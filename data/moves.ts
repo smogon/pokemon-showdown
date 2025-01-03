@@ -9939,23 +9939,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 25,
 		priority: 1,
 		flags: {metronome: 1, light: 1,},
-		pseudoWeather: 'iondeluge',
 		condition: {
-			duration: 1,
-			onFieldStart(target, source, sourceEffect) {
-				this.add('-fieldactivate', 'move: Ion Deluge');
-				this.hint(`Normal-type moves become Electric-type after using ${sourceEffect}.`);
+			duration: 4,
+			onSideStart(targetSide) {
+				this.add('-sidestart', targetSide, 'Ion Deluge');
 			},
-			onModifyTypePriority: -2,
-			onModifyType(move) {
-				if (move.type === 'Normal') {
-					move.type = 'Electric';
-					this.debug(move.name + "'s type changed to Electric");
-				}
+			onResidualOrder: 5,
+			onResidualSubOrder: 1,
+			onResidual(target) {
+				if (!target.hasType('Ground') || !target.hasType('Electric')) this.damage(target.baseMaxhp / 8, target);
+			},
+			onSideResidualOrder: 26,
+			onSideResidualSubOrder: 11,
+			onSideEnd(targetSide) {
+				this.add('-sideend', targetSide, 'Ion Deluge');
 			},
 		},
-		secondary: null,
-		target: "all",
+		target: "normal",
 		type: "Electric",
 		zMove: {boost: {spa: 1}},
 		contestType: "Beautiful",
