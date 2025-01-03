@@ -4439,7 +4439,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onWeather(target, source, effect) {
 			if (target.hasItem('utilityumbrella')) return;
 			if (effect.id === 'sunnyday' || effect.id === 'desolateland') {
-				this.damage(target.baseMaxhp / 8, target, target);
+				this.damage(target.baseMaxhp / 16, target, target);
 			}
 		},
 		flags: {},
@@ -4685,6 +4685,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if ((source && source !== pokemon) || this.activeMove.id === 'knockoff') {
 				this.add('-activate', pokemon, 'ability: Sticky Hold');
 				return false;
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (this.checkMoveMakesContact(move, source, target)) {
+				this.debug('Sticky Hold weaken');
+				return this.chainModify(0.75);
 			}
 		},
 		flags: {breakable: 1},
