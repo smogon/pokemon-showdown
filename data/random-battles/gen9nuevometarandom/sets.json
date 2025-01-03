@@ -701,12 +701,7 @@
                 "spaEVs": 0,
                 "spdEVs": 4,
                 "speEVs": 0
-            }
-        ]
-    },
-    "raticatealolatotem": {
-        "level": 100,
-        "sets": [
+            },
             {
                 "role": "Specially Defensive",
                 "movepool": ["Knock Off", "U-turn", "Toxic", "Double-Edge"],
@@ -1868,6 +1863,142 @@
                 "spaEVs": 0,
                 "spdEVs": 252,
                 "speEVs": 0
+            }
+        ]
+    },
+    "arcanine": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Sacred Fire", "Extreme Speed", "Close Combat", "Wild Charge"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Incinerate", "Scorching Sands", "Dragon Pulse", "Swift"],
+                "abilities": ["Flash Fire"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Sacred Fire", "Extreme Speed", "Close Combat", "Wild Charge"],
+                "abilities": ["Justified"],
+                "teraTypes": ["Water"],
+                "items": "Assault Vest",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "arcaninehisui": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Physical Scarf",
+                "movepool": ["Head Smash", "Flare Blitz", "Wild Charge", "Close Combat"],
+                "abilities": ["Rock Head"],
+                "teraTypes": ["Water"],
+                "items": "Choice Scarf",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Band",
+                "movepool": ["Monolito", "Flare Blitz", "Extreme Speed", "Wild Charge"],
+                "abilities": ["Rock Head"],
+                "teraTypes": ["Water"],
+                "items": "Choice Band",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Extreme Speed", "Monolito", "Flare Blitz", "Wild Charge"],
+                "abilities": ["Rock Head"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Extreme Speed", "Stone Edge", "Flare Blitz", "Wild Charge"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Water"],
+                "items": "Totem Gigante",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Extreme Speed", "Head Smash", "Flare Blitz", "Wild Charge"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Water"],
+                "items": "Totem Gigante",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Extreme Speed", "Monolito", "Flare Blitz", "Wild Charge"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Water"],
+                "items": "Totem Gigante",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
             }
         ]
     }
