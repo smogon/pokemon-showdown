@@ -15,6 +15,42 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Miraju
+	illusiveenergy: {
+		name: "Illusive Energy",
+		gen: 9,
+		flags: {},
+		desc: "On switch-in, this Pokemon appears as a randomly selected inactive party member until it takes damage. Fails if this Pokemon has no inactive party members remaining.",
+		shortDesc: "Disguises as a random party member until damage is taken.",
+		onBeforeSwitchIn(pokemon) {
+			let possibleTargets = [];
+			pokemon.illusion = null;
+			for (const target of pokemon.side.pokemon) {
+				if (target === pokemon || target.isActive || target.fainted) continue;
+				possibleTargets.push(target);
+			}
+			if (!possibleTargets.length) return;
+			pokemon.illusion = this.sample(possibleTargets);
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (target.illusion) {
+				this.singleEvent('End', this.dex.abilities.get('Illusive Energy'), target.abilityState, target, source, move);
+			}
+		},
+		onEnd(pokemon) {
+			if (pokemon.illusion) {
+				this.debug('illusive energy illusion cleared');
+				pokemon.illusion = null;
+				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
+					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				this.add('replace', pokemon, details);
+				this.add('-end', pokemon, 'Illusive Energy');
+			}
+		},
+		onFaint(pokemon) {
+			pokemon.illusion = null;
+		},
+	},
 	// Tao
 	shangqing: {
 		name: "Shangqing",
