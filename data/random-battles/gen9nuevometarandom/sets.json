@@ -240,7 +240,7 @@
             {
                 "role": "Physically Defensive",
                 "movepool": ["Flip Turn", "Haze", "Rapid Spin", "Scald"],
-                "abilities": ["Rain Dish"],
+                "abilities": ["Torrent"],
                 "teraTypes": ["Water"],
                 "items": "Leftovers",
                 "nature": "bold",
@@ -1082,7 +1082,7 @@
             {
                 "role": "Fast Physical Sweeper",
                 "movepool": ["Swords Dance", "Earthquake", "Stone Edge", "Leech Life"],
-                "abilities": ["Sand Rush"],
+                "abilities": ["Sand Veil"],
                 "teraTypes": ["Water"],
                 "items": "Leftovers",
                 "nature": "adamant",
@@ -1830,20 +1830,6 @@
                 "spaEVs": 252,
                 "spdEVs": 4,
                 "speEVs": 252
-            },
-            {
-                "role": "Fast Special Sweeper",
-                "movepool": ["Nasty Plot", "Ice Beam", "Psyshock", "Surf"],
-                "abilities": ["Swift Swim"],
-                "teraTypes": ["Water"],
-                "items": "Life Orb",
-                "nature": "modest",
-                "hpEVs": 0,
-                "atkEVs": 0,
-                "defEVs": 0,
-                "spaEVs": 252,
-                "spdEVs": 4,
-                "speEVs": 252
             }
         ]
     },
@@ -1992,6 +1978,218 @@
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Water"],
                 "items": "Totem Gigante",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "poliwrath": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Physical Scarf",
+                "movepool": ["Surging Strikes", "Ice Ball", "Earthquake", "Close Combat"],
+                "abilities": ["Water Absorb"],
+                "teraTypes": ["Water"],
+                "items": "Choice Scarf",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Bulky Band",
+                "movepool": ["Surging Strikes", "Close Combat", "Earthquake", "Ice Ball"],
+                "abilities": ["Water Absorb"],
+                "teraTypes": ["Water"],
+                "items": "Choice Band",
+                "nature": "adamant",
+                "hpEVs": 252,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Substitute", "Bulk Up", "Drain Punch", "Surging Strikes"],
+                "abilities": ["Water Absorb"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "adamant",
+                "hpEVs": 252,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
+    },
+    "alakazam": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Shadow Ball", "Dazzling Gleam", "Psyshock", "Nasty Plot"],
+                "abilities": ["Magic Guard"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Recover", "Dazzling Gleam", "Psyshock", "Calm Mind"],
+                "abilities": ["Magic Guard"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "alakazammega": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Shadow Ball", "Dazzling Gleam", "Psyshock", "Nasty Plot"],
+                "abilities": ["Magic Guard"],
+                "teraTypes": ["Water"],
+                "items": "Alakazite",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Recover", "Dazzling Gleam", "Telekinesis", "Nasty Plot"],
+                "abilities": ["Magic Guard"],
+                "teraTypes": ["Water"],
+                "items": "Alakazite",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "machamp": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Bullet Punch", "Protect", "Drain Punch", "Darkest Lariat"],
+                "abilities": ["Guts"],
+                "teraTypes": ["Water"],
+                "items": "Flame Orb",
+                "nature": "adamant",
+                "hpEVs": 248,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 8,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Fissure", "Dynamic Punch", "Mega Kick", "Stone Edge"],
+                "abilities": ["No Guard"],
+                "teraTypes": ["Water"],
+                "items": "Assault Vest",
+                "nature": "adamant",
+                "hpEVs": 248,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 8,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Substitute", "Bulk Up", "Drain Punch", "Bullet Punch"],
+                "abilities": ["Steadfast"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "careful",
+                "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 8,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            }
+        ]
+    },
+    "machampmega": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Power-Up Punch", "Drain Punch", "Stone Edge", "Bullet Punch"],
+                "abilities": ["Steadfast"],
+                "teraTypes": ["Water"],
+                "items": "Machampite",
+                "nature": "adamant",
+                "hpEVs": 248,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 8,
+                "speEVs": 0
+            }
+        ]
+    },
+    "victreebel": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Swords Dance", "Knock Off", "Poison Jab", "Power Whip"],
+                "abilities": ["Chlorophyll"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Swords Dance", "Leech Life", "Power Whip", "Poison Jab"],
+                "abilities": ["Gluttony"],
+                "teraTypes": ["Water"],
+                "items": "Salac Berry",
                 "nature": "jolly",
                 "hpEVs": 0,
                 "atkEVs": 252,
