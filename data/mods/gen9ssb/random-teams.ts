@@ -216,6 +216,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wuji',
 		evs: {atk: 252, def: 4, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
 	},
+	Miraju: {
+		species: 'Wynaut', ability: 'Illusive Energy', item: 'Eviolite', gender: 'N',
+		moves: ['Hyperspace Hole', 'Glare', 'Memento'],
+		signatureMove: 'Close Combat',
+		evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+	},
 	/*
  	Ingrid: {
 		species: 'Doublade', ability: 'Caliber Conversion', item: 'Odin\'s Sheath', gender: 'F',
