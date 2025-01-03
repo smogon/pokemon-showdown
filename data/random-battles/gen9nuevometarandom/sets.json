@@ -530,14 +530,98 @@
             }
         ]
     },
-    "pikachu": {
-        "level": 93,
+    "pikachubelle": {
+        "level": 100,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["Fake Out", "Knock Off", "Play Rough", "Surf", "Volt Switch", "Volt Tackle"],
-                "abilities": ["Lightning Rod"],
-                "teraTypes": ["Water"]
+                "role": "Fast Special Sweeper",
+                "movepool": ["Volt Switch", "Icy Wind", "Grass Knot", "Thunderbolt"],
+                "abilities": ["Snow Cloak"],
+                "teraTypes": ["Water"],
+                "items": "Light Ball",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "pikachulibre": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Fake Out", "Mach Punch", "Flying Press", "Plasma Fists"],
+                "abilities": ["Iron Fist"],
+                "teraTypes": ["Water"],
+                "items": "Light Ball",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "pikachuphd": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Fake Out", "Zen Headbutt", "Zing Zap", "Knock Off"],
+                "abilities": ["Pressure"],
+                "teraTypes": ["Water"],
+                "items": "Light Ball",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "pikachupopstar": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Draining Kiss", "Electro Ball", "Grass Knot", "Agility"],
+                "abilities": ["Pixilate"],
+                "teraTypes": ["Water"],
+                "items": "Light Ball",
+                "nature": "modest",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "pikachurockstar": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Snarl", "Overdrive", "Grass Knot", "Volt Switch"],
+                "abilities": ["Punk Rock"],
+                "teraTypes": ["Water"],
+                "items": "Light Ball",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
             }
         ]
     },
