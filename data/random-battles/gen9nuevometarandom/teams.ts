@@ -1419,7 +1419,7 @@ export class RandomTeams {
 	): number {
 		if (this.adjustLevel) return this.adjustLevel;
 		// doubles levelling
-		if (!isDoubles && this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"]!;
+		if (this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"]!;
 		// Default to tier-based levelling
 		const tier = species.tier;
 		const tierScale: Partial<Record<Species['tier'], number>> = {
@@ -1769,10 +1769,6 @@ export class RandomTeams {
 							if (typeWeaknesses['Freeze-Dry'] >= 4 * limitFactor) continue;
 						}
 
-						// Limit one level 100 Pokemon
-						if (!this.adjustLevel && (this.getLevel(species, false) === 100) && numMaxLevelPokemon >= limitFactor) {
-							continue;
-						}
 					}
 
 					// Limit three of any type combination in Monotype
