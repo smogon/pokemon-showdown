@@ -1140,6 +1140,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	earlybird: {
 		flags: {},
 		name: "Early Bird",
+		onModifyPriority(priority, source, target, move) {
+			if(['sunnyday', 'desolateland'].includes(source.effectiveWeather())){
+				return priority + 1;
+			}
+		},
 		// Implemented in statuses.js
 		rating: 1.5,
 		num: 48,
@@ -3400,15 +3405,38 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 211,
 	},
 	powerofalchemy: {
-		onAllyFaint(target) {
-			if (!this.effectState.target.hp) return;
-			const ability = target.getAbility();
-			if (ability.flags['noreceiver'] || ability.id === 'noability') return;
-			if (this.effectState.target.setAbility(ability)) {
-				this.add('-ability', this.effectState.target, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
+		onStart(pokemon) {
+			for (const target of pokemon.foes()) {
+				if (this.field.isTerrain('psychicterrain')) {
+					target.addVolatile("gastroacid")
+				}
+			}
+			if (this.field.isTerrain('grassyterrain')){
+				this.heal(pokemon.baseMaxhp / 16.5, pokemon, pokemon)
 			}
 		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1},
+		onModifyDamage(damage, source, target, move) {
+			if(this.field.isTerrain('electricterrain')){
+				return this.chainModify(1.25);
+			}
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (this.field.isTerrain('mistyterrain')){
+			if (source && target === source) return;
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+			}
+			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+				this.add("-fail", target, "unboost", "[from] ability: Power of Alchemy", "[of] " + target);
+			}
+		}
+		},
+		flags: {breakable: 1},
 		name: "Power of Alchemy",
 		rating: 0,
 		num: 223,
@@ -4206,6 +4234,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.debug('shed skin');
 				this.add('-activate', pokemon, 'ability: Shed Skin');
 				pokemon.cureStatus();
+				this.heal(pokemon.baseMaxhp / 8, pokemon, pokemon);
 			}
 		},
 		flags: {},
@@ -4443,14 +4472,39 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	soundproof: {
 		onTryHit(target, source, move) {
 			if (target !== source && move.flags['sound']) {
-				this.add('-immune', target, '[from] ability: Soundproof');
+				move.accuracy = true;
+				if (!target.addVolatile('soundproof')) {
+					this.add('-immune', target, '[from] ability: Soundproof');
+				}
 				return null;
 			}
 		},
-		onAllyTryHitSide(target, source, move) {
-			if (move.flags['sound']) {
-				this.add('-immune', this.effectState.target, '[from] ability: Soundproof');
-			}
+		onEnd(pokemon) {
+			pokemon.removeVolatile('soundproof');
+		},
+		condition: {
+			duration: 2,
+			noCopy: true, // doesn't get copied by Baton Pass
+			onStart(target) {
+				this.add('-start', target, 'ability: Soundproof');
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, attacker, defender, move) {
+				if (attacker.hasAbility('soundproof')) {
+					this.debug('Soundproof boost');
+					return this.chainModify(2);
+				}
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(atk, attacker, defender, move) {
+				if (attacker.hasAbility('soundproof')) {
+					this.debug('Soundproof boost');
+					return this.chainModify(2);
+				}
+			},
+			onEnd(target) {
+				this.add('-end', target, 'ability: Soundproof', '[silent]');
+			},
 		},
 		flags: {breakable: 1},
 		name: "Soundproof",
