@@ -2080,6 +2080,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			return false;
 		},
+		//TODO: immunidad a volatiles
 		flags: {breakable: 1},
 		name: "Immunity",
 		rating: 2,
