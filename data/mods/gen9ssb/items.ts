@@ -3,6 +3,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 	zhuyou: {
 		name: "Zhuyou",
 		gen: 9,
+		onTakeItem: false,
 		onModifySpD(spd, pokemon) {
 			return this.chainModify(1.1);
 		},
@@ -19,12 +20,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 			return this.chainModify(1.1);
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
-			if (source.getMoveHitData(move).crit) {
+			if (target.getMoveHitData(move).crit) {
 				this.heal(source.maxhp / 4, source);
 			}
 		},
 		onResidual(pokemon) {
-			if (pokemon.status) pokemon.cureStatus();
+			if (!pokemon.status) return;
+			if (pokemon.cureStatus()) {
+				this.add('-curestatus', pokemon, pokemon.status, '[from] item: Zhuyou');
+			}
 		},
 	},
 	// Ingrid
