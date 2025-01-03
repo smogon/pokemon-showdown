@@ -2075,7 +2075,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onSetStatus(status, target, source, effect) {
-			if (status.id !== 'psn' && status.id !== 'tox') return;
 			if ((effect as Move)?.status) {
 				this.add('-immune', target, '[from] ability: Immunity');
 			}
