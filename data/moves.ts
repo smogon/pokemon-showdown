@@ -3446,6 +3446,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			this.hint("Only a Pokemon whose form is Darkrai can use this move.");
 			return null;
 		},
+		onModifyMove(move, pokemon, target) {
+			if(this.gameType === 'doubles'){
+				move.accuracy *= 0.5;
+			}
+		},
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Dark",
@@ -4626,7 +4631,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 90,
 		basePower: 100,
 		category: "Physical",
-
 		name: "Egg Bomb",
 		pp: 10,
 		priority: 0,
@@ -4700,7 +4704,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-
 		name: "Electrify",
 		pp: 20,
 		priority: 0,
@@ -4819,8 +4822,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	embargo: {
 		num: 373,
 		accuracy: 100,
-		basePower: 0,
-		category: "Status",
+		basePower: 80,
+		category: "Physical",
 
 		name: "Embargo",
 		pp: 15,
@@ -5389,22 +5392,31 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	ficklebeam: {
 		num: 907,
-		accuracy: 100,
-		basePower: 80,
+		accuracy: 95,
+		basePower: 25,
 		category: "Special",
 		name: "Fickle Beam",
 		pp: 5,
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1},
-		onBasePower(basePower, pokemon) {
-			if (this.randomChance(3, 10)) {
-				this.attrLastMove('[anim] Fickle Beam All Out');
-				this.add('-activate', pokemon, 'move: Fickle Beam');
-				return this.chainModify(2);
-			}
-		},
-		secondary: null,
-		target: "normal",
+		multihit: 5,
+		secondary: {
+			chance: 10,
+			onHit(target, source) {
+				const result = this.random(4);
+				if (result === 0) {
+					this.boost({atk: -1}, target);
+				} else if (result === 1) {
+					this.boost({def: -1}, target);
+				} else if (result === 2) {
+					this.boost({spa: -1}, target);
+				} else if (result === 3) {
+					this.boost({spd: -1}, target);
+				} else {
+					this.boost({spe: -1}, target);
+				}
+			},
+		},		target: "normal",
 		type: "Dragon",
 	},
 	fierydance: {

@@ -944,7 +944,7 @@ export class BattleActions {
 					if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) break;
 				}
 			}
-
+//daño
 			const moveData = move;
 			if (!moveData.flags) moveData.flags = {};
 
