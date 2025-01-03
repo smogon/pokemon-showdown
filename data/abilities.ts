@@ -1484,28 +1484,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 59,
 	},
 	forewarn: {
-		onStart(pokemon) {
-			let warnMoves: (Move | Pokemon)[][] = [];
-			let warnBp = 1;
-			for (const target of pokemon.foes()) {
-				for (const moveSlot of target.moveSlots) {
-					const move = this.dex.moves.get(moveSlot.move);
-					let bp = move.basePower;
-					if (move.ohko) bp = 150;
-					if (move.id === 'counter' || move.id === 'metalburst' || move.id === 'mirrorcoat') bp = 120;
-					if (bp === 1) bp = 80;
-					if (!bp && move.category !== 'Status') bp = 80;
-					if (bp > warnBp) {
-						warnMoves = [[move, target]];
-						warnBp = bp;
-					} else if (bp === warnBp) {
-						warnMoves.push([move, target]);
-					}
-				}
+		onModifyPriority(priority, pokemon, target, move) {
+			if (pokemon.activeTurns === 1) {
+				return priority + 1;
 			}
-			if (!warnMoves.length) return;
-			const [warnMoveName, warnTarget] = this.sample(warnMoves);
-			this.add('-activate', pokemon, 'ability: Forewarn', warnMoveName, '[of] ' + warnTarget);
 		},
 		flags: {},
 		name: "Forewarn",
