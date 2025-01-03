@@ -133,7 +133,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		gen: 9,
 		priority: -8,
-		flags: {contact: 1, protect: 1, punch: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
+		flags: {contact: 1, protect: 1, punch: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, metronome: 1},
 		pp: 5,
 		breaksProtect: true,
 		onTryMove() {
@@ -182,7 +182,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		gen: 9,
 		priority: -8,
-		flags: {contact: 1, protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
+		flags: {contact: 1, protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1, metronome: 1},
 		pp: 5,
 		willCrit: true,
 		onTryMove() {
@@ -221,6 +221,27 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					}
 				}
 			},
+		},
+		secondary: null,
+		type: "Fighting",
+		target: "normal",
+	},
+	ziran: {
+		name: "Ziran",
+		basePower: 80,
+		category: "Physical",
+		shortDesc: "Move data used for Shangqing.",
+		accuracy: true,
+		gen: 9,
+		priority: 0,
+		flags: {contact: 1, protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failinstruct: 1},
+		pp: 10,
+		willCrit: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Dynamic Punch', target);
 		},
 		secondary: null,
 		type: "Fighting",
