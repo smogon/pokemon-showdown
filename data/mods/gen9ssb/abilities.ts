@@ -20,6 +20,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Shangqing",
 		gen: 9,
 		flags: {},
+		desc: "This Pokemon is permanently tormented, and its Fighting-type moves can hit Ghost-type Pokemon for neutral damage. Whenever this Pokemon lands a critical hit, it immediately uses Ziran. This Pokemon's attacks that would KO, barring Ziran, instead leave the foe at 1 HP, paralyzed, and forces them to switch.",
 		onUpdate(pokemon) {
 			if (!pokemon.volatiles['torment']) {
 				this.add('-activate', pokemon, 'Shangqing');
@@ -27,10 +28,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onResidual(pokemon) {
+			this.effectState.ziranUsed = false;
 			if (pokemon.volatiles['torment']) {
 				pokemon.volatiles['torment'].duration++;
 			}
-			this.effectState.ziranUsed = false;
+			for (const target of this.getAllActive()) {
+				if (target.abilityState.eotSwitch) {
+					target.abilityState.eotSwitch = false;
+					target.forceSwitchFlag = true;
+				}
+			}
 		},
 		onModifyMove(move, pokemon) {
 			if (move.type === 'Fighting') {
@@ -41,10 +48,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onModifyDamage(damage, source, target, move) {
 			if (move.id !== 'ziran' && damage >= target.hp) {
+				this.effectState.koTrigger = true;
 				return target.hp - 1;
 			}
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
+			if (this.effectState.koTrigger) {
+				target.trySetStatus('par', source);
+				target.abilityState.eotSwitch = true;
+				this.effectState.koTrigger = false;
+			}
 			if (target.getMoveHitData(move).crit && !this.effectState.ziranUsed) {
 				this.effectState.ziranUsed = true;
 				this.actions.useMove('Ziran', target);
