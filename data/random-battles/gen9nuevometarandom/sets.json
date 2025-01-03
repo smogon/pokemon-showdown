@@ -704,6 +704,53 @@
             }
         ]
     },
+    "raticatealolatotem": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Knock Off", "U-turn", "Toxic", "Double-Edge"],
+                "abilities": ["Hustle"],
+                "teraTypes": ["Water"],
+                "items": "Totem Gigante",
+                "nature": "careful",
+                "hpEVs": 248,
+                "atkEVs": 8,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Bulk Up", "Sucker Punch", "Hyper Fang", "Covet"],
+                "abilities": ["Hustle"],
+                "teraTypes": ["Water"],
+                "items": "Totem Gigante",
+                "nature": "careful",
+                "hpEVs": 248,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 8,
+                "speEVs": 0
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Knock Off", "Sucker Punch", "Toxic", "U-turn"],
+                "abilities": ["Hustle"],
+                "teraTypes": ["Water"],
+                "items": "Totem Gigante",
+                "nature": "adamant",
+                "hpEVs": 248,
+                "atkEVs": 8,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            }
+        ]
+    },
     "fearow": {
         "level": 100,
         "sets": [
