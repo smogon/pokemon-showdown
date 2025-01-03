@@ -17158,7 +17158,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 60,
 		category: "Physical",
-		isNonstandard: "LGPE",
 		name: "Sizzly Slide",
 		pp: 20,
 		priority: 0,
