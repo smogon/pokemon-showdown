@@ -15,6 +15,42 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Tao
+	shangqing: {
+		name: "Shangqing",
+		gen: 9,
+		flags: {},
+		onUpdate(pokemon) {
+			if (!pokemon.volatiles['torment']) {
+				this.add('-activate', pokemon, 'Shangqing');
+				pokemon.addVolatile('torment');
+			}
+		},
+		onResidual(pokemon) {
+			if (pokemon.volatiles['torment']) {
+				pokemon.volatiles['torment'].duration++;
+			}
+			this.effectState.ziranUsed = false;
+		},
+		onModifyMove(move, pokemon) {
+			if (move.type === 'Fighting') {
+				move.onEffectiveness = function (typeMod, target, type) {
+					if (type === 'Ghost') return 0;
+				};
+			}
+		},
+		onModifyDamage(damage, source, target, move) {
+			if (move.id !== 'ziran' && damage >= target.hp) {
+				return target.hp - 1;
+			}
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (target.getMoveHitData(move).crit && !this.effectState.ziranUsed) {
+				this.effectState.ziranUsed = true;
+				this.actions.useMove('Ziran', target);
+			}
+		},
+	},
 	// Flufi
 	forceofwill: {
 		name: "Force of Will",
