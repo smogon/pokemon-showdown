@@ -1147,7 +1147,7 @@
             }
         ]
     },
-    "Nidoqueen": {
+    "nidoqueen": {
         "level": 100,
         "sets": [
             {
@@ -1429,7 +1429,7 @@
             }
         ]
     },
-    "Golbat": {
+    "golbat": {
         "level": 100,
         "sets": [
             {
