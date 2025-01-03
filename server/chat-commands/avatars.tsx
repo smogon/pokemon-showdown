@@ -667,6 +667,10 @@ const CUSTOM_AVATARS_NGAMMER = new Set([
 	'juansssss', 'ngammer'
 ]);
 
+const CUSTOM_AVATARS_NGAMMER2 = new Set([
+	'ngammer2'
+]);
+
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_GNOMOWLADNY) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_BRUMIRAGE) OFFICIAL_AVATARS.add(avatar);
