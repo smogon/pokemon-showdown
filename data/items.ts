@@ -7688,7 +7688,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onTakeItem(item, source) {
          return false;
 		},
-		itemUser: ["Raticate-Alola", 'Marowak-Alola', "Electrode Hisui", "Arcanine-Hisui"],
+		itemUser: ["Raticate-Alola", 'Marowak-Alola', "Electrode-Hisui", "Arcanine-Hisui"],
 		num: -103,
 		gen: 6,
 
