@@ -2364,6 +2364,6 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 		name: "Pluma Watt",
 		shortDesc: "This Pokemon has a 30% chance to move first in its priority bracket with attacking moves.",
 
-		activate: "  Quick Draw made [POKEMON] move faster!",
+		activate: "  Pluma Watt made [POKEMON] move faster!",
 	},
 };
