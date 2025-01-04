@@ -2432,7 +2432,7 @@
             {
                 "role": "Specially Defensive",
                 "movepool": ["Calm Mind", "Stored Power", "Slack Off", "Iron Defense"],
-                "abilities": ["Oblivious"],
+                "abilities": ["Regenerator"],
                 "teraTypes": ["Water"],
                 "items": "Slowbronite",
                 "nature": "calm",
@@ -2446,7 +2446,7 @@
             {
                 "role": "Bulky Special Sweeper",
                 "movepool": ["Teleport", "Slack Off", "Future Sight", "Scald"],
-                "abilities": ["Oblivious"],
+                "abilities": ["Regenerator"],
                 "teraTypes": ["Water"],
                 "items": "Slowbronite",
                 "nature": "bold",
@@ -4262,6 +4262,326 @@
                 "abilities": ["Mineralizacion"],
                 "teraTypes": ["Water"],
                 "items": "Assault Vest",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "aerodactyl": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Stealth Rock", "Defog", "Stone Edge", "Roost"],
+                "abilities": ["Mineralizacion"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "jolly",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Dual Wingbeat", "Stone Edge", "Fire Fang"],
+                "abilities": ["Mineralizacion"],
+                "teraTypes": ["Water"],
+                "items": "Expert Belt",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "aerodactylmega": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Dual Wingbeat", "Stone Edge", "Fire Fang"],
+                "abilities": ["Mineralizacion"],
+                "teraTypes": ["Water"],
+                "items": "Aerodactylite",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "snorlax": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Belly Drum", "Substitute", "Last Resort", "Trailblaze"],
+                "abilities": ["Gluttony"],
+                "teraTypes": ["Water"],
+                "items": "Salac Berry",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Physically Defensive",
+                "movepool": ["Toxic", "Encore", "Body Press", "Defense Curl"],
+                "abilities": ["Immunity"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Giga Impact", "Curse", "Darkest Lariat", "Fire Punch"],
+                "abilities": ["Immunity"],
+                "teraTypes": ["Water"],
+                "items": "Snorlium Z",
+                "nature": "adamant",
+                "hpEVs": 252,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
+    },
+    "snorlaxmega": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Body Slam", "Toxic", "Protect", "Seed Bomb"],
+                "abilities": ["Immunity"],
+                "teraTypes": ["Water"],
+                "items": "Snorlaxite",
+                "nature": "careful",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 4,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Curse", "Rest", "Sleep Talk", "Seed Bomb"],
+                "abilities": ["Immunity"],
+                "teraTypes": ["Water"],
+                "items": "Snorlaxite",
+                "nature": "careful",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 4,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            }
+        ]
+    },
+    "tauros": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Close Combat", "Zen Headbutt", "Lash Out", "Giga Impact"],
+                "abilities": ["Anger Point"],
+                "teraTypes": ["Water"],
+                "items": "Assault Vest",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Close Combat", "Toxic", "Pursuit", "Return"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Close Combat", "Focus Energy", "Lash Out", "Return"],
+                "abilities": ["Anger Point"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "taurospaldeaaqua": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Close Combat", "Wave Crash", "Lash Out", "Aqua Jet"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Water"],
+                "items": "Assault Vest",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Trailblaze", "Aqua Jet", "Wave Crash", "Close Combat"],
+                "abilities": ["Anger Point"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Bulk Up", "Aqua Jet", "Close Combat", "Liquidation"],
+                "abilities": ["Cud Chew"],
+                "teraTypes": ["Water"],
+                "items": "Salac Berry",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "taurospaldeablaze": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Close Combat", "Flare Blitz", "Wild Charge", "Earthquake"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Water"],
+                "items": "Assault Vest",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Flame Charge", "Bulk Up", "Flare Blitz", "Close Combat"],
+                "abilities": ["Anger Point"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Bulk Up", "Wild Charge", "Close Combat", "Flare Blitz"],
+                "abilities": ["Cud Chew"],
+                "teraTypes": ["Water"],
+                "items": "Salac Berry",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "taurospaldeacombat": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Close Combat", "Lash Out", "Wild Charge", "Earthquake"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Water"],
+                "items": "Assault Vest",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Trailblaze", "Bulk Up", "Iron Head", "Close Combat"],
+                "abilities": ["Anger Point"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Bulk Up", "Wild Charge", "Close Combat", "Iron Head"],
+                "abilities": ["Cud Chew"],
+                "teraTypes": ["Water"],
+                "items": "Salac Berry",
                 "nature": "jolly",
                 "hpEVs": 0,
                 "atkEVs": 252,
