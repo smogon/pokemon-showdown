@@ -2340,13 +2340,15 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	inteligenciaartificial: {
 		name: "Inteligencia Artificial",
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon's offensive stat is multiplied by 1.4 and the accuracy of its attacks is multiplied by 0.95.",
+		shortDesc: "This Pokemon's offensive stat is 1.4x and accuracy of its attacks is 0.95x.",
 	},
 	comealmas: {
 		name: "Come Almas",
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon's moves have their power multiplied by 1+(X*0.05), where X is the total number of times any Pokemon has fainted when this Ability became active, and X cannot be greater than 10.",
+		shortDesc: "This Pokemon's moves have 5% more power for each fainted Pokemon, up to 10 Pokemon.",
+
+		activate: "  [POKEMON] gained strength from the fallen!",
 	},
 	inteligenciaavanzada: {
 		name: "Inteligencia Avanzada",
