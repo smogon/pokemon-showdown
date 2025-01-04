@@ -970,7 +970,7 @@ export const ItemsText: {[id: IDEntry]: ItemText} = {
 	},
 	lightball: {
 		name: "Light Ball",
-		shortDesc: "If held by a Pikachu, its Attack and Sp. Atk are doubled.",
+		shortDesc: "If held by a Pikachu, its Attack and Sp. Atk are doubled. Other Pokemon are paralyzed.",
 		gen4: {
 			shortDesc: "If held by a Pikachu, its attacks have their power doubled.",
 		},
@@ -1140,9 +1140,9 @@ export const ItemsText: {[id: IDEntry]: ItemText} = {
 	},
 	metalpowder: {
 		name: "Metal Powder",
-		shortDesc: "If held by a Ditto that hasn't Transformed, its Defense is doubled.",
+		shortDesc: "If held by a Ditto , its Defense is increased.",
 		gen2: {
-			shortDesc: "If held by a Ditto, its Defense and Sp. Def are 1.5x, even while Transformed.",
+			shortDesc: "If held by a Ditto, its Defense and Sp. Def are 1.2x, even while Transformed.",
 		},
 	},
 	metronome: {
@@ -1447,7 +1447,7 @@ export const ItemsText: {[id: IDEntry]: ItemText} = {
 	},
 	quickpowder: {
 		name: "Quick Powder",
-		shortDesc: "If held by a Ditto that hasn't Transformed, its Speed is doubled.",
+		shortDesc: "If held by a Ditto , its Speed is increased 20%.",
 	},
 	rabutaberry: {
 		name: "Rabuta Berry",
@@ -2455,4 +2455,13 @@ export const ItemsText: {[id: IDEntry]: ItemText} = {
 		name: "Kinglerite",
 		shortDesc: "If held by a Kingler, this item allows it to Mega Evolve in battle.",
 	},
+	snorlaxite: {
+		name: "Snorlaxite",
+		shortDesc: "If held by a Snorlax, this item allows it to Mega Evolve in battle.",
+	},
+	dimencionador: {
+		name: "Dimencionador",
+		shortDesc: "Holder's use of Trick Room, Wonder Room, Magic Room, or Gravity lasts 8 turns instead of 5.",
+	},
+	
 };
