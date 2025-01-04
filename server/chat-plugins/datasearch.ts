@@ -2595,7 +2595,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 			// can happen if you hotpatch formats without hotpatching chat
 			return {error: `"${formatid}" is not a supported format.`};
 		}
-		const dex = Dex.mod(formatid).includeData();
+		const dex = Dex.mod(formatid);
 		gen = dex.gen;
 		formatName = `Gen ${gen}`;
 		format = new Dex.Format({mod: formatid, effectType: 'Format', exists: true});
