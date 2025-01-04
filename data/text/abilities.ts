@@ -2326,12 +2326,12 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	mentefria: {
 		name: "Mente Fria",
 		desc: "",
-		shortDesc: "",
+		shortDesc: "This Pokemon's special moves that don't make contact have their power multiplied by 1.15 and 30% chance of freezing.",
 	},
 	llamasiniestra: {
 		name: "Llama Siniestra",
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon's Special Attack is raised by 2 stages if it attacks and knocks out another Pokemon with a Dark-type attack. This Pokemon's Dark-type moves have a 100% chance of burning. This effect comes after a move's inherent secondary effect chance.",
+		shortDesc: "This Pokemon's Special Attack is raised by 2 stages if it attacks and KOes another Pokemon with a Dark-type attack. This Pokemon's Dark-type moves have a 100% chance of burning.",
 	},
 	inteligenciaasertiva: {
 		name: "Inteligencia Asertiva",
