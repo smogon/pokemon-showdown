@@ -12184,9 +12184,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1},
-		onHit(target, source, effect) {
+		onHit(pokemon) {
 			const moves = this.dex.moves.all().filter(move => (
-				(![2, 4].includes(this.gen) || !source.moves.includes(move.id)) &&
 				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
 				move.flags['metronome']
 			));
@@ -12196,8 +12195,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				randomMove = this.sample(moves).id;
 			}
 			if (!randomMove) return false;
-			source.side.lastSelectedMove = this.toID(randomMove);
-			this.actions.useMove(randomMove, target);
+			this.actions.useMove(randomMove, pokemon);
 		},
 		callsMove: true,
 		secondary: null,
