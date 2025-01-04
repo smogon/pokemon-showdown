@@ -2723,7 +2723,7 @@
             },
             {
                 "role": "Fast Special Sweeper",
-                "movepool": ["Nasty Plot", "Nightmare", "Focus Blast", "Nasty Plot"],
+                "movepool": ["Nasty Plot", "Nightmare", "Focus Blast", "Hypnosis"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Water"],
                 "items": "Focus Sash",
@@ -2836,10 +2836,10 @@
             },
             {
                 "role": "Physically Defensive",
-                "movepool": ["Poison Tail", "Stealth Rock", "Earthquake", "Shore Up"],
-                "abilities": ["Sand Veil"],
+                "movepool": ["Hypnosis", "Nightmare", "Dream Eater", "Calm Mind"],
+                "abilities": ["Forewarn"],
                 "teraTypes": ["Water"],
-                "items": "Black Sludge",
+                "items": "Leftovers",
                 "nature": "bold",
                 "hpEVs": 252,
                 "atkEVs": 0,
