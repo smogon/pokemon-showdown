@@ -2352,8 +2352,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	inteligenciaavanzada: {
 		name: "Inteligencia Avanzada",
-		desc: "",
-		shortDesc: "",
+		desc: "Deals damage to the target based on its Defense instead of Special Defense, whichever is lower, but damage is multiplied by 0.8.",
+		shortDesc: "Damages target based on the foes' weaker Defense, but offensive stat is multiplied by 0.8.",
 	},
 	inteligenciaantigua: {
 		name: "Inteligencia Antigua",
