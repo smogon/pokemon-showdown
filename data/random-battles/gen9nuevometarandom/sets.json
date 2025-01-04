@@ -2239,7 +2239,7 @@
             {
                 "role": "Fast Physical Sweeper",
                 "movepool": ["Rock Polish", "Rollout", "Thunder Punch", "Earthquake"],
-                "abilities": ["Static"],
+                "abilities": ["Sturdy"],
                 "teraTypes": ["Water"],
                 "items": "Weakness Policy",
                 "nature": "jolly",
