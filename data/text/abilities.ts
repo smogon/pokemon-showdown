@@ -2279,7 +2279,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	nudillosdepiedra: {
 		name: "Nudillos De Piedra",
 		desc: "",
-		shortDesc: "",
+		shortDesc: "Holder's punch-based attacks do 2x damage, and it loses 15% of its max HP after the attack.",
 	},
 	suertudo: {
 		name: "Suertudo",
@@ -2303,6 +2303,56 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	colocapantallas: {
 		name: "Coloca Pantallas",
+		desc: "",
+		shortDesc: "",
+	},
+	cantohelado: {
+		name: "Canto Helado",
+		desc: "",
+		shortDesc: "",
+	},
+	vatios: {
+		name: "Vatios",
+		desc: "",
+		shortDesc: "",
+	},
+	mineralizacion: {
+		name: "Mineralizacion",
+		desc: "",
+		shortDesc: "",
+	},
+	mentefria: {
+		name: "Mente Fria",
+		desc: "",
+		shortDesc: "",
+	},
+	llamasiniestra: {
+		name: "Llama Siniestra",
+		desc: "",
+		shortDesc: "",
+	},
+	inteligenciaasertiva: {
+		name: "Inteligencia Asertiva",
+		desc: "",
+		shortDesc: "",
+	},
+	inteligenciaartificial: {
+		name: "Inteligencia Artificial",
+		desc: "",
+		shortDesc: "",
+	},
+	comealmas: {
+		name: "Come Almas",
+		desc: "",
+		shortDesc: "",
+	},
+	inteligenciaavanzada: {
+		name: "Inteligencia Avanzada",
+		desc: "",
+		shortDesc: "",
+	},
+	inteligenciaantigua: {
+		name: "Inteligencia Antigua",
 		desc: "",
 		shortDesc: "",
 	},
