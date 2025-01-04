@@ -2351,7 +2351,7 @@
             },
             {
                 "role": "Fast Special Sweeper",
-                "movepool": ["Nasty Plot", "Grass Knot", "Electro Ball", "Psyshock"],
+                "movepool": ["Scorching Sands", "Mystical Fire", "Dazzling Gleam", "Psychic"],
                 "abilities": ["Pastel Veil"],
                 "teraTypes": ["Water"],
                 "items": "Life Orb",
