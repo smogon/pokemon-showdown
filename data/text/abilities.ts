@@ -2296,7 +2296,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	malicia: {
 		name: "Malicia",
 		desc: "",
-		shortDesc: "",
+		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Dark-type attack.",
 	},
 	frubujas: {
 		name: "Frubujas",
@@ -2316,7 +2316,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	vatios: {
 		name: "Vatios",
 		desc: "",
-		shortDesc: "",
+		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Electric-type attack.",
 	},
 	mineralizacion: {
 		name: "Mineralizacion",
