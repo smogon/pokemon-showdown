@@ -2300,8 +2300,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	frubujas: {
 		name: "Frubujas",
-		desc: "This Pokemon receives 1/2 damage from contact moves. This Pokemon's moves lower the Speed of opponents by 1 stage.",
-		shortDesc: "This Pokemon receives 1/2 damage from contact moves. This Pokemon's moves lower the Speed of opponents by 1 stage.",
+		desc: "This Pokemon receives 1/10 damage from contact moves. This Pokemon's moves lower the Speed of opponents by 1 stage.",
+		shortDesc: "This Pokemon receives 1/10 damage from contact moves. This Pokemon's moves lower the Speed of opponents by 1 stage.",
 	},
 	colocapantallas: {
 		name: "Coloca Pantallas",
@@ -2320,8 +2320,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	mineralizacion: {
 		name: "Mineralizacion",
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon is immune to Rock-type and Steel-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type or Steel-type move. This Pokemon is unaffected by Stealth Rocks on its side of the field and removes them.",
+		shortDesc: "This Pokemon is healed 1/4 by Rock and Steel. This Pokemon is unaffected by Stealth Rocks on its side of the field and removes them.",
 	},
 	mentefria: {
 		name: "Mente Fria",
