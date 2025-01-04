@@ -12,7 +12,8 @@ interface Player {
 	name: string;
 	team?: Team;
 	price: number;
-	tiers?: string[];
+	tiersPlayed: string[];
+	tiersNotPlayed: string[];
 }
 
 interface Manager {
@@ -148,7 +149,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		let buf = `<span style="font-size: 85%">`;
 		buf += players.slice(0, max).map(p => {
 			if (typeof p === 'object') {
-				return `<username title="Tiers: ${p.tiers?.length ? `${Utils.escapeHTML(p.tiers.join(', '))}` : 'N/A'}"${clickable ? ' class="username"' : ''}>${Utils.escapeHTML(p.name)}</username>`;
+				return `<username title="Tiers: ${p.tiersPlayed.length ? `${Utils.escapeHTML(p.tiersPlayed.join(', '))}` : 'N/A'}"${clickable ? ' class="username"' : ''}>${Utils.escapeHTML(p.name)}</username>`;
 			}
 			return `<username${clickable ? ' class="username"' : ''}>${Utils.escapeHTML(p)}</username>`;
 		}).join(', ');
@@ -211,8 +212,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		const players = Utils.sortBy(this.getUndraftedPlayers(), p => p.name);
 		const tierArrays = new Map<string, Player[]>();
 		for (const player of players) {
-			if (!player.tiers) continue;
-			for (const tier of player.tiers) {
+			for (const tier of player.tiersPlayed) {
 				if (!tierArrays.has(tier)) tierArrays.set(tier, []);
 				tierArrays.get(tier)!.push(player);
 			}
@@ -245,8 +245,9 @@ export class Auction extends Rooms.SimpleRoomGame {
 		let buf = `<div class="infobox">`;
 		buf += Utils.html`Player: <username>${this.nominatedPlayer.name}</username> `;
 		buf += `Top bid: <b>${this.highestBid}</b> `;
-		buf += Utils.html`Top bidder: <b>${this.highestBidder.name}</b> `;
-		buf += Utils.html`Tiers: <b>${this.nominatedPlayer.tiers?.length ? `${this.nominatedPlayer.tiers.join(', ')}` : 'N/A'}</b>`;
+		buf += Utils.html`Top bidder: <b>${this.highestBidder.name}</b><br/>`;
+		buf += Utils.html`Tiers Played: <b>${this.nominatedPlayer.tiersPlayed.length ? `${this.nominatedPlayer.tiersPlayed.join(', ')}` : 'N/A'}</b><br/>`;
+		buf += Utils.html`Tiers Not Played: <b>${this.nominatedPlayer.tiersNotPlayed.length ? `${this.nominatedPlayer.tiersNotPlayed.join(', ')}` : 'N/A'}</b>`;
 		buf += `</div>`;
 		this.room.add(`|uhtml|bid-${this.nominatedPlayer.id}|${buf}`).update();
 	}
@@ -322,15 +323,25 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}
 		const rows = data.replace('\r', '').split('\n');
 		const tierNames = rows.shift()!.split('\t').slice(1);
+		if (tierNames.some(tier => tier.length > 30)) {
+			throw new Chat.ErrorMessage(`Tier names must be 30 characters or less.`);
+		}
+
 		const playerList = new Map<string, Player>();
 		for (const row of rows) {
-			const tiers = [];
+			const tiersPlayed = [];
+			const tiersNotPlayed = [];
 			const [name, ...tierData] = row.split('\t');
 			for (let i = 0; i < tierData.length; i++) {
-				if (['y', 'Y', '\u2713', '\u2714'].includes(tierData[i].trim())) {
+				switch (tierData[i].trim().toLowerCase()) {
+				case 'y':
 					if (!tierNames[i]) throw new Chat.ErrorMessage(`Invalid tier data found in the pastebin.`);
-					if (tierNames[i].length > 30) throw new Chat.ErrorMessage(`Tier names must be 30 characters or less.`);
-					tiers.push(tierNames[i]);
+					tiersPlayed.push(tierNames[i]);
+					break;
+				case 'n':
+					if (!tierNames[i]) throw new Chat.ErrorMessage(`Invalid tier data found in the pastebin.`);
+					tiersNotPlayed.push(tierNames[i]);
+					break;
 				}
 			}
 			if (name.length > 25) throw new Chat.ErrorMessage(`Player names must be 25 characters or less.`);
@@ -338,27 +349,27 @@ export class Auction extends Rooms.SimpleRoomGame {
 				id: toID(name),
 				name,
 				price: 0,
+				tiersPlayed,
+				tiersNotPlayed,
 			};
-			if (tiers.length) player.tiers = tiers;
 			playerList.set(player.id, player);
 		}
 		this.auctionPlayers = playerList;
 	}
 
-	addAuctionPlayer(name: string, tiers?: string[]) {
+	addAuctionPlayer(name: string, tiersPlayed: string[], tiersNotPlayed: string[]) {
 		if (this.state === 'bid') throw new Chat.ErrorMessage(`Players cannot be added during a nomination.`);
 		if (name.length > 25) throw new Chat.ErrorMessage(`Player names must be 25 characters or less.`);
+		if (tiersPlayed.some(tier => tier.length > 30) || tiersNotPlayed.some(tier => tier.length > 30)) {
+			throw new Chat.ErrorMessage(`Tier names must be 30 characters or less.`);
+		}
 		const player: Player = {
 			id: toID(name),
 			name,
 			price: 0,
+			tiersPlayed,
+			tiersNotPlayed,
 		};
-		if (tiers?.length) {
-			if (tiers.some(tier => tier.length > 30)) {
-				throw new Chat.ErrorMessage(`Tier names must be 30 characters or less.`);
-			}
-			player.tiers = tiers;
-		}
 		this.auctionPlayers.set(player.id, player);
 		return player;
 	}
@@ -541,14 +552,15 @@ export class Auction extends Rooms.SimpleRoomGame {
 			this.state = 'bid';
 			this.highestBid = this.minBid;
 			this.highestBidder = this.nominatingTeam;
-
+			this.sendMessage(Utils.html`/html <username class="username">${user.name}</username> from team <b>${this.nominatingTeam.name}</b> has nominated <username>${player.name}</username> for auction!`);
 			const notifyMsg = Utils.html`|notify|${this.room.title} Auction|${player.name} has been nominated!`;
 			for (const currManager of this.managers.values()) {
 				if (currManager.team === this.nominatingTeam) continue;
-				Users.getExact(currManager.id)?.sendTo(this.room, notifyMsg);
+				const curUser = Users.getExact(currManager.id);
+				curUser?.sendTo(this.room, notifyMsg);
+				curUser?.sendTo(this.room,
+					`|raw|Send a message with the amount you want to bid (e.g. <code>.5</code> or <code>5</code> will place a bid of <b>5000</b>)!`);
 			}
-
-			this.sendMessage(Utils.html`/html <username class="username">${user.name}</username> from team <b>${this.nominatingTeam.name}</b> has nominated <username>${player.name}</username> for auction. Use /bid or type a number to place a bid!`);
 			this.sendBidInfo();
 			this.startBidTimer();
 		}
@@ -591,8 +603,26 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	onChatMessage(message: string, user: User) {
-		if (this.state === 'bid' && Number(message.replace(',', '.'))) {
-			this.bid(user, parseCredits(message));
+		if (this.state !== 'bid') return;
+
+		const originalMsg = message;
+		if (message.startsWith('.')) message = message.slice(1);
+		if (Number(message.replace(',', '.'))) {
+			if (this.type === 'blind') {
+				this.bid(user, parseCredits(message));
+			} else {
+				// If bid is unsuccessful, the error message and the original message are sent to the room
+				try {
+					this.bid(user, parseCredits(message));
+				} catch (e) {
+					this.room.add(`|c|${user.getIdentity()}|${originalMsg}`);
+					if (e instanceof Chat.ErrorMessage) {
+						this.sendMessage(Utils.html`/html <span class="message-error">${e.message}</span>`);
+					} else {
+						this.sendMessage(`/html <span class="message-error">An unexpected error occurred while placing your bid.</span>`);
+					}
+				}
+			}
 			return '';
 		}
 	}
@@ -876,13 +906,16 @@ export const commands: Chat.ChatCommands = {
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
-			const [name, ...tiers] = target.split(',').map(x => x.trim());
+			const name = target.slice(0, target.indexOf(',')).trim();
+			const [tiersPlayed, tiersNotPlayed] = target.slice(target.indexOf(',') + 1).split(';')
+				.map(tiers => tiers.split(',').map(t => t.trim()));
+
 			if (!name) return this.parse('/help auction addplayer');
-			const player = auction.addAuctionPlayer(name, tiers);
+			const player = auction.addAuctionPlayer(name, tiersPlayed, tiersNotPlayed);
 			this.addModAction(`${user.name} added player ${player.name} to the auction.`);
 		},
 		addplayerhelp: [
-			`/auction addplayer [name], [tier1], [tier2], ... - Adds a player to the auction. Requires: # ~ auction owner`,
+			`/auction addplayer [name], [tierPlayed1], [tierPlayed2], ... ; [tierNotPlayed1], [tierNotPlayed2], ... - Adds a player to the auction. Requires: # ~ auction owner`,
 		],
 		removeplayer(target, room, user) {
 			const auction = this.requireGame(Auction);
@@ -1009,15 +1042,6 @@ export const commands: Chat.ChatCommands = {
 		nominatehelp: [
 			`/auction nominate OR /nom [player] - Nominates a player for auction.`,
 		],
-		bid(target, room, user) {
-			const auction = this.requireGame(Auction);
-			if (!target) return this.parse('/help auction bid');
-			auction.bid(user, parseCredits(target));
-		},
-		bidhelp: [
-			`/auction bid OR /bid [amount] - Bids on a player for the specified amount. If the amount is less than 500, it will be multiplied by 1000.`,
-			`During the bidding phase, all numbers that are sent in the chat will be treated as bids.`,
-		],
 		skip: 'skipnom',
 		skipnom(target, room, user) {
 			const auction = this.requireGame(Auction);
@@ -1076,8 +1100,7 @@ export const commands: Chat.ChatCommands = {
 			`- display: Displays the current state of the auction.<br/>` +
 			`- pricelist: Displays the current prices of players by team.<br/>` +
 			`- nom [player]: Nominates a player for auction.<br/>` +
-			`- bid [amount]: Bids on a player for the specified amount. If the amount is less than 500, it will be multiplied by 1000.<br/>` +
-			`You may use /bid and /nom directly without the /auction prefix.<br/>` +
+			`You may use /nom directly without the /auction prefix.<br/>` +
 			`During the bidding phase, all numbers that are sent in the chat will be treated as bids.<br/><br/>` +
 			`<details class="readmore"><summary>Configuration Commands</summary>` +
 			`- minbid [amount]: Sets the minimum bid.<br/>` +
@@ -1107,8 +1130,8 @@ export const commands: Chat.ChatCommands = {
 	nom(target) {
 		this.parse(`/auction nominate ${target}`);
 	},
-	bid(target) {
-		this.parse(`/auction bid ${target}`);
+	bid() {
+		this.errorReply(`/bid is no longer supported. Send the amount by itself in the chat to place your bid.`);
 	},
 	overpay() {
 		this.requireGame(Auction);
