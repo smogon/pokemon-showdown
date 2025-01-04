@@ -2783,5 +2783,165 @@
                 "speEVs": 252
             }
         ]
+    },
+    "onix": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Physically Defensive Support",
+                "movepool": ["Toxic", "Dragon Tail", "Stealth Rock", "Sandstorm"],
+                "abilities": ["Sturdy"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "impish",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Physically Defensive Support",
+                "movepool": ["Body Press", "Dragon Tail", "Stealth Rock", "Taunt"],
+                "abilities": ["Sturdy"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "impish",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
+    },
+    "Hypno": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Physically Defensive",
+                "movepool": ["Rest", "Calm Mind", "Telekinesis", "Draining Kiss"],
+                "abilities": ["Insomnia"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 4,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 0,
+                "speEVs": 0
+            },
+            {
+                "role": "Physically Defensive",
+                "movepool": ["Poison Tail", "Stealth Rock", "Earthquake", "Shore Up"],
+                "abilities": ["Sand Veil"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Specs",
+                "movepool": ["Telekinesis", "Hyper Beam", "Dazzling Gleam", "Focus Blast"],
+                "abilities": ["Forewarn"],
+                "teraTypes": ["Water"],
+                "items": "Choice Specs",
+                "nature": "modest",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
+    },
+    "kingler": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dig", "Liquidation", "X-Scissor", "Knock Off"],
+                "abilities": ["Hyper Cutter"],
+                "teraTypes": ["Water"],
+                "items": "Power Herb",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Guillotine", "Crabhammer", "X-Scissor", "Hammer Arm"],
+                "abilities": ["Shell Armor"],
+                "teraTypes": ["Water"],
+                "items": "Assault Vest",
+                "nature": "adamant",
+                "hpEVs": 252,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Physical Scarf",
+                "movepool": ["High Horsepower", "Liquidation", "Rock Slide", "Knock Off"],
+                "abilities": ["Sheer Force"],
+                "teraTypes": ["Water"],
+                "items": "Choice Scarf",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "kinglermega": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["High Horsepower", "Liquidation", "X-Scissor", "Knock Off"],
+                "abilities": ["Hyper Cutter"],
+                "teraTypes": ["Water"],
+                "items": "Kinglerite",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Stomping Tantrum", "Crabhammer", "Swords Dance", "Knock Off"],
+                "abilities": ["Hyper Cutter"],
+                "teraTypes": ["Water"],
+                "items": "Kinglerite",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
     }
 }
