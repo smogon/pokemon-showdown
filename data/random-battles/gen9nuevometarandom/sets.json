@@ -2704,7 +2704,7 @@
             }
         ]
     },
-    "Gengar": {
+    "gengar": {
         "level": 100,
         "sets": [
             {
@@ -2751,7 +2751,7 @@
             }
         ]
     },
-    "Gengarmega": {
+    "gengarmega": {
         "level": 100,
         "sets": [
             {
@@ -2817,7 +2817,7 @@
             }
         ]
     },
-    "Hypno": {
+    "hypno": {
         "level": 100,
         "sets": [
             {
