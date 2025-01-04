@@ -2278,18 +2278,20 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	nudillosdepiedra: {
 		name: "Nudillos De Piedra",
-		desc: "",
-		shortDesc: "Holder's punch-based attacks do 2x damage, and it loses 15% of its max HP after the attack.",
+		desc: "This Pokemon's punch-based attacks have their power multiplied by 2, but it loses 15% of its max HP after the attack.",
+		shortDesc: "This Pokemon's punch-based attacks have 2x power. It loses 15% of its max HP after the attack.",
+
+		damage: "  [POKEMON] lost some of its HP!",
 	},
 	suertudo: {
 		name: "Suertudo",
 		desc: "",
-		shortDesc: "",
+		shortDesc: "This Pokemon's attacks are critical hits.",
 	},
 	gigantificacion: {
 		name: "Gigantificacion",
 		desc: "",
-		shortDesc: "",
+		shortDesc: "On switch-in, this Pokemon's highest stat is raised by 1 stage.",
 	},
 	malicia: {
 		name: "Malicia",
