@@ -2360,4 +2360,10 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 		desc: "This Pokemon's moves will always hit and the power of its attacks is decreased by X/2, where X is the difference between the moves accuracy and 100.",
 		shortDesc: "Every move used by this Pokemon will always hit, but power is decreased by 1/2 the accuracy increase.",
 	},
+	plumawatt: {
+		name: "Pluma Watt",
+		shortDesc: "This Pokemon has a 30% chance to move first in its priority bracket with attacking moves.",
+
+		activate: "  Quick Draw made [POKEMON] move faster!",
+	},
 };
