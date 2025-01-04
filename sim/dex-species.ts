@@ -64,7 +64,7 @@ export interface PokemonGoDataTable {[speciesid: IDEntry]: PokemonGoData}
  * First character is a generation number, 1-9.
  * Second character is a source ID, one of:
  *
- * - M = TM/HM 
+ * - M = TM/HM
  * - T = tutor
  * - L = start or level-up, 3rd char+ is the level
  * - R = restricted (special moves like Rotom moves)
@@ -324,7 +324,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		this.canGigantamax = data.canGigantamax || undefined;
 		this.gmaxUnreleased = !!data.gmaxUnreleased;
 		this.cannotDynamax = !!data.cannotDynamax;
-		this.battleOnly = data.battleOnly || (this.isMega ? this.baseSpecies : undefined);
+		this.battleOnly = data.battleOnly || (this.isMega ? this.baseSpecies : undefined) || (this.isTotem ? this.baseSpecies : undefined);
 		this.changesFrom = data.changesFrom ||
 			(this.battleOnly !== this.baseSpecies ? this.battleOnly : this.baseSpecies);
 		if (Array.isArray(this.changesFrom)) this.changesFrom = this.changesFrom[0];
@@ -463,6 +463,7 @@ export class DexSpecies {
 				hisui: ['h', 'hisui', 'hisuian'],
 				paldea: ['p', 'paldea', 'paldean'],
 				mega: ['m', 'mega'],
+				totem: ['t', 'totem'],
 				primal: ['p', 'primal'],
 			};
 			for (const forme in formeNames) {

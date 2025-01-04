@@ -1235,7 +1235,7 @@ export class RandomTeams {
 		}
 		if (
 			species.id !== 'yanmega' &&
-			this.dex.getEffectiveness('Rock', species) >= 2 && (!types.includes('Flying') || !isDoubles)
+			this.dex.getEffectiveness('Rock', species) >= 2 && (!types.includes('Flying'))
 		) return 'Heavy-Duty Boots';
 	}
 

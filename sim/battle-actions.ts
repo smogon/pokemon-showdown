@@ -1459,7 +1459,7 @@ export class BattleActions {
 	canZMove(pokemon: Pokemon) {
 		if (pokemon.side.zMoveUsed ||
 			(pokemon.transformed &&
-				(pokemon.species.isMega || pokemon.species.isPrimal || pokemon.species.forme === "Ultra"))
+				(pokemon.species.isMega || pokemon.species.isTotem || pokemon.species.isPrimal || pokemon.species.forme === "Ultra"))
 		) return;
 		const item = pokemon.getItem();
 		if (!item.zMove) return;
