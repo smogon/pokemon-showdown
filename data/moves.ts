@@ -761,10 +761,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onBeforeMovePriority: 2,
 			onBeforeMove(pokemon, target, move) {
 				this.add('-activate', pokemon, 'move: Attract', '[of] ' + this.effectState.source);
-				if (this.randomChance(1, 2)) {
-					this.add('cant', pokemon, 'Attract');
-					return false;
-				}
+				move.basePower *= 0.8;
 			},
 			onEnd(pokemon) {
 				this.add('-end', pokemon, 'Attract', '[silent]');
@@ -6464,13 +6461,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	furycutter: {
 		num: 210,
-		accuracy: 95,
-		basePower: 40,
+		accuracy: 100,
+		basePower: 70,
 		basePowerCallback(pokemon, target, move) {
 			if (!pokemon.volatiles['furycutter'] || move.hit === 1) {
 				pokemon.addVolatile('furycutter');
 			}
-			const bp = this.clampIntRange(move.basePower * pokemon.volatiles['furycutter'].multiplier, 1, 160);
+			const bp = this.clampIntRange(move.basePower + pokemon.volatiles['furycutter'].increase, 1, 150);
 			this.debug('BP: ' + bp);
 			return bp;
 		},
@@ -6480,15 +6477,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1},
 		condition: {
-			duration: 2,
 			onStart() {
-				this.effectState.multiplier = 1;
+				this.effectState.increase = 15;
 			},
 			onRestart() {
-				if (this.effectState.multiplier < 4) {
-					this.effectState.multiplier <<= 1;
+				if (this.effectState.increase < 80) {
+					this.effectState.increase += 15;
 				}
-				this.effectState.duration = 2;
 			},
 		},
 		secondary: null,
@@ -10354,14 +10349,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	lashout: {
 		num: 808,
 		accuracy: 100,
-		basePower: 75,
+		basePower: 70,
 		category: "Physical",
 		name: "Lash Out",
 		pp: 5,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		onBasePower(basePower, source) {
-			if (source.statsLoweredThisTurn) {
+			if (source.statsLoweredThisTurn || source.status) {
 				this.debug('lashout buff');
 				return this.chainModify(2);
 			}
@@ -14089,14 +14084,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-
 		name: "Powder",
 		pp: 20,
 		priority: 1,
 		flags: {protect: 1, reflectable: 1, mirror: 1, bypasssub: 1, metronome: 1, powder: 1},
 		volatileStatus: 'powder',
+		//TODO terminar
 		condition: {
-			duration: 1,
+			duration: 5,
 			onStart(target) {
 				this.add('-singleturn', target, 'Powder');
 			},
@@ -14111,7 +14106,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 		},
 		secondary: null,
-		target: "normal",
+		target: "foeSide",
 		type: "Bug",
 		zMove: {boost: {spd: 2}},
 		contestType: "Clever",
@@ -14943,7 +14938,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Status",
 		name: "Quash",
 		pp: 15,
-		priority: 0,
+		priority: 5,
 		flags: {protect: 1, mirror: 1},
 		onHit(target) {
 			if (this.activePerHalf === 1) return false; // fails in singles
@@ -17050,8 +17045,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		num: 318,
 		accuracy: 100,
 		basePower: 60,
+		basePowerCallback(pokemon, target, move) {
+			if (target.hasType('Fairy')) {
+				this.debug('BP doubled from status condition');
+				return move.basePower * 1.5;
+			}
+			return move.basePower;
+		},
 		category: "Special",
-
 		name: "Silver Wind",
 		pp: 5,
 		priority: 0,
@@ -18473,18 +18474,22 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	steamroller: {
 		num: 537,
-		accuracy: 100,
-		basePower: 65,
+		accuracy: 90,
+		basePower: 70,
 		category: "Physical",
-
 		name: "Steamroller",
 		pp: 20,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, slicing: 1,},
-		secondary: {
-			chance: 30,
-			volatileStatus: 'flinch',
-		},
+		secondaries: [
+			{
+				chance: 30,
+				volatileStatus: 'flinch',
+			}, {
+				chance: 30,
+				sideCondition: 'spikes',
+			},
+		],
 		target: "normal",
 		type: "Bug",
 		contestType: "Tough",
@@ -19959,12 +19964,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	thief: {
 		num: 168,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 50,
 		category: "Physical",
 		name: "Thief",
 		pp: 25,
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, failmefirst: 1, noassist: 1, failcopycat: 1},
+		onBasePower(basePower, source, target, move) {
+			const item = target.getItem();
+			if (!this.singleEvent('TakeItem', item, target.itemState, target, target, move, item)) return;
+			if (item.id) {
+				return this.chainModify(1.5);
+			}
+		},
+		//TODO usar objeto
 		onAfterHit(target, source, move) {
 			if (source.item || source.volatiles['gem']) {
 				return;
