@@ -3281,5 +3281,255 @@
                 "speEVs": 0
             }
         ]
+    },
+    "hitmonlee": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Close Combat", "Swords Dance", "Knock Off", "Bullet Punch"],
+                "abilities": ["Unburden"],
+                "teraTypes": ["Water"],
+                "items": "Fighting Gem",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Swords Dance", "Rapid Spin", "Close Combat", "Knock Off"],
+                "abilities": ["Limber"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Physical Scarf",
+                "movepool": ["High Jump Kick", "Double-Edge", "Earthquake", "Rapid Spin"],
+                "abilities": ["Reckless"],
+                "teraTypes": ["Water"],
+                "items": "Choice Scarf",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "hitmonchan": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Fake Out", "Bullet Punch", "Mach Punch", "Drain Punch"],
+                "abilities": ["Iron Fist"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Dynamic Punch", "Stone Edge", "Rage", "Bullet Punch"],
+                "abilities": ["Keen Eye"],
+                "teraTypes": ["Water"],
+                "items": "Assault Vest",
+                "nature": "adamant",
+                "hpEVs": 252,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Bullet Punch", "Bulk Up", "Drain Punch", "Knock Off"],
+                "abilities": ["Inner Focus"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "adamant",
+                "hpEVs": 252,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
+    },
+    "lickitung": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Wish", "Protect", "Toxic", "Body Press"],
+                "abilities": ["Unaware"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
+    },
+    "weezing": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Mixed Defensive",
+                "movepool": ["Will-O-Wisp", "Clear Smog", "Incinerate", "Pain Split"],
+                "abilities": ["Levitate"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 4,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Physically Defensive",
+                "movepool": ["Will-O-Wisp", "Pain Split", "Toxic Spikes", "Incinerate"],
+                "abilities": ["Levitate"],
+                "teraTypes": ["Water"],
+                "items": "Rocky Helmet",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
+    },
+    "weezinggalar": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Mixed Defensive",
+                "movepool": ["Will-O-Wisp", "Defog", "Incinerate", "Pain Split"],
+                "abilities": ["Levitate"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 4,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Physically Defensive",
+                "movepool": ["Strange Steam", "Pain Split", "Toxic Spikes", "Incinerate"],
+                "abilities": ["Misty Surge"],
+                "teraTypes": ["Water"],
+                "items": "Rocky Helmet",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
+    },
+    "Rhydon": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Physically Defensive Support",
+                "movepool": ["Toxic", "Dragon Tail", "Stealth Rock", "Body Press"],
+                "abilities": ["Stamina"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "impish",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
+    },
+    "chansey": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Physically Defensive Support",
+                "movepool": ["Toxic", "Soft-Boiled", "Stealth Rock", "Seismic Toss"],
+                "abilities": ["Natural Cure"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "bold",
+                "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 8,
+                "speEVs": 0
+            },
+            {
+                "role": "Physically Defensive Support",
+                "movepool": ["Thunder Wave", "Soft-Boiled", "Heal Bell", "Counter"],
+                "abilities": ["Natural Cure"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "bold",
+                "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 8,
+                "speEVs": 0
+            }
+        ]
+    },
+    "tangela": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Physically Defensive Support",
+                "movepool": ["Toxic", "Leech Seed", "Knock Off", "Giga Drain"],
+                "abilities": ["Regenerator"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
     }
 }
