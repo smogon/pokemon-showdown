@@ -1175,15 +1175,15 @@
             },
             {
                 "role": "Specially Defensive",
-                "movepool": ["Mud Shot", "Stealth Rock", "Incinerate", "Shore Up"],
+                "movepool": ["Earthquake", "Stealth Rock", "Incinerate", "Shore Up"],
                 "abilities": ["Sand Veil"],
                 "teraTypes": ["Water"],
                 "items": "Black Sludge",
-                "nature": "calm",
+                "nature": "careful",
                 "hpEVs": 252,
-                "atkEVs": 0,
+                "atkEVs": 4,
                 "defEVs": 0,
-                "spaEVs": 4,
+                "spaEVs": 0,
                 "spdEVs": 252,
                 "speEVs": 0
             }
@@ -2558,6 +2558,227 @@
                 "atkEVs": 252,
                 "defEVs": 0,
                 "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "dewgong": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Mixed Defensive",
+                "movepool": ["Flip Turn", "Hydro Pump", "Brine", "Sheer Cold"],
+                "abilities": ["Hydration"],
+                "teraTypes": ["Water"],
+                "items": "Assault Vest",
+                "nature": "bold",
+                "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 8,
+                "speEVs": 0
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Flip Turn", "Toxic", "Protect", "Brine"],
+                "abilities": ["Hydration"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 4,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Flip Turn", "Brine", "Toxic", "Fake Out"],
+                "abilities": ["Hydration"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 4,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            }
+        ]
+    },
+    "muk": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Special Sweeper",
+                "movepool": ["Acid Spray", "Sludge Bomb", "Incinerate", "Mega Drain"],
+                "abilities": ["Sticky Hold"],
+                "teraTypes": ["Water"],
+                "items": "Assault Vest",
+                "nature": "modest",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Incinerate", "Toxic Spikes", "Haze", "Sludge Bomb"],
+                "abilities": ["Sticky Hold"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 4,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Physically Defensive",
+                "movepool": ["Incinerate", "Sludge Bomb", "Giga Drain", "Toxic Spikes"],
+                "abilities": ["Sticky Hold"],
+                "teraTypes": ["Water"],
+                "items": "Rocky Helmet",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
+    },
+    "mukalola": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Shadow Sneak", "Knock Off", "Drain Punch", "Poison Jab"],
+                "abilities": ["Poison Touch"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "adamant",
+                "hpEVs": 252,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Recycle", "Curse", "Poison Jab", "Shadow Sneak"],
+                "abilities": ["Poison Touch"],
+                "teraTypes": ["Water"],
+                "items": "Aguav Berry",
+                "nature": "careful",
+                "hpEVs": 252,
+                "atkEVs": 4,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Curse", "Knock Off", "Drain Punch", "Poison Jab"],
+                "abilities": ["Power of Alchemy"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "adamant",
+                "hpEVs": 252,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
+    },
+    "Gengar": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Nasty Plot", "Sludge Wave", "Shadow Ball", "Thunderbolt"],
+                "abilities": ["Levitate"],
+                "teraTypes": ["Water"],
+                "items": "Focus Sash",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Nasty Plot", "Nightmare", "Focus Blast", "Nasty Plot"],
+                "abilities": ["Levitate"],
+                "teraTypes": ["Water"],
+                "items": "Focus Sash",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Dazzling Gleam", "Sludge Wave", "Shadow Ball", "Thunderbolt"],
+                "abilities": ["Levitate"],
+                "teraTypes": ["Water"],
+                "items": "Choice Specs",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "Gengarmega": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Nasty Plot", "Sludge Wave", "Shadow Ball", "Thunderbolt"],
+                "abilities": ["Levitate"],
+                "teraTypes": ["Water"],
+                "items": "Gengarite",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Nasty Plot", "Nightmare", "Focus Blast", "Nasty Plot"],
+                "abilities": ["Levitate"],
+                "teraTypes": ["Water"],
+                "items": "Gengarite",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
                 "spdEVs": 4,
                 "speEVs": 252
             }
