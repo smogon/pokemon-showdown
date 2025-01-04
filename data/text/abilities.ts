@@ -2306,12 +2306,12 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	colocapantallas: {
 		name: "Coloca Pantallas",
 		desc: "",
-		shortDesc: "",
+		shortDesc: "This Pokemon's use of Aurora Veil, Light Screen, or Reflect lasts 8 turns instead of 5.",
 	},
 	cantohelado: {
 		name: "Canto Helado",
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon's sound-based moves become Ice-type moves. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects. This Pokemon's sound-based moves have a 30% chance of freezing.",
+		shortDesc: "This Pokemon's sound-based moves become Ice type. This Pokemon's sound-based moves have a 30% chance of freezing",
 	},
 	vatios: {
 		name: "Vatios",
