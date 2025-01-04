@@ -1652,6 +1652,9 @@ export class RandomTeams {
 		const typePool = this.dex.types.names();
 		const type = this.forceMonotype || this.sample(typePool);
 
+		const usePotD = global.Config && Config.potd && ruleTable.has('potd');
+		const potd = usePotD ? this.dex.species.get(Config.potd) : null;
+
 		const baseFormes: {[k: string]: number} = {};
 		let hasMega = false;
 		let hasTotem = false;
@@ -1773,6 +1776,9 @@ export class RandomTeams {
 
 					// Limit three of any type combination in Monotype
 					if (!this.forceMonotype && isMonotype && (typeComboCount[typeCombo] >= 3 * limitFactor)) continue;
+
+					if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
+
 				}
 
 				const set = this.randomSet(
