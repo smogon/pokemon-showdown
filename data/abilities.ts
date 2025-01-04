@@ -821,13 +821,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			let mod = 1;
-			if (move.flags['contact']) {
+			if (move.flags['contact'] || target.hp > 0) {
 				const reduction = target.volatiles['cutecharm']?.stack || 0;
 				mod *= 1 - reduction;
 			}
 			return this.chainModify(mod);
 		},
-
+		/*onFoeSwitchOut(target, source) {
+				target.volatiles['cutecharm']?.stack = 0
+		},*/
 		flags: {breakable: 1},
 		name: "Cute Charm",
 		rating: 0.5,
