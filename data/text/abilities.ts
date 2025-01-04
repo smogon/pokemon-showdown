@@ -2300,8 +2300,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	frubujas: {
 		name: "Frubujas",
-		desc: "This Pokemon receives 1/2 damage from contact moves. This Pokemon's moves lower the Speed of opponents by 1 stage.",
-		shortDesc: "This Pokemon receives 1/2 damage from contact moves. This Pokemon's moves lower the Speed of opponents by 1 stage.",
+		desc: "This Pokemon receives 1/10 damage from contact moves. This Pokemon's moves lower the Speed of opponents by 1 stage.",
+		shortDesc: "This Pokemon receives 1/10 damage from contact moves. This Pokemon's moves lower the Speed of opponents by 1 stage.",
 	},
 	colocapantallas: {
 		name: "Coloca Pantallas",
@@ -2320,42 +2320,50 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	mineralizacion: {
 		name: "Mineralizacion",
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon is immune to Rock-type and Steel-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type or Steel-type move. This Pokemon is unaffected by Stealth Rocks on its side of the field and removes them.",
+		shortDesc: "This Pokemon is healed 1/4 by Rock and Steel. This Pokemon is unaffected by Stealth Rocks on its side of the field and removes them.",
 	},
 	mentefria: {
 		name: "Mente Fria",
 		desc: "",
-		shortDesc: "",
+		shortDesc: "This Pokemon's special moves that don't make contact have their power multiplied by 1.15 and 30% chance of freezing.",
 	},
 	llamasiniestra: {
 		name: "Llama Siniestra",
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon's Special Attack is raised by 2 stages if it attacks and knocks out another Pokemon with a Dark-type attack. This Pokemon's Dark-type moves have a 100% chance of burning. This effect comes after a move's inherent secondary effect chance.",
+		shortDesc: "This Pokemon's Special Attack is raised by 2 stages if it attacks and KOes another Pokemon with a Dark-type attack. This Pokemon's Dark-type moves have a 100% chance of burning.",
 	},
 	inteligenciaasertiva: {
 		name: "Inteligencia Asertiva",
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon's moves and their effects ignore immunities, protection, stat stages and certain Abilities of other Pokemon. The Abilities that can be negated are Armor Tail, Aroma Veil, Aura Break, Battle Armor, Big Pecks, Bulletproof, Clear Body, Contrary, Damp, Dazzling, Disguise, Dry Skin, Earth Eater, Filter, Flash Fire, Flower Gift, Flower Veil, Fluffy, Friend Guard, Fur Coat, Good as Gold, Grass Pelt, Guard Dog, Heatproof, Heavy Metal, Hyper Cutter, Ice Face, Ice Scales, Illuminate, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Light Metal, Lightning Rod, Limber, Magic Bounce, Magma Armor, Marvel Scale, Mind's Eye, Mirror Armor, Motor Drive, Multiscale, Oblivious, Overcoat, Own Tempo, Pastel Veil, Punk Rock, Purifying Salt, Queenly Majesty, Sand Veil, Sap Sipper, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Sweet Veil, Tangled Feet, Telepathy, Tera Shell, Thermal Exchange, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Bubble, Water Veil, Well-Baked Body, White Smoke, Wind Rider, Wonder Guard, and Wonder Skin. This affects every other Pokemon on the field, whether or not it is a target of this Pokemon's move, and whether or not their Ability is beneficial to this Pokemon.	",
+		shortDesc: "This Pokemon's moves and their effects ignore the Abilities, stat stages, immunities and protection of other Pokemon when doing damage.",
 	},
 	inteligenciaartificial: {
 		name: "Inteligencia Artificial",
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon's offensive stat is multiplied by 1.4 and the accuracy of its attacks is multiplied by 0.95.",
+		shortDesc: "This Pokemon's offensive stat is 1.4x and accuracy of its attacks is 0.95x.",
 	},
 	comealmas: {
 		name: "Come Almas",
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon's moves have their power multiplied by 1+(X*0.05), where X is the total number of times any Pokemon has fainted when this Ability became active, and X cannot be greater than 10.",
+		shortDesc: "This Pokemon's moves have 5% more power for each fainted Pokemon, up to 10 Pokemon.",
+
+		activate: "  [POKEMON] gained strength from the fallen!",
 	},
 	inteligenciaavanzada: {
 		name: "Inteligencia Avanzada",
-		desc: "",
-		shortDesc: "",
+		desc: "Deals damage to the target based on its Defense instead of Special Defense, whichever is lower, but damage is multiplied by 0.8.",
+		shortDesc: "Damages target based on the foes' weaker Defense, but offensive stat is multiplied by 0.8.",
 	},
 	inteligenciaantigua: {
 		name: "Inteligencia Antigua",
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon's moves will always hit and the power of its attacks is decreased by X/2, where X is the difference between the moves accuracy and 100.",
+		shortDesc: "Every move used by this Pokemon will always hit, but power is decreased by 1/2 the accuracy increase.",
+	},
+	plumawatt: {
+		name: "Pluma Watt",
+		shortDesc: "This Pokemon has a 30% chance to move first in its priority bracket with attacking moves.",
+
+		activate: "  Pluma Watt made [POKEMON] move faster!",
 	},
 };

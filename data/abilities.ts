@@ -6119,4 +6119,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: -117,
 	},
+	plumawatt: {
+		onFractionalPriorityPriority: -1,
+		onFractionalPriority(priority, pokemon, target, move) {
+			if (move.category !== "Status" && this.randomChance(3, 10)) {
+				this.add('-activate', pokemon, 'ability: Pluma Watt');
+				return 0.1;
+			}
+		},
+		flags: {},
+		name: "Pluma Watt",
+		rating: 2.5,
+		num: 259,
+	},
 };
