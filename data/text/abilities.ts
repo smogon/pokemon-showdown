@@ -2296,27 +2296,27 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	malicia: {
 		name: "Malicia",
 		desc: "",
-		shortDesc: "",
+		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Dark-type attack.",
 	},
 	frubujas: {
 		name: "Frubujas",
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon receives 1/2 damage from contact moves. This Pokemon's moves lower the Speed of opponents by 1 stage.",
+		shortDesc: "This Pokemon receives 1/2 damage from contact moves. This Pokemon's moves lower the Speed of opponents by 1 stage.",
 	},
 	colocapantallas: {
 		name: "Coloca Pantallas",
 		desc: "",
-		shortDesc: "",
+		shortDesc: "This Pokemon's use of Aurora Veil, Light Screen, or Reflect lasts 8 turns instead of 5.",
 	},
 	cantohelado: {
 		name: "Canto Helado",
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon's sound-based moves become Ice-type moves. This effect comes after other effects that change a move's type, but before Ion Deluge and Electrify's effects. This Pokemon's sound-based moves have a 30% chance of freezing.",
+		shortDesc: "This Pokemon's sound-based moves become Ice type. This Pokemon's sound-based moves have a 30% chance of freezing",
 	},
 	vatios: {
 		name: "Vatios",
 		desc: "",
-		shortDesc: "",
+		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Electric-type attack.",
 	},
 	mineralizacion: {
 		name: "Mineralizacion",
