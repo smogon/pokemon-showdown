@@ -20,7 +20,7 @@ Check the test/ directory to see if a file already exists for the effect that yo
 		it(`test should start here`, function () {
 
 		});
-	}
+	});
 
 To create the battle, use common.createBattle and pass in two arrays of teams. You can add additional flags as well:
 - gameType: 'doubles', 'triples', 'multi', 'freeforall', etc (tests default to singles)
