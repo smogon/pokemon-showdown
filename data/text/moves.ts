@@ -605,6 +605,11 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 		desc: "Has a 20% chance to paralyze the target.",
 		shortDesc: "20% chance to paralyze the target.",
 	},
+	bombapegajosa: {
+		name: "Bomba Pegajosa",
+		desc: "If this move is successful, it sets up a hazard on the opposing side of the field, lowering the Speed by 1 stage of each opposing Pokemon that switches in, unless it is a Flying-type Pokemon or has the Levitate Ability. Can be removed from the opposing side if any Pokemon uses Tidy Up, or if any opposing Pokemon uses Mortal Spin, Rapid Spin, or Defog successfully, or is hit by Defog.",
+		shortDesc: "Sets a Sticky Web on the opposing side.",
+	},
 	boneclub: {
 		name: "Bone Club",
 		desc: "Has a 10% chance to make the target flinch.",
