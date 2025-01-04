@@ -3531,5 +3531,250 @@
                 "speEVs": 0
             }
         ]
+    },
+    "kangaskhan": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Band",
+                "movepool": ["Beat Up", "Drain Punch", "Double-Edge", "Ice Punch"],
+                "abilities": ["Scrappy"],
+                "teraTypes": ["Water"],
+                "items": "Choice Band",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Fake Out", "Power-Up Punch", "Drain Punch", "Return"],
+                "abilities": ["Scrappy"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Wish", "Protect", "Fake Out", "Body Slam"],
+                "abilities": ["Inner Focus"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "careful",
+                "hpEVs": 252,
+                "atkEVs": 4,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            }
+        ]
+    },
+    "kangaskhanmega": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Band",
+                "movepool": ["Beat Up", "Fake Out", "Power-Up Punch", "Return"],
+                "abilities": ["Scrappy"],
+                "teraTypes": ["Water"],
+                "items": "Kangaskhanite",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Fake Out", "Power-Up Punch", "Drain Punch", "Body Slam"],
+                "abilities": ["Scrappy"],
+                "teraTypes": ["Water"],
+                "items": "Kangaskhanite",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "seaking": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Specs",
+                "movepool": ["Flip Turn", "Surf", "Mud Shot", "Ice Beam"],
+                "abilities": ["Lightning Rod"],
+                "teraTypes": ["Water"],
+                "items": "Choice Specs",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Flip Turn", "Ice Beam", "Mud Shot", "Hydro Pump"],
+                "abilities": ["Lightning Rod"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Flip Turn", "Ice Beam", "Mud Shot", "Hydro Pump"],
+                "abilities": ["Water Veil"],
+                "teraTypes": ["Water"],
+                "items": "Assault Vest",
+                "nature": "modest",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
+    },
+    "starmie": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Specs",
+                "movepool": ["Flip Turn", "Telekinesis", "Hydro Pump", "Blizzard"],
+                "abilities": ["Illuminate"],
+                "teraTypes": ["Water"],
+                "items": "Choice Specs",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Flip Turn", "Blizzard", "Telekinesis", "Hydro Pump"],
+                "abilities": ["Illuminate"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "mrmime": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Reflect", "Light Screen", "Fake Out", "Mystical Fire"],
+                "abilities": ["Coloca Pantallas"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "timid",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 4,
+                "spaEVs": 0,
+                "spdEVs": 0,
+                "speEVs": 252
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Reflect", "Light Screen", "Trick Room", "Mystical Fire"],
+                "abilities": ["Coloca Pantallas"],
+                "teraTypes": ["Water"],
+                "items": "Dimencionador",
+                "nature": "sassy",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
+            }
+        ]
+    },
+    "mrmimegalar": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Reflect", "Freeze-Dry", "Stored Power", "Slack Off"],
+                "abilities": ["Screen Cleaner"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "scyther": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Swords Dance", "Dual Wingbeat", "Pounce", "Trailblaze"],
+                "abilities": ["Technician"],
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Roost", "Defog", "Knock Off", "U-turn"],
+                "abilities": ["Swarm"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "jolly",
+                "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 8,
+                "spaEVs": 0,
+                "spdEVs": 0,
+                "speEVs": 252
+            }
+        ]
     }
 }
