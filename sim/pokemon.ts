@@ -1012,7 +1012,7 @@ export class Pokemon {
 		if (!skipChecks) {
 			if (!this.side.canDynamaxNow()) return;
 			if (
-				this.species.isMega || this.species.isPrimal || this.species.forme === "Ultra" ||
+				this.species.isMega || this.species.isTotem || this.species.isPrimal || this.species.forme === "Ultra" ||
 				this.getItem().zMove || this.canMegaEvo
 			) {
 				return;
