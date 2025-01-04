@@ -2358,6 +2358,6 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	inteligenciaantigua: {
 		name: "Inteligencia Antigua",
 		desc: "",
-		shortDesc: "",
+		shortDesc: "Every move used by this Pokemon will always hit and power of its attacks is decreased by half the accuracy increase.",
 	},
 };
