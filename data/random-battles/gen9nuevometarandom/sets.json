@@ -2199,5 +2199,368 @@
                 "speEVs": 252
             }
         ]
+    },
+    "tentacruel": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Mortal Spin", "Acid Spray", "Corrosive Gas", "Scald"],
+                "abilities": ["Clear Body"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Scald", "Mortal Spin", "Haze", "Knock Off"],
+                "abilities": ["Liquid Ooze"],
+                "teraTypes": ["Water"],
+                "items": "Black Sludge",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 4
+            }
+        ]
+    },
+    "golem": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Rock Polish", "Rollout", "Thunder Punch", "Earthquake"],
+                "abilities": ["Static"],
+                "teraTypes": ["Water"],
+                "items": "Weakness Policy",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "golemalola": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Earth Power", "Volt Switch", "Roca Galvanizada", "Flamethrower"],
+                "abilities": ["Magnet Pull"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Autotomize", "Flamethrower", "Roca Galvanizada", "Thunderbolt"],
+                "abilities": ["Sturdy"],
+                "teraTypes": ["Water"],
+                "items": "Weakness Policy",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Special Scarf",
+                "movepool": ["Volt Switch", "Self-Destruct", "Roca Galvanizada", "Earth Power"],
+                "abilities": ["Galvanize"],
+                "teraTypes": ["Water"],
+                "items": "Choice Scarf",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "rapidash": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Physical Scarf",
+                "movepool": ["Play Rough", "Flare Blitz", "Drill Run", "Wild Charge"],
+                "abilities": ["Run Away"],
+                "teraTypes": ["Water"],
+                "items": "Choice Scarf",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Swords Dance", "Flame Charge", "Flare Blitz", "Play Rough"],
+                "abilities": ["Flash Fire"],
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "rapidashgalar": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Mystical Fire", "Psychic", "Scorching Sands", "Dazzling Gleam"],
+                "abilities": ["Pastel Veil"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Nasty Plot", "Grass Knot", "Electro Ball", "Psyshock"],
+                "abilities": ["Pastel Veil"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Scorching Sands", "Psychic", "Fairy Wind", "Mystical Fire"],
+                "abilities": ["Pastel Veil"],
+                "teraTypes": ["Water"],
+                "items": "Choice Specs",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "slowbro": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Physically Defensive",
+                "movepool": ["Future Sight", "Teleport", "Slack Off", "Scald"],
+                "abilities": ["Regenerator"],
+                "teraTypes": ["Water"],
+                "items": "Rocky Helmet",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 4,
+                "spdEVs": 0,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Special Sweeper",
+                "movepool": ["Teleport", "Flamethrower", "Future Sight", "Scald"],
+                "abilities": ["Regenerator"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "modest",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Special Sweeper",
+                "movepool": ["Trick Room", "Teleport", "Scald", "Slack Off"],
+                "abilities": ["Regenerator"],
+                "teraTypes": ["Water"],
+                "items": "Dimencionador",
+                "nature": "relaxed",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
+    },
+    "slowbromega": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Calm Mind", "Stored Power", "Slack Off", "Iron Defense"],
+                "abilities": ["Oblivious"],
+                "teraTypes": ["Water"],
+                "items": "Slowbronite",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Special Sweeper",
+                "movepool": ["Teleport", "Slack Off", "Future Sight", "Scald"],
+                "abilities": ["Oblivious"],
+                "teraTypes": ["Water"],
+                "items": "Slowbronite",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 4,
+                "spdEVs": 0,
+                "speEVs": 0
+            }
+        ]
+    },
+    "magneton": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Special Sweeper",
+                "movepool": ["Volt Switch", "Flash Cannon", "Thunderbolt", "Signal Beam"],
+                "abilities": ["Analytic"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "modest",
+                "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 8,
+                "speEVs": 0
+            }
+        ]
+    },
+    "farfetchd": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Physical Scarf",
+                "movepool": ["U-turn", "Brave Bird", "Double-Edge", "Close Combat"],
+                "abilities": ["Suertudo"],
+                "teraTypes": ["Water"],
+                "items": "Choice Scarf",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "farfetchdgalar": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Defog", "Roost", "Knock Off", "Brick Break"],
+                "abilities": ["Inner Focus"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "careful",
+                "hpEVs": 252,
+                "atkEVs": 4,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            }
+        ]
+    },
+    "dodrio": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Bulky Physical Sweeper",
+                "movepool": ["Swords Dance", "Brave Bird", "Drill Run", "Roost"],
+                "abilities": ["Tangled Feet"],
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "impish",
+                "hpEVs": 252,
+                "atkEVs": 4,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Swords Dance", "Tripico", "Bullet Seed", "Fury Attack"],
+                "abilities": ["Skill Link"],
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Swords Dance", "Tripico", "Bullet Seed", "Fury Attack"],
+                "abilities": ["Tangled Feet"],
+                "teraTypes": ["Water"],
+                "items": "Loaded Dice",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
     }
 }
