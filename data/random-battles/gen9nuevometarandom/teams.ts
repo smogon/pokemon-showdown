@@ -1777,7 +1777,6 @@ export class RandomTeams {
 					// Limit three of any type combination in Monotype
 					if (!this.forceMonotype && isMonotype && (typeComboCount[typeCombo] >= 3 * limitFactor)) continue;
 
-					if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 				}
 

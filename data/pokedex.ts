@@ -483,7 +483,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	raticatealolatotem: {
 		num: 20,
 		name: "Raticate-Alola-Totem",
-		baseSpecies: "Raticate-Alola",
+		baseSpecies: "Raticate",
 		forme: "Alola-Totem",
 		types: ["Dark", "Normal"],
 		baseStats: {hp: 130, atk: 85, def: 105, spa: 40, spd: 105, spe: 55},
@@ -1507,7 +1507,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	arcaninehisuitotem: {
 		num: 59,
 		name: "Arcanine-Hisui-Totem",
-		baseSpecies: "Arcanine-Hisui",
+		baseSpecies: "Arcanine",
 		forme: "Hisui-Totem",
 		types: ["Fire", "Rock"],
 		genderRatio: {M: 0.75, F: 0.25},
@@ -2398,7 +2398,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	electrodehisuitotem: {
 		num: 101,
 		name: "Electrode-Hisui-Totem",
-		baseSpecies: "Electrode-Hisui",
+		baseSpecies: "Electrode",
 		forme: "Hisui-Totem",
 		types: ["Electric", "Grass"],
 		gender: "N",
@@ -2504,7 +2504,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	marowakalolatotem: {
 		num: 105,
 		name: "Marowak-Alola-Totem",
-		baseSpecies: "Marowak-Alola",
+		baseSpecies: "Marowak",
 		forme: "Alola-Totem",
 		types: ["Fire", "Ghost"],
 		baseStats: {hp: 80, atk: 165, def: 105, spa: 76, spd: 80, spe: 15},
