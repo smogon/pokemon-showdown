@@ -3776,5 +3776,302 @@
                 "speEVs": 252
             }
         ]
+    },
+    "jynx": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Frost Breath", "Focus Blast", "Psyshock", "Calm Mind"],
+                "abilities": ["Oblivious"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Specs",
+                "movepool": ["Telekinesis", "Wring Out", "Frost Breath", "Focus Blast"],
+                "abilities": ["Forewarn"],
+                "teraTypes": ["Water"],
+                "items": "Choice Specs",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "electabuzz": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Volt Switch", "Taunt", "Knock Off", "Thunder Wave"],
+                "abilities": ["Vital Spirit"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "jolly",
+                "hpEVs": 252,
+                "atkEVs": 4,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 0,
+                "speEVs": 252
+            }
+        ]
+    },
+    "magmar": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Ember", "Incinerate", "Detect", "Clear Smog"],
+                "abilities": ["Vital Spirit"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
+            }
+        ]
+    },
+    "pinsir": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Physical Scarf",
+                "movepool": ["Close Combat", "Megahorn", "Earthquake", "Knock Off"],
+                "abilities": ["Moxie"],
+                "teraTypes": ["Water"],
+                "items": "Choice Scarf",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Bulk Up", "X-Scissor", "Earthquake", "Knock Off"],
+                "abilities": ["Moxie"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Band",
+                "movepool": ["Megahorn", "Close Combat", "Earthquake", "Knock Off"],
+                "abilities": ["Mold Breaker"],
+                "teraTypes": ["Water"],
+                "items": "Choice Band",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "pinsirmega": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Physical Scarf",
+                "movepool": ["Swords Dance", "Megahorn", "Quick Attack", "Return"],
+                "abilities": ["Moxie"],
+                "teraTypes": ["Water"],
+                "items": "Pinsirite",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Physical Scarf",
+                "movepool": ["Swords Dance", "Megahorn", "Quick Attack", "Double Hit"],
+                "abilities": ["Moxie"],
+                "teraTypes": ["Water"],
+                "items": "Pinsirite",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "gyarados": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Bounce", "Earthquake", "Waterfall"],
+                "abilities": ["Moxie"],
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Bounce", "Earthquake", "Waterfall"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Bounce", "Earthquake", "Waterfall"],
+                "abilities": ["Moxie"],
+                "teraTypes": ["Water"],
+                "items": "Flyinium Z",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "gyaradosmega": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Bounce", "Earthquake", "Waterfall"],
+                "abilities": ["Moxie"],
+                "teraTypes": ["Water"],
+                "items": "Gyaradosite",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Crunch", "Earthquake", "Aqua Tail"],
+                "abilities": ["Intimidate"],
+                "teraTypes": ["Water"],
+                "items": "Gyaradosite",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "lapras": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Ice Shard", "Liquidation", "Earthquake"],
+                "abilities": ["Hydration"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Toxic", "Freeze-Dry", "Life Dew", "Haze"],
+                "abilities": ["Hydration"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 4,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            }
+        ]
+    },
+    "laprasmega": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Ice Shard", "Liquidation", "Earthquake"],
+                "abilities": ["Hydration"],
+                "teraTypes": ["Water"],
+                "items": "Laprasite",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Rest", "Snore", "Haze", "Brine"],
+                "abilities": ["Hydration"],
+                "teraTypes": ["Water"],
+                "items": "Laprasite",
+                "nature": "calm",
+                "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 8,
+                "speEVs": 0
+            }
+        ]
     }
 }
