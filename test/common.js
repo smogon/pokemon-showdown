@@ -21,7 +21,7 @@ const DEFAULT_SEED = [0x09917, 0x06924, 0x0e1c8, 0x06af0];
 class TestTools {
 	constructor(mod = 'base') {
 		this.currentMod = mod;
-		this.dex = Dex.mod(mod).includeData(); // ensure that gen is initialized
+		this.dex = Dex.mod(mod);
 
 		this.modPrefix = this.dex.isBase ? `[gen9] ` : `[${mod}] `;
 	}
