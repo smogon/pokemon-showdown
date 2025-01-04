@@ -2300,8 +2300,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	frubujas: {
 		name: "Frubujas",
-		desc: "",
-		shortDesc: "",
+		desc: "This Pokemon receives 1/2 damage from contact moves. This Pokemon's moves lower the Speed of opponents by 1 stage.",
+		shortDesc: "This Pokemon receives 1/2 damage from contact moves. This Pokemon's moves lower the Speed of opponents by 1 stage.",
 	},
 	colocapantallas: {
 		name: "Coloca Pantallas",
