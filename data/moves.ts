@@ -17046,7 +17046,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		basePower: 60,
 		basePowerCallback(pokemon, target, move) {
 			if (target.hasType('Fairy')) {
-				this.debug('BP doubled from status condition');
 				return move.basePower * 1.5;
 			}
 			return move.basePower;
