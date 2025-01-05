@@ -414,7 +414,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				 || pokemon.species.baseSpecies === 'Armaldo' || pokemon.species.baseSpecies === 'Rampardos' || pokemon.species.baseSpecies === 'Omastar'
 				  || pokemon.species.baseSpecies === 'Bastiodon' || pokemon.species.baseSpecies === 'Carracosta' || pokemon.species.baseSpecies === 'Archeops'
 				  || pokemon.species.baseSpecies === 'Tyrantrum' || pokemon.species.baseSpecies === 'Aurorus' || pokemon.species.baseSpecies === 'Dracozolt'
-				  || pokemon.species.baseSpecies === 'Dracovish' || pokemon.species.baseSpecies === 'Arctozolt' || pokemon.species.baseSpecies === 'Arctovish' ){
+				  || pokemon.species.baseSpecies === 'Dracovish' || pokemon.species.baseSpecies === 'Arctozolt' || pokemon.species.baseSpecies === 'Arctovish'){
 				bp *= 1.5
 			 }
 			 return bp;
