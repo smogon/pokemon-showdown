@@ -387,8 +387,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	beatup: {
 		name: "Beat Up",
-		desc: "Hits one time for the user and one time for each unfainted Pokemon without a non-volatile status condition in the user's party. The power of each hit is equal to 5+(X/10), where X is each participating Pokemon's base Attack; each hit is considered to come from the user.",
-		shortDesc: "All healthy allies aid in damaging the target.",
+		desc: "For each fallen ally the movement gets -20BP.",
+		shortDesc: "For each fallen ally the movement gets -20BP.",
 		gen4: {
 			desc: "Deals typeless damage. Hits one time for the user and one time for each unfainted Pokemon without a non-volatile status condition in the user's party. For each hit, the damage formula uses the participating Pokemon's base Attack as the Attack stat, the target's base Defense as the Defense stat, and ignores stat stages and other effects that modify Attack or Defense; each hit is considered to come from the user.",
 		},
@@ -3183,8 +3183,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	hyperfang: {
 		name: "Hyper Fang",
-		desc: "Has a 10% chance to make the target flinch.",
-		shortDesc: "10% chance to make the target flinch.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	hyperspacefury: {
 		name: "Hyperspace Fury",
@@ -3523,8 +3523,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	lastresort: {
 		name: "Last Resort",
-		desc: "This move fails unless the user knows this move and at least one other move, and has used all the other moves it knows at least once each since it became active or Transformed.",
-		shortDesc: "Fails unless each known move has been used.",
+		desc: "This move can only be used if the user has less than half of his HP..",
+		shortDesc: "This move can only be used if the user has less than half of his HP..",
 	},
 	lastrespects: {
 		name: "Last Respects",
@@ -4783,8 +4783,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	poisontail: {
 		name: "Poison Tail",
-		desc: "Has a 10% chance to poison the target and a higher chance for a critical hit.",
-		shortDesc: "High critical hit ratio. 10% chance to poison.",
+		desc: "If both the user and the target have not fainted, the target is forced to switch out and be replaced with a random unfainted ally. This effect fails if the target used Ingrain previously, has the Suction Cups Ability, or this move hit a substitute. 10% chance of TOX.",
+		shortDesc: "Forces the target to switch to a random ally. 10% chance of TOX.",
 	},
 	pollenpuff: {
 		name: "Pollen Puff",
