@@ -19384,7 +19384,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 90,
 		basePower: 100,
 		category: "Special",
-
 		name: "Synchronoise",
 		pp: 10,
 		priority: 0,
