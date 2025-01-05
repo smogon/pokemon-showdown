@@ -15281,7 +15281,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
-
 		name: "Razor Wind",
 		pp: 10,
 		priority: 0,
@@ -17020,9 +17019,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	silverwind: {
 		num: 318,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 70,
 		category: "Special",
-
 		name: "Silver Wind",
 		pp: 5,
 		priority: 0,

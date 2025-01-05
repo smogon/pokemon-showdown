@@ -91,8 +91,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	aircutter: {
 		name: "Air Cutter",
-		desc: "Has a higher chance for a critical hit.",
-		shortDesc: "High critical hit ratio. Hits adjacent foes.",
+		desc: "This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities. This move does not check accuracy.",
+		shortDesc: "Always results in a critical hit; no accuracy check.",
 	},
 	airslash: {
 		name: "Air Slash",
@@ -255,8 +255,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	attackorder: {
 		name: "Attack Order",
-		desc: "Has a higher chance for a critical hit.",
-		shortDesc: "High critical hit ratio.",
+		desc: "This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities. This move does not check accuracy.",
+		shortDesc: "Always results in a critical hit; no accuracy check.",
 	},
 	attract: {
 		name: "Attract",
@@ -1758,8 +1758,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	ember: {
 		name: "Ember",
-		desc: "Has a 10% chance to burn the target.",
-		shortDesc: "10% chance to burn the target.",
+		desc: "Has a 100% chance to burn the target.",
+		shortDesc: "100% chance to burn the target.",
 	},
 	encore: {
 		name: "Encore",
@@ -3178,7 +3178,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	hyperdrill: {
 		name: "Hyper Drill",
-		shortDesc: "Bypasses protection without breaking it.",
+		desc: "This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities.",
+		shortDesc: "Always results in a critical hit.",
 	},
 	hyperfang: {
 		name: "Hyper Fang",
@@ -3309,8 +3310,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	incinerate: {
 		name: "Incinerate",
-		desc: "The target loses its held item if it is a Berry or a Gem. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
-		shortDesc: "Destroys the foe(s) Berry/Gem.",
+		desc: "If the target is holding an item that can be removed from it, ignoring the Sticky Hold Ability, this move's power is multiplied by 1.5. If the user has not fainted, the target loses its held item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item or cause a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, a Silvally, a Zacian, or a Zamazenta to lose their Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
+		shortDesc: "1.5x damage if foe holds an item. Removes item.",
 		gen5: {
 			desc: "The target loses its held item if it is a Berry. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
 			shortDesc: "Destroys the foe(s) Berry.",
@@ -3452,8 +3453,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	karatechop: {
 		name: "Karate Chop",
-		desc: "Has a higher chance for a critical hit.",
-		shortDesc: "High critical hit ratio.",
+		desc: "This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities.",
+		shortDesc: "Always results in a critical hit.",
 	},
 	kinesis: {
 		name: "Kinesis",
@@ -3602,8 +3603,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	lifedew: {
 		name: "Life Dew",
-		desc: "Each Pokemon on the user's side restores 1/4 of its maximum HP, rounded half up.",
-		shortDesc: "Heals the user and its allies by 1/4 their max HP.",
+		desc: "Each Pokemon on the user's side restores 1/2 of its maximum HP, rounded half up.",
+		shortDesc: "Heals the user and its allies by 1/2 their max HP.",
 	},
 	lightofruin: {
 		name: "Light of Ruin",
@@ -3993,8 +3994,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	megadrain: {
 		name: "Mega Drain",
-		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
-		shortDesc: "User recovers 50% of the damage dealt.",
+		desc: "The user recovers 1/4 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		shortDesc: "User recovers 25% of the damage dealt.",
 		gen4: {
 			desc: "The user recovers 1/2 the HP lost by the target, rounded down. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded down.",
 		},
@@ -4378,8 +4379,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	muddywater: {
 		name: "Muddy Water",
-		desc: "Has a 30% chance to lower the target's accuracy by 1 stage.",
-		shortDesc: "30% chance to lower the foe(s) accuracy by 1.",
+		desc: "Has a 30% chance to lower the target's Attack by 1 stage.",
+		shortDesc: "30% chance to lower the foe(s) Attack by 1.",
 	},
 	multiattack: {
 		name: "Multi-Attack",
@@ -4455,8 +4456,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	nightmare: {
 		name: "Nightmare",
-		desc: "Causes the target to lose 1/4 of its maximum HP, rounded down, at the end of each turn as long as it is asleep. This move does not affect the target unless it is asleep. The effect ends when the target wakes up, even if it falls asleep again in the same turn.",
-		shortDesc: "A sleeping target is hurt by 1/4 max HP per turn.",
+		desc: "Power doubles if the target has a sleep.",
+		shortDesc: "Power doubles if the target has a sleep.",
 
 		start: "  [POKEMON] began having a nightmare!",
 		damage: "  [POKEMON] is locked in a nightmare!",
@@ -4529,8 +4530,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	octazooka: {
 		name: "Octazooka",
-		desc: "Has a 50% chance to lower the target's accuracy by 1 stage.",
-		shortDesc: "50% chance to lower the target's accuracy by 1.",
+		desc: "Lowers the target's evasiveness by 1 stages.",
+		shortDesc: "Lowers the foe(s) evasiveness by 1.",
 	},
 	octolock: {
 		name: "Octolock",
@@ -4622,8 +4623,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	payback: {
 		name: "Payback",
-		desc: "Power doubles if the user moves after the target this turn, including actions taken through Instruct or the Dancer Ability. Switching in does not count as an action.",
-		shortDesc: "Power doubles if the user moves after the target.",
+		desc: "This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities.",
+		shortDesc: "Always results in a critical hit.",
 		gen6: {
 			desc: "Power doubles if the user moves after the target this turn. Switching in does not count as an action.",
 		},
@@ -5161,8 +5162,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	razorleaf: {
 		name: "Razor Leaf",
-		desc: "Has a higher chance for a critical hit.",
-		shortDesc: "High critical hit ratio. Hits adjacent foes.",
+		desc: "This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities.",
+		shortDesc: "Always results in a critical hit.",
 		gen2: {
 			shortDesc: "High critical hit ratio.",
 		},
@@ -5174,8 +5175,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	razorwind: {
 		name: "Razor Wind",
-		desc: "Has a higher chance for a critical hit. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Charges, then hits foe(s) turn 2. High crit ratio.",
+		desc: "Has a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio.",
 		gen4: {
 			desc: "Has a higher chance for a critical hit. This attack charges on the first turn and executes on the second.",
 		},
@@ -5399,7 +5400,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	rockthrow: {
 		name: "Rock Throw",
-		shortDesc: "No additional effect.",
+		desc: "This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities.",
+		shortDesc: "Always results in a critical hit.",
 	},
 	rocktomb: {
 		name: "Rock Tomb",
@@ -5596,7 +5598,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	scratch: {
 		name: "Scratch",
-		shortDesc: "No additional effect.",
+		desc: "This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities.",
+		shortDesc: "Always results in a critical hit. Usually goes first.",
 	},
 	screech: {
 		name: "Screech",
@@ -5682,8 +5685,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	shadowclaw: {
 		name: "Shadow Claw",
-		desc: "Has a higher chance for a critical hit.",
-		shortDesc: "High critical hit ratio.",
+		desc: "This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities.",
+		shortDesc: "Always results in a critical hit.",
 	},
 	shadowforce: {
 		name: "Shadow Force",
@@ -5790,8 +5793,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	silverwind: {
 		name: "Silver Wind",
-		desc: "Has a 10% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
-		shortDesc: "10% chance to raise all stats by 1 (not acc/eva).",
+		desc: "50% more damage if the user is a fairy type..",
+		shortDesc: "50% more damage if the user is a fairy type..",
 	},
 	simplebeam: {
 		name: "Simple Beam",
@@ -5934,8 +5937,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	slash: {
 		name: "Slash",
-		desc: "Has a higher chance for a critical hit.",
-		shortDesc: "High critical hit ratio.",
+		desc: "This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities.",
+		shortDesc: "Always results in a critical hit.",
 	},
 	sleeppowder: {
 		name: "Sleep Powder",
@@ -6146,8 +6149,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	spark: {
 		name: "Spark",
-		desc: "Has a 30% chance to paralyze the target.",
-		shortDesc: "30% chance to paralyze the target.",
+		desc: "This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities.",
+		shortDesc: "Always results in a critical hit.",
 	},
 	sparklingaria: {
 		name: "Sparkling Aria",
@@ -6458,8 +6461,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	stringshot: {
 		name: "String Shot",
-		desc: "Lowers the target's Speed by 2 stages.",
-		shortDesc: "Lowers the foe(s) Speed by 2.",
+		desc: "Lowers the target's Speed by 1 stages.",
+		shortDesc: "Lowers the foe(s) Speed by 1.",
 		gen5: {
 			desc: "Lowers the target's Speed by 1 stage.",
 			shortDesc: "Lowers the foe(s) Speed by 1.",
@@ -7358,7 +7361,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	watergun: {
 		name: "Water Gun",
-		shortDesc: "No additional effect.",
+		desc: "This move is always a critical hit unless the target is under the effect of Lucky Chant or has the Battle Armor or Shell Armor Abilities.",
+		shortDesc: "Always results in a critical hit.",
 	},
 	waterpledge: {
 		name: "Water Pledge",
