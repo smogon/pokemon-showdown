@@ -350,6 +350,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Little Colosseum LC",
 		desc: `A Little Cup metagame that aims to buff weaker Pokemon and nerf LC Ubers to create a more diverse metagame.`,
 		mod: 'littlecolosseum',
+		searchShow: false,
 		ruleset: ['Little Cup', 'Standard'],
 		banlist: [
 			'Aipom', 'Basculin-White-Striped', 'Diglett-Base', 'Dunsparce', 'Duraludon', 'Flittle', 'Girafarig', 'Gligar',
@@ -372,6 +373,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: `A Gen 2 metagame that adds doubles to the game.`,
 		mod: 'gen2doubles',
 		gameType: 'doubles',
+		searchShow: false,
 		ruleset: ['Standard Doubles', 'Swagger Clause'],
 		banlist: ['Uber', 'Bright Powder', 'King\'s Rock', 'Quick Claw'],
 		onBegin() {
