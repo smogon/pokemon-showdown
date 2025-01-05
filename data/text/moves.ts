@@ -28,8 +28,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	acid: {
 		name: "Acid",
-		desc: "Has a 10% chance to lower the target's Special Defense by 1 stage.",
-		shortDesc: "10% chance to lower the foe(s) Sp. Def by 1.",
+		desc: "Hit steel type pokemon with neutral damage.",
+		shortDesc: "Hit steel type pokemon with neutral damage.",
 		gen3: {
 			desc: "Has a 10% chance to lower the target's Defense by 1 stage.",
 			shortDesc: "10% chance to lower the foe(s) Defense by 1.",
@@ -44,8 +44,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	acidarmor: {
 		name: "Acid Armor",
-		desc: "Raises the user's Defense by 2 stages.",
-		shortDesc: "Raises the user's Defense by 2.",
+		desc: "Raises the user's Defense by 2 stages. Hit steel type pokemon with neutral damage.",
+		shortDesc: "Raises the user's Defense by 2 and hit steel type pokemon.",
 	},
 	aciddownpour: {
 		name: "Acid Downpour",
@@ -140,8 +140,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	ancientpower: {
 		name: "Ancient Power",
-		desc: "Has a 10% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
-		shortDesc: "10% chance to raise all stats by 1 (not acc/eva).",
+		desc: "50% more power in fossil pokemon.",
+		shortDesc: "50% more power in fossil pokemon",
 	},
 	appleacid: {
 		name: "Apple Acid",
@@ -650,8 +650,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	bounce: {
 		name: "Bounce",
-		desc: "Has a 30% chance to paralyze the target. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister, and Gust and Twister have doubled power when used against it. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Bounces turn 1. Hits turn 2. 30% paralyze.",
+		desc: "Has a 30% chance to paralyze the target.",
+		shortDesc: "30% paralyze.",
 		gen5: {
 			desc: "Has a 30% chance to paralyze the target. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thunder, and Twister, and Gust and Twister have doubled power when used against it. If the user is holding a Power Herb, the move completes in one turn.",
 		},
@@ -711,8 +711,11 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	brine: {
 		name: "Brine",
-		desc: "Power doubles if the target has less than or equal to half of its maximum HP remaining.",
-		shortDesc: "Power doubles if the target's HP is 50% or less.",
+		desc: "Causes damage to the target equal to 1/8 of its maximum HP (1/4 if the target is Steel or Water type), rounded down, at the end of each turn during effect. This effect ends when the target is no longer active.",
+		shortDesc: "Deals 1/8 max HP each turn; 1/4 on Steel, Water.",
+
+		start: "  [POKEMON] is being brine!",
+		damage: "  [POKEMON] is hurt by brine!",
 	},
 	brutalswing: {
 		name: "Brutal Swing",
@@ -870,8 +873,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	chargebeam: {
 		name: "Charge Beam",
-		desc: "Has a 70% chance to raise the user's Special Attack by 1 stage.",
-		shortDesc: "70% chance to raise the user's Sp. Atk by 1.",
+		desc: "Has a 100% chance to raise the user's Special Attack by 1 stage.",
+		shortDesc: "100% chance to raise the user's Sp. Atk by 1.",
 	},
 	charm: {
 		name: "Charm",
@@ -1117,8 +1120,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	corrosivegas: {
 		name: "Corrosive Gas",
-		desc: "The target loses its held item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item or cause a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, a Silvally, a Zacian, or a Zamazenta to lose their Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
-		shortDesc: "Removes adjacent Pokemon's held items.",
+		desc: "The target loses its held item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item or cause a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, a Silvally, a Zacian, or a Zamazenta to lose their Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability. 30% chance to badly poison the target.",
+		shortDesc: "Removes adjacent Pokemon's held items and 30% chance to badly poison the target.",
 
 		fail: "#healblock",
 		removeItem: "  [SOURCE] corroded [POKEMON]'s [ITEM]!",
@@ -1244,7 +1247,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	cut: {
 		name: "Cut",
-		shortDesc: "No additional effect.",
+		desc: "If this attack does not miss, the effects of Reflect, Light Screen, and Aurora Veil end for the target's side of the field before damage is calculated.",
+		shortDesc: "Destroys screens, unless the target is immune.",
 	},
 	darkestlariat: {
 		name: "Darkest Lariat",
@@ -1725,8 +1729,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	electroball: {
 		name: "Electro Ball",
-		desc: "The power of this move depends on (user's current Speed / target's current Speed), rounded down. Power is equal to 150 if the result is 4 or more, 120 if 3, 80 if 2, 60 if 1, 40 if less than 1. If the target's current Speed is 0, this move's power is 40.",
-		shortDesc: "More power the faster the user is than the target.",
+		desc: "Damage is calculated using the user's Speed stat as its Attack, including stat stage changes. Other effects that modify the Attack stat are used as normal.",
+		shortDesc: "Uses user's Speed stat as Atk in damage calculation.",
 		gen5: {
 			desc: "The power of this move depends on (user's current Speed / target's current Speed), rounded down. Power is equal to 150 if the result is 4 or more, 120 if 3, 80 if 2, 60 if 1, 40 if less than 1. If the target's current Speed is 0, it is treated as 1 instead.",
 		},
@@ -1924,7 +1928,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	fairywind: {
 		name: "Fairy Wind",
-		shortDesc: "No additional effect.",
+		desc: "No additional effect.",
+		shortDesc: "Usually goes first.",
 	},
 	fakeout: {
 		name: "Fake Out",
@@ -2232,8 +2237,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	focusenergy: {
 		name: "Focus Energy",
-		desc: "Raises the user's chance for a critical hit by 2 stages. Fails if the user already has the effect. Baton Pass can be used to transfer this effect to an ally.",
-		shortDesc: "Raises the user's critical hit ratio by 2.",
+		desc: "Raises the user's chance for a critical hit by 2 stages. Fails if the user already has the effect. Baton Pass can be used to transfer this effect to an ally. Raises the user's Speed by 1.",
+		shortDesc: "Raises the user's critical hit ratio by 2. Raises the user's Speed by 1.",
 		gen2: {
 			desc: "Raises the user's chance for a critical hit by 1 stage. Fails if the user already has the effect. Baton Pass can be used to transfer this effect to an ally.",
 			shortDesc: "Raises the user's critical hit ratio by 1.",
@@ -2320,8 +2325,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	freezingglare: {
 		name: "Freezing Glare",
-		desc: "Has a 10% chance to freeze the target.",
-		shortDesc: "10% chance to freeze the target.",
+		desc: "Has a 30% chance to freeze the target.",
+		shortDesc: "30% chance to freeze the target.",
 	},
 	freezyfrost: {
 		name: "Freezy Frost",
@@ -3218,8 +3223,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	iceball: {
 		name: "Ice Ball",
-		desc: "If this move is successful, the user is locked into this move and cannot make another move until it misses, 5 turns have passed, or the attack cannot be used. Power doubles with each successful hit of this move and doubles again if Defense Curl was used previously by the user. If this move is called by Sleep Talk, the move is used for one turn.",
-		shortDesc: "Power doubles with each hit. Repeats for 5 turns.",
+		desc: "The user spends two or three turns locked into this move and becomes confused immediately after its move on the last turn of the effect if it is not already. This move targets an opposing Pokemon at random on each turn. If the user is prevented from moving, is asleep at the beginning of a turn, or the attack is not successful against the target on the first turn of the effect or the second turn of a three-turn effect, the effect ends without causing confusion. If this move is called by Sleep Talk and the user is asleep, the move is used for one turn and does not confuse the user.",
+		shortDesc: "Lasts 2-3 turns. Confuses the user afterwards.",
 		gen7: {
 			desc: "If this move is successful, the user is locked into this move and cannot make another move until it misses, 5 turns have passed, or the attack cannot be used. Power doubles with each successful hit of this move and doubles again if Defense Curl was used previously by the user. If this move is called by Sleep Talk, the move is used for one turn. If this move hits an active Disguise during the effect, the power multiplier is paused but the turn counter is not, potentially allowing the multiplier to be used on the user's next move after this effect ends.",
 		},
@@ -3810,8 +3815,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	magnitude: {
 		name: "Magnitude",
-		desc: "The power of this move varies; 5% chances for 10 and 150 power, 10% chances for 30 and 110 power, 20% chances for 50 and 90 power, and 30% chance for 70 power. Damage doubles if the target is using Dig.",
-		shortDesc: "Hits adjacent Pokemon. Power varies; 2x on Dig.",
+		desc: "The user spends two or three turns locked into this move and becomes confused immediately after its move on the last turn of the effect if it is not already. This move targets an opposing Pokemon at random on each turn. If the user is prevented from moving, is asleep at the beginning of a turn, or the attack is not successful against the target on the first turn of the effect or the second turn of a three-turn effect, the effect ends without causing confusion. If this move is called by Sleep Talk and the user is asleep, the move is used for one turn and does not confuse the user.",
+		shortDesc: "Lasts 2-3 turns. Confuses the user afterwards.",
 		gen4: {
 			desc: "The power of this move varies. 5% chances for 10 and 150 power, 10% chances for 30 and 110 power, 20% chances for 50 and 90 power, and 30% chance for 70 power. Power doubles if the target is using Dig.",
 		},
@@ -4356,8 +4361,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	mudshot: {
 		name: "Mud Shot",
-		desc: "Has a 100% chance to lower the target's Speed by 1 stage.",
-		shortDesc: "100% chance to lower the target's Speed by 1.",
+		desc: "Has a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio.",
 	},
 	mudslap: {
 		name: "Mud-Slap",
@@ -4542,8 +4547,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	odorsleuth: {
 		name: "Odor Sleuth",
-		desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Normal- and Fighting-type attacks can hit the target if it is a Ghost type. Fails if the target is already affected, or affected by Foresight or Miracle Eye.",
-		shortDesc: "Fighting, Normal hit Ghost. Evasiveness ignored.",
+		desc: "No additional effect.",
+		shortDesc: "Usually goes first.",
 		gen4: {
 			desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Normal- and Fighting-type attacks can hit the target if it is a Ghost type.",
 		},
@@ -4747,8 +4752,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	poisonfang: {
 		name: "Poison Fang",
-		desc: "Has a 50% chance to badly poison the target.",
-		shortDesc: "50% chance to badly poison the target.",
+		desc: "Has a 10% chance to badly poison the target and a 10% chance to make it flinch.",
+		shortDesc: "10% chance to badly poison. 10% chance to flinch.",
 		gen5: {
 			desc: "Has a 30% chance to badly poison the target.",
 			shortDesc: "30% chance to badly poison the target.",
@@ -5108,8 +5113,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	ragefist: {
 		name: "Rage Fist",
-		desc: "Power is equal to 50+(X*50), where X is the total number of times the user has been hit by a damaging attack during the battle, even if the user did not lose HP from the attack. X cannot be greater than 6 and does not reset upon switching out or fainting. Each hit of a multi-hit attack is counted, but confusion damage is not counted.",
-		shortDesc: "+50 power for each time user was hit. Max 6 hits.",
+		desc: "Power is equal to 50+(X*25), where X is the total number of times the user has been hit by a damaging attack during the battle, even if the user did not lose HP from the attack. X cannot be greater than 6 and does not reset upon switching out or fainting. Each hit of a multi-hit attack is counted, but confusion damage is not counted.",
+		shortDesc: "+25 power for each time user was hit. Max 6 hits.",
 	},
 	ragepowder: {
 		name: "Rage Powder",
@@ -5445,8 +5450,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	rollout: {
 		name: "Rollout",
-		desc: "If this move is successful, the user is locked into this move and cannot make another move until it misses, 5 turns have passed, or the attack cannot be used. Power doubles with each successful hit of this move and doubles again if Defense Curl was used previously by the user. If this move is called by Sleep Talk, the move is used for one turn.",
-		shortDesc: "Power doubles with each hit. Repeats for 5 turns.",
+		desc: "The user spends two or three turns locked into this move and becomes confused immediately after its move on the last turn of the effect if it is not already. This move targets an opposing Pokemon at random on each turn. If the user is prevented from moving, is asleep at the beginning of a turn, or the attack is not successful against the target on the first turn of the effect or the second turn of a three-turn effect, the effect ends without causing confusion. If this move is called by Sleep Talk and the user is asleep, the move is used for one turn and does not confuse the user.",
+		shortDesc: "Lasts 2-3 turns. Confuses the user afterwards.",
 		gen7: {
 			desc: "If this move is successful, the user is locked into this move and cannot make another move until it misses, 5 turns have passed, or the attack cannot be used. Power doubles with each successful hit of this move and doubles again if Defense Curl was used previously by the user. If this move is called by Sleep Talk, the move is used for one turn. If this move hits an active Disguise during the effect, the power multiplier is paused but the turn counter is not, potentially allowing the multiplier to be used on the user's next move after this effect ends.",
 		},
@@ -5639,7 +5644,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	seedbomb: {
 		name: "Seed Bomb",
-		shortDesc: "No additional effect.",
+		desc: "Power doubles if the target has a non-volatile status condition.",
+		shortDesc: "Power doubles if the target has a status ailment.",
 	},
 	seedflare: {
 		name: "Seed Flare",
@@ -5783,8 +5789,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	signalbeam: {
 		name: "Signal Beam",
-		desc: "Has a 10% chance to confuse the target.",
-		shortDesc: "10% chance to confuse the target.",
+		desc: "Has a 30% chance to confuse the target.",
+		shortDesc: "30% chance to confuse the target.",
 	},
 	silktrap: {
 		name: "Silk Trap",
@@ -6854,8 +6860,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	telekinesis: {
 		name: "Telekinesis",
-		desc: "For 3 turns, the target cannot avoid any attacks made against it, other than OHKO moves, as long as it remains active. During the effect, the target is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability as long as it remains active. If the target uses Baton Pass, the replacement will gain the effect. Ingrain, Smack Down, Thousand Arrows, and Iron Ball override this move if the target is under any of their effects. Fails if the target is already under this effect or the effects of Ingrain, Smack Down, or Thousand Arrows. The target is immune to this move on use if its species is Diglett, Dugtrio, Alolan Diglett, Alolan Dugtrio, Sandygast, Palossand, or Gengar while Mega-Evolved. Mega Gengar cannot be under this effect by any means.",
-		shortDesc: "For 3 turns, target floats but moves can't miss it.",
+		desc: "If the target lost HP, the user takes recoil damage equal to 1/3 the HP lost by the target, rounded half up, but not less than 1 HP.",
+		shortDesc: "Has 1/3 recoil.",
 		gen6: {
 			desc: "For 3 turns, the target cannot avoid any attacks made against it, other than OHKO moves, as long as it remains active. During the effect, the target is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability as long as it remains active. If the target uses Baton Pass, the replacement will gain the effect. Ingrain, Smack Down, Thousand Arrows, and Iron Ball override this move if the target is under any of their effects. Fails if the target is already under this effect or the effects of Ingrain, Smack Down, or Thousand Arrows. The target is immune to this move on use if its species is Diglett, Dugtrio, or Gengar while Mega-Evolved. Mega Gengar cannot be under this effect by any means.",
 		},
@@ -7601,15 +7607,16 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	wringout: {
 		name: "Wring Out",
-		desc: "Power is equal to 120 * (target's current HP / target's maximum HP), rounded half down, but not less than 1.",
-		shortDesc: "More power the more HP the target has left.",
+		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
+		shortDesc: "Less power as user's HP decreases. Hits foe(s).",
 		gen4: {
 			desc: "Power is equal to 120 * (target's current HP / target's maximum HP) + 1, rounded down.",
 		},
 	},
 	xscissor: {
 		name: "X-Scissor",
-		shortDesc: "No additional effect.",
+		desc: "Has a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio.",
 	},
 	yawn: {
 		name: "Yawn",

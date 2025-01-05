@@ -13952,7 +13952,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		category: "Physical",
 		name: "Poison Tail",
 		pp: 25,
-		priority: -1,
+		priority: -6,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		critRatio: 2,
 		secondary: {
