@@ -483,7 +483,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	raticatealolatotem: {
 		num: 20,
 		name: "Raticate-Alola-Totem",
-		baseSpecies: "Raticate",
+		baseSpecies: "Raticate-Alola",
 		forme: "Alola-Totem",
 		types: ["Dark", "Normal"],
 		baseStats: {hp: 130, atk: 85, def: 105, spa: 40, spd: 105, spe: 55},
