@@ -537,8 +537,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	forewarn: {
 		name: "Forewarn",
-		desc: "On switch-in, this Pokemon is alerted to the move with the highest power, at random, known by an opposing Pokemon. This effect considers OHKO moves to have 150 power, Counter, Mirror Coat, and Metal Burst to have 120 power, every other attacking move with an unspecified power to have 80 power, and non-damaging moves to have 1 power. gives priority to the first move used after arriving at the field",
-		shortDesc: "On switch-in, this Pokemon is alerted to the foes' move with the highest power. gives priority to the first move used after arriving at the field",
+		shortDesc: "Gives priority to the first move used after arriving at the field",
 		gen4: {
 			desc: "On switch-in, this Pokemon is alerted to the move with the highest power, at random, known by an opposing Pokemon. This effect considers OHKO moves to have 150 power, Counter, Mirror Coat, and Metal Burst to have 120 power, and every other attacking move with an unspecified power to have 80 power.",
 		},
