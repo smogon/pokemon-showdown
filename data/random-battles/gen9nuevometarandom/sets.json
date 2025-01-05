@@ -4334,11 +4334,11 @@
                 "teraTypes": ["Water"],
                 "items": "Salac Berry",
                 "nature": "jolly",
-                "hpEVs": 0,
+                "hpEVs": 4,
                 "atkEVs": 252,
                 "defEVs": 0,
                 "spaEVs": 0,
-                "spdEVs": 4,
+                "spdEVs": 0,
                 "speEVs": 252
             },
             {
