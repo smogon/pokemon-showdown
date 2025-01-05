@@ -615,7 +615,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 				try {
 					this.bid(user, parseCredits(message));
 				} catch (e) {
-					this.room.add(`|c|${user.getIdentity()}|${originalMsg}`);
+					this.room.add(`|c|${user.getIdentity(this.room)}|${originalMsg}`);
 					if (e instanceof Chat.ErrorMessage) {
 						this.sendMessage(Utils.html`/html <span class="message-error">${e.message}</span>`);
 					} else {
@@ -906,9 +906,10 @@ export const commands: Chat.ChatCommands = {
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
-			const name = target.slice(0, target.indexOf(',')).trim();
-			const [tiersPlayed, tiersNotPlayed] = target.slice(target.indexOf(',') + 1).split(';')
-				.map(tiers => tiers.split(',').map(t => t.trim()));
+			const [playedPart, notPlayedPart] = target.split(";");
+			const tiersPlayed = playedPart.split(",").map(item => item.trim());
+			const tiersNotPlayed = notPlayedPart ? notPlayedPart.split(",").map(item => item.trim()) : [];
+			const name = tiersPlayed.shift();
 
 			if (!name) return this.parse('/help auction addplayer');
 			const player = auction.addAuctionPlayer(name, tiersPlayed, tiersNotPlayed);
