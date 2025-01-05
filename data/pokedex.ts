@@ -1507,7 +1507,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	arcaninehisuitotem: {
 		num: 59,
 		name: "Arcanine-Hisui-Totem",
-		baseSpecies: "Arcanine",
+		baseSpecies: "Arcanine-Hisui",
 		forme: "Hisui-Totem",
 		types: ["Fire", "Rock"],
 		genderRatio: {M: 0.75, F: 0.25},
@@ -2398,7 +2398,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	electrodehisuitotem: {
 		num: 101,
 		name: "Electrode-Hisui-Totem",
-		baseSpecies: "Electrode",
+		baseSpecies: "Electrode-Hisui",
 		forme: "Hisui-Totem",
 		types: ["Electric", "Grass"],
 		gender: "N",
