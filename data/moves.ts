@@ -2506,9 +2506,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	clamp: {
 		num: 128,
 		accuracy: 95,
-		basePower: 15,
+		basePower: 25,
 		category: "Physical",
-
 		name: "Clamp",
 		pp: 15,
 		priority: 0,
