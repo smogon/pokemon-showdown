@@ -530,7 +530,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 */
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
-
+/*
 	{
 		section: "Other Metagames",
 		column: 2,
@@ -782,7 +782,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen7',
 		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
-
+*/
 	// Challengeable OMs
 	///////////////////////////////////////////////////////////////////
 

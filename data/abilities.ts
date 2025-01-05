@@ -1,7 +1,7 @@
 /*
 
 Ratings and how they work:
-
+ 
 -1: Detrimental
 	  An ability that severely harms the user.
 	ex. Defeatist, Slow Start
@@ -5838,7 +5838,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Escudo Escama",
 		rating: 2,
 		num: -101,
-	}, 
+	},
 	nudillosdepiedra: {
 		onBasePowerPriority: 23,
 		onBasePower(basePower, attacker, defender, move) {
