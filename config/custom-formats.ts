@@ -5,6 +5,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	{
 		section: "Nuevo Meta Singles",
+		column: 1,
 	},
 	{
 		name: "[Gen 9] Nuevo Meta",

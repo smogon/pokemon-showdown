@@ -350,7 +350,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// Pet Mods
 	///////////////////////////////////////////////////////////////////
-
+/*
 	{
 		section: "Pet Mods",
 	},
@@ -389,7 +389,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			this.add('-message', `https://www.smogon.com/forums/threads/3755811/`);
 		},
 	},
-
+*/
 	// Draft League
 	///////////////////////////////////////////////////////////////////
 
@@ -493,7 +493,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// OM of the Month
 	///////////////////////////////////////////////////////////////////
-
+/*
 	{
 		section: "OM of the Month",
 		column: 2,
@@ -527,7 +527,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Volcarona', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom',
 		],
 	},
-
+*/
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 
@@ -2059,7 +2059,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// Randomized Format Spotlight
 	///////////////////////////////////////////////////////////////////
-
+/*
 	{
 		section: "Randomized Format Spotlight",
 		column: 3,
@@ -2072,10 +2072,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'triples',
 		ruleset: ['Obtainable', 'HP Percentage Mod', 'Cancel Mod'],
 	},
-
+*/
 	// Randomized Metas
 	///////////////////////////////////////////////////////////////////
-
+/*
 	{
 		section: "Randomized Metas",
 		column: 3,
@@ -2489,7 +2489,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			}
 		},
 	},
-
+*/
 	// RoA Spotlight
 	///////////////////////////////////////////////////////////////////
 
