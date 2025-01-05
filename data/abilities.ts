@@ -816,8 +816,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					target.addVolatile('cutecharm');
 				}
 				const currentStack = target.volatiles['cutecharm'].stack || 0;
-				if (target.hp > 0)
+				if (!target.fainted){
 				target.volatiles['cutecharm'].stack = Math.min(currentStack + 0.1, 0.9);
+				}
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
