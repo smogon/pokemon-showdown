@@ -518,8 +518,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	blastburn: {
 		name: "Blast Burn",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "This attack charges on the first turn and executes on the second. Raises the user's Special Attack by 1 stage on the first turn. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Raises user's Sp. Atk by 1 on turn 1. Hits turn 2.",
 	},
 	blazekick: {
 		name: "Blaze Kick",
@@ -1365,8 +1365,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	dig: {
 		name: "Dig",
-		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Earthquake and Magnitude but takes double damage from them, and is also unaffected by weather. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Digs underground turn 1, strikes turn 2.",
+		desc: "This attack charges on the first turn and executes on the second. Raises the user's Attack by 1 stage on the first turn. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Raises user's Atk by 1 on turn 1. Hits turn 2.",
 		gen4: {
 			desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Earthquake and Magnitude, which have doubled power when used against it, and is also unaffected by weather. If the user is holding a Power Herb, the move completes in one turn.",
 		},
@@ -1430,8 +1430,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	dive: {
 		name: "Dive",
-		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Surf and Whirlpool but takes double damage from them, and is also unaffected by weather. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Dives underwater turn 1, strikes turn 2.",
+		desc: "This attack charges on the first turn and executes on the second. Raises the user's Attack by 1 stage on the first turn. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Raises user's Atk by 1 on turn 1. Hits turn 2.",
 		gen4: {
 			desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Surf and Whirlpool, which have doubled power when used against it, and is also unaffected by weather. If the user is holding a Power Herb, the move completes in one turn.",
 		},
@@ -2200,8 +2200,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	fly: {
 		name: "Fly",
-		desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister, and Gust and Twister have doubled power when used against it. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Flies up on first turn, then strikes the next turn.",
+		desc: "This attack charges on the first turn and executes on the second. Raises the user's Speed by 1 stage on the first turn. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Raises user's Speed by 1 on turn 1. Hits turn 2.",
 		gen5: {
 			desc: "This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thunder, and Twister, and Gust and Twister have doubled power when used against it. If the user is holding a Power Herb, the move completes in one turn.",
 		},
@@ -2330,8 +2330,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	frenzyplant: {
 		name: "Frenzy Plant",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "This attack charges on the first turn and executes on the second. Raises the user's Special Attack by 1 stage on the first turn. If the user is holding a Power Herb, the move completes in one turn.",
+		shortDesc: "Raises user's Sp. Atk by 1 on turn 1. Hits turn 2.",
 	},
 	frostbreath: {
 		name: "Frost Breath",
