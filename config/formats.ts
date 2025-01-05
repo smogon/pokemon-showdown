@@ -530,7 +530,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 */
 	// Other Metagames
 	///////////////////////////////////////////////////////////////////
-
+/*
 	{
 		section: "Other Metagames",
 		column: 2,
@@ -782,7 +782,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen7',
 		ruleset: ['-Nonexistent', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause'],
 	},
-
+*/
 	// Challengeable OMs
 	///////////////////////////////////////////////////////////////////
 
@@ -2768,7 +2768,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// Sw/Sh Doubles
 	///////////////////////////////////////////////////////////////////
-
+/*
 	{
 		section: "Sw/Sh Doubles",
 		column: 4,
@@ -2839,7 +2839,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
-
+*/
 	// US/UM Singles
 	///////////////////////////////////////////////////////////////////
 	{
@@ -2972,7 +2972,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// US/UM Doubles
 	///////////////////////////////////////////////////////////////////
-
+/*
 	{
 		section: "US/UM Doubles",
 		column: 4,
@@ -3043,7 +3043,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
-
+*/
 	// OR/AS Singles
 	///////////////////////////////////////////////////////////////////
 
@@ -3160,7 +3160,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// OR/AS Doubles/Triples
 	///////////////////////////////////////////////////////////////////
-
+/*
 	{
 		section: "OR/AS Doubles/Triples",
 		column: 4,
@@ -3228,7 +3228,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
-
+*/
 	// B2/W2 Singles
 	///////////////////////////////////////////////////////////////////
 
@@ -3353,7 +3353,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// B2/W2 Doubles
 	///////////////////////////////////////////////////////////////////
-
+/*
 	{
 		section: "B2/W2 Doubles",
 		column: 4,
@@ -3405,7 +3405,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
-
+*/
 	// DPP Singles
 	///////////////////////////////////////////////////////////////////
 
@@ -3514,7 +3514,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// DPP Doubles
 	///////////////////////////////////////////////////////////////////
-
+/*
 	{
 		section: "DPP Doubles",
 		column: 4,
@@ -3546,7 +3546,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		// no restrictions
 		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
-
+*/
 	// Past Generations
 	///////////////////////////////////////////////////////////////////
 
