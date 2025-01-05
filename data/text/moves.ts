@@ -2227,8 +2227,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	focusblast: {
 		name: "Focus Blast",
-		desc: "Has a 10% chance to lower the target's Special Defense by 1 stage.",
-		shortDesc: "10% chance to lower the target's Sp. Def by 1.",
+		desc: "Lowers the user's Special Attack by 2 stages.",
+		shortDesc: "Lowers the user's Sp. Atk by 2.",
 	},
 	focusenergy: {
 		name: "Focus Energy",
@@ -2249,8 +2249,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	focuspunch: {
 		name: "Focus Punch",
-		desc: "The user loses its focus and does nothing if it is hit by a damaging attack this turn before it can execute the move.",
-		shortDesc: "Fails if the user takes damage before it hits.",
+		desc: "Lowers the user's Attack by 2 stages.",
+		shortDesc: "Lowers the user's Atk by 2.",
 		gen4: {
 			desc: "The user loses its focus and does nothing if it is hit by a damaging attack this turn before it can execute the move, but it still loses PP.",
 		},
@@ -2457,8 +2457,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	gigaimpact: {
 		name: "Giga Impact",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "Lowers the user's Attack by 2 stages.",
+		shortDesc: "Lowers the user's Atk by 2.",
 	},
 	gigatonhammer: {
 		name: "Gigaton Hammer",
@@ -3114,8 +3114,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	horndrill: {
 		name: "Horn Drill",
-		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
-		shortDesc: "OHKOs the target. Fails if user is a lower level.",
+		desc: "Lowers the user's Defense and Special Defense by 1 stage.",
+		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
 		gen2: {
 			desc: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 * (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level.",
 		},
@@ -4004,7 +4004,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	megahorn: {
 		name: "Megahorn",
-		shortDesc: "No additional effect.",
+		desc: "Lowers the user's Defense and Special Defense by 1 stage.",
+		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
 	},
 	megakick: {
 		name: "Mega Kick",
@@ -4266,8 +4267,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	mistyexplosion: {
 		name: "Misty Explosion",
-		desc: "If the current terrain is Misty Terrain and the user is grounded, this move's power is multiplied by 1.5. The user faints after using this move, even if this move fails for having no target. This move is prevented from executing if any active Pokemon has the Damp Ability.",
-		shortDesc: "User faints. User on Misty Terrain: 1.5x power.",
+		desc: "Lowers the user's Defense and Special Defense by 1 stage.",
+		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
 	},
 	mistyterrain: {
 		name: "Misty Terrain",
@@ -6575,8 +6576,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	supercellslam: {
 		name: "Supercell Slam",
-		desc: "If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Magic Guard Ability are unaffected by crash damage. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
-		shortDesc: "User is hurt by 50% of its max HP if it misses.",
+		desc: "Lowers the user's Defense and Special Defense by 1 stage.",
+		shortDesc: "Lowers the user's Defense and Sp. Def by 1.",
 
 		damage: "#crash",
 	},
