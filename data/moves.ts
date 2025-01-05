@@ -17041,7 +17041,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	silverwind2: {
 		num: 318,
 		accuracy: 100,
-		basePower: 60,
+		basePower: 70,
 		basePowerCallback(pokemon, target, move) {
 			if (target.hasType('Fairy')) {
 				return move.basePower * 1.5;
