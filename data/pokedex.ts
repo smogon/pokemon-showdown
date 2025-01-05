@@ -2504,7 +2504,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	marowakalolatotem: {
 		num: 105,
 		name: "Marowak-Alola-Totem",
-		baseSpecies: "Marowak",
+		baseSpecies: "Marowak-Alola",
 		forme: "Alola-Totem",
 		types: ["Fire", "Ghost"],
 		baseStats: {hp: 80, atk: 165, def: 105, spa: 76, spd: 80, spe: 15},
