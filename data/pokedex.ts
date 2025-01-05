@@ -521,7 +521,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Flying"],
 	},
 	fearill: {
-		num: 1026,
+		num: -1001,
 		name: "Fearill",
 		types: ["Dark", "Flying"],
 		baseStats: {hp: 70, atk: 115, def: 73, spa: 62, spd: 70, spe: 110},
