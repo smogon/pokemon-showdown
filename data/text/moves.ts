@@ -2083,8 +2083,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	fissure: {
 		name: "Fissure",
-		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
-		shortDesc: "OHKOs the target. Fails if user is a lower level.",
+		desc: "Lowers the user's Attack by 2 stages.",
+		shortDesc: "Lowers the user's Atk by 2.",
 		gen2: {
 			desc: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 * (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level. Can hit a target using Dig.",
 		},
@@ -2791,8 +2791,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	guillotine: {
 		name: "Guillotine",
-		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
-		shortDesc: "OHKOs the target. Fails if user is a lower level.",
+		desc: "Lowers the user's Attack by 2 stages.",
+		shortDesc: "Lowers the user's Atk by 2.",
 		gen2: {
 			desc: "Deals 65535 damage to the target. This attack's accuracy out of 256 is equal to the lesser of (2 * (user's level - target's level) + 76) and 255, before applying accuracy and evasiveness modifiers. Fails if the target is at a higher level.",
 		},
@@ -3151,8 +3151,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	hydrocannon: {
 		name: "Hydro Cannon",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "Lowers the user's Special Attack by 2 stages.",
+		shortDesc: "Lowers the user's Sp. Atk by 2.",
 	},
 	hydropump: {
 		name: "Hydro Pump",
@@ -3169,8 +3169,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	hyperbeam: {
 		name: "Hyper Beam",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "Lowers the user's Special Attack by 2 stages.",
+		shortDesc: "Lowers the user's Sp. Atk by 2.",
 		gen1: {
 			desc: "If this move is successful, the user must recharge on the following turn and cannot select a move, unless the target or its substitute was knocked out by this move.",
 			shortDesc: "Can't move next turn if target or sub is not KOed.",
@@ -5407,8 +5407,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	rockwrecker: {
 		name: "Rock Wrecker",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "Lowers the user's Attack by 2 stages.",
+		shortDesc: "Lowers the user's Atk by 2.",
 	},
 	roleplay: {
 		name: "Role Play",
@@ -5732,8 +5732,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	sheercold: {
 		name: "Sheer Cold",
-		desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + X)%, where X is 30 if the user is an Ice type and 20 otherwise, and fails if the target is at a higher level. Ice-type Pokemon and Pokemon with the Sturdy Ability are immune.",
-		shortDesc: "OHKOs non-Ice targets. Fails if user's lower level.",
+		desc: "Lowers the user's Special Attack by 2 stages.",
+		shortDesc: "Lowers the user's Sp. Atk by 2.",
 		gen6: {
 			desc: "Deals damage to the target equal to the target's maximum HP. Ignores accuracy and evasiveness modifiers. This attack's accuracy is equal to (user's level - target's level + 30)%, and fails if the target is at a higher level. Pokemon with the Sturdy Ability are immune.",
 			shortDesc: "OHKOs the target. Fails if user is a lower level.",
@@ -5885,8 +5885,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	skyattack: {
 		name: "Sky Attack",
-		desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Charges, then hits turn 2. 30% flinch. High crit.",
+		desc: "Lowers the user's Attack by 2 stages.",
+		shortDesc: "Lowers the user's Atk by 2.",
 		gen3: {
 			desc: "Has a 30% chance to make the target flinch and a higher chance for a critical hit. This attack charges on the first turn and executes on the second.",
 		},
