@@ -1,7 +1,9 @@
 import {SSBSet} from "./random-teams";
+import {ssbSets} from "./random-teams";
 import {ChosenAction} from '../../../sim/side';
 import {FS} from '../../../lib';
 import {toID} from '../../../sim/dex-data';
+import {changeSet, getName, enemyStaff, PSEUDO_WEATHERS} from "./scripts";
 
 // Similar to User.usergroups. Cannot import here due to users.ts requiring Chat
 // This also acts as a cache, meaning ranks will only update when a hotpatch/restart occurs
