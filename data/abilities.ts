@@ -476,17 +476,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 145,
 	},
 	blaze: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Fire' ) {
-				this.debug('Blaze boost');
-				return this.chainModify(1.2);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Fire' ) {
-				this.debug('Blaze boost');
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Fire') {
+				this.debug('Sharpness boost');
 				return this.chainModify(1.2);
 			}
 		},
@@ -1933,17 +1926,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onImmunity(type, pokemon) {
 			if (type === 'hail') return false;
 		},
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Ice' ) {
-				this.debug('Ice Body boost');
-				return this.chainModify(1.1);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Ice' ) {
-				this.debug('Ice Body boost');
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Water') {
+				this.debug('Sharpness boost');
 				return this.chainModify(1.1);
 			}
 		},
@@ -2397,17 +2383,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return 0;
 			}
 		},
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Poison' ) {
-				this.debug('Liquid Ooze boost');
-				return this.chainModify(1.1);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Poison' ) {
-				this.debug('Liquid Ooze boost');
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Poison') {
+				this.debug('Sharpness boost');
 				return this.chainModify(1.1);
 			}
 		},
@@ -3101,17 +3080,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 142,
 	},
 	overgrow: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Grass' ) {
-				this.debug('Overgrow boost');
-				return this.chainModify(1.2);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Grass' ) {
-				this.debug('Overgrow boost');
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Grass') {
+				this.debug('Sharpness boost');
 				return this.chainModify(1.2);
 			}
 		},
@@ -3207,17 +3179,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			return false;
 		},
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Psychic' ) {
-				this.debug('Pastel Veil boost');
-				return this.chainModify(1.1);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Psychic' ) {
-				this.debug('Pastel Veil boost');
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Psychic') {
+				this.debug('Sharpness boost');
 				return this.chainModify(1.1);
 			}
 		},
@@ -4660,17 +4625,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.flags['wind']) mod /= 2;
 			return this.chainModify(mod);
 		},
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Poison' ) {
-				this.debug('Stench boost');
-				return this.chainModify(1.1);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Poison' ) {
-				this.debug('Stench boost');
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Poison') {
+				this.debug('Sharpness boost');
 				return this.chainModify(1.1);
 			}
 		},
@@ -4831,17 +4789,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 207,
 	},
 	swarm: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Bug') {
-				this.debug('Swarm boost');
-				return this.chainModify(1.2);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Bug') {
-				this.debug('Swarm boost');
+				this.debug('Sharpness boost');
 				return this.chainModify(1.2);
 			}
 		},
@@ -5148,17 +5099,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 110,
 	},
 	torrent: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Water') {
-				this.debug('Torrent boost');
-				return this.chainModify(1.2);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Water') {
-				this.debug('Torrent boost');
+				this.debug('Sharpness boost');
 				return this.chainModify(1.2);
 			}
 		},
@@ -5876,17 +5820,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: -104,
 	},
 	malicia: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Dark' ) {
-				this.debug('Malicia boost');
-				return this.chainModify(1.2);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Dark' ) {
-				this.debug('Malicia boost');
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Dark') {
+				this.debug('Sharpness boost');
 				return this.chainModify(1.2);
 			}
 		},
@@ -5939,17 +5876,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: -108,
 	},
 	vatios: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Electric' ) {
-				this.debug('Overgrow boost');
-				return this.chainModify(1.2);
-			}
-		},
-		onModifySpAPriority: 5,
-		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Electric' ) {
-				this.debug('Overgrow boost');
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Electric') {
+				this.debug('Sharpness boost');
 				return this.chainModify(1.2);
 			}
 		},
@@ -6047,12 +5977,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: -113,
 	},
 	inteligenciaartificial: {
-		onModifyAtkPriority: 5,
-		onModifyAtk(atk) {
-			return this.modify(atk, 1.4);
-		},
-		onModifySpA(spa) {
-			return this.modify(spa, 1.4);
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+				this.debug('Sharpness boost');
+				return this.chainModify(1.4);
 		},
 		onSourceModifyAccuracyPriority: -1,
 		onSourceModifyAccuracy(accuracy, target, source, move) {
