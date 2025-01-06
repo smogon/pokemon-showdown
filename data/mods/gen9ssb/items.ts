@@ -707,6 +707,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 				this.add('-anim', target, 'Searing Shot', target);
 				let temp = this.dex.getActiveMove('ember');
 				for (const pokemon of this.getAllActive()) {
+					if (pokemon.volatiles['protect']) continue;
 					let burn = this.actions.getDamage(target, pokemon, temp);
 					this.damage(burn, pokemon, target, this.dex.items.get('Braid of Fire'));
 				}
