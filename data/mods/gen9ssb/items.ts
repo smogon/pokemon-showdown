@@ -9,15 +9,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
 			move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
 			move.multihit = 2;
-			move.onModifyMove = function (m, s, t) {
-				if (m.hit === 2) {
-					m.type = 'Fire';
-					m.basePower = m.basePower / 4;
-					this.add('-message', m.basePower);
-					this.add('-message', m.type);
-					this.add('-anim', t, 'Incinerate', t);
-				}
-			};
+		},
+		onModifyMove(move, pokemon) {
+			if (move.hit === 2) {
+				move.type = 'Fire';
+				move.basePower = move.basePower / 4;
+				this.add('-anim', this.effectState.target, 'Incinerate', this.effectState.target);
+			},
 		},
 	},
 	// Tao
