@@ -546,7 +546,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'epipen');
 			break;
 		case 'mimic':
-			if (action.pokemon.transformInto(action.target, this.dex.abilities.get('murderousmimic')) {
+			if (action.pokemon.transformInto(action.target, this.dex.abilities.get('murderousmimic'))) {
 				action.pokemon.formeChange(action.target.species.name);
 				this.add('-message', `${action.pokemon.name} mimicked its ally ${action.target.name}!`);
 			}
