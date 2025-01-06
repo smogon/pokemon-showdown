@@ -172,7 +172,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	blaze: {
 		name: "Blaze",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Fire-type attack.",
+		shortDesc: "This Pokemon's Fire-type moves have their power multiplied by 1.2.",
 		gen4: {
 			desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Fire-type attacks have their power multiplied by 1.5.",
 			shortDesc: "At 1/3 or less of its max HP, this Pokemon's Fire-type attacks have 1.5x power.",
@@ -897,7 +897,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	liquidooze: {
 		name: "Liquid Ooze",
-		shortDesc: "This Pokemon damages those draining HP from it for as much as they would heal. 30% to badly poison if being drained. This Pokemon's offensive stat is multiplied by 1.2 while using an Poison-type attack",
+		shortDesc: "This Pokemon damages those draining HP from it for as much as they would heal. 30% to badly poison if being drained. This Pokemon's Poison-type moves have their power multiplied by 1.1.",
 		gen4: {
 			desc: "This Pokemon damages those draining HP from it for as much as they would heal. This effect does not consider Dream Eater.",
 		},
@@ -1168,7 +1168,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	overgrow: {
 		name: "Overgrow",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Grass-type attack",
+		shortDesc: "This Pokemon's Grass-type moves have their power multiplied by 1.2.",
 		gen4: {
 			desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Grass-type attacks have their power multiplied by 1.5.",
 			shortDesc: "At 1/3 or less of its max HP, this Pokemon's Grass-type attacks have 1.5x power.",
@@ -1200,8 +1200,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	pastelveil: {
 		name: "Pastel Veil",
-		desc: "This Pokemon and its allies cannot be poisoned. Gaining this Ability while this Pokemon or its ally is poisoned cures them. If this Ability is being ignored during an effect that causes poison, this Pokemon is cured immediately but its ally is not. increases the damage of Psychic-type moves by 10%.",
-		shortDesc: "This Pokemon and its allies cannot be poisoned. On switch-in, cures poisoned allies. increases the damage of Psychic-type moves by 10%.",
+		desc: "This Pokemon and its allies cannot be poisoned. Gaining this Ability while this Pokemon or its ally is poisoned cures them. If this Ability is being ignored during an effect that causes poison, this Pokemon is cured immediately but its ally is not. This Pokemon's Psychic-type moves have their power multiplied by 1.1.",
+		shortDesc: "This Pokemon and its allies cannot be poisoned. On switch-in, cures poisoned allies. This Pokemon's Psychic-type moves have 1.1X power.",
 	},
 	perishbody: {
 		name: "Perish Body",
@@ -1859,7 +1859,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	swarm: {
 		name: "Swarm",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Bug-type attack.",
+		shortDesc: "This Pokemon's Bug-type moves have their power multiplied by 1.2.",
 		gen4: {
 			desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Bug-type attacks have their power multiplied by 1.5.",
 			shortDesc: "At 1/3 or less of its max HP, this Pokemon's Bug-type attacks have 1.5x power.",
@@ -2000,7 +2000,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	torrent: {
 		name: "Torrent",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Water-type attack",
+		shortDesc: "This Pokemon's Water-type moves have their power multiplied by 1.2.",
 		gen4: {
 			desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Water-type attacks have their power multiplied by 1.5.",
 			shortDesc: "At 1/3 or less of its max HP, this Pokemon's Water-type attacks have 1.5x power.",
@@ -2279,7 +2279,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	malicia: {
 		name: "Malicia",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Dark-type attack.",
+		shortDesc: "This Pokemon's Dark-type moves have their power multiplied by 1.2.",
 	},
 	frubujas: {
 		name: "Frubujas",
@@ -2299,7 +2299,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	vatios: {
 		name: "Vatios",
 		desc: "",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Electric-type attack.",
+		shortDesc: "This Pokemon's Electric-type moves have their power multiplied by 1.2.",
 	},
 	mineralizacion: {
 		name: "Mineralizacion",
@@ -2323,8 +2323,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	inteligenciaartificial: {
 		name: "Inteligencia Artificial",
-		desc: "This Pokemon's offensive stat is multiplied by 1.4 and the accuracy of its attacks is multiplied by 0.95.",
-		shortDesc: "This Pokemon's offensive stat is 1.4x and accuracy of its attacks is 0.95x.",
+		desc: "This Pokemon's moves have their power multiplied by 1.4 and the accuracy of its attacks is multiplied by 0.95.",
+		shortDesc: "This Pokemon's moves have 1.4x power and accuracy of its attacks is 0.95x.",
 	},
 	comealmas: {
 		name: "Come Almas",
