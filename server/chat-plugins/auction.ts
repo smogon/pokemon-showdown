@@ -185,6 +185,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			smogonExport += `[SPOILER="All"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
 			buf += Utils.html`<copytext value="${smogonExport}">Copy Smogon Export</copytext>`;
 		}
+
 		return buf;
 	}
 
