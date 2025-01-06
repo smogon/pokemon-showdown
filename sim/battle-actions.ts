@@ -1743,7 +1743,6 @@ export class BattleActions {
 		const type = move.type;
 
 		baseDamage += 2;
-		if (move.multihitType) this.add('-message', move.multihitType);
 		if (move.spreadHit) {
 			// multi-target modifier (doubles only)
 			const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
@@ -1755,9 +1754,7 @@ export class BattleActions {
 			this.battle.debug(`Parental Bond modifier: ${bondModifier}`);
 			baseDamage = this.battle.modify(baseDamage, bondModifier);
 		} else if (move.multihitType === 'thehappyknife' && move.hit > 1) {
-			this.add('-message', `I SEE IT HAPPENING`);
 			this.battle.debug(`the happy knife modifier: 0.25x`);
-			move.type = 'Fire';
 			baseDamage = this.battle.modify(baseDamage, 0.25);
 		}
 
