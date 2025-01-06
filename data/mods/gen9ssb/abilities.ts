@@ -15,6 +15,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Marvin
+	murderousmimic: {
+		name: "Murderous Mimic",
+		gen: 9,
+		flags: {},
+		shortDesc: "Transforms into an ally of choice when using Mimic.",
+		onModifyMove(move, pokemon) {
+			if (move.id === 'mimic') {
+				move.onAfterMove = function (p, t, m) {
+					this.add('-activate', p, 'ability: Murderous Mimic');
+					p.side.addSlotCondition(p, 'mimic');
+				};
+			}
+		},
+	},
 	// Miraju
 	illusiveenergy: {
 		name: "Illusive Energy",
