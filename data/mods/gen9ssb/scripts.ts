@@ -546,10 +546,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'epipen');
 			break;
 		case 'mimic':
-			// @ts-ignore
-			changeSet(this, action.pokemon, ssbSets[action.target.name], true);
-			action.pokemon.formeChange(action.target.species.name);
-			this.add('-message', `${action.pokemon.name} mimicked its ally ${action.target.name}!`);
+			if (action.pokemon.transformInto(action.target, this.dex.abilities.get('murderousmimic')) {
+				action.pokemon.formeChange(action.target.species.name);
+				this.add('-message', `${action.pokemon.name} mimicked its ally ${action.target.name}!`);
+			}
+			//changeSet(this, action.pokemon, ssbSets[action.target.name], true);
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'mimic');
 			break;
 		case 'shocktherapy':
