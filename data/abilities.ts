@@ -813,25 +813,22 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 				// Increment the cumulative damage reduction, capped at 0.9
 				if (!target.volatiles['cutecharm']) {
-					target.addVolatile('cutecharm');
+					source.addVolatile('cutecharm');
 				}
-				const currentStack = target.volatiles['cutecharm'].stack || 0;
+				const currentStack = source.volatiles['cutecharm'].stack || 0;
 				if (!target.fainted){
-				target.volatiles['cutecharm'].stack = Math.min(currentStack + 0.1, 0.9);
+					source.volatiles['cutecharm'].stack = Math.min(currentStack + 0.1, 0.9);
 				}
 			}
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			let mod = 1;
 			if (move.flags['contact']) {
-				const reduction = target.volatiles['cutecharm']?.stack || 0;
+				const reduction = source.volatiles['cutecharm']?.stack || 0;
 				mod *= 1 - reduction;
 			}
 			return this.chainModify(mod);
 		},
-		/*onFoeSwitchOut(target, source) {
-				target.volatiles['cutecharm']?.stack = 0
-		},*/
 		flags: {breakable: 1},
 		name: "Cute Charm",
 		rating: 0.5,
