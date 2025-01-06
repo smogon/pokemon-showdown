@@ -66,7 +66,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onStart(pokemon) {
 				this.add('-message', `What?!`);
 				this.add('-message', `${this.effectState.source.name} just melted away!`);
-				this.add('-start', pokemon, 'Emergency Meltdown', '[silent]');
 				this.add('-message', `${pokemon.name} is in shock!`);
 			},
 			onBeforeMovePriority: 6,
@@ -79,7 +78,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.tryTrap();
 			},
 			onEnd(pokemon) {
-				this.add('-end', pokemon, 'Emergency Meltdown', '[silent]');
 				this.add('-message', `${pokemon.name} shook off the meltdown!`);
 			},
 		},
