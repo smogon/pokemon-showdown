@@ -64,6 +64,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		condition: {
 			duration: 2,
 			onStart(pokemon) {
+				this.add('-anim', pokemon, 'Splash', pokemon);
 				this.add('-message', `What?!`);
 				this.add('-message', `${this.effectState.source.name} just melted away!`);
 				this.add('-message', `${pokemon.name} is in shock!`);
