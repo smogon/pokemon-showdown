@@ -12246,6 +12246,9 @@ export const Moves: {[moveid: string]: MoveData} = {
 			};
 			this.add('-start', source, 'Mimic', move.name);
 		},
+		condition: {
+			duration: 1,
+		},
 		secondary: null,
 		target: "normal",
 		type: "Normal",
