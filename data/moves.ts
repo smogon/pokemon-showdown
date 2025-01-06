@@ -7285,29 +7285,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Poison",
 		contestType: "Cool",
 	},
-	gmaxmeltdown: {
-		num: 1000,
-		accuracy: true,
-		basePower: 10,
-		category: "Physical",
-		isNonstandard: "Gigantamax",
-		name: "G-Max Meltdown",
-		pp: 5,
-		priority: 0,
-		flags: {},
-		isMax: "Melmetal",
-		self: {
-			onHit(source, target, effect) {
-				for (const pokemon of source.foes()) {
-					if (!pokemon.volatiles['dynamax']) pokemon.addVolatile('torment', source, effect);
-				}
-			},
-		},
-		secondary: null,
-		target: "adjacentFoe",
-		type: "Steel",
-		contestType: "Cool",
-	},
 	gmaxoneblow: {
 		num: 1000,
 		accuracy: true,
