@@ -5,12 +5,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 9,
 		desc: "This Pokémon's damaging moves hit twice. The second hit is Fire-type and has its damage quartered.",
 		shortDesc: "Attacks hit twice; 2nd hit is Fire-type and has 1/4 damage.",
-		onPrepareHit(source, target, move) {
-			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
-			move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
-			move.multihit = 2;
-			move.multihitType = 'thehappyknife';
-		},
 	},
 	// Tao
 	zhuyou: {
