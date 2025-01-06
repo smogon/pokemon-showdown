@@ -1755,6 +1755,7 @@ export class BattleActions {
 			this.battle.debug(`Parental Bond modifier: ${bondModifier}`);
 			baseDamage = this.battle.modify(baseDamage, bondModifier);
 		} else if (move.multihitType === 'thehappyknife' && move.hit > 1) {
+			this.add('-message', `I SEE IT HAPPENING`);
 			this.battle.debug(`the happy knife modifier: 0.25x`);
 			move.type = 'Fire';
 			baseDamage = this.battle.modify(baseDamage, 0.25);
