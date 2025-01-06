@@ -25,7 +25,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move.id === 'mimic') {
 				move.onAfterMove = function (p, t, m) {
 					this.add('-activate', p, 'ability: Murderous Mimic');
+					// @ts-ignore
 					p.side.addSlotCondition(p, 'mimic');
+					// @ts-ignore
 					p.switchFlag = true;
 				};
 			}
