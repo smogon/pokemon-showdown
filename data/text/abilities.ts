@@ -32,8 +32,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	analytic: {
 		name: "Analytic",
-		desc: "The power of this Pokemon's move is multiplied by 2 and won't miss if it is the last to move in a turn. Does not affect Doom Desire and Future Sight.",
-		shortDesc: "This Pokemon's attacks have 2x power and will always hit if it is the last to move in a turn.",
+		desc: "If the pokemon is the last to move, the move it uses will never misses and will have 30% more power.",
+		shortDesc: "If the pokemon is the last to move, the move it uses will never misses and will have 30% more power.",
 	},
 	angerpoint: {
 		name: "Anger Point",
