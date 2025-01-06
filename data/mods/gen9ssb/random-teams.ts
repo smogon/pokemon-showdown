@@ -216,6 +216,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Wuji',
 		evs: {atk: 252, def: 4, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
 	},
+	Marvin: {
+		species: 'Darmanitan-Galar-Zen', ability: 'Murderous Mimic', item: 'The Happy Knife', gender: 'M',
+		moves: ['Ice Spinner', 'Pyro Ball', 'Mimic'],
+		signatureMove: 'Meltdown',
+		evs: {hp: 120, atk: 136, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
+	},
 	/*
 	Miraju: {
 		species: 'Wynaut', ability: 'Illusive Energy', item: 'Eviolite', gender: 'N',
