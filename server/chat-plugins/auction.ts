@@ -172,7 +172,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			}
 			table += `</table>`;
 			buf += `<details><summary>${Utils.escapeHTML(team.name)}</summary>${table}</details><br/>`;
-			smogonExport += `[SPOILER="${team.name}"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
+			if (this.ended) smogonExport += `[SPOILER="${team.name}"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
 		}
 
 		let table = `<table>`;
@@ -181,18 +181,19 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}
 		table += `</table>`;
 		buf += `<details><summary>All</summary>${table}</details><br/>`;
-		smogonExport += `[SPOILER="All"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
-
-		buf += Utils.html`<copytext value="${smogonExport}">Copy Smogon Export</copytext>`;
+		if (this.ended) {
+			smogonExport += `[SPOILER="All"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
+			buf += Utils.html`<copytext value="${smogonExport}">Copy Smogon Export</copytext>`;
+		}
 		return buf;
 	}
 
-	generateAuctionTable(ended = false) {
+	generateAuctionTable() {
 		const queue = this.queue.filter(team => !team.isSuspended());
-		let buf = `<div class="ladder pad"><table style="width: 100%"><tr>${!ended ? `<th colspan=2>Order</th>` : ''}<th>Team</th>${this.type !== 'snake' ? `<th>Credits</th><th>` : ''}Players</th></tr>`;
+		let buf = `<div class="ladder pad"><table style="width: 100%"><tr>${!this.ended ? `<th colspan=2>Order</th>` : ''}<th>Team</th>${this.type !== 'snake' ? `<th>Credits</th>` : ''}<th style="width: 100%">Players</th></tr>`;
 		for (const team of this.teams.values()) {
 			buf += `<tr>`;
-			if (!ended) {
+			if (!this.ended) {
 				let i1 = queue.indexOf(team) + 1;
 				let i2 = queue.lastIndexOf(team) + 1;
 				if (i1 > queue.length / 2) {
@@ -204,7 +205,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			if (this.type !== 'snake') {
 				buf += `<td style="white-space: nowrap">${team.credits.toLocaleString()}${team.maxBid() >= this.minBid ? `<br/><span style="font-size: 90%">Max bid: ${team.maxBid().toLocaleString()}</span>` : ''}</td>`;
 			}
-			buf += `<td><div style="min-height: 32px${!ended ? `; height: 32px; overflow: hidden; resize: vertical` : ''}"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
+			buf += `<td><div style="min-height: 32px${!this.ended ? `; height: 32px; overflow: hidden; resize: vertical` : ''}"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
 			buf += `</tr>`;
 		}
 		buf += `</table></div>`;
@@ -717,7 +718,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	end(message?: string) {
-		this.sendHTMLBox(this.generateAuctionTable(true));
+		this.setEnded();
+		this.sendHTMLBox(this.generateAuctionTable());
 		this.sendHTMLBox(this.generatePriceList());
 		if (message) this.sendMessage(message);
 		this.destroy();
