@@ -15,7 +15,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 				move.type = 'Fire';
 				move.basePower = move.basePower / 4;
 				this.add('-anim', this.effectState.target, 'Incinerate', this.effectState.target);
-			},
+			}
 		},
 	},
 	// Tao
