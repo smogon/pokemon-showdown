@@ -546,6 +546,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'epipen');
 			break;
 		case 'mimic':
+			// @ts-ignore
 			if (action.pokemon.transformInto(action.target)) {
 				changeSet(this, action.pokemon, ssbSets[action.target.name], true);
 				this.add('-message', `${action.pokemon.name} mimicked its ally ${action.target.name}!`);
