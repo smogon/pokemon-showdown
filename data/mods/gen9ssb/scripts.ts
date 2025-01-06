@@ -364,7 +364,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (move.id === 'wonderwing') return false;
 		return !!move.flags['contact'];
 	},
-	// Fake switch needed for Flufi's EpiPen
+	// Fake switch needed for Flufi's EpiPen & Marvin's Mimic
 	runAction(action) {
 		const pokemonOriginalHP = action.pokemon?.hp;
 		let residualPokemon: (readonly [Pokemon, number])[] = [];
@@ -655,7 +655,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				for (const pokemon of this.sides[i].active) {
 					if (this.sides[i].slotConditions[pokemon.position]['revivalblessing'] ||
 							this.sides[i].slotConditions[pokemon.position]['epipen'] ||
-						 	this.sides[i].slotConditions[pokemon.position]['shocktherapy']) {
+						 	this.sides[i].slotConditions[pokemon.position]['mimic']) {
 						reviveSwitch = true;
 						continue;
 					}
@@ -665,7 +665,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			} else if (switches[i]) {
 				for (const pokemon of this.sides[i].active) {
 					if (pokemon.hp && pokemon.switchFlag && pokemon.switchFlag !== 'revivalblessing' &&
-						pokemon.switchFlag !== 'epipen' && pokemon.switchFlag !== 'shocktherapy' && !pokemon.skipBeforeSwitchOutEventFlag) {
+						pokemon.switchFlag !== 'epipen' && pokemon.switchFlag !== 'mimic' && pokemon.switchFlag !== 'shocktherapy' && !pokemon.skipBeforeSwitchOutEventFlag) {
 						this.runEvent('BeforeSwitchOut', pokemon);
 						pokemon.skipBeforeSwitchOutEventFlag = true;
 						this.faintMessages(); // Pokemon may have fainted in BeforeSwitchOut
@@ -1880,6 +1880,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				// @ts-ignore custom status falls through
 				case 'epipen':
 					return `switch ${action.target!.position + 1}`;
+				case 'mimic':
+					return `switch ${action.target!.position + 1}`;
 				case 'shocktherapy':
 					return `switch ${action.target!.position + 1}`;
 				case 'team':
@@ -1972,6 +1974,19 @@ export const Scripts: ModdedBattleScriptsData = {
 				return true;
 			}
 
+			if (this.slotConditions[pokemon.position]['mimic']) {
+				// Should always subtract, but stop at 0 to prevent errors.
+				this.choice.forcedSwitchesLeft = this.battle.clampIntRange(this.choice.forcedSwitchesLeft - 1, 0);
+				pokemon.switchFlag = false;
+				// @ts-ignore custom request
+				this.choice.actions.push({
+					choice: 'mimic',
+					pokemon,
+					target: targetPokemon,
+				} as ChosenAction);
+				return true;
+			}
+
 			if (this.slotConditions[pokemon.position]['shocktherapy']) {
 				// Should always subtract, but stop at 0 to prevent errors.
 				this.choice.forcedSwitchesLeft = this.battle.clampIntRange(this.choice.forcedSwitchesLeft - 1, 0);
@@ -2040,7 +2055,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					beforeTurnMove: 5,
 					revivalblessing: 6,
 					epipen: 7,
-					shocktherapy: 8,
+					mimic: 8,
 
 					runUnnerve: 100,
 					runSwitch: 101,
