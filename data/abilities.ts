@@ -217,7 +217,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	arenatrap: {
 		onFoeTrapPokemon(pokemon) {
 			if (!pokemon.isAdjacent(this.effectState.target)) return;
-			if (pokemon.isGrounded()) {
+			if ((pokemon.hasType('Ground') || pokemon.hasType('Bug') || pokemon.hasType('Flying')) && pokemon.hp <= pokemon.baseMaxhp / 3) {
 				pokemon.tryTrap(true);
 			}
 		},
@@ -4163,7 +4163,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	shadowtag: {
 		onFoeTrapPokemon(pokemon) {
-			if (!pokemon.hasAbility('shadowtag') && pokemon.isAdjacent(this.effectState.target)) {
+			if (!pokemon.hasAbility('shadowtag') && pokemon.isAdjacent(this.effectState.target) && (pokemon.hasType('Ghost') || pokemon.hasType('Bug') || pokemon.hasType('Dark')) && pokemon.hp <= pokemon.baseMaxhp / 3) {
 				pokemon.tryTrap(true);
 			}
 		},
