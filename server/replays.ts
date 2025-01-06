@@ -91,7 +91,7 @@ export const Replays = new class {
 		return replayData;
 	}
 
-	async retry<T>(fn: () => Promise<T>, retries: number = 3, delayMs: number = 1000): Promise<T> {
+	async retry<T>(fn: () => Promise<T>, retries = 3, delayMs = 1000): Promise<T> {
 	  let lastError: any;
 	  for (let attempt = 1; attempt <= retries; attempt++) {
 	    try {
