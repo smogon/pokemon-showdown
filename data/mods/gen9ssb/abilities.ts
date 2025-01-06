@@ -30,6 +30,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				};
 			}
 		},
+		onSwitchOut(pokemon) {
+			if (pokemon.species.name !== 'Darmanitan-Galar-Zen') changeSet(this, pokemon, ssbSets['Marvin'], true);
+		},
 	},
 	// Miraju
 	illusiveenergy: {
