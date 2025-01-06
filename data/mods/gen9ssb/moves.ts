@@ -41,8 +41,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Marvin
-	meltdown: {
-		name: "Meltdown",
+	emergencymeltdown: {
+		name: "Emergency Meltdown",
 		basePower: 0,
 		category: "Status",
 		shortDesc: "User faints. Target cannot move for 2 turns.",
@@ -55,16 +55,17 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Agility', source);
+			this.add('-anim', source, 'V-create', source);
 			this.add('-anim', source, 'Explosion', source);
 		},
 		selfdestruct: 'always',
-		volatileStatus: 'meltdown',
+		volatileStatus: 'emergencymeltdown',
 		condition: {
 			duration: 2,
 			onStart(pokemon) {
 				this.add('-message', `What?!`);
 				this.add('-message', `${this.effectState.source.name} just melted away!`);
-				this.add('-start', pokemon, 'Meltdown', '[silent]');
+				this.add('-start', pokemon, 'Emergency Meltdown', '[silent]');
 				this.add('-message', `${pokemon.name} is in shock!`);
 			},
 			onBeforeMovePriority: 6,
@@ -77,7 +78,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.tryTrap();
 			},
 			onEnd(pokemon) {
-				this.add('-end', pokemon, 'Meltdown', '[silent]');
+				this.add('-end', pokemon, 'Emergency Meltdown', '[silent]');
 				this.add('-message', `${pokemon.name} shook off the meltdown!`);
 			},
 		},
