@@ -50,6 +50,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		gen: 9,
 		pp: 5,
+		flags: {bypasssub: 1},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
