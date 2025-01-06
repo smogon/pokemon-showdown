@@ -9,13 +9,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
 			move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
 			move.multihit = 2;
-		},
-		onModifyMove(move, pokemon) {
-			if (move.hit === 2) {
-				move.type = 'Fire';
-				move.basePower = move.basePower / 4;
-				this.add('-anim', this.effectState.target, 'Incinerate', this.effectState.target);
-			}
+			move.multihitType = 'thehappyknife';
 		},
 	},
 	// Tao
