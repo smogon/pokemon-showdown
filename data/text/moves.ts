@@ -914,8 +914,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	chloroblast: {
 		name: "Chloroblast",
-		desc: "If this move is successful, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
-		shortDesc: "User loses 50% max HP.",
+		desc: "If this move is successful, the user loses 1/4 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
+		shortDesc: "User loses 25% max HP.",
 	},
 	circlethrow: {
 		name: "Circle Throw",
