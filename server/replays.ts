@@ -99,7 +99,6 @@ export const Replays = new class {
 	    } catch (error) {
 	      lastError = error;
 	      if (attempt < retries) {
-	        console.warn(`Attempt ${attempt} failed. Retrying in ${delayMs}ms...`);
 	        await new Promise(res => setTimeout(res, delayMs));
 	      }
 	    }
