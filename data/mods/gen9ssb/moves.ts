@@ -40,6 +40,51 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Marvin
+	meltdown: {
+		name: "Meltdown",
+		basePower: 0,
+		category: "Status",
+		shortDesc: "User faints. Target cannot move for 2 turns.",
+		desc: "User faints. Target cannot move or switch until after the end of next turn.",
+		accuracy: true,
+		gen: 9,
+		pp: 5,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Agility', source);
+			this.add('-anim', source, 'Explosion', source);
+		},
+		selfdestruct: 'always',
+		volatileStatus: 'meltdown',
+		condition: {
+			duration: 2,
+			onStart(pokemon) {
+				this.add('-message', `What?!`);
+				this.add('-message', `${this.effectState.source.name} just melted away!`);
+				this.add('-start', pokemon, 'Meltdown', '[silent]');
+				this.add('-message', `${pokemon.name} is in shock!`);
+			},
+			onBeforeMovePriority: 6,
+			onBeforeMove(attacker, defender, move) {
+				this.add('cant', attacker, 'Meltdown', move);
+				this.add('-message', `${attacker.name} is frozen in shock!`);
+				return false;
+			},
+			onTrapPokemon(pokemon) {
+				pokemon.tryTrap();
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Meltdown', '[silent]');
+				this.add('-message', `${pokemon.name} shook off the meltdown!`);
+			},
+		},
+		secondary: null,
+		type: "Fire",
+		target: "normal",
+	},
 	// Saint Deli
 	giftoffortune: {
 		name: "Gift of Fortune",
