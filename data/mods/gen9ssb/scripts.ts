@@ -543,6 +543,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			// @ts-ignore
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'epipen');
 			break;
+		case 'mimic':
+			if (action.pokemon.transformInto(action.target)) {
+				this.add('-activate', action.pokemon, 'ability: Murderous Mimic');
+			}
+			action.pokemon.side.removeSlotCondition(action.pokemon, 'mimic');
+			break;
 		case 'shocktherapy':
 			let sHP = action.target.hp + (action.target.maxhp / 10);
 			// @ts-ignore
