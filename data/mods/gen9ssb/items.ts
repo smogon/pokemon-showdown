@@ -13,6 +13,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 				if (m.hit === 2) {
 					m.type = 'Fire';
 					m.basePower = m.basePower / 4;
+					this.add('-message', m.basePower);
+					this.add('-message', m.type);
 					this.add('-anim', s, 'Incinerate', s);
 				}
 			};
