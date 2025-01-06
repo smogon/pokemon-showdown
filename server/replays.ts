@@ -111,7 +111,7 @@ export const Replays = new class {
 		const replayData = this.toReplayRow(replay);
 		try {
 			// Retry the insert operation up to 3 times with a 1-second delay between attempts
-			await retry(() => replays.insert(replayData), 3, 1000);
+			await this.retry(() => replays.insert(replayData), 3, 1000);
 			for (const playerName of replay.players) {
 				await replayPlayers.insert({
 					playerid: toID(playerName),
