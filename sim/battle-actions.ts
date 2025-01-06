@@ -1743,7 +1743,7 @@ export class BattleActions {
 		const type = move.type;
 
 		baseDamage += 2;
-
+		if (move.multihitType) this.add('-message', move.multihitType);
 		if (move.spreadHit) {
 			// multi-target modifier (doubles only)
 			const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
