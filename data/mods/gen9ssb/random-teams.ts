@@ -219,7 +219,7 @@ export const ssbSets: SSBSets = {
 	Marvin: {
 		species: 'Darmanitan-Galar-Zen', ability: 'Murderous Mimic', item: 'The Happy Knife', gender: 'M',
 		moves: ['Ice Spinner', 'Pyro Ball', 'Mimic'],
-		signatureMove: 'Meltdown',
+		signatureMove: 'Emergency Meltdown',
 		evs: {hp: 120, atk: 136, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
 	},
 	/*
