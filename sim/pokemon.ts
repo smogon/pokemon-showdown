@@ -237,7 +237,6 @@ export class Pokemon {
 	 */
 	activeMoveActions: number;
 	previouslySwitchedIn: number;
-	truantTurn: boolean;
 	// Gen 9 only
 	stellarBoostedTypes: string[];
 
@@ -448,7 +447,6 @@ export class Pokemon {
 		this.activeTurns = 0;
 		this.activeMoveActions = 0;
 		this.previouslySwitchedIn = 0;
-		this.truantTurn = false;
 		this.stellarBoostedTypes = [];
 		this.isStarted = false;
 		this.duringMove = false;
