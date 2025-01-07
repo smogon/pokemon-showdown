@@ -192,17 +192,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onStart() {},
 		onSwitchIn(pokemon) {
-			pokemon.truantTurn = this.turn !== 0;
+			pokemon.abilityState.truantTurn = this.turn !== 0;
 		},
 		onBeforeMove(pokemon) {
-			if (pokemon.truantTurn) {
+			if (pokemon.abilityState.truantTurn) {
 				this.add('cant', pokemon, 'ability: Truant');
 				return false;
 			}
 		},
 		onResidualOrder: 27,
 		onResidual(pokemon) {
-			pokemon.truantTurn = !pokemon.truantTurn;
+			pokemon.abilityState.truantTurn = !pokemon.abilityState.truantTurn;
 		},
 	},
 	voltabsorb: {
