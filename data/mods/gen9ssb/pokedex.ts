@@ -6,6 +6,11 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 100, atk: 100, def: 100, spa: 100, spd: 100, spe: 100}, // the base stats for the pokemon
 	},
 	*/
+	darmanitangalarzen: {
+		inherit: true,
+		abilities: {0: "Murderous Mimic"},
+		baseStats: {hp: 115, atk: 120, def: 85, spa: 30, spd: 65, spe: 108},
+	},
 	trevenant: {
 		inherit: true,
 		abilities: {0: "Horrors of the Forest"},
