@@ -9,6 +9,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	protosynthesis: {
 		inherit: true,
+		onWeatherChange(pokemon) {
+			// Protosynthesis is not affected by Utility Umbrella
+			if (this.field.isWeather('sunnyday')) {
+				pokemon.addVolatile('protosynthesis');
+			} else if (!pokemon.volatiles['protosynthesis']?.fromBooster && this.field.weather !== 'sunnyday') {
+				// Protosynthesis will not deactivite if Sun is suppressed, hence the direct ID check (isWeather respects supression)
+				pokemon.removeVolatile('protosynthesis');
+			}
+		},
 		condition: {
 			noCopy: true,
 			onStart(pokemon, source, effect) {
