@@ -4720,7 +4720,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	electroball: {
 		num: 486,
 		accuracy: 100,
-		basePower: 100,
+		basePower: 75,
 		category: "Special",
 		name: "Electro Ball",
 		pp: 10,
