@@ -17073,7 +17073,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Special",
-
 		name: "Viento Escama",
 		pp: 5,
 		priority: 0,
