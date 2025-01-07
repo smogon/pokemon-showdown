@@ -2043,7 +2043,7 @@ export class Battle {
 			this.lastDamage = damage;
 			if (target.volatiles['substitute']) {
 				const hint = "In Gen 1, if a Pokemon with a Substitute hurts itself due to confusion or Jump Kick/Hi Jump Kick recoil and the target";
-				// if the move was a self-targeting move, the source is the same as the target. We need the check the opposing substitute
+				// if the move was a self-targeting move, the source is the same as the target. We need to check the opposing substitute
 				const foe = target.side.foe.active[0];
 				if (foe?.volatiles['substitute']) {
 					foe.volatiles['substitute'].hp -= damage;
