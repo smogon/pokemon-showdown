@@ -449,9 +449,6 @@ export class Pokemon {
 		this.activeMoveActions = 0;
 		this.previouslySwitchedIn = 0;
 		this.truantTurn = false;
-		this.swordBoost = false;
-		this.shieldBoost = false;
-		this.syrupTriggered = false;
 		this.stellarBoostedTypes = [];
 		this.isStarted = false;
 		this.duringMove = false;
