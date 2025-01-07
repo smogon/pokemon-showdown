@@ -2272,17 +2272,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	libero: {
 		onPrepareHit(source, target, move) {
-			if (this.effectState.libero) return;
+			if (this.effectState.protean) return;
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.effectState.libero = true;
+				this.effectState.protean = true;
 				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
 			}
 		},
 		onSwitchIn() {
-			delete this.effectState.libero;
+			delete this.effectState.protean;
 		},
 		flags: {},
 		name: "Libero",
@@ -2875,6 +2875,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
+		onAnySwitchIn(pokemon) {
+			if (this.event.target === pokemon) {
+				if(['libero', 'protean'].includes(pokemon.getAbility().id)) {
+					console.log('Reset Libero/Protean when Neutralizing Gas is active');
+					delete pokemon.abilityState.protean;
+				}
+			}
+		},
 		onEnd(source) {
 			if (source.transformed) return;
 			for (const pokemon of this.getAllActive()) {
@@ -3425,7 +3433,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
 			}
 		},
-		onSwitchIn(pokemon) {
+		onSwitchIn() {
 			delete this.effectState.protean;
 		},
 		flags: {},
