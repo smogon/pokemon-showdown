@@ -852,8 +852,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	dauntlessshield: {
 		onStart(pokemon) {
-			if (pokemon.shieldBoost) return;
-			pokemon.shieldBoost = true;
+			if (pokemon.abilityState.shieldBoost) return;
+			pokemon.abilityState.shieldBoost = true;
 			this.boost({def: 1}, pokemon);
 		},
 		flags: {},
@@ -2170,8 +2170,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	intrepidsword: {
 		onStart(pokemon) {
-			if (pokemon.swordBoost) return;
-			pokemon.swordBoost = true;
+			if (pokemon.abilityState.swordBoost) return;
+			pokemon.abilityState.swordBoost = true;
 			this.boost({atk: 1}, pokemon);
 		},
 		flags: {},
@@ -4623,8 +4623,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	supersweetsyrup: {
 		onStart(pokemon) {
-			if (pokemon.syrupTriggered) return;
-			pokemon.syrupTriggered = true;
+			if (pokemon.abilityState.syrupTriggered) return;
+			pokemon.abilityState.syrupTriggered = true;
 			this.add('-ability', pokemon, 'Supersweet Syrup');
 			for (const target of pokemon.adjacentFoes()) {
 				if (target.volatiles['substitute']) {

@@ -239,9 +239,6 @@ export class Pokemon {
 	previouslySwitchedIn: number;
 	truantTurn: boolean;
 	// Gen 9 only
-	swordBoost: boolean;
-	shieldBoost: boolean;
-	syrupTriggered: boolean;
 	stellarBoostedTypes: string[];
 
 	/** Have this pokemon's Start events run yet? (Start events run every switch-in) */
