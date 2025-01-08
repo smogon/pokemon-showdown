@@ -1043,6 +1043,6 @@ export default class TeamGenerator {
 	}
 
 	setSeed(seed: PRNGSeed) {
-		this.prng.seed = seed;
+		this.prng.setSeed(seed);
 	}
 }

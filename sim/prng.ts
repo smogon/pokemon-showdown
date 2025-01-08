@@ -12,6 +12,8 @@
  * @license MIT license
  */
 
+import * as sodium from 'sodium-native';
+
 /** 64-bit big-endian [high -> low] int */
 export type PRNGSeed = [number, number, number, number];
 
@@ -21,12 +23,23 @@ export type PRNGSeed = [number, number, number, number];
  */
 export class PRNG {
 	readonly initialSeed: PRNGSeed;
-	seed: PRNGSeed;
+	seed: Buffer;
 	/** Creates a new source of randomness for the given seed. */
-	constructor(seed: PRNGSeed | null = null) {
+	constructor(seed: PRNGSeed | Buffer | null = null) {
 		if (!seed) seed = PRNG.generateSeed();
 		this.initialSeed = seed.slice() as PRNGSeed; // make a copy
-		this.seed = seed.slice() as PRNGSeed;
+		this.seed = Array.isArray(seed) ? PRNG.convertSeed(seed.slice() as PRNGSeed) : seed;
+	}
+
+	static convertSeed(inputSeed: PRNGSeed) {
+		// randombytes_buf_deterministic only takes 32 bytes (8x4 here), so it's gotta be slightly longer
+		// than we use
+		const seed = new Uint32Array(8);
+		for (let i = 0; i < seed.length; i++) seed[i] = inputSeed[i];
+		const buf = sodium.sodium_malloc(32);
+		// @ts-ignore this doesn't accept buffers, but instead TypedArrays - typedef is out of date
+		sodium.randombytes_buf_deterministic(buf, seed);
+		return buf.slice();
 	}
 
 	/**
@@ -36,6 +49,10 @@ export class PRNG {
 	 */
 	get startingSeed(): PRNGSeed {
 		return this.initialSeed;
+	}
+
+	setSeed(seed: PRNGSeed) {
+		this.seed = PRNG.convertSeed(seed);
 	}
 
 	/**
@@ -56,8 +73,7 @@ export class PRNG {
 	 * m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
 	 */
 	next(from?: number, to?: number): number {
-		this.seed = this.nextFrame(this.seed); // Advance the RNG
-		let result = (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
+		let result = this.seededRandom();
 		if (from) from = Math.floor(from);
 		if (to) to = Math.floor(to);
 		if (from === undefined) {
@@ -68,6 +84,14 @@ export class PRNG {
 			result = Math.floor(result * (to - from) / 0x100000000) + from;
 		}
 		return result;
+	}
+
+	private seededRandom() {
+		const buf = sodium.sodium_malloc(36);
+		sodium.randombytes_buf_deterministic(buf, this.seed);
+		// use the last four bytes for the output, use the other 32 bytes for the next seed
+		this.seed = buf.slice(buf.length - 32);
+		return buf.slice(32).readUint32BE();
 	}
 
 	/**
@@ -125,6 +149,49 @@ export class PRNG {
 		}
 	}
 
+	static generateSeed() {
+		return [
+			Math.floor(Math.random() * 0x10000),
+			Math.floor(Math.random() * 0x10000),
+			Math.floor(Math.random() * 0x10000),
+			Math.floor(Math.random() * 0x10000),
+		] as PRNGSeed;
+	}
+}
+
+// old, predictable PRNG. do not use this for anything but tests
+export class TestPRNG extends PRNG {
+	_seed: PRNGSeed;
+	/** Creates a new source of randomness for the given seed. */
+	constructor(seed: PRNGSeed | null = null) {
+		super();
+		if (!seed) seed = PRNG.generateSeed();
+		this._seed = seed.slice() as PRNGSeed;
+	}
+
+	/**
+	 * Retrieves the next random number in the sequence.
+	 * This function has three different results, depending on arguments:
+	 * - random() returns a real number in [0, 1), just like Math.random()
+	 * - random(n) returns an integer in [0, n)
+	 * - random(m, n) returns an integer in [m, n)
+	 * m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
+	 */
+	next(from?: number, to?: number): number {
+		this._seed = this.nextFrame(this._seed); // Advance the RNG
+		let result = (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
+		if (from) from = Math.floor(from);
+		if (to) to = Math.floor(to);
+		if (from === undefined) {
+			result = result / 0x100000000;
+		} else if (!to) {
+			result = Math.floor(result * from / 0x100000000);
+		} else {
+			result = Math.floor(result * (to - from) / 0x100000000) + from;
+		}
+		return result;
+	}
+
 	/**
 	 * Calculates `a * b + c` (with 64-bit 2's complement integers)
 	 *
@@ -169,15 +236,6 @@ export class PRNG {
 		}
 
 		return seed;
-	}
-
-	static generateSeed() {
-		return [
-			Math.floor(Math.random() * 0x10000),
-			Math.floor(Math.random() * 0x10000),
-			Math.floor(Math.random() * 0x10000),
-			Math.floor(Math.random() * 0x10000),
-		] as PRNGSeed;
 	}
 }
 

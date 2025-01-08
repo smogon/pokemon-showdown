@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const assert = require('./assert');
 const Sim = require('./../dist/sim');
+const {TestPRNG} = require('./../dist/sim/prng');
 const Dex = Sim.Dex;
 
 const cache = new Map();
@@ -109,7 +110,11 @@ class TestTools {
 			strictChoices: options.strictChoices !== false,
 		};
 
-		if (!teams) return new Sim.Battle(battleOptions);
+		if (!teams) {
+			const battle = new Sim.Battle(battleOptions);
+			battle.prng = new TestPRNG(options.seed || DEFAULT_SEED);
+			return battle;
+		}
 
 		for (let i = 0; i < teams.length; i++) {
 			assert(Array.isArray(teams[i]), `Team provided is not an array`);
@@ -117,7 +122,9 @@ class TestTools {
 			battleOptions[playerSlot] = {team: teams[i]};
 		}
 
-		return new Sim.Battle(battleOptions);
+		const battle = new Sim.Battle(battleOptions);
+		battle.prng = new TestPRNG(options.seed || DEFAULT_SEED);
+		return battle;
 	}
 
 	/**
