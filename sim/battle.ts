@@ -65,7 +65,7 @@ interface BattleOptions {
 	/** Output callback */
 	send?: (type: string, data: string | string[]) => void;
 	prng?: PRNG; // PRNG override (you usually don't need this, just pass a seed)
-	seed?: PRNGSeed; // PRNG seed
+	seed?: PRNGSeed | Buffer; // PRNG seed
 	rated?: boolean | string; // Rated string
 	p1?: PlayerOptions; // Player 1 data
 	p2?: PlayerOptions; // Player 2 data

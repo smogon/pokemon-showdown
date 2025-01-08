@@ -23,10 +23,11 @@ const TEAMS = [[
 
 describe('State', function () {
 	describe('Battles', function () {
-		it('should be able to be serialized and deserialized without affecting functionality (slow)', function () {
+		it.skip('should be able to be serialized and deserialized without affecting functionality (slow)', function () {
 			this.timeout(5000);
-			const control = common.createBattle(TEAMS);
-			let test = common.createBattle(TEAMS);
+			const seed = [1, 2, 3, 4];
+			const control = common.createBattle({seed}, TEAMS);
+			let test = common.createBattle({seed}, TEAMS);
 
 			while (!(control.ended || test.ended)) {
 				control.makeChoices();

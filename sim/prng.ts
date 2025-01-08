@@ -35,7 +35,7 @@ export class PRNG implements PRNGRequired {
 	constructor(seed: PRNGSeed | Buffer | null = null, initialSeed?: PRNGSeed) {
 		if (!seed) seed = PRNG.generateSeed();
 		// hack i know i know
-		this.initialSeed = initialSeed || (Array.isArray(seed) ? seed.slice() : Array.from(seed)) as PRNGSeed;
+		this.initialSeed = initialSeed || [...seed] as PRNGSeed;
 		this.seed = Array.isArray(seed) ? PRNG.convertSeed(seed.slice() as PRNGSeed) : seed;
 	}
 
