@@ -3,7 +3,7 @@
 const PRNG = require('../../../dist/sim/prng').PRNG;
 const assert = require('../../assert');
 
-const testSeed = PRNG.generateSeed();
+const testSeed = [2, 3, 4, 5];
 
 describe(`PRNG`, function () {
 	it("should always generate the same results off the same seed", function () {

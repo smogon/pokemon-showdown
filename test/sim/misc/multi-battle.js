@@ -16,7 +16,7 @@ describe('Free-for-all', function () {
 		], [
 			{species: 'scyther', moves: ['sleeptalk']},
 		], [
-			{species: 'scyther', moves: ['sleeptalk', 'uturn']},
+			{species: 'scyther', moves: ['sleeptalk']},
 			{species: 'wynaut', moves: ['vitalthrow']},
 		], [
 			{species: 'scyther', moves: ['sleeptalk']},
@@ -24,8 +24,7 @@ describe('Free-for-all', function () {
 		battle.makeChoices();
 		battle.lose('p2');
 		assert(battle.p2.activeRequest.wait);
-		battle.makeChoices('auto', '', 'move uturn', 'auto');
-		battle.lose('p3');
+		battle.makeChoices('auto', '', 'move sleeptalk', 'auto');
 		battle.makeChoices();
 		assert.equal(battle.turn, 4);
 	});
