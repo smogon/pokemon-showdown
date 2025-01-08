@@ -114,7 +114,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	rattata: {
-		tier: "ZU",
+		tier: "LC",
 		natDexTier: "LC",
 	},
 	rattataalola: {
@@ -252,7 +252,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	sandshrew: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	sandshrewalola: {
 		tier: "LC",
@@ -378,7 +378,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	diglett: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	diglettalola: {
 		tier: "LC",
@@ -437,10 +437,10 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "NFE",
 	},
 	growlithe: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	growlithehisui: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	arcanine: {
 		tier: "RU",
@@ -520,7 +520,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	tentacool: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	tentacruel: {
 		tier: "NU",
@@ -550,11 +550,11 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	ponyta: {
-		tier: "ZU",
+		tier: "LC",
 		natDexTier: "LC",
 	},
 	ponytagalar: {
-		tier: "ZU",
+		tier: "LC",
 		natDexTier: "LC",
 	},
 	rapidash: {
@@ -569,7 +569,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "LC",
 	},
 	slowpokegalar: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	slowbro: {
 		tier: "UU",
@@ -596,7 +596,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "OU",
 	},
 	magnemite: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	magneton: {
 		tier: "NU",
@@ -864,7 +864,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	staryu: {
-		tier: "ZU",
+		tier: "LC",
 		natDexTier: "LC",
 	},
 	starmie: {
