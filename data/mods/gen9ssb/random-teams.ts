@@ -184,7 +184,7 @@ export const ssbSets: SSBSets = {
 		species: 'Landorus', ability: 'Herald of Order', item: 'Hadean Soil', gender: 'M',
 		moves: ['Land\'s Wrath', 'Bleakwind Storm', 'Paleo Wave'],
 		signatureMove: 'Dominus Lapidis',
-		evs: {hp: 252, def: 88, spd: 168}, nature: 'Jolly',
+		evs: {hp: 248, def: 92, spd: 168}, nature: 'Jolly',
 	},
 	Aevum: {
 		species: 'Calyrex', ability: 'Temporal Domain', item: 'Rewind Watch', gender: 'M',
