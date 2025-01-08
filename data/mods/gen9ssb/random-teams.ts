@@ -214,7 +214,7 @@ export const ssbSets: SSBSets = {
 		species: 'Kubfu', ability: 'Shangqing', item: 'Zhuyou', gender: 'M',
 		moves: ['Triple Kick', 'Circle Throw', 'Taiji'],
 		signatureMove: 'Wuji',
-		evs: {atk: 252, def: 4, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
+		evs: {hp: 120, atk: 136, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
 	},
 	Marvin: {
 		species: 'Darmanitan-Galar-Zen', ability: 'Murderous Mimic', item: 'The Happy Knife', gender: 'M',
