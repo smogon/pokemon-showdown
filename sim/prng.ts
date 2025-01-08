@@ -47,6 +47,7 @@ export class PRNG implements PRNGRequired {
 		const buf = sodium.sodium_malloc(32);
 		// @ts-ignore this doesn't accept buffers, but instead TypedArrays - typedef is out of date
 		sodium.randombytes_buf_deterministic(buf, seed);
+		sodium.sodium_memzero(buf);
 		return buf.slice();
 	}
 
@@ -99,7 +100,9 @@ export class PRNG implements PRNGRequired {
 		sodium.randombytes_buf_deterministic(buf, this.seed);
 		// use the last four bytes for the output, use the other 32 bytes for the next seed
 		this.seed = buf.slice(buf.length - 32);
-		return buf.slice(32).readUint32BE();
+		const val = buf.slice(32).readUint32BE();
+		sodium.sodium_memzero(buf);
+		return val;
 	}
 
 	/**
