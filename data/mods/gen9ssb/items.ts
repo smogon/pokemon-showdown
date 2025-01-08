@@ -12,19 +12,19 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 9,
 		onTakeItem: false,
 		onModifySpD(spd, pokemon) {
-			return this.chainModify(1.1);
+			return this.chainModify(1.25);
 		},
 		onModifyDef(def, pokemon) {
-			return this.chainModify(1.1);
+			return this.chainModify(1.25);
 		},
 		onModifyAtk(atk, pokemon) {
-			return this.chainModify(1.1);
+			return this.chainModify(1.25);
 		},
 		onModifySpA(spa, pokemon) {
-			return this.chainModify(1.1);
+			return this.chainModify(1.25);
 		},
 		onModifySpe(spe, pokemon) {
-			return this.chainModify(1.1);
+			return this.chainModify(1.25);
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (target.getMoveHitData(move).crit) {
