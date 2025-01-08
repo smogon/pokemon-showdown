@@ -76,7 +76,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		name: "Gift Sack",
 		gen: 9,
 		shortDesc: "Absorbs moves; Replaces foe's strongest move with random one.",
-		desc: "This Pokemon is immune to special moves, and stores them after being hit, storing up to five moves; Uses all stored moves upon using Gift of Fortune. Strengthens Gift of Fortune based on number of stored moves. Replaces the target's strongest attacking move with another random move.",
+		desc: "This Pokemon is immune to special moves, and stores them after being hit, storing up to three moves; Uses all stored moves upon using Gift of Fortune. Strengthens Gift of Fortune based on number of stored moves. Replaces the target's strongest attacking move with another random move.",
 		onStart(pokemon) {
 			let max = 0;
 			let strongestMove;
