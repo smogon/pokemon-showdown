@@ -23,7 +23,21 @@ export const Items: {[k: string]: ModdedItemData} = {
 	zhuyou: {
 		name: "Zhuyou",
 		gen: 9,
+		shortDesc: "1.25x stats; Crits heal user 1/4 max HP; Cures status.",
+		desc: "This Pokemon's stats are 1.25x, including HP. Whenever this Pokemon lands a critical hit, it recovers 1/4 of its max HP. At the end of each turn, this Pokemon is cured of any present status conditions.",
 		onTakeItem: false,
+		onStart(pokemon) {
+			if (pokemon.itemState.zhuyouActivated) return;
+			this.add('-activate', pokemon, 'item: Zhuyou');
+			this.add('-message', `${pokemon.name}'s maximum HP increased!`);
+			const newHp = Math.ceil(pokemon.hp * 1.25);
+			const newMaxHp = Math.ceil(pokemon.maxhp * 1.25);
+			pokemon.hp = newHp;
+			pokemon.maxhp = newMaxHp;
+			pokemon.baseMaxhp = newMaxHp;
+			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+			pokemon.itemState.zhuyouActivated = true;
+		},
 		onModifySpD(spd, pokemon) {
 			return this.chainModify(1.25);
 		},
