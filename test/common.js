@@ -112,7 +112,7 @@ class TestTools {
 
 		if (!teams) {
 			const battle = new Sim.Battle(battleOptions);
-			battle.prng = new TestPRNG(options.seed || DEFAULT_SEED);
+			battle.prng = new TestPRNG(battleOptions.seed);
 			return battle;
 		}
 
@@ -123,7 +123,7 @@ class TestTools {
 		}
 
 		const battle = new Sim.Battle(battleOptions);
-		battle.prng = new TestPRNG(options.seed || DEFAULT_SEED);
+		battle.prng = new TestPRNG(battleOptions.seed);
 		return battle;
 	}
 
