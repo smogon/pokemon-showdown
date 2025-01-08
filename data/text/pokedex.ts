@@ -662,6 +662,9 @@ export const PokedexText: {[id: IDEntry]: PokedexText} = {
 	snorlax: {
 		name: "Snorlax",
 	},
+	snorlaxmega: {
+		name: "Snorlax-Mega",
+	},
 	snorlaxgmax: {
 		name: "Snorlax-Gmax",
 	},

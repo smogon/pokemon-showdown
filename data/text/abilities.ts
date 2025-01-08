@@ -172,7 +172,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	blaze: {
 		name: "Blaze",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Fire-type attack.",
+		shortDesc: "This Pokemon's Fire-type moves have their power multiplied by 1.2.",
 		gen4: {
 			desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Fire-type attacks have their power multiplied by 1.5.",
 			shortDesc: "At 1/3 or less of its max HP, this Pokemon's Fire-type attacks have 1.5x power.",
@@ -276,7 +276,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	cursedbody: {
 		name: "Cursed Body",
-		shortDesc: "30% chance a Pokemon attacking this Pokemon will be cursed.",
+		shortDesc: "50% chance a Pokemon attacking this Pokemon will be cursed.",
 	},
 	cutecharm: {
 		name: "Cute Charm",
@@ -386,8 +386,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	dryskin: {
 		name: "Dry Skin",
-		desc: "This Pokemon is immune to Water-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type move. The power of Fire-type moves is multiplied by 1.25 when used on this Pokemon. At the end of each turn, this Pokemon restores 1/8 of its maximum HP, rounded down, if the weather is Rain Dance, and loses 1/8 of its maximum HP, rounded down, if the weather is Sunny Day. The weather effects are prevented if this Pokemon is holding a Utility Umbrella.",
-		shortDesc: "This Pokemon is healed 1/4 by Water, 1/8 by Rain; is hurt 1.25x by Fire, 1/8 by Sun.",
+		desc: "This Pokemon is immune to Water-type moves and restores 1/2 of its maximum HP, rounded down, when hit by a Water-type move. The power of Fire-type moves is multiplied by 1.25 when used on this Pokemon. At the end of each turn, this Pokemon restores 1/8 of its maximum HP, rounded down, if the weather is Rain Dance, and loses 1/8 of its maximum HP, rounded down, if the weather is Sunny Day. The weather effects are prevented if this Pokemon is holding a Utility Umbrella.",
+		shortDesc: "This Pokemon is healed 1/2 by Water, 1/8 by Rain; is hurt 1.25x by Fire, 1/8 by Sun.",
 		gen7: {
 			desc: "This Pokemon is immune to Water-type moves and restores 1/4 of its maximum HP, rounded down, when hit by a Water-type move. The power of Fire-type moves is multiplied by 1.25 when used on this Pokemon. At the end of each turn, this Pokemon restores 1/8 of its maximum HP, rounded down, if the weather is Rain Dance, and loses 1/8 of its maximum HP, rounded down, if the weather is Sunny Day.",
 		},
@@ -396,7 +396,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	earlybird: {
 		name: "Early Bird",
-		shortDesc: "This Pokemon's sleep counter drops by 2 instead of 1.",
+		shortDesc: "If Sunny Day is active, this Pokemon's moves have priority raised by 1. Wakes up after 1 turn.",
 	},
 	eartheater: {
 		name: "Earth Eater",
@@ -468,7 +468,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	flamebody: {
 		name: "Flame Body",
-		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be burned.",
+		shortDesc: "50% chance a Pokemon making contact with this Pokemon will be burned.",
 		gen4: {
 			desc: "30% chance a Pokemon making contact with this Pokemon will be burned. This effect does not happen if this Pokemon did not lose HP from the attack.",
 		},
@@ -484,8 +484,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	flashfire: {
 		name: "Flash Fire",
-		desc: "This Pokemon is immune to Fire-type moves. The first time it is hit by a Fire-type move, its offensive stat is multiplied by 1.5 while using a Fire-type attack as long as it remains active and has this Ability. If this Pokemon is frozen, it cannot be defrosted by Fire-type attacks.",
-		shortDesc: "This Pokemon's Fire attacks do 1.5x damage if hit by one Fire move; Fire immunity.",
+		desc: "This Pokemon is immune to Fire-type moves. The first time it is hit by a Fire-type move, its offensive stat is multiplied by 1.2 while using an attack as long as it remains active and has this Ability. If this Pokemon is frozen, it cannot be defrosted by Fire-type attacks.",
+		shortDesc: "This Pokemon's attacks do 1.2x damage if hit by one Fire move; Fire immunity.",
 		gen4: {
 			desc: "This Pokemon is immune to Fire-type moves, as long as it is not frozen. The first time it is hit by a Fire-type move, damage from its Fire-type attacks will be multiplied by 1.5 as long as it remains active and has this Ability.",
 		},
@@ -543,7 +543,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	frisk: {
 		name: "Frisk",
-		shortDesc: "On switch-in, this Pokemon identifies the held items of all opposing Pokemon.",
+		shortDesc: "On switch-in, this Pokemon identifies the held items of all opposing Pokemon and applies the embargo effect.",
 		gen5: {
 			shortDesc: "On switch-in, this Pokemon identifies the held item of a random opposing Pokemon.",
 		},
@@ -691,8 +691,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	icebody: {
 		name: "Ice Body",
-		desc: "If Snow is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn.",
-		shortDesc: "If Snow is active, this Pokemon heals 1/16 of its max HP each turn.",
+		desc: "If Snow is active, this Pokemon restores 1/8 of its maximum HP, rounded down, at the end of each turn. This Pokemon's Poison-type moves have their power multiplied by 1.1.",
+		shortDesc: "If Snow is active, this Pokemon heals 1/8 of its max HP each turn.",
 		gen8: {
 			desc: "If Hail is active, this Pokemon restores 1/16 of its maximum HP, rounded down, at the end of each turn. This Pokemon takes no damage from Hail.",
 			shortDesc: "If Hail is active, this Pokemon heals 1/16 of its max HP each turn; immunity to Hail.",
@@ -809,7 +809,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	justified: {
 		name: "Justified",
-		shortDesc: "This Pokemon's Attack is raised by 1 stage after it is damaged by a Dark-type move.",
+		desc: "This Pokemon is immune to Dark-type moves and raises its Attack by 1 stage when hit by a Dark-type move.",
+		shortDesc: "This Pokemon's Attack is raised 1 stage if hit by an Dark move; Dark immunity.",
 	},
 	keeneye: {
 		name: "Keen Eye",
@@ -897,7 +898,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	liquidooze: {
 		name: "Liquid Ooze",
-		shortDesc: "This Pokemon damages those draining HP from it for as much as they would heal. 30% to badly poison if being drained. This Pokemon's offensive stat is multiplied by 1.2 while using an Poison-type attack",
+		shortDesc: "This Pokemon damages those draining HP from it for as much as they would heal. 30% to badly poison if being drained. This Pokemon's Poison-type moves have their power multiplied by 1.1.",
 		gen4: {
 			desc: "This Pokemon damages those draining HP from it for as much as they would heal. This effect does not consider Dream Eater.",
 		},
@@ -964,7 +965,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	marvelscale: {
 		name: "Marvel Scale",
-		shortDesc: "If this Pokemon has a non-volatile status condition, its Defense is multiplied by 1.5.",
+		shortDesc: "If this Pokemon has a non-volatile status condition, its Defense is multiplied by 1.5 and it can only be damaged by direct attacks.",
 	},
 	megalauncher: {
 		name: "Mega Launcher",
@@ -1168,7 +1169,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	overgrow: {
 		name: "Overgrow",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Grass-type attack",
+		shortDesc: "This Pokemon's Grass-type moves have their power multiplied by 1.2.",
 		gen4: {
 			desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Grass-type attacks have their power multiplied by 1.5.",
 			shortDesc: "At 1/3 or less of its max HP, this Pokemon's Grass-type attacks have 1.5x power.",
@@ -1176,8 +1177,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	owntempo: {
 		name: "Own Tempo",
-		desc: "This Pokemon cannot be confused. Gaining this Ability while confused cures it. This Pokemon is immune to the effect of the Intimidate Ability.",
-		shortDesc: "This Pokemon cannot be confused. Immune to Intimidate.",
+		desc: "This Pokemon cannot be statused. Gaining this Ability while confused cures it. This Pokemon is immune to the effect of the Intimidate Ability.",
+		shortDesc: "This Pokemon cannot be statused. Immune to Intimidate.",
 		gen7: {
 			desc: "This Pokemon cannot be confused. Gaining this Ability while confused cures it.",
 			shortDesc: "This Pokemon cannot be confused.",
@@ -1200,8 +1201,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	pastelveil: {
 		name: "Pastel Veil",
-		desc: "This Pokemon and its allies cannot be poisoned. Gaining this Ability while this Pokemon or its ally is poisoned cures them. If this Ability is being ignored during an effect that causes poison, this Pokemon is cured immediately but its ally is not. increases the damage of Psychic-type moves by 10%.",
-		shortDesc: "This Pokemon and its allies cannot be poisoned. On switch-in, cures poisoned allies. increases the damage of Psychic-type moves by 10%.",
+		desc: "This Pokemon and its allies cannot be poisoned. Gaining this Ability while this Pokemon or its ally is poisoned cures them. If this Ability is being ignored during an effect that causes poison, this Pokemon is cured immediately but its ally is not. This Pokemon's Psychic-type moves have their power multiplied by 1.1.",
+		shortDesc: "This Pokemon and its allies cannot be poisoned. On switch-in, cures poisoned allies. This Pokemon's Psychic-type moves have 1.1X power.",
 	},
 	perishbody: {
 		name: "Perish Body",
@@ -1217,8 +1218,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	pickup: {
 		name: "Pickup",
-		desc: "At the end of each turn, if this Pokemon is not holding an item and at least one adjacent Pokemon used an item during this turn, one of those Pokemon is selected at random and this Pokemon obtains that Pokemon's last used item. An item is not considered the last used if it was a popped Air Balloon, if the item was picked up by another Pokemon with this Ability, or if the item was lost to Bug Bite, Corrosive Gas, Covet, Incinerate, Knock Off, Pluck, or Thief. Items thrown with Fling can be picked up.",
-		shortDesc: "If this Pokemon has no item, it finds one used by an adjacent Pokemon this turn.",
+		desc: "At the end of each turn, if at least one adjacent Pokemon used an item during this turn, one of those Pokemon is selected at random and this Pokemon consumes that Pokemon's last used item. An item is not considered the last used if it was a popped Air Balloon, if the item was picked up by another Pokemon with this Ability, or if the item was lost to Bug Bite, Corrosive Gas, Covet, Incinerate, Knock Off, Pluck, or Thief. Items thrown with Fling can be picked up.",
+		shortDesc: "This Pokemon finds one item used by an adjacent Pokemon this turn and uses it.",
 		gen7: {
 			desc: "At the end of each turn, if this Pokemon is not holding an item and at least one adjacent Pokemon used an item during this turn, one of those Pokemon is selected at random and this Pokemon obtains that Pokemon's last used item. An item is not considered the last used if it was a popped Air Balloon, if the item was picked up by another Pokemon with this Ability, or if the item was lost to Bug Bite, Covet, Incinerate, Knock Off, Pluck, or Thief. Items thrown with Fling can be picked up.",
 		},
@@ -1274,8 +1275,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	poisontouch: {
 		name: "Poison Touch",
-		desc: "This Pokemon's contact moves have a 30% chance of poisoning. This effect comes after a move's inherent secondary effect chance.",
-		shortDesc: "This Pokemon's contact moves have a 30% chance of poisoning.",
+		desc: "This Pokemon's contact moves have a 30% chance of badly poisoning and 70% of poisoning. This effect comes after a move's inherent secondary effect chance.",
+		shortDesc: "This Pokemon's attacks have a 30% chance of badly poisoning and 70% of poisoning.",
 	},
 	powerconstruct: {
 		name: "Power Construct",
@@ -1420,8 +1421,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	rattled: {
 		name: "Rattled",
-		desc: "This Pokemon's Speed is raised by 1 stage if hit by a Bug-, Dark-, or Ghost-type attack, or if an opposing Pokemon affected this Pokemon with the Intimidate Ability.",
-		shortDesc: "Speed is raised 1 stage if hit by a Bug-, Dark-, or Ghost-type attack, or Intimidated.",
+		desc: "This Pokemon's Speed is raised by 2 stages if hit by a Bug-, Dark-, or Ghost-type attack, or if an opposing Pokemon affected this Pokemon with the Intimidate Ability.",
+		shortDesc: "Speed is raised 2 stages if hit by a Bug-, Dark-, or Ghost-type attack, or Intimidated.",
 		gen7: {
 			desc: "This Pokemon's Speed is raised by 1 stage if hit by a Bug-, Dark-, or Ghost-type attack.",
 			shortDesc: "This Pokemon's Speed is raised 1 stage if hit by a Bug-, Dark-, or Ghost-type attack.",
@@ -1442,8 +1443,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	reckless: {
 		name: "Reckless",
-		desc: "This Pokemon's attacks with recoil or crash damage have their power multiplied by 1.2. Does not affect Struggle.",
-		shortDesc: "This Pokemon's attacks with recoil or crash damage have 1.2x power; not Struggle.",
+		desc: "This Pokemon's attacks with recoil or crash damage have their power multiplied by 1.5. Does not affect Struggle.",
+		shortDesc: "This Pokemon's attacks with recoil or crash damage have 1.5x power; not Struggle.",
 	},
 	refrigerate: {
 		name: "Refrigerate",
@@ -1465,8 +1466,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	rivalry: {
 		name: "Rivalry",
-		desc: "This Pokemon's attacks have their power multiplied by 1.25 against targets of the same gender or multiplied by 0.75 against targets of the opposite gender. There is no modifier if either this Pokemon or the target is genderless.",
-		shortDesc: "This Pokemon's attacks do 1.25x on same gender targets; 0.75x on opposite gender.",
+		desc: "This Pokemon's attacks have their power multiplied by 1.5 against targets of the same gender. There is no modifier if either this Pokemon or the target is genderless or the opposite gender.",
+		shortDesc: "This Pokemon's attacks do 1.5 on same gender targets.",
 	},
 	rkssystem: {
 		name: "RKS System",
@@ -1712,7 +1713,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	soundproof: {
 		name: "Soundproof",
-		shortDesc: "This Pokemon is immune to sound-based moves, unless it used the move.",
+		desc: "This Pokemon is immune to sound moves. The first time it is hit by a sound move, its offensive stat is multiplied by 2 while using its next attack as long as it remains active and has this Ability.",
+		shortDesc: "This Pokemon's next attack does 2x damage if hit by one sound move; sound immunity.",
 		gen7: {
 			shortDesc: "This Pokemon is immune to sound-based moves, including Heal Bell.",
 		},
@@ -1786,8 +1788,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	stench: {
 		name: "Stench",
-		desc: "This Pokemon's attacks without a chance to make the target flinch gain a 10% chance to make the target flinch.",
-		shortDesc: "This Pokemon's attacks without a chance to flinch gain a 10% chance to flinch.",
+		desc: "This Pokemon receives 1/2 damage from wind moves. This Pokemon's Poison-type moves have their power multiplied by 1.1.",
+		shortDesc: "This Pokemon takes 1/2 damage from wind moves, its Poison-type moves have 1.1x power.",
 		gen4: {
 			desc: "No competitive use.",
 			shortDesc: "No competitive use.",
@@ -1859,7 +1861,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	swarm: {
 		name: "Swarm",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Bug-type attack.",
+		shortDesc: "This Pokemon's Bug-type moves have their power multiplied by 1.2.",
 		gen4: {
 			desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Bug-type attacks have their power multiplied by 1.5.",
 			shortDesc: "At 1/3 or less of its max HP, this Pokemon's Bug-type attacks have 1.5x power.",
@@ -2000,7 +2002,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	torrent: {
 		name: "Torrent",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Water-type attack",
+		shortDesc: "This Pokemon's Water-type moves have their power multiplied by 1.2.",
 		gen4: {
 			desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its Water-type attacks have their power multiplied by 1.5.",
 			shortDesc: "At 1/3 or less of its max HP, this Pokemon's Water-type attacks have 1.5x power.",
@@ -2017,8 +2019,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	toxicchain: {
 		name: "Toxic Chain",
-		desc: "This Pokemon's attacks have a 30% chance of badly poisoning. This effect comes before a move's inherent secondary effect chance.",
-		shortDesc: "This Pokemon's attacks have a 30% chance of badly poisoning.",
+		desc: "This Pokemon's attacks have a 100% chance of badly poisoning. This effect comes before a move's inherent secondary effect chance.",
+		shortDesc: "This Pokemon's attacks have a 100% chance of badly poisoning.",
 	},
 	toxicdebris: {
 		name: "Toxic Debris",
@@ -2279,7 +2281,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	malicia: {
 		name: "Malicia",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Dark-type attack.",
+		shortDesc: "This Pokemon's Dark-type moves have their power multiplied by 1.2.",
 	},
 	frubujas: {
 		name: "Frubujas",
@@ -2299,7 +2301,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	vatios: {
 		name: "Vatios",
 		desc: "",
-		shortDesc: "This Pokemon's offensive stat is multiplied by 1.2 while using an Electric-type attack.",
+		shortDesc: "This Pokemon's Electric-type moves have their power multiplied by 1.2.",
 	},
 	mineralizacion: {
 		name: "Mineralizacion",
@@ -2319,12 +2321,12 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	inteligenciaasertiva: {
 		name: "Inteligencia Asertiva",
 		desc: "This Pokemon's moves and their effects ignore immunities, protection, stat stages and certain Abilities of other Pokemon. The Abilities that can be negated are Armor Tail, Aroma Veil, Aura Break, Battle Armor, Big Pecks, Bulletproof, Clear Body, Contrary, Damp, Dazzling, Disguise, Dry Skin, Earth Eater, Filter, Flash Fire, Flower Gift, Flower Veil, Fluffy, Friend Guard, Fur Coat, Good as Gold, Grass Pelt, Guard Dog, Heatproof, Heavy Metal, Hyper Cutter, Ice Face, Ice Scales, Illuminate, Immunity, Inner Focus, Insomnia, Keen Eye, Leaf Guard, Levitate, Light Metal, Lightning Rod, Limber, Magic Bounce, Magma Armor, Marvel Scale, Mind's Eye, Mirror Armor, Motor Drive, Multiscale, Oblivious, Overcoat, Own Tempo, Pastel Veil, Punk Rock, Purifying Salt, Queenly Majesty, Sand Veil, Sap Sipper, Shell Armor, Shield Dust, Simple, Snow Cloak, Solid Rock, Soundproof, Sticky Hold, Storm Drain, Sturdy, Suction Cups, Sweet Veil, Tangled Feet, Telepathy, Tera Shell, Thermal Exchange, Thick Fat, Unaware, Vital Spirit, Volt Absorb, Water Absorb, Water Bubble, Water Veil, Well-Baked Body, White Smoke, Wind Rider, Wonder Guard, and Wonder Skin. This affects every other Pokemon on the field, whether or not it is a target of this Pokemon's move, and whether or not their Ability is beneficial to this Pokemon.	",
-		shortDesc: "This Pokemon's moves and their effects ignore the Abilities, stat stages, immunities and protection of other Pokemon when doing damage.",
+		shortDesc: "This Pokemon ignores the Abilities, stat stages, immunities and protection of other Pokemon when doing damage.",
 	},
 	inteligenciaartificial: {
 		name: "Inteligencia Artificial",
-		desc: "This Pokemon's offensive stat is multiplied by 1.4 and the accuracy of its attacks is multiplied by 0.95.",
-		shortDesc: "This Pokemon's offensive stat is 1.4x and accuracy of its attacks is 0.95x.",
+		desc: "This Pokemon's moves have their power multiplied by 1.4 and the accuracy of its attacks is multiplied by 0.95.",
+		shortDesc: "This Pokemon's moves have 1.4x power and accuracy of its attacks is 0.95x.",
 	},
 	comealmas: {
 		name: "Come Almas",

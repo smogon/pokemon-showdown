@@ -5799,8 +5799,13 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	silverwind: {
 		name: "Silver Wind",
-		desc: "50% more damage if the user is a fairy type..",
-		shortDesc: "50% more damage if the user is a fairy type..",
+		desc: "50% more damage if the user is a fairy type.",
+		shortDesc: "50% more damage if the user is a fairy type.",
+	},
+	silverwind3: {
+		name: "Viento Escama",
+		desc: ".",
+		shortDesc: ".",
 	},
 	simplebeam: {
 		name: "Simple Beam",
