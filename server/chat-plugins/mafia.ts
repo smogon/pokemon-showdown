@@ -1986,11 +1986,11 @@ export const pages: Chat.PageTable = {
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Role Details</summary>`;
 				buf += `<table><tr><td style="text-align:center;"><img width="75" height="75" src="//${Config.routes.client}/fx/mafia-${role.image || 'villager'}.png"></td><td style="text-align:left;width:100%"><ul>${role.memo.map(m => `<li>${m}</li>`).join('')}</ul></td></tr></table>`;
 				buf += `</details></p>`;
-				if (game.dayNum > 1) {
-					for (let i = 1; i < game.dayNum; i++) {
-						previousActionsPL += `<b>Night ${i}</b><br/>`;
-						previousActionsPL += `${isPlayer.actionArr?.[i] ? `${isPlayer.actionArr[i]}` : ''}<br/>`;
-					}
+				for (let i = 0; i < game.dayNum; i++) {
+					previousActionsPL += `<b>Night ${i}</b><br/>`;
+					previousActionsPL += `${isPlayer.actionArr?.[i] ? `${isPlayer.actionArr[i]}` : ''}<br/>`;
+				}
+				if (game.dayNum > 0) {
 					buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Previous Actions</summary>${previousActionsPL}</span></details></p>`;
 				}
 			}
@@ -2045,14 +2045,12 @@ export const pages: Chat.PageTable = {
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">No Response</summary>${noResponses}</span></details></p>`;
 			}
 			let previousActions = `<br/>`;
-			if (game.dayNum > 1) {
-				for (let i = 1; i < game.dayNum; i++) {
-					previousActions += `<b>Night ${i}</b><br/>`;
-					for (const player of game.players) {
-						previousActions += `<b>${player.safeName}</b>:${player.actionArr[i] ? `${player.actionArr[i]}` : ''}<br/>`;
-					}
-					previousActions += `<br/>`;
+			for (let i = 0; i < game.dayNum; i++) {
+				previousActions += `<b>Night ${i}</b><br/>`;
+				for (const player of game.players) {
+					previousActions += `<b>${player.safeName}</b>:${player.actionArr[i] ? `${player.actionArr[i]}` : ''}<br/>`;
 				}
+				previousActions += `<br/>`;
 			}
 			buf += `<h3>Host options</h3>`;
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">General Options</summary>`;
@@ -2106,7 +2104,7 @@ export const pages: Chat.PageTable = {
 				buf += `: <button class="button" name="send" value="/msgroom ${room.roomid},/mafia revive ${eliminated.id}">Revive</button></p>`;
 			}
 			buf += `<hr/></details></p>`;
-			if (game.dayNum > 1) {
+			if (game.dayNum > 0) {
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Previous Night Actions</summary>${previousActions}</span></details></p>`;
 			}
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">How to setup roles</summary>`;
