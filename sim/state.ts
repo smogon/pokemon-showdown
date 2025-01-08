@@ -147,7 +147,7 @@ export const State = new class {
 				battle.sides[i].activeRequest = side.activeRequest === null ? null : requests[i];
 			}
 		}
-		battle.prng = new PRNG(state.prng);
+		battle.prng = new PRNG(Buffer.from(state.prng));
 		const queue = this.deserializeWithRefs(state.queue, battle);
 		battle.queue.list = queue;
 		(battle as any).hints = new Set(state.hints);
