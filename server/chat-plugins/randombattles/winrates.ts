@@ -10,7 +10,7 @@ interface Stats {
 	month: string;
 	formats: Record<string, FormatData>;
 }
- 
+
 interface MonEntry {
 	timesGenerated: number;
 	numWins: number;
@@ -44,6 +44,8 @@ function getDefaultStats() {
 		formats: {
 			// all of these requested by rands staff. they don't anticipate it being changed much
 			// so i'm not spending the time to add commands to toggle this
+			gen9nuevometarandom: {mons: {}},
+			gen9nuevometa: {mons: {}},
 			gen9randombattle: {mons: {}},
 			gen9randomdoublesbattle: {mons: {}},
 			gen9babyrandombattle: {mons: {}},
