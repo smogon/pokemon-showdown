@@ -5,7 +5,7 @@
  * @license MIT
  */
 
-import {PRNG, PRNGSeed} from '../prng';
+import {TestPRNG as PRNG, PRNGSeed} from '../prng';
 import {Runner, RunnerOptions} from './runner';
 
 // @ts-ignore

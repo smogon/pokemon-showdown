@@ -13,7 +13,7 @@ import {ObjectReadWriteStream} from '../../lib/streams';
 import {Battle} from '../battle';
 import * as BattleStreams from '../battle-stream';
 import {State} from '../state';
-import {PRNG, PRNGSeed} from '../prng';
+import {TestPRNG as PRNG, PRNGSeed} from '../prng';
 import {RandomPlayerAI} from './random-player-ai';
 
 export interface AIOptions {

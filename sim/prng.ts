@@ -17,11 +17,18 @@ import * as sodium from 'sodium-native';
 /** 64-bit big-endian [high -> low] int */
 export type PRNGSeed = [number, number, number, number];
 
+interface PRNGRequired {
+	next(from?: number, to?: number): number;
+	randomChance(numerator: number, denominator: number): boolean;
+	sample<T>(items: readonly T[]): T;
+	shuffle<T>(items: T[], start: number, end: number): void;
+}
+
 /**
  * A PRNG intended to emulate the on-cartridge PRNG for Gen 5 with a 64-bit
  * initial seed.
  */
-export class PRNG {
+export class PRNG implements PRNGRequired {
 	readonly initialSeed: PRNGSeed;
 	seed: Buffer;
 	/** Creates a new source of randomness for the given seed. */
@@ -161,26 +168,27 @@ export class PRNG {
 }
 
 // old, predictable PRNG. do not use this for anything but tests
-export class TestPRNG extends PRNG {
-	_seed: PRNGSeed;
+export class TestPRNG implements PRNGRequired {
+	readonly initialSeed: PRNGSeed;
+	seed: PRNGSeed;
 	/** Creates a new source of randomness for the given seed. */
 	constructor(seed: PRNGSeed | null = null) {
-		super();
 		if (!seed) seed = PRNG.generateSeed();
-		this._seed = seed.slice() as PRNGSeed;
+		this.initialSeed = seed.slice() as PRNGSeed; // make a copy
+		this.seed = seed.slice() as PRNGSeed;
 	}
 
-	/**
-	 * Retrieves the next random number in the sequence.
-	 * This function has three different results, depending on arguments:
-	 * - random() returns a real number in [0, 1), just like Math.random()
-	 * - random(n) returns an integer in [0, n)
-	 * - random(m, n) returns an integer in [m, n)
-	 * m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
-	 */
+	get startingSeed(): PRNGSeed {
+		return this.initialSeed;
+	}
+
+	clone(): PRNG {
+		return new PRNG(this.seed);
+	}
+
 	next(from?: number, to?: number): number {
-		this._seed = this.nextFrame(this._seed); // Advance the RNG
-		let result = (this._seed[0] << 16 >>> 0) + this._seed[1]; // Use the upper 32 bits
+		this.seed = this.nextFrame(this.seed); // Advance the RNG
+		let result = (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
 		if (from) from = Math.floor(from);
 		if (to) to = Math.floor(to);
 		if (from === undefined) {
@@ -193,11 +201,32 @@ export class TestPRNG extends PRNG {
 		return result;
 	}
 
-	/**
-	 * Calculates `a * b + c` (with 64-bit 2's complement integers)
-	 *
-	 * If you've done long multiplication, this is the same thing.
-	 */
+	randomChance(numerator: number, denominator: number): boolean {
+		return this.next(denominator) < numerator;
+	}
+
+	sample<T>(items: readonly T[]): T {
+		if (items.length === 0) {
+			throw new RangeError(`Cannot sample an empty array`);
+		}
+		const index = this.next(items.length);
+		const item = items[index];
+		if (item === undefined && !Object.prototype.hasOwnProperty.call(items, index)) {
+			throw new RangeError(`Cannot sample a sparse array`);
+		}
+		return item;
+	}
+
+	shuffle<T>(items: T[], start = 0, end: number = items.length) {
+		while (start < end - 1) {
+			const nextIndex = this.next(start, end);
+			if (start !== nextIndex) {
+				[items[start], items[nextIndex]] = [items[nextIndex], items[start]];
+			}
+			start++;
+		}
+	}
+
 	multiplyAdd(a: PRNGSeed, b: PRNGSeed, c: PRNGSeed) {
 		const out: PRNGSeed = [0, 0, 0, 0];
 		let carry = 0;
@@ -217,17 +246,6 @@ export class TestPRNG extends PRNG {
 		return out;
 	}
 
-	/**
-	 * The RNG is a Linear Congruential Generator (LCG) in the form: `x_{n + 1} = (a x_n + c) % m`
-	 *
-	 * Where: `x_0` is the seed, `x_n` is the random number after n iterations,
-	 *
-	 * ````
-	 * a = 0x5D588B656C078965
-	 * c = 0x00269EC3
-	 * m = 2^64
-	 * ````
-	 */
 	nextFrame(seed: PRNGSeed, framesToAdvance = 1): PRNGSeed {
 		const a: PRNGSeed = [0x5D58, 0x8B65, 0x6C07, 0x8965];
 		const c: PRNGSeed = [0, 0, 0x26, 0x9EC3];

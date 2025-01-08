@@ -7,7 +7,7 @@
 
 import {ObjectReadWriteStream} from '../../lib/streams';
 import {Dex, toID} from '../dex';
-import {PRNG, PRNGSeed} from '../prng';
+import {TestPRNG as PRNG, PRNGSeed} from '../prng';
 import {RandomPlayerAI} from './random-player-ai';
 import {AIOptions, Runner} from './runner';
 
