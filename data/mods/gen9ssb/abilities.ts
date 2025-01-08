@@ -1683,6 +1683,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		gen: 9,
 		shortDesc: "Flying-type moves hit for three turns.",
 		desc: "Whenever this Pokemon uses a Flying-type move, it hits for the next three turns using the typing of your team's last used move before the Flying-type move. Opposing Pokemon take x1.4 damage from attacks of this typing for three turns.",
+		shortDesc: "Flying moves hit for 3-turns using team's last attack type.",
 		onBeforeMovePriority: 9,
 		onBeforeMove(pokemon) {
 			if (!pokemon.side.lastMoveUsed) return;
