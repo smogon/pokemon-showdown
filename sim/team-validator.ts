@@ -537,6 +537,14 @@ export class TeamValidator {
 				tierSpecies = dex.species.get('Zamazenta-Crowned');
 			}
 		}
+		if (ruleTable.has('obtainableformes')) {
+			const canTotem = dex.gen <= 7 || ruleTable.has('+pokemontag:past');
+			if (item.id === 'totemgigante' && (species.id === 'Raticate-Alola' || species.id === 'Marowak-Alola' || species.id === 'Electrode-Hisui' || species.id === 'Arcanine-Hisui')) {
+				tierSpecies = dex.species.get(item.megaStone);
+			} else if (item.id === 'redorb' && species.id === 'groudon') {
+				tierSpecies = dex.species.get(species.id + '-Totem');
+			}
+		}
 
 		return {outOfBattleSpecies, tierSpecies};
 	}

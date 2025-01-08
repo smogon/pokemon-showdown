@@ -875,7 +875,8 @@ export class DexFormats {
 		ruleTable.resolveNumbers(format, this.dex);
 
 		const canMegaEvo = this.dex.gen <= 7 || ruleTable.has('+pokemontag:past');
-		if (ruleTable.has('obtainableformes') && canMegaEvo &&
+		const canTotem = this.dex.gen <= 7 || ruleTable.has('+pokemontag:past');
+		if (ruleTable.has('obtainableformes') && canMegaEvo && canTotem &&
 			ruleTable.isBannedSpecies(this.dex.species.get('rayquazamega')) &&
 			!ruleTable.isBannedSpecies(this.dex.species.get('rayquaza'))
 		) {

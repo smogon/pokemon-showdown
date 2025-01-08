@@ -10,7 +10,7 @@ interface Stats {
 	month: string;
 	formats: Record<string, FormatData>;
 }
-
+ 
 interface MonEntry {
 	timesGenerated: number;
 	numWins: number;
