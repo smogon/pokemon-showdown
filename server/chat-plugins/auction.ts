@@ -177,7 +177,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 		let table = `<table>`;
 		for (const player of players) {
-			table += Utils.html`<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
+			table += Utils.html`<tr><td>${player.name}</td><td>${player.price}</td><td>${player.team!.name}</td></tr>`;
 		}
 		table += `</table>`;
 		buf += `<details><summary>All</summary>${table}</details><br/>`;
@@ -902,7 +902,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		importplayershelp: [
 			`/auction importplayers [pastebin url] - Imports a list of players from a pastebin. Requires: # ~ auction owner`,
-			`The pastebin should be a list of tab-separated values with the first row containing tier names and subsequent rows containing the player names and a Y in the column corresponding to the tier.`,
+			`The pastebin should be a list of tab-separated values with the first row containing tier names and subsequent rows containing the player names and either a 'y' or an 'n' in the column corresponding to the tier they prefer or do not play respectively.`,
 			`See https://pastebin.com/jPTbJBva for an example.`,
 		],
 		addplayer(target, room, user) {
