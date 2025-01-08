@@ -179,7 +179,7 @@ export class TestPRNG extends PRNG {
 	 */
 	next(from?: number, to?: number): number {
 		this._seed = this.nextFrame(this._seed); // Advance the RNG
-		let result = (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
+		let result = (this._seed[0] << 16 >>> 0) + this._seed[1]; // Use the upper 32 bits
 		if (from) from = Math.floor(from);
 		if (to) to = Math.floor(to);
 		if (from === undefined) {
