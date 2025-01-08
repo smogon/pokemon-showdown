@@ -25,9 +25,10 @@ export class PRNG {
 	readonly initialSeed: PRNGSeed;
 	seed: Buffer;
 	/** Creates a new source of randomness for the given seed. */
-	constructor(seed: PRNGSeed | Buffer | null = null) {
+	constructor(seed: PRNGSeed | Buffer | null = null, initialSeed?: PRNGSeed) {
 		if (!seed) seed = PRNG.generateSeed();
-		this.initialSeed = seed.slice() as PRNGSeed; // make a copy
+		// hack i know i know
+		this.initialSeed = initialSeed || (Array.isArray(seed) ? seed.slice() : Array.from(seed)) as PRNGSeed;
 		this.seed = Array.isArray(seed) ? PRNG.convertSeed(seed.slice() as PRNGSeed) : seed;
 	}
 
@@ -61,7 +62,7 @@ export class PRNG {
 	 * The new PRNG will have its initial seed set to the seed of the current instance.
 	 */
 	clone(): PRNG {
-		return new PRNG(this.seed);
+		return new PRNG(this.seed, this.initialSeed);
 	}
 
 	/**
