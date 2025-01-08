@@ -871,6 +871,14 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				break;
 			}
 
+			if (target === 'totem') {
+				if (totemSearch === isNotSearch) return {error: "A search cannot include and exclude 'totem'."};
+				if (parameters.length > 1) return {error: "The parameter 'totem' cannot have alternative parameters."};
+				totemSearch = !isNotSearch;
+				orGroup.skip = true;
+				break;
+			}
+
 			if (target === 'gmax' || target === 'gigantamax') {
 				if (gmaxSearch === isNotSearch) return {error: "A search cannot include and exclude 'gigantamax'."};
 				if (parameters.length > 1) return {error: "The parameter 'gigantamax' cannot have alternative parameters."};
@@ -1060,7 +1068,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 	if (
 		showAll && searches.length === 0 && singleTypeSearch === null &&
-		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null && sort === null
+		megaSearch === null && totemSearch === null && gmaxSearch === null && fullyEvolvedSearch === null && sort === null
 	) {
 		return {
 			error: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.",

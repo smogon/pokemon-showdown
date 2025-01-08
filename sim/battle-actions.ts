@@ -1921,6 +1921,7 @@ export class BattleActions {
 		this.battle.runEvent('AfterMega', pokemon);
 		return true;
 	}
+	
 
 	// Let's Go
 	canMegaEvoX?: (this: BattleActions, pokemon: Pokemon) => string | null;

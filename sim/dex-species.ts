@@ -333,9 +333,9 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 		if (!this.gen && this.num >= 1) {
 			if (this.num >= 906 || this.forme.includes('Paldea')) {
 				this.gen = 9;
-			} else if (this.num >= 810 || ['Gmax', 'Galar', 'Galar-Zen', 'Hisui'].includes(this.forme)) {
+			} else if (this.num >= 810 /*|| ['Gmax', 'Galar', 'Galar-Zen', 'Hisui'].includes(this.forme)*/) {
 				this.gen = 8;
-			} else if (this.num >= 722 || this.forme.startsWith('Alola') || this.forme === 'Starter') {
+			} else if (this.num >= 722 /*|| this.forme.startsWith('Alola')*/ || this.forme === 'Starter') {
 				this.gen = 7;
 			} else if (this.forme === 'Primal') {
 				this.gen = 6;
@@ -511,10 +511,6 @@ export class DexSpecies {
 					species.tier = this.dex.data.FormatsData[toID(species.baseSpecies)].tier || 'Illegal';
 					species.doublesTier = this.dex.data.FormatsData[toID(species.baseSpecies)].doublesTier || 'Illegal';
 					species.natDexTier = this.dex.data.FormatsData[toID(species.baseSpecies)].natDexTier || 'Illegal';
-				} else if (species.id.endsWith('totem')) {
-					species.tier = this.dex.data.FormatsData[species.id.slice(0, -5)].tier || 'Illegal';
-					species.doublesTier = this.dex.data.FormatsData[species.id.slice(0, -5)].doublesTier || 'Illegal';
-					species.natDexTier = this.dex.data.FormatsData[species.id.slice(0, -5)].natDexTier || 'Illegal';
 				} else if (species.battleOnly) {
 					species.tier = this.dex.data.FormatsData[toID(species.battleOnly)].tier || 'Illegal';
 					species.doublesTier = this.dex.data.FormatsData[toID(species.battleOnly)].doublesTier || 'Illegal';

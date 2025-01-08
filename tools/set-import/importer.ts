@@ -129,7 +129,7 @@ function eligible(dex: ModdedDex, id: ID) {
 	if (!gen || gen > dex.gen) return false;
 
 	const species = dex.species.get(id);
-	if (['Mega', 'Primal', 'Ultra'].some(f => species.forme.startsWith(f))) return true;
+	if (['Mega', 'Primal', 'Ultra', 'Totem'].some(f => species.forme.startsWith(f))) return true;
 
 	// Species with formes distinct enough to merit inclusion
 	const unique = ['darmanitan', 'meloetta', 'greninja', 'zygarde'];
@@ -141,7 +141,7 @@ function eligible(dex: ModdedDex, id: ID) {
 	// Most of these don't have analyses
 	const capNFE = species.isNonstandard === 'CAP' && species.nfe;
 
-	return !id.endsWith('totem') && !capNFE && !similar.some(f => id.startsWith(f) && id !== f);
+	return !capNFE && !similar.some(f => id.startsWith(f) && id !== f);
 }
 
 // TODO: Fix dex data such that CAP mons have a correct gen set
@@ -266,7 +266,7 @@ function toStatsTable(stats?: StatsTable, elide = 0) {
 function fixedAbility(dex: ModdedDex, pokemon: string, ability?: string) {
 	if (dex.gen <= 2) return undefined;
 	const species = dex.species.get(pokemon);
-	if (ability && !['Mega', 'Primal', 'Ultra'].some(f => species.forme.startsWith(f))) return ability;
+	if (ability && !['Mega', 'Primal', 'Ultra', 'Totem'].some(f => species.forme.startsWith(f))) return ability;
 	return species.abilities[0];
 }
 
