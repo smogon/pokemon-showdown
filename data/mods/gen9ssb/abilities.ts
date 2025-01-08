@@ -191,7 +191,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (damage >= target.hp) {
 				this.add('-activate', target, 'ability: Generosity');
 				this.add('-anim', target, 'Confuse Ray', target);
-				this.actions.useMove('Revival Blessing', target);
+				target.side.addSlotCondition(target, 'revivalblessing');
 			}
 		},
 		onFaint(pokemon) {
