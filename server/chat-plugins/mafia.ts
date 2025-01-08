@@ -1990,7 +1990,7 @@ export const pages: Chat.PageTable = {
 					previousActionsPL += `<b>Night ${i}</b><br/>`;
 					previousActionsPL += `${isPlayer.actionArr?.[i] ? `${isPlayer.actionArr[i]}` : ''}<br/>`;
 				}
-				if (game.phase === "day" || game.dayNum > 0) {
+				if (game.dayNum > 0) {
 					buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Previous Actions</summary>${previousActionsPL}</span></details></p>`;
 				}
 			}
