@@ -123,7 +123,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (boosted) {
 				this.debug('Analytic boost');
-				return this.chainModify(1.3);
+				return this.chainModify(1.5);
 			}
 		},
 		onSourceModifyAccuracyPriority: -1,
