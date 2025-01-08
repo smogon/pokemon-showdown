@@ -3733,12 +3733,28 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 214,
 	},
 	quickdraw: {
+		onStart(pokemon) {
+			pokemon.addVolatile('quickdraw');
+		},
+		onResidualOrder: 1,
+		onResidualSubOrder: 1,
+		onResidual(pokemon) {
+			if (pokemon.volatiles['quickdraw']) {
+				pokemon.volatiles['quickdraw'].turns++;
+			}
+		},
 		onFractionalPriorityPriority: -1,
 		onFractionalPriority(priority, pokemon, target, move) {
-			if (move.category !== "Status" && this.randomChance(3, 10)) {
+			if (move.category !== "Status" && pokemon.volatiles['quickdraw']?.turns >= 3) {
+				pokemon.volatiles['quickdraw'].turns = 0;
 				this.add('-activate', pokemon, 'ability: Quick Draw');
 				return 0.1;
 			}
+		},
+		condition: {
+			onStart() {
+				this.effectState.turns = 0;
+			},
 		},
 		flags: {},
 		name: "Quick Draw",
