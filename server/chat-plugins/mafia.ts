@@ -2104,7 +2104,7 @@ export const pages: Chat.PageTable = {
 				buf += `: <button class="button" name="send" value="/msgroom ${room.roomid},/mafia revive ${eliminated.id}">Revive</button></p>`;
 			}
 			buf += `<hr/></details></p>`;
-			if (game.phase === "day" || game.dayNum > 0) {
+			if (game.dayNum > 0) {
 				buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">Previous Night Actions</summary>${previousActions}</span></details></p>`;
 			}
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">How to setup roles</summary>`;
