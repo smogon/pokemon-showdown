@@ -6,6 +6,22 @@ const assert = require('../../assert');
 const testSeed = [1, 2, 3, 4];
 
 describe(`PRNG`, function () {
+	it("should always generate the same results off the same seed", function () {
+		const results = [];
+		const seed = PRNG.generateSeed();
+		let testAgainst = new PRNG(seed);
+		for (let i = 0; i < 100; i++) {
+			results.push(testAgainst.next());
+		}
+		for (let i = 0; i < 10; i++) {
+			const cur = new PRNG(seed);
+			for (let j = 0; j < results.length; j++) {
+				const n = cur.next();
+				assert(results[j] === n, `generation ${j} for seed ${seed} did not match (expected: ${results[j]}, got ${n})`);
+			}
+		}
+	});
+
 	describe(`randomChance(numerator=0, denominator=1)`, function () {
 		it(`should always return false`, function () {
 			const prng = new PRNG(testSeed);
