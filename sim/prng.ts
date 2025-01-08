@@ -44,11 +44,10 @@ export class PRNG implements PRNGRequired {
 		// than we use
 		const seed = new Uint32Array(8);
 		for (let i = 0; i < seed.length; i++) seed[i] = inputSeed[i];
-		const buf = sodium.sodium_malloc(32);
+		const buf = Buffer.alloc(32);
 		// @ts-ignore this doesn't accept buffers, but instead TypedArrays - typedef is out of date
 		sodium.randombytes_buf_deterministic(buf, seed);
-		sodium.sodium_memzero(buf);
-		return buf.slice();
+		return buf;
 	}
 
 	/**
@@ -86,7 +85,7 @@ export class PRNG implements PRNGRequired {
 		if (from) from = Math.floor(from);
 		if (to) to = Math.floor(to);
 		if (from === undefined) {
-			result = result / 0x100000000;
+			result = result / 0x1000000000;
 		} else if (!to) {
 			result = Math.floor(result * from / 0x100000000);
 		} else {
@@ -96,13 +95,11 @@ export class PRNG implements PRNGRequired {
 	}
 
 	private seededRandom() {
-		const buf = sodium.sodium_malloc(36);
+		const buf = Buffer.alloc(36);
 		sodium.randombytes_buf_deterministic(buf, this.seed);
 		// use the last four bytes for the output, use the other 32 bytes for the next seed
 		this.seed = buf.slice(buf.length - 32);
-		const val = buf.slice(32).readUint32BE();
-		sodium.sodium_memzero(buf);
-		return val;
+		return buf.slice(32).readUint32BE();
 	}
 
 	/**

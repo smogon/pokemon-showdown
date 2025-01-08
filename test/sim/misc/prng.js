@@ -3,21 +3,20 @@
 const PRNG = require('../../../dist/sim/prng').PRNG;
 const assert = require('../../assert');
 
-const testSeed = [1, 2, 3, 4];
+const testSeed = PRNG.generateSeed();
 
 describe(`PRNG`, function () {
 	it("should always generate the same results off the same seed", function () {
 		const results = [];
-		const seed = PRNG.generateSeed();
-		let testAgainst = new PRNG(seed);
+		let testAgainst = new PRNG(testSeed);
 		for (let i = 0; i < 100; i++) {
 			results.push(testAgainst.next());
 		}
 		for (let i = 0; i < 10; i++) {
-			const cur = new PRNG(seed);
+			const cur = new PRNG(testSeed);
 			for (let j = 0; j < results.length; j++) {
 				const n = cur.next();
-				assert(results[j] === n, `generation ${j} for seed ${seed} did not match (expected: ${results[j]}, got ${n})`);
+				assert(results[j] === n, `generation ${j} for seed ${testSeed} did not match (expected: ${results[j]}, got ${n})`);
 			}
 		}
 	});
