@@ -112,7 +112,7 @@ export const ssbSets: SSBSets = {
 		species: 'Vikavolt-Totem', ability: 'Battery Life', item: 'Apparatus', gender: 'N',
 		moves: ['Parabolic Charge', 'Bug Buzz', 'Techno Blast'],
 		signatureMove: 'Galvanic Web',
-		evs: {hp: 252, spa: 252, spd: 4}, nature: 'Modest',
+		evs: {hp: 252, spa: 252, spd: 4}, ivs: {spe: 29}, nature: 'Modest',
 	},
 	Quetzalcoatl: {
 		species: 'Zapdos', ability: 'Peal of Thunder', item: 'Expert Belt', gender: 'N',
