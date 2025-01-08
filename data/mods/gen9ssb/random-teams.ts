@@ -62,7 +62,7 @@ export const ssbSets: SSBSets = {
 	},
 	Aeri: {
 		species: 'Butterfree-Gmax', ability: 'Woven Together, Cohere Forever', item: 'Fleeting Winds', gender: 'F',
-		moves: ['U-turn', 'Alluring Voice', 'Mystical Fire'],
+		moves: ['U-turn', 'Nature\'s Madness', 'Mist'],
 		signatureMove: 'Blissful Breeze',
 		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Timid',
 	},
