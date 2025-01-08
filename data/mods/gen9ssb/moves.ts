@@ -1301,6 +1301,12 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		condition: {
 			duration: 9,
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, pokemon) {
+				if (pokemon.abilityState.stacks <= 0) return;
+				let boost = 1 + 0.1 * pokemon.abilityState.stacks;
+				return this.chainModify(boost);
+			},
 			onModifySpAPriority: 5,
 			onModifySpA(spa, pokemon) {
 				if (pokemon.abilityState.stacks <= 0) return;
