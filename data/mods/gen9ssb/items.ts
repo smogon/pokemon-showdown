@@ -6,32 +6,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 		desc: "This Pokémon's damaging moves hit twice. The second hit is Fire-type and has its damage quartered.",
 		shortDesc: "Attacks hit twice; 2nd hit is Fire-type and has 1/4 damage.",
 		onModifyMove(move) {
-			this.add('-message', `onModifyMove Outer: HIT ${move.hit}`);
-			if (!move.multihit && !move.isZ) move.multihit = 2;
-			if (move.hit > 1) move.type = "Fire";
+			if (!move.multihit && move.category !== 'Status' && !move.isZ) move.multihit = 2;
 		},
 		onBasePower(basePower, user, target, move) {
-			this.add('-message', `onBasePower: HIT ${move.hit}`);
 			if (move.hit > 1) {
+				move.type = 'Fire';
+				this.add('-anim', user, 'Incinerate', user);
 				return this.chainModify(0.25);
 			}
 		},
-		/*
-		onModifyMove(move, pokemon) {
-			if (move.category !== 'Status' && !move.multihit && !move.isZ) {
-				move.multihit = 2;
-				move.onHit = function (t, s, m) {
-					this.add('-message', m.hit);
-					if (m.hit === 2) {
-						this.add('-message', `HELP`);
-						m.type = 'Fire';
-						m.basePower = move.basePower / 4;
-						this.add('-message', `${move.type}`);
-					}
-				};
-			}
-		},
-  		*/
 	},
 	// Tao
 	zhuyou: {
