@@ -32,7 +32,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onModifySpe(spe, pokemon) {
 			// Paralysis occurs after all other Speed modifiers, so evaluate all modifiers up to this point first
 			spe = this.finalModify(spe);
-			if (!pokemon.hasAbility('quickfeet')) {
+			if (!pokemon.hasAbility('quickfeet') && !pokemon.hasAbility('plumawatt')) {
 				spe = Math.floor(spe * 50 / 100);
 			}
 			return spe;

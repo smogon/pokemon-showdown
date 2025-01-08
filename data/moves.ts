@@ -1088,7 +1088,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 25,
 		category: "Physical",
-
 		name: "Barrage",
 		pp: 20,
 		priority: 0,

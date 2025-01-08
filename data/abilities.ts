@@ -3745,7 +3745,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onFractionalPriorityPriority: -1,
 		onFractionalPriority(priority, pokemon, target, move) {
-			if (move.category !== "Status" && pokemon.volatiles['quickdraw']?.turns >= 3) {
+			if (pokemon.volatiles['quickdraw']?.turns >= 3) {
 				pokemon.volatiles['quickdraw'].turns = 0;
 				this.add('-activate', pokemon, 'ability: Quick Draw');
 				return 0.1;
@@ -6063,12 +6063,29 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: -117,
 	},
 	plumawatt: {
-		onFractionalPriorityPriority: -1,
-		onFractionalPriority(priority, pokemon, target, move) {
-			if (move.category !== "Status" && this.randomChance(3, 10)) {
-				this.add('-activate', pokemon, 'ability: Pluma Watt');
-				return 0.1;
+		onStart(pokemon) {
+			pokemon.addVolatile('plumawatt');
+		},
+		onResidualOrder: 1,
+		onResidualSubOrder: 1,
+		onResidual(pokemon) {
+			if (pokemon.volatiles['plumawatt']) {
+				pokemon.volatiles['plumawatt'].turns++;
 			}
+		},
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.volatiles['plumawatt']?.turns >= 3 || attacker.status === 'par') {
+				this.debug('Pluma Watt boost');
+				attacker.volatiles['plumawatt'].turns = 0;
+				this.add('-activate', attacker, 'ability: Pluma Watt');
+				return this.chainModify(2);
+			}
+		},
+		condition: {
+			onStart() {
+				this.effectState.turns = 0;
+			},
 		},
 		flags: {},
 		name: "Pluma Watt",
