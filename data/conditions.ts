@@ -157,7 +157,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.add('-end', target, 'confusion');
 		},
 		onModifyMove(move, pokemon, target) {
-			 move.recoil = [12.5, 100];
+			 move.recoil = [25, 100];
 		},
 	},
 	flinch: {
