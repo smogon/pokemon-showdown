@@ -2780,7 +2780,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		gen: 9,
 		pp: 1,
 		noPPBoosts: true,
-		priority: -10,
+		priority: 1,
 		isZ: "yoichisbow",
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile(move.id)) {
