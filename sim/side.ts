@@ -84,6 +84,7 @@ export class Side {
 	 */
 	dynamaxUsed: boolean;
 	hhBoost: boolean;
+	reviveOnSwitchIn: boolean;
 	lastMoveUsed: Move | null;
 
 	faintedLastTurn: Pokemon | null;
