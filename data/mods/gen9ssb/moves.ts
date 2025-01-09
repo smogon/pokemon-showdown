@@ -110,6 +110,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const stats: BoostID[] = [];
 			let stat: BoostID;
 			for (stat in target.boosts) {
+				if (stat === 'accuracy' || stat === 'evasion') continue;
 				if (target.boosts[stat] < 6) {
 					stats.push(stat);
 				}
