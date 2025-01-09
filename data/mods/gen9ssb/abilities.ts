@@ -192,6 +192,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-activate', target, 'ability: Generosity');
 				this.add('-anim', target, 'Confuse Ray', target);
 				target.side.addSlotCondition(target, 'revivalblessing');
+				target.switchFlag = true;
 			}
 		},
 		onFaint(pokemon) {
