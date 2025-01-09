@@ -2808,6 +2808,12 @@ export const Formats: FormatList = [
 				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 			}
 
+			if (pokemon.side.hhBoost) pokemon.addVolatile('helpinghand');
+			if (pokemon.side.reviveOnSwitchIn) {
+				pokemon.side.reviveOnSwitchIn = false;
+				this.actions.useMove('Revival Blessing', pokemon);
+			}
+			
 			// Handling Colossus Carrier
 			if (pokemon.item && pokemon.getItem().name === 'Colossus Carrier' && pokemon.abilityState.carrierItems) {
 				let format = this.format;
