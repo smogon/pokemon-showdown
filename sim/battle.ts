@@ -2375,6 +2375,17 @@ export class Battle {
 				pokemon.illusion = null;
 				pokemon.isActive = false;
 				pokemon.isStarted = false;
+				if (
+					(pokemon.terastallized && ['Ogerpon', 'Terapagos'].includes(pokemon.baseSpecies.baseSpecies)) ||
+					pokemon.baseSpecies.isMega
+				) {
+					const baseSpecies = this.dex.species.get(pokemon.set.species || pokemon.set.name);
+					pokemon.setSpecies(baseSpecies);
+					pokemon.baseSpecies = baseSpecies;
+					pokemon.baseAbility = pokemon.ability = toID(pokemon.set.ability);
+					pokemon.details = pokemon.getSimpleDetails();
+					this.add('detailschange', pokemon, (pokemon.illusion || pokemon).details, '[silent]');
+				}
 				delete pokemon.terastallized;
 				pokemon.side.faintedThisTurn = pokemon;
 				if (this.faintQueue.length >= faintQueueLeft) checkWin = true;

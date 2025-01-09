@@ -1323,8 +1323,7 @@ export class Pokemon {
 
 		// Pokemon transformed into Ogerpon cannot Terastallize
 		// restoring their ability to tera after they untransform is handled ELSEWHERE
-		if (this.species.baseSpecies === 'Ogerpon' && this.canTerastallize) this.canTerastallize = false;
-		if (this.species.baseSpecies === 'Terapagos' && this.canTerastallize) this.canTerastallize = false;
+		if (['Ogerpon', 'Terapagos'].includes(this.species.baseSpecies) && this.canTerastallize) this.canTerastallize = false;
 
 		return true;
 	}
