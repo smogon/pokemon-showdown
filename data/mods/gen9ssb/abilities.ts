@@ -96,13 +96,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		onModifyMove(move, pokemon) {
-			if (move.type === 'Fighting') {
-				move.onEffectiveness = function (typeMod, target, type) {
-					if (type === 'Ghost') return 0;
-				};
-			}
-		},
 		onModifyDamage(damage, source, target, move) {
 			if (move.id !== 'ziran' && damage >= target.hp) {
 				this.effectState.koTrigger = true;
