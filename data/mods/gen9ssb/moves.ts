@@ -2835,14 +2835,19 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-sidestart', targetSide, 'Dynamite Arrow', '[silent]');
 			},
 			onSideEnd(targetSide) {
+				let source;
 				const pokemon = targetSide.active[0];
 				if (pokemon.fainted || !pokemon.hp) {
 					this.add('-sideend', targetSide, 'Dynamite Arrow', '[silent]');
 					return;
 				}
 				this.add('-anim', pokemon, 'Thousand Arrows', pokemon);
-				let sources = pokemon.side.foe.pokemon.filter(ally => ally.name === 'Trey');
-				const source = sources[0];
+				let possibleSources = pokemon.side.foe.pokemon.filter(ally => ally.name === 'Trey' || ally.ability === 'concentration');
+				if (!possibleSources || !possibleSources.length) {
+					source = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+				} else {
+					source = possibleSources[0];
+				}
 				const move = this.dex.getActiveMove('dynamitearrow');
 				const dmg = this.actions.getDamage(source, pokemon, move);
 				this.damage(dmg, pokemon);
