@@ -169,10 +169,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onUpdate(pokemon) {
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (this.effectState.revivalBlessing) {
-				pokemon.abilityState.deathOnRevival = true;
 				this.effectState.revivalBlessing = false;
 				this.actions.useMove('Revival Blessing', pokemon);
+				this.actions.useMove('Memento', pokemon, target);
 			}
 		},
 		onModifyMove(move, pokemon) {
