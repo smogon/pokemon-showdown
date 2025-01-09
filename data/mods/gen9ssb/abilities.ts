@@ -199,6 +199,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onTryHit(target, source, move) {
 			this.add('-message', `Generosity onTryHit:\nSOURCE: ${source.name} | TARGET: ${target.name}`);
+			// @ts-ignore
 			const damage = this.actions.getDamage(source, target, move);
 			this.add('-message', `DAMAGE: ${damage}`);
 			if (!damage) return;
@@ -1146,6 +1147,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.add('-anim', pokemon, 'Thunderbolt', target);
 			const newTarget = this.sample(possibleTargets);
 			const move = this.dex.getActiveMove('thundershock');
+			// @ts-ignore
 			let dmg = this.actions.getDamage(pokemon, newTarget, move);
 			if (!dmg) {
 				this.add('-immune', newTarget);
@@ -1728,6 +1730,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				let move = this.dex.getActiveMove('blissfulbreeze');
 				move.type = this.effectState.type;
 				this.add('-anim', pokemon, 'Geomancy', pokemon);
+				// @ts-ignore
 				const damage = this.actions.getDamage(source, pokemon, move);
 				this.damage(damage * 1.4, pokemon, source, this.dex.conditions.get('Woven Together, Cohere Forever'));
 			},
