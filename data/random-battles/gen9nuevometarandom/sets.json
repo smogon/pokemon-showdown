@@ -1,6 +1,6 @@
 {
     "venusaur": {
-        "level": 100,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -47,7 +47,7 @@
         ]
     },
         "venusaurmega": {
-            "level": 100,
+            "level": 82,
             "sets": [
                 {
                     "role": "Physically Defensive",
@@ -94,7 +94,7 @@
             ]
         },
     "charizard": {
-        "level": 100,
+        "level": 85,
         "sets": [
             {
                 "role": "Specially Defensive",
@@ -141,7 +141,7 @@
         ]
     },
     "charizardmegay": {
-        "level": 100,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -188,7 +188,7 @@
         ]
     },
     "charizardmegax": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -235,7 +235,7 @@
         ]
     },
     "blastoise": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Physically Defensive",
@@ -282,7 +282,7 @@
         ]
     },
     "blastoisemega": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Special Sweeper",
@@ -329,7 +329,7 @@
         ]
     },
     "butterfree": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Physically Defensive",
@@ -376,7 +376,7 @@
         ]
     },
     "butterfreemega": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -423,7 +423,7 @@
         ]
     },
     "beedrill": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Physical Scarf",
@@ -470,7 +470,7 @@
         ]
     },
     "beedrillmega": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -517,7 +517,7 @@
         ]
     },
     "pidgeot": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Physical Sweeper",
@@ -564,7 +564,7 @@
         ]
     },
     "pidgeotmega": {
-        "level": 100,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -611,7 +611,7 @@
         ]
     },
     "raticate": {
-        "level": 100,
+        "level": 87,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -658,7 +658,7 @@
         ]
     },
     "raticatealola": {
-        "level": 100,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Physical Sweeper",
@@ -747,7 +747,7 @@
         ]
     },
     "fearow": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Fast Support",
@@ -766,7 +766,7 @@
         ]
     },
     "fearill": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -813,7 +813,7 @@
         ]
     },
     "arbok": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -860,7 +860,7 @@
         ]
     },
     "pikachubelle": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -879,7 +879,7 @@
         ]
     },
     "pikachulibre": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -898,7 +898,7 @@
         ]
     },
     "pikachuphd": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -917,7 +917,7 @@
         ]
     },
     "pikachupopstar": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -936,7 +936,7 @@
         ]
     },
     "pikachurockstar": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -955,7 +955,7 @@
         ]
     },
     "raichu": {
-        "level": 100,
+        "level": 85,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -1002,7 +1002,7 @@
         ]
     },
     "raichualola": {
-        "level": 100,
+        "level": 81,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -1049,7 +1049,7 @@
         ]
     },
     "sandslash": {
-        "level": 100,
+        "level": 87,
         "sets": [
             {
                 "role": "Physically Defensive Support",
@@ -1096,7 +1096,7 @@
         ]
     },
     "sandslashalola": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Physically Defensive Support",
@@ -1143,7 +1143,7 @@
         ]
     },
     "nidoqueen": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Physically Defensive",
@@ -1190,7 +1190,7 @@
         ]
     },
     "nidoking": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -1237,7 +1237,7 @@
         ]
     },
     "clefable": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Specially Defensive",
@@ -1284,7 +1284,7 @@
         ]
     },
     "ninetales": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -1331,7 +1331,7 @@
         ]
     },
     "ninetalesalola": {
-        "level": 100,
+        "level": 81,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -1378,7 +1378,7 @@
         ]
     },
     "wigglytuff": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Specially Defensive",
@@ -1425,7 +1425,7 @@
         ]
     },
     "golbat": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Fast Support",
@@ -1472,7 +1472,7 @@
         ]
     },
     "vileplume": {
-        "level": 100,
+        "level": 86,
         "sets": [
             {
                 "role": "Specially Defensive",
@@ -1519,7 +1519,7 @@
         ]
     },
     "parasect": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Band",
@@ -1566,7 +1566,7 @@
         ]
     },
     "venomoth": {
-        "level": 100,
+        "level": 85,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -1613,7 +1613,7 @@
         ]
     },
     "dugtrio": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -1660,7 +1660,7 @@
         ]
     },
     "dugtrioalola": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -1707,7 +1707,7 @@
         ]
     },
     "persian": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Band",
@@ -1754,7 +1754,7 @@
         ]
     },
     "persianalola": {
-        "level": 100,
+        "level": 85,
         "sets": [
             {
                 "role": "Fast Bulky Support",
@@ -1801,7 +1801,7 @@
         ]
     },
     "golduck": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -1834,7 +1834,7 @@
         ]
     },
     "primeape": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Physical Sweeper",
@@ -1853,7 +1853,7 @@
         ]
     },
     "arcanine": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -1900,7 +1900,7 @@
         ]
     },
     "arcaninehisui": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Physical Scarf",
@@ -1989,7 +1989,7 @@
         ]
     },
     "poliwrath": {
-        "level": 100,
+        "level": 86,
         "sets": [
             {
                 "role": "Physical Scarf",
@@ -2036,7 +2036,7 @@
         ]
     },
     "alakazam": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -2069,7 +2069,7 @@
         ]
     },
     "alakazammega": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -2102,7 +2102,7 @@
         ]
     },
     "machamp": {
-        "level": 100,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Physical Sweeper",
@@ -2149,7 +2149,7 @@
         ]
     },
     "machampmega": {
-        "level": 100,
+        "level": 83,
         "sets": [
             {
                 "role": "Bulky Physical Sweeper",
@@ -2168,7 +2168,7 @@
         ]
     },
     "victreebel": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -2201,7 +2201,7 @@
         ]
     },
     "tentacruel": {
-        "level": 100,
+        "level": 86,
         "sets": [
             {
                 "role": "Specially Defensive",
@@ -2234,7 +2234,7 @@
         ]
     },
     "golem": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -2253,7 +2253,7 @@
         ]
     },
     "golemalola": {
-        "level": 100,
+        "level": 85,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -2300,7 +2300,7 @@
         ]
     },
     "rapidash": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Physical Scarf",
@@ -2333,7 +2333,7 @@
         ]
     },
     "rapidashgalar": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -2380,7 +2380,7 @@
         ]
     },
     "slowbro": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Physically Defensive",
@@ -2427,7 +2427,7 @@
         ]
     },
     "slowbromega": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Specially Defensive",
@@ -2460,7 +2460,7 @@
         ]
     },
     "magneton": {
-        "level": 100,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Special Sweeper",
@@ -2479,7 +2479,7 @@
         ]
     },
     "farfetchd": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Physical Scarf",
@@ -2498,7 +2498,7 @@
         ]
     },
     "farfetchdgalar": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Physical Sweeper",
@@ -2517,7 +2517,7 @@
         ]
     },
     "dodrio": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Physical Sweeper",
@@ -2564,7 +2564,7 @@
         ]
     },
     "dewgong": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Mixed Defensive",
@@ -2611,7 +2611,7 @@
         ]
     },
     "muk": {
-        "level": 100,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Special Sweeper",
@@ -2658,7 +2658,7 @@
         ]
     },
     "mukalola": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Physical Sweeper",
@@ -2705,7 +2705,7 @@
         ]
     },
     "gengar": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -2752,7 +2752,7 @@
         ]
     },
     "gengarmega": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -2785,7 +2785,7 @@
         ]
     },
     "onix": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Physically Defensive Support",
@@ -2818,7 +2818,7 @@
         ]
     },
     "hypno": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Physically Defensive",
@@ -2865,7 +2865,7 @@
         ]
     },
     "kingler": {
-        "level": 100,
+        "level": 86,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -2912,7 +2912,7 @@
         ]
     },
     "kinglermega": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -2945,7 +2945,7 @@
         ]
     },
     "electrode": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -2992,7 +2992,7 @@
         ]
     },
     "electrodehisui": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -3067,7 +3067,7 @@
         ]
     },
     "exeggutor": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Physically Defensive",
@@ -3114,7 +3114,7 @@
         ]
     },
     "exeggutoralola": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -3161,7 +3161,7 @@
         ]
     },
     "marowak": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Physical Sweeper",
@@ -3208,7 +3208,7 @@
         ]
     },
     "marowakalola": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Physical Sweeper",
@@ -3283,7 +3283,7 @@
         ]
     },
     "hitmonlee": {
-        "level": 100,
+        "level": 86,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -3330,7 +3330,7 @@
         ]
     },
     "hitmonchan": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -3377,7 +3377,7 @@
         ]
     },
     "lickitung": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Physical Sweeper",
@@ -3396,7 +3396,7 @@
         ]
     },
     "weezing": {
-        "level": 100,
+        "level": 86,
         "sets": [
             {
                 "role": "Mixed Defensive",
@@ -3429,7 +3429,7 @@
         ]
     },
     "weezinggalar": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Mixed Defensive",
@@ -3462,7 +3462,7 @@
         ]
     },
     "rhydon": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Physically Defensive Support",
@@ -3481,7 +3481,7 @@
         ]
     },
     "chansey": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Physically Defensive Support",
@@ -3514,7 +3514,7 @@
         ]
     },
     "tangela": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Physically Defensive Support",
@@ -3533,7 +3533,7 @@
         ]
     },
     "kangaskhan": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Fast Band",
@@ -3580,7 +3580,7 @@
         ]
     },
     "kangaskhanmega": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Band",
@@ -3613,7 +3613,7 @@
         ]
     },
     "seaking": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Fast Specs",
@@ -3660,7 +3660,7 @@
         ]
     },
     "starmie": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Specs",
@@ -3693,7 +3693,7 @@
         ]
     },
     "mrmime": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Support",
@@ -3726,7 +3726,7 @@
         ]
     },
     "mrmimegalar": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -3745,7 +3745,7 @@
         ]
     },
     "scyther": {
-        "level": 100,
+        "level": 88,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -3778,7 +3778,7 @@
         ]
     },
     "jynx": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -3811,7 +3811,7 @@
         ]
     },
     "electabuzz": {
-        "level": 100,
+        "level": 86,
         "sets": [
             {
                 "role": "Fast Support",
@@ -3830,7 +3830,7 @@
         ]
     },
     "magmar": {
-        "level": 100,
+        "level": 86,
         "sets": [
             {
                 "role": "Specially Defensive",
@@ -3849,7 +3849,7 @@
         ]
     },
     "pinsir": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Physical Scarf",
@@ -3896,7 +3896,7 @@
         ]
     },
     "pinsirmega": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Physical Scarf",
@@ -3929,7 +3929,7 @@
         ]
     },
     "gyarados": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -3976,7 +3976,7 @@
         ]
     },
     "gyaradosmega": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -4009,7 +4009,7 @@
         ]
     },
     "lapras": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -4042,7 +4042,7 @@
         ]
     },
     "laprasmega": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -4075,7 +4075,7 @@
         ]
     },
     "ditto": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Physically Defensive",
@@ -4094,7 +4094,7 @@
         ]
     },
     "jolteon": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -4141,7 +4141,7 @@
         ]
     },
     "flareon": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Specially Defensive",
@@ -4174,7 +4174,7 @@
         ]
     },
     "vaporeon": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Specially Defensive",
@@ -4207,7 +4207,7 @@
         ]
     },
     "omastar": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -4240,7 +4240,7 @@
         ]
     },
     "kabutops": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -4273,7 +4273,7 @@
         ]
     },
     "aerodactyl": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -4306,7 +4306,7 @@
         ]
     },
     "aerodactylmega": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -4325,7 +4325,7 @@
         ]
     },
     "snorlax": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -4372,7 +4372,7 @@
         ]
     },
     "snorlaxmega": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Specially Defensive",
@@ -4405,7 +4405,7 @@
         ]
     },
     "tauros": {
-        "level": 100,
+        "level": 87,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -4452,7 +4452,7 @@
         ]
     },
     "taurospaldeaaqua": {
-        "level": 100,
+        "level": 85,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -4499,7 +4499,7 @@
         ]
     },
     "taurospaldeablaze": {
-        "level": 100,
+        "level": 86,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -4546,7 +4546,7 @@
         ]
     },
     "taurospaldeacombat": {
-        "level": 100,
+        "level": 86,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -4593,7 +4593,7 @@
         ]
     },
     "articunogalar": {
-        "level": 100,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Specs",
@@ -4640,7 +4640,7 @@
         ]
     },
     "moltresgalar": {
-        "level": 100,
+        "level": 81,
         "sets": [
             {
                 "role": "Special Scarf",
@@ -4687,7 +4687,7 @@
         ]
     },
     "zapdosgalar": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Physical Scarf",
@@ -4734,7 +4734,7 @@
         ]
     },
     "articuno": {
-        "level": 100,
+        "level": 86,
         "sets": [
             {
                 "role": "Specially Defensive",
@@ -4781,7 +4781,7 @@
         ]
     },
     "zapdos": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Specs",
@@ -4828,7 +4828,7 @@
         ]
     },
     "moltres": {
-        "level": 100,
+        "level": 82,
         "sets": [
             {
                 "role": "Physically Defensive",
@@ -4875,7 +4875,7 @@
         ]
     },
     "dragonite": {
-        "level": 100,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
@@ -4922,7 +4922,7 @@
         ]
     },
     "mewtwo": {
-        "level": 100,
+        "level": 76,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -4955,7 +4955,7 @@
         ]
     },
     "mewtwomegax": {
-        "level": 100,
+        "level": 76,
         "sets": [
             {
                 "role": "Physical Scarf",
@@ -4988,7 +4988,7 @@
         ]
     },
     "mewtwomegay": {
-        "level": 100,
+        "level": 76,
         "sets": [
             {
                 "role": "Fast Special Sweeper",
@@ -5021,7 +5021,7 @@
         ]
     },
     "mew": {
-        "level": 100,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Physical Sweeper",
