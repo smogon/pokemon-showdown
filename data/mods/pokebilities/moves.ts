@@ -6,6 +6,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onStart(pokemon) {
 				this.add('-endability', pokemon);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
+				this.singleEvent('PostEnd', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
 				if (pokemon.m.innates) {
 					for (const innate of pokemon.m.innates) {
 						pokemon.removeVolatile("ability" + innate);

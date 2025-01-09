@@ -7,6 +7,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (pokemon.hasItem('Ability Shield')) return false;
 				this.add('-endability', pokemon);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
+				this.singleEvent('PostEnd', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
 				const keys = Object.keys(pokemon.volatiles).filter(x => x.startsWith("ability:"));
 				if (keys.length) {
 					for (const abil of keys) {
@@ -136,12 +137,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
 			}
 			this.singleEvent('End', sourceAbility, source.abilityState, source);
+			this.singleEvent('PostEnd', sourceAbility, source.abilityState, source);
 			if (ally?.m.innate) {
 				ally.removeVolatile(ally.m.innate);
 				delete ally.m.innate;
 			}
 
 			this.singleEvent('End', targetAbility, target.abilityState, target);
+			this.singleEvent('PostEnd', targetAbility, target.abilityState, target);
 			if (foeAlly?.m.innate) {
 				foeAlly.removeVolatile(foeAlly.m.innate);
 				delete foeAlly.m.innate;

@@ -114,6 +114,9 @@ export class BattleActions {
 				pokemon.copyVolatileFrom(oldActive, switchCopyFlag);
 			}
 			if (newMove) pokemon.lastMove = newMove;
+			side.active[pos] = null!;
+			this.battle.add('-switchout', oldActive, oldActive.getDetails);
+			this.battle.singleEvent('PostEnd', oldActive.getAbility(), oldActive.abilityState, oldActive);
 			oldActive.clearVolatile();
 		}
 		if (oldActive) {

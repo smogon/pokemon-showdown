@@ -1850,6 +1850,7 @@ export class Pokemon {
 			if (!setAbilityEvent) return setAbilityEvent;
 		}
 		this.battle.singleEvent('End', this.battle.dex.abilities.get(oldAbility), this.abilityState, this, source);
+		this.battle.singleEvent('PostEnd', this.battle.dex.abilities.get(oldAbility), this.abilityState, this, source);
 		if (this.battle.effect && this.battle.effect.effectType === 'Move' && !isFromFormeChange) {
 			this.battle.add('-endability', this, this.battle.dex.abilities.get(oldAbility), '[from] move: ' +
 				this.battle.dex.moves.get(this.battle.effect.id));

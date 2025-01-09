@@ -6664,6 +6664,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (pokemon.hasItem('Ability Shield')) return false;
 				this.add('-endability', pokemon);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
+				this.singleEvent('PostEnd', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
 			},
 			onCopy(pokemon) {
 				if (pokemon.getAbility().flags['cantsuppress']) pokemon.removeVolatile('gastroacid');
@@ -17212,7 +17213,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
 			}
 			this.singleEvent('End', sourceAbility, source.abilityState, source);
+			this.singleEvent('PostEnd', sourceAbility, source.abilityState, source);
 			this.singleEvent('End', targetAbility, target.abilityState, target);
+			this.singleEvent('PostEnd', targetAbility, target.abilityState, target);
 			source.ability = targetAbility.id;
 			target.ability = sourceAbility.id;
 			source.abilityState = {id: this.toID(source.ability), target: source};

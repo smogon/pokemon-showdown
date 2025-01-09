@@ -256,6 +256,24 @@ describe('Neutralizing Gas', function () {
 		assert.statStage(battle.p2.active[0], 'atk', 0);
 	});
 
+	it(`should wear off after the holder leaves the field`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{species: "Eternatus", moves: ['sleeptalk']},
+			{species: "Bisharp", moves: ['sleeptalk']},
+		], [
+			{species: "Salamence", ability: 'intimidate', moves: ['sleeptalk']},
+			{species: "Diglett", moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('switch bisharp, move sleeptalk', 'auto');
+		const log = battle.getDebugLog();
+		const weezingIndex = log.indexOf('|-unboost|p1a: Weezing|atk|1');
+		const eternatusIndex = log.indexOf('|-unboost|p1b: Eternatus|atk|1');
+		assert(weezingIndex < 0, 'Intimidate should have activated after Weezing left the field');
+		assert(eternatusIndex >= 0, 'Eternats should have been affected by Intimidate');
+	});
+
 	it(`should not prevent Ice Face from blocking damage nor reform Ice Face when leaving the field`, function () {
 		battle = common.createBattle([[
 			{species: 'Eiscue', ability: 'iceface', moves: ['sleeptalk', 'hail']},

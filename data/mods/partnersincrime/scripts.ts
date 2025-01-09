@@ -276,6 +276,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (!this.battle.runEvent('SetAbility', this, source, this.battle.effect, ability)) return false;
 			this.battle.singleEvent('End', this.battle.dex.abilities.get(oldAbility), this.abilityState, this, source);
+			this.battle.singleEvent('PostEnd', this.battle.dex.abilities.get(oldAbility), this.abilityState, this, source);
 			const ally = this.side.active.find(mon => mon && mon !== this && !mon.fainted);
 			if (ally?.m.innate) {
 				ally.removeVolatile(ally.m.innate);

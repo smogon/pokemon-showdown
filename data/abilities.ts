@@ -927,7 +927,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			if (this.field.getWeather().id === 'deltastream' && !strongWeathers.includes(weather.id)) return false;
 		},
-		onEnd(pokemon) {
+		onPostEnd(pokemon) {
 			if (this.field.weatherState.source !== pokemon) return;
 			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;
@@ -951,7 +951,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			if (this.field.getWeather().id === 'desolateland' && !strongWeathers.includes(weather.id)) return false;
 		},
-		onEnd(pokemon) {
+		onPostEnd(pokemon) {
 			if (this.field.weatherState.source !== pokemon) return;
 			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;
@@ -2871,11 +2871,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.add('-end', target, 'Slow Start', '[silent]');
 				}
 				if (strongWeathers.includes(target.getAbility().id)) {
-					this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
+					this.singleEvent('PostEnd', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
 				}
 			}
 		},
-		onEnd(source) {
+		onPostEnd(source) {
 			if (source.transformed) return;
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon !== source && pokemon.hasAbility('Neutralizing Gas')) {
@@ -2883,11 +2883,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 			this.add('-end', source, 'ability: Neutralizing Gas');
-
-			// FIXME this happens before the pokemon switches out, should be the opposite order.
-			// Not an easy fix since we cant use a supported event. Would need some kind of special event that
-			// gathers events to run after the switch and then runs them when the ability is no longer accessible.
-			// (If you're tackling this, do note extreme weathers have the same issue)
 
 			// Mark this pokemon's ability as ending so Pokemon#ignoringAbility skips it
 			if (source.abilityState.ending) return;
@@ -3375,7 +3370,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			if (this.field.getWeather().id === 'primordialsea' && !strongWeathers.includes(weather.id)) return false;
 		},
-		onEnd(pokemon) {
+		onPostEnd(pokemon) {
 			if (this.field.weatherState.source !== pokemon) return;
 			for (const target of this.getAllActive()) {
 				if (target === pokemon) continue;

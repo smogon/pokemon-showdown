@@ -553,7 +553,8 @@ export class Battle {
 			this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 			return relayVar;
 		}
-		if (eventid !== 'End' && effect.effectType === 'Ability' && (target instanceof Pokemon) && target.ignoringAbility()) {
+		if (!['End', 'PostEnd'].includes(eventid) && effect.effectType === 'Ability' &&
+			(target instanceof Pokemon) && target.ignoringAbility()) {
 			this.debug(eventid + ' handler suppressed by Gastro Acid or Neutralizing Gas');
 			return relayVar;
 		}
@@ -822,7 +823,7 @@ export class Battle {
 					this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 				}
 				continue;
-			} else if (eventid !== 'End' && effect.effectType === 'Ability' &&
+			} else if (!['End', 'PostEnd'].includes(eventid) && effect.effectType === 'Ability' &&
 					(effectHolder instanceof Pokemon) && effectHolder.ignoringAbility()) {
 				if (eventid !== 'Update') {
 					this.debug(eventid + ' handler suppressed by Gastro Acid or Neutralizing Gas');
@@ -2370,6 +2371,7 @@ export class Battle {
 				if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
+				this.singleEvent('PostEnd', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				pokemon.clearVolatile(false);
 				pokemon.fainted = true;
 				pokemon.illusion = null;

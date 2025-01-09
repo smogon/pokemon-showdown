@@ -307,6 +307,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
+				this.singleEvent('PostEnd', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				pokemon.clearVolatile(false);
 				pokemon.fainted = true;
 				pokemon.illusion = null;
@@ -891,6 +892,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					pokemon.copyVolatileFrom(oldActive, switchCopyFlag);
 				}
 				if (newMove) pokemon.lastMove = newMove;
+				side.active[pos] = null!;
+				this.battle.add('-switchout', oldActive, oldActive.getDetails);
+				this.battle.singleEvent('PostEnd', oldActive.getAbility(), oldActive.abilityState, oldActive);
 				oldActive.clearVolatile();
 			}
 			if (oldActive) {
