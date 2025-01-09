@@ -89,8 +89,7 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 		pokemon.teraType = newSet.teraType === 'Any' ? context.sample(allTypes) :
 			Array.isArray(newSet.teraType) ? context.sample(newSet.teraType) : newSet.teraType;
 	}
-	const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-		(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+	const details = pokemon.getSimpleDetails();
 	if (oldShiny !== pokemon.set.shiny || oldGender !== pokemon.gender) context.add('replace', pokemon, details);
 	if (changeAbility) pokemon.setAbility(newSet.ability as string, undefined, true);
 
@@ -386,8 +385,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const species = pokemon.setSpecies(rawSpecies);
 				if (!species) continue;
 				pokemon.baseSpecies = rawSpecies;
-				pokemon.details = species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				pokemon.details = pokemon.getSimpleDetails();
 				// pokemon.setAbility(species.abilities['0'], null, true);
 				// pokemon.baseAbility = pokemon.ability;
 

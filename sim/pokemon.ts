@@ -353,8 +353,7 @@ export class Pokemon {
 		this.position = 0;
 		let displayedSpeciesName = this.species.name;
 		if (displayedSpeciesName === 'Greninja-Bond') displayedSpeciesName = 'Greninja';
-		this.details = displayedSpeciesName + (this.level === 100 ? '' : ', L' + this.level) +
-			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
+		this.details = this.getSimpleDetails(displayedSpeciesName);
 
 		this.status = '';
 		this.statusState = {};
@@ -509,17 +508,21 @@ export class Pokemon {
 		return this.isActive ? this.getSlot() + fullname.slice(2) : fullname;
 	}
 
+	getSimpleDetails(displayedSpeciesName: string | null = null, illusionDetails = false) {
+		let name = displayedSpeciesName || this.species.name;
+		let level = this.level;
+		if (illusionDetails && this.illusion) {
+			if (this.battle.ruleTable.has('illusionlevelmod')) level = this.illusion.level;
+			name = this.illusion.species.name;
+			if (name === 'Greninja-Bond') name = 'Greninja';
+		}
+		return name + (level === 100 ? '' : ', L' + level) +
+			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
+	}
+
 	getDetails = () => {
 		const health = this.getHealth();
-		let details = this.details;
-		if (this.illusion) {
-			const level = this.battle.ruleTable.has('illusionlevelmod') ? this.illusion.level : this.level;
-			let displayedSpeciesName = this.illusion.species.name;
-			if (displayedSpeciesName === 'Greninja-Bond') displayedSpeciesName = 'Greninja';
-			const illusionDetails = displayedSpeciesName + (level === 100 ? '' : ', L' + level) +
-				(this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
-			details = illusionDetails;
-		}
+		let details = this.getSimpleDetails(null, true);
 		if (this.terastallized) details += `, tera:${this.terastallized}`;
 		return {side: health.side, secret: `${details}|${health.secret}`, shared: `${details}|${health.shared}`};
 	};
@@ -1387,8 +1390,7 @@ export class Pokemon {
 			this.illusion ? this.illusion.species.name : species.baseSpecies;
 		if (isPermanent) {
 			this.baseSpecies = rawSpecies;
-			this.details = species.name + (this.level === 100 ? '' : ', L' + this.level) +
-				(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
+			this.details = this.getSimpleDetails();
 			let details = (this.illusion || this).details;
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
 			this.battle.add('detailschange', this, details);
