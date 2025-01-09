@@ -2384,7 +2384,7 @@ export class Battle {
 					pokemon.baseSpecies = baseSpecies;
 					pokemon.baseAbility = pokemon.ability = toID(pokemon.set.ability);
 					pokemon.details = pokemon.getSimpleDetails();
-					this.add('detailschange', pokemon, (pokemon.illusion || pokemon).details, '[silent]');
+					this.add('detailschange', pokemon, pokemon.details, '[silent]');
 				}
 				delete pokemon.terastallized;
 				pokemon.side.faintedThisTurn = pokemon;
