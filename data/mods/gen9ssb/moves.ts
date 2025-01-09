@@ -2407,11 +2407,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	// Gizmo
 	coinclash: {
 		accuracy: 80,
-		basePower: 30,
+		basePower: 25,
 		category: "Physical",
 		name: "Coin Clash",
-		desc: "Hits 4-5 times. Flings coin at target after use. 50% chance to gain +2 crit ratio and 1.25x evasion until switch/faint. Fails if not holding Inconspicuous Coin.",
-		shortDesc: "See '/ssb Gizmo' for more!",
+		desc: "Hits 3-5 times. Flings coin at target after use. 50% chance to gain +2 crit ratio and 1.25x evasion until switch/faint. Fails if not holding Inconspicuous Coin.",
+		shortDesc: "Hits 3-5(+1) times. 50%: +2 Crit/1.25x EVA. -Inconspicuous Coin: Fails.",
 		pp: 5,
 		flags: {contact: 1},
 		onTryMove(pokemon, target, move) {
@@ -2428,8 +2428,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Pay Day', target);
 		},
 		onAfterMove(source, target, move) {
-			if (!source.item) return;
-			this.add('-message', `${source.name} hurled the Inconspicuous Coin at ${target.name}!`);
+			this.add('-message', `${source.name} tossed the Inconspicuous Coin at ${target.name}!`);
 			this.damage(target.maxhp / this.random(6, 10), target, source);
 			source.addVolatile('coinclash');
 			source.abilityState.recallActive = true;
