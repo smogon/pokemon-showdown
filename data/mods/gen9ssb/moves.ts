@@ -542,6 +542,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-anim', pokemon, 'Aqua Ring', pokemon);
 			},
 			onTryPrimaryHit(target, source, move) {
+				// @ts-ignore
 				let originalDamage = this.actions.getDamage(source, target, move);
 				if (target === source || move.infiltrates) return;
 				if (!this.dex.getImmunity(move.type, 'Ground')) {
@@ -552,6 +553,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						return this.dex.getEffectiveness(move.type, 'Ground');
 					};
 				}
+				// @ts-ignore
 				let damage = this.actions.getDamage(source, target, move);
 				if (!damage && damage !== 0) {
 					this.add('-fail', source);
@@ -588,6 +590,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						disabled: false,
 						used: false,
 					};
+					// @ts-ignore
 					let resDamage = this.actions.getDamage(resSource, source, resWave);
 					if (resDamage) {
 						this.add('-anim', target, 'Power Gem', source);
@@ -1016,6 +1019,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			for (const activePokemon of this.getAllActive()) {
 				if (!activePokemon.side.slotConditions[activePokemon.position]['futuremove']) continue;
 				const move = this.dex.getActiveMove(activePokemon.side.slotConditions[activePokemon.position]['futuremove'].move);
+				// @ts-ignore
 				const dmg = this.actions.getDamage(pokemon, activePokemon, move);
 				delete activePokemon.side.slotConditions[activePokemon.position]['futuremove'];
 				if (move === 'doomdesire') {
@@ -1079,6 +1083,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (target === source || move.flags['bypasssub'] || move.infiltrates) {
 					return;
 				}
+				// @ts-ignore
 				let damage = this.actions.getDamage(source, target, move);
 				if (!damage) {
 					this.add('-fail', source);
@@ -1833,6 +1838,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						disabled: false,
 						used: false,
 					};
+					// @ts-ignore
 					const dmg = this.actions.getDamage(source, pokemon, nMove);
 					if (!dmg) {
 						this.add('-immune', pokemon);
@@ -2002,6 +2008,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onTryPrimaryHitPriority: -1,
 			onTryPrimaryHit(target, source, move) {
 				if (target === source || move.flags['bypasssub'] || move.infiltrates || !target.abilityState.orbHp) return;
+				// @ts-ignore
 				const damage = this.actions.getDamage(source, target, move);
 				if (!damage) {
 					this.add('-message', `${target.name} was protected by Orb Shield!`);
@@ -2260,6 +2267,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 			if (!possibleTargets || !possibleTargets.length) return null;
 			const newTarget = this.sample(possibleTargets);
+			// @ts-ignore
 			let dmg = this.actions.getDamage(source, newTarget, move);
 			if (!dmg) {
 				this.add('-message', `${newTarget.name} was unaffected by Terrorize the Peaks!`);
@@ -2850,6 +2858,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					source = possibleSources[0];
 				}
 				const move = this.dex.getActiveMove('dynamitearrow');
+				// @ts-ignore
 				const dmg = this.actions.getDamage(source, pokemon, move);
 				this.damage(dmg, pokemon);
 				this.boost({def: -1, spe: -1}, pokemon);
@@ -2908,6 +2917,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					source = sources[0];
 				}
 				const move = this.dex.getActiveMove('ranyakumo');
+				// @ts-ignore
 				const dmg = this.actions.getDamage(source, pokemon, move);
 				this.add('-anim', pokemon, 'Hex', pokemon);
 				this.damage(dmg, pokemon, source, this.dex.conditions.get('Ran Yakumo'));
