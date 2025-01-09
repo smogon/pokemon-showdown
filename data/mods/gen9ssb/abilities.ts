@@ -168,6 +168,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-start', pokemon, 'typechange', 'Ice/Water', '[from] ability: Generosity');
 			}
 		},
+		onUpdate(pokemon) {
+			if (this.effectState.revivalBlessing) {
+				pokemon.abilityState.deathOnRevival = true;
+				this.effectState.revivalBlessing = false;
+				this.actions.useMove('Revival Blessing', pokemon);
+			}
+		},
 		onModifyMove(move, pokemon) {
 			if (move.id === 'present') {
 				move.type = 'Ice';
@@ -197,6 +204,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (ally.status) ally.cureStatus();
 			}
 		},
+		onDamage(damage, target, source, effect) {
+			if (effect?.effectType === 'Move' && target !== source && damage >= target.hp) {
+				const move = this.dex.moves.get(effect.id);
+				if (move.category === 'Special' && target.abilityState.sack) {
+					// Using this to escape from onDamage if being hit in a scenario
+					// where Gift Sack will activate. Without this, Generosity will
+					// see incoming damage, trigger Revival Blessing, then no damage
+					// will be taken due to Gift Sack, giving you a free Revival Blessing.
+					if (target.abilityState.sack.length < 3) return;
+				}
+				this.add('-activate', target, 'ability: Generosity');
+				this.effectState.revivalBlessing = true;
+				return target.hp - 1;
+			}
+		},
 		onTryHit(target, source, move) {
 			// @ts-ignore
 			const damage = this.actions.getDamage(source, target, move);
@@ -214,7 +236,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		onFaint(pokemon) {
 			pokemon.side.hhBoost = true;
-			pokemon.side.reviveOnSwitchIn = true;
 		},
 	},
 	// Gadget
