@@ -171,10 +171,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onUpdate(pokemon) {
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (this.effectState.revivalBlessing) {
-				this.effectState.revivalBlessing = false;
 				this.actions.useMove('Revival Blessing', pokemon);
-				this.actions.useMove('Memento', pokemon, target);
 			}
+		},
+		onResidual(pokemon) {
+			if (this.effectState.revivalBlessing) pokemon.faint();
 		},
 		onModifyMove(move, pokemon) {
 			if (move.id === 'present') {
