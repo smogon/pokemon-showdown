@@ -25,7 +25,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	deltacharge: {
 		name: "Delta Charge",
 		onStart(pokemon) {
-			this.add('-start', pokemon, 'Delta Charge', '[silent]');
 			this.add('-anim', pokemon, 'Growth', pokemon);
 			this.add('-message', `${pokemon.name} is preparing to attack!`);
 			this.effectState.damaged = false;
@@ -39,9 +38,6 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			} else if (this.effectState.damaged === false) {
 				move.critRatio = 6;
 			}
-		},
-		onEnd(pokemon) {
-			this.add('-end', pokemon, 'Delta Charge', '[silent]');
 		},
 	},
 	// Trey
