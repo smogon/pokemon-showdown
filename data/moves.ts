@@ -15645,13 +15645,6 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return false;
 			}
 		},
-		onAfterMoveSecondarySelf(pokemon, target, move) {
-			this.add('-message', `${pokemon.ability}`);
-			// SSB Integration
-			if (pokemon.ability === 'generosity') {
-				this.actions.useMove('Memento', pokemon, target);
-			}
-		},
 		slotCondition: 'revivalblessing',
 		// No this not a real switchout move
 		// This is needed to trigger a switch protocol to choose a fainted party member
