@@ -188,7 +188,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onTryHit(target, source, move) {
+			this.add('-message', `Generosity onTryHit:\nSOURCE: ${source.name} | TARGET: ${target.name}`);
 			const damage = this.actions.getDamage(source, target, move);
+			this.add('-message', `DAMAGE: ${damage}`);
 			if (!damage) return;
 			if (damage >= target.hp) {
 				this.add('-activate', target, 'ability: Generosity');
