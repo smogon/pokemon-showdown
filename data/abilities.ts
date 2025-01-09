@@ -2876,11 +2876,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onAnySwitchIn(pokemon) {
-			if (this.event.target === pokemon) {
-				if (['libero', 'protean'].includes(pokemon.getAbility().id)) {
-					this.debug('Reset Libero/Protean when Neutralizing Gas is active');
-					delete pokemon.abilityState.protean;
-				}
+			if (this.event.target === pokemon && ['libero', 'protean'].includes(pokemon.getAbility().id)) {
+				this.debug('Reset Libero/Protean when Neutralizing Gas is active');
+				delete pokemon.abilityState.protean;
 			}
 		},
 		onEnd(source) {
