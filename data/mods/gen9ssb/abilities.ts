@@ -198,20 +198,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onTryHit(target, source, move) {
-			this.add('-message', `Generosity onTryHit:\nSOURCE: ${source.name} | TARGET: ${target.name}`);
 			// @ts-ignore
 			const damage = this.actions.getDamage(source, target, move);
-			this.add('-message', `DAMAGE: ${damage}`);
 			if (!damage) return;
+			if (move.category === 'Special' && target.abilityState.sack) {
+				// Break from onTryHit if the target has Gift Sack and if it has less than 3 moves in it.
+				// This is because the Gift Sack will absorb the move and nullify damage, meaning we
+				// do not want Revival Blessing to happen.
+				if (target.abilityState.sack.length < 3) return;
+			}
 			if (damage >= target.hp) {
 				this.add('-activate', target, 'ability: Generosity');
 				this.add('-anim', target, 'Confuse Ray', target);
-				this.add('-message', `${target.name} prepared for the incoming attack!`);
-				this.actions.useMove('Revival Blessing', target);
 			}
 		},
 		onFaint(pokemon) {
 			pokemon.side.hhBoost = true;
+			pokemon.side.reviveOnSwitchIn = true;
 		},
 	},
 	// Gadget
