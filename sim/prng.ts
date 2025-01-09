@@ -97,9 +97,9 @@ export class PRNG implements PRNGRequired {
 	private seededRandom() {
 		const buf = Buffer.alloc(36);
 		sodium.randombytes_buf_deterministic(buf, this.seed);
-		// use the last four bytes for the output, use the other 32 bytes for the next seed
-		this.seed = buf.slice(buf.length - 32);
-		return buf.slice(32).readUint32BE();
+		// use the first four bytes for the output, use the other 32 bytes for the next seed
+		this.seed = buf.slice(4);
+		return buf.slice(0, 4).readUint32BE();
 	}
 
 	/**
