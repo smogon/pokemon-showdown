@@ -24,7 +24,7 @@ describe(`Terapagos`, function () {
 		assert.false(!!ditto.terastallized);
 	});
 
-	it(`shouldn't revert to Terapagos-Normal if it faints while Terastallized`, function () {
+	it(`shouldn't revert to Terapagos-Normal if it faints while not Terastallized`, function () {
 		battle = common.createBattle([[
 			{species: 'terapagos', ability: 'terashift', moves: ['memento']},
 			{species: 'darkrai', moves: ['darkpulse']},
