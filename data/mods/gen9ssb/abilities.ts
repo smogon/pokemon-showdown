@@ -187,12 +187,14 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (ally.status) ally.cureStatus();
 			}
 		},
-		onDamage(damage, target, source, effect) {
+		onTryHit(target, source, move) {
+			const damage = this.actions.getDamage(source, target, move);
+			if (!damage) return;
 			if (damage >= target.hp) {
 				this.add('-activate', target, 'ability: Generosity');
 				this.add('-anim', target, 'Confuse Ray', target);
-				target.side.addSlotCondition(target, 'revivalblessing');
-				target.switchFlag = true;
+				this.add('-message', `${target.name} prepared for the incoming attack!`);
+				this.actions.useMove('Revival Blessing', target);
 			}
 		},
 		onFaint(pokemon) {
