@@ -15645,6 +15645,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return false;
 			}
 		},
+		onAfterMove(pokemon) {
+			// Integration for a custom ability in SSB, ignore elsewhere
+			if (pokemon.abilityState.deathOnRevival) pokemon.faint();
+		},
 		slotCondition: 'revivalblessing',
 		// No this not a real switchout move
 		// This is needed to trigger a switch protocol to choose a fainted party member
