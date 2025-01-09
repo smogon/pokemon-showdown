@@ -79,6 +79,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 		desc: "This Pokemon is permanently tormented, and its Fighting-type moves can hit Ghost-type Pokemon for neutral damage. Whenever this Pokemon lands a critical hit, it immediately uses Ziran. This Pokemon's attacks that would KO, barring Ziran, instead leave the foe at 1 HP, paralyzed, and forces them to switch.",
 		onUpdate(pokemon) {
+			for (const target of pokemon.foes()) {
+				if (!target.volatiles['shangqing']) target.addVolatile('shangqing');
+			}
 			if (!pokemon.volatiles['torment']) {
 				this.add('-activate', pokemon, 'Shangqing');
 				pokemon.addVolatile('torment');
@@ -112,6 +115,20 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.effectState.ziranUsed = true;
 				this.actions.useMove('Ziran', source, target);
 			}
+		},
+		onSwitchOut(pokemon) {
+			for (const target of pokemon.foes()) {
+				if (target.volatiles['shangqing']) target.removeVolatile('shangqing');
+			}
+		},
+		condition: {
+			noCopy: true,
+			onNegateImmunity(pokemon, type) {
+				if (pokemon.hasType('Ghost') && ['Normal', 'Fighting'].includes(type)) return false;
+			},
+			onSwitchOut(pokemon) {
+				pokemon.removeVolatile('shangqing');
+			},
 		},
 	},
 	// Flufi
