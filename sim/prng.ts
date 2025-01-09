@@ -85,7 +85,7 @@ export class PRNG implements PRNGRequired {
 		if (from) from = Math.floor(from);
 		if (to) to = Math.floor(to);
 		if (from === undefined) {
-			result = result / 0x1000000000;
+			result = result / 0x100000000;
 		} else if (!to) {
 			result = Math.floor(result * from / 0x100000000);
 		} else {
