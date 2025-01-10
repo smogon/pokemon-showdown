@@ -682,7 +682,7 @@ export class TeamValidator {
 				set.hpType = type.name;
 			}
 		}
-		if (species.forceTeraType) {
+		if (species.forceTeraType && ruleTable.has('obtainablemisc')) {
 			set.teraType = species.forceTeraType;
 		}
 		if (set.teraType) {

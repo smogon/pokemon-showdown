@@ -39,4 +39,18 @@ describe(`Terapagos`, function () {
 		const terapagos = battle.p1.active[0];
 		assert.species(terapagos, 'Terapagos-Terastal');
 	});
+
+	it(`[Hackmons] can Terastallize into other types, but Teraform Zero fails`, function () {
+		battle = common.createBattle([[
+			{species: 'terapagos', ability: 'terashift', moves: ['sleeptalk'], teraType: 'Fire'},
+		], [
+			{species: 'kyogre', ability: 'drizzle', moves: ['sleeptalk']},
+		]]);
+		const terapagos = battle.p1.active[0];
+		battle.makeChoices('move sleeptalk terastallize', 'auto');
+		assert.species(terapagos, 'Terapagos-Stellar');
+		assert.equal(terapagos.terastallized, 'Fire');
+		assert(battle.log.includes('|-ability|p1a: Terapagos|Teraform Zero'), 'Teraform Zero should activate');
+		assert.equal(battle.field.weather, 'raindance', 'Teraform Zero should fail');
+	});
 });
