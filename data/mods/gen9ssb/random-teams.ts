@@ -142,7 +142,7 @@ export const ssbSets: SSBSets = {
 		species: 'Iron Thorns', ability: 'Auto Repair', item: 'Absorptive Shell', gender: 'N',
 		moves: ['Techno Blast', 'Flash Cannon', 'Explosion'],
 		signatureMove: 'Turbocharge',
-		evs: {hp: 128, spa: 128, spe: 252}, nature: 'Hasty', shiny: true,
+		evs: {hp: 128, spa: 128, spe: 252}, nature: 'Hasty',
 	},
 	'Kaiser Dragon': {
 		species: 'Rayquaza', ability: 'Elemental Shift', item: 'Leftovers', gender: 'N',
