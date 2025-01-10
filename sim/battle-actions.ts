@@ -1667,9 +1667,10 @@ export class BattleActions {
 			basePower = 0;
 		}
 
+		const dexMove = this.dex.moves.get(move.id);
 		if (
 			basePower < 60 && source.getTypes(true).includes(move.type) && source.terastallized &&
-			this.dex.moves.get(move.id).priority <= 0 && !move.multihit &&
+			dexMove.priority <= 0 && !dexMove.multihit &&
 			// Hard move.basePower check for moves like Dragon Energy that have variable BP
 			!((move.basePower === 0 || move.basePower === 150) && move.basePowerCallback)
 		) {
