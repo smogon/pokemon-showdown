@@ -4824,7 +4824,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 			desc: "If the target uses a Fire-type move this turn, it is prevented from executing and the target loses 1/4 of its maximum HP, rounded half up. This effect happens before the Fire-type move would be prevented by Primordial Sea.",
 		},
 
-		start: "  [POKEMON] is covered in powder!",
+		start: "  Powder was scattered on the ground all around [TEAM]!",
+		end: "  The powder disappeared from the ground around [TEAM]!",
 		activate: "  When the flame touched the powder on the Pok\u00E9mon, it exploded!",
 	},
 	powdersnow: {
