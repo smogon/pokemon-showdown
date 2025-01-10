@@ -965,7 +965,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				pokemon.setType('Flying');
 				this.actions.useMove('Tailwind', pokemon);
 				for (let i = 0; i < 4; i++) {
-					let moves = ['roost', 'defog', 'pluck', 'oblivionwing'];
+					let moves = ['roost', 'defog', 'aeroblast', 'beakblast'];
 					const move = this.dex.moves.get(moves[i]);
 					const newSlot = {
 						move: move.name,
@@ -982,9 +982,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			} else if (r === 6) {
 				this.add('-start', pokemon, 'typechange', 'Poison');
 				pokemon.setType('Poison');
-				this.actions.useMove('Haze', pokemon);
+				this.actions.useMove('Toxic Spikes', pokemon);
 				for (let i = 0; i < 4; i++) {
-					let moves = ['toxic', 'protect', 'venoshock', 'barbbarrage'];
+					let moves = ['gunkshot', 'mortalspin', 'sludgebomb', 'clearsmog'];
 					const move = this.dex.moves.get(moves[i]);
 					const newSlot = {
 						move: move.name,
