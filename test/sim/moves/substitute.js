@@ -152,17 +152,6 @@ describe('Substitute', function () {
 		battle.makeChoices();
 		assert(battle.log.some(line => line.includes('confusion')));
 	});
-	
-	it(`[Gen 1] Substitute should not block secondary effect confusion if it is unbroken`, function () {
-		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
-			{species: 'Magikarp', moves: ['psybeam']},
-		], [
-			{species: 'Alakazam', moves: ['substitute']},
-		]]);
-
-		battle.makeChoices();
-		assert(battle.log.some(line => line.includes('confusion')));
-	});
 
 	it(`[Gen 1] if a Pokemon with a Substitute hurts itself due to confusion and the target does not have a Substitute, there is no damage dealt.`, function () {
 		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
