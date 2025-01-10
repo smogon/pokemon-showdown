@@ -270,7 +270,7 @@ export class RandomGen8Teams {
 	}
 
 	random(m?: number, n?: number) {
-		return this.prng.next(m, n);
+		return this.prng.random(m, n);
 	}
 
 	/**
@@ -3112,7 +3112,7 @@ export class RandomGen8Teams {
 		for (const speciesName of pokemonPool) {
 			const sortObject = {
 				speciesName: speciesName,
-				score: Math.pow(this.prng.next(), 1 / this.randomBSSFactorySets[speciesName].usage),
+				score: Math.pow(this.prng.random(), 1 / this.randomBSSFactorySets[speciesName].usage),
 			};
 			shuffledSpecies.push(sortObject);
 		}

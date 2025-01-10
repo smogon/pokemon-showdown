@@ -140,10 +140,10 @@ export class Runner {
 	// NOTE: advances this.prng's seed by 4.
 	private newSeed(): PRNGSeed {
 		return [
-			Math.floor(this.prng.next() * 0x10000),
-			Math.floor(this.prng.next() * 0x10000),
-			Math.floor(this.prng.next() * 0x10000),
-			Math.floor(this.prng.next() * 0x10000),
+			Math.floor(this.prng.random() * 0x10000),
+			Math.floor(this.prng.random() * 0x10000),
+			Math.floor(this.prng.random() * 0x10000),
+			Math.floor(this.prng.random() * 0x10000),
 		];
 	}
 

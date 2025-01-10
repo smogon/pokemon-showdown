@@ -217,13 +217,13 @@ class TeamGenerator {
 		const team: PokemonSet[] = [];
 		for (const pokemon of this.pools.pokemon.next(6)) {
 			const species = this.dex.species.get(pokemon);
-			const randomEVs = () => this.prng.next(253);
-			const randomIVs = () => this.prng.next(32);
+			const randomEVs = () => this.prng.random(253);
+			const randomIVs = () => this.prng.random(32);
 
 			let item;
 			const moves = [];
 			const combos = this.signatures.get(species.id);
-			if (combos && this.prng.next() > TeamGenerator.COMBO) {
+			if (combos && this.prng.random() > TeamGenerator.COMBO) {
 				const combo = this.prng.sample(combos);
 				item = combo.item;
 				if (combo.move) moves.push(combo.move);
@@ -255,8 +255,8 @@ class TeamGenerator {
 					spe: randomIVs(),
 				},
 				nature: this.prng.sample(this.natures),
-				level: this.prng.next(50, 100),
-				happiness: this.prng.next(256),
+				level: this.prng.random(50, 100),
+				happiness: this.prng.random(256),
 				shiny: this.prng.randomChance(1, 1024),
 			});
 		}
@@ -310,7 +310,7 @@ class Pool {
 
 	private shuffle<T>(arr: T[]): T[] {
 		for (let i = arr.length - 1; i > 0; i--) {
-			const j = Math.floor(this.prng.next() * (i + 1));
+			const j = Math.floor(this.prng.random() * (i + 1));
 			[arr[i], arr[j]] = [arr[j], arr[i]];
 		}
 		return arr;
@@ -384,7 +384,7 @@ class Pool {
 			this.filler = this.possible.slice();
 			length = this.filler.length;
 		}
-		const index = this.prng.next(length);
+		const index = this.prng.random(length);
 		const element = this.filler![index];
 		this.filler![index] = this.filler![length - 1];
 		this.filler!.pop();

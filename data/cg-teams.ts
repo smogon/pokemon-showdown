@@ -1028,7 +1028,7 @@ export default class TeamGenerator {
 
 		const totalWeight = weights.reduce((a, b) => a + b, 0);
 
-		let randomWeight = this.prng.next(0, totalWeight);
+		let randomWeight = this.prng.random(0, totalWeight);
 		for (let i = 0; i < choices.length; i++) {
 			randomWeight -= weights[i];
 			if (randomWeight < 0) {

@@ -27,6 +27,10 @@ interface RNG {
 
 /**
  * Abstract PRNG.
+ *
+ * Chooses the RNG implementation based on the seed passed to the constructor.
+ * Seeds starting with 'sodium' use sodium. Other seeds use the Gen 5 RNG.
+ * If a seed isn't given, defaults to sodium.
  */
 export class PRNG {
 	readonly startingSeed: PRNGSeed;
@@ -66,7 +70,7 @@ export class PRNG {
 	 * - random(m, n) returns an integer in [m, n)
 	 * m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
 	 */
-	next(from?: number, to?: number): number {
+	random(from?: number, to?: number): number {
 		const result = this.rng.next();
 		if (from) from = Math.floor(from);
 		if (to) to = Math.floor(to);
@@ -90,7 +94,7 @@ export class PRNG {
 	 * The denominator must be a positive integer (`> 0`).
 	 */
 	randomChance(numerator: number, denominator: number): boolean {
-		return this.next(denominator) < numerator;
+		return this.random(denominator) < numerator;
 	}
 
 	/**
@@ -110,7 +114,7 @@ export class PRNG {
 		if (items.length === 0) {
 			throw new RangeError(`Cannot sample an empty array`);
 		}
-		const index = this.next(items.length);
+		const index = this.random(items.length);
 		const item = items[index];
 		if (item === undefined && !Object.prototype.hasOwnProperty.call(items, index)) {
 			throw new RangeError(`Cannot sample a sparse array`);
@@ -126,7 +130,7 @@ export class PRNG {
 	 */
 	shuffle<T>(items: T[], start = 0, end: number = items.length) {
 		while (start < end - 1) {
-			const nextIndex = this.next(start, end);
+			const nextIndex = this.random(start, end);
 			if (start !== nextIndex) {
 				[items[start], items[nextIndex]] = [items[nextIndex], items[start]];
 			}
@@ -137,10 +141,10 @@ export class PRNG {
 	static generateSeed(): SodiumRNGSeed {
 		return [
 			'sodium',
-			Math.floor(Math.random() * 0x100000000),
-			Math.floor(Math.random() * 0x100000000),
-			Math.floor(Math.random() * 0x100000000),
-			Math.floor(Math.random() * 0x100000000),
+			Math.trunc(Math.random() * 0x100000000),
+			Math.trunc(Math.random() * 0x100000000),
+			Math.trunc(Math.random() * 0x100000000),
+			Math.trunc(Math.random() * 0x100000000),
 		];
 	}
 }
@@ -159,7 +163,7 @@ export class SodiumRNG implements RNG {
 		const seed = Buffer.alloc(32);
 		for (let i = 1; i < inputSeed.length; i++) {
 			const num = inputSeed[i as 1]; // 32-bit uint
-			// big-endian, 8 bits each
+			// big-endian
 			seed.writeUInt32BE(num, i * 4 - 4);
 		}
 		this.seed = seed;
@@ -175,9 +179,9 @@ export class SodiumRNG implements RNG {
 	next() {
 		const buf = Buffer.alloc(36);
 		sodium.randombytes_buf_deterministic(buf, this.seed);
-		// use the first four bytes for the output, use the other 32 bytes for the next seed
-		this.seed = buf.slice(4);
-		return buf.slice(0, 4).readUint32BE();
+		// use the first 32 bytes for the next seed, and the next 4 bytes for the output
+		this.seed = buf.slice(0, 32);
+		return buf.slice(32, 36).readUint32BE();
 	}
 }
 
@@ -196,14 +200,6 @@ export class Gen5RNG implements RNG {
 		return this.seed;
 	}
 
-	/**
-	 * Retrieves the next random number in the sequence.
-	 * This function has three different results, depending on arguments:
-	 * - random() returns a real number in [0, 1), just like Math.random()
-	 * - random(n) returns an integer in [0, n)
-	 * - random(m, n) returns an integer in [m, n)
-	 * m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
-	 */
 	next(): number {
 		this.seed = this.nextFrame(this.seed); // Advance the RNG
 		return (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
@@ -211,10 +207,9 @@ export class Gen5RNG implements RNG {
 
 	/**
 	 * Calculates `a * b + c` (with 64-bit 2's complement integers)
-	 *
-	 * If you've done long multiplication, this is the same thing.
 	 */
 	multiplyAdd(a: Gen5RNGSeed, b: Gen5RNGSeed, c: Gen5RNGSeed) {
+		// If you've done long multiplication, this is the same thing.
 		const out: Gen5RNGSeed = [0, 0, 0, 0];
 		let carry = 0;
 
@@ -249,34 +244,43 @@ export class Gen5RNG implements RNG {
 		const c: Gen5RNGSeed = [0, 0, 0x26, 0x9EC3];
 
 		for (let i = 0; i < framesToAdvance; i++) {
+			// seed = seed * a + c
 			seed = this.multiplyAdd(seed, a, c);
 		}
 
 		return seed;
 	}
 
-	static generateSeed() {
+	static generateSeed(): Gen5RNGSeed {
 		return [
-			Math.floor(Math.random() * 0x10000),
-			Math.floor(Math.random() * 0x10000),
-			Math.floor(Math.random() * 0x10000),
-			Math.floor(Math.random() * 0x10000),
-		] as Gen5RNGSeed;
+			Math.trunc(Math.random() * 0x10000),
+			Math.trunc(Math.random() * 0x10000),
+			Math.trunc(Math.random() * 0x10000),
+			Math.trunc(Math.random() * 0x10000),
+		];
 	}
 }
 
-// The following commented-out function is designed to emulate the on-cartridge
+// The following commented-out class is designed to emulate the on-cartridge
 // PRNG for Gens 3 and 4, as described in
 // https://www.smogon.com/ingame/rng/pid_iv_creation#pokemon_random_number_generator
 // This RNG uses a 32-bit initial seed
 // m and n are converted to integers via Math.floor. If the result is NaN, they
 // are ignored.
 /*
-random(m: number, n: number) {
-	this.seed = (this.seed * 0x41C64E6D + 0x6073) >>> 0; // truncate the result to the last 32 bits
-	let result = this.seed >>> 16; // the first 16 bits of the seed are the random value
-	m = Math.floor(m)
-	n = Math.floor(n)
-	return (m ? (n ? (result % (n - m)) + m : result % m) : result / 0x10000)
+export type Gen3RNGSeed = ['gen3', number];
+export class Gen3RNG implements RNG {
+	seed: number;
+	constructor(seed: Gen3RNGSeed | null = null) {
+		this.seed = seed ? seed[1] : Math.trunc(Math.random() * 0x100000000);
+	}
+	getSeed() {
+		return ['gen3', this.seed];
+	}
+	next(): number {
+		this.seed = this.seed * 0x41C64E6D + 0x6073) >>> 0; // truncate the result to the last 32 bits
+		const val = this.seed >>> 16; // the first 16 bits of the seed are the random value
+		return val << 16; // PRNG#random expects a 32-bit number and will divide accordingly
+	}
 }
 */

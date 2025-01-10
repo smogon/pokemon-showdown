@@ -10,12 +10,12 @@ describe(`PRNG`, function () {
 		const results = [];
 		const testAgainst = new PRNG(testSeed);
 		for (let i = 0; i < 100; i++) {
-			results.push(testAgainst.next());
+			results.push(testAgainst.random());
 		}
 		for (let i = 0; i < 10; i++) {
 			const cur = new PRNG(testSeed);
 			for (let j = 0; j < results.length; j++) {
-				const n = cur.next();
+				const n = cur.random();
 				assert(results[j] === n, `generation ${j} for seed ${testSeed} did not match (expected: ${results[j]}, got ${n})`);
 			}
 		}
@@ -56,12 +56,12 @@ describe(`PRNG`, function () {
 			}
 			assert.bounded(trueCount, [45, 55]);
 		});
-		it(`should be identical to (next(2) == 0)`, function () {
+		it(`should be identical to (random(2) == 0)`, function () {
 			// This invariant is important for battle logs.
 			const coinPRNG = new PRNG(testSeed);
 			const numberPRNG = new PRNG(testSeed);
 			for (let i = 0; i < 10; ++i) {
-				assert.equal(numberPRNG.next(2) === 0, coinPRNG.randomChance(1, 2));
+				assert.equal(numberPRNG.random(2) === 0, coinPRNG.randomChance(1, 2));
 			}
 		});
 	});
@@ -76,12 +76,12 @@ describe(`PRNG`, function () {
 			}
 			assert.bounded(trueCount, [80, 90]);
 		});
-		it(`should be identical to (next(256) < 217)`, function () {
+		it(`should be identical to (random(256) < 217)`, function () {
 			// This invariant is important for battle logs.
 			const coinPRNG = new PRNG(testSeed);
 			const numberPRNG = new PRNG(testSeed);
 			for (let i = 0; i < 10; ++i) {
-				assert.equal(numberPRNG.next(256) < 217, coinPRNG.randomChance(217, 256));
+				assert.equal(numberPRNG.random(256) < 217, coinPRNG.randomChance(217, 256));
 			}
 		});
 	});
@@ -144,13 +144,13 @@ describe(`PRNG`, function () {
 			assert.bounded(occurences.x, [63, 71]);
 			assert.bounded(occurences.y, [29, 37]);
 		});
-		it(`should be identical to array[next(array.length)]`, function () {
+		it(`should be identical to array[random(array.length)]`, function () {
 			// This invariant is important for battle logs.
 			const items = [{}, {}, {}, {}, {}, {}, {}, {}];
 			const samplePRNG = new PRNG(testSeed);
 			const randomIntegerPRNG = new PRNG(testSeed);
 			for (let i = 0; i < 10; ++i) {
-				assert.equal(items[randomIntegerPRNG.next(items.length)], samplePRNG.sample(items));
+				assert.equal(items[randomIntegerPRNG.random(items.length)], samplePRNG.sample(items));
 			}
 		});
 	});
