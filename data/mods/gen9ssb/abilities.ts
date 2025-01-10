@@ -161,7 +161,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		name: "Generosity",
 		gen: 9,
 		flags: {},
-		desc: "Ice/Water; Present becomes Ice-type/Special; Life Dew heals unfainted party members 1/4 max HP; On switch out, summons Lucky Chant and cures allies of all status conditions. Upon fainting, summons Revival Blessing and grants permanent Helping Hand to all party members.",
+		desc: "Ice/Water; Present becomes Ice-type/Special + Gives Charcoal; Life Dew heals unfainted party members 1/4 max HP; On switch out, summons Lucky Chant and cures allies of all status conditions. Upon fainting, summons Revival Blessing and grants permanent Helping Hand to all party members.",
 		shortDesc: "See '/ssb Saint Deli' for more!",
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies === 'Delibird' && pokemon.setType(['Ice', 'Water'])) {
@@ -183,6 +183,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (move.id === 'present') {
 				move.type = 'Ice';
 				move.category = 'Special';
+				move.onHit = function (t, s, m) {
+					const newItem = this.dex.items.get('charcoal')
+					t.item = newItem.id;
+					t.setItem(newItem);
+					this.add('-item', t, newItem, '[from] move: Present');
+				};
 			}
 			if (move.id === 'lifedew') {
 				move.onAfterMoveSecondarySelf = function (p, t, m) {
