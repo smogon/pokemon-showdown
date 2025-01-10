@@ -4891,6 +4891,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.species.forme !== 'Terastal') {
 				this.add('-activate', pokemon, 'ability: Tera Shift');
 				pokemon.formeChange('Terapagos-Terastal', this.effect, true);
+				pokemon.regressionForme = null;
 				pokemon.baseMaxhp = Math.floor(Math.floor(
 					2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
 				) * pokemon.level / 100 + 10);
@@ -5571,6 +5572,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
 			if (pokemon.species.forme !== 'Hero') {
 				pokemon.formeChange('Palafin-Hero', this.effect, true);
+				pokemon.regressionForme = null;
 			}
 		},
 		onSwitchIn() {

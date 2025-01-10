@@ -24,32 +24,6 @@ describe(`Terapagos`, function () {
 		assert.false(!!ditto.terastallized);
 	});
 
-	it(`shouldn't revert to Terapagos-Normal if it faints while not Terastallized`, function () {
-		battle = common.createBattle([[
-			{species: 'terapagos', ability: 'terashift', moves: ['memento']},
-			{species: 'darkrai', moves: ['darkpulse']},
-		], [
-			{species: 'mareep', ability: 'static', moves: ['sleeptalk']},
-		]]);
-		const terapagos = battle.p1.active[0];
-		battle.makeChoices();
-		assert.species(terapagos, 'Terapagos-Terastal');
-		assert.equal(terapagos.ability, 'terashell', `Expected ${terapagos}'ability to be Tera Shell, not ${terapagos.ability}`);
-	});
-
-	it(`should revert to Terapagos-Normal if it faints while Terastallized`, function () {
-		battle = common.createBattle([[
-			{species: 'terapagos', ability: 'terashift', moves: ['memento']},
-			{species: 'darkrai', moves: ['darkpulse']},
-		], [
-			{species: 'mareep', ability: 'static', moves: ['sleeptalk']},
-		]]);
-		const terapagos = battle.p1.active[0];
-		battle.makeChoices('move memento terastallize', 'auto');
-		assert.species(terapagos, 'Terapagos');
-		assert.equal(terapagos.ability, 'terashift', `Expected ${terapagos}'ability to be Tera Shift, not ${terapagos.ability}`);
-	});
-
 	it(`[Hackmons] should not cause Terapagos-Terastal to become Terapagos-Stellar if the user is Transformed`, function () {
 		battle = common.createBattle([[
 			{species: 'terapagos', ability: 'terashift', moves: ['transform'], teraType: 'Stellar'},

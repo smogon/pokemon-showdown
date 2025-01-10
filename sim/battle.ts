@@ -2370,23 +2370,18 @@ export class Battle {
 				if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
+				if (pokemon.regressionForme) {
+					pokemon.baseSpecies = pokemon.regressionForme.species;
+					pokemon.baseAbility = pokemon.regressionForme.ability;
+					pokemon.details = pokemon.getSimpleDetails(pokemon.baseSpecies.name);
+					pokemon.regressionForme = null;
+					this.add('detailschange', pokemon, pokemon.details, '[silent]');
+				}
 				pokemon.clearVolatile(false);
 				pokemon.fainted = true;
 				pokemon.illusion = null;
 				pokemon.isActive = false;
 				pokemon.isStarted = false;
-				if (
-					(pokemon.terastallized && ['Morpeko', 'Ogerpon', 'Terapagos'].includes(pokemon.baseSpecies.baseSpecies)) ||
-					['Greninja-Bond', 'Necrozma-Ultra', 'Zygarde-Complete'].includes(pokemon.baseSpecies.baseSpecies) ||
-					pokemon.baseSpecies.isMega || pokemon.baseSpecies.isPrimal
-				) {
-					const baseSpecies = this.dex.species.get(pokemon.set.species || pokemon.set.name);
-					pokemon.setSpecies(baseSpecies);
-					pokemon.baseSpecies = baseSpecies;
-					pokemon.baseAbility = pokemon.ability = toID(pokemon.set.ability);
-					pokemon.details = pokemon.getSimpleDetails();
-					this.add('detailschange', pokemon, pokemon.details, '[silent]');
-				}
 				delete pokemon.terastallized;
 				pokemon.side.faintedThisTurn = pokemon;
 				if (this.faintQueue.length >= faintQueueLeft) checkWin = true;

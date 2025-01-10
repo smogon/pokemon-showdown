@@ -131,6 +131,8 @@ export class Pokemon {
 	faintQueued: boolean;
 	subFainted: boolean | null;
 
+	regressionForme: {species: Species, ability: ID} | null;
+
 	types: string[];
 	addedType: string;
 	knownType: boolean;
@@ -417,6 +419,8 @@ export class Pokemon {
 		this.fainted = false;
 		this.faintQueued = false;
 		this.subFainted = null;
+
+		this.regressionForme = null;
 
 		this.types = this.baseSpecies.types;
 		this.baseTypes = this.types;
@@ -1388,6 +1392,7 @@ export class Pokemon {
 		const apparentSpecies =
 			this.illusion ? this.illusion.species.name : species.baseSpecies;
 		if (isPermanent) {
+			if (!this.regressionForme) this.regressionForme = {species: this.baseSpecies, ability: this.baseAbility};
 			this.baseSpecies = rawSpecies;
 			this.details = this.getSimpleDetails();
 			let details = (this.illusion || this).details;
