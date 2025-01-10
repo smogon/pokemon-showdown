@@ -462,16 +462,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				pokemon.volatiles['planetbefall'].turns++;
 			},
 			onTryMove(attacker, defender, move) {
-				if (attacker.volatiles['planetbefall'].turns <= 0) {
-					this.add('-message', `${attacker.name} couldn't move!`);
-					return false;
-				}
-			},
-			onTrapPokemon(pokemon) {
-				pokemon.tryTrap(true);
+				this.add('-message', `${attacker.name} is too petrified to move!`);
+				return false;
 			},
 			onDamagingHit(damage, target, source, move) {
-				if (target === source || !move || target.volatiles['planetbefall'].turns <= 0) return;
+				if (target === source || !move || move.id === 'planetbefall') return;
 				target.removeVolatile('planetbefall');
 			},
 			onEnd(pokemon) {
