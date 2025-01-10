@@ -129,10 +129,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				source.abilityState.sack = [];
 				this.add('-message', `${source.name} emptied its Gift Sack!`);
 			}
-			const newItem = this.dex.items.get('charcoal')
-			target.item = newItem.id;
-			target.setItem(newItem);
-			this.add('-item', target, newItem, '[from] move: Gift of Fortune');
 		},
 		critRatio: 2,
 		type: "Water",
