@@ -724,8 +724,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	bubble: {
 		name: "Bubble",
-		desc: "Has a 10% chance to lower the target's Speed by 1 stage.",
-		shortDesc: "10% chance to lower the foe(s) Speed by 1.",
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage.",
+		shortDesc: "100% chance to lower the foe(s) Speed by 1.",
 		gen1: {
 			desc: "Has a 33% chance to lower the target's Speed by 1 stage.",
 			shortDesc: "33% chance to lower the target's Speed by 1.",
@@ -736,8 +736,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	bubblebeam: {
 		name: "Bubble Beam",
-		desc: "Has a 10% chance to lower the target's Speed by 1 stage.",
-		shortDesc: "10% chance to lower the target's Speed by 1.",
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage.",
+		shortDesc: "100% chance to lower the target's Speed by 1.",
 		gen1: {
 			desc: "Has a 33% chance to lower the target's Speed by 1 stage.",
 			shortDesc: "33% chance to lower the target's Speed by 1.",
@@ -896,8 +896,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	chillingwater: {
 		name: "Chilling Water",
-		desc: "Has a 100% chance to lower the target's Attack by 1 stage.",
-		shortDesc: "100% chance to lower the target's Attack by 1.",
+		desc: "Has a 50% chance to lower the target's Attack by 1 stage and a 30% chance to freeze the target.",
+		shortDesc: "Target: 50% -1 Defense, 30% flinch.",
 	},
 	chillyreception: {
 		name: "Chilly Reception",
@@ -1020,8 +1020,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	confide: {
 		name: "Confide",
-		desc: "Lowers the target's Special Attack by 1 stage.",
-		shortDesc: "Lowers the target's Sp. Atk by 1.",
+		desc: "Lowers the target's Special Attack by 2 stages.",
+		shortDesc: "Lowers the target's Sp. Atk by 2.",
 	},
 	confuseray: {
 		name: "Confuse Ray",
@@ -1138,8 +1138,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	cottonspore: {
 		name: "Cotton Spore",
-		desc: "Lowers the target's Speed by 2 stages.",
-		shortDesc: "Lowers the target's Speed by 2.",
+		desc: "Lowers the target's Speed by 3 stages.",
+		shortDesc: "Lowers the target's Speed by 3.",
 	},
 	counter: {
 		name: "Counter",
@@ -1558,8 +1558,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	dragoncheer: {
 		name: "Dragon Cheer",
-		desc: "Raises the target's chance for a critical hit by 1 stage, or by 2 stages if the target is Dragon type. Fails if there is no ally adjacent to the user, or if the target already has this effect or the Focus Energy effect. Baton Pass can be used to transfer this effect to an ally.",
-		shortDesc: "Ally: Crit ratio +1, or +2 if ally is Dragon type.",
+		desc: "Raises the target's chance for a critical hit by 1 stage, or by 2 stages if the target is Dragon type. Fails if there is no ally adjacent to the user, or if the target already has this effect or the Focus Energy effect. Baton Pass can be used to transfer this effect to an ally. Raises the user's Attack by 1.",
+		shortDesc: "Ally: Crit ratio +1, or +2 if ally is Dragon type. Raises the user's Attack by 1.",
 
 		start: "#focusenergy",
 	},
@@ -3557,8 +3557,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	leaftornado: {
 		name: "Leaf Tornado",
-		desc: "Has a 50% chance to lower the target's accuracy by 1 stage.",
-		shortDesc: "50% chance to lower the target's accuracy by 1.",
+		desc: "Hits three times.",
+		shortDesc: "Hits 3 times.",
 	},
 	leechlife: {
 		name: "Leech Life",
@@ -3591,8 +3591,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	leer: {
 		name: "Leer",
-		desc: "Lowers the target's Defense by 1 stage.",
-		shortDesc: "Lowers the foe(s) Defense by 1.",
+		desc: "Lowers the target's Defense by 2 stages.",
+		shortDesc: "Lowers the foe(s) Defense by 2.",
 		gen2: {
 			shortDesc: "Lowers the target's Defense by 1.",
 		},
@@ -3613,8 +3613,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	lightofruin: {
 		name: "Light of Ruin",
-		desc: "If the target lost HP, the user takes recoil damage equal to 1/2 the HP lost by the target, rounded half up, but not less than 1 HP.",
-		shortDesc: "Has 1/2 recoil.",
+		desc: "If the target lost HP, the user takes recoil damage equal to 1/3 the HP lost by the target, rounded half up, but not less than 1 HP.",
+		shortDesc: "Has 1/3 recoil.",
 	},
 	lightscreen: {
 		name: "Light Screen",
@@ -4809,8 +4809,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	pounce: {
 		name: "Pounce",
-		desc: "Has a 100% chance to lower the target's Speed by 1 stage.",
-		shortDesc: "100% chance to lower the target's Speed by 1.",
+		desc: "Has a 100% chance to lower the target's Speed by 2 stages.",
+		shortDesc: "100% chance to lower the target's Speed by 2.",
 	},
 	pound: {
 		name: "Pound",
@@ -6360,8 +6360,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	steamroller: {
 		name: "Steamroller",
-		desc: "Has a 30% chance to make the target flinch. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
-		shortDesc: "30% chance to make the target flinch.",
+		desc: "Has a 30% chance to make the target flinch. If this move is successful, it has a 30% chance to set up a hazard on the opposing side of the field, damaging each opposing Pokemon that switches in, unless it is a Flying-type Pokemon or has the Levitate Ability. A maximum of three layers may be set, and opponents lose 1/8 of their maximum HP with one layer, 1/6 of their maximum HP with two layers, and 1/4 of their maximum HP with three layers, all rounded down. Can be removed from the opposing side if any Pokemon uses Tidy Up, or if any opposing Pokemon uses Mortal Spin, Rapid Spin, or Defog successfully, or is hit by Defog. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
+		shortDesc: "30% chance to make the target flinch. 30% chance to set a layer of Spikes",
 		gen5: {
 			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
@@ -6409,8 +6409,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	stokedsparksurfer: {
 		name: "Stoked Sparksurfer",
-		desc: "Has a 100% chance to paralyze the target.",
-		shortDesc: "100% chance to paralyze the target.",
+		desc: "If this move is successful, the terrain becomes Electric Terrain.",
+		shortDesc: "Summons Electric Terrain.",
 	},
 	stomp: {
 		name: "Stomp",
