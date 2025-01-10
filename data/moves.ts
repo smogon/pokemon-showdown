@@ -4809,12 +4809,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
-
 		name: "Embargo",
 		pp: 15,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, metronome: 1},
 		volatileStatus: 'embargo',
+		onTryHit(target, source) {
+			if (target.volatiles['embargo']) {
+				target.removeVolatile('embargo');
+			}
+		},
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
