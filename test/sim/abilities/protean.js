@@ -113,6 +113,73 @@ describe('Protean', function () {
 		// More examples: https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/post-8548957
 	});
 
+	it(`should not allow the user to change its typing twice`, function () {
+		battle = common.createBattle([[
+			{species: 'Cinderace', ability: 'protean', moves: ['tackle', 'watergun']},
+		], [
+			{species: 'Gengar', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+		const cinder = battle.p1.active[0];
+		assert(cinder.hasType('Normal'));
+
+		battle.makeChoices('move watergun', 'auto');
+		assert.false(cinder.hasType('Water'));
+	});
+
+	it(`should not allow the user to change its typing twice if the Ability was suppressed`, function () {
+		battle = common.createBattle([[
+			{species: 'Cinderace', ability: 'protean', moves: ['tackle', 'watergun']},
+		], [
+			{species: 'Gengar', moves: ['sleeptalk']},
+			{species: 'Weezing', ability: 'neutralizinggas', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('move tackle', 'auto');
+		const cinder = battle.p1.active[0];
+		assert(cinder.hasType('Normal'));
+
+		battle.makeChoices('move watergun', 'switch 2');
+		battle.makeChoices('move watergun', 'switch 2');
+
+		assert.false(cinder.hasType('Water'));
+	});
+
+	it(`should allow the user to change its typing twice if it lost and regained the Ability`, function () {
+		battle = common.createBattle([[
+			{species: 'Cinderace', ability: 'protean', moves: ['tackle', 'watergun']},
+		], [
+			{species: 'Gengar', ability: 'protean', moves: ['sleeptalk', 'skillswap']},
+		]]);
+
+		battle.makeChoices('move tackle', 'move skillswap');
+		const cinder = battle.p1.active[0];
+		assert(cinder.hasType('Normal'));
+
+		battle.makeChoices('move watergun', 'auto');
+		assert(cinder.hasType('Water'));
+	});
+
+	it(`should not be prevented from resetting its effectState by Ability suppression`, function () {
+		battle = common.createBattle([[
+			{species: 'Cinderace', ability: 'protean', moves: ['tackle']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'Gengar', ability: 'protean', moves: ['sleeptalk']},
+			{species: 'Weezing', ability: 'neutralizinggas', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices('move tackle', 'auto');
+		battle.makeChoices('move tackle', 'switch 2'); // Weezing comes in
+		battle.makeChoices('switch 2', 'auto'); // Cinderace switches out and back in
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices('move tackle', 'switch 2'); // Weezing switches out
+
+		const cinder = battle.p1.active[0];
+		assert(cinder.hasType('Normal'));
+	});
+
 	describe('Gen 6-8', function () {
 		it(`should activate on both turns of a charge move`, function () {
 			battle = common.gen(8).createBattle([[
