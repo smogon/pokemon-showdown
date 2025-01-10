@@ -6639,7 +6639,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-
 		name: "Gear Up",
 		pp: 20,
 		priority: 0,
@@ -11153,17 +11152,24 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {snatch: 1, distance: 1, bypasssub: 1, metronome: 1},
 		onHitSide(side, source, move) {
-			const targets = side.allies().filter(ally => (
-				ally.hasAbility(['plus', 'minus']) &&
-				(!ally.volatiles['maxguard'] || this.runEvent('TryHit', ally, source, move))
+			const targets = side.allies().filter(target => (
+				target.hasAbility(['plus', 'minus']) &&
+				(!target.volatiles['maxguard'] || this.runEvent('TryHit', target, source, move))
 			));
-			if (!targets.length) return false;
-
+			const targets2 = side.allies().filter(target => (
+				(target.hasType("Steel") || target.hasType("Electric")) &&
+				(!target.volatiles['maxguard'] || this.runEvent('TryHit', target, source, move))
+			));
+			if (!targets.length && !targets2.length) return false;
 			let didSomething = false;
 			for (const target of targets) {
-				didSomething = this.boost({def: 1, spd: 1}, target, source, move, false, true) || didSomething;
+				if (target.hasAbility(['plus', 'minus']))
+				this.boost({atk: 1, spa: 1}, target, source, move, false, true);
 			}
-			return didSomething;
+			for (const target2 of targets2) {
+				if (target2.hasType("Steel") || target2.hasType("Electric"))
+					target2.addVolatile('charge')
+			}
 		},
 		secondary: null,
 		target: "allySide",
