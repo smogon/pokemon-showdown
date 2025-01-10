@@ -15,7 +15,8 @@ const LadderStore: typeof import('./ladders-remote').LadderStore = (
 const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
 
-import type {ChallengeType} from './room-battle';
+import type {ChallengeType, RoomBattlePlayerOptions} from './room-battle';
+import type {CachedMMR} from './users';
 import {BattleReady, BattleChallenge, GameChallenge, BattleInvite, challenges} from './ladders-challenges';
 
 /**
@@ -70,7 +71,7 @@ class Ladder extends LadderStore {
 			return null;
 		}
 
-		let rating = 0;
+		let rating = {elo: 0} as CachedMMR;
 		let valResult;
 		let removeNicknames = !!(user.locked || user.namelocked);
 
@@ -111,7 +112,8 @@ class Ladder extends LadderStore {
 
 		if (isRated && !Ladders.disabled) {
 			const uid = user.id;
-			[valResult, rating] = await Promise.all([
+			let ratingResult;
+			[valResult, ratingResult] = await Promise.all([
 				TeamValidatorAsync.get(this.formatid).validateTeam(team, {removeNicknames, user: uid}),
 				this.getRating(uid),
 			]);
@@ -119,11 +121,13 @@ class Ladder extends LadderStore {
 				// User feedback for renames handled elsewhere.
 				return null;
 			}
-			if (!rating) rating = 1;
+			// Elo has a hard-floor of 1000.
+			// (Ab)-use this fact to use 1 as an unknown Elo sentinel value.
+			rating = ratingResult ?? {elo: 1};
 		} else {
 			if (Ladders.disabled) {
 				connection.popup(`The ladder is temporarily disabled due to technical difficulties - you will not receive ladder rating for this game.`);
-				rating = 1;
+				rating = {elo: 1};
 			}
 			const validator = TeamValidatorAsync.get(this.formatid);
 			valResult = await validator.validateTeam(team, {removeNicknames, user: user.id});
@@ -368,7 +372,7 @@ class Ladder extends LadderStore {
 		searchRange += elapsed / 300; // +1 every .3 seconds
 		if (searchRange > 300) searchRange = 300 + (searchRange - 300) / 10; // +1 every 3 sec after 300
 		if (searchRange > 600) searchRange = 600;
-		const ratings = matches.map(([search]) => search.rating);
+		const ratings = matches.map(([search]) => search.rating.elo);
 		if (Math.max(...ratings) - Math.min(...ratings) > searchRange) return false;
 
 		matches[0][1].lastMatch = matches[1][1].id;
@@ -450,7 +454,7 @@ class Ladder extends LadderStore {
 	static match(readies: BattleReady[]) {
 		const formatid = readies[0].formatid;
 		if (readies.some(ready => ready.formatid !== formatid)) throw new Error(`Format IDs don't match`);
-		const players = [];
+		const players = [] as RoomBattlePlayerOptions[];
 		let missingUser = null;
 		let minRating = Infinity;
 		for (const ready of readies) {
@@ -459,14 +463,15 @@ class Ladder extends LadderStore {
 				missingUser = ready.userid;
 				break;
 			}
-			players.push({
+			const playerOpts = {
 				user,
 				team: ready.settings.team,
-				rating: ready.rating,
+				rating: ready.rating.elo ?? 1000,
 				hidden: ready.settings.hidden,
 				inviteOnly: ready.settings.inviteOnly,
-			});
-			if (ready.rating < minRating) minRating = ready.rating;
+			};
+			players.push(playerOpts);
+			if (playerOpts.rating < minRating) minRating = playerOpts.rating;
 		}
 		if (missingUser) {
 			for (const ready of readies) {

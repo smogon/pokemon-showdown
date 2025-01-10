@@ -36,6 +36,12 @@ export function getString(str: any): string {
 	return (typeof str === 'string' || typeof str === 'number') ? '' + str : '';
 }
 
+export function getNumber(num: any): number {
+	if (typeof num === 'number') return num;
+	if (typeof num === 'string') return Number(num);
+	return NaN;
+}
+
 export function escapeRegex(str: string) {
 	return str.replace(/[\\^$.*+?()[\]{}|]/g, '\\$&');
 }
@@ -407,6 +413,11 @@ export function parseExactInt(str: string): number {
 	return parseInt(str);
 }
 
+export function ensureValidNumber(num: number, defaultValue: number): number {
+	if (Number.isNaN(num)) return defaultValue;
+	return num;
+}
+
 /** formats an array into a series of question marks and adds the elements to an arguments array */
 export function formatSQLArray(arr: unknown[], args?: unknown[]) {
 	args?.push(...arr);
@@ -431,10 +442,12 @@ export class Multiset<T> extends Map<T, number> {
 
 // backwards compatibility
 export const Utils = {
-	parseExactInt, waitUntil, html, escapeHTML,
+	parseExactInt, ensureValidNumber,
+	waitUntil, html, escapeHTML,
 	compare, sortBy, levenshtein,
 	shuffle, deepClone, clearRequireCache,
 	randomElement, forceWrap, splitFirst,
-	stripHTML, visualize, getString,
+	stripHTML, visualize,
+	getString, getNumber,
 	escapeRegex, formatSQLArray, Multiset,
 };

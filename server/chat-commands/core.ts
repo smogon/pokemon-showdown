@@ -1459,7 +1459,7 @@ export const commands: Chat.ChatCommands = {
 				return false;
 			}
 			const ladder = Ladders(target);
-			if (!user.registered && Config.forceregisterelo && await ladder.getRating(user.id) >= Config.forceregisterelo) {
+			if (!user.registered && Config.forceregisterelo && await ladder.getElo(user.id) >= Config.forceregisterelo) {
 				user.send(
 					Utils.html`|popup||html|${this.tr`Since you have reached ${Config.forceregisterelo} ELO in ${target}, you must register your account to continue playing that format on ladder.`}<p style="text-align: center"><button name="register" value="${user.id}"><b>${this.tr`Register`}</b></button></p>`
 				);

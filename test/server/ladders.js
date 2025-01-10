@@ -8,7 +8,7 @@ const {makeUser} = require('../users-utils');
 describe('Matchmaker', function () {
 	const FORMATID = 'gen7ou';
 	const addSearch = (player, rating = 1000, formatid = FORMATID) => {
-		const search = new Ladders.BattleReady(player.id, formatid, player.battleSettings, rating);
+		const search = new Ladders.BattleReady(player.id, formatid, player.battleSettings, {elo: rating});
 		Ladders(formatid).addSearch(search, player);
 		return search;
 	};
@@ -48,7 +48,7 @@ describe('Matchmaker', function () {
 		assert.equal(formatSearches.size, 1);
 		assert.equal(s1.userid, this.p1.id);
 		assert.equal(s1.settings.team, this.p1.battleSettings.team);
-		assert.equal(s1.rating, 1000);
+		assert.equal(s1.rating.elo, 1000);
 	});
 
 	it('should matchmake users when appropriate', function () {
@@ -78,7 +78,7 @@ describe('Matchmaker', function () {
 		const s2 = addSearch(this.p2, 2000);
 		assert.equal(Ladders.searches.get(FORMATID).searches.size, 2);
 
-		s2.rating = 1000;
+		s2.rating.elo = 1000;
 		Ladders.Ladder.periodicMatch();
 		assert.equal(Ladders.searches.get(FORMATID).searches.size, 0);
 
