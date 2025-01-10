@@ -152,4 +152,54 @@ describe('Substitute', function () {
 		battle.makeChoices();
 		assert(battle.log.some(line => line.includes('confusion')));
 	});
+
+	it(`[Gen 1] if a Pokemon with a Substitute hurts itself due to confusion and the target does not have a Substitute, there is no damage dealt.`, function () {
+		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
+			{species: 'Magikarp', moves: ['substitute', 'agility']},
+		], [
+			{species: 'Alakazam', moves: ['confuseray', 'agility']},
+		]]);
+		const magikarp = battle.p1.active[0];
+		const alakazam = battle.p2.active[0];
+
+		battle.makeChoices();
+		magikarp.volatiles['confusion'].time = 5;
+		const magikarpHp = magikarp.hp;
+		const magikarpSubstituteHp = magikarp.volatiles['substitute'].hp;
+		const alakaxamHp = alakazam.hp;
+
+		battle.forceRandomChance = false; // to hit self in confusion
+		battle.makeChoices('move agility', 'move agility');
+		assert(battle.log.includes("|-hint|In Gen 1, if a Pokemon with a Substitute hurts itself due to confusion or Jump Kick/Hi Jump Kick recoil and the target does not have a Substitute there is no damage dealt."));
+		assert.equal(magikarp.hp, magikarpHp);
+		assert.equal(magikarp.volatiles['substitute'].hp, magikarpSubstituteHp);
+		assert.equal(alakazam.hp, alakaxamHp);
+	});
+
+	it(`[Gen 1] if a Pokemon with a Substitute hurts itself due to confusion and the target has a Substitute, the target's Substitute takes the damage.`, function () {
+		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
+			{species: 'Magikarp', moves: ['substitute', 'agility']},
+		], [
+			{species: 'Alakazam', moves: ['confuseray', 'substitute', 'agility']},
+		]]);
+		const magikarp = battle.p1.active[0];
+		const alakazam = battle.p2.active[0];
+
+		battle.makeChoices();
+		magikarp.volatiles['confusion'].time = 5;
+
+		battle.makeChoices('move agility', 'move substitute');
+		const magikarpHp = magikarp.hp;
+		const magikarpSubstituteHp = magikarp.volatiles['substitute'].hp;
+		const alakaxamHp = alakazam.hp;
+		const alakaxamSubstituteHp = alakazam.volatiles['substitute'].hp;
+
+		battle.forceRandomChance = false; // to hit self in confusion
+		battle.makeChoices('move agility', 'move agility');
+		assert(battle.log.includes("|-hint|In Gen 1, if a Pokemon with a Substitute hurts itself due to confusion or Jump Kick/Hi Jump Kick recoil and the target has a Substitute, the target's Substitute takes the damage."));
+		assert.equal(magikarp.hp, magikarpHp);
+		assert.equal(magikarp.volatiles['substitute'].hp, magikarpSubstituteHp);
+		assert.equal(alakazam.hp, alakaxamHp);
+		assert.notEqual(alakazam.volatiles['substitute'].hp, alakaxamSubstituteHp);
+	});
 });
