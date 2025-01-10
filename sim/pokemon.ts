@@ -131,6 +131,7 @@ export class Pokemon {
 	faintQueued: boolean;
 	subFainted: boolean | null;
 
+	/** If this Pokemon faints will change to this species */
 	regressionForme: {species: Species, ability: ID} | null;
 
 	types: string[];
