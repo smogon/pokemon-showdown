@@ -1248,7 +1248,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				target.clearBoosts();
 				this.add('-clearboost', target);
 				target.addVolatile('protect');
-				const set = Math.floor(Math.random() * 4);
+				const set = this.random(4);
 				const newMoves = [];
 				let role = '';
 				switch (set) {

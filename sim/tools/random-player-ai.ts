@@ -120,14 +120,14 @@ export class RandomPlayerAI extends BattlePlayer {
 					// NOTE: We don't generate all possible targeting combinations.
 					if (request.active.length > 1) {
 						if ([`normal`, `any`, `adjacentFoe`].includes(m.target)) {
-							move += ` ${1 + Math.floor(this.prng.random() * 2)}`;
+							move += ` ${1 + this.prng.random(2)}`;
 						}
 						if (m.target === `adjacentAlly`) {
 							move += ` -${(i ^ 1) + 1}`;
 						}
 						if (m.target === `adjacentAllyOrSelf`) {
 							if (hasAlly) {
-								move += ` -${1 + Math.floor(this.prng.random() * 2)}`;
+								move += ` -${1 + this.prng.random(2)}`;
 							} else {
 								move += ` -${i + 1}`;
 							}
