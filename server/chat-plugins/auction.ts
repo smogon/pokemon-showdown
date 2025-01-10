@@ -63,7 +63,7 @@ class Team {
 		return this.suspended || (
 			this.auction.type === 'snake' ?
 				this.players.length >= this.auction.minPlayers :
-				this.credits < this.auction.minBid
+				(this.credits < this.auction.minBid || this.players.length >= this.auction.maxPlayers)
 		);
 	}
 
@@ -91,6 +91,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	startingCredits: number;
 	minBid = 3000;
 	minPlayers = 10;
+	maxPlayers = 0;
 	type: 'auction' | 'blind' | 'snake' = 'auction';
 
 	lastQueue: Team[] | null = null;
@@ -235,6 +236,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		buf += `<details><summary>Auction Settings</summary>`;
 		buf += `- Minimum bid: <b>${this.minBid.toLocaleString()}</b><br/>`;
 		buf += `- Minimum players per team: <b>${this.minPlayers}</b><br/>`;
+		if (this.type !== 'snake') buf += `- Maximum players per team: <b>${this.maxPlayers || 'N/A'}</b><br/>`;
 		buf += `- Nom timer: <b>${this.nomTimeLimit ? `${this.nomTimeLimit}s` : 'Off'}</b><br/>`;
 		if (this.type !== 'snake') buf += `- Bid timer: <b>${this.bidTimeLimit}s</b><br/>`;
 		buf += `- Auction type: <b>${this.type}</b><br/>`;
@@ -277,6 +279,14 @@ export class Auction extends Rooms.SimpleRoomGame {
 			throw new Chat.ErrorMessage(`The minimum number of players must be between 1 and 30.`);
 		}
 		this.minPlayers = amount;
+	}
+
+	setMaxPlayers(amount: number) {
+		if (this.type === 'snake') throw new Chat.ErrorMessage(`You only need to set minplayers for snake drafts.`);
+		if (this.state !== 'setup') {
+			throw new Chat.ErrorMessage(`The maximum number of players cannot be changed after the auction has started.`);
+		}
+		this.maxPlayers = amount;
 	}
 
 	setNomTimeLimit(seconds: number) {
@@ -818,6 +828,18 @@ export const commands: Chat.ChatCommands = {
 		},
 		minplayershelp: [
 			`/auction minplayers [amount] - Sets the minimum number of players. Requires: # ~ auction owner`,
+		],
+		maxplayers(target, room, user) {
+			const auction = this.requireGame(Auction);
+			auction.checkOwner(user);
+
+			if (!target) return this.parse('/help auction maxplayers');
+			const amount = parseInt(target);
+			auction.setMaxPlayers(amount);
+			this.addModAction(`${user.name} set the maximum number of players to ${amount}.`);
+		},
+		maxplayershelp: [
+			`/auction maxplayers [amount] - Sets the maximum number of players. Requires: # ~ auction owner`,
 		],
 		nomtimer(target, room, user) {
 			const auction = this.requireGame(Auction);
