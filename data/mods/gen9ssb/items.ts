@@ -75,8 +75,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 	giftsack: {
 		name: "Gift Sack",
 		gen: 9,
-		shortDesc: "Absorbs moves; Replaces foe's strongest move with random one.",
-		desc: "This Pokemon is immune to special moves, and stores them after being hit, storing up to three moves; Uses all stored moves upon using Gift of Fortune. Strengthens Gift of Fortune based on number of stored moves. Replaces the target's strongest attacking move with another random move.",
+		shortDesc: "Swaps foe's strongest move; Absorbs up to 1 special move.",
+		desc: "Replaces the target's strongest attacking move with another random move on switch-in. If this Pokemon is hit by a Special attack, it stores the attack and takes no damage, storing up to one attack. Upon using Gift of Fortune, holder uses move stored by Gift Sack if one is present.",
 		onStart(pokemon) {
 			let max = 0;
 			let strongestMove;
@@ -116,12 +116,11 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onTryHit(pokemon, source, move) {
 			if (move.category === 'Special' && pokemon !== source) {
 				if (!pokemon.abilityState.sack) pokemon.abilityState.sack = [];
-				if (pokemon.abilityState.sack.length >= 3) return;
+				if (pokemon.abilityState.sack.length >= 1) return;
 				this.add('-anim', pokemon, 'Present', pokemon);
 				this.add('-anim', pokemon, 'Tickle', pokemon);
 				this.add('-activate', pokemon, 'item: Gift Sack', move.name);
 				this.add('-message', `${pokemon.name} stored ${move.name} in its Gift Sack!`);
-				if (!pokemon.abilityState.sack) pokemon.abilityState.sack = [];
 				pokemon.abilityState.sack.push(move.name);
 				return null;
 			}
