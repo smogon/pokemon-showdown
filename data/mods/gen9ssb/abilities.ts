@@ -764,7 +764,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					basePower: move.basePower,
 					category: move.category,
 					priority: move.priority,
-					flags: move.flags,
+					flags: {allyanim: 1, metronome: 1, futuremove: 1},
 					ignoreImmunity: true,
 					effectType: 'Move',
 					type: move.type,
