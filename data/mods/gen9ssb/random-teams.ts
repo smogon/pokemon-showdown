@@ -154,7 +154,7 @@ export const ssbSets: SSBSets = {
 		species: 'Hatterene', ability: 'Ordinary Magician', item: '', gender: 'F',
 		moves: ['Volt Switch', 'Overheat', 'Freezy Frost'],
 		signatureMove: 'Orb Shield',
-		evs: {hp: 248, def: 8, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
+		evs: {hp: 248, def: 8, spa: 252}, ivs: {atk: 0, spe: 0}, nature: 'Quiet',
 	},
 	Zeeb: {
 		species: 'Aipom', ability: 'Nutcracker', item: 'Slingshot', gender: 'M',
