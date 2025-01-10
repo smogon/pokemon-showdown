@@ -1197,7 +1197,7 @@ export class Pokemon {
 	copyVolatileFrom(pokemon: Pokemon, switchCause?: string | boolean) {
 		this.clearVolatile();
 		if (switchCause !== 'shedtail' && switchCause !== 'doubleteam') this.boosts = pokemon.boosts;
-		if (switchCause === 'doubleteam') this.boosts = pokemon.boosts;
+		if (switchCause === 'doubleteam') this.setBoost({spe:1});
 		for (const i in pokemon.volatiles) {
 			if (switchCause === 'shedtail' && i !== 'substitute') continue;
 			if (this.battle.dex.conditions.getByID(i as ID).noCopy) continue;
