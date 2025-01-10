@@ -1042,8 +1042,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		desc: "User creates a substitute. Any damage it takes is dealt to foe.",
-		shortDesc: "Creates a substitute that damages the foe.",
+		desc: "User creates a substitute that disappears at the end of turn. Any damage it takes is dealt back to the foe.",
+		shortDesc: "Creates a 1-turn substitute that damages the foe.",
 		name: "Killing Doll",
 		pp: 8,
 		noPPBoosts: true,
@@ -1070,6 +1070,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		},
 		volatileStatus: 'killingdoll',
 		condition: {
+			duration: 1,
 			onStart(pokemon) {
 				pokemon.abilityState.dollhp = Math.floor(pokemon.maxhp / 4);
 				this.add('-message', `${pokemon.name} summoned a Killing Doll!`);
