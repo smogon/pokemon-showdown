@@ -1406,6 +1406,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		onAfterMove(pokemon, target, move) {
 			if (pokemon.species.id === 'necrozma') changeSet(this, pokemon, ssbSets['Luminous-N'], true);
 			pokemon.setAbility('blindinglight');
+			this.add('-anim', pokemon, 'Flash', pokemon);
+			for (const targetPokemon of this.getAllActive()) {
+				if (pokemon === targetPokemon) continue;
+				targetPokemon.addVolatile('blindinglight');
+			}
 		},
 	},
 	// Fblthp
