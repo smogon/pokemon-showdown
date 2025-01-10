@@ -150,7 +150,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		let buf = `<span style="font-size: 85%">`;
 		buf += players.slice(0, max).map(p => {
 			if (typeof p === 'object') {
-				return `<username title="Tiers: ${p.tiersPlayed.length ? `${Utils.escapeHTML(p.tiersPlayed.join(', '))}` : 'N/A'}"${clickable ? ' class="username"' : ''}>${Utils.escapeHTML(p.name)}</username>`;
+				return `<username ${clickable ? ' class="username"' : ''}>${Utils.escapeHTML(p.name)}</username>`;
 			}
 			return `<username${clickable ? ' class="username"' : ''}>${Utils.escapeHTML(p)}</username>`;
 		}).join(', ');
@@ -207,7 +207,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			if (this.type !== 'snake') {
 				buf += `<td style="white-space: nowrap">${team.credits.toLocaleString()}${team.maxBid() >= this.minBid ? `<br/><span style="font-size: 90%">Max bid: ${team.maxBid().toLocaleString()}</span>` : ''}</td>`;
 			}
-			buf += `<td><div style="min-height: 32px${!this.ended ? `; height: 32px; overflow: hidden; resize: vertical` : ''}"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
+			buf += `<td title="${team.players.map(p => Utils.escapeHTML(p.name)).join(', ')}"><div style="min-height: 32px${!this.ended ? `; height: 32px; overflow: hidden; resize: vertical` : ''}"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
 			buf += `</tr>`;
 		}
 		buf += `</table></div>`;
@@ -359,7 +359,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			if (name.length > 25) throw new Chat.ErrorMessage(`Player names must be 25 characters or less.`);
 			const player: Player = {
 				id: toID(name),
-				name,
+				name: name.trim(),
 				price: 0,
 				tiersPlayed,
 				tiersNotPlayed,
