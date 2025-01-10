@@ -63,7 +63,10 @@ class Team {
 		return this.suspended || (
 			this.auction.type === 'snake' ?
 				this.players.length >= this.auction.minPlayers :
-				(this.credits < this.auction.minBid || this.players.length >= this.auction.maxPlayers)
+				(
+					this.credits < this.auction.minBid ||
+					(this.auction.maxPlayers && this.players.length >= this.auction.maxPlayers)
+				)
 		);
 	}
 
@@ -608,34 +611,35 @@ export class Auction extends Rooms.SimpleRoomGame {
 			if (bid <= this.highestBid) throw new Chat.ErrorMessage(`Your bid must be higher than the current bid.`);
 			this.highestBid = bid;
 			this.highestBidder = team;
-			this.sendMessage(Utils.html`/html <username class="username">${user.name}</username>[${team.name}]: <b>${bid}</b>`);
+			// this.sendMessage(Utils.html`/html <username class="username">${user.name}</username>[${team.name}]: <b>${bid}</b>`);
 			this.sendBidInfo();
 			this.startBidTimer();
 		}
 	}
 
 	onChatMessage(message: string, user: User) {
-		if (this.state !== 'bid') return;
-
-		const originalMsg = message;
+		if (this.state !== 'bid' || this.type !== 'blind') return;
 		if (message.startsWith('.')) message = message.slice(1);
 		if (Number(message.replace(',', '.'))) {
-			if (this.type === 'blind') {
+			this.bid(user, parseCredits(message));
+			return '';
+		}
+	}
+
+	onLogMessage(message: string, user: User) {
+		if (this.state !== 'bid' || this.type === 'blind') return;
+		if (message.startsWith('.')) message = message.slice(1);
+		if (Number(message.replace(',', '.'))) {
+			this.room.update();
+			try {
 				this.bid(user, parseCredits(message));
-			} else {
-				// If bid is unsuccessful, the original message is sent to the room
-				try {
-					this.bid(user, parseCredits(message));
-				} catch (e) {
-					this.room.add(`|c|${user.getIdentity(this.room)}|${originalMsg}`);
-					if (e instanceof Chat.ErrorMessage) {
-						user.sendTo(this.room, Utils.html`/html <span class="message-error">${e.message}</span>`);
-					} else {
-						user.sendTo(this.room, `/html <span class="message-error">An unexpected error occurred while placing your bid.</span>`);
-					}
+			} catch (e) {
+				if (e instanceof Chat.ErrorMessage) {
+					user.sendTo(this.room, Utils.html`|raw|<span class="message-error">${e.message}</span>`);
+				} else {
+					user.sendTo(this.room, `|raw|<span class="message-error">An unexpected error occurred while placing your bid.</span>`);
 				}
 			}
-			return '';
 		}
 	}
 
