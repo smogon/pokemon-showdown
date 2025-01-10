@@ -1949,7 +1949,7 @@ export class BattleActions {
 			const tera = pokemon.species.id === 'ogerpon' ? 'tealtera' : 'tera';
 			pokemon.formeChange(pokemon.species.id + tera, null, true);
 		}
-		if (pokemon.species.name === 'Terapagos-Terastal' && type === 'Stellar') {
+		if (pokemon.species.name === 'Terapagos-Terastal') {
 			pokemon.formeChange('Terapagos-Stellar', null, true);
 			pokemon.baseMaxhp = Math.floor(Math.floor(
 				2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100

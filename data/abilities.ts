@@ -4856,6 +4856,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.baseSpecies.name !== 'Terapagos-Stellar') return;
 			if (this.field.weather || this.field.terrain) {
 				this.add('-ability', pokemon, 'Teraform Zero');
+				if (pokemon.terastallized !== 'Stellar') {
+					if (this.field.weather || this.field.terrain) {
+						// display fail message https://www.youtube.com/watch?v=g-eUP0IrxI0
+						this.hint("Teraform Zero fails to remove the weather and the terrain if Terapagos-Stellar is not Tera-Stellar.");
+					}
+					return;
+				}
 				this.field.clearWeather();
 				this.field.clearTerrain();
 			}
