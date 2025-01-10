@@ -27,7 +27,7 @@ describe(`[Hackmons] Ogerpon`, function () {
 		], [
 			{species: 'silicobra', moves: ['stealthrock']},
 		]]);
-		assert.throws(() => battle.makeChoices('move sleeptalk terastallize', 'auto'), "/Can't move: Ogerpon can't Terastallize\./");
+		assert.throws(() => battle.makeChoices('move sleeptalk terastallize', 'auto'), "/Can't move: Ogerpon can't Terastallize./");
 	});
 
 	// https://www.smogon.com/forums/threads/ogerpon-teal-tera-tera-can-exist.3742851/post-10132811

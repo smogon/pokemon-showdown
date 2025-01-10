@@ -1401,12 +1401,12 @@ export class Pokemon {
 			let details = (this.illusion || this).details;
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
 			this.battle.add('detailschange', this, details);
-			if (species.baseSpecies === 'Ogerpon' && this.terastallized && this.teraType !== species.forceTeraType) {
-				this.battle.hint(`Ogerpon terastallized into ${species.name}, but it has taken the appearance of ${displayedSpeciesName} due to its tera type being ${this.teraType}.`);
-			}
 			if (!source) {
 				// Tera forme
 				// Ogerpon/Terapagos text goes here
+				if (species.baseSpecies === 'Ogerpon' && this.terastallized && this.teraType !== species.forceTeraType) {
+					this.battle.hint(`Ogerpon terastallized into ${species.name}, but it has taken the appearance of ${displayedSpeciesName} due to its tera type being ${this.teraType}.`);
+				}
 			} else if (source.effectType === 'Item') {
 				this.canTerastallize = null; // National Dex behavior
 				if (source.zMove) {
