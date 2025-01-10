@@ -39,7 +39,7 @@ try {
 
 function getDefaultStats() {
 	return {
-		elo: 1500,
+		elo: 1000,
 		month: getMonth(),
 		formats: {
 			// all of these requested by rands staff. they don't anticipate it being changed much
