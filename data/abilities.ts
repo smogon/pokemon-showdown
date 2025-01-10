@@ -1167,13 +1167,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	embodyaspectcornerstone: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.name === 'Ogerpon-Cornerstone-Tera' && !this.effectState.embodied) {
-				this.effectState.embodied = true;
+			if (pokemon.baseSpecies.name === 'Ogerpon-Cornerstone-Tera' && this.effectState.embodied !== pokemon.previouslySwitchedIn) {
+				this.effectState.embodied = pokemon.previouslySwitchedIn;
 				this.boost({def: 1}, pokemon);
 			}
-		},
-		onSwitchIn() {
-			delete this.effectState.embodied;
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1},
 		name: "Embody Aspect (Cornerstone)",
@@ -1182,13 +1179,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	embodyaspecthearthflame: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.name === 'Ogerpon-Hearthflame-Tera' && !this.effectState.embodied) {
-				this.effectState.embodied = true;
+			if (pokemon.baseSpecies.name === 'Ogerpon-Hearthflame-Tera' && this.effectState.embodied !== pokemon.previouslySwitchedIn) {
+				this.effectState.embodied = pokemon.previouslySwitchedIn;
 				this.boost({atk: 1}, pokemon);
 			}
-		},
-		onSwitchIn() {
-			delete this.effectState.embodied;
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1},
 		name: "Embody Aspect (Hearthflame)",
@@ -1197,13 +1191,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	embodyaspectteal: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.name === 'Ogerpon-Teal-Tera' && !this.effectState.embodied) {
-				this.effectState.embodied = true;
+			if (pokemon.baseSpecies.name === 'Ogerpon-Teal-Tera' && this.effectState.embodied !== pokemon.previouslySwitchedIn) {
+				this.effectState.embodied = pokemon.previouslySwitchedIn;
 				this.boost({spe: 1}, pokemon);
 			}
-		},
-		onSwitchIn() {
-			delete this.effectState.embodied;
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1},
 		name: "Embody Aspect (Teal)",
@@ -1212,13 +1203,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	embodyaspectwellspring: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.name === 'Ogerpon-Wellspring-Tera' && !this.effectState.embodied) {
-				this.effectState.embodied = true;
+			if (pokemon.baseSpecies.name === 'Ogerpon-Wellspring-Tera' && this.effectState.embodied !== pokemon.previouslySwitchedIn) {
+				this.effectState.embodied = pokemon.previouslySwitchedIn;
 				this.boost({spd: 1}, pokemon);
 			}
-		},
-		onSwitchIn() {
-			delete this.effectState.embodied;
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1},
 		name: "Embody Aspect (Wellspring)",
@@ -2272,17 +2260,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	libero: {
 		onPrepareHit(source, target, move) {
-			if (this.effectState.protean) return;
+			if (this.effectState.libero === source.previouslySwitchedIn) return;
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.effectState.protean = true;
+				this.effectState.libero = source.previouslySwitchedIn;
 				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
 			}
-		},
-		onSwitchIn() {
-			delete this.effectState.protean;
 		},
 		flags: {},
 		name: "Libero",
@@ -2875,11 +2860,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
-		onAnySwitchIn(pokemon) {
-			if (['libero', 'protean'].includes(pokemon.getAbility().id)) {
-				delete pokemon.abilityState.protean;
-			}
-		},
 		onEnd(source) {
 			if (source.transformed) return;
 			for (const pokemon of this.getAllActive()) {
@@ -3421,17 +3401,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	protean: {
 		onPrepareHit(source, target, move) {
-			if (this.effectState.protean) return;
+			if (this.effectState.protean === source.previouslySwitchedIn) return;
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.effectState.protean = true;
+				this.effectState.protean = source.previouslySwitchedIn;
 				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
 			}
-		},
-		onSwitchIn() {
-			delete this.effectState.protean;
 		},
 		flags: {},
 		name: "Protean",
