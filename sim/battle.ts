@@ -2377,7 +2377,8 @@ export class Battle {
 				pokemon.isStarted = false;
 				if (
 					(pokemon.terastallized && ['Morpeko', 'Ogerpon', 'Terapagos'].includes(pokemon.baseSpecies.baseSpecies)) ||
-					pokemon.baseSpecies.isMega
+					['Greninja-Bond', 'Necrozma-Ultra', 'Zygarde-Complete'].includes(pokemon.baseSpecies.baseSpecies) ||
+					pokemon.baseSpecies.isMega || pokemon.baseSpecies.isPrimal
 				) {
 					const baseSpecies = this.dex.species.get(pokemon.set.species || pokemon.set.name);
 					pokemon.setSpecies(baseSpecies);
