@@ -272,8 +272,8 @@ export class Battle {
 
 		this.send = options.send || (() => {});
 
-		const inputOptions: {formatid: ID, seed: PRNGSeed | Buffer, rated?: string | true} = {
-			formatid: options.formatid, seed: this.prng.seed,
+		const inputOptions: {formatid: ID, seed: PRNGSeed, rated?: string | true} = {
+			formatid: options.formatid, seed: this.prng.startingSeed,
 		};
 		if (this.rated) inputOptions.rated = this.rated;
 		if (typeof __version !== 'undefined') {
