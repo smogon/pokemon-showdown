@@ -4104,10 +4104,19 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: +1,
 		flags: {metronome: 1},
-		onTry(source) {
-			source.clearBoosts()
-			return !!this.canSwitch(source.side);
+		onHit(target) {
+			if (!this.canSwitch(target.side) || target.volatiles['commanded']) {
+				this.attrLastMove('[still]');
+				this.add('-fail', target);
+				return this.NOT_FAIL;
+			}
 		},
+		self: {
+			onHit(source) {
+				source.skipBeforeSwitchOutEventFlag = true;
+			},
+		},
+		selfSwitch: 'doubleteam',
 		secondary: null,
 		target: "self",
 		type: "Normal",

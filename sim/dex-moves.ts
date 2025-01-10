@@ -203,7 +203,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	thawsTarget?: boolean;
 	heal?: number[] | null;
 	forceSwitch?: boolean;
-	selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
+	selfSwitch?: 'copyvolatile' | 'shedtail' | 'doubleteam' | boolean ;
 	selfBoost?: {boosts?: SparseBoostsTable};
 	selfdestruct?: 'always' | 'ifHit' | boolean;
 	breaksProtect?: boolean;
@@ -339,7 +339,7 @@ export interface ActiveMove extends MutableMove {
 	negateSecondary?: boolean;
 	pranksterBoosted?: boolean;
 	selfDropped?: boolean;
-	selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
+	selfSwitch?: 'copyvolatile' | 'shedtail' | 'doubleteam' | boolean;
 	spreadHit?: boolean;
 	statusRoll?: string;
 	/** Hardcode to make Tera Stellar STAB work with multihit moves */
@@ -460,7 +460,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	};
 	readonly flags: MoveFlags;
 	/** Whether or not the user must switch after using this move. */
-	readonly selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
+	readonly selfSwitch?: 'copyvolatile' | 'shedtail' | 'doubleteam' | boolean;
 	/** Move target only used by Pressure. */
 	readonly pressureTarget: MoveTarget;
 	/** Move target used if the user is not a Ghost type (for Curse). */
