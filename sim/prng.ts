@@ -12,7 +12,7 @@
  * @license MIT license
  */
 
-import * as sodium from 'sodium-native';
+import {Chacha20} from "ts-chacha20";
 
 export type PRNGSeed = SodiumRNGSeed | Gen5RNGSeed;
 export type SodiumRNGSeed = ['sodium' | number, ...number[]];
@@ -149,7 +149,15 @@ export class PRNG {
 	}
 }
 
+/**
+ * This is a drop-in replacement for libsodium's randombytes_buf_deterministic,
+ * but it's implemented with ts-chacha20 instead, for a smaller dependency that
+ * doesn't use NodeJS native modules, for better portability.
+ */
 export class SodiumRNG implements RNG {
+	// nonce chosen to be compatible with libsodium's randombytes_buf_deterministic
+	// https://github.com/jedisct1/libsodium/blob/ce07d6c82c0e6c75031cf627913bf4f9d3f1e754/src/libsodium/randombytes/randombytes.c#L178
+	readonly NONCE = Uint8Array.from([..."LibsodiumDRG"].map(c => c.charCodeAt(0)));
 	seed!: Buffer;
 	/** Creates a new source of randomness for the given seed. */
 	constructor(seed: SodiumRNGSeed) {
@@ -177,8 +185,13 @@ export class SodiumRNG implements RNG {
 	}
 
 	next() {
-		const buf = Buffer.alloc(36);
-		sodium.randombytes_buf_deterministic(buf, this.seed);
+		const zeroBuf = Buffer.alloc(36);
+		// basically exactly what Sodium does
+		const buf = Buffer.from(new Chacha20(this.seed, this.NONCE).encrypt(zeroBuf));
+
+		// tested to do the exact same thing as
+		// sodium.randombytes_buf_deterministic(buf, this.seed);
+
 		// use the first 32 bytes for the next seed, and the next 4 bytes for the output
 		this.seed = buf.slice(0, 32);
 		return buf.slice(32, 36).readUint32BE();
