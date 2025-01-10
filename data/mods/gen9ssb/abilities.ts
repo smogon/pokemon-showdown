@@ -1480,6 +1480,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
       name: "Quick Camo",
       onTryHit(target, source, move) {
       	if (target === source) return;
+			if (move.flags['futuremove']) return;
          const possibleTypes = [];
 	      const attackType = move.type;
 	      for (const type of this.dex.types.names()) {
