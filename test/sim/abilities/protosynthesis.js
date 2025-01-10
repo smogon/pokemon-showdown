@@ -88,7 +88,7 @@ describe('Protosynthesis', function () {
 		const tail = battle.p1.active[0];
 		battle.makeChoices('move splash', 'switch 2');
 
-		assert(!battle.p1.active[0].volatiles['protosynthesis'], `Scream Tail should not have remained boosted by Protosynthesis because a weather supressing ability started even though Sun was active`);
+		assert(!tail.volatiles['protosynthesis'], `Scream Tail should not have remained boosted by Protosynthesis because a weather supressing ability started even though Sun was active`);
 	});
 
 	it(`should not activate if weather is suppressed`, function () {
