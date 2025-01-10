@@ -2197,7 +2197,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
          onBasePower(basePower, pokemon, target) {
             if (this.effectState.duration >= 3) return this.chainModify(2);
-            if (this.effectState.duration < 3) return this.chainModify(0.5);
          },
       },
       isZ: "forgedhammer",
