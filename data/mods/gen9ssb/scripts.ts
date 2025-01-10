@@ -880,6 +880,9 @@ export const Scripts: ModdedBattleScriptsData = {
 
 				oldActive.illusion = null;
 				this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
+				side.active[pos] = null!;
+				this.battle.add('-switchout', oldActive, oldActive.getDetails);
+				this.battle.singleEvent('PostEnd', oldActive.getAbility(), oldActive.abilityState, oldActive);
 
 				// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
 				this.battle.queue.cancelAction(oldActive);
@@ -892,9 +895,6 @@ export const Scripts: ModdedBattleScriptsData = {
 					pokemon.copyVolatileFrom(oldActive, switchCopyFlag);
 				}
 				if (newMove) pokemon.lastMove = newMove;
-				side.active[pos] = null!;
-				this.battle.add('-switchout', oldActive, oldActive.getDetails);
-				this.battle.singleEvent('PostEnd', oldActive.getAbility(), oldActive.abilityState, oldActive);
 				oldActive.clearVolatile();
 			}
 			if (oldActive) {
