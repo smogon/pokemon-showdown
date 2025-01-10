@@ -63,7 +63,7 @@ class Team {
 		return this.suspended || (
 			this.auction.type === 'snake' ?
 				this.players.length >= this.auction.minPlayers :
-				this.credits < this.auction.minBid
+				(this.credits < this.auction.minBid || this.players.length >= this.auction.maxPlayers)
 		);
 	}
 
@@ -91,6 +91,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	startingCredits: number;
 	minBid = 3000;
 	minPlayers = 10;
+	maxPlayers = 0;
 	type: 'auction' | 'blind' | 'snake' = 'auction';
 
 	lastQueue: Team[] | null = null;
@@ -149,7 +150,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		let buf = `<span style="font-size: 85%">`;
 		buf += players.slice(0, max).map(p => {
 			if (typeof p === 'object') {
-				return `<username title="Tiers: ${p.tiersPlayed.length ? `${Utils.escapeHTML(p.tiersPlayed.join(', '))}` : 'N/A'}"${clickable ? ' class="username"' : ''}>${Utils.escapeHTML(p.name)}</username>`;
+				return `<username ${clickable ? ' class="username"' : ''}>${Utils.escapeHTML(p.name)}</username>`;
 			}
 			return `<username${clickable ? ' class="username"' : ''}>${Utils.escapeHTML(p)}</username>`;
 		}).join(', ');
@@ -172,27 +173,29 @@ export class Auction extends Rooms.SimpleRoomGame {
 			}
 			table += `</table>`;
 			buf += `<details><summary>${Utils.escapeHTML(team.name)}</summary>${table}</details><br/>`;
-			smogonExport += `[SPOILER="${team.name}"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
+			if (this.ended) smogonExport += `[SPOILER="${team.name}"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
 		}
 
 		let table = `<table>`;
 		for (const player of players) {
-			table += Utils.html`<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
+			table += Utils.html`<tr><td>${player.name}</td><td>${player.price}</td><td>${player.team!.name}</td></tr>`;
 		}
 		table += `</table>`;
 		buf += `<details><summary>All</summary>${table}</details><br/>`;
-		smogonExport += `[SPOILER="All"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
+		if (this.ended) {
+			smogonExport += `[SPOILER="All"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
+			buf += Utils.html`<copytext value="${smogonExport}">Copy Smogon Export</copytext>`;
+		}
 
-		buf += Utils.html`<copytext value="${smogonExport}">Copy Smogon Export</copytext>`;
 		return buf;
 	}
 
-	generateAuctionTable(ended = false) {
+	generateAuctionTable() {
 		const queue = this.queue.filter(team => !team.isSuspended());
-		let buf = `<div class="ladder pad"><table style="width: 100%"><tr>${!ended ? `<th colspan=2>Order</th>` : ''}<th>Team</th>${this.type !== 'snake' ? `<th>Credits</th><th>` : ''}Players</th></tr>`;
+		let buf = `<div class="ladder pad"><table style="width: 100%"><tr>${!this.ended ? `<th colspan=2>Order</th>` : ''}<th>Team</th>${this.type !== 'snake' ? `<th>Credits</th>` : ''}<th style="width: 100%">Players</th></tr>`;
 		for (const team of this.teams.values()) {
 			buf += `<tr>`;
-			if (!ended) {
+			if (!this.ended) {
 				let i1 = queue.indexOf(team) + 1;
 				let i2 = queue.lastIndexOf(team) + 1;
 				if (i1 > queue.length / 2) {
@@ -204,7 +207,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			if (this.type !== 'snake') {
 				buf += `<td style="white-space: nowrap">${team.credits.toLocaleString()}${team.maxBid() >= this.minBid ? `<br/><span style="font-size: 90%">Max bid: ${team.maxBid().toLocaleString()}</span>` : ''}</td>`;
 			}
-			buf += `<td><div style="min-height: 32px${!ended ? `; height: 32px; overflow: hidden; resize: vertical` : ''}"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
+			buf += `<td title="${team.players.map(p => Utils.escapeHTML(p.name)).join(', ')}"><div style="min-height: 32px${!this.ended ? `; height: 32px; overflow: hidden; resize: vertical` : ''}"><span style="float: right">${team.players.length}</span>${this.generateUsernameList(team.players)}</div></td>`;
 			buf += `</tr>`;
 		}
 		buf += `</table></div>`;
@@ -233,6 +236,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		buf += `<details><summary>Auction Settings</summary>`;
 		buf += `- Minimum bid: <b>${this.minBid.toLocaleString()}</b><br/>`;
 		buf += `- Minimum players per team: <b>${this.minPlayers}</b><br/>`;
+		if (this.type !== 'snake') buf += `- Maximum players per team: <b>${this.maxPlayers || 'N/A'}</b><br/>`;
 		buf += `- Nom timer: <b>${this.nomTimeLimit ? `${this.nomTimeLimit}s` : 'Off'}</b><br/>`;
 		if (this.type !== 'snake') buf += `- Bid timer: <b>${this.bidTimeLimit}s</b><br/>`;
 		buf += `- Auction type: <b>${this.type}</b><br/>`;
@@ -275,6 +279,14 @@ export class Auction extends Rooms.SimpleRoomGame {
 			throw new Chat.ErrorMessage(`The minimum number of players must be between 1 and 30.`);
 		}
 		this.minPlayers = amount;
+	}
+
+	setMaxPlayers(amount: number) {
+		if (this.type === 'snake') throw new Chat.ErrorMessage(`You only need to set minplayers for snake drafts.`);
+		if (this.state !== 'setup') {
+			throw new Chat.ErrorMessage(`The maximum number of players cannot be changed after the auction has started.`);
+		}
+		this.maxPlayers = amount;
 	}
 
 	setNomTimeLimit(seconds: number) {
@@ -347,7 +359,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 			if (name.length > 25) throw new Chat.ErrorMessage(`Player names must be 25 characters or less.`);
 			const player: Player = {
 				id: toID(name),
-				name,
+				name: name.trim(),
 				price: 0,
 				tiersPlayed,
 				tiersNotPlayed,
@@ -611,15 +623,15 @@ export class Auction extends Rooms.SimpleRoomGame {
 			if (this.type === 'blind') {
 				this.bid(user, parseCredits(message));
 			} else {
-				// If bid is unsuccessful, the error message and the original message are sent to the room
+				// If bid is unsuccessful, the original message is sent to the room
 				try {
 					this.bid(user, parseCredits(message));
 				} catch (e) {
-					this.room.add(`|c|${user.getIdentity()}|${originalMsg}`);
+					this.room.add(`|c|${user.getIdentity(this.room)}|${originalMsg}`);
 					if (e instanceof Chat.ErrorMessage) {
-						this.sendMessage(Utils.html`/html <span class="message-error">${e.message}</span>`);
+						user.sendTo(this.room, Utils.html`/html <span class="message-error">${e.message}</span>`);
 					} else {
-						this.sendMessage(`/html <span class="message-error">An unexpected error occurred while placing your bid.</span>`);
+						user.sendTo(this.room, `/html <span class="message-error">An unexpected error occurred while placing your bid.</span>`);
 					}
 				}
 			}
@@ -717,7 +729,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	end(message?: string) {
-		this.sendHTMLBox(this.generateAuctionTable(true));
+		this.setEnded();
+		this.sendHTMLBox(this.generateAuctionTable());
 		this.sendHTMLBox(this.generatePriceList());
 		if (message) this.sendMessage(message);
 		this.destroy();
@@ -816,6 +829,18 @@ export const commands: Chat.ChatCommands = {
 		minplayershelp: [
 			`/auction minplayers [amount] - Sets the minimum number of players. Requires: # ~ auction owner`,
 		],
+		maxplayers(target, room, user) {
+			const auction = this.requireGame(Auction);
+			auction.checkOwner(user);
+
+			if (!target) return this.parse('/help auction maxplayers');
+			const amount = parseInt(target);
+			auction.setMaxPlayers(amount);
+			this.addModAction(`${user.name} set the maximum number of players to ${amount}.`);
+		},
+		maxplayershelp: [
+			`/auction maxplayers [amount] - Sets the maximum number of players. Requires: # ~ auction owner`,
+		],
 		nomtimer(target, room, user) {
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
@@ -899,16 +924,17 @@ export const commands: Chat.ChatCommands = {
 		},
 		importplayershelp: [
 			`/auction importplayers [pastebin url] - Imports a list of players from a pastebin. Requires: # ~ auction owner`,
-			`The pastebin should be a list of tab-separated values with the first row containing tier names and subsequent rows containing the player names and a Y in the column corresponding to the tier.`,
+			`The pastebin should be a list of tab-separated values with the first row containing tier names and subsequent rows containing the player names and either a 'y' or an 'n' in the column corresponding to the tier they prefer or do not play respectively.`,
 			`See https://pastebin.com/jPTbJBva for an example.`,
 		],
 		addplayer(target, room, user) {
 			const auction = this.requireGame(Auction);
 			auction.checkOwner(user);
 
-			const name = target.slice(0, target.indexOf(',')).trim();
-			const [tiersPlayed, tiersNotPlayed] = target.slice(target.indexOf(',') + 1).split(';')
-				.map(tiers => tiers.split(',').map(t => t.trim()));
+			const [playedPart, notPlayedPart] = target.split(";");
+			const tiersPlayed = playedPart.split(",").map(item => item.trim());
+			const tiersNotPlayed = notPlayedPart ? notPlayedPart.split(",").map(item => item.trim()) : [];
+			const name = tiersPlayed.shift();
 
 			if (!name) return this.parse('/help auction addplayer');
 			const player = auction.addAuctionPlayer(name, tiersPlayed, tiersNotPlayed);
