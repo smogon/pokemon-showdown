@@ -623,15 +623,15 @@ export class Auction extends Rooms.SimpleRoomGame {
 			if (this.type === 'blind') {
 				this.bid(user, parseCredits(message));
 			} else {
-				// If bid is unsuccessful, the error message and the original message are sent to the room
+				// If bid is unsuccessful, the original message is sent to the room
 				try {
 					this.bid(user, parseCredits(message));
 				} catch (e) {
 					this.room.add(`|c|${user.getIdentity(this.room)}|${originalMsg}`);
 					if (e instanceof Chat.ErrorMessage) {
-						this.sendMessage(Utils.html`/html <span class="message-error">${e.message}</span>`);
+						user.sendTo(this.room, Utils.html`/html <span class="message-error">${e.message}</span>`);
 					} else {
-						this.sendMessage(`/html <span class="message-error">An unexpected error occurred while placing your bid.</span>`);
+						user.sendTo(this.room, `/html <span class="message-error">An unexpected error occurred while placing your bid.</span>`);
 					}
 				}
 			}
