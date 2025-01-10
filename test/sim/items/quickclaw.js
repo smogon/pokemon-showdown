@@ -10,7 +10,7 @@ describe('Quick Claw', function () {
 		battle.destroy();
 	});
 
-	it.skip(`[Gen 2] shares its activation roll with every holder on any given turn`, function () {
+	it(`[Gen 2] shares its activation roll with every holder on any given turn`, function () {
 		battle = common.gen(2).createBattle({seed: [1, 2, 3, 27]}, [[
 			{species: 'snorlax', item: 'quickclaw', moves: ['sleeptalk']},
 		], [
@@ -27,7 +27,7 @@ describe('Quick Claw', function () {
 		assert.notEqual(snorlax.speed, mewtwo.speed);
 	});
 
-	it.skip(`[Gen 3] causes Speed ties with every holder when activated`, function () {
+	it(`[Gen 3] causes Speed ties with every holder when activated`, function () {
 		battle = common.gen(3).createBattle({seed: [163, 106, 112, 542]}, [[
 			{species: 'snorlax', item: 'quickclaw', moves: ['spore']},
 		], [

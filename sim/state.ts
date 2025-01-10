@@ -66,7 +66,7 @@ export const State = new class {
 		for (const [i, side] of battle.sides.entries()) {
 			state.sides[i] = this.serializeSide(side);
 		}
-		state.prng = battle.prng.seed;
+		state.prng = battle.prng.getSeed();
 		state.hints = Array.from(battle.hints);
 		// We treat log specially because we only set it back on Battle after everything
 		// else has been deserialized to avoid anything accidentally `add`-ing to it.
@@ -147,7 +147,7 @@ export const State = new class {
 				battle.sides[i].activeRequest = side.activeRequest === null ? null : requests[i];
 			}
 		}
-		battle.prng = new PRNG(state.prng.length > 4 ? Buffer.from(state.prng, 32) : state.prng);
+		battle.prng = new PRNG(state.prng);
 		const queue = this.deserializeWithRefs(state.queue, battle);
 		battle.queue.list = queue;
 		(battle as any).hints = new Set(state.hints);

@@ -8,7 +8,7 @@
 
 import {ObjectReadWriteStream} from '../../lib/streams';
 import {BattlePlayer} from '../battle-stream';
-import {TestPRNG as PRNG, PRNGSeed} from '../prng';
+import {PRNG, PRNGSeed} from '../prng';
 
 export class RandomPlayerAI extends BattlePlayer {
 	protected readonly move: number;

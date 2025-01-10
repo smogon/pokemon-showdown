@@ -14,53 +14,39 @@
 
 import * as sodium from 'sodium-native';
 
+export type PRNGSeed = SodiumRNGSeed | Gen5RNGSeed;
+export type SodiumRNGSeed = ['sodium' | number, ...number[]];
 /** 64-bit big-endian [high -> low] int */
-export type PRNGSeed = [number, number, number, number];
+export type Gen5RNGSeed = [number, number, number, number];
 
-interface PRNGRequired {
-	next(from?: number, to?: number): number;
-	randomChance(numerator: number, denominator: number): boolean;
-	sample<T>(items: readonly T[]): T;
-	shuffle<T>(items: T[], start: number, end: number): void;
+interface RNG {
+	getSeed(): PRNGSeed;
+	/** random 32-bit number */
+	next(): number;
 }
 
 /**
- * A PRNG intended to emulate the on-cartridge PRNG for Gen 5 with a 64-bit
- * initial seed.
+ * Abstract PRNG.
  */
-export class PRNG implements PRNGRequired {
-	readonly initialSeed: PRNGSeed;
-	seed: Buffer;
+export class PRNG {
+	readonly startingSeed: PRNGSeed;
+	rng!: RNG;
 	/** Creates a new source of randomness for the given seed. */
-	constructor(seed: PRNGSeed | Buffer | null = null, initialSeed?: PRNGSeed) {
+	constructor(seed: PRNGSeed | null = null, initialSeed?: PRNGSeed) {
 		if (!seed) seed = PRNG.generateSeed();
-		// hack i know i know
-		this.initialSeed = initialSeed || [...seed] as PRNGSeed;
-		this.seed = Array.isArray(seed) ? PRNG.convertSeed(seed.slice() as PRNGSeed) : seed;
-	}
-
-	static convertSeed(inputSeed: PRNGSeed) {
-		// randombytes_buf_deterministic only takes 32 bytes (8x4 here), so it's gotta be slightly longer
-		// than we use
-		const seed = new Uint32Array(8);
-		for (let i = 0; i < seed.length; i++) seed[i] = inputSeed[i];
-		const buf = Buffer.alloc(32);
-		// @ts-ignore this doesn't accept buffers, but instead TypedArrays - typedef is out of date
-		sodium.randombytes_buf_deterministic(buf, seed);
-		return buf;
-	}
-
-	/**
-	 * Getter to the initial seed.
-	 *
-	 * This should be considered a hack and is only here for backwards compatibility.
-	 */
-	get startingSeed(): PRNGSeed {
-		return this.initialSeed;
+		this.startingSeed = initialSeed || [...seed]; // make a copy
+		this.setSeed(seed);
 	}
 
 	setSeed(seed: PRNGSeed) {
-		this.seed = PRNG.convertSeed(seed);
+		if (seed[0] === 'sodium') {
+			this.rng = new SodiumRNG(seed);
+		} else {
+			this.rng = new Gen5RNG(seed as Gen5RNGSeed);
+		}
+	}
+	getSeed(): PRNGSeed {
+		return this.rng.getSeed();
 	}
 
 	/**
@@ -69,7 +55,7 @@ export class PRNG implements PRNGRequired {
 	 * The new PRNG will have its initial seed set to the seed of the current instance.
 	 */
 	clone(): PRNG {
-		return new PRNG(this.seed, this.initialSeed);
+		return new PRNG(this.rng.getSeed(), this.startingSeed);
 	}
 
 	/**
@@ -81,25 +67,16 @@ export class PRNG implements PRNGRequired {
 	 * m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
 	 */
 	next(from?: number, to?: number): number {
-		let result = this.seededRandom();
+		const result = this.rng.next();
 		if (from) from = Math.floor(from);
 		if (to) to = Math.floor(to);
 		if (from === undefined) {
-			result = result / 0x100000000;
+			return result / 0x100000000;
 		} else if (!to) {
-			result = Math.floor(result * from / 0x100000000);
+			return Math.floor(result * from / 0x100000000);
 		} else {
-			result = Math.floor(result * (to - from) / 0x100000000) + from;
+			return Math.floor(result * (to - from) / 0x100000000) + from;
 		}
-		return result;
-	}
-
-	private seededRandom() {
-		const buf = Buffer.alloc(36);
-		sodium.randombytes_buf_deterministic(buf, this.seed);
-		// use the first four bytes for the output, use the other 32 bytes for the next seed
-		this.seed = buf.slice(4);
-		return buf.slice(0, 4).readUint32BE();
 	}
 
 	/**
@@ -157,78 +134,88 @@ export class PRNG implements PRNGRequired {
 		}
 	}
 
-	static generateSeed() {
+	static generateSeed(): SodiumRNGSeed {
 		return [
-			Math.floor(Math.random() * 0x10000),
-			Math.floor(Math.random() * 0x10000),
-			Math.floor(Math.random() * 0x10000),
-			Math.floor(Math.random() * 0x10000),
-		] as PRNGSeed;
+			'sodium',
+			Math.floor(Math.random() * 0x100000000),
+			Math.floor(Math.random() * 0x100000000),
+			Math.floor(Math.random() * 0x100000000),
+			Math.floor(Math.random() * 0x100000000),
+		];
 	}
 }
 
-// old, predictable PRNG. do not use this for anything but tests
-export class TestPRNG implements PRNGRequired {
-	readonly initialSeed: PRNGSeed;
-	seed: PRNGSeed;
+export class SodiumRNG implements RNG {
+	seed!: Buffer;
 	/** Creates a new source of randomness for the given seed. */
-	constructor(seed: PRNGSeed | null = null) {
-		if (!seed) seed = PRNG.generateSeed();
-		this.initialSeed = seed.slice() as PRNGSeed; // make a copy
-		this.seed = seed.slice() as PRNGSeed;
+	constructor(seed: SodiumRNGSeed) {
+		this.setSeed(seed);
 	}
 
-	get startingSeed(): PRNGSeed {
-		return this.initialSeed;
+	setSeed(inputSeed: SodiumRNGSeed) {
+		// randombytes_buf_deterministic requires 32 bytes (8x4 here), but
+		// generateSeed generates 16 bytes, so the last 16 bytes will be 0
+		// when starting out. This shouldn't cause any problems.
+		const seed = Buffer.alloc(32);
+		for (let i = 1; i < inputSeed.length; i++) {
+			const num = inputSeed[i as 1]; // 32-bit uint
+			// big-endian, 8 bits each
+			seed.writeUInt32BE(num, i * 4 - 4);
+		}
+		this.seed = seed;
+	}
+	getSeed() {
+		const out: SodiumRNGSeed = ['sodium'];
+		for (let i = 0; i < 32; i += 4) {
+			out.push(this.seed.readUInt32BE(i));
+		}
+		return out;
 	}
 
-	clone(): PRNG {
-		return new PRNG(this.seed);
+	next() {
+		const buf = Buffer.alloc(36);
+		sodium.randombytes_buf_deterministic(buf, this.seed);
+		// use the first four bytes for the output, use the other 32 bytes for the next seed
+		this.seed = buf.slice(4);
+		return buf.slice(0, 4).readUint32BE();
+	}
+}
+
+/**
+ * A PRNG intended to emulate the on-cartridge PRNG for Gen 5 with a 64-bit
+ * initial seed.
+ */
+export class Gen5RNG implements RNG {
+	seed: Gen5RNGSeed;
+	/** Creates a new source of randomness for the given seed. */
+	constructor(seed: Gen5RNGSeed | null = null) {
+		this.seed = [...seed || Gen5RNG.generateSeed()];
 	}
 
-	next(from?: number, to?: number): number {
+	getSeed() {
+		return this.seed;
+	}
+
+	/**
+	 * Retrieves the next random number in the sequence.
+	 * This function has three different results, depending on arguments:
+	 * - random() returns a real number in [0, 1), just like Math.random()
+	 * - random(n) returns an integer in [0, n)
+	 * - random(m, n) returns an integer in [m, n)
+	 * m and n are converted to integers via Math.floor. If the result is NaN, they are ignored.
+	 */
+	next(): number {
 		this.seed = this.nextFrame(this.seed); // Advance the RNG
-		let result = (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
-		if (from) from = Math.floor(from);
-		if (to) to = Math.floor(to);
-		if (from === undefined) {
-			result = result / 0x100000000;
-		} else if (!to) {
-			result = Math.floor(result * from / 0x100000000);
-		} else {
-			result = Math.floor(result * (to - from) / 0x100000000) + from;
-		}
-		return result;
+		return (this.seed[0] << 16 >>> 0) + this.seed[1]; // Use the upper 32 bits
 	}
 
-	randomChance(numerator: number, denominator: number): boolean {
-		return this.next(denominator) < numerator;
-	}
-
-	sample<T>(items: readonly T[]): T {
-		if (items.length === 0) {
-			throw new RangeError(`Cannot sample an empty array`);
-		}
-		const index = this.next(items.length);
-		const item = items[index];
-		if (item === undefined && !Object.prototype.hasOwnProperty.call(items, index)) {
-			throw new RangeError(`Cannot sample a sparse array`);
-		}
-		return item;
-	}
-
-	shuffle<T>(items: T[], start = 0, end: number = items.length) {
-		while (start < end - 1) {
-			const nextIndex = this.next(start, end);
-			if (start !== nextIndex) {
-				[items[start], items[nextIndex]] = [items[nextIndex], items[start]];
-			}
-			start++;
-		}
-	}
-
-	multiplyAdd(a: PRNGSeed, b: PRNGSeed, c: PRNGSeed) {
-		const out: PRNGSeed = [0, 0, 0, 0];
+	/**
+	 * Calculates `a * b + c` (with 64-bit 2's complement integers)
+	 *
+	 * If you've done long multiplication, this is the same thing.
+	 */
+	multiplyAdd(a: Gen5RNGSeed, b: Gen5RNGSeed, c: Gen5RNGSeed) {
+		const out: Gen5RNGSeed = [0, 0, 0, 0];
 		let carry = 0;
 
 		for (let outIndex = 3; outIndex >= 0; outIndex--) {
@@ -246,15 +233,35 @@ export class TestPRNG implements PRNGRequired {
 		return out;
 	}
 
-	nextFrame(seed: PRNGSeed, framesToAdvance = 1): PRNGSeed {
-		const a: PRNGSeed = [0x5D58, 0x8B65, 0x6C07, 0x8965];
-		const c: PRNGSeed = [0, 0, 0x26, 0x9EC3];
+	/**
+	 * The RNG is a Linear Congruential Generator (LCG) in the form: `x_{n + 1} = (a x_n + c) % m`
+	 *
+	 * Where: `x_0` is the seed, `x_n` is the random number after n iterations,
+	 *
+	 * ````
+	 * a = 0x5D588B656C078965
+	 * c = 0x00269EC3
+	 * m = 2^64
+	 * ````
+	 */
+	nextFrame(seed: Gen5RNGSeed, framesToAdvance = 1): Gen5RNGSeed {
+		const a: Gen5RNGSeed = [0x5D58, 0x8B65, 0x6C07, 0x8965];
+		const c: Gen5RNGSeed = [0, 0, 0x26, 0x9EC3];
 
 		for (let i = 0; i < framesToAdvance; i++) {
 			seed = this.multiplyAdd(seed, a, c);
 		}
 
 		return seed;
+	}
+
+	static generateSeed() {
+		return [
+			Math.floor(Math.random() * 0x10000),
+			Math.floor(Math.random() * 0x10000),
+			Math.floor(Math.random() * 0x10000),
+			Math.floor(Math.random() * 0x10000),
+		] as Gen5RNGSeed;
 	}
 }
 

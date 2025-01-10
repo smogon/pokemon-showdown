@@ -65,7 +65,7 @@ interface BattleOptions {
 	/** Output callback */
 	send?: (type: string, data: string | string[]) => void;
 	prng?: PRNG; // PRNG override (you usually don't need this, just pass a seed)
-	seed?: PRNGSeed | Buffer; // PRNG seed
+	seed?: PRNGSeed; // PRNG seed
 	rated?: boolean | string; // Rated string
 	p1?: PlayerOptions; // Player 1 data
 	p2?: PlayerOptions; // Player 2 data
@@ -222,7 +222,7 @@ export class Battle {
 			(format.playerCount > 2 || this.gameType === 'doubles') ? 2 :
 			1;
 		this.prng = options.prng || new PRNG(options.seed || undefined);
-		this.prngSeed = this.prng.startingSeed.slice() as PRNGSeed;
+		this.prngSeed = this.prng.startingSeed;
 		this.rated = options.rated || !!options.rated;
 		this.reportExactHP = !!format.debug;
 		this.reportPercentages = false;
@@ -273,7 +273,7 @@ export class Battle {
 		this.send = options.send || (() => {});
 
 		const inputOptions: {formatid: ID, seed: PRNGSeed, rated?: string | true} = {
-			formatid: options.formatid, seed: this.prng.startingSeed,
+			formatid: options.formatid, seed: this.prngSeed,
 		};
 		if (this.rated) inputOptions.rated = this.rated;
 		if (typeof __version !== 'undefined') {
@@ -353,7 +353,7 @@ export class Battle {
 	}
 
 	/** Note that passing `undefined` resets to the starting seed, but `null` will roll a new seed */
-	resetRNG(seed: PRNGSeed | null = this.prng.startingSeed) {
+	resetRNG(seed: PRNGSeed | null = this.prngSeed) {
 		this.prng = new PRNG(seed);
 		this.add('message', "The battle's RNG was reset.");
 	}

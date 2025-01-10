@@ -13,7 +13,7 @@ import {ObjectReadWriteStream} from '../../lib/streams';
 import {Battle} from '../battle';
 import * as BattleStreams from '../battle-stream';
 import {State} from '../state';
-import {TestPRNG as PRNG, PRNGSeed} from '../prng';
+import {PRNG, PRNGSeed} from '../prng';
 import {RandomPlayerAI} from './random-player-ai';
 
 export interface AIOptions {
@@ -86,7 +86,7 @@ export class Runner {
 	private async runGame(format: string, battleStream: RawBattleStream | DualStream) {
 		// @ts-ignore - DualStream implements everything relevant from BattleStream.
 		const streams = BattleStreams.getPlayerStreams(battleStream);
-		const spec = {formatid: format, seed: this.prng.seed};
+		const spec = {formatid: format, seed: this.prng.getSeed()};
 		const is4P = Dex.formats.get(format).playerCount > 2;
 		const p1spec = this.getPlayerSpec("Bot 1", this.p1options);
 		const p2spec = this.getPlayerSpec("Bot 2", this.p2options);

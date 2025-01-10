@@ -7,7 +7,7 @@
 
 import {ObjectReadWriteStream} from '../../lib/streams';
 import {Dex, toID} from '../dex';
-import {TestPRNG as PRNG, PRNGSeed} from '../prng';
+import {PRNG, PRNGSeed} from '../prng';
 import {RandomPlayerAI} from './random-player-ai';
 import {AIOptions, Runner} from './runner';
 
@@ -74,7 +74,7 @@ export class ExhaustiveRunner {
 		const dex = Dex.forFormat(this.format);
 		dex.loadData(); // FIXME: This is required for `dex.gen` to be set properly...
 
-		const seed = this.prng.seed;
+		const seed = this.prng.getSeed();
 		const pools = this.createPools(dex);
 		const createAI = (s: ObjectReadWriteStream<string>, o: AIOptions) => new CoordinatedPlayerAI(s, o, pools);
 		const generator = new TeamGenerator(dex, this.prng, pools, ExhaustiveRunner.getSignatures(dex, pools));
