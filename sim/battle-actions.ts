@@ -1928,6 +1928,10 @@ export class BattleActions {
 		if (pokemon.getItem().zMove || pokemon.canMegaEvo || this.dex.gen !== 9) {
 			return null;
 		}
+		if (pokemon.species.baseSpecies === 'Ogerpon' && !['Fire', 'Grass', 'Rock', 'Water'].includes(pokemon.teraType)) {
+			this.battle.hint("Ogerpon can only terastallize into Fire, Grass, Rock or Water types, or the game gets softlocked.");
+			return null;
+		}
 		return pokemon.teraType;
 	}
 
@@ -1946,8 +1950,9 @@ export class BattleActions {
 		pokemon.knownType = true;
 		pokemon.apparentType = type;
 		if (pokemon.species.baseSpecies === 'Ogerpon') {
-			const tera = pokemon.species.id === 'ogerpon' ? 'tealtera' : 'tera';
-			pokemon.formeChange(pokemon.species.id + tera, null, true);
+			let ogerponSpecies = toID(pokemon.species.battleOnly || pokemon.species.id);
+			ogerponSpecies += ogerponSpecies === 'ogerpon' ? 'tealtera' : 'tera';
+			pokemon.formeChange(ogerponSpecies, null, true);
 		}
 		if (pokemon.species.name === 'Terapagos-Terastal') {
 			pokemon.formeChange('Terapagos-Stellar', null, true);
