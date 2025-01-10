@@ -1071,7 +1071,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	blindinglight: {
 		name: "Blinding Light",
 		gen: 9,
-		onSwitchIn(pokemon) {
+		onStart(pokemon) {
 			this.add('-anim', pokemon, 'Flash', pokemon);
 			for (const target of this.getAllActive()) {
 				if (pokemon === target) continue;
