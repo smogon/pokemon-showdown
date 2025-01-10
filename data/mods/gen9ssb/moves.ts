@@ -1080,7 +1080,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			},
 			onTryPrimaryHitPriority: -1,
 			onTryPrimaryHit(target, source, move) {
-				if (target === source || move.flags['bypasssub'] || move.infiltrates) {
+				if (target === source || move.flags['bypasssub'] || move.infiltrates || move.flags['futuremove']) {
 					return;
 				}
 				// @ts-ignore
