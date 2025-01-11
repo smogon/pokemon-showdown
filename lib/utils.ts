@@ -417,81 +417,81 @@ export function formatSQLArray(arr: unknown[], args?: unknown[]) {
  * Nibble lookup table to convert ASCII character codes to their hexadecimal values (0-15).
  * Invalid characters are marked with 0xFF.
  */
-const nibbleLookup: Uint8Array = (() => {
-  const lookup = new Uint8Array(256);
-  for (let i = 0; i < 256; i++) {
-    lookup[i] = 0xFF; // Mark as invalid by default
-  }
-  '0123456789abcdef'.split('').forEach((char, index) => {
-    lookup[char.charCodeAt(0)] = index;
-  });
-  '0123456789ABCDEF'.split('').forEach((char, index) => {
-    lookup[char.charCodeAt(0)] = index;
-  });
-  return lookup;
+const nibbleLookup = (() => {
+	const lookup = new Uint8Array(256); // this is line 421
+	for (let i = 0; i < 256; i++) {
+		lookup[i] = 0xFF; // Mark as invalid by default
+	}
+	'0123456789abcdef'.split('').forEach((char, index) => {
+		lookup[char.charCodeAt(0)] = index;
+	});
+	'0123456789ABCDEF'.split('').forEach((char, index) => {
+		lookup[char.charCodeAt(0)] = index;
+	});
+	return lookup;
 })();
 
 /**
  * Byte-to-hex lookup table for efficient conversion from bytes to hexadecimal strings.
  */
-const byteToHexTable: string[] = (() => {
-  const table: string[] = new Array(256);
-  for (let i = 0; i < 256; i++) {
-    table[i] = (i < 16 ? '0' : '') + i.toString(16);
-  }
-  return table;
+const byteToHexTable = (() => {
+	const table = new Array<string>(256);
+	for (let i = 0; i < 256; i++) {
+		table[i] = (i < 16 ? '0' : '') + i.toString(16);
+	}
+	return table;
 })();
 
 export function bufFromHex(hex: string): Uint8Array {
-  const len = hex.length;
-  const size = Math.ceil(len / 2);
-  const buf = new Uint8Array(size);
-  let j = 0;
+	const len = hex.length;
+	const buf = new Uint8Array(Math.ceil(len / 2));
+	let j = 0;
 
-  for (let i = 0; i < len; i += 2) {
-    const hiChar = hex.charCodeAt(i);
-    const loChar = i + 1 < len ? hex.charCodeAt(i + 1) : 0x30; // '0' if no character
-    const hi = nibbleLookup[hiChar];
-    const lo = nibbleLookup[loChar];
+	for (let i = 0; i < len; i += 2) {
+		const hiChar = hex.charCodeAt(i);
+		const loChar = i + 1 < len ? hex.charCodeAt(i + 1) : 0x30; // '0' if no character
+		const hi = nibbleLookup[hiChar];
+		const lo = nibbleLookup[loChar];
 
-    if (hi === 0xFF || lo === 0xFF) {
-      throw new Error(
-        `Invalid hex character encountered: '${hex[i]}' or '${hex[i + 1] || '0'}'`
-      );
-    }
+		if (hi === 0xFF || lo === 0xFF) {
+			throw new Error(
+				`Invalid hex character encountered: '${hex[i]}' or '${hex[i + 1] || '0'}'`
+			);
+		}
 
-    buf[j++] = (hi << 4) | lo;
-  }
+		buf[j++] = (hi << 4) | lo;
+	}
 
-  return buf;
+	return buf;
 }
+
 export function bufWriteHex(buf: Uint8Array, hex: string, offset: number = 0): void {
-  const len = hex.length;
-  const size = Math.ceil(len / 2);
-  let j = offset;
+	const len = hex.length;
+	let j = offset;
 
-  for (let i = 0; i < len; i += 2) {
-    const hiChar = hex.charCodeAt(i);
-    const loChar = i + 1 < len ? hex.charCodeAt(i + 1) : 0x30; // '0' if no character
-    const hi = nibbleLookup[hiChar];
-    const lo = nibbleLookup[loChar];
+	for (let i = 0; i < len; i += 2) {
+		const hiChar = hex.charCodeAt(i);
+		const loChar = i + 1 < len ? hex.charCodeAt(i + 1) : 0x30; // '0' if no character
+		const hi = nibbleLookup[hiChar];
+		const lo = nibbleLookup[loChar];
 
-    if (hi === 0xFF || lo === 0xFF) {
-      throw new Error(
-        `Invalid hex character encountered: '${hex[i]}' or '${hex[i + 1] || '0'}'`
-      );
-    }
+		if (hi === 0xFF || lo === 0xFF) {
+			throw new Error(
+				`Invalid hex character encountered: '${hex[i]}' or '${hex[i + 1] || '0'}'`
+			);
+		}
 
-    buf[j++] = (hi << 4) | lo;
-  }
+		buf[j++] = (hi << 4) | lo;
+	}
 }
+
 export function bufReadHex(buf: Uint8Array, start: number = 0, end?: number): string {
-  if (end === undefined) end = buf.length;
-  let out = '';
-  for (let i = start; i < end; i++) {
-    out += byteToHexTable[buf[i]];
-  }
-  return out;
+	if (end === undefined) end = buf.length;
+	let out = '';
+	for (let i = start; i < end; i++) {
+		out += byteToHexTable[buf[i]];
+	}
+	return out;
 }
 
 export class Multiset<T> extends Map<T, number> {
