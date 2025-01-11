@@ -52,7 +52,7 @@ export const ssbSets: SSBSets = {
 		species: "Decidueye-Hisui", ability: "Concentration", item: "Yoichi's Bow", gender: "M",
 		moves: ["Triple Arrows", "Pursuit", "Trop Kick"],
 		signatureMove: "Burst Delta",
-		evs: {hp: 4, atk: 252, spe: 252}, nature: "Adamant",
+		evs: {hp: 8, atk: 252, spe: 248}, nature: "Adamant",
 	},
 	'Yukari Yakumo': {
 		species: 'Lunala', ability: 'Spiriting Away', item: 'Choice Scarf', gender: 'F',
