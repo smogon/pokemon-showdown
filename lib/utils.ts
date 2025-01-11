@@ -465,7 +465,7 @@ export function bufFromHex(hex: string): Uint8Array {
 	return buf;
 }
 
-export function bufWriteHex(buf: Uint8Array, hex: string, offset: number = 0): void {
+export function bufWriteHex(buf: Uint8Array, hex: string, offset = 0): void {
 	const len = hex.length;
 	let j = offset;
 
@@ -485,7 +485,7 @@ export function bufWriteHex(buf: Uint8Array, hex: string, offset: number = 0): v
 	}
 }
 
-export function bufReadHex(buf: Uint8Array, start: number = 0, end?: number): string {
+export function bufReadHex(buf: Uint8Array, start = 0, end?): string {
 	if (end === undefined) end = buf.length;
 	let out = '';
 	for (let i = start; i < end; i++) {
