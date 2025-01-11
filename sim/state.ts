@@ -66,7 +66,7 @@ export const State = new class {
 		for (const [i, side] of battle.sides.entries()) {
 			state.sides[i] = this.serializeSide(side);
 		}
-		state.prng = battle.prng.seed;
+		state.prng = battle.prng.getSeed();
 		state.hints = Array.from(battle.hints);
 		// We treat log specially because we only set it back on Battle after everything
 		// else has been deserialized to avoid anything accidentally `add`-ing to it.

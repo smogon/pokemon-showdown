@@ -107,7 +107,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		// Get what we need ready.
-		const seed = this.prng.seed;
+		const seed = this.prng.getSeed();
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
