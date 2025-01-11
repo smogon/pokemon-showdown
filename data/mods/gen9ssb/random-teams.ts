@@ -224,6 +224,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Emergency Meltdown',
 		evs: {hp: 120, atk: 136, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
 	},
+	Cinque: {
+		species: 'Marowak', ability: 'Cheerleader', item: 'Moogle Plushie', gender: 'F',
+		moves: ['Magnitude', 'Payback', 'Stone Edge'],
+		signatureMove: 'Homerun Swing - Windup',
+		evs: {hp: 252, atk: 252, spd: 4}, ivs: {spa: 0}, nature: 'Adamant',
+	},
 	/*
 	Miraju: {
 		species: 'Wynaut', ability: 'Illusive Energy', item: 'Eviolite', gender: 'N',
