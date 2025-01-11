@@ -590,7 +590,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.debug('Pursuit start');
 				let alreadyAdded = false;
 				for (const source of this.effectState.sources) {
-					if (source.speed < pokemon.speed || (source.speed === pokemon.speed && this.random(2) === 0)) {
+					if (source.speed < pokemon.speed || (source.speed === pokemon.speed && this.randomChance(1, 2))) {
 						// Destiny Bond ends if the switch action "outspeeds" the attacker, regardless of host
 						pokemon.removeVolatile('destinybond');
 					}

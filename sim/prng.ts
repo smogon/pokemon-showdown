@@ -82,11 +82,11 @@ export class PRNG {
 		if (from) from = Math.floor(from);
 		if (to) to = Math.floor(to);
 		if (from === undefined) {
-			return result / 0x100000000;
+			return result / 2 ** 32;
 		} else if (!to) {
-			return Math.floor(result * from / 0x100000000);
+			return Math.floor(result * from / 2 ** 32);
 		} else {
-			return Math.floor(result * (to - from) / 0x100000000) + from;
+			return Math.floor(result * (to - from) / 2 ** 32) + from;
 		}
 	}
 
@@ -149,10 +149,10 @@ export class PRNG {
 		return [
 			'sodium',
 			// 32 bits each, 128 bits total (16 bytes)
-			Math.trunc(Math.random() * 0x100000000).toString(16).padStart(8, '0') +
-				Math.trunc(Math.random() * 0x100000000).toString(16).padStart(8, '0') +
-				Math.trunc(Math.random() * 0x100000000).toString(16).padStart(8, '0') +
-				Math.trunc(Math.random() * 0x100000000).toString(16).padStart(8, '0'),
+			Math.trunc(Math.random() * 2 ** 32).toString(16).padStart(8, '0') +
+				Math.trunc(Math.random() * 2 ** 32).toString(16).padStart(8, '0') +
+				Math.trunc(Math.random() * 2 ** 32).toString(16).padStart(8, '0') +
+				Math.trunc(Math.random() * 2 ** 32).toString(16).padStart(8, '0'),
 		];
 	}
 }
@@ -267,10 +267,10 @@ export class Gen5RNG implements RNG {
 
 	static generateSeed(): Gen5RNGSeed {
 		return [
-			Math.trunc(Math.random() * 0x10000),
-			Math.trunc(Math.random() * 0x10000),
-			Math.trunc(Math.random() * 0x10000),
-			Math.trunc(Math.random() * 0x10000),
+			Math.trunc(Math.random() * 2 ** 16),
+			Math.trunc(Math.random() * 2 ** 16),
+			Math.trunc(Math.random() * 2 ** 16),
+			Math.trunc(Math.random() * 2 ** 16),
 		];
 	}
 }
@@ -286,7 +286,7 @@ export type Gen3RNGSeed = ['gen3', number];
 export class Gen3RNG implements RNG {
 	seed: number;
 	constructor(seed: Gen3RNGSeed | null = null) {
-		this.seed = seed ? seed[1] : Math.trunc(Math.random() * 0x100000000);
+		this.seed = seed ? seed[1] : Math.trunc(Math.random() * 2 ** 32);
 	}
 	getSeed() {
 		return ['gen3', this.seed];

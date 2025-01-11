@@ -32,7 +32,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			// However, just in case, use 1 if it is undefined.
 			const counter = this.effectState.counter || 1;
 			if (counter >= 256) {
-				return this.random(0x100000000) === 0; // 2^32
+				return this.randomChance(1, 2 ** 32);
 			}
 			this.debug("Success chance: " + Math.round(100 / counter) + "%");
 			return this.randomChance(1, counter);
