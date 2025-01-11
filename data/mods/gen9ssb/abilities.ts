@@ -1914,9 +1914,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 			return move.critRatio;
 		},
-		onModifySpe(spe) {
-			return this.chainModify(1.3);
-		},
 		flags: {},
 		name: "Concentration",
 		gen: 9,
