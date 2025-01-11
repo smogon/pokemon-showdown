@@ -78,6 +78,7 @@ export class PRNG {
 	 */
 	random(from?: number, to?: number): number {
 		const result = this.rng.next();
+
 		if (from) from = Math.floor(from);
 		if (to) to = Math.floor(to);
 		if (from === undefined) {
@@ -192,7 +193,7 @@ export class SodiumRNG implements RNG {
 		// use the first 32 bytes for the next seed, and the next 4 bytes for the output
 		this.seed = buf.slice(0, 32);
 		// reading big-endian
-		return buf.slice(32, 36).reduce((a, b) => (a << 8) + b);
+		return buf.slice(32, 36).reduce((a, b) => a * 256 + b);
 		// alternative, probably slower (TODO: benchmark)
 		// return parseInt(Utils.bufReadHex(buf, 32, 36), 16);
 	}
@@ -293,7 +294,7 @@ export class Gen3RNG implements RNG {
 	next(): number {
 		this.seed = this.seed * 0x41C64E6D + 0x6073) >>> 0; // truncate the result to the last 32 bits
 		const val = this.seed >>> 16; // the first 16 bits of the seed are the random value
-		return val << 16; // PRNG#random expects a 32-bit number and will divide accordingly
+		return val << 16 >>> 0; // PRNG#random expects a 32-bit number and will divide accordingly
 	}
 }
 */
