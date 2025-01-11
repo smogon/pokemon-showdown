@@ -114,12 +114,14 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Galvanic Web',
 		evs: {hp: 252, spa: 252, spd: 4}, ivs: {spe: 29}, nature: 'Modest',
 	},
+	/*
 	Quetzalcoatl: {
 		species: 'Zapdos', ability: 'Peal of Thunder', item: 'Expert Belt', gender: 'N',
 		moves: ['Secret Sword', 'Earth Power', 'Oblivion Wing'],
 		signatureMove: 'Big Thunder',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
+ 	*/
 	Fblthp: {
 		species: 'Poliwhirl', ability: 'Lost and Found', item: 'Bubble Wand', gender: 'M',
 		moves: ['Bouncy Bubble', 'Yawn', 'Helping Hand'],
