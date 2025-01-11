@@ -1198,9 +1198,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (target.isActive) {
 				this.damage(damage, target, pokemon, '[from] Peal of Thunder');
 			} else {
+				this.add('-message', `currently executing block that contains this.runEvent('Damage')`);
 				if (damage >= target.hp) damage = target.hp - 1;
-				target.hp -= damage;
-				this.add('-damage', target, target.getHealth, '[from] Peal of Thunder');
+				this.runEvent('Damage', target, pokemon, this.effect, damage, true);
+				//this.add('-damage', target, target.getHealth, '[from] Peal of Thunder');
 			}
 		},
 		onTryHit(target, source, move) {
