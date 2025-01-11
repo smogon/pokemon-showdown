@@ -3,7 +3,7 @@
 const PRNG = require('../../../dist/sim/prng').PRNG;
 const assert = require('../../assert');
 
-const testSeed = ['sodium', 1, 2, 3, 4];
+const testSeed = ['sodium', '00000001000000020000000300000004'];
 
 describe(`PRNG`, function () {
 	it("should always generate the same results off the same seed", function () {

@@ -12,13 +12,17 @@
  * @license MIT license
  */
 
-import {Chacha20} from "ts-chacha20";
+import {Chacha20} from 'ts-chacha20';
+import {Utils} from '../lib/utils';
 
 export type PRNGSeed = SodiumRNGSeed | Gen5RNGSeed;
-export type SodiumRNGSeed = ['sodium' | number, ...number[]];
+export type SodiumRNGSeed = ['sodium', string];
 /** 64-bit big-endian [high -> low] int */
 export type Gen5RNGSeed = [number, number, number, number];
 
+/**
+ * Low-level source of 32-bit random numbers.
+ */
 interface RNG {
 	getSeed(): PRNGSeed;
 	/** random 32-bit number */
@@ -26,11 +30,13 @@ interface RNG {
 }
 
 /**
- * Abstract PRNG.
+ * High-level PRNG API, for getting random numbers.
  *
  * Chooses the RNG implementation based on the seed passed to the constructor.
  * Seeds starting with 'sodium' use sodium. Other seeds use the Gen 5 RNG.
  * If a seed isn't given, defaults to sodium.
+ *
+ * The actual randomness source is in this.rng.
  */
 export class PRNG {
 	readonly startingSeed: PRNGSeed;
@@ -141,10 +147,11 @@ export class PRNG {
 	static generateSeed(): SodiumRNGSeed {
 		return [
 			'sodium',
-			Math.trunc(Math.random() * 0x100000000),
-			Math.trunc(Math.random() * 0x100000000),
-			Math.trunc(Math.random() * 0x100000000),
-			Math.trunc(Math.random() * 0x100000000),
+			// 32 bits each, 128 bits total (16 bytes)
+			Math.trunc(Math.random() * 0x100000000).toString(16).padStart(8, '0') +
+				Math.trunc(Math.random() * 0x100000000).toString(16).padStart(8, '0') +
+				Math.trunc(Math.random() * 0x100000000).toString(16).padStart(8, '0') +
+				Math.trunc(Math.random() * 0x100000000).toString(16).padStart(8, '0'),
 		];
 	}
 }
@@ -157,44 +164,37 @@ export class PRNG {
 export class SodiumRNG implements RNG {
 	// nonce chosen to be compatible with libsodium's randombytes_buf_deterministic
 	// https://github.com/jedisct1/libsodium/blob/ce07d6c82c0e6c75031cf627913bf4f9d3f1e754/src/libsodium/randombytes/randombytes.c#L178
-	readonly NONCE = Uint8Array.from([..."LibsodiumDRG"].map(c => c.charCodeAt(0)));
-	seed!: Buffer;
+	static readonly NONCE = Uint8Array.from([..."LibsodiumDRG"].map(c => c.charCodeAt(0)));
+	seed!: Uint8Array;
 	/** Creates a new source of randomness for the given seed. */
 	constructor(seed: SodiumRNGSeed) {
 		this.setSeed(seed);
 	}
 
-	setSeed(inputSeed: SodiumRNGSeed) {
-		// randombytes_buf_deterministic requires 32 bytes (8x4 here), but
+	setSeed(seed: SodiumRNGSeed) {
+		// randombytes_buf_deterministic requires 32 bytes, but
 		// generateSeed generates 16 bytes, so the last 16 bytes will be 0
 		// when starting out. This shouldn't cause any problems.
-		const seed = Buffer.alloc(32);
-		for (let i = 1; i < inputSeed.length; i++) {
-			const num = inputSeed[i as 1]; // 32-bit uint
-			// big-endian
-			seed.writeUInt32BE(num, i * 4 - 4);
-		}
-		this.seed = seed;
+		const seedBuf = new Uint8Array(32);
+		Utils.bufWriteHex(seedBuf, seed[1].padEnd(64, '0'));
+		this.seed = seedBuf;
 	}
-	getSeed() {
-		const out: SodiumRNGSeed = ['sodium'];
-		for (let i = 0; i < 32; i += 4) {
-			out.push(this.seed.readUInt32BE(i));
-		}
-		return out;
+	getSeed(): SodiumRNGSeed {
+		return ['sodium', Utils.bufReadHex(this.seed)];
 	}
 
 	next() {
-		const zeroBuf = Buffer.alloc(36);
-		// basically exactly what Sodium does
-		const buf = Buffer.from(new Chacha20(this.seed, this.NONCE).encrypt(zeroBuf));
-
+		const zeroBuf = new Uint8Array(36);
 		// tested to do the exact same thing as
 		// sodium.randombytes_buf_deterministic(buf, this.seed);
+		const buf = new Chacha20(this.seed, SodiumRNG.NONCE).encrypt(zeroBuf);
 
 		// use the first 32 bytes for the next seed, and the next 4 bytes for the output
 		this.seed = buf.slice(0, 32);
-		return buf.slice(32, 36).readUint32BE();
+		// reading big-endian
+		return buf.slice(32, 36).reduce((a, b) => (a << 8) + b);
+		// alternative, probably slower (TODO: benchmark)
+		// return parseInt(Utils.bufReadHex(buf, 32, 36), 16);
 	}
 }
 
