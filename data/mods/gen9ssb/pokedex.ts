@@ -46,13 +46,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		types: ['Water', 'Normal'],
 		baseStats: {hp: 65, atk: 65, def: 65, spa: 90, spd: 50, spe: 90},
 	},
-	pikachu: {
+	pikachustarter: {
 		inherit: true,
-		abilities: {0: "Force of Will"},
-	},
-	pikachulibre: {
-		inherit: true,
-		types: ['Electric', 'Fighting'],
 		abilities: {0: "Force of Will"},
 	},
 	zapdos: {
@@ -108,5 +103,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	vikavolt: {
 		inherit: true,
 		abilities: {0: "Battery Life"},
+	},
+	decidueyehisui: {
+		inherit: true,
+		baseStats: {hp: 88, atk: 112, def: 80, spa: 95, spd: 95, spe: 93},
+		abilities: {0: "Concentration"},
 	},
 };
