@@ -506,7 +506,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Baton Pass', 'Last Respects', 'Shed Tail',
 		],
 		onSwitchIn(pokemon) {
-			this.add('-start', pokemon, pokemon.getNature().name + ' Nature', '[silent]');
+			this.add('-start', pokemon, pokemon.getNature().name, '[silent]');
 		},
 		battle: {
 			spreadModify(baseStats, set) {
