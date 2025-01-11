@@ -1805,18 +1805,23 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			this.add('-anim', source, 'Hurricane', source);
 			this.add('-anim', source, 'Thunder', target);
 		},
-		onHit(target, source, move) {
+		onTryHit(target, source, move) {
 			let smartTargets = [];
 			for (const pokemon of this.getAllPokemon()) {
 				if (pokemon.fainted || !pokemon.hp || pokemon.hp <= 1) continue;
 				smartTargets.push(pokemon);
 			}
 			let newTarget = this.sample(smartTargets);
+			this.add('-message', `newTarget: ${newTarget.name}`);
 			if (!newTarget.runImmunity('Electric')) {
 				this.add('-immune', newTarget);
 				return false;
 			}
 			if (newTarget.ability === 'pealofthunder') {
+				if (newTarget.hp === newTarget.maxhp) {
+					this.add('-immune', newTarget);
+					return false;
+				}
 				if (newTarget.isActive) {
 					this.heal(newTarget.maxhp / 3, newTarget, source, this.effect);
 				} else {
@@ -1828,14 +1833,16 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			// @ts-ignore
 			let damage = this.actions.getDamage(source, newTarget, move);
 			if (!damage) return false;
+			// If all above checks are passed, execute damage and return as NOT_FAIL
 			if (newTarget.isActive) {
 				this.damage(damage, newTarget, source, this.effect);
 			} else {
 				if (damage >= newTarget.hp) damage = newTarget.hp - 1;
 				newTarget.hp -= damage;
-				this.add('-damage', newTarget, newTarget.getHealth, '[from] Big Thunder');
+				this.add('-damage', newTarget, newTarget.getHealth);
 			}
-			return false;
+			this.add('-message', `DAMAGE SUCCESSFULLY DEALT TO: ${newTarget.name}`);
+			return this.NOT_FAIL;
 		},
 		secondary: null,
 		target: "normal",
