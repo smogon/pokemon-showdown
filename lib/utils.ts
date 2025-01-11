@@ -418,7 +418,7 @@ export function formatSQLArray(arr: unknown[], args?: unknown[]) {
  * Invalid characters are marked with 0xFF.
  */
 const nibbleLookup = (() => {
-	const lookup = new Uint8Array(256); // this is line 421
+	const lookup = new Uint8Array(256);
 	for (let i = 0; i < 256; i++) {
 		lookup[i] = 0xFF; // Mark as invalid by default
 	}
