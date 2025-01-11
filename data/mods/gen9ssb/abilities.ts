@@ -1168,48 +1168,40 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		desc: "This Pokemon heals 1/3 of its max HP and gets +1 SpAtk/Spe if hit by an Electric-type move; Electric-type immunity. Upon switching in, a random active or inactive Pokemon is damaged (40 BP, Electric-type, Special)",
 		shortDesc: "+1/3 HP/+1 SpA/Spe if hit by Electric; Hits random Pokemon on switch-in.",
 		onStart(pokemon) {
-			let possibleTargets = [];
-			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
-			for (const e of pokemon.side.pokemon) {
-				if (e.hp) possibleTargets.push(e);
-			}
-			for (const e of target.side.pokemon) {
-				if (e.hp) possibleTargets.push(e);
-			}
-			if (!possibleTargets) return null;
-			this.add('-anim', pokemon, 'Thunderbolt', pokemon);
-			this.add('-anim', pokemon, 'Thunderbolt', target);
-			const newTarget = this.sample(possibleTargets);
+			let allTargets = [];
 			const move = this.dex.getActiveMove('thundershock');
+			for (const target of this.getAllPokemon()) {
+				if (target.fainted || !target.hp || target.hp <= 1) continue;
+				allTargets.push(target);
+			}
+			if (!allTargets.length) return;
+			const target = this.sample(allTargets);
+			this.add('-activate', pokemon, 'Peal of Thunder');
+			this.add('-anim', pokemon, 'Thunder Shock', pokemon);
 			// @ts-ignore
-			let dmg = this.actions.getDamage(pokemon, newTarget, move);
-			if (!dmg) {
-				this.add('-immune', newTarget);
+			let damage = this.actions.getDamage(pokemon, target, move);
+			if (!target.runImmunity(move.type) || !damage || target.side.sideConditions['jadeshield']) {
+				this.add('-immune', target);
 				return;
 			}
-			if (newTarget.side.sideConditions['jadeshield']) {
-				this.add('-immune', newTarget, 'Jade Shield');
-				return;
-			}
-			this.add('-message', `${newTarget.name} was struck by Peal of Thunder!`);
-			if (newTarget.ability === 'pealofthunder' || newTarget === pokemon) {
-				if (newTarget.isActive) {
+			if (target.ability === 'pealofthunder' || target === pokemon) {
+				if (target.isActive) {
 					this.heal(newTarget.baseMaxhp / 3, newTarget);
-					this.add('-immune', newTarget, '[from] ability: Peal of Thunder');
+					this.add('-immune', target, '[from] ability: Peal of Thunder');
 					return;
 				} else {
-					newTarget.hp += newTarget.baseMaxhp / 3;
-					this.add('-immune', newTarget, '[from] ability: Peal of Thunder');
+					target.hp += target.baseMaxhp / 3;
+					this.add('-immune', target, '[from] ability: Peal of Thunder');
 					return;
 				}
 			}
-			if (newTarget === target) {
-				this.damage(dmg, target, pokemon);
-				return;
+			if (target.isActive) {
+				this.damage(damage, target, pokemon, '[from] Peal of Thunder');
+			} else {
+				if (damage >= target.hp) damage = target.hp - 1;
+				target.hp -= damage;
+				this.add('-damage', target, target.getHealth, '[from] Peal of Thunder');
 			}
-			if (dmg > newTarget.hp) dmg = newTarget.hp;
-			newTarget.hp -= dmg;
-			this.add('-message', `${newTarget.name} lost ${Math.round(dmg/newTarget.baseMaxhp * 100)}% of its health!`);
 		},
 		onTryHit(target, source, move) {
 			if (move.type === 'Electric') {
