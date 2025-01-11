@@ -1248,7 +1248,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				target.clearBoosts();
 				this.add('-clearboost', target);
 				target.addVolatile('protect');
-				const set = Math.floor(Math.random() * 4);
+				const set = this.random(4);
 				const newMoves = [];
 				let role = '';
 				switch (set) {
@@ -2608,7 +2608,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			const spd = target.getStat('spd', false, true);
 			const physical = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * atk) / def) / 50);
 			const special = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * spa) / spd) / 50);
-			if (physical > special || (physical === special && this.random(2) === 0)) {
+			if (physical > special || (physical === special && this.randomChance(1, 2))) {
 				move.category = 'Physical';
 				move.flags.contact = 1;
 			}

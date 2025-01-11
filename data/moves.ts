@@ -7352,7 +7352,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isMax: "Snorlax",
 		self: {
 			onHit(source) {
-				if (this.random(2) === 0) return;
+				if (this.randomChance(1, 2)) return;
 				for (const pokemon of source.alliesAndSelf()) {
 					if (pokemon.item) continue;
 
@@ -7448,12 +7448,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		isMax: "Grimmsnarl",
 		onHit(target) {
 			if (target.status || !target.runStatusImmunity('slp')) return;
-			if (this.random(2) === 0) return;
+			if (this.randomChance(1, 2)) return;
 			target.addVolatile('yawn');
 		},
 		onAfterSubDamage(damage, target) {
 			if (target.status || !target.runStatusImmunity('slp')) return;
-			if (this.random(2) === 0) return;
+			if (this.randomChance(1, 2)) return;
 			target.addVolatile('yawn');
 		},
 		secondary: null,
@@ -16812,7 +16812,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const spd = target.getStat('spd', false, true);
 			const physical = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * atk) / def) / 50);
 			const special = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * spa) / spd) / 50);
-			if (physical > special || (physical === special && this.random(2) === 0)) {
+			if (physical > special || (physical === special && this.randomChance(1, 2))) {
 				move.category = 'Physical';
 				move.flags.contact = 1;
 			}

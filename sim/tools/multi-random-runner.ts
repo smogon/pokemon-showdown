@@ -71,7 +71,7 @@ export class MultiRandomRunner {
 				games = [];
 			}
 
-			const seed = this.prng.seed;
+			const seed = this.prng.getSeed();
 			const game = new Runner({format, ...this.options}).run().catch(err => {
 				failures++;
 				console.error(

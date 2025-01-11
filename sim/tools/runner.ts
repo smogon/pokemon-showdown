@@ -86,7 +86,7 @@ export class Runner {
 	private async runGame(format: string, battleStream: RawBattleStream | DualStream) {
 		// @ts-ignore - DualStream implements everything relevant from BattleStream.
 		const streams = BattleStreams.getPlayerStreams(battleStream);
-		const spec = {formatid: format, seed: this.prng.seed};
+		const spec = {formatid: format, seed: this.prng.getSeed()};
 		const is4P = Dex.formats.get(format).playerCount > 2;
 		const p1spec = this.getPlayerSpec("Bot 1", this.p1options);
 		const p2spec = this.getPlayerSpec("Bot 2", this.p2options);
@@ -140,10 +140,10 @@ export class Runner {
 	// NOTE: advances this.prng's seed by 4.
 	private newSeed(): PRNGSeed {
 		return [
-			Math.floor(this.prng.next() * 0x10000),
-			Math.floor(this.prng.next() * 0x10000),
-			Math.floor(this.prng.next() * 0x10000),
-			Math.floor(this.prng.next() * 0x10000),
+			this.prng.random(2 ** 16),
+			this.prng.random(2 ** 16),
+			this.prng.random(2 ** 16),
+			this.prng.random(2 ** 16),
 		];
 	}
 
