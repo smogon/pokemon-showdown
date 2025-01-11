@@ -1814,7 +1814,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			let newTarget = this.sample(smartTargets);
 			if (!newTarget.runImmunity('Electric')) {
 				this.add('-immune', newTarget);
-				return;
+				return false;
 			}
 			if (newTarget.ability === 'pealofthunder') {
 				if (newTarget.isActive) {
@@ -1823,7 +1823,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					newTarget.hp += newTarget.maxhp / 3;
 					this.add('-heal', newTarget, newTarget.getHealth, this.effect);
 				}
-				return;
+				return false;
 			}
 			// @ts-ignore
 			let damage = this.actions.getDamage(source, newTarget, move);
