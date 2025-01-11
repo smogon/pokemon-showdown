@@ -15,6 +15,73 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Cinque
+	cheerleader: {
+		name: "Cheerleader",
+		gen: 9,
+		flags: {},
+		shortDesc: "-Flinch/Par/Frz/Slp/Cnf; Multiscale; +1 crit if attacked.",
+		desc: "Prevents Flinching, Paralysis, Freeze, Sleep, and Confusion. Whenever this Pokemon is damaged by an attacking move, its crit ratio is raised by 1.",
+		onStart() {
+			this.effectState.attacksTaken = 0;
+		},
+		onModifyAtk(atk, pokemon) {
+			if (!pokemon.abilityState.homerun) return;
+			return this.chainModify(1.5);
+		},	
+		onModifyDef(def,pokemon) {
+			if (!pokemon.abilityState.homerun) return;
+			return this.chainModify(1.5);
+	   },
+		onModifySpd(spd, pokemon) {
+			if (!pokemon.abilityState.homerun) return;
+			return this.chainModify(1.5);
+	   },
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.hp >= target.maxhp) {
+				this.debug('Cheerleader weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onModifySTAB(stab, source, target, move) {
+			if (!pokemon.abilityState.homerun) return;
+			if (move.forceSTAB || source.hasType(move.type)) {
+				if (stab === 2) {
+					return 2.25;
+				}
+				return 2;
+			}
+	   },
+		onTryAddVolatile(status, pokemon) {
+			if (['flinch', 'confusion', 'yawn'].includes(status.id)) {
+				this.add('-immune', target, '[from] ability: Cheerleader');
+				return null;
+			}
+	   },
+		onUpdate(pokemon) {
+			if (['slp', 'frz', 'par'].includes(pokemon.status)) {
+				this.add('-activate', pokemon, 'ability: Cheerleader');
+				pokemon.cureStatus();
+			}
+			if (pokemon.volatiles['confusion']) {
+				this.add('-activate', pokemon, 'ability: Cheerleader');
+				pokemon.removeVolatile('confusion');
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (['slp', 'par', 'frz'].includes(status.id)) {
+				this.add('-immune', target, '[from] ability: Cheerleader');
+				return false;
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move && damage && target !== source) this.effectState.attacksTaken++;
+		},
+		onModifyCritRatio(critRatio, pokemon) {
+			if (!this.effectState.attacksTaken) return;
+			return critRatio + this.effectState.attacksTaken;
+		},
+	},
 	// Marvin
 	murderousmimic: {
 		name: "Murderous Mimic",
