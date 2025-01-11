@@ -505,6 +505,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Urshifu-Single-Strike', 'Urshifu-Rapid-Strike', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass',
 			'Last Respects', 'Shed Tail',
 		],
+		onSwitchIn(pokemon) {
+			this.add('-start', pokemon, pokemon.getNature().name + ' Nature', '[silent]');
+		},
 		battle: {
 			spreadModify(baseStats, set) {
 				const modStats: SparseStatsTable = {atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
