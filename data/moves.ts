@@ -9945,7 +9945,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	iondeluge: {
 		num: 569,
-		accuracy: true,
+		accuracy: 95,
 		basePower: 0,
 		category: "Status",
 
@@ -11086,37 +11086,32 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {mirror: 1, metronome: 1},
-		pseudoWeather: 'magicroom',
+		sideCondition: 'magicroom',
 		condition: {
 			duration: 5,
-			durationCallback(source, effect) {
+			durationCallback(target, source, effect) {
 				if (source?.hasItem('dimencionador')) {
 					return 8;
 				}
 				return 5;
 			},
-			onFieldStart(target, source) {
+			onSideStart(side, source) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-fieldstart', 'move: Magic Room', '[of] ' + source, '[persistent]');
+					this.add('-sidestart', side, 'move: Magic Room', '[of] ' + source, '[persistent]');
 				} else {
-					this.add('-fieldstart', 'move: Magic Room', '[of] ' + source);
+					this.add('-sidestart', side, 'move: Magic Room', '[of] ' + source);
 				}
-				for (const mon of this.getAllActive()) {
+				for (const mon of side.active) {
 					this.singleEvent('End', mon.getItem(), mon.itemState, mon);
 				}
 			},
-			onFieldRestart(target, source) {
-				this.field.removePseudoWeather('magicroom');
+			onSideEnd(side) {
+				this.add('-sideend', side, 'move: Magic Room');
 			},
 			// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
-			onFieldResidualOrder: 27,
-			onFieldResidualSubOrder: 6,
-			onFieldEnd() {
-				this.add('-fieldend', 'move: Magic Room', '[of] ' + this.effectState.source);
-			},
 		},
 		secondary: null,
-		target: "all",
+		target: "foeSide",
 		type: "Psychic",
 		zMove: {boost: {spd: 1}},
 		contestType: "Clever",
