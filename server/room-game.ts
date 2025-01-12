@@ -89,7 +89,9 @@ export class RoomGamePlayer<GameClass extends RoomGame = SimpleRoomGame> {
 		this.getUser()?.send(data);
 	}
 	sendRoom(data: string) {
-		this.getUser()?.sendTo(this.game.roomid, data);
+		if (this.game) {
+			this.getUser()?.sendTo(this.game.roomid, data);
+		}
 	}
 }
 
