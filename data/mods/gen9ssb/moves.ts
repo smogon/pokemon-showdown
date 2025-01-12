@@ -4236,7 +4236,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			pokemon.cureStatus();
 			this.boost({def: 1, spd: 1});
 			(pokemon as any).level += 5;
-			pokemon.details = pokemon.getSimpleDetails();
+			pokemon.details = pokemon.getUpdatedDetails();
 			this.add('-anim', pokemon, 'Geomancy', pokemon);
 			this.add('replace', pokemon, pokemon.details);
 			this.add('-message', `${pokemon.name} gained 5 levels!`);
@@ -5904,7 +5904,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add(`c:|${getName((source.illusion || source).name)}|lol never do that ever again thanks`);
 				this.add('custom', '-endterastallize', pokemon);
 				delete pokemon.terastallized;
-				const details = pokemon.getSimpleDetails();
+				const details = pokemon.getUpdatedDetails();
 				this.add('detailschange', pokemon, details);
 			}
 		},

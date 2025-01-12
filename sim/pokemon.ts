@@ -354,7 +354,7 @@ export class Pokemon {
 		}
 
 		this.position = 0;
-		this.details = this.getSimpleDetails();
+		this.details = this.getUpdatedDetails();
 
 		this.status = '';
 		this.statusState = {};
@@ -511,7 +511,7 @@ export class Pokemon {
 		return this.isActive ? this.getSlot() + fullname.slice(2) : fullname;
 	}
 
-	getSimpleDetails(displayedSpeciesName: string | null = null, illusionDetails = false) {
+	getUpdatedDetails(displayedSpeciesName: string | null = null, illusionDetails = false) {
 		let name = displayedSpeciesName || this.species.name;
 		let level = this.level;
 		if (illusionDetails && this.illusion) {
@@ -523,9 +523,9 @@ export class Pokemon {
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 	}
 
-	getDetails = () => {
+	getFullDetails = () => {
 		const health = this.getHealth();
-		let details = this.illusion ? this.getSimpleDetails(null, true) : this.details;
+		let details = this.illusion ? this.getUpdatedDetails(null, true) : this.details;
 		if (this.terastallized) details += `, tera:${this.terastallized}`;
 		return {side: health.side, secret: `${details}|${health.secret}`, shared: `${details}|${health.shared}`};
 	};
@@ -1395,7 +1395,7 @@ export class Pokemon {
 				this.regressionForme = {species: this.baseSpecies, ability: this.baseAbility};
 			}
 			this.baseSpecies = rawSpecies;
-			this.details = this.getSimpleDetails();
+			this.details = this.getUpdatedDetails();
 			let details = (this.illusion || this).details;
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
 			this.battle.add('detailschange', this, details);

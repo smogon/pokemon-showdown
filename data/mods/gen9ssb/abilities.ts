@@ -1755,7 +1755,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					target.clearBoosts();
 					this.add('-clearboost', target);
 					this.boost({atk: 1, def: -1, spa: 1, spd: -1, spe: 1});
-					const details = target.getSimpleDetails();
+					const details = target.getUpdatedDetails();
 					target.details = details;
 					this.add('replace', target, details);
 				}

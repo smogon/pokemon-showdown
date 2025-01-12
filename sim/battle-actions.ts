@@ -136,9 +136,9 @@ export class BattleActions {
 		}
 		this.battle.runEvent('BeforeSwitchIn', pokemon);
 		if (sourceEffect) {
-			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails, '[from] ' + sourceEffect);
+			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, '[from] ' + sourceEffect);
 		} else {
-			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails);
+			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 		}
 		pokemon.abilityOrder = this.battle.abilityOrder++;
 		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
@@ -1963,7 +1963,7 @@ export class BattleActions {
 				pokemon.regressionForme = {species: pokemon.baseSpecies, ability: pokemon.baseAbility};
 			}
 			pokemon.baseSpecies = pokemon.species;
-			pokemon.details = pokemon.getSimpleDetails();
+			pokemon.details = pokemon.getUpdatedDetails();
 		}
 		this.battle.runEvent('AfterTerastallization', pokemon);
 	}

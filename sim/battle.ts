@@ -2373,7 +2373,7 @@ export class Battle {
 				if (pokemon.regressionForme) {
 					pokemon.baseSpecies = pokemon.regressionForme.species;
 					pokemon.baseAbility = pokemon.regressionForme.ability;
-					pokemon.details = pokemon.getSimpleDetails(pokemon.baseSpecies.name);
+					pokemon.details = pokemon.getUpdatedDetails(pokemon.baseSpecies.name);
 					pokemon.regressionForme = null;
 					this.add('detailschange', pokemon, pokemon.details, '[silent]');
 				}
@@ -2501,7 +2501,7 @@ export class Battle {
 				const species = pokemon.setSpecies(rawSpecies);
 				if (!species) continue;
 				pokemon.baseSpecies = rawSpecies;
-				pokemon.details = pokemon.getSimpleDetails();
+				pokemon.details = pokemon.getUpdatedDetails();
 				pokemon.setAbility(species.abilities['0'], null, true);
 				pokemon.baseAbility = pokemon.ability;
 

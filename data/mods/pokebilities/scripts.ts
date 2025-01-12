@@ -169,7 +169,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.illusion ? this.illusion.species.name : species.baseSpecies;
 			if (isPermanent) {
 				this.baseSpecies = rawSpecies;
-				this.details = this.getSimpleDetails();
+				this.details = this.getUpdatedDetails();
 				this.battle.add('detailschange', this, (this.illusion || this).details);
 				if (source.effectType === 'Item') {
 					this.canTerastallize = null; // National Dex behavior
