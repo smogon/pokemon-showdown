@@ -30,7 +30,7 @@ describe(`Terapagos`, function () {
 		], [
 			{species: 'silicobra', moves: ['sleeptalk']},
 		]]);
-
-		assert.throws(() => battle.makeChoices());
+		battle.makeChoices();
+		assert.species(battle.p1.active[0], 'Terapagos-Terastal');
 	});
 });
