@@ -2371,11 +2371,9 @@ export class Battle {
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				if (pokemon.regressionForme) {
+					// before clearing volatiles
 					pokemon.baseSpecies = pokemon.regressionForme.species;
 					pokemon.baseAbility = pokemon.regressionForme.ability;
-					pokemon.details = pokemon.getUpdatedDetails(pokemon.baseSpecies.name);
-					pokemon.regressionForme = null;
-					this.add('detailschange', pokemon, pokemon.details, '[silent]');
 				}
 				pokemon.clearVolatile(false);
 				pokemon.fainted = true;
@@ -2383,6 +2381,12 @@ export class Battle {
 				pokemon.isActive = false;
 				pokemon.isStarted = false;
 				delete pokemon.terastallized;
+				if (pokemon.regressionForme) {
+					// after clearing volatiles
+					pokemon.details = pokemon.getUpdatedDetails();
+					pokemon.regressionForme = null;
+					this.add('detailschange', pokemon, pokemon.details, '[silent]');
+				}
 				pokemon.side.faintedThisTurn = pokemon;
 				if (this.faintQueue.length >= faintQueueLeft) checkWin = true;
 			}

@@ -511,21 +511,20 @@ export class Pokemon {
 		return this.isActive ? this.getSlot() + fullname.slice(2) : fullname;
 	}
 
-	getUpdatedDetails(displayedSpeciesName: string | null = null, illusionDetails = false) {
-		let name = displayedSpeciesName || this.species.name;
-		let level = this.level;
-		if (illusionDetails && this.illusion) {
-			if (this.battle.ruleTable.has('illusionlevelmod')) level = this.illusion.level;
-			name = this.illusion.species.name;
-		}
+	getUpdatedDetails(illusionLevel?: number) {
+		let name = this.species.name;
 		if (name === 'Greninja-Bond') name = 'Greninja';
+		const level = illusionLevel || this.level;
 		return name + (level === 100 ? '' : ', L' + level) +
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 	}
 
 	getFullDetails = () => {
 		const health = this.getHealth();
-		let details = this.illusion ? this.getUpdatedDetails(null, true) : this.details;
+		let details = this.details;
+		if (this.illusion) {
+			details = this.illusion.getUpdatedDetails(this.battle.ruleTable.has('illusionlevelmod') ? this.level : undefined);
+		}
 		if (this.terastallized) details += `, tera:${this.terastallized}`;
 		return {side: health.side, secret: `${details}|${health.secret}`, shared: `${details}|${health.shared}`};
 	};
