@@ -24,7 +24,7 @@ describe(`Terapagos`, function () {
 		assert.false(!!ditto.terastallized);
 	});
 
-	it(`[Hackmons] can't use Transforme`, function () {
+	it(`[Hackmons] can't use Transform`, function () {
 		battle = common.createBattle([[
 			{species: 'terapagos', ability: 'terashift', moves: ['transform']},
 		], [
