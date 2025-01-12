@@ -6090,6 +6090,47 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Pluma Watt",
 		rating: 2.5,
-		num: 259,
+		num: -118,
+	},
+	liberaalmas: {
+		onStart(pokemon) {
+			if(pokemon.side.faintedLastTurn){
+				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, pokemon);
+			}
+		},
+		flags: {},
+		name: "Libera Almas",
+		rating: 2,
+		num: -119,
+	},
+	almapura: {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) {
+				this.debug('Alma Pura neutralize');
+				return target.getMoveHitData(move).typeMod = 0;
+			}
+		},
+		flags: {breakable: 1},
+		name: "Alma Pura",
+		rating: 3,
+		num: -120,
+	},
+	ultimogolpe: {
+		onStart(pokemon) {
+			for (const ally of pokemon.adjacentAllies()) {
+				if(ally.hp <= ally.baseMaxhp / 4){
+					this.damage(ally.baseMaxhp / 4, ally, pokemon)
+				}
+			}
+			for (const foe of pokemon.adjacentFoes()) {
+				if(foe.hp <= foe.baseMaxhp / 4){
+					this.damage(foe.baseMaxhp / 4, foe, pokemon)
+				}
+			}
+		},
+		flags: {},
+		name: "Ultimo Golpe",
+		rating: 2,
+		num: -121,
 	},
 };
