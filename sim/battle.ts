@@ -2385,7 +2385,6 @@ export class Battle {
 					// after clearing volatiles
 					pokemon.details = pokemon.getUpdatedDetails();
 					pokemon.regressionForme = null;
-					this.add('detailschange', pokemon, pokemon.details, '[silent]');
 				}
 				pokemon.side.faintedThisTurn = pokemon;
 				if (this.faintQueue.length >= faintQueueLeft) checkWin = true;
