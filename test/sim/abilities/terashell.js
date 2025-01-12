@@ -63,6 +63,19 @@ describe('Tera Shell', function () {
 		assert.bounded(damage, [28, 33], `Tera Shell should not reduce damage, because Tera Shell should be suppressed`);
 	});
 
+	it(`should not work if the user's species is not currently Terapagos-Terastal`, function () {
+		battle = common.createBattle([[
+			{species: 'Espeon', moves: ['transform']},
+		], [
+			{species: 'Terapagos', ability: 'terashift', moves: ['flowertrick']},
+		]]);
+
+		battle.makeChoices();
+		const espeon = battle.p1.active[0];
+		const damage = espeon.maxhp - espeon.hp;
+		assert.bounded(damage, [33, 39], `Tera Shell should have activated because current species is Terapagos`);
+	});
+
 	it(`should not weaken the damage from Struggle`, function () {
 		battle = common.createBattle([[
 			{species: 'Terapagos', ability: 'terashift', moves: ['luckychant']},
