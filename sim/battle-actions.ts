@@ -1959,7 +1959,7 @@ export class BattleActions {
 			this.battle.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		}
 		if (pokemon.species.baseSpecies === 'Morpeko') {
-			if (pokemon.species.name !== 'Morpeko') {
+			if (pokemon.species.name !== 'Morpeko' && !pokemon.transformed) {
 				pokemon.regressionForme = {species: pokemon.baseSpecies, ability: pokemon.baseAbility};
 			}
 			pokemon.baseSpecies = pokemon.species;

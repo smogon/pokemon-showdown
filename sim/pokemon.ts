@@ -1393,7 +1393,9 @@ export class Pokemon {
 		const apparentSpecies =
 			this.illusion ? this.illusion.species.name : species.baseSpecies;
 		if (isPermanent) {
-			if (!this.regressionForme) this.regressionForme = {species: this.baseSpecies, ability: this.baseAbility};
+			if (!this.regressionForme && !this.transformed) {
+				this.regressionForme = {species: this.baseSpecies, ability: this.baseAbility};
+			}
 			this.baseSpecies = rawSpecies;
 			this.details = this.getSimpleDetails();
 			let details = (this.illusion || this).details;
