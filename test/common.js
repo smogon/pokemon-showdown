@@ -105,7 +105,7 @@ class TestTools {
 			// If a seed for the pseudo-random number generator is not provided,
 			// a default seed (guaranteed to be the same across test executions)
 			// will be used.
-			seed: options.seed || DEFAULT_SEED,
+			seed: options.seed === undefined ? DEFAULT_SEED : (options.seed || undefined),
 			strictChoices: options.strictChoices !== false,
 		};
 
