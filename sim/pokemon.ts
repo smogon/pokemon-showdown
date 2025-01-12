@@ -354,9 +354,7 @@ export class Pokemon {
 		}
 
 		this.position = 0;
-		let displayedSpeciesName = this.species.name;
-		if (displayedSpeciesName === 'Greninja-Bond') displayedSpeciesName = 'Greninja';
-		this.details = this.getSimpleDetails(displayedSpeciesName);
+		this.details = this.getSimpleDetails();
 
 		this.status = '';
 		this.statusState = {};
@@ -519,15 +517,15 @@ export class Pokemon {
 		if (illusionDetails && this.illusion) {
 			if (this.battle.ruleTable.has('illusionlevelmod')) level = this.illusion.level;
 			name = this.illusion.species.name;
-			if (name === 'Greninja-Bond') name = 'Greninja';
 		}
+		if (name === 'Greninja-Bond') name = 'Greninja';
 		return name + (level === 100 ? '' : ', L' + level) +
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 	}
 
 	getDetails = () => {
 		const health = this.getHealth();
-		let details = this.getSimpleDetails(null, true);
+		let details = this.illusion ? this.getSimpleDetails(null, true) : this.details;
 		if (this.terastallized) details += `, tera:${this.terastallized}`;
 		return {side: health.side, secret: `${details}|${health.secret}`, shared: `${details}|${health.shared}`};
 	};
