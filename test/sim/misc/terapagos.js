@@ -24,19 +24,13 @@ describe(`Terapagos`, function () {
 		assert.false(!!ditto.terastallized);
 	});
 
-	it(`[Hackmons] should not cause Terapagos-Terastal to become Terapagos-Stellar if the user is Transformed`, function () {
+	it(`[Hackmons] can't use Transforme`, function () {
 		battle = common.createBattle([[
-			{species: 'terapagos', ability: 'terashift', moves: ['transform'], teraType: 'Stellar'},
-			{species: 'pikachu', moves: ['sleeptalk']},
+			{species: 'terapagos', ability: 'terashift', moves: ['transform']},
 		], [
 			{species: 'silicobra', moves: ['sleeptalk']},
 		]]);
 
-		battle.makeChoices();
-		battle.makeChoices('move sleeptalk terastallize', 'auto');
-		battle.makeChoices('switch 2', 'auto');
-		battle.makeChoices('switch 2', 'auto');
-		const terapagos = battle.p1.active[0];
-		assert.species(terapagos, 'Terapagos-Terastal');
+		assert.throws(() => battle.makeChoices());
 	});
 });
