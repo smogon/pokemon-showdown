@@ -682,8 +682,8 @@ export class TeamValidator {
 				set.hpType = type.name;
 			}
 		}
-		if (species.forceTeraType && ruleTable.has('obtainablemisc')) {
-			set.teraType = species.forceTeraType;
+		if (species.requiredTeraType && ruleTable.has('obtainablemisc')) {
+			set.teraType = species.requiredTeraType;
 		}
 		if (set.teraType) {
 			const type = dex.types.get(set.teraType);

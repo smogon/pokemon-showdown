@@ -1388,7 +1388,7 @@ export class Pokemon {
 		if (isPermanent) {
 			this.baseSpecies = rawSpecies;
 			let displayedSpeciesName = species.name;
-			if (species.baseSpecies === 'Ogerpon' && this.terastallized && this.teraType !== species.forceTeraType) {
+			if (species.baseSpecies === 'Ogerpon' && this.terastallized && this.teraType !== species.requiredTeraType) {
 				switch (this.teraType) {
 				case 'Grass': displayedSpeciesName = 'Ogerpon-Teal-Tera'; break;
 				case 'Water': displayedSpeciesName = 'Ogerpon-Wellspring-Tera'; break;
@@ -1404,7 +1404,7 @@ export class Pokemon {
 			if (!source) {
 				// Tera forme
 				// Ogerpon/Terapagos text goes here
-				if (species.baseSpecies === 'Ogerpon' && this.terastallized && this.teraType !== species.forceTeraType) {
+				if (species.baseSpecies === 'Ogerpon' && this.terastallized && this.teraType !== species.requiredTeraType) {
 					this.battle.hint(`Ogerpon terastallized into ${species.name}, but it has taken the appearance of ${displayedSpeciesName} due to its tera type being ${this.teraType}.`);
 				}
 			} else if (source.effectType === 'Item') {
