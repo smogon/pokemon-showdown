@@ -683,7 +683,7 @@ export class TeamValidator {
 			}
 		}
 		if (species.requiredTeraType && ruleTable.has('obtainablemisc')) {
-			set.teraType = species.requiredTeraType;
+			problems.push(`${species.name}'s Terastal type needs to be ${species.requiredTeraType}, please fix it.`);
 		}
 		if (set.teraType) {
 			const type = dex.types.get(set.teraType);
