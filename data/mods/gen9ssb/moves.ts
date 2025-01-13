@@ -40,6 +40,67 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// PokeKart, o' PokeKart
+	star: {
+		name: "Star",
+		basePower: 120,
+		category: "Physical",
+		accuracy: 100,
+		gen: 9,
+		pp: 10,
+		flags: {contact: 1, protect: 1},
+		priority: 2,
+		condition: {
+			duration: 3,
+			onStart(pokemon) {
+				this.effectState.oldMove = this.dex.moves.get(pokemon.moveSlots[3].id);
+				let move = this.dex.moves.get('star');
+				let itemBox = pokemon.moves.indexOf('itembox');
+				// If for whatever reason, Item Box's Star is triggered without having Item Box, it
+				// will fill Star into the fourth (signature) moveslot where Item Box should be.
+				if (!itemBox || itemBox < 0) itemBox = 3;
+				pokemon.moveSlots[itemBox] = {
+					move: move.name,
+					id: move.id,
+					pp: move.pp,
+					maxpp: move.pp,
+					target: move.target,
+					disabled: false,
+					used: false,
+					virtual: true,
+				};
+			},
+			onDamage(damage, target, source, effect) {
+				if (damage && effect.effectType === 'Move') {
+					this.add('-message', `${target.name}'s Star Power protected it from ${source.name}'s ${effect.name}!`);
+					return 0;
+				}
+			},
+			onDisableMove(pokemon) {
+				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot.id !== 'star') {
+						pokemon.disableMove(moveSlot.id);
+					}
+				}
+			},
+			onEnd(pokemon) {
+				this.add('-message', `${pokemon.name}'s Star Power wore off!`);
+				pokemon.moveSlots[pokemon.moves.indexOf('star')] = {
+					move: this.effectState.oldMove.name,
+					id: this.effectState.oldMove.id,
+					pp: this.effectState.oldMove.pp,
+					maxpp: this.effectState.oldMove.pp,
+					target: this.effectState.oldMove.target,
+					disabled: false,
+					used: false,
+					virtual: true,
+				};
+			},
+		},
+		secondary: null,
+		type: "Steel",
+		target: "normal",
+	},
 	// Marvin
 	emergencymeltdown: {
 		name: "Emergency Meltdown",
