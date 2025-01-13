@@ -1722,7 +1722,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender) {
-			if (!defender.activeTurns) {
+			if (defender && !defender.activeTurns) {
 				this.debug('Stakeout boost');
 				return this.chainModify(2);
 			}
