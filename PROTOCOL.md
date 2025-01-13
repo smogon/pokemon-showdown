@@ -26,6 +26,10 @@ Client implementations you might want to look at for reference include:
 - the official client (HTML5 + JavaScript) -
     https://github.com/smogon/pokemon-showdown-client
 
+You can use a library wrapping the API in the language of your choice (if it exists):
+
+- Scala: https://github.com/pidoveproject/scala-showdown-api
+
 The official client logs protocol messages in the JavaScript console,
 so opening that (F12 in most browsers) can help tell you what's going
 on.
