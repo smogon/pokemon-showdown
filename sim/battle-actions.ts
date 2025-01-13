@@ -1929,7 +1929,6 @@ export class BattleActions {
 			return null;
 		}
 		if (pokemon.species.baseSpecies === 'Ogerpon' && !['Fire', 'Grass', 'Rock', 'Water'].includes(pokemon.teraType)) {
-			this.battle.hint("Ogerpon can only terastallize into Fire, Grass, Rock or Water types, or the game gets softlocked.");
 			return null;
 		}
 		return pokemon.teraType;
