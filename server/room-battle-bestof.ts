@@ -84,6 +84,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	score: number[] | null = null;
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
+		this.gameid = 'bestof' as ID;
 		this.format = Dex.formats.get(options.format);
 		this.bestOf = Number(Dex.formats.getRuleTable(this.format).valueRules.get('bestof'))!;
 		this.winThreshold = Math.floor(this.bestOf / 2) + 1;
