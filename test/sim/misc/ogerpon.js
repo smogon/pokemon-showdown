@@ -21,17 +21,19 @@ describe(`[Hackmons] Ogerpon`, function () {
 		assert.equal(ogerpon.ability, 'embodyaspectteal', `Ogerpon's ability should be Embody Aspect after switching out`);
 	});
 
-	it(`can't Terastallize into a type other than Fire, Grass, Rock or Water`, function () {
+	it(`won't Terastallize into a type other than Fire, Grass, Rock or Water`, function () {
 		battle = common.gen(9).createBattle([[
 			{species: 'ogerponwellspringtera', ability: 'embodyaspectwellspring', moves: ['sleeptalk'], teraType: 'Electric'},
 		], [
 			{species: 'silicobra', moves: ['stealthrock']},
 		]]);
-		assert.throws(() => battle.makeChoices('move sleeptalk terastallize', 'auto'), "/Can't move: Ogerpon can't Terastallize./");
+		const ogerpon = battle.p1.active[0];
+		battle.makeChoices('move sleeptalk terastallize', 'auto');
+		assert.false(!!ogerpon.terastallized);
 	});
 
 	// https://www.smogon.com/forums/threads/ogerpon-teal-tera-tera-can-exist.3742851/post-10132811
-	it(`can Terastallize to a type other than its mask type`, function () {
+	it(`can Terastallize into the type of another mask`, function () {
 		battle = common.gen(9).createBattle([[
 			{species: 'ogerponwellspring', ability: 'waterabsorb', moves: ['ivycudgel'], teraType: 'Rock'},
 		], [
@@ -65,7 +67,7 @@ describe(`[Hackmons] Ogerpon`, function () {
 	});
 
 	// https://www.smogon.com/forums/threads/ogerpon-teal-tera-tera-can-exist.3742851/post-10132811
-	it(`Tera form can Terastallize to a type other than its mask type`, function () {
+	it(`Tera form can Terastallize into the type of another mask`, function () {
 		battle = common.gen(9).createBattle([[
 			{species: 'ogerponwellspringtera', ability: 'embodyaspectwellspring', moves: ['ivycudgel'], teraType: 'Rock'},
 		], [
