@@ -41,6 +41,44 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	*/
 	// Cinque
+	homerunswing: {
+		name: "Homerun Swing",
+		basePower: 40,
+		category: "Physical",
+		accuracy: true,
+		gen: 9,
+		desc: "Ignores immunities, protection and forces opponent to switch. Homerun Swing - Windup has its PP reduced to 0. If this attack fails to K.O: Pokemon must recharge. If this attack K.Os: Permanent 2x Attack, 1.5x Defense and Special Defense, Restores 30% HP, next attack is a guaranteed critical, Safeguard for 5 turns, all allies gain 1.3x Attack and Special Attack for 5 turns.",
+		shortDesc: "Forces target to switch; User recharges if no KO; Ignores immunity/protect.",
+		priority: 6,
+		pp: 1,
+		isZ: "Moogle Plushie",
+		flags: {contact: 1},
+		breaksProtect: true,
+		onEffectiveness(typeMod, target, type, move) {
+			if (move.type !== 'Ground' || !target) return;
+			if (!target.runImmunity('Ground')) {
+				if (target.hasType('Flying')) return 0;
+			}
+		},
+		basePowerCallback(pokemon, target, move) {
+			if (!pokemon.abilityState.windup) return;
+			return 40 + 60 * pokemon.abilityState.windup;
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (!target || target.fainted || target.hp <= 0) {
+				pokemon.abilityState.homerun = true;
+				this.heal(pokemon.baseMaxhp*0.35, pokemon);
+			}
+			if (pokemon.abilityState.windup) {
+				const boosts: SparseBoostsTable = {};
+				boosts.def = -pokemon.abilityState.windup;
+				boosts.spd = -pokemon.abilityState.windup;
+				this.boost(boosts, pokemon, pokemon);
+			}
+			pokemon.deductPP('homerunswingwindup', 64);
+			pokemon.abilityState.windup = 0;
+		},
+	},
 	homerunswingwindup: {
       name: "Homerun Swing - Windup",
       category: "Status",
