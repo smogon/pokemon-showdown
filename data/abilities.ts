@@ -1167,7 +1167,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	embodyaspectcornerstone: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.name === 'Ogerpon-Cornerstone-Tera' &&
+			if (pokemon.baseSpecies.name === 'Ogerpon-Cornerstone-Tera' && pokemon.terastallized &&
 				this.effectState.embodied !== pokemon.previouslySwitchedIn) {
 				this.effectState.embodied = pokemon.previouslySwitchedIn;
 				this.boost({def: 1}, pokemon);
@@ -1180,7 +1180,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	embodyaspecthearthflame: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.name === 'Ogerpon-Hearthflame-Tera' &&
+			if (pokemon.baseSpecies.name === 'Ogerpon-Hearthflame-Tera' && pokemon.terastallized &&
 				this.effectState.embodied !== pokemon.previouslySwitchedIn) {
 				this.effectState.embodied = pokemon.previouslySwitchedIn;
 				this.boost({atk: 1}, pokemon);
@@ -1193,7 +1193,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	embodyaspectteal: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.name === 'Ogerpon-Teal-Tera' &&
+			if (pokemon.baseSpecies.name === 'Ogerpon-Teal-Tera' && pokemon.terastallized &&
 				this.effectState.embodied !== pokemon.previouslySwitchedIn) {
 				this.effectState.embodied = pokemon.previouslySwitchedIn;
 				this.boost({spe: 1}, pokemon);
@@ -1206,7 +1206,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	embodyaspectwellspring: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.name === 'Ogerpon-Wellspring-Tera' &&
+			if (pokemon.baseSpecies.name === 'Ogerpon-Wellspring-Tera' && pokemon.terastallized &&
 				this.effectState.embodied !== pokemon.previouslySwitchedIn) {
 				this.effectState.embodied = pokemon.previouslySwitchedIn;
 				this.boost({spd: 1}, pokemon);

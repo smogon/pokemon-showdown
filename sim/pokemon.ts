@@ -1387,7 +1387,16 @@ export class Pokemon {
 			this.illusion ? this.illusion.species.name : species.baseSpecies;
 		if (isPermanent) {
 			this.baseSpecies = rawSpecies;
-			this.details = species.name + (this.level === 100 ? '' : ', L' + this.level) +
+			let displayedSpeciesName = species.name;
+			if (species.baseSpecies === 'Ogerpon' && this.terastallized && this.teraType !== species.requiredTeraType) {
+				switch (this.teraType) {
+				case 'Grass': displayedSpeciesName = 'Ogerpon-Teal-Tera'; break;
+				case 'Water': displayedSpeciesName = 'Ogerpon-Wellspring-Tera'; break;
+				case 'Fire': displayedSpeciesName = 'Ogerpon-Hearthflame-Tera'; break;
+				case 'Rock': displayedSpeciesName = 'Ogerpon-Cornerstone-Tera'; break;
+				}
+			}
+			this.details = displayedSpeciesName + (this.level === 100 ? '' : ', L' + this.level) +
 				(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 			let details = (this.illusion || this).details;
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
@@ -1395,6 +1404,9 @@ export class Pokemon {
 			if (!source) {
 				// Tera forme
 				// Ogerpon/Terapagos text goes here
+				if (species.baseSpecies === 'Ogerpon' && this.terastallized && this.teraType !== species.requiredTeraType) {
+					this.battle.hint(`Ogerpon terastallized into ${species.name}, but it has taken the appearance of ${displayedSpeciesName} due to its tera type being ${this.teraType}.`);
+				}
 			} else if (source.effectType === 'Item') {
 				this.canTerastallize = null; // National Dex behavior
 				if (source.zMove) {
