@@ -216,16 +216,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Emergency Meltdown',
 		evs: { hp: 120, atk: 136, spe: 252 }, ivs: { spa: 0 }, nature: 'Jolly',
 	},
-	/* Vaulted for being fucking stupid!
-	Quetzalcoatl: {
-		species: 'Zapdos', ability: 'Peal of Thunder', item: 'Expert Belt', gender: 'N',
-		moves: ['Secret Sword', 'Earth Power', 'Oblivion Wing'],
-		signatureMove: 'Big Thunder',
-		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
-	},
-<<<<<<< HEAD
-=======
- 	*/
 	Fblthp: {
 		species: 'Poliwhirl', ability: 'Lost and Found', item: 'Bubble Wand', gender: 'M',
 		moves: ['Bouncy Bubble', 'Yawn', 'Helping Hand'],
@@ -328,21 +318,26 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Emergency Meltdown',
 		evs: {hp: 120, atk: 136, spe: 252}, ivs: {spa: 0}, nature: 'Jolly',
 	},
-	/*
+	/* Vaulted for being fucking stupid!
+	Quetzalcoatl: {
+		species: 'Zapdos', ability: 'Peal of Thunder', item: 'Expert Belt', gender: 'N',
+		moves: ['Secret Sword', 'Earth Power', 'Oblivion Wing'],
+		signatureMove: 'Big Thunder',
+		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
+	},
 	Cinque: {
 		species: 'Marowak', ability: 'Cheerleader', item: 'Moogle Plushie', gender: 'F',
 		moves: ['Magnitude', 'Payback', 'Stone Edge'],
 		signatureMove: 'Homerun Swing - Windup',
 		evs: {hp: 252, atk: 252, spd: 4}, ivs: {spa: 0}, nature: 'Adamant',
 	},
->>>>>>> 364f7d948df1154feb0f05a1d159e837af123df8
 	Miraju: {
 		species: 'Wynaut', ability: 'Illusive Energy', item: 'Eviolite', gender: 'N',
 		moves: ['Hyperspace Hole', 'Glare', 'Memento'],
 		signatureMove: 'Close Combat',
 		evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
-	  Ingrid: {
+	Ingrid: {
 		species: 'Doublade', ability: 'Caliber Conversion', item: 'Odin\'s Sheath', gender: 'F',
 		moves: ['Smart Strike', 'Shadow Sneak', 'Swords Dance'],
 		signatureMove: 'Equip Spectre',
