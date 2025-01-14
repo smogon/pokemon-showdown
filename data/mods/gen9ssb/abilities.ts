@@ -44,7 +44,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 		onModifySTAB(stab, source, target, move) {
-			if (!pokemon.abilityState.homerun) return;
+			if (!source.abilityState.homerun) return;
 			if (move.forceSTAB || source.hasType(move.type)) {
 				if (stab === 2) {
 					return 2.25;
