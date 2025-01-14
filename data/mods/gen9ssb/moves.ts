@@ -68,6 +68,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!target || target.fainted || target.hp <= 0) {
 				pokemon.abilityState.homerun = true;
 				this.heal(pokemon.baseMaxhp*0.35, pokemon);
+				this.add('-message', `It's a K.O.!\n${pokemon.name}'s Attack, Defense, and Special Defense increased!`);
 			}
 			if (pokemon.abilityState.windup) {
 				const boosts: SparseBoostsTable = {};
