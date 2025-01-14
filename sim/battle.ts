@@ -1982,6 +1982,7 @@ export class Battle {
 					this.heal(amount, source, target, 'drain');
 				}
 			}
+			if (effect.effectType !== 'Move') this.runEvent('TakeDamage', target, source, effect, targetDamage);
 		}
 
 		if (instafaint) {
@@ -2063,6 +2064,7 @@ export class Battle {
 		}
 
 		damage = target.damage(damage, source, effect);
+		this.runEvent('TakeDamage', target, source, effect, damage);
 		switch (effect.id) {
 		case 'strugglerecoil':
 			this.add('-damage', target, target.getHealth, '[from] recoil');
