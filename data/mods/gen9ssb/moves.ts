@@ -40,6 +40,55 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Cinque
+	homerunswingwindup: {
+      name: "Homerun Swing - Windup",
+      category: "Status",
+      basePower: 0,
+      accuracy: true,
+      pp: 64,
+		noPPBoosts: true,
+      desc: "Raises user's Defense and Special Defense by 1 stage and increases the power of Homerun Swing. After use, user is trapped and can only select Homerun Swing Windup and Homerun Swing until Homerun Swing is used successfully.",
+      shortDesc: "+1 DEF/SPD/Z-Move power increases. Locks in until Z-move is used.",
+      priority: 0,
+      flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Dragon Dance', source);
+		},
+		onHit(target, source, move) {
+			if (!source.volatiles['homerunswingwindup']) source.addVolatile('homerunswingwindup');
+			if (!source.abilityState.windup) source.abilityState.windup = 0;
+			source.abilityState.windup++;
+			this.add('-message', `${source.name} is winding up!`);
+			this.debug(`${source.name} windup charges: ${source.abilityState.windup}`);
+		},
+      boosts: {
+         def: 1,
+         spd: 1,
+      },
+		condition: {
+			onTrapPokemon(pokemon) {
+				pokemon.tryTrap();
+			},
+			onDisableMove(pokemon) {
+				for (const move of pokemon.moveSlots) {
+					if (move.id !== 'homerunswingwindup' && move.id !== 'homerunswing') {
+						pokemon.disableMove(move.id);
+					}
+				}
+			},
+			onAfterMove(pokemon, target, move) {
+				if (move.id === 'homerunswing') {
+					pokemon.removeVolatile('homerunswingwindup');
+				}
+			},
+		},
+      type: "Ground",
+      target: "self",
+    },
 	// PokeKart, o' PokeKart
 	star: {
 		name: "Star",
