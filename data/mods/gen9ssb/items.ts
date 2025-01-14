@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: { [k: string]: ModdedItemData } = {
 	// Cinque
 	moogleplushie: {
 		name: "Moogle Plushie",
@@ -9,13 +9,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 		zMoveFrom: "Homerun Swing - Windup",
 		itemUser: ["Marowak"],
 		onModifyAtk(atk) {
-			return this.chainmodify(1.5);
+			return this.chainModify(1.5);
 		},
 		onModifyDef(def) {
-			return this.chainmodify(1.5);
+			return this.chainModify(1.5);
 		},
 		onModifySpD(spd) {
-			return this.chainmodify(1.5);
+			return this.chainModify(1.5);
 		},
 	},
 	// Marvin
@@ -378,7 +378,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			this.add('-anim', pokemon, 'Mean Look', pokemon);
 			for (const activePokemon of this.getAllActive()) {
 				health += activePokemon.storedStats.atk - (activePokemon.storedStats.atk * 0.67);
-				this.boost({atk: -1}, activePokemon);
+				this.boost({ atk: -1 }, activePokemon);
 			}
 			this.heal(health, pokemon);
 		},
@@ -545,7 +545,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			this.add('-anim', pokemon, 'Bubble Beam', pokemon);
 			for (const target of this.getAllActive()) {
 				if (pokemon === target) continue;
-				this.boost({spe: -1}, target, target, this.effect);
+				this.boost({ spe: -1 }, target, target, this.effect);
 				if (target.happiness < 255) target.happiness += 30;
 				if (target.happiness > 255) target.happiness = 255;
 			}
@@ -686,42 +686,42 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	// Prince Smurf
 	smurfscrown: {
-   	name: "Smurf\'s Crown",
-      spritenum: 236,
-      fling: {
-         basePower: 300,
-      },
-      onTryBoost(boost, target, source, effect) {
-         if (source && target === source) return;
-         let showMsg = false;
-         let i: BoostID;
-         for (i in boost) {
-            if (boost[i]! < 0) {
-                  delete boost[i];
-                  showMsg = true;
-            }
-         }
-         if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-             this.add('-fail', target, 'unboost', '[from] item: Smurf\'s Crown', '[of] ' + target);
-         }
-      },
-      onAfterMoveSecondarySelfPriority: -1,
-      onAfterMoveSecondarySelf(pokemon, target, move) {
-         if (move.totalDamage && !pokemon.forceSwitchFlag) {
-            this.heal(move.totalDamage / 4, pokemon);
-         }
-      },
-      onUpdate(pokemon) {
-         if (pokemon.hp <= pokemon.maxhp / 4) pokemon.eatItem();
+		name: "Smurf\'s Crown",
+		spritenum: 236,
+		fling: {
+			basePower: 300,
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (source && target === source) return;
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+			}
+			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+				this.add('-fail', target, 'unboost', '[from] item: Smurf\'s Crown', '[of] ' + target);
+			}
+		},
+		onAfterMoveSecondarySelfPriority: -1,
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (move.totalDamage && !pokemon.forceSwitchFlag) {
+				this.heal(move.totalDamage / 4, pokemon);
+			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.hp <= pokemon.maxhp / 4) pokemon.eatItem();
 		},
 		onEat(pokemon) {
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
-         const r = this.random(100);
-         if (r < 33) {
-            pokemon.addVolatile('grudge');
-         } else if (r >= 33 && r < 66) {
-            this.heal(pokemon.baseMaxhp / 2, pokemon, pokemon);
-         } else if (r >= 66) {
+			const r = this.random(100);
+			if (r < 33) {
+				pokemon.addVolatile('grudge');
+			} else if (r >= 33 && r < 66) {
+				this.heal(pokemon.baseMaxhp / 2, pokemon, pokemon);
+			} else if (r >= 66) {
 				let dmg = this.actions.getDamage(pokemon, target, 'Explosion');
 				this.add('-message', `${pokemon.name}'s crown exploded!`);
 				this.addMove('-anim', pokemon, 'Explosion', pokemon);
@@ -730,8 +730,8 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 		shortDesc: "See '/ssb Prince Smurf' for more!",
-   	desc: "Prevents other Pokemon from lowering the holder's stats; after an attack, holder recovers 1/4 of the damage dealt to the Target. When the holder is at 1/4 HP or less it will trigger 1 of 3 reactions: Applies Grudge to the holder for a turn, item is then disposed; Heals the holder for 50% HP and cures party of status, item is then disposed; Forces the holder to explode.",
-   },
+		desc: "Prevents other Pokemon from lowering the holder's stats; after an attack, holder recovers 1/4 of the damage dealt to the Target. When the holder is at 1/4 HP or less it will trigger 1 of 3 reactions: Applies Grudge to the holder for a turn, item is then disposed; Heals the holder for 50% HP and cures party of status, item is then disposed; Forces the holder to explode.",
+	},
 	// Kozuchi
 	forgedhammer: {
 		name: "forgedhammer",
@@ -800,7 +800,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		gen: 9,
 		onSourceModifyDamage(damage, source, target, move) {
 			if (!target.abilityState.charges) target.abilityState.charges = 0;
-			const chance = 6/(1+target.abilityState.charges);
+			const chance = 6 / (1 + target.abilityState.charges);
 			if (this.randomChance(1, chance)) {
 				this.add('-message', `${target.name} defended itself with the Inconspicuous Coin!`);
 				return this.chainModify(0.5);
@@ -808,7 +808,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		},
 		onModifyDamage(damage, source, target, move) {
 			if (!source.abilityState.charges || source.abilityState.charges === 0) return;
-			const chance = 5/(1+source.abilityState.charges);
+			const chance = 5 / (1 + source.abilityState.charges);
 			if (this.randomChance(1, chance) && move.basePower <= 60) {
 				this.add('-message', `${source.name} used the Inconspicuous Coin's charge to strengthen ${move.name}'s impact!`);
 				return this.chainModify(2);

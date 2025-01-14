@@ -1,9 +1,9 @@
-import {ssbSets} from "./random-teams";
-import {changeSet, getName, enemyStaff, PSEUDO_WEATHERS} from "./scripts";
+import { ssbSets } from "./random-teams";
+import { changeSet, getName, enemyStaff, PSEUDO_WEATHERS } from "./scripts";
 
 const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'millenniumcastle'];
 
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: { [k: string]: ModdedAbilityData } = {
 	/*
 	// Example
 	abilityid: {
@@ -28,15 +28,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyAtk(atk, pokemon) {
 			if (!pokemon.abilityState.homerun) return;
 			return this.chainModify(1.5);
-		},	
-		onModifyDef(def,pokemon) {
+		},
+		onModifyDef(def, pokemon) {
 			if (!pokemon.abilityState.homerun) return;
 			return this.chainModify(1.5);
-	   },
+		},
 		onModifySpd(spd, pokemon) {
 			if (!pokemon.abilityState.homerun) return;
 			return this.chainModify(1.5);
-	   },
+		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.hp >= target.maxhp) {
 				this.debug('Cheerleader weaken');
@@ -51,13 +51,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 				return 2;
 			}
-	   },
+		},
 		onTryAddVolatile(status, pokemon) {
 			if (['flinch', 'confusion', 'yawn'].includes(status.id)) {
 				this.add('-immune', target, '[from] ability: Cheerleader');
 				return null;
 			}
-	   },
+		},
 		onUpdate(pokemon) {
 			if (['slp', 'frz', 'par'].includes(pokemon.status)) {
 				this.add('-activate', pokemon, 'ability: Cheerleader');
@@ -507,21 +507,21 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.add('-anim', pokemon, 'Razor Leaf', pokemon);
 					this.damage(pokemon.maxhp / 10, pokemon);
 					pokemon.formeChange('Carnivine');
-					pokemon.set.evs = {hp: 248, atk: 56, def: 204, spa: 0, spd: 0, spe: 0};
+					pokemon.set.evs = { hp: 248, atk: 56, def: 204, spa: 0, spd: 0, spe: 0 };
 					pokemon.set.nature = 'Relaxed';
 					break;
 				case 'carnivine':
 					this.add('-anim', pokemon, 'Flash Cannon', pokemon);
 					this.damage(pokemon.maxhp / 10, pokemon);
 					pokemon.formeChange('Perrserker');
-					pokemon.set.evs = {hp: 0, atk: 252, def: 4, spa: 0, spd: 0, spe: 252};
+					pokemon.set.evs = { hp: 0, atk: 252, def: 4, spa: 0, spd: 0, spe: 252 };
 					pokemon.set.nature = 'Naughty';
 					break;
 				case 'perrserker':
 					this.add('-anim', pokemon, 'Mud Bomb', pokemon);
 					this.damage(pokemon.maxhp / 10, pokemon);
 					pokemon.formeChange('Swalot');
-					pokemon.set.evs = {hp: 248, atk: 0, def: 104, spa: 0, spd: 156, spe: 0};
+					pokemon.set.evs = { hp: 248, atk: 0, def: 104, spa: 0, spd: 156, spe: 0 };
 					pokemon.set.nature = 'Careful';
 					break;
 			}
@@ -589,7 +589,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-message', `${pokemon.name} converted to Second Caliber!`);
 				pokemon.set.shiny = true;
 				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-				(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				pokemon.details = details;
 				this.add('replace', pokemon, details);
 				const newMoves = ['Smart Strike', 'Counter', 'Detect', 'Impaling Thrust'];
@@ -614,7 +614,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-message', `${pokemon.name} converted to First Caliber!`);
 				pokemon.set.shiny = false;
 				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-				(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
 				pokemon.details = details;
 				this.add('replace', pokemon, details);
 				const newMoves = ['Smart Strike', 'Sacred Sword', 'Acrobatics', 'Equip Spectre'];
@@ -644,15 +644,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {},
 		onModifyMove(move, pokemon) {
 			if (move.id === 'coreenforcer') move.category = 'Physical';
-			if (['zygarde', 'zygardecomplete'].includes(pokemon.species.id) && !move.multihit) {
-				if (move.category === 'Status') return;
-				move.multihit = 2;
-			}
+			if (['zygarde', 'zygardecomplete'].includes(pokemon.species.id) &&
+				!move.multihit && move.category !== 'Status'
+			) move.multihit = 2;
 		},
 		onBasePower(basePower, pokemon, target, move) {
 			if (move.hit === 2) {
 				if (pokemon.species.id === 'zygardecomplete') return basePower / 2;
 				if (pokemon.species.id === 'zygarde') return basePower / 4;
+				return;
 			}
 		},
 		onDamage(damage, target, source, effect) {
@@ -837,7 +837,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					basePower: move.basePower,
 					category: move.category,
 					priority: move.priority,
-					flags: {allyanim: 1, metronome: 1, futuremove: 1},
+					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
 					ignoreImmunity: true,
 					effectType: 'Move',
 					type: move.type,
@@ -858,7 +858,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (target.ability !== 'perfectcopy') {
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				pokemon.setAbility(target.getAbility().id);
-				pokemon.abilityState = {id: this.toID(target.ability), target: pokemon};
+				pokemon.abilityState = { id: this.toID(target.ability), target: pokemon };
 			}
 			// Learning An Opponent's Move
 			let possibleMoves = [];
@@ -900,7 +900,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-message', `${pokemon.name} copied ${target.name}'s stat changes!`);
 			}
 		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1 },
 		name: "Perfect Copy",
 		gen: 9,
 	},
@@ -1124,7 +1124,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Elemental Shift",
 		gen: 9,
 	},
@@ -1153,11 +1153,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			duration: 1,
 			onStart(pokemon) {
 				this.add('-message', `${pokemon.name} was struck by a blinding light!`);
-				this.boost({accuracy: -6}, pokemon);
+				this.boost({ accuracy: -6 }, pokemon);
 			},
 			onEnd(pokemon) {
 				this.add('-message', `The blinding light faded!`);
-				this.boost({accuracy: 6}, pokemon);
+				this.boost({ accuracy: 6 }, pokemon);
 			},
 		},
 	},
@@ -1165,21 +1165,27 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	chaindrift: {
 		name: "Chain Drift",
 		gen: 9,
+		onModifyMove(move) {
+			if (move.id === 'spinout') {
+				delete move.self;
+			}
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (move && source !== target) target.abilityState.damagedThisTurn = true;
 		},
 		onResidual(pokemon) {
 			if (!pokemon.abilityState.damagedThisTurn && pokemon.activeTurns) {
 				this.add('-activate', pokemon, 'ability: Chain Drift');
-				this.boost({spe: 1});
+				this.boost({ spe: 1 });
 			}
 			pokemon.abilityState.damagedThisTurn = false;
 		},
 		onAfterBoost(boost, target, source, effect) {
+			this.add('-message', `onAfterBoost source: ${source.name}, target: ${target.name}`);
 			if (boost.spe >= 0 && !source.activeTurns) {
 				this.add('-activate', target, 'ability: Chain Drift');
 				this.add('-message', `${target.name} is preparing to shift gears!`);
-				this.boost({spe: -1}, target);
+				this.boost({ spe: -1 }, target);
 				target.addVolatile('chaindrift');
 			}
 		},
@@ -1187,7 +1193,6 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			duration: 2,
 			onRestart(pokemon) {
 				this.effectState.duration = 2;
-				this.add('-start', pokemon, 'ability: Chain Drift', '[silent]');
 			},
 			onModifyCritRatio(critRatio) {
 				return 5;
@@ -1204,8 +1209,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onDamage(damage, target, source, effect) {
 			if (!target.abilityState.switches) target.abilityState.switches = 0;
 			if (target === source || !damage ||
-			effect.effectType !== 'Move' || target.abilityState.switches >= 3 ||
-			target.side.totalFainted >= 5) return;
+				effect.effectType !== 'Move' || target.abilityState.switches >= 3 ||
+				target.side.totalFainted >= 5) return;
 			target.abilityState.switches++;
 			this.add('-activate', target, 'ability: Lost and Found');
 			this.add('-message', `${target.name} scrambled away from danger!`);
@@ -1274,15 +1279,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onTryHit(target, source, move) {
 			if (move.type === 'Electric') {
 				if (!this.heal(target.baseMaxhp / 3)) {
-	            this.add('-immune', target, '[from] ability: Peal of Thunder');
-	        	}
-	        	if (!this.boost({spa: 1, spe: 1})) {
-	            this.add('-immune', target, '[from] ability: Peal of Thunder');
-	        	}
+					this.add('-immune', target, '[from] ability: Peal of Thunder');
+				}
+				if (!this.boost({ spa: 1, spe: 1 })) {
+					this.add('-immune', target, '[from] ability: Peal of Thunder');
+				}
 				return null;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		name: "Peal of Thunder",
 		gen: 9,
 	},
@@ -1382,7 +1387,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					pokemon.abilityState.gauges -= 3;
 					this.add('-message', `${pokemon.name} used its battery to power up ${move.name}!`);
 				}
-			}	
+			}
 		},
 		onResidual(pokemon) {
 			// Recharge if out of battery
@@ -1392,12 +1397,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-message', `${pokemon.name} is out of battery!`);
 				this.field.setTerrain('electricterrain');
 				pokemon.addVolatile('mustrecharge');
-			// Charge if at maximum battery
+				// Charge if at maximum battery
 			} else if (pokemon.abilityState.gauges >= 5) {
 				this.add(`-anim`, pokemon, "Charge");
 				pokemon.addVolatile('charge');
 				this.add('-message', `${pokemon.name} is at maximum charge!`);
-			// Otherwise state charge amount
+				// Otherwise state charge amount
 			} else {
 				this.add(`-anim`, pokemon, "Charge");
 				this.add('-message', `${pokemon.name} is at ${(pokemon.abilityState.gauges / 5) * 100}% battery!`);
@@ -1500,7 +1505,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onSwitchOut(pokemon) {
 			this.actions.useMove('Fling', pokemon);
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		name: "Ordinary Magician",
 		gen: 9,
 	},
@@ -1528,11 +1533,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			if (pokemon.activeTurns) {
 				const s = this.random(3);
 				if (s === 0) {
-					this.boost({spd: 1});
+					this.boost({ spd: 1 });
 				} else if (s === 1) {
-					this.boost({def: 1});
+					this.boost({ def: 1 });
 				} else {
-					this.boost({spa: 1});
+					this.boost({ spa: 1 });
 				}
 			}
 		},
@@ -1542,43 +1547,43 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	// Prince Smurf
 	quickcamo: {
-      shortDesc: "Changes type to resist move before hit + Protean. First move slot always stab.",
-      name: "Quick Camo",
-      onTryHit(target, source, move) {
-      	if (target === source) return;
+		shortDesc: "Changes type to resist move before hit + Protean. First move slot always stab.",
+		name: "Quick Camo",
+		onTryHit(target, source, move) {
+			if (target === source) return;
 			if (move.flags['futuremove']) return;
-         const possibleTypes = [];
-	      const attackType = move.type;
-	      for (const type of this.dex.types.names()) {
-	            if (target.hasType(type)) continue;
-	            const typeCheck = this.dex.types.get(type).damageTaken[attackType];
-	            if (typeCheck === 2) {
-	            	possibleTypes.push(type);
-	           }	
-	      }
-	      if (!possibleTypes.length) return;
-	      const randomType = this.sample(possibleTypes);
-	      target.setType(randomType);
-	      this.add('-start', target, 'typechange', randomType);
+			const possibleTypes = [];
+			const attackType = move.type;
+			for (const type of this.dex.types.names()) {
+				if (target.hasType(type)) continue;
+				const typeCheck = this.dex.types.get(type).damageTaken[attackType];
+				if (typeCheck === 2) {
+					possibleTypes.push(type);
+				}
+			}
+			if (!possibleTypes.length) return;
+			const randomType = this.sample(possibleTypes);
+			target.setType(randomType);
+			this.add('-start', target, 'typechange', randomType);
 		},
 		onPrepareHit(source, target, move) {
-	      if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
-	      const type = move.type;
-	      if (type && type !== '???' && source.getTypes().join() !== type) {
-	        	source.setType(type);
-	        	this.add('-start', source, 'typechange', type, '[from] ability: Quick Camo');
-	      }	
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+			const type = move.type;
+			if (type && type !== '???' && source.getTypes().join() !== type) {
+				source.setType(type);
+				this.add('-start', source, 'typechange', type, '[from] ability: Quick Camo');
+			}
 		},
-	   onModifyMove(move, pokemon, target) {
-	      const types = pokemon.getTypes(true);
-	      const noModifyType = [
-	        'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
-	      ];
-	      if (noModifyType.includes(move.id)) return;
-	      for (const [i, type] of types.entries()) {
-	            if (!this.dex.types.isName(type)) continue;
-	            if (pokemon.moveSlots[i] && move.id === pokemon.moveSlots[i].id) move.type = type;
-	      }
+		onModifyMove(move, pokemon, target) {
+			const types = pokemon.getTypes(true);
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (noModifyType.includes(move.id)) return;
+			for (const [i, type] of types.entries()) {
+				if (!this.dex.types.isName(type)) continue;
+				if (pokemon.moveSlots[i] && move.id === pokemon.moveSlots[i].id) move.type = type;
+			}
 		},
 		flags: {},
 	},
@@ -1594,19 +1599,19 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				this.add('-message', `${pokemon.name} equipped their armor from Scrapworker!`);
 			}
 		},
-	   onSourceModifyDamage(damage, source, target, move) {
-      	if (move.category === 'Physical') {
-            if (!target.abilityState.armor) return;
-            if (target.abilityState.armor === 3) return this.chainModify(0.25);
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.category === 'Physical') {
+				if (!target.abilityState.armor) return;
+				if (target.abilityState.armor === 3) return this.chainModify(0.25);
 				if (target.abilityState.armor === 2) return this.chainModify(0.5);
 				if (target.abilityState.armor === 1) return this.chainModify(0.75);
-         }
-         if (move.category === 'Special') {
-         	if (!target.abilityState.armor) return;
-            if (target.abilityState.armor === 3) return this.chainModify(0.7);
+			}
+			if (move.category === 'Special') {
+				if (!target.abilityState.armor) return;
+				if (target.abilityState.armor === 3) return this.chainModify(0.7);
 				if (target.abilityState.armor === 2) return this.chainModify(0.8);
 				if (target.abilityState.armor === 1) return this.chainModify(0.9);
-         }
+			}
 		},
 		onSourceModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
@@ -1758,7 +1763,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.add('-message', `${pokemon.name} is overflowing with charge!`);
 					this.add(`-anim`, pokemon, "Thunderclap", pokemon);
 					this.add(`-anim`, pokemon, "Volt Tackle", target);
-					this.damage(100*pokemon.abilityState.charges, target, pokemon);
+					this.damage(100 * pokemon.abilityState.charges, target, pokemon);
 					pokemon.abilityState.charges = 0;
 					this.add('-message', `${pokemon.name} was launched away by the impact!`);
 					if (pokemon.hp && !pokemon.fainted) pokemon.forceSwitchFlag = true;
@@ -1770,12 +1775,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onModifyAtk(atk, pokemon) {
 			if (!pokemon.abilityState.charges) return;
 			this.debug('Charge boost');
-			return this.chainModify(1+(0.5*pokemon.abilityState.charges));
+			return this.chainModify(1 + (0.5 * pokemon.abilityState.charges));
 		},
 		onModifySpe(spe, pokemon) {
 			if (!pokemon.abilityState.charges) return;
 			this.debug('Charge boost');
-			return this.chainModify(1+(0.5*pokemon.abilityState.charges));
+			return this.chainModify(1 + (0.5 * pokemon.abilityState.charges));
 		},
 		onModifyCritRatio(critRatio, source, target) {
 			if (source.abilityState.firedUp) return critRatio + 2;
@@ -1911,9 +1916,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 			}
 			if (statsLowered) {
-				this.boost({atk: 2}, target, target, null, false, true);
-				this.boost({spa: 2}, target, target, null, false, true);
-				this.boost({spe: 2}, target, target, null, false, true);
+				this.boost({ atk: 2 }, target, target, null, false, true);
+				this.boost({ spa: 2 }, target, target, null, false, true);
+				this.boost({ spe: 2 }, target, target, null, false, true);
 			}
 		},
 		onUpdate(pokemon) {

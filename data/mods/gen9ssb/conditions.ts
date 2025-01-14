@@ -1,7 +1,7 @@
-import {ssbSets} from "./random-teams";
-import {changeSet, getName, enemyStaff} from './scripts';
+import { ssbSets } from "./random-teams";
+import { changeSet, getName, enemyStaff } from './scripts';
 
-export const Conditions: {[k: string]: ModdedConditionData & {innateName?: string}} = {
+export const Conditions: { [k: string]: ModdedConditionData & { innateName?: string } } = {
 	/*
 	// Example:
 	userid: {
@@ -71,7 +71,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onDamagingHit(damage, target, source, move) {
 			if (move.category !== 'Status') {
 				if (!target.hasType('Grass')) target.addType('Grass');
-				this.boost({spe: -2}, target);
+				this.boost({ spe: -2 }, target);
 				this.add('-message', `${target.name}'s Akasha Seeds bloomed!`);
 				target.removeVolatile('akashaseeds');
 				this.add('-end', pokemon, 'Akasha Seeds', '[silent]');
@@ -118,14 +118,69 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 	},
 	// PokeKart
+	blooper: {
+		name: "Blooper",
+		onBeforeMove(pokemon, target, move) {
+			if (pokemon === target) return;
+			// Generally, moves with accuracy set to 'true' that are also status are
+			// harmless targetless moves (Misty Terrain, Rain Dance, Safeguard, etc) so these cases are skipped
+			if (move.category === 'Status' && move.accuracy === true) return;
+			move.accuracy = 0;
+			pokemon.removeVolatile('blooper');
+		},
+		onEnd(pokemon) {
+			this.add('-message', `${pokemon.name}'s Blooper ink faded away!`);
+		},
+	},
+	spinyshell: {
+		name: "Spiny Shell",
+		effectType: 'Condition',
+		duration: 2,
+		onSideStart(side) {
+			this.add('-message', `this.effectState.source = ${this.effectState.source}`)
+		},
+		onSideEnd(side) {
+			const source = this.effectState.source;
+			const baseMove = this.dex.moves.get('itembox');
+			const itemBox = {
+				move: baseMove.name,
+				id: baseMove.id,
+				basePower: 120,
+				pp: baseMove.pp,
+				maxpp: baseMove.pp,
+				target: baseMove.target,
+				disabled: false,
+				used: false,
+			};
+			let highest = 0;
+			let target;
+			for (const pokemon of side.pokemon) {
+				if (pokemon.hp > highest) {
+					highest = pokemon.hp;
+					target = pokemon;
+				}
+			}
+			const damage = this.actions.getDamage(source, target, itemBox);
+			if (damage) {
+				if (target.isActive()) {
+					this.add('-anim', target, 'Present', target);
+					this.add('-anim', target, 'Explosion', target);
+					this.add('-anim', target, 'Play Nice', target);
+					this.damage(damage, target, source, this.dex.conditions.get('Spiny Shell'));
+				} else {
+					target.hp -= damage;
+					this.add('-message', `${target.name} was hit by ${source.name}'s Spiny Shell!`);
+				}
+			}
+		},
+	},
 	lightning: {
 		name: "Lightning",
 		effectType: 'Condition',
 		duration: 3,
-		onSideStart(side, source) {
-			this.add('-sidestart', side, 'Lightning', '[silent]');
+		onSideStart(side) {
 			for (const pokemon of side.pokemon) {
-				this.add('-anim', source, 'Thunder Shock', pokemon);
+				this.add('-anim', pokemon, 'Thunderbolt', pokemon);
 				pokemon.abilityState.originalMaxHp = pokemon.maxhp;
 				pokemon.maxhp /= 2;
 				pokemon.baseMaxhp /= 2;
@@ -133,11 +188,11 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			}
 		},
 		onSideEnd(side) {
-			this.add('-sideend', side, 'Lightning', '[silent]');
 			for (const pokemon of side.pokemon) {
 				this.add('-anim', pokemon, 'Growth', pokemon);
 				pokemon.maxhp = pokemon.abilityState.originalMaxHp;
 				pokemon.baseMaxhp = pokemon.abilityState.originalMaxHp;
+				this.add('-heal', pokemon, pokemon.getHealth, '[silent]')
 				this.add('-message', `${pokemon.name} returned to normal size!`);
 			}
 		},
@@ -151,18 +206,24 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			pokemon.abilityState.originalMaxHp = pokemon.maxhp;
 			pokemon.maxhp *= 2;
 			pokemon.baseMaxhp *= 2;
+			this.add('-heal', pokemon, pokemon.getHealth);
 			this.add('-message', `${pokemon.name}'s max HP was doubled!`);
 		},
 		onModifyMove(move, pokemon) {
 			move.onHit = function (t, s, m) {
+				if (m.category === 'Status' || t === s) return;
 				t.addVolatile('quash');
 			};
+		},
+		onSwitchOut(pokemon) {
+			pokemon.removeVolatile('megamushroom');
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, 'Mega Mushroom', '[silent]');
 			this.add('-anim', pokemon, 'Minimize', pokemon);
 			pokemon.maxhp = pokemon.abilityState.originalMaxHp;
 			pokemon.baseMaxhp = pokemon.abilityState.originalMaxHp;
+			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			this.add('-message', `${pokemon.name} returned to normal size!`);
 		},
 	},
@@ -170,23 +231,33 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		name: "Boo",
 		duration: 2,
 		onStart(pokemon) {
-			this.add('-start', pokemon, 'Boo', '[silent]');
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			this.add('-anim', pokemon, 'Mist', pokemon);
-			this.add('-anim', pokemon, 'Teleport', pokemon);
+			this.add('-anim', pokemon, 'Explosion', pokemon);
+			this.add('-message', `${pokemon.name} vanished!`);
+			this.effectState.oldMove = this.dex.getActiveMove(pokemon.moveSlots[3].id);
+			pokemon.moveSlots[3] = this.dex.getActiveMove(target.moveSlots[3].id);
+			for (const move of pokemon.moveSlots) {
+				if (move.id !== target.moveSlots[3].id) {
+					pokemon.disableMove(move.id);
+				}
+			}
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			return priority + 1;
 		},
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
-			if (effect?.effectType === 'Move') {
+			if (damage && effect?.effectType === 'Move') {
 				this.add('-fail', source);
-				return false;
+				return null;
 			}
 		},
+		onTrapPokemon(pokemon) {
+			pokemon.tryTrap();
+		},
 		onEnd(pokemon) {
-			this.add('-end', pokemon, 'Boo', '[silent]');
-			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
-			const targetSig = this.dex.getActiveMove(target.moveSlots[3].id);
-			this.add('-anim', pokemon, 'Phantom Force', pokemon);
-			this.actions.useMove(targetSig, pokemon, target);
+			this.add('-message', `${pokemon.name} used its foe's signature move against it!`);
 		},
 	},
 	// Morte
@@ -211,7 +282,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			this.add('-sideend', side, 'Cursed Doll');
 		},
 	},
-	
+
 	// Urabrask
 	rainoffire: {
 		name: 'Rain of Fire',
@@ -257,7 +328,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	// Uses empty volatile statuses as a visual effect
 	// pokemon.addVolatile('0%');
 	// pokemon.removeVolatile('0%');
-	
+
 	'0%': {
 		name: "0%",
 	},
@@ -276,7 +347,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 	'100%': {
 		name: "100%",
 	},
-	
+
 	aegii: {
 		noCopy: true,
 		onStart() {
@@ -550,21 +621,21 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onStart(pokemon) {
 			this.add(`c:|${getName('ausma')}|what it Do what it Be`);
 			switch (this.toID(enemyStaff(pokemon))) {
-			case 'umuwo':
-				this.add(`c:|${getName('ausma')}|it's.... chu......`);
-				break;
-			case 'spoo':
-				this.add(`c:|${getName('ausma')}|LOOL SPOOP?!`);
-				break;
-			case 'rumia':
-				this.add(`c:|${getName('ausma')}|oh no... it's poomia....`);
-				break;
-			case 'lily':
-				this.add(`c:|${getName('ausma')}|togedemaru`);
-				break;
-			case 'lumari':
-				this.add(`c:|${getName('ausma')}|we should watch the next ladybug ep after this tbh`);
-				break;
+				case 'umuwo':
+					this.add(`c:|${getName('ausma')}|it's.... chu......`);
+					break;
+				case 'spoo':
+					this.add(`c:|${getName('ausma')}|LOOL SPOOP?!`);
+					break;
+				case 'rumia':
+					this.add(`c:|${getName('ausma')}|oh no... it's poomia....`);
+					break;
+				case 'lily':
+					this.add(`c:|${getName('ausma')}|togedemaru`);
+					break;
+				case 'lumari':
+					this.add(`c:|${getName('ausma')}|we should watch the next ladybug ep after this tbh`);
+					break;
 			}
 		},
 		onSwitchOut() {
@@ -751,7 +822,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		shortDesc: "This Pokemon's Defense is raised 2 stages if hit by a Fire move; Fire immunity.",
 		onTryHit(target, source, move) {
 			if (!target.illusion && target !== source && move.type === 'Fire') {
-				if (!this.boost({def: 2})) {
+				if (!this.boost({ def: 2 })) {
 					this.add('-immune', target, '[from] ability: Well-Baked Body');
 				}
 				return null;
@@ -1124,12 +1195,12 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onStart(pokemon) {
 			this.add(`c:|${getName('Froggeh')}|Hello. Froggeh the dad here. And welcome to The Happy Place!`);
 			switch (this.toID(enemyStaff(pokemon))) {
-			case 'valerian':
-				this.add(`c:|${getName('Froggeh')}|See that frog, she is green, diggin the froggy queen!`);
-				break;
-			case 'queeni':
-				this.add(`c:|${getName('Froggeh')}|Imagine if you will- a frog with a smol crown on her head.`);
-				break;
+				case 'valerian':
+					this.add(`c:|${getName('Froggeh')}|See that frog, she is green, diggin the froggy queen!`);
+					break;
+				case 'queeni':
+					this.add(`c:|${getName('Froggeh')}|Imagine if you will- a frog with a smol crown on her head.`);
+					break;
 			}
 		},
 		onSwitchOut() {
@@ -1143,7 +1214,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 				if (source.foes()) {
 					for (const foe of source.foes()) {
 						if (foe.illusion || foe.name !== 'Froggeh') continue;
-						this.boost({atk: 1, def: 1}, foe);
+						this.boost({ atk: 1, def: 1 }, foe);
 					}
 				}
 			}
@@ -1272,15 +1343,15 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			let friends;
 			const tier = this.sample(['Partners in Crime', 'Sketchmons', 'Godly Power']);
 			switch (tier) {
-			case 'Partners in Crime':
-				friends = ['chromate', 'yuki', 'YoBuddyTheBaker', 'zoe', 'jasprose'];
-				break;
-			case 'Sketchmons':
-				friends = ['Eggs', 'career ended', 'ponchlake'];
-				break;
-			default:
-				friends = ['roonie217', 'chromate', 'tkhanh', 'lilyhii'];
-				break;
+				case 'Partners in Crime':
+					friends = ['chromate', 'yuki', 'YoBuddyTheBaker', 'zoe', 'jasprose'];
+					break;
+				case 'Sketchmons':
+					friends = ['Eggs', 'career ended', 'ponchlake'];
+					break;
+				default:
+					friends = ['roonie217', 'chromate', 'tkhanh', 'lilyhii'];
+					break;
 			}
 			this.add(`c:|${getName('HiZo')}|Why am I needed here, I was in the middle of a game of ${tier} with ${this.sample(friends)}`);
 			this.add(`c:|${getName('HiZo')}|Did I break something again`);
@@ -1502,14 +1573,14 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFoeSwitchIn(pokemon) {
 			switch ((pokemon.illusion || pokemon).name) {
-			case 'Clementine':
-				this.add(`c:|${getName('Kennedy')}|Not the Fr*nch....`);
-				break;
-			case 'dhelmise':
-				this.add(`c:|${getName('Kennedy')}|fuck that`);
-				this.effectState.target.faint();
-				this.add('message', 'Kennedy fainted mysteriously.....');
-				break;
+				case 'Clementine':
+					this.add(`c:|${getName('Kennedy')}|Not the Fr*nch....`);
+					break;
+				case 'dhelmise':
+					this.add(`c:|${getName('Kennedy')}|fuck that`);
+					this.effectState.target.faint();
+					this.add('message', 'Kennedy fainted mysteriously.....');
+					break;
 			}
 		},
 		onFaint() {
@@ -1746,65 +1817,65 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onStart(pokemon) {
 			let phrase = '';
 			switch (this.toID(enemyStaff(pokemon))) {
-			case 'alex':
-			case 'nya':
-				this.add(`c:|${getName('Lyna 氷')}|Oh, a cat <3`);
-				break;
-			case 'r8':
-			case 'clementine':
-			case 'lionyx':
-			case 'teclis':
-			case 'swiffix':
-			case 'ironwater':
-				phrase = 'slt';
-				break;
-			default:
-				phrase = 'Hey <3';
-				break;
+				case 'alex':
+				case 'nya':
+					this.add(`c:|${getName('Lyna 氷')}|Oh, a cat <3`);
+					break;
+				case 'r8':
+				case 'clementine':
+				case 'lionyx':
+				case 'teclis':
+				case 'swiffix':
+				case 'ironwater':
+					phrase = 'slt';
+					break;
+				default:
+					phrase = 'Hey <3';
+					break;
 			}
 			this.add(`c:|${getName('Lyna 氷')}|${phrase}`);
 		},
 		onSwitchOut(pokemon) {
 			let phrase = '';
 			switch (this.toID(enemyStaff(pokemon))) {
-			case 'alex':
-			case 'nya':
-				phrase = 'You\'re so cute, I can\'t hit you...';
-				break;
-			case 'r8':
-			case 'clementine':
-			case 'lionyx':
-			case 'teclis':
-			case 'swiffix':
-			case 'ironwater':
-				phrase = '**Tournoi Hebdo sur <<arcade>> !**';
-				break;
-			default:
-				phrase = 'Nvm I\'m too busy for that, cya!';
-				break;
+				case 'alex':
+				case 'nya':
+					phrase = 'You\'re so cute, I can\'t hit you...';
+					break;
+				case 'r8':
+				case 'clementine':
+				case 'lionyx':
+				case 'teclis':
+				case 'swiffix':
+				case 'ironwater':
+					phrase = '**Tournoi Hebdo sur <<arcade>> !**';
+					break;
+				default:
+					phrase = 'Nvm I\'m too busy for that, cya!';
+					break;
 			}
 			this.add(`c:|${getName('Lyna 氷')}|${phrase}`);
 		},
 		onFaint(pokemon) {
 			let phrase = '';
 			switch (this.toID(enemyStaff(pokemon))) {
-			case 'alex':
-			case 'nya':
-				phrase = 'You\'re definitely too cute...';
-				break;
-			case 'r8':
-				phrase = 'ok mais on dit pain au chocolat.';
-				break;
-			case 'clementine':
-			case 'lionyx':
-			case 'teclis':
-			case 'swiffix':
-			case 'ironwater':
-				phrase = 't\'as de la chance que je sois sympa..';
-				break;
-			default:
-				phrase = 'The flames were too frozen...';
-				break;
+				case 'alex':
+				case 'nya':
+					phrase = 'You\'re definitely too cute...';
+					break;
+				case 'r8':
+					phrase = 'ok mais on dit pain au chocolat.';
+					break;
+				case 'clementine':
+				case 'lionyx':
+				case 'teclis':
+				case 'swiffix':
+				case 'ironwater':
+					phrase = 't\'as de la chance que je sois sympa..';
+					break;
+				default:
+					phrase = 'The flames were too frozen...';
+					break;
 			}
 			this.add(`c:|${getName('Lyna 氷')}|${phrase}`);
 		},
@@ -1989,10 +2060,10 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (this.randomChance(3, 10)) {
 				let allOutAnim = 'Draco Meteor';
 				switch (move.id) {
-				case 'voltswitch': allOutAnim = 'Thunder'; break;
-				case 'freezedry': allOutAnim = 'Glacial Lance'; break;
-				case 'triattack': allOutAnim = 'Blood Moon'; break;
-				case '3': allOutAnim = 'Fleur Cannon'; break;
+					case 'voltswitch': allOutAnim = 'Thunder'; break;
+					case 'freezedry': allOutAnim = 'Glacial Lance'; break;
+					case 'triattack': allOutAnim = 'Blood Moon'; break;
+					case '3': allOutAnim = 'Fleur Cannon'; break;
 				}
 				this.attrLastMove('[anim] ' + allOutAnim);
 				this.add('-activate', attacker, 'move: Fickle Beam');
@@ -2033,80 +2104,80 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		onStart(pokemon) {
 			let message;
 			switch (this.toID(enemyStaff(pokemon))) {
-			case 'partman':
-				message = 'Hii Q - oh, it\'s just me.';
-				break;
-			case 'arsenal':
-				message = 'Do I count as a gunner?';
-				break;
-			case 'aqrator':
-				message = 'Speaking of cafes - this Pokemon is so popular, it has an entire cafe dedicated to it in the Pokemon world! Alongside the cafe, there\'s also stuff like a bus tour where you can sit one-on-one with the Pokemon and admire its beauty.';
-				break;
-			case 'beowulf':
-				message = 'BEE';
-				break;
-			case 'breadstycks':
-				message = 'BREADBOWL';
-				break;
-			case 'clerica':
-				message = 'SMELY HIIII';
-				break;
-			case 'computerwizard8800':
-				message = 'CWIZ SLEEP';
-				break;
-			case 'hydrostatics':
-				message = 'Here to bully Hydro';
-				break;
-			case 'kennedy':
-				message = 'Down the reds!';
-				break;
-			case 'kry':
-				this.add(`c:|${getName('PartMan')}|%r 14 // @Kry`);
-				this.add(`c:|${getName('Ice Kyubs')}|Roll: 14`);
-				message = null;
-				break;
-			case 'mex':
-				message = 'Probopass moment';
-				break;
-			case 'monkey':
-				message = 'Remember to smile!';
-				break;
-			case 'notater517':
-				message = 'E-excuse me s-senpai >///<';
-				break;
-			case 'pissog':
-				message = 'Ma ciaomi queste noci';
-				break;
-			case 'pyro':
-				message = 'Fight me you boiled potato';
-				break;
-			case 'rsb':
-				message = '/me hugs';
-				break;
-			case 'siegfried':
-				message = 'Is Sieg baked or boiled?';
-				break;
-			case 'softflex':
-				message = '/me softly flexes';
-				break;
-			case 'sulo':
-				message = '...Sulo\'s AFK again, aren\'t they?';
-				break;
-			case 'trace':
-				this.add('-message', `PartMan's Neutralizing Gas filled the area! (but not really)`);
-				message = null;
-				break;
-			case 'warriorgallade':
-				message = 'Berry nice to meet you!';
-				break;
-			case 'za':
-				message = '/me shitposts';
-				break;
-			case 'zalm':
-				message = '<(:O)00000>';
-				break;
-			default:
-				message = 'Hiii QT :3';
+				case 'partman':
+					message = 'Hii Q - oh, it\'s just me.';
+					break;
+				case 'arsenal':
+					message = 'Do I count as a gunner?';
+					break;
+				case 'aqrator':
+					message = 'Speaking of cafes - this Pokemon is so popular, it has an entire cafe dedicated to it in the Pokemon world! Alongside the cafe, there\'s also stuff like a bus tour where you can sit one-on-one with the Pokemon and admire its beauty.';
+					break;
+				case 'beowulf':
+					message = 'BEE';
+					break;
+				case 'breadstycks':
+					message = 'BREADBOWL';
+					break;
+				case 'clerica':
+					message = 'SMELY HIIII';
+					break;
+				case 'computerwizard8800':
+					message = 'CWIZ SLEEP';
+					break;
+				case 'hydrostatics':
+					message = 'Here to bully Hydro';
+					break;
+				case 'kennedy':
+					message = 'Down the reds!';
+					break;
+				case 'kry':
+					this.add(`c:|${getName('PartMan')}|%r 14 // @Kry`);
+					this.add(`c:|${getName('Ice Kyubs')}|Roll: 14`);
+					message = null;
+					break;
+				case 'mex':
+					message = 'Probopass moment';
+					break;
+				case 'monkey':
+					message = 'Remember to smile!';
+					break;
+				case 'notater517':
+					message = 'E-excuse me s-senpai >///<';
+					break;
+				case 'pissog':
+					message = 'Ma ciaomi queste noci';
+					break;
+				case 'pyro':
+					message = 'Fight me you boiled potato';
+					break;
+				case 'rsb':
+					message = '/me hugs';
+					break;
+				case 'siegfried':
+					message = 'Is Sieg baked or boiled?';
+					break;
+				case 'softflex':
+					message = '/me softly flexes';
+					break;
+				case 'sulo':
+					message = '...Sulo\'s AFK again, aren\'t they?';
+					break;
+				case 'trace':
+					this.add('-message', `PartMan's Neutralizing Gas filled the area! (but not really)`);
+					message = null;
+					break;
+				case 'warriorgallade':
+					message = 'Berry nice to meet you!';
+					break;
+				case 'za':
+					message = '/me shitposts';
+					break;
+				case 'zalm':
+					message = '<(:O)00000>';
+					break;
+				default:
+					message = 'Hiii QT :3';
 			}
 			if (message) this.add(`c:|${getName('PartMan')}|${message}`);
 		},
@@ -2410,65 +2481,65 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		noCopy: true,
 		onStart(pokemon) {
 			switch (this.toID(enemyStaff(pokemon))) {
-			case 'wigglytree':
-				this.add(`c:|${getName('SexyMalasada')}|Hey Wiggles! I made pizza again! Wanna learn more RNG btw?`);
-				break;
-			case 'appletunalamode':
-				this.add(`c:|${getName('SexyMalasada')}|And now you must learn how to RNG with nothing but a sundial for a timer! __Trust me!__`);
-				break;
-			case 'loethalion':
-				this.add(`c:|${getName('SexyMalasada')}|For the hundredth time Loe, check. the. pins.`);
-				break;
-			case 'nicolic':
-				this.add(`c:|${getName('SexyMalasada')}|Hi Nic! Why you keep postponing learning old-gen RNG? q_q`);
-				break;
-			case 'swiffix':
-				this.add(`c:|${getName('SexyMalasada')}|....something smells in here`);
-				break;
-			case 'mex':
-				this.add(`c:|${getName('SexyMalasada')}|Today is the day you finally learn RNG Mex, deal with it!`);
-				break;
-			case 'clefable':
-				this.add(`c:|${getName('SexyMalasada')}|Oi! I'm not hacking, it's RNG!`);
-				break;
-			case 'billo':
-				this.add(`c:|${getName('SexyMalasada')}|Billo help! The tool isn't working again q_q`);
-				break;
-			default:
-				this.add(`c:|${getName('SexyMalasada')}|Hello! Do you have some time to talk about RNGesus and its awesome teachings: The Art of RNG abuse??`);
-				break;
+				case 'wigglytree':
+					this.add(`c:|${getName('SexyMalasada')}|Hey Wiggles! I made pizza again! Wanna learn more RNG btw?`);
+					break;
+				case 'appletunalamode':
+					this.add(`c:|${getName('SexyMalasada')}|And now you must learn how to RNG with nothing but a sundial for a timer! __Trust me!__`);
+					break;
+				case 'loethalion':
+					this.add(`c:|${getName('SexyMalasada')}|For the hundredth time Loe, check. the. pins.`);
+					break;
+				case 'nicolic':
+					this.add(`c:|${getName('SexyMalasada')}|Hi Nic! Why you keep postponing learning old-gen RNG? q_q`);
+					break;
+				case 'swiffix':
+					this.add(`c:|${getName('SexyMalasada')}|....something smells in here`);
+					break;
+				case 'mex':
+					this.add(`c:|${getName('SexyMalasada')}|Today is the day you finally learn RNG Mex, deal with it!`);
+					break;
+				case 'clefable':
+					this.add(`c:|${getName('SexyMalasada')}|Oi! I'm not hacking, it's RNG!`);
+					break;
+				case 'billo':
+					this.add(`c:|${getName('SexyMalasada')}|Billo help! The tool isn't working again q_q`);
+					break;
+				default:
+					this.add(`c:|${getName('SexyMalasada')}|Hello! Do you have some time to talk about RNGesus and its awesome teachings: The Art of RNG abuse??`);
+					break;
 			}
 		},
 		onSwitchOut(pokemon) {
 			switch (this.toID(enemyStaff(pokemon))) {
-			case 'loethalion':
-				this.add(`c:|${getName('SexyMalasada')}|fricking heck`);
-				break;
-			case 'swiffix':
-				this.add(`c:|${getName('SexyMalasada')}|Just shower already!`);
-				break;
-			case 'billo':
-				this.add(`c:|${getName('SexyMalasada')}|Fiiiine I'll read the wiki...`);
-				break;
-			default:
-				this.add(`c:|${getName('SexyMalasada')}|Crap! I missed my frame... Resetting... q_q`);
-				break;
+				case 'loethalion':
+					this.add(`c:|${getName('SexyMalasada')}|fricking heck`);
+					break;
+				case 'swiffix':
+					this.add(`c:|${getName('SexyMalasada')}|Just shower already!`);
+					break;
+				case 'billo':
+					this.add(`c:|${getName('SexyMalasada')}|Fiiiine I'll read the wiki...`);
+					break;
+				default:
+					this.add(`c:|${getName('SexyMalasada')}|Crap! I missed my frame... Resetting... q_q`);
+					break;
 			}
 		},
 		onFaint(pokemon) {
 			switch (this.toID(enemyStaff(pokemon))) {
-			case 'loethalion':
-				this.add(`c:|${getName('SexyMalasada')}|fricking heck`);
-				break;
-			case 'swiffix':
-				this.add(`c:|${getName('SexyMalasada')}|Just shower already!`);
-				break;
-			case 'billo':
-				this.add(`c:|${getName('SexyMalasada')}|Fiiiine I'll read the wiki...`);
-				break;
-			default:
-				this.add(`c:|${getName('SexyMalasada')}|Well then.. have fun soft-resetting for your shiny! >:( Cya on the flipside 🕶️`);
-				break;
+				case 'loethalion':
+					this.add(`c:|${getName('SexyMalasada')}|fricking heck`);
+					break;
+				case 'swiffix':
+					this.add(`c:|${getName('SexyMalasada')}|Just shower already!`);
+					break;
+				case 'billo':
+					this.add(`c:|${getName('SexyMalasada')}|Fiiiine I'll read the wiki...`);
+					break;
+				default:
+					this.add(`c:|${getName('SexyMalasada')}|Well then.. have fun soft-resetting for your shiny! >:( Cya on the flipside 🕶️`);
+					break;
 			}
 		},
 	},
@@ -2666,15 +2737,15 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		noCopy: true,
 		onStart(pokemon) {
 			switch (this.toID(enemyStaff(pokemon))) {
-			case 'blitz':
-				this.add(`c:|${getName('Tenshi')}|le fishe`);
-				break;
-			case 'ut':
-			case 'clouds':
-				this.add(`c:|${getName('Tenshi')}|birbs cannot save u from SAND`);
-				break;
-			default:
-				this.add(`c:|${getName('Tenshi')}|he SLEUTHING`);
+				case 'blitz':
+					this.add(`c:|${getName('Tenshi')}|le fishe`);
+					break;
+				case 'ut':
+				case 'clouds':
+					this.add(`c:|${getName('Tenshi')}|birbs cannot save u from SAND`);
+					break;
+				default:
+					this.add(`c:|${getName('Tenshi')}|he SLEUTHING`);
 			}
 		},
 		onSwitchOut(pokemon) {
@@ -2703,17 +2774,17 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		},
 		onFaint(pokemon) {
 			switch (this.toID(enemyStaff(pokemon))) {
-			case 'blitz':
-				this.add(`c:|${getName('Tenshi')}|YOU KILLED YOUR SON`);
-				break;
-			case 'ut':
-				this.add(`c:|${getName('Tenshi')}|worryrex`);
-				break;
-			case 'clouds':
-				this.add(`c:|${getName('Tenshi')}|SAND is no longer in the air tonight :(`);
-				break;
-			default:
-				this.add(`c:|${getName('Tenshi')}|Wait no that's illegal`);
+				case 'blitz':
+					this.add(`c:|${getName('Tenshi')}|YOU KILLED YOUR SON`);
+					break;
+				case 'ut':
+					this.add(`c:|${getName('Tenshi')}|worryrex`);
+					break;
+				case 'clouds':
+					this.add(`c:|${getName('Tenshi')}|SAND is no longer in the air tonight :(`);
+					break;
+				default:
+					this.add(`c:|${getName('Tenshi')}|Wait no that's illegal`);
 			}
 		},
 	},
@@ -2903,20 +2974,20 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (attacker.species.baseSpecies !== 'Ogerpon' || attacker.transformed) return;
 			let targetForme = 'Ogerpon';
 			switch (move.type) {
-			case 'Rock':
-				targetForme += '-Cornerstone';
-				break;
-			case 'Fire':
-				targetForme += '-Hearthflame';
-				break;
-			case 'Water':
-				targetForme += '-Wellspring';
-				break;
-			case 'Grass':
-				// Do nothing
-				break;
-			default:
-				return;
+				case 'Rock':
+					targetForme += '-Cornerstone';
+					break;
+				case 'Fire':
+					targetForme += '-Hearthflame';
+					break;
+				case 'Water':
+					targetForme += '-Wellspring';
+					break;
+				case 'Grass':
+					// Do nothing
+					break;
+				default:
+					return;
 			}
 			if (attacker.terastallized) targetForme += (targetForme === 'Ogerpon' ? '-Teal' : '') + '-Tera';
 			if (attacker.species.name !== targetForme) {
@@ -2951,7 +3022,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 			if (pokemon.illusion) return;
 			pokemon.abilityState.gluttony = true;
 			this.add('-activate', pokemon, 'ability: Nutrient Boost');
-			this.boost({def: 1, spd: 1}, pokemon);
+			this.boost({ def: 1, spd: 1 }, pokemon);
 		},
 		onSwitchOut() {
 			this.add(`c:|${getName('WarriorGallade')}|amidst this tactical retreat, you didn't think i forgot about the pokeradar, did you? you can bet that my return with even more questions will be __eventful__ :3`);
@@ -3194,7 +3265,7 @@ export const Conditions: {[k: string]: ModdedConditionData & {innateName?: strin
 		effectType: 'Condition',
 		duration: 4,
 		onSideStart(side, source) {
-			this.effectState.source = source;e
+			this.effectState.source = source; e
 			this.add('-sidestart', side, 'move: Biotic Orb (Foe)');
 		},
 		onResidualOrder: 5,
