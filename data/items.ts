@@ -1551,9 +1551,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (source && source !== target && target.hp && move && move.category !== 'Status' && !move.flags['futuremove']) {
 				if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.beingCalledBack || target.isSkyDropped()) return;
 				if (target.volatiles['commanding'] || target.volatiles['commanded']) return;
-				for (const pokemon of this.getAllActive()) {
-					if (pokemon.switchFlag === true) return;
-				}
 				target.switchFlag = true;
 				if (target.useItem()) {
 					source.switchFlag = false;
@@ -1584,9 +1581,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				if (target.hp) {
 					if (!this.canSwitch(target.side)) return;
 					if (target.volatiles['commanding'] || target.volatiles['commanded']) return;
-					for (const pokemon of this.getAllActive()) {
-						if (pokemon.switchFlag === true) return;
-					}
 					if (target.useItem()) target.switchFlag = true;
 				}
 			}
