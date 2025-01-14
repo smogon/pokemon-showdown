@@ -52,67 +52,169 @@ export const ssbSets: SSBSets = {
 		species: "Decidueye-Hisui", ability: "Concentration", item: "Yoichi's Bow", gender: "M",
 		moves: ["Triple Arrows", "Pursuit", "Trop Kick"],
 		signatureMove: "Burst Delta",
-		evs: {hp: 8, atk: 252, spe: 248}, nature: "Adamant",
+		evs: { hp: 8, atk: 252, spe: 248 }, nature: "Adamant",
 	},
 	'Yukari Yakumo': {
 		species: 'Lunala', ability: 'Spiriting Away', item: 'Choice Scarf', gender: 'F',
 		moves: ['Rest', 'Future Sight', 'Dark Pulse'],
 		signatureMove: 'Shikigami Ran',
-		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+		evs: { def: 4, spa: 252, spe: 252 }, ivs: { atk: 0 }, nature: 'Timid',
 	},
 	Aeri: {
 		species: 'Butterfree-Gmax', ability: 'Woven Together, Cohere Forever', item: 'Fleeting Winds', gender: 'F',
 		moves: ['U-turn', 'Nature\'s Madness', 'Mist'],
 		signatureMove: 'Blissful Breeze',
-		evs: {hp: 252, spa: 4, spe: 252}, nature: 'Timid',
+		evs: { hp: 252, spa: 4, spe: 252 }, nature: 'Timid',
 	},
 	Gizmo: {
 		species: 'Gimmighoul-Roaming', ability: 'Head-On Battery', item: 'Inconspicuous Coin', gender: 'M',
 		moves: ['Shadow Punch', 'Nuzzle', 'Charge'],
 		signatureMove: 'Coin Clash',
-		evs: {hp: 252, atk: 252, def: 252, spa: 252, spd: 252, spe: 252}, nature: 'Jolly',
+		evs: { hp: 252, atk: 252, def: 252, spa: 252, spd: 252, spe: 252 }, nature: 'Jolly',
 	},
 	Mima: {
 		species: 'Mismagius', ability: 'Vengeful Spirit', item: 'Crescent Staff', gender: 'F',
 		moves: ['Destiny Bond', 'Secret Sword', 'Shadow Ball'],
 		signatureMove: 'Complete Darkness',
-		evs: {spa: 252, spd: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+		evs: { spa: 252, spd: 4, spe: 252 }, ivs: { atk: 0 }, nature: 'Timid',
 	},
 	Sariel: {
 		species: 'Yveltal', ability: 'Angel of Death', item: 'Leftovers', gender: 'N',
 		moves: ['Recover', 'Protect', 'Foul Play'],
 		signatureMove: 'Civilization of Magic',
-		evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
+		evs: { hp: 252, def: 4, spe: 252 }, ivs: { atk: 0 }, nature: 'Timid',
 	},
 	Urabrask: {
 		species: 'Smokomodo', ability: 'Praetor\'s Grasp', item: 'Braid of Fire', gender: 'M',
 		moves: ['Fire Lash', 'Headlong Rush', 'Spikes'],
 		signatureMove: 'Terrorize the Peaks',
-		evs: {atk: 252, spa: 4, spe: 252}, nature: 'Naive',
+		evs: { atk: 252, spa: 4, spe: 252 }, nature: 'Naive',
 	},
 	Kozuchi: {
 		species: 'Tinkaton', ability: 'Scrapworker', item: 'Forged Hammer', gender: 'F',
 		moves: ['Gigaton Hammer', 'Play Rough', 'High Horsepower'],
 		signatureMove: 'Weapon Enhancement',
-		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Jolly',
+		evs: { hp: 4, atk: 252, spe: 252 }, nature: 'Jolly',
 	},
 	'Prince Smurf': {
-      species: 'Kecleon', ability: 'Quick Camo', item: 'Smurf\'s Crown', gender: 'M',
-      moves: ['Psyshield Bash', 'Drain Punch', 'Comeuppance'],
-      signatureMove: 'You Filthy Peasant',
-      evs: {hp: 252, def: 196, spd: 60}, nature: 'Careful',
-   },
+		species: 'Kecleon', ability: 'Quick Camo', item: 'Smurf\'s Crown', gender: 'M',
+		moves: ['Psyshield Bash', 'Drain Punch', 'Comeuppance'],
+		signatureMove: 'You Filthy Peasant',
+		evs: { hp: 252, def: 196, spd: 60 }, nature: 'Careful',
+	},
 	'Sanae Kochiya': {
 		species: 'Togekiss', ability: 'Wind Priestess', item: 'Leftovers', gender: 'F',
 		moves: ['Revival Blessing', 'Sparkly Swirl', 'Oblivion Wing'],
 		signatureMove: 'Miracle',
-		evs: {hp: 252, def: 4, spa: 252}, ivs: {atk: 0}, nature: 'Modest',
+		evs: { hp: 252, def: 4, spa: 252 }, ivs: { atk: 0 }, nature: 'Modest',
 	},
 	'Cyclommatic Cell': {
 		species: 'Vikavolt-Totem', ability: 'Battery Life', item: 'Apparatus', gender: 'N',
 		moves: ['Parabolic Charge', 'Bug Buzz', 'Techno Blast'],
 		signatureMove: 'Galvanic Web',
-		evs: {hp: 252, spa: 252, spd: 4}, ivs: {spe: 29}, nature: 'Modest',
+		evs: { hp: 252, spa: 252, spd: 4 }, ivs: { spe: 29 }, nature: 'Modest',
+	},
+	Fblthp: {
+		species: 'Poliwhirl', ability: 'Lost and Found', item: 'Bubble Wand', gender: 'M',
+		moves: ['Bouncy Bubble', 'Yawn', 'Helping Hand'],
+		signatureMove: 'Blow and Go',
+		evs: { hp: 248, spa: 140, spd: 120 }, nature: 'Modest',
+	},
+	Luminous: {
+		species: 'Necrozma', ability: 'Blinding Light', item: 'Spectral Prism', gender: 'N',
+		moves: ['Photon Geyser', 'Light of Ruin', 'Moonlight'],
+		signatureMove: 'Rainbow Maxifier',
+		evs: { hp: 140, def: 56, spa: 60, spd: 252 }, nature: 'Calm', shiny: true,
+	},
+	'Luminous-N': {
+		species: 'Necrozma-Ultra', ability: 'Blinding Light', item: 'Spectral Prism', gender: 'N',
+		moves: ['Photon Geyser', 'Light of Ruin', 'Moonlight'],
+		signatureMove: 'Rainbow Maxifier',
+		evs: { hp: 140, def: 56, spa: 60, spd: 252 }, nature: 'Calm', shiny: true, skip: 'Luminous',
+	},
+	'Shifu Robot': {
+		species: 'Iron Thorns', ability: 'Auto Repair', item: 'Absorptive Shell', gender: 'N',
+		moves: ['Techno Blast', 'Flash Cannon', 'Explosion'],
+		signatureMove: 'Turbocharge',
+		evs: { hp: 128, spa: 128, spe: 252 }, nature: 'Hasty',
+	},
+	'Kaiser Dragon': {
+		species: 'Rayquaza', ability: 'Elemental Shift', item: 'Leftovers', gender: 'N',
+		moves: ['Splash', 'Celebrate', 'Hold Hands'],
+		signatureMove: 'Struggle',
+		evs: { hp: 252, spd: 4, spe: 252 }, nature: 'Hasty', shiny: true,
+	},
+	'Marisa Kirisame': {
+		species: 'Hatterene', ability: 'Ordinary Magician', item: '', gender: 'F',
+		moves: ['Volt Switch', 'Overheat', 'Freezy Frost'],
+		signatureMove: 'Orb Shield',
+		evs: { hp: 248, def: 8, spa: 252 }, ivs: { atk: 0, spe: 0 }, nature: 'Quiet',
+	},
+	Zeeb: {
+		species: 'Aipom', ability: 'Nutcracker', item: 'Slingshot', gender: 'M',
+		moves: ['Fake Out', 'Tidy Up', 'False Surrender'],
+		signatureMove: 'Super-Knuckle Shuffle',
+		evs: { def: 128, spd: 128, spe: 252 }, ivs: { atk: 0, spa: 0 }, nature: 'Jolly',
+	},
+	Emerl: {
+		species: 'Genesect', ability: 'Perfect Copy', item: 'Choice Scarf', gender: 'N',
+		moves: ['U-turn', 'Leech Life', 'Flash Cannon'],
+		signatureMove: 'Awakened Mode',
+		evs: { atk: 252, spa: 252, spe: 4 }, nature: 'Hasty',
+	},
+	'Sakuya Izayoi': {
+		species: 'Magearna', ability: 'The World', item: 'Stopwatch', gender: 'F',
+		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
+		signatureMove: 'Killing Doll',
+		evs: { hp: 252, def: 4, spa: 252 }, ivs: { atk: 0, spe: 0 }, nature: 'Quiet',
+	},
+	'Suika Ibuki': {
+		species: 'Ogerpon', ability: 'Density Manipulation', item: 'Ibuki Gourd', gender: 'F',
+		moves: ['U-turn', 'Switcheroo', 'Drain Punch'],
+		signatureMove: 'Demi',
+		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly',
+	},
+	Morax: {
+		species: 'Landorus', ability: 'Herald of Order', item: 'Hadean Soil', gender: 'M',
+		moves: ['Land\'s Wrath', 'Bleakwind Storm', 'Paleo Wave'],
+		signatureMove: 'Dominus Lapidis',
+		evs: { hp: 248, def: 92, spd: 168 }, nature: 'Jolly',
+	},
+	Aevum: {
+		species: 'Calyrex', ability: 'Temporal Domain', item: 'Rewind Watch', gender: 'M',
+		moves: ['Matcha Gotcha', 'Freezing Glare', 'Earth Power'],
+		signatureMove: 'Genesis Ray',
+		evs: { hp: 4, spa: 252, spe: 252 }, nature: 'Timid',
+	},
+	'Rooci Caxa': {
+		species: 'Trevenant', ability: 'Horrors of the Forest', item: 'Spirit Berry', gender: 'M',
+		moves: ['Strength Sap', 'Phantom Force', 'Sacred Fire'],
+		signatureMove: 'Root Reaper',
+		evs: { hp: 252, def: 4, spd: 252 }, nature: 'Careful',
+	},
+	'Saint Deli': {
+		species: 'Delibird', ability: 'Generosity', item: 'Gift Sack', gender: 'N',
+		moves: ['Baton Pass', 'Present', 'Life Dew'],
+		signatureMove: 'Gift of Fortune',
+		evs: { hp: 4, spa: 252, spe: 252 }, nature: 'Timid',
+	},
+	Flufi: {
+		species: 'Pikachu-Starter', ability: 'Force of Will', item: 'EpiPen', gender: 'M',
+		moves: ['Plasma Fists', 'Triple Axel', 'No Retreat'],
+		signatureMove: 'Cranberry Cutter',
+		evs: { hp: 160, atk: 240, spe: 108 }, nature: 'Jolly',
+	},
+	Tao: {
+		species: 'Kubfu', ability: 'Shangqing', item: 'Zhuyou', gender: 'M',
+		moves: ['Triple Kick', 'Circle Throw', 'Taiji'],
+		signatureMove: 'Wuji',
+		evs: { hp: 120, atk: 136, spe: 252 }, ivs: { spa: 0 }, nature: 'Jolly',
+	},
+	Marvin: {
+		species: 'Darmanitan-Galar-Zen', ability: 'Murderous Mimic', item: 'The Happy Knife', gender: 'M',
+		moves: ['Ice Spinner', 'Pyro Ball', 'Mimic'],
+		signatureMove: 'Emergency Meltdown',
+		evs: { hp: 120, atk: 136, spe: 252 }, ivs: { spa: 0 }, nature: 'Jolly',
 	},
 	/* Vaulted for being fucking stupid!
 	Quetzalcoatl: {
@@ -121,6 +223,8 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Big Thunder',
 		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
 	},
+<<<<<<< HEAD
+=======
  	*/
 	Fblthp: {
 		species: 'Poliwhirl', ability: 'Lost and Found', item: 'Bubble Wand', gender: 'M',
@@ -231,13 +335,14 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Homerun Swing - Windup',
 		evs: {hp: 252, atk: 252, spd: 4}, ivs: {spa: 0}, nature: 'Adamant',
 	},
+>>>>>>> 364f7d948df1154feb0f05a1d159e837af123df8
 	Miraju: {
 		species: 'Wynaut', ability: 'Illusive Energy', item: 'Eviolite', gender: 'N',
 		moves: ['Hyperspace Hole', 'Glare', 'Memento'],
 		signatureMove: 'Close Combat',
 		evs: {hp: 252, def: 4, spe: 252}, ivs: {atk: 0}, nature: 'Timid',
 	},
- 	Ingrid: {
+	  Ingrid: {
 		species: 'Doublade', ability: 'Caliber Conversion', item: 'Odin\'s Sheath', gender: 'F',
 		moves: ['Smart Strike', 'Shadow Sneak', 'Swords Dance'],
 		signatureMove: 'Equip Spectre',
@@ -261,19 +366,19 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Transfuse Toxin',
 		evs: {hp: 252, def: 108, spd: 148}, ivs: {atk: 0}, nature: 'Bold',
 	},
- 	Morte: {
+	  Morte: {
 		species: 'Mimikyu', ability: 'Dollkeeper', item: 'Malediction', gender: 'M',
 		moves: ['Magical Torque', 'Shadow Force', 'Thousand Waves'],
 		signatureMove: 'Omen of Defeat',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 	},
- 	Varnava: {
+	  Varnava: {
 		species: 'Zygarde-Complete', ability: 'Cell Deconstruct', item: 'Varnavium Z', gender: 'M',
 		moves: ['Core Enforcer', 'Thousand Arrows', 'Coil'],
 		signatureMove: 'Ecosystem Drain',
 		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
 	},
- 	Genus: {
+	  Genus: {
 		species: 'Dusclops', ability: 'Lucky Charm', item: 'Gachium Z', gender: 'N',
 		moves: ['Substitute', 'Roar', 'Recover'],
 		signatureMove: 'Star Pull',
@@ -296,13 +401,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'New Beginnings',
 		evs: {atk: 188, spd: 104, spe: 216}, ivs: {spa: 0}, nature: 'Adamant',
 	},
- 	Shorikai: {
+	  Shorikai: {
 		species: 'Corviknight-Gmax', ability: 'Iridium Ironworks', item: 'Genesis Engine', gender: 'N',
 		moves: ['Metal Burst', 'King\'s Shield', 'Spikes'],
 		signatureMove: 'Sanguine Shuriken',
 		evs: {hp: 248, spd: 8, spe: 252}, nature: 'Jolly', shiny: true,
 	},
- 	Croupier: {
+	  Croupier: {
 		species: 'Hoopa', ability: 'Fair Play', item: 'Staufen\'s Die', gender: 'M',
 		moves: ['Photon Geyser', 'Ominous Wind', 'Tap Out'],
 		signatureMove: 'Roll the Dice',
