@@ -1949,7 +1949,7 @@ export class BattleActions {
 		}
 		if (pokemon.species.name === 'Terapagos-Terastal' && type === 'Stellar') {
 			pokemon.formeChange('Terapagos-Stellar', null, true);
-			pokemon.regressionForme = {species: this.dex.species.get('Terapagos'), ability: toID('Tera Shift')};
+			pokemon.regressionForme = true;
 			pokemon.baseMaxhp = Math.floor(Math.floor(
 				2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
 			) * pokemon.level / 100 + 10);
@@ -1958,8 +1958,10 @@ export class BattleActions {
 			pokemon.maxhp = newMaxHP;
 			this.battle.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		}
-		if (pokemon.species.baseSpecies === 'Morpeko' && !pokemon.transformed) {
-			pokemon.regressionForme = {species: pokemon.baseSpecies, ability: pokemon.baseAbility};
+		if (pokemon.species.baseSpecies === 'Morpeko' && !pokemon.transformed &&
+			pokemon.baseSpecies.id !== pokemon.species.id
+		) {
+			pokemon.regressionForme = true;
 			pokemon.baseSpecies = pokemon.species;
 			pokemon.details = pokemon.getUpdatedDetails();
 		}

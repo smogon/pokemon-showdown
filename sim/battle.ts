@@ -2372,8 +2372,8 @@ export class Battle {
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				if (pokemon.regressionForme) {
 					// before clearing volatiles
-					pokemon.baseSpecies = pokemon.regressionForme.species;
-					pokemon.baseAbility = pokemon.regressionForme.ability;
+					pokemon.baseSpecies = this.dex.species.get(pokemon.set.species || pokemon.set.name);
+					pokemon.baseAbility = toID(pokemon.set.ability);
 				}
 				pokemon.clearVolatile(false);
 				pokemon.fainted = true;
@@ -2384,7 +2384,7 @@ export class Battle {
 				if (pokemon.regressionForme) {
 					// after clearing volatiles
 					pokemon.details = pokemon.getUpdatedDetails();
-					pokemon.regressionForme = null;
+					pokemon.regressionForme = false;
 				}
 				pokemon.side.faintedThisTurn = pokemon;
 				if (this.faintQueue.length >= faintQueueLeft) checkWin = true;

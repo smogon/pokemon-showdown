@@ -131,8 +131,8 @@ export class Pokemon {
 	faintQueued: boolean;
 	subFainted: boolean | null;
 
-	/** If this Pokemon faints will change to this species */
-	regressionForme: {species: Species, ability: ID} | null;
+	/** If this Pokemon should revert to its set species when it faints */
+	regressionForme: boolean;
 
 	types: string[];
 	addedType: string;
@@ -419,7 +419,7 @@ export class Pokemon {
 		this.faintQueued = false;
 		this.subFainted = null;
 
-		this.regressionForme = null;
+		this.regressionForme = false;
 
 		this.types = this.baseSpecies.types;
 		this.baseTypes = this.types;
@@ -1390,9 +1390,7 @@ export class Pokemon {
 		const apparentSpecies =
 			this.illusion ? this.illusion.species.name : species.baseSpecies;
 		if (isPermanent) {
-			if (!this.regressionForme && !this.transformed) {
-				this.regressionForme = {species: this.baseSpecies, ability: this.baseAbility};
-			}
+			if (!this.transformed) this.regressionForme = true;
 			this.baseSpecies = rawSpecies;
 			this.details = this.getUpdatedDetails();
 			let details = (this.illusion || this).details;
