@@ -180,7 +180,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		slotCondition: 'freeswitchbutton',
 		condition: {
-			onSwap(target) {
+			onSwitchIn(target) {
 				if (!target.fainted && (target.hp < target.maxhp)) {
 					target.heal(target.maxhp / 3);
 					this.add('-heal', target, target.getHealth, '[from] move: Free Switch Button');
@@ -2513,7 +2513,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				target.removeVolatile('wonderwing');
 			},
 			onDamage(damage, target, source, effect) {
-				if (this.effectState.duration < 2) return;
+				if (this.effectState.duration! < 2) return;
 				this.add('-activate', source, 'move: Wonder Wing');
 				return false;
 			},
@@ -3947,7 +3947,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			slotCondition: 'qualitycontrolzoomies',
 		},
 		condition: {
-			onSwap(target) {
+			onSwitchIn(target) {
 				if (!target.fainted) {
 					target.addVolatile('catstampofapproval');
 					target.side.removeSlotCondition(target, 'qualitycontrolzoomies');
@@ -4034,7 +4034,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		slotCondition: 'nyaa',
 		condition: {
-			onSwap(target) {
+			onSwitchIn(target) {
 				const source = this.effectState.source;
 				if (!target.fainted) {
 					this.add(`c:|${getName((source.illusion || source).name)}|~nyaa ${target.name}`);
@@ -5984,7 +5984,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onStart(pokemon, source) {
 				this.effectState.hp = source.maxhp / 2;
 			},
-			onSwap(target) {
+			onSwitchIn(target) {
 				if (!target.fainted) target.addVolatile('aquaring', target);
 			},
 			onResidualOrder: 4,
@@ -6263,7 +6263,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		slotCondition: 'tagyoureit',
 		condition: {
-			onSwap(target) {
+			onSwitchIn(target) {
 				if (target && !target.fainted) {
 					this.add('-anim', target, "Baton Pass", target);
 					target.addVolatile('focusenergy');
@@ -6845,7 +6845,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Sticky Web');
 			},
-			onEntryHazard(pokemon) {
+			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('eternalgenerator')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('stickyweb'));

@@ -41,7 +41,7 @@ function getMegaStone(stone: string, mod = 'gen9'): Item | null {
 			return null;
 		}
 	}
-	if (!item.megaStone && !item.onPrimal && !item.forcedForme?.endsWith('Epilogue') &&
+	if (!item.megaStone && !item.isPrimalOrb && !item.forcedForme?.endsWith('Epilogue') &&
 		!item.forcedForme?.endsWith('Origin') && !item.name.startsWith('Rusted') && !item.name.endsWith('Mask')) return null;
 	return item;
 }

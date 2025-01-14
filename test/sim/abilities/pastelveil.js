@@ -29,7 +29,7 @@ describe('Pastel Veil', function () {
 			{species: 'wynaut', moves: ['sleeptalk']},
 			{species: 'wynaut', moves: ['sleeptalk']},
 		], [
-			{species: 'croagunk', moves: ['skillswap', 'sleeptalk']},
+			{species: 'croagunk', moves: ['sleeptalk', 'skillswap']},
 			{species: 'wynaut', ability: 'compoundeyes', moves: ['poisongas']},
 		]]);
 		battle.makeChoices('auto', 'move skillswap 1, move poisongas');
