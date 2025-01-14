@@ -1,4 +1,23 @@
 export const Items: {[k: string]: ModdedItemData} = {
+	// Cinque
+	moogleplushie: {
+		name: "Moogle Plushie",
+		gen: 9,
+		shortDesc: "1.5x Atk, Def & SpDef. Allows use of Homerun Swing",
+		desc: "Raises Attack Defense and Special Defense by 1.5x. Allows the usage of the Z-Move: Homerun Swing.",
+		zMove: "Homerun Swing",
+		zMoveFrom: "Homerun Swing - Windup",
+		itemUser: ["Marowak"],
+		onModifyAtk(atk) {
+			return this.chainmodify(1.5);
+		},
+		onModifyDef(def) {
+			return this.chainmodify(1.5);
+		},
+		onModifySpD(spd) {
+			return this.chainmodify(1.5);
+		},
+	},
 	// Marvin
 	thehappyknife: {
 		name: "The Happy Knife",

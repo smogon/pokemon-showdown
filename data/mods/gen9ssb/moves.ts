@@ -40,6 +40,165 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		heal: [1, 2], // recover first num / second num % of the target's HP
 	},
 	*/
+	// Cinque
+	homerunswing: {
+		name: "Homerun Swing",
+		basePower: 40,
+		category: "Physical",
+		accuracy: true,
+		gen: 9,
+		desc: "Ignores immunities and protection.. Homerun Swing - Windup's PP is reduced to 0. If this KOes the target, user's Attack, Defense, and Special Defense are 1.5x permanently, STAB bonus is permanently 2x instead of 1.5x, and restores 35% of its max HP.",
+		shortDesc: "Ignores immunity. If KO: Heals, increases ATK/DEF/SPD, boosts STAB.",
+		priority: 6,
+		pp: 1,
+		isZ: "Moogle Plushie",
+		flags: {contact: 1},
+		breaksProtect: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Teeter Dance', source);
+			this.add('-anim', source, 'Bone Club', target);
+		},
+		onEffectiveness(typeMod, target, type, move) {
+			if (move.type !== 'Ground' || !target) return;
+			if (!target.runImmunity('Ground')) {
+				if (target.hasType('Flying')) return 0;
+			}
+		},
+		basePowerCallback(pokemon, target, move) {
+			if (!pokemon.abilityState.windup) return;
+			return 40 + 60 * pokemon.abilityState.windup;
+		},
+		onHit(target, source, move) {
+			this.add('-anim', source, 'Dragon Cheer', source);
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (!target || target.fainted || target.hp <= 0) {
+				pokemon.abilityState.homerun = true;
+				this.heal(pokemon.baseMaxhp*0.35, pokemon);
+				this.add('-message', `It's a K.O.!\n${pokemon.name}'s Attack, Defense, and Special Defense increased!`);
+			}
+			if (pokemon.abilityState.windup) {
+				const boosts: SparseBoostsTable = {};
+				boosts.def = -pokemon.abilityState.windup;
+				boosts.spd = -pokemon.abilityState.windup;
+				this.boost(boosts, pokemon, pokemon);
+			}
+			pokemon.deductPP('homerunswingwindup', 64);
+			pokemon.abilityState.windup = 0;
+		},
+	},
+	homerunswingwindup: {
+      name: "Homerun Swing - Windup",
+      category: "Status",
+      basePower: 0,
+      accuracy: true,
+      pp: 64,
+		noPPBoosts: true,
+      desc: "Raises user's Defense and Special Defense by 1 stage and increases the power of Homerun Swing. After use, user is trapped and can only select Homerun Swing Windup and Homerun Swing until Homerun Swing is used successfully.",
+      shortDesc: "+1 DEF/SPD/Z-Move power increases. Locks in until Z-move is used.",
+      priority: 0,
+      flags: {},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Dragon Dance', source);
+		},
+		onHit(target, source, move) {
+			if (!source.volatiles['homerunswingwindup']) source.addVolatile('homerunswingwindup');
+			if (!source.abilityState.windup) source.abilityState.windup = 0;
+			source.abilityState.windup++;
+			this.add('-message', `${source.name} is winding up!`);
+			this.debug(`${source.name} windup charges: ${source.abilityState.windup}`);
+		},
+      boosts: {
+         def: 1,
+         spd: 1,
+      },
+		condition: {
+			onTrapPokemon(pokemon) {
+				pokemon.tryTrap();
+			},
+			onDisableMove(pokemon) {
+				for (const move of pokemon.moveSlots) {
+					if (move.id !== 'homerunswingwindup' && move.id !== 'homerunswing') {
+						pokemon.disableMove(move.id);
+					}
+				}
+			},
+			onAfterMove(pokemon, target, move) {
+				if (move.id === 'homerunswing') {
+					pokemon.removeVolatile('homerunswingwindup');
+				}
+			},
+		},
+      type: "Ground",
+      target: "self",
+    },
+	// PokeKart, o' PokeKart
+	star: {
+		name: "Star",
+		basePower: 120,
+		category: "Physical",
+		accuracy: 100,
+		gen: 9,
+		pp: 10,
+		flags: {contact: 1, protect: 1},
+		priority: 2,
+		condition: {
+			duration: 3,
+			onStart(pokemon) {
+				this.effectState.oldMove = this.dex.moves.get(pokemon.moveSlots[3].id);
+				let move = this.dex.moves.get('star');
+				let itemBox = pokemon.moves.indexOf('itembox');
+				// If for whatever reason, Item Box's Star is triggered without having Item Box, it
+				// will fill Star into the fourth (signature) moveslot where Item Box should be.
+				if (!itemBox || itemBox < 0) itemBox = 3;
+				pokemon.moveSlots[itemBox] = {
+					move: move.name,
+					id: move.id,
+					pp: move.pp,
+					maxpp: move.pp,
+					target: move.target,
+					disabled: false,
+					used: false,
+					virtual: true,
+				};
+			},
+			onDamage(damage, target, source, effect) {
+				if (damage && effect.effectType === 'Move') {
+					this.add('-message', `${target.name}'s Star Power protected it from ${source.name}'s ${effect.name}!`);
+					return 0;
+				}
+			},
+			onDisableMove(pokemon) {
+				for (const moveSlot of pokemon.moveSlots) {
+					if (moveSlot.id !== 'star') {
+						pokemon.disableMove(moveSlot.id);
+					}
+				}
+			},
+			onEnd(pokemon) {
+				this.add('-message', `${pokemon.name}'s Star Power wore off!`);
+				pokemon.moveSlots[pokemon.moves.indexOf('star')] = {
+					move: this.effectState.oldMove.name,
+					id: this.effectState.oldMove.id,
+					pp: this.effectState.oldMove.pp,
+					maxpp: this.effectState.oldMove.pp,
+					target: this.effectState.oldMove.target,
+					disabled: false,
+					used: false,
+					virtual: true,
+				};
+			},
+		},
+		secondary: null,
+		type: "Steel",
+		target: "normal",
+	},
 	// Marvin
 	emergencymeltdown: {
 		name: "Emergency Meltdown",
