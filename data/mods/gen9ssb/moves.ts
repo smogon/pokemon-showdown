@@ -47,13 +47,20 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		category: "Physical",
 		accuracy: true,
 		gen: 9,
-		desc: "Ignores immunities, protection and forces opponent to switch. Homerun Swing - Windup has its PP reduced to 0. If this attack fails to K.O: Pokemon must recharge. If this attack K.Os: Permanent 2x Attack, 1.5x Defense and Special Defense, Restores 30% HP, next attack is a guaranteed critical, Safeguard for 5 turns, all allies gain 1.3x Attack and Special Attack for 5 turns.",
-		shortDesc: "Forces target to switch; User recharges if no KO; Ignores immunity/protect.",
+		desc: "Ignores immunities and protection.. Homerun Swing - Windup's PP is reduced to 0. If this KOes the target, user's Attack, Defense, and Special Defense are 1.5x permanently, STAB bonus is permanently 2x instead of 1.5x, and restores 35% of its max HP.",
+		shortDesc: "Ignores immunity. If KO: Heals, increases ATK/DEF/SPD, boosts STAB.",
 		priority: 6,
 		pp: 1,
 		isZ: "Moogle Plushie",
 		flags: {contact: 1},
 		breaksProtect: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Teeter Dance', source);
+			this.add('-anim', source, 'Bone Club', target);
+		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (move.type !== 'Ground' || !target) return;
 			if (!target.runImmunity('Ground')) {
@@ -63,6 +70,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		basePowerCallback(pokemon, target, move) {
 			if (!pokemon.abilityState.windup) return;
 			return 40 + 60 * pokemon.abilityState.windup;
+		},
+		onHit(target, source, move) {
+			this.add('-anim', source, 'Dragon Cheer', source);
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (!target || target.fainted || target.hp <= 0) {
