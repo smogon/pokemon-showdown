@@ -23,7 +23,7 @@ export class RandomPlayerAI extends BattlePlayer {
 		super(playerStream, debug);
 		this.move = options.move || 1.0;
 		this.mega = options.mega || 0;
-		this.prng = options.seed && !Array.isArray(options.seed) ? options.seed : new PRNG(options.seed);
+		this.prng = PRNG.get(options.seed);
 	}
 
 	receiveError(error: Error) {
