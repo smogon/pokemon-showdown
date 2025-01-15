@@ -111,7 +111,7 @@ export default class TeamGenerator {
 		this.dex = Dex.forFormat(format);
 		this.format = Dex.formats.get(format);
 		this.teamSize = this.format.ruleTable?.maxTeamSize || 6;
-		this.prng = seed instanceof PRNG ? seed : new PRNG(seed);
+		this.prng = PRNG.get(seed);
 		this.itemPool = this.dex.items.all().filter(i => i.exists && i.isNonstandard !== 'Past' && !i.isPokeball);
 		this.specialItems = {};
 		for (const i of this.itemPool) {

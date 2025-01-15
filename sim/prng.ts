@@ -15,7 +15,7 @@
 import {Chacha20} from 'ts-chacha20';
 import {Utils} from '../lib/utils';
 
-export type PRNGSeed = SodiumRNGSeed | Gen5RNGSeed;
+export type PRNGSeed = `${'sodium' | 'gen5' | number},${string}`;
 export type SodiumRNGSeed = ['sodium', string];
 /** 64-bit big-endian [high -> low] int */
 export type Gen5RNGSeed = [number, number, number, number];
@@ -44,15 +44,27 @@ export class PRNG {
 	/** Creates a new source of randomness for the given seed. */
 	constructor(seed: PRNGSeed | null = null, initialSeed?: PRNGSeed) {
 		if (!seed) seed = PRNG.generateSeed();
-		this.startingSeed = initialSeed || [...seed]; // make a copy
+		if (Array.isArray(seed)) {
+			// compat for old inputlogs
+			seed = seed.join(',') as PRNGSeed;
+		}
+		if (typeof seed !== 'string') {
+			throw new Error(`PRNG: Seed ${seed} must be a string`);
+		}
+		this.startingSeed = initialSeed ?? seed;
 		this.setSeed(seed);
 	}
 
 	setSeed(seed: PRNGSeed) {
-		if (seed[0] === 'sodium') {
-			this.rng = new SodiumRNG(seed);
+		if (seed.startsWith('sodium,')) {
+			this.rng = new SodiumRNG(seed.split(',') as SodiumRNGSeed);
+		} else if (seed.startsWith('gen5,')) {
+			const gen5Seed = [seed.slice(5, 9), seed.slice(9, 13), seed.slice(13, 17), seed.slice(17, 21)];
+			this.rng = new Gen5RNG(gen5Seed.map(n => parseInt(n, 16)) as Gen5RNGSeed);
+		} else if (/[0-9]/.test(seed.charAt(0))) {
+			this.rng = new Gen5RNG(seed.split(',').map(Number) as Gen5RNGSeed);
 		} else {
-			this.rng = new Gen5RNG(seed as Gen5RNGSeed);
+			throw new Error(`Unrecognized RNG seed ${seed}`);
 		}
 	}
 	getSeed(): PRNGSeed {
@@ -145,15 +157,14 @@ export class PRNG {
 		}
 	}
 
-	static generateSeed(): SodiumRNGSeed {
-		return [
-			'sodium',
-			// 32 bits each, 128 bits total (16 bytes)
-			Math.trunc(Math.random() * 2 ** 32).toString(16).padStart(8, '0') +
-				Math.trunc(Math.random() * 2 ** 32).toString(16).padStart(8, '0') +
-				Math.trunc(Math.random() * 2 ** 32).toString(16).padStart(8, '0') +
-				Math.trunc(Math.random() * 2 ** 32).toString(16).padStart(8, '0'),
-		];
+	static generateSeed(): PRNGSeed {
+		return PRNG.convertSeed(SodiumRNG.generateSeed());
+	}
+	static convertSeed(seed: SodiumRNGSeed | Gen5RNGSeed): PRNGSeed {
+		return seed.join(',') as PRNGSeed;
+	}
+	static get(prng?: PRNG | PRNGSeed | null) {
+		return prng && typeof prng !== 'string' && !Array.isArray(prng) ? prng : new PRNG(prng as PRNGSeed);
 	}
 }
 
@@ -180,8 +191,8 @@ export class SodiumRNG implements RNG {
 		Utils.bufWriteHex(seedBuf, seed[1].padEnd(64, '0'));
 		this.seed = seedBuf;
 	}
-	getSeed(): SodiumRNGSeed {
-		return ['sodium', Utils.bufReadHex(this.seed)];
+	getSeed(): PRNGSeed {
+		return `sodium,${Utils.bufReadHex(this.seed)}`;
 	}
 
 	next() {
@@ -197,6 +208,17 @@ export class SodiumRNG implements RNG {
 		// alternative, probably slower (TODO: benchmark)
 		// return parseInt(Utils.bufReadHex(buf, 32, 36), 16);
 	}
+
+	static generateSeed(): SodiumRNGSeed {
+		return [
+			'sodium',
+			// 32 bits each, 128 bits total (16 bytes)
+			Math.trunc(Math.random() * 2 ** 32).toString(16).padStart(8, '0') +
+				Math.trunc(Math.random() * 2 ** 32).toString(16).padStart(8, '0') +
+				Math.trunc(Math.random() * 2 ** 32).toString(16).padStart(8, '0') +
+				Math.trunc(Math.random() * 2 ** 32).toString(16).padStart(8, '0'),
+		];
+	}
 }
 
 /**
@@ -210,8 +232,8 @@ export class Gen5RNG implements RNG {
 		this.seed = [...seed || Gen5RNG.generateSeed()];
 	}
 
-	getSeed() {
-		return this.seed;
+	getSeed(): PRNGSeed {
+		return this.seed.join(',') as PRNGSeed;
 	}
 
 	next(): number {

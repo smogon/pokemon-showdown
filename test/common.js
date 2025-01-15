@@ -16,7 +16,7 @@ function capitalize(word) {
 /**
  * The default random number generator seed used if one is not given.
  */
-const DEFAULT_SEED = [0x09917, 0x06924, 0x0e1c8, 0x06af0];
+const DEFAULT_SEED = 'gen5,99176924e1c86af0';
 
 class TestTools {
 	constructor(mod = 'base') {
