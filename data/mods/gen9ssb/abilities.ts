@@ -37,12 +37,6 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			if (!pokemon.abilityState.homerun) return;
 			return this.chainModify(1.5);
 		},
-		onSourceModifyDamage(damage, source, target, move) {
-			if (target.hp >= target.maxhp) {
-				this.debug('Cheerleader weaken');
-				return this.chainModify(0.5);
-			}
-		},
 		onModifySTAB(stab, source, target, move) {
 			if (!source.abilityState.homerun) return;
 			if (move.forceSTAB || source.hasType(move.type)) {
@@ -50,6 +44,12 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 					return 2.25;
 				}
 				return 2;
+			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.hp >= target.maxhp) {
+				this.debug('Cheerleader weaken');
+				return this.chainModify(0.5);
 			}
 		},
 		onTryAddVolatile(status, pokemon) {
