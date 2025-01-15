@@ -138,7 +138,7 @@ export class RandomGen8Teams {
 
 		this.factoryTier = '';
 		this.format = format;
-		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
+		this.prng = PRNG.get(prng);
 
 		this.moveEnforcementCheckers = {
 			screens: (movePool, moves, abilities, types, counter, species, teamDetails) => {
@@ -243,7 +243,7 @@ export class RandomGen8Teams {
 	}
 
 	setSeed(prng?: PRNG | PRNGSeed) {
-		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
+		this.prng = PRNG.get(prng);
 	}
 
 	getTeam(options?: PlayerOptions | null): PokemonSet[] {

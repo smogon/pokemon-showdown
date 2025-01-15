@@ -59,8 +59,7 @@ export class ExhaustiveRunner {
 	constructor(options: ExhaustiveRunnerOptions) {
 		this.format = options.format;
 		this.cycles = options.cycles || ExhaustiveRunner.DEFAULT_CYCLES;
-		this.prng = (options.prng && !Array.isArray(options.prng)) ?
-			options.prng : new PRNG(options.prng);
+		this.prng = PRNG.get(options.prng);
 		this.log = !!options.log;
 		this.maxGames = options.maxGames;
 		this.maxFailures = options.maxFailures || ExhaustiveRunner.MAX_FAILURES;
@@ -100,7 +99,7 @@ export class ExhaustiveRunner {
 				this.failures++;
 				console.error(
 					`\n\nRun \`node tools/simulate exhaustive --cycles=${this.cycles} ` +
-						`--format=${this.format} --seed=${seed.join()}\`:\n`,
+						`--format=${this.format} --seed=${seed}\`:\n`,
 					err
 				);
 			}
@@ -198,7 +197,7 @@ class TeamGenerator {
 		signatures: Map<string, {item: string, move?: string}[]>
 	) {
 		this.dex = dex;
-		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
+		this.prng = PRNG.get(prng);
 		this.pools = pools;
 		this.signatures = signatures;
 
