@@ -1,4 +1,4 @@
-import {Utils} from '../lib';
+import {Utils} from '../lib/utils';
 import type {ConditionData} from './dex-conditions';
 import {assignMissingFields, BasicEffect, toID} from './dex-data';
 

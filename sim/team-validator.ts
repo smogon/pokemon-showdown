@@ -9,7 +9,7 @@
 
 import {Dex, toID} from './dex';
 import type {MoveSource} from './dex-species';
-import {Utils} from '../lib';
+import {Utils} from '../lib/utils';
 import {Tags} from '../data/tags';
 import {Teams} from './teams';
 import {PRNG} from './prng';

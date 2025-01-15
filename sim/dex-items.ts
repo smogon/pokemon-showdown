@@ -1,6 +1,6 @@
 import type {PokemonEventMethods, ConditionData} from './dex-conditions';
 import {assignMissingFields, BasicEffect, toID} from './dex-data';
-import {Utils} from '../lib';
+import {Utils} from '../lib/utils';
 
 interface FlingData {
 	basePower: number;

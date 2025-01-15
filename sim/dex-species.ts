@@ -1,5 +1,5 @@
 import {assignMissingFields, BasicEffect, toID} from './dex-data';
-import {Utils} from '../lib';
+import {Utils} from '../lib/utils';
 import {isDeepStrictEqual} from 'node:util';
 
 interface SpeciesAbility {
