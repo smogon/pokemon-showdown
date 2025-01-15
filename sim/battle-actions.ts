@@ -136,9 +136,9 @@ export class BattleActions {
 		}
 		this.battle.runEvent('BeforeSwitchIn', pokemon);
 		if (sourceEffect) {
-			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails, '[from] ' + sourceEffect);
+			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, '[from] ' + sourceEffect);
 		} else {
-			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails);
+			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 		}
 		pokemon.abilityOrder = this.battle.abilityOrder++;
 		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
@@ -1959,9 +1959,12 @@ export class BattleActions {
 			pokemon.maxhp = newMaxHP;
 			this.battle.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		}
-		if (pokemon.species.baseSpecies === 'Morpeko') {
+		if (pokemon.species.baseSpecies === 'Morpeko' && !pokemon.transformed &&
+			pokemon.baseSpecies.id !== pokemon.species.id
+		) {
+			pokemon.regressionForme = true;
 			pokemon.baseSpecies = pokemon.species;
-			pokemon.details = pokemon.details.replace('Morpeko', pokemon.species.name);
+			pokemon.details = pokemon.getUpdatedDetails();
 		}
 		this.battle.runEvent('AfterTerastallization', pokemon);
 	}
