@@ -109,7 +109,7 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 				// 429: too many requests, we already freeze for 10s above so. not much more we can do
 				return null;
 			}
-			Monitor.crashlog(e, 'A Perspective API request', { request: JSON.stringify(requestData) });
+			Monitor.crashlog(e, 'A Perspective API request', {request: JSON.stringify(requestData)});
 			return null;
 		}
 	}
