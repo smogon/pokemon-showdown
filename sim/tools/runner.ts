@@ -58,8 +58,7 @@ export class Runner {
 	constructor(options: RunnerOptions) {
 		this.format = options.format;
 
-		this.prng = (options.prng && !Array.isArray(options.prng)) ?
-			options.prng : new PRNG(options.prng);
+		this.prng = PRNG.get(options.prng);
 		this.p1options = {...Runner.AI_OPTIONS, ...options.p1options};
 		this.p2options = {...Runner.AI_OPTIONS, ...options.p2options};
 		this.p3options = {...Runner.AI_OPTIONS, ...options.p3options};
@@ -144,7 +143,7 @@ export class Runner {
 			this.prng.random(2 ** 16),
 			this.prng.random(2 ** 16),
 			this.prng.random(2 ** 16),
-		];
+		].join(',') as PRNGSeed;
 	}
 
 	private getPlayerSpec(name: string, options: AIOptions) {
