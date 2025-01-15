@@ -19,7 +19,7 @@
  * @license MIT
  */
 
-import {Utils} from '../lib';
+import {Utils} from '../lib/utils';
 import type {RequestState} from './battle';
 import {Pokemon, EffectState} from './pokemon';
 import {State} from './state';

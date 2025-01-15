@@ -1,4 +1,4 @@
-import {Utils} from '../lib';
+import {Utils} from '../lib/utils';
 import {assignMissingFields, toID, BasicEffect} from './dex-data';
 import {EventMethods} from './dex-conditions';
 import {SpeciesData} from './dex-species';

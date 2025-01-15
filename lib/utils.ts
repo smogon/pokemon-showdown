@@ -448,7 +448,7 @@ export class Multiset<T> extends Map<T, number> {
 export const Utils = {
 	parseExactInt, waitUntil, html, escapeHTML,
 	compare, sortBy, levenshtein,
-	shuffle, deepClone, clearRequireCache,
+	shuffle, deepClone, deepFreeze, clampIntRange, clearRequireCache,
 	randomElement, forceWrap, splitFirst,
 	stripHTML, visualize, getString,
 	escapeRegex, formatSQLArray,

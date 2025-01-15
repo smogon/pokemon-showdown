@@ -23,7 +23,7 @@ import {Side} from './side';
 import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
 import {BattleActions} from './battle-actions';
-import {Utils} from '../lib';
+import {Utils} from '../lib/utils';
 declare const __version: any;
 
 export type ChannelID = 0 | 1 | 2 | 3 | 4;
