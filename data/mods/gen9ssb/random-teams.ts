@@ -228,13 +228,14 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Item Box',
 		evs: { hp: 252, def: 4, spe: 252 }, nature: 'Jolly',
 	},
+	/*
 	Cinque: {
 		species: 'Marowak', ability: 'Cheerleader', item: 'Moogle Plushie', gender: 'F',
 		moves: ['Magnitude', 'Payback', 'Stone Edge'],
 		signatureMove: 'Homerun Swing - Windup',
 		evs: { hp: 252, atk: 252, spd: 4 }, ivs: { spa: 0 }, nature: 'Adamant',
 	},
-	/* Vaulted for being fucking stupid!
+	Vaulted for being fucking stupid!
 	Quetzalcoatl: {
 		species: 'Zapdos', ability: 'Peal of Thunder', item: 'Expert Belt', gender: 'N',
 		moves: ['Secret Sword', 'Earth Power', 'Oblivion Wing'],

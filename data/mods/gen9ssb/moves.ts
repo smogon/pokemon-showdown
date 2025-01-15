@@ -47,15 +47,15 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		category: "Physical",
 		accuracy: true,
 		gen: 9,
-		desc: "Ignores immunities and protection.. Homerun Swing - Windup's PP is reduced to 0. If this KOes the target, user's Attack, Defense, and Special Defense are 1.5x permanently, STAB bonus is permanently 2x instead of 1.5x, and restores 35% of its max HP.",
+		desc: "Ignores immunities and protection. Homerun Swing - Windup's PP is reduced to 0. If this KOes the target, user's Attack, Defense, and Special Defense are 1.5x permanently, STAB bonus is permanently 2x instead of 1.5x, and restores 35% of its max HP.",
 		shortDesc: "Ignores immunity. If KO: Heals, increases ATK/DEF/SPD, boosts STAB.",
 		priority: 6,
-		pp: 1,
-		isZ: "Moogle Plushie",
+		pp: 5,
+		isZ: "moogleplushie",
 		flags: { contact: 1 },
-		breaksProtect: true,
-		onTryMove() {
+		onTryMove(target, source, move) {
 			this.attrLastMove('[still]');
+			this.add('-message', `target: ${target.name}`);
 		},
 		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Teeter Dance', source);
@@ -68,8 +68,15 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			}
 		},
 		basePowerCallback(pokemon, target, move) {
+			this.add('-message', `basePowerCallback triggered`);
 			if (!pokemon.abilityState.windup) return;
-			return 40 + 60 * pokemon.abilityState.windup;
+			this.add('-message', `current windup: ${pokemon.abilityState.windup}`)
+			let power = pokemon.abilityState.windup * 60;
+			this.add('-message', `anticipated bp in basePowerCallback: ${move.basePower + power}`);
+			return move.basePower + power;
+		},
+		onTryHit(target, source, move) {
+			this.add('-message', `onTryHit move bp: ${move.basePower}`)
 		},
 		onHit(target, source, move) {
 			this.add('-anim', source, 'Dragon Cheer', source);
@@ -89,6 +96,9 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			pokemon.deductPP('homerunswingwindup', 64);
 			pokemon.abilityState.windup = 0;
 		},
+		secondary: null,
+		target: "normal",
+		type: "Ground",
 	},
 	homerunswingwindup: {
 		name: "Homerun Swing - Windup",
@@ -101,8 +111,9 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		shortDesc: "+1 DEF/SPD/Z-Move power increases. Locks in until Z-move is used.",
 		priority: 0,
 		flags: {},
-		onTryMove() {
+		onTryMove(target, source, move) {
 			this.attrLastMove('[still]');
+			this.add('-message', `target: ${target.name}`);
 		},
 		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Dragon Dance', source);
@@ -112,7 +123,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			if (!source.abilityState.windup) source.abilityState.windup = 0;
 			source.abilityState.windup++;
 			this.add('-message', `${source.name} is winding up!`);
-			this.debug(`${source.name} windup charges: ${source.abilityState.windup}`);
+			this.add('-message', `${source.name} windup charges: ${source.abilityState.windup}`);
 		},
 		boosts: {
 			def: 1,

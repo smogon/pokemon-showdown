@@ -8,6 +8,7 @@ export const Items: { [k: string]: ModdedItemData } = {
 		zMove: "Homerun Swing",
 		zMoveFrom: "Homerun Swing - Windup",
 		itemUser: ["Marowak"],
+		onTakeItem: false,
 		onModifyAtk(atk) {
 			return this.chainModify(1.5);
 		},
@@ -207,9 +208,10 @@ export const Items: { [k: string]: ModdedItemData } = {
 		},
 		onTryHit(pokemon, source, move) {
 			if (pokemon !== source && move.type === 'Ground' || move.type === 'Rock') {
-				this.add('-activate', pokemon, 'item: Hadean Soil', move.name);
+				if (move.id === 'homerunswing') return;
+				this.add('-immune', pokemon);
 				this.heal(pokemon.maxhp / 4, pokemon);
-				return false;
+				return null;
 			}
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
