@@ -3,8 +3,8 @@ export const Items: { [k: string]: ModdedItemData } = {
 	moogleplushie: {
 		name: "Moogle Plushie",
 		gen: 9,
-		shortDesc: "1.5x Atk, Def & SpDef. Allows use of Homerun Swing",
-		desc: "Raises Attack Defense and Special Defense by 1.5x. Allows the usage of the Z-Move: Homerun Swing.",
+		shortDesc: "1.5x Atk/Def/SpDef; Allows use of Homerun Swing",
+		desc: "This Pokemon's Attack, Defense, and Special Defense are 1.5x. If held by a Marowak with Homerun Swing - Windup, it can use Homerun Swing.",
 		zMove: "Homerun Swing",
 		zMoveFrom: "Homerun Swing - Windup",
 		itemUser: ["Marowak"],
@@ -208,7 +208,7 @@ export const Items: { [k: string]: ModdedItemData } = {
 		},
 		onTryHit(pokemon, source, move) {
 			if (pokemon !== source && move.type === 'Ground' || move.type === 'Rock') {
-				if (move.id === 'homerunswing') return;
+				if (['homerunswing', 'homerunswingwindup'].includes(move.id)) return;
 				this.add('-immune', pokemon);
 				this.heal(pokemon.maxhp / 4, pokemon);
 				return null;

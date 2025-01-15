@@ -55,7 +55,6 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		flags: { contact: 1 },
 		onTryMove(target, source, move) {
 			this.attrLastMove('[still]');
-			this.add('-message', `target: ${target.name}`);
 		},
 		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Teeter Dance', source);
@@ -68,15 +67,9 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			}
 		},
 		basePowerCallback(pokemon, target, move) {
-			this.add('-message', `basePowerCallback triggered`);
-			if (!pokemon.abilityState.windup) return;
-			this.add('-message', `current windup: ${pokemon.abilityState.windup}`)
+			if (!pokemon.abilityState.windup) return move.basePower;
 			let power = pokemon.abilityState.windup * 60;
-			this.add('-message', `anticipated bp in basePowerCallback: ${move.basePower + power}`);
 			return move.basePower + power;
-		},
-		onTryHit(target, source, move) {
-			this.add('-message', `onTryHit move bp: ${move.basePower}`)
 		},
 		onHit(target, source, move) {
 			this.add('-anim', source, 'Dragon Cheer', source);
@@ -102,32 +95,30 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 	},
 	homerunswingwindup: {
 		name: "Homerun Swing - Windup",
-		category: "Status",
+		// This is a Status move in disguise
+		category: "Physical",
 		basePower: 0,
 		accuracy: true,
 		pp: 64,
 		noPPBoosts: true,
+		ignoreImmunity: true,
+		ignoreAbility: true,
 		desc: "Raises user's Defense and Special Defense by 1 stage and increases the power of Homerun Swing. After use, user is trapped and can only select Homerun Swing Windup and Homerun Swing until Homerun Swing is used successfully.",
 		shortDesc: "+1 DEF/SPD/Z-Move power increases. Locks in until Z-move is used.",
 		priority: 0,
 		flags: {},
 		onTryMove(target, source, move) {
 			this.attrLastMove('[still]');
-			this.add('-message', `target: ${target.name}`);
 		},
 		onPrepareHit(target, source, move) {
 			this.add('-anim', source, 'Dragon Dance', source);
 		},
 		onHit(target, source, move) {
+			this.boost({ def: 1, spd: 1 }, source, source);
 			if (!source.volatiles['homerunswingwindup']) source.addVolatile('homerunswingwindup');
 			if (!source.abilityState.windup) source.abilityState.windup = 0;
 			source.abilityState.windup++;
 			this.add('-message', `${source.name} is winding up!`);
-			this.add('-message', `${source.name} windup charges: ${source.abilityState.windup}`);
-		},
-		boosts: {
-			def: 1,
-			spd: 1,
 		},
 		condition: {
 			onTrapPokemon(pokemon) {
@@ -146,8 +137,9 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 				}
 			},
 		},
+		secondary: null,
 		type: "Ground",
-		target: "self",
+		target: "normal",
 	},
 	// PokeKart, o' PokeKart
 	itembox: {
