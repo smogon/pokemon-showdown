@@ -52,9 +52,6 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 				return 2;
 			}
 		},
-		onBeforeMove(pokemon, target, move) {
-			this.add(`-message`, `TROUBLESHOOT:\nsource: ${pokemon.name}\ntarget: ${target.name}\nmove: ${move.name}\nmove target type: ${move.target}\nmove base power: ${move.basePower}`);
-		},
 		onTryAddVolatile(status, pokemon) {
 			if (['flinch', 'confusion', 'yawn'].includes(status.id)) {
 				this.add('-immune', pokemon, '[from] ability: Cheerleader');
