@@ -53,7 +53,6 @@ function isCommon(message: string) {
 	return ['gg', 'wp', 'ggwp', 'gl', 'hf', 'glhf', 'hello'].includes(message);
 }
 
-// Added Retry Constants
 const MAX_RETRIES = 3;
 const RETRY_DELAY_BASE = 500; // in milliseconds
 
