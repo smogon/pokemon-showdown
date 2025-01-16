@@ -73,7 +73,6 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 		comment: {text},
 	};
 
-	// **Modified API Request with Retry Logic**
 	for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
 		try {
 			const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post({
