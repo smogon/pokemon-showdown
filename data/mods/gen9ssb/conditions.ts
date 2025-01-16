@@ -136,11 +136,9 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 		name: "Spiny Shell",
 		effectType: 'Condition',
 		duration: 2,
-		onSideStart(side) {
-			this.add('-message', `this.effectState.source = ${this.effectState.source}`)
-		},
 		onSideEnd(side) {
-			const source = this.effectState.source;
+			const pokemon = this.effectState.source;
+			const source = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			const baseMove = this.dex.moves.get('itembox');
 			const itemBox = {
 				move: baseMove.name,
@@ -162,7 +160,7 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 			}
 			const damage = this.actions.getDamage(source, target, itemBox);
 			if (damage) {
-				if (target.isActive()) {
+				if (target.isActive) {
 					this.add('-anim', target, 'Present', target);
 					this.add('-anim', target, 'Explosion', target);
 					this.add('-anim', target, 'Play Nice', target);
@@ -231,20 +229,42 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 		name: "Boo",
 		duration: 2,
 		onStart(pokemon) {
-			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			this.add('-anim', pokemon, 'Mist', pokemon);
 			this.add('-anim', pokemon, 'Explosion', pokemon);
 			this.add('-message', `${pokemon.name} vanished!`);
-			this.effectState.oldMove = this.dex.getActiveMove(pokemon.moveSlots[3].id);
-			pokemon.moveSlots[3] = this.dex.getActiveMove(target.moveSlots[3].id);
-			for (const move of pokemon.moveSlots) {
-				if (move.id !== target.moveSlots[3].id) {
-					pokemon.disableMove(move.id);
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			const oldBase = this.dex.moves.get(pokemon.moveSlots[3].id);
+			const booBase = this.dex.moves.get(target.moveSlots[3].id);
+			const oldMove = {
+				move: oldBase.name,
+				id: oldBase.id,
+				pp: (oldBase.noPPBoosts || oldBase.isZ) ? oldBase.pp : oldBase.pp * 8 / 5,
+				maxpp: (oldBase.noPPBoosts || oldBase.isZ) ? oldBase.pp : oldBase.pp * 8 / 5,
+				target: oldBase.target,
+				disabled: false,
+				used: false,
+			};
+			const booMove = {
+				move: booBase.name,
+				id: booBase.id,
+				pp: (booBase.noPPBoosts || booBase.isZ) ? booBase.pp : booBase.pp * 8 / 5,
+				maxpp: (booBase.noPPBoosts || booBase.isZ) ? booBase.pp : booBase.pp * 8 / 5,
+				target: booBase.target,
+				disabled: false,
+				used: false,
+			};
+			pokemon.moveSlots[3] = booMove;
+			this.effectState.oldMove = oldMove;
+		},
+		onDisableMove(pokemon) {
+			for (const moveSlot of pokemon.moveSlots) {
+				if (moveSlot.id !== pokemon.moveSlots[3].id) {
+					pokemon.disableMove(moveSlot.id);
 				}
 			}
 		},
-		onModifyPriority(priority, pokemon, target, move) {
-			return priority + 1;
+		onTrapPokemon(pokemon) {
+			pokemon.tryTrap();
 		},
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
@@ -253,11 +273,14 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 				return null;
 			}
 		},
-		onTrapPokemon(pokemon) {
-			pokemon.tryTrap();
+		onModifyPriority(priority, pokemon, target, move) {
+			return priority + 1;
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			this.add('-message', `${source.name} used ${target.name}'s ${move.name} against it!`);
 		},
 		onEnd(pokemon) {
-			this.add('-message', `${pokemon.name} used its foe's signature move against it!`);
+			pokemon.moveSlots[3] = this.effectState.oldMove;
 		},
 	},
 	// Morte

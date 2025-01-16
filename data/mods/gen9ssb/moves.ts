@@ -194,16 +194,16 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 				case 'star':
 					this.add(`raw|<b>Star!</b>`);
 					this.actions.useMove('Star', source, target);
-					const sNewMove = this.dex.getActiveMove('star');
-					const sTargetSlot = source.moves.indexOf('itembox');
-					source.moveSlots[sTargetSlot] = sNewMove;
+					source.addVolatile('star');
 					return this.NOT_FAIL;
+					break;
 				case 'lightning':
 					this.add(`raw|<b>Lightning!</b>`);
 					move.basePower = 100;
 					move.onHit = function (t, s, m) {
 						t.side.addSideCondition('lightning');
 					};
+					break;
 				case 'triplebanana':
 					this.add(`raw|<b>Triple Banana!</b>`);
 					move.basePower = 1;
@@ -215,10 +215,12 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 						this.add('-anim', t, 'Teeter Dance', t);
 						if (this.randomChance(1, 3) && !t.volatiles['mustrecharge']) t.addVolatile('mustrecharge');
 					};
+					break;
 				case 'boo':
 					this.add(`raw|<b>Boo!</b>`);
 					source.addVolatile('boo');
 					return this.NOT_FAIL;
+					break;
 				case 'powblock':
 					this.add(`raw|<b>POW!</b>`);
 					move.basePower = 80;
@@ -233,13 +235,14 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 							this.add('-enditem', t, item.name, '[from] move: POW', '[of] ' + s);
 						}
 					};
+					break;
 				case 'spinyshell':
 					this.add(`raw|<b>Spiny Shell!</b>`);
 					this.add('-anim', source, 'Wish', source);
 					target.side.addSideCondition('spinyshell');
-					target.side.sideConditions['spinyshell'].source = source;
 					this.add('-message', `The Spiny Shell disappeared into the sky!`);
 					return this.NOT_FAIL;
+					break;
 				case 'triplegreenshell':
 					this.add(`raw|<b>Green Shell!</b>`);
 					move.basePower = 40;
@@ -252,6 +255,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 							this.add('-anim', s, 'Energy Ball', t);
 						}
 					};
+					break;
 				case 'blooper':
 					this.add(`raw|<b>Blooper!</b>`);
 					move.basePower = 80;
@@ -261,13 +265,13 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					move.onHit = function (t, s, m) {
 						t.addVolatile('blooper');
 					};
+					break;
 				case 'bulletbill':
 					this.add(`raw|<b>Bullet Bill!</b>`);
 					this.actions.useMove('Bullet Bill', source, target);
-					let newMove = this.dex.getActiveMove('bulletbill');
-					let targetSlot = source.moves.indexOf('itembox');
-					if (targetSlot) source.moveSlots[targetSlot] = newMove;
+					source.addVolatile('bulletbill');
 					return this.NOT_FAIL;
+					break;
 			}
 		},
 		secondary: null,
@@ -290,13 +294,26 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			this.add('-anim', source, 'Explosion', source);
 			this.add('-anim', source, 'Extreme Speed', target);
 		},
+		onHit(target) {
+			target.forceSwitchFlag = true;
+		},
 		condition: {
 			duration: 3,
 			onStart(pokemon) {
-				this.effectState.oldMove = this.dex.getActiveMove(pokemon.moveSlots[3].id);
-				let move = this.dex.getActiveMove('bulletbill');
+				const oldBase = this.dex.moves.get(pokemon.moveSlots[3].id);
+				this.effectState.oldMove = {
+					move: oldBase.name,
+					id: oldBase.id,
+					pp: oldBase.pp,
+					maxpp: oldBase.pp,
+					target: oldBase.target,
+					disabled: false,
+					used: false,
+					virtual: true,
+				};
+				const move = this.dex.moves.get('bulletbill');
 				let itemBox = pokemon.moves.indexOf('itembox');
-				// If for whatever reason, Item Box's Star is triggered without having Item Box, it
+				// If for whatever reason, Item Box's Bullet Bill is triggered without having Item Box, it
 				// will fill Bullet Bill into the fourth (signature) moveslot where Item Box should be.
 				if (!itemBox || itemBox < 0) itemBox = 3;
 				pokemon.moveSlots[itemBox] = {
@@ -319,16 +336,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			},
 			onEnd(pokemon) {
 				this.add('-message', `${pokemon.name}'s Bullet Bill ran out of gas!`);
-				pokemon.moveSlots[pokemon.moves.indexOf('bulletbill')] = {
-					move: this.effectState.oldMove.name,
-					id: this.effectState.oldMove.id,
-					pp: this.effectState.oldMove.pp,
-					maxpp: this.effectState.oldMove.pp,
-					target: this.effectState.oldMove.target,
-					disabled: false,
-					used: false,
-					virtual: true,
-				};
+				pokemon.moveSlots[3] = this.effectState.oldMove;
 			},
 		},
 		secondary: null,
@@ -344,11 +352,27 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		pp: 10,
 		flags: { contact: 1, protect: 1 },
 		priority: 2,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			this.add('-anim', source, 'Twinkle Tackle', target);
+		},
 		condition: {
 			duration: 3,
 			onStart(pokemon) {
-				this.effectState.oldMove = this.dex.getActiveMove(pokemon.moveSlots[3].id);
-				let move = this.dex.getActiveMove('star');
+				const oldBase = this.dex.moves.get(pokemon.moveSlots[3].id);
+				this.effectState.oldMove = {
+					move: oldBase.name,
+					id: oldBase.id,
+					pp: oldBase.pp,
+					maxpp: oldBase.pp,
+					target: oldBase.target,
+					disabled: false,
+					used: false,
+					virtual: true,
+				};
+				const move = this.dex.moves.get('star');
 				let itemBox = pokemon.moves.indexOf('itembox');
 				// If for whatever reason, Item Box's Star is triggered without having Item Box, it
 				// will fill Star into the fourth (signature) moveslot where Item Box should be.
@@ -367,7 +391,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			onDamage(damage, target, source, effect) {
 				if (damage && effect.effectType === 'Move') {
 					this.add('-message', `${target.name}'s Star Power protected it from ${source.name}'s ${effect.name}!`);
-					return 0;
+					return null;
 				}
 			},
 			onDisableMove(pokemon) {
@@ -379,16 +403,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			},
 			onEnd(pokemon) {
 				this.add('-message', `${pokemon.name}'s Star Power wore off!`);
-				pokemon.moveSlots[pokemon.moves.indexOf('star')] = {
-					move: this.effectState.oldMove.name,
-					id: this.effectState.oldMove.id,
-					pp: this.effectState.oldMove.pp,
-					maxpp: this.effectState.oldMove.pp,
-					target: this.effectState.oldMove.target,
-					disabled: false,
-					used: false,
-					virtual: true,
-				};
+				pokemon.moveSlots[3] = this.effectState.oldMove;
 			},
 		},
 		secondary: null,
