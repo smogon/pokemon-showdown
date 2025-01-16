@@ -95,7 +95,6 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 			}
 			return result;
 		} catch (e: any) {
-			// **Handle Retryable Errors**
 			if ((e.message.includes('Service Unavailable') || e.statusCode === 503) && attempt < MAX_RETRIES) {
 				const delay = RETRY_DELAY_BASE * Math.pow(2, attempt - 1);
 				await new Promise(res => setTimeout(res, delay));
