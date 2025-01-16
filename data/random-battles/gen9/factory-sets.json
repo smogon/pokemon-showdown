@@ -4602,46 +4602,6 @@
 				"moves": [["Earthquake"], ["U-turn"], ["Scale Shot", "Outrage"], ["Throat Chop", "Stone Edge"]]
 			}]
 		},
-		"mienshao": {
-			"weight": 10,
-			"sets": [{
-				"species": "Mienshao",
-				"weight": 40,
-				"item": ["Choice Scarf"],
-				"ability": ["Regenerator"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": ["Jolly"],
-				"teraType": ["Fighting", "Dark"],
-				"moves": [["Close Combat"], ["U-turn"], ["Knock Off"], ["Ice Spinner", "Poison Jab", "Triple Axel"]]
-			}, {
-				"species": "Mienshao",
-				"weight": 15,
-				"item": ["Assault Vest"],
-				"ability": ["Regenerator"],
-				"evs": {"hp": 132, "spd": 160, "spe": 216},
-				"nature": ["Jolly"],
-				"teraType": ["Electric"],
-				"moves": [["Close Combat"], ["U-turn"], ["Knock Off"], ["Triple Axel", "Ice Spinner"]]
-			}, {
-				"species": "Mienshao",
-				"weight": 15,
-				"item": ["Assault Vest"],
-				"ability": ["Regenerator"],
-				"evs": {"atk": 132, "spd": 160, "spe": 216},
-				"nature": ["Jolly"],
-				"teraType": ["Poison"],
-				"moves": [["Close Combat"], ["U-turn"], ["Knock Off"], ["Poison Jab"]]
-			}, {
-				"species": "Mienshao",
-				"weight": 30,
-				"item": ["Life Orb"],
-				"ability": ["Regenerator"],
-				"evs": {"atk": 252, "spd": 4, "spe": 252},
-				"nature": ["Jolly"],
-				"teraType": ["Fighting", "Dark"],
-				"moves": [["Close Combat"], ["Fake Out"], ["Knock Off"], ["U-turn"]]
-			}]
-		},
 		"bronzong": {
 			"weight": 9,
 			"sets": [{
@@ -5886,6 +5846,29 @@
 				"nature": ["Bold"],
 				"teraType": ["Water", "Steel"],
 				"moves": [["Moonblast"], ["Trick"], ["Calm Mind", "Psychic"], ["Synthesis"]]
+			}]
+		},
+		"infernape": {
+			"weight": 1,
+			"sets": [{
+				"species": "Infernape",
+				"weight": 50,
+				"item": ["Choice Scarf"],
+				"ability": ["Blaze"],
+				"evs": {"atk": 252, "spd": 4, "spe": 252},
+				"nature": ["Jolly"],
+				"teraType": ["Fighting"],
+				"moves": [["U-turn"], ["Switcheroo"], ["Close Combat"], ["Flare Blitz"]]
+			}, {
+				"species": "Infernape",
+				"weight": 50,
+				"item": ["Air Balloon", "Expert Belt"],
+				"ability": ["Blaze"],
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
+				"ivs": {"atk": 0},
+				"nature": ["Timid"],
+				"teraType": ["Fighting", "Grass"],
+				"moves": [["Nasty Plot"], ["Vacuum Wave"], ["Fire Blast"], ["Grass Knot"]]
 			}]
 		},
 		"goodra": {
