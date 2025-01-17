@@ -89,10 +89,10 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		inherit: true,
-		runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
+		runMove(moveOrMoveName, pokemon, targetLoc, options) {
 			let move = this.dex.getActiveMove(moveOrMoveName);
 			let target = this.battle.getTarget(pokemon, move, targetLoc);
-			if (!sourceEffect && move.id !== 'struggle') {
+			if (!options?.sourceEffect && move.id !== 'struggle') {
 				const changedMove = this.battle.runEvent('OverrideAction', pokemon, target, move);
 				if (changedMove && changedMove !== true) {
 					move = this.dex.getActiveMove(changedMove);
@@ -135,7 +135,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			pokemon.moveUsed(move);
-			this.battle.actions.useMove(move, pokemon, target, sourceEffect);
+			this.battle.actions.useMove(move, pokemon, {target, sourceEffect: options?.sourceEffect});
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 			if (!move.selfSwitch && pokemon.side.foe.active[0].hp) this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 		},
@@ -302,7 +302,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (move.recoil && move.totalDamage) {
-				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, target, 'recoil');
+				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, target, 'recoil');
 			}
 			return damage;
 		},
@@ -545,11 +545,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Checking for the move's Critical Hit ratio
 			let critRatio = this.battle.runEvent('ModifyCritRatio', source, target, move, move.critRatio || 0);
 			critRatio = this.battle.clampIntRange(critRatio, 0, 5);
-			const critMult = [0, 16, 8, 4, 3, 2];
+			const critMult = [0, 17, 32, 64, 85, 128];
 			let isCrit = move.willCrit || false;
 			if (typeof move.willCrit === 'undefined') {
 				if (critRatio) {
-					isCrit = this.battle.randomChance(1, critMult[critRatio]);
+					isCrit = this.battle.random(256) < critMult[critRatio];
 				}
 			}
 

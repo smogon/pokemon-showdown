@@ -17,9 +17,9 @@ import * as https from 'https';
 import * as path from 'path';
 import {crashlogger, ProcessManager, Streams, Repl} from '../lib';
 import {IPTools} from './ip-tools';
+import {ChannelID, extractChannelMessages} from '../sim/battle';
 
 type StreamWorker = ProcessManager.StreamWorker;
-type ChannelID = 0 | 1 | 2 | 3 | 4;
 
 export const Sockets = new class {
 	async onSpawn(worker: StreamWorker) {
@@ -254,10 +254,11 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 				null, null, null, null, null,
 			];
 			const message = data.substr(nlLoc + 1);
+			const channelMessages = extractChannelMessages(message, [0, 1, 2, 3, 4]);
 			const roomChannel = this.roomChannels.get(roomid);
 			for (const [curSocketid, curSocket] of room) {
 				const channelid = roomChannel?.get(curSocketid) || 0;
-				if (!messages[channelid]) messages[channelid] = this.extractChannel(message, channelid);
+				if (!messages[channelid]) messages[channelid] = channelMessages[channelid].join('\n');
 				curSocket.write(messages[channelid]!);
 			}
 		},
@@ -424,25 +425,6 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		}
 
 		console.log(`Test your server at http://${config.bindaddress === '0.0.0.0' ? 'localhost' : config.bindaddress}:${config.port}`);
-	}
-
-	extractChannel(message: string, channelid: -1 | ChannelID) {
-		if (channelid === -1) {
-			// Grab all privileged messages
-			return message.replace(/\n\|split\|p[1234]\n([^\n]*)\n(?:[^\n]*)/g, '\n$1');
-		}
-
-		// Grab privileged messages channel has access to
-		switch (channelid) {
-		case 1: message = message.replace(/\n\|split\|p1\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		case 2: message = message.replace(/\n\|split\|p2\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		case 3: message = message.replace(/\n\|split\|p3\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		case 4: message = message.replace(/\n\|split\|p4\n([^\n]*)\n(?:[^\n]*)/g, '\n$1'); break;
-		}
-
-		// Discard remaining privileged messages
-		// Note: the last \n? is for privileged messages that are empty when non-privileged
-		return message.replace(/\n\|split\|(?:[^\n]*)\n(?:[^\n]*)\n\n?/g, '\n');
 	}
 
 	/**

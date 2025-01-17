@@ -45,6 +45,7 @@ try {
 const maxMistakes = 6;
 
 export class Hangman extends Rooms.SimpleRoomGame {
+	override readonly gameid = 'hangman' as ID;
 	gameNumber: number;
 	creator: ID;
 	word: string;
@@ -69,7 +70,6 @@ export class Hangman extends Rooms.SimpleRoomGame {
 
 		this.gameNumber = room.nextGameNumber();
 
-		this.gameid = 'hangman' as ID;
 		this.title = 'Hangman';
 		this.creator = user.id;
 		this.word = word;
@@ -341,7 +341,7 @@ export const commands: Chat.ChatCommands = {
 			this.modlog('HANGMAN');
 			return this.addModAction(`A game of hangman was started by ${user.name} – use /guess to play!`);
 		},
-		createhelp: ["/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # &"],
+		createhelp: ["/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # ~"],
 
 		guess(target, room, user) {
 			const word = this.filter(target);
@@ -363,7 +363,7 @@ export const commands: Chat.ChatCommands = {
 			this.modlog('ENDHANGMAN');
 			return this.privateModAction(`The game of hangman was ended by ${user.name}.`);
 		},
-		endhelp: ["/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # &"],
+		endhelp: ["/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # ~"],
 
 		disable(target, room, user) {
 			room = this.requireRoom();
@@ -553,20 +553,20 @@ export const commands: Chat.ChatCommands = {
 	hangmanhelp: [
 		`/hangman allows users to play the popular game hangman in PS rooms.`,
 		`Accepts the following commands:`,
-		`/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # &`,
+		`/hangman create [word], [hint] - Makes a new hangman game. Requires: % @ # ~`,
 		`/hangman guess [letter] - Makes a guess for the letter entered.`,
 		`/hangman guess [word] - Same as a letter, but guesses an entire word.`,
 		`/hangman display - Displays the game.`,
-		`/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # &`,
-		`/hangman [enable/disable] - Enables or disables hangman from being started in a room. Requires: # &`,
+		`/hangman end - Ends the game of hangman before the man is hanged or word is guessed. Requires: % @ # ~`,
+		`/hangman [enable/disable] - Enables or disables hangman from being started in a room. Requires: # ~`,
 		`/hangman random [tag]- Runs a random hangman, if the room has any added. `,
-		`If a tag is given, randomizes from only terms with those tags. Requires: % @ # &`,
-		`/hangman addrandom [word], [...hints] - Adds an entry for [word] with the [hints] provided to the room's hangman pool. Requires: % @ # &`,
+		`If a tag is given, randomizes from only terms with those tags. Requires: % @ # ~`,
+		`/hangman addrandom [word], [...hints] - Adds an entry for [word] with the [hints] provided to the room's hangman pool. Requires: % @ # ~`,
 		`/hangman removerandom [word][, hints] - Removes data from the hangman entry for [word]. If hints are given, removes only those hints.` +
-		` Otherwise it removes the entire entry. Requires: % @ & #`,
-		`/hangman addtag [word], [...tags] - Adds tags to the hangman term matching [word]. Requires: % @ & #`,
+		` Otherwise it removes the entire entry. Requires: % @ ~ #`,
+		`/hangman addtag [word], [...tags] - Adds tags to the hangman term matching [word]. Requires: % @ ~ #`,
 		`/hangman untag [term][, ...tags] - Removes tags from the hangman [term]. If tags are given, removes only those tags. Requires: % @ # * `,
-		`/hangman terms - Displays all random hangman in a room. Requires: % @ # &`,
+		`/hangman terms - Displays all random hangman in a room. Requires: % @ # ~`,
 	],
 };
 

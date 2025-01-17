@@ -2,10 +2,10 @@
 "use strict";
 
 try {
-	// technically this was introduced in Node 11, but we'll ask for the most recent LTS with it to be safe
-	[].flatMap(x => x);
+	// technically this was introduced in Node 15, but we'll ask for the most recent LTS with it to be safe
+	Promise.any([null]);
 } catch (e) {
-	console.log("We require Node.js version 14 or later; you're using " + process.version);
+	console.log("We require Node.js version 16 or later; you're using " + process.version);
 	process.exit(1);
 }
 
@@ -30,11 +30,6 @@ try {
 	console.log('Installing dependencies...');
 	shell('npm install');
 }
-// for some reason, esbuild won't be requirable until a tick has passed
-// see https://stackoverflow.com/questions/53270058/node-cant-find-certain-modules-after-synchronous-install
-setImmediate(() => {
-	require('./tools/build-utils').transpile(force, decl);
-});
 
 // Make sure config.js exists. If not, copy it over synchronously from
 // config-example.js, since it's needed before we can start the server
@@ -49,3 +44,11 @@ try {
 		fs.readFileSync('config/config-example.js')
 	);
 }
+
+// for some reason, esbuild won't be requirable until a tick has passed
+// see https://stackoverflow.com/questions/53270058/node-cant-find-certain-modules-after-synchronous-install
+setImmediate(() => {
+	// npm package, don't rebuild
+	if (process.argv[2] === 'postinstall' && fs.existsSync('dist')) return;
+	require('./tools/build-utils').transpile(force, decl);
+});

@@ -155,14 +155,17 @@ describe('Choices', function () {
 			}
 		});
 
-		it('should allow specifying move targets', function () {
-			battle = common.createBattle({gameType: 'doubles'}, [
-				[{species: "Gastrodon", ability: 'stickyhold', moves: ['gastroacid']}, {species: "Venusaur", ability: 'thickfat', moves: ['leechseed']}],
-				[{species: "Tyranitar", ability: 'unnerve', moves: ['knockoff']}, {species: "Zapdos", ability: 'pressure', moves: ['thunderwave']}],
+		it(`should allow specifying move targets`, function () {
+			battle = common.createBattle({gameType: 'doubles'}, [[
+				{species: "Gastrodon", ability: 'stickyhold', moves: ['gastroacid']},
+				{species: "Venusaur", ability: 'noguard', moves: ['leechseed']},
+			], [
+				{species: "Tyranitar", ability: 'unnerve', moves: ['knockoff']},
+				{species: "Zapdos", ability: 'pressure', moves: ['glare']}],
 			]);
 			const p2active = battle.p2.active;
 
-			battle.makeChoices('move gastroacid 1, move leechseed 2', 'move knockoff -2, move thunderwave -1');
+			battle.makeChoices('move gastroacid 1, move leechseed 2', 'move knockoff -2, move glare -1');
 			assert.equal(battle.turn, 2);
 
 			assert(p2active[0].volatiles['gastroacid']);
@@ -1236,7 +1239,7 @@ describe('Choice internals', function () {
 		p1.chooseMove(1);
 		p2.chooseMove(1);
 		p2.chooseMove(1);
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.equal(battle.turn, 2);
 		assert.statStage(p2.active[0], 'atk', -1);
@@ -1245,7 +1248,7 @@ describe('Choice internals', function () {
 		p1.chooseMove('synthesis');
 		p2.chooseMove('surf');
 		p2.chooseMove('calmmind');
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.equal(battle.turn, 3);
 		assert.fullHP(p1.active[1]);
@@ -1254,7 +1257,7 @@ describe('Choice internals', function () {
 		p1.chooseMove('2');
 		p2.chooseMove('1');
 		p2.chooseMove('calmmind');
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.equal(battle.turn, 4);
 		assert.fullHP(p1.active[1]);
@@ -1279,13 +1282,13 @@ describe('Choice internals', function () {
 		p1.chooseMove('selfdestruct');
 		p2.chooseMove('recover');
 		p2.chooseMove('recover');
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.fainted(p1.active[0]);
 		assert.fainted(p1.active[1]);
 		p1.chooseSwitch(4);
 		p1.chooseSwitch(3);
-		battle.commitDecisions();
+		battle.commitChoices();
 		assert.equal(battle.turn, 2);
 		assert.equal(p1.active[0].name, 'Ekans');
 		assert.equal(p1.active[1].name, 'Koffing');
@@ -1313,7 +1316,7 @@ describe('Choice internals', function () {
 			`Expected switch to fail`
 		);
 		p2.choose('move recover, move recover');
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.equal(battle.turn, 2);
 		assert.equal(p1.active[0].name, 'Mew');
@@ -1326,7 +1329,7 @@ describe('Choice internals', function () {
 			`Expected switch to fail`
 		);
 		p2.choose('move recover, move recover');
-		battle.commitDecisions();
+		battle.commitChoices();
 
 		assert.equal(battle.turn, 3);
 		assert.equal(p1.active[0].name, 'Bulbasaur');

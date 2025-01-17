@@ -1,11 +1,7 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	adamantcrystal: {
 		inherit: true,
 		isNonstandard: "Future",
-	},
-	adamantorb: {
-		inherit: true,
-		isNonstandard: null,
 	},
 	berryjuice: {
 		inherit: true,
@@ -51,6 +47,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	dracoplate: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	dragonmemory: {
 		inherit: true,
 		isNonstandard: null,
@@ -59,9 +59,17 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	dreadplate: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	dubiousdisc: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	earthplate: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	electirizer: {
 		inherit: true,
@@ -86,6 +94,14 @@ export const Items: {[k: string]: ModdedItemData} = {
 	firememory: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	fistplate: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	flameplate: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	flowersweet: {
 		inherit: true,
@@ -115,14 +131,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	galaricacuff: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	galaricawreath: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	ghostmemory: {
 		inherit: true,
 		isNonstandard: null,
@@ -137,7 +145,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 	},
 	griseousorb: {
 		inherit: true,
-		isNonstandard: null,
 		onTakeItem(item, pokemon, source) {
 			if (source?.baseSpecies.num === 487 || pokemon.baseSpecies.num === 487) {
 				return false;
@@ -154,6 +161,18 @@ export const Items: {[k: string]: ModdedItemData} = {
 	icememory: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	icicleplate: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	insectplate: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
+	ironplate: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	jabocaberry: {
 		inherit: true,
@@ -179,10 +198,6 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: "Future",
 	},
-	lustrousorb: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	machobrace: {
 		inherit: true,
 		isNonstandard: null,
@@ -195,6 +210,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	meadowplate: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	metalpowder: {
 		inherit: true,
 		isNonstandard: null,
@@ -203,19 +222,15 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	mindplate: {
+		inherit: true,
+		isNonstandard: "Past",
+	},
 	oddincense: {
 		inherit: true,
 		isNonstandard: null,
 	},
-	pixieplate: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	poisonmemory: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	prismscale: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -231,9 +246,9 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	reapercloth: {
+	razorfang: {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
 	ribbonsweet: {
 		inherit: true,
@@ -255,19 +270,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	rustedshield: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	rustedsword: {
-		inherit: true,
-		isNonstandard: null,
-	},
 	sachet: {
-		inherit: true,
-		isNonstandard: null,
-	},
-	safariball: {
 		inherit: true,
 		isNonstandard: null,
 	},
@@ -279,17 +282,25 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
-	souldew: {
+	skyplate: {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
 	},
-	sportball: {
+	splashplate: {
 		inherit: true,
-		isNonstandard: null,
+		isNonstandard: "Past",
+	},
+	spookyplate: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	starsweet: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	stoneplate: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	strawberrysweet: {
 		inherit: true,
@@ -306,6 +317,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 	thickclub: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	toxicplate: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 	tr00: {
 		inherit: true,
@@ -722,5 +737,9 @@ export const Items: {[k: string]: ModdedItemData} = {
 	whippeddream: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	zapplate: {
+		inherit: true,
+		isNonstandard: "Past",
 	},
 };

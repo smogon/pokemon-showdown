@@ -1,4 +1,4 @@
-export const Pokedex: {[k: string]: ModdedSpeciesData} = {
+export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable = {
 	growlithehisui: {
 		inherit: true,
 		abilities: {0: "Intimidate", 1: "Flash Fire", H: "Justified"},
@@ -14,6 +14,22 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	sneaselhisui: {
 		inherit: true,
 		abilities: {0: "Inner Focus", 1: "Keen Eye", H: "Poison Touch"},
+	},
+	shiftry: {
+		inherit: true,
+		abilities: {0: "Chlorophyll", 1: "Early Bird", H: "Pickpocket"},
+	},
+	piplup: {
+		inherit: true,
+		abilities: {0: "Torrent", H: "Defiant"},
+	},
+	prinplup: {
+		inherit: true,
+		abilities: {0: "Torrent", H: "Defiant"},
+	},
+	empoleon: {
+		inherit: true,
+		abilities: {0: "Torrent", H: "Defiant"},
 	},
 	gallade: {
 		inherit: true,
@@ -31,10 +47,6 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Torrent", H: "Shell Armor"},
 	},
-	zoroarkhisui: {
-		inherit: true,
-		baseStats: {hp: 55, atk: 100, def: 60, spa: 125, spd: 60, spe: 110},
-	},
 	braviaryhisui: {
 		inherit: true,
 		abilities: {0: "Keen Eye", 1: "Sheer Force", H: "Defiant"},
@@ -48,6 +60,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		abilities: {0: "Shield Dust", 1: "Compound Eyes"},
 		prevo: undefined,
 		evoLevel: undefined,
+	},
+	vivillonpokeball: {
+		inherit: true,
+		abilities: {0: "Shield Dust", 1: "Compound Eyes"},
 	},
 	sliggoohisui: {
 		inherit: true,
@@ -77,13 +93,8 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 92, atk: 130, def: 145, spa: 80, spd: 145, spe: 128},
 	},
-	kubfu: {
-		inherit: true,
-		abilities: {0: "Inner Focus"},
-	},
 	kleavor: {
 		inherit: true,
-		baseStats: {hp: 70, atk: 135, def: 95, spa: 45, spd: 70, spe: 85},
 		abilities: {0: "Swarm", 1: "Sheer Force", H: "Steadfast"},
 	},
 	basculegion: {
@@ -104,5 +115,10 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 	enamorus: {
 		inherit: true,
 		abilities: {0: "Healer", H: "Contrary"},
+	},
+	kitsunoh: {
+		inherit: true,
+		baseStats: {hp: 80, atk: 103, def: 85, spa: 55, spd: 80, spe: 110},
+		abilities: {0: "Frisk", 1: "Limber", H: "Iron Fist"},
 	},
 };

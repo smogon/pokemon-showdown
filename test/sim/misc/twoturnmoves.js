@@ -40,9 +40,12 @@ describe('Two Turn Moves [Gen 1]', function () {
 	});
 
 	it(`two-turn move ends if it fails due to Disable, does not use PP`, function () {
-		battle = common.gen(1).createBattle();
-		battle.setPlayer('p1', {team: [{species: "Aerodactyl", moves: ['skyattack']}]});
-		battle.setPlayer('p2', {team: [{species: "Drowzee", moves: ['disable']}]});
+		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
+			{species: 'Aerodactyl', moves: ['skyattack']},
+		], [
+			{species: 'Drowzee', moves: ['disable']},
+		]]);
+
 		const aerodactyl = battle.p1.active[0];
 		battle.makeChoices();
 		assert(aerodactyl.volatiles['disable'].time > 1);

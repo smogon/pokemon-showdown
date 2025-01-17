@@ -109,12 +109,12 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.battle.debug('Negating (sp)atk boost/penalty.');
 					atkBoosts = 0;
 				}
-				attack = attacker.calculateStat(attackStat as any, atkBoosts);
+				attack = attacker.calculateStat(attackStat as any, atkBoosts, 1, source);
 				attack = this.battle.runEvent('Modify' + (statTable as any)[attackStat], source, target, move, attack);
 				if (attack > maxAttack) maxAttack = attack;
 			}
 
-			let defense = defender.calculateStat(defenseStat, defBoosts);
+			let defense = defender.calculateStat(defenseStat, defBoosts, 1, target);
 
 			// Apply Stat Modifiers
 			defense = this.battle.runEvent('Modify' + statTable[defenseStat], target, source, move, defense);

@@ -6,7 +6,9 @@
 
 import {FS, Utils} from '../../lib';
 
-const STAFF_REPOS = Config.staffrepos || ['pokemon-showdown', 'pokemon-showdown-client', 'Pokemon-Showdown-Dex'];
+const STAFF_REPOS = Config.staffrepos || [
+	'pokemon-showdown', 'pokemon-showdown-client', 'Pokemon-Showdown-Dex', 'pokemon-showdown-loginserver',
+];
 const COOLDOWN = 10 * 60 * 1000;
 
 export const gitData: GitData = JSON.parse(FS("config/chat-plugins/github.json").readIfExistsSync() || "{}");
@@ -236,11 +238,11 @@ export const commands: Chat.ChatCommands = {
 		},
 	},
 	githubhelp: [
-		`/github ban [username], [reason] - Bans a GitHub user from having their GitHub actions reported to Dev room. Requires: % @ # &`,
-		`/github unban [username] - Unbans a GitHub user from having their GitHub actions reported to Dev room. Requires: % @ # &`,
-		`/github bans - Lists all GitHub users that are currently gitbanned. Requires: % @ # &`,
-		`/github setname [username], [name] - Sets a GitHub user's name on reported GitHub actions to be [name]. Requires: % @ # &`,
-		`/github clearname [username] - Removes a GitHub user's name from the GitHub username list. Requires: % @ # &`,
+		`/github ban [username], [reason] - Bans a GitHub user from having their GitHub actions reported to Dev room. Requires: % @ # ~`,
+		`/github unban [username] - Unbans a GitHub user from having their GitHub actions reported to Dev room. Requires: % @ # ~`,
+		`/github bans - Lists all GitHub users that are currently gitbanned. Requires: % @ # ~`,
+		`/github setname [username], [name] - Sets a GitHub user's name on reported GitHub actions to be [name]. Requires: % @ # ~`,
+		`/github clearname [username] - Removes a GitHub user's name from the GitHub username list. Requires: % @ # ~`,
 		`/github names - Lists all GitHub usernames that are currently on our list.`,
 	],
 };

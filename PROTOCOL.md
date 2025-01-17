@@ -40,7 +40,7 @@ Messages from the user to the server are in the form:
 
 `ROOMID` can optionally be left blank if unneeded (commands like `/join lobby`
 can be sent anywhere). Responses will be sent to a PM box with no username
-(so `|/command` is equivalent to `|/pm &, /command`).
+(so `|/command` is equivalent to `|/pm ~, /command`).
 
 `TEXT` can contain newlines, in which case it'll be treated the same
 way as if each line were sent to the room separately.
@@ -237,10 +237,10 @@ represented by a space), and the rest of the string being their username.
 > You just connected to the server, and we're giving you some information you'll need to log in.
 >
 > If you're already logged in and have session cookies, you can make an HTTP GET request to
-> `https://play.pokemonshowdown.com/action.php?act=upkeep&challstr=CHALLSTR`
+> `https://play.pokemonshowdown.com/api/upkeep?challstr=CHALLSTR`
 >
-> Otherwise, you'll need to make an HTTP POST request to `https://play.pokemonshowdown.com/action.php`
-> with the data `act=login&name=USERNAME&pass=PASSWORD&challstr=CHALLSTR`
+> Otherwise, you'll need to make an HTTP POST request to `https://play.pokemonshowdown.com/api/login`
+> with the data `name=USERNAME&pass=PASSWORD&challstr=CHALLSTR`
 >
 > `USERNAME` is your username and `PASSWORD` is your password, and `CHALLSTR`
 > is the value you got from `|challstr|`. Note that `CHALLSTR` contains `|`

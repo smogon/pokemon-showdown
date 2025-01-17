@@ -1,4 +1,4 @@
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	disguise: {
 		inherit: true,
 		onDamage(damage, target, source, effect) {
@@ -24,20 +24,16 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	darkaura: {
 		inherit: true,
-		isBreakable: true,
+		flags: {breakable: 1},
 	},
 	fairyaura: {
 		inherit: true,
-		isBreakable: true,
+		flags: {breakable: 1},
 	},
 	innerfocus: {
 		inherit: true,
 		rating: 1,
-		onBoost() {},
-	},
-	intimidate: {
-		inherit: true,
-		rating: 4,
+		onTryBoost() {},
 	},
 	moody: {
 		inherit: true,
@@ -68,11 +64,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	oblivious: {
 		inherit: true,
-		onBoost() {},
+		onTryBoost() {},
 	},
 	owntempo: {
 		inherit: true,
-		onBoost() {},
+		onTryBoost() {},
 	},
 	rattled: {
 		onDamagingHit(damage, target, source, move) {
@@ -86,7 +82,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	scrappy: {
 		inherit: true,
-		onBoost() {},
+		onTryBoost() {},
 	},
 	slowstart: {
 		inherit: true,

@@ -1,16 +1,16 @@
 import {FS} from '../lib/fs';
 import type {RoomSection} from './chat-commands/room-settings';
+import {toID} from '../sim/dex-data';
 
-export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '§' | '+' | '^' | ' ' | '‽' | '!';
+export type GroupSymbol = '~' | '#' | '★' | '*' | '@' | '%' | '☆' | '§' | '+' | '^' | ' ' | '‽' | '!';
 export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
 export type AuthLevel = EffectiveGroupSymbol | 'unlocked' | 'trusted' | 'autoconfirmed';
 
-export const SECTIONLEADER_SYMBOL: GroupSymbol = '\u00a7';
 export const PLAYER_SYMBOL: GroupSymbol = '\u2606';
 export const HOST_SYMBOL: GroupSymbol = '\u2605';
 
 export const ROOM_PERMISSIONS = [
-	'addhtml', 'announce', 'ban', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomsectionleader', 'roomvoice', 'roomprizewinner', 'show', 'showmedia', 'timer', 'tournaments', 'warn',
+	'addhtml', 'announce', 'ban', 'bypassafktimer', 'declare', 'editprivacy', 'editroom', 'exportinputlog', 'game', 'gamemanagement', 'gamemoderation', 'joinbattle', 'kick', 'minigame', 'modchat', 'modlog', 'mute', 'nooverride', 'receiveauthmessages', 'roombot', 'roomdriver', 'roommod', 'roomowner', 'roomvoice', 'roomprizewinner', 'show', 'showmedia', 'timer', 'tournaments', 'warn',
 ] as const;
 
 export const GLOBAL_PERMISSIONS = [
@@ -63,7 +63,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 			// At one point bots used to be ranked above drivers, so this checks
 			// driver rank to make sure this function works on servers that
 			// did not reorder the ranks.
-			return Auth.atLeast(rank, '*') || Auth.atLeast(rank, SECTIONLEADER_SYMBOL) || Auth.atLeast(rank, '%');
+			return Auth.atLeast(rank, '*') || Auth.atLeast(rank, '%');
 		} else {
 			return false;
 		}
@@ -115,7 +115,8 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		permission: string,
 		target: User | EffectiveGroupSymbol | ID | null,
 		room?: BasicRoom | null,
-		cmd?: string
+		cmd?: string,
+		cmdToken?: string,
 	): boolean {
 		if (user.hasSysopAccess()) return true;
 
@@ -137,11 +138,10 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 
 		let group = Auth.getGroup(symbol);
 		if (group['root']) return true;
+		// Global drivers who are SLs should get room mod powers too
 		if (
 			room?.settings.section &&
 			room.settings.section === Users.globalAuth.sectionLeaders.get(user.id) &&
-			// Global drivers who are SLs should get room mod powers too
-			Users.globalAuth.atLeast(user, SECTIONLEADER_SYMBOL) &&
 			// But dont override ranks above moderator such as room owner
 			(Auth.getGroup('@').rank > group.rank)
 		) {
@@ -156,18 +156,25 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		if (roomPermissions) {
 			let foundSpecificPermission = false;
 			if (cmd) {
+				if (!cmdToken) cmdToken = `/`;
 				const namespace = cmd.slice(0, cmd.indexOf(' '));
-				if (roomPermissions[`/${cmd}`]) {
+				if (roomPermissions[`${cmdToken}${cmd}`]) {
 					// this checks sub commands and command objects, but it checks to see if a sub-command
 					// overrides (should a perm for the command object exist) first
-					if (!auth.atLeast(user, roomPermissions[`/${cmd}`])) return false;
+					if (!auth.atLeast(user, roomPermissions[`${cmdToken}${cmd}`])) return false;
 					jurisdiction = 'u';
 					foundSpecificPermission = true;
-				} else if (roomPermissions[`/${namespace}`]) {
+				} else if (roomPermissions[`${cmdToken}${namespace}`]) {
 					// if it's for one command object
-					if (!auth.atLeast(user, roomPermissions[`/${namespace}`])) return false;
+					if (!auth.atLeast(user, roomPermissions[`${cmdToken}${namespace}`])) return false;
 					jurisdiction = 'u';
 					foundSpecificPermission = true;
+				}
+				if (foundSpecificPermission && targetSymbol === Users.Auth.defaultSymbol()) {
+					// if /permissions has granted unranked users permission to use the command,
+					// grant jurisdiction over unranked (since unranked users don't have jurisdiction over unranked)
+					// see https://github.com/smogon/pokemon-showdown/pull/9534#issuecomment-1565719315
+					jurisdiction += Users.Auth.defaultSymbol();
 				}
 			}
 			if (!foundSpecificPermission && roomPermissions[permission]) {
@@ -181,15 +188,18 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 		return Auth.getGroup(symbol).rank >= Auth.getGroup(symbol2).rank;
 	}
 	static supportedRoomPermissions(room: Room | null = null) {
-		const handlers = Chat.allCommands().filter(c => c.hasRoomPermissions);
 		const commands = [];
-		for (const handler of handlers) {
-			commands.push(`/${handler.fullCmd}`);
+		for (const handler of Chat.allCommands()) {
+			if (!handler.hasRoomPermissions && !handler.broadcastable) continue;
+
+			// if it's only broadcast permissions, not use permissions, use the broadcast symbol
+			const cmdPrefix = handler.hasRoomPermissions ? "/" : "!";
+			commands.push(`${cmdPrefix}${handler.fullCmd}`);
 			if (handler.aliases.length) {
 				for (const alias of handler.aliases) {
 					// kind of a hack but this is the only good way i could think of to
 					// overwrite the alias without making assumptions about the string
-					commands.push(`/${handler.fullCmd.replace(handler.cmd, alias)}`);
+					commands.push(`${cmdPrefix}${handler.fullCmd.replace(handler.cmd, alias)}`);
 				}
 			}
 		}
@@ -281,7 +291,7 @@ export class RoomAuth extends Auth {
 		// Plus, using user.can is cleaner than Users.globalAuth.get(user) === admin and it accounts for more things.
 		// (and no this won't recurse or anything since user.can() with no room doesn't call this)
 		if (this.room.settings.isPrivate === true && user.can('makeroom')) {
-			// not hardcoding & here since globalAuth.get should return & in basically all cases
+			// not hardcoding ~ here since globalAuth.get should return ~ in basically all cases
 			// except sysops, and there's an override for them anyways so it doesn't matter
 			return Users.globalAuth.get(user);
 		}

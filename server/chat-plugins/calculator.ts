@@ -180,15 +180,20 @@ export const commands: Chat.ChatCommands = {
 			const [result, inferredBase] = solveRPN(parseMathematicalExpression(expression));
 			if (!base) base = inferredBase;
 			let baseResult = '';
-			if (result && base !== 10) {
+			if (Number.isFinite(result) && base !== 10) {
 				baseResult = `${BASE_PREFIXES[base]}${result.toString(base).toUpperCase()}`;
 				if (baseResult === expression) baseResult = '';
 			}
 			let resultStr = '';
+			const resultTruncated = parseFloat(result.toPrecision(15));
+			let resultDisplay = resultTruncated.toString();
+			if (resultTruncated > 10 ** 15) {
+				resultDisplay = resultTruncated.toExponential();
+			}
 			if (baseResult) {
-				resultStr = `<strong>${baseResult}</strong> = ${result}`;
+				resultStr = `<strong>${baseResult}</strong> = ${resultDisplay}`;
 			} else {
-				resultStr = `<strong>${result}</strong>`;
+				resultStr = `<strong>${resultDisplay}</strong>`;
 			}
 			this.sendReplyBox(`${expression}<br />= ${resultStr}`);
 		} catch (e: any) {

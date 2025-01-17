@@ -19,6 +19,17 @@ describe('Copycat', function () {
 
 		battle.makeChoices();
 		battle.makeChoices('auto', 'move roar');
-		assert.equal(battle.p2.active[0].boosts.spa, -4);
+		assert.statStage(battle.p2.active[0], 'spa', -4);
+	});
+
+	it('[Gen 4] should not be able to copy called moves', function () {
+		battle = common.gen(4).createBattle([[
+			{species: 'bonsly', ability: 'sturdy', moves: ['copycat']},
+		], [
+			{species: 'ampharos', ability: 'static', moves: ['growl', 'counter']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('auto', 'move counter');
+		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
 });

@@ -20,6 +20,21 @@ describe(`Pursuit`, function () {
 		assert.fainted(battle.p2.active[0]);
 	});
 
+	it(`should execute before the target switches out and after the user Terastallizes`, function () {
+		battle = common.gen(9).createBattle([[
+			{species: "Kingambit", ability: 'defiant', moves: ['pursuit']},
+		], [
+			{species: "Giratina", ability: 'pressure', moves: ['shadow ball']},
+			{species: "Clefable", ability: 'unaware', moves: ['calmmind']},
+		]]);
+		const giratina = battle.p2.pokemon[0];
+		const hpBeforeSwitch = giratina.hp;
+		battle.makeChoices('move Pursuit terastallize', 'switch 2');
+		const damage = hpBeforeSwitch - giratina.hp;
+		// 0 Atk Tera Dark Kingambit switching boosted Pursuit (80 BP) vs. 0 HP / 0 Def Giratina: 256-304
+		assert.bounded(damage, [256, 304], 'Actual damage: ' + damage);
+	});
+
 	it(`should continue the switch in Gen 3`, function () {
 		battle = common.gen(3).createBattle([[
 			{species: "Tyranitar", ability: 'sandstream', moves: ['pursuit']},
@@ -58,16 +73,16 @@ describe(`Pursuit`, function () {
 	});
 
 	it(`should not double in power or activate before a switch if targeting an ally`, function () {
-		battle = common.createBattle({gameType: 'doubles', seed: [1, 1, 1, 1]}, [[
-			{species: "Beedrill", ability: 'swarm', item: 'beedrillite', moves: ['pursuit']},
-			{species: "Clefable", ability: 'unaware', moves: ['calmmind']},
-			{species: "Furret", ability: 'frisk', moves: ['uturn']},
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Beedrill", item: 'beedrillite', moves: ['pursuit']},
+			{species: "Clefable", moves: ['calmmind']},
+			{species: "Furret", ability: 'shellarmor', moves: ['uturn']},
 		], [
-			{species: "Clefable", ability: 'magicguard', moves: ['calmmind']},
-			{species: "Alakazam", ability: 'unaware', moves: ['calmmind']},
+			{species: "Clefable", moves: ['calmmind']},
+			{species: "Alakazam", moves: ['calmmind']},
 		]]);
 		const furret = battle.p1.pokemon[2];
-		battle.makeChoices('move Pursuit mega -2, switch 3', 'auto');
+		battle.makeChoices('move pursuit mega -2, switch 3', 'auto');
 		assert.bounded(furret.maxhp - furret.hp, [60, 70]);
 	});
 

@@ -43,15 +43,15 @@
  *
  * @license MIT
  */
-
+require('source-map-support').install();
 // NOTE: This file intentionally doesn't use too many modern JavaScript
 // features, so that it doesn't crash old versions of Node.js, so we
-// can successfully print the "We require Node.js 8+" message.
+// can successfully print the "We require Node.js 16+" message.
 
 // Check for version
 const nodeVersion = parseInt(process.versions.node);
-if (isNaN(nodeVersion) || nodeVersion < 14) {
-	throw new Error("We require Node.js version 14 or later; you're using " + process.version);
+if (isNaN(nodeVersion) || nodeVersion < 16) {
+	throw new Error("We require Node.js version 16 or later; you're using " + process.version);
 }
 
 import {FS, Repl} from '../lib';
@@ -71,6 +71,7 @@ function setupGlobals() {
 	void Monitor.version().then((hash: any) => {
 		global.__version.tree = hash;
 	});
+	Repl.cleanup();
 
 	if (Config.watchconfig) {
 		FS('config/config.js').onModify(() => {

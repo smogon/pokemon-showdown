@@ -2,7 +2,7 @@
  * The japanese version of Blizzard in Gen 1 had a 30% chance to freeze
  */
 
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	blizzard: {
 		inherit: true,
 		secondary: {

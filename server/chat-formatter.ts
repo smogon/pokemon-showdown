@@ -35,11 +35,13 @@ REGEXFREE SOURCE FOR LINKREGEX
 			(
 				# characters allowed inside URL paths
 				(
-					[^\s()&<>] | &amp; | &quot;
+					[^\s()&<>[\]] | &amp; | &quot;
 				|
 					# parentheses in URLs should be matched, so they're not confused
 					# for parentheses around URLs
-					\( ( [^\\s()<>&] | &amp; )* \)
+					\( ( [^\s()<>&[\]] | &amp; )* \)
+	  			|
+					\[ ( [^\s()<>&[\]] | &amp; )* ]
 				)*
 				# URLs usually don't end with punctuation, so don't allow
 				# punctuation symbols that probably arent related to URL.
@@ -47,7 +49,7 @@ REGEXFREE SOURCE FOR LINKREGEX
 					[^\s()[\]{}\".,!?;:&<>*`^~\\]
 				|
 					# annoyingly, Wikipedia URLs often end in )
-					\( ( [^\s()<>&] | &amp; )* \)
+					\( ( [^\s()<>&[\]] | &amp; )* \)
 				)
 			)?
 		)?
@@ -58,9 +60,19 @@ REGEXFREE SOURCE FOR LINKREGEX
 	(?! [^ ]*&gt; )
 
 */
-export const linkRegex = /(?:(?:https?:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:(?:com?|org|net|edu|info|us|jp)\b|[a-z]{2,3}(?=:[0-9]|\/)))(?::[0-9]+)?(?:\/(?:(?:[^\s()&<>]|&amp;|&quot;|\((?:[^\\s()<>&]|&amp;)*\))*(?:[^\s()[\]{}".,!?;:&<>*`^~\\]|\((?:[^\s()<>&]|&amp;)*\)))?)?|[a-z0-9.]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,})(?![^ ]*&gt;)/ig;
+export const linkRegex = /(?:(?:https?:\/\/[a-z0-9-]+(?:\.[a-z0-9-]+)*|www\.[a-z0-9-]+(?:\.[a-z0-9-]+)+|\b[a-z0-9-]+(?:\.[a-z0-9-]+)*\.(?:(?:com?|org|net|edu|info|us|jp)\b|[a-z]{2,3}(?=:[0-9]|\/)))(?::[0-9]+)?(?:\/(?:(?:[^\s()&<>[\]]|&amp;|&quot;|\((?:[^\s()<>&[\]]|&amp;)*\)|\[(?:[^\s()<>&[\]]|&amp;)*])*(?:[^\s()[\]{}".,!?;:&<>*`^~\\]|\((?:[^\s()<>&[\]]|&amp;)*\)))?)?|[a-z0-9.]+@[a-z0-9-]+(?:\.[a-z0-9-]+)*\.[a-z]{2,})(?![^ ]*&gt;)/ig;
 
-type SpanType = '_' | '*' | '~' | '^' | '\\' | '|' | '<' | '[' | '`' | 'a' | 'spoiler' | '>' | '(';
+/**
+ * A span is a part of the text that's formatted. In the text:
+ *
+ *     Hi, **this** is an example.
+ *
+ * The word `this` is a `*` span. Many spans are just a symbol repeated, and
+ * that symbol is the span type, but also many are more complicated.
+ * For an explanation of all of these, see the `TextFormatter#get` function
+ * implementation.
+ */
+type SpanType = '_' | '*' | '~' | '^' | '\\' | '|' | '<' | '[' | '`' | 'a' | 'u' | 'spoiler' | '>' | '(';
 
 type FormatSpan = [SpanType, number];
 
@@ -68,12 +80,16 @@ class TextFormatter {
 	readonly str: string;
 	readonly buffers: string[];
 	readonly stack: FormatSpan[];
+	/** Allows access to special formatting (links without URL preview, pokemon icons) */
 	readonly isTrusted: boolean;
+	/** Replace \n with <br /> */
 	readonly replaceLinebreaks: boolean;
+	/** Discord-style WYSIWYM output; markup characters are in `<tt>` */
+	readonly showSyntax: boolean;
 	/** offset of str that's been parsed so far */
 	offset: number;
 
-	constructor(str: string, isTrusted = false, replaceLinebreaks = false) {
+	constructor(str: string, isTrusted = false, replaceLinebreaks = false, showSyntax = false) {
 		// escapeHTML, without escaping /
 		str = `${str}`
 			.replace(/&/g, '&amp;')
@@ -84,6 +100,7 @@ class TextFormatter {
 
 		// filter links first
 		str = str.replace(linkRegex, uri => {
+			if (showSyntax) return `<u>${uri}</u>`;
 			let fulluri;
 			if (/^[a-z0-9.]+@/ig.test(uri)) {
 				fulluri = 'mailto:' + uri;
@@ -110,6 +127,7 @@ class TextFormatter {
 		this.stack = [];
 		this.isTrusted = isTrusted;
 		this.replaceLinebreaks = this.isTrusted || replaceLinebreaks;
+		this.showSyntax = showSyntax;
 		this.offset = 0;
 	}
 	// debugAt(i=0, j=i+1) { console.log(`${this.slice(0, i)}[${this.slice(i, j)}]${this.slice(j, this.str.length)}`); }
@@ -122,6 +140,15 @@ class TextFormatter {
 		return this.str.charAt(start);
 	}
 
+	/**
+	 * We've encountered a possible start for a span. It's pushed onto our span
+	 * stack.
+	 *
+	 * The span stack saves the start position so it can be replaced with HTML
+	 * if we find an end for the span, but we don't actually replace it until
+	 * `closeSpan` is called, so nothing happens (it stays plaintext) if no end
+	 * is found.
+	 */
 	pushSpan(spanType: SpanType, start: number, end: number) {
 		this.pushSlice(start);
 		this.stack.push([spanType, this.buffers.length]);
@@ -155,7 +182,8 @@ class TextFormatter {
 	}
 
 	/**
-	 * Attempt to close a span.
+	 * We've encountered a possible end for a span. If it's in the span stack,
+	 * we transform it into HTML.
 	 */
 	closeSpan(spanType: SpanType, start: number, end: number) {
 		// loop backwards
@@ -181,11 +209,12 @@ class TextFormatter {
 		case '~': tagName = 's'; break;
 		case '^': tagName = 'sup'; break;
 		case '\\': tagName = 'sub'; break;
-		case '|': tagName = 'span'; attrs = ' class="spoiler"'; break;
+		case '|': tagName = 'span'; attrs = (this.showSyntax ? ' class="spoiler-shown"' : ' class="spoiler"'); break;
 		}
+		const syntax = (this.showSyntax ? `<tt>${spanType}${spanType}</tt>` : '');
 		if (tagName) {
-			this.buffers[startIndex] = `<${tagName}${attrs}>`;
-			this.buffers.push(`</${tagName}>`);
+			this.buffers[startIndex] = `${syntax}<${tagName}${attrs}>`;
+			this.buffers.push(`</${tagName}>${syntax}`);
 			this.offset = end;
 		}
 		return true;
@@ -203,7 +232,7 @@ class TextFormatter {
 		switch (span[0]) {
 		case 'spoiler':
 			this.buffers.push(`</span>`);
-			this.buffers[span[1]] = `<span class="spoiler">`;
+			this.buffers[span[1]] = (this.showSyntax ? `<span class="spoiler-shown">` : `<span class="spoiler">`);
 			break;
 		case '>':
 			this.buffers.push(`</span>`);
@@ -230,9 +259,15 @@ class TextFormatter {
 		return encodeURIComponent(component);
 	}
 
+	/**
+	 * Handles special cases.
+	 */
 	runLookahead(spanType: SpanType, start: number) {
 		switch (spanType) {
 		case '`':
+			// code span. Not only are the contents not formatted, but
+			// the start and end delimiters must match in length.
+			// ``Neither `this` nor ```this``` end this code span.``
 			{
 				let delimLength = 0;
 				let i = start;
@@ -253,9 +288,9 @@ class TextFormatter {
 					i++;
 				}
 				if (curDelimLength !== delimLength) return false;
+				const end = i;
 				// matching delims found
 				this.pushSlice(start);
-				this.buffers.push(`<code>`);
 				let innerStart = start + delimLength;
 				let innerEnd = i - delimLength;
 				if (innerStart + 1 >= innerEnd) {
@@ -268,12 +303,20 @@ class TextFormatter {
 				} else if (this.at(innerEnd - 1) === ' ' && this.at(innerEnd - 2) === '`') {
 					innerEnd--; // strip ending space
 				}
+				if (this.showSyntax) this.buffers.push(`<tt>${this.slice(start, innerStart)}</tt>`);
+				this.buffers.push(`<code>`);
 				this.buffers.push(this.slice(innerStart, innerEnd));
 				this.buffers.push(`</code>`);
-				this.offset = i;
+				if (this.showSyntax) this.buffers.push(`<tt>${this.slice(innerEnd, end)}</tt>`);
+				this.offset = end;
 			}
 			return true;
 		case '[':
+			// Link span. Several possiblilities:
+			// [[text <uri>]] - a link with custom text
+			// [[search term]] - Google search
+			// [[wiki: search term]] - Wikipedia search
+			// [[pokemon: species name]] - icon (also item:, type:, category:)
 			{
 				if (this.slice(start, start + 2) !== '[[') return false;
 				let i = start + 2;
@@ -287,6 +330,9 @@ class TextFormatter {
 					i++;
 				}
 				if (this.slice(i, i + 2) !== ']]') return false;
+
+				this.pushSlice(start);
+				this.offset = i + 2;
 				let termEnd = i;
 				let uri = '';
 				if (anglePos >= 0 && this.slice(i - 4, i) === '&gt;') { // `>`
@@ -295,17 +341,21 @@ class TextFormatter {
 					if (this.at(termEnd - 1) === ' ') termEnd--;
 					uri = encodeURI(uri.replace(/^([a-z]*[^a-z:])/g, 'http://$1'));
 				}
-				let term = this.slice(start + 2, termEnd).replace(/<\/?a(?: [^>]+)?>/g, '');
-				if (uri && !this.isTrusted) {
+				let term = this.slice(start + 2, termEnd).replace(/<\/?[au](?: [^>]+)?>/g, '');
+				if (this.showSyntax) {
+					term += `<small>${this.slice(termEnd, i)}</small>`;
+				} else if (uri && !this.isTrusted) {
 					const shortUri = uri.replace(/^https?:\/\//, '').replace(/^www\./, '').replace(/\/$/, '');
 					term += `<small> &lt;${shortUri}&gt;</small>`;
 					uri += '" rel="noopener';
 				}
+
 				if (colonPos > 0) {
 					const key = this.slice(start + 2, colonPos).toLowerCase();
 					switch (key) {
 					case 'w':
 					case 'wiki':
+						if (this.showSyntax) break;
 						term = term.slice(term.charAt(key.length + 1) === ' ' ? key.length + 2 : key.length + 1);
 						uri = `//en.wikipedia.org/w/index.php?title=Special:Search&search=${this.toUriComponent(term)}`;
 						term = `wiki: ${term}`;
@@ -314,6 +364,10 @@ class TextFormatter {
 					case 'item':
 					case 'type':
 					case 'category':
+						if (this.showSyntax) {
+							this.buffers.push(`<tt>${this.slice(start, this.offset)}</tt>`);
+							return true;
+						}
 						term = term.slice(term.charAt(key.length + 1) === ' ' ? key.length + 2 : key.length + 1);
 
 						let display = '';
@@ -334,28 +388,42 @@ class TextFormatter {
 				if (!uri) {
 					uri = `//www.google.com/search?ie=UTF-8&btnI&q=${this.toUriComponent(term)}`;
 				}
-				this.pushSlice(start);
-				this.buffers.push(`<a href="${uri}" target="_blank">${term}</a>`);
-				this.offset = i + 2;
+				if (this.showSyntax) {
+					this.buffers.push(`<tt>[[</tt><u>${term}</u><tt>]]</tt>`);
+				} else {
+					this.buffers.push(`<a href="${uri}" target="_blank">${term}</a>`);
+				}
 			}
 			return true;
 		case '<':
+			// Roomid-link span. Not to be confused with a URL span.
+			// `<<roomid>>`
 			{
 				if (this.slice(start, start + 8) !== '&lt;&lt;') return false; // <<
 				let i = start + 8;
 				while (/[a-z0-9-]/.test(this.at(i))) i++;
 				if (this.slice(i, i + 8) !== '&gt;&gt;') return false; // >>
+
 				this.pushSlice(start);
 				const roomid = this.slice(start + 8, i);
-				this.buffers.push(`&laquo;<a href="/${roomid}" target="_blank">${roomid}</a>&raquo;`);
+				if (this.showSyntax) {
+					this.buffers.push(`<small>&lt;&lt;</small><u>${roomid}</u><small>&gt;&gt;</small>`);
+				} else {
+					this.buffers.push(`&laquo;<a href="/${roomid}" target="_blank">${roomid}</a>&raquo;`);
+				}
 				this.offset = i + 8;
 			}
 			return true;
-		case 'a':
+		case 'a': case 'u':
+			// URL span. Skip to the end of the link - where `</a>` or `</u>` is.
+			// Nothing inside should be formatted further (obviously we don't want
+			// `example.com/__foo__` to turn `foo` italic).
 			{
-				let i = start + 1;
-				while (this.at(i) !== '/' || this.at(i + 1) !== 'a' || this.at(i + 2) !== '>') i++; // </a>
-				i += 3;
+				let i = start + 2;
+				// Find </a> or </u>.
+				// We need to check the location of `>` to disambiguate from </small>.
+				while (this.at(i) !== '<' || this.at(i + 1) !== '/' || this.at(i + 3) !== '>') i++;
+				i += 4;
 				this.pushSlice(i);
 			}
 			return true;
@@ -365,7 +433,9 @@ class TextFormatter {
 
 	get() {
 		let beginningOfLine = this.offset;
-		// main loop! i tracks our position
+		// main loop! `i` tracks our position
+		// Note that we skip around a lot; `i` is mutated inside the loop
+		// pretty often.
 		for (let i = beginningOfLine; i < this.str.length; i++) {
 			const char = this.at(i);
 			switch (char) {
@@ -375,7 +445,11 @@ class TextFormatter {
 			case '^':
 			case '\\':
 			case '|':
+				// Must be exactly two chars long.
 				if (this.at(i + 1) === char && this.at(i + 2) !== char) {
+					// This is a completely normal two-char span. Close it if it's
+					// already open, open it if it's not.
+					// The inside of regular spans must not start or end with a space.
 					if (!(this.at(i - 1) !== ' ' && this.closeSpan(char, i, i + 2))) {
 						if (this.at(i + 2) !== ' ') this.pushSpan(char, i, i + 2);
 					}
@@ -387,9 +461,11 @@ class TextFormatter {
 				while (this.at(i + 1) === char) i++;
 				break;
 			case '(':
+				// `(` span - does nothing except end spans
 				this.stack.push(['(', -1]);
 				break;
 			case ')':
+				// end of `(` span
 				this.closeParenSpan(i);
 				if (i < this.offset) {
 					i = this.offset - 1;
@@ -397,6 +473,9 @@ class TextFormatter {
 				}
 				break;
 			case '`':
+				// ` ``code`` ` span. Uses lookahead because its contents are not
+				// formatted.
+				// Must be at least two `` ` `` in a row.
 				if (this.at(i + 1) === '`') this.runLookahead('`', i);
 				if (i < this.offset) {
 					i = this.offset - 1;
@@ -405,6 +484,9 @@ class TextFormatter {
 				while (this.at(i + 1) === '`') i++;
 				break;
 			case '[':
+				// `[` (link) span. Uses lookahead because it might contain a
+				// URL which can't be formatted, or search terms that can't be
+				// formatted.
 				this.runLookahead('[', i);
 				if (i < this.offset) {
 					i = this.offset - 1;
@@ -413,6 +495,9 @@ class TextFormatter {
 				while (this.at(i + 1) === '[') i++;
 				break;
 			case ':':
+				// Looks behind for `spoiler:` or `spoilers:`. Spoiler spans
+				// are also weird because they don't require an ending symbol,
+				// although that's not handled here.
 				if (i < 7) break;
 				if (this.slice(i - 7, i + 1).toLowerCase() === 'spoiler:' ||
 					this.slice(i - 8, i + 1).toLowerCase() === 'spoilers:') {
@@ -421,11 +506,16 @@ class TextFormatter {
 				}
 				break;
 			case '&': // escaped '<' or '>'
+				// greentext or roomid
 				if (i === beginningOfLine && this.slice(i, i + 4) === '&gt;') {
+					// greentext span, normal except it lacks an ending span
+					// check for certain emoticons like `>_>` or `>w<`
 					if (!"._/=:;".includes(this.at(i + 4)) && !['w&lt;', 'w&gt;'].includes(this.slice(i + 4, i + 9))) {
 						this.pushSpan('>', i, i);
 					}
 				} else {
+					// completely normal `<<roomid>>` span
+					// uses lookahead because roomids can't be formatted.
 					this.runLookahead('<', i);
 				}
 				if (i < this.offset) {
@@ -434,7 +524,10 @@ class TextFormatter {
 				}
 				while (this.slice(i + 1, i + 5) === 'lt;&') i += 4;
 				break;
-			case '<': // guaranteed to be <a
+			case '<': // guaranteed to be <a ...> or <u>
+				// URL span
+				// The constructor has already converted `<` to `&lt;` and URLs
+				// to links, so `<` must be the start of a converted link.
 				this.runLookahead('a', i);
 				if (i < this.offset) {
 					i = this.offset - 1;
@@ -444,6 +537,7 @@ class TextFormatter {
 				break;
 			case '\r':
 			case '\n':
+				// End of the line. No spans span multiple lines.
 				this.popAllSpans(i);
 				if (this.replaceLinebreaks) {
 					this.buffers.push(`<br />`);
@@ -462,8 +556,8 @@ class TextFormatter {
 /**
  * Takes a string and converts it to HTML by replacing standard chat formatting with the appropriate HTML tags.
  */
-export function formatText(str: string, isTrusted = false, replaceLinebreaks = false) {
-	return new TextFormatter(str, isTrusted, replaceLinebreaks).get();
+export function formatText(str: string, isTrusted = false, replaceLinebreaks = false, showSyntax = false) {
+	return new TextFormatter(str, isTrusted, replaceLinebreaks, showSyntax).get();
 }
 
 /**

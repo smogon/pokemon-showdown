@@ -313,7 +313,7 @@ describe('Target Resolution', function () {
 	});
 
 	it(`Ally Switch should cause single-target moves to fail if targeting an ally`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'purrloin', moves: ['thunder', 'ironhead']},
 			{species: 'wynaut', moves: ['allyswitch']},
 		], [
@@ -361,18 +361,18 @@ describe('Target Resolution', function () {
 		// hardcoded RNG seed to show the erroneous targeting behavior
 		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
 			{species: 'shuckle', ability: 'compoundeyes', moves: ['copycat']},
-			{species: 'foongus', moves: ['spore']},
+			{species: 'foongus', item: 'laggingtail', moves: ['spore']},
 		], [
-			{species: 'aggron', moves: ['sleeptalk']},
-			{species: 'slowbro', moves: ['rollout']},
+			{species: 'aggron', moves: ['splash']},
+			{species: 'slowbro', moves: ['splash', 'rollout']},
 		]]);
 
-		battle.makeChoices('move copycat, move spore 2', 'auto');
+		battle.makeChoices('move copycat, move spore 2', 'move splash, move rollout 1');
 		// Determine which slot was damaged on first turn of Rollout
 		const aggron = battle.p2.active[0];
 		const notTargetedPokemon = aggron.hp === aggron.maxhp ? aggron : battle.p2.active[1];
 
-		for (let i = 0; i < 4; i++) battle.makeChoices();
+		for (let i = 0; i < 5; i++) battle.makeChoices();
 		assert.fullHP(notTargetedPokemon);
 	});
 });

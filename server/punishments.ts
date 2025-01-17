@@ -127,11 +127,10 @@ class PunishmentMap extends Map<string, Punishment[]> {
 	deleteOne(k: string, punishment: Punishment) {
 		const list = this.get(k);
 		if (!list) return;
-		for (const [i, cur] of list.entries()) {
+		for (let i = list.length - 1; i >= 0; i--) {
+			const cur = list[i];
 			if (punishment.type === cur.type && cur.id === punishment.id) {
 				list.splice(i, 1);
-				break; // we don't need to run the rest of the list here
-				// given we will only ever have one punishment of one type
 			}
 		}
 		if (!list.length) {
@@ -145,9 +144,10 @@ class PunishmentMap extends Map<string, Punishment[]> {
 			list = [];
 			this.set(k, list);
 		}
-		for (const [i, curPunishment] of list.entries()) {
+		for (let i = list.length - 1; i >= 0; i--) {
+			const curPunishment = list[i];
 			if (punishment.type === curPunishment.type) {
-				if (punishment.expireTime <= curPunishment.expireTime) {
+				if (curPunishment.expireTime >= punishment.expireTime) {
 					curPunishment.reason = punishment.reason;
 					// if we already have a punishment of the same type with a higher expiration date
 					// we want to just update the reason and ignore it
@@ -467,6 +467,9 @@ export const Punishments = new class {
 		for (const row of data.replace('\r', '').split("\n")) {
 			if (!row) continue;
 			const [ip, type, note] = row.trim().split("\t");
+			if (ip === 'IP') {
+				continue; // first row
+			}
 			if (IPTools.ipRegex.test(note)) {
 				// this is handling a bug where data accidentally got reversed
 				// (into note,shared,ip format instead of ip,shared,note format)
@@ -1336,9 +1339,7 @@ export const Punishments = new class {
 		if (room.subRooms) {
 			for (const subRoom of room.subRooms.values()) {
 				for (const curUser of affected) {
-					if (subRoom.game && subRoom.game.removeBannedUser) {
-						subRoom.game.removeBannedUser(curUser);
-					}
+					subRoom.game?.removeBannedUser?.(curUser);
 					curUser.leaveRoom(subRoom.roomid);
 				}
 			}
@@ -1356,9 +1357,7 @@ export const Punishments = new class {
 		for (const curUser of affected) {
 			// ensure there aren't roombans so nothing gets mixed up
 			Punishments.roomUnban(room, (curUser as any).id || curUser);
-			if (room.game && room.game.removeBannedUser) {
-				room.game.removeBannedUser(curUser);
-			}
+			room.game?.removeBannedUser?.(curUser);
 			curUser.leaveRoom(room.roomid);
 		}
 
@@ -1838,9 +1837,7 @@ export const Punishments = new class {
 				}
 				if (punishment.type !== 'ROOMBAN' && punishment.type !== 'BLACKLIST') return null;
 				const room = Rooms.get(roomid)!;
-				if (room.game && room.game.removeBannedUser) {
-					room.game.removeBannedUser(user);
-				}
+				room.game?.removeBannedUser?.(user);
 				user.leaveRoom(room.roomid);
 			}
 			return punishments;
@@ -1902,6 +1899,13 @@ export const Punishments = new class {
 						}
 					}
 				}
+			}
+		}
+
+		for (const id of user.previousIDs) {
+			punishments = Punishments.roomUserids.nestedGet(roomid, id);
+			for (const p of punishments || []) {
+				if (['ROOMBAN', 'BLACKLIST'].includes(p.type)) return p;
 			}
 		}
 
@@ -2114,7 +2118,7 @@ export const Punishments = new class {
 				if (typeof user !== 'string') {
 					user.popup(
 						`|modal|You've been locked for breaking the rules in multiple chatrooms.\n\n` +
-						`If you feel that your lock was unjustified, you can still PM staff members (%, @, &) to discuss it${Config.appealurl ? " or you can appeal:\n" + Config.appealurl : "."}\n\n` +
+						`If you feel that your lock was unjustified, you can still PM staff members (%, @, ~) to discuss it${Config.appealurl ? " or you can appeal:\n" + Config.appealurl : "."}\n\n` +
 						`Your lock will expire in a few days.`
 					);
 				}

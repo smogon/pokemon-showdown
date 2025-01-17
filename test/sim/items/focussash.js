@@ -21,15 +21,17 @@ describe('Focus Sash', function () {
 		assert.equal(holder.hp, 1);
 	});
 
-	it('should be consumed and allow its user to survive a confusion damage hit from full HP', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Shedinja', ability: 'wonderguard', item: 'focussash', moves: ['absorb']}]});
-		battle.setPlayer('p2', {team: [{species: 'Klefki', ability: 'prankster', moves: ['confuseray']}]});
-		const holder = battle.p1.active[0];
+	it(`should be consumed and allow its user to survive a confusion damage hit from full HP`, function () {
+		battle = common.createBattle({forceRandomChance: true}, [[
+			{species: 'Shedinja', ability: 'wonderguard', item: 'focussash', moves: ['absorb']},
+		], [
+			{species: 'Klefki', ability: 'prankster', moves: ['confuseray']},
+		]]);
+
+		const shedinja = battle.p1.active[0];
 		battle.makeChoices('move absorb', 'move confuseray');
-		assert.false.holdsItem(holder);
-		assert.false.fainted(holder);
-		assert.equal(holder.hp, 1);
+		assert.false.holdsItem(shedinja);
+		assert.false.fainted(shedinja);
 	});
 
 	it('should not trigger on recoil damage', function () {

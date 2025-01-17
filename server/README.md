@@ -11,7 +11,7 @@ Installing
 
     ./pokemon-showdown
 
-(Requires Node.js v14+)
+(Requires Node.js v16+)
 
 If your distro package manager has an old Node.js version, the simplest way to upgrade is `n` – usually no root necessary:
 
@@ -67,13 +67,13 @@ If you truly want to host the client yourself, there is [a repository for the Po
 Setting up an Administrator account
 ------------------------------------------------------------------------
 
-Once your server is up, you probably want to make yourself an Administrator (&) on it.
+Once your server is up, you probably want to make yourself an Administrator (~) on it.
 
 ### config/usergroups.csv
 
 To become an Administrator, create a file named `config/usergroups.csv` containing
 
-    USER,&
+    USER,~
 
 Replace `USER` with the username that you would like to become an Administrator. Do not put a space between the comma and the ampersand.
 

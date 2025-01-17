@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	adamantorb: {
 		inherit: true,
 		onBasePower(basePower, user, target, move) {
@@ -113,14 +113,34 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	dracoplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
+	dreadplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
+	earthplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	fastball: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	fistplate: {
+		inherit: true,
+		onTakeItem: true,
 	},
 	flameorb: {
 		inherit: true,
 		onResidualOrder: 10,
 		onResidualSubOrder: 20,
+	},
+	flameplate: {
+		inherit: true,
+		onTakeItem: true,
 	},
 	focussash: {
 		inherit: true,
@@ -156,9 +176,21 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		isNonstandard: null,
 	},
+	icicleplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
+	insectplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	ironball: {
 		inherit: true,
 		onEffectiveness() {},
+	},
+	ironplate: {
+		inherit: true,
+		onTakeItem: true,
 	},
 	kingsrock: {
 		inherit: true,
@@ -204,7 +236,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 			return basePower;
 		},
 		onModifyDamagePhase2(damage, source, target, move) {
-			if (!move.isFutureMove) return damage * 1.3;
+			if (!move.flags['futuremove']) return damage * 1.3;
 		},
 		condition: {
 			duration: 1,
@@ -249,6 +281,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return this.chainModify(1.2);
 			}
 		},
+	},
+	meadowplate: {
+		inherit: true,
+		onTakeItem: true,
 	},
 	mentalherb: {
 		inherit: true,
@@ -306,6 +342,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 			},
 		},
 	},
+	mindplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	moonball: {
 		inherit: true,
 		isNonstandard: null,
@@ -325,6 +365,18 @@ export const Items: {[k: string]: ModdedItemData} = {
 			}
 		},
 	},
+	skyplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
+	splashplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
+	spookyplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	sportball: {
 		inherit: true,
 		isNonstandard: null,
@@ -342,6 +394,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onResidualOrder: 10,
 		onResidualSubOrder: 20,
 	},
+	stoneplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	thickclub: {
 		inherit: true,
 		onModifyAtk(atk, pokemon) {
@@ -355,6 +411,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 		onResidualOrder: 10,
 		onResidualSubOrder: 20,
 	},
+	toxicplate: {
+		inherit: true,
+		onTakeItem: true,
+	},
 	widelens: {
 		inherit: true,
 		onSourceModifyAccuracyPriority: 4,
@@ -363,6 +423,10 @@ export const Items: {[k: string]: ModdedItemData} = {
 				return accuracy * 1.1;
 			}
 		},
+	},
+	zapplate: {
+		inherit: true,
+		onTakeItem: true,
 	},
 	zoomlens: {
 		inherit: true,

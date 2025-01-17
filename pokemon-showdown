@@ -105,13 +105,14 @@ if (!process.argv[2] || /^[0-9]+$/.test(process.argv[2])) {
 		{
 			ensureBuilt();
 			var Teams = require('./dist/sim/teams.js').Teams;
-			var seed = process.argv[4] ? process.argv[4].split(',').map(Number) : undefined;
+			var seed = process.argv[4] || undefined;
 			console.log(Teams.pack(Teams.generate(process.argv[3], {seed})));
 		}
 		break;
 	case 'validate-team':
 		{
 			ensureBuilt();
+			require('source-map-support/register');
 			var Teams = require('./dist/sim/teams.js').Teams;
 			var TeamValidator = require('./dist/sim/team-validator.js').TeamValidator;
 			var validator = TeamValidator.get(process.argv[3]);

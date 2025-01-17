@@ -16,7 +16,7 @@ function capitalize(word) {
 /**
  * The default random number generator seed used if one is not given.
  */
-const DEFAULT_SEED = [0x09917, 0x06924, 0x0e1c8, 0x06af0];
+const DEFAULT_SEED = 'gen5,99176924e1c86af0';
 
 class TestTools {
 	constructor(mod = 'base') {
@@ -42,7 +42,11 @@ class TestTools {
 	}
 
 	getFormat(options) {
-		if (options.formatid) return Dex.formats.get(options.formatid);
+		if (options.formatid) {
+			const format = Dex.formats.get(options.formatid);
+			if (format.effectType !== 'Format') throw new Error(`Unidentified format: ${options.formatid}`);
+			return format;
+		}
 
 		const gameType = Dex.toID(options.gameType || 'singles');
 		const customRules = [
@@ -60,10 +64,12 @@ class TestTools {
 		let basicFormat = this.currentMod === 'base' && gameType === 'singles' ? 'Anything Goes' : 'Custom Game';
 		let modPrefix = this.modPrefix;
 		if (this.currentMod === 'gen1stadium') basicFormat = 'OU';
-		if (gameType === 'freeforall' || gameType === 'multi') {
+		if (gameType === 'multi') {
 			basicFormat = 'randombattle';
-			modPrefix = `[gen8] `; // Remove when FFA/multis support Gen 9
+			modPrefix = `[gen8] `; // Remove when multis support Gen 9
 		}
+		// Re-integrate to the above if statement when gen 9 ffa randbats is added
+		if (gameType === 'freeforall') basicFormat = '';
 		const gameTypePrefix = gameType === 'singles' ? '' : capitalize(gameType) + ' ';
 		const formatName = `${modPrefix}${gameTypePrefix}${basicFormat}${customRulesID}`;
 
@@ -71,7 +77,7 @@ class TestTools {
 		if (format) return format;
 
 		format = Dex.formats.get(formatName);
-		if (!format.exists) throw new Error(`Unidentified format: ${formatName}`);
+		if (format.effectType !== 'Format') throw new Error(`Unidentified format: ${formatName}`);
 
 		formatsCache.set(formatName, format);
 		return format;
@@ -93,11 +99,13 @@ class TestTools {
 		const format = this.getFormat(options);
 
 		const battleOptions = {
+			debug: true,
+			forceRandomChance: null || options.forceRandomChance,
 			format: format,
 			// If a seed for the pseudo-random number generator is not provided,
 			// a default seed (guaranteed to be the same across test executions)
 			// will be used.
-			seed: options.seed || DEFAULT_SEED,
+			seed: options.seed === undefined ? DEFAULT_SEED : (options.seed || undefined),
 			strictChoices: options.strictChoices !== false,
 		};
 

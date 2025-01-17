@@ -23,7 +23,7 @@ export class RandomPlayerAI extends BattlePlayer {
 		super(playerStream, debug);
 		this.move = options.move || 1.0;
 		this.mega = options.mega || 0;
-		this.prng = options.seed && !Array.isArray(options.seed) ? options.seed : new PRNG(options.seed);
+		this.prng = PRNG.get(options.seed);
 	}
 
 	receiveError(error: Error) {
@@ -79,7 +79,7 @@ export class RandomPlayerAI extends BattlePlayer {
 				canTerastallize = canTerastallize && !!active.canTerastallize;
 
 				// Determine whether we should change form if we do end up switching
-				const change = (canMegaEvo || canUltraBurst || canDynamax) && this.prng.next() < this.mega;
+				const change = (canMegaEvo || canUltraBurst || canDynamax) && this.prng.random() < this.mega;
 				// If we've already dynamaxed or if we're planning on potentially dynamaxing
 				// we need to use the maxMoves instead of our regular moves
 
@@ -120,14 +120,14 @@ export class RandomPlayerAI extends BattlePlayer {
 					// NOTE: We don't generate all possible targeting combinations.
 					if (request.active.length > 1) {
 						if ([`normal`, `any`, `adjacentFoe`].includes(m.target)) {
-							move += ` ${1 + Math.floor(this.prng.next() * 2)}`;
+							move += ` ${1 + this.prng.random(2)}`;
 						}
 						if (m.target === `adjacentAlly`) {
 							move += ` -${(i ^ 1) + 1}`;
 						}
 						if (m.target === `adjacentAllyOrSelf`) {
 							if (hasAlly) {
-								move += ` -${1 + Math.floor(this.prng.next() * 2)}`;
+								move += ` -${1 + this.prng.random(2)}`;
 							} else {
 								move += ` -${i + 1}`;
 							}
@@ -148,7 +148,7 @@ export class RandomPlayerAI extends BattlePlayer {
 				));
 				const switches = active.trapped ? [] : canSwitch;
 
-				if (switches.length && (!moves.length || this.prng.next() > this.move)) {
+				if (switches.length && (!moves.length || this.prng.random() > this.move)) {
 					const target = this.chooseSwitch(
 						active,
 						canSwitch.map(slot => ({slot, pokemon: pokemon[slot - 1]}))

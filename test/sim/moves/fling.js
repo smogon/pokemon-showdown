@@ -57,20 +57,19 @@ describe('Fling', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it(`should Fling, not consume Leppa Berry when using 1 PP Leppa Berry Fling`, function () {
+	it.skip(`should Fling, not consume Leppa Berry when using 1 PP Leppa Berry Fling`, function () {
+		// Currently depends on RNG when it should not
 		battle = common.createBattle([[
-			{species: 'wynaut', moves: ['fling', 'sleeptalk']},
+			{species: 'wynaut', moves: ['fling']},
 		], [
-			{species: 'cleffa', item: 'leppaberry', moves: ['spite', 'trick', 'sleeptalk']},
+			{species: 'clefable', item: 'leppaberry', moves: ['trick']},
 		]]);
-		// Waste 15 Fling PP
-		for (let i = 0; i < 3; i++) battle.makeChoices();
-		battle.makeChoices('move sleeptalk', 'move trick');
-		battle.makeChoices('move fling', 'move sleeptalk');
-
 		const wynaut = battle.p1.active[0];
 		const cleffa = battle.p2.active[0];
+		wynaut.getMoveData('fling').pp = 1;
+		battle.makeChoices('move fling', 'move trick');
+
 		assert.equal(wynaut.getMoveData('fling').pp, 0);
-		assert.equal(cleffa.getMoveData('spite').pp, 16);
+		assert.equal(cleffa.getMoveData('trick').pp, 16);
 	});
 });

@@ -81,9 +81,9 @@ describe('Team Validator', function () {
 		const team = [
 			{species: 'xerneas', ability: 'fairyaura', moves: ['snore'], ivs: {hp: 0, atk: 0, def: 0, spa: 0}, evs: {hp: 1}},
 		];
-		assert.false.legalTeam(team, 'gen8anythinggoes');
+		assert.false.legalTeam(team, 'gen9anythinggoes');
 
-		assert.legalTeam(team, 'gen8purehackmons');
+		assert.legalTeam(team, 'gen9purehackmons');
 	});
 
 	it('should reject non-existent natures', function () {
@@ -204,9 +204,9 @@ describe('Team Validator', function () {
 		const team = [
 			{species: 'corsola', ability: 'hustle', moves: ['snore', 'snore'], evs: {hp: 1}},
 		];
-		assert.false.legalTeam(team, 'gen8anythinggoes');
+		assert.false.legalTeam(team, 'gen9anythinggoes');
 
-		assert.legalTeam(team, 'gen8purehackmons');
+		assert.legalTeam(team, 'gen9purehackmons');
 	});
 
 	it('should accept VC moves only with Hidden ability and correct IVs', function () {
@@ -242,5 +242,12 @@ describe('Team Validator', function () {
 			{species: 'weezing-galar', ability: 'levitate', moves: ['zapcannon'], evs: {hp: 1}},
 		];
 		assert.legalTeam(team, 'gen8ou');
+	});
+
+	it(`should disallow past gen only moves in Gen 9`, function () {
+		const team = [
+			{species: 'oricorio', ability: 'dancer', moves: ['roleplay'], evs: {hp: 1}},
+		];
+		assert.false.legalTeam(team, 'gen9ou');
 	});
 });

@@ -128,14 +128,14 @@ BAD:
 
 ```ts
 // if ten seconds have passed and the user is staff
-if (now > then + 10_000 && '&@%'.includes(user.tempGroup)) {
+if (now > then + 10_000 && '~@%'.includes(user.tempGroup)) {
 ```
 
 GOOD:
 
 ```ts
 const tenSecondsPassed = now > then + 10_000;
-const userIsStaff = '&@%'.includes(user.tempGroup);
+const userIsStaff = '~@%'.includes(user.tempGroup);
 if (tenSecondsPassed && userIsStaff) {
 ```
 
@@ -317,7 +317,9 @@ We oppose the usual JavaScript culture of casually adding dependencies from NPM.
 
 There are, of course, a lot of libraries like SockJS doing valuable things that we shouldn't reimplement ourselves. However, most libraries on NPM have very different priorities than we do (not caring about performance or bugs in subdependencies).
 
-But in practice, for any dependency we could reimplement in around 30 lines of code, we'll write it ourselves and maintain it in `lib/`. Such maintenance is usually worth avoiding a `left-pad` situation, and also is generally better for performance, and also helps us easily craft the API to be most convenient for our own use-case.
+A common reason given for preferring dependencies is because someone else is more likely to have encountered and fixed bugs. But in practice many dependencies are worse-maintained than Showdown. And many bugs come from misusing a dependency.
+
+In practice, for any dependency we could reimplement in around 30 lines of code, we'll write it ourselves and maintain it in `lib/`. Such maintenance is usually worth avoiding a `left-pad` situation, and also is generally better for performance, and also helps us easily craft the API to be most convenient for our own use-case.
 
 To be clear, we're not _opposed_ to new dependencies and will accept them where they make sense. But we try to avoid them more most than other Node projects do.
 
@@ -325,18 +327,4 @@ To be clear, we're not _opposed_ to new dependencies and will accept them where 
 `package-lock.json`
 ------------------------------------------------------------------------
 
-We don't use `package-lock`. This is against NPM's (and most others') official advice that we should.
-
-: First, what's `package-lock` and why is it recommended? `package-lock.json` is basically a snapshot of the `node_modules/` directory. You can think of it like `node_modules.zip`, except more human-readable, and requires an internet connection to unzip.
-
-: The main advantage of adding it to Git is that it lets you know exactly the state of `node_modules/` at the time the programmer commits it. So if a dependency breaks, it's easier to trace exactly when it broke.
-
-: It also makes sure `node_modules/` is exactly the same between different development environments, so differences don't cause bugs to appear for some developers but not others.
-
-This comes with a number of disadvantages. The biggest one is that it causes package-lock changes to appear in random commits, which can outright lead to merge conflicts. It also makes diffs in general significantly less readable. It also [introduces security vulnerabilities](https://snyk.io/blog/why-npm-lockfiles-can-be-a-security-blindspot-for-injecting-malicious-modules/).
-
-The biggest supposed advantage (ensure everyone's on the same version) isn't even an advantage! We'd specify the versions as `4.15.4` instead of `^4.15.4` if we wanted everyone on the same version, rather than the latest version. Writing `^4.15.4` is an explicit choice to opt into automatic updating.
-
-We can still have everyone on the same version if we all re-run `npm install`, which we would STILL have to do if we were using a package-lock file. The package-lock file does not improve this situation.
-
-(The last time we polled our developers, most supported not having a `package-lock` file.)
+In the past, we didn't use `package-lock`. The reasons are historical. We do now. If you see a project without package-lock, feel free to add it.

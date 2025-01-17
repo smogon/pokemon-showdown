@@ -20,10 +20,12 @@ describe('Truant', function () {
 		assert.false.hurts(pokemon, () => battle.makeChoices());
 	});
 
-	it('should allow the user to act after a recharge turn', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Slaking", ability: 'truant', moves: ['hyperbeam']}]});
-		battle.setPlayer('p2', {team: [{species: "Steelix", ability: 'sturdy', moves: ['endure']}]});
+	it(`should allow the user to act after a recharge turn`, function () {
+		battle = common.createBattle([[
+			{species: 'Slaking', ability: 'truant', moves: ['hyperbeam']},
+		], [
+			{species: 'Registeel', ability: 'noguard', moves: ['endure']},
+		]]);
 		const pokemon = battle.p2.active[0];
 
 		assert.hurts(pokemon, () => battle.makeChoices());

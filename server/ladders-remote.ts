@@ -147,7 +147,6 @@ export class LadderStore {
 	}
 	/**
 	 * Calculates Elo based on a match result
-	 *
 	 */
 	calculateElo(oldElo: number, score: number, foeElo: number): number {
 		// see lib/ntbb-ladder.lib.php in the pokemon-showdown-client repo for the login server implementation

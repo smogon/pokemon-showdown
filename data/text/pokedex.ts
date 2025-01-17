@@ -1,4 +1,4 @@
-export const PokedexText: {[k: string]: PokedexText} = {
+export const PokedexText: {[id: IDEntry]: PokedexText} = {
 	bulbasaur: {
 		name: "Bulbasaur",
 	},
@@ -2506,6 +2506,9 @@ export const PokedexText: {[k: string]: PokedexText} = {
 	},
 	greninja: {
 		name: "Greninja",
+	},
+	greninjabond: {
+		name: "Greninja-Bond",
 	},
 	greninjaash: {
 		name: "Greninja-Ash",
