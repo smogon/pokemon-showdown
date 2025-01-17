@@ -4,23 +4,13 @@
  * @author mia-pi-git
  */
 
-import {Utils, FS} from '../../lib';
+import {Utils} from '../../lib';
 
 /** map<to, from> */
 export const chessChallenges: Map<ID, ID> = Chat.oldPlugins.chess?.chessChallenges || new Map();
 
 const LETTERS = ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a'];
-const MATCH_INTERVAL = 60 * 1000;
-
 type Side = 'B' | 'W';
-
-interface LadderEntry {
-	username: string;
-	userid: string;
-	rating: number;
-	wins: number;
-	losses: number;
-}
 
 interface Piece {
 	symbols: {B: string, W: string};
