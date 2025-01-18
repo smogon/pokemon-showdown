@@ -733,6 +733,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	booster: "Booster Energy",
 	boots: "Heavy-Duty Boots",
 	cb: "Choice Band",
+	clam: "Clear Amulet",
 	cloak: "Covert Cloak",
 	dice: "Loaded Dice",
 	ebelt: "Expert Belt",
