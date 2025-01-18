@@ -2674,6 +2674,8 @@ export class RandomTeams {
 				if (teamData.resistances[type]) continue;
 				if (teamData.weaknesses[type] >= 3 * limitFactor) return this.randomFactoryTeam(side, ++depth);
 			}
+			// Try to force Stealth Rock on non-Uber teams
+			if (!teamData.has['stealthRock'] && this.factoryTier !== 'Uber') return this.randomFactoryTeam(side, ++depth);
 		}
 		return pokemon;
 	}
