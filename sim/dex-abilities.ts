@@ -97,7 +97,7 @@ export class DexAbilities {
 				// Abilities and items Start at different times during the SwitchIn event, so we do this
 				// instead of running the Start event during switch-ins
 				// gens 4 and before still use the old system, though
-				if (abilityData.onStart && !abilityData.onSwitchIn) {
+				if (abilityData.onStart && !abilityData.onSwitchIn && !abilityData.onAnySwitchIn) {
 					abilityData.onSwitchIn = abilityData.onStart;
 				}
 			}

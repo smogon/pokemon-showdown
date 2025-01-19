@@ -596,7 +596,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 213,
 	},
 	commander: {
-		onSwitchInPriority: -2,
+		onAnySwitchInPriority: -2,
+		onAnySwitchIn() {
+			this.effectState.started = true;
+			((this.effect as any).onUpdate as (p: Pokemon) => void).call(this, this.effectState.target);
+		},
 		onStart(pokemon) {
 			this.effectState.started = true;
 			((this.effect as any).onUpdate as (p: Pokemon) => void).call(this, pokemon);
@@ -3113,11 +3117,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.cureStatus();
 			}
 		},
-		onAllySwitchIn(pokemon) {
-			if (['psn', 'tox'].includes(pokemon.status)) {
-				this.add('-activate', this.effectState.target, 'ability: Pastel Veil');
-				pokemon.cureStatus();
-			}
+		onAnySwitchIn() {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onSetStatus(status, target, source, effect) {
 			if (!['psn', 'tox'].includes(status.id)) return;
