@@ -620,14 +620,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onWeatherChange(pokemon) {
 			if (pokemon.transformed) return;
 
-			if (pokemon.hasAbility('protosynthesis') && (this.field.isWeather('sunnyday') || pokemon.useItem())) {
+			if (pokemon.hasAbility('protosynthesis') && !this.field.isWeather('sunnyday') && pokemon.useItem()) {
 				pokemon.addVolatile('protosynthesis');
 			}
 		},
 		onTerrainChange(pokemon) {
 			if (pokemon.transformed) return;
 
-			if (pokemon.hasAbility('quarkdrive') && (this.field.isTerrain('electricterrain') || pokemon.useItem())) {
+			if (pokemon.hasAbility('quarkdrive') && !this.field.isTerrain('electricterrain') && pokemon.useItem()) {
 				pokemon.addVolatile('quarkdrive');
 			}
 		},
