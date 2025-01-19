@@ -615,7 +615,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onStart() {
-			// don't trigger before hazards
 			this.effectState.started = true;
 		},
 		onWeatherChange(pokemon) {
@@ -633,6 +632,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		onUpdate(pokemon) {
+			// don't trigger before hazards
 			if (!this.effectState.started || pokemon.transformed) return;
 			if (this.queue.peek(true)?.choice === 'runSwitch') return;
 
