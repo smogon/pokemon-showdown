@@ -615,7 +615,22 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onStart() {
+			// don't trigger before hazards
 			this.effectState.started = true;
+		},
+		onWeatherChange(pokemon) {
+			if (pokemon.transformed) return;
+
+			if (pokemon.hasAbility('protosynthesis') && (this.field.isWeather('sunnyday') || pokemon.useItem())) {
+				pokemon.addVolatile('protosynthesis');
+			}
+		},
+		onTerrainChange(pokemon) {
+			if (pokemon.transformed) return;
+
+			if (pokemon.hasAbility('quarkdrive') && (this.field.isTerrain('electricterrain') || pokemon.useItem())) {
+				pokemon.addVolatile('quarkdrive');
+			}
 		},
 		onUpdate(pokemon) {
 			if (!this.effectState.started || pokemon.transformed) return;
