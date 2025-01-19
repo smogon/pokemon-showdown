@@ -425,10 +425,10 @@ export class Pokemon {
 
 		this.baseAbility = toID(set.ability);
 		this.ability = this.baseAbility;
-		this.abilityState = new EffectState({id: this.ability}, this.battle);
+		this.abilityState = new EffectState({id: this.ability, target: this}, this.battle);
 
 		this.item = toID(set.item);
-		this.itemState = new EffectState({id: this.item}, this.battle);
+		this.itemState = new EffectState({id: this.item, target: this}, this.battle);
 		this.lastItem = '';
 		this.usedItemThisTurn = false;
 		this.ateBerry = false;

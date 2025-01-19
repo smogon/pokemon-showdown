@@ -60,4 +60,22 @@ describe("White Herb", function () {
 		assert.false.holdsItem(wynaut);
 		assert.statStage(wynaut, 'atk', 0);
 	});
+
+	it('should activate before Opportunist during switch-ins', function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'axew', moves: ['sleeptalk']},
+			{species: 'fraxure', moves: ['finalgambit']},
+			{species: 'zacian', ability: 'intrepidsword', moves: ['sleeptalk']},
+			{species: 'torracat', ability: 'intimidate', moves: ['sleeptalk']},
+		], [
+			{species: 'flittle', item: 'whiteherb', ability: 'opportunist', moves: ['sleeptalk']},
+			{species: 'haxorus', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move sleeptalk, move finalgambit -1', 'auto');
+		battle.makeChoices('switch 3, switch 4');
+		const flittle = battle.p2.active[0];
+		assert.false.holdsItem(flittle);
+		assert.statStage(flittle, 'atk', 1);
+		common.saveReplay(battle);
+	});
 });

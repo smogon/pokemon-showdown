@@ -7191,7 +7191,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				}
 			},
 		},
-		onSwitchInPriority: -2,
+		onAnySwitchInPriority: -2,
+		onAnySwitchIn() {
+			((this.effect as any).onUpdate as (p: Pokemon) => void).call(this, this.effectState.target);
+		},
 		onStart(pokemon) {
 			((this.effect as any).onUpdate as (p: Pokemon) => void).call(this, pokemon);
 		},
