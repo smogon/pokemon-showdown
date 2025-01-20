@@ -1,7 +1,5 @@
 // List of flags and their descriptions can be found in sim/dex-moves.ts
 
-import {EffectState} from '../sim/pokemon';
-
 export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	"10000000voltthunderbolt": {
 		num: 719,
@@ -17223,8 +17221,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			this.singleEvent('End', targetAbility, target.abilityState, target);
 			source.ability = targetAbility.id;
 			target.ability = sourceAbility.id;
-			source.abilityState = new EffectState({id: this.toID(source.ability), target: source}, this);
-			target.abilityState = new EffectState({id: this.toID(target.ability), target: target}, this);
+			source.abilityState = this.initEffectState({id: this.toID(source.ability), target: source});
+			target.abilityState = this.initEffectState({id: this.toID(target.ability), target: target});
 			source.volatileStaleness = undefined;
 			if (!target.isAlly(source)) target.volatileStaleness = 'external';
 			this.singleEvent('Start', targetAbility, source.abilityState, source);

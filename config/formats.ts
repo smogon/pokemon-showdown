@@ -17,8 +17,6 @@ New sections will be added to the bottom of the specified column.
 The column value will be ignored for repeat sections.
 */
 
-import {EffectState} from '../sim/pokemon';
-
 export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// S/V Singles
@@ -730,7 +728,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
 			for (const ability of format.getSharedPower!(pokemon)) {
 				const effect = 'ability:' + ability;
-				pokemon.volatiles[effect] = new EffectState({id: this.toID(effect), target: pokemon}, this);
+				pokemon.volatiles[effect] = this.initEffectState({id: this.toID(effect), target: pokemon});
 				if (!pokemon.m.abils) pokemon.m.abils = [];
 				if (!pokemon.m.abils.includes(effect)) pokemon.m.abils.push(effect);
 			}
@@ -1464,14 +1462,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				if (!pokemon.m.innate && !BAD_ABILITIES.includes(this.toID(ally.ability))) {
 					pokemon.m.innate = 'ability:' + ally.ability;
 					if (!ngas || ally.getAbility().flags['cantsuppress'] || pokemon.hasItem('Ability Shield')) {
-						pokemon.volatiles[pokemon.m.innate] = new EffectState({id: pokemon.m.innate, target: pokemon}, this);
+						pokemon.volatiles[pokemon.m.innate] = this.initEffectState({id: pokemon.m.innate, target: pokemon});
 						pokemon.m.startVolatile = true;
 					}
 				}
 				if (!ally.m.innate && !BAD_ABILITIES.includes(this.toID(pokemon.ability))) {
 					ally.m.innate = 'ability:' + pokemon.ability;
 					if (!ngas || pokemon.getAbility().flags['cantsuppress'] || ally.hasItem('Ability Shield')) {
-						ally.volatiles[ally.m.innate] = new EffectState({id: ally.m.innate, target: ally}, this);
+						ally.volatiles[ally.m.innate] = this.initEffectState({id: ally.m.innate, target: ally});
 						ally.m.startVolatile = true;
 					}
 				}
@@ -1769,7 +1767,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			for (const item of format.getSharedItems!(pokemon)) {
 				if (pokemon.m.sharedItemsUsed.includes(item)) continue;
 				const effect = 'item:' + item;
-				pokemon.volatiles[effect] = new EffectState({id: this.toID(effect), target: pokemon}, this);
+				pokemon.volatiles[effect] = this.initEffectState({id: this.toID(effect), target: pokemon});
 				if (!pokemon.m.items) pokemon.m.items = [];
 				if (!pokemon.m.items.includes(effect)) pokemon.m.items.push(effect);
 			}
@@ -2587,7 +2585,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
 			for (const ability of format.getSharedPower!(pokemon)) {
 				const effect = 'ability:' + ability;
-				pokemon.volatiles[effect] = new EffectState({id: this.toID(effect), target: pokemon}, this);
+				pokemon.volatiles[effect] = this.initEffectState({id: this.toID(effect), target: pokemon});
 				if (!pokemon.m.abils) pokemon.m.abils = [];
 				if (!pokemon.m.abils.includes(effect)) pokemon.m.abils.push(effect);
 			}

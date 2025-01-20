@@ -294,13 +294,13 @@ export class Side {
 			if (!(status as any).onSideRestart) return false;
 			return this.battle.singleEvent('SideRestart', status, this.sideConditions[status.id], this, source, sourceEffect);
 		}
-		this.sideConditions[status.id] = new EffectState({
+		this.sideConditions[status.id] = this.battle.initEffectState({
 			id: status.id,
 			target: this,
 			source,
 			sourceSlot: source.getSlot(),
 			duration: status.duration,
-		}, this.battle);
+		});
 		if (status.durationCallback) {
 			this.sideConditions[status.id].duration =
 				status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
@@ -346,14 +346,14 @@ export class Side {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.slotConditions[target][status.id], this, source, sourceEffect);
 		}
-		const conditionState = this.slotConditions[target][status.id] = new EffectState({
+		const conditionState = this.slotConditions[target][status.id] = this.battle.initEffectState({
 			id: status.id,
 			target: this,
 			source,
 			sourceSlot: source.getSlot(),
 			isSlotCondition: true,
 			duration: status.duration,
-		}, this.battle);
+		});
 		if (status.durationCallback) {
 			conditionState.duration =
 				status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);

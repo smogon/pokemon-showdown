@@ -30,36 +30,11 @@ interface Attacker {
 	damageValue?: (number | boolean | undefined);
 }
 
-export class EffectState {
+export interface EffectState {
 	id: string;
 	effectOrder: number;
 	duration?: number;
 	[k: string]: any;
-
-	constructor(data: AnyObject, battle: Battle, effectOrder?: number) {
-		this.id = data.id || '';
-		Object.assign(this, data);
-		if (effectOrder !== undefined) {
-			this.effectOrder = effectOrder;
-		} else if (this.id && this.target && (!(this.target instanceof Pokemon) || this.target.isActive)) {
-			this.effectOrder = battle.effectOrder++;
-		} else {
-			this.effectOrder = 0;
-		}
-	}
-
-	clear() {
-		this.id = '';
-		for (const k in this) {
-			if (k === 'id' || k === 'target') {
-				continue;
-			} else if (k === 'effectOrder') {
-				this.effectOrder = 0;
-			} else {
-				delete this[k];
-			}
-		}
-	}
 }
 
 // Berries which restore PP/HP and thus inflict external staleness when given to an opponent as
@@ -334,7 +309,7 @@ export class Pokemon {
 		if (set.name === set.species || !set.name) {
 			set.name = this.baseSpecies.baseSpecies;
 		}
-		this.speciesState = new EffectState({id: this.species.id}, this.battle);
+		this.speciesState = this.battle.initEffectState({id: this.species.id});
 
 		this.name = set.name.substr(0, 20);
 		this.fullname = this.side.id + ': ' + this.name;
@@ -382,7 +357,7 @@ export class Pokemon {
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 
 		this.status = '';
-		this.statusState = new EffectState({}, this.battle);
+		this.statusState = this.battle.initEffectState({});
 		this.volatiles = {};
 		this.showCure = undefined;
 
@@ -425,10 +400,10 @@ export class Pokemon {
 
 		this.baseAbility = toID(set.ability);
 		this.ability = this.baseAbility;
-		this.abilityState = new EffectState({id: this.ability, target: this}, this.battle);
+		this.abilityState = this.battle.initEffectState({id: this.ability, target: this});
 
 		this.item = toID(set.item);
-		this.itemState = new EffectState({id: this.item, target: this}, this.battle);
+		this.itemState = this.battle.initEffectState({id: this.item, target: this});
 		this.lastItem = '';
 		this.usedItemThisTurn = false;
 		this.ateBerry = false;
@@ -1220,7 +1195,7 @@ export class Pokemon {
 			if (switchCause === 'shedtail' && i !== 'substitute') continue;
 			if (this.battle.dex.conditions.getByID(i as ID).noCopy) continue;
 			// shallow clones
-			this.volatiles[i] = new EffectState(pokemon.volatiles[i], this.battle);
+			this.volatiles[i] = this.battle.initEffectState({...pokemon.volatiles[i]});
 			if (this.volatiles[i].linkedPokemon) {
 				delete pokemon.volatiles[i].linkedPokemon;
 				delete pokemon.volatiles[i].linkedStatus;
@@ -1686,7 +1661,7 @@ export class Pokemon {
 		}
 
 		this.status = status.id;
-		this.statusState = new EffectState({id: status.id, target: this}, this.battle);
+		this.statusState = this.battle.initEffectState({id: status.id, target: this});
 		if (source) this.statusState.source = source;
 		if (status.duration) this.statusState.duration = status.duration;
 		if (status.durationCallback) {
@@ -1752,7 +1727,7 @@ export class Pokemon {
 
 			this.lastItem = this.item;
 			this.item = '';
-			this.itemState.clear();
+			this.battle.clearEffectState(this.itemState);
 			this.usedItemThisTurn = true;
 			this.ateBerry = true;
 			this.battle.runEvent('AfterUseItem', this, null, null, item);
@@ -1789,7 +1764,7 @@ export class Pokemon {
 
 			this.lastItem = this.item;
 			this.item = '';
-			this.itemState.clear();
+			this.battle.clearEffectState(this.itemState);
 			this.usedItemThisTurn = true;
 			this.battle.runEvent('AfterUseItem', this, null, null, item);
 			return true;
@@ -1809,7 +1784,7 @@ export class Pokemon {
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
 			this.item = '';
 			const oldItemState = this.itemState;
-			this.itemState.clear();
+			this.battle.clearEffectState(this.itemState);
 			this.pendingStaleness = undefined;
 			this.battle.singleEvent('End', item, oldItemState, this);
 			this.battle.runEvent('AfterTakeItem', this, null, null, item);
@@ -1834,7 +1809,7 @@ export class Pokemon {
 		const oldItem = this.getItem();
 		const oldItemState = this.itemState;
 		this.item = item.id;
-		this.itemState = new EffectState({id: item.id, target: this}, this.battle);
+		this.itemState = this.battle.initEffectState({id: item.id, target: this});
 		if (oldItem.exists) this.battle.singleEvent('End', oldItem, oldItemState, this);
 		if (item.id) {
 			this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
@@ -1876,7 +1851,7 @@ export class Pokemon {
 				this.battle.dex.moves.get(this.battle.effect.id));
 		}
 		this.ability = ability.id;
-		this.abilityState = new EffectState({id: ability.id, target: this}, this.battle);
+		this.abilityState = this.battle.initEffectState({id: ability.id, target: this});
 		if (ability.id && this.battle.gen > 3 &&
 			(!isTransform || oldAbility !== ability.id || this.battle.gen <= 4)) {
 			this.battle.singleEvent('Start', ability, this.abilityState, this, source);
@@ -1935,7 +1910,7 @@ export class Pokemon {
 			this.battle.debug('add volatile [' + status.id + '] interrupted');
 			return result;
 		}
-		this.volatiles[status.id] = new EffectState({id: status.id, name: status.name, target: this}, this.battle);
+		this.volatiles[status.id] = this.battle.initEffectState({id: status.id, name: status.name, target: this});
 		if (source) {
 			this.volatiles[status.id].source = source;
 			this.volatiles[status.id].sourceSlot = source.getSlot();

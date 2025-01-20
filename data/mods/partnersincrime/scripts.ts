@@ -1,5 +1,4 @@
 import {Utils} from '../../../lib';
-import {EffectState} from '../../../sim/pokemon';
 
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
@@ -240,7 +239,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.battle.dex.moves.get(this.battle.effect.id));
 			}
 			this.ability = ability.id;
-			this.abilityState = new EffectState({id: ability.id, target: this}, this.battle);
+			this.abilityState = this.battle.initEffectState({id: ability.id, target: this});
 			if (ability.id && this.battle.gen > 3) {
 				this.battle.singleEvent('Start', ability, this.abilityState, this, source);
 				if (ally && ally.ability !== this.ability) {

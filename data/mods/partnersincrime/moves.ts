@@ -1,5 +1,3 @@
-import {EffectState} from '../../../sim/pokemon';
-
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	gastroacid: {
 		inherit: true,
@@ -153,7 +151,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 
 			source.ability = targetAbility.id;
-			source.abilityState = new EffectState({id: this.toID(source.ability), target: source}, this);
+			source.abilityState = this.initEffectState({id: this.toID(source.ability), target: source});
 			if (source.m.innate && source.m.innate.endsWith(targetAbility.id)) {
 				source.removeVolatile(source.m.innate);
 				delete source.m.innate;
@@ -168,7 +166,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 
 			target.ability = sourceAbility.id;
-			target.abilityState = new EffectState({id: this.toID(target.ability), target: target}, this);
+			target.abilityState = this.initEffectState({id: this.toID(target.ability), target: target});
 			if (target.m.innate && target.m.innate.endsWith(sourceAbility.id)) {
 				target.removeVolatile(target.m.innate);
 				delete target.m.innate;

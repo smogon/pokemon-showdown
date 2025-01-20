@@ -217,7 +217,7 @@ export class Battle {
 			options.forceRandomChance : null;
 		this.deserialized = !!options.deserialized;
 		this.strictChoices = !!options.strictChoices;
-		this.formatData = new EffectState({id: format.id}, this);
+		this.formatData = this.initEffectState({id: format.id});
 		this.gameType = (format.gameType || 'singles');
 		this.field = new Field(this);
 		this.sides = Array(format.playerCount).fill(null) as any;
@@ -247,7 +247,7 @@ export class Battle {
 		this.ended = false;
 
 		this.effect = {id: ''} as Effect;
-		this.effectState = new EffectState({id: ''}, this);
+		this.effectState = this.initEffectState({id: ''});
 
 		this.event = {id: ''};
 		this.events = null;
@@ -592,7 +592,7 @@ export class Battle {
 		const parentEvent = this.event;
 
 		this.effect = effect;
-		this.effectState = state as EffectState || new EffectState({}, this);
+		this.effectState = state as EffectState || this.initEffectState({});
 		this.event = {id: eventid, target, source, effect: sourceEffect};
 		this.eventDepth++;
 
@@ -745,7 +745,7 @@ export class Battle {
 			if (callback !== undefined) {
 				if (Array.isArray(target)) throw new Error("");
 				handlers.unshift(this.resolvePriority({
-					effect: sourceEffect, callback, state: new EffectState({}, this), end: null, effectHolder: target,
+					effect: sourceEffect, callback, state: this.initEffectState({}), end: null, effectHolder: target,
 				}, `on${eventid}`));
 			}
 		}
@@ -858,7 +858,7 @@ export class Battle {
 				const parentEffect = this.effect;
 				const parentEffectState = this.effectState;
 				this.effect = handler.effect;
-				this.effectState = handler.state || new EffectState({}, this);
+				this.effectState = handler.state || this.initEffectState({});
 				this.effectState.target = effectHolder;
 
 				returnVal = handler.callback.apply(this, args);
@@ -3223,6 +3223,31 @@ export class Battle {
 	 */
 	getOverflowedTurnCount(): number {
 		return this.gen >= 8 ? (this.turn - 1) % 256 : this.turn - 1;
+	}
+
+	initEffectState(obj: Partial<EffectState>, effectOrder?: number): EffectState {
+		if (!obj.id) obj.id = '';
+		if (effectOrder !== undefined) {
+			obj.effectOrder = effectOrder;
+		} else if (obj.id && obj.target && (!(obj.target instanceof Pokemon) || obj.target.isActive)) {
+			obj.effectOrder = this.effectOrder++;
+		} else {
+			obj.effectOrder = 0;
+		}
+		return obj as EffectState;
+	}
+
+	clearEffectState(state: EffectState) {
+		state.id = '';
+		for (const k in state) {
+			if (k === 'id' || k === 'target') {
+				continue;
+			} else if (k === 'effectOrder') {
+				state.effectOrder = 0;
+			} else {
+				delete state[k];
+			}
+		}
 	}
 
 	destroy() {
