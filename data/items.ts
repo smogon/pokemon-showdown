@@ -619,13 +619,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onWeatherChange(pokemon) {
 			if (pokemon.transformed) return;
-			if (pokemon.hasAbility('protosynthesis') && !this.field.isWeather('sunnyday') && pokemon.useItem()) {
+			if (!pokemon.volatiles['protosynthesis'] && pokemon.hasAbility('protosynthesis') &&
+				!this.field.isWeather('sunnyday') && pokemon.useItem()) {
 				pokemon.addVolatile('protosynthesis');
 			}
 		},
 		onTerrainChange(pokemon) {
 			if (pokemon.transformed) return;
-			if (pokemon.hasAbility('quarkdrive') && !this.field.isTerrain('electricterrain') && pokemon.useItem()) {
+			if (!pokemon.volatiles['quarkdrive'] && pokemon.hasAbility('quarkdrive') &&
+				!this.field.isTerrain('electricterrain') && pokemon.useItem()) {
 				pokemon.addVolatile('quarkdrive');
 			}
 		},
@@ -634,10 +636,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (!this.effectState.started || pokemon.transformed) return;
 			if (this.queue.peek(true)?.choice === 'runSwitch') return;
 
-			if (pokemon.hasAbility('protosynthesis') && !this.field.isWeather('sunnyday') && pokemon.useItem()) {
+			if (!pokemon.volatiles['protosynthesis'] && pokemon.hasAbility('protosynthesis') &&
+				!this.field.isWeather('sunnyday') && pokemon.useItem()) {
 				pokemon.addVolatile('protosynthesis');
 			}
-			if (pokemon.hasAbility('quarkdrive') && !this.field.isTerrain('electricterrain') && pokemon.useItem()) {
+			if (!pokemon.volatiles['quarkdrive'] && pokemon.hasAbility('quarkdrive') &&
+				!this.field.isTerrain('electricterrain') && pokemon.useItem()) {
 				pokemon.addVolatile('quarkdrive');
 			}
 		},
