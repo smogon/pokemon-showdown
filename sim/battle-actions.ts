@@ -169,48 +169,21 @@ export class BattleActions {
 		return true;
 	}
 	runSwitch(pokemon: Pokemon) {
-		const battle = this.battle;
-		if (battle.gen >= 5) {
-			const switchersIn = [pokemon];
-			for (let a = battle.queue.peek(); a?.choice === 'runSwitch'; a = battle.queue.peek()) {
-				const nextSwitch = battle.queue.shift();
-				switchersIn.push(nextSwitch!.pokemon!);
-			}
-			const allActive = battle.getAllActive(true);
-			battle.speedSort(allActive);
-			battle.speedOrder = allActive.map((a) => a.side.n * battle.sides.length + a.position);
-			battle.fieldEvent('SwitchIn', switchersIn);
+		const switchersIn = [pokemon];
+		while (this.battle.queue.peek()?.choice === 'runSwitch') {
+			const nextSwitch = this.battle.queue.shift();
+			switchersIn.push(nextSwitch!.pokemon!);
+		}
+		const allActive = this.battle.getAllActive(true);
+		this.battle.speedSort(allActive);
+		this.battle.speedOrder = allActive.map((a) => a.side.n * this.battle.sides.length + a.position);
+		this.battle.fieldEvent('SwitchIn', switchersIn);
 
-			for (const poke of switchersIn) {
-				if (!poke.hp) continue;
-				poke.isStarted = true;
-				poke.draggedIn = null;
-			}
-			return true;
+		for (const poke of switchersIn) {
+			if (!poke.hp) continue;
+			poke.isStarted = true;
+			poke.draggedIn = null;
 		}
-		battle.runEvent('EntryHazard', pokemon);
-
-		battle.runEvent('SwitchIn', pokemon);
-
-		if (battle.gen <= 2) {
-			// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
-			for (const poke of battle.getAllActive()) poke.lastMove = null;
-			if (!pokemon.side.faintedThisTurn && pokemon.draggedIn !== battle.turn) {
-				battle.runEvent('AfterSwitchInSelf', pokemon);
-			}
-		}
-		if (!pokemon.hp) return false;
-		pokemon.isStarted = true;
-		if (!pokemon.fainted) {
-			battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
-			battle.singleEvent('Start', pokemon.getItem(), pokemon.itemState, pokemon);
-		}
-		if (battle.gen === 4) {
-			for (const foeActive of pokemon.foes()) {
-				foeActive.removeVolatile('substitutebroken');
-			}
-		}
-		pokemon.draggedIn = null;
 		return true;
 	}
 
