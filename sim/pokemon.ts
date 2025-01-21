@@ -839,7 +839,7 @@ export class Pokemon {
 	}
 
 	ignoringItem() {
-		return !!(
+		return !this.getItem().isPrimalOrb && !!(
 			this.itemState.knockedOff || // Gen 3-4
 			(this.battle.gen >= 5 && !this.isActive) ||
 			(!this.getItem().ignoreKlutz && this.hasAbility('klutz')) ||

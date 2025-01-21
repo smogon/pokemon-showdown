@@ -24,7 +24,6 @@ import {State} from './state';
 import {BattleQueue, Action} from './battle-queue';
 import {BattleActions} from './battle-actions';
 import {Utils} from '../lib/utils';
-import {ItemData} from './dex-items';
 declare const __version: any;
 
 export type ChannelID = 0 | 1 | 2 | 3 | 4;
@@ -567,7 +566,6 @@ export class Battle {
 			return relayVar;
 		}
 		if (eventid !== 'Start' && eventid !== 'TakeItem' && effect.effectType === 'Item' &&
-			!(eventid === 'SwitchIn' && (effect as ItemData).onSwitchInPriority === -1) && // <- questionable hack
 			(target instanceof Pokemon) && target.ignoringItem()) {
 			this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 			return relayVar;
