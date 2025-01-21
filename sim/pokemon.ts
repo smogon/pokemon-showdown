@@ -1333,7 +1333,7 @@ export class Pokemon {
 	/**
 	 * Changes this Pokemon's species to the given speciesId (or species).
 	 * This function only handles changes to stats and type.
-	 * Use formChange to handle changes to ability and sending client messages.
+	 * Use formeChange to handle changes to ability and sending client messages.
 	 */
 	setSpecies(rawSpecies: Species, source: Effect | null = this.battle.effect, isTransform = false) {
 		const species = this.battle.runEvent('ModifySpecies', this, null, source, rawSpecies);
