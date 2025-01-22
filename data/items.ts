@@ -617,33 +617,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart() {
 			this.effectState.started = true;
 		},
-		onWeatherChange(pokemon) {
-			if (pokemon.transformed) return;
-			if (!pokemon.volatiles['protosynthesis'] && pokemon.hasAbility('protosynthesis') &&
-				!this.field.isWeather('sunnyday') && pokemon.useItem()) {
-				pokemon.addVolatile('protosynthesis');
-			}
-		},
-		onTerrainChange(pokemon) {
-			if (pokemon.transformed) return;
-			if (!pokemon.volatiles['quarkdrive'] && pokemon.hasAbility('quarkdrive') &&
-				!this.field.isTerrain('electricterrain') && pokemon.useItem()) {
-				pokemon.addVolatile('quarkdrive');
-			}
-		},
-		onUpdate(pokemon) {
-			// don't trigger before hazards
-			if (!this.effectState.started || pokemon.transformed) return;
-			if (this.queue.peek(true)?.choice === 'runSwitch') return;
-
-			if (!pokemon.volatiles['protosynthesis'] && pokemon.hasAbility('protosynthesis') &&
-				!this.field.isWeather('sunnyday') && pokemon.useItem()) {
-				pokemon.addVolatile('protosynthesis');
-			}
-			if (!pokemon.volatiles['quarkdrive'] && pokemon.hasAbility('quarkdrive') &&
-				!this.field.isTerrain('electricterrain') && pokemon.useItem()) {
-				pokemon.addVolatile('quarkdrive');
-			}
+		onUse(pokemon) {
+			pokemon.addVolatile(pokemon.ability);
 		},
 		onTakeItem(item, source) {
 			if (source.baseSpecies.tags.includes("Paradox")) return false;
