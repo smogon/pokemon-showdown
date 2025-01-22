@@ -947,7 +947,7 @@ export class Battle {
 					handler.subOrder = 5;
 				}
 			} else if (handler.effect.effectType === 'Ability') {
-				if (handler.effect.name === 'Poison Touch' || handler.effect.name === 'Perish Body') {
+				if (['Perish Body', 'Poison Touch'].includes(handler.effect.name)) {
 					handler.subOrder = 6;
 				} else if (handler.effect.name === 'Stall') {
 					handler.subOrder = 9;
