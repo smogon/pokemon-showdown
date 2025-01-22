@@ -30,13 +30,13 @@ describe('Magician', function () {
 		assert.false.holdsItem(battle.p1.active[0], 'Klefki should not have stolen Weakness Policy.');
 	});
 
-	it(`should not steal Throat Spray on the turn it activates`, function () {
+	it(`should not steal an item on the turn Throat Spray activates`, function () {
 		battle = common.createBattle([[
 			{species: 'klefki', ability: 'magician', item: 'throatspray', moves: ['psychicnoise']},
 		], [
 			{species: 'hatterene', item: 'tr69', moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices();
-		assert.false.holdsItem(battle.p1.active[0], 'Klefki should not have stolen Throat Spray.');
+		assert.false.holdsItem(battle.p1.active[0], 'Klefki should not have stolen an item.');
 	});
 });
