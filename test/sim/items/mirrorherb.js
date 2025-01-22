@@ -39,11 +39,12 @@ describe("Mirror Herb", () => {
 			{species: 'Primeape', ability: 'Defiant', item: 'Weakness Policy', moves: ['sleeptalk', 'haze']},
 			{species: 'Annihilape', ability: 'Defiant', item: 'Weakness Policy', moves: ['sleeptalk', 'howl']},
 		]]);
-		assert.statStage(battle.p1.active[0], 'atk', 4, `Mirror Herb should have copied both Defiant boosts but only boosted atk by ${battle.p1.active[0].boosts.atk}`);
+		const electrode = battle.p1.active[0];
+		assert.statStage(electrode, 'atk', 4, `Mirror Herb should have copied both Defiant boosts but only boosted atk by ${electrode.boosts.atk}`);
 		battle.makeChoices('auto', 'move haze, move howl');
-		assert.statStage(battle.p1.active[0], 'atk', 2, `Mirror Herb should have copied both Howl boosts but only boosted atk by ${battle.p1.active[0].boosts.atk}`);
+		assert.statStage(electrode, 'atk', 2, `Mirror Herb should have copied both Howl boosts but only boosted atk by ${electrode.boosts.atk}`);
 		battle.makeChoices('move recycle, move air cutter', 'auto');
-		assert.statStage(battle.p1.active[0], 'spa', 4, `Mirror Herb should have copied all Weakness Policy boosts but only boosted spa by ${battle.p1.active[0].boosts.spa}`);
+		assert.statStage(electrode, 'spa', 4, `Mirror Herb should have copied all Weakness Policy boosts but only boosted spa by ${electrode.boosts.spa}`);
 	});
 
 	it("should wait for most entrance abilities before copying all their (opposing) boosts", () => {

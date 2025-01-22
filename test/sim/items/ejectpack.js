@@ -128,7 +128,7 @@ describe(`Eject Pack`, function () {
 		assert.species(battle.p2.active[1], 'Wynaut');
 	});
 
-	it(`should not trigger until after all entrance abilities have resolved during simultaneous switches`, function () {
+	it(`should not prevent entrance Abilities from resolving during simultaneous switches`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Hydreigon', ability: 'intimidate', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},

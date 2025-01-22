@@ -76,6 +76,5 @@ describe("White Herb", function () {
 		const flittle = battle.p2.active[0];
 		assert.false.holdsItem(flittle);
 		assert.statStage(flittle, 'atk', 1);
-		common.saveReplay(battle);
 	});
 });
