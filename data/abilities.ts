@@ -598,16 +598,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	commander: {
 		onAnySwitchInPriority: -2,
 		onAnySwitchIn() {
-			this.effectState.started = true;
 			((this.effect as any).onUpdate as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onStart(pokemon) {
-			this.effectState.started = true;
 			((this.effect as any).onUpdate as (p: Pokemon) => void).call(this, pokemon);
 		},
 		onUpdate(pokemon) {
+			if (this.gameType !== 'doubles') return;
+			// don't run between when a Pokemon switches in and the resulting onSwitchIn event
+			if (this.queue.peek()?.choice === 'runSwitch') return;
+
 			const ally = pokemon.allies()[0];
-			if (this.gameType !== 'doubles' || !this.effectState.started) return;
 			if (pokemon.switchFlag || ally?.switchFlag) return;
 			if (!ally || pokemon.baseSpecies.baseSpecies !== 'Tatsugiri' || ally.baseSpecies.baseSpecies !== 'Dondozo') {
 				// Handle any edge cases

@@ -269,6 +269,6 @@ describe('Commander', function () {
 		battle.makeChoices();
 		const tatsugiri = battle.p2.pokemon[0];
 
-		assert(tatsugiri.status, 'psn');
+		assert.equal(tatsugiri.status, 'psn');
 	});
 });
