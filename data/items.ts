@@ -7330,7 +7330,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Poison",
 		},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
@@ -7396,7 +7396,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Psychic",
 		},
-		onResidualOrder: 5,
+		onResidualOrder: 10,
 		onResidual(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
