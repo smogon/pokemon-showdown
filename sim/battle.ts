@@ -926,7 +926,7 @@ export class Battle {
 				Format: 5,
 				Rule: 5,
 				Ruleset: 5,
-				// Poison Touch: 6,
+				// Poison Touch: 6, (also includes Perish Body)
 				Ability: 7,
 				Item: 8,
 				// Stall: 9,
@@ -946,7 +946,7 @@ export class Battle {
 					handler.subOrder = 5;
 				}
 			} else if (handler.effect.effectType === 'Ability') {
-				if (handler.effect.name === 'Poison Touch') {
+				if (handler.effect.name === 'Poison Touch' || handler.effect.name === 'Perish Body') {
 					handler.subOrder = 6;
 				} else if (handler.effect.name === 'Stall') {
 					handler.subOrder = 9;
