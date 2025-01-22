@@ -4867,7 +4867,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 309,
 	},
 	terashell: {
-		// effectiveness implemented in pokemon.ts
+		// effectiveness implemented in sim/pokemon.ts:Pokemon#runEffectiveness
 		onAnyAfterMove() {
 			this.effectState.resisted = false;
 		},
