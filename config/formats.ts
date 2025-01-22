@@ -733,7 +733,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				if (!pokemon.m.abils.includes(effect)) pokemon.m.abils.push(effect);
 			}
 		},
-		onSwitchInPriority: 2,
+		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
 			let format = this.format;
 			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
@@ -1568,7 +1568,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				}
 			}
 		},
-		onSwitchInPriority: 2,
+		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
 			if (pokemon.m.innates) {
 				for (const innate of pokemon.m.innates) {
@@ -1772,7 +1772,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				if (!pokemon.m.items.includes(effect)) pokemon.m.items.push(effect);
 			}
 		},
-		onSwitchInPriority: 2,
+		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
 			let format = this.format;
 			if (!format.getSharedItems) format = this.dex.formats.get('gen9sharingiscaring');
@@ -2590,7 +2590,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				if (!pokemon.m.abils.includes(effect)) pokemon.m.abils.push(effect);
 			}
 		},
-		onSwitchInPriority: 2,
+		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
 			let format = this.format;
 			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');

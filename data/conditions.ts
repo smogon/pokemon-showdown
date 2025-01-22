@@ -423,7 +423,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.effectState.sourceEffect = sourceEffect;
 			this.add('-activate', source, 'healreplacement');
 		},
-		onSwitchInPriority: 1,
 		onSwitchIn(target) {
 			if (!target.fainted) {
 				target.heal(target.maxhp);
