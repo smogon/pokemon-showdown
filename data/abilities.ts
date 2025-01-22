@@ -2216,6 +2216,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 51,
 	},
 	klutz: {
+		// Klutz isn't technically active immediatlely in-game, but it activates early enough to beat all items
+		// we should keep an eye out in future gens for items that activate on switch-in before Unnerve
+		onSwitchInPriority: 1,
 		// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
 		onStart(pokemon) {
 			this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
