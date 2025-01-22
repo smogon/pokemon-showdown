@@ -675,12 +675,12 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hp > pokemon.maxhp / 4 && pokemon.species.id !== 'zygarde') {
 				if (pokemon.abilityState.transformed50) return;
 				this.add('-activate', pokemon, 'ability: Cell Deconstruct');
-				pokemon.formeChange('Zygarde');
+				changeSet(this, pokemon, ssbSets['Varnava-50'], true);
 				pokemon.abilityState.transformed50 = true;
 			} else if (pokemon.hp <= pokemon.maxhp / 4 && pokemon.species.id !== 'zygarde10') {
 				if (pokemon.abilityState.transformed10) return;
 				this.add('-activate', pokemon, 'ability: Cell Deconstruct');
-				pokemon.formeChange('Zygarde-10%');
+				changeSet(this, pokemon, ssbSets['Varnava-25'], true);
 				pokemon.abilityState.transformed10 = true;
 			}
 		},
