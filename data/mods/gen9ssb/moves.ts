@@ -166,6 +166,9 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 				this.hint(`Error: No item selected on the backend for Item Box.\nContact the developer if you see this.`);
 				return null;
 			}
+			// If you use your imagination, it's like he's punching an item block like Mario!
+			this.add('-anim', source, 'Sky Uppercut', source);
+
 			switch (source.abilityState.itemBox) {
 				case 'megamushroom':
 					this.add(`raw|<b>Mega Mushroom!</b>`);
