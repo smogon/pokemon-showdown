@@ -3890,7 +3890,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: 178,
 		name: "Xatu",
 		types: ["Psychic", "Flying"],
-		baseStats: {hp: 65, atk: 75, def: 70, spa: 95, spd: 70, spe: 95},
+		baseStats: {hp: 65, atk: 55, def: 75, spa: 115, spd: 75, spe: 105},
 		abilities: {0: "Synchronize", 1: "Early Bird", H: "Magic Bounce"},
 		heightm: 1.5,
 		weightkg: 15,
