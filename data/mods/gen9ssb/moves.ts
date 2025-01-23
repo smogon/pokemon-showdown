@@ -243,6 +243,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					this.add(`raw|<b>Spiny Shell!</b>`);
 					this.add('-anim', source, 'Wish', source);
 					target.side.addSideCondition('spinyshell');
+					target.side.sideConditions['spinyshell'].effectSource = source;
 					this.add('-message', `The Spiny Shell disappeared into the sky!`);
 					return this.NOT_FAIL;
 					break;
