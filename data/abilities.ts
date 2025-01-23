@@ -479,7 +479,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Fire') {
-				this.debug('Sharpness boost');
+				this.debug('Blaze boost');
 				return this.chainModify(1.2);
 			}
 		},
@@ -1929,7 +1929,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Water') {
-				this.debug('Sharpness boost');
+				this.debug('Ice Body boost');
 				return this.chainModify(1.1);
 			}
 		},
@@ -2386,7 +2386,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Poison') {
-				this.debug('Sharpness boost');
+				this.debug('Liquid Ooze boost');
 				return this.chainModify(1.1);
 			}
 		},
@@ -3083,7 +3083,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Grass') {
-				this.debug('Sharpness boost');
+				this.debug('Overgrow boost');
 				return this.chainModify(1.2);
 			}
 		},
@@ -3182,7 +3182,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Psychic') {
-				this.debug('Sharpness boost');
+				this.debug('Pastel Veil boost');
 				return this.chainModify(1.1);
 			}
 		},
@@ -4644,7 +4644,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Poison') {
-				this.debug('Sharpness boost');
+				this.debug('Stench boost');
 				return this.chainModify(1.1);
 			}
 		},
@@ -4808,7 +4808,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Bug') {
-				this.debug('Sharpness boost');
+				this.debug('Swarm boost');
 				return this.chainModify(1.2);
 			}
 		},
@@ -5118,7 +5118,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Water') {
-				this.debug('Sharpness boost');
+				this.debug('Torrent boost');
 				return this.chainModify(1.2);
 			}
 		},
@@ -5839,7 +5839,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Dark') {
-				this.debug('Sharpness boost');
+				this.debug('Malicia boost');
 				return this.chainModify(1.2);
 			}
 		},
@@ -5895,7 +5895,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.type === 'Electric') {
-				this.debug('Sharpness boost');
+				this.debug('Vatios boost');
 				return this.chainModify(1.2);
 			}
 		},
@@ -5995,7 +5995,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	inteligenciaartificial: {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
-				this.debug('Sharpness boost');
+				this.debug('Inteligencia Artificial boost');
 				return this.chainModify(1.4);
 		},
 		onSourceModifyAccuracyPriority: -1,
@@ -6132,5 +6132,46 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Ultimo Golpe",
 		rating: 2,
 		num: -121,
+	},
+	vampirismo: {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['bite']) {
+				this.debug('Vampirismo boost');
+				return this.chainModify(1.2);
+			}
+		},
+		onModifyMove(move) {
+			move.drain = [1, 2];
+		},
+		flags: {},
+		name: "Vampirismo",
+		rating: 3.5,
+		num: -122,
+	},
+	cabellogalvanico: {
+		onSourceDamagingHit(damage, target, source, move) {
+			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
+			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
+			if (move.category === 'Special') {
+				const r = this.random(100);
+				if (r < 20) {
+					target.trySetStatus('par', source);
+				}
+			}
+		},
+		flags: {},
+		name: "Cabello Galvanico",
+		rating: 2,
+		num: -123,
+	},
+	jovial: {
+		onDamagingHit(damage, target, source, effect) {
+			this.boost({spa: 1});
+		},
+		flags: {},
+		name: "Jovial",
+		rating: 1,
+		num: 83,
 	},
 };
