@@ -3433,10 +3433,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onModifyMove(move, pokemon, target) {
-			if(this.gameType === 'doubles'){
-				move.accuracy *= 0.5;
+			if(this.gameType === 'doubles' && move.accuracy !== true){
+				return move.accuracy *= 0.5;
 			}
 		},
+
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Dark",

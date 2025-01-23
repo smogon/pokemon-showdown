@@ -6036,6 +6036,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	inteligenciaavanzada: {
 		onModifyMove(move, pokemon, target) {
+			if(target){
 			if (target.getStat('spd', false, true) > target.getStat('def', false, true) && move.category === "Special"){
 				move.overrideDefensiveStat = 'def';
 				move.basePower *= 0.8;
@@ -6043,6 +6044,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				move.overrideDefensiveStat = 'spd';
 				move.basePower *= 0.8;
 			}
+		}
 		},
 		flags: {},
 		name: "Inteligencia Avanzada",
