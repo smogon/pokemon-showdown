@@ -5148,9 +5148,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onModifyCritRatio(critRatio) {
-			return critRatio + 1;
-		},
 		onModifyMove(move, pokemon, target) {
 			 if (move.critRatio >= 2){
 				return move.willCrit = true
