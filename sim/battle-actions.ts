@@ -176,7 +176,7 @@ export class BattleActions {
 		}
 		const allActive = this.battle.getAllActive(true);
 		this.battle.speedSort(allActive);
-		this.battle.speedOrder = allActive.map((a) => a.side.n * this.battle.sides.length + a.position);
+		this.battle.speedOrder = allActive.map((a) => a.side.n * a.battle.sides.length + a.position);
 		this.battle.fieldEvent('SwitchIn', switchersIn);
 
 		for (const poke of switchersIn) {
