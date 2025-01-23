@@ -1,6 +1,7 @@
 import { ssbSets } from "./random-teams";
+import { rbSets } from "../../random-battles/gen9/sets.json";
 import { PSEUDO_WEATHERS, changeSet, getName } from "./scripts";
-import { Teams } from '../../../sim/teams';
+import { Teams } from "../../../sim/teams";
 
 export const Moves: { [k: string]: ModdedMoveData } = {
 	/*
@@ -794,7 +795,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			for (const pulledPokemon of pullPool) {
 				pokemon.formeChange(pulledPokemon);
 			}
-			this.add('-message', `${highRoll} Star Pull!`);
+			this.add('-message', `${highRoll}-Star Pull!`);
 			this.add('-message', `${pokemon.name} transformed into ${pokemon.species.name}!`);
 		},
 		secondary: null,
