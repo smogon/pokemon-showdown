@@ -1,5 +1,5 @@
 import { ssbSets } from "./random-teams";
-import { rbSets } from "../../random-battles/gen9/sets.json";
+import { rbSets } from "../../random-battles/gen9/sets";
 import { PSEUDO_WEATHERS, changeSet, getName } from "./scripts";
 import { Teams } from "../../../sim/teams";
 
