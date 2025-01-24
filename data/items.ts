@@ -617,6 +617,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart() {
 			this.effectState.started = true;
 		},
+		onUseItem(item, pokemon) {
+			return ['protosynthesis', 'quarkdrive'].includes(pokemon.ability);
+		},
 		onUse(pokemon) {
 			pokemon.addVolatile(pokemon.ability);
 		},
