@@ -101,8 +101,8 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly boosts?: SparseBoostsTable | false;
 
 	declare readonly onEat?: ((this: Battle, pokemon: Pokemon) => void) | false;
-	declare readonly onPrimal?: (this: Battle, pokemon: Pokemon) => void;
 	declare readonly onUse?: ((this: Battle, pokemon: Pokemon) => void) | false;
+	declare readonly onPrimal?: (this: Battle, pokemon: Pokemon) => void;
 	declare readonly onStart?: (this: Battle, target: Pokemon) => void;
 	declare readonly onEnd?: (this: Battle, target: Pokemon) => void;
 
