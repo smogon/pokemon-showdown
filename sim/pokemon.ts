@@ -2105,12 +2105,27 @@ export class Pokemon {
 	}
 
 	runEffectiveness(move: ActiveMove) {
-		if (this.terastallized && move.type === 'Stellar') return 1;
 		let totalTypeMod = 0;
-		for (const type of this.getTypes()) {
-			let typeMod = this.battle.dex.getEffectiveness(move, type);
-			typeMod = this.battle.singleEvent('Effectiveness', move, null, this, type, move, typeMod);
-			totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
+		if (this.terastallized && move.type === 'Stellar') {
+			totalTypeMod = 1;
+		} else {
+			for (const type of this.getTypes()) {
+				let typeMod = this.battle.dex.getEffectiveness(move, type);
+				typeMod = this.battle.singleEvent('Effectiveness', move, null, this, type, move, typeMod);
+				totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
+			}
+		}
+		if (this.species.name === 'Terapagos-Terastal' && this.hasAbility('Tera Shell') &&
+			!this.battle.suppressingAbility(this)) {
+			if (this.abilityState.resisted) return -1; // all hits of multi-hit move should be not very effective
+			if (move.category === 'Status' || move.id === 'struggle' || !this.runImmunity(move.type) ||
+				totalTypeMod < 0 || this.hp < this.maxhp) {
+				return totalTypeMod;
+			}
+
+			this.battle.add('-activate', this, 'ability: Tera Shell');
+			this.abilityState.resisted = true;
+			return -1;
 		}
 		return totalTypeMod;
 	}
