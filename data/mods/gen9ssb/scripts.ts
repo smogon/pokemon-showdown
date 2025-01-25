@@ -89,8 +89,7 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 		pokemon.teraType = newSet.teraType === 'Any' ? context.sample(allTypes) :
 			Array.isArray(newSet.teraType) ? context.sample(newSet.teraType) : newSet.teraType;
 	}
-	const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-		(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+	const details = pokemon.getUpdatedDetails();
 	if (oldShiny !== pokemon.set.shiny || oldGender !== pokemon.gender) context.add('replace', pokemon, details);
 	if (changeAbility) pokemon.setAbility(newSet.ability as string, undefined, true);
 
@@ -386,8 +385,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const species = pokemon.setSpecies(rawSpecies);
 				if (!species) continue;
 				pokemon.baseSpecies = rawSpecies;
-				pokemon.details = species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				pokemon.details = pokemon.getUpdatedDetails();
 				// pokemon.setAbility(species.abilities['0'], null, true);
 				// pokemon.baseAbility = pokemon.ability;
 
@@ -916,9 +914,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			this.battle.runEvent('BeforeSwitchIn', pokemon);
 			if (sourceEffect) {
-				this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails, '[from] ' + sourceEffect);
+				this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, '[from] ' + sourceEffect);
 			} else {
-				this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getDetails);
+				this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 			}
 			pokemon.abilityOrder = this.battle.abilityOrder++;
 			if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;

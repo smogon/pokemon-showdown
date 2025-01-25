@@ -2022,8 +2022,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.illusion) {
 				this.debug('illusion cleared');
 				pokemon.illusion = null;
-				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				const details = pokemon.getUpdatedDetails();
 				this.add('replace', pokemon, details);
 				this.add('-end', pokemon, 'Illusion');
 				if (this.ruleTable.has('illusionlevelmod')) {
@@ -4867,6 +4866,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.species.forme !== 'Terastal') {
 				this.add('-activate', pokemon, 'ability: Tera Shift');
 				pokemon.formeChange('Terapagos-Terastal', this.effect, true);
+				pokemon.regressionForme = false;
 				pokemon.baseMaxhp = Math.floor(Math.floor(
 					2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
 				) * pokemon.level / 100 + 10);
@@ -5547,6 +5547,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
 			if (pokemon.species.forme !== 'Hero') {
 				pokemon.formeChange('Palafin-Hero', this.effect, true);
+				pokemon.regressionForme = false;
 			}
 		},
 		onSwitchIn() {

@@ -81,6 +81,16 @@ assert.fullHP = function (pokemon, message) {
 	});
 };
 
+assert.hasAbility = function (pokemon, ability, message) {
+	const actual = pokemon.ability;
+	const expected = toID(ability);
+	if (actual === expected) return;
+	throw new AssertionError({
+		message: message || `Expected ${pokemon} ability to be ${expected}, not ${actual}.`,
+		stackStartFunction: assert.hasAbility,
+	});
+};
+
 assert.holdsItem = function (pokemon, message) {
 	if (pokemon.item) return;
 	throw new AssertionError({
