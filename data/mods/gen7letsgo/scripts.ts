@@ -20,6 +20,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 	},
 	actions: {
+		inherit: true,
 		canMegaEvo(pokemon) {
 			return checkMegaForme(pokemon.baseSpecies, 'Mega', this.battle);
 		},
