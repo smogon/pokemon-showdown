@@ -248,7 +248,8 @@ export class BattleQueue {
 				if (typeof action.pokemon.switchFlag === 'string') {
 					action.sourceEffect = this.battle.dex.moves.get(action.pokemon.switchFlag as ID) as any;
 				}
-				action.pokemon.switchFlag = false;
+				if (this.battle.turn !== action.pokemon.lastTurnEjected || !action.pokemon.item) action.pokemon.lastTurnEjected = null;
+				action.pokemon.switchFlag = null;
 			}
 		}
 
