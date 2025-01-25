@@ -195,7 +195,7 @@ export class RandomTeams {
 
 		this.factoryTier = '';
 		this.format = format;
-		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
+		this.prng = PRNG.get(prng);
 
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
@@ -252,7 +252,7 @@ export class RandomTeams {
 	}
 
 	setSeed(prng?: PRNG | PRNGSeed) {
-		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
+		this.prng = PRNG.get(prng);
 	}
 
 	getTeam(options?: PlayerOptions | null): PokemonSet[] {
@@ -279,7 +279,7 @@ export class RandomTeams {
 	}
 
 	random(m?: number, n?: number) {
-		return this.prng.next(m, n);
+		return this.prng.random(m, n);
 	}
 
 	/**
@@ -1632,7 +1632,7 @@ export class RandomTeams {
 	randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
-		const seed = this.prng.seed;
+		const seed = this.prng.getSeed();
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
@@ -2551,7 +2551,7 @@ export class RandomTeams {
 		for (const speciesName of pokemonPool) {
 			const sortObject = {
 				speciesName,
-				score: Math.pow(this.prng.next(), 1 / this.randomFactorySets[this.factoryTier][speciesName].weight),
+				score: Math.pow(this.prng.random(), 1 / this.randomFactorySets[this.factoryTier][speciesName].weight),
 			};
 			shuffledSpecies.push(sortObject);
 		}
@@ -2674,6 +2674,8 @@ export class RandomTeams {
 				if (teamData.resistances[type]) continue;
 				if (teamData.weaknesses[type] >= 3 * limitFactor) return this.randomFactoryTeam(side, ++depth);
 			}
+			// Try to force Stealth Rock on non-Uber teams
+			if (!teamData.has['stealthRock'] && this.factoryTier !== 'Uber') return this.randomFactoryTeam(side, ++depth);
 		}
 		return pokemon;
 	}
@@ -2847,7 +2849,7 @@ export class RandomTeams {
 		for (const speciesName of pokemonPool) {
 			const sortObject = {
 				speciesName,
-				score: Math.pow(this.prng.next(), 1 / this.randomBSSFactorySets[speciesName].weight),
+				score: Math.pow(this.prng.random(), 1 / this.randomBSSFactorySets[speciesName].weight),
 			};
 			shuffledSpecies.push(sortObject);
 		}

@@ -14,7 +14,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		// For more examples, see https://github.com/smogon/pokemon-showdown/blob/master/data/abilities.ts
 	},
 	*/
-	// Please keep abilites organized alphabetically based on staff member name!
+	// Please keep abilities organized alphabetically based on staff member name!
 	// Aelita
 	fortifiedmetal: {
 		shortDesc: "This Pokemon's weight is doubled and Attack is 1.5x when statused.",
@@ -797,7 +797,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamage(damage, target, source, effect) {
 			if (effect.id === 'recoil') {
 				let trueSource = source;
-				// For some reason, the source of the damage is the subsitute user when
+				// For some reason, the source of the damage is the substitute user when
 				// hitting a sub.
 				if (source !== target) trueSource = target;
 				if (!this.activeMove) throw new Error("Battle.activeMove is null");
@@ -1722,14 +1722,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender) {
-			if (!defender.activeTurns) {
+			if (defender && !defender.activeTurns) {
 				this.debug('Stakeout boost');
 				return this.chainModify(2);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender) {
-			if (!defender.activeTurns) {
+			if (defender && !defender.activeTurns) {
 				this.debug('Stakeout boost');
 				return this.chainModify(2);
 			}

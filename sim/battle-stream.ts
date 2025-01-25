@@ -136,10 +136,9 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 			this.battle!.inputLog.push(`>forcelose ${message}`);
 			break;
 		case 'reseed':
-			const seed = message ? message.split(',').map(Number) as PRNGSeed : null;
-			this.battle!.resetRNG(seed);
+			this.battle!.resetRNG(message as PRNGSeed);
 			// could go inside resetRNG, but this makes using it in `eval` slightly less buggy
-			this.battle!.inputLog.push(`>reseed ${this.battle!.prng.seed.join(',')}`);
+			this.battle!.inputLog.push(`>reseed ${this.battle!.prng.getSeed()}`);
 			break;
 		case 'tiebreak':
 			this.battle!.tiebreak();

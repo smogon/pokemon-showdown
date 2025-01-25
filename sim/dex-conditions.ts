@@ -1,4 +1,4 @@
-import {Utils} from '../lib';
+import {Utils} from '../lib/utils';
 import {assignMissingFields, BasicEffect, toID} from './dex-data';
 import type {SecondaryEffect, MoveEventMethods} from './dex-moves';
 

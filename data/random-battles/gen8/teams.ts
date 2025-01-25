@@ -138,7 +138,7 @@ export class RandomGen8Teams {
 
 		this.factoryTier = '';
 		this.format = format;
-		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
+		this.prng = PRNG.get(prng);
 
 		this.moveEnforcementCheckers = {
 			screens: (movePool, moves, abilities, types, counter, species, teamDetails) => {
@@ -243,7 +243,7 @@ export class RandomGen8Teams {
 	}
 
 	setSeed(prng?: PRNG | PRNGSeed) {
-		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
+		this.prng = PRNG.get(prng);
 	}
 
 	getTeam(options?: PlayerOptions | null): PokemonSet[] {
@@ -270,7 +270,7 @@ export class RandomGen8Teams {
 	}
 
 	random(m?: number, n?: number) {
-		return this.prng.next(m, n);
+		return this.prng.random(m, n);
 	}
 
 	/**
@@ -2479,7 +2479,7 @@ export class RandomGen8Teams {
 	randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
-		const seed = this.prng.seed;
+		const seed = this.prng.getSeed();
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
@@ -3112,7 +3112,7 @@ export class RandomGen8Teams {
 		for (const speciesName of pokemonPool) {
 			const sortObject = {
 				speciesName: speciesName,
-				score: Math.pow(this.prng.next(), 1 / this.randomBSSFactorySets[speciesName].usage),
+				score: Math.pow(this.prng.random(), 1 / this.randomBSSFactorySets[speciesName].usage),
 			};
 			shuffledSpecies.push(sortObject);
 		}

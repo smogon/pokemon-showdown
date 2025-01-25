@@ -10,7 +10,8 @@
     "preact-render-to-string": "^5.1.19",
     "probe-image-size": "^7.2.3",
     "sockjs": "^0.3.21",
-    "source-map-support": "^0.5.21"
+    "source-map-support": "^0.5.21",
+    "ts-chacha20": "^1.2.0"
   },
   "optionalDependencies": {
     "better-sqlite3": "^7.6.2",
@@ -72,6 +73,7 @@
     "@types/nodemailer": "^6.4.4",
     "@types/pg": "^8.6.5",
     "@types/sockjs": "^0.3.33",
+    "@types/sodium-native": "^2.3.9",
     "@typescript-eslint/eslint-plugin": "^5.8.0",
     "@typescript-eslint/parser": "^5.8.0",
     "eslint": "8.5.0",
