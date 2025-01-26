@@ -246,20 +246,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Homerun Swing - Windup',
 		evs: { hp: 252, atk: 252, spd: 4 }, ivs: { spa: 0 }, nature: 'Adamant',
 	},
-	/*
-	Vaulted for being fucking stupid!
 	Quetzalcoatl: {
-		species: 'Zapdos', ability: 'Peal of Thunder', item: 'Expert Belt', gender: 'N',
-		moves: ['Secret Sword', 'Earth Power', 'Oblivion Wing'],
+		species: 'Zapdos', ability: 'Peal of Thunder', item: 'Leftovers', gender: 'N',
+		moves: ['Oblivion Wing', 'Whirlwind', 'Glare'],
 		signatureMove: 'Big Thunder',
-		evs: {def: 4, spa: 252, spe: 252}, ivs: {atk: 0}, nature: 'Timid', shiny: true,
+		evs: {hp: 252, spa: 252, spe: 4}, ivs: {atk: 0}, nature: 'Modest',
 	},
-	Cinque: {
-		species: 'Marowak', ability: 'Cheerleader', item: 'Moogle Plushie', gender: 'F',
-		moves: ['Magnitude', 'Payback', 'Stone Edge'],
-		signatureMove: 'Homerun Swing - Windup',
-		evs: {hp: 252, atk: 252, spd: 4}, ivs: {spa: 0}, nature: 'Adamant',
-	},
+	/*
 	Miraju: {
 		species: 'Wynaut', ability: 'Illusive Energy', item: 'Eviolite', gender: 'N',
 		moves: ['Hyperspace Hole', 'Glare', 'Memento'],
