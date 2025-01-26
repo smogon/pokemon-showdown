@@ -1244,57 +1244,17 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 	},
 	// Quetzalcoatl
 	pealofthunder: {
-		desc: "This Pokemon heals 1/3 of its max HP and gets +1 SpAtk/Spe if hit by an Electric-type move; Electric-type immunity. Upon switching in, a random active or inactive Pokemon is damaged (40 BP, Electric-type, Special)",
-		shortDesc: "+1/3 HP/+1 SpA/Spe if hit by Electric; Hits random Pokemon on switch-in.",
-		onStart(pokemon) {
-			let allTargets = [];
-			const move = this.dex.getActiveMove('thundershock');
-			for (const target of this.getAllPokemon()) {
-				if (target.fainted || !target.hp || target.hp <= 1) continue;
-				allTargets.push(target);
-			}
-			if (!allTargets.length) return;
-			const target = this.sample(allTargets);
-			this.add('-activate', pokemon, 'Peal of Thunder');
-			this.add('-anim', pokemon, 'Thunder Shock', pokemon);
-			// @ts-ignore
-			let damage = this.actions.getDamage(pokemon, target, move);
-			if (!target.runImmunity(move.type) || !damage || target.side.sideConditions['jadeshield']) {
-				this.add('-immune', target);
-				return;
-			}
-			if (target.ability === 'pealofthunder' || target === pokemon) {
-				if (target.isActive) {
-					this.heal(newTarget.baseMaxhp / 3, newTarget);
-					this.add('-immune', target, '[from] ability: Peal of Thunder');
-					return;
-				} else {
-					target.hp += target.baseMaxhp / 3;
-					this.add('-immune', target, '[from] ability: Peal of Thunder');
-					return;
-				}
-			}
-			if (target.isActive) {
-				this.damage(damage, target, pokemon, '[from] Peal of Thunder');
-			} else {
-				this.add('-message', `currently executing block that contains this.runEvent('Damage')`);
-				if (damage >= target.hp) damage = target.hp - 1;
-				this.runEvent('Damage', target, pokemon, this.effect, damage, true);
-				//this.add('-damage', target, target.getHealth, '[from] Peal of Thunder');
-			}
-		},
+		desc: "This Pokemon summons Electric Terrain when hit by Electric moves; Electric immunity.",
 		onTryHit(target, source, move) {
 			if (move.type === 'Electric') {
-				if (!this.heal(target.baseMaxhp / 3)) {
-					this.add('-immune', target, '[from] ability: Peal of Thunder');
-				}
-				if (!this.boost({ spa: 1, spe: 1 })) {
-					this.add('-immune', target, '[from] ability: Peal of Thunder');
-				}
+				this.field.setTerrain('electricterrain');
+				this.add('-immune', target, '[from] ability: Peal of Thunder');
 				return null;
 			}
 		},
-		flags: { breakable: 1 },
+		onResidual(pokemon) {
+			const temp = this.dex.moves.get('thundershock');
+		},
 		name: "Peal of Thunder",
 		gen: 9,
 	},
