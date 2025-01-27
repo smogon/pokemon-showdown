@@ -2365,7 +2365,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			},
 			onEnd(pokemon) {
 				const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
-				if (pokemon.abilityState.orbHp) this.damage(pokemon.abilityState.orbHp, target, pokemon);
+				if (pokemon.abilityState.orbHp) this.damage(80, target, pokemon);
 				this.add('-end', pokemon, 'Orb Shield');
 				pokemon.abilityState.orbHp = 0;
 			},
