@@ -1262,30 +1262,37 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			const target = this.effectState.target;
 			const move = this.dex.moves.get('thundershock');
 			const activeMove = {
-				move: move.name,
-				id: move.id,
-				basePower: 20,
-				pp: move.pp,
-				maxpp: move.pp,
-				target: move.target,
-				disabled: false,
-				used: false,
+				move: move.name, id: move.id, basePower: 20, pp: move.pp, maxpp: move.pp,
+				target: move.target, disabled: false, used: false,
 			};
 			const damage = this.actions.getDamage(pokemon, target, activeMove);
-			if (!damage || damage <= 0) {
-				this.add('-immune', target);
-				return null;
-			} else if (target.ability === 'pealofthunder') {
+			// First run an ability check and damage check to ensure target does not have PoT and damage is present
+			if (target.ability === 'pealofthunder') {
 				this.field.setTerrain('electricterrain');
 				this.add('-immune', target);
+				return;
+			}
+			if (!damage || damage <= 0) {
+				this.add('-immune', target);
+				return;
+			}
+			// Both checks break from the function if true. If the checks are passed, proceed to damage
+			// First checking if target is active or inactive, so we can use the correct function for damage
+			// this.damage does NOT work on inactive Pokemon, HP must be manually lowered; See below.
+			if (target.isActive) {
+				this.damage(damage, target, pokemon);
 			} else {
-				if (target.isActive) {
-					this.damage(damage, target, pokemon);
-				} else {
-					target.hp -= damage;
-					if (target.hp < 0) target.hp = 0;
-					this.add('-damage', target, pokemon, '[from] ability: Peal of Thunder');
-				}
+				target.hp -= damage;
+				if (target.hp < 0) target.hp = 0;
+				this.add('-damage', target, target.getHealth, target.getAbility());
+			}
+			if (!pokemon.abilityState.static) pokemon.abilityState.static = 0;
+			if (this.field.terrain === 'electricterrain') {
+				pokemon.abilityState.static += 2;
+				this.add('-message', `${pokemon.name} received two static counters!`);
+			} else {
+				pokemon.abilityState.static++;
+				this.add('-message', `${pokemon.name} received a static counter!`);
 			}
 		},
 		name: "Peal of Thunder",
