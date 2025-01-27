@@ -585,7 +585,7 @@ export const ssbSets: SSBSets = {
 	},
 	Loethalion: {
 		species: 'Ralts', ability: 'Psychic Surge', item: 'Gardevoirite', gender: '',
-		moves: [['Esper Wing', 'Lumina Crash', 'Psychic Noise'], ['Agility', 'Calm Mind'], ['Draining Kiss', 'Matcha Gotcha']],
+		moves: ['Esper Wing', 'Calm Mind', 'Lunar Blessing'],
 		signatureMove: 'Darkmoon Cackle',
 		evs: {spa: 252, spd: 4, spe: 252}, nature: 'Timid', shiny: true,
 	},
@@ -618,12 +618,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Surging Strikes', 'Jet Punch', 'Close Combat'],
 		signatureMove: 'Good Vibes Only',
 		evs: {hp: 4, atk: 252, spe: 252}, nature: 'Adamant', teraType: 'Water', shiny: true,
-	},
-	maroon: {
-		species: 'Archaludon', ability: 'Built Different', item: 'Leftovers', gender: 'M',
-		moves: ['Body Press', 'Stealth Rock', 'Rapid Spin'],
-		signatureMove: 'Metal Blast',
-		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold', teraType: 'Flying',
 	},
 	Mathy: {
 		species: 'Furret', ability: 'Dynamic Typing', item: 'Big Root', gender: 'M',
@@ -805,6 +799,12 @@ export const ssbSets: SSBSets = {
 		moves: ['Hyper Voice', 'Psyshock', 'Focus Blast'],
 		signatureMove: 'Monke Magic',
 		evs: {hp: 252, def: 4, spa: 252}, ivs: {spe: 0}, nature: 'Quiet', teraType: 'Fighting',
+	},
+	'Rio Vidal': {
+		species: 'Archaludon', ability: 'Built Different', item: 'Leftovers', gender: 'M',
+		moves: ['Body Press', 'Stealth Rock', 'Rapid Spin'],
+		signatureMove: 'Metal Blast',
+		evs: {hp: 252, def: 252, spa: 4}, nature: 'Bold', teraType: 'Flying',
 	},
 	Rissoux: {
 		species: 'Arcanine-Hisui', ability: 'Hard Headed', item: 'Heavy-Duty Boots', gender: 'M',

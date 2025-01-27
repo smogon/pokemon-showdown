@@ -3617,44 +3617,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Fairy",
 	},
 
-	// maroon
-	metalblast: {
-		accuracy: 90,
-		basePower: 90,
-		category: "Physical",
-		shortDesc: "Sets G-Max Steelsurge on the foe's side.",
-		desc: "If this move is successful, it sets up G-Max Steelsurge on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Steel type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
-		name: "Metal Blast",
-		gen: 9,
-		pp: 10,
-		priority: 0,
-		flags: {protect: 1},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Steel Beam', target);
-			this.add('-anim', source, 'G-max Steelsurge', target);
-		},
-		onAfterHit(target, source, move) {
-			if (!move.hasSheerForce && source.hp) {
-				for (const side of source.side.foeSidesWithConditions()) {
-					side.addSideCondition('gmaxsteelsurge');
-				}
-			}
-		},
-		onAfterSubDamage(damage, target, source, move) {
-			if (!move.hasSheerForce && source.hp) {
-				for (const side of source.side.foeSidesWithConditions()) {
-					side.addSideCondition('gmaxsteelsurge');
-				}
-			}
-		},
-		secondary: {}, // Sheer Force-boosted
-		target: "normal",
-		type: "Steel",
-	},
-
 	// Mathy
 	breakingchange: {
 		accuracy: 100,
@@ -4741,6 +4703,44 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		target: "all",
 		type: "Psychic",
+	},
+
+	// Rio Vidal
+	metalblast: {
+		accuracy: 90,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "Sets G-Max Steelsurge on the foe's side.",
+		desc: "If this move is successful, it sets up G-Max Steelsurge on the opposing side of the field, damaging each opposing Pokemon that switches in. Foes lose 1/32, 1/16, 1/8, 1/4, or 1/2 of their maximum HP, rounded down, based on their weakness to the Steel type; 0.25x, 0.5x, neutral, 2x, or 4x, respectively. Can be removed from the opposing side if any opposing Pokemon uses Rapid Spin or Defog successfully, or is hit by Defog.",
+		name: "Metal Blast",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Steel Beam', target);
+			this.add('-anim', source, 'G-max Steelsurge', target);
+		},
+		onAfterHit(target, source, move) {
+			if (!move.hasSheerForce && source.hp) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('gmaxsteelsurge');
+				}
+			}
+		},
+		onAfterSubDamage(damage, target, source, move) {
+			if (!move.hasSheerForce && source.hp) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('gmaxsteelsurge');
+				}
+			}
+		},
+		secondary: {}, // Sheer Force-boosted
+		target: "normal",
+		type: "Steel",
 	},
 
 	// Rissoux
