@@ -171,6 +171,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					this.add(`raw|<b>Mega Mushroom!</b>`);
 					source.addVolatile('megamushroom');
 					move.basePower = 100;
+					break;
 				case 'triplemushroom':
 					this.add(`raw|<b>Triple Mushroom!</b>`);
 					move.basePower = 20;
@@ -181,6 +182,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					move.onHit = function (t, s, m) {
 						this.boost({ spe: 1 }, s);
 					};
+					break;
 				case 'tripleredshell':
 					this.add(`raw|<b>Triple Red Shell!</b>`);
 					move.basePower = 40;
@@ -191,6 +193,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					move.onHit = function (t, s, m) {
 						if (this.randomChance(1, 3)) this.boost({ spe: -1 }, t, s, m);
 					};
+					break;
 				case 'star':
 					this.add(`raw|<b>Star!</b>`);
 					this.actions.useMove('Star', source, target);
