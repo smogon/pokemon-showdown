@@ -26,12 +26,14 @@ export const Items: { [k: string]: ModdedItemData } = {
 		desc: "This Pokémon's damaging moves hit twice. The second hit is Fire-type and has its damage quartered.",
 		shortDesc: "Attacks hit twice; 2nd hit is Fire-type and has 1/4 damage.",
 		onModifyMove(move) {
-			if (!move.multihit && move.category !== 'Status' && !move.isZ) move.multihit = 2;
+			if (move.multihit || move.category === 'Status' ||
+				move.isZ || move.isMax || move.id === 'itembox') return;
+			move.multihit = 2;
 		},
 		onBasePower(basePower, user, target, move) {
 			if (move.hit > 1) {
 				move.type = 'Fire';
-				this.add('-anim', user, 'Incinerate', user);
+				this.add('-anim', user, 'Fire Lash', target);
 				return this.chainModify(0.25);
 			}
 		},
