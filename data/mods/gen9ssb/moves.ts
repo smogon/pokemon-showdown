@@ -2158,67 +2158,46 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 	// Quetzalcoatl
 	bigthunder: {
 		accuracy: true,
-		basePower: 20,
+		basePower: 50,
 		category: "Special",
-		desc: "Hits once for each healthy Pokemon in the battle, both allies and foes. Each hit hits a random active or inactive Pokemon on either side.",
-		shortDesc: "Hits a random active/inactive Pokemon with each hit.",
 		name: "Big Thunder",
 		pp: 5,
 		priority: 0,
-		flags: { protect: 1, mirror: 1 },
+		flags: {protect: 1, bypasssub: 1},
+		shortDesc: "Hits opposing Pokemon at end of each turn. Duration varies.",
+		desc: "Hits all opposing Pokemon at the end of each turn. Number of turns is determined by the number of static counters the user has upon use.",
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source, move) {
-			let allTargets = [];
-			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.fainted || !pokemon.hp || pokemon.hp <= 1) continue;
-				allTargets.push(pokemon);
-			}
-			if (!allTargets.length) return null;
-			move.multihit = allTargets.length;
-
 			this.add('-anim', source, 'Hurricane', source);
 			this.add('-anim', source, 'Thunder', target);
+			if (!source.abilityState.static) {
+				this.debug('insufficient charge for big thunder');
+				return false;
+			}
 		},
-		onTryHit(target, source, move) {
-			let smartTargets = [];
-			for (const pokemon of this.getAllPokemon()) {
-				if (pokemon.fainted || !pokemon.hp || pokemon.hp <= 1) continue;
-				smartTargets.push(pokemon);
-			}
-			let newTarget = this.sample(smartTargets);
-			this.add('-message', `newTarget: ${newTarget.name}`);
-			if (!newTarget.runImmunity('Electric')) {
-				this.add('-immune', newTarget);
-				return false;
-			}
-			if (newTarget.ability === 'pealofthunder') {
-				if (newTarget.hp === newTarget.maxhp) {
-					this.add('-immune', newTarget);
-					return false;
-				}
-				if (newTarget.isActive) {
-					this.heal(newTarget.maxhp / 3, newTarget, source, this.effect);
+		onHit(target, source, move) {
+			target.side.addSideCondition('bigthunder');
+			target.sideConditions['bigthunder'].duration = source.abilityState.static;
+			target.sideConditions['bigthunder'].source = source;
+			target.sideConditions['bigthunder'].move = move;
+			source.abilityState.static = null;
+		},
+		condition: {
+			onResidual(pokemon) {
+				this.add('-anim', pokemon, 'Thunder', pokemon);
+				const damage = this.actions.getDamage(this.effectState.source, pokemon, this.effectState.move);
+				if (!damage || pokemon.ability === 'pealofthunder') {
+					if (pokemon.ability === 'pealofthunder') this.field.setTerrain('electricterrain');
+					this.add('-immune', pokemon);
 				} else {
-					newTarget.hp += newTarget.maxhp / 3;
-					this.add('-heal', newTarget, newTarget.getHealth, this.effect);
+					this.damage(damage, pokemon, this.effectState.source, this.dex.moves.get('bigthunder'));
 				}
-				return false;
-			}
-			// @ts-ignore
-			let damage = this.actions.getDamage(source, newTarget, move);
-			if (!damage) return false;
-			// If all above checks are passed, execute damage and return as NOT_FAIL
-			if (newTarget.isActive) {
-				this.damage(damage, newTarget, source, this.effect);
-			} else {
-				if (damage >= newTarget.hp) damage = newTarget.hp - 1;
-				newTarget.hp -= damage;
-				this.add('-damage', newTarget, newTarget.getHealth);
-			}
-			this.add('-message', `DAMAGE SUCCESSFULLY DEALT TO: ${newTarget.name}`);
-			return this.NOT_FAIL;
+			},
+			onSideEnd() {
+				this.add('-message', `The thunderstorm petered out!`);
+			},
 		},
 		secondary: null,
 		target: "normal",
