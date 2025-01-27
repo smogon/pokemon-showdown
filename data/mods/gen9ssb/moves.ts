@@ -1399,7 +1399,6 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			}
 			if (success) this.add('-message', `${target.name} was assaulted with all active future moves!`);
 		},
-		selfSwitch: true,
 		secondary: null,
 		target: "self",
 		type: "Psychic",
