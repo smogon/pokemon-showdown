@@ -693,6 +693,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			if (pokemon.hp > pokemon.maxhp / 3) {
 				this.add('-activate', pokemon, 'Density Manipulation');
 				pokemon.addVolatile('substitute');
+				pokemon.volatiles['substitute'].hp = 1;
 				this.directDamage(pokemon.maxhp / 3, pokemon);
 			}
 		},
