@@ -164,7 +164,7 @@ export const ssbSets: SSBSets = {
 	},
 	'Sakuya Izayoi': {
 		species: 'Magearna', ability: 'The World', item: 'Stopwatch', gender: 'F',
-		moves: ['Volt Switch', 'Doom Desire', 'Fleur Cannon'],
+		moves: ['Dazzling Gleam', 'Doom Desire', 'Fleur Cannon'],
 		signatureMove: 'Killing Doll',
 		evs: { hp: 252, def: 4, spa: 252 }, ivs: { atk: 0, spe: 0 }, nature: 'Quiet',
 	},
