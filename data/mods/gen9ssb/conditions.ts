@@ -1382,11 +1382,11 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onStart(pokemon) {
 			const foe = enemyStaff(pokemon);
 			if (foe === 'WigglyTree') {
-				this.add(`c:|${getName('Loethalion')}|No, I'm not drawing Dialga on a bike again`);
+				this.add(`c:|${getName('Loethalion')}|No, I'm not drawing Dialga on a bike again.`);
 			} else if (foe === 'Swiffix') {
-				this.add(`c:|${getName('Loethalion')}|Oh hi Stinky`);
+				this.add(`c:|${getName('Loethalion')}|Oh hi Stinky.`);
 			} else if (foe === 'Mex') {
-				this.add(`c:|${getName('Loethalion')}|In spain without the A`);
+				this.add(`c:|${getName('Loethalion')}|I'm in Spain without the A.`);
 			} else if (foe === 'Billo') {
 				this.add(`c:|${getName('Loethalion')}|So your saying I can't ban myself?`);
 			} else if (foe === 'Clefable') {
@@ -1394,14 +1394,20 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			} else if (foe === 'Lunell') {
 				this.add(`c:|${getName('Loethalion')}|We bean posting?`);
 			} else if (foe === 'Ciran') {
-				this.add(`c:|${getName('Loethalion')}|So I have another great piplup drawing idea :>`);
+				this.add(`c:|${getName('Loethalion')}|THE FR*CK WORD STAYS BANNED.`);
+			} else if (foe === 'Appletun a la Mode') {
+				this.add(`c:|${getName('Loethalion')}|OOOUUGGHHHH OOOUUUWWAAAA.`);
+			} else if (foe === 'SexyMalasada') {
+				this.add(`c:|${getName('Loethalion')}|I forgot how to rng this mon again, what singular step did I miss?`);
 			} else {
-				this.add(`c:|${getName('Loethalion')}| ...from Zero`);
+				this.add(`c:|${getName('Loethalion')}|...from Zero`);
 			}
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (enemyStaff(source) === 'Swiffix') {
 				this.add(`c:|${getName('Loethalion')}|It's still pfp...`);
+			} else if (enemyStaff(source) === 'Appletun a la Mode') {
+				this.add(`c:|${getName('Loethalion')}|ᵒᵒᵘᵍʰʰ ᵒᵒᵘᵘʷᵃᵃ`);
 			}
 		},
 		onSwitchOut(pokemon) {
@@ -1520,21 +1526,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		},
 		onFaint() {
 			this.add(`c:|${getName('marillvibes ♫')}|The vibes are off... :(`);
-		},
-	},
-	maroon: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('maroon')}|It's not my fault you're, like, in love with me!`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('maroon')}|That's why her hair is so big. It's full of secrets.`);
-		},
-		onFoeSwitchOut() {
-			this.add(`c:|${getName('maroon')}|You wanna do something fun? You wanna go to Taco Bell?`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('maroon')}|Gretchen, I'm sorry I laughed at you that time you got diarrhea at Barnes & Noble. And I'm sorry for telling everyone about it. And I'm sorry for repeating it now.`);
 		},
 	},
 	mathy: {
@@ -2025,6 +2016,21 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		},
 		onFaint() {
 			this.add(`c:|${getName('ReturnToMonkey')}|Reject the humanity...if you dare...`);
+		},
+	},
+	riovidal: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Rio Vidal')}|It's not my fault you're, like, in love with me!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Rio Vidal')}|That's why her hair is so big. It's full of secrets.`);
+		},
+		onFoeSwitchOut() {
+			this.add(`c:|${getName('Rio Vidal')}|You wanna do something fun? You wanna go to Taco Bell?`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Rio Vidal')}|Gretchen, I'm sorry I laughed at you that time you got diarrhea at Barnes & Noble. And I'm sorry for telling everyone about it. And I'm sorry for repeating it now.`);
 		},
 	},
 	rissoux: {
