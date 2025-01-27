@@ -170,7 +170,7 @@ export const ssbSets: SSBSets = {
 	},
 	'Suika Ibuki': {
 		species: 'Ogerpon', ability: 'Density Manipulation', item: 'Ibuki Gourd', gender: 'F',
-		moves: ['U-turn', 'Switcheroo', 'Drain Punch'],
+		moves: ['Pursuit', 'Switcheroo', 'Drain Punch'],
 		signatureMove: 'Demi',
 		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly',
 	},
