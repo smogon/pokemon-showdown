@@ -1226,22 +1226,6 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			return damage / 5;
 		},
 	},
-	// Flufi
-	defenseoftheheart: {
-		name: "Defense of the Heart",
-		gen: 9,
-		shortDesc: "2x Defense; Uses Defense in damage calculation.",
-		desc: "This Pokemon's Defense is doubled. This Pokemon's attacks use its Defense stat in damage calculation instead of Attack or Special Attack.",
-		onModifyDefPriority: 26,
-		onModifyDef(def, pokemon) {
-			return this.chainModify(2);
-		},
-		onModifyMove(move, pokemon, target) {
-			if (move.category !== "Status") {
-				move.overrideOffensiveStat = 'def';
-			}
-		},
-	},
 	// Quetzalcoatl
 	pealofthunder: {
 		desc: "This Pokemon summons Electric Terrain when hit by Electric moves; Electric immunity.",
@@ -1253,19 +1237,24 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 		onResidual(pokemon) {
+			this.add('-activate', pokemon, 'Peal of Thunder');
+			this.effectState.runStatic = true;
+
 			let allTargets = [];
 			for (const target of this.getAllPokemon()) {
 				if (target.fainted || !target.hp) continue;
 				allTargets.push(target);
 			}
-			this.effectState.target = this.sample(allTargets);
-			const target = this.effectState.target;
+			const target = this.sample(allTargets);
+
 			const move = this.dex.moves.get('thundershock');
 			const activeMove = {
 				move: move.name, id: move.id, basePower: 20, pp: move.pp, maxpp: move.pp,
 				target: move.target, disabled: false, used: false,
 			};
 			const damage = this.actions.getDamage(pokemon, target, activeMove);
+			this.add('-anim', pokemon, 'Thunderbolt', target.side.active[0]);
+
 			// First run an ability check and damage check to ensure target does not have PoT and damage is present
 			if (target.ability === 'pealofthunder') {
 				this.field.setTerrain('electricterrain');
@@ -1286,13 +1275,19 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 				if (target.hp < 0) target.hp = 0;
 				this.add('-damage', target, target.getHealth, target.getAbility());
 			}
-			if (!pokemon.abilityState.static) pokemon.abilityState.static = 0;
-			if (this.field.terrain === 'electricterrain') {
-				pokemon.abilityState.static += 2;
-				this.add('-message', `${pokemon.name} received two static counters!`);
-			} else {
-				pokemon.abilityState.static++;
-				this.add('-message', `${pokemon.name} received a static counter!`);
+		},
+		onUpdate(pokemon) {
+			if (this.effectState.runStatic) {
+				this.effectState.runStatic = false;
+				this.add('-anim', pokemon, 'Charge', pokemon);
+				if (!pokemon.abilityState.static) pokemon.abilityState.static = 0;
+				if (this.field.terrain === 'electricterrain') {
+					pokemon.abilityState.static += 2;
+					this.add('-message', `${pokemon.name} received two static counters!`);
+				} else {
+					pokemon.abilityState.static++;
+					this.add('-message', `${pokemon.name} received a static counter!`);
+				}
 			}
 		},
 		name: "Peal of Thunder",
