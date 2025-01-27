@@ -822,7 +822,11 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		name: "The World",
 		gen: 9,
 		onSwitchIn(pokemon) {
-			if (!this.field.pseudoWeather.trickroom) this.field.addPseudoWeather('trickroom');
+			if (!this.field.pseudoWeather['trickroom']) {
+				this.field.addPseudoWeather('trickroom');
+			} else {
+				this.field.removePseudoWeather('trickroom');
+			}
 		},
 		onFoeTryMove(target, source, move) {
 			if (move.category === 'Status' || move.flags['futuremove']) return;
@@ -838,7 +842,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 					basePower: move.basePower,
 					category: move.category,
 					priority: move.priority,
-					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
+					flags: { allyanim: 1, metronome: 1, futuremove: 1, bypasssub: 1 },
 					ignoreImmunity: true,
 					effectType: 'Move',
 					type: move.type,
