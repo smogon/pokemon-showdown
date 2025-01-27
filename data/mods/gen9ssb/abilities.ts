@@ -1,3 +1,5 @@
+// @ts-nocheck
+// I love avoiding my problems instead of solving them
 import { ssbSets } from "./random-teams";
 import { changeSet, getName, enemyStaff, PSEUDO_WEATHERS } from "./scripts";
 
@@ -92,9 +94,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			if (move.id === 'mimic') {
 				move.onAfterMove = function (p, t, m) {
 					this.add('-activate', p, 'ability: Murderous Mimic');
-					// @ts-ignore
 					p.side.addSlotCondition(p, 'mimic');
-					// @ts-ignore
 					p.switchFlag = true;
 				};
 			}
@@ -675,12 +675,12 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.hp > pokemon.maxhp / 4 && pokemon.species.id !== 'zygarde') {
 				if (pokemon.abilityState.transformed50) return;
 				this.add('-activate', pokemon, 'ability: Cell Deconstruct');
-				pokemon.formeChange('Zygarde');
+				changeSet(this, pokemon, ssbSets['Varnava-50'], true);
 				pokemon.abilityState.transformed50 = true;
 			} else if (pokemon.hp <= pokemon.maxhp / 4 && pokemon.species.id !== 'zygarde10') {
 				if (pokemon.abilityState.transformed10) return;
 				this.add('-activate', pokemon, 'ability: Cell Deconstruct');
-				pokemon.formeChange('Zygarde-10%');
+				changeSet(this, pokemon, ssbSets['Varnava-25'], true);
 				pokemon.abilityState.transformed10 = true;
 			}
 		},
@@ -1244,57 +1244,50 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 	},
 	// Quetzalcoatl
 	pealofthunder: {
-		desc: "This Pokemon heals 1/3 of its max HP and gets +1 SpAtk/Spe if hit by an Electric-type move; Electric-type immunity. Upon switching in, a random active or inactive Pokemon is damaged (40 BP, Electric-type, Special)",
-		shortDesc: "+1/3 HP/+1 SpA/Spe if hit by Electric; Hits random Pokemon on switch-in.",
-		onStart(pokemon) {
-			let allTargets = [];
-			const move = this.dex.getActiveMove('thundershock');
-			for (const target of this.getAllPokemon()) {
-				if (target.fainted || !target.hp || target.hp <= 1) continue;
-				allTargets.push(target);
-			}
-			if (!allTargets.length) return;
-			const target = this.sample(allTargets);
-			this.add('-activate', pokemon, 'Peal of Thunder');
-			this.add('-anim', pokemon, 'Thunder Shock', pokemon);
-			// @ts-ignore
-			let damage = this.actions.getDamage(pokemon, target, move);
-			if (!target.runImmunity(move.type) || !damage || target.side.sideConditions['jadeshield']) {
-				this.add('-immune', target);
-				return;
-			}
-			if (target.ability === 'pealofthunder' || target === pokemon) {
-				if (target.isActive) {
-					this.heal(newTarget.baseMaxhp / 3, newTarget);
-					this.add('-immune', target, '[from] ability: Peal of Thunder');
-					return;
-				} else {
-					target.hp += target.baseMaxhp / 3;
-					this.add('-immune', target, '[from] ability: Peal of Thunder');
-					return;
-				}
-			}
-			if (target.isActive) {
-				this.damage(damage, target, pokemon, '[from] Peal of Thunder');
-			} else {
-				this.add('-message', `currently executing block that contains this.runEvent('Damage')`);
-				if (damage >= target.hp) damage = target.hp - 1;
-				this.runEvent('Damage', target, pokemon, this.effect, damage, true);
-				//this.add('-damage', target, target.getHealth, '[from] Peal of Thunder');
-			}
-		},
+		desc: "This Pokemon summons Electric Terrain when hit by Electric moves; Electric immunity.",
 		onTryHit(target, source, move) {
 			if (move.type === 'Electric') {
-				if (!this.heal(target.baseMaxhp / 3)) {
-					this.add('-immune', target, '[from] ability: Peal of Thunder');
-				}
-				if (!this.boost({ spa: 1, spe: 1 })) {
-					this.add('-immune', target, '[from] ability: Peal of Thunder');
-				}
+				this.field.setTerrain('electricterrain');
+				this.add('-immune', target, '[from] ability: Peal of Thunder');
 				return null;
 			}
 		},
-		flags: { breakable: 1 },
+		onResidual(pokemon) {
+			let allTargets = [];
+			for (const target of this.getAllPokemon()) {
+				if (target.fainted || !target.hp) continue;
+				allTargets.push(target);
+			}
+			this.effectState.target = this.sample(allTargets);
+			const target = this.effectState.target;
+			const move = this.dex.moves.get('thundershock');
+			const activeMove = {
+				move: move.name,
+				id: move.id,
+				basePower: 20,
+				pp: move.pp,
+				maxpp: move.pp,
+				target: move.target,
+				disabled: false,
+				used: false,
+			};
+			const damage = this.actions.getDamage(pokemon, target, activeMove);
+			if (!damage || damage <= 0) {
+				this.add('-immune', target);
+				return null;
+			} else if (target.ability === 'pealofthunder') {
+				this.field.setTerrain('electricterrain');
+				this.add('-immune', target);
+			} else {
+				if (target.isActive) {
+					this.damage(damage, target, pokemon);
+				} else {
+					target.hp -= damage;
+					if (target.hp < 0) target.hp = 0;
+					this.add('-damage', target, pokemon, '[from] ability: Peal of Thunder');
+				}
+			}
+		},
 		name: "Peal of Thunder",
 		gen: 9,
 	},

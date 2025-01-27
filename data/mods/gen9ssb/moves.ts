@@ -1,6 +1,7 @@
 import { ssbSets } from "./random-teams";
+import { rbSets } from "../../random-battles/gen9/sets";
 import { PSEUDO_WEATHERS, changeSet, getName } from "./scripts";
-import { Teams } from '../../../sim/teams';
+import { Teams } from "../../../sim/teams";
 
 export const Moves: { [k: string]: ModdedMoveData } = {
 	/*
@@ -166,6 +167,9 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 				this.hint(`Error: No item selected on the backend for Item Box.\nContact the developer if you see this.`);
 				return null;
 			}
+			// If you use your imagination, it's like he's punching an item block like Mario!
+			this.add('-anim', source, 'Sky Uppercut', source);
+
 			switch (source.abilityState.itemBox) {
 				case 'megamushroom':
 					this.add(`raw|<b>Mega Mushroom!</b>`);
@@ -243,6 +247,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					this.add(`raw|<b>Spiny Shell!</b>`);
 					this.add('-anim', source, 'Wish', source);
 					target.side.addSideCondition('spinyshell');
+					target.side.sideConditions['spinyshell'].effectSource = source;
 					this.add('-message', `The Spiny Shell disappeared into the sky!`);
 					return this.NOT_FAIL;
 					break;
@@ -793,7 +798,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			for (const pulledPokemon of pullPool) {
 				pokemon.formeChange(pulledPokemon);
 			}
-			this.add('-message', `${highRoll} Star Pull!`);
+			this.add('-message', `${highRoll}-Star Pull!`);
 			this.add('-message', `${pokemon.name} transformed into ${pokemon.species.name}!`);
 		},
 		secondary: null,

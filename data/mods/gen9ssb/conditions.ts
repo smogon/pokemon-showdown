@@ -137,8 +137,9 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 		effectType: 'Condition',
 		duration: 2,
 		onSideEnd(side) {
-			const pokemon = this.effectState.source;
-			const source = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			let target;
+			let highest = 0;
+			const source = this.effectState.effectSource;
 			const baseMove = this.dex.moves.get('itembox');
 			const itemBox = {
 				move: baseMove.name,
@@ -150,8 +151,6 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 				disabled: false,
 				used: false,
 			};
-			let highest = 0;
-			let target;
 			for (const pokemon of side.pokemon) {
 				if (pokemon.hp > highest) {
 					highest = pokemon.hp;
