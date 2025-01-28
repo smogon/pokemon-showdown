@@ -613,11 +613,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onSwitchInPriority: -2,
-		onStart(pokemon) {
-			this.effectState.started = true;
-			((this.effect as any).onUpdate as (p: Pokemon) => void).call(this, pokemon);
-		},
 		onUseItem(item, pokemon) {
 			return ['protosynthesis', 'quarkdrive'].includes(pokemon.ability);
 		},

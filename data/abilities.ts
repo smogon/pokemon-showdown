@@ -3433,29 +3433,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
-			this.effectState.started = true;
 		},
 		onWeatherChange(pokemon) {
 			// Protosynthesis is not affected by Utility Umbrella
 			if (this.field.isWeather('sunnyday')) {
 				pokemon.addVolatile('protosynthesis');
-			} else if (!pokemon.volatiles['protosynthesis'] && pokemon.hasItem('boosterenergy') && this.effectState.started) {
+			} else if (!pokemon.volatiles['protosynthesis'] && pokemon.hasItem('boosterenergy')) {
 				pokemon.useItem();
 			} else if (!pokemon.volatiles['protosynthesis']?.fromBooster) {
 				pokemon.removeVolatile('protosynthesis');
 			}
 		},
 		onUpdate(pokemon) {
-			// don't trigger before hazards
-			if (this.queue.peek(true)?.choice === 'runSwitch') return;
+			// don't run between when a Pokemon switches in and the resulting onSwitchIn event
+			if (this.queue.peek()?.choice === 'runSwitch') return;
 
-			if (!pokemon.volatiles['protosynthesis'] && !this.field.isWeather('sunnyday') && pokemon.hasItem('boosterenergy') &&
-				pokemon.itemState.started) {
+			if (!pokemon.volatiles['protosynthesis'] && !this.field.isWeather('sunnyday') && pokemon.hasItem('boosterenergy')) {
 				pokemon.useItem();
 			}
 		},
 		onEnd(pokemon) {
-			delete this.effectState.started;
 			delete pokemon.volatiles['protosynthesis'];
 			this.add('-end', pokemon, 'Protosynthesis', '[silent]');
 		},
@@ -3583,28 +3580,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			this.singleEvent('TerrainChange', this.effect, this.effectState, pokemon);
-			this.effectState.started = true;
 		},
 		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('electricterrain')) {
 				pokemon.addVolatile('quarkdrive');
-			} else if (!pokemon.volatiles['quarkdrive'] && pokemon.hasItem('boosterenergy') && this.effectState.started) {
+			} else if (!pokemon.volatiles['quarkdrive'] && pokemon.hasItem('boosterenergy')) {
 				pokemon.useItem();
 			} else if (!pokemon.volatiles['quarkdrive']?.fromBooster) {
 				pokemon.removeVolatile('quarkdrive');
 			}
 		},
 		onUpdate(pokemon) {
-			// don't trigger before hazards
-			if (this.queue.peek(true)?.choice === 'runSwitch') return;
+			// don't run between when a Pokemon switches in and the resulting onSwitchIn event
+			if (this.queue.peek()?.choice === 'runSwitch') return;
 
-			if (!pokemon.volatiles['quarkdrive'] && !this.field.isTerrain('electricterrain') && pokemon.hasItem('boosterenergy') &&
-				pokemon.itemState.started) {
+			if (!pokemon.volatiles['quarkdrive'] && !this.field.isTerrain('electricterrain') && pokemon.hasItem('boosterenergy')) {
 				pokemon.useItem();
 			}
 		},
 		onEnd(pokemon) {
-			delete this.effectState.started;
 			delete pokemon.volatiles['quarkdrive'];
 			this.add('-end', pokemon, 'Quark Drive', '[silent]');
 		},
