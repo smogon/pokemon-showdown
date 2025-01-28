@@ -5,6 +5,7 @@
  */
 
 import {PostgresDatabase, FS, Utils} from '../../lib';
+import * as crypto from 'crypto';
 
 /** Maximum amount of teams a user can have stored at once. */
 const MAX_TEAMS = 200;
@@ -261,7 +262,7 @@ export const TeamsHandler = new class {
 	}
 	generatePassword(len = 20) {
 		let pw = '';
-		for (let i = 0; i < len; i++) pw += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
+		for (let i = 0; i < len; i++) pw += ALPHABET[crypto.randomInt(0, ALPHABET.length - 1)];
 		return pw;
 	}
 	updateViews(teamid: string) {

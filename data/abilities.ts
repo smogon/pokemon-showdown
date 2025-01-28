@@ -89,15 +89,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	airlock: {
 		onSwitchIn(pokemon) {
-			this.effectState.switchingIn = true;
+			// Air Lock does not activate when Skill Swapped or when Neutralizing Gas leaves the field
+			this.add('-ability', pokemon, 'Air Lock');
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
 		},
 		onStart(pokemon) {
-			// Air Lock does not activate when Skill Swapped or when Neutralizing Gas leaves the field
 			pokemon.abilityState.ending = false; // Clear the ending flag
-			if (this.effectState.switchingIn) {
-				this.add('-ability', pokemon, 'Air Lock');
-				this.effectState.switchingIn = false;
-			}
 			this.eachEvent('WeatherChange', this.effect);
 		},
 		onEnd(pokemon) {
@@ -255,11 +252,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 165,
 	},
 	asoneglastrier: {
-		onPreStart(pokemon) {
-			this.add('-ability', pokemon, 'As One');
-			this.add('-ability', pokemon, 'Unnerve');
-			this.effectState.unnerved = true;
-		},
+		onSwitchInPriority: 1,
 		onStart(pokemon) {
 			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'As One');
@@ -283,11 +276,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 266,
 	},
 	asonespectrier: {
-		onPreStart(pokemon) {
-			this.add('-ability', pokemon, 'As One');
-			this.add('-ability', pokemon, 'Unnerve');
-			this.effectState.unnerved = true;
-		},
+		onSwitchInPriority: 1,
 		onStart(pokemon) {
 			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'As One');
@@ -547,15 +536,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	cloudnine: {
 		onSwitchIn(pokemon) {
-			this.effectState.switchingIn = true;
+			// Cloud Nine does not activate when Skill Swapped or when Neutralizing Gas leaves the field
+			this.add('-ability', pokemon, 'Cloud Nine');
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
 		},
 		onStart(pokemon) {
-			// Cloud Nine does not activate when Skill Swapped or when Neutralizing Gas leaves the field
 			pokemon.abilityState.ending = false; // Clear the ending flag
-			if (this.effectState.switchingIn) {
-				this.add('-ability', pokemon, 'Cloud Nine');
-				this.effectState.switchingIn = false;
-			}
 			this.eachEvent('WeatherChange', this.effect);
 		},
 		onEnd(pokemon) {
@@ -610,9 +596,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 213,
 	},
 	commander: {
+		onAnySwitchInPriority: -2,
+		onAnySwitchIn() {
+			((this.effect as any).onUpdate as (p: Pokemon) => void).call(this, this.effectState.target);
+		},
+		onStart(pokemon) {
+			((this.effect as any).onUpdate as (p: Pokemon) => void).call(this, pokemon);
+		},
 		onUpdate(pokemon) {
 			if (this.gameType !== 'doubles') return;
+			// don't run between when a Pokemon switches in and the resulting onSwitchIn event
+			if (this.queue.peek()?.choice === 'runSwitch') return;
+
 			const ally = pokemon.allies()[0];
+			if (pokemon.switchFlag || ally?.switchFlag) return;
 			if (!ally || pokemon.baseSpecies.baseSpecies !== 'Tatsugiri' || ally.baseSpecies.baseSpecies !== 'Dondozo') {
 				// Handle any edge cases
 				if (pokemon.getVolatile('commanding')) pokemon.removeVolatile('commanding');
@@ -693,6 +690,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 212,
 	},
 	costar: {
+		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			const ally = pokemon.allies()[0];
 			if (!ally) return;
@@ -1055,10 +1053,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	drizzle: {
 		onStart(source) {
-			for (const action of this.queue) {
-				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'kyogre') return;
-				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
-			}
+			if (source.species.id === 'kyogre' && source.item === 'blueorb') return;
 			this.field.setWeather('raindance');
 		},
 		flags: {},
@@ -1068,10 +1063,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	drought: {
 		onStart(source) {
-			for (const action of this.queue) {
-				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'groudon') return;
-				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
-			}
+			if (source.species.id === 'groudon' && source.item === 'redorb') return;
 			this.field.setWeather('sunnyday');
 		},
 		flags: {},
@@ -1329,6 +1321,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 18,
 	},
 	flowergift: {
+		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 		},
@@ -1416,6 +1409,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 218,
 	},
 	forecast: {
+		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 		},
@@ -1819,6 +1813,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 118,
 	},
 	hospitality: {
+		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			for (const ally of pokemon.adjacentAllies()) {
 				this.heal(ally.baseMaxhp / 4, ally, pokemon);
@@ -1913,6 +1908,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 115,
 	},
 	iceface: {
+		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			if (this.field.isWeather(['hail', 'snow']) && pokemon.species.id === 'eiscuenoice') {
 				this.add('-activate', pokemon, 'ability: Ice Face');
@@ -2022,8 +2018,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.illusion) {
 				this.debug('illusion cleared');
 				pokemon.illusion = null;
-				const details = pokemon.species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				const details = pokemon.getUpdatedDetails();
 				this.add('replace', pokemon, details);
 				this.add('-end', pokemon, 'Illusion');
 				if (this.ruleTable.has('illusionlevelmod')) {
@@ -2060,19 +2055,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	imposter: {
 		onSwitchIn(pokemon) {
-			this.effectState.switchingIn = true;
-		},
-		onStart(pokemon) {
 			// Imposter does not activate when Skill Swapped or when Neutralizing Gas leaves the field
-			if (!this.effectState.switchingIn) return;
-			// copies across in doubles/triples
+			// Imposter copies across in doubles/triples
 			// (also copies across in multibattle and diagonally in free-for-all,
 			// but side.foe already takes care of those)
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (target) {
 				pokemon.transformInto(target, this.dex.abilities.get('imposter'));
 			}
-			this.effectState.switchingIn = false;
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1},
 		name: "Imposter",
@@ -2226,6 +2216,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 51,
 	},
 	klutz: {
+		// Klutz isn't technically active immediately in-game, but it activates early enough to beat all items
+		// we should keep an eye out in future gens for items that activate on switch-in before Unnerve
+		onSwitchInPriority: 1,
 		// Item suppression implemented in Pokemon.ignoringItem() within sim/pokemon.js
 		onStart(pokemon) {
 			this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
@@ -2512,6 +2505,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 196,
 	},
 	mimicry: {
+		onSwitchInPriority: -1,
 		onStart(pokemon) {
 			this.singleEvent('TerrainChange', this.effect, this.effectState, pokemon);
 		},
@@ -2839,7 +2833,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	neutralizinggas: {
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
-		onPreStart(pokemon) {
+		onSwitchInPriority: 2,
+		onSwitchIn(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
 			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
@@ -2975,16 +2970,34 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	opportunist: {
 		onFoeAfterBoost(boost, target, source, effect) {
 			if (effect?.name === 'Opportunist' || effect?.name === 'Mirror Herb') return;
-			const pokemon = this.effectState.target;
-			const positiveBoosts: Partial<BoostsTable> = {};
+			if (!this.effectState.boosts) this.effectState.boosts = {} as SparseBoostsTable;
+			const boostPlus = this.effectState.boosts;
 			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! > 0) {
-					positiveBoosts[i] = boost[i];
+					boostPlus[i] = (boostPlus[i] || 0) + boost[i];
 				}
 			}
-			if (Object.keys(positiveBoosts).length < 1) return;
-			this.boost(positiveBoosts, pokemon);
+		},
+		onAnySwitchInPriority: -3,
+		onAnySwitchIn() {
+			if (!this.effectState.boosts) return;
+			this.boost(this.effectState.boosts, this.effectState.target);
+			delete this.effectState.boosts;
+		},
+		onAnyAfterMove() {
+			if (!this.effectState.boosts) return;
+			this.boost(this.effectState.boosts, this.effectState.target);
+			delete this.effectState.boosts;
+		},
+		onResidualOrder: 29,
+		onResidual(pokemon) {
+			if (!this.effectState.boosts) return;
+			this.boost(this.effectState.boosts, this.effectState.target);
+			delete this.effectState.boosts;
+		},
+		onEnd() {
+			delete this.effectState.boosts;
 		},
 		flags: {},
 		name: "Opportunist",
@@ -3107,11 +3120,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.cureStatus();
 			}
 		},
-		onAllySwitchIn(pokemon) {
-			if (['psn', 'tox'].includes(pokemon.status)) {
-				this.add('-activate', this.effectState.target, 'ability: Pastel Veil');
-				pokemon.cureStatus();
-			}
+		onAnySwitchIn() {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onSetStatus(status, target, source, effect) {
 			if (!['psn', 'tox'].includes(status.id)) return;
@@ -3420,6 +3430,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 168,
 	},
 	protosynthesis: {
+		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 			this.effectState.started = true;
@@ -3569,6 +3580,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 272,
 	},
 	quarkdrive: {
+		onSwitchInPriority: -2,
 		onStart(pokemon) {
 			this.singleEvent('TerrainChange', this.effect, this.effectState, pokemon);
 			this.effectState.started = true;
@@ -3977,6 +3989,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 157,
 	},
 	schooling: {
+		onSwitchInPriority: -1,
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Wishiwashi' || pokemon.level < 20 || pokemon.transformed) return;
 			if (pokemon.hp > pokemon.maxhp / 4) {
@@ -4171,6 +4184,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 19,
 	},
 	shieldsdown: {
+		onSwitchInPriority: -1,
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Minior' || pokemon.transformed) return;
 			if (pokemon.hp > pokemon.maxhp / 2) {
@@ -4258,7 +4272,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			},
 			onResidual(pokemon) {
 				if (!pokemon.activeTurns) {
-					this.effectState.duration += 1;
+					this.effectState.duration! += 1;
 				}
 			},
 			onModifyAtkPriority: 5,
@@ -4878,17 +4892,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 309,
 	},
 	terashell: {
-		onEffectiveness(typeMod, target, type, move) {
-			if (!target || target.species.name !== 'Terapagos-Terastal') return;
-			if (this.effectState.resisted) return -1; // all hits of multi-hit move should be not very effective
-			if (move.category === 'Status' || move.id === 'struggle') return;
-			if (!target.runImmunity(move.type)) return; // immunity has priority
-			if (target.hp < target.maxhp) return;
-
-			this.add('-activate', target, 'ability: Tera Shell');
-			this.effectState.resisted = true;
-			return -1;
-		},
+		// effectiveness implemented in sim/pokemon.ts:Pokemon#runEffectiveness
 		onAnyAfterMove() {
 			this.effectState.resisted = false;
 		},
@@ -4898,11 +4902,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 308,
 	},
 	terashift: {
-		onPreStart(pokemon) {
+		onSwitchInPriority: 2,
+		onSwitchIn(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Terapagos') return;
 			if (pokemon.species.forme !== 'Terastal') {
 				this.add('-activate', pokemon, 'ability: Tera Shift');
 				pokemon.formeChange('Terapagos-Terastal', this.effect, true);
+				pokemon.regressionForme = false;
 				pokemon.baseMaxhp = Math.floor(Math.floor(
 					2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
 				) * pokemon.level / 100 + 10);
@@ -5059,19 +5065,23 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	trace: {
 		onStart(pokemon) {
+			this.effectState.seek = true;
 			// n.b. only affects Hackmons
 			// interaction with No Ability is complicated: https://www.smogon.com/forums/threads/pokemon-sun-moon-battle-mechanics-research.3586701/page-76#post-7790209
 			if (pokemon.adjacentFoes().some(foeActive => foeActive.ability === 'noability')) {
-				this.effectState.gaveUp = true;
+				this.effectState.seek = false;
 			}
 			// interaction with Ability Shield is similar to No Ability
 			if (pokemon.hasItem('Ability Shield')) {
 				this.add('-block', pokemon, 'item: Ability Shield');
-				this.effectState.gaveUp = true;
+				this.effectState.seek = false;
+			}
+			if (this.effectState.seek) {
+				this.singleEvent('Update', this.effect, this.effectState, pokemon);
 			}
 		},
 		onUpdate(pokemon) {
-			if (!pokemon.isStarted || this.effectState.gaveUp) return;
+			if (!this.effectState.seek) return;
 
 			const possibleTargets = pokemon.adjacentFoes().filter(
 				target => !target.getAbility().flags['notrace'] && target.ability !== 'noability'
@@ -5196,10 +5206,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 84,
 	},
 	unnerve: {
-		onPreStart(pokemon) {
-			this.add('-ability', pokemon, 'Unnerve');
-			this.effectState.unnerved = true;
-		},
+		onSwitchInPriority: 1,
 		onStart(pokemon) {
 			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'Unnerve');
@@ -5583,14 +5590,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
 			if (pokemon.species.forme !== 'Hero') {
 				pokemon.formeChange('Palafin-Hero', this.effect, true);
+				pokemon.regressionForme = false;
 			}
 		},
-		onSwitchIn() {
-			this.effectState.switchingIn = true;
-		},
-		onStart(pokemon) {
-			if (!this.effectState.switchingIn) return;
-			this.effectState.switchingIn = false;
+		onSwitchIn(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
 			if (!this.effectState.heroMessageDisplayed && pokemon.species.forme === 'Hero') {
 				this.add('-activate', pokemon, 'ability: Zero to Hero');
