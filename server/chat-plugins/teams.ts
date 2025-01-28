@@ -262,7 +262,7 @@ export const TeamsHandler = new class {
 	}
 	generatePassword(len = 20) {
 		let pw = '';
-		for (let i = 0; i < len; i++) pw += ALPHABET[crypto.randomInt(0, ALPHABET.length)];
+		for (let i = 0; i < len; i++) pw += ALPHABET[crypto.randomInt(0, ALPHABET.length - 1)];
 		return pw;
 	}
 	updateViews(teamid: string) {
