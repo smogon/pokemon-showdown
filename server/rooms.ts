@@ -840,7 +840,7 @@ export abstract class BasicRoom {
 				// This is the same password generation approach as genPassword in the client replays.lib.php
 				// but obviously will not match given mt_rand there uses a different RNG and seed.
 				let password = '';
-				for (let i = 0; i < 31; i++) password += ALPHABET[crypto.randomInt(0, ALPHABET.length)];
+				for (let i = 0; i < 31; i++) password += ALPHABET[crypto.randomInt(0, ALPHABET.length - 1)];
 
 				this.rename(this.title, `${this.roomid}-${password}pw` as RoomID, true);
 			} else {
