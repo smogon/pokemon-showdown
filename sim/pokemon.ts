@@ -132,6 +132,9 @@ export class Pokemon {
 	faintQueued: boolean;
 	subFainted: boolean | null;
 
+	/** If this Pokemon should revert to its set species when it faints */
+	regressionForme: boolean;
+
 	types: string[];
 	addedType: string;
 	knownType: boolean;
@@ -351,10 +354,7 @@ export class Pokemon {
 		}
 
 		this.position = 0;
-		let displayedSpeciesName = this.species.name;
-		if (displayedSpeciesName === 'Greninja-Bond') displayedSpeciesName = 'Greninja';
-		this.details = displayedSpeciesName + (this.level === 100 ? '' : ', L' + this.level) +
-			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
+		this.details = this.getUpdatedDetails();
 
 		this.status = '';
 		this.statusState = this.battle.initEffectState({});
@@ -418,6 +418,8 @@ export class Pokemon {
 		this.fainted = false;
 		this.faintQueued = false;
 		this.subFainted = null;
+
+		this.regressionForme = false;
 
 		this.types = this.baseSpecies.types;
 		this.baseTypes = this.types;
@@ -503,16 +505,19 @@ export class Pokemon {
 		return this.isActive ? this.getSlot() + fullname.slice(2) : fullname;
 	}
 
-	getDetails = () => {
+	getUpdatedDetails(illusionLevel?: number) {
+		let name = this.species.name;
+		if (name === 'Greninja-Bond') name = 'Greninja';
+		const level = illusionLevel || this.level;
+		return name + (level === 100 ? '' : ', L' + level) +
+			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
+	}
+
+	getFullDetails = () => {
 		const health = this.getHealth();
 		let details = this.details;
 		if (this.illusion) {
-			const level = this.battle.ruleTable.has('illusionlevelmod') ? this.illusion.level : this.level;
-			let displayedSpeciesName = this.illusion.species.name;
-			if (displayedSpeciesName === 'Greninja-Bond') displayedSpeciesName = 'Greninja';
-			const illusionDetails = displayedSpeciesName + (level === 100 ? '' : ', L' + level) +
-				(this.illusion.gender === '' ? '' : ', ' + this.illusion.gender) + (this.illusion.set.shiny ? ', shiny' : '');
-			details = illusionDetails;
+			details = this.illusion.getUpdatedDetails(this.battle.ruleTable.has('illusionlevelmod') ? this.level : undefined);
 		}
 		if (this.terastallized) details += `, tera:${this.terastallized}`;
 		return {side: health.side, secret: `${details}|${health.secret}`, shared: `${details}|${health.shared}`};
@@ -1314,8 +1319,7 @@ export class Pokemon {
 
 		// Pokemon transformed into Ogerpon cannot Terastallize
 		// restoring their ability to tera after they untransform is handled ELSEWHERE
-		if (this.species.baseSpecies === 'Ogerpon' && this.canTerastallize) this.canTerastallize = false;
-		if (this.species.baseSpecies === 'Terapagos' && this.canTerastallize) this.canTerastallize = false;
+		if (['Ogerpon', 'Terapagos'].includes(this.species.baseSpecies) && this.canTerastallize) this.canTerastallize = false;
 
 		return true;
 	}
@@ -1323,7 +1327,7 @@ export class Pokemon {
 	/**
 	 * Changes this Pokemon's species to the given speciesId (or species).
 	 * This function only handles changes to stats and type.
-	 * Use formChange to handle changes to ability and sending client messages.
+	 * Use formeChange to handle changes to ability and sending client messages.
 	 */
 	setSpecies(rawSpecies: Species, source: Effect | null = this.battle.effect, isTransform = false) {
 		const species = this.battle.runEvent('ModifySpecies', this, null, source, rawSpecies);
@@ -1380,9 +1384,9 @@ export class Pokemon {
 		const apparentSpecies =
 			this.illusion ? this.illusion.species.name : species.baseSpecies;
 		if (isPermanent) {
+			if (!this.transformed) this.regressionForme = true;
 			this.baseSpecies = rawSpecies;
-			this.details = species.name + (this.level === 100 ? '' : ', L' + this.level) +
-				(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
+			this.details = this.getUpdatedDetails();
 			let details = (this.illusion || this).details;
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
 			this.battle.add('detailschange', this, details);
@@ -2101,12 +2105,27 @@ export class Pokemon {
 	}
 
 	runEffectiveness(move: ActiveMove) {
-		if (this.terastallized && move.type === 'Stellar') return 1;
 		let totalTypeMod = 0;
-		for (const type of this.getTypes()) {
-			let typeMod = this.battle.dex.getEffectiveness(move, type);
-			typeMod = this.battle.singleEvent('Effectiveness', move, null, this, type, move, typeMod);
-			totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
+		if (this.terastallized && move.type === 'Stellar') {
+			totalTypeMod = 1;
+		} else {
+			for (const type of this.getTypes()) {
+				let typeMod = this.battle.dex.getEffectiveness(move, type);
+				typeMod = this.battle.singleEvent('Effectiveness', move, null, this, type, move, typeMod);
+				totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
+			}
+		}
+		if (this.species.name === 'Terapagos-Terastal' && this.hasAbility('Tera Shell') &&
+			!this.battle.suppressingAbility(this)) {
+			if (this.abilityState.resisted) return -1; // all hits of multi-hit move should be not very effective
+			if (move.category === 'Status' || move.id === 'struggle' || !this.runImmunity(move.type) ||
+				totalTypeMod < 0 || this.hp < this.maxhp) {
+				return totalTypeMod;
+			}
+
+			this.battle.add('-activate', this, 'ability: Tera Shell');
+			this.abilityState.resisted = true;
+			return -1;
 		}
 		return totalTypeMod;
 	}
