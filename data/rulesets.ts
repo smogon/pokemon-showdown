@@ -2102,58 +2102,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			pokemon.trapped = true;
 		},
 	},
-	crazyhouserule: {
-		effectType: 'Rule',
-		name: 'Crazyhouse Rule',
-		desc: "Pok\u00e9mon you KO are added to your team and removed from the opponent's, and vice versa.",
-		onValidateRule(value) {
-			if (this.format.gameType === 'doubles' || this.format.gameType === 'triples') {
-				throw new Error(`Crazyhouse Rule currently does not support ${this.format.gameType} battles.`);
-			}
-			const ruleTable = this.ruleTable;
-			const maxTeamSize = ruleTable.pickedTeamSize || ruleTable.maxTeamSize;
-			const potentialMaxTeamSize = maxTeamSize * this.format.playerCount;
-			if (potentialMaxTeamSize > 24) {
-				throw new Error(`Crazyhouse Rule cannot be added because a team can potentially have ${potentialMaxTeamSize} Pokemon on one team, which is more than the server limit of 24.`);
-			}
-		},
-		// In order to prevent a case of the clones, housekeeping is needed.
-		// This is especially needed to make sure one side doesn't end up with too many Pokemon.
-		onBeforeSwitchIn(pokemon) {
-			if (this.turn < 1 || !pokemon.side.faintedThisTurn) return;
-			pokemon.side.pokemon = pokemon.side.pokemon.filter(x => !(x.fainted && !x.m.outofplay));
-			for (let i = 0; i < pokemon.side.pokemon.length && i < 24; i++) {
-				pokemon.side.pokemon[i].position = i;
-			}
-		},
-		onFaint(target, source, effect) {
-			target.m.numSwaps ||= 0;
-			target.m.numSwaps++;
-			if (effect?.effectType !== 'Move' || source.side.pokemon.length >= 24 ||
-				source.side === target.side || target.m.numSwaps >= 4) {
-				target.m.outofplay = true;
-				return;
-			}
-
-			const hpCost = this.clampIntRange(Math.floor((target.baseMaxhp * target.m.numSwaps) / 4), 1);
-			// Just in case(tm) and for Shedinja
-			if (hpCost >= target.baseMaxhp) {
-				target.m.outofplay = true;
-				return;
-			}
-
-			const newPoke = source.side.addPokemon({...target.set, item: target.item})!;
-
-			// copy PP over
-			(newPoke as any).baseMoveSlots = target.baseMoveSlots;
-
-			newPoke.hp = this.clampIntRange(newPoke.maxhp - hpCost, 1);
-			newPoke.clearVolatile();
-
-			this.add('poke', newPoke.side.id, newPoke.details, '');
-			this.add('-message', `${target.name} was captured by ${newPoke.side.name}!`);
-		},
-	},
 	chimera1v1rule: {
 		effectType: 'Rule',
 		name: 'Chimera 1v1 Rule',
