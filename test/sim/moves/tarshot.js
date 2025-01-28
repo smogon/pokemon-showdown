@@ -41,7 +41,7 @@ describe('Tar Shot', function () {
 			{species: 'wobbuffet', moves: ['tarshot']},
 			{species: 'wynaut', moves: ['fusionflare']},
 		], [
-			{species: 'tornadus', moves: ['sleeptalk']},
+			{species: 'tornadus', ability: 'shellarmor', moves: ['sleeptalk']},
 			{species: 'thundurus', ability: 'deltastream', moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices('move tarshot 1, move fusionflare 1', 'auto');

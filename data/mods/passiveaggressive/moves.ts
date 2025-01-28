@@ -6,7 +6,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSideStart(side, source) {
 				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
-			onEntryHazard(pokemon) {
+			onSwitchIn(pokemon) {
 				const calc = calculate(this, this.effectState.source, pokemon, 'stealthrock');
 				if (pokemon.hasItem('heavydutyboots') || !calc) return;
 				this.damage(calc * pokemon.maxhp / 8);
@@ -20,7 +20,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSideStart(side, source) {
 				this.add('-sidestart', side, 'move: G-Max Steelsurge');
 			},
-			onEntryHazard(pokemon) {
+			onSwitchIn(pokemon) {
 				const calc = calculate(this, this.effectState.source, pokemon, 'stealthrock');
 				if (pokemon.hasItem('heavydutyboots') || !calc) return;
 				this.damage(calc * pokemon.maxhp / 8);
@@ -40,7 +40,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-sidestart', side, 'Spikes');
 				this.effectState.layers++;
 			},
-			onEntryHazard(pokemon) {
+			onSwitchIn(pokemon) {
 				const calc = calculate(this, this.effectState.source, pokemon, 'spikes');
 				if (!calc || !pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
 				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
@@ -279,7 +279,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-sidestart', side, 'move: Toxic Spikes');
 				this.effectState.layers++;
 			},
-			onEntryHazard(pokemon) {
+			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);

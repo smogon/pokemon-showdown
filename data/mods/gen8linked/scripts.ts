@@ -173,16 +173,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			break;
-		case 'runUnnerve':
-			this.singleEvent('PreStart', action.pokemon.getAbility(), action.pokemon.abilityState, action.pokemon);
-			break;
 		case 'runSwitch':
 			this.actions.runSwitch(action.pokemon);
-			break;
-		case 'runPrimal':
-			if (!action.pokemon.transformed) {
-				this.singleEvent('Primal', action.pokemon.getItem(), action.pokemon.itemState, action.pokemon);
-			}
 			break;
 		case 'shift':
 			if (!action.pokemon.isActive) return false;
@@ -198,7 +190,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.clearActiveMove(true);
 			this.updateSpeed();
 			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
-			this.residualEvent('Residual');
+			this.fieldEvent('Residual');
 			this.add('upkeep');
 			break;
 		}
@@ -416,9 +408,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				// Note that the speed stat used is after any volatile replacements like Speed Swap,
 				// but before any multipliers like Agility or Choice Scarf
 				// Ties go to whichever Pokemon has had the ability for the least amount of time
-				dancers.sort(
-					(a, b) => -(b.storedStats['spe'] - a.storedStats['spe']) || b.abilityOrder - a.abilityOrder
-				);
+				dancers.sort((a, b) => -(b.storedStats['spe'] - a.storedStats['spe']) ||
+					b.abilityState.effectOrder - a.abilityState.effectOrder);
 				for (const dancer of dancers) {
 					if (this.battle.faintMessages()) break;
 					if (dancer.fainted) continue;
@@ -451,7 +442,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 					runUnnerve: 100,
 					runSwitch: 101,
-					runPrimal: 102,
+					// runPrimal: 102, (deprecated)
 					switch: 103,
 					megaEvo: 104,
 					runDynamax: 105,

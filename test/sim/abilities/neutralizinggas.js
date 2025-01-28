@@ -375,6 +375,7 @@ describe('Neutralizing Gas', function () {
 			const log = battle.getDebugLog();
 			const pressureIndex = log.indexOf('|-ability|p1b: Eternatus|Pressure');
 			const unnerveIndex = log.indexOf('|-ability|p2a: Rookidee|Unnerve');
+			assert(unnerveIndex > 0, 'Unnerve should have an activation message');
 			assert(pressureIndex < unnerveIndex, 'Faster Pressure should activate before slower Unnerve');
 		});
 	});

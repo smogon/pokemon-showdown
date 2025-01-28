@@ -59,7 +59,7 @@ describe('Ice Face', function () {
 		assert.false(hasMultipleActivates, "Ice Face should not trigger when being KOed. Only one |-activate| should exist in this test.");
 	});
 
-	it.skip(`should reform Ice Face on switchin after all entrance Abilities occur`, function () {
+	it(`should reform Ice Face on switchin after all entrance Abilities occur`, function () {
 		battle = common.createBattle([[
 			{species: 'Eiscue', ability: 'iceface', moves: ['sleeptalk']},
 			{species: 'Abomasnow', ability: 'snowwarning', moves: ['sleeptalk']},

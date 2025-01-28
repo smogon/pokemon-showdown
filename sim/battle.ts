@@ -93,6 +93,7 @@ interface EventListener extends EventListenerWithoutPriority {
 	order: number | false;
 	priority: number;
 	subOrder: number;
+	effectOrder?: number;
 	speed?: number;
 }
 
@@ -171,8 +172,9 @@ export class Battle {
 	lastMoveLine: number;
 	/** The last damage dealt by a move in the battle - only used by Gen 1 Counter. */
 	lastDamage: number;
-	abilityOrder: number;
+	effectOrder: number;
 	quickClawRoll: boolean;
+	speedOrder: number[];
 
 	teamGenerator: ReturnType<typeof Teams.getGenerator> | null;
 
@@ -214,7 +216,7 @@ export class Battle {
 			options.forceRandomChance : null;
 		this.deserialized = !!options.deserialized;
 		this.strictChoices = !!options.strictChoices;
-		this.formatData = {id: format.id};
+		this.formatData = this.initEffectState({id: format.id});
 		this.gameType = (format.gameType || 'singles');
 		this.field = new Field(this);
 		this.sides = Array(format.playerCount).fill(null) as any;
@@ -244,7 +246,7 @@ export class Battle {
 		this.ended = false;
 
 		this.effect = {id: ''} as Effect;
-		this.effectState = {id: ''};
+		this.effectState = this.initEffectState({id: ''});
 
 		this.event = {id: ''};
 		this.events = null;
@@ -258,8 +260,12 @@ export class Battle {
 		this.lastMoveLine = -1;
 		this.lastSuccessfulMoveThisTurn = null;
 		this.lastDamage = 0;
-		this.abilityOrder = 0;
+		this.effectOrder = 0;
 		this.quickClawRoll = false;
+		this.speedOrder = [];
+		for (let i = 0; i < this.activePerHalf * 2; i++) {
+			this.speedOrder.push(i);
+		}
 
 		this.teamGenerator = null;
 
@@ -393,6 +399,7 @@ export class Battle {
 	 * 2. Priority, high to low (default 0)
 	 * 3. Speed, high to low (default 0)
 	 * 4. SubOrder, low to high (default 0)
+	 * 5. EffectOrder, low to high (default 0)
 	 *
 	 * Doesn't reference `this` so doesn't need to be bound.
 	 */
@@ -401,13 +408,15 @@ export class Battle {
 			((b.priority || 0) - (a.priority || 0)) ||
 			((b.speed || 0) - (a.speed || 0)) ||
 			-((b.subOrder || 0) - (a.subOrder || 0)) ||
+			-((b.effectOrder || 0) - (a.effectOrder || 0)) ||
 			0;
 	}
 
 	static compareRedirectOrder(a: AnyObject, b: AnyObject) {
 		return ((b.priority || 0) - (a.priority || 0)) ||
 			((b.speed || 0) - (a.speed || 0)) ||
-			((a.effectHolder && b.effectHolder) ? -(b.effectHolder.abilityOrder - a.effectHolder.abilityOrder) : 0) ||
+			((a.effectHolder?.abilityState && b.effectHolder?.abilityState) ?
+				-(b.effectHolder.abilityState.effectOrder - a.effectHolder.abilityState.effectOrder) : 0) ||
 			0;
 	}
 
@@ -471,21 +480,30 @@ export class Battle {
 	/**
 	 * Runs an event with no source on each effect on the field, in Speed order.
 	 *
-	 * Unlike `eachEvent`, this contains a lot of other handling and is intended only for the residual step.
+	 * Unlike `eachEvent`, this contains a lot of other handling and is only intended for
+	 * the 'Residual' and 'SwitchIn' events.
 	 */
-	residualEvent(eventid: string, relayVar?: any) {
+	fieldEvent(eventid: string, targets?: Pokemon[]) {
 		const callbackName = `on${eventid}`;
-		let handlers = this.findBattleEventHandlers(callbackName, 'duration');
-		handlers = handlers.concat(this.findFieldEventHandlers(this.field, `onField${eventid}`, 'duration'));
+		let getKey: undefined | 'duration';
+		if (eventid === 'Residual') {
+			getKey = 'duration';
+		}
+		let handlers = this.findFieldEventHandlers(this.field, `onField${eventid}`, getKey);
 		for (const side of this.sides) {
 			if (side.n < 2 || !side.allySide) {
-				handlers = handlers.concat(this.findSideEventHandlers(side, `onSide${eventid}`, 'duration'));
+				handlers = handlers.concat(this.findSideEventHandlers(side, `onSide${eventid}`, getKey));
 			}
 			for (const active of side.active) {
 				if (!active) continue;
-				handlers = handlers.concat(this.findPokemonEventHandlers(active, callbackName, 'duration'));
+				if (eventid === 'SwitchIn') {
+					handlers = handlers.concat(this.findPokemonEventHandlers(active, `onAny${eventid}`));
+				}
+				if (targets && !targets.includes(active)) continue;
+				handlers = handlers.concat(this.findPokemonEventHandlers(active, callbackName, getKey));
 				handlers = handlers.concat(this.findSideEventHandlers(side, callbackName, undefined, active));
 				handlers = handlers.concat(this.findFieldEventHandlers(this.field, callbackName, undefined, active));
+				handlers = handlers.concat(this.findBattleEventHandlers(callbackName, getKey, active));
 			}
 		}
 		this.speedSort(handlers);
@@ -494,7 +512,7 @@ export class Battle {
 			handlers.shift();
 			const effect = handler.effect;
 			if ((handler.effectHolder as Pokemon).fainted) continue;
-			if (handler.end && handler.state && handler.state.duration) {
+			if (eventid === 'Residual' && handler.end && handler.state && handler.state.duration) {
 				handler.state.duration--;
 				if (!handler.state.duration) {
 					const endCallArgs = handler.endCallArgs || [handler.effectHolder, effect.id];
@@ -508,7 +526,7 @@ export class Battle {
 			if ((handler.effectHolder as Side).sideConditions) handlerEventid = `Side${eventid}`;
 			if ((handler.effectHolder as Field).pseudoWeather) handlerEventid = `Field${eventid}`;
 			if (handler.callback) {
-				this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, relayVar, handler.callback);
+				this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, undefined, handler.callback);
 			}
 
 			this.faintMessages();
@@ -518,7 +536,7 @@ export class Battle {
 
 	/** The entire event system revolves around this function and runEvent. */
 	singleEvent(
-		eventid: string, effect: Effect, state: AnyObject | null,
+		eventid: string, effect: Effect, state: EffectState | Record<string, never> | null,
 		target: string | Pokemon | Side | Field | Battle | null, source?: string | Pokemon | Effect | false | null,
 		sourceEffect?: Effect | string | null, relayVar?: any, customCallback?: unknown
 	) {
@@ -548,8 +566,8 @@ export class Battle {
 			// it's changed; call it off
 			return relayVar;
 		}
-		if (eventid !== 'Start' && eventid !== 'TakeItem' && eventid !== 'Primal' &&
-			effect.effectType === 'Item' && (target instanceof Pokemon) && target.ignoringItem()) {
+		if (eventid !== 'Start' && eventid !== 'TakeItem' && effect.effectType === 'Item' &&
+			(target instanceof Pokemon) && target.ignoringItem()) {
 			this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 			return relayVar;
 		}
@@ -573,7 +591,7 @@ export class Battle {
 		const parentEvent = this.event;
 
 		this.effect = effect;
-		this.effectState = state || {};
+		this.effectState = state as EffectState || this.initEffectState({});
 		this.event = {id: eventid, target, source, effect: sourceEffect};
 		this.eventDepth++;
 
@@ -726,7 +744,7 @@ export class Battle {
 			if (callback !== undefined) {
 				if (Array.isArray(target)) throw new Error("");
 				handlers.unshift(this.resolvePriority({
-					effect: sourceEffect, callback, state: {}, end: null, effectHolder: target,
+					effect: sourceEffect, callback, state: this.initEffectState({}), end: null, effectHolder: target,
 				}, `on${eventid}`));
 			}
 		}
@@ -839,7 +857,7 @@ export class Battle {
 				const parentEffect = this.effect;
 				const parentEffectState = this.effectState;
 				this.effect = handler.effect;
-				this.effectState = handler.state || {};
+				this.effectState = handler.state || this.initEffectState({});
 				this.effectState.target = effectHolder;
 
 				returnVal = handler.callback.apply(this, args);
@@ -888,17 +906,72 @@ export class Battle {
 		return this.runEvent(eventid, target, source, effect, relayVar, onEffect, true);
 	}
 
-	resolvePriority(handler: EventListenerWithoutPriority, callbackName: string) {
+	resolvePriority(h: EventListenerWithoutPriority, callbackName: string) {
+		const handler = h as EventListener;
 		// @ts-ignore
 		handler.order = handler.effect[`${callbackName}Order`] || false;
 		// @ts-ignore
 		handler.priority = handler.effect[`${callbackName}Priority`] || 0;
 		// @ts-ignore
 		handler.subOrder = handler.effect[`${callbackName}SubOrder`] || 0;
-		if (handler.effectHolder && (handler.effectHolder as Pokemon).getStat) {
-			(handler as EventListener).speed = (handler.effectHolder as Pokemon).speed;
+		if (!handler.subOrder) {
+			// https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/page-59#post-8685465
+			const effectTypeOrder: {[k in EffectType]?: number} = {
+				// Z-Move: 1,
+				Condition: 2,
+				// Slot Condition: 3,
+				// Side Condition: 4,
+				// Field Condition: 5, (includes weather but also terrains and pseudoweathers)
+				Weather: 5,
+				Format: 5,
+				Rule: 5,
+				Ruleset: 5,
+				// Poison Touch: 6, (also includes Perish Body)
+				Ability: 7,
+				Item: 8,
+				// Stall: 9,
+			};
+			handler.subOrder = effectTypeOrder[handler.effect.effectType] || 0;
+			if (handler.effect.effectType === 'Condition') {
+				if (handler.state?.target instanceof Side) {
+					if (handler.state.isSlotCondition) {
+						// slot condition
+						handler.subOrder = 3;
+					} else {
+						// side condition
+						handler.subOrder = 4;
+					}
+				} else if (handler.state?.target instanceof Field) {
+					// field condition
+					handler.subOrder = 5;
+				}
+			} else if (handler.effect.effectType === 'Ability') {
+				if (handler.effect.name === 'Poison Touch' || handler.effect.name === 'Perish Body') {
+					handler.subOrder = 6;
+				} else if (handler.effect.name === 'Stall') {
+					handler.subOrder = 9;
+				}
+			}
 		}
-		return handler as EventListener;
+		if (callbackName.endsWith('SwitchIn') || callbackName.endsWith('RedirectTarget')) {
+			// If multiple hazards are present on one side, their event handlers all perfectly tie in speed, priority,
+			// and subOrder. They should activate in the order they were created, which is where effectOrder comes in.
+			// This also applies to speed ties for which ability like Lightning Rod redirects moves.
+			// TODO: In-game, other events are also sorted this way, but that's an implementation for another refactor
+			handler.effectOrder = handler.state?.effectOrder;
+		}
+		if (handler.effectHolder && (handler.effectHolder as Pokemon).getStat) {
+			const pokemon = (handler.effectHolder as Pokemon);
+			handler.speed = pokemon.speed;
+			if (callbackName.endsWith('SwitchIn')) {
+				// Pokemon speeds including ties are resolved before all onSwitchIn handlers and aren't re-sorted in-between
+				// so we subtract a fractional speed from each Pokemon's respective event handlers by using the index of their
+				// unique field position in a pre-sorted-by-speed array
+				const fieldPositionValue = pokemon.side.n * this.sides.length + pokemon.position;
+				handler.speed -= this.speedOrder.indexOf(fieldPositionValue) / (this.activePerHalf * 2);
+			}
+		}
+		return handler;
 	}
 
 	findEventHandlers(target: Pokemon | Pokemon[] | Side | Battle, eventName: string, source?: Pokemon | null) {
@@ -1009,7 +1082,7 @@ export class Battle {
 					state: slotConditionState,
 					end: side.removeSlotCondition,
 					endCallArgs: [side, pokemon, slotCondition.id],
-					effectHolder: side,
+					effectHolder: pokemon,
 				}, callbackName));
 			}
 		}
@@ -1017,7 +1090,7 @@ export class Battle {
 		return handlers;
 	}
 
-	findBattleEventHandlers(callbackName: string, getKey?: 'duration') {
+	findBattleEventHandlers(callbackName: string, getKey?: 'duration', customHolder?: Pokemon) {
 		const handlers: EventListener[] = [];
 
 		let callback;
@@ -1026,15 +1099,15 @@ export class Battle {
 		callback = format[callbackName];
 		if (callback !== undefined || (getKey && this.formatData[getKey])) {
 			handlers.push(this.resolvePriority({
-				effect: format, callback, state: this.formatData, end: null, effectHolder: this,
+				effect: format, callback, state: this.formatData, end: null, effectHolder: customHolder || this,
 			}, callbackName));
 		}
 		if (this.events && (callback = this.events[callbackName]) !== undefined) {
 			for (const handler of callback) {
 				const state = (handler.target.effectType === 'Format') ? this.formatData : null;
 				handlers.push({
-					effect: handler.target, callback: handler.callback, state, end: null,
-					effectHolder: this, priority: handler.priority, order: handler.order, subOrder: handler.subOrder,
+					effect: handler.target, callback: handler.callback, state, end: null, effectHolder: customHolder || this,
+					priority: handler.priority, order: handler.order, subOrder: handler.subOrder,
 				});
 			}
 		}
@@ -1182,11 +1255,11 @@ export class Battle {
 		return pokemonList;
 	}
 
-	getAllActive() {
+	getAllActive(includeFainted?: boolean) {
 		const pokemonList: Pokemon[] = [];
 		for (const side of this.sides) {
 			for (const pokemon of side.active) {
-				if (pokemon && !pokemon.fainted) {
+				if (pokemon && (includeFainted || !pokemon.fainted)) {
 					pokemonList.push(pokemon);
 				}
 			}
@@ -2355,6 +2428,7 @@ export class Battle {
 				if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
+				this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
 				if (pokemon.regressionForme) {
 					// before clearing volatiles
 					pokemon.baseSpecies = this.dex.species.get(pokemon.set.species || pokemon.set.name);
@@ -2633,16 +2707,8 @@ export class Battle {
 			this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
 			break;
-		case 'runUnnerve':
-			this.singleEvent('PreStart', action.pokemon.getAbility(), action.pokemon.abilityState, action.pokemon);
-			break;
 		case 'runSwitch':
 			this.actions.runSwitch(action.pokemon);
-			break;
-		case 'runPrimal':
-			if (!action.pokemon.transformed) {
-				this.singleEvent('Primal', action.pokemon.getItem(), action.pokemon.itemState, action.pokemon);
-			}
 			break;
 		case 'shift':
 			if (!action.pokemon.isActive) return false;
@@ -2658,7 +2724,7 @@ export class Battle {
 			this.clearActiveMove(true);
 			this.updateSpeed();
 			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
-			this.residualEvent('Residual');
+			this.fieldEvent('Residual');
 			this.add('upkeep');
 			break;
 		}
@@ -2702,7 +2768,7 @@ export class Battle {
 			return false;
 		}
 
-		if (this.gen >= 5) {
+		if (this.gen >= 5 && action.choice !== 'start') {
 			this.eachEvent('Update');
 			for (const [pokemon, originalHP] of residualPokemon) {
 				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
@@ -3143,6 +3209,31 @@ export class Battle {
 	 */
 	getOverflowedTurnCount(): number {
 		return this.gen >= 8 ? (this.turn - 1) % 256 : this.turn - 1;
+	}
+
+	initEffectState(obj: Partial<EffectState>, effectOrder?: number): EffectState {
+		if (!obj.id) obj.id = '';
+		if (effectOrder !== undefined) {
+			obj.effectOrder = effectOrder;
+		} else if (obj.id && obj.target && (!(obj.target instanceof Pokemon) || obj.target.isActive)) {
+			obj.effectOrder = this.effectOrder++;
+		} else {
+			obj.effectOrder = 0;
+		}
+		return obj as EffectState;
+	}
+
+	clearEffectState(state: EffectState) {
+		state.id = '';
+		for (const k in state) {
+			if (k === 'id' || k === 'target') {
+				continue;
+			} else if (k === 'effectOrder') {
+				state.effectOrder = 0;
+			} else {
+				delete state[k];
+			}
+		}
 	}
 
 	destroy() {

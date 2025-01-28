@@ -5,7 +5,6 @@ import {Utils} from '../lib/utils';
 interface AbilityEventMethods {
 	onCheckShow?: (this: Battle, pokemon: Pokemon) => void;
 	onEnd?: (this: Battle, target: Pokemon & Side & Field) => void;
-	onPreStart?: (this: Battle, pokemon: Pokemon) => void;
 	onStart?: (this: Battle, target: Pokemon) => void;
 }
 
@@ -94,6 +93,14 @@ export class DexAbilities {
 			ability = this.get(this.dex.data.Aliases[id]);
 		} else if (id && this.dex.data.Abilities.hasOwnProperty(id)) {
 			const abilityData = this.dex.data.Abilities[id] as any;
+			if (this.dex.gen >= 5) {
+				// Abilities and items Start at different times during the SwitchIn event, so we do this
+				// instead of running the Start event during switch-ins
+				// gens 4 and before still use the old system, though
+				if (abilityData.onStart && !abilityData.onSwitchIn && !abilityData.onAnySwitchIn) {
+					abilityData.onSwitchIn = abilityData.onStart;
+				}
+			}
 			const abilityTextData = this.dex.getDescs('Abilities', id, abilityData);
 			ability = new Ability({
 				name: id,

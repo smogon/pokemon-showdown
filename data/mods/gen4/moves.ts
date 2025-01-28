@@ -326,7 +326,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noCopy: true,
 			onStart(pokemon) {
 				if (!this.queue.willMove(pokemon)) {
-					this.effectState.duration++;
+					this.effectState.duration!++;
 				}
 				if (!pokemon.lastMove) {
 					return false;
@@ -1553,6 +1553,23 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	spikes: {
 		inherit: true,
 		flags: {metronome: 1, mustpressure: 1},
+		condition: {
+			// this is a side condition
+			onSideStart(side) {
+				this.add('-sidestart', side, 'Spikes');
+				this.effectState.layers = 1;
+			},
+			onSideRestart(side) {
+				if (this.effectState.layers >= 3) return false;
+				this.add('-sidestart', side, 'Spikes');
+				this.effectState.layers++;
+			},
+			onEntryHazard(pokemon) {
+				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
+				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
+				this.damage(damageAmounts[this.effectState.layers] * pokemon.maxhp / 24);
+			},
+		},
 	},
 	spite: {
 		inherit: true,
@@ -1561,6 +1578,17 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	stealthrock: {
 		inherit: true,
 		flags: {metronome: 1, mustpressure: 1},
+		condition: {
+			// this is a side condition
+			onSideStart(side) {
+				this.add('-sidestart', side, 'move: Stealth Rock');
+			},
+			onEntryHazard(pokemon) {
+				if (pokemon.hasItem('heavydutyboots')) return;
+				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
+				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+			},
+		},
 	},
 	struggle: {
 		inherit: true,
