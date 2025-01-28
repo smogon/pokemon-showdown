@@ -92,6 +92,8 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	readonly isGem: boolean;
 	/** Is this item a Pokeball? */
 	readonly isPokeball: boolean;
+	/** Is this item a Red or Blue Orb? */
+	readonly isPrimalOrb: boolean;
 
 	declare readonly condition?: ConditionData;
 	declare readonly forcedForme?: string;
@@ -101,7 +103,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly boosts?: SparseBoostsTable | false;
 
 	declare readonly onEat?: ((this: Battle, pokemon: Pokemon) => void) | false;
-	declare readonly onPrimal?: (this: Battle, pokemon: Pokemon) => void;
+	declare readonly onUse?: ((this: Battle, pokemon: Pokemon) => void) | false;
 	declare readonly onStart?: (this: Battle, target: Pokemon) => void;
 	declare readonly onEnd?: (this: Battle, target: Pokemon) => void;
 
@@ -124,6 +126,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 		this.onPlate = data.onPlate || undefined;
 		this.isGem = !!data.isGem;
 		this.isPokeball = !!data.isPokeball;
+		this.isPrimalOrb = !!data.isPrimalOrb;
 
 		if (!this.gen) {
 			if (this.num >= 1124) {
@@ -190,6 +193,14 @@ export class DexItems {
 		}
 		if (id && this.dex.data.Items.hasOwnProperty(id)) {
 			const itemData = this.dex.data.Items[id] as any;
+			if (this.dex.gen >= 5) {
+				// Abilities and items Start at different times during the SwitchIn event, so we do this
+				// instead of running the Start event during switch-ins
+				// gens 4 and before still use the old system, though
+				if (itemData.onStart && !itemData.onSwitchIn && !itemData.onAnySwitchIn) {
+					itemData.onSwitchIn = itemData.onStart;
+				}
+			}
 			const itemTextData = this.dex.getDescs('Items', id, itemData);
 			item = new Item({
 				name: id,

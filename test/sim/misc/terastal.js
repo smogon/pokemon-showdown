@@ -35,9 +35,9 @@ describe("Terastallization", function () {
 
 	it('should give STAB correctly to the user\'s old types', function () {
 		battle = common.createBattle([[
-			{species: 'Ampharos', ability: 'static', moves: ['shockwave', 'swift'], teraType: 'Electric'},
+			{species: 'Ampharos', ability: 'shellarmor', moves: ['shockwave', 'swift'], teraType: 'Electric'},
 		], [
-			{species: 'Ampharos', ability: 'static', moves: ['shockwave', 'swift'], teraType: 'Normal'},
+			{species: 'Ampharos', ability: 'shellarmor', moves: ['shockwave', 'swift'], teraType: 'Normal'},
 		]]);
 		battle.makeChoices('move shockwave terastallize', 'move shockwave terastallize');
 		const teraDamage = battle.p2.active[0].maxhp - battle.p2.active[0].hp;
@@ -47,7 +47,7 @@ describe("Terastallization", function () {
 		const nonTeraDamage = battle.p1.active[0].maxhp - battle.p1.active[0].hp;
 		// 0 SpA Ampharos Shock Wave vs. 0 HP / 0 SpD Ampharos: 40-48
 		assert.bounded(nonTeraDamage, [40, 48],
-			"Terastallizing did not keep old type's STAB; actual damage: " + teraDamage);
+			"Terastallizing did not keep old type's STAB; actual damage: " + nonTeraDamage);
 
 		battle = common.createBattle([[
 			{species: 'Mimikyu', ability: 'disguise', item: 'laggingtail', moves: ['shadowclaw', 'waterfall', 'sleeptalk'], teraType: 'Water'},

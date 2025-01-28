@@ -199,53 +199,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		this.makeRequest('move');
 	},
-	actions: {
-		runSwitch(pokemon) {
-			this.battle.runEvent('Swap', pokemon);
-
-			if (this.battle.gen >= 5) {
-				this.battle.runEvent('SwitchIn', pokemon);
-			}
-
-			this.battle.runEvent('EntryHazard', pokemon);
-
-			if (this.battle.gen <= 4) {
-				this.battle.runEvent('SwitchIn', pokemon);
-			}
-
-			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
-
-			if (this.battle.gen <= 2 && !pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.battle.turn) {
-				this.battle.runEvent('AfterSwitchInSelf', pokemon);
-			}
-			if (!pokemon.hp) return false;
-			pokemon.isStarted = true;
-			if (!pokemon.fainted) {
-				this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
-				// Start innates
-				let status;
-				if (pokemon.m.startVolatile && pokemon.m.innate) {
-					status = this.battle.dex.conditions.get(pokemon.m.innate);
-					this.battle.singleEvent('Start', status, pokemon.volatiles[status.id], pokemon);
-					pokemon.m.startVolatile = false;
-				}
-				if (ally && ally.m.startVolatile && ally.m.innate) {
-					status = this.battle.dex.conditions.get(ally.m.innate);
-					this.battle.singleEvent('Start', status, ally.volatiles[status.id], ally);
-					ally.m.startVolatile = false;
-				}
-				// pic end
-				this.battle.singleEvent('Start', pokemon.getItem(), pokemon.itemState, pokemon);
-			}
-			if (this.battle.gen === 4) {
-				for (const foeActive of pokemon.foes()) {
-					foeActive.removeVolatile('substitutebroken');
-				}
-			}
-			pokemon.draggedIn = null;
-			return true;
-		},
-	},
 	pokemon: {
 		setAbility(ability, source, isFromFormeChange) {
 			if (!this.hp) return false;
@@ -267,7 +220,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.battle.dex.moves.get(this.battle.effect.id));
 			}
 			this.ability = ability.id;
-			this.abilityState = {id: ability.id, target: this};
+			this.abilityState = this.battle.initEffectState({id: ability.id, target: this});
 			if (ability.id && this.battle.gen > 3) {
 				this.battle.singleEvent('Start', ability, this.abilityState, this, source);
 				if (ally && ally.ability !== this.ability) {
@@ -286,7 +239,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.removeVolatile(this.m.innate);
 				delete this.m.innate;
 			}
-			this.abilityOrder = this.battle.abilityOrder++;
 			return oldAbility;
 		},
 		hasAbility(ability) {
