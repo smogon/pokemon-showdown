@@ -18,7 +18,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					pokemon.removeVolatile('protosynthesis');
 				}
 				if (!pokemon.volatiles['protosynthesis'] && pokemon.hasItem('boosterenergy')) {
-					pokemon.useItem(pokemon, pokemon.getAbility());
+					pokemon.useItem(pokemon, this.dex.abilities.get('protosynthesis'));
 				}
 			}
 		},

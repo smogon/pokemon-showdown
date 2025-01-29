@@ -3443,7 +3443,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					pokemon.removeVolatile('protosynthesis');
 				}
 				if (!pokemon.volatiles['protosynthesis'] && pokemon.hasItem('boosterenergy')) {
-					pokemon.useItem(pokemon, pokemon.getAbility());
+					pokemon.useItem(pokemon, this.dex.abilities.get('protosynthesis'));
 				}
 			}
 		},
@@ -3452,7 +3452,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.queue.peek()?.choice === 'runSwitch') return;
 
 			if (!pokemon.volatiles['protosynthesis'] && !this.field.isWeather('sunnyday') && pokemon.hasItem('boosterenergy')) {
-				pokemon.useItem(pokemon, pokemon.getAbility());
+				pokemon.useItem(pokemon, this.dex.abilities.get('protosynthesis'));
 			}
 		},
 		onEnd(pokemon) {
@@ -3592,7 +3592,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					pokemon.removeVolatile('quarkdrive');
 				}
 				if (!pokemon.volatiles['quarkdrive'] && pokemon.hasItem('boosterenergy')) {
-					pokemon.useItem(pokemon, pokemon.getAbility());
+					pokemon.useItem(pokemon, this.dex.abilities.get('quarkdrive'));
 				}
 			}
 		},
@@ -3601,7 +3601,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.queue.peek()?.choice === 'runSwitch') return;
 
 			if (!pokemon.volatiles['quarkdrive'] && !this.field.isTerrain('electricterrain') && pokemon.hasItem('boosterenergy')) {
-				pokemon.useItem(pokemon, pokemon.getAbility());
+				pokemon.useItem(pokemon, this.dex.abilities.get('quarkdrive'));
 			}
 		},
 		onEnd(pokemon) {
