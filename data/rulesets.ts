@@ -319,6 +319,19 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
+	johtopokedex: {
+		effectType: 'ValidatorRule',
+		name: 'Johto Pokedex',
+		desc: "Only allows Pok&eacute;mon native to the Johto region",
+		onValidateSet(set, format) {
+			const johtoDex = [ "Chikorita", "Bayleef", "Meganium", "Cyndaquil", "Quilava", "Typhlosion", "Typhlosion-Hisui", "Totodile", "Croconaw", "Feraligatr", "Sentret", "Furret", "Furrip", "Furrum", "Furrful", "Hoothoot", "Noctowl", "Noceadowl", "Ledyba", "Ledian", "Spinarak", "Ariados", "Crobat", "Chinchou", "Lanturn", "Pichu", "Pichu-Spiky-Eared", "Cleffa", "Igglybuff", "Togepi", "Togetic", "Natu", "Xatu"
+			];
+			const species = this.dex.species.get(set.species || set.name);
+			if (!johtoDex.includes(species.baseSpecies) && !this.ruleTable.has('+' + species.id)) {
+				return [species.baseSpecies + " is not in the Johto Pokédex."];
+			}
+		},
+	},
 	hoennpokedex: {
 		effectType: 'ValidatorRule',
 		name: 'Hoenn Pokedex',
