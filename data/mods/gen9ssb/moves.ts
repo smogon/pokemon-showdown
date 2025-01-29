@@ -156,10 +156,10 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
-		onBeforeMove(pokemon) {
+		beforeTurnCallback(pokemon) {
 			// mario puncha da block weeheeeee HELP ME.
 			this.add('-anim', pokemon, 'Sky Uppercut', pokemon);
-			let items = ['megamushroom', 'triplemushroom', 'tripleredshell', 'star', 'lightning', 'triplebanana', 'boo', 'powblock', 'spinyshell', 'triplegreenshell', 'blooper', 'bulletbill'];
+			const items = ['megamushroom', 'triplemushroom', 'tripleredshell', 'star', 'lightning', 'triplebanana', 'boo', 'powblock', 'spinyshell', 'triplegreenshell', 'blooper', 'bulletbill'];
 			const selectedItem = this.sample(items);
 			pokemon.abilityState.itemBox = selectedItem;
 		},
@@ -169,7 +169,6 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 				this.hint(`Error: No item selected on the backend for Item Box.\nContact the developer if you see this.`);
 				return null;
 			}
-
 			switch (source.abilityState.itemBox) {
 				case 'megamushroom':
 					this.add(`raw|<b>Mega Mushroom!</b>`);
