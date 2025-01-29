@@ -1542,7 +1542,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (pokemon.m.innates) {
 				for (const innate of pokemon.m.innates) {
 					if (pokemon.hasAbility(innate)) continue;
-					let effect = 'ability:' + innate;
+					const effect = 'ability:' + innate;
 					pokemon.volatiles[effect] = this.initEffectState({id: this.toID(effect), target: pokemon});
 				}
 			}
