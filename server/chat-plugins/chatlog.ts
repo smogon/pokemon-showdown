@@ -15,6 +15,23 @@ const MAX_TOPUSERS = 100;
 
 const UPPER_STAFF_ROOMS = ['upperstaff', 'adminlog', 'slowlog'];
 
+/**
+ * Generic helper function to retry queries on any error.
+ */
+async function safeQuery<T>(fn: () => Promise<T>, attempts = 3): Promise<T> {
+	for (let i = 1; i <= attempts; i++) {
+		try {
+			return await fn();
+		} catch (err) {
+			if (i < attempts) {
+				continue;
+			}
+			throw err;
+		}
+	}
+	throw new Error('Max retries reached.');
+}
+
 interface ChatlogSearch {
 	raw?: boolean;
 	search: string;
@@ -59,38 +76,45 @@ export class LogReaderRoom {
 
 	async listMonths() {
 		if (roomlogTable) {
-			const dates = await roomlogTable.query<any>()`SELECT DISTINCT month FROM roomlog_dates WHERE roomid = ${this.roomid}`;
-			return dates.map(x => x.month);
-		}
-		try {
-			const listing = await Monitor.logPath(`chat/${this.roomid}`).readdir();
-			return listing.filter(file => /^[0-9][0-9][0-9][0-9]-[0-9][0-9]$/.test(file));
-		} catch {
-			return [];
+			const resolvedDates = await safeQuery(() => roomlogTable!.query<any>()`
+				SELECT DISTINCT month FROM roomlog_dates WHERE roomid = ${this.roomid}
+			`);
+			return resolvedDates.map(x => x.month);
+		} else {
+			try {
+				const listing = await Monitor.logPath(`chat/${this.roomid}`).readdir();
+				return listing.filter(file => /^[0-9][0-9][0-9][0-9]-[0-9][0-9]$/.test(file));
+			} catch {
+				return [];
+			}
 		}
 	}
 
 	async listDays(month: string) {
 		if (roomlogTable) {
-			const dates = await (
-				roomlogTable.query<any>()`SELECT DISTINCT date FROM roomlog_dates WHERE roomid = ${this.roomid} AND month = ${month}`
-			);
-			return dates.map(x => x.date);
-		}
-		try {
-			const listing = await Monitor.logPath(`chat/${this.roomid}/${month}`).readdir();
-			return listing.filter(file => file.endsWith(".txt")).map(file => file.slice(0, -4));
-		} catch {
-			return [];
+			const resolvedDates = await safeQuery(() => roomlogTable!.query<any>()`
+				SELECT DISTINCT date FROM roomlog_dates
+				WHERE roomid = ${this.roomid} AND month = ${month}
+			`);
+			return resolvedDates.map(x => x.date);
+		} else {
+			try {
+				const listing = await Monitor.logPath(`chat/${this.roomid}/${month}`).readdir();
+				return listing.filter(file => file.endsWith(".txt")).map(file => file.slice(0, -4));
+			} catch {
+				return [];
+			}
 		}
 	}
 
 	async getLog(day: string) {
 		if (roomlogTable) {
 			const [dayStart, dayEnd] = LogReader.dayToRange(day);
-			const logs = await roomlogTable.selectAll(
-				['log', 'time']
-			)`WHERE roomid = ${this.roomid} AND time BETWEEN ${dayStart}::int::timestamp AND ${dayEnd}::int::timestamp`;
+			const logs = await safeQuery(() =>
+				roomlogTable!.selectAll(['log', 'time'])`WHERE roomid = ${this.roomid} 
+			AND time BETWEEN ${dayStart}::int::timestamp 
+			AND ${dayEnd}::int::timestamp`);
+
 			return new Streams.ObjectReadStream<string>({
 				read(this: Streams.ObjectReadStream<string>) {
 					for (const {log, time} of logs) {
@@ -102,7 +126,7 @@ export class LogReaderRoom {
 		}
 		const month = LogReader.getMonth(day);
 		const log = Monitor.logPath(`chat/${this.roomid}/${month}/${day}.txt`);
-		if (!await log.exists()) return null;
+		if (!(await log.exists())) return null;
 		return log.createReadStream().byLine();
 	}
 }
@@ -119,7 +143,7 @@ export const LogReader = new class {
 
 	async list() {
 		if (roomlogTable) {
-			const roomids = await roomlogTable.query()`SELECT DISTINCT roomid FROM roomlogs`;
+			const roomids = await safeQuery(() => roomlogTable!.query()`SELECT DISTINCT roomid FROM roomlogs`);
 			return roomids.map(x => x.roomid) as RoomID[];
 		}
 		const listing = await Monitor.logPath(`chat`).readdir();
