@@ -1,6 +1,80 @@
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	inherit: 'gen9',
+	fieldEvent(eventid, targets) {
+		const callbackName = `on${eventid}`;
+		let getKey: undefined | 'duration';
+		if (eventid === 'Residual') {
+			getKey = 'duration';
+		}
+		let handlers = this.findFieldEventHandlers(this.field, `onField${eventid}`, getKey);
+		for (const side of this.sides) {
+			if (side.n < 2 || !side.allySide) {
+				handlers = handlers.concat(this.findSideEventHandlers(side, `onSide${eventid}`, getKey));
+			}
+			for (const active of side.active) {
+				if (!active) continue;
+				if (eventid === 'SwitchIn') {
+					handlers = handlers.concat(this.findPokemonEventHandlers(active, `onAny${eventid}`));
+				}
+				if (targets && !targets.includes(active)) continue;
+				// The ally of the pokemon
+				const ally = active.side.active.find(mon => mon && mon !== active && !mon.fainted);
+				if (ally?.m.innate && targets && !targets.includes(ally)) {
+					const volatileState = active.volatiles[ally.m.innate];
+					const volatile = this.dex.conditions.getByID(ally.m.innate as ID);
+					// @ts-ignore - dynamic lookup
+					let callback = volatile[callbackName];
+					if (callback !== undefined || (getKey && volatileState[getKey])) {
+						handlers.push(this.resolvePriority({
+							effect: volatile, callback, state: volatileState, end: ally.removeVolatile, effectHolder: ally,
+						}, callbackName));
+					} else if (['ability', 'item'].includes(volatile.id.split(':')[0])) {
+						// Innate abilities/items; see comment below
+						// @ts-ignore - dynamic lookup
+						if (this.gen >= 5 && callbackName === 'onSwitchIn' && !volatile.onAnySwitchIn) {
+							callback = volatile.onStart;
+							if (callback !== undefined || (getKey && volatileState[getKey])) {
+								handlers.push(this.resolvePriority({
+									effect: volatile, callback, state: volatileState, end: ally.removeVolatile, effectHolder: ally,
+								}, callbackName));
+							}
+						}
+					}
+				}
+				handlers = handlers.concat(this.findPokemonEventHandlers(active, callbackName, getKey));
+				handlers = handlers.concat(this.findSideEventHandlers(side, callbackName, undefined, active));
+				handlers = handlers.concat(this.findFieldEventHandlers(this.field, callbackName, undefined, active));
+				handlers = handlers.concat(this.findBattleEventHandlers(callbackName, getKey, active));
+			}
+		}
+		this.speedSort(handlers);
+		while (handlers.length) {
+			const handler = handlers[0];
+			handlers.shift();
+			const effect = handler.effect;
+			if ((handler.effectHolder as Pokemon).fainted) continue;
+			if (eventid === 'Residual' && handler.end && handler.state && handler.state.duration) {
+				handler.state.duration--;
+				if (!handler.state.duration) {
+					const endCallArgs = handler.endCallArgs || [handler.effectHolder, effect.id];
+					handler.end.call(...endCallArgs as [any, ...any[]]);
+					if (this.ended) return;
+					continue;
+				}
+			}
+
+			let handlerEventid = eventid;
+			if ((handler.effectHolder as Side).sideConditions) handlerEventid = `Side${eventid}`;
+			if ((handler.effectHolder as Field).pseudoWeather) handlerEventid = `Field${eventid}`;
+			if (handler.callback) {
+				this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, undefined, handler.callback);
+			}
+
+			this.faintMessages();
+			if (this.ended) return;
+		}
+	},
 	endTurn() {
 		this.turn++;
 		this.lastSuccessfulMoveThisTurn = null;
