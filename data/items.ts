@@ -613,8 +613,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onUseItem(item, pokemon) {
-			return item.id === 'boosterenergy' && (pokemon.hasAbility('protosynthesis') || pokemon.hasAbility('quarkdrive'));
+		onUseItem(item, pokemon, source, sourceEffect) {
+			return item.id === 'boosterenergy' && pokemon === source && ['protosynthesis', 'quarkdrive'].includes(sourceEffect.id);
 		},
 		onUse(pokemon) {
 			pokemon.addVolatile(pokemon.ability);
