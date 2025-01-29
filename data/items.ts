@@ -614,7 +614,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onUseItem(item, pokemon, source, sourceEffect) {
-			return item.id === 'boosterenergy' && pokemon === source && ['protosynthesis', 'quarkdrive'].includes(sourceEffect.id);
+			return pokemon === source && ['protosynthesis', 'quarkdrive'].includes(sourceEffect.id);
 		},
 		onUse(pokemon) {
 			pokemon.addVolatile(pokemon.ability);
