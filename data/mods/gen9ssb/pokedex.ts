@@ -602,12 +602,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: {0: "Huge Power"},
 	},
 
-	// maroon
-	archaludon: {
-		inherit: true,
-		abilities: {0: "Built Different"},
-	},
-
 	// Mathy
 	furret: {
 		inherit: true,
@@ -797,6 +791,12 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	oranguru: {
 		inherit: true,
 		abilities: {0: "Monke See Monke Do"},
+	},
+
+	// Rio Vidal
+	archaludon: {
+		inherit: true,
+		abilities: {0: "Built Different"},
 	},
 
 	// Rissoux

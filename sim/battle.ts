@@ -966,7 +966,7 @@ export class Battle {
 			handler.speed = pokemon.speed;
 			if (callbackName.endsWith('SwitchIn')) {
 				// Pokemon speeds including ties are resolved before all onSwitchIn handlers and aren't re-sorted in-between
-				// so we subtract a fractional speed to each Pokemon's respective event handlers by using the index of their
+				// so we subtract a fractional speed from each Pokemon's respective event handlers by using the index of their
 				// unique field position in a pre-sorted-by-speed array
 				const fieldPositionValue = pokemon.side.n * this.sides.length + pokemon.position;
 				handler.speed -= this.speedOrder.indexOf(fieldPositionValue) / (this.activePerHalf * 2);
@@ -1682,23 +1682,6 @@ export class Battle {
 		}
 		if (this.gen === 2) this.quickClawRoll = this.randomChance(60, 256);
 		if (this.gen === 3) this.quickClawRoll = this.randomChance(1, 5);
-
-		// Crazyhouse Progress checker because sidebars has trouble keeping track of Pokemon.
-		// Please remove me once there is client support.
-		if (this.ruleTable.has('crazyhouserule')) {
-			for (const side of this.sides) {
-				let buf = `raw|${Utils.escapeHTML(side.name)}'s team:<br />`;
-				for (const pokemon of side.pokemon) {
-					if (!buf.endsWith('<br />')) buf += '/</span>&#8203;';
-					if (pokemon.fainted) {
-						buf += `<span style="white-space:nowrap;"><span style="opacity:.3"><psicon pokemon="${pokemon.species.id}" /></span>`;
-					} else {
-						buf += `<span style="white-space:nowrap"><psicon pokemon="${pokemon.species.id}" />`;
-					}
-				}
-				this.add(`${buf}</span>`);
-			}
-		}
 
 		this.makeRequest('move');
 	}
@@ -2447,12 +2430,22 @@ export class Battle {
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
+				if (pokemon.regressionForme) {
+					// before clearing volatiles
+					pokemon.baseSpecies = this.dex.species.get(pokemon.set.species || pokemon.set.name);
+					pokemon.baseAbility = toID(pokemon.set.ability);
+				}
 				pokemon.clearVolatile(false);
 				pokemon.fainted = true;
 				pokemon.illusion = null;
 				pokemon.isActive = false;
 				pokemon.isStarted = false;
 				delete pokemon.terastallized;
+				if (pokemon.regressionForme) {
+					// after clearing volatiles
+					pokemon.details = pokemon.getUpdatedDetails();
+					pokemon.regressionForme = false;
+				}
 				pokemon.side.faintedThisTurn = pokemon;
 				if (this.faintQueue.length >= faintQueueLeft) checkWin = true;
 			}
@@ -2571,8 +2564,7 @@ export class Battle {
 				const species = pokemon.setSpecies(rawSpecies);
 				if (!species) continue;
 				pokemon.baseSpecies = rawSpecies;
-				pokemon.details = species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				pokemon.details = pokemon.getUpdatedDetails();
 				pokemon.setAbility(species.abilities['0'], null, true);
 				pokemon.baseAbility = pokemon.ability;
 
