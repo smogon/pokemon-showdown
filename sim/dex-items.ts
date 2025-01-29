@@ -193,14 +193,6 @@ export class DexItems {
 		}
 		if (id && this.dex.data.Items.hasOwnProperty(id)) {
 			const itemData = this.dex.data.Items[id] as any;
-			if (this.dex.gen >= 5) {
-				// Abilities and items Start at different times during the SwitchIn event, so we do this
-				// instead of running the Start event during switch-ins
-				// gens 4 and before still use the old system, though
-				if (itemData.onStart && !itemData.onSwitchIn && !itemData.onAnySwitchIn) {
-					itemData.onSwitchIn = itemData.onStart;
-				}
-			}
 			const itemTextData = this.dex.getDescs('Items', id, itemData);
 			item = new Item({
 				name: id,
