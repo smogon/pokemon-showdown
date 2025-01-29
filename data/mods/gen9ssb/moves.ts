@@ -151,27 +151,28 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		gen: 9,
 		pp: 64,
 		noPPBoosts: true,
-		flags: { protect: 1 },
-		priority: 8,
-		onEffectiveness(typeMod, target, type) {
-			return 0;
+		flags: {protect: 1},
+		priority: 0,
+		onTryMove() {
+			this.attrLastMove('[still]');
 		},
-		onTry(source) {
+		onBeforeMove(pokemon) {
+			// mario puncha da block weeheeeee HELP ME.
+			this.add('-anim', pokemon, 'Sky Uppercut', pokemon);
 			let items = ['megamushroom', 'triplemushroom', 'tripleredshell', 'star', 'lightning', 'triplebanana', 'boo', 'powblock', 'spinyshell', 'triplegreenshell', 'blooper', 'bulletbill'];
-			let selectedItem = this.sample(items);
-			source.abilityState.itemBox = selectedItem;
-			this.add('-anim', source, 'Sky Uppercut', source);
-		},
+			const selectedItem = this.sample(items);
+			pokemon.abilityState.itemBox = selectedItem;
+		},//HEL
 		onPrepareHit(target, source, move) {
 			if (!source.abilityState.itemBox) {
 				this.add('-fail', source, 'move: Item Box');
 				this.hint(`Error: No item selected on the backend for Item Box.\nContact the developer if you see this.`);
 				return null;
-			}
+			}//ELP ME
 
 			switch (source.abilityState.itemBox) {
 				case 'megamushroom':
-					this.add(`raw|<b>Mega Mushroom!</b>`);
+					this.add(`raw|<b>Mega Mushroom!</b>`);//PLEAAA HEL
 					source.addVolatile('megamushroom');
 					move.basePower = 100;
 					break;
@@ -193,7 +194,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					move.onPrepareHit = function (t, s, m) {
 						this.add('-anim', s, 'Pyro Ball', t);
 					};
-					move.onHit = function (t, s, m) {
+/*HEEEEELP*/	move.onHit = function (t, s, m) {
 						if (this.randomChance(1, 3)) this.boost({ spe: -1 }, t, s, m);
 					};
 					break;
@@ -230,7 +231,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					source.addVolatile('boo');
 					return this.NOT_FAIL;
 					break;
-				case 'powblock':
+				case 'powblock'://HELLO?
 					this.add(`raw|<b>POW!</b>`);
 					move.basePower = 80;
 					move.onPrepareHit = function (t, s, m) {
