@@ -162,17 +162,17 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			let items = ['megamushroom', 'triplemushroom', 'tripleredshell', 'star', 'lightning', 'triplebanana', 'boo', 'powblock', 'spinyshell', 'triplegreenshell', 'blooper', 'bulletbill'];
 			const selectedItem = this.sample(items);
 			pokemon.abilityState.itemBox = selectedItem;
-		},//HEL
+		},
 		onPrepareHit(target, source, move) {
 			if (!source.abilityState.itemBox) {
 				this.add('-fail', source, 'move: Item Box');
 				this.hint(`Error: No item selected on the backend for Item Box.\nContact the developer if you see this.`);
 				return null;
-			}//ELP ME
+			}
 
 			switch (source.abilityState.itemBox) {
 				case 'megamushroom':
-					this.add(`raw|<b>Mega Mushroom!</b>`);//PLEAAA HEL
+					this.add(`raw|<b>Mega Mushroom!</b>`);
 					source.addVolatile('megamushroom');
 					move.basePower = 100;
 					break;
@@ -194,7 +194,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					move.onPrepareHit = function (t, s, m) {
 						this.add('-anim', s, 'Pyro Ball', t);
 					};
-/*HEEEEELP*/	move.onHit = function (t, s, m) {
+					move.onHit = function (t, s, m) {
 						if (this.randomChance(1, 3)) this.boost({ spe: -1 }, t, s, m);
 					};
 					break;
@@ -231,7 +231,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					source.addVolatile('boo');
 					return this.NOT_FAIL;
 					break;
-				case 'powblock'://HELLO?
+				case 'powblock':
 					this.add(`raw|<b>POW!</b>`);
 					move.basePower = 80;
 					move.onPrepareHit = function (t, s, m) {
@@ -286,7 +286,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			}
 		},
 		onEffectiveness(typeMod, target, type) {
-			return 0;//I NEED HELP.
+			return 0;
 		},
 		secondary: null,
 		type: "Steel",
