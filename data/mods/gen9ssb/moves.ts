@@ -160,6 +160,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			let items = ['megamushroom', 'triplemushroom', 'tripleredshell', 'star', 'lightning', 'triplebanana', 'boo', 'powblock', 'spinyshell', 'triplegreenshell', 'blooper', 'bulletbill'];
 			let selectedItem = this.sample(items);
 			source.abilityState.itemBox = selectedItem;
+			this.add('-anim', source, 'Sky Uppercut', source);
 		},
 		onPrepareHit(target, source, move) {
 			if (!source.abilityState.itemBox) {
@@ -167,8 +168,6 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 				this.hint(`Error: No item selected on the backend for Item Box.\nContact the developer if you see this.`);
 				return null;
 			}
-			// If you use your imagination, it's like he's punching an item block like Mario!
-			this.add('-anim', source, 'Sky Uppercut', source);
 
 			switch (source.abilityState.itemBox) {
 				case 'megamushroom':
@@ -180,7 +179,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					this.add(`raw|<b>Triple Mushroom!</b>`);
 					move.basePower = 20;
 					move.multihit = 3;
-					move.onTryHit = function (t, s, m) {
+					move.onPrepareHit = function (t, s, m) {
 						this.add('-anim', s, 'Quick Attack', t);
 					};
 					move.onHit = function (t, s, m) {
@@ -191,7 +190,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					this.add(`raw|<b>Triple Red Shell!</b>`);
 					move.basePower = 40;
 					move.multihit = 3;
-					move.onTryHit = function (t, s, m) {
+					move.onPrepareHit = function (t, s, m) {
 						this.add('-anim', s, 'Pyro Ball', t);
 					};
 					move.onHit = function (t, s, m) {
@@ -207,6 +206,9 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 				case 'lightning':
 					this.add(`raw|<b>Lightning!</b>`);
 					move.basePower = 100;
+					move.onPrepareHit = function (t, s, m) {
+						this.add('-anim', t, 'Thunderbolt', t);
+					};
 					move.onHit = function (t, s, m) {
 						t.side.addSideCondition('lightning');
 					};
@@ -215,7 +217,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					this.add(`raw|<b>Triple Banana!</b>`);
 					move.basePower = 1;
 					move.multihit = 3;
-					move.onTryHit = function (t, s, m) {
+					move.onPrepareHit = function (t, s, m) {
 						this.add('-anim', s, 'Teeter Dance', s);
 					};
 					move.onHit = function (t, s, m) {
@@ -231,7 +233,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 				case 'powblock':
 					this.add(`raw|<b>POW!</b>`);
 					move.basePower = 80;
-					move.onTryHit = function (t, s, m) {
+					move.onPrepareHit = function (t, s, m) {
 						this.add('-anim', s, 'Seismic Toss', s);
 						this.add('-anim', s, 'Earthquake', t);
 					};
@@ -255,7 +257,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					this.add(`raw|<b>Green Shell!</b>`);
 					move.basePower = 40;
 					move.multihit = 3;
-					move.onTryHit = function (t, s, m) {
+					move.onPrepareHit = function (t, s, m) {
 						if (this.randomChance(1, 10)) {
 							m.target = 'self';
 							this.add('-anim', s, 'Energy Ball', s);
@@ -267,7 +269,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 				case 'blooper':
 					this.add(`raw|<b>Blooper!</b>`);
 					move.basePower = 80;
-					move.onTryHit = function (t, s, m) {
+					move.onPrepareHit = function (t, s, m) {
 						this.add('-anim', s, 'Acid Spray', t);
 					};
 					move.onHit = function (t, s, m) {
