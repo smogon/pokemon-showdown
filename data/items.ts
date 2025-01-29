@@ -616,8 +616,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onUseItem(item, pokemon, source, sourceEffect) {
 			return pokemon === source && ['protosynthesis', 'quarkdrive'].includes(sourceEffect.id);
 		},
-		onUse(pokemon) {
-			pokemon.addVolatile(pokemon.ability);
+		onUse(pokemon, source, sourceEffect) {
+			pokemon.addVolatile(sourceEffect.id);
 		},
 		onTakeItem(item, source) {
 			if (source.baseSpecies.tags.includes("Paradox")) return false;
