@@ -605,7 +605,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onUpdate(pokemon) {
 			if (this.gameType !== 'doubles') return;
-			// don't run between when a Pokemon switches in and the resulting onSwitchIn event
+			// don't run between when a Pokemon switches in and the resulting SwitchIn event
 			if (this.queue.peek()?.choice === 'runSwitch') return;
 
 			const ally = pokemon.allies()[0];
@@ -3445,7 +3445,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onUpdate(pokemon) {
-			// don't run between when a Pokemon switches in and the resulting onSwitchIn event
+			// don't run between when a Pokemon switches in and the resulting SwitchIn event
 			if (this.queue.peek()?.choice === 'runSwitch') return;
 
 			if (!pokemon.volatiles['protosynthesis'] && !this.field.isWeather('sunnyday') && pokemon.hasItem('boosterenergy')) {
@@ -3591,7 +3591,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onUpdate(pokemon) {
-			// don't run between when a Pokemon switches in and the resulting onSwitchIn event
+			// don't run between when a Pokemon switches in and the resulting SwitchIn event
 			if (this.queue.peek()?.choice === 'runSwitch') return;
 
 			if (!pokemon.volatiles['quarkdrive'] && !this.field.isTerrain('electricterrain') && pokemon.hasItem('boosterenergy')) {
