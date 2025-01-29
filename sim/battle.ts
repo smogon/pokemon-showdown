@@ -512,7 +512,7 @@ export class Battle {
 			handlers.shift();
 			const effect = handler.effect;
 			if ((handler.effectHolder as Pokemon).fainted) {
-				if (!(handler.state && handler.state.isSlotCondition)) continue;
+				if (!(handler.state?.isSlotCondition)) continue;
 			}
 			if (eventid === 'Residual' && handler.end && handler.state && handler.state.duration) {
 				handler.state.duration--;
