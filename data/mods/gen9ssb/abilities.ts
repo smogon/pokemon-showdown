@@ -1192,12 +1192,11 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 				if (!pokemon.isActive) continue;
 				if (!pokemon.activeTurns) {
 					success = true;
-					this.boost({ spe: -1 }, pokemon);
+					this.boost({ spe: -1 }, pokemon, target, effect);
 				}
 			}
 			if (success) {
-				this.add('-activate', target, 'ability: Chain Drift');
-				this.add('-message', `${target.name} is preparing to shift gears!`);
+				this.add('-message', `${target.name} is shifting gears!`);
 				target.addVolatile('chaindrift');
 			}
 		},
