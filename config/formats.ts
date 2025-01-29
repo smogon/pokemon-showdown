@@ -733,19 +733,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				if (!pokemon.m.abils.includes(effect)) pokemon.m.abils.push(effect);
 			}
 		},
-		onSwitchInPriority: 100,
-		onSwitchIn(pokemon) {
-			let format = this.format;
-			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
-			for (const ability of format.getSharedPower!(pokemon)) {
-				if (ability === 'noability') {
-					this.hint(`Mirror Armor and Trace break in Shared Power formats that don't use Shared Power as a base, so they get removed from non-base users.`);
-				}
-				const effect = 'ability:' + ability;
-				delete pokemon.volatiles[effect];
-				pokemon.addVolatile(effect);
-			}
-		},
 	},
 	{
 		name: "[Gen 9] STABmons",
@@ -1552,26 +1539,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			}
 		},
 		onBeforeSwitchIn(pokemon) {
-			// Abilities that must be applied before both sides trigger onSwitchIn to correctly
-			// handle switch-in ability-to-ability interactions, e.g. Intimidate counters
-			const neededBeforeSwitchInIDs = [
-				'clearbody', 'competitive', 'contrary', 'defiant', 'fullmetalbody', 'hypercutter', 'innerfocus',
-				'mirrorarmor', 'oblivious', 'owntempo', 'rattled', 'scrappy', 'simple', 'whitesmoke',
-			];
-			if (pokemon.m.innates) {
-				for (const innate of pokemon.m.innates) {
-					if (!neededBeforeSwitchInIDs.includes(innate)) continue;
-					if (pokemon.hasAbility(innate)) continue;
-					pokemon.addVolatile("ability:" + innate, pokemon);
-				}
-			}
-		},
-		onSwitchInPriority: 100,
-		onSwitchIn(pokemon) {
 			if (pokemon.m.innates) {
 				for (const innate of pokemon.m.innates) {
 					if (pokemon.hasAbility(innate)) continue;
-					pokemon.addVolatile("ability:" + innate, pokemon);
+					const effect = 'ability:' + innate;
+					pokemon.volatiles[effect] = this.initEffectState({id: this.toID(effect), target: pokemon});
 				}
 			}
 		},
@@ -1766,19 +1738,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				if (pokemon.m.sharedItemsUsed.includes(item)) continue;
 				const effect = 'item:' + item;
 				pokemon.volatiles[effect] = this.initEffectState({id: this.toID(effect), target: pokemon});
-				if (!pokemon.m.items) pokemon.m.items = [];
-				if (!pokemon.m.items.includes(effect)) pokemon.m.items.push(effect);
-			}
-		},
-		onSwitchInPriority: 100,
-		onSwitchIn(pokemon) {
-			let format = this.format;
-			if (!format.getSharedItems) format = this.dex.formats.get('gen9sharingiscaring');
-			for (const item of format.getSharedItems!(pokemon)) {
-				if (pokemon.m.sharedItemsUsed.includes(item)) continue;
-				const effect = 'item:' + item;
-				delete pokemon.volatiles[effect];
-				pokemon.addVolatile(effect);
 			}
 		},
 	},
@@ -2588,20 +2547,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				if (!pokemon.m.abils.includes(effect)) pokemon.m.abils.push(effect);
 			}
 		},
-		onSwitchInPriority: 100,
-		onSwitchIn(pokemon) {
-			let format = this.format;
-			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
-			for (const ability of format.getSharedPower!(pokemon)) {
-				if (ability === 'noability') {
-					this.hint(`Mirror Armor and Trace break in Shared Power formats that don't use Shared Power as a base, so they get removed from non-base users.`);
-				}
-				const effect = 'ability:' + ability;
-				delete pokemon.volatiles[effect];
-				pokemon.addVolatile(effect);
-			}
-		},
-
 	},
 	{
 		name: "[Gen 9] Battle Factory",
