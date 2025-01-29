@@ -177,24 +177,23 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					break;
 				case 'triplemushroom':
 					this.add(`raw|<b>Triple Mushroom!</b>`);
+					this.add('-anim', source, 'Growth', source);
 					move.basePower = 20;
 					move.multihit = 3;
-					move.onPrepareHit = function (t, s, m) {
+					move.onTryHit = function (t, s, m) {
 						this.add('-anim', s, 'Quick Attack', t);
 					};
 					move.onHit = function (t, s, m) {
-						this.boost({ spe: 1 }, s);
+						this.boost({spe: 1}, s, s, m);
 					};
 					break;
 				case 'tripleredshell':
 					this.add(`raw|<b>Triple Red Shell!</b>`);
+					this.add('-anim', source, 'Searing Shot', target);
 					move.basePower = 40;
 					move.multihit = 3;
-					move.onPrepareHit = function (t, s, m) {
-						this.add('-anim', s, 'Pyro Ball', t);
-					};
 					move.onHit = function (t, s, m) {
-						if (this.randomChance(1, 3)) this.boost({ spe: -1 }, t, s, m);
+						if (this.randomChance(1, 3)) this.boost({spe: -1}, t, s, m);
 					};
 					break;
 				case 'star':
@@ -204,25 +203,24 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					return this.NOT_FAIL;
 					break;
 				case 'lightning':
+					this.add('-anim', target, 'Thunderbolt', target);
 					this.add(`raw|<b>Lightning!</b>`);
 					move.basePower = 100;
-					move.onPrepareHit = function (t, s, m) {
-						this.add('-anim', t, 'Thunderbolt', t);
-					};
 					move.onHit = function (t, s, m) {
 						t.side.addSideCondition('lightning');
 					};
 					break;
 				case 'triplebanana':
 					this.add(`raw|<b>Triple Banana!</b>`);
+					this.add('-anim', source, 'Teeter Dance', source);
 					move.basePower = 1;
 					move.multihit = 3;
-					move.onPrepareHit = function (t, s, m) {
-						this.add('-anim', s, 'Teeter Dance', s);
-					};
 					move.onHit = function (t, s, m) {
-						this.add('-anim', t, 'Teeter Dance', t);
-						if (this.randomChance(1, 3) && !t.volatiles['mustrecharge']) t.addVolatile('mustrecharge');
+						if (this.randomChance(1, 3)) {
+							this.add('-anim', t, 'Tickle', t);
+							this.add('-message', `${t.name} slipped on a banana!`);
+							if (!t.volatiles['mustrecharge']) t.addVolatile('mustrecharge');
+						}
 					};
 					break;
 				case 'boo':
@@ -232,16 +230,14 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					break;
 				case 'powblock':
 					this.add(`raw|<b>POW!</b>`);
+					this.add('-anim', source, 'Earthquake', target);
+					this.add('-anim', target, 'Seismic Toss', target);
 					move.basePower = 80;
-					move.onPrepareHit = function (t, s, m) {
-						this.add('-anim', s, 'Seismic Toss', s);
-						this.add('-anim', s, 'Earthquake', t);
-					};
 					move.onHit = function (t, s, m) {
 						if (!t.volatiles['flinch']) t.addVolatile('flinch');
 						let item = t.takeItem();
 						if (item) {
-							this.add('-enditem', t, item.name, '[from] move: POW', '[of] ' + s);
+							this.add('-enditem', t, item.name, '[from] move: Item Box', '[of] ' + s);
 						}
 					};
 					break;
@@ -250,30 +246,27 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					this.add('-anim', source, 'Wish', source);
 					target.side.addSideCondition('spinyshell');
 					target.side.sideConditions['spinyshell'].effectSource = source;
-					this.add('-message', `The Spiny Shell disappeared into the sky!`);
+					this.add('-message', `The shell disappeared into the sky!`);
 					return this.NOT_FAIL;
 					break;
 				case 'triplegreenshell':
-					this.add(`raw|<b>Green Shell!</b>`);
+					this.add(`raw|<b>Triple Green Shell!</b>`);
+					this.add('-anim', source, 'Teeter Dance', source);
+					this.add('-anim', source, 'Seed Bomb', target);
 					move.basePower = 40;
 					move.multihit = 3;
-					move.onPrepareHit = function (t, s, m) {
+					move.onTryHit = function (t, s, m) {
 						if (this.randomChance(1, 10)) {
 							m.target = 'self';
-							this.add('-anim', s, 'Energy Ball', s);
-						} else {
-							this.add('-anim', s, 'Energy Ball', t);
 						}
 					};
 					break;
 				case 'blooper':
 					this.add(`raw|<b>Blooper!</b>`);
+					this.add('-anim', source, 'Acid Spray', target);
 					move.basePower = 80;
-					move.onPrepareHit = function (t, s, m) {
-						this.add('-anim', s, 'Acid Spray', t);
-					};
 					move.onHit = function (t, s, m) {
-						t.addVolatile('blooper');
+						if (!t.volatiles['blooper']) t.addVolatile('blooper');
 					};
 					break;
 				case 'bulletbill':
