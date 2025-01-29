@@ -61,7 +61,7 @@ describe('Wish', function () {
 		assert.false.fullHP(wynaut, `Wish should have never resolved.`);
 	});
 
-	it.skip(`should do nothing if no Pokemon is present to heal from Wish`, function () {
+	it(`should do nothing if no Pokemon is present to heal from Wish`, function () {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['sleeptalk', 'wish']},
 			{species: 'Shedinja', moves: ['sleeptalk']},
