@@ -203,12 +203,13 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 			pokemon.abilityState.originalMaxHp = pokemon.maxhp;
 			pokemon.maxhp *= 2;
 			pokemon.baseMaxhp *= 2;
+			pokemon.hp *= 2;
 			this.add('-heal', pokemon, pokemon.getHealth);
-			this.add('-message', `${pokemon.name}'s max HP was doubled!`);
+			this.add('-message', `${pokemon.name}'s HP was doubled!`);
 		},
 		onModifyMove(move, pokemon) {
 			move.onHit = function (t, s, m) {
-				if (m.category === 'Status' || t === s) return;
+				if (m.category === 'Status' || t === s || t.volatiles['quash']) return;
 				t.addVolatile('quash');
 			};
 		},
@@ -220,6 +221,7 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 			this.add('-anim', pokemon, 'Minimize', pokemon);
 			pokemon.maxhp = pokemon.abilityState.originalMaxHp;
 			pokemon.baseMaxhp = pokemon.abilityState.originalMaxHp;
+			pokemon.hp /= 2;
 			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			this.add('-message', `${pokemon.name} returned to normal size!`);
 		},
@@ -255,6 +257,9 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 			pokemon.moveSlots[3] = booMove;
 			this.effectState.oldMove = oldMove;
 		},
+		onModifyPriority(priority, pokemon, target, move) {
+			return priority + 1;
+		},
 		onDisableMove(pokemon) {
 			for (const moveSlot of pokemon.moveSlots) {
 				if (moveSlot.id !== pokemon.moveSlots[3].id) {
@@ -265,18 +270,12 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 		onTrapPokemon(pokemon) {
 			pokemon.tryTrap();
 		},
-		onDamagePriority: 1,
-		onDamage(damage, target, source, effect) {
-			if (damage && effect?.effectType === 'Move') {
-				this.add('-fail', source);
-				return null;
+		onFoeBeforeMovePriority: 15,
+		onFoeBeforeMove(attacker, defender, move) {
+			if (defender.volatiles['boo']) {
+				this.add('cant', attacker, this.dex.conditions.get('Boo'), move);
+				return false;
 			}
-		},
-		onModifyPriority(priority, pokemon, target, move) {
-			return priority + 1;
-		},
-		onAfterMoveSecondarySelf(source, target, move) {
-			this.add('-message', `${source.name} used ${target.name}'s ${move.name} against it!`);
 		},
 		onEnd(pokemon) {
 			pokemon.moveSlots[3] = this.effectState.oldMove;
