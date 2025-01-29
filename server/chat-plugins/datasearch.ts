@@ -625,7 +625,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		zubl: 'ZUBL', zu: 'ZU',
 		nfe: 'NFE',
 		lc: 'LC',
-		cap: 'CAP', caplc: 'CAP LC', capnfe: 'CAP NFE',
+		cap: 'CAP', caplc: 'CAP LC', capnfe: 'CAP NFE', pendiente: 'Pendiente', pendientes: 'Pendiente'
 	});
 	const allDoublesTiers: {[k: string]: TierTypes.Singles | TierTypes.Other} = Object.assign(Object.create(null), {
 		doublesubers: 'DUber', doublesuber: 'DUber', duber: 'DUber', dubers: 'DUber',

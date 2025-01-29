@@ -140,6 +140,10 @@ export const Tags: {[id: IDEntry]: TagData} = {
 		name: "Uber",
 		speciesFilter: species => species.tier === 'Uber' || species.tier === '(Uber)' || species.tier === 'AG',
 	},
+	pendiente: {
+		name: "Pendiente",
+		speciesFilter: species => species.tier === 'Pendiente',
+	},
 	ou: {
 		name: "OU",
 		speciesFilter: species => species.tier === 'OU' || species.tier === '(OU)',
@@ -241,6 +245,10 @@ export const Tags: {[id: IDEntry]: TagData} = {
 	nduber: {
 		name: "ND Uber",
 		speciesFilter: species => species.natDexTier === 'Uber' || species.natDexTier === '(Uber)',
+	},
+	ndpendiente: {
+		name: "ND Pendiente",
+		speciesFilter: species => species.natDexTier === 'Pendiente',
 	},
 	ndou: {
 		name: "ND OU",
