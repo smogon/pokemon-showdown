@@ -226,7 +226,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	/** True if a Pokemon species is incapable of dynamaxing */
 	readonly cannotDynamax?: boolean;
 	/** The Tera Type this Pokemon is forced to use */
-	readonly forceTeraType?: string;
+	readonly requiredTeraType?: string;
 	/** What it transforms from, if a pokemon is a forme that is only accessible in battle. */
 	readonly battleOnly?: string | string[];
 	/** Required item. Do not use this directly; see requiredItems. */

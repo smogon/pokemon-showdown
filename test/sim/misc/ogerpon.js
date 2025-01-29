@@ -20,4 +20,108 @@ describe(`[Hackmons] Ogerpon`, function () {
 		battle.makeChoices('switch 2', 'auto');
 		assert.equal(ogerpon.ability, 'embodyaspectteal', `Ogerpon's ability should be Embody Aspect after switching out`);
 	});
+
+	it(`won't Terastallize into a type other than Fire, Grass, Rock or Water`, function () {
+		battle = common.gen(9).createBattle([[
+			{species: 'ogerponwellspringtera', ability: 'embodyaspectwellspring', moves: ['sleeptalk'], teraType: 'Electric'},
+		], [
+			{species: 'silicobra', moves: ['stealthrock']},
+		]]);
+		const ogerpon = battle.p1.active[0];
+		battle.makeChoices('move sleeptalk terastallize', 'auto');
+		assert.false(!!ogerpon.terastallized);
+	});
+
+	// https://www.smogon.com/forums/threads/ogerpon-teal-tera-tera-can-exist.3742851/post-10132811
+	it(`can Terastallize into the type of another mask`, function () {
+		battle = common.gen(9).createBattle([[
+			{species: 'ogerponwellspring', ability: 'waterabsorb', moves: ['ivycudgel'], teraType: 'Rock'},
+		], [
+			{species: 'seismitoad', ability: 'waterabsorb', moves: ['stealthrock']},
+		]]);
+		const ogerpon = battle.p1.active[0];
+		battle.makeChoices('move ivycudgel terastallize', 'auto');
+		assert.species(ogerpon, 'Ogerpon-Wellspring-Tera');
+		assert.equal(ogerpon.ability, 'embodyaspectwellspring');
+		assert.statStage(ogerpon, 'spd', 1);
+		assert.equal(ogerpon.getTypes().join(''), 'Rock');
+		assert.fullHP(battle.p2.active[0]);
+		assert(battle.log.includes('|detailschange|p1a: Ogerpon|Ogerpon-Cornerstone-Tera, F, tera:Rock'));
+	});
+
+	// https://www.smogon.com/forums/threads/ogerpon-teal-tera-tera-can-exist.3742851/post-10132811
+	it(`Tera form can Terastallize`, function () {
+		battle = common.gen(9).createBattle([[
+			{species: 'ogerponwellspringtera', ability: 'embodyaspectwellspring', moves: ['ivycudgel'], teraType: 'Water'},
+		], [
+			{species: 'seismitoad', ability: 'waterabsorb', moves: ['stealthrock']},
+		]]);
+		const ogerpon = battle.p1.active[0];
+		battle.makeChoices('move ivycudgel terastallize', 'auto');
+		assert.species(ogerpon, 'Ogerpon-Wellspring-Tera');
+		assert.equal(ogerpon.ability, 'embodyaspectwellspring');
+		assert.statStage(ogerpon, 'spd', 1);
+		assert.equal(ogerpon.getTypes().join(''), 'Water');
+		assert.fullHP(battle.p2.active[0]);
+		assert(battle.log.includes('|detailschange|p1a: Ogerpon|Ogerpon-Wellspring-Tera, F, tera:Water'));
+	});
+
+	// https://www.smogon.com/forums/threads/ogerpon-teal-tera-tera-can-exist.3742851/post-10132811
+	it(`Tera form can Terastallize into the type of another mask`, function () {
+		battle = common.gen(9).createBattle([[
+			{species: 'ogerponwellspringtera', ability: 'embodyaspectwellspring', moves: ['ivycudgel'], teraType: 'Rock'},
+		], [
+			{species: 'seismitoad', ability: 'waterabsorb', moves: ['stealthrock']},
+		]]);
+		const ogerpon = battle.p1.active[0];
+		battle.makeChoices('move ivycudgel terastallize', 'auto');
+		assert.species(ogerpon, 'Ogerpon-Wellspring-Tera');
+		assert.equal(ogerpon.ability, 'embodyaspectwellspring');
+		assert.statStage(ogerpon, 'spd', 1);
+		assert.equal(ogerpon.getTypes().join(''), 'Rock');
+		assert.fullHP(battle.p2.active[0]);
+		assert(battle.log.includes('|detailschange|p1a: Ogerpon|Ogerpon-Cornerstone-Tera, F, tera:Rock'));
+	});
+
+	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-10404934
+	it(`can Terastallize into any type if transformed, but it won't change form`, function () {
+		battle = common.gen(9).createBattle([[
+			{species: 'ogerponwellspring', ability: 'waterabsorb', moves: ['transform', 'ivycudgel'], teraType: 'Fairy'},
+			{species: 'silicobra', moves: ['stealthrock']},
+		], [
+			{species: 'seismitoad', ability: 'waterabsorb', moves: ['sleeptalk']},
+		]]);
+		const ogerpon = battle.p1.active[0];
+		battle.makeChoices('move transform', 'auto');
+		battle.makeChoices('move sleeptalk terastallize', 'auto');
+		assert.equal(ogerpon.baseSpecies.name, 'Ogerpon-Wellspring');
+		assert.species(ogerpon, 'Seismitoad');
+		assert.equal(ogerpon.getTypes().join(''), 'Fairy');
+
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices('move ivycudgel', 'auto');
+		assert.species(ogerpon, 'Ogerpon-Wellspring');
+		assert.equal(ogerpon.ability, 'waterabsorb');
+		assert.statStage(ogerpon, 'spd', 0);
+		assert.equal(ogerpon.getTypes().join(''), 'Fairy');
+		assert.fullHP(battle.p2.active[0]);
+		assert.false(battle.log.includes('|detailschange|'));
+	});
+
+	// https://www.smogon.com/forums/threads/ogerpon-teal-tera-tera-can-exist.3742851/post-10132811
+	it(`Embody Aspect should not activate unless the user is Terastallized`, function () {
+		battle = common.gen(9).createBattle([[
+			{species: 'ogerponwellspringtera', ability: 'embodyaspectwellspring', moves: ['sleeptalk'], teraType: 'Water'},
+		], [
+			{species: 'silicobra', moves: ['stealthrock']},
+		]]);
+		const ogerpon = battle.p1.active[0];
+		battle.makeChoices();
+		assert.species(ogerpon, 'Ogerpon-Wellspring-Tera');
+		assert.statStage(ogerpon, 'spd', 0);
+		battle.makeChoices('move sleeptalk terastallize', 'auto');
+		assert.species(ogerpon, 'Ogerpon-Wellspring-Tera');
+		assert.statStage(ogerpon, 'spd', 1);
+	});
 });
