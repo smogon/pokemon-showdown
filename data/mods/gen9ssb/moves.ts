@@ -285,6 +285,9 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					break;
 			}
 		},
+		onEffectiveness(typeMod, target, type) {
+			return 0;//I NEED HELP.
+		},
 		secondary: null,
 		type: "Steel",
 		target: 'normal',
