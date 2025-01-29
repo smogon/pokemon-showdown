@@ -3438,10 +3438,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Protosynthesis is not affected by Utility Umbrella
 			if (this.field.isWeather('sunnyday')) {
 				pokemon.addVolatile('protosynthesis');
-			} else if (!pokemon.volatiles['protosynthesis'] && pokemon.hasItem('boosterenergy')) {
-				pokemon.useItem();
-			} else if (!pokemon.volatiles['protosynthesis']?.fromBooster) {
-				pokemon.removeVolatile('protosynthesis');
+			} else {
+				if (!pokemon.volatiles['protosynthesis']?.fromBooster) {
+					pokemon.removeVolatile('protosynthesis');
+				}
+				if (!pokemon.volatiles['protosynthesis'] && pokemon.hasItem('boosterenergy')) {
+					pokemon.useItem();
+				}
 			}
 		},
 		onUpdate(pokemon) {
@@ -3584,10 +3587,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('electricterrain')) {
 				pokemon.addVolatile('quarkdrive');
-			} else if (!pokemon.volatiles['quarkdrive'] && pokemon.hasItem('boosterenergy')) {
-				pokemon.useItem();
-			} else if (!pokemon.volatiles['quarkdrive']?.fromBooster) {
-				pokemon.removeVolatile('quarkdrive');
+			} else {
+				if (!pokemon.volatiles['quarkdrive']?.fromBooster) {
+					pokemon.removeVolatile('quarkdrive');
+				}
+				if (!pokemon.volatiles['quarkdrive'] && pokemon.hasItem('boosterenergy')) {
+					pokemon.useItem();
+				}
 			}
 		},
 		onUpdate(pokemon) {
