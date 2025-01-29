@@ -1463,19 +1463,17 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					pokemon.m.innate = 'ability:' + ally.ability;
 					if (!ngas || ally.getAbility().flags['cantsuppress'] || pokemon.hasItem('Ability Shield')) {
 						pokemon.volatiles[pokemon.m.innate] = this.initEffectState({id: pokemon.m.innate, target: pokemon});
-						pokemon.m.startVolatile = true;
 					}
 				}
 				if (!ally.m.innate && !BAD_ABILITIES.includes(this.toID(pokemon.ability))) {
 					ally.m.innate = 'ability:' + pokemon.ability;
 					if (!ngas || pokemon.getAbility().flags['cantsuppress'] || ally.hasItem('Ability Shield')) {
 						ally.volatiles[ally.m.innate] = this.initEffectState({id: ally.m.innate, target: ally});
-						ally.m.startVolatile = true;
 					}
 				}
 			}
 		},
-		// Starting innate abilities in scripts#actions
+		// Starting innate abilities in scripts
 		onSwitchOut(pokemon) {
 			if (pokemon.m.innate) {
 				pokemon.removeVolatile(pokemon.m.innate);
