@@ -7,7 +7,8 @@ export const Formats: FormatList = [
 		desc: `No Special rules`,
 		threads: [],
 		mod: 'pokefind',
-		ruleset: []
+		ruleset: [],
+		gameType: 'singles'
 	},
 	{
 		name: "NormalDouble",
