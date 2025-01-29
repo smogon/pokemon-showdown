@@ -1043,6 +1043,17 @@ export class Battle {
 				handlers.push(this.resolvePriority({
 					effect: volatile, callback, state: volatileState, end: pokemon.removeVolatile, effectHolder: pokemon,
 				}, callbackName));
+			} else if (['ability', 'item'].includes(volatile.id.split(':')[0])) {
+				// Innate abilities/items; see comment below
+				// @ts-ignore - dynamic lookup
+				if (this.gen >= 5 && callbackName === 'onSwitchIn' && !volatile.onAnySwitchIn) {
+					callback = volatile.onStart;
+					if (callback !== undefined || (getKey && volatileState[getKey])) {
+						handlers.push(this.resolvePriority({
+							effect: volatile, callback, state: volatileState, end: pokemon.removeVolatile, effectHolder: pokemon,
+						}, callbackName));
+					}
+				}
 			}
 		}
 		// Abilities and items Start at different times during the SwitchIn event, so we run their onStart handlers

@@ -369,6 +369,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 		this: Battle, move: ActiveMove, attacker: Pokemon, defender: Pokemon, announcePads?: boolean
 	) => boolean;
 	checkWin?: (this: Battle, faintQueue?: Battle['faintQueue'][0]) => true | undefined;
+	fieldEvent?: (this: Battle, eventid: string, targets?: Pokemon[]) => void;
 }
 
 type TypeInfo = import('./dex-data').TypeInfo;
