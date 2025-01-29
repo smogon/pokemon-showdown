@@ -1156,124 +1156,117 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RUBL",
 	},
 	chikorita: {
-		tier: "Illegal",
+		tier: "Pendiente",
 	},
 	bayleef: {
-		tier: "Illegal",
+		tier: "Pendiente",
 	},
 	meganium: {
-		tier: "Illegal",
+		tier: "Pendiente",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
 	cyndaquil: {
-		tier: "Illegal",
+		tier: "Pendiente",
 	},
 	quilava: {
-		tier: "Illegal",
+		tier: "Pendiente",
 	},
 	typhlosion: {
-		tier: "Illegal",
+		tier: "Pendiente",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
 	typhlosionhisui: {
-		tier: "Illegal",
+		tier: "Pendiente",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
 	totodile: {
-		tier: "Illegal",
+		tier: "Pendiente",
 	},
 	croconaw: {
-		tier: "Illegal",
+		tier: "Pendiente",
 	},
 	feraligatr: {
-		tier: "Illegal",
+		tier: "Pendiente",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
 	sentret: {
-		tier: "Illegal",
+		tier: "Pendiente",
 	},
 	furret: {
-		tier: "Illegal",
+		tier: "Pendiente",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
 	furrip: {
-		tier: "Illegal",
+		tier: "Pendiente",
 		natDexTier: "RU",
 	},
 	furrum: {
-		tier: "Illegal",
+		tier: "Pendiente",
 		natDexTier: "RU",
 	},
 	furrful: {
-		tier: "Illegal",
+		tier: "Pendiente",
 		natDexTier: "RU",
 	},
 	hoothoot: {
-		tier: "Illegal",
+		tier: "Pendiente",
 	},
 	noctowl: {
-		tier: "Illegal",
+		tier: "Pendiente",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
 	noceadowl: {
-		tier: "Illegal",
+		tier: "Pendiente",
 		natDexTier: "RU",
 	},
 	ledyba: {
-
-		tier: "Illegal",
+		tier: "Pendiente",
 		natDexTier: "LC",
 	},
 	ledian: {
-
-		tier: "Illegal",
+		tier: "Pendiente",
 		natDexTier: "RU",
 	},
 	spinarak: {
-		tier: "Illegal",
+		tier: "Pendiente",
 	},
 	ariados: {
-		tier: "Illegal",
+		tier: "Pendiente",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
 	chinchou: {
-		tier: "Illegal",
+		tier: "Pendiente",
 	},
 	lanturn: {
-		tier: "Illegal",
+		tier: "Pendiente",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
 	togepi: {
-
-		tier: "Illegal",
+		tier: "Pendiente",
 		natDexTier: "LC",
 	},
 	togetic: {
-
-		tier: "Illegal",
+		tier: "Pendiente",
 		natDexTier: "NFE",
 	},
 	togekiss: {
-
 		tier: "Illegal",
 		natDexTier: "RU",
 	},
 	natu: {
-
-		tier: "Illegal",
+		tier: "Pendiente",
 		natDexTier: "LC",
 	},
 	xatu: {
-
-		tier: "Illegal",
+		tier: "Pendiente",
 		natDexTier: "RU",
 	},
 	mareep: {
