@@ -1045,6 +1045,9 @@ export class Battle {
 				}, callbackName));
 			}
 		}
+		// Abilities and items Start at different times during the SwitchIn event, so we run their onStart handlers
+		// during the SwitchIn event instead of running the Start event during switch-ins
+		// gens 4 and before still use the old system, though
 		const ability = pokemon.getAbility();
 		// @ts-ignore - dynamic lookup
 		callback = ability[callbackName];
@@ -1052,6 +1055,15 @@ export class Battle {
 			handlers.push(this.resolvePriority({
 				effect: ability, callback, state: pokemon.abilityState, end: pokemon.clearAbility, effectHolder: pokemon,
 			}, callbackName));
+			// @ts-ignore - dynamic lookup
+		} else if (this.gen >= 5 && callbackName === 'onSwitchIn' && !ability.onAnySwitchIn) {
+			// @ts-ignore - dynamic lookup
+			callback = ability.onStart;
+			if (callback !== undefined || (getKey && pokemon.abilityState[getKey])) {
+				handlers.push(this.resolvePriority({
+					effect: ability, callback, state: pokemon.abilityState, end: pokemon.clearAbility, effectHolder: pokemon,
+				}, callbackName));
+			}
 		}
 		const item = pokemon.getItem();
 		// @ts-ignore - dynamic lookup
@@ -1060,6 +1072,15 @@ export class Battle {
 			handlers.push(this.resolvePriority({
 				effect: item, callback, state: pokemon.itemState, end: pokemon.clearItem, effectHolder: pokemon,
 			}, callbackName));
+			// @ts-ignore - dynamic lookup
+		} else if (this.gen >= 5 && callbackName === 'onSwitchIn' && !item.onAnySwitchIn) {
+			// @ts-ignore - dynamic lookup
+			callback = item.onStart;
+			if (callback !== undefined || (getKey && pokemon.itemState[getKey])) {
+				handlers.push(this.resolvePriority({
+					effect: item, callback, state: pokemon.itemState, end: pokemon.clearItem, effectHolder: pokemon,
+				}, callbackName));
+			}
 		}
 		const species = pokemon.baseSpecies;
 		// @ts-ignore - dynamic lookup
