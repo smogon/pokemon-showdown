@@ -273,9 +273,15 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 		onFoeBeforeMovePriority: 15,
 		onFoeBeforeMove(attacker, defender, move) {
 			if (defender.volatiles['boo']) {
-				this.add('cant', attacker, this.dex.conditions.get('Boo'), move);
-				return false;
+				// need to prefer making the move fail as opposed to just having the move miss, like Phantom Force would normally work.
+				// this way the user is not targeted by a move mid-vanish and does not reappear earlier than anticipated.
+				this.debug(`${move.id} fail due to boo vanish`);
+				return null;
 			}
+		},
+		onBeforeMove(pokemon) {
+			pokemon.removeVolatile('boo');
+			this.add('-anim', pokemon, 'Spectral Thief', pokemon);
 		},
 		onEnd(pokemon) {
 			pokemon.moveSlots[3] = this.effectState.oldMove;
