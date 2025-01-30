@@ -517,7 +517,7 @@ export class Pokemon {
 		let details = this.details;
 		if (this.illusion) {
 			details = this.illusion.getUpdatedDetails(
-				this.battle.ruleTable.has('illusionlevelmod') ? this.illusion.level : undefined
+				this.battle.ruleTable.has('illusionlevelmod') ? this.illusion.level : this.level
 			);
 		}
 		if (this.terastallized) details += `, tera:${this.terastallized}`;
