@@ -187,6 +187,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	partiallytrapped: {
 		name: 'partiallytrapped',
 		duration: 2,
+		onStart(target, source, effect) {
+			target.maybePartiallyTrapped = true;
+		},
 		onBeforeMovePriority: 9,
 		onBeforeMove(pokemon) {
 			this.add('cant', pokemon, 'partiallytrapped');
@@ -201,6 +204,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 		onStart(target, source, effect) {
 			this.effectState.move = effect.id;
+			target.maybePartiallyTrapping = effect.id;
 		},
 		onDisableMove(pokemon) {
 			if (!pokemon.hasMove(this.effectState.move)) {
