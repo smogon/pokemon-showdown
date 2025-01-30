@@ -730,7 +730,7 @@
         ]
     },
     "tangela": {
-        "level": 93,
+        "level": 94,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1242,7 +1242,7 @@
         ]
     },
     "togetic": {
-        "level": 96,
+        "level": 97,
         "sets": [
             {
                 "role": "Staller",
@@ -2154,7 +2154,7 @@
         ]
     },
     "shiftry": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2312,7 +2312,7 @@
         ]
     },
     "nosepass": {
-        "level": 99,
+        "level": 100,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2495,7 +2495,7 @@
         ]
     },
     "swalot": {
-        "level": 89,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Attacker",
