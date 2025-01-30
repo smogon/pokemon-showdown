@@ -505,10 +505,9 @@ export class Pokemon {
 		return this.isActive ? this.getSlot() + fullname.slice(2) : fullname;
 	}
 
-	getUpdatedDetails(illusionLevel?: number) {
+	getUpdatedDetails(level = this.level) {
 		let name = this.species.name;
 		if (name === 'Greninja-Bond') name = 'Greninja';
-		const level = illusionLevel || this.level;
 		return name + (level === 100 ? '' : ', L' + level) +
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 	}
@@ -517,7 +516,9 @@ export class Pokemon {
 		const health = this.getHealth();
 		let details = this.details;
 		if (this.illusion) {
-			details = this.illusion.getUpdatedDetails(this.battle.ruleTable.has('illusionlevelmod') ? this.level : undefined);
+			details = this.illusion.getUpdatedDetails(
+				this.battle.ruleTable.has('illusionlevelmod') ? this.illusion.level : undefined
+			);
 		}
 		if (this.terastallized) details += `, tera:${this.terastallized}`;
 		return {side: health.side, secret: `${details}|${health.secret}`, shared: `${details}|${health.shared}`};
