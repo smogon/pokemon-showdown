@@ -246,13 +246,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Homerun Swing - Windup',
 		evs: { hp: 252, atk: 252, spd: 4 }, ivs: { spa: 0 }, nature: 'Adamant',
 	},
+	/*
 	Quetzalcoatl: {
 		species: 'Zapdos', ability: 'Peal of Thunder', item: 'Leftovers', gender: 'N',
 		moves: ['Oblivion Wing', 'Whirlwind', 'Glare'],
 		signatureMove: 'Big Thunder',
 		evs: {hp: 252, spa: 252, spe: 4}, ivs: {atk: 0}, nature: 'Modest',
 	},
-	/*
 	Miraju: {
 		species: 'Wynaut', ability: 'Illusive Energy', item: 'Eviolite', gender: 'N',
 		moves: ['Hyperspace Hole', 'Glare', 'Memento'],
