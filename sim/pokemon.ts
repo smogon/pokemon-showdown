@@ -1493,9 +1493,6 @@ export class Pokemon {
 
 		this.volatileStaleness = undefined;
 
-		delete this.abilityState.started;
-		delete this.itemState.started;
-
 		this.setSpecies(this.baseSpecies);
 	}
 
@@ -1749,7 +1746,7 @@ export class Pokemon {
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		const item = this.getItem();
-		if (this.battle.runEvent('UseItem', this, null, null, item)) {
+		if (this.battle.runEvent('UseItem', this, source, sourceEffect, item)) {
 			switch (item.id) {
 			case 'redcard':
 				this.battle.add('-enditem', this, item, '[of] ' + source);
