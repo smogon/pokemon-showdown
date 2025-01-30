@@ -1528,7 +1528,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 				this.field.setWeather('raindance');
 				this.add('-message', `${pokemon.name}'s Wind Priestess summoned heavy rain!`);
 			} else if (w === 2) {
-				this.field.setWeather('snowscape');
+				this.field.setWeather('snow');
 				this.add('-message', `${pokemon.name}'s Wind Priestess summoned a snowstorm!`);
 			} else {
 				this.field.setWeather('sandstorm');
