@@ -504,10 +504,6 @@ export const Items: { [k: string]: ModdedItemData } = {
 		onStart(pokemon) {
 			if (pokemon.setType(['Steel', 'Fire'])) this.add('-start', pokemon, 'typechange', 'Steel/Fire', '[from] item: Flame Flyer');
 		},
-		onModifySpePriority: 1,
-		onModifySpe(spe, pokemon) {
-			return this.chainModify(1.1);
-		},
 		onModifyMove(move, pokemon) {
 			move.overrideOffensiveStat = 'spe';
 		},
