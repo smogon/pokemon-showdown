@@ -96,4 +96,19 @@ describe(`Photon Geyser`, function () {
 		battle.makeChoices();
 		assert.fainted(battle.p2.active[0]);
 	});
+
+	it(`should be a physical attack with higher attack stat even if target ignores stat changes`, function () {
+		battle = common.createBattle([[
+			// Regidrago has equal base attack and special attack stats.
+			{species: 'regidrago', ability: 'dragonsmaw', moves: ['photongeyser', 'dragondance']},
+		], [
+			// Dondozo's Unaware should not affect the move's category.
+			{species: 'dondozo', ability: 'unaware', moves: ['splash']},
+		]]);
+		// Dragon Dance boosts Regidrago's attack stat.
+		battle.makeChoices('move dragondance', 'move splash');
+		battle.makeChoices('move photongeyser', 'move splash');
+
+		assert.equal(battle.p1.pokemon[0].lastMove.category, 'Physical');
+	});
 });

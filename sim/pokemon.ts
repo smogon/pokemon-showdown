@@ -564,7 +564,7 @@ export class Pokemon {
 		return this.battle.modify(stat, (modifier || 1));
 	}
 
-	getStat(statName: StatIDExceptHP, unboosted?: boolean, unmodified?: boolean) {
+	getStat(statName: StatIDExceptHP, ignoreBoosts?: boolean, ignoreModifiers?: boolean, ignoreBoostModifiers?: boolean) {
 		statName = toID(statName) as StatIDExceptHP;
 		// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
 		if (statName === 'hp') throw new Error("Please read `maxhp` directly");
@@ -574,7 +574,7 @@ export class Pokemon {
 
 		// Download ignores Wonder Room's effect, but this results in
 		// stat stages being calculated on the opposite defensive stat
-		if (unmodified && 'wonderroom' in this.battle.field.pseudoWeather) {
+		if (ignoreModifiers && 'wonderroom' in this.battle.field.pseudoWeather) {
 			if (statName === 'def') {
 				statName = 'spd';
 			} else if (statName === 'spd') {
@@ -583,8 +583,11 @@ export class Pokemon {
 		}
 
 		// stat boosts
-		if (!unboosted) {
-			const boosts = this.battle.runEvent('ModifyBoost', this, null, null, {...this.boosts});
+		if (!ignoreBoosts) {
+			let boosts = {...this.boosts};
+			if (!ignoreBoostModifiers) {
+				boosts = this.battle.runEvent('ModifyBoost', this, null, null, boosts);
+			}
 			let boost = boosts[statName];
 			const boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 			if (boost > 6) boost = 6;
@@ -597,7 +600,7 @@ export class Pokemon {
 		}
 
 		// stat modifier effects
-		if (!unmodified) {
+		if (!ignoreModifiers) {
 			const statTable: {[s in StatIDExceptHP]: string} = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
 			stat = this.battle.runEvent('Modify' + statTable[statName], this, null, null, stat);
 		}
