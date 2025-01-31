@@ -1710,6 +1710,10 @@ export class Pokemon {
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		const item = this.getItem();
+		if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
+			// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
+			return false;
+		}
 		if (
 			this.battle.runEvent('UseItem', this, null, null, item) &&
 			(force || this.battle.runEvent('TryEatItem', this, null, null, item))
@@ -1749,6 +1753,10 @@ export class Pokemon {
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		const item = this.getItem();
+		if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
+			// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
+			return false;
+		}
 		if (this.battle.runEvent('UseItem', this, null, null, item)) {
 			switch (item.id) {
 			case 'redcard':
