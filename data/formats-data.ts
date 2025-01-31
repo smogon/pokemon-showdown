@@ -2462,7 +2462,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "NFE",
 	},
 	torterra: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
@@ -3501,7 +3501,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "LC",
 	},
 	mienshao: {
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "UU",
 	},
@@ -4161,7 +4161,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	oricoriosensu: {
-		tier: "ZU",
+		tier: "NUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
@@ -5442,7 +5442,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	roaringmoon: {
 		tier: "OU",
 		doublesTier: "DOU",
-		natDexTier: "Uber",
+		natDexTier: "(OU)",
 	},
 	irontreads: {
 		tier: "OU",

@@ -60,4 +60,21 @@ describe('Wish', function () {
 		const wynaut = battle.p1.active[0];
 		assert.false.fullHP(wynaut, `Wish should have never resolved.`);
 	});
+
+	it(`should do nothing if no Pokemon is present to heal from Wish`, function () {
+		battle = common.createBattle([[
+			{species: 'Wynaut', moves: ['sleeptalk', 'wish']},
+			{species: 'Shedinja', moves: ['sleeptalk']},
+		], [
+			{species: 'Happiny', ability: 'noguard', moves: ['sleeptalk', 'stoneaxe']},
+		]]);
+
+		battle.makeChoices('move wish', 'move stoneaxe');
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices('switch 2');
+		const wynaut = battle.p1.active[0];
+		assert.false.fullHP(wynaut, `Wish should not have healed Wynaut even after it was KOed.`);
+		battle.makeChoices();
+		assert.false.fullHP(wynaut, `Wish should not have healed Wynaut later either.`);
+	});
 });

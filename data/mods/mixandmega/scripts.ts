@@ -67,8 +67,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const species = pokemon.setSpecies(rawSpecies);
 				if (!species) continue;
 				pokemon.baseSpecies = rawSpecies;
-				pokemon.details = species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				pokemon.details = pokemon.getUpdatedDetails();
 				pokemon.ability = this.toID(species.abilities['0']);
 				pokemon.baseAbility = pokemon.ability;
 			}
@@ -118,8 +117,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const species = pokemon.setSpecies(rawSpecies);
 				if (!species) continue;
 				pokemon.baseSpecies = rawSpecies;
-				pokemon.details = species.name + (pokemon.level === 100 ? '' : ', L' + pokemon.level) +
-					(pokemon.gender === '' ? '' : ', ' + pokemon.gender) + (pokemon.set.shiny ? ', shiny' : '');
+				pokemon.details = pokemon.getUpdatedDetails();
 				pokemon.ability = this.toID(species.abilities['0']);
 				pokemon.baseAbility = pokemon.ability;
 
@@ -257,16 +255,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
 			break;
-		case 'runUnnerve':
-			this.singleEvent('PreStart', action.pokemon.getAbility(), action.pokemon.abilityState, action.pokemon);
-			break;
 		case 'runSwitch':
 			this.actions.runSwitch(action.pokemon);
-			break;
-		case 'runPrimal':
-			if (!action.pokemon.transformed) {
-				this.singleEvent('Primal', action.pokemon.getItem(), action.pokemon.itemState, action.pokemon);
-			}
 			break;
 		case 'shift':
 			if (!action.pokemon.isActive) return false;
@@ -282,7 +272,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.clearActiveMove(true);
 			this.updateSpeed();
 			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
-			this.residualEvent('Residual');
+			this.fieldEvent('Residual');
 			this.add('upkeep');
 			break;
 		}
@@ -326,7 +316,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return false;
 		}
 
-		if (this.gen >= 5) {
+		if (this.gen >= 5 && action.choice !== 'start') {
 			this.eachEvent('Update');
 			for (const [pokemon, originalHP] of residualPokemon) {
 				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);

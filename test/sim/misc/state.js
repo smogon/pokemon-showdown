@@ -25,8 +25,8 @@ describe('State', function () {
 	describe('Battles', function () {
 		it('should be able to be serialized and deserialized without affecting functionality (slow)', function () {
 			this.timeout(5000);
-			const control = common.createBattle(TEAMS);
-			let test = common.createBattle(TEAMS);
+			const control = common.createBattle({seed: 'sodium,00000001000000020000000300000004'}, TEAMS);
+			let test = common.createBattle({seed: 'sodium,00000001000000020000000300000004'}, TEAMS);
 
 			while (!(control.ended || test.ended)) {
 				control.makeChoices();

@@ -529,7 +529,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Sticky Web');
 			},
-			onEntryHazard(pokemon) {
+			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				this.boost({spe: -1}, pokemon, this.effectState.source, this.dex.getActiveMove('stickyweb'));

@@ -260,6 +260,7 @@ interface ModdedBattleActions {
 }
 
 interface ModdedBattleSide {
+	inherit?: true;
 	canDynamaxNow?: (this: Side) => boolean;
 	chooseSwitch?: (this: Side, slotText?: string) => any;
 	getChoice?: (this: Side) => string;
@@ -328,10 +329,12 @@ interface ModdedBattlePokemon {
 }
 
 interface ModdedBattleQueue extends Partial<BattleQueue> {
+	inherit?: true;
 	resolveAction?: (this: BattleQueue, action: ActionChoice, midTurn?: boolean) => Action[];
 }
 
 interface ModdedField extends Partial<Field> {
+	inherit?: true;
 	suppressingWeather?: (this: Field) => boolean;
 }
 
@@ -366,6 +369,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 		this: Battle, move: ActiveMove, attacker: Pokemon, defender: Pokemon, announcePads?: boolean
 	) => boolean;
 	checkWin?: (this: Battle, faintQueue?: Battle['faintQueue'][0]) => true | undefined;
+	fieldEvent?: (this: Battle, eventid: string, targets?: Pokemon[]) => void;
 }
 
 type TypeInfo = import('./dex-data').TypeInfo;

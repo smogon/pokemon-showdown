@@ -261,7 +261,7 @@
         ]
     },
     "dugtrio": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Support",
@@ -874,7 +874,7 @@
         ]
     },
     "articuno": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Staller",
@@ -997,7 +997,7 @@
         ]
     },
     "furret": {
-        "level": 93,
+        "level": 92,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1262,7 +1262,7 @@
         ]
     },
     "dunsparce": {
-        "level": 93,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1368,7 +1368,7 @@
         ]
     },
     "magcargo": {
-        "level": 98,
+        "level": 99,
         "sets": [
             {
                 "role": "Staller",
@@ -1597,7 +1597,7 @@
         ]
     },
     "tyranitar": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1728,7 +1728,7 @@
         ]
     },
     "beautifly": {
-        "level": 99,
+        "level": 100,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1793,7 +1793,7 @@
         ]
     },
     "pelipper": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3307,7 +3307,7 @@
         ]
     },
     "yanmega": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Attacker",

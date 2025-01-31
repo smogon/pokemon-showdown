@@ -1744,13 +1744,32 @@ export const commands: Chat.ChatCommands = {
 				help = namespace['help'];
 			}
 
+			const display = (handler: Chat.AnnotatedChatHandler | Chat.ChatCommands) => {
+				let perm: GlobalPermission | null = null;
+				if (typeof handler === 'object') {
+					// if the user cannot view any command in the table, pretend it does not exist
+					for (const k in handler) {
+						const fn = handler[k] as Chat.AnnotatedChatHandler | string | string[];
+						if (typeof fn !== 'function') continue;
+						if (fn.isPrivate && fn.requiredPermission && !user.can(fn.requiredPermission as GlobalPermission)) {
+							perm = fn.requiredPermission as GlobalPermission;
+							break;
+						}
+					}
+				}
+				return (
+					(typeof handler === 'function' && !handler.isPrivate) ||
+					perm && user.can(perm) ||
+					(handler.isPrivate && user.can(perm || 'lock'))
+				);
+			};
+
 			const curHandler = namespace[cmd] as Chat.AnnotatedChatHandler;
-			const requiredPerm = curHandler?.requiredPermission || 'lock';
-			if (curHandler?.isPrivate && !user.can(requiredPerm as GlobalPermission)) {
+			if (curHandler && !display(curHandler)) {
 				throw new Chat.ErrorMessage(this.tr`The command '/${target}' does not exist.`);
 			}
 
-			if (typeof help === 'function') {
+			if (typeof help === 'function' && display(help)) {
 				// If the help command is a function, parse it instead
 				this.run(help);
 				return true;

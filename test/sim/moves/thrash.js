@@ -25,7 +25,7 @@ describe('Thrash [Gen 1]', function () {
 	});
 
 	it("Four turn Thrash", function () {
-		battle = common.gen(1).createBattle({seed: [1, 1, 1, 1]});
+		battle = common.gen(1).createBattle({seed: 'gen5,0001000100010001'});
 		battle.setPlayer('p1', {team: [{species: "Nidoking", moves: ['thrash']}]});
 		battle.setPlayer('p2', {team: [{species: "Golem", moves: ['splash']}]});
 		const nidoking = battle.p1.active[0];
