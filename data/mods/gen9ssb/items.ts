@@ -74,7 +74,7 @@ export const Items: { [k: string]: ModdedItemData } = {
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (target.getMoveHitData(move).crit) {
-				this.heal(source.maxhp / 4, source);
+				this.heal(source.maxhp / 8, source);
 			}
 		},
 		onResidual(pokemon) {
