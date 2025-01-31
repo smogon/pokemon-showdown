@@ -1176,7 +1176,9 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (move && source !== target) target.abilityState.damagedThisTurn = true;
+			if (!move || !damage || source === target) return;
+			target.abilityState.damagedThisTurn = true;
+			this.boost({spe: -1});
 		},
 		onResidual(pokemon) {
 			if (!pokemon.abilityState.damagedThisTurn && pokemon.activeTurns) {
@@ -1204,9 +1206,6 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			duration: 2,
 			onRestart(pokemon) {
 				this.effectState.duration = 2;
-			},
-			onModifyCritRatio(critRatio) {
-				return 5;
 			},
 		},
 	},
