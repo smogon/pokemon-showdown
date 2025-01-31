@@ -1265,7 +1265,7 @@ export class RandomTeams {
 		);
 		const doublesLeftoversHardcodes = (
 			moves.has('acidarmor') || species.id === 'eternatus' || species.id === 'regigigas' || moves.has('wish')
-		)
+		);
 
 		if (species.id === 'ursalunabloodmoon' && moves.has('protect')) return 'Silk Scarf';
 		if (
