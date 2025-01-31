@@ -236,7 +236,7 @@ export const ssbSets: SSBSets = {
 	},
 	PokeKart: {
 		species: 'Revavroom', ability: 'Chain Drift', item: 'Flame Flyer', gender: 'N',
-		moves: ['Gear Grind', 'Blazing Torque', 'U-turn'],
+		moves: ['Spin Out', 'Blazing Torque', 'U-turn'],
 		signatureMove: 'Item Box',
 		evs: { hp: 252, def: 4, spe: 252 }, nature: 'Jolly',
 	},
@@ -246,13 +246,13 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Homerun Swing - Windup',
 		evs: { hp: 252, atk: 252, spd: 4 }, ivs: { spa: 0 }, nature: 'Adamant',
 	},
-	/*
 	Quetzalcoatl: {
 		species: 'Zapdos', ability: 'Peal of Thunder', item: 'Leftovers', gender: 'N',
 		moves: ['Oblivion Wing', 'Whirlwind', 'Glare'],
 		signatureMove: 'Big Thunder',
 		evs: {hp: 252, spa: 252, spe: 4}, ivs: {atk: 0}, nature: 'Modest',
 	},
+	/*
 	Miraju: {
 		species: 'Wynaut', ability: 'Illusive Energy', item: 'Eviolite', gender: 'N',
 		moves: ['Hyperspace Hole', 'Glare', 'Memento'],
@@ -289,12 +289,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Omen of Defeat',
 		evs: {hp: 252, atk: 4, spe: 252}, nature: 'Jolly',
 	},
-	  Varnava: {
-		species: 'Zygarde-Complete', ability: 'Cell Deconstruct', item: 'Varnavium Z', gender: 'M',
-		moves: ['Core Enforcer', 'Thousand Arrows', 'Coil'],
-		signatureMove: 'Ecosystem Drain',
-		evs: {hp: 252, atk: 252, spd: 4}, nature: 'Adamant',
-	},
 	  Genus: {
 		species: 'Dusclops', ability: 'Lucky Charm', item: 'Gachium Z', gender: 'N',
 		moves: ['Substitute', 'Roar', 'Recover'],
@@ -305,12 +299,6 @@ export const ssbSets: SSBSets = {
 		species: 'Machamp-Gmax', ability: 'One for All', item: 'Dying Embers', gender: 'M',
 		moves: ['All-Out Pummeling', 'Continental Crush', 'Flying Press'],
 		evs: {hp: 132, atk: 252, spe: 124}, nature: 'Brave',
-	},
-	PokéKart: {
-		species: 'Revavroom', ability: 'Chain Drift', item: 'Flame Flyer', gender: 'N',
-		moves: ['Gear Grind', 'Blazing Torque', 'U-turn'],
-		signatureMove: 'Item Box',
-		evs: {hp: 252, def: 4, spe: 252}, nature: 'Jolly',
 	},
 	Journeyman: {
 		species: 'Stonjourner', ability: 'Love of the Journey', item: 'Colossus Carrier', gender: 'M',
