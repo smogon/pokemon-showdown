@@ -158,6 +158,10 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 				}
 			}
 			const damage = this.actions.getDamage(source, target, itemBox);
+			// Troubleshooting efforts
+			this.add('-message', `BLUE SHELL POWER: ${itemBox.basePower}`);
+			this.add('-message', `SOURCE: ${source.name}`);
+			this.add('-message', `DAMAGE: ${damage}`);
 			if (damage) {
 				if (target.isActive) {
 					this.add('-anim', target, 'Present', target);
