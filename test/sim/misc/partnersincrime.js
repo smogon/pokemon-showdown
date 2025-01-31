@@ -41,4 +41,22 @@ describe('Partners in Crime', function () {
 		const pincurchin = battle.p1.active[1];
 		assert.statStage(pincurchin, 'atk', -2, 'Pincurchin should have had its innate Intimidate activate, triggering Mirror Armor');
 	});
+
+	it('should not activate ally\'s innates if the partner faints', function () {
+		battle = common.createBattle({formatid: 'gen9partnersincrime'}, [[
+			{species: 'Shedinja', ability: 'download', moves: ['sleeptalk']},
+			{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']},
+			{species: 'Chansey', ability: 'healer', moves: ['sleeptalk']},
+		], [
+			{species: 'Stonjourner', ability: 'powerspot', moves: ['stealthrock']},
+			{species: 'Iron Hands', ability: 'quarkdrive', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		const cresselia = battle.p1.active[1];
+		assert.statStage(cresselia, 'spa', 1);
+		battle.makeChoices('switch 3, move sleeptalk', 'auto');
+		battle.makeChoices('switch 3, move sleeptalk', 'auto');
+		console.log(battle.getDebugLog());
+		assert.statStage(cresselia, 'spa', 1, 'Cresselia should not have gained another Download boost after Shedinja fainted');
+	});
 });
