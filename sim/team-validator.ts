@@ -2617,15 +2617,12 @@ export class TeamValidator {
 					if (learnedGen === dex.gen && learned.charAt(1) !== 'R') {
 						// current-gen level-up, TM or tutor moves:
 						//   always available
-						if (!(learnedGen >= 8 && learned.charAt(1) === 'E') && babyOnly) {
-							if (setSources.isFromPokemonGo && species.evoLevel) {
-								cantLearnReason = `is from a prevo, which is incompatible with its Pokemon GO origin.`;
-								continue;
-							} else {
-								setSources.babyOnly = babyOnly;
-							}
+						if (!(learnedGen >= 8 && learned.charAt(1) === 'E') && babyOnly &&
+							setSources.isFromPokemonGo && species.evoLevel) {
+							cantLearnReason = `is from a prevo, which is incompatible with its Pokemon GO origin.`;
+							continue;
 						}
-						if (!moveSources.moveEvoCarryCount && !setSources.babyOnly) return null;
+						if (!moveSources.moveEvoCarryCount && !babyOnly) return null;
 					}
 					// past-gen level-up, TM, or tutor moves:
 					//   available as long as the source gen was or was before this gen
