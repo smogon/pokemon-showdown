@@ -1712,6 +1712,8 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		basePower: 80,
 		category: "Special",
 		name: "Rainbow Maxifier",
+		shortDesc: "Water: +Fire-type; Light-type if transformed. Starts Rainbow.",
+		desc: "If this move is Water-type, Fire-type is added to its type effectiveness. If used by Necrozma-Ultra, this move becomes Light-type instead. Starts a rainbow on the user's side upon hitting. 30% chance to burn. 30% chance to reduce the target's Attack and Special Attack by 1 stage.",
 		pp: 16,
 		noPPBoosts: true,
 		priority: 0,
