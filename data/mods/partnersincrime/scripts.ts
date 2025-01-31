@@ -8,6 +8,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			getKey = 'duration';
 		}
 		let handlers = this.findFieldEventHandlers(this.field, `onField${eventid}`, getKey);
+		const PiChandlers = [];
 		for (const side of this.sides) {
 			if (side.n < 2 || !side.allySide) {
 				handlers = handlers.concat(this.findSideEventHandlers(side, `onSide${eventid}`, getKey));
@@ -21,12 +22,12 @@ export const Scripts: ModdedBattleScriptsData = {
 				// The ally of the pokemon
 				const ally = active.side.active.find(mon => mon && mon !== active && !mon.fainted);
 				if (ally?.m.innate && targets && !targets.includes(ally)) {
-					const volatileState = active.volatiles[ally.m.innate];
+					const volatileState = ally.volatiles[ally.m.innate];
 					const volatile = this.dex.conditions.getByID(ally.m.innate as ID);
 					// @ts-ignore - dynamic lookup
 					let callback = volatile[callbackName];
 					if (callback !== undefined || (getKey && volatileState[getKey])) {
-						handlers.push(this.resolvePriority({
+						PiChandlers.push(this.resolvePriority({
 							effect: volatile, callback, state: volatileState, end: ally.removeVolatile, effectHolder: ally,
 						}, callbackName));
 					} else if (['ability', 'item'].includes(volatile.id.split(':')[0])) {
@@ -35,7 +36,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						if (this.gen >= 5 && callbackName === 'onSwitchIn' && !volatile.onAnySwitchIn) {
 							callback = volatile.onStart;
 							if (callback !== undefined || (getKey && volatileState[getKey])) {
-								handlers.push(this.resolvePriority({
+								PiChandlers.push(this.resolvePriority({
 									effect: volatile, callback, state: volatileState, end: ally.removeVolatile, effectHolder: ally,
 								}, callbackName));
 							}
@@ -49,11 +50,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 		}
 		this.speedSort(handlers);
+		handlers = handlers.concat(PiChandlers);
 		while (handlers.length) {
 			const handler = handlers[0];
 			handlers.shift();
 			const effect = handler.effect;
-			if ((handler.effectHolder as Pokemon).fainted) continue;
+			if ((handler.effectHolder as Pokemon).fainted || (handler.state?.isPiC as Pokemon)?.fainted) continue;
 			if (eventid === 'Residual' && handler.end && handler.state && handler.state.duration) {
 				handler.state.duration--;
 				if (!handler.state.duration) {
