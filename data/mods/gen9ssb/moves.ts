@@ -660,7 +660,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source, move) {
-			this.add('-anim', source, 'Dynamic Punch', target);
+			this.add('-anim', source, 'Focus Punch', target);
 		},
 		secondary: null,
 		type: "Fighting",
