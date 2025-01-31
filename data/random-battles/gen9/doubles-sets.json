@@ -775,7 +775,7 @@
             },
             {
                 "role": "Bulky Protect",
-                "movepool": ["Helping Hand", "Icy Wind", "Muddy Water", "Protect", "Scald", "Wish", "Yawn"],
+                "movepool": ["Flip Turn", "Helping Hand", "Icy Wind", "Muddy Water", "Protect", "Scald", "Wish", "Yawn"],
                 "abilities": ["Water Absorb"],
                 "teraTypes": ["Dragon", "Fire", "Ground"]
             }
@@ -836,7 +836,7 @@
         "level": 83,
         "sets": [
             {
-                "role": "Doubles Support",
+                "role": "Doubles Bulky Attacker",
                 "movepool": ["Brave Bird", "Freeze-Dry", "Ice Beam", "Icy Wind", "Protect", "Roost", "Tailwind"],
                 "abilities": ["Pressure"],
                 "teraTypes": ["Ground", "Steel"]
@@ -886,7 +886,7 @@
         "level": 79,
         "sets": [
             {
-                "role": "Doubles Support",
+                "role": "Doubles Bulky Attacker",
                 "movepool": ["Brave Bird", "Fire Blast", "Heat Wave", "Protect", "Scorching Sands", "Tailwind"],
                 "abilities": ["Flame Body"],
                 "teraTypes": ["Fire", "Ground"]
@@ -1138,7 +1138,7 @@
         "level": 93,
         "sets": [
             {
-                "role": "Doubles Support",
+                "role": "Bulky Protect",
                 "movepool": ["Acrobatics", "Encore", "Pollen Puff", "Rage Powder", "Sleep Powder", "Strength Sap", "Tailwind"],
                 "abilities": ["Infiltrator"],
                 "teraTypes": ["Steel"]
@@ -1535,10 +1535,10 @@
                 "teraTypes": ["Ghost", "Rock", "Steel"]
             },
             {
-                "role": "Doubles Support",
-                "movepool": ["Fire Blast", "High Horsepower", "Icy Wind", "Knock Off", "Protect", "Rock Slide", "Stone Edge", "Thunder Wave"],
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Fire Blast", "High Horsepower", "Icy Wind", "Knock Off", "Rock Slide", "Stone Edge"],
                 "abilities": ["Sand Stream"],
-                "teraTypes": ["Flying", "Steel"]
+                "teraTypes": ["Ghost", "Flying", "Steel"]
             }
         ]
     },
@@ -1750,7 +1750,7 @@
                 "role": "Doubles Support",
                 "movepool": ["Disable", "Encore", "Fake Out", "Foul Play", "Knock Off", "Quash", "Recover", "Will-O-Wisp"],
                 "abilities": ["Prankster"],
-                "teraTypes": ["Steel"]
+                "teraTypes": ["Poison", "Steel"]
             }
         ]
     },
@@ -1891,15 +1891,15 @@
         "level": 92,
         "sets": [
             {
-                "role": "Doubles Support",
+                "role": "Doubles Bulky Attacker",
                 "movepool": ["Brave Bird", "Draco Meteor", "Fire Blast", "Helping Hand", "Roost", "Tailwind", "Will-O-Wisp"],
-                "abilities": ["Cloud Nine"],
+                "abilities": ["Natural Cure"],
                 "teraTypes": ["Steel"]
             },
             {
-                "role": "Bulky Protect",
-                "movepool": ["Brave Bird", "Protect", "Roost", "Will-O-Wisp"],
-                "abilities": ["Cloud Nine"],
+                "role": "Doubles Support",
+                "movepool": ["Brave Bird", "Roost", "Tailwind", "Will-O-Wisp"],
+                "abilities": ["Natural Cure"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -3662,7 +3662,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Helping Hand", "Icy Wind", "Scald", "Wide Guard"],
+                "movepool": ["Flip Turn", "Helping Hand", "Icy Wind", "Scald", "Wide Guard"],
                 "abilities": ["Regenerator"],
                 "teraTypes": ["Steel"]
             }
@@ -5830,7 +5830,7 @@
                 "role": "Doubles Wallbreaker",
                 "movepool": ["Earth Power", "Energy Ball", "Hyper Voice", "Pollen Puff", "Protect", "Strength Sap"],
                 "abilities": ["Seed Sower"],
-                "teraTypes": ["Grass"]
+                "teraTypes": ["Normal", "Poison"]
             }
         ]
     },
@@ -6470,12 +6470,6 @@
     "ironthorns": {
         "level": 82,
         "sets": [
-            {
-                "role": "Doubles Bulky Attacker",
-                "movepool": ["Electroweb", "High Horsepower", "Protect", "Rock Slide", "Stealth Rock", "Thunder Punch", "Thunder Wave", "Volt Switch"],
-                "abilities": ["Quark Drive"],
-                "teraTypes": ["Flying", "Grass"]
-            },
             {
                 "role": "Doubles Setup Sweeper",
                 "movepool": ["Dragon Dance", "High Horsepower", "Ice Punch", "Protect", "Rock Slide", "Wild Charge"],

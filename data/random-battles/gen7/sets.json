@@ -1594,7 +1594,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["hiddenpowerpsychic"],
+                "movepool": ["hiddenpowerfighting", "hiddenpowerpsychic"],
                 "abilities": ["Levitate"]
             }
         ]
@@ -1861,7 +1861,7 @@
                 "abilities": ["Sturdy"]
             },
             {
-                "role": "Staller",
+                "role": "Bulky Attacker",
                 "movepool": ["bravebird", "roost", "spikes", "stealthrock", "toxic"],
                 "abilities": ["Sturdy"]
             }
@@ -2283,7 +2283,8 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["calmmind", "focusblast", "healingwish", "moonblast", "psychic", "shadowball", "thunderbolt", "trick"],
-                "abilities": ["Trace"]
+                "abilities": ["Trace"],
+                "preferredTypes": ["Fighting"]
             },
             {
                 "role": "Setup Sweeper",
@@ -2297,8 +2298,14 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["calmmind", "focusblast", "hypervoice", "psyshock", "substitute", "taunt", "willowisp"],
+                "movepool": ["calmmind", "encore", "focusblast", "hypervoice", "psyshock", "taunt", "willowisp"],
                 "abilities": ["Trace"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["focusblast", "hypervoice", "psyshock", "substitute", "taunt", "willowisp"],
+                "abilities": ["Trace"],
+                "preferredTypes": ["Fighting"]
             }
         ]
     },
@@ -2734,11 +2741,6 @@
                 "role": "Setup Sweeper",
                 "movepool": ["dragondance", "earthquake", "return", "roost"],
                 "abilities": ["Natural Cure"]
-            },
-            {
-                "role": "Bulky Support",
-                "movepool": ["defog", "earthquake", "fireblast", "healbell", "return", "roost"],
-                "abilities": ["Natural Cure"]
             }
         ]
     },
@@ -3070,11 +3072,6 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["doubleedge", "dragondance", "earthquake", "return", "roost"],
-                "abilities": ["Intimidate"]
-            },
-            {
-                "role": "Bulky Attacker",
-                "movepool": ["doubleedge", "dracometeor", "earthquake", "fireblast", "return", "roost"],
                 "abilities": ["Intimidate"]
             }
         ]
@@ -3908,6 +3905,11 @@
                 "role": "Bulky Support",
                 "movepool": ["defog", "knockoff", "powerwhip", "sleeppowder", "synthesis", "toxic"],
                 "abilities": ["Levitate"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["knockoff", "powerwhip", "swordsdance", "synthesis"],
+                "abilities": ["Levitate"]
             }
         ]
     },
@@ -3973,7 +3975,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["bodyslam", "healbell", "knockoff", "protect", "wish"],
+                "movepool": ["bodyslam", "knockoff", "protect", "wish"],
                 "abilities": ["Cloud Nine", "Oblivious"]
             },
             {
@@ -4884,11 +4886,11 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "moonlight", "psyshock", "shadowball", "signalbeam"],
+                "movepool": ["calmmind", "hiddenpowerfighting", "moonlight", "psyshock", "signalbeam"],
                 "abilities": ["Synchronize"]
             },
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["healbell", "moonlight", "psychic", "signalbeam", "thunderwave", "toxic"],
                 "abilities": ["Synchronize"]
             }
@@ -6790,7 +6792,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["haze", "recover", "scald", "toxic", "toxicspikes"],
+                "movepool": ["haze", "knockoff", "recover", "scald", "toxic", "toxicspikes"],
                 "abilities": ["Regenerator"]
             },
             {
@@ -7342,6 +7344,11 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["calmmind", "focusblast", "moonblast", "psychic", "psyshock"],
+                "abilities": ["Psychic Surge"]
+            },
+            {
+                "role": "AV Pivot",
+                "movepool": ["focusblast", "moonblast", "naturesmadness", "psychic", "psyshock"],
                 "abilities": ["Psychic Surge"]
             }
         ]
