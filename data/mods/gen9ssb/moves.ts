@@ -633,11 +633,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			onDamage(damage, target, source, move) {
 				if (target !== source && move && move.category !== 'Status') {
 					this.effectState.damaged = true;
-					if (move.category === 'Physical') {
-						return 0;
-					} else if (move.category === 'Special') {
-						return damage / 2;
-					}
+					return damage / 2;
 				}
 			},
 		},
