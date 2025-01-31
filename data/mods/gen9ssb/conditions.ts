@@ -144,7 +144,7 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 			const itemBox = {
 				move: baseMove.name,
 				id: baseMove.id,
-				basePower: 120,
+				basePower: 1200,
 				pp: baseMove.pp,
 				maxpp: baseMove.pp,
 				target: baseMove.target,
