@@ -17,6 +17,43 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 	},
 	*/
 	// Please keep abilites organized alphabetically based on staff member name!
+	// Mink
+	sickeningstench: {
+		name: "Sickening Stench",
+		gen: 9,
+		flags: {},
+		desc: "The accuracy and power of attacks used against the user is 0.9x. Prevents other active Pokemon from eating their items.",
+		shortDesc: "Attacks on user have 0.9x BP/ACC. Active Pokemon cannot eat.",
+		onStart(pokemon) {
+			for (const target of this.getAllActive) {
+				if (pokemon === target) continue;
+				target.addVolatile('sickeningstench');
+			}
+		},
+		onTryHit(pokemon, target, move) {
+			if (pokemon === target || !target || !move) return;
+			if (move.basePower) {
+				this.debug('sickening stench BP debuff');
+				move.basePower *= 0.9;
+			}
+			if (move.accuracy !== true) {
+				this.debug('sickening stench accuracy debuff');
+				move.accuracy *= 0.9;
+			}
+		},
+		onEnd(pokemon) {
+			for (const target of this.getAllActive) {
+				if (pokemon === target) continue;
+				if (target.volatiles['sickeningstench']) target.removeVolatile('sickeningstench');
+			}
+		},
+		condition: {
+			onTryEatItem(item, pokemon) {
+				this.add('-message', `${pokemon.name} couldn't eat because of the Sickening Stench!`);
+				return null;
+			},
+		},
+	},
 	// Cinque
 	cheerleader: {
 		name: "Cheerleader",
@@ -1208,7 +1245,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			},
 			onDamagingHit(damage, target, source, move) {
 				if (!move || !damage || target === source) return;
-				this.boost({spe: -1});
+				this.boost({ spe: -1 });
 			},
 		},
 	},
@@ -2018,7 +2055,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		flags: {breakable: 1},
 		gen: 9,
 	},
-
+	
 	// Aethernum
 	theeminenceintheshadow: {
 		shortDesc: "Unaware + Supreme Overlord with half the boost.",
@@ -2059,7 +2096,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// Akir
 	takeitslow: {
 		shortDesc: "Regenerator + Psychic Surge.",
@@ -2073,7 +2110,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		flags: {},
 		gen: 9,
 	},
-
+	
 	// Alex
 	pawprints: {
 		shortDesc: "Oblivious + status moves ignore abilities.",
@@ -2112,7 +2149,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// Alexander489
 	confirmedtown: {
 		shortDesc: "Technician + Protean.",
@@ -2136,7 +2173,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Appletun a la Mode
 	servedcold: {
 		shortDesc: "This Pokemon's Defense is raised 2 stages if hit by an Ice move; Ice immunity.",
@@ -2151,7 +2188,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// aQrator
 	neverendingfhunt: {
 		shortDesc: "This Pokemon's Status moves have priority raised by 1. Dark types are not immune.",
@@ -2163,7 +2200,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// A Quag To The Past
 	quagofruin: {
 		shortDesc: "Active Pokemon without this Ability have 0.85x Defense. Ignores abilities.",
@@ -2223,7 +2260,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		flags: {breakable: 1},
 		gen: 9,
 	},
-
+	
 	// Archas
 	saintlybullet: {
 		shortDesc: "Snipe Shot always has STAB and heals the user by 1/8 (or 1/6 on a crit) of its max HP.",
@@ -2242,7 +2279,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		flags: {},
 		gen: 9,
 	},
-
+	
 	// Arcueid
 	marblephantasm: {
 		shortDesc: "Deoxys-Defense is immune to status moves/effects. Deoxys-Attack gains Fairy type.",
@@ -2270,7 +2307,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		flags: {},
 		gen: 9,
 	},
-
+	
 	// Arsenal
 	absorbphys: {
 		shortDesc: "This Pokemon heals 1/4 of its max HP when hit by Normal moves; Normal immunity.",
@@ -2286,7 +2323,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		flags: {breakable: 1},
 		gen: 9,
 	},
-
+	
 	// Artemis
 	supervisedlearning: {
 		shortDesc: "Unaware + Clear Body.",
@@ -2323,7 +2360,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		flags: {},
 		gen: 9,
 	},
-
+	
 	// Audiino
 	mitosis: {
 		shortDesc: "Regenerator + Multiscale.",
@@ -2339,7 +2376,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// ausma
 	cascade: {
 		shortDesc: "At 25% HP, transforms into a Mismagius. Sigil's Storm becomes Ghost type and doesn't charge.",
@@ -2360,7 +2397,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Bert122
 	pesteringassault: {
 		shortDesc: "Uses Knock Off, Taunt, Torment, Soak, and Confuse Ray with 40% accuracy at turn end.",
@@ -2378,7 +2415,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// blazeofvictory
 	prismaticlens: {
 		shortDesc: "Pixilate + Tinted Lens.",
@@ -2406,7 +2443,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Blitz
 	blitzofruin: {
 		shortDesc: "Active Pokemon without this Ability have 0.75x Speed.",
@@ -2423,7 +2460,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// Breadstycks
 	painfulexit: {
 		shortDesc: "When this Pokemon switches out, foes lose 25% HP.",
@@ -2443,7 +2480,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Chloe
 	acetosa: {
 		shortDesc: "This Pokemon's moves are changed to be Grass type and have 1.2x power.",
@@ -2465,7 +2502,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Clefable
 	thatshacked: {
 		shortDesc: "Tries to inflict the foe with Torment at the end of each turn.",
@@ -2499,7 +2536,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Clementine
 	meltingpoint: {
 		shortDesc: "+2 Speed. Fire moves change user to Water type. Fire immunity.",
@@ -2516,7 +2553,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 	},
-
+	
 	// clerica
 	masquerade: {
 		shortDesc: "(Mimikyu only) The first hit is blocked: instead, takes 1/8 damage and gets +1 Atk/Spe.",
@@ -2540,7 +2577,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
-
+	
 			if (!target.runImmunity(move.type)) return;
 			return false;
 		},
@@ -2549,10 +2586,10 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			if (!['mimikyu', 'mimikyutotem'].includes(target.species.id) || target.transformed) {
 				return;
 			}
-
+	
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
-
+	
 			if (!target.runImmunity(move.type)) return;
 			return 0;
 		},
@@ -2567,7 +2604,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 	},
-
+	
 	// Clouds
 	jetstream: {
 		shortDesc: "Delta Stream + Stealth Rock immunity.",
@@ -2597,7 +2634,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// Coolcodename
 	firewall: {
 		shortDesc: "Burns foes that attempt to use status moves on this Pokemon; Status move immunity.",
@@ -2612,7 +2649,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// Corthius
 	grassyemperor: {
 		shortDesc: "On switch-in, summons Grassy Terrain. During Grassy Terrain, Attack is 1.33x.",
@@ -2633,7 +2670,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Daki
 	astrothunder: {
 		shortDesc: "Drizzle + Static.",
@@ -2653,7 +2690,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 	},
-
+	
 	// Dawn of Artemis
 	formchange: {
 		shortDesc: ">50% HP Necrozma, else Necrozma-Ultra. SpA boosts become Atk boosts and vice versa.",
@@ -2679,7 +2716,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// DaWoblefet
 	shadowartifice: {
 		shortDesc: "Traps adjacent foes. If KOed with a move, that move's user loses an equal amount of HP.",
@@ -2704,7 +2741,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// dhelmise
 	coalescence: {
 		shortDesc: "Moves drain 37%. Allies heal 5% HP. <25% HP, moves drain 114%, allies get 10%.",
@@ -2732,7 +2769,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Elly
 	stormsurge: {
 		shortDesc: "On switch-in, summons rain that causes wind moves to have perfect accuracy and 1.2x Base Power.",
@@ -2742,7 +2779,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			this.field.setWeather('stormsurge');
 		},
 	},
-
+	
 	// Emboar02
 	hogwash: {
 		shortDesc: "Reckless; on STAB moves, also add Rock Head. On non-STAB moves, recoil is recovery.",
@@ -2765,7 +2802,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 	},
-
+	
 	// Frostyicelad
 	almostfrosty: {
 		shortDesc: "This Pokemon's damaging moves hit twice. The second hit has its damage halved.",
@@ -2784,7 +2821,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 	},
-
+	
 	// Frozoid
 	snowballer: {
 		shortDesc: "This Pokemon's Attack is raised 1 stage if hit by an Ice move; Ice immunity.",
@@ -2800,7 +2837,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// Fame
 	socialjumpluffwarrior: {
 		shortDesc: "Serene Grace + Mold Breaker.",
@@ -2821,7 +2858,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Ganjafin
 	gamblingaddiction: {
 		shortDesc: "When under 1/4 max HP: +1 Spe, heal to full HP, and all moves become Final Gambit.",
@@ -2848,7 +2885,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Goro Yagami
 	illusionmaster: {
 		shortDesc: "This Pokemon has an illusion until it falls below 33% health.",
@@ -2906,7 +2943,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1},
 	},
-
+	
 	// havi
 	mensiscage: {
 		shortDesc: "Immune to status and is considered to be asleep. 30% chance to Disable when hit.",
@@ -2931,7 +2968,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		// Permanent sleep "status" implemented in the relevant sleep-checking effects
 		flags: {},
 	},
-
+	
 	// Hecate
 	hacking: {
 		name: "Hacking",
@@ -2979,7 +3016,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// HoeenHero
 	misspelled: {
 		shortDesc: "Swift Swim + Special Attack 1.5x, Accuracy 0.8x. Never misses, only misspells.",
@@ -3002,7 +3039,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		// Misspelling implemented in scripts.ts#hitStepAccuracy
 		flags: {},
 	},
-
+	
 	// Hydrostatics
 	hydrostaticpositivity: {
 		shortDesc: "Sturdy + Storm Drain + Motor Drive + 1.3x accuracy of Water & Electric moves",
@@ -3015,7 +3052,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 				}
 				return null;
 			}
-
+	
 			// Motor Drive
 			if (target !== source && move.type === 'Electric') {
 				if (!this.boost({spe: 1})) {
@@ -3023,7 +3060,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 				}
 				return null;
 			}
-
+	
 			// Sturdy
 			if (move.ohko) {
 				this.add('-immune', target, '[from] ability: Hydrostatic Positivity');
@@ -3059,7 +3096,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 	},
-
+	
 	// in the hills
 	illiterit: {
 		shortDesc: "Immune to moves with 12 or more alphanumeric characters.",
@@ -3073,7 +3110,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// Irly
 	therollingspheal: {
 		shortDesc: "1.5x dmg boost for every repeated move use. Up to 5 uses. +1 Spe when use contact.",
@@ -3125,7 +3162,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Irpachuza
 	mimeknowsbest: {
 		shortDesc: "When this Pokemon switches in, it uses a random screen or protect move.",
@@ -3143,7 +3180,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// J0rdy004
 	fortifyingfrost: {
 		shortDesc: "If Snow is active, this Pokemon's Sp. Atk and Sp. Def are 1.5x.",
@@ -3161,7 +3198,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// kenn
 	deserteddunes: {
 		shortDesc: "Summons Deserted Dunes until switch-out; Sandstorm + Rock weaknesses removed.",
@@ -3187,7 +3224,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		flags: {},
 		gen: 9,
 	},
-
+	
 	// Kennedy
 	anfield: {
 		shortDesc: "Clears terrain/hazards/pseudo weathers. Summons Anfield Atmosphere.",
@@ -3254,7 +3291,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 	},
-
+	
 	// kingbaruk
 	peerpressure: {
 		shortDesc: "All moves used while this Pokemon is on the field consume 4 PP.",
@@ -3267,7 +3304,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Kiwi
 	surehitsorcery: {
 		shortDesc: "No Guard + Prankster + Grassy Surge.",
@@ -3293,7 +3330,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Klmondo
 	superskilled: {
 		shortDesc: "Skill Link + Multiscale.",
@@ -3314,7 +3351,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// Kry
 	flashfreeze: {
 		shortDesc: "Heatproof + If attacker's used offensive stat has positive stat changes, take 0.75x damage.",
@@ -3348,7 +3385,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// Lasen
 	idealizedworld: {
 		shortDesc: "Removes everything on switch-in.",
@@ -3380,7 +3417,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Lionyx
 	enormoos: {
 		shortDesc: "This Pokemon's Defense is used in damage calculation instead of Attack or Sp. Atk.",
@@ -3392,7 +3429,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Lumari
 	pyrotechnic: {
 		shortDesc: "Critical hits are guaranteed when the foe is burned.",
@@ -3402,7 +3439,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Lunell
 	lowtidehightide: {
 		shortDesc: "Switch-in sets Gravity, immune to Water, traps Water-type foes.",
@@ -3430,7 +3467,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// Lyna
 	magicaura: {
 		shortDesc: "Magic Guard + Magic Bounce.",
@@ -3467,7 +3504,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// Mad Monty
 	climatechange: {
 		shortDesc: "1.5x SpA in sun, 1.5x Def/SpD in snow, heals 50% in rain. Changes forme/weather.",
@@ -3525,10 +3562,10 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 			if (pokemon.isActive && forme) {
 				pokemon.formeChange(forme, this.effect, false, '[msg]');
-
+	
 				if (!relevantMove) return;
 				const move = this.dex.getActiveMove(relevantMove);
-
+	
 				const sketchIndex = Math.max(
 					pokemon.moves.indexOf("solarbeam"), pokemon.moves.indexOf("thunder"), pokemon.moves.indexOf("auroraveil")
 				);
@@ -3564,7 +3601,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {cantsuppress: 1},
 	},
-
+	
 	// maroon
 	builtdifferent: {
 		shortDesc: "Stamina + Normal-type moves get +1 priority.",
@@ -3577,7 +3614,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Mathy
 	dynamictyping: {
 		shortDesc: "Moves used by all Pokemon are ??? type.",
@@ -3591,7 +3628,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Merritty
 	endround: {
 		shortDesc: "Clears everything.",
@@ -3647,7 +3684,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {cantsuppress: 1},
 	},
-
+	
 	// Meteordash
 	tatsuglare: {
 		shortDesc: "Fur Coat + All moves hit off of Sp. Atk stat.",
@@ -3661,7 +3698,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// Mex
 	timedilation: {
 		shortDesc: "+10% BP for every 10 turns passed in battle, max 200%.",
@@ -3675,7 +3712,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Monkey
 	harambehit: {
 		shortDesc: "Unseen Fist + Punch moves have 1.5x power.",
@@ -3692,7 +3729,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// MyPearl
 	eoncall: {
 		shortDesc: "Changes into Latios after status move, Latias after special move.",
@@ -3707,7 +3744,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Neko
 	weatherproof: {
 		shortDesc: "Water-/Fire-type moves against this Pokemon deal damage with a halved offensive stat.",
@@ -3728,7 +3765,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// Ney
 	pranksterplus: {
 		shortDesc: "This Pokemon's Status moves have priority raised by 1. Dark types are not immune.",
@@ -3740,7 +3777,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Notater517
 	ventcrosser: {
 		shortDesc: "Uses Baton Pass after every move.",
@@ -3750,7 +3787,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// nya
 	adorablegrace: {
 		shortDesc: "This Pokemon's secondary effects and certain items have their activation chance doubled.",
@@ -3768,7 +3805,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		// Item chances modified in items.js
 	},
-
+	
 	// Nyx
 	lasthymn: {
 		shortDesc: "Weakens incoming attacks by 10% for each Pokemon fainted.",
@@ -3791,7 +3828,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 	},
-
+	
 	// Opple
 	orchardsgift: {
 		shortDesc: "Summons Grassy Terrain. 1.5x Sp. Atk and Sp. Def during Grassy Terrain.",
@@ -3818,7 +3855,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 	},
-
+	
 	// PartMan
 	ctiershitposter: {
 		shortDesc: "-1 Atk/SpA, +1 Def/SpD. +1 Atk/SpA/Spe, -1 Def/SpD, Mold Breaker if 420+ dmg taken.",
@@ -3855,7 +3892,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 	},
-
+	
 	// Pastor Gigas
 	godsmercy: {
 		shortDesc: "Summons Misty Surge and cures the team's status conditions on switch-in.",
@@ -3872,7 +3909,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// PenQuin
 	poleonspyroquirk: {
 		shortDesc: "Burned Pokemon also become confused.",
@@ -3885,7 +3922,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// phoopes
 	ididitagain: {
 		shortDesc: "Bypasses Sleep Clause Mod once per battle.",
@@ -3893,7 +3930,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		flags: {},
 		// implemented in rulesets.ts
 	},
-
+	
 	// Pulse_kS
 	pulseluck: {
 		shortDesc: "Mega Launcher + Super Luck.",
@@ -3909,7 +3946,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// PYRO
 	hardcorehustle: {
 		shortDesc: "Moves have 15% more power and -5% Acc for each fainted ally, up to 5 allies.",
@@ -3943,7 +3980,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Quite Quiet
 	fancyscarf: {
 		shortDesc: "Shield Dust + Magic Guard",
@@ -3960,7 +3997,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// quziel
 	highperformancecomputing: {
 		shortDesc: "Becomes a random typing at the beginning of each turn.",
@@ -3973,7 +4010,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 	},
-
+	
 	// R8
 	antipelau: {
 		shortDesc: "Boosts Sp. Atk by 2 and sets a 25% Wish upon switch-in.",
@@ -4000,7 +4037,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Rainshaft
 	rainysaura: {
 		shortDesc: "On switch-in, this Pokemon summons rain. Boosts all Psychic-type damage by 33%.",
@@ -4022,7 +4059,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Ransei
 	ultramystik: {
 		shortDesc: "Stats 1.5x until hit super effectively + Magic Guard + Leftovers.",
@@ -4089,7 +4126,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			this.heal(pokemon.baseMaxhp / 16, pokemon, pokemon, pokemon.getAbility());
 		},
 	},
-
+	
 	// ReturnToMonkey
 	monkeseemonkedo: {
 		shortDesc: "Boosts Atk or SpA by 1 based on foe's defenses, then copies foe's Ability.",
@@ -4106,7 +4143,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			} else if (totalspd) {
 				this.boost({atk: 1});
 			}
-
+	
 			// n.b. only affects Hackmons
 			// interaction with No Ability is complicated: https://www.smogon.com/forums/threads/pokemon-sun-moon-battle-mechanics-research.3586701/page-76#post-7790209
 			if (pokemon.adjacentFoes().some(foeActive => foeActive.ability === 'noability')) {
@@ -4120,12 +4157,12 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		onUpdate(pokemon) {
 			if (!pokemon.isStarted || this.effectState.gaveUp) return;
-
+	
 			const possibleTargets = pokemon.adjacentFoes().filter(
 				target => !target.getAbility().flags['notrace'] && target.ability !== 'noability'
 			);
 			if (!possibleTargets.length) return;
-
+	
 			const target = this.sample(possibleTargets);
 			const ability = target.getAbility();
 			if (pokemon.setAbility(ability)) {
@@ -4134,7 +4171,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1},
 	},
-
+	
 	// RSB
 	hotpursuit: {
 		shortDesc: "This Pokemon's damaging moves have the Pursuit effect.",
@@ -4195,7 +4232,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Rumia
 	youkaiofthedusk: {
 		shortDesc: "This Pokemon's Defense is doubled and its status moves gain +1 priority.",
@@ -4212,7 +4249,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// SexyMalasada
 	ancestryritual: {
 		shortDesc: "Recoil heals. While below 50% HP, changes to Typhlosion-Hisui.",
@@ -4240,7 +4277,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Siegfried
 	magicalmysterycharge: {
 		shortDesc: "Summons Electric Terrain upon switch-in, +1 boost to Sp. Def during Electric Terrain.",
@@ -4256,7 +4293,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Sificon
 	perfectlyimperfect: {
 		shortDesc: "Magic Guard + Thick Fat.",
@@ -4283,7 +4320,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// skies
 	spikesofwrath: {
 		shortDesc: "Cheek Pouch + sets Spikes and Toxic Spikes upon getting KOed.",
@@ -4308,7 +4345,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Soft Flex
 	adaptiveengineering: {
 		shortDesc: "Every turn, raises a random stat by 1 stage if the foe has more raised stats.",
@@ -4332,7 +4369,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Solaros & Lunaris
 	ridethesun: {
 		shortDesc: "Drought + Chlorophyll",
@@ -4351,7 +4388,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// spoo
 	icanheartheheartbeatingasone: {
 		shortDesc: "Pixilate + Sharpness. -1 Atk upon KOing an opposing Pokemon.",
@@ -4382,7 +4419,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Steorra
 	ghostlyhallow: {
 		shortDesc: "This Pokémon can hit Normal types with Ghost-type moves.",
@@ -4395,7 +4432,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 	},
-
+	
 	// Struchni
 	overaskedclause: {
 		shortDesc: "Moves used by opposing Pokemon on the previous turn will always fail.",
@@ -4410,7 +4447,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 	},
-
+	
 	// Sulo
 	protectionofthegelatin: {
 		shortDesc: "Magic Guard + Stamina",
@@ -4425,7 +4462,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			this.boost({def: 1});
 		},
 	},
-
+	
 	// Swiffix
 	stinky: {
 		desc: "10% chance to either poison or paralyze the target on hit.",
@@ -4450,7 +4487,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Tenshi
 	sandsleuth: {
 		desc: "Sets Gravity and identifies foes on switch-in. Priority immune from identified foes.",
@@ -4479,7 +4516,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Theia
 	powerabuse: {
 		shortDesc: "Drought + 60% damage reduction + 20% burn after physical move.",
@@ -4497,7 +4534,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// Tico
 	eternalgenerator: {
 		shortDesc: "Regenerator + Magic Guard + immune to Sticky Web.",
@@ -4513,7 +4550,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// TheJesucristoOsAma
 	thegraceofjesuschrist: {
 		shortDesc: "Changes plates at the end of every turn.",
@@ -4530,7 +4567,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// trace
 	eyesofeternity: {
 		shortDesc: "Moves used by/against this Pokemon always hit; only damaged by attacks.",
@@ -4553,7 +4590,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Two of Roses
 	aswesee: {
 		shortDesc: "1x per turn: Stat gets boosted -> 50% chance to copy, 15% to raise another.",
@@ -4594,7 +4631,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// UT
 	galeguard: {
 		shortDesc: "Mountaineer + Fur Coat.",
@@ -4615,7 +4652,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// umuwo
 	soulsurfer: {
 		name: "Soul Surfer",
@@ -4630,7 +4667,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Valerian
 	fullbloom: {
 		shortDesc: "This Pokémon's priority moves have double power.",
@@ -4642,7 +4679,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 	},
-
+	
 	// Venous
 	concreteoverwater: {
 		shortDesc: "Gains +1 Defense and Sp. Def before getting hit by a super effective move.",
@@ -4655,7 +4692,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Violet
 	seenoevilhearnoevilspeaknoevil: {
 		shortDesc: "Dark immune; Cornerstone: Sound immune. Wellspring: Moves never miss. Hearthflame: 1.3x BP vs male.",
@@ -4668,7 +4705,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 				}
 				return null;
 			}
-
+	
 			if (target !== source && move.type === 'Dark') {
 				this.add('-immune', target, '[from] ability: See No Evil, Hear No Evil, Speak No Evil');
 				return null;
@@ -4696,7 +4733,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// Vistar
 	virtualidol: {
 		shortDesc: "Dancer + Punk Rock.",
@@ -4716,7 +4753,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// vmnunes
 	wildgrowth: {
 		shortDesc: "Attacking moves also inflict Leech Seed on the target.",
@@ -4728,7 +4765,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// WarriorGallade
 	primevalharvest: {
 		shortDesc: "Sun: Heal 1/8 max HP, random berry if no item. Else 50% random berry if no item.",
@@ -4755,7 +4792,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// WigglyTree
 	treestance: {
 		shortDesc: "Rock Head + Filter.",
@@ -4774,7 +4811,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// xy01
 	panic: {
 		shortDesc: "Lowers the foe's Atk and Sp. Atk by 1 upon switch-in.",
@@ -4795,7 +4832,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// Yellow Paint
 	yellowmagic: {
 		shortDesc: "+25% HP, +1 SpA, +1 Spe, Charge, or paralyzes attacker when hit by an Electric move; Electric immunity.",
@@ -4833,7 +4870,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {breakable: 1},
 	},
-
+	
 	// yeet dab xd
 	treasurebag: {
 		shortDesc: "Cycles between Blast Seed, Oran Berry, Petrify Orb, Luminous Orb and Reviver Seed.",
@@ -4938,7 +4975,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			},
 		},
 	},
-
+	
 	// yuki
 	partyup: {
 		shortDesc: "On switch-in, this Pokemon's ability is replaced with a random teammate's ability.",
@@ -4951,7 +4988,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {notrace: 1},
 	},
-
+	
 	// YveltalNL
 	heightadvantage: {
 		shortDesc: "If this Pokemon's height is more than that of the foe, -1 to foe's Attack/Sp. Atk.",
@@ -4974,7 +5011,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {},
 	},
-
+	
 	// za
 	troll: {
 		shortDesc: "Using moves that can flinch makes user move first in their priority bracket.",
@@ -4986,7 +5023,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 	},
-
+	
 	// Zarel
 	tempochange: {
 		shortDesc: "Switches Meloetta's forme between Aria and Pirouette at the end of each turn.",
@@ -5002,7 +5039,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1},
 	},
-
+	
 	// zoro
 	ninelives: {
 		shortDesc: "Twice per battle, this Pokemon will survive a lethal hit with 1 HP remaining, regardless of HP.",
@@ -5030,7 +5067,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		// and their disguise/sturdy state is unaffected by modifying anything here. but let wg know if this breaks stuff.
 		flags: {breakable: 1},
 	},
-
+	
 	// Modified abilities
 	baddreams: {
 		inherit: true,

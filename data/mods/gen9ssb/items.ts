@@ -1,4 +1,28 @@
 export const Items: { [k: string]: ModdedItemData } = {
+	// Mink
+	corpselily: {
+		name: "Corpse Lily",
+		gen: 9,
+		desc: "This Pokemon recovers 1/16 of its max HP at end of turn and an additional 1/16 of its max HP for each active Pokemon that is poisoned (other than the holder). If the holder is hit by a contact move, the attacker has a 30% chance to become poisoned. If held by a Venusaur-Mega with Transfuse Toxin, it can use Toxic Deluge.",
+		shortDesc: "+1/16 HP; +1/16 for each poisoned Pokemon; Contact: 30% PSN.",
+		zMove: "Toxic Deluge",
+		zMoveFrom: "Transfuse Toxin",
+		itemUser: ["Venusaur", "Venusaur-Mega"],
+		onTakeItem: false,
+		onResidual(pokemon) {
+			if (!pokemon || !pokemon.hp) return;
+			let totalPsn = 0;
+			for (const target of this.getAllActive) {
+				if (!target.status || pokemon === target) continue;
+				if (target.status === 'psn' || target.status === 'tox') totalPsn++;
+			}
+			if (!totalPsn) {
+				this.heal(pokemon.baseMaxhp / 16);
+			} else if (totalPsn >= 1) {
+				this.heal((pokemon.baseMaxhp / 16) * totalPsn);
+			}
+		},
+	},
 	// Cinque
 	moogleplushie: {
 		name: "Moogle Plushie",
@@ -82,15 +106,6 @@ export const Items: { [k: string]: ModdedItemData } = {
 			if (pokemon.cureStatus()) {
 				this.add('-curestatus', pokemon, pokemon.status, '[from] item: Zhuyou');
 			}
-		},
-	},
-	// Ingrid
-	odinssheath: {
-		name: "Odin's Sheath",
-		gen: 9,
-		onModifySpDPriority: 2,
-		onModifySpD(spd) {
-			return this.chainModify(2);
 		},
 	},
 	// Saint Deli

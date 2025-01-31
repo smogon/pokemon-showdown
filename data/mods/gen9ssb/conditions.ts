@@ -315,30 +315,22 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 			this.add('-sideend', side, 'Cursed Doll');
 		},
 	},
-
-	// Urabrask
-	rainoffire: {
-		name: 'Rain of Fire',
+	// Mink
+	acidrain: {
+		name: 'Acid Rain',
 		effectType: 'Weather',
 		duration: 5,
 		onWeather(target) {
-			if (!target.hasType('Fire')) {
-				this.add('-anim', target, 'Incinerate', target);
-				this.damage(target.baseMaxhp / 10, target, target, this.effect);
-				if (this.randomChance(1, 10)) {
-					const item = target.getItem();
-					this.add('-message', `${target.name}'s ${item.name} was incinerated by Rain of Fire!`);
-					this.add('-enditem', target, item);
-					target.setItem('');
-				}
-			}
+			this.add('-anim', target, 'Acid Downpour', target);
+			this.add('-message', `Acid rained onto the battlefield!`);
+			if (target) target.trySetStatus('psn');
 		},
-		onAnySetWeather(target, source, weather) {
-			const willFail = ['sunnyday', 'hail', 'snow', 'sandstorm'];
-			if (this.field.getWeather().id === 'rainoffire' && willFail.includes(weather.id)) return false;
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.type !== 'Poison' || move.category === 'Status' || !basePower) return;
+			return this.chainModify(1.33);
 		},
 		onFieldStart(battle, source, effect) {
-			this.add('-weather', 'Rain of Fire');
+			this.add('-weather', 'Acid Rain');
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');

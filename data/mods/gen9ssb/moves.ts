@@ -151,7 +151,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		gen: 9,
 		pp: 64,
 		noPPBoosts: true,
-		flags: {protect: 1},
+		flags: { protect: 1 },
 		priority: 0,
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -184,7 +184,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 						this.add('-anim', s, 'Quick Attack', t);
 					};
 					move.onHit = function (t, s, m) {
-						this.boost({spe: 1}, s, s, m);
+						this.boost({ spe: 1 }, s, s, m);
 					};
 					break;
 				case 'tripleredshell':
@@ -193,7 +193,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 					move.basePower = 40;
 					move.multihit = 3;
 					move.onHit = function (t, s, m) {
-						if (this.randomChance(1, 3)) this.boost({spe: -1}, t, s, m);
+						if (this.randomChance(1, 3)) this.boost({ spe: -1 }, t, s, m);
 					};
 					break;
 				case 'star':
@@ -665,15 +665,16 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 	// Mink
 	toxicdeluge: {
 		name: "Toxic Deluge",
-		basePower: 40,
-		category: "Special",
+		basePower: 0,
+		category: "Status",
 		gen: 9,
 		priority: 0,
 		flags: {},
 		accuracy: true,
 		pp: 1,
-		desc: "Combines Dark in its type effectiveness. Hits one additional time for each teammate inflicted with poison or toxic. Each hit has a 100% chance to poison regardless of typing. If the target is already poisoned, the target is inflicted with toxic instead.",
-		shortDesc: "Hits for each poisoned ally. 100%: Poisons targets.",
+		desc: "Summons Acid Rain for 5 turns, powering up Poison-type moves and poisoning active Pokemon.",
+		shortDesc: "Summons Acid Rain for 5 turns.",
+		weather: 'acidrain',
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -681,29 +682,9 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 			this.add('-anim', source, 'Barb Barrage', source);
 			this.add('-anim', source, 'Acid Downpour', target);
 		},
-		onModifyMove(move, pokemon) {
-			let c = 0;
-			for (const target of pokemon.side.pokemon) {
-				if (target.status === 'psn' || target.status === 'tox') {
-					c++;
-				}
-			}
-			if (c <= 0) return;
-			move.multihit = c;
-		},
-		onEffectiveness(typeMod, target, type, move) {
-			return typeMod + this.dex.getEffectiveness('Dark', type);
-		},
-		onHit(target, source, move) {
-			if (!target.status || !['psn', 'tox'].includes(target.status)) {
-				target.setStatus('psn');
-			} else if (target.status === 'psn') {
-				target.setStatus('tox');
-			}
-		},
 		secondary: null,
-		type: "Poison",
-		target: "allAdjacent",
+		type: "Dark",
+		target: "all",
 	},
 	// Mink
 	transfusetoxin: {
@@ -713,15 +694,15 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		gen: 9,
 		priority: 0,
 		flags: {},
-		accuracy: 95,
+		accuracy: 85,
 		pp: 5,
-		desc: "Badly poisons the foe, always starting at the third stage, regardless of its typing. Replaces existing status conditions. The user is then inflicted with Curse if the attack is successful.",
-		shortDesc: "Very badly poisons the target. User becomes cursed.",
+		desc: "Badly poisons the foe, always starting at the third stage, regardless of its typing. Replaces existing status conditions.",
+		shortDesc: "Very badly poisons the target. Ignores immunities.",
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source, move) {
-			this.add('-anim', source, 'Sludge Wave', target);
+			this.add('-anim', source, 'Acid', target);
 			this.add('-anim', source, 'Strength Sap', target);
 		},
 		onHit(target, source, move) {
@@ -2158,7 +2139,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		name: "Big Thunder",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, bypasssub: 1},
+		flags: { protect: 1, bypasssub: 1 },
 		shortDesc: "Hits opposing Pokemon at end of each turn. Duration varies.",
 		desc: "Hits all opposing Pokemon at the end of each turn. Number of turns is determined by the number of static counters the user has upon use.",
 		onTryMove() {
