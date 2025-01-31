@@ -2176,9 +2176,9 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		},
 		onHit(target, source, move) {
 			target.side.addSideCondition('bigthunder');
-			target.sideConditions['bigthunder'].duration = source.abilityState.static;
-			target.sideConditions['bigthunder'].source = source;
-			target.sideConditions['bigthunder'].move = move;
+			target.side.sideConditions['bigthunder'].duration = source.abilityState.static;
+			target.side.sideConditions['bigthunder'].source = source;
+			target.side.sideConditions['bigthunder'].move = move;
 			source.abilityState.static = null;
 		},
 		condition: {
