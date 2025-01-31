@@ -180,8 +180,9 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 		effectType: 'Condition',
 		duration: 3,
 		onSideStart(side) {
+			this.add('-anim', pokemon, 'Thunderbolt', pokemon);
 			for (const pokemon of side.pokemon) {
-				this.add('-anim', pokemon, 'Thunderbolt', pokemon);
+				if (pokemon.fainted || !pokemon.hp) continue;
 				pokemon.abilityState.originalMaxHp = pokemon.maxhp;
 				pokemon.maxhp /= 2;
 				pokemon.baseMaxhp /= 2;
@@ -189,8 +190,9 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 			}
 		},
 		onSideEnd(side) {
+			this.add('-anim', pokemon, 'Growth', pokemon);
 			for (const pokemon of side.pokemon) {
-				this.add('-anim', pokemon, 'Growth', pokemon);
+				if (pokemon.fainted || !pokemon.hp) continue;
 				pokemon.maxhp = pokemon.abilityState.originalMaxHp;
 				pokemon.baseMaxhp = pokemon.abilityState.originalMaxHp;
 				this.add('-heal', pokemon, pokemon.getHealth, '[silent]')
