@@ -56,7 +56,6 @@ describe('Partners in Crime', function () {
 		assert.statStage(cresselia, 'spa', 1);
 		battle.makeChoices('switch 3, move sleeptalk', 'auto');
 		battle.makeChoices('switch 3, move sleeptalk', 'auto');
-		console.log(battle.getDebugLog());
 		assert.statStage(cresselia, 'spa', 1, 'Cresselia should not have gained another Download boost after Shedinja fainted');
 	});
 });
