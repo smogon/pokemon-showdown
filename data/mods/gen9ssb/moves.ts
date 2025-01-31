@@ -159,7 +159,7 @@ export const Moves: { [k: string]: ModdedMoveData } = {
 		beforeTurnCallback(pokemon) {
 			// mario puncha da block weeheeeee HELP ME.
 			this.add('-anim', pokemon, 'Sky Uppercut', pokemon);
-			const items = ['lightning', 'blooper', 'spinyshell'];
+			const items = ['blooper'];
 			const selectedItem = this.sample(items);
 			pokemon.abilityState.itemBox = selectedItem;
 		},
