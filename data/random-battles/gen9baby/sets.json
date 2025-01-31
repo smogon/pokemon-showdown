@@ -3149,7 +3149,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Thief", "High Jump Kick", "Rapid Spin", "Rock Slide"],
+                "movepool": ["High Jump Kick", "Rapid Spin", "Rock Slide", "Thief"],
                 "abilities": ["Guts"],
                 "teraTypes": ["Dark"]
             } 

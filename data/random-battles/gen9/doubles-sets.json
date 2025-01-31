@@ -775,7 +775,7 @@
             },
             {
                 "role": "Bulky Protect",
-                "movepool": ["Flip Turn", "Helping Hand", "Icy Wind", "Muddy Water", "Protect", "Scald", "Wish", "Yawn"],
+                "movepool": ["Helping Hand", "Icy Wind", "Muddy Water", "Protect", "Scald", "Wish", "Yawn"],
                 "abilities": ["Water Absorb"],
                 "teraTypes": ["Dragon", "Fire", "Ground"]
             }
@@ -1538,7 +1538,7 @@
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Fire Blast", "High Horsepower", "Icy Wind", "Knock Off", "Rock Slide", "Stone Edge"],
                 "abilities": ["Sand Stream"],
-                "teraTypes": ["Ghost", "Flying", "Steel"]
+                "teraTypes": ["Flying", "Ghost", "Steel"]
             }
         ]
     },

@@ -1055,7 +1055,7 @@
         },
         {
             "species": "Archaludon",
-            "weight": 30,
+            "weight": 35,
             "moves": [
                 ["Electro Shot"],
                 ["Draco Meteor"],
@@ -1071,7 +1071,7 @@
         },
         {
             "species": "Archaludon",
-            "weight": 15,
+            "weight": 20,
             "moves": [
                 ["Body Press"],
                 ["Flash Cannon"],
