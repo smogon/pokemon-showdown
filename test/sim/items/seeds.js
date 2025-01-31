@@ -49,4 +49,16 @@ describe('Seeds', function () {
 		assert(electricSeedIndex > 0, 'Electric Seed should activate');
 		assert(redOrbIndex < electricSeedIndex, 'Groudon should undergo Primal Reversion before Electric Seed activates, because Groudon is faster.');
 	});
+
+	it(`should not cause items passed by Symbiosis to be consumed arbitrarily`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Miraidon', ability: 'hadronengine', item: 'electricseed', moves: ['protect']},
+			{species: 'Oranguru', ability: 'symbiosis', item: 'covertcloak', moves: ['protect']},
+		], [
+			{species: 'Alakazam', moves: ['sleeptalk']},
+			{species: 'Alakazam', moves: ['sleeptalk']},
+		]]);
+		assert.equal(battle.p1.active[0].item, 'covertcloak', "Miraidon should hold Covert Cloak");
+		assert.false.holdsItem(battle.p1.active[1]);
+	});
 });
