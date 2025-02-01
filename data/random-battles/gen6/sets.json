@@ -1240,7 +1240,12 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["gigadrain", "hiddenpowerfire", "hiddenpowerrock", "moonblast", "sleeppowder", "synthesis", "toxic"],
+                "movepool": ["gigadrain", "hiddenpowerground", "leechseed", "moonblast", "sleeppowder", "sludgebomb", "synthesis", "toxic"],
+                "abilities": ["Chlorophyll"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["drainpunch", "leafblade", "return", "swordsdance"],
                 "abilities": ["Chlorophyll"]
             }
         ]
@@ -1377,7 +1382,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["hiddenpowerpsychic"],
+                "movepool": ["hiddenpowerfighting", "hiddenpowerpsychic"],
                 "abilities": ["Levitate"]
             }
         ]
@@ -1569,7 +1574,7 @@
                 "abilities": ["Guts"]
             },
             {
-                "role": "Wallbreaker",
+                "role": "Setup Sweeper",
                 "movepool": ["closecombat", "crunch", "facade", "swordsdance"],
                 "abilities": ["Quick Feet"]
             }
@@ -1644,7 +1649,7 @@
                 "abilities": ["Sturdy"]
             },
             {
-                "role": "Staller",
+                "role": "Bulky Attacker",
                 "movepool": ["bravebird", "roost", "spikes", "stealthrock", "toxic"],
                 "abilities": ["Sturdy"]
             }
@@ -2065,7 +2070,8 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["calmmind", "focusblast", "healingwish", "moonblast", "psychic", "shadowball", "thunderbolt", "trick"],
-                "abilities": ["Trace"]
+                "abilities": ["Trace"],
+                "preferredTypes": ["Fighting"]
             },
             {
                 "role": "Setup Sweeper",
@@ -2079,8 +2085,14 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["calmmind", "focusblast", "hypervoice", "psyshock", "substitute", "taunt", "willowisp"],
+                "movepool": ["calmmind", "encore", "focusblast", "hypervoice", "psyshock", "taunt", "willowisp"],
                 "abilities": ["Trace"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["focusblast", "hypervoice", "psyshock", "substitute", "taunt", "willowisp"],
+                "abilities": ["Trace"],
+                "preferredTypes": ["Fighting"]
             }
         ]
     },
@@ -2483,11 +2495,6 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["dragondance", "earthquake", "outrage", "roost"],
-                "abilities": ["Natural Cure"]
-            },
-            {
-                "role": "Bulky Support",
-                "movepool": ["dracometeor", "earthquake", "fireblast", "healbell", "roost", "toxic"],
                 "abilities": ["Natural Cure"]
             }
         ]
@@ -3609,7 +3616,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["knockoff", "powerwhip", "sleeppowder", "synthesis", "toxic"],
+                "movepool": ["knockoff", "powerwhip", "sleeppowder", "swordsdance", "synthesis", "toxic"],
                 "abilities": ["Levitate"]
             }
         ]
@@ -3676,7 +3683,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["bodyslam", "healbell", "knockoff", "protect", "wish"],
+                "movepool": ["bodyslam", "knockoff", "protect", "wish"],
                 "abilities": ["Cloud Nine", "Oblivious"]
             },
             {
@@ -4533,7 +4540,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "moonlight", "psyshock", "shadowball", "signalbeam"],
+                "movepool": ["calmmind", "hiddenpowerfighting", "moonlight", "psyshock", "signalbeam"],
                 "abilities": ["Synchronize"]
             },
             {
