@@ -261,6 +261,7 @@ interface ModdedBattleActions {
 
 interface ModdedBattleSide {
 	inherit?: true;
+	allies?: (this: Side, all?: boolean) => Pokemon[];
 	canDynamaxNow?: (this: Side) => boolean;
 	chooseSwitch?: (this: Side, slotText?: string) => any;
 	getChoice?: (this: Side) => string;
@@ -370,6 +371,7 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	) => boolean;
 	checkWin?: (this: Battle, faintQueue?: Battle['faintQueue'][0]) => true | undefined;
 	fieldEvent?: (this: Battle, eventid: string, targets?: Pokemon[]) => void;
+	getAllActive?: (this: Battle, includeFainted?: boolean, includeCommanding?: boolean) => Pokemon[];
 }
 
 type TypeInfo = import('./dex-data').TypeInfo;
