@@ -529,6 +529,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					if (this.turn & 1 && pokemon.position === (this.turn & 2 ? 0 : 1) && pokemon.hp && pokemon.allies().length) {
 						pokemon.volatiles['commanding'] = this.initEffectState({id: 'commanding', name: 'Commanding', target: pokemon});
 						pokemon.volatiles['gastroacid'] = this.initEffectState({id: 'gastroacid', name: 'Gastro Acid', target: pokemon});
+						this.add('-message', `${pokemon.side.name}'s ${pokemon.name !== pokemon.species.name ? `${pokemon.name} (${pokemon.species.name})` : pokemon.name} will be skipped next turn.`);
 					} else {
 						pokemon.removeVolatile('commanding');
 						pokemon.removeVolatile('gastroacid');
