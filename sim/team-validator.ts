@@ -2673,7 +2673,9 @@ export class TeamValidator {
 					// DW moves:
 					//   only if that was the source
 					moveSources.add(learned + species.id);
-					moveSources.dreamWorldMoveCount++;
+					// If a DW move can be learned through some means other than DW,
+					// it should not be treated as a DW move
+					if (!moveSources.sourcesBefore) moveSources.dreamWorldMoveCount++;
 				} else if (learned.charAt(1) === 'V' && this.minSourceGen < learnedGen) {
 					// Virtual Console or Let's Go transfer moves:
 					//   only if that was the source
