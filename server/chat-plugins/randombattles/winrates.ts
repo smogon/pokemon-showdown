@@ -73,7 +73,7 @@ function getMonth() {
 // no, this cannot be baseSpecies - some formes matter, ex arceus formes
 // no, there is no better way to do this.
 // yes, i tried.
-function getSpeciesName(set: PokemonSet, format: Format) {
+export function getSpeciesName(set: PokemonSet, format: Format) {
 	const species = set.species;
 	const item = Dex.items.get(set.item);
 	const moves = set.moves;
