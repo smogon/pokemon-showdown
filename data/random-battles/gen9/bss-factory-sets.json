@@ -1035,6 +1035,57 @@
           }
       ]
   },
+  "archaludon": {
+      "weight": 9,
+      "sets": [
+        {
+            "species": "Archaludon",
+            "weight": 45,
+            "moves": [
+                ["Steel Beam"],
+                ["Draco Meteor", "Dragon Tail"],
+                ["Stealth Rock"],
+                ["Thunder Wave", "Mirror Coat", "Metal Burst"]
+            ],
+            "item": ["Custap Berry", "Red Card"],
+            "nature": "Modest",
+            "evs": {"def": 4, "spa": 252, "spe": 252},
+            "teraType": ["Fairy", "Ghost"],
+            "ability": ["Sturdy"]
+        },
+        {
+            "species": "Archaludon",
+            "weight": 35,
+            "moves": [
+                ["Electro Shot"],
+                ["Draco Meteor"],
+                ["Flash Cannon"],
+                ["Thunderbolt", "Dark Pulse"]
+            ],
+            "item": ["Power Herb"],
+            "nature": "Timid",
+            "evs": {"def": 4, "spa": 252, "spe": 252},
+            "teraType": ["Electric"],
+            "wantsTera": true,
+            "ability": ["Sturdy", "Stamina"]
+        },
+        {
+            "species": "Archaludon",
+            "weight": 20,
+            "moves": [
+                ["Body Press"],
+                ["Flash Cannon"],
+                ["Stealth Rock", "Thunderbolt"],
+                ["Dark Pulse", "Roar", "Dragon Tail"]
+            ],
+            "item": ["Leftovers", "Sitrus Berry", "Air Balloon"],
+            "nature": "Modest",
+            "evs": {"def": 180, "spa": 252, "spe": 76},
+            "teraType": ["Fairy", "Flying"],
+            "ability": ["Stamina"]
+        }
+    ]
+},
   "garganacl": {
       "weight": 9,
       "sets": [
@@ -1430,14 +1481,30 @@
           },
           {
               "species": "Roaring Moon",
-              "weight": 10,
+              "weight": 5,
               "moves": [
                   ["Knock Off"],
                   ["U-turn"],
                   ["Earthquake", "Scale Shot"],
                   ["Tera Blast"]
               ],
-              "item": ["Choice Band", "Choice Scarf"],
+              "item": ["Choice Band"],
+              "nature": "Jolly",
+              "evs": {"atk": 252, "spd": 4, "spe": 252},
+              "teraType": ["Fairy", "Fire"],
+              "wantsTera": true,
+              "ability": ["Protosynthesis"]
+          },
+          {
+              "species": "Roaring Moon",
+              "weight": 5,
+              "moves": [
+                  ["Knock Off"],
+                  ["U-turn"],
+                  ["Earthquake"],
+                  ["Tera Blast"]
+              ],
+              "item": ["Choice Scarf"],
               "nature": "Jolly",
               "evs": {"atk": 252, "spd": 4, "spe": 252},
               "teraType": ["Fairy", "Fire"],

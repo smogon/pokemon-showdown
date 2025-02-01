@@ -1226,7 +1226,7 @@
         ]
     },
     "grubbin": {
-        "level": 7,
+        "level": 6,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1804,9 +1804,9 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Close Combat", "Earthquake", "Heavy Slam", "Stealth Rock", "Stone Edge"],
+                "movepool": ["Close Combat", "Earthquake", "Heavy Slam", "Rest", "Sleep Talk", "Stealth Rock", "Stone Edge"],
                 "abilities": ["Stamina"],
-                "teraTypes": ["Fighting", "Steel"]
+                "teraTypes": ["Steel"]
             }
         ]
     },
@@ -1988,7 +1988,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Earthquake", "Gunk Shot", "Ice Shard", "Knock Off", "Stealth Rock", "Stone Edge"],
+                "movepool": ["Earthquake", "Gunk Shot", "Ice Shard", "Knock Off", "Rest", "Sleep Talk", "Stealth Rock", "Stone Edge"],
                 "abilities": ["Pickup"],
                 "teraTypes": ["Dragon", "Poison"]
             }
@@ -2433,6 +2433,12 @@
                 "movepool": ["Aqua Jet", "Fake Out", "Icicle Spear", "Surf"],
                 "abilities": ["Thick Fat"],
                 "teraTypes": ["Poison", "Steel", "Water"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Icicle Spear", "Rest", "Sleep Talk", "Surf"],
+                "abilities": ["Thick Fat"],
+                "teraTypes": ["Poison", "Steel"]
             }
         ]
     },
@@ -2448,7 +2454,7 @@
         ]
     },
     "sewaddle": {
-        "level": 7,
+        "level": 6,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2764,7 +2770,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Earthquake", "Encore", "Play Rough", "Thunder Wave"],
+                "movepool": ["Earthquake", "Encore", "Play Rough", "Rest", "Sleep Talk", "Thunder Wave"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Ground"]
             },
@@ -3146,7 +3152,13 @@
                 "movepool": ["Bulk Up", "High Jump Kick", "Rapid Spin", "Rock Slide"],
                 "abilities": ["Guts"],
                 "teraTypes": ["Fighting", "Rock"]
-            }
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["High Jump Kick", "Rapid Spin", "Rock Slide", "Thief"],
+                "abilities": ["Guts"],
+                "teraTypes": ["Dark"]
+            } 
         ]
     },
     "varoom": {

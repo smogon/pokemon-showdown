@@ -1144,12 +1144,12 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["encore", "energyball", "sleeppowder", "stunspore", "toxic", "uturn"],
+                "movepool": ["encore", "energyball", "sleeppowder", "toxic", "uturn"],
                 "abilities": ["Chlorophyll"]
             },
             {
                 "role": "Fast Support",
-                "movepool": ["hiddenpowerflying", "leechseed", "protect", "substitute", "toxic"],
+                "movepool": ["hiddenpowerflying", "leechseed", "protect", "sleeppowder", "substitute"],
                 "abilities": ["Chlorophyll"]
             }
         ]
@@ -1332,7 +1332,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["encore", "knockoff", "protect", "stealthrock", "toxic"],
+                "movepool": ["encore", "knockoff", "stealthrock", "toxic"],
                 "abilities": ["Gluttony"]
             }
         ]
@@ -1361,7 +1361,7 @@
                 "abilities": ["Guts"]
             },
             {
-                "role": "Wallbreaker",
+                "role": "Setup Sweeper",
                 "movepool": ["closecombat", "crunch", "facade", "swordsdance"],
                 "abilities": ["Quick Feet"]
             }
@@ -1965,7 +1965,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["batonpass", "ironhead", "substitute", "suckerpunch", "swordsdance"],
+                "movepool": ["batonpass", "ironhead", "suckerpunch", "swordsdance"],
                 "abilities": ["Intimidate"]
             },
             {
@@ -2191,12 +2191,12 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["darkpulse", "encore", "lowkick", "seedbomb", "spikes", "suckerpunch"],
+                "movepool": ["darkpulse", "encore", "seedbomb", "spikes", "suckerpunch", "superpower"],
                 "abilities": ["Sand Veil"]
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["lowkick", "seedbomb", "suckerpunch", "swordsdance"],
+                "movepool": ["seedbomb", "suckerpunch", "superpower", "swordsdance"],
                 "abilities": ["Sand Veil"]
             },
             {
@@ -3586,12 +3586,6 @@
                 "role": "Bulky Support",
                 "movepool": ["bulkup", "outrage", "rest", "sleeptalk"],
                 "abilities": ["Pressure"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["bulkup", "dragonclaw", "earthquake", "fireblast", "rest"],
-                "abilities": ["Pressure"],
-                "preferredTypes": ["Ground"]
             }
         ]
     },

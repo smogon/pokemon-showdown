@@ -206,8 +206,6 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			['bodyslam', 'healingwish'],
 			// Blaziken
 			['agility', 'vacuumwave'],
-			// Shuckle
-			['knockoff', 'protect'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
