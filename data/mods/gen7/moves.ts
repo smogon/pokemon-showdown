@@ -383,7 +383,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			duration: 2,
-			onSwitchInPriority: 1,
 			onSwitchIn(target) {
 				if (!target.fainted) {
 					target.heal(target.maxhp);
@@ -610,7 +609,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			duration: 2,
-			onSwitchInPriority: 1,
 			onSwitchIn(target) {
 				if (!target.fainted) {
 					target.heal(target.maxhp);
