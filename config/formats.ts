@@ -2279,14 +2279,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		banlist: [
 			'ND Uber', 'ND AG', 'ND OU', 'ND UUBL', 'ND UU', 'ND RUBL', 'ND RU', 'ND NFE', 'ND LC',
-			'Battle Bond', 'Moody', 'Shadow Tag', 'Berserk Gene', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Acupressure', 'Last Respects',
-			'Baton Pass + Rapid Spin',
+			'Battle Bond', 'Moody', 'Power Construct', 'Shadow Tag', 'Berserk Gene', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Acupressure',
+			'Last Respects', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin',
 		],
 		unbanlist: [
-			'Absol-Base', 'Alcremie', 'Bellibolt', 'Clodsire', 'Comfey', 'Crawdaunt', 'Cursola', 'Dachsbun', 'Donphan', 'Flapple', 'Golurk',
-			'Goodra-Base', 'Houndoom-Base', 'Infernape', 'Jynx', 'Kecleon', 'Kingdra', 'Mesprit', 'Oricorio-Pom-Pom', 'Probopass', 'Reuniclus',
-			'Sawsbuck', 'Scyther', 'Shaymin-Land', 'Shiftry', 'Slowbro-Base', 'Spiritomb', 'Swanna', 'Toedscruel', 'Torkoal', 'Type: Null',
-			'Unown', 'Vileplume', 'Virizion', 'Wugtrio',
+			'Alcremie-Base', 'Ambipom', 'Araquanid-Base', 'Arbok', 'Arctozolt', 'Bewear', 'Breloom', 'Cacturne', 'Carnivine', 'Dewgong', 'Emolga',
+			'Glalie-Base', 'Golduck', 'Hitmonchan', 'Kecleon', 'Maractus', 'Musharna', 'Pangoro', 'Persian-Alola', 'Pincurchin', 'Pinsir-Base',
+			'Rapidash-Galar', 'Regigigas', 'Scrafty', 'Sigilyph', 'Spinda', 'Tauros-Base', 'Togedemaru-Base', 'Uxie', 'Weezing-Base', 'Whiscash',
+			'Zangoose', 'Zweilous', 'Zygarde-10%',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
