@@ -320,17 +320,22 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 		name: 'Acid Rain',
 		effectType: 'Weather',
 		duration: 5,
-		onWeather(target) {
-			this.add('-anim', target, 'Acid Downpour', target);
-			this.add('-message', `Acid rained onto the battlefield!`);
-			if (target) target.trySetStatus('psn');
-		},
-		onBasePower(basePower, pokemon, target, move) {
-			if (move.type !== 'Poison' || move.category === 'Status' || !basePower) return;
-			return this.chainModify(1.33);
+		onWeatherModifyDamage(damage, attacker, defender, move) {
+			if (move.type === 'Poison') {
+				this.debug('Acid Rain poison buff');
+				return this.chainModify(1.33);
+			}
 		},
 		onFieldStart(battle, source, effect) {
 			this.add('-weather', 'Acid Rain');
+		},
+		onFieldResidualOrder: 1,
+		onFieldResidual() {
+			this.add('-weather', 'Acid Rain', '[upkeep]');
+			this.eachEvent('Weather');
+			for (const pokemon of this.getAllActive()) {
+				pokemon.trySetStatus('psn');
+			}
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
@@ -342,13 +347,6 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 			move.accuracy = 0;
 		},
 	},
-	lag: {
-		name: "Lag",
-		onModifyPriority(priority, pokemon, target, move) {
-			return priority - 8;
-		},
-	},
-
 	// Cyclommatic Cell Battery Display
 	// Uses empty volatile statuses as a visual effect
 	// pokemon.addVolatile('0%');

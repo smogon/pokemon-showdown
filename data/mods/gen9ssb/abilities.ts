@@ -25,7 +25,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 		desc: "The accuracy and power of attacks used against the user is 0.9x. Prevents other active Pokemon from eating their items.",
 		shortDesc: "Attacks on user have 0.9x BP/ACC. Active Pokemon cannot eat.",
 		onStart(pokemon) {
-			for (const target of this.getAllActive) {
+			for (const target of this.getAllActive()) {
 				if (pokemon === target) continue;
 				target.addVolatile('sickeningstench');
 			}
@@ -42,7 +42,7 @@ export const Abilities: { [k: string]: ModdedAbilityData } = {
 			}
 		},
 		onEnd(pokemon) {
-			for (const target of this.getAllActive) {
+			for (const target of this.getAllActive()) {
 				if (pokemon === target) continue;
 				if (target.volatiles['sickeningstench']) target.removeVolatile('sickeningstench');
 			}

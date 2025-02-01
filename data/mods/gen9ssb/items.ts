@@ -12,7 +12,7 @@ export const Items: { [k: string]: ModdedItemData } = {
 		onResidual(pokemon) {
 			if (!pokemon || !pokemon.hp) return;
 			let totalPsn = 0;
-			for (const target of this.getAllActive) {
+			for (const target of this.getAllActive()) {
 				if (!target.status || pokemon === target) continue;
 				if (target.status === 'psn' || target.status === 'tox') totalPsn++;
 			}
