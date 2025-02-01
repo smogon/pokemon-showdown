@@ -2424,7 +2424,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Encore", "Flip Turn", "Haze", "Icicle Spear", "Rest", "Sleep Talk", "Surf", "Thief"],
+                "movepool": ["Encore", "Flip Turn", "Haze", "Icicle Spear", "Surf", "Thief"],
                 "abilities": ["Thick Fat"],
                 "teraTypes": ["Poison", "Steel"]
             },
@@ -2433,6 +2433,12 @@
                 "movepool": ["Aqua Jet", "Fake Out", "Icicle Spear", "Surf"],
                 "abilities": ["Thick Fat"],
                 "teraTypes": ["Poison", "Steel", "Water"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["Icicle Spear", "Rest", "Sleep Talk", "Surf"],
+                "abilities": ["Thick Fat"],
+                "teraTypes": ["Poison", "Steel"]
             }
         ]
     },
