@@ -22,23 +22,24 @@ export const Scripts: ModdedBattleScriptsData = {
 				const ally = active.side.active.find(mon => mon && mon !== active && !mon.fainted);
 				if (eventid === 'SwitchIn' && ally?.m.innate && targets && !targets.includes(ally)) {
 					const volatileState = ally.volatiles[ally.m.innate];
-					if (!volatileState) return;
-					const volatile = this.dex.conditions.getByID(ally.m.innate as ID);
-					// @ts-ignore - dynamic lookup
-					let callback = volatile[callbackName];
-					// @ts-ignore - dynamic lookup
-					if (this.gen >= 5 && !volatile.onSwitchIn && !volatile.onAnySwitchIn) {
-						callback = volatile.onStart;
-					}
-					if (callback !== undefined) {
-						const allyHandler = this.resolvePriority({
-							effect: volatile, callback, state: volatileState, end: ally.removeVolatile, effectHolder: ally,
-						}, callbackName);
-						// if only one Pokemon is switching in, activate its ally's new innate at the speed of the one switching in
-						allyHandler.speed = this.resolvePriority({
-							effect: volatile, callback, state: volatileState, end: ally.removeVolatile, effectHolder: active,
-						}, callbackName).speed;
-						handlers.push(allyHandler);
+					if (volatileState) {
+						const volatile = this.dex.conditions.getByID(ally.m.innate as ID);
+						// @ts-ignore - dynamic lookup
+						let callback = volatile[callbackName];
+						// @ts-ignore - dynamic lookup
+						if (this.gen >= 5 && !volatile.onSwitchIn && !volatile.onAnySwitchIn) {
+							callback = volatile.onStart;
+						}
+						if (callback !== undefined) {
+							const allyHandler = this.resolvePriority({
+								effect: volatile, callback, state: volatileState, end: ally.removeVolatile, effectHolder: ally,
+							}, callbackName);
+							// if only one Pokemon is switching in, activate its ally's new innate at the speed of the one switching in
+							allyHandler.speed = this.resolvePriority({
+								effect: volatile, callback, state: volatileState, end: ally.removeVolatile, effectHolder: active,
+							}, callbackName).speed;
+							handlers.push(allyHandler);
+						}
 					}
 				}
 				handlers = handlers.concat(this.findPokemonEventHandlers(active, callbackName, getKey));
