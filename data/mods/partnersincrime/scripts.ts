@@ -22,6 +22,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const ally = active.side.active.find(mon => mon && mon !== active && !mon.fainted);
 				if (eventid === 'SwitchIn' && ally?.m.innate && targets && !targets.includes(ally)) {
 					const volatileState = ally.volatiles[ally.m.innate];
+					if (!volatileState) return;
 					const volatile = this.dex.conditions.getByID(ally.m.innate as ID);
 					// @ts-ignore - dynamic lookup
 					let callback = volatile[callbackName];
