@@ -591,11 +591,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			for (const ally of allies) {
 				if (ally !== source) {
 					if (ally.hasAbility('sapsipper')) {
-						if (ally.isActive) this.add('-immune', ally, '[from] ability: Sap Sipper');
+						this.add('-immune', ally, '[from] ability: Sap Sipper');
 						continue;
 					}
 					if (ally.hasAbility('goodasgold')) {
-						if (ally.isActive) this.add('-immune', ally, '[from] ability: Good as Gold');
+						this.add('-immune', ally, '[from] ability: Good as Gold');
 						continue;
 					}
 					if (ally.volatiles['substitute'] && !move.infiltrates) continue;
@@ -8547,11 +8547,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			for (const ally of allies) {
 				if (ally !== source) {
 					if (ally.hasAbility('soundproof')) {
-						if (ally.isActive) this.add('-immune', ally, '[from] ability: Soundproof');
+						this.add('-immune', ally, '[from] ability: Soundproof');
 						continue;
 					}
 					if (ally.hasAbility('goodasgold')) {
-						if (ally.isActive) this.add('-immune', ally, '[from] ability: Good as Gold');
+						this.add('-immune', ally, '[from] ability: Good as Gold');
 						continue;
 					}
 				}
