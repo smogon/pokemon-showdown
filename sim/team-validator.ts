@@ -768,6 +768,10 @@ export class TeamValidator {
 		problem = this.checkNature(set, nature, setHas);
 		if (problem) problems.push(problem);
 
+		if (set.shiny && dex.gen === 1) {
+			set.shiny = false;
+		}
+
 		if (set.moves && Array.isArray(set.moves)) {
 			set.moves = set.moves.filter(val => val);
 		}
@@ -1677,6 +1681,9 @@ export class TeamValidator {
 			const unownLetter = species.forme || "A";
 			if (unownLetter !== expectedLetter) {
 				problems.push(`Unown has forme ${unownLetter}, but its DVs give it the forme ${expectedLetter}.`);
+			}
+			if (set.shiny && !['I', 'V'].includes(unownLetter)) {
+				problems.push(`Shiny Unown can only be forme I or V.`);
 			}
 		}
 		return problems;
