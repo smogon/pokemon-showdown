@@ -91,7 +91,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchIn(pokemon) {
 			// Air Lock does not activate when Skill Swapped or when Neutralizing Gas leaves the field
 			this.add('-ability', pokemon, 'Air Lock');
-			this.singleEvent('Start', this.effect, this.effectState, pokemon);
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
 		},
 		onStart(pokemon) {
 			pokemon.abilityState.ending = false; // Clear the ending flag
@@ -538,7 +538,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchIn(pokemon) {
 			// Cloud Nine does not activate when Skill Swapped or when Neutralizing Gas leaves the field
 			this.add('-ability', pokemon, 'Cloud Nine');
-			this.singleEvent('Start', this.effect, this.effectState, pokemon);
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
 		},
 		onStart(pokemon) {
 			pokemon.abilityState.ending = false; // Clear the ending flag
@@ -598,10 +598,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	commander: {
 		onAnySwitchInPriority: -2,
 		onAnySwitchIn() {
-			this.singleEvent('Update', this.effect, this.effectState, this.effectState.target);
+			((this.effect as any).onUpdate as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onStart(pokemon) {
-			this.singleEvent('Update', this.effect, this.effectState, pokemon);
+			((this.effect as any).onUpdate as (p: Pokemon) => void).call(this, pokemon);
 		},
 		onUpdate(pokemon) {
 			if (this.gameType !== 'doubles') return;
@@ -3121,7 +3121,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onAnySwitchIn() {
-			this.singleEvent('Start', this.effect, this.effectState, this.effectState.target);
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onSetStatus(status, target, source, effect) {
 			if (!['psn', 'tox'].includes(status.id)) return;
