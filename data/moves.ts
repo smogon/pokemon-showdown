@@ -590,7 +590,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
 				if (ally !== source) {
-					if (ally.volatiles['substitute'] && !move.infiltrates) continue;
 					if (ally.hasAbility('sapsipper')) {
 						if (ally.isActive) this.add('-immune', ally, '[from] ability: Sap Sipper');
 						continue;
@@ -599,6 +598,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 						if (ally.isActive) this.add('-immune', ally, '[from] ability: Good as Gold');
 						continue;
 					}
+					if (ally.volatiles['substitute'] && !move.infiltrates) continue;
 				}
 				if (ally.cureStatus()) success = true;
 			}
