@@ -334,14 +334,14 @@ export const Conditions: { [k: string]: ModdedConditionData & { innateName?: str
 			this.add('-weather', 'Acid Rain', '[upkeep]');
 			this.eachEvent('Weather');
 			for (const pokemon of this.getAllActive()) {
-				if (pokemon.trySetStatus('psn', pokemon.side.foe.active[0], this.dex.conditions.get('Acid Rain'))) {
-					this.add('-anim', pokemon, 'Acid Downpour', pokemon);
-				}
+				if (pokemon.species.id === 'venusaurmega') continue;
+				this.add('-anim', pokemon, 'Acid Downpour', pokemon);
+				pokemon.trySetStatus('psn', pokemon.side.foe.active[0], this.dex.conditions.get('Acid Rain'));
 			}
 			this.add('-message', 'Acid Rain fell from the sky!');
 		},
 		onFieldEnd() {
-			this.add('-weather', 'Acid Rain');
+			this.add('-message', `Acid Rain petered out!`);
 		},
 	},
 	willmiss: {
