@@ -401,4 +401,21 @@ describe('Future Sight', function () {
 		const steelix = battle.p1.active[1];
 		assert.false.fullHP(steelix, `Steelix should have been damaged by the 3rd Future Sight`);
 	});
+
+	it(`should do nothing if no Pokemon is present to take damage from the Future attack`, function () {
+		battle = common.createBattle([[
+			{species: 'Wynaut', ability: 'magicguard', moves: ['sleeptalk']},
+			{species: 'Shedinja', moves: ['sleeptalk']},
+		], [
+			{species: 'Happiny', moves: ['stealthrock', 'futuresight']},
+		]]);
+
+		battle.makeChoices('auto', 'move futuresight');
+		battle.makeChoices('auto', 'move stealthrock');
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices('switch 2');
+		battle.makeChoices();
+		const wynaut = battle.p1.active[0];
+		assert.fullHP(wynaut);
+	});
 });

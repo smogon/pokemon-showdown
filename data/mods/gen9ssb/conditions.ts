@@ -1552,7 +1552,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			this.add(`c:|${getName('Merritty')}|congratulations to our winner`);
 		},
 		innateName: "Tourban",
-		shortDesc: "Takes half damage from Ghost moves, deals double damge to Ghost-types.",
+		shortDesc: "Takes half damage from Ghost moves, deals double damage to Ghost-types.",
 		onSourceModifyDamage(damage, source, target, move) {
 			if (source.illusion) return;
 			if (move.type === 'Ghost') {

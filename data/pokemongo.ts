@@ -642,7 +642,7 @@ export const PokemonGoData: import('../sim/dex-species').PokemonGoDataTable = {
 	woobat: {encounters: ['wild']},
 	swoobat: {encounters: ['wild']},
 	drilbur: {encounters: ['wild']},
-	exacdrill: {encounters: ['wild']},
+	excadrill: {encounters: ['wild']},
 	audino: {encounters: ['wild']},
 	timburr: {encounters: ['egg', 'raid']}, // wild encounter available on 2023-08-26
 	gurdurr: {encounters: ['egg', 'raid']}, // wild encounter available on 2023-08-26

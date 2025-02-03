@@ -435,7 +435,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	// in the hills
 	gligar: {
 		inherit: true,
-		abilities: {0: "Illterit"},
+		abilities: {0: "Illiterit"},
 	},
 
 	// ironwater
