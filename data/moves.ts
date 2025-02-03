@@ -591,7 +591,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			for (const ally of allies) {
 				if (ally !== source) {
 					if (ally.hasAbility('sapsipper')) {
-						if (ally.isActive) this.add('-immune', ally, '[from] ability: Sap Sipper');;
+						if (ally.isActive) this.add('-immune', ally, '[from] ability: Sap Sipper');
 						continue;
 					}
 					if (ally.hasAbility('goodasgold')) {
