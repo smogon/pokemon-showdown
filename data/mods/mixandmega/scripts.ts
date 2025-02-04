@@ -6,6 +6,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!item.megaStone && !item.onDrive && !item.onPlate && !item.onMemory) continue;
 			this.modData('Items', i).onTakeItem = false;
 			if (item.isNonstandard) this.modData('Items', i).isNonstandard = null;
+			if (item.megaStone) {
+				this.modData('FormatsData', this.toID(item.megaStone)).isNonstandard = null;
+			}
 		}
 	},
 	start() {

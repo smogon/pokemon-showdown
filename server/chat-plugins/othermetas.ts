@@ -41,7 +41,8 @@ function getMegaStone(stone: string, mod = 'gen9'): Item | null {
 			return null;
 		}
 	}
-	if (!(item.forcedForme && !item.zMove) && !item.megaStone && !item.isPrimalOrb) return null;
+	if (!(item.forcedForme && !item.zMove) && !item.megaStone &&
+		!item.isPrimalOrb && !item.name.startsWith("Rusted")) return null;
 	return item;
 }
 
