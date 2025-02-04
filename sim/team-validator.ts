@@ -1682,9 +1682,6 @@ export class TeamValidator {
 			if (unownLetter !== expectedLetter) {
 				problems.push(`Unown has forme ${unownLetter}, but its DVs give it the forme ${expectedLetter}.`);
 			}
-			if (set.shiny && !['I', 'V'].includes(unownLetter)) {
-				problems.push(`Shiny Unown can only be forme I or V.`);
-			}
 		}
 		return problems;
 	}
