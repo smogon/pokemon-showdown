@@ -514,14 +514,6 @@ export class Pokemon {
 	getUpdatedDetails(illusionLevel?: number) {
 		let name = this.species.name;
 		if (name === 'Greninja-Bond') name = 'Greninja';
-		if (this.species.baseSpecies === 'Ogerpon' && this.terastallized && this.teraType !== this.species.requiredTeraType) {
-			switch (this.teraType) {
-			case 'Grass': name = 'Ogerpon-Teal-Tera'; break;
-			case 'Water': name = 'Ogerpon-Wellspring-Tera'; break;
-			case 'Fire': name = 'Ogerpon-Hearthflame-Tera'; break;
-			case 'Rock': name = 'Ogerpon-Cornerstone-Tera'; break;
-			}
-		}
 		const level = illusionLevel || this.level;
 		return name + (level === 100 ? '' : ', L' + level) +
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
@@ -1407,9 +1399,6 @@ export class Pokemon {
 			if (!source) {
 				// Tera forme
 				// Ogerpon/Terapagos text goes here
-				if (species.baseSpecies === 'Ogerpon' && this.terastallized && this.teraType !== species.requiredTeraType) {
-					this.battle.hint(`Ogerpon terastallized into ${species.name}, but it has taken the appearance of ${this.details.split(",")[0]} due to its tera type being ${this.teraType}.`);
-				}
 			} else if (source.effectType === 'Item') {
 				this.canTerastallize = null; // National Dex behavior
 				if (source.zMove) {

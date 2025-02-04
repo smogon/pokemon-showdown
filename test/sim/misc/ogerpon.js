@@ -46,7 +46,6 @@ describe(`[Hackmons] Ogerpon`, function () {
 		assert.statStage(ogerpon, 'spd', 1);
 		assert.equal(ogerpon.getTypes().join(''), 'Rock');
 		assert.fullHP(battle.p2.active[0]);
-		assert(battle.log.includes('|detailschange|p1a: Ogerpon|Ogerpon-Cornerstone-Tera, F, tera:Rock'));
 	});
 
 	// https://www.smogon.com/forums/threads/ogerpon-teal-tera-tera-can-exist.3742851/post-10132811
@@ -63,7 +62,6 @@ describe(`[Hackmons] Ogerpon`, function () {
 		assert.statStage(ogerpon, 'spd', 1);
 		assert.equal(ogerpon.getTypes().join(''), 'Water');
 		assert.fullHP(battle.p2.active[0]);
-		assert(battle.log.includes('|detailschange|p1a: Ogerpon|Ogerpon-Wellspring-Tera, F, tera:Water'));
 	});
 
 	// https://www.smogon.com/forums/threads/ogerpon-teal-tera-tera-can-exist.3742851/post-10132811
@@ -80,7 +78,6 @@ describe(`[Hackmons] Ogerpon`, function () {
 		assert.statStage(ogerpon, 'spd', 1);
 		assert.equal(ogerpon.getTypes().join(''), 'Rock');
 		assert.fullHP(battle.p2.active[0]);
-		assert(battle.log.includes('|detailschange|p1a: Ogerpon|Ogerpon-Cornerstone-Tera, F, tera:Rock'));
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-10404934
@@ -106,7 +103,6 @@ describe(`[Hackmons] Ogerpon`, function () {
 		assert.statStage(ogerpon, 'spd', 0);
 		assert.equal(ogerpon.getTypes().join(''), 'Fairy');
 		assert.fullHP(battle.p2.active[0]);
-		assert.false(battle.log.includes('|detailschange|'));
 	});
 
 	// https://www.smogon.com/forums/threads/ogerpon-teal-tera-tera-can-exist.3742851/post-10132811
