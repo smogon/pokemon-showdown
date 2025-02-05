@@ -472,10 +472,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 5] Draft",
-		mod: 'gen6',
+		mod: 'gen5',
 		searchShow: false,
 		ruleset: ['Standard Draft', 'Moody Clause', 'Swagger Clause', 'DryPass Clause', 'Gem Clause', 'Sleep Moves Clause'],
-		banlist: ['King\'s Rock', 'Quick Claw', 'Soul Dew', 'Assist', 'Drizzle ++ Swift Swim', 'Sandstorm ++ Sand Rush', 'Drought ++ Chlorophyll', 'Blaziken + Speed Boost', 'Landorus + Sheer Force', 'Excadrill + Sand Rush']
+		banlist: ['King\'s Rock', 'Quick Claw', 'Soul Dew', 'Assist', 'Drizzle ++ Swift Swim', 'Sandstorm ++ Sand Rush', 'Drought ++ Chlorophyll', 'Landorus + Sheer Force', 'Excadrill + Sand Rush']
 	},
 	{
 		name: "[Gen 4] Draft",
