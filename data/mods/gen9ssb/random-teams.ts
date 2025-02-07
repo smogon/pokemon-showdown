@@ -72,6 +72,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Coin Clash',
 		evs: { hp: 252, atk: 252, def: 252, spa: 252, spd: 252, spe: 252 }, nature: 'Jolly',
 	},
+	Gadget: {
+		species: 'Gimmighoul', ability: 'Cash Grab', item: 'Everythingamajig', gender: 'M',
+		moves: ['Pay Day', 'Make It Rain'],
+		signatureMove: 'Capital Cannon',
+		evs: { hp: 252, atk: 252, def: 252, spa: 252, spd: 252, spe: 252 }, nature: 'Rash',
+	},
 	Mima: {
 		species: 'Mismagius', ability: 'Vengeful Spirit', item: 'Crescent Staff', gender: 'F',
 		moves: ['Destiny Bond', 'Secret Sword', 'Shadow Ball'],
