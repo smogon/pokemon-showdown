@@ -369,7 +369,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			let success = false;
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
-				if (ally.hasAbility('soundproof')) continue;
+				if (ally.hasAbility('soundproof')) {
+					this.add('-immune', ally, '[from] ability: Soundproof');
+					continue;
+				}
 				if (ally.cureStatus()) success = true;
 			}
 			return success;
