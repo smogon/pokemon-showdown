@@ -678,18 +678,16 @@ export class TeamValidator {
 				set.hpType = type.name;
 			}
 		}
-		if (set.teraType || this.gen === 9) {
+		if ((this.gen === 9 && !ruleTable.has('terastalclause')) || ruleTable.has('bonustypemod')) {
 			const type = dex.types.get(set.teraType || species.requiredTeraType || species.types[0]);
 			if (!type.exists || type.isNonstandard) {
 				problems.push(`${name}'s Terastal type (${set.teraType}) is invalid.`);
 			} else if (species.requiredTeraType && species.requiredTeraType !== type.name && ruleTable.has('obtainablemisc')) {
 				problems.push(`${species.name}'s Terastal type needs to be ${species.requiredTeraType}, please fix it.`);
-			} else {
-				set.teraType = type.name;
 			}
-			if (dex.gen !== 9 || (ruleTable.has('terastalclause') && !ruleTable.has('bonustypemod'))) {
-				delete set.teraType;
-			}
+			set.teraType = type.name;
+		} else {
+			delete set.teraType;
 		}
 
 		let problem = this.checkSpecies(set, species, tierSpecies, setHas);
