@@ -505,9 +505,10 @@ export class Pokemon {
 		return this.isActive ? this.getSlot() + fullname.slice(2) : fullname;
 	}
 
-	getUpdatedDetails(level = this.level) {
+	getUpdatedDetails(level?: number) {
 		let name = this.species.name;
 		if (name === 'Greninja-Bond') name = 'Greninja';
+		level = level || this.level;
 		return name + (level === 100 ? '' : ', L' + level) +
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 	}
