@@ -295,7 +295,7 @@ describe('Dex data', function () {
 	// Alola (18) + Totem (12) + Pikachu (7) - Pikachu (6) + Greninja (2) + Zygarde (2) +
 	// Oricorio (3) + Rockruff (1) + Lycanroc (2) + Wishiwashi (1) + Silvally (17) + Minior (1)
 	// Mimikyu (1) + Necrozma (3) [Magearna (1) + LGPE Starters/Meltan/Melmetal (4)]
-	formes[7] = formes[6] + 18 + 12 + 7 - 6 + 2 + 2 + 3 + 1 + 2 + 1 + 17 + 1 + 1 + 3 - 1;
+	formes[7] = formes[6] + 18 + 12 + 7 - 6 + 2 + 2 + 3 + 1 + 2 + 1 + 17 + 1 + 1 + 3;
 	// Silvally (17) + Rotom (5) + Basculin (1) + Meowstic (1) +
 	// Aegislash (1) + Pumpkaboo (3) + Gourgeist (3) + Pikachu (7) + Galar (14) +
 	// Alola (8) + Indeedee (1) + Morpeko (1) + Eiscue (1) + Zacian/Zamazenta (2) +
@@ -308,17 +308,17 @@ describe('Dex data', function () {
 	// {GMax} 26 + 7
 	formes[8] = 17 + 5 + 1 + 1 + 1 + 3 + 3 + 7 + 14 + 8 +
 	  1 + 1 + 1 + 2 + 1 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 +
-	  (4 + 1 + 1 + 1 + 1 + 2 + (1 + 1)) + (1 + 3 + 4 + 2 + 3 + 1 + 2) - 1; // FIXME Rockruff
+	  (4 + 1 + 1 + 1 + 1 + 2 + (1 + 1)) + (1 + 3 + 4 + 2 + 3 + 1 + 2);
 	// Pikachu (8) + Origin (3) + Therian (4) + Alola (16) + Galar (7) + Paldea (4) + Hisui (16) +
 	// Deoxys (3) + Rotom (5) + Shaymin (1) + Arceus (17) + Basculin (2) + Kyurem (2) + Keldeo (1) +
-	// Meloetta (1) + Greninja (1) + Vivillon (2) + Meowstic (1) + Hoopa (1) + Oricorio (3) +
+	// Meloetta (1) + Greninja (1) + Vivillon (2) + Meowstic (1) + Hoopa (1) + Oricorio (3) + Rockruff (1) +
 	// Lycanroc (2) + Minior (1) + Mimikyu (1) + Necrozma (2) + Magearna (1) + Toxtricity (1) +
 	// Antique (2) + Eiscue (1) + Indeedee (1) + Cramorant (2) + Morpeko (1) + Crowned (2) +
 	// Urshifu (1) + Zarude (1) + Calyrex (2) + Oinkologne (1) + Ursaluna (1) + Dudunsparce (1) +
 	// Palafin (1) + Maushold (1) + Squawkabilly (3) + Gimmighoul (1) + Basculegion (1) +
 	// Masterpiece (2) + Ogerpon (7) + Terapagos (2)
 	formes[9] = 8 + 3 + 4 + 16 + 7 + 4 + 16 + 3 + 5 + 1 + 17 +
-	  2 + 2 + 1 + 1 + 1 + 2 + 1 + 1 + 3 + 2 + 1 + 1 + 2 + 1 +
+	  2 + 2 + 1 + 1 + 1 + 2 + 1 + 1 + 3 + 1 + 2 + 1 + 1 + 2 + 1 +
 	  1 + 2 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 2 + 1 + 1 + 1 +
 	  1 + 3 + 1 + 1 + 2 + 7 + 2;
 
