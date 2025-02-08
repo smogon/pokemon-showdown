@@ -508,7 +508,7 @@ export class Pokemon {
 	getUpdatedDetails(level?: number) {
 		let name = this.species.name;
 		if (name === 'Greninja-Bond') name = 'Greninja';
-		level = level || this.level;
+		if (!level) level = this.level;
 		return name + (level === 100 ? '' : ', L' + level) +
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 	}
