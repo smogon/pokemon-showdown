@@ -12,7 +12,7 @@ describe('Trump Card', function () {
 
 	it('should power-up the less PP the move has', function () {
 		battle = common.createBattle([
-			[{species: 'Eevee', ability: 'runaway', moves: ['trumpcard']}],
+			[{species: 'Eevee', ability: 'runaway', moves: ['trumpcard'], movePPUps: [0]}],
 			[{species: 'Lugia', ability: 'multiscale', moves: ['recover']}],
 		]);
 
@@ -54,7 +54,7 @@ describe('Trump Card', function () {
 
 	it('should work if called via Custap Berry in Gen 4', function () {
 		battle = common.gen(4).createBattle([
-			[{species: 'Eevee', level: 1, ability: 'runaway', item: 'custapberry', moves: ['trumpcard']}],
+			[{species: 'Eevee', level: 1, ability: 'runaway', item: 'custapberry', moves: ['trumpcard'], movePPUps: [0]}],
 			[{species: 'Scizor', ability: 'technician', moves: ['falseswipe']}],
 		]);
 
