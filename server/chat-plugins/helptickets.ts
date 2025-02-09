@@ -1111,7 +1111,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				`Punish <strong>${ticket.userid}</strong> (reporter)`,
 				`<h2 style="color:red">You are about to punish the reporter. Are you sure you want to do this?</h2>`,
 			);
-			buf += `<strong>Reported user:</strong> ${reportUserid} </strong>`;
+			buf += `<strong>Reported user:</strong> <span class="username">${reportUserid}</span> </strong>`;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${reportUserid}'">Global Modlog</button><br />`;
 			buf += HelpTicket.displayPunishmentList(
 				reportUserid,
@@ -1229,7 +1229,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			);
 			const opp = getReportedUser(ticket) || (await listOpponentsFrom(ticket))[0];
 			if (opp) {
-				buf += `<br /><strong>Reported user:</strong> ${opp} `;
+				buf += `<br /><strong>Reported user:</strong> <span class="username">${opp}</span> `;
 				buf += `<button class="button" name="send" value="/modlog room=global,user='${opp}'">Global Modlog</button><br />`;
 				buf += HelpTicket.displayPunishmentList(
 					opp,
@@ -1294,6 +1294,8 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				`<h2 style="color:red">You are about to punish the reporter. Are you sure you want to do this?</h2>`
 			);
 			if (opp) {
+				buf += `<strong>Reported user:</strong> <span class="username">${opp}</span> </strong>`;
+				buf += `<button class="button" name="send" value="/modlog room=global,user='${opp}'">Global Modlog</button><br />`;
 				buf += HelpTicket.displayPunishmentList(
 					opp,
 					proof,
@@ -2408,7 +2410,8 @@ export const commands: Chat.ChatCommands = {
 			const staffMessage = [
 				`<p>${closeButtons} <details><summary class="button">More Options</summary> ${staffIntroButtons}`,
 				`<button class="button" name="send" value="/modlog room=global, user='${ticket.userid}'"><small>Global Modlog for ${ticket.creator}</small></button>`,
-				`<button class="button" name="send" value="/helpticket ban ${user.id}"><small>Ticketban</small></button></details></p>`,
+				`<button class="button" name="send" value="/helpticket ban ${user.id}"><small>Ticketban</small></button>`,
+				`<button class="button" name="send" value="/am edithistory ${ticket.userid}"><small>Artemis History for ${ticket.creator}</small></button></p></details>`,
 			].join('<br />');
 			const staffHint = staffContexts[ticketType] || '';
 			let reportTargetInfo = '';

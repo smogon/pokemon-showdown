@@ -11,6 +11,7 @@ interface StoneDeltas {
 	baseStats: {[stat in StatID]: number};
 	bst: number;
 	weighthg: number;
+	heightm: number;
 	type?: string;
 }
 
@@ -40,8 +41,8 @@ function getMegaStone(stone: string, mod = 'gen9'): Item | null {
 			return null;
 		}
 	}
-	if (!item.megaStone && !item.onPrimal && !item.forcedForme?.endsWith('Epilogue') &&
-		!item.forcedForme?.endsWith('Origin') && !item.name.startsWith('Rusted') && !item.name.endsWith('Mask')) return null;
+	if (!(item.forcedForme && !item.zMove) && !item.megaStone &&
+		!item.isPrimalOrb && !item.name.startsWith("Rusted")) return null;
 	return item;
 }
 
@@ -122,8 +123,7 @@ export const commands: Chat.ChatCommands = {
 			break;
 		default:
 			const forcedForme = stone.forcedForme;
-			if (forcedForme &&
-				(forcedForme.startsWith('Ogerpon') || forcedForme.endsWith('Origin') || forcedForme.endsWith('Epilogue'))) {
+			if (forcedForme) {
 				megaSpecies = dex.species.get(forcedForme);
 				baseSpecies = dex.species.get(forcedForme.split('-')[0]);
 			} else {
@@ -135,22 +135,29 @@ export const commands: Chat.ChatCommands = {
 		const deltas: StoneDeltas = {
 			baseStats: Object.create(null),
 			weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
+			heightm: ((megaSpecies.heightm * 10) - (baseSpecies.heightm * 10)) / 10,
 			bst: megaSpecies.bst - baseSpecies.bst,
 		};
 		let statId: StatID;
 		for (statId in megaSpecies.baseStats) {
 			deltas.baseStats[statId] = megaSpecies.baseStats[statId] - baseSpecies.baseStats[statId];
 		}
-		if (megaSpecies.types.length > baseSpecies.types.length) {
+		if (['Arceus', 'Silvally'].includes(baseSpecies.name)) {
+			deltas.type = megaSpecies.types[0];
+		} else if (megaSpecies.types.length > baseSpecies.types.length) {
 			deltas.type = megaSpecies.types[1];
 		} else if (megaSpecies.types.length < baseSpecies.types.length) {
-			deltas.type = 'mono';
+			deltas.type = dex.gen === 8 ? 'mono' : baseSpecies.types[0];
 		} else if (megaSpecies.types[1] !== baseSpecies.types[1]) {
 			deltas.type = megaSpecies.types[1];
 		}
 		const mixedSpecies = Utils.deepClone(species);
 		mixedSpecies.abilities = Utils.deepClone(megaSpecies.abilities);
-		if (mixedSpecies.types[0] === deltas.type) { // Add any type gains
+		if (['Arceus', 'Silvally'].includes(baseSpecies.name)) {
+			const secondType = mixedSpecies.types[1];
+			mixedSpecies.types = [deltas.type];
+			if (secondType && secondType !== deltas.type) mixedSpecies.types.push(secondType);
+		} else if (mixedSpecies.types[0] === deltas.type) { // Add any type gains
 			mixedSpecies.types = [deltas.type];
 		} else if (deltas.type === 'mono') {
 			mixedSpecies.types = [mixedSpecies.types[0]];
@@ -166,6 +173,7 @@ export const commands: Chat.ChatCommands = {
 			mixedSpecies.bst += mixedSpecies.baseStats[statName];
 		}
 		mixedSpecies.weighthg = Math.max(1, species.weighthg + deltas.weighthg);
+		mixedSpecies.heightm = Math.max(0.1, ((species.heightm * 10) + (deltas.heightm * 10)) / 10);
 		mixedSpecies.tier = "MnM";
 		let weighthit = 20;
 		if (mixedSpecies.weighthg >= 2000) {
@@ -218,13 +226,17 @@ export const commands: Chat.ChatCommands = {
 		const stone = getMegaStone(targetid, sep[1]);
 		const stones = [];
 		if (!stone) {
-			const species = dex.species.get(
-				targetid.replace(/(?:mega[xy]?|primal|origin|crowned|epilogue|cornerstone|wellspring|hearthflame)$/, '')
+			const formeIdRegex = new RegExp(
+				`(?:mega[xy]?|primal|origin|crowned|epilogue|cornerstone|wellspring|hearthflame|douse|shock|chill|burn|${dex.types.all().map(x => x.id).filter(x => x !== 'normal').join('|')})$`
 			);
+			const species = dex.species.get(targetid.replace(formeIdRegex, ''));
 			if (!species.exists) throw new Chat.ErrorMessage(`Error: Mega Stone not found.`);
 			if (!species.otherFormes) throw new Chat.ErrorMessage(`Error: Mega Evolution not found.`);
 			for (const poke of species.otherFormes) {
-				if (!/(?:-Cornerstone|-Wellspring|-Hearthflame|-Crowned|-Epilogue|-Origin|-Primal|-Mega(?:-[XY])?)$/.test(poke)) {
+				const formeRegex = new RegExp(
+					`(?:-Douse|-Shock|-Chill|-Burn|-Cornerstone|-Wellspring|-Hearthflame|-Crowned|-Epilogue|-Origin|-Primal|-Mega(?:-[XY])?|${dex.types.names().filter(x => x !== 'Normal').map(x => '-' + x).join('|')})$`
+				);
+				if (!formeRegex.test(poke)) {
 					continue;
 				}
 				const megaPoke = dex.species.get(poke);
@@ -259,8 +271,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			default:
 				const forcedForme = aStone.forcedForme;
-				if (forcedForme &&
-					(forcedForme.startsWith('Ogerpon') || forcedForme.endsWith('Origin') || forcedForme.endsWith('Epilogue'))) {
+				if (forcedForme) {
 					megaSpecies = dex.species.get(forcedForme);
 					baseSpecies = dex.species.get(forcedForme.split('-')[0]);
 				} else {
@@ -272,21 +283,25 @@ export const commands: Chat.ChatCommands = {
 			const deltas: StoneDeltas = {
 				baseStats: Object.create(null),
 				weighthg: megaSpecies.weighthg - baseSpecies.weighthg,
+				heightm: ((megaSpecies.heightm * 10) - (baseSpecies.heightm * 10)) / 10,
 				bst: megaSpecies.bst - baseSpecies.bst,
 			};
 			let statId: StatID;
 			for (statId in megaSpecies.baseStats) {
 				deltas.baseStats[statId] = megaSpecies.baseStats[statId] - baseSpecies.baseStats[statId];
 			}
-			if (megaSpecies.types.length > baseSpecies.types.length) {
+			if (['Arceus', 'Silvally'].includes(baseSpecies.name)) {
+				deltas.type = megaSpecies.types[0];
+			} else if (megaSpecies.types.length > baseSpecies.types.length) {
 				deltas.type = megaSpecies.types[1];
 			} else if (megaSpecies.types.length < baseSpecies.types.length) {
-				deltas.type = dex.gen >= 8 ? 'mono' : megaSpecies.types[0];
+				deltas.type = dex.gen === 8 ? 'mono' : megaSpecies.types[0];
 			} else if (megaSpecies.types[1] !== baseSpecies.types[1]) {
 				deltas.type = megaSpecies.types[1];
 			}
 			const details = {
 				Gen: aStone.gen,
+				Height: (deltas.heightm < 0 ? "" : "+") + deltas.heightm + " m",
 				Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
 			};
 			let tier;
@@ -335,7 +350,7 @@ export const commands: Chat.ChatCommands = {
 			buf += `</span>`;
 			buf += `</li>`;
 			this.sendReply(`|raw|<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`);
-			this.sendReply(`|raw|<font size="1"><font color="#686868">Gen:</font> ${details["Gen"]}&nbsp;|&ThickSpace;<font color="#686868">Weight:</font> ${details["Weight"]}</font>`);
+			this.sendReply(`|raw|<font size="1">${Object.entries(details).map(([detail, value]) => `<font color="#686868">${detail}:</font> ${value}`).join("&nbsp;|&ThickSpace;")}</font>`);
 		}
 	},
 	stonehelp: [`/stone <mega stone or other>[, generation] - Shows the changes that a mega stone/orb applies to a Pok\u00e9mon.`],

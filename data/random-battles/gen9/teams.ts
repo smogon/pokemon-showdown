@@ -3,6 +3,7 @@ import {Utils} from '../../../lib';
 import {PRNG, PRNGSeed} from '../../../sim/prng';
 import {RuleTable} from '../../../sim/dex-formats';
 import {Tags} from './../../tags';
+import {Teams} from '../../../sim/teams';
 
 export interface TeamData {
 	typeCount: {[k: string]: number};
@@ -87,7 +88,7 @@ const MIXED_SETUP = [
 ];
 // Some moves that only boost Speed:
 const SPEED_SETUP = [
-	'agility', 'autotomize', 'flamecharge', 'rockpolish', 'trailblaze',
+	'agility', 'autotomize', 'flamecharge', 'rockpolish', 'snowscape', 'trailblaze',
 ];
 // Conglomerate for ease of access
 const SETUP = [
@@ -96,7 +97,7 @@ const SETUP = [
 	'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'takeheart', 'tidyup', 'trailblaze', 'workup', 'victorydance',
 ];
 const SPEED_CONTROL = [
-	'electroweb', 'glare', 'icywind', 'lowsweep', 'quash', 'stringshot', 'tailwind', 'thunderwave', 'trickroom',
+	'electroweb', 'glare', 'icywind', 'lowsweep', 'nuzzle', 'quash', 'tailwind', 'thunderwave', 'trickroom',
 ];
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
@@ -194,7 +195,7 @@ export class RandomTeams {
 
 		this.factoryTier = '';
 		this.format = format;
-		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
+		this.prng = PRNG.get(prng);
 
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
@@ -251,7 +252,7 @@ export class RandomTeams {
 	}
 
 	setSeed(prng?: PRNG | PRNGSeed) {
-		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
+		this.prng = PRNG.get(prng);
 	}
 
 	getTeam(options?: PlayerOptions | null): PokemonSet[] {
@@ -278,7 +279,7 @@ export class RandomTeams {
 	}
 
 	random(m?: number, n?: number) {
-		return this.prng.next(m, n);
+		return this.prng.random(m, n);
 	}
 
 	/**
@@ -628,10 +629,8 @@ export class RandomTeams {
 			this.incompatibleMoves(moves, movePool, ['psychicfangs', 'throatchop'], ['poisonjab', 'throatchop']);
 		}
 		if (species.id === 'cyclizar') this.incompatibleMoves(moves, movePool, 'taunt', 'knockoff');
-		if (species.id === 'mesprit') this.incompatibleMoves(moves, movePool, 'healingwish', 'uturn');
 		if (species.id === 'camerupt') this.incompatibleMoves(moves, movePool, 'roar', 'willowisp');
 		if (species.id === 'coalossal') this.incompatibleMoves(moves, movePool, 'flamethrower', 'overheat');
-		if (!isDoubles && species.id === 'jumpluff') this.incompatibleMoves(moves, movePool, 'encore', 'strengthsap');
 	}
 
 	// Checks for and removes incompatible moves, starting with the first move in movesA.
@@ -922,6 +921,16 @@ export class RandomTeams {
 			}
 		}
 
+		// Enforce pivoting moves on AV Pivot
+		if (role === 'AV Pivot') {
+			const pivotMoves = movePool.filter(moveid => ['uturn', 'voltswitch'].includes(moveid));
+			if (pivotMoves.length) {
+				const moveid = this.sample(pivotMoves);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
+		}
+
 		// Enforce setup
 		if (role.includes('Setup') || role === 'Tera Blast user') {
 			// First, try to add a non-Speed setup move
@@ -948,6 +957,12 @@ export class RandomTeams {
 					counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 						movePool, teraType, role);
 				}
+			}
+			const speedControl = movePool.filter(moveid => SPEED_CONTROL.includes(moveid));
+			if (speedControl.length) {
+				const moveid = this.sample(speedControl);
+				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
 			}
 		}
 
@@ -1248,6 +1263,9 @@ export class RandomTeams {
 		const offensiveRole = (
 			['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Doubles Setup Sweeper', 'Offensive Protect'].some(m => role === m)
 		);
+		const doublesLeftoversHardcodes = (
+			moves.has('acidarmor') || species.id === 'eternatus' || species.id === 'regigigas' || moves.has('wish')
+		);
 
 		if (species.id === 'ursalunabloodmoon' && moves.has('protect')) return 'Silk Scarf';
 		if (
@@ -1278,7 +1296,7 @@ export class RandomTeams {
 		}
 		if (
 			(role === 'Bulky Protect' && counter.get('setup')) || moves.has('substitute') || moves.has('irondefense') ||
-			moves.has('coil') || species.id === 'eternatus' || species.id === 'regigigas'
+			moves.has('coil') || doublesLeftoversHardcodes
 		) return 'Leftovers';
 		if (species.id === 'sylveon') return 'Pixie Plate';
 		if (ability === 'Intimidate' && this.dex.getEffectiveness('Rock', species) >= 1) return 'Heavy-Duty Boots';
@@ -1353,7 +1371,7 @@ export class RandomTeams {
 		if (moves.has('substitute')) return 'Leftovers';
 		if (
 			moves.has('stickyweb') && isLead &&
-			(species.baseStats.hp + species.baseStats.def + species.baseStats.spd) < 235
+			(species.baseStats.hp + species.baseStats.def + species.baseStats.spd) <= 235
 		) return 'Focus Sash';
 		if (this.dex.getEffectiveness('Rock', species) >= 1) return 'Heavy-Duty Boots';
 		if (
@@ -1528,11 +1546,12 @@ export class RandomTeams {
 				// Luvdisc should be able to Substitute down to very low HP
 				if (hp % 4 > 0) break;
 			} else {
-				// Maximize number of Stealth Rock switch-ins
+				// Maximize number of Stealth Rock switch-ins in singles
+				if (isDoubles) break;
 				if (srWeakness <= 0 || ability === 'Regenerator' || ['Leftovers', 'Life Orb'].includes(item)) break;
 				if (item !== 'Sitrus Berry' && hp % (4 / srWeakness) > 0) break;
 				// Minimise number of Stealth Rock switch-ins to activate Sitrus Berry
-				if (!isDoubles && item === 'Sitrus Berry' && hp % (4 / srWeakness) === 0) break;
+				if (item === 'Sitrus Berry' && hp % (4 / srWeakness) === 0) break;
 			}
 			evs.hp -= 4;
 		}
@@ -1622,7 +1641,7 @@ export class RandomTeams {
 	randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
-		const seed = this.prng.seed;
+		const seed = this.prng.getSeed();
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
@@ -2541,7 +2560,7 @@ export class RandomTeams {
 		for (const speciesName of pokemonPool) {
 			const sortObject = {
 				speciesName,
-				score: Math.pow(this.prng.next(), 1 / this.randomFactorySets[this.factoryTier][speciesName].weight),
+				score: Math.pow(this.prng.random(), 1 / this.randomFactorySets[this.factoryTier][speciesName].weight),
 			};
 			shuffledSpecies.push(sortObject);
 		}
@@ -2664,6 +2683,8 @@ export class RandomTeams {
 				if (teamData.resistances[type]) continue;
 				if (teamData.weaknesses[type] >= 3 * limitFactor) return this.randomFactoryTeam(side, ++depth);
 			}
+			// Try to force Stealth Rock on non-Uber teams
+			if (!teamData.has['stealthRock'] && this.factoryTier !== 'Uber') return this.randomFactoryTeam(side, ++depth);
 		}
 		return pokemon;
 	}
@@ -2837,7 +2858,7 @@ export class RandomTeams {
 		for (const speciesName of pokemonPool) {
 			const sortObject = {
 				speciesName,
-				score: Math.pow(this.prng.next(), 1 / this.randomBSSFactorySets[speciesName].weight),
+				score: Math.pow(this.prng.random(), 1 / this.randomBSSFactorySets[speciesName].weight),
 			};
 			shuffledSpecies.push(sortObject);
 		}
@@ -2948,6 +2969,46 @@ export class RandomTeams {
 		}
 
 		return pokemon;
+	}
+
+	randomDraftFactoryMatchups: AnyObject = require("./draft-factory-matchups.json").matchups;
+	rdfMatchupIndex = -1;
+	rdfMatchupSide = -1;
+
+	randomDraftFactoryTeam(side: PlayerOptions): RandomTeamsTypes.RandomDraftFactorySet[] {
+		this.enforceNoDirectCustomBanlistChanges();
+
+		if (this.rdfMatchupIndex === -1) this.rdfMatchupIndex = this.random(0, this.randomDraftFactoryMatchups.length);
+		if (this.rdfMatchupSide === -1) this.rdfMatchupSide = this.random(0, 2);
+
+		const matchup = this.randomDraftFactoryMatchups[this.rdfMatchupIndex];
+		const team = Teams.unpack(matchup[this.rdfMatchupSide]);
+		if (!team) throw new Error(`Invalid team for draft factory matchup ${this.rdfMatchupIndex}`);
+		this.rdfMatchupSide = 1 - this.rdfMatchupSide;
+		return team.map(set => {
+			let species = this.dex.species.get(set.species);
+			if (species.battleOnly) {
+				if (typeof species.battleOnly !== 'string') {
+					throw new Error(`Invalid species ${species.name} for draft factory matchup ${this.rdfMatchupIndex} team ${this.rdfMatchupSide}`);
+				}
+				species = this.dex.species.get(species.battleOnly);
+			}
+			return {
+				name: species.baseSpecies,
+				species: species.name,
+				gender: set.gender,
+				moves: set.moves,
+				ability: set.ability,
+				evs: set.evs,
+				ivs: set.ivs,
+				item: set.item,
+				level: this.adjustLevel || set.level,
+				shiny: !!set.shiny,
+				nature: set.nature,
+				teraType: set.teraType,
+				teraCaptain: set.name === 'Tera Captain',
+			};
+		});
 	}
 }
 

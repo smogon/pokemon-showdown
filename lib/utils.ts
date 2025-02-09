@@ -413,6 +413,21 @@ export function formatSQLArray(arr: unknown[], args?: unknown[]) {
 	return [...'?'.repeat(arr.length)].join(', ');
 }
 
+export function bufFromHex(hex: string) {
+	const buf = new Uint8Array(Math.ceil(hex.length / 2));
+	bufWriteHex(buf, hex);
+	return buf;
+}
+export function bufWriteHex(buf: Uint8Array, hex: string, offset = 0) {
+	const size = Math.ceil(hex.length / 2);
+	for (let i = 0; i < size; i++) {
+		buf[offset + i] = parseInt(hex.slice(i * 2, i * 2 + 2).padEnd(2, '0'), 16);
+	}
+}
+export function bufReadHex(buf: Uint8Array, start = 0, end?: number) {
+	return [...buf.slice(start, end)].map(val => val.toString(16).padStart(2, '0')).join('');
+}
+
 export class Multiset<T> extends Map<T, number> {
 	get(key: T) {
 		return super.get(key) ?? 0;
@@ -433,8 +448,10 @@ export class Multiset<T> extends Map<T, number> {
 export const Utils = {
 	parseExactInt, waitUntil, html, escapeHTML,
 	compare, sortBy, levenshtein,
-	shuffle, deepClone, clearRequireCache,
+	shuffle, deepClone, deepFreeze, clampIntRange, clearRequireCache,
 	randomElement, forceWrap, splitFirst,
 	stripHTML, visualize, getString,
-	escapeRegex, formatSQLArray, Multiset,
+	escapeRegex, formatSQLArray,
+	bufFromHex, bufReadHex, bufWriteHex,
+	Multiset,
 };

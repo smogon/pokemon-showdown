@@ -260,6 +260,8 @@ interface ModdedBattleActions {
 }
 
 interface ModdedBattleSide {
+	inherit?: true;
+	allies?: (this: Side, all?: boolean) => Pokemon[];
 	canDynamaxNow?: (this: Side) => boolean;
 	chooseSwitch?: (this: Side, slotText?: string) => any;
 	getChoice?: (this: Side) => string;
@@ -328,10 +330,12 @@ interface ModdedBattlePokemon {
 }
 
 interface ModdedBattleQueue extends Partial<BattleQueue> {
+	inherit?: true;
 	resolveAction?: (this: BattleQueue, action: ActionChoice, midTurn?: boolean) => Action[];
 }
 
 interface ModdedField extends Partial<Field> {
+	inherit?: true;
 	suppressingWeather?: (this: Field) => boolean;
 }
 
@@ -366,6 +370,8 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 		this: Battle, move: ActiveMove, attacker: Pokemon, defender: Pokemon, announcePads?: boolean
 	) => boolean;
 	checkWin?: (this: Battle, faintQueue?: Battle['faintQueue'][0]) => true | undefined;
+	fieldEvent?: (this: Battle, eventid: string, targets?: Pokemon[]) => void;
+	getAllActive?: (this: Battle, includeFainted?: boolean, includeCommanding?: boolean) => Pokemon[];
 }
 
 type TypeInfo = import('./dex-data').TypeInfo;
@@ -510,6 +516,24 @@ namespace RandomTeamsTypes {
 		gigantamax?: boolean;
 		wantsTera?: boolean;
 		teraType?: string;
+	}
+	export interface RandomDraftFactorySet {
+		name: string;
+		species: string;
+		gender: string;
+		moves: string[];
+		ability: string;
+		evs: SparseStatsTable;
+		ivs: SparseStatsTable;
+		item: string;
+		level: number;
+		shiny: boolean;
+		nature?: string;
+		happiness?: number;
+		dynamaxLevel?: number;
+		gigantamax?: boolean;
+		teraType?: string;
+		teraCaptain?: boolean;
 	}
 	export interface RandomSetData {
 		role: Role;

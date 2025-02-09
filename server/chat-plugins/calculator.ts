@@ -180,7 +180,7 @@ export const commands: Chat.ChatCommands = {
 			const [result, inferredBase] = solveRPN(parseMathematicalExpression(expression));
 			if (!base) base = inferredBase;
 			let baseResult = '';
-			if (result && base !== 10) {
+			if (Number.isFinite(result) && base !== 10) {
 				baseResult = `${BASE_PREFIXES[base]}${result.toString(base).toUpperCase()}`;
 				if (baseResult === expression) baseResult = '';
 			}

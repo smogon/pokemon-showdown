@@ -1,6 +1,14 @@
-import {Utils} from '../lib';
+import {Utils} from '../lib/utils';
 import {assignMissingFields, BasicEffect, toID} from './dex-data';
 import type {SecondaryEffect, MoveEventMethods} from './dex-moves';
+
+/**
+ * Event method prefixes:
+ * Ally: triggers for each ally (including the effect holder itself) that is a target of the event, i.e. Pastel Veil
+ * Foe: triggers for each foe that is a target of the event, i.e. Unnerve
+ * Source: triggers for the source of the event; events must have a source parameter to trigger these handlers
+ * Any: triggers for each target of the event regardless of the holder's relation to it
+ */
 
 export interface EventMethods {
 	onDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
@@ -184,7 +192,6 @@ export interface EventMethods {
 	) => boolean | null | void;
 	onFoeSetWeather?: (this: Battle, target: Pokemon, source: Pokemon, weather: Condition) => boolean | void;
 	onFoeStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void;
-	onFoeSwitchIn?: (this: Battle, pokemon: Pokemon) => void;
 	onFoeSwitchOut?: (this: Battle, pokemon: Pokemon) => void;
 	onFoeTakeItem?: (
 		(this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void
@@ -285,7 +292,6 @@ export interface EventMethods {
 	) => boolean | null | void;
 	onSourceSetWeather?: (this: Battle, target: Pokemon, source: Pokemon, weather: Condition) => boolean | void;
 	onSourceStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void;
-	onSourceSwitchIn?: (this: Battle, pokemon: Pokemon) => void;
 	onSourceSwitchOut?: (this: Battle, pokemon: Pokemon) => void;
 	onSourceTakeItem?: (
 		(this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void
@@ -426,6 +432,8 @@ export interface EventMethods {
 	onAnyModifyAccuracyPriority?: number;
 	onAnyFaintPriority?: number;
 	onAnyPrepareHitPriority?: number;
+	onAnySwitchInPriority?: number;
+	onAnySwitchInSubOrder?: number;
 	onAllyBasePowerPriority?: number;
 	onAllyModifyAtkPriority?: number;
 	onAllyModifySpAPriority?: number;
@@ -470,6 +478,7 @@ export interface EventMethods {
 	onSourceModifyDamagePriority?: number;
 	onSourceModifySpAPriority?: number;
 	onSwitchInPriority?: number;
+	onSwitchInSubOrder?: number;
 	onTrapPokemonPriority?: number;
 	onTryBoostPriority?: number;
 	onTryEatItemPriority?: number;
@@ -553,7 +562,6 @@ export interface PokemonEventMethods extends EventMethods {
 	onAllySetWeather?: (this: Battle, target: Pokemon, source: Pokemon, weather: Condition) => boolean | void;
 	onAllySideConditionStart?: (this: Battle, target: Pokemon, source: Pokemon, sideCondition: Condition) => void;
 	onAllyStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void;
-	onAllySwitchIn?: (this: Battle, pokemon: Pokemon) => void;
 	onAllySwitchOut?: (this: Battle, pokemon: Pokemon) => void;
 	onAllyTakeItem?: (
 		(this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void
@@ -616,6 +624,7 @@ export class Condition extends BasicEffect implements
 	Readonly<BasicEffect & SideConditionData & FieldConditionData & PokemonConditionData> {
 	declare readonly effectType: 'Condition' | 'Weather' | 'Status' | 'Terastal';
 	declare readonly counterMax?: number;
+	declare effectOrder?: number;
 
 	declare readonly durationCallback?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect | null) => number;
 	declare readonly onCopy?: (this: Battle, pokemon: Pokemon) => void;

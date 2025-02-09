@@ -2001,7 +2001,8 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		this.addGlobalModAction(`${unlocked} was unnamelocked by ${user.name}.${reason}`);
-		if (!reason) this.globalModlog("UNNAMELOCK", toID(target));
+		this.globalModlog("UNNAMELOCK", toID(target));
+		this.parse(`/allowname ${toID(target)}`);
 		if (targetUser) targetUser.popup(`${user.name} has unnamelocked you.`);
 	},
 	unnamelockhelp: [`/unnamelock [username] - Unnamelocks the user. Requires: % @ ~`],

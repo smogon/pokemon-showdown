@@ -42,4 +42,39 @@ describe('Wish', function () {
 		battle.makeChoices('auto', 'move thousandarrows');
 		assert.fullHP(battle.p1.active[0]);
 	});
+
+	it(`should never resolve when used on a turn that is a multiple of 256n - 1`, function () {
+		battle = common.createBattle([[
+			{species: 'Wynaut', moves: ['sleeptalk', 'wish', 'doubleedge']},
+		], [
+			{species: 'Stakataka', moves: ['sleeptalk']},
+		]]);
+
+		battle.turn = 255; // Showdown turn is +1 from what the games are; this would ordinarily be 254
+		battle.makeChoices('move doubleedge', 'auto');
+		battle.makeChoices('move wish', 'auto');
+		for (let i = 0; i < 5; i++) battle.makeChoices();
+		battle.makeChoices('move wish', 'auto');
+		battle.makeChoices();
+
+		const wynaut = battle.p1.active[0];
+		assert.false.fullHP(wynaut, `Wish should have never resolved.`);
+	});
+
+	it(`should do nothing if no Pokemon is present to heal from Wish`, function () {
+		battle = common.createBattle([[
+			{species: 'Wynaut', moves: ['sleeptalk', 'wish']},
+			{species: 'Shedinja', moves: ['sleeptalk']},
+		], [
+			{species: 'Happiny', ability: 'noguard', moves: ['sleeptalk', 'stoneaxe']},
+		]]);
+
+		battle.makeChoices('move wish', 'move stoneaxe');
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices('switch 2');
+		const wynaut = battle.p1.active[0];
+		assert.false.fullHP(wynaut, `Wish should not have healed Wynaut even after it was KOed.`);
+		battle.makeChoices();
+		assert.false.fullHP(wynaut, `Wish should not have healed Wynaut later either.`);
+	});
 });

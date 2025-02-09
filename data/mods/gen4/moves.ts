@@ -47,6 +47,33 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 		},
 	},
+	assist: {
+		inherit: true,
+		onHit(target) {
+			const moves = [];
+			for (const pokemon of target.side.pokemon) {
+				if (pokemon === target) continue;
+				for (const moveSlot of pokemon.moveSlots) {
+					const moveid = moveSlot.id;
+					const move = this.dex.moves.get(moveid);
+					if (
+						move.flags['noassist'] ||
+						(this.field.pseudoWeather['gravity'] && move.flags['gravity']) ||
+						(target.volatiles['healblock'] && move.flags['heal'])
+					) {
+						continue;
+					}
+					moves.push(moveid);
+				}
+			}
+			let randomMove = '';
+			if (moves.length) randomMove = this.sample(moves);
+			if (!randomMove) {
+				return false;
+			}
+			this.actions.useMove(randomMove, target);
+		},
+	},
 	beatup: {
 		inherit: true,
 		basePower: 10,
@@ -198,6 +225,22 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-start', target, 'typechange', type);
 		},
 	},
+	copycat: {
+		inherit: true,
+		onHit(pokemon) {
+			const move: Move | ActiveMove | null = this.lastMove;
+			if (!move) return;
+
+			if (
+				move.flags['failcopycat'] ||
+				(this.field.pseudoWeather['gravity'] && move.flags['gravity']) ||
+				(pokemon.volatiles['healblock'] && move.flags['heal'])
+			) {
+				return false;
+			}
+			this.actions.useMove(move.id, pokemon);
+		},
+	},
 	cottonspore: {
 		inherit: true,
 		accuracy: 85,
@@ -283,7 +326,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			noCopy: true,
 			onStart(pokemon) {
 				if (!this.queue.willMove(pokemon)) {
-					this.effectState.duration++;
+					this.effectState.duration!++;
 				}
 				if (!pokemon.lastMove) {
 					return false;
@@ -500,6 +543,37 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		recoil: [1, 3],
 	},
+	fling: {
+		inherit: true,
+		onPrepareHit(target, source, move) {
+			if (source.ignoringItem()) return false;
+			if (source.hasAbility('multitype')) return false;
+			const item = source.getItem();
+			if (!this.singleEvent('TakeItem', item, source.itemState, source, source, move, item)) return false;
+			if (!item.fling) return false;
+			move.basePower = item.fling.basePower;
+			this.debug('BP: ' + move.basePower);
+			if (item.isBerry) {
+				move.onHit = function (foe) {
+					if (this.singleEvent('Eat', item, null, foe, null, null)) {
+						this.runEvent('EatItem', foe, null, null, item);
+						if (item.id === 'leppaberry') foe.staleness = 'external';
+					}
+					if (item.onEat) foe.ateBerry = true;
+				};
+			} else if (item.fling.effect) {
+				move.onHit = item.fling.effect;
+			} else {
+				if (!move.secondaries) move.secondaries = [];
+				if (item.fling.status) {
+					move.secondaries.push({status: item.fling.status});
+				} else if (item.fling.volatileStatus) {
+					move.secondaries.push({volatileStatus: item.fling.volatileStatus});
+				}
+			}
+			source.addVolatile('fling');
+		},
+	},
 	focuspunch: {
 		inherit: true,
 		priorityChargeCallback() {},
@@ -668,7 +742,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-activate', source, 'move: Heal Bell');
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
-				if (!ally.hasAbility('soundproof')) ally.cureStatus(true);
+				if (ally.hasAbility('soundproof')) {
+					if (ally.isActive) this.add('-immune', ally, '[from] ability: Soundproof');
+					continue;
+				}
+				ally.cureStatus(true);
 			}
 		},
 	},
@@ -976,6 +1054,23 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	metronome: {
 		inherit: true,
 		flags: {noassist: 1, failcopycat: 1, nosleeptalk: 1, failmimic: 1},
+		onHit(pokemon) {
+			const moves = this.dex.moves.all().filter(move => (
+				(![2, 4].includes(this.gen) || !pokemon.moves.includes(move.id)) &&
+				(!move.isNonstandard || move.isNonstandard === 'Unobtainable') &&
+				move.flags['metronome'] &&
+				!(this.field.pseudoWeather['gravity'] && move.flags['gravity']) &&
+				!(pokemon.volatiles['healblock'] && move.flags['heal'])
+			));
+			let randomMove = '';
+			if (moves.length) {
+				moves.sort((a, b) => a.num - b.num);
+				randomMove = this.sample(moves).id;
+			}
+			if (!randomMove) return false;
+			pokemon.side.lastSelectedMove = this.toID(randomMove);
+			this.actions.useMove(randomMove, pokemon);
+		},
 	},
 	mimic: {
 		inherit: true,
@@ -1462,6 +1557,23 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	spikes: {
 		inherit: true,
 		flags: {metronome: 1, mustpressure: 1},
+		condition: {
+			// this is a side condition
+			onSideStart(side) {
+				this.add('-sidestart', side, 'Spikes');
+				this.effectState.layers = 1;
+			},
+			onSideRestart(side) {
+				if (this.effectState.layers >= 3) return false;
+				this.add('-sidestart', side, 'Spikes');
+				this.effectState.layers++;
+			},
+			onEntryHazard(pokemon) {
+				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
+				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
+				this.damage(damageAmounts[this.effectState.layers] * pokemon.maxhp / 24);
+			},
+		},
 	},
 	spite: {
 		inherit: true,
@@ -1470,6 +1582,17 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	stealthrock: {
 		inherit: true,
 		flags: {metronome: 1, mustpressure: 1},
+		condition: {
+			// this is a side condition
+			onSideStart(side) {
+				this.add('-sidestart', side, 'move: Stealth Rock');
+			},
+			onEntryHazard(pokemon) {
+				if (pokemon.hasItem('heavydutyboots')) return;
+				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
+				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+			},
+		},
 	},
 	struggle: {
 		inherit: true,

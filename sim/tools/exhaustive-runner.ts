@@ -59,8 +59,7 @@ export class ExhaustiveRunner {
 	constructor(options: ExhaustiveRunnerOptions) {
 		this.format = options.format;
 		this.cycles = options.cycles || ExhaustiveRunner.DEFAULT_CYCLES;
-		this.prng = (options.prng && !Array.isArray(options.prng)) ?
-			options.prng : new PRNG(options.prng);
+		this.prng = PRNG.get(options.prng);
 		this.log = !!options.log;
 		this.maxGames = options.maxGames;
 		this.maxFailures = options.maxFailures || ExhaustiveRunner.MAX_FAILURES;
@@ -72,9 +71,8 @@ export class ExhaustiveRunner {
 
 	async run() {
 		const dex = Dex.forFormat(this.format);
-		dex.loadData(); // FIXME: This is required for `dex.gen` to be set properly...
 
-		const seed = this.prng.seed;
+		const seed = this.prng.getSeed();
 		const pools = this.createPools(dex);
 		const createAI = (s: ObjectReadWriteStream<string>, o: AIOptions) => new CoordinatedPlayerAI(s, o, pools);
 		const generator = new TeamGenerator(dex, this.prng, pools, ExhaustiveRunner.getSignatures(dex, pools));
@@ -101,7 +99,7 @@ export class ExhaustiveRunner {
 				this.failures++;
 				console.error(
 					`\n\nRun \`node tools/simulate exhaustive --cycles=${this.cycles} ` +
-						`--format=${this.format} --seed=${seed.join()}\`:\n`,
+						`--format=${this.format} --seed=${seed}\`:\n`,
 					err
 				);
 			}
@@ -199,7 +197,7 @@ class TeamGenerator {
 		signatures: Map<string, {item: string, move?: string}[]>
 	) {
 		this.dex = dex;
-		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
+		this.prng = PRNG.get(prng);
 		this.pools = pools;
 		this.signatures = signatures;
 
@@ -217,13 +215,13 @@ class TeamGenerator {
 		const team: PokemonSet[] = [];
 		for (const pokemon of this.pools.pokemon.next(6)) {
 			const species = this.dex.species.get(pokemon);
-			const randomEVs = () => this.prng.next(253);
-			const randomIVs = () => this.prng.next(32);
+			const randomEVs = () => this.prng.random(253);
+			const randomIVs = () => this.prng.random(32);
 
 			let item;
 			const moves = [];
 			const combos = this.signatures.get(species.id);
-			if (combos && this.prng.next() > TeamGenerator.COMBO) {
+			if (combos && this.prng.random() > TeamGenerator.COMBO) {
 				const combo = this.prng.sample(combos);
 				item = combo.item;
 				if (combo.move) moves.push(combo.move);
@@ -255,8 +253,8 @@ class TeamGenerator {
 					spe: randomIVs(),
 				},
 				nature: this.prng.sample(this.natures),
-				level: this.prng.next(50, 100),
-				happiness: this.prng.next(256),
+				level: this.prng.random(50, 100),
+				happiness: this.prng.random(256),
 				shiny: this.prng.randomChance(1, 1024),
 			});
 		}
@@ -310,7 +308,7 @@ class Pool {
 
 	private shuffle<T>(arr: T[]): T[] {
 		for (let i = arr.length - 1; i > 0; i--) {
-			const j = Math.floor(this.prng.next() * (i + 1));
+			const j = this.prng.random(i + 1);
 			[arr[i], arr[j]] = [arr[j], arr[i]];
 		}
 		return arr;
@@ -384,7 +382,7 @@ class Pool {
 			this.filler = this.possible.slice();
 			length = this.filler.length;
 		}
-		const index = this.prng.next(length);
+		const index = this.prng.random(length);
 		const element = this.filler![index];
 		this.filler![index] = this.filler![length - 1];
 		this.filler!.pop();

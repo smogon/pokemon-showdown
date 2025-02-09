@@ -111,7 +111,7 @@ export default class TeamGenerator {
 		this.dex = Dex.forFormat(format);
 		this.format = Dex.formats.get(format);
 		this.teamSize = this.format.ruleTable?.maxTeamSize || 6;
-		this.prng = seed instanceof PRNG ? seed : new PRNG(seed);
+		this.prng = PRNG.get(seed);
 		this.itemPool = this.dex.items.all().filter(i => i.exists && i.isNonstandard !== 'Past' && !i.isPokeball);
 		this.specialItems = {};
 		for (const i of this.itemPool) {
@@ -1028,7 +1028,7 @@ export default class TeamGenerator {
 
 		const totalWeight = weights.reduce((a, b) => a + b, 0);
 
-		let randomWeight = this.prng.next(0, totalWeight);
+		let randomWeight = this.prng.random(0, totalWeight);
 		for (let i = 0; i < choices.length; i++) {
 			randomWeight -= weights[i];
 			if (randomWeight < 0) {
@@ -1043,6 +1043,6 @@ export default class TeamGenerator {
 	}
 
 	setSeed(seed: PRNGSeed) {
-		this.prng.seed = seed;
+		this.prng.setSeed(seed);
 	}
 }

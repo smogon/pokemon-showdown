@@ -77,7 +77,7 @@ describe('Protosynthesis', function () {
 		assert.equal(tail.volatiles['protosynthesis'].bestStat, 'spd', `Scream Tail's SpD should have been boosted by Protosynthesis in Sun while holding Utility Umbrella`);
 	});
 
-	it(`should not be deactiviated by weather suppressing abilities`, function () {
+	it(`should be deactiviated by weather suppressing abilities`, function () {
 		battle = common.createBattle([[
 			{species: 'Scream Tail', ability: 'protosynthesis', moves: ['splash']},
 		], [
@@ -88,7 +88,7 @@ describe('Protosynthesis', function () {
 		const tail = battle.p1.active[0];
 		battle.makeChoices('move splash', 'switch 2');
 
-		assert.equal(tail.volatiles['protosynthesis'].bestStat, 'spd', `Scream Tail's SpD should have remained boosted by Protosynthesis in Sun even though a weather supressing ability was activated`);
+		assert(!tail.volatiles['protosynthesis'], `Scream Tail should not have remained boosted by Protosynthesis because a weather supressing ability started even though Sun was active`);
 	});
 
 	it(`should not activate if weather is suppressed`, function () {

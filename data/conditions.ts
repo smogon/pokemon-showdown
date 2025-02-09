@@ -91,6 +91,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 			if (target.species.name === 'Shaymin-Sky' && target.baseSpecies.baseSpecies === 'Shaymin') {
 				target.formeChange('Shaymin', this.effect, true);
+				target.regressionForme = false;
 			}
 		},
 		onBeforeMovePriority: 10,
@@ -374,8 +375,18 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 	futuremove: {
 		// this is a slot condition
 		name: 'futuremove',
-		duration: 3,
+		onStart(target) {
+			this.effectState.targetSlot = target.getSlot();
+			this.effectState.endingTurn = (this.turn - 1) + 2;
+			if (this.effectState.endingTurn >= 254) {
+				this.hint(`In Gen 8+, Future attacks will never resolve when used on the 255th turn or later.`);
+			}
+		},
 		onResidualOrder: 3,
+		onResidual(target: Pokemon) {
+			if (this.getOverflowedTurnCount() < this.effectState.endingTurn) return;
+			target.side.removeSlotCondition(this.getAtSlot(this.effectState.targetSlot), 'futuremove');
+		},
 		onEnd(target) {
 			const data = this.effectState;
 			// time's up; time to hit! :D
@@ -413,7 +424,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.effectState.sourceEffect = sourceEffect;
 			this.add('-activate', source, 'healreplacement');
 		},
-		onSwitchInPriority: 1,
 		onSwitchIn(target) {
 			if (!target.fainted) {
 				target.heal(target.maxhp);

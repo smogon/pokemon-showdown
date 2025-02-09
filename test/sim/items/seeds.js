@@ -32,7 +32,7 @@ describe('Seeds', function () {
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
-	it.skip(`should activate on switching in after other entrance Abilities, at the same time as Primal reversion`, function () {
+	it(`should activate on switching in after other entrance Abilities, at the same time as Primal reversion`, function () {
 		battle = common.createBattle([[
 			{species: 'Tapu Koko', ability: 'electricsurge', moves: ['finalgambit']},
 			{species: 'Groudon', ability: 'drought', item: 'redorb', moves: ['sleeptalk']},
@@ -42,8 +42,23 @@ describe('Seeds', function () {
 		]]);
 		battle.makeChoices();
 		battle.makeChoices();
+		const log = battle.getDebugLog();
 		const redOrbIndex = log.indexOf('Groudon-Primal');
 		const electricSeedIndex = log.indexOf('Electric Seed');
-		assert(redOrbIndex < electricSeedIndex, 'Groudon should undergo Primal Reversion first, then Electric Seed should activate, because Groudon is faster.');
+		assert(redOrbIndex > 0, 'Groudon should undergo Primal Reversion');
+		assert(electricSeedIndex > 0, 'Electric Seed should activate');
+		assert(redOrbIndex < electricSeedIndex, 'Groudon should undergo Primal Reversion before Electric Seed activates, because Groudon is faster.');
+	});
+
+	it(`should not cause items passed by Symbiosis to be consumed arbitrarily`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Miraidon', ability: 'hadronengine', item: 'electricseed', moves: ['protect']},
+			{species: 'Oranguru', ability: 'symbiosis', item: 'covertcloak', moves: ['protect']},
+		], [
+			{species: 'Alakazam', moves: ['sleeptalk']},
+			{species: 'Alakazam', moves: ['sleeptalk']},
+		]]);
+		assert.equal(battle.p1.active[0].item, 'covertcloak', "Miraidon should hold Covert Cloak");
+		assert.false.holdsItem(battle.p1.active[1]);
 	});
 });

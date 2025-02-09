@@ -16,12 +16,12 @@ function capitalize(word) {
 /**
  * The default random number generator seed used if one is not given.
  */
-const DEFAULT_SEED = [0x09917, 0x06924, 0x0e1c8, 0x06af0];
+const DEFAULT_SEED = 'gen5,99176924e1c86af0';
 
 class TestTools {
 	constructor(mod = 'base') {
 		this.currentMod = mod;
-		this.dex = Dex.mod(mod).includeData(); // ensure that gen is initialized
+		this.dex = Dex.mod(mod);
 
 		this.modPrefix = this.dex.isBase ? `[gen9] ` : `[${mod}] `;
 	}
@@ -105,7 +105,7 @@ class TestTools {
 			// If a seed for the pseudo-random number generator is not provided,
 			// a default seed (guaranteed to be the same across test executions)
 			// will be used.
-			seed: options.seed || DEFAULT_SEED,
+			seed: options.seed === undefined ? DEFAULT_SEED : (options.seed || undefined),
 			strictChoices: options.strictChoices !== false,
 		};
 

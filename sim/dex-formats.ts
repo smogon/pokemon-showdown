@@ -1,4 +1,4 @@
-import {Utils} from '../lib';
+import {Utils} from '../lib/utils';
 import {assignMissingFields, toID, BasicEffect} from './dex-data';
 import {EventMethods} from './dex-conditions';
 import {SpeciesData} from './dex-species';
@@ -441,6 +441,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly queue?: ModdedBattleQueue;
 	declare readonly field?: ModdedField;
 	declare readonly actions?: ModdedBattleActions;
+	declare readonly side?: ModdedBattleSide;
 	declare readonly challengeShow?: boolean;
 	declare readonly searchShow?: boolean;
 	declare readonly bestOfDefault?: boolean;
