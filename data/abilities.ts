@@ -301,7 +301,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	aurabreak: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Aura Break');
 		},
 		onAnyTryPrimaryHit(target, source, move) {
@@ -372,7 +371,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	beadsofruin: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Beads of Ruin');
 		},
 		onAnyModifySpD(spd, target, source, move) {
@@ -833,7 +831,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	darkaura: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Dark Aura');
 		},
 		onAnyBasePowerPriority: 20,
@@ -1227,7 +1224,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	fairyaura: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Fairy Aura');
 		},
 		onAnyBasePowerPriority: 20,
@@ -4758,7 +4754,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	swordofruin: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Sword of Ruin');
 		},
 		onAnyModifyDef(def, target, source, move) {
@@ -4776,7 +4771,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	tabletsofruin: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Tablets of Ruin');
 		},
 		onAnyModifyAtk(atk, source, target, move) {
@@ -5202,7 +5196,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	vesselofruin: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Vessel of Ruin');
 		},
 		onAnyModifySpA(spa, source, target, move) {
