@@ -318,9 +318,9 @@ describe('Dex data', function () {
 	// Palafin (1) + Maushold (1) + Squawkabilly (3) + Gimmighoul (1) + Basculegion (1) +
 	// Masterpiece (2) + Ogerpon (7) + Terapagos (2)
 	formes[9] = 8 + 3 + 4 + 16 + 7 + 4 + 16 + 3 + 5 + 1 + 17 +
-	  2 + 2 + 1 + 1 + 1 + 2 + 1 + 1 + 3 + 1 + 2 + 1 + 1 + 2 + 1 +
-	  1 + 2 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 2 + 1 + 1 + 1 +
-	  1 + 3 + 1 + 1 + 2 + 7 + 2;
+	  2 + 2 + 1 + 1 + 1 + 2 + 1 + 1 + 3 + 1 + 2 + 1 + 1 + 2 +
+	  1 + 1 + 2 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 2 + 1 + 1 +
+	  1 + 1 + 3 + 1 + 1 + 2 + 7 + 2;
 
 	for (const gen of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
 		it(`Gen ${gen} should have ${species[gen]} species and ${formes[gen]} formes`, () => {
