@@ -3146,14 +3146,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	perishbody: {
 		onDamagingHit(damage, target, source, move) {
 			if (!this.checkMoveMakesContact(move, source, target) || source.volatiles['perishsong']) return;
-
-			let announced = false;
+			this.add('-ability', target, 'Perish Body');
 			for (const pokemon of [target, source]) {
-				if (pokemon.volatiles['perishsong']) continue;
-				if (!announced) {
-					this.add('-ability', target, 'Perish Body');
-					announced = true;
-				}
 				pokemon.addVolatile('perishsong');
 			}
 		},
