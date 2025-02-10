@@ -33,6 +33,31 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onModifyMove() {},
 	},
+	magicbounce: {
+		inherit: true,
+		onTryHit(target, source, move) {
+			if (target === source || move.hasBounced || !move.flags['reflectable'] ||
+				(target.isSemiInvulnerable() && move.target !== 'foeSide')) {
+				return;
+			}
+			const newMove = this.dex.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.actions.useMove(newMove, target, {target: source});
+			return null;
+		},
+		onAllyTryHitSide(target, source, move) {
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable'] ||
+				(target.isSemiInvulnerable() && move.target !== 'foeSide')) {
+				return;
+			}
+			const newMove = this.dex.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.actions.useMove(newMove, this.effectState.target, {target: source});
+			return null;
+		},
+	},
 	oblivious: {
 		inherit: true,
 		onUpdate(pokemon) {

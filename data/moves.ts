@@ -11097,7 +11097,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onTryHitPriority: 2,
 			onTryHit(target, source, move) {
-				if (target === source || move.hasBounced || !move.flags['reflectable']) {
+				if (target === source || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) {
 					return;
 				}
 				const newMove = this.dex.getActiveMove(move.id);
@@ -11107,7 +11107,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return null;
 			},
 			onAllyTryHitSide(target, source, move) {
-				if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
+				if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) {
 					return;
 				}
 				const newMove = this.dex.getActiveMove(move.id);

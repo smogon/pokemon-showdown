@@ -516,6 +516,41 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 60,
 	},
+	magiccoat: {
+		inherit: true,
+		condition: {
+			duration: 1,
+			onStart(target, source, effect) {
+				this.add('-singleturn', target, 'move: Magic Coat');
+				if (effect?.effectType === 'Move') {
+					this.effectState.pranksterBoosted = effect.pranksterBoosted;
+				}
+			},
+			onTryHitPriority: 2,
+			onTryHit(target, source, move) {
+				if (target === source || move.hasBounced || !move.flags['reflectable'] ||
+					(target.isSemiInvulnerable() && move.target !== 'foeSide')) {
+					return;
+				}
+				const newMove = this.dex.getActiveMove(move.id);
+				newMove.hasBounced = true;
+				newMove.pranksterBoosted = this.effectState.pranksterBoosted;
+				this.actions.useMove(newMove, target, {target: source});
+				return null;
+			},
+			onAllyTryHitSide(target, source, move) {
+				if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable'] ||
+					(target.isSemiInvulnerable() && move.target !== 'foeSide')) {
+					return;
+				}
+				const newMove = this.dex.getActiveMove(move.id);
+				newMove.hasBounced = true;
+				newMove.pranksterBoosted = false;
+				this.actions.useMove(newMove, this.effectState.target, {target: source});
+				return null;
+			},
+		},
+	},
 	magicroom: {
 		inherit: true,
 		priority: -7,
