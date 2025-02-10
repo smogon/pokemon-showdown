@@ -826,6 +826,7 @@ export class Battle {
 						Boost: 1,
 						DragOut: 1,
 						Effectiveness: 1,
+						Start: 1,
 					};
 					if (eventid in AttackingEvents) {
 						this.debug(eventid + ' handler suppressed by Mold Breaker');
