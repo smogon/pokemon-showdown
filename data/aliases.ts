@@ -456,9 +456,6 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	ogerpontealmask: "Ogerpon",
 	terapagosbaby: "Terapagos",
 
-	// event formes
-	rockruffdusk: "Rockruff",
-
 	// totem formes
 	raticatet: "Raticate-Alola-Totem",
 	totemalolanraticate: "Raticate-Alola-Totem",
