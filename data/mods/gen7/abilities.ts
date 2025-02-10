@@ -24,10 +24,18 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	darkaura: {
 		inherit: true,
+		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'Dark Aura');
+		},
 		flags: {breakable: 1},
 	},
 	fairyaura: {
 		inherit: true,
+		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'Fairy Aura');
+		},
 		flags: {breakable: 1},
 	},
 	innerfocus: {
