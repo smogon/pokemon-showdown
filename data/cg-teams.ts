@@ -67,6 +67,26 @@ const TOP_SPEED = 300;
 const levelOverride: {[speciesID: string]: number} = {};
 export let levelUpdateInterval: NodeJS.Timeout | null = null;
 
+// can't import the function cg-teams-leveling.ts uses to this context for some reason
+const useBaseSpecies = [
+	'Pikachu',
+	'Gastrodon',
+	'Magearna',
+	'Dudunsparce',
+	'Maushold',
+	'Keldeo',
+	'Zarude',
+	'Polteageist',
+	'Sinistcha',
+	'Sawsbuck',
+	'Vivillon',
+	'Florges',
+	'Minior',
+	'Toxtricity',
+	'Tatsugiri',
+	'Alcremie',
+];
+
 async function updateLevels(database: SQL.DatabaseManager) {
 	const updateSpecies = await database.prepare(
 		'UPDATE gen9computergeneratedteams SET wins = 0, losses = 0, level = ? WHERE species_id = ?'
@@ -995,9 +1015,21 @@ export default class TeamGenerator {
 	 * @returns The level a Pokémon should be.
 	 */
 	protected static getLevel(species: Species): number {
+		if (['Zacian', 'Zamazenta'].includes(species.name)) {
+			species = Dex.species.get(species.otherFormes![0]);
+		} else if (species.baseSpecies === 'Squawkabilly') {
+			if (['Yellow', 'White'].includes(species.forme)) {
+				species = Dex.species.get('Squawkabilly-Yellow');
+			} else {
+				species = Dex.species.get('Squawkabilly');
+			}
+		} else if (useBaseSpecies.includes(species.baseSpecies)) {
+			species = Dex.species.get(species.baseSpecies);
+		}
 		if (levelOverride[species.id]) return levelOverride[species.id];
 
 		switch (species.tier) {
+		case 'AG': return 60;
 		case 'Uber': return 70;
 		case 'OU': case 'Unreleased': return 80;
 		case 'UU': return 90;
