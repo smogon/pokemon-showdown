@@ -18036,6 +18036,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			volatileStatus: 'sparklingaria',
 		},
 		onAfterMove(source, target, move) {
+			if (move.hasSheerForce) return;
 			let targets = 0;
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon.getMoveHitData(move).successful) targets++;
