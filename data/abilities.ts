@@ -1914,6 +1914,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectState.busted = false;
 				pokemon.formeChange('Eiscue', this.effect, true);
+				pokemon.regressionForme = false;
 			}
 		},
 		onDamagePriority: 1,
@@ -1944,6 +1945,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onUpdate(pokemon) {
 			if (pokemon.species.id === 'eiscue' && this.effectState.busted) {
 				pokemon.formeChange('Eiscue-Noice', this.effect, true);
+				pokemon.regressionForme = false;
 			}
 		},
 		onWeatherChange(pokemon, source, sourceEffect) {
@@ -1954,6 +1956,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectState.busted = false;
 				pokemon.formeChange('Eiscue', this.effect, true);
+				pokemon.regressionForme = false;
 			}
 		},
 		flags: {
