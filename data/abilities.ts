@@ -5456,6 +5456,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	windrider: {
 		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
 			if (pokemon.side.sideConditions['tailwind']) {
 				this.boost({atk: 1}, pokemon, pokemon);
 			}
