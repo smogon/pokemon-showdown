@@ -52,11 +52,19 @@ describe('Magic Bounce', function () {
 	});
 
 	it('should not bounce moves while semi-invulnerable', function () {
-		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Bulbasaur", ability: 'overgrow', moves: ['growl']}]});
-		battle.setPlayer('p2', {team: [{species: "Xatu", ability: 'magicbounce', moves: ['fly']}]});
-		battle.makeChoices('move growl', 'move fly');
+		battle = common.createBattle({gameType: 'doubles'});
+		battle.setPlayer('p1', {team: [
+			{species: "Bulbasaur", ability: 'overgrow', moves: ['growl']},
+			{species: "Geodude", ability: 'rockhead', moves: ['stealthrock']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: "Xatu", ability: 'magicbounce', moves: ['fly']},
+			{species: "Charmander", ability: 'blaze', moves: ['sleeptalk']},
+		]});
+		battle.makeChoices('auto', 'auto');
 		assert.statStage(battle.p1.active[0], 'atk', 0);
 		assert.statStage(battle.p2.active[0], 'atk', 0);
+		assert.false(battle.p1.sideConditions['stealthrock']);
+		assert(battle.p2.sideConditions['stealthrock']);
 	});
 });

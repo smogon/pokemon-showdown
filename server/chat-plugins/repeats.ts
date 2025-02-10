@@ -160,6 +160,7 @@ export const commands: Chat.ChatCommands = {
 		const isHTML = cmd.includes('html');
 		const isByMessages = cmd.includes('bymessages');
 		room = this.requireRoom();
+		if (room.settings.isPersonal) return this.errorReply(`Personal rooms do not support repeated messages.`);
 		this.checkCan(isHTML ? 'addhtml' : 'mute', null, room);
 		const [intervalString, name, ...messageArray] = target.split(',');
 		const id = toID(name);
@@ -210,6 +211,7 @@ export const commands: Chat.ChatCommands = {
 	repeatfaq(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkCan('mute', null, room);
+		if (room.settings.isPersonal) return this.errorReply(`Personal rooms do not support repeated messages.`);
 		const isByMessages = cmd.includes('bymessages');
 
 		let [intervalString, topic] = target.split(',');
