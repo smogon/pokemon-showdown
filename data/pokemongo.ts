@@ -605,7 +605,7 @@ export const PokemonGoData: import('../sim/dex-species').PokemonGoDataTable = {
 	giratina: {encounters: ['raid', 'specialtrade']},
 	cresselia: {encounters: ['raid', 'research', 'specialtrade']},
 	darkrai: {encounters: ['raid', 'notrade']},
-	shaymin: {encounters: ['research', 'noshiny', 'notrade']},
+	shaymin: {encounters: ['research', 'notrade']},
 	victini: {encounters: ['research', 'noshiny', 'notrade']},
 	snivy: {encounters: ['wild']},
 	servine: {encounters: ['wild']},

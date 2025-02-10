@@ -771,6 +771,10 @@ export class TeamValidator {
 		problem = this.checkNature(set, nature, setHas);
 		if (problem) problems.push(problem);
 
+		if (set.shiny && dex.gen === 1) {
+			set.shiny = false;
+		}
+
 		if (set.moves && Array.isArray(set.moves)) {
 			set.moves = set.moves.filter(val => val);
 		}
