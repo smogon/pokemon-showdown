@@ -72,7 +72,7 @@ describe('Shield Dust', function () {
 		assert.statStage(battle.p2.active[0], 'spa', -1);
 	});
 
-	it.skip(`should only prevent Sparkling Aria from curing burn if there is only one target`, function () {
+	it(`should only prevent Sparkling Aria from curing burn if there is only one target`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'noguard', moves: ['willowisp', 'sparklingaria']},
 		], [
