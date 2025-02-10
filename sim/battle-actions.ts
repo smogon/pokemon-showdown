@@ -1190,8 +1190,6 @@ export class BattleActions {
 				this.battle.debug('damage calculation interrupted');
 				damage[i] = false;
 				continue;
-			} else {
-				target.getMoveHitData(move).successful = true;
 			}
 			damage[i] = curDamage;
 		}
@@ -1601,8 +1599,14 @@ export class BattleActions {
 			}
 		}
 
+		const moveHit = target.getMoveHitData(move);
+		moveHit.successful = true;
 		if (move.ohko) return target.maxhp;
-		if (move.damageCallback) return move.damageCallback.call(this.battle, source, target);
+		if (move.damageCallback) {
+			const damageCallabackResult = move.damageCallback.call(this.battle, source, target);
+			moveHit.successful = damageCallabackResult !== false && damageCallabackResult !== null;
+			return damageCallabackResult;
+		}
 		if (move.damage === 'level') {
 			return source.level;
 		} else if (move.damage) {
@@ -1632,7 +1636,6 @@ export class BattleActions {
 			}
 		}
 
-		const moveHit = target.getMoveHitData(move);
 		moveHit.crit = move.willCrit || false;
 		if (move.willCrit === undefined) {
 			if (critRatio) {

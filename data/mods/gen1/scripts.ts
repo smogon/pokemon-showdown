@@ -757,6 +757,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
+			const moveHit = target.getMoveHitData(move);
+			moveHit.successful = true;
 			// Is it an OHKO move?
 			if (move.ohko) {
 				return 65535;
@@ -764,7 +766,9 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We edit the damage through move's damage callback if necessary.
 			if (move.damageCallback) {
-				return move.damageCallback.call(this.battle, source, target);
+				const damageCallabackResult = move.damageCallback.call(this.battle, source, target);
+				moveHit.successful = damageCallabackResult !== false && damageCallabackResult !== null;
+				return damageCallabackResult;
 			}
 
 			// We take damage from damage=level moves (seismic toss).
@@ -835,7 +839,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					isCrit = this.battle.randomChance(critChance, 256);
 				}
 			}
-			if (isCrit) target.getMoveHitData(move).crit = true;
+			if (isCrit) moveHit.crit = true;
 
 			// Happens after crit calculation.
 			if (basePower) {
@@ -940,6 +944,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			const totalTypeMod = target.runEffectiveness(move);
+			moveHit.typeMod = totalTypeMod;
 			if (totalTypeMod > 0) {
 				if (!suppressMessages) this.battle.add('-supereffective', target);
 			}
