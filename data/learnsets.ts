@@ -79966,7 +79966,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			cosmicpower: ["9L0", "8M", "8L0", "7L1"],
 			teleport: ["9L1", "8L1", "7L1"],
 		},
-		eventOnly: true,
 	},
 	solgaleo: {
 		learnset: {
@@ -80065,7 +80064,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			{generation: 8, level: 70, shiny: 1, moves: ["zenheadbutt", "firespin", "irontail", "nobleroar"]},
 			{generation: 9, level: 70, moves: ["flareblitz", "solarbeam", "wildcharge", "metalburst"]},
 		],
-		eventOnly: true,
 	},
 	lunala: {
 		learnset: {
@@ -80162,7 +80160,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			{generation: 8, level: 70, shiny: 1, moves: ["shadowball", "moonblast", "magiccoat", "swift"]},
 			{generation: 9, level: 70, moves: ["dreameater", "phantomforce", "moonblast", "psychic"]},
 		],
-		eventOnly: true,
 	},
 	nihilego: {
 		learnset: {
@@ -81224,7 +81221,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			venoshock: ["8M", "8L28", "7M", "7L13"],
 			xscissor: ["8M", "7M"],
 		},
-		eventOnly: true,
 	},
 	stakataka: {
 		learnset: {
