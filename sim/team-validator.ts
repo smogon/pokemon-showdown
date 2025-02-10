@@ -515,8 +515,11 @@ export class TeamValidator {
 				tierSpecies = outOfBattleSpecies;
 			}
 		}
-		if (ability.id === 'owntempo' && species.id === 'rockruff') {
-			tierSpecies = outOfBattleSpecies = dex.species.get('rockruffdusk');
+		if (ability.id === 'owntempo' && toID(species.baseSpecies) === 'rockruff') {
+			outOfBattleSpecies = dex.species.get('rockruffdusk');
+			if (ruleTable.has('obtainableformes')) {
+				tierSpecies = outOfBattleSpecies;
+			}
 		}
 
 		if (ruleTable.has('obtainableformes')) {
@@ -1666,6 +1669,9 @@ export class TeamValidator {
 		if (species.baseSpecies === "Greninja" && toID(set.ability) === 'battlebond') {
 			set.species = "Greninja-Bond";
 		}
+		if (species.baseSpecies === "Rockruff" && toID(set.ability) === 'owntempo') {
+			set.species = "Rockruff-Dusk";
+		}
 
 		if (species.baseSpecies === "Unown" && dex.gen === 2) {
 			let resultBinary = '';
@@ -1713,6 +1719,9 @@ export class TeamValidator {
 		}
 		if (tierSpecies.baseSpecies === 'Greninja' && toID(set.ability) === 'battlebond') {
 			setHas['pokemon:greninjabond'] = true;
+		}
+		if (tierSpecies.baseSpecies === 'Rockruff' && toID(set.ability) === 'owntempo') {
+			setHas['pokemon:rockruffdusk'] = true;
 		}
 
 		const tier = tierSpecies.tier === '(PU)' ? 'ZU' : tierSpecies.tier === '(NU)' ? 'PU' : tierSpecies.tier;
