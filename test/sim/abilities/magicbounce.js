@@ -67,4 +67,21 @@ describe('Magic Bounce', function () {
 		assert.false(battle.p1.sideConditions['stealthrock']);
 		assert(battle.p2.sideConditions['stealthrock']);
 	});
+
+	it(`[Gen 5] should bounce moves that target the foe's side while semi-invulnerable`, function () {
+		battle = common.gen(5).createBattle({gameType: 'doubles'});
+		battle.setPlayer('p1', {team: [
+			{species: "Bulbasaur", ability: 'overgrow', moves: ['growl']},
+			{species: "Geodude", ability: 'rockhead', moves: ['stealthrock']},
+		]});
+		battle.setPlayer('p2', {team: [
+			{species: "Xatu", ability: 'magicbounce', moves: ['fly']},
+			{species: "Charmander", ability: 'blaze', moves: ['sleeptalk']},
+		]});
+		battle.makeChoices('auto', 'auto');
+		assert.statStage(battle.p1.active[0], 'atk', 0);
+		assert.statStage(battle.p2.active[0], 'atk', 0);
+		assert(battle.p1.sideConditions['stealthrock']);
+		assert.false(battle.p2.sideConditions['stealthrock']);
+	});
 });
