@@ -18032,13 +18032,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1},
 		secondary: {
-			dustproof: true,
 			chance: 100,
 			volatileStatus: 'sparklingaria',
 		},
 		onAfterMove(source, target, move) {
+			let targets = 0;
 			for (const pokemon of this.getAllActive()) {
-				if (pokemon !== source && pokemon.removeVolatile('sparklingaria') && pokemon.status === 'brn' && !source.fainted) {
+				if (pokemon.getMoveHitData(move).successful) targets++;
+			}
+			for (const pokemon of this.getAllActive()) {
+				if (pokemon !== source && pokemon.status === 'brn' && !source.fainted &&
+					(pokemon.removeVolatile('sparklingaria') || targets > 1)) {
 					pokemon.cureStatus();
 				}
 			}

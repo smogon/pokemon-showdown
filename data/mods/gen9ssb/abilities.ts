@@ -1867,7 +1867,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onModifySecondaries(secondaries) {
 			this.debug('Fancy Scarf prevent secondary');
-			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+			return secondaries.filter(effect => !!effect.self);
 		},
 		flags: {},
 	},

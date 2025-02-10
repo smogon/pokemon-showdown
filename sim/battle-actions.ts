@@ -1190,6 +1190,8 @@ export class BattleActions {
 				this.battle.debug('damage calculation interrupted');
 				damage[i] = false;
 				continue;
+			} else {
+				target.getMoveHitData(move).successful = true;
 			}
 			damage[i] = curDamage;
 		}
@@ -1576,7 +1578,7 @@ export class BattleActions {
 	 * Normal PS return value rules apply:
 	 * undefined = success, null = silent failure, false = loud failure
 	 */
-	 getDamage(
+	getDamage(
 		source: Pokemon, target: Pokemon, move: string | number | ActiveMove,
 		suppressMessages = false
 	): number | undefined | null | false {
