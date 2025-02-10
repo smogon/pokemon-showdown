@@ -18037,9 +18037,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onAfterMove(source, target, move) {
 			if (move.hasSheerForce) return;
-			let targets = 0;
+			cons targets = 0;
 			for (const pokemon of this.getAllActive()) {
-				if (pokemon.getMoveHitData(move).successful) targets++;
+				if (pokemon !== source && pokemon.getMoveHitData(move).successful) targets++;
 			}
 			for (const pokemon of this.getAllActive()) {
 				if (pokemon !== source && pokemon.status === 'brn' && !source.fainted &&
