@@ -215,6 +215,9 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	secondary?: SecondaryEffect | null;
 	secondaries?: SecondaryEffect[] | null;
 	self?: SecondaryEffect | null;
+	/**
+	 * Boosted by Sheer Force without suppressing secondary effects
+	 */
 	ignoresSheerForceSuppression?: boolean;
 
 	// Hit effect modifiers

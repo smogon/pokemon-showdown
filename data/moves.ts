@@ -2319,7 +2319,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			}
 		},
-		secondary: {}, // Sheer Force-boosted
+		signoresSheerForceSuppression: true,
 		target: "normal",
 		type: "Dark",
 	},
@@ -18778,7 +18778,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			}
 		},
-		secondary: {}, // Sheer Force-boosted
+		ignoresSheerForceSuppression: true,
 		target: "normal",
 		type: "Rock",
 	},
