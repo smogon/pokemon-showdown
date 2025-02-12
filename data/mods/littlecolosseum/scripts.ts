@@ -62,6 +62,12 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "mareep").learnset.gigadrain = ["9L1"];
 		this.modData("Learnsets", "mareep").learnset.worryseed = ["9L1"];
 		this.modData("Learnsets", "mareep").learnset.slackoff = ["9L1"];
+		this.modData("Learnsets", "eevee").learnset.muddywater = ["9L1"];
+		this.modData("Learnsets", "eevee").learnset.voltswitch = ["9L1"];
+		this.modData("Learnsets", "eevee").learnset.flamewheel = ["9L1"];
+		this.modData("Learnsets", "eevee").learnset.psyshock = ["9L1"];
+		this.modData("Learnsets", "eevee").learnset.bulletseed = ["9L1"];
+		this.modData("Learnsets", "eevee").learnset.icywind = ["9L1"];
 	},
 	pokemon: {
 		runImmunity(type: string, message?: string | boolean) {

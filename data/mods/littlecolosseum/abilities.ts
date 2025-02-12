@@ -1,22 +1,22 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
-	hazardabsorb: {
+	magmaticentrance: {
 		// implemented in moves.ts
 		flags: {},
 		shortDesc: "This Pokemon doesn't take damage from hazards.",
-		name: "Hazard Absorb",
+		name: "Magmatic Entrance",
 		rating: 4,
 	},
-	proteangen7: {
+	entertainer: {
 		onPrepareHit(source, target, move) {
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.add('-start', source, 'typechange', type, '[from] ability: Protean (Gen 7)');
+				this.add('-start', source, 'typechange', type, '[from] ability: Entertainer');
 			}
 		},
 		flags: {},
-		name: "Protean (Gen 7)",
+		name: "Entertainer",
 		shortDesc: "This Pokemon's type changes to the type of the move it is using.",
 		rating: 4,
 		num: -168,
@@ -164,5 +164,32 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Effects of Fluffy and Electromorphosis.",
 		name: "Fluffy Charger",
 		rating: 4,
+	},
+	supremesurvivor: {
+		onPrepareHit(source, target, move) {
+			if (this.effectState.protean) return;
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
+			const type = move.type;
+			if (type && type !== '???' && source.getTypes().join() !== type) {
+				if (!source.setType(type)) return;
+				this.effectState.protean = true;
+				this.add('-start', source, 'typechange', type, '[from] ability: Supreme Survivor');
+			}
+		},
+		onModifySTAB(stab, source, target, move) {
+			if (move.forceSTAB || source.hasType(move.type)) {
+				if (stab === 2) {
+					return 2.25;
+				}
+				return 2;
+			}
+		},
+		onSwitchIn(pokemon) {
+			delete this.effectState.protean;
+		},
+		flags: {},
+		shortDesc: "Effects of Adaptability and Protean.",
+		name: "Supreme Survivor",
+		rating: 5,
 	},
 };

@@ -13,12 +13,12 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	slugma: {
 		inherit: true,
 		baseStats: {hp: 30, atk: 40, def: 40, spa: 80, spd: 30, spe: 40},
-		abilities: {0: "Flame Body", 1: "Weak Armor", H: "Hazard Absorb"},
+		abilities: {0: "Flame Body", 1: "Weak Armor", H: "Magmatic Entrance"},
 	},
 	sprigatito: {
 		inherit: true,
 		baseStats: {hp: 40, atk: 65, def: 54, spa: 31, spd: 45, spe: 75},
-		abilities: {0: "Overgrow", H: "Protean (Gen 7)"},
+		abilities: {0: "Overgrow", H: "Entertainer"},
 	},
 	dreepy: {
 		inherit: true,
@@ -90,5 +90,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	cetoddle: {
 		inherit: true,
 		abilities: {0: "Thick Fat", 1: "Sheer Force", H: "Sliding Whale"},
+	},
+	eevee: {
+		inherit: true,
+		baseStats: {hp: 60, atk: 55, def: 50, spa: 45, spd: 65, spe: 55},
+		abilities: {0: "Run Away", 1: "Supreme Survivor", H: "Anticipation"},
 	},
 };
