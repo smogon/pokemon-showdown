@@ -19,7 +19,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (['mimikyu', 'mimikyutotem'].includes(pokemon.species.id) && this.effectState.busted) {
 				const speciesid = pokemon.species.id === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
 				pokemon.formeChange(speciesid, this.effect, true);
-				pokemon.regressionForme = false;
 			}
 		},
 	},
