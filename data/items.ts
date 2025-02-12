@@ -3816,16 +3816,16 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onAnySwitchInPriority: -3,
 		onAnySwitchIn() {
-			if (!this.effectState.ready || !this.effectState.boosts) return;
+			if (!this.effectState.ready) return;
 			(this.effectState.target as Pokemon).useItem();
 		},
 		onAnyAfterMove() {
-			if (!this.effectState.ready || !this.effectState.boosts) return;
+			if (!this.effectState.ready) return;
 			(this.effectState.target as Pokemon).useItem();
 		},
 		onResidualOrder: 29,
 		onResidual(pokemon) {
-			if (!this.effectState.ready || !this.effectState.boosts) return;
+			if (!this.effectState.ready) return;
 			(this.effectState.target as Pokemon).useItem();
 		},
 		onUse(pokemon) {
@@ -7191,27 +7191,43 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				}
 			},
 		},
-		onAnySwitchInPriority: -2,
-		onAnySwitchIn() {
-			((this.effect as any).onUpdate as (p: Pokemon) => void).call(this, this.effectState.target);
-		},
-		onStart(pokemon) {
-			((this.effect as any).onUpdate as (p: Pokemon) => void).call(this, pokemon);
-		},
-		onUpdate(pokemon) {
-			let activate = false;
-			const boosts: SparseBoostsTable = {};
+		onAfterBoost(boost, pokemon) {
+			delete this.effectState.ready;
+			this.effectState.boosts = {} as SparseBoostsTable;
 			let i: BoostID;
 			for (i in pokemon.boosts) {
 				if (pokemon.boosts[i] < 0) {
-					activate = true;
-					boosts[i] = 0;
+					this.effectState.ready = true;
+					this.effectState.boosts[i] = 0;
 				}
 			}
-			if (activate && pokemon.useItem()) {
-				pokemon.setBoost(boosts);
-				this.add('-clearnegativeboost', pokemon, '[silent]');
-			}
+		},
+		onStart(pokemon) {
+			((this.effect as any).onAfterBoost as (b: SparseBoostsTable, p: Pokemon) => void).call(this, pokemon.boosts, pokemon);
+			if (!this.effectState.ready) return;
+			(this.effectState.target as Pokemon).useItem();
+		},
+		onAnySwitchInPriority: -2,
+		onAnySwitchIn() {
+			if (!this.effectState.ready) return;
+			(this.effectState.target as Pokemon).useItem();
+		},
+		onAnyAfterMove() {
+			if (!this.effectState.ready) return;
+			(this.effectState.target as Pokemon).useItem();
+		},
+		onResidualOrder: 29,
+		onResidual(pokemon) {
+			if (!this.effectState.ready) return;
+			(this.effectState.target as Pokemon).useItem();
+		},
+		onUse(pokemon) {
+			pokemon.setBoost(this.effectState.boosts);
+			this.add('-clearnegativeboost', pokemon, '[silent]');
+		},
+		onEnd() {
+			delete this.effectState.boosts;
+			delete this.effectState.ready;
 		},
 		num: 214,
 		gen: 3,
