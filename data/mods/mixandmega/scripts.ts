@@ -3,7 +3,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	init() {
 		for (const i in this.data.Items) {
 			const item = this.data.Items[i];
-			if (!item.megaStone && !item.onDrive && !(item.onPlate && !item.zMove) && !item.onMemory) continue;
+			if (!item.megaStone && !item.onDrive && !item.onPlate && !item.onMemory) continue;
 			this.modData('Items', i).onTakeItem = false;
 			if (item.isNonstandard) this.modData('Items', i).isNonstandard = null;
 			if (item.megaStone) {
@@ -516,10 +516,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!deltas) throw new TypeError("Must specify deltas!");
 			const species = this.dex.deepClone(this.dex.species.get(speciesOrForme));
 			species.abilities = {'0': deltas.ability};
-			if (species.types[0] === deltas.type || deltas.formeType === 'Arceus') {
+			if (deltas.formeType === 'Arceus') {
 				const secondType = species.types[1];
 				species.types = [deltas.type];
 				if (secondType && secondType !== deltas.type) species.types.push(secondType);
+			} else if (species.types[0] === deltas.type) {
+				species.types = [deltas.type];
 			} else if (deltas.type === 'mono') {
 				species.types = [species.types[0]];
 			} else if (deltas.type) {
