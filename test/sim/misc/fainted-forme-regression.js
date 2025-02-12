@@ -62,7 +62,7 @@ describe(`Fainted forme regression`, function () {
 		assert.hasAbility(pokemon, 'Drizzle');
 	});
 
-	it(`shouldn't revert Arceus-forms to base Arceus`, function () {
+	it(`should not revert Arceus-forms to base Arceus`, function () {
 		battle = common.createBattle([[
 			{species: 'arceusfire', ability: 'multitype', item: 'flameplate', moves: ['memento']},
 			{species: 'darkrai', moves: ['darkpulse']},
@@ -73,6 +73,19 @@ describe(`Fainted forme regression`, function () {
 		battle.makeChoices();
 		assert.species(pokemon, 'Arceus-Fire');
 		assert.hasAbility(pokemon, 'Multitype');
+	});
+
+	it("should not revert Eiscue-Noice to base Eiscue", function () {
+		battle = common.createBattle([[
+			{species: 'eiscuenoice', ability: 'iceface', moves: ['memento']},
+			{species: 'darkrai', moves: ['darkpulse']},
+		], [
+			{species: 'mareep', ability: 'static', moves: ['quickattack']},
+		]]);
+		const pokemon = battle.p1.active[0];
+		battle.makeChoices();
+		assert.species(pokemon, 'Eiscue-Noice');
+		assert.hasAbility(pokemon, 'Ice Face');
 	});
 
 	it("should revert Terastallized Morpeko-Hangry to base Morpeko", function () {
@@ -90,7 +103,7 @@ describe(`Fainted forme regression`, function () {
 		assert.hasAbility(pokemon, 'Hunger Switch');
 	});
 
-	it(`shouldn't revert Palafin-Hero to base Palafin`, function () {
+	it(`should not revert Palafin-Hero to base Palafin`, function () {
 		battle = common.createBattle([[
 			{species: 'palafin', ability: 'zerotohero', moves: ['memento']},
 			{species: 'darkrai', moves: ['darkpulse']},
@@ -122,7 +135,7 @@ describe(`Fainted forme regression`, function () {
 		assert.hasAbility(pokemon, 'Water Absorb');
 	});
 
-	it(`shouldn't revert Terapagos-Terastal to base Terapagos`, function () {
+	it(`should not revert Terapagos-Terastal to base Terapagos`, function () {
 		battle = common.createBattle([[
 			{species: 'terapagos', ability: 'terashift', moves: ['memento']},
 			{species: 'darkrai', moves: ['darkpulse']},
