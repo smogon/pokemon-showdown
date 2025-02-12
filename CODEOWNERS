@@ -7,6 +7,7 @@ data/text/ @Marty-D
 databases/ @monsanto
 lib/sql.ts @mia-pi-git
 server/artemis/* @mia-pi-git
+server/chat-plugins/chess.ts @mia-pi-git
 server/chat-plugins/abuse-monitor.ts @mia-pi-git
 server/chat-plugins/friends.ts @mia-pi-git
 server/chat-plugins/github.ts @mia-pi-git
