@@ -585,10 +585,6 @@ export class TeamValidator {
 			name = `${set.name} (${set.species})`;
 		}
 
-		if (!set.teraType && this.gen === 9) {
-			set.teraType = species.types[0];
-		}
-
 		if (!set.level) set.level = ruleTable.defaultLevel;
 
 		let adjustLevel = ruleTable.adjustLevel;
@@ -685,19 +681,16 @@ export class TeamValidator {
 				set.hpType = type.name;
 			}
 		}
-		if (species.forceTeraType) {
-			set.teraType = species.forceTeraType;
-		}
-		if (set.teraType) {
-			const type = dex.types.get(set.teraType);
+		if ((this.gen === 9 && !ruleTable.has('terastalclause')) || ruleTable.has('bonustypemod')) {
+			const type = dex.types.get(set.teraType || species.requiredTeraType || species.types[0]);
 			if (!type.exists || type.isNonstandard) {
 				problems.push(`${name}'s Terastal type (${set.teraType}) is invalid.`);
-			} else {
-				set.teraType = type.name;
+			} else if (species.requiredTeraType && species.requiredTeraType !== type.name && ruleTable.has('obtainablemisc')) {
+				problems.push(`${species.name}'s Terastal type needs to be ${species.requiredTeraType}, please fix it.`);
 			}
-			if (dex.gen !== 9 || (ruleTable.has('terastalclause') && !ruleTable.has('bonustypemod'))) {
-				delete set.teraType;
-			}
+			set.teraType = type.name;
+		} else {
+			delete set.teraType;
 		}
 
 		let problem = this.checkSpecies(set, species, tierSpecies, setHas);

@@ -426,7 +426,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let type = pokemon.teraType;
 			if (pokemon.species.baseSpecies !== 'Ogerpon' && pokemon.getItem().name.endsWith('Mask')) {
-				type = this.dex.species.get(pokemon.getItem().forcedForme).forceTeraType!;
+				type = this.dex.species.get(pokemon.getItem().forcedForme).requiredTeraType!;
 			}
 			this.battle.add('-terastallize', pokemon, type);
 			pokemon.terastallized = type;
