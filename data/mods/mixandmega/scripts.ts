@@ -3,7 +3,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	init() {
 		for (const i in this.data.Items) {
 			const item = this.data.Items[i];
-			if (!item.megaStone && !item.onDrive && !item.onPlate && !item.onMemory) continue;
+			if (!item.megaStone && !item.onDrive && !(item.onPlate && !item.zMove) && !item.onMemory) continue;
 			this.modData('Items', i).onTakeItem = false;
 			if (item.isNonstandard) this.modData('Items', i).isNonstandard = null;
 			if (item.megaStone) {
