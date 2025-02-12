@@ -4738,8 +4738,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			}
 		},
-		secondary: null,
-		ignoresSheerForceSuppression: true,
+		secondary: {}, // Sheer Force-boosted
 		target: "normal",
 		type: "Steel",
 	},
@@ -4961,8 +4960,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return success;
 			},
 		},
-		secondary: null,
-		ignoresSheerForceSuppression: true,
+		secondary: {}, // allows sheer force to trigger
 		target: "normal",
 		type: "Rock",
 	},
@@ -5260,8 +5258,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			}
 		},
-		secondary: null,
-		ignoresSheerForceSuppression: true,
+		secondary: {}, // Sheer Force-boosted
 		target: "normal",
 		type: "Dark",
 	},
