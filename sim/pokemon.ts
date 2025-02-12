@@ -242,7 +242,6 @@ export class Pokemon {
 	activeMoveActions: number;
 	previouslySwitchedIn: number;
 	truantTurn: boolean;
-	// Gen 7 only
 	bondTriggered: boolean;
 	// Gen 9 only
 	swordBoost: boolean;
