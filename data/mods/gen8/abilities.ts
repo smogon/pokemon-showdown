@@ -104,6 +104,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	battlebond: {
 		inherit: true,
 		onSourceAfterFaint(length, target, source, effect) {
+			if (source.bondTriggered) return;
 			if (effect?.effectType !== 'Move') {
 				return;
 			}
@@ -111,6 +112,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.add('-activate', source, 'ability: Battle Bond');
 				source.formeChange('Greninja-Ash', this.effect, true);
 				source.regressionForme = true;
+				source.bondTriggered = true;
 			}
 		},
 		onModifyMovePriority: -1,
