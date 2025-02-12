@@ -37,7 +37,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	jetpunch: {
 		inherit: true,
-		hasSheerForce: true,
+		ignoresSheerForceSuppression: true,
 	},
 	matchagotcha: {
 		inherit: true,

@@ -3522,7 +3522,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			return null;
 		},
 		secondary: null,
-		hasSheerForce: true,
+		ignoresSheerForceSuppression: true,
 		onPrepareHit(target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, 'Lunar Dance', target);
@@ -4738,7 +4738,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			}
 		},
-		secondary: {}, // Sheer Force-boosted
+		secondary: null,
+		ignoresSheerForceSuppression: true,
 		target: "normal",
 		type: "Steel",
 	},
@@ -4960,7 +4961,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return success;
 			},
 		},
-		secondary: {}, // allows sheer force to trigger
+		secondary: null,
+		ignoresSheerForceSuppression: true,
 		target: "normal",
 		type: "Rock",
 	},
@@ -5258,7 +5260,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			}
 		},
-		secondary: {}, // Sheer Force-boosted
+		secondary: null,
+		ignoresSheerForceSuppression: true,
 		target: "normal",
 		type: "Dark",
 	},

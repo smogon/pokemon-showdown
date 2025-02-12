@@ -215,7 +215,10 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	secondary?: SecondaryEffect | null;
 	secondaries?: SecondaryEffect[] | null;
 	self?: SecondaryEffect | null;
-	hasSheerForce?: boolean;
+	/**
+	 * Boosted by Sheer Force without suppressing secondary effects
+	 */
+	ignoresSheerForceSuppression?: boolean;
 
 	// Hit effect modifiers
 	// --------------------
@@ -392,7 +395,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	 * Moves manually boosted by Sheer Force that don't have secondary effects.
 	 * e.g. Jet Punch
 	 */
-	readonly hasSheerForce: boolean;
+	readonly ignoresSheerForceSuppression: boolean;
 	/**
 	 * Move priority. Higher priorities go before lower priorities,
 	 * trumping the Speed stat.
@@ -492,7 +495,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.baseMoveType = Utils.getString(data.baseMoveType) || this.type;
 		this.secondary = data.secondary || null;
 		this.secondaries = data.secondaries || (this.secondary && [this.secondary]) || null;
-		this.hasSheerForce = !!(data.hasSheerForce && !this.secondaries);
+		this.ignoresSheerForceSuppression = data.ignoresSheerForceSuppression || false;
 		this.priority = Number(data.priority) || 0;
 		this.category = data.category!;
 		this.overrideOffensiveStat = data.overrideOffensiveStat || undefined;
