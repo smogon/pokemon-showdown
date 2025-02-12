@@ -3816,16 +3816,16 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onAnySwitchInPriority: -3,
 		onAnySwitchIn() {
-			if (!this.effectState.ready || !this.effectState.boosts) return;
+			if (!this.effectState.ready) return;
 			(this.effectState.target as Pokemon).useItem();
 		},
 		onAnyAfterMove() {
-			if (!this.effectState.ready || !this.effectState.boosts) return;
+			if (!this.effectState.ready) return;
 			(this.effectState.target as Pokemon).useItem();
 		},
 		onResidualOrder: 29,
 		onResidual(pokemon) {
-			if (!this.effectState.ready || !this.effectState.boosts) return;
+			if (!this.effectState.ready) return;
 			(this.effectState.target as Pokemon).useItem();
 		},
 		onUse(pokemon) {
@@ -7193,7 +7193,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onAfterBoost(boost, pokemon) {
 			delete this.effectState.ready;
-			if (!this.effectState.boosts) this.effectState.boosts = {} as SparseBoostsTable;
+			this.effectState.boosts = {} as SparseBoostsTable;
 			let i: BoostID;
 			for (i in pokemon.boosts) {
 				if (pokemon.boosts[i] < 0) {
@@ -7204,16 +7204,21 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onAnySwitchInPriority: -2,
 		onAnySwitchIn() {
-			if (!this.effectState.ready || !this.effectState.boosts) return;
+			if (!this.effectState.ready) return;
+			(this.effectState.target as Pokemon).useItem();
+		},
+		onStart(pokemon) {
+			((this.effect as any).onAfterBoost as (b: SparseBoostsTable, p: Pokemon) => void).call(this, pokemon.boosts, pokemon);
+			if (!this.effectState.ready) return;
 			(this.effectState.target as Pokemon).useItem();
 		},
 		onAnyAfterMove() {
-			if (!this.effectState.ready || !this.effectState.boosts) return;
+			if (!this.effectState.ready) return;
 			(this.effectState.target as Pokemon).useItem();
 		},
 		onResidualOrder: 29,
 		onResidual(pokemon) {
-			if (!this.effectState.ready || !this.effectState.boosts) return;
+			if (!this.effectState.ready) return;
 			(this.effectState.target as Pokemon).useItem();
 		},
 		onUse(pokemon) {
