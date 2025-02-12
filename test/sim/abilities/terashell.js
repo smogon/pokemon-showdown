@@ -122,7 +122,7 @@ describe('Tera Shell', function () {
 		assert.bounded(damage, [27, 32], `Tera Shell should not have reduced the damage Struggle dealt`);
 	});
 
-	it.skip(`should not continue to weaken attacks after taking damage from a Future attack`, function () {
+	it(`should not continue to weaken attacks after taking damage from a Future attack`, function () {
 		battle = common.createBattle([[
 			{species: 'Terapagos', ability: 'terashift', moves: ['sleeptalk']},
 			{species: 'Espeon', moves: ['sleeptalk']},
