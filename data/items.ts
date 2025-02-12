@@ -7202,13 +7202,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				}
 			}
 		},
-		onAnySwitchInPriority: -2,
-		onAnySwitchIn() {
+		onStart(pokemon) {
+			((this.effect as any).onAfterBoost as (b: SparseBoostsTable, p: Pokemon) => void).call(this, pokemon.boosts, pokemon);
 			if (!this.effectState.ready) return;
 			(this.effectState.target as Pokemon).useItem();
 		},
-		onStart(pokemon) {
-			((this.effect as any).onAfterBoost as (b: SparseBoostsTable, p: Pokemon) => void).call(this, pokemon.boosts, pokemon);
+		onAnySwitchInPriority: -2,
+		onAnySwitchIn() {
 			if (!this.effectState.ready) return;
 			(this.effectState.target as Pokemon).useItem();
 		},
