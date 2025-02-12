@@ -4820,8 +4820,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			attacker.addVolatile('twoturnmove', defender);
 			return null;
 		},
-		secondary: null,
-		hasSheerForce: true,
+		ignoresSheerForceSuppression: true,
 		target: "normal",
 		type: "Electric",
 	},
@@ -13509,8 +13508,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				break;
 			}
 		},
-		secondary: null,
-		hasSheerForce: true,
+		ignoresSheerForceSuppression: true,
 		target: "normal",
 		type: "Dragon",
 	},
