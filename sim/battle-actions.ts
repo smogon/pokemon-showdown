@@ -528,7 +528,7 @@ export class BattleActions {
 			!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) &&
 			!move.flags['futuremove']
 		) {
-			const originalHp = pokemon.hp;
+			let originalHp = pokemon.hp;
 			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 			if (pokemon && pokemon !== target && move.category !== 'Status') {
@@ -536,9 +536,13 @@ export class BattleActions {
 					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
 				}
 			}
-			for (const i of targets.keys()) {
-				this.battle.singleEvent('AfterMoveSecondaryLast', move, null, targets[i], pokemon, move);
-				this.battle.runEvent('AfterMoveSecondaryLast', targets[i], pokemon, move);
+			for (const target of targets) {
+				originalHp = target.hp;
+				this.battle.singleEvent('AfterMoveSecondaryLast', move, null, target, pokemon, move);
+				this.battle.runEvent('AfterMoveSecondaryLast', target, pokemon, move);
+				if (target.hp <= target.maxhp / 2 && originalHp > target.maxhp / 2) {
+					this.battle.runEvent('EmergencyExit', target, target);
+				}
 			}
 		}
 
