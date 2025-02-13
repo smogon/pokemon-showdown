@@ -536,6 +536,10 @@ export class BattleActions {
 					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
 				}
 			}
+			for (const i of targets.keys()) {
+				this.battle.singleEvent('AfterMoveSecondaryLast', move, null, targets[i], pokemon, move);
+				this.battle.runEvent('AfterMoveSecondaryLast', targets[i], pokemon, move);
+			}
 		}
 
 		return true;

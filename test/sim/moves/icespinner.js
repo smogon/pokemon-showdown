@@ -21,7 +21,19 @@ describe(`Ice Spinner`, function () {
 		assert.false(battle.field.isTerrain('psychicterrain'));
 	});
 
-	it.skip(`should not remove Terrains if the user faints from Life Orb`, function () {
+	it(`should remove Terrains if behind a substitute`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', moves: ['substitute', 'icespinner']},
+		], [
+			{species: 'registeel', ability: 'psychicsurge', moves: ['sleeptalk']},
+		]]);
+
+		battle.makeChoices();
+		battle.makeChoices('move ice spinner', 'auto');
+		assert.false(battle.field.isTerrain('psychicterrain'));
+	});
+
+	it(`should not remove Terrains if the user faints from Life Orb`, function () {
 		battle = common.createBattle([[
 			{species: 'shedinja', item: 'lifeorb', moves: ['icespinner']},
 			{species: 'wynaut', moves: ['sleeptalk']},
