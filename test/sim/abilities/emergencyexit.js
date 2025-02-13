@@ -337,7 +337,7 @@ describe(`Emergency Exit`, function () {
 	});
 
 	it.skip(`should request switchout between residual damage`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', level: 1, item: 'Eject Button', moves: ['rockthrow', 'sleeptalk'], gigantamax: true},
 			{species: 'Wynaut', level: 1, moves: ['sleeptalk', 'grasspledge']},
 			{species: 'Wynaut', level: 1, moves: ['sleeptalk', 'firepledge']},
@@ -357,7 +357,7 @@ describe(`Emergency Exit`, function () {
 
 		const golisopod = battle.p2.active[0];
 		let maxHP = golisopod.maxhp;
-		let expectedHP = maxHP - Math.floor(maxHP / 2) - Math.floor(maxHP / 6);
+		let expectedHP = maxHP - Math.floor(maxHP / 2) - Math.floor(maxHP / 8);
 		assert.equal(golisopod.hp, expectedHP, `Golisopod should have only taken Volcalith damage`);
 
 		const amoonguss = battle.p2.active[1];
