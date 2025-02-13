@@ -62,6 +62,32 @@ describe(`Fainted forme regression`, function () {
 		assert.hasAbility(pokemon, 'Drizzle');
 	});
 
+	it(`should revert Greninja-Ash and not allow it to transform again`, function () {
+		battle = common.gen(7).createBattle([[
+			{species: 'greninjabond', ability: 'battlebond', moves: ['surf', 'memento']},
+			{species: 'pawmot', moves: ['revivalblessing']},
+		], [
+			{species: 'mareep', level: 5, ability: 'static', moves: ['sleeptalk']},
+			{species: 'mareep', level: 5, ability: 'static', moves: ['sleeptalk']},
+			{species: 'mareep', level: 5, ability: 'static', moves: ['sleeptalk']},
+		]]);
+		const pokemon = battle.p1.active[0];
+		assert.species(pokemon, 'Greninja-Bond');
+		battle.makeChoices();
+		assert.species(pokemon, 'Greninja-Ash');
+
+		battle.makeChoices(); // switch
+		battle.makeChoices('move memento', 'auto');
+		assert.species(pokemon, 'Greninja-Bond');
+
+		battle.makeChoices(); // switch
+		battle.makeChoices();
+		battle.makeChoices(); // revival
+		battle.makeChoices('switch 2', 'auto');
+		battle.makeChoices();
+		assert.species(pokemon, 'Greninja-Bond');
+	});
+
 	it(`should not revert Arceus-forms to base Arceus`, function () {
 		battle = common.createBattle([[
 			{species: 'arceusfire', ability: 'multitype', item: 'flameplate', moves: ['memento']},
@@ -73,6 +99,63 @@ describe(`Fainted forme regression`, function () {
 		battle.makeChoices();
 		assert.species(pokemon, 'Arceus-Fire');
 		assert.hasAbility(pokemon, 'Multitype');
+	});
+
+	it(`should not revert Mimikyu-Busted to base Mimikyu`, function () {
+		battle = common.createBattle([[
+			{species: 'mimikyu', ability: 'disguise', moves: ['memento']},
+			{species: 'pawmot', moves: ['revivalblessing']},
+		], [
+			{species: 'mareep', ability: 'static', moves: ['sleeptalk', 'aquajet']},
+		]]);
+		battle.makeChoices('auto', 'move aquajet');
+		battle.makeChoices(); // switch
+		battle.makeChoices();
+		battle.makeChoices(); // revival
+		battle.makeChoices('switch 2', 'auto'); // switch
+
+		const pokemon = battle.p1.active[0];
+		assert.species(pokemon, 'Mimikyu-Busted');
+		assert(pokemon.abilityState.busted);
+		assert.equal(pokemon.hp, Math.floor(pokemon.maxhp / 2));
+	});
+
+	it(`Mimikyu should keep its disguise if it was not busted`, function () {
+		battle = common.createBattle([[
+			{species: 'mimikyu', ability: 'disguise', moves: ['memento']},
+			{species: 'pawmot', moves: ['revivalblessing']},
+		], [
+			{species: 'mareep', ability: 'static', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices(); // switch
+		battle.makeChoices();
+		battle.makeChoices(); // revival
+		battle.makeChoices('switch 2', 'auto'); // switch
+
+		const pokemon = battle.p1.active[0];
+		assert.species(pokemon, 'Mimikyu');
+		assert.false(pokemon.abilityState.busted);
+		assert.equal(pokemon.hp, Math.floor(pokemon.maxhp / 2));
+	});
+
+	it(`[Gen 8] should revert Mimikyu-Busted to base Mimikyu`, function () {
+		battle = common.gen(8).createBattle([[
+			{species: 'mimikyu', ability: 'disguise', moves: ['memento']},
+			{species: 'pawmot', moves: ['revivalblessing']},
+		], [
+			{species: 'mareep', ability: 'static', moves: ['sleeptalk', 'aquajet']},
+		]]);
+		battle.makeChoices('auto', 'move aquajet');
+		battle.makeChoices(); // switch
+		battle.makeChoices();
+		battle.makeChoices(); // revival
+		battle.makeChoices('switch 2', 'auto'); // switch
+
+		const pokemon = battle.p1.active[0];
+		assert.species(pokemon, 'Mimikyu');
+		assert.false(pokemon.abilityState.busted);
+		assert.equal(pokemon.hp, Math.floor(pokemon.maxhp / 2));
 	});
 
 	it("should not revert Eiscue-Noice to base Eiscue", function () {
