@@ -1219,16 +1219,17 @@ export class BattleActions {
 						continue;
 					}
 					const amount = target.baseMaxhp * moveData.heal[0] / moveData.heal[1];
-					const d = target.heal((this.battle.gen < 5 ? Math.floor : Math.round)(amount));
+					const d = this.battle.heal((this.battle.gen < 5 ? Math.floor : Math.round)(amount), target, source, move);
 					if (!d && d !== 0) {
-						this.battle.add('-fail', source);
-						this.battle.attrLastMove('[still]');
+						if (d !== null) {
+							this.battle.add('-fail', source);
+							this.battle.attrLastMove('[still]');
+						}
 						this.battle.debug('heal interrupted');
 						damage[i] = this.combineResults(damage[i], false);
 						didAnything = this.combineResults(didAnything, null);
 						continue;
 					}
-					this.battle.add('-heal', target, target.getHealth);
 					didSomething = true;
 				}
 				if (moveData.status) {
