@@ -153,18 +153,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onTryEatItem(item) {
-			const healingItems = [
-				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice',
-			];
-			if (healingItems.includes(item.id)) {
+			if (item.isBerry || item.id === 'berryjuice') {
 				return this.effectState.checkedAngerShell;
 			}
 			return true;
 		},
 		onAfterMoveSecondary(target, source, move) {
-			const healingItems = [
-				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice',
-			];
 			this.effectState.checkedAngerShell = true;
 			if (!source || source === target || !target.hp || !move.totalDamage) return;
 			const lastAttackedBy = target.getLastAttackedBy();
@@ -172,7 +166,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
 				this.boost({atk: 1, spa: 1, spe: 1, def: -1, spd: -1}, target, target);
-				if (target.item && healingItems.includes(target.item)) this.runEvent('TakeDamage', target, null, null, damage);
+				const item = target.getItem();
+				if (item.isBerry || item.id === 'berryjuice') this.runEvent('TakeDamage', target, null, null, damage);
 			}
 		},
 		flags: {},
@@ -417,18 +412,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onTryEatItem(item) {
-			const healingItems = [
-				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice',
-			];
-			if (healingItems.includes(item.id)) {
+			if (item.isBerry || item.id === 'berryjuice') {
 				return this.effectState.checkedBerserk;
 			}
 			return true;
 		},
 		onAfterMoveSecondary(target, source, move) {
-			const healingItems = [
-				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice',
-			];
 			this.effectState.checkedBerserk = true;
 			if (!source || source === target || !target.hp || !move.totalDamage) return;
 			const lastAttackedBy = target.getLastAttackedBy();
@@ -436,8 +425,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const damage = move.multihit && !move.smartTarget ? move.totalDamage : lastAttackedBy.damage;
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
 				this.boost({spa: 1}, target, target);
-				// berserk hardcode
-				if (target.item && healingItems.includes(target.item)) this.runEvent('TakeDamage', target, null, null, damage);
+				const item = target.getItem();
+				if (item.isBerry || item.id === 'berryjuice') this.runEvent('TakeDamage', target, null, null, damage);
 			}
 		},
 		flags: {},

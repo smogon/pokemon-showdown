@@ -370,8 +370,8 @@ describe(`Emergency Exit`, function () {
 
 		const golisopod = battle.p2.active[0];
 		let maxHP = golisopod.maxhp;
-		let expectedHP = maxHP - Math.floor(maxHP / 2) - Math.floor(maxHP / 8);
-		assert.equal(golisopod.hp, expectedHP, `Golisopod should have only taken Sea of Fire damage`);
+		let expectedHP = maxHP - Math.floor(maxHP / 2) - Math.floor(maxHP / 6);
+		assert.equal(golisopod.hp, expectedHP, `Golisopod should have only taken Volcalith damage`);
 
 		const amoonguss = battle.p2.active[1];
 		maxHP = amoonguss.maxhp;

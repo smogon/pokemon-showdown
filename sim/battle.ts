@@ -533,7 +533,6 @@ export class Battle {
 				this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, undefined, handler.callback);
 				if (originalHp) {
 					const pokemon = handler.effectHolder as Pokemon;
-					this.runEvent('Update', pokemon);
 					if (pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
 						this.runEvent('EmergencyExit', pokemon);
 					}
@@ -964,7 +963,7 @@ export class Battle {
 				}
 			}
 		}
-		if (callbackName.endsWith('SwitchIn') || callbackName.endsWith('RedirectTarget')) {
+		if (callbackName.endsWith('SwitchIn') || callbackName.endsWith('Residual') || callbackName.endsWith('RedirectTarget')) {
 			// If multiple hazards are present on one side, their event handlers all perfectly tie in speed, priority,
 			// and subOrder. They should activate in the order they were created, which is where effectOrder comes in.
 			// This also applies to speed ties for which ability like Lightning Rod redirects moves.
@@ -2163,7 +2162,6 @@ export class Battle {
 		}
 
 		damage = target.damage(damage, source, effect);
-		this.runEvent('TakeDamage', target, source, effect, damage);
 		switch (effect.id) {
 		case 'strugglerecoil':
 			this.add('-damage', target, target.getHealth, '[from] recoil');
@@ -2176,6 +2174,7 @@ export class Battle {
 			break;
 		}
 		if (target.fainted) this.faint(target);
+		this.runEvent('TakeDamage', target, source, effect, damage);
 		return damage;
 	}
 
