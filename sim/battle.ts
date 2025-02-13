@@ -514,6 +514,7 @@ export class Battle {
 			if ((handler.effectHolder as Pokemon).fainted) {
 				if (!(handler.state?.isSlotCondition)) continue;
 			}
+			if ((handler.effectHolder as Pokemon).switchFlag === 'emergencyexit') continue;
 			if (eventid === 'Residual' && handler.end && handler.state && handler.state.duration) {
 				handler.state.duration--;
 				if (!handler.state.duration) {
@@ -528,7 +529,15 @@ export class Battle {
 			if ((handler.effectHolder as Side).sideConditions) handlerEventid = `Side${eventid}`;
 			if ((handler.effectHolder as Field).pseudoWeather) handlerEventid = `Field${eventid}`;
 			if (handler.callback) {
+				const originalHp = (handler.effectHolder as Pokemon).hp;
 				this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, undefined, handler.callback);
+				if (originalHp) {
+					const pokemon = handler.effectHolder as Pokemon;
+					this.runEvent('Update', pokemon);
+					if (pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
+						this.runEvent('EmergencyExit', pokemon);
+					}
+				}
 			}
 
 			this.faintMessages();

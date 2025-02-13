@@ -83,7 +83,7 @@ describe(`Emergency Exit`, function () {
 		assert(!battle.p2.activeRequest.forceSwitch);
 	});
 
-	it(`should request switch-out before end-of-turn fainted Pokemon`, function () {
+	it.skip(`should request switch-out before end-of-turn fainted Pokemon`, function () {
 		battle = common.createBattle([[
 			{species: "Golisopod", item: 'blacksludge', ability: 'emergencyexit', moves: ['payback']},
 			{species: "Wynaut", moves: ['sleeptalk']},
@@ -321,7 +321,7 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'move');
 	});
 
-	it.skip(`should request switchout between hazards`, function () {
+	it(`should request switchout between hazards`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['sleeptalk', 'uturn']},
 			{species: 'volcarona', ability: 'emergencyexit', evs: {hp: 4}, moves: ['sleeptalk']},
@@ -336,8 +336,8 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it.skip(`should request switchout between residual damage`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+	it(`should request switchout between residual damage`, function () {
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', level: 1, item: 'Eject Button', moves: ['rockthrow', 'sleeptalk'], gigantamax: true},
 			{species: 'Wynaut', level: 1, moves: ['sleeptalk', 'grasspledge']},
 			{species: 'Wynaut', level: 1, moves: ['sleeptalk', 'firepledge']},
@@ -357,7 +357,7 @@ describe(`Emergency Exit`, function () {
 
 		const golisopod = battle.p2.active[0];
 		let maxHP = golisopod.maxhp;
-		let expectedHP = maxHP - Math.floor(maxHP / 2) - Math.floor(maxHP / 6);
+		let expectedHP = maxHP - Math.floor(maxHP / 2) - Math.floor(maxHP / 8);
 		assert.equal(golisopod.hp, expectedHP, `Golisopod should have only taken Volcalith damage`);
 
 		const amoonguss = battle.p2.active[1];

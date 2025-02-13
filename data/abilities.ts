@@ -1217,7 +1217,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					active.switchFlag = false;
 				}
 			}
-			target.switchFlag = true;
+			target.switchFlag = this.toID('emergencyexit');
 			this.add('-activate', target, 'ability: Emergency Exit');
 		},
 		flags: {},
@@ -5432,7 +5432,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					active.switchFlag = false;
 				}
 			}
-			target.switchFlag = true;
+			target.switchFlag = this.toID('emergencyexit');
 			this.add('-activate', target, 'ability: Wimp Out');
 		},
 		flags: {},
