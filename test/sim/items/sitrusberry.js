@@ -41,19 +41,25 @@ describe('Sitrus Berry', function () {
 		assert.equal(battle.p1.active[0].hp, 1);
 	});
 
-	it.skip(`should not heal 25% HP if a confusion self-hit would bring the user into Berry trigger range`, function () {
-		battle = common.createBattle([[
+	it(`should not heal 25% HP if a confusion self-hit would bring the user into Berry trigger range`, function () {
+		battle = common.createBattle({seed: [0, 0, 0, 0], //Hardcoding seed so it guarantees confusion hit and then snapping out
+		}, [[
 			{species: 'Deoxys-Attack', item: 'sitrusberry', moves: ['sleeptalk']},
 		], [
-			{species: 'Sableye', ability: 'prankster', moves: ['confuseray']},
+			{species: 'Sableye', ability: 'prankster', moves: ['confuseray', 'sleeptalk', 'falseswipe']},
 		]]);
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move confuseray');
+		battle.makeChoices('move sleeptalk', 'move sleeptalk'); //Confusion hit is here
 		assert.holdsItem(holder);
 		assert.false.fullHP(holder);
+		battle.makeChoices('move sleeptalk', 'move falseswipe');
+		common.saveReplay(battle, "test");
+		//Should eat the berry after the false swipe damage
+		assert.false.holdsItem(holder);
 	});
 
-	it.skip(`should heal 25% HP immediately after any end-of-turn effect`, function () {
+	it(`should heal 25% HP immediately after any end-of-turn effect`, function () {
 		battle = common.createBattle([[
 			{species: 'mimikyu', moves: ['curse']},
 		], [
