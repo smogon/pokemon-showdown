@@ -57,7 +57,7 @@ describe(`Ice Spinner`, function () {
 		assert(battle.field.isTerrain('psychicterrain'));
 	});
 
-	it.skip(`should not remove Terrains if the user is forced out via Red Card`, function () {
+	it(`should not remove Terrains if the user is forced out via Red Card`, function () {
 		battle = common.createBattle([[
 			{species: 'shedinja', moves: ['icespinner']},
 			{species: 'wynaut', moves: ['sleeptalk']},
