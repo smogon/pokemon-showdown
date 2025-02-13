@@ -516,10 +516,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!deltas) throw new TypeError("Must specify deltas!");
 			const species = this.dex.deepClone(this.dex.species.get(speciesOrForme));
 			species.abilities = {'0': deltas.ability};
-			if (species.types[0] === deltas.type || deltas.formeType === 'Arceus') {
+			if (deltas.formeType === 'Arceus') {
 				const secondType = species.types[1];
 				species.types = [deltas.type];
 				if (secondType && secondType !== deltas.type) species.types.push(secondType);
+			} else if (species.types[0] === deltas.type) {
+				species.types = [deltas.type];
 			} else if (deltas.type === 'mono') {
 				species.types = [species.types[0]];
 			} else if (deltas.type) {
