@@ -3319,7 +3319,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				for (const event of ['AllyFaint', 'AnyFaint']) {
 					const callbackName = 'on' + event;
 					// @ts-ignore - dynamic lookup
-					const callback = ability[`onAlly${eventName}`];
+					const callback = ability[callbackName];
 					if (callback !== undefined) {
 						handlers.push(this.resolvePriority({
 							effect: ability, callback, state: pokemon.abilityState, end: pokemon.clearAbility, effectHolder: pokemon,
