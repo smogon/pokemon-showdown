@@ -58,6 +58,19 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
+	it(`should not request switch-out if hurt by confusion`, function () {
+		battle = common.createBattle({forceRandomChance: true}, [[
+			{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], ivs: EMPTY_IVS},
+			{species: "Clefable", ability: 'unaware', moves: ['metronome']},
+		], [
+			{species: "Crobat", ability: 'noguard', moves: ['confuseray']},
+		]]);
+		const golisopod = battle.p1.active[0];
+		golisopod.hp = Math.floor(golisopod.maxhp / 2) + 1;
+		battle.makeChoices();
+		assert.equal(battle.requestState, 'move');
+	});
+
 	it(`should not request switch-out if attacked and healed by berry`, function () {
 		battle = common.createBattle([[
 			{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], item: 'sitrusberry', ivs: EMPTY_IVS},
