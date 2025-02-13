@@ -585,7 +585,10 @@ export class Pokemon {
 
 		// stat boosts
 		if (!unboosted) {
-			const boosts = this.battle.runEvent('ModifyBoost', this, null, null, {...this.boosts});
+			let boosts = this.boosts;
+			if (!unmodified) {
+				boosts = this.battle.runEvent('ModifyBoost', this, null, null, {...boosts});
+			}
 			let boost = boosts[statName];
 			const boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 			if (boost > 6) boost = 6;
