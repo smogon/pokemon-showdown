@@ -8619,7 +8619,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (effect && (effect.id === 'zpower' || (effect as Move).isZ)) return damage;
 				if (target !== source && target.hp !== target.maxhp) {
 					this.attrLastMove('[still]');
-					// Wrong error message, correct one not supported yet
+					// FIXME: Wrong error message, correct one not supported yet
 					this.add('cant', source, 'move: Heal Block', effect);
 					return null;
 				}
