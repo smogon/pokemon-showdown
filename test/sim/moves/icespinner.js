@@ -21,15 +21,15 @@ describe(`Ice Spinner`, function () {
 		assert.false(battle.field.isTerrain('psychicterrain'));
 	});
 
-	it(`should remove Terrains if behind a substitute`, function () {
+	it(`should remove Terrains if target has a substitute`, function () {
 		battle = common.createBattle([[
-			{species: 'wynaut', moves: ['substitute', 'icespinner']},
+			{species: 'wynaut', moves: ['sleeptalk', 'icespinner']},
 		], [
-			{species: 'registeel', ability: 'psychicsurge', moves: ['sleeptalk']},
+			{species: 'registeel', ability: 'psychicsurge', moves: ['substitute', 'sleeptalk']},
 		]]);
 
-		battle.makeChoices();
-		battle.makeChoices('move ice spinner', 'auto');
+		battle.makeChoices('move sleeptalk', 'move substitute');
+		battle.makeChoices('move ice spinner', 'move sleeptalk');
 		assert.false(battle.field.isTerrain('psychicterrain'));
 	});
 
