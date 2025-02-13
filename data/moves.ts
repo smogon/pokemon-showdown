@@ -14069,9 +14069,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(target, source, move) {
 			if (source.isAlly(target)) {
 				if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
-					if (!target.volatiles['healblock']) {
-						this.add('-immune', target);
-					}
 					return this.NOT_FAIL;
 				}
 			}
