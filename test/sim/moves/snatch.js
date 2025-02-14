@@ -124,7 +124,7 @@ describe('Snatch [Gen 4]', function () {
 		assert.statStage(battle.p2.active[0], 'atk', 1);
 	});
 
-	it.skip(`should only deduct additional PP from Snatch if the Snatch was successful`, function () {
+	it(`should only deduct additional PP from Snatch if the Snatch was successful`, function () {
 		battle = common.gen(4).createBattle([[
 			{species: 'Palkia', ability: 'pressure', moves: ['watergun', 'calmmind']},
 		], [

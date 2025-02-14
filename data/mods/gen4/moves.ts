@@ -1545,7 +1545,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				snatchUser.removeVolatile('snatch');
 				this.add('-activate', snatchUser, 'move: Snatch', '[of] ' + source);
-				this.actions.useMove(move.id, snatchUser);
+				const snatchIndex = snatchUser.moves.indexOf('snatch');
+				if (this.actions.useMove(move.id, snatchUser) && snatchIndex >= 0) {
+					snatchUser.moveSlots[snatchIndex].pp--;
+				}
 				return null;
 			},
 		},
