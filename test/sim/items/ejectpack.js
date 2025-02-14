@@ -112,7 +112,7 @@ describe(`Eject Pack`, function () {
 		assert.species(battle.p2.active[1], 'Wynaut', `Mew should have switched out with its Eject Button.`);
 	});
 
-	it.skip(`should only trigger the fastest Eject Pack when multiple targets with Eject Pack have stats lowered`, function () {
+	it(`should only trigger the fastest Eject Pack when multiple targets with Eject Pack have stats lowered`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Hydreigon', moves: ['leer']},
 			{species: 'Horsea', moves: ['sleeptalk']},
