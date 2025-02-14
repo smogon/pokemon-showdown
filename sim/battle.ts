@@ -2084,6 +2084,7 @@ export class Battle {
 					this.heal(amount, source, target, 'drain');
 				}
 			}
+			// for moves, it needs to run after the 'AfterHit' event
 			if (effect.effectType !== 'Move') this.runEvent('TakeDamage', target, source, effect, targetDamage);
 		}
 
