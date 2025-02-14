@@ -445,11 +445,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return this.random(4, 9);
 			},
 			onStart(target, source) {
-				const moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
-				if (
-					!target.lastMove || target.lastMove.flags['failencore'] ||
-					!target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0
-				) {
+				const moveSlot = target.lastMove ? target.getMoveData(target.lastMove.id) : null;
+				if (!target.lastMove || target.lastMove.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
 					// it failed
 					return false;
 				}
@@ -462,10 +459,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onResidualOrder: 10,
 			onResidualSubOrder: 14,
 			onResidual(target) {
-				if (
-					target.moves.includes(this.effectState.move) &&
-					target.moveSlots[target.moves.indexOf(this.effectState.move)].pp <= 0
-				) {
+				const moveSlot = target.getMoveData(this.effectState.move);
+				if (moveSlot && moveSlot.pp <= 0) {
 					// early termination if you run out of PP
 					target.removeVolatile('encore');
 				}
@@ -1546,10 +1541,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				snatchUser.removeVolatile('snatch');
 				this.add('-activate', snatchUser, 'move: Snatch', '[of] ' + source);
 				if (this.actions.useMove(move.id, snatchUser)) {
-					const snatchIndex = snatchUser.moves.indexOf('snatch');
-					if (snatchIndex >= 0) {
-						snatchUser.moveSlots[snatchIndex].pp--;
-					}
+					snatchUser.deductPP('snatch');
 				}
 				return null;
 			},
