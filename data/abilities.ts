@@ -1212,13 +1212,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 			for (const side of this.sides) {
 				for (const active of side.active) {
-					if (active.switchFlag !== 'emergencyexit') {
+					if (!this.effectState.emergencyExiting) {
 						active.switchFlag = false;
 					}
 				}
 			}
-			target.switchFlag = 'emergencyexit' as ID;
+			target.switchFlag = true;
+			this.effectState.emergencyExiting = true;
 			this.add('-activate', target, 'ability: Emergency Exit');
+		},
+		onEnd(pokemon) {
+			delete this.effectState.emergencyExiting;
 		},
 		flags: {},
 		name: "Emergency Exit",
@@ -5429,13 +5433,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 			for (const side of this.sides) {
 				for (const active of side.active) {
-					if (active.switchFlag !== 'emergencyexit') {
+					if (!active.abilityState.emergencyExiting) {
 						active.switchFlag = false;
 					}
 				}
 			}
-			target.switchFlag = 'emergencyexit' as ID;
+			target.switchFlag = true;
+			this.effectState.emergencyExiting = true;
 			this.add('-activate', target, 'ability: Wimp Out');
+		},
+		onEnd() {
+			delete this.effectState.emergencyExiting;
 		},
 		flags: {},
 		name: "Wimp Out",

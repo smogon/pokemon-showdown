@@ -514,7 +514,8 @@ export class Battle {
 			if ((handler.effectHolder as Pokemon).fainted) {
 				if (!(handler.state?.isSlotCondition)) continue;
 			}
-			if ((handler.effectHolder as Pokemon).switchFlag === 'emergencyexit') continue;
+			// FIXME: this shouldn't be necessary, emergency exiting Pokemon should be ignoring everything
+			if ((handler.effectHolder as Pokemon).abilityState?.emergencyExiting) continue;
 			if (eventid === 'Residual' && handler.end && handler.state && handler.state.duration) {
 				handler.state.duration--;
 				if (!handler.state.duration) {
@@ -965,7 +966,7 @@ export class Battle {
 			}
 		}
 		if (callbackName.endsWith('SwitchIn') || callbackName.endsWith('RedirectTarget') ||
-			// quick fix: can't set effectOrder on Destiny Bond (and possibly other effects)
+			// FIXME: this is a quick fix because can't set effectOrder on Destiny Bond (and possibly other effects)
 			(callbackName.endsWith('Residual') && handler.effect.effectType === 'Condition' &&
 			(handler.state?.target instanceof Side || handler.state?.target instanceof Field))) {
 			// If multiple hazards are present on one side, their event handlers all perfectly tie in speed, priority,
@@ -2818,10 +2819,10 @@ export class Battle {
 			this.eachEvent('Update');
 		}
 
-		if (this.getAllActive(true).some(pokemon => pokemon.switchFlag === 'emergencyexit')) {
+		if (this.getAllActive(true).some(pokemon => pokemon.abilityState.emergencyExiting)) {
 			// reject switch requests of other Pokemon
 			for (const pokemon of this.getAllActive(true)) {
-				if (pokemon.switchFlag !== 'emergencyexit') {
+				if (!pokemon.abilityState.emergencyExiting) {
 					pokemon.switchFlag = false;
 				}
 			}
