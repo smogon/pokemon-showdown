@@ -3058,7 +3058,21 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Fighting",
 		},
-		onUpdate(pokemon) {
+		onAnySwitchIn() {
+			const pokemon = (this.effectState.target as Pokemon);
+			if (!pokemon.hp) return;
+			if (pokemon.moveSlots.some(move => move.pp === 0)) {
+				pokemon.eatItem();
+			}
+		},
+		onAnyAfterMove() {
+			const pokemon = (this.effectState.target as Pokemon);
+			if (!pokemon.hp) return;
+			if (pokemon.moveSlots.some(move => move.pp === 0)) {
+				pokemon.eatItem();
+			}
+		},
+		onResidual(pokemon) {
 			if (!pokemon.hp) return;
 			if (pokemon.moveSlots.some(move => move.pp === 0)) {
 				pokemon.eatItem();
