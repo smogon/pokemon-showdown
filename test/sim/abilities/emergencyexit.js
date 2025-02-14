@@ -96,7 +96,7 @@ describe(`Emergency Exit`, function () {
 		assert(!battle.p2.activeRequest.forceSwitch);
 	});
 
-	it.skip(`should request switch-out before end-of-turn fainted Pokemon`, function () {
+	it(`should request switch-out before end-of-turn fainted Pokemon`, function () {
 		battle = common.createBattle([[
 			{species: "Golisopod", item: 'blacksludge', ability: 'emergencyexit', moves: ['payback']},
 			{species: "Wynaut", moves: ['sleeptalk']},
