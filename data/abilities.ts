@@ -1212,7 +1212,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 			for (const side of this.sides) {
 				for (const active of side.active) {
-					if (!this.effectState.emergencyExiting) {
+					if (!active.abilityState.emergencyExiting) {
 						active.switchFlag = false;
 					}
 				}
@@ -1221,7 +1221,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.effectState.emergencyExiting = true;
 			this.add('-activate', target, 'ability: Emergency Exit');
 		},
-		onEnd(pokemon) {
+		onEnd() {
 			delete this.effectState.emergencyExiting;
 		},
 		flags: {},
