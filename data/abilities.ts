@@ -1212,7 +1212,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 			for (const side of this.sides) {
 				for (const active of side.active) {
-					active.switchFlag = false;
+					if (active.switchFlag !== 'emergencyexit') {
+						active.switchFlag = false;
+					}
 				}
 			}
 			target.switchFlag = 'emergencyexit' as ID;
@@ -5427,7 +5429,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 			for (const side of this.sides) {
 				for (const active of side.active) {
-					active.switchFlag = false;
+					if (active.switchFlag !== 'emergencyexit') {
+						active.switchFlag = false;
+					}
 				}
 			}
 			target.switchFlag = 'emergencyexit' as ID;

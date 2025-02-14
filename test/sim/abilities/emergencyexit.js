@@ -110,6 +110,19 @@ describe(`Emergency Exit`, function () {
 		assert(!battle.p2.activeRequest.forceSwitch);
 	});
 
+	it(`should request switch-out both Emergency Exit Pokemon`, function () {
+		battle = common.createBattle({forceRandomChance: true}, [[
+			{species: "Golisopod", item: 'blacksludge', ability: 'emergencyexit', moves: ['superfang']},
+			{species: "Wynaut", moves: ['sleeptalk']},
+		], [
+			{species: "Golisopod", item: 'blacksludge', ability: 'emergencyexit', moves: ['superfang']},
+			{species: "Wynaut", moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert(battle.p1.activeRequest.forceSwitch);
+		assert(battle.p2.activeRequest.forceSwitch);
+	});
+
 	it(`should request switch-out after taking hazard damage`, function () {
 		battle = common.createBattle([
 			[{species: "Golisopod", ability: 'emergencyexit', moves: ['uturn', 'sleeptalk']}, {species: "Magikarp", ability: 'swiftswim', moves: ['splash']}],
@@ -346,6 +359,25 @@ describe(`Emergency Exit`, function () {
 		battle.makeChoices('switch 2');
 		const volcarona = battle.p1.active[0];
 		assert.equal(volcarona.hp, Math.floor(volcarona.maxhp / 2), 'Emergency Exit should trigger before Spikes damage.');
+		assert.equal(battle.requestState, 'switch');
+	});
+
+	it.skip(`should ignore Intimidate if it switches out during switch event`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', level: 1, moves: ['sleeptalk', 'uturn']},
+			{species: 'volcarona', ability: 'emergencyexit', evs: {hp: 4}, moves: ['sleeptalk']},
+			{species: 'manaphy', moves: ['sleeptalk']},
+		], [
+			{species: 'landorus', moves: ['stealthrock', 'spikes', 'explosion']},
+			{species: 'incineroar', ability: 'intimidate', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('auto', 'move spikes');
+		battle.makeChoices('auto', 'move explosion');
+		battle.makeChoices();
+		assert(battle.log.includes('|-ability|p2a: Incineroar|Intimidate|boost'));
+		const volcarona = battle.p1.active[0];
+		assert.equal(volcarona.boosts['atk'], 0, 'Emergency Exit should ignore Intimidate.');
 		assert.equal(battle.requestState, 'switch');
 	});
 
