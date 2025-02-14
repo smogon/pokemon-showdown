@@ -97590,7 +97590,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			spiritshackle: ["9L45", "8L45", "7L1"],
 			spite: ["9M", "7T", "7E"],
 			stoneedge: ["9M", "8M", "7M"],
-			substitute: ["8M", "7M"],
+			substitute: ["9M", "8M", "7M"],
 			surf: ["9M", "8M", "7M"],
 			swagger: ["7M"],
 			takedown: ["9M"],
