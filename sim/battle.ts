@@ -955,7 +955,10 @@ export class Battle {
 				}
 			}
 		}
-		if (callbackName.endsWith('SwitchIn') || callbackName.endsWith('RedirectTarget')) {
+		if (callbackName.endsWith('SwitchIn') || callbackName.endsWith('RedirectTarget') ||
+			// quick fix: can't allow all Residual events because of Destiny Bond (and possibly others)
+			(callbackName.endsWith('Residual') && handler.effect.effectType === 'Condition' &&
+			(handler.state?.target instanceof Side || handler.state?.target instanceof Field))) {
 			// If multiple hazards are present on one side, their event handlers all perfectly tie in speed, priority,
 			// and subOrder. They should activate in the order they were created, which is where effectOrder comes in.
 			// This also applies to speed ties for which ability like Lightning Rod redirects moves.
