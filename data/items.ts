@@ -1571,25 +1571,44 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 50,
 		},
-		onAfterBoost(boost, target, source, effect) {
-			if (this.activeMove?.id === 'partingshot') return;
-			let eject = false;
+		onAfterBoost(boost, pokemon) {
+			if (this.effectState.eject || this.activeMove?.id === 'partingshot') return;
 			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
-					eject = true;
+					this.effectState.eject = true;
+					break;
 				}
 			}
-			if (eject) {
-				if (target.hp) {
-					if (!this.canSwitch(target.side)) return;
-					if (target.volatiles['commanding'] || target.volatiles['commanded']) return;
-					for (const pokemon of this.getAllActive()) {
-						if (pokemon.switchFlag === true) return;
-					}
-					if (target.useItem()) target.switchFlag = true;
-				}
+		},
+		onAnySwitchInPriority: -2,
+		onAnySwitchIn() {
+			if (!this.effectState.eject) return;
+			(this.effectState.target as Pokemon).useItem();
+		},
+		onAnyAfterMove() {
+			if (!this.effectState.eject) return;
+			(this.effectState.target as Pokemon).useItem();
+		},
+		onResidualOrder: 29,
+		onResidual(pokemon) {
+			if (!this.effectState.eject) return;
+			(this.effectState.target as Pokemon).useItem();
+		},
+		onUseItem(item, pokemon) {
+			if (!this.canSwitch(pokemon.side)) return false;
+			if (pokemon.volatiles['commanding'] || pokemon.volatiles['commanded']) return false;
+			for (const active of this.getAllActive()) {
+				if (active.switchFlag === true) return false;
 			}
+			return true;
+		},
+		onUse(pokemon) {
+			pokemon.switchFlag = true;
+		},
+		onEnd() {
+			delete this.effectState.boosts;
+			delete this.effectState.ready;
 		},
 		num: 1119,
 		gen: 8,

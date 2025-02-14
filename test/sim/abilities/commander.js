@@ -126,7 +126,7 @@ describe('Commander', function () {
 		assert.equal(battle.requestState, 'move', 'It should not have switched out on standard phazing moves');
 	});
 
-	it.skip(`should prevent Eject Pack switchouts`, function () {
+	it(`should prevent Eject Pack switchouts`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wynaut', item: 'redcard', ability: 'noguard', moves: ['sleeptalk', 'tackle', 'dragontail']},
 			{species: 'gyarados', item: 'ejectbutton', ability: 'intimidate', moves: ['sleeptalk', 'trick', 'roar']},

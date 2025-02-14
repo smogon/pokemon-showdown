@@ -68,7 +68,7 @@ describe(`Eject Pack`, function () {
 		assert.equal(battle.p1.requestState, 'switch');
 	});
 
-	it.skip(`should not switch out the user if the user acquired the Eject Pack after the stat drop occurred`, function () {
+	it(`should not switch out the user if the user acquired the Eject Pack after the stat drop occurred`, function () {
 		battle = common.createBattle([[
 			{species: 'Klefki', ability: 'magician', moves: ['lowsweep']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -80,7 +80,7 @@ describe(`Eject Pack`, function () {
 		assert.false.equal(battle.requestState, 'switch');
 	});
 
-	it.skip(`should wait until after all other end-turn effects have resolved before switching out the holder`, function () {
+	it(`should wait until after all other end-turn effects have resolved before switching out the holder`, function () {
 		battle = common.createBattle([[
 			{species: 'Glalie', item: 'ejectpack', ability: 'moody', moves: ['icebeam']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -96,7 +96,7 @@ describe(`Eject Pack`, function () {
 		assert(powerConstructIndex < ejectPackIndex, 'Eject Pack should not activate before Power Construct');
 	});
 
-	it.skip(`should not activate when another switching effect was triggered as part of the move`, function () {
+	it(`should not activate when another switching effect was triggered as part of the move`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Hydreigon', moves: ['breakingswipe']},
 			{species: 'Horsea', moves: ['sleeptalk']},
