@@ -337,7 +337,7 @@ describe(`Emergency Exit`, function () {
 	});
 
 	it.skip(`should request switchout between residual damage`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', level: 1, item: 'Eject Button', moves: ['rockthrow', 'sleeptalk'], gigantamax: true},
 			{species: 'Wynaut', level: 1, moves: ['sleeptalk', 'grasspledge']},
 			{species: 'Wynaut', level: 1, moves: ['sleeptalk', 'firepledge']},
