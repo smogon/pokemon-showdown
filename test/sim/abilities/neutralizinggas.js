@@ -302,7 +302,7 @@ describe('Neutralizing Gas', function () {
 	});
 
 	it(`should not reactivate instances of Embody Aspect that had previously activated`, function () {
-		battle = common.createBattle({gameType: 'freeforall'}, [[
+		battle = common.gen(9).createBattle({gameType: 'freeforall'}, [[
 			{species: 'Ogerpon-Hearthflame', ability: 'moldbreaker', item: 'hearthflamemask', moves: ['bellydrum']},
 		], [
 			{species: 'Ogerpon-Wellspring', ability: 'waterabsorb', item: 'wellspringmask', moves: ['sleeptalk']},
