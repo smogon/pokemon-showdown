@@ -38,6 +38,7 @@ describe('Soul-Heart', function () {
 			{species: 'Wynaut', ability: 'soulheart', level: 1, moves: ['sleeptalk']},
 			{species: 'Roggenrola', moves: ['sleeptalk']},
 		]]);
+		battle.makeChoices();
 
 		const log = battle.getDebugLog();
 		const soulHeartIndex = log.indexOf('|Soul-Heart');
@@ -52,6 +53,7 @@ describe('Soul-Heart', function () {
 			{species: 'Magearna', ability: 'soulheart', level: 1, moves: ['sleeptalk']},
 			{species: 'Lugia', moves: ['sleeptalk']},
 		]]);
+		battle.makeChoices();
 
 		const log = battle.getDebugLog();
 		const soulHeartIndex = log.indexOf('|Soul-Heart');
