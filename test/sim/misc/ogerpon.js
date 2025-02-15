@@ -11,7 +11,7 @@ describe(`Ogerpon`, function () {
 	});
 
 	it(`should reject the Terastallization choice while Transformed into Ogerpon`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'ditto', ability: 'imposter', moves: ['sleeptalk']},
 		], [
 			{species: 'ogerpon', ability: 'defiant', moves: ['sleeptalk'], teraType: 'Grass'},
@@ -22,7 +22,7 @@ describe(`Ogerpon`, function () {
 
 	// this test passes, but there isn't a way to create a battle for a mod without a format
 	it.skip(`[DLC1] should accept the Terastallization choice, but not Terastallize while Transformed into Ogerpon`, function () {
-		battle = battle = common.createBattle({formatid: 'gen9dlc1@@@!teampreview'}, [[
+		battle = battle = common.gen(9).createBattle({formatid: 'gen9dlc1@@@!teampreview'}, [[
 			{species: 'ditto', ability: 'imposter', moves: ['sleeptalk']},
 		], [
 			{species: 'ogerpon', ability: 'defiant', moves: ['sleeptalk'], teraType: 'Grass'},
