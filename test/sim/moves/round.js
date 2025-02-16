@@ -20,7 +20,7 @@ describe('Round', function () {
 	});
 
 	it('should not take priority over abilities', function () {
-		battle = common.gen(5).createBattle({gameType: 'doubles'}, [[
+		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Charizard", moves: ['round']},
 			{species: "Venusaur", moves: ['round']},
 		], [
