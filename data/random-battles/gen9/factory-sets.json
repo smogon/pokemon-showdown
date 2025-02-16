@@ -3299,7 +3299,7 @@
 			"weight": 7,
 			"sets": [{
 				"species": "Goodra-Hisui",
-				"weight": 100,
+				"weight": 40,
 				"item": ["Choice Specs"],
 				"ability": ["Gooey"],
 				"evs": {"hp": 40, "spa": 252, "spe": 216},
@@ -3307,6 +3307,24 @@
 				"nature": ["Modest"],
 				"teraType": ["Ghost", "Dragon"],
 				"moves": [["Flash Cannon"], ["Draco Meteor"], ["Thunderbolt"], ["Flamethrower"]]
+			}, {
+				"species": "Goodra-Hisui",
+				"weight": 30,
+				"item": ["Leftovers"],
+				"ability": ["Gooey", "Sap Sipper"],
+				"evs": {"hp": 252, "def": 64, "spa": 192},
+				"nature": ["Quiet"],
+				"teraType": ["Ghost", "Fairy"],
+				"moves": [["Acid Spray", "Heavy Slam", "Flash Cannon"], ["Draco Meteor"], ["Knock Off"], ["Protect"]]
+			}, {
+				"species": "Goodra-Hisui",
+				"weight": 30,
+				"item": ["Leftovers"],
+				"ability": ["Gooey", "Sap Sipper"],
+				"evs": {"hp": 252, "def": 64, "spa": 192},
+				"nature": ["Quiet"],
+				"teraType": ["Ghost", "Fairy"],
+				"moves": [["Acid Spray", "Heavy Slam", "Flash Cannon"], ["Draco Meteor"], ["Knock Off"], ["Dragon Tail"]]
 			}]
 		},
 		"jirachi": {
