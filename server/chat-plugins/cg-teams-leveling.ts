@@ -41,7 +41,7 @@ async function updateStats(battle: RoomBattle, winner: ID) {
 	if (!incrementWins || !incrementLosses) await dbSetupPromise;
 	if (toID(battle.format) !== 'gen9computergeneratedteams') return;
 	// if the game is rated or part of a tournament hosted by a public room, it counts
-	if (battle.rated === 1 && battle.room.parent?.game) {
+	if (battle.rated <= 1 && battle.room.parent?.game) {
 		let parent = battle.room.parent;
 		if (parent.game!.gameid === 'bestof' && parent.parent?.game) parent = parent.parent;
 		if (parent.game!.gameid !== 'tournament' || parent.settings.isPrivate) return;
@@ -56,7 +56,7 @@ async function updateStats(battle: RoomBattle, winner: ID) {
 
 		for (const set of team) {
 			const statsSpecies = getLevelSpeciesID(set, Dex.formats.get(battle.format));
-			await addPokemon?.run([statsSpecies, set.level]);
+			await addPokemon?.run([statsSpecies, set.level || 100]);
 			await increment?.run([statsSpecies]);
 		}
 	}
