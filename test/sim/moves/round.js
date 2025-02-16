@@ -19,7 +19,7 @@ describe('Round', function () {
 		assert.equal(battle.p2.active[0].item, '');
 	});
 
-	it.only('should not take priority over abilities', function () {
+	it('should not take priority over abilities', function () {
 		battle = common.gen(5).createBattle({gameType: 'doubles'}, [[
 			{species: "Charizard", moves: ['round']},
 			{species: "Venusaur", moves: ['round']},
