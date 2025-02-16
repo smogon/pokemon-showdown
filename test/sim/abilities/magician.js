@@ -20,6 +20,29 @@ describe('Magician', function () {
 		assert.equal(battle.p1.active[0].item, 'tr69');
 	});
 
+	it(`should steal the opponents item if the target faints`, function () {
+		battle = common.createBattle([[
+			{species: 'klefki', ability: 'magician', moves: ['flashcannon']},
+		], [
+			{species: 'wynaut', level: 1, item: 'tr69', moves: ['sleeptalk']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('move flashcannon', 'move sleeptalk');
+		assert.equal(battle.p1.active[0].item, 'tr69');
+	});
+
+	it(`should not steal the opponents item if the user faints`, function () {
+		battle = common.createBattle([[
+			{species: 'klefki', level: 1, ability: 'magician', moves: ['tackle']},
+			{species: 'wynaut', moves: ['sleeptalk']},
+		], [
+			{species: 'wynaut', item: 'rockyhelmet', moves: ['falseswipe']},
+		]]);
+		battle.makeChoices('move tackle', 'move falseswipe');
+		assert.false.holdsItem(battle.p1.active[0]);
+		assert.holdsItem(battle.p2.active[0]);
+	});
+
 	it(`should not steal Weakness Policy on super-effective hits`, function () {
 		battle = common.createBattle([[
 			{species: 'klefki', ability: 'magician', moves: ['flashcannon']},
