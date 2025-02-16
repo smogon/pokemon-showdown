@@ -24,7 +24,7 @@ describe('Round', function () {
 			{species: "Charizard", moves: ['round']},
 			{species: "Venusaur", moves: ['round']},
 		], [
-			{species: "Caterpie", item: 'ejectbutton', moves: ['sleeptalk']},
+			{species: "Blissey", item: 'ejectbutton', moves: ['sleeptalk']},
 			{species: "Blastoise", moves: ['sleeptalk']},
 			{species: "Incineroar", ability: 'intimidate', moves: ['sleeptalk']},
 		]]);
