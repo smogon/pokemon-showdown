@@ -46,6 +46,7 @@ describe('Magician', function () {
 	it(`should steal the opponents item if the user uses U-turn`, function () {
 		battle = common.createBattle([[
 			{species: 'klefki', ability: 'magician', moves: ['uturn']},
+			{species: 'wynaut', moves: ['sleeptalk']},
 		], [
 			{species: 'wynaut', item: 'tr69', moves: ['sleeptalk']},
 		]]);
@@ -58,6 +59,7 @@ describe('Magician', function () {
 			{species: 'klefki', ability: 'magician', moves: ['dragontail']},
 		], [
 			{species: 'wynaut', item: 'tr69', moves: ['sleeptalk']},
+			{species: 'wynaut', moves: ['sleeptalk']},
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].item, 'tr69');
