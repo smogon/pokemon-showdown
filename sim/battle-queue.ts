@@ -19,7 +19,7 @@ import type {Battle} from './battle';
 export interface MoveAction {
 	/** action type */
 	choice: 'move' | 'beforeTurnMove' | 'priorityChargeMove';
-	order: 3 | 5 | 200 | 201 | 199 | 106;
+	order: 3 | 5 | 105 | 199 | 200 | 201;
 	/** priority of the action (lower first) */
 	priority: number;
 	/** fractional priority of the action (lower first) */
@@ -50,7 +50,7 @@ export interface MoveAction {
 export interface SwitchAction {
 	/** action type */
 	choice: 'switch' | 'instaswitch' | 'revivalblessing';
-	order: 3 | 6 | 103;
+	order: 3 | 6 | 101;
 	/** priority of the action (lower first) */
 	priority: number;
 	/** speed of pokemon switching (higher first if priority tie) */
