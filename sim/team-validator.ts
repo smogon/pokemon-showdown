@@ -2803,7 +2803,7 @@ export class TeamValidator {
 					 * Case 3: Prevo-only move - allow moves of the species from the min gen and later
 					 * Case 4: Evo-only move - allow moves of the species from the max gen and before
 					*/
-					const baseSpeciesID = toID(nextSpecies.baseSpecies)
+					const baseSpeciesID = toID(nextSpecies.baseSpecies);
 					if (canLearnSpecies.includes(baseSpeciesID) ||
 						(0 < speciesCount && speciesCount < canLearnSpecies.length) ||
 						(speciesCount === 0 && gen >= minLearnGen) ||
