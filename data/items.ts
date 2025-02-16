@@ -1581,7 +1581,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				}
 			}
 		},
-		onAnySwitchInPriority: -2,
+		onAnySwitchInPriority: -4,
 		onAnySwitchIn() {
 			if (!this.effectState.eject) return;
 			(this.effectState.target as Pokemon).useItem();
