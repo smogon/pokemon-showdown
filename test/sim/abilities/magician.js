@@ -43,6 +43,26 @@ describe('Magician', function () {
 		assert.holdsItem(battle.p2.active[0]);
 	});
 
+	it(`should steal the opponents item if the user uses U-turn`, function () {
+		battle = common.createBattle([[
+			{species: 'klefki', ability: 'magician', moves: ['uturn']},
+		], [
+			{species: 'wynaut', item: 'tr69', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].item, 'tr69');
+	});
+
+	it(`should steal the opponents item if the user uses Dragon Tail`, function () {
+		battle = common.createBattle([[
+			{species: 'klefki', ability: 'magician', moves: ['dragontail']},
+		], [
+			{species: 'wynaut', item: 'tr69', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].item, 'tr69');
+	});
+
 	it(`should not steal Weakness Policy on super-effective hits`, function () {
 		battle = common.createBattle([[
 			{species: 'klefki', ability: 'magician', moves: ['flashcannon']},
