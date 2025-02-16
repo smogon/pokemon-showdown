@@ -2179,8 +2179,8 @@ export class Battle {
 			this.add('-damage', target, target.getHealth);
 			break;
 		}
-		if (target.fainted) this.faint(target);
 		this.runEvent('TakeDamage', target, source, effect, damage);
+		if (target.fainted) this.faint(target);
 		return damage;
 	}
 
