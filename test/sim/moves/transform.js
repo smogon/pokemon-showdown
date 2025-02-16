@@ -163,9 +163,15 @@ describe('Transform', function () {
 		const abilityAnnounceIndex = log.indexOf('|-endability|');
 		assert.equal(abilityAnnounceIndex, -1, `It should not announce the user's ability was suppressed.`);
 	});
+});
+
+describe('Transform [Gen 9]', function () {
+	afterEach(function () {
+		battle.destroy();
+	});
 
 	it("should copy the target's old types, not the Tera Type", function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire"},
 		], [
 			{species: "Ampharos", ability: "static", moves: ['sleeptalk'], teraType: "Dragon"},
@@ -177,7 +183,7 @@ describe('Transform', function () {
 	});
 
 	it("should keep the user's Tera Type when Terastallized", function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire"},
 		], [
 			{species: "Ampharos", ability: "static", moves: ['sleeptalk'], teraType: "Dragon"},
@@ -187,7 +193,7 @@ describe('Transform', function () {
 	});
 
 	it("should fail against Ogerpon when the user is Terastallized", function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire"},
 		], [
 			{species: "Ogerpon", ability: "defiant", moves: ['sleeptalk'], teraType: "Grass"},
@@ -197,7 +203,7 @@ describe('Transform', function () {
 	});
 
 	it("should fail against Ogerpon when Ogerpon is Terastallized", function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire"},
 		], [
 			{species: "Ogerpon", ability: "defiant", moves: ['sleeptalk'], teraType: "Grass"},
@@ -207,7 +213,7 @@ describe('Transform', function () {
 	});
 
 	it("should prevent Pokemon transformed into Ogerpon from Terastallizing", function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire"},
 		], [
 			{species: "Ogerpon", ability: "defiant", moves: ['sleeptalk'], teraType: "Grass"},
@@ -217,7 +223,7 @@ describe('Transform', function () {
 	});
 
 	it("should not allow Pokemon transformed into Ogerpon to Terastallize later if they couldn't before transforming", function () {
-		battle = common.createBattle({formatid: 'gen9customgame@@@!teampreview,terastalclause'}, [[
+		battle = common.gen(9).createBattle({formatid: 'gen9customgame@@@!teampreview,terastalclause'}, [[
 			{species: "Ditto", ability: "limber", moves: ['transform'], teraType: "Fire"},
 			{species: "Shedinja", ability: "wonderguard", moves: ['transform'], teraType: "Fire"},
 		], [
@@ -231,7 +237,7 @@ describe('Transform', function () {
 	});
 
 	it(`should not work if the user is Tera Stellar`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'Ditto', ability: 'limber', moves: ['transform'], teraType: 'Stellar'},
 		], [
 			{species: 'Wynaut', moves: ['sleeptalk']},

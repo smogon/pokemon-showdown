@@ -11,7 +11,7 @@ describe(`Tera Starstorm`, function () {
 	});
 
 	it(`should be a physical attack when terastallized with higher attack stat and the user is Terapagos-Stellar`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'terapagos', evs: {atk: 252}, ability: 'terashift', moves: ['terastarstorm'], teraType: 'Stellar'},
 		], [
 			{species: 'regirock', moves: ['sleeptalk']},
@@ -22,7 +22,7 @@ describe(`Tera Starstorm`, function () {
 	});
 
 	it(`should be a spread move when the user is Terapagos-Stellar`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(9).createBattle({gameType: 'doubles'}, [[
 			{species: 'terapagos', ability: 'terashift', moves: ['terastarstorm'], teraType: 'Stellar'},
 			{species: 'pichu', moves: ['sleeptalk']},
 		], [
@@ -38,7 +38,7 @@ describe(`Tera Starstorm`, function () {
 	});
 
 	it(`should only get its unique properties while the user is Terapagos-Stellar`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(9).createBattle({gameType: 'doubles'}, [[
 			{species: 'incineroar', moves: ['terastarstorm'], teraType: 'Stellar'},
 			{species: 'pichu', moves: ['sleeptalk']},
 		], [
