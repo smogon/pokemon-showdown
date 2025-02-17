@@ -1554,7 +1554,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.switchFlag === true) return;
 				}
-				target.switchFlag = true;
+				target.switchFlag = true; // Symbiosis relies on this being set here
 				if (target.useItem()) {
 					source.switchFlag = false;
 				} else {
@@ -1587,7 +1587,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 					for (const pokemon of this.getAllActive()) {
 						if (pokemon.switchFlag === true) return;
 					}
-					if (target.useItem()) target.switchFlag = true;
+					target.switchFlag = true; // Symbiosis relies on this being set here
+					if (!target.useItem()) target.switchFlag = false;
 				}
 			}
 		},

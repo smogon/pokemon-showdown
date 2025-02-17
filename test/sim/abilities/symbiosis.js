@@ -63,7 +63,7 @@ describe('Symbiosis', function () {
 		assert.equal(battle.p1.active[1].item, 'leftovers');
 	});
 
-	it.skip(`should not trigger on an ally using their Eject Pack`, function () {
+	it(`should not trigger on an ally using their Eject Pack`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'oranguru', ability: 'symbiosis', item: 'leftovers', moves: ['sleeptalk']},
 			{species: 'wynaut', item: 'ejectpack', moves: ['superpower']},
