@@ -166,7 +166,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
 				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
@@ -281,7 +281,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
 				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
@@ -453,7 +453,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				}
 			}
 		},
-		onTakeDamage(damage, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				if (this.runEvent('TryHeal', pokemon, null, this.effect, 20) && pokemon.useItem()) {
 					this.heal(20);
@@ -1864,7 +1864,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
 				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
@@ -2188,7 +2188,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
 				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
@@ -2650,7 +2650,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
 				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
@@ -2998,7 +2998,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
 				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
@@ -3139,7 +3139,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
 				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
@@ -3441,7 +3441,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
 				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
@@ -4103,7 +4103,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
@@ -4249,7 +4249,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
 				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
@@ -5165,7 +5165,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
 				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
@@ -5396,7 +5396,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 2) {
 				pokemon.eatItem();
 			}
@@ -5625,7 +5625,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
 				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
@@ -7328,7 +7328,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.eatItem();
 			}
 		},
-		onTakeDamage(damage, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
 				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
