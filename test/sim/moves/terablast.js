@@ -45,8 +45,7 @@ describe('Tera Blast', function () {
 		assert.equal(battle.p1.pokemon[0].lastMove.category, 'Special');
 	});
 
-	// Skipped until https://github.com/smogon/pokemon-showdown/issues/9381 is fixed.
-	it.skip(`should be a special attack when terastallized even if target ignores stat changes`, function () {
+	it(`should be a physical attack when terastallized with higher attack stat even if target ignores stat changes`, function () {
 		const battle = common.createBattle([[
 			// Regidrago has equal base attack and special attack stats.
 			{species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast', 'dragondance']},
