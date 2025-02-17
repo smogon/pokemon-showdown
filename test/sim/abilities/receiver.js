@@ -10,7 +10,7 @@ describe(`Receiver`, function () {
 		battle.destroy();
 	});
 
-	it.skip(`should gain a boost immediately if taking over a KO boost Ability`, function () {
+	it(`should gain a boost immediately if taking over a KO boost Ability`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'whimsicott', ability: 'soulheart', moves: ['memento']},
 			{species: 'passimian', ability: 'receiver', moves: ['sleeptalk']},
@@ -23,7 +23,7 @@ describe(`Receiver`, function () {
 		assert.statStage(passimian, 'spa', 1);
 	});
 
-	it.skip(`should do weird stuff with multiple Soul-Heart and multiple Receiver`, function () {
+	it(`should do weird stuff with multiple Soul-Heart and multiple Receiver`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Passimian', ability: 'receiver', moves: ['earthquake']},
 			{species: 'Magearna', ability: 'soulheart', level: 1, moves: ['sleeptalk']},
