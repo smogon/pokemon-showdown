@@ -4908,8 +4908,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (!move || target.volatiles['dynamax']) return false;
 
 				if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
-				const moveIndex = target.moves.indexOf(move.id);
-				if (move.isZ || move.flags['failencore'] || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
+				const moveSlot = target.getMoveData(move.id);
+				if (move.isZ || move.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
 					// it failed
 					return false;
 				}
@@ -4924,8 +4924,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onResidualOrder: 16,
 			onResidual(target) {
-				if (!target.moves.includes(this.effectState.move) ||
-					target.moveSlots[target.moves.indexOf(this.effectState.move)].pp <= 0) {
+				const moveSlot = target.getMoveData(this.effectState.move);
+				if (!moveSlot || moveSlot.pp <= 0) {
 					// early termination if you run out of PP
 					target.removeVolatile('encore');
 				}
@@ -9995,12 +9995,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(target, source) {
 			if (!target.lastMove || target.volatiles['dynamax']) return false;
 			const lastMove = target.lastMove;
-			const moveIndex = target.moves.indexOf(lastMove.id);
+			const moveSlot = target.getMoveData(lastMove.id);
 			if (
 				lastMove.flags['failinstruct'] || lastMove.isZ || lastMove.isMax ||
 				lastMove.flags['charge'] || lastMove.flags['recharge'] ||
 				target.volatiles['beakblast'] || target.volatiles['focuspunch'] || target.volatiles['shelltrap'] ||
-				(target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)
+				(moveSlot && moveSlot.pp <= 0)
 			) {
 				return false;
 			}

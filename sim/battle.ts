@@ -2604,10 +2604,10 @@ export class Battle {
 				const behemothMove: {[k: string]: string} = {
 					'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 				};
-				const ironHead = pokemon.baseMoves.indexOf('ironhead');
-				if (ironHead >= 0) {
+				const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
+				if (ironHeadIndex >= 0) {
 					const move = this.dex.moves.get(behemothMove[rawSpecies.name]);
-					pokemon.baseMoveSlots[ironHead] = {
+					pokemon.baseMoveSlots[ironHeadIndex] = {
 						move: move.name,
 						id: move.id,
 						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
@@ -3141,9 +3141,9 @@ export class Battle {
 					const crowned: {[k: string]: string} = {
 						'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 					};
-					const ironHead = set.moves.map(toID).indexOf('ironhead' as ID);
-					if (ironHead >= 0) {
-						newSet.moves[ironHead] = crowned[newSet.species];
+					const ironHeadIndex = set.moves.map(toID).indexOf('ironhead' as ID);
+					if (ironHeadIndex >= 0) {
+						newSet.moves[ironHeadIndex] = crowned[newSet.species];
 					}
 				}
 				return newSet;
