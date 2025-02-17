@@ -4143,7 +4143,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	shielddust: {
 		onModifySecondaries(secondaries) {
 			this.debug('Shield Dust prevent secondary');
-			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+			return secondaries.filter(effect => !!effect.self);
 		},
 		flags: {breakable: 1},
 		name: "Shield Dust",

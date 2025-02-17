@@ -1576,7 +1576,7 @@ export class BattleActions {
 	 * Normal PS return value rules apply:
 	 * undefined = success, null = silent failure, false = loud failure
 	 */
-	 getDamage(
+	getDamage(
 		source: Pokemon, target: Pokemon, move: string | number | ActiveMove,
 		suppressMessages = false
 	): number | undefined | null | false {
@@ -1599,8 +1599,14 @@ export class BattleActions {
 			}
 		}
 
+		const moveHit = target.getMoveHitData(move);
+		moveHit.successful = true;
 		if (move.ohko) return target.maxhp;
-		if (move.damageCallback) return move.damageCallback.call(this.battle, source, target);
+		if (move.damageCallback) {
+			const damageCallabackResult = move.damageCallback.call(this.battle, source, target);
+			moveHit.successful = damageCallabackResult !== false && damageCallabackResult !== null;
+			return damageCallabackResult;
+		}
 		if (move.damage === 'level') {
 			return source.level;
 		} else if (move.damage) {
@@ -1630,7 +1636,6 @@ export class BattleActions {
 			}
 		}
 
-		const moveHit = target.getMoveHitData(move);
 		moveHit.crit = move.willCrit || false;
 		if (move.willCrit === undefined) {
 			if (critRatio) {
