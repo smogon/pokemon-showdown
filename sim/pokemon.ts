@@ -242,6 +242,7 @@ export class Pokemon {
 	activeMoveActions: number;
 	previouslySwitchedIn: number;
 	truantTurn: boolean;
+	bondTriggered: boolean;
 	// Gen 9 only
 	swordBoost: boolean;
 	shieldBoost: boolean;
@@ -454,6 +455,7 @@ export class Pokemon {
 		this.activeMoveActions = 0;
 		this.previouslySwitchedIn = 0;
 		this.truantTurn = false;
+		this.bondTriggered = false;
 		this.swordBoost = false;
 		this.shieldBoost = false;
 		this.syrupTriggered = false;
@@ -1386,7 +1388,6 @@ export class Pokemon {
 		const apparentSpecies =
 			this.illusion ? this.illusion.species.name : species.baseSpecies;
 		if (isPermanent) {
-			if (!this.transformed) this.regressionForme = true;
 			this.baseSpecies = rawSpecies;
 			this.details = this.getUpdatedDetails();
 			let details = (this.illusion || this).details;
@@ -1395,6 +1396,7 @@ export class Pokemon {
 			if (!source) {
 				// Tera forme
 				// Ogerpon/Terapagos text goes here
+				this.regressionForme = true;
 			} else if (source.effectType === 'Item') {
 				this.canTerastallize = null; // National Dex behavior
 				if (source.zMove) {
@@ -1411,6 +1413,7 @@ export class Pokemon {
 					this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
 					this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
 				}
+				this.regressionForme = true;
 			} else if (source.effectType === 'Status') {
 				// Shaymin-Sky -> Shaymin
 				this.battle.add('-formechange', this, species.name, message);
