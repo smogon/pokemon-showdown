@@ -58,6 +58,19 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
+	it(`should not request switch-out on self-hit confusion`, function () {
+		battle = common.createBattle({forceRandomChance: true}, [[
+			{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], ivs: EMPTY_IVS},
+			{species: "Clefable", ability: 'unaware', moves: ['metronome']},
+		], [
+			{species: "Crobat", ability: 'noguard', moves: ['confuseray']},
+		]]);
+		const golisopod = battle.p1.active[0];
+		golisopod.hp = Math.floor(golisopod.maxhp / 2) + 1;
+		battle.makeChoices();
+		assert.equal(battle.requestState, 'move');
+	});
+
 	it(`should not request switch-out if attacked and healed by berry`, function () {
 		battle = common.createBattle([[
 			{species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'], item: 'sitrusberry', ivs: EMPTY_IVS},
@@ -95,6 +108,19 @@ describe(`Emergency Exit`, function () {
 		assert(battle.p1.activeRequest.forceSwitch);
 		assert.fainted(battle.p2.active[0]);
 		assert(!battle.p2.activeRequest.forceSwitch);
+	});
+
+	it(`should request switch-out both Emergency Exit Pokemon`, function () {
+		battle = common.createBattle({forceRandomChance: true}, [[
+			{species: "Golisopod", item: 'blacksludge', ability: 'emergencyexit', moves: ['superfang']},
+			{species: "Wynaut", moves: ['sleeptalk']},
+		], [
+			{species: "Golisopod", item: 'blacksludge', ability: 'emergencyexit', moves: ['superfang']},
+			{species: "Wynaut", moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		assert(battle.p1.activeRequest.forceSwitch);
+		assert(battle.p2.activeRequest.forceSwitch);
 	});
 
 	it(`should request switch-out after taking hazard damage`, function () {
@@ -321,7 +347,7 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'move');
 	});
 
-	it.skip(`should request switchout between hazards`, function () {
+	it(`should request switchout between hazards`, function () {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['sleeptalk', 'uturn']},
 			{species: 'volcarona', ability: 'emergencyexit', evs: {hp: 4}, moves: ['sleeptalk']},
@@ -336,7 +362,26 @@ describe(`Emergency Exit`, function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it.skip(`should request switchout between residual damage`, function () {
+	it.skip(`should ignore Intimidate if it switches out during switch event`, function () {
+		battle = common.createBattle([[
+			{species: 'wynaut', level: 1, moves: ['sleeptalk', 'uturn']},
+			{species: 'volcarona', ability: 'emergencyexit', evs: {hp: 4}, moves: ['sleeptalk']},
+			{species: 'manaphy', moves: ['sleeptalk']},
+		], [
+			{species: 'landorus', moves: ['stealthrock', 'spikes', 'explosion']},
+			{species: 'incineroar', ability: 'intimidate', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('auto', 'move spikes');
+		battle.makeChoices('auto', 'move explosion');
+		battle.makeChoices();
+		assert(battle.log.includes('|-ability|p2a: Incineroar|Intimidate|boost'));
+		const volcarona = battle.p1.active[0];
+		assert.equal(volcarona.boosts['atk'], 0, 'Emergency Exit should ignore Intimidate.');
+		assert.equal(battle.requestState, 'switch');
+	});
+
+	it(`should request switchout between residual damage`, function () {
 		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', level: 1, item: 'Eject Button', moves: ['rockthrow', 'sleeptalk'], gigantamax: true},
 			{species: 'Wynaut', level: 1, moves: ['sleeptalk', 'grasspledge']},
