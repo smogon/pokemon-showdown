@@ -2380,7 +2380,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	magicbounce: {
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
-			if (target === source || move.hasBounced || !move.flags['reflectable']) {
+			if (target === source || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) {
 				return;
 			}
 			const newMove = this.dex.getActiveMove(move.id);
@@ -2390,7 +2390,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
-			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) {
 				return;
 			}
 			const newMove = this.dex.getActiveMove(move.id);
@@ -3145,17 +3145,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	perishbody: {
 		onDamagingHit(damage, target, source, move) {
-			if (!this.checkMoveMakesContact(move, source, target)) return;
-
-			let announced = false;
-			for (const pokemon of [target, source]) {
-				if (pokemon.volatiles['perishsong']) continue;
-				if (!announced) {
-					this.add('-ability', target, 'Perish Body');
-					announced = true;
-				}
-				pokemon.addVolatile('perishsong');
-			}
+			if (!this.checkMoveMakesContact(move, source, target) || source.volatiles['perishsong']) return;
+			this.add('-ability', target, 'Perish Body');
+			source.addVolatile('perishsong');
+			target.addVolatile('perishsong');
 		},
 		flags: {},
 		name: "Perish Body",
@@ -4867,8 +4860,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	terashell: {
 		// effectiveness implemented in sim/pokemon.ts:Pokemon#runEffectiveness
+		// needs two checks to reset between regular moves and future attacks
+		onAnyBeforeMove() {
+			delete this.effectState.resisted;
+		},
 		onAnyAfterMove() {
-			this.effectState.resisted = false;
+			delete this.effectState.resisted;
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, breakable: 1},
 		name: "Tera Shell",

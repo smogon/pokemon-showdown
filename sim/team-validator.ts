@@ -515,8 +515,11 @@ export class TeamValidator {
 				tierSpecies = outOfBattleSpecies;
 			}
 		}
-		if (ability.id === 'owntempo' && species.id === 'rockruff') {
-			tierSpecies = outOfBattleSpecies = dex.species.get('rockruffdusk');
+		if (ability.id === 'owntempo' && toID(species.baseSpecies) === 'rockruff') {
+			outOfBattleSpecies = dex.species.get('rockruffdusk');
+			if (ruleTable.has('obtainableformes')) {
+				tierSpecies = outOfBattleSpecies;
+			}
 		}
 
 		if (ruleTable.has('obtainableformes')) {
@@ -767,6 +770,10 @@ export class TeamValidator {
 		nature = dex.natures.get(set.nature);
 		problem = this.checkNature(set, nature, setHas);
 		if (problem) problems.push(problem);
+
+		if (set.shiny && dex.gen === 1) {
+			set.shiny = false;
+		}
 
 		if (set.moves && Array.isArray(set.moves)) {
 			set.moves = set.moves.filter(val => val);
@@ -1666,6 +1673,9 @@ export class TeamValidator {
 		if (species.baseSpecies === "Greninja" && toID(set.ability) === 'battlebond') {
 			set.species = "Greninja-Bond";
 		}
+		if (species.baseSpecies === "Rockruff" && toID(set.ability) === 'owntempo') {
+			set.species = "Rockruff-Dusk";
+		}
 
 		if (species.baseSpecies === "Unown" && dex.gen === 2) {
 			let resultBinary = '';
@@ -1713,6 +1723,9 @@ export class TeamValidator {
 		}
 		if (tierSpecies.baseSpecies === 'Greninja' && toID(set.ability) === 'battlebond') {
 			setHas['pokemon:greninjabond'] = true;
+		}
+		if (tierSpecies.baseSpecies === 'Rockruff' && toID(set.ability) === 'owntempo') {
+			setHas['pokemon:rockruffdusk'] = true;
 		}
 
 		const tier = tierSpecies.tier === '(PU)' ? 'ZU' : tierSpecies.tier === '(NU)' ? 'PU' : tierSpecies.tier;
@@ -2522,7 +2535,7 @@ export class TeamValidator {
 
 				const learnedGen = parseInt(learned.charAt(0));
 				if (formeCantInherit && (learned.charAt(1) !== 'E' || learnedGen < 9)) continue;
-				if (setSources.learnsetDomain && !setSources.learnsetDomain.includes(learnedGen + species.id) &&
+				if (setSources.learnsetDomain && !setSources.learnsetDomain.includes(learnedGen + toID(species.baseSpecies)) &&
 					(learned.charAt(1) !== 'E' || learnedGen < 8)
 				) {
 					if (!cantLearnReason) {
@@ -2685,10 +2698,10 @@ export class TeamValidator {
 					}
 					moveSources.add(learned);
 				}
-				if (learned.charAt(1) === 'E' && learnedGen >= 8 && !canLearnSpecies.includes(baseSpecies.id)) {
-					canLearnSpecies.push(baseSpecies.id);
+				if (learned.charAt(1) === 'E' && learnedGen >= 8 && !canLearnSpecies.includes(toID(baseSpecies.baseSpecies))) {
+					canLearnSpecies.push(toID(baseSpecies.baseSpecies));
 				}
-				if (!canLearnSpecies.includes(species.id)) canLearnSpecies.push(species.id);
+				if (!canLearnSpecies.includes(toID(species.baseSpecies))) canLearnSpecies.push(toID(species.baseSpecies));
 				minLearnGen = Math.min(minLearnGen, learnedGen);
 			}
 			if (ruleTable.has('mimicglitch') && species.gen < 5) {
@@ -2790,13 +2803,14 @@ export class TeamValidator {
 					 * Case 3: Prevo-only move - allow moves of the species from the min gen and later
 					 * Case 4: Evo-only move - allow moves of the species from the max gen and before
 					*/
-					if (canLearnSpecies.includes(nextSpecies.id) ||
+					const baseSpeciesID = toID(nextSpecies.baseSpecies);
+					if (canLearnSpecies.includes(baseSpeciesID) ||
 						(0 < speciesCount && speciesCount < canLearnSpecies.length) ||
 						(speciesCount === 0 && gen >= minLearnGen) ||
 						(speciesCount === canLearnSpecies.length && gen <= moveSources.sourcesBefore)
 					) {
 						if (!moveSources.learnsetDomain) moveSources.learnsetDomain = [];
-						moveSources.learnsetDomain.push(gen + nextSpecies.id);
+						moveSources.learnsetDomain.push(gen + baseSpeciesID);
 					}
 				}
 				if (canLearnSpecies.includes(nextSpecies.id)) speciesCount++;

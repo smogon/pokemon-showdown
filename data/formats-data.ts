@@ -4878,7 +4878,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "LC",
 	},
 	polteageist: {
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
@@ -5283,7 +5283,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "LC",
 	},
 	cetitan: {
-		tier: "PUBL",
+		tier: "NUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
@@ -5442,7 +5442,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	roaringmoon: {
 		tier: "OU",
 		doublesTier: "DOU",
-		natDexTier: "(OU)",
+		natDexTier: "OU",
 	},
 	irontreads: {
 		tier: "OU",
@@ -5953,6 +5953,14 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	cresceidon: {
 		isNonstandard: "CAP",
 		tier: "CAP",
+	},
+	chuggon: {
+		isNonstandard: "CAP",
+		tier: "CAP LC",
+	},
+	draggalong: {
+		isNonstandard: "CAP",
+		tier: "CAP NFE",
 	},
 	chuggalong: {
 		isNonstandard: "CAP",
