@@ -2332,7 +2332,7 @@ export class TeamValidator {
 			if (set.shiny && pokemonGoSources.includes('noshiny')) {
 				problems.push(`${name} is not obtainable from Pokemon GO.`);
 			} else {
-				if (pokemonGoSources.includes('wild') && !((set.shiny && pokemonGoSources.includes('nowildshiny')))) {
+				if (pokemonGoSources.includes('wild')) {
 					minLevel = 1;
 					minIVs = 0;
 				}
@@ -2360,7 +2360,12 @@ export class TeamValidator {
 					minIVs = Math.min(minIVs, 0);
 				}
 				if (pokemonGoSources.includes('research')) {
-					minLevel = Math.min(minLevel, 15);
+					if (species.id === 'cresselia') {
+						// For some reason, Cresselia from research has a possible level 10 source
+						minLevel = Math.min(minLevel, 10);
+					} else {
+						minLevel = Math.min(minLevel, 15);
+					}
 					minIVs = Math.min(minIVs, 10);
 				}
 				if (pokemonGoSources.includes('giovanni') && !set.shiny) {
