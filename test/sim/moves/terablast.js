@@ -5,7 +5,7 @@ const common = require('./../../common');
 
 describe('Tera Blast', function () {
 	it(`should be a special attack when base stats are tied`, function () {
-		const battle = common.createBattle([[
+		const battle = common.gen(9).createBattle([[
 			// Regidrago has equal base attack and special attack stats.
 			{species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast']},
 		], [
@@ -17,7 +17,7 @@ describe('Tera Blast', function () {
 	});
 
 	it(`should be a physical attack when terastallized with higher attack stat`, function () {
-		const battle = common.createBattle([[
+		const battle = common.gen(9).createBattle([[
 			// Regidrago has equal base attack and special attack stats.
 			{species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast', 'dragondance']},
 		], [
@@ -47,7 +47,7 @@ describe('Tera Blast', function () {
 
 	// Skipped until https://github.com/smogon/pokemon-showdown/issues/9381 is fixed.
 	it.skip(`should be a special attack when terastallized even if target ignores stat changes`, function () {
-		const battle = common.createBattle([[
+		const battle = common.gen(9).createBattle([[
 			// Regidrago has equal base attack and special attack stats.
 			{species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast', 'dragondance']},
 		], [

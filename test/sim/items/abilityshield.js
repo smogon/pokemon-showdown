@@ -212,7 +212,7 @@ describe('Ability Shield', function () {
 	});
 
 	it(`should not prevent forme changes from changing the holder's ability`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'ogerpon', ability: 'defiant', item: 'abilityshield', moves: ['sleeptalk']},
 		], [
 			{species: 'scorbunny', ability: 'libero', moves: ['agility']},
