@@ -1046,8 +1046,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	swallow: {
 		inherit: true,
 		onHit(pokemon) {
+			const layers = pokemon.volatiles['stockpile']?.layers || 1;
 			const healAmount = [0.25, 0.5, 1];
-			const success = !!this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
+			const success = !!this.heal(this.modify(pokemon.maxhp, healAmount[layers - 1]));
 			if (!success) this.add('-fail', pokemon, 'heal');
 			pokemon.removeVolatile('stockpile');
 			return success || null;
