@@ -2524,7 +2524,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 					type = 'Fire';
 				} else if (['sandstorm', 'deserteddunes'].includes(currentWeather) && !target.hasType('Rock')) {
 					type = 'Rock';
-				} else if (['hail', 'snow'].includes(currentWeather) && !target.hasType('Ice')) {
+				} else if (['hail', 'snowscape'].includes(currentWeather) && !target.hasType('Ice')) {
 					type = 'Ice';
 				} else {
 					// do nothing if it's not the 4 primary weathers...unless there are more?
@@ -2783,7 +2783,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		innateName: "Snow Warning",
 		onStart(source) {
 			if (source.illusion) return;
-			this.field.setWeather('snow', source, this.dex.abilities.get('snowwarning'));
+			this.field.setWeather('snowscape', source, this.dex.abilities.get('snowwarning'));
 		},
 	},
 	yveltalnl: {
