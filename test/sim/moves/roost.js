@@ -86,7 +86,7 @@ describe('Roost', function () {
 	});
 
 	it('should not remove Flying type during Terastallization', function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: "Dudunsparce", ability: "runaway", moves: ['sleeptalk', 'roost'], teraType: "Flying"},
 		], [
 			{species: "Chansey", ability: "naturalcure", moves: ['earthquake']},

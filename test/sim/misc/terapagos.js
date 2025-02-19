@@ -11,7 +11,7 @@ describe(`Terapagos`, function () {
 	});
 
 	it.skip(`should accept the Terastallization choice, but not Terastallize while Transformed into Terapagos-Terastal`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'ditto', ability: 'imposter', moves: ['sleeptalk']},
 		], [
 			{species: 'terapagos', ability: 'terashift', moves: ['sleeptalk'], teraType: 'Stellar'},
@@ -25,7 +25,7 @@ describe(`Terapagos`, function () {
 	});
 
 	it(`[Hackmons] should not cause Terapagos-Terastal to become Terapagos-Stellar if the user is Transformed`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'terapagos', ability: 'terashift', moves: ['transform'], teraType: 'Stellar'},
 			{species: 'pikachu', moves: ['sleeptalk']},
 		], [

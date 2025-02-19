@@ -76,7 +76,7 @@ describe(`Fainted forme regression`, function () {
 	});
 
 	it("should revert Terastallized Morpeko-Hangry to base Morpeko", function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'Morpeko', ability: 'hungerswitch', moves: ['memento', 'sleeptalk']},
 			{species: 'darkrai', moves: ['darkpulse']},
 		], [
@@ -107,7 +107,7 @@ describe(`Fainted forme regression`, function () {
 	});
 
 	it(`should revert Ogerpon-Tera to base Ogerpon`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{
 				species: 'ogerponwellspring', ability: 'waterabsorb', item: 'wellspring mask',
 				moves: ['memento'], teraType: 'Water',
@@ -136,7 +136,7 @@ describe(`Fainted forme regression`, function () {
 	});
 
 	it(`should revert Terapagos-Stellar to base Terapagos`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'terapagos', ability: 'terashift', moves: ['memento'], teraType: 'Stellar'},
 			{species: 'darkrai', moves: ['darkpulse']},
 		], [

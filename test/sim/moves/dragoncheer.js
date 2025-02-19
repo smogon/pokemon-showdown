@@ -67,7 +67,7 @@ describe('Dragon Cheer', function () {
 	});
 
 	it('should not increase ratio if affected Pokemon turns into a Dragon Type after Dragon Cheer', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
+		battle = common.gen(9).createBattle({gameType: 'doubles'}, [[
 			{species: 'dragapult', moves: ['dragoncheer', 'splash']},
 			{species: 'horsea', moves: ['bubble'], teraType: 'Dragon'},
 		], [

@@ -11,7 +11,7 @@ describe("Tera Stellar", function () {
 	});
 
 	it(`should increase the damage of non-STAB moves by 1.2x on the first use of that move type`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'Wynaut', ability: 'noguard', moves: ['surf', 'hydropump', 'extrasensory', 'hyperspacehole'], teraType: 'Stellar'},
 		], [
 			{species: 'Happiny', ability: 'shellarmor', moves: ['softboiled']},
@@ -45,7 +45,7 @@ describe("Tera Stellar", function () {
 	});
 
 	it(`should not have the once-per-type restriction when used by Terapagos`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'Terapagos', ability: 'terashift', moves: ['surf', 'hypervoice'], item: 'laggingtail', teraType: 'Stellar'},
 		], [
 			{species: 'Chansey', ability: 'shellarmor', moves: ['softboiled']},
@@ -71,7 +71,7 @@ describe("Tera Stellar", function () {
 	});
 
 	it(`should not modify the Pokemon's base type for defensive purposes`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'Krookodile', moves: ['sleeptalk'], teraType: 'Stellar'},
 		], [
 			{species: 'Tornadus', ability: 'prankster', moves: ['psychic', 'thunderwave', 'leer']},
@@ -92,7 +92,7 @@ describe("Tera Stellar", function () {
 	});
 
 	it(`should only be super-effective against opposing Terastallized targets`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'Krookodile', moves: ['terablast'], teraType: 'Stellar'},
 		], [
 			{species: 'Steelix', item: 'weaknesspolicy', moves: ['sleeptalk'], teraType: 'Stellar'},
@@ -104,7 +104,7 @@ describe("Tera Stellar", function () {
 	});
 
 	it(`should increase the user's stats with Tera Blast if the user has Contrary`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'inkay', ability: 'contrary', moves: ['terablast'], teraType: 'Stellar'},
 		], [
 			{species: 'chansey', moves: ['sleeptalk']},
@@ -118,7 +118,7 @@ describe("Tera Stellar", function () {
 	});
 
 	it(`should not work with Adapatability`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'Wynaut', ability: 'adaptability', moves: ['hyperspacehole', 'terablast'], teraType: 'Stellar'},
 		], [
 			{species: 'Happiny', ability: 'shellarmor', moves: ['softboiled']},
@@ -144,7 +144,7 @@ describe("Tera Stellar", function () {
 	});
 
 	it(`should increase the damage of all hits of a multi-hit move`, function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'Wynaut', moves: ['surgingstrikes', 'flipturn'], teraType: 'Stellar'},
 		], [
 			{species: 'Blissey', moves: ['softboiled']},

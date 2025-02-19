@@ -41,7 +41,7 @@ describe("Hunger Switch", function () {
 	});
 
 	it("should stop activating when Morpeko Terastallizes", function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'Morpeko', ability: 'hungerswitch', moves: ['rest']},
 		], [
 			{species: 'Magikarp', ability: 'Swift Swim', moves: ['splash']},
@@ -54,7 +54,7 @@ describe("Hunger Switch", function () {
 	});
 
 	it("should maintain its form when Terastallized, even when switched out", function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: 'Morpeko', ability: 'hungerswitch', moves: ['rest']},
 			{species: 'Furret', ability: 'Run Away', moves: ['sleeptalk']},
 		], [
