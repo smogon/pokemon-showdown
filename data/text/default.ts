@@ -290,7 +290,7 @@ export const DefaultText: {[id: IDEntry]: DefaultText} = {
 		upkeep: "  (The hail is crashing down.)",
 		damage: "  [POKEMON] is buffeted by the hail!",
 	},
-	snow: {
+	snowscape: {
 		weatherName: "Snow",
 		start: "  It started to snow!",
 		end: "  The snow stopped.",
