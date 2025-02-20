@@ -113,7 +113,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			case 'raindance':
 			case 'primordialsea':
 			case 'hail':
-			case 'snow':
+			case 'snowscape':
 				move.type = 'Water';
 				break;
 			case 'sandstorm':
