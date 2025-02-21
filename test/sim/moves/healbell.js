@@ -25,6 +25,32 @@ describe('Heal Bell', function () {
 		assert.equal(battle.p1.pokemon[1].status, '');
 	});
 
+	it(`should not heal the major status conditions of a Pokemon with Soundproof`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Kommo-o', ability: 'soundproof', moves: ['sleeptalk']},
+			{species: 'Chansey', moves: ['sleeptalk', 'healbell']},
+		], [
+			{species: 'Nidoking', moves: ['sleeptalk', 'toxic']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('auto', 'move toxic 1, move sleeptalk');
+		battle.makeChoices('move sleeptalk, move healbell', 'auto');
+		assert.equal(battle.p1.pokemon[0].status, 'tox');
+	});
+
+	it(`with Mold Breaker should heal the major status conditions of a Pokemon with Soundproof`, function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'Kommo-o', ability: 'soundproof', moves: ['sleeptalk']},
+			{species: 'Excadrill', ability: 'moldbreaker', moves: ['healbell']},
+		], [
+			{species: 'Nidoking', moves: ['sleeptalk', 'toxic']},
+			{species: 'Wynaut', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices('auto', 'move toxic 1, move sleeptalk');
+		battle.makeChoices('move sleeptalk, move healbell', 'auto');
+		assert.equal(battle.p1.pokemon[0].status, '');
+	});
+
 	it(`in a Multi Battle, should heal the major status conditions of the ally's team`, function () {
 		battle = common.createBattle({gameType: 'multi'}, [[
 			{species: 'Machamp', ability: 'noguard', moves: ['poisongas']},
