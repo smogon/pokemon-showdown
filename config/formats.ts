@@ -3119,7 +3119,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen3',
 		ruleset: ['[Gen 3] OU', '!One Boost Passer Clause'],
 		banlist: [
-			'OU', 'Smeargle + Ingrain', 'Sand Veil', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Flail', 'Reversal', 'Swagger',
+			'OU', 'Smeargle + Ingrain', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Flail', 'Reversal',
 			'Baton Pass + Speed Boost', 'Baton Pass + Agility', 'Baton Pass + Dragon Dance',
 		],
 	},
