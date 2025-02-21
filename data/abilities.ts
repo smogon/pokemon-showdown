@@ -153,10 +153,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onTryEatItem(item) {
-			const healingItems = [
-				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice',
-			];
-			if (healingItems.includes(item.id)) {
+			if (item.isBerry || item.id === 'berryjuice') {
 				return this.effectState.checkedAngerShell;
 			}
 			return true;
@@ -169,6 +166,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
 				this.boost({atk: 1, spa: 1, spe: 1, def: -1, spd: -1}, target, target);
+				const item = target.getItem();
+				if (item.isBerry || item.id === 'berryjuice') this.runEvent('AfterDamage', target, null, null, damage);
 			}
 		},
 		flags: {},
@@ -413,10 +412,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onTryEatItem(item) {
-			const healingItems = [
-				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice',
-			];
-			if (healingItems.includes(item.id)) {
+			if (item.isBerry || item.id === 'berryjuice') {
 				return this.effectState.checkedBerserk;
 			}
 			return true;
@@ -429,6 +425,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const damage = move.multihit && !move.smartTarget ? move.totalDamage : lastAttackedBy.damage;
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
 				this.boost({spa: 1}, target, target);
+				const item = target.getItem();
+				if (item.isBerry || item.id === 'berryjuice') this.runEvent('AfterDamage', target, null, null, damage);
 			}
 		},
 		flags: {},
@@ -1214,11 +1212,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 			for (const side of this.sides) {
 				for (const active of side.active) {
-					active.switchFlag = false;
+					if (!active.abilityState.emergencyExiting) {
+						active.switchFlag = false;
+					}
 				}
 			}
 			target.switchFlag = true;
+			this.effectState.emergencyExiting = true;
 			this.add('-activate', target, 'ability: Emergency Exit');
+		},
+		onEnd() {
+			delete this.effectState.emergencyExiting;
 		},
 		flags: {},
 		name: "Emergency Exit",
@@ -5429,11 +5433,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 			for (const side of this.sides) {
 				for (const active of side.active) {
-					active.switchFlag = false;
+					if (!active.abilityState.emergencyExiting) {
+						active.switchFlag = false;
+					}
 				}
 			}
 			target.switchFlag = true;
+			this.effectState.emergencyExiting = true;
 			this.add('-activate', target, 'ability: Wimp Out');
+		},
+		onEnd() {
+			delete this.effectState.emergencyExiting;
 		},
 		flags: {},
 		name: "Wimp Out",

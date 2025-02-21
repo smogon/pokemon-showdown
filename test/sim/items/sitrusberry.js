@@ -41,7 +41,7 @@ describe('Sitrus Berry', function () {
 		assert.equal(battle.p1.active[0].hp, 1);
 	});
 
-	it.skip(`should not heal 25% HP if a confusion self-hit would bring the user into Berry trigger range`, function () {
+	it(`should not heal 25% HP if a confusion self-hit would bring the user into Berry trigger range`, function () {
 		battle = common.createBattle([[
 			{species: 'Deoxys-Attack', item: 'sitrusberry', moves: ['sleeptalk']},
 		], [
@@ -53,7 +53,7 @@ describe('Sitrus Berry', function () {
 		assert.false.fullHP(holder);
 	});
 
-	it.skip(`should heal 25% HP immediately after any end-of-turn effect`, function () {
+	it(`should heal 25% HP immediately after any end-of-turn effect`, function () {
 		battle = common.createBattle([[
 			{species: 'mimikyu', moves: ['curse']},
 		], [
