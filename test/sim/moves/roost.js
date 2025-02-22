@@ -28,7 +28,7 @@ describe('Roost', function () {
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
-	it('should suppress user\'s current Flying type if succesful', function () {
+	it('should suppress user\'s current Flying type if successful', function () {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Aggron", item: 'leftovers', ability: 'sturdy', moves: ['mudslap', 'hiddenpowergrass']}]});
 		battle.setPlayer('p2', {team: [{species: "Aerodactyl", item: 'focussash', ability: 'wonderguard', moves: ['roost', 'doubleedge']}]});
