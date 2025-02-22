@@ -885,7 +885,9 @@ export class TeamValidator {
 						const underleveledSpecies = dex.species.get(isUnderleveled).baseSpecies;
 						// Can only be an FE species or in a three-stage line, the prevo
 						if (eventSpecies !== species.baseSpecies && eventSpecies !== underleveledSpecies) continue;
-					} else if (source !== '8V') continue;
+					} else if (source !== '8V') {
+						continue;
+					}
 				}
 				if (['2E', '3E'].includes(source.substr(0, 2)) && set.level < 5) continue;
 				skippedEggSource = false;
