@@ -53,6 +53,9 @@ function isCommon(message: string) {
 	return ['gg', 'wp', 'ggwp', 'gl', 'hf', 'glhf', 'hello'].includes(message);
 }
 
+const MAX_RETRIES = 3;
+const RETRY_DELAY_BASE = 500; // in milliseconds
+
 let throttleTime: number | null = null;
 export const limiter = new Limiter(800);
 export const PM = new ProcessManager.QueryProcessManager<string, Record<string, number> | null>(module, async text => {
@@ -68,38 +71,50 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 		requestedAttributes: ATTRIBUTES,
 		comment: {text},
 	};
-	try {
-		const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post({
-			query: {
-				key: Config.perspectiveKey,
-			},
-			body: JSON.stringify(requestData),
-			headers: {
-				'Content-Type': "application/json",
-			},
-			timeout: 10 * 1000, // 10s
-		});
-		if (!raw) return null;
-		const data = JSON.parse(raw);
-		if (data.error) throw new Error(data.message);
-		const result: {[k: string]: number} = {};
-		for (const k in data.attributeScores) {
-			const score = data.attributeScores[k];
-			result[k] = score.summaryScore.value;
-		}
-		return result;
-	} catch (e: any) {
-		throttleTime = Date.now();
-		if (e.message.startsWith('Request timeout') || e.statusCode === 429) {
-			// request timeout: just ignore this. error on their end not ours.
-			// 429: too many requests, we already freeze for 10s above so. not much more we can do
+
+	for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+		try {
+			const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post({
+				query: {
+					key: Config.perspectiveKey,
+				},
+				body: JSON.stringify(requestData),
+				headers: {
+					'Content-Type': "application/json",
+				},
+				timeout: 10 * 1000, // 10s
+			});
+			if (!raw) return null;
+			const data = JSON.parse(raw);
+			if (data.error) throw new Error(data.message);
+			const result: { [k: string]: number } = {};
+			for (const k in data.attributeScores) {
+				const score = data.attributeScores[k];
+				result[k] = score.summaryScore.value;
+			}
+			return result;
+		} catch (e: any) {
+			if ((e.message.includes('Service Unavailable') || e.statusCode === 503) && attempt < MAX_RETRIES) {
+				const delay = RETRY_DELAY_BASE * Math.pow(2, attempt - 1);
+				await new Promise(res => setTimeout(res, delay));
+				continue; // Retry the request
+			}
+
+			throttleTime = Date.now();
+			if (e.message.startsWith('Request timeout') || e.statusCode === 429) {
+				// request timeout: just ignore this. error on their end not ours.
+				// 429: too many requests, we already freeze for 10s above so. not much more we can do
+				return null;
+			}
+			Monitor.crashlog(e, 'A Perspective API request', {request: JSON.stringify(requestData)});
 			return null;
 		}
-		Monitor.crashlog(e, 'A Perspective API request', {request: JSON.stringify(requestData)});
-		return null;
 	}
-}, PM_TIMEOUT);
 
+	// If all retries fail
+	throttleTime = Date.now();
+	return null;
+}, PM_TIMEOUT);
 
 // main module check necessary since this gets required in other non-parent processes sometimes
 // when that happens we do not want to take over or set up or anything
