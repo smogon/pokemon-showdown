@@ -22,7 +22,7 @@ describe('Psychic Noise', function () {
 		assert.cantMove(() => battle.choose('p1', 'move softboiled'));
 	});
 
-	it.skip(`should prevent the target's ally from healing it with Life Dew`, function () {
+	it(`should prevent the target's ally from healing it with Life Dew`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Wynaut', ability: 'battlearmor', moves: ['sleeptalk']},
 			{species: 'Blissey', ability: 'battlearmor', moves: ['lifedew']},

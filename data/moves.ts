@@ -8616,7 +8616,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-end', pokemon, 'move: Heal Block');
 			},
 			onTryHeal(damage, target, source, effect) {
-				if ((effect?.id === 'zpower') || this.effectState.isZ) return damage;
+				if (effect && (effect.id === 'zpower' || (effect as Move).isZ)) return damage;
+				if (target !== source && target.hp !== target.maxhp) {
+					this.attrLastMove('[still]');
+					// FIXME: Wrong error message, correct one not supported yet
+					this.add('cant', source, 'move: Heal Block', effect);
+					return null;
+				}
 				return false;
 			},
 			onRestart(target, source, effect) {
@@ -14063,13 +14069,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(target, source, move) {
 			if (source.isAlly(target)) {
 				if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
-					if (target.volatiles['healblock'] && target.hp !== target.maxhp) {
-						this.attrLastMove('[still]');
-						// Wrong error message, correct one not supported yet
-						this.add('cant', source, 'move: Heal Block', move);
-					} else {
-						this.add('-immune', target);
-					}
 					return this.NOT_FAIL;
 				}
 			}
