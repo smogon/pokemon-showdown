@@ -750,6 +750,22 @@ export class Battle {
 				}, `on${eventid}`));
 			}
 		}
+		return this.runHandlers(handlers, eventid, target, source, sourceEffect, relayVar, fastExit);
+	}
+
+	runHandlers(
+		handlers: EventListener[], eventid: string, target?: Pokemon | Pokemon[] | Side | Battle | null,
+		source?: string | Pokemon | false | null, sourceEffect?: Effect | null, relayVar?: any, fastExit?: boolean
+	) {
+		if (this.eventDepth >= 8) {
+			// oh fuck
+			this.add('message', 'STACK LIMIT EXCEEDED');
+			this.add('message', 'PLEASE REPORT IN BUG THREAD');
+			this.add('message', 'Event: ' + eventid);
+			this.add('message', 'Parent event: ' + this.event.id);
+			throw new Error("Stack overflow");
+		}
+		if (!target) target = this;
 
 		if (['Invulnerability', 'TryHit', 'DamagingHit', 'EntryHazard'].includes(eventid)) {
 			handlers.sort(Battle.compareLeftToRightOrder);
