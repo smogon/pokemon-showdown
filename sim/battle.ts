@@ -568,6 +568,11 @@ export class Battle {
 			// it's changed; call it off
 			return relayVar;
 		}
+		if (eventid === 'SwitchIn' && effect.effectType === 'Ability' && effect.flags['breakable'] &&
+			this.suppressingAbility(target as Pokemon)) {
+			this.debug(eventid + ' handler suppressed by Mold Breaker');
+			return relayVar;
+		}
 		if (eventid !== 'Start' && eventid !== 'TakeItem' && effect.effectType === 'Item' &&
 			(target instanceof Pokemon) && target.ignoringItem()) {
 			this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
