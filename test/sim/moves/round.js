@@ -18,6 +18,23 @@ describe('Round', function () {
 		battle.makeChoices('move round', 'move rest');
 		assert.equal(battle.p2.active[0].item, '');
 	});
+
+	it('should not take priority over abilities', function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: "Charizard", moves: ['round']},
+			{species: "Venusaur", moves: ['round']},
+		], [
+			{species: "Blissey", item: 'ejectbutton', moves: ['sleeptalk']},
+			{species: "Blastoise", moves: ['sleeptalk']},
+			{species: "Incineroar", ability: 'intimidate', moves: ['sleeptalk']},
+		]]);
+		battle.makeChoices();
+		battle.makeChoices();
+		const log = battle.getDebugLog();
+		const intimidateIndex = log.lastIndexOf('|-ability|p2a: Incineroar|Intimidate|boost');
+		const roundIndex = log.lastIndexOf('|move|p1b: Venusaur|Round|p2a: Incineroar|[from] move: Round');
+		assert(intimidateIndex < roundIndex, 'Intimidate should activate before the rest of the Round attacks');
+	});
 });
 
 describe('Round [Gen 5]', function () {
