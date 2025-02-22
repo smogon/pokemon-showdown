@@ -19,7 +19,7 @@ import type {Battle} from './battle';
 export interface MoveAction {
 	/** action type */
 	choice: 'move' | 'beforeTurnMove' | 'priorityChargeMove';
-	order: 3 | 5 | 200 | 201 | 199 | 106;
+	order: 3 | 5 | 105 | 199 | 200 | 201;
 	/** priority of the action (lower first) */
 	priority: number;
 	/** fractional priority of the action (lower first) */
@@ -50,7 +50,7 @@ export interface MoveAction {
 export interface SwitchAction {
 	/** action type */
 	choice: 'switch' | 'instaswitch' | 'revivalblessing';
-	order: 3 | 6 | 103;
+	order: 3 | 6 | 101;
 	/** priority of the action (lower first) */
 	priority: number;
 	/** speed of pokemon switching (higher first if priority tie) */
@@ -174,14 +174,12 @@ export class BattleQueue {
 				beforeTurnMove: 5,
 				revivalblessing: 6,
 
-				runSwitch: 101,
-				switch: 103,
-				megaEvo: 104,
-				megaEvoX: 104,
-				megaEvoY: 104,
-				runDynamax: 105,
-				terastallize: 106,
-				priorityChargeMove: 107,
+				runSwitch: 100,
+				switch: 101,
+				megaEvo: 102, megaEvoX: 102, megaEvoY: 102,
+				runDynamax: 103,
+				terastallize: 104,
+				priorityChargeMove: 105,
 
 				shift: 200,
 				// default is 200 (for moves)
