@@ -880,9 +880,10 @@ export class TeamValidator {
 			}
 			for (const source of setSources.sources) {
 				if (isUnderleveled) {
-					if (source.charAt(1) == 'S') {
+					if (source.charAt(1) === 'S') {
 						const eventSpecies = dex.species.get(source.substr(3)).baseSpecies;
 						const underleveledSpecies = dex.species.get(isUnderleveled).baseSpecies;
+						// Can only be an FE species or in a three-stage line, the prevo
 						if (eventSpecies !== species.baseSpecies && eventSpecies !== underleveledSpecies) continue;
 					} else if (source !== '8V') continue;
 				}
