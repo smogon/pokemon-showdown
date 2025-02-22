@@ -1,6 +1,7 @@
 
 import {Elimination} from './generator-elimination';
 import {RoundRobin} from './generator-round-robin';
+import {Swiss} from './generator-swiss';
 import {Utils} from '../../lib';
 import {PRNG} from '../../sim/prng';
 import type {BestOfGame} from '../room-battle-bestof';
@@ -20,7 +21,25 @@ export interface TournamentRoomSettings {
 	blockRecents?: boolean;
 }
 
-type Generator = RoundRobin | Elimination;
+export interface BracketData {
+	type: 'tree' | 'table';
+	[k: string]: any;
+}
+
+export interface Generator {
+	readonly name: string;
+	readonly isDrawingSupported: boolean;
+	isBracketFrozen: boolean;
+
+	getPendingBracketData(players: TournamentPlayer[]): BracketData;
+	getBracketData(): BracketData;
+	freezeBracket(players: TournamentPlayer[]): void;
+	disqualifyUser(user: TournamentPlayer): string | void;
+	getAvailableMatches(): [TournamentPlayer, TournamentPlayer][] | string;
+	setMatchResult(match: [TournamentPlayer, TournamentPlayer], result: string, score: number[]): string | void;
+	isTournamentEnded(): boolean;
+	getResults(): (TournamentPlayer | null)[][] | string;
+}
 
 const BRACKET_MINIMUM_UPDATE_INTERVAL = 2 * 1000;
 const AUTO_DISQUALIFY_WARNING_TIMEOUT = 30 * 1000;
@@ -39,6 +58,7 @@ const TournamentGenerators = {
 	__proto__: null,
 	roundrobin: RoundRobin,
 	elimination: Elimination,
+	swiss: Swiss,
 };
 
 function usersToNames(users: TournamentPlayer[]) {
@@ -299,7 +319,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		const possiblePlayer = this.playerTable[targetUser.id];
 		let isJoined = false;
 		if (possiblePlayer) {
-			if (this.generator.name.includes("Elimination")) {
+			if (this.generator.name.includes("Elimination") || this.generator.name === 'Swiss') {
 				isJoined = !possiblePlayer.isEliminated && !possiblePlayer.isDisqualified;
 			} else if (this.generator.name.includes("Round Robin")) {
 				if (possiblePlayer.isDisqualified) {
@@ -573,7 +593,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	}
 
 	getBracketData() {
-		let data: any;
+		let data: BracketData;
 		if (!this.isTournamentStarted) {
 			data = this.generator.getPendingBracketData(this.players);
 		} else {
@@ -611,7 +631,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 					}
 				}
 			}
-		} else if (data.type === 'table') {
+		} else if (data.type === 'table' && this.generator.name.includes("Round Robin")) {
 			if (this.isTournamentStarted) {
 				for (const [r, row] of data.tableContents.entries()) {
 					const pendingChallenge = data.tableHeaders.rows[r].pendingChallenge;
@@ -1205,7 +1225,7 @@ function getGenerator(generator: string | undefined) {
 	case 'elim': generator = 'elimination'; break;
 	case 'rr': generator = 'roundrobin'; break;
 	}
-	return TournamentGenerators[generator as 'elimination' | 'roundrobin'];
+	return TournamentGenerators[generator as 'elimination' | 'roundrobin' | 'swiss'];
 }
 
 function createTournamentGenerator(
