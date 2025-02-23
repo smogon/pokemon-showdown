@@ -613,6 +613,20 @@
 				"moves": [["Moonblast"], ["Shadow Ball"], ["Psyshock", "Mystical Fire", "Calm Mind"], ["Power Gem"]]
 			}]
 		},
+		"skeledirge": {
+			"weight": 1,
+			"sets": [{
+				"species": "Skeledirge",
+				"weight": 100,
+				"item": ["Heavy-Duty Boots"],
+				"ability": ["Unaware"],
+				"evs": {"hp": 252, "def": 252, "spa": 4},
+				"ivs": {"atk": 0},
+				"nature": ["Bold"],
+				"teraType": ["Fairy"],
+				"moves": [["Torch Song"], ["Hex"], ["Will-O-Wisp"], ["Slack Off"]]
+			}]
+		},
 		"rayquaza": {
 			"weight": 1,
 			"sets": [{
