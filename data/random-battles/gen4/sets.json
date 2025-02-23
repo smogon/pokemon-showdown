@@ -261,7 +261,7 @@
         ]
     },
     "dugtrio": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Support",
@@ -874,7 +874,7 @@
         ]
     },
     "articuno": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Staller",
@@ -997,7 +997,7 @@
         ]
     },
     "furret": {
-        "level": 93,
+        "level": 92,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1144,12 +1144,12 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["encore", "energyball", "sleeppowder", "stunspore", "toxic", "uturn"],
+                "movepool": ["encore", "energyball", "sleeppowder", "toxic", "uturn"],
                 "abilities": ["Chlorophyll"]
             },
             {
                 "role": "Fast Support",
-                "movepool": ["hiddenpowerflying", "leechseed", "protect", "substitute", "toxic"],
+                "movepool": ["hiddenpowerflying", "leechseed", "protect", "sleeppowder", "substitute"],
                 "abilities": ["Chlorophyll"]
             }
         ]
@@ -1262,7 +1262,7 @@
         ]
     },
     "dunsparce": {
-        "level": 93,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1332,7 +1332,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["encore", "knockoff", "protect", "stealthrock", "toxic"],
+                "movepool": ["encore", "knockoff", "stealthrock", "toxic"],
                 "abilities": ["Gluttony"]
             }
         ]
@@ -1361,14 +1361,14 @@
                 "abilities": ["Guts"]
             },
             {
-                "role": "Wallbreaker",
+                "role": "Setup Sweeper",
                 "movepool": ["closecombat", "crunch", "facade", "swordsdance"],
                 "abilities": ["Quick Feet"]
             }
         ]
     },
     "magcargo": {
-        "level": 98,
+        "level": 99,
         "sets": [
             {
                 "role": "Staller",
@@ -1597,7 +1597,7 @@
         ]
     },
     "tyranitar": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1728,7 +1728,7 @@
         ]
     },
     "beautifly": {
-        "level": 99,
+        "level": 100,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1793,7 +1793,7 @@
         ]
     },
     "pelipper": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1965,7 +1965,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["batonpass", "ironhead", "substitute", "suckerpunch", "swordsdance"],
+                "movepool": ["batonpass", "ironhead", "suckerpunch", "swordsdance"],
                 "abilities": ["Intimidate"]
             },
             {
@@ -2191,12 +2191,12 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["darkpulse", "encore", "lowkick", "seedbomb", "spikes", "suckerpunch"],
+                "movepool": ["darkpulse", "encore", "seedbomb", "spikes", "suckerpunch", "superpower"],
                 "abilities": ["Sand Veil"]
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["lowkick", "seedbomb", "suckerpunch", "swordsdance"],
+                "movepool": ["seedbomb", "suckerpunch", "superpower", "swordsdance"],
                 "abilities": ["Sand Veil"]
             },
             {
@@ -3307,7 +3307,7 @@
         ]
     },
     "yanmega": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3586,12 +3586,6 @@
                 "role": "Bulky Support",
                 "movepool": ["bulkup", "outrage", "rest", "sleeptalk"],
                 "abilities": ["Pressure"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["bulkup", "dragonclaw", "earthquake", "fireblast", "rest"],
-                "abilities": ["Pressure"],
-                "preferredTypes": ["Ground"]
             }
         ]
     },

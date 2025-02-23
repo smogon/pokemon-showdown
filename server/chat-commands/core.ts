@@ -1733,6 +1733,9 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 
+			const curHandler = namespace[cmd] as Chat.AnnotatedChatHandler;
+			let isPrivate = curHandler?.isPrivate;
+			let requiredPerm = curHandler?.requiredPermission || 'lock';
 			let help = namespace[`${cmd}help`];
 			if (typeof help === 'string') {
 				help = namespace[help];
@@ -1744,32 +1747,23 @@ export const commands: Chat.ChatCommands = {
 				help = namespace['help'];
 			}
 
-			const display = (handler: Chat.AnnotatedChatHandler | Chat.ChatCommands) => {
-				let perm: GlobalPermission | null = null;
-				if (typeof handler === 'object') {
-					// if the user cannot view any command in the table, pretend it does not exist
-					for (const k in handler) {
-						const fn = handler[k] as Chat.AnnotatedChatHandler | string | string[];
-						if (typeof fn !== 'function') continue;
-						if (fn.isPrivate && fn.requiredPermission && !user.can(fn.requiredPermission as GlobalPermission)) {
-							perm = fn.requiredPermission as GlobalPermission;
-							break;
-						}
+			const isNamespace = typeof Chat.commands[cmd] === 'object';
+			if ((namespace !== Chat.commands || isNamespace) && !isPrivate) {
+				if (isNamespace) namespace = Chat.commands[cmd] as Chat.AnnotatedChatCommands;
+				for (const k in namespace) {
+					const cur = namespace[k];
+					if (typeof cur === 'function' && cur.isPrivate) {
+						isPrivate = true;
+						requiredPerm = (cur.requiredPermission || "lock");
 					}
 				}
-				return (
-					(typeof handler === 'function' && !handler.isPrivate) ||
-					perm && user.can(perm) ||
-					(handler.isPrivate && user.can(perm || 'lock'))
-				);
-			};
+			}
 
-			const curHandler = namespace[cmd] as Chat.AnnotatedChatHandler;
-			if (curHandler && !display(curHandler)) {
+			if (isPrivate && !user.can(requiredPerm as GlobalPermission)) {
 				throw new Chat.ErrorMessage(this.tr`The command '/${target}' does not exist.`);
 			}
 
-			if (typeof help === 'function' && display(help)) {
+			if (typeof help === 'function') {
 				// If the help command is a function, parse it instead
 				this.run(help);
 				return true;

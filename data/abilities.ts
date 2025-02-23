@@ -1426,7 +1426,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (pokemon.species.id !== 'castformrainy') forme = 'Castform-Rainy';
 				break;
 			case 'hail':
-			case 'snow':
+			case 'snowscape':
 				if (pokemon.species.id !== 'castformsnowy') forme = 'Castform-Snowy';
 				break;
 			default:
@@ -1895,7 +1895,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	icebody: {
 		onWeather(target, source, effect) {
-			if (effect.id === 'hail' || effect.id === 'snow') {
+			if (effect.id === 'hail' || effect.id === 'snowscape') {
 				this.heal(target.baseMaxhp / 16);
 			}
 		},
@@ -1910,7 +1910,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	iceface: {
 		onSwitchInPriority: -2,
 		onStart(pokemon) {
-			if (this.field.isWeather(['hail', 'snow']) && pokemon.species.id === 'eiscuenoice') {
+			if (this.field.isWeather(['hail', 'snowscape']) && pokemon.species.id === 'eiscuenoice') {
 				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectState.busted = false;
 				pokemon.formeChange('Eiscue', this.effect, true);
@@ -1950,7 +1950,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// snow/hail resuming because Cloud Nine/Air Lock ended does not trigger Ice Face
 			if ((sourceEffect as Ability)?.suppressWeather) return;
 			if (!pokemon.hp) return;
-			if (this.field.isWeather(['hail', 'snow']) && pokemon.species.id === 'eiscuenoice') {
+			if (this.field.isWeather(['hail', 'snowscape']) && pokemon.species.id === 'eiscuenoice') {
 				this.add('-activate', pokemon, 'ability: Ice Face');
 				this.effectState.busted = false;
 				pokemon.formeChange('Eiscue', this.effect, true);
@@ -2380,7 +2380,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	magicbounce: {
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
-			if (target === source || move.hasBounced || !move.flags['reflectable']) {
+			if (target === source || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) {
 				return;
 			}
 			const newMove = this.dex.getActiveMove(move.id);
@@ -2390,7 +2390,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
-			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) {
 				return;
 			}
 			const newMove = this.dex.getActiveMove(move.id);
@@ -3145,17 +3145,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	perishbody: {
 		onDamagingHit(damage, target, source, move) {
-			if (!this.checkMoveMakesContact(move, source, target)) return;
-
-			let announced = false;
-			for (const pokemon of [target, source]) {
-				if (pokemon.volatiles['perishsong']) continue;
-				if (!announced) {
-					this.add('-ability', target, 'Perish Body');
-					announced = true;
-				}
-				pokemon.addVolatile('perishsong');
-			}
+			if (!this.checkMoveMakesContact(move, source, target) || source.volatiles['perishsong']) return;
+			this.add('-ability', target, 'Perish Body');
+			source.addVolatile('perishsong');
+			target.addVolatile('perishsong');
 		},
 		flags: {},
 		name: "Perish Body",
@@ -4267,7 +4260,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	slushrush: {
 		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather(['hail', 'snow'])) {
+			if (this.field.isWeather(['hail', 'snowscape'])) {
 				return this.chainModify(2);
 			}
 		},
@@ -4295,7 +4288,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy) {
 			if (typeof accuracy !== 'number') return;
-			if (this.field.isWeather(['hail', 'snow'])) {
+			if (this.field.isWeather(['hail', 'snowscape'])) {
 				this.debug('Snow Cloak - decreasing accuracy');
 				return this.chainModify([3277, 4096]);
 			}
@@ -4307,7 +4300,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	snowwarning: {
 		onStart(source) {
-			this.field.setWeather('snow');
+			this.field.setWeather('snowscape');
 		},
 		flags: {},
 		name: "Snow Warning",
@@ -4867,8 +4860,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	terashell: {
 		// effectiveness implemented in sim/pokemon.ts:Pokemon#runEffectiveness
+		// needs two checks to reset between regular moves and future attacks
+		onAnyBeforeMove() {
+			delete this.effectState.resisted;
+		},
 		onAnyAfterMove() {
-			this.effectState.resisted = false;
+			delete this.effectState.resisted;
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, breakable: 1},
 		name: "Tera Shell",

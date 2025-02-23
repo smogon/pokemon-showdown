@@ -20,25 +20,25 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (targets && !targets.includes(active)) continue;
 				// The ally of the pokemon
 				const ally = active.side.active.find(mon => mon && mon !== active && !mon.fainted);
-				if (ally?.m.innate && targets && !targets.includes(ally)) {
-					const volatileState = active.volatiles[ally.m.innate];
-					const volatile = this.dex.conditions.getByID(ally.m.innate as ID);
-					// @ts-ignore - dynamic lookup
-					let callback = volatile[callbackName];
-					if (callback !== undefined || (getKey && volatileState[getKey])) {
-						handlers.push(this.resolvePriority({
-							effect: volatile, callback, state: volatileState, end: ally.removeVolatile, effectHolder: ally,
-						}, callbackName));
-					} else if (['ability', 'item'].includes(volatile.id.split(':')[0])) {
-						// Innate abilities/items; see comment below
+				if (eventid === 'SwitchIn' && ally?.m.innate && targets && !targets.includes(ally)) {
+					const volatileState = ally.volatiles[ally.m.innate];
+					if (volatileState) {
+						const volatile = this.dex.conditions.getByID(ally.m.innate as ID);
 						// @ts-ignore - dynamic lookup
-						if (this.gen >= 5 && callbackName === 'onSwitchIn' && !volatile.onAnySwitchIn) {
+						let callback = volatile[callbackName];
+						// @ts-ignore - dynamic lookup
+						if (this.gen >= 5 && !volatile.onSwitchIn && !volatile.onAnySwitchIn) {
 							callback = volatile.onStart;
-							if (callback !== undefined || (getKey && volatileState[getKey])) {
-								handlers.push(this.resolvePriority({
-									effect: volatile, callback, state: volatileState, end: ally.removeVolatile, effectHolder: ally,
-								}, callbackName));
-							}
+						}
+						if (callback !== undefined) {
+							const allyHandler = this.resolvePriority({
+								effect: volatile, callback, state: volatileState, end: ally.removeVolatile, effectHolder: ally,
+							}, callbackName);
+							// if only one Pokemon is switching in, activate its ally's new innate at the speed of the one switching in
+							allyHandler.speed = this.resolvePriority({
+								effect: volatile, callback, state: volatileState, end: ally.removeVolatile, effectHolder: active,
+							}, callbackName).speed;
+							handlers.push(allyHandler);
 						}
 					}
 				}
@@ -53,7 +53,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const handler = handlers[0];
 			handlers.shift();
 			const effect = handler.effect;
-			if ((handler.effectHolder as Pokemon).fainted) continue;
+			if ((handler.effectHolder as Pokemon).fainted || (handler.state?.pic as Pokemon)?.fainted) continue;
 			if (eventid === 'Residual' && handler.end && handler.state && handler.state.duration) {
 				handler.state.duration--;
 				if (!handler.state.duration) {

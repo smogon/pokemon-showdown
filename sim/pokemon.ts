@@ -509,10 +509,10 @@ export class Pokemon {
 		return this.isActive ? this.getSlot() + fullname.slice(2) : fullname;
 	}
 
-	getUpdatedDetails(illusionLevel?: number) {
+	getUpdatedDetails(level?: number) {
 		let name = this.species.name;
-		if (name === 'Greninja-Bond') name = 'Greninja';
-		const level = illusionLevel || this.level;
+		if (['Greninja-Bond', 'Rockruff-Dusk'].includes(name)) name = this.species.baseSpecies;
+		if (!level) level = this.level;
 		return name + (level === 100 ? '' : ', L' + level) +
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 	}
@@ -521,7 +521,9 @@ export class Pokemon {
 		const health = this.getHealth();
 		let details = this.details;
 		if (this.illusion) {
-			details = this.illusion.getUpdatedDetails(this.battle.ruleTable.has('illusionlevelmod') ? this.level : undefined);
+			details = this.illusion.getUpdatedDetails(
+				this.battle.ruleTable.has('illusionlevelmod') ? this.illusion.level : this.level
+			);
 		}
 		if (this.terastallized) details += `, tera:${this.terastallized}`;
 		return {side: health.side, secret: `${details}|${health.secret}`, shared: `${details}|${health.shared}`};
@@ -1727,6 +1729,10 @@ export class Pokemon {
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		const item = this.getItem();
+		if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
+			// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
+			return false;
+		}
 		if (
 			this.battle.runEvent('UseItem', this, null, null, item) &&
 			(force || this.battle.runEvent('TryEatItem', this, null, null, item))
@@ -1766,6 +1772,10 @@ export class Pokemon {
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		const item = this.getItem();
+		if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
+			// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
+			return false;
+		}
 		if (this.battle.runEvent('UseItem', this, null, null, item)) {
 			switch (item.id) {
 			case 'redcard':
