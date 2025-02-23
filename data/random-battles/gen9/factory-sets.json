@@ -3030,21 +3030,6 @@
 				"moves": [["Liquidation"], ["Toxic"], ["Haze"], ["Recover"]]
 			}]
 		},
-		"comfey": {
-			"weight": 1,
-			"sets": [{
-				"species": "Comfey",
-				"wantsTera": true,
-				"weight": 100,
-				"item": ["Life Orb"],
-				"ability": ["Triage"],
-				"evs": {"hp": 240, "spa": 252, "spe": 16},
-				"ivs": {"atk": 0},
-				"nature": ["Modest"],
-				"teraType": ["Ground"],
-				"moves": [["Calm Mind"], ["Taunt"], ["Draining Kiss"], ["Tera Blast"]]
-			}]
-		},
 		"fezandipiti": {
 			"weight": 4,
 			"sets": [{
@@ -3159,6 +3144,42 @@
 				"nature": ["Adamant"],
 				"teraType": ["Bug", "Steel"],
 				"moves": [["Close Combat"], ["First Impression"], ["U-turn"], ["Morning Sun", "Will-O-Wisp", "Stun Spore"]]
+			}]
+		},
+		"hydreigon": {
+			"weight": 1,
+			"sets": [{
+				"species": "Hydreigon",
+				"weight": 50,
+				"item": ["Leftovers"],
+				"ability": ["Levitate"],
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
+				"ivs": {"atk": 0},
+				"nature": ["Timid"],
+				"teraType": ["Steel"],
+				"moves": [["Draco Meteor", "Earth Power"], ["Dark Pulse"], ["Nasty Plot"], ["Substitute", "Thunder Wave"]]
+			}, {
+				"species": "Hydreigon",
+				"weight": 50,
+				"item": ["Choice Scarf"],
+				"ability": ["Levitate"],
+				"evs": {"spa": 252, "spd": 4, "spe": 252},
+				"nature": ["Timid"],
+				"teraType": ["Dragon"],
+				"moves": [["Draco Meteor"], ["Dark Pulse"], ["Earth Power", "Fire Blast"], ["U-turn"]]
+			}]
+		},
+		"zapdosgalar": {
+			"weight": 1,
+			"sets": [{
+				"species": "Zapdos-Galar",
+				"weight": 100,
+				"item": ["Choice Scarf"],
+				"ability": ["Defiant"],
+				"evs": {"atk": 252, "def": 4, "spe": 252},
+				"nature": ["Jolly"],
+				"teraType": ["Flying", "Fighting"],
+				"moves": [["Close Combat"], ["Brave Bird"], ["U-turn"], ["Knock Off"]]
 			}]
 		}
 	},
