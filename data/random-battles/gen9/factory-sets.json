@@ -2913,33 +2913,6 @@
 				"moves": [["Moonblast"], ["Earth Power"], ["Mystical Fire"], ["Calm Mind"]]
 			}]
 		},
-		"gardevoir": {
-			"weight": 2,
-			"sets": [{
-				"species": "Gardevoir",
-				"weight": 100,
-				"item": ["Choice Scarf"],
-				"ability": ["Trace"],
-				"evs": {"def": 4, "spa": 252, "spe": 252},
-				"ivs": {"atk": 0},
-				"nature": ["Timid", "Modest"],
-				"teraType": ["Fairy"],
-				"moves": [["Moonblast"], ["Psychic"], ["Focus Blast", "Trick"], ["Healing Wish"]]
-			}]
-		},
-		"arcaninehisui": {
-			"weight": 3,
-			"sets": [{
-				"species": "Arcanine-Hisui",
-				"weight": 100,
-				"item": ["Heavy-Duty Boots"],
-				"ability": ["Rock Head"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
-				"nature": ["Jolly"],
-				"teraType": ["Normal"],
-				"moves": [["Head Smash"], ["Flare Blitz"], ["Extreme Speed"], ["Stealth Rock", "Morning Sun"]]
-			}]
-		},
 		"keldeo": {
 			"weight": 3,
 			"sets": [{
@@ -3043,19 +3016,6 @@
 				"moves": [["Liquidation"], ["Toxic"], ["Haze"], ["Recover"]]
 			}]
 		},
-		"chesnaught": {
-			"weight": 1,
-			"sets": [{
-				"species": "Chesnaught",
-				"weight": 100,
-				"item": ["Leftovers", "Rocky Helmet"],
-				"ability": ["Bulletproof"],
-				"evs": {"hp": 252, "def": 252, "spd": 4},
-				"nature": ["Impish"],
-				"teraType": ["Poison", "Ghost"],
-				"moves": [["Spikes"], ["Body Press"], ["Synthesis"], ["Knock Off", "Wood Hammer", "Stone Edge"]]
-			}]
-		},
 		"comfey": {
 			"weight": 1,
 			"sets": [{
@@ -3072,7 +3032,7 @@
 			}]
 		},
 		"fezandipiti": {
-			"weight": 1,
+			"weight": 4,
 			"sets": [{
 				"species": "Fezandipiti",
 				"weight": 100,
@@ -3108,7 +3068,7 @@
 			}]
 		},
 		"metagross": {
-			"weight": 2,
+			"weight": 1,
 			"sets": [{
 				"species": "Metagross",
 				"weight": 50,
@@ -3161,20 +3121,6 @@
 				"moves": [["Roost"], ["Draco Meteor"], ["Hurricane"], ["Flamethrower"]]
 			}]
 		},
-		"sinistcha": {
-			"weight": 2,
-			"sets": [{
-				"species": "Sinistcha",
-				"weight": 100,
-				"item": ["Heavy-Duty Boots", "Leftovers"],
-				"ability": ["Heatproof"],
-				"evs": {"hp": 252, "def": 160, "spe": 96},
-				"ivs": {"atk": 0},
-				"nature": ["Bold"],
-				"teraType": ["Fairy", "Poison"],
-				"moves": [["Calm Mind"], ["Matcha Gotcha"], ["Shadow Ball"], ["Strength Sap"]]
-			}]
-		},
 		"conkeldurr": {
 			"weight": 2,
 			"sets": [{
@@ -3189,7 +3135,7 @@
 			}]
 		},
 		"slitherwing": {
-			"weight": 1,
+			"weight": 2,
 			"sets": [{
 				"species": "Slither Wing",
 				"weight": 100,
