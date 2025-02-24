@@ -120,6 +120,8 @@ export class Pokemon {
 	trapped: boolean | "hidden";
 	maybeTrapped: boolean;
 	maybeDisabled: boolean;
+	maybePartiallyTrapped: boolean;
+	maybePartiallyTrapping: string | false;
 
 	illusion: Pokemon | null;
 	transformed: boolean;
@@ -411,6 +413,8 @@ export class Pokemon {
 		this.trapped = false;
 		this.maybeTrapped = false;
 		this.maybeDisabled = false;
+		this.maybePartiallyTrapped = false;
+		this.maybePartiallyTrapping = false;
 
 		this.illusion = null;
 		this.transformed = false;
@@ -941,6 +945,12 @@ export class Pokemon {
 				id: lockedMove,
 			}];
 		}
+		if (this.maybePartiallyTrapping || this.maybePartiallyTrapped) {
+			return [{
+				move: 'Fight',
+				id: 'fight',
+			}];
+		}
 		const moves = [];
 		let hasValidMove = false;
 		for (const moveSlot of this.moveSlots) {
@@ -1056,6 +1066,8 @@ export class Pokemon {
 		const data: {
 			moves: {move: string, id: string, target?: string, disabled?: string | boolean}[],
 			maybeDisabled?: boolean,
+			maybePartiallyTrapping?: string | false,
+			maybePartiallyTrapped?: boolean,
 			trapped?: boolean,
 			maybeTrapped?: boolean,
 			canMegaEvo?: boolean,
@@ -1073,6 +1085,12 @@ export class Pokemon {
 		if (isLastActive) {
 			if (this.maybeDisabled) {
 				data.maybeDisabled = true;
+			}
+			if (this.maybePartiallyTrapping) {
+				data.maybePartiallyTrapping = this.maybePartiallyTrapping;
+			}
+			if (this.maybePartiallyTrapped) {
+				data.maybePartiallyTrapped = true;
 			}
 			if (canSwitchIn) {
 				if (this.trapped === true) {

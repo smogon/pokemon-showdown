@@ -2488,8 +2488,17 @@ export class Battle {
 			// in gen 1, fainting skips the rest of the turn
 			// residuals don't exist in gen 1
 			this.queue.clear();
-			// Fainting clears accumulated Bide damage
+
 			for (const pokemon of this.getAllActive()) {
+				// Remove maybe partial trapping
+				if (!pokemon.volatiles['partiallytrapped'] && pokemon.maybePartiallyTrapped) {
+					pokemon.maybePartiallyTrapped = false;
+				}
+				if (!pokemon.volatiles['partialtrappinglock'] && pokemon.maybePartiallyTrapping) {
+					pokemon.maybePartiallyTrapping = false;
+				}
+
+				// Fainting clears accumulated Bide damage
 				if (pokemon.volatiles['bide'] && pokemon.volatiles['bide'].damage) {
 					pokemon.volatiles['bide'].damage = 0;
 					this.hint("Desync Clause Mod activated!");

@@ -187,10 +187,21 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	partiallytrapped: {
 		name: 'partiallytrapped',
 		duration: 2,
+		onStart(target, source, effect) {
+			target.maybePartiallyTrapped = true;
+			if (!this.effectState.numTimes) {
+				this.effectState.numTimes = 0;
+			}
+		},
 		onBeforeMovePriority: 9,
 		onBeforeMove(pokemon) {
 			this.add('cant', pokemon, 'partiallytrapped');
 			return false;
+		},
+		onEnd(pokemon) {
+			if (this.effectState.numTimes === 5) {
+				pokemon.maybePartiallyTrapped = false;
+			}
 		},
 	},
 	partialtrappinglock: {
@@ -201,6 +212,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 		onStart(target, source, effect) {
 			this.effectState.move = effect.id;
+			target.maybePartiallyTrapping = effect.id;
+			this.effectState.numTimes = this.effectState.duration;
 		},
 		onDisableMove(pokemon) {
 			if (!pokemon.hasMove(this.effectState.move)) {
@@ -210,6 +223,11 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				if (moveSlot.id !== this.effectState.move) {
 					pokemon.disableMove(moveSlot.id);
 				}
+			}
+		},
+		onEnd(pokemon) {
+			if (this.effectState.numTimes === 5) {
+				pokemon.maybePartiallyTrapping = false;
 			}
 		},
 	},
