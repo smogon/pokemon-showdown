@@ -923,13 +923,7 @@ export class Pokemon {
 		move: string, id: string, disabled?: string | boolean, disabledSource?: string,
 		target?: string, pp?: number, maxpp?: number,
 	}[] {
-		if (lockedMove || this.maybePartiallyTrapping || this.maybePartiallyTrapped) {
-			if (this.maybePartiallyTrapping || this.maybePartiallyTrapped) {
-				return [{
-					move: 'Fight',
-					id: 'fight',
-				}];
-			}
+		if (lockedMove) {
 			lockedMove = toID(lockedMove);
 			this.trapped = true;
 			if (lockedMove === 'recharge') {
@@ -949,6 +943,12 @@ export class Pokemon {
 			return [{
 				move: this.battle.dex.moves.get(lockedMove).name,
 				id: lockedMove,
+			}];
+		}
+		if (this.maybePartiallyTrapping || this.maybePartiallyTrapped) {
+			return [{
+				move: 'Fight',
+				id: 'fight',
 			}];
 		}
 		const moves = [];
