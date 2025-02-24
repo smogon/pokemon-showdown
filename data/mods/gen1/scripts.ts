@@ -363,6 +363,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (hitResult === false) {
 				this.battle.attrLastMove('[miss]');
 				this.battle.add('-miss', pokemon);
+        if (pokemon.maybePartiallyTrapping) pokemon.maybePartiallyTrapping = false;
 				if (move.selfdestruct) {
 					this.battle.faint(pokemon, pokemon, move);
 				}
@@ -439,6 +440,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (accuracy === 255) this.battle.hint("In Gen 1, moves with 100% accuracy can still miss 1/256 of the time.");
 				damage = false;
 				this.battle.lastDamage = 0;
+        if (pokemon.maybePartiallyTrapping) pokemon.maybePartiallyTrapping = false;
 			}
 
 			// If damage is 0 and not false it means it didn't miss, let's calc.
