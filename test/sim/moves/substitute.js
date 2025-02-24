@@ -138,7 +138,7 @@ describe('Substitute', function () {
 		assert.equal(ponyta.maxhp - ponyta.hp, Math.floor(ponyta.maxhp / 4));
 
 		const hp = ponyta.hp;
-		battle.makeChoices('move growl', 'move clamp');
+		battle.makeChoices();
 		assert.bounded(hp - ponyta.hp, [91, 108]);
 	});
 

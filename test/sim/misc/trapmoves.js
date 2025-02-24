@@ -221,7 +221,7 @@ describe('Partial Trapping Moves [Gen 1]', function () {
 		}
 		battle.makeChoices('move toxic', 'auto');
 		battle.makeChoices('move wrap', 'switch 2');
-		battle.makeChoices('move wrap', 'switch 2');
+		battle.makeChoices('move fight', 'switch 2');
 		battle.makeChoices();
 		assert(!battle.p1.active[0].volatiles['partialtrappinglock']);
 	});
