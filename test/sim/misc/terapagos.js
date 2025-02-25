@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Terapagos`, function () {
-	afterEach(function () {
+describe(`Terapagos`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it.skip(`should accept the Terastallization choice, but not Terastallize while Transformed into Terapagos-Terastal`, function () {
+	it.skip(`should accept the Terastallization choice, but not Terastallize while Transformed into Terapagos-Terastal`, () => {
 		battle = common.gen(9).createBattle([[
 			{species: 'ditto', ability: 'imposter', moves: ['sleeptalk']},
 		], [
@@ -24,7 +24,7 @@ describe(`Terapagos`, function () {
 		assert.false(!!ditto.terastallized);
 	});
 
-	it(`[Hackmons] should not cause Terapagos-Terastal to become Terapagos-Stellar if the user is Transformed`, function () {
+	it(`[Hackmons] should not cause Terapagos-Terastal to become Terapagos-Stellar if the user is Transformed`, () => {
 		battle = common.gen(9).createBattle([[
 			{species: 'terapagos', ability: 'terashift', moves: ['transform'], teraType: 'Stellar'},
 			{species: 'pikachu', moves: ['sleeptalk']},

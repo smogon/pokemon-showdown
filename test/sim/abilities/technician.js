@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Technician', function () {
-	afterEach(function () {
+describe('Technician', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should not apply boost on a move boosted over 60 BP by Battery in Gen 7', function () {
+	it('should not apply boost on a move boosted over 60 BP by Battery in Gen 7', () => {
 		battle = common.gen(7).createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Toxtricity', ability: 'technician', moves: ['shockwave']},
@@ -26,7 +26,7 @@ describe('Technician', function () {
 		assert.bounded(damage, [94, 112]);
 	});
 
-	it(`should apply boost on a move boosted over 60 BP by Steely Spirit`, function () {
+	it(`should apply boost on a move boosted over 60 BP by Steely Spirit`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Scizor', ability: 'technician', moves: ['metalclaw']},
 			{species: 'Perrserker', ability: 'steelyspirit', moves: ['sleeptalk']},
@@ -40,7 +40,7 @@ describe('Technician', function () {
 		assert.bounded(damage, [151, 178]);
 	});
 
-	it(`should consider the BP before Aura boosts have been applied in Gen 8`, function () {
+	it(`should consider the BP before Aura boosts have been applied in Gen 8`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Smeargle', ability: 'technician', moves: ['drainingkiss', 'knockoff']},
 			{species: 'Scizor', ability: 'technician', moves: ['thief', 'sleeptalk']},

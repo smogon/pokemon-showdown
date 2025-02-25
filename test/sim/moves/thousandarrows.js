@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Thousand Arrows', function () {
-	afterEach(function () {
+describe('Thousand Arrows', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should hit Flying-type Pokemon and remove their Ground immunity`, function () {
+	it(`should hit Flying-type Pokemon and remove their Ground immunity`, () => {
 		battle = common.createBattle([[
 			{species: 'Zygarde', level: 1, moves: ['thousandarrows', 'earthquake']},
 		], [
@@ -23,7 +23,7 @@ describe('Thousand Arrows', function () {
 		assert.false.fullHP(tropius);
 	});
 
-	it(`should ignore type effectiveness on the first hit against Flying-type Pokemon`, function () {
+	it(`should ignore type effectiveness on the first hit against Flying-type Pokemon`, () => {
 		battle = common.createBattle([[
 			{species: 'Zygarde', level: 1, moves: ['thousandarrows']},
 		], [
@@ -38,7 +38,7 @@ describe('Thousand Arrows', function () {
 		assert.statStage(hooh, 'spa', 2);
 	});
 
-	it(`should not ignore type effectiveness on the first hit against Flying-type Pokemon with Ring Target`, function () {
+	it(`should not ignore type effectiveness on the first hit against Flying-type Pokemon with Ring Target`, () => {
 		battle = common.createBattle([[
 			{species: 'Zygarde', level: 1, moves: ['thousandarrows']},
 		], [
@@ -48,7 +48,7 @@ describe('Thousand Arrows', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not ground or deal neutral damage to Flying-type Pokemon holding an Iron Ball`, function () {
+	it(`should not ground or deal neutral damage to Flying-type Pokemon holding an Iron Ball`, () => {
 		battle = common.createBattle([[
 			{species: 'Zygarde', level: 1, moves: ['thousandarrows', 'earthquake']},
 		], [
@@ -65,7 +65,7 @@ describe('Thousand Arrows', function () {
 		assert.equal(hp, hooh.hp);
 	});
 
-	it(`should not ground or deal neutral damage to Flying-type Pokemon affected by Gravity`, function () {
+	it(`should not ground or deal neutral damage to Flying-type Pokemon affected by Gravity`, () => {
 		battle = common.createBattle([[
 			{species: 'Zygarde', level: 1, moves: ['thousandarrows', 'sleeptalk']},
 		], [
@@ -84,7 +84,7 @@ describe('Thousand Arrows', function () {
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 	});
 
-	it(`should hit Pokemon with Levitate and remove their Ground immunity`, function () {
+	it(`should hit Pokemon with Levitate and remove their Ground immunity`, () => {
 		battle = common.createBattle([[
 			{species: 'Zygarde', level: 1, moves: ['thousandarrows', 'earthquake']},
 		], [
@@ -97,7 +97,7 @@ describe('Thousand Arrows', function () {
 		assert.false.fullHP(cress);
 	});
 
-	it(`should hit non-Flying-type Pokemon with Levitate with standard type effectiveness`, function () {
+	it(`should hit non-Flying-type Pokemon with Levitate with standard type effectiveness`, () => {
 		battle = common.createBattle([[
 			{species: 'Zygarde', level: 1, moves: ['thousandarrows']},
 		], [
@@ -109,7 +109,7 @@ describe('Thousand Arrows', function () {
 		assert.statStage(eelektross, 'spa', 2);
 	});
 
-	it(`should hit Pokemon with Air Balloon`, function () {
+	it(`should hit Pokemon with Air Balloon`, () => {
 		battle = common.createBattle([[
 			{species: 'Zygarde', level: 1, moves: ['thousandarrows']},
 		], [
@@ -121,7 +121,7 @@ describe('Thousand Arrows', function () {
 		assert.false.holdsItem(donphan);
 	});
 
-	it(`should hit Electric-type Wonder Guard Pokemon holding an Air Balloon`, function () {
+	it(`should hit Electric-type Wonder Guard Pokemon holding an Air Balloon`, () => {
 		battle = common.createBattle([[
 			{species: 'Zygarde', level: 1, moves: ['thousandarrows']},
 		], [
@@ -131,7 +131,7 @@ describe('Thousand Arrows', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not hit Ground-type Pokemon when affected by Electrify`, function () {
+	it(`should not hit Ground-type Pokemon when affected by Electrify`, () => {
 		battle = common.createBattle([[
 			{species: 'Zygarde', level: 1, moves: ['thousandarrows']},
 		], [
@@ -141,7 +141,7 @@ describe('Thousand Arrows', function () {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not hit Ghost-type Pokemon when affected by Normalize`, function () {
+	it(`should not hit Ghost-type Pokemon when affected by Normalize`, () => {
 		battle = common.createBattle([[
 			{species: 'Zygarde', level: 1, ability: 'normalize', moves: ['thousandarrows']},
 		], [

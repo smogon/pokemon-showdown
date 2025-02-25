@@ -12,10 +12,10 @@ let battle;
  *
  * All tests based on confirmations given here: https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9894139
  */
-describe('Dragon Cheer', function () {
+describe('Dragon Cheer', () => {
 	afterEach(() => battle.destroy());
 
-	it('should raise critical hit ratio by 2 stages for dragon types', function () {
+	it('should raise critical hit ratio by 2 stages for dragon types', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'dragapult', moves: ['dragoncheer']},
 			{species: 'kingdra', moves: ['bubble']},
@@ -26,14 +26,14 @@ describe('Dragon Cheer', function () {
 
 		battle.onEvent(
 			'ModifyCritRatio', battle.format, -99,
-			(critRatio) => assert.equal(critRatio, 3)
+			critRatio => assert.equal(critRatio, 3)
 		);
 
 		battle.makeChoices('auto', 'auto');
 		assert(battle.log.some(line => line.startsWith('|-start')));
 	});
 
-	it('should raise critical hit ratio by 1 stage for non-dragon types', function () {
+	it('should raise critical hit ratio by 1 stage for non-dragon types', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'dragapult', moves: ['dragoncheer']},
 			{species: 'horsea', moves: ['bubble']},
@@ -44,14 +44,14 @@ describe('Dragon Cheer', function () {
 
 		battle.onEvent(
 			'ModifyCritRatio', battle.format, -99,
-			(critRatio) => assert.equal(critRatio, 2)
+			critRatio => assert.equal(critRatio, 2)
 		);
 
 		battle.makeChoices('auto', 'auto');
 		assert(battle.log.some(line => line.startsWith('|-start')));
 	});
 
-	it('should fail if used twice on the same ally', function () {
+	it('should fail if used twice on the same ally', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'dragapult', moves: ['dragoncheer']},
 			{species: 'kingdra', moves: ['bubble']},
@@ -66,7 +66,7 @@ describe('Dragon Cheer', function () {
 		assert(battle.log.some(line => line.startsWith('|-fail'))); // second trigger
 	});
 
-	it('should not increase ratio if affected Pokemon turns into a Dragon Type after Dragon Cheer', function () {
+	it('should not increase ratio if affected Pokemon turns into a Dragon Type after Dragon Cheer', () => {
 		battle = common.gen(9).createBattle({gameType: 'doubles'}, [[
 			{species: 'dragapult', moves: ['dragoncheer', 'splash']},
 			{species: 'horsea', moves: ['bubble'], teraType: 'Dragon'},
@@ -77,14 +77,14 @@ describe('Dragon Cheer', function () {
 
 		battle.onEvent(
 			'ModifyCritRatio', battle.format, -99,
-			(critRatio) => assert.equal(critRatio, 2)
+			critRatio => assert.equal(critRatio, 2)
 		);
 
 		battle.makeChoices('move dragoncheer -2, move bubble', 'auto');
 		battle.makeChoices('move splash, move bubble terastallize', 'auto');
 	});
 
-	it('should fail in singles or if no ally exists', function () {
+	it('should fail in singles or if no ally exists', () => {
 		battle = common.createBattle([
 			[{species: 'gyarados', moves: ['dragoncheer']}],
 			[{species: 'dragapult', moves: ['splash']}],
@@ -94,7 +94,7 @@ describe('Dragon Cheer', function () {
 		assert(battle.log.some(line => !line.startsWith('|-fail')));
 	});
 
-	it(`should be copied by Psych Up, using the target's Dragon Cheer level`, function () {
+	it(`should be copied by Psych Up, using the target's Dragon Cheer level`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'milotic', moves: ['dragoncheer', 'psychup', 'bubble']},
 			{species: 'kingdra', moves: ['sleeptalk']},
@@ -105,7 +105,7 @@ describe('Dragon Cheer', function () {
 
 		battle.onEvent(
 			'ModifyCritRatio', battle.format, -99,
-			(critRatio) => assert.equal(critRatio, 3)
+			critRatio => assert.equal(critRatio, 3)
 		);
 
 		battle.makeChoices('move dragoncheer -2, move sleeptalk', 'auto');
@@ -113,7 +113,7 @@ describe('Dragon Cheer', function () {
 		battle.makeChoices('move bubble, move sleeptalk', 'auto');
 	});
 
-	it(`should be copied by Psych Up, using the target's Dragon Cheer level and replacing the user's current critical hit stage`, function () {
+	it(`should be copied by Psych Up, using the target's Dragon Cheer level and replacing the user's current critical hit stage`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'milotic', moves: ['dragoncheer', 'psychup', 'bubble', 'focusenergy']},
 			{species: 'comfey', moves: ['sleeptalk']},
@@ -124,7 +124,7 @@ describe('Dragon Cheer', function () {
 
 		battle.onEvent(
 			'ModifyCritRatio', battle.format, -99,
-			(critRatio) => assert.equal(critRatio, 2)
+			critRatio => assert.equal(critRatio, 2)
 		);
 
 		battle.makeChoices('move focusenergy, move sleeptalk', 'auto');
@@ -133,7 +133,7 @@ describe('Dragon Cheer', function () {
 		battle.makeChoices('move bubble, move sleeptalk', 'auto');
 	});
 
-	it(`should be copied by Transform, using the target's Dragon Cheer level`, function () {
+	it(`should be copied by Transform, using the target's Dragon Cheer level`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'milotic', moves: ['dragoncheer', 'transform']},
 			{species: 'kingdra', moves: ['sleeptalk', 'bubble']},
@@ -144,7 +144,7 @@ describe('Dragon Cheer', function () {
 
 		battle.onEvent(
 			'ModifyCritRatio', battle.format, -99,
-			(critRatio) => assert.equal(critRatio, 3)
+			critRatio => assert.equal(critRatio, 3)
 		);
 
 		battle.makeChoices('move dragoncheer -2, move sleeptalk', 'auto');

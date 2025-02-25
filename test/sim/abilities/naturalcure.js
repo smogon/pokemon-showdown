@@ -5,8 +5,8 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Natural Cure', function () {
-	it('should cure even when phased out by Roar', function () {
+describe('Natural Cure', () => {
+	it('should cure even when phased out by Roar', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {
 			team: [

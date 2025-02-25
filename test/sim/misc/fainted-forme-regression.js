@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Fainted forme regression`, function () {
-	afterEach(function () {
+describe(`Fainted forme regression`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('[Hackmons] should be able to revert between different mega evolutions', function () {
+	it('[Hackmons] should be able to revert between different mega evolutions', () => {
 		battle = common.createBattle([[
 			{species: 'charizardmegay', ability: 'drought', item: 'charizarditex', moves: ['memento']},
 			{species: 'darkrai', moves: ['darkpulse']},
@@ -23,7 +23,7 @@ describe(`Fainted forme regression`, function () {
 		assert.hasAbility(pokemon, 'Drought');
 	});
 
-	it(`should revert Mega Evolutions`, function () {
+	it(`should revert Mega Evolutions`, () => {
 		battle = common.createBattle([[
 			{species: 'alakazam', ability: 'synchronize', item: 'alakazite', moves: ['memento']},
 			{species: 'darkrai', moves: ['darkpulse']},
@@ -36,7 +36,7 @@ describe(`Fainted forme regression`, function () {
 		assert.hasAbility(pokemon, 'Synchronize');
 	});
 
-	it(`should revert Rayquaza-Mega`, function () {
+	it(`should revert Rayquaza-Mega`, () => {
 		battle = common.gen(7).createBattle([[
 			{species: 'rayquaza', ability: 'airlock', moves: ['memento', 'dragonascent']},
 			{species: 'darkrai', moves: ['darkpulse']},
@@ -49,7 +49,7 @@ describe(`Fainted forme regression`, function () {
 		assert.hasAbility(pokemon, 'Air Lock');
 	});
 
-	it(`should revert Primal forms`, function () {
+	it(`should revert Primal forms`, () => {
 		battle = common.createBattle([[
 			{species: 'kyogre', ability: 'drizzle', moves: ['memento']},
 			{species: 'darkrai', moves: ['darkpulse']},
@@ -62,7 +62,7 @@ describe(`Fainted forme regression`, function () {
 		assert.hasAbility(pokemon, 'Drizzle');
 	});
 
-	it(`shouldn't revert Arceus-forms to base Arceus`, function () {
+	it(`shouldn't revert Arceus-forms to base Arceus`, () => {
 		battle = common.createBattle([[
 			{species: 'arceusfire', ability: 'multitype', item: 'flameplate', moves: ['memento']},
 			{species: 'darkrai', moves: ['darkpulse']},
@@ -75,7 +75,7 @@ describe(`Fainted forme regression`, function () {
 		assert.hasAbility(pokemon, 'Multitype');
 	});
 
-	it("should revert Terastallized Morpeko-Hangry to base Morpeko", function () {
+	it("should revert Terastallized Morpeko-Hangry to base Morpeko", () => {
 		battle = common.gen(9).createBattle([[
 			{species: 'Morpeko', ability: 'hungerswitch', moves: ['memento', 'sleeptalk']},
 			{species: 'darkrai', moves: ['darkpulse']},
@@ -90,7 +90,7 @@ describe(`Fainted forme regression`, function () {
 		assert.hasAbility(pokemon, 'Hunger Switch');
 	});
 
-	it(`shouldn't revert Palafin-Hero to base Palafin`, function () {
+	it(`shouldn't revert Palafin-Hero to base Palafin`, () => {
 		battle = common.createBattle([[
 			{species: 'palafin', ability: 'zerotohero', moves: ['memento']},
 			{species: 'darkrai', moves: ['darkpulse']},
@@ -106,7 +106,7 @@ describe(`Fainted forme regression`, function () {
 		assert.hasAbility(pokemon, 'Zero to Hero');
 	});
 
-	it(`should revert Ogerpon-Tera to base Ogerpon`, function () {
+	it(`should revert Ogerpon-Tera to base Ogerpon`, () => {
 		battle = common.gen(9).createBattle([[
 			{
 				species: 'ogerponwellspring', ability: 'waterabsorb', item: 'wellspring mask',
@@ -122,7 +122,7 @@ describe(`Fainted forme regression`, function () {
 		assert.hasAbility(pokemon, 'Water Absorb');
 	});
 
-	it(`shouldn't revert Terapagos-Terastal to base Terapagos`, function () {
+	it(`shouldn't revert Terapagos-Terastal to base Terapagos`, () => {
 		battle = common.createBattle([[
 			{species: 'terapagos', ability: 'terashift', moves: ['memento']},
 			{species: 'darkrai', moves: ['darkpulse']},
@@ -135,7 +135,7 @@ describe(`Fainted forme regression`, function () {
 		assert.hasAbility(pokemon, 'Tera Shell');
 	});
 
-	it(`should revert Terapagos-Stellar to base Terapagos`, function () {
+	it(`should revert Terapagos-Stellar to base Terapagos`, () => {
 		battle = common.gen(9).createBattle([[
 			{species: 'terapagos', ability: 'terashift', moves: ['memento'], teraType: 'Stellar'},
 			{species: 'darkrai', moves: ['darkpulse']},

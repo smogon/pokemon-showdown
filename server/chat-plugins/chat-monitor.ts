@@ -418,7 +418,6 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 		}
 	}
 
-
 	return message;
 };
 /* eslint-enable @typescript-eslint/prefer-optional-chain */

@@ -530,14 +530,13 @@ export const commands: Chat.ChatCommands = {
 				return errors.push(`${targetUser.name} [locked]`);
 			}
 
-			if (!(targetUser.id in room!.users)) {
+			if (!(targetUser.id in room.users)) {
 				return errors.push(`${targetUser.name} [not in room]`);
 			}
 
 			successes.push(targetUser.name);
 			targetUser.sendTo(room, `|${messageType}|${html}`);
 		});
-
 
 		if (successes.length) this.sendReply(`Sent private HTML to ${Chat.toListString(successes)}.`);
 		if (errors.length) this.errorReply(`Unable to send private HTML to ${Chat.toListString(errors)}.`);
@@ -551,7 +550,7 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	botmsg(target, room, user, connection) {
-		if (!target || !target.includes(',')) {
+		if (!target?.includes(',')) {
 			return this.parse('/help botmsg');
 		}
 		this.checkRecursion();
@@ -589,7 +588,7 @@ export const commands: Chat.ChatCommands = {
 		const units = ["B", "KiB", "MiB", "GiB", "TiB"];
 		const results = resultNums.map(num => {
 			const unitIndex = Math.floor(Math.log2(num) / 10); // 2^10 base log
-			return `${(num / Math.pow(2, 10 * unitIndex)).toFixed(2)} ${units[unitIndex]}`;
+			return `${(num / (2 ** (10 * unitIndex))).toFixed(2)} ${units[unitIndex]}`;
 		});
 		this.sendReply(`||[Main process] RSS: ${results[0]}, Heap: ${results[1]} / ${results[2]}`);
 	},
@@ -945,7 +944,7 @@ export const commands: Chat.ChatCommands = {
 					const ramNum = parseInt(ram);
 					if (!isNaN(ramNum)) {
 						const unitIndex = Math.floor(Math.log2(ramNum) / 10); // 2^10 base log
-						entry.ram = `${(ramNum / Math.pow(2, 10 * unitIndex)).toFixed(2)} ${ramUnits[unitIndex]}`;
+						entry.ram = `${(ramNum / (2 ** (10 * unitIndex))).toFixed(2)} ${ramUnits[unitIndex]}`;
 					}
 					processes.set(pid, entry);
 				}
@@ -1030,7 +1029,7 @@ export const commands: Chat.ChatCommands = {
 				)).join('') +
 				`\t}},\n`
 			)).join('') +
-		`};\n`);
+			`};\n`);
 		this.sendReply("learnsets.js saved.");
 	},
 	savelearnsetshelp: [
@@ -1368,7 +1367,6 @@ export const commands: Chat.ChatCommands = {
 		target = toID(target);
 		Monitor.updateServerLock = true;
 
-
 		let success = true;
 		if (target === 'private') {
 			if (!validPrivateCodePath) {
@@ -1403,7 +1401,7 @@ export const commands: Chat.ChatCommands = {
 				['staff', 'development'],
 				`|c|${user.getIdentity()}|/log ${user.name} used /updateloginserver - but something failed while updating.`
 			);
-			return this.errorReply(err.message + '\n' + err.stack);
+			return this.errorReply(`${err.message}\n${err.stack}`);
 		}
 		if (!result) return this.errorReply('No result received.');
 		this.stafflog(`[o] ${result.success || ""} [e] ${result.actionerror || ""}`);
@@ -1436,7 +1434,7 @@ export const commands: Chat.ChatCommands = {
 				['staff', 'development'],
 				`|c|${user.getIdentity()}|/log ${user.name} used /updateclient - but something failed while updating.`
 			);
-			return this.errorReply(err.message + '\n' + err.stack);
+			return this.errorReply(`${err.message}\n${err.stack}`);
 		}
 		if (!result) return this.errorReply('No result received.');
 		this.stafflog(`[o] ${result.success || ""} [e] ${result.actionerror || ""}`);
@@ -1493,8 +1491,8 @@ export const commands: Chat.ChatCommands = {
 		}
 		const generateHTML = (direction: string, contents: string) => (
 			`<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top">` +
-				Utils.escapeHTML(direction).repeat(2) +
-				`&nbsp;</td><td>${Chat.getReadmoreCodeBlock(contents)}</td></tr><table>`
+			Utils.escapeHTML(direction).repeat(2) +
+			`&nbsp;</td><td>${Chat.getReadmoreCodeBlock(contents)}</td></tr><table>`
 		);
 		this.sendReply(`|html|${generateHTML('>', target)}`);
 		logRoom?.roomlog(`>> ${target}`);

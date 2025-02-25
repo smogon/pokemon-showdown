@@ -29,19 +29,19 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 const RETRY_AFTER_LOGIN = null;
 
 import {FS, Utils, Streams} from '../lib';
-import {RoomSection, RoomSections} from './chat-commands/room-settings';
-import {QueuedHunt} from './chat-plugins/scavengers';
-import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
-import {RepeatedPhrase} from './chat-plugins/repeats';
+import {type RoomSection, RoomSections} from './chat-commands/room-settings';
+import {type QueuedHunt} from './chat-plugins/scavengers';
+import {type ScavengerGameTemplate} from './chat-plugins/scavenger-games';
+import {type RepeatedPhrase} from './chat-plugins/repeats';
 import {
 	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, type RoomBattleOptions,
 } from "./room-battle";
 import {BestOfGame} from './room-battle-bestof';
 import {RoomGame, SimpleRoomGame, RoomGamePlayer} from './room-game';
-import {MinorActivity, MinorActivityData} from './room-minor-activity';
+import {MinorActivity, type MinorActivityData} from './room-minor-activity';
 import {Roomlogs, type Roomlog} from './roomlogs';
 import {RoomAuth} from './user-groups';
-import {PartialModlogEntry, mainModlog} from './modlog';
+import {type PartialModlogEntry, mainModlog} from './modlog';
 import {Replays} from './replays';
 import * as crypto from 'crypto';
 
@@ -202,8 +202,8 @@ export abstract class BasicRoom {
 	readonly muteQueue: MuteEntry[];
 	userCount: number;
 	active: boolean;
-	muteTimer: NodeJS.Timer | null;
-	modchatTimer: NodeJS.Timer | null;
+	muteTimer: NodeJS.Timeout | null;
+	modchatTimer: NodeJS.Timeout | null;
 	lastUpdate: number;
 	lastBroadcast: string;
 	lastBroadcastTime: number;
@@ -219,13 +219,13 @@ export abstract class BasicRoom {
 
 	reportJoins: boolean;
 	batchJoins: number;
-	reportJoinsInterval: NodeJS.Timer | null;
+	reportJoinsInterval: NodeJS.Timeout | null;
 
 	minorActivity: MinorActivity | null;
 	minorActivityQueue: MinorActivityData[] | null;
 	banwordRegex: RegExp | true | null;
-	logUserStatsInterval: NodeJS.Timer | null;
-	expireTimer: NodeJS.Timer | null;
+	logUserStatsInterval: NodeJS.Timeout | null;
+	expireTimer: NodeJS.Timeout | null;
 	userList: string;
 	pendingApprovals: Map<string, ShowRequest> | null;
 
@@ -509,8 +509,6 @@ export abstract class BasicRoom {
 		}
 		if (this.parent) return this.parent.getMuteTime(user);
 	}
-	// I think putting the `new` before the signature is confusing the linter
-	// eslint-disable-next-line @typescript-eslint/type-annotation-spacing
 	getGame<T extends RoomGame>(constructor: new (...args: any[]) => T, subGame = false): T | null {
 		// TODO: switch to `static readonly gameid` when all game files are TypeScripted
 		if (subGame && this.subGame && this.subGame.constructor.name === constructor.name) return this.subGame as T;
@@ -662,9 +660,9 @@ export abstract class BasicRoom {
 			}
 			++groups[this.auth.get(user.id)];
 		}
-		let entry = '|userstats|total:' + total + '|guests:' + guests;
+		let entry = `|userstats|total:${total}|guests:${guests}`;
 		for (const i in groups) {
-			entry += '|' + i + ':' + groups[i];
+			entry += `|${i}:${groups[i]}`;
 		}
 		this.roomlog(entry);
 	}
@@ -752,14 +750,16 @@ export abstract class BasicRoom {
 				}
 				message += `<strong>Comment:</strong> ${entry.comment ? entry.comment : 'None.'}<br />`;
 				message += `<button class="button" name="send" value="/approveshow ${userid}">Approve</button>` +
-				`<button class="button" name="send" value="/denyshow ${userid}">Deny</button></div>`;
+					`<button class="button" name="send" value="/denyshow ${userid}">Deny</button></div>`;
 				message += `<hr />`;
 			}
 			message += `</details></div>`;
 			messages.push(message);
 		}
-		if (!this.settings.isPrivate && !this.settings.isPersonal &&
-				this.settings.modchat && this.settings.modchat !== 'autoconfirmed') {
+		if (
+			!this.settings.isPrivate && !this.settings.isPersonal &&
+			this.settings.modchat && this.settings.modchat !== 'autoconfirmed'
+		) {
 			messages.push(`|raw|<div class="broadcast-red">Modchat currently set to ${this.settings.modchat}</div>`);
 		}
 		return messages.join('\n');
@@ -968,7 +968,7 @@ export abstract class BasicRoom {
 			user.send(`>${oldID}\n|noinit|rename|${newID}|${newTitle}`);
 		}
 
-		if (this.parent && this.parent.subRooms) {
+		if (this.parent?.subRooms) {
 			(this as any).parent.subRooms.delete(oldID);
 			(this as any).parent.subRooms.set(newID, this as ChatRoom);
 		}
@@ -1334,7 +1334,7 @@ export class GlobalRoomState {
 			players: [],
 			delayedTimer: timer.active,
 		});
-		if (!room || !room.battle) return false; // shouldn't happen???
+		if (!room?.battle) return false; // shouldn't happen???
 		if (timer) { // json blob of settings
 			Object.assign(room.battle.timer.settings, timer);
 		}
@@ -1384,7 +1384,7 @@ export class GlobalRoomState {
 			const stream = Monitor.logPath('battles.jsonl').createReadStream();
 			await stream.fd;
 			input = stream.byLine();
-		} catch (e) {
+		} catch {
 			return;
 		}
 		for await (const line of input) {
@@ -1457,7 +1457,7 @@ export class GlobalRoomState {
 		if (this.formatList) {
 			return this.formatList;
 		}
-		this.formatList = '|formats' + (Ladders.formatsListPrefix || '');
+		this.formatList = `|formats${Ladders.formatsListPrefix || ''}`;
 		let section = '';
 		let prevSection = '';
 		let curColumn = 1;
@@ -1469,9 +1469,9 @@ export class GlobalRoomState {
 
 			if (section !== prevSection) {
 				prevSection = section;
-				this.formatList += '|,' + curColumn + '|' + section;
+				this.formatList += `|,${curColumn}|${section}`;
 			}
-			this.formatList += '|' + format.name;
+			this.formatList += `|${format.name}`;
 			let displayCode = 0;
 			if (format.team) displayCode |= 1;
 			if (format.searchShow) displayCode |= 2;
@@ -1480,7 +1480,7 @@ export class GlobalRoomState {
 			const ruleTable = Dex.formats.getRuleTable(format);
 			const level = ruleTable.adjustLevel || ruleTable.adjustLevelDown || ruleTable.maxLevel;
 			if (level === 50) displayCode |= 16;
-			 // 32 was previously used for Multi Battles
+			// 32 was previously used for Multi Battles
 			if (format.bestOfDefault) displayCode |= 64;
 			if (format.teraPreviewDefault) displayCode |= 128;
 			this.formatList += ',' + displayCode.toString(16);
@@ -1741,8 +1741,7 @@ export class GlobalRoomState {
 	startLockdown(err: Error | null = null, slow = false) {
 		if (this.lockdown && err) return;
 		const devRoom = Rooms.get('development');
-		// @ts-ignore
-		const stack = (err ? Utils.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
+		const stack = (err ? Utils.escapeHTML(err.stack!).split(`\n`).slice(0, 2).join(`<br />`) : ``);
 		for (const [id, curRoom] of Rooms.rooms) {
 			if (err) {
 				if (id === 'staff' || id === 'development' || (!devRoom && id === 'lobby')) {
@@ -1756,9 +1755,9 @@ export class GlobalRoomState {
 				curRoom.addRaw(`<div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`).update();
 			}
 			const game = curRoom.game;
-			// @ts-ignore TODO: revisit when game.timer is standardized
-			if (!slow && game && game.timer && typeof game.timer.start === 'function' && !game.ended) {
-				// @ts-ignore
+			// @ts-expect-error TODO: revisit when game.timer is standardized
+			if (!slow && game?.timer && typeof game.timer.start === 'function' && !game.ended) {
+				// @ts-expect-error see above
 				game.timer.start();
 				if (curRoom.settings.modchat !== '+') {
 					curRoom.settings.modchat = '+';
@@ -1923,7 +1922,7 @@ export class GameRoom extends BasicRoom {
 		// console.log("NEW BATTLE");
 
 		this.tour = options.tour || null;
-		this.setParent((options as any).parent || (this.tour && this.tour.room) || null);
+		this.setParent((options as any).parent || this.tour?.room || null);
 
 		this.p1 = options.players?.[0]?.user || null;
 		this.p2 = options.players?.[1]?.user || null;
@@ -1975,10 +1974,8 @@ export class GameRoom extends BasicRoom {
 	requestModchat(user: User | null) {
 		if (!user) {
 			this.modchatUser = '';
-			return;
 		} else if (!this.modchatUser || this.modchatUser === user.id || this.auth.get(user.id) !== Users.PLAYER_SYMBOL) {
 			this.modchatUser = user.id;
-			return;
 		} else {
 			return "Modchat can only be changed by the user who turned it on, or by staff";
 		}

@@ -50,7 +50,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// and the user's ally, like Earthquake and Explosion, don't get affected by spread modifiers
 			if (move.spreadHit && move.target === 'allAdjacentFoes') {
 				const spreadModifier = move.spreadModifier || 0.5;
-				this.battle.debug('Spread modifier: ' + spreadModifier);
+				this.battle.debug(`Spread modifier: ${spreadModifier}`);
 				baseDamage = this.battle.modify(baseDamage, spreadModifier);
 			}
 
@@ -163,7 +163,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let movename = move.name;
 			if (move.id === 'hiddenpower') movename = 'Hidden Power';
 			if (sourceEffect) attrs += `|[from]${this.dex.conditions.get(sourceEffect)}`;
-			this.battle.addMove('move', pokemon, movename, target + attrs);
+			this.battle.addMove('move', pokemon, movename, `${target}${attrs}`);
 
 			if (!target) {
 				this.battle.attrLastMove('[notarget]');

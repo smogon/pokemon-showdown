@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Hazards', function () {
-	afterEach(function () {
+describe('Hazards', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should damage Pokemon before regular entrance Abilities`, function () {
+	it(`should damage Pokemon before regular entrance Abilities`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['uturn']},
 			{species: 'shedinja', ability: 'electricsurge', moves: ['sleeptalk']},
@@ -22,7 +22,7 @@ describe('Hazards', function () {
 		assert.false(battle.field.isTerrain('electricterrain'));
 	});
 
-	it(`should damage multiple Pokemon switching in simulatenously by Speed order`, function () {
+	it(`should damage multiple Pokemon switching in simulatenously by Speed order`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['stealthrock', 'sleeptalk']},
 			{species: 'kyogre', ability: 'drizzle', item: 'choicescarf', moves: ['sleeptalk']},
@@ -44,7 +44,7 @@ describe('Hazards', function () {
 		assert(rocksLandorusIndex < abilityLandorusIndex, 'Stealth Rock should damage Landorus before Intimidate activates.');
 	});
 
-	it(`should set up hazards even if there is no target`, function () {
+	it(`should set up hazards even if there is no target`, () => {
 		battle = common.createBattle([[
 			{species: 'diglett', level: 1, moves: ['sleeptalk', 'finalgambit']},
 			{species: 'diglett', level: 1, moves: ['sleeptalk', 'finalgambit']},
@@ -67,7 +67,7 @@ describe('Hazards', function () {
 		assert.statStage(battle.p1.active[0], 'spe', -1);
 	});
 
-	it(`should apply hazards in the order they were set up`, function () {
+	it(`should apply hazards in the order they were set up`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['sleeptalk', 'uturn']},
 			{species: 'whismur', moves: ['sleeptalk']},
@@ -92,7 +92,7 @@ describe('Hazards', function () {
 		assert(spikesIndex < rocksIndex, 'Spikes should have damaged before Stealth Rock.');
 	});
 
-	it(`should allow Berries to trigger between hazards`, function () {
+	it(`should allow Berries to trigger between hazards`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['sleeptalk', 'uturn']},
 			{species: 'shedinja', item: 'lumberry', moves: ['sleeptalk']},
@@ -106,7 +106,7 @@ describe('Hazards', function () {
 		assert.false.holdsItem(shedinja, 'Shedinja should have lost Lum Berry before fainting to rocks.');
 	});
 
-	it(`should set up hazards to every opponents' side in a Free-for-all battle`, function () {
+	it(`should set up hazards to every opponents' side in a Free-for-all battle`, () => {
 		battle = common.createBattle({gameType: 'freeforall'}, [[
 			{species: 'Bronzong', moves: ['sleeptalk', 'stealthrock']},
 		], [
@@ -123,7 +123,7 @@ describe('Hazards', function () {
 		assert.deepEqual(battle.sides.map(side => !!side.sideConditions.stealthrock), [true, true, true, true]);
 	});
 
-	it(`should set up hazards even if there is no target in a Free-for-all battle`, function () {
+	it(`should set up hazards even if there is no target in a Free-for-all battle`, () => {
 		battle = common.createBattle({gameType: 'freeforall'}, [[
 			{species: 'Bronzong', item: 'laggingtail', moves: ['sleeptalk', 'stealthrock']},
 		], [

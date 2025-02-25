@@ -43,8 +43,8 @@ export class FormatText extends preact.Component<{isTrusted?: boolean, replaceLi
 	render() {
 		const child = this.props.children;
 		if (typeof child !== 'string') throw new Error(`Invalid props.children type: ${!child ? child : typeof child}`);
-		return <span dangerouslySetInnerHTML={
-			{__html: Chat.formatText(child, this.props.isTrusted, this.props.replaceLinebreaks)}
-		} />;
+		return <span
+			dangerouslySetInnerHTML={{__html: Chat.formatText(child, this.props.isTrusted, this.props.replaceLinebreaks)}}
+		/>;
 	}
 }

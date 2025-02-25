@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Rage Fist', function () {
-	afterEach(function () {
+describe('Rage Fist', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should increase BP by 50 each time the user is hit`, function () {
+	it(`should increase BP by 50 each time the user is hit`, () => {
 		battle = common.createBattle([[
 			{species: 'Primeape', moves: ['ragefist']},
 		], [
@@ -26,7 +26,7 @@ describe('Rage Fist', function () {
 		assert.bounded(rageFistDamage, [34, 41], `Rage Fist should be 100 BP`);
 	});
 
-	it(`should not increase BP after being hit by status moves`, function () {
+	it(`should not increase BP after being hit by status moves`, () => {
 		battle = common.createBattle([[
 			{species: 'Primeape', moves: ['ragefist']},
 		], [
@@ -43,7 +43,7 @@ describe('Rage Fist', function () {
 		assert.bounded(rageFistDamage, [17, 21]);
 	});
 
-	it(`should increase BP after each hit of multi-hit moves`, function () {
+	it(`should increase BP after each hit of multi-hit moves`, () => {
 		battle = common.createBattle([[
 			{species: 'Primeape', ability: 'noguard', moves: ['sleeptalk', 'ragefist']},
 		], [
@@ -56,7 +56,7 @@ describe('Rage Fist', function () {
 		assert.bounded(umbreon.maxhp - umbreon.hp, [52, 61]);
 	});
 
-	it(`should use user's own number of times hit when called by another move`, function () {
+	it(`should use user's own number of times hit when called by another move`, () => {
 		battle = common.createBattle([[
 			{species: 'Primeape', moves: ['ragefist']},
 		], [
@@ -68,7 +68,7 @@ describe('Rage Fist', function () {
 		assert.bounded(primeape.maxhp - primeape.hp, [77, 91]);
 	});
 
-	it(`should not increase BP when the user's Substitute is damaged or broken`, function () {
+	it(`should not increase BP when the user's Substitute is damaged or broken`, () => {
 		battle = common.createBattle([[
 			{species: 'Primeape', moves: ['substitute', 'ragefist']},
 		], [
@@ -82,7 +82,7 @@ describe('Rage Fist', function () {
 		assert.equal(primeape.timesAttacked, 0);
 	});
 
-	it(`should not increase BP when healed by an ally's Pollen Puff`, function () {
+	it(`should not increase BP when healed by an ally's Pollen Puff`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Wynaut', moves: ['pollenpuff']},
 			{species: 'Annihilape', moves: ['sleeptalk', 'bellydrum']},
@@ -99,7 +99,7 @@ describe('Rage Fist', function () {
 		assert.equal(annihilape.timesAttacked, 0, `timesAttacked should not have incremented after a not-full HP Pollen Puff`);
 	});
 
-	it(`should increase BP when hit by Dragon Darts`, function () {
+	it(`should increase BP when hit by Dragon Darts`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Primeape', moves: ['sleeptalk', 'ragefist']},
 			{species: 'Wynaut', moves: ['sleeptalk', 'allyswitch']},

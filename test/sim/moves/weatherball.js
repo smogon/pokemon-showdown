@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Weather Ball', function () {
-	afterEach(function () {
+describe('Weather Ball', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should change type when used as a Z-move in weather', function () {
+	it('should change type when used as a Z-move in weather', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: "Castform", item: 'normaliumz', moves: ['weatherball']},
@@ -22,7 +22,7 @@ describe('Weather Ball', function () {
 		assert.equal(battle.p2.active[0].item, '');
 	});
 
-	it('should not change type when called by a Z-move in weather', function () {
+	it('should not change type when called by a Z-move in weather', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: "Castform", item: 'normaliumz', moves: ['shadowball', 'assist']},
@@ -36,7 +36,7 @@ describe('Weather Ball', function () {
 		assert(!battle.p2.active[0].fainted);
 	});
 
-	it('should not trigger counter when it is special during gen 3', function () {
+	it('should not trigger counter when it is special during gen 3', () => {
 		battle = common.gen(3).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Shuckle', ability: 'drizzle', moves: ['weatherball']}]});
 		battle.setPlayer('p2', {team: [{species: 'Shuckle', moves: ['counter']}]});
@@ -44,7 +44,7 @@ describe('Weather Ball', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it('should trigger mirror coat when it is special during gen 3', function () {
+	it('should trigger mirror coat when it is special during gen 3', () => {
 		battle = common.gen(3).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Shuckle', ability: 'drought', moves: ['weatherball']}]});
 		battle.setPlayer('p2', {team: [{species: 'Shuckle', moves: ['mirrorcoat']}]});
@@ -52,7 +52,7 @@ describe('Weather Ball', function () {
 		assert.false.fullHP(battle.p1.active[0]);
 	});
 
-	it('should not trigger mirror coat when it is physical during gen 3', function () {
+	it('should not trigger mirror coat when it is physical during gen 3', () => {
 		battle = common.gen(3).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Shuckle', moves: ['weatherball']}]});
 		battle.setPlayer('p2', {team: [{species: 'Shuckle', moves: ['mirrorcoat']}]});
@@ -60,7 +60,7 @@ describe('Weather Ball', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it('should trigger counter when it is physical during gen 3', function () {
+	it('should trigger counter when it is physical during gen 3', () => {
 		battle = common.gen(3).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Shuckle', ability: 'sandstream', moves: ['weatherball']}]});
 		battle.setPlayer('p2', {team: [{species: 'Shuckle', moves: ['counter']}]});

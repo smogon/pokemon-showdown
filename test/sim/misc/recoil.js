@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Recoil', function () {
-	afterEach(function () {
+describe('Recoil', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should deal damage to the user after an attack depending on the damage dealt', function () {
+	it('should deal damage to the user after an attack depending on the damage dealt', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Kartana", ability: 'compoundeyes', moves: ['headcharge', 'doubleedge', 'headsmash']}]});
 		battle.setPlayer('p2', {team: [{species: "Happiny", level: 50, ability: 'sturdy', moves: ['strengthsap']}]});

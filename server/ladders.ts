@@ -33,10 +33,6 @@ const searches = new Map<string, {
  * attempting to make a match with looser restrictions until one can be made.
  */
 class Ladder extends LadderStore {
-	constructor(formatid: string) {
-		super(formatid);
-	}
-
 	async prepBattle(connection: Connection, challengeType: ChallengeType, team: string | null = null, isRated = false) {
 		// all validation for a battle goes through here
 		const user = connection.user;
@@ -73,7 +69,6 @@ class Ladder extends LadderStore {
 		let rating = 0;
 		let valResult;
 		let removeNicknames = !!(user.locked || user.namelocked);
-
 
 		const regex = /(?:^|])([^|]*)\|([^|]*)\|/g;
 		let match = regex.exec(team);
@@ -226,7 +221,6 @@ class Ladder extends LadderStore {
 		if (Ladders.challenges.remove(chall)) {
 			return Ladders.match([chall.ready, ready]);
 		}
-		return;
 	}
 
 	cancelSearch(user: User) {

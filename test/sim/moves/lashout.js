@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Lash Out', function () {
-	afterEach(function () {
+describe('Lash Out', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should double in base power if the user's stats were lowered this turn`, function () {
+	it(`should double in base power if the user's stats were lowered this turn`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['lashout']},
 		], [
@@ -22,7 +22,7 @@ describe('Lash Out', function () {
 		assert.bounded(damage, [158, 186]); // If it wasn't doubled, range would be 79-94
 	});
 
-	it(`should double in base power if the user's stats were lowered this turn by an ally`, function () {
+	it(`should double in base power if the user's stats were lowered this turn by an ally`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Wynaut', moves: ['lashout']},
 			{species: 'Blissey', moves: ['faketears']},
@@ -36,7 +36,7 @@ describe('Lash Out', function () {
 		assert.bounded(damage, [158, 186]); // If it wasn't doubled, range would be 79-94
 	});
 
-	it(`should double in base power if the user's stats were lowered at the start of the match`, function () {
+	it(`should double in base power if the user's stats were lowered at the start of the match`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', ability: 'shellarmor', moves: ['lashout']},
 		], [
@@ -48,7 +48,7 @@ describe('Lash Out', function () {
 		assert.bounded(damage, [104, 123]); // If it wasn't doubled, range would be 52-62
 	});
 
-	it(`should not double in base power if the user's stats were lowered at a switch after a KO`, function () {
+	it(`should not double in base power if the user's stats were lowered at a switch after a KO`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', ability: 'shellarmor', moves: ['lashout']},
 		], [
@@ -63,7 +63,7 @@ describe('Lash Out', function () {
 		assert.bounded(damage, [52, 62]); // If it was doubled, range would be 104-123
 	});
 
-	it(`should double in base power even if stat resets are reset by Haze`, function () {
+	it(`should double in base power even if stat resets are reset by Haze`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Wynaut', moves: ['lashout']},
 			{species: 'Blissey', moves: ['faketears']},

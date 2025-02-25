@@ -751,10 +751,11 @@ export const commands: Chat.ChatCommands = {
 						<p>Custom avatars from account <strong>{id}</strong>:</p>,
 						allowed.filter(Boolean).map(avatar => (
 							<p>
-								{hasButton ?
-									<button name="send" value={`/avatar ${avatar}`} class="button">{Avatars.img(avatar!)}</button> :
+								{hasButton ? (
+									<button name="send" value={`/avatar ${avatar}`} class="button">{Avatars.img(avatar!)}</button>
+								) : (
 									Avatars.img(avatar!)
-								} {}
+								)} {}
 								<code>/avatar {avatar!.replace('#', '')}</code>
 							</p>
 						))

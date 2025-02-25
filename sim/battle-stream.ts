@@ -379,7 +379,7 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 	}
 
 	_write(message: string | Buffer) {
-		this.currentMessage += '' + message;
+		this.currentMessage += `${message}`;
 		const index = this.currentMessage.lastIndexOf('\n');
 		if (index >= 0) {
 			void this.battleStream.write(this.currentMessage.slice(0, index));

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Ring Target', function () {
-	afterEach(function () {
+describe('Ring Target', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should negate natural immunities and deal normal type effectiveness with the other type(s)`, function () {
+	it(`should negate natural immunities and deal normal type effectiveness with the other type(s)`, () => {
 		battle = common.createBattle([[
 			{species: "Smeargle", ability: 'owntempo', moves: ['earthquake', 'vitalthrow', 'shadowball', 'psychic']},
 		], [
@@ -36,7 +36,7 @@ describe('Ring Target', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not affect ability-based immunities`, function () {
+	it(`should not affect ability-based immunities`, () => {
 		battle = common.createBattle([[
 			{species: 'Hariyama', moves: ['earthquake']},
 		], [
@@ -52,7 +52,7 @@ describe('Ring Target', function () {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not affect Magnet Rise`, function () {
+	it(`should not affect Magnet Rise`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['earthquake']},
 		], [

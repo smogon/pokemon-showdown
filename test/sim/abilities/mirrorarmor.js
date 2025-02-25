@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe("Mirror Armor", function () {
-	afterEach(function () {
+describe("Mirror Armor", () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it("should bounce boosts back to the source", function () {
+	it("should bounce boosts back to the source", () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Corviknight', ability: 'mirrorarmor', moves: ['endure']},
@@ -28,7 +28,7 @@ describe("Mirror Armor", function () {
 		assert.statStage(machop, 'def', -1);
 	});
 
-	it("should reflect Parting Shot's stat drops, then the Parting Shot user should switch", function () {
+	it("should reflect Parting Shot's stat drops, then the Parting Shot user should switch", () => {
 		battle = common.createBattle([[
 			{species: 'Corviknight', ability: 'mirrorarmor', moves: ['sleeptalk']},
 		], [
@@ -45,7 +45,7 @@ describe("Mirror Armor", function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it("should activate, but silently, if the source has fainted", function () {
+	it("should activate, but silently, if the source has fainted", () => {
 		battle = common.createBattle([[
 			{species: 'corviknight', ability: 'mirrorarmor', moves: ['bravebird']},
 		], [

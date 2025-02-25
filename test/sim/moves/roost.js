@@ -6,12 +6,12 @@ const Sim = require('./../../../dist/sim');
 
 let battle;
 
-describe('Roost', function () {
-	afterEach(function () {
+describe('Roost', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should fail if the user is at max HP', function () {
+	it('should fail if the user is at max HP', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Clefable", item: 'leftovers', ability: 'unaware', moves: ['calmmind']}]});
 		battle.setPlayer('p2', {team: [{species: "Dragonite", item: 'laggingtail', ability: 'multiscale', moves: ['roost']}]});
@@ -19,7 +19,7 @@ describe('Roost', function () {
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
 	});
 
-	it('should heal the user', function () {
+	it('should heal the user', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Clefable", ability: 'unaware', moves: ['calmmind', 'hiddenpowergrass']}]});
 		battle.setPlayer('p2', {team: [{species: "Dragonite", ability: 'multiscale', moves: ['roost', 'dragondance']}]});
@@ -28,7 +28,7 @@ describe('Roost', function () {
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
-	it('should suppress user\'s current Flying type if succesful', function () {
+	it('should suppress user\'s current Flying type if succesful', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Aggron", item: 'leftovers', ability: 'sturdy', moves: ['mudslap', 'hiddenpowergrass']}]});
 		battle.setPlayer('p2', {team: [{species: "Aerodactyl", item: 'focussash', ability: 'wonderguard', moves: ['roost', 'doubleedge']}]});
@@ -49,7 +49,7 @@ describe('Roost', function () {
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Hit super-effectively by HP Grass
 	});
 
-	it('should suppress Flying type yet to be acquired this turn', function () {
+	it('should suppress Flying type yet to be acquired this turn', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: "Pidgeot", item: 'laggingtail', ability: 'victorystar', moves: ['aircutter']},
@@ -70,7 +70,7 @@ describe('Roost', function () {
 		assert.equal(hitCount, 3);
 	});
 
-	it('should treat a pure Flying pokémon as Normal type', function () {
+	it('should treat a pure Flying pokémon as Normal type', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Tornadus", item: 'focussash', ability: 'prankster', moves: ['roost']}]});
 		battle.setPlayer('p2', {team: [{species: "Gastly", item: 'laggingtail', ability: 'levitate', moves: ['astonish', 'trickortreat']}]});
@@ -85,7 +85,7 @@ describe('Roost', function () {
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp); // Immune to Astonish
 	});
 
-	it('should not remove Flying type during Terastallization', function () {
+	it('should not remove Flying type during Terastallization', () => {
 		battle = common.gen(9).createBattle([[
 			{species: "Dudunsparce", ability: "runaway", moves: ['sleeptalk', 'roost'], teraType: "Flying"},
 		], [
@@ -97,12 +97,12 @@ describe('Roost', function () {
 	});
 });
 
-describe('Roost - DPP', function () {
-	afterEach(function () {
+describe('Roost - DPP', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should treat a pure Flying pokémon as `???` type', function () {
+	it('should treat a pure Flying pokémon as `???` type', () => {
 		battle = common.gen(4).createBattle([
 			[{species: "Arceus-Flying", item: 'skyplate', ability: 'multitype', moves: ['roost']}],
 			[{species: "Gastly", item: 'laggingtail', ability: 'levitate', moves: ['astonish', 'earthpower']}],

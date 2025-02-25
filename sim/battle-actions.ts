@@ -139,7 +139,7 @@ export class BattleActions {
 		pokemon.itemState.effectOrder = this.battle.effectOrder++;
 		this.battle.runEvent('BeforeSwitchIn', pokemon);
 		if (sourceEffect) {
-			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, '[from] ' + sourceEffect);
+			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, `[from] ${sourceEffect}`);
 		} else {
 			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 		}
@@ -176,7 +176,7 @@ export class BattleActions {
 		}
 		const allActive = this.battle.getAllActive(true);
 		this.battle.speedSort(allActive);
-		this.battle.speedOrder = allActive.map((a) => a.side.n * a.battle.sides.length + a.position);
+		this.battle.speedOrder = allActive.map(a => a.side.n * a.battle.sides.length + a.position);
 		this.battle.fieldEvent('SwitchIn', switchersIn);
 
 		for (const poke of switchersIn) {
@@ -449,10 +449,10 @@ export class BattleActions {
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
 		if (sourceEffect) attrs += `|[from] ${sourceEffect.fullname}`;
 		if (zMove && move.isZ === true) {
-			attrs = '|[anim]' + movename + attrs;
-			movename = 'Z-' + movename;
+			attrs = `|[anim]${movename}${attrs}`;
+			movename = `Z-${movename}`;
 		}
-		this.battle.addMove('move', pokemon, movename, target + attrs);
+		this.battle.addMove('move', pokemon, movename, `${target}${attrs}`);
 
 		if (zMove) this.runZPower(move, pokemon);
 
@@ -721,8 +721,10 @@ export class BattleActions {
 					}
 				}
 			}
-			if (move.alwaysHit || (move.id === 'toxic' && this.battle.gen >= 8 && pokemon.hasType('Poison')) ||
-					(move.target === 'self' && move.category === 'Status' && !target.isSemiInvulnerable())) {
+			if (
+				move.alwaysHit || (move.id === 'toxic' && this.battle.gen >= 8 && pokemon.hasType('Poison')) ||
+				(move.target === 'self' && move.category === 'Status' && !target.isSemiInvulnerable())
+			) {
 				accuracy = true; // bypasses ohko accuracy modifiers
 			} else {
 				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
@@ -762,7 +764,7 @@ export class BattleActions {
 					if (move.id === 'feint') {
 						this.battle.add('-activate', target, 'move: Feint');
 					} else {
-						this.battle.add('-activate', target, 'move: ' + move.name, '[broken]');
+						this.battle.add('-activate', target, `move: ${move.name}`, '[broken]');
 					}
 					if (this.battle.gen >= 6) delete target.volatiles['stall'];
 				}
@@ -953,7 +955,7 @@ export class BattleActions {
 				// purposes of Counter, Metal Burst, and Mirror Coat.
 				damage[i] = md === true || !md ? 0 : md;
 				// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
-				move.totalDamage += damage[i] as number;
+				move.totalDamage += damage[i];
 			}
 			if (move.mindBlownRecoil) {
 				const hpBeforeRecoil = pokemon.hp;
@@ -1019,7 +1021,7 @@ export class BattleActions {
 
 		this.battle.eachEvent('Update');
 
-		this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val) as Pokemon[], pokemon, move);
+		this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
 
 		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 			for (const [i, d] of damage.entries()) {
@@ -1576,7 +1578,7 @@ export class BattleActions {
 	 * Normal PS return value rules apply:
 	 * undefined = success, null = silent failure, false = loud failure
 	 */
-	 getDamage(
+	getDamage(
 		source: Pokemon, target: Pokemon, move: string | number | ActiveMove,
 		suppressMessages = false
 	): number | undefined | null | false {
@@ -1729,7 +1731,7 @@ export class BattleActions {
 		if (move.spreadHit) {
 			// multi-target modifier (doubles only)
 			const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
-			this.battle.debug('Spread modifier: ' + spreadModifier);
+			this.battle.debug(`Spread modifier: ${spreadModifier}`);
 			baseDamage = this.battle.modify(baseDamage, spreadModifier);
 		} else if (move.multihitType === 'parentalbond' && move.hit > 1) {
 			// Parental Bond modifier

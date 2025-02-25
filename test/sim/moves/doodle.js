@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Doodle', function () {
-	afterEach(function () {
+describe('Doodle', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should replace the Abilities of the user and its ally with the Ability of its target`, function () {
+	it(`should replace the Abilities of the user and its ally with the Ability of its target`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wynaut', ability: 'shadowtag', moves: ['doodle']},
 			{species: 'ironhands', ability: 'quarkdrive', moves: ['sleeptalk']},
@@ -23,7 +23,7 @@ describe('Doodle', function () {
 		assert.equal(battle.p1.active[1].ability, 'magicguard');
 	});
 
-	it(`should fail against certain Abilities`, function () {
+	it(`should fail against certain Abilities`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wynaut', ability: 'shadowtag', moves: ['doodle']},
 			{species: 'ironhands', ability: 'quarkdrive', moves: ['sleeptalk']},
@@ -36,7 +36,7 @@ describe('Doodle', function () {
 		assert.equal(battle.p1.active[1].ability, 'quarkdrive');
 	});
 
-	it(`should not fail if only the user has an unreplaceable Ability`, function () {
+	it(`should not fail if only the user has an unreplaceable Ability`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'komala', ability: 'comatose', moves: ['doodle']},
 			{species: 'wynaut', ability: 'shadowtag', moves: ['swordsdance']},

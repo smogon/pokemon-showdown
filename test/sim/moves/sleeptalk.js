@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Sleep Talk', function () {
-	afterEach(function () {
+describe('Sleep Talk', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should run conditions for submove', function () {
+	it('should run conditions for submove', () => {
 		battle = common.createBattle([[
 			{species: 'snorlax', ability: 'noguard', moves: ['sleeptalk', 'highjumpkick']},
 		], [
@@ -22,7 +22,7 @@ describe('Sleep Talk', function () {
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|cant'), 'should log that High Jump Kick failed');
 	});
 
-	it('should fail and lose PP on subsequent turns while Choice locked, prior to Gen 5', function () {
+	it('should fail and lose PP on subsequent turns while Choice locked, prior to Gen 5', () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'Breloom', moves: ['spore', 'snore']},
 		], [

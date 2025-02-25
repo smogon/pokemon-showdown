@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Multiscale', function () {
-	afterEach(function () {
+describe('Multiscale', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should halve damage when it is at full health`, function () {
+	it(`should halve damage when it is at full health`, () => {
 		battle = common.createBattle([[
 			{species: 'Dragonite', ability: 'multiscale', moves: ['sleeptalk']},
 		], [
@@ -26,7 +26,7 @@ describe('Multiscale', function () {
 		assert.bounded(dnite.maxhp - dnite.hp - damage, [30, 36], `Multiscale should not reduce damage, because Dragonite was damaged`);
 	});
 
-	it('should be suppressed by Mold Breaker', function () {
+	it('should be suppressed by Mold Breaker', () => {
 		battle = common.createBattle([[
 			{species: 'Dragonite', ability: 'multiscale', moves: ['sleeptalk']},
 		], [

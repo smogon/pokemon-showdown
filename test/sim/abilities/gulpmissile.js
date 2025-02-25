@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Gulp Missile', function () {
-	afterEach(function () {
+describe('Gulp Missile', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should retrieve a catch on the first turn of Dive`, function () {
+	it(`should retrieve a catch on the first turn of Dive`, () => {
 		battle = common.createBattle([[
 			{species: 'cramorant', ability: 'gulpmissile', moves: ['dive']},
 		], [
@@ -20,7 +20,7 @@ describe('Gulp Missile', function () {
 		assert.species(battle.p1.active[0], 'Cramorant-Gulping');
 	});
 
-	it(`should retrieve a catch only if the move was successful`, function () {
+	it(`should retrieve a catch only if the move was successful`, () => {
 		battle = common.createBattle([[
 			{species: 'cramorant', ability: 'gulpmissile', moves: ['surf']},
 		], [
@@ -30,7 +30,7 @@ describe('Gulp Missile', function () {
 		assert.false.species(battle.p1.active[0], 'Cramorant-Gulping');
 	});
 
-	it(`should not spit out its catch if the Cramorant is semi-invulnerable`, function () {
+	it(`should not spit out its catch if the Cramorant is semi-invulnerable`, () => {
 		battle = common.createBattle([[
 			{species: 'cramorant', ability: 'gulpmissile', moves: ['dive']},
 		], [
@@ -42,7 +42,7 @@ describe('Gulp Missile', function () {
 		assert.statStage(battle.p2.active[0], 'def', 0);
 	});
 
-	it(`should change forms before damage calculation`, function () {
+	it(`should change forms before damage calculation`, () => {
 		battle = common.createBattle([[
 			{species: 'cramorant', ability: 'gulpmissile', moves: ['surf']},
 		], [
@@ -54,8 +54,8 @@ describe('Gulp Missile', function () {
 		assert.bounded(damage, [48, 57], `Cramorant should have received STAB in damage calculation`);
 	});
 
-	describe(`Hackmons Cramorant`, function () {
-		it(`should be sent out as the hacked form`, function () {
+	describe(`Hackmons Cramorant`, () => {
+		it(`should be sent out as the hacked form`, () => {
 			battle = common.createBattle([[
 				{species: 'cramorantgulping', ability: 'gulpmissile', moves: ['sleeptalk']},
 				{species: 'wynaut', moves: ['sleeptalk']},
@@ -73,7 +73,7 @@ describe('Gulp Missile', function () {
 			assert.statStage(togepi, 'def', -2);
 		});
 
-		it(`should not force Cramorant-Gorging or -Gulping to have Gulp Missile`, function () {
+		it(`should not force Cramorant-Gorging or -Gulping to have Gulp Missile`, () => {
 			battle = common.createBattle([[
 				{species: 'cramorantgorging', ability: 'intimidate', moves: ['sleeptalk']},
 			], [

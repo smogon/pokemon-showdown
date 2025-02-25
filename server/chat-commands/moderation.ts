@@ -9,7 +9,7 @@
  * @license MIT
  */
 import {Utils} from '../../lib';
-import {RoomSection, RoomSections} from './room-settings';
+import {type RoomSection, RoomSections} from './room-settings';
 
 /* eslint no-else-return: "error" */
 
@@ -350,7 +350,7 @@ export const commands: Chat.ChatCommands = {
 				Utils.sortBy(names).map(userid => {
 					const isOnline = Users.get(userid)?.statusType === 'online';
 					// targetRoom guaranteed to exist above
-					return userid in targetRoom!.users && isOnline ? `**${userid}**` : userid;
+					return userid in targetRoom.users && isOnline ? `**${userid}**` : userid;
 				}).join(', ');
 		});
 
@@ -481,6 +481,7 @@ export const commands: Chat.ChatCommands = {
 		);
 
 		await Promise.all(promises);
+		// eslint-disable-next-line require-atomic-updates
 		connection.autojoins = autojoins.join(',');
 	},
 	autojoinhelp: [`/autojoin [rooms] - Automatically joins all the given rooms.`],
@@ -910,7 +911,6 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		const {privateReason, publicReason} = this.parseSpoiler(reason);
-
 
 		// Use default time for locks.
 		const duration = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : (month ? Date.now() + 30 * 24 * 60 * 60 * 1000 : null);
@@ -2144,7 +2144,6 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 
-
 		const expireTime = cmd.includes('perma') ? Date.now() + (10 * 365 * 24 * 60 * 60 * 1000) : null;
 		const action = expireTime ? 'PERMABLACKLIST' : 'BLACKLIST';
 
@@ -2199,7 +2198,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		const includesUrl = reason.includes(`.${Config.routes.root}/`); // lgtm [js/incomplete-url-substring-sanitization]
 		if (!room.battle && !includesUrl && cmd !== 'forcebattleban') {
-			 return this.errorReply(`Battle bans require a battle replay if used outside of a battle; if the battle has expired, use /forcebattleban.`);
+			return this.errorReply(`Battle bans require a battle replay if used outside of a battle; if the battle has expired, use /forcebattleban.`);
 		}
 		if (!user.can('rangeban', targetUser)) {
 			this.errorReply(`Battlebans have been deprecated. Alternatives:`);
@@ -2356,7 +2355,7 @@ export const commands: Chat.ChatCommands = {
 
 		const duplicates = targets.filter(userid => (
 			// can be asserted, room should always exist
-			Punishments.roomUserids.nestedGetByType(room!.roomid, userid, 'BLACKLIST')
+			Punishments.roomUserids.nestedGetByType(room.roomid, userid, 'BLACKLIST')
 		));
 		if (duplicates.length) {
 			return this.errorReply(`[${duplicates.join(', ')}] ${Chat.plural(duplicates, "are", "is")} already blacklisted.`);

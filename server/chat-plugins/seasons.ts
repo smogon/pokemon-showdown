@@ -64,7 +64,7 @@ export function getBadges(user: User, curFormat: string) {
 
 function getUserHTML(user: User, format: string) {
 	const buf = `<username>${user.name}</username>`;
-	const badgeType = getBadges(user, format).filter(x => x.format === format)[0]?.type;
+	const badgeType = getBadges(user, format).find(x => x.format === format)?.type;
 	if (badgeType) {
 		let formatType = format.split(/gen\d+/)[1];
 		if (!['ou', 'randombattle'].includes(formatType)) formatType = 'rotating';
@@ -217,7 +217,7 @@ export function rollSeason() {
 	}
 }
 
-export let updateTimeout: NodeJS.Timer | true | null = null;
+export let updateTimeout: NodeJS.Timeout | true | null = null;
 
 export function rollTimer() {
 	if (updateTimeout === true) return;

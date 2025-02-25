@@ -9,7 +9,7 @@ import {Auth} from '../user-groups';
 import {statements} from './database';
 /** The time until a PM sent offline expires. Presently, 60 days. */
 export const EXPIRY_TIME = 60 * 24 * 60 * 60 * 1000;
-/** The time until a PM that has been seen by the user expires. Presently, one week.*/
+/** The time until a PM that has been seen by the user expires. Presently, one week. */
 export const SEEN_EXPIRY_TIME = 7 * 24 * 60 * 60 * 1000;
 /** The max PMs that one user can have pending to a specific user at one time */
 export const MAX_PENDING = 20;
@@ -136,7 +136,7 @@ export const PrivateMessages = new class {
 		}
 		return `${Users.globalAuth.get(toID(user))}${user}`;
 	}
-	nextClear(): NodeJS.Timer {
+	nextClear(): NodeJS.Timeout {
 		if (!PM.isParentProcess) return null!;
 		const time = Date.now();
 		// even though we expire once a week atm, we check once a day

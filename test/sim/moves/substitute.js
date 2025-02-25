@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Substitute', function () {
-	afterEach(function () {
+describe('Substitute', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should deduct 25% of max HP, rounded down', function () {
+	it('should deduct 25% of max HP, rounded down', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute']}]});
 		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['recover']}]});
@@ -19,7 +19,7 @@ describe('Substitute', function () {
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 	});
 
-	it('should not block the user\'s own moves from targetting itself', function () {
+	it('should not block the user\'s own moves from targetting itself', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute', 'calmmind']}]});
 		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['recover']}]});
@@ -29,7 +29,7 @@ describe('Substitute', function () {
 		assert.equal(battle.p1.active[0].boosts['spd'], 1);
 	});
 
-	it('should block damage from most moves', function () {
+	it('should block damage from most moves', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute']}]});
 		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['psystrike']}]});
@@ -38,7 +38,7 @@ describe('Substitute', function () {
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 	});
 
-	it('should not block recoil damage', function () {
+	it('should not block recoil damage', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute', 'doubleedge']}]});
 		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['nastyplot']}]});
@@ -48,7 +48,7 @@ describe('Substitute', function () {
 		assert.notEqual(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 	});
 
-	it('should take specific recoil damage in Gen 1', function () {
+	it('should take specific recoil damage in Gen 1', () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Hitmonlee', moves: ['substitute', 'highjumpkick']},
 		], [
@@ -87,7 +87,7 @@ describe('Substitute', function () {
 		assert.equal(hitmonchan.maxhp - hitmonchan.hp, Math.floor(hitmonchan.maxhp / 4));
 	});
 
-	it('should cause recoil damage from an opponent\'s moves to be based on damage dealt to the substitute', function () {
+	it('should cause recoil damage from an opponent\'s moves to be based on damage dealt to the substitute', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute']}]});
 		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'noguard', moves: ['nastyplot', 'lightofruin']}]});
@@ -97,7 +97,7 @@ describe('Substitute', function () {
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.ceil(Math.floor(battle.p1.active[0].maxhp / 4) / 2));
 	});
 
-	it('should cause recovery from an opponent\'s draining moves to be based on damage dealt to the substitute', function () {
+	it('should cause recovery from an opponent\'s draining moves to be based on damage dealt to the substitute', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Zangoose', ability: 'pressure', moves: ['substitute']}]});
 		battle.setPlayer('p2', {team: [{species: 'Zangoose', ability: 'noguard', moves: ['bellydrum', 'drainpunch']}]});
@@ -107,7 +107,7 @@ describe('Substitute', function () {
 		assert.equal(battle.p2.active[0].hp - hp, Math.ceil(Math.floor(battle.p1.active[0].maxhp / 4) / 2));
 	});
 
-	it('should block most status moves targetting the user', function () {
+	it('should block most status moves targetting the user', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'noguard', moves: ['substitute']}]});
 		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['hypnosis', 'toxic', 'poisongas', 'thunderwave', 'willowisp']}]});
@@ -117,7 +117,7 @@ describe('Substitute', function () {
 		}
 	});
 
-	it('should allow multi-hit moves to continue after the substitute fades', function () {
+	it('should allow multi-hit moves to continue after the substitute fades', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Dragonite', ability: 'noguard', item: 'focussash', moves: ['substitute', 'roost']}]});
 		battle.setPlayer('p2', {team: [{species: 'Dragonite', ability: 'hugepower', item: 'laggingtail', moves: ['roost', 'dualchop']}]});
@@ -126,7 +126,7 @@ describe('Substitute', function () {
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it(`[Gen 1] should track what the actual damage would have been without the Substitute`, function () {
+	it(`[Gen 1] should track what the actual damage would have been without the Substitute`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Ponyta', moves: ['substitute', 'growl'], evs: {hp: 252, spd: 252}},
 		], [
@@ -142,7 +142,7 @@ describe('Substitute', function () {
 		assert.bounded(hp - ponyta.hp, [91, 108]);
 	});
 
-	it(`[Gen 1] Substitute should not block secondary effect confusion if it is unbroken`, function () {
+	it(`[Gen 1] Substitute should not block secondary effect confusion if it is unbroken`, () => {
 		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
 			{species: 'Magikarp', moves: ['psybeam']},
 		], [
@@ -153,7 +153,7 @@ describe('Substitute', function () {
 		assert(battle.log.some(line => line.includes('confusion')));
 	});
 
-	it(`[Gen 1] if a Pokemon with a Substitute hurts itself due to confusion and the target does not have a Substitute, there is no damage dealt.`, function () {
+	it(`[Gen 1] if a Pokemon with a Substitute hurts itself due to confusion and the target does not have a Substitute, there is no damage dealt.`, () => {
 		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
 			{species: 'Magikarp', moves: ['substitute', 'agility']},
 		], [
@@ -176,7 +176,7 @@ describe('Substitute', function () {
 		assert.equal(alakazam.hp, alakaxamHp);
 	});
 
-	it(`[Gen 1] if a Pokemon with a Substitute hurts itself due to confusion and the target has a Substitute, the target's Substitute takes the damage.`, function () {
+	it(`[Gen 1] if a Pokemon with a Substitute hurts itself due to confusion and the target has a Substitute, the target's Substitute takes the damage.`, () => {
 		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
 			{species: 'Magikarp', moves: ['substitute', 'agility']},
 		], [

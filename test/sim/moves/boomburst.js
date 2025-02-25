@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Boomburst', function () {
-	afterEach(function () {
+describe('Boomburst', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should pierce through substitutes', function () {
+	it('should pierce through substitutes', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'boomburst']}]});
 		battle.setPlayer('p2', {team: [{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}]});

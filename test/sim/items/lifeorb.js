@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Life Orb', function () {
-	afterEach(function () {
+describe('Life Orb', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should hurt the user by 1/10 of their max HP after a successful attack', function () {
+	it('should hurt the user by 1/10 of their max HP after a successful attack', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Scizor', ability: 'technician', item: 'lifeorb', moves: ['uturn']},

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Quash', function () {
-	afterEach(function () {
+describe('Quash', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should cause the target to move last if it has not moved yet', function () {
+	it('should cause the target to move last if it has not moved yet', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: "Sableye", ability: 'prankster', moves: ['quash']},
@@ -26,7 +26,7 @@ describe('Quash', function () {
 		assert.equal(battle.log[battle.lastMoveLine].split('|')[3], 'Swift');
 	});
 
-	it('should not cause the target to move again if it has already moved', function () {
+	it('should not cause the target to move again if it has already moved', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: "Sableye", ability: 'prankster', moves: ['quash']},

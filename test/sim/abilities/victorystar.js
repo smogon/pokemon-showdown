@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe("Victory Star", function () {
-	afterEach(function () {
+describe("Victory Star", () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`can boost accuracy twice if both the user and ally have the ability`, function () {
+	it(`can boost accuracy twice if both the user and ally have the ability`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Victini', ability: 'victorystar', moves: ['hypnosis']},
 			{species: 'Wynaut', ability: 'victorystar', moves: ['poltergeist']},
@@ -19,14 +19,14 @@ describe("Victory Star", function () {
 			{species: 'Avalugg', moves: ['poltergeist']},
 		]]);
 
-		battle.onEvent('Accuracy', battle.format, function (accuracy) {
+		battle.onEvent('Accuracy', battle.format, accuracy => {
 			assert.equal(accuracy, 73);
 		});
 
 		battle.makeChoices();
 	});
 
-	it(`should not boost the accuracy of opponents`, function () {
+	it(`should not boost the accuracy of opponents`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Victini', ability: 'victorystar', moves: ['sleeptalk']},
 			{species: 'Wynaut', ability: 'victorystar', moves: ['sleeptalk']},
@@ -35,14 +35,14 @@ describe("Victory Star", function () {
 			{species: 'Avalugg', moves: ['sleeptalk']},
 		]]);
 
-		battle.onEvent('Accuracy', battle.format, function (accuracy) {
+		battle.onEvent('Accuracy', battle.format, accuracy => {
 			assert.equal(accuracy, 60);
 		});
 
 		battle.makeChoices();
 	});
 
-	it(`should boost accuracy even when used against allies`, function () {
+	it(`should boost accuracy even when used against allies`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Victini', ability: 'victorystar', moves: ['sleeptalk']},
 			{species: 'Wynaut', ability: 'victorystar', moves: ['irontail']},
@@ -51,7 +51,7 @@ describe("Victory Star", function () {
 			{species: 'Avalugg', moves: ['sleeptalk']},
 		]]);
 
-		battle.onEvent('Accuracy', battle.format, function (accuracy) {
+		battle.onEvent('Accuracy', battle.format, accuracy => {
 			assert.equal(accuracy, 91);
 		});
 

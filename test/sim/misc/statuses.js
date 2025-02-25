@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Burn', function () {
-	afterEach(function () {
+describe('Burn', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should inflict 1/16 of max HP at the end of the turn, rounded down', function () {
+	it('should inflict 1/16 of max HP at the end of the turn, rounded down', () => {
 		battle = common.createBattle([
 			[{species: 'Machamp', ability: 'noguard', moves: ['bulkup']}],
 			[{species: 'Sableye', ability: 'prankster', moves: ['willowisp']}],
@@ -19,7 +19,7 @@ describe('Burn', function () {
 		assert.hurtsBy(target, Math.floor(target.maxhp / 16), () => battle.makeChoices('move bulkup', 'move willowisp'));
 	});
 
-	it(`should halve damage from most Physical attacks`, function () {
+	it(`should halve damage from most Physical attacks`, () => {
 		battle = common.createBattle([[
 			{species: 'Machamp', ability: 'noguard', moves: ['boneclub']},
 		], [
@@ -31,7 +31,7 @@ describe('Burn', function () {
 		assert.bounded(damage, [37, 44]);
 	});
 
-	it('should reduce atk to 50% of its original value in Stadium', function () {
+	it('should reduce atk to 50% of its original value in Stadium', () => {
 		// I know WoW doesn't exist in Stadium, but the engine supports future gen moves
 		// and this is easier than digging for a seed that makes Flamethrower burn
 		battle = common.createBattle({formatid: 'gen1stadiumou@@@!teampreview'}, [
@@ -43,7 +43,7 @@ describe('Burn', function () {
 		assert.equal(battle.p1.active[0].getStat('atk'), Math.floor(attack * 0.5));
 	});
 
-	it('should not halve damage from moves with set damage', function () {
+	it('should not halve damage from moves with set damage', () => {
 		battle = common.createBattle([
 			[{species: 'Machamp', ability: 'noguard', moves: ['seismictoss']}],
 			[{species: 'Talonflame', ability: 'galewings', moves: ['willowisp']}],
@@ -52,12 +52,12 @@ describe('Burn', function () {
 	});
 });
 
-describe('Paralysis', function () {
-	afterEach(function () {
+describe('Paralysis', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should reduce speed to 50% of its original value`, function () {
+	it(`should reduce speed to 50% of its original value`, () => {
 		battle = common.createBattle([[
 			{species: 'Vaporeon', moves: ['sleeptalk']},
 		], [
@@ -70,7 +70,7 @@ describe('Paralysis', function () {
 		assert.equal(vaporeon.getStat('spe'), battle.modify(speed, 0.5));
 	});
 
-	it(`should apply its Speed reduction after all other Speed modifiers`, function () {
+	it(`should apply its Speed reduction after all other Speed modifiers`, () => {
 		battle = common.createBattle([[
 			{species: 'goldeen', item: 'choicescarf', evs: {spe: 252}, moves: ['sleeptalk']}, // 225 Speed
 		], [
@@ -90,7 +90,7 @@ describe('Paralysis', function () {
 		assert.equal(battle.p1.active[0].getStat('spe'), 273); // would be 272 if paralysis was applied first
 	});
 
-	it('should reduce speed to 25% of its original value in Gen 6', function () {
+	it('should reduce speed to 25% of its original value in Gen 6', () => {
 		battle = common.gen(6).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]});
 		battle.setPlayer('p2', {team: [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]});
@@ -99,7 +99,7 @@ describe('Paralysis', function () {
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 
-	it('should reduce speed to 25% of its original value in Gen 2', function () {
+	it('should reduce speed to 25% of its original value in Gen 2', () => {
 		battle = common.gen(2).createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Vaporeon', ability: 'waterabsorb', moves: ['aquaring']}]});
 		battle.setPlayer('p2', {team: [{species: 'Jolteon', ability: 'voltabsorb', moves: ['thunderwave']}]});
@@ -108,7 +108,7 @@ describe('Paralysis', function () {
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 
-	it('should reduce speed to 25% of its original value in Stadium', function () {
+	it('should reduce speed to 25% of its original value in Stadium', () => {
 		battle = common.createBattle({formatid: 'gen1stadiumou@@@!teampreview'}, [
 			[{species: 'Vaporeon', moves: ['growl']}],
 			[{species: 'Jolteon', moves: ['thunderwave']}],
@@ -118,7 +118,7 @@ describe('Paralysis', function () {
 		assert.equal(battle.p1.active[0].getStat('spe'), Math.floor(speed * 0.25));
 	});
 
-	it('should reapply its speed drop when an opponent uses a stat-altering move in Gen 1', function () {
+	it('should reapply its speed drop when an opponent uses a stat-altering move in Gen 1', () => {
 		battle = common.gen(1).createBattle([
 			[{species: 'Electrode', moves: ['rest']}],
 			[{species: 'Slowpoke', moves: ['amnesia', 'thunderwave']}],
@@ -129,7 +129,7 @@ describe('Paralysis', function () {
 		assert.equal(battle.p1.active[0].getStat('spe'), battle.modify(speed, 0.25));
 	});
 
-	it('should not reapply its speed drop when an opponent uses a failed stat-altering move in Gen 1', function () {
+	it('should not reapply its speed drop when an opponent uses a failed stat-altering move in Gen 1', () => {
 		battle = common.gen(1).createBattle([
 			[{species: 'Electrode', moves: ['rest']}],
 			[{species: 'Slowpoke', moves: ['amnesia', 'thunderwave']}],
@@ -144,12 +144,12 @@ describe('Paralysis', function () {
 	});
 });
 
-describe('Toxic Poison', function () {
-	afterEach(function () {
+describe('Toxic Poison', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should inflict 1/16 of max HP rounded down, times the number of active turns with the status, at the end of the turn', function () {
+	it('should inflict 1/16 of max HP rounded down, times the number of active turns with the status, at the end of the turn', () => {
 		battle = common.createBattle([
 			[{species: 'Chansey', ability: 'naturalcure', moves: ['softboiled']}],
 			[{species: 'Gengar', ability: 'levitate', moves: ['toxic']}],
@@ -161,7 +161,7 @@ describe('Toxic Poison', function () {
 		}
 	});
 
-	it('should reset the damage counter when the Pokemon switches out', function () {
+	it('should reset the damage counter when the Pokemon switches out', () => {
 		battle = common.createBattle([
 			[{species: 'Chansey', ability: 'serenegrace', moves: ['counter']}, {species: 'Snorlax', ability: 'immunity', moves: ['curse']}],
 			[{species: 'Crobat', ability: 'infiltrator', moves: ['toxic', 'whirlwind']}],
@@ -176,12 +176,12 @@ describe('Toxic Poison', function () {
 	});
 });
 
-describe('Freeze', function () {
-	afterEach(function () {
+describe('Freeze', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should cause an afflicted Shaymin-Sky to revert to its base forme', function () {
+	it('should cause an afflicted Shaymin-Sky to revert to its base forme', () => {
 		battle = common.createBattle([
 			[{species: 'Chansey', ability: 'serenegrace', moves: ['icebeam']}],
 			[{species: 'Shaymin-Sky', ability: 'sturdy', moves: ['sleeptalk']}],
@@ -200,7 +200,7 @@ describe('Freeze', function () {
 		assert.equal(battle.p2.active[0].species.name, 'Shaymin');
 	});
 
-	it('should not cause an afflicted Pokemon transformed into Shaymin-Sky to change to Shaymin', function () {
+	it('should not cause an afflicted Pokemon transformed into Shaymin-Sky to change to Shaymin', () => {
 		battle = common.createBattle([
 			[{species: 'Ditto', ability: 'imposter', moves: ['transform']}],
 			[{species: 'Shaymin-Sky', ability: 'sturdy', moves: ['icebeam', 'sleeptalk']}],
@@ -218,7 +218,7 @@ describe('Freeze', function () {
 		assert.equal(battle.p1.active[0].species.name, 'Shaymin-Sky');
 	});
 
-	it(`should not be possible to burn a frozen target when using a move that thaws that target`, function () {
+	it(`should not be possible to burn a frozen target when using a move that thaws that target`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'serenegrace', item: 'widelens', moves: ['sleeptalk', 'sacredfire']},
 		], [
@@ -232,12 +232,12 @@ describe('Freeze', function () {
 	});
 });
 
-describe('Burn [Gen 6]', function () {
-	afterEach(function () {
+describe('Burn [Gen 6]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should inflict 1/8 of max HP at the end of the turn, rounded down', function () {
+	it('should inflict 1/8 of max HP at the end of the turn, rounded down', () => {
 		battle = common.gen(6).createBattle([
 			[{species: 'Machamp', ability: 'noguard', moves: ['bulkup']}],
 			[{species: 'Sableye', ability: 'prankster', moves: ['willowisp']}],
@@ -247,12 +247,12 @@ describe('Burn [Gen 6]', function () {
 	});
 });
 
-describe('Toxic Poison [Gen 1]', function () {
-	afterEach(function () {
+describe('Toxic Poison [Gen 1]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should affect Leech Seed damage counter`, function () {
+	it(`should affect Leech Seed damage counter`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Venusaur', moves: ['toxic', 'leechseed']},
 		], [
@@ -271,13 +271,12 @@ describe('Toxic Poison [Gen 1]', function () {
 	});
 });
 
-
-describe('Toxic Poison [Gen 2]', function () {
-	afterEach(function () {
+describe('Toxic Poison [Gen 2]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should not affect Leech Seed damage counter`, function () {
+	it(`should not affect Leech Seed damage counter`, () => {
 		battle = common.gen(2).createBattle({forceRandomChance: true}, [[
 			{species: 'Venusaur', moves: ['toxic', 'leechseed']},
 		], [
@@ -291,7 +290,7 @@ describe('Toxic Poison [Gen 2]', function () {
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 16) * 5);
 	});
 
-	it(`should pass the damage counter to Pokemon with Baton Pass`, function () {
+	it(`should pass the damage counter to Pokemon with Baton Pass`, () => {
 		battle = common.gen(2).createBattle([[
 			{species: 'Smeargle', moves: ['toxic', 'willowisp', 'splash']},
 		], [
@@ -323,7 +322,7 @@ describe('Toxic Poison [Gen 2]', function () {
 		assert.equal(hp - chansey.hp, Math.floor(chansey.maxhp / 8), `Chansey should have taken normal damage from burn`);
 	});
 
-	it('should revert to regular poison on switch in, even for Poison types', function () {
+	it('should revert to regular poison on switch in, even for Poison types', () => {
 		battle = common.gen(2).createBattle([
 			[{species: 'Smeargle', moves: ['toxic', 'splash']}],
 			[
@@ -340,7 +339,7 @@ describe('Toxic Poison [Gen 2]', function () {
 		assert.equal(battle.p2.active[0].status, 'psn');
 	});
 
-	it('should not have its damage counter affected by Heal Bell', function () {
+	it('should not have its damage counter affected by Heal Bell', () => {
 		battle = common.gen(2).createBattle([[
 			{species: 'Smeargle', moves: ['toxic', 'willowisp', 'splash']},
 		], [

@@ -10,7 +10,6 @@ import * as mysql from 'mysql2';
 import * as pg from 'pg';
 
 export type BasicSQLValue = string | number | null;
-// eslint-disable-next-line
 export type SQLRow = {[k: string]: BasicSQLValue};
 export type SQLValue = BasicSQLValue | SQLStatement | PartialOrSQL<SQLRow> | BasicSQLValue[] | undefined;
 
@@ -328,7 +327,7 @@ export class MySQLDatabase extends Database<mysql.Pool, mysql.OkPacket> {
 		for (let i = 0; i < query.values.length; i++) {
 			const value = query.values[i];
 			if (query.sql[i + 1].startsWith('`') || query.sql[i + 1].startsWith('"')) {
-				sql = sql.slice(0, -1) + this.escapeId('' + value) + query.sql[i + 1].slice(1);
+				sql = sql.slice(0, -1) + this.escapeId(`${value}`) + query.sql[i + 1].slice(1);
 			} else {
 				sql += '?' + query.sql[i + 1];
 				values.push(value);
@@ -373,7 +372,7 @@ export class PGDatabase extends Database<pg.Pool, {affectedRows: number | null}>
 		for (let i = 0; i < query.values.length; i++) {
 			const value = query.values[i];
 			if (query.sql[i + 1].startsWith('`') || query.sql[i + 1].startsWith('"')) {
-				sql = sql.slice(0, -1) + this.escapeId('' + value) + query.sql[i + 1].slice(1);
+				sql = sql.slice(0, -1) + this.escapeId(`${value}`) + query.sql[i + 1].slice(1);
 			} else {
 				paramCount++;
 				sql += `$${paramCount}` + query.sql[i + 1];

@@ -119,7 +119,7 @@ function solveRPN(rpn: string[]): [number, number] {
 			if (token.startsWith('0o')) base = 8;
 			let num = Number(token);
 			if (isNaN(num) && token.toUpperCase() in Math) {
-				// @ts-ignore
+				// @ts-expect-error Math consts should be safe
 				num = Math[token.toUpperCase()];
 			}
 			if (isNaN(num) && token !== 'NaN') {

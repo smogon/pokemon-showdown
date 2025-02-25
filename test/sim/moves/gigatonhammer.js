@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Gigaton Hammer', function () {
-	afterEach(function () {
+describe('Gigaton Hammer', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should not be able to be selected if it was the last move used`, function () {
+	it(`should not be able to be selected if it was the last move used`, () => {
 		battle = common.createBattle([[
 			{species: 'Tinkaton', moves: ['helpinghand', 'gigatonhammer']},
 		], [
@@ -23,7 +23,7 @@ describe('Gigaton Hammer', function () {
 		assert.cantMove(() => battle.p1.chooseMove('gigatonhammer'), 'Tinkaton', 'Gigaton Hammer', true);
 	});
 
-	it(`should be able to be used twice in one turn`, function () {
+	it(`should be able to be used twice in one turn`, () => {
 		battle = common.createBattle([[
 			{species: 'Tinkaton', moves: ['gigatonhammer']},
 		], [

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Seeds', function () {
-	afterEach(function () {
+describe('Seeds', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should activate even on a double-switch-in`, function () {
+	it(`should activate even on a double-switch-in`, () => {
 		battle = common.createBattle([[
 			{species: 'Tapu Koko', ability: 'electricsurge', item: 'grassyseed', moves: ['protect']},
 		], [
@@ -20,7 +20,7 @@ describe('Seeds', function () {
 		assert.false.holdsItem(battle.p2.active[0]);
 	});
 
-	it(`should not activate when Magic Room ends`, function () {
+	it(`should not activate when Magic Room ends`, () => {
 		battle = common.createBattle([[
 			{species: 'Tapu Koko', ability: 'electricsurge', moves: ['protect']},
 			{species: 'Hawlucha', item: 'electricseed', moves: ['protect']},
@@ -32,7 +32,7 @@ describe('Seeds', function () {
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
-	it(`should activate on switching in after other entrance Abilities, at the same time as Primal reversion`, function () {
+	it(`should activate on switching in after other entrance Abilities, at the same time as Primal reversion`, () => {
 		battle = common.createBattle([[
 			{species: 'Tapu Koko', ability: 'electricsurge', moves: ['finalgambit']},
 			{species: 'Groudon', ability: 'drought', item: 'redorb', moves: ['sleeptalk']},
@@ -50,7 +50,7 @@ describe('Seeds', function () {
 		assert(redOrbIndex < electricSeedIndex, 'Groudon should undergo Primal Reversion before Electric Seed activates, because Groudon is faster.');
 	});
 
-	it(`should not cause items passed by Symbiosis to be consumed arbitrarily`, function () {
+	it(`should not cause items passed by Symbiosis to be consumed arbitrarily`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Miraidon', ability: 'hadronengine', item: 'electricseed', moves: ['protect']},
 			{species: 'Oranguru', ability: 'symbiosis', item: 'covertcloak', moves: ['protect']},

@@ -42,7 +42,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSwitchIn(pokemon) {
 				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('magmaticentrance') || pokemon.hasAbility('hover')) return;
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
-				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+				this.damage(pokemon.maxhp * (2 ** typeMod) / 8);
 			},
 		},
 		secondary: null,

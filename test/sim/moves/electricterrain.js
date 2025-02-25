@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Electric Terrain', function () {
-	afterEach(function () {
+describe('Electric Terrain', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should change the current terrain to Electric Terrain for five turns', function () {
+	it('should change the current terrain to Electric Terrain for five turns', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Florges", ability: 'symbiosis', moves: ['mist', 'electricterrain']}]});
 		battle.setPlayer('p2', {team: [{species: "Florges", ability: 'symbiosis', moves: ['mist']}]});
@@ -26,7 +26,7 @@ describe('Electric Terrain', function () {
 		assert(battle.field.isTerrain(''));
 	});
 
-	it('should increase the base power of Electric-type attacks used by grounded Pokemon', function () {
+	it('should increase the base power of Electric-type attacks used by grounded Pokemon', () => {
 		battle = common.gen(7).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Jolteon", ability: 'voltabsorb', moves: ['electricterrain']}]});
 		battle.setPlayer('p2', {team: [{species: "Thundurus", ability: 'defiant', moves: ['thunderwave']}]});
@@ -39,7 +39,7 @@ describe('Electric Terrain', function () {
 		assert.equal(basePower, move.basePower);
 	});
 
-	it('should prevent moves from putting grounded Pokemon to sleep', function () {
+	it('should prevent moves from putting grounded Pokemon to sleep', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Jolteon", ability: 'voltabsorb', moves: ['electricterrain', 'spore']}]});
 		battle.setPlayer('p2', {team: [{species: "Abra", ability: 'magicguard', moves: ['telekinesis', 'spore']}]});
@@ -49,7 +49,7 @@ describe('Electric Terrain', function () {
 		assert.equal(battle.p2.active[0].status, '');
 	});
 
-	it('should not remove active non-volatile statuses from grounded Pokemon', function () {
+	it('should not remove active non-volatile statuses from grounded Pokemon', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Jolteon", ability: 'voltabsorb', moves: ['sleeptalk', 'electricterrain']}]});
 		battle.setPlayer('p2', {team: [{species: "Whimsicott", ability: 'prankster', moves: ['spore']}]});
@@ -57,7 +57,7 @@ describe('Electric Terrain', function () {
 		assert.equal(battle.p1.active[0].status, 'slp');
 	});
 
-	it('should prevent Yawn from putting grounded Pokemon to sleep, and cause Yawn to fail', function () {
+	it('should prevent Yawn from putting grounded Pokemon to sleep, and cause Yawn to fail', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Jolteon", ability: 'voltabsorb', moves: ['electricterrain', 'yawn']}]});
 		battle.setPlayer('p2', {team: [{species: "Sableye", ability: 'prankster', moves: ['yawn']}]});
@@ -67,7 +67,7 @@ describe('Electric Terrain', function () {
 		assert(!battle.p2.active[0].volatiles['yawn']);
 	});
 
-	it('should cause Rest to fail on grounded Pokemon', function () {
+	it('should cause Rest to fail on grounded Pokemon', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Jolteon", ability: 'shellarmor', moves: ['electricterrain', 'rest']}]});
 		battle.setPlayer('p2', {team: [{species: "Pidgeot", ability: 'keeneye', moves: ['doubleedge', 'rest']}]});
@@ -77,7 +77,7 @@ describe('Electric Terrain', function () {
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
-	it('should not affect Pokemon in a semi-invulnerable state', function () {
+	it('should not affect Pokemon in a semi-invulnerable state', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'owntempo', moves: ['yawn', 'skydrop']}]});
 		battle.setPlayer('p2', {team: [{species: "Sableye", ability: 'prankster', moves: ['yawn', 'electricterrain']}]});
@@ -87,7 +87,7 @@ describe('Electric Terrain', function () {
 		assert.equal(battle.p2.active[0].status, 'slp');
 	});
 
-	it('should cause Nature Power to become Thunderbolt', function () {
+	it('should cause Nature Power to become Thunderbolt', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Jolteon", ability: 'voltabsorb', moves: ['electricterrain']}]});
 		battle.setPlayer('p2', {team: [{species: "Shuckle", ability: 'sturdy', moves: ['naturepower']}]});
@@ -96,7 +96,7 @@ describe('Electric Terrain', function () {
 		assert.equal(resultMove, 'thunderbolt');
 	});
 
-	it.skip(`should block Sleep before the move would have missed`, function () {
+	it.skip(`should block Sleep before the move would have missed`, () => {
 		battle = common.createBattle([[
 			{species: 'tapukoko', moves: ['electricterrain']},
 		], [

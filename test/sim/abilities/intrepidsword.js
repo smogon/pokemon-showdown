@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Intrepid Sword', function () {
-	afterEach(function () {
+describe('Intrepid Sword', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should only increase the user's Attack stat once per game`, function () {
+	it(`should only increase the user's Attack stat once per game`, () => {
 		battle = common.createBattle([[
 			{species: 'Zacian', ability: 'intrepidsword', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -25,7 +25,7 @@ describe('Intrepid Sword', function () {
 		assert.statStage(zacian, 'atk', 0);
 	});
 
-	it(`should use up its once-per-game boost if it switches in with +6 Attack`, function () {
+	it(`should use up its once-per-game boost if it switches in with +6 Attack`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['bellydrum', 'batonpass']},
 			{species: 'Zacian', ability: 'intrepidsword', moves: ['sleeptalk']},
@@ -42,7 +42,7 @@ describe('Intrepid Sword', function () {
 		assert.statStage(zacian, 'atk', 0);
 	});
 
-	it(`should not use up its once-per-game boost if it switches in while its Ability is suppressed`, function () {
+	it(`should not use up its once-per-game boost if it switches in while its Ability is suppressed`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['batonpass']},
 			{species: 'Zacian', ability: 'intrepidsword', moves: ['sleeptalk']},
@@ -60,7 +60,7 @@ describe('Intrepid Sword', function () {
 		assert.statStage(zacian, 'atk', 1);
 	});
 
-	it(`should be able to increase the user's Attack stat multiple times per game [Gen 8]`, function () {
+	it(`should be able to increase the user's Attack stat multiple times per game [Gen 8]`, () => {
 		battle = common.gen(8).createBattle([[
 			{species: 'Zacian', ability: 'intrepidsword', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},

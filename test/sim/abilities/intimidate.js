@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Intimidate', function () {
-	afterEach(function () {
+describe('Intimidate', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should decrease Atk by 1 level', function () {
+	it('should decrease Atk by 1 level', () => {
 		battle = common.gen(7).createBattle([[
 			{species: "Smeargle", ability: 'owntempo', moves: ['sketch']},
 		], [
@@ -19,7 +19,7 @@ describe('Intimidate', function () {
 		assert.statStage(battle.p1.active[0], 'atk', -1);
 	});
 
-	it('should be blocked by Substitute', function () {
+	it('should be blocked by Substitute', () => {
 		battle = common.createBattle([[
 			{species: "Escavalier", item: 'leftovers', ability: 'shellarmor', moves: ['substitute']},
 		], [
@@ -31,7 +31,7 @@ describe('Intimidate', function () {
 		assert.statStage(battle.p1.active[0], 'atk', 0);
 	});
 
-	it('should not activate if U-turn breaks the Substitute in Gen 4', function () {
+	it('should not activate if U-turn breaks the Substitute in Gen 4', () => {
 		battle = common.gen(4).createBattle({gameType: 'doubles'}, [[
 			{species: "Gengar", level: 1, item: 'leftovers', ability: 'levitate', moves: ['substitute']},
 			{species: "Suicune", level: 1, item: 'leftovers', ability: 'pressure', moves: ['substitute']},
@@ -54,7 +54,7 @@ describe('Intimidate', function () {
 		assert.statStage(battle.p1.active[1], 'atk', 0);
 	});
 
-	it('should affect adjacent foes only', function () {
+	it('should affect adjacent foes only', () => {
 		battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 			{species: "Bulbasaur", item: 'leftovers', ability: 'overgrow', moves: ['vinewhip']},
 			{species: "Charmander", item: 'leftovers', ability: 'blaze', moves: ['ember']},
@@ -72,14 +72,14 @@ describe('Intimidate', function () {
 		assert.statStage(farPokemon, 'atk', 0);
 	});
 
-	it('should wait until all simultaneous switch ins at the beginning of a battle have completed before activating', function () {
+	it('should wait until all simultaneous switch ins at the beginning of a battle have completed before activating', () => {
 		battle = common.createBattle({preview: true}, [[
 			{species: "Arcanine", ability: 'intimidate', moves: ['morningsun']},
 		], [
 			{species: "Gyarados", ability: 'intimidate', moves: ['dragondance']},
 		]]);
 		let intimidateCount = 0;
-		battle.onEvent('TryBoost', battle.format, function (boost, target, source) {
+		battle.onEvent('TryBoost', battle.format, (boost, target, source) => {
 			assert.species(source, intimidateCount === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
 		});
@@ -96,7 +96,7 @@ describe('Intimidate', function () {
 			{species: "Arcanine", ability: 'intimidate', moves: ['morningsun']},
 		]]);
 		intimidateCount = 0;
-		battle.onEvent('TryBoost', battle.format, function (boost, target, source) {
+		battle.onEvent('TryBoost', battle.format, (boost, target, source) => {
 			assert.species(source, intimidateCount === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
 		});
@@ -106,7 +106,7 @@ describe('Intimidate', function () {
 		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
 
-	it('should wait until all simultaneous switch ins after double-KOs have completed before activating', function () {
+	it('should wait until all simultaneous switch ins after double-KOs have completed before activating', () => {
 		battle = common.createBattle({preview: true}, [[
 			{species: "Blissey", ability: 'naturalcure', moves: ['healingwish']},
 			{species: "Arcanine", ability: 'intimidate', moves: ['healingwish']},
@@ -118,7 +118,7 @@ describe('Intimidate', function () {
 		]]);
 		const [p1active, p2active] = [battle.p1.active, battle.p2.active];
 		let intimidateCount = 0;
-		battle.onEvent('TryBoost', battle.format, function (boost, target, source) {
+		battle.onEvent('TryBoost', battle.format, (boost, target, source) => {
 			assert.species(source, intimidateCount % 2 === 0 ? 'Arcanine' : 'Gyarados');
 			intimidateCount++;
 		});

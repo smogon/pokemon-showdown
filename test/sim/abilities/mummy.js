@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Mummy', function () {
-	afterEach(function () {
+describe('Mummy', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should set the attacker's ability to Mummy when the user is hit by a contact move`, function () {
+	it(`should set the attacker's ability to Mummy when the user is hit by a contact move`, () => {
 		battle = common.createBattle([[
 			{species: 'Cofagrigus', ability: 'mummy', moves: ['sleeptalk']},
 		], [
@@ -21,7 +21,7 @@ describe('Mummy', function () {
 		assert.equal(battle.p2.active[0].ability, 'mummy');
 	});
 
-	it(`should not change abilities that can't be suppressed`, function () {
+	it(`should not change abilities that can't be suppressed`, () => {
 		battle = common.createBattle([[
 			{species: 'Cofagrigus', ability: 'mummy', moves: ['sleeptalk']},
 		], [
@@ -32,7 +32,7 @@ describe('Mummy', function () {
 		assert.equal(battle.p2.active[0].ability, 'disguise');
 	});
 
-	it(`should not activate before all damage calculation is complete`, function () {
+	it(`should not activate before all damage calculation is complete`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Sableye', ability: 'toughclaws', moves: ['brutalswing']},
 			{species: 'Golisopod', ability: 'emergencyexit', moves: ['sleeptalk']},

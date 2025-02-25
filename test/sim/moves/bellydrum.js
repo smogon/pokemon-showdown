@@ -5,10 +5,10 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Belly Drum', function () {
+describe('Belly Drum', () => {
 	afterEach(() => battle.destroy());
 
-	it("should reduce the user's HP by half of their maximum HP, then boost their Attack to maximum", function () {
+	it("should reduce the user's HP by half of their maximum HP, then boost their Attack to maximum", () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Linoone", ability: 'limber', moves: ['bellydrum']}]});
 		battle.setPlayer('p2', {team: [{species: "Terrakion", ability: 'justified', moves: ['bulkup']}]});
@@ -18,7 +18,7 @@ describe('Belly Drum', function () {
 		assert.statStage(user, 'atk', 6);
 	});
 
-	it("should fail if the user's HP is less than half of their maximum HP", function () {
+	it("should fail if the user's HP is less than half of their maximum HP", () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Linoone", ability: 'sturdy', moves: ['bellydrum']}]});
 		battle.setPlayer('p2', {team: [{species: "Terrakion", ability: 'justified', moves: ['closecombat']}]});
@@ -29,10 +29,10 @@ describe('Belly Drum', function () {
 	});
 });
 
-describe('Z-Belly Drum', function () {
+describe('Z-Belly Drum', () => {
 	afterEach(() => battle.destroy());
 
-	it("should heal the user, then reduce their HP by half their max HP and boost the user's Attack to maximum", function () {
+	it("should heal the user, then reduce their HP by half their max HP and boost the user's Attack to maximum", () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Linoone", ability: 'limber', item: 'normaliumz', moves: ['bellydrum']}]});
 		battle.setPlayer('p2', {team: [{species: "Rattata", ability: 'guts', moves: ['quickattack']}]});
@@ -42,7 +42,7 @@ describe('Z-Belly Drum', function () {
 		assert.statStage(user, 'atk', 6);
 	});
 
-	it("should not fail even if the user's HP is less than half of their maximum HP", function () {
+	it("should not fail even if the user's HP is less than half of their maximum HP", () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Linoone", ability: 'sturdy', item: 'normaliumz', moves: ['bellydrum']}]});
 		battle.setPlayer('p2', {team: [{species: "Terrakion", ability: 'justified', moves: ['closecombat']}]});

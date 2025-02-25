@@ -95,13 +95,11 @@ class ElimNode {
 		}
 		return undefined;
 	}
-	// eslint-disable-next-line no-restricted-globals
 	[Symbol.iterator]() {
 		const results: ElimNode[] = [this];
 		for (const result of results) {
 			if (result.children) results.push(...result.children);
 		}
-		// eslint-disable-next-line no-restricted-globals
 		return results[Symbol.iterator]();
 	}
 	toJSON() {
@@ -300,7 +298,7 @@ export class Elimination {
 		}
 
 		tree.root.traverse(node => {
-			if (node.children && node.children[0].user && node.children[1].user) {
+			if (node.children?.[0].user && node.children[1].user) {
 				node.state = 'available';
 			}
 		});
@@ -334,7 +332,7 @@ export class Elimination {
 			return undefined;
 		});
 		if (found) {
-			// @ts-ignore
+			// @ts-expect-error TODO: refactor to fix this
 			const error = this.setMatchResult(found.match, found.result, found.score);
 			if (error) {
 				throw new Error(`Unexpected ${error} from setMatchResult([${found.match.join(', ')}], ${found.result})`);

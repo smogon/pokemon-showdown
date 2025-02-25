@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('High Jump Kick', function () {
-	afterEach(function () {
+describe('High Jump Kick', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should damage the user if it does not hit the target', function () {
+	it('should damage the user if it does not hit the target', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Gastly', ability: 'levitate', moves: ['sleeptalk']},
@@ -22,7 +22,7 @@ describe('High Jump Kick', function () {
 		assert.hurts(battle.p2.active[0], () => battle.makeChoices());
 	});
 
-	it('should not damage the user if there was no target', function () {
+	it('should not damage the user if there was no target', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Dugtrio', ability: 'sandveil', moves: ['memento']},

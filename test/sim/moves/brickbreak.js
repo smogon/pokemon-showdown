@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Brick Break', function () {
-	afterEach(function () {
+describe('Brick Break', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should break Reflect', function () {
+	it('should break Reflect', () => {
 		battle = common.createBattle([[
 			{species: "mew", moves: ['brickbreak', 'splash']},
 		], [
@@ -24,7 +24,7 @@ describe('Brick Break', function () {
 		assert.false(battle.p2.sideConditions['reflect']);
 	});
 
-	it('should not break Reflect when used against a Ghost-type', function () {
+	it('should not break Reflect when used against a Ghost-type', () => {
 		battle = common.createBattle([[
 			{species: "mew", moves: ['brickbreak', 'splash']},
 		], [
@@ -38,7 +38,7 @@ describe('Brick Break', function () {
 		assert(battle.p2.sideConditions['reflect']);
 	});
 
-	it.skip('should break Reflect when used against a Ghost-type in Gen 4 or earlier', function () {
+	it.skip('should break Reflect when used against a Ghost-type in Gen 4 or earlier', () => {
 		battle = common.gen(4).createBattle([[
 			{species: "mew", moves: ['brickbreak', 'splash']},
 		], [
@@ -52,7 +52,7 @@ describe('Brick Break', function () {
 		assert.false(battle.p2.sideConditions['reflect']);
 	});
 
-	it('should break Reflect against a Ghost type whose type immunity is being ignored', function () {
+	it('should break Reflect against a Ghost type whose type immunity is being ignored', () => {
 		battle = common.createBattle([[
 			{species: "mew", moves: ['brickbreak', 'splash']},
 		], [
@@ -66,7 +66,7 @@ describe('Brick Break', function () {
 		assert.false(battle.p2.sideConditions['reflect']);
 	});
 
-	it('should break Reflect against a Ghost type whose type immunity is being ignored', function () {
+	it('should break Reflect against a Ghost type whose type immunity is being ignored', () => {
 		battle = common.createBattle([[
 			{species: "mew", ability: "scrappy", moves: ['brickbreak', 'splash']},
 		], [
@@ -80,7 +80,7 @@ describe('Brick Break', function () {
 		assert.false(battle.p2.sideConditions['reflect']);
 	});
 
-	it('should break Reflect against a Ghost type if it has been electrified', function () {
+	it('should break Reflect against a Ghost type if it has been electrified', () => {
 		battle = common.createBattle([[
 			{species: "mew", moves: ['brickbreak', 'splash']},
 		], [
@@ -94,7 +94,7 @@ describe('Brick Break', function () {
 		assert.false(battle.p2.sideConditions['reflect']);
 	});
 
-	it(`should break the foe's Reflect when used against an ally in Gen 3`, function () {
+	it(`should break the foe's Reflect when used against an ally in Gen 3`, () => {
 		battle = common.gen(3).createBattle({gameType: 'doubles'}, [[
 			{species: "mew", moves: ['brickbreak', 'splash']},
 			{species: "mew", moves: ['splash']},

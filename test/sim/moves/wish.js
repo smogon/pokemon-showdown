@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Wish', function () {
-	afterEach(function () {
+describe('Wish', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should heal the Pokemon in the user's slot by 1/2 of the user's max HP 1 turn after use`, function () {
+	it(`should heal the Pokemon in the user's slot by 1/2 of the user's max HP 1 turn after use`, () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: "Chansey", moves: ['wish']},
@@ -28,7 +28,7 @@ describe('Wish', function () {
 		assert.equal(battle.p1.active[1].hp, 321);
 	});
 
-	it('should progress its duration whether or not the Pokemon in its slot is fainted', function () {
+	it('should progress its duration whether or not the Pokemon in its slot is fainted', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: "Pichu", ability: 'prankster', moves: ['wish']},
@@ -43,7 +43,7 @@ describe('Wish', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it(`should never resolve when used on a turn that is a multiple of 256n - 1`, function () {
+	it(`should never resolve when used on a turn that is a multiple of 256n - 1`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['sleeptalk', 'wish', 'doubleedge']},
 		], [
@@ -61,7 +61,7 @@ describe('Wish', function () {
 		assert.false.fullHP(wynaut, `Wish should have never resolved.`);
 	});
 
-	it(`should do nothing if no Pokemon is present to heal from Wish`, function () {
+	it(`should do nothing if no Pokemon is present to heal from Wish`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['sleeptalk', 'wish']},
 			{species: 'Shedinja', moves: ['sleeptalk']},

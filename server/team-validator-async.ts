@@ -25,7 +25,7 @@ export class TeamValidatorAsync {
 		return PM.query({formatid, options, team});
 	}
 
-	static get(format: string) {
+	static get(this: void, format: string) {
 		return new TeamValidatorAsync(format);
 	}
 }

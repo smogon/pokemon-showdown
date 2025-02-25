@@ -5,14 +5,14 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Pledge Moves', function () {
-	beforeEach(function () {
+describe('Pledge Moves', () => {
+	beforeEach(() => {
 		battle = common.createBattle({gameType: 'doubles'});
 	});
 
 	afterEach(() => battle.destroy());
 
-	it('should not combine if one of the users is forced to use a non-pledge move on its turn', function () {
+	it('should not combine if one of the users is forced to use a non-pledge move on its turn', () => {
 		battle.setPlayer('p1', {team: [
 			{species: 'Venusaur', level: 90, moves: ['sludge', 'grasspledge']},
 			{species: 'Charizard', level: 99, moves: ['sleeptalk', 'firepledge']},
@@ -28,7 +28,7 @@ describe('Pledge Moves', function () {
 		assert(!battle.p1.active[1].moveThisTurn, "Charizard should not have moved this turn.");
 	});
 
-	it("should not start a Pledge combo for Z-moves", function () {
+	it("should not start a Pledge combo for Z-moves", () => {
 		battle = common.gen(7).createBattle({gameType: 'doubles'}, [[
 			{species: 'Weedle', ability: 'sapsipper', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -41,7 +41,7 @@ describe('Pledge Moves', function () {
 		assert.statStage(weedle, 'atk', +1);
 	});
 
-	it("should not start a Pledge combo for Max Moves", function () {
+	it("should not start a Pledge combo for Max Moves", () => {
 		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Weedle', ability: 'sapsipper', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},

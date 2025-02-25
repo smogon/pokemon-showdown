@@ -5,12 +5,12 @@ const common = require('../../common');
 
 let battle;
 
-describe('Punching Glove', function () {
-	afterEach(function () {
+describe('Punching Glove', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should prevent item effects triggered by contact from acting`, function () {
+	it(`should prevent item effects triggered by contact from acting`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'punchingglove', moves: ['bulletpunch']},
 		], [
@@ -20,7 +20,7 @@ describe('Punching Glove', function () {
 		assert.fullHP(battle.p1.active[0], `Attacker should not be hurt`);
 	});
 
-	it(`should not prevent item effects triggered by contact from acting if using non-punching contact move`, function () {
+	it(`should not prevent item effects triggered by contact from acting if using non-punching contact move`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'punchingglove', moves: ['tackle']},
 		], [
@@ -30,7 +30,7 @@ describe('Punching Glove', function () {
 		assert.false.fullHP(battle.p1.active[0], `Attacker should be hurt`);
 	});
 
-	it(`should not activate on the opponent's moves`, function () {
+	it(`should not activate on the opponent's moves`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'punchingglove', moves: ['sleeptalk']},
 		], [
@@ -41,7 +41,7 @@ describe('Punching Glove', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9406865
-	it(`should stop Pickpocket`, function () {
+	it(`should stop Pickpocket`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'punchingglove', moves: ['bulletpunch']},
 		], [
@@ -53,7 +53,7 @@ describe('Punching Glove', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9406865
-	it(`should block against Protecting effects with a contact side effect`, function () {
+	it(`should block against Protecting effects with a contact side effect`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'punchingglove', moves: ['sleeptalk', 'bulletpunch']},
 		], [

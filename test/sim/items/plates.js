@@ -10,16 +10,16 @@ const plates = [
 	'Splash Plate', 'Spooky Plate', 'Stone Plate', 'Toxic Plate', 'Zap Plate',
 ];
 
-describe('Plates', function () {
+describe('Plates', () => {
 	for (const plate of plates) {
-		describe(plate, function () {
+		describe(plate, () => {
 			const id = plate.replace(/\W+/g, '').toLowerCase();
 
-			afterEach(function () {
+			afterEach(() => {
 				battle.destroy();
 			});
 
-			it('should not be stolen or removed if held by an Arceus', function () {
+			it('should not be stolen or removed if held by an Arceus', () => {
 				battle = common.createBattle();
 				battle.setPlayer('p1', {team: [{species: 'Arceus', ability: 'frisk', item: id, moves: ['recover']}]});
 				battle.setPlayer('p2', {team: [
@@ -37,7 +37,7 @@ describe('Plates', function () {
 				}
 			});
 
-			it('should not be removed by Fling if held by an Arceus', function () {
+			it('should not be removed by Fling if held by an Arceus', () => {
 				battle = common.createBattle();
 				battle.setPlayer('p1', {team: [{species: 'Mawile', ability: 'intimidate', moves: ['swordsdance']}]});
 				battle.setPlayer('p2', {team: [{species: 'Arceus', ability: 'frisk', item: id, moves: ['fling']}]});
@@ -45,7 +45,7 @@ describe('Plates', function () {
 				assert.holdsItem(battle.p2.active[0]);
 			});
 
-			it('should not be given to an Arceus', function () {
+			it('should not be given to an Arceus', () => {
 				battle = common.createBattle();
 				battle.setPlayer('p1', {team: [{species: 'Arceus', ability: 'multitype', moves: ['thief']}]});
 				battle.setPlayer('p2', {team: [{species: 'Azumarill', ability: 'thickfat', item: id, moves: ['bestow']}]});
@@ -53,7 +53,7 @@ describe('Plates', function () {
 				assert.false.holdsItem(battle.p1.active[0]);
 			});
 
-			it('should be removed if not held by an Arceus', function () {
+			it('should be removed if not held by an Arceus', () => {
 				battle = common.createBattle();
 				battle.setPlayer('p1', {team: [{species: 'Arceus', ability: 'multitype', moves: ['knockoff']}]});
 				battle.setPlayer('p2', {team: [{species: 'Azumarill', ability: 'thickfat', item: id, moves: ['bulkup']}]});

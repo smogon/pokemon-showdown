@@ -5,19 +5,19 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Primordial Sea', function () {
-	afterEach(function () {
+describe('Primordial Sea', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should activate the Primordial Sea weather upon switch-in', function () {
+	it('should activate the Primordial Sea weather upon switch-in', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]});
 		battle.setPlayer('p2', {team: [{species: "Abra", ability: 'magicguard', moves: ['teleport']}]});
 		assert(battle.field.isWeather('primordialsea'));
 	});
 
-	it('should increase the damage (not the basePower) of Water-type attacks', function () {
+	it('should increase the damage (not the basePower) of Water-type attacks', () => {
 		battle = common.createBattle();
 		battle.randomizer = dmg => dmg; // max damage
 		battle.setPlayer('p1', {team: [{species: 'Kyogre', ability: 'primordialsea', moves: ['waterpledge']}]});
@@ -30,7 +30,7 @@ describe('Primordial Sea', function () {
 		assert.equal(basePower, move.basePower);
 	});
 
-	it('should cause Fire-type attacks to fail', function () {
+	it('should cause Fire-type attacks to fail', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]});
 		battle.setPlayer('p2', {team: [{species: "Charizard", ability: 'blaze', moves: ['flamethrower']}]});
@@ -38,14 +38,14 @@ describe('Primordial Sea', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it('should not cause Fire-type Status moves to fail', function () {
+	it('should not cause Fire-type Status moves to fail', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]});
 		battle.setPlayer('p2', {team: [{species: "Charizard", ability: 'noguard', moves: ['willowisp']}]});
 		assert.sets(() => battle.p1.active[0].status, 'brn', () => battle.makeChoices('move helpinghand', 'move willowisp'));
 	});
 
-	it('should prevent moves and abilities from setting the weather to Sunny Day, Rain Dance, Sandstorm, or Hail', function () {
+	it('should prevent moves and abilities from setting the weather to Sunny Day, Rain Dance, Sandstorm, or Hail', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]});
 		battle.setPlayer('p2', {team: [
@@ -63,7 +63,7 @@ describe('Primordial Sea', function () {
 		}
 	});
 
-	it('should be treated as Rain Dance for any forme, move or ability that requires it', function () {
+	it('should be treated as Rain Dance for any forme, move or ability that requires it', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Kyogre", ability: 'primordialsea', moves: ['sonicboom']}]});
 		battle.setPlayer('p2', {team: [
@@ -92,7 +92,7 @@ describe('Primordial Sea', function () {
 		assert.equal(myActive[0].status, '');
 	});
 
-	it('should cause the Primordial Sea weather to fade if it switches out and no other Primordial Sea Pokemon are active', function () {
+	it('should cause the Primordial Sea weather to fade if it switches out and no other Primordial Sea Pokemon are active', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']},
@@ -102,7 +102,7 @@ describe('Primordial Sea', function () {
 		assert.sets(() => battle.field.isWeather('primordialsea'), false, () => battle.makeChoices('switch 2', 'move roost'));
 	});
 
-	it('should not cause the Primordial Sea weather to fade if it switches out and another Primordial Sea Pokemon is active', function () {
+	it('should not cause the Primordial Sea weather to fade if it switches out and another Primordial Sea Pokemon is active', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']},
@@ -112,21 +112,21 @@ describe('Primordial Sea', function () {
 		assert.constant(() => battle.field.isWeather('primordialsea'), () => battle.makeChoices('switch 2', 'move bulkup'));
 	});
 
-	it('should cause the Primordial Sea weather to fade if its ability is suppressed and no other Primordial Sea Pokemon are active', function () {
+	it('should cause the Primordial Sea weather to fade if its ability is suppressed and no other Primordial Sea Pokemon are active', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]});
 		battle.setPlayer('p2', {team: [{species: "Lugia", ability: 'pressure', moves: ['gastroacid']}]});
 		assert.sets(() => battle.field.isWeather('primordialsea'), false, () => battle.makeChoices('move helpinghand', 'move gastroacid'));
 	});
 
-	it('should not cause the Primordial Sea weather to fade if its ability is suppressed and another Primordial Sea Pokemon is active', function () {
+	it('should not cause the Primordial Sea weather to fade if its ability is suppressed and another Primordial Sea Pokemon is active', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]});
 		battle.setPlayer('p2', {team: [{species: "Kyogre", ability: 'primordialsea', moves: ['gastroacid']}]});
 		assert.constant(() => battle.field.isWeather('primordialsea'), () => battle.makeChoices('move helpinghand', 'move gastroacid'));
 	});
 
-	it('should cause the Primordial Sea weather to fade if its ability is changed and no other Primordial Sea Pokemon are active', function () {
+	it('should cause the Primordial Sea weather to fade if its ability is changed and no other Primordial Sea Pokemon are active', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Kyogre", ability: 'primordialsea', moves: ['helpinghand']}]});
 		battle.setPlayer('p2', {team: [{species: "Lugia", ability: 'pressure', moves: ['entrainment']}]});

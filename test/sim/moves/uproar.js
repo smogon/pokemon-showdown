@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Uproar', function () {
-	afterEach(function () {
+describe('Uproar', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should pierce through substitutes', function () {
+	it('should pierce through substitutes', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'uproar']}]});
 		battle.setPlayer('p2', {team: [{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}]});
@@ -19,7 +19,7 @@ describe('Uproar', function () {
 		assert.equal(battle.p2.active[0].item, '');
 	});
 
-	it('should end if the user is under the effect of Throat Chop', function () {
+	it('should end if the user is under the effect of Throat Chop', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Zoroark", moves: ['uproar']}]});
 		battle.setPlayer('p2', {team: [{species: "Corsola", moves: ['throatchop']}]});
@@ -28,12 +28,12 @@ describe('Uproar', function () {
 	});
 });
 
-describe('Uproar [Gen 5]', function () {
-	afterEach(function () {
+describe('Uproar [Gen 5]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should not pierce through substitutes', function () {
+	it('should not pierce through substitutes', () => {
 		battle = common.gen(5).createBattle([
 			[{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'uproar']}],
 			[{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}],

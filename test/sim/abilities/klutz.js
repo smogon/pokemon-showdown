@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Klutz', function () {
-	afterEach(function () {
+describe('Klutz', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should negate residual healing events', function () {
+	it('should negate residual healing events', () => {
 		battle = common.createBattle([[
 			{species: "Lopunny", ability: 'klutz', item: 'leftovers', moves: ['bellydrum']},
 		], [
@@ -20,7 +20,7 @@ describe('Klutz', function () {
 		assert.hurtsBy(klutzMon, Math.floor(klutzMon.maxhp / 2), () => battle.makeChoices('move bellydrum', 'move shadowsneak'), "Leftovers healing should not apply");
 	});
 
-	it('should prevent items from being consumed', function () {
+	it('should prevent items from being consumed', () => {
 		battle = common.createBattle([[
 			{species: "Lopunny", level: 1, ability: 'klutz', item: 'sitrusberry', moves: ['endure']},
 		], [
@@ -31,7 +31,7 @@ describe('Klutz', function () {
 		assert.equal(klutzMon.hp, 1);
 	});
 
-	it('should ignore the effects of items that disable moves', function () {
+	it('should ignore the effects of items that disable moves', () => {
 		battle = common.createBattle([[
 			{species: "Lopunny", ability: 'klutz', item: 'assaultvest', moves: ['protect']},
 		], [
@@ -41,7 +41,7 @@ describe('Klutz', function () {
 		assert.equal(battle.p1.active[0].lastMove.id, 'protect');
 	});
 
-	it('should not ignore item effects that prevent item removal', function () {
+	it('should not ignore item effects that prevent item removal', () => {
 		battle = common.createBattle([[
 			{species: "Genesect", ability: 'klutz', item: 'dousedrive', moves: ['calmmind']},
 		], [
@@ -51,7 +51,7 @@ describe('Klutz', function () {
 		assert.constant(() => klutzMon.item, () => battle.makeChoices('move calmmind', 'move trick'));
 	});
 
-	it('should cause Fling to fail', function () {
+	it('should cause Fling to fail', () => {
 		battle = common.createBattle([[
 			{species: "Lopunny", ability: 'klutz', item: 'seaincense', moves: ['fling']},
 		], [
@@ -61,7 +61,7 @@ describe('Klutz', function () {
 		assert.constant(() => klutzMon.item, () => battle.makeChoices('move fling', 'move calmmind'));
 	});
 
-	it('should not prevent Pokemon from Mega Evolving', function () {
+	it('should not prevent Pokemon from Mega Evolving', () => {
 		battle = common.createBattle([[
 			{species: "Lopunny", ability: 'klutz', item: 'lopunnite', moves: ['protect']},
 		], [

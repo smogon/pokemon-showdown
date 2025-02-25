@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Knock Off', function () {
-	afterEach(function () {
+describe('Knock Off', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should remove most items', function () {
+	it('should remove most items', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Mew", ability: 'synchronize', moves: ['knockoff']}]});
 		battle.setPlayer('p2', {team: [{species: "Blissey", ability: 'naturalcure', item: 'shedshell', moves: ['softboiled']}]});
@@ -18,7 +18,7 @@ describe('Knock Off', function () {
 		assert.equal(battle.p2.active[0].item, '');
 	});
 
-	it('should not remove items when hitting Sub', function () {
+	it('should not remove items when hitting Sub', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Mew", ability: 'noability', moves: ['knockoff']}]});
 		battle.setPlayer('p2', {team: [{species: "Ninjask", ability: 'noability', item: 'shedshell', moves: ['substitute']}]});
@@ -26,7 +26,7 @@ describe('Knock Off', function () {
 		assert.equal(battle.p2.active[0].item, 'shedshell');
 	});
 
-	it('should not remove plates from Arceus', function () {
+	it('should not remove plates from Arceus', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Mew", ability: 'synchronize', moves: ['knockoff']}]});
 		battle.setPlayer('p2', {team: [{species: "Arceus", ability: 'download', item: 'flameplate', moves: ['swordsdance']}]});
@@ -34,7 +34,7 @@ describe('Knock Off', function () {
 		assert.equal(battle.p2.active[0].item, 'flameplate');
 	});
 
-	it('should not remove drives from Genesect', function () {
+	it('should not remove drives from Genesect', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Mew", ability: 'synchronize', moves: ['knockoff']}]});
 		battle.setPlayer('p2', {team: [{species: "Genesect", ability: 'download', item: 'dousedrive', moves: ['shiftgear']}]});
@@ -42,7 +42,7 @@ describe('Knock Off', function () {
 		assert.equal(battle.p2.active[0].item, 'dousedrive');
 	});
 
-	it('should not remove correctly held mega stones', function () {
+	it('should not remove correctly held mega stones', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Mew", ability: 'synchronize', moves: ['knockoff']}]});
 		battle.setPlayer('p2', {team: [{species: "Scizor", ability: 'technician', item: 'scizorite', moves: ['swordsdance']}]});
@@ -50,7 +50,7 @@ describe('Knock Off', function () {
 		assert.equal(battle.p2.active[0].item, 'scizorite');
 	});
 
-	it('should remove wrong mega stones', function () {
+	it('should remove wrong mega stones', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Mew", ability: 'synchronize', moves: ['knockoff']}]});
 		battle.setPlayer('p2', {team: [{species: "Scizor", ability: 'technician', item: 'audinite', moves: ['swordsdance']}]});
@@ -58,7 +58,7 @@ describe('Knock Off', function () {
 		assert.equal(battle.p2.active[0].item, '');
 	});
 
-	it('should not remove items if the user faints mid-move', function () {
+	it('should not remove items if the user faints mid-move', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Shedinja", ability: 'wonderguard', moves: ['knockoff']}]});
 		battle.setPlayer('p2', {team: [{species: "Ferrothorn", ability: 'ironbarbs', item: 'rockyhelmet', moves: ['curse']}]});
@@ -67,12 +67,12 @@ describe('Knock Off', function () {
 	});
 });
 
-describe('Knock Off [Gen 4]', function () {
-	afterEach(function () {
+describe('Knock Off [Gen 4]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should only make the held item unusable, not actually remove it', function () {
+	it('should only make the held item unusable, not actually remove it', () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'Wynaut', moves: ['knockoff']},
 		], [
@@ -83,7 +83,7 @@ describe('Knock Off [Gen 4]', function () {
 		assert.false.fullHP(battle.p2.active[0], 'Aggron should not have been healed by Leftovers.');
 	});
 
-	it('should make the target unable to gain a new item', function () {
+	it('should make the target unable to gain a new item', () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'Wynaut', item: 'pokeball', moves: ['knockoff', 'trick']},
 		], [
@@ -97,7 +97,7 @@ describe('Knock Off [Gen 4]', function () {
 		assert.equal(battle.p2.active[0].item, 'leftovers');
 	});
 
-	it(`should not knock off the target's item if the target's ability is Sticky Hold or Multitype`, function () {
+	it(`should not knock off the target's item if the target's ability is Sticky Hold or Multitype`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'Wynaut', moves: ['knockoff']},
 		], [

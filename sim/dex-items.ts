@@ -207,9 +207,11 @@ export class DexItems {
 				const parent = this.dex.mod(this.dex.parentMod);
 				if (itemData === parent.data.Items[id]) {
 					const parentItem = parent.items.getByID(id);
-					if (item.isNonstandard === parentItem.isNonstandard &&
-					    item.desc === parentItem.desc &&
-					    item.shortDesc === parentItem.shortDesc) {
+					if (
+						item.isNonstandard === parentItem.isNonstandard &&
+						item.desc === parentItem.desc &&
+						item.shortDesc === parentItem.shortDesc
+					) {
 						item = parentItem;
 					}
 				}

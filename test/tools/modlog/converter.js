@@ -352,12 +352,12 @@ describe('Modlog conversion script', () => {
 
 		it('should correctly parse poll modlogs', () => {
 			assert.equal(
-				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) ([apoll] was started by [annika].)',),
+				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) ([apoll] was started by [annika].)'),
 				'[2020-08-23T19:50:49.944Z] (development) POLL: by annika'
 			);
 
 			assert.equal(
-				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) ([thepoll] was ended by [annika].)',),
+				converter.modernizeLog('[2020-08-23T19:50:49.944Z] (development) ([thepoll] was ended by [annika].)'),
 				'[2020-08-23T19:50:49.944Z] (development) POLL END: by annika'
 			);
 		});
@@ -516,7 +516,6 @@ describe('Modlog conversion script', () => {
 				}
 			);
 
-
 			assert.deepEqual(
 				converter.parseModlog(`[2020-08-23T19:50:49.944Z] (development) WEEKLOCK: [gejg] alts:[annalytically] [127.0.0.1] by somemod: terrible user`),
 				{
@@ -648,7 +647,7 @@ describe('Modlog conversion script', () => {
 					action: 'OLD MODLOG', roomID: 'development', isGlobal: false, loggedBy: 'unknown',
 					note: `hello hi test`, time: 1598212249944, alts: [],
 				}),
-				`[2020-08-23T19:50:49.944Z] (development) OLD MODLOG: by unknown: hello hi test\n`,
+				`[2020-08-23T19:50:49.944Z] (development) OLD MODLOG: by unknown: hello hi test\n`
 			);
 		});
 

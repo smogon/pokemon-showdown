@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Ally Switch`, function () {
-	afterEach(function () {
+describe(`Ally Switch`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should cause the Pokemon to switch sides in a double battle`, function () {
+	it(`should cause the Pokemon to switch sides in a double battle`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Primeape', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['allyswitch']},
@@ -27,7 +27,7 @@ describe(`Ally Switch`, function () {
 		assert.species(wynaut, 'Wynaut');
 	});
 
-	it(`should not work if the user is in the center of a Triple Battle`, function () {
+	it(`should not work if the user is in the center of a Triple Battle`, () => {
 		battle = common.gen(6).createBattle({gameType: 'triples'}, [[
 			{species: 'Primeape', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['allyswitch']},
@@ -43,7 +43,7 @@ describe(`Ally Switch`, function () {
 		assert.species(wynaut, 'Wynaut');
 	});
 
-	it(`should swap Pokemon on the edges of a Triple Battle`, function () {
+	it(`should swap Pokemon on the edges of a Triple Battle`, () => {
 		battle = common.gen(6).createBattle({gameType: 'triples'}, [[
 			{species: 'Wynaut', moves: ['allyswitch']},
 			{species: 'Primeape', moves: ['sleeptalk']},
@@ -59,7 +59,7 @@ describe(`Ally Switch`, function () {
 		assert.species(wynaut, 'Wynaut');
 	});
 
-	it(`should not work in formats where you do not control allies`, function () {
+	it(`should not work in formats where you do not control allies`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['allyswitch']},
 		], [
@@ -96,7 +96,7 @@ describe(`Ally Switch`, function () {
 		assert(battle.log.some(line => line.includes('|-fail|')), `It should fail in FFAs`);
 	});
 
-	it(`should have a chance to fail when used successively`, function () {
+	it(`should have a chance to fail when used successively`, () => {
 		battle = common.createBattle({gameType: 'doubles', forceRandomChance: false}, [[
 			{species: 'Primeape', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['allyswitch']},
@@ -112,7 +112,7 @@ describe(`Ally Switch`, function () {
 		assert.species(wynaut, 'Wynaut');
 	});
 
-	it(`[Gen 8] should not have a chance to fail when used successively`, function () {
+	it(`[Gen 8] should not have a chance to fail when used successively`, () => {
 		battle = common.gen(8).createBattle({gameType: 'doubles', forceRandomChance: false}, [[
 			{species: 'Primeape', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['allyswitch']},
@@ -128,7 +128,7 @@ describe(`Ally Switch`, function () {
 		assert.species(wynaut, 'Wynaut');
 	});
 
-	it(`should not use the protection counter when determining if the move should fail`, function () {
+	it(`should not use the protection counter when determining if the move should fail`, () => {
 		battle = common.createBattle({gameType: 'doubles', forceRandomChance: false}, [[
 			{species: 'Primeape', moves: ['calmmind']},
 			{species: 'Wynaut', moves: ['allyswitch', 'protect']},

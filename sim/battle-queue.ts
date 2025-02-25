@@ -146,7 +146,6 @@ export class BattleQueue {
 	unshift(action: Action) {
 		return this.list.unshift(action);
 	}
-	// eslint-disable-next-line no-restricted-globals
 	[Symbol.iterator]() { return this.list[Symbol.iterator](); }
 	entries() {
 		return this.list.entries();

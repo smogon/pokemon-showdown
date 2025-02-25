@@ -25,12 +25,14 @@ interface MafiaDataRole {
 }
 interface MafiaDataTheme {
 	name: string;
+	memo?: undefined;
 	desc: string;
 	// roles
 	[players: number]: string;
 }
 interface MafiaDataIDEA {
 	name: string;
+	memo?: undefined;
 	roles: string[];
 	picks: string[];
 	choices: number;
@@ -78,7 +80,7 @@ interface MafiaIDEAData {
 
 interface MafiaIDEAModule {
 	data: MafiaIDEAData | null;
-	timer: NodeJS.Timer | null;
+	timer: NodeJS.Timeout | null;
 	discardsHidden: boolean;
 	discardsHTML: string;
 	// users that haven't picked a role yet
@@ -92,13 +94,14 @@ interface MafiaIDEAPlayerData {
 }
 
 // The different possible ways for a player to be eliminated
-enum MafiaEliminateType {
-	ELIMINATE = "was eliminated", // standard (vote + faction kill + anything else)
-	KICK = "was kicked from the game", // staff kick
-	TREESTUMP = "was treestumped", // can still talk
-	SPIRIT = "became a restless spirit", // can still vote
-	SPIRITSTUMP = "became a restless treestump" // treestump + spirit
-}
+const MafiaEliminateType = {
+	ELIMINATE: "was eliminated", // standard (vote + faction kill + anything else)
+	KICK: "was kicked from the game", // staff kick
+	TREESTUMP: "was treestumped", // can still talk
+	SPIRIT: "became a restless spirit", // can still vote
+	SPIRITSTUMP: "became a restless treestump", // treestump + spirit
+} as const;
+type MafiaEliminateType = typeof MafiaEliminateType[keyof typeof MafiaEliminateType];
 
 const DATA_FILE = 'config/chat-plugins/mafia-data.json';
 const LOGS_FILE = 'config/chat-plugins/mafia-logs.json';
@@ -249,7 +252,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 	// Only call updateHtmlRoom if the player is still involved in the game in some way
 	tryUpdateHtmlRoom() {
 		if ([null, MafiaEliminateType.SPIRIT, MafiaEliminateType.TREESTUMP,
-			MafiaEliminateType.SPIRITSTUMP].includes(this.eliminated)) {
+			MafiaEliminateType.SPIRITSTUMP].includes(this.eliminated as any)) {
 			this.updateHtmlRoom();
 		}
 	}
@@ -261,7 +264,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 	updateHtmlRoom() {
 		if (this.game.ended) return this.closeHtmlRoom();
 		const user = Users.get(this.id);
-		if (!user || !user.connected) return;
+		if (!user?.connected) return;
 		for (const conn of user.connections) {
 			void Chat.resolvePage(`view-mafia-${this.game.room.roomid}`, user, conn);
 		}
@@ -269,7 +272,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 
 	closeHtmlRoom() {
 		const user = Users.get(this.id);
-		if (!user || !user.connected) return;
+		if (!user?.connected) return;
 		return user.send(`>view-mafia-${this.game.room.roomid}\n|deinit`);
 	}
 
@@ -319,7 +322,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	phase: 'signups' | 'locked' | 'IDEApicking' | 'IDEAlocked' | 'day' | 'night';
 	dayNum: number;
 
-	timer: NodeJS.Timer | null;
+	timer: NodeJS.Timeout | null;
 	dlAt: number;
 
 	IDEA: MafiaIDEAModule;
@@ -614,7 +617,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		} else {
 			this.sendDeclare(`Night ${this.dayNum}. PM the host your action, or idle.`);
 		}
-		return;
 	}
 
 	static parseRole(roleString: string) {
@@ -895,9 +897,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.hasPlurality = null;
 		if (this.getHammerValue(targetId) <= vote.trueCount) {
 			// HAMMER
-			this.sendDeclare(`Hammer! ${targetId === 'novote' ? 'Nobody' : Utils.escapeHTML(name as string)} was voted out!`);
+			this.sendDeclare(`Hammer! ${targetId === 'novote' ? 'Nobody' : Utils.escapeHTML(name!)} was voted out!`);
 			this.sendRoom(`|raw|<div class="infobox">${this.voteBox()}</div>`);
-			if (targetId !== 'novote') this.eliminate(target as MafiaPlayer, MafiaEliminateType.ELIMINATE);
+			if (targetId !== 'novote') this.eliminate(target!, MafiaEliminateType.ELIMINATE);
 			this.night(true);
 			return;
 		}
@@ -1204,10 +1206,10 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	revealRole(user: User, toReveal: MafiaPlayer, revealAs: string) {
 		if (!this.started) {
-		    return this.sendUser(user, `|error|You may only reveal roles once the game has started.`);
+			return this.sendUser(user, `|error|You may only reveal roles once the game has started.`);
 		}
 		if (!toReveal.role) {
-		    return this.sendUser(user, `|error|The user ${toReveal.id} is not assigned a role.`);
+			return this.sendUser(user, `|error|The user ${toReveal.id} is not assigned a role.`);
 		}
 		toReveal.revealed = revealAs;
 		this.sendDeclare(`${toReveal.safeName}'s role ${toReveal.isEliminated() ? `was` : `is`} ${revealAs}.`);
@@ -1790,7 +1792,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 
 		const player = this.getPlayer(user.id);
-		const eliminated = player && player.isEliminated();
+		const eliminated = player?.isEliminated();
 		const staff = user.can('mute', null, this.room);
 
 		if (!player) {
@@ -2128,7 +2130,7 @@ export const pages: Chat.PageTable = {
 				} else {
 					buf += `<p><button class="button" name="send" value="/msgroom ${room.roomid},/mafia join">Join game</button></p>`;
 				}
-			} else if (!isPlayer || !isPlayer.isEliminated()) {
+			} else if (!isPlayer?.isEliminated()) {
 				if ((!isPlayer && game.subs.includes(user.id)) || (isPlayer && !game.requestedSub.includes(user.id))) {
 					buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">${isPlayer ? 'Request to be subbed out' : 'Cancel sub request'}</summary>`;
 					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia sub out">${isPlayer ? 'Confirm request to be subbed out' : 'Confirm cancelation of sub request'}</button></details></p>`;
@@ -2286,7 +2288,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				if (hostQueue.includes(targetUserID)) return this.errorReply(`User ${targetUserID} is already on the host queue.`);
 				if (targetUser && Mafia.isHostBanned(room, targetUser)) {
-					 return this.errorReply(`User ${targetUserID} is banned from hosting mafia games.`);
+					return this.errorReply(`User ${targetUserID} is banned from hosting mafia games.`);
 				}
 				hostQueue.push(targetUserID);
 				room.add(`User ${targetUserID} has been added to the host queue by ${user.name}.`).update();
@@ -2769,10 +2771,10 @@ export const commands: Chat.ChatCommands = {
 			for (const targetUsername of args) {
 				const player = game.getPlayer(toID(targetUsername));
 				if (player) {
-					game.revealRole(user, player, `${cmd === 'revealas' ? revealAs : player.getStylizedRole()}`);
+					game.revealRole(user, player, `${revealAs || player.getStylizedRole()}`);
 					game.logAction(user, `revealed ${player.name}`);
-					if (cmd === 'revealas') {
-						game.secretLogAction(user, `fakerevealed ${player.name} as ${revealedRole!.role.name}`);
+					if (revealedRole) {
+						game.secretLogAction(user, `fakerevealed ${player.name} as ${revealedRole.role.name}`);
 					}
 				} else {
 					this.errorReply(`${targetUsername} is not a player.`);
@@ -3532,13 +3534,13 @@ export const commands: Chat.ChatCommands = {
 
 			if (cmd in cmdTypes) {
 				const toSearch = MafiaData[cmdTypes[cmd]];
-				// @ts-ignore guaranteed not an alias
+				// @ts-expect-error guaranteed not an alias
 				result = toSearch[target];
 			} else {
 				// search everything
 				for (const [cmdType, dataKey] of Object.entries(cmdTypes)) {
 					if (target in MafiaData[dataKey]) {
-						// @ts-ignore guaranteed not an alias
+						// @ts-expect-error guaranteed not an alias
 						result = MafiaData[dataKey][target];
 						dataType = cmdType;
 						break;
@@ -3547,8 +3549,8 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (!result) return this.errorReply(`"${target}" is not a valid mafia alignment, role, theme, or IDEA.`);
 
-			// @ts-ignore
-			let buf = `<h3${result.color ? ' style="color: ' + result.color + '"' : ``}>${result.name}</h3><b>Type</b>: ${dataType}<br/>`;
+			// @ts-expect-error property access
+			let buf = `<h3${result.color ? ` style="color: ${result.color}"` : ``}>${result.name}</h3><b>Type</b>: ${dataType}<br/>`;
 			if (dataType === 'theme') {
 				if ((result as MafiaDataTheme).desc) {
 					buf += `<b>Description</b>: ${(result as MafiaDataTheme).desc}<br/><details><summary class="button" style="font-weight: bold; display: inline-block">Setups:</summary>`;
@@ -3577,7 +3579,6 @@ export const commands: Chat.ChatCommands = {
 					buf += `${idearole}<br/>`;
 				}
 			} else {
-				// @ts-ignore
 				if (result.memo) buf += `${result.memo.join('<br/>')}`;
 			}
 			return this.sendReplyBox(buf);
@@ -4014,7 +4015,7 @@ export const commands: Chat.ChatCommands = {
 			if (!(source in MafiaData)) {
 				return this.errorReply(`Invalid source. Valid sources are ${Object.keys(MafiaData).join(', ')}`);
 			}
-			// @ts-ignore checked above
+			// @ts-expect-error checked above
 			const dataSource = MafiaData[source];
 			if (!(entry in dataSource)) return this.errorReply(`${entry} does not exist in ${source}.`);
 

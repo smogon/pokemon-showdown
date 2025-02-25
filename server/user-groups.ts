@@ -174,7 +174,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 					// if /permissions has granted unranked users permission to use the command,
 					// grant jurisdiction over unranked (since unranked users don't have jurisdiction over unranked)
 					// see https://github.com/smogon/pokemon-showdown/pull/9534#issuecomment-1565719315
-					jurisdiction += Users.Auth.defaultSymbol();
+					(jurisdiction as string) += Users.Auth.defaultSymbol();
 				}
 			}
 			if (!foundSpecificPermission && roomPermissions[permission]) {

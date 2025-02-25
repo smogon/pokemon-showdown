@@ -5,12 +5,12 @@ const common = require('../../common');
 
 let battle;
 
-describe('Copycat', function () {
-	afterEach(function () {
+describe('Copycat', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should be able to copy called moves', function () {
+	it('should be able to copy called moves', () => {
 		battle = common.createBattle([[
 			{species: 'riolu', ability: 'steadfast', moves: ['copycat']},
 		], [
@@ -22,7 +22,7 @@ describe('Copycat', function () {
 		assert.statStage(battle.p2.active[0], 'spa', -4);
 	});
 
-	it('[Gen 4] should not be able to copy called moves', function () {
+	it('[Gen 4] should not be able to copy called moves', () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'bonsly', ability: 'sturdy', moves: ['copycat']},
 		], [

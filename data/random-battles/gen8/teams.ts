@@ -1,7 +1,7 @@
 import {Dex, toID} from '../../../sim/dex';
 import {Utils} from '../../../lib';
-import {PRNG, PRNGSeed} from '../../../sim/prng';
-import {RuleTable} from '../../../sim/dex-formats';
+import {PRNG, type PRNGSeed} from '../../../sim/prng';
+import {type RuleTable} from '../../../sim/dex-formats';
 import {Tags} from './../../tags';
 
 export interface TeamData {
@@ -169,7 +169,7 @@ export class RandomGen8Teams {
 				!moves.has('calmmind') &&
 				['protect', 'substitute', 'spikyshield'].some(m => movePool.includes(m))
 			),
-			Bug: (movePool) => movePool.includes('megahorn'),
+			Bug: movePool => movePool.includes('megahorn'),
 			Dark: (movePool, moves, abilities, types, counter) => {
 				if (!counter.get('Dark')) return true;
 				return moves.has('suckerpunch') && (movePool.includes('knockoff') || movePool.includes('wickedblow'));
@@ -249,8 +249,8 @@ export class RandomGen8Teams {
 	getTeam(options?: PlayerOptions | null): PokemonSet[] {
 		const generatorName = (
 			typeof this.format.team === 'string' && this.format.team.startsWith('random')
-		 ) ? this.format.team + 'Team' : '';
-		// @ts-ignore
+		) ? this.format.team + 'Team' : '';
+		// @ts-expect-error property access
 		return this[generatorName || 'randomTeam'](options);
 	}
 
@@ -1687,7 +1687,6 @@ export class RandomGen8Teams {
 		return false;
 	}
 
-
 	getAbility(
 		types: Set<string>,
 		moves: Set<string>,
@@ -2234,7 +2233,7 @@ export class RandomGen8Teams {
 			const runEnforcementChecker = (checkerName: string) => {
 				if (!this.moveEnforcementCheckers[checkerName]) return false;
 				return this.moveEnforcementCheckers[checkerName](
-					movePool, moves, abilities, types, counter, species as Species, teamDetails
+					movePool, moves, abilities, types, counter, species, teamDetails
 				);
 			};
 
@@ -2562,7 +2561,7 @@ export class RandomGen8Teams {
 					}
 					if (this.dex.getEffectiveness(typeName, species) > 1) {
 						if (!typeDoubleWeaknesses[typeName]) typeDoubleWeaknesses[typeName] = 0;
-						if (typeDoubleWeaknesses[typeName] >= 1 * limitFactor) {
+						if (typeDoubleWeaknesses[typeName] >= limitFactor) {
 							skip = true;
 							break;
 						}
@@ -2788,7 +2787,6 @@ export class RandomGen8Teams {
 			moves.push(setData.moveVariants ? moveSlot[setData.moveVariants[i]] : this.sample(moveSlot));
 		}
 
-
 		const item = setData.item || this.sampleIfArray(setData.set.item);
 		const ability = setData.ability || this.sampleIfArray(setData.set.ability);
 		const nature = this.sampleIfArray(setData.set.nature);
@@ -2847,7 +2845,7 @@ export class RandomGen8Teams {
 
 		const teamData: TeamData = {
 			typeCount: {}, typeComboCount: {}, baseFormes: {},
-			has: {}, forceResult: forceResult, weaknesses: {}, resistances: {},
+			has: {}, forceResult, weaknesses: {}, resistances: {},
 		};
 		const requiredMoveFamilies = ['hazardSet', 'hazardClear'];
 		const requiredMoves: {[k: string]: string} = {
@@ -2925,7 +2923,7 @@ export class RandomGen8Teams {
 				// Drought and Drizzle don't count towards the type combo limit
 					typeCombo = set.ability + '';
 				}
-				if (teamData.typeComboCount[typeCombo] >= 1 * limitFactor) continue;
+				if (teamData.typeComboCount[typeCombo] >= limitFactor) continue;
 			}
 
 			// Okay, the set passes, add it to our team
@@ -3085,7 +3083,7 @@ export class RandomGen8Teams {
 		const pokemonPool = Object.keys(this.randomBSSFactorySets);
 
 		const teamData: TeamData = {
-			typeCount: {}, typeComboCount: {}, baseFormes: {}, has: {}, forceResult: forceResult,
+			typeCount: {}, typeComboCount: {}, baseFormes: {}, has: {}, forceResult,
 			weaknesses: {}, resistances: {},
 		};
 		const weatherAbilitiesSet: {[k: string]: string} = {
@@ -3111,8 +3109,8 @@ export class RandomGen8Teams {
 		const shuffledSpecies = [];
 		for (const speciesName of pokemonPool) {
 			const sortObject = {
-				speciesName: speciesName,
-				score: Math.pow(this.prng.random(), 1 / this.randomBSSFactorySets[speciesName].usage),
+				speciesName,
+				score: this.prng.random() ** (1 / this.randomBSSFactorySets[speciesName].usage),
 			};
 			shuffledSpecies.push(sortObject);
 		}

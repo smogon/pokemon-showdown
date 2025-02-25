@@ -54,7 +54,8 @@ export class BestOfPlayer extends RoomGamePlayer<BestOfGame> {
 		const button = `|c|~|/uhtml controls,<div class="infobox"><p style="margin:6px">Are you ready for game ${gameNum}, ${this.name}?</p><p style="margin:6px">` +
 			(this.ready ?
 				`<button class="button" disabled><i class="fa fa-check"></i> I'm ready!</button> &ndash; waiting for opponent...` :
-				`<button class="button notifying" name="send" value="${cmd}">I'm ready!</button>`) +
+				`<button class="button notifying" name="send" value="${cmd}">I'm ready!</button>`
+			) +
 			`</p></div>`;
 		this.sendRoom(button);
 		battleRoom?.sendUser(user, button);
@@ -78,7 +79,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	/** when waiting between battles, this is the just-ended battle room, the one with the |tempnotify| */
 	waitingBattle: GameRoom | null = null;
 	nextBattleTimerEnd: number | null = null;
-	nextBattleTimer: NodeJS.Timer | null = null;
+	nextBattleTimer: NodeJS.Timeout | null = null;
 	/** Does NOT control bestof's own timer, which is always-on. Controls timers in sub-battles. */
 	needsTimer = false;
 	score: number[] | null = null;
@@ -358,7 +359,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		this.games[this.games.length - 1].winner = winner;
 		if (winner) {
 			winner.wins++;
-			const loserPlayer = room.battle!.players.filter(p => p.num !== winner.num)[0];
+			const loserPlayer = room.battle!.players.find(p => p.num !== winner.num);
 			if (loserPlayer && loserPlayer.dcSecondsLeft <= 0) { // disconnection means opp wins the set
 				return this.forfeit(loserPlayer.name, ` lost the series due to inactivity.`);
 			}
@@ -477,7 +478,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	forfeitPlayer(loser: BestOfPlayer, message = '') {
 		if (this.ended || this.winner) return false;
 
-		this.winner = this.players.filter(p => p !== loser)[0];
+		this.winner = this.players.find(p => p !== loser)!;
 		this.room.add(`||${loser.name}${message || ' forfeited.'}`);
 		this.end(this.winner.id);
 

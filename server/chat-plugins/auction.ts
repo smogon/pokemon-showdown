@@ -86,10 +86,10 @@ function parseCredits(amount: string) {
 
 export class Auction extends Rooms.SimpleRoomGame {
 	override readonly gameid = 'auction' as ID;
-	owners: Set<ID> = new Set();
-	teams: Map<string, Team> = new Map();
-	managers: Map<string, Manager> = new Map();
-	auctionPlayers: Map<string, Player> = new Map();
+	owners = new Set<ID>();
+	teams = new Map<string, Team>();
+	managers = new Map<string, Manager>();
+	auctionPlayers = new Map<string, Player>();
 
 	startingCredits: number;
 	minBid = 3000;
@@ -99,10 +99,10 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	lastQueue: Team[] | null = null;
 	queue: Team[] = [];
-	nomTimer: NodeJS.Timer = null!;
+	nomTimer: NodeJS.Timeout = null!;
 	nomTimeLimit = 0;
 	nomTimeRemaining = 0;
-	bidTimer: NodeJS.Timer = null!;
+	bidTimer: NodeJS.Timeout = null!;
 	bidTimeLimit = 10;
 	bidTimeRemaining = 10;
 	nominatingTeam: Team = null!;
@@ -110,7 +110,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	highestBidder: Team = null!;
 	highestBid = 0;
 	/** Used for blind mode */
-	bidsPlaced: Map<Team, number> = new Map();
+	bidsPlaced = new Map<Team, number>();
 	state: 'setup' | 'nom' | 'bid' = 'setup';
 	constructor(room: Room, startingCredits = 100000) {
 		super(room);

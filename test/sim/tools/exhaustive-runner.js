@@ -4,7 +4,7 @@ const assert = require('assert').strict;
 
 const {ExhaustiveRunner} = require('../../../dist/sim/tools/exhaustive-runner');
 
-describe('ExhaustiveRunner (slow)', async function () {
+describe('ExhaustiveRunner (slow)', async () => {
 	it('should run successfully', async function () {
 		this.timeout(0);
 		const opts = {prng: [1, 2, 3, 4]};

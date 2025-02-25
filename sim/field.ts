@@ -6,7 +6,7 @@
  */
 
 import {State} from './state';
-import {EffectState} from './pokemon';
+import {type EffectState} from './pokemon';
 import {toID} from './dex';
 
 export class Field {
@@ -39,7 +39,7 @@ export class Field {
 	setWeather(status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+		if (!source && this.battle.event?.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 
 		if (this.weather === status.id) {
@@ -130,7 +130,7 @@ export class Field {
 	setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
 		status = this.battle.dex.conditions.get(status);
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+		if (!source && this.battle.event?.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 		if (!source) throw new Error(`setting terrain without a source`);
 
@@ -188,7 +188,7 @@ export class Field {
 		source: Pokemon | 'debug' | null = null,
 		sourceEffect: Effect | null = null
 	): boolean {
-		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+		if (!source && this.battle.event?.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.battle.sides[0].active[0];
 		status = this.battle.dex.conditions.get(status);
 

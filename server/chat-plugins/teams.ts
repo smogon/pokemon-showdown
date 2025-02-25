@@ -423,7 +423,6 @@ export const commands: Chat.ChatCommands = {
 				this.parse(`/join view-teams-view-${id}-${id}`);
 			} else {
 				this.parse(`/join view-teams-${page}`);
-				return;
 			}
 		},
 		''(target) {

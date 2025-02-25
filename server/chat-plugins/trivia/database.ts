@@ -171,9 +171,9 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		for (const [lb, discrim] of Object.entries(LEADERBOARD_ENUM) as [Leaderboard, number][]) {
 			if (!additions[lb]) continue;
 			await this.leaderboardChangeQuery!.run({
-				score: additions[lb]!.score,
-				totalPoints: additions[lb]!.totalPoints,
-				totalCorrectAnswers: additions[lb]!.totalCorrectAnswers,
+				score: additions[lb].score,
+				totalPoints: additions[lb].totalPoints,
+				totalCorrectAnswers: additions[lb].totalCorrectAnswers,
 				userid,
 				leaderboard: discrim,
 			});
@@ -494,7 +494,6 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 		return Promise.all(rows.map((row: AnyObject) => this.rowToQuestion(row)));
 	}
-
 
 	/*****************************
 	 * Methods for deleting data *

@@ -4,22 +4,22 @@ const assert = require('../../assert');
 
 let team;
 
-describe('Team Validator', function () {
-	it("should validate Necrozma formes correctly", function () {
+describe('Team Validator', () => {
+	it("should validate Necrozma formes correctly", () => {
 		team = [
 			{species: 'necrozmadawnwings', ability: 'prismarmor', shiny: true, moves: ['moongeistbeam', 'metalclaw'], evs: {hp: 1}},
 		];
 		assert.legalTeam(team, 'gen7anythinggoes');
 	});
 
-	it('should reject Ultra Necrozma where ambiguous', function () {
+	it('should reject Ultra Necrozma where ambiguous', () => {
 		team = [
 			{species: 'necrozmaultra', ability: 'neuroforce', moves: ['confusion'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen7ubers');
 	});
 
-	it('should handle Deoxys formes in Gen 3', function () {
+	it('should handle Deoxys formes in Gen 3', () => {
 		team = [
 			{species: 'deoxys', ability: 'pressure', moves: ['wrap'], evs: {hp: 1}},
 			{species: 'deoxys', ability: 'pressure', moves: ['wrap'], evs: {hp: 1}},
@@ -35,7 +35,7 @@ describe('Team Validator', function () {
 		assert.legalTeam(team, 'gen3ubers@@@!speciesclause,+nonexistent');
 	});
 
-	it('should correctly validate USUM Rockruff', function () {
+	it('should correctly validate USUM Rockruff', () => {
 		team = [
 			{species: 'rockruff', ability: 'owntempo', moves: ['happyhour'], evs: {hp: 1}},
 		];
@@ -63,7 +63,7 @@ describe('Team Validator', function () {
 		assert.false.legalTeam(team, 'gen7anythinggoes');
 	});
 
-	it('should reject Pokemon that cannot obtain moves in a particular forme', function () {
+	it('should reject Pokemon that cannot obtain moves in a particular forme', () => {
 		team = [
 			{species: 'toxtricity', ability: 'punkrock', moves: ['venomdrench, magneticflux'], evs: {hp: 1}},
 			{species: 'toxtricity-low-key', ability: 'punkrock', moves: ['venoshock, shiftgear'], evs: {hp: 1}},

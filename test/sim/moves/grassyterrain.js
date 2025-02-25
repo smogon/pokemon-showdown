@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Grassy Terrain', function () {
-	afterEach(function () {
+describe('Grassy Terrain', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should change the current terrain to Grassy Terrain for five turns`, function () {
+	it(`should change the current terrain to Grassy Terrain for five turns`, () => {
 		battle = common.createBattle([[
 			{species: 'Florges', moves: ['grassyterrain', 'sleeptalk']},
 		], [
@@ -24,7 +24,7 @@ describe('Grassy Terrain', function () {
 		assert(battle.field.isTerrain(''));
 	});
 
-	it(`should halve the base power of Earthquake, Bulldoze, and Magnitude against grounded targets`, function () {
+	it(`should halve the base power of Earthquake, Bulldoze, and Magnitude against grounded targets`, () => {
 		battle = common.createBattle([[
 			{species: 'Shaymin', moves: ['grassyterrain']},
 		], [
@@ -39,7 +39,7 @@ describe('Grassy Terrain', function () {
 		assert.equal(battle.runEvent('BasePower', shaymin, aerodactyl, Dex.moves.get('bulldoze'), 60, true), 60);
 	});
 
-	it(`should increase the base power of Grass-type attacks used by grounded Pokemon`, function () {
+	it(`should increase the base power of Grass-type attacks used by grounded Pokemon`, () => {
 		battle = common.gen(7).createBattle([[
 			{species: 'Shaymin', moves: ['grassyterrain']},
 		], [
@@ -56,7 +56,7 @@ describe('Grassy Terrain', function () {
 		assert.equal(basePower, move.basePower);
 	});
 
-	it(`should heal grounded Pokemon by 1/16 of their max HP`, function () {
+	it(`should heal grounded Pokemon by 1/16 of their max HP`, () => {
 		battle = common.createBattle([[
 			{species: 'Shaymin', moves: ['grassyterrain', 'seismictoss']},
 		], [
@@ -70,7 +70,7 @@ describe('Grassy Terrain', function () {
 		assert.equal(wynaut.hp, wynaut.maxhp - 100);
 	});
 
-	it(`should not affect Pokemon in a semi-invulnerable state`, function () {
+	it(`should not affect Pokemon in a semi-invulnerable state`, () => {
 		battle = common.createBattle([[
 			{species: 'Shaymin', moves: ['grassyterrain', 'seismictoss']},
 		], [
@@ -84,7 +84,7 @@ describe('Grassy Terrain', function () {
 		assert.equal(wynaut.hp, wynaut.maxhp - 100);
 	});
 
-	it(`should cause Nature Power to become Energy Ball`, function () {
+	it(`should cause Nature Power to become Energy Ball`, () => {
 		battle = common.createBattle([[
 			{species: 'Shaymin', moves: ['grassyterrain']},
 		], [
@@ -95,7 +95,7 @@ describe('Grassy Terrain', function () {
 		assert.equal(resultMove, 'energyball');
 	});
 
-	it(`should heal by Speed order in the same block as Leftovers`, function () {
+	it(`should heal by Speed order in the same block as Leftovers`, () => {
 		battle = common.createBattle([[
 			{species: 'rillaboom', ability: 'grassysurge', item: 'leftovers', moves: ['seismictoss']},
 		], [
@@ -111,7 +111,7 @@ describe('Grassy Terrain', function () {
 		assert(rillaGrassyIndex < rillaLeftoversIndex, 'Rillaboom should heal from Grassy Terrain before Leftovers');
 	});
 
-	it(`should only decrement turn count when being set before it would decrement in the end-of-turn effects`, function () {
+	it(`should only decrement turn count when being set before it would decrement in the end-of-turn effects`, () => {
 		battle = common.createBattle([[
 			{species: 'grookey', ability: 'grassysurge', moves: ['sleeptalk']},
 		], [
@@ -130,7 +130,7 @@ describe('Grassy Terrain', function () {
 		assert(battle.field.isTerrain('grassyterrain'), `Grassy Terrain should still be active turn 5, ending turn 6.`);
 	});
 
-	it.skip(`should not skip healing Pokemon if it was set during the block it would heal Pokemon`, function () {
+	it.skip(`should not skip healing Pokemon if it was set during the block it would heal Pokemon`, () => {
 		battle = common.createBattle([[
 			{species: 'coalossal', ability: 'grassysurge', moves: ['sleeptalk', 'rockthrow']},
 		], [

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe("Tera Stellar", function () {
-	afterEach(function () {
+describe("Tera Stellar", () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should increase the damage of non-STAB moves by 1.2x on the first use of that move type`, function () {
+	it(`should increase the damage of non-STAB moves by 1.2x on the first use of that move type`, () => {
 		battle = common.gen(9).createBattle([[
 			{species: 'Wynaut', ability: 'noguard', moves: ['surf', 'hydropump', 'extrasensory', 'hyperspacehole'], teraType: 'Stellar'},
 		], [
@@ -44,7 +44,7 @@ describe("Tera Stellar", function () {
 		assert.bounded(damage, [43, 52], `Hyperspace Hole should have 1.5x damage on its first use, because Psychic-type was already used`);
 	});
 
-	it(`should not have the once-per-type restriction when used by Terapagos`, function () {
+	it(`should not have the once-per-type restriction when used by Terapagos`, () => {
 		battle = common.gen(9).createBattle([[
 			{species: 'Terapagos', ability: 'terashift', moves: ['surf', 'hypervoice'], item: 'laggingtail', teraType: 'Stellar'},
 		], [
@@ -70,7 +70,7 @@ describe("Tera Stellar", function () {
 		assert.bounded(damage, [156, 184], `Hyper Voice should have 2x damage on its second use`);
 	});
 
-	it(`should not modify the Pokemon's base type for defensive purposes`, function () {
+	it(`should not modify the Pokemon's base type for defensive purposes`, () => {
 		battle = common.gen(9).createBattle([[
 			{species: 'Krookodile', moves: ['sleeptalk'], teraType: 'Stellar'},
 		], [
@@ -91,7 +91,7 @@ describe("Tera Stellar", function () {
 		assert.statStage(krookodile, 'def', 0);
 	});
 
-	it(`should only be super-effective against opposing Terastallized targets`, function () {
+	it(`should only be super-effective against opposing Terastallized targets`, () => {
 		battle = common.gen(9).createBattle([[
 			{species: 'Krookodile', moves: ['terablast'], teraType: 'Stellar'},
 		], [
@@ -103,7 +103,7 @@ describe("Tera Stellar", function () {
 		assert.statStage(steelix, 'atk', 2);
 	});
 
-	it(`should increase the user's stats with Tera Blast if the user has Contrary`, function () {
+	it(`should increase the user's stats with Tera Blast if the user has Contrary`, () => {
 		battle = common.gen(9).createBattle([[
 			{species: 'inkay', ability: 'contrary', moves: ['terablast'], teraType: 'Stellar'},
 		], [
@@ -117,7 +117,7 @@ describe("Tera Stellar", function () {
 		assert.statStage(inkay, 'spa', 1);
 	});
 
-	it(`should not work with Adapatability`, function () {
+	it(`should not work with Adapatability`, () => {
 		battle = common.gen(9).createBattle([[
 			{species: 'Wynaut', ability: 'adaptability', moves: ['hyperspacehole', 'terablast'], teraType: 'Stellar'},
 		], [
@@ -143,7 +143,7 @@ describe("Tera Stellar", function () {
 		assert.bounded(damage, [24, 29], `Tera Blast should not have any boosted damage on its second use`);
 	});
 
-	it(`should increase the damage of all hits of a multi-hit move`, function () {
+	it(`should increase the damage of all hits of a multi-hit move`, () => {
 		battle = common.gen(9).createBattle([[
 			{species: 'Wynaut', moves: ['surgingstrikes', 'flipturn'], teraType: 'Stellar'},
 		], [

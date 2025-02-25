@@ -143,7 +143,7 @@ export const commands: Chat.ChatCommands = {
 				try {
 					const dimensions = await Chat.fitImage(rawImg, 300, 300);
 					image = [rawImg, ...dimensions.slice(0, -1)] as Image;
-				} catch (e) {
+				} catch {
 					return this.popupReply(`Invalid image URL: ${rawImg}`);
 				}
 			}

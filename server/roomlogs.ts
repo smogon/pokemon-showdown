@@ -8,7 +8,7 @@
  */
 
 import {FS, Utils, type Streams} from '../lib';
-import {PGDatabase, SQL, SQLStatement} from '../lib/database';
+import {PGDatabase, SQL, type SQLStatement} from '../lib/database';
 import type {PartialModlogEntry} from './modlog';
 
 interface RoomlogOptions {
@@ -257,12 +257,12 @@ export class Roomlog {
 			const chatData = this.parseChatLine(message);
 			const type = message.split('|')[1] || "";
 			void this.insertLog(SQL`INSERT INTO roomlogs (${{
-				type: type,
+				type,
 				roomid: this.roomid,
 				userid: toID(chatData?.user) || null,
 				time: SQL`now()`,
 				log: message,
-		  }})`);
+			}})`);
 
 			const dateStr = Chat.toTimestamp(date).split(' ')[0];
 			void this.insertLog(SQL`INSERT INTO roomlog_dates (${{
@@ -290,7 +290,7 @@ export class Roomlog {
 				e.message?.includes('Connection terminated unexpectedly')
 			) {
 				// delay before retrying
-				await new Promise(resolve => setTimeout(resolve, 2000));
+				await new Promise(resolve => { setTimeout(resolve, 2000); });
 				return this.insertLog(query, ignoreFailure, retries - 1);
 			}
 			// crashlog for all other errors
@@ -328,7 +328,7 @@ export class Roomlog {
 		this.roomid = newID;
 		return true;
 	}
-	static rollLogs() {
+	static rollLogs(this: void) {
 		if (Roomlogs.rollLogTimer === true) return;
 		if (Roomlogs.rollLogTimer) {
 			clearTimeout(Roomlogs.rollLogTimer);

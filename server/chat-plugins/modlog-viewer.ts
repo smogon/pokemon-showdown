@@ -8,7 +8,7 @@
  */
 
 import {Dashycode, Utils} from '../../lib';
-import {ModlogID, ModlogSearch, ModlogEntry} from '../modlog';
+import type {ModlogID, ModlogSearch, ModlogEntry} from '../modlog';
 
 const MAX_QUERY_LENGTH = 2500;
 const DEFAULT_RESULTS_LENGTH = 100;

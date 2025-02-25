@@ -9,11 +9,11 @@ import {strict as assert} from 'assert';
 import * as fs from 'fs';
 
 import {Dex} from '..';
-import {ObjectReadWriteStream} from '../../lib/streams';
+import {type ObjectReadWriteStream} from '../../lib/streams';
 import {Battle} from '../battle';
 import * as BattleStreams from '../battle-stream';
 import {State} from '../state';
-import {PRNG, PRNGSeed} from '../prng';
+import {PRNG, type PRNGSeed} from '../prng';
 import {RandomPlayerAI} from './random-player-ai';
 
 export interface AIOptions {
@@ -83,7 +83,7 @@ export class Runner {
 	}
 
 	private async runGame(format: string, battleStream: RawBattleStream | DualStream) {
-		// @ts-ignore - DualStream implements everything relevant from BattleStream.
+		// @ts-expect-error - DualStream implements everything relevant from BattleStream.
 		const streams = BattleStreams.getPlayerStreams(battleStream);
 		const spec = {formatid: format, seed: this.prng.getSeed()};
 		const is4P = Dex.formats.get(format).playerCount > 2;
@@ -120,12 +120,12 @@ export class Runner {
 		}
 
 		let initMessage = `>start ${JSON.stringify(spec)}\n` +
-		`>player p1 ${JSON.stringify(p1spec)}\n` +
-		`>player p2 ${JSON.stringify(p2spec)}`;
+			`>player p1 ${JSON.stringify(p1spec)}\n` +
+			`>player p2 ${JSON.stringify(p2spec)}`;
 		if (is4P) {
 			initMessage += `\n` +
-			`>player p3 ${JSON.stringify(p3spec!)}\n` +
-			`>player p4 ${JSON.stringify(p4spec!)}`;
+				`>player p3 ${JSON.stringify(p3spec!)}\n` +
+				`>player p4 ${JSON.stringify(p4spec!)}`;
 		}
 		void streams.omniscient.write(initMessage);
 

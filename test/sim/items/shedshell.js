@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Shed Shell', function () {
-	afterEach(function () {
+describe('Shed Shell', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should allow Pokemon to escape trapping abilities', function () {
+	it('should allow Pokemon to escape trapping abilities', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Gothitelle", ability: 'shadowtag', moves: ['calmmind']}]});
 		battle.setPlayer('p2', {team: [
@@ -21,7 +21,7 @@ describe('Shed Shell', function () {
 		assert.species(battle.p2.active[0], 'Heatran');
 	});
 
-	it('should allow Pokemon to escape from most moves that would trap them', function () {
+	it('should allow Pokemon to escape from most moves that would trap them', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'levitate', moves: ['meanlook']}]});
 		battle.setPlayer('p2', {team: [
@@ -33,7 +33,7 @@ describe('Shed Shell', function () {
 		assert.species(battle.p2.active[0], 'Heatran');
 	});
 
-	it('should not allow Pokemon to escape from Sky Drop', function () {
+	it('should not allow Pokemon to escape from Sky Drop', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Dragonite", ability: 'multiscale', moves: ['skydrop']}]});
 		battle.setPlayer('p2', {team: [

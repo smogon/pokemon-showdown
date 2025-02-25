@@ -158,12 +158,10 @@ export function checkRipgrepAvailability() {
 	return Config.ripgrepmodlog;
 }
 
-
 function reportError(msg: string) {
 	// This module generally loads before Monitor, so we put this in a setImmediate to wait for it to load.
 	// Most child processes don't have Monitor.error, but the main process should always have them, and Config
 	// errors should always be the same across processes, so this is a neat way to avoid unnecessary logging.
-	// @ts-ignore typescript doesn't like us accessing Monitor like this
 	setImmediate(() => global.Monitor?.error?.(msg));
 }
 export const Config = load();

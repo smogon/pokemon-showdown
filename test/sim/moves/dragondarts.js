@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Dragon Darts', function () {
-	afterEach(function () {
+describe('Dragon Darts', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should hit twice in singles`, function () {
+	it(`should hit twice in singles`, () => {
 		battle = common.createBattle([[
 			{species: "Ninjask", moves: ['dragondarts']},
 		], [
@@ -20,7 +20,7 @@ describe('Dragon Darts', function () {
 		assert.statStage(battle.p2.active[0], 'def', 2);
 	});
 
-	it(`should hit each foe once in doubles`, function () {
+	it(`should hit each foe once in doubles`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Ninjask", moves: ['dragondarts']},
 			{species: "Mew", ability: 'stamina', moves: ['splash']},
@@ -34,7 +34,7 @@ describe('Dragon Darts', function () {
 		assert.statStage(battle.p2.active[1], 'def', 1);
 	});
 
-	it(`should hit the other foe twice if it misses against one`, function () {
+	it(`should hit the other foe twice if it misses against one`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Ninjask", item: 'blunderpolicy', moves: ['dragondarts']},
 			{species: "Wynaut", ability: 'stamina', moves: ['splash']},
@@ -49,7 +49,7 @@ describe('Dragon Darts', function () {
 		const shaymin = battle.p2.active[1];
 
 		// Modding accuracy so Dragon Darts always misses Mew
-		battle.onEvent('Accuracy', battle.format, function (accuracy, target, source, move) {
+		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
 			return target.species.id !== 'mew';
 		});
 
@@ -61,7 +61,7 @@ describe('Dragon Darts', function () {
 		assert.statStage(shaymin, 'def', 2);
 	});
 
-	it(`should hit itself and ally if it targets itself after Ally Switch`, function () {
+	it(`should hit itself and ally if it targets itself after Ally Switch`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Ninjask", ability: 'stamina', moves: ['dragondarts']},
 			{species: "Mew", ability: 'stamina', moves: ['allyswitch']},
@@ -76,7 +76,7 @@ describe('Dragon Darts', function () {
 		assert.statStage(battle.p2.active[1], 'def', 0);
 	});
 
-	it(`should hit both targets even if one faints`, function () {
+	it(`should hit both targets even if one faints`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Ninjask", moves: ['dragondarts']},
 			{species: "Mew", moves: ['splash']},
@@ -90,7 +90,7 @@ describe('Dragon Darts', function () {
 		assert.equal(battle.p2.active[1].hp, 0);
 	});
 
-	it(`should hit the ally twice in doubles`, function () {
+	it(`should hit the ally twice in doubles`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Ninjask", moves: ['dragondarts']},
 			{species: "Mew", ability: 'stamina', moves: ['splash']},
@@ -104,7 +104,7 @@ describe('Dragon Darts', function () {
 		assert.statStage(battle.p2.active[1], 'def', 0);
 	});
 
-	it(`should smart-target the foe that's not Protecting in Doubles`, function () {
+	it(`should smart-target the foe that's not Protecting in Doubles`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Ninjask", moves: ['dragondarts']},
 			{species: "Mew", ability: 'stamina', moves: ['splash']},
@@ -118,7 +118,7 @@ describe('Dragon Darts', function () {
 		assert.statStage(battle.p2.active[1], 'def', 2);
 	});
 
-	it(`should be able to be redirected`, function () {
+	it(`should be able to be redirected`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Ninjask", moves: ['dragondarts']},
 			{species: "Mew", ability: 'stamina', moves: ['splash']},
@@ -132,7 +132,7 @@ describe('Dragon Darts', function () {
 		assert.statStage(battle.p2.active[1], 'def', 0);
 	});
 
-	it('should hit one target twice if the other is protected by an ability', function () {
+	it('should hit one target twice if the other is protected by an ability', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"]},
@@ -151,7 +151,7 @@ describe('Dragon Darts', function () {
 		assert.statStage(battle.p2.active[1], 'spe', 1);
 	});
 
-	it('should hit one target twice if the other is immunue', function () {
+	it('should hit one target twice if the other is immunue', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"]},
@@ -167,7 +167,7 @@ describe('Dragon Darts', function () {
 		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
 
-	it('should hit one target twice if the other is semi-invulnerable', function () {
+	it('should hit one target twice if the other is semi-invulnerable', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: "Dragapult", item: "Lagging Tail", ability: "Clear Body", moves: ["dragondarts"]},
@@ -183,7 +183,7 @@ describe('Dragon Darts', function () {
 		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
 
-	it('should hit one target twice if the other is fainted', function () {
+	it('should hit one target twice if the other is fainted', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"]},
@@ -201,7 +201,7 @@ describe('Dragon Darts', function () {
 		assert.equal(battle.p2.active[1].hp, 0);
 	});
 
-	it('should hit one target twice if the other is Dark type and Dragon Darts is Prankster boosted', function () {
+	it('should hit one target twice if the other is Dark type and Dragon Darts is Prankster boosted', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: "Dragapult", ability: "Clear Body", moves: ["sleeptalk", "dragondarts"]},
@@ -218,7 +218,7 @@ describe('Dragon Darts', function () {
 		assert.equal(battle.p2.active[1].hp, battle.p2.active[1].maxhp);
 	});
 
-	it('should fail if both targets are fainted', function () {
+	it('should fail if both targets are fainted', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: "Dragapult", ability: "Clear Body", moves: ["dragondarts"]},

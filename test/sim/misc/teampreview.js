@@ -5,12 +5,12 @@ const common = require('../../common');
 
 let battle;
 
-describe('Team Preview', function () {
-	afterEach(function () {
+describe('Team Preview', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should hide formes of certain Pokemon', function () {
+	it('should hide formes of certain Pokemon', () => {
 		battle = common.createBattle([[
 			{species: 'Pumpkaboo-Super', ability: 'pickup', moves: ['sleeptalk']},
 			{species: 'Gourgeist-Small', ability: 'pickup', moves: ['sleeptalk']},
@@ -28,7 +28,7 @@ describe('Team Preview', function () {
 		}
 	});
 
-	it('should hide Arceus formes [Gen 8]', function () {
+	it('should hide Arceus formes [Gen 8]', () => {
 		battle = common.createBattle({formatid: 'gen8anythinggoes'}, [[
 			{species: 'Arceus-Steel', ability: 'multitype', item: 'steelplate', moves: ['sleeptalk']},
 		], [
@@ -42,7 +42,7 @@ describe('Team Preview', function () {
 		}
 	});
 
-	it('should not hide formes of hacked Zacian/Zamazenta formes', function () {
+	it('should not hide formes of hacked Zacian/Zamazenta formes', () => {
 		battle = common.createBattle([[
 			{species: 'Zacian-Crowned', moves: ['sleeptalk']},
 		], [

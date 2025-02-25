@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Spikes', function () {
-	afterEach(function () {
+describe('Spikes', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should apply one layer per use in a double battle`, function () {
+	it(`should apply one layer per use in a double battle`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Bronzong', moves: ['sleeptalk']},
 			{species: 'Cufant', moves: ['sleeptalk']},
@@ -23,7 +23,7 @@ describe('Spikes', function () {
 		assert.equal(battle.sides[0].sideConditions.spikes.layers, 1);
 	});
 
-	it(`should be bounced without any layers being set by the original user`, function () {
+	it(`should be bounced without any layers being set by the original user`, () => {
 		battle = common.createBattle({gameType: 'freeforall'}, [[
 			{species: 'Hatterene', ability: 'Magic Bounce', moves: ['sleeptalk']},
 		], [

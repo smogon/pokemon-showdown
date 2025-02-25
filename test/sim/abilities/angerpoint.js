@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Anger Point', function () {
-	afterEach(function () {
+describe('Anger Point', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should maximize Attack when hit by a critical hit', function () {
+	it('should maximize Attack when hit by a critical hit', () => {
 		battle = common.createBattle([[
 			{species: "Cryogonal", ability: 'noguard', moves: ['frostbreath']},
 		], [
@@ -22,7 +22,7 @@ describe('Anger Point', function () {
 		assert.statStage(angerMon, 'atk', 6);
 	});
 
-	it('should maximize Attack when hit by a critical hit even if the foe has Mold Breaker', function () {
+	it('should maximize Attack when hit by a critical hit even if the foe has Mold Breaker', () => {
 		battle = common.createBattle([[
 			{species: "Haxorus", ability: 'moldbreaker', item: 'scopelens', moves: ['focusenergy', 'falseswipe']},
 		], [
@@ -35,7 +35,7 @@ describe('Anger Point', function () {
 		assert.statStage(angerMon, 'atk', 6);
 	});
 
-	it('should not maximize Attack when dealing a critical hit', function () {
+	it('should not maximize Attack when dealing a critical hit', () => {
 		battle = common.createBattle([[
 			{species: "Cryogonal", ability: 'noguard', moves: ['endure']},
 		], [
@@ -48,7 +48,7 @@ describe('Anger Point', function () {
 		assert.statStage(angerMon, 'atk', 0);
 	});
 
-	it('should not maximize Attack when behind a substitute', function () {
+	it('should not maximize Attack when behind a substitute', () => {
 		battle = common.createBattle([[
 			{species: "Cryogonal", ability: 'noguard', item: 'laggingtail', moves: ['frostbreath']},
 		], [

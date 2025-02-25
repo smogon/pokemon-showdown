@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Sunsteel Strike', function () {
-	afterEach(function () {
+describe('Sunsteel Strike', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should not ignore the user's own Ability`, function () {
+	it(`should not ignore the user's own Ability`, () => {
 		battle = common.createBattle([[
 			{species: 'metagross', ability: 'clearbody', moves: ['sunsteelstrike']},
 		], [
@@ -21,7 +21,7 @@ describe('Sunsteel Strike', function () {
 		assert.statStage(metagross, 'spe', 0);
 	});
 
-	it(`should ignore the user's own Ability (Gen 7)`, function () {
+	it(`should ignore the user's own Ability (Gen 7)`, () => {
 		battle = common.gen(7).createBattle([[
 			{species: 'metagross', ability: 'clearbody', moves: ['sunsteelstrike']},
 		], [

@@ -12752,7 +12752,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		tags: ["Restricted Legendary"],
 		eggGroups: ["Undiscovered"],
 		otherFormes: ["Zygarde-10%", "Zygarde-Complete"],
-		 // forme 2 = 10% with Power Constructor ,forme 3 = 50% with Power Construct
+		// forme 2 = 10% with Power Constructor ,forme 3 = 50% with Power Construct
 		formeOrder: ["Zygarde", "Zygarde-10%", "Zygarde-10%", "Zygarde", "Zygarde-Complete"],
 	},
 	zygarde10: {
@@ -14057,7 +14057,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		otherFormes: ["Minior-Meteor"],
 		cosmeticFormes: ["Minior-Orange", "Minior-Yellow", "Minior-Green", "Minior-Blue", "Minior-Indigo", "Minior-Violet"],
 		formeOrder: [
-			 // All of the colored Minior Meteor formes (unsupported by PS) are numbers 0-6
+			// All of the colored Minior Meteor formes (unsupported by PS) are numbers 0-6
 			"Minior-Meteor", "Minior-Meteor", "Minior-Meteor", "Minior-Meteor", "Minior-Meteor", "Minior-Meteor", "Minior-Meteor",
 			"Minior", "Minior-Orange", "Minior-Yellow", "Minior-Green", "Minior-Blue", "Minior-Indigo", "Minior-Violet",
 		],

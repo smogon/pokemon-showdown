@@ -127,24 +127,25 @@ export const Teams = new class Teams {
 
 			// species
 			const id = this.packName(set.species || set.name);
-			buf += '|' + (this.packName(set.name || set.species) === id ? '' : id);
+			buf += `|${this.packName(set.name || set.species) === id ? '' : id}`;
 
 			// item
-			buf += '|' + this.packName(set.item);
+			buf += `|${this.packName(set.item)}`;
 
 			// ability
-			buf += '|' + this.packName(set.ability);
+			buf += `|${this.packName(set.ability)}`;
 
 			// moves
 			buf += '|' + set.moves.map(this.packName).join(',');
 
 			// nature
-			buf += '|' + (set.nature || '');
+			buf += `|${set.nature || ''}`;
 
 			// evs
 			let evs = '|';
 			if (set.evs) {
-				evs = '|' + (set.evs['hp'] || '') + ',' + (set.evs['atk'] || '') + ',' + (set.evs['def'] || '') + ',' + (set.evs['spa'] || '') + ',' + (set.evs['spd'] || '') + ',' + (set.evs['spe'] || '');
+				evs = `|${set.evs['hp'] || ''},${set.evs['atk'] || ''},${set.evs['def'] || ''},` +
+					`${set.evs['spa'] || ''},${set.evs['spd'] || ''},${set.evs['spe'] || ''}`;
 			}
 			if (evs === '|,,,,,') {
 				buf += '|';
@@ -154,7 +155,7 @@ export const Teams = new class Teams {
 
 			// gender
 			if (set.gender) {
-				buf += '|' + set.gender;
+				buf += `|${set.gender}`;
 			} else {
 				buf += '|';
 			}
@@ -162,8 +163,8 @@ export const Teams = new class Teams {
 			// ivs
 			let ivs = '|';
 			if (set.ivs) {
-				ivs = '|' + getIv(set.ivs, 'hp') + ',' + getIv(set.ivs, 'atk') + ',' + getIv(set.ivs, 'def') +
-					',' + getIv(set.ivs, 'spa') + ',' + getIv(set.ivs, 'spd') + ',' + getIv(set.ivs, 'spe');
+				ivs = `|${getIv(set.ivs, 'hp')},${getIv(set.ivs, 'atk')},${getIv(set.ivs, 'def')},` +
+					`${getIv(set.ivs, 'spa')},${getIv(set.ivs, 'spd')},${getIv(set.ivs, 'spe')}`;
 			}
 			if (ivs === '|,,,,,') {
 				buf += '|';
@@ -180,25 +181,25 @@ export const Teams = new class Teams {
 
 			// level
 			if (set.level && set.level !== 100) {
-				buf += '|' + set.level;
+				buf += `|${set.level}`;
 			} else {
 				buf += '|';
 			}
 
 			// happiness
 			if (set.happiness !== undefined && set.happiness !== 255) {
-				buf += '|' + set.happiness;
+				buf += `|${set.happiness}`;
 			} else {
 				buf += '|';
 			}
 
 			if (set.pokeball || set.hpType || set.gigantamax ||
 				(set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10) || set.teraType) {
-				buf += ',' + (set.hpType || '');
-				buf += ',' + this.packName(set.pokeball || '');
-				buf += ',' + (set.gigantamax ? 'G' : '');
-				buf += ',' + (set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10 ? set.dynamaxLevel : '');
-				buf += ',' + (set.teraType || '');
+				buf += `,${set.hpType || ''}`;
+				buf += `,${this.packName(set.pokeball || '')}`;
+				buf += `,${set.gigantamax ? 'G' : ''}`;
+				buf += `,${set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10 ? set.dynamaxLevel : ''}`;
+				buf += `,${set.teraType || ''}`;
 			}
 		}
 
@@ -339,7 +340,7 @@ export const Teams = new class Teams {
 	}
 
 	/** Very similar to toID but without the lowercase conversion */
-	packName(name: string | undefined | null) {
+	packName(this: void, name: string | undefined | null) {
 		if (!name) return '';
 		return name.replace(/[^A-Za-z0-9]+/g, '');
 	}

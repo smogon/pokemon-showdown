@@ -16,7 +16,7 @@ describe('[Gen 9] Random Battle (slow)', () => {
 describe('[Gen 9] Monotype Random Battle (slow)', () => {
 	const options = {format: 'gen9monotyperandombattle'};
 
-	it('all Pokemon should share a common type', function () {
+	it('all Pokemon should share a common type', () => {
 		testTeam({...options, rounds: 100}, team => {
 			assert.legalTeam(team, 'gen9customgame@@@sametypeclause');
 		});

@@ -3,7 +3,7 @@
 const assert = require('assert').strict;
 const Dashycode = require('./../../dist/lib/dashycode');
 
-describe('Dashycode', function () {
+describe('Dashycode', () => {
 	const ascii = Array.from({length: 0x80}, (v, i) => i);
 	const iso88591 = Array.from({length: 0x80}, (v, i) => i + 0x80);
 	const utf16 = Array.from({length: 0xFF00}, (v, i) => i + 0x100);
@@ -13,19 +13,19 @@ describe('Dashycode', function () {
 
 	const encoded = new Map();
 
-	const encode = (codepoint) => {
+	const encode = codepoint => {
 		const character = String.fromCodePoint(codepoint);
 		const dashycode = Dashycode.encode(character);
 		assert.equal(encoded.has(dashycode), false);
 		encoded.set(dashycode, character);
 	};
 
-	const decode = (dashycode) => {
+	const decode = dashycode => {
 		const character = Dashycode.decode(dashycode);
 		assert.equal(encoded.get(dashycode), character);
 	};
 
-	const transcode = (plaintext) => function () {
+	const transcode = plaintext => function () {
 		const ciphertext = Dashycode.encode(plaintext);
 		assert.equal(Dashycode.decode(ciphertext), plaintext);
 	};
@@ -42,13 +42,13 @@ describe('Dashycode', function () {
 		}
 	};
 
-	it('should encode all codepoints uniquely', function () {
+	it('should encode all codepoints uniquely', () => {
 		for (const codepoint of [...ascii, ...iso88591, ...utf16]) {
 			encode(codepoint);
 		}
 	});
 
-	it('should decode all codepoints accurately', function () {
+	it('should decode all codepoints accurately', () => {
 		for (const dashycode of encoded.keys()) {
 			decode(dashycode);
 		}
@@ -67,7 +67,7 @@ describe('Dashycode', function () {
 	it('should transcode mixtures of ASCII and UTF-16 codepoints', transcodeWithSets(ascii, utf16));
 	it('should transcode mixtures of ISO-8859-1 and UTF-16 codepoints', transcodeWithSets(iso88591, utf16));
 
-	after(function () {
+	after(() => {
 		encoded.clear();
 	});
 });

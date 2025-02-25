@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Zen Mode', function () {
-	afterEach(function () {
+describe('Zen Mode', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`can't be overriden in Gen 7 or later`, function () {
+	it(`can't be overriden in Gen 7 or later`, () => {
 		battle = common.createBattle([[
 			{species: "Darmanitan", ability: 'zenmode', moves: ['entrainment']},
 		], [
@@ -25,7 +25,7 @@ describe('Zen Mode', function () {
 		assert.equal(darm.ability, 'zenmode');
 	});
 
-	it(`can be overriden in Gen 6 and earlier`, function () {
+	it(`can be overriden in Gen 6 and earlier`, () => {
 		battle = common.gen(6).createBattle([[
 			{species: "Darmanitan", ability: 'zenmode', moves: ['entrainment', 'sleeptalk']},
 		], [

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Frisk', function () {
-	afterEach(function () {
+describe('Frisk', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should reveal opposing Pokemon's items`, function () {
+	it(`should reveal opposing Pokemon's items`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Dusclops', ability: 'frisk', moves: ['snore']},
 			{species: 'Duskull', ability: 'levitate', moves: ['snore']},
@@ -23,7 +23,7 @@ describe('Frisk', function () {
 		assert(log.indexOf('Glastrier|Choice Band') > -1, "Frisk should have revealed Glastrier's Choice Band");
 	});
 
-	it(`should not reveal opposing fainted Pokemon's items`, function () {
+	it(`should not reveal opposing fainted Pokemon's items`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Dusclops', ability: 'frisk', moves: ['snore']},
 			{species: 'Duskull', ability: 'levitate', moves: ['snore']},

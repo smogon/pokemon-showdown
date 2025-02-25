@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Speed`, function () {
-	afterEach(function () {
+describe(`Speed`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it.skip(`should cap chained Speed modifiers at 410 as a lower bound`, function () {
+	it.skip(`should cap chained Speed modifiers at 410 as a lower bound`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'regigigas', ability: 'slowstart', item: 'ironball', moves: ['waterpledge']},
 			{species: 'ivysaur', moves: ['grasspledge']},

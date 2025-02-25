@@ -17,7 +17,7 @@ import * as https from 'https';
 import * as path from 'path';
 import {crashlogger, ProcessManager, Streams, Repl} from '../lib';
 import {IPTools} from './ip-tools';
-import {ChannelID, extractChannelMessages} from '../sim/battle';
+import {type ChannelID, extractChannelMessages} from '../sim/battle';
 
 type StreamWorker = ProcessManager.StreamWorker;
 
@@ -59,7 +59,7 @@ export const Sockets = new class {
 			}
 		}
 	}
-	onUnspawn(worker: StreamWorker) {
+	onUnspawn(this: void, worker: StreamWorker) {
 		Users.socketDisconnectAll(worker, worker.workerid);
 	}
 
@@ -259,7 +259,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			for (const [curSocketid, curSocket] of room) {
 				const channelid = roomChannel?.get(curSocketid) || 0;
 				if (!messages[channelid]) messages[channelid] = channelMessages[channelid].join('\n');
-				curSocket.write(messages[channelid]!);
+				curSocket.write(messages[channelid]);
 			}
 		},
 	};
@@ -317,7 +317,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 						`Socket process ${process.pid}`
 					);
 				}
-			} catch (e: any) {
+			} catch {
 				console.warn('SSL certificate config values will not support HTTPS server option values in the future. Please set it to use the absolute path of its PEM file.');
 				cert = config.ssl.options.cert;
 			}
@@ -344,8 +344,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 				// console.log(`static rq: ${req.socket.remoteAddress}:${req.socket.remotePort} -> ${req.socket.localAddress}:${req.socket.localPort} - ${req.method} ${req.url} ${req.httpVersion} - ${req.rawHeaders.join('|')}`);
 				req.resume();
 				req.addListener('end', () => {
-					if (config.customhttpresponse &&
-							config.customhttpresponse(req, res)) {
+					if (config.customhttpresponse?.(req, res)) {
 						return;
 					}
 
@@ -418,9 +417,9 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 
 		if (this.serverSsl) {
 			server.installHandlers(this.serverSsl, {});
-			// @ts-ignore - if appssl exists, then `config.ssl` must also exist
+			// @ts-expect-error if appssl exists, then `config.ssl` must also exist
 			this.serverSsl.listen(config.ssl.port, config.bindaddress);
-			// @ts-ignore - if appssl exists, then `config.ssl` must also exist
+			// @ts-expect-error if appssl exists, then `config.ssl` must also exist
 			console.log(`Worker ${PM.workerid} now listening for SSL on port ${config.ssl.port}`);
 		}
 
@@ -463,7 +462,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			return;
 		}
 
-		const socketid = '' + (++this.socketCounter);
+		const socketid = `${++this.socketCounter}`;
 		this.sockets.set(socketid, socket);
 
 		let socketip = socket.remoteAddress;

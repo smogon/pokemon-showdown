@@ -81,11 +81,11 @@ export function getSpeciesName(set: PokemonSet, format: Format) {
 	if (species.startsWith("Pikachu-")) {
 		return 'Pikachu';
 	} else if (species.startsWith("Unown-")) {
-	  return 'Unown';
+		return 'Unown';
 	} else if (species === "Gastrodon-East") {
 		return 'Gastrodon';
 	} else if (species === "Magearna-Original") {
-	  return "Magearna";
+		return "Magearna";
 	} else if (species === "Genesect-Douse") {
 		return "Genesect";
 	} else if (species === "Dudunsparce-Three-Segment") {
@@ -162,7 +162,6 @@ function checkRollover() {
 const getZScore = (data: MonEntry) => (
 	2 * Math.sqrt(data.timesGenerated) * (data.numWins / data.timesGenerated - 0.5)
 );
-
 
 export const handlers: Chat.Handlers = {
 	onBattleEnd(battle, winner, players) {

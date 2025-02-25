@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('[Gen 1] Stat Drop Overflow', function () {
-	afterEach(function () {
+describe('[Gen 1] Stat Drop Overflow', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`SafeTwo`, function () {
+	it(`SafeTwo`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Mewtwo', moves: ['amnesia', 'psychic'], ivs: {'spa': 28, 'spd': 28}},
 		], [
@@ -30,7 +30,7 @@ describe('[Gen 1] Stat Drop Overflow', function () {
 		assert.false.fainted(mewtwo);
 	});
 
-	it(`Not SafeTwo`, function () {
+	it(`Not SafeTwo`, () => {
 		battle = common.gen(1).createBattle([[
 			{species: 'Mewtwo', moves: ['amnesia', 'luckychant'], evs: {'spa': 255, 'spd': 255}},
 		], [

@@ -7,7 +7,6 @@
 
 import {FS, Utils} from '../../../lib';
 
-
 interface SetCriteria {
 	moves: {mustHave: Move[], mustNotHave: Move[]};
 	ability: {mustHave?: Ability, mustNotHave: Ability[]};
@@ -15,7 +14,6 @@ interface SetCriteria {
 	nature: {mustHave?: Nature, mustNotHave: Nature[]};
 	teraType: {mustHave?: TypeInfo, mustNotHave: TypeInfo[]};
 }
-
 
 function getHTMLCriteriaDescription(criteria: SetCriteria) {
 	const format = (list: {name: string}[]) => list.map(m => Utils.html`<strong>${m.name}</strong>`);
@@ -175,7 +173,7 @@ function getSets(species: string | Species, format: string | Format = 'gen9rando
 /**
  * Gets the random battles data for a Pokemon for formats with the old schema.
  */
-function getData(species: string | Species, format: string | Format): any | null {
+function getData(species: string | Species, format: string | Format): AnyObject | null {
 	const dex = Dex.forFormat(format);
 	format = Dex.formats.get(format);
 	species = dex.species.get(species);
@@ -273,15 +271,15 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 	if (!Object.keys(statsFile).length) return null;
 	let buf = ``;
 	if (!isBSS) {
-		if (!tier) return {e: `Please provide a valid tier.`};
-		if (!(toID(tier) in TIERS)) return {e: `That tier isn't supported.`};
+		if (!tier) throw new Chat.ErrorMessage(`Please provide a valid tier.`);
+		if (!(toID(tier) in TIERS)) throw new Chat.ErrorMessage(`That tier isn't supported.`);
 		if (!(TIERS[toID(tier)] in statsFile)) {
-			return {e: `${TIERS[toID(tier)]} is not included in [Gen ${genNum}] Battle Factory.`};
+			throw new Chat.ErrorMessage(`${TIERS[toID(tier)]} is not included in [Gen ${genNum}] Battle Factory.`);
 		}
 		const t = statsFile[TIERS[toID(tier)]];
 		if (!(species.id in t)) {
 			const formatName = Dex.formats.get(`${gen}battlefactory`).name;
-			return {e: `${species.name} doesn't have any sets in ${TIERS[toID(tier)]} for ${formatName}.`};
+			throw new Chat.ErrorMessage(`${species.name} doesn't have any sets in ${TIERS[toID(tier)]} for ${formatName}.`);
 		}
 		const setObj = t[species.id];
 		if (genNum >= 9) {
@@ -332,7 +330,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 		}
 	} else {
 		const format = Dex.formats.get(`${gen}bssfactory`);
-		if (!(species.id in statsFile)) return {e: `${species.name} doesn't have any sets in ${format.name}.`};
+		if (!(species.id in statsFile)) throw new Chat.ErrorMessage(`${species.name} doesn't have any sets in ${format.name}.`);
 		const setObj = statsFile[species.id];
 		if (genNum >= 9) {
 			buf += `Species rarity: ${setObj.weight} (higher is more common, max 10)<br />`;
@@ -494,7 +492,7 @@ export const commands: Chat.ChatCommands = {
 
 		const searchResults = dex.dataSearch(args[0], ['Pokedex']);
 
-		if (!searchResults || !searchResults.length) {
+		if (!searchResults?.length) {
 			this.errorReply(`No Pok\u00e9mon named '${args[0]}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
 			return;
 		}
@@ -613,9 +611,6 @@ export const commands: Chat.ChatCommands = {
 			if (args[1] && toID(args[1]) in Dex.dexes && Dex.dexes[toID(args[1])].gen >= 7) mod = toID(args[1]);
 			const bssSets = battleFactorySets(species, null, mod, true);
 			if (!bssSets) return this.parse(`/help battlefactory`);
-			if (typeof bssSets !== 'string') {
-				return this.errorReply(`Error: ${bssSets.e}`);
-			}
 			return this.sendReplyBox(bssSets);
 		} else {
 			const args = target.split(',');
@@ -634,21 +629,18 @@ export const commands: Chat.ChatCommands = {
 			let bfSets;
 			if (species.name === 'Necrozma-Ultra') {
 				bfSets = battleFactorySets(Dex.species.get('necrozma-dawnwings'), tier, mod);
-				if (typeof bfSets === 'string') {
-					bfSets += battleFactorySets(Dex.species.get('necrozma-duskmane'), tier, mod);
+				if (bfSets) {
+					bfSets += battleFactorySets(Dex.species.get('necrozma-duskmane'), tier, mod)!;
 				}
 			} else if (species.name === 'Zygarde-Complete') {
 				bfSets = battleFactorySets(Dex.species.get('zygarde'), tier, mod);
-				if (typeof bfSets === 'string') {
-					bfSets += battleFactorySets(Dex.species.get('zygarde-10'), tier, mod);
+				if (bfSets) {
+					bfSets += battleFactorySets(Dex.species.get('zygarde-10'), tier, mod)!;
 				}
 			} else {
 				bfSets = battleFactorySets(species, tier, mod);
 			}
 			if (!bfSets) return this.parse(`/help battlefactory`);
-			if (typeof bfSets !== 'string') {
-				return this.errorReply(`Error: ${bfSets.e}`);
-			}
 			return this.sendReplyBox(bfSets);
 		}
 	},
@@ -682,7 +674,7 @@ export const commands: Chat.ChatCommands = {
 	randombattlesetprobabilities(target, room, user) {
 		// Restricted to global staff and randbats room auth
 		const randbatsRoom = Rooms.get('randombattles');
-		if (!(randbatsRoom && randbatsRoom.auth.has(user.id))) {
+		if (!randbatsRoom?.auth.has(user.id)) {
 			this.checkCan('lock');
 		}
 

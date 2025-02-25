@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Snatch', function () {
-	afterEach(function () {
+describe('Snatch', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should cause the victim of Snatch to change typing with Protean rather than the Snatch user', function () {
+	it('should cause the victim of Snatch to change typing with Protean rather than the Snatch user', () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'protean', moves: ['snatch']},
 		], [
@@ -25,7 +25,7 @@ describe('Snatch', function () {
 		assert(dratini.hasType('Normal'));
 	});
 
-	it('should not Choice lock the user from the snatched move', function () {
+	it('should not Choice lock the user from the snatched move', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wynaut', moves: ['snatch', 'howl']},
 			{species: 'accelgor', item: 'choicescarf', moves: ['trick']},
@@ -40,7 +40,7 @@ describe('Snatch', function () {
 		battle.makeChoices('move snatch, move trick 1', 'auto');
 	});
 
-	it('should not be able to steal Rest when the Rest user is at full HP', function () {
+	it('should not be able to steal Rest when the Rest user is at full HP', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wynaut', moves: ['snatch']},
 			{species: 'accelgor', moves: ['rest']},
@@ -55,7 +55,7 @@ describe('Snatch', function () {
 		assert.statStage(wynaut, 'atk', 1);
 	});
 
-	it('should Snatch moves and run Throat Chop and Heal Block checks', function () {
+	it('should Snatch moves and run Throat Chop and Heal Block checks', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'porygon2', moves: ['sleeptalk', 'howl']},
 			{species: 'weavile', moves: ['toxicthread', 'sleeptalk', 'snatch']},
@@ -106,12 +106,12 @@ describe('Snatch', function () {
 	});
 });
 
-describe('Snatch [Gen 4]', function () {
-	afterEach(function () {
+describe('Snatch [Gen 4]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should Snatch moves that were called by another user of Snatch', function () {
+	it('should Snatch moves that were called by another user of Snatch', () => {
 		battle = common.gen(4).createBattle({gameType: 'doubles'}, [[
 			{species: 'weavile', moves: ['snatch']},
 			{species: 'wynaut', moves: ['howl']},
@@ -124,7 +124,7 @@ describe('Snatch [Gen 4]', function () {
 		assert.statStage(battle.p2.active[0], 'atk', 1);
 	});
 
-	it.skip(`should only deduct additional PP from Snatch if the Snatch was successful`, function () {
+	it.skip(`should only deduct additional PP from Snatch if the Snatch was successful`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'Palkia', ability: 'pressure', moves: ['watergun', 'calmmind']},
 		], [

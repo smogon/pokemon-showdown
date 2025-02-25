@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Cloud Nine', function () {
-	afterEach(function () {
+describe('Cloud Nine', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should treat the weather as none for the purposes of formes, moves and abilities', function () {
+	it('should treat the weather as none for the purposes of formes, moves and abilities', () => {
 		battle = common.createBattle([[
 			{species: 'Golduck', ability: 'cloudnine', moves: ['sunnyday']},
 		], [
@@ -22,7 +22,7 @@ describe('Cloud Nine', function () {
 		assert.species(weatherUser, 'Cherrim');
 	});
 
-	it('should negate the effects of Sun on Fire-type and Water-type attacks', function () {
+	it('should negate the effects of Sun on Fire-type and Water-type attacks', () => {
 		battle = common.createBattle([[
 			{species: 'Groudon', ability: 'drought', moves: ['rest']},
 		], [
@@ -38,7 +38,7 @@ describe('Cloud Nine', function () {
 		assert.equal(basePower, move.basePower);
 	});
 
-	it('should negate the effects of Rain on Fire-type and Water-type attacks', function () {
+	it('should negate the effects of Rain on Fire-type and Water-type attacks', () => {
 		battle = common.createBattle([[
 			{species: 'Kyogre', ability: 'drizzle', moves: ['rest']},
 		], [
@@ -54,7 +54,7 @@ describe('Cloud Nine', function () {
 		assert.equal(basePower, move.basePower);
 	});
 
-	it('should negate the damage-dealing effects of Sandstorm', function () {
+	it('should negate the damage-dealing effects of Sandstorm', () => {
 		battle = common.createBattle([[
 			{species: 'Tyranitar', ability: 'sandstream', moves: ['dragondance']},
 		], [
@@ -63,7 +63,7 @@ describe('Cloud Nine', function () {
 		assert.false.hurts(battle.p2.active[0], () => battle.makeChoices('move dragondance', 'move calmmind'));
 	});
 
-	it('should negate the damage-dealing effects of Hail', function () {
+	it('should negate the damage-dealing effects of Hail', () => {
 		battle = common.createBattle([[
 			{species: 'Abomasnow', ability: 'snowwarning', moves: ['rest']},
 		], [
@@ -72,7 +72,7 @@ describe('Cloud Nine', function () {
 		assert.false.hurts(battle.p2.active[0], () => battle.makeChoices('move rest', 'move calmmind'));
 	});
 
-	it('should not negate Desolate Land\'s ability to prevent other weathers from activating', function () {
+	it('should not negate Desolate Land\'s ability to prevent other weathers from activating', () => {
 		battle = common.createBattle([[
 			{species: 'Golduck', ability: 'cloudnine', moves: ['raindance']},
 		], [
@@ -81,7 +81,7 @@ describe('Cloud Nine', function () {
 		assert.constant(() => battle.weather, () => battle.makeChoices('move raindance', 'move sunnyday'));
 	});
 
-	it('should not negate Primordial Sea\'s ability to prevent other weathers from activating', function () {
+	it('should not negate Primordial Sea\'s ability to prevent other weathers from activating', () => {
 		battle = common.createBattle([[
 			{species: 'Golduck', ability: 'cloudnine', moves: ['raindance']},
 		], [
@@ -90,7 +90,7 @@ describe('Cloud Nine', function () {
 		assert.constant(() => battle.weather, () => battle.makeChoices('move raindance', 'move sunnyday'));
 	});
 
-	it('should not negate Delta Stream\'s ability to prevent other weathers from activating', function () {
+	it('should not negate Delta Stream\'s ability to prevent other weathers from activating', () => {
 		battle = common.createBattle([[
 			{species: 'Golduck', ability: 'cloudnine', moves: ['raindance']},
 		], [
@@ -99,7 +99,7 @@ describe('Cloud Nine', function () {
 		assert.constant(() => battle.weather, () => battle.makeChoices('move raindance', 'move sunnyday'));
 	});
 
-	it('should still display status of the weather', function () {
+	it('should still display status of the weather', () => {
 		battle = common.createBattle([[
 			{species: 'Golduck', ability: 'cloudnine', moves: ['calmmind']},
 		], [
@@ -115,7 +115,7 @@ describe('Cloud Nine', function () {
 		assert.equal(battle.log[battle.lastMoveLine + 4], '|-weather|none');
 	});
 
-	it(`should allow Hydration to trigger if the user fainted before Hydration could trigger`, function () {
+	it(`should allow Hydration to trigger if the user fainted before Hydration could trigger`, () => {
 		battle = common.createBattle([[
 			{species: 'Toxapex', ability: 'cloudnine', moves: ['toxic', 'raindance', 'finalgambit']},
 			{species: 'Wynaut', moves: ['sleeptalk']},

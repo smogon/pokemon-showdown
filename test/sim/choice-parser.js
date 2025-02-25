@@ -5,10 +5,10 @@ const common = require('./../common');
 
 let battle;
 
-describe('Choice parser', function () {
+describe('Choice parser', () => {
 	afterEach(() => battle.destroy());
-	describe('Team Preview requests', function () {
-		it('should accept only `team` choices', function () {
+	describe('Team Preview requests', () => {
+		it('should accept only `team` choices', () => {
 			battle = common.createBattle({preview: true}, [
 				[{species: "Mew", ability: 'synchronize', moves: ['recover']}],
 				[{species: "Rhydon", ability: 'prankster', moves: ['splash']}],
@@ -26,7 +26,7 @@ describe('Choice parser', function () {
 			}
 		});
 
-		it('should reject non-numerical choice details', function () {
+		it('should reject non-numerical choice details', () => {
 			battle = common.createBattle({preview: true}, [
 				[{species: "Mew", ability: 'synchronize', moves: ['recover']}],
 				[{species: "Rhydon", ability: 'prankster', moves: ['splash']}],
@@ -39,7 +39,7 @@ describe('Choice parser', function () {
 			}
 		});
 
-		it('should reject zero-based choice details', function () {
+		it('should reject zero-based choice details', () => {
 			battle = common.createBattle({preview: true}, [
 				[{species: "Mew", ability: 'synchronize', moves: ['recover']}],
 				[{species: "Rhydon", ability: 'prankster', moves: ['splash']}],
@@ -48,16 +48,16 @@ describe('Choice parser', function () {
 			for (const side of battle.sides) {
 				assert.throws(
 					() => battle.choose(side.id, 'team 0'),
-					new RegExp(`\\[Invalid choice\\] Can't choose for Team Preview:`, 'i'),
+					/\[Invalid choice\] Can't choose for Team Preview:/i,
 					`Input should have been rejected`
 				);
 			}
 		});
 	});
 
-	describe('Switch requests', function () {
-		describe('Generic', function () {
-			it('should reject non-numerical input for `switch` choices', function () {
+	describe('Switch requests', () => {
+		describe('Generic', () => {
+			it('should reject non-numerical input for `switch` choices', () => {
 				battle = common.createBattle();
 				battle.setPlayer('p1', {team: [
 					{species: "Mew", ability: 'synchronize', moves: ['lunardance']},
@@ -72,8 +72,8 @@ describe('Choice parser', function () {
 			});
 		});
 
-		describe('Singles', function () {
-			it('should accept only `switch` choices', function () {
+		describe('Singles', () => {
+			it('should accept only `switch` choices', () => {
 				battle = common.createBattle();
 				battle.setPlayer('p1', {team: [
 					{species: "Mew", ability: 'synchronize', moves: ['lunardance']},
@@ -94,8 +94,8 @@ describe('Choice parser', function () {
 			});
 		});
 
-		describe('Doubles/Triples', function () {
-			it('should accept only `switch` and `pass` choices', function () {
+		describe('Doubles/Triples', () => {
+			it('should accept only `switch` and `pass` choices', () => {
 				battle = common.createBattle({gameType: 'doubles'});
 				battle.setPlayer('p1', {team: [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
@@ -117,7 +117,7 @@ describe('Choice parser', function () {
 				assert(battle.p1.choose(`pass, switch 3`), `Choice 'pass, switch 3' should be valid`);
 			});
 
-			it('should reject choice details for `pass` choices', function () {
+			it('should reject choice details for `pass` choices', () => {
 				battle = common.createBattle({gameType: 'doubles'});
 				battle.setPlayer('p1', {team: [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
@@ -140,7 +140,7 @@ describe('Choice parser', function () {
 				assert.throws(() => battle.choose('p1', `${passChoice} a, ${switchChoice}`));
 			});
 
-			it.skip(`should only allow switching to left slots on double KOs with only one Pokemon remaining`, function () {
+			it.skip(`should only allow switching to left slots on double KOs with only one Pokemon remaining`, () => {
 				battle = common.createBattle({gameType: 'doubles'}, [[
 					{species: 'tornadus', moves: ['sleeptalk']},
 					{species: 'landorus', moves: ['earthquake']},
@@ -155,9 +155,9 @@ describe('Choice parser', function () {
 		});
 	});
 
-	describe('Move requests', function () {
-		describe('Generic', function () {
-			it('should reject `pass` choices for non-fainted Pokémon', function () {
+	describe('Move requests', () => {
+		describe('Generic', () => {
+			it('should reject `pass` choices for non-fainted Pokémon', () => {
 				battle = common.createBattle();
 				battle.setPlayer('p1', {team: [{species: "Mew", ability: 'synchronize', moves: ['recover']}]});
 				battle.setPlayer('p2', {team: [{species: "Rhydon", ability: 'prankster', moves: ['splash']}]});
@@ -167,7 +167,7 @@ describe('Choice parser', function () {
 				}
 			});
 
-			it('should allow mega evolving and targeting in the same move in either order', function () {
+			it('should allow mega evolving and targeting in the same move in either order', () => {
 				battle = common.createBattle({gameType: 'doubles'});
 				battle.setPlayer('p1', {team: [
 					{species: "Gengar", ability: 'cursedbody', item: 'gengarite', moves: ['shadowball']},
@@ -188,7 +188,7 @@ describe('Choice parser', function () {
 				assert(battle.choose('p2', `move Blaze Kick zmove 1, move irondefense`));
 			});
 
-			it('should allow Dynamax use in multiple possible formats', function () {
+			it('should allow Dynamax use in multiple possible formats', () => {
 				battle = common.gen(8).createBattle([[
 					{species: "Mew", moves: ['psychic']},
 				], [
@@ -200,7 +200,7 @@ describe('Choice parser', function () {
 				assert(battle.p2.active[0].volatiles['dynamax']);
 			});
 
-			it('should handle Conversion 2', function () {
+			it('should handle Conversion 2', () => {
 				battle = common.createBattle({gameType: 'doubles'});
 				battle.setPlayer('p1', {team: [
 					{species: "Porygon-Z", ability: 'adaptability', item: 'normaliumz', moves: ['conversion', 'conversion2']},
@@ -224,8 +224,8 @@ describe('Choice parser', function () {
 			});
 		});
 
-		describe('Singles', function () {
-			it('should accept only `move` and `switch` choices', function () {
+		describe('Singles', () => {
+			it('should accept only `move` and `switch` choices', () => {
 				battle = common.createBattle();
 				battle.setPlayer('p1', {team: [
 					{species: "Mew", ability: 'synchronize', moves: ['lunardance', 'recover']},
@@ -249,8 +249,8 @@ describe('Choice parser', function () {
 			});
 		});
 
-		describe('Doubles', function () {
-			it('should enforce `pass` choices for fainted Pokémon', function () {
+		describe('Doubles', () => {
+			it('should enforce `pass` choices for fainted Pokémon', () => {
 				battle = common.createBattle({gameType: 'doubles'});
 				battle.setPlayer('p1', {team: [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
@@ -274,8 +274,8 @@ describe('Choice parser', function () {
 			});
 		});
 
-		describe('Triples', function () {
-			it('should accept only `move` and `switch` choices for a healthy Pokémon on the center', function () {
+		describe('Triples', () => {
+			it('should accept only `move` and `switch` choices for a healthy Pokémon on the center', () => {
 				battle = common.gen(5).createBattle({gameType: 'triples'});
 				battle.setPlayer('p1', {team: [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
@@ -304,7 +304,7 @@ describe('Choice parser', function () {
 				}
 			});
 
-			it('should accept only `move`, `switch` and `shift` choices for a healthy Pokémon on the left', function () {
+			it('should accept only `move`, `switch` and `shift` choices for a healthy Pokémon on the left', () => {
 				battle = common.gen(5).createBattle({gameType: 'triples'});
 				battle.setPlayer('p1', {team: [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
@@ -334,7 +334,7 @@ describe('Choice parser', function () {
 				}
 			});
 
-			it('should accept only `move`, `switch` and `shift` choices for a healthy Pokémon on the right', function () {
+			it('should accept only `move`, `switch` and `shift` choices for a healthy Pokémon on the right', () => {
 				battle = common.gen(5).createBattle({gameType: 'triples'});
 				battle.setPlayer('p1', {team: [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},
@@ -364,7 +364,7 @@ describe('Choice parser', function () {
 				}
 			});
 
-			it('should enforce `pass` choices for fainted Pokémon', function () {
+			it('should enforce `pass` choices for fainted Pokémon', () => {
 				battle = common.gen(5).createBattle({gameType: 'triples'});
 				battle.setPlayer('p1', {team: [
 					{species: "Pineco", ability: 'sturdy', moves: ['selfdestruct']},

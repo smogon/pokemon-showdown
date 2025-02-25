@@ -1,4 +1,4 @@
-import {RandomTeams, MoveCounter} from "../gen9/teams";
+import {RandomTeams, type MoveCounter} from "../gen9/teams";
 
 /** Pokemon who should never be in the lead slot */
 const NO_LEAD_POKEMON = [
@@ -265,7 +265,7 @@ export class RandomCAPTeams extends RandomTeams {
 					}
 					if (this.dex.getEffectiveness(typeName, species) > 1) {
 						if (!typeDoubleWeaknesses[typeName]) typeDoubleWeaknesses[typeName] = 0;
-						if (typeDoubleWeaknesses[typeName] >= 1 * limitFactor) {
+						if (typeDoubleWeaknesses[typeName] >= limitFactor) {
 							skip = true;
 							break;
 						}

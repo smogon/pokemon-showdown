@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Synchronize', function () {
-	afterEach(function () {
+describe('Synchronize', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should complete before Lum Berry can trigger`, function () {
+	it(`should complete before Lum Berry can trigger`, () => {
 		battle = common.createBattle([[
 			{species: 'alakazam', ability: 'synchronize', item: 'lumberry', moves: ['sleeptalk']},
 		], [

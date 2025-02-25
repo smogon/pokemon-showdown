@@ -129,7 +129,7 @@ export const Nominations = new class {
 		const altTable = new Set<string>([...alts]);
 		for (const alt of [primaryID, ...alts]) {
 			const modlog = await this.fetchModlog(alt);
-			if (!modlog || !modlog.results.length) continue;
+			if (!modlog?.results.length) continue;
 			for (const entry of modlog.results) {
 				if (entry.ip) ipTable.add(entry.ip);
 				if (entry.autoconfirmedID) altTable.add(entry.autoconfirmedID);

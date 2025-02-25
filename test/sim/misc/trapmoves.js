@@ -7,13 +7,13 @@ let battle;
 const trappers = ['Block', 'Mean Look', 'Spider Web', 'Thousand Waves', 'Anchor Shot', 'Spirit Shackle'];
 const partialtrappers = ['Bind', 'Clamp', 'Fire Spin', 'Infestation', 'Magma Storm', 'Sand Tomb', 'Whirlpool', 'Wrap'];
 
-describe('Trapping Moves', function () {
-	afterEach(function () {
+describe('Trapping Moves', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
 	for (const move of trappers) {
-		it('should prevent Pokemon from switching out normally', function () {
+		it('should prevent Pokemon from switching out normally', () => {
 			battle = common.createBattle();
 			battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'prankster', moves: [toID(move)]}]});
 			battle.setPlayer('p2', {team: [
@@ -25,7 +25,7 @@ describe('Trapping Moves', function () {
 			assert.equal(battle.p2.active[0].species.id, 'tangrowth');
 		});
 
-		it('should not prevent Pokemon from switching out using moves', function () {
+		it('should not prevent Pokemon from switching out using moves', () => {
 			battle = common.createBattle();
 			battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'prankster', moves: [toID(move)]}]});
 			battle.setPlayer('p2', {team: [
@@ -37,7 +37,7 @@ describe('Trapping Moves', function () {
 			assert.equal(battle.p2.active[0].species.id, 'starmie');
 		});
 
-		it('should not prevent Pokemon immune to trapping from switching out', function () {
+		it('should not prevent Pokemon immune to trapping from switching out', () => {
 			battle = common.createBattle();
 			battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'prankster', moves: [toID(move)]}]});
 			battle.setPlayer('p2', {team: [
@@ -49,7 +49,7 @@ describe('Trapping Moves', function () {
 			assert.equal(battle.p2.active[0].species.id, 'starmie');
 		});
 
-		it('should stop trapping the Pokemon if the user is no longer active', function () {
+		it('should stop trapping the Pokemon if the user is no longer active', () => {
 			battle = common.createBattle();
 			battle.setPlayer('p1', {team: [
 				{species: "Smeargle", ability: 'prankster', moves: [toID(move)]},
@@ -64,7 +64,7 @@ describe('Trapping Moves', function () {
 			assert.equal(battle.p2.active[0].species.id, 'starmie');
 		});
 
-		it('should free all trapped Pokemon if the user is no longer active', function () {
+		it('should free all trapped Pokemon if the user is no longer active', () => {
 			battle = common.createBattle({gameType: 'doubles'});
 			battle.setPlayer('p1', {team: [
 				{species: "Smeargle", ability: 'prankster', moves: [toID(move)]},
@@ -89,7 +89,7 @@ describe('Trapping Moves', function () {
 
 		if (trappers.indexOf(move) < 3) {
 			// Only test on moves that existed in gen 4
-			it('should be passed when the user uses Baton Pass in Gen 4', function () {
+			it('should be passed when the user uses Baton Pass in Gen 4', () => {
 				battle = common.gen(4).createBattle();
 				battle.setPlayer('p1', {team: [
 					{species: "Smeargle", ability: 'prankster', moves: [toID(move), 'batonpass']},
@@ -111,13 +111,13 @@ describe('Trapping Moves', function () {
 	}
 });
 
-describe('Partial Trapping Moves', function () {
-	afterEach(function () {
+describe('Partial Trapping Moves', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
 	for (const move of partialtrappers) {
-		it('should deal 1/8 HP per turn', function () {
+		it('should deal 1/8 HP per turn', () => {
 			battle = common.createBattle();
 			battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'noguard', moves: [toID(move), 'rest']}]});
 			battle.setPlayer('p2', {team: [{species: "Blissey", ability: 'naturalcure', moves: ['healbell']}]});
@@ -128,7 +128,7 @@ describe('Partial Trapping Moves', function () {
 			assert.equal(pokemon.maxhp - pokemon.hp, battle.modify(pokemon.maxhp, 1 / 8));
 		});
 
-		it('should prevent Pokemon from switching out normally', function () {
+		it('should prevent Pokemon from switching out normally', () => {
 			battle = common.createBattle();
 			battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'noguard', moves: [toID(move)]}]});
 			battle.setPlayer('p2', {team: [
@@ -140,7 +140,7 @@ describe('Partial Trapping Moves', function () {
 			assert.equal(battle.p2.active[0].species.id, 'blissey');
 		});
 
-		it('should not prevent Pokemon from switching out using moves', function () {
+		it('should not prevent Pokemon from switching out using moves', () => {
 			battle = common.createBattle();
 			battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'noguard', moves: [toID(move)]}]});
 			battle.setPlayer('p2', {team: [
@@ -152,7 +152,7 @@ describe('Partial Trapping Moves', function () {
 			assert.equal(battle.p2.active[0].species.id, 'starmie');
 		});
 
-		it('should not prevent Pokemon immune to trapping from switching out', function () {
+		it('should not prevent Pokemon immune to trapping from switching out', () => {
 			battle = common.createBattle();
 			battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'noguard', moves: [toID(move)]}]});
 			battle.setPlayer('p2', {team: [
@@ -164,7 +164,7 @@ describe('Partial Trapping Moves', function () {
 			assert.equal(battle.p2.active[0].species.id, 'starmie');
 		});
 
-		it('should stop trapping the Pokemon if the user is no longer active', function () {
+		it('should stop trapping the Pokemon if the user is no longer active', () => {
 			battle = common.createBattle();
 			battle.setPlayer('p1', {team: [
 				{species: "Smeargle", ability: 'noguard', moves: [toID(move)]},
@@ -179,7 +179,7 @@ describe('Partial Trapping Moves', function () {
 			assert.equal(battle.p2.active[0].species.id, 'starmie');
 		});
 
-		it('should stop trapping the Pokemon if the target uses Rapid Spin', function () {
+		it('should stop trapping the Pokemon if the target uses Rapid Spin', () => {
 			battle = common.createBattle();
 			battle.setPlayer('p1', {team: [
 				{species: "Smeargle", ability: 'noguard', moves: [toID(move)]},
@@ -196,12 +196,12 @@ describe('Partial Trapping Moves', function () {
 	}
 });
 
-describe('Partial Trapping Moves [Gen 1]', function () {
-	afterEach(function () {
+describe('Partial Trapping Moves [Gen 1]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('Wrap ends when wrapped Pokemon dies of residual damage', function () {
+	it('Wrap ends when wrapped Pokemon dies of residual damage', () => {
 		battle = common.gen(1).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Arbok", moves: ['wrap', 'toxic']}]});
 		battle.setPlayer('p2', {team: [{species: "Rhydon", moves: ['splash']}, {species: "Exeggutor", moves: ['splash']}]});
@@ -212,7 +212,7 @@ describe('Partial Trapping Moves [Gen 1]', function () {
 		assert(!battle.p1.active[0].volatiles['partialtrappinglock']);
 	});
 
-	it('Wrap ends when wrapped Pokemon switches to a Pokemon that dies of residual damage', function () {
+	it('Wrap ends when wrapped Pokemon switches to a Pokemon that dies of residual damage', () => {
 		battle = common.gen(1).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Dragonite", moves: ['wrap', 'seismictoss', 'toxic'], evs: {hp: 255}}]});
 		battle.setPlayer('p2', {team: [{species: "Mewtwo", moves: ['splash'], evs: {hp: 255}}, {species: "Exeggutor", moves: ['splash']}]});
@@ -226,7 +226,7 @@ describe('Partial Trapping Moves [Gen 1]', function () {
 		assert(!battle.p1.active[0].volatiles['partialtrappinglock']);
 	});
 
-	it('Wrap ends when wrapper dies to residual damage', function () {
+	it('Wrap ends when wrapper dies to residual damage', () => {
 		battle = common.gen(1).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Dragonite", moves: ['wrap', 'splash']}, {species: "Exeggutor", moves: ['splash']}]});
 		battle.setPlayer('p2', {team: [{species: "Rhydon", moves: ['toxic']}]});
@@ -237,7 +237,7 @@ describe('Partial Trapping Moves [Gen 1]', function () {
 		assert(!battle.p2.active[0].volatiles['partiallytrapped']);
 	});
 
-	it('Wrap ends when wrapper switches to a Pokemon that dies of residual damage', function () {
+	it('Wrap ends when wrapper switches to a Pokemon that dies of residual damage', () => {
 		battle = common.gen(1).createBattle();
 		battle.setPlayer('p1', {team: [{species: "Rhydon", moves: ['splash'], evs: {hp: 255}}, {species: "Dragonite", moves: ['wrap']}]});
 		battle.setPlayer('p2', {team: [{species: "Slowbro", moves: ['seismictoss', 'toxic']}]});

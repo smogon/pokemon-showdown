@@ -1137,7 +1137,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				if (Object.values(alts.tiers).includes(false) && alts.tiers[tier] !== false) continue;
 				// LC handling, checks for LC Pokemon in higher tiers that need to be handled separately,
 				// as well as event-only Pokemon that are not eligible for LC despite being the first stage
-				let format = Dex.formats.get('gen' + mod.gen + 'lc');
+				let format = Dex.formats.get(`gen${mod.gen}lc`);
 				if (format.effectType !== 'Format') format = Dex.formats.get('gen9lc');
 				if (
 					alts.tiers.LC &&
@@ -1311,7 +1311,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		if (!isRegionalForm && !maskForm && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies) &&
 			getSortValue(mon) === getSortValue(dex[mon].baseSpecies)) continue;
 		const teraFormeChangesFrom = dex[mon].forme.endsWith("Tera") ? !Array.isArray(dex[mon].battleOnly) ?
-			dex[mon].battleOnly as string : null : null;
+			dex[mon].battleOnly! : null : null;
 		if (teraFormeChangesFrom && results.includes(teraFormeChangesFrom) &&
 			getSortValue(mon) === getSortValue(teraFormeChangesFrom)) continue;
 		if (dex[mon].isNonstandard === 'Gigantamax' && !allowGmax) continue;
@@ -1322,8 +1322,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		results = results.filter(name => {
 			const species = mod.species.get(name);
 			return (species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
-			(!species.forme || (['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme) &&
-				species.name !== 'Pikachu-Alola'));
+				(!species.forme || (['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme) &&
+					species.name !== 'Pikachu-Alola'));
 		});
 	}
 
@@ -2004,7 +2004,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			for (const searchStatus in alts.status) {
 				let canStatus = !!(
 					move.status === searchStatus ||
-					(move.secondaries && move.secondaries.some(entry => entry.status === searchStatus))
+					(move.secondaries?.some(entry => entry.status === searchStatus))
 				);
 				if (searchStatus === 'slp') {
 					canStatus = canStatus || moveid === 'yawn';
@@ -2022,7 +2022,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			for (const searchStatus in alts.volatileStatus) {
 				const canStatus = !!(
 					(move.secondary && move.secondary.volatileStatus === searchStatus) ||
-					(move.secondaries && move.secondaries.some(entry => entry.volatileStatus === searchStatus)) ||
+					(move.secondaries?.some(entry => entry.volatileStatus === searchStatus)) ||
 					(move.volatileStatus === searchStatus)
 				);
 				if (canStatus === alts.volatileStatus[searchStatus]) {
@@ -2074,7 +2074,10 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		}
 		resultsStr += results.map(
 			result => `<a href="//${Config.routes.dex}/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
-				`${sort ? ` (${dex[toID(result)][sort.slice(0, -1) as keyof Move] === true ? '-' : dex[toID(result)][sort.slice(0, -1) as keyof Move]})` : ''}`
+				(sort ?
+					// eslint-disable-next-line @typescript-eslint/no-base-to-string
+					` (${dex[toID(result)][sort.slice(0, -1) as keyof Move] === true ? '-' : dex[toID(result)][sort.slice(0, -1) as keyof Move]})` :
+					'')
 		).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
@@ -2212,7 +2215,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		return {error: "No distinguishing words were used. Try a more specific search."};
 	}
 
-	const dex = maxGen ? Dex.mod("gen" + maxGen) : Dex;
+	const dex = maxGen ? Dex.mod(`gen${maxGen}`) : Dex;
 	if (searchedWords.includes('fling')) {
 		let basePower = 0;
 		let effect;
@@ -2250,14 +2253,14 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 
 			if (basePower && effect) {
 				if (item.fling.basePower === basePower &&
-				(item.fling.status === effect || item.fling.volatileStatus === effect)) foundItems.push(item.name);
+					(item.fling.status === effect || item.fling.volatileStatus === effect)) foundItems.push(item.name);
 			} else if (basePower) {
 				if (item.fling.basePower === basePower) foundItems.push(item.name);
 			} else {
 				if (item.fling.status === effect || item.fling.volatileStatus === effect) foundItems.push(item.name);
 			}
 		}
-		if (foundItems.length === 0) return {error: 'No items inflict ' + basePower + 'bp damage when used with Fling.'};
+		if (foundItems.length === 0) return {error: `No items inflict ${basePower}bp damage when used with Fling.`};
 	} else if (target.search(/natural ?gift/i) >= 0) {
 		let basePower = 0;
 		let type = "";
@@ -2287,7 +2290,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 		}
 		if (foundItems.length === 0) {
-			return {error: 'No berries inflict ' + basePower + 'bp damage when used with Natural Gift.'};
+			return {error: `No berries inflict ${basePower}bp damage when used with Natural Gift.`};
 		}
 	} else {
 		let bestMatched = 0;
@@ -2477,7 +2480,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 	}
 
 	let bestMatched = 0;
-	const dex = maxGen ? Dex.mod("gen" + maxGen) : Dex;
+	const dex = maxGen ? Dex.mod(`gen${maxGen}`) : Dex;
 	for (const ability of dex.abilities.all()) {
 		let matched = 0;
 		// splits words in the description into a toID()-esque format except retaining / and . in numbers
@@ -2722,7 +2725,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 				}` : ``;
 				buffer += `<li>${sourceGen} (all moves are level-up/tutor/TM/HM/egg in Gen ${sourcesBefore}${orEarlier})`;
 			} else {
-				buffer += `<li>${sourceGen} (all moves are level-up/tutor/TM/HM in Gen ${Math.min(gen, sourcesBefore)}${sourcesBefore < gen ? " to " + gen : ""})`;
+				buffer += `<li>${sourceGen} (all moves are level-up/tutor/TM/HM in Gen ${Math.min(gen, sourcesBefore)}${sourcesBefore < gen ? ` to ${gen}` : ""})`;
 			}
 		}
 		if (setSources.babyOnly && sourcesBefore) {
@@ -2829,7 +2832,7 @@ if (!PM.isParentProcess) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
-	};
+	} as any;
 	if (Config.crashguard) {
 		process.on('uncaughtException', err => {
 			Monitor.crashlog(err, 'A dexsearch process');
@@ -2840,8 +2843,8 @@ if (!PM.isParentProcess) {
 	global.toID = Dex.toID;
 	Dex.includeData();
 
-	// @ts-ignore
-	require('../../lib/repl').Repl.start('dexsearch', cmd => eval(cmd)); // eslint-disable-line no-eval
+	// eslint-disable-next-line no-eval
+	require('../../lib/repl').Repl.start('dexsearch', (cmd: string) => eval(cmd));
 } else {
 	PM.spawn(MAX_PROCESSES);
 }

@@ -41,7 +41,7 @@ const findFilesForPath = path => {
 	return out;
 };
 
-exports.transpile = (decl) => {
+exports.transpile = decl => {
 	esbuild.buildSync({
 		entryPoints: findFilesForPath('./'),
 		outdir: './dist',

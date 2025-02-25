@@ -5,10 +5,10 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Partners in Crime', function () {
+describe('Partners in Crime', () => {
 	afterEach(() => battle.destroy());
 
-	it('should activate shared abilities at the same time as other abilities', function () {
+	it('should activate shared abilities at the same time as other abilities', () => {
 		battle = common.createBattle({formatid: 'gen9partnersincrime'}, [[
 			{species: 'Incineroar', ability: 'intimidate', item: 'whiteherb', moves: ['sleeptalk']},
 			{species: 'Pincurchin', ability: 'electricsurge', moves: ['sleeptalk']},
@@ -35,7 +35,7 @@ describe('Partners in Crime', function () {
 		assert.statStage(incineroar, 'atk', 0, `Incineroar's White Herb should have activated after both Litten and Rampardos's Intimidates`);
 	});
 
-	it('should activate shared abilities for each ally when only the original holder switches in', function () {
+	it('should activate shared abilities for each ally when only the original holder switches in', () => {
 		battle = common.createBattle({formatid: 'gen9partnersincrime'}, [[
 			{species: 'Pyukumuku', ability: 'innardsout', moves: ['sleeptalk']},
 			{species: 'Pincurchin', ability: 'electricsurge', moves: ['sleeptalk']},
@@ -52,7 +52,7 @@ describe('Partners in Crime', function () {
 		assert.statStage(pincurchin, 'atk', -2, 'Pincurchin should have had its innate Intimidate activate, triggering Mirror Armor');
 	});
 
-	it('should not activate ally\'s innates if the partner faints on switch-in', function () {
+	it('should not activate ally\'s innates if the partner faints on switch-in', () => {
 		battle = common.createBattle({formatid: 'gen9partnersincrime'}, [[
 			{species: 'Shedinja', ability: 'download', moves: ['sleeptalk']},
 			{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']},

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('G-Max Volcalith', function () {
-	afterEach(function () {
+describe('G-Max Volcalith', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should not damage Rock-types`, function () {
+	it(`should not damage Rock-types`, () => {
 		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', moves: ['rockthrow'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -23,7 +23,7 @@ describe('G-Max Volcalith', function () {
 		assert.fullHP(battle.p2.active[1]);
 	});
 
-	it(`should deal damage for four turns, including the fourth turn`, function () {
+	it(`should deal damage for four turns, including the fourth turn`, () => {
 		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -39,7 +39,7 @@ describe('G-Max Volcalith', function () {
 		assert.equal(blastoise.hp, blastoise.maxhp - (Math.floor(blastoise.maxhp / 6) * 4));
 	});
 
-	it.skip(`should deal damage alongside Sea of Fire or G-Max Wildfire in the order those field effects were set`, function () {
+	it.skip(`should deal damage alongside Sea of Fire or G-Max Wildfire in the order those field effects were set`, () => {
 		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', item: 'Eject Button', moves: ['rockthrow', 'sleeptalk'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk', 'grasspledge']},
@@ -60,7 +60,7 @@ describe('G-Max Volcalith', function () {
 		assert(volcalithDamageIndex < pledgeDamageIndex, 'G-Max Volcalith should damage before Sea of Fire, because Volcalith was set up first.');
 	});
 
-	it(`should damage Pokemon in order of Speed`, function () {
+	it(`should damage Pokemon in order of Speed`, () => {
 		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -82,7 +82,7 @@ describe('G-Max Volcalith', function () {
 		assert(mewtwoDamagedTRIndex < wynautDamagedTRIndex, 'Wynaut should be damaged before Mewtwo in Trick Room.');
 	});
 
-	it(`should deal damage before Black Sludge recovery/damage`, function () {
+	it(`should deal damage before Black Sludge recovery/damage`, () => {
 		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -96,7 +96,7 @@ describe('G-Max Volcalith', function () {
 		assert.equal(toxicroak.hp, toxicroak.maxhp - Math.floor(toxicroak.maxhp / 6) + Math.floor(toxicroak.maxhp / 16));
 	});
 
-	it(`should deal damage before Grassy Terrain recovery`, function () {
+	it(`should deal damage before Grassy Terrain recovery`, () => {
 		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
 			{species: 'Wynaut', moves: ['sleeptalk']},

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Rattled', function () {
-	afterEach(function () {
+describe('Rattled', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should boost the user's Speed when Intimidated`, function () {
+	it(`should boost the user's Speed when Intimidated`, () => {
 		battle = common.createBattle([[
 			{species: 'Dunsparce', ability: 'rattled', moves: ['sleeptalk']},
 		], [
@@ -21,7 +21,7 @@ describe('Rattled', function () {
 		assert.statStage(battle.p1.active[0], 'spe', 1);
 	});
 
-	it(`should not boost the user's Speed if Intimidate failed to lower attack`, function () {
+	it(`should not boost the user's Speed if Intimidate failed to lower attack`, () => {
 		battle = common.createBattle([[
 			{species: 'Dunsparce', item: 'clearamulet', ability: 'rattled', moves: ['sleeptalk']},
 		], [

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Z-Moves', function () {
-	afterEach(function () {
+describe('Z-Moves', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should deal reduced damage to only protected targets`, function () {
+	it(`should deal reduced damage to only protected targets`, () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Kommo-o', ability: 'overcoat', item: 'kommoniumz', moves: ['clangingscales']},

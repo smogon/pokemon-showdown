@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Kee Berry', function () {
-	afterEach(function () {
+describe('Kee Berry', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should activate after a multi-hit physical move`, function () {
+	it(`should activate after a multi-hit physical move`, () => {
 		battle = common.createBattle([[
 			{species: "Wynaut", moves: ['doubleironbash']},
 		], [

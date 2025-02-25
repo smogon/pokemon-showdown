@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Flower Gift', function () {
-	afterEach(function () {
+describe('Flower Gift', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should boost allies' Attack and Special Defense stats`, function () {
+	it(`should boost allies' Attack and Special Defense stats`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Cherrim", ability: 'flowergift', moves: ['healbell']},
 			{species: "Snorlax", ability: 'immunity', moves: ['healbell']},
@@ -32,7 +32,7 @@ describe('Flower Gift', function () {
 		assert.equal(battle.p1.active[1].getStat('spd'), battle.modify(baseSpd, 1.5));
 	});
 
-	it(`should still work if Cherrim transforms into something with Flower Gift without originally having it`, function () {
+	it(`should still work if Cherrim transforms into something with Flower Gift without originally having it`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Cherrim", ability: 'serenegrace', moves: ['transform']},
 			{species: "Snorlax", ability: 'immunity', moves: ['healbell']},
@@ -55,7 +55,7 @@ describe('Flower Gift', function () {
 		assert.equal(battle.p1.active[1].getStat('spd'), battle.modify(baseSpd, 1.5));
 	});
 
-	it(`should not trigger if the Pokemon was KOed`, function () {
+	it(`should not trigger if the Pokemon was KOed`, () => {
 		// TODO: Is this interaction possible in Gen 9?
 		battle = common.gen(8).createBattle([[
 			{species: 'Cherrim', ability: 'flowergift', moves: ['sleeptalk']},

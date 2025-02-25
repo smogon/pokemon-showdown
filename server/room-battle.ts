@@ -162,7 +162,7 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 export class RoomBattleTimer {
 	readonly battle: RoomBattle;
 	readonly timerRequesters: Set<ID>;
-	timer: NodeJS.Timer | null;
+	timer: NodeJS.Timeout | null;
 	isFirstTurn: boolean;
 	/**
 	 * Last tick, as milliseconds since UNIX epoch.
@@ -196,7 +196,7 @@ export class RoomBattleTimer {
 
 		// so that Object.assign doesn't overwrite anything with `undefined`
 		for (const k in timerSettings) {
-			// @ts-ignore
+			// @ts-expect-error prop access
 			if (timerSettings[k] === undefined) delete timerSettings[k];
 		}
 
@@ -625,7 +625,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 		const allPlayersWait = this.players.every(p => !!p.request.isWait);
 		if (allPlayersWait || // too late
-			(rqid && rqid !== '' + request.rqid)) { // WAY too late
+			(rqid && rqid !== `${request.rqid}`)) { // WAY too late
 			player.sendRoom(`|error|[Invalid choice] Sorry, too late to make a different move; the next turn has already started`);
 			return;
 		}
@@ -645,7 +645,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		}
 		const allPlayersWait = this.players.every(p => !!p.request.isWait);
 		if (allPlayersWait || // too late
-			(rqid && rqid !== '' + request.rqid)) { // WAY too late
+			(rqid && rqid !== `${request.rqid}`)) { // WAY too late
 			player.sendRoom(`|error|[Invalid choice] Sorry, too late to cancel; the next turn has already started`);
 			return;
 		}
@@ -906,7 +906,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		logData.endType = this.endType;
 		if (!p1rating) logData.ladderError = true;
 		const date = new Date();
-		logData.timestamp = '' + date;
+		logData.timestamp = `${date}`;
 		logData.roomid = this.room.roomid;
 		logData.format = this.room.format;
 
@@ -1052,7 +1052,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (playerOpts) {
 			const options = {
 				name: player.name,
-				avatar: user ? '' + user.avatar : '',
+				avatar: user ? `${user.avatar}` : '',
 				team: playerOpts.team || undefined,
 				rating: Math.round(playerOpts.rating || 0),
 			};
@@ -1375,8 +1375,8 @@ if (!PM.isParentProcess) {
 		const merge = execSync('git merge-base origin/master HEAD', {
 			stdio: ['ignore', 'pipe', 'ignore'],
 		});
-		global.__version.head = ('' + head).trim();
-		const origin = ('' + merge).trim();
+		global.__version.head = `${head}`.trim();
+		const origin = `${merge}`.trim();
 		if (origin !== global.__version.head) global.__version.origin = origin;
 	} catch {}
 

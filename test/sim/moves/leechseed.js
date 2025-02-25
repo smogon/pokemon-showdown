@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Leech Seed', function () {
-	afterEach(function () {
+describe('Leech Seed', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should heal and damage itself if it ends up in the same slot via Ally Switch`, function () {
+	it(`should heal and damage itself if it ends up in the same slot via Ally Switch`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'celesteela', ability: 'noguard', moves: ['sleeptalk', 'leechseed']},
 			{species: 'comfey', moves: ['sleeptalk', 'allyswitch']},

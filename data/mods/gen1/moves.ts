@@ -175,7 +175,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		onHit(target, source) {
 			source.setType(target.getTypes(true));
-			this.add('-start', source, 'typechange', source.types.join('/'), '[from] move: Conversion', '[of] ' + target);
+			this.add('-start', source, 'typechange', source.types.join('/'), '[from] move: Conversion', `[of] ${target}`);
 		},
 	},
 	counter: {
@@ -876,8 +876,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// Drain/recoil/secondary effect confusion do not happen if the substitute breaks
 				if (target.volatiles['substitute']) {
 					if (move.recoil) {
-						this.damage(this.clampIntRange(Math.floor(uncappedDamage * move.recoil[0] / move.recoil[1]), 1)
-							, source, target, 'recoil');
+						this.damage(this.clampIntRange(Math.floor(uncappedDamage * move.recoil[0] / move.recoil[1]), 1),
+							source, target, 'recoil');
 					}
 					if (move.drain) {
 						const amount = this.clampIntRange(Math.floor(uncappedDamage * move.drain[0] / move.drain[1]), 1);
@@ -899,7 +899,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// Add here counter damage
 				const lastAttackedBy = target.getLastAttackedBy();
 				if (!lastAttackedBy) {
-					target.attackedBy.push({source: source, move: move.id, damage: uncappedDamage, slot: source.getSlot(), thisTurn: true});
+					target.attackedBy.push({source, move: move.id, damage: uncappedDamage, slot: source.getSlot(), thisTurn: true});
 				} else {
 					lastAttackedBy.move = move.id;
 					lastAttackedBy.damage = uncappedDamage;

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Assurance', function () {
-	afterEach(function () {
+describe('Assurance', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should double its base power if the target already took damage this turn`, function () {
+	it(`should double its base power if the target already took damage this turn`, () => {
 		battle = common.createBattle([[
 			{species: 'Sneasel', ability: 'sturdy', moves: ['assurance']},
 		], [
@@ -25,7 +25,7 @@ describe('Assurance', function () {
 		assert.bounded(regi.hp, [regi.maxhp - recoil - assuRange[1], regi.maxhp - recoil - assuRange[0]]);
 	});
 
-	it(`should double the power against damaged Pokemon, not damaged slots`, function () {
+	it(`should double the power against damaged Pokemon, not damaged slots`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'bulbasaur', level: 1, moves: ['sleeptalk']},
 			{species: 'landorus', moves: ['sleeptalk']},
@@ -39,7 +39,7 @@ describe('Assurance', function () {
 		assert.bounded(damage, [63, 75]); // 60 BP; if it was 120 BP, it would be 124-147 damage
 	});
 
-	it(`should not double its base power if the target lost HP due to Pain Split`, function () {
+	it(`should not double its base power if the target lost HP due to Pain Split`, () => {
 		battle = common.createBattle([[
 			{species: 'Greedent', moves: ['assurance']},
 		], [

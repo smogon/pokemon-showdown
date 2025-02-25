@@ -186,13 +186,8 @@ export class Modlog {
 	 * Methods for writing to the modlog. *
 	 **************************************/
 
-	/**
-	 * @deprecated Modlogs use SQLite and no longer need initialization.
-	 */
-	initialize(roomid: ModlogID) {
-		return;
-	}
-
+	/** @deprecated Modlogs use SQLite and no longer need initialization. */
+	initialize(roomid: ModlogID) {}
 
 	/**
 	 * Writes to the modlog

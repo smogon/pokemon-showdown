@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Iron Ball', function () {
-	afterEach(function () {
+describe('Iron Ball', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should reduce halve the holder\'s speed', function () {
+	it('should reduce halve the holder\'s speed', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'owntempo', item: 'ironball', moves: ['bestow']}]});
 		battle.setPlayer('p2', {team: [{species: "Aerodactyl", ability: 'pressure', moves: ['stealthrock']}]});
@@ -18,7 +18,7 @@ describe('Iron Ball', function () {
 		assert.sets(() => target.getStat('spe'), battle.modify(target.getStat('spe'), 0.5), () => battle.makeChoices('move bestow', 'move stealthrock'));
 	});
 
-	it('should negate Ground immunities and deal neutral type effectiveness to Flying-type Pokemon', function () {
+	it('should negate Ground immunities and deal neutral type effectiveness to Flying-type Pokemon', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['earthquake']}]});
 		battle.setPlayer('p2', {team: [
@@ -35,7 +35,7 @@ describe('Iron Ball', function () {
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
-	it('should not deal neutral type effectiveness to Flying-type Pokemon in Gravity', function () {
+	it('should not deal neutral type effectiveness to Flying-type Pokemon in Gravity', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['earthquake', 'gravity']}]});
 		battle.setPlayer('p2', {team: [
@@ -55,7 +55,7 @@ describe('Iron Ball', function () {
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
-	it('should negate artificial Ground immunities and deal normal type effectiveness', function () {
+	it('should negate artificial Ground immunities and deal normal type effectiveness', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['earthquake']}]});
 		battle.setPlayer('p2', {team: [
@@ -70,7 +70,7 @@ describe('Iron Ball', function () {
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
-	it('should ground Pokemon that are airborne', function () {
+	it('should ground Pokemon that are airborne', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'owntempo', moves: ['spore']}]});
 		battle.setPlayer('p2', {team: [{species: "Thundurus", ability: 'prankster', item: 'ironball', moves: ['electricterrain']}]});

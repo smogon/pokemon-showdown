@@ -1,7 +1,7 @@
 import {Dex, toID} from '../../../sim/dex';
 import {Utils} from '../../../lib';
-import {PRNG, PRNGSeed} from '../../../sim/prng';
-import {RuleTable} from '../../../sim/dex-formats';
+import {PRNG, type PRNGSeed} from '../../../sim/prng';
+import {type RuleTable} from '../../../sim/dex-formats';
 import {Tags} from './../../tags';
 import {Teams} from '../../../sim/teams';
 
@@ -255,11 +255,11 @@ export class RandomTeams {
 		this.prng = PRNG.get(prng);
 	}
 
-	getTeam(options?: PlayerOptions | null): PokemonSet[] {
+	getTeam(options: PlayerOptions | null = null): PokemonSet[] {
 		const generatorName = (
 			typeof this.format.team === 'string' && this.format.team.startsWith('random')
-		 ) ? this.format.team + 'Team' : '';
-		// @ts-ignore
+		) ? this.format.team + 'Team' : '';
+		// @ts-expect-error property access
 		return this[generatorName || 'randomTeam'](options);
 	}
 
@@ -995,7 +995,7 @@ export class RandomTeams {
 		if (!['AV Pivot', 'Fast Support', 'Bulky Support', 'Bulky Protect', 'Doubles Support'].includes(role)) {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
-				const currentAttackType = counter.damagingMoves.values().next().value.type;
+				const currentAttackType = counter.damagingMoves.values().next().value!.type;
 				// Choose an attacking move that is of different type to the current single attack
 				const coverageMoves = [];
 				for (const moveid of movePool) {
@@ -1080,7 +1080,6 @@ export class RandomTeams {
 
 		return false;
 	}
-
 
 	getAbility(
 		types: string[],
@@ -1313,7 +1312,7 @@ export class RandomTeams {
 		}
 		if (isLead && (species.id === 'glimmora' ||
 			(['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Offensive Protect'].includes(role) &&
-			species.baseStats.hp + species.baseStats.def + species.baseStats.spd <= 230))
+				species.baseStats.hp + species.baseStats.def + species.baseStats.spd <= 230))
 		) return 'Focus Sash';
 		if (
 			['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Offensive Protect'].includes(role) &&
@@ -1564,7 +1563,7 @@ export class RandomTeams {
 			// Physical Tera Blast
 			if (
 				move.id === 'terablast' && (species.id === 'porygon2' || ['Contrary', 'Defiant'].includes(ability) ||
-				moves.has('shiftgear') || species.baseStats.atk > species.baseStats.spa)
+					moves.has('shiftgear') || species.baseStats.atk > species.baseStats.spa)
 			) return false;
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
@@ -1715,7 +1714,7 @@ export class RandomTeams {
 					}
 					if (this.dex.getEffectiveness(typeName, species) > 1) {
 						if (!typeDoubleWeaknesses[typeName]) typeDoubleWeaknesses[typeName] = 0;
-						if (typeDoubleWeaknesses[typeName] >= 1 * limitFactor) {
+						if (typeDoubleWeaknesses[typeName] >= limitFactor) {
 							skip = true;
 							break;
 						}
@@ -2496,7 +2495,6 @@ export class RandomTeams {
 		};
 	}
 
-
 	randomFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
 		this.enforceNoDirectCustomBanlistChanges();
 
@@ -2525,7 +2523,7 @@ export class RandomTeams {
 			baseFormes: {},
 			has: {},
 			wantsTeraCount: 0,
-			forceResult: forceResult,
+			forceResult,
 			weaknesses: {},
 			resistances: {},
 		};
@@ -2560,7 +2558,7 @@ export class RandomTeams {
 		for (const speciesName of pokemonPool) {
 			const sortObject = {
 				speciesName,
-				score: Math.pow(this.prng.random(), 1 / this.randomFactorySets[this.factoryTier][speciesName].weight),
+				score: this.prng.random() ** (1 / this.randomFactorySets[this.factoryTier][speciesName].weight),
 			};
 			shuffledSpecies.push(sortObject);
 		}
@@ -2813,7 +2811,6 @@ export class RandomTeams {
 		};
 	}
 
-
 	randomBSSFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
 		this.enforceNoDirectCustomBanlistChanges();
 
@@ -2829,7 +2826,7 @@ export class RandomTeams {
 			baseFormes: {},
 			has: {},
 			wantsTeraCount: 0,
-			forceResult: forceResult,
+			forceResult,
 			weaknesses: {},
 			resistances: {},
 		};
@@ -2858,7 +2855,7 @@ export class RandomTeams {
 		for (const speciesName of pokemonPool) {
 			const sortObject = {
 				speciesName,
-				score: Math.pow(this.prng.random(), 1 / this.randomBSSFactorySets[speciesName].weight),
+				score: this.prng.random() ** (1 / this.randomBSSFactorySets[speciesName].weight),
 			};
 			shuffledSpecies.push(sortObject);
 		}

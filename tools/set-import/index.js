@@ -84,7 +84,7 @@ const SETS = path.resolve(__dirname, 'sets');
 			} else {
 				version = `${major}.${minor}.${Number(patch) + 1}`;
 			}
-		} catch (err) {
+		} catch {
 			console.error("Version required to create '@smogon/sets' package");
 			process.exit(1);
 		}
@@ -92,7 +92,7 @@ const SETS = path.resolve(__dirname, 'sets');
 
 	const packagejson = {
 		"name": "@smogon/sets",
-		"version": version,
+		version,
 		"description": "Set data imported from Smogon.com and used on Pokémon Showdown",
 		"main": "index.js",
 		"unpkg": "index.js",

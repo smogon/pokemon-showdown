@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Teleport`, function () {
-	afterEach(function () {
+describe(`Teleport`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should fail to switch the user out if no Pokemon can be switched in`, function () {
+	it(`should fail to switch the user out if no Pokemon can be switched in`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['teleport']},
 		], [

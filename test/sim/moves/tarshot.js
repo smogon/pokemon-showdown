@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Tar Shot', function () {
-	afterEach(function () {
+describe('Tar Shot', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should cause subsequent Fire-type attacks to deal 2x damage as a type chart multiplier', function () {
+	it('should cause subsequent Fire-type attacks to deal 2x damage as a type chart multiplier', () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['tarshot', 'fusionflare']},
 		], [
@@ -23,7 +23,7 @@ describe('Tar Shot', function () {
 		assert.bounded(damage, [82, 98]);
 	});
 
-	it('should cause Fire-type attacks to trigger Weakness Policy', function () {
+	it('should cause Fire-type attacks to trigger Weakness Policy', () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['tarshot', 'fusionflare']},
 		], [
@@ -36,7 +36,7 @@ describe('Tar Shot', function () {
 		assert.statStage(battle.p2.active[0], 'spa', 2);
 	});
 
-	it('should not interact with Delta Stream', function () {
+	it('should not interact with Delta Stream', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wobbuffet', moves: ['tarshot']},
 			{species: 'wynaut', moves: ['fusionflare']},
@@ -50,7 +50,7 @@ describe('Tar Shot', function () {
 		assert.bounded(damage, [62, 74]);
 	});
 
-	it(`should add a Fire-type weakness, not make the target 2x weaker to Fire`, function () {
+	it(`should add a Fire-type weakness, not make the target 2x weaker to Fire`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['tarshot', 'flamecharge']},
 		], [
@@ -63,7 +63,7 @@ describe('Tar Shot', function () {
 		assert.bounded(damage, [88, 104]);
 	});
 
-	it(`should not remove the Tar Shot status when a Pokemon Terastallizes`, function () {
+	it(`should not remove the Tar Shot status when a Pokemon Terastallizes`, () => {
 		battle = common.gen(9).createBattle([[
 			{species: 'wynaut', moves: ['tarshot', 'flamecharge']},
 		], [
@@ -75,7 +75,7 @@ describe('Tar Shot', function () {
 		assert.statStage(lax, 'atk', 2, `Weakness Policy should have activated`);
 	});
 
-	it(`should prevent a Terastallized Pokemon from being afflicted with the Tar Shot status`, function () {
+	it(`should prevent a Terastallized Pokemon from being afflicted with the Tar Shot status`, () => {
 		battle = common.gen(9).createBattle([[
 			{species: 'wynaut', moves: ['tarshot', 'flamecharge']},
 		], [

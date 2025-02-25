@@ -151,7 +151,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect, '[of] ' + source);
+					this.add('-fieldstart', 'move: Misty Terrain', `[from] ability: ${effect}`, `[of] ${source}`);
 				} else {
 					this.add('-fieldstart', 'move: Misty Terrain');
 				}

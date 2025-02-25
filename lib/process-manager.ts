@@ -192,7 +192,7 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 				this.resolveRelease = resolve;
 			});
 		}
-		return this.pendingRelease as Promise<void>;
+		return this.pendingRelease!;
 	}
 
 	destroy() {
@@ -265,7 +265,6 @@ export class StreamProcessWrapper implements ProcessWrapper {
 			if (messageType === 'END') {
 				stream.pushEnd();
 				this.deleteStream(taskId);
-				return;
 			} else if (messageType === 'PUSH') {
 				stream.push(message);
 			} else if (messageType === 'THROW') {
@@ -309,7 +308,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 				this.resolveRelease = resolve;
 			});
 		}
-		return this.pendingRelease as Promise<void>;
+		return this.pendingRelease!;
 	}
 
 	destroy() {
@@ -395,7 +394,7 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
 				this.resolveRelease = resolve;
 			});
 		}
-		return this.pendingRelease as Promise<void>;
+		return this.pendingRelease!;
 	}
 
 	destroy() {
@@ -405,7 +404,6 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
 		}
 		void this.stream.destroy();
 		this.process.disconnect();
-		return;
 	}
 }
 
@@ -718,7 +716,6 @@ export class RawProcessManager extends ProcessManager<RawProcessWrapper> {
 		if (this.isCluster && this.isParentProcess) {
 			cluster.setupMaster({
 				exec: this.filename,
-				// @ts-ignore TODO: update type definition
 				cwd: FS.ROOT_PATH,
 			});
 		}

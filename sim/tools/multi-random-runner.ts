@@ -5,11 +5,10 @@
  * @license MIT
  */
 
-import {PRNG, PRNGSeed} from '../prng';
-import {Runner, RunnerOptions} from './runner';
+import {PRNG, type PRNGSeed} from '../prng';
+import {Runner, type RunnerOptions} from './runner';
 
-// @ts-ignore
-export interface MultiRandomRunnerOptions extends RunnerOptions {
+export interface MultiRandomRunnerOptions extends Partial<RunnerOptions> {
 	totalGames: number;
 	prng?: PRNG | PRNGSeed | null;
 	format?: string;

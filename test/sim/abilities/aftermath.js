@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Aftermath', function () {
-	afterEach(function () {
+describe('Aftermath', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it("should hurt attackers by 1/4 their max HP when this Pokemon is KOed by a contact move", function () {
+	it("should hurt attackers by 1/4 their max HP when this Pokemon is KOed by a contact move", () => {
 		battle = common.createBattle([[
 			{species: 'galvantula', moves: ['lunge']},
 		], [

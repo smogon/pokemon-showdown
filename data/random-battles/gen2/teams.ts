@@ -1,5 +1,5 @@
 import RandomGen3Teams from '../gen3/teams';
-import {PRNG, PRNGSeed} from '../../../sim/prng';
+import type {PRNG, PRNGSeed} from '../../../sim/prng';
 import type {MoveCounter} from '../gen8/teams';
 
 // Moves that restore HP:
@@ -312,7 +312,7 @@ export class RandomGen2Teams extends RandomGen3Teams {
 		if (['Fast Attacker', 'Setup Sweeper', 'Bulky Attacker'].includes(role)) {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
-				const currentAttackType = counter.damagingMoves.values().next().value.type;
+				const currentAttackType = counter.damagingMoves.values().next().value!.type;
 				// Choose an attacking move that is of different type to the current single attack
 				const coverageMoves = [];
 				for (const moveid of movePool) {

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`As One`, function () {
-	afterEach(function () {
+describe(`As One`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should work if the user is Transformed`, function () {
+	it(`should work if the user is Transformed`, () => {
 		battle = common.createBattle([[
 			{species: 'ditto', ability: 'imposter', moves: ['transform']},
 		], [

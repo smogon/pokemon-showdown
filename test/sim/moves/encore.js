@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Encore', function () {
-	afterEach(function () {
+describe('Encore', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should cause the target to be forced to repeat its move`, function () {
+	it(`should cause the target to be forced to repeat its move`, () => {
 		battle = common.createBattle([[
 			{species: 'slowbro', moves: ['tackle', 'irondefense']},
 		], [
@@ -25,7 +25,7 @@ describe('Encore', function () {
 		assert.cantMove(() => battle.choose('p1', 'move tackle'));
 	});
 
-	it(`should cause the target to move with its Encored attack at the priority of the originally selected move once`, function () {
+	it(`should cause the target to move with its Encored attack at the priority of the originally selected move once`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'regieleki', moves: ['sleeptalk', 'substitute']},
 			{species: 'pichu', moves: ['sleeptalk']},
@@ -41,7 +41,7 @@ describe('Encore', function () {
 		assert.fainted(eleki, `Encore + Quick Attack being selected gives Headlong Rush priority.`);
 	});
 
-	it(`should cause the target to move with its Encored attack at the priority of the originally selected move once and get blocked when appropriate`, function () {
+	it(`should cause the target to move with its Encored attack at the priority of the originally selected move once and get blocked when appropriate`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'regieleki', moves: ['psychicterrain']},
 			{species: 'pichu', moves: ['sleeptalk']},
@@ -59,7 +59,7 @@ describe('Encore', function () {
 		assert.fainted(eleki, `Headlong Rush should no longer be moving with priority.`);
 	});
 
-	it('should not affect Focus Punch if the the user\'s decision is not changed', function () {
+	it('should not affect Focus Punch if the the user\'s decision is not changed', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [
 			[
 				{species: "Smeargle", level: 50, ability: 'owntempo', moves: ['splash', 'focuspunch']},
@@ -86,7 +86,7 @@ describe('Encore', function () {
 		assert.equal(battle.p2.active[0].hp, hp);
 	});
 
-	it(`should make Focus Punch always succeed if it changes the user's decision`, function () {
+	it(`should make Focus Punch always succeed if it changes the user's decision`, () => {
 		// Hardcoded RNG seed so the random target from Encored Focus Punch will not attack Zigzagoon
 		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
 			{species: 'Smeargle', level: 50, moves: ['splash', 'focuspunch']},
@@ -113,7 +113,7 @@ describe('Encore', function () {
 		assert.equal(p2smeargle.hp, hp);
 	});
 
-	it('should not affect Shell Trap if the user\'s decision is not changed', function () {
+	it('should not affect Shell Trap if the user\'s decision is not changed', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [
 			[
 				{species: "Smeargle", level: 99, ability: 'owntempo', moves: ['shelltrap', 'splash']},
@@ -141,7 +141,7 @@ describe('Encore', function () {
 		assert.notEqual(battle.p2.active[0].hp, hp);
 	});
 
-	it('should make Shell Trap always fail if the user\'s decision is changed', function () {
+	it('should make Shell Trap always fail if the user\'s decision is changed', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [
 			[
 				{species: "Smeargle", level: 99, ability: 'owntempo', moves: ['splash', 'shelltrap']},
@@ -169,7 +169,7 @@ describe('Encore', function () {
 		assert.notEqual(battle.p2.active[0].hp, hp);
 	});
 
-	it(`should not cause self-targeting moves to redirect to the opponent`, function () {
+	it(`should not cause self-targeting moves to redirect to the opponent`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Wynaut", moves: ['destinybond', 'counter']},
 			{species: "Octillery", moves: ['sleeptalk']},
@@ -185,12 +185,12 @@ describe('Encore', function () {
 	});
 });
 
-describe('Encore [Gen 2]', function () {
-	afterEach(function () {
+describe('Encore [Gen 2]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`[Gen 2] Encore succeeds when used against an opponent that last attacked before the Encore user switched in`, function () {
+	it(`[Gen 2] Encore succeeds when used against an opponent that last attacked before the Encore user switched in`, () => {
 		battle = common.gen(2).createBattle({forceRandomChance: true}, [[
 			{species: 'slowbro', moves: ['glare']},
 			{species: 'fearow', moves: ['encore']},

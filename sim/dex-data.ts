@@ -22,7 +22,7 @@ import {Utils} from '../lib/utils';
 export function toID(text: any): ID {
 	if (typeof text !== 'string') {
 		if (text) text = text.id || text.userid || text.roomid || text;
-		if (typeof text === 'number') text = '' + text;
+		if (typeof text === 'number') text = `${text}`;
 		else if (typeof text !== 'string') return '';
 	}
 	return text.toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
@@ -157,7 +157,6 @@ export interface NatureData {
 export type ModdedNatureData = NatureData | Partial<Omit<NatureData, 'name'>> & {inherit: true};
 
 export interface NatureDataTable {[natureid: IDEntry]: NatureData}
-
 
 export class DexNatures {
 	readonly dex: ModdedDex;

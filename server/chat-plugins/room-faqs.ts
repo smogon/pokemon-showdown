@@ -108,7 +108,7 @@ export const commands: Chat.ChatCommands = {
 		const topic = toID(target);
 		if (!topic) return this.parse('/help roomfaq');
 
-		if (!(roomFaqs[room.roomid] && roomFaqs[room.roomid][topic])) return this.errorReply("Invalid topic.");
+		if (!roomFaqs[room.roomid]?.[topic]) return this.errorReply("Invalid topic.");
 		if (
 			room.settings.repeats?.length &&
 			room.settings.repeats.filter(x => x.faq && x.id === topic).length
@@ -117,9 +117,9 @@ export const commands: Chat.ChatCommands = {
 		}
 		delete roomFaqs[room.roomid][topic];
 		Object.keys(roomFaqs[room.roomid]).filter(
-			val => getAlias(room!.roomid, val) === topic
+			val => getAlias(room.roomid, val) === topic
 		).map(
-			val => delete roomFaqs[room!.roomid][val]
+			val => delete roomFaqs[room.roomid][val]
 		);
 		if (!Object.keys(roomFaqs[room.roomid]).length) delete roomFaqs[room.roomid];
 		saveRoomFaqs();

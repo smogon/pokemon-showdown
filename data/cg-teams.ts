@@ -34,7 +34,7 @@
  */
 
 import {Dex, PRNG, SQL} from '../sim';
-import {EventMethods} from '../sim/dex-conditions';
+import type {EventMethods} from '../sim/dex-conditions';
 import {
 	ABILITY_MOVE_BONUSES,
 	ABILITY_MOVE_TYPE_BONUSES,
@@ -493,7 +493,7 @@ export default class TeamGenerator {
 				weight *= 32;
 
 				// these moves can also lessen the effectiveness of the user's team's own hazards
-				weight *= Math.pow(0.8, Object.values(teamStats.hazardSetters).reduce((total, num) => total + num, 0));
+				weight *= 0.8 ** Object.values(teamStats.hazardSetters).reduce((total, num) => total + num, 0);
 			}
 
 			// boosts
@@ -639,8 +639,8 @@ export default class TeamGenerator {
 		if (move.category === 'Special') powerEstimate *= Math.max(0.5, 1 + specialSetup) / Math.max(0.5, 1 + physicalSetup);
 
 		const abilityBonus = (
-			((ABILITY_MOVE_BONUSES[this.dex.toID(ability)] || {})[move.id] || 1) *
-			((ABILITY_MOVE_TYPE_BONUSES[this.dex.toID(ability)] || {})[moveType] || 1)
+			(ABILITY_MOVE_BONUSES[this.dex.toID(ability)]?.[move.id] || 1) *
+			(ABILITY_MOVE_TYPE_BONUSES[this.dex.toID(ability)]?.[moveType] || 1)
 		);
 
 		let weight = powerEstimate * abilityBonus;
@@ -664,7 +664,7 @@ export default class TeamGenerator {
 		if (move.flags.contact) {
 			if (ability === 'Tough Claws') weight *= 1.3;
 			if (ability === 'Unseen Fist') weight *= 1.1;
-			if (ability === 'Poison Touch') weight *= TeamGenerator.statusWeight('psn', 1 - Math.pow(0.7, numberOfHits));
+			if (ability === 'Poison Touch') weight *= TeamGenerator.statusWeight('psn', 1 - (0.7 ** numberOfHits));
 		}
 		if (move.flags.bite && ability === 'Strong Jaw') weight *= 1.5;
 		// 5% boost for ability to break subs
@@ -697,7 +697,7 @@ export default class TeamGenerator {
 				}
 			}
 		}
-		if (ability === 'Toxic Chain') weight *= TeamGenerator.statusWeight('tox', 1 - Math.pow(0.7, numberOfHits));
+		if (ability === 'Toxic Chain') weight *= TeamGenerator.statusWeight('tox', 1 - (0.7 ** numberOfHits));
 
 		// Special effect if something special happened earlier in the turn
 		// More useful on slower Pokemon
@@ -734,7 +734,7 @@ export default class TeamGenerator {
 
 		// these two hazard removers don't clear hazards on the opponent's field, but can be blocked by type immunities
 		if (['rapidspin', 'mortalspin'].includes(move.id)) {
-			weight *= 1 + 20 * Math.pow(0.25, teamStats.hazardRemovers);
+			weight *= 1 + 20 * (0.25 ** teamStats.hazardRemovers);
 		}
 
 		// these moves have a hard-coded 16x bonus

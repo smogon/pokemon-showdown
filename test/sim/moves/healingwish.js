@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Healing Wish', function () {
-	afterEach(function () {
+describe('Healing Wish', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should heal a switch-in for full before hazards at end of turn', function () {
+	it('should heal a switch-in for full before hazards at end of turn', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Caterpie', ability: 'shielddust', moves: ['stringshot']},
@@ -32,7 +32,7 @@ describe('Healing Wish', function () {
 		assert.equal(battle.p1.active[0].moveSlots[0].pp, 63);
 	});
 
-	it('should not be consumed if a switch-in is fully healed already', function () {
+	it('should not be consumed if a switch-in is fully healed already', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Jirachi', ability: 'serenegrace', moves: ['healingwish', 'protect']},
@@ -49,7 +49,7 @@ describe('Healing Wish', function () {
 		assert(battle.p1.slotConditions[0]['healingwish']);
 	});
 
-	it('should heal an ally fully after Ally Switch', function () {
+	it('should heal an ally fully after Ally Switch', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Jirachi', ability: 'serenegrace', moves: ['healingwish']},
@@ -72,7 +72,7 @@ describe('Healing Wish', function () {
 		assert.false(battle.p1.slotConditions[0]['healingwish']);
 	});
 
-	it(`should fail to switch the user out if no Pokemon can be switched in`, function () {
+	it(`should fail to switch the user out if no Pokemon can be switched in`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['healingwish']},
 		], [
@@ -94,7 +94,7 @@ describe('Healing Wish', function () {
 		assert.false.fainted(battle.p1.active[0]);
 	});
 
-	it(`should not set up the slot condition when it fails`, function () {
+	it(`should not set up the slot condition when it fails`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wobbuffet', moves: ['healingwish', 'swordsdance']},
 			{species: 'wynaut', moves: ['swordsdance', 'allyswitch']},
@@ -109,7 +109,7 @@ describe('Healing Wish', function () {
 		assert.false.fullHP(wynaut);
 	});
 
-	it('[Gen 4] should heal a switch-in for full after hazards mid-turn', function () {
+	it('[Gen 4] should heal a switch-in for full after hazards mid-turn', () => {
 		battle = common.gen(4).createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Caterpie', ability: 'shielddust', moves: ['stringshot']},

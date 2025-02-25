@@ -16,7 +16,7 @@ function makeTriviaUser(name, ip) {
 	return user;
 }
 
-describe('Trivia', function () {
+describe('Trivia', () => {
 	before(function () {
 		Rooms.global.addChatRoom('Trivia');
 		this.room = Rooms.get('trivia');
@@ -147,7 +147,7 @@ describe('Trivia', function () {
 		assert.equal(this.game.verifyAnswer('not the right answer'), false);
 	});
 
-	context('marking player absence', function () {
+	context('marking player absence', () => {
 		beforeEach(async function () {
 			const questions = [null, null].fill({question: '', answers: ['answer'], category: 'ae'});
 			const game = new FirstModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
@@ -191,7 +191,7 @@ describe('Trivia', function () {
 		});
 	});
 
-	context('first mode', function () {
+	context('first mode', () => {
 		beforeEach(async function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
 			const game = new FirstModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
@@ -255,7 +255,7 @@ describe('Trivia', function () {
 		});
 	});
 
-	context('timer mode', function () {
+	context('timer mode', () => {
 		beforeEach(async function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
 			const game = new TimerModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
@@ -330,7 +330,7 @@ describe('Trivia', function () {
 		});
 	});
 
-	context('number mode', function () {
+	context('number mode', () => {
 		beforeEach(async function () {
 			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
 			const game = new NumberModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);

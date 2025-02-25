@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Stance change', function () {
-	afterEach(function () {
+describe('Stance change', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should change formes when Sleep Talk calls a move`, function () {
+	it(`should change formes when Sleep Talk calls a move`, () => {
 		battle = common.createBattle([[
 			{species: "Aegislash", ability: 'stancechange', moves: ['sleeptalk', 'shadowclaw']},
 		], [

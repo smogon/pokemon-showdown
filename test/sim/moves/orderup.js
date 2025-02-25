@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Order Up', function () {
-	afterEach(function () {
+describe('Order Up', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it.skip(`should boost Dondozo's stat even if Sheer Force-boosted`, function () {
+	it.skip(`should boost Dondozo's stat even if Sheer Force-boosted`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wynaut', moves: ['sleeptalk']},
 			{species: 'mew', ability: 'shellarmor', moves: ['sleeptalk']},

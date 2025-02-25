@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Syrup Bomb', function () {
-	afterEach(function () {
+describe('Syrup Bomb', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should lower the opponent's Speed for 3 turns, but not remove its volatile until after 4 turns`, function () {
+	it(`should lower the opponent's Speed for 3 turns, but not remove its volatile until after 4 turns`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', ability: 'noguard', moves: ['syrupbomb']},
 		], [
@@ -27,7 +27,7 @@ describe('Syrup Bomb', function () {
 		assert.false(applin.volatiles['syrupbomb'], `Applin should no longer have the Syrup Bomb volatile`);
 	});
 
-	it(`should end if the source leaves the field`, function () {
+	it(`should end if the source leaves the field`, () => {
 		battle = common.createBattle([[
 			{species: 'Dipplin', ability: 'noguard', moves: ['syrupbomb']},
 			{species: 'Furret', moves: ['sleeptalk']},
@@ -40,7 +40,7 @@ describe('Syrup Bomb', function () {
 		assert.statStage(battle.p2.active[0], 'spe', -1);
 	});
 
-	it(`the stat changes should be reflected by Mirror Armor`, function () {
+	it(`the stat changes should be reflected by Mirror Armor`, () => {
 		battle = common.createBattle([[
 			{species: 'Dipplin', ability: 'noguard', moves: ['syrupbomb']},
 		], [

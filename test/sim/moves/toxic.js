@@ -5,8 +5,8 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Toxic', function () {
-	it('should always hit when used by a Poison-type', function () {
+describe('Toxic', () => {
+	it('should always hit when used by a Poison-type', () => {
 		battle = common.createBattle([
 			[{species: "Naganadel", moves: ['toxic']}],
 			[{species: "Sigilyph", ability: 'wonderskin', moves: ['sleeptalk']}],
@@ -16,8 +16,8 @@ describe('Toxic', function () {
 	});
 });
 
-describe('Toxic [Gen 7]', function () {
-	it('should set all moves to sure-hit until the end of the turn', function () {
+describe('Toxic [Gen 7]', () => {
+	it('should set all moves to sure-hit until the end of the turn', () => {
 		battle = common.gen(7).createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: "Nidoking", moves: ['toxic', 'horndrill']},

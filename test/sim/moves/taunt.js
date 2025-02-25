@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Taunt', function () {
-	afterEach(function () {
+describe('Taunt', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should prevent the target from using Status moves and disable them', function () {
+	it('should prevent the target from using Status moves and disable them', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Sableye', ability: 'prankster', moves: ['taunt']}]});
 		battle.setPlayer('p2', {team: [{species: 'Chansey', ability: 'naturalcure', moves: ['calmmind']}]});
@@ -20,7 +20,7 @@ describe('Taunt', function () {
 		battle.makeChoices('move taunt', 'move struggle');
 	});
 
-	it('should not prevent the target from using Z-Powered Status moves', function () {
+	it('should not prevent the target from using Z-Powered Status moves', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Sableye', ability: 'prankster', moves: ['taunt']}]});
 		battle.setPlayer('p2', {team: [{species: 'Charmander', ability: 'blaze', item: 'firiumz', moves: ['sunnyday']}]});

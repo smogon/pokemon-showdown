@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Max Guard', function () {
-	afterEach(function () {
+describe('Max Guard', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should be disallowed by Taunt', function () {
+	it('should be disallowed by Taunt', () => {
 		battle = common.gen(8).createBattle([[
 			{species: "Feebas", moves: ['splash', 'tackle']},
 		], [
@@ -20,7 +20,7 @@ describe('Max Guard', function () {
 		assert.cantMove(() => battle.choose('p1', 'move splash'), 'Feebas', 'Max Guard', false);
 	});
 
-	it('should allow Feint to damage the user, but not break the protection effect', function () {
+	it('should allow Feint to damage the user, but not break the protection effect', () => {
 		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'minun', moves: ['sleeptalk']},
 			{species: 'plusle', moves: ['sleeptalk']},
@@ -34,7 +34,7 @@ describe('Max Guard', function () {
 		assert.false.fainted(minun);
 	});
 
-	it('should block certain moves that bypass Protect', function () {
+	it('should block certain moves that bypass Protect', () => {
 		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'sunflora', item: 'sitrusberry', ability: 'minus', moves: ['sleeptalk']},
 			{species: 'plusle', ability: 'plus', moves: ['magneticflux', 'gearup']},

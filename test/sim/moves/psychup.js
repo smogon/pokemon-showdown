@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Psych Up', function () {
-	afterEach(function () {
+describe('Psych Up', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should copy the opponent\'s crit ratio', function () {
+	it('should copy the opponent\'s crit ratio', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Palkia', level: 100, moves: ['sleeptalk', 'focusenergy', 'psychup', 'laserfocus']},
@@ -39,7 +39,7 @@ describe('Psych Up', function () {
 		assert(palkia.volatiles['laserfocus'], "A pokemon should gain a Laser Focus boost if the target of Psych Up has a Laser Focus boost.");
 	});
 
-	it('should copy both positive and negative stat changes', function () {
+	it('should copy both positive and negative stat changes', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Palkia', level: 100, moves: ['sleeptalk', 'psychup']},
@@ -61,12 +61,12 @@ describe('Psych Up', function () {
 	});
 });
 
-describe('Psych Up [Gen 5]', function () {
-	afterEach(function () {
+describe('Psych Up [Gen 5]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should not copy the opponent\'s crit ratio', function () {
+	it('should not copy the opponent\'s crit ratio', () => {
 		battle = common.gen(5).createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Palkia', level: 100, moves: ['sleeptalk', 'focusenergy', 'psychup']},

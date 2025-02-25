@@ -700,7 +700,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		return `You are banned from creating help tickets.`;
 	}
 	static notifyResolved(user: User, ticket: TicketState, userid = user.id) {
-		const {result, time, by, seen, note} = ticket.resolved as ResolvedTicketInfo;
+		const {result, time, by, seen, note} = ticket.resolved!;
 		if (seen) return;
 		const timeString = (Date.now() - time) > 1000 ? `, ${Chat.toDurationString(Date.now() - time)} ago.` : '.';
 		user.send(`|pm|~Staff|${user.getIdentity()}|Hello! Your report was resolved by ${by}${timeString}`);
@@ -720,7 +720,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 
 const NOTIFY_ALL_TIMEOUT = 5 * 60 * 1000;
 const NOTIFY_ASSIST_TIMEOUT = 60 * 1000;
-const unclaimedTicketTimer: {[k: string]: NodeJS.Timer | null} = {upperstaff: null, staff: null};
+const unclaimedTicketTimer: {[k: string]: NodeJS.Timeout | null} = {upperstaff: null, staff: null};
 const timerEnds: {[k: string]: number} = {upperstaff: 0, staff: 0};
 function pokeUnclaimedTicketTimer(hasUnclaimed: boolean, hasAssistRequest: boolean) {
 	const room = Rooms.get('staff');
@@ -865,8 +865,6 @@ function checkIp(ip: string) {
 export function getBattleLinks(text: string) {
 	const rooms = new Set<string>();
 	const battles = text.match(BATTLES_REGEX);
-	// typescript-eslint is having trouble detecting REPLAY_REGEX as a global regex
-	// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
 	const replays = text.match(REPLAY_REGEX);
 	if (battles) {
 		for (const battle of battles) rooms.add(battle);
@@ -1249,7 +1247,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 		title: "Enter the name of the room",
 		getReviewDisplay(ticket, staff) {
 			let buf = ``;
-			const room = Rooms.search(ticket.text[0]) as Room;
+			const room = Rooms.search(ticket.text[0])!;
 			if (!staff.inRooms.has(room.roomid)) {
 				buf += `<button class="button" name="send" value="/msgroom staff,/join ${room.roomid}">Join room</button>`;
 				buf += `<br />`;
@@ -2305,7 +2303,7 @@ export const commands: Chat.ChatCommands = {
 				'IP-Appeal': `Hi! How are you connecting to Showdown right now? At home, at school, on a phone using mobile data, or some other way?`,
 				'Public Room Assistance Request': `Hi! Which room(s) do you need us to help you watch?`,
 				Other: `Hi! What seems to be the problem? Tell us about any people involved,` +
-				` and if this happened in a specific place on the site.`,
+					` and if this happened in a specific place on the site.`,
 			};
 			const staffContexts: {[k: string]: string} = {
 				'IP-Appeal': `<p><strong>${user.name}'s IP Addresses</strong>: ${user.ips.map(ip => `<a href="https://whatismyipaddress.com/ip/${ip}" target="_blank">${ip}</a>`).join(', ')}</p>`,
@@ -2350,6 +2348,7 @@ export const commands: Chat.ChatCommands = {
 				ticket.text = [text, contextString];
 				ticket.active = true;
 				Chat.runHandlers('onTicketCreate', ticket, user);
+				// eslint-disable-next-line require-atomic-updates
 				tickets[user.id] = ticket;
 				await HelpTicket.modlog({
 					action: 'TEXTTICKET OPEN',
@@ -2434,7 +2433,9 @@ export const commands: Chat.ChatCommands = {
 						reportTargetInfo += Utils.html`There are no common battles between '${reportTarget}' and '${ticket.creator}'.`;
 					} else {
 						reportTargetInfo += Utils.html`Showing ${commonBattles.length} common battle(s) between '${reportTarget}' and '${ticket.creator}': `;
-						reportTargetInfo += commonBattles.map(roomid => Utils.html`<a href=/${roomid}>${roomid.replace(/^battle-/, '')}`);
+						reportTargetInfo += commonBattles.map(
+							roomid => Utils.html`<a href=/${roomid}>${roomid.replace(/^battle-/, '')}`
+						).join(', ');
 					}
 				}
 			}
@@ -2998,7 +2999,7 @@ export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
 	}
 };
 
-export const loginfilter: Chat.LoginFilter = (user) => {
+export const loginfilter: Chat.LoginFilter = user => {
 	const ticket = tickets[user.id];
 	if (ticket?.resolved) {
 		HelpTicket.notifyResolved(user, ticket);

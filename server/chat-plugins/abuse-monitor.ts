@@ -355,7 +355,7 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 						delete cache[room.roomid].staffNotified;
 						void Chat.database.run(
 							`INSERT INTO perspective_stats (staff, roomid, result, timestamp) VALUES ($staff, $roomid, $result, $timestamp) ` +
-								`ON CONFLICT (roomid) DO UPDATE SET result = $result, timestamp = $timestamp`,
+							`ON CONFLICT (roomid) DO UPDATE SET result = $result, timestamp = $timestamp`,
 							// todo: maybe use 3 to indicate punishment?
 							{staff: '', roomid: room.roomid, result: 1, timestamp: Date.now()}
 						);
@@ -626,7 +626,7 @@ function calcThreshold(roomid: RoomID) {
 	const incr = settings.thresholdIncrement;
 	let num = settings.threshold;
 	const room = Rooms.get(roomid);
-	if (!room || !room.battle || !incr) return num;
+	if (!room?.battle || !incr) return num;
 	if (!incr.minTurns || room.battle.turn >= incr.minTurns) {
 		num += (Math.floor(room.battle.turn / incr.turns) * incr.amount);
 	}
@@ -764,7 +764,7 @@ export const commands: Chat.ChatCommands = {
 					}
 					const secondaries = Object.entries(p.secondaryTypes || {});
 					if (secondaries.length) {
-						if (!secondaries.every(([sK, sV]) => response![sK] >= sV)) continue;
+						if (!secondaries.every(([sK, sV]) => response[sK] >= sV)) continue;
 						descriptors.push('secondary');
 					}
 					if (descriptors.length) { // ignore modlog / flag -only based actions
@@ -1187,7 +1187,7 @@ export const commands: Chat.ChatCommands = {
 			saveSettings();
 			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${user.name} set the abuse monitor minimum score to ${num}.`);
-			this.globalModlog("ABUSEMONITOR MIN", null, "" + num);
+			this.globalModlog("ABUSEMONITOR MIN", null, `${num}`);
 			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
 		},
 		ex: 'exportpunishment',
@@ -1237,34 +1237,15 @@ export const commands: Chat.ChatCommands = {
 			checkAccess(this);
 			let buf = settings.punishments.map(punishment => {
 				const line = [];
-				for (const k in punishment) {
-					// simplifies code to not need to cast every time.
-					const key = k as keyof PunishmentSettings;
-					const val = punishment[key];
-					switch (key) {
-					case 'modlogCount':
-						line.push(`mlc=${val}`);
-						break;
-					case 'modlogActions':
-						line.push(`${(val as string[]).map(f => `mla=${f}`).join(', ')}`);
-						break;
-					case 'punishment':
-						line.push(`p=${val}`);
-						break;
-					case 'type':
-						line.push(`t=${val}`);
-						break;
-					case 'count':
-						line.push(`c=${val}`);
-						break;
-					case 'certainty':
-						line.push(`ct=${val}`);
-						break;
-					case 'secondaryTypes':
-						for (const type in (val as any)) {
-							line.push(`st=${type}|${(val as any)[type]}`);
-						}
-						break;
+				if ('modlogCount' in punishment) line.push(`mlc=${punishment.modlogCount}`);
+				if (punishment.modlogActions) line.push(`${punishment.modlogActions.map(f => `mla=${f}`).join(', ')}`);
+				line.push(`p=${punishment.punishment}`);
+				if ('type' in punishment) line.push(`t=${punishment.type}`);
+				if ('count' in punishment) line.push(`c=${punishment.count}`);
+				if ('certainty' in punishment) line.push(`ct=${punishment.certainty}`);
+				if ('secondaryTypes' in punishment) {
+					for (const type in punishment.secondaryTypes) {
+						line.push(`st=${type}|${punishment.secondaryTypes[type]}`);
 					}
 				}
 				return line.join(', ');
@@ -1417,6 +1398,7 @@ export const commands: Chat.ChatCommands = {
 			this.privateGlobalModAction(`${user.name} removed the abuse-monitor punishment indexed at ${idx + 1}.`);
 			this.stafflog(
 				`Punishment: ` +
+				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				`${Object.keys(punishment).map(f => `${f}: ${punishment[f as keyof PunishmentSettings]}`).join(', ')}`
 			);
 			this.globalModlog(`ABUSEMONITOR REMOVEPUNISHMENT`, null, `${idx + 1}`);

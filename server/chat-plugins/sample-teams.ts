@@ -65,7 +65,7 @@ export const SampleTeams = new class SampleTeams {
 	whitelistedRooms(formatid: string, names = false) {
 		formatid = this.sanitizeFormat(formatid);
 		if (!teamData.whitelist[formatid]?.length) return null;
-		return Utils.sortBy(teamData.whitelist[formatid], (x) => {
+		return Utils.sortBy(teamData.whitelist[formatid], x => {
 			if (!names) return x;
 			const room = Rooms.search(x);
 			if (!room) return x;

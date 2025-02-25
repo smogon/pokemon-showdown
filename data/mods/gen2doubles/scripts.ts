@@ -4,7 +4,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	pokemon: {
 		inherit: true,
 		getStat(statName, unboosted, unmodified, fastReturn) {
-			// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
+			// @ts-expect-error type checking prevents 'hp' from being passed, but we're paranoid
 			if (statName === 'hp') throw new Error("Please read `maxhp` directly");
 
 			// base stat
@@ -297,7 +297,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (targets.length > 1) move.spreadHit = true;
 			if (move.spreadHit && move.target === 'allAdjacentFoes') {
 				const spreadModifier = move.spreadModifier || 0.5;
-				this.battle.debug('Spread modifier: ' + spreadModifier);
+				this.battle.debug(`Spread modifier: ${spreadModifier}`);
 				damage = this.battle.modify(damage, spreadModifier);
 			}
 

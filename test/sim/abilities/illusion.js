@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Illusion', function () {
-	afterEach(function () {
+describe('Illusion', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should not instantly wear off before Dynamaxing`, function () {
+	it(`should not instantly wear off before Dynamaxing`, () => {
 		battle = common.gen(8).createBattle([[
 			{species: "Zoroark", ability: 'illusion', moves: ['sleeptalk']},
 			{species: "Diglett", moves: ['sleeptalk']},
@@ -22,7 +22,7 @@ describe('Illusion', function () {
 		assert(battle.log.every(line => !line.includes('|-end|p1a: Zoroark|Illusion')));
 	});
 
-	it(`should prevent the user from Dynamaxed when Illusioning as a Pokemon that cannot Dynamax`, function () {
+	it(`should prevent the user from Dynamaxed when Illusioning as a Pokemon that cannot Dynamax`, () => {
 		battle = common.gen(8).createBattle([[
 			{species: "Zoroark", ability: 'illusion', moves: ['sleeptalk']},
 			{species: "Eternatus", moves: ['sleeptalk']},
@@ -33,7 +33,7 @@ describe('Illusion', function () {
 		assert.cantMove(() => battle.choose('p1', 'move sleeptalk dynamax'));
 	});
 
-	it(`should be able to wear off normally while Dynamaxed`, function () {
+	it(`should be able to wear off normally while Dynamaxed`, () => {
 		battle = common.gen(8).createBattle([[
 			{species: "Zoroark", ability: 'illusion', moves: ['machpunch']},
 			{species: "Diglett", moves: ['sleeptalk']},
@@ -45,7 +45,7 @@ describe('Illusion', function () {
 		assert(battle.log.some(line => line.includes('|-end|p1a: Zoroark|Illusion')));
 	});
 
-	it(`should Illusion as the regular Dynamax version of G-Max Pokemon while Dynamaxed`, function () {
+	it(`should Illusion as the regular Dynamax version of G-Max Pokemon while Dynamaxed`, () => {
 		battle = common.gen(8).createBattle([[
 			{species: "Zoroark", ability: 'illusion', moves: ['sleeptalk']},
 			{species: "Charizard", gigantamax: true, moves: ['ember', 'sleeptalk']},
@@ -57,7 +57,7 @@ describe('Illusion', function () {
 		assert(battle.log.every(line => !line.includes('Gmax')));
 	});
 
-	it(`should instantly wear off before using a Z-move`, function () {
+	it(`should instantly wear off before using a Z-move`, () => {
 		battle = common.gen(7).createBattle([[
 			{species: "Zoroark", ability: 'illusion', item: 'fightiniumz', moves: ['machpunch', 'sleeptalk']},
 			{species: "Octillery", moves: ['sleeptalk']},

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Pastel Veil', function () {
-	afterEach(function () {
+describe('Pastel Veil', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should prevent itself and its allies from becoming poisoned', function () {
+	it('should prevent itself and its allies from becoming poisoned', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'ponyta', ability: 'pastelveil', moves: ['sleeptalk']},
 			{species: 'wynaut', moves: ['sleeptalk']},
@@ -23,7 +23,7 @@ describe('Pastel Veil', function () {
 		assert.equal(battle.p1.pokemon[1].status, '');
 	});
 
-	it('should remove poison on itself and allies when switched in', function () {
+	it('should remove poison on itself and allies when switched in', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'ponyta', ability: 'pastelveil', moves: ['sleeptalk']},
 			{species: 'wynaut', moves: ['sleeptalk']},
@@ -39,7 +39,7 @@ describe('Pastel Veil', function () {
 		assert.equal(battle.p1.pokemon[1].status, '');
 	});
 
-	it('should remove poison on itself and allies when the ability is acquired via Skill Swap', function () {
+	it('should remove poison on itself and allies when the ability is acquired via Skill Swap', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'ponyta', ability: 'pastelveil', moves: ['sleeptalk']},
 			{species: 'wynaut', moves: ['sleeptalk']},
@@ -53,7 +53,7 @@ describe('Pastel Veil', function () {
 		assert.equal(battle.p1.pokemon[1].status, '');
 	});
 
-	it('should prevent a poison originating from an ally', function () {
+	it('should prevent a poison originating from an ally', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'ponyta', ability: 'pastelveil', moves: ['toxic']},
 			{species: 'wynaut', moves: ['toxic']},
@@ -66,7 +66,7 @@ describe('Pastel Veil', function () {
 		assert.equal(battle.p1.pokemon[1].status, '');
 	});
 
-	it('should be bypassed by Mold Breaker and cured afterwards, but not for the ally', function () {
+	it('should be bypassed by Mold Breaker and cured afterwards, but not for the ally', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'ponyta', ability: 'pastelveil', moves: ['sleeptalk']},
 			{species: 'wynaut', moves: ['sleeptalk']},
@@ -80,7 +80,7 @@ describe('Pastel Veil', function () {
 		assert.equal(battle.p1.pokemon[1].status, 'tox');
 	});
 
-	it('should only check for Pastel Veil cures after Lum/Pecha Berry', function () {
+	it('should only check for Pastel Veil cures after Lum/Pecha Berry', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'ponyta', ability: 'pastelveil', item: 'lumberry', moves: ['sleeptalk']},
 			{species: 'wynaut', moves: ['sleeptalk']},

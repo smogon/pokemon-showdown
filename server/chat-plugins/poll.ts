@@ -708,20 +708,20 @@ process.nextTick(() => {
 	Chat.multiLinePattern.register('/poll (new|create|createmulti|htmlcreate|htmlcreatemulti|queue|queuemulti|htmlqueuemulti) ');
 });
 
-// should handle restarts and also hotpatches
+// convert from old format (should handle restarts and also hotpatches)
 for (const room of Rooms.rooms.values()) {
 	if (room.getMinorActivityQueue(true)) {
 		for (const poll of room.getMinorActivityQueue(true)!) {
 			if (!poll.activityid) {
-				// @ts-ignore
+				// @ts-expect-error old format
 				poll.activityid = poll.activityId;
-				// @ts-ignore
+				// @ts-expect-error old format
 				delete poll.activityId;
 			}
 			if (!poll.activityNumber) {
-				// @ts-ignore
+				// @ts-expect-error old format
 				poll.activityNumber = poll.pollNumber;
-				// @ts-ignore
+				// @ts-expect-error old format
 				delete poll.pollNumber;
 			}
 			room.saveSettings();
@@ -729,15 +729,15 @@ for (const room of Rooms.rooms.values()) {
 	}
 	if (room.settings.minorActivity) {
 		if (!room.settings.minorActivity.activityid) {
-			// @ts-ignore
+			// @ts-expect-error old format
 			room.settings.minorActivity.activityid = room.settings.minorActivity.activityId;
-			// @ts-ignore
+			// @ts-expect-error old format
 			delete room.settings.minorActivity.activityId;
 		}
 		if (typeof room.settings.minorActivity.activityNumber !== 'number') {
-			// @ts-ignore
+			// @ts-expect-error old format
 			room.settings.minorActivity.activityNumber = room.settings.minorActivity.pollNumber ||
-				// @ts-ignore
+				// @ts-expect-error old format
 				room.settings.minorActivity.announcementNumber;
 		}
 		room.saveSettings();

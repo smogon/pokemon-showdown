@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Belch', function () {
-	afterEach(function () {
+describe('Belch', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should be disabled if the user has not consumed a berry`, function () {
+	it(`should be disabled if the user has not consumed a berry`, () => {
 		battle = common.createBattle([[
 			{species: 'Swalot', item: 'lumberry', moves: ['belch', 'stockpile']},
 		], [
@@ -24,7 +24,7 @@ describe('Belch', function () {
 		assert.equal(swalot.lastMove.id, 'belch');
 	});
 
-	it('should count berries as consumed with Bug Bite or Pluck', function () {
+	it('should count berries as consumed with Bug Bite or Pluck', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Swalot', ability: 'gluttony', item: 'salacberry', moves: ['belch', 'bugbite']}]});
 		battle.setPlayer('p2', {team: [{species: 'Swalot', ability: 'gluttony', item: 'salacberry', moves: ['belch', 'pluck']}]});
@@ -34,7 +34,7 @@ describe('Belch', function () {
 		assert.equal(battle.p2.active[0].lastMove.id, 'belch');
 	});
 
-	it('should count berries as consumed when they are Flung', function () {
+	it('should count berries as consumed when they are Flung', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Swalot', ability: 'gluttony', moves: ['belch', 'stockpile']}]});
 		battle.setPlayer('p2', {team: [{species: 'Machamp', ability: 'noguard', item: 'salacberry', moves: ['fling']}]});
@@ -43,7 +43,7 @@ describe('Belch', function () {
 		assert.equal(battle.p1.active[0].lastMove.id, 'belch');
 	});
 
-	it('should still count berries as consumed after switch out', function () {
+	it('should still count berries as consumed after switch out', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Swalot', item: 'lumberry', moves: ['belch', 'uturn']},

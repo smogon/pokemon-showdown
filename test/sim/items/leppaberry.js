@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Leppa Berry', function () {
-	afterEach(function () {
+describe('Leppa Berry', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should restore PP to the first move with any PP missing when eaten forcibly', function () {
+	it('should restore PP to the first move with any PP missing when eaten forcibly', () => {
 		battle = common.createBattle([
 			[{species: 'Gyarados', ability: 'moxie', item: '', moves: ['sleeptalk', 'splash']}],
 			[{species: 'Geodude', ability: 'sturdy', item: 'leppaberry', moves: ['sleeptalk', 'fling']}],

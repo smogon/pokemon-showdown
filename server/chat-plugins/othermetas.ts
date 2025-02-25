@@ -188,10 +188,10 @@ export const commands: Chat.ChatCommands = {
 			weighthit = 40;
 		}
 		const details: {[k: string]: string} = {
-			"Dex#": '' + mixedSpecies.num,
-			Gen: '' + mixedSpecies.gen,
-			Height: mixedSpecies.heightm + " m",
-			Weight: mixedSpecies.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>",
+			"Dex#": `${mixedSpecies.num}`,
+			Gen: `${mixedSpecies.gen}`,
+			Height: `${mixedSpecies.heightm} m`,
+			Weight: `${mixedSpecies.weighthg / 10} kg <em>(${weighthit} BP)</em>`,
 			"Dex Colour": mixedSpecies.color,
 		};
 		if (mixedSpecies.eggGroups) details["Egg Group(s)"] = mixedSpecies.eggGroups.join(", ");
@@ -301,8 +301,8 @@ export const commands: Chat.ChatCommands = {
 			}
 			const details = {
 				Gen: aStone.gen,
-				Height: (deltas.heightm < 0 ? "" : "+") + deltas.heightm + " m",
-				Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
+				Height: `${deltas.heightm < 0 ? "" : "+"}${deltas.heightm} m`,
+				Weight: `${deltas.weighthg < 0 ? "" : "+"}${deltas.weighthg / 10} kg`,
 			};
 			let tier;
 			if (['redorb', 'blueorb'].includes(aStone.id)) {
@@ -377,7 +377,7 @@ export const commands: Chat.ChatCommands = {
 		species.bst = 0;
 		for (const i in species.baseStats) {
 			if (dex.gen === 1 && i === 'spd') continue;
-			species.baseStats[i] = species.baseStats[i] * (bst <= 350 ? 2 : 1);
+			species.baseStats[i] *= (bst <= 350 ? 2 : 1);
 			species.bst += species.baseStats[i];
 		}
 		this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
@@ -814,8 +814,8 @@ export const commands: Chat.ChatCommands = {
 		const details: {[k: string]: string} = {
 			"Dex#": mixedSpecies.num,
 			Gen: mixedSpecies.gen,
-			Height: mixedSpecies.heightm + " m",
-			Weight: mixedSpecies.weighthg / 10 + " kg <em>(" + weighthit + " BP)</em>",
+			Height: `${mixedSpecies.heightm} m`,
+			Weight: `${mixedSpecies.weighthg / 10} kg <em>(${weighthit} BP)</em>`,
 			"Dex Colour": mixedSpecies.color,
 		};
 		if (mixedSpecies.eggGroups) details["Egg Group(s)"] = mixedSpecies.eggGroups.join(", ");
@@ -882,7 +882,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			const details = {
 				Gen: evo.gen,
-				Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
+				Weight: `${deltas.weighthg < 0 ? "" : "+"}${deltas.weighthg / 10} kg`,
 				Stage: (Dex.species.get(prevoSpecies.prevo).exists ? 3 : 2),
 			};
 			this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);
@@ -922,7 +922,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			const details = {
 				Gen: evo.gen,
-				Weight: (deltas.weighthg < 0 ? "" : "+") + deltas.weighthg / 10 + " kg",
+				Weight: `${deltas.weighthg < 0 ? "" : "+"}${deltas.weighthg / 10} kg`,
 				Stage: (Dex.species.get(prevoSpecies.prevo).exists ? 3 : 2),
 			};
 			this.sendReply(`|raw|${Chat.getDataPokemonHTML(deltas)}`);

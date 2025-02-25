@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Jaboca Berry', function () {
-	afterEach(function () {
+describe('Jaboca Berry', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should activate after a physical move`, function () {
+	it(`should activate after a physical move`, () => {
 		battle = common.createBattle([[
 			{species: "Charizard", evs: {hp: 252}, moves: ['scratch', 'ember']},
 		], [
@@ -23,7 +23,7 @@ describe('Jaboca Berry', function () {
 		assert.hurtsBy(charizard, charizard.maxhp / 8, () => battle.makeChoices());
 	});
 
-	it(`should activate even if the holder has 0 HP`, function () {
+	it(`should activate even if the holder has 0 HP`, () => {
 		battle = common.createBattle([[
 			{species: "Morpeko", evs: {hp: 252}, moves: ['aurawheel']},
 		], [
@@ -34,7 +34,7 @@ describe('Jaboca Berry', function () {
 		assert.hurtsBy(morpeko, morpeko.maxhp / 8, () => battle.makeChoices());
 	});
 
-	it(`should not activate after a physical move used by a Pokemon with Magic Guard`, function () {
+	it(`should not activate after a physical move used by a Pokemon with Magic Guard`, () => {
 		battle = common.createBattle([[
 			{species: "Clefable", ability: 'magicguard', moves: ['pound']},
 		], [

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Critical hits', function () {
-	afterEach(function () {
+describe('Critical hits', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should not happen on self-hits`, function () {
+	it(`should not happen on self-hits`, () => {
 		battle = common.createBattle({forceRandomChance: true}, [[
 			{species: 'Zubat', moves: ['confuseray']},
 		], [

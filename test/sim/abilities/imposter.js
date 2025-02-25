@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Imposter', function () {
-	afterEach(function () {
+describe('Imposter', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should Transform into the opposing Pokemon facing it', function () {
+	it('should Transform into the opposing Pokemon facing it', () => {
 		battle = common.createBattle([[
 			{species: "Ditto", ability: 'imposter', moves: ['sleeptalk']},
 		], [
@@ -19,7 +19,7 @@ describe('Imposter', function () {
 		assert.equal(battle.p1.active[0].species, battle.p2.active[0].species);
 	});
 
-	it('should be blocked by substitutes', function () {
+	it('should be blocked by substitutes', () => {
 		battle = common.createBattle([[
 			{species: "Escavalier", ability: 'shellarmor', moves: ['substitute']},
 		], [
@@ -31,7 +31,7 @@ describe('Imposter', function () {
 		assert.notEqual(battle.p2.active[0].species, battle.p1.active[0].species);
 	});
 
-	it('should not activate if Skill Swapped', function () {
+	it('should not activate if Skill Swapped', () => {
 		battle = common.createBattle([[
 			{species: "Shuckle", ability: 'imposter', moves: ['sleeptalk', 'skillswap']},
 		], [

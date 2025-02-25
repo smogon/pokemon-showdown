@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Pollen Puff', function () {
-	afterEach(function () {
+describe('Pollen Puff', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should heal allies through Substitute, but not damage opponents through Substitute`, function () {
+	it(`should heal allies through Substitute, but not damage opponents through Substitute`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Wynaut", level: 1, moves: ['pollenpuff']},
 			{species: "Garchomp", ability: 'compoundeyes', moves: ['superfang']},
@@ -26,7 +26,7 @@ describe('Pollen Puff', function () {
 		assert.equal(lucario.hp, lucario.maxhp - Math.floor(lucario.maxhp / 4));
 	});
 
-	it(`should not heal a Pokemon if they have natural type immunity to Pollen Puff`, function () {
+	it(`should not heal a Pokemon if they have natural type immunity to Pollen Puff`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Wynaut", ability: 'normalize', moves: ['pollenpuff']},
 			{species: "Froslass", moves: ['bellydrum']},
@@ -39,8 +39,8 @@ describe('Pollen Puff', function () {
 		assert.false.fullHP(battle.p1.active[1]);
 	});
 
-	describe(`interaction of Heal Block and Pollen Puff`, function () {
-		it(`should prevent the user from targeting an ally with Pollen Puff while the user is affected by Heal Block`, function () {
+	describe(`interaction of Heal Block and Pollen Puff`, () => {
+		it(`should prevent the user from targeting an ally with Pollen Puff while the user is affected by Heal Block`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'bunnelby', moves: ['sleeptalk', 'pollenpuff']},
 				{species: 'roggenrola', ability: 'magicbounce', moves: ['sleeptalk']},
@@ -54,7 +54,7 @@ describe('Pollen Puff', function () {
 			assert.false.cantMove(() => battle.choose('p1', 'move pollenpuff 1, move sleeptalk'));
 		});
 
-		it(`should not prevent the user from targeting an ally with Z-Pollen Puff while the user is affected by Heal Block`, function () {
+		it(`should not prevent the user from targeting an ally with Z-Pollen Puff while the user is affected by Heal Block`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'bunnelby', item: 'buginiumz', moves: ['sleeptalk', 'pollenpuff']},
 				{species: 'roggenrola', ability: 'magicbounce', moves: ['sleeptalk']},
@@ -67,7 +67,7 @@ describe('Pollen Puff', function () {
 			assert.false.cantMove(() => battle.choose('p1', 'move pollenpuff zmove -2, move sleeptalk'));
 		});
 
-		it(`should not prevent the user from targeting an ally with Pollen Puff while the target is affected by Heal Block at move selection, but it should fail at move execution`, function () {
+		it(`should not prevent the user from targeting an ally with Pollen Puff while the target is affected by Heal Block at move selection, but it should fail at move execution`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'wynaut', ability: 'magicbounce', moves: ['sleeptalk', 'pollenpuff']},
 				{species: 'roggenrola', moves: ['sleeptalk']},
@@ -81,7 +81,7 @@ describe('Pollen Puff', function () {
 			assert.false.fullHP(battle.p1.active[1], `Roggenrola should not have healed from Pollen Puff`);
 		});
 
-		it(`should prevent the user from successfully using Pollen Puff into an ally if the user becomes affected by Heal Block mid-turn`, function () {
+		it(`should prevent the user from successfully using Pollen Puff into an ally if the user becomes affected by Heal Block mid-turn`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'wynaut', moves: ['pollenpuff']},
 				{species: 'roggenrola', ability: 'magicbounce', moves: ['sleeptalk']},
@@ -94,7 +94,7 @@ describe('Pollen Puff', function () {
 			assert.false.fullHP(battle.p1.active[1], `Roggenrola should not have healed from Pollen Puff`);
 		});
 
-		it(`should not prevent the user from using Z-Pollen Puff into an ally`, function () {
+		it(`should not prevent the user from using Z-Pollen Puff into an ally`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'wynaut', item: 'buginiumz', moves: ['pollenpuff']},
 				{species: 'roggenrola', moves: ['sleeptalk']},

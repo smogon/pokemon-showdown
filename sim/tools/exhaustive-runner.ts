@@ -5,11 +5,11 @@
  * @license MIT
  */
 
-import {ObjectReadWriteStream} from '../../lib/streams';
+import type {ObjectReadWriteStream} from '../../lib/streams';
 import {Dex, toID} from '../dex';
-import {PRNG, PRNGSeed} from '../prng';
+import {PRNG, type PRNGSeed} from '../prng';
 import {RandomPlayerAI} from './random-player-ai';
-import {AIOptions, Runner} from './runner';
+import {type AIOptions, Runner} from './runner';
 
 interface Pools {
 	pokemon: Pool;
@@ -99,13 +99,13 @@ export class ExhaustiveRunner {
 				this.failures++;
 				console.error(
 					`\n\nRun \`node tools/simulate exhaustive --cycles=${this.cycles} ` +
-						`--format=${this.format} --seed=${seed}\`:\n`,
+					`--format=${this.format} --seed=${seed}\`:\n`,
 					err
 				);
 			}
 		} while ((!this.maxGames || this.games < this.maxGames) &&
-					(!this.maxFailures || this.failures < this.maxFailures) &&
-					generator.exhausted < this.cycles);
+			(!this.maxFailures || this.failures < this.maxFailures) &&
+			generator.exhausted < this.cycles);
 
 		return this.failures;
 	}
@@ -435,10 +435,12 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 		// Prefer to choose a Pokemon that has a species/ability/item/move we haven't seen yet.
 		for (const {slot, pokemon} of choices) {
 			const species = toID(pokemon.details.split(',')[0]);
-			if (!this.pools.pokemon.wasUsed(species) ||
-					!this.pools.abilities.wasUsed(pokemon.baseAbility) ||
-					!this.pools.items.wasUsed(pokemon.item) ||
-					pokemon.moves.some((m: AnyObject) => !this.pools.moves.wasUsed(this.fixMove(m)))) {
+			if (
+				!this.pools.pokemon.wasUsed(species) ||
+				!this.pools.abilities.wasUsed(pokemon.baseAbility) ||
+				!this.pools.items.wasUsed(pokemon.item) ||
+				pokemon.moves.some((m: AnyObject) => !this.pools.moves.wasUsed(this.fixMove(m)))
+			) {
 				this.pools.pokemon.markUsed(species);
 				this.pools.abilities.markUsed(pokemon.baseAbility);
 				this.pools.items.markUsed(pokemon.item);
@@ -460,7 +462,7 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 	// Gigantamax Pokemon need to be special cased for tracking because the current
 	// tracking only works if you can switch in a Pokemon.
 	private markUsedIfGmax(active: AnyObject | undefined) {
-		if (active && !active.canDynamax && active.maxMoves && active.maxMoves.gigantamax) {
+		if (active && !active.canDynamax && active.maxMoves?.gigantamax) {
 			this.pools.pokemon.markUsed(toID(active.maxMoves.gigantamax));
 		}
 	}

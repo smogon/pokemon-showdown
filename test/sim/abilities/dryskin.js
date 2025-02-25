@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Dry Skin', function () {
-	afterEach(function () {
+describe('Dry Skin', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should take 1/8 max HP every turn that Sunny Day is active', function () {
+	it('should take 1/8 max HP every turn that Sunny Day is active', () => {
 		battle = common.createBattle([[
 			{species: 'Toxicroak', ability: 'dryskin', moves: ['bulkup']},
 		], [
@@ -20,7 +20,7 @@ describe('Dry Skin', function () {
 		assert.hurtsBy(dryMon, Math.floor(dryMon.maxhp / 8), () => battle.makeChoices('move bulkup', 'move sunnyday'));
 	});
 
-	it('should heal 1/8 max HP every turn that Rain Dance is active', function () {
+	it('should heal 1/8 max HP every turn that Rain Dance is active', () => {
 		battle = common.createBattle([[
 			{species: 'Toxicroak', ability: 'dryskin', moves: ['substitute']},
 		], [
@@ -31,7 +31,7 @@ describe('Dry Skin', function () {
 		assert.hurtsBy(dryMon, -Math.floor(dryMon.maxhp / 8), () => battle.makeChoices('move substitute', 'move raindance'));
 	});
 
-	it('should grant immunity to Water-type moves and heal 1/4 max HP', function () {
+	it('should grant immunity to Water-type moves and heal 1/4 max HP', () => {
 		battle = common.createBattle([[
 			{species: 'Toxicroak', ability: 'dryskin', moves: ['substitute']},
 		], [
@@ -41,7 +41,7 @@ describe('Dry Skin', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it('should cause the user to take 1.25x damage from Fire-type attacks', function () {
+	it('should cause the user to take 1.25x damage from Fire-type attacks', () => {
 		battle = common.createBattle([[
 			{species: 'Toxicroak', ability: 'dryskin', moves: ['bulkup']},
 		], [
@@ -52,7 +52,7 @@ describe('Dry Skin', function () {
 		assert.bounded(damage, [51, 61]);
 	});
 
-	it('should be suppressed by Mold Breaker', function () {
+	it('should be suppressed by Mold Breaker', () => {
 		battle = common.createBattle([[
 			{species: 'Toxicroak', ability: 'dryskin', moves: ['bulkup']},
 		], [

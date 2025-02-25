@@ -5,19 +5,19 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Neutralizing Gas', function () {
-	afterEach(function () {
+describe('Neutralizing Gas', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should prevent switch-in abilities from activating', function () {
+	it('should prevent switch-in abilities from activating', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Gyarados", ability: 'intimidate', moves: ['splash']}]});
 		battle.setPlayer('p2', {team: [{species: "Weezing", ability: 'neutralizinggas', moves: ['toxicspikes']}]});
 		assert.statStage(battle.p2.active[0], 'atk', 0);
 	});
 
-	it('should ignore damage-reducing abilities', function () {
+	it('should ignore damage-reducing abilities', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Weezing", ability: 'neutralizinggas', item: 'expertbelt', moves: ['sludgebomb']}]});
 		battle.setPlayer('p2', {team: [{species: "Mr. Mime", ability: 'filter', item: 'laggingtail', moves: ['substitute']}]});
@@ -25,7 +25,7 @@ describe('Neutralizing Gas', function () {
 		assert(!battle.p1.active[0].volatiles['substitute']);
 	});
 
-	it('should negate self-healing abilities', function () {
+	it('should negate self-healing abilities', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Weezing", ability: 'neutralizinggas', moves: ['toxic']}]});
 		battle.setPlayer('p2', {team: [{species: "Breloom", ability: 'poisonheal', moves: ['swordsdance']}]});
@@ -33,7 +33,7 @@ describe('Neutralizing Gas', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it('should negate abilities that suppress item effects', function () {
+	it('should negate abilities that suppress item effects', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Weezing", ability: 'neutralizinggas', moves: ['reflect']}]});
 		battle.setPlayer('p2', {team: [{species: "Reuniclus", ability: 'magicguard', item: 'lifeorb', moves: ['shadowball']}]});
@@ -41,7 +41,7 @@ describe('Neutralizing Gas', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it('should negate abilities that modify boosts', function () {
+	it('should negate abilities that modify boosts', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Weezing", ability: 'neutralizinggas', moves: ['spore']}]});
 		battle.setPlayer('p2', {team: [{species: "Shuckle", ability: 'contrary', moves: ['sleeptalk', 'superpower']}]});
@@ -49,7 +49,7 @@ describe('Neutralizing Gas', function () {
 		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
 
-	it(`should negate abilites that activate on switch-out`, function () {
+	it(`should negate abilites that activate on switch-out`, () => {
 		battle = common.createBattle([
 			[{species: "Weezing", ability: 'neutralizinggas', moves: ['toxic']},
 				{species: "Type: Null", ability: 'battlearmor', moves: ['facade']}],
@@ -62,7 +62,7 @@ describe('Neutralizing Gas', function () {
 		assert.equal(battle.p2.active[0].status, 'tox');
 	});
 
-	it('should negate abilities that modify move type', function () {
+	it('should negate abilities that modify move type', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Gengar", ability: 'neutralizinggas', moves: ['laserfocus']}]});
 		battle.setPlayer('p2', {team: [{species: "Sylveon", ability: 'pixilate', moves: ['hypervoice']}]});
@@ -70,7 +70,7 @@ describe('Neutralizing Gas', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it("should negate abilities that damage the attacker", function () {
+	it("should negate abilities that damage the attacker", () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Weezing-Galar', ability: 'neutralizinggas', moves: ['payback']},
@@ -82,7 +82,7 @@ describe('Neutralizing Gas', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it(`should negate Primal weather Abilities`, function () {
+	it(`should negate Primal weather Abilities`, () => {
 		battle = common.createBattle([[
 			{species: 'Groudon', item: 'redorb', moves: ['sleeptalk']},
 		], [
@@ -96,7 +96,7 @@ describe('Neutralizing Gas', function () {
 		assert(battle.field.isWeather('desolateland'), `Desolate Land should be active again`);
 	});
 
-	it('should not activate Imposter if Neutralizing Gas leaves the field', function () {
+	it('should not activate Imposter if Neutralizing Gas leaves the field', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: "Weezing", ability: 'neutralizinggas', moves: ['snore']},
@@ -111,7 +111,7 @@ describe('Neutralizing Gas', function () {
 		assert.notEqual(battle.p1.pokemon[1].species, battle.p2.active[0].species);
 	});
 
-	it(`should prevent Unburden's activation when it is active on the field`, function () {
+	it(`should prevent Unburden's activation when it is active on the field`, () => {
 		battle = common.createBattle([[
 			{species: "Wynaut", ability: 'unburden', item: 'sitrusberry', evs: {hp: 4}, moves: ['bellydrum']},
 		], [
@@ -124,12 +124,12 @@ describe('Neutralizing Gas', function () {
 		battle.makeChoices();
 		assert.equal(wynaut.getStat('spe'), originalSpeed);
 
-		//The chance to trigger Unburden is gone, so it missed the timing and doesn't gain the speed post-NGas removal
+		// The chance to trigger Unburden is gone, so it missed the timing and doesn't gain the speed post-NGas removal
 		battle.makeChoices('auto', 'switch 2');
 		assert.equal(wynaut.getStat('spe'), originalSpeed);
 	});
 
-	it(`should negate Unburden when Neutralizing Gas enters the field`, function () {
+	it(`should negate Unburden when Neutralizing Gas enters the field`, () => {
 		battle = common.createBattle([[
 			{species: "Wynaut", ability: 'unburden', item: 'sitrusberry', evs: {hp: 4}, moves: ['bellydrum']},
 		], [
@@ -149,7 +149,7 @@ describe('Neutralizing Gas', function () {
 		assert.equal(wynaut.getStat('spe'), originalSpeed * 2);
 	});
 
-	it(`should cause Illusion to instantly wear off when Neutralizing Gas enters the field`, function () {
+	it(`should cause Illusion to instantly wear off when Neutralizing Gas enters the field`, () => {
 		battle = common.createBattle([[
 			{species: "Zoroark", ability: 'illusion', moves: ['sleeptalk']},
 			{species: "Eternatus", moves: ['sleeptalk']},
@@ -162,7 +162,7 @@ describe('Neutralizing Gas', function () {
 		assert(battle.log.some(line => line.includes('|-end|p1a: Zoroark|Illusion')));
 	});
 
-	it(`should cause Slow Start to instantly wear off/restart when Neutralizing Gas leaves/enters the field`, function () {
+	it(`should cause Slow Start to instantly wear off/restart when Neutralizing Gas leaves/enters the field`, () => {
 		battle = common.createBattle([[
 			{species: "Regigigas", ability: 'slowstart', moves: ['sleeptalk']},
 			{species: "Eternatus", moves: ['sleeptalk']},
@@ -183,7 +183,7 @@ describe('Neutralizing Gas', function () {
 		assert.equal(regigigas.getStat('spe'), slowStartSpeed);
 	});
 
-	it(`should not cause Gluttony to instantly eat Berries when Neutralizing Gas leaves the field`, function () {
+	it(`should not cause Gluttony to instantly eat Berries when Neutralizing Gas leaves the field`, () => {
 		battle = common.createBattle([[
 			{species: "Wynaut", ability: 'gluttony', item: 'aguavberry', evs: {hp: 4}, moves: ['bellydrum']},
 		], [
@@ -204,7 +204,7 @@ describe('Neutralizing Gas', function () {
 		assert.equal(wynaut.hp, Math.floor(wynaut.maxhp / 2) - 1 + Math.floor(wynaut.maxhp / 3));
 	});
 
-	it(`should not trigger twice if negated then replaced`, function () {
+	it(`should not trigger twice if negated then replaced`, () => {
 		battle = common.createBattle([[
 			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
 		], [
@@ -220,7 +220,7 @@ describe('Neutralizing Gas', function () {
 		assert.statStage(wynaut, 'atk', 1);
 	});
 
-	it(`should not re-trigger Unnerve if the ability was already triggered before`, function () {
+	it(`should not re-trigger Unnerve if the ability was already triggered before`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Bisharp", ability: 'defiant', moves: ['sleeptalk']},
 			{species: "Eternatus", ability: 'pressure', moves: ['sleeptalk']},
@@ -243,7 +243,7 @@ describe('Neutralizing Gas', function () {
 		assert.equal(firstUnnerveIndex, secondUnnerveIndex, 'Unnerve should have only activated once.');
 	});
 
-	it(`should not announce Neutralizing Gas has worn off, if multiple are active simultenously`, function () {
+	it(`should not announce Neutralizing Gas has worn off, if multiple are active simultenously`, () => {
 		battle = common.createBattle([[
 			{species: "Weezing", ability: 'neutralizinggas', moves: ['sleeptalk']},
 		], [
@@ -256,7 +256,7 @@ describe('Neutralizing Gas', function () {
 		assert.statStage(battle.p2.active[0], 'atk', 0);
 	});
 
-	it(`should not prevent Ice Face from blocking damage nor reform Ice Face when leaving the field`, function () {
+	it(`should not prevent Ice Face from blocking damage nor reform Ice Face when leaving the field`, () => {
 		battle = common.createBattle([[
 			{species: 'Eiscue', ability: 'iceface', moves: ['sleeptalk', 'hail']},
 		], [
@@ -274,7 +274,7 @@ describe('Neutralizing Gas', function () {
 		assert.species(eiscue, 'Eiscue-Noice');
 	});
 
-	it(`should not work if it was obtained via Transform`, function () {
+	it(`should not work if it was obtained via Transform`, () => {
 		battle = common.createBattle([[
 			{species: 'Ditto', moves: ['transform']},
 		], [
@@ -287,7 +287,7 @@ describe('Neutralizing Gas', function () {
 		assert.statStage(battle.p2.active[0], 'atk', 1);
 	});
 
-	it(`should not reactivate abilities that were protected by Ability Shield`, function () {
+	it(`should not reactivate abilities that were protected by Ability Shield`, () => {
 		battle = common.createBattle([[
 			{species: 'Porygon', ability: 'download', item: 'abilityshield', moves: ['sleeptalk']},
 		], [
@@ -301,7 +301,7 @@ describe('Neutralizing Gas', function () {
 		assert.statStage(porygon, 'spa', 1);
 	});
 
-	it(`should not reactivate instances of Embody Aspect that had previously activated`, function () {
+	it(`should not reactivate instances of Embody Aspect that had previously activated`, () => {
 		battle = common.gen(9).createBattle({gameType: 'freeforall'}, [[
 			{species: 'Ogerpon-Hearthflame', ability: 'moldbreaker', item: 'hearthflamemask', moves: ['bellydrum']},
 		], [
@@ -331,8 +331,8 @@ describe('Neutralizing Gas', function () {
 		assert.statStage(cornerstone, 'def', 1, `Ogerpon-Cornerstone-Tera's Embody Aspect should have been activated by Neutalizing Gas ending`);
 	});
 
-	describe(`Ability reactivation order`, function () {
-		it(`should cause entrance Abilities to reactivate in order of Speed`, function () {
+	describe(`Ability reactivation order`, () => {
+		it(`should cause entrance Abilities to reactivate in order of Speed`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: "Pincurchin", ability: 'electricsurge', moves: ['sleeptalk']},
 				{species: "Eternatus", moves: ['sleeptalk']},
@@ -346,7 +346,7 @@ describe('Neutralizing Gas', function () {
 			assert(battle.field.isTerrain('electricterrain'));
 		});
 
-		it(`should cause non-entrance abilities to be active immediately`, function () {
+		it(`should cause non-entrance abilities to be active immediately`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: "Bisharp", ability: 'defiant', moves: ['sleeptalk']},
 				{species: "Eternatus", moves: ['sleeptalk']},
@@ -360,7 +360,7 @@ describe('Neutralizing Gas', function () {
 			assert.statStage(battle.p1.active[0], 'atk', 1);
 		});
 
-		it(`should not give Unnerve priority in activation`, function () {
+		it(`should not give Unnerve priority in activation`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: "Bisharp", ability: 'defiant', moves: ['sleeptalk']},
 				{species: "Eternatus", ability: 'pressure', moves: ['sleeptalk']},

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Damp', function () {
-	afterEach(function () {
+describe('Damp', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should prevent self-destruction moves from activating', function () {
+	it('should prevent self-destruction moves from activating', () => {
 		battle = common.createBattle([[
 			{species: 'Politoed', ability: 'damp', moves: ['calmmind']},
 		], [
@@ -22,7 +22,7 @@ describe('Damp', function () {
 		assert.fullHP(selfKOMon);
 	});
 
-	it('should prevent Aftermath from activating', function () {
+	it('should prevent Aftermath from activating', () => {
 		battle = common.createBattle([[
 			{species: 'Poliwrath', ability: 'damp', moves: ['closecombat']},
 		], [
@@ -34,7 +34,7 @@ describe('Damp', function () {
 		assert.fainted(afterMathMon);
 	});
 
-	it('should be suppressed by Mold Breaker', function () {
+	it('should be suppressed by Mold Breaker', () => {
 		battle = common.createBattle([[
 			{species: 'Politoed', ability: 'damp', moves: ['calmmind']},
 		], [

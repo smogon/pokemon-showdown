@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Nightmare [Gen 2]', function () {
-	afterEach(function () {
+describe('Nightmare [Gen 2]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should not deal damage to the affected if the opponent is KOed', function () {
+	it('should not deal damage to the affected if the opponent is KOed', () => {
 		battle = common.gen(2).createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: "Slugma", moves: ['sleeptalk']},
@@ -25,7 +25,7 @@ describe('Nightmare [Gen 2]', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it('should continue dealing damage to the affected if it falls asleep while asleep', function () {
+	it('should continue dealing damage to the affected if it falls asleep while asleep', () => {
 		battle = common.gen(2).createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: "Magcargo", moves: ['sleeptalk', 'rest']},

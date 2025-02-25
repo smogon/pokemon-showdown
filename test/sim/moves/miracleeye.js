@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Miracle Eye', function () {
-	afterEach(function () {
+describe('Miracle Eye', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should negate Psychic immunities`, function () {
+	it(`should negate Psychic immunities`, () => {
 		battle = common.createBattle([[
 			{species: 'Smeargle', moves: ['miracleeye', 'psychic']},
 		], [
@@ -21,14 +21,14 @@ describe('Miracle Eye', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should ignore the effect of positive evasion stat stages`, function () {
+	it(`should ignore the effect of positive evasion stat stages`, () => {
 		battle = common.createBattle([[
 			{species: 'Smeargle', moves: ['tackle', 'miracleeye']},
 		], [
 			{species: 'Forretress', moves: ['sleeptalk']},
 		]]);
 
-		battle.onEvent('Accuracy', battle.format, function (accuracy, target, source, move) {
+		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
 			if (move.id === 'tackle') {
 				assert.equal(accuracy, 100, `Miracle Eye should ignore positive evasion boosts`);
 			}
@@ -41,14 +41,14 @@ describe('Miracle Eye', function () {
 		assert.false.fullHP(forretress);
 	});
 
-	it(`should not ignore the effect of negative evasion stat stages`, function () {
+	it(`should not ignore the effect of negative evasion stat stages`, () => {
 		battle = common.createBattle([[
 			{species: 'Smeargle', moves: ['zapcannon', 'miracleeye']},
 		], [
 			{species: 'Zapdos', moves: ['sleeptalk']},
 		]]);
 
-		battle.onEvent('Accuracy', battle.format, function (accuracy, target, source, move) {
+		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
 			if (move.id === 'zapcannon') {
 				assert(accuracy >= 100, `Miracle Eye should not ignore negative evasion drops`);
 			}

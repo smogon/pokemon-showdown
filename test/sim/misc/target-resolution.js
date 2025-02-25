@@ -5,13 +5,13 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Target Resolution', function () {
-	afterEach(function () {
+describe('Target Resolution', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	describe(`Targetted Pokémon fainted in-turn`, function () {
-		it(`should redirect 'any' from a fainted foe to a targettable foe`, function () {
+	describe(`Targetted Pokémon fainted in-turn`, () => {
+		it(`should redirect 'any' from a fainted foe to a targettable foe`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['watergun']},
 				{species: 'Metapod', ability: 'shedskin', moves: ['harden']},
@@ -24,7 +24,7 @@ describe('Target Resolution', function () {
 			assert.hurts(defender, () => battle.makeChoices('move watergun 2, auto', 'auto'));
 		});
 
-		it(`should not redirect 'any' from a fainted ally to another Pokémon by default`, function () {
+		it(`should not redirect 'any' from a fainted ally to another Pokémon by default`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['watergun']},
 				{species: 'Latias', ability: 'levitate', moves: ['healingwish']},
@@ -43,7 +43,7 @@ describe('Target Resolution', function () {
 			assert(battle.log.includes('|-fail|p1a: Wailord'));
 		});
 
-		it(`should support RedirectTarget event for a fainted foe and type 'any' `, function () {
+		it(`should support RedirectTarget event for a fainted foe and type 'any' `, () => {
 			battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 				{species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['waterpulse']}, // Water Pulse over Water Gun due to targeting in triples
 				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
@@ -90,7 +90,7 @@ describe('Target Resolution', function () {
 			assert.statStage(redirector, 'spa', 1);
 		});
 
-		it(`should not redirect non-pulse/flying moves in Triples if the Pokemon is out of range`, function () {
+		it(`should not redirect non-pulse/flying moves in Triples if the Pokemon is out of range`, () => {
 			battle = common.gen(6).createBattle({gameType: 'triples'}, [[
 				{species: 'Shuckle', moves: ['watergun']},
 				{species: 'Magikarp', moves: ['swordsdance']},
@@ -104,7 +104,7 @@ describe('Target Resolution', function () {
 			assert.fullHP(battle.p2.active[0], `Beartic should not be damaged by a Water Gun because it is out of range`);
 		});
 
-		it(`should support RedirectTarget event for a fainted ally and type 'any'`, function () {
+		it(`should support RedirectTarget event for a fainted ally and type 'any'`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['watergun']},
 				{species: 'Latias', ability: 'levitate', moves: ['healingwish']},
@@ -118,7 +118,7 @@ describe('Target Resolution', function () {
 			assert.statStage(redirector, 'spa', 1);
 		});
 
-		it(`should not redirect to another random target if the intended one is fainted in FFA`, function () {
+		it(`should not redirect to another random target if the intended one is fainted in FFA`, () => {
 			battle = common.createBattle({gameType: 'freeforall'}, [[
 				{species: 'Calyrex', moves: ['sleeptalk']},
 			], [
@@ -135,8 +135,8 @@ describe('Target Resolution', function () {
 		});
 	});
 
-	describe(`Targetted slot is empty`, function () {
-		it(`should redirect 'any' from a fainted foe to a targettable foe`, function () {
+	describe(`Targetted slot is empty`, () => {
+		it(`should redirect 'any' from a fainted foe to a targettable foe`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'Wailord', ability: 'pressure', moves: ['watergun']},
 				{species: 'Shedinja', item: 'flameorb', ability: 'wonderguard', moves: ['agility']},
@@ -159,7 +159,7 @@ describe('Target Resolution', function () {
 			);
 		});
 
-		it(`should not redirect 'any' from a fainted ally to another Pokémon by default`, function () {
+		it(`should not redirect 'any' from a fainted ally to another Pokémon by default`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'Wailord', ability: 'pressure', moves: ['watergun']},
 				{species: 'Shedinja', item: 'flameorb', ability: 'wonderguard', moves: ['agility']},
@@ -187,7 +187,7 @@ describe('Target Resolution', function () {
 			assert(battle.log.includes('|-fail|p2a: Wailord'));
 		});
 
-		it(`should support RedirectTarget event for a fainted foe and type 'any'`, function () {
+		it(`should support RedirectTarget event for a fainted foe and type 'any'`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'Hippowdon', ability: 'sandstream', moves: ['waterpulse']},
 				{species: 'Shedinja', ability: 'wonderguard', moves: ['agility']},
@@ -202,7 +202,7 @@ describe('Target Resolution', function () {
 			assert.statStage(redirector, 'spa', 2);
 		});
 
-		it(`should support RedirectTarget event for a fainted ally and type 'any'`, function () {
+		it(`should support RedirectTarget event for a fainted ally and type 'any'`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'Hippowdon', ability: 'sandstream', moves: ['waterpulse']},
 				{species: 'Shedinja', ability: 'wonderguard', moves: ['agility']},
@@ -218,8 +218,8 @@ describe('Target Resolution', function () {
 		});
 	});
 
-	describe(`Smart-tracking targeting effects`, function () {
-		it(`should allow Stalwart to follow its target after an opposing Ally Switch`, function () {
+	describe(`Smart-tracking targeting effects`, () => {
+		it(`should allow Stalwart to follow its target after an opposing Ally Switch`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
 				{species: 'Wynaut', moves: ['sleeptalk']},
@@ -233,7 +233,7 @@ describe('Target Resolution', function () {
 			assert.false.fullHP(ninjask, `Duraludon should have followed Ninjask's Ally Switch.`);
 		});
 
-		it(`should allow Stalwart to bypass Storm Drain redirection`, function () {
+		it(`should allow Stalwart to bypass Storm Drain redirection`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
 				{species: 'Wynaut', moves: ['sleeptalk']},
@@ -247,7 +247,7 @@ describe('Target Resolution', function () {
 			assert.false.fullHP(ninjask, `Duraludon should have ignored Gastrodon's Storm Drain.`);
 		});
 
-		it(`should allow Stalwart to bypass Follow Me redirection`, function () {
+		it(`should allow Stalwart to bypass Follow Me redirection`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
 				{species: 'Wynaut', moves: ['sleeptalk']},
@@ -261,7 +261,7 @@ describe('Target Resolution', function () {
 			assert.false.fullHP(ninjask, `Duraludon should have ignored Clefable's Follow Me.`);
 		});
 
-		it(`should allow Stalwart to correctly target a Pokemon which switched out and back in another slot`, function () {
+		it(`should allow Stalwart to correctly target a Pokemon which switched out and back in another slot`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
 				{species: 'Wynaut', moves: ['sleeptalk']},
@@ -278,7 +278,7 @@ describe('Target Resolution', function () {
 			assert.false.fullHP(regieleki, `Duraludon should have followed Regieleki through its switch-out.`);
 		});
 
-		it(`should allow Snipe Shot to follow its target after an opposing Ally Switch`, function () {
+		it(`should allow Snipe Shot to follow its target after an opposing Ally Switch`, () => {
 			battle = common.createBattle({gameType: 'doubles'}, [[
 				{species: 'Inteleon', moves: ['snipeshot']},
 				{species: 'Ninjask', moves: ['sleeptalk']},
@@ -293,7 +293,7 @@ describe('Target Resolution', function () {
 		});
 	});
 
-	it('should not force charge moves called by another move to target an ally after Ally Switch', function () {
+	it('should not force charge moves called by another move to target an ally after Ally Switch', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'purrloin', ability: 'no guard', moves: ['copycat', 'sleeptalk']},
 			{species: 'wynaut', moves: ['allyswitch', 'fly', 'skullbash']},
@@ -312,7 +312,7 @@ describe('Target Resolution', function () {
 		assert.fullHP(battle.p1.active[1]);
 	});
 
-	it(`Ally Switch should cause single-target moves to fail if targeting an ally`, function () {
+	it(`Ally Switch should cause single-target moves to fail if targeting an ally`, () => {
 		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
 			{species: 'purrloin', moves: ['thunder', 'ironhead']},
 			{species: 'wynaut', moves: ['allyswitch']},
@@ -326,7 +326,7 @@ describe('Target Resolution', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it(`charge moves like Phantom Force should target slots turn 1 and Pokemon turn 2`, function () {
+	it(`charge moves like Phantom Force should target slots turn 1 and Pokemon turn 2`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'houndour', level: 1, moves: ['sleeptalk']},
 			{species: 'altaria', moves: ['sleeptalk']},
@@ -357,7 +357,7 @@ describe('Target Resolution', function () {
 		assert.false.fullHP(battle.p1.active[1], 'Altaria should not be at full HP, because Phantom Force was redirected and targeted it.');
 	});
 
-	it(`should cause Rollout to target the same slot after being called as a submove`, function () {
+	it(`should cause Rollout to target the same slot after being called as a submove`, () => {
 		// hardcoded RNG seed to show the erroneous targeting behavior
 		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
 			{species: 'shuckle', ability: 'compoundeyes', moves: ['copycat']},

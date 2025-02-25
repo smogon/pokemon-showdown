@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Lightning Rod', function () {
-	afterEach(function () {
+describe('Lightning Rod', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should grant immunity to Electric-type moves and boost Special Attack by 1 stage', function () {
+	it('should grant immunity to Electric-type moves and boost Special Attack by 1 stage', () => {
 		battle = common.gen(6).createBattle([[
 			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']},
 		], [
@@ -21,7 +21,7 @@ describe('Lightning Rod', function () {
 		assert.statStage(battle.p1.active[0], 'spa', 1);
 	});
 
-	it('should not boost Special Attack if the user is already immune to Electric-type moves in gen 6-', function () {
+	it('should not boost Special Attack if the user is already immune to Electric-type moves in gen 6-', () => {
 		battle = common.gen(6).createBattle([[
 			{species: 'Rhydon', ability: 'lightningrod', moves: ['sleeptalk']},
 		], [
@@ -31,7 +31,7 @@ describe('Lightning Rod', function () {
 		assert.statStage(battle.p1.active[0], 'spa', 0);
 	});
 
-	it('should boost Special Attack if the user is already immune to Electric-type moves in gen 7+', function () {
+	it('should boost Special Attack if the user is already immune to Electric-type moves in gen 7+', () => {
 		battle = common.createBattle([[
 			{species: 'Rhydon', ability: 'lightningrod', moves: ['sleeptalk']},
 		], [
@@ -59,7 +59,7 @@ describe('Lightning Rod', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it('should redirect to the fastest Pokemon with the ability', function () {
+	it('should redirect to the fastest Pokemon with the ability', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']},
 			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']},
@@ -74,7 +74,7 @@ describe('Lightning Rod', function () {
 		assert.statStage(slowTric, 'spa', 0);
 	});
 
-	it('should redirect to the Pokemon having the ability longest', function () {
+	it('should redirect to the Pokemon having the ability longest', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Meloetta', ability: 'serenegrace', moves: ['roleplay']},
 			{species: 'Pikachu', ability: 'lightningrod', moves: ['sleeptalk']},
@@ -101,7 +101,7 @@ describe('Lightning Rod', function () {
 		assert.statStage(rodStarts, 'spa', 2);
 	});
 
-	it('should not redirect if another Pokemon has used Follow Me', function () {
+	it('should not redirect if another Pokemon has used Follow Me', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Manectric', ability: 'lightningrod', moves: ['sleeptalk']},
 			{species: 'Manectric', ability: 'static', moves: ['followme']},
@@ -115,7 +115,7 @@ describe('Lightning Rod', function () {
 		assert.false.fullHP(defender);
 	});
 
-	it('should have its Electric-type immunity and its ability to redirect moves suppressed by Mold Breaker', function () {
+	it('should have its Electric-type immunity and its ability to redirect moves suppressed by Mold Breaker', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Manectric', ability: 'lightningrod', moves: ['endure']},
 			{species: 'Manaphy', ability: 'hydration', moves: ['tailglow']},

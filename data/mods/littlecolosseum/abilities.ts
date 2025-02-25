@@ -74,7 +74,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
 					return;
 				}
-				this.add('-item', source, yourItem, '[from] ability: Magic Resistance', '[of] ' + target);
+				this.add('-item', source, yourItem, '[from] ability: Magic Resistance', `[of] ${target}`);
 			}
 		},
 		flags: {breakable: 1},

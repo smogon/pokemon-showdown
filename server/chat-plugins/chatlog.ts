@@ -560,7 +560,7 @@ export abstract class Searcher {
 		}
 		if (nextExists) {
 			buf += `${prevExists ? `` : `<br />`}<a roomid="view-roominfo-${room}--${next}">Next month</a><br />`;
-		}*/
+		} */
 		buf += this.visualizeStats(stats.average);
 		buf += `<hr />`;
 		buf += `<details class="readmore"><summary><strong>Stats by day</strong></summary>`;
@@ -690,7 +690,7 @@ export class FSLogSearcher extends Searcher {
 		results.deadTime = waitIncrements.length ? this.calculateDead(waitIncrements) : 0;
 		results.deadPercent = !results.totalLines ? 100 : (waitIncrements.length / results.totalLines) * 100;
 		results.linesPerUser = (results.totalLines / Object.keys(results.users).length) || 0;
-		results.averagePresent = results.averagePresent / userstatCount;
+		results.averagePresent /= userstatCount;
 
 		// we don't cache the current day's stats because that could be inaccurate, whereas old days will always be the same
 		if (day !== LogReader.today()) {
@@ -862,11 +862,11 @@ export const pages: Chat.PageTable = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let [roomid, date, opts] = Utils.splitFirst(args.join('-'), '--', 2) as
 			[RoomID, string | undefined, string | undefined];
-		if (date) date = date.trim();
 		if (!roomid || roomid.startsWith('-')) {
 			this.title = '[Logs]';
 			return LogViewer.list(user, roomid?.slice(1));
 		}
+		this.title = '[Logs] ' + roomid;
 
 		// permission check
 		const room = Rooms.get(roomid);
@@ -900,25 +900,30 @@ export const pages: Chat.PageTable = {
 		}
 
 		void accessLog.writeLine(`${user.id}: <${roomid}> ${date}`);
-		this.title = '[Logs] ' + roomid;
+
+		if (!date) {
+			return LogViewer.room(roomid);
+		}
+
+		date = date.trim();
 		let search;
 
-		const parsedDate = new Date(date as string);
+		const parsedDate = new Date(date);
 		const validDateStrings = ['all', 'alltime'];
-		const validNonDateTerm = search ? validDateStrings.includes(date!) : date === 'today';
+		const validNonDateTerm = search ? validDateStrings.includes(date) : date === 'today';
 		// this is apparently the best way to tell if a date is invalid
-		if (date && isNaN(parsedDate.getTime()) && !validNonDateTerm) {
+		if (isNaN(parsedDate.getTime()) && !validNonDateTerm) {
 			return this.errorReply(`Invalid date.`);
 		}
 
 		const isTime = opts?.startsWith('time-');
 		if (isTime && opts) opts = toID(opts.slice(5));
 
-		if (date && search) {
+		if (search) {
 			Searcher.checkEnabled();
 			this.checkCan('bypassall');
 			return LogSearcher.runSearch();
-		} else if (date) {
+		} else {
 			if (date === 'today') {
 				this.setHTML(await LogViewer.day(roomid, LogReader.today(), opts));
 				if (isTime) this.send(`|scroll|div[data-server="${opts}"]`);
@@ -928,8 +933,6 @@ export const pages: Chat.PageTable = {
 			} else {
 				return LogViewer.month(roomid, parsedDate.toISOString().slice(0, 7));
 			}
-		} else {
-			return LogViewer.room(roomid);
 		}
 	},
 	roomstats(args, user) {
@@ -1162,7 +1165,6 @@ export const commands: Chat.ChatCommands = {
 		`Requires: % @ ~`,
 	],
 
-
 	gbc: 'getbattlechat',
 	async getbattlechat(target, room, user) {
 		this.checkCan('lock');
@@ -1254,7 +1256,6 @@ export const commands: Chat.ChatCommands = {
 		`If no arguments are given, shows the entire access log.`,
 		`Requires: ~`,
 	],
-
 
 	gcsearch: 'groupchatsearch',
 	async groupchatsearch(target, room, user) {

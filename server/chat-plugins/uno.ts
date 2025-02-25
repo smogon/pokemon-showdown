@@ -52,7 +52,7 @@ function createDeck() {
 
 	for (const color of colors) {
 		basic.push(...values.map(v => {
-			const c: Card = {value: v, color: color, name: `${color} ${v}`};
+			const c: Card = {value: v, color, name: `${color} ${v}`};
 			return c;
 		}));
 	}
@@ -66,7 +66,7 @@ function createDeck() {
 			const c: Card = {color: colors[v], value: '0', name: `${colors[v]} 0`};
 			return c;
 		}),
-		 // Wild cards
+		// Wild cards
 		...[0, 1, 2, 3].map(v => {
 			const c: Card = {color: 'Black', value: 'Wild', name: 'Wild'};
 			return c;
@@ -83,9 +83,9 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 	override readonly gameid = 'uno' as ID;
 	override title = 'UNO';
 	override readonly allowRenames = true;
-	override timer: NodeJS.Timer | null = null;
+	override timer: NodeJS.Timeout | null = null;
 	maxTime = MAX_TIME;
-	autostartTimer: NodeJS.Timer | null = null;
+	autostartTimer: NodeJS.Timeout | null = null;
 	state: 'signups' | 'color' | 'play' | 'uno' = 'signups';
 	currentPlayer: UNOPlayer | null = null;
 	deck: Card[] = Utils.shuffle(createDeck());
@@ -283,7 +283,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 
 	onAwaitUno() {
 		return new Promise<void>(resolve => {
-			if (!this.awaitUnoPlayer) return resolve();
+			if (!this.awaitUnoPlayer) return void resolve();
 
 			this.state = "uno";
 			// the throttle for sending messages is at 600ms for non-authed users,

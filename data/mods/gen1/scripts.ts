@@ -26,7 +26,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	pokemon: {
 		inherit: true,
 		getStat(statName, unmodified) {
-			// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
+			// @ts-expect-error type checking prevents 'hp' from being passed, but we're paranoid
 			if (statName === 'hp') throw new Error("Please read `maxhp` directly");
 			if (unmodified) return this.baseStoredStats[statName];
 			return this.modifiedStats![statName];
@@ -160,8 +160,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			let lockedMove = this.battle.runEvent('LockMove', pokemon);
 			if (lockedMove === true) lockedMove = false;
 			if (
-				(!lockedMove &&
-				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target))
+				!lockedMove &&
+				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)
 			) {
 				pokemon.deductPP(move, null, target);
 			} else {
@@ -293,8 +293,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (sourceEffect) attrs += '|[from]' + this.battle.dex.conditions.get(sourceEffect);
-			this.battle.addMove('move', pokemon, move.name, target + attrs);
+			if (sourceEffect) attrs += `|[from]${this.battle.dex.conditions.get(sourceEffect)}`;
+			this.battle.addMove('move', pokemon, move.name, `${target}${attrs}`);
 
 			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
 				return true;
@@ -323,7 +323,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (target.boosts.atk < 6 && (move.selfdestruct || move.id === 'disable') && target.volatiles['rage']) {
 				this.battle.boost({atk: 1}, target, pokemon, this.dex.conditions.get('rage'));
 				this.battle.hint(`In Gen 1, using ${move.name} causes the target to build Rage, ` +
-				`even if it misses or fails`, true);
+					`even if it misses or fails`, true);
 			}
 
 			// Go ahead with results of the used move.
@@ -394,7 +394,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// If a sleep inducing move is used while the user is recharging, the accuracy is true.
-			if (move.status === 'slp' && target && target.volatiles['mustrecharge']) {
+			if (move.status === 'slp' && target?.volatiles['mustrecharge']) {
 				accuracy = true;
 			}
 

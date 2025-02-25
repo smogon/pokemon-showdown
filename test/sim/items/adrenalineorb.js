@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Adrenaline Orb', function () {
-	afterEach(function () {
+describe('Adrenaline Orb', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should activate even if an Ability stopped Intimidate`, function () {
+	it(`should activate even if an Ability stopped Intimidate`, () => {
 		battle = common.createBattle([[
 			{species: "Mamoswine", ability: 'oblivious', item: 'adrenalineorb', moves: ['sleeptalk']},
 		], [
@@ -20,7 +20,7 @@ describe('Adrenaline Orb', function () {
 		assert.statStage(battle.p1.active[0], 'spe', 1);
 	});
 
-	it(`should activate even if Mist stopped Intimidate`, function () {
+	it(`should activate even if Mist stopped Intimidate`, () => {
 		battle = common.createBattle([[
 			{species: "Wynaut", item: 'adrenalineorb', moves: ['mist']},
 		], [
@@ -33,7 +33,7 @@ describe('Adrenaline Orb', function () {
 		assert.statStage(battle.p1.active[0], 'spe', 1);
 	});
 
-	it(`should not activate if Substitute stopped Intimidate`, function () {
+	it(`should not activate if Substitute stopped Intimidate`, () => {
 		battle = common.createBattle([[
 			{species: "Wynaut", item: 'adrenalineorb', moves: ['substitute']},
 		], [
@@ -46,7 +46,7 @@ describe('Adrenaline Orb', function () {
 		assert.statStage(battle.p1.active[0], 'spe', 0);
 	});
 
-	it(`should not activate if the holder is at -6 Attack`, function () {
+	it(`should not activate if the holder is at -6 Attack`, () => {
 		battle = common.createBattle([[
 			{species: "Dugtrio", item: 'adrenalineorb', moves: ['bellydrum']},
 		], [
@@ -60,7 +60,7 @@ describe('Adrenaline Orb', function () {
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
-	it(`should activate if the holder is at -5 Attack`, function () {
+	it(`should activate if the holder is at -5 Attack`, () => {
 		battle = common.createBattle([[
 			{species: "Dugtrio", item: 'adrenalineorb', moves: ['bellydrum', 'curse', 'splash']},
 		], [
@@ -68,8 +68,8 @@ describe('Adrenaline Orb', function () {
 			{species: "Incineroar", ability: 'intimidate', moves: ['sleeptalk']},
 		]]);
 
-		battle.makeChoices(); //dugtrio +6 atk
-		battle.makeChoices('move splash', 'move topsyturvy'); //dugtrio -6 atk
+		battle.makeChoices(); // dugtrio +6 atk
+		battle.makeChoices('move splash', 'move topsyturvy'); // dugtrio -6 atk
 		battle.makeChoices('move curse', 'move splash'); // dugtrio -5 atk and -1 speed
 		assert.statStage(battle.p1.active[0], 'spe', -1);
 		battle.makeChoices('move splash', 'switch 2'); // now dugtrio is at -6 and should use orb to be back at 0 speed
@@ -77,7 +77,7 @@ describe('Adrenaline Orb', function () {
 		assert.false.holdsItem(battle.p1.active[0]);
 	});
 
-	it(`should not activate if the holder is at +6 Speed`, function () {
+	it(`should not activate if the holder is at +6 Speed`, () => {
 		battle = common.createBattle([[
 			{species: "Dugtrio", item: 'adrenalineorb', ability: 'steamengine', moves: ['sleeptalk']},
 		], [
@@ -90,7 +90,7 @@ describe('Adrenaline Orb', function () {
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
-	it(`should not activate if the Contrary holder is at +6 Attack`, function () {
+	it(`should not activate if the Contrary holder is at +6 Attack`, () => {
 		battle = common.createBattle([[
 			{species: "Dugtrio", item: 'adrenalineorb', ability: 'contrary', moves: ['bellydrum']},
 		], [
@@ -98,14 +98,14 @@ describe('Adrenaline Orb', function () {
 			{species: "Incineroar", ability: 'intimidate', moves: ['sleeptalk']},
 		]]);
 
-		//Set Contrary Belly Drum (-6) and Topsy-Turvy to +6
+		// Set Contrary Belly Drum (-6) and Topsy-Turvy to +6
 		battle.makeChoices();
 		battle.makeChoices();
 		assert.statStage(battle.p1.active[0], 'spe', 0);
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
-	it(`should not activate if the Contrary holder is at -6 Speed`, function () {
+	it(`should not activate if the Contrary holder is at -6 Speed`, () => {
 		battle = common.createBattle([[
 			{species: "Dugtrio", item: 'adrenalineorb', moves: ['sleeptalk']},
 		], [

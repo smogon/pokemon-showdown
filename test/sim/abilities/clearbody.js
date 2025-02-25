@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Clear Body', function () {
-	afterEach(function () {
+describe('Clear Body', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should negate stat drops from opposing effects', function () {
+	it('should negate stat drops from opposing effects', () => {
 		battle = common.createBattle([[
 			{species: 'Tentacruel', ability: 'clearbody', moves: ['recover']},
 		], [
@@ -27,7 +27,7 @@ describe('Clear Body', function () {
 		}
 	});
 
-	it('should not negate stat drops from the user\'s moves', function () {
+	it('should not negate stat drops from the user\'s moves', () => {
 		battle = common.createBattle([[
 			{species: 'Tentacruel', ability: 'clearbody', moves: ['superpower']},
 		], [
@@ -38,7 +38,7 @@ describe('Clear Body', function () {
 		assert.statStage(battle.p1.active[0], 'def', -1);
 	});
 
-	it('should not negate stat boosts from opposing moves', function () {
+	it('should not negate stat boosts from opposing moves', () => {
 		battle = common.createBattle([[
 			{species: 'Tentacruel', ability: 'clearbody', moves: ['shadowsneak']},
 		], [
@@ -48,7 +48,7 @@ describe('Clear Body', function () {
 		assert.statStage(battle.p1.active[0], 'atk', 2);
 	});
 
-	it('should not negate absolute stat changes', function () {
+	it('should not negate absolute stat changes', () => {
 		battle = common.createBattle([[
 			{species: 'Tentacruel', ability: 'clearbody', moves: ['coil']},
 		], [
@@ -60,7 +60,7 @@ describe('Clear Body', function () {
 		assert.statStage(battle.p1.active[0], 'accuracy', -1);
 	});
 
-	it('should be suppressed by Mold Breaker', function () {
+	it('should be suppressed by Mold Breaker', () => {
 		battle = common.createBattle([[
 			{species: 'Tentacruel', ability: 'clearbody', moves: ['recover']},
 		], [
@@ -70,7 +70,7 @@ describe('Clear Body', function () {
 		assert.statStage(battle.p1.active[0], 'atk', -1);
 	});
 
-	it('should be suppressed by Mold Breaker if it is forced out by a move', function () {
+	it('should be suppressed by Mold Breaker if it is forced out by a move', () => {
 		battle = common.createBattle([[
 			{species: 'Metagross', ability: 'clearbody', moves: ['sleeptalk']},
 			{species: 'Metagross', ability: 'clearbody', moves: ['sleeptalk']},
@@ -83,7 +83,7 @@ describe('Clear Body', function () {
 		assert.statStage(battle.p1.active[0], 'spe', -1);
 	});
 
-	it('should not take priority over a stat being at -6', function () {
+	it('should not take priority over a stat being at -6', () => {
 		battle = common.createBattle([[
 			{species: 'Dragapult', ability: 'clearbody', moves: ['bellydrum', 'sleeptalk']},
 		], [

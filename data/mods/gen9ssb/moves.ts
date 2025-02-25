@@ -835,7 +835,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				} else if (chance <= 70) {
 					for (const condition of sideConditions) {
 						if (source.side.removeSideCondition(condition)) {
-							this.add('-sideend', source.side, this.dex.conditions.get(condition).name, '[from] move: Sigil\'s Storm', '[of] ' + source);
+							this.add('-sideend', source.side, this.dex.conditions.get(condition).name, '[from] move: Sigil\'s Storm', `[of] ${source}`);
 						}
 					}
 				} else if (chance <= 80) {
@@ -2444,7 +2444,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Dark",
 	},
 
-
 	// HoeenHero
 	reprogram: {
 		accuracy: 100,
@@ -2470,7 +2469,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			if (source.addVolatile('lockon', target)) {
 				this.add('-message', 'HoeenHero double checked their work and fixed any errors!');
-				this.add('-activate', source, 'move: Lock-On', '[of] ' + target);
+				this.add('-activate', source, 'move: Lock-On', `[of] ${target}`);
 				success = true;
 			}
 			if (success) {
@@ -2732,7 +2731,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.addMove('-anim', target, 'Wish', target);
 			target.clearBoosts();
 			this.add('-clearboost', target);
-			// @ts-ignore set wants a sig but randbats sets don't have one
+			// @ts-expect-error set wants a sig but randbats sets don't have one
 			changeSet(this, target, team[0], true);
 			this.add(`c:|${getName((source.illusion || source).name)}|${msg}`);
 		},
@@ -2933,7 +2932,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						for (const condition of sideConditions) {
 							if (source.side.removeSideCondition(condition)) {
 								success = true;
-								this.add('-sideend', source.side, this.dex.conditions.get(condition).name, '[from] move: , (ac)', '[of] ' + source);
+								this.add('-sideend', source.side, this.dex.conditions.get(condition).name, '[from] move: , (ac)', `[of] ${source}`);
 							}
 						}
 					} else if (effect < 95) {
@@ -3040,9 +3039,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onFieldStart(target, source) {
 				if (source?.hasAbility('persistent')) {
-					this.add('-fieldstart', 'move: Anfield Atmosphere', '[of] ' + source, '[persistent]');
+					this.add('-fieldstart', 'move: Anfield Atmosphere', `[of] ${source}`, '[persistent]');
 				} else {
-					this.add('-fieldstart', 'move: Anfield Atmosphere', '[of] ' + source);
+					this.add('-fieldstart', 'move: Anfield Atmosphere', `[of] ${source}`);
 				}
 				for (const pokemon of this.getAllActive()) {
 					if (pokemon.volatiles['confusion']) {
@@ -3430,7 +3429,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 30,
 		basePowerCallback(pokemon, target, move) {
 			const bp = move.basePower + 20 * pokemon.positiveBoosts();
-			this.debug('BP: ' + bp);
+			this.debug(`BP: ${bp}`);
 			return bp;
 		},
 		category: "Special",
@@ -3754,7 +3753,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 				for (const condition of sideConditions) {
 					if (pokemon.side.removeSideCondition(condition)) {
-						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Time Skip', '[of] ' + pokemon);
+						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Time Skip', `[of] ${pokemon}`);
 					}
 				}
 				// 9 turn addition so the +1 from endTurn totals to 10 turns
@@ -4596,7 +4595,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					if (player.removeSideCondition(targetCondition)) {
 						success = true;
 						if (displayText.includes(targetCondition)) {
-							this.add('-sideend', player, this.dex.conditions.get(targetCondition).name, '[from] move: Magic Trick', '[of] ' + source);
+							this.add('-sideend', player, this.dex.conditions.get(targetCondition).name, '[from] move: Magic Trick', `[of] ${source}`);
 						}
 					}
 				}
@@ -4939,13 +4938,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				for (const targetCondition of removeTarget) {
 					if (targetSide.removeSideCondition(targetCondition)) {
 						if (!removeAll.includes(targetCondition)) continue;
-						this.add('-sideend', targetSide, this.dex.conditions.get(targetCondition).name, '[from] move: Treacherous Traversal', '[of] ' + source);
+						this.add('-sideend', targetSide, this.dex.conditions.get(targetCondition).name, '[from] move: Treacherous Traversal', `[of] ${source}`);
 						success = true;
 					}
 				}
 				for (const sideCondition of removeAll) {
 					if (source.side.removeSideCondition(sideCondition)) {
-						this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Treacherous Traversal', '[of] ' + source);
+						this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Treacherous Traversal', `[of] ${source}`);
 						success = true;
 					}
 				}
@@ -5021,7 +5020,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (source.hp) {
 				const item = target.takeItem();
 				if (item) {
-					this.add('-enditem', target, item.name, '[from] move: Grass Gaming', '[of] ' + source);
+					this.add('-enditem', target, item.name, '[from] move: Grass Gaming', `[of] ${source}`);
 				}
 			}
 		},
@@ -5093,12 +5092,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		onAfterHit(target, pokemon) {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
-				this.add('-end', pokemon, 'Leech Seed', '[from] move: Concept Relevant', '[of] ' + pokemon);
+				this.add('-end', pokemon, 'Leech Seed', '[from] move: Concept Relevant', `[of] ${pokemon}`);
 			}
 			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Concept Relevant', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Concept Relevant', `[of] ${pokemon}`);
 				}
 			}
 			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
@@ -5121,12 +5120,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		onAfterSubDamage(damage, target, pokemon) {
 			if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
-				this.add('-end', pokemon, 'Leech Seed', '[from] move: Concept Relevant', '[of] ' + pokemon);
+				this.add('-end', pokemon, 'Leech Seed', '[from] move: Concept Relevant', `[of] ${pokemon}`);
 			}
 			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			for (const condition of sideConditions) {
 				if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Concept Relevant', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Concept Relevant', `[of] ${pokemon}`);
 				}
 			}
 			if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
@@ -5570,13 +5569,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
-					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Eternal Wish', '[of] ' + source);
+					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Eternal Wish', `[of] ${source}`);
 					success = true;
 				}
 			}
 			for (const sideCondition of removeAll) {
 				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Eternal Wish', '[of] ' + source);
+					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Eternal Wish', `[of] ${source}`);
 					success = true;
 				}
 			}
@@ -5751,7 +5750,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "???",
 	},
 
-
 	// UT
 	myboys: {
 		accuracy: 100,
@@ -5851,13 +5849,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
-					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Your Crippling Interest', '[of] ' + source);
+					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Your Crippling Interest', `[of] ${source}`);
 					success = true;
 				}
 			}
 			for (const sideCondition of removeAll) {
 				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Your Crippling Interest', '[of] ' + source);
+					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Your Crippling Interest', `[of] ${source}`);
 					success = true;
 				}
 			}
@@ -6201,7 +6199,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (!target.hasItem('Miracle Seed')) {
 					const item = target.takeItem();
 					if (item) {
-						this.add('-enditem', target, item.name, '[from] move: top kek', '[of] ' + source);
+						this.add('-enditem', target, item.name, '[from] move: top kek', `[of] ${source}`);
 						target.setItem('Miracle Seed', source, move);
 					}
 				}
@@ -6638,7 +6636,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
+					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect.name, `[of] ${source}`);
 				} else {
 					this.add('-fieldstart', 'move: Misty Terrain');
 				}
@@ -6755,7 +6753,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Psychic Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
+					this.add('-fieldstart', 'move: Psychic Terrain', '[from] ability: ' + effect.name, `[of] ${source}`);
 				} else {
 					this.add('-fieldstart', 'move: Psychic Terrain');
 				}
@@ -6777,7 +6775,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return null;
 			}
 			if (source.hasAbility(['insomnia', 'vitalspirit'])) {
-				this.add('-fail', source, '[from] ability: ' + source.getAbility().name, '[of] ' + source);
+				this.add('-fail', source, '[from] ability: ' + source.getAbility().name, `[of] ${source}`);
 				return null;
 			}
 		},
@@ -6940,7 +6938,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				move.basePower *= 2;
 				break;
 			}
-			this.debug('BP: ' + move.basePower);
+			this.debug(`BP: ${move.basePower}`);
 		},
 	},
 	wildboltstorm: {

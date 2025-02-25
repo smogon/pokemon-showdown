@@ -2,8 +2,8 @@
 
 const assert = require('../../assert');
 
-describe('Team Validator', function () {
-	it("should allow Shedinja to take exactly one level-up move from Ninjask in gen 3-4", function () {
+describe('Team Validator', () => {
+	it("should allow Shedinja to take exactly one level-up move from Ninjask in gen 3-4", () => {
 		let team = [
 			{species: 'shedinja', ability: 'wonderguard', moves: ['silverwind', 'swordsdance'], evs: {hp: 1}},
 		];
@@ -29,7 +29,7 @@ describe('Team Validator', function () {
 		assert.legalTeam(team, 'gen1ou');
 	});
 
-	it('should correctly enforce per-game evolution restrictions', function () {
+	it('should correctly enforce per-game evolution restrictions', () => {
 		let team = [
 			{species: 'raichualola', ability: 'surgesurfer', moves: ['doublekick'], evs: {hp: 1}},
 		];
@@ -52,7 +52,7 @@ describe('Team Validator', function () {
 		assert.legalTeam(team, 'gen9anythinggoes@@@minsourcegen=9');
 	});
 
-	it('should prevent Pokemon that don\'t evolve via level-up and evolve from a Pokemon that does evolve via level-up from being underleveled.', function () {
+	it('should prevent Pokemon that don\'t evolve via level-up and evolve from a Pokemon that does evolve via level-up from being underleveled.', () => {
 		const team = [
 			{species: 'nidoking', level: 1, ability: 'sheerforce', moves: ['earthpower'], evs: {hp: 1}},
 			{species: 'mamoswine', level: 1, ability: 'oblivious', moves: ['earthquake'], evs: {hp: 1}},
@@ -91,14 +91,14 @@ describe('Team Validator', function () {
 		assert.legalTeam(team, 'gen1ou');
 	});
 
-	it('should correctly enforce Shell Smash as a sketched move for Necturna prior to Gen 9', function () {
+	it('should correctly enforce Shell Smash as a sketched move for Necturna prior to Gen 9', () => {
 		const team = [
 			{species: 'necturna', ability: 'forewarn', moves: ['shellsmash', 'vcreate'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen8cap');
 	});
 
-	it("should prevent Pokemon from having a Gen 3 tutor move and a Gen 4 ability together without evolving", function () {
+	it("should prevent Pokemon from having a Gen 3 tutor move and a Gen 4 ability together without evolving", () => {
 		let team = [
 			{species: 'hitmonchan', ability: 'ironfist', moves: ['dynamicpunch'], evs: {hp: 1}},
 		];
@@ -112,8 +112,8 @@ describe('Team Validator', function () {
 	});
 
 	// Based on research by Anubis: https://www.smogon.com/forums/posts/9713378
-	describe(`Hackmons formes`, function () {
-		it(`should reject battle-only formes in Gen 9, even in Hackmons`, function () {
+	describe(`Hackmons formes`, () => {
+		it(`should reject battle-only formes in Gen 9, even in Hackmons`, () => {
 			const team = [
 				{species: 'palafinhero', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
 				{species: 'zamazentacrowned', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
@@ -121,7 +121,7 @@ describe('Team Validator', function () {
 			assert.false.legalTeam(team, 'gen9purehackmons');
 		});
 
-		it(`should also reject battle-only dexited formes in Gen 9 Hackmons`, function () {
+		it(`should also reject battle-only dexited formes in Gen 9 Hackmons`, () => {
 			const team = [
 				{species: 'zygardecomplete', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
 				{species: 'darmanitangalarzen', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
@@ -130,14 +130,14 @@ describe('Team Validator', function () {
 			assert.false.legalTeam(team, 'gen9purehackmons');
 		});
 
-		it(`should not allow Xerneas with a hacked Ability in Gen 9 Hackmons`, function () {
+		it(`should not allow Xerneas with a hacked Ability in Gen 9 Hackmons`, () => {
 			const team = [
 				{species: 'xerneasneutral', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
 			];
 			assert.false.legalTeam(team, 'gen9purehackmons');
 		});
 
-		it(`should allow various other hacked formes in Gen 9 Hackmons`, function () {
+		it(`should allow various other hacked formes in Gen 9 Hackmons`, () => {
 			const team = [
 				{species: 'giratinaorigin', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
 				{species: 'calyrexshadow', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
@@ -149,7 +149,7 @@ describe('Team Validator', function () {
 			assert.legalTeam(team, 'gen9purehackmons');
 		});
 
-		it(`should not allow old gen-exclusive formes in Gen 9 Hackmons`, function () {
+		it(`should not allow old gen-exclusive formes in Gen 9 Hackmons`, () => {
 			let team = [
 				{species: 'pikachucosplay', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
 			];
@@ -166,14 +166,14 @@ describe('Team Validator', function () {
 			assert.false.legalTeam(team, 'gen9purehackmons');
 		});
 
-		it(`should not allow CAP Pokemon in Gen 9 Hackmons`, function () {
+		it(`should not allow CAP Pokemon in Gen 9 Hackmons`, () => {
 			const team = [
 				{species: 'hemogoblin', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
 			];
 			assert.false.legalTeam(team, 'gen9purehackmons');
 		});
 
-		it(`should allow battle-only formes in Hackmons before Gen 9`, function () {
+		it(`should allow battle-only formes in Hackmons before Gen 9`, () => {
 			const team = [
 				{species: 'zamazentacrowned', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
 				{species: 'zygardecomplete', ability: 'steadfast', moves: ['watergun'], evs: {hp: 1}},
@@ -182,7 +182,7 @@ describe('Team Validator', function () {
 		});
 	});
 
-	it('should allow various (underleveled) from Pokemon GO', function () {
+	it('should allow various (underleveled) from Pokemon GO', () => {
 		const team = [
 			{species: 'mewtwo', level: 20, ability: 'pressure', moves: ['agility'], evs: {hp: 1}, ivs: {hp: 1, atk: 1, def: 1, spa: 1, spd: 1}},
 			{species: 'donphan', level: 1, ability: 'sturdy', moves: ['endeavor']},
@@ -194,14 +194,14 @@ describe('Team Validator', function () {
 		assert.legalTeam(team, 'gen9ubers');
 	});
 
-	it('should disallow Pokemon from Pokemon GO knowing incompatible moves', function () {
+	it('should disallow Pokemon from Pokemon GO knowing incompatible moves', () => {
 		const team = [
 			{species: 'mew', shiny: true, level: 15, ability: 'synchronize', moves: ['aircutter'], evs: {hp: 1}, ivs: {hp: 21, atk: 31, def: 21, spa: 21, spd: 31, spe: 0}},
 		];
 		assert.false.legalTeam(team, 'gen8ou');
 	});
 
-	it('should check for legal combinations of prevo/evo-exclusive moves', function () {
+	it('should check for legal combinations of prevo/evo-exclusive moves', () => {
 		let team = [
 			{species: 'slowking', ability: 'oblivious', moves: ['counter', 'slackoff'], evs: {hp: 1}},
 		];

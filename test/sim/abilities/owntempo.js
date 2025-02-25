@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Own Tempo', function () {
-	afterEach(function () {
+describe('Own Tempo', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should block Intimidate', function () {
+	it('should block Intimidate', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Gyarados', ability: 'intimidate', moves: ['splash']}]});
 		battle.setPlayer('p2', {team: [{species: 'Smeargle', ability: 'own tempo', item: 'adrenaline orb', moves: ['sleeptalk']}]});

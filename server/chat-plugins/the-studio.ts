@@ -7,7 +7,7 @@
  */
 
 import {FS, Net, Utils} from '../../lib';
-import {YouTube, VideoData} from './youtube';
+import {YouTube, type VideoData} from './youtube';
 
 const LASTFM_DB = 'config/chat-plugins/lastfm.json';
 const RECOMMENDATIONS = 'config/chat-plugins/the-studio.json';
@@ -321,8 +321,9 @@ class RecommendationsInterface {
 		let buf = ``;
 		buf += `<div style="color:#000;background:linear-gradient(rgba(210,210,210),rgba(225,225,225))">`;
 		buf += `<table style="margin:auto;background:rgba(255,255,255,0.25);padding:3px;"><tbody><tr>`;
-		if (rec.videoInfo === undefined) {
-			rec.videoInfo = await YouTube.getVideoData(rec.videoInfo);
+		if (!rec.videoInfo) {
+			// eslint-disable-next-line require-atomic-updates
+			rec.videoInfo = await YouTube.getVideoData(YouTube.getId(rec.url));
 			saveRecommendations();
 		}
 		if (rec.videoInfo) {
@@ -510,7 +511,8 @@ export const commands: Chat.ChatCommands = {
 
 	delrec: 'removerecommendation',
 	removerecommendation(target, room, user) {
-		room = this.requireRoom('thestudio' as RoomID);		const [artist, title] = target.split(`|`).map(x => x.trim());
+		room = this.requireRoom('thestudio' as RoomID);
+		const [artist, title] = target.split(`|`).map(x => x.trim());
 		if (!(artist && title)) return this.parse(`/help removerecommendation`);
 		const rec = Recs.get(artist, title);
 		if (!rec) throw new Chat.ErrorMessage(`Recommendation not found.`);

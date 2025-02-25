@@ -140,8 +140,7 @@ export interface MoveEventMethods {
 	onTry?: CommonHandlers['ResultSourceMove'];
 	onTryHit?: CommonHandlers['ExtResultSourceMove'];
 	onTryHitField?: CommonHandlers['ResultMove'];
-	onTryHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean |
-	 null | "" | void;
+	onTryHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void;
 	onTryImmunity?: CommonHandlers['ResultMove'];
 	onTryMove?: CommonHandlers['ResultSourceMove'];
 	onUseMoveMessage?: CommonHandlers['VoidSourceMove'];
@@ -403,19 +402,19 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/**
 	 * Pokemon for the attack stat. Ability and Item damage modifiers still come from the real attacker.
 	 */
-	 readonly overrideOffensivePokemon?: 'target' | 'source';
+	readonly overrideOffensivePokemon?: 'target' | 'source';
 	/**
 	 * Physical moves use attack stat modifiers, special moves use special attack stat modifiers.
 	 */
-	 readonly overrideOffensiveStat?: StatIDExceptHP;
+	readonly overrideOffensiveStat?: StatIDExceptHP;
 	/**
 	 * Pokemon for the defense stat. Ability and Item damage modifiers still come from the real defender.
 	 */
-	 readonly overrideDefensivePokemon?: 'target' | 'source';
+	readonly overrideDefensivePokemon?: 'target' | 'source';
 	/**
 	 * uses modifiers that match the new stat
 	 */
-	 readonly overrideDefensiveStat?: StatIDExceptHP;
+	readonly overrideDefensiveStat?: StatIDExceptHP;
 	/** Whether or not this move ignores negative attack boosts. */
 	readonly ignoreNegativeOffensive: boolean;
 	/** Whether or not this move ignores positive defense boosts. */
@@ -505,7 +504,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.ignoreDefensive = !!data.ignoreDefensive;
 		this.ignoreImmunity = (data.ignoreImmunity !== undefined ? data.ignoreImmunity : this.category === 'Status');
 		this.pp = Number(data.pp);
-		this.noPPBoosts = !!data.noPPBoosts;
+		this.noPPBoosts = !!(data.noPPBoosts ?? data.isZ);
 		this.isZ = data.isZ || false;
 		this.isMax = data.isMax || false;
 		this.flags = data.flags || {};
@@ -660,9 +659,10 @@ export class DexMoves {
 				const parentMod = this.dex.mod(this.dex.parentMod);
 				if (moveData === parentMod.data.Moves[id]) {
 					const parentMove = parentMod.moves.getByID(id);
-					if (move.isNonstandard === parentMove.isNonstandard &&
-					    move.desc === parentMove.desc &&
-					    move.shortDesc === parentMove.shortDesc) {
+					if (
+						move.isNonstandard === parentMove.isNonstandard &&
+						move.desc === parentMove.desc && move.shortDesc === parentMove.shortDesc
+					) {
 						move = parentMove;
 					}
 				}

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Costar', function () {
-	afterEach(function () {
+describe('Costar', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should copy the teammate\'s crit ratio on activation', function () {
+	it('should copy the teammate\'s crit ratio on activation', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Smeargle', level: 1, moves: ['sleeptalk', 'focusenergy']},
@@ -34,7 +34,7 @@ describe('Costar', function () {
 		assert(!flamigo.volatiles['focusenergy'], "Costar should copy having no volatile crit modifiers when re-activated.");
 	});
 
-	it('should copy both positive and negative stat changes', function () {
+	it('should copy both positive and negative stat changes', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Suicune', level: 1, moves: ['sleeptalk']},
@@ -45,7 +45,6 @@ describe('Costar', function () {
 			{species: 'Suicune', level: 1, moves: ['sleeptalk']},
 			{species: 'Suicune', level: 1, moves: ['sleeptalk']},
 		]});
-
 
 		battle.makeChoices('move sleeptalk, move shellsmash', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices('switch flamigo, move sleeptalk', 'move sleeptalk, move sleeptalk');
@@ -58,7 +57,7 @@ describe('Costar', function () {
 		assert.statStage(flamigo, 'spd', -1, "A pokemon should copy the target's negative stat changes (spd) when switching in with Costar.");
 	});
 
-	it('should always activate later than Intimidate during simultaneous switch-ins', function () {
+	it('should always activate later than Intimidate during simultaneous switch-ins', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'flamigo', ability: 'costar', moves: ['sleeptalk']},
 			{species: 'registeel', ability: 'clearbody', moves: ['sleeptalk']},
@@ -71,4 +70,3 @@ describe('Costar', function () {
 		assert.statStage(flamigo, 'evasion', 0);
 	});
 });
-

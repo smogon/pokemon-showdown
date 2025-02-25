@@ -5,6 +5,7 @@
 import {QueryProcessManager} from './process-manager';
 import type * as sqlite from 'better-sqlite3';
 import {FS} from './fs';
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore in case not installed
 import type {SQLStatement} from 'sql-template-strings';
 
@@ -453,7 +454,7 @@ export const SQL = Object.assign(getSQL, {
 	})() as typeof import('sql-template-strings').SQL,
 });
 
-export namespace SQL {
+export declare namespace SQL {
 	export type DatabaseManager = import('./sql').SQLDatabaseManager;
 	export type Statement = import('./sql').Statement;
 	export type Options = import('./sql').SQLOptions;

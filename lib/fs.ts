@@ -35,7 +35,7 @@ interface PendingUpdate {
 	pendingDataFetcher: (() => string | Buffer) | null;
 	pendingOptions: AnyObject | null;
 	throttleTime: number; // throttling until time (0 for no throttle)
-	throttleTimer: NodeJS.Timer | null;
+	throttleTimer: NodeJS.Timeout | null;
 }
 
 declare const __fsState: {pendingUpdates: Map<string, PendingUpdate>};
@@ -313,21 +313,16 @@ export class FSPath {
 
 	createWriteStream(options = {}): WriteStream {
 		if (global.Config?.nofswriting) {
-			// @ts-ignore
 			return new WriteStream({write() {}});
 		}
-		// @ts-ignore
 		return new WriteStream(fs.createWriteStream(this.path, options));
 	}
 
-	createAppendStream(options = {}): WriteStream {
+	createAppendStream(options: AnyObject = {}): WriteStream {
 		if (global.Config?.nofswriting) {
-			// @ts-ignore
 			return new WriteStream({write() {}});
 		}
-		// @ts-ignore
 		options.flags = options.flags || 'a';
-		// @ts-ignore
 		return new WriteStream(fs.createWriteStream(this.path, options));
 	}
 
@@ -487,7 +482,7 @@ class FileReadStream extends ReadStream {
 
 	_read(size = 16384): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
-			if (this.atEOF) return resolve();
+			if (this.atEOF) return void resolve();
 			this.ensureCapacity(size);
 			void this.fd.then(fd => {
 				fs.read(fd, this.buf, this.bufEnd, size, null, (err, bytesRead, buf) => {

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Magnetic Flux', function () {
-	afterEach(function () {
+describe('Magnetic Flux', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should boost the Defense and Special Defense of all active allies with Plus or Minus', function () {
+	it('should boost the Defense and Special Defense of all active allies with Plus or Minus', () => {
 		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: "Minun", ability: 'minus', moves: ['sleeptalk']},

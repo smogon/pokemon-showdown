@@ -5,8 +5,8 @@
  */
 
 import {Utils} from "../../lib";
-import {AddressRange} from "../ip-tools";
-import {GlobalPermission} from "../user-groups";
+import type {AddressRange} from "../ip-tools";
+import type {GlobalPermission} from "../user-groups";
 
 const HOST_SUFFIXES = ['res', 'proxy', 'mobile'];
 const SUFFIX_ALIASES: {[k: string]: string} = {

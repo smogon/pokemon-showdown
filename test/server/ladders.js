@@ -5,7 +5,7 @@ const assert = require('assert').strict;
 global.Ladders = require('../../dist/server/ladders').Ladders;
 const {makeUser} = require('../users-utils');
 
-describe('Matchmaker', function () {
+describe('Matchmaker', () => {
 	const FORMATID = 'gen7ou';
 	const addSearch = (player, rating = 1000, formatid = FORMATID) => {
 		const search = new Ladders.BattleReady(player.id, formatid, player.battleSettings, rating);
@@ -19,7 +19,7 @@ describe('Matchmaker', function () {
 		return null;
 	};
 
-	before(function () {
+	before(() => {
 		clearInterval(Ladders.periodicMatchInterval);
 		Ladders.periodicMatchInterval = null;
 	});
@@ -108,7 +108,7 @@ describe('Matchmaker', function () {
 		assert.equal(Ladders.searches.get(FORMATID).searches.size, 0);
 	});
 
-	describe('#startBattle', function () {
+	describe('#startBattle', () => {
 		beforeEach(function () {
 			this.s1 = addSearch(this.p1);
 			this.s2 = addSearch(this.p2);

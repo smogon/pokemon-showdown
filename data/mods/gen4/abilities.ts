@@ -191,7 +191,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart(pokemon) {
 			const target = pokemon.side.randomFoe();
 			if (target?.item && !target.itemState.knockedOff) {
-				this.add('-item', '', target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon);
+				this.add('-item', '', target.getItem().name, '[from] ability: Frisk', `[of] ${pokemon}`);
 			}
 		},
 	},
@@ -247,7 +247,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onSetStatus(status, target, source, effect) {
 			if (effect && effect.id === 'rest') {
-				return;
+				// do nothing
 			} else if (this.field.isWeather('sunnyday')) {
 				return false;
 			}
@@ -261,7 +261,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	liquidooze: {
 		inherit: true,
 		onSourceTryHeal(damage, target, source, effect) {
-			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
+			this.debug(`Heal is occurring: ${target} <- ${source} :: ${effect.id}`);
 			const canOoze = ['drain', 'leechseed'];
 			if (canOoze.includes(effect.id) && this.activeMove?.id !== 'dreameater') {
 				this.damage(damage, null, null, null, true);
@@ -535,7 +535,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return;
 			}
 			if (pokemon.setAbility(ability)) {
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
 			}
 		},
 		flags: {notrace: 1},

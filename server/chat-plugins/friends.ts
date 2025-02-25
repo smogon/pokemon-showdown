@@ -629,7 +629,7 @@ export const pages: Chat.PageTable = {
 					.filter(id => {
 						const battle = Rooms.get(id)?.battle;
 						return (
-							battle && battle.playerTable[friend.id] &&
+							battle?.playerTable[friend.id] &&
 							(!battle.roomid.endsWith('pw') || friend.settings.displayBattlesToFriends)
 						);
 					})

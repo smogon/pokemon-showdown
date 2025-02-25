@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Poison Touch`, function () {
-	afterEach(function () {
+describe(`Poison Touch`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should poison targets if the user damages the target with a contact move`, function () {
+	it(`should poison targets if the user damages the target with a contact move`, () => {
 		battle = common.createBattle({forceRandomChance: true}, [[
 			{species: 'Wynaut', ability: 'poisontouch', moves: ['falseswipe']},
 		], [
@@ -21,7 +21,7 @@ describe(`Poison Touch`, function () {
 		assert.equal(battle.p2.active[0].status, 'psn', `Shuckle should be poisoned`);
 	});
 
-	it(`should not poison targets behind a Substitute or holding Covert Cloak`, function () {
+	it(`should not poison targets behind a Substitute or holding Covert Cloak`, () => {
 		battle = common.createBattle({forceRandomChance: true}, [[
 			{species: 'Wynaut', ability: 'poisontouch', moves: ['falseswipe']},
 		], [
@@ -35,7 +35,7 @@ describe(`Poison Touch`, function () {
 		assert.equal(battle.p2.active[0].status, '', `Regirock should not be poisoned`);
 	});
 
-	it(`should poison independently of and after regular secondary status effects`, function () {
+	it(`should poison independently of and after regular secondary status effects`, () => {
 		battle = common.createBattle({forceRandomChance: true}, [[
 			{species: 'Wynaut', ability: 'poisontouch', moves: ['nuzzle']},
 		], [
@@ -47,7 +47,7 @@ describe(`Poison Touch`, function () {
 		assert.false.holdsItem(shuckle);
 	});
 
-	it(`should poison before Mummy takes over the user's Ability`, function () {
+	it(`should poison before Mummy takes over the user's Ability`, () => {
 		battle = common.createBattle({forceRandomChance: true}, [[
 			{species: 'Wynaut', ability: 'poisontouch', moves: ['falseswipe']},
 		], [
@@ -58,7 +58,7 @@ describe(`Poison Touch`, function () {
 		assert.equal(battle.p2.active[0].status, 'psn');
 	});
 
-	it(`should not poison itself with contact moves that aren't hitting other Pokemon`, function () {
+	it(`should not poison itself with contact moves that aren't hitting other Pokemon`, () => {
 		battle = common.createBattle({forceRandomChance: true}, [[
 			{species: 'Wynaut', ability: 'poisontouch', moves: ['bide']},
 		], [
@@ -71,7 +71,7 @@ describe(`Poison Touch`, function () {
 		assert.equal(battle.p1.active[0].status, '');
 	});
 
-	it(`should not have a 60% chance to poison if Pledge Rainbow is active`, function () {
+	it(`should not have a 60% chance to poison if Pledge Rainbow is active`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wynaut', ability: 'poisontouch', moves: ['falseswipe', 'waterpledge']},
 			{species: 'wobbuffet', moves: ['sleeptalk', 'firepledge']},
@@ -80,7 +80,7 @@ describe(`Poison Touch`, function () {
 			{species: 'feebas', moves: ['sleeptalk']},
 		]]);
 
-		battle.onEvent('ModifyMove', battle.format, -99, function (move) {
+		battle.onEvent('ModifyMove', battle.format, -99, move => {
 			if (move.id === 'falseswipe') {
 				// If False Swipe had a psn secondary, it would have a 60% chance to activate
 				assert.equal(move.secondaries, null);

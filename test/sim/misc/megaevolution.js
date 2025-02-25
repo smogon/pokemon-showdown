@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Mega Evolution', function () {
-	afterEach(function () {
+describe('Mega Evolution', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should overwrite normally immutable abilities', function () {
+	it('should overwrite normally immutable abilities', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: "Metagross", ability: 'comatose', item: 'metagrossite', moves: ['metalclaw']},
@@ -23,7 +23,7 @@ describe('Mega Evolution', function () {
 		assert.equal(megaMon.ability, 'toughclaws');
 	});
 
-	it('[Hackmons] should be able to override different formes but not same forme', function () {
+	it('[Hackmons] should be able to override different formes but not same forme', () => {
 		battle = common.createBattle([[
 			{species: "Charizard-Mega-Y", item: 'charizarditex', moves: ['protect']},
 		], [
@@ -37,7 +37,7 @@ describe('Mega Evolution', function () {
 		assert.equal(battle.p1.active[0].species.name, 'Charizard-Mega-X');
 	});
 
-	it('should happen once', function () {
+	it('should happen once', () => {
 		battle = common.gen(7).createBattle([[
 			{species: "Rayquaza", moves: ['dragondance', 'dragonascent']},
 		], [
@@ -49,7 +49,7 @@ describe('Mega Evolution', function () {
 		});
 	});
 
-	it('should modify speed/priority in gen 7+', function () {
+	it('should modify speed/priority in gen 7+', () => {
 		battle = common.createBattle([[
 			{species: 'Metagross', ability: 'prankster', item: 'metagrossite', moves: ['taunt']},
 		], [
@@ -101,7 +101,7 @@ describe('Mega Evolution', function () {
 		assert.equal(megaMon.status, '');
 	});
 
-	it('should not break priority', function () {
+	it('should not break priority', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: "Metagross", ability: 'quickfeet', item: 'metagrossite', moves: ['protect']},

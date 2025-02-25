@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Weakness Policy', function () {
-	afterEach(function () {
+describe('Weakness Policy', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should be triggered by super effective hits', function () {
+	it('should be triggered by super effective hits', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: "Lucario", ability: 'justified', moves: ['aurasphere']},
@@ -25,7 +25,7 @@ describe('Weakness Policy', function () {
 		assert.statStage(holder, 'spa', 2);
 	});
 
-	it('should respect individual type effectivenesses in doubles', function () {
+	it('should respect individual type effectivenesses in doubles', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: "Stunfisk", ability: 'limber', moves: ['earthquake', 'surf', 'discharge']},
@@ -79,7 +79,7 @@ describe('Weakness Policy', function () {
 		assert.statStage(volc, 'spa', 2);
 	});
 
-	it('should not be triggered by fixed damage moves', function () {
+	it('should not be triggered by fixed damage moves', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: "Lucario", ability: 'justified', moves: ['seismictoss']},
@@ -94,7 +94,7 @@ describe('Weakness Policy', function () {
 		assert.statStage(holder, 'spa', 0);
 	});
 
-	it(`should trigger before forced switching moves`, function () {
+	it(`should trigger before forced switching moves`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'compoundeyes', moves: ['dragontail']},
 		], [

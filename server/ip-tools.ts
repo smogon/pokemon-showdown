@@ -157,7 +157,7 @@ export const IPTools = new class {
 	isValidRange(range: string): boolean {
 		return IPTools.stringToRange(range) !== null;
 	}
-	stringToRange(range: string | null): AddressRange | null {
+	stringToRange(this: void, range: string | null): AddressRange | null {
 		if (!range) return null;
 		if (range.endsWith('*')) {
 			const parts = range.replace('.*', '').split('.');

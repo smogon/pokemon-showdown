@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Pledge moves', function () {
-	afterEach(function () {
+describe('Pledge moves', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should work`, function () {
+	it(`should work`, () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Ninjask', ability: 'noability', moves: ['waterpledge']},

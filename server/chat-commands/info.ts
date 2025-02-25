@@ -541,7 +541,7 @@ export const commands: Chat.ChatCommands = {
 			this.errorReply(`This command must be broadcast:`);
 			return this.parse(`/help checkchallenges`);
 		}
-		if (!target || !target.includes(',')) return this.parse(`/help checkchallenges`);
+		if (!target?.includes(',')) return this.parse(`/help checkchallenges`);
 		const {targetUser: user1, rest} = this.requireUser(target);
 		const {targetUser: user2, rest: rest2} = this.requireUser(rest);
 		if (user1 === user2 || rest2) return this.parse(`/help checkchallenges`);
@@ -602,7 +602,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		const newTargets = dex.dataSearch(target);
 		const showDetails = (cmd.startsWith('dt') || cmd === 'details');
-		if (!newTargets || !newTargets.length) {
+		if (!newTargets?.length) {
 			return this.errorReply(`No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
 		}
 
@@ -1118,7 +1118,7 @@ export const commands: Chat.ChatCommands = {
 					totalTypeMod += typeof moveMod === 'number' ? moveMod : baseMod;
 				}
 			}
-			factor = Math.pow(2, totalTypeMod);
+			factor = 2 ** totalTypeMod;
 		}
 
 		const hasThousandArrows = source.id === 'thousandarrows' && defender.types.includes('Flying');
@@ -1205,7 +1205,7 @@ export const commands: Chat.ChatCommands = {
 				bestCoverage[type] = 0;
 				continue;
 			}
-			bestCoverage[type] = Math.pow(2, bestCoverage[type]);
+			bestCoverage[type] = 2 ** bestCoverage[type];
 		}
 
 		if (!dispTable) {
@@ -1281,7 +1281,7 @@ export const commands: Chat.ChatCommands = {
 						if (bestEff === -5) {
 							bestEff = 0;
 						} else {
-							bestEff = Math.pow(2, bestEff);
+							bestEff = 2 ** bestEff;
 						}
 					}
 					if (bestEff === 0) {
@@ -1552,7 +1552,7 @@ export const commands: Chat.ChatCommands = {
 				if (ev < 0) iv += ev;
 				ev *= 4;
 				if (iv < 0 || ev > 255) {
-					return this.sendReplyBox('No valid EV/IV combination possible with given parameters. Maybe try a different nature?' + ev);
+					return this.sendReplyBox(`No valid EV/IV combination possible with given parameters. Maybe try a different nature?${ev}`);
 				}
 			} else {
 				return this.sendReplyBox('Too many parameters given; nothing to calculate.');
@@ -1592,13 +1592,13 @@ export const commands: Chat.ChatCommands = {
 		let uptimeText;
 		if (uptime > 24 * 60 * 60) {
 			const uptimeDays = Math.floor(uptime / (24 * 60 * 60));
-			uptimeText = uptimeDays + " " + (uptimeDays === 1 ? "day" : "days");
+			uptimeText = `${uptimeDays} ${uptimeDays === 1 ? "day" : "days"}`;
 			const uptimeHours = Math.floor(uptime / (60 * 60)) - uptimeDays * 24;
-			if (uptimeHours) uptimeText += ", " + uptimeHours + " " + (uptimeHours === 1 ? "hour" : "hours");
+			if (uptimeHours) uptimeText += `, ${uptimeHours} ${uptimeHours === 1 ? "hour" : "hours"}`;
 		} else {
 			uptimeText = Chat.toDurationString(uptime * 1000);
 		}
-		this.sendReplyBox("Uptime: <b>" + uptimeText + "</b>");
+		this.sendReplyBox(`Uptime: <b>${uptimeText}</b>`);
 	},
 	uptimehelp: [`/uptime - Shows how long the server has been online for.`],
 
@@ -1674,8 +1674,8 @@ export const commands: Chat.ChatCommands = {
 		const indefinitePunishments = [
 			this.tr`<strong>Indefinite global punishments</strong>:`,
 			this.tr`<strong>permalock</strong> - Issued for repeated instances of bad behavior and is rarely the result of a single action. ` +
-				this.tr`These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>` +
-				this.tr` forum after at least 3 months without incident.`,
+			this.tr`These can be appealed in the <a href="https://www.smogon.com/forums/threads/discipline-appeal-rules.3583479/">Discipline Appeal</a>` +
+			this.tr` forum after at least 3 months without incident.`,
 			this.tr`<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.`,
 		];
 
@@ -2499,7 +2499,7 @@ export const commands: Chat.ChatCommands = {
 		let maxRoll = 0;
 		let minRoll = Number.MAX_SAFE_INTEGER;
 
-		const trackRolls = diceQuantity * (('' + diceFaces).length + 1) <= 60;
+		const trackRolls = diceQuantity * (`${diceFaces}`.length + 1) <= 60;
 		const rolls = [];
 		let rollSum = 0;
 
@@ -2544,7 +2544,7 @@ export const commands: Chat.ChatCommands = {
 	pr: 'pickrandom',
 	pick: 'pickrandom',
 	pickrandom(target, room, user) {
-		if (!target || !target.includes(',')) return this.parse('/help pick');
+		if (!target?.includes(',')) return this.parse('/help pick');
 		if (!this.runBroadcast(true)) return false;
 		if (this.broadcasting) {
 			[, target] = Utils.splitFirst(this.message, ' ');
@@ -2600,9 +2600,9 @@ export const commands: Chat.ChatCommands = {
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
 		room.pendingApprovals.set(user.id, {
 			name: user.name,
-			link: link,
-			comment: comment,
-			dimensions: dimensions,
+			link,
+			comment,
+			dimensions,
 		});
 		this.sendReply(`You have requested to show the link: ${link}${comment ? ` (with the comment ${comment})` : ''}.`);
 		const message = `|tempnotify|pendingapprovals|Pending media request!` +
@@ -3321,7 +3321,7 @@ export const pages: Chat.PageTable = {
 		return buf;
 	},
 	approvals(args) {
-		const room = Rooms.get(args[0]) as ChatRoom | GameRoom;
+		const room = Rooms.get(args[0])!;
 		this.checkCan('mute', null, room);
 		if (!room.pendingApprovals) room.pendingApprovals = new Map();
 		if (room.pendingApprovals.size < 1) return `<h2>No pending approvals on ${room.title}</h2>`;

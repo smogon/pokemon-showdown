@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Simple', function () {
-	afterEach(function () {
+describe('Simple', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should double all stat boosts', function () {
+	it('should double all stat boosts', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Bibarel", ability: 'simple', moves: ['curse']}]});
 		battle.setPlayer('p2', {team: [{species: "Gyarados", ability: 'moxie', moves: ['splash']}]});
@@ -22,12 +22,12 @@ describe('Simple', function () {
 	});
 });
 
-describe('Simple [Gen 4]', function () {
-	afterEach(function () {
+describe('Simple [Gen 4]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should double the effect of stat boosts', function () {
+	it('should double the effect of stat boosts', () => {
 		battle = common.gen(4).createBattle([
 			[{species: "Bibarel", ability: 'simple', moves: ['defensecurl']}],
 			[{species: "Gyarados", ability: 'moxie', moves: ['splash']}],
@@ -37,7 +37,7 @@ describe('Simple [Gen 4]', function () {
 		assert.statStage(target, 'def', 1);
 	});
 
-	it('should double the effect of stat boosts passed by Baton Pass', function () {
+	it('should double the effect of stat boosts passed by Baton Pass', () => {
 		battle = common.gen(4).createBattle([
 			[{species: "Sableye", ability: 'prankster', moves: ['batonpass']}, {species: "Bibarel", ability: 'simple', moves: ['protect']}],
 			[{species: "Gyarados", ability: 'intimidate', moves: ['splash']}],
@@ -48,7 +48,7 @@ describe('Simple [Gen 4]', function () {
 		assert.equal(battle.p1.active[0].getStat('atk'), Math.floor(0.5 * battle.p1.active[0].getStat('atk', true)));
 	});
 
-	it('should be suppressed by Mold Breaker', function () {
+	it('should be suppressed by Mold Breaker', () => {
 		battle = common.gen(4).createBattle([
 			[{species: "Bibarel", ability: 'simple', moves: ['defensecurl']}],
 			[{species: "Haxorus", ability: 'moldbreaker', item: 'laggingtail', moves: ['earthquake']}],

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Imprison', function () {
-	afterEach(function () {
+describe('Imprison', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should prevent foes from using moves that the user knows`, function () {
+	it(`should prevent foes from using moves that the user knows`, () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Abra', ability: 'prankster', moves: ['imprison', 'calmmind', 'batonpass']},
@@ -48,7 +48,7 @@ describe('Imprison', function () {
 		assert.statStage(battle.p2.active[0], 'spa', 3);
 	});
 
-	it(`should not prevent foes from using Z-Powered Status moves`, function () {
+	it(`should not prevent foes from using Z-Powered Status moves`, () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Sableye', ability: 'prankster', moves: ['imprison', 'sunnyday']}]});
 		battle.setPlayer('p2', {team: [{species: 'Charmander', ability: 'blaze', item: 'firiumz', moves: ['sunnyday']}]});
@@ -58,7 +58,7 @@ describe('Imprison', function () {
 		assert(battle.field.isWeather('sunnyday'));
 	});
 
-	it(`should not prevent the user from using moves that a foe knows`, function () {
+	it(`should not prevent the user from using moves that a foe knows`, () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Abra', ability: 'prankster', moves: ['imprison', 'calmmind', 'batonpass']},

@@ -8,7 +8,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	pokemon: {
 		inherit: true,
 		getStat(statName, unboosted, unmodified, fastReturn) {
-			// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
+			// @ts-expect-error type checking prevents 'hp' from being passed, but we're paranoid
 			if (statName === 'hp') throw new Error("Please read `maxhp` directly");
 
 			// base stat
@@ -107,7 +107,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// THIS IS PURELY A SANITY CHECK
 				// DO NOT TAKE ADVANTAGE OF THIS TO PREVENT A POKEMON FROM MOVING;
 				// USE this.battle.queue.cancelMove INSTEAD
-				this.battle.debug('' + pokemon.fullname + ' INCONSISTENT STATE, ALREADY MOVED: ' + pokemon.moveThisTurn);
+				this.battle.debug(`${pokemon.fullname} INCONSISTENT STATE, ALREADY MOVED: ${pokemon.moveThisTurn}`);
 				this.battle.clearActiveMove(true);
 				return;
 			}

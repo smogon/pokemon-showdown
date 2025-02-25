@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Red Card', function () {
-	afterEach(function () {
+describe('Red Card', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should not trigger if the target should be KOed from Destiny Bond and also not crash the client`, function () {
+	it(`should not trigger if the target should be KOed from Destiny Bond and also not crash the client`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Aggron", item: 'redcard', moves: ['rockslide']},
 			{species: "Wynaut", ability: 'prankster', level: 1, moves: ['destinybond']},
@@ -25,7 +25,7 @@ describe('Red Card', function () {
 		assert.fainted(battle.p1.pokemon[1], "Gardevoir should faint from Aggron's Destiny Bond");
 	});
 
-	it(`should trigger if the target is still in battle`, function () {
+	it(`should trigger if the target is still in battle`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Aggron", item: 'redcard', moves: ['rockslide']},
 			{species: "Wynaut", ability: 'prankster', level: 1, moves: ['sleeptalk']},

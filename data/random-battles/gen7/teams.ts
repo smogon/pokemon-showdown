@@ -1,5 +1,5 @@
-import {MoveCounter, TeamData, RandomGen8Teams} from '../gen8/teams';
-import {PRNG, PRNGSeed} from '../../../sim/prng';
+import {MoveCounter, type TeamData, RandomGen8Teams} from '../gen8/teams';
+import type {PRNG, PRNGSeed} from '../../../sim/prng';
 import {toID} from '../../../sim/dex';
 
 export interface BattleFactorySpecies {
@@ -679,7 +679,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (['Fast Attacker', 'Setup Sweeper', 'Bulky Attacker', 'Wallbreaker', 'Z-Move user'].includes(role)) {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
-				const currentAttackType = counter.damagingMoves.values().next().value.type;
+				const currentAttackType = counter.damagingMoves.values().next().value!.type;
 				// Choose an attacking move that is of different type to the current single attack
 				const coverageMoves = [];
 				for (const moveid of movePool) {
@@ -751,7 +751,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 		return false;
 	}
-
 
 	getAbility(
 		types: Set<string>,
@@ -1268,7 +1267,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 							}
 							if (this.dex.getEffectiveness(typeName, species) > 0) {
 								if (!typeDoubleWeaknesses[typeName]) typeDoubleWeaknesses[typeName] = 0;
-								if (typeDoubleWeaknesses[typeName] >= 1 * limitFactor) {
+								if (typeDoubleWeaknesses[typeName] >= limitFactor) {
 									skip = true;
 									break;
 								}
@@ -1483,7 +1482,6 @@ export class RandomGen7Teams extends RandomGen8Teams {
 			moves.push(setData.moveVariants ? moveSlot[setData.moveVariants[i]] : this.sample(moveSlot));
 		}
 
-
 		const item = setData.item || this.sampleIfArray(setData.set.item);
 		const ability = setData.ability || this.sampleIfArray(setData.set.ability);
 		const nature = this.sampleIfArray(setData.set.nature);
@@ -1537,7 +1535,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 
 		const teamData: TeamData = {
 			typeCount: {}, typeComboCount: {}, baseFormes: {}, megaCount: 0, zCount: 0,
-			has: {}, forceResult: forceResult, weaknesses: {}, resistances: {},
+			has: {}, forceResult, weaknesses: {}, resistances: {},
 		};
 		const requiredMoveFamilies = ['hazardSet', 'hazardClear'];
 		const requiredMoves: {[k: string]: string} = {
@@ -1623,7 +1621,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				// Drought and Drizzle don't count towards the type combo limit
 					typeCombo = set.ability + '';
 				}
-				if (teamData.typeComboCount[typeCombo] >= 1 * limitFactor) continue;
+				if (teamData.typeComboCount[typeCombo] >= limitFactor) continue;
 			}
 
 			// Okay, the set passes, add it to our team
@@ -1866,7 +1864,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				// Drought and Drizzle don't count towards the type combo limit
 				typeCombo = set.ability;
 			}
-			if (teamData.typeComboCount[typeCombo] >= 1 * limitFactor) continue;
+			if (teamData.typeComboCount[typeCombo] >= limitFactor) continue;
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);

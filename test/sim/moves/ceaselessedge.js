@@ -7,12 +7,12 @@ let battle;
 
 // tests are derived from the following post and related quotes:
 // https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9417627
-describe('Ceaseless Edge', function () {
-	afterEach(function () {
+describe('Ceaseless Edge', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should set up Spikes on the side of the opponent`, function () {
+	it(`should set up Spikes on the side of the opponent`, () => {
 		battle = common.createBattle([[
 			{species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge']},
 		], [
@@ -23,7 +23,7 @@ describe('Ceaseless Edge', function () {
 		assert.equal(battle.p2.sideConditions.spikes?.layers, 1);
 	});
 
-	it(`should set up Spikes on the side of the opponent, not necessarily the target, in a double battle`, function () {
+	it(`should set up Spikes on the side of the opponent, not necessarily the target, in a double battle`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge']},
 			{species: 'pikachu', moves: ['splash']},
@@ -38,7 +38,7 @@ describe('Ceaseless Edge', function () {
 		assert.equal(battle.p2.sideConditions.spikes?.layers, 1);
 	});
 
-	it(`should still set up Spikes on the side of the opponent that is behind a Substitute`, function () {
+	it(`should still set up Spikes on the side of the opponent that is behind a Substitute`, () => {
 		battle = common.createBattle([[
 			{species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge']},
 		], [
@@ -49,7 +49,7 @@ describe('Ceaseless Edge', function () {
 		assert.equal(battle.p2.sideConditions.spikes?.layers, 1);
 	});
 
-	it(`should not set up Spikes if the move does not hit opponent or its Substitute`, function () {
+	it(`should not set up Spikes if the move does not hit opponent or its Substitute`, () => {
 		battle = common.createBattle([[
 			{species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge']},
 		], [
@@ -60,7 +60,7 @@ describe('Ceaseless Edge', function () {
 		assert.equal(!!(battle.p2.sideConditions.spikes), false);
 	});
 
-	it(`should not be bounced back by Magic Bounce`, function () {
+	it(`should not be bounced back by Magic Bounce`, () => {
 		battle = common.createBattle([[
 			{species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge']},
 		], [
@@ -72,7 +72,7 @@ describe('Ceaseless Edge', function () {
 		assert.equal(battle.p2.sideConditions.spikes?.layers, 1);
 	});
 
-	it(`should have its Spikes prevented by Sheer Force`, function () {
+	it(`should have its Spikes prevented by Sheer Force`, () => {
 		battle = common.createBattle([[
 			{species: 'samurotthisui', ability: 'sheerforce', moves: ['ceaselessedge']},
 		], [
@@ -83,7 +83,7 @@ describe('Ceaseless Edge', function () {
 		assert.equal(!!(battle.p2.sideConditions.spikes), false);
 	});
 
-	it(`should not set Spikes when the user faints from Rocky Helmet`, function () {
+	it(`should not set Spikes when the user faints from Rocky Helmet`, () => {
 		battle = common.createBattle([[
 			{species: 'samurotthisui', ability: 'noguard', item: 'focussash', moves: ['ceaselessedge']},
 			{species: 'wynaut', moves: ['sleeptalk']},

@@ -137,7 +137,6 @@ describe('Endless Battle Clause (slow)', () => {
 		assert.equal(battle.winner, 'Player 2');
 	});
 
-
 	it('Entrainment\'s externally inflicted staleness should go away on switch', () => {
 		battle = common.createBattle({endlessBattleClause: true});
 		battle.setPlayer('p1', {team: [

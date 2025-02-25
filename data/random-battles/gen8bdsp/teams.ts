@@ -1,7 +1,7 @@
 // BDSP team generation logic is currently largely shared with Swsh
 
-import {PRNG, PRNGSeed} from '../../../sim/prng';
-import {MoveCounter, RandomGen8Teams, OldRandomBattleSpecies} from '../gen8/teams';
+import {type PRNG, type PRNGSeed} from '../../../sim/prng';
+import {type MoveCounter, RandomGen8Teams, type OldRandomBattleSpecies} from '../gen8/teams';
 
 export class RandomBDSPTeams extends RandomGen8Teams {
 	randomData: {[species: string]: OldRandomBattleSpecies} = require('./data.json');

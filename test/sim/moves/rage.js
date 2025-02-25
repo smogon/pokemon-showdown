@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Rage [Gen 1]', function () {
-	afterEach(function () {
+describe('Rage [Gen 1]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it("Rage accuracy bug", function () {
+	it("Rage accuracy bug", () => {
 		battle = common.gen(1).createBattle({seed: [1, 1, 1, 0]});
 		battle.setPlayer('p1', {team: [{species: "Nidoking", moves: ['rage']}]});
 		battle.setPlayer('p2', {team: [{species: "Aerodactyl", moves: ['doubleteam']}]});

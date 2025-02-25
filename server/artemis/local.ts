@@ -22,7 +22,7 @@ class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 	listen() {
 		this.process.stdout.setEncoding('utf8');
 		this.process.stderr.setEncoding('utf8');
-		this.process.stdout.on('data', (data) => {
+		this.process.stdout.on('data', data => {
 			// so many bugs were created by \nready\n
 			data = data.trim();
 			const [taskId, dataStr] = data.split("|");

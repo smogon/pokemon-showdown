@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Overflow Stat Mod', function () {
-	afterEach(function () {
+describe('Overflow Stat Mod', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should cap stats at 654 after a positive nature', function () {
+	it('should cap stats at 654 after a positive nature', () => {
 		battle = common.createBattle({overflowStatMod: true});
 		battle.setPlayer('p1', {team: [
 			{species: 'Eternatus-Eternamax', ability: 'Neutralizing Gas', moves: ['tackle'], nature: 'bold', evs: {def: 252}},

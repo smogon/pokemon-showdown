@@ -5,18 +5,18 @@ const common = require('./../../common');
 
 let battle;
 
-describe("Accuracy", function () {
-	afterEach(function () {
+describe("Accuracy", () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should round half down when applying a modifier`, function () {
+	it(`should round half down when applying a modifier`, () => {
 		battle = common.createBattle([
 			[{species: 'Butterfree', ability: 'compoundeyes', moves: ['sleeppowder']}],
 			[{species: 'Beldum', moves: ['poltergeist']}],
 		]);
 
-		battle.onEvent('Accuracy', battle.format, function (accuracy) {
+		battle.onEvent('Accuracy', battle.format, accuracy => {
 			assert.equal(accuracy, 98, 'CompoundEyes Sleep Powder should be 98% accurate');
 		});
 
@@ -27,7 +27,7 @@ describe("Accuracy", function () {
 			[{species: 'Regirock', moves: ['sleeptalk']}],
 		]);
 
-		battle.onEvent('Accuracy', battle.format, function (accuracy) {
+		battle.onEvent('Accuracy', battle.format, accuracy => {
 			assert.equal(accuracy, 94, 'Victory Star Fire Blast should be 94% accurate');
 		});
 
@@ -38,14 +38,14 @@ describe("Accuracy", function () {
 			[{species: 'Regirock', moves: ['sleeptalk']}],
 		]);
 
-		battle.onEvent('Accuracy', battle.format, function (accuracy) {
+		battle.onEvent('Accuracy', battle.format, accuracy => {
 			assert.equal(accuracy, 93, 'Wide Lens Fire Blast should be 93% accurate');
 		});
 
 		battle.makeChoices();
 	});
 
-	it(`should chain modifiers in order of the Pokemon's raw speed`, function () {
+	it(`should chain modifiers in order of the Pokemon's raw speed`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Mewtwo', ability: 'victorystar', moves: ['gravity', 'sleeptalk', 'sandattack']},
 			{species: 'Charizard', ability: 'compoundeyes', moves: ['sleeptalk', 'fireblast']},
@@ -57,7 +57,7 @@ describe("Accuracy", function () {
 		battle.makeChoices('move sandattack -2, move sleeptalk', 'move doubleteam, move sandattack 2');
 		battle.makeChoices('auto', 'move sleeptalk, move confuseray -1');
 
-		battle.onEvent('Accuracy', battle.format, function (accuracy, target, source, move) {
+		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
 			if (move.id !== 'fireblast') return;
 			assert.equal(accuracy, 51);
 		});
@@ -76,7 +76,7 @@ describe("Accuracy", function () {
 		battle.makeChoices('move sandattack -2, move sleeptalk', 'move doubleteam, move sandattack 2');
 		battle.makeChoices('auto', 'move sleeptalk, move confuseray -1');
 
-		battle.onEvent('Accuracy', battle.format, function (accuracy, target, source, move) {
+		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
 			if (move.id !== 'fireblast') return;
 			assert.equal(accuracy, 50);
 		});

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Revival Blessing', function () {
-	afterEach(function () {
+describe('Revival Blessing', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should revive allies`, function () {
+	it(`should revive allies`, () => {
 		battle = common.createBattle([[
 			{species: 'corviknight', ability: 'runaway', moves: ['memento']},
 			{species: 'zoroark', ability: 'runaway', moves: ['revivalblessing']},
@@ -26,7 +26,7 @@ describe('Revival Blessing', function () {
 		assert.equal(battle.p1.pokemon[1].hp, Math.floor(battle.p1.pokemon[1].maxhp / 2));
 	});
 
-	it(`should not actually switch the active Pokemon`, function () {
+	it(`should not actually switch the active Pokemon`, () => {
 		battle = common.createBattle([[
 			{species: 'corviknight', ability: 'runaway', moves: ['memento']},
 			{species: 'zoroark', ability: 'runaway', moves: ['revivalblessing']},
@@ -42,7 +42,7 @@ describe('Revival Blessing', function () {
 		assert.species(battle.p1.active[0], 'Zoroark');
 	});
 
-	it(`should let you revive even with one Pokemon remaining`, function () {
+	it(`should let you revive even with one Pokemon remaining`, () => {
 		battle = common.createBattle([[
 			{species: 'corviknight', ability: 'runaway', moves: ['memento']},
 			{species: 'zoroark', ability: 'runaway', moves: ['revivalblessing']},

@@ -1,6 +1,6 @@
 import RandomGen6Teams from '../gen6/teams';
-import {PRNG} from '../../../sim';
-import {MoveCounter} from '../gen8/teams';
+import type {PRNG} from '../../../sim';
+import type {MoveCounter} from '../gen8/teams';
 import {toID} from '../../../sim/dex';
 
 // Moves that restore HP:
@@ -454,7 +454,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (['Fast Attacker', 'Setup Sweeper', 'Bulky Attacker', 'Wallbreaker'].includes(role)) {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
-				const currentAttackType = counter.damagingMoves.values().next().value.type;
+				const currentAttackType = counter.damagingMoves.values().next().value!.type;
 				// Choose an attacking move that is of different type to the current single attack
 				const coverageMoves = [];
 				for (const moveid of movePool) {
@@ -520,7 +520,6 @@ export class RandomGen5Teams extends RandomGen6Teams {
 
 		return false;
 	}
-
 
 	getAbility(
 		types: Set<string>,
@@ -659,7 +658,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 		if (moves.has('outrage') && counter.get('setup')) return 'Lum Berry';
 		if (
 			(ability === 'Rough Skin') || (species.id !== 'hooh' && role !== 'Wallbreaker' &&
-			ability === 'Regenerator' && species.baseStats.hp + species.baseStats.def >= 180 && this.randomChance(1, 2))
+				ability === 'Regenerator' && species.baseStats.hp + species.baseStats.def >= 180 && this.randomChance(1, 2))
 		) return 'Rocky Helmet';
 		if (['protect', 'substitute'].some(m => moves.has(m))) return 'Leftovers';
 		if (
@@ -905,7 +904,7 @@ export class RandomGen5Teams extends RandomGen6Teams {
 					}
 					if (this.dex.getEffectiveness(typeName, species) > 1) {
 						if (!typeDoubleWeaknesses[typeName]) typeDoubleWeaknesses[typeName] = 0;
-						if (typeDoubleWeaknesses[typeName] >= 1 * limitFactor) {
+						if (typeDoubleWeaknesses[typeName] >= limitFactor) {
 							skip = true;
 							break;
 						}

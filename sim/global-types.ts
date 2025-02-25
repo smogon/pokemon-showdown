@@ -32,15 +32,15 @@ type StatsExceptHPTable = {[stat in StatIDExceptHP]: number};
 type StatsTable = {[stat in StatID]: number};
 type SparseStatsTable = Partial<StatsTable>;
 type BoostID = StatIDExceptHP | 'accuracy' | 'evasion';
-type BoostsTable = {[boost in BoostID]: number };
+type BoostsTable = {[boost in BoostID]: number};
 type SparseBoostsTable = Partial<BoostsTable>;
 type Nonstandard = 'Past' | 'Future' | 'Unobtainable' | 'CAP' | 'LGPE' | 'Custom' | 'Gigantamax';
 
 type PokemonSet = import('./teams').PokemonSet;
 
-namespace TierTypes {
+declare namespace TierTypes {
 	export type Singles = "AG" | "Uber" | "(Uber)" | "OU" | "(OU)" | "UUBL" | "UU" | "RUBL" | "RU" | "NUBL" | "NU" |
-	"(NU)" | "PUBL" | "PU" | "(PU)" | "ZUBL" | "ZU" | "NFE" | "LC";
+		"(NU)" | "PUBL" | "PU" | "(PU)" | "ZUBL" | "ZU" | "NFE" | "LC";
 	export type Doubles = "DUber" | "(DUber)" | "DOU" | "(DOU)" | "DBL" | "DUU" | "(DUU)" | "NFE" | "LC";
 	export type Other = "Unreleased" | "Illegal" | "CAP" | "CAP NFE" | "CAP LC";
 }
@@ -446,7 +446,7 @@ type ItemText = TextFile<ConditionTextData>;
 type PokedexText = TextFile<BasicTextData>;
 type DefaultText = AnyObject;
 
-namespace RandomTeamsTypes {
+declare namespace RandomTeamsTypes {
 	export interface TeamDetails {
 		megaStone?: number;
 		zMove?: number;
@@ -547,8 +547,8 @@ namespace RandomTeamsTypes {
 		sets: RandomSetData[];
 	}
 	export type Role = '' | 'Fast Attacker' | 'Setup Sweeper' | 'Wallbreaker' | 'Tera Blast user' |
-	'Bulky Attacker' | 'Bulky Setup' | 'Fast Bulky Setup' | 'Bulky Support' | 'Fast Support' | 'AV Pivot' |
-	'Doubles Fast Attacker' | 'Doubles Setup Sweeper' | 'Doubles Wallbreaker' | 'Doubles Bulky Attacker' |
-	'Doubles Bulky Setup' | 'Offensive Protect' | 'Bulky Protect' | 'Doubles Support' | 'Choice Item user' |
-	'Z-Move user' | 'Staller' | 'Spinner' | 'Generalist' | 'Berry Sweeper' | 'Thief user';
+		'Bulky Attacker' | 'Bulky Setup' | 'Fast Bulky Setup' | 'Bulky Support' | 'Fast Support' | 'AV Pivot' |
+		'Doubles Fast Attacker' | 'Doubles Setup Sweeper' | 'Doubles Wallbreaker' | 'Doubles Bulky Attacker' |
+		'Doubles Bulky Setup' | 'Offensive Protect' | 'Bulky Protect' | 'Doubles Support' | 'Choice Item user' |
+		'Z-Move user' | 'Staller' | 'Spinner' | 'Generalist' | 'Berry Sweeper' | 'Thief user';
 }

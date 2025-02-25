@@ -18,7 +18,7 @@ interface BattleOutcome {
 
 interface BattleSearchResults {
 	totalBattles: number;
-	/** Total battle outcomes. Null when only searching for one userid.*/
+	/** Total battle outcomes. Null when only searching for one userid. */
 	totalOutcomes: BattleOutcome[] | null;
 	totalWins: {[k: string]: number};
 	totalLosses: {[k: string]: number};
@@ -255,7 +255,7 @@ async function rustBattleSearch(
 		await ProcessManager.exec(`psbattletools --version`, {
 			env: {PATH: `${process.env.PATH}:${process.env.HOME}/.cargo/bin`},
 		});
-	} catch (e) {
+	} catch {
 		return context.errorReply(
 			`You must install <a href="https://crates.io/crates/psbattletools">psbattletools</a> to use the alternate battlesearch.`
 		);

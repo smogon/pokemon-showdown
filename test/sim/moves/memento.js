@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Memento`, function () {
-	afterEach(function () {
+describe(`Memento`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should cause the user to faint even if the target has Clear Body`, function () {
+	it(`should cause the user to faint even if the target has Clear Body`, () => {
 		battle = common.createBattle([[
 			{species: 'whimsicott', moves: ['memento']},
 			{species: 'landorus', moves: ['sleeptalk']},
@@ -21,7 +21,7 @@ describe(`Memento`, function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it(`should not cause the user to faint if used into Substitute`, function () {
+	it(`should not cause the user to faint if used into Substitute`, () => {
 		battle = common.createBattle([[
 			{species: 'whimsicott', moves: ['memento']},
 			{species: 'landorus', moves: ['sleeptalk']},
@@ -32,7 +32,7 @@ describe(`Memento`, function () {
 		assert.equal(battle.requestState, 'move');
 	});
 
-	it(`should cause the user to faint after stat drops from Mirror Armor`, function () {
+	it(`should cause the user to faint after stat drops from Mirror Armor`, () => {
 		battle = common.createBattle([[
 			{species: 'whimsicott', moves: ['memento']},
 			{species: 'landorus', moves: ['sleeptalk']},
@@ -46,7 +46,7 @@ describe(`Memento`, function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it(`should set the Z-Memento healing flag even if the Memento itself was not successful`, function () {
+	it(`should set the Z-Memento healing flag even if the Memento itself was not successful`, () => {
 		battle = common.createBattle([[
 			{species: 'landorus', moves: ['sleeptalk']},
 			{species: 'whimsicott', item: 'darkiniumz', moves: ['memento']},

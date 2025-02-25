@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe("White Herb", function () {
-	afterEach(function () {
+describe("White Herb", () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should activate after Parting Shot drops both stats, but before the switch is resolved', function () {
+	it('should activate after Parting Shot drops both stats, but before the switch is resolved', () => {
 		battle = common.createBattle([[
 			{species: 'torracat', moves: ['partingshot']},
 			{species: 'litten', moves: ['sleeptalk']},
@@ -24,7 +24,7 @@ describe("White Herb", function () {
 		assert.statStage(wynaut, 'spa', 0);
 	});
 
-	it.skip('should activate after Abilities that boost stats on KOs', function () {
+	it.skip('should activate after Abilities that boost stats on KOs', () => {
 		battle = common.createBattle([[
 			{species: 'litten', level: 1, ability: 'noguard', moves: ['sleeptalk']},
 			{species: 'torracat', moves: ['partingshot']},
@@ -37,7 +37,7 @@ describe("White Herb", function () {
 		assert.statStage(wynaut, 'spa', 0);
 	});
 
-	it('should activate after two Intimidate switch in at the same time', function () {
+	it('should activate after two Intimidate switch in at the same time', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'litten', ability: 'intimidate', moves: ['sleeptalk']},
 			{species: 'torracat', ability: 'intimidate', moves: ['sleeptalk', 'finalgambit']},
@@ -61,7 +61,7 @@ describe("White Herb", function () {
 		assert.statStage(wynaut, 'atk', 0);
 	});
 
-	it('should activate before Opportunist during switch-ins', function () {
+	it('should activate before Opportunist during switch-ins', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'axew', moves: ['sleeptalk']},
 			{species: 'fraxure', moves: ['finalgambit']},

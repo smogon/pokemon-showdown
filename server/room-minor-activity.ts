@@ -39,7 +39,7 @@ export abstract class MinorActivity {
 	abstract activityid: ID;
 	abstract name: string;
 
-	timeout: NodeJS.Timer | null;
+	timeout: NodeJS.Timeout | null;
 	timeoutMins: number;
 	timerEnd: number;
 	roomid: RoomID;

@@ -14,12 +14,9 @@ const quotes: {[room: string]: Quote[]} = JSON.parse(FS(STORAGE_PATH).readIfExis
 // migrate quotes out of roomsettings
 function convertOldQuotes() {
 	for (const room of Rooms.rooms.values()) {
-		// @ts-ignore
-		if (room.settings.quotes) {
-			// @ts-ignore
-			quotes[room.roomid] = room.settings.quotes;
-			// @ts-ignore
-			delete room.settings.quotes;
+		if ((room.settings as any).quotes) {
+			quotes[room.roomid] = (room.settings as any).quotes;
+			delete (room.settings as any).quotes;
 			room.saveSettings();
 			saveQuotes();
 		}

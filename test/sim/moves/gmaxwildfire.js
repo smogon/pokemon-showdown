@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('G-Max Wildfire', function () {
-	afterEach(function () {
+describe('G-Max Wildfire', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should not damage Fire-types', function () {
+	it('should not damage Fire-types', () => {
 		battle = common.gen(8).createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Charizard', moves: ['ember'], gigantamax: true},
@@ -24,7 +24,7 @@ describe('G-Max Wildfire', function () {
 		assert.fullHP(battle.p2.active[1]);
 	});
 
-	it('should deal damage for four turns, including the fourth turn', function () {
+	it('should deal damage for four turns, including the fourth turn', () => {
 		battle = common.gen(8).createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Charizard', moves: ['ember', 'sleeptalk'], gigantamax: true},

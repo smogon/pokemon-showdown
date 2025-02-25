@@ -1,7 +1,7 @@
 import {Utils} from '../lib/utils';
 import {assignMissingFields, toID, BasicEffect} from './dex-data';
-import {EventMethods} from './dex-conditions';
-import {SpeciesData} from './dex-species';
+import type {EventMethods} from './dex-conditions';
+import type {SpeciesData} from './dex-species';
 import {Tags} from '../data/tags';
 
 const DEFAULT_MOD = 'gen9';

@@ -227,7 +227,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const armorTailHolder = this.effectState.target;
 			if ((source.isAlly(armorTailHolder) || move.target === 'all') && move.priority > 0.1) {
 				this.attrLastMove('[still]');
-				this.add('cant', armorTailHolder, 'ability: Armor Tail', move, '[of] ' + target);
+				this.add('cant', armorTailHolder, 'ability: Armor Tail', move, `[of] ${target}`);
 				return false;
 			}
 		},
@@ -241,7 +241,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (['attract', 'disable', 'encore', 'healblock', 'taunt', 'torment'].includes(status.id)) {
 				if (effect.effectType === 'Move') {
 					const effectHolder = this.effectState.target;
-					this.add('-block', target, 'ability: Aroma Veil', '[of] ' + effectHolder);
+					this.add('-block', target, 'ability: Aroma Veil', `[of] ${effectHolder}`);
 				}
 				return null;
 			}
@@ -442,7 +442,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (boost.def && boost.def < 0) {
 				delete boost.def;
 				if (!(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-					this.add("-fail", target, "unboost", "Defense", "[from] ability: Big Pecks", "[of] " + target);
+					this.add("-fail", target, "unboost", "Defense", "[from] ability: Big Pecks", `[of] ${target}`);
 				}
 			}
 		},
@@ -526,7 +526,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add("-fail", target, "unboost", "[from] ability: Clear Body", "[of] " + target);
+				this.add("-fail", target, "unboost", "[from] ability: Clear Body", `[of] ${target}`);
 			}
 		},
 		flags: {breakable: 1},
@@ -622,7 +622,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				// Cancel all actions this turn for pokemon if applicable
 				this.queue.cancelAction(pokemon);
 				// Add volatiles to both pokemon
-				this.add('-activate', pokemon, 'ability: Commander', '[of] ' + ally);
+				this.add('-activate', pokemon, 'ability: Commander', `[of] ${ally}`);
 				pokemon.addVolatile('commanding');
 				ally.addVolatile('commanded', pokemon);
 				// Continued in conditions.ts in the volatiles
@@ -771,7 +771,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			for (const ally of pokemon.adjacentAllies()) {
 				ally.clearBoosts();
-				this.add('-clearboost', ally, '[from] ability: Curious Medicine', '[of] ' + pokemon);
+				this.add('-clearboost', ally, '[from] ability: Curious Medicine', `[of] ${pokemon}`);
 			}
 		},
 		flags: {},
@@ -810,7 +810,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onAnyTryMove(target, source, effect) {
 			if (['explosion', 'mindblown', 'mistyexplosion', 'selfdestruct'].includes(effect.id)) {
 				this.attrLastMove('[still]');
-				this.add('cant', this.effectState.target, 'ability: Damp', effect, '[of] ' + target);
+				this.add('cant', this.effectState.target, 'ability: Damp', effect, `[of] ${target}`);
 				return false;
 			}
 		},
@@ -869,7 +869,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const dazzlingHolder = this.effectState.target;
 			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
 				this.attrLastMove('[still]');
-				this.add('cant', dazzlingHolder, 'ability: Dazzling', move, '[of] ' + target);
+				this.add('cant', dazzlingHolder, 'ability: Dazzling', move, `[of] ${target}`);
 				return false;
 			}
 		},
@@ -1370,7 +1370,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries) {
 				const effectHolder = this.effectState.target;
-				this.add('-block', target, 'ability: Flower Veil', '[of] ' + effectHolder);
+				this.add('-block', target, 'ability: Flower Veil', `[of] ${effectHolder}`);
 			}
 		},
 		onAllySetStatus(status, target, source, effect) {
@@ -1378,7 +1378,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.debug('interrupting setStatus with Flower Veil');
 				if (effect.name === 'Synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
 					const effectHolder = this.effectState.target;
-					this.add('-block', target, 'ability: Flower Veil', '[of] ' + effectHolder);
+					this.add('-block', target, 'ability: Flower Veil', `[of] ${effectHolder}`);
 				}
 				return null;
 			}
@@ -1387,7 +1387,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target.hasType('Grass') && status.id === 'yawn') {
 				this.debug('Flower Veil blocking yawn');
 				const effectHolder = this.effectState.target;
-				this.add('-block', target, 'ability: Flower Veil', '[of] ' + effectHolder);
+				this.add('-block', target, 'ability: Flower Veil', `[of] ${effectHolder}`);
 				return null;
 			}
 		},
@@ -1464,7 +1464,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (!warnMoves.length) return;
 			const [warnMoveName, warnTarget] = this.sample(warnMoves);
-			this.add('-activate', pokemon, 'ability: Forewarn', warnMoveName, '[of] ' + warnTarget);
+			this.add('-activate', pokemon, 'ability: Forewarn', warnMoveName, `[of] ${warnTarget}`);
 		},
 		flags: {},
 		name: "Forewarn",
@@ -1487,7 +1487,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			for (const target of pokemon.foes()) {
 				if (target.item) {
-					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon);
+					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', `[of] ${pokemon}`);
 				}
 			}
 		},
@@ -1508,7 +1508,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add("-fail", target, "unboost", "[from] ability: Full Metal Body", "[of] " + target);
+				this.add("-fail", target, "unboost", "[from] ability: Full Metal Body", `[of] ${target}`);
 			}
 		},
 		flags: {},
@@ -1884,7 +1884,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (boost.atk && boost.atk < 0) {
 				delete boost.atk;
 				if (!(effect as ActiveMove).secondaries) {
-					this.add("-fail", target, "unboost", "Attack", "[from] ability: Hyper Cutter", "[of] " + target);
+					this.add("-fail", target, "unboost", "Attack", "[from] ability: Hyper Cutter", `[of] ${target}`);
 				}
 			}
 		},
@@ -1981,7 +1981,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (boost.accuracy && boost.accuracy < 0) {
 				delete boost.accuracy;
 				if (!(effect as ActiveMove).secondaries) {
-					this.add("-fail", target, "unboost", "accuracy", "[from] ability: Illuminate", "[of] " + target);
+					this.add("-fail", target, "unboost", "accuracy", "[from] ability: Illuminate", `[of] ${target}`);
 				}
 			}
 		},
@@ -2097,7 +2097,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryBoost(boost, target, source, effect) {
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Inner Focus', '[of] ' + target);
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Inner Focus', `[of] ${target}`);
 			}
 		},
 		flags: {breakable: 1},
@@ -2203,7 +2203,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (boost.accuracy && boost.accuracy < 0) {
 				delete boost.accuracy;
 				if (!(effect as ActiveMove).secondaries) {
-					this.add("-fail", target, "unboost", "accuracy", "[from] ability: Keen Eye", "[of] " + target);
+					this.add("-fail", target, "unboost", "accuracy", "[from] ability: Keen Eye", `[of] ${target}`);
 				}
 			}
 		},
@@ -2333,7 +2333,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
 				const oldAbility = source.setAbility('lingeringaroma', target);
 				if (oldAbility) {
-					this.add('-activate', target, 'ability: Lingering Aroma', this.dex.abilities.get(oldAbility).name, '[of] ' + source);
+					this.add('-activate', target, 'ability: Lingering Aroma', this.dex.abilities.get(oldAbility).name, `[of] ${source}`);
 				}
 			}
 		},
@@ -2344,7 +2344,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	liquidooze: {
 		onSourceTryHeal(damage, target, source, effect) {
-			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
+			this.debug(`Heal is occurring: ${target} <- ${source} :: ${effect.id}`);
 			const canOoze = ['drain', 'leechseed', 'strengthsap'];
 			if (canOoze.includes(effect.id)) {
 				this.damage(damage);
@@ -2430,7 +2430,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
 					return;
 				}
-				this.add('-item', source, yourItem, '[from] ability: Magician', '[of] ' + target);
+				this.add('-item', source, yourItem, '[from] ability: Magician', `[of] ${target}`);
 			}
 		},
 		flags: {},
@@ -2548,7 +2548,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (boost.accuracy && boost.accuracy < 0) {
 				delete boost.accuracy;
 				if (!(effect as ActiveMove).secondaries) {
-					this.add("-fail", target, "unboost", "accuracy", "[from] ability: Mind's Eye", "[of] " + target);
+					this.add("-fail", target, "unboost", "accuracy", "[from] ability: Mind's Eye", `[of] ${target}`);
 				}
 			}
 		},
@@ -2711,7 +2711,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
 				const oldAbility = source.setAbility('mummy', target);
 				if (oldAbility) {
-					this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(oldAbility).name, '[of] ' + source);
+					this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(oldAbility).name, `[of] ${source}`);
 				}
 			}
 		},
@@ -2794,7 +2794,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				// It's not possible to know what pokemon were cured
 
 				// Unlike a -hint, this is real information that battlers need, so we use a -message
-				this.add('-message', "(" + cureList.length + " of " + pokemon.side.name + "'s pokemon " + (cureList.length === 1 ? "was" : "were") + " cured by Natural Cure.)");
+				this.add('-message', `(${cureList.length} of ${pokemon.side.name}'s pokemon ${cureList.length === 1 ? "was" : "were"} cured by Natural Cure.)`);
 
 				for (const pkmn of cureList) {
 					pkmn.showCure = false;
@@ -2959,7 +2959,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryBoost(boost, target, source, effect) {
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', '[of] ' + target);
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', `[of] ${target}`);
 			}
 		},
 		flags: {breakable: 1},
@@ -2975,7 +2975,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! > 0) {
-					boostPlus[i] = (boostPlus[i] || 0) + boost[i];
+					boostPlus[i] = (boostPlus[i] || 0) + boost[i]!;
 				}
 			}
 		},
@@ -3078,7 +3078,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryBoost(boost, target, source, effect) {
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Own Tempo', '[of] ' + target);
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Own Tempo', `[of] ${target}`);
 			}
 		},
 		flags: {breakable: 1},
@@ -3089,7 +3089,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	parentalbond: {
 		onPrepareHit(source, target, move) {
 			if (move.category === 'Status' || move.multihit || move.flags['noparentalbond'] || move.flags['charge'] ||
-			move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
+				move.flags['futuremove'] || move.spreadHit || move.isZ || move.isMax) return;
 			move.multihit = 2;
 			move.multihitType = 'parentalbond';
 		},
@@ -3134,7 +3134,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!['psn', 'tox'].includes(status.id)) return;
 			if ((effect as Move)?.status) {
 				const effectHolder = this.effectState.target;
-				this.add('-block', target, 'ability: Pastel Veil', '[of] ' + effectHolder);
+				this.add('-block', target, 'ability: Pastel Veil', `[of] ${effectHolder}`);
 			}
 			return false;
 		},
@@ -3169,8 +3169,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					source.item = yourItem.id;
 					return;
 				}
-				this.add('-enditem', source, yourItem, '[silent]', '[from] ability: Pickpocket', '[of] ' + source);
-				this.add('-item', target, yourItem, '[from] ability: Pickpocket', '[of] ' + source);
+				this.add('-enditem', source, yourItem, '[silent]', '[from] ability: Pickpocket', `[of] ${source}`);
+				this.add('-item', target, yourItem, '[from] ability: Pickpocket', `[of] ${source}`);
 			}
 		},
 		flags: {},
@@ -3313,7 +3313,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const ability = target.getAbility();
 			if (ability.flags['noreceiver'] || ability.id === 'noability') return;
 			if (this.effectState.target.setAbility(ability)) {
-				this.add('-ability', this.effectState.target, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
+				this.add('-ability', this.effectState.target, ability, '[from] ability: Power of Alchemy', `[of] ${target}`);
 			}
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1},
@@ -3635,7 +3635,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const dazzlingHolder = this.effectState.target;
 			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
 				this.attrLastMove('[still]');
-				this.add('cant', dazzlingHolder, 'ability: Queenly Majesty', move, '[of] ' + target);
+				this.add('cant', dazzlingHolder, 'ability: Queenly Majesty', move, `[of] ${target}`);
 				return false;
 			}
 		},
@@ -3702,7 +3702,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const ability = target.getAbility();
 			if (ability.flags['noreceiver'] || ability.id === 'noability') return;
 			if (this.effectState.target.setAbility(ability)) {
-				this.add('-ability', this.effectState.target, ability, '[from] ability: Receiver', '[of] ' + target);
+				this.add('-ability', this.effectState.target, ability, '[from] ability: Receiver', `[of] ${target}`);
 			}
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1},
@@ -4002,7 +4002,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryBoost(boost, target, source, effect) {
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Scrappy', '[of] ' + target);
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Scrappy', `[of] ${target}`);
 			}
 		},
 		flags: {},
@@ -4692,7 +4692,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (status.id === 'slp') {
 				this.debug('Sweet Veil interrupts sleep');
 				const effectHolder = this.effectState.target;
-				this.add('-block', target, 'ability: Sweet Veil', '[of] ' + effectHolder);
+				this.add('-block', target, 'ability: Sweet Veil', `[of] ${effectHolder}`);
 				return null;
 			}
 		},
@@ -4700,7 +4700,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (status.id === 'yawn') {
 				this.debug('Sweet Veil blocking yawn');
 				const effectHolder = this.effectState.target;
-				this.add('-block', target, 'ability: Sweet Veil', '[of] ' + effectHolder);
+				this.add('-block', target, 'ability: Sweet Veil', `[of] ${effectHolder}`);
 				return null;
 			}
 		},
@@ -4733,7 +4733,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				source.item = myItem.id;
 				return;
 			}
-			this.add('-activate', source, 'ability: Symbiosis', myItem, '[of] ' + pokemon);
+			this.add('-activate', source, 'ability: Symbiosis', myItem, `[of] ${pokemon}`);
 		},
 		flags: {},
 		name: "Symbiosis",
@@ -4821,7 +4821,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 30,
 		onBasePower(basePower, attacker, defender, move) {
 			const basePowerAfterMultiplier = this.modify(basePower, this.event.modifier);
-			this.debug('Base Power: ' + basePowerAfterMultiplier);
+			this.debug(`Base Power: ${basePowerAfterMultiplier}`);
 			if (basePowerAfterMultiplier <= 60) {
 				this.debug('Technician boost');
 				return this.chainModify(1.5);
@@ -5062,7 +5062,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const target = this.sample(possibleTargets);
 			const ability = target.getAbility();
 			if (pokemon.setAbility(ability)) {
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
 			}
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1},
@@ -5282,9 +5282,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const sourceAbility = source.setAbility('wanderingspirit', target);
 				if (!sourceAbility) return;
 				if (target.isAlly(source)) {
-					this.add('-activate', target, 'Skill Swap', '', '', '[of] ' + source);
+					this.add('-activate', target, 'Skill Swap', '', '', `[of] ${source}`);
 				} else {
-					this.add('-activate', target, 'ability: Wandering Spirit', this.dex.abilities.get(sourceAbility).name, 'Wandering Spirit', '[of] ' + source);
+					this.add('-activate', target, 'ability: Wandering Spirit', this.dex.abilities.get(sourceAbility).name, 'Wandering Spirit', `[of] ${source}`);
 				}
 				target.setAbility(sourceAbility);
 			}
@@ -5416,7 +5416,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add("-fail", target, "unboost", "[from] ability: White Smoke", "[of] " + target);
+				this.add("-fail", target, "unboost", "[from] ability: White Smoke", `[of] ${target}`);
 			}
 		},
 		flags: {breakable: 1},

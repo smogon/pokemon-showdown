@@ -90,6 +90,9 @@ function missing(dep) {
 	}
 }
 
+function shell(cmd) {
+	require('child_process').execSync(cmd, {stdio: 'inherit', cwd: __dirname});
+}
 function parseFlags(argv) {
 	if (!(argv.length > 3 || argv.length === 3 && argv[2].startsWith('-'))) return {_: argv.slice(2)};
 	if (missing('minimist')) shell('npm install minimist');
@@ -102,7 +105,7 @@ case 'multi':
 case 'random':
 	{
 		const argv = parseFlags(process.argv);
-		const options = Object.assign({totalGames: 100}, argv);
+		const options = {totalGames: 100, ...argv};
 		options.totalGames = Number(argv._[1] || argv.num) || options.totalGames;
 		if (argv.seed) options.prng = argv.seed.split(',').map(s => Number(s));
 		// Run options.totalGames, exiting with the number of games with errors.

@@ -170,7 +170,7 @@ export class LadderStore {
 		}
 
 		// main Elo formula
-		const E = 1 / (1 + Math.pow(10, (foeElo - oldElo) / 400));
+		const E = 1 / (1 + 10 ** ((foeElo - oldElo) / 400));
 
 		const newElo = oldElo + K * (score - E);
 

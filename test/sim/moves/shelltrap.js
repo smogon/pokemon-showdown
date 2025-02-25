@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Shell Trap', function () {
-	afterEach(function () {
+describe('Shell Trap', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should deduct PP regardless if it was successful', function () {
+	it('should deduct PP regardless if it was successful', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [
 			[
 				{species: 'Turtonator', ability: 'shellarmor', moves: ['shelltrap']},
@@ -33,7 +33,7 @@ describe('Shell Trap', function () {
 		assert.equal(move.pp, move.maxpp - 2);
 	});
 
-	it('should not Z-power if hit by a Z-move', function () {
+	it('should not Z-power if hit by a Z-move', () => {
 		battle = common.createBattle({}, [
 			[{species: 'Turtonator', moves: ['shelltrap']}],
 			[{species: 'Magikarp', item: 'normaliumz', moves: ['flail']}],
@@ -42,7 +42,7 @@ describe('Shell Trap', function () {
 		assert(battle.log.some(line => line.includes('|Shell Trap|')));
 	});
 
-	it('should not Max if hit by a Max move', function () {
+	it('should not Max if hit by a Max move', () => {
 		battle = common.gen(8).createBattle({}, [
 			[{species: 'Turtonator', moves: ['shelltrap']}],
 			[{species: 'Magikarp', moves: ['flail']}],

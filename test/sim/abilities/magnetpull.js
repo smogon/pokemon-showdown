@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Magnet Pull', function () {
-	afterEach(function () {
+describe('Magnet Pull', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should prevent Steel-type Pokemon from switching out normally', function () {
+	it('should prevent Steel-type Pokemon from switching out normally', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Magnezone", ability: 'magnetpull', moves: ['soak', 'charge']}]});
 		battle.setPlayer('p2', {team: [
@@ -29,7 +29,7 @@ describe('Magnet Pull', function () {
 		assert.species(battle.p2.active[0], 'Starmie');
 	});
 
-	it('should not prevent Steel-type Pokemon from switching out using moves', function () {
+	it('should not prevent Steel-type Pokemon from switching out using moves', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Magnezone", ability: 'magnetpull', moves: ['toxic']}]});
 		battle.setPlayer('p2', {team: [
@@ -41,7 +41,7 @@ describe('Magnet Pull', function () {
 		assert.species(battle.p2.active[0], 'Tentacruel');
 	});
 
-	it('should not prevent Pokemon immune to trapping from switching out', function () {
+	it('should not prevent Pokemon immune to trapping from switching out', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Magnezone", ability: 'magnetpull', moves: ['substitute']}]});
 		battle.setPlayer('p2', {team: [

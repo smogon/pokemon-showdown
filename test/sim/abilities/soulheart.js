@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Soul-Heart', function () {
-	afterEach(function () {
+describe('Soul-Heart', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should activate on each individual KO`, function () {
+	it(`should activate on each individual KO`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Toxapex', moves: ['sleeptalk']},
 			{species: 'Victini', moves: ['finalgambit']},
@@ -29,7 +29,7 @@ describe('Soul-Heart', function () {
 		assert.notEqual(soulHeartFirstIndex, soulHeartSecondIndex, 'Soul-Heart should have activated twice.');
 	});
 
-	it(`should not activate if two Soul-Hearts are KOed on the same side`, function () {
+	it(`should not activate if two Soul-Hearts are KOed on the same side`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Gengar', moves: ['astralbarrage']},
 			{species: 'Aron', moves: ['sleeptalk']},
@@ -45,7 +45,7 @@ describe('Soul-Heart', function () {
 		assert.equal(soulHeartIndex, -1, 'Soul-Heart should not have activated.');
 	});
 
-	it.skip(`should activate an opposing Soul-Heart if the attacker's ally was first KOed in a spread move`, function () {
+	it.skip(`should activate an opposing Soul-Heart if the attacker's ally was first KOed in a spread move`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Landorus', moves: ['earthquake']},
 			{species: 'Aron', moves: ['sleeptalk']},

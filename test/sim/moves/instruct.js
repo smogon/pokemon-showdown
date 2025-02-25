@@ -5,10 +5,10 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Instruct`, function () {
+describe(`Instruct`, () => {
 	afterEach(() => battle.destroy());
 
-	it(`should make the target reuse its last move`, function () {
+	it(`should make the target reuse its last move`, () => {
 		battle = common.createBattle([
 			[{species: "Cramorant", moves: ['stockpile']}],
 			[{species: "Oranguru", moves: ['instruct']}],
@@ -17,7 +17,7 @@ describe(`Instruct`, function () {
 		assert.equal(battle.p1.active[0].boosts.def, 2);
 	});
 
-	it(`should not trigger AfterMove effects of the instructed move for the Instruct user`, function () {
+	it(`should not trigger AfterMove effects of the instructed move for the Instruct user`, () => {
 		battle = common.createBattle([
 			[{species: "Swalot", moves: ['stockpile', 'spitup']}],
 			[{species: "Duskull", moves: ['stockpile', 'instruct']}],

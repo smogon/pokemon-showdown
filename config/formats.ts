@@ -531,7 +531,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		battle: {
 			endTurn() {
-				// @ts-ignore Hack
+				// @ts-expect-error Hack
 				for (const pokemon of this.getAllActive(false, true)) {
 					// turn counter hasn't been incremented yet
 					if (this.turn & 1 && pokemon.position === (this.turn & 2 ? 0 : 1) && pokemon.hp && pokemon.allies().length) {
@@ -1007,8 +1007,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					Object.assign(t.side.slotConditions[t.position]['futuremove'], {
 						duration: 3,
 						move: moveData.id,
-						source: source,
-						moveData: moveData,
+						source,
+						moveData,
 					});
 					this.add('-message', `${source.name} foresaw an attack!`);
 					return this.NOT_FAIL;
@@ -1075,10 +1075,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				move.secondaries?.some(secondary => secondary.boosts?.accuracy && secondary.boosts?.accuracy < 0);
 			const flinchMove = move.secondaries?.some(secondary => secondary.volatileStatus === 'flinch');
 			const freezeMove = move.secondaries?.some(secondary => secondary.status === 'frz') || move.id === 'triattack';
-			if (this.ruleTable.isRestricted(`move:${move.id}`) ||
+			if (
+				this.ruleTable.isRestricted(`move:${move.id}`) ||
 				((accuracyLoweringMove || move.ohko || move.multihit || move.id === 'beatup' || move.flags['charge'] ||
 					move.priority > 0 || move.damageCallback || flinchMove || freezeMove) &&
-				!this.ruleTable.has(`+move:${move.id}`))) {
+					!this.ruleTable.has(`+move:${move.id}`))
+			) {
 				problems.push(`The move ${move.name} can't be used as an item.`);
 			}
 			return problems.length ? problems : null;
@@ -1542,7 +1544,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				delete pokemon.m.innate;
 			}
 			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
-			if (ally && ally.m.innate) {
+			if (ally?.m.innate) {
 				ally.removeVolatile(ally.m.innate);
 				delete ally.m.innate;
 			}
@@ -1553,7 +1555,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				delete pokemon.m.innate;
 			}
 			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
-			if (ally && ally.m.innate) {
+			if (ally?.m.innate) {
 				ally.removeVolatile(ally.m.innate);
 				delete ally.m.innate;
 			}
@@ -1688,11 +1690,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					set.moves.splice(i, 1);
 				}
 			}
-			const allowedPokemoves = this.ruleTable.valueRules.get('allowedpokemoves') || 1;
-			if (pokemoves > Number(allowedPokemoves)) {
+			const allowedPokemoves = Number(this.ruleTable.valueRules.get('allowedpokemoves') || '1');
+			if (pokemoves > allowedPokemoves) {
 				problems.push(
 					`${set.species} has ${pokemoves} Pokemoves.`,
-					`(Pok\u00e9mon can only have ${allowedPokemoves} Pokemove${allowedPokemoves + '' === '1' ? '' : 's'} each.)`
+					`(Pok\u00e9mon can only have ${allowedPokemoves} Pokemove${allowedPokemoves === 1 ? '' : 's'} each.)`
 				);
 			}
 			if (this.validateSet(set, teamHas)) {
@@ -1890,7 +1892,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				if (move.spreadHit) {
 					// multi-target modifier (doubles only)
 					const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
-					this.battle.debug('Spread modifier: ' + spreadModifier);
+					this.battle.debug(`Spread modifier: ${spreadModifier}`);
 					baseDamage = this.battle.modify(baseDamage, spreadModifier);
 				} else if (move.multihitType === 'parentalbond' && move.hit > 1) {
 					// Parental Bond modifier
@@ -2575,7 +2577,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				// that a pokemon is on a team through the onStart even triggering
 				// at the start of a match, users with pokemon names will need their
 				// statuses to end in "user".
-				name = name + 'user';
+				name = `${name}user`;
 			}
 			// Add the mon's status effect to it as a volatile.
 			const status = this.dex.conditions.get(name);

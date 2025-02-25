@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Fell Stringer', function () {
-	afterEach(function () {
+describe('Fell Stringer', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should get a boost when KOing a Pokemon after redirection', function () {
+	it('should get a boost when KOing a Pokemon after redirection', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'joltik', moves: ['fellstinger']},
 			{species: 'wynaut', moves: ['sleeptalk']},

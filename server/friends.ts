@@ -2,6 +2,7 @@
  * Friends chat-plugin database handler.
  * @author mia-pi-git
  */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore in case it isn't installed
 import type * as Database from 'better-sqlite3';
 import {Utils, FS, ProcessManager, Repl} from '../lib';
@@ -65,7 +66,7 @@ export function sendPM(message: string, to: string, from = '~') {
 }
 
 function canPM(sender: User, receiver: User | null) {
-	if (!receiver || !receiver.settings.blockPMs) return true;
+	if (!receiver?.settings.blockPMs) return true;
 	if (receiver.settings.blockPMs === true) return sender.can('lock');
 	if (receiver.settings.blockPMs === 'friends') return false;
 	return Users.globalAuth.atLeast(sender, receiver.settings.blockPMs);
@@ -131,8 +132,8 @@ export class FriendsDatabase {
 		return (await this.all('get', [userid, MAX_FRIENDS])) || [];
 	}
 	async getRequests(user: User) {
-		const sent: Set<string> = new Set();
-		const received: Set<string> = new Set();
+		const sent = new Set<string>();
+		const received = new Set<string>();
 		if (user.settings.blockFriendRequests) {
 			// delete any pending requests that may have been sent to them while offline
 			// we used to return but we will not since you can send requests while blocking
@@ -376,7 +377,7 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
  * todo: should these be under a namespace?
  */
 
-/** Find if a friendship exists between two users.*/
+/** Find if a friendship exists between two users. */
 export function findFriendship(users: [string, string]) {
 	setup();
 	return !!statements.findFriendship.get({user1: users[0], user2: users[1]});
@@ -443,7 +444,7 @@ if (require.main === module) {
 			slow(message: string) {
 				process.send!(`CALLBACK\nSLOW\n${message}`);
 			},
-		};
+		} as any;
 		process.on('uncaughtException', err => {
 			if (Config.crashguard) {
 				Monitor.crashlog(err, 'A friends child process');

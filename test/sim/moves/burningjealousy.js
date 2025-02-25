@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Burning Jealousy', function () {
-	afterEach(function () {
+describe('Burning Jealousy', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should burn a target whose stats were raised this turn`, function () {
+	it(`should burn a target whose stats were raised this turn`, () => {
 		battle = common.createBattle([[
 			{species: 'Mew', moves: ['dragondance']},
 		], [
@@ -20,7 +20,7 @@ describe('Burning Jealousy', function () {
 		assert.equal(battle.p1.active[0].status, 'brn');
 	});
 
-	it(`should not burn a target whose stats were raised after the attack`, function () {
+	it(`should not burn a target whose stats were raised after the attack`, () => {
 		battle = common.createBattle([[
 			{species: 'Ninetales', moves: ['burningjealousy']},
 		], [
@@ -30,7 +30,7 @@ describe('Burning Jealousy', function () {
 		assert.equal(battle.p2.active[0].status, '');
 	});
 
-	it(`should burn a target whose stats were boosted at the start of the match`, function () {
+	it(`should burn a target whose stats were boosted at the start of the match`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['burningjealousy']},
 		], [
@@ -40,7 +40,7 @@ describe('Burning Jealousy', function () {
 		assert.equal(battle.p2.active[0].status, 'brn');
 	});
 
-	it(`should not burn a target whose stats were boosted at a switch after a KO`, function () {
+	it(`should not burn a target whose stats were boosted at a switch after a KO`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['burningjealousy']},
 		], [
@@ -53,7 +53,7 @@ describe('Burning Jealousy', function () {
 		assert.equal(battle.p2.active[0].status, '');
 	});
 
-	it(`should be affected by Sheer Force`, function () {
+	it(`should be affected by Sheer Force`, () => {
 		battle = common.createBattle([[
 			{species: 'Cobalion', moves: ['swordsdance']},
 		], [

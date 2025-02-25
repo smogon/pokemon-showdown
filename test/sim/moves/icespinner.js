@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Ice Spinner`, function () {
-	afterEach(function () {
+describe(`Ice Spinner`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should remove Terrains if the user is active and on the field`, function () {
+	it(`should remove Terrains if the user is active and on the field`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['icespinner']},
 		], [
@@ -21,7 +21,7 @@ describe(`Ice Spinner`, function () {
 		assert.false(battle.field.isTerrain('psychicterrain'));
 	});
 
-	it.skip(`should not remove Terrains if the user faints from Life Orb`, function () {
+	it.skip(`should not remove Terrains if the user faints from Life Orb`, () => {
 		battle = common.createBattle([[
 			{species: 'shedinja', item: 'lifeorb', moves: ['icespinner']},
 			{species: 'wynaut', moves: ['sleeptalk']},
@@ -33,7 +33,7 @@ describe(`Ice Spinner`, function () {
 		assert(battle.field.isTerrain('psychicterrain'));
 	});
 
-	it(`should not remove Terrains if the user faints from Rocky Helmet`, function () {
+	it(`should not remove Terrains if the user faints from Rocky Helmet`, () => {
 		battle = common.createBattle([[
 			{species: 'shedinja', moves: ['icespinner']},
 			{species: 'wynaut', moves: ['sleeptalk']},
@@ -45,7 +45,7 @@ describe(`Ice Spinner`, function () {
 		assert(battle.field.isTerrain('psychicterrain'));
 	});
 
-	it.skip(`should not remove Terrains if the user is forced out via Red Card`, function () {
+	it.skip(`should not remove Terrains if the user is forced out via Red Card`, () => {
 		battle = common.createBattle([[
 			{species: 'shedinja', moves: ['icespinner']},
 			{species: 'wynaut', moves: ['sleeptalk']},

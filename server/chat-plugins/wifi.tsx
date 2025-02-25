@@ -116,7 +116,7 @@ abstract class Giveaway extends Rooms.SimpleRoomGame {
 	 * IP:userid
 	 */
 	joined: Map<string, ID>;
-	timer: NodeJS.Timer | null;
+	timer: NodeJS.Timeout | null;
 	pokemonID: ID;
 	sprite: Chat.VNode;
 
@@ -717,7 +717,7 @@ export class LotteryGiveaway extends Giveaway {
 			this.send(this.generateWindow(<>
 				<p style={{textAlign: 'center', fontSize: '10pt', fontWeight: 'bold'}}>Lottery Draw</p>
 				<p style={{textAlign: 'center'}}>{Chat.count(this.joined.size, 'users')} joined the giveaway.<br />
-				Our lucky winner{Chat.plural(this.winners)}: <b>{winnerNames}</b>!<br />Congratulations!</p>
+					Our lucky winner{Chat.plural(this.winners)}: <b>{winnerNames}</b>!<br />Congratulations!</p>
 			</>));
 			this.room.sendMods(`|c|~|Participants: ${[...this.joined.values()].join(', ')}`);
 			for (const winner of this.winners) {
@@ -749,7 +749,7 @@ export class GTS extends Rooms.SimpleRoomGame {
 	sprite: Chat.VNode;
 	sent: string[];
 	noDeposits: boolean;
-	timer: NodeJS.Timer | null;
+	timer: NodeJS.Timeout | null;
 
 	constructor(
 		room: Room, giver: User, amount: number,
@@ -1332,10 +1332,10 @@ export const commands: Chat.ChatCommands = {
 			const giveaway = wifiData.submittedGiveaways[hasGiveaway.type][hasGiveaway.index];
 			if (hasGiveaway.type === 'question') {
 				const data = giveaway as QuestionGiveawayData;
-				this.parse(`/giveaway create question ${data.targetUserID}|${data.ot}|${data.tid}|${data.game}|${data.question}|${data.answers.join(',')}|${data.ivs.join('/')}|${data.ball}|${data.extraInfo}|${Teams.pack([data.prize])!}`);
+				this.parse(`/giveaway create question ${data.targetUserID}|${data.ot}|${data.tid}|${data.game}|${data.question}|${data.answers.join(',')}|${data.ivs.join('/')}|${data.ball}|${data.extraInfo}|${Teams.pack([data.prize])}`);
 			} else {
 				const data = giveaway as LotteryGiveawayData;
-				this.parse(`/giveaway create lottery ${data.targetUserID}|${data.ot}|${data.tid}|${data.game}|${data.winners}|${data.ivs.join('/')}|${data.ball}|${data.extraInfo}|${Teams.pack([data.prize])!}`);
+				this.parse(`/giveaway create lottery ${data.targetUserID}|${data.ot}|${data.tid}|${data.game}|${data.winners}|${data.ivs.join('/')}|${data.ball}|${data.extraInfo}|${Teams.pack([data.prize])}`);
 			}
 			wifiData.submittedGiveaways[hasGiveaway.type].splice(hasGiveaway.index, 1);
 			saveData();
@@ -1532,9 +1532,10 @@ function makePageHeader(user: User, pageid?: string) {
 		'submitted-add': <i class="fa fa-inbox"></i>,
 	};
 	const buf = [];
-	buf.push(<button class="button" style={{float: 'right'}} name="send" value={
-		`/j view-giveaways${pageid?.trim() ? `-${pageid.trim()}` : ''}`
-	}>
+	buf.push(<button
+		class="button" style={{float: 'right'}} name="send"
+		value={`/j view-giveaways${pageid?.trim() ? `-${pageid.trim()}` : ''}`}
+	>
 		<i class="fa fa-refresh"></i> Refresh
 	</button>);
 	buf.push(<h1>Wi-Fi Giveaways</h1>);
@@ -1601,7 +1602,7 @@ export const pages: Chat.PageTable = {
 				case 'lottery':
 					return <>
 						<h2>Make a Lottery Giveaway</h2>
-						<form data-submitsend={"/giveaway create lottery {giver}|{ot}|{tid}|{game}|{winners}|{ivs}|{ball}|{info}|{set}"}>
+						<form data-submitsend="/giveaway create lottery {giver}|{ot}|{tid}|{game}|{winners}|{ivs}|{ball}|{info}|{set}">
 							<label for="giver">Giver: </label><input name="giver" /><br /><br />
 							<label for="ot">OT: </label><input name="ot" /><br /><br />
 							<label for="tid">TID: </label><input name="tid" /><br /><br />
@@ -1624,9 +1625,9 @@ export const pages: Chat.PageTable = {
 				case 'question':
 					return <>
 						<h2>Make a Question Giveaway</h2>
-						<form data-submitsend={
-							"/giveaway create question {giver}|{ot}|{tid}|{game}|{question}|{answers}|{ivs}|{ball}|{info}|{set}"
-						}>
+						<form
+							data-submitsend="/giveaway create question {giver}|{ot}|{tid}|{game}|{question}|{answers}|{ivs}|{ball}|{info}|{set}"
+						>
 							<label for="giver">Giver:</label><input name="giver" /><br /><br />
 							<label for="ot">OT:</label><input name="ot" /><br /><br />
 							<label for="tid">TID:</label><input name="tid" /><br /><br />
@@ -1657,8 +1658,8 @@ export const pages: Chat.PageTable = {
 			this.checkCan('warn', null, Rooms.search('wifi')!);
 			const [add, type] = args;
 			const giveaways = [
-				...((wifiData.storedGiveaways || {}).lottery || []),
-				...((wifiData.storedGiveaways || {}).question || []),
+				...(wifiData.storedGiveaways?.lottery || []),
+				...(wifiData.storedGiveaways?.question || []),
 			];
 			const adding = add === 'add';
 			if (!giveaways.length && !adding) {
@@ -1696,17 +1697,22 @@ export const pages: Chat.PageTable = {
 										</details>
 									</>}
 									<hr />
-									<button class="button" name="send" value={
-										`/giveaway delete lottery,${wifiData.storedGiveaways.lottery.indexOf(giveaway) + 1}`
-									}><i class="fa fa-trash"></i> Delete giveaway</button>
-									{!targetUser?.connected ?
+									<button
+										class="button" name="send" value={
+											`/giveaway delete lottery,${wifiData.storedGiveaways.lottery.indexOf(giveaway) + 1}`
+										}
+									><i class="fa fa-trash"></i> Delete giveaway</button>
+									{!targetUser?.connected ? (
 										<button title="The giver is offline" disabled class="button disabled" style={{float: 'right'}}>
 											Create giveaway
-										</button> :
-										<button class="button" style={{float: 'right'}} name="send" value={
-											`/giveaway create lottery ${giveaway.targetUserID}|${giveaway.ot}|${giveaway.tid}|${giveaway.game}|${giveaway.winners}|${giveaway.ivs.join('/')}|${giveaway.ball}|${giveaway.extraInfo.trim().replace(/\n/g, '<br />')}|${Teams.pack([giveaway.prize])}`
-										}>Create giveaway</button>
-									}
+										</button>
+									) : (
+										<button
+											class="button" style={{float: 'right'}} name="send" value={
+												`/giveaway create lottery ${giveaway.targetUserID}|${giveaway.ot}|${giveaway.tid}|${giveaway.game}|${giveaway.winners}|${giveaway.ivs.join('/')}|${giveaway.ball}|${giveaway.extraInfo.trim().replace(/\n/g, '<br />')}|${Teams.pack([giveaway.prize])}`
+											}
+										>Create giveaway</button>
+									)}
 								</div>);
 							} else {
 								giveaway = giveaway as QuestionGiveawayData;
@@ -1732,19 +1738,23 @@ export const pages: Chat.PageTable = {
 										</details>
 									</>}
 									<hr />
-									<button class="button" name="send" value={
-										`/giveaway delete question,${wifiData.storedGiveaways.question.indexOf(giveaway) + 1}`
-									}>
+									<button
+										class="button" name="send"
+										value={`/giveaway delete question,${wifiData.storedGiveaways.question.indexOf(giveaway) + 1}`}
+									>
 										<i class="fa fa-trash"></i> Delete giveaway
 									</button>
-									{!targetUser?.connected ?
+									{!targetUser?.connected ? (
 										<button title="The giver is offline" disabled class="button disabled" style={{float: 'right'}}>
 											Create giveaway
-										</button> :
-										<button class="button" style={{float: 'right'}} name="send" value={
-											`/giveaway create question ${giveaway.targetUserID}|${giveaway.ot}|${giveaway.tid}|${giveaway.game}|${giveaway.question}|${giveaway.answers.join(',')}|${giveaway.ivs.join('/')}|${giveaway.ball}|${giveaway.extraInfo.trim().replace(/\n/g, '<br />')}|${Teams.pack([giveaway.prize])}`
-										}>Create giveaway</button>
-									}
+										</button>
+									) : (
+										<button
+											class="button" style={{float: 'right'}} name="send" value={
+												`/giveaway create question ${giveaway.targetUserID}|${giveaway.ot}|${giveaway.tid}|${giveaway.game}|${giveaway.question}|${giveaway.answers.join(',')}|${giveaway.ivs.join('/')}|${giveaway.ball}|${giveaway.extraInfo.trim().replace(/\n/g, '<br />')}|${Teams.pack([giveaway.prize])}`
+											}
+										>Create giveaway</button>
+									)}
 								</div>);
 							}
 						}
@@ -1784,9 +1794,9 @@ export const pages: Chat.PageTable = {
 										<button class="button" type="submit">Store Lottery Giveaway</button>
 									</form>;
 								case 'question':
-									return <form data-submitsend={
-										"/giveaway store question {giver}|{ot}|{tid}|{game}|{question}|{answers}|{ivs}|{ball}|{info}|{set}"
-									}>
+									return <form
+										data-submitsend="/giveaway store question {giver}|{ot}|{tid}|{game}|{question}|{answers}|{ivs}|{ball}|{info}|{set}"
+									>
 										<label for="giver">Giver:</label><input name="giver" /><br /><br />
 										<label for="ot">OT:</label><input name="ot" /><br /><br />
 										<label for="tid">TID:</label><input name="tid" /><br /><br />
@@ -1821,8 +1831,8 @@ export const pages: Chat.PageTable = {
 			const adding = add === 'add';
 			if (!adding) this.checkCan('warn', null, Rooms.get('wifi')!);
 			const giveaways = [
-				...((wifiData.submittedGiveaways || {}).lottery || []),
-				...((wifiData.submittedGiveaways || {}).question || []),
+				...(wifiData.submittedGiveaways?.lottery || []),
+				...(wifiData.submittedGiveaways?.question || []),
 			];
 			if (!giveaways.length && !adding) {
 				return <div class="pad">
@@ -1953,9 +1963,9 @@ export const pages: Chat.PageTable = {
 										<button class="button" type="submit">Submit Lottery Giveaway</button>
 									</form>;
 								case 'question':
-									return <form data-submitsend={
-										"/giveaway submit question {giver}|{ot}|{tid}|{game}|{question}|{answers}|{ivs}|{ball}|{info}|{set}"
-									}>
+									return <form
+										data-submitsend="/giveaway submit question {giver}|{ot}|{tid}|{game}|{question}|{answers}|{ivs}|{ball}|{info}|{set}"
+									>
 										<label for="giver">Giver:</label><input name="giver" /><br /><br />
 										<label for="ot">OT:</label><input name="ot" /><br /><br />
 										<label for="tid">TID:</label><input name="tid" /><br /><br />

@@ -6,9 +6,9 @@
  * @license MIT
  */
 
-import {ObjectReadWriteStream} from '../../lib/streams';
+import type {ObjectReadWriteStream} from '../../lib/streams';
 import {BattlePlayer} from '../battle-stream';
-import {PRNG, PRNGSeed} from '../prng';
+import {PRNG, type PRNGSeed} from '../prng';
 
 export class RandomPlayerAI extends BattlePlayer {
 	protected readonly move: number;
@@ -17,7 +17,7 @@ export class RandomPlayerAI extends BattlePlayer {
 
 	constructor(
 		playerStream: ObjectReadWriteStream<string>,
-		options: {move?: number, mega?: number, seed?: PRNG | PRNGSeed | null } = {},
+		options: {move?: number, mega?: number, seed?: PRNG | PRNGSeed | null} = {},
 		debug = false
 	) {
 		super(playerStream, debug);
@@ -178,7 +178,7 @@ export class RandomPlayerAI extends BattlePlayer {
 						return move;
 					}
 				} else {
-					throw new Error(`${this.constructor.name} unable to make choice ${i}. request='${request}',` +
+					throw new Error(`${this.constructor.name} unable to make choice ${i}. request='${typeof request}',` +
 						` chosen='${chosen}', (mega=${canMegaEvo}, ultra=${canUltraBurst}, zmove=${canZMove},` +
 						` dynamax='${canDynamax}', terastallize=${canTerastallize})`);
 				}

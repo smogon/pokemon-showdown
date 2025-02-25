@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Sword of Ruin`, function () {
-	afterEach(function () {
+describe(`Sword of Ruin`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should lower the Defense of all other Pokemon`, function () {
+	it(`should lower the Defense of all other Pokemon`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk']},
 		], [
@@ -22,7 +22,7 @@ describe(`Sword of Ruin`, function () {
 		assert.bounded(damage, [120, 142]);
 	});
 
-	it(`should not lower the Defense of other Pokemon with the Sword of Ruin Ability`, function () {
+	it(`should not lower the Defense of other Pokemon with the Sword of Ruin Ability`, () => {
 		battle = common.createBattle({forceRandomChance: false}, [[
 			{species: 'wynaut', ability: 'swordofruin', moves: ['sleeptalk']},
 		], [

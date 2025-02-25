@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Steely Spirit', function () {
-	afterEach(function () {
+describe('Steely Spirit', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should boost Steel-type moves for its ally and itself', function () {
+	it('should boost Steel-type moves for its ally and itself', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'aron', ability: 'steelyspirit', moves: ['ironhead']},
 			{species: 'aron', moves: ['ironhead']},
@@ -29,7 +29,7 @@ describe('Steely Spirit', function () {
 		assert.bounded(damage, [172, 204]);
 	});
 
-	it('should stack with itself', function () {
+	it('should stack with itself', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'aron', ability: 'steelyspirit', moves: ['ironhead']},
 			{species: 'aron', ability: 'steelyspirit', moves: ['ironhead']},

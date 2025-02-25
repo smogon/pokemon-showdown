@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Focus Punch', function () {
-	afterEach(function () {
+describe('Focus Punch', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should cause the user to lose focus if hit by an attacking move`, function () {
+	it(`should cause the user to lose focus if hit by an attacking move`, () => {
 		battle = common.createBattle([[
 			{species: 'Chansey', moves: ['focuspunch']},
 		], [
@@ -20,7 +20,7 @@ describe('Focus Punch', function () {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not cause the user to lose focus if hit by a status move`, function () {
+	it(`should not cause the user to lose focus if hit by a status move`, () => {
 		battle = common.createBattle([[
 			{species: 'Chansey', moves: ['focuspunch']},
 		], [
@@ -30,7 +30,7 @@ describe('Focus Punch', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not cause the user to lose focus if hit while behind a substitute`, function () {
+	it(`should not cause the user to lose focus if hit while behind a substitute`, () => {
 		battle = common.createBattle([[
 			{species: 'Chansey', moves: ['substitute', 'focuspunch']},
 		], [
@@ -41,7 +41,7 @@ describe('Focus Punch', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should cause the user to lose focus if hit by a move called by Nature Power`, function () {
+	it(`should cause the user to lose focus if hit by a move called by Nature Power`, () => {
 		battle = common.createBattle([[
 			{species: 'Chansey', moves: ['focuspunch']},
 		], [
@@ -51,7 +51,7 @@ describe('Focus Punch', function () {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not cause the user to lose focus on later uses of Focus Punch if hit`, function () {
+	it(`should not cause the user to lose focus on later uses of Focus Punch if hit`, () => {
 		battle = common.createBattle([[
 			{species: 'Chansey', moves: ['focuspunch']},
 		], [
@@ -63,7 +63,7 @@ describe('Focus Punch', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should cause the user to lose focus if hit by an attacking move followed by a status move in one turn`, function () {
+	it(`should cause the user to lose focus if hit by an attacking move followed by a status move in one turn`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [
 			[{species: 'Chansey', ability: 'naturalcure', moves: ['focuspunch']}, {species: 'Blissey', ability: 'naturalcure', moves: ['softboiled']}],
 			[{species: 'Venusaur', ability: 'overgrow', moves: ['magicalleaf']}, {species: 'Ivysaur', ability: 'overgrow', moves: ['toxic']}],
@@ -73,7 +73,7 @@ describe('Focus Punch', function () {
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
 	});
 
-	it(`should not deduct PP if the user lost focus`, function () {
+	it(`should not deduct PP if the user lost focus`, () => {
 		battle = common.createBattle([[
 			{species: 'Chansey', moves: ['focuspunch']},
 		], [
@@ -86,7 +86,7 @@ describe('Focus Punch', function () {
 		assert.equal(move.pp, move.maxpp - 1);
 	});
 
-	it(`should deduct PP if the user lost focus before Gen 5`, function () {
+	it(`should deduct PP if the user lost focus before Gen 5`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'Chansey', moves: ['focuspunch']},
 		], [
@@ -99,7 +99,7 @@ describe('Focus Punch', function () {
 		assert.equal(move.pp, move.maxpp - 2);
 	});
 
-	it(`should display a message indicating the Pokemon is tightening focus`, function () {
+	it(`should display a message indicating the Pokemon is tightening focus`, () => {
 		battle = common.createBattle([[
 			{species: 'Chansey', moves: ['focuspunch']},
 		], [
@@ -111,7 +111,7 @@ describe('Focus Punch', function () {
 		assert(tighteningFocusMessage > 0);
 	});
 
-	it(`should not tighten the Pokemon's focus when Dynamaxing or already Dynamaxed`, function () {
+	it(`should not tighten the Pokemon's focus when Dynamaxing or already Dynamaxed`, () => {
 		battle = common.gen(8).createBattle([[
 			{species: 'Chansey', moves: ['focuspunch']},
 		], [
@@ -124,7 +124,7 @@ describe('Focus Punch', function () {
 		assert(tighteningFocusMessage < 0);
 	});
 
-	it(`should tighten focus after switches in Gen 5+`, function () {
+	it(`should tighten focus after switches in Gen 5+`, () => {
 		battle = common.createBattle([[
 			{species: 'salamence', moves: ['focuspunch']},
 		], [
@@ -139,7 +139,7 @@ describe('Focus Punch', function () {
 		assert(focusPunchChargeIndex > switchIndex, `Focus Punch's charge message should occur after switches in Gen 5+`);
 	});
 
-	it(`should tighten focus before switches in Gens 3-4`, function () {
+	it(`should tighten focus before switches in Gens 3-4`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'salamence', moves: ['focuspunch']},
 		], [

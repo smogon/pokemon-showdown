@@ -241,8 +241,7 @@ export class AutoResponder {
 	destroy() {
 		this.writeState();
 		this.room.responder = null;
-		// @ts-ignore deallocating
-		this.room = null;
+		this.room = null!;
 	}
 	ignore(terms: string[], context: Chat.CommandContext) {
 		const filtered = terms.map(t => context.filter(t)).filter(Boolean);

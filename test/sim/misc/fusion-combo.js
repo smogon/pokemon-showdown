@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Fusion Bolt + Fusion Flare', function () {
-	afterEach(function () {
+describe('Fusion Bolt + Fusion Flare', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should boost the second move if the first was used immediately before it`, function () {
+	it(`should boost the second move if the first was used immediately before it`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Wynaut', moves: ['fusionbolt']},
 			{species: 'Wobbuffet', moves: ['fusionflare']},
@@ -28,7 +28,7 @@ describe('Fusion Bolt + Fusion Flare', function () {
 		assert.equal(bpModifiers.get('fusionflare'), 2);
 	});
 
-	it(`should boost the second move if the first was used by the same Pokemon`, function () {
+	it(`should boost the second move if the first was used by the same Pokemon`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Magikarp', item: 'laggingtail', moves: ['fusionbolt', 'fusionflare']},
 			{species: 'Oranguru', moves: ['sleeptalk', 'instruct']},
@@ -49,7 +49,7 @@ describe('Fusion Bolt + Fusion Flare', function () {
 		assert.equal(bpModifiers.get('fusionflare'), 2);
 	});
 
-	it(`should not boost the second move if another move was used between them`, function () {
+	it(`should not boost the second move if another move was used between them`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Zekrom', moves: ['fusionbolt']},
 			{species: 'Reshiram', item: 'laggingtail', moves: ['fusionflare']},
@@ -69,7 +69,7 @@ describe('Fusion Bolt + Fusion Flare', function () {
 		assert.equal(bpModifiers.get('fusionflare'), 1);
 	});
 
-	it(`should not boost the second move if the first move failed`, function () {
+	it(`should not boost the second move if the first move failed`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Regieleki', moves: ['fusionbolt']},
 			{species: 'Reshiram', moves: ['fusionflare']},

@@ -21,8 +21,8 @@ const TEAMS = [[
 	{species: 'Snorlax', ability: 'thickfat', item: 'leftovers', moves: ['rest']},
 ]];
 
-describe('State', function () {
-	describe('Battles', function () {
+describe('State', () => {
+	describe('Battles', () => {
 		it('should be able to be serialized and deserialized without affecting functionality (slow)', function () {
 			this.timeout(5000);
 			const control = common.createBattle({seed: 'sodium,00000001000000020000000300000004'}, TEAMS);
@@ -43,7 +43,7 @@ describe('State', function () {
 			control.destroy();
 			test.destroy();
 		});
-		it('should require special treatment for complex objects', function () {
+		it('should require special treatment for complex objects', () => {
 			const battle = common.createBattle(TEAMS);
 			battle.foo = new Map();
 			assert.throws(() => battle.toJSON(), /Unsupported type Map/);

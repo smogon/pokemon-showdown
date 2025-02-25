@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Flame Orb', function () {
-	afterEach(function () {
+describe('Flame Orb', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should not trigger when entering battle', function () {
+	it('should not trigger when entering battle', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Magikarp', ability: 'swiftswim', item: 'focussash', moves: ['splash']},
@@ -24,7 +24,7 @@ describe('Flame Orb', function () {
 		assert.notEqual(battle.p1.active[0].status, 'brn');
 	});
 
-	it('should trigger after one turn', function () {
+	it('should trigger after one turn', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Ursaring', ability: 'guts', item: 'flameorb', moves: ['protect']}]});
 		battle.setPlayer('p2', {team: [{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']}]});

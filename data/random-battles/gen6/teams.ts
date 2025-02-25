@@ -1,6 +1,6 @@
-import {MoveCounter, TeamData} from '../gen8/teams';
-import RandomGen7Teams, {BattleFactorySpecies, ZeroAttackHPIVs} from '../gen7/teams';
-import {PRNG, PRNGSeed} from '../../../sim/prng';
+import {type MoveCounter, type TeamData} from '../gen8/teams';
+import RandomGen7Teams, {type BattleFactorySpecies, ZeroAttackHPIVs} from '../gen7/teams';
+import {type PRNG, type PRNGSeed} from '../../../sim/prng';
 import {toID} from '../../../sim/dex';
 
 // Moves that restore HP:
@@ -490,7 +490,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (['Fast Attacker', 'Setup Sweeper', 'Bulky Attacker', 'Wallbreaker'].includes(role)) {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
-				const currentAttackType = counter.damagingMoves.values().next().value.type;
+				const currentAttackType = counter.damagingMoves.values().next().value!.type;
 				// Choose an attacking move that is of different type to the current single attack
 				const coverageMoves = [];
 				for (const moveid of movePool) {
@@ -560,7 +560,6 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 		return false;
 	}
-
 
 	getAbility(
 		types: Set<string>,
@@ -975,7 +974,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			evs: setData.set.evs || {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
 			ivs: setData.set.ivs || {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
 			nature: setData.set.nature || 'Serious',
-			moves: moves,
+			moves,
 		};
 	}
 
@@ -1047,7 +1046,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				// Drought and Drizzle don't count towards the type combo limit
 				typeCombo = set.ability;
 			}
-			if (teamData.typeComboCount[typeCombo] >= 1 * limitFactor) continue;
+			if (teamData.typeComboCount[typeCombo] >= limitFactor) continue;
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);

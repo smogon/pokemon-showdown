@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Pickup', function () {
-	afterEach(function () {
+describe('Pickup', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should pick up a consumed item', function () {
+	it('should pick up a consumed item', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Gourgeist', ability: 'pickup', moves: ['flamethrower']}]});
 		battle.setPlayer('p2', {team: [{species: 'Paras', ability: 'dryskin', item: 'sitrusberry', moves: ['endure']}]});
@@ -18,7 +18,7 @@ describe('Pickup', function () {
 		assert.holdsItem(battle.p1.active[0], "Pick Up should retrieve consumed Sitrus Berry");
 	});
 
-	it('should pick up flung items', function () {
+	it('should pick up flung items', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Gourgeist', ability: 'pickup', moves: ['endure']}]});
 		battle.setPlayer('p2', {team: [{species: 'Clefairy', ability: 'unaware', item: 'airballoon', moves: ['fling']}]});
@@ -26,7 +26,7 @@ describe('Pickup', function () {
 		assert.holdsItem(battle.p1.active[0], "Pick Up should retrieve flung Air Balloon");
 	});
 
-	it('should not pick up an item that was knocked off', function () {
+	it('should not pick up an item that was knocked off', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Ambipom', ability: 'pickup', moves: ['knockoff']}]});
 		battle.setPlayer('p2', {team: [{species: 'Machamp', ability: 'noguard', item: 'choicescarf', moves: ['bulkup']}]});
@@ -34,7 +34,7 @@ describe('Pickup', function () {
 		assert.false.holdsItem(battle.p1.active[0], "Pick Up should not retrieve knocked off Choice Scarf");
 	});
 
-	it('should not pick up a popped Air Balloon', function () {
+	it('should not pick up a popped Air Balloon', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Ambipom', ability: 'pickup', moves: ['fakeout']}]});
 		battle.setPlayer('p2', {team: [{species: 'Scizor', ability: 'swarm', item: 'airballoon', moves: ['roost']}]});
@@ -42,7 +42,7 @@ describe('Pickup', function () {
 		assert.false.holdsItem(battle.p1.active[0], "Pick Up should not retrieve popped Air Balloon");
 	});
 
-	it('should not pick up items from Pokemon that have switched out and back in', function () {
+	it('should not pick up items from Pokemon that have switched out and back in', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Gourgeist', ability: 'pickup', moves: ['shadowsneak']},
@@ -59,7 +59,7 @@ describe('Pickup', function () {
 		assert.false.holdsItem(battle.p1.active[0], "Pick Up should not retrieve Eject Button of returned Clefable");
 	});
 
-	it('should not pick up items from Pokemon that have switched out', function () {
+	it('should not pick up items from Pokemon that have switched out', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Gourgeist', ability: 'pickup', moves: ['shadowsneak', 'synthesis']}]});
 		battle.setPlayer('p2', {team: [
@@ -74,7 +74,7 @@ describe('Pickup', function () {
 		assert.false.holdsItem(battle.p1.active[0]);
 	});
 
-	it('should not pick up items that were already retrieved', function () {
+	it('should not pick up items that were already retrieved', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Ambipom', ability: 'pickup', moves: ['return']}]});
 		battle.setPlayer('p2', {team: [{species: 'Aron', level: 1, ability: 'sturdy', item: 'berryjuice', moves: ['recycle']}]});
@@ -82,7 +82,7 @@ describe('Pickup', function () {
 		assert.false.holdsItem(battle.p1.active[0]);
 	});
 
-	it('should pick up items from adjacent allies', function () {
+	it('should pick up items from adjacent allies', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [
 			[{species: 'Ambipom', ability: 'pickup', moves: ['protect']}, {species: 'Aron', level: 1, ability: 'sturdy', item: 'berryjuice', moves: ['followme']}],
 			[{species: 'Ambipom', ability: 'technician', moves: ['return']}, {species: 'Arcanine', ability: 'flashfire', moves: ['protect']}],
@@ -91,7 +91,7 @@ describe('Pickup', function () {
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
-	it('should not pick up items from non-adjacent allies and enemies', function () {
+	it('should not pick up items from non-adjacent allies and enemies', () => {
 		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Ambipom', ability: 'pickup', moves: ['protect']},

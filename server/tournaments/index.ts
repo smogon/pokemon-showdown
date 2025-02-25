@@ -1,4 +1,3 @@
-
 import {Elimination} from './generator-elimination';
 import {RoundRobin} from './generator-round-robin';
 import {Utils} from '../../lib';
@@ -290,8 +289,8 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			(this.isTournamentStarted && this.isAvailableMatchesInvalidated)) {
 			this.room.add(
 				"Error: update() called with a target user when data invalidated: " +
-				(!this.bracketUpdateTimer && this.isBracketInvalidated) + ", " +
-				(this.isTournamentStarted && this.isAvailableMatchesInvalidated) +
+				`${!this.bracketUpdateTimer && this.isBracketInvalidated}, ` +
+				`${this.isTournamentStarted && this.isAvailableMatchesInvalidated}` +
 				"; Please report this to an admin."
 			);
 			return;
@@ -415,8 +414,10 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			return;
 		}
 
-		if ((this.room.settings.tournaments?.autoconfirmedOnly || this.autoconfirmedOnly) &&
-		   !user.autoconfirmed && !user.trusted) {
+		if (
+			(this.room.settings.tournaments?.autoconfirmedOnly || this.autoconfirmedOnly) &&
+			!user.autoconfirmed && !user.trusted
+		) {
 			user.popup("Signups for tournaments are only available for autoconfirmed users in this room.");
 			return;
 		}
@@ -1572,9 +1573,9 @@ const commands: Chat.ChatCommands = {
 					tournament.playerCap = 0;
 					room.send(`|tournament|update|{"playerCap": "${playerCap}"}`);
 				}
-				const capNote = (tournament.playerCap ? ' with a player cap of ' + tournament.playerCap : '');
+				const capNote = (tournament.playerCap ? ` with a player cap of ${tournament.playerCap}` : '');
 				this.privateModAction(`${user.name} set tournament type to ${generator.name}${capNote}.`);
-				this.modlog('TOUR SETTYPE', null, generator.name + capNote);
+				this.modlog('TOUR SETTYPE', null, `${generator.name}${capNote}`);
 				this.sendReply(`Tournament set to ${generator.name}${capNote}.`);
 			}
 		},

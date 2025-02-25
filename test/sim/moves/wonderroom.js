@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Wonder Room', function () {
-	afterEach(function () {
+describe('Wonder Room', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should swap the raw Defense and Special Defense stats, but not stat stage changes or other defense modifiers`, function () {
+	it(`should swap the raw Defense and Special Defense stats, but not stat stage changes or other defense modifiers`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['brickbreak']},
 		], [
@@ -34,7 +34,7 @@ describe('Wonder Room', function () {
 		assert.bounded(damage, [38, 46], `Wonder Room should not use Assault Vest for Brick Break's damage calculation`);
 	});
 
-	it(`should cause Body Press to use Sp. Def stat stage changes`, function () {
+	it(`should cause Body Press to use Sp. Def stat stage changes`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['amnesia', 'bodypress']},
 		], [
@@ -48,7 +48,7 @@ describe('Wonder Room', function () {
 		assert.bounded(damage, [100, 118]);
 	});
 
-	it(`should be ignored by Download when determining raw stats, but not stat stage changes`, function () {
+	it(`should be ignored by Download when determining raw stats, but not stat stage changes`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['wonderroom']},
 			{species: 'Porygon', ability: 'download', moves: ['sleeptalk']},

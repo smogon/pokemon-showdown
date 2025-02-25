@@ -108,7 +108,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					// purposes of Counter, Metal Burst, and Mirror Coat.
 					damage[i] = md === true || !md ? 0 : md;
 					// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
-					move.totalDamage += damage[i] as number;
+					move.totalDamage += damage[i];
 				}
 				if (move.mindBlownRecoil) {
 					const hpBeforeRecoil = pokemon.hp;
@@ -176,7 +176,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.battle.eachEvent('Update');
 
-			this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val) as Pokemon[], pokemon, move);
+			this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
 
 			if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 				for (const [i, d] of damage.entries()) {
@@ -207,7 +207,7 @@ export const Scripts: ModdedBattleScriptsData = {
 function calculate(battle: Battle, source: Pokemon, pokemon: Pokemon, moveid = 'tackle') {
 	const move = battle.dex.getActiveMove(moveid);
 	move.type = source.getTypes()[0];
-	const typeMod = Math.pow(2, battle.clampIntRange(pokemon.runEffectiveness(move), -6, 6));
+	const typeMod = 2 ** battle.clampIntRange(pokemon.runEffectiveness(move), -6, 6);
 	if (!pokemon.runImmunity(move.type)) return 0;
 	return typeMod;
 }

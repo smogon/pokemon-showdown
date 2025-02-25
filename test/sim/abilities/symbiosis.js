@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Symbiosis', function () {
-	afterEach(function () {
+describe('Symbiosis', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should share its item with its ally`, function () {
+	it(`should share its item with its ally`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Smeargle', ability: 'symbiosis', item: 'enigmaberry', moves: ['sleeptalk']},
 			{species: 'Latias', ability: 'levitate', item: 'weaknesspolicy', moves: ['sleeptalk']},
@@ -23,7 +23,7 @@ describe('Symbiosis', function () {
 		assert.equal(battle.p1.active[1].item, 'enigmaberry');
 	});
 
-	it('should not share an item required to change forme', function () {
+	it('should not share an item required to change forme', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [
 			[{species: 'Smeargle', ability: 'symbiosis', item: 'latiasite', moves: ['snarl']}, {species: 'Latias', ability: 'levitate', item: 'weaknesspolicy', moves: ['snarl']}],
 			[{species: 'Smeargle', moves: ['snarl']}, {species: 'Smeargle', moves: ['snarl']}],
@@ -33,7 +33,7 @@ describe('Symbiosis', function () {
 		assert.equal(battle.p1.active[1].item, '');
 	});
 
-	it('should not trigger on an ally losing their Eject Button in Generation 7 or later', function () {
+	it('should not trigger on an ally losing their Eject Button in Generation 7 or later', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'oranguru', ability: 'symbiosis', item: 'leftovers', moves: ['sleeptalk']},
 			{species: 'wynaut', item: 'ejectbutton', moves: ['sleeptalk']},
@@ -48,7 +48,7 @@ describe('Symbiosis', function () {
 		assert.equal(battle.p1.active[1].item, '');
 	});
 
-	it('should trigger on an ally losing their Eject Button in Generation 6', function () {
+	it('should trigger on an ally losing their Eject Button in Generation 6', () => {
 		battle = common.gen(6).createBattle({gameType: 'doubles'}, [[
 			{species: 'oranguru', ability: 'symbiosis', item: 'leftovers', moves: ['sleeptalk']},
 			{species: 'wynaut', item: 'ejectbutton', moves: ['sleeptalk']},
@@ -63,7 +63,7 @@ describe('Symbiosis', function () {
 		assert.equal(battle.p1.active[1].item, 'leftovers');
 	});
 
-	it.skip(`should not trigger on an ally using their Eject Pack`, function () {
+	it.skip(`should not trigger on an ally using their Eject Pack`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'oranguru', ability: 'symbiosis', item: 'leftovers', moves: ['sleeptalk']},
 			{species: 'wynaut', item: 'ejectpack', moves: ['superpower']},
@@ -79,8 +79,8 @@ describe('Symbiosis', function () {
 	});
 
 	// See Marty's research for many more examples: https://www.smogon.com/forums/threads/battle-mechanics-research.3489239/post-6401506
-	describe.skip('Symbiosis Eject Button Glitch (Gen 6 only)', function () {
-		it('should cause Leftovers to restore HP 4 times', function () {
+	describe.skip('Symbiosis Eject Button Glitch (Gen 6 only)', () => {
+		it('should cause Leftovers to restore HP 4 times', () => {
 			battle = common.gen(6).createBattle({gameType: 'doubles'}, [[
 				{species: 'florges', ability: 'symbiosis', item: 'leftovers', moves: ['sleeptalk']},
 				{species: 'roggenrola', level: 50, ability: 'sturdy', item: 'ejectbutton', moves: ['sleeptalk']},
@@ -102,7 +102,7 @@ describe('Symbiosis', function () {
 			assert.equal(targetHP, roggenrola.hp);
 		});
 
-		it('should cause Choice items to apply 2 times', function () {
+		it('should cause Choice items to apply 2 times', () => {
 			battle = common.gen(6).createBattle({gameType: 'doubles'}, [[
 				{species: 'florges', ability: 'symbiosis', item: 'choiceband', moves: ['sleeptalk']},
 				{species: 'roggenrola', evs: {atk: 8}, item: 'ejectbutton', moves: ['smackdown']},

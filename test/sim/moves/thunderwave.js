@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Thunder Wave', function () {
-	afterEach(function () {
+describe('Thunder Wave', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should not ignore natural type immunities', function () {
+	it('should not ignore natural type immunities', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Jolteon", ability: 'quickfeet', moves: ['thunderwave']}]});
 		battle.setPlayer('p2', {team: [{species: "Hippowdon", ability: 'sandforce', moves: ['slackoff']}]});

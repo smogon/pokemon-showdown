@@ -116,7 +116,6 @@ class PunishmentMap extends Map<string, Punishment[]> {
 			this.removeExpiring(punishments);
 			if (punishments.length) {
 				for (const punishment of punishments) {
-					// eslint-disable-next-line callback-return
 					callback(punishment, k, this);
 				}
 			} else {
@@ -179,7 +178,7 @@ class NestedPunishmentMap extends Map<RoomID, PunishmentMap> {
 		return undefined;
 	}
 	nestedGetByType(k1: RoomID, k2: string, type: string) {
-		return this.nestedGet(k1, k2)?.filter(p => p.type === type)[0];
+		return this.nestedGet(k1, k2)?.find(p => p.type === type);
 	}
 	nestedHas(k1: RoomID, k2: string) {
 		return !!this.nestedGet(k1, k2);
@@ -196,7 +195,6 @@ class NestedPunishmentMap extends Map<RoomID, PunishmentMap> {
 				subMap.removeExpiring(punishments);
 				if (punishments.length) {
 					for (const punishment of punishments) {
-						// eslint-disable-next-line callback-return
 						callback(punishment, k1, k2);
 					}
 				} else {
@@ -258,7 +256,7 @@ export const Punishments = new class {
 	/**
 	 * Map<userid that has been warned, reason they were warned for>
 	 */
-	readonly offlineWarns: Map<ID, string> = new Map();
+	readonly offlineWarns = new Map<ID, string>();
 	/**
 	 * punishType is an allcaps string, for global punishments they can be
 	 * anything in the punishmentTypes map.
@@ -266,7 +264,7 @@ export const Punishments = new class {
 	 * This map can be extended with custom punishments by chat plugins.
 	 *
 	 * Keys in the map correspond to PunishInfo */
-	readonly punishmentTypes = new Map<string, PunishInfo>([
+	readonly punishmentTypes: Map<string, PunishInfo> = new Map<string, PunishInfo>([
 		...(global.Punishments?.punishmentTypes || []),
 		['LOCK', {desc: 'locked'}],
 		['BAN', {desc: 'globally banned'}],
@@ -287,7 +285,7 @@ export const Punishments = new class {
 	 * - 'MUTE' (used by getRoomPunishments)
 	 *
 	 */
-	readonly roomPunishmentTypes = new Map<string, PunishInfo>([
+	readonly roomPunishmentTypes: Map<string, PunishInfo> = new Map<string, PunishInfo>([
 		// references to global.Punishments? are here because if you hotpatch punishments without hotpatching chat,
 		// old punishment types won't be loaded into here, which might cause issues. This guards against that.
 		...(global.Punishments?.roomPunishmentTypes || []),
@@ -950,7 +948,7 @@ export const Punishments = new class {
 		rest?: any[]
 	) {
 		if (!expireTime) expireTime = Date.now() + LOCK_DURATION;
-		const punishment = {type: 'LOCK', id, expireTime, reason: reason, rest} as Punishment;
+		const punishment = {type: 'LOCK', id, expireTime, reason, rest} as Punishment;
 
 		const userObject = Users.get(user);
 		// This makes it easier for unit tests to tell if a user was locked
@@ -999,7 +997,7 @@ export const Punishments = new class {
 			action: `AUTO${punishment}`,
 			visualRoomID: typeof room !== 'string' ? (room as Room).roomid : room,
 			ip: typeof user !== 'string' ? user.latestIp : null,
-			userid: userid,
+			userid,
 			note: reason,
 			isGlobal: true,
 		};
@@ -1014,7 +1012,7 @@ export const Punishments = new class {
 			Rooms.global.modlog(logEntry);
 		}
 
-		if (roomObject?.battle && userObject && userObject.connections[0]) {
+		if (roomObject?.battle && userObject?.connections[0]) {
 			Chat.parse('/savereplay forpunishment', roomObject, userObject, userObject.connections[0]);
 		}
 
@@ -1558,7 +1556,7 @@ export const Punishments = new class {
 	}
 
 	sortedTypes = ['TICKETBAN', 'LOCK', 'NAMELOCK', 'BAN'];
-	sortedRoomTypes = [...(global.Punishments?.sortedRoomTypes || []), 'ROOMBAN', 'BLACKLIST'];
+	sortedRoomTypes: string[] = [...(global.Punishments?.sortedRoomTypes || []), 'ROOMBAN', 'BLACKLIST'];
 	byWeight(punishments?: Punishment[], room = false) {
 		if (!punishments) return [];
 		return Utils.sortBy(
@@ -1669,7 +1667,7 @@ export const Punishments = new class {
 							`|popup||html|You are banned from battling` +
 							`${punishment.id !== userid ? ` because you have the same IP as banned user: ${punishUserid}` : ''}. ` +
 							`Your battle ban will expire in a few days.` +
-							`${punishment.reason ? Utils.html `\n\nReason: ${punishment.reason}` : ``}` +
+							`${punishment.reason ? Utils.html`\n\nReason: ${punishment.reason}` : ``}` +
 							`${appealLink ? `\n\nOr you can ${appealLink}.` : ``}`
 						);
 						user.notified.punishment = true;
@@ -2118,7 +2116,9 @@ export const Punishments = new class {
 				if (typeof user !== 'string') {
 					user.popup(
 						`|modal|You've been locked for breaking the rules in multiple chatrooms.\n\n` +
-						`If you feel that your lock was unjustified, you can still PM staff members (%, @, ~) to discuss it${Config.appealurl ? " or you can appeal:\n" + Config.appealurl : "."}\n\n` +
+						`If you feel that your lock was unjustified, you can still PM staff members (%, @, ~) to discuss it${
+							Config.appealurl ? ` or you can appeal:\n${Config.appealurl}` : "."
+						}\n\n` +
 						`Your lock will expire in a few days.`
 					);
 				}

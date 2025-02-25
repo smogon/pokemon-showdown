@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Relic Song', function () {
-	afterEach(function () {
+describe('Relic Song', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should transform Meloetta into its Pirouette forme', function () {
+	it('should transform Meloetta into its Pirouette forme', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Meloetta", ability: 'serenegrace', moves: ['relicsong']}]});
 		battle.setPlayer('p2', {team: [{species: "Registeel", ability: 'clearbody', moves: ['rest']}]});
@@ -18,7 +18,7 @@ describe('Relic Song', function () {
 		assert.equal(battle.p1.active[0].species.id, 'meloettapirouette');
 	});
 
-	it('should transform Meloetta-Pirouette into its Aria forme', function () {
+	it('should transform Meloetta-Pirouette into its Aria forme', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Meloetta-Pirouette", ability: 'serenegrace', moves: ['relicsong']}]});
 		battle.setPlayer('p2', {team: [{species: "Registeel", ability: 'clearbody', moves: ['rest']}]});
@@ -26,7 +26,7 @@ describe('Relic Song', function () {
 		assert.equal(battle.p1.active[0].species.id, 'meloetta');
 	});
 
-	it('should pierce through substitutes', function () {
+	it('should pierce through substitutes', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'relicsong']}]});
 		battle.setPlayer('p2', {team: [{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}]});
@@ -36,12 +36,12 @@ describe('Relic Song', function () {
 	});
 });
 
-describe('Relic Song [Gen 5]', function () {
-	afterEach(function () {
+describe('Relic Song [Gen 5]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should not pierce through substitutes', function () {
+	it('should not pierce through substitutes', () => {
 		battle = common.gen(5).createBattle([
 			[{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'relicsong']}],
 			[{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}],
@@ -51,7 +51,7 @@ describe('Relic Song [Gen 5]', function () {
 		assert.equal(battle.p2.active[0].item, 'focussash');
 	});
 
-	it('should transform Meloetta into its Pirouette forme even if it hits a substitute', function () {
+	it('should transform Meloetta into its Pirouette forme even if it hits a substitute', () => {
 		battle = common.createBattle([
 			[{species: "Meloetta", ability: 'serenegrace', moves: ['relicsong']}],
 			[{species: "Registeel", ability: 'prankster', moves: ['substitute']}],

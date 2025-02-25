@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Rapid Spin', function () {
-	afterEach(function () {
+describe('Rapid Spin', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should remove entry hazards`, function () {
+	it(`should remove entry hazards`, () => {
 		battle = common.createBattle([[
 			{species: 'Omastar', moves: ['stealthrock', 'spikes', 'toxicspikes', 'stickyweb']},
 		], [
@@ -24,7 +24,7 @@ describe('Rapid Spin', function () {
 		assert(!side['stealthrock'] && !side['spikes'] && !side['toxicspikes'] && !side['stickyweb']);
 	});
 
-	it(`should remove entry hazards past a Substitute`, function () {
+	it(`should remove entry hazards past a Substitute`, () => {
 		battle = common.createBattle([[
 			{species: 'Cobalion', moves: ['stealthrock', 'substitute']},
 		], [
@@ -35,7 +35,7 @@ describe('Rapid Spin', function () {
 		assert(!battle.p2.sideConditions['stealthrock']);
 	});
 
-	it(`should not remove hazards if the user faints`, function () {
+	it(`should not remove hazards if the user faints`, () => {
 		battle = common.createBattle([[
 			{species: 'Mew', item: 'rockyhelmet', moves: ['stealthrock']},
 		], [
@@ -46,7 +46,7 @@ describe('Rapid Spin', function () {
 		assert(battle.p2.sideConditions['stealthrock']);
 	});
 
-	it(`should not remove hazards if the user has Sheer Force`, function () {
+	it(`should not remove hazards if the user has Sheer Force`, () => {
 		battle = common.createBattle([[
 			{species: 'Cobalion', moves: ['stealthrock']},
 		], [
@@ -56,7 +56,7 @@ describe('Rapid Spin', function () {
 		assert(battle.p2.sideConditions['stealthrock']);
 	});
 
-	it(`should remove hazards if the user has Sheer Force [Gen 7]`, function () {
+	it(`should remove hazards if the user has Sheer Force [Gen 7]`, () => {
 		battle = common.gen(7).createBattle([[
 			{species: 'Cobalion', moves: ['stealthrock']},
 		], [

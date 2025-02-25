@@ -164,7 +164,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			const sideConditions = ['reflect', 'lightscreen', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock'];
 			for (const condition of sideConditions) {
 				if (pokemon.side.removeSideCondition(condition)) {
-					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Defog', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Defog', `[of] ${pokemon}`);
 				}
 			}
 		},
@@ -202,7 +202,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePowerCallback(pokemon, target) {
 			const ratio = Math.floor(pokemon.getStat('spe') / Math.max(1, target.getStat('spe')));
 			const bp = [40, 60, 80, 120, 150][Math.min(ratio, 4)];
-			this.debug('BP: ' + bp);
+			this.debug(`BP: ${bp}`);
 			return bp;
 		},
 	},
@@ -277,7 +277,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'futuresight',
-				source: source,
+				source,
 				moveData: {
 					id: 'futuresight',
 					name: "Future Sight",
@@ -335,7 +335,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePowerCallback(pokemon, target) {
 			let power = Math.floor(25 * target.getStat('spe') / Math.max(1, pokemon.getStat('spe'))) + 1;
 			if (power > 150) power = 150;
-			this.debug('BP: ' + power);
+			this.debug(`BP: ${power}`);
 			return power;
 		},
 	},
@@ -368,7 +368,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 0,
 		basePowerCallback(pokemon) {
 			const bp = pokemon.hpPower || 70;
-			this.debug('BP: ' + bp);
+			this.debug(`BP: ${bp}`);
 			return bp;
 		},
 	},
@@ -793,7 +793,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (targetAbility === sourceAbility) {
 				return false;
 			}
-			this.add('-activate', source, 'move: Skill Swap', this.dex.abilities.get(targetAbility), this.dex.abilities.get(sourceAbility), '[of] ' + target);
+			this.add('-activate', source, 'move: Skill Swap', this.dex.abilities.get(targetAbility), this.dex.abilities.get(sourceAbility), `[of] ${target}`);
 			source.setAbility(targetAbility);
 			target.setAbility(sourceAbility);
 		},

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Focus Sash', function () {
-	afterEach(function () {
+describe('Focus Sash', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should be consumed and allow its user to survive an attack from full HP', function () {
+	it('should be consumed and allow its user to survive an attack from full HP', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Paras', ability: 'dryskin', item: 'focussash', moves: ['sleeptalk']}]});
 		battle.setPlayer('p2', {team: [{species: 'Delphox', ability: 'magician', moves: ['incinerate']}]});
@@ -21,7 +21,7 @@ describe('Focus Sash', function () {
 		assert.equal(holder.hp, 1);
 	});
 
-	it(`should be consumed and allow its user to survive a confusion damage hit from full HP`, function () {
+	it(`should be consumed and allow its user to survive a confusion damage hit from full HP`, () => {
 		battle = common.createBattle({forceRandomChance: true}, [[
 			{species: 'Shedinja', ability: 'wonderguard', item: 'focussash', moves: ['absorb']},
 		], [
@@ -34,7 +34,7 @@ describe('Focus Sash', function () {
 		assert.false.fainted(shedinja);
 	});
 
-	it('should not trigger on recoil damage', function () {
+	it('should not trigger on recoil damage', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Shedinja', ability: 'wonderguard', item: 'focussash', moves: ['doubleedge']}]});
 		battle.setPlayer('p2', {team: [{species: 'Klefki', ability: 'prankster', moves: ['reflect']}]});
@@ -44,7 +44,7 @@ describe('Focus Sash', function () {
 		assert.fainted(holder);
 	});
 
-	it('should not trigger on residual damage', function () {
+	it('should not trigger on residual damage', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Shedinja', ability: 'wonderguard', item: 'focussash', moves: ['sleeptalk']}]});
 		battle.setPlayer('p2', {team: [{species: 'Crobat', ability: 'infiltrator', moves: ['toxic']}]});

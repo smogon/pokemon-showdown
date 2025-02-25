@@ -10,14 +10,14 @@ const adderMoves = [
 	{name: 'Forest\'s Curse', type: 'Grass'},
 ];
 
-describe('Type addition', function () {
-	afterEach(function () {
+describe('Type addition', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
 	for (const moveData of adderMoves) {
-		describe(moveData.name, function () {
-			it('should add ' + moveData.type + ' type to its target', function () {
+		describe(moveData.name, () => {
+			it('should add ' + moveData.type + ' type to its target', () => {
 				battle = common.createBattle();
 				battle.setPlayer('p1', {team: [{species: "Gourgeist", ability: 'frisk', moves: [moveData.name]}]});
 				battle.setPlayer('p2', {team: [{species: "Machamp", ability: 'guts', moves: ['crosschop']}]});
@@ -25,7 +25,7 @@ describe('Type addition', function () {
 				assert.sets(() => target.getTypes().join('/'), `Fighting/${moveData.type}`, () => battle.makeChoices('move ' + moveData.name, 'move crosschop'));
 			});
 
-			it('should not add ' + moveData.type + ' type to ' + moveData.type + ' targets', function () {
+			it('should not add ' + moveData.type + ' type to ' + moveData.type + ' targets', () => {
 				battle = common.createBattle();
 				battle.setPlayer('p1', {team: [{species: "Gourgeist", ability: 'frisk', moves: [moveData.name]}]});
 				battle.setPlayer('p2', {team: [{species: "Trevenant", ability: 'harvest', moves: ['ingrain']}]});
@@ -33,7 +33,7 @@ describe('Type addition', function () {
 				assert.constant(() => target.getTypes().join('/'), () => battle.makeChoices('move ' + moveData.name, 'move ingrain'));
 			});
 
-			it('should be able to add ' + moveData.type + ' type to Arceus', function () {
+			it('should be able to add ' + moveData.type + ' type to Arceus', () => {
 				battle = common.createBattle();
 				battle.setPlayer('p1', {team: [{species: "Gourgeist", ability: 'frisk', moves: [moveData.name]}]});
 				battle.setPlayer('p2', {team: [{species: "Arceus", ability: 'multitype', moves: ['extremespeed']}]});
@@ -43,7 +43,7 @@ describe('Type addition', function () {
 
 			for (const moveData2 of adderMoves) {
 				if (moveData.name === moveData2.name) {
-					it('should fail on repeated use', function () {
+					it('should fail on repeated use', () => {
 						battle = common.createBattle();
 						battle.setPlayer('p1', {team: [{species: "Gourgeist", ability: 'frisk', moves: [moveData.name]}]});
 						battle.setPlayer('p2', {team: [{species: "Deoxys-Speed", ability: 'pressure', moves: ['spikes']}]});
@@ -53,7 +53,7 @@ describe('Type addition', function () {
 						assert(battle.log[battle.lastMoveLine + 1].startsWith('|-fail|'));
 					});
 				} else {
-					it('should override ' + moveData2.name, function () {
+					it('should override ' + moveData2.name, () => {
 						battle = common.createBattle();
 						battle.setPlayer('p1', {team: [{species: "Gourgeist", ability: 'frisk', moves: [moveData.name, moveData2.name]}]});
 						battle.setPlayer('p2', {team: [{species: "Deoxys-Speed", ability: 'pressure', moves: ['spikes']}]});

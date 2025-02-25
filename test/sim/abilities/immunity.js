@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Immunity', function () {
-	afterEach(function () {
+describe('Immunity', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should make the user immune to poison', function () {
+	it('should make the user immune to poison', () => {
 		battle = common.createBattle([[
 			{species: 'Snorlax', ability: 'immunity', moves: ['curse']},
 		], [
@@ -19,7 +19,7 @@ describe('Immunity', function () {
 		assert.constant(() => battle.p1.active[0].status, () => battle.makeChoices('move curse', 'move toxic'));
 	});
 
-	it('should cure poison if a Pokemon receives the ability', function () {
+	it('should cure poison if a Pokemon receives the ability', () => {
 		battle = common.createBattle([[
 			{species: 'Snorlax', ability: 'thickfat', moves: ['curse']},
 		], [
@@ -30,7 +30,7 @@ describe('Immunity', function () {
 		assert.sets(() => target.status, '', () => battle.makeChoices('move curse', 'move skillswap'));
 	});
 
-	it('should have its immunity to poison temporarily suppressed by Mold Breaker, but should cure the status immediately afterwards', function () {
+	it('should have its immunity to poison temporarily suppressed by Mold Breaker, but should cure the status immediately afterwards', () => {
 		battle = common.createBattle([[
 			{species: 'Snorlax', ability: 'immunity', moves: ['curse']},
 		], [

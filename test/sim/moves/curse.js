@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Curse', function () {
-	afterEach(function () {
+describe('Curse', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should request the Ghost target if the user is a known Ghost`, function () {
+	it(`should request the Ghost target if the user is a known Ghost`, () => {
 		battle = common.createBattle([[
 			{species: 'Gengar', moves: ['curse']},
 		], [
@@ -19,7 +19,7 @@ describe('Curse', function () {
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
 	});
 
-	it(`should request the Ghost target after the user becomes Ghost`, function () {
+	it(`should request the Ghost target after the user becomes Ghost`, () => {
 		battle = common.createBattle([[
 			{species: 'Rapidash', moves: ['curse']},
 		], [
@@ -30,7 +30,7 @@ describe('Curse', function () {
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'normal');
 	});
 
-	it(`should not request a target after the user stops being Ghost`, function () {
+	it(`should not request a target after the user stops being Ghost`, () => {
 		battle = common.createBattle([[
 			{species: 'Gengar', moves: ['curse']},
 		], [
@@ -41,7 +41,7 @@ describe('Curse', function () {
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 	});
 
-	it(`should not request a target if the user is a known non-Ghost`, function () {
+	it(`should not request a target if the user is a known non-Ghost`, () => {
 		battle = common.createBattle([[
 			{species: 'Blastoise', moves: ['curse']},
 		], [
@@ -50,7 +50,7 @@ describe('Curse', function () {
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 	});
 
-	it(`should not request a target if the user is an unknown non-Ghost`, function () {
+	it(`should not request a target if the user is an unknown non-Ghost`, () => {
 		battle = common.createBattle([[
 			{species: 'Blastoise', moves: ['curse', 'reflecttype']},
 		], [
@@ -63,7 +63,7 @@ describe('Curse', function () {
 		assert.equal(battle.p1.active[0].getMoveRequestData().moves[0].target, 'self');
 	});
 
-	it(`should curse a non-Ghost user with Protean`, function () {
+	it(`should curse a non-Ghost user with Protean`, () => {
 		battle = common.createBattle([[
 			{species: 'Greninja', ability: 'protean', moves: ['curse', 'spite']},
 		], [
@@ -81,7 +81,7 @@ describe('Curse', function () {
 		assert.fullHP(caterpie);
 	});
 
-	it(`should curse the target if a Ghost user has Protean`, function () {
+	it(`should curse the target if a Ghost user has Protean`, () => {
 		battle = common.createBattle([[
 			{species: 'Gengar', ability: 'protean', moves: ['curse']},
 		], [
@@ -99,7 +99,7 @@ describe('Curse', function () {
 		assert.equal(caterpie.hp, caterpie.maxhp - curseResidual * 2);
 	});
 
-	it(`should target either random opponent if the target is an ally`, function () {
+	it(`should target either random opponent if the target is an ally`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Wynaut', moves: ['sleeptalk']},
 			{species: 'Gengar', moves: ['curse']},
@@ -116,7 +116,7 @@ describe('Curse', function () {
 		assert(caterpie.maxhp !== caterpie.hp || metapod.maxhp !== metapod.hp, `Either Caterpie or Metapod should have lost HP from Curse`);
 	});
 
-	it(`[Gen 7] should target the ally if the target is an ally`, function () {
+	it(`[Gen 7] should target the ally if the target is an ally`, () => {
 		battle = common.gen(7).createBattle({gameType: 'doubles'}, [[
 			{species: 'Wynaut', moves: ['sleeptalk']},
 			{species: 'Gengar', moves: ['curse']},
@@ -131,8 +131,8 @@ describe('Curse', function () {
 	});
 });
 
-describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function () {
-	afterEach(function () {
+describe('XY/ORAS Curse targetting when becoming Ghost the same turn', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
@@ -212,12 +212,12 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 		assert(cursedFoe);
 	}
 
-	it('should target an opponent in Doubles if the user is on left side and becomes Ghost the same turn', function () {
+	it('should target an opponent in Doubles if the user is on left side and becomes Ghost the same turn', () => {
 		battle = common.gen(6).createBattle({gameType: 'doubles'}, doublesTeams.slice());
 		runDoublesTest(battle, battle.p1.active[0]);
 	});
 
-	it('should target the ally in Doubles if the user is on right side and becomes Ghost the same turn', function () {
+	it('should target the ally in Doubles if the user is on right side and becomes Ghost the same turn', () => {
 		battle = common.gen(6).createBattle({gameType: 'doubles'}, [
 			[doublesTeams[0][1], doublesTeams[0][0]],
 			doublesTeams[1],
@@ -226,7 +226,7 @@ describe('XY/ORAS Curse targetting when becoming Ghost the same turn', function 
 	});
 
 	for (const cursePos of [0, 1, 2]) {
-		it('should target an opponent in Triples even if the user is on position ' + cursePos, function () {
+		it('should target an opponent in Triples even if the user is on position ' + cursePos, () => {
 			const p1team = triplesTeams[0].slice(1);
 			p1team.splice(cursePos, 0, triplesTeams[0][0]);
 			const p2team = triplesTeams[1].slice();

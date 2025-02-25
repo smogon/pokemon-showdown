@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Shell Bell', function () {
-	afterEach(function () {
+describe('Shell Bell', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should heal from the damage against all targets of the move`, function () {
+	it(`should heal from the damage against all targets of the move`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'tornadus', ability: 'compoundeyes', moves: ['superfang']},
 			{species: 'landorus', item: 'shellbell', moves: ['earthquake']},
@@ -24,7 +24,7 @@ describe('Shell Bell', function () {
 	});
 
 	// Also applies to Parental Bond
-	it(`should heal from the damage from all hits of multi-hit moves`, function () {
+	it(`should heal from the damage from all hits of multi-hit moves`, () => {
 		battle = common.createBattle([[
 			{species: 'shelmet', moves: ['finalgambit']},
 			{species: 'landorus', moves: ['sleeptalk']},

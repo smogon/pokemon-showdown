@@ -2,8 +2,8 @@
 
 const assert = require('../../assert');
 
-describe("Custom Rules", function () {
-	it('should support legality tags', function () {
+describe("Custom Rules", () => {
+	it('should support legality tags', () => {
 		let team = [
 			{species: 'kitsunoh', ability: 'frisk', moves: ['shadowstrike'], evs: {hp: 1}},
 		];
@@ -22,7 +22,7 @@ describe("Custom Rules", function () {
 		assert.false.legalTeam(team, 'gen7ou@@@!obtainableabilities');
 	});
 
-	it('should allow Pokemon to be banned', function () {
+	it('should allow Pokemon to be banned', () => {
 		let team = [
 			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: {hp: 1}},
 		];
@@ -39,14 +39,14 @@ describe("Custom Rules", function () {
 		assert.legalTeam(team, 'gen7anythinggoes@@@!Obtainable Formes,-Greninja-Ash');
 	});
 
-	it('should allow Pokemon to be unbanned', function () {
+	it('should allow Pokemon to be unbanned', () => {
 		const team = [
 			{species: 'blaziken', ability: 'blaze', moves: ['skyuppercut'], evs: {hp: 1}},
 		];
 		assert.legalTeam(team, 'gen7ou@@@+Blaziken');
 	});
 
-	it('should allow Pokemon to be whitelisted', function () {
+	it('should allow Pokemon to be whitelisted', () => {
 		let team = [
 			{species: 'giratina', ability: 'pressure', moves: ['protect'], evs: {hp: 1}},
 		];
@@ -63,7 +63,7 @@ describe("Custom Rules", function () {
 		assert.false.legalTeam(team, 'gen8nationaldex@@@-allpokemon');
 	});
 
-	it('should support banning/unbanning tag combinations', function () {
+	it('should support banning/unbanning tag combinations', () => {
 		let team = [
 			{species: 'Crucibelle-Mega', ability: 'Regenerator', moves: ['protect'], evs: {hp: 1}},
 		];
@@ -88,7 +88,7 @@ describe("Custom Rules", function () {
 		assert.false.legalTeam(team, 'gen8customgame@@@-sublegendary');
 	});
 
-	it('should support restrictions', function () {
+	it('should support restrictions', () => {
 		let team = [
 			{species: 'Yveltal', ability: 'No Ability', moves: ['protect'], evs: {hp: 1}},
 		];
@@ -101,21 +101,21 @@ describe("Custom Rules", function () {
 		assert.false.legalTeam(team, 'gen7customgame@@@limitonerestricted,*restrictedlegendary');
 	});
 
-	it('should allow moves to be banned', function () {
+	it('should allow moves to be banned', () => {
 		const team = [
 			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen7anythinggoes@@@-Agility');
 	});
 
-	it('should allow moves to be unbanned', function () {
+	it('should allow moves to be unbanned', () => {
 		const team = [
 			{species: 'absol', ability: 'pressure', moves: ['batonpass'], evs: {hp: 1}},
 		];
 		assert.legalTeam(team, 'gen7ou@@@+Baton Pass');
 	});
 
-	it('should allow items to be banned', function () {
+	it('should allow items to be banned', () => {
 		let team = [
 			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], item: 'lightball', evs: {hp: 1}},
 		];
@@ -137,28 +137,28 @@ describe("Custom Rules", function () {
 		assert.legalTeam(team, 'gen7anythinggoes@@@-allitems');
 	});
 
-	it('should allow items to be unbanned', function () {
+	it('should allow items to be unbanned', () => {
 		const team = [
 			{species: 'eevee', ability: 'runaway', moves: ['tackle'], item: 'eeviumz', evs: {hp: 1}},
 		];
 		assert.legalTeam(team, 'gen7lc@@@+Eevium Z');
 	});
 
-	it('should allow abilities to be banned', function () {
+	it('should allow abilities to be banned', () => {
 		const team = [
 			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: {hp: 1}},
 		];
 		assert.false.legalTeam(team, 'gen7anythinggoes@@@-Static');
 	});
 
-	it('should allow abilities to be unbanned', function () {
+	it('should allow abilities to be unbanned', () => {
 		const team = [
 			{species: 'wobbuffet', ability: 'shadowtag', moves: ['counter'], evs: {hp: 1}},
 		];
 		assert.legalTeam(team, 'gen7ou@@@+Shadow Tag');
 	});
 
-	it('should allow complex bans to be added', function () {
+	it('should allow complex bans to be added', () => {
 		let team = [
 			{species: 'pikachu', ability: 'static', moves: ['agility', 'protect', 'thunder', 'thunderbolt'], evs: {hp: 1}},
 		];
@@ -171,7 +171,7 @@ describe("Custom Rules", function () {
 		assert.false.legalTeam(team, 'gen7doublesou@@@-Gravity ++ Thunderbolt');
 	});
 
-	it('should allow complex bans to be altered', function () {
+	it('should allow complex bans to be altered', () => {
 		let team = [
 			{species: 'smeargle', ability: 'owntempo', moves: ['gravity'], evs: {hp: 1}},
 			{species: 'abomasnow', ability: 'snowwarning', moves: ['grasswhistle'], evs: {hp: 1}},
@@ -186,7 +186,7 @@ describe("Custom Rules", function () {
 		assert.false.legalTeam(team, 'gen7doublesou@@@-Gravity ++ Grass Whistle > 2');
 	});
 
-	it('should allow complex bans to be removed', function () {
+	it('should allow complex bans to be removed', () => {
 		const team = [
 			{species: 'smeargle', ability: 'owntempo', moves: ['gravity'], evs: {hp: 1}},
 			{species: 'abomasnow', ability: 'snowwarning', moves: ['grasswhistle'], evs: {hp: 1}},
@@ -194,7 +194,7 @@ describe("Custom Rules", function () {
 		assert.legalTeam(team, 'gen7doublesou@@@+Gravity ++ Grass Whistle');
 	});
 
-	it('should allow rule bundles to be removed', function () {
+	it('should allow rule bundles to be removed', () => {
 		const team = [
 			{species: 'azumarill', ability: 'hugepower', moves: ['waterfall'], evs: {hp: 1}},
 			{species: 'azumarill', ability: 'hugepower', moves: ['waterfall'], evs: {hp: 1}},
@@ -202,7 +202,7 @@ describe("Custom Rules", function () {
 		assert.legalTeam(team, 'gen7ou@@@!Standard');
 	});
 
-	it('should allow rule bundles to be overridden', function () {
+	it('should allow rule bundles to be overridden', () => {
 		const team = [
 			{species: 'charizard-mega-y', ability: 'drought', item: 'charizarditey', moves: ['wingattack'], evs: {hp: 1}},
 		];

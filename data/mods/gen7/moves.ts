@@ -134,13 +134,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
-					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Defog', '[of] ' + source);
+					this.add('-sideend', target.side, this.dex.conditions.get(targetCondition).name, '[from] move: Defog', `[of] ${source}`);
 					success = true;
 				}
 			}
 			for (const sideCondition of removeAll) {
 				if (source.side.removeSideCondition(sideCondition)) {
-					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Defog', '[of] ' + source);
+					this.add('-sideend', source.side, this.dex.conditions.get(sideCondition).name, '[from] move: Defog', `[of] ${source}`);
 					success = true;
 				}
 			}
@@ -214,7 +214,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect && effect.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Electric Terrain', '[from] ability: ' + effect, '[of] ' + source);
+					this.add('-fieldstart', 'move: Electric Terrain', `[from] ability: ${effect}`, `[of] ${source}`);
 				} else {
 					this.add('-fieldstart', 'move: Electric Terrain');
 				}
@@ -337,7 +337,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect && effect.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Grassy Terrain', '[from] ability: ' + effect, '[of] ' + source);
+					this.add('-fieldstart', 'move: Grassy Terrain', `[from] ability: ${effect}`, `[of] ${source}`);
 				} else {
 					this.add('-fieldstart', 'move: Grassy Terrain');
 				}
@@ -813,7 +813,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect && effect.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Psychic Terrain', '[from] ability: ' + effect, '[of] ' + source);
+					this.add('-fieldstart', 'move: Psychic Terrain', `[from] ability: ${effect}`, `[of] ${source}`);
 				} else {
 					this.add('-fieldstart', 'move: Psychic Terrain');
 				}
@@ -1072,7 +1072,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (myItem) source.item = myItem.id;
 				return false;
 			}
-			this.add('-activate', source, 'move: Trick', '[of] ' + target);
+			this.add('-activate', source, 'move: Trick', `[of] ${target}`);
 			if (myItem) {
 				target.setItem(myItem);
 				this.add('-item', target, myItem, '[from] move: Switcheroo');
@@ -1172,7 +1172,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (myItem) source.item = myItem.id;
 				return false;
 			}
-			this.add('-activate', source, 'move: Trick', '[of] ' + target);
+			this.add('-activate', source, 'move: Trick', `[of] ${target}`);
 			if (myItem) {
 				target.setItem(myItem);
 				this.add('-item', target, myItem, '[from] move: Trick');

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Metal Burst', function () {
-	afterEach(function () {
+describe('Metal Burst', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should run conditions for submove`, function () {
+	it(`should run conditions for submove`, () => {
 		battle = common.createBattle([[
 			{species: 'golem', moves: ['sleeptalk']},
 			{species: 'snorlax', moves: ['sleeptalk', 'metalburst']},
@@ -24,7 +24,7 @@ describe('Metal Burst', function () {
 		assert.equal(breloom.hp, breloom.maxhp - battle.dex.moves.get('sonicboom').damage * 1.5);
 	});
 
-	it(`should target the opposing Pokemon that hit the user with an attack most recently that turn`, function () {
+	it(`should target the opposing Pokemon that hit the user with an attack most recently that turn`, () => {
 		// The seed should select venusaur if the test would otherwise fail
 		battle = common.createBattle({gameType: 'doubles', seed: [3, 4, 5, 6]}, [[
 			{species: 'snorlax', moves: ['metalburst']},
@@ -40,7 +40,7 @@ describe('Metal Burst', function () {
 		assert.fullHP(battle.p2.active[1]);
 	});
 
-	it(`should deal 1 damage if the user was hit by a 0-damage attack`, function () {
+	it(`should deal 1 damage if the user was hit by a 0-damage attack`, () => {
 		battle = common.createBattle([[
 			{species: 'munchlax', ability: 'sturdy', moves: ['sleeptalk', 'metalburst']},
 		], [
@@ -52,7 +52,7 @@ describe('Metal Burst', function () {
 		assert.equal(battle.p2.active[0].hp, battle.p2.active[0].maxhp - 1);
 	});
 
-	it(`should be subject to redirection`, function () {
+	it(`should be subject to redirection`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'shuckle', moves: ['metalburst']},
 			{species: 'chansey', ability: 'moldbreaker', moves: ['electrify', 'sleeptalk']},

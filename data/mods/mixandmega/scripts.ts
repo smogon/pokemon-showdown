@@ -130,8 +130,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					pokemon.baseMoveSlots[ironHead] = {
 						move: move.name,
 						id: move.id,
-						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
-						maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
 						target: move.target,
 						disabled: false,
 						disabledSource: '',

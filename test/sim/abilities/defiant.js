@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Defiant`, function () {
-	afterEach(function () {
+describe(`Defiant`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should raise the user's attack when lowered by an opponent`, function () {
+	it(`should raise the user's attack when lowered by an opponent`, () => {
 		battle = common.createBattle([[
 			{species: 'pawniard', ability: 'defiant', moves: ['sleeptalk', 'tackle']},
 		], [
@@ -23,7 +23,7 @@ describe(`Defiant`, function () {
 		assert.statStage(battle.p1.active[0], 'atk', 6);
 	});
 
-	it(`should not raise the user's attack when lowered by itself or an ally`, function () {
+	it(`should not raise the user's attack when lowered by itself or an ally`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'pawniard', ability: 'defiant', moves: ['closecombat', 'sleeptalk']},
 			{species: 'wynaut', moves: ['faketears', 'firelash', 'silktrap']},

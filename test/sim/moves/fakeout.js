@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Fake Out', function () {
-	afterEach(function () {
+describe('Fake Out', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should flinch on the first turn out', function () {
+	it('should flinch on the first turn out', () => {
 		battle = common.createBattle([[
 			{species: 'Chansey', ability: 'naturalcure', moves: ['fakeout']},
 		], [
@@ -20,7 +20,7 @@ describe('Fake Out', function () {
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it('should not flinch on the second turn out', function () {
+	it('should not flinch on the second turn out', () => {
 		battle = common.createBattle([[
 			{species: 'Chansey', ability: 'naturalcure', moves: ['fakeout']},
 		], [
@@ -32,7 +32,7 @@ describe('Fake Out', function () {
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it('should flinch after switching out and back in to refresh the move', function () {
+	it('should flinch after switching out and back in to refresh the move', () => {
 		battle = common.createBattle([[
 			{species: 'Chansey', ability: 'naturalcure', moves: ['fakeout']},
 			{species: 'Blissey', ability: 'naturalcure', moves: ['fakeout']},
@@ -46,7 +46,7 @@ describe('Fake Out', function () {
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it('should not flinch if the user has already used a Dancer move first', function () {
+	it('should not flinch if the user has already used a Dancer move first', () => {
 		battle = common.createBattle([[
 			{species: 'Chansey', ability: 'naturalcure', moves: ['fakeout']},
 			{species: 'Oricorio', ability: 'dancer', moves: ['fakeout']},
@@ -58,7 +58,7 @@ describe('Fake Out', function () {
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it('should not flinch if the target had prepared to Focus Punch', function () {
+	it('should not flinch if the target had prepared to Focus Punch', () => {
 		battle = common.createBattle([[
 			{species: 'Hitmontop', ability: 'steadfast', moves: ['fakeout']},
 		], [

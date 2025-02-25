@@ -5,7 +5,7 @@ const {PostgresDatabase} = require('../../dist/lib');
 function testMod(mod) {
 	try {
 		require(mod);
-	} catch (e) {
+	} catch {
 		return it.skip;
 	}
 	return it;
@@ -21,7 +21,7 @@ describe.skip("Postgres features", () => {
 			await this.database.query(`CREATE TABLE test (col TEXT, col2 TEXT)`);
 			await this.database.query(
 				`INSERT INTO test (col, col2) VALUES ($1, $2)`,
-				['foo', 'bar'],
+				['foo', 'bar']
 			);
 		});
 	});

@@ -5,10 +5,10 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Pursuit`, function () {
+describe(`Pursuit`, () => {
 	afterEach(() => battle.destroy());
 
-	it(`should execute before the target switches out and after the user mega evolves`, function () {
+	it(`should execute before the target switches out and after the user mega evolves`, () => {
 		battle = common.createBattle([[
 			{species: "Beedrill", ability: 'swarm', item: 'beedrillite', moves: ['pursuit']},
 		], [
@@ -20,7 +20,7 @@ describe(`Pursuit`, function () {
 		assert.fainted(battle.p2.active[0]);
 	});
 
-	it(`should execute before the target switches out and after the user Terastallizes`, function () {
+	it(`should execute before the target switches out and after the user Terastallizes`, () => {
 		battle = common.gen(9).createBattle([[
 			{species: "Kingambit", ability: 'defiant', moves: ['pursuit']},
 		], [
@@ -35,7 +35,7 @@ describe(`Pursuit`, function () {
 		assert.bounded(damage, [256, 304], 'Actual damage: ' + damage);
 	});
 
-	it(`should continue the switch in Gen 3`, function () {
+	it(`should continue the switch in Gen 3`, () => {
 		battle = common.gen(3).createBattle([[
 			{species: "Tyranitar", ability: 'sandstream', moves: ['pursuit']},
 		], [
@@ -46,7 +46,7 @@ describe(`Pursuit`, function () {
 		assert(battle.p2.active[0].hp);
 	});
 
-	it(`should continue the switch in Gen 4`, function () {
+	it(`should continue the switch in Gen 4`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: "Tyranitar", ability: 'sandstream', moves: ['pursuit']},
 		], [
@@ -57,7 +57,7 @@ describe(`Pursuit`, function () {
 		assert(battle.p2.active[0].hp);
 	});
 
-	it(`should not repeat`, function () {
+	it(`should not repeat`, () => {
 		battle = common.createBattle([[
 			{species: "Beedrill", ability: 'swarm', item: 'beedrillite', moves: ['pursuit']},
 			{species: "Clefable", ability: 'unaware', moves: ['calmmind']},
@@ -72,7 +72,7 @@ describe(`Pursuit`, function () {
 		assert.equal(hpBeforeSwitch, clefable.hp);
 	});
 
-	it(`should not double in power or activate before a switch if targeting an ally`, function () {
+	it(`should not double in power or activate before a switch if targeting an ally`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Beedrill", item: 'beedrillite', moves: ['pursuit']},
 			{species: "Clefable", moves: ['calmmind']},
@@ -86,7 +86,7 @@ describe(`Pursuit`, function () {
 		assert.bounded(furret.maxhp - furret.hp, [60, 70]);
 	});
 
-	it(`should deal damage prior to attacker selecting a switch in after u-turn etc`, function () {
+	it(`should deal damage prior to attacker selecting a switch in after u-turn etc`, () => {
 		battle = common.createBattle([[
 			{species: 'parasect', moves: ['pursuit']},
 		], [
@@ -104,7 +104,7 @@ describe(`Pursuit`, function () {
 		battle.makeChoices('move Pursuit', 'move voltswitch');
 	});
 
-	it(`should only activate before switches on adjacent foes`, function () {
+	it(`should only activate before switches on adjacent foes`, () => {
 		battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 			{species: 'Beedrill', moves: ['pursuit']},
 			{species: 'Wynaut', moves: ['swordsdance']},

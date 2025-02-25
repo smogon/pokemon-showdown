@@ -6,8 +6,8 @@ const Sim = require('./../../../dist/sim');
 
 let battle;
 
-describe('Rage Powder', function () {
-	afterEach(function () {
+describe('Rage Powder', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
@@ -44,7 +44,7 @@ describe('Rage Powder', function () {
 		assert.equal(hitCount[2], 0);
 	});
 
-	it('should not affect Pokemon with Powder immunities', function () {
+	it('should not affect Pokemon with Powder immunities', () => {
 		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Amoonguss', ability: 'overcoat', moves: ['growth']},

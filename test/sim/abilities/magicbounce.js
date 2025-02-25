@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Magic Bounce', function () {
-	afterEach(function () {
+describe('Magic Bounce', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should bounce Growl', function () {
+	it('should bounce Growl', () => {
 		// Sanity check: if this test fails, the remaining tests for Magic Bounce may not make sense.
 		// Tests for specific moves belong to the respective moves' test suites.
 		battle = common.createBattle();
@@ -21,7 +21,7 @@ describe('Magic Bounce', function () {
 		assert.statStage(battle.p2.active[0], 'atk', 0);
 	});
 
-	it('should bounce once when target and source share the ability', function () {
+	it('should bounce once when target and source share the ability', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Xatu", ability: 'magicbounce', moves: ['roost']}]});
 		battle.setPlayer('p2', {team: [{species: "Espeon", ability: 'magicbounce', moves: ['growl']}]});
@@ -30,7 +30,7 @@ describe('Magic Bounce', function () {
 		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
 
-	it('should not cause a choice-lock', function () {
+	it('should not cause a choice-lock', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: "Spoink", ability: 'thickfat', moves: ['bounce']},
@@ -42,7 +42,7 @@ describe('Magic Bounce', function () {
 		assert.notEqual(battle.p1.active[0].lastMove.id, 'growl');
 	});
 
-	it('should be suppressed by Mold Breaker', function () {
+	it('should be suppressed by Mold Breaker', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Bulbasaur", ability: 'moldbreaker', moves: ['growl']}]});
 		battle.setPlayer('p2', {team: [{species: "Espeon", ability: 'magicbounce', moves: ['futuresight']}]});
@@ -51,7 +51,7 @@ describe('Magic Bounce', function () {
 		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
 
-	it('should not bounce moves while semi-invulnerable', function () {
+	it('should not bounce moves while semi-invulnerable', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: "Bulbasaur", ability: 'overgrow', moves: ['growl']},
@@ -68,7 +68,7 @@ describe('Magic Bounce', function () {
 		assert(battle.p2.sideConditions['stealthrock']);
 	});
 
-	it(`[Gen 5] should bounce moves that target the foe's side while semi-invulnerable`, function () {
+	it(`[Gen 5] should bounce moves that target the foe's side while semi-invulnerable`, () => {
 		battle = common.gen(5).createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: "Bulbasaur", ability: 'overgrow', moves: ['growl']},

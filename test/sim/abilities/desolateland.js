@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Desolate Land', function () {
-	afterEach(function () {
+describe('Desolate Land', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should activate the Desolate Land weather upon switch-in', function () {
+	it('should activate the Desolate Land weather upon switch-in', () => {
 		battle = common.createBattle([[
 			{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']},
 		], [
@@ -19,7 +19,7 @@ describe('Desolate Land', function () {
 		assert(battle.field.isWeather('desolateland'));
 	});
 
-	it('should increase the damage (not the basePower) of Fire-type attacks', function () {
+	it('should increase the damage (not the basePower) of Fire-type attacks', () => {
 		battle = common.createBattle([[
 			{species: 'Ninetales', ability: 'desolateland', moves: ['incinerate']},
 		], [
@@ -34,7 +34,7 @@ describe('Desolate Land', function () {
 		assert.equal(basePower, move.basePower);
 	});
 
-	it('should cause Water-type attacks to fail', function () {
+	it('should cause Water-type attacks to fail', () => {
 		battle = common.createBattle([[
 			{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']},
 		], [
@@ -44,7 +44,7 @@ describe('Desolate Land', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it('should not cause Water-type Status moves to fail', function () {
+	it('should not cause Water-type Status moves to fail', () => {
 		battle = common.createBattle([[
 			{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']},
 		], [
@@ -54,7 +54,7 @@ describe('Desolate Land', function () {
 		assert.sets(() => soakTarget.getTypes().join('/'), 'Water', () => battle.makeChoices('move helpinghand', 'move soak'));
 	});
 
-	it('should prevent moves and abilities from setting the weather to Sunny Day, Rain Dance, Sandstorm, or Hail', function () {
+	it('should prevent moves and abilities from setting the weather to Sunny Day, Rain Dance, Sandstorm, or Hail', () => {
 		battle = common.createBattle([[
 			{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']},
 		], [
@@ -72,7 +72,7 @@ describe('Desolate Land', function () {
 		}
 	});
 
-	it('should be treated as Sunny Day for any forme, move or ability that requires it', function () {
+	it('should be treated as Sunny Day for any forme, move or ability that requires it', () => {
 		battle = common.createBattle([[
 			{species: "Groudon", ability: 'desolateland', moves: ['helpinghand', 'solarbeam']},
 		], [
@@ -101,7 +101,7 @@ describe('Desolate Land', function () {
 		assert.false.fullHP(myActive[0], "Toxicroak should be hurt by Dry Skin");
 	});
 
-	it('should cause the Desolate Land weather to fade if it switches out and no other Desolate Land Pokemon are active', function () {
+	it('should cause the Desolate Land weather to fade if it switches out and no other Desolate Land Pokemon are active', () => {
 		battle = common.createBattle([[
 			{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']},
 			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
@@ -111,7 +111,7 @@ describe('Desolate Land', function () {
 		assert.sets(() => battle.field.isWeather('desolateland'), false, () => battle.makeChoices('switch 2', 'move roost'));
 	});
 
-	it('should not cause the Desolate Land weather to fade if it switches out and another Desolate Land Pokemon is active', function () {
+	it('should not cause the Desolate Land weather to fade if it switches out and another Desolate Land Pokemon is active', () => {
 		battle = common.createBattle([[
 			{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']},
 			{species: "Ho-Oh", ability: 'pressure', moves: ['roost']},
@@ -121,7 +121,7 @@ describe('Desolate Land', function () {
 		assert.constant(() => battle.field.isWeather('desolateland'), () => battle.makeChoices('switch 2', 'move bulkup'));
 	});
 
-	it('should cause the Desolate Land weather to fade if its ability is suppressed and no other Desolate Land Pokemon are active', function () {
+	it('should cause the Desolate Land weather to fade if its ability is suppressed and no other Desolate Land Pokemon are active', () => {
 		battle = common.createBattle([[
 			{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']},
 		], [
@@ -130,7 +130,7 @@ describe('Desolate Land', function () {
 		assert.sets(() => battle.field.isWeather('desolateland'), false, () => battle.makeChoices('move helpinghand', 'move gastroacid'));
 	});
 
-	it('should not cause the Desolate Land weather to fade if its ability is suppressed and another Desolate Land Pokemon is active', function () {
+	it('should not cause the Desolate Land weather to fade if its ability is suppressed and another Desolate Land Pokemon is active', () => {
 		battle = common.createBattle([[
 			{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']},
 		], [
@@ -139,7 +139,7 @@ describe('Desolate Land', function () {
 		assert.constant(() => battle.field.isWeather('desolateland'), () => battle.makeChoices('move helpinghand', 'move gastroacid'));
 	});
 
-	it('should cause the Desolate Land weather to fade if its ability is changed and no other Desolate Land Pokemon are active', function () {
+	it('should cause the Desolate Land weather to fade if its ability is changed and no other Desolate Land Pokemon are active', () => {
 		battle = common.createBattle([[
 			{species: "Groudon", ability: 'desolateland', moves: ['helpinghand']},
 		], [
@@ -148,7 +148,7 @@ describe('Desolate Land', function () {
 		assert.sets(() => battle.field.isWeather('desolateland'), false, () => battle.makeChoices('move helpinghand', 'move entrainment'));
 	});
 
-	it('should fade after being forced out via Roar', function () {
+	it('should fade after being forced out via Roar', () => {
 		battle = common.createBattle([[
 			{species: 'Groudon', item: "Red Orb", moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -159,7 +159,7 @@ describe('Desolate Land', function () {
 		assert.false(battle.field.isWeather('desolateland'));
 	});
 
-	it(`should cause Water-type Natural Gift to fail`, function () {
+	it(`should cause Water-type Natural Gift to fail`, () => {
 		battle = common.createBattle([[
 			{species: 'Groudon', item: 'Red Orb', moves: ['sleeptalk']},
 		], [

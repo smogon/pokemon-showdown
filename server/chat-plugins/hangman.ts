@@ -481,7 +481,7 @@ export const commands: Chat.ChatCommands = {
 			// only a .trim() because toID will make it unable to find the term if it has caps
 			term = term.trim();
 			tags = tags.map(i => toID(i)).filter(Boolean);
-			if (!term || !tags || !tags.length) {
+			if (!term || !tags?.length) {
 				return this.parse('/help hangman');
 			}
 			if (!hangmanData[room.roomid]) {

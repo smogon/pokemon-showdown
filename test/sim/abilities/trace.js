@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Trace', function () {
-	afterEach(function () {
+describe('Trace', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should copy the opponent's Ability`, function () {
+	it(`should copy the opponent's Ability`, () => {
 		battle = common.createBattle([[
 			{species: "Ralts", ability: 'trace', moves: ['sleeptalk']},
 		], [
@@ -22,7 +22,7 @@ describe('Trace', function () {
 		assert.equal(ralts.ability, 'shadowtag');
 	});
 
-	it(`should delay copying the opponent's Ability if the initial Abilities could not be copied by Trace`, function () {
+	it(`should delay copying the opponent's Ability if the initial Abilities could not be copied by Trace`, () => {
 		battle = common.createBattle([[
 			{species: "Ralts", ability: 'trace', moves: ['sleeptalk']},
 		], [
@@ -43,7 +43,7 @@ describe('Trace', function () {
 	});
 
 	// see research: https://www.smogon.com/forums/threads/pokemon-sun-moon-battle-mechanics-research.3586701/post-7790209
-	it(`should interact properly with Ability index 0 'No Ability'`, function () {
+	it(`should interact properly with Ability index 0 'No Ability'`, () => {
 		// Trace stops working if it initially finds 'No Ability'
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Ralts", ability: 'trace', moves: ['sleeptalk']},

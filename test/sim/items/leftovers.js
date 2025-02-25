@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Leftovers [Gen 2]', function () {
-	afterEach(function () {
+describe('Leftovers [Gen 2]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should heal after switch', function () {
+	it('should heal after switch', () => {
 		battle = common.gen(2).createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Blissey', item: 'leftovers', moves: ['healbell']},

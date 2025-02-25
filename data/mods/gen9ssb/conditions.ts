@@ -1,6 +1,6 @@
 import {ssbSets} from "./random-teams";
 import {changeSet, getName, enemyStaff} from './scripts';
-import {ModdedConditionData} from "../../../sim/dex-conditions";
+import type {ModdedConditionData} from "../../../sim/dex-conditions";
 
 export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: string}} = {
 	/*
@@ -619,7 +619,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			if (target.illusion) return;
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', '[of] ' + target);
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', `[of] ${target}`);
 			}
 		},
 	},
@@ -3069,7 +3069,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onFieldStart(battle, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'StormSurge', '[from] ability: ' + effect.name, '[of] ' + source);
+				this.add('-weather', 'StormSurge', '[from] ability: ' + effect.name, `[of] ${source}`);
 			} else {
 				this.add('-weather', 'StormSurge');
 			}
@@ -3107,7 +3107,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'DesertedDunes', '[from] ability: ' + effect.name, '[of] ' + source);
+			this.add('-weather', 'DesertedDunes', '[from] ability: ' + effect.name, `[of] ${source}`);
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
@@ -3179,16 +3179,16 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			}
 
 			if (effect.name === 'Cute Charm') {
-				this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] ' + source);
+				this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', `[of] ${source}`);
 			} else if (effect.name === 'Destiny Knot') {
-				this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', '[of] ' + source);
+				this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', `[of] ${source}`);
 			} else {
 				this.add('-start', pokemon, 'Attract');
 			}
 		},
 		onUpdate(pokemon) {
 			if (this.effectState.source && !this.effectState.source.isActive && pokemon.volatiles['attract']) {
-				this.debug('Removing Attract volatile on ' + pokemon);
+				this.debug(`Removing Attract volatile on ${pokemon}`);
 				pokemon.removeVolatile('attract');
 			}
 		},

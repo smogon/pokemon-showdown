@@ -13,6 +13,7 @@ import {Utils} from '../lib/utils';
 import {Tags} from '../data/tags';
 import {Teams} from './teams';
 import {PRNG} from './prng';
+import {type RuleTable} from './dex-formats';
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!
@@ -317,7 +318,7 @@ export class TeamValidator {
 	readonly format: Format;
 	readonly dex: ModdedDex;
 	readonly gen: number;
-	readonly ruleTable: import('./dex-formats').RuleTable;
+	readonly ruleTable: RuleTable;
 	readonly minSourceGen: number;
 
 	readonly toID: (str: any) => ID;
@@ -411,7 +412,7 @@ export class TeamValidator {
 			if (!set) return [`You sent invalid team data. If you're not using a custom client, please report this as a bug.`];
 
 			let setProblems: string[] | null = null;
-			if (options.skipSets && options.skipSets[set.name]) {
+			if (options.skipSets?.[set.name]) {
 				for (const i in options.skipSets[set.name]) {
 					teamHas[i] = (teamHas[i] || 0) + 1;
 				}
@@ -531,8 +532,10 @@ export class TeamValidator {
 				tierSpecies = dex.species.get('Groudon-Primal');
 			} else if (item.id === 'blueorb' && species.id === 'kyogre') {
 				tierSpecies = dex.species.get('Kyogre-Primal');
-			} else if (canMegaEvo && species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID) &&
-					!ruleTable.has('megarayquazaclause')) {
+			} else if (
+				canMegaEvo && species.id === 'rayquaza' && set.moves.map(toID).includes('dragonascent' as ID) &&
+				!ruleTable.has('megarayquazaclause')
+			) {
 				tierSpecies = dex.species.get('Rayquaza-Mega');
 			} else if (item.id === 'rustedsword' && species.id === 'zacian') {
 				tierSpecies = dex.species.get('Zacian-Crowned');
@@ -560,7 +563,7 @@ export class TeamValidator {
 		if (set.species.toLowerCase().endsWith('-gmax') && this.format.id !== 'gen8megamax') {
 			set.species = set.species.slice(0, -5);
 			species = dex.species.get(set.species);
-			if (set.name && set.name.endsWith('-Gmax')) set.name = species.baseSpecies;
+			if (set.name?.endsWith('-Gmax')) set.name = species.baseSpecies;
 			set.gigantamax = true;
 		}
 		if (set.name && set.name.length > 18) {
@@ -868,7 +871,7 @@ export class TeamValidator {
 						for (let eventIndex = 0; eventIndex < eventData.length; eventIndex++) {
 							const eventLevel = eventData[eventIndex].level;
 							if (eventLevel && set.level >= eventLevel) {
-								setSources.sources.push(eventData[eventIndex].generation + 'S' + eventIndex + ' ' + evoSpecies.id);
+								setSources.sources.push(`${eventData[eventIndex].generation}S${eventIndex} ${evoSpecies.id}`);
 							}
 						}
 					}
@@ -894,14 +897,14 @@ export class TeamValidator {
 				setSources.sources = legalSources;
 			} else if (isUnderleveled) {
 				problems.push(`${name} must be at least level ${requiredLevel} to be evolved.`);
-				const firstEventSource = setSources.sources.filter(source => source.charAt(1) === 'S')[0];
+				const firstEventSource = setSources.sources.find(source => source.charAt(1) === 'S');
 				if (firstEventSource) {
 					const eventProblems = this.validateSource(
 						set, firstEventSource, setSources, outOfBattleSpecies, ` to be underleveled`
 					);
 					if (eventProblems) problems.push(...eventProblems);
 				}
-				if (pokemonGoProblems && pokemonGoProblems.length) {
+				if (pokemonGoProblems?.length) {
 					problems.push(`It failed to validate as a Pokemon from Pokemon GO because:`);
 					for (const pokemonGoProblem of pokemonGoProblems) {
 						problems.push(pokemonGoProblem);
@@ -935,7 +938,7 @@ export class TeamValidator {
 							set, nonEggSource, setSources, outOfBattleSpecies, ` because it has a move only available`
 						);
 						if (eventProblems) problems.push(...eventProblems);
-						if (species.id === 'mew' && pokemonGoProblems && pokemonGoProblems.length) {
+						if (species.id === 'mew' && pokemonGoProblems?.length) {
 							problems.push(`Additionally, it failed to validate as a Pokemon from Pokemon GO because:`);
 							for (const pokemonGoProblem of pokemonGoProblems) {
 								problems.push(pokemonGoProblem);
@@ -957,7 +960,7 @@ export class TeamValidator {
 				legal = true;
 			}
 			if (!legal) {
-				if (!pokemonGoProblems || (pokemonGoProblems && pokemonGoProblems.length)) {
+				if (!pokemonGoProblems || (pokemonGoProblems?.length)) {
 					if (eventData.length === 1) {
 						problems.push(`${species.name} is only obtainable from an event - it needs to match its event:`);
 					} else {
@@ -974,7 +977,7 @@ export class TeamValidator {
 							if (eventProblems) problems.push(...eventProblems);
 						}
 					}
-					if (pokemonGoProblems && pokemonGoProblems.length) {
+					if (pokemonGoProblems?.length) {
 						problems.push(`Additionally, it failed to validate as a Pokemon from Pokemon GO because:`);
 						for (const pokemonGoProblem of pokemonGoProblems) {
 							problems.push(pokemonGoProblem);
@@ -990,7 +993,7 @@ export class TeamValidator {
 		const pokemonGoOnlySpecies = ['meltan', 'melmetal', 'gimmighoulroaming'];
 		if (ruleTable.has('obtainablemisc') && (pokemonGoOnlySpecies.includes(species.id))) {
 			setSources.isFromPokemonGo = true;
-			if (pokemonGoProblems && pokemonGoProblems.length) {
+			if (pokemonGoProblems?.length) {
 				problems.push(`${name} is only obtainable from Pokemon GO, and failed to validate because:`);
 				for (const pokemonGoProblem of pokemonGoProblems) {
 					problems.push(pokemonGoProblem);
@@ -1156,10 +1159,10 @@ export class TeamValidator {
 				if (set.ivs[stat as 'hp'] >= 31) perfectIVs++;
 			}
 			if (perfectIVs < 3) {
-				if (!pokemonGoProblems || (pokemonGoProblems && pokemonGoProblems.length)) {
+				if (!pokemonGoProblems || pokemonGoProblems?.length) {
 					const reason = (this.minSourceGen === 6 ? ` and this format requires Gen ${dex.gen} Pokémon` : ` in Gen 6 or later`);
 					problems.push(`${name} must have at least three perfect IVs because it's a legendary${reason}.`);
-					if (pokemonGoProblems && pokemonGoProblems.length) {
+					if (pokemonGoProblems?.length) {
 						problems.push(`Additionally, it failed to validate as a Pokemon from Pokemon GO because:`);
 						for (const pokemonGoProblem of pokemonGoProblems) {
 							problems.push(pokemonGoProblem);
@@ -1514,7 +1517,7 @@ export class TeamValidator {
 			if (!eggSources.sourcesBefore && !eggSources.sources.length) return false;
 			const onlyEggSources = eggSources.sources.filter(source => source.charAt(1) === 'E');
 			if (eggGen >= 3 && onlyEggSources.length && eggSources.limitedEggMoves === null && eggSources.sourcesBefore) {
-				eggSources.possiblyLimitedEggMoves = [toID(eggSources.sourcesBefore + move)];
+				eggSources.possiblyLimitedEggMoves = [toID(`${eggSources.sourcesBefore}${move}`)];
 			}
 			allEggSources.intersectWith(eggSources);
 			if (!allEggSources.size()) return false;
@@ -2143,8 +2146,10 @@ export class TeamValidator {
 			if (dex.gen >= 3 && requiredIVs >= 3 && set.hpType === 'Fighting') {
 				if (fastReturn) return true;
 				problems.push(`${name} can't use Hidden Power Fighting because it must have at least three perfect IVs${etc}.`);
-			} else if (dex.gen >= 3 && requiredIVs >= 5 && set.hpType &&
-					!['Dark', 'Dragon', 'Electric', 'Steel', 'Ice'].includes(set.hpType)) {
+			} else if (
+				dex.gen >= 3 && requiredIVs >= 5 && set.hpType &&
+				!['Dark', 'Dragon', 'Electric', 'Steel', 'Ice'].includes(set.hpType)
+			) {
 				if (fastReturn) return true;
 				problems.push(`${name} can only use Hidden Power Dark/Dragon/Electric/Steel/Ice because it must have at least 5 perfect IVs${etc}.`);
 			}
@@ -2540,7 +2545,7 @@ export class TeamValidator {
 
 				const learnedGen = parseInt(learned.charAt(0));
 				if (formeCantInherit && (learned.charAt(1) !== 'E' || learnedGen < 9)) continue;
-				if (setSources.learnsetDomain && !setSources.learnsetDomain.includes(learnedGen + toID(species.baseSpecies)) &&
+				if (setSources.learnsetDomain && !setSources.learnsetDomain.includes(`${learnedGen}${toID(species.baseSpecies)}`) &&
 					(learned.charAt(1) !== 'E' || learnedGen < 8)
 				) {
 					if (!cantLearnReason) {
@@ -2572,7 +2577,7 @@ export class TeamValidator {
 				const canUseAbilityPatch = dex.gen >= 8 && format.mod !== 'gen8dlc1';
 				if (
 					learnedGen < 7 && setSources.isHidden && !canUseAbilityPatch &&
-					!dex.mod('gen' + learnedGen).species.get(baseSpecies.name).abilities['H']
+					!dex.mod(`gen${learnedGen}`).species.get(baseSpecies.name).abilities['H']
 				) {
 					cantLearnReason = `can only be learned in gens without Hidden Abilities.`;
 					continue;
@@ -2611,7 +2616,7 @@ export class TeamValidator {
 						// falls through to LMT check below
 					} else if (level >= 5 && learnedGen === 3 && species.canHatch) {
 						// Pomeg Glitch
-						learned = learnedGen + 'Epomeg' as MoveSource;
+						learned = `${learnedGen}Epomeg` as MoveSource;
 					} else if (species.gender !== 'N' &&
 						learnedGen >= 2 && species.canHatch && !setSources.isFromPokemonGo) {
 						// available as egg move
@@ -2620,7 +2625,7 @@ export class TeamValidator {
 							cantLearnReason = `is learned at level ${parseInt(learned.substr(2))}.`;
 							continue;
 						}
-						learned = learnedGen + 'Eany' as MoveSource;
+						learned = `${learnedGen}Eany` as MoveSource;
 						// falls through to E check below
 					} else {
 						// this move is unavailable, skip it
@@ -2667,10 +2672,10 @@ export class TeamValidator {
 					} else if (learnedGen < 6 || (species.mother && !this.motherCanLearn(toID(species.mother), moveid))) {
 						limitedEggMove = move.id;
 					}
-					learned = learnedGen + 'E' + (species.prevo ? species.id : '') as MoveSource;
+					learned = `${learnedGen}E${species.prevo ? species.id : ''}` as MoveSource;
 					if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
 						// can tradeback
-						moveSources.add('1ET' + learned.slice(2), limitedEggMove);
+						moveSources.add(`1ET${learned.slice(2)}`, limitedEggMove);
 					}
 					moveSources.add(learned, limitedEggMove);
 				} else if (learned.charAt(1) === 'S') {
@@ -2680,17 +2685,17 @@ export class TeamValidator {
 					// 	Available as long as the past gen can get the Pokémon and then trade it back.
 					if (tradebackEligible && learnedGen === 2 && move.gen <= 1) {
 						// can tradeback
-						moveSources.add('1ST' + learned.slice(2) + ' ' + species.id);
+						moveSources.add(`1ST${learned.slice(2)} ${species.id}`);
 					}
-					moveSources.add(learned + ' ' + species.id);
+					moveSources.add(`${learned} ${species.id}`);
 					const eventLearnset = dex.species.getLearnsetData(species.id);
 					if (eventLearnset.eventData?.[parseInt(learned.charAt(2))].emeraldEventEgg && learnedGen === 3) {
-						moveSources.pomegEventEgg = learned + ' ' + species.id;
+						moveSources.pomegEventEgg = `${learned} ${species.id}`;
 					}
 				} else if (learned.charAt(1) === 'D') {
 					// DW moves:
 					//   only if that was the source
-					moveSources.add(learned + species.id);
+					moveSources.add(`${learned}${species.id}`);
 					// If a DW move can be learned through some means other than DW,
 					// it should not be treated as a DW move
 					if (!moveSources.sourcesBefore) moveSources.dreamWorldMoveCount++;
@@ -2815,7 +2820,7 @@ export class TeamValidator {
 						(speciesCount === canLearnSpecies.length && gen <= moveSources.sourcesBefore)
 					) {
 						if (!moveSources.learnsetDomain) moveSources.learnsetDomain = [];
-						moveSources.learnsetDomain.push(gen + baseSpeciesID);
+						moveSources.learnsetDomain.push(`${gen}${baseSpeciesID}`);
 					}
 				}
 				if (canLearnSpecies.includes(nextSpecies.id)) speciesCount++;
@@ -2830,7 +2835,7 @@ export class TeamValidator {
 		}
 		const eggSources = moveSources.sources.filter(source => source.charAt(1) === 'E');
 		if (dex.gen >= 3 && eggSources.length && moveSources.limitedEggMoves === null && moveSources.sourcesBefore) {
-			moveSources.possiblyLimitedEggMoves = [toID(moveSources.sourcesBefore + move.id)];
+			moveSources.possiblyLimitedEggMoves = [toID(`${moveSources.sourcesBefore}${move.id}`)];
 		}
 		const backupSources = setSources.sources;
 		const backupSourcesBefore = setSources.sourcesBefore;

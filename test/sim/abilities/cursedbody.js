@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Cursed Body`, function () {
-	afterEach(function () {
+describe(`Cursed Body`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should be able to disable Z-moves (not the base of Z-moves)`, function () {
+	it(`should be able to disable Z-moves (not the base of Z-moves)`, () => {
 		battle = common.createBattle({forceRandomChance: true}, [[
 			{species: 'gengar', ability: 'cursedbody', item: 'focussash', moves: ['sleeptalk']},
 		], [

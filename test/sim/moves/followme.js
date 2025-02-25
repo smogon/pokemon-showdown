@@ -5,8 +5,8 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Follow Me', function () {
-	afterEach(function () {
+describe('Follow Me', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
@@ -25,7 +25,7 @@ describe('Follow Me', function () {
 			{species: 'Alakazam', ability: 'synchronize', moves: ['lowkick']},
 		]});
 		let hitCount = 0;
-		battle.onEvent('Damage', battle.format, function (damage, pokemon) {
+		battle.onEvent('Damage', battle.format, (damage, pokemon) => {
 			if (pokemon.species.id === 'clefable') {
 				hitCount++;
 			}
@@ -34,7 +34,7 @@ describe('Follow Me', function () {
 		assert.equal(hitCount, 2);
 	});
 
-	it('should not redirect self-targetting moves', function () {
+	it('should not redirect self-targetting moves', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Clefable', ability: 'unaware', moves: ['followme']},
@@ -50,7 +50,7 @@ describe('Follow Me', function () {
 		assert.equal(battle.p2.active[1].boosts['atk'], 1);
 	});
 
-	it(`should allow redirection even if the user is the last slot of a double battle`, function () {
+	it(`should allow redirection even if the user is the last slot of a double battle`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: "Wynaut", moves: ['sleeptalk', 'tackle']},
 			{species: "Wynaut", moves: ['sleeptalk', 'tackle']},
@@ -67,7 +67,7 @@ describe('Follow Me', function () {
 		assert.fullHP(battle.p1.active[1]);
 	});
 
-	it(`should redirect single-target moves towards it if it is a valid target in FFA`, function () {
+	it(`should redirect single-target moves towards it if it is a valid target in FFA`, () => {
 		battle = common.createBattle({gameType: 'freeforall'}, [[
 			{species: "Wynaut", moves: ['tackle']},
 		], [
@@ -85,7 +85,7 @@ describe('Follow Me', function () {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`[Gen 3] should continue to redirect moves after the user is knocked out and replaced`, function () {
+	it(`[Gen 3] should continue to redirect moves after the user is knocked out and replaced`, () => {
 		battle = common.gen(3).createBattle({gameType: 'doubles'}, [[
 			{species: "Swellow", moves: ['aerialace']},
 			{species: "Chansey", level: 1, moves: ['followme']},

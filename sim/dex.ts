@@ -212,7 +212,7 @@ export class ModdedDex {
 	 */
 	getName(name: any): string {
 		if (typeof name !== 'string' && typeof name !== 'number') return '';
-		name = ('' + name).replace(/[|\s[\],\u202e]+/g, ' ').trim();
+		name = `${name}`.replace(/[|\s[\],\u202e]+/g, ' ').trim();
 		if (name.length > 18) name = name.substr(0, 18).trim();
 
 		// remove zalgo
@@ -234,7 +234,7 @@ export class ModdedDex {
 		target: {getTypes: () => string[]} | {types: string[]} | string[] | string
 	): boolean {
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
-		// @ts-ignore
+		// @ts-expect-error really wish TS would support this
 		const targetTyping: string[] | string = target.getTypes?.() || target.types || target;
 		if (Array.isArray(targetTyping)) {
 			for (const type of targetTyping) {
@@ -252,7 +252,7 @@ export class ModdedDex {
 		target: {getTypes: () => string[]} | {types: string[]} | string[] | string
 	): number {
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
-		// @ts-ignore
+		// @ts-expect-error really wish TS would support this
 		const targetTyping: string[] | string = target.getTypes?.() || target.types || target;
 		let totalTypeMod = 0;
 		if (Array.isArray(targetTyping)) {
@@ -358,7 +358,7 @@ export class ModdedDex {
 	 * Truncate a number into an unsigned 32-bit integer, for
 	 * compatibility with the cartridge games' math systems.
 	 */
-	trunc(num: number, bits = 0) {
+	trunc(this: void, num: number, bits = 0) {
 		if (bits) return (num >>> 0) % (2 ** bits);
 		return num >>> 0;
 	}
@@ -531,12 +531,12 @@ export class ModdedDex {
 					} else if (!(entryId in childTypedData)) {
 						// If it doesn't exist it's inherited from the parent data
 						childTypedData[entryId] = parentTypedData[entryId];
-					} else if (childTypedData[entryId] && childTypedData[entryId].inherit) {
+					} else if (childTypedData[entryId]?.inherit) {
 						// {inherit: true} can be used to modify only parts of the parent data,
 						// instead of overwriting entirely
 						delete childTypedData[entryId].inherit;
 
-						// Merge parent into children entry, preserving existing childs' properties.
+						// Merge parent and child's entry, with child overwriting parent.
 						childTypedData[entryId] = {...parentTypedData[entryId], ...childTypedData[entryId]};
 					}
 				}
@@ -567,7 +567,7 @@ dexes['base'] = new ModdedDex();
 dexes[BASE_MOD] = dexes['base'];
 
 export const Dex = dexes['base'];
-export namespace Dex {
+export declare namespace Dex {
 	export type Species = import('./dex-species').Species;
 	export type Item = import('./dex-items').Item;
 	export type Move = import('./dex-moves').Move;

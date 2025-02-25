@@ -7,7 +7,7 @@
  * @license MIT license
  */
 
-import {ScavengerHunt, ScavengerHuntPlayer, sanitizeAnswer} from './scavengers';
+import {ScavengerHunt, type ScavengerHuntPlayer, sanitizeAnswer} from './scavengers';
 import {Utils} from '../../lib';
 
 export type TwistEvent = (this: ScavengerHunt, ...args: any[]) => void;
@@ -35,7 +35,7 @@ interface GameMode {
 function toSeconds(time: string) {
 	// hhmmss => ss
 	const parts = time.split(':').reverse();
-	return parts.map((value, index) => parseInt(value) * Math.pow(60, index)).reduce((a, b) => a + b);
+	return parts.map((value, index) => parseInt(value) * (60 ** index)).reduce((a, b) => a + b);
 }
 
 class Leaderboard {
@@ -49,7 +49,7 @@ class Leaderboard {
 		const userid: string = toID(name);
 
 		if (!userid || userid === 'constructor' || !points) return this;
-		if (!this.data[userid]) this.data[userid] = {name: name};
+		if (!this.data[userid]) this.data[userid] = {name};
 
 		if (!this.data[userid][aspect]) this.data[userid][aspect] = 0;
 		this.data[userid][aspect] += points;
@@ -1040,7 +1040,7 @@ const MODES: {[k: string]: GameMode | string} = {
 export class ScavengerGameTemplate {
 	room: Room;
 	playerlist: null | string[];
-	timer: NodeJS.Timer | null;
+	timer: NodeJS.Timeout | null;
 
 	[k: string]: any;
 	constructor(room: Room) {

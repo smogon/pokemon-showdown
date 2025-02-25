@@ -1,7 +1,8 @@
-import {SSBSet} from "./random-teams";
-import {ChosenAction} from '../../../sim/side';
+import type {SSBSet} from "./random-teams";
+import type {ChosenAction} from '../../../sim/side';
 import {FS} from '../../../lib';
 import {toID} from '../../../sim/dex-data';
+import {type SwitchAction} from "../../../sim/battle-queue";
 
 // Similar to User.usergroups. Cannot import here due to users.ts requiring Chat
 // This also acts as a cache, meaning ranks will only update when a hotpatch/restart occurs
@@ -38,7 +39,7 @@ export function getName(name: string): string {
 	let group = usergroups[userid] || ' ';
 	if (name === 'Artemis') group = '@';
 	if (name === 'Jeopard-E' || name === 'Ice Kyubs') group = '*';
-	return Math.floor(Date.now() / 1000) + '|' + group + name;
+	return `${Math.floor(Date.now() / 1000)}|${group}${name}`;
 }
 
 export function enemyStaff(pokemon: Pokemon): string {
@@ -76,7 +77,7 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	const oldGender = pokemon.set.gender;
 	if ((pokemon.set.gender !== newSet.gender) && !Array.isArray(newSet.gender)) {
 		pokemon.set.gender = newSet.gender;
-		// @ts-ignore Shut up sharp_claw wanted this
+		// @ts-expect-error Shut up sharp_claw wanted this
 		pokemon.gender = newSet.gender;
 	}
 	const oldShiny = pokemon.set.shiny;
@@ -144,9 +145,8 @@ export function changeMoves(context: Battle, pokemon: Pokemon, newMoves: (string
 		const moveSlot = {
 			move: move.name,
 			id: move.id,
-			// eslint-disable-next-line max-len
-			pp: ((move.noPPBoosts || move.isZ) ? Math.floor(move.pp * carryOver[slot]) : Math.floor((move.pp * (8 / 5)) * carryOver[slot])),
-			maxpp: ((move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5),
+			pp: Math.floor((move.noPPBoosts ? move.pp : move.pp * 8 / 5) * carryOver[slot]),
+			maxpp: (move.noPPBoosts ? move.pp : move.pp * 8 / 5),
 			target: move.target,
 			disabled: false,
 			disabledSource: '',
@@ -295,7 +295,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			faintData = this.faintQueue.shift()!;
 			const pokemon: Pokemon = faintData.target;
 			if (!pokemon.fainted &&
-					this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
+				this.runEvent('BeforeFaint', pokemon, faintData.source, faintData.effect)) {
 				if (!pokemon.isActive) {
 					this.add('message', `${pokemon.name} was killed by ${pokemon.side.name}!`);
 					// TODO: Custom Protocol needed for teambar update
@@ -323,7 +323,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.queue.clear();
 			// Fainting clears accumulated Bide damage
 			for (const pokemon of this.getAllActive()) {
-				if (pokemon.volatiles['bide'] && pokemon.volatiles['bide'].damage) {
+				if (pokemon.volatiles['bide']?.damage) {
 					pokemon.volatiles['bide'].damage = 0;
 					this.hint("Desync Clause Mod activated!");
 					this.hint("In Gen 1, Bide's accumulated damage is reset to 0 when a Pokemon faints.");
@@ -398,8 +398,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					pokemon.baseMoveSlots[ironHead] = {
 						move: move.name,
 						id: move.id,
-						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
-						maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
 						target: move.target,
 						disabled: false,
 						disabledSource: '',
@@ -523,28 +523,23 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
 			break;
-		// @ts-ignore I'm sorry but it takes a lot
+		// @ts-expect-error I'm sorry but it takes a lot
 		case 'scapegoat':
-			// @ts-ignore
+			action = action as SwitchAction;
 			const percent = (action.target.hp / action.target.baseMaxhp) * 100;
-			// @ts-ignore TODO: Client support for custom faint
+			// TODO: Client support for custom faint
 			action.target.faint();
 			if (percent > 66) {
 				this.add('message', `Your courage will be greatly rewarded.`);
-				// @ts-ignore
-				this.boost({atk: 3, spa: 3, spe: 3}, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat'));
+				this.boost({atk: 3, spa: 3, spe: 3}, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
 			} else if (percent > 33) {
 				this.add('message', `Your offering was accepted.`);
-				// @ts-ignore
-				this.boost({atk: 2, spa: 2, spe: 2}, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat'));
+				this.boost({atk: 2, spa: 2, spe: 2}, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
 			} else {
 				this.add('message', `Coward.`);
-				// @ts-ignore
-				this.boost({atk: 1, spa: 1, spe: 1}, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat'));
+				this.boost({atk: 1, spa: 1, spe: 1}, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
 			}
-			// @ts-ignore
 			this.add(`c:|${getName((action.pokemon.illusion || action.pokemon).name)}|Don't worry, if this plan fails we can just blame ${action.target.name}`);
-			// @ts-ignore
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'scapegoat');
 			break;
 		case 'runSwitch':
@@ -633,8 +628,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			let reviveSwitch = false; // Used to ignore the fake switch for Revival Blessing
 			if (switches[i] && !this.canSwitch(this.sides[i])) {
 				for (const pokemon of this.sides[i].active) {
-					if (this.sides[i].slotConditions[pokemon.position]['revivalblessing'] ||
-							this.sides[i].slotConditions[pokemon.position]['scapegoat']) {
+					if (
+						this.sides[i].slotConditions[pokemon.position]['revivalblessing'] ||
+						this.sides[i].slotConditions[pokemon.position]['scapegoat']
+					) {
 						reviveSwitch = true;
 						continue;
 					}
@@ -721,7 +718,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (move.spreadHit) {
 				// multi-target modifier (doubles only)
 				const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
-				this.battle.debug('Spread modifier: ' + spreadModifier);
+				this.battle.debug(`Spread modifier: ${spreadModifier}`);
 				baseDamage = this.battle.modify(baseDamage, spreadModifier);
 			} else if (move.multihitType === 'parentalbond' && move.hit > 1) {
 				// Parental Bond modifier
@@ -906,7 +903,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			this.battle.runEvent('BeforeSwitchIn', pokemon);
 			if (sourceEffect) {
-				this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, '[from] ' + sourceEffect);
+				this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, `[from] ${sourceEffect}`);
 			} else {
 				this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 			}
@@ -1076,7 +1073,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 				if (move.alwaysHit || (move.id === 'toxic' && this.battle.gen >= 8 && pokemon.hasType('Poison')) ||
-						(move.target === 'self' && move.category === 'Status' && !target.isSemiInvulnerable())) {
+					(move.target === 'self' && move.category === 'Status' && !target.isSemiInvulnerable())) {
 					accuracy = true; // bypasses ohko accuracy modifiers
 				} else {
 					accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
@@ -1320,7 +1317,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				attrs = '|[anim]' + movename + attrs;
 				movename = 'Z-' + movename;
 			}
-			this.battle.addMove('move', pokemon, movename, target + attrs);
+			this.battle.addMove('move', pokemon, movename, `${target}${attrs}`);
 
 			if (zMove) this.runZPower(move, pokemon);
 
@@ -1517,7 +1514,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					// purposes of Counter, Metal Burst, and Mirror Coat.
 					damage[i] = md === true || !md ? 0 : md;
 					// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
-					move.totalDamage += damage[i] as number;
+					move.totalDamage += damage[i];
 				}
 				if (move.mindBlownRecoil) {
 					const hpBeforeRecoil = pokemon.hp;
@@ -1583,7 +1580,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.battle.eachEvent('Update');
 
-			this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val) as Pokemon[], pokemon, move);
+			this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
 
 			if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 				for (const [i, d] of damage.entries()) {
@@ -1611,11 +1608,13 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else if (!this.battle.singleEvent('TryImmunity', move, {}, target, pokemon, move)) {
 					this.battle.add('-immune', target);
 					hitResults[i] = false;
-				} else if (this.battle.gen >= 7 && move.pranksterBoosted &&
+				} else if (
+					this.battle.gen >= 7 && move.pranksterBoosted &&
 					// Prankster Clone immunity
 					(pokemon.hasAbility('prankster') || pokemon.hasAbility('youkaiofthedusk') ||
 						pokemon.volatiles['irpachuza'] || pokemon.hasAbility('neverendingfhunt')) &&
-					!targets[i].isAlly(pokemon) && !this.dex.getImmunity('prankster', target)) {
+						!targets[i].isAlly(pokemon) && !this.dex.getImmunity('prankster', target)
+				) {
 					this.battle.debug('natural prankster immunity');
 					if (!target.illusion) this.battle.hint("Since gen 7, Dark is immune to Prankster moves.");
 					this.battle.add('-immune', target);
@@ -1636,8 +1635,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			const move = this.dex.getActiveMove(moveOrMoveName);
 			let hitResult: boolean | number | null = true;
-			let moveData = hitEffect as ActiveMove;
-			if (!moveData) moveData = move;
+			const moveData = hitEffect || move;
 			if (!moveData.flags) moveData.flags = {};
 			if (move.target === 'all' && !isSelf) {
 				hitResult = this.battle.singleEvent('TryHitField', moveData, {}, target || null, pokemon, move);
@@ -1854,7 +1852,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				case 'switch':
 				case 'instaswitch':
 				case 'revivalblessing':
-				// @ts-ignore custom status falls through
+				// @ts-expect-error custom status falls through
 				case 'scapegoat':
 					return `switch ${action.target!.position + 1}`;
 				case 'team':
@@ -1938,7 +1936,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// Should always subtract, but stop at 0 to prevent errors.
 				this.choice.forcedSwitchesLeft = this.battle.clampIntRange(this.choice.forcedSwitchesLeft - 1, 0);
 				pokemon.switchFlag = false;
-				// @ts-ignore custom request
+				// @ts-expect-error custom request
 				this.choice.actions.push({
 					choice: 'scapegoat',
 					pokemon,

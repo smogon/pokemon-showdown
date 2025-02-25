@@ -5,10 +5,10 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Spectral Thief`, function () {
+describe(`Spectral Thief`, () => {
 	afterEach(() => battle.destroy());
 
-	it(`should steal the target's boosts before hitting`, function () {
+	it(`should steal the target's boosts before hitting`, () => {
 		battle = common.createBattle([
 			[{species: "Smeargle", ability: 'technician', moves: ['calmmind', 'spectralthief']}],
 			[{species: "Litten", ability: 'intimidate', item: 'focussash', moves: ['swordsdance', 'roar']}],
@@ -31,7 +31,7 @@ describe(`Spectral Thief`, function () {
 		assert.atLeast(victim.maxhp - victim.hp, 3 * minusOneDmg);
 	});
 
-	it(`should double the boosts if the user has Simple`, function () {
+	it(`should double the boosts if the user has Simple`, () => {
 		battle = common.createBattle([
 			[{species: "Smeargle", ability: 'simple', moves: ['calmmind', 'spectralthief']}],
 			[{species: "Mew", ability: 'pressure', moves: ['swordsdance', 'roar']}],
@@ -47,7 +47,7 @@ describe(`Spectral Thief`, function () {
 		assert.statStage(victim, 'atk', 0);
 	});
 
-	it(`should only steal boosts once if the user has Parental Bond`, function () {
+	it(`should only steal boosts once if the user has Parental Bond`, () => {
 		battle = common.createBattle([
 			[{species: "Smeargle", ability: 'parentalbond', moves: ['calmmind', 'spectralthief']}],
 			[{species: "Mew", ability: 'pressure', item: 'weaknesspolicy', moves: ['swordsdance', 'roar']}],
@@ -64,7 +64,7 @@ describe(`Spectral Thief`, function () {
 		assert.statStage(victim, 'atk', 2);
 	});
 
-	it(`should not steal boosts if the target is immune to the hit`, function () {
+	it(`should not steal boosts if the target is immune to the hit`, () => {
 		battle = common.createBattle([
 			[{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['spectralthief']}],
 			[{species: "Zangoose", ability: 'immunity', moves: ['swordsdance']}],
@@ -76,7 +76,7 @@ describe(`Spectral Thief`, function () {
 		assert.statStage(victim, 'atk', 2);
 	});
 
-	it(`should zero target's boosts if the target has Contrary`, function () {
+	it(`should zero target's boosts if the target has Contrary`, () => {
 		battle = common.createBattle([
 			[{species: "Smeargle", ability: 'owntempo', item: 'focussash', moves: ['spectralthief']}],
 			[{species: "Serperior", ability: 'contrary', moves: ['leafstorm']}],
@@ -87,7 +87,7 @@ describe(`Spectral Thief`, function () {
 		assert.false.fainted(victim);
 	});
 
-	it(`should zero target's boosts if the target has Clear Body`, function () {
+	it(`should zero target's boosts if the target has Clear Body`, () => {
 		battle = common.createBattle([
 			[{species: "Smeargle", ability: 'owntempo', moves: ['spectralthief']}],
 			[{species: "Tentacruel", ability: 'clearbody', moves: ['swordsdance']}],
@@ -98,7 +98,7 @@ describe(`Spectral Thief`, function () {
 		assert.false.fainted(victim);
 	});
 
-	it(`should zero target's boosts if the target has Simple`, function () {
+	it(`should zero target's boosts if the target has Simple`, () => {
 		battle = common.createBattle([
 			[{species: "Smeargle", ability: 'owntempo', moves: ['spectralthief']}],
 			[{species: "Swoobat", ability: 'simple', moves: ['amnesia']}],

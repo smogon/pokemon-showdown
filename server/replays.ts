@@ -9,7 +9,7 @@ import * as crypto from 'crypto';
 export const replaysDB = Config.replaysdb ? new PGDatabase(Config.replaysdb) : null!;
 
 export const replays = replaysDB?.getTable<
-ReplayRow
+	ReplayRow
 >('replays', 'id');
 
 export const replayPlayers = replaysDB?.getTable<{
@@ -26,7 +26,6 @@ export const replayPlayers = replaysDB?.getTable<{
 }>('replayplayers');
 
 // must be a type and not an interface to qualify as an SQLRow
-// eslint-disable-next-line
 export type ReplayRow = {
 	id: string,
 	format: string,

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Weather damage calculation', function () {
-	afterEach(function () {
+describe('Weather damage calculation', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should multiply the damage (not the basePower) in favorable weather', function () {
+	it('should multiply the damage (not the basePower) in favorable weather', () => {
 		battle = common.createBattle();
 		battle.randomizer = dmg => dmg; // max damage
 		battle.setPlayer('p1', {team: [{species: 'Ninetales', ability: 'drought', moves: ['incinerate']}]});
@@ -23,7 +23,7 @@ describe('Weather damage calculation', function () {
 		assert.equal(basePower, move.basePower);
 	});
 
-	it('should reduce the damage (not the basePower) in unfavorable weather', function () {
+	it('should reduce the damage (not the basePower) in unfavorable weather', () => {
 		battle = common.createBattle();
 		battle.randomizer = dmg => dmg; // max damage
 		battle.setPlayer('p1', {team: [{species: 'Ninetales', ability: 'drizzle', moves: ['incinerate']}]});
@@ -36,7 +36,7 @@ describe('Weather damage calculation', function () {
 		assert.equal(basePower, move.basePower);
 	});
 
-	it('should make Hail/Sandstorm damage some pokemon but not others', function () {
+	it('should make Hail/Sandstorm damage some pokemon but not others', () => {
 		battle = common.gen(8).createBattle();
 		battle.randomizer = dmg => dmg; // max damage
 		battle.setPlayer('p1', {team: [{species: 'Abomasnow', ability: 'snowwarning', moves: ['protect']}]});
@@ -48,7 +48,7 @@ describe('Weather damage calculation', function () {
 		assert.notEqual(p2active.hp, p2active.maxhp);
 	});
 
-	it(`should wear off on the final turn before weather effects are applied`, function () {
+	it(`should wear off on the final turn before weather effects are applied`, () => {
 		battle = common.createBattle([[
 			{species: 'Tyranitar', ability: 'sandstream', moves: ['sleeptalk']},
 		], [
@@ -60,7 +60,7 @@ describe('Weather damage calculation', function () {
 		assert.equal(wynaut.hp, wynaut.maxhp - (Math.floor(wynaut.maxhp / 16) * 4));
 	});
 
-	it(`should wear off before future attacks`, function () {
+	it(`should wear off before future attacks`, () => {
 		battle = common.createBattle([[
 			{species: 'Tyranitar', ability: 'sandstream', moves: ['doomdesire', 'soak']},
 		], [
@@ -76,7 +76,7 @@ describe('Weather damage calculation', function () {
 		assert(sandDamageIndex < futureDamageIndex, `Sandstorm should have dealt damage before Doom Desire`);
 	});
 
-	it(`should run residual weather effects in order of Speed`, function () {
+	it(`should run residual weather effects in order of Speed`, () => {
 		battle = common.createBattle([[
 			{species: 'Sunkern', ability: 'solarpower', moves: ['sunnyday']},
 		], [

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Sparkling Aria', function () {
-	afterEach(function () {
+describe('Sparkling Aria', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should cure the target's burn`, function () {
+	it(`should cure the target's burn`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', ability: 'compoundeyes', moves: ['will-o-wisp', 'sparklingaria']},
 		], [
@@ -22,7 +22,7 @@ describe('Sparkling Aria', function () {
 		assert.equal(battle.p2.active[0].status, '');
 	});
 
-	it(`should not cure the target's burn if the user fainted`, function () {
+	it(`should not cure the target's burn if the user fainted`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Shedinja', moves: ['sparklingaria']},
 			{species: 'Wynaut', level: 1, ability: 'innardsout', moves: ['sleeptalk']},

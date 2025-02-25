@@ -5,10 +5,10 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Ice Face', function () {
+describe('Ice Face', () => {
 	afterEach(() => battle.destroy());
 
-	it(`should block damage from one physical move per Hail`, function () {
+	it(`should block damage from one physical move per Hail`, () => {
 		battle = common.createBattle([[
 			{species: 'Eiscue', ability: 'iceface', moves: ['splash']},
 		], [
@@ -24,7 +24,7 @@ describe('Ice Face', function () {
 		assert.hurts(eiscue, () => battle.makeChoices());
 	});
 
-	it(`should not work while Transformed`, function () {
+	it(`should not work while Transformed`, () => {
 		battle = common.createBattle([[
 			{species: 'Eiscue', ability: 'iceface', moves: ['transform']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -44,7 +44,7 @@ describe('Ice Face', function () {
 		assert.species(transformedEiscue, 'Eiscue-Noice', `Transformed Eiscue should not have changed to Eiscue after hail was set`);
 	});
 
-	it(`should not trigger if the Pokemon was KOed by Max Hailstorm`, function () {
+	it(`should not trigger if the Pokemon was KOed by Max Hailstorm`, () => {
 		battle = common.gen(8).createBattle([[
 			{species: 'Eiscue', level: 1, ability: 'iceface', moves: ['sleeptalk']},
 		], [
@@ -59,7 +59,7 @@ describe('Ice Face', function () {
 		assert.false(hasMultipleActivates, "Ice Face should not trigger when being KOed. Only one |-activate| should exist in this test.");
 	});
 
-	it(`should reform Ice Face on switchin after all entrance Abilities occur`, function () {
+	it(`should reform Ice Face on switchin after all entrance Abilities occur`, () => {
 		battle = common.createBattle([[
 			{species: 'Eiscue', ability: 'iceface', moves: ['sleeptalk']},
 			{species: 'Abomasnow', ability: 'snowwarning', moves: ['sleeptalk']},

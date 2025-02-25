@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Magic Guard', function () {
-	afterEach(function () {
+describe('Magic Guard', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should prevent all non-attack damage`, function () {
+	it(`should prevent all non-attack damage`, () => {
 		battle = common.createBattle([[
 			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
 			{species: 'Clefable', ability: 'magicguard', item: 'lifeorb', moves: ['doubleedge', 'mindblown', 'highjumpkick']},
@@ -26,7 +26,7 @@ describe('Magic Guard', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it(`should prevent Leech Seed's healing effect`, function () {
+	it(`should prevent Leech Seed's healing effect`, () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Clefable', ability: 'magicguard', moves: ['moonblast']},
@@ -39,7 +39,7 @@ describe('Magic Guard', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it('should not be suppressed by Mold Breaker', function () {
+	it('should not be suppressed by Mold Breaker', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [
 			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},

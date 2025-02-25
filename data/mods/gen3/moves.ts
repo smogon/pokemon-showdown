@@ -265,13 +265,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			Object.assign(target.side.slotConditions[target.position]['futuremove'], {
 				duration: 3,
 				move: 'doomdesire',
-				source: source,
+				source,
 				moveData: {
 					id: 'doomdesire',
 					name: "Doom Desire",
 					accuracy: 85,
 					basePower: 0,
-					damage: damage,
+					damage,
 					category: "Physical",
 					flags: {metronome: 1, futuremove: 1},
 					effectType: 'Move',
@@ -363,7 +363,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			} else {
 				bp = 20;
 			}
-			this.debug('BP: ' + bp);
+			this.debug(`BP: ${bp}`);
 			return bp;
 		},
 	},
@@ -572,7 +572,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			} else {
 				bp = 20;
 			}
-			this.debug('BP: ' + bp);
+			this.debug(`BP: ${bp}`);
 			return bp;
 		},
 	},
@@ -593,7 +593,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const pp = moveSlot.pp;
 				const move = this.dex.moves.get(moveid);
 				if (moveid && !move.flags['nosleeptalk'] && !move.flags['charge']) {
-					moves.push({move: moveid, pp: pp});
+					moves.push({move: moveid, pp});
 				}
 			}
 			if (!moves.length) {

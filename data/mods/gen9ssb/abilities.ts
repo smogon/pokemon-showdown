@@ -116,7 +116,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryBoost(boost, target, source, effect) {
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Paw Prints', '[of] ' + target);
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Paw Prints', `[of] ${target}`);
 			}
 		},
 		onModifyMove(move) {
@@ -134,7 +134,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onBasePowerPriority: 30,
 		onBasePower(basePower, attacker, defender, move) {
 			const basePowerAfterMultiplier = this.modify(basePower, this.event.modifier);
-			this.debug('Base Power: ' + basePowerAfterMultiplier);
+			this.debug(`Base Power: ${basePowerAfterMultiplier}`);
 			if (basePowerAfterMultiplier <= 60) {
 				this.debug('Confirmed Town boost');
 				return this.chainModify(1.5);
@@ -360,7 +360,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add("-fail", target, "unboost", "[from] ability: Supervised Learning", "[of] " + target);
+				this.add("-fail", target, "unboost", "[from] ability: Supervised Learning", `[of] ${target}`);
 			}
 		},
 		flags: {},
@@ -762,7 +762,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			for (const ally of pokemon.side.pokemon) {
 				if (!ally.hp || ally === pokemon) continue;
 				if (ally.heal(this.modify(ally.baseMaxhp, pokemon.hp > pokemon.maxhp / 4 ? 0.05 : 0.1))) {
-					this.add('-heal', ally, ally.getHealth, '[from] ability: Coalescence', '[of] ' + pokemon);
+					this.add('-heal', ally, ally.getHealth, '[from] ability: Coalescence', `[of] ${pokemon}`);
 				}
 			}
 		},
@@ -879,8 +879,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				const finalGambit = {
 					move: move.name,
 					id: move.id,
-					pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
-					maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+					pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+					maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
 					target: move.target,
 					disabled: false,
 					used: false,
@@ -959,7 +959,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.add(
 				'message',
 				`${name} hacked into PS and looked at ${name === 'Hecate' ? 'her' : 'their'} opponent's sets. ` +
-					`${warnTarget.name}'s move ${warnMoveName} drew ${name === 'Hecate' ? 'her' : 'their'} eye.`
+				`${warnTarget.name}'s move ${warnMoveName} drew ${name === 'Hecate' ? 'her' : 'their'} eye.`
 			);
 			this.add(`c:|${getName(name)}|Interesting. With that in mind, bring it!`);
 		},
@@ -1164,7 +1164,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				];
 				for (const sideCondition of remove) {
 					if (side.removeSideCondition(sideCondition)) {
-						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name, '[from] ability: Anfield', '[of] ' + target);
+						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name, '[from] ability: Anfield', `[of] ${target}`);
 					}
 				}
 			}
@@ -1321,12 +1321,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const displayText = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			for (const targetCondition of Object.keys(target.sideConditions)) {
 				if (target.removeSideCondition(targetCondition) && displayText.includes(targetCondition)) {
-					this.add('-sideend', target, this.dex.conditions.get(targetCondition).name, '[from] ability: Idealized World', '[of] ' + pokemon);
+					this.add('-sideend', target, this.dex.conditions.get(targetCondition).name, '[from] ability: Idealized World', `[of] ${pokemon}`);
 				}
 			}
 			for (const sideCondition of Object.keys(pokemon.side.sideConditions)) {
 				if (pokemon.side.removeSideCondition(sideCondition) && displayText.includes(sideCondition)) {
-					this.add('-sideend', pokemon.side, this.dex.conditions.get(sideCondition).name, '[from] ability: Idealized World', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(sideCondition).name, '[from] ability: Idealized World', `[of] ${pokemon}`);
 				}
 			}
 			this.field.clearTerrain();
@@ -1470,7 +1470,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				];
 				for (const sideCondition of remove) {
 					if (side.removeSideCondition(sideCondition)) {
-						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name, '[from] ability: End Round', '[of] ' + pokemon);
+						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name, '[from] ability: End Round', `[of] ${pokemon}`);
 					}
 				}
 			}
@@ -1505,7 +1505,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					}
 				}
 				mon.clearBoosts();
-				this.add('-clearboost', mon, '[from] ability: End Round', '[of] ' + pokemon);
+				this.add('-clearboost', mon, '[from] ability: End Round', `[of] ${pokemon}`);
 			}
 		},
 		flags: {cantsuppress: 1},
@@ -1697,9 +1697,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				const sourceAbility = source.setAbility('drifting', target);
 				if (!sourceAbility) return;
 				if (target.isAlly(source)) {
-					this.add('-activate', target, 'Skill Swap', '', '', '[of] ' + source);
+					this.add('-activate', target, 'Skill Swap', '', '', `[of] ${source}`);
 				} else {
-					this.add('-activate', target, 'ability: Drifting', this.dex.abilities.get(sourceAbility).name, 'Drifting', '[of] ' + source);
+					this.add('-activate', target, 'ability: Drifting', this.dex.abilities.get(sourceAbility).name, 'Drifting', `[of] ${source}`);
 				}
 				target.setAbility(sourceAbility);
 			}
@@ -2037,7 +2037,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const target = this.sample(possibleTargets);
 			const ability = target.getAbility();
 			if (pokemon.setAbility(ability)) {
-				this.add('-ability', pokemon, ability, '[from] ability: Monke See Monke Do', '[of] ' + target);
+				this.add('-ability', pokemon, ability, '[from] ability: Monke See Monke Do', `[of] ${target}`);
 			}
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1},
@@ -2250,7 +2250,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Every turn, raises a random stat by 1 stage if the foe has more raised stats.",
 		name: "Adaptive Engineering",
 		onResidual(source) {
-			if (source === undefined || source.foes() === undefined || source.foes()[0] === undefined) return;
+			if (source?.foes()?.[0] === undefined) return;
 			if (source.positiveBoosts() < source.foes()[0].positiveBoosts()) {
 				const stats: BoostID[] = [];
 				let stat: BoostID;
@@ -2338,7 +2338,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (target.lastMove && target.lastMove.id !== 'struggle') {
 				if (move.id === target.lastMove.id) {
 					this.attrLastMove('[still]');
-					this.add('cant', target, 'ability: Overasked Clause', move, '[of] ' + source);
+					this.add('cant', target, 'ability: Overasked Clause', move, `[of] ${source}`);
 					return false;
 				}
 			}
@@ -2406,7 +2406,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				const dazzlingHolder = this.effectState.target;
 				if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
 					this.attrLastMove('[still]');
-					this.add('cant', target, 'ability: Sand Sleuth', move, '[of] ' + source);
+					this.add('cant', target, 'ability: Sand Sleuth', move, `[of] ${source}`);
 					return false;
 				}
 			}

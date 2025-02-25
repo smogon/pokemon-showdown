@@ -80,7 +80,7 @@ function loadData() {
 const channelData: ChannelData = loadData();
 
 export class YoutubeInterface {
-	interval: NodeJS.Timer | null;
+	interval: NodeJS.Timeout | null;
 	intervalTime: number;
 	data: ChannelData;
 	linkRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i;
@@ -113,7 +113,7 @@ export class YoutubeInterface {
 			videos: Number(data.statistics.videoCount),
 			subs: Number(data.statistics.subscriberCount),
 			views: Number(data.statistics.viewCount),
-			username: username,
+			username,
 		};
 		this.data.channels[id] = {...cache};
 		this.save();
@@ -664,7 +664,7 @@ export const commands: Chat.ChatCommands = {
 	youtubehelp: [
 		`YouTube commands:`,
 		`/randchannel [optional category]- View data of a random channel from the YouTube database.` +
-			` If a category is given, the random channel will be in the  given category.`,
+		` If a category is given, the random channel will be in the given category.`,
 		`/youtube addchannel [channel] - Add channel data to the YouTube database. Requires: % @ #`,
 		`/youtube removechannel [channel]- Delete channel data from the YouTube database. Requires: % @ #`,
 		`/youtube channel [channel] - View the data of a specified channel. Can be either channel ID or channel name.`,

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Prankster', function () {
-	afterEach(function () {
+describe('Prankster', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should increase the priority of Status moves', function () {
+	it('should increase the priority of Status moves', () => {
 		battle = common.createBattle([
 			[{species: "Murkrow", ability: 'prankster', moves: ['taunt']}],
 			[{species: "Deoxys-Speed", ability: 'pressure', moves: ['calmmind']}],
@@ -19,7 +19,7 @@ describe('Prankster', function () {
 		assert.statStage(battle.p2.active[0], 'spa', 0);
 	});
 
-	it('should cause Status moves to fail against Dark Pokémon', function () {
+	it('should cause Status moves to fail against Dark Pokémon', () => {
 		battle = common.createBattle([
 			[{species: "Sableye", ability: 'prankster', moves: ['willowisp']}],
 			[{species: "Sableye", ability: 'keeneye', moves: ['willowisp']}],
@@ -27,7 +27,7 @@ describe('Prankster', function () {
 		assert.constant(() => battle.p2.active[0].status, () => battle.makeChoices('move willowisp', 'move willowisp'));
 	});
 
-	it('should cause bounced Status moves to fail against Dark Pokémon', function () {
+	it('should cause bounced Status moves to fail against Dark Pokémon', () => {
 		battle = common.createBattle([
 			[{species: "Klefki", ability: 'prankster', moves: ['magiccoat']}],
 			[{species: "Spiritomb", ability: 'pressure', moves: ['willowisp']}],
@@ -35,7 +35,7 @@ describe('Prankster', function () {
 		assert.constant(() => battle.p2.active[0].status, () => battle.makeChoices('move magiccoat', 'move willowisp'));
 	});
 
-	it('should not cause bounced Status moves to fail against Dark Pokémon if it is removed', function () {
+	it('should not cause bounced Status moves to fail against Dark Pokémon if it is removed', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: "Alakazam", ability: 'synchronize', moves: ['skillswap']},
@@ -50,7 +50,7 @@ describe('Prankster', function () {
 		assert.statStage(darkPokemon, 'spa', -1);
 	});
 
-	it('should not cause Status moves forced by Encore to fail against Dark Pokémon', function () {
+	it('should not cause Status moves forced by Encore to fail against Dark Pokémon', () => {
 		battle = common.createBattle([
 			[{species: "Liepard", ability: 'prankster', moves: ['encore']}],
 			[{species: "Riolu", ability: 'prankster', moves: ['confide', 'return']}],
@@ -60,7 +60,7 @@ describe('Prankster', function () {
 		assert.statStage(battle.p1.active[0], 'spa', -1);
 	});
 
-	it('should cause moves forced by Encore to fail against Dark Pokémon if the attacker intended to use a Status move', function () {
+	it('should cause moves forced by Encore to fail against Dark Pokémon if the attacker intended to use a Status move', () => {
 		// https://www.smogon.com/forums/threads/3469932/page-396#post-7736003
 		battle = common.createBattle({gameType: 'doubles'}, [
 			[{species: "Liepard", ability: 'prankster', moves: ['encore', 'nastyplot']}, {species: "Tapu Fini", ability: 'mistysurge', moves: ['calmmind']}],
@@ -73,7 +73,7 @@ describe('Prankster', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it('should not leak the ability via hint if the target is immune to the Status move', function () {
+	it('should not leak the ability via hint if the target is immune to the Status move', () => {
 		battle = common.createBattle([
 			[{species: "Sableye", ability: 'prankster', moves: ['willowisp']}],
 			[{species: "Houndoom", ability: 'pressure', moves: ['willowisp']}],
@@ -83,12 +83,12 @@ describe('Prankster', function () {
 	});
 });
 
-describe('Prankster [Gen 6]', function () {
-	afterEach(function () {
+describe('Prankster [Gen 6]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should not cause Status moves to fail against Dark Pokémon`, function () {
+	it(`should not cause Status moves to fail against Dark Pokémon`, () => {
 		battle = common.gen(6).createBattle([[
 			{species: 'Sableye', ability: 'prankster', moves: ['willowisp']},
 		], [

@@ -140,7 +140,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			onStart(pokemon, source) {
-				this.add('-start', pokemon, 'Curse', '[of] ' + source);
+				this.add('-start', pokemon, 'Curse', `[of] ${source}`);
 			},
 			onAfterMoveSelf(pokemon) {
 				this.damage(pokemon.baseMaxhp / 4);
@@ -548,7 +548,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onResidualOrder: 4,
 			onResidual(pokemon) {
 				const duration = pokemon.volatiles['perishsong'].duration;
-				this.add('-start', pokemon, 'perish' + duration);
+				this.add('-start', pokemon, `perish${duration}`);
 			},
 		},
 	},
@@ -909,7 +909,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
 					return;
 				}
-				this.add('-item', source, yourItem, '[from] move: Thief', '[of] ' + target);
+				this.add('-item', source, yourItem, '[from] move: Thief', `[of] ${target}`);
 			},
 		},
 	},

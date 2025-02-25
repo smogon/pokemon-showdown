@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Heal Bell', function () {
-	afterEach(function () {
+describe('Heal Bell', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should heal the major status conditions of the user's team`, function () {
+	it(`should heal the major status conditions of the user's team`, () => {
 		battle = common.createBattle([[
 			{species: 'Dunsparce', moves: ['sleeptalk']},
 			{species: 'Chansey', moves: ['healbell']},
@@ -25,7 +25,7 @@ describe('Heal Bell', function () {
 		assert.equal(battle.p1.pokemon[1].status, '');
 	});
 
-	it(`in a Multi Battle, should heal the major status conditions of the ally's team`, function () {
+	it(`in a Multi Battle, should heal the major status conditions of the ally's team`, () => {
 		battle = common.createBattle({gameType: 'multi'}, [[
 			{species: 'Machamp', ability: 'noguard', moves: ['poisongas']},
 		], [
@@ -62,7 +62,7 @@ describe('Heal Bell', function () {
 		assert.equal(battle.p2.pokemon[0].status, '', `Wynaut should not be poisoned.`);
 	});
 
-	it(`in a Free-For-All, should heal the major status conditions of the user's team, and not any opposing teams`, function () {
+	it(`in a Free-For-All, should heal the major status conditions of the user's team, and not any opposing teams`, () => {
 		battle = common.createBattle({gameType: 'freeforall'}, [[
 			{species: 'Machamp', ability: 'noguard', moves: ['poisongas']},
 		], [

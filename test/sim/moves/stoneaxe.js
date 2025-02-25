@@ -7,12 +7,12 @@ let battle;
 
 // tests are derived from the following post and related quotes:
 // https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9417627
-describe('Stone Axe', function () {
-	afterEach(function () {
+describe('Stone Axe', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should set up Stealth Rock on the side of the opponent`, function () {
+	it(`should set up Stealth Rock on the side of the opponent`, () => {
 		battle = common.createBattle([[
 			{species: 'kleavor', ability: 'noguard', moves: ['stoneaxe']},
 		], [
@@ -23,7 +23,7 @@ describe('Stone Axe', function () {
 		assert(battle.p2.sideConditions.stealthrock);
 	});
 
-	it(`should set up Stealth Rock on the side of the opponent, not necessarily the target, in a double battle`, function () {
+	it(`should set up Stealth Rock on the side of the opponent, not necessarily the target, in a double battle`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'kleavor', ability: 'noguard', moves: ['stoneaxe']},
 			{species: 'pikachu', moves: ['splash']},
@@ -38,7 +38,7 @@ describe('Stone Axe', function () {
 		assert(battle.p2.sideConditions.stealthrock);
 	});
 
-	it(`should still set up Stealth Rock on the side of the opponent that is behind a Substitute`, function () {
+	it(`should still set up Stealth Rock on the side of the opponent that is behind a Substitute`, () => {
 		battle = common.createBattle([[
 			{species: 'kleavor', ability: 'noguard', moves: ['stoneaxe']},
 		], [
@@ -49,7 +49,7 @@ describe('Stone Axe', function () {
 		assert(battle.p2.sideConditions.stealthrock);
 	});
 
-	it(`should not set up Stealth Rock if the move does not hit opponent or its Substitute`, function () {
+	it(`should not set up Stealth Rock if the move does not hit opponent or its Substitute`, () => {
 		battle = common.createBattle([[
 			{species: 'kleavor', moves: ['stoneaxe']},
 		], [
@@ -60,7 +60,7 @@ describe('Stone Axe', function () {
 		assert.equal(!!(battle.p2.sideConditions.stealthrock), false);
 	});
 
-	it('should not be bounced back by Magic Bounce', function () {
+	it('should not be bounced back by Magic Bounce', () => {
 		battle = common.createBattle([[
 			{species: 'kleavor', ability: 'noguard', moves: ['stoneaxe']},
 		], [
@@ -72,7 +72,7 @@ describe('Stone Axe', function () {
 		assert(battle.p2.sideConditions.stealthrock);
 	});
 
-	it('should have its Stealth Rock prevented by Sheer Force', function () {
+	it('should have its Stealth Rock prevented by Sheer Force', () => {
 		battle = common.createBattle([[
 			{species: 'kleavor', ability: 'sheerforce', moves: ['stoneaxe']},
 		], [
@@ -83,7 +83,7 @@ describe('Stone Axe', function () {
 		assert.equal(!!(battle.p2.sideConditions.stealthrock), false);
 	});
 
-	it(`should not set Stealth Rock when the user faints from Rocky Helmet`, function () {
+	it(`should not set Stealth Rock when the user faints from Rocky Helmet`, () => {
 		battle = common.createBattle([[
 			{species: 'kleavor', ability: 'noguard', item: 'focussash', moves: ['stoneaxe']},
 			{species: 'wynaut', moves: ['sleeptalk']},

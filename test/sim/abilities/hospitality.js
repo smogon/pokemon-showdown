@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Hospitality', function () {
-	afterEach(function () {
+describe('Hospitality', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should activate after hazards', function () {
+	it('should activate after hazards', () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'snom', level: 1, ability: 'noguard', moves: ['sleeptalk']},
 			{species: 'snom', level: 1, ability: 'noguard', moves: ['sleeptalk']},

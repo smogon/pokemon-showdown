@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Color Change', function () {
-	afterEach(function () {
+describe('Color Change', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should change the user\'s type when struck by a move', function () {
+	it('should change the user\'s type when struck by a move', () => {
 		battle = common.createBattle([[
 			{species: "Kecleon", ability: 'colorchange', moves: ['recover']},
 		], [
@@ -21,7 +21,7 @@ describe('Color Change', function () {
 		assert(ccMon.hasType('Grass'));
 	});
 
-	it('should not change the user\'s type if it had a Substitute when hit', function () {
+	it('should not change the user\'s type if it had a Substitute when hit', () => {
 		battle = common.createBattle([[
 			{species: "Kecleon", ability: 'colorchange', moves: ['substitute']},
 		], [

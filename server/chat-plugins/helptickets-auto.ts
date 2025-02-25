@@ -1,7 +1,7 @@
 import {FS, Utils} from '../../lib';
 import type {ModlogSearch, ModlogEntry} from '../modlog';
 import {
-	TicketState, getBattleLog, getBattleLinks,
+	type TicketState, getBattleLog, getBattleLinks,
 	writeTickets, notifyStaff, writeStats, HelpTicket,
 	tickets,
 } from './helptickets';
@@ -515,6 +515,7 @@ export async function runPunishments(ticket: TicketState & {text: [string, strin
 				closeTicket(ticket); // no good response. just close it, because we __have__ dispatched an action.
 			}
 		} else {
+			// eslint-disable-next-line require-atomic-updates
 			ticket.recommended = [];
 			for (const res of result.values()) {
 				Rooms.get('abuselog')?.add(

@@ -29,7 +29,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Move') {
-				this.add('-status', target, 'slp', '[from] move: ' + sourceEffect.name);
+				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
 				this.add('-status', target, 'slp');
 			}
@@ -223,7 +223,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 		onStallMove() {
 			const counter = Math.floor(this.effectState.counter) || 127;
-			this.debug("Success chance: " + Math.round(counter * 1000 / 255) / 10 + "% (" + counter + "/255)");
+			this.debug(`Success chance: ${Math.round(counter * 1000 / 255) / 10}% (${counter}/255)`);
 			return this.randomChance(counter, 255);
 		},
 		onRestart() {

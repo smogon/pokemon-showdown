@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Protective Pads', function () {
-	afterEach(function () {
+describe('Protective Pads', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should prevent ability-changing abilities triggered by contact from acting`, function () {
+	it(`should prevent ability-changing abilities triggered by contact from acting`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'sturdy', item: 'protectivepads', moves: ['bulletpunch']},
 		], [
@@ -26,7 +26,7 @@ describe('Protective Pads', function () {
 		assert.false(mummyActivationMessages[0].includes('Sturdy'), `Attacker's ability should not be revealed`);
 	});
 
-	it(`should prevent damaging abilities triggered by contact from acting`, function () {
+	it(`should prevent damaging abilities triggered by contact from acting`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch']},
 		], [
@@ -38,7 +38,7 @@ describe('Protective Pads', function () {
 		assert(battle.log.some(line => line.includes('Protective Pads')));
 	});
 
-	it(`should prevent stat stage-changing abilities triggered by contact from acting`, function () {
+	it(`should prevent stat stage-changing abilities triggered by contact from acting`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch']},
 		], [
@@ -50,7 +50,7 @@ describe('Protective Pads', function () {
 		assert(battle.log.some(line => line.includes('Protective Pads')));
 	});
 
-	it(`should not stop Pickpocket`, function () {
+	it(`should not stop Pickpocket`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch']},
 		], [
@@ -61,7 +61,7 @@ describe('Protective Pads', function () {
 		assert.equal(battle.p2.active[0].item, 'protectivepads', `Target should receive stolen Protective Pads`);
 	});
 
-	it(`should prevent item effects triggered by contact from acting`, function () {
+	it(`should prevent item effects triggered by contact from acting`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch']},
 		], [
@@ -73,7 +73,7 @@ describe('Protective Pads', function () {
 		assert(battle.log.every(line => !line.includes('Protective Pads')));
 	});
 
-	it(`should not activate on the opponent's moves`, function () {
+	it(`should not activate on the opponent's moves`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'protectivepads', moves: ['sleeptalk']},
 		], [
@@ -83,7 +83,7 @@ describe('Protective Pads', function () {
 		assert.statStage(battle.p1.active[0], 'atk', -1, `Attack should be lowered`);
 	});
 
-	it(`should not start Perish Body on either Pokemon`, function () {
+	it(`should not start Perish Body on either Pokemon`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch']},
 		], [
@@ -96,7 +96,7 @@ describe('Protective Pads', function () {
 		assert(battle.log.every(line => !line.includes('Protective Pads')));
 	});
 
-	it(`should block against Protecting effects with a contact side effect`, function () {
+	it(`should block against Protecting effects with a contact side effect`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'protectivepads', moves: ['sleeptalk', 'tackle']},
 		], [
@@ -115,7 +115,7 @@ describe('Protective Pads', function () {
 		assert(battle.log.every(line => !line.includes('Protective Pads')));
 	});
 
-	it(`should not protect against Gulp Missile when using a contact move`, function () {
+	it(`should not protect against Gulp Missile when using a contact move`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'protectivepads', moves: ['bulletpunch']},
 		], [

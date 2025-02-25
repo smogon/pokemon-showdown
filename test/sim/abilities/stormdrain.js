@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Storm Drain', function () {
-	afterEach(function () {
+describe('Storm Drain', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should grant immunity to Water-type moves and boost Special Attack by 1 stage', function () {
+	it('should grant immunity to Water-type moves and boost Special Attack by 1 stage', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleeptalk']}]});
 		battle.setPlayer('p2', {team: [{species: 'Azumarill', ability: 'thickfat', moves: ['aquajet']}]});
@@ -19,7 +19,7 @@ describe('Storm Drain', function () {
 		assert.statStage(battle.p1.active[0], 'spa', 1);
 	});
 
-	it('should redirect Max Geyser', function () {
+	it('should redirect Max Geyser', () => {
 		battle = common.gen(8).createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleep talk']},
@@ -34,7 +34,7 @@ describe('Storm Drain', function () {
 		assert.statStage(battle.p1.active[0], 'spa', 1);
 	});
 
-	it('should redirect single-target Water-type attacks to the user if it is a valid target', function () {
+	it('should redirect single-target Water-type attacks to the user if it is a valid target', () => {
 		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleeptalk']},
@@ -52,7 +52,7 @@ describe('Storm Drain', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it('should redirect to the fastest Pokemon with the ability', function () {
+	it('should redirect to the fastest Pokemon with the ability', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleeptalk']},
@@ -69,7 +69,7 @@ describe('Storm Drain', function () {
 		assert.statStage(slowGastrodon, 'spa', 0);
 	});
 
-	it('should not redirect if another Pokemon has used Follow Me', function () {
+	it('should not redirect if another Pokemon has used Follow Me', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleeptalk']},
@@ -85,7 +85,7 @@ describe('Storm Drain', function () {
 		assert.false.fullHP(defender);
 	});
 
-	it('should have its Water-type immunity and its ability to redirect moves suppressed by Mold Breaker', function () {
+	it('should have its Water-type immunity and its ability to redirect moves suppressed by Mold Breaker', () => {
 		battle = common.createBattle({gameType: 'doubles'});
 		battle.setPlayer('p1', {team: [
 			{species: 'Gastrodon', ability: 'stormdrain', moves: ['endure']},

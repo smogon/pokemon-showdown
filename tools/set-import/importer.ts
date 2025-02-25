@@ -303,7 +303,7 @@ function validSet(
 
 function skip(dex: ModdedDex, format: Format, pokemon: string, set: DeepPartial<PokemonSet>) {
 	const {gen} = FORMATS.get(format.id)!;
-	const hasMove = (m: string) => set.moves && set.moves.includes(m);
+	const hasMove = (m: string) => set.moves?.includes(m);
 	const bh = format.id.includes('balancedhackmons');
 
 	if (pokemon === 'Groudon-Primal' && set.item !== 'Red Orb') return true;
@@ -334,7 +334,7 @@ function toPokemonSet(
 	outOfBattleSpeciesName?: string
 ): PokemonSet {
 	// To simplify things, during validation we mutate the input set to correct for HP mismatches
-	const hp = set.moves && set.moves.find(m => m.startsWith('Hidden Power'));
+	const hp = set.moves?.find(m => m.startsWith('Hidden Power'));
 	let fill = dex.gen === 2 ? 30 : 31;
 	if (hp) {
 		const type = hp.slice(13);
@@ -377,7 +377,6 @@ function toPokemonSet(
 	}
 	return copy;
 }
-
 
 function expectedHP(ivs: Partial<StatsTable>) {
 	ivs = fillStats(ivs, 31);
@@ -562,7 +561,7 @@ const request = retrying(throttling(fetch, 1, 50), 5, 20);
 export function fetch(u: string) {
 	const client = u.startsWith('http:') ? http : https;
 	return new Promise<string>((resolve, reject) => {
-		// @ts-ignore Typescript bug - thinks the second argument should be RequestOptions, not a callback
+		// @ts-expect-error Typescript bug - thinks the second argument should be RequestOptions, not a callback
 		const req = client.get(u, (res: IncomingMessage) => {
 			if (res.statusCode !== 200) {
 				if (res.statusCode >= 500 && res.statusCode < 600) {

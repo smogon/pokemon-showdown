@@ -3,7 +3,7 @@
  * By Mia.
  * @author mia-pi-git
  */
-import {SQL, FS} from '../../lib';
+import {type SQL, FS} from '../../lib';
 import {MAX_PENDING} from '.';
 
 export const statements = {

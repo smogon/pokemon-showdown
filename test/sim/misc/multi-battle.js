@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Free-for-all', function () {
-	afterEach(function () {
+describe('Free-for-all', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should support forfeiting`, function () {
+	it(`should support forfeiting`, () => {
 		battle = common.createBattle({gameType: 'freeforall'}, [[
 			{species: 'wynaut', moves: ['vitalthrow']},
 		], [

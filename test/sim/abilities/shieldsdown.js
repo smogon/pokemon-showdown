@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Shields Down', function () {
-	afterEach(function () {
+describe('Shields Down', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should be immune to status until below 50%`, function () {
+	it(`should be immune to status until below 50%`, () => {
 		battle = common.createBattle([[
 			{species: 'Minior', ability: 'shieldsdown', moves: ['splash']},
 		], [
@@ -27,7 +27,7 @@ describe('Shields Down', function () {
 		assert.equal(minior.status, 'par');
 	});
 
-	it(`should be immune to status until below 50% in all formes`, function () {
+	it(`should be immune to status until below 50% in all formes`, () => {
 		battle = common.createBattle([[
 			{species: 'Minior-Blue', ability: 'shieldsdown', moves: ['splash']},
 		], [

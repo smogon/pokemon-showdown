@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Unaware', function () {
-	afterEach(function () {
+describe('Unaware', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should ignore attack stage changes when Pokemon with it are attacked`, function () {
+	it(`should ignore attack stage changes when Pokemon with it are attacked`, () => {
 		battle = common.createBattle([[
 			{species: 'Clefable', ability: 'unaware', moves: ['softboiled']},
 		], [
@@ -24,7 +24,7 @@ describe('Unaware', function () {
 		assert.bounded(damage, [19, 22]);
 	});
 
-	it(`should not ignore attack stage changes when Pokemon with it attack`, function () {
+	it(`should not ignore attack stage changes when Pokemon with it attack`, () => {
 		battle = common.createBattle([[
 			{species: 'Clefable', ability: 'unaware', moves: ['moonblast', 'nastyplot']},
 		], [
@@ -38,7 +38,7 @@ describe('Unaware', function () {
 		assert.bounded(damage, [69, 81]);
 	});
 
-	it(`should ignore defense stage changes when Pokemon with it attack`, function () {
+	it(`should ignore defense stage changes when Pokemon with it attack`, () => {
 		battle = common.createBattle([[
 			{species: 'Clefable', ability: 'unaware', item: 'laggingtail', moves: ['moonblast']},
 		], [
@@ -51,7 +51,7 @@ describe('Unaware', function () {
 		assert.bounded(damage, [34, 41]);
 	});
 
-	it(`should not ignore defense stage changes when Pokemon with it are attacked`, function () {
+	it(`should not ignore defense stage changes when Pokemon with it are attacked`, () => {
 		battle = common.createBattle([[
 			{species: 'Clefable', ability: 'unaware', moves: ['luckychant', 'irondefense']},
 		], [
@@ -65,7 +65,7 @@ describe('Unaware', function () {
 		assert.bounded(damage, [16, 19]);
 	});
 
-	it(`should be suppressed by Mold Breaker`, function () {
+	it(`should be suppressed by Mold Breaker`, () => {
 		battle = common.createBattle([[
 			{species: 'Clefable', ability: 'unaware', moves: ['softboiled']},
 		], [
@@ -79,7 +79,7 @@ describe('Unaware', function () {
 		assert.bounded(damage, [73, 86]);
 	});
 
-	it(`should only apply to targets with Unaware in battles with multiple Pokemon`, function () {
+	it(`should only apply to targets with Unaware in battles with multiple Pokemon`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'manaphy', moves: ['tailglow', 'surf']},
 			{species: 'slowbro', ability: 'unaware', moves: ['sleeptalk']},
@@ -93,7 +93,7 @@ describe('Unaware', function () {
 		assert.equal(battle.p2.active[1].hp, 1);
 	});
 
-	it(`should ignore attack stage changes when Pokemon with it are attacked with Foul Play`, function () {
+	it(`should ignore attack stage changes when Pokemon with it are attacked with Foul Play`, () => {
 		battle = common.createBattle([[
 			{species: 'Clefable', ability: 'unaware', moves: ['bellydrum']},
 		], [

@@ -224,12 +224,12 @@ describe("New set format (slow)", () => {
 				}
 			}
 		});
-		it('all Pokemon should have 4 moves, except for Ditto and Unown', function () {
+		it('all Pokemon should have 4 moves, except for Ditto and Unown', () => {
 			testTeam({format, rounds}, team => {
 				for (const pokemon of team) assert(pokemon.name === 'Ditto' || pokemon.name === 'Unown' || pokemon.moves.length === 4, `In ${format}, ${pokemon.name} can generate with ${pokemon.moves.length} moves`);
 			});
 		});
-		it('all moves on all sets should exist and be obtainable', function () {
+		it('all moves on all sets should exist and be obtainable', () => {
 			const generator = Teams.getGenerator(format);
 			for (const pokemon of Object.keys(setsJSON)) {
 				const species = dex.species.get(pokemon);
@@ -355,7 +355,6 @@ describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
 								assert(validateLearnset(move, set, vType, mod), `illegal move "${moveName}" of ${species}`);
 							}
 						}
-
 
 						// Check that no moves appear more than once in a set
 						assert.equal(set.moves.flat(1).length, new Set(set.moves.flat(1)).size, `${species} has repeat moves`);

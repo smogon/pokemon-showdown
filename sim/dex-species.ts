@@ -538,7 +538,7 @@ export class DexSpecies {
 				const isLetsGo = (
 					(species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
 					(!species.forme || (['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme) &&
-					species.name !== 'Pikachu-Alola'))
+						species.name !== 'Pikachu-Alola'))
 				);
 				if (!isLetsGo) species.isNonstandard = 'Past';
 			}
@@ -609,9 +609,12 @@ export class DexSpecies {
 					if (gen4HMMoves.includes(moveid) && this.dex.gen >= 5) {
 						if (!learnset[moveid].some(source => parseInt(source.charAt(0)) >= 5 &&
 							parseInt(source.charAt(0)) <= this.dex.gen)) continue;
-					} else if (gen3HMMoves.includes(moveid) && this.dex.gen >= 4 &&
-						!learnset[moveid].some(source => parseInt(source.charAt(0)) >= 4 &&
-						parseInt(source.charAt(0)) <= this.dex.gen)) {
+					} else if (
+						gen3HMMoves.includes(moveid) && this.dex.gen >= 4 &&
+						!learnset[moveid].some(
+							source => parseInt(source.charAt(0)) >= 4 && parseInt(source.charAt(0)) <= this.dex.gen
+						)
+					) {
 						continue;
 					}
 				}

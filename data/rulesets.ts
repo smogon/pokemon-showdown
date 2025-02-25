@@ -479,7 +479,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'PotD',
 		desc: "Forces the Pokemon of the Day onto every random team.",
 		onBegin() {
-			if (global.Config && global.Config.potd) {
+			if (global.Config?.potd) {
 				this.add('rule', "Pokemon of the Day: " + this.dex.species.get(Config.potd).name);
 			}
 		},
@@ -1064,7 +1064,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 
 			for (const moveId of set.moves) {
 				const move = this.dex.moves.get(moveId);
-				if (move.id === 'flamecharge' || (move.boosts && move.boosts.spe && move.boosts.spe > 0)) {
+				if (move.id === 'flamecharge' || (move.boosts?.spe && move.boosts.spe > 0)) {
 					speedBoosted = true;
 				}
 				const nonSpeedBoostedMoves = [
@@ -1073,7 +1073,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				];
 				if (nonSpeedBoostedMoves.includes(move.id) ||
 					move.boosts && ((move.boosts.atk && move.boosts.atk > 0) || (move.boosts.def && move.boosts.def > 0) ||
-					(move.boosts.spa && move.boosts.spa > 0) || (move.boosts.spd && move.boosts.spd > 0))) {
+						(move.boosts.spa && move.boosts.spa > 0) || (move.boosts.spd && move.boosts.spd > 0))) {
 					nonSpeedBoosted = true;
 				}
 				if (item.zMove && move.type === item.zMoveType && move.zMove?.boost) {
@@ -1082,8 +1082,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 						if (!speedBoosted) speedBoosted = move.name;
 					}
 					if (
-						((boosts.atk && boosts.atk > 0) || (boosts.def && boosts.def > 0) ||
-						(boosts.spa && boosts.spa > 0) || (boosts.spd && boosts.spd > 0))
+						(boosts.atk && boosts.atk > 0) || (boosts.def && boosts.def > 0) ||
+						(boosts.spa && boosts.spa > 0) || (boosts.spd && boosts.spd > 0)
 					) {
 						if (!nonSpeedBoosted || move.name === speedBoosted) nonSpeedBoosted = move.name;
 					}
@@ -1312,13 +1312,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'Sleep Clause Mod: Limit one foe put to sleep');
 		},
 		onSetStatus(status, target, source) {
-			if (source && source.isAlly(target)) {
+			if (source?.isAlly(target)) {
 				return;
 			}
 			if (status.id === 'slp') {
 				for (const pokemon of target.side.pokemon) {
 					if (pokemon.hp && pokemon.status === 'slp') {
-						if (!pokemon.statusState.source || !pokemon.statusState.source.isAlly(pokemon)) {
+						if (!pokemon.statusState.source?.isAlly(pokemon)) {
 							this.add('-message', 'Sleep Clause Mod activated.');
 							this.hint("Sleep Clause Mod prevents players from putting more than one of their opponent's Pokémon to sleep at a time");
 							return false;
@@ -1336,7 +1336,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'Stadium Sleep Clause: Limit one foe put to sleep');
 		},
 		onSetStatus(status, target, source) {
-			if (source && source.isAlly(target)) {
+			if (source?.isAlly(target)) {
 				return;
 			}
 			if (status.id === 'slp') {
@@ -1384,7 +1384,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'Freeze Clause Mod: Limit one foe frozen');
 		},
 		onSetStatus(status, target, source) {
-			if (source && source.isAlly(target)) {
+			if (source?.isAlly(target)) {
 				return;
 			}
 			if (status.id === 'frz') {
@@ -1427,7 +1427,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 			for (const set of team) {
 				if (this.gen === 9 && set.teraType &&
-						!typeTable.includes(set.teraType) && this.ruleTable.has(`enforcesameteratype`)) {
+					!typeTable.includes(set.teraType) && this.ruleTable.has(`enforcesameteratype`)) {
 					return [`${set.species}'s Tera Type must match the team's type.`];
 				}
 			}
@@ -1673,7 +1673,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (!target) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			const types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.dex.moves.get(move.id).type))];
-			return {...species, types: types};
+			return {...species, types};
 		},
 		onSwitchIn(pokemon) {
 			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
@@ -2432,7 +2432,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					if (!subtarget.side.addSlotCondition(subtarget, 'futuremove')) return false;
 					Object.assign(subtarget.side.slotConditions[subtarget.position]['futuremove'], {
 						move: 'doomdesire',
-						source: source,
+						source,
 						moveData: {
 							id: 'doomdesire',
 							name: "Doom Desire",
@@ -2456,7 +2456,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					Object.assign(subtarget.side.slotConditions[subtarget.position]['futuremove'], {
 						duration: 3,
 						move: 'futuresight',
-						source: source,
+						source,
 						moveData: {
 							id: 'futuresight',
 							name: "Future Sight",
@@ -2626,8 +2626,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 			const problemPokemon = this.dex.species.all().filter(s => (
 				(s.name === 'Xerneas' || s.battleOnly || s.forme === 'Eternamax') &&
-					!(s.isMega || s.isPrimal || ['Greninja-Ash', 'Necrozma-Ultra'].includes(s.name)) &&
-					!(this.ruleTable.has(`+pokemon:${s.id}`) || this.ruleTable.has(`+basepokemon:${this.toID(s.baseSpecies)}`))
+				!(s.isMega || s.isPrimal || ['Greninja-Ash', 'Necrozma-Ultra'].includes(s.name)) &&
+				!(this.ruleTable.has(`+pokemon:${s.id}`) || this.ruleTable.has(`+basepokemon:${this.toID(s.baseSpecies)}`))
 			));
 			if (problemPokemon.includes(species)) {
 				if (species.requiredItem && this.toID(set.item) !== this.toID(species.requiredItem)) {

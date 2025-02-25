@@ -19,7 +19,6 @@ export const ATTRIBUTES = {
 	"FLIRTATION": {},
 };
 
-
 export interface PerspectiveRequest {
 	languages: string[];
 	requestedAttributes: AnyObject;
@@ -89,6 +88,7 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 		}
 		return result;
 	} catch (e: any) {
+		// eslint-disable-next-line require-atomic-updates
 		throttleTime = Date.now();
 		if (e.message.startsWith('Request timeout') || e.statusCode === 429) {
 			// request timeout: just ignore this. error on their end not ours.
@@ -99,7 +99,6 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 		return null;
 	}
 }, PM_TIMEOUT);
-
 
 // main module check necessary since this gets required in other non-parent processes sometimes
 // when that happens we do not want to take over or set up or anything
@@ -114,7 +113,7 @@ if (require.main === module) {
 		slow(text: string) {
 			process.send!(`CALLBACK\nSLOW\n${text}`);
 		},
-	};
+	} as any;
 	global.toID = toID;
 	process.on('uncaughtException', err => {
 		if (Config.crashguard) {
@@ -172,4 +171,3 @@ export class RemoteClassifier {
 		return PM.processes.length;
 	}
 }
-

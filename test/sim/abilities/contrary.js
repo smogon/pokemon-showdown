@@ -5,8 +5,8 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Contrary', function () {
-	afterEach(function () {
+describe('Contrary', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
@@ -23,7 +23,7 @@ describe('Contrary', function () {
 		assert.statStage(contraryMon, 'def', 1);
 	});
 
-	it('should not invert absolute stat changes', function () {
+	it('should not invert absolute stat changes', () => {
 		battle = common.createBattle([[
 			{species: "Serperior", ability: 'contrary', moves: ['leechseed']},
 		], [
@@ -34,7 +34,7 @@ describe('Contrary', function () {
 		assert.statStage(contraryMon, 'atk', -1);
 	});
 
-	it('should invert Belly Drum\'s maximizing Attack', function () {
+	it('should invert Belly Drum\'s maximizing Attack', () => {
 		battle = common.createBattle([[
 			{species: "Spinda", ability: 'contrary', moves: ['bellydrum']},
 		], [
@@ -45,7 +45,7 @@ describe('Contrary', function () {
 		assert.statStage(contraryMon, 'atk', -6);
 	});
 
-	it('should be suppressed by Mold Breaker', function () {
+	it('should be suppressed by Mold Breaker', () => {
 		battle = common.createBattle([[
 			{species: "Spinda", ability: 'contrary', moves: ['tackle']},
 		], [

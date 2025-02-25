@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe("Ripen", function () {
-	afterEach(function () {
+describe("Ripen", () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should double healing from Berries', function () {
+	it('should double healing from Berries', () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'ripen', item: 'sitrusberry', ivs: {hp: 30}, moves: ['sleeptalk']},
 		], [
@@ -21,7 +21,7 @@ describe("Ripen", function () {
 		assert.equal(ripenWynaut.hp, Math.floor(ripenWynaut.maxhp / 2) + (Math.floor(ripenWynaut.maxhp / 4) * 2));
 	});
 
-	it('should double stat boosts from Berries', function () {
+	it('should double stat boosts from Berries', () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'ripen', item: 'liechiberry', evs: {hp: 4}, moves: ['sleeptalk']},
 		], [
@@ -33,7 +33,7 @@ describe("Ripen", function () {
 		assert.statStage(ripenWynaut, 'atk', 2);
 	});
 
-	it(`should double damage done from Jaboca / Rowap Berries`, function () {
+	it(`should double damage done from Jaboca / Rowap Berries`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'ripen', item: 'jabocaberry', moves: ['sleeptalk']},
 		], [
@@ -44,7 +44,7 @@ describe("Ripen", function () {
 		assert.equal(falinks.hp, falinks.maxhp - Math.floor(falinks.maxhp / 4), `Falinks should have lost 1/4 of its HP`);
 	});
 
-	it('should allow resist Berries to quarter the damage done', function () {
+	it('should allow resist Berries to quarter the damage done', () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'ripen', item: 'colburberry', evs: {spe: 4}, moves: ['luckychant']},
 		], [
@@ -56,7 +56,7 @@ describe("Ripen", function () {
 		assert.bounded(damage, [18, 21]); // If it was only halved, range would be 36-43
 	});
 
-	it('should allow resist Berries to quarter the damage done even on a critical hit', function () {
+	it('should allow resist Berries to quarter the damage done even on a critical hit', () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'ripen', item: 'colburberry', evs: {spe: 4}, moves: ['sleeptalk']},
 		], [
@@ -69,7 +69,7 @@ describe("Ripen", function () {
 		assert.bounded(damage, [27, 32]); // If it was only halved, range would be 54-64
 	});
 
-	it('should double the effects of Berries eaten by Fling', function () {
+	it('should double the effects of Berries eaten by Fling', () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'ripen', moves: ['sleeptalk']},
 		], [
@@ -80,7 +80,7 @@ describe("Ripen", function () {
 		assert.statStage(ripenWynaut, 'atk', 2);
 	});
 
-	it('should double the effects of Berries eaten by Bug Bite', function () {
+	it('should double the effects of Berries eaten by Bug Bite', () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', ability: 'ripen', moves: ['bugbite']},
 		], [

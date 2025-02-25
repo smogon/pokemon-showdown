@@ -193,7 +193,6 @@ describe('[Gen 8] Random Battle (slow)', () => {
 	it('should always give Palossand Shore Up', () => testAlwaysHasMove('palossand', options, 'shoreup'));
 	it('should always give Azumarill Aqua Jet', () => testAlwaysHasMove('azumarill', options, 'aquajet'));
 
-
 	it('should forbid a certain Togekiss set', () => {
 		testSet('togekiss', options, set => {
 			assert.notDeepEqual(

@@ -3,8 +3,8 @@
 const assert = require('./../../assert');
 const common = require('./../../common');
 
-describe('Tera Blast', function () {
-	it(`should be a special attack when base stats are tied`, function () {
+describe('Tera Blast', () => {
+	it(`should be a special attack when base stats are tied`, () => {
 		const battle = common.gen(9).createBattle([[
 			// Regidrago has equal base attack and special attack stats.
 			{species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast']},
@@ -16,7 +16,7 @@ describe('Tera Blast', function () {
 		assert.equal(battle.p1.pokemon[0].lastMove.category, 'Special');
 	});
 
-	it(`should be a physical attack when terastallized with higher attack stat`, function () {
+	it(`should be a physical attack when terastallized with higher attack stat`, () => {
 		const battle = common.gen(9).createBattle([[
 			// Regidrago has equal base attack and special attack stats.
 			{species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast', 'dragondance']},
@@ -30,7 +30,7 @@ describe('Tera Blast', function () {
 		assert.equal(battle.p1.pokemon[0].lastMove.category, 'Physical');
 	});
 
-	it(`should be a special attack when not terastallized, even if attack stat is higher`, function () {
+	it(`should be a special attack when not terastallized, even if attack stat is higher`, () => {
 		const battle = common.createBattle([[
 			// Regidrago has equal base attack and special attack stats.
 			{species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast', 'dragondance']},
@@ -46,7 +46,7 @@ describe('Tera Blast', function () {
 	});
 
 	// Skipped until https://github.com/smogon/pokemon-showdown/issues/9381 is fixed.
-	it.skip(`should be a special attack when terastallized even if target ignores stat changes`, function () {
+	it.skip(`should be a special attack when terastallized even if target ignores stat changes`, () => {
 		const battle = common.gen(9).createBattle([[
 			// Regidrago has equal base attack and special attack stats.
 			{species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast', 'dragondance']},

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('After You', function () {
-	afterEach(function () {
+describe('After You', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should cause the targeted Pokemon to immediately move next`, function () {
+	it(`should cause the targeted Pokemon to immediately move next`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Wynaut', ability: 'prankster', moves: ['afteryou']},
 			{species: 'Magnemite', level: 1, moves: ['magnetrise']},
@@ -24,7 +24,7 @@ describe('After You', function () {
 		assert.false.fainted(magnemite);
 	});
 
-	it(`should only cause the target to move next, not run a submove`, function () {
+	it(`should only cause the target to move next, not run a submove`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Wynaut', ability: 'prankster', moves: ['afteryou']},
 			{species: 'Necrozma', level: 50, ability: 'prankster', moves: ['photongeyser']},
@@ -41,7 +41,7 @@ describe('After You', function () {
 		assert.fainted(roggenrola);
 	});
 
-	it(`should work in a free-for-all`, function () {
+	it(`should work in a free-for-all`, () => {
 		battle = common.createBattle({gameType: 'freeforall'}, [[
 			{species: 'Wynaut', ability: 'prankster', moves: ['afteryou']},
 		], [
@@ -57,7 +57,7 @@ describe('After You', function () {
 		assert.false.fainted(magnemite);
 	});
 
-	it(`should fail in singles whether the user is faster or slower than its target`, function () {
+	it(`should fail in singles whether the user is faster or slower than its target`, () => {
 		battle = common.createBattle([[
 			{species: 'Wynaut', moves: ['afteryou', 'ember']},
 		], [

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Cheek Pouch`, function () {
-	afterEach(function () {
+describe(`Cheek Pouch`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should restore 1/3 HP to the user after eating a Berry`, function () {
+	it(`should restore 1/3 HP to the user after eating a Berry`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'lumberry', ability: 'cheekpouch', moves: ['sleeptalk']},
 		], [
@@ -21,7 +21,7 @@ describe(`Cheek Pouch`, function () {
 		assert.fullHP(wynaut);
 	});
 
-	it(`should not activate if the user was at full HP`, function () {
+	it(`should not activate if the user was at full HP`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', item: 'lumberry', ability: 'cheekpouch', moves: ['sleeptalk']},
 		], [

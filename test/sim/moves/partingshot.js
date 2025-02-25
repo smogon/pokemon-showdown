@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Parting Shot`, function () {
-	afterEach(function () {
+describe(`Parting Shot`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should not switch the user out if the target's stats are not changed`, function () {
+	it(`should not switch the user out if the target's stats are not changed`, () => {
 		battle = common.createBattle([[
 			{species: 'Silvally', ability: 'prankster', moves: ['partingshot', 'splash']},
 			{species: 'Type: Null', ability: 'battlearmor', moves: ['return']},
@@ -43,7 +43,7 @@ describe(`Parting Shot`, function () {
 		assert.equal(battle.requestState, 'move');
 	});
 
-	it(`should set the Z-Parting Shot healing flag even if the Parting Shot itself was not successful`, function () {
+	it(`should set the Z-Parting Shot healing flag even if the Parting Shot itself was not successful`, () => {
 		battle = common.createBattle([[
 			{species: 'landorus', ability: 'noguard', moves: ['sleeptalk']},
 			{species: 'persian-alola', ability: 'noguard', item: 'darkiniumz', moves: ['partingshot']},

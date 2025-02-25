@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Magic Room', function () {
-	afterEach(function () {
+describe('Magic Room', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should negate residual healing events`, function () {
+	it(`should negate residual healing events`, () => {
 		battle = common.createBattle([[
 			{species: 'Lopunny', item: 'leftovers', moves: ['bellydrum']},
 		], [
@@ -21,7 +21,7 @@ describe('Magic Room', function () {
 		assert.equal(lopunny.hp, Math.ceil(lopunny.maxhp / 2));
 	});
 
-	it(`should prevent items from being consumed`, function () {
+	it(`should prevent items from being consumed`, () => {
 		battle = common.createBattle([[
 			{species: 'Lopunny', item: 'chopleberry', moves: ['magicroom']},
 		], [
@@ -31,7 +31,7 @@ describe('Magic Room', function () {
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
-	it(`should ignore the effects of items that disable moves`, function () {
+	it(`should ignore the effects of items that disable moves`, () => {
 		battle = common.createBattle([[
 			{species: 'Lopunny', item: 'assaultvest', moves: ['protect']},
 		], [
@@ -44,7 +44,7 @@ describe('Magic Room', function () {
 		assert.equal(lopunny.lastMove.id, 'protect');
 	});
 
-	it(`should cause Fling to fail`, function () {
+	it(`should cause Fling to fail`, () => {
 		battle = common.createBattle([[
 			{species: 'Lopunny', item: 'seaincense', moves: ['fling']},
 		], [
@@ -54,7 +54,7 @@ describe('Magic Room', function () {
 		assert.holdsItem(battle.p1.active[0]);
 	});
 
-	it(`should not prevent Mega Evolution`, function () {
+	it(`should not prevent Mega Evolution`, () => {
 		battle = common.createBattle([[
 			{species: 'Lopunny', item: 'lopunnite', moves: ['sleeptalk']},
 		], [
@@ -64,7 +64,7 @@ describe('Magic Room', function () {
 		assert.species(battle.p1.active[0], 'Lopunny-Mega');
 	});
 
-	it(`should not prevent Primal Reversion`, function () {
+	it(`should not prevent Primal Reversion`, () => {
 		battle = common.createBattle([[
 			{species: 'Zapdos', moves: ['uturn']},
 			{species: 'Groudon', ability: 'drought', item: 'redorb', moves: ['protect']},

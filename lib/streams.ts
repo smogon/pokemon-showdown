@@ -371,13 +371,13 @@ export class ReadStream {
 
 	async next(byteCount: number | null = null) {
 		const value = await this.read(byteCount);
-		return {value, done: value === null};
+		return {value, done: value === null} as {value: string, done: false} | {value: null, done: true};
 	}
 
 	async pipeTo(outStream: WriteStream, options: {noEnd?: boolean} = {}) {
-		let value, done;
-		while (({value, done} = await this.next(), !done)) {
-			await outStream.write(value!);
+		let next;
+		while ((next = await this.next(), !next.done)) {
+			await outStream.write(next.value);
 		}
 		if (!options.noEnd) return outStream.writeEnd();
 	}
@@ -385,7 +385,7 @@ export class ReadStream {
 
 interface WriteStreamOptions {
 	nodeStream?: NodeJS.WritableStream;
-	write?: (this: WriteStream, data: string | Buffer) => (Promise<undefined> | undefined);
+	write?: (this: WriteStream, data: string | Buffer) => (Promise<undefined> | undefined | void);
 	writeEnd?: (this: WriteStream) => Promise<any>;
 }
 
@@ -721,7 +721,6 @@ export class ObjectReadStream<T> {
 		return this._destroy();
 	}
 
-	// eslint-disable-next-line no-restricted-globals
 	[Symbol.asyncIterator]() { return this; }
 	async next() {
 		if (this.buf.length) return {value: this.buf.shift() as T, done: false as const};
@@ -731,9 +730,9 @@ export class ObjectReadStream<T> {
 	}
 
 	async pipeTo(outStream: ObjectWriteStream<T>, options: {noEnd?: boolean} = {}) {
-		let value, done;
-		while (({value, done} = await this.next(), !done)) {
-			await outStream.write(value!);
+		let next;
+		while ((next = await this.next(), !next.done)) {
+			await outStream.write(next.value);
 		}
 		if (!options.noEnd) return outStream.writeEnd();
 	}

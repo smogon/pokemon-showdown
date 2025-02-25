@@ -7,12 +7,12 @@ let battle;
 
 const STEAL_MOVES = ['thief', 'knockoff', 'switcheroo', 'bugbite'];
 
-describe('Sticky Hold', function () {
-	afterEach(function () {
+describe('Sticky Hold', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should prevent held items from being stolen by most moves or abilities', function () {
+	it('should prevent held items from being stolen by most moves or abilities', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Shuckle', ability: 'stickyhold', item: 'razzberry', moves: ['recover']}]});
 		battle.setPlayer('p2', {team: [
@@ -30,7 +30,7 @@ describe('Sticky Hold', function () {
 		}
 	});
 
-	it('should be suppressed by Mold Breaker', function () {
+	it('should be suppressed by Mold Breaker', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: 'Pangoro', ability: 'moldbreaker', moves: ['knockoff']}]});
 		battle.setPlayer('p2', {team: [{species: 'Shuckle', ability: 'stickyhold', item: 'ironball', moves: ['rest']}]});

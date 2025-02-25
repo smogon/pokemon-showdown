@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Magician', function () {
-	afterEach(function () {
+describe('Magician', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should steal the opponents item`, function () {
+	it(`should steal the opponents item`, () => {
 		battle = common.createBattle([[
 			{species: 'klefki', ability: 'magician', moves: ['flashcannon']},
 		], [
@@ -20,7 +20,7 @@ describe('Magician', function () {
 		assert.equal(battle.p1.active[0].item, 'tr69');
 	});
 
-	it(`should not steal Weakness Policy on super-effective hits`, function () {
+	it(`should not steal Weakness Policy on super-effective hits`, () => {
 		battle = common.createBattle([[
 			{species: 'klefki', ability: 'magician', moves: ['flashcannon']},
 		], [

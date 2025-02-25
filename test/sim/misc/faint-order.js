@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Fainting', function () {
-	afterEach(function () {
+describe('Fainting', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should end the turn in Gen 1`, function () {
+	it(`should end the turn in Gen 1`, () => {
 		// Gen 1 has no end-of-turn effects
 		battle = common.gen(1).createBattle([[
 			{species: 'Electrode', moves: ['explosion']},
@@ -23,7 +23,7 @@ describe('Fainting', function () {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should end the turn in Gen 3`, function () {
+	it(`should end the turn in Gen 3`, () => {
 		battle = common.gen(3).createBattle([[
 			{species: 'Electrode', moves: ['explosion']},
 			{species: 'Pikachu', moves: ['growl']},
@@ -35,7 +35,7 @@ describe('Fainting', function () {
 		assert.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should not end the turn in Gen 4`, function () {
+	it(`should not end the turn in Gen 4`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'Electrode', moves: ['explosion']},
 			{species: 'Pikachu', moves: ['growl']},
@@ -47,7 +47,7 @@ describe('Fainting', function () {
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should check for a winner after an attack`, function () {
+	it(`should check for a winner after an attack`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'Shedinja', moves: ['shadowsneak']},
 		], [
@@ -68,7 +68,7 @@ describe('Fainting', function () {
 		assert.equal(battle.winner, 'Player 1');
 	});
 
-	it(`should check for a winner after recoil`, function () {
+	it(`should check for a winner after recoil`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'Shedinja', moves: ['flareblitz']},
 		], [
@@ -91,7 +91,7 @@ describe('Fainting', function () {
 		assert.equal(battle.winner, 'Player 1');
 	});
 
-	it(`should check for a winner after Rough Skin`, function () {
+	it(`should check for a winner after Rough Skin`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'Shedinja', moves: ['shadowsneak']},
 		], [
@@ -125,7 +125,7 @@ describe('Fainting', function () {
 		assert.equal(battle.winner, 'Player 1');
 	});
 
-	it(`should check for a winner after future moves`, function () {
+	it(`should check for a winner after future moves`, () => {
 		battle = common.gen(7).createBattle([[
 			{species: 'Shedinja', moves: ['futuresight']},
 		], [
@@ -136,7 +136,7 @@ describe('Fainting', function () {
 		assert.equal(battle.winner, 'Player 1');
 	});
 
-	it(`should check for a winner after Rocky Helmet`, function () {
+	it(`should check for a winner after Rocky Helmet`, () => {
 		battle = common.gen(5).createBattle([[
 			{species: 'Shedinja', moves: ['shadowsneak']},
 		], [
@@ -159,7 +159,7 @@ describe('Fainting', function () {
 		assert.equal(battle.winner, 'Player 1');
 	});
 
-	it(`should check for a winner after Destiny Bond`, function () {
+	it(`should check for a winner after Destiny Bond`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'Shedinja', moves: ['destinybond']},
 		], [
@@ -182,7 +182,7 @@ describe('Fainting', function () {
 		assert.equal(battle.winner, 'Player 2');
 	});
 
-	it(`should check for a winner after Final Gambit`, function () {
+	it(`should check for a winner after Final Gambit`, () => {
 		battle = common.gen(5).createBattle([[
 			{species: 'Shedinja', moves: ['sleeptalk']},
 		], [

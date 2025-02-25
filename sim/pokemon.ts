@@ -339,7 +339,7 @@ export class Pokemon {
 				if (!set.hpType) set.hpType = move.type;
 				move = this.battle.dex.moves.get('hiddenpower');
 			}
-			let basepp = (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5;
+			let basepp = move.noPPBoosts ? move.pp : move.pp * 8 / 5;
 			if (this.battle.gen < 3) basepp = Math.min(61, basepp);
 			this.baseMoveSlots.push({
 				move: move.name,
@@ -509,8 +509,8 @@ export class Pokemon {
 		let name = this.species.name;
 		if (['Greninja-Bond', 'Rockruff-Dusk'].includes(name)) name = this.species.baseSpecies;
 		if (!level) level = this.level;
-		return name + (level === 100 ? '' : ', L' + level) +
-			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
+		return name + (level === 100 ? '' : `, L${level}`) +
+			(this.gender === '' ? '' : `, ${this.gender}`) + (this.set.shiny ? ', shiny' : '');
 	}
 
 	getFullDetails = () => {
@@ -531,7 +531,7 @@ export class Pokemon {
 
 	calculateStat(statName: StatIDExceptHP, boost: number, modifier?: number, statUser?: Pokemon) {
 		statName = toID(statName) as StatIDExceptHP;
-		// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
+		// @ts-expect-error type checking prevents 'hp' from being passed, but we're paranoid
 		if (statName === 'hp') throw new Error("Please read `maxhp` directly");
 
 		// base stat
@@ -567,7 +567,7 @@ export class Pokemon {
 
 	getStat(statName: StatIDExceptHP, unboosted?: boolean, unmodified?: boolean) {
 		statName = toID(statName) as StatIDExceptHP;
-		// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
+		// @ts-expect-error type checking prevents 'hp' from being passed, but we're paranoid
 		if (statName === 'hp') throw new Error("Please read `maxhp` directly");
 
 		// base stat
@@ -946,11 +946,11 @@ export class Pokemon {
 		for (const moveSlot of this.moveSlots) {
 			let moveName = moveSlot.move;
 			if (moveSlot.id === 'hiddenpower') {
-				moveName = 'Hidden Power ' + this.hpType;
-				if (this.battle.gen < 6) moveName += ' ' + this.hpPower;
+				moveName = `Hidden Power ${this.hpType}`;
+				if (this.battle.gen < 6) moveName += ` ${this.hpPower}`;
 			} else if (moveSlot.id === 'return' || moveSlot.id === 'frustration') {
 				const basePowerCallback = this.battle.dex.moves.get(moveSlot.id).basePowerCallback as (pokemon: Pokemon) => number;
-				moveName += ' ' + basePowerCallback(this);
+				moveName += ` ${basePowerCallback(this)}`;
 			}
 			let target = moveSlot.target;
 			switch (moveSlot.id) {
@@ -1117,11 +1117,11 @@ export class Pokemon {
 			},
 			moves: this[forAlly ? 'baseMoves' : 'moves'].map(move => {
 				if (move === 'hiddenpower') {
-					return move + toID(this.hpType) + (this.battle.gen < 6 ? '' : this.hpPower);
+					return `${move}${toID(this.hpType)}${this.battle.gen < 6 ? '' : this.hpPower}`;
 				}
 				if (move === 'frustration' || move === 'return') {
 					const basePowerCallback = this.battle.dex.moves.get(move).basePowerCallback as (pokemon: Pokemon) => number;
-					return move + basePowerCallback(this);
+					return `${move}${basePowerCallback(this)}`;
 				}
 				return move;
 			}),
@@ -1221,10 +1221,13 @@ export class Pokemon {
 
 	transformInto(pokemon: Pokemon, effect?: Effect) {
 		const species = pokemon.species;
-		if (pokemon.fainted || this.illusion || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
+		if (
+			pokemon.fainted || this.illusion || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 			(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
-			species.name === 'Eternatus-Eternamax' || (['Ogerpon', 'Terapagos'].includes(species.baseSpecies) &&
-			(this.terastallized || pokemon.terastallized)) || this.terastallized === 'Stellar') {
+			species.name === 'Eternatus-Eternamax' ||
+			(['Ogerpon', 'Terapagos'].includes(species.baseSpecies) && (this.terastallized || pokemon.terastallized)) ||
+			this.terastallized === 'Stellar'
+		) {
 			return false;
 		}
 
@@ -1598,7 +1601,7 @@ export class Pokemon {
 		d = this.battle.trunc(d);
 		if (isNaN(d)) return;
 		if (d < 1) d = 1;
-		d = d - this.hp;
+		d -= this.hp;
 		this.hp += d;
 		if (this.hp > this.maxhp) {
 			d -= this.hp - this.maxhp;
@@ -1646,8 +1649,9 @@ export class Pokemon {
 			return false;
 		}
 
-		if (!ignoreImmunities && status.id &&
-				!(source?.hasAbility('corrosion') && ['tox', 'psn'].includes(status.id))) {
+		if (
+			!ignoreImmunities && status.id && !(source?.hasAbility('corrosion') && ['tox', 'psn'].includes(status.id))
+		) {
 			// the game currently never ignores immunities
 			if (!this.runStatusImmunity(status.id === 'tox' ? 'psn' : status.id)) {
 				this.battle.debug('immune to status');
@@ -1709,7 +1713,7 @@ export class Pokemon {
 		if ((!this.hp && this.item !== 'jabocaberry' && this.item !== 'rowapberry') || !this.isActive) return false;
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+		if (!source && this.battle.event?.target) source = this.battle.event.target;
 		const item = this.getItem();
 		if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
 			// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
@@ -1752,7 +1756,7 @@ export class Pokemon {
 		if (!this.item || this.itemState.knockedOff) return false;
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+		if (!source && this.battle.event?.target) source = this.battle.event.target;
 		const item = this.getItem();
 		if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
 			// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
@@ -1761,7 +1765,7 @@ export class Pokemon {
 		if (this.battle.runEvent('UseItem', this, null, null, item)) {
 			switch (item.id) {
 			case 'redcard':
-				this.battle.add('-enditem', this, item, '[of] ' + source);
+				this.battle.add('-enditem', this, item, `[of] ${source}`);
 				break;
 			default:
 				if (item.isGem) {
@@ -1862,8 +1866,10 @@ export class Pokemon {
 		}
 		this.battle.singleEvent('End', this.battle.dex.abilities.get(oldAbility), this.abilityState, this, source);
 		if (this.battle.effect && this.battle.effect.effectType === 'Move' && !isFromFormeChange) {
-			this.battle.add('-endability', this, this.battle.dex.abilities.get(oldAbility), '[from] move: ' +
-				this.battle.dex.moves.get(this.battle.effect.id));
+			this.battle.add(
+				'-endability', this, this.battle.dex.abilities.get(oldAbility),
+				`[from] move: ${this.battle.dex.moves.get(this.battle.effect.id)}`
+			);
 		}
 		this.ability = ability.id;
 		this.abilityState = this.battle.initEffectState({id: ability.id, target: this});

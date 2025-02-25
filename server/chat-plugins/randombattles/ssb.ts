@@ -1,4 +1,4 @@
-import {SSBSet, ssbSets} from "../../../data/mods/gen9ssb/random-teams";
+import {type SSBSet, ssbSets} from "../../../data/mods/gen9ssb/random-teams";
 import {Utils} from "../../../lib";
 import {formatNature, STAT_NAMES} from ".";
 
@@ -379,7 +379,6 @@ function SSBSets(target: string) {
 	}
 	return buf;
 }
-
 
 export const disabledSets = Chat.oldPlugins.ssb?.disabledSets || [];
 

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Gear Up', function () {
-	afterEach(function () {
+describe('Gear Up', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should boost the Attack and Special Attack of all active allies with Plus or Minus', function () {
+	it('should boost the Attack and Special Attack of all active allies with Plus or Minus', () => {
 		battle = common.gen(5).createBattle({gameType: 'triples'});
 		battle.setPlayer('p1', {team: [
 			{species: "Minun", ability: 'minus', moves: ['sleeptalk']},

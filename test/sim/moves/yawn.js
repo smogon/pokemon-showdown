@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Yawn', function () {
-	afterEach(function () {
+describe('Yawn', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should put foes to sleep eventually`, function () {
+	it(`should put foes to sleep eventually`, () => {
 		battle = common.createBattle([[
 			{species: "Mew", moves: ['yawn', 'splash']},
 		], [
@@ -22,7 +22,7 @@ describe('Yawn', function () {
 		assert.equal(battle.p2.active[0].status, 'slp');
 	});
 
-	it(`should be blocked by Safeguard`, function () {
+	it(`should be blocked by Safeguard`, () => {
 		battle = common.createBattle([[
 			{species: "Mew", moves: ['yawn']},
 		], [
@@ -33,7 +33,7 @@ describe('Yawn', function () {
 		assert.equal(battle.p2.active[0].status, '');
 	});
 
-	it(`should be able to put foes to sleep through Safeguard if used first`, function () {
+	it(`should be able to put foes to sleep through Safeguard if used first`, () => {
 		battle = common.createBattle([[
 			{species: "Ninjask", moves: ['yawn']},
 		], [

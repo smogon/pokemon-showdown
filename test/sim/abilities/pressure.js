@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Pressure`, function () {
-	afterEach(function () {
+describe(`Pressure`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should deduct 1 extra PP from opposing Pokemon moves targeting the user`, function () {
+	it(`should deduct 1 extra PP from opposing Pokemon moves targeting the user`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Giratina', ability: 'pressure', moves: ['sleeptalk']},
 			{species: 'Togepi', moves: ['peck']},
@@ -26,7 +26,7 @@ describe(`Pressure`, function () {
 		assert.equal(hooh.getMoveData(move).pp, hooh.getMoveData(move).maxpp - 2);
 	});
 
-	it(`should deduct 1 extra PP if moves are redirected to the user`, function () {
+	it(`should deduct 1 extra PP if moves are redirected to the user`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Giratina', ability: 'pressure', moves: ['followme']},
 			{species: 'Togepi', moves: ['peck']},
@@ -42,7 +42,7 @@ describe(`Pressure`, function () {
 		assert.equal(hooh.getMoveData(move).pp, hooh.getMoveData(move).maxpp - 2);
 	});
 
-	it(`should deduct PP even if the move fails or misses`, function () {
+	it(`should deduct PP even if the move fails or misses`, () => {
 		battle = common.createBattle([[
 			{species: 'Dusknoir', ability: 'pressure', moves: ['mistyterrain', 'shadowforce']},
 		], [
@@ -67,7 +67,7 @@ describe(`Pressure`, function () {
 		assert.equal(move.pp, move.maxpp - 2, `Surf should lose 1 additional PP from Pressure`);
 	});
 
-	it(`should deduct PP for each Pressure Pokemon targeted`, function () {
+	it(`should deduct PP for each Pressure Pokemon targeted`, () => {
 		battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 			{species: 'Giratina', ability: 'pressure', moves: ['rest']},
 			{species: 'Palkia', ability: 'pressure', moves: ['rest']},
@@ -86,7 +86,7 @@ describe(`Pressure`, function () {
 		assert.equal(move.pp, move.maxpp - 3, `Rock Slide should lose 2 additional PP from Pressure`);
 	});
 
-	it(`should deduct PP for each opposing Pressure Pokemon when Snatch or Imprison are used`, function () {
+	it(`should deduct PP for each opposing Pressure Pokemon when Snatch or Imprison are used`, () => {
 		battle = common.gen(5).createBattle({gameType: 'triples'}, [[
 			{species: 'Giratina', ability: 'pressure', moves: ['rest']},
 			{species: 'Palkia', ability: 'pressure', moves: ['rest']},
@@ -104,7 +104,7 @@ describe(`Pressure`, function () {
 		assert.equal(move.pp, move.maxpp - 4, `Imprison should lose 3 additional PP from Pressure`);
 	});
 
-	it(`should deduct additional PP from Max Moves`, function () {
+	it(`should deduct additional PP from Max Moves`, () => {
 		battle = common.gen(8).createBattle([[
 			{species: 'wynaut', moves: ['darkpulse']},
 		], [
@@ -115,7 +115,7 @@ describe(`Pressure`, function () {
 		assert.equal(move.pp, move.maxpp - 2);
 	});
 
-	it(`should deduct additional PP from Z-Moves`, function () {
+	it(`should deduct additional PP from Z-Moves`, () => {
 		battle = common.gen(7).createBattle([[
 			{species: 'wynaut', item: 'darkiniumz', moves: ['darkpulse']},
 		], [
@@ -126,7 +126,7 @@ describe(`Pressure`, function () {
 		assert.equal(move.pp, move.maxpp - 2);
 	});
 
-	it(`should deduct additional PP from submoves that target Pressure`, function () {
+	it(`should deduct additional PP from submoves that target Pressure`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['assist']},
 			{species: 'yveltal', moves: ['darkpulse']},
@@ -138,7 +138,7 @@ describe(`Pressure`, function () {
 		assert.equal(move.pp, move.maxpp - 2);
 	});
 
-	it(`should not deduct additional PP from Sticky Web (only entry hazard to do so)`, function () {
+	it(`should not deduct additional PP from Sticky Web (only entry hazard to do so)`, () => {
 		battle = common.createBattle([[
 			{species: 'wynaut', moves: ['stickyweb', 'stealthrock']},
 		], [
@@ -154,7 +154,7 @@ describe(`Pressure`, function () {
 		assert.equal(move.pp, move.maxpp - 2, `Stealth Rock should lose 2 PP`);
 	});
 
-	it(`should deduct additional PP from Tera Blast even when not used into the Pressure target`, function () {
+	it(`should deduct additional PP from Tera Blast even when not used into the Pressure target`, () => {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'wynaut', moves: ['terablast']},
 			{species: 'magikarp', moves: ['sleeptalk']},
@@ -169,7 +169,7 @@ describe(`Pressure`, function () {
 		assert.equal(move.pp, move.maxpp - 4);
 	});
 
-	it(`should not deduct additional PP from moves reflected by Magic Coat`, function () {
+	it(`should not deduct additional PP from moves reflected by Magic Coat`, () => {
 		battle = common.createBattle([[
 			{species: 'reuniclus', moves: ['magiccoat', 'confuseray']},
 		], [
@@ -187,12 +187,12 @@ describe(`Pressure`, function () {
 	});
 });
 
-describe('Pressure [Gen 4]', function () {
-	afterEach(function () {
+describe('Pressure [Gen 4]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should deduct 1 extra PP from any moves targeting the user`, function () {
+	it(`should deduct 1 extra PP from any moves targeting the user`, () => {
 		battle = common.gen(4).createBattle({gameType: 'doubles'}, [[
 			{species: 'Giratina', ability: 'pressure', moves: ['sleeptalk']},
 			{species: 'Togepi', moves: ['peck']},
@@ -208,7 +208,7 @@ describe('Pressure [Gen 4]', function () {
 		assert.equal(hooh.getMoveData(move).pp, hooh.getMoveData(move).maxpp - 2);
 	});
 
-	it(`should deduct 1 extra PP if moves are redirected to the user`, function () {
+	it(`should deduct 1 extra PP if moves are redirected to the user`, () => {
 		battle = common.gen(4).createBattle({gameType: 'doubles'}, [[
 			{species: 'Giratina', ability: 'pressure', moves: ['followme']},
 			{species: 'Togepi', moves: ['peck']},
@@ -224,7 +224,7 @@ describe('Pressure [Gen 4]', function () {
 		assert.equal(hooh.getMoveData(move).pp, hooh.getMoveData(move).maxpp - 2);
 	});
 
-	it(`should deduct PP even if the move fails or misses`, function () {
+	it(`should deduct PP even if the move fails or misses`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'Dusknoir', ability: 'pressure', moves: ['shadowforce']},
 		], [
@@ -240,7 +240,7 @@ describe('Pressure [Gen 4]', function () {
 		assert.equal(move.pp, move.maxpp - 2, `Dragon Pulse should lose 1 additional PP from Pressure`);
 	});
 
-	it(`should deduct PP for each Pressure Pokemon targeted`, function () {
+	it(`should deduct PP for each Pressure Pokemon targeted`, () => {
 		battle = common.gen(4).createBattle({gameType: 'doubles'}, [[
 			{species: 'Palkia', ability: 'pressure', moves: ['rest']},
 			{species: 'Dialga', ability: 'pressure', moves: ['rest']},
@@ -255,7 +255,7 @@ describe('Pressure [Gen 4]', function () {
 		assert.equal(move.pp, move.maxpp - 4, `Earthquake should lose 3 additional PP from Pressure`);
 	});
 
-	it(`should not deduct PP from self-targeting moves`, function () {
+	it(`should not deduct PP from self-targeting moves`, () => {
 		battle = common.gen(4).createBattle([[
 			{species: 'Palkia', ability: 'pressure', moves: ['calmmind']},
 		], [

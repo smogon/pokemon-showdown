@@ -5,12 +5,12 @@ const common = require('../../common');
 
 let battle;
 
-describe('Charge', function () {
-	afterEach(function () {
+describe('Charge', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should double the base power of the next Electric attack', function () {
+	it('should double the base power of the next Electric attack', () => {
 		battle = common.createBattle([[
 			{species: 'Kilowattrel', moves: ['charge', 'thunderbolt']},
 		], [
@@ -22,7 +22,7 @@ describe('Charge', function () {
 		assert.fainted(battle.p2.active[0]);
 	});
 
-	it('should remain active until an Electric-type attack is used', function () {
+	it('should remain active until an Electric-type attack is used', () => {
 		battle = common.createBattle([[
 			{species: 'Kilowattrel', moves: ['charge', 'agility', 'airslash', 'thunderbolt', 'naturepower']},
 		], [
@@ -41,7 +41,7 @@ describe('Charge', function () {
 		assert.false(battle.p1.active[0].volatiles['charge']);
 	});
 
-	it('should wear off after an Electric-type status move that is not Charge is used', function () {
+	it('should wear off after an Electric-type status move that is not Charge is used', () => {
 		battle = common.createBattle([[
 			{species: 'Kilowattrel', moves: ['charge', 'thunderwave']},
 		], [
@@ -56,12 +56,12 @@ describe('Charge', function () {
 	});
 });
 
-describe('Charge [Gen 8]', function () {
-	afterEach(function () {
+describe('Charge [Gen 8]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should wear off after a move of any type is used', function () {
+	it('should wear off after a move of any type is used', () => {
 		battle = common.gen(8).createBattle([[
 			{species: 'Pikachu', moves: ['charge', 'tackle', 'thundershock']},
 		], [

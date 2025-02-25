@@ -65,7 +65,7 @@ export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 			userid: targetUser.id,
 			name: targetUser.name,
 			avatar: targetUser.avatar,
-			group: group,
+			group,
 			customgroup: sectionleader ? "Section Leader" : undefined,
 			autoconfirmed: targetUser.autoconfirmed ? true : undefined,
 			status: targetUser.getStatus() || undefined,
@@ -111,7 +111,7 @@ export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 			roomid: targetRoom.roomid,
 			title: targetRoom.title,
 			type: targetRoom.type,
-			visibility: visibility,
+			visibility,
 			modchat: targetRoom.settings.modchat,
 			modjoin: targetRoom.settings.modjoin,
 			auth: {},
@@ -495,7 +495,7 @@ export const commands: Chat.ChatCommands = {
 		} else if (target === 'autoconfirmed' || target === 'trusted' || target === 'unlocked') {
 			if (!isOffline) user.settings.blockPMs = target;
 			target = this.tr(target);
-			this.sendReply(this.tr `You are now blocking ${msg}private messages, except from staff and ${target} users.`);
+			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff and ${target} users.`);
 		} else if (target === 'friends') {
 			if (!isOffline) user.settings.blockPMs = target;
 			this.sendReply(this.tr`You are now blocking ${msg}private messages, except from staff and friends.`);
@@ -533,6 +533,7 @@ export const commands: Chat.ChatCommands = {
 		if (isOffline) {
 			await Chat.PrivateMessages.deleteSettings(user.id);
 		} else {
+			// eslint-disable-next-line require-atomic-updates
 			user.settings.blockPMs = false;
 		}
 		user.update();
@@ -594,7 +595,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	statushelp: [
 		`/status [note] - Sets a short note as your status, visible when users click your username.`,
-		 `Use /clearstatus to clear your status message.`,
+		`Use /clearstatus to clear your status message.`,
 	],
 
 	donotdisturb: 'busy',
@@ -905,10 +906,8 @@ export const commands: Chat.ChatCommands = {
 		if (!showAll) {
 			const parsed = parseInt(target);
 			if (isNaN(parsed)) {
-				const matchedSet = team.filter(set => {
-					const id = toID(target);
-					return toID(set.name) === id || toID(set.species) === id;
-				})[0];
+				const id = toID(target);
+				const matchedSet = team.find(set => toID(set.name) === id || toID(set.species) === id);
 				if (!matchedSet) return this.errorReply(this.tr`You don't have a Pokémon matching "${target}" in your team.`);
 				team = [matchedSet];
 			} else {
@@ -1673,7 +1672,7 @@ export const commands: Chat.ChatCommands = {
 		const handler = Chat.crqHandlers[cmd];
 		if (!handler) return connection.send(`|queryresponse|${cmd}|null`);
 		let data = handler.call(this, target, user, trustable);
-		if (data && data.then) data = await data;
+		if (data?.then) data = await data;
 		connection.send(`|queryresponse|${cmd}|${JSON.stringify(data)}`);
 	},
 

@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Most status moves', function () {
-	afterEach(function () {
+describe('Most status moves', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should ignore natural type immunities', function () {
+	it('should ignore natural type immunities', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'prankster', item: 'leftovers', moves: ['gastroacid', 'glare', 'confuseray', 'sandattack']}]});
 		battle.setPlayer('p2', {team: [
@@ -32,7 +32,7 @@ describe('Most status moves', function () {
 		assert.statStage(battle.p2.active[0], 'accuracy', -1);
 	});
 
-	it(`should fail when the opposing Pokemon is immune to the status effect it sets`, function () {
+	it(`should fail when the opposing Pokemon is immune to the status effect it sets`, () => {
 		battle = common.createBattle([[
 			{species: 'Smeargle', ability: 'noguard', item: 'laggingtail', moves: ['thunderwave', 'willowisp', 'poisongas', 'toxic']},
 		], [
@@ -68,14 +68,14 @@ describe('Most status moves', function () {
 	});
 });
 
-describe('Poison-inflicting status moves [Gen 2]', function () {
+describe('Poison-inflicting status moves [Gen 2]', () => {
 	const POISON_STATUS_MOVES = ['poisonpowder', 'poisongas', 'toxic'];
 
-	afterEach(function () {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should not ignore type immunities', function () {
+	it('should not ignore type immunities', () => {
 		battle = common.gen(2).createBattle([
 			[{species: "Smeargle", moves: POISON_STATUS_MOVES}],
 			[{species: "Magneton", moves: ['sleeptalk']}],

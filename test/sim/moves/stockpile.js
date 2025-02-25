@@ -5,12 +5,12 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Stockpile', function () {
-	afterEach(function () {
+describe('Stockpile', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should keep track of how many boosts to each defense stat were successful', function () {
+	it('should keep track of how many boosts to each defense stat were successful', () => {
 		battle = common.createBattle([
 			[{species: 'Seviper', ability: 'shedskin', moves: ['stockpile', 'spitup']}],
 			[{species: 'Zangoose', ability: 'immunity', moves: ['sleeptalk']}],
