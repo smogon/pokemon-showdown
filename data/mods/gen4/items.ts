@@ -89,7 +89,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		},
 		onCustap(pokemon) {
 			const action = this.queue.willMove(pokemon);
-			this.debug('custap action: ' + action);
+			this.debug(`custap action: ${action?.moveid}`);
 			if (action && pokemon.eatItem()) {
 				this.queue.cancelAction(pokemon);
 				this.add('-message', "Custap Berry activated.");
@@ -241,7 +241,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		condition: {
 			duration: 1,
 			onAfterMoveSecondarySelf(source, target, move) {
-				if (move && move.effectType === 'Move' && source && source.volatiles['lifeorb']) {
+				if (move && move.effectType === 'Move' && source?.volatiles['lifeorb']) {
 					this.damage(source.baseMaxhp / 10, source, source, this.dex.items.get('lifeorb'));
 					source.removeVolatile('lifeorb');
 				}

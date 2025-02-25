@@ -3,7 +3,7 @@
  * @author mia-pi-git
  */
 'use strict';
-const {execSync: exec} = require('child_process');
+const { execSync: exec } = require('child_process');
 const common = require('../../common');
 
 (common.hasModule('sucrase') ? describe : describe.skip)("The Sucrase build script", () => {

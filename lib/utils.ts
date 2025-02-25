@@ -15,7 +15,7 @@
  *   that if it's English-specific, it should be left out of here.
  */
 
-export type Comparable = number | string | boolean | Comparable[] | {reverse: Comparable};
+export type Comparable = number | string | boolean | Comparable[] | { reverse: Comparable };
 
 /**
  * Safely converts the passed variable into a string. Unlike '' + str,
@@ -33,7 +33,7 @@ export type Comparable = number | string | boolean | Comparable[] | {reverse: Co
  */
 
 export function getString(str: any): string {
-	return (typeof str === 'string' || typeof str === 'number') ? '' + str : '';
+	return (typeof str === 'string' || typeof str === 'number') ? `${str}` : '';
 }
 
 export function escapeRegex(str: string) {
@@ -45,7 +45,7 @@ export function escapeRegex(str: string) {
 */
 export function escapeHTML(str: string | number) {
 	if (str === null || str === undefined) return '';
-	return ('' + str)
+	return `${str}`
 		.replace(/&/g, '&amp;')
 		.replace(/</g, '&lt;')
 		.replace(/>/g, '&gt;')
@@ -69,14 +69,14 @@ export function stripHTML(htmlContent: string) {
 export function formatOrder(place: number) {
 	// anything between 10 and 20 should always end with -th
 	let remainder = place % 100;
-	if (remainder >= 10 && remainder <= 20) return place + 'th';
+	if (remainder >= 10 && remainder <= 20) return `${place}th`;
 
 	// follow standard rules with -st, -nd, -rd, and -th
 	remainder = place % 10;
-	if (remainder === 1) return place + 'st';
-	if (remainder === 2) return place + 'nd';
-	if (remainder === 3) return place + 'rd';
-	return place + 'th';
+	if (remainder === 1) return `${place}st`;
+	if (remainder === 2) return `${place}nd`;
+	if (remainder === 3) return `${place}rd`;
+	return `${place}th`;
 }
 
 /**
@@ -103,7 +103,7 @@ export function visualize(value: any, depth = 0): string {
 		return `${value}`;
 	}
 	let constructor = '';
-	if (value.constructor && value.constructor.name && typeof value.constructor.name === 'string') {
+	if (typeof value.constructor?.name === 'string') {
 		constructor = value.constructor.name;
 		if (constructor === 'Object') constructor = '';
 	} else {
@@ -128,9 +128,11 @@ export function visualize(value: any, depth = 0): string {
 	if (value.toString) {
 		try {
 			const stringValue = value.toString();
-			if (typeof stringValue === 'string' &&
-					stringValue !== '[object Object]' &&
-					stringValue !== `[object ${constructor}]`) {
+			if (
+				typeof stringValue === 'string' &&
+				stringValue !== '[object Object]' &&
+				stringValue !== `[object ${constructor}]`
+			) {
 				return `${constructor}(${stringValue})`;
 			}
 		} catch {}
@@ -180,7 +182,7 @@ export function compare(a: Comparable, b: Comparable): number {
 		return 0;
 	}
 	if ('reverse' in a) {
-		return compare((b as {reverse: string}).reverse, a.reverse);
+		return compare((b as { reverse: string }).reverse, a.reverse);
 	}
 	throw new Error(`Passed value ${a} is not comparable`);
 }
@@ -301,7 +303,7 @@ export function clampIntRange(num: any, min?: number, max?: number): number {
 	return num;
 }
 
-export function clearRequireCache(options: {exclude?: string[]} = {}) {
+export function clearRequireCache(options: { exclude?: string[] } = {}) {
 	const excludes = options?.exclude || [];
 	excludes.push('/node_modules/');
 

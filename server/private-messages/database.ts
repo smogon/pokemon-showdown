@@ -3,8 +3,8 @@
  * By Mia.
  * @author mia-pi-git
  */
-import {SQL, FS} from '../../lib';
-import {MAX_PENDING} from '.';
+import { type SQL, FS } from '../../lib';
+import { MAX_PENDING } from '.';
 
 export const statements = {
 	send: 'INSERT INTO offline_pms (sender, receiver, message, time) VALUES (?, ?, ?, ?)',
@@ -50,7 +50,7 @@ export const transactions: {
 		const [sender, receiver, message] = args;
 		const count = statementList.get('checkSentCount', [sender, receiver])?.count;
 		if (count && count > MAX_PENDING) {
-			return {error: `You have already sent the maximum ${MAX_PENDING} offline PMs to that user.`};
+			return { error: `You have already sent the maximum ${MAX_PENDING} offline PMs to that user.` };
 		}
 		return statementList.run('send', [sender, receiver, message, Date.now()]);
 	},

@@ -81,7 +81,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.setActiveMove(move, pokemon, target);
 
 			if (pokemon.moveThisTurn || !this.battle.runEvent('BeforeMove', pokemon, target, move)) {
-				this.battle.debug('' + pokemon.fullname + ' move interrupted; movedThisTurn: ' + pokemon.moveThisTurn);
+				this.battle.debug(`${pokemon.fullname} move interrupted; movedThisTurn: ${pokemon.moveThisTurn}`);
 				this.battle.clearActiveMove(true);
 				// This is only run for sleep
 				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -103,14 +103,14 @@ export const Scripts: ModdedBattleScriptsData = {
 			} else {
 				sourceEffect = move;
 			}
-			this.battle.actions.useMove(move, pokemon, {target, sourceEffect});
+			this.battle.actions.useMove(move, pokemon, { target, sourceEffect });
 		},
 		// This function deals with AfterMoveSelf events.
 		// This leads with partial trapping moves shenanigans after the move has been used.
 		useMove(moveOrMoveName, pokemon, options) {
 			let sourceEffect = options?.sourceEffect;
 			let target = options?.target;
-			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, {target, sourceEffect});
+			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, { target, sourceEffect });
 
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
@@ -199,8 +199,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (sourceEffect) attrs += '|[from]' + this.battle.dex.conditions.get(sourceEffect);
-			this.battle.addMove('move', pokemon, move.name, target + attrs);
+			if (sourceEffect) attrs += `|[from]${this.battle.dex.conditions.get(sourceEffect)}`;
+			this.battle.addMove('move', pokemon, move.name, `${target}${attrs}`);
 
 			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
 				return true;
@@ -609,26 +609,26 @@ export const Scripts: ModdedBattleScriptsData = {
 				let critChance = source.species.baseStats['spe'] + 76;
 
 				// Now we right logical shift it two places, essentially dividing by 4 and flooring it.
-				critChance = critChance >> 2;
+				critChance >>= 2;
 
 				// Now we check for focus energy volatile.
 				if (source.volatiles['focusenergy']) {
 					// If it exists, crit chance is multiplied by 4 and floored with a logical left shift.
-					critChance = critChance << 2;
+					critChance <<= 2;
 					// Then we add 160.
 					critChance += 160;
 				} else {
 					// If it is not active, we left shift it by 1.
-					critChance = critChance << 1;
+					critChance <<= 1;
 				}
 
 				// Now we check for the move's critical hit ratio.
 				if (move.critRatio === 2) {
 					// High crit ratio, we multiply the result so far by 4.
-					critChance = critChance << 2;
+					critChance <<= 2;
 				} else if (move.critRatio === 1) {
 					// Normal hit ratio, we divide the crit chance by 2 and floor the result again.
-					critChance = critChance >> 1;
+					critChance >>= 1;
 				}
 
 				// Now we make sure it's a number between 1 and 255.

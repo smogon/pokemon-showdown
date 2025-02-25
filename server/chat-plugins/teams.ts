@@ -4,7 +4,7 @@
  * @author mia-pi-git
  */
 
-import {PostgresDatabase, FS, Utils} from '../../lib';
+import { PostgresDatabase, FS, Utils } from '../../lib';
 import * as crypto from 'crypto';
 
 /** Maximum amount of teams a user can have stored at once. */
@@ -283,7 +283,7 @@ export const TeamsHandler = new class {
 		if (teamData.private) buf += ` (Private)`;
 		buf += `</strong><br />`;
 		buf += `<small>Uploaded by: <strong>${teamData.ownerid}</strong></small><br />`;
-		buf += `<small>Uploaded on: ${Chat.toTimestamp(teamData.date, {human: true})}</small><br />`;
+		buf += `<small>Uploaded on: ${Chat.toTimestamp(teamData.date, { human: true })}</small><br />`;
 		buf += `<small>Format: ${Dex.formats.get(teamData.format).name}</small><br />`;
 		buf += `<small>Views: ${teamData.views === -1 ? 0 : teamData.views}</small>`;
 		const team = Teams.import(teamData.team);
@@ -358,7 +358,7 @@ export const TeamsHandler = new class {
 	}
 	async count(user: string | User) {
 		const id = toID(user);
-		const result = await this.query<{count: number}>(`SELECT count(*) AS count FROM teams WHERE ownerid = $1`, [id]);
+		const result = await this.query<{ count: number }>(`SELECT count(*) AS count FROM teams WHERE ownerid = $1`, [id]);
 		return result?.[0]?.count || 0;
 	}
 	async get(teamid: number | string): Promise<StoredTeam | null> {
@@ -418,12 +418,11 @@ export const commands: Chat.ChatCommands = {
 
 			const page = isEdit ? 'edit' : 'upload';
 			if (id) {
-				connection.send(`|queryresponse|teamupload|` + JSON.stringify({teamid: id, teamName}));
+				connection.send(`|queryresponse|teamupload|` + JSON.stringify({ teamid: id, teamName }));
 				connection.send(`>view-teams-${page}\n|deinit`);
 				this.parse(`/join view-teams-view-${id}-${id}`);
 			} else {
 				this.parse(`/join view-teams-${page}`);
-				return;
 			}
 		},
 		''(target) {
@@ -557,7 +556,7 @@ export const pages: Chat.PageTable = {
 			let count = Number(query.shift()) || 50;
 			if (count > MAX_TEAMS) count = MAX_TEAMS;
 			let teams: StoredTeam[] = [], title = '';
-			const buttons: {[k: string]: string} = {
+			const buttons: { [k: string]: string } = {
 				views: `<button class="button" name="send" value="/teams mostviews">Sort by most views</button>`,
 				latest: `<button class="button" name="send" value="/teams latest">Sort by most recent upload</button>`,
 			};

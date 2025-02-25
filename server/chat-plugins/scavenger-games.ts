@@ -7,8 +7,8 @@
  * @license MIT license
  */
 
-import {ScavengerHunt, ScavengerHuntPlayer, sanitizeAnswer} from './scavengers';
-import {Utils} from '../../lib';
+import { ScavengerHunt, type ScavengerHuntPlayer, sanitizeAnswer } from './scavengers';
+import { Utils } from '../../lib';
 
 export type TwistEvent = (this: ScavengerHunt, ...args: any[]) => void;
 interface Twist {
@@ -35,11 +35,11 @@ interface GameMode {
 function toSeconds(time: string) {
 	// hhmmss => ss
 	const parts = time.split(':').reverse();
-	return parts.map((value, index) => parseInt(value) * Math.pow(60, index)).reduce((a, b) => a + b);
+	return parts.map((value, index) => parseInt(value) * (60 ** index)).reduce((a, b) => a + b);
 }
 
 class Leaderboard {
-	data: {[userid: string]: AnyObject};
+	data: { [userid: string]: AnyObject };
 
 	constructor() {
 		this.data = {};
@@ -49,7 +49,7 @@ class Leaderboard {
 		const userid: string = toID(name);
 
 		if (!userid || userid === 'constructor' || !points) return this;
-		if (!this.data[userid]) this.data[userid] = {name: name};
+		if (!this.data[userid]) this.data[userid] = { name };
 
 		if (!this.data[userid][aspect]) this.data[userid][aspect] = 0;
 		this.data[userid][aspect] += points;
@@ -59,8 +59,8 @@ class Leaderboard {
 		return this; // allow chaining
 	}
 
-	visualize(sortBy: string): Promise<({rank: number} & AnyObject)[]>;
-	visualize(sortBy: string, userid: string): Promise<({rank: number} & AnyObject) | undefined>;
+	visualize(sortBy: string): Promise<({ rank: number } & AnyObject)[]>;
+	visualize(sortBy: string, userid: string): Promise<({ rank: number } & AnyObject) | undefined>;
 	visualize(sortBy: string, userid?: string) {
 		// FIXME: this is not how promises work
 		// return a promise for async sorting - make this less exploitable
@@ -79,7 +79,7 @@ class Leaderboard {
 				return {
 					rank: lastPlacement,
 					...bit,
-				} as {rank: number} & AnyObject;
+				} as { rank: number } & AnyObject;
 			}); // identify ties
 			if (userid) {
 				const rank = ladder.find(entry => toID(entry.name) === userid);
@@ -98,7 +98,7 @@ class Leaderboard {
 	}
 }
 
-const TWISTS: {[k: string]: Twist} = {
+const TWISTS: { [k: string]: Twist } = {
 	perfectscore: {
 		name: 'Perfect Score',
 		id: 'perfectscore',
@@ -124,7 +124,7 @@ const TWISTS: {[k: string]: Twist} = {
 		onComplete(player, time, blitz) {
 			const isPerfect = !this.leftGame?.includes(player.id) &&
 				Object.values(player.answers).every((attempts: any) => attempts.length <= 1);
-			return {name: player.name, time, blitz, isPerfect};
+			return { name: player.name, time, blitz, isPerfect };
 		},
 
 		onAfterEndPriority: 1,
@@ -172,7 +172,7 @@ const TWISTS: {[k: string]: Twist} = {
 
 		onComplete(player, time, blitz) {
 			const noSkip = !player.skippedQuestion;
-			return {name: player.name, time, blitz, noSkip};
+			return { name: player.name, time, blitz, noSkip };
 		},
 
 		onAfterEndPriority: 1,
@@ -202,13 +202,13 @@ const TWISTS: {[k: string]: Twist} = {
 
 		onPreComplete(player) {
 			const now = Date.now();
-			const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
+			const time = Chat.toDurationString(now - this.startTime, { hhmmss: true });
 			const canBlitz = this.completed.length < 3;
 
 			const blitz = now - this.startTime <= 60000 && canBlitz &&
 				(this.room.settings.scavSettings?.blitzPoints?.[this.gameType] || this.gameType === 'official');
 
-			const result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
+			const result = this.runEvent('Complete', player, time, blitz) || { name: player.name, time, blitz };
 
 			this.preCompleted = this.preCompleted ? [...this.preCompleted, result] : [result];
 			player.completed = true;
@@ -236,13 +236,13 @@ const TWISTS: {[k: string]: Twist} = {
 
 		onComplete(player, time, blitz) {
 			const seconds = toSeconds(time);
-			if (!player.incorrect) return {name: player.name, total: seconds, blitz, time, original_time: time};
+			if (!player.incorrect) return { name: player.name, total: seconds, blitz, time, original_time: time };
 
 			const total = seconds + (30 * player.incorrect.length);
-			const finalTime = Chat.toDurationString(total * 1000, {hhmmss: true});
+			const finalTime = Chat.toDurationString(total * 1000, { hhmmss: true });
 			if (total > 60) blitz = false;
 
-			return {name: player.name, total, blitz, time: finalTime, original_time: time};
+			return { name: player.name, total, blitz, time: finalTime, original_time: time };
 		},
 
 		onConfirmCompletion(player, time, blitz, place, result) {
@@ -289,13 +289,13 @@ const TWISTS: {[k: string]: Twist} = {
 
 		onPreComplete(player) {
 			const now = Date.now();
-			const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
+			const time = Chat.toDurationString(now - this.startTime, { hhmmss: true });
 			const canBlitz = this.completed.length < 3;
 
 			const blitz = now - this.startTime <= 60000 && canBlitz &&
 				(this.room.settings.scavSettings?.blitzPoints?.[this.gameType] || this.gameType === 'official');
 
-			const result = this.runEvent('Complete', player, time, blitz) || {name: player.name, time, blitz};
+			const result = this.runEvent('Complete', player, time, blitz) || { name: player.name, time, blitz };
 
 			this.preCompleted = this.preCompleted ? [...this.preCompleted, result] : [result];
 			player.precompleted = true;
@@ -342,7 +342,7 @@ const TWISTS: {[k: string]: Twist} = {
 
 		onLeave(player) {
 			for (const ip of player.joinIps) {
-				this.altIps[ip] = {id: player.id, name: player.name};
+				this.altIps[ip] = { id: player.id, name: player.name };
 			}
 		},
 
@@ -359,7 +359,7 @@ const TWISTS: {[k: string]: Twist} = {
 			const result = {
 				name: player.name,
 				id: player.id,
-				time: Chat.toDurationString(takenTime, {hhmmss: true}),
+				time: Chat.toDurationString(takenTime, { hhmmss: true }),
 				duration: takenTime,
 				blitz,
 			};
@@ -424,7 +424,7 @@ const TWISTS: {[k: string]: Twist} = {
 				// collate the data for each question
 				let collection = [];
 				for (const str in data) {
-					collection.push({count: data[str].length, value: str});
+					collection.push({ count: data[str].length, value: str });
 				}
 				collection = collection.sort((a, b) => b.count - a.count);
 				const maxValue = collection[0]?.count || 0;
@@ -520,16 +520,16 @@ const TWISTS: {[k: string]: Twist} = {
 			const sliceIndex = this.gameType === 'official' ? 5 : 3;
 			const hosts = Chat.toListString(this.hosts.map(h => `<em>${Utils.escapeHTML(h.name)}</em>`));
 
-			const mines: {mine: string, users: string[]}[][] = [];
+			const mines: { mine: string, users: string[] }[][] = [];
 
 			for (const mineSet of this.mines as string[][]) {
-				mines.push(mineSet.map(mine => ({mine: mine.substr(1), users: [] as string[]})));
+				mines.push(mineSet.map(mine => ({ mine: mine.substr(1), users: [] as string[] })));
 			}
 
 			for (const player of Object.values(this.playerTable)) {
 				if (!player) continue;
 				if (player.mines) {
-					for (const {index, mine} of player.mines) {
+					for (const { index, mine } of player.mines) {
 						mines[index].find(obj => obj.mine === mine)?.users.push(player.name);
 					}
 				}
@@ -544,7 +544,7 @@ const TWISTS: {[k: string]: Twist} = {
 				`<details style="cursor: pointer;"><summary>Solution: </summary><br />` +
 				`${this.questions.map((q, i) => (
 					`${i + 1}) ${this.formatOutput(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span><br/>` +
-					`<details style="cursor: pointer;"><summary>Mines: </summary>${mines[i].map(({mine, users}) => Utils.escapeHTML(`${mine}: ${users.join(' / ') || '-'}`)).join('<br />')}</details>`
+					`<details style="cursor: pointer;"><summary>Mines: </summary>${mines[i].map(({ mine, users }) => Utils.escapeHTML(`${mine}: ${users.join(' / ') || '-'}`)).join('<br />')}</details>`
 				)).join("<br />")}` +
 				`</details>`
 			);
@@ -559,9 +559,9 @@ const TWISTS: {[k: string]: Twist} = {
 					const player = this.playerTable[playerId];
 					if (!player) continue;
 					if (!player.mines) player.mines = [];
-					(player.mines as {index: number, mine: string}[]).push(...mines
+					(player.mines as { index: number, mine: string }[]).push(...mines
 						.filter(mine => (guesses as Set<string>).has(sanitizeAnswer(mine)))
-						.map(mine => ({index: q, mine: mine.substr(1)})));
+						.map(mine => ({ index: q, mine: mine.substr(1) })));
 				}
 			}
 		},
@@ -570,7 +570,7 @@ const TWISTS: {[k: string]: Twist} = {
 		onAfterEnd(isReset) {
 			if (isReset) return;
 			const noMines = [];
-			for (const {name} of this.completed) {
+			for (const { name } of this.completed) {
 				const player = this.playerTable[toID(name)];
 				if (!player) continue;
 				if (!player.mines?.length) noMines.push(name);
@@ -583,7 +583,7 @@ const TWISTS: {[k: string]: Twist} = {
 	},
 };
 
-const MODES: {[k: string]: GameMode | string} = {
+const MODES: { [k: string]: GameMode | string } = {
 	ko: 'kogames',
 	kogames: {
 		name: 'KO Games',
@@ -1008,7 +1008,7 @@ const MODES: {[k: string]: GameMode | string} = {
 				const game = this.room.scavgame!;
 
 				const team = game.getPlayerTeam(player);
-				return {name: team.name, time, blitz};
+				return { name: team.name, time, blitz };
 			},
 
 			// workaround that gives the answer after verifying that completion should not be hidden
@@ -1040,7 +1040,7 @@ const MODES: {[k: string]: GameMode | string} = {
 export class ScavengerGameTemplate {
 	room: Room;
 	playerlist: null | string[];
-	timer: NodeJS.Timer | null;
+	timer: NodeJS.Timeout | null;
 
 	[k: string]: any;
 	constructor(room: Room) {

@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('[Gen 1] Stat Drop Overflow', function () {
-	afterEach(function () {
+describe('[Gen 1] Stat Drop Overflow', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`SafeTwo`, function () {
+	it(`SafeTwo`, () => {
 		battle = common.gen(1).createBattle([[
-			{species: 'Mewtwo', moves: ['amnesia', 'psychic'], ivs: {'spa': 28, 'spd': 28}},
+			{ species: 'Mewtwo', moves: ['amnesia', 'psychic'], ivs: { 'spa': 28, 'spd': 28 } },
 		], [
-			{species: 'Slowbro', moves: ['amnesia', 'surf'], evs: {'spa': 255, 'spd': 255}},
+			{ species: 'Slowbro', moves: ['amnesia', 'surf'], evs: { 'spa': 255, 'spd': 255 } },
 		]]);
 
 		const mewtwo = battle.p1.active[0];
@@ -23,18 +23,18 @@ describe('[Gen 1] Stat Drop Overflow', function () {
 		battle.makeChoices();
 		assert.equal(mewtwo.modifiedStats['spa'], 999);
 		battle.makeChoices();
-		mewtwo.boostBy({spa: -1, spd: -1}); // Drop Special to +5
+		mewtwo.boostBy({ spa: -1, spd: -1 }); // Drop Special to +5
 		assert.equal(mewtwo.modifiedStats['spa'], 1023);
 		// Mewtwo's Special has not overflowed
 		battle.makeChoices('move psychic', 'move surf');
 		assert.false.fainted(mewtwo);
 	});
 
-	it(`Not SafeTwo`, function () {
+	it(`Not SafeTwo`, () => {
 		battle = common.gen(1).createBattle([[
-			{species: 'Mewtwo', moves: ['amnesia', 'luckychant'], evs: {'spa': 255, 'spd': 255}},
+			{ species: 'Mewtwo', moves: ['amnesia', 'luckychant'], evs: { 'spa': 255, 'spd': 255 } },
 		], [
-			{species: 'Slowbro', moves: ['amnesia', 'surf'], evs: {'spa': 255, 'spd': 255}},
+			{ species: 'Slowbro', moves: ['amnesia', 'surf'], evs: { 'spa': 255, 'spd': 255 } },
 		]]);
 
 		const mewtwo = battle.p1.active[0];
@@ -43,7 +43,7 @@ describe('[Gen 1] Stat Drop Overflow', function () {
 		battle.makeChoices();
 		assert.equal(mewtwo.modifiedStats['spa'], 999);
 		battle.makeChoices();
-		mewtwo.boostBy({spa: -1, spd: -1}); // Drop Special to +5
+		mewtwo.boostBy({ spa: -1, spd: -1 }); // Drop Special to +5
 		assert.equal(mewtwo.modifiedStats['spa'], 1218);
 		// Mewtwo's Special has overflowed
 		battle.makeChoices('move luckychant', 'move surf');

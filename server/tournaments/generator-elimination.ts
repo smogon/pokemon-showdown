@@ -1,4 +1,4 @@
-import {Utils} from '../../lib';
+import { Utils } from '../../lib';
 
 interface ElimTree {
 	root: ElimNode;
@@ -6,7 +6,7 @@ interface ElimTree {
 	nextLayerLeafNodes: ElimNode[];
 }
 
-import type {TournamentPlayer} from './index';
+import type { TournamentPlayer } from './index';
 
 /**
  * There are two types of elim nodes, player nodes
@@ -95,13 +95,11 @@ class ElimNode {
 		}
 		return undefined;
 	}
-	// eslint-disable-next-line no-restricted-globals
 	[Symbol.iterator]() {
 		const results: ElimNode[] = [this];
 		for (const result of results) {
 			if (result.children) results.push(...result.children);
 		}
-		// eslint-disable-next-line no-restricted-globals
 		return results[Symbol.iterator]();
 	}
 	toJSON() {
@@ -193,7 +191,7 @@ export class Elimination {
 		for (const user of Utils.shuffle(players)) {
 			if (!tree) {
 				tree = {
-					root: new ElimNode({user}),
+					root: new ElimNode({ user }),
 					currentLayerLeafNodes: [],
 					nextLayerLeafNodes: [],
 				};
@@ -203,10 +201,10 @@ export class Elimination {
 			const targetNode = tree.currentLayerLeafNodes.shift();
 			if (!targetNode) throw new Error(`TypeScript bug: no ! in checkJs`);
 
-			const newLeftChild = new ElimNode({user: targetNode.user});
+			const newLeftChild = new ElimNode({ user: targetNode.user });
 			tree.nextLayerLeafNodes.push(newLeftChild);
 
-			const newRightChild = new ElimNode({user});
+			const newRightChild = new ElimNode({ user });
 			tree.nextLayerLeafNodes.push(newRightChild);
 			targetNode.setChildren([newLeftChild, newRightChild]);
 
@@ -222,8 +220,8 @@ export class Elimination {
 
 		this.maxSubtrees = Math.min(this.maxSubtrees, players.length - 1);
 		for (let losersBracketIndex = 1; losersBracketIndex < this.maxSubtrees; losersBracketIndex++) {
-			const matchesByDepth: {[depth: number]: ElimNode[]} = {};
-			const queue = [{node: tree.root, depth: 0}];
+			const matchesByDepth: { [depth: number]: ElimNode[] } = {};
+			const queue = [{ node: tree.root, depth: 0 }];
 			let frame;
 			while ((frame = queue.shift())) {
 				if (!frame.node.children || frame.node.losersBracketNode) continue;
@@ -231,12 +229,12 @@ export class Elimination {
 				if (!matchesByDepth[frame.depth]) matchesByDepth[frame.depth] = [];
 				matchesByDepth[frame.depth].push(frame.node);
 
-				queue.push({node: frame.node.children[0], depth: frame.depth + 1});
-				queue.push({node: frame.node.children[1], depth: frame.depth + 1});
+				queue.push({ node: frame.node.children[0], depth: frame.depth + 1 });
+				queue.push({ node: frame.node.children[1], depth: frame.depth + 1 });
 			}
 
 			const newTree: ElimTree = {
-				root: new ElimNode({losersBracketIndex, fromNode: matchesByDepth[0][0]}),
+				root: new ElimNode({ losersBracketIndex, fromNode: matchesByDepth[0][0] }),
 				currentLayerLeafNodes: [],
 				nextLayerLeafNodes: [],
 			};
@@ -258,13 +256,13 @@ export class Elimination {
 					const oldLeafFromNode = oldLeaf.fromNode;
 					oldLeaf.fromNode = null;
 
-					const newBranch = new ElimNode({losersBracketIndex});
-					oldLeaf.setChildren([new ElimNode({losersBracketIndex, fromNode: oldLeafFromNode}), newBranch]);
+					const newBranch = new ElimNode({ losersBracketIndex });
+					oldLeaf.setChildren([new ElimNode({ losersBracketIndex, fromNode: oldLeafFromNode }), newBranch]);
 
-					const newLeftChild = new ElimNode({losersBracketIndex, fromNode: matchesThisDepth[n]});
+					const newLeftChild = new ElimNode({ losersBracketIndex, fromNode: matchesThisDepth[n] });
 					newTree.nextLayerLeafNodes.push(newLeftChild);
 
-					const newRightChild = new ElimNode({losersBracketIndex, fromNode: matchesThisDepth[n + 1]});
+					const newRightChild = new ElimNode({ losersBracketIndex, fromNode: matchesThisDepth[n + 1] });
 					newTree.nextLayerLeafNodes.push(newRightChild);
 					newBranch.setChildren([newLeftChild, newRightChild]);
 				}
@@ -278,9 +276,9 @@ export class Elimination {
 					const oldLeafFromNode = oldLeaf.fromNode;
 					oldLeaf.fromNode = null;
 
-					const newLeaf = new ElimNode({fromNode: matchesThisDepth[n]});
+					const newLeaf = new ElimNode({ fromNode: matchesThisDepth[n] });
 					newTree.nextLayerLeafNodes.push(newLeaf);
-					oldLeaf.setChildren([new ElimNode({fromNode: oldLeafFromNode}), newLeaf]);
+					oldLeaf.setChildren([new ElimNode({ fromNode: oldLeafFromNode }), newLeaf]);
 				}
 
 				newTree.currentLayerLeafNodes = newTree.nextLayerLeafNodes;
@@ -300,7 +298,7 @@ export class Elimination {
 		}
 
 		tree.root.traverse(node => {
-			if (node.children && node.children[0].user && node.children[1].user) {
+			if (node.children?.[0].user && node.children[1].user) {
 				node.state = 'available';
 			}
 		});
@@ -334,7 +332,7 @@ export class Elimination {
 			return undefined;
 		});
 		if (found) {
-			// @ts-ignore
+			// @ts-expect-error TODO: refactor to fix this
 			const error = this.setMatchResult(found.match, found.result, found.score);
 			if (error) {
 				throw new Error(`Unexpected ${error} from setMatchResult([${found.match.join(', ')}], ${found.result})`);
@@ -396,8 +394,8 @@ export class Elimination {
 
 			if (loser.losses <= winner.losses && !loser.isDisqualified) {
 				// grand subfinals rematch
-				const newNode = new ElimNode({state: 'available', losersBracketNode: targetNode.losersBracketNode});
-				newNode.setChildren([targetNode, new ElimNode({user: loser})]);
+				const newNode = new ElimNode({ state: 'available', losersBracketNode: targetNode.losersBracketNode });
+				newNode.setChildren([targetNode, new ElimNode({ user: loser })]);
 				parent.setChildren([newNode, parent.children![1]]);
 				return;
 			}
@@ -418,8 +416,8 @@ export class Elimination {
 				}
 			}
 		} else if (loser.losses < this.maxSubtrees && !loser.isDisqualified) {
-			const newRoot = new ElimNode({state: 'available'});
-			newRoot.setChildren([targetNode, new ElimNode({user: loser})]);
+			const newRoot = new ElimNode({ state: 'available' });
+			newRoot.setChildren([targetNode, new ElimNode({ user: loser })]);
 			this.treeRoot = newRoot;
 		}
 

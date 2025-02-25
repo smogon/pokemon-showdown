@@ -17,7 +17,7 @@ if (!global.Config) {
 		nofswriting: false,
 		usesqlitemodlog: hasSQLite,
 		usesqlite: hasSQLite,
-	};
+	} as any;
 }
 
 import type * as DatabaseType from 'better-sqlite3';

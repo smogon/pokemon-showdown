@@ -5,16 +5,16 @@
  * @author mia-pi-git
  */
 
-import {Utils} from '../../lib/utils';
-import {MAX_REQUESTS, sendPM} from '../friends';
+import { Utils } from '../../lib/utils';
+import { MAX_REQUESTS, sendPM } from '../friends';
 
-const STATUS_COLORS: {[k: string]: string} = {
+const STATUS_COLORS: { [k: string]: string } = {
 	idle: '#ff7000',
 	online: '#009900',
 	busy: '#cc3838',
 };
 
-const STATUS_TITLES: {[k: string]: string} = {
+const STATUS_TITLES: { [k: string]: string } = {
 	online: 'Online',
 	idle: 'Idle',
 	busy: 'Busy',
@@ -64,14 +64,14 @@ export const Friends = new class {
 	}
 	async visualizeList(userid: ID) {
 		const friends = await Chat.Friends.getFriends(userid);
-		const categorized: {[k: string]: string[]} = {
+		const categorized: { [k: string]: string[] } = {
 			online: [],
 			idle: [],
 			busy: [],
 			offline: [],
 		};
-		const loginTimes: {[k: string]: number} = {};
-		for (const {friend: friendID, last_login, allowing_login: hideLogin} of [...friends].sort()) {
+		const loginTimes: { [k: string]: number } = {};
+		for (const { friend: friendID, last_login, allowing_login: hideLogin } of [...friends].sort()) {
 			const friend = Users.getExact(friendID);
 			if (friend?.connected) {
 				categorized[friend.statusType].push(friend.id);
@@ -146,7 +146,7 @@ export const Friends = new class {
 		}
 		if (login && typeof login === 'number' && !user?.connected) {
 			buf += `Last seen: <time>${new Date(Number(login)).toISOString()}</time>`;
-			buf += ` (${Chat.toDurationString(Date.now() - login, {precision: 1})} ago)`;
+			buf += ` (${Chat.toDurationString(Date.now() - login, { precision: 1 })} ago)`;
 		} else if (typeof login === 'string') {
 			buf += `${login}`;
 		}
@@ -204,7 +204,7 @@ function toLink(buf: string) {
 
 function headerButtons(type: string, user: User) {
 	const buf = [];
-	const icons: {[k: string]: string} = {
+	const icons: { [k: string]: string } = {
 		sent: '<i class="fa fa-paper-plane"></i>',
 		received: '<i class="fa fa-get-pocket"></i>',
 		all: '<i class="fa fa-users"></i>',
@@ -212,7 +212,7 @@ function headerButtons(type: string, user: User) {
 		settings: '<i class="fa fa-cog"></i>',
 		spectate: '<i class="fa fa-binoculars"></i>',
 	};
-	const titles: {[k: string]: string} = {
+	const titles: { [k: string]: string } = {
 		all: 'All Friends',
 		spectate: 'Spectate',
 		sent: 'Sent',
@@ -395,7 +395,7 @@ export const commands: Chat.ChatCommands = {
 		async listdisplay(target, room, user, connection) {
 			Friends.checkCanUse(this);
 			target = toID(target);
-			const {public_list: setting} = await Chat.Friends.getSettings(user.id);
+			const { public_list: setting } = await Chat.Friends.getSettings(user.id);
 			if (this.meansYes(target)) {
 				if (setting) {
 					return this.errorReply(this.tr`You are already allowing other people to view your friends list.`);
@@ -485,7 +485,7 @@ export const pages: Chat.PageTable = {
 			if (user.settings.blockFriendRequests) {
 				buf += `<h3>${this.tr(`You are currently blocking friend requests`)}.</h3>`;
 			}
-			const {sent} = await Chat.Friends.getRequests(user);
+			const { sent } = await Chat.Friends.getRequests(user);
 			if (sent.size < 1) {
 				buf += `<strong>You have no outgoing friend requests pending.</strong><br />`;
 				buf += `<br />To add a friend, use <code>/friend add [username]</code>.`;
@@ -504,7 +504,7 @@ export const pages: Chat.PageTable = {
 		case 'received': case 'incoming':
 			this.title = `[Friends] Received`;
 			buf += headerButtons('received', user);
-			const {received} = await Chat.Friends.getRequests(user);
+			const { received } = await Chat.Friends.getRequests(user);
 			if (received.size < 1) {
 				buf += `<strong>You have no pending friend requests.</strong>`;
 				buf += `</div>`;
@@ -525,7 +525,7 @@ export const pages: Chat.PageTable = {
 			if (target === user.id) {
 				return this.errorReply(`Use /friends list to view your own list.`);
 			}
-			const {public_list: isAllowing} = await Chat.Friends.getSettings(target);
+			const { public_list: isAllowing } = await Chat.Friends.getSettings(target);
 			if (!isAllowing) return this.errorReply(`${target}'s friends list is not public or they do not have one.`);
 			this.title = `[Friends List] ${target}`;
 			buf += await Friends.visualizePublicList(target);
@@ -555,7 +555,7 @@ export const pages: Chat.PageTable = {
 			buf += headerButtons('settings', user);
 			buf += `<h3>Friends Settings:</h3>`;
 			const settings = user.settings;
-			const {public_list, send_login_data} = await Chat.Friends.getSettings(user.id);
+			const { public_list, send_login_data } = await Chat.Friends.getSettings(user.id);
 			buf += `<strong>Notify me when my friends come online:</strong><br />`;
 			buf += `<button class="button${settings.allowFriendNotifications ? `` : ` disabled`}" name="send" `;
 			buf += `value="/friends hidenotifs">Disable</button> `;
@@ -629,7 +629,7 @@ export const pages: Chat.PageTable = {
 					.filter(id => {
 						const battle = Rooms.get(id)?.battle;
 						return (
-							battle && battle.playerTable[friend.id] &&
+							battle?.playerTable[friend.id] &&
 							(!battle.roomid.endsWith('pw') || friend.settings.displayBattlesToFriends)
 						);
 					})
@@ -645,7 +645,7 @@ export const pages: Chat.PageTable = {
 				buf += battles.map(([friend, battle]) => {
 					// we've already ensured the battle exists in the filter above
 					// (and .battle only exists if it's a GameRoom, so this cast is safe)
-					const room = Rooms.get(battle) as GameRoom & {battle: Rooms.RoomBattle};
+					const room = Rooms.get(battle) as GameRoom & { battle: Rooms.RoomBattle };
 					const format = Dex.formats.get(room.battle.format).name;
 					const rated = room.battle.rated ? `<small style="float:right">(Rated: ${room.battle.rated})</small>` : '';
 					const title = room.title.includes(friend.name) ?

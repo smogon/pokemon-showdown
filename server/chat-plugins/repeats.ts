@@ -4,8 +4,8 @@
  * @author Annika, Zarel
  */
 
-import {roomFaqs, getAlias, visualizeFaq} from './room-faqs';
-import type {MessageHandler} from '../rooms';
+import { roomFaqs, getAlias, visualizeFaq } from './room-faqs';
+import type { MessageHandler } from '../rooms';
 
 export interface RepeatedPhrase {
 	/** Identifier for deleting */
@@ -82,7 +82,7 @@ export const Repeats = new class {
 			roomRepeats = new Map();
 			this.repeats.set(room, roomRepeats);
 		}
-		const {id, phrase, interval} = repeat;
+		const { id, phrase, interval } = repeat;
 
 		if (roomRepeats.has(id)) {
 			throw new Error(`Repeat already exists`);
@@ -278,7 +278,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(this.tr`There are no repeated phrases in this room.`);
 		}
 
-		for (const {id} of room.settings.repeats) {
+		for (const { id } of room.settings.repeats) {
 			Repeats.removeRepeat(room, id);
 		}
 

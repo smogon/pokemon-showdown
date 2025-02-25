@@ -5,28 +5,28 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Max Guard', function () {
-	afterEach(function () {
+describe('Max Guard', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should be disallowed by Taunt', function () {
+	it('should be disallowed by Taunt', () => {
 		battle = common.gen(8).createBattle([[
-			{species: "Feebas", moves: ['splash', 'tackle']},
+			{ species: "Feebas", moves: ['splash', 'tackle'] },
 		], [
-			{species: "Wynaut", moves: ['taunt', 'splash']},
+			{ species: "Wynaut", moves: ['taunt', 'splash'] },
 		]]);
 		battle.makeChoices('move tackle dynamax', 'auto');
 		assert.cantMove(() => battle.choose('p1', 'move splash'), 'Feebas', 'Max Guard', false);
 	});
 
-	it('should allow Feint to damage the user, but not break the protection effect', function () {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'minun', moves: ['sleeptalk']},
-			{species: 'plusle', moves: ['sleeptalk']},
+	it('should allow Feint to damage the user, but not break the protection effect', () => {
+		battle = common.gen(8).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'minun', moves: ['sleeptalk'] },
+			{ species: 'plusle', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', ability: 'noguard', moves: ['fissure']},
-			{species: 'wynaut', moves: ['feint']},
+			{ species: 'wynaut', ability: 'noguard', moves: ['fissure'] },
+			{ species: 'wynaut', moves: ['feint'] },
 		]]);
 		battle.makeChoices('move sleeptalk dynamax, move sleeptalk', 'move fissure 1, move feint 1');
 
@@ -34,13 +34,13 @@ describe('Max Guard', function () {
 		assert.false.fainted(minun);
 	});
 
-	it('should block certain moves that bypass Protect', function () {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'sunflora', item: 'sitrusberry', ability: 'minus', moves: ['sleeptalk']},
-			{species: 'plusle', ability: 'plus', moves: ['magneticflux', 'gearup']},
+	it('should block certain moves that bypass Protect', () => {
+		battle = common.gen(8).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'sunflora', item: 'sitrusberry', ability: 'minus', moves: ['sleeptalk'] },
+			{ species: 'plusle', ability: 'plus', moves: ['magneticflux', 'gearup'] },
 		], [
-			{species: 'ferrothorn', item: 'sitrusberry', moves: ['flowershield', 'teatime']},
-			{species: 'tsareena', ability: 'intrepidsword', moves: ['psychup', 'sleeptalk']},
+			{ species: 'ferrothorn', item: 'sitrusberry', moves: ['flowershield', 'teatime'] },
+			{ species: 'tsareena', ability: 'intrepidsword', moves: ['psychup', 'sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move sleeptalk dynamax, move magneticflux', 'move flowershield, move psychup 1');

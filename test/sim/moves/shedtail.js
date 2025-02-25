@@ -12,10 +12,10 @@ describe('Shed Tail', () => {
 
 	it("should make the user switch out and pass a Substitute", () => {
 		battle = common.createBattle([[
-			{species: 'Cyclizar', ability: 'shedskin', moves: ['shedtail']},
-			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+			{ species: 'Cyclizar', ability: 'shedskin', moves: ['shedtail'] },
+			{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
 		], [
-			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+			{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.requestState, 'switch');
@@ -25,9 +25,9 @@ describe('Shed Tail', () => {
 
 	it("should fail (and not set Substitute) if the user has no teammates", () => {
 		battle = common.createBattle([[
-			{species: 'Cyclizar', ability: 'shedskin', moves: ['shedtail']},
+			{ species: 'Cyclizar', ability: 'shedskin', moves: ['shedtail'] },
 		], [
-			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+			{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
 		]]);
 		battle.makeChoices();
 		assert.false(battle.p1.active[0].volatiles['substitute']);

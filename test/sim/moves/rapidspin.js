@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Rapid Spin', function () {
-	afterEach(function () {
+describe('Rapid Spin', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should remove entry hazards`, function () {
+	it(`should remove entry hazards`, () => {
 		battle = common.createBattle([[
-			{species: 'Omastar', moves: ['stealthrock', 'spikes', 'toxicspikes', 'stickyweb']},
+			{ species: 'Omastar', moves: ['stealthrock', 'spikes', 'toxicspikes', 'stickyweb'] },
 		], [
-			{species: 'Armaldo', moves: ['sleeptalk', 'rapidspin']},
+			{ species: 'Armaldo', moves: ['sleeptalk', 'rapidspin'] },
 		]]);
 		for (let i = 1; i < 5; i++) {
 			battle.makeChoices('move ' + i, 'auto');
@@ -24,43 +24,43 @@ describe('Rapid Spin', function () {
 		assert(!side['stealthrock'] && !side['spikes'] && !side['toxicspikes'] && !side['stickyweb']);
 	});
 
-	it(`should remove entry hazards past a Substitute`, function () {
+	it(`should remove entry hazards past a Substitute`, () => {
 		battle = common.createBattle([[
-			{species: 'Cobalion', moves: ['stealthrock', 'substitute']},
+			{ species: 'Cobalion', moves: ['stealthrock', 'substitute'] },
 		], [
-			{species: 'Armaldo', moves: ['sleeptalk', 'rapidspin']},
+			{ species: 'Armaldo', moves: ['sleeptalk', 'rapidspin'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move substitute', 'move rapidspin');
 		assert(!battle.p2.sideConditions['stealthrock']);
 	});
 
-	it(`should not remove hazards if the user faints`, function () {
+	it(`should not remove hazards if the user faints`, () => {
 		battle = common.createBattle([[
-			{species: 'Mew', item: 'rockyhelmet', moves: ['stealthrock']},
+			{ species: 'Mew', item: 'rockyhelmet', moves: ['stealthrock'] },
 		], [
-			{species: 'Shedinja', moves: ['rapidspin']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Shedinja', moves: ['rapidspin'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.p2.sideConditions['stealthrock']);
 	});
 
-	it(`should not remove hazards if the user has Sheer Force`, function () {
+	it(`should not remove hazards if the user has Sheer Force`, () => {
 		battle = common.createBattle([[
-			{species: 'Cobalion', moves: ['stealthrock']},
+			{ species: 'Cobalion', moves: ['stealthrock'] },
 		], [
-			{species: 'Armaldo', ability: 'sheerforce', moves: ['rapidspin']},
+			{ species: 'Armaldo', ability: 'sheerforce', moves: ['rapidspin'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.p2.sideConditions['stealthrock']);
 	});
 
-	it(`should remove hazards if the user has Sheer Force [Gen 7]`, function () {
+	it(`should remove hazards if the user has Sheer Force [Gen 7]`, () => {
 		battle = common.gen(7).createBattle([[
-			{species: 'Cobalion', moves: ['stealthrock']},
+			{ species: 'Cobalion', moves: ['stealthrock'] },
 		], [
-			{species: 'Armaldo', ability: 'sheerforce', moves: ['rapidspin']},
+			{ species: 'Armaldo', ability: 'sheerforce', moves: ['rapidspin'] },
 		]]);
 		battle.makeChoices();
 		assert.false(battle.p2.sideConditions['stealthrock']);

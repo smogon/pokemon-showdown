@@ -5,19 +5,19 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Stomping Tantrum', function () {
-	afterEach(function () {
+describe('Stomping Tantrum', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should double its Base Power if the last move used on the previous turn failed`, function () {
+	it(`should double its Base Power if the last move used on the previous turn failed`, () => {
 		battle = common.createBattle([[
-			{species: 'Marowak', moves: ['attract', 'spore', 'stompingtantrum']},
+			{ species: 'Marowak', moves: ['attract', 'spore', 'stompingtantrum'] },
 		], [
-			{species: 'Manaphy', moves: ['rest']},
+			{ species: 'Manaphy', moves: ['rest'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, function (basePower) {
+		battle.onEvent('BasePower', battle.format, basePower => {
 			assert.equal(basePower, 150);
 		});
 
@@ -27,14 +27,14 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move stompingtantrum', 'move rest');
 	});
 
-	it(`should not double its Base Power if the last move used on the previous turn hit Protect`, function () {
+	it(`should not double its Base Power if the last move used on the previous turn hit Protect`, () => {
 		battle = common.createBattle([[
-			{species: 'Marowak', moves: ['stompingtantrum']},
+			{ species: 'Marowak', moves: ['stompingtantrum'] },
 		], [
-			{species: 'Manaphy', moves: ['protect', 'sleeptalk']},
+			{ species: 'Manaphy', moves: ['protect', 'sleeptalk'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, function (basePower) {
+		battle.onEvent('BasePower', battle.format, basePower => {
 			assert.equal(basePower, 75);
 		});
 
@@ -42,16 +42,16 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move stompingtantrum', 'move sleeptalk');
 	});
 
-	it(`should double its Base Power if the last move used was a spread move that partially hit Protect and otherwise failed`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Cresselia', moves: ['sunnyday']},
-			{species: 'Groudon', ability: 'noguard', moves: ['stompingtantrum', 'precipiceblades']},
+	it(`should double its Base Power if the last move used was a spread move that partially hit Protect and otherwise failed`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Cresselia', moves: ['sunnyday'] },
+			{ species: 'Groudon', ability: 'noguard', moves: ['stompingtantrum', 'precipiceblades'] },
 		], [
-			{species: 'Tapu Lele', moves: ['protect', 'calmmind']},
-			{species: 'Ho-Oh', moves: ['recover']},
+			{ species: 'Tapu Lele', moves: ['protect', 'calmmind'] },
+			{ species: 'Ho-Oh', moves: ['recover'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, function (basePower, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, (basePower, attacker, defender, move) => {
 			if (move.id === 'stompingtantrum') assert.equal(basePower, 150);
 		});
 
@@ -59,14 +59,14 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move sunnyday, move stompingtantrum 1', 'move calmmind, move recover');
 	});
 
-	it(`should not double its Base Power if the last move used on the previous turn was a successful Celebrate`, function () {
+	it(`should not double its Base Power if the last move used on the previous turn was a successful Celebrate`, () => {
 		battle = common.createBattle([[
-			{species: 'Snorlax', moves: ['celebrate', 'stompingtantrum']},
+			{ species: 'Snorlax', moves: ['celebrate', 'stompingtantrum'] },
 		], [
-			{species: 'Manaphy', moves: ['sleeptalk']},
+			{ species: 'Manaphy', moves: ['sleeptalk'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, function (basePower) {
+		battle.onEvent('BasePower', battle.format, basePower => {
 			assert.equal(basePower, 75);
 		});
 
@@ -74,14 +74,14 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move stompingtantrum', 'auto');
 	});
 
-	it(`should not double its Base Power if the last "move" used on the previous turn was a recharge`, function () {
+	it(`should not double its Base Power if the last "move" used on the previous turn was a recharge`, () => {
 		battle = common.createBattle([[
-			{species: 'Marowak-Alola', ability: 'noguard', moves: ['stompingtantrum', 'hyperbeam']},
+			{ species: 'Marowak-Alola', ability: 'noguard', moves: ['stompingtantrum', 'hyperbeam'] },
 		], [
-			{species: 'Lycanroc-Midnight', moves: ['sleeptalk']},
+			{ species: 'Lycanroc-Midnight', moves: ['sleeptalk'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
+		battle.onEvent('BasePower', battle.format, (basePower, pokemon, target, move) => {
 			if (move.id === 'stompingtantrum') assert.equal(basePower, 75);
 		});
 
@@ -90,14 +90,14 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move stompingtantrum', 'auto');
 	});
 
-	it.skip(`should not double its Base Power if the user dropped mid-Fly due to Smack Down`, function () {
+	it.skip(`should not double its Base Power if the user dropped mid-Fly due to Smack Down`, () => {
 		battle = common.createBattle([[
-			{species: 'Magikarp', moves: ['fly', 'stompingtantrum']},
+			{ species: 'Magikarp', moves: ['fly', 'stompingtantrum'] },
 		], [
-			{species: 'Wynaut', moves: ['smackdown']},
+			{ species: 'Wynaut', moves: ['smackdown'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
+		battle.onEvent('BasePower', battle.format, (basePower, pokemon, target, move) => {
 			if (move.id === 'stompingtantrum') assert.equal(basePower, 75);
 		});
 
@@ -105,14 +105,14 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move stompingtantrum', 'auto');
 	});
 
-	it(`should double its Base Power if a two-turn move fails for a different reason`, function () {
+	it(`should double its Base Power if a two-turn move fails for a different reason`, () => {
 		battle = common.createBattle([[
-			{species: 'Magikarp', moves: ['dive', 'stompingtantrum']},
+			{ species: 'Magikarp', moves: ['dive', 'stompingtantrum'] },
 		], [
-			{species: 'Wynaut', ability: 'waterabsorb', moves: ['splash']},
+			{ species: 'Wynaut', ability: 'waterabsorb', moves: ['splash'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
+		battle.onEvent('BasePower', battle.format, (basePower, pokemon, target, move) => {
 			if (move.id === 'stompingtantrum') assert.equal(basePower, 150);
 		});
 
@@ -121,15 +121,15 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move stompingtantrum', 'auto');
 	});
 
-	it(`should double its Base Power on some failure conditions of Rest`, function () {
+	it(`should double its Base Power on some failure conditions of Rest`, () => {
 		battle = common.createBattle([[
-			{species: 'Magikarp', ability: 'comatose', moves: ['rest', 'stompingtantrum']},
-			{species: 'Feebas', ability: 'insomnia', moves: ['rest', 'stompingtantrum']},
+			{ species: 'Magikarp', ability: 'comatose', moves: ['rest', 'stompingtantrum'] },
+			{ species: 'Feebas', ability: 'insomnia', moves: ['rest', 'stompingtantrum'] },
 		], [
-			{species: 'Accelgor', moves: ['sleeptalk', 'nightshade']},
+			{ species: 'Accelgor', moves: ['sleeptalk', 'nightshade'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
+		battle.onEvent('BasePower', battle.format, (basePower, pokemon, target, move) => {
 			if (move.id === 'stompingtantrum') assert.equal(basePower, 150);
 		});
 
@@ -144,14 +144,14 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move stompingtantrum', 'auto');
 	});
 
-	it.skip(`should not double its Base Power on other failure conditions of Rest`, function () {
+	it.skip(`should not double its Base Power on other failure conditions of Rest`, () => {
 		battle = common.createBattle([[
-			{species: 'Magikarp', moves: ['rest', 'stompingtantrum', 'defog']},
+			{ species: 'Magikarp', moves: ['rest', 'stompingtantrum', 'defog'] },
 		], [
-			{species: 'Accelgor', moves: ['sleeptalk', 'nightshade', 'electricterrain', 'mistyterrain']},
+			{ species: 'Accelgor', moves: ['sleeptalk', 'nightshade', 'electricterrain', 'mistyterrain'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
+		battle.onEvent('BasePower', battle.format, (basePower, pokemon, target, move) => {
 			if (move.id === 'stompingtantrum') assert.equal(basePower, 75);
 		});
 
@@ -167,16 +167,16 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move stompingtantrum', 'auto');
 	});
 
-	it.skip(`should not double its Base Power on most failed healing effects`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Magikarp', moves: ['roost', 'lifedew', 'healpulse', 'stompingtantrum']},
-			{species: 'Feebas', moves: ['shoreup', 'junglehealing', 'pollenpuff', 'stompingtantrum']},
+	it.skip(`should not double its Base Power on most failed healing effects`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Magikarp', moves: ['roost', 'lifedew', 'healpulse', 'stompingtantrum'] },
+			{ species: 'Feebas', moves: ['shoreup', 'junglehealing', 'pollenpuff', 'stompingtantrum'] },
 		], [
-			{species: 'Accelgor', moves: ['sleeptalk']},
-			{species: 'Accelgor', moves: ['sleeptalk']},
+			{ species: 'Accelgor', moves: ['sleeptalk'] },
+			{ species: 'Accelgor', moves: ['sleeptalk'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
+		battle.onEvent('BasePower', battle.format, (basePower, pokemon, target, move) => {
 			if (move.id === 'stompingtantrum') assert.equal(basePower, 75);
 		});
 
@@ -190,14 +190,14 @@ describe('Stomping Tantrum', function () {
 		battle.makeChoices('move stompingtantrum 1, move stompingtantrum 1', 'auto');
 	});
 
-	it(`should cause Gravity-negated moves to double in BP, even Z-moves`, function () {
+	it(`should cause Gravity-negated moves to double in BP, even Z-moves`, () => {
 		battle = common.gen(7).createBattle([[
-			{species: "Magikarp", item: 'normaliumz', moves: ['splash', 'stompingtantrum']},
+			{ species: "Magikarp", item: 'normaliumz', moves: ['splash', 'stompingtantrum'] },
 		], [
-			{species: "Accelgor", moves: ['gravity']},
+			{ species: "Accelgor", moves: ['gravity'] },
 		]]);
 
-		battle.onEvent('BasePower', battle.format, function (basePower, pokemon, target, move) {
+		battle.onEvent('BasePower', battle.format, (basePower, pokemon, target, move) => {
 			if (move.id === 'stompingtantrum') assert.equal(basePower, 150);
 		});
 

@@ -1,4 +1,4 @@
-import {FS, Utils} from '../../lib';
+import { FS, Utils } from '../../lib';
 
 const STORAGE_PATH = 'config/chat-plugins/quotes.json';
 const MAX_QUOTES = 300;
@@ -9,17 +9,14 @@ interface Quote {
 	date: number;
 }
 
-const quotes: {[room: string]: Quote[]} = JSON.parse(FS(STORAGE_PATH).readIfExistsSync() || "{}");
+const quotes: { [room: string]: Quote[] } = JSON.parse(FS(STORAGE_PATH).readIfExistsSync() || "{}");
 
 // migrate quotes out of roomsettings
 function convertOldQuotes() {
 	for (const room of Rooms.rooms.values()) {
-		// @ts-ignore
-		if (room.settings.quotes) {
-			// @ts-ignore
-			quotes[room.roomid] = room.settings.quotes;
-			// @ts-ignore
-			delete room.settings.quotes;
+		if ((room.settings as any).quotes) {
+			quotes[room.roomid] = (room.settings as any).quotes;
+			delete (room.settings as any).quotes;
 			room.saveSettings();
 			saveQuotes();
 		}
@@ -38,8 +35,8 @@ export const commands: Chat.ChatCommands = {
 		const roomQuotes = quotes[room.roomid];
 		if (!roomQuotes?.length) return this.errorReply(`This room has no quotes.`);
 		this.runBroadcast(true);
-		const {quote, date, userid} = roomQuotes[Math.floor(Math.random() * roomQuotes.length)];
-		const time = Chat.toTimestamp(new Date(date), {human: true});
+		const { quote, date, userid } = roomQuotes[Math.floor(Math.random() * roomQuotes.length)];
+		const time = Chat.toTimestamp(new Date(date), { human: true });
 		const attribution = toID(target) === 'showauthor' ? `<hr /><small>Added by ${userid} on ${time}</small>` : '';
 		return this.sendReplyBox(`${Chat.getReadmoreBlock(quote)}${attribution}`);
 	},
@@ -70,7 +67,7 @@ export const commands: Chat.ChatCommands = {
 		if (room.settings.isPrivate && roomQuotes.length >= MAX_QUOTES) {
 			return this.errorReply(`This room already has ${MAX_QUOTES} quotes, which is the maximum for private rooms.`);
 		}
-		roomQuotes.push({userid: user.id, quote: target, date: Date.now()});
+		roomQuotes.push({ userid: user.id, quote: target, date: Date.now() });
 		saveQuotes();
 		this.refreshPage(`quotes-${room.roomid}`);
 		const collapsedQuote = target.replace(/\n/g, ' ');
@@ -113,8 +110,8 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`Quote not found.`);
 		}
 		this.runBroadcast(true);
-		const {quote, date, userid} = roomQuotes[index];
-		const time = Chat.toTimestamp(new Date(date), {human: true});
+		const { quote, date, userid } = roomQuotes[index];
+		const time = Chat.toTimestamp(new Date(date), { human: true });
 		const attribution = toID(showAuthor) === 'showauthor' ? `<hr /><small>Added by ${userid} on ${time}</small>` : '';
 		return this.sendReplyBox(`${Chat.formatText(quote, false, true)}${attribution}`);
 	},
@@ -163,9 +160,9 @@ export const pages: Chat.PageTable = {
 		buffer += Utils.html`<h2>Quotes for ${room.title} (${roomQuotes.length}):</h2>`;
 		for (const [i, quoteObj] of roomQuotes.entries()) {
 			const index = i + 1;
-			const {quote, userid, date} = quoteObj;
+			const { quote, userid, date } = quoteObj;
 			buffer += `<div class="infobox">#${index}: ${Chat.formatText(quote, false, true)}`;
-			buffer += `<br /><hr /><small>Added by ${userid} on ${Chat.toTimestamp(new Date(date), {human: true})}</small>`;
+			buffer += `<br /><hr /><small>Added by ${userid} on ${Chat.toTimestamp(new Date(date), { human: true })}</small>`;
 			if (user.can('mute', null, room)) {
 				buffer += ` <button class="button" name="send" value="/msgroom ${room.roomid},/removequote ${index}">Remove</button>`;
 			}

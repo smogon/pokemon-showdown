@@ -7,8 +7,8 @@
  * @license MIT
  */
 
-import {Dashycode, Utils} from '../../lib';
-import {ModlogID, ModlogSearch, ModlogEntry} from '../modlog';
+import { Dashycode, Utils } from '../../lib';
+import type { ModlogID, ModlogSearch, ModlogEntry } from '../modlog';
 
 const MAX_QUERY_LENGTH = 2500;
 const DEFAULT_RESULTS_LENGTH = 100;
@@ -17,7 +17,7 @@ const LINES_SEPARATOR = 'lines=';
 const MAX_RESULTS_LENGTH = MORE_BUTTON_INCREMENTS[MORE_BUTTON_INCREMENTS.length - 1];
 const IPS_REGEX = /[([]?([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})[)\]]?/g;
 
-const ALIASES: {[k: string]: string} = {
+const ALIASES: { [k: string]: string } = {
 	'helpticket': 'help-rooms',
 	'groupchat': 'groupchat-rooms',
 	'battle': 'battle-rooms',
@@ -95,7 +95,7 @@ function prettifyResults(
 	const resultString = resultArray.map(result => {
 		const date = new Date(result.time || Date.now());
 		const entryRoom = result.visualRoomID || result.roomID || 'global';
-		let [dateString, timestamp] = Chat.toTimestamp(date, {human: true}).split(' ');
+		let [dateString, timestamp] = Chat.toTimestamp(date, { human: true }).split(' ');
 		let line = `<small>[${timestamp}] (${entryRoom})</small> ${result.action}`;
 		if (result.userid) {
 			line += `: [${result.userid}]`;
@@ -129,7 +129,7 @@ function prettifyResults(
 		);
 		return `${dateString}<small>[${timestamp}] (${thisRoomID})</small>${line}`;
 	}).join(`<br />`);
-	const [dateString, timestamp] = Chat.toTimestamp(new Date(), {human: true}).split(' ');
+	const [dateString, timestamp] = Chat.toTimestamp(new Date(), { human: true }).split(' ');
 	let preamble;
 	const modlogid = roomid + (searchString ? '-' + Dashycode.encode(searchString) : '');
 	if (searchString) {
@@ -179,7 +179,7 @@ async function getModlog(
 	if (search.note?.length) {
 		for (const [i, noteSearch] of search.note.entries()) {
 			if (/^["'].+["']$/.test(noteSearch.search)) {
-				search.note[i] = {...noteSearch, search: noteSearch.search.substring(1, noteSearch.search.length - 1)};
+				search.note[i] = { ...noteSearch, search: noteSearch.search.substring(1, noteSearch.search.length - 1) };
 				search.note[i].isExact = true;
 			}
 		}
@@ -194,7 +194,7 @@ async function getModlog(
 
 		search.user[i] = userSearch;
 	}
-	if (onlyNotes) search.action.push({search: 'NOTE'});
+	if (onlyNotes) search.action.push({ search: 'NOTE' });
 
 	const response = await Rooms.Modlog.search(roomid, search, maxLines, onlyPunishments);
 	if (!response) return connection.popup(`The moderator log is currently disabled.`);
@@ -233,7 +233,7 @@ export const commands: Chat.ChatCommands = {
 		let lines;
 		const possibleParam = cmd.slice(2);
 		const targets = target.split(',').map(f => f.trim()).filter(Boolean);
-		const search: ModlogSearch = {note: [], user: [], ip: [], action: [], actionTaker: []};
+		const search: ModlogSearch = { note: [], user: [], ip: [], action: [], actionTaker: [] };
 
 		switch (possibleParam) {
 		case 'id':
@@ -267,19 +267,19 @@ export const commands: Chat.ChatCommands = {
 			switch (param) {
 			case 'note': case 'text':
 				if (!search.note) search.note = [];
-				search.note.push({search: value, isExclusion});
+				search.note.push({ search: value, isExclusion });
 				break;
 			case 'user': case 'name': case 'username': case 'userid':
-				search.user.push({search: value});
+				search.user.push({ search: value });
 				break;
 			case 'ip': case 'ipaddress': case 'ipaddr':
-				search.ip.push({search: value, isExclusion});
+				search.ip.push({ search: value, isExclusion });
 				break;
 			case 'action': case 'punishment':
-				search.action.push({search: value.toUpperCase(), isExclusion});
+				search.action.push({ search: value.toUpperCase(), isExclusion });
 				break;
 			case 'actiontaker': case 'moderator': case 'staff': case 'mod':
-				search.actionTaker.push({search: toID(value), isExclusion});
+				search.actionTaker.push({ search: toID(value), isExclusion });
 				break;
 			case 'room': case 'roomid':
 				roomid = value.toLowerCase().replace(/[^a-z0-9-]+/g, '') as ModlogID;

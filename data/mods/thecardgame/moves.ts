@@ -84,7 +84,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (target.hasType('Normal')) return 0;
 			}
 		},
-		ignoreImmunity: {'Fighting': true},
+		ignoreImmunity: { 'Fighting': true },
 	},
 	trickortreat: {
 		inherit: true,

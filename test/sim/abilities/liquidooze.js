@@ -5,62 +5,62 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Liquid Ooze', function () {
-	afterEach(function () {
+describe('Liquid Ooze', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should damage the target after it uses a draining move', function () {
+	it('should damage the target after it uses a draining move', () => {
 		battle = common.createBattle([[
-			{species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk']},
+			{ species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk'] },
 		], [
-			{species: 'serperior', moves: ['gigadrain']},
+			{ species: 'serperior', moves: ['gigadrain'] },
 		]]);
 		battle.makeChoices();
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should damage the target after taking damage from Leech Seed`, function () {
+	it(`should damage the target after taking damage from Leech Seed`, () => {
 		battle = common.createBattle([[
-			{species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk']},
+			{ species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk'] },
 		], [
-			{species: 'serperior', ability: 'noguard', moves: ['leechseed']},
+			{ species: 'serperior', ability: 'noguard', moves: ['leechseed'] },
 		]]);
 		battle.makeChoices();
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 });
 
-describe('Liquid Ooze [Gen 4]', function () {
-	afterEach(function () {
+describe('Liquid Ooze [Gen 4]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should damage the target after it uses a draining move', function () {
+	it('should damage the target after it uses a draining move', () => {
 		battle = common.gen(4).createBattle([[
-			{species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk']},
+			{ species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk'] },
 		], [
-			{species: 'roserade', moves: ['gigadrain']},
+			{ species: 'roserade', moves: ['gigadrain'] },
 		]]);
 		battle.makeChoices();
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it(`should damage the target after taking damage from leech seed`, function () {
+	it(`should damage the target after taking damage from leech seed`, () => {
 		battle = common.gen(4).createBattle([[
-			{species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk']},
+			{ species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk'] },
 		], [
-			{species: 'roserade', ability: 'noguard', moves: ['leechseed']},
+			{ species: 'roserade', ability: 'noguard', moves: ['leechseed'] },
 		]]);
 		battle.makeChoices();
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it('should not damage the target if the target used Dream Eater', function () {
+	it('should not damage the target if the target used Dream Eater', () => {
 		battle = common.gen(4).createBattle([[
-			{species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk']},
+			{ species: 'tentacruel', ability: 'liquidooze', moves: ['sleeptalk'] },
 		], [
-			{species: 'jolteon', moves: ['spore', 'dreameater']},
+			{ species: 'jolteon', moves: ['spore', 'dreameater'] },
 		]]);
 		battle.makeChoices('move sleeptalk', 'move spore');
 		battle.makeChoices('move sleeptalk', 'move dreameater');

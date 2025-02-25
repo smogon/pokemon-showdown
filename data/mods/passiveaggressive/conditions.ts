@@ -50,7 +50,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 function calculate(battle: Battle, source: Pokemon, pokemon: Pokemon) {
 	const move = battle.dex.getActiveMove('tackle');
 	move.type = source.getTypes()[0];
-	const typeMod = Math.pow(2, battle.clampIntRange(pokemon.runEffectiveness(move), -6, 6));
+	const typeMod = 2 ** battle.clampIntRange(pokemon.runEffectiveness(move), -6, 6);
 	if (!pokemon.runImmunity(move.type)) return 0;
 	return typeMod;
 }

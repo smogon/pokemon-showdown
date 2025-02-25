@@ -5,15 +5,15 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Two Turn Moves [Gen 1]', function () {
-	afterEach(function () {
+describe('Two Turn Moves [Gen 1]', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`charges the first turn, does damage and uses PP the second turn`, function () {
+	it(`charges the first turn, does damage and uses PP the second turn`, () => {
 		battle = common.gen(1).createBattle();
-		battle.setPlayer('p1', {team: [{species: "Venusaur", moves: ['solarbeam']}]});
-		battle.setPlayer('p2', {team: [{species: "Parasect", moves: ['swordsdance']}]});
+		battle.setPlayer('p1', { team: [{ species: "Venusaur", moves: ['solarbeam'] }] });
+		battle.setPlayer('p2', { team: [{ species: "Parasect", moves: ['swordsdance'] }] });
 		const venusaur = battle.p1.active[0];
 		const parasect = battle.p2.active[0];
 		assert.equal(venusaur.moveSlots[0].pp, 16);
@@ -27,10 +27,10 @@ describe('Two Turn Moves [Gen 1]', function () {
 		assert.false.fullHP(parasect);
 	});
 
-	it(`move is paused when asleep or frozen`, function () {
+	it(`move is paused when asleep or frozen`, () => {
 		battle = common.gen(1).createBattle();
-		battle.setPlayer('p1', {team: [{species: "Aerodactyl", moves: ['skyattack']}]});
-		battle.setPlayer('p2', {team: [{species: "Parasect", moves: ['spore']}]});
+		battle.setPlayer('p1', { team: [{ species: "Aerodactyl", moves: ['skyattack'] }] });
+		battle.setPlayer('p2', { team: [{ species: "Parasect", moves: ['spore'] }] });
 		const aerodactyl = battle.p1.active[0];
 		for (let i = 0; i < 10; i++) {
 			battle.makeChoices();
@@ -39,11 +39,11 @@ describe('Two Turn Moves [Gen 1]', function () {
 		}
 	});
 
-	it(`two-turn move ends if it fails due to Disable, does not use PP`, function () {
-		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
-			{species: 'Aerodactyl', moves: ['skyattack']},
+	it(`two-turn move ends if it fails due to Disable, does not use PP`, () => {
+		battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
+			{ species: 'Aerodactyl', moves: ['skyattack'] },
 		], [
-			{species: 'Drowzee', moves: ['disable']},
+			{ species: 'Drowzee', moves: ['disable'] },
 		]]);
 
 		const aerodactyl = battle.p1.active[0];
@@ -56,10 +56,10 @@ describe('Two Turn Moves [Gen 1]', function () {
 		assert(!aerodactyl.volatiles['twoturnmove']);
 	});
 
-	it(`[Gen 1] if called by Metronome or Mirror Move, the calling move uses PP in the attacking turn`, function () {
-		battle = common.gen(1).createBattle({seed: [0, 1, 0, 1]});
-		battle.setPlayer('p1', {team: [{species: 'blastoise', moves: ['metronome', 'skullbash']}]});
-		battle.setPlayer('p2', {team: [{species: 'golem', moves: ['defensecurl']}]});
+	it(`[Gen 1] if called by Metronome or Mirror Move, the calling move uses PP in the attacking turn`, () => {
+		battle = common.gen(1).createBattle({ seed: [0, 1, 0, 1] });
+		battle.setPlayer('p1', { team: [{ species: 'blastoise', moves: ['metronome', 'skullbash'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'golem', moves: ['defensecurl'] }] });
 		const blastoise = battle.p1.active[0];
 		battle.makeChoices();
 		assert(battle.log.some(line => line.includes('|move|p1a: Blastoise|Skull Bash||[from]Metronome|[still]')));
@@ -70,10 +70,10 @@ describe('Two Turn Moves [Gen 1]', function () {
 		assert.equal(blastoise.moveSlots[1].pp, 24);
 	});
 
-	it(`Dig/Fly dodges all attacks except for Swift, Transform, and Bide`, function () {
+	it(`Dig/Fly dodges all attacks except for Swift, Transform, and Bide`, () => {
 		battle = common.gen(1).createBattle();
-		battle.setPlayer('p1', {team: [{species: "Aerodactyl", moves: ['fly']}]});
-		battle.setPlayer('p2', {team: [{species: "Pidgeot", moves: ['gust']}]});
+		battle.setPlayer('p1', { team: [{ species: "Aerodactyl", moves: ['fly'] }] });
+		battle.setPlayer('p2', { team: [{ species: "Pidgeot", moves: ['gust'] }] });
 		battle.makeChoices();
 		assert(battle.log.some(line => line.includes("Aerodactyl can't be hit")));
 		assert.fullHP(battle.p1.active[0]);
@@ -81,10 +81,10 @@ describe('Two Turn Moves [Gen 1]', function () {
 		assert.false.fullHP(battle.p1.active[0]);
 	});
 
-	it(`Dig/Fly invulnerability glitch`, function () {
-		battle = common.gen(1).createBattle({seed: [0, 0, 0, 1]});
-		battle.setPlayer('p1', {team: [{species: "Electrode", moves: ['thunderwave', 'swift', 'thunderbolt']}]});
-		battle.setPlayer('p2', {team: [{species: "Pidgeot", moves: ['fly', 'gust']}]});
+	it(`Dig/Fly invulnerability glitch`, () => {
+		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 1] });
+		battle.setPlayer('p1', { team: [{ species: "Electrode", moves: ['thunderwave', 'swift', 'thunderbolt'] }] });
+		battle.setPlayer('p2', { team: [{ species: "Pidgeot", moves: ['fly', 'gust'] }] });
 		const pidgeot = battle.p2.active[0];
 		battle.makeChoices();
 		assert(pidgeot.volatiles['twoturnmove']);

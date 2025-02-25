@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('[Gen 1] Bide', function () {
-	afterEach(function () {
+describe('[Gen 1] Bide', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should be possible to roll two-turn Bide`, function () {
-		battle = common.gen(1).createBattle({seed: [0, 1, 1, 1]}, [[
-			{species: 'Aerodactyl', moves: ['bide', 'whirlwind']},
+	it(`should be possible to roll two-turn Bide`, () => {
+		battle = common.gen(1).createBattle({ seed: [0, 1, 1, 1] }, [[
+			{ species: 'Aerodactyl', moves: ['bide', 'whirlwind'] },
 		], [
-			{species: 'Gyarados', moves: ['dragonrage']},
+			{ species: 'Gyarados', moves: ['dragonrage'] },
 		]]);
 		const aerodactyl = battle.p1.active[0];
 		const gyarados = battle.p2.active[0];
@@ -32,11 +32,11 @@ describe('[Gen 1] Bide', function () {
 		assert.equal(gyarados.maxhp - gyarados.hp, 160);
 	});
 
-	it(`should be possible to roll three-turn Bide`, function () {
-		battle = common.gen(1).createBattle({seed: [1, 1, 1, 1]}, [[
-			{species: 'Aerodactyl', moves: ['bide']},
+	it(`should be possible to roll three-turn Bide`, () => {
+		battle = common.gen(1).createBattle({ seed: [1, 1, 1, 1] }, [[
+			{ species: 'Aerodactyl', moves: ['bide'] },
 		], [
-			{species: 'Gyarados', moves: ['dragonrage']},
+			{ species: 'Gyarados', moves: ['dragonrage'] },
 		]]);
 		const aerodactyl = battle.p1.active[0];
 		const gyarados = battle.p2.active[0];
@@ -49,11 +49,11 @@ describe('[Gen 1] Bide', function () {
 		assert.equal(gyarados.maxhp - gyarados.hp, 240);
 	});
 
-	it(`should damage Substitute with Bide damage`, function () {
+	it(`should damage Substitute with Bide damage`, () => {
 		battle = common.gen(1).createBattle([[
-			{species: 'Aerodactyl', moves: ['bide', 'whirlwind']},
+			{ species: 'Aerodactyl', moves: ['bide', 'whirlwind'] },
 		], [
-			{species: 'Gyarados', moves: ['dragonrage', 'substitute']},
+			{ species: 'Gyarados', moves: ['dragonrage', 'substitute'] },
 		]]);
 
 		const aerodactyl = battle.p1.active[0];
@@ -67,12 +67,12 @@ describe('[Gen 1] Bide', function () {
 		assert.false(gyarados.volatiles['substitute']);
 	});
 
-	it(`should accumulate damage as the opponent switches or uses moves that don't reset lastDamage`, function () {
+	it(`should accumulate damage as the opponent switches or uses moves that don't reset lastDamage`, () => {
 		battle = common.gen(1).createBattle([[
-			{species: 'Aerodactyl', moves: ['bide']},
+			{ species: 'Aerodactyl', moves: ['bide'] },
 		], [
-			{species: 'Gyarados', moves: ['dragonrage', 'splash']},
-			{species: 'Exeggutor', moves: ['barrage']},
+			{ species: 'Gyarados', moves: ['dragonrage', 'splash'] },
+			{ species: 'Exeggutor', moves: ['barrage'] },
 		]]);
 
 		const aerodactyl = battle.p1.active[0];
@@ -86,12 +86,12 @@ describe('[Gen 1] Bide', function () {
 		assert.equal(exeggutor.maxhp - exeggutor.hp, 240);
 	});
 
-	it(`should zero out accumulated damage when an enemy faints (Desync Clause Mod)`, function () {
+	it(`should zero out accumulated damage when an enemy faints (Desync Clause Mod)`, () => {
 		battle = common.gen(1).createBattle([[
-			{species: 'Aerodactyl', moves: ['bide']},
+			{ species: 'Aerodactyl', moves: ['bide'] },
 		], [
-			{species: 'Gyarados', moves: ['dragonrage', 'leer']},
-			{species: 'Exeggutor', moves: ['barrage']},
+			{ species: 'Gyarados', moves: ['dragonrage', 'leer'] },
+			{ species: 'Exeggutor', moves: ['barrage'] },
 		]]);
 
 		const aerodactyl = battle.p1.active[0];
@@ -112,11 +112,11 @@ describe('[Gen 1] Bide', function () {
 		assert(battle.log.some(line => line.includes('Desync Clause Mod activated')));
 	});
 
-	it(`should pause Bide's duration when asleep or frozen`, function () {
+	it(`should pause Bide's duration when asleep or frozen`, () => {
 		battle = common.gen(1).createBattle([[
-			{species: 'Aerodactyl', moves: ['bide']},
+			{ species: 'Aerodactyl', moves: ['bide'] },
 		], [
-			{species: 'Parasect', moves: ['spore']},
+			{ species: 'Parasect', moves: ['spore'] },
 		]]);
 
 		const aerodactyl = battle.p1.active[0];
@@ -128,11 +128,11 @@ describe('[Gen 1] Bide', function () {
 		}
 	});
 
-	it(`should pause Bide's duration when disabled`, function () {
-		battle = common.gen(1).createBattle({seed: [1, 1, 1, 0]}, [[
-			{species: 'Aerodactyl', moves: ['bide', 'whirlwind']},
+	it(`should pause Bide's duration when disabled`, () => {
+		battle = common.gen(1).createBattle({ seed: [1, 1, 1, 0] }, [[
+			{ species: 'Aerodactyl', moves: ['bide', 'whirlwind'] },
 		], [
-			{species: 'Voltorb', moves: ['disable']},
+			{ species: 'Voltorb', moves: ['disable'] },
 		]]);
 
 		const aerodactyl = battle.p1.active[0];

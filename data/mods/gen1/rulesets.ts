@@ -36,7 +36,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		},
 		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
-			const stats: {[k: string]: number} = {
+			const stats: { [k: string]: number } = {
 				hp: newSpecies.baseStats.spe,
 				atk: newSpecies.baseStats.spa,
 				def: newSpecies.baseStats.def,

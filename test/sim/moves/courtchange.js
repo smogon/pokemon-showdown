@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Court Change`, function () {
-	afterEach(function () {
+describe(`Court Change`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should swap certain side conditions to the opponent's side and vice versa`, function () {
+	it(`should swap certain side conditions to the opponent's side and vice versa`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', moves: ['sleeptalk', 'stealthrock', 'lightscreen']},
+			{ species: 'wynaut', moves: ['sleeptalk', 'stealthrock', 'lightscreen'] },
 		], [
-			{species: 'cinderace', moves: ['courtchange', 'tailwind', 'safeguard']},
+			{ species: 'cinderace', moves: ['courtchange', 'tailwind', 'safeguard'] },
 		]]);
 		battle.makeChoices('move stealthrock', 'move tailwind');
 		battle.makeChoices('move lightscreen', 'move safeguard');
@@ -26,12 +26,12 @@ describe(`Court Change`, function () {
 		assert(!!battle.p2.sideConditions['lightscreen']);
 	});
 
-	it(`should allow Sticky Web to trigger Defiant when set by the Defiant user's team`, function () {
+	it(`should allow Sticky Web to trigger Defiant when set by the Defiant user's team`, () => {
 		battle = common.createBattle([[
-			{species: 'cinderace', moves: ['courtchange', 'stickyweb', 'sleeptalk']},
-			{species: 'pawniard', ability: 'defiant', moves: ['sleeptalk']},
+			{ species: 'cinderace', moves: ['courtchange', 'stickyweb', 'sleeptalk'] },
+			{ species: 'pawniard', ability: 'defiant', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move stickyweb', 'auto');
 		battle.makeChoices('move courtchange', 'auto');
@@ -41,12 +41,12 @@ describe(`Court Change`, function () {
 		assert.statStage(battle.p1.active[0], 'atk', 2);
 	});
 
-	it(`[Gen 8] should not allow Sticky Web to trigger Defiant when set by the Defiant user's team`, function () {
+	it(`[Gen 8] should not allow Sticky Web to trigger Defiant when set by the Defiant user's team`, () => {
 		battle = common.gen(8).createBattle([[
-			{species: 'cinderace', moves: ['courtchange', 'stickyweb', 'sleeptalk']},
-			{species: 'pawniard', ability: 'defiant', moves: ['sleeptalk']},
+			{ species: 'cinderace', moves: ['courtchange', 'stickyweb', 'sleeptalk'] },
+			{ species: 'pawniard', ability: 'defiant', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move stickyweb', 'auto');
 		battle.makeChoices('move courtchange', 'auto');

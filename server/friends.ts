@@ -2,10 +2,11 @@
  * Friends chat-plugin database handler.
  * @author mia-pi-git
  */
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore in case it isn't installed
 import type * as Database from 'better-sqlite3';
-import {Utils, FS, ProcessManager, Repl} from '../lib';
-import {Config} from './config-loader';
+import { Utils, FS, ProcessManager, Repl } from '../lib';
+import { Config } from './config-loader';
 import * as path from 'path';
 
 /** Max friends per user */
@@ -65,7 +66,7 @@ export function sendPM(message: string, to: string, from = '~') {
 }
 
 function canPM(sender: User, receiver: User | null) {
-	if (!receiver || !receiver.settings.blockPMs) return true;
+	if (!receiver?.settings.blockPMs) return true;
 	if (receiver.settings.blockPMs === true) return sender.can('lock');
 	if (receiver.settings.blockPMs === 'friends') return false;
 	return Users.globalAuth.atLeast(sender, receiver.settings.blockPMs);
@@ -125,44 +126,44 @@ export class FriendsDatabase {
 		}
 
 		statements.expire.run();
-		return {database, statements};
+		return { database, statements };
 	}
 	async getFriends(userid: ID): Promise<Friend[]> {
 		return (await this.all('get', [userid, MAX_FRIENDS])) || [];
 	}
 	async getRequests(user: User) {
-		const sent: Set<string> = new Set();
-		const received: Set<string> = new Set();
+		const sent = new Set<string>();
+		const received = new Set<string>();
 		if (user.settings.blockFriendRequests) {
 			// delete any pending requests that may have been sent to them while offline
 			// we used to return but we will not since you can send requests while blocking
 			await this.run('deleteReceivedRequests', [user.id]);
 		}
 		const sentResults = await this.all('getSent', [user.id]);
-		if (sentResults === null) return {sent, received};
+		if (sentResults === null) return { sent, received };
 		for (const request of sentResults) {
 			sent.add(request.receiver);
 		}
 		const receivedResults = await this.all('getReceived', [user.id]) || [];
 		if (!receivedResults) {
-			return {received, sent};
+			return { received, sent };
 		}
 		for (const request of receivedResults) {
 			received.add(request.sender);
 		}
-		return {sent, received};
+		return { sent, received };
 	}
 	all(statement: string, data: any[] | AnyObject): Promise<any[] | null> {
-		return this.query({type: 'all', data, statement});
+		return this.query({ type: 'all', data, statement });
 	}
-	transaction(statement: string, data: any[] | AnyObject): Promise<{result: any} | null> {
-		return this.query({data, statement, type: 'transaction'});
+	transaction(statement: string, data: any[] | AnyObject): Promise<{ result: any } | null> {
+		return this.query({ data, statement, type: 'transaction' });
 	}
-	run(statement: string, data: any[] | AnyObject): Promise<{changes: number, lastInsertRowid: number}> {
-		return this.query({statement, data, type: 'run'});
+	run(statement: string, data: any[] | AnyObject): Promise<{ changes: number, lastInsertRowid: number }> {
+		return this.query({ statement, data, type: 'run' });
 	}
 	get(statement: string, data: any[] | AnyObject): Promise<AnyObject | null> {
-		return this.query({statement, data, type: 'get'});
+		return this.query({ statement, data, type: 'get' });
 	}
 	private async query(input: DatabaseRequest) {
 		const process = PM.acquire();
@@ -226,7 +227,7 @@ export class FriendsDatabase {
 	async removeFriend(userid: ID, friendID: ID) {
 		if (!friendID || !userid) throw new Chat.ErrorMessage(`Invalid usernames supplied.`);
 
-		const result = await this.run('delete', {user1: userid, user2: friendID});
+		const result = await this.run('delete', { user1: userid, user2: friendID });
 		if (result.changes < 1) {
 			throw new Chat.ErrorMessage(`You do not have ${friendID} friended.`);
 		}
@@ -255,12 +256,12 @@ export class FriendsDatabase {
 	async findFriendship(user1: string, user2: string): Promise<boolean> {
 		user1 = toID(user1);
 		user2 = toID(user2);
-		return !!(await this.get('findFriendship', {user1, user2}))?.length;
+		return !!(await this.get('findFriendship', { user1, user2 }))?.length;
 	}
 }
 
-const statements: {[k: string]: Database.Statement} = {};
-const transactions: {[k: string]: Database.Transaction} = {};
+const statements: { [k: string]: Database.Statement } = {};
+const transactions: { [k: string]: Database.Transaction } = {};
 
 const ACTIONS = {
 	add: (
@@ -305,26 +306,26 @@ const ACTIONS = {
 	),
 };
 
-const FUNCTIONS: {[k: string]: (...input: any[]) => any} = {
+const FUNCTIONS: { [k: string]: (...input: any[]) => any } = {
 	'should_expire': (sentTime: number) => {
 		if (Date.now() - sentTime > REQUEST_EXPIRY_TIME) return 1;
 		return 0;
 	},
 };
 
-const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
+const TRANSACTIONS: { [k: string]: (input: any[]) => DatabaseResult } = {
 	send: requests => {
 		for (const request of requests) {
 			const [senderID, receiverID] = request;
 			const hasSentRequest = (
-				statements.findRequest.get({user1: senderID, user2: receiverID}) as AnyObject
+				statements.findRequest.get({ user1: senderID, user2: receiverID }) as AnyObject
 			)['num'];
 			const friends = (statements.countFriends.get(senderID, senderID) as AnyObject)['num'];
 			const totalRequests = (statements.countRequests.get(senderID, senderID) as AnyObject)['num'];
 			if (friends >= MAX_FRIENDS) {
 				throw new FailureMessage(`You are at the maximum number of friends.`);
 			}
-			const existingFriendship = statements.findFriendship.all({user1: senderID, user2: receiverID});
+			const existingFriendship = statements.findFriendship.all({ user1: senderID, user2: receiverID });
 			if (existingFriendship.length) {
 				throw new FailureMessage(`You are already friends with '${receiverID}'.`);
 			}
@@ -338,14 +339,14 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 			}
 			statements.insertRequest.run(senderID, receiverID, Date.now());
 		}
-		return {result: []};
+		return { result: [] };
 	},
 	add: requests => {
 		for (const request of requests) {
 			const [senderID, receiverID] = request;
-			statements.add.run({user1: senderID, user2: receiverID});
+			statements.add.run({ user1: senderID, user2: receiverID });
 		}
-		return {result: []};
+		return { result: [] };
 	},
 	accept: requests => {
 		for (const request of requests) {
@@ -354,20 +355,20 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
 			if (friends?.length >= MAX_FRIENDS) {
 				throw new FailureMessage(`You are at the maximum number of friends.`);
 			}
-			const {result} = TRANSACTIONS.removeRequest([request]);
+			const { result } = TRANSACTIONS.removeRequest([request]);
 			if (!result.length) throw new FailureMessage(`You have no request pending from ${senderID}.`);
 			TRANSACTIONS.add([request]);
 		}
-		return {result: []};
+		return { result: [] };
 	},
 	removeRequest: requests => {
 		const result = [];
 		for (const request of requests) {
 			const [to, from] = request;
-			const {changes} = statements.deleteRequest.run(to, from);
+			const { changes } = statements.deleteRequest.run(to, from);
 			if (changes) result.push(changes);
 		}
-		return {result};
+		return { result };
 	},
 };
 
@@ -376,10 +377,10 @@ const TRANSACTIONS: {[k: string]: (input: any[]) => DatabaseResult} = {
  * todo: should these be under a namespace?
  */
 
-/** Find if a friendship exists between two users.*/
+/** Find if a friendship exists between two users. */
 export function findFriendship(users: [string, string]) {
 	setup();
-	return !!statements.findFriendship.get({user1: users[0], user2: users[1]});
+	return !!statements.findFriendship.get({ user1: users[0], user2: users[1] });
 }
 
 // internal for child process api - ensures statements are only set up
@@ -390,7 +391,7 @@ const setup = () => {
 
 /** Process manager for main process use. */
 export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, DatabaseResult>(module, query => {
-	const {type, statement, data} = query;
+	const { type, statement, data } = query;
 	const start = Date.now();
 	const result: DatabaseResult = {};
 	try {
@@ -443,7 +444,7 @@ if (require.main === module) {
 			slow(message: string) {
 				process.send!(`CALLBACK\nSLOW\n${message}`);
 			},
-		};
+		} as any;
 		process.on('uncaughtException', err => {
 			if (Config.crashguard) {
 				Monitor.crashlog(err, 'A friends child process');

@@ -8,7 +8,7 @@
 
 const assert = require("../assert");
 const Teams = require('./../../dist/sim/teams').Teams;
-const {TeamValidator, PokemonSources} = require('../../dist/sim/team-validator');
+const { TeamValidator, PokemonSources } = require('../../dist/sim/team-validator');
 
 /**
  * Unit test helper for Pokemon sets

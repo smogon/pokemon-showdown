@@ -5,7 +5,7 @@
 'use strict';
 
 const assert = require('assert').strict;
-const {PrefixManager} = require('../../../dist/server/chat-plugins/username-prefixes');
+const { PrefixManager } = require('../../../dist/server/chat-plugins/username-prefixes');
 const PREFIX_DURATION = 10 * 24 * 60 * 60 * 1000;
 
 describe('PrefixManager', function () {
@@ -30,12 +30,12 @@ describe('PrefixManager', function () {
 
 	it('should not overwrite manually specified prefixes', () => {
 		const time = Date.now() + PREFIX_DURATION;
-		Config.forcedprefixes = [{prefix: 'manual', type: 'modchat', expireAt: time}];
+		Config.forcedprefixes = [{ prefix: 'manual', type: 'modchat', expireAt: time }];
 		this.prefixManager.addPrefix('nomodchat', 'modchat');
 
 		assert.deepEqual(Config.forcedprefixes, [
-			{prefix: 'manual', type: 'modchat', expireAt: time},
-			{prefix: 'nomodchat', type: 'modchat', expireAt: Config.forcedprefixes.find(x => x.prefix === 'nomodchat').expireAt},
+			{ prefix: 'manual', type: 'modchat', expireAt: time },
+			{ prefix: 'nomodchat', type: 'modchat', expireAt: Config.forcedprefixes.find(x => x.prefix === 'nomodchat').expireAt },
 		]);
 	});
 

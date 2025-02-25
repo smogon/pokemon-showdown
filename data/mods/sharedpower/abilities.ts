@@ -66,12 +66,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 			if (isAbility) {
 				if (pokemon.setAbility(ability)) {
-					this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+					this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
 				}
 			} else {
 				pokemon.removeVolatile('ability:trace');
 				pokemon.addVolatile('ability:' + ability.id, pokemon);
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
 			}
 		},
 	},

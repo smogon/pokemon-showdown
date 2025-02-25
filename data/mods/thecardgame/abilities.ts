@@ -98,7 +98,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
 			if (['Dark', 'Grass', 'Psychic'].includes(move.type)) {
-				this.boost({spe: 1});
+				this.boost({ spe: 1 });
 			}
 		},
 	},

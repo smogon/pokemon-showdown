@@ -28,7 +28,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				const calc = calculate(this, target, source);
 				if (calc) this.damage(calc * source.baseMaxhp / 4, source, target);
 				if (target.species.id === 'cramorantgulping') {
-					this.boost({def: -1}, source, target, null, true);
+					this.boost({ def: -1 }, source, target, null, true);
 				} else {
 					source.trySetStatus('par', target, move);
 				}
@@ -59,7 +59,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 function calculate(battle: Battle, source: Pokemon, pokemon: Pokemon) {
 	const move = battle.dex.getActiveMove('tackle');
 	move.type = source.getTypes()[0];
-	const typeMod = Math.pow(2, battle.clampIntRange(pokemon.runEffectiveness(move), -6, 6));
+	const typeMod = 2 ** battle.clampIntRange(pokemon.runEffectiveness(move), -6, 6);
 	if (!pokemon.runImmunity(move.type)) return 0;
 	return typeMod;
 }

@@ -159,18 +159,18 @@ export function encode(str: string, allowCaps = false) {
 	let unsafePart = streamGetCode(unsafeStream);
 	if (safePart.startsWith('-')) {
 		safePart = safePart.slice(1);
-		unsafePart = unsafePart + '2';
+		unsafePart = `${unsafePart}2`;
 	}
 	if (safePart.endsWith('-')) {
 		safePart = safePart.slice(0, -1);
 	}
 	if (!safePart) {
 		safePart = '0';
-		unsafePart = '0' + unsafePart;
+		unsafePart = `0${unsafePart}`;
 		if (unsafePart.endsWith('2')) unsafePart = unsafePart.slice(0, -1);
 	}
 	if (!unsafePart) return safePart;
-	return safePart + '--' + unsafePart;
+	return `${safePart}--${unsafePart}`;
 }
 
 export function decode(codedStr: string) {
@@ -283,7 +283,6 @@ export function vizStream(codeBuf: string, translate = true) {
 
 	function vizBlock(s: DashyStream, bufLen: number) {
 		const buf = streamRead(s, bufLen);
-		// @ts-ignore
 		return buf.toString(2).padStart(bufLen, '0');
 	}
 

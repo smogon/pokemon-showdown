@@ -6,20 +6,20 @@
 
 const assert = require('../assert');
 const common = require('../common');
-const {Utils} = require('../../dist/lib');
-const {testTeam, assertSetValidity, validateLearnset} = require('./tools');
-const {default: Dex} = require('../../dist/sim/dex');
+const { Utils } = require('../../dist/lib');
+const { testTeam, assertSetValidity, validateLearnset } = require('./tools');
+const { default: Dex } = require('../../dist/sim/dex');
 
 describe('value rule support (slow)', () => {
 	it('should generate teams of the proper length for the format (i.e. support Max Team Size)', () => {
-		testTeam({format: 'gen9randombattle', rounds: 100}, team => assert.equal(team.length, 6));
-		testTeam({format: 'gen9challengecup1v1', rounds: 100}, team => assert.equal(team.length, 6));
-		testTeam({format: 'gen9hackmonscup', rounds: 100}, team => assert.equal(team.length, 6));
+		testTeam({ format: 'gen9randombattle', rounds: 100 }, team => assert.equal(team.length, 6));
+		testTeam({ format: 'gen9challengecup1v1', rounds: 100 }, team => assert.equal(team.length, 6));
+		testTeam({ format: 'gen9hackmonscup', rounds: 100 }, team => assert.equal(team.length, 6));
 
-		testTeam({format: 'gen8multirandombattle', rounds: 100}, team => assert.equal(team.length, 3));
-		testTeam({format: 'gen8cap1v1', rounds: 100}, team => assert.equal(team.length, 3));
+		testTeam({ format: 'gen8multirandombattle', rounds: 100 }, team => assert.equal(team.length, 3));
+		testTeam({ format: 'gen8cap1v1', rounds: 100 }, team => assert.equal(team.length, 3));
 
-		testTeam({format: 'gen7randombattle', rounds: 100}, team => assert.equal(team.length, 6));
+		testTeam({ format: 'gen7randombattle', rounds: 100 }, team => assert.equal(team.length, 6));
 	});
 
 	for (let gen = 1; gen <= 9; gen++) {
@@ -38,7 +38,7 @@ describe('value rule support (slow)', () => {
 				const setsJSON = require(`../../dist/data/random-battles/gen${gen}/sets.json`);
 
 				it(`${format.name} should support Max Move Count = ${count}`, () => {
-					testTeam({format, rounds: 50}, team => {
+					testTeam({ format, rounds: 50 }, team => {
 						for (const set of team) {
 							let species = set.species;
 							// Formes make this test code really complicated, so we skip them
@@ -70,7 +70,7 @@ describe('value rule support (slow)', () => {
 				const dataJSON = require(`../../dist/data/random-battles/gen${gen}/data.json`);
 
 				it(`${format.name} should support Max Move Count = ${count}`, () => {
-					testTeam({format, rounds: 50}, team => {
+					testTeam({ format, rounds: 50 }, team => {
 						for (const set of team) {
 							let species = set.species;
 							// Formes make this test code really complicated, so we skip them
@@ -104,7 +104,7 @@ describe('value rule support (slow)', () => {
 
 		for (const level of [1, 99999]) {
 			it(`${format.name} should support Adjust Level = ${level}`, () => {
-				testTeam({format: `${format.id}@@@Adjust Level = ${level}`, rounds: 50}, team => {
+				testTeam({ format: `${format.id}@@@Adjust Level = ${level}`, rounds: 50 }, team => {
 					for (const set of team) {
 						assert.equal(set.level, level);
 					}
@@ -161,7 +161,7 @@ describe("New set format (slow)", () => {
 	for (const format of Object.keys(formatInfo)) {
 		const filename = formatInfo[format].filename;
 		const setsJSON = require(`../../dist/data/random-battles/${filename}.json`);
-		const dex = common.mod(common.getFormat({formatid: format}).mod).dex; // verifies format exists
+		const dex = common.mod(common.getFormat({ formatid: format }).mod).dex; // verifies format exists
 		const genNum = dex.gen;
 		const rounds = 100;
 		it(`${filename}.json should have valid set data`, () => {
@@ -181,7 +181,7 @@ describe("New set format (slow)", () => {
 						} else {
 							assert(move === dexMove.id || move.startsWith('hiddenpower'), `In ${format}, ${species.name} has misformatted move: ${move}`);
 						}
-						assert(validateLearnset(dexMove, {species}, 'ubers', `gen${genNum}`), `In ${format}, ${species.name} can't learn ${move}`);
+						assert(validateLearnset(dexMove, { species }, 'ubers', `gen${genNum}`), `In ${format}, ${species.name} can't learn ${move}`);
 					}
 					for (let i = 0; i < set.movepool.length - 1; i++) {
 						assert(set.movepool[i + 1] > set.movepool[i], `In ${format}, ${species.name} movepool should be sorted alphabetically`);
@@ -224,12 +224,12 @@ describe("New set format (slow)", () => {
 				}
 			}
 		});
-		it('all Pokemon should have 4 moves, except for Ditto and Unown', function () {
-			testTeam({format, rounds}, team => {
+		it('all Pokemon should have 4 moves, except for Ditto and Unown', () => {
+			testTeam({ format, rounds }, team => {
 				for (const pokemon of team) assert(pokemon.name === 'Ditto' || pokemon.name === 'Unown' || pokemon.moves.length === 4, `In ${format}, ${pokemon.name} can generate with ${pokemon.moves.length} moves`);
 			});
 		});
-		it('all moves on all sets should exist and be obtainable', function () {
+		it('all moves on all sets should exist and be obtainable', () => {
 			const generator = Teams.getGenerator(format);
 			for (const pokemon of Object.keys(setsJSON)) {
 				const species = dex.species.get(pokemon);
@@ -253,7 +253,7 @@ describe("New set format (slow)", () => {
 							const stickyWeb = Math.floor(i / 4) % 2;
 							const spikes = Math.floor(i / 8) % 2;
 							const screens = Math.floor(i / 2) % 2;
-							const teamDetails = {rapidSpin, stealthRock, stickyWeb, spikes, screens};
+							const teamDetails = { rapidSpin, stealthRock, stickyWeb, spikes, screens };
 							// randomMoveset() deletes moves from the movepool, so recreate it every time
 							const movePool = set.movepool.map(m => (m.startsWith('hiddenpower') ? m : dex.moves.get(m).id));
 							let moveSet;
@@ -283,7 +283,7 @@ describe('randomly generated teams should be valid (slow)', () => {
 			this.timeout(0);
 
 			const targetTeamSize = Dex.formats.getRuleTable(format).maxTeamSize;
-			testTeam({format: format.id}, team => {
+			testTeam({ format: format.id }, team => {
 				assert.equal(team.length, targetTeamSize, `Team of incorrect size (should have ${targetTeamSize} Pokémon but actually has ${team.length} Pokémon): ${JSON.stringify(team)}`);
 
 				for (const set of team) {
@@ -355,7 +355,6 @@ describe('Battle Factory and BSS Factory data should be valid (slow)', () => {
 								assert(validateLearnset(move, set, vType, mod), `illegal move "${moveName}" of ${species}`);
 							}
 						}
-
 
 						// Check that no moves appear more than once in a set
 						assert.equal(set.moves.flat(1).length, new Set(set.moves.flat(1)).size, `${species} has repeat moves`);

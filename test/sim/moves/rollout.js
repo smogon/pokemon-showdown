@@ -8,22 +8,22 @@ let battle;
 const moves = ['Ice Ball', 'Rollout'];
 
 for (const move of moves) {
-	describe(move, function () {
+	describe(move, () => {
 		const id = move.toLowerCase().replace(/\W+/g, '');
 
-		afterEach(function () {
+		afterEach(() => {
 			battle.destroy();
 		});
 
-		it('should double its Base Power every turn for five turns, then resets to 30 BP', function () {
+		it('should double its Base Power every turn for five turns, then resets to 30 BP', () => {
 			battle = common.createBattle([
-				[{species: 'Shuckle', ability: 'gluttony', moves: [id]}],
-				[{species: 'Steelix', ability: 'noguard', moves: ['recover']}],
+				[{ species: 'Shuckle', ability: 'gluttony', moves: [id] }],
+				[{ species: 'Steelix', ability: 'noguard', moves: ['recover'] }],
 			]);
 
 			let ebp = 30;
 			let count = 0;
-			battle.onEvent('BasePower', battle.format, function (basePower) {
+			battle.onEvent('BasePower', battle.format, basePower => {
 				count++;
 				assert.equal(basePower, ebp);
 				if (count % 5 === 0) {
@@ -39,15 +39,15 @@ for (const move of moves) {
 			assert.equal(count, 8);
 		});
 
-		it('should reset its Base Power if the move misses', function () {
+		it('should reset its Base Power if the move misses', () => {
 			battle = common.createBattle([
-				[{species: 'Shuckle', ability: 'gluttony', moves: [id]}],
-				[{species: 'Steelix', ability: 'furcoat', moves: ['recover']}],
+				[{ species: 'Shuckle', ability: 'gluttony', moves: [id] }],
+				[{ species: 'Steelix', ability: 'furcoat', moves: ['recover'] }],
 			]);
 
 			let ebp = 30;
 			let count = 0;
-			battle.onEvent('Accuracy', battle.format, function (accuracy, target, pokemon, move) {
+			battle.onEvent('Accuracy', battle.format, (accuracy, target, pokemon, move) => {
 				if (move.id === 'recover') return;
 
 				count++;
@@ -58,7 +58,7 @@ for (const move of moves) {
 					return true;
 				}
 			});
-			battle.onEvent('BasePower', battle.format, function (basePower) {
+			battle.onEvent('BasePower', battle.format, basePower => {
 				assert.equal(basePower, ebp);
 				ebp *= 2;
 			});
@@ -69,15 +69,15 @@ for (const move of moves) {
 			assert.equal(count, 5);
 		});
 
-		it('should reset its Base Power if the Pokemon is immobilized', function () {
+		it('should reset its Base Power if the Pokemon is immobilized', () => {
 			battle = common.createBattle([
-				[{species: 'Shuckle', ability: 'gluttony', moves: [id]}],
-				[{species: 'Steelix', ability: 'noguard', moves: ['recover']}],
+				[{ species: 'Shuckle', ability: 'gluttony', moves: [id] }],
+				[{ species: 'Steelix', ability: 'noguard', moves: ['recover'] }],
 			]);
 
 			let ebp = 30;
 			let count = 0;
-			battle.onEvent('BeforeMove', battle.format, function (attacker, defender, move) {
+			battle.onEvent('BeforeMove', battle.format, (attacker, defender, move) => {
 				if (move.id === 'recover') return;
 
 				count++;
@@ -86,7 +86,7 @@ for (const move of moves) {
 					return false; // Imitate immobilization from Paralysis, etc.
 				}
 			});
-			battle.onEvent('BasePower', battle.format, function (basePower) {
+			battle.onEvent('BasePower', battle.format, basePower => {
 				assert.equal(basePower, ebp);
 				ebp *= 2;
 			});
@@ -97,14 +97,14 @@ for (const move of moves) {
 			assert.equal(count, 5);
 		});
 
-		it('should have double Base Power if the Pokemon used Defense Curl earlier', function () {
+		it('should have double Base Power if the Pokemon used Defense Curl earlier', () => {
 			battle = common.createBattle([
-				[{species: 'Shuckle', ability: 'gluttony', moves: [id, 'defensecurl']}],
-				[{species: 'Steelix', ability: 'noguard', moves: ['recover']}],
+				[{ species: 'Shuckle', ability: 'gluttony', moves: [id, 'defensecurl'] }],
+				[{ species: 'Steelix', ability: 'noguard', moves: ['recover'] }],
 			]);
 
 			let runCount = 0;
-			battle.onEvent('BasePower', battle.format, function (basePower) {
+			battle.onEvent('BasePower', battle.format, basePower => {
 				assert.equal(basePower, 60);
 				runCount++;
 			});
@@ -114,14 +114,14 @@ for (const move of moves) {
 			assert.equal(runCount, 1);
 		});
 
-		it('should not be affected by Parental Bond', function () {
+		it('should not be affected by Parental Bond', () => {
 			battle = common.createBattle([
-				[{species: 'Shuckle', ability: 'parentalbond', moves: [id]}],
-				[{species: 'Steelix', ability: 'noguard', moves: ['recover']}],
+				[{ species: 'Shuckle', ability: 'parentalbond', moves: [id] }],
+				[{ species: 'Steelix', ability: 'noguard', moves: ['recover'] }],
 			]);
 
 			let hitCount = 0;
-			battle.onEvent('BasePower', battle.format, function (basePower) {
+			battle.onEvent('BasePower', battle.format, basePower => {
 				assert.equal(basePower, 30);
 				hitCount++;
 			});
@@ -130,14 +130,14 @@ for (const move of moves) {
 			assert.equal(hitCount, 1);
 		});
 
-		describe(`Rollout Storage glitch (Gen 7 / Gen 8DLC1)`, function () {
-			it(`should delay the Rollout multiplier when hitting Disguise or Ice Face`, function () {
+		describe(`Rollout Storage glitch (Gen 7 / Gen 8DLC1)`, () => {
+			it(`should delay the Rollout multiplier when hitting Disguise or Ice Face`, () => {
 				battle = common.gen(7).createBattle([[
-					{species: 'wynaut', ability: 'compoundeyes', ivs: {atk: '0'}, nature: 'bold', moves: [id, 'watergun']},
+					{ species: 'wynaut', ability: 'compoundeyes', ivs: { atk: '0' }, nature: 'bold', moves: [id, 'watergun'] },
 				], [
-					{species: 'mimikyu', ability: 'disguise', evs: {hp: '252', def: '252'}, nature: 'bold', moves: ['gravity']},
-					{species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk']},
-					{species: 'wigglytuff', ability: 'battlearmor', moves: ['rest']},
+					{ species: 'mimikyu', ability: 'disguise', evs: { hp: '252', def: '252' }, nature: 'bold', moves: ['gravity'] },
+					{ species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk'] },
+					{ species: 'wigglytuff', ability: 'battlearmor', moves: ['rest'] },
 				]]);
 
 				for (let i = 0; i < 5; i++) { battle.makeChoices(); }
@@ -151,13 +151,13 @@ for (const move of moves) {
 				assert.bounded(damage, [18, 22]);
 			});
 
-			it(`should delay the Rollout multiplier when hitting multiple Disguise or Ice Face`, function () {
+			it(`should delay the Rollout multiplier when hitting multiple Disguise or Ice Face`, () => {
 				battle = common.gen(7).createBattle([[
-					{species: 'wynaut', ability: 'compoundeyes', ivs: {atk: '0'}, nature: 'bold', moves: [id, 'watergun']},
+					{ species: 'wynaut', ability: 'compoundeyes', ivs: { atk: '0' }, nature: 'bold', moves: [id, 'watergun'] },
 				], [
-					{species: 'mimikyu', ability: 'disguise', evs: {hp: '252', def: '252'}, nature: 'bold', moves: ['gravity']},
-					{species: 'mimikyu', ability: 'disguise', evs: {hp: '252', def: '252'}, nature: 'bold', moves: ['gravity']},
-					{species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk']},
+					{ species: 'mimikyu', ability: 'disguise', evs: { hp: '252', def: '252' }, nature: 'bold', moves: ['gravity'] },
+					{ species: 'mimikyu', ability: 'disguise', evs: { hp: '252', def: '252' }, nature: 'bold', moves: ['gravity'] },
+					{ species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk'] },
 				]]);
 
 				battle.makeChoices();
@@ -169,12 +169,12 @@ for (const move of moves) {
 				assert.bounded(damage, [74, 88]); // 40 * 2^3 BP; would be 40 BP otherwise, range 10-12
 			});
 
-			it(`should use the move's default BP when applying the modifier`, function () {
+			it(`should use the move's default BP when applying the modifier`, () => {
 				battle = common.gen(7).createBattle([[
-					{species: 'wynaut', ability: 'compoundeyes', ivs: {atk: '0'}, nature: 'bold', moves: [id, 'grassknot']},
+					{ species: 'wynaut', ability: 'compoundeyes', ivs: { atk: '0' }, nature: 'bold', moves: [id, 'grassknot'] },
 				], [
-					{species: 'mimikyu', ability: 'disguise', evs: {hp: '252', def: '252'}, nature: 'bold', moves: ['gravity']},
-					{species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk']},
+					{ species: 'mimikyu', ability: 'disguise', evs: { hp: '252', def: '252' }, nature: 'bold', moves: ['gravity'] },
+					{ species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk'] },
 				]]);
 
 				for (let i = 0; i < 5; i++) { battle.makeChoices(); }
@@ -184,13 +184,13 @@ for (const move of moves) {
 				assert.bounded(damage, [5, 6]); // 1 * 2^4 BP; would be 120 BP otherwise, range 28-34
 			});
 
-			it(`should only apply the Rollout Storage boost to the first target of a spread move`, function () {
-				battle = common.gen(7).createBattle({gameType: 'doubles'}, [[
-					{species: 'mimikyu', ability: 'disguise', evs: {hp: '252', def: '252'}, nature: 'bold', moves: ['gravity']},
-					{species: 'wynaut', ability: 'compoundeyes', ivs: {atk: '0'}, nature: 'bold', moves: [id, 'snarl']},
+			it(`should only apply the Rollout Storage boost to the first target of a spread move`, () => {
+				battle = common.gen(7).createBattle({ gameType: 'doubles' }, [[
+					{ species: 'mimikyu', ability: 'disguise', evs: { hp: '252', def: '252' }, nature: 'bold', moves: ['gravity'] },
+					{ species: 'wynaut', ability: 'compoundeyes', ivs: { atk: '0' }, nature: 'bold', moves: [id, 'snarl'] },
 				], [
-					{species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk']},
-					{species: 'hydreigon', ability: 'battlearmor', moves: ['sleeptalk']},
+					{ species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk'] },
+					{ species: 'hydreigon', ability: 'battlearmor', moves: ['sleeptalk'] },
 				]]);
 
 				battle.makeChoices('move gravity, move ' + id + ' -1', 'auto');
