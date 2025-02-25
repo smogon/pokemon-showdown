@@ -589,9 +589,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			let success = false;
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
-				if (ally !== source && ((ally.hasAbility('sapsipper')) ||
-						(ally.volatiles['substitute'] && !move.infiltrates))) {
-					continue;
+				if (ally !== source) {
+					if (ally.hasAbility('sapsipper')) {
+						this.add('-immune', ally, '[from] ability: Sap Sipper');
+						continue;
+					}
+					if (ally.hasAbility('goodasgold')) {
+						this.add('-immune', ally, '[from] ability: Good as Gold');
+						continue;
+					}
+					if (ally.volatiles['substitute'] && !move.infiltrates) continue;
 				}
 				if (ally.cureStatus()) success = true;
 			}
@@ -859,7 +866,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {snatch: 1, metronome: 1},
 		sideCondition: 'auroraveil',
 		onTry() {
-			return this.field.isWeather(['hail', 'snow']);
+			return this.field.isWeather(['hail', 'snowscape']);
 		},
 		condition: {
 			duration: 5,
@@ -1541,7 +1548,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1},
 		onModifyMove(move) {
-			if (this.field.isWeather(['hail', 'snow'])) move.accuracy = true;
+			if (this.field.isWeather(['hail', 'snowscape'])) move.accuracy = true;
 		},
 		secondary: {
 			chance: 10,
@@ -2479,7 +2486,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {},
 		// TODO show prepare message before the "POKEMON used MOVE!" message
 		// This happens even before sleep shows its "POKEMON is fast asleep." message
-		weather: 'snow',
+		weather: 'snowscape',
 		selfSwitch: true,
 		secondary: null,
 		target: "all",
@@ -3768,7 +3775,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.queue.willMove(pokemon) ||
 					(pokemon === this.activePokemon && this.activeMove && !this.activeMove.isExternal)
 				) {
-					this.effectState.duration--;
+					this.effectState.duration!--;
 				}
 				if (!pokemon.lastMove) {
 					this.debug(`Pokemon hasn't moved yet`);
@@ -4909,7 +4916,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.effectState.move = move.id;
 				this.add('-start', target, 'Encore');
 				if (!this.queue.willMove(target)) {
-					this.effectState.duration++;
+					this.effectState.duration!++;
 				}
 			},
 			onOverrideAction(pokemon, target, move) {
@@ -7483,7 +7490,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: G-Max Steelsurge');
 			},
-			onEntryHazard(pokemon) {
+			onSwitchIn(pokemon) {
 				if (pokemon.hasItem('heavydutyboots')) return;
 				// Ice Face and Disguise correctly get typed damage from Stealth Rock
 				// because Stealth Rock bypasses Substitute.
@@ -8538,7 +8545,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			let success = false;
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
-				if (ally !== source && ally.hasAbility('soundproof')) continue;
+				if (ally !== source) {
+					if (ally.hasAbility('soundproof')) {
+						this.add('-immune', ally, '[from] ability: Soundproof');
+						continue;
+					}
+					if (ally.hasAbility('goodasgold')) {
+						this.add('-immune', ally, '[from] ability: Good as Gold');
+						continue;
+					}
+				}
 				if (ally.cureStatus()) success = true;
 			}
 			return success;
@@ -8637,6 +8653,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		selfdestruct: "ifHit",
 		slotCondition: 'healingwish',
 		condition: {
+			onSwitchIn(target) {
+				this.singleEvent('Swap', this.effect, this.effectState, target);
+			},
 			onSwap(target) {
 				if (!target.fainted && (target.hp < target.maxhp || target.status)) {
 					target.heal(target.maxhp);
@@ -10945,6 +10964,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		selfdestruct: "ifHit",
 		slotCondition: 'lunardance',
 		condition: {
+			onSwitchIn(target) {
+				this.singleEvent('Swap', this.effect, this.effectState, target);
+			},
 			onSwap(target) {
 				if (
 					!target.fainted && (
@@ -11075,7 +11097,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onTryHitPriority: 2,
 			onTryHit(target, source, move) {
-				if (target === source || move.hasBounced || !move.flags['reflectable']) {
+				if (target === source || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) {
 					return;
 				}
 				const newMove = this.dex.getActiveMove(move.id);
@@ -11085,7 +11107,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return null;
 			},
 			onAllyTryHitSide(target, source, move) {
-				if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
+				if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) {
 					return;
 				}
 				const newMove = this.dex.getActiveMove(move.id);
@@ -12677,7 +12699,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			case 'primordialsea':
 			case 'sandstorm':
 			case 'hail':
-			case 'snow':
+			case 'snowscape':
 				factor = 0.25;
 				break;
 			}
@@ -12714,7 +12736,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			case 'primordialsea':
 			case 'sandstorm':
 			case 'hail':
-			case 'snow':
+			case 'snowscape':
 				factor = 0.25;
 				break;
 			}
@@ -17215,8 +17237,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			this.singleEvent('End', targetAbility, target.abilityState, target);
 			source.ability = targetAbility.id;
 			target.ability = sourceAbility.id;
-			source.abilityState = {id: this.toID(source.ability), target: source};
-			target.abilityState = {id: this.toID(target.ability), target: target};
+			source.abilityState = this.initEffectState({id: this.toID(source.ability), target: source});
+			target.abilityState = this.initEffectState({id: this.toID(target.ability), target: target});
 			source.volatileStaleness = undefined;
 			if (!target.isAlly(source)) target.volatileStaleness = 'external';
 			this.singleEvent('Start', targetAbility, source.abilityState, source);
@@ -17817,7 +17839,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		weather: 'snow',
+		weather: 'snowscape',
 		secondary: null,
 		target: "all",
 		type: "Ice",
@@ -17888,7 +17910,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onBasePower(basePower, pokemon, target) {
-			const weakWeathers = ['raindance', 'primordialsea', 'sandstorm', 'hail', 'snow'];
+			const weakWeathers = ['raindance', 'primordialsea', 'sandstorm', 'hail', 'snowscape'];
 			if (weakWeathers.includes(pokemon.effectiveWeather())) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
@@ -17925,7 +17947,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		onBasePower(basePower, pokemon, target) {
-			const weakWeathers = ['raindance', 'primordialsea', 'sandstorm', 'hail', 'snow'];
+			const weakWeathers = ['raindance', 'primordialsea', 'sandstorm', 'hail', 'snowscape'];
 			if (weakWeathers.includes(pokemon.effectiveWeather())) {
 				this.debug('weakened by weather');
 				return this.chainModify(0.5);
@@ -18163,7 +18185,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-sidestart', side, 'Spikes');
 				this.effectState.layers++;
 			},
-			onEntryHazard(pokemon) {
+			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
 				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(damageAmounts[this.effectState.layers] * pokemon.maxhp / 24);
@@ -18484,7 +18506,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
-			onEntryHazard(pokemon) {
+			onSwitchIn(pokemon) {
 				if (pokemon.hasItem('heavydutyboots')) return;
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
@@ -18612,7 +18634,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onSideStart(side) {
 				this.add('-sidestart', side, 'move: Sticky Web');
 			},
-			onEntryHazard(pokemon) {
+			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				this.boost({spe: -1}, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('stickyweb'));
@@ -19445,7 +19467,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			case 'primordialsea':
 			case 'sandstorm':
 			case 'hail':
-			case 'snow':
+			case 'snowscape':
 				factor = 0.25;
 				break;
 			}
@@ -19698,7 +19720,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			duration: 3,
 			onStart(target) {
 				if (target.activeTurns && !this.queue.willMove(target)) {
-					this.effectState.duration++;
+					this.effectState.duration!++;
 				}
 				this.add('-start', target, 'move: Taunt');
 			},
@@ -20509,7 +20531,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-sidestart', side, 'move: Toxic Spikes');
 				this.effectState.layers++;
 			},
-			onEntryHazard(pokemon) {
+			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasType('Poison')) {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
@@ -21494,7 +21516,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.type = 'Rock';
 				break;
 			case 'hail':
-			case 'snow':
+			case 'snowscape':
 				move.type = 'Ice';
 				break;
 			}
@@ -21513,7 +21535,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				move.basePower *= 2;
 				break;
 			case 'hail':
-			case 'snow':
+			case 'snowscape':
 				move.basePower *= 2;
 				break;
 			}
@@ -21725,9 +21747,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onResidualOrder: 4,
-			onResidual(side: any) {
+			onResidual(target: Pokemon) {
 				if (this.getOverflowedTurnCount() <= this.effectState.startingTurn) return;
-				side.removeSlotCondition(this.getAtSlot(this.effectState.sourceSlot), 'wish');
+				target.side.removeSlotCondition(this.getAtSlot(this.effectState.sourceSlot), 'wish');
 			},
 			onEnd(target) {
 				if (target && !target.fainted) {

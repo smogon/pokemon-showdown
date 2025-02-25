@@ -1022,7 +1022,7 @@ export class CommandContext extends MessageContext {
 	canUseConsole() {
 		if (!this.user.hasConsoleAccess(this.connection)) {
 			throw new Chat.ErrorMessage(
-				this.cmdToken + this.fullCmd + " - Requires console access, please set up `Config.consoleips`."
+				(this.cmdToken + this.fullCmd).trim() + " - Requires console access, please set up `Config.consoleips`."
 			);
 		}
 		return true;
@@ -1506,7 +1506,7 @@ export class CommandContext extends MessageContext {
 			throw new Chat.ErrorMessage(`The command "${this.cmdToken}${this.fullCmd}" does not exist.`);
 		}
 		throw new Chat.ErrorMessage(
-			`The command "${this.cmdToken}${this.fullCmd}" does not exist. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`
+			`The command "${(this.cmdToken + this.fullCmd).trim()}" does not exist. To send a message starting with "${this.cmdToken}${this.fullCmd}", type "${this.cmdToken}${this.cmdToken}${this.fullCmd}".`
 		);
 	}
 	refreshPage(pageid: string) {

@@ -57,5 +57,18 @@ describe('Costar', function () {
 		assert.statStage(flamigo, 'def', -1, "A pokemon should copy the target's negative stat changes (def) when switching in with Costar.");
 		assert.statStage(flamigo, 'spd', -1, "A pokemon should copy the target's negative stat changes (spd) when switching in with Costar.");
 	});
+
+	it('should always activate later than Intimidate during simultaneous switch-ins', function () {
+		battle = common.createBattle({gameType: 'doubles'}, [[
+			{species: 'flamigo', ability: 'costar', moves: ['sleeptalk']},
+			{species: 'registeel', ability: 'clearbody', moves: ['sleeptalk']},
+		], [
+			{species: 'litten', ability: 'intimidate', moves: ['sleeptalk']},
+			{species: 'dipplin', ability: 'supersweetsyrup', moves: ['sleeptalk']},
+		]]);
+		const flamigo = battle.p1.active[0];
+		assert.statStage(flamigo, 'atk', 0);
+		assert.statStage(flamigo, 'evasion', 0);
+	});
 });
 

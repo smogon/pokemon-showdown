@@ -31,8 +31,9 @@ interface Attacker {
 }
 
 export interface EffectState {
-	// TODO: set this to be an actual number after converting data/ to .ts
-	duration?: number | any;
+	id: string;
+	effectOrder: number;
+	duration?: number;
 	[k: string]: any;
 }
 
@@ -253,7 +254,6 @@ export class Pokemon {
 
 	weighthg: number;
 	speed: number;
-	abilityOrder: number;
 
 	canMegaEvo: string | null | undefined;
 	canMegaEvoX: string | null | undefined;
@@ -312,7 +312,7 @@ export class Pokemon {
 		if (set.name === set.species || !set.name) {
 			set.name = this.baseSpecies.baseSpecies;
 		}
-		this.speciesState = {id: this.species.id};
+		this.speciesState = this.battle.initEffectState({id: this.species.id});
 
 		this.name = set.name.substr(0, 20);
 		this.fullname = this.side.id + ': ' + this.name;
@@ -357,7 +357,7 @@ export class Pokemon {
 		this.details = this.getUpdatedDetails();
 
 		this.status = '';
-		this.statusState = {};
+		this.statusState = this.battle.initEffectState({});
 		this.volatiles = {};
 		this.showCure = undefined;
 
@@ -400,10 +400,10 @@ export class Pokemon {
 
 		this.baseAbility = toID(set.ability);
 		this.ability = this.baseAbility;
-		this.abilityState = {id: this.ability};
+		this.abilityState = this.battle.initEffectState({id: this.ability, target: this});
 
 		this.item = toID(set.item);
-		this.itemState = {id: this.item};
+		this.itemState = this.battle.initEffectState({id: this.item, target: this});
 		this.lastItem = '';
 		this.usedItemThisTurn = false;
 		this.ateBerry = false;
@@ -463,12 +463,6 @@ export class Pokemon {
 
 		this.weighthg = 1;
 		this.speed = 0;
-		/**
-		 * Determines the order in which redirect abilities like Lightning Rod
-		 * activate if speed tied. Surprisingly not random like every other speed
-		 * tie, but based on who first switched in or acquired the ability!
-		 */
-		this.abilityOrder = 0;
 
 		this.canMegaEvo = this.battle.actions.canMegaEvo(this);
 		this.canMegaEvoX = this.battle.actions.canMegaEvoX?.(this);
@@ -511,10 +505,10 @@ export class Pokemon {
 		return this.isActive ? this.getSlot() + fullname.slice(2) : fullname;
 	}
 
-	getUpdatedDetails(illusionLevel?: number) {
+	getUpdatedDetails(level?: number) {
 		let name = this.species.name;
-		if (name === 'Greninja-Bond') name = 'Greninja';
-		const level = illusionLevel || this.level;
+		if (['Greninja-Bond', 'Rockruff-Dusk'].includes(name)) name = this.species.baseSpecies;
+		if (!level) level = this.level;
 		return name + (level === 100 ? '' : ', L' + level) +
 			(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
 	}
@@ -523,7 +517,9 @@ export class Pokemon {
 		const health = this.getHealth();
 		let details = this.details;
 		if (this.illusion) {
-			details = this.illusion.getUpdatedDetails(this.battle.ruleTable.has('illusionlevelmod') ? this.level : undefined);
+			details = this.illusion.getUpdatedDetails(
+				this.battle.ruleTable.has('illusionlevelmod') ? this.illusion.level : this.level
+			);
 		}
 		if (this.terastallized) details += `, tera:${this.terastallized}`;
 		return {side: health.side, secret: `${details}|${health.secret}`, shared: `${details}|${health.shared}`};
@@ -850,7 +846,7 @@ export class Pokemon {
 	}
 
 	ignoringItem() {
-		return !!(
+		return !this.getItem().isPrimalOrb && !!(
 			this.itemState.knockedOff || // Gen 3-4
 			(this.battle.gen >= 5 && !this.isActive) ||
 			(!this.getItem().ignoreKlutz && this.hasAbility('klutz')) ||
@@ -1206,7 +1202,7 @@ export class Pokemon {
 			if (switchCause === 'shedtail' && i !== 'substitute') continue;
 			if (this.battle.dex.conditions.getByID(i as ID).noCopy) continue;
 			// shallow clones
-			this.volatiles[i] = {...pokemon.volatiles[i]};
+			this.volatiles[i] = this.battle.initEffectState({...pokemon.volatiles[i]});
 			if (this.volatiles[i].linkedPokemon) {
 				delete pokemon.volatiles[i].linkedPokemon;
 				delete pokemon.volatiles[i].linkedStatus;
@@ -1404,7 +1400,7 @@ export class Pokemon {
 				if (source.zMove) {
 					this.battle.add('-burst', this, apparentSpecies, species.requiredItem);
 					this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
-				} else if (source.onPrimal) {
+				} else if (source.isPrimalOrb) {
 					if (this.illusion) {
 						this.ability = '';
 						this.battle.add('-primal', this.illusion, species.requiredItem);
@@ -1497,6 +1493,9 @@ export class Pokemon {
 		this.beingCalledBack = false;
 
 		this.volatileStaleness = undefined;
+
+		delete this.abilityState.started;
+		delete this.itemState.started;
 
 		this.setSpecies(this.baseSpecies);
 	}
@@ -1669,7 +1668,7 @@ export class Pokemon {
 		}
 
 		this.status = status.id;
-		this.statusState = {id: status.id, target: this};
+		this.statusState = this.battle.initEffectState({id: status.id, target: this});
 		if (source) this.statusState.source = source;
 		if (status.duration) this.statusState.duration = status.duration;
 		if (status.durationCallback) {
@@ -1712,6 +1711,10 @@ export class Pokemon {
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		const item = this.getItem();
+		if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
+			// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
+			return false;
+		}
 		if (
 			this.battle.runEvent('UseItem', this, null, null, item) &&
 			(force || this.battle.runEvent('TryEatItem', this, null, null, item))
@@ -1735,7 +1738,7 @@ export class Pokemon {
 
 			this.lastItem = this.item;
 			this.item = '';
-			this.itemState = {id: '', target: this};
+			this.battle.clearEffectState(this.itemState);
 			this.usedItemThisTurn = true;
 			this.ateBerry = true;
 			this.battle.runEvent('AfterUseItem', this, null, null, item);
@@ -1751,6 +1754,10 @@ export class Pokemon {
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
 		const item = this.getItem();
+		if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
+			// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
+			return false;
+		}
 		if (this.battle.runEvent('UseItem', this, null, null, item)) {
 			switch (item.id) {
 			case 'redcard':
@@ -1772,7 +1779,7 @@ export class Pokemon {
 
 			this.lastItem = this.item;
 			this.item = '';
-			this.itemState = {id: '', target: this};
+			this.battle.clearEffectState(this.itemState);
 			this.usedItemThisTurn = true;
 			this.battle.runEvent('AfterUseItem', this, null, null, item);
 			return true;
@@ -1792,7 +1799,7 @@ export class Pokemon {
 		if (this.battle.runEvent('TakeItem', this, source, null, item)) {
 			this.item = '';
 			const oldItemState = this.itemState;
-			this.itemState = {id: '', target: this};
+			this.battle.clearEffectState(this.itemState);
 			this.pendingStaleness = undefined;
 			this.battle.singleEvent('End', item, oldItemState, this);
 			this.battle.runEvent('AfterTakeItem', this, null, null, item);
@@ -1817,7 +1824,7 @@ export class Pokemon {
 		const oldItem = this.getItem();
 		const oldItemState = this.itemState;
 		this.item = item.id;
-		this.itemState = {id: item.id, target: this};
+		this.itemState = this.battle.initEffectState({id: item.id, target: this});
 		if (oldItem.exists) this.battle.singleEvent('End', oldItem, oldItemState, this);
 		if (item.id) {
 			this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
@@ -1859,12 +1866,11 @@ export class Pokemon {
 				this.battle.dex.moves.get(this.battle.effect.id));
 		}
 		this.ability = ability.id;
-		this.abilityState = {id: ability.id, target: this};
+		this.abilityState = this.battle.initEffectState({id: ability.id, target: this});
 		if (ability.id && this.battle.gen > 3 &&
 			(!isTransform || oldAbility !== ability.id || this.battle.gen <= 4)) {
 			this.battle.singleEvent('Start', ability, this.abilityState, this, source);
 		}
-		this.abilityOrder = this.battle.abilityOrder++;
 		return oldAbility;
 	}
 
@@ -1919,7 +1925,7 @@ export class Pokemon {
 			this.battle.debug('add volatile [' + status.id + '] interrupted');
 			return result;
 		}
-		this.volatiles[status.id] = {id: status.id, name: status.name, target: this};
+		this.volatiles[status.id] = this.battle.initEffectState({id: status.id, name: status.name, target: this});
 		if (source) {
 			this.volatiles[status.id].source = source;
 			this.volatiles[status.id].sourceSlot = source.getSlot();

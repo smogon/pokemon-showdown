@@ -1733,6 +1733,9 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 
+			const curHandler = namespace[cmd] as Chat.AnnotatedChatHandler;
+			let isPrivate = curHandler?.isPrivate;
+			let requiredPerm = curHandler?.requiredPermission || 'lock';
 			let help = namespace[`${cmd}help`];
 			if (typeof help === 'string') {
 				help = namespace[help];
@@ -1744,9 +1747,19 @@ export const commands: Chat.ChatCommands = {
 				help = namespace['help'];
 			}
 
-			const curHandler = namespace[cmd] as Chat.AnnotatedChatHandler;
-			const requiredPerm = curHandler?.requiredPermission || 'lock';
-			if (curHandler?.isPrivate && !user.can(requiredPerm as GlobalPermission)) {
+			const isNamespace = typeof Chat.commands[cmd] === 'object';
+			if ((namespace !== Chat.commands || isNamespace) && !isPrivate) {
+				if (isNamespace) namespace = Chat.commands[cmd] as Chat.AnnotatedChatCommands;
+				for (const k in namespace) {
+					const cur = namespace[k];
+					if (typeof cur === 'function' && cur.isPrivate) {
+						isPrivate = true;
+						requiredPerm = (cur.requiredPermission || "lock");
+					}
+				}
+			}
+
+			if (isPrivate && !user.can(requiredPerm as GlobalPermission)) {
 				throw new Chat.ErrorMessage(this.tr`The command '/${target}' does not exist.`);
 			}
 

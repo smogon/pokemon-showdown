@@ -2,10 +2,13 @@ export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	init() {
 		for (const i in this.data.Items) {
-			if (!this.data.Items[i].megaStone) continue;
+			const item = this.data.Items[i];
+			if (!item.megaStone && !item.onDrive && !(item.onPlate && !item.zMove) && !item.onMemory) continue;
 			this.modData('Items', i).onTakeItem = false;
-			const id = this.toID(this.data.Items[i].megaStone);
-			this.modData('FormatsData', id).isNonstandard = null;
+			if (item.isNonstandard) this.modData('Items', i).isNonstandard = null;
+			if (item.megaStone) {
+				this.modData('FormatsData', this.toID(item.megaStone)).isNonstandard = null;
+			}
 		}
 	},
 	start() {
@@ -59,11 +62,8 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 		for (const pokemon of this.getAllPokemon()) {
 			const item = pokemon.getItem();
-			if ([
-				'adamantcrystal', 'griseouscore', 'lustrousglobe', 'wellspringmask',
-				'cornerstonemask', 'hearthflamemask', 'vilevial',
-			].includes(item.id) && item.forcedForme !== pokemon.species.name) {
-				const rawSpecies = (this.actions as any).getMixedSpecies(pokemon.m.originalSpecies, item.forcedForme!, pokemon);
+			if (item.forcedForme && !item.zMove && item.forcedForme !== pokemon.species.name) {
+				const rawSpecies = (this.actions as any).getMixedSpecies(pokemon.m.originalSpecies, item.forcedForme, pokemon);
 				const species = pokemon.setSpecies(rawSpecies);
 				if (!species) continue;
 				pokemon.baseSpecies = rawSpecies;
@@ -255,16 +255,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
 			break;
-		case 'runUnnerve':
-			this.singleEvent('PreStart', action.pokemon.getAbility(), action.pokemon.abilityState, action.pokemon);
-			break;
 		case 'runSwitch':
 			this.actions.runSwitch(action.pokemon);
-			break;
-		case 'runPrimal':
-			if (!action.pokemon.transformed) {
-				this.singleEvent('Primal', action.pokemon.getItem(), action.pokemon.itemState, action.pokemon);
-			}
 			break;
 		case 'shift':
 			if (!action.pokemon.isActive) return false;
@@ -280,7 +272,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.clearActiveMove(true);
 			this.updateSpeed();
 			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
-			this.residualEvent('Residual');
+			this.fieldEvent('Residual');
 			this.add('upkeep');
 			break;
 		}
@@ -324,7 +316,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return false;
 		}
 
-		if (this.gen >= 5) {
+		if (this.gen >= 5 && action.choice !== 'start') {
 			this.eachEvent('Update');
 			for (const [pokemon, originalHP] of residualPokemon) {
 				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
@@ -499,14 +491,17 @@ export const Scripts: ModdedBattleScriptsData = {
 			for (statId in formeChangeSpecies.baseStats) {
 				deltas.baseStats[statId] = formeChangeSpecies.baseStats[statId] - baseSpecies.baseStats[statId];
 			}
-			if (formeChangeSpecies.types.length > baseSpecies.types.length) {
+			let formeType: string | null = null;
+			if (['Arceus', 'Silvally'].includes(baseSpecies.name)) {
+				deltas.type = formeChangeSpecies.types[0];
+				formeType = 'Arceus';
+			} else if (formeChangeSpecies.types.length > baseSpecies.types.length) {
 				deltas.type = formeChangeSpecies.types[1];
 			} else if (formeChangeSpecies.types.length < baseSpecies.types.length) {
 				deltas.type = this.battle.ruleTable.has('mixandmegaoldaggronite') ? 'mono' : baseSpecies.types[0];
 			} else if (formeChangeSpecies.types[1] !== baseSpecies.types[1]) {
 				deltas.type = formeChangeSpecies.types[1];
 			}
-			let formeType: string | null = null;
 			if (formeChangeSpecies.isMega) formeType = 'Mega';
 			if (formeChangeSpecies.isPrimal) formeType = 'Primal';
 			if (formeChangeSpecies.name.endsWith('Crowned')) formeType = 'Crowned';
@@ -521,7 +516,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!deltas) throw new TypeError("Must specify deltas!");
 			const species = this.dex.deepClone(this.dex.species.get(speciesOrForme));
 			species.abilities = {'0': deltas.ability};
-			if (species.types[0] === deltas.type) {
+			if (deltas.formeType === 'Arceus') {
+				const secondType = species.types[1];
+				species.types = [deltas.type];
+				if (secondType && secondType !== deltas.type) species.types.push(secondType);
+			} else if (species.types[0] === deltas.type) {
 				species.types = [deltas.type];
 			} else if (deltas.type === 'mono') {
 				species.types = [species.types[0]];

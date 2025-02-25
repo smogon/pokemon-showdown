@@ -383,9 +383,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onResidualOrder: 3,
-		onResidual(side: any) {
+		onResidual(target: Pokemon) {
 			if (this.getOverflowedTurnCount() < this.effectState.endingTurn) return;
-			side.removeSlotCondition(this.getAtSlot(this.effectState.targetSlot), 'futuremove');
+			target.side.removeSlotCondition(this.getAtSlot(this.effectState.targetSlot), 'futuremove');
 		},
 		onEnd(target) {
 			const data = this.effectState;
@@ -424,7 +424,6 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.effectState.sourceEffect = sourceEffect;
 			this.add('-activate', source, 'healreplacement');
 		},
-		onSwitchInPriority: 1,
 		onSwitchIn(target) {
 			if (!target.fainted) {
 				target.heal(target.maxhp);
@@ -690,8 +689,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.add('-weather', 'none');
 		},
 	},
-	snow: {
-		name: 'Snow',
+	snowscape: {
+		name: 'Snowscape',
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
@@ -702,22 +701,22 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onModifyDefPriority: 10,
 		onModifyDef(def, pokemon) {
-			if (pokemon.hasType('Ice') && this.field.isWeather('snow')) {
+			if (pokemon.hasType('Ice') && this.field.isWeather('snowscape')) {
 				return this.modify(def, 1.5);
 			}
 		},
 		onFieldStart(field, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'Snow', '[from] ability: ' + effect.name, '[of] ' + source);
+				this.add('-weather', 'Snowscape', '[from] ability: ' + effect.name, '[of] ' + source);
 			} else {
-				this.add('-weather', 'Snow');
+				this.add('-weather', 'Snowscape');
 			}
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
-			this.add('-weather', 'Snow', '[upkeep]');
-			if (this.field.isWeather('snow')) this.eachEvent('Weather');
+			this.add('-weather', 'Snowscape', '[upkeep]');
+			if (this.field.isWeather('snowscape')) this.eachEvent('Weather');
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');

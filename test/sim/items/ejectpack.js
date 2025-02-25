@@ -68,7 +68,7 @@ describe(`Eject Pack`, function () {
 		assert.equal(battle.p1.requestState, 'switch');
 	});
 
-	it.skip(`should not switch out the user if the user acquired the Eject Pack after the stat drop occurred`, function () {
+	it(`should not switch out the user if the user acquired the Eject Pack after the stat drop occurred`, function () {
 		battle = common.createBattle([[
 			{species: 'Klefki', ability: 'magician', moves: ['lowsweep']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -128,7 +128,7 @@ describe(`Eject Pack`, function () {
 		assert.species(battle.p2.active[1], 'Wynaut');
 	});
 
-	it.skip(`should not trigger until after all entrance abilities have resolved during simultaneous switches`, function () {
+	it(`should not prevent entrance Abilities from resolving during simultaneous switches`, function () {
 		battle = common.createBattle({gameType: 'doubles'}, [[
 			{species: 'Hydreigon', ability: 'intimidate', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
@@ -137,7 +137,6 @@ describe(`Eject Pack`, function () {
 			{species: 'Mew', level: 1, ability: 'electricsurge', moves: ['sleeptalk']},
 			{species: 'Wynaut', moves: ['sleeptalk']},
 		]]);
-		battle.makeChoices();
 		assert(battle.field.isWeather('sunnyday'));
 		assert(battle.field.isTerrain('electricterrain'));
 		assert.equal(battle.p2.requestState, 'switch');

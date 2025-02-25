@@ -48,7 +48,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	pidgeotto: {
-		tier: "ZU",
+		tier: "NFE",
 	},
 	pidgeot: {
 		tier: "NU",
@@ -99,7 +99,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	nidorino: {
-		tier: "ZU",
+		tier: "NFE",
 	},
 	nidoking: {
 		tier: "UU",
@@ -186,7 +186,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RU",
 	},
 	growlithe: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	arcanine: {
 		tier: "UU",
@@ -303,7 +303,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	onix: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	steelix: {
 		tier: "UUBL",
@@ -378,7 +378,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	horsea: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	seadra: {
 		tier: "PU",
@@ -393,7 +393,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	staryu: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	starmie: {
 		tier: "OU",
@@ -408,7 +408,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UUBL",
 	},
 	smoochum: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	jynx: {
 		tier: "UUBL",
@@ -519,7 +519,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RU",
 	},
 	cyndaquil: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	quilava: {
 		tier: "ZU",
@@ -816,7 +816,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	lombre: {
-		tier: "ZU",
+		tier: "NFE",
 	},
 	ludicolo: {
 		tier: "UUBL",
@@ -831,7 +831,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RU",
 	},
 	taillow: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	swellow: {
 		tier: "UUBL",
@@ -960,7 +960,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RU",
 	},
 	wailmer: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	wailord: {
 		tier: "NU",
@@ -1089,7 +1089,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "RU",
 	},
 	snorunt: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	glalie: {
 		tier: "NU",

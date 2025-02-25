@@ -206,8 +206,6 @@ export class SodiumRNG implements RNG {
 		this.seed = buf.slice(0, 32);
 		// reading big-endian
 		return buf.slice(32, 36).reduce((a, b) => a * 256 + b);
-		// alternative, probably slower (TODO: benchmark)
-		// return parseInt(Utils.bufReadHex(buf, 32, 36), 16);
 	}
 
 	static generateSeed(): SodiumRNGSeed {

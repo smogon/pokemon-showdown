@@ -302,7 +302,7 @@ describe('Neutralizing Gas', function () {
 	});
 
 	it(`should not reactivate instances of Embody Aspect that had previously activated`, function () {
-		battle = common.createBattle({gameType: 'freeforall'}, [[
+		battle = common.gen(9).createBattle({gameType: 'freeforall'}, [[
 			{species: 'Ogerpon-Hearthflame', ability: 'moldbreaker', item: 'hearthflamemask', moves: ['bellydrum']},
 		], [
 			{species: 'Ogerpon-Wellspring', ability: 'waterabsorb', item: 'wellspringmask', moves: ['sleeptalk']},
@@ -375,6 +375,7 @@ describe('Neutralizing Gas', function () {
 			const log = battle.getDebugLog();
 			const pressureIndex = log.indexOf('|-ability|p1b: Eternatus|Pressure');
 			const unnerveIndex = log.indexOf('|-ability|p2a: Rookidee|Unnerve');
+			assert(unnerveIndex > 0, 'Unnerve should have an activation message');
 			assert(pressureIndex < unnerveIndex, 'Faster Pressure should activate before slower Unnerve');
 		});
 	});

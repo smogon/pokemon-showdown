@@ -45,7 +45,7 @@ describe('Roost', function () {
 		// Ensure that Aerodactyl has some damage
 		battle.makeChoices('move mudslap', 'move doubleedge');
 
-		battle.makeChoices('move hiddenpowergrasss', 'move roost');
+		battle.makeChoices('move hiddenpowergrass', 'move roost');
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp); // Hit super-effectively by HP Grass
 	});
 
@@ -86,7 +86,7 @@ describe('Roost', function () {
 	});
 
 	it('should not remove Flying type during Terastallization', function () {
-		battle = common.createBattle([[
+		battle = common.gen(9).createBattle([[
 			{species: "Dudunsparce", ability: "runaway", moves: ['sleeptalk', 'roost'], teraType: "Flying"},
 		], [
 			{species: "Chansey", ability: "naturalcure", moves: ['earthquake']},

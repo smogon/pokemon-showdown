@@ -82,7 +82,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	trace: {
 		inherit: true,
 		onUpdate(pokemon) {
-			if (!pokemon.isStarted) return;
+			if (!this.effectState.seek) return;
 			const isAbility = pokemon.ability === 'trace';
 			const possibleTargets: Pokemon[] = [];
 			for (const target of pokemon.side.foe.active) {

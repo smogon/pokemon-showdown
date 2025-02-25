@@ -33,14 +33,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onAfterSetStatus(status, pokemon) {
 				// Sleep, freeze, and partial trap will just pause duration.
 				if (pokemon.volatiles['flinch']) {
-					this.effectState.duration++;
+					this.effectState.duration!++;
 				} else if (pokemon.volatiles['partiallytrapped']) {
-					this.effectState.duration++;
+					this.effectState.duration!++;
 				} else {
 					switch (status.id) {
 					case 'slp':
 					case 'frz':
-						this.effectState.duration++;
+						this.effectState.duration!++;
 						break;
 					}
 				}

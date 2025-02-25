@@ -369,7 +369,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			let success = false;
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
-				if (ally.hasAbility('soundproof')) continue;
+				if (ally.hasAbility('soundproof')) {
+					this.add('-immune', ally, '[from] ability: Soundproof');
+					continue;
+				}
 				if (ally.cureStatus()) success = true;
 			}
 			return success;
@@ -1043,8 +1046,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	swallow: {
 		inherit: true,
 		onHit(pokemon) {
+			const layers = pokemon.volatiles['stockpile']?.layers || 1;
 			const healAmount = [0.25, 0.5, 1];
-			const success = !!this.heal(this.modify(pokemon.maxhp, healAmount[(pokemon.volatiles['stockpile'].layers - 1)]));
+			const success = !!this.heal(this.modify(pokemon.maxhp, healAmount[layers - 1]));
 			if (!success) this.add('-fail', pokemon, 'heal');
 			pokemon.removeVolatile('stockpile');
 			return success || null;
