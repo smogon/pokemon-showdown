@@ -2332,7 +2332,7 @@ export class TeamValidator {
 			if (set.shiny && pokemonGoSources.includes('noshiny')) {
 				problems.push(`${name} is not obtainable from Pokemon GO.`);
 			} else {
-				if (pokemonGoSources.includes('wild') && !((set.shiny && pokemonGoSources.includes('nowildshiny')))) {
+				if (pokemonGoSources.includes('wild')) {
 					minLevel = 1;
 					minIVs = 0;
 				}
@@ -2360,7 +2360,12 @@ export class TeamValidator {
 					minIVs = Math.min(minIVs, 0);
 				}
 				if (pokemonGoSources.includes('research')) {
-					minLevel = Math.min(minLevel, 15);
+					if (species.id === 'cresselia') {
+						// For some reason, Cresselia from research has a possible level 10 source
+						minLevel = Math.min(minLevel, 10);
+					} else {
+						minLevel = Math.min(minLevel, 15);
+					}
 					minIVs = Math.min(minIVs, 10);
 				}
 				if (pokemonGoSources.includes('giovanni') && !set.shiny) {
@@ -2535,7 +2540,7 @@ export class TeamValidator {
 
 				const learnedGen = parseInt(learned.charAt(0));
 				if (formeCantInherit && (learned.charAt(1) !== 'E' || learnedGen < 9)) continue;
-				if (setSources.learnsetDomain && !setSources.learnsetDomain.includes(learnedGen + species.id) &&
+				if (setSources.learnsetDomain && !setSources.learnsetDomain.includes(learnedGen + toID(species.baseSpecies)) &&
 					(learned.charAt(1) !== 'E' || learnedGen < 8)
 				) {
 					if (!cantLearnReason) {
@@ -2698,10 +2703,10 @@ export class TeamValidator {
 					}
 					moveSources.add(learned);
 				}
-				if (learned.charAt(1) === 'E' && learnedGen >= 8 && !canLearnSpecies.includes(baseSpecies.id)) {
-					canLearnSpecies.push(baseSpecies.id);
+				if (learned.charAt(1) === 'E' && learnedGen >= 8 && !canLearnSpecies.includes(toID(baseSpecies.baseSpecies))) {
+					canLearnSpecies.push(toID(baseSpecies.baseSpecies));
 				}
-				if (!canLearnSpecies.includes(species.id)) canLearnSpecies.push(species.id);
+				if (!canLearnSpecies.includes(toID(species.baseSpecies))) canLearnSpecies.push(toID(species.baseSpecies));
 				minLearnGen = Math.min(minLearnGen, learnedGen);
 			}
 			if (ruleTable.has('mimicglitch') && species.gen < 5) {
@@ -2803,13 +2808,14 @@ export class TeamValidator {
 					 * Case 3: Prevo-only move - allow moves of the species from the min gen and later
 					 * Case 4: Evo-only move - allow moves of the species from the max gen and before
 					*/
-					if (canLearnSpecies.includes(nextSpecies.id) ||
+					const baseSpeciesID = toID(nextSpecies.baseSpecies);
+					if (canLearnSpecies.includes(baseSpeciesID) ||
 						(0 < speciesCount && speciesCount < canLearnSpecies.length) ||
 						(speciesCount === 0 && gen >= minLearnGen) ||
 						(speciesCount === canLearnSpecies.length && gen <= moveSources.sourcesBefore)
 					) {
 						if (!moveSources.learnsetDomain) moveSources.learnsetDomain = [];
-						moveSources.learnsetDomain.push(gen + nextSpecies.id);
+						moveSources.learnsetDomain.push(gen + baseSpeciesID);
 					}
 				}
 				if (canLearnSpecies.includes(nextSpecies.id)) speciesCount++;

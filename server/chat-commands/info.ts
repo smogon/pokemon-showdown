@@ -2140,8 +2140,8 @@ export const commands: Chat.ChatCommands = {
 		if (showAll || target === 'tiering' || target === 'tiers' || target === 'tier') {
 			buffer.push(`<a href="https://www.smogon.com/ingame/battle/tiering-faq">${this.tr`Tiering FAQ`}</a>`);
 		}
-		if (showAll || target === 'badge' || target === 'badges') {
-			buffer.push(`<a href="https://www.smogon.com/badge_faq">${this.tr`Badge FAQ`}</a>`);
+		if (showAll || ['badge', 'badges', 'badgeholders'].includes(target)) {
+			buffer.push(`<a href="https://www.smogon.com/forums/threads/60351/">${this.tr`Badge FAQ`}</a>`);
 		}
 		if (showAll || target === 'rng') {
 			buffer.push(`<a href="https://${Config.routes.root}/${this.tr`pages/rng`}">${this.tr`Common misconceptions about our RNG`}</a>`);
