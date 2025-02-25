@@ -53,7 +53,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						return false;
 					}
 					const target = this.getRandomTarget(pokemon, 'Pound');
-					this.actions.moveHit(target, pokemon, currentMove, {damage: this.effectState.damage * 2} as ActiveMove);
+					this.actions.moveHit(target, pokemon, currentMove, { damage: this.effectState.damage * 2 } as ActiveMove);
 					pokemon.removeVolatile('bide');
 					return false;
 				}
@@ -217,7 +217,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 
 			return 2 * this.lastDamage;
 		},
-		flags: {contact: 1, protect: 1, metronome: 1},
+		flags: { contact: 1, protect: 1, metronome: 1 },
 	},
 	crabhammer: {
 		inherit: true,
@@ -246,7 +246,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Disable",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, bypasssub: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 		volatileStatus: 'disable',
 		onTryHit(target) {
 			// This function should not return if the checks are met. Adding && undefined ensures this happens.
@@ -402,7 +402,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// in-game, so it is equivalent to just clear it.
 				const silentHack = '|[silent]';
 				const silentHackVolatiles = ['disable', 'confusion'];
-				const hazeVolatiles: {[key: string]: string} = {
+				const hazeVolatiles: { [key: string]: string } = {
 					'disable': '',
 					'confusion': '',
 					'mist': 'Mist',
@@ -485,7 +485,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Light Screen",
 		pp: 30,
 		priority: 0,
-		flags: {metronome: 1},
+		flags: { metronome: 1 },
 		volatileStatus: 'lightscreen',
 		onTryHit(pokemon) {
 			if (pokemon.volatiles['lightscreen']) {
@@ -502,7 +502,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	mimic: {
 		inherit: true,
-		flags: {protect: 1, bypasssub: 1, metronome: 1},
+		flags: { protect: 1, bypasssub: 1, metronome: 1 },
 		onHit(target, source) {
 			const moveslot = source.moves.indexOf('mimic');
 			if (moveslot < 0) return false;
@@ -611,7 +611,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onHit(target, source, move) {
 				// Disable and exploding moves boost Rage even if they miss/fail, so they are dealt with separately.
 				if (target.boosts.atk < 6 && (move.category !== 'Status' && !move.selfdestruct)) {
-					this.boost({atk: 1});
+					this.boost({ atk: 1 });
 				}
 			},
 		},
@@ -662,7 +662,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Reflect",
 		pp: 20,
 		priority: 0,
-		flags: {metronome: 1},
+		flags: { metronome: 1 },
 		volatileStatus: 'reflect',
 		onTryHit(pokemon) {
 			if (pokemon.volatiles['reflect']) {
@@ -815,7 +815,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Substitute",
 		pp: 10,
 		priority: 0,
-		flags: {metronome: 1},
+		flags: { metronome: 1 },
 		volatileStatus: 'substitute',
 		onTryHit(target) {
 			if (target.volatiles['substitute']) {
@@ -899,7 +899,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// Add here counter damage
 				const lastAttackedBy = target.getLastAttackedBy();
 				if (!lastAttackedBy) {
-					target.attackedBy.push({source, move: move.id, damage: uncappedDamage, slot: source.getSlot(), thisTurn: true});
+					target.attackedBy.push({ source, move: move.id, damage: uncappedDamage, slot: source.getSlot(), thisTurn: true });
 				} else {
 					lastAttackedBy.move = move.id;
 					lastAttackedBy.damage = uncappedDamage;

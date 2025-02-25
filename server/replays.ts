@@ -3,7 +3,7 @@
  *
  * Ported to TypeScript by Annika and Mia.
  */
-import {SQL, PGDatabase} from '../lib/database';
+import { SQL, PGDatabase } from '../lib/database';
 import * as crypto from 'crypto';
 
 export const replaysDB = Config.replaysdb ? new PGDatabase(Config.replaysdb) : null!;
@@ -131,14 +131,14 @@ export const Replays = new class {
 		const replayData = await replays.get(id);
 		if (!replayData) return null;
 
-		await replays.update(replayData.id, {views: SQL`views + 1`});
+		await replays.update(replayData.id, { views: SQL`views + 1` });
 
 		return this.toReplay(replayData);
 	}
 
 	async edit(replay: Replay) {
 		const replayData = this.toReplayRow(replay);
-		await replays.update(replay.id, {private: replayData.private, password: replayData.password});
+		await replays.update(replay.id, { private: replayData.private, password: replayData.password });
 	}
 
 	generatePassword(length = 31) {

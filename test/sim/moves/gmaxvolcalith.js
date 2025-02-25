@@ -11,12 +11,12 @@ describe('G-Max Volcalith', () => {
 	});
 
 	it(`should not damage Rock-types`, () => {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'Coalossal', moves: ['rockthrow'], gigantamax: true},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+		battle = common.gen(8).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Coalossal', moves: ['rockthrow'], gigantamax: true },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Blastoise', moves: ['sleeptalk']},
-			{species: 'Boldore', moves: ['sleeptalk']},
+			{ species: 'Blastoise', moves: ['sleeptalk'] },
+			{ species: 'Boldore', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move rockthrow 1 dynamax, move sleeptalk', 'move sleeptalk, move sleeptalk');
@@ -24,12 +24,12 @@ describe('G-Max Volcalith', () => {
 	});
 
 	it(`should deal damage for four turns, including the fourth turn`, () => {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+		battle = common.gen(8).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Blastoise', moves: ['sleeptalk']},
-			{species: 'Boldore', moves: ['sleeptalk']},
+			{ species: 'Blastoise', moves: ['sleeptalk'] },
+			{ species: 'Boldore', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move rockthrow 2 dynamax, move sleeptalk', 'move sleeptalk, move sleeptalk');
@@ -40,13 +40,13 @@ describe('G-Max Volcalith', () => {
 	});
 
 	it.skip(`should deal damage alongside Sea of Fire or G-Max Wildfire in the order those field effects were set`, () => {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'Coalossal', item: 'Eject Button', moves: ['rockthrow', 'sleeptalk'], gigantamax: true},
-			{species: 'Wynaut', moves: ['sleeptalk', 'grasspledge']},
-			{species: 'Wynaut', moves: ['sleeptalk', 'firepledge']},
+		battle = common.gen(8).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Coalossal', item: 'Eject Button', moves: ['rockthrow', 'sleeptalk'], gigantamax: true },
+			{ species: 'Wynaut', moves: ['sleeptalk', 'grasspledge'] },
+			{ species: 'Wynaut', moves: ['sleeptalk', 'firepledge'] },
 		], [
-			{species: 'Blissey', moves: ['sleeptalk']},
-			{species: 'Chansey', moves: ['sleeptalk']},
+			{ species: 'Blissey', moves: ['sleeptalk'] },
+			{ species: 'Chansey', moves: ['sleeptalk'] },
 		]]);
 
 		// Set up Volcalith first, then Sea of Fire
@@ -61,12 +61,12 @@ describe('G-Max Volcalith', () => {
 	});
 
 	it(`should damage Pokemon in order of Speed`, () => {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+		battle = common.gen(8).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
-			{species: 'Mewtwo', moves: ['sleeptalk', 'trickroom']},
+			{ species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true },
+			{ species: 'Mewtwo', moves: ['sleeptalk', 'trickroom'] },
 		]]);
 
 		battle.makeChoices('move rockthrow 1 dynamax, move sleeptalk', 'move rockthrow 1 dynamax, move sleeptalk');
@@ -83,12 +83,12 @@ describe('G-Max Volcalith', () => {
 	});
 
 	it(`should deal damage before Black Sludge recovery/damage`, () => {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+		battle = common.gen(8).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Toxicroak', item: 'blacksludge', moves: ['sleeptalk']},
-			{species: 'Boldore', moves: ['sleeptalk']},
+			{ species: 'Toxicroak', item: 'blacksludge', moves: ['sleeptalk'] },
+			{ species: 'Boldore', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move rockthrow 2 dynamax, move sleeptalk', 'move sleeptalk, move sleeptalk');
@@ -97,12 +97,12 @@ describe('G-Max Volcalith', () => {
 	});
 
 	it(`should deal damage before Grassy Terrain recovery`, () => {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+		battle = common.gen(8).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Coalossal', moves: ['sleeptalk', 'rockthrow'], gigantamax: true },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Rillaboom', ability: 'grassysurge', moves: ['sleeptalk']},
-			{species: 'Boldore', moves: ['sleeptalk']},
+			{ species: 'Rillaboom', ability: 'grassysurge', moves: ['sleeptalk'] },
+			{ species: 'Boldore', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move rockthrow 2 dynamax, move sleeptalk', 'move sleeptalk, move sleeptalk');

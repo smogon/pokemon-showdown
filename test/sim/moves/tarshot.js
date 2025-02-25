@@ -12,9 +12,9 @@ describe('Tar Shot', () => {
 
 	it('should cause subsequent Fire-type attacks to deal 2x damage as a type chart multiplier', () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', moves: ['tarshot', 'fusionflare']},
+			{ species: 'wynaut', moves: ['tarshot', 'fusionflare'] },
 		], [
-			{species: 'cleffa', moves: ['sleeptalk']},
+			{ species: 'cleffa', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move fusionflare', 'auto');
@@ -25,9 +25,9 @@ describe('Tar Shot', () => {
 
 	it('should cause Fire-type attacks to trigger Weakness Policy', () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', moves: ['tarshot', 'fusionflare']},
+			{ species: 'wynaut', moves: ['tarshot', 'fusionflare'] },
 		], [
-			{species: 'cleffa', item: 'weaknesspolicy', moves: ['sleeptalk']},
+			{ species: 'cleffa', item: 'weaknesspolicy', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move fusionflare', 'auto');
@@ -37,12 +37,12 @@ describe('Tar Shot', () => {
 	});
 
 	it('should not interact with Delta Stream', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'wobbuffet', moves: ['tarshot']},
-			{species: 'wynaut', moves: ['fusionflare']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'wobbuffet', moves: ['tarshot'] },
+			{ species: 'wynaut', moves: ['fusionflare'] },
 		], [
-			{species: 'tornadus', ability: 'shellarmor', moves: ['sleeptalk']},
-			{species: 'thundurus', ability: 'deltastream', moves: ['sleeptalk']},
+			{ species: 'tornadus', ability: 'shellarmor', moves: ['sleeptalk'] },
+			{ species: 'thundurus', ability: 'deltastream', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move tarshot 1, move fusionflare 1', 'auto');
 		const torn = battle.p2.active[0];
@@ -52,9 +52,9 @@ describe('Tar Shot', () => {
 
 	it(`should add a Fire-type weakness, not make the target 2x weaker to Fire`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', moves: ['tarshot', 'flamecharge']},
+			{ species: 'wynaut', moves: ['tarshot', 'flamecharge'] },
 		], [
-			{species: 'ferrothorn', moves: ['sleeptalk']},
+			{ species: 'ferrothorn', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move tarshot', 'auto');
 		battle.makeChoices('move flamecharge', 'auto');
@@ -65,9 +65,9 @@ describe('Tar Shot', () => {
 
 	it(`should not remove the Tar Shot status when a Pokemon Terastallizes`, () => {
 		battle = common.gen(9).createBattle([[
-			{species: 'wynaut', moves: ['tarshot', 'flamecharge']},
+			{ species: 'wynaut', moves: ['tarshot', 'flamecharge'] },
 		], [
-			{species: 'snorlax', item: 'weaknesspolicy', moves: ['sleeptalk']},
+			{ species: 'snorlax', item: 'weaknesspolicy', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move tarshot', 'auto');
 		battle.makeChoices('move flamecharge', 'move sleeptalk terastallize');
@@ -77,9 +77,9 @@ describe('Tar Shot', () => {
 
 	it(`should prevent a Terastallized Pokemon from being afflicted with the Tar Shot status`, () => {
 		battle = common.gen(9).createBattle([[
-			{species: 'wynaut', moves: ['tarshot', 'flamecharge']},
+			{ species: 'wynaut', moves: ['tarshot', 'flamecharge'] },
 		], [
-			{species: 'snorlax', item: 'weaknesspolicy', moves: ['sleeptalk']},
+			{ species: 'snorlax', item: 'weaknesspolicy', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move tarshot', 'move sleeptalk terastallize');
 		battle.makeChoices('move flamecharge', 'auto');

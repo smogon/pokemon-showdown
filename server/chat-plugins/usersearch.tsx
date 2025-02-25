@@ -1,4 +1,4 @@
-import {Utils, FS} from '../../lib';
+import { Utils, FS } from '../../lib';
 
 export const nameList = new Set<string>(JSON.parse(
 	FS('config/chat-plugins/usersearch.json').readIfExistsSync() || "[]"
@@ -7,9 +7,9 @@ export const nameList = new Set<string>(JSON.parse(
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
 
-class PunishmentHTML extends Chat.JSX.Component<{userid: ID, target: string}> {
+class PunishmentHTML extends Chat.JSX.Component<{ userid: ID, target: string }> {
 	render() {
-		const {userid, target} = {...this.props};
+		const { userid, target } = { ...this.props };
 		const buf = [];
 		for (const cmdName of ['Forcerename', 'Namelock', 'Weeknamelock']) {
 			// We have to use dangerouslySetInnerHTML here because otherwise the `value`
@@ -25,10 +25,10 @@ class PunishmentHTML extends Chat.JSX.Component<{userid: ID, target: string}> {
 	}
 }
 
-class SearchUsernames extends Chat.JSX.Component<{target: string, page?: boolean}> {
+class SearchUsernames extends Chat.JSX.Component<{ target: string, page?: boolean }> {
 	render() {
-		const {target, page} = {...this.props};
-		const results: {offline: string[], online: string[]} = {
+		const { target, page } = { ...this.props };
+		const results: { offline: string[], online: string[] } = {
 			offline: [],
 			online: [],
 		};
@@ -217,7 +217,7 @@ export const pages: Chat.PageTable = {
 		const target = toID(query.shift());
 		if (!target) {
 			this.title = `[Usersearch Terms]`;
-			const sorted: {[k: string]: number} = {};
+			const sorted: { [k: string]: number } = {};
 			for (const curUser of Users.users.values()) {
 				for (const term of nameList) {
 					if (curUser.id.includes(term)) {
@@ -228,7 +228,7 @@ export const pages: Chat.PageTable = {
 			}
 			return <div class="pad">
 				<strong>Usersearch term list</strong>
-				<button style={{float: 'right'}} class="button" name="send" value="/uspage">
+				<button style={{ float: 'right' }} class="button" name="send" value="/uspage">
 					<i class="fa fa-refresh"></i> Refresh
 				</button>
 				<hr />
@@ -251,7 +251,7 @@ export const pages: Chat.PageTable = {
 										<td><button class="button" name="send" value={`/uspage ${k}`}>Search</button></td>
 									</tr>);
 								}
-								if (!buf.length) return <tr><td colSpan={3} style={{textAlign: 'center'}}>No names found.</td></tr>;
+								if (!buf.length) return <tr><td colSpan={3} style={{ textAlign: 'center' }}>No names found.</td></tr>;
 								return buf;
 							})()}
 						</table>

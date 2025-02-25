@@ -12,11 +12,11 @@ describe('G-Max Steelsurge', () => {
 
 	it(`should deal 2x damage to Eiscue and Mimikyu`, () => {
 		battle = common.gen(8).createBattle([[
-			{species: 'Pyukumuku', moves: ['uturn']},
-			{species: 'Eiscue', ability: 'iceface', moves: ['splash']},
-			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
+			{ species: 'Pyukumuku', moves: ['uturn'] },
+			{ species: 'Eiscue', ability: 'iceface', moves: ['splash'] },
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
-			{species: 'Copperajah', moves: ['ironhead', 'sleeptalk'], gigantamax: true},
+			{ species: 'Copperajah', moves: ['ironhead', 'sleeptalk'], gigantamax: true },
 		]]);
 		battle.makeChoices('move uturn', 'move ironhead dynamax');
 		battle.makeChoices('switch 2');

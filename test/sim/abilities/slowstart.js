@@ -12,10 +12,10 @@ describe(`Slow Start`, () => {
 
 	it(`should delay activation on switch-in, like Speed Boost`, () => {
 		battle = common.createBattle([[
-			{species: 'diglett', moves: ['sleeptalk']},
-			{species: 'regigigas', ability: 'slowstart', item: 'normaliumz', moves: ['sleeptalk']},
+			{ species: 'diglett', moves: ['sleeptalk'] },
+			{ species: 'regigigas', ability: 'slowstart', item: 'normaliumz', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('switch 2', 'auto');
 		for (let i = 0; i < 4; i++) { battle.makeChoices(); }
@@ -31,9 +31,9 @@ describe(`Slow Start`, () => {
 
 	it(`[Gen 7] should halve the user's Special Attack when using a special Z-move`, () => {
 		battle = common.gen(7).createBattle([[
-			{species: 'regigigas', ability: 'slowstart', item: 'normaliumz', moves: ['hyperbeam']},
+			{ species: 'regigigas', ability: 'slowstart', item: 'normaliumz', moves: ['hyperbeam'] },
 		], [
-			{species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk']},
+			{ species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move hyperbeam zmove', 'auto');
 		const wynaut = battle.p2.active[0];
@@ -44,10 +44,10 @@ describe(`Slow Start`, () => {
 	it(`[Gen 7] should not halve the user's Attack when using physical Photon Geyser`, () => {
 		// We are using Photon Geyser through Assist, because otherwise Photon Geyser would just ignore Slow Start
 		battle = common.gen(7).createBattle([[
-			{species: 'regigigas', ability: 'slowstart', moves: ['assist']},
-			{species: 'necrozma', moves: ['photongeyser']},
+			{ species: 'regigigas', ability: 'slowstart', moves: ['assist'] },
+			{ species: 'necrozma', moves: ['photongeyser'] },
 		], [
-			{species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk']},
+			{ species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		const wynaut = battle.p2.active[0];

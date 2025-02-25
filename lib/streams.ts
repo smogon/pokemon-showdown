@@ -31,7 +31,7 @@ export class ReadStream {
 	nextPush: Promise<void>;
 	awaitingPush: boolean;
 
-	constructor(optionsOrStreamLike: {[k: string]: any} | NodeJS.ReadableStream | string | Buffer = {}) {
+	constructor(optionsOrStreamLike: { [k: string]: any } | NodeJS.ReadableStream | string | Buffer = {}) {
 		this.buf = Buffer.allocUnsafe(BUF_SIZE);
 		this.bufStart = 0;
 		this.bufEnd = 0;
@@ -49,13 +49,13 @@ export class ReadStream {
 		});
 		this.awaitingPush = false;
 
-		let options: {[k: string]: any};
+		let options: { [k: string]: any };
 		if (typeof optionsOrStreamLike === 'string') {
-			options = {buffer: optionsOrStreamLike};
+			options = { buffer: optionsOrStreamLike };
 		} else if (optionsOrStreamLike instanceof Buffer) {
-			options = {buffer: optionsOrStreamLike};
+			options = { buffer: optionsOrStreamLike };
 		} else if (typeof (optionsOrStreamLike as any)._readableState === 'object') {
-			options = {nodeStream: optionsOrStreamLike as NodeJS.ReadableStream};
+			options = { nodeStream: optionsOrStreamLike as NodeJS.ReadableStream };
 		} else {
 			options = optionsOrStreamLike;
 		}
@@ -371,10 +371,10 @@ export class ReadStream {
 
 	async next(byteCount: number | null = null) {
 		const value = await this.read(byteCount);
-		return {value, done: value === null} as {value: string, done: false} | {value: null, done: true};
+		return { value, done: value === null } as { value: string, done: false } | { value: null, done: true };
 	}
 
-	async pipeTo(outStream: WriteStream, options: {noEnd?: boolean} = {}) {
+	async pipeTo(outStream: WriteStream, options: { noEnd?: boolean } = {}) {
 		let next;
 		while ((next = await this.next(), !next.done)) {
 			await outStream.write(next.value);
@@ -405,7 +405,7 @@ export class WriteStream {
 
 		let options: WriteStreamOptions = optionsOrStream as any;
 		if ((options as any)._writableState) {
-			options = {nodeStream: optionsOrStream as NodeJS.WritableStream};
+			options = { nodeStream: optionsOrStream as NodeJS.WritableStream };
 		}
 		if (options.nodeStream) {
 			const nodeStream: NodeJS.WritableStream = options.nodeStream;
@@ -574,9 +574,9 @@ export class ObjectReadStream<T> {
 
 		let options: ObjectReadStreamOptions<T>;
 		if (Array.isArray(optionsOrStreamLike)) {
-			options = {buffer: optionsOrStreamLike};
+			options = { buffer: optionsOrStreamLike };
 		} else if (typeof (optionsOrStreamLike as any)._readableState === 'object') {
-			options = {nodeStream: optionsOrStreamLike as NodeJS.ReadableStream};
+			options = { nodeStream: optionsOrStreamLike as NodeJS.ReadableStream };
 		} else {
 			options = optionsOrStreamLike as ObjectReadStreamOptions<T>;
 		}
@@ -723,13 +723,13 @@ export class ObjectReadStream<T> {
 
 	[Symbol.asyncIterator]() { return this; }
 	async next() {
-		if (this.buf.length) return {value: this.buf.shift() as T, done: false as const};
+		if (this.buf.length) return { value: this.buf.shift() as T, done: false as const };
 		await this.loadIntoBuffer(1, true);
-		if (!this.buf.length) return {value: undefined, done: true as const};
-		return {value: this.buf.shift() as T, done: false as const};
+		if (!this.buf.length) return { value: undefined, done: true as const };
+		return { value: this.buf.shift() as T, done: false as const };
 	}
 
-	async pipeTo(outStream: ObjectWriteStream<T>, options: {noEnd?: boolean} = {}) {
+	async pipeTo(outStream: ObjectWriteStream<T>, options: { noEnd?: boolean } = {}) {
 		let next;
 		while ((next = await this.next(), !next.done)) {
 			await outStream.write(next.value);
@@ -757,7 +757,7 @@ export class ObjectWriteStream<T> {
 
 		let options: ObjectWriteStreamOptions<T> = optionsOrStream as any;
 		if (options._writableState) {
-			options = {nodeStream: optionsOrStream as NodeJS.WritableStream};
+			options = { nodeStream: optionsOrStream as NodeJS.WritableStream };
 		}
 		if (options.nodeStream) {
 			const nodeStream: NodeJS.WritableStream = options.nodeStream;
@@ -862,10 +862,10 @@ export function stdout() {
 
 export function stdpipe(stream: WriteStream | ReadStream | ReadWriteStream) {
 	const promises = [];
-	if ((stream as ReadStream | WriteStream & {pipeTo: undefined}).pipeTo) {
+	if ((stream as ReadStream | WriteStream & { pipeTo: undefined }).pipeTo) {
 		promises.push((stream as ReadStream).pipeTo(stdout()));
 	}
-	if ((stream as WriteStream | ReadStream & {write: undefined}).write) {
+	if ((stream as WriteStream | ReadStream & { write: undefined }).write) {
 		promises.push(stdin().pipeTo(stream as WriteStream));
 	}
 	return Promise.all(promises);

@@ -12,9 +12,9 @@ describe('Psyblade', () => {
 
 	it(`should have its base power multiplied by 1.5 in Electric Terrain`, () => {
 		battle = common.createBattle([[
-			{species: 'Gallade', ability: 'steadfast', moves: ['psyblade']},
+			{ species: 'Gallade', ability: 'steadfast', moves: ['psyblade'] },
 		], [
-			{species: 'Miraidon', ability: 'hadronengine', moves: ['luckychant']},
+			{ species: 'Miraidon', ability: 'hadronengine', moves: ['luckychant'] },
 		]]);
 		const miraidon = battle.p2.active[0];
 		battle.makeChoices();
@@ -23,9 +23,9 @@ describe('Psyblade', () => {
 
 	it(`should have its base power multiplied by 1.5 in Electric Terrain even if the user or the target isn't grounded`, () => {
 		battle = common.createBattle([[
-			{species: 'Gallade', ability: 'steadfast', item: 'airballoon', moves: ['psyblade']},
+			{ species: 'Gallade', ability: 'steadfast', item: 'airballoon', moves: ['psyblade'] },
 		], [
-			{species: 'Miraidon', ability: 'hadronengine', item: 'airballoon', moves: ['luckychant']},
+			{ species: 'Miraidon', ability: 'hadronengine', item: 'airballoon', moves: ['luckychant'] },
 		]]);
 		const miraidon = battle.p2.active[0];
 		battle.makeChoices();

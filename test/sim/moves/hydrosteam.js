@@ -12,9 +12,9 @@ describe('Hydro Steam', () => {
 
 	it(`should have its damage multiplied by 1.5 in Sunny Day`, () => {
 		battle = common.createBattle([[
-			{species: 'Volcanion', ability: 'waterabsorb', moves: ['hydrosteam']},
+			{ species: 'Volcanion', ability: 'waterabsorb', moves: ['hydrosteam'] },
 		], [
-			{species: 'Koraidon', ability: 'orichalcumpulse', moves: ['luckychant']},
+			{ species: 'Koraidon', ability: 'orichalcumpulse', moves: ['luckychant'] },
 		]]);
 		const koraidon = battle.p2.active[0];
 		battle.makeChoices();
@@ -23,9 +23,9 @@ describe('Hydro Steam', () => {
 
 	it(`should have its damaged halved if the user holds a Utility Umbrella`, () => {
 		battle = common.createBattle([[
-			{species: 'Volcanion', ability: 'waterabsorb', item: 'utilityumbrella', moves: ['hydrosteam']},
+			{ species: 'Volcanion', ability: 'waterabsorb', item: 'utilityumbrella', moves: ['hydrosteam'] },
 		], [
-			{species: 'Koraidon', ability: 'orichalcumpulse', moves: ['luckychant']},
+			{ species: 'Koraidon', ability: 'orichalcumpulse', moves: ['luckychant'] },
 		]]);
 		const koraidon = battle.p2.active[0];
 		battle.makeChoices();
@@ -34,9 +34,9 @@ describe('Hydro Steam', () => {
 
 	it(`should have its damage multiplied by 1.5 if only the target holds Utility Umbrella`, () => {
 		battle = common.createBattle([[
-			{species: 'Volcanion', ability: 'waterabsorb', moves: ['hydrosteam']},
+			{ species: 'Volcanion', ability: 'waterabsorb', moves: ['hydrosteam'] },
 		], [
-			{species: 'Koraidon', ability: 'orichalcumpulse', item: 'utilityumbrella', moves: ['luckychant']},
+			{ species: 'Koraidon', ability: 'orichalcumpulse', item: 'utilityumbrella', moves: ['luckychant'] },
 		]]);
 		const koraidon = battle.p2.active[0];
 		battle.makeChoices();
@@ -45,9 +45,9 @@ describe('Hydro Steam', () => {
 
 	it(`should not have its damage changed if both the user and target hold Utility Umbrellas`, () => {
 		battle = common.createBattle([[
-			{species: 'Volcanion', ability: 'waterabsorb', item: 'utilityumbrella', moves: ['hydrosteam']},
+			{ species: 'Volcanion', ability: 'waterabsorb', item: 'utilityumbrella', moves: ['hydrosteam'] },
 		], [
-			{species: 'Koraidon', ability: 'orichalcumpulse', item: 'utilityumbrella', moves: ['luckychant']},
+			{ species: 'Koraidon', ability: 'orichalcumpulse', item: 'utilityumbrella', moves: ['luckychant'] },
 		]]);
 		const koraidon = battle.p2.active[0];
 		battle.makeChoices();

@@ -1,5 +1,5 @@
-import {FS, Utils} from '../../lib';
-import {YouTube} from './youtube';
+import { FS, Utils } from '../../lib';
+import { YouTube } from './youtube';
 
 const MINUTE = 60 * 1000;
 const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
@@ -7,13 +7,13 @@ const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
 const PRENOMS_FILE = 'config/chat-plugins/otd-prenoms.json';
 const DATA_FILE = 'config/chat-plugins/otds.json';
 
-export const prenoms: {[k: string]: [string, AnyObject][]} = JSON.parse(FS(PRENOMS_FILE).readIfExistsSync() || "{}");
+export const prenoms: { [k: string]: [string, AnyObject][] } = JSON.parse(FS(PRENOMS_FILE).readIfExistsSync() || "{}");
 export const otdData: OtdData = JSON.parse(FS(DATA_FILE).readIfExistsSync() || "{}");
 export const otds = new Map<string, OtdHandler>();
 
-const FINISH_HANDLERS: {[k: string]: (winner: AnyObject) => Promise<void>} = {
+const FINISH_HANDLERS: { [k: string]: (winner: AnyObject) => Promise<void> } = {
 	cotw: async winner => {
-		const {channel, nominator} = winner;
+		const { channel, nominator } = winner;
 		const searchResults = await YouTube.searchChannel(channel, 1);
 		const result = searchResults?.[0];
 		if (result) {
@@ -44,7 +44,7 @@ interface OtdSettings {
 }
 
 interface OtdData {
-	[k: string]: {settings: OtdSettings, winners: AnyObject[]};
+	[k: string]: { settings: OtdSettings, winners: AnyObject[] };
 }
 
 function savePrenoms() {
@@ -93,7 +93,7 @@ class OtdHandler {
 	}
 
 	static create(room: Room, settings: OtdSettings) {
-		const {title, timeLabel} = settings;
+		const { title, timeLabel } = settings;
 		const id = settings.id || toID(title).charAt(0) + 'ot' + timeLabel.charAt(0);
 		const handler = new OtdHandler(id, room, settings);
 		otds.set(id, handler);
@@ -195,7 +195,7 @@ class OtdHandler {
 			}
 		}
 
-		const obj: {[k: string]: string} = {};
+		const obj: { [k: string]: string } = {};
 		obj[user.id] = user.name;
 
 		const nomObj = {
@@ -334,7 +334,7 @@ class OtdHandler {
 	}
 
 	appendWinner(nomination: string, user: string): AnyObject {
-		const entry: AnyObject = {time: Date.now(), nominator: user};
+		const entry: AnyObject = { time: Date.now(), nominator: user };
 		entry[this.keys[0]] = nomination;
 		this.winners.push(entry);
 		this.save();
@@ -352,7 +352,7 @@ class OtdHandler {
 		throw new Chat.ErrorMessage(`The winner with nomination ${nominationName} could not be found.`);
 	}
 
-	setWinnerProperty(properties: {[k: string]: string}) {
+	setWinnerProperty(properties: { [k: string]: string }) {
 		if (!this.winners.length) return;
 		for (const i in properties) {
 			this.winners[this.winners.length - 1][i] = properties[i];
@@ -669,7 +669,7 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const params = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
 
-		const changelist: {[k: string]: string} = {};
+		const changelist: { [k: string]: string } = {};
 
 		for (const param of params) {
 			let [key, ...values] = param.split(':');

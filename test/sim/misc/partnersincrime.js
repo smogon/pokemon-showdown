@@ -9,13 +9,13 @@ describe('Partners in Crime', () => {
 	afterEach(() => battle.destroy());
 
 	it('should activate shared abilities at the same time as other abilities', () => {
-		battle = common.createBattle({formatid: 'gen9partnersincrime'}, [[
-			{species: 'Incineroar', ability: 'intimidate', item: 'whiteherb', moves: ['sleeptalk']},
-			{species: 'Pincurchin', ability: 'electricsurge', moves: ['sleeptalk']},
+		battle = common.createBattle({ formatid: 'gen9partnersincrime' }, [[
+			{ species: 'Incineroar', ability: 'intimidate', item: 'whiteherb', moves: ['sleeptalk'] },
+			{ species: 'Pincurchin', ability: 'electricsurge', moves: ['sleeptalk'] },
 		], [
-			{species: 'Rampardos', ability: 'sheerforce', moves: ['sleeptalk']},
-			{species: 'Iron Valiant', ability: 'quarkdrive', moves: ['sleeptalk']},
-			{species: 'Litten', ability: 'intimidate', moves: ['sleeptalk']},
+			{ species: 'Rampardos', ability: 'sheerforce', moves: ['sleeptalk'] },
+			{ species: 'Iron Valiant', ability: 'quarkdrive', moves: ['sleeptalk'] },
+			{ species: 'Litten', ability: 'intimidate', moves: ['sleeptalk'] },
 		]]);
 		// team preview
 		battle.makeChoices();
@@ -36,13 +36,13 @@ describe('Partners in Crime', () => {
 	});
 
 	it('should activate shared abilities for each ally when only the original holder switches in', () => {
-		battle = common.createBattle({formatid: 'gen9partnersincrime'}, [[
-			{species: 'Pyukumuku', ability: 'innardsout', moves: ['sleeptalk']},
-			{species: 'Pincurchin', ability: 'electricsurge', moves: ['sleeptalk']},
-			{species: 'Incineroar', ability: 'intimidate', moves: ['sleeptalk']},
+		battle = common.createBattle({ formatid: 'gen9partnersincrime' }, [[
+			{ species: 'Pyukumuku', ability: 'innardsout', moves: ['sleeptalk'] },
+			{ species: 'Pincurchin', ability: 'electricsurge', moves: ['sleeptalk'] },
+			{ species: 'Incineroar', ability: 'intimidate', moves: ['sleeptalk'] },
 		], [
-			{species: 'Corviknight', ability: 'mirrorarmor', moves: ['sleeptalk']},
-			{species: 'Iron Valiant', ability: 'quarkdrive', moves: ['sleeptalk']},
+			{ species: 'Corviknight', ability: 'mirrorarmor', moves: ['sleeptalk'] },
+			{ species: 'Iron Valiant', ability: 'quarkdrive', moves: ['sleeptalk'] },
 		]]);
 		// team preview
 		battle.makeChoices();
@@ -53,13 +53,13 @@ describe('Partners in Crime', () => {
 	});
 
 	it('should not activate ally\'s innates if the partner faints on switch-in', () => {
-		battle = common.createBattle({formatid: 'gen9partnersincrime'}, [[
-			{species: 'Shedinja', ability: 'download', moves: ['sleeptalk']},
-			{species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk']},
-			{species: 'Chansey', ability: 'healer', moves: ['sleeptalk']},
+		battle = common.createBattle({ formatid: 'gen9partnersincrime' }, [[
+			{ species: 'Shedinja', ability: 'download', moves: ['sleeptalk'] },
+			{ species: 'Cresselia', ability: 'levitate', moves: ['sleeptalk'] },
+			{ species: 'Chansey', ability: 'healer', moves: ['sleeptalk'] },
 		], [
-			{species: 'Stonjourner', ability: 'powerspot', moves: ['stealthrock']},
-			{species: 'Iron Hands', ability: 'quarkdrive', moves: ['sleeptalk']},
+			{ species: 'Stonjourner', ability: 'powerspot', moves: ['stealthrock'] },
+			{ species: 'Iron Hands', ability: 'quarkdrive', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		const cresselia = battle.p1.active[1];

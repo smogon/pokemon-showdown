@@ -11,10 +11,10 @@ describe('Critical hits', () => {
 	});
 
 	it(`should not happen on self-hits`, () => {
-		battle = common.createBattle({forceRandomChance: true}, [[
-			{species: 'Zubat', moves: ['confuseray']},
+		battle = common.createBattle({ forceRandomChance: true }, [[
+			{ species: 'Zubat', moves: ['confuseray'] },
 		], [
-			{species: 'Chansey', item: 'luckypunch', ability: 'superluck', moves: ['softboiled']},
+			{ species: 'Chansey', item: 'luckypunch', ability: 'superluck', moves: ['softboiled'] },
 		]]);
 
 		battle.makeChoices('move confuseray', 'move softboiled');

@@ -1,6 +1,6 @@
 // Note: These are the rules that formats use
 
-import type {Learnset} from "../sim/dex-species";
+import type { Learnset } from "../sim/dex-species";
 
 // The list of formats is stored in config/formats.js
 export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
@@ -109,7 +109,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 						if (this.ruleTable.has(`+move:${move.id}`)) continue;
 						const problem = `${set.name}'s move ${move.name} does not exist in the National Dex.`;
 						if (this.ruleTable.has('omunobtainablemoves')) {
-							const {outOfBattleSpecies} = this.getValidationSpecies(set);
+							const { outOfBattleSpecies } = this.getValidationSpecies(set);
 							if (!this.omCheckCanLearn(move, outOfBattleSpecies, this.allSources(outOfBattleSpecies), set, problem)) continue;
 						}
 						return [problem];
@@ -239,7 +239,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			// repealing this will not actually let you USE multiple moves, because of a cart bug:
 			// https://twitter.com/DaWoblefet/status/1396217830006132737
 			if (set.moves) {
-				const hasMove: {[k: string]: true} = {};
+				const hasMove: { [k: string]: true } = {};
 				for (const moveId of set.moves) {
 					const move = this.dex.moves.get(moveId);
 					const moveid = move.id;
@@ -859,7 +859,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onValidateTeam(team) {
 			if (this.format.id === 'gen8multibility') return;
 			const abilityTable = new this.dex.Multiset<string>();
-			const base: {[k: string]: string} = {
+			const base: { [k: string]: string } = {
 				airlock: 'cloudnine',
 				armortail: 'queenlymajesty',
 				battlearmor: 'shellarmor',
@@ -1673,7 +1673,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (!target) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			const types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.dex.moves.get(move.id).type))];
-			return {...species, types};
+			return { ...species, types };
 		},
 		onSwitchIn(pokemon) {
 			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
@@ -1917,7 +1917,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			);
 
 			const species = this.dex.species.get(set.species);
-			for (const {learnset} of this.dex.species.getFullLearnset(species.id)) {
+			for (const { learnset } of this.dex.species.getFullLearnset(species.id)) {
 				for (const moveid in moveSources) {
 					moveSources[moveid].push(...(learnset[moveid] || []));
 				}
@@ -2163,7 +2163,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			const typesSet = new Set(species.types);
 			const bonusType = this.dex.types.get(target.teraType);
 			if (bonusType.exists) typesSet.add(bonusType.name);
-			return {...species, types: [...typesSet]};
+			return { ...species, types: [...typesSet] };
 		},
 		onSwitchIn(pokemon) {
 			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
@@ -2193,7 +2193,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		},
 		onModifySpecies(species, target, source, effect) {
 			if (!species.baseStats) return;
-			const boosts: {[tier: string]: number} = {
+			const boosts: { [tier: string]: number } = {
 				uu: 15,
 				rubl: 15,
 				ru: 20,
@@ -2357,9 +2357,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					} else {
 						if (!m.secondaries) m.secondaries = [];
 						if (item.fling.status) {
-							m.secondaries.push({status: item.fling.status});
+							m.secondaries.push({ status: item.fling.status });
 						} else if (item.fling.volatileStatus) {
-							m.secondaries.push({volatileStatus: item.fling.volatileStatus});
+							m.secondaries.push({ volatileStatus: item.fling.volatileStatus });
 						}
 					}
 					source.addVolatile('fling');
@@ -2440,7 +2440,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 							basePower: 140,
 							category: "Physical",
 							priority: 0,
-							flags: {futuremove: 1},
+							flags: { futuremove: 1 },
 							effectType: 'Move',
 							type: 'Steel',
 						},
@@ -2464,7 +2464,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 							basePower: 120,
 							category: "Physical",
 							priority: 0,
-							flags: {futuremove: 1},
+							flags: { futuremove: 1 },
 							ignoreImmunity: false,
 							effectType: 'Move',
 							type: 'Psychic',

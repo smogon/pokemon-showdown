@@ -12,9 +12,9 @@ describe('Kee Berry', () => {
 
 	it(`should activate after a multi-hit physical move`, () => {
 		battle = common.createBattle([[
-			{species: "Wynaut", moves: ['doubleironbash']},
+			{ species: "Wynaut", moves: ['doubleironbash'] },
 		], [
-			{species: "Alakazam", item: 'keeberry', ability: 'shellarmor', moves: ['sleeptalk']},
+			{ species: "Alakazam", item: 'keeberry', ability: 'shellarmor', moves: ['sleeptalk'] },
 		]]);
 
 		const alakazam = battle.p2.active[0];

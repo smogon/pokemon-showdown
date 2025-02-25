@@ -12,19 +12,19 @@ describe('Intimidate', () => {
 
 	it('should decrease Atk by 1 level', () => {
 		battle = common.gen(7).createBattle([[
-			{species: "Smeargle", ability: 'owntempo', moves: ['sketch']},
+			{ species: "Smeargle", ability: 'owntempo', moves: ['sketch'] },
 		], [
-			{species: "Gyarados", ability: 'intimidate', moves: ['splash']},
+			{ species: "Gyarados", ability: 'intimidate', moves: ['splash'] },
 		]]);
 		assert.statStage(battle.p1.active[0], 'atk', -1);
 	});
 
 	it('should be blocked by Substitute', () => {
 		battle = common.createBattle([[
-			{species: "Escavalier", item: 'leftovers', ability: 'shellarmor', moves: ['substitute']},
+			{ species: "Escavalier", item: 'leftovers', ability: 'shellarmor', moves: ['substitute'] },
 		], [
-			{species: "Greninja", item: 'laggingtail', ability: 'protean', moves: ['uturn']},
-			{species: "Gyarados", item: 'leftovers', ability: 'intimidate', moves: ['splash']},
+			{ species: "Greninja", item: 'laggingtail', ability: 'protean', moves: ['uturn'] },
+			{ species: "Gyarados", item: 'leftovers', ability: 'intimidate', moves: ['splash'] },
 		]]);
 		battle.makeChoices('move substitute', 'move uturn');
 		battle.makeChoices('', 'switch gyarados');
@@ -32,14 +32,14 @@ describe('Intimidate', () => {
 	});
 
 	it('should not activate if U-turn breaks the Substitute in Gen 4', () => {
-		battle = common.gen(4).createBattle({gameType: 'doubles'}, [[
-			{species: "Gengar", level: 1, item: 'leftovers', ability: 'levitate', moves: ['substitute']},
-			{species: "Suicune", level: 1, item: 'leftovers', ability: 'pressure', moves: ['substitute']},
+		battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
+			{ species: "Gengar", level: 1, item: 'leftovers', ability: 'levitate', moves: ['substitute'] },
+			{ species: "Suicune", level: 1, item: 'leftovers', ability: 'pressure', moves: ['substitute'] },
 		], [
-			{species: "Gliscor", item: 'laggingtail', ability: 'sandveil', moves: ['uturn']},
-			{species: "Scizor", item: 'laggingtail', ability: 'technician', moves: ['batonpass']},
-			{species: "Gyarados", item: 'leftovers', ability: 'intimidate', moves: ['splash']},
-			{species: "Salamence", item: 'leftovers', ability: 'intimidate', moves: ['splash']},
+			{ species: "Gliscor", item: 'laggingtail', ability: 'sandveil', moves: ['uturn'] },
+			{ species: "Scizor", item: 'laggingtail', ability: 'technician', moves: ['batonpass'] },
+			{ species: "Gyarados", item: 'leftovers', ability: 'intimidate', moves: ['splash'] },
+			{ species: "Salamence", item: 'leftovers', ability: 'intimidate', moves: ['splash'] },
 		]]);
 		battle.makeChoices('move substitute, move substitute', 'move uturn 1, move batonpass');
 		battle.makeChoices('', 'switch 3, pass');
@@ -55,14 +55,14 @@ describe('Intimidate', () => {
 	});
 
 	it('should affect adjacent foes only', () => {
-		battle = common.gen(5).createBattle({gameType: 'triples'}, [[
-			{species: "Bulbasaur", item: 'leftovers', ability: 'overgrow', moves: ['vinewhip']},
-			{species: "Charmander", item: 'leftovers', ability: 'blaze', moves: ['ember']},
-			{species: "Squirtle", item: 'leftovers', ability: 'torrent', moves: ['bubble']},
+		battle = common.gen(5).createBattle({ gameType: 'triples' }, [[
+			{ species: "Bulbasaur", item: 'leftovers', ability: 'overgrow', moves: ['vinewhip'] },
+			{ species: "Charmander", item: 'leftovers', ability: 'blaze', moves: ['ember'] },
+			{ species: "Squirtle", item: 'leftovers', ability: 'torrent', moves: ['bubble'] },
 		], [
-			{species: "Greninja", ability: 'protean', moves: ['uturn']},
-			{species: "Mew", ability: 'synchronize', moves: ['softboiled']},
-			{species: "Gyarados", ability: 'intimidate', moves: ['splash']},
+			{ species: "Greninja", ability: 'protean', moves: ['uturn'] },
+			{ species: "Mew", ability: 'synchronize', moves: ['softboiled'] },
+			{ species: "Gyarados", ability: 'intimidate', moves: ['splash'] },
 		]]);
 
 		const [frontPokemon, centerPokemon, farPokemon] = battle.p1.active;
@@ -73,10 +73,10 @@ describe('Intimidate', () => {
 	});
 
 	it('should wait until all simultaneous switch ins at the beginning of a battle have completed before activating', () => {
-		battle = common.createBattle({preview: true}, [[
-			{species: "Arcanine", ability: 'intimidate', moves: ['morningsun']},
+		battle = common.createBattle({ preview: true }, [[
+			{ species: "Arcanine", ability: 'intimidate', moves: ['morningsun'] },
 		], [
-			{species: "Gyarados", ability: 'intimidate', moves: ['dragondance']},
+			{ species: "Gyarados", ability: 'intimidate', moves: ['dragondance'] },
 		]]);
 		let intimidateCount = 0;
 		battle.onEvent('TryBoost', battle.format, (boost, target, source) => {
@@ -90,10 +90,10 @@ describe('Intimidate', () => {
 
 		// Do it again with the Pokemon in reverse order
 		battle.destroy();
-		battle = common.createBattle({preview: true}, [[
-			{species: "Gyarados", ability: 'intimidate', moves: ['dragondance']},
+		battle = common.createBattle({ preview: true }, [[
+			{ species: "Gyarados", ability: 'intimidate', moves: ['dragondance'] },
 		], [
-			{species: "Arcanine", ability: 'intimidate', moves: ['morningsun']},
+			{ species: "Arcanine", ability: 'intimidate', moves: ['morningsun'] },
 		]]);
 		intimidateCount = 0;
 		battle.onEvent('TryBoost', battle.format, (boost, target, source) => {
@@ -107,14 +107,14 @@ describe('Intimidate', () => {
 	});
 
 	it('should wait until all simultaneous switch ins after double-KOs have completed before activating', () => {
-		battle = common.createBattle({preview: true}, [[
-			{species: "Blissey", ability: 'naturalcure', moves: ['healingwish']},
-			{species: "Arcanine", ability: 'intimidate', moves: ['healingwish']},
-			{species: "Gyarados", ability: 'intimidate', moves: ['healingwish']},
+		battle = common.createBattle({ preview: true }, [[
+			{ species: "Blissey", ability: 'naturalcure', moves: ['healingwish'] },
+			{ species: "Arcanine", ability: 'intimidate', moves: ['healingwish'] },
+			{ species: "Gyarados", ability: 'intimidate', moves: ['healingwish'] },
 		], [
-			{species: "Blissey", ability: 'naturalcure', moves: ['healingwish']},
-			{species: "Gyarados", ability: 'intimidate', moves: ['healingwish']},
-			{species: "Arcanine", ability: 'intimidate', moves: ['healingwish']},
+			{ species: "Blissey", ability: 'naturalcure', moves: ['healingwish'] },
+			{ species: "Gyarados", ability: 'intimidate', moves: ['healingwish'] },
+			{ species: "Arcanine", ability: 'intimidate', moves: ['healingwish'] },
 		]]);
 		const [p1active, p2active] = [battle.p1.active, battle.p2.active];
 		let intimidateCount = 0;

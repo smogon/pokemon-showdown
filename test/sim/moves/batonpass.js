@@ -12,10 +12,10 @@ describe(`Baton Pass`, () => {
 
 	it(`should switch the user out, passing with it a variety of effects`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', moves: ['focusenergy', 'substitute', 'swordsdance', 'batonpass']},
-			{species: 'wingull', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['focusenergy', 'substitute', 'swordsdance', 'batonpass'] },
+			{ species: 'wingull', moves: ['sleeptalk'] },
 		], [
-			{species: 'pichu', ability: 'noguard', moves: ['leechseed']},
+			{ species: 'pichu', ability: 'noguard', moves: ['leechseed'] },
 		]]);
 		for (let i = 1; i < 5; i++) battle.makeChoices('move ' + i, 'auto');
 		battle.makeChoices('switch wingull');
@@ -29,19 +29,19 @@ describe(`Baton Pass`, () => {
 
 	it(`should fail to switch the user out if no Pokemon can be switched in`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', moves: ['batonpass']},
+			{ species: 'wynaut', moves: ['batonpass'] },
 		], [
-			{species: 'pichu', moves: ['swordsdance']},
+			{ species: 'pichu', moves: ['swordsdance'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log.some(line => line.startsWith('|-fail')));
 
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'wynaut', moves: ['batonpass']},
-			{species: 'pichu', moves: ['swordsdance']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'wynaut', moves: ['batonpass'] },
+			{ species: 'pichu', moves: ['swordsdance'] },
 		], [
-			{species: 'pichu', moves: ['swordsdance']},
-			{species: 'pichu', moves: ['swordsdance']},
+			{ species: 'pichu', moves: ['swordsdance'] },
+			{ species: 'pichu', moves: ['swordsdance'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log.some(line => line.startsWith('|-fail')));

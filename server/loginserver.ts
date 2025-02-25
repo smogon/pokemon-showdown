@@ -10,7 +10,7 @@
 const LOGIN_SERVER_TIMEOUT = 30000;
 const LOGIN_SERVER_BATCH_TIME = 1000;
 
-import {Net, FS} from '../lib';
+import { Net, FS } from '../lib';
 
 /**
  * A custom error type used when requests to the login server take too long.
@@ -20,7 +20,7 @@ TimeoutError.prototype.name = TimeoutError.name;
 
 function parseJSON(json: string) {
 	if (json.startsWith(']')) json = json.substr(1);
-	const data: {error: string | null, json: any[] | null} = {error: null, json: null};
+	const data: { error: string | null, json: any[] | null } = { error: null, json: null };
 	try {
 		data.json = JSON.parse(json);
 	} catch (err: any) {

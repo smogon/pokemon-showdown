@@ -12,8 +12,8 @@ describe('Shell Armor', () => {
 
 	it('should prevent moves from dealing critical hits', () => {
 		battle = common.createBattle([
-			[{species: 'Slowbro', ability: 'shellarmor', moves: ['quickattack']}],
-			[{species: 'Cryogonal', ability: 'noguard', moves: ['frostbreath']}],
+			[{ species: 'Slowbro', ability: 'shellarmor', moves: ['quickattack'] }],
+			[{ species: 'Cryogonal', ability: 'noguard', moves: ['frostbreath'] }],
 		]);
 		let successfulEvent = false;
 		battle.onEvent('ModifyDamage', battle.format, (damage, attacker, defender, move) => {
@@ -28,8 +28,8 @@ describe('Shell Armor', () => {
 
 	it('should be suppressed by Mold Breaker', () => {
 		battle = common.createBattle([
-			[{species: 'Slowbro', ability: 'shellarmor', moves: ['quickattack']}],
-			[{species: 'Cryogonal', ability: 'moldbreaker', item: 'zoomlens', moves: ['frostbreath']}],
+			[{ species: 'Slowbro', ability: 'shellarmor', moves: ['quickattack'] }],
+			[{ species: 'Cryogonal', ability: 'moldbreaker', item: 'zoomlens', moves: ['frostbreath'] }],
 		]);
 		let successfulEvent = false;
 		battle.onEvent('ModifyDamage', battle.format, (damage, attacker, defender, move) => {

@@ -2,9 +2,9 @@
  * Code for using Google's Perspective API for filters.
  * @author mia-pi-git
  */
-import {ProcessManager, Net, Repl} from '../../lib';
-import {Config} from '../config-loader';
-import {toID} from '../../sim/dex-data';
+import { ProcessManager, Net, Repl } from '../../lib';
+import { Config } from '../config-loader';
+import { toID } from '../../sim/dex-data';
 
 // 20m. this is mostly here so we can use Monitor.slow()
 const PM_TIMEOUT = 20 * 60 * 1000;
@@ -22,7 +22,7 @@ export const ATTRIBUTES = {
 export interface PerspectiveRequest {
 	languages: string[];
 	requestedAttributes: AnyObject;
-	comment: {text: string};
+	comment: { text: string };
 }
 
 function time() {
@@ -65,7 +65,7 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 		// todo - support 'es', 'it', 'pt', 'fr' - use user.language? room.settings.language...?
 		languages: ['en'],
 		requestedAttributes: ATTRIBUTES,
-		comment: {text},
+		comment: { text },
 	};
 	try {
 		const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:analyze`).post({
@@ -81,7 +81,7 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 		if (!raw) return null;
 		const data = JSON.parse(raw);
 		if (data.error) throw new Error(data.message);
-		const result: {[k: string]: number} = {};
+		const result: { [k: string]: number } = {};
 		for (const k in data.attributeScores) {
 			const score = data.attributeScores[k];
 			result[k] = score.summaryScore.value;
@@ -95,7 +95,7 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 			// 429: too many requests, we already freeze for 10s above so. not much more we can do
 			return null;
 		}
-		Monitor.crashlog(e, 'A Perspective API request', {request: JSON.stringify(requestData)});
+		Monitor.crashlog(e, 'A Perspective API request', { request: JSON.stringify(requestData) });
 		return null;
 	}
 }, PM_TIMEOUT);
@@ -136,11 +136,11 @@ export class RemoteClassifier {
 	async suggestScore(text: string, data: Record<string, number>) {
 		if (!Config.perspectiveKey) return Promise.resolve(null);
 		const body: AnyObject = {
-			comment: {text},
+			comment: { text },
 			attributeScores: {},
 		};
 		for (const k in data) {
-			body.attributeScores[k] = {summaryScore: {value: data[k]}};
+			body.attributeScores[k] = { summaryScore: { value: data[k] } };
 		}
 		try {
 			const raw = await Net(`https://commentanalyzer.googleapis.com/v1alpha1/comments:suggestscore`).post({
@@ -155,7 +155,7 @@ export class RemoteClassifier {
 			});
 			return JSON.parse(raw);
 		} catch (e: any) {
-			return {error: e.message};
+			return { error: e.message };
 		}
 	}
 	destroy() {

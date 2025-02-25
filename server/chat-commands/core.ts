@@ -14,11 +14,11 @@
  */
 
 /* eslint no-else-return: "error" */
-import {Utils} from '../../lib';
-import type {UserSettings} from '../users';
-import type {GlobalPermission, RoomPermission} from '../user-groups';
+import { Utils } from '../../lib';
+import type { UserSettings } from '../users';
+import type { GlobalPermission, RoomPermission } from '../user-groups';
 
-export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
+export const crqHandlers: { [k: string]: Chat.CRQHandler } = {
 	userdetails(target, user, trustable) {
 		if (target.length > 18) {
 			return null;
@@ -33,8 +33,8 @@ export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 				rooms: false,
 			};
 		}
-		interface RoomData {p1?: string; p2?: string; isPrivate?: boolean | 'hidden' | 'voice'}
-		let roomList: {[roomid: string]: RoomData} | false = {};
+		interface RoomData { p1?: string; p2?: string; isPrivate?: boolean | 'hidden' | 'voice' }
+		let roomList: { [roomid: string]: RoomData } | false = {};
 		for (const roomid of targetUser.inRooms) {
 			const targetRoom = Rooms.get(roomid);
 			if (!targetRoom) continue; // shouldn't happen
@@ -75,7 +75,7 @@ export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 	},
 	roomlist(target, user, trustable) {
 		if (!trustable) return false;
-		return {rooms: Rooms.global.getBattles(target)};
+		return { rooms: Rooms.global.getBattles(target) };
 	},
 	rooms(target, user, trustable) {
 		if (!trustable) return false;
@@ -96,7 +96,7 @@ export const crqHandlers: {[k: string]: Chat.CRQHandler} = {
 		if (!targetRoom || (
 			targetRoom.settings.isPrivate && !user.inRooms.has(targetRoom.roomid) && !user.games.has(targetRoom.roomid)
 		)) {
-			const roominfo = {id: target, error: 'not found or access denied'};
+			const roominfo = { id: target, error: 'not found or access denied' };
 			return roominfo;
 		}
 		let visibility;
@@ -269,7 +269,7 @@ export const commands: Chat.ChatCommands = {
 
 	noreply(target, room, user) {
 		if (!target.startsWith('/')) return this.parse('/help noreply');
-		return this.parse(target, {isQuiet: true});
+		return this.parse(target, { isQuiet: true });
 	},
 	noreplyhelp: [`/noreply [command] - Runs the command without displaying the response.`],
 
@@ -307,7 +307,7 @@ export const commands: Chat.ChatCommands = {
 		if (message.trim().startsWith('/msgroom ')) {
 			return this.errorReply(`Please do not nest /msgroom inside itself.`);
 		}
-		const subcontext = new Chat.CommandContext({room: targetRoom, message, user, connection});
+		const subcontext = new Chat.CommandContext({ room: targetRoom, message, user, connection });
 		await subcontext.parse();
 	},
 	msgroomhelp: [`/msgroom [room], [command] - Runs the [command] in the given [room].`],
@@ -333,7 +333,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.checkRecursion();
 
-		const {targetUser, targetUsername, rest: message} = this.splitUser(target);
+		const { targetUser, targetUsername, rest: message } = this.splitUser(target);
 		if (targetUsername === '~') {
 			this.pmTarget = null;
 			this.room = null;
@@ -877,7 +877,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		const formatid = target.slice(formatIndex + 12, nextQuoteIndex);
-		const battleRoom = Rooms.createBattle({format: formatid, players: [], inputLog: target});
+		const battleRoom = Rooms.createBattle({ format: formatid, players: [], inputLog: target });
 		if (!battleRoom) return; // createBattle will inform the user if creating the battle failed
 
 		battleRoom.auth.set(user.id, Users.HOST_SYMBOL);
@@ -920,7 +920,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 
-		let resultString = Utils.escapeHTML(Teams.export(team, {hideStats}));
+		let resultString = Utils.escapeHTML(Teams.export(team, { hideStats }));
 		if (showAll) {
 			resultString = `<details><summary>${this.tr`View team`}</summary>${resultString}</details>`;
 		}
@@ -1171,7 +1171,7 @@ export const commands: Chat.ChatCommands = {
 
 		this.checkCan('joinbattle', null, room);
 
-		const {targetUser, targetUsername: name, rest: slot} = this.splitUser(target, {exactName: true});
+		const { targetUser, targetUsername: name, rest: slot } = this.splitUser(target, { exactName: true });
 		if (slot !== 'p1' && slot !== 'p2' && slot !== 'p3' && slot !== 'p4') {
 			this.errorReply(this.tr`Player must be set to "p1" or "p2", not "${slot}".`);
 			return this.parse('/help addplayer');
@@ -1339,12 +1339,12 @@ export const commands: Chat.ChatCommands = {
 		if (room.battle.challengeType === 'tour' || room.battle.rated) {
 			return this.errorReply(this.tr`You can only do this in unrated non-tour battles.`);
 		}
-		const {targetUser, rest: reason} = this.requireUser(target, {allowOffline: true});
+		const { targetUser, rest: reason } = this.requireUser(target, { allowOffline: true });
 		this.checkCan('kick', targetUser, room);
 		if (room.battle.leaveGame(targetUser)) {
 			const displayReason = reason ? ` (${reason})` : ``;
 			this.addModAction(room.tr`${targetUser.name} was kicked from a battle by ${user.name}.${displayReason}`);
-			this.modlog('KICKBATTLE', targetUser, reason, {noip: 1, noalts: 1});
+			this.modlog('KICKBATTLE', targetUser, reason, { noip: 1, noalts: 1 });
 		} else {
 			this.errorReply("/kickbattle - User isn't in battle.");
 		}
@@ -1487,7 +1487,7 @@ export const commands: Chat.ChatCommands = {
 
 	chall: 'challenge',
 	challenge(target, room, user, connection) {
-		const {targetUser, targetUsername, rest: formatName} = this.splitUser(target);
+		const { targetUser, targetUsername, rest: formatName } = this.splitUser(target);
 		if (!targetUser?.connected) {
 			return this.popupReply(this.tr`The user '${targetUsername}' was not found.`);
 		}
@@ -1552,7 +1552,7 @@ export const commands: Chat.ChatCommands = {
 	],
 	cchall: 'cancelchallenge',
 	cancelchallenge(target, room, user, connection) {
-		const {targetUser, targetUsername, rest} = this.splitUser(target);
+		const { targetUser, targetUsername, rest } = this.splitUser(target);
 		if (rest) return this.popupReply(this.tr`This command does not support specifying multiple users`);
 		this.pmTarget = targetUser || this.pmTarget;
 		if (!this.pmTarget) return this.popupReply(this.tr`User "${targetUsername}" not found.`);
@@ -1571,7 +1571,7 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	async accept(target, room, user, connection) {
-		const {targetUser, targetUsername, rest} = this.splitUser(target);
+		const { targetUser, targetUsername, rest } = this.splitUser(target);
 		if (rest) return this.popupReply(this.tr`This command does not support specifying multiple users`);
 		this.pmTarget = targetUser || this.pmTarget;
 		if (!this.pmTarget) return this.popupReply(this.tr`User "${targetUsername}" not found.`);
@@ -1593,7 +1593,7 @@ export const commands: Chat.ChatCommands = {
 	accepthelp: [`/accept [user] - Accepts a challenge from the given user.`],
 
 	reject(target, room, user, connection) {
-		const {targetUser, targetUsername, rest} = this.splitUser(target);
+		const { targetUser, targetUsername, rest } = this.splitUser(target);
 		if (rest) return this.popupReply(this.tr`This command does not support specifying multiple users`);
 		this.pmTarget = targetUser || this.pmTarget;
 		if (!this.pmTarget) return this.popupReply(this.tr`User "${targetUsername}" not found.`);
@@ -1626,7 +1626,7 @@ export const commands: Chat.ChatCommands = {
 		const format = originalFormat.effectType === 'Format' ? originalFormat : Dex.formats.get('Anything Goes');
 		if (format.effectType !== 'Format') return this.popupReply(this.tr`Please provide a valid format.`);
 
-		return TeamValidatorAsync.get(format.id).validateTeam(user.battleSettings.team, {user: user.id}).then(result => {
+		return TeamValidatorAsync.get(format.id).validateTeam(user.battleSettings.team, { user: user.id }).then(result => {
 			const matchMessage = (originalFormat === format ? "" : this.tr`The format '${originalFormat.name}' was not found.`);
 			if (result.startsWith('1')) {
 				connection.popup(`${(matchMessage ? matchMessage + "\n\n" : "")}${this.tr`Your team is valid for ${format.name}.`}`);
@@ -1823,6 +1823,6 @@ process.nextTick(() => {
 });
 
 export const loginfilter: Chat.LoginFilter = user => {
-	if (!Chat.PrivateMessages.checkCanUse(user, {isLogin: true, forceBool: true})) return;
+	if (!Chat.PrivateMessages.checkCanUse(user, { isLogin: true, forceBool: true })) return;
 	void Chat.PrivateMessages.sendReceived(user);
 };

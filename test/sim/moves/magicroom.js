@@ -12,9 +12,9 @@ describe('Magic Room', () => {
 
 	it(`should negate residual healing events`, () => {
 		battle = common.createBattle([[
-			{species: 'Lopunny', item: 'leftovers', moves: ['bellydrum']},
+			{ species: 'Lopunny', item: 'leftovers', moves: ['bellydrum'] },
 		], [
-			{species: 'Golem', moves: ['magicroom']},
+			{ species: 'Golem', moves: ['magicroom'] },
 		]]);
 		const lopunny = battle.p1.active[0];
 		battle.makeChoices();
@@ -23,9 +23,9 @@ describe('Magic Room', () => {
 
 	it(`should prevent items from being consumed`, () => {
 		battle = common.createBattle([[
-			{species: 'Lopunny', item: 'chopleberry', moves: ['magicroom']},
+			{ species: 'Lopunny', item: 'chopleberry', moves: ['magicroom'] },
 		], [
-			{species: 'Golem', moves: ['lowkick']},
+			{ species: 'Golem', moves: ['lowkick'] },
 		]]);
 		battle.makeChoices();
 		assert.holdsItem(battle.p1.active[0]);
@@ -33,9 +33,9 @@ describe('Magic Room', () => {
 
 	it(`should ignore the effects of items that disable moves`, () => {
 		battle = common.createBattle([[
-			{species: 'Lopunny', item: 'assaultvest', moves: ['protect']},
+			{ species: 'Lopunny', item: 'assaultvest', moves: ['protect'] },
 		], [
-			{species: 'Golem', moves: ['magicroom']},
+			{ species: 'Golem', moves: ['magicroom'] },
 		]]);
 		const lopunny = battle.p1.active[0];
 		battle.makeChoices();
@@ -46,9 +46,9 @@ describe('Magic Room', () => {
 
 	it(`should cause Fling to fail`, () => {
 		battle = common.createBattle([[
-			{species: 'Lopunny', item: 'seaincense', moves: ['fling']},
+			{ species: 'Lopunny', item: 'seaincense', moves: ['fling'] },
 		], [
-			{species: 'Deoxys-Speed', moves: ['magicroom']},
+			{ species: 'Deoxys-Speed', moves: ['magicroom'] },
 		]]);
 		battle.makeChoices();
 		assert.holdsItem(battle.p1.active[0]);
@@ -56,9 +56,9 @@ describe('Magic Room', () => {
 
 	it(`should not prevent Mega Evolution`, () => {
 		battle = common.createBattle([[
-			{species: 'Lopunny', item: 'lopunnite', moves: ['sleeptalk']},
+			{ species: 'Lopunny', item: 'lopunnite', moves: ['sleeptalk'] },
 		], [
-			{species: 'Deoxys-Speed', moves: ['magicroom']},
+			{ species: 'Deoxys-Speed', moves: ['magicroom'] },
 		]]);
 		battle.makeChoices('move sleeptalk mega', 'move magicroom');
 		assert.species(battle.p1.active[0], 'Lopunny-Mega');
@@ -66,10 +66,10 @@ describe('Magic Room', () => {
 
 	it(`should not prevent Primal Reversion`, () => {
 		battle = common.createBattle([[
-			{species: 'Zapdos', moves: ['uturn']},
-			{species: 'Groudon', ability: 'drought', item: 'redorb', moves: ['protect']},
+			{ species: 'Zapdos', moves: ['uturn'] },
+			{ species: 'Groudon', ability: 'drought', item: 'redorb', moves: ['protect'] },
 		], [
-			{species: 'Accelgor', moves: ['magicroom']},
+			{ species: 'Accelgor', moves: ['magicroom'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('switch 2');

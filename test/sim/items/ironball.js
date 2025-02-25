@@ -12,19 +12,19 @@ describe('Iron Ball', () => {
 
 	it('should reduce halve the holder\'s speed', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'owntempo', item: 'ironball', moves: ['bestow']}]});
-		battle.setPlayer('p2', {team: [{species: "Aerodactyl", ability: 'pressure', moves: ['stealthrock']}]});
+		battle.setPlayer('p1', { team: [{ species: "Smeargle", ability: 'owntempo', item: 'ironball', moves: ['bestow'] }] });
+		battle.setPlayer('p2', { team: [{ species: "Aerodactyl", ability: 'pressure', moves: ['stealthrock'] }] });
 		const target = battle.p2.active[0];
 		assert.sets(() => target.getStat('spe'), battle.modify(target.getStat('spe'), 0.5), () => battle.makeChoices('move bestow', 'move stealthrock'));
 	});
 
 	it('should negate Ground immunities and deal neutral type effectiveness to Flying-type Pokemon', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['earthquake']}]});
-		battle.setPlayer('p2', {team: [
-			{species: "Aerodactyl", ability: 'pressure', item: 'ironball', moves: ['stealthrock']},
-			{species: "Tropius", ability: 'harvest', item: 'ironball', moves: ['leechseed']},
-		]});
+		battle.setPlayer('p1', { team: [{ species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['earthquake'] }] });
+		battle.setPlayer('p2', { team: [
+			{ species: "Aerodactyl", ability: 'pressure', item: 'ironball', moves: ['stealthrock'] },
+			{ species: "Tropius", ability: 'harvest', item: 'ironball', moves: ['leechseed'] },
+		] });
 		battle.makeChoices('move earthquake', 'move stealthrock');
 		// Earthquake neutral on Aerodactyl
 		assert(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
@@ -37,11 +37,11 @@ describe('Iron Ball', () => {
 
 	it('should not deal neutral type effectiveness to Flying-type Pokemon in Gravity', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['earthquake', 'gravity']}]});
-		battle.setPlayer('p2', {team: [
-			{species: "Aerodactyl", ability: 'shellarmor', item: 'ironball', moves: ['stealthrock']},
-			{species: "Tropius", ability: 'shellarmor', item: 'ironball', moves: ['leechseed']},
-		]});
+		battle.setPlayer('p1', { team: [{ species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['earthquake', 'gravity'] }] });
+		battle.setPlayer('p2', { team: [
+			{ species: "Aerodactyl", ability: 'shellarmor', item: 'ironball', moves: ['stealthrock'] },
+			{ species: "Tropius", ability: 'shellarmor', item: 'ironball', moves: ['leechseed'] },
+		] });
 		// Set up Gravity
 		battle.makeChoices('move gravity', 'move stealthrock');
 
@@ -57,11 +57,11 @@ describe('Iron Ball', () => {
 
 	it('should negate artificial Ground immunities and deal normal type effectiveness', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['earthquake']}]});
-		battle.setPlayer('p2', {team: [
-			{species: "Rotom", ability: 'levitate', item: 'ironball', moves: ['rest']},
-			{species: "Parasect", ability: 'levitate', item: 'ironball', moves: ['rest']},
-		]});
+		battle.setPlayer('p1', { team: [{ species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['earthquake'] }] });
+		battle.setPlayer('p2', { team: [
+			{ species: "Rotom", ability: 'levitate', item: 'ironball', moves: ['rest'] },
+			{ species: "Parasect", ability: 'levitate', item: 'ironball', moves: ['rest'] },
+		] });
 		battle.makeChoices('move earthquake', 'move rest');
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 		assert.notEqual(battle.p2.active[0].hp, battle.p2.active[0].maxhp);
@@ -72,8 +72,8 @@ describe('Iron Ball', () => {
 
 	it('should ground Pokemon that are airborne', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'owntempo', moves: ['spore']}]});
-		battle.setPlayer('p2', {team: [{species: "Thundurus", ability: 'prankster', item: 'ironball', moves: ['electricterrain']}]});
+		battle.setPlayer('p1', { team: [{ species: "Smeargle", ability: 'owntempo', moves: ['spore'] }] });
+		battle.setPlayer('p2', { team: [{ species: "Thundurus", ability: 'prankster', item: 'ironball', moves: ['electricterrain'] }] });
 		battle.makeChoices('move spore', 'move electricterrain');
 		assert.equal(battle.p2.active[0].status, '');
 	});

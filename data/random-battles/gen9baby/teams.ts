@@ -1,6 +1,6 @@
-import type {PRNG, PRNGSeed} from "../../../sim/prng";
-import {RandomTeams, type MoveCounter} from "../gen9/teams";
-import {Utils} from '../../../lib';
+import type { PRNG, PRNGSeed } from "../../../sim/prng";
+import { RandomTeams, type MoveCounter } from "../gen9/teams";
+import { Utils } from '../../../lib';
 
 // First, some lists of moves that can be used for rules throughout set generation. Taken from regular gen9.
 
@@ -569,8 +569,8 @@ export class RandomBabyTeams extends RandomTeams {
 		let ability = '';
 		let item = undefined;
 
-		const evs = {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85};
-		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+		const evs = { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 };
+		const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 
 		const types = species.types;
 		const abilities = set.abilities!;
@@ -662,7 +662,7 @@ export class RandomBabyTeams extends RandomTeams {
 		};
 	}
 
-	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
+	randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
 
 	randomBabyTeam() {
 		this.enforceNoDirectCustomBanlistChanges();

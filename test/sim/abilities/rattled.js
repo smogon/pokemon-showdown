@@ -12,9 +12,9 @@ describe('Rattled', () => {
 
 	it(`should boost the user's Speed when Intimidated`, () => {
 		battle = common.createBattle([[
-			{species: 'Dunsparce', ability: 'rattled', moves: ['sleeptalk']},
+			{ species: 'Dunsparce', ability: 'rattled', moves: ['sleeptalk'] },
 		], [
-			{species: 'Incineroar', ability: 'intimidate', moves: ['sleeptalk']},
+			{ species: 'Incineroar', ability: 'intimidate', moves: ['sleeptalk'] },
 		]]);
 
 		assert.statStage(battle.p1.active[0], 'atk', -1);
@@ -23,9 +23,9 @@ describe('Rattled', () => {
 
 	it(`should not boost the user's Speed if Intimidate failed to lower attack`, () => {
 		battle = common.createBattle([[
-			{species: 'Dunsparce', item: 'clearamulet', ability: 'rattled', moves: ['sleeptalk']},
+			{ species: 'Dunsparce', item: 'clearamulet', ability: 'rattled', moves: ['sleeptalk'] },
 		], [
-			{species: 'Incineroar', ability: 'intimidate', moves: ['sleeptalk']},
+			{ species: 'Incineroar', ability: 'intimidate', moves: ['sleeptalk'] },
 		]]);
 
 		assert.statStage(battle.p1.active[0], 'atk', 0);

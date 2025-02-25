@@ -1,7 +1,7 @@
 'use strict';
 
-const {Teams} = require('../dist/sim');
-const {Dex} = require('../dist/sim/dex');
+const { Teams } = require('../dist/sim');
+const { Dex } = require('../dist/sim/dex');
 
 if (!process.argv[2]) {
 	console.log(`Usage: node team-generation-benchmark.js <format> [number of runs]`);

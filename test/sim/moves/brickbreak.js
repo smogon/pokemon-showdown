@@ -12,9 +12,9 @@ describe('Brick Break', () => {
 
 	it('should break Reflect', () => {
 		battle = common.createBattle([[
-			{species: "mew", moves: ['brickbreak', 'splash']},
+			{ species: "mew", moves: ['brickbreak', 'splash'] },
 		], [
-			{species: "ninjask", moves: ['reflect', 'splash']},
+			{ species: "ninjask", moves: ['reflect', 'splash'] },
 		]]);
 
 		battle.makeChoices('move splash', 'move reflect');
@@ -26,9 +26,9 @@ describe('Brick Break', () => {
 
 	it('should not break Reflect when used against a Ghost-type', () => {
 		battle = common.createBattle([[
-			{species: "mew", moves: ['brickbreak', 'splash']},
+			{ species: "mew", moves: ['brickbreak', 'splash'] },
 		], [
-			{species: "gengar", moves: ['reflect', 'splash']},
+			{ species: "gengar", moves: ['reflect', 'splash'] },
 		]]);
 
 		battle.makeChoices('move splash', 'move reflect');
@@ -40,9 +40,9 @@ describe('Brick Break', () => {
 
 	it.skip('should break Reflect when used against a Ghost-type in Gen 4 or earlier', () => {
 		battle = common.gen(4).createBattle([[
-			{species: "mew", moves: ['brickbreak', 'splash']},
+			{ species: "mew", moves: ['brickbreak', 'splash'] },
 		], [
-			{species: "gengar", moves: ['reflect', 'splash']},
+			{ species: "gengar", moves: ['reflect', 'splash'] },
 		]]);
 
 		battle.makeChoices('move splash', 'move reflect');
@@ -54,9 +54,9 @@ describe('Brick Break', () => {
 
 	it('should break Reflect against a Ghost type whose type immunity is being ignored', () => {
 		battle = common.createBattle([[
-			{species: "mew", moves: ['brickbreak', 'splash']},
+			{ species: "mew", moves: ['brickbreak', 'splash'] },
 		], [
-			{species: "gengar", item: "ringtarget", moves: ['reflect', 'splash']},
+			{ species: "gengar", item: "ringtarget", moves: ['reflect', 'splash'] },
 		]]);
 
 		battle.makeChoices('move splash', 'move reflect');
@@ -68,9 +68,9 @@ describe('Brick Break', () => {
 
 	it('should break Reflect against a Ghost type whose type immunity is being ignored', () => {
 		battle = common.createBattle([[
-			{species: "mew", ability: "scrappy", moves: ['brickbreak', 'splash']},
+			{ species: "mew", ability: "scrappy", moves: ['brickbreak', 'splash'] },
 		], [
-			{species: "gengar", moves: ['reflect', 'splash']},
+			{ species: "gengar", moves: ['reflect', 'splash'] },
 		]]);
 
 		battle.makeChoices('move splash', 'move reflect');
@@ -82,9 +82,9 @@ describe('Brick Break', () => {
 
 	it('should break Reflect against a Ghost type if it has been electrified', () => {
 		battle = common.createBattle([[
-			{species: "mew", moves: ['brickbreak', 'splash']},
+			{ species: "mew", moves: ['brickbreak', 'splash'] },
 		], [
-			{species: "gengar", moves: ['reflect', 'electrify']},
+			{ species: "gengar", moves: ['reflect', 'electrify'] },
 		]]);
 
 		battle.makeChoices('move splash', 'move reflect');
@@ -95,12 +95,12 @@ describe('Brick Break', () => {
 	});
 
 	it(`should break the foe's Reflect when used against an ally in Gen 3`, () => {
-		battle = common.gen(3).createBattle({gameType: 'doubles'}, [[
-			{species: "mew", moves: ['brickbreak', 'splash']},
-			{species: "mew", moves: ['splash']},
+		battle = common.gen(3).createBattle({ gameType: 'doubles' }, [[
+			{ species: "mew", moves: ['brickbreak', 'splash'] },
+			{ species: "mew", moves: ['splash'] },
 		], [
-			{species: "gengar", moves: ['reflect', 'splash']},
-			{species: "gengar", moves: ['splash']},
+			{ species: "gengar", moves: ['reflect', 'splash'] },
+			{ species: "gengar", moves: ['splash'] },
 		]]);
 
 		battle.makeChoices('move splash, move splash', 'move reflect, move splash');

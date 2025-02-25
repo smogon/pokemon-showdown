@@ -12,9 +12,9 @@ describe('Thousand Arrows', () => {
 
 	it(`should hit Flying-type Pokemon and remove their Ground immunity`, () => {
 		battle = common.createBattle([[
-			{species: 'Zygarde', level: 1, moves: ['thousandarrows', 'earthquake']},
+			{ species: 'Zygarde', level: 1, moves: ['thousandarrows', 'earthquake'] },
 		], [
-			{species: 'Tropius', moves: ['synthesis']},
+			{ species: 'Tropius', moves: ['synthesis'] },
 		]]);
 		const tropius = battle.p2.active[0];
 		battle.makeChoices();
@@ -25,9 +25,9 @@ describe('Thousand Arrows', () => {
 
 	it(`should ignore type effectiveness on the first hit against Flying-type Pokemon`, () => {
 		battle = common.createBattle([[
-			{species: 'Zygarde', level: 1, moves: ['thousandarrows']},
+			{ species: 'Zygarde', level: 1, moves: ['thousandarrows'] },
 		], [
-			{species: 'Ho-Oh', item: 'weaknesspolicy', moves: ['recover']},
+			{ species: 'Ho-Oh', item: 'weaknesspolicy', moves: ['recover'] },
 		]]);
 		const hooh = battle.p2.active[0];
 		battle.makeChoices();
@@ -40,9 +40,9 @@ describe('Thousand Arrows', () => {
 
 	it(`should not ignore type effectiveness on the first hit against Flying-type Pokemon with Ring Target`, () => {
 		battle = common.createBattle([[
-			{species: 'Zygarde', level: 1, moves: ['thousandarrows']},
+			{ species: 'Zygarde', level: 1, moves: ['thousandarrows'] },
 		], [
-			{species: 'Ho-Oh', ability: 'wonderguard', item: 'ringtarget', moves: ['recover']},
+			{ species: 'Ho-Oh', ability: 'wonderguard', item: 'ringtarget', moves: ['recover'] },
 		]]);
 		battle.makeChoices();
 		assert.false.fullHP(battle.p2.active[0]);
@@ -50,9 +50,9 @@ describe('Thousand Arrows', () => {
 
 	it(`should not ground or deal neutral damage to Flying-type Pokemon holding an Iron Ball`, () => {
 		battle = common.createBattle([[
-			{species: 'Zygarde', level: 1, moves: ['thousandarrows', 'earthquake']},
+			{ species: 'Zygarde', level: 1, moves: ['thousandarrows', 'earthquake'] },
 		], [
-			{species: 'Ho-Oh', item: 'ironball', moves: ['recover', 'trick']},
+			{ species: 'Ho-Oh', item: 'ironball', moves: ['recover', 'trick'] },
 		]]);
 
 		const hooh = battle.p2.active[0];
@@ -67,9 +67,9 @@ describe('Thousand Arrows', () => {
 
 	it(`should not ground or deal neutral damage to Flying-type Pokemon affected by Gravity`, () => {
 		battle = common.createBattle([[
-			{species: 'Zygarde', level: 1, moves: ['thousandarrows', 'sleeptalk']},
+			{ species: 'Zygarde', level: 1, moves: ['thousandarrows', 'sleeptalk'] },
 		], [
-			{species: 'Ho-Oh', moves: ['recover', 'gravity']},
+			{ species: 'Ho-Oh', moves: ['recover', 'gravity'] },
 		]]);
 
 		battle.makeChoices('move sleeptalk', 'move gravity');
@@ -86,9 +86,9 @@ describe('Thousand Arrows', () => {
 
 	it(`should hit Pokemon with Levitate and remove their Ground immunity`, () => {
 		battle = common.createBattle([[
-			{species: 'Zygarde', level: 1, moves: ['thousandarrows', 'earthquake']},
+			{ species: 'Zygarde', level: 1, moves: ['thousandarrows', 'earthquake'] },
 		], [
-			{species: 'Cresselia', moves: ['recover']},
+			{ species: 'Cresselia', moves: ['recover'] },
 		]]);
 		const cress = battle.p2.active[0];
 		battle.makeChoices();
@@ -99,9 +99,9 @@ describe('Thousand Arrows', () => {
 
 	it(`should hit non-Flying-type Pokemon with Levitate with standard type effectiveness`, () => {
 		battle = common.createBattle([[
-			{species: 'Zygarde', level: 1, moves: ['thousandarrows']},
+			{ species: 'Zygarde', level: 1, moves: ['thousandarrows'] },
 		], [
-			{species: 'Eelektross', ability: 'levitate', item: 'weaknesspolicy', moves: ['sleeptalk']},
+			{ species: 'Eelektross', ability: 'levitate', item: 'weaknesspolicy', moves: ['sleeptalk'] },
 		]]);
 		const eelektross = battle.p2.active[0];
 		battle.makeChoices();
@@ -111,9 +111,9 @@ describe('Thousand Arrows', () => {
 
 	it(`should hit Pokemon with Air Balloon`, () => {
 		battle = common.createBattle([[
-			{species: 'Zygarde', level: 1, moves: ['thousandarrows']},
+			{ species: 'Zygarde', level: 1, moves: ['thousandarrows'] },
 		], [
-			{species: 'Donphan', item: 'airballoon', moves: ['sleeptalk']},
+			{ species: 'Donphan', item: 'airballoon', moves: ['sleeptalk'] },
 		]]);
 		const donphan = battle.p2.active[0];
 		battle.makeChoices();
@@ -123,9 +123,9 @@ describe('Thousand Arrows', () => {
 
 	it(`should hit Electric-type Wonder Guard Pokemon holding an Air Balloon`, () => {
 		battle = common.createBattle([[
-			{species: 'Zygarde', level: 1, moves: ['thousandarrows']},
+			{ species: 'Zygarde', level: 1, moves: ['thousandarrows'] },
 		], [
-			{species: 'Regieleki', ability: 'wonderguard', item: 'airballoon', moves: ['sleeptalk']},
+			{ species: 'Regieleki', ability: 'wonderguard', item: 'airballoon', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.false.fullHP(battle.p2.active[0]);
@@ -133,9 +133,9 @@ describe('Thousand Arrows', () => {
 
 	it(`should not hit Ground-type Pokemon when affected by Electrify`, () => {
 		battle = common.createBattle([[
-			{species: 'Zygarde', level: 1, moves: ['thousandarrows']},
+			{ species: 'Zygarde', level: 1, moves: ['thousandarrows'] },
 		], [
-			{species: 'Stunfisk', moves: ['electrify']},
+			{ species: 'Stunfisk', moves: ['electrify'] },
 		]]);
 		battle.makeChoices();
 		assert.fullHP(battle.p2.active[0]);
@@ -143,9 +143,9 @@ describe('Thousand Arrows', () => {
 
 	it(`should not hit Ghost-type Pokemon when affected by Normalize`, () => {
 		battle = common.createBattle([[
-			{species: 'Zygarde', level: 1, ability: 'normalize', moves: ['thousandarrows']},
+			{ species: 'Zygarde', level: 1, ability: 'normalize', moves: ['thousandarrows'] },
 		], [
-			{species: 'Dusknoir', moves: ['sleeptalk']},
+			{ species: 'Dusknoir', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.fullHP(battle.p2.active[0]);

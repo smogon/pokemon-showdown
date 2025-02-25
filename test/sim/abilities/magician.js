@@ -12,9 +12,9 @@ describe('Magician', () => {
 
 	it(`should steal the opponents item`, () => {
 		battle = common.createBattle([[
-			{species: 'klefki', ability: 'magician', moves: ['flashcannon']},
+			{ species: 'klefki', ability: 'magician', moves: ['flashcannon'] },
 		], [
-			{species: 'wynaut', item: 'tr69', moves: ['sleeptalk']},
+			{ species: 'wynaut', item: 'tr69', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].item, 'tr69');
@@ -22,9 +22,9 @@ describe('Magician', () => {
 
 	it(`should not steal Weakness Policy on super-effective hits`, () => {
 		battle = common.createBattle([[
-			{species: 'klefki', ability: 'magician', moves: ['flashcannon']},
+			{ species: 'klefki', ability: 'magician', moves: ['flashcannon'] },
 		], [
-			{species: 'hatterene', item: 'weaknesspolicy', moves: ['sleeptalk']},
+			{ species: 'hatterene', item: 'weaknesspolicy', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.false.holdsItem(battle.p1.active[0], 'Klefki should not have stolen Weakness Policy.');

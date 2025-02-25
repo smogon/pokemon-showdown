@@ -389,7 +389,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add('-zpower', pokemon);
 				pokemon.side.zMoveUsed = true;
 			}
-			const moveDidSomething = this.useMove(baseMove, pokemon, {target, sourceEffect, zMove, maxMove});
+			const moveDidSomething = this.useMove(baseMove, pokemon, { target, sourceEffect, zMove, maxMove });
 			this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
 			if (this.battle.activeMove) move = this.battle.activeMove;
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
@@ -416,7 +416,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.battle.add('-activate', dancer, 'ability: Dancer');
 					const dancersTarget = !target!.isAlly(dancer) && pokemon.isAlly(dancer) ? target! : pokemon;
 					this.runMove(move.id, dancer, dancer.getLocOf(dancersTarget),
-						{sourceEffect: this.dex.abilities.get('dancer'), externalMove: true});
+						{ sourceEffect: this.dex.abilities.get('dancer'), externalMove: true });
 				}
 			}
 			if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
@@ -433,7 +433,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!action.side && action.pokemon) action.side = action.pokemon.side;
 			if (!action.move && action.moveid) action.move = this.battle.dex.getActiveMove(action.moveid);
 			if (!action.order) {
-				const orders: {[choice: string]: number} = {
+				const orders: { [choice: string]: number } = {
 					team: 1,
 					start: 2,
 					instaswitch: 3,

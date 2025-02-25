@@ -5,7 +5,7 @@ const common = require('../../common');
 
 let battle;
 
-const ates = {Refrigerate: 'Ice', Pixilate: 'Fairy', Aerilate: 'Flying', Galvanize: 'Electric'};
+const ates = { Refrigerate: 'Ice', Pixilate: 'Fairy', Aerilate: 'Flying', Galvanize: 'Electric' };
 
 for (const ate in ates) {
 	describe(ate, () => {
@@ -15,9 +15,9 @@ for (const ate in ates) {
 
 		it(`should make most Normal type moves become ${ates[ate]} type`, () => {
 			battle = common.createBattle([[
-				{species: 'Genesect', ability: ate, moves: ['hypervoice']},
+				{ species: 'Genesect', ability: ate, moves: ['hypervoice'] },
 			], [
-				{species: 'Gengar', moves: ['sleeptalk']},
+				{ species: 'Gengar', moves: ['sleeptalk'] },
 			]]);
 			battle.makeChoices();
 			assert.false.fullHP(battle.p2.active[0]);
@@ -25,9 +25,9 @@ for (const ate in ates) {
 
 		it('should boost the power of Normal type attacks by 20% when changing their type', () => {
 			battle = common.createBattle([[
-				{species: 'Genesect', ability: ate, moves: ['hypervoice']},
+				{ species: 'Genesect', ability: ate, moves: ['hypervoice'] },
 			], [
-				{species: 'Blissey', ability: 'shellarmor', moves: ['sleeptalk']},
+				{ species: 'Blissey', ability: 'shellarmor', moves: ['sleeptalk'] },
 			]]);
 			battle.makeChoices();
 			assert.bounded(battle.p2.active[0].hp, [651 - 83, 651 - 70]);

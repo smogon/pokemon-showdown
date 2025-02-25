@@ -16,12 +16,12 @@ describe('Dragon Cheer', () => {
 	afterEach(() => battle.destroy());
 
 	it('should raise critical hit ratio by 2 stages for dragon types', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'dragapult', moves: ['dragoncheer']},
-			{species: 'kingdra', moves: ['bubble']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'dragapult', moves: ['dragoncheer'] },
+			{ species: 'kingdra', moves: ['bubble'] },
 		], [
-			{species: 'dragapult', moves: ['splash']},
-			{species: 'dragapult', moves: ['splash']},
+			{ species: 'dragapult', moves: ['splash'] },
+			{ species: 'dragapult', moves: ['splash'] },
 		]]);
 
 		battle.onEvent(
@@ -34,12 +34,12 @@ describe('Dragon Cheer', () => {
 	});
 
 	it('should raise critical hit ratio by 1 stage for non-dragon types', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'dragapult', moves: ['dragoncheer']},
-			{species: 'horsea', moves: ['bubble']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'dragapult', moves: ['dragoncheer'] },
+			{ species: 'horsea', moves: ['bubble'] },
 		], [
-			{species: 'dragapult', moves: ['splash']},
-			{species: 'dragapult', moves: ['splash']},
+			{ species: 'dragapult', moves: ['splash'] },
+			{ species: 'dragapult', moves: ['splash'] },
 		]]);
 
 		battle.onEvent(
@@ -52,12 +52,12 @@ describe('Dragon Cheer', () => {
 	});
 
 	it('should fail if used twice on the same ally', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'dragapult', moves: ['dragoncheer']},
-			{species: 'kingdra', moves: ['bubble']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'dragapult', moves: ['dragoncheer'] },
+			{ species: 'kingdra', moves: ['bubble'] },
 		], [
-			{species: 'dragapult', moves: ['splash']},
-			{species: 'dragapult', moves: ['splash']},
+			{ species: 'dragapult', moves: ['splash'] },
+			{ species: 'dragapult', moves: ['splash'] },
 		]]);
 
 		battle.makeChoices('auto', 'auto');
@@ -67,12 +67,12 @@ describe('Dragon Cheer', () => {
 	});
 
 	it('should not increase ratio if affected Pokemon turns into a Dragon Type after Dragon Cheer', () => {
-		battle = common.gen(9).createBattle({gameType: 'doubles'}, [[
-			{species: 'dragapult', moves: ['dragoncheer', 'splash']},
-			{species: 'horsea', moves: ['bubble'], teraType: 'Dragon'},
+		battle = common.gen(9).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'dragapult', moves: ['dragoncheer', 'splash'] },
+			{ species: 'horsea', moves: ['bubble'], teraType: 'Dragon' },
 		], [
-			{species: 'dragapult', moves: ['splash']},
-			{species: 'dragapult', moves: ['splash']},
+			{ species: 'dragapult', moves: ['splash'] },
+			{ species: 'dragapult', moves: ['splash'] },
 		]]);
 
 		battle.onEvent(
@@ -86,8 +86,8 @@ describe('Dragon Cheer', () => {
 
 	it('should fail in singles or if no ally exists', () => {
 		battle = common.createBattle([
-			[{species: 'gyarados', moves: ['dragoncheer']}],
-			[{species: 'dragapult', moves: ['splash']}],
+			[{ species: 'gyarados', moves: ['dragoncheer'] }],
+			[{ species: 'dragapult', moves: ['splash'] }],
 		]);
 
 		battle.makeChoices();
@@ -95,12 +95,12 @@ describe('Dragon Cheer', () => {
 	});
 
 	it(`should be copied by Psych Up, using the target's Dragon Cheer level`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'milotic', moves: ['dragoncheer', 'psychup', 'bubble']},
-			{species: 'kingdra', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'milotic', moves: ['dragoncheer', 'psychup', 'bubble'] },
+			{ species: 'kingdra', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', moves: ['sleeptalk']},
-			{species: 'wobbuffet', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['sleeptalk'] },
+			{ species: 'wobbuffet', moves: ['sleeptalk'] },
 		]]);
 
 		battle.onEvent(
@@ -114,12 +114,12 @@ describe('Dragon Cheer', () => {
 	});
 
 	it(`should be copied by Psych Up, using the target's Dragon Cheer level and replacing the user's current critical hit stage`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'milotic', moves: ['dragoncheer', 'psychup', 'bubble', 'focusenergy']},
-			{species: 'comfey', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'milotic', moves: ['dragoncheer', 'psychup', 'bubble', 'focusenergy'] },
+			{ species: 'comfey', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', moves: ['sleeptalk']},
-			{species: 'wobbuffet', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['sleeptalk'] },
+			{ species: 'wobbuffet', moves: ['sleeptalk'] },
 		]]);
 
 		battle.onEvent(
@@ -134,12 +134,12 @@ describe('Dragon Cheer', () => {
 	});
 
 	it(`should be copied by Transform, using the target's Dragon Cheer level`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'milotic', moves: ['dragoncheer', 'transform']},
-			{species: 'kingdra', moves: ['sleeptalk', 'bubble']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'milotic', moves: ['dragoncheer', 'transform'] },
+			{ species: 'kingdra', moves: ['sleeptalk', 'bubble'] },
 		], [
-			{species: 'wynaut', moves: ['sleeptalk']},
-			{species: 'wobbuffet', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['sleeptalk'] },
+			{ species: 'wobbuffet', moves: ['sleeptalk'] },
 		]]);
 
 		battle.onEvent(

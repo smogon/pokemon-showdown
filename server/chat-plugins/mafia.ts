@@ -1,13 +1,13 @@
-import {Utils, FS} from '../../lib';
+import { Utils, FS } from '../../lib';
 
 interface MafiaData {
 	// keys for all of these are IDs
-	alignments: {[k: string]: MafiaDataAlignment};
-	roles: {[k: string]: MafiaDataRole};
-	themes: {[k: string]: MafiaDataTheme};
-	IDEAs: {[k: string]: MafiaDataIDEA};
-	terms: {[k: string]: MafiaDataTerm};
-	aliases: {[k: string]: ID};
+	alignments: { [k: string]: MafiaDataAlignment };
+	roles: { [k: string]: MafiaDataRole };
+	themes: { [k: string]: MafiaDataTheme };
+	IDEAs: { [k: string]: MafiaDataIDEA };
+	terms: { [k: string]: MafiaDataTerm };
+	aliases: { [k: string]: ID };
 }
 interface MafiaDataAlignment {
 	name: string;
@@ -43,10 +43,10 @@ interface MafiaDataTerm {
 }
 
 interface MafiaLogTable {
-	[date: string]: {[userid: string]: number};
+	[date: string]: { [userid: string]: number };
 }
 type MafiaLogSection = 'leaderboard' | 'mvps' | 'hosts' | 'plays' | 'leavers';
-type MafiaLog = {[section in MafiaLogSection]: MafiaLogTable};
+type MafiaLog = { [section in MafiaLogSection]: MafiaLogTable };
 
 interface MafiaRole {
 	name: string;
@@ -90,7 +90,7 @@ interface MafiaIDEAModule {
 interface MafiaIDEAPlayerData {
 	choices: string[];
 	originalChoices: string[];
-	picks: {[choice: string]: string | null};
+	picks: { [choice: string]: string | null };
 }
 
 // The different possible ways for a player to be eliminated
@@ -112,7 +112,7 @@ const VALID_IMAGES = [
 ];
 
 let MafiaData: MafiaData = Object.create(null);
-let logs: MafiaLog = {leaderboard: {}, mvps: {}, hosts: {}, plays: {}, leavers: {}};
+let logs: MafiaLog = { leaderboard: {}, mvps: {}, hosts: {}, plays: {}, leavers: {} };
 
 Punishments.addRoomPunishmentType({
 	type: 'MAFIAGAMEBAN',
@@ -151,7 +151,7 @@ function writeFile(path: string, data: AnyObject) {
 // themes and IDEAs have no common keys (looked up together when setting themes)
 
 // Load data
-MafiaData = readFile(DATA_FILE) || {alignments: {}, roles: {}, themes: {}, IDEAs: {}, terms: {}, aliases: {}};
+MafiaData = readFile(DATA_FILE) || { alignments: {}, roles: {}, themes: {}, IDEAs: {}, terms: {}, aliases: {} };
 if (!MafiaData.alignments.town) {
 	MafiaData.alignments.town = {
 		name: 'town', plural: 'town', memo: [`This alignment is required for the script to function properly.`],
@@ -163,12 +163,12 @@ if (!MafiaData.alignments.solo) {
 	};
 }
 
-logs = readFile(LOGS_FILE) || {leaderboard: {}, mvps: {}, hosts: {}, plays: {}, leavers: {}};
+logs = readFile(LOGS_FILE) || { leaderboard: {}, mvps: {}, hosts: {}, plays: {}, leavers: {} };
 
 const tables: MafiaLogSection[] = ['leaderboard', 'mvps', 'hosts', 'plays', 'leavers'];
 for (const section of tables) {
 	// Check to see if we need to eliminate an old month's data.
-	const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
+	const month = new Date().toLocaleString("en-us", { month: "numeric", year: "numeric" });
 	if (!logs[section]) logs[section] = {};
 	if (!logs[section][month]) logs[section][month] = {};
 	if (Object.keys(logs[section]).length >= 3) {
@@ -300,9 +300,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	played: ID[];
 
 	hammerCount: number;
-	votes: {[userid: string]: MafiaVote};
-	voteModifiers: {[userid: string]: number};
-	hammerModifiers: {[userid: string]: number};
+	votes: { [userid: string]: MafiaVote };
+	voteModifiers: { [userid: string]: number };
+	hammerModifiers: { [userid: string]: number };
 	hasPlurality: ID | null;
 
 	enableNV: boolean;
@@ -551,11 +551,11 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		const newRoles: MafiaRole[] = [];
 		const problems: string[] = [];
 		const alignments: string[] = [];
-		const cache: {[k: string]: MafiaRole} = Object.create(null);
+		const cache: { [k: string]: MafiaRole } = Object.create(null);
 		for (const roleName of roles) {
 			const roleId = roleName.toLowerCase().replace(/[^\w\d\s]/g, '');
 			if (roleId in cache) {
-				newRoles.push({...cache[roleId]});
+				newRoles.push({ ...cache[roleId] });
 			} else {
 				const role = Mafia.parseRole(roleName);
 				if (role.problems.length) {
@@ -697,7 +697,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			}
 		}
 
-		return {role, problems};
+		return { role, problems };
 	}
 
 	start(user: User, day = false) {
@@ -1336,7 +1336,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.updatePlayers();
 
 		if (this.room.roomid === 'mafia' && this.started) {
-			const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
+			const month = new Date().toLocaleString("en-us", { month: "numeric", year: "numeric" });
 			if (!logs.leavers[month]) logs.leavers[month] = {};
 			if (!logs.leavers[month][player.id]) logs.leavers[month][player.id] = 0;
 			logs.leavers[month][player.id]++;
@@ -1857,7 +1857,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			// Intead of using this.played, which shows players who have subbed out as well
 			// We check who played through to the end when recording playlogs
 			const played = this.players.map(p => p.id);
-			const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
+			const month = new Date().toLocaleString("en-us", { month: "numeric", year: "numeric" });
 			if (!logs.plays[month]) logs.plays[month] = {};
 			for (const player of played) {
 				if (!logs.plays[month][player]) logs.plays[month][player] = 0;
@@ -2147,32 +2147,32 @@ export const pages: Chat.PageTable = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		const mafiaRoom = Rooms.get('mafia');
 		if (!query.length || !mafiaRoom) return this.close();
-		const headers: {[k: string]: {title: string, type: string, section: MafiaLogSection}} = {
-			leaderboard: {title: 'Leaderboard', type: 'Points', section: 'leaderboard'},
-			mvpladder: {title: 'MVP Ladder', type: 'MVPs', section: 'mvps'},
-			hostlogs: {title: 'Host Logs', type: 'Hosts', section: 'hosts'},
-			playlogs: {title: 'Play Logs', type: 'Plays', section: 'plays'},
-			leaverlogs: {title: 'Leaver Logs', type: 'Leavers', section: 'leavers'},
+		const headers: { [k: string]: { title: string, type: string, section: MafiaLogSection } } = {
+			leaderboard: { title: 'Leaderboard', type: 'Points', section: 'leaderboard' },
+			mvpladder: { title: 'MVP Ladder', type: 'MVPs', section: 'mvps' },
+			hostlogs: { title: 'Host Logs', type: 'Hosts', section: 'hosts' },
+			playlogs: { title: 'Play Logs', type: 'Plays', section: 'plays' },
+			leaverlogs: { title: 'Leaver Logs', type: 'Leavers', section: 'leavers' },
 		};
 		const date = new Date();
 		if (query[1] === 'prev') date.setMonth(date.getMonth() - 1);
-		const month = date.toLocaleString("en-us", {month: "numeric", year: "numeric"});
+		const month = date.toLocaleString("en-us", { month: "numeric", year: "numeric" });
 		const ladder = headers[query[0]];
 		if (!ladder) return this.close();
 		if (['hosts', 'plays', 'leavers'].includes(ladder.section)) this.checkCan('mute', null, mafiaRoom);
-		this.title = `Mafia ${ladder.title} (${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()})`;
+		this.title = `Mafia ${ladder.title} (${date.toLocaleString("en-us", { month: 'long' })} ${date.getFullYear()})`;
 		let buf = `<div class="pad ladder">`;
 		buf += `${query[1] === 'prev' ? '' : `<button class="button" name="send" value="/join view-mafialadder-${query[0]}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button> <button class="button" name="send" value="/join view-mafialadder-${query[0]}-prev" style="float:left">View last month's ${ladder.title}</button>`}`;
 		buf += `<br /><br />`;
 		const section = ladder.section;
 		if (!logs[section][month] || !Object.keys(logs[section][month]).length) {
-			buf += `${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()} not found.</div>`;
+			buf += `${ladder.title} for ${date.toLocaleString("en-us", { month: 'long' })} ${date.getFullYear()} not found.</div>`;
 			return buf;
 		}
 		const entries = Utils.sortBy(Object.entries(logs[section][month]), ([key, value]) => (
 			-value
 		));
-		buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">Mafia ${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()}</h1></th></tr>`;
+		buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">Mafia ${ladder.title} for ${date.toLocaleString("en-us", { month: 'long' })} ${date.getFullYear()}</h1></th></tr>`;
 		buf += `<tr><th>User</th><th>${ladder.type}</th></tr>`;
 		for (const [key, value] of entries) {
 			buf += `<tr><td>${key}</td><td>${value}</td></tr>`;
@@ -2212,7 +2212,7 @@ export const commands: Chat.ChatCommands = {
 				const skipped = [];
 				let hostid;
 				while ((hostid = hostQueue.shift())) {
-					({targetUser, targetUsername} = this.splitUser(hostid, {exactName: true}));
+					({ targetUser, targetUsername } = this.splitUser(hostid, { exactName: true }));
 					if (!targetUser?.connected ||
 						!room.users[targetUser.id] || Mafia.isHostBanned(room, targetUser)) {
 						skipped.push(hostid);
@@ -2227,7 +2227,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				if (!targetUser) return this.errorReply(`Nobody on the host queue could be hosted.`);
 			} else {
-				({targetUser, targetUsername} = this.splitUser(target, {exactName: true}));
+				({ targetUser, targetUsername } = this.splitUser(target, { exactName: true }));
 				if (room.roomid === 'mafia' && hostQueue.length && toID(targetUsername) !== hostQueue[0]) {
 					if (!cmd.includes('force')) {
 						return this.errorReply(`${targetUsername} isn't the next host on the queue. Use /mafia forcehost if you're sure.`);
@@ -2259,7 +2259,7 @@ export const commands: Chat.ChatCommands = {
 				if (queueIndex > -1) hostQueue.splice(queueIndex, 1);
 				room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Mafiasignup!**`).update();
 			}
-			this.modlog('MAFIAHOST', targetUser, null, {noalts: true, noip: true});
+			this.modlog('MAFIAHOST', targetUser, null, { noalts: true, noip: true });
 		},
 		hosthelp: [
 			`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires whitelist + % @ # ~, drivers+ can host other people.`,
@@ -3423,7 +3423,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkChat();
 			if (!target) return this.parse(`/help mafia ${cmd}`);
 			this.checkCan('mute', null, room);
-			const {targetUser} = this.requireUser(target);
+			const { targetUser } = this.requireUser(target);
 			if (!room.users[targetUser.id]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be hosted.`);
 			if (game.hostid === targetUser.id) return this.errorReply(`${targetUser.name} is already the host.`);
 			if (game.cohostids.includes(targetUser.id)) return this.errorReply(`${targetUser.name} is already a cohost.`);
@@ -3440,7 +3440,7 @@ export const commands: Chat.ChatCommands = {
 				for (const conn of targetUser.connections) {
 					void Chat.resolvePage(`view-mafia-${room.roomid}`, targetUser, conn);
 				}
-				this.modlog('MAFIACOHOST', targetUser, null, {noalts: true, noip: true});
+				this.modlog('MAFIACOHOST', targetUser, null, { noalts: true, noip: true });
 			} else {
 				const oldHostid = game.hostid;
 				const oldHost = Users.get(game.hostid);
@@ -3454,7 +3454,7 @@ export const commands: Chat.ChatCommands = {
 					void Chat.resolvePage(`view-mafia-${room.roomid}`, targetUser, conn);
 				}
 				game.sendDeclare(Utils.html`${targetUser.name} has been substituted as the new host, replacing ${oldHostid}.`);
-				this.modlog('MAFIASUBHOST', targetUser, `replacing ${oldHostid}`, {noalts: true, noip: true});
+				this.modlog('MAFIASUBHOST', targetUser, `replacing ${oldHostid}`, { noalts: true, noip: true });
 			}
 		},
 		subhosthelp: [`/mafia subhost [user] - Substitues the user as the new game host.`],
@@ -3480,7 +3480,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			game.cohostids.splice(cohostIndex, 1);
 			game.sendDeclare(Utils.html`${target} was removed as a cohost by ${user.name}`);
-			this.modlog('MAFIAUNCOHOST', target, null, {noalts: true, noip: true});
+			this.modlog('MAFIAUNCOHOST', target, null, { noalts: true, noip: true });
 		},
 
 		end(target, room, user) {
@@ -3528,7 +3528,7 @@ export const commands: Chat.ChatCommands = {
 			let result: MafiaDataAlignment | MafiaDataRole | MafiaDataTheme | MafiaDataIDEA | MafiaDataTerm | null = null;
 			let dataType = cmd;
 
-			const cmdTypes: {[k: string]: keyof MafiaData} = {
+			const cmdTypes: { [k: string]: keyof MafiaData } = {
 				role: 'roles', alignment: 'alignments', theme: 'themes', term: 'terms', idea: 'IDEAs',
 			};
 
@@ -3559,7 +3559,7 @@ export const commands: Chat.ChatCommands = {
 					const num = parseInt(i);
 					if (isNaN(num)) continue;
 					buf += `${i}: `;
-					const count: {[k: string]: number} = {};
+					const count: { [k: string]: number } = {};
 					const roles = [];
 					for (const role of (result as MafiaDataTheme)[num].split(',').map((x: string) => x.trim())) {
 						count[role] = count[role] ? count[role] + 1 : 1;
@@ -3613,7 +3613,7 @@ export const commands: Chat.ChatCommands = {
 				args.shift();
 			}
 			if (!args.length) return this.parse('/help mafia win');
-			const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
+			const month = new Date().toLocaleString("en-us", { month: "numeric", year: "numeric" });
 			if (!logs.leaderboard[month]) logs.leaderboard[month] = {};
 
 			let toGiveTo = [];
@@ -3662,7 +3662,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('mute', null, room);
 			const args = target.split(',');
 			if (!args.length) return this.parse('/help mafia mvp');
-			const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
+			const month = new Date().toLocaleString("en-us", { month: "numeric", year: "numeric" });
 			if (!logs.mvps[month]) logs.mvps[month] = {};
 			if (!logs.leaderboard[month]) logs.leaderboard[month] = {};
 			let gavePoints = false;
@@ -3723,7 +3723,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('warn', null, room);
 
-			const {targetUser, rest} = this.requireUser(target);
+			const { targetUser, rest } = this.requireUser(target);
 			const [string1, string2] = this.splitOne(rest);
 			let duration, reason;
 			if (parseInt(string1)) {
@@ -3776,7 +3776,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('warn', null, room);
 
-			const {targetUser} = this.requireUser(target, {allowOffline: true});
+			const { targetUser } = this.requireUser(target, { allowOffline: true });
 			if (!Mafia.isGameBanned(room, targetUser) && cmd === 'ungameban') {
 				return this.errorReply(`User '${targetUser.name}' isn't banned from playing mafia games.`);
 			} else if (!Mafia.isHostBanned(room, targetUser) && cmd === 'unhostban') {
@@ -3787,7 +3787,7 @@ export const commands: Chat.ChatCommands = {
 			else Mafia.ungameBan(room, targetUser);
 
 			this.privateModAction(`${targetUser.name} was unbanned from ${cmd === 'unhostban' ? 'hosting' : 'playing'} mafia games by ${user.name}.`);
-			this.modlog(`MAFIA${cmd.toUpperCase()}`, targetUser, null, {noip: 1, noalts: 1});
+			this.modlog(`MAFIA${cmd.toUpperCase()}`, targetUser, null, { noip: 1, noalts: 1 });
 		},
 
 		overwriterole: 'addrole',
@@ -3812,13 +3812,13 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`${name} is already an alias (pointing to ${MafiaData.aliases[id]}).`);
 			}
 
-			const role: MafiaDataRole = {name, memo};
+			const role: MafiaDataRole = { name, memo };
 			if (alignment) role.alignment = alignment;
 			if (image) role.image = image;
 
 			MafiaData.roles[id] = role;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDROLE`, null, id, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDROLE`, null, id, { noalts: true, noip: true });
 			this.sendReply(`The role ${id} was added to the database.`);
 		},
 		addrolehelp: [
@@ -3846,14 +3846,14 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`${name} is already an alias (pointing to ${MafiaData.aliases[id]})`);
 			}
 
-			const alignment: MafiaDataAlignment = {name, plural, memo};
+			const alignment: MafiaDataAlignment = { name, plural, memo };
 			if (color) alignment.color = color;
 			if (buttonColor) alignment.buttonColor = buttonColor;
 			if (image) alignment.image = image;
 
 			MafiaData.alignments[id] = alignment;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDALIGNMENT`, null, id, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDALIGNMENT`, null, id, { noalts: true, noip: true });
 			this.sendReply(`The alignment ${id} was added to the database.`);
 		},
 		addalignmenthelp: [
@@ -3879,7 +3879,7 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`${name} is already an alias (pointing to ${MafiaData.aliases[id]})`);
 			}
 
-			const rolelistsMap: {[players: number]: string} = {};
+			const rolelistsMap: { [players: number]: string } = {};
 			const uniqueRoles = new Set<string>();
 
 			for (const rolelist of rolelists) {
@@ -3898,10 +3898,10 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (problems.length) return this.errorReply(`Problems found when parsing roles:\n${problems.join('\n')}`);
 
-			const theme: MafiaDataTheme = {name, desc, ...rolelistsMap};
+			const theme: MafiaDataTheme = { name, desc, ...rolelistsMap };
 			MafiaData.themes[id] = theme;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDTHEME`, null, id, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDTHEME`, null, id, { noalts: true, noip: true });
 			this.sendReply(`The theme ${id} was added to the database.`);
 		},
 		addthemehelp: [
@@ -3942,10 +3942,10 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (problems.length) return this.errorReply(`Problems found when parsing roles:\n${problems.join('\n')}`);
 
-			const IDEA: MafiaDataIDEA = {name, choices, picks, roles};
+			const IDEA: MafiaDataIDEA = { name, choices, picks, roles };
 			MafiaData.IDEAs[id] = IDEA;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDIDEA`, null, id, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDIDEA`, null, id, { noalts: true, noip: true });
 			this.sendReply(`The IDEA ${id} was added to the database.`);
 		},
 		addideahelp: [
@@ -3970,10 +3970,10 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`${name} is already an alias (pointing to ${MafiaData.aliases[id]})`);
 			}
 
-			const term: MafiaDataTerm = {name, memo};
+			const term: MafiaDataTerm = { name, memo };
 			MafiaData.terms[id] = term;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDTERM`, null, id, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDTERM`, null, id, { noalts: true, noip: true });
 			this.sendReply(`The term ${id} was added to the database.`);
 		},
 		addtermhelp: [`/mafia addterm name|memo1|memo2... - Adds a term to the database. Requires % @ # ~`],
@@ -3999,7 +3999,7 @@ export const commands: Chat.ChatCommands = {
 
 			MafiaData.aliases[from] = to;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDALIAS`, null, `${from}: ${to}`, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDALIAS`, null, `${from}: ${to}`, { noalts: true, noip: true });
 			this.sendReply(`The alias ${from} was added, pointing to ${to}.`);
 		},
 		addaliashelp: [
@@ -4044,7 +4044,7 @@ export const commands: Chat.ChatCommands = {
 
 			writeFile(DATA_FILE, MafiaData);
 			if (buf) this.sendReply(buf);
-			this.modlog(`MAFIADELETEDATA`, null, `${entry} from ${source}`, {noalts: true, noip: true});
+			this.modlog(`MAFIADELETEDATA`, null, `${entry} from ${source}`, { noalts: true, noip: true });
 			this.sendReply(`The entry ${entry} was deleted from the ${source} database.`);
 		},
 		deletedatahelp: [`/mafia deletedata source,entry - Removes an entry from the database. Requires % @ # ~`],

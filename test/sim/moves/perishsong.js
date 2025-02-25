@@ -11,12 +11,12 @@ describe('Perish Song', () => {
 	});
 
 	it(`should KO all Pokemon that heard it in 3 turns`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: "Primarina", moves: ['perishsong', 'moonblast']},
-			{species: "Magikarp", moves: ['splash']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Primarina", moves: ['perishsong', 'moonblast'] },
+			{ species: "Magikarp", moves: ['splash'] },
 		], [
-			{species: "Magikarp", moves: ['splash']},
-			{species: "Magikarp", moves: ['splash']},
+			{ species: "Magikarp", moves: ['splash'] },
+			{ species: "Magikarp", moves: ['splash'] },
 		]]);
 		battle.makeChoices('move perishsong, move splash', 'auto');
 		// We've had a crash related to fainted Pokemon and Perish Song
@@ -30,9 +30,9 @@ describe('Perish Song', () => {
 
 	it(`should cause Pokemon to faint by order of Speed`, () => {
 		battle = common.createBattle([[
-			{species: 'Weavile', moves: ['perishsong']},
+			{ species: 'Weavile', moves: ['perishsong'] },
 		], [
-			{species: 'Slowpoke', moves: ['sleeptalk']},
+			{ species: 'Slowpoke', moves: ['sleeptalk'] },
 		]]);
 
 		for (let i = 0; i < 4; i++) { battle.makeChoices(); }
@@ -41,9 +41,9 @@ describe('Perish Song', () => {
 
 	it(`should not affect other Pokemon with the ability Soundproof`, () => {
 		battle = common.createBattle([[
-			{species: 'Weavile', ability: 'soundproof', moves: ['perishsong']},
+			{ species: 'Weavile', ability: 'soundproof', moves: ['perishsong'] },
 		], [
-			{species: 'Slowpoke', ability: 'soundproof', moves: ['sleeptalk']},
+			{ species: 'Slowpoke', ability: 'soundproof', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -53,9 +53,9 @@ describe('Perish Song', () => {
 
 	it(`should not affect any Pokemon with the ability Soundproof in Gen 7`, () => {
 		battle = common.gen(7).createBattle([[
-			{species: 'Weavile', ability: 'soundproof', moves: ['perishsong']},
+			{ species: 'Weavile', ability: 'soundproof', moves: ['perishsong'] },
 		], [
-			{species: 'Slowpoke', ability: 'soundproof', moves: ['sleeptalk']},
+			{ species: 'Slowpoke', ability: 'soundproof', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();

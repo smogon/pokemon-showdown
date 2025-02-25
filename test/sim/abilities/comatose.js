@@ -12,9 +12,9 @@ describe('Comatose', () => {
 
 	it('should make the user immune to status conditions', () => {
 		battle = common.createBattle([[
-			{species: "Komala", ability: 'comatose', moves: ['shadowclaw']},
+			{ species: "Komala", ability: 'comatose', moves: ['shadowclaw'] },
 		], [
-			{species: "Smeargle", ability: 'noguard', moves: ['spore', 'glare', 'willowisp', 'toxic']},
+			{ species: "Smeargle", ability: 'noguard', moves: ['spore', 'glare', 'willowisp', 'toxic'] },
 		]]);
 		const comatoseMon = battle.p1.active[0];
 		for (let i = 1; i <= 4; i++) {
@@ -24,9 +24,9 @@ describe('Comatose', () => {
 
 	it('should not have its status immunity bypassed by Mold Breaker', () => {
 		battle = common.createBattle([[
-			{species: "Komala", ability: 'comatose', moves: ['shadowclaw']},
+			{ species: "Komala", ability: 'comatose', moves: ['shadowclaw'] },
 		], [
-			{species: "Smeargle", ability: 'moldbreaker', moves: ['spore', 'glare', 'willowisp', 'toxic']},
+			{ species: "Smeargle", ability: 'moldbreaker', moves: ['spore', 'glare', 'willowisp', 'toxic'] },
 		]]);
 		const comatoseMon = battle.p1.active[0];
 		for (let i = 1; i <= 4; i++) {
@@ -36,9 +36,9 @@ describe('Comatose', () => {
 
 	it('should cause Rest to fail', () => {
 		battle = common.createBattle([[
-			{species: "Komala", ability: 'comatose', moves: ['rest']},
+			{ species: "Komala", ability: 'comatose', moves: ['rest'] },
 		], [
-			{species: "Smeargle", ability: 'technician', moves: ['aquajet']},
+			{ species: "Smeargle", ability: 'technician', moves: ['aquajet'] },
 		]]);
 		const comatoseMon = battle.p1.active[0];
 		assert.hurts(comatoseMon, () => battle.makeChoices('move rest', 'move aquajet'));
@@ -47,9 +47,9 @@ describe('Comatose', () => {
 
 	it('should allow the use of Snore and Sleep Talk as if the user were asleep', () => {
 		battle = common.createBattle([[
-			{species: "Komala", item: 'normaliumz', ability: 'comatose', moves: ['snore', 'sleeptalk', 'brickbreak']},
+			{ species: "Komala", item: 'normaliumz', ability: 'comatose', moves: ['snore', 'sleeptalk', 'brickbreak'] },
 		], [
-			{species: "Smeargle", moves: ['endure']},
+			{ species: "Smeargle", moves: ['endure'] },
 		]]);
 		const defender = battle.p2.active[0];
 		assert.hurts(defender, () => battle.makeChoices('move snore', 'move endure'), "Expected damage from Snore.");
@@ -58,18 +58,18 @@ describe('Comatose', () => {
 
 	it('should cause the user to be damaged by Dream Eater as if it were asleep', () => {
 		battle = common.createBattle([[
-			{species: "Komala", ability: 'comatose', moves: ['shadowclaw']},
+			{ species: "Komala", ability: 'comatose', moves: ['shadowclaw'] },
 		], [
-			{species: "Smeargle", ability: 'technician', moves: ['dreameater']},
+			{ species: "Smeargle", ability: 'technician', moves: ['dreameater'] },
 		]]);
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices('move shadowclaw', 'move dreameater'));
 	});
 
 	it('should cause Wake-Up Slap and Hex to have doubled base power when used against the user', () => {
 		battle = common.createBattle([[
-			{species: "Komala", ability: 'comatose', item: 'ringtarget', moves: ['endure']},
+			{ species: "Komala", ability: 'comatose', item: 'ringtarget', moves: ['endure'] },
 		], [
-			{species: "Smeargle", ability: 'technician', moves: ['hex', 'wakeupslap']},
+			{ species: "Smeargle", ability: 'technician', moves: ['hex', 'wakeupslap'] },
 		]]);
 
 		let bp = 0;

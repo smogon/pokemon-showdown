@@ -23,14 +23,14 @@ To reload chat commands:
 
 */
 
-import type {RoomPermission, GlobalPermission} from './user-groups';
-import type {Punishment} from './punishments';
-import type {PartialModlogEntry} from './modlog';
-import {FriendsDatabase, PM} from './friends';
-import {SQL, Repl, FS, Utils} from '../lib';
+import type { RoomPermission, GlobalPermission } from './user-groups';
+import type { Punishment } from './punishments';
+import type { PartialModlogEntry } from './modlog';
+import { FriendsDatabase, PM } from './friends';
+import { SQL, Repl, FS, Utils } from '../lib';
 import * as Artemis from './artemis';
-import {Dex} from '../sim';
-import {PrivateMessages} from './private-messages';
+import { Dex } from '../sim';
+import { PrivateMessages } from './private-messages';
 import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
 
@@ -67,7 +67,7 @@ export interface AnnotatedChatCommands {
 	[k: string]: AnnotatedChatHandler | string | string[] | AnnotatedChatCommands;
 }
 
-export type HandlerTable = {[key in keyof Handlers]?: Handlers[key]};
+export type HandlerTable = { [key in keyof Handlers]?: Handlers[key] };
 
 interface Handlers {
 	onRoomClose: (id: string, user: User, connection: Connection, page: boolean) => any;
@@ -127,7 +127,7 @@ export type ChatFilter = ((
 	connection: Connection,
 	targetUser: User | null,
 	originalMessage: string
-) => string | false | null | undefined | void) & {priority?: number};
+) => string | false | null | undefined | void) & { priority?: number };
 
 export type NameFilter = (name: string, user: User) => string;
 export type NicknameFilter = (name: string, user: User) => string | false;
@@ -138,7 +138,7 @@ export type HostFilter = (host: string, user: User, connection: Connection, host
 
 export interface Translations {
 	name?: string;
-	strings: {[english: string]: string};
+	strings: { [english: string]: string };
 }
 
 const LINK_WHITELIST = [
@@ -159,11 +159,11 @@ const BROADCAST_TOKEN = '!';
 const PLUGIN_DATABASE_PATH = './databases/chat-plugins.db';
 const MAX_PLUGIN_LOADING_DEPTH = 3;
 
-import {formatText, linkRegex, stripFormatting} from './chat-formatter';
+import { formatText, linkRegex, stripFormatting } from './chat-formatter';
 
 // @ts-expect-error no typedef available
 import ProbeModule = require('probe-image-size');
-const probe: (url: string) => Promise<{width: number, height: number}> = ProbeModule;
+const probe: (url: string) => Promise<{ width: number, height: number }> = ProbeModule;
 
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
 
@@ -296,41 +296,41 @@ export abstract class MessageContext {
 		if (!targets[0].trim()) targets.pop();
 
 		if (targets.length > (atLeastOneTarget ? 1 : 0)) {
-			const {dex, format, isMatch} = this.extractFormat(targets[0].trim(), allowRules);
+			const { dex, format, isMatch } = this.extractFormat(targets[0].trim(), allowRules);
 			if (isMatch) {
 				targets.shift();
-				return {dex, format, targets};
+				return { dex, format, targets };
 			}
 		}
 		if (targets.length > 1) {
-			const {dex, format, isMatch} = this.extractFormat(targets[targets.length - 1].trim(), allowRules);
+			const { dex, format, isMatch } = this.extractFormat(targets[targets.length - 1].trim(), allowRules);
 			if (isMatch) {
 				targets.pop();
-				return {dex, format, targets};
+				return { dex, format, targets };
 			}
 		}
 
 		const room = (this as any as CommandContext).room;
-		const {dex, format} = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format, allowRules);
-		return {dex, format, targets};
+		const { dex, format } = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format, allowRules);
+		return { dex, format, targets };
 	}
-	extractFormat(formatOrMod?: string, allowRules?: boolean): {dex: ModdedDex, format: Format | null, isMatch: boolean} {
+	extractFormat(formatOrMod?: string, allowRules?: boolean): { dex: ModdedDex, format: Format | null, isMatch: boolean } {
 		if (!formatOrMod) {
-			return {dex: Dex.includeData(), format: null, isMatch: false};
+			return { dex: Dex.includeData(), format: null, isMatch: false };
 		}
 
 		const format = Dex.formats.get(formatOrMod);
 		if (format.effectType === 'Format' || allowRules && format.effectType === 'Rule') {
-			return {dex: Dex.forFormat(format), format, isMatch: true};
+			return { dex: Dex.forFormat(format), format, isMatch: true };
 		}
 
 		if (toID(formatOrMod) in Dex.dexes) {
-			return {dex: Dex.mod(toID(formatOrMod)), format: null, isMatch: true};
+			return { dex: Dex.mod(toID(formatOrMod)), format: null, isMatch: true };
 		}
 
 		return this.extractFormat();
 	}
-	splitUser(target: string, {exactName}: {exactName?: boolean} = {}) {
+	splitUser(target: string, { exactName }: { exactName?: boolean } = {}) {
 		const [inputUsername, rest] = this.splitOne(target).map(str => str.trim());
 		const targetUser = Users.get(inputUsername, exactName);
 
@@ -341,8 +341,8 @@ export abstract class MessageContext {
 			rest,
 		};
 	}
-	requireUser(target: string, options: {allowOffline?: boolean, exactName?: boolean} = {}) {
-		const {targetUser, targetUsername, rest} = this.splitUser(target, options);
+	requireUser(target: string, options: { allowOffline?: boolean, exactName?: boolean } = {}) {
+		const { targetUser, targetUsername, rest } = this.splitUser(target, options);
 
 		if (!targetUser) {
 			throw new Chat.ErrorMessage(`The user "${targetUsername}" is offline or misspelled.`);
@@ -353,9 +353,9 @@ export abstract class MessageContext {
 
 		// `inputUsername` and `targetUsername` are never needed because we already handle the "user not found" error messages
 		// just use `targetUser.name` where previously necessary
-		return {targetUser, rest};
+		return { targetUser, rest };
 	}
-	getUserOrSelf(target: string, {exactName}: {exactName?: boolean} = {}) {
+	getUserOrSelf(target: string, { exactName }: { exactName?: boolean } = {}) {
 		if (!target.trim()) return this.user;
 
 		return Users.get(target, exactName);
@@ -372,7 +372,7 @@ export class PageContext extends MessageContext {
 	initialized: boolean;
 	title: string;
 	args: string[];
-	constructor(options: {pageid: string, user: User, connection: Connection, language?: ID}) {
+	constructor(options: { pageid: string, user: User, connection: Connection, language?: ID }) {
 		super(options.user, options.language);
 
 		this.connection = options.connection;
@@ -561,7 +561,7 @@ export class CommandContext extends MessageContext {
 	// TODO: return should be void | boolean | Promise<void | boolean>
 	parse(
 		msg?: string,
-		options: Partial<{isQuiet: boolean, broadcastPrefix: string, bypassRoomCheck: boolean}> = {}
+		options: Partial<{ isQuiet: boolean, broadcastPrefix: string, bypassRoomCheck: boolean }> = {}
 	): any {
 		if (typeof msg === 'string') {
 			// spawn subcontext
@@ -946,7 +946,7 @@ export class CommandContext extends MessageContext {
 		action: string,
 		user: string | User | null = null,
 		note: string | null = null,
-		options: Partial<{noalts: any, noip: any}> = {}
+		options: Partial<{ noalts: any, noip: any }> = {}
 	) {
 		const entry: PartialModlogEntry = {
 			action,
@@ -970,7 +970,7 @@ export class CommandContext extends MessageContext {
 		(this.room || Rooms.global).modlog(entry);
 	}
 	parseSpoiler(reason: string) {
-		if (!reason) return {publicReason: "", privateReason: ""};
+		if (!reason) return { publicReason: "", privateReason: "" };
 
 		let publicReason = reason;
 		let privateReason = reason;
@@ -982,7 +982,7 @@ export class CommandContext extends MessageContext {
 			publicReason = reason.slice(0, proofIndex).trim();
 			privateReason = `${publicReason}${proof ? ` (PROOF: ${proof})` : ''}`;
 		}
-		return {publicReason, privateReason};
+		return { publicReason, privateReason };
 	}
 	roomlog(data: string) {
 		if (this.room) this.room.roomlog(data);
@@ -1553,12 +1553,12 @@ export const Chat = new class {
 	basePages!: PageTable;
 	pages!: PageTable;
 	readonly destroyHandlers: (() => void)[] = [Artemis.destroy];
-	readonly crqHandlers: {[k: string]: CRQHandler} = {};
-	readonly handlers: {[k: string]: ((...args: any) => any)[]} = Object.create(null);
+	readonly crqHandlers: { [k: string]: CRQHandler } = {};
+	readonly handlers: { [k: string]: ((...args: any) => any)[] } = Object.create(null);
 	/** The key is the name of the plugin. */
-	readonly plugins: {[k: string]: ChatPlugin} = {};
+	readonly plugins: { [k: string]: ChatPlugin } = {};
 	/** Will be empty except during hotpatch */
-	oldPlugins: {[k: string]: ChatPlugin} = {};
+	oldPlugins: { [k: string]: ChatPlugin } = {};
 	roomSettings: SettingsHandler[] = [];
 
 	/*********************************************************
@@ -1814,7 +1814,7 @@ export const Chat = new class {
 		if (process.send) return; // We don't need a database in a subprocess that requires Chat.
 		if (!Config.usesqlite) return;
 		// check if we have the db_info table, which will always be present unless the schema needs to be initialized
-		const {hasDBInfo} = await this.database.get(
+		const { hasDBInfo } = await this.database.get(
 			`SELECT count(*) AS hasDBInfo FROM sqlite_master WHERE type = 'table' AND name = 'db_info'`
 		);
 		if (!hasDBInfo) await this.database.runFile('./databases/schemas/chat-plugins.sql');
@@ -1832,12 +1832,12 @@ export const Chat = new class {
 			const migrationVersion = parseInt(/v(\d+)\.sql$/.exec(migrationFile)?.[1] || '');
 			if (!migrationVersion) continue;
 			if (migrationVersion > curVersion) {
-				migrationsToRun.push({version: migrationVersion, file: migrationFile});
+				migrationsToRun.push({ version: migrationVersion, file: migrationFile });
 				Monitor.adminlog(`Pushing to migrationsToRun: ${migrationVersion} at ${migrationFile} - mainModule ${process.mainModule === module} !process.send ${!process.send}`);
 			}
 		}
-		Utils.sortBy(migrationsToRun, ({version}) => version);
-		for (const {file} of migrationsToRun) {
+		Utils.sortBy(migrationsToRun, ({ version }) => version);
+		for (const { file } of migrationsToRun) {
 			await this.database.runFile(pathModule.resolve(migrationsFolder, file));
 		}
 
@@ -1890,7 +1890,7 @@ export const Chat = new class {
 		Chat.loadPlugins();
 
 		const initialRoomlogLength = room?.log.getLineCount();
-		const context = new CommandContext({message, room, user, connection});
+		const context = new CommandContext({ message, room, user, connection });
 		const start = Date.now();
 		const result = context.parse();
 		if (typeof result?.then === 'function') {
@@ -1999,7 +1999,7 @@ export const Chat = new class {
 	loadPlugin(plugin: AnyObject, name: string) {
 		// esbuild builds cjs exports in such a way that they use getters, leading to crashes
 		// in the plugin.roomSettings = [plugin.roomSettings] action. So, we have to make them not getters
-		plugin = {...plugin};
+		plugin = { ...plugin };
 		if (plugin.commands) {
 			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
 		}
@@ -2040,7 +2040,7 @@ export const Chat = new class {
 		}
 		Chat.plugins[name] = plugin;
 	}
-	loadPlugins(oldPlugins?: {[k: string]: ChatPlugin}) {
+	loadPlugins(oldPlugins?: { [k: string]: ChatPlugin }) {
 		if (Chat.commands) return;
 		if (oldPlugins) Chat.oldPlugins = oldPlugins;
 
@@ -2286,7 +2286,7 @@ export const Chat = new class {
 	 *
 	 * options.human = true will reports hours human-readable
 	 */
-	toTimestamp(date: Date, options: {human?: boolean} = {}) {
+	toTimestamp(date: Date, options: { human?: boolean } = {}) {
 		const human = options.human;
 		let parts: any[] = [
 			date.getFullYear(),	date.getMonth() + 1, date.getDate(),
@@ -2306,7 +2306,7 @@ export const Chat = new class {
 	 * options.hhmmss = true will instead report the duration in 00:00:00 format
 	 *
 	 */
-	toDurationString(val: number, options: {hhmmss?: boolean, precision?: number} = {}) {
+	toDurationString(val: number, options: { hhmmss?: boolean, precision?: number } = {}) {
 		// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)
 		// https://github.com/tc39/ecma402/issues/47
 		const date = new Date(+val);
@@ -2497,14 +2497,14 @@ export const Chat = new class {
 	/**
 	 * Gets the dimension of the image at url. Returns 0x0 if the image isn't found, as well as the relevant error.
 	 */
-	getImageDimensions(url: string): Promise<{height: number, width: number}> {
+	getImageDimensions(url: string): Promise<{ height: number, width: number }> {
 		return probe(url);
 	}
 
 	parseArguments(
 		str: string,
 		delim = ',',
-		opts: Partial<{paramDelim: string, useIDs: boolean, allowEmpty: boolean}> = {useIDs: true}
+		opts: Partial<{ paramDelim: string, useIDs: boolean, allowEmpty: boolean }> = { useIDs: true }
 	) {
 		const result: Record<string, string[]> = {};
 		for (const part of str.split(delim)) {
@@ -2541,7 +2541,7 @@ export const Chat = new class {
 	 * @return [width, height, resized]
 	 */
 	async fitImage(url: string, maxHeight = 300, maxWidth = 300): Promise<[number, number, boolean]> {
-		const {height, width} = await Chat.getImageDimensions(url);
+		const { height, width } = await Chat.getImageDimensions(url);
 
 		if (width <= maxWidth && height <= maxHeight) return [width, height, false];
 
@@ -2612,8 +2612,8 @@ export const Chat = new class {
 		return this.linkRegex.test(possibleUrl);
 	}
 
-	readonly filterWords: {[k: string]: FilterWord[]} = {};
-	readonly monitors: {[k: string]: Monitor} = {};
+	readonly filterWords: { [k: string]: FilterWord[] } = {};
+	readonly monitors: { [k: string]: Monitor } = {};
 
 	registerMonitor(id: string, entry: Monitor) {
 		if (!Chat.filterWords[id]) Chat.filterWords[id] = [];
@@ -2621,7 +2621,7 @@ export const Chat = new class {
 	}
 
 	resolvePage(pageid: string, user: User, connection: Connection) {
-		return (new PageContext({pageid, user, connection, language: user.language!})).resolve();
+		return (new PageContext({ pageid, user, connection, language: user.language! })).resolve();
 	}
 };
 
@@ -2645,7 +2645,7 @@ export const Chat = new class {
 	return user;
 };
 (CommandContext.prototype as any).splitTarget = function (this: any, target: string, exactName: boolean) {
-	const {targetUser, inputUsername, targetUsername, rest} = this.splitUser(target, exactName);
+	const { targetUser, inputUsername, targetUsername, rest } = this.splitUser(target, exactName);
 	this.targetUser = targetUser;
 	this.inputUsername = inputUsername;
 	this.targetUsername = targetUsername;

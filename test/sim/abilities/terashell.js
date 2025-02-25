@@ -10,8 +10,8 @@ describe('Tera Shell', () => {
 
 	it(`should take not very effective damage when it is at full health`, () => {
 		battle = common.createBattle([
-			[{species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk']}],
-			[{species: 'Wynaut', moves: ['wickedblow']}],
+			[{ species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk'] }],
+			[{ species: 'Wynaut', moves: ['wickedblow'] }],
 		]);
 
 		battle.makeChoices();
@@ -26,8 +26,8 @@ describe('Tera Shell', () => {
 	// confirmed here: https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9893603
 	it(`should not take precedence over immunities`, () => {
 		battle = common.createBattle([
-			[{species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk']}],
-			[{species: 'Wynaut', moves: ['shadowball']}],
+			[{ species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk'] }],
+			[{ species: 'Wynaut', moves: ['shadowball'] }],
 		]);
 
 		battle.makeChoices();
@@ -38,9 +38,9 @@ describe('Tera Shell', () => {
 	// confirmed here: https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-10398768
 	it(`should not activate if Terapagos already resists the move`, () => {
 		battle = common.createBattle([[
-			{species: 'Terapagos', ability: 'terashift', moves: ['sleeptalk']},
+			{ species: 'Terapagos', ability: 'terashift', moves: ['sleeptalk'] },
 		], [
-			{species: 'Urshifu-Rapid-Strike', moves: ['surgingstrikes', 'soak', 'forestscurse']},
+			{ species: 'Urshifu-Rapid-Strike', moves: ['surgingstrikes', 'soak', 'forestscurse'] },
 		]]);
 		const terapagos = battle.p1.active[0];
 		battle.makeChoices('auto', 'move soak');
@@ -59,8 +59,8 @@ describe('Tera Shell', () => {
 	// confirmed here: https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9893781
 	it('All hits of multi-hit move should be not very effective', () => {
 		battle = common.createBattle([
-			[{species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk']}],
-			[{species: 'Wynaut', moves: ['surgingstrikes']}],
+			[{ species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk'] }],
+			[{ species: 'Wynaut', moves: ['surgingstrikes'] }],
 		]);
 
 		battle.makeChoices();
@@ -72,8 +72,8 @@ describe('Tera Shell', () => {
 	// confirmed here: https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9893651
 	it(`should be suppressed by Gastro Acid`, () => {
 		battle = common.createBattle([
-			[{species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk']}],
-			[{species: 'Wynaut', moves: ['gastroacid', 'wickedblow']}],
+			[{ species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk'] }],
+			[{ species: 'Wynaut', moves: ['gastroacid', 'wickedblow'] }],
 		]);
 
 		battle.makeChoices('move sleeptalk', 'move gastroacid');
@@ -85,9 +85,9 @@ describe('Tera Shell', () => {
 
 	it(`should not work if the user's species is not currently Terapagos-Terastal`, () => {
 		battle = common.createBattle([[
-			{species: 'Terapagos', ability: 'terashift', moves: ['transform']},
+			{ species: 'Terapagos', ability: 'terashift', moves: ['transform'] },
 		], [
-			{species: 'Umbreon', ability: 'terashell', moves: ['flowertrick']},
+			{ species: 'Umbreon', ability: 'terashell', moves: ['flowertrick'] },
 		]]);
 
 		battle.makeChoices();
@@ -96,9 +96,9 @@ describe('Tera Shell', () => {
 		assert.bounded(damage, [51, 60], `Tera Shell should not have activated because current species is not Terapagos`);
 
 		battle = common.createBattle([[
-			{species: 'Espeon', moves: ['transform']},
+			{ species: 'Espeon', moves: ['transform'] },
 		], [
-			{species: 'Terapagos', ability: 'terashift', moves: ['flowertrick']},
+			{ species: 'Terapagos', ability: 'terashift', moves: ['flowertrick'] },
 		]]);
 
 		battle.makeChoices();
@@ -109,9 +109,9 @@ describe('Tera Shell', () => {
 
 	it(`should not weaken the damage from Struggle`, () => {
 		battle = common.createBattle([[
-			{species: 'Terapagos', ability: 'terashift', moves: ['luckychant']},
+			{ species: 'Terapagos', ability: 'terashift', moves: ['luckychant'] },
 		], [
-			{species: 'Slowking', item: 'assaultvest', moves: ['sleeptalk']},
+			{ species: 'Slowking', item: 'assaultvest', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -123,10 +123,10 @@ describe('Tera Shell', () => {
 
 	it(`should not continue to weaken attacks after taking damage from a Future attack`, () => {
 		battle = common.createBattle([[
-			{species: 'Terapagos', ability: 'terashift', moves: ['sleeptalk']},
-			{species: 'Espeon', moves: ['sleeptalk']},
+			{ species: 'Terapagos', ability: 'terashift', moves: ['sleeptalk'] },
+			{ species: 'Espeon', moves: ['sleeptalk'] },
 		], [
-			{species: 'Slowking', moves: ['sleeptalk', 'wickedblow', 'futuresight']},
+			{ species: 'Slowking', moves: ['sleeptalk', 'wickedblow', 'futuresight'] },
 		]]);
 
 		battle.makeChoices('auto', 'move futuresight');
@@ -145,12 +145,12 @@ describe('Tera Shell', () => {
 
 	it.skip(`should activate, but not weaken, moves with fixed damage`, () => {
 		battle = common.createBattle([[
-			{species: 'Terapagos', ability: 'terashift', evs: {hp: 252}, moves: ['recover', 'seismictoss']},
-			{species: 'Magikarp', moves: ['sleeptalk']},
+			{ species: 'Terapagos', ability: 'terashift', evs: { hp: 252 }, moves: ['recover', 'seismictoss'] },
+			{ species: 'Magikarp', moves: ['sleeptalk'] },
 		], [
-			{species: 'Slowpoke', ability: 'noguard', moves: ['seismictoss', 'superfang', 'counter']},
-			{species: 'Shuckle', moves: ['finalgambit']},
-			{species: 'Wynaut', ability: 'noguard', moves: ['sheercold']},
+			{ species: 'Slowpoke', ability: 'noguard', moves: ['seismictoss', 'superfang', 'counter'] },
+			{ species: 'Shuckle', moves: ['finalgambit'] },
+			{ species: 'Wynaut', ability: 'noguard', moves: ['sheercold'] },
 		]]);
 
 		const terapagos = battle.p1.active[0];

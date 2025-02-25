@@ -11,15 +11,15 @@ describe('Technician', () => {
 	});
 
 	it('should not apply boost on a move boosted over 60 BP by Battery in Gen 7', () => {
-		battle = common.gen(7).createBattle({gameType: 'doubles'});
-		battle.setPlayer('p1', {team: [
-			{species: 'Toxtricity', ability: 'technician', moves: ['shockwave']},
-			{species: 'Charjabug', ability: 'battery', moves: ['sleeptalk']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: 'Marshadow', ability: 'technician', moves: ['sleeptalk']},
-			{species: 'Mew', ability: 'synchronize', moves: ['sleeptalk']},
-		]});
+		battle = common.gen(7).createBattle({ gameType: 'doubles' });
+		battle.setPlayer('p1', { team: [
+			{ species: 'Toxtricity', ability: 'technician', moves: ['shockwave'] },
+			{ species: 'Charjabug', ability: 'battery', moves: ['sleeptalk'] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: 'Marshadow', ability: 'technician', moves: ['sleeptalk'] },
+			{ species: 'Mew', ability: 'synchronize', moves: ['sleeptalk'] },
+		] });
 		battle.makeChoices('move shockwave 2, move sleeptalk', 'move sleeptalk, move sleeptalk');
 		const mew = battle.p2.active[1];
 		const damage = mew.maxhp - mew.hp;
@@ -27,12 +27,12 @@ describe('Technician', () => {
 	});
 
 	it(`should apply boost on a move boosted over 60 BP by Steely Spirit`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Scizor', ability: 'technician', moves: ['metalclaw']},
-			{species: 'Perrserker', ability: 'steelyspirit', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Scizor', ability: 'technician', moves: ['metalclaw'] },
+			{ species: 'Perrserker', ability: 'steelyspirit', moves: ['sleeptalk'] },
 		], [
-			{species: 'Marshadow', moves: ['luckychant']},
-			{species: 'Mew', ability: 'noguard', moves: ['sleeptalk']},
+			{ species: 'Marshadow', moves: ['luckychant'] },
+			{ species: 'Mew', ability: 'noguard', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move metalclaw 2, auto', 'auto');
 		const mew = battle.p2.active[1];
@@ -41,13 +41,13 @@ describe('Technician', () => {
 	});
 
 	it(`should consider the BP before Aura boosts have been applied in Gen 8`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Smeargle', ability: 'technician', moves: ['drainingkiss', 'knockoff']},
-			{species: 'Scizor', ability: 'technician', moves: ['thief', 'sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Smeargle', ability: 'technician', moves: ['drainingkiss', 'knockoff'] },
+			{ species: 'Scizor', ability: 'technician', moves: ['thief', 'sleeptalk'] },
 		], [
-			{species: 'Xerneas', ability: 'fairyaura', moves: ['luckychant']},
-			{species: 'Yveltal', ability: 'darkaura', moves: ['sleeptalk']},
-			{species: 'Zygarde', ability: 'aurabreak', moves: ['sleeptalk']},
+			{ species: 'Xerneas', ability: 'fairyaura', moves: ['luckychant'] },
+			{ species: 'Yveltal', ability: 'darkaura', moves: ['sleeptalk'] },
+			{ species: 'Zygarde', ability: 'aurabreak', moves: ['sleeptalk'] },
 		]]);
 		// 1st turn: test Fairy Aura and Dark Aura
 		// Scizor attacks Xerneas with Thief, Smeargle attacks Yveltal with Draining Kiss

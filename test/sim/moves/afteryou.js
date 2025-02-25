@@ -11,12 +11,12 @@ describe('After You', () => {
 	});
 
 	it(`should cause the targeted Pokemon to immediately move next`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Wynaut', ability: 'prankster', moves: ['afteryou']},
-			{species: 'Magnemite', level: 1, moves: ['magnetrise']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Wynaut', ability: 'prankster', moves: ['afteryou'] },
+			{ species: 'Magnemite', level: 1, moves: ['magnetrise'] },
 		], [
-			{species: 'Great Tusk', moves: ['headlongrush']},
-			{species: "Magikarp", moves: ['sleeptalk']},
+			{ species: 'Great Tusk', moves: ['headlongrush'] },
+			{ species: "Magikarp", moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move afteryou -2, move magnetrise', 'move headlongrush 2, auto');
@@ -25,12 +25,12 @@ describe('After You', () => {
 	});
 
 	it(`should only cause the target to move next, not run a submove`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Wynaut', ability: 'prankster', moves: ['afteryou']},
-			{species: 'Necrozma', level: 50, ability: 'prankster', moves: ['photongeyser']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Wynaut', ability: 'prankster', moves: ['afteryou'] },
+			{ species: 'Necrozma', level: 50, ability: 'prankster', moves: ['photongeyser'] },
 		], [
-			{species: 'Dugtrio', moves: ['sleeptalk']},
-			{species: 'Roggenrola', level: 1, ability: 'sturdy', moves: ['sleeptalk']},
+			{ species: 'Dugtrio', moves: ['sleeptalk'] },
+			{ species: 'Roggenrola', level: 1, ability: 'sturdy', moves: ['sleeptalk'] },
 		]]);
 
 		// Photon Geyser has a mechanic where it ignores abilities with Mold Breaker,
@@ -42,14 +42,14 @@ describe('After You', () => {
 	});
 
 	it(`should work in a free-for-all`, () => {
-		battle = common.createBattle({gameType: 'freeforall'}, [[
-			{species: 'Wynaut', ability: 'prankster', moves: ['afteryou']},
+		battle = common.createBattle({ gameType: 'freeforall' }, [[
+			{ species: 'Wynaut', ability: 'prankster', moves: ['afteryou'] },
 		], [
-			{species: 'Magnemite', level: 1, moves: ['magnetrise']},
+			{ species: 'Magnemite', level: 1, moves: ['magnetrise'] },
 		], [
-			{species: 'Great Tusk', moves: ['headlongrush']},
+			{ species: 'Great Tusk', moves: ['headlongrush'] },
 		], [
-			{species: 'Magikarp', moves: ['sleeptalk']},
+			{ species: 'Magikarp', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move afteryou 1', 'move magnetrise', 'move headlongrush 1', 'auto');
@@ -59,9 +59,9 @@ describe('After You', () => {
 
 	it(`should fail in singles whether the user is faster or slower than its target`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', moves: ['afteryou', 'ember']},
+			{ species: 'Wynaut', moves: ['afteryou', 'ember'] },
 		], [
-			{species: 'Tyrogue', moves: ['afteryou', 'seismictoss']},
+			{ species: 'Tyrogue', moves: ['afteryou', 'seismictoss'] },
 		]]);
 
 		battle.makeChoices('move afteryou', 'move seismictoss');

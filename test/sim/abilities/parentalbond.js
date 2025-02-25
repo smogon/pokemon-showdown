@@ -9,9 +9,9 @@ let damages;
 describe('Parental Bond', () => {
 	beforeEach(() => {
 		battle = common.createBattle([[
-			{species: 'Kangaskhan', ability: 'parentalbond', item: 'electriumz', moves: ['thunderpunch', 'doublekick']},
+			{ species: 'Kangaskhan', ability: 'parentalbond', item: 'electriumz', moves: ['thunderpunch', 'doublekick'] },
 		], [
-			{species: 'Aggron', ability: 'battlearmor', moves: ['rest']},
+			{ species: 'Aggron', ability: 'battlearmor', moves: ['rest'] },
 		]]);
 
 		damages = [];
@@ -46,9 +46,9 @@ describe('Parental Bond', () => {
 describe('Parental Bond [Gen 6]', () => {
 	beforeEach(() => {
 		battle = common.gen(6).createBattle([[
-			{species: 'Kangaskhan', ability: 'parentalbond', item: 'electriumz', moves: ['thunderpunch', 'doublekick']},
+			{ species: 'Kangaskhan', ability: 'parentalbond', item: 'electriumz', moves: ['thunderpunch', 'doublekick'] },
 		], [
-			{species: 'Aggron', ability: 'battlearmor', moves: ['rest']},
+			{ species: 'Aggron', ability: 'battlearmor', moves: ['rest'] },
 		]]);
 
 		damages = [];

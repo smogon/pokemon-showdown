@@ -7,13 +7,13 @@
  * @license MIT
  */
 
-import {Dex, toID} from './dex';
-import type {MoveSource} from './dex-species';
-import {Utils} from '../lib/utils';
-import {Tags} from '../data/tags';
-import {Teams} from './teams';
-import {PRNG} from './prng';
-import {type RuleTable} from './dex-formats';
+import { Dex, toID } from './dex';
+import type { MoveSource } from './dex-species';
+import { Utils } from '../lib/utils';
+import { Tags } from '../data/tags';
+import { Teams } from './teams';
+import { PRNG } from './prng';
+import { type RuleTable } from './dex-formats';
 
 /**
  * Describes a possible way to get a pokemon. Is not exhaustive!
@@ -340,7 +340,7 @@ export class TeamValidator {
 		team: PokemonSet[] | null,
 		options: {
 			removeNicknames?: boolean,
-			skipSets?: {[name: string]: {[key: string]: boolean}},
+			skipSets?: { [name: string]: { [key: string]: boolean } },
 		} = {}
 	): string[] | null {
 		if (team && this.format.validateTeam) {
@@ -353,7 +353,7 @@ export class TeamValidator {
 		team: PokemonSet[] | null,
 		options: {
 			removeNicknames?: boolean,
-			skipSets?: {[name: string]: {[key: string]: boolean}},
+			skipSets?: { [name: string]: { [key: string]: boolean } },
 		} = {}
 	): string[] | null {
 		const format = this.format;
@@ -405,7 +405,7 @@ export class TeamValidator {
 			return problems;
 		}
 
-		const teamHas: {[k: string]: number} = {};
+		const teamHas: { [k: string]: number } = {};
 		let lgpeStarterCount = 0;
 		let deoxysType;
 		for (const set of team) {
@@ -483,7 +483,7 @@ export class TeamValidator {
 		return problems;
 	}
 
-	getEventOnlyData(species: Species, noRecurse?: boolean): {species: Species, eventData: EventInfo[]} | null {
+	getEventOnlyData(species: Species, noRecurse?: boolean): { species: Species, eventData: EventInfo[] } | null {
 		const dex = this.dex;
 		const learnset = dex.species.getLearnsetData(species.id);
 		if (!learnset?.eventOnly) {
@@ -498,10 +498,10 @@ export class TeamValidator {
 			throw new Error(`Event-only species ${species.name} has no eventData table`);
 		}
 
-		return {species, eventData: learnset.eventData};
+		return { species, eventData: learnset.eventData };
 	}
 
-	getValidationSpecies(set: PokemonSet): {outOfBattleSpecies: Species, tierSpecies: Species} {
+	getValidationSpecies(set: PokemonSet): { outOfBattleSpecies: Species, tierSpecies: Species } {
 		const dex = this.dex;
 		const ruleTable = this.ruleTable;
 		const species = dex.species.get(set.species);
@@ -544,7 +544,7 @@ export class TeamValidator {
 			}
 		}
 
-		return {outOfBattleSpecies, tierSpecies};
+		return { outOfBattleSpecies, tierSpecies };
 	}
 
 	validateSet(set: PokemonSet, teamHas: AnyObject): string[] | null {
@@ -612,7 +612,7 @@ export class TeamValidator {
 			problems.push(`${name} (level ${set.level}) is above the maximum level of ${ruleTable.maxLevel}${ruleTable.blame('maxlevel')}`);
 		}
 
-		const setHas: {[k: string]: true} = {};
+		const setHas: { [k: string]: true } = {};
 
 		if (!set.evs) set.evs = TeamValidator.fillStats(null, ruleTable.evLimit === null ? 252 : 0);
 		if (!set.ivs) set.ivs = TeamValidator.fillStats(null, 31);
@@ -639,7 +639,7 @@ export class TeamValidator {
 		item = dex.items.get(set.item);
 		ability = dex.abilities.get(set.ability);
 
-		const {outOfBattleSpecies, tierSpecies} = this.getValidationSpecies(set);
+		const { outOfBattleSpecies, tierSpecies } = this.getValidationSpecies(set);
 		if (ability.id === 'battlebond' && toID(species.baseSpecies) === 'greninja') {
 			if (ruleTable.has('obtainablemisc')) {
 				if (set.gender && set.gender !== 'M') {
@@ -795,7 +795,7 @@ export class TeamValidator {
 			problems.push(...this.validateStats(set, species, setSources, pokemonGoProblems));
 		}
 
-		const moveLegalityWhitelist: {[k: string]: true | undefined} = {};
+		const moveLegalityWhitelist: { [k: string]: true | undefined } = {};
 		for (const moveName of set.moves) {
 			if (!moveName) continue;
 			const move = dex.moves.get(Utils.getString(moveName));
@@ -948,7 +948,7 @@ export class TeamValidator {
 				}
 			}
 		} else if (ruleTable.has('obtainablemisc') && (eventOnlyData = this.getEventOnlyData(outOfBattleSpecies))) {
-			const {species: eventSpecies, eventData} = eventOnlyData;
+			const { species: eventSpecies, eventData } = eventOnlyData;
 			let legal = false;
 			for (const event of eventData) {
 				if (this.validateEvent(set, setSources, event, eventSpecies)) continue;
@@ -1123,7 +1123,7 @@ export class TeamValidator {
 		if (set.hpType && maxedIVs && ruleTable.has('obtainablemisc')) {
 			if (dex.gen <= 2) {
 				const HPdvs = dex.types.get(set.hpType).HPdvs;
-				set.ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
+				set.ivs = { hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30 };
 				let statName: StatID;
 				for (statName in HPdvs) {
 					set.ivs[statName] = HPdvs[statName]! * 2;
@@ -1490,7 +1490,7 @@ export class TeamValidator {
 		allEggSources.sourcesBefore = eggGen;
 		for (const move of moves) {
 			const eggSources = new PokemonSources();
-			for (const {learnset, species: curSpecies} of this.dex.species.getFullLearnset(species.id)) {
+			for (const { learnset, species: curSpecies } of this.dex.species.getFullLearnset(species.id)) {
 				const eggPokemon = curSpecies.prevo ? curSpecies.id : '';
 				if (learnset[move]) {
 					for (const moveSource of learnset[move]) {
@@ -1543,7 +1543,7 @@ export class TeamValidator {
 	motherCanLearn(species: ID, move: ID) {
 		if (!species) return false;
 		const fullLearnset = this.dex.species.getFullLearnset(species);
-		for (const {learnset} of fullLearnset) {
+		for (const { learnset } of fullLearnset) {
 			if (learnset[move]) return true;
 		}
 		return false;
@@ -1637,7 +1637,7 @@ export class TeamValidator {
 		}
 
 		if (species.name === 'Pikachu-Cosplay') {
-			const cosplay: {[k: string]: string} = {
+			const cosplay: { [k: string]: string } = {
 				meteormash: 'Pikachu-Rock-Star', iciclecrash: 'Pikachu-Belle', drainingkiss: 'Pikachu-Pop-Star',
 				electricterrain: 'Pikachu-PhD', flyingpress: 'Pikachu-Libre',
 			};
@@ -1653,7 +1653,7 @@ export class TeamValidator {
 			set.species = 'Keldeo-Resolute';
 		}
 
-		const crowned: {[k: string]: string} = {
+		const crowned: { [k: string]: string } = {
 			'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 		};
 		if (species.name in crowned) {
@@ -1695,7 +1695,7 @@ export class TeamValidator {
 		return problems;
 	}
 
-	checkSpecies(set: PokemonSet, species: Species, tierSpecies: Species, setHas: {[k: string]: true}) {
+	checkSpecies(set: PokemonSet, species: Species, tierSpecies: Species, setHas: { [k: string]: true }) {
 		const dex = this.dex;
 		const ruleTable = this.ruleTable;
 
@@ -1854,7 +1854,7 @@ export class TeamValidator {
 		return null;
 	}
 
-	checkItem(set: PokemonSet, item: Item, setHas: {[k: string]: true}) {
+	checkItem(set: PokemonSet, item: Item, setHas: { [k: string]: true }) {
 		const dex = this.dex;
 		const ruleTable = this.ruleTable;
 
@@ -1902,7 +1902,7 @@ export class TeamValidator {
 		return null;
 	}
 
-	checkMove(set: PokemonSet, move: Move, setHas: {[k: string]: true}) {
+	checkMove(set: PokemonSet, move: Move, setHas: { [k: string]: true }) {
 		const dex = this.dex;
 		const ruleTable = this.ruleTable;
 
@@ -1948,7 +1948,7 @@ export class TeamValidator {
 		return null;
 	}
 
-	checkAbility(set: PokemonSet, ability: Ability, setHas: {[k: string]: true}) {
+	checkAbility(set: PokemonSet, ability: Ability, setHas: { [k: string]: true }) {
 		const dex = this.dex;
 		const ruleTable = this.ruleTable;
 
@@ -1999,7 +1999,7 @@ export class TeamValidator {
 		return null;
 	}
 
-	checkNature(set: PokemonSet, nature: Nature, setHas: {[k: string]: true}) {
+	checkNature(set: PokemonSet, nature: Nature, setHas: { [k: string]: true }) {
 		const dex = this.dex;
 		const ruleTable = this.ruleTable;
 
@@ -2104,7 +2104,7 @@ export class TeamValidator {
 			/** In Gen 7+, IVs can be changed to 31 */
 			const canBottleCap = dex.gen >= 7 && set.level >= (dex.gen < 9 ? 100 : 50);
 
-			if (!set.ivs) set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+			if (!set.ivs) set.ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 			let statName: StatID;
 			for (statName in eventData.ivs) {
 				if (canBottleCap && set.ivs[statName] === 31) continue;
@@ -2220,7 +2220,7 @@ export class TeamValidator {
 
 	validateMoves(
 		species: Species, moves: string[], setSources: PokemonSources, set?: Partial<PokemonSet>,
-		name: string = species.name, moveLegalityWhitelist: {[k: string]: true | undefined} = {}
+		name: string = species.name, moveLegalityWhitelist: { [k: string]: true | undefined } = {}
 	) {
 		const dex = this.dex;
 		const ruleTable = this.ruleTable;
@@ -2498,7 +2498,7 @@ export class TeamValidator {
 			return ` can't learn any moves at all.`;
 		}
 
-		for (const {species, learnset} of fullLearnset) {
+		for (const { species, learnset } of fullLearnset) {
 			if (dex.gen <= 2 && species.gen === 1) tradebackEligible = true;
 			const checkingPrevo = species.baseSpecies !== originalSpecies.baseSpecies;
 			if (checkingPrevo && !moveSources.size()) {
@@ -2854,7 +2854,7 @@ export class TeamValidator {
 	}
 
 	static fillStats(stats: SparseStatsTable | null, fillNum = 0): StatsTable {
-		const filledStats: StatsTable = {hp: fillNum, atk: fillNum, def: fillNum, spa: fillNum, spd: fillNum, spe: fillNum};
+		const filledStats: StatsTable = { hp: fillNum, atk: fillNum, def: fillNum, spa: fillNum, spd: fillNum, spe: fillNum };
 		if (stats) {
 			let statName: StatID;
 			for (statName in filledStats) {

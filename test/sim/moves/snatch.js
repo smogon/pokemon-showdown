@@ -12,9 +12,9 @@ describe('Snatch', () => {
 
 	it('should cause the victim of Snatch to change typing with Protean rather than the Snatch user', () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'protean', moves: ['snatch']},
+			{ species: 'wynaut', ability: 'protean', moves: ['snatch'] },
 		], [
-			{species: 'dratini', ability: 'protean', moves: ['howl']},
+			{ species: 'dratini', ability: 'protean', moves: ['howl'] },
 		]]);
 
 		const wynaut = battle.p1.active[0];
@@ -26,12 +26,12 @@ describe('Snatch', () => {
 	});
 
 	it('should not Choice lock the user from the snatched move', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'wynaut', moves: ['snatch', 'howl']},
-			{species: 'accelgor', item: 'choicescarf', moves: ['trick']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'wynaut', moves: ['snatch', 'howl'] },
+			{ species: 'accelgor', item: 'choicescarf', moves: ['trick'] },
 		], [
-			{species: 'dratini', moves: ['howl']},
-			{species: 'luvdisc', moves: ['sleeptalk']},
+			{ species: 'dratini', moves: ['howl'] },
+			{ species: 'luvdisc', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move snatch, move trick -1', 'auto');
@@ -41,12 +41,12 @@ describe('Snatch', () => {
 	});
 
 	it('should not be able to steal Rest when the Rest user is at full HP', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'wynaut', moves: ['snatch']},
-			{species: 'accelgor', moves: ['rest']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'wynaut', moves: ['snatch'] },
+			{ species: 'accelgor', moves: ['rest'] },
 		], [
-			{species: 'dratini', moves: ['howl']},
-			{species: 'luvdisc', moves: ['quickattack']},
+			{ species: 'dratini', moves: ['howl'] },
+			{ species: 'luvdisc', moves: ['quickattack'] },
 		]]);
 
 		const wynaut = battle.p1.active[0];
@@ -56,12 +56,12 @@ describe('Snatch', () => {
 	});
 
 	it('should Snatch moves and run Throat Chop and Heal Block checks', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'porygon2', moves: ['sleeptalk', 'howl']},
-			{species: 'weavile', moves: ['toxicthread', 'sleeptalk', 'snatch']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'porygon2', moves: ['sleeptalk', 'howl'] },
+			{ species: 'weavile', moves: ['toxicthread', 'sleeptalk', 'snatch'] },
 		], [
-			{species: 'mew', item: 'powerherb', moves: ['throatchop', 'toxicthread', 'sleeptalk', 'healblock']},
-			{species: 'skitty', ability: 'intrepidsword', moves: ['throatchop', 'healbell', 'recover']},
+			{ species: 'mew', item: 'powerherb', moves: ['throatchop', 'toxicthread', 'sleeptalk', 'healblock'] },
+			{ species: 'skitty', ability: 'intrepidsword', moves: ['throatchop', 'healbell', 'recover'] },
 		]]);
 
 		battle.makeChoices('move sleeptalk, move toxicthread 2', 'move throatchop 1, move throatchop 2');
@@ -78,12 +78,12 @@ describe('Snatch', () => {
 	});
 
 	it('should not snatch Swallow if the Swallow user has no Stockpiles', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'mandibuzz', moves: ['snatch']},
-			{species: 'accelgor', moves: ['swallow']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'mandibuzz', moves: ['snatch'] },
+			{ species: 'accelgor', moves: ['swallow'] },
 		], [
-			{species: 'surskit', moves: ['quickattack']},
-			{species: 'wingull', moves: ['quickattack']},
+			{ species: 'surskit', moves: ['quickattack'] },
+			{ species: 'wingull', moves: ['quickattack'] },
 		]]);
 
 		battle.makeChoices('auto', 'move quickattack 1, move quickattack 2');
@@ -94,9 +94,9 @@ describe('Snatch', () => {
 
 	it('Snatched Swallow should heal the snatcher by 25% if the snatcher has no Stockpiles', () => {
 		battle = common.createBattle([[
-			{species: 'clefable', moves: ['sleeptalk', 'bellydrum', 'snatch']},
+			{ species: 'clefable', moves: ['sleeptalk', 'bellydrum', 'snatch'] },
 		], [
-			{species: 'dewgong', moves: ['stockpile', 'swallow']},
+			{ species: 'dewgong', moves: ['stockpile', 'swallow'] },
 		]]);
 		battle.makeChoices('move bellydrum', 'auto');
 		battle.makeChoices();
@@ -112,12 +112,12 @@ describe('Snatch [Gen 4]', () => {
 	});
 
 	it('should Snatch moves that were called by another user of Snatch', () => {
-		battle = common.gen(4).createBattle({gameType: 'doubles'}, [[
-			{species: 'weavile', moves: ['snatch']},
-			{species: 'wynaut', moves: ['howl']},
+		battle = common.gen(4).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'weavile', moves: ['snatch'] },
+			{ species: 'wynaut', moves: ['howl'] },
 		], [
-			{species: 'alakazam', moves: ['snatch']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'alakazam', moves: ['snatch'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -126,9 +126,9 @@ describe('Snatch [Gen 4]', () => {
 
 	it.skip(`should only deduct additional PP from Snatch if the Snatch was successful`, () => {
 		battle = common.gen(4).createBattle([[
-			{species: 'Palkia', ability: 'pressure', moves: ['watergun', 'calmmind']},
+			{ species: 'Palkia', ability: 'pressure', moves: ['watergun', 'calmmind'] },
 		], [
-			{species: 'Dialga', moves: ['snatch']},
+			{ species: 'Dialga', moves: ['snatch'] },
 		]]);
 		battle.makeChoices();
 		const move = battle.p2.active[0].getMoveData(Dex.moves.get('snatch'));

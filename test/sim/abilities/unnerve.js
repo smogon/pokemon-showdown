@@ -12,10 +12,10 @@ describe(`Unnerve`, () => {
 
 	it(`should allow Berry activation between switches of Unnerve`, () => {
 		battle = common.createBattle([[
-			{species: 'toxapex', ability: 'unnerve', moves: ['toxic']},
-			{species: 'corviknight', ability: 'unnerve', moves: ['sleeptalk']},
+			{ species: 'toxapex', ability: 'unnerve', moves: ['toxic'] },
+			{ species: 'corviknight', ability: 'unnerve', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', item: 'lumberry', moves: ['sleeptalk']},
+			{ species: 'wynaut', item: 'lumberry', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('switch 2', 'auto');
@@ -28,11 +28,11 @@ describe(`Unnerve`, () => {
 		beforeEach(() => {
 			battle = common.createBattle([[
 				// 18 HP on Wynaut
-				{species: 'Wynaut', level: 3, ivs: {hp: 0}, ability: 'dazzling', item: 'oranberry', moves: ['bellydrum', 'flamethrower']},
-				{species: 'Aggron', moves: ['sleeptalk']},
+				{ species: 'Wynaut', level: 3, ivs: { hp: 0 }, ability: 'dazzling', item: 'oranberry', moves: ['bellydrum', 'flamethrower'] },
+				{ species: 'Aggron', moves: ['sleeptalk'] },
 			], [
-				{species: 'Mewtwo', ability: 'unnerve', item: 'laggingtail', moves: ['explosion']},
-				{species: 'Celesteela', moves: ['tackle', 'poweruppunch', 'quickattack', 'roar']},
+				{ species: 'Mewtwo', ability: 'unnerve', item: 'laggingtail', moves: ['explosion'] },
+				{ species: 'Celesteela', moves: ['tackle', 'poweruppunch', 'quickattack', 'roar'] },
 			]]);
 			battle.makeChoices();
 			assert.false.fainted(battle.p1.active[0], `Wynaut should not have fainted.`);

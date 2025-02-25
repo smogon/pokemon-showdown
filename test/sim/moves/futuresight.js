@@ -12,9 +12,9 @@ describe('Future Sight', () => {
 
 	it(`should damage in two turns, ignoring Protect, affected by Dark immunities`, () => {
 		battle = common.createBattle([[
-			{species: 'Sneasel', moves: ['sleeptalk', 'futuresight']},
+			{ species: 'Sneasel', moves: ['sleeptalk', 'futuresight'] },
 		], [
-			{species: 'Girafarig', moves: ['sleeptalk', 'futuresight', 'protect']},
+			{ species: 'Girafarig', moves: ['sleeptalk', 'futuresight', 'protect'] },
 		]]);
 
 		const sneasel = battle.p1.active[0];
@@ -30,9 +30,9 @@ describe('Future Sight', () => {
 
 	it(`should fail when already active for the target's position`, () => {
 		battle = common.createBattle([[
-			{species: 'Sneasel', moves: ['sleeptalk']},
+			{ species: 'Sneasel', moves: ['sleeptalk'] },
 		], [
-			{species: 'Girafarig', moves: ['futuresight']},
+			{ species: 'Girafarig', moves: ['futuresight'] },
 		]]);
 
 		battle.makeChoices();
@@ -42,9 +42,9 @@ describe('Future Sight', () => {
 
 	it(`[Gen 2] should damage in two turns, ignoring Protect`, () => {
 		battle = common.gen(2).createBattle([[
-			{species: 'Sneasel', moves: ['sleeptalk', 'futuresight', 'sweetscent']},
+			{ species: 'Sneasel', moves: ['sleeptalk', 'futuresight', 'sweetscent'] },
 		], [
-			{species: 'Girafarig', moves: ['sleeptalk', 'futuresight', 'protect', 'sweetscent']},
+			{ species: 'Girafarig', moves: ['sleeptalk', 'futuresight', 'protect', 'sweetscent'] },
 		]]);
 
 		const sneasel = battle.p1.active[0];
@@ -61,9 +61,9 @@ describe('Future Sight', () => {
 
 	it(`should not double Stomping Tantrum for exiting normally`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', moves: ['futuresight', 'stompingtantrum']},
+			{ species: 'Wynaut', moves: ['futuresight', 'stompingtantrum'] },
 		], [
-			{species: 'Scizor', ability: 'shellarmor', moves: ['sleeptalk']},
+			{ species: 'Scizor', ability: 'shellarmor', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -75,10 +75,10 @@ describe('Future Sight', () => {
 
 	it(`should not trigger Eject Button`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', moves: ['futuresight']},
+			{ species: 'Wynaut', moves: ['futuresight'] },
 		], [
-			{species: 'Scizor', item: 'ejectbutton', moves: ['sleeptalk']},
-			{species: 'Roggenrola', moves: ['sleeptalk']},
+			{ species: 'Scizor', item: 'ejectbutton', moves: ['sleeptalk'] },
+			{ species: 'Roggenrola', moves: ['sleeptalk'] },
 		]]);
 
 		for (let i = 0; i < 3; i++) battle.makeChoices();
@@ -87,10 +87,10 @@ describe('Future Sight', () => {
 
 	it(`should be able to set Future Sight against an empty target slot`, () => {
 		battle = common.createBattle([[
-			{species: 'Shedinja', moves: ['finalgambit']},
-			{species: 'Roggenrola', moves: ['sleeptalk']},
+			{ species: 'Shedinja', moves: ['finalgambit'] },
+			{ species: 'Roggenrola', moves: ['sleeptalk'] },
 		], [
-			{species: 'Wynaut', moves: ['sleeptalk', 'futuresight']},
+			{ species: 'Wynaut', moves: ['sleeptalk', 'futuresight'] },
 		]]);
 
 		battle.makeChoices('auto', 'move future sight');
@@ -103,9 +103,9 @@ describe('Future Sight', () => {
 
 	it(`its damaging hit should not count as copyable for Copycat`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', moves: ['sleeptalk', 'futuresight']},
+			{ species: 'Wynaut', moves: ['sleeptalk', 'futuresight'] },
 		], [
-			{species: 'Liepard', moves: ['sleeptalk', 'copycat']},
+			{ species: 'Liepard', moves: ['sleeptalk', 'copycat'] },
 		]]);
 
 		battle.makeChoices('move futuresight', 'auto');
@@ -120,9 +120,9 @@ describe('Future Sight', () => {
 
 	it(`should only cause the user to take Life Orb recoil on its damaging turn`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'lifeorb', moves: ['futuresight']},
+			{ species: 'wynaut', item: 'lifeorb', moves: ['futuresight'] },
 		], [
-			{species: 'mew', moves: ['sleeptalk']},
+			{ species: 'mew', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -138,9 +138,9 @@ describe('Future Sight', () => {
 
 	it(`[Gen 4] should not be affected by Life Orb`, () => {
 		battle = common.gen(4).createBattle([[
-			{species: 'wynaut', item: 'lifeorb', moves: ['futuresight']},
+			{ species: 'wynaut', item: 'lifeorb', moves: ['futuresight'] },
 		], [
-			{species: 'mew', ability: 'noguard', moves: ['sleeptalk']},
+			{ species: 'mew', ability: 'noguard', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -155,10 +155,10 @@ describe('Future Sight', () => {
 
 	it(`should not be affected by Life Orb if not the original user`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'lifeorb', moves: ['futuresight']},
-			{species: 'liepard', item: 'lifeorb', moves: ['sleeptalk']},
+			{ species: 'wynaut', item: 'lifeorb', moves: ['futuresight'] },
+			{ species: 'liepard', item: 'lifeorb', moves: ['sleeptalk'] },
 		], [
-			{species: 'mew', moves: ['sleeptalk']},
+			{ species: 'mew', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -173,9 +173,9 @@ describe('Future Sight', () => {
 
 	it(`should not cause the user to change typing on either its starting or damaging turn`, () => {
 		battle = common.createBattle([[
-			{species: 'roggenrola', ability: 'protean', moves: ['futuresight', 'sleeptalk']},
+			{ species: 'roggenrola', ability: 'protean', moves: ['futuresight', 'sleeptalk'] },
 		], [
-			{species: 'mew', moves: ['sleeptalk']},
+			{ species: 'mew', moves: ['sleeptalk'] },
 		]]);
 
 		const roggenrola = battle.p1.active[0];
@@ -188,9 +188,9 @@ describe('Future Sight', () => {
 
 	it(`should be boosted by Terrain only if Terrain is active on the damaging turn`, () => {
 		battle = common.createBattle([[
-			{species: 'Blissey', ability: 'shellarmor', moves: ['softboiled']},
+			{ species: 'Blissey', ability: 'shellarmor', moves: ['softboiled'] },
 		], [
-			{species: 'Wynaut', ability: 'psychicsurge', moves: ['sleeptalk', 'futuresight']},
+			{ species: 'Wynaut', ability: 'psychicsurge', moves: ['sleeptalk', 'futuresight'] },
 		]]);
 
 		battle.makeChoices('auto', 'move futuresight');
@@ -209,11 +209,11 @@ describe('Future Sight', () => {
 
 	it(`should be boosted by Terrain even if the user is not on the field, as long as the user is not Flying-type`, () => {
 		battle = common.createBattle([[
-			{species: 'Blissey', ability: 'shellarmor', moves: ['softboiled']},
+			{ species: 'Blissey', ability: 'shellarmor', moves: ['softboiled'] },
 		], [
-			{species: 'cresselia', ability: 'levitate', moves: ['sleeptalk', 'futuresight']},
-			{species: 'deino', ability: 'psychicsurge', moves: ['sleeptalk']},
-			{species: 'xatu', moves: ['sleeptalk', 'futuresight']},
+			{ species: 'cresselia', ability: 'levitate', moves: ['sleeptalk', 'futuresight'] },
+			{ species: 'deino', ability: 'psychicsurge', moves: ['sleeptalk'] },
+			{ species: 'xatu', moves: ['sleeptalk', 'futuresight'] },
 		]]);
 
 		// Cresselia will be Terrain-boosted because its Ability is not checked while not active
@@ -235,10 +235,10 @@ describe('Future Sight', () => {
 
 	it(`should not ignore the target's screens, even when the user is not active on the field`, () => {
 		battle = common.createBattle([[
-			{species: 'Blissey', ability: 'shellarmor', item: 'lightclay', moves: ['softboiled', 'lightscreen']},
+			{ species: 'Blissey', ability: 'shellarmor', item: 'lightclay', moves: ['softboiled', 'lightscreen'] },
 		], [
-			{species: 'Wynaut', moves: ['sleeptalk', 'futuresight']},
-			{species: 'deino', moves: ['sleeptalk']},
+			{ species: 'Wynaut', moves: ['sleeptalk', 'futuresight'] },
+			{ species: 'deino', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move lightscreen', 'move futuresight');
@@ -257,10 +257,10 @@ describe('Future Sight', () => {
 
 	it(`should not consider the user's item or Ability when the user is not active`, () => {
 		battle = common.createBattle([[
-			{species: 'Blissey', ability: 'shellarmor', moves: ['softboiled']},
+			{ species: 'Blissey', ability: 'shellarmor', moves: ['softboiled'] },
 		], [
-			{species: 'Wynaut', ability: 'adaptability', item: 'choicespecs', moves: ['futuresight']},
-			{species: 'Deino', ability: 'powerspot', moves: ['sleeptalk']},
+			{ species: 'Wynaut', ability: 'adaptability', item: 'choicespecs', moves: ['futuresight'] },
+			{ species: 'Deino', ability: 'powerspot', moves: ['sleeptalk'] },
 		]]);
 
 		for (let i = 0; i < 3; i++) battle.makeChoices();
@@ -277,9 +277,9 @@ describe('Future Sight', () => {
 
 	it(`should not ignore the target's Unaware`, () => {
 		battle = common.createBattle([[
-			{species: 'Manaphy', ability: 'simple', moves: ['tailglow', 'futuresight']},
+			{ species: 'Manaphy', ability: 'simple', moves: ['tailglow', 'futuresight'] },
 		], [
-			{species: 'Ho-Oh', ability: 'unaware', moves: ['luckychant']},
+			{ species: 'Ho-Oh', ability: 'unaware', moves: ['luckychant'] },
 		]]);
 
 		battle.makeChoices();
@@ -293,9 +293,9 @@ describe('Future Sight', () => {
 
 	it(`should use the user's most recent Special Attack stat if the user is on the field`, () => {
 		battle = common.createBattle([[
-			{species: 'Aegislash', ability: 'stancechange', moves: ['futuresight', 'kingsshield']},
+			{ species: 'Aegislash', ability: 'stancechange', moves: ['futuresight', 'kingsshield'] },
 		], [
-			{species: 'Ho-Oh', ability: 'shellarmor', moves: ['recover']},
+			{ species: 'Ho-Oh', ability: 'shellarmor', moves: ['recover'] },
 		]]);
 
 		for (let i = 0; i < 3; i++) battle.makeChoices();
@@ -312,10 +312,10 @@ describe('Future Sight', () => {
 
 	it.skip(`should use the user's most recent Special Attack stat, even if the user is not on the field`, () => {
 		battle = common.createBattle([[
-			{species: 'Aegislash', ability: 'stancechange', moves: ['futuresight', 'kingsshield']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Aegislash', ability: 'stancechange', moves: ['futuresight', 'kingsshield'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Ho-Oh', ability: 'shellarmor', moves: ['recover', 'flareblitz']},
+			{ species: 'Ho-Oh', ability: 'shellarmor', moves: ['recover', 'flareblitz'] },
 		]]);
 
 		battle.makeChoices();
@@ -336,10 +336,10 @@ describe('Future Sight', () => {
 
 	it(`should only use Sp. Atk stat boosts/drops if the user is on the field`, () => {
 		battle = common.createBattle([[
-			{species: 'Flapple', moves: ['futuresight', 'nastyplot', 'sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Flapple', moves: ['futuresight', 'nastyplot', 'sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Ho-Oh', ability: 'shellarmor', moves: ['recover']},
+			{ species: 'Ho-Oh', ability: 'shellarmor', moves: ['recover'] },
 		]]);
 
 		battle.makeChoices();
@@ -358,9 +358,9 @@ describe('Future Sight', () => {
 
 	it(`should never resolve when used on turn 254 or later`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', moves: ['sleeptalk', 'futuresight']},
+			{ species: 'Wynaut', moves: ['sleeptalk', 'futuresight'] },
 		], [
-			{species: 'Stakataka', moves: ['sleeptalk']},
+			{ species: 'Stakataka', moves: ['sleeptalk'] },
 		]]);
 
 		battle.turn = 255; // Showdown turn is +1 from what the games are; this would ordinarily be 254
@@ -374,12 +374,12 @@ describe('Future Sight', () => {
 	});
 
 	it(`should target particular slots in Doubles`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Wynaut', moves: ['sleeptalk', 'futuresight']},
-			{species: 'Steelix', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Wynaut', moves: ['sleeptalk', 'futuresight'] },
+			{ species: 'Steelix', moves: ['sleeptalk'] },
 		], [
-			{species: 'Girafarig', moves: ['sleeptalk', 'recover']},
-			{species: 'Farigiraf', moves: ['sleeptalk', 'recover']},
+			{ species: 'Girafarig', moves: ['sleeptalk', 'recover'] },
+			{ species: 'Farigiraf', moves: ['sleeptalk', 'recover'] },
 		]]);
 
 		battle.makeChoices('move futuresight 2, auto', 'auto');
@@ -404,10 +404,10 @@ describe('Future Sight', () => {
 
 	it(`should do nothing if no Pokemon is present to take damage from the Future attack`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', ability: 'magicguard', moves: ['sleeptalk']},
-			{species: 'Shedinja', moves: ['sleeptalk']},
+			{ species: 'Wynaut', ability: 'magicguard', moves: ['sleeptalk'] },
+			{ species: 'Shedinja', moves: ['sleeptalk'] },
 		], [
-			{species: 'Happiny', moves: ['stealthrock', 'futuresight']},
+			{ species: 'Happiny', moves: ['stealthrock', 'futuresight'] },
 		]]);
 
 		battle.makeChoices('auto', 'move futuresight');

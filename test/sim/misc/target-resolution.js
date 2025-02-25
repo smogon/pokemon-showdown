@@ -12,26 +12,26 @@ describe('Target Resolution', () => {
 
 	describe(`Targetted Pokémon fainted in-turn`, () => {
 		it(`should redirect 'any' from a fainted foe to a targettable foe`, () => {
-			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['watergun']},
-				{species: 'Metapod', ability: 'shedskin', moves: ['harden']},
+			battle = common.createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['watergun'] },
+				{ species: 'Metapod', ability: 'shedskin', moves: ['harden'] },
 			], [
-				{species: 'Chansey', ability: 'naturalcure', moves: ['curse']},
-				{species: 'Latias', ability: 'levitate', moves: ['healingwish']},
-				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
+				{ species: 'Chansey', ability: 'naturalcure', moves: ['curse'] },
+				{ species: 'Latias', ability: 'levitate', moves: ['healingwish'] },
+				{ species: 'Magikarp', ability: 'rattled', moves: ['splash'] },
 			]]);
 			const defender = battle.p2.active[0];
 			assert.hurts(defender, () => battle.makeChoices('move watergun 2, auto', 'auto'));
 		});
 
 		it(`should not redirect 'any' from a fainted ally to another Pokémon by default`, () => {
-			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['watergun']},
-				{species: 'Latias', ability: 'levitate', moves: ['healingwish']},
-				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
+			battle = common.createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['watergun'] },
+				{ species: 'Latias', ability: 'levitate', moves: ['healingwish'] },
+				{ species: 'Magikarp', ability: 'rattled', moves: ['splash'] },
 			], [
-				{species: 'Chansey', ability: 'naturalcure', moves: ['curse']},
-				{species: 'Metapod', ability: 'shedskin', moves: ['harden']},
+				{ species: 'Chansey', ability: 'naturalcure', moves: ['curse'] },
+				{ species: 'Metapod', ability: 'shedskin', moves: ['harden'] },
 			]]);
 			const activePokemonList = [battle.p1.active[0], ...battle.p2.active];
 			const prevHps = activePokemonList.map(pokemon => pokemon.hp);
@@ -44,15 +44,15 @@ describe('Target Resolution', () => {
 		});
 
 		it(`should support RedirectTarget event for a fainted foe and type 'any' `, () => {
-			battle = common.gen(5).createBattle({gameType: 'triples'}, [[
-				{species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['waterpulse']}, // Water Pulse over Water Gun due to targeting in triples
-				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
-				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
+			battle = common.gen(5).createBattle({ gameType: 'triples' }, [[
+				{ species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['waterpulse'] }, // Water Pulse over Water Gun due to targeting in triples
+				{ species: 'Magikarp', ability: 'rattled', moves: ['splash'] },
+				{ species: 'Magikarp', ability: 'rattled', moves: ['splash'] },
 			], [
-				{species: 'Gastrodon', ability: 'stormdrain', moves: ['curse']},
-				{species: 'Latias', ability: 'levitate', moves: ['healingwish']},
-				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
-				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
+				{ species: 'Gastrodon', ability: 'stormdrain', moves: ['curse'] },
+				{ species: 'Latias', ability: 'levitate', moves: ['healingwish'] },
+				{ species: 'Magikarp', ability: 'rattled', moves: ['splash'] },
+				{ species: 'Magikarp', ability: 'rattled', moves: ['splash'] },
 			]]);
 			let redirector = battle.p2.active[0];
 			battle.makeChoices('move waterpulse 2, auto', 'auto');
@@ -60,15 +60,15 @@ describe('Target Resolution', () => {
 
 			// Do it again with swapped positions
 			battle.destroy();
-			battle = common.gen(5).createBattle({gameType: 'triples'}, [[
-				{species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['watergun']},
-				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
-				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
+			battle = common.gen(5).createBattle({ gameType: 'triples' }, [[
+				{ species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['watergun'] },
+				{ species: 'Magikarp', ability: 'rattled', moves: ['splash'] },
+				{ species: 'Magikarp', ability: 'rattled', moves: ['splash'] },
 			], [
-				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
-				{species: 'Latias', ability: 'levitate', moves: ['healingwish']},
-				{species: 'Gastrodon', ability: 'stormdrain', moves: ['curse']},
-				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
+				{ species: 'Magikarp', ability: 'rattled', moves: ['splash'] },
+				{ species: 'Latias', ability: 'levitate', moves: ['healingwish'] },
+				{ species: 'Gastrodon', ability: 'stormdrain', moves: ['curse'] },
+				{ species: 'Magikarp', ability: 'rattled', moves: ['splash'] },
 			]]);
 			redirector = battle.p2.active[2];
 			battle.makeChoices('move watergun 2, auto', 'auto');
@@ -76,14 +76,14 @@ describe('Target Resolution', () => {
 
 			// Test Storm Drain on the user's side
 			battle.destroy();
-			battle = common.gen(5).createBattle({gameType: 'triples'}, [[
-				{species: 'Shuckle', moves: ['watergun']},
-				{species: 'Gastrodon', ability: 'stormdrain', moves: ['swordsdance']},
-				{species: 'Magikarp', moves: ['swordsdance']},
+			battle = common.gen(5).createBattle({ gameType: 'triples' }, [[
+				{ species: 'Shuckle', moves: ['watergun'] },
+				{ species: 'Gastrodon', ability: 'stormdrain', moves: ['swordsdance'] },
+				{ species: 'Magikarp', moves: ['swordsdance'] },
 			], [
-				{species: 'Beartic', moves: ['swordsdance']},
-				{species: 'Magikarp', moves: ['swordsdance']},
-				{species: 'Victini', moves: ['finalgambit']},
+				{ species: 'Beartic', moves: ['swordsdance'] },
+				{ species: 'Magikarp', moves: ['swordsdance'] },
+				{ species: 'Victini', moves: ['finalgambit'] },
 			]]);
 			redirector = battle.p1.active[1];
 			battle.makeChoices('move watergun 3, auto', 'move swordsdance, move swordsdance, move finalgambit -2');
@@ -91,27 +91,27 @@ describe('Target Resolution', () => {
 		});
 
 		it(`should not redirect non-pulse/flying moves in Triples if the Pokemon is out of range`, () => {
-			battle = common.gen(6).createBattle({gameType: 'triples'}, [[
-				{species: 'Shuckle', moves: ['watergun']},
-				{species: 'Magikarp', moves: ['swordsdance']},
-				{species: 'Magikarp', moves: ['swordsdance']},
+			battle = common.gen(6).createBattle({ gameType: 'triples' }, [[
+				{ species: 'Shuckle', moves: ['watergun'] },
+				{ species: 'Magikarp', moves: ['swordsdance'] },
+				{ species: 'Magikarp', moves: ['swordsdance'] },
 			], [
-				{species: 'Beartic', moves: ['swordsdance']},
-				{species: 'Magikarp', moves: ['swordsdance']},
-				{species: 'Victini', moves: ['finalgambit']},
+				{ species: 'Beartic', moves: ['swordsdance'] },
+				{ species: 'Magikarp', moves: ['swordsdance'] },
+				{ species: 'Victini', moves: ['finalgambit'] },
 			]]);
 			battle.makeChoices('move watergun 3, auto', 'move swordsdance, move swordsdance, move finalgambit -2');
 			assert.fullHP(battle.p2.active[0], `Beartic should not be damaged by a Water Gun because it is out of range`);
 		});
 
 		it(`should support RedirectTarget event for a fainted ally and type 'any'`, () => {
-			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['watergun']},
-				{species: 'Latias', ability: 'levitate', moves: ['healingwish']},
-				{species: 'Magikarp', ability: 'rattled', moves: ['splash']},
+			battle = common.createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Wailord', item: 'laggingtail', ability: 'pressure', moves: ['watergun'] },
+				{ species: 'Latias', ability: 'levitate', moves: ['healingwish'] },
+				{ species: 'Magikarp', ability: 'rattled', moves: ['splash'] },
 			], [
-				{species: 'Gastrodon', ability: 'stormdrain', moves: ['curse']},
-				{species: 'Metapod', ability: 'shedskin', moves: ['harden']},
+				{ species: 'Gastrodon', ability: 'stormdrain', moves: ['curse'] },
+				{ species: 'Metapod', ability: 'shedskin', moves: ['harden'] },
 			]]);
 			const redirector = battle.p2.active[0];
 			battle.makeChoices('move watergun -2, auto', 'auto');
@@ -119,14 +119,14 @@ describe('Target Resolution', () => {
 		});
 
 		it(`should not redirect to another random target if the intended one is fainted in FFA`, () => {
-			battle = common.createBattle({gameType: 'freeforall'}, [[
-				{species: 'Calyrex', moves: ['sleeptalk']},
+			battle = common.createBattle({ gameType: 'freeforall' }, [[
+				{ species: 'Calyrex', moves: ['sleeptalk'] },
 			], [
-				{species: 'Victini', ability: 'Victory Star', moves: ['vcreate']},
+				{ species: 'Victini', ability: 'Victory Star', moves: ['vcreate'] },
 			], [
-				{species: 'Chansey', moves: ['sleeptalk']},
+				{ species: 'Chansey', moves: ['sleeptalk'] },
 			], [
-				{species: 'Tyrunt', moves: ['crunch']},
+				{ species: 'Tyrunt', moves: ['crunch'] },
 			]]);
 			battle.makeChoices('auto', 'move vcreate 1', 'auto', 'move crunch 1');
 			assert.fainted(battle.sides[0].active[0]);
@@ -137,12 +137,12 @@ describe('Target Resolution', () => {
 
 	describe(`Targetted slot is empty`, () => {
 		it(`should redirect 'any' from a fainted foe to a targettable foe`, () => {
-			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Wailord', ability: 'pressure', moves: ['watergun']},
-				{species: 'Shedinja', item: 'flameorb', ability: 'wonderguard', moves: ['agility']},
+			battle = common.createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Wailord', ability: 'pressure', moves: ['watergun'] },
+				{ species: 'Shedinja', item: 'flameorb', ability: 'wonderguard', moves: ['agility'] },
 			], [
-				{species: 'Wailord', ability: 'pressure', moves: ['watergun']},
-				{species: 'Shedinja', item: 'flameorb', ability: 'wonderguard', moves: ['agility']},
+				{ species: 'Wailord', ability: 'pressure', moves: ['watergun'] },
+				{ species: 'Shedinja', item: 'flameorb', ability: 'wonderguard', moves: ['agility'] },
 			]]);
 			const attackers = battle.sides.map(side => side.active[0]);
 
@@ -160,12 +160,12 @@ describe('Target Resolution', () => {
 		});
 
 		it(`should not redirect 'any' from a fainted ally to another Pokémon by default`, () => {
-			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Wailord', ability: 'pressure', moves: ['watergun']},
-				{species: 'Shedinja', item: 'flameorb', ability: 'wonderguard', moves: ['agility']},
+			battle = common.createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Wailord', ability: 'pressure', moves: ['watergun'] },
+				{ species: 'Shedinja', item: 'flameorb', ability: 'wonderguard', moves: ['agility'] },
 			], [
-				{species: 'Wailord', ability: 'pressure', moves: ['watergun']},
-				{species: 'Shedinja', item: 'flameorb', ability: 'wonderguard', moves: ['agility']},
+				{ species: 'Wailord', ability: 'pressure', moves: ['watergun'] },
+				{ species: 'Shedinja', item: 'flameorb', ability: 'wonderguard', moves: ['agility'] },
 			]]);
 
 			const attackers = battle.sides.map(side => side.active[0]);
@@ -188,12 +188,12 @@ describe('Target Resolution', () => {
 		});
 
 		it(`should support RedirectTarget event for a fainted foe and type 'any'`, () => {
-			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Hippowdon', ability: 'sandstream', moves: ['waterpulse']},
-				{species: 'Shedinja', ability: 'wonderguard', moves: ['agility']},
+			battle = common.createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Hippowdon', ability: 'sandstream', moves: ['waterpulse'] },
+				{ species: 'Shedinja', ability: 'wonderguard', moves: ['agility'] },
 			], [
-				{species: 'Gastrodon', ability: 'stormdrain', moves: ['curse']},
-				{species: 'Shedinja', ability: 'wonderguard', moves: ['agility']},
+				{ species: 'Gastrodon', ability: 'stormdrain', moves: ['curse'] },
+				{ species: 'Shedinja', ability: 'wonderguard', moves: ['agility'] },
 			]]);
 			const redirector = battle.p2.active[0];
 
@@ -203,12 +203,12 @@ describe('Target Resolution', () => {
 		});
 
 		it(`should support RedirectTarget event for a fainted ally and type 'any'`, () => {
-			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Hippowdon', ability: 'sandstream', moves: ['waterpulse']},
-				{species: 'Shedinja', ability: 'wonderguard', moves: ['agility']},
+			battle = common.createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Hippowdon', ability: 'sandstream', moves: ['waterpulse'] },
+				{ species: 'Shedinja', ability: 'wonderguard', moves: ['agility'] },
 			], [
-				{species: 'Gastrodon', ability: 'stormdrain', moves: ['curse']},
-				{species: 'Shedinja', ability: 'wonderguard', moves: ['agility']},
+				{ species: 'Gastrodon', ability: 'stormdrain', moves: ['curse'] },
+				{ species: 'Shedinja', ability: 'wonderguard', moves: ['agility'] },
 			]]);
 			const redirector = battle.p2.active[0];
 
@@ -220,12 +220,12 @@ describe('Target Resolution', () => {
 
 	describe(`Smart-tracking targeting effects`, () => {
 		it(`should allow Stalwart to follow its target after an opposing Ally Switch`, () => {
-			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
-				{species: 'Wynaut', moves: ['sleeptalk']},
+			battle = common.createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Duraludon', ability: 'stalwart', moves: ['watergun'] },
+				{ species: 'Wynaut', moves: ['sleeptalk'] },
 			], [
-				{species: 'Gastrodon', moves: ['sleeptalk']},
-				{species: 'Ninjask', moves: ['allyswitch']},
+				{ species: 'Gastrodon', moves: ['sleeptalk'] },
+				{ species: 'Ninjask', moves: ['allyswitch'] },
 			]]);
 
 			const ninjask = battle.p2.active[1];
@@ -234,12 +234,12 @@ describe('Target Resolution', () => {
 		});
 
 		it(`should allow Stalwart to bypass Storm Drain redirection`, () => {
-			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
-				{species: 'Wynaut', moves: ['sleeptalk']},
+			battle = common.createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Duraludon', ability: 'stalwart', moves: ['watergun'] },
+				{ species: 'Wynaut', moves: ['sleeptalk'] },
 			], [
-				{species: 'Gastrodon', ability: 'stormdrain', moves: ['sleeptalk']},
-				{species: 'Ninjask', moves: ['sleeptalk']},
+				{ species: 'Gastrodon', ability: 'stormdrain', moves: ['sleeptalk'] },
+				{ species: 'Ninjask', moves: ['sleeptalk'] },
 			]]);
 
 			const ninjask = battle.p2.active[1];
@@ -248,12 +248,12 @@ describe('Target Resolution', () => {
 		});
 
 		it(`should allow Stalwart to bypass Follow Me redirection`, () => {
-			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
-				{species: 'Wynaut', moves: ['sleeptalk']},
+			battle = common.createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Duraludon', ability: 'stalwart', moves: ['watergun'] },
+				{ species: 'Wynaut', moves: ['sleeptalk'] },
 			], [
-				{species: 'Clefable', moves: ['followme']},
-				{species: 'Ninjask', moves: ['sleeptalk']},
+				{ species: 'Clefable', moves: ['followme'] },
+				{ species: 'Ninjask', moves: ['sleeptalk'] },
 			]]);
 
 			const ninjask = battle.p2.active[1];
@@ -262,13 +262,13 @@ describe('Target Resolution', () => {
 		});
 
 		it(`should allow Stalwart to correctly target a Pokemon which switched out and back in another slot`, () => {
-			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Duraludon', ability: 'stalwart', moves: ['watergun']},
-				{species: 'Wynaut', moves: ['sleeptalk']},
+			battle = common.createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Duraludon', ability: 'stalwart', moves: ['watergun'] },
+				{ species: 'Wynaut', moves: ['sleeptalk'] },
 			], [
-				{species: 'Ninjask', moves: ['uturn']},
-				{species: 'Regieleki', moves: ['uturn']},
-				{species: 'Octillery', moves: ['sleeptalk']},
+				{ species: 'Ninjask', moves: ['uturn'] },
+				{ species: 'Regieleki', moves: ['uturn'] },
+				{ species: 'Octillery', moves: ['sleeptalk'] },
 			]]);
 
 			const regieleki = battle.p2.active[1];
@@ -279,12 +279,12 @@ describe('Target Resolution', () => {
 		});
 
 		it(`should allow Snipe Shot to follow its target after an opposing Ally Switch`, () => {
-			battle = common.createBattle({gameType: 'doubles'}, [[
-				{species: 'Inteleon', moves: ['snipeshot']},
-				{species: 'Ninjask', moves: ['sleeptalk']},
+			battle = common.createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Inteleon', moves: ['snipeshot'] },
+				{ species: 'Ninjask', moves: ['sleeptalk'] },
 			], [
-				{species: 'Gastrodon', moves: ['sleeptalk']},
-				{species: 'Ninjask', moves: ['allyswitch']},
+				{ species: 'Gastrodon', moves: ['sleeptalk'] },
+				{ species: 'Ninjask', moves: ['allyswitch'] },
 			]]);
 
 			const ninjask = battle.p2.active[1];
@@ -294,12 +294,12 @@ describe('Target Resolution', () => {
 	});
 
 	it('should not force charge moves called by another move to target an ally after Ally Switch', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'purrloin', ability: 'no guard', moves: ['copycat', 'sleeptalk']},
-			{species: 'wynaut', moves: ['allyswitch', 'fly', 'skullbash']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'purrloin', ability: 'no guard', moves: ['copycat', 'sleeptalk'] },
+			{ species: 'wynaut', moves: ['allyswitch', 'fly', 'skullbash'] },
 		], [
-			{species: 'aron', moves: ['sleeptalk']},
-			{species: 'lairon', moves: ['sleeptalk']},
+			{ species: 'aron', moves: ['sleeptalk'] },
+			{ species: 'lairon', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move sleeptalk, move fly 1', 'auto');
@@ -313,12 +313,12 @@ describe('Target Resolution', () => {
 	});
 
 	it(`Ally Switch should cause single-target moves to fail if targeting an ally`, () => {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'purrloin', moves: ['thunder', 'ironhead']},
-			{species: 'wynaut', moves: ['allyswitch']},
+		battle = common.gen(8).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'purrloin', moves: ['thunder', 'ironhead'] },
+			{ species: 'wynaut', moves: ['allyswitch'] },
 		], [
-			{species: 'swablu', moves: ['sleeptalk']},
-			{species: 'swablu', moves: ['sleeptalk']},
+			{ species: 'swablu', moves: ['sleeptalk'] },
+			{ species: 'swablu', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move ironhead -2, move allyswitch', 'auto');
@@ -327,13 +327,13 @@ describe('Target Resolution', () => {
 	});
 
 	it(`charge moves like Phantom Force should target slots turn 1 and Pokemon turn 2`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'houndour', level: 1, moves: ['sleeptalk']},
-			{species: 'altaria', moves: ['sleeptalk']},
-			{species: 'aggron', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'houndour', level: 1, moves: ['sleeptalk'] },
+			{ species: 'altaria', moves: ['sleeptalk'] },
+			{ species: 'aggron', moves: ['sleeptalk'] },
 		], [
-			{species: 'dragapult', moves: ['phantomforce']},
-			{species: 'regieleki', moves: ['sleeptalk', 'sheercold']},
+			{ species: 'dragapult', moves: ['phantomforce'] },
+			{ species: 'regieleki', moves: ['sleeptalk', 'sheercold'] },
 		]]);
 
 		// Phantom Force should still target slot 1, despite Houndour fainting
@@ -343,13 +343,13 @@ describe('Target Resolution', () => {
 		assert.fullHP(battle.p1.active[1], 'Altaria should be at full HP, because it was not targeted.');
 		assert.false.fullHP(battle.p1.active[0], 'Aggron should not be at full HP, because it was targeted.');
 
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'houndour', level: 1, moves: ['sleeptalk']},
-			{species: 'altaria', moves: ['sleeptalk']},
-			{species: 'aggron', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'houndour', level: 1, moves: ['sleeptalk'] },
+			{ species: 'altaria', moves: ['sleeptalk'] },
+			{ species: 'aggron', moves: ['sleeptalk'] },
 		], [
-			{species: 'dragapult', moves: ['phantomforce']},
-			{species: 'regieleki', moves: ['sleeptalk', 'sheercold']},
+			{ species: 'dragapult', moves: ['phantomforce'] },
+			{ species: 'regieleki', moves: ['sleeptalk', 'sheercold'] },
 		]]);
 
 		battle.makeChoices('auto', 'move phantomforce 1, move sleeptalk');
@@ -359,12 +359,12 @@ describe('Target Resolution', () => {
 
 	it(`should cause Rollout to target the same slot after being called as a submove`, () => {
 		// hardcoded RNG seed to show the erroneous targeting behavior
-		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
-			{species: 'shuckle', ability: 'compoundeyes', moves: ['copycat']},
-			{species: 'foongus', item: 'laggingtail', moves: ['spore']},
+		battle = common.createBattle({ gameType: 'doubles', seed: [1, 2, 3, 4] }, [[
+			{ species: 'shuckle', ability: 'compoundeyes', moves: ['copycat'] },
+			{ species: 'foongus', item: 'laggingtail', moves: ['spore'] },
 		], [
-			{species: 'aggron', moves: ['splash']},
-			{species: 'slowbro', moves: ['splash', 'rollout']},
+			{ species: 'aggron', moves: ['splash'] },
+			{ species: 'slowbro', moves: ['splash', 'rollout'] },
 		]]);
 
 		battle.makeChoices('move copycat, move spore 2', 'move splash, move rollout 1');

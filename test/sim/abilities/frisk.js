@@ -11,12 +11,12 @@ describe('Frisk', () => {
 	});
 
 	it(`should reveal opposing Pokemon's items`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Dusclops', ability: 'frisk', moves: ['snore']},
-			{species: 'Duskull', ability: 'levitate', moves: ['snore']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Dusclops', ability: 'frisk', moves: ['snore'] },
+			{ species: 'Duskull', ability: 'levitate', moves: ['snore'] },
 		], [
-			{species: 'Spectrier', ability: 'grimneigh', item: 'choicespecs', moves: ['shadowball']},
-			{species: 'Glastrier', ability: 'chillingneigh', item: 'choiceband', moves: ['avalanche']},
+			{ species: 'Spectrier', ability: 'grimneigh', item: 'choicespecs', moves: ['shadowball'] },
+			{ species: 'Glastrier', ability: 'chillingneigh', item: 'choiceband', moves: ['avalanche'] },
 		]]);
 		const log = battle.getDebugLog();
 		assert(log.indexOf('Spectrier|Choice Specs') > -1, "Frisk should have revealed Spectrier's Choice Specs");
@@ -24,13 +24,13 @@ describe('Frisk', () => {
 	});
 
 	it(`should not reveal opposing fainted Pokemon's items`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Dusclops', ability: 'frisk', moves: ['snore']},
-			{species: 'Duskull', ability: 'levitate', moves: ['snore']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Dusclops', ability: 'frisk', moves: ['snore'] },
+			{ species: 'Duskull', ability: 'levitate', moves: ['snore'] },
 		], [
-			{species: 'Pikachu', ability: 'static', item: 'lightball', moves: ['snore']},
-			{species: 'Weezing', ability: 'neutralizinggas', item: 'choiceband', moves: ['explosion']},
-			{species: 'Pichu', ability: 'static', moves: ['snore']},
+			{ species: 'Pikachu', ability: 'static', item: 'lightball', moves: ['snore'] },
+			{ species: 'Weezing', ability: 'neutralizinggas', item: 'choiceband', moves: ['explosion'] },
+			{ species: 'Pichu', ability: 'static', moves: ['snore'] },
 		]]);
 		battle.makeChoices();
 		assert.false(battle.log.find(line => line.startsWith('|-item|')),

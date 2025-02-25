@@ -2,7 +2,7 @@
  * Poll chat plugin
  * By bumbadadabum and Zarel.
  */
-import {Utils} from '../../lib';
+import { Utils } from '../../lib';
 
 const MINUTES = 60000;
 const MAX_QUESTIONS = 10;
@@ -16,9 +16,9 @@ export interface PollOptions {
 	question: string;
 	supportHTML: boolean;
 	multiPoll: boolean;
-	pendingVotes?: {[userid: string]: number[]};
-	voters?: {[k: string]: number[]};
-	voterIps?: {[k: string]: number[]};
+	pendingVotes?: { [userid: string]: number[] };
+	voters?: { [k: string]: number[] };
+	voterIps?: { [k: string]: number[] };
 	maxVotes?: number;
 	totalVotes?: number;
 	timeoutMins?: number;
@@ -37,9 +37,9 @@ export class Poll extends Rooms.MinorActivity {
 	activityNumber: number;
 	question: string;
 	multiPoll: boolean;
-	pendingVotes: {[userid: string]: number[]};
-	voters: {[k: string]: number[]};
-	voterIps: {[k: string]: number[]};
+	pendingVotes: { [userid: string]: number[] };
+	voters: { [k: string]: number[] };
+	voterIps: { [k: string]: number[] };
 	totalVotes: number;
 	isQuiz: boolean;
 	/** Max votes of 0 means no vote cap */
@@ -571,7 +571,7 @@ export const commands: Chat.ChatCommands = {
 				if (isNaN(timeoutMins) || timeoutMins <= 0 || timeoutMins > 7 * 24 * 60) {
 					return this.errorReply(this.tr`Time should be a number of minutes less than one week.`);
 				}
-				poll.setTimer({timeoutMins});
+				poll.setTimer({ timeoutMins });
 				room.add(this.tr`The poll timer was turned on: the poll will end in ${Chat.toDurationString(timeoutMins * MINUTES)}.`);
 				this.modlog('POLL TIMER', null, `${timeoutMins} minutes`);
 				return this.privateModAction(room.tr`The poll timer was set to ${timeoutMins} minute(s) by ${user.name}.`);

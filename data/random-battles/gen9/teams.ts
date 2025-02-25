@@ -1,21 +1,21 @@
-import {Dex, toID} from '../../../sim/dex';
-import {Utils} from '../../../lib';
-import {PRNG, type PRNGSeed} from '../../../sim/prng';
-import {type RuleTable} from '../../../sim/dex-formats';
-import {Tags} from './../../tags';
-import {Teams} from '../../../sim/teams';
+import { Dex, toID } from '../../../sim/dex';
+import { Utils } from '../../../lib';
+import { PRNG, type PRNGSeed } from '../../../sim/prng';
+import { type RuleTable } from '../../../sim/dex-formats';
+import { Tags } from './../../tags';
+import { Teams } from '../../../sim/teams';
 
 export interface TeamData {
-	typeCount: {[k: string]: number};
-	typeComboCount: {[k: string]: number};
-	baseFormes: {[k: string]: number};
+	typeCount: { [k: string]: number };
+	typeComboCount: { [k: string]: number };
+	baseFormes: { [k: string]: number };
 	megaCount?: number;
 	zCount?: number;
 	wantsTeraCount?: number;
-	has: {[k: string]: number};
+	has: { [k: string]: number };
 	forceResult: boolean;
-	weaknesses: {[k: string]: number};
-	resistances: {[k: string]: number};
+	weaknesses: { [k: string]: number };
+	resistances: { [k: string]: number };
 	weather?: string;
 	eeveeLimCount?: number;
 	gigantamax?: boolean;
@@ -168,7 +168,7 @@ export class RandomTeams {
 	 *
 	 * returns true to try to force the move type, false otherwise.
 	 */
-	moveEnforcementCheckers: {[k: string]: MoveEnforcementChecker};
+	moveEnforcementCheckers: { [k: string]: MoveEnforcementChecker };
 
 	/** Used by .getPools() */
 	private poolsCacheKey: [string | undefined, number | undefined, RuleTable | undefined, boolean] | undefined;
@@ -388,7 +388,7 @@ export class RandomTeams {
 		const types = species.types;
 		if (!moves?.size) return counter;
 
-		const categories = {Physical: 0, Special: 0, Status: 0};
+		const categories = { Physical: 0, Special: 0, Status: 0 };
 
 		// Iterate through all moves we've chosen so far and keep track of what they do:
 		for (const moveid of moves) {
@@ -1498,8 +1498,8 @@ export class RandomTeams {
 		let ability = '';
 		let item = undefined;
 
-		const evs = {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85};
-		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+		const evs = { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 };
+		const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 
 		const types = species.types;
 		const abilities = set.abilities!;
@@ -1604,9 +1604,9 @@ export class RandomTeams {
 		pokemonToExclude: RandomTeamsTypes.RandomSet[] = [],
 		isMonotype = false,
 		pokemonList: string[]
-	): [{[k: string]: string[]}, string[]] {
+	): [{ [k: string]: string[] }, string[]] {
 		const exclude = pokemonToExclude.map(p => toID(p.species));
-		const pokemonPool: {[k: string]: string[]} = {};
+		const pokemonPool: { [k: string]: string[] } = {};
 		const baseSpeciesPool = [];
 		for (const pokemon of pokemonList) {
 			let species = this.dex.species.get(pokemon);
@@ -1634,8 +1634,8 @@ export class RandomTeams {
 		return [pokemonPool, baseSpeciesPool];
 	}
 
-	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
-	randomDoublesSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./doubles-sets.json');
+	randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
+	randomDoublesSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./doubles-sets.json');
 
 	randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
@@ -1654,12 +1654,12 @@ export class RandomTeams {
 		const usePotD = global.Config && Config.potd && ruleTable.has('potd');
 		const potd = usePotD ? this.dex.species.get(Config.potd) : null;
 
-		const baseFormes: {[k: string]: number} = {};
+		const baseFormes: { [k: string]: number } = {};
 
-		const typeCount: {[k: string]: number} = {};
-		const typeComboCount: {[k: string]: number} = {};
-		const typeWeaknesses: {[k: string]: number} = {};
-		const typeDoubleWeaknesses: {[k: string]: number} = {};
+		const typeCount: { [k: string]: number } = {};
+		const typeComboCount: { [k: string]: number } = {};
+		const typeWeaknesses: { [k: string]: number } = {};
+		const typeDoubleWeaknesses: { [k: string]: number } = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 		let numMaxLevelPokemon = 0;
 
@@ -1911,7 +1911,7 @@ export class RandomTeams {
 			const moves = this.multipleSamplesNoReplace(pool, this.maxMoveCount);
 
 			// Random EVs
-			const evs: StatsTable = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+			const evs: StatsTable = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 			const s: StatID[] = ["hp", "atk", "def", "spa", "spd", "spe"];
 			let evpool = 510;
 			do {
@@ -2081,7 +2081,7 @@ export class RandomTeams {
 			this.cachedPool = pool.slice();
 			this.cachedSpeciesPool = speciesPool.slice();
 		}
-		return {pool, speciesPool};
+		return { pool, speciesPool };
 	}
 
 	randomNPokemon(n: number, requiredType?: string, minSourceGen?: number, ruleTable?: RuleTable, requireMoves = false) {
@@ -2092,10 +2092,10 @@ export class RandomTeams {
 			throw new Error(`"${requiredType}" is not a valid type.`);
 		}
 
-		const {pool, speciesPool} = this.getPools(requiredType, minSourceGen, ruleTable, requireMoves);
+		const { pool, speciesPool } = this.getPools(requiredType, minSourceGen, ruleTable, requireMoves);
 		const isNotCustom = !ruleTable;
 
-		const hasDexNumber: {[k: string]: number} = {};
+		const hasDexNumber: { [k: string]: number } = {};
 		for (let i = 0; i < n; i++) {
 			const num = this.sampleNoReplace(pool);
 			hasDexNumber[num] = i;
@@ -2287,7 +2287,7 @@ export class RandomTeams {
 			} while (m.length < setMoveCount);
 
 			// Random EVs
-			const evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+			const evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 			if (this.gen === 6) {
 				let evpool = 510;
 				do {
@@ -2379,7 +2379,7 @@ export class RandomTeams {
 		return team;
 	}
 
-	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./factory-sets.json');
+	randomFactorySets: { [format: string]: { [species: string]: BattleFactorySpecies } } = require('./factory-sets.json');
 
 	randomFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails, tier: string
@@ -2388,7 +2388,7 @@ export class RandomTeams {
 		const setList = this.randomFactorySets[tier][id].sets;
 
 		const itemsLimited = ['choicespecs', 'choiceband', 'choicescarf'];
-		const movesLimited: {[k: string]: string} = {
+		const movesLimited: { [k: string]: string } = {
 			stealthrock: 'stealthRock',
 			stoneaxe: 'stealthRock',
 			spikes: 'spikes',
@@ -2397,7 +2397,7 @@ export class RandomTeams {
 			rapidspin: 'hazardClear',
 			defog: 'hazardClear',
 		};
-		const abilitiesLimited: {[k: string]: string} = {
+		const abilitiesLimited: { [k: string]: string } = {
 			toxicdebris: 'toxicSpikes',
 		};
 
@@ -2444,13 +2444,13 @@ export class RandomTeams {
 				moves.push(this.sample(allowedMoves));
 			}
 			if (reject) continue;
-			effectivePool.push({set, moves, item});
+			effectivePool.push({ set, moves, item });
 		}
 
 		if (!effectivePool.length) {
 			if (!teamData.forceResult) return null;
 			for (const set of setList) {
-				effectivePool.push({set});
+				effectivePool.push({ set });
 			}
 		}
 
@@ -2487,8 +2487,8 @@ export class RandomTeams {
 			shiny: setData.set.shiny || this.randomChance(1, 1024),
 			level: this.adjustLevel || (tier === "LC" ? 5 : 100),
 			happiness: 255,
-			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs},
-			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.set.ivs},
+			evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs },
+			ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.set.ivs },
 			nature: this.sample(setData.set.nature) || "Serious",
 			moves,
 			wantsTera: setData.set.wantsTera,
@@ -2505,7 +2505,7 @@ export class RandomTeams {
 			this.factoryTier = this.sample(['Uber', 'OU', 'UU', 'RU', 'NU', 'PU']);
 		}
 
-		const tierValues: {[k: string]: number} = {
+		const tierValues: { [k: string]: number } = {
 			Uber: 5,
 			OU: 4, UUBL: 4,
 			UU: 3, RUBL: 3,
@@ -2527,7 +2527,7 @@ export class RandomTeams {
 			weaknesses: {},
 			resistances: {},
 		};
-		const resistanceAbilities: {[k: string]: string[]} = {
+		const resistanceAbilities: { [k: string]: string[] } = {
 			dryskin: ['Water'], waterabsorb: ['Water'], stormdrain: ['Water'],
 			flashfire: ['Fire'], heatproof: ['Fire'], waterbubble: ['Fire'], wellbakedbody: ['Fire'],
 			lightningrod: ['Electric'], motordrive: ['Electric'], voltabsorb: ['Electric'],
@@ -2535,7 +2535,7 @@ export class RandomTeams {
 			thickfat: ['Ice', 'Fire'],
 			eartheater: ['Ground'], levitate: ['Ground'],
 		};
-		const movesLimited: {[k: string]: string} = {
+		const movesLimited: { [k: string]: string } = {
 			stealthrock: 'stealthRock',
 			stoneaxe: 'stealthRock',
 			spikes: 'spikes',
@@ -2544,7 +2544,7 @@ export class RandomTeams {
 			rapidspin: 'hazardClear',
 			defog: 'hazardClear',
 		};
-		const abilitiesLimited: {[k: string]: string} = {
+		const abilitiesLimited: { [k: string]: string } = {
 			toxicdebris: 'toxicSpikes',
 		};
 		const limitFactor = Math.ceil(this.maxTeamSize / 6);
@@ -2695,7 +2695,7 @@ export class RandomTeams {
 		const id = toID(species.name);
 		const setList = this.randomBSSFactorySets[id].sets;
 
-		const movesMax: {[k: string]: number} = {
+		const movesMax: { [k: string]: number } = {
 			batonpass: 1,
 			stealthrock: 1,
 			toxicspikes: 1,
@@ -2703,14 +2703,14 @@ export class RandomTeams {
 			auroraveil: 1,
 		};
 		const weatherAbilities = ['drizzle', 'drought', 'snowwarning', 'sandstream'];
-		const terrainAbilities: {[k: string]: string} = {
+		const terrainAbilities: { [k: string]: string } = {
 			electricsurge: "electric",
 			psychicsurge: "psychic",
 			grassysurge: "grassy",
 			seedsower: "grassy",
 			mistysurge: "misty",
 		};
-		const terrainItemsRequire: {[k: string]: string} = {
+		const terrainItemsRequire: { [k: string]: string } = {
 			electricseed: "electric",
 			psychicseed: "psychic",
 			grassyseed: "grassy",
@@ -2761,14 +2761,14 @@ export class RandomTeams {
 				curSetMoveVariants.push(variantIndex);
 			}
 			if (reject) continue;
-			const set = {set: curSet, moveVariants: curSetMoveVariants};
+			const set = { set: curSet, moveVariants: curSetMoveVariants };
 			effectivePool.push(set);
 		}
 
 		if (!effectivePool.length) {
 			if (!teamData.forceResult) return null;
 			for (const curSet of setList) {
-				effectivePool.push({set: curSet});
+				effectivePool.push({ set: curSet });
 			}
 		}
 
@@ -2803,8 +2803,8 @@ export class RandomTeams {
 			shiny: this.randomChance(1, 1024),
 			level: 50,
 			happiness: 255,
-			evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs},
-			ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.set.ivs},
+			evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.set.evs },
+			ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.set.ivs },
 			nature: setData.set.nature || "Serious",
 			moves,
 			wantsTera: setData.set.wantsTera,
@@ -2830,13 +2830,13 @@ export class RandomTeams {
 			weaknesses: {},
 			resistances: {},
 		};
-		const weatherAbilitiesSet: {[k: string]: string} = {
+		const weatherAbilitiesSet: { [k: string]: string } = {
 			drizzle: "raindance",
 			drought: "sunnyday",
 			snowwarning: "hail",
 			sandstream: "sandstorm",
 		};
-		const resistanceAbilities: {[k: string]: string[]} = {
+		const resistanceAbilities: { [k: string]: string[] } = {
 			waterabsorb: ["Water"],
 			flashfire: ["Fire"],
 			lightningrod: ["Electric"],

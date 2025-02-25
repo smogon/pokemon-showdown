@@ -12,9 +12,9 @@ describe('Lash Out', () => {
 
 	it(`should double in base power if the user's stats were lowered this turn`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', moves: ['lashout']},
+			{ species: 'Wynaut', moves: ['lashout'] },
 		], [
-			{species: 'Blissey', moves: ['faketears']},
+			{ species: 'Blissey', moves: ['faketears'] },
 		]]);
 		battle.makeChoices();
 		const blissey = battle.p2.active[0];
@@ -23,12 +23,12 @@ describe('Lash Out', () => {
 	});
 
 	it(`should double in base power if the user's stats were lowered this turn by an ally`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Wynaut', moves: ['lashout']},
-			{species: 'Blissey', moves: ['faketears']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Wynaut', moves: ['lashout'] },
+			{ species: 'Blissey', moves: ['faketears'] },
 		], [
-			{species: 'Tyrogue', moves: ['sleeptalk']},
-			{species: 'Tyrogue', moves: ['sleeptalk']},
+			{ species: 'Tyrogue', moves: ['sleeptalk'] },
+			{ species: 'Tyrogue', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move lashout -2, move faketears -1', 'auto');
 		const blissey = battle.p1.active[1];
@@ -38,9 +38,9 @@ describe('Lash Out', () => {
 
 	it(`should double in base power if the user's stats were lowered at the start of the match`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', ability: 'shellarmor', moves: ['lashout']},
+			{ species: 'Wynaut', ability: 'shellarmor', moves: ['lashout'] },
 		], [
-			{species: 'Blissey', ability: 'intimidate', moves: ['skillswap']},
+			{ species: 'Blissey', ability: 'intimidate', moves: ['skillswap'] },
 		]]);
 		battle.makeChoices();
 		const blissey = battle.p2.active[0];
@@ -50,10 +50,10 @@ describe('Lash Out', () => {
 
 	it(`should not double in base power if the user's stats were lowered at a switch after a KO`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', ability: 'shellarmor', moves: ['lashout']},
+			{ species: 'Wynaut', ability: 'shellarmor', moves: ['lashout'] },
 		], [
-			{species: 'Shedinja', moves: ['sleeptalk']},
-			{species: 'Blissey', ability: 'intimidate', moves: ['skillswap']},
+			{ species: 'Shedinja', moves: ['sleeptalk'] },
+			{ species: 'Blissey', ability: 'intimidate', moves: ['skillswap'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices();
@@ -64,12 +64,12 @@ describe('Lash Out', () => {
 	});
 
 	it(`should double in base power even if stat resets are reset by Haze`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Wynaut', moves: ['lashout']},
-			{species: 'Blissey', moves: ['faketears']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Wynaut', moves: ['lashout'] },
+			{ species: 'Blissey', moves: ['faketears'] },
 		], [
-			{species: 'Tyrogue', moves: ['haze']},
-			{species: 'Tyrogue', moves: ['sleeptalk']},
+			{ species: 'Tyrogue', moves: ['haze'] },
+			{ species: 'Tyrogue', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move lashout -2, move faketears -1', 'auto');
 		const blissey = battle.p1.active[1];

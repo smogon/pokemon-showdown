@@ -11,12 +11,12 @@ describe('Fell Stringer', () => {
 	});
 
 	it('should get a boost when KOing a Pokemon after redirection', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'joltik', moves: ['fellstinger']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'joltik', moves: ['fellstinger'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', moves: ['sleeptalk']},
-			{species: 'pichu', level: 1, moves: ['followme']},
+			{ species: 'wynaut', moves: ['sleeptalk'] },
+			{ species: 'pichu', level: 1, moves: ['followme'] },
 		]]);
 		battle.makeChoices("move fellstinger 1, move sleeptalk", "move sleeptalk, move followme");
 		assert.statStage(battle.p1.active[0], 'atk', 3);

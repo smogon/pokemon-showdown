@@ -2,7 +2,7 @@
  * Integration for Smogon tournaments.
  * @author mia-pi-git
  */
-import {FS, Utils} from '../../lib';
+import { FS, Utils } from '../../lib';
 
 type Image = [string, number, number];
 interface TourEvent {
@@ -11,7 +11,7 @@ interface TourEvent {
 	desc: string;
 	image?: Image;
 	/** If there's an image, there needs to be credit to wherever they got it */
-	artistCredit?: {url: string, name: string};
+	artistCredit?: { url: string, name: string };
 	id: string;
 	shortDesc: string;
 	date: number;
@@ -155,7 +155,7 @@ export const commands: Chat.ChatCommands = {
 				if (!artistUrl) {
 					return this.errorReply(`Invalid artist credit URL.`);
 				}
-				artistCredit = {url: artistUrl, name: rawArtistName.trim()};
+				artistCredit = { url: artistUrl, name: rawArtistName.trim() };
 			}
 			if (!rawShort?.length || !rawDesc?.length) {
 				return this.popupReply(`Must provide both a short description and a full description.`);

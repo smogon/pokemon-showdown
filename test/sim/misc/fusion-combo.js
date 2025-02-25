@@ -11,12 +11,12 @@ describe('Fusion Bolt + Fusion Flare', () => {
 	});
 
 	it(`should boost the second move if the first was used immediately before it`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Wynaut', moves: ['fusionbolt']},
-			{species: 'Wobbuffet', moves: ['fusionflare']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Wynaut', moves: ['fusionbolt'] },
+			{ species: 'Wobbuffet', moves: ['fusionflare'] },
 		], [
-			{species: 'Dragonite', item: 'laggingtail', moves: ['roost']},
-			{species: 'Lugia', moves: ['fusionbolt']},
+			{ species: 'Dragonite', item: 'laggingtail', moves: ['roost'] },
+			{ species: 'Lugia', moves: ['fusionbolt'] },
 		]]);
 
 		const bpModifiers = new Map();
@@ -29,12 +29,12 @@ describe('Fusion Bolt + Fusion Flare', () => {
 	});
 
 	it(`should boost the second move if the first was used by the same Pokemon`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Magikarp', item: 'laggingtail', moves: ['fusionbolt', 'fusionflare']},
-			{species: 'Oranguru', moves: ['sleeptalk', 'instruct']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Magikarp', item: 'laggingtail', moves: ['fusionbolt', 'fusionflare'] },
+			{ species: 'Oranguru', moves: ['sleeptalk', 'instruct'] },
 		], [
-			{species: 'Dragonite', moves: ['roost']},
-			{species: 'Lugia', moves: ['roost']},
+			{ species: 'Dragonite', moves: ['roost'] },
+			{ species: 'Lugia', moves: ['roost'] },
 		]]);
 
 		battle.makeChoices();
@@ -50,12 +50,12 @@ describe('Fusion Bolt + Fusion Flare', () => {
 	});
 
 	it(`should not boost the second move if another move was used between them`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Zekrom', moves: ['fusionbolt']},
-			{species: 'Reshiram', item: 'laggingtail', moves: ['fusionflare']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Zekrom', moves: ['fusionbolt'] },
+			{ species: 'Reshiram', item: 'laggingtail', moves: ['fusionflare'] },
 		], [
-			{species: 'Dragonite', ability: 'shellarmor', moves: ['roost']},
-			{species: 'Lugia', moves: ['roost']},
+			{ species: 'Dragonite', ability: 'shellarmor', moves: ['roost'] },
+			{ species: 'Lugia', moves: ['roost'] },
 		]]);
 
 		battle.makeChoices();
@@ -70,12 +70,12 @@ describe('Fusion Bolt + Fusion Flare', () => {
 	});
 
 	it(`should not boost the second move if the first move failed`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Regieleki', moves: ['fusionbolt']},
-			{species: 'Reshiram', moves: ['fusionflare']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Regieleki', moves: ['fusionbolt'] },
+			{ species: 'Reshiram', moves: ['fusionflare'] },
 		], [
-			{species: 'Stunfisk', moves: ['roost']},
-			{species: 'Stunfisk', moves: ['roost']},
+			{ species: 'Stunfisk', moves: ['roost'] },
+			{ species: 'Stunfisk', moves: ['roost'] },
 		]]);
 
 		const bpModifiers = new Map();

@@ -6,7 +6,7 @@
  * @author Zarel <guangcongluo@gmail.com>
  */
 
-import {FS, Net} from "../../lib";
+import { FS, Net } from "../../lib";
 
 const AVATARS_FILE = 'config/avatars.json';
 
@@ -38,7 +38,7 @@ interface AvatarEntry {
 	default?: AvatarID | null;
 }
 
-const customAvatars: {[userid: string]: AvatarEntry} = Object.create(null);
+const customAvatars: { [userid: string]: AvatarEntry } = Object.create(null);
 
 try {
 	const configAvatars = JSON.parse(FS(AVATARS_FILE).readSync());
@@ -46,13 +46,13 @@ try {
 } catch {
 	if (Config.customavatars) {
 		for (const userid in Config.customavatars) {
-			customAvatars[userid] = {allowed: [Config.customavatars[userid]]};
+			customAvatars[userid] = { allowed: [Config.customavatars[userid]] };
 		}
 	}
 	if (Config.allowedavatars) {
 		for (const avatar in Config.customavatars) {
 			for (const userid of Config.customavatars[avatar]) {
-				if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
+				if (!customAvatars[userid]) customAvatars[userid] = { allowed: [null] };
 				customAvatars[userid].allowed.push(avatar);
 			}
 		}
@@ -63,7 +63,7 @@ if ((Config.customavatars && Object.keys(Config.customavatars).length) || Config
 	Monitor.crashlog("Please remove 'customavatars' and 'allowedavatars' from Config (config/config.js). Your avatars have been migrated to the new '/addavatar' system.");
 }
 function saveCustomAvatars(instant?: boolean) {
-	FS(AVATARS_FILE).writeUpdate(() => JSON.stringify(customAvatars), {throttle: instant ? null : 60_000});
+	FS(AVATARS_FILE).writeUpdate(() => JSON.stringify(customAvatars), { throttle: instant ? null : 60_000 });
 }
 
 export const Avatars = new class {
@@ -109,7 +109,7 @@ export const Avatars = new class {
 		if (avatar.startsWith('#') && avatar.includes('.')) return avatar.slice(1);
 		return avatar;
 	}
-	async validate(avatar: string, options?: {rejectOfficial?: boolean}) {
+	async validate(avatar: string, options?: { rejectOfficial?: boolean }) {
 		avatar = this.convert(avatar);
 		if (!/^#?[a-z0-9-]+$/.test(avatar) && !/^[a-z0-9.-]+$/.test(avatar)) {
 			throw new Chat.ErrorMessage(`Avatar "${avatar}" is not in a valid format. ${AVATAR_FORMATS_MESSAGE}`);
@@ -126,7 +126,7 @@ export const Avatars = new class {
 		const src = Avatars.src(avatar);
 		if (!src) return <strong><code>{avatar}</code></strong>;
 		return <img
-			src={src} alt={noAlt ? '' : avatar} width="80" height="80" class="pixelated" style={{verticalAlign: 'middle'}}
+			src={src} alt={noAlt ? '' : avatar} width="80" height="80" class="pixelated" style={{ verticalAlign: 'middle' }}
 		/>;
 	}
 	getDefault(userid: ID) {
@@ -141,7 +141,7 @@ export const Avatars = new class {
 	/** does not include validation */
 	setDefault(userid: ID, avatar: AvatarID | null) {
 		if (avatar === this.getDefault(userid)) return;
-		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
+		if (!customAvatars[userid]) customAvatars[userid] = { allowed: [null] };
 		const entry = customAvatars[userid];
 
 		if (avatar === entry.allowed[0]) {
@@ -152,7 +152,7 @@ export const Avatars = new class {
 		saveCustomAvatars();
 	}
 	addAllowed(userid: ID, avatar: AvatarID | null) {
-		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
+		if (!customAvatars[userid]) customAvatars[userid] = { allowed: [null] };
 
 		if (customAvatars[userid].allowed.includes(avatar)) return false;
 
@@ -174,7 +174,7 @@ export const Avatars = new class {
 		return true;
 	}
 	addPersonal(userid: ID, avatar: AvatarID | null) {
-		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
+		if (!customAvatars[userid]) customAvatars[userid] = { allowed: [null] };
 		const entry = customAvatars[userid];
 
 		if (entry.allowed.includes(avatar)) return false;
@@ -812,7 +812,7 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`"${inputUsername}" is not a valid username.`);
 		}
 		const userid = toID(inputUsername);
-		const avatar = await Avatars.validate(inputAvatar, {rejectOfficial: true});
+		const avatar = await Avatars.validate(inputAvatar, { rejectOfficial: true });
 
 		if (!Avatars.addPersonal(userid, avatar)) {
 			throw new Chat.ErrorMessage(`User "${inputUsername}" can already use avatar "${avatar}".`);
@@ -835,7 +835,7 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`"${inputUsername}" is not a valid username.`);
 		}
 		const userid = toID(inputUsername);
-		const avatar = await Avatars.validate(inputAvatar, {rejectOfficial: true});
+		const avatar = await Avatars.validate(inputAvatar, { rejectOfficial: true });
 
 		if (!Avatars.addAllowed(userid, avatar)) {
 			throw new Chat.ErrorMessage(`User "${inputUsername}" can already use avatar "${avatar}".`);
@@ -926,7 +926,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(`That user has no avatars.`);
 		}
 		const existing = customAvatars[to]?.allowed.filter(Boolean);
-		customAvatars[to] = {...customAvatars[from]};
+		customAvatars[to] = { ...customAvatars[from] };
 		delete customAvatars[from];
 		if (existing) {
 			for (const avatar of existing) {

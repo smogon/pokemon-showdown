@@ -12,10 +12,10 @@ describe(`Fainted forme regression`, () => {
 
 	it('[Hackmons] should be able to revert between different mega evolutions', () => {
 		battle = common.createBattle([[
-			{species: 'charizardmegay', ability: 'drought', item: 'charizarditex', moves: ['memento']},
-			{species: 'darkrai', moves: ['darkpulse']},
+			{ species: 'charizardmegay', ability: 'drought', item: 'charizarditex', moves: ['memento'] },
+			{ species: 'darkrai', moves: ['darkpulse'] },
 		], [
-			{species: 'mareep', ability: 'static', moves: ['sleeptalk']},
+			{ species: 'mareep', ability: 'static', moves: ['sleeptalk'] },
 		]]);
 		const pokemon = battle.p1.active[0];
 		battle.makeChoices('move memento mega', 'auto');
@@ -25,10 +25,10 @@ describe(`Fainted forme regression`, () => {
 
 	it(`should revert Mega Evolutions`, () => {
 		battle = common.createBattle([[
-			{species: 'alakazam', ability: 'synchronize', item: 'alakazite', moves: ['memento']},
-			{species: 'darkrai', moves: ['darkpulse']},
+			{ species: 'alakazam', ability: 'synchronize', item: 'alakazite', moves: ['memento'] },
+			{ species: 'darkrai', moves: ['darkpulse'] },
 		], [
-			{species: 'mareep', ability: 'static', moves: ['sleeptalk']},
+			{ species: 'mareep', ability: 'static', moves: ['sleeptalk'] },
 		]]);
 		const pokemon = battle.p1.active[0];
 		battle.makeChoices('move memento mega', 'auto');
@@ -38,10 +38,10 @@ describe(`Fainted forme regression`, () => {
 
 	it(`should revert Rayquaza-Mega`, () => {
 		battle = common.gen(7).createBattle([[
-			{species: 'rayquaza', ability: 'airlock', moves: ['memento', 'dragonascent']},
-			{species: 'darkrai', moves: ['darkpulse']},
+			{ species: 'rayquaza', ability: 'airlock', moves: ['memento', 'dragonascent'] },
+			{ species: 'darkrai', moves: ['darkpulse'] },
 		], [
-			{species: 'mareep', ability: 'static', moves: ['sleeptalk']},
+			{ species: 'mareep', ability: 'static', moves: ['sleeptalk'] },
 		]]);
 		const pokemon = battle.p1.active[0];
 		battle.makeChoices('move memento mega', 'auto');
@@ -51,10 +51,10 @@ describe(`Fainted forme regression`, () => {
 
 	it(`should revert Primal forms`, () => {
 		battle = common.createBattle([[
-			{species: 'kyogre', ability: 'drizzle', moves: ['memento']},
-			{species: 'darkrai', moves: ['darkpulse']},
+			{ species: 'kyogre', ability: 'drizzle', moves: ['memento'] },
+			{ species: 'darkrai', moves: ['darkpulse'] },
 		], [
-			{species: 'mareep', ability: 'static', moves: ['sleeptalk']},
+			{ species: 'mareep', ability: 'static', moves: ['sleeptalk'] },
 		]]);
 		const pokemon = battle.p1.active[0];
 		battle.makeChoices();
@@ -64,10 +64,10 @@ describe(`Fainted forme regression`, () => {
 
 	it(`shouldn't revert Arceus-forms to base Arceus`, () => {
 		battle = common.createBattle([[
-			{species: 'arceusfire', ability: 'multitype', item: 'flameplate', moves: ['memento']},
-			{species: 'darkrai', moves: ['darkpulse']},
+			{ species: 'arceusfire', ability: 'multitype', item: 'flameplate', moves: ['memento'] },
+			{ species: 'darkrai', moves: ['darkpulse'] },
 		], [
-			{species: 'mareep', ability: 'static', moves: ['sleeptalk']},
+			{ species: 'mareep', ability: 'static', moves: ['sleeptalk'] },
 		]]);
 		const pokemon = battle.p1.active[0];
 		battle.makeChoices();
@@ -77,10 +77,10 @@ describe(`Fainted forme regression`, () => {
 
 	it("should revert Terastallized Morpeko-Hangry to base Morpeko", () => {
 		battle = common.gen(9).createBattle([[
-			{species: 'Morpeko', ability: 'hungerswitch', moves: ['memento', 'sleeptalk']},
-			{species: 'darkrai', moves: ['darkpulse']},
+			{ species: 'Morpeko', ability: 'hungerswitch', moves: ['memento', 'sleeptalk'] },
+			{ species: 'darkrai', moves: ['darkpulse'] },
 		], [
-			{species: 'mareep', ability: 'static', moves: ['sleeptalk']},
+			{ species: 'mareep', ability: 'static', moves: ['sleeptalk'] },
 		]]);
 		const pokemon = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'auto');
@@ -92,10 +92,10 @@ describe(`Fainted forme regression`, () => {
 
 	it(`shouldn't revert Palafin-Hero to base Palafin`, () => {
 		battle = common.createBattle([[
-			{species: 'palafin', ability: 'zerotohero', moves: ['memento']},
-			{species: 'darkrai', moves: ['darkpulse']},
+			{ species: 'palafin', ability: 'zerotohero', moves: ['memento'] },
+			{ species: 'darkrai', moves: ['darkpulse'] },
 		], [
-			{species: 'mareep', ability: 'static', moves: ['sleeptalk']},
+			{ species: 'mareep', ability: 'static', moves: ['sleeptalk'] },
 		]]);
 		const pokemon = battle.p1.active[0];
 		battle.makeChoices('switch 2', 'auto');
@@ -112,9 +112,9 @@ describe(`Fainted forme regression`, () => {
 				species: 'ogerponwellspring', ability: 'waterabsorb', item: 'wellspring mask',
 				moves: ['memento'], teraType: 'Water',
 			},
-			{species: 'darkrai', moves: ['darkpulse']},
+			{ species: 'darkrai', moves: ['darkpulse'] },
 		], [
-			{species: 'mareep', ability: 'static', moves: ['sleeptalk']},
+			{ species: 'mareep', ability: 'static', moves: ['sleeptalk'] },
 		]]);
 		const pokemon = battle.p1.active[0];
 		battle.makeChoices('move memento terastallize', 'auto');
@@ -124,10 +124,10 @@ describe(`Fainted forme regression`, () => {
 
 	it(`shouldn't revert Terapagos-Terastal to base Terapagos`, () => {
 		battle = common.createBattle([[
-			{species: 'terapagos', ability: 'terashift', moves: ['memento']},
-			{species: 'darkrai', moves: ['darkpulse']},
+			{ species: 'terapagos', ability: 'terashift', moves: ['memento'] },
+			{ species: 'darkrai', moves: ['darkpulse'] },
 		], [
-			{species: 'mareep', ability: 'static', moves: ['sleeptalk']},
+			{ species: 'mareep', ability: 'static', moves: ['sleeptalk'] },
 		]]);
 		const pokemon = battle.p1.active[0];
 		battle.makeChoices();
@@ -137,10 +137,10 @@ describe(`Fainted forme regression`, () => {
 
 	it(`should revert Terapagos-Stellar to base Terapagos`, () => {
 		battle = common.gen(9).createBattle([[
-			{species: 'terapagos', ability: 'terashift', moves: ['memento'], teraType: 'Stellar'},
-			{species: 'darkrai', moves: ['darkpulse']},
+			{ species: 'terapagos', ability: 'terashift', moves: ['memento'], teraType: 'Stellar' },
+			{ species: 'darkrai', moves: ['darkpulse'] },
 		], [
-			{species: 'mareep', ability: 'static', moves: ['sleeptalk']},
+			{ species: 'mareep', ability: 'static', moves: ['sleeptalk'] },
 		]]);
 		const pokemon = battle.p1.active[0];
 		battle.makeChoices('move memento terastallize', 'auto');

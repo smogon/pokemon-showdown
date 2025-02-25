@@ -11,12 +11,12 @@ describe(`Serene Grace`, () => {
 	});
 
 	it(`should not stack with Pledge Rainbow for flinches`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'wynaut', ability: 'serenegrace', moves: ['bite', 'waterpledge']},
-			{species: 'wobbuffet', moves: ['sleeptalk', 'firepledge']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'wynaut', ability: 'serenegrace', moves: ['bite', 'waterpledge'] },
+			{ species: 'wobbuffet', moves: ['sleeptalk', 'firepledge'] },
 		], [
-			{species: 'pyukumuku', moves: ['sleeptalk']},
-			{species: 'feebas', moves: ['sleeptalk']},
+			{ species: 'pyukumuku', moves: ['sleeptalk'] },
+			{ species: 'feebas', moves: ['sleeptalk'] },
 		]]);
 
 		battle.onEvent('ModifyMove', battle.format, -99, move => {
@@ -32,12 +32,12 @@ describe(`Serene Grace`, () => {
 	});
 
 	it(`[Gen 8] should overflow when quadrupling a stat drop effect with Pledge Rainbow`, () => {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'wynaut', ability: 'serenegrace', moves: ['poweruppunch', 'waterpledge']},
-			{species: 'wobbuffet', ability: 'serenegrace', moves: ['acidspray', 'firepledge']},
+		battle = common.gen(8).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'wynaut', ability: 'serenegrace', moves: ['poweruppunch', 'waterpledge'] },
+			{ species: 'wobbuffet', ability: 'serenegrace', moves: ['acidspray', 'firepledge'] },
 		], [
-			{species: 'magikarp', moves: ['sleeptalk']},
-			{species: 'feebas', moves: ['sleeptalk']},
+			{ species: 'magikarp', moves: ['sleeptalk'] },
+			{ species: 'feebas', moves: ['sleeptalk'] },
 		]]);
 
 		// Modding secondary chances so it will either always apply or never apply
@@ -60,12 +60,12 @@ describe(`Serene Grace`, () => {
 	});
 
 	it(`should not overflow when quadrupling a status effect with Pledge Rainbow`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'wynaut', ability: 'serenegrace', moves: ['nuzzle', 'waterpledge']},
-			{species: 'wobbuffet', ability: 'serenegrace', moves: ['flamethrower', 'firepledge']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'wynaut', ability: 'serenegrace', moves: ['nuzzle', 'waterpledge'] },
+			{ species: 'wobbuffet', ability: 'serenegrace', moves: ['flamethrower', 'firepledge'] },
 		], [
-			{species: 'magikarp', moves: ['sleeptalk']},
-			{species: 'feebas', moves: ['sleeptalk']},
+			{ species: 'magikarp', moves: ['sleeptalk'] },
+			{ species: 'feebas', moves: ['sleeptalk'] },
 		]]);
 
 		// Modding secondary chances so it will either always apply or never apply

@@ -11,12 +11,12 @@ describe('Leech Seed', () => {
 	});
 
 	it(`should heal and damage itself if it ends up in the same slot via Ally Switch`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'celesteela', ability: 'noguard', moves: ['sleeptalk', 'leechseed']},
-			{species: 'comfey', moves: ['sleeptalk', 'allyswitch']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'celesteela', ability: 'noguard', moves: ['sleeptalk', 'leechseed'] },
+			{ species: 'comfey', moves: ['sleeptalk', 'allyswitch'] },
 		], [
-			{species: 'wynaut', moves: ['sleeptalk']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['sleeptalk'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move leech seed -2, move sleeptalk', 'auto');
 		const comfey = battle.p1.active[1];

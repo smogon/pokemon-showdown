@@ -12,9 +12,9 @@ describe('Conversion2', () => {
 
 	it('should change users type to resist', () => {
 		battle = common.createBattle([
-			[{species: 'porygon2', moves: ['sleeptalk', 'conversion2', 'spore']}],
-			[{species: 'raticate', moves: ['tackle']},
-				{species: 'zapdos', moves: ['thundershock', 'sleeptalk']}],
+			[{ species: 'porygon2', moves: ['sleeptalk', 'conversion2', 'spore'] }],
+			[{ species: 'raticate', moves: ['tackle'] },
+				{ species: 'zapdos', moves: ['thundershock', 'sleeptalk'] }],
 		]);
 
 		battle.makeChoices('move conversion2', 'move tackle');
@@ -26,8 +26,8 @@ describe('Conversion2', () => {
 
 	it('should respect the determined type of the last move', () => {
 		battle = common.createBattle([
-			[{species: 'porygon2', moves: ['electrify', 'conversion2']}],
-			[{species: 'shuckle', moves: ['tackle']}],
+			[{ species: 'porygon2', moves: ['electrify', 'conversion2'] }],
+			[{ species: 'shuckle', moves: ['tackle'] }],
 		]);
 
 		battle.makeChoices('move electrify', 'move tackle');

@@ -12,9 +12,9 @@ describe(`Defiant`, () => {
 
 	it(`should raise the user's attack when lowered by an opponent`, () => {
 		battle = common.createBattle([[
-			{species: 'pawniard', ability: 'defiant', moves: ['sleeptalk', 'tackle']},
+			{ species: 'pawniard', ability: 'defiant', moves: ['sleeptalk', 'tackle'] },
 		], [
-			{species: 'wynaut', moves: ['faketears', 'firelash', 'silktrap']},
+			{ species: 'wynaut', moves: ['faketears', 'firelash', 'silktrap'] },
 		]]);
 		battle.makeChoices('auto', 'move faketears');
 		battle.makeChoices('auto', 'move firelash');
@@ -24,12 +24,12 @@ describe(`Defiant`, () => {
 	});
 
 	it(`should not raise the user's attack when lowered by itself or an ally`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'pawniard', ability: 'defiant', moves: ['closecombat', 'sleeptalk']},
-			{species: 'wynaut', moves: ['faketears', 'firelash', 'silktrap']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'pawniard', ability: 'defiant', moves: ['closecombat', 'sleeptalk'] },
+			{ species: 'wynaut', moves: ['faketears', 'firelash', 'silktrap'] },
 		], [
-			{species: 'screamtail', moves: ['sleeptalk']},
-			{species: 'jigglypuff', moves: ['sleeptalk']},
+			{ species: 'screamtail', moves: ['sleeptalk'] },
+			{ species: 'jigglypuff', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move sleeptalk, move firelash -1', 'auto');
 		battle.makeChoices('move closecombat 1, move faketears -1', 'auto');

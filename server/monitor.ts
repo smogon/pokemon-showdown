@@ -7,8 +7,8 @@
  * @license MIT
  */
 
-import {exec, type ExecException, type ExecOptions} from 'child_process';
-import {crashlogger, FS} from "../lib";
+import { exec, type ExecException, type ExecOptions } from 'child_process';
+import { crashlogger, FS } from "../lib";
 import * as pathModule from 'path';
 
 const MONITOR_CLEAN_TIMEOUT = 2 * 60 * 60 * 1000;
@@ -60,9 +60,9 @@ export const Monitor = new class {
 	tickets = new TimedCounter();
 
 	activeIp: string | null = null;
-	networkUse: {[k: string]: number} = {};
-	networkCount: {[k: string]: number} = {};
-	hotpatchLock: {[k: string]: {by: string, reason: string}} = {};
+	networkUse: { [k: string]: number } = {};
+	networkCount: { [k: string]: number } = {};
+	hotpatchLock: { [k: string]: { by: string, reason: string } } = {};
 
 	TimedCounter = TimedCounter;
 
@@ -345,7 +345,7 @@ export const Monitor = new class {
 			const index = Monitor.logPath('.gitindex');
 			const options = {
 				cwd: __dirname,
-				env: {GIT_INDEX_FILE: index.path},
+				env: { GIT_INDEX_FILE: index.path },
 			};
 
 			let [code, stdout, stderr] = await this.sh(`git add -A`, options);

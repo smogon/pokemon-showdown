@@ -11,30 +11,30 @@ describe('Inverse Battle', () => {
 	});
 
 	it(`should change natural resistances into weaknesses`, () => {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['vitalthrow']},
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['vitalthrow'] },
 		], [
-			{species: 'scyther', moves: ['sleeptalk']},
+			{ species: 'scyther', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 	});
 
 	it(`should change natural weaknesses into resistances`, () => {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['vitalthrow']},
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['vitalthrow'] },
 		], [
-			{species: 'absol', moves: ['sleeptalk']},
+			{ species: 'absol', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-resisted|'));
 	});
 
 	it(`should negate natural immunities and make them weaknesses`, () => {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['vitalthrow']},
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['vitalthrow'] },
 		], [
-			{species: 'dusknoir', moves: ['sleeptalk']},
+			{ species: 'dusknoir', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
@@ -42,15 +42,15 @@ describe('Inverse Battle', () => {
 	});
 
 	it(`should affect Stealth Rock damage`, () => {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['stealthrock', 'snore']},
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['stealthrock', 'snore'] },
 		], [
-			{species: 'ninjask', moves: ['sleeptalk']},
-			{species: 'steelix', moves: ['sleeptalk']},
-			{species: 'hitmonchan', moves: ['sleeptalk']},
-			{species: 'chansey', moves: ['sleeptalk']},
-			{species: 'staraptor', moves: ['sleeptalk']},
-			{species: 'volcarona', moves: ['sleeptalk']},
+			{ species: 'ninjask', moves: ['sleeptalk'] },
+			{ species: 'steelix', moves: ['sleeptalk'] },
+			{ species: 'hitmonchan', moves: ['sleeptalk'] },
+			{ species: 'chansey', moves: ['sleeptalk'] },
+			{ species: 'staraptor', moves: ['sleeptalk'] },
+			{ species: 'volcarona', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		let pokemon;
@@ -64,30 +64,30 @@ describe('Inverse Battle', () => {
 	});
 
 	it(`should affect the resistance of Delta Stream`, () => {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['hiddenpowerbug']},
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['hiddenpowerbug'] },
 		], [
-			{species: 'rayquazamega', ability: 'deltastream', moves: ['sleeptalk']},
+			{ species: 'rayquazamega', ability: 'deltastream', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 	});
 
 	it(`should make Ghost/Grass types take neutral damage from Flying Press`, () => {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'hawlucha', moves: ['flyingpress']},
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'hawlucha', moves: ['flyingpress'] },
 		], [
-			{species: 'gourgeist', moves: ['sleeptalk']},
+			{ species: 'gourgeist', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(!battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 	});
 
 	it(`should not affect ability-based immunities`, () => {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['earthquake']},
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['earthquake'] },
 		], [
-			{species: 'mismagius', ability: 'levitate', moves: ['sleeptalk']},
+			{ species: 'mismagius', ability: 'levitate', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
@@ -95,10 +95,10 @@ describe('Inverse Battle', () => {
 	});
 
 	it(`should not affect move-based immunities`, () => {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['earthquake']},
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['earthquake'] },
 		], [
-			{species: 'klefki', moves: ['magnetrise']},
+			{ species: 'klefki', moves: ['magnetrise'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-immune|'));
@@ -106,30 +106,30 @@ describe('Inverse Battle', () => {
 	});
 
 	it(`should not affect the type effectiveness of Freeze Dry on Water-type Pokemon`, () => {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['freezedry']},
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['freezedry'] },
 		], [
-			{species: 'floatzel', moves: ['sleeptalk']},
+			{ species: 'floatzel', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log[battle.lastMoveLine + 1].startsWith('|-supereffective|'));
 	});
 
 	it(`should not affect the "ungrounded" state of Flying-type Pokemon`, () => {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['spore']},
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['spore'] },
 		], [
-			{species: 'talonflame', moves: ['mistyterrain']},
+			{ species: 'talonflame', moves: ['mistyterrain'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p2.active[0].status, 'slp');
 	});
 
 	it(`should let Tera Shell take not very effective damage`, () => {
-		battle = common.createBattle({inverseMod: true}, [[
-			{species: 'wynaut', moves: ['wickedblow']},
+		battle = common.createBattle({ inverseMod: true }, [[
+			{ species: 'wynaut', moves: ['wickedblow'] },
 		], [
-			{species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk']},
+			{ species: 'Terapagos-Terastal', ability: 'terashell', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		const terapagos = battle.p2.active[0];

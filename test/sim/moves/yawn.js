@@ -12,9 +12,9 @@ describe('Yawn', () => {
 
 	it(`should put foes to sleep eventually`, () => {
 		battle = common.createBattle([[
-			{species: "Mew", moves: ['yawn', 'splash']},
+			{ species: "Mew", moves: ['yawn', 'splash'] },
 		], [
-			{species: "Ninjask", moves: ['splash']},
+			{ species: "Ninjask", moves: ['splash'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p2.active[0].status, '');
@@ -24,9 +24,9 @@ describe('Yawn', () => {
 
 	it(`should be blocked by Safeguard`, () => {
 		battle = common.createBattle([[
-			{species: "Mew", moves: ['yawn']},
+			{ species: "Mew", moves: ['yawn'] },
 		], [
-			{species: "Ninjask", moves: ['safeguard']},
+			{ species: "Ninjask", moves: ['safeguard'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices();
@@ -35,9 +35,9 @@ describe('Yawn', () => {
 
 	it(`should be able to put foes to sleep through Safeguard if used first`, () => {
 		battle = common.createBattle([[
-			{species: "Ninjask", moves: ['yawn']},
+			{ species: "Ninjask", moves: ['yawn'] },
 		], [
-			{species: "Mew", moves: ['safeguard']},
+			{ species: "Mew", moves: ['safeguard'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices();

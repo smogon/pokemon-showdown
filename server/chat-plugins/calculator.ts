@@ -1,4 +1,4 @@
-import {Utils} from '../../lib';
+import { Utils } from '../../lib';
 
 type Operator = '^' | 'negative' | '%' | '/' | '*' | '+' | '-' | '(';
 interface Operators {
@@ -6,7 +6,7 @@ interface Operators {
 	associativity: "Left" | "Right";
 }
 
-const OPERATORS: {[k in Operator]: Operators} = {
+const OPERATORS: { [k in Operator]: Operators } = {
 	"^": {
 		precedence: 5,
 		associativity: "Right",
@@ -41,7 +41,7 @@ const OPERATORS: {[k in Operator]: Operators} = {
 	},
 };
 
-const BASE_PREFIXES: {[base: number]: string} = {
+const BASE_PREFIXES: { [base: number]: string } = {
 	2: "0b",
 	8: "0o",
 	10: "",

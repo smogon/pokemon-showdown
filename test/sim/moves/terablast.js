@@ -7,9 +7,9 @@ describe('Tera Blast', () => {
 	it(`should be a special attack when base stats are tied`, () => {
 		const battle = common.gen(9).createBattle([[
 			// Regidrago has equal base attack and special attack stats.
-			{species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast']},
+			{ species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast'] },
 		], [
-			{species: 'regirock', ability: 'clearbody', moves: ['protect']},
+			{ species: 'regirock', ability: 'clearbody', moves: ['protect'] },
 		]]);
 		battle.makeChoices('move terablast terastallize', 'move protect');
 
@@ -19,9 +19,9 @@ describe('Tera Blast', () => {
 	it(`should be a physical attack when terastallized with higher attack stat`, () => {
 		const battle = common.gen(9).createBattle([[
 			// Regidrago has equal base attack and special attack stats.
-			{species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast', 'dragondance']},
+			{ species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast', 'dragondance'] },
 		], [
-			{species: 'regirock', ability: 'clearbody', moves: ['protect']},
+			{ species: 'regirock', ability: 'clearbody', moves: ['protect'] },
 		]]);
 		// Dragon Dance boosts Regidrago's attack stat.
 		battle.makeChoices('move dragondance', 'move protect');
@@ -33,9 +33,9 @@ describe('Tera Blast', () => {
 	it(`should be a special attack when not terastallized, even if attack stat is higher`, () => {
 		const battle = common.createBattle([[
 			// Regidrago has equal base attack and special attack stats.
-			{species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast', 'dragondance']},
+			{ species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast', 'dragondance'] },
 		], [
-			{species: 'regirock', ability: 'clearbody', moves: ['protect']},
+			{ species: 'regirock', ability: 'clearbody', moves: ['protect'] },
 		]]);
 		// Dragon Dance boosts Regidrago's attack stat.
 		battle.makeChoices('move dragondance', 'move protect');
@@ -49,10 +49,10 @@ describe('Tera Blast', () => {
 	it.skip(`should be a special attack when terastallized even if target ignores stat changes`, () => {
 		const battle = common.gen(9).createBattle([[
 			// Regidrago has equal base attack and special attack stats.
-			{species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast', 'dragondance']},
+			{ species: 'regidrago', ability: 'dragonsmaw', moves: ['terablast', 'dragondance'] },
 		], [
 			// Dondozo's Unaware should not affect Tera Blast's category.
-			{species: 'dondozo', ability: 'unaware', moves: ['splash']},
+			{ species: 'dondozo', ability: 'unaware', moves: ['splash'] },
 		]]);
 		// Dragon Dance boosts Regidrago's attack stat.
 		battle.makeChoices('move dragondance', 'move splash');

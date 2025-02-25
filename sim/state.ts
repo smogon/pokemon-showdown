@@ -9,12 +9,12 @@
  * @license MIT
  */
 
-import {Battle} from './battle';
-import {Dex} from './dex';
-import {Field} from './field';
-import {Pokemon} from './pokemon';
-import {PRNG} from './prng';
-import {type Choice, Side} from './side';
+import { Battle } from './battle';
+import { Dex } from './dex';
+import { Field } from './field';
+import { Pokemon } from './pokemon';
+import { PRNG } from './prng';
+import { type Choice, Side } from './side';
 
 // The simulator supports up to 24 different Pokemon on a team. Serialization
 // uses letters instead of numbers to indicate indices/positions, but where

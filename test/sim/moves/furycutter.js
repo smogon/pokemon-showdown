@@ -12,9 +12,9 @@ describe('Fury Cutter', () => {
 
 	it('should double in power with each successful hit', () => {
 		battle = common.createBattle([[
-			{species: 'kangaskhan', moves: ['luckychant']},
+			{ species: 'kangaskhan', moves: ['luckychant'] },
 		], [
-			{species: 'wynaut', ability: "compoundeyes", moves: ['furycutter']},
+			{ species: 'wynaut', ability: "compoundeyes", moves: ['furycutter'] },
 		]]);
 
 		battle.makeChoices();
@@ -33,9 +33,9 @@ describe('Fury Cutter', () => {
 
 	it('should double in power with each successful hit (Gen 3)', () => {
 		battle = common.gen(3).createBattle([[
-			{species: 'kangaskhan', moves: ['luckychant']},
+			{ species: 'kangaskhan', moves: ['luckychant'] },
 		], [
-			{species: 'wynaut', ability: "compoundeyes", moves: ['furycutter']},
+			{ species: 'wynaut', ability: "compoundeyes", moves: ['furycutter'] },
 		]]);
 
 		battle.makeChoices();

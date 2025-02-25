@@ -12,9 +12,9 @@ describe('Eviolite', () => {
 
 	it(`should multiply the defenses of a Pokemon that can evolve by 1.5`, () => {
 		battle = common.createBattle([[
-			{species: 'Omanyte', ability: 'shellarmor', item: 'eviolite', moves: ['rest']},
+			{ species: 'Omanyte', ability: 'shellarmor', item: 'eviolite', moves: ['rest'] },
 		], [
-			{species: 'Cherrim', moves: ['seedbomb', 'megadrain']},
+			{ species: 'Cherrim', moves: ['seedbomb', 'megadrain'] },
 		]]);
 		battle.makeChoices();
 		assert.false.fainted(battle.p1.active[0]);
@@ -24,10 +24,10 @@ describe('Eviolite', () => {
 
 	it(`should not multiply the defenses of a Pokemon that cannot evolve by 1.5`, () => {
 		battle = common.createBattle([[
-			{species: 'Omastar', ability: 'shellarmor', item: 'eviolite', moves: ['rest']},
-			{species: 'Omastar', ability: 'shellarmor', item: 'eviolite', moves: ['rest']},
+			{ species: 'Omastar', ability: 'shellarmor', item: 'eviolite', moves: ['rest'] },
+			{ species: 'Omastar', ability: 'shellarmor', item: 'eviolite', moves: ['rest'] },
 		], [
-			{species: 'Sceptile', item: 'meadowplate', moves: ['leafblade', 'megadrain']},
+			{ species: 'Sceptile', item: 'meadowplate', moves: ['leafblade', 'megadrain'] },
 		]]);
 		battle.makeChoices();
 		assert.fainted(battle.p1.active[0]);
@@ -38,9 +38,9 @@ describe('Eviolite', () => {
 
 	it(`should multiply the defenses of a National Dex Pokemon that can evolve by 1.5`, () => {
 		battle = common.createBattle([[
-			{species: 'Geodude', ability: 'shellarmor', item: 'eviolite', moves: ['rest']},
+			{ species: 'Geodude', ability: 'shellarmor', item: 'eviolite', moves: ['rest'] },
 		], [
-			{species: 'Roserade', moves: ['seedbomb', 'absorb']},
+			{ species: 'Roserade', moves: ['seedbomb', 'absorb'] },
 		]]);
 		battle.makeChoices();
 		assert.false.fainted(battle.p1.active[0]);

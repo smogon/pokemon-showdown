@@ -12,9 +12,9 @@ describe("Ripen", () => {
 
 	it('should double healing from Berries', () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'ripen', item: 'sitrusberry', ivs: {hp: 30}, moves: ['sleeptalk']},
+			{ species: 'wynaut', ability: 'ripen', item: 'sitrusberry', ivs: { hp: 30 }, moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', ability: 'compoundeyes', moves: ['superfang']},
+			{ species: 'wynaut', ability: 'compoundeyes', moves: ['superfang'] },
 		]]);
 		battle.makeChoices();
 		const ripenWynaut = battle.p1.active[0];
@@ -23,9 +23,9 @@ describe("Ripen", () => {
 
 	it('should double stat boosts from Berries', () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'ripen', item: 'liechiberry', evs: {hp: 4}, moves: ['sleeptalk']},
+			{ species: 'wynaut', ability: 'ripen', item: 'liechiberry', evs: { hp: 4 }, moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', ability: 'compoundeyes', moves: ['superfang']},
+			{ species: 'wynaut', ability: 'compoundeyes', moves: ['superfang'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices();
@@ -35,9 +35,9 @@ describe("Ripen", () => {
 
 	it(`should double damage done from Jaboca / Rowap Berries`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'ripen', item: 'jabocaberry', moves: ['sleeptalk']},
+			{ species: 'wynaut', ability: 'ripen', item: 'jabocaberry', moves: ['sleeptalk'] },
 		], [
-			{species: 'falinks', moves: ['tackle']},
+			{ species: 'falinks', moves: ['tackle'] },
 		]]);
 		battle.makeChoices();
 		const falinks = battle.p2.active[0];
@@ -46,9 +46,9 @@ describe("Ripen", () => {
 
 	it('should allow resist Berries to quarter the damage done', () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'ripen', item: 'colburberry', evs: {spe: 4}, moves: ['luckychant']},
+			{ species: 'wynaut', ability: 'ripen', item: 'colburberry', evs: { spe: 4 }, moves: ['luckychant'] },
 		], [
-			{species: 'wynaut', moves: ['darkpulse']},
+			{ species: 'wynaut', moves: ['darkpulse'] },
 		]]);
 		battle.makeChoices();
 		const ripenWynaut = battle.p1.active[0];
@@ -58,9 +58,9 @@ describe("Ripen", () => {
 
 	it('should allow resist Berries to quarter the damage done even on a critical hit', () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'ripen', item: 'colburberry', evs: {spe: 4}, moves: ['sleeptalk']},
+			{ species: 'wynaut', ability: 'ripen', item: 'colburberry', evs: { spe: 4 }, moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', moves: ['laserfocus', 'darkpulse']},
+			{ species: 'wynaut', moves: ['laserfocus', 'darkpulse'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('auto', 'move dark pulse');
@@ -71,9 +71,9 @@ describe("Ripen", () => {
 
 	it('should double the effects of Berries eaten by Fling', () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'ripen', moves: ['sleeptalk']},
+			{ species: 'wynaut', ability: 'ripen', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', item: "liechiberry", moves: ['fling']},
+			{ species: 'wynaut', item: "liechiberry", moves: ['fling'] },
 		]]);
 		battle.makeChoices();
 		const ripenWynaut = battle.p1.active[0];
@@ -82,9 +82,9 @@ describe("Ripen", () => {
 
 	it('should double the effects of Berries eaten by Bug Bite', () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'ripen', moves: ['bugbite']},
+			{ species: 'wynaut', ability: 'ripen', moves: ['bugbite'] },
 		], [
-			{species: 'wynaut', item: "liechiberry", moves: ['sleeptalk']},
+			{ species: 'wynaut', item: "liechiberry", moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		const ripenWynaut = battle.p1.active[0];

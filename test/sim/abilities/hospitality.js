@@ -11,14 +11,14 @@ describe('Hospitality', () => {
 	});
 
 	it('should activate after hazards', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'snom', level: 1, ability: 'noguard', moves: ['sleeptalk']},
-			{species: 'snom', level: 1, ability: 'noguard', moves: ['sleeptalk']},
-			{species: 'deerling', moves: ['sleeptalk']},
-			{species: 'sinistcha', ability: 'hospitality', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'snom', level: 1, ability: 'noguard', moves: ['sleeptalk'] },
+			{ species: 'snom', level: 1, ability: 'noguard', moves: ['sleeptalk'] },
+			{ species: 'deerling', moves: ['sleeptalk'] },
+			{ species: 'sinistcha', ability: 'hospitality', moves: ['sleeptalk'] },
 		], [
-			{species: 'kleavor', moves: ['stoneaxe']},
-			{species: 'kleavor', moves: ['stoneaxe']},
+			{ species: 'kleavor', moves: ['stoneaxe'] },
+			{ species: 'kleavor', moves: ['stoneaxe'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('switch 3, switch 4');

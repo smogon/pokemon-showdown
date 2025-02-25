@@ -11,12 +11,12 @@ describe(`Ally Switch`, () => {
 	});
 
 	it(`should cause the Pokemon to switch sides in a double battle`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Primeape', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['allyswitch']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Primeape', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['allyswitch'] },
 		], [
-			{species: 'Dreepy', moves: ['sleeptalk']},
-			{species: 'Pichu', moves: ['sleeptalk']},
+			{ species: 'Dreepy', moves: ['sleeptalk'] },
+			{ species: 'Pichu', moves: ['sleeptalk'] },
 		]]);
 
 		let wynaut = battle.p1.active[1];
@@ -28,14 +28,14 @@ describe(`Ally Switch`, () => {
 	});
 
 	it(`should not work if the user is in the center of a Triple Battle`, () => {
-		battle = common.gen(6).createBattle({gameType: 'triples'}, [[
-			{species: 'Primeape', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['allyswitch']},
-			{species: 'Shaymin', moves: ['sleeptalk']},
+		battle = common.gen(6).createBattle({ gameType: 'triples' }, [[
+			{ species: 'Primeape', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['allyswitch'] },
+			{ species: 'Shaymin', moves: ['sleeptalk'] },
 		], [
-			{species: 'Murkrow', moves: ['sleeptalk']},
-			{species: 'Pichu', moves: ['sleeptalk']},
-			{species: 'Skrelp', moves: ['sleeptalk']},
+			{ species: 'Murkrow', moves: ['sleeptalk'] },
+			{ species: 'Pichu', moves: ['sleeptalk'] },
+			{ species: 'Skrelp', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -44,14 +44,14 @@ describe(`Ally Switch`, () => {
 	});
 
 	it(`should swap Pokemon on the edges of a Triple Battle`, () => {
-		battle = common.gen(6).createBattle({gameType: 'triples'}, [[
-			{species: 'Wynaut', moves: ['allyswitch']},
-			{species: 'Primeape', moves: ['sleeptalk']},
-			{species: 'Shaymin', moves: ['sleeptalk']},
+		battle = common.gen(6).createBattle({ gameType: 'triples' }, [[
+			{ species: 'Wynaut', moves: ['allyswitch'] },
+			{ species: 'Primeape', moves: ['sleeptalk'] },
+			{ species: 'Shaymin', moves: ['sleeptalk'] },
 		], [
-			{species: 'Murkrow', moves: ['sleeptalk']},
-			{species: 'Pichu', moves: ['sleeptalk']},
-			{species: 'Skrelp', moves: ['sleeptalk']},
+			{ species: 'Murkrow', moves: ['sleeptalk'] },
+			{ species: 'Pichu', moves: ['sleeptalk'] },
+			{ species: 'Skrelp', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -61,35 +61,35 @@ describe(`Ally Switch`, () => {
 
 	it(`should not work in formats where you do not control allies`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', moves: ['allyswitch']},
+			{ species: 'Wynaut', moves: ['allyswitch'] },
 		], [
-			{species: 'Pichu', moves: ['swordsdance']},
+			{ species: 'Pichu', moves: ['swordsdance'] },
 		]]);
 
 		battle.makeChoices();
 		assert(battle.log.some(line => line.includes('|-fail|')), `It should fail in singles`);
 
-		battle = common.createBattle({gameType: 'multi'}, [[
-			{species: 'Wynaut', moves: ['allyswitch']},
+		battle = common.createBattle({ gameType: 'multi' }, [[
+			{ species: 'Wynaut', moves: ['allyswitch'] },
 		], [
-			{species: 'Cubone', moves: ['swordsdance']},
+			{ species: 'Cubone', moves: ['swordsdance'] },
 		], [
-			{species: 'Marowak', moves: ['swordsdance']},
+			{ species: 'Marowak', moves: ['swordsdance'] },
 		], [
-			{species: 'Shaymin', moves: ['swordsdance']},
+			{ species: 'Shaymin', moves: ['swordsdance'] },
 		]]);
 
 		battle.makeChoices();
 		assert(battle.log.some(line => line.includes('|-fail|')), `It should fail in multis`);
 
-		battle = common.createBattle({gameType: 'freeforall'}, [[
-			{species: 'wynaut', moves: ['allyswitch']},
+		battle = common.createBattle({ gameType: 'freeforall' }, [[
+			{ species: 'wynaut', moves: ['allyswitch'] },
 		], [
-			{species: 'scyther', moves: ['swordsdance']},
+			{ species: 'scyther', moves: ['swordsdance'] },
 		], [
-			{species: 'scizor', moves: ['swordsdance']},
+			{ species: 'scizor', moves: ['swordsdance'] },
 		], [
-			{species: 'shaymin', moves: ['swordsdance']},
+			{ species: 'shaymin', moves: ['swordsdance'] },
 		]]);
 
 		battle.makeChoices();
@@ -97,12 +97,12 @@ describe(`Ally Switch`, () => {
 	});
 
 	it(`should have a chance to fail when used successively`, () => {
-		battle = common.createBattle({gameType: 'doubles', forceRandomChance: false}, [[
-			{species: 'Primeape', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['allyswitch']},
+		battle = common.createBattle({ gameType: 'doubles', forceRandomChance: false }, [[
+			{ species: 'Primeape', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['allyswitch'] },
 		], [
-			{species: 'Dreepy', moves: ['sleeptalk']},
-			{species: 'Pichu', moves: ['sleeptalk']},
+			{ species: 'Dreepy', moves: ['sleeptalk'] },
+			{ species: 'Pichu', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -113,12 +113,12 @@ describe(`Ally Switch`, () => {
 	});
 
 	it(`[Gen 8] should not have a chance to fail when used successively`, () => {
-		battle = common.gen(8).createBattle({gameType: 'doubles', forceRandomChance: false}, [[
-			{species: 'Primeape', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['allyswitch']},
+		battle = common.gen(8).createBattle({ gameType: 'doubles', forceRandomChance: false }, [[
+			{ species: 'Primeape', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['allyswitch'] },
 		], [
-			{species: 'Dreepy', moves: ['sleeptalk']},
-			{species: 'Pichu', moves: ['sleeptalk']},
+			{ species: 'Dreepy', moves: ['sleeptalk'] },
+			{ species: 'Pichu', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -129,12 +129,12 @@ describe(`Ally Switch`, () => {
 	});
 
 	it(`should not use the protection counter when determining if the move should fail`, () => {
-		battle = common.createBattle({gameType: 'doubles', forceRandomChance: false}, [[
-			{species: 'Primeape', moves: ['calmmind']},
-			{species: 'Wynaut', moves: ['allyswitch', 'protect']},
+		battle = common.createBattle({ gameType: 'doubles', forceRandomChance: false }, [[
+			{ species: 'Primeape', moves: ['calmmind'] },
+			{ species: 'Wynaut', moves: ['allyswitch', 'protect'] },
 		], [
-			{species: 'Dreepy', moves: ['calmmind']},
-			{species: 'Pichu', moves: ['calmmind']},
+			{ species: 'Dreepy', moves: ['calmmind'] },
+			{ species: 'Pichu', moves: ['calmmind'] },
 		]]);
 
 		battle.makeChoices('move calmmind, move allyswitch', 'auto');

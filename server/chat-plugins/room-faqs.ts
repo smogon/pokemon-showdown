@@ -1,9 +1,9 @@
-import {FS, Utils} from '../../lib';
+import { FS, Utils } from '../../lib';
 
 export const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
 const MAX_ROOMFAQ_LENGTH = 8192;
 
-export const roomFaqs: {[k: string]: {[k: string]: RoomFAQ}} = (() => {
+export const roomFaqs: { [k: string]: { [k: string]: RoomFAQ } } = (() => {
 	const data = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync() || "{}");
 	let save = false;
 	for (const k in data) {
@@ -24,7 +24,7 @@ interface RoomFAQ {
 	html?: boolean;
 }
 
-function saveRoomFaqs(table?: {[k: string]: {[k: string]: RoomFAQ}}) {
+function saveRoomFaqs(table?: { [k: string]: { [k: string]: RoomFAQ } }) {
 	FS(ROOMFAQ_FILE).writeUpdate(() => JSON.stringify(table || roomFaqs));
 }
 

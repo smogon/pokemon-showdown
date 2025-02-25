@@ -13,8 +13,8 @@ describe('Weather damage calculation', () => {
 	it('should multiply the damage (not the basePower) in favorable weather', () => {
 		battle = common.createBattle();
 		battle.randomizer = dmg => dmg; // max damage
-		battle.setPlayer('p1', {team: [{species: 'Ninetales', ability: 'drought', moves: ['incinerate']}]});
-		battle.setPlayer('p2', {team: [{species: 'Cryogonal', ability: 'levitate', moves: ['splash']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Ninetales', ability: 'drought', moves: ['incinerate'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Cryogonal', ability: 'levitate', moves: ['splash'] }] });
 		const attacker = battle.p1.active[0];
 		const defender = battle.p2.active[0];
 		assert.hurtsBy(defender, 152, () => battle.makeChoices('move incinerate', 'move splash'));
@@ -26,8 +26,8 @@ describe('Weather damage calculation', () => {
 	it('should reduce the damage (not the basePower) in unfavorable weather', () => {
 		battle = common.createBattle();
 		battle.randomizer = dmg => dmg; // max damage
-		battle.setPlayer('p1', {team: [{species: 'Ninetales', ability: 'drizzle', moves: ['incinerate']}]});
-		battle.setPlayer('p2', {team: [{species: 'Cryogonal', ability: 'levitate', moves: ['splash']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Ninetales', ability: 'drizzle', moves: ['incinerate'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Cryogonal', ability: 'levitate', moves: ['splash'] }] });
 		const attacker = battle.p1.active[0];
 		const defender = battle.p2.active[0];
 		assert.hurtsBy(defender, 50, () => battle.makeChoices('move incinerate', 'move splash'));
@@ -39,8 +39,8 @@ describe('Weather damage calculation', () => {
 	it('should make Hail/Sandstorm damage some pokemon but not others', () => {
 		battle = common.gen(8).createBattle();
 		battle.randomizer = dmg => dmg; // max damage
-		battle.setPlayer('p1', {team: [{species: 'Abomasnow', ability: 'snowwarning', moves: ['protect']}]});
-		battle.setPlayer('p2', {team: [{species: 'Sandslash', ability: 'sandveil', moves: ['protect']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Abomasnow', ability: 'snowwarning', moves: ['protect'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Sandslash', ability: 'sandveil', moves: ['protect'] }] });
 		battle.makeChoices('move protect', 'move protect');
 		const p1active = battle.p1.active[0];
 		const p2active = battle.p2.active[0];
@@ -50,9 +50,9 @@ describe('Weather damage calculation', () => {
 
 	it(`should wear off on the final turn before weather effects are applied`, () => {
 		battle = common.createBattle([[
-			{species: 'Tyranitar', ability: 'sandstream', moves: ['sleeptalk']},
+			{ species: 'Tyranitar', ability: 'sandstream', moves: ['sleeptalk'] },
 		], [
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 
 		for (let i = 0; i < 5; i++) battle.makeChoices();
@@ -62,9 +62,9 @@ describe('Weather damage calculation', () => {
 
 	it(`should wear off before future attacks`, () => {
 		battle = common.createBattle([[
-			{species: 'Tyranitar', ability: 'sandstream', moves: ['doomdesire', 'soak']},
+			{ species: 'Tyranitar', ability: 'sandstream', moves: ['doomdesire', 'soak'] },
 		], [
-			{species: 'Roggenrola', moves: ['sleeptalk']},
+			{ species: 'Roggenrola', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -78,9 +78,9 @@ describe('Weather damage calculation', () => {
 
 	it(`should run residual weather effects in order of Speed`, () => {
 		battle = common.createBattle([[
-			{species: 'Sunkern', ability: 'solarpower', moves: ['sunnyday']},
+			{ species: 'Sunkern', ability: 'solarpower', moves: ['sunnyday'] },
 		], [
-			{species: 'Charizard', ability: 'dryskin', moves: ['sleeptalk']},
+			{ species: 'Charizard', ability: 'dryskin', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();

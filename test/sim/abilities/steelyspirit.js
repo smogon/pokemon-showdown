@@ -11,12 +11,12 @@ describe('Steely Spirit', () => {
 	});
 
 	it('should boost Steel-type moves for its ally and itself', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'aron', ability: 'steelyspirit', moves: ['ironhead']},
-			{species: 'aron', moves: ['ironhead']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'aron', ability: 'steelyspirit', moves: ['ironhead'] },
+			{ species: 'aron', moves: ['ironhead'] },
 		], [
-			{species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move ironhead 1, move ironhead 2', 'auto');
@@ -30,12 +30,12 @@ describe('Steely Spirit', () => {
 	});
 
 	it('should stack with itself', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'aron', ability: 'steelyspirit', moves: ['ironhead']},
-			{species: 'aron', ability: 'steelyspirit', moves: ['ironhead']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'aron', ability: 'steelyspirit', moves: ['ironhead'] },
+			{ species: 'aron', ability: 'steelyspirit', moves: ['ironhead'] },
 		], [
-			{species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk']},
-			{species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk']},
+			{ species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk'] },
+			{ species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move ironhead 1, move ironhead 2', 'auto');

@@ -12,9 +12,9 @@ describe('Dancer', () => {
 
 	it('should only copy dance moves used by other Pokemon', () => {
 		battle = common.createBattle([[
-			{species: 'Oricorio', ability: 'dancer', moves: ['swordsdance']},
+			{ species: 'Oricorio', ability: 'dancer', moves: ['swordsdance'] },
 		], [
-			{species: 'Oricorio', ability: 'dancer', moves: ['howl']},
+			{ species: 'Oricorio', ability: 'dancer', moves: ['howl'] },
 		]]);
 		battle.makeChoices('move swordsdance', 'move howl');
 		assert.statStage(battle.p1.active[0], 'atk', 2);
@@ -22,32 +22,32 @@ describe('Dancer', () => {
 	});
 
 	it('should activate in order of lowest to highest raw speed', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Shedinja', level: 98, ability: 'dancer', item: 'focussash', moves: ['sleeptalk']},
-			{species: 'Shedinja', level: 99, ability: 'dancer', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Shedinja', level: 98, ability: 'dancer', item: 'focussash', moves: ['sleeptalk'] },
+			{ species: 'Shedinja', level: 99, ability: 'dancer', moves: ['sleeptalk'] },
 		], [
-			{species: 'Shedinja', ability: 'wonderguard', moves: ['fierydance']},
-			{species: 'Shedinja', ability: 'dancer', moves: ['sleeptalk']},
+			{ species: 'Shedinja', ability: 'wonderguard', moves: ['fierydance'] },
+			{ species: 'Shedinja', ability: 'dancer', moves: ['sleeptalk'] },
 		]]);
 		const [, fastDancer] = battle.p1.active;
 		const [wwDanceSource, foeDancer] = battle.p2.active;
-		fastDancer.boostBy({spe: 6});
+		fastDancer.boostBy({ spe: 6 });
 		battle.makeChoices('move sleeptalk, move sleeptalk', 'move fierydance 1, move sleeptalk');
 		assert.fainted(wwDanceSource);
 		assert.fainted(foeDancer);
 	});
 
 	it('should activate in order of lowest to highest raw speed inside Trick Room', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Shedinja', level: 98, ability: 'dancer', item: 'focussash', moves: ['sleeptalk']},
-			{species: 'Shedinja', level: 99, ability: 'dancer', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Shedinja', level: 98, ability: 'dancer', item: 'focussash', moves: ['sleeptalk'] },
+			{ species: 'Shedinja', level: 99, ability: 'dancer', moves: ['sleeptalk'] },
 		], [
-			{species: 'Shedinja', ability: 'wonderguard', moves: ['fierydance', 'trickroom']},
-			{species: 'Shedinja', ability: 'dancer', moves: ['sleeptalk']},
+			{ species: 'Shedinja', ability: 'wonderguard', moves: ['fierydance', 'trickroom'] },
+			{ species: 'Shedinja', ability: 'dancer', moves: ['sleeptalk'] },
 		]]);
 		const [, fastDancer] = battle.p1.active;
 		const [wwDanceSource, foeDancer] = battle.p2.active;
-		fastDancer.boostBy({spe: 6});
+		fastDancer.boostBy({ spe: 6 });
 		battle.makeChoices('move sleeptalk, move sleeptalk', 'move trickroom, move sleeptalk');
 		battle.makeChoices('move sleeptalk, move sleeptalk', 'move fierydance 1, move sleeptalk');
 		assert.fainted(wwDanceSource);
@@ -56,9 +56,9 @@ describe('Dancer', () => {
 
 	it(`should not copy a move that was blocked by Protect`, () => {
 		battle = common.createBattle([[
-			{species: 'Oricorio', ability: 'dancer', moves: ['protect']},
+			{ species: 'Oricorio', ability: 'dancer', moves: ['protect'] },
 		], [
-			{species: 'Wynaut', ability: 'dancer', moves: ['fierydance']},
+			{ species: 'Wynaut', ability: 'dancer', moves: ['fierydance'] },
 		]]);
 
 		battle.makeChoices();
@@ -66,12 +66,12 @@ describe('Dancer', () => {
 	});
 
 	it(`should not copy Teeter Dance when all targets are confused`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Oricorio', ability: 'dancer', moves: ['sleeptalk', 'protect']},
-			{species: 'Slowbro', ability: 'owntempo', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Oricorio', ability: 'dancer', moves: ['sleeptalk', 'protect'] },
+			{ species: 'Slowbro', ability: 'owntempo', moves: ['sleeptalk'] },
 		], [
-			{species: 'Wynaut', ability: 'dancer', item: 'persimberry', moves: ['sleeptalk', 'teeterdance']},
-			{species: 'Slowking', ability: 'owntempo', moves: ['sleeptalk']},
+			{ species: 'Wynaut', ability: 'dancer', item: 'persimberry', moves: ['sleeptalk', 'teeterdance'] },
+			{ species: 'Slowking', ability: 'owntempo', moves: ['sleeptalk'] },
 		]]);
 
 		const wynaut = battle.p2.active[0];
@@ -83,19 +83,19 @@ describe('Dancer', () => {
 	});
 
 	it(`should not copy a Dance move that failed for other reasons`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'mew', ability: 'dancer', moves: ['dragondance', 'protect']},
-			{species: 'wynaut', ability: 'dancer', moves: ['featherdance']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'mew', ability: 'dancer', moves: ['dragondance', 'protect'] },
+			{ species: 'wynaut', ability: 'dancer', moves: ['featherdance'] },
 		], [
-			{species: 'oricoriopau', ability: 'dancer', moves: ['revelationdance', 'protect']},
-			{species: 'shedinja', ability: 'wonderguard', moves: ['finalgambit']},
+			{ species: 'oricoriopau', ability: 'dancer', moves: ['revelationdance', 'protect'] },
+			{ species: 'shedinja', ability: 'wonderguard', moves: ['finalgambit'] },
 		]]);
 		const mew = battle.p1.active[0];
 		const wynaut = battle.p1.active[1];
 		const oricorio = battle.p2.active[0];
 
-		mew.boostBy({atk: 6, spe: 6});
-		oricorio.boostBy({atk: -6});
+		mew.boostBy({ atk: 6, spe: 6 });
+		oricorio.boostBy({ atk: -6 });
 
 		battle.makeChoices('move dragondance, move featherdance 1', 'move revelationdance -2, move finalgambit 1');
 		assert.fullHP(oricorio, `Nothing should target Oricorio because Revelation Dance failed from Wonder Guard`);
@@ -104,9 +104,9 @@ describe('Dancer', () => {
 
 	it(`should not copy a move that missed`, () => {
 		battle = common.createBattle([[
-			{species: 'Oricorio', ability: 'dancer', moves: ['revelationdance']},
+			{ species: 'Oricorio', ability: 'dancer', moves: ['revelationdance'] },
 		], [
-			{species: 'Wynaut', ability: 'dancer', moves: ['dig']},
+			{ species: 'Wynaut', ability: 'dancer', moves: ['dig'] },
 		]]);
 
 		// Modding accuracy so Revelation Dance always misses if Oricorio uses it (Wynaut should in fact never use it though)
@@ -121,9 +121,9 @@ describe('Dancer', () => {
 
 	it('should copy a move that hit, but did 0 damage', () => {
 		battle = common.createBattle([[
-			{species: 'Oricorio', ability: 'dancer', moves: ['fierydance']},
+			{ species: 'Oricorio', ability: 'dancer', moves: ['fierydance'] },
 		], [
-			{species: 'Shedinja', ability: 'dancer', item: 'focussash', moves: ['meanlook']},
+			{ species: 'Shedinja', ability: 'dancer', item: 'focussash', moves: ['meanlook'] },
 		]]);
 		const dancer = battle.p1.active[0];
 		assert.hurts(dancer, () => battle.makeChoices('move fierydance', 'move meanlook'));
@@ -131,22 +131,22 @@ describe('Dancer', () => {
 
 	it('should not activate if the holder fainted', () => {
 		battle = common.createBattle([[
-			{species: 'Oricoriopompom', ability: 'dancer', moves: ['revelationdance']},
+			{ species: 'Oricoriopompom', ability: 'dancer', moves: ['revelationdance'] },
 		], [
-			{species: 'oricorio', ability: 'dancer', level: 1, moves: ['sleeptalk']},
-			{species: 'oricorio', ability: 'dancer', level: 1, moves: ['sleeptalk']},
+			{ species: 'oricorio', ability: 'dancer', level: 1, moves: ['sleeptalk'] },
+			{ species: 'oricorio', ability: 'dancer', level: 1, moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(!battle.log.includes('|-activate|p2: Oricorio|ability: Dancer'));
 	});
 
 	it('should target the user of a Dance move unless it was an ally attacking an opponent', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Oricorio', level: 98, ability: 'dancer', item: 'laggingtail', moves: ['sleeptalk', 'protect', 'teeterdance']},
-			{species: 'Oricorio', level: 99, ability: 'heatproof', moves: ['fierydance', 'sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Oricorio', level: 98, ability: 'dancer', item: 'laggingtail', moves: ['sleeptalk', 'protect', 'teeterdance'] },
+			{ species: 'Oricorio', level: 99, ability: 'heatproof', moves: ['fierydance', 'sleeptalk'] },
 		], [
-			{species: 'Oricorio', ability: 'heatproof', moves: ['fierydance', 'sleeptalk']},
-			{species: 'Suicune', ability: 'heatproof', moves: ['sleeptalk']},
+			{ species: 'Oricorio', ability: 'heatproof', moves: ['fierydance', 'sleeptalk'] },
+			{ species: 'Suicune', ability: 'heatproof', moves: ['sleeptalk'] },
 		]]);
 
 		const opponentTargetingAlly = battle.p2.active[0];
@@ -169,12 +169,12 @@ describe('Dancer', () => {
 	});
 
 	it('should adopt the target selected by copycat', () => {
-		battle = common.createBattle({gameType: 'doubles', seed: [1, 2, 3, 4]}, [[
-			{species: 'oricoriopau', ability: 'dancer', moves: ['featherdance']},
-			{species: 'flamigo', moves: ['copycat']},
+		battle = common.createBattle({ gameType: 'doubles', seed: [1, 2, 3, 4] }, [[
+			{ species: 'oricoriopau', ability: 'dancer', moves: ['featherdance'] },
+			{ species: 'flamigo', moves: ['copycat'] },
 		], [
-			{species: 'fletchinder', level: 1, moves: ['sleeptalk']},
-			{species: 'squawkabilly', level: 1, moves: ['sleeptalk']},
+			{ species: 'fletchinder', level: 1, moves: ['sleeptalk'] },
+			{ species: 'squawkabilly', level: 1, moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move featherdance 1, move copycat', 'auto');
 		const flamigo = battle.p1.active[1];

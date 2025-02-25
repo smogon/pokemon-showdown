@@ -12,9 +12,9 @@ describe('Miracle Eye', () => {
 
 	it(`should negate Psychic immunities`, () => {
 		battle = common.createBattle([[
-			{species: 'Smeargle', moves: ['miracleeye', 'psychic']},
+			{ species: 'Smeargle', moves: ['miracleeye', 'psychic'] },
 		], [
-			{species: 'Darkrai', moves: ['sleeptalk']},
+			{ species: 'Darkrai', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move miracle eye', 'auto');
 		battle.makeChoices('move psychic', 'auto');
@@ -23,9 +23,9 @@ describe('Miracle Eye', () => {
 
 	it(`should ignore the effect of positive evasion stat stages`, () => {
 		battle = common.createBattle([[
-			{species: 'Smeargle', moves: ['tackle', 'miracleeye']},
+			{ species: 'Smeargle', moves: ['tackle', 'miracleeye'] },
 		], [
-			{species: 'Forretress', moves: ['sleeptalk']},
+			{ species: 'Forretress', moves: ['sleeptalk'] },
 		]]);
 
 		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
@@ -36,16 +36,16 @@ describe('Miracle Eye', () => {
 
 		const forretress = battle.p2.active[0];
 		battle.makeChoices('move miracle eye', 'auto');
-		battle.boost({evasion: 6}, forretress);
+		battle.boost({ evasion: 6 }, forretress);
 		battle.makeChoices('move tackle', 'auto');
 		assert.false.fullHP(forretress);
 	});
 
 	it(`should not ignore the effect of negative evasion stat stages`, () => {
 		battle = common.createBattle([[
-			{species: 'Smeargle', moves: ['zapcannon', 'miracleeye']},
+			{ species: 'Smeargle', moves: ['zapcannon', 'miracleeye'] },
 		], [
-			{species: 'Zapdos', moves: ['sleeptalk']},
+			{ species: 'Zapdos', moves: ['sleeptalk'] },
 		]]);
 
 		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
@@ -56,7 +56,7 @@ describe('Miracle Eye', () => {
 
 		const zapdos = battle.p2.active[0];
 		battle.makeChoices('move miracle eye', 'auto');
-		battle.boost({evasion: -6}, battle.p2.active[0]);
+		battle.boost({ evasion: -6 }, battle.p2.active[0]);
 		battle.makeChoices('move zap cannon', 'auto');
 		assert.false.fullHP(zapdos);
 	});

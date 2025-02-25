@@ -294,7 +294,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					`[from] move: ${this.battle.dex.moves.get(this.battle.effect.id)}`);
 			}
 			this.ability = ability.id;
-			this.abilityState = this.battle.initEffectState({id: ability.id, target: this});
+			this.abilityState = this.battle.initEffectState({ id: ability.id, target: this });
 			if (ability.id && this.battle.gen > 3) {
 				this.battle.singleEvent('Start', ability, this.abilityState, this, source);
 				if (ally && ally.ability !== this.ability) {

@@ -6,8 +6,8 @@
  *
  * @license MIT
  */
-import {Utils} from '../../lib';
-import type {EffectiveGroupSymbol, RoomPermission} from '../user-groups';
+import { Utils } from '../../lib';
+import type { EffectiveGroupSymbol, RoomPermission } from '../user-groups';
 
 const RANKS = Config.groupsranking;
 
@@ -21,7 +21,7 @@ export const sections = [
 
 export type RoomSection = typeof sections[number];
 
-export const RoomSections: {sectionNames: {[k in RoomSection]: string}, sections: readonly RoomSection[]} = {
+export const RoomSections: { sectionNames: { [k in RoomSection]: string }, sections: readonly RoomSection[] } = {
 	sectionNames: {
 		official: 'Official',
 		battleformats: 'Battle formats',
@@ -162,7 +162,7 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		if (!target) {
 			if (!room.settings.autoModchat) return this.sendReply(`This room has automodchat OFF.`);
-			const {rank: curRank, time: curTime} = room.settings.autoModchat;
+			const { rank: curRank, time: curTime } = room.settings.autoModchat;
 			return this.sendReply(`Automodchat is currently set to set modchat to ${curRank} after ${curTime} minutes.`);
 		}
 		this.checkCan('declare', null, room);
@@ -466,7 +466,7 @@ export const commands: Chat.ChatCommands = {
 					if (handler?.isPrivate && !user.can('lock')) return false;
 					return (perm.startsWith('/') || perm.startsWith('!')) && perm.includes(' ');
 				});
-			const subPermissionsByNamespace: {[k: string]: string[]} = {};
+			const subPermissionsByNamespace: { [k: string]: string[] } = {};
 			for (const perm of subPermissions) {
 				const [namespace] = perm.split(' ', 1);
 				if (!subPermissionsByNamespace[namespace]) subPermissionsByNamespace[namespace] = [];
@@ -1537,7 +1537,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.checkCan('declare', null, room);
 
-		const displayIDToName: {[k: string]: Room['settings']['dataCommandTierDisplay']} = {
+		const displayIDToName: { [k: string]: Room['settings']['dataCommandTierDisplay'] } = {
 			tiers: 'tiers',
 			doublestiers: 'doubles tiers',
 			nationaldextiers: 'National Dex tiers',
@@ -1618,7 +1618,7 @@ export const commands: Chat.ChatCommands = {
 		if (format.effectType === 'Format') {
 			target = format.name;
 		}
-		const {isMatch} = this.extractFormat(target);
+		const { isMatch } = this.extractFormat(target);
 		if (!isMatch) throw new Chat.ErrorMessage(`Unrecognized format or mod "${target}"`);
 
 		room.settings.defaultFormat = target;

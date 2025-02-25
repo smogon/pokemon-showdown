@@ -12,8 +12,8 @@ describe('Hyper Voice', () => {
 
 	it('should pierce through substitutes', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'hypervoice']}]});
-		battle.setPlayer('p2', {team: [{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}]});
+		battle.setPlayer('p1', { team: [{ species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'hypervoice'] }] });
+		battle.setPlayer('p2', { team: [{ species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest'] }] });
 		battle.makeChoices('move splash', 'move substitute');
 		battle.makeChoices('move hypervoice', 'move rest');
 		assert.equal(battle.p2.active[0].item, '');
@@ -27,8 +27,8 @@ describe('Hyper Voice [Gen 5]', () => {
 
 	it('should not pierce through substitutes', () => {
 		battle = common.gen(5).createBattle([
-			[{species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'hypervoice']}],
-			[{species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest']}],
+			[{ species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'hypervoice'] }],
+			[{ species: "Caterpie", level: 2, ability: 'naturalcure', item: 'focussash', moves: ['substitute', 'rest'] }],
 		]);
 		battle.makeChoices('move splash', 'move substitute');
 		battle.makeChoices('move hypervoice', 'move rest');

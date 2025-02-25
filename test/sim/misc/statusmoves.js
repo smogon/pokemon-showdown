@@ -12,14 +12,14 @@ describe('Most status moves', () => {
 
 	it('should ignore natural type immunities', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Smeargle", ability: 'prankster', item: 'leftovers', moves: ['gastroacid', 'glare', 'confuseray', 'sandattack']}]});
-		battle.setPlayer('p2', {team: [
-			{species: "Klefki", ability: 'magician', happiness: 0, moves: ['return']},
-			{species: "Dusknoir", ability: 'frisk', moves: ['shadowpunch']},
-			{species: "Slaking", ability: 'truant', moves: ['shadowclaw']},
-			{species: "Tornadus", ability: 'prankster', moves: ['tailwind']},
-			{species: "Unown", ability: 'levitate', moves: ['hiddenpower']},
-		]});
+		battle.setPlayer('p1', { team: [{ species: "Smeargle", ability: 'prankster', item: 'leftovers', moves: ['gastroacid', 'glare', 'confuseray', 'sandattack'] }] });
+		battle.setPlayer('p2', { team: [
+			{ species: "Klefki", ability: 'magician', happiness: 0, moves: ['return'] },
+			{ species: "Dusknoir", ability: 'frisk', moves: ['shadowpunch'] },
+			{ species: "Slaking", ability: 'truant', moves: ['shadowclaw'] },
+			{ species: "Tornadus", ability: 'prankster', moves: ['tailwind'] },
+			{ species: "Unown", ability: 'levitate', moves: ['hiddenpower'] },
+		] });
 		battle.makeChoices('move gastroacid', 'move return');
 		assert.false.holdsItem(battle.p2.active[0]); // Klefki's Magician suppressed by Gastro Acid.
 		battle.makeChoices('move glare', 'switch 2'); // Dusknoir
@@ -34,12 +34,12 @@ describe('Most status moves', () => {
 
 	it(`should fail when the opposing Pokemon is immune to the status effect it sets`, () => {
 		battle = common.createBattle([[
-			{species: 'Smeargle', ability: 'noguard', item: 'laggingtail', moves: ['thunderwave', 'willowisp', 'poisongas', 'toxic']},
+			{ species: 'Smeargle', ability: 'noguard', item: 'laggingtail', moves: ['thunderwave', 'willowisp', 'poisongas', 'toxic'] },
 		], [
-			{species: 'Zapdos', moves: ['charge']},
-			{species: 'Emboar', moves: ['sleeptalk']},
-			{species: 'Muk', moves: ['shadowsneak']},
-			{species: 'Aron', moves: ['magnetrise']},
+			{ species: 'Zapdos', moves: ['charge'] },
+			{ species: 'Emboar', moves: ['sleeptalk'] },
+			{ species: 'Muk', moves: ['shadowsneak'] },
+			{ species: 'Aron', moves: ['magnetrise'] },
 		]]);
 
 		battle.makeChoices('move thunderwave', 'move charge');
@@ -77,8 +77,8 @@ describe('Poison-inflicting status moves [Gen 2]', () => {
 
 	it('should not ignore type immunities', () => {
 		battle = common.gen(2).createBattle([
-			[{species: "Smeargle", moves: POISON_STATUS_MOVES}],
-			[{species: "Magneton", moves: ['sleeptalk']}],
+			[{ species: "Smeargle", moves: POISON_STATUS_MOVES }],
+			[{ species: "Magneton", moves: ['sleeptalk'] }],
 		]);
 		// Set all moves to perfect accuracy
 		battle.onEvent('Accuracy', battle.format, true);

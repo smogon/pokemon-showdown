@@ -212,7 +212,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (move.id === 'present') {
-				const typeIndexes: {[k: string]: number} = {
+				const typeIndexes: { [k: string]: number } = {
 					Normal: 0, Fighting: 1, Flying: 2, Poison: 3, Ground: 4, Rock: 5, Bug: 7, Ghost: 8, Steel: 9,
 					Fire: 20, Water: 21, Grass: 22, Electric: 23, Psychic: 24, Ice: 25, Dragon: 26, Dark: 27,
 				};
@@ -293,7 +293,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Attempting to add correct spread damage nerf
-			const {targets} = source.getMoveTargets(move, target);
+			const { targets } = source.getMoveTargets(move, target);
 			if (targets.length > 1) move.spreadHit = true;
 			if (move.spreadHit && move.target === 'allAdjacentFoes') {
 				const spreadModifier = move.spreadModifier || 0.5;

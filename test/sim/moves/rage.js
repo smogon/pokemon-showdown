@@ -11,9 +11,9 @@ describe('Rage [Gen 1]', () => {
 	});
 
 	it("Rage accuracy bug", () => {
-		battle = common.gen(1).createBattle({seed: [1, 1, 1, 0]});
-		battle.setPlayer('p1', {team: [{species: "Nidoking", moves: ['rage']}]});
-		battle.setPlayer('p2', {team: [{species: "Aerodactyl", moves: ['doubleteam']}]});
+		battle = common.gen(1).createBattle({ seed: [1, 1, 1, 0] });
+		battle.setPlayer('p1', { team: [{ species: "Nidoking", moves: ['rage'] }] });
+		battle.setPlayer('p2', { team: [{ species: "Aerodactyl", moves: ['doubleteam'] }] });
 		const nidoking = battle.p1.active[0];
 		battle.makeChoices();
 		assert.equal(nidoking.volatiles['rage'].accuracy, 255);

@@ -5,9 +5,9 @@
  */
 
 import * as child_process from 'child_process';
-import {ProcessManager, Streams, Utils, Repl, FS} from '../../lib';
-import {Config} from '../config-loader';
-import {toID} from '../../sim/dex-data';
+import { ProcessManager, Streams, Utils, Repl, FS } from '../../lib';
+import { Config } from '../config-loader';
+import { toID } from '../../sim/dex-data';
 
 class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 	tasks = new Set<string>();

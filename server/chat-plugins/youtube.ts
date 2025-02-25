@@ -6,7 +6,7 @@
  * @author mia-pi-git
  */
 
-import {Utils, FS, Net} from '../../lib';
+import { Utils, FS, Net } from '../../lib';
 
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
@@ -59,7 +59,7 @@ interface TwitchChannel {
 }
 
 interface ChannelData {
-	channels: {[k: string]: ChannelEntry};
+	channels: { [k: string]: ChannelEntry };
 	categories: string[];
 	intervalTime?: number;
 }
@@ -85,7 +85,7 @@ export class YoutubeInterface {
 	data: ChannelData;
 	linkRegex = /^(https?:\/\/)?(www\.)?(youtube\.com|youtu\.be)(\/|$)/i;
 	constructor(data?: ChannelData) {
-		this.data = data ? data : {categories: [], channels: {}};
+		this.data = data ? data : { categories: [], channels: {} };
 		this.interval = null;
 		this.intervalTime = 0;
 		if (data?.intervalTime) {
@@ -98,7 +98,7 @@ export class YoutubeInterface {
 		}
 		const id = this.getId(link);
 		const raw = await Net(`${ROOT}channels`).get({
-			query: {part: 'snippet,statistics', id, key: Config.youtubeKey},
+			query: { part: 'snippet,statistics', id, key: Config.youtubeKey },
 		});
 		const res = JSON.parse(raw);
 		if (!res?.items || res.items.length < 1) {
@@ -115,13 +115,13 @@ export class YoutubeInterface {
 			views: Number(data.statistics.viewCount),
 			username,
 		};
-		this.data.channels[id] = {...cache};
+		this.data.channels[id] = { ...cache };
 		this.save();
 		return cache;
 	}
 	async generateChannelDisplay(link: string) {
 		const id = this.getId(link);
-		const {name, description, icon, videos, subs, views, username} = await this.get(id);
+		const { name, description, icon, videos, subs, views, username } = await this.get(id);
 		// credits bumbadadabum for most of the html
 		let buf = `<div class="infobox"><table style="margin:0px;"><tr>`;
 		buf += `<td style="margin:5px;padding:5px;min-width:175px;max-width:160px;text-align:center;border-bottom:0px;">`;
@@ -163,7 +163,7 @@ export class YoutubeInterface {
 	}
 	get(id: string, username?: string): Promise<ChannelEntry> {
 		if (!(id in this.data.channels)) return this.getChannelData(id, username);
-		return Promise.resolve({...this.data.channels[id]});
+		return Promise.resolve({ ...this.data.channels[id] });
 	}
 	async getVideoData(id: string): Promise<VideoData | null> {
 		const cached = videoDataCache.get(id);
@@ -171,7 +171,7 @@ export class YoutubeInterface {
 		let raw;
 		try {
 			raw = await Net(`${ROOT}videos`).get({
-				query: {part: 'snippet,statistics', id, key: Config.youtubeKey},
+				query: { part: 'snippet,statistics', id, key: Config.youtubeKey },
 			});
 		} catch (e: any) {
 			throw new Chat.ErrorMessage(`Failed to retrieve video data: ${e.message}.`);
@@ -321,11 +321,11 @@ export class YoutubeInterface {
 			const id = this.getId(url);
 			const data = await this.getVideoData(id);
 			if (!data) throw new Chat.ErrorMessage(`Video not found.`);
-			videoInfo = Object.assign(data, {groupwatchType: 'youtube'}) as GroupwatchData;
+			videoInfo = Object.assign(data, { groupwatchType: 'youtube' }) as GroupwatchData;
 		} else if (host === 'www.twitch.tv') {
 			const data = await Twitch.getChannel(urlData.pathname.slice(1));
 			if (!data) throw new Chat.ErrorMessage(`Channel not found`);
-			videoInfo = Object.assign(data, {groupwatchType: 'twitch'}) as GroupwatchData;
+			videoInfo = Object.assign(data, { groupwatchType: 'twitch' }) as GroupwatchData;
 		} else {
 			throw new Chat.ErrorMessage(`Invalid URL: must be either a Youtube or Twitch link.`);
 		}
@@ -349,7 +349,7 @@ export const Twitch = new class {
 					'Content-Type': 'application/json',
 					'Accept': "application/vnd.twitchtv.v5+json",
 				},
-				query: {query: channel},
+				query: { query: channel },
 			});
 		} catch (e: any) {
 			throw new Chat.ErrorMessage(`Error retrieving twitch channel: ${e.message}`);
@@ -377,7 +377,7 @@ export const Twitch = new class {
 	}
 };
 
-type GroupwatchData = VideoData & {groupwatchType: 'youtube'} | TwitchChannel & {groupwatchType: 'twitch'};
+type GroupwatchData = VideoData & { groupwatchType: 'youtube' } | TwitchChannel & { groupwatchType: 'twitch' };
 export class GroupWatch extends Rooms.SimpleRoomGame {
 	override readonly gameid = 'groupwatch' as ID;
 	url: string;
@@ -749,7 +749,7 @@ export const pages: Chat.PageTable = {
 	async channels(args, user) {
 		const [type] = args;
 		if (!Config.youtubeKey) return `<h2>Youtube is not configured.</h2>`;
-		const titles: {[k: string]: string} = {
+		const titles: { [k: string]: string } = {
 			all: 'All channels',
 			categories: 'by category',
 		};
@@ -763,7 +763,7 @@ export const pages: Chat.PageTable = {
 			if (!YouTube.data.categories.length) {
 				return this.errorReply(`There are currently no categories in the Youtube channel database.`);
 			}
-			const sorted: {[k: string]: string[]} = {};
+			const sorted: { [k: string]: string[] } = {};
 			const channels = YouTube.data.channels;
 			for (const [id, channel] of Object.entries(channels)) {
 				const category = channel.category || "No category";
@@ -784,7 +784,7 @@ export const pages: Chat.PageTable = {
 			break;
 		default:
 			for (const id of Utils.shuffle(Object.keys(YouTube.data.channels))) {
-				const {name, username} = await YouTube.get(id);
+				const { name, username } = await YouTube.get(id);
 				if (toID(type) !== 'all' && !username) continue;
 				buffer += `<details><summary>${name}`;
 				buffer += `<small><i> (Channel ID: ${id})</i></small>`;

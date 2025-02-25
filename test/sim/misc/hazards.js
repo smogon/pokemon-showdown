@@ -12,10 +12,10 @@ describe('Hazards', () => {
 
 	it(`should damage Pokemon before regular entrance Abilities`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', moves: ['uturn']},
-			{species: 'shedinja', ability: 'electricsurge', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['uturn'] },
+			{ species: 'shedinja', ability: 'electricsurge', moves: ['sleeptalk'] },
 		], [
-			{species: 'landorus', moves: ['stealthrock']},
+			{ species: 'landorus', moves: ['stealthrock'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('switch 2');
@@ -24,11 +24,11 @@ describe('Hazards', () => {
 
 	it(`should damage multiple Pokemon switching in simulatenously by Speed order`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', moves: ['stealthrock', 'sleeptalk']},
-			{species: 'kyogre', ability: 'drizzle', item: 'choicescarf', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['stealthrock', 'sleeptalk'] },
+			{ species: 'kyogre', ability: 'drizzle', item: 'choicescarf', moves: ['sleeptalk'] },
 		], [
-			{species: 'miltank', moves: ['stealthrock', 'finalgambit']},
-			{species: 'landorus-therian', ability: 'intimidate', moves: ['sleeptalk']},
+			{ species: 'miltank', moves: ['stealthrock', 'finalgambit'] },
+			{ species: 'landorus-therian', ability: 'intimidate', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move sleeptalk', 'move finalgambit');
@@ -46,12 +46,12 @@ describe('Hazards', () => {
 
 	it(`should set up hazards even if there is no target`, () => {
 		battle = common.createBattle([[
-			{species: 'diglett', level: 1, moves: ['sleeptalk', 'finalgambit']},
-			{species: 'diglett', level: 1, moves: ['sleeptalk', 'finalgambit']},
-			{species: 'diglett', level: 1, moves: ['sleeptalk', 'finalgambit']},
-			{species: 'diglett', level: 1, moves: ['sleeptalk', 'finalgambit']},
+			{ species: 'diglett', level: 1, moves: ['sleeptalk', 'finalgambit'] },
+			{ species: 'diglett', level: 1, moves: ['sleeptalk', 'finalgambit'] },
+			{ species: 'diglett', level: 1, moves: ['sleeptalk', 'finalgambit'] },
+			{ species: 'diglett', level: 1, moves: ['sleeptalk', 'finalgambit'] },
 		], [
-			{species: 'wynaut', item: 'laggingtail', moves: ['stealthrock', 'spikes', 'stickyweb', 'defog']},
+			{ species: 'wynaut', item: 'laggingtail', moves: ['stealthrock', 'spikes', 'stickyweb', 'defog'] },
 		]]);
 
 		battle.makeChoices('move finalgambit', 'move stealthrock');
@@ -69,10 +69,10 @@ describe('Hazards', () => {
 
 	it(`should apply hazards in the order they were set up`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', moves: ['sleeptalk', 'uturn']},
-			{species: 'whismur', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['sleeptalk', 'uturn'] },
+			{ species: 'whismur', moves: ['sleeptalk'] },
 		], [
-			{species: 'landorus', moves: ['stealthrock', 'spikes', 'stickyweb', 'toxicspikes']},
+			{ species: 'landorus', moves: ['stealthrock', 'spikes', 'stickyweb', 'toxicspikes'] },
 		]]);
 		battle.makeChoices('move sleeptalk', 'move toxicspikes');
 		battle.makeChoices('move sleeptalk', 'move stickyweb');
@@ -94,10 +94,10 @@ describe('Hazards', () => {
 
 	it(`should allow Berries to trigger between hazards`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', moves: ['sleeptalk', 'uturn']},
-			{species: 'shedinja', item: 'lumberry', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['sleeptalk', 'uturn'] },
+			{ species: 'shedinja', item: 'lumberry', moves: ['sleeptalk'] },
 		], [
-			{species: 'landorus', moves: ['toxicspikes', 'stealthrock']},
+			{ species: 'landorus', moves: ['toxicspikes', 'stealthrock'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move uturn', 'move stealthrock');
@@ -107,14 +107,14 @@ describe('Hazards', () => {
 	});
 
 	it(`should set up hazards to every opponents' side in a Free-for-all battle`, () => {
-		battle = common.createBattle({gameType: 'freeforall'}, [[
-			{species: 'Bronzong', moves: ['sleeptalk', 'stealthrock']},
+		battle = common.createBattle({ gameType: 'freeforall' }, [[
+			{ species: 'Bronzong', moves: ['sleeptalk', 'stealthrock'] },
 		], [
-			{species: 'Cufant', moves: ['sleeptalk']},
+			{ species: 'Cufant', moves: ['sleeptalk'] },
 		], [
-			{species: 'Qwilfish', moves: ['sleeptalk']},
+			{ species: 'Qwilfish', moves: ['sleeptalk'] },
 		], [
-			{species: 'Marowak', moves: ['stealthrock']},
+			{ species: 'Marowak', moves: ['stealthrock'] },
 		]]);
 
 		battle.makeChoices();
@@ -124,17 +124,17 @@ describe('Hazards', () => {
 	});
 
 	it(`should set up hazards even if there is no target in a Free-for-all battle`, () => {
-		battle = common.createBattle({gameType: 'freeforall'}, [[
-			{species: 'Bronzong', item: 'laggingtail', moves: ['sleeptalk', 'stealthrock']},
+		battle = common.createBattle({ gameType: 'freeforall' }, [[
+			{ species: 'Bronzong', item: 'laggingtail', moves: ['sleeptalk', 'stealthrock'] },
 		], [
-			{species: 'Wynaut', level: 1, moves: ['finalgambit']},
-			{species: 'Cufant', moves: ['sleeptalk']},
+			{ species: 'Wynaut', level: 1, moves: ['finalgambit'] },
+			{ species: 'Cufant', moves: ['sleeptalk'] },
 		], [
-			{species: 'Wynaut', level: 1, moves: ['finalgambit']},
-			{species: 'Qwilfish', moves: ['sleeptalk']},
+			{ species: 'Wynaut', level: 1, moves: ['finalgambit'] },
+			{ species: 'Qwilfish', moves: ['sleeptalk'] },
 		], [
-			{species: 'Wynaut', level: 1, moves: ['finalgambit']},
-			{species: 'Marowak', moves: ['stealthrock']},
+			{ species: 'Wynaut', level: 1, moves: ['finalgambit'] },
+			{ species: 'Marowak', moves: ['stealthrock'] },
 		]]);
 
 		battle.makeChoices('move stealthrock', 'move finalgambit 1', 'move finalgambit 1', 'move finalgambit 1');

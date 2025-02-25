@@ -12,9 +12,9 @@ describe('Berserk', () => {
 
 	it(`should activate prior to healing from Sitrus Berry`, () => {
 		battle = common.createBattle([[
-			{species: 'drampa', item: 'sitrusberry', ability: 'berserk', evs: {hp: 4}, moves: ['sleeptalk']},
+			{ species: 'drampa', item: 'sitrusberry', ability: 'berserk', evs: { hp: 4 }, moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', ability: 'compoundeyes', moves: ['superfang']},
+			{ species: 'wynaut', ability: 'compoundeyes', moves: ['superfang'] },
 		]]);
 
 		battle.makeChoices();
@@ -25,9 +25,9 @@ describe('Berserk', () => {
 
 	it(`should not activate prior to healing from Sitrus Berry after a multi-hit move`, () => {
 		battle = common.createBattle([[
-			{species: 'drampa', item: 'sitrusberry', ability: 'berserk', evs: {hp: 4}, moves: ['sleeptalk']},
+			{ species: 'drampa', item: 'sitrusberry', ability: 'berserk', evs: { hp: 4 }, moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', ability: 'parentalbond', moves: ['seismictoss']},
+			{ species: 'wynaut', ability: 'parentalbond', moves: ['seismictoss'] },
 		]]);
 
 		battle.makeChoices();
@@ -37,12 +37,12 @@ describe('Berserk', () => {
 	});
 
 	it(`should not activate below 50% HP if it was damaged by Dragon Darts`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'drampa', ability: 'berserk', evs: {hp: 4}, moves: ['sleeptalk']},
-			{species: 'togedemaru', ability: 'compoundeyes', moves: ['superfang']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'drampa', ability: 'berserk', evs: { hp: 4 }, moves: ['sleeptalk'] },
+			{ species: 'togedemaru', ability: 'compoundeyes', moves: ['superfang'] },
 		], [
-			{species: 'wynaut', moves: ['dragondarts']},
-			{species: 'shuckle', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['dragondarts'] },
+			{ species: 'shuckle', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move sleeptalk, move superfang -1', 'auto');

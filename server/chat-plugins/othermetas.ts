@@ -5,10 +5,10 @@
  * @author dhelmise
 */
 
-import {Utils} from '../../lib';
+import { Utils } from '../../lib';
 
 interface StoneDeltas {
-	baseStats: {[stat in StatID]: number};
+	baseStats: { [stat in StatID]: number };
 	bst: number;
 	weighthg: number;
 	heightm: number;
@@ -187,7 +187,7 @@ export const commands: Chat.ChatCommands = {
 		} else if (mixedSpecies.weighthg >= 100) {
 			weighthit = 40;
 		}
-		const details: {[k: string]: string} = {
+		const details: { [k: string]: string } = {
 			"Dex#": `${mixedSpecies.num}`,
 			Gen: `${mixedSpecies.gen}`,
 			Height: `${mixedSpecies.heightm} m`,
@@ -414,7 +414,7 @@ export const commands: Chat.ChatCommands = {
 			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
 		}
-		const boosts: {[tier in TierShiftTiers]: number} = {
+		const boosts: { [tier in TierShiftTiers]: number } = {
 			UU: 15,
 			RUBL: 15,
 			RU: 20,
@@ -465,7 +465,7 @@ export const commands: Chat.ChatCommands = {
 		if (!toID(args[0]) && !toID(args[1])) return this.parse('/help franticfusions');
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen && !args[2]) target = `${target},gen${targetGen}`;
-		const {dex, targets} = this.splitFormat(target, true);
+		const { dex, targets } = this.splitFormat(target, true);
 		this.runBroadcast();
 		if (targets.length > 2) return this.parse('/help franticfusions');
 		const species = Utils.deepClone(dex.species.get(targets[0]));
@@ -674,7 +674,7 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
 		}
 		if (dex.gen === 1) {
-			const flippedStats: {[k: string]: number} = {
+			const flippedStats: { [k: string]: number } = {
 				hp: species.baseStats.spe,
 				atk: species.baseStats.spa,
 				def: species.baseStats.def,
@@ -811,7 +811,7 @@ export const commands: Chat.ChatCommands = {
 		} else if (mixedSpecies.weighthg >= 100) {
 			weighthit = 40;
 		}
-		const details: {[k: string]: string} = {
+		const details: { [k: string]: string } = {
 			"Dex#": mixedSpecies.num,
 			Gen: mixedSpecies.gen,
 			Height: `${mixedSpecies.heightm} m`,
@@ -945,7 +945,7 @@ export const commands: Chat.ChatCommands = {
 		const move = Utils.deepClone(Dex.moves.get('tackle'));
 		move.name = species.name;
 		move.type = species.types[0];
-		move.flags = {protect: 1};
+		move.flags = { protect: 1 };
 		move.basePower = Math.max(species.baseStats['atk'], species.baseStats['spa']);
 		move.pp = 5;
 		move.gen = species.gen;

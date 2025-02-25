@@ -1,6 +1,6 @@
 "use strict";
 const assert = require('assert').strict;
-const {PostgresDatabase} = require('../../dist/lib');
+const { PostgresDatabase } = require('../../dist/lib');
 
 function testMod(mod) {
 	try {
@@ -38,7 +38,7 @@ describe.skip("Postgres features", () => {
 					`SELECT tablename FROM pg_catalog.pg_tables ` +
 					`WHERE tablename = 'test' LIMIT 1;`
 				);
-				for (const {tablename} of tables) {
+				for (const { tablename } of tables) {
 					await worker.query(`DROP TABLE ` + tablename);
 				}
 			});

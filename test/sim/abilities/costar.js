@@ -11,17 +11,17 @@ describe('Costar', () => {
 	});
 
 	it('should copy the teammate\'s crit ratio on activation', () => {
-		battle = common.createBattle({gameType: 'doubles'});
-		battle.setPlayer('p1', {team: [
-			{species: 'Smeargle', level: 1, moves: ['sleeptalk', 'focusenergy']},
-			{species: 'Suicune', level: 1, moves: ['sleeptalk']},
-			{species: 'Flamigo', level: 1, ability: 'costar', moves: ['sleeptalk']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: 'Suicune', level: 1, moves: ['sleeptalk']},
-			{species: 'pikachu', level: 1, moves: ['sleeptalk']},
-			{species: 'weezinggalar', level: 1, ability: 'neutralizinggas', moves: ['sleeptalk']},
-		]});
+		battle = common.createBattle({ gameType: 'doubles' });
+		battle.setPlayer('p1', { team: [
+			{ species: 'Smeargle', level: 1, moves: ['sleeptalk', 'focusenergy'] },
+			{ species: 'Suicune', level: 1, moves: ['sleeptalk'] },
+			{ species: 'Flamigo', level: 1, ability: 'costar', moves: ['sleeptalk'] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: 'Suicune', level: 1, moves: ['sleeptalk'] },
+			{ species: 'pikachu', level: 1, moves: ['sleeptalk'] },
+			{ species: 'weezinggalar', level: 1, ability: 'neutralizinggas', moves: ['sleeptalk'] },
+		] });
 
 		battle.makeChoices('move focusenergy, move sleeptalk', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices('move sleeptalk, switch flamigo', 'move sleeptalk, move sleeptalk');
@@ -35,16 +35,16 @@ describe('Costar', () => {
 	});
 
 	it('should copy both positive and negative stat changes', () => {
-		battle = common.createBattle({gameType: 'doubles'});
-		battle.setPlayer('p1', {team: [
-			{species: 'Suicune', level: 1, moves: ['sleeptalk']},
-			{species: 'Smeargle', level: 1, moves: ['sleeptalk', 'shellsmash']},
-			{species: 'Flamigo', level: 1, ability: 'costar', moves: ['sleeptalk']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: 'Suicune', level: 1, moves: ['sleeptalk']},
-			{species: 'Suicune', level: 1, moves: ['sleeptalk']},
-		]});
+		battle = common.createBattle({ gameType: 'doubles' });
+		battle.setPlayer('p1', { team: [
+			{ species: 'Suicune', level: 1, moves: ['sleeptalk'] },
+			{ species: 'Smeargle', level: 1, moves: ['sleeptalk', 'shellsmash'] },
+			{ species: 'Flamigo', level: 1, ability: 'costar', moves: ['sleeptalk'] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: 'Suicune', level: 1, moves: ['sleeptalk'] },
+			{ species: 'Suicune', level: 1, moves: ['sleeptalk'] },
+		] });
 
 		battle.makeChoices('move sleeptalk, move shellsmash', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices('switch flamigo, move sleeptalk', 'move sleeptalk, move sleeptalk');
@@ -58,12 +58,12 @@ describe('Costar', () => {
 	});
 
 	it('should always activate later than Intimidate during simultaneous switch-ins', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'flamigo', ability: 'costar', moves: ['sleeptalk']},
-			{species: 'registeel', ability: 'clearbody', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'flamigo', ability: 'costar', moves: ['sleeptalk'] },
+			{ species: 'registeel', ability: 'clearbody', moves: ['sleeptalk'] },
 		], [
-			{species: 'litten', ability: 'intimidate', moves: ['sleeptalk']},
-			{species: 'dipplin', ability: 'supersweetsyrup', moves: ['sleeptalk']},
+			{ species: 'litten', ability: 'intimidate', moves: ['sleeptalk'] },
+			{ species: 'dipplin', ability: 'supersweetsyrup', moves: ['sleeptalk'] },
 		]]);
 		const flamigo = battle.p1.active[0];
 		assert.statStage(flamigo, 'atk', 0);

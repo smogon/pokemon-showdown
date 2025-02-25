@@ -12,9 +12,9 @@ describe('Multiscale', () => {
 
 	it(`should halve damage when it is at full health`, () => {
 		battle = common.createBattle([[
-			{species: 'Dragonite', ability: 'multiscale', moves: ['sleeptalk']},
+			{ species: 'Dragonite', ability: 'multiscale', moves: ['sleeptalk'] },
 		], [
-			{species: 'Wynaut', moves: ['wickedblow']},
+			{ species: 'Wynaut', moves: ['wickedblow'] },
 		]]);
 
 		battle.makeChoices();
@@ -28,9 +28,9 @@ describe('Multiscale', () => {
 
 	it('should be suppressed by Mold Breaker', () => {
 		battle = common.createBattle([[
-			{species: 'Dragonite', ability: 'multiscale', moves: ['sleeptalk']},
+			{ species: 'Dragonite', ability: 'multiscale', moves: ['sleeptalk'] },
 		], [
-			{species: 'Wynaut', ability: 'moldbreaker', moves: ['wickedblow']},
+			{ species: 'Wynaut', ability: 'moldbreaker', moves: ['wickedblow'] },
 		]]);
 
 		battle.makeChoices();

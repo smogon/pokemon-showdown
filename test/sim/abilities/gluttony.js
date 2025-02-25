@@ -12,9 +12,9 @@ describe('Gluttony', () => {
 
 	it(`should activate Aguav Berry at 50% health`, () => {
 		battle = common.createBattle([[
-			{species: "wobbuffet", ability: 'gluttony', item: 'aguavberry', evs: {hp: 4}, moves: ['sleeptalk']},
+			{ species: "wobbuffet", ability: 'gluttony', item: 'aguavberry', evs: { hp: 4 }, moves: ['sleeptalk'] },
 		], [
-			{species: "wynaut", ability: 'compoundeyes', moves: ['superfang']},
+			{ species: "wynaut", ability: 'compoundeyes', moves: ['superfang'] },
 		]]);
 
 		battle.makeChoices();
@@ -24,9 +24,9 @@ describe('Gluttony', () => {
 
 	it(`should activate after Belly Drum`, () => {
 		battle = common.createBattle([[
-			{species: "snorlax", ability: 'gluttony', item: 'aguavberry', evs: {hp: 4}, moves: ['bellydrum']},
+			{ species: "snorlax", ability: 'gluttony', item: 'aguavberry', evs: { hp: 4 }, moves: ['bellydrum'] },
 		], [
-			{species: "wynaut", moves: ['sleeptalk']},
+			{ species: "wynaut", moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -36,9 +36,9 @@ describe('Gluttony', () => {
 
 	it(`should activate after poison damage`, () => {
 		battle = common.createBattle([[
-			{species: "wobbuffet", ability: 'gluttony', item: 'aguavberry', evs: {hp: 28}, moves: ['sleeptalk']},
+			{ species: "wobbuffet", ability: 'gluttony', item: 'aguavberry', evs: { hp: 28 }, moves: ['sleeptalk'] },
 		], [
-			{species: "wynaut", ability: 'noguard', moves: ['poisonpowder']},
+			{ species: "wynaut", ability: 'noguard', moves: ['poisonpowder'] },
 		]]);
 
 		for (let i = 0; i < 4; i++) battle.makeChoices();

@@ -5,11 +5,11 @@
  * @license MIT
  */
 
-import type {ObjectReadWriteStream} from '../../lib/streams';
-import {Dex, toID} from '../dex';
-import {PRNG, type PRNGSeed} from '../prng';
-import {RandomPlayerAI} from './random-player-ai';
-import {type AIOptions, Runner} from './runner';
+import type { ObjectReadWriteStream } from '../../lib/streams';
+import { Dex, toID } from '../dex';
+import { PRNG, type PRNGSeed } from '../prng';
+import { RandomPlayerAI } from './random-player-ai';
+import { type AIOptions, Runner } from './runner';
 
 interface Pools {
 	pokemon: Pool;
@@ -85,10 +85,10 @@ export class ExhaustiveRunner {
 				// and the AI can coordinate usage properly.
 				await new Runner({
 					prng: this.prng,
-					p1options: {team: generator.generate(), createAI},
-					p2options: {team: generator.generate(), createAI},
-					p3options: is4P ? {team: generator.generate(), createAI} : undefined,
-					p4options: is4P ? {team: generator.generate(), createAI} : undefined,
+					p1options: { team: generator.generate(), createAI },
+					p2options: { team: generator.generate(), createAI },
+					p3options: is4P ? { team: generator.generate(), createAI } : undefined,
+					p4options: is4P ? { team: generator.generate(), createAI } : undefined,
 					format: this.format,
 					dual: this.dual,
 					error: true,
@@ -133,13 +133,13 @@ export class ExhaustiveRunner {
 		);
 	}
 
-	private static getSignatures(dex: typeof Dex, pools: Pools): Map<string, {item: string, move?: string}[]> {
+	private static getSignatures(dex: typeof Dex, pools: Pools): Map<string, { item: string, move?: string }[]> {
 		const signatures = new Map();
 		for (const id of pools.items.possible) {
 			const item = dex.data.Items[id];
 			if (item.megaEvolves) {
 				const pokemon = toID(item.megaEvolves);
-				const combo = {item: id};
+				const combo = { item: id };
 				let combos = signatures.get(pokemon);
 				if (!combos) {
 					combos = [];
@@ -149,7 +149,7 @@ export class ExhaustiveRunner {
 			} else if (item.itemUser) {
 				for (const user of item.itemUser) {
 					const pokemon = toID(user);
-					const combo: {item: string, move?: string} = {item: id};
+					const combo: { item: string, move?: string } = { item: id };
 					if (item.zMoveFrom) combo.move = toID(item.zMoveFrom);
 					let combos = signatures.get(pokemon);
 					if (!combos) {
@@ -164,7 +164,7 @@ export class ExhaustiveRunner {
 	}
 
 	private static onlyValid<T>(
-		gen: number, obj: {[key: string]: T}, getter: (k: string) => AnyObject,
+		gen: number, obj: { [key: string]: T }, getter: (k: string) => AnyObject,
 		additional?: (k: string, v: AnyObject) => boolean, nonStandard?: boolean
 	) {
 		return Object.keys(obj).filter(k => {
@@ -190,12 +190,12 @@ class TeamGenerator {
 	private readonly dex: typeof Dex;
 	private readonly prng: PRNG;
 	private readonly pools: Pools;
-	private readonly signatures: Map<string, {item: string, move?: string}[]>;
+	private readonly signatures: Map<string, { item: string, move?: string }[]>;
 	private readonly natures: readonly string[];
 
 	constructor(
 		dex: typeof Dex, prng: PRNG | PRNGSeed | null, pools: Pools,
-		signatures: Map<string, {item: string, move?: string}[]>
+		signatures: Map<string, { item: string, move?: string }[]>
 	) {
 		this.dex = dex;
 		this.prng = PRNG.get(prng);
@@ -271,7 +271,7 @@ class Pool {
 	private unused: Set<string>;
 	private filled: Set<string> | undefined;
 	private filler: string[] | undefined;
-	private iter: (Iterator<string> & {done?: boolean}) | undefined;
+	private iter: (Iterator<string> & { done?: boolean }) | undefined;
 
 	exhausted: number;
 
@@ -410,13 +410,13 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 	}
 
 	protected chooseTeamPreview(team: AnyObject[]): string {
-		return `team ${this.choosePokemon(team.map((p, i) => ({slot: i + 1, pokemon: p}))) || 1}`;
+		return `team ${this.choosePokemon(team.map((p, i) => ({ slot: i + 1, pokemon: p }))) || 1}`;
 	}
 
-	protected chooseMove(active: AnyObject, moves: {choice: string, move: AnyObject}[]): string {
+	protected chooseMove(active: AnyObject, moves: { choice: string, move: AnyObject }[]): string {
 		this.markUsedIfGmax(active);
 		// Prefer to use a move which hasn't been used yet.
-		for (const {choice, move} of moves) {
+		for (const { choice, move } of moves) {
 			const id = this.fixMove(move);
 			if (!this.pools.moves.wasUsed(id)) {
 				this.pools.moves.markUsed(id);
@@ -426,14 +426,14 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 		return super.chooseMove(active, moves);
 	}
 
-	protected chooseSwitch(active: AnyObject | undefined, switches: {slot: number, pokemon: AnyObject}[]): number {
+	protected chooseSwitch(active: AnyObject | undefined, switches: { slot: number, pokemon: AnyObject }[]): number {
 		this.markUsedIfGmax(active);
 		return this.choosePokemon(switches) || super.chooseSwitch(active, switches);
 	}
 
-	private choosePokemon(choices: {slot: number, pokemon: AnyObject}[]) {
+	private choosePokemon(choices: { slot: number, pokemon: AnyObject }[]) {
 		// Prefer to choose a Pokemon that has a species/ability/item/move we haven't seen yet.
-		for (const {slot, pokemon} of choices) {
+		for (const { slot, pokemon } of choices) {
 			const species = toID(pokemon.details.split(',')[0]);
 			if (
 				!this.pools.pokemon.wasUsed(species) ||

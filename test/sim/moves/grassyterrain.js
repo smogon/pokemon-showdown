@@ -12,9 +12,9 @@ describe('Grassy Terrain', () => {
 
 	it(`should change the current terrain to Grassy Terrain for five turns`, () => {
 		battle = common.createBattle([[
-			{species: 'Florges', moves: ['grassyterrain', 'sleeptalk']},
+			{ species: 'Florges', moves: ['grassyterrain', 'sleeptalk'] },
 		], [
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 		for (let i = 0; i < 4; i++) {
 			battle.makeChoices();
@@ -26,9 +26,9 @@ describe('Grassy Terrain', () => {
 
 	it(`should halve the base power of Earthquake, Bulldoze, and Magnitude against grounded targets`, () => {
 		battle = common.createBattle([[
-			{species: 'Shaymin', moves: ['grassyterrain']},
+			{ species: 'Shaymin', moves: ['grassyterrain'] },
 		], [
-			{species: 'Aerodactyl', moves: ['sleeptalk']},
+			{ species: 'Aerodactyl', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		const shaymin = battle.p1.active[0];
@@ -41,9 +41,9 @@ describe('Grassy Terrain', () => {
 
 	it(`should increase the base power of Grass-type attacks used by grounded Pokemon`, () => {
 		battle = common.gen(7).createBattle([[
-			{species: 'Shaymin', moves: ['grassyterrain']},
+			{ species: 'Shaymin', moves: ['grassyterrain'] },
 		], [
-			{species: 'Aerodactyl', moves: ['sleeptalk']},
+			{ species: 'Aerodactyl', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		let basePower;
@@ -58,9 +58,9 @@ describe('Grassy Terrain', () => {
 
 	it(`should heal grounded Pokemon by 1/16 of their max HP`, () => {
 		battle = common.createBattle([[
-			{species: 'Shaymin', moves: ['grassyterrain', 'seismictoss']},
+			{ species: 'Shaymin', moves: ['grassyterrain', 'seismictoss'] },
 		], [
-			{species: 'Wynaut', moves: ['magnetrise', 'seismictoss']},
+			{ species: 'Wynaut', moves: ['magnetrise', 'seismictoss'] },
 		]]);
 		battle.makeChoices('move grassyterrain', 'move magnetrise');
 		battle.makeChoices('move seismictoss', 'move seismictoss');
@@ -72,9 +72,9 @@ describe('Grassy Terrain', () => {
 
 	it(`should not affect Pokemon in a semi-invulnerable state`, () => {
 		battle = common.createBattle([[
-			{species: 'Shaymin', moves: ['grassyterrain', 'seismictoss']},
+			{ species: 'Shaymin', moves: ['grassyterrain', 'seismictoss'] },
 		], [
-			{species: 'Wynaut', moves: ['skydrop', 'seismictoss']},
+			{ species: 'Wynaut', moves: ['skydrop', 'seismictoss'] },
 		]]);
 		battle.makeChoices('move seismictoss', 'move seismictoss');
 		battle.makeChoices('move grassyterrain', 'move skydrop');
@@ -86,9 +86,9 @@ describe('Grassy Terrain', () => {
 
 	it(`should cause Nature Power to become Energy Ball`, () => {
 		battle = common.createBattle([[
-			{species: 'Shaymin', moves: ['grassyterrain']},
+			{ species: 'Shaymin', moves: ['grassyterrain'] },
 		], [
-			{species: 'Wynaut', moves: ['naturepower']},
+			{ species: 'Wynaut', moves: ['naturepower'] },
 		]]);
 		battle.makeChoices();
 		const resultMove = toID(battle.log[battle.lastMoveLine].split('|')[3]);
@@ -97,9 +97,9 @@ describe('Grassy Terrain', () => {
 
 	it(`should heal by Speed order in the same block as Leftovers`, () => {
 		battle = common.createBattle([[
-			{species: 'rillaboom', ability: 'grassysurge', item: 'leftovers', moves: ['seismictoss']},
+			{ species: 'rillaboom', ability: 'grassysurge', item: 'leftovers', moves: ['seismictoss'] },
 		], [
-			{species: 'alakazam', item: 'focussash', moves: ['seismictoss']},
+			{ species: 'alakazam', item: 'focussash', moves: ['seismictoss'] },
 		]]);
 
 		battle.makeChoices();
@@ -113,10 +113,10 @@ describe('Grassy Terrain', () => {
 
 	it(`should only decrement turn count when being set before it would decrement in the end-of-turn effects`, () => {
 		battle = common.createBattle([[
-			{species: 'grookey', ability: 'grassysurge', moves: ['sleeptalk']},
+			{ species: 'grookey', ability: 'grassysurge', moves: ['sleeptalk'] },
 		], [
-			{species: 'shedinja', ability: 'neutralizinggas', item: 'stickybarb', moves: ['sleeptalk']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'shedinja', ability: 'neutralizinggas', item: 'stickybarb', moves: ['sleeptalk'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices(); // KO Neutralizing Gas
@@ -132,10 +132,10 @@ describe('Grassy Terrain', () => {
 
 	it.skip(`should not skip healing Pokemon if it was set during the block it would heal Pokemon`, () => {
 		battle = common.createBattle([[
-			{species: 'coalossal', ability: 'grassysurge', moves: ['sleeptalk', 'rockthrow']},
+			{ species: 'coalossal', ability: 'grassysurge', moves: ['sleeptalk', 'rockthrow'] },
 		], [
-			{species: 'shedinja', ability: 'neutralizinggas', item: 'focussash', moves: ['dragonrage']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'shedinja', ability: 'neutralizinggas', item: 'focussash', moves: ['dragonrage'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move rockthrow dynamax', 'auto');

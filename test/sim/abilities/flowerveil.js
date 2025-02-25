@@ -11,12 +11,12 @@ describe('Flower Veil', () => {
 	});
 
 	it(`should block status conditions and stat drops on Grass-type Pokemon and its allies`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Breloom', moves: ['sleeptalk']},
-			{species: 'Venusaur', ability: 'flowerveil', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Breloom', moves: ['sleeptalk'] },
+			{ species: 'Venusaur', ability: 'flowerveil', moves: ['sleeptalk'] },
 		], [
-			{species: 'Persian', moves: ['sandattack']},
-			{species: 'Raticate', moves: ['glare']},
+			{ species: 'Persian', moves: ['sandattack'] },
+			{ species: 'Raticate', moves: ['glare'] },
 		]]);
 
 		battle.makeChoices('auto', 'move sandattack 1, move glare 1');
@@ -32,13 +32,13 @@ describe('Flower Veil', () => {
 	});
 
 	it(`should not stop an ally from falling asleep when Yawn was already affecting it`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Breloom', moves: ['sleeptalk']},
-			{species: 'Heatran', moves: ['sleeptalk']},
-			{species: 'Florges', ability: 'flowerveil', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Breloom', moves: ['sleeptalk'] },
+			{ species: 'Heatran', moves: ['sleeptalk'] },
+			{ species: 'Florges', ability: 'flowerveil', moves: ['sleeptalk'] },
 		], [
-			{species: 'Persian', moves: ['sleeptalk', 'yawn']},
-			{species: 'Raticate', moves: ['sleeptalk']},
+			{ species: 'Persian', moves: ['sleeptalk', 'yawn'] },
+			{ species: 'Raticate', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move sleeptalk, move sleeptalk', 'move yawn 1, move sleeptalk');

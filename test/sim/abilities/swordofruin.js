@@ -12,9 +12,9 @@ describe(`Sword of Ruin`, () => {
 
 	it(`should lower the Defense of all other Pokemon`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk']},
+			{ species: 'wynaut', ability: 'shellarmor', moves: ['sleeptalk'] },
 		], [
-			{species: 'chienpao', ability: 'swordofruin', moves: ['aerialace']},
+			{ species: 'chienpao', ability: 'swordofruin', moves: ['aerialace'] },
 		]]);
 		battle.makeChoices();
 		const wynaut = battle.p1.active[0];
@@ -23,10 +23,10 @@ describe(`Sword of Ruin`, () => {
 	});
 
 	it(`should not lower the Defense of other Pokemon with the Sword of Ruin Ability`, () => {
-		battle = common.createBattle({forceRandomChance: false}, [[
-			{species: 'wynaut', ability: 'swordofruin', moves: ['sleeptalk']},
+		battle = common.createBattle({ forceRandomChance: false }, [[
+			{ species: 'wynaut', ability: 'swordofruin', moves: ['sleeptalk'] },
 		], [
-			{species: 'chienpao', ability: 'swordofruin', moves: ['aerialace']},
+			{ species: 'chienpao', ability: 'swordofruin', moves: ['aerialace'] },
 		]]);
 		battle.makeChoices();
 		const wynaut = battle.p1.active[0];

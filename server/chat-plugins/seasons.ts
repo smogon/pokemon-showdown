@@ -2,7 +2,7 @@
  * @author mia-pi-git
  */
 
-import {FS, Net, Utils} from '../../lib';
+import { FS, Net, Utils } from '../../lib';
 
 export const SEASONS_PER_YEAR = 4;
 export const FORMATS_PER_SEASON = 4;
@@ -16,8 +16,8 @@ export const FORMAT_POOL = ['ubers', 'uu', 'ru', 'nu', 'pu', 'lc', 'doublesou', 
 export const PUBLIC_PHASE_LENGTH = 3;
 
 interface SeasonData {
-	current: {period: number, year: number, formatsGeneratedAt: number, season: number};
-	badgeholders: {[period: string]: {[format: string]: {[badgeType: string]: string[]}}};
+	current: { period: number, year: number, formatsGeneratedAt: number, season: number };
+	badgeholders: { [period: string]: { [format: string]: { [badgeType: string]: string[] } } };
 	formatSchedule: Record<string, string[]>;
 }
 
@@ -28,21 +28,21 @@ try {
 } catch {
 	data = {
 		// force a reroll
-		current: {season: null!, year: null!, formatsGeneratedAt: null!, period: null!},
+		current: { season: null!, year: null!, formatsGeneratedAt: null!, period: null! },
 		formatSchedule: {},
 		badgeholders: {},
 	};
 }
 
 export function getBadges(user: User, curFormat: string) {
-	let userBadges: {type: string, format: string}[] = [];
+	let userBadges: { type: string, format: string }[] = [];
 	const season = data.current.season; // don't factor in old badges
 	for (const format in data.badgeholders[season]) {
 		const badges = data.badgeholders[season][format];
 		for (const type in badges) {
 			if (badges[type].includes(user.id)) {
 				// ex badge-bronze-gen9ou-250-1-2024
-				userBadges.push({type, format});
+				userBadges.push({ type, format });
 			}
 		}
 	}

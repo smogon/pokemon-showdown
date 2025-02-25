@@ -121,7 +121,7 @@ describe(`PRNG`, () => {
 		});
 		it(`should return items with equal probability for a five-item array`, () => {
 			const items = ['a', 'b', 'c', 'd', 'e'];
-			const occurences = {a: 0, b: 0, c: 0, d: 0, e: 0};
+			const occurences = { a: 0, b: 0, c: 0, d: 0, e: 0 };
 			const prng = new PRNG(testSeed);
 			for (let i = 0; i < 1000; ++i) {
 				const sample = prng.sample(items);
@@ -135,7 +135,7 @@ describe(`PRNG`, () => {
 		});
 		it(`should return items with weighted probability for a three-item array with duplicates`, () => {
 			const items = ['x', 'x', 'y'];
-			const occurences = {x: 0, y: 0};
+			const occurences = { x: 0, y: 0 };
 			const prng = new PRNG(testSeed);
 			for (let i = 0; i < 100; ++i) {
 				const sample = prng.sample(items);

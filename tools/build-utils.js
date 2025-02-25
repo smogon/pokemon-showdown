@@ -61,6 +61,6 @@ exports.transpile = decl => {
 
 exports.buildDecls = () => {
 	try {
-		child_process.execSync(`node ./node_modules/typescript/bin/tsc -p sim`, {stdio: 'inherit'});
+		child_process.execSync(`node ./node_modules/typescript/bin/tsc -p sim`, { stdio: 'inherit' });
 	} catch {}
 };

@@ -12,9 +12,9 @@ describe('Klutz', () => {
 
 	it('should negate residual healing events', () => {
 		battle = common.createBattle([[
-			{species: "Lopunny", ability: 'klutz', item: 'leftovers', moves: ['bellydrum']},
+			{ species: "Lopunny", ability: 'klutz', item: 'leftovers', moves: ['bellydrum'] },
 		], [
-			{species: "Giratina", ability: 'pressure', moves: ['shadowsneak']},
+			{ species: "Giratina", ability: 'pressure', moves: ['shadowsneak'] },
 		]]);
 		const klutzMon = battle.p1.active[0];
 		assert.hurtsBy(klutzMon, Math.floor(klutzMon.maxhp / 2), () => battle.makeChoices('move bellydrum', 'move shadowsneak'), "Leftovers healing should not apply");
@@ -22,9 +22,9 @@ describe('Klutz', () => {
 
 	it('should prevent items from being consumed', () => {
 		battle = common.createBattle([[
-			{species: "Lopunny", level: 1, ability: 'klutz', item: 'sitrusberry', moves: ['endure']},
+			{ species: "Lopunny", level: 1, ability: 'klutz', item: 'sitrusberry', moves: ['endure'] },
 		], [
-			{species: "Deoxys", ability: 'noguard', moves: ['psychic']},
+			{ species: "Deoxys", ability: 'noguard', moves: ['psychic'] },
 		]]);
 		const klutzMon = battle.p1.active[0];
 		assert.constant(() => klutzMon.item, () => battle.makeChoices('move endure', 'move psychic'));
@@ -33,9 +33,9 @@ describe('Klutz', () => {
 
 	it('should ignore the effects of items that disable moves', () => {
 		battle = common.createBattle([[
-			{species: "Lopunny", ability: 'klutz', item: 'assaultvest', moves: ['protect']},
+			{ species: "Lopunny", ability: 'klutz', item: 'assaultvest', moves: ['protect'] },
 		], [
-			{species: "Deoxys", ability: 'noguard', moves: ['psychic']},
+			{ species: "Deoxys", ability: 'noguard', moves: ['psychic'] },
 		]]);
 		battle.makeChoices('move protect', 'move psychic');
 		assert.equal(battle.p1.active[0].lastMove.id, 'protect');
@@ -43,9 +43,9 @@ describe('Klutz', () => {
 
 	it('should not ignore item effects that prevent item removal', () => {
 		battle = common.createBattle([[
-			{species: "Genesect", ability: 'klutz', item: 'dousedrive', moves: ['calmmind']},
+			{ species: "Genesect", ability: 'klutz', item: 'dousedrive', moves: ['calmmind'] },
 		], [
-			{species: "Deoxys", ability: 'noguard', moves: ['trick']},
+			{ species: "Deoxys", ability: 'noguard', moves: ['trick'] },
 		]]);
 		const klutzMon = battle.p1.active[0];
 		assert.constant(() => klutzMon.item, () => battle.makeChoices('move calmmind', 'move trick'));
@@ -53,9 +53,9 @@ describe('Klutz', () => {
 
 	it('should cause Fling to fail', () => {
 		battle = common.createBattle([[
-			{species: "Lopunny", ability: 'klutz', item: 'seaincense', moves: ['fling']},
+			{ species: "Lopunny", ability: 'klutz', item: 'seaincense', moves: ['fling'] },
 		], [
-			{species: "Deoxys", ability: 'noguard', moves: ['calmmind']},
+			{ species: "Deoxys", ability: 'noguard', moves: ['calmmind'] },
 		]]);
 		const klutzMon = battle.p1.active[0];
 		assert.constant(() => klutzMon.item, () => battle.makeChoices('move fling', 'move calmmind'));
@@ -63,9 +63,9 @@ describe('Klutz', () => {
 
 	it('should not prevent Pokemon from Mega Evolving', () => {
 		battle = common.createBattle([[
-			{species: "Lopunny", ability: 'klutz', item: 'lopunnite', moves: ['protect']},
+			{ species: "Lopunny", ability: 'klutz', item: 'lopunnite', moves: ['protect'] },
 		], [
-			{species: "Deoxys", ability: 'noguard', moves: ['calmmind']},
+			{ species: "Deoxys", ability: 'noguard', moves: ['calmmind'] },
 		]]);
 		battle.makeChoices('move protect mega', 'move calmmind');
 		assert.species(battle.p1.active[0], 'Lopunny-Mega');

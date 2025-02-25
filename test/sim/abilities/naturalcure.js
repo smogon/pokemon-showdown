@@ -10,13 +10,13 @@ describe('Natural Cure', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', {
 			team: [
-				{species: 'Celebi', ability: 'naturalcure', moves: ['leechseed']},
-				{species: 'Swampert', ability: 'torrents', moves: ['surf']},
+				{ species: 'Celebi', ability: 'naturalcure', moves: ['leechseed'] },
+				{ species: 'Swampert', ability: 'torrents', moves: ['surf'] },
 			],
 		});
 		battle.setPlayer('p2', {
 			team: [
-				{species: 'Zapdos', ability: 'pressure', moves: ['thunderwave', 'roar']},
+				{ species: 'Zapdos', ability: 'pressure', moves: ['thunderwave', 'roar'] },
 			],
 		});
 		battle.makeChoices('move leechseed', 'move thunderwave');

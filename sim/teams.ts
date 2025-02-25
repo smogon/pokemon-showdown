@@ -7,8 +7,8 @@
  * @license MIT
  */
 
-import {Dex, toID} from './dex';
-import type {PRNG, PRNGSeed} from './prng';
+import { Dex, toID } from './dex';
+import type { PRNG, PRNGSeed } from './prng';
 
 export interface PokemonSet {
 	/**
@@ -346,7 +346,7 @@ export const Teams = new class Teams {
 	}
 
 	/** Will not entirely recover a packed name, but will be a pretty readable guess */
-	unpackName(name: string, dexTable?: {get: (name: string) => AnyObject}) {
+	unpackName(name: string, dexTable?: { get: (name: string) => AnyObject }) {
 		if (!name) return '';
 		if (dexTable) {
 			const obj = dexTable.get(name);
@@ -358,7 +358,7 @@ export const Teams = new class Teams {
 	/**
 	 * Exports a team in human-readable PS export format
 	 */
-	export(team: PokemonSet[], options?: {hideStats?: boolean}) {
+	export(team: PokemonSet[], options?: { hideStats?: boolean }) {
 		let output = '';
 		for (const set of team) {
 			output += this.exportSet(set, options) + `\n`;
@@ -366,7 +366,7 @@ export const Teams = new class Teams {
 		return output;
 	}
 
-	exportSet(set: PokemonSet, {hideStats}: {hideStats?: boolean} = {}) {
+	exportSet(set: PokemonSet, { hideStats }: { hideStats?: boolean } = {}) {
 		let out = ``;
 
 		// core
@@ -498,7 +498,7 @@ export const Teams = new class Teams {
 		} else if (line.startsWith('EVs: ')) {
 			line = line.slice(5);
 			const evLines = line.split('/');
-			set.evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+			set.evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 			for (const evLine of evLines) {
 				const [statValue, statName] = evLine.trim().split(' ');
 				const statid = Dex.stats.getID(statName);
@@ -509,7 +509,7 @@ export const Teams = new class Teams {
 		} else if (line.startsWith('IVs: ')) {
 			line = line.slice(5);
 			const ivLines = line.split('/');
-			set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+			set.ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 			for (const ivLine of ivLines) {
 				const [statValue, statName] = ivLine.trim().split(' ');
 				const statid = Dex.stats.getID(statName);
@@ -530,7 +530,7 @@ export const Teams = new class Teams {
 				const hpType = line.slice(14, -1);
 				line = 'Hidden Power ' + hpType;
 				if (!set.ivs && Dex.types.isName(hpType)) {
-					set.ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+					set.ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 					const hpIVs = Dex.types.get(hpType).HPivs || {};
 					for (const statid in hpIVs) {
 						set.ivs[statid as StatID] = hpIVs[statid as StatID]!;
@@ -557,14 +557,14 @@ export const Teams = new class Teams {
 					set.ability = sanitize(set.ability);
 					set.gender = sanitize(set.gender);
 					set.nature = sanitize(set.nature);
-					const evs = {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0};
+					const evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 					if (set.evs) {
 						for (const statid in evs) {
 							if (typeof set.evs[statid] === 'number') evs[statid as StatID] = set.evs[statid];
 						}
 					}
 					set.evs = evs;
-					const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+					const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 					if (set.ivs) {
 						for (const statid in ivs) {
 							if (typeof set.ivs[statid] === 'number') ivs[statid as StatID] = set.ivs[statid];
@@ -602,8 +602,8 @@ export const Teams = new class Teams {
 				curSet = {
 					name: '', species: '', item: '', ability: '', gender: '',
 					nature: '',
-					evs: {hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0},
-					ivs: {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
+					evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+					ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
 					level: 100,
 					moves: [],
 				};

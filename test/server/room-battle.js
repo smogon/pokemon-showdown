@@ -2,7 +2,7 @@
 
 const assert = require('assert').strict;
 
-const {makeUser} = require('../users-utils');
+const { makeUser } = require('../users-utils');
 
 describe('Simulator abstraction layer features', () => {
 	describe('Battle', () => {
@@ -26,7 +26,7 @@ describe('Simulator abstraction layer features', () => {
 			p2 = makeUser();
 			room = Rooms.createBattle({
 				format: '',
-				players: [{user: p1, team: packedTeam}, {user: p2, team: packedTeam}],
+				players: [{ user: p1, team: packedTeam }, { user: p2, team: packedTeam }],
 				allowRenames: false,
 			});
 			assert(room.battle);

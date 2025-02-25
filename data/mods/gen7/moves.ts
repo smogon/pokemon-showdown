@@ -126,7 +126,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onHit(target, source, move) {
 			let success = false;
-			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({evasion: -1});
+			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({ evasion: -1 });
 			const removeTarget = [
 				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
 			];
@@ -171,7 +171,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	dragonhammer: {
 		inherit: true,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 	},
 	dragonrage: {
 		inherit: true,
@@ -506,7 +506,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	howl: {
 		inherit: true,
-		flags: {snatch: 1, metronome: 1},
+		flags: { snatch: 1, metronome: 1 },
 		boosts: {
 			atk: 1,
 		},
@@ -578,13 +578,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					}
 				}
 				if (this.checkMoveMakesContact(move, source, target)) {
-					this.boost({atk: -2}, source, target, this.dex.getActiveMove("King's Shield"));
+					this.boost({ atk: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
 				}
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
 				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-					this.boost({atk: -2}, source, target, this.dex.getActiveMove("King's Shield"));
+					this.boost({ atk: -2 }, source, target, this.dex.getActiveMove("King's Shield"));
 				}
 			},
 		},
@@ -665,7 +665,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	moongeistbeam: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
 	},
 	moonlight: {
 		inherit: true,
@@ -733,7 +733,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	naturesmadness: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
 	},
 	needlearm: {
 		inherit: true,
@@ -761,7 +761,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	pollenpuff: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
 		onHit(target, source) {
 			if (source.isAlly(target)) {
 				if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
@@ -1037,7 +1037,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	sunsteelstrike: {
 		inherit: true,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 	},
 	supersonicskystrike: {
 		inherit: true,

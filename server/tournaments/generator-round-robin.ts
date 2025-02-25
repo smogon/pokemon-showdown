@@ -4,8 +4,8 @@ interface Match {
 	result?: string;
 }
 
-import {Utils} from '../../lib/utils';
-import type {TournamentPlayer} from './index';
+import { Utils } from '../../lib/utils';
+import type { TournamentPlayer } from './index';
 
 export class RoundRobin {
 	readonly name: string;
@@ -88,7 +88,7 @@ export class RoundRobin {
 				if (!this.isDoubles && col >= row) return null;
 				if (p1 === p2) return null;
 
-				return {state: 'available'};
+				return { state: 'available' };
 			})
 		);
 		this.matchesPerPlayer = players.length - 1;

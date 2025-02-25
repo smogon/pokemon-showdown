@@ -11,15 +11,15 @@ describe('Psych Up', () => {
 	});
 
 	it('should copy the opponent\'s crit ratio', () => {
-		battle = common.createBattle({gameType: 'doubles'});
-		battle.setPlayer('p1', {team: [
-			{species: 'Palkia', level: 100, moves: ['sleeptalk', 'focusenergy', 'psychup', 'laserfocus']},
-			{species: 'Smeargle', level: 1, moves: ['laserfocus', 'sleeptalk', 'focusenergy']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: 'Suicune', level: 1, moves: ['sleeptalk']},
-			{species: 'Suicune', level: 1, moves: ['sleeptalk']},
-		]});
+		battle = common.createBattle({ gameType: 'doubles' });
+		battle.setPlayer('p1', { team: [
+			{ species: 'Palkia', level: 100, moves: ['sleeptalk', 'focusenergy', 'psychup', 'laserfocus'] },
+			{ species: 'Smeargle', level: 1, moves: ['laserfocus', 'sleeptalk', 'focusenergy'] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: 'Suicune', level: 1, moves: ['sleeptalk'] },
+			{ species: 'Suicune', level: 1, moves: ['sleeptalk'] },
+		] });
 		const palkia = battle.p1.active[0];
 
 		battle.makeChoices('move focusenergy, move sleeptalk', 'move sleeptalk, move sleeptalk');
@@ -40,15 +40,15 @@ describe('Psych Up', () => {
 	});
 
 	it('should copy both positive and negative stat changes', () => {
-		battle = common.createBattle({gameType: 'doubles'});
-		battle.setPlayer('p1', {team: [
-			{species: 'Palkia', level: 100, moves: ['sleeptalk', 'psychup']},
-			{species: 'Smeargle', level: 1, moves: ['sleeptalk', 'swordsdance', 'featherdance']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: 'Suicune', level: 1, moves: ['sleeptalk']},
-			{species: 'Suicune', level: 1, moves: ['sleeptalk']},
-		]});
+		battle = common.createBattle({ gameType: 'doubles' });
+		battle.setPlayer('p1', { team: [
+			{ species: 'Palkia', level: 100, moves: ['sleeptalk', 'psychup'] },
+			{ species: 'Smeargle', level: 1, moves: ['sleeptalk', 'swordsdance', 'featherdance'] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: 'Suicune', level: 1, moves: ['sleeptalk'] },
+			{ species: 'Suicune', level: 1, moves: ['sleeptalk'] },
+		] });
 		const palkia = battle.p1.active[0];
 
 		battle.makeChoices('move sleeptalk, move swordsdance', 'move sleeptalk, move sleeptalk');
@@ -67,15 +67,15 @@ describe('Psych Up [Gen 5]', () => {
 	});
 
 	it('should not copy the opponent\'s crit ratio', () => {
-		battle = common.gen(5).createBattle({gameType: 'doubles'});
-		battle.setPlayer('p1', {team: [
-			{species: 'Palkia', level: 100, moves: ['sleeptalk', 'focusenergy', 'psychup']},
-			{species: 'Smeargle', level: 1, moves: ['sleeptalk', 'focusenergy']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: 'Suicune', level: 1, moves: ['sleeptalk']},
-			{species: 'Suicune', level: 1, moves: ['sleeptalk']},
-		]});
+		battle = common.gen(5).createBattle({ gameType: 'doubles' });
+		battle.setPlayer('p1', { team: [
+			{ species: 'Palkia', level: 100, moves: ['sleeptalk', 'focusenergy', 'psychup'] },
+			{ species: 'Smeargle', level: 1, moves: ['sleeptalk', 'focusenergy'] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: 'Suicune', level: 1, moves: ['sleeptalk'] },
+			{ species: 'Suicune', level: 1, moves: ['sleeptalk'] },
+		] });
 		const palkia = battle.p1.active[0];
 
 		battle.makeChoices('move sleeptalk, move focusenergy', 'move sleeptalk, move sleeptalk');

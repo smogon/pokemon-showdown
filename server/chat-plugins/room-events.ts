@@ -6,7 +6,7 @@
  *
  * @license MIT license
  */
-import {Utils} from '../../lib';
+import { Utils } from '../../lib';
 
 export interface RoomEvent {
 	eventName: string;
@@ -28,7 +28,7 @@ function convertAliasFormat(room: Room) {
 	for (const event of Object.values(room.settings.events) as AnyObject[]) {
 		if (!event.aliases) continue;
 		for (const alias of event.aliases) {
-			room.settings.events[alias] = {eventID: toID(event.eventName)};
+			room.settings.events[alias] = { eventID: toID(event.eventName) };
 		}
 		delete event.aliases;
 	}
@@ -41,7 +41,7 @@ function formatEvent(room: Room, event: RoomEvent, showAliases?: boolean, showCa
 	if (timeRemaining < 0) explanation = "This event will start soon";
 	if (event.started) explanation = "This event has started";
 	if (!isNaN(timeRemaining)) {
-		explanation = `This event will start in: ${Chat.toDurationString(timeRemaining, {precision: 2})}`;
+		explanation = `This event will start in: ${Chat.toDurationString(timeRemaining, { precision: 2 })}`;
 	}
 
 	const eventID = toID(event.eventName);
@@ -339,7 +339,7 @@ export const commands: Chat.ChatCommands = {
 			if (!(event && 'eventName' in event)) return this.errorReply(`There is no event titled "${eventId}".`);
 			if (room.settings.events[alias]) return this.errorReply(`"${alias}" is already an event, alias, or category.`);
 
-			room.settings.events[alias] = {eventID: eventId};
+			room.settings.events[alias] = { eventID: eventId };
 			this.privateModAction(`${user.name} added an alias "${alias}" for the roomevent "${eventId}".`);
 			this.modlog('ROOMEVENT', null, `alias for "${eventId}": "${alias}"`);
 			room.saveSettings();
@@ -443,7 +443,7 @@ export const commands: Chat.ChatCommands = {
 			if (!room.settings.events) room.settings.events = Object.create(null);
 			if (room.settings.events?.[categoryId]) return this.errorReply(`The category "${target}" already exists.`);
 
-			room.settings.events![categoryId] = {events: []};
+			room.settings.events![categoryId] = { events: [] };
 
 			this.privateModAction(`${user.name} added the category "${categoryId}".`);
 			this.modlog('ROOMEVENT', null, `category: added "${categoryId}"`);

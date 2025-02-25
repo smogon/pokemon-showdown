@@ -12,24 +12,24 @@ describe('Gravity', () => {
 
 	it('should ground Flying-type Pokemon and remove their Ground immunity', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Aerodactyl', ability: 'pressure', moves: ['gravity']}]});
-		battle.setPlayer('p2', {team: [{species: 'Aron', ability: 'sturdy', moves: ['earthpower']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Aerodactyl', ability: 'pressure', moves: ['gravity'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Aron', ability: 'sturdy', moves: ['earthpower'] }] });
 		battle.makeChoices('move gravity', 'move earthpower');
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should ground Pokemon with Levitate and remove their Ground immunity', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Rotom', ability: 'levitate', moves: ['gravity']}]});
-		battle.setPlayer('p2', {team: [{species: 'Aron', ability: 'sturdy', moves: ['earthpower']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Rotom', ability: 'levitate', moves: ['gravity'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Aron', ability: 'sturdy', moves: ['earthpower'] }] });
 		battle.makeChoices('move gravity', 'move earthpower');
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
 	it('should interrupt and disable the use of airborne moves', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Spiritomb', ability: 'pressure', moves: ['gravity']}]});
-		battle.setPlayer('p2', {team: [{species: 'Aerodactyl', ability: 'pressure', moves: ['fly']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Spiritomb', ability: 'pressure', moves: ['gravity'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Aerodactyl', ability: 'pressure', moves: ['fly'] }] });
 		battle.makeChoices('move gravity', 'move fly');
 		assert(!battle.p2.active[0].volatiles['twoturnmove']);
 		assert.cantMove(() => battle.makeChoices('move gravity', 'move fly'), 'Aerodactyl', 'Fly');
@@ -37,9 +37,9 @@ describe('Gravity', () => {
 
 	it('should allow the use of Z-moves of Gravity-blocked moves, but only apply their Z-effects', () => {
 		battle = common.gen(7).createBattle([[
-			{species: "Magikarp", ability: 'protean', item: 'normaliumz', moves: ['splash', 'sleeptalk']},
+			{ species: "Magikarp", ability: 'protean', item: 'normaliumz', moves: ['splash', 'sleeptalk'] },
 		], [
-			{species: "Accelgor", moves: ['gravity']},
+			{ species: "Accelgor", moves: ['gravity'] },
 		]]);
 
 		battle.makeChoices('move splash zmove', 'move gravity');

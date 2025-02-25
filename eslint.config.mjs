@@ -1,6 +1,6 @@
 // @ts-check
 
-import {configs, configure, globals} from './eslint-ps-standard.mjs';
+import { configs, configure, globals } from './eslint-ps-standard.mjs';
 
 export default configure([
 	{
@@ -80,7 +80,7 @@ export default configure([
 			// too strict when there's no way to ensure that catch catches an error
 			"@typescript-eslint/prefer-promise-reject-errors": "off",
 			// we use import() everywhere
-			"@typescript-eslint/consistent-type-imports": ["error", {disallowTypeAnnotations: false, fixStyle: "inline-type-imports"}],
+			"@typescript-eslint/consistent-type-imports": ["error", { disallowTypeAnnotations: false, fixStyle: "inline-type-imports" }],
 			// TS has _way_ too many issues to require comments on all of them
 			// most commonly:
 			// - closed types https://github.com/microsoft/TypeScript/issues/12936

@@ -11,12 +11,12 @@ describe('Doodle', () => {
 	});
 
 	it(`should replace the Abilities of the user and its ally with the Ability of its target`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'wynaut', ability: 'shadowtag', moves: ['doodle']},
-			{species: 'ironhands', ability: 'quarkdrive', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'wynaut', ability: 'shadowtag', moves: ['doodle'] },
+			{ species: 'ironhands', ability: 'quarkdrive', moves: ['sleeptalk'] },
 		], [
-			{species: 'clefable', ability: 'magicguard', moves: ['sleeptalk']},
-			{species: 'mudkip', ability: 'torrent', moves: ['sleeptalk']},
+			{ species: 'clefable', ability: 'magicguard', moves: ['sleeptalk'] },
+			{ species: 'mudkip', ability: 'torrent', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move doodle 1, auto', 'auto');
 		assert.equal(battle.p1.active[0].ability, 'magicguard');
@@ -24,12 +24,12 @@ describe('Doodle', () => {
 	});
 
 	it(`should fail against certain Abilities`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'wynaut', ability: 'shadowtag', moves: ['doodle']},
-			{species: 'ironhands', ability: 'quarkdrive', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'wynaut', ability: 'shadowtag', moves: ['doodle'] },
+			{ species: 'ironhands', ability: 'quarkdrive', moves: ['sleeptalk'] },
 		], [
-			{species: 'fluttermane', ability: 'protosynthesis', moves: ['sleeptalk']},
-			{species: 'mudkip', ability: 'torrent', moves: ['sleeptalk']},
+			{ species: 'fluttermane', ability: 'protosynthesis', moves: ['sleeptalk'] },
+			{ species: 'mudkip', ability: 'torrent', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move doodle 1, auto', 'auto');
 		assert.equal(battle.p1.active[0].ability, 'shadowtag');
@@ -37,12 +37,12 @@ describe('Doodle', () => {
 	});
 
 	it(`should not fail if only the user has an unreplaceable Ability`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'komala', ability: 'comatose', moves: ['doodle']},
-			{species: 'wynaut', ability: 'shadowtag', moves: ['swordsdance']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'komala', ability: 'comatose', moves: ['doodle'] },
+			{ species: 'wynaut', ability: 'shadowtag', moves: ['swordsdance'] },
 		], [
-			{species: 'clefable', ability: 'magicguard', moves: ['swordsdance']},
-			{species: 'mudkip', ability: 'torrent', moves: ['swordsdance']},
+			{ species: 'clefable', ability: 'magicguard', moves: ['swordsdance'] },
+			{ species: 'mudkip', ability: 'torrent', moves: ['swordsdance'] },
 		]]);
 		battle.makeChoices('move doodle 1, auto', 'auto');
 		assert.equal(battle.p1.active[0].ability, 'comatose');

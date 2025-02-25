@@ -10,8 +10,8 @@ describe('Burning Bulwark', () => {
 
 	it(`should burn the user of a contact move`, () => {
 		battle = common.createBattle([
-			[{species: "Gallade", ability: 'justified', moves: ['tackle']}],
-			[{species: "Entei", ability: 'innerfocus', moves: ['burningbulwark']}],
+			[{ species: "Gallade", ability: 'justified', moves: ['tackle'] }],
+			[{ species: "Entei", ability: 'innerfocus', moves: ['burningbulwark'] }],
 		]);
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].status, 'brn', 'Gallade should be burned when using contact move');
@@ -19,8 +19,8 @@ describe('Burning Bulwark', () => {
 
 	it(`should not burn the user of a contact move if user has protective pads`, () => {
 		battle = common.createBattle([
-			[{species: "Gallade", item: 'protectivepads', ability: 'justified', moves: ['tackle']}],
-			[{species: "Entei", ability: 'innerfocus', moves: ['burningbulwark']}],
+			[{ species: "Gallade", item: 'protectivepads', ability: 'justified', moves: ['tackle'] }],
+			[{ species: "Entei", ability: 'innerfocus', moves: ['burningbulwark'] }],
 		]);
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].status, '', 'Gallade should not be burned when using contact move due to protective pads');
@@ -28,8 +28,8 @@ describe('Burning Bulwark', () => {
 
 	it(`should not burn the user of a non-contact move`, () => {
 		battle = common.createBattle([
-			[{species: "Ogerpon-Wellspring", ability: 'Water Absorb', moves: ['ivycudgel']}],
-			[{species: "Entei", ability: 'innerfocus', moves: ['burningbulwark']}],
+			[{ species: "Ogerpon-Wellspring", ability: 'Water Absorb', moves: ['ivycudgel'] }],
+			[{ species: "Entei", ability: 'innerfocus', moves: ['burningbulwark'] }],
 		]);
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].status, '', 'Ogerpon-Wellspring should not be burned when using non-contact move');

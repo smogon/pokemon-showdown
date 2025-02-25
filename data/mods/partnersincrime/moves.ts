@@ -151,7 +151,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 
 			source.ability = targetAbility.id;
-			source.abilityState = this.initEffectState({id: this.toID(source.ability), target: source});
+			source.abilityState = this.initEffectState({ id: this.toID(source.ability), target: source });
 			if (source.m.innate?.endsWith(targetAbility.id)) {
 				source.removeVolatile(source.m.innate);
 				delete source.m.innate;
@@ -166,7 +166,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 
 			target.ability = sourceAbility.id;
-			target.abilityState = this.initEffectState({id: this.toID(target.ability), target});
+			target.abilityState = this.initEffectState({ id: this.toID(target.ability), target });
 			if (target.m.innate?.endsWith(sourceAbility.id)) {
 				target.removeVolatile(target.m.innate);
 				delete target.m.innate;

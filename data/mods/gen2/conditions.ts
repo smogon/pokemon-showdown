@@ -192,7 +192,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			const move = this.dex.moves.get(this.effectState.move);
 			if (move.id) {
 				this.debug('Forcing into ' + move.id);
-				this.queue.changeAction(pokemon, {choice: 'move', moveid: move.id});
+				this.queue.changeAction(pokemon, { choice: 'move', moveid: move.id });
 			}
 		},
 	},

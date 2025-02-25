@@ -45,7 +45,7 @@ const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 
-import {Utils, type ProcessManager} from '../lib';
+import { Utils, type ProcessManager } from '../lib';
 import {
 	Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL, type RoomPermission, type GlobalPermission,
 } from './user-groups';
@@ -147,7 +147,7 @@ function getExactUser(name: string | User) {
  * Usage:
  *   Users.findUsers([userids], [ips])
  */
-function findUsers(userids: ID[], ips: string[], options: {forPunishment?: boolean, includeTrusted?: boolean} = {}) {
+function findUsers(userids: ID[], ips: string[], options: { forPunishment?: boolean, includeTrusted?: boolean } = {}) {
 	const matches: User[] = [];
 	if (options.forPunishment) ips = ips.filter(ip => !Punishments.isSharedIp(ip));
 	const ipMatcher = IPTools.checker(ips);
@@ -350,7 +350,7 @@ export class User extends Chat.MessageContext {
 	 * `)`
 	 */
 	readonly games: Set<RoomID>;
-	mmrCache: {[format: string]: number};
+	mmrCache: { [format: string]: number };
 	guestNum: number;
 	name: string;
 	named: boolean;
@@ -391,7 +391,7 @@ export class User extends Chat.MessageContext {
 	isPublicBot: boolean;
 	lastDisconnected: number;
 	lastConnected: number;
-	foodfight?: {generatedTeam: string[], dish: string, ingredients: string[], timestamp: number};
+	foodfight?: { generatedTeam: string[], dish: string, ingredients: string[], timestamp: number };
 	friends?: Set<string>;
 
 	chatQueue: ChatQueueEntry[] | null;
@@ -540,7 +540,7 @@ export class User extends Chat.MessageContext {
 		this.send(`|popup|` + message.replace(/\n/g, '||'));
 	}
 	getIdentity(room: BasicRoom | null = null) {
-		const punishgroups = Config.punishgroups || {locked: null, muted: null};
+		const punishgroups = Config.punishgroups || { locked: null, muted: null };
 		if (this.locked || this.namelocked) {
 			const lockedSymbol = (punishgroups.locked?.symbol || '\u203d');
 			return lockedSymbol + this.name;
@@ -1277,7 +1277,7 @@ export class User extends Chat.MessageContext {
 	 * alts (i.e. when forPunishment is true), they will always be the first element of that list.
 	 */
 	getAltUsers(includeTrusted = false, forPunishment = false) {
-		let alts = findUsers([this.getLastId()], this.ips, {includeTrusted, forPunishment});
+		let alts = findUsers([this.getLastId()], this.ips, { includeTrusted, forPunishment });
 		alts = alts.filter(user => user !== this);
 		if (forPunishment) alts.unshift(this);
 		return alts;

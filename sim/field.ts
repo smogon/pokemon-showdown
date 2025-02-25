@@ -5,9 +5,9 @@
  * @license MIT
  */
 
-import {State} from './state';
-import {type EffectState} from './pokemon';
-import {toID} from './dex';
+import { State } from './state';
+import { type EffectState } from './pokemon';
+import { toID } from './dex';
 
 export class Field {
 	readonly battle: Battle;
@@ -17,7 +17,7 @@ export class Field {
 	weatherState: EffectState;
 	terrain: ID;
 	terrainState: EffectState;
-	pseudoWeather: {[id: string]: EffectState};
+	pseudoWeather: { [id: string]: EffectState };
 
 	constructor(battle: Battle) {
 		this.battle = battle;
@@ -26,9 +26,9 @@ export class Field {
 		this.id = '';
 
 		this.weather = '';
-		this.weatherState = this.battle.initEffectState({id: ''});
+		this.weatherState = this.battle.initEffectState({ id: '' });
 		this.terrain = '';
-		this.terrainState = this.battle.initEffectState({id: ''});
+		this.terrainState = this.battle.initEffectState({ id: '' });
 		this.pseudoWeather = {};
 	}
 
@@ -67,7 +67,7 @@ export class Field {
 		const prevWeather = this.weather;
 		const prevWeatherState = this.weatherState;
 		this.weather = status.id;
-		this.weatherState = this.battle.initEffectState({id: status.id});
+		this.weatherState = this.battle.initEffectState({ id: status.id });
 		if (source) {
 			this.weatherState.source = source;
 			this.weatherState.sourceSlot = source.getSlot();

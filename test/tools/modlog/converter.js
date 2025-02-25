@@ -653,7 +653,7 @@ describe('Modlog conversion script', () => {
 
 		it('should handle hangman', () => {
 			assert.deepEqual(
-				converter.rawifyLog({action: 'HANGMAN', roomID: 'lobby', isGlobal: false, loggedBy: 'archastl', time: 1600557924908, alts: []}),
+				converter.rawifyLog({ action: 'HANGMAN', roomID: 'lobby', isGlobal: false, loggedBy: 'archastl', time: 1600557924908, alts: [] }),
 				`[2020-09-19T23:25:24.908Z] (lobby) HANGMAN: by archastl\n`
 			);
 		});

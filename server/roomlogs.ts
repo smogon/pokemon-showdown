@@ -7,9 +7,9 @@
  * @license MIT
  */
 
-import {FS, Utils, type Streams} from '../lib';
-import {PGDatabase, SQL, type SQLStatement} from '../lib/database';
-import type {PartialModlogEntry} from './modlog';
+import { FS, Utils, type Streams } from '../lib';
+import { PGDatabase, SQL, type SQLStatement } from '../lib/database';
+import type { PartialModlogEntry } from './modlog';
 
 interface RoomlogOptions {
 	isMultichannel?: boolean;
@@ -246,7 +246,7 @@ export class Roomlog {
 			// const section = !this.noLogTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
 			if (line.startsWith(messageStart)) {
 				const parts = Utils.splitFirst(line, '|', section);
-				return {user: parts[section - 1], message: parts[section]};
+				return { user: parts[section - 1], message: parts[section] };
 			}
 		}
 	}
@@ -308,7 +308,7 @@ export class Roomlog {
 		const roomlogStreamExisted = this.roomlogStream !== null;
 		await this.destroy();
 		if (this.roomlogTable) {
-			await this.roomlogTable.updateAll({roomid: newID})`WHERE roomid = ${this.roomid}`;
+			await this.roomlogTable.updateAll({ roomid: newID })`WHERE roomid = ${this.roomid}`;
 		} else {
 			const roomlogPath = `chat`;
 			const [roomlogExists, newRoomlogExists] = await Promise.all([

@@ -12,9 +12,9 @@ describe('Gulp Missile', () => {
 
 	it(`should retrieve a catch on the first turn of Dive`, () => {
 		battle = common.createBattle([[
-			{species: 'cramorant', ability: 'gulpmissile', moves: ['dive']},
+			{ species: 'cramorant', ability: 'gulpmissile', moves: ['dive'] },
 		], [
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.species(battle.p1.active[0], 'Cramorant-Gulping');
@@ -22,9 +22,9 @@ describe('Gulp Missile', () => {
 
 	it(`should retrieve a catch only if the move was successful`, () => {
 		battle = common.createBattle([[
-			{species: 'cramorant', ability: 'gulpmissile', moves: ['surf']},
+			{ species: 'cramorant', ability: 'gulpmissile', moves: ['surf'] },
 		], [
-			{species: 'lapras', ability: 'waterabsorb', moves: ['sleeptalk']},
+			{ species: 'lapras', ability: 'waterabsorb', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.false.species(battle.p1.active[0], 'Cramorant-Gulping');
@@ -32,9 +32,9 @@ describe('Gulp Missile', () => {
 
 	it(`should not spit out its catch if the Cramorant is semi-invulnerable`, () => {
 		battle = common.createBattle([[
-			{species: 'cramorant', ability: 'gulpmissile', moves: ['dive']},
+			{ species: 'cramorant', ability: 'gulpmissile', moves: ['dive'] },
 		], [
-			{species: 'ludicolo', ability: 'noguard', moves: ['sleeptalk', 'machpunch']},
+			{ species: 'ludicolo', ability: 'noguard', moves: ['sleeptalk', 'machpunch'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('auto', 'move machpunch');
@@ -44,9 +44,9 @@ describe('Gulp Missile', () => {
 
 	it(`should change forms before damage calculation`, () => {
 		battle = common.createBattle([[
-			{species: 'cramorant', ability: 'gulpmissile', moves: ['surf']},
+			{ species: 'cramorant', ability: 'gulpmissile', moves: ['surf'] },
 		], [
-			{species: 'sceptile', ability: 'shellarmor', moves: ['magicpowder']},
+			{ species: 'sceptile', ability: 'shellarmor', moves: ['magicpowder'] },
 		]]);
 		battle.makeChoices();
 		const sceptile = battle.p2.active[0];
@@ -57,10 +57,10 @@ describe('Gulp Missile', () => {
 	describe(`Hackmons Cramorant`, () => {
 		it(`should be sent out as the hacked form`, () => {
 			battle = common.createBattle([[
-				{species: 'cramorantgulping', ability: 'gulpmissile', moves: ['sleeptalk']},
-				{species: 'wynaut', moves: ['sleeptalk']},
+				{ species: 'cramorantgulping', ability: 'gulpmissile', moves: ['sleeptalk'] },
+				{ species: 'wynaut', moves: ['sleeptalk'] },
 			], [
-				{species: 'togepi', moves: ['fairywind']},
+				{ species: 'togepi', moves: ['fairywind'] },
 			]]);
 			battle.makeChoices();
 
@@ -75,9 +75,9 @@ describe('Gulp Missile', () => {
 
 		it(`should not force Cramorant-Gorging or -Gulping to have Gulp Missile`, () => {
 			battle = common.createBattle([[
-				{species: 'cramorantgorging', ability: 'intimidate', moves: ['sleeptalk']},
+				{ species: 'cramorantgorging', ability: 'intimidate', moves: ['sleeptalk'] },
 			], [
-				{species: 'togepi', moves: ['fairywind']},
+				{ species: 'togepi', moves: ['fairywind'] },
 			]]);
 			battle.makeChoices();
 

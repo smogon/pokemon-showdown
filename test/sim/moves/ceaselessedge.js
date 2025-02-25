@@ -14,9 +14,9 @@ describe('Ceaseless Edge', () => {
 
 	it(`should set up Spikes on the side of the opponent`, () => {
 		battle = common.createBattle([[
-			{species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge']},
+			{ species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge'] },
 		], [
-			{species: 'registeel', moves: ['splash']},
+			{ species: 'registeel', moves: ['splash'] },
 		]]);
 
 		battle.makeChoices();
@@ -24,12 +24,12 @@ describe('Ceaseless Edge', () => {
 	});
 
 	it(`should set up Spikes on the side of the opponent, not necessarily the target, in a double battle`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge']},
-			{species: 'pikachu', moves: ['splash']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge'] },
+			{ species: 'pikachu', moves: ['splash'] },
 		], [
-			{species: 'squirtle', moves: ['splash']},
-			{species: 'bulbasaur', moves: ['splash']},
+			{ species: 'squirtle', moves: ['splash'] },
+			{ species: 'bulbasaur', moves: ['splash'] },
 		]]);
 
 		battle.makeChoices('move ceaselessedge -2, move splash', 'move splash, move splash');
@@ -40,9 +40,9 @@ describe('Ceaseless Edge', () => {
 
 	it(`should still set up Spikes on the side of the opponent that is behind a Substitute`, () => {
 		battle = common.createBattle([[
-			{species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge']},
+			{ species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge'] },
 		], [
-			{species: 'regieleki', moves: ['substitute']},
+			{ species: 'regieleki', moves: ['substitute'] },
 		]]);
 
 		battle.makeChoices();
@@ -51,9 +51,9 @@ describe('Ceaseless Edge', () => {
 
 	it(`should not set up Spikes if the move does not hit opponent or its Substitute`, () => {
 		battle = common.createBattle([[
-			{species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge']},
+			{ species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge'] },
 		], [
-			{species: 'regieleki', moves: ['protect']},
+			{ species: 'regieleki', moves: ['protect'] },
 		]]);
 
 		battle.makeChoices();
@@ -62,9 +62,9 @@ describe('Ceaseless Edge', () => {
 
 	it(`should not be bounced back by Magic Bounce`, () => {
 		battle = common.createBattle([[
-			{species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge']},
+			{ species: 'samurotthisui', ability: 'noguard', moves: ['ceaselessedge'] },
 		], [
-			{species: 'registeel', ability: 'magicbounce', moves: ['splash']},
+			{ species: 'registeel', ability: 'magicbounce', moves: ['splash'] },
 		]]);
 
 		battle.makeChoices();
@@ -74,9 +74,9 @@ describe('Ceaseless Edge', () => {
 
 	it(`should have its Spikes prevented by Sheer Force`, () => {
 		battle = common.createBattle([[
-			{species: 'samurotthisui', ability: 'sheerforce', moves: ['ceaselessedge']},
+			{ species: 'samurotthisui', ability: 'sheerforce', moves: ['ceaselessedge'] },
 		], [
-			{species: 'registeel', ability: 'noguard', moves: ['splash']},
+			{ species: 'registeel', ability: 'noguard', moves: ['splash'] },
 		]]);
 
 		battle.makeChoices();
@@ -85,10 +85,10 @@ describe('Ceaseless Edge', () => {
 
 	it(`should not set Spikes when the user faints from Rocky Helmet`, () => {
 		battle = common.createBattle([[
-			{species: 'samurotthisui', ability: 'noguard', item: 'focussash', moves: ['ceaselessedge']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'samurotthisui', ability: 'noguard', item: 'focussash', moves: ['ceaselessedge'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'regieleki', item: 'rockyhelmet', moves: ['sheercold']},
+			{ species: 'regieleki', item: 'rockyhelmet', moves: ['sheercold'] },
 		]]);
 
 		battle.makeChoices(); // Samurott will faint to the Rocky Helmet

@@ -6,7 +6,7 @@
  *
  * @license MIT license
  */
-import {Utils} from '../../lib';
+import { Utils } from '../../lib';
 
 type Color = 'Green' | 'Yellow' | 'Red' | 'Blue' | 'Black';
 interface Card {
@@ -18,7 +18,7 @@ interface Card {
 
 const MAX_TIME = 60; // seconds
 
-const rgbGradients: {[k in Color]: string} = {
+const rgbGradients: { [k in Color]: string } = {
 	Green: "rgba(0, 122, 0, 1), rgba(0, 185, 0, 0.9)",
 	Yellow: "rgba(255, 225, 0, 1), rgba(255, 255, 85, 0.9)",
 	Blue: "rgba(40, 40, 255, 1), rgba(125, 125, 255, 0.9)",
@@ -26,7 +26,7 @@ const rgbGradients: {[k in Color]: string} = {
 	Black: "rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.55)",
 };
 
-const textColors: {[k in Color]: string} = {
+const textColors: { [k in Color]: string } = {
 	Green: "rgb(0, 128, 0)",
 	Yellow: "rgb(175, 165, 40)",
 	Blue: "rgb(75, 75, 255)",
@@ -52,7 +52,7 @@ function createDeck() {
 
 	for (const color of colors) {
 		basic.push(...values.map(v => {
-			const c: Card = {value: v, color, name: `${color} ${v}`};
+			const c: Card = { value: v, color, name: `${color} ${v}` };
 			return c;
 		}));
 	}
@@ -63,17 +63,17 @@ function createDeck() {
 		...basic,
 		// The four 0s
 		...[0, 1, 2, 3].map(v => {
-			const c: Card = {color: colors[v], value: '0', name: `${colors[v]} 0`};
+			const c: Card = { color: colors[v], value: '0', name: `${colors[v]} 0` };
 			return c;
 		}),
 		// Wild cards
 		...[0, 1, 2, 3].map(v => {
-			const c: Card = {color: 'Black', value: 'Wild', name: 'Wild'};
+			const c: Card = { color: 'Black', value: 'Wild', name: 'Wild' };
 			return c;
 		}),
 		// Wild +4 cards
 		...[0, 1, 2, 3].map(v => {
-			const c: Card = {color: 'Black', value: '+4', name: 'Wild +4'};
+			const c: Card = { color: 'Black', value: '+4', name: 'Wild +4' };
 			return c;
 		}),
 	]; // 108 cards
@@ -95,7 +95,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 	unoId: ID | null = null;
 	direction: 1 | -1 = 1;
 	suppressMessages: boolean;
-	spectators: {[k: string]: number} = Object.create(null);
+	spectators: { [k: string]: number } = Object.create(null);
 	isPlusFour = false;
 	gameNumber: number;
 

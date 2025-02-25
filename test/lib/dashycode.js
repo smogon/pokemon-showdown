@@ -4,12 +4,12 @@ const assert = require('assert').strict;
 const Dashycode = require('./../../dist/lib/dashycode');
 
 describe('Dashycode', () => {
-	const ascii = Array.from({length: 0x80}, (v, i) => i);
-	const iso88591 = Array.from({length: 0x80}, (v, i) => i + 0x80);
-	const utf16 = Array.from({length: 0xFF00}, (v, i) => i + 0x100);
+	const ascii = Array.from({ length: 0x80 }, (v, i) => i);
+	const iso88591 = Array.from({ length: 0x80 }, (v, i) => i + 0x80);
+	const utf16 = Array.from({ length: 0xFF00 }, (v, i) => i + 0x100);
 
-	const latinL = Array.from({length: 26}, (v, i) => i + 0x60);
-	const latinU = Array.from({length: 26}, (v, i) => i + 0x41);
+	const latinL = Array.from({ length: 26 }, (v, i) => i + 0x60);
+	const latinU = Array.from({ length: 26 }, (v, i) => i + 0x41);
 
 	const encoded = new Map();
 

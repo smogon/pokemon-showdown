@@ -12,7 +12,7 @@
 
 import * as path from 'path';
 import * as child_process from 'child_process';
-import {FS, Utils, ProcessManager, SQL} from '../../lib';
+import { FS, Utils, ProcessManager, SQL } from '../../lib';
 
 interface ProcessData {
 	cmd: string;
@@ -30,7 +30,7 @@ function bash(command: string, context: Chat.CommandContext, cwd?: string): Prom
 	context.stafflog(`$ ${command}`);
 	if (!cwd) cwd = FS.ROOT_PATH;
 	return new Promise(resolve => {
-		child_process.exec(command, {cwd}, (error, stdout, stderr) => {
+		child_process.exec(command, { cwd }, (error, stdout, stderr) => {
 			let log = `[o] ${stdout}[e] ${stderr}`;
 			if (error) log = `[c] ${error.code}\n${log}`;
 			context.stafflog(log);
@@ -322,7 +322,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('addhtml', null, room);
 		if (!target) return this.parse("/help pminfobox");
 
-		const {targetUser, rest: html} = this.requireUser(target);
+		const { targetUser, rest: html } = this.requireUser(target);
 		this.checkHTML(html);
 		this.checkPMHTML(targetUser);
 
@@ -343,7 +343,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('addhtml', null, room);
 		if (!target) return this.parse("/help " + cmd);
 
-		const {targetUser, rest: html} = this.requireUser(target);
+		const { targetUser, rest: html } = this.requireUser(target);
 		this.checkHTML(html);
 		this.checkPMHTML(targetUser);
 
@@ -458,7 +458,7 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	highlighthtmlpage(target, room, user) {
-		const {targetUser, rest} = this.requireUser(target);
+		const { targetUser, rest } = this.requireUser(target);
 		let [pageid, title, highlight] = Utils.splitFirst(rest, ',', 2);
 
 		pageid = `${user.id}-${toID(pageid)}`;
@@ -555,7 +555,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.checkRecursion();
 
-		let {targetUser, rest: message} = this.requireUser(target);
+		let { targetUser, rest: message } = this.requireUser(target);
 
 		const auth = this.room ? this.room.auth : Users.globalAuth;
 		if (!['*', '#'].includes(auth.get(targetUser))) {
@@ -614,7 +614,7 @@ export const commands: Chat.ChatCommands = {
 
 		target = toID(target);
 		try {
-			Utils.clearRequireCache({exclude: ['/lib/process-manager']});
+			Utils.clearRequireCache({ exclude: ['/lib/process-manager'] });
 			if (target === 'all') {
 				if (lock['all']) {
 					return this.errorReply(`Hot-patching all has been disabled by ${lock['all'].by} (${lock['all'].reason})`);
@@ -670,7 +670,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply('Hotpatching processmanager prototypes...');
 
 				// keep references
-				const cache = {...require.cache};
+				const cache = { ...require.cache };
 				Utils.clearRequireCache();
 				const newPM = require('../../lib/process-manager');
 				require.cache = cache;
@@ -825,7 +825,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply("Hotpatching modlog...");
 
 				void Rooms.Modlog.database.destroy();
-				const {mainModlog} = require('../modlog');
+				const { mainModlog } = require('../modlog');
 				if (mainModlog.readyPromise) {
 					this.sendReply("Waiting for the new SQLite database to be ready...");
 					await mainModlog.readyPromise;
@@ -927,14 +927,14 @@ export const commands: Chat.ChatCommands = {
 
 		const cwd = FS.ROOT_PATH;
 		await new Promise<void>(resolve => {
-			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', {cwd}, (err, stdout) => {
+			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', { cwd }, (err, stdout) => {
 				if (err) throw err;
 				const rows = stdout.split('\n').slice(1); // first line is the table header
 				for (const row of rows) {
 					if (!row.trim()) continue;
 					const [pid, cpu, time, ram, ...rest] = row.split(' ').filter(Boolean);
 					if (pid === `${child.pid}`) continue; // ignore this process
-					const entry: ProcessData = {cmd: rest.join(' ')};
+					const entry: ProcessData = { cmd: rest.join(' ') };
 					// at the point of 0:00.[num], it's in so few seconds we don't care, so
 					// we don't need to clutter the display
 					if (time && !time.startsWith('0:00')) {
@@ -1053,7 +1053,7 @@ export const commands: Chat.ChatCommands = {
 		if (!parsed) {
 			return this.errorReply(`Command "/${target}" is in an invalid format.`);
 		}
-		const {handler, fullCmd} = parsed;
+		const { handler, fullCmd } = parsed;
 		if (!handler) {
 			return this.errorReply(`Command "/${target}" not found.`);
 		}
@@ -1548,7 +1548,7 @@ export const commands: Chat.ChatCommands = {
 		const database = SQL(module, {
 			file: `./databases/${db}.db`,
 			onError(err) {
-				return {err: err.message, stack: err.stack};
+				return { err: err.message, stack: err.stack };
 			},
 		});
 		function formatResult(result: any[] | string) {

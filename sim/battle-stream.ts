@@ -9,9 +9,9 @@
  * @license MIT
  */
 
-import {Streams, Utils} from '../lib';
-import {Teams} from './teams';
-import {Battle, extractChannelMessages} from './battle';
+import { Streams, Utils } from '../lib';
+import { Teams } from './teams';
+import { Battle, extractChannelMessages } from './battle';
 
 /**
  * Like string.split(delimiter), but only recognizes the first `limit`
@@ -363,7 +363,7 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 	readonly battleStream: BattleStream;
 	currentMessage: string;
 
-	constructor(options: {debug?: boolean}) {
+	constructor(options: { debug?: boolean }) {
 		super();
 		this.battleStream = new BattleStream(options);
 		this.currentMessage = '';

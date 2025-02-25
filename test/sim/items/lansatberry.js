@@ -12,8 +12,8 @@ describe('Lansat Berry', () => {
 
 	it('should apply a Focus Energy effect when consumed', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Aggron', ability: 'sturdy', item: 'lansatberry', moves: ['sleeptalk']}]});
-		battle.setPlayer('p2', {team: [{species: 'Lucario', ability: 'adaptability', moves: ['aurasphere']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Aggron', ability: 'sturdy', item: 'lansatberry', moves: ['sleeptalk'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Lucario', ability: 'adaptability', moves: ['aurasphere'] }] });
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move aurasphere');
 		assert.false.holdsItem(holder);
@@ -22,8 +22,8 @@ describe('Lansat Berry', () => {
 
 	it('should start to apply the effect even in middle of an attack', () => {
 		battle = common.createBattle([
-			[{species: 'Makuhita', ability: 'guts', item: 'lansatberry', moves: ['triplekick']}],
-			[{species: 'Muk', ability: 'noguard', item: 'rockyhelmet', moves: ['acidarmor']}],
+			[{ species: 'Makuhita', ability: 'guts', item: 'lansatberry', moves: ['triplekick'] }],
+			[{ species: 'Muk', ability: 'noguard', item: 'rockyhelmet', moves: ['acidarmor'] }],
 		]);
 		const holder = battle.p1.active[0];
 

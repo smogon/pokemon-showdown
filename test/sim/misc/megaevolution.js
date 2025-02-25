@@ -12,12 +12,12 @@ describe('Mega Evolution', () => {
 
 	it('should overwrite normally immutable abilities', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [
-			{species: "Metagross", ability: 'comatose', item: 'metagrossite', moves: ['metalclaw']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Wishiwashi", ability: 'schooling', moves: ['uturn']},
-		]});
+		battle.setPlayer('p1', { team: [
+			{ species: "Metagross", ability: 'comatose', item: 'metagrossite', moves: ['metalclaw'] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: "Wishiwashi", ability: 'schooling', moves: ['uturn'] },
+		] });
 		const megaMon = battle.p1.active[0];
 		battle.makeChoices('move metalclaw mega', 'move uturn');
 		assert.equal(megaMon.ability, 'toughclaws');
@@ -25,9 +25,9 @@ describe('Mega Evolution', () => {
 
 	it('[Hackmons] should be able to override different formes but not same forme', () => {
 		battle = common.createBattle([[
-			{species: "Charizard-Mega-Y", item: 'charizarditex', moves: ['protect']},
+			{ species: "Charizard-Mega-Y", item: 'charizarditex', moves: ['protect'] },
 		], [
-			{species: "Kangaskhan-Mega", item: 'kangaskhanite', moves: ['protect']},
+			{ species: "Kangaskhan-Mega", item: 'kangaskhanite', moves: ['protect'] },
 		]]);
 		assert.equal(battle.p1.active[0].species.name, 'Charizard-Mega-Y');
 		assert.throws(() => {
@@ -39,9 +39,9 @@ describe('Mega Evolution', () => {
 
 	it('should happen once', () => {
 		battle = common.gen(7).createBattle([[
-			{species: "Rayquaza", moves: ['dragondance', 'dragonascent']},
+			{ species: "Rayquaza", moves: ['dragondance', 'dragonascent'] },
 		], [
-			{species: "Steelix", moves: ['splash']},
+			{ species: "Steelix", moves: ['splash'] },
 		]]);
 		battle.makeChoices('move dragondance mega', 'move splash');
 		assert.throws(() => {
@@ -51,9 +51,9 @@ describe('Mega Evolution', () => {
 
 	it('should modify speed/priority in gen 7+', () => {
 		battle = common.createBattle([[
-			{species: 'Metagross', ability: 'prankster', item: 'metagrossite', moves: ['taunt']},
+			{ species: 'Metagross', ability: 'prankster', item: 'metagrossite', moves: ['taunt'] },
 		], [
-			{species: 'Wishiwashi', ability: 'prankster', moves: ['glare']},
+			{ species: 'Wishiwashi', ability: 'prankster', moves: ['glare'] },
 		]]);
 
 		battle.makeChoices('move taunt mega', 'auto');
@@ -61,9 +61,9 @@ describe('Mega Evolution', () => {
 		assert.equal(megaMon.status, 'par');
 
 		battle = common.createBattle([[
-			{species: 'Garchomp', item: 'garchompite', moves: ['taunt']},
+			{ species: 'Garchomp', item: 'garchompite', moves: ['taunt'] },
 		], [
-			{species: 'Jirachi', moves: ['glare']},
+			{ species: 'Jirachi', moves: ['glare'] },
 		]]);
 
 		battle.makeChoices('move taunt mega', 'auto');
@@ -71,9 +71,9 @@ describe('Mega Evolution', () => {
 		assert.equal(megaMon.status, 'par');
 
 		battle = common.createBattle([[
-			{species: 'Metagross', item: 'metagrossite', moves: ['taunt']},
+			{ species: 'Metagross', item: 'metagrossite', moves: ['taunt'] },
 		], [
-			{species: 'Jirachi', moves: ['glare']},
+			{ species: 'Jirachi', moves: ['glare'] },
 		]]);
 
 		battle.makeChoices('move taunt mega', 'auto');
@@ -81,9 +81,9 @@ describe('Mega Evolution', () => {
 		assert.equal(megaMon.status, '');
 
 		battle = common.gen(6).createBattle([[
-			{species: 'Metagross', ability: 'prankster', item: 'metagrossite', moves: ['taunt']},
+			{ species: 'Metagross', ability: 'prankster', item: 'metagrossite', moves: ['taunt'] },
 		], [
-			{species: 'Wishiwashi', ability: 'prankster', moves: ['glare']},
+			{ species: 'Wishiwashi', ability: 'prankster', moves: ['glare'] },
 		]]);
 
 		battle.makeChoices('move taunt mega', 'auto');
@@ -91,9 +91,9 @@ describe('Mega Evolution', () => {
 		assert.equal(megaMon.status, '');
 
 		battle = common.gen(6).createBattle([[
-			{species: 'Garchomp', item: 'garchompite', moves: ['taunt']},
+			{ species: 'Garchomp', item: 'garchompite', moves: ['taunt'] },
 		], [
-			{species: 'Jirachi', moves: ['glare']},
+			{ species: 'Jirachi', moves: ['glare'] },
 		]]);
 
 		battle.makeChoices('move taunt mega', 'auto');
@@ -103,12 +103,12 @@ describe('Mega Evolution', () => {
 
 	it('should not break priority', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [
-			{species: "Metagross", ability: 'quickfeet', item: 'metagrossite', moves: ['protect']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Ninjask", ability: 'quickfeet', moves: ['thunderwave']},
-		]});
+		battle.setPlayer('p1', { team: [
+			{ species: "Metagross", ability: 'quickfeet', item: 'metagrossite', moves: ['protect'] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: "Ninjask", ability: 'quickfeet', moves: ['thunderwave'] },
+		] });
 		const megaMon = battle.p1.active[0];
 		battle.makeChoices('move protect mega', 'auto');
 		assert.equal(megaMon.status, '');
@@ -116,13 +116,13 @@ describe('Mega Evolution', () => {
 
 	describe("Mega Rayquaza", () => {
 		const TEAMS = [[
-			{species: "Rayquaza", ability: 'airlock', moves: ['dragonascent'], evs: {hp: 1}},
+			{ species: "Rayquaza", ability: 'airlock', moves: ['dragonascent'], evs: { hp: 1 } },
 		], [
-			{species: "Rayquaza", ability: 'airlock', moves: ['protect'], evs: {hp: 1}},
+			{ species: "Rayquaza", ability: 'airlock', moves: ['protect'], evs: { hp: 1 } },
 		]];
 
 		function assertCanMega(formatid) {
-			battle = common.createBattle({formatid}, TEAMS);
+			battle = common.createBattle({ formatid }, TEAMS);
 			battle.makeChoices(); // team preview
 			battle.makeChoices('move 1 mega', 'auto');
 			assert.equal(battle.p1.active[0].species.name, "Rayquaza-Mega");
@@ -130,7 +130,7 @@ describe('Mega Evolution', () => {
 
 		function assertLegalButCantMega(formatid) {
 			assert.legalTeam(TEAMS[0], formatid);
-			battle = common.createBattle({formatid}, TEAMS);
+			battle = common.createBattle({ formatid }, TEAMS);
 			battle.makeChoices(); // team preview
 			assert.throws(() => battle.choose('p1', 'move 1 mega'));
 		}
@@ -163,7 +163,7 @@ describe('Mega Evolution', () => {
 			assertLegalButCantMega('gen9nationaldexag@@@-ndag');
 
 			// don't add it where unnecessary
-			const format = common.getFormat({formatid: 'gen4anythinggoes'});
+			const format = common.getFormat({ formatid: 'gen4anythinggoes' });
 			assert.false(Dex.formats.getRuleTable(format).has('megarayquazaclause'));
 		});
 	});

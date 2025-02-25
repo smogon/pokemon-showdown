@@ -2,7 +2,7 @@
 
 const assert = require('assert').strict;
 
-const {makeUser} = require('../users-utils');
+const { makeUser } = require('../users-utils');
 
 describe('Rooms features', () => {
 	describe('Rooms', () => {
@@ -50,17 +50,17 @@ describe('Rooms features', () => {
 			const p1 = makeUser();
 			const p2 = makeUser();
 			const options = [
-				{rated: false, tour: false},
-				{rated: false, tour: {onBattleWin() {}}},
-				{rated: true, tour: false},
-				{rated: true, tour: {onBattleWin() {}}},
+				{ rated: false, tour: false },
+				{ rated: false, tour: { onBattleWin() {} } },
+				{ rated: true, tour: false },
+				{ rated: true, tour: { onBattleWin() {} } },
 			];
 			for (const option of options) {
 				room = Rooms.createBattle({
 					format: 'customgame',
 					players: [
-						{user: p1, team: packedTeam},
-						{user: p2, team: packedTeam},
+						{ user: p1, team: packedTeam },
+						{ user: p2, team: packedTeam },
 					],
 					...option,
 				});
@@ -76,8 +76,8 @@ describe('Rooms features', () => {
 			room = Rooms.createBattle({
 				format: 'customgame',
 				players: [
-					{user: p1, team: packedTeam},
-					{user: p2, team: packedTeam},
+					{ user: p1, team: packedTeam },
+					{ user: p2, team: packedTeam },
 				],
 				rated: false,
 				auth: {},
@@ -100,8 +100,8 @@ describe('Rooms features', () => {
 			room = Rooms.createBattle({
 				format: 'customgame',
 				players: [
-					{user: p1, team: packedTeam},
-					{user: p2, team: packedTeam},
+					{ user: p1, team: packedTeam },
+					{ user: p2, team: packedTeam },
 				],
 				rated: false,
 				auth: {},
@@ -164,7 +164,7 @@ describe('Rooms features', () => {
 
 			it("should rename their parents subroom reference", async () => {
 				parent = Rooms.createChatRoom("parent", "Parent");
-				subroom = Rooms.createChatRoom("subroom", "Subroom", {parentid: "parent"});
+				subroom = Rooms.createChatRoom("subroom", "Subroom", { parentid: "parent" });
 				await subroom.rename("TheSubroom");
 				assert.equal(parent.subRooms.has("subroom"), false);
 				assert.equal(parent.subRooms.has("thesubroom"), true);
@@ -172,7 +172,7 @@ describe('Rooms features', () => {
 
 			it("should rename their subrooms parent reference", async () => {
 				parent = Rooms.createChatRoom("parent", "Parent");
-				subroom = Rooms.createChatRoom("subroom", "Subroom", {parentid: "parent"});
+				subroom = Rooms.createChatRoom("subroom", "Subroom", { parentid: "parent" });
 				await parent.rename("TheParent");
 				assert.equal(subroom.parent, parent);
 			});

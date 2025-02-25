@@ -1,4 +1,4 @@
-import {RESTORATIVE_BERRIES} from "../../../sim/pokemon";
+import { RESTORATIVE_BERRIES } from "../../../sim/pokemon";
 
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
@@ -129,7 +129,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const oldItem = this.getItem();
 			const oldItemState = this.itemState;
 			this.item = item.id;
-			this.itemState = this.battle.initEffectState({id: item.id, target: this});
+			this.itemState = this.battle.initEffectState({ id: item.id, target: this });
 			if (oldItem.exists) this.battle.singleEvent('End', oldItem, oldItemState, this);
 			if (item.id) {
 				this.battle.singleEvent('Start', item, this.itemState, this, source, effect);

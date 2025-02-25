@@ -12,9 +12,9 @@ describe('Disable', () => {
 
 	it(`should prevent the use of the target's last move`, () => {
 		battle = common.createBattle([[
-			{species: "Wynaut", moves: ['disable']},
+			{ species: "Wynaut", moves: ['disable'] },
 		], [
-			{species: "Spearow", moves: ['growl']},
+			{ species: "Spearow", moves: ['growl'] },
 		]]);
 
 		battle.makeChoices();
@@ -23,9 +23,9 @@ describe('Disable', () => {
 
 	it(`should interupt consecutively executed moves like Outrage`, () => {
 		battle = common.createBattle([[
-			{species: "Wynaut", moves: ['disable']},
+			{ species: "Wynaut", moves: ['disable'] },
 		], [
-			{species: "Spearow", moves: ['outrage', 'sleeptalk']},
+			{ species: "Spearow", moves: ['outrage', 'sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -36,9 +36,9 @@ describe('Disable', () => {
 
 	it(`should not work successfully against Struggle`, () => {
 		battle = common.createBattle([[
-			{species: "Wynaut", moves: ['disable']},
+			{ species: "Wynaut", moves: ['disable'] },
 		], [
-			{species: "Spearow", item: 'assaultvest', moves: ['growl']},
+			{ species: "Spearow", item: 'assaultvest', moves: ['growl'] },
 		]]);
 
 		battle.makeChoices();
@@ -47,10 +47,10 @@ describe('Disable', () => {
 
 	describe(`[Gen 1] Disable`, () => {
 		it(`should fail if the opponent already has a move disabled`, () => {
-			battle = common.createBattle({forceRandomChance: true}, [[
-				{species: 'Mew', moves: ['disable']},
+			battle = common.createBattle({ forceRandomChance: true }, [[
+				{ species: 'Mew', moves: ['disable'] },
 			], [
-				{species: 'Muk', moves: ['splash', 'tackle']},
+				{ species: 'Muk', moves: ['splash', 'tackle'] },
 			]]);
 			battle.makeChoices('auto', 'move tackle');
 			battle.makeChoices('auto', 'move splash');
@@ -59,20 +59,20 @@ describe('Disable', () => {
 		});
 
 		it(`should work on the first turn so long as the opponent has move with PP`, () => {
-			battle = common.gen(1).createBattle({forceRandomChance: true}, [[
-				{species: 'Mew', moves: ['disable']},
+			battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
+				{ species: 'Mew', moves: ['disable'] },
 			], [
-				{species: 'Muk', moves: ['roar']},
+				{ species: 'Muk', moves: ['roar'] },
 			]]);
 			battle.makeChoices();
 			assert('disable' in battle.p2.active[0].volatiles);
 		});
 
 		it(`should fail if opponent has no moves with PP`, () => {
-			battle = common.gen(1).createBattle({forceRandomChance: true}, [[
-				{species: 'Mew', moves: ['disable']},
+			battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
+				{ species: 'Mew', moves: ['disable'] },
 			], [
-				{species: 'Muk', moves: ['hyperbeam']},
+				{ species: 'Muk', moves: ['hyperbeam'] },
 			]]);
 			battle.p2.active[0].deductPP('hyperbeam', 8);
 			battle.makeChoices();
@@ -80,10 +80,10 @@ describe('Disable', () => {
 		});
 
 		it(`should not select moves with 0 PP`, () => {
-			battle = common.gen(1).createBattle({forceRandomChance: true}, [[
-				{species: 'Mew', moves: ['disable']},
+			battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
+				{ species: 'Mew', moves: ['disable'] },
 			], [
-				{species: 'Muk', moves: ['hyperbeam', 'fireblast', 'blizzard', 'tackle']},
+				{ species: 'Muk', moves: ['hyperbeam', 'fireblast', 'blizzard', 'tackle'] },
 			]]);
 			const muk = battle.p2.active[0];
 			muk.deductPP('hyperbeam', 8);
@@ -97,9 +97,9 @@ describe('Disable', () => {
 		it(`Disable should build Rage, even if it misses/fails`, () => {
 			// Disable hits
 			battle = common.gen(1).createBattle([[
-				{species: 'Drowzee', moves: ['disable']},
+				{ species: 'Drowzee', moves: ['disable'] },
 			], [
-				{species: 'Abra', moves: ['rage']},
+				{ species: 'Abra', moves: ['rage'] },
 			]]);
 			// Modding accuracy so Disable always hits
 			battle.onEvent('Accuracy', battle.format, true);
@@ -107,9 +107,9 @@ describe('Disable', () => {
 			assert(battle.log.some(line => line.startsWith('|-boost|')));
 
 			battle = common.gen(1).createBattle([[
-				{species: 'Drowzee', moves: ['disable']},
+				{ species: 'Drowzee', moves: ['disable'] },
 			], [
-				{species: 'Abra', moves: ['rage']},
+				{ species: 'Abra', moves: ['rage'] },
 			]]);
 			// Modding accuracy so Disable always misses
 			battle.onEvent('Accuracy', battle.format, (accuracy, target, pokemon, move) => {

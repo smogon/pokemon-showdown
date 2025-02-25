@@ -12,9 +12,9 @@ describe(`Terapagos`, () => {
 
 	it.skip(`should accept the Terastallization choice, but not Terastallize while Transformed into Terapagos-Terastal`, () => {
 		battle = common.gen(9).createBattle([[
-			{species: 'ditto', ability: 'imposter', moves: ['sleeptalk']},
+			{ species: 'ditto', ability: 'imposter', moves: ['sleeptalk'] },
 		], [
-			{species: 'terapagos', ability: 'terashift', moves: ['sleeptalk'], teraType: 'Stellar'},
+			{ species: 'terapagos', ability: 'terashift', moves: ['sleeptalk'], teraType: 'Stellar' },
 		]]);
 
 		// Currently throws a choice error
@@ -26,10 +26,10 @@ describe(`Terapagos`, () => {
 
 	it(`[Hackmons] should not cause Terapagos-Terastal to become Terapagos-Stellar if the user is Transformed`, () => {
 		battle = common.gen(9).createBattle([[
-			{species: 'terapagos', ability: 'terashift', moves: ['transform'], teraType: 'Stellar'},
-			{species: 'pikachu', moves: ['sleeptalk']},
+			{ species: 'terapagos', ability: 'terashift', moves: ['transform'], teraType: 'Stellar' },
+			{ species: 'pikachu', moves: ['sleeptalk'] },
 		], [
-			{species: 'silicobra', moves: ['sleeptalk']},
+			{ species: 'silicobra', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();

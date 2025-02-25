@@ -11,12 +11,12 @@ describe('Spikes', () => {
 	});
 
 	it(`should apply one layer per use in a double battle`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Bronzong', moves: ['sleeptalk']},
-			{species: 'Cufant', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Bronzong', moves: ['sleeptalk'] },
+			{ species: 'Cufant', moves: ['sleeptalk'] },
 		], [
-			{species: 'Qwilfish', moves: ['sleeptalk']},
-			{species: 'Glalie', moves: ['spikes']},
+			{ species: 'Qwilfish', moves: ['sleeptalk'] },
+			{ species: 'Glalie', moves: ['spikes'] },
 		]]);
 
 		battle.makeChoices();
@@ -24,14 +24,14 @@ describe('Spikes', () => {
 	});
 
 	it(`should be bounced without any layers being set by the original user`, () => {
-		battle = common.createBattle({gameType: 'freeforall'}, [[
-			{species: 'Hatterene', ability: 'Magic Bounce', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'freeforall' }, [[
+			{ species: 'Hatterene', ability: 'Magic Bounce', moves: ['sleeptalk'] },
 		], [
-			{species: 'Cufant', moves: ['sleeptalk']},
+			{ species: 'Cufant', moves: ['sleeptalk'] },
 		], [
-			{species: 'Qwilfish', moves: ['sleeptalk']},
+			{ species: 'Qwilfish', moves: ['sleeptalk'] },
 		], [
-			{species: 'Glalie', moves: ['spikes']},
+			{ species: 'Glalie', moves: ['spikes'] },
 		]]);
 
 		battle.makeChoices();

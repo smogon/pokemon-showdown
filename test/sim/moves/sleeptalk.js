@@ -12,9 +12,9 @@ describe('Sleep Talk', () => {
 
 	it('should run conditions for submove', () => {
 		battle = common.createBattle([[
-			{species: 'snorlax', ability: 'noguard', moves: ['sleeptalk', 'highjumpkick']},
+			{ species: 'snorlax', ability: 'noguard', moves: ['sleeptalk', 'highjumpkick'] },
 		], [
-			{species: 'breloom', moves: ['spore', 'gravity']},
+			{ species: 'breloom', moves: ['spore', 'gravity'] },
 		]]);
 		battle.makeChoices('move sleeptalk', 'move gravity');
 		battle.makeChoices('move sleeptalk', 'move spore');
@@ -24,9 +24,9 @@ describe('Sleep Talk', () => {
 
 	it('should fail and lose PP on subsequent turns while Choice locked, prior to Gen 5', () => {
 		battle = common.gen(4).createBattle([[
-			{species: 'Breloom', moves: ['spore', 'snore']},
+			{ species: 'Breloom', moves: ['spore', 'snore'] },
 		], [
-			{species: 'Chansey', item: 'choiceband', moves: ['sleeptalk', 'pound']},
+			{ species: 'Chansey', item: 'choiceband', moves: ['sleeptalk', 'pound'] },
 		]]);
 		const breloom = battle.p1.active[0];
 		const chansey = battle.p2.active[0];

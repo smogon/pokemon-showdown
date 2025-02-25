@@ -11,12 +11,12 @@ describe(`Speed`, () => {
 	});
 
 	it.skip(`should cap chained Speed modifiers at 410 as a lower bound`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'regigigas', ability: 'slowstart', item: 'ironball', moves: ['waterpledge']},
-			{species: 'ivysaur', moves: ['grasspledge']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'regigigas', ability: 'slowstart', item: 'ironball', moves: ['waterpledge'] },
+			{ species: 'ivysaur', moves: ['grasspledge'] },
 		], [
-			{species: 'wynaut', moves: ['sleeptalk']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['sleeptalk'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move waterpledge -2, move grasspledge -1', 'auto');
 		const regigigas = battle.p1.active[0];

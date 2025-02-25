@@ -1,12 +1,12 @@
-import type {SSBSet} from "./random-teams";
-import type {ChosenAction} from '../../../sim/side';
-import {FS} from '../../../lib';
-import {toID} from '../../../sim/dex-data';
-import {type SwitchAction} from "../../../sim/battle-queue";
+import type { SSBSet } from "./random-teams";
+import type { ChosenAction } from '../../../sim/side';
+import { FS } from '../../../lib';
+import { toID } from '../../../sim/dex-data';
+import { type SwitchAction } from "../../../sim/battle-queue";
 
 // Similar to User.usergroups. Cannot import here due to users.ts requiring Chat
 // This also acts as a cache, meaning ranks will only update when a hotpatch/restart occurs
-const usergroups: {[userid: string]: string} = {};
+const usergroups: { [userid: string]: string } = {};
 const usergroupData = FS('config/usergroups.csv').readIfExistsSync().split('\n');
 for (const row of usergroupData) {
 	if (!toID(row)) continue;
@@ -16,7 +16,7 @@ for (const row of usergroupData) {
 	usergroups[toID(cells[0])] = cells[1].trim() || ' ';
 }
 
-const roomauth: {[roomid: string]: {[userid: string]: string}} = {};
+const roomauth: { [roomid: string]: { [userid: string]: string } } = {};
 /**
  * Given a username and room, returns the auth they have in that room. Used for some conditional messages/effects.
  * Each room is cached on the first call until the process is restarted.
@@ -170,9 +170,9 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (!target?.hp) return 0;
 		if (!target.isActive) return false;
 		if (this.gen > 5 && !target.side.foePokemonLeft()) return false;
-		boost = this.runEvent('ChangeBoost', target, source, effect, {...boost});
+		boost = this.runEvent('ChangeBoost', target, source, effect, { ...boost });
 		boost = target.getCappedBoost(boost);
-		boost = this.runEvent('TryBoost', target, source, effect, {...boost});
+		boost = this.runEvent('TryBoost', target, source, effect, { ...boost });
 		let success = null;
 		let boosted = isSecondary;
 		let boostName: BoostID;
@@ -389,7 +389,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// pokemon.setAbility(species.abilities['0'], null, true);
 				// pokemon.baseAbility = pokemon.ability;
 
-				const behemothMove: {[k: string]: string} = {
+				const behemothMove: { [k: string]: string } = {
 					'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 				};
 				const ironHead = pokemon.baseMoves.indexOf('ironhead');
@@ -531,13 +531,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			action.target.faint();
 			if (percent > 66) {
 				this.add('message', `Your courage will be greatly rewarded.`);
-				this.boost({atk: 3, spa: 3, spe: 3}, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
+				this.boost({ atk: 3, spa: 3, spe: 3 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
 			} else if (percent > 33) {
 				this.add('message', `Your offering was accepted.`);
-				this.boost({atk: 2, spa: 2, spe: 2}, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
+				this.boost({ atk: 2, spa: 2, spe: 2 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
 			} else {
 				this.add('message', `Coward.`);
-				this.boost({atk: 1, spa: 1, spe: 1}, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
+				this.boost({ atk: 1, spa: 1, spe: 1 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
 			}
 			this.add(`c:|${getName((action.pokemon.illusion || action.pokemon).name)}|Don't worry, if this plan fails we can just blame ${action.target.name}`);
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'scapegoat');
@@ -916,7 +916,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
 				this.runSwitch(pokemon);
 			} else {
-				this.battle.queue.insertChoice({choice: 'runSwitch', pokemon});
+				this.battle.queue.insertChoice({ choice: 'runSwitch', pokemon });
 			}
 
 			return true;
@@ -1001,7 +1001,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (zMoveName) {
 					const zMove = this.dex.moves.get(zMoveName);
 					if (!zMove.isZ && zMove.category === 'Status') zMoveName = "Z-" + zMoveName;
-					zMoves.push({move: zMoveName, target: zMove.target});
+					zMoves.push({ move: zMoveName, target: zMove.target });
 				} else {
 					zMoves.push(null);
 				}
@@ -1058,11 +1058,11 @@ export const Scripts: ModdedBattleScriptsData = {
 					if (accuracy !== true) {
 						let boost = 0;
 						if (!move.ignoreAccuracy) {
-							const boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, {...pokemon.boosts});
+							const boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
 							boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
 						}
 						if (!move.ignoreEvasion) {
-							const boosts = this.battle.runEvent('ModifyBoost', target, null, null, {...target.boosts});
+							const boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
 							boost = this.battle.clampIntRange(boost - boosts['evasion'], -6, 6);
 						}
 						if (boost > 0) {
@@ -1100,7 +1100,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						}
 					}
 					if (!move.ohko && pokemon.hasItem('blunderpolicy') && pokemon.useItem()) {
-						this.battle.boost({spe: 2}, pokemon);
+						this.battle.boost({ spe: 2 }, pokemon);
 					}
 					hitResults[i] = false;
 					continue;
@@ -1199,7 +1199,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			const oldActiveMove = move;
 
-			const moveDidSomething = this.useMove(baseMove, pokemon, {target, sourceEffect, zMove, maxMove});
+			const moveDidSomething = this.useMove(baseMove, pokemon, { target, sourceEffect, zMove, maxMove });
 			this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
 			if (this.battle.activeMove) move = this.battle.activeMove;
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
@@ -1230,7 +1230,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						targetOf1stDance :
 						pokemon;
 					const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-					this.runMove(move.id, dancer, dancersTargetLoc, {sourceEffect: dancer.getAbility(), externalMove: true});
+					this.runMove(move.id, dancer, dancersTargetLoc, { sourceEffect: dancer.getAbility(), externalMove: true });
 				}
 			}
 			if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
@@ -1275,7 +1275,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!move.hasBounced) move.pranksterBoosted = this.battle.activeMove.pranksterBoosted;
 			}
 			const baseTarget = move.target;
-			let targetRelayVar = {target};
+			let targetRelayVar = { target };
 			targetRelayVar = this.battle.runEvent('ModifyTarget', pokemon, target, move, targetRelayVar, true);
 			if (targetRelayVar.target !== undefined) target = targetRelayVar.target;
 			if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
@@ -1327,7 +1327,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			const {targets, pressureTargets} = pokemon.getMoveTargets(move, target);
+			const { targets, pressureTargets } = pokemon.getMoveTargets(move, target);
 			if (targets.length) {
 				target = targets[targets.length - 1]; // in case of redirection
 			}
@@ -1466,7 +1466,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 					if (accuracy !== true) {
 						if (!move.ignoreAccuracy) {
-							const boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, {...pokemon.boosts});
+							const boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
 							const boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
 							if (boost > 0) {
 								accuracy *= boostTable[boost];
@@ -1475,7 +1475,7 @@ export const Scripts: ModdedBattleScriptsData = {
 							}
 						}
 						if (!move.ignoreEvasion) {
-							const boosts = this.battle.runEvent('ModifyBoost', target, null, null, {...target.boosts});
+							const boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
 							const boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
 							if (boost > 0) {
 								accuracy /= boostTable[boost];
@@ -1554,7 +1554,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				} else {
 					recoilDamage = this.battle.clampIntRange(this.battle.trunc(pokemon.maxhp / 4), 1);
 				}
-				this.battle.directDamage(recoilDamage, pokemon, pokemon, {id: 'strugglerecoil'} as Condition);
+				this.battle.directDamage(recoilDamage, pokemon, pokemon, { id: 'strugglerecoil' } as Condition);
 				if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
 					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
 				}
@@ -1794,7 +1794,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (!target || (target.fainted && !target.isAlly(this)) && this.battle.gameType !== 'freeforall') {
 					// If a targeted foe faints, the move is retargeted
 					const possibleTarget = this.battle.getRandomTarget(this, move);
-					if (!possibleTarget) return {targets: [], pressureTargets: []};
+					if (!possibleTarget) return { targets: [], pressureTargets: [] };
 					target = possibleTarget;
 				}
 				if (this.battle.activePerHalf > 1 && !move.tracksTarget) {
@@ -1815,7 +1815,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					targets.push(target);
 				}
 				if (target.fainted && !move.flags['futuremove']) {
-					return {targets: [], pressureTargets: []};
+					return { targets: [], pressureTargets: [] };
 				}
 				if (selectedTarget !== target) {
 					this.battle.retargetLastMove(target);
@@ -1831,7 +1831,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				pressureTargets = this.foes();
 			}
 
-			return {targets, pressureTargets};
+			return { targets, pressureTargets };
 		},
 	},
 	side: {
@@ -1992,7 +1992,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!action.side && action.pokemon) action.side = action.pokemon.side;
 			if (!action.move && action.moveid) action.move = this.battle.dex.getActiveMove(action.moveid);
 			if (!action.order) {
-				const orders: {[choice: string]: number} = {
+				const orders: { [choice: string]: number } = {
 					team: 1,
 					start: 2,
 					instaswitch: 3,

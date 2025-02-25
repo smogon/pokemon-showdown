@@ -5,7 +5,7 @@
  * https://github.com/Hidden50/Pokemon-Showdown-Node-Bot/blob/master/commands/base-auctions.js
  * @author Karthik
  */
-import {Net, Utils} from '../../lib';
+import { Net, Utils } from '../../lib';
 
 interface Player {
 	id: ID;
@@ -261,7 +261,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	sendTimer(change = false, nom = false) {
 		let buf = `<div class="infobox message-error">`;
-		buf += `<i class="fa fa-hourglass-start"></i> ${Chat.toDurationString((nom ? this.nomTimeRemaining : this.bidTimeRemaining) * 1000, {hhmmss: true}).slice(1)}`;
+		buf += `<i class="fa fa-hourglass-start"></i> ${Chat.toDurationString((nom ? this.nomTimeRemaining : this.bidTimeRemaining) * 1000, { hhmmss: true }).slice(1)}`;
 		buf += `</div>`;
 		this.room.add(`|uhtml${change ? 'change' : ''}|timer|${buf}`).update();
 	}
@@ -465,7 +465,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		for (const id of users.map(toID)) {
 			const manager = this.managers.get(id);
 			if (!manager) {
-				this.managers.set(id, {id, team});
+				this.managers.set(id, { id, team });
 			} else {
 				manager.team = team;
 			}

@@ -12,10 +12,10 @@ describe('Wonder Room', () => {
 
 	it(`should swap the raw Defense and Special Defense stats, but not stat stage changes or other defense modifiers`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', moves: ['brickbreak']},
+			{ species: 'Wynaut', moves: ['brickbreak'] },
 		], [
-			{species: 'Blissey', ability: 'shellarmor', moves: ['wonderroom', 'defensecurl', 'roost']},
-			{species: 'Chansey', ability: 'shellarmor', item: 'assaultvest', moves: ['sleeptalk']},
+			{ species: 'Blissey', ability: 'shellarmor', moves: ['wonderroom', 'defensecurl', 'roost'] },
+			{ species: 'Chansey', ability: 'shellarmor', item: 'assaultvest', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -36,9 +36,9 @@ describe('Wonder Room', () => {
 
 	it(`should cause Body Press to use Sp. Def stat stage changes`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', moves: ['amnesia', 'bodypress']},
+			{ species: 'Wynaut', moves: ['amnesia', 'bodypress'] },
 		], [
-			{species: 'Blissey', ability: 'shellarmor', moves: ['wonderroom', 'sleeptalk']},
+			{ species: 'Blissey', ability: 'shellarmor', moves: ['wonderroom', 'sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -50,10 +50,10 @@ describe('Wonder Room', () => {
 
 	it(`should be ignored by Download when determining raw stats, but not stat stage changes`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', moves: ['wonderroom']},
-			{species: 'Porygon', ability: 'download', moves: ['sleeptalk']},
+			{ species: 'Wynaut', moves: ['wonderroom'] },
+			{ species: 'Porygon', ability: 'download', moves: ['sleeptalk'] },
 		], [
-			{species: 'Venusaur', moves: ['sleeptalk', 'amnesia']},
+			{ species: 'Venusaur', moves: ['sleeptalk', 'amnesia'] },
 		]]);
 
 		battle.makeChoices();

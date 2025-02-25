@@ -12,9 +12,9 @@ describe('Color Change', () => {
 
 	it('should change the user\'s type when struck by a move', () => {
 		battle = common.createBattle([[
-			{species: "Kecleon", ability: 'colorchange', moves: ['recover']},
+			{ species: "Kecleon", ability: 'colorchange', moves: ['recover'] },
 		], [
-			{species: "Paras", ability: 'damp', moves: ['absorb']},
+			{ species: "Paras", ability: 'damp', moves: ['absorb'] },
 		]]);
 		const ccMon = battle.p1.active[0];
 		battle.makeChoices('move Recover', 'move Absorb');
@@ -23,9 +23,9 @@ describe('Color Change', () => {
 
 	it('should not change the user\'s type if it had a Substitute when hit', () => {
 		battle = common.createBattle([[
-			{species: "Kecleon", ability: 'colorchange', moves: ['substitute']},
+			{ species: "Kecleon", ability: 'colorchange', moves: ['substitute'] },
 		], [
-			{species: "Machamp", ability: 'purepower', item: 'laggingtail', moves: ['closecombat']},
+			{ species: "Machamp", ability: 'purepower', item: 'laggingtail', moves: ['closecombat'] },
 		]]);
 		const ccMon = battle.p1.active[0];
 		battle.makeChoices('move Substitute', 'move Closecombat');

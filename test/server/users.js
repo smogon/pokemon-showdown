@@ -2,7 +2,7 @@
 
 const assert = require('assert').strict;
 
-const {makeUser, makeConnection} = require('../users-utils');
+const { makeUser, makeConnection } = require('../users-utils');
 
 describe('Users features', () => {
 	describe('Users', () => {

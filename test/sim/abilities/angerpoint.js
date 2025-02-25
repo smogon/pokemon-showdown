@@ -12,9 +12,9 @@ describe('Anger Point', () => {
 
 	it('should maximize Attack when hit by a critical hit', () => {
 		battle = common.createBattle([[
-			{species: "Cryogonal", ability: 'noguard', moves: ['frostbreath']},
+			{ species: "Cryogonal", ability: 'noguard', moves: ['frostbreath'] },
 		], [
-			{species: "Primeape", ability: 'angerpoint', moves: ['endure']},
+			{ species: "Primeape", ability: 'angerpoint', moves: ['endure'] },
 		]]);
 		const angerMon = battle.p2.active[0];
 
@@ -24,9 +24,9 @@ describe('Anger Point', () => {
 
 	it('should maximize Attack when hit by a critical hit even if the foe has Mold Breaker', () => {
 		battle = common.createBattle([[
-			{species: "Haxorus", ability: 'moldbreaker', item: 'scopelens', moves: ['focusenergy', 'falseswipe']},
+			{ species: "Haxorus", ability: 'moldbreaker', item: 'scopelens', moves: ['focusenergy', 'falseswipe'] },
 		], [
-			{species: "Primeape", ability: 'angerpoint', moves: ['defensecurl']},
+			{ species: "Primeape", ability: 'angerpoint', moves: ['defensecurl'] },
 		]]);
 		const angerMon = battle.p2.active[0];
 
@@ -37,9 +37,9 @@ describe('Anger Point', () => {
 
 	it('should not maximize Attack when dealing a critical hit', () => {
 		battle = common.createBattle([[
-			{species: "Cryogonal", ability: 'noguard', moves: ['endure']},
+			{ species: "Cryogonal", ability: 'noguard', moves: ['endure'] },
 		], [
-			{species: "Primeape", ability: 'angerpoint', moves: ['stormthrow']},
+			{ species: "Primeape", ability: 'angerpoint', moves: ['stormthrow'] },
 		]]);
 		const [defender, angerMon] = [battle.p1.active[0], battle.p2.active[0]];
 
@@ -50,9 +50,9 @@ describe('Anger Point', () => {
 
 	it('should not maximize Attack when behind a substitute', () => {
 		battle = common.createBattle([[
-			{species: "Cryogonal", ability: 'noguard', item: 'laggingtail', moves: ['frostbreath']},
+			{ species: "Cryogonal", ability: 'noguard', item: 'laggingtail', moves: ['frostbreath'] },
 		], [
-			{species: "Primeape", ability: 'angerpoint', moves: ['substitute']},
+			{ species: "Primeape", ability: 'angerpoint', moves: ['substitute'] },
 		]]);
 		const angerMon = battle.p2.active[0];
 

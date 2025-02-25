@@ -11,7 +11,7 @@
  *
  * @license MIT
  */
-import {Utils} from '../lib';
+import { Utils } from '../lib';
 
 export class LadderStore {
 	formatid: string;

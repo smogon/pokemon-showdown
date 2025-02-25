@@ -12,8 +12,8 @@ describe('Dazzling', () => {
 
 	it('should block moves with positive priority', () => {
 		battle = common.createBattle([
-			[{species: "Sableye", ability: 'prankster', moves: ['taunt']}],
-			[{species: "Bruxish", ability: 'dazzling', moves: ['swordsdance']}],
+			[{ species: "Sableye", ability: 'prankster', moves: ['taunt'] }],
+			[{ species: "Bruxish", ability: 'dazzling', moves: ['swordsdance'] }],
 		]);
 
 		battle.makeChoices('move taunt', 'move swordsdance');
@@ -22,8 +22,8 @@ describe('Dazzling', () => {
 
 	it('should not block moves that target all Pokemon, except Perish Song, Rototiller, and Flower Shield', () => {
 		battle = common.createBattle([
-			[{species: "Bruxish", ability: 'dazzling', moves: ['swordsdance', 'sleeptalk']}],
-			[{species: "Mew", ability: 'prankster', moves: ['perishsong', 'haze']}],
+			[{ species: "Bruxish", ability: 'dazzling', moves: ['swordsdance', 'sleeptalk'] }],
+			[{ species: "Mew", ability: 'prankster', moves: ['perishsong', 'haze'] }],
 		]);
 
 		battle.makeChoices('move swordsdance', 'move perishsong');

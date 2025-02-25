@@ -12,10 +12,10 @@ describe('Intrepid Sword', () => {
 
 	it(`should only increase the user's Attack stat once per game`, () => {
 		battle = common.createBattle([[
-			{species: 'Zacian', ability: 'intrepidsword', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Zacian', ability: 'intrepidsword', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Mew', moves: ['sleeptalk']},
+			{ species: 'Mew', moves: ['sleeptalk'] },
 		]]);
 
 		const zacian = battle.p1.active[0];
@@ -27,10 +27,10 @@ describe('Intrepid Sword', () => {
 
 	it(`should use up its once-per-game boost if it switches in with +6 Attack`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', moves: ['bellydrum', 'batonpass']},
-			{species: 'Zacian', ability: 'intrepidsword', moves: ['sleeptalk']},
+			{ species: 'Wynaut', moves: ['bellydrum', 'batonpass'] },
+			{ species: 'Zacian', ability: 'intrepidsword', moves: ['sleeptalk'] },
 		], [
-			{species: 'Mew', moves: ['sleeptalk']},
+			{ species: 'Mew', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move bellydrum', 'auto');
@@ -44,10 +44,10 @@ describe('Intrepid Sword', () => {
 
 	it(`should not use up its once-per-game boost if it switches in while its Ability is suppressed`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', moves: ['batonpass']},
-			{species: 'Zacian', ability: 'intrepidsword', moves: ['sleeptalk']},
+			{ species: 'Wynaut', moves: ['batonpass'] },
+			{ species: 'Zacian', ability: 'intrepidsword', moves: ['sleeptalk'] },
 		], [
-			{species: 'Mew', moves: ['sleeptalk', 'gastroacid']},
+			{ species: 'Mew', moves: ['sleeptalk', 'gastroacid'] },
 		]]);
 
 		battle.makeChoices('move batonpass', 'move gastroacid');
@@ -62,10 +62,10 @@ describe('Intrepid Sword', () => {
 
 	it(`should be able to increase the user's Attack stat multiple times per game [Gen 8]`, () => {
 		battle = common.gen(8).createBattle([[
-			{species: 'Zacian', ability: 'intrepidsword', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Zacian', ability: 'intrepidsword', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Mew', moves: ['sleeptalk']},
+			{ species: 'Mew', moves: ['sleeptalk'] },
 		]]);
 
 		const zacian = battle.p1.active[0];

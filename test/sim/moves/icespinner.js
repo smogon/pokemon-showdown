@@ -12,9 +12,9 @@ describe(`Ice Spinner`, () => {
 
 	it(`should remove Terrains if the user is active and on the field`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', moves: ['icespinner']},
+			{ species: 'wynaut', moves: ['icespinner'] },
 		], [
-			{species: 'registeel', ability: 'psychicsurge', moves: ['sleeptalk']},
+			{ species: 'registeel', ability: 'psychicsurge', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -23,10 +23,10 @@ describe(`Ice Spinner`, () => {
 
 	it.skip(`should not remove Terrains if the user faints from Life Orb`, () => {
 		battle = common.createBattle([[
-			{species: 'shedinja', item: 'lifeorb', moves: ['icespinner']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'shedinja', item: 'lifeorb', moves: ['icespinner'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'registeel', ability: 'psychicsurge', moves: ['sleeptalk']},
+			{ species: 'registeel', ability: 'psychicsurge', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -35,10 +35,10 @@ describe(`Ice Spinner`, () => {
 
 	it(`should not remove Terrains if the user faints from Rocky Helmet`, () => {
 		battle = common.createBattle([[
-			{species: 'shedinja', moves: ['icespinner']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'shedinja', moves: ['icespinner'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'registeel', item: 'rockyhelmet', ability: 'psychicsurge', moves: ['sleeptalk']},
+			{ species: 'registeel', item: 'rockyhelmet', ability: 'psychicsurge', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -47,10 +47,10 @@ describe(`Ice Spinner`, () => {
 
 	it.skip(`should not remove Terrains if the user is forced out via Red Card`, () => {
 		battle = common.createBattle([[
-			{species: 'shedinja', moves: ['icespinner']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'shedinja', moves: ['icespinner'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'registeel', item: 'redcard', ability: 'psychicsurge', moves: ['sleeptalk']},
+			{ species: 'registeel', item: 'redcard', ability: 'psychicsurge', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();

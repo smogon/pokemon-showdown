@@ -12,9 +12,9 @@ describe('Seeds', () => {
 
 	it(`should activate even on a double-switch-in`, () => {
 		battle = common.createBattle([[
-			{species: 'Tapu Koko', ability: 'electricsurge', item: 'grassyseed', moves: ['protect']},
+			{ species: 'Tapu Koko', ability: 'electricsurge', item: 'grassyseed', moves: ['protect'] },
 		], [
-			{species: 'Tapu Bulu', ability: 'grassysurge', item: 'electricseed', moves: ['protect']},
+			{ species: 'Tapu Bulu', ability: 'grassysurge', item: 'electricseed', moves: ['protect'] },
 		]]);
 		assert.false.holdsItem(battle.p1.active[0]);
 		assert.false.holdsItem(battle.p2.active[0]);
@@ -22,10 +22,10 @@ describe('Seeds', () => {
 
 	it(`should not activate when Magic Room ends`, () => {
 		battle = common.createBattle([[
-			{species: 'Tapu Koko', ability: 'electricsurge', moves: ['protect']},
-			{species: 'Hawlucha', item: 'electricseed', moves: ['protect']},
+			{ species: 'Tapu Koko', ability: 'electricsurge', moves: ['protect'] },
+			{ species: 'Hawlucha', item: 'electricseed', moves: ['protect'] },
 		], [
-			{species: 'Alakazam', moves: ['magicroom']},
+			{ species: 'Alakazam', moves: ['magicroom'] },
 		]]);
 		battle.makeChoices('move protect', 'move magicroom');
 		battle.makeChoices('switch 2', 'move magicroom');
@@ -34,11 +34,11 @@ describe('Seeds', () => {
 
 	it(`should activate on switching in after other entrance Abilities, at the same time as Primal reversion`, () => {
 		battle = common.createBattle([[
-			{species: 'Tapu Koko', ability: 'electricsurge', moves: ['finalgambit']},
-			{species: 'Groudon', ability: 'drought', item: 'redorb', moves: ['sleeptalk']},
+			{ species: 'Tapu Koko', ability: 'electricsurge', moves: ['finalgambit'] },
+			{ species: 'Groudon', ability: 'drought', item: 'redorb', moves: ['sleeptalk'] },
 		], [
-			{species: 'Bounsweet', moves: ['sleeptalk']},
-			{species: 'Shuckle', item: 'electricseed', moves: ['sleeptalk']},
+			{ species: 'Bounsweet', moves: ['sleeptalk'] },
+			{ species: 'Shuckle', item: 'electricseed', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices();
@@ -51,12 +51,12 @@ describe('Seeds', () => {
 	});
 
 	it(`should not cause items passed by Symbiosis to be consumed arbitrarily`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Miraidon', ability: 'hadronengine', item: 'electricseed', moves: ['protect']},
-			{species: 'Oranguru', ability: 'symbiosis', item: 'covertcloak', moves: ['protect']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Miraidon', ability: 'hadronengine', item: 'electricseed', moves: ['protect'] },
+			{ species: 'Oranguru', ability: 'symbiosis', item: 'covertcloak', moves: ['protect'] },
 		], [
-			{species: 'Alakazam', moves: ['sleeptalk']},
-			{species: 'Alakazam', moves: ['sleeptalk']},
+			{ species: 'Alakazam', moves: ['sleeptalk'] },
+			{ species: 'Alakazam', moves: ['sleeptalk'] },
 		]]);
 		assert.equal(battle.p1.active[0].item, 'covertcloak', "Miraidon should hold Covert Cloak");
 		assert.false.holdsItem(battle.p1.active[1]);

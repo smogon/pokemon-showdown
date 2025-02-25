@@ -4,12 +4,12 @@ const assert = require('assert').strict;
 const common = require('./../../common');
 
 let battle;
-const unimportantPokemon = {species: 'magikarp', moves: ['splash']};
+const unimportantPokemon = { species: 'magikarp', moves: ['splash'] };
 
 describe(`[Hackmons] Arceus`, () => {
 	it(`in untyped forme should change its type to match the plate held`, () => {
 		battle = common.gen(4).createBattle([[
-			{species: 'arceus', ability: 'multitype', item: 'flameplate', moves: ['rest']},
+			{ species: 'arceus', ability: 'multitype', item: 'flameplate', moves: ['rest'] },
 		], [
 			unimportantPokemon,
 		]]);
@@ -19,7 +19,7 @@ describe(`[Hackmons] Arceus`, () => {
 
 	it(`in Steel forme should should be Water-typed to match the held Splash Plate`, () => {
 		battle = common.gen(4).createBattle([[
-			{species: 'arceussteel', ability: 'multitype', item: 'splashplate', moves: ['rest']},
+			{ species: 'arceussteel', ability: 'multitype', item: 'splashplate', moves: ['rest'] },
 		], [
 			unimportantPokemon,
 		]]);
@@ -29,7 +29,7 @@ describe(`[Hackmons] Arceus`, () => {
 
 	it(`in a typed forme should be Normal-typed if no plate is held`, () => {
 		battle = common.gen(4).createBattle([[
-			{species: 'arceusfire', ability: 'multitype', item: 'leftovers', moves: ['rest']},
+			{ species: 'arceusfire', ability: 'multitype', item: 'leftovers', moves: ['rest'] },
 		], [
 			unimportantPokemon,
 		]]);
@@ -39,7 +39,7 @@ describe(`[Hackmons] Arceus`, () => {
 
 	it(`in a typed forme should be Normal-typed despite holding a plate if Arceus does not have the Multitype ability`, () => {
 		battle = common.gen(4).createBattle([[
-			{species: 'arceusfire', ability: 'truant', item: 'flameplate', moves: ['rest']},
+			{ species: 'arceusfire', ability: 'truant', item: 'flameplate', moves: ['rest'] },
 		], [
 			unimportantPokemon,
 		]]);
@@ -49,9 +49,9 @@ describe(`[Hackmons] Arceus`, () => {
 
 	it(`should not be able to lose its typing`, () => {
 		battle = common.createBattle([[
-			{species: 'arceus', ability: 'multitype', item: 'flameplate', moves: ['burnup']},
+			{ species: 'arceus', ability: 'multitype', item: 'flameplate', moves: ['burnup'] },
 		], [
-			{species: 'reuniclus', moves: ['soak']},
+			{ species: 'reuniclus', moves: ['soak'] },
 		]]);
 		battle.makeChoices();
 		const arceus = battle.p1.active[0];
@@ -60,9 +60,9 @@ describe(`[Hackmons] Arceus`, () => {
 
 	it(`should use Arceus's real type for Revelation Dance`, () => {
 		battle = common.gen(7).createBattle([[
-			{species: 'arceusfire', ability: 'sandrush', moves: ['revelationdance']},
+			{ species: 'arceusfire', ability: 'sandrush', moves: ['revelationdance'] },
 		], [
-			{species: 'aggron', ability: 'colorchange', moves: ['sleeptalk']},
+			{ species: 'aggron', ability: 'colorchange', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		const aggron = battle.p2.active[0];

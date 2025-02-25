@@ -191,7 +191,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.activeTarget = pokemon;
 			const damage = this.actions.getConfusionDamage(pokemon, 40);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
-			const activeMove = {id: this.toID('confused'), effectType: 'Move', type: '???'};
+			const activeMove = { id: this.toID('confused'), effectType: 'Move', type: '???' };
 			this.damage(damage, pokemon, pokemon, activeMove as ActiveMove);
 			return false;
 		},
@@ -806,7 +806,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: "Commanded",
 		noCopy: true,
 		onStart(pokemon) {
-			this.boost({atk: 2, spa: 2, spe: 2, def: 2, spd: 2}, pokemon);
+			this.boost({ atk: 2, spa: 2, spe: 2, def: 2, spd: 2 }, pokemon);
 		},
 		onDragOutPriority: 2,
 		onDragOut() {

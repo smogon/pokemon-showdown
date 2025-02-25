@@ -12,9 +12,9 @@ describe(`Cheek Pouch`, () => {
 
 	it(`should restore 1/3 HP to the user after eating a Berry`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'lumberry', ability: 'cheekpouch', moves: ['sleeptalk']},
+			{ species: 'wynaut', item: 'lumberry', ability: 'cheekpouch', moves: ['sleeptalk'] },
 		], [
-			{species: 'pichu', moves: ['nuzzle']},
+			{ species: 'pichu', moves: ['nuzzle'] },
 		]]);
 		const wynaut = battle.p1.active[0];
 		battle.makeChoices();
@@ -23,9 +23,9 @@ describe(`Cheek Pouch`, () => {
 
 	it(`should not activate if the user was at full HP`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'lumberry', ability: 'cheekpouch', moves: ['sleeptalk']},
+			{ species: 'wynaut', item: 'lumberry', ability: 'cheekpouch', moves: ['sleeptalk'] },
 		], [
-			{species: 'pichu', moves: ['glare']},
+			{ species: 'pichu', moves: ['glare'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log.every(line => !line.startsWith('|-heal')));

@@ -7,9 +7,9 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore in case module doesn't exist
 import type * as PG from 'pg';
-import type {SQLStatement} from 'sql-template-strings';
+import type { SQLStatement } from 'sql-template-strings';
 import * as Streams from './streams';
-import {FS} from './fs';
+import { FS } from './fs';
 import * as Utils from './utils';
 
 interface MigrationOptions {

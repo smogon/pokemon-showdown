@@ -28,21 +28,21 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 
 const RETRY_AFTER_LOGIN = null;
 
-import {FS, Utils, Streams} from '../lib';
-import {type RoomSection, RoomSections} from './chat-commands/room-settings';
-import {type QueuedHunt} from './chat-plugins/scavengers';
-import {type ScavengerGameTemplate} from './chat-plugins/scavenger-games';
-import {type RepeatedPhrase} from './chat-plugins/repeats';
+import { FS, Utils, Streams } from '../lib';
+import { type RoomSection, RoomSections } from './chat-commands/room-settings';
+import { type QueuedHunt } from './chat-plugins/scavengers';
+import { type ScavengerGameTemplate } from './chat-plugins/scavenger-games';
+import { type RepeatedPhrase } from './chat-plugins/repeats';
 import {
 	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, type RoomBattleOptions,
 } from "./room-battle";
-import {BestOfGame} from './room-battle-bestof';
-import {RoomGame, SimpleRoomGame, RoomGamePlayer} from './room-game';
-import {MinorActivity, type MinorActivityData} from './room-minor-activity';
-import {Roomlogs, type Roomlog} from './roomlogs';
-import {RoomAuth} from './user-groups';
-import {type PartialModlogEntry, mainModlog} from './modlog';
-import {Replays} from './replays';
+import { BestOfGame } from './room-battle-bestof';
+import { RoomGame, SimpleRoomGame, RoomGamePlayer } from './room-game';
+import { MinorActivity, type MinorActivityData } from './room-minor-activity';
+import { Roomlogs, type Roomlog } from './roomlogs';
+import { RoomAuth } from './user-groups';
+import { type PartialModlogEntry, mainModlog } from './modlog';
+import { Replays } from './replays';
 import * as crypto from 'crypto';
 
 /*********************************************************
@@ -85,7 +85,7 @@ interface UserTable {
 
 export interface RoomSettings {
 	title: string;
-	auth: {[userid: string]: GroupSymbol};
+	auth: { [userid: string]: GroupSymbol };
 	creationTime: number;
 	section?: RoomSection;
 
@@ -98,7 +98,7 @@ export interface RoomSettings {
 	staffRoom?: boolean;
 	language?: ID | false;
 	slowchat?: number | false;
-	events?: {[k: string]: RoomEvent | RoomEventAlias | RoomEventCategory};
+	events?: { [k: string]: RoomEvent | RoomEventAlias | RoomEventCategory };
 	filterStretching?: boolean;
 	filterEmojis?: boolean;
 	filterCaps?: boolean;
@@ -118,7 +118,7 @@ export interface RoomSettings {
 	rulesLink?: string | null;
 	dataCommandTierDisplay?: 'tiers' | 'doubles tiers' | 'National Dex tiers' | 'numbers';
 	requestShowEnabled?: boolean | null;
-	permissions?: {[k: string]: GroupSymbol};
+	permissions?: { [k: string]: GroupSymbol };
 	minorActivity?: PollData | AnnouncementData;
 	minorActivityQueue?: MinorActivityData[];
 	repeats?: RepeatedPhrase[];
@@ -148,11 +148,11 @@ export type MessageHandler = (room: BasicRoom, message: string) => void;
 export type Room = GameRoom | ChatRoom;
 export type PrivacySetting = boolean | 'hidden' | 'voice' | 'unlisted';
 
-import type {AnnouncementData} from './chat-plugins/announcements';
-import type {PollData} from './chat-plugins/poll';
-import type {AutoResponder} from './chat-plugins/responder';
-import type {RoomEvent, RoomEventAlias, RoomEventCategory} from './chat-plugins/room-events';
-import type {Tournament, TournamentRoomSettings} from './tournaments/index';
+import type { AnnouncementData } from './chat-plugins/announcements';
+import type { PollData } from './chat-plugins/poll';
+import type { AutoResponder } from './chat-plugins/responder';
+import type { RoomEvent, RoomEventAlias, RoomEventCategory } from './chat-plugins/room-events';
+import type { Tournament, TournamentRoomSettings } from './tournaments/index';
 
 export abstract class BasicRoom {
 	/** to rename use room.rename */
@@ -648,7 +648,7 @@ export abstract class BasicRoom {
 	logUserStats() {
 		let total = 0;
 		let guests = 0;
-		const groups: {[k: string]: number} = {};
+		const groups: { [k: string]: number } = {};
 		for (const group of Config.groupsranking) {
 			groups[group] = 0;
 		}
@@ -1076,14 +1076,14 @@ export abstract class BasicRoom {
 		// they are staff and online
 		const staff = Object.values(this.users).filter(u => this.auth.atLeast(u, '%'));
 		if (!staff.length) {
-			const {time} = this.settings.autoModchat;
+			const { time } = this.settings.autoModchat;
 			if (!time || time < 5) {
 				throw new Error(`Invalid time setting for automodchat (${Utils.visualize(this.settings.autoModchat)})`);
 			}
 			if (this.modchatTimer) return;
 			this.modchatTimer = setTimeout(() => {
 				if (!this.settings.autoModchat) return;
-				const {rank} = this.settings.autoModchat;
+				const { rank } = this.settings.autoModchat;
 				const oldSetting = this.settings.modchat;
 				this.settings.modchat = rank;
 				this.add(
@@ -1276,7 +1276,7 @@ export class GlobalRoomState {
 		} else {
 			// Prevent there from being two possible hidden classes an instance
 			// of GlobalRoom can have.
-			this.ladderIpLog = new Streams.WriteStream({write() { return undefined; }});
+			this.ladderIpLog = new Streams.WriteStream({ write() { return undefined; } });
 		}
 
 		this.reportUserStatsInterval = setInterval(
@@ -1323,7 +1323,7 @@ export class GlobalRoomState {
 		};
 	}
 	deserializeBattleRoom(battle: NonNullable<Awaited<ReturnType<GlobalRoomState['serializeBattleRoom']>>>) {
-		const {inputLog, players, roomid, title, rated, timer} = battle;
+		const { inputLog, players, roomid, title, rated, timer } = battle;
 		const [, formatid] = roomid.split('-');
 		const room = Rooms.createBattle({
 			format: formatid,
@@ -1420,7 +1420,7 @@ export class GlobalRoomState {
 			JSON.stringify(this.settingsList)
 				.replace(/\{"title":/g, '\n{"title":')
 				.replace(/\]$/, '\n]')
-		), {throttle: 5000});
+		), { throttle: 5000 });
 	}
 
 	writeNumRooms() {
@@ -1506,7 +1506,7 @@ export class GlobalRoomState {
 			rankList.push({
 				symbol: rank,
 				name: (Config.groups[rank].name || null),
-				type: groupType}); // send the first character in the rank, incase they put a string several characters long
+				type: groupType }); // send the first character in the rank, incase they put a string several characters long
 		}
 
 		const typeOrder = ['punishment', 'normal', 'staff', 'leadership'];
@@ -1515,7 +1515,7 @@ export class GlobalRoomState {
 
 		// add the punishment types at the very end.
 		for (const rank in Config.punishgroups) {
-			rankList.push({symbol: Config.punishgroups[rank].symbol, name: Config.punishgroups[rank].name, type: 'punishment'});
+			rankList.push({ symbol: Config.punishgroups[rank].symbol, name: Config.punishgroups[rank].name, type: 'punishment' });
 		}
 
 		Config.rankList = '|customgroups|' + JSON.stringify(rankList) + '\n';
@@ -1543,7 +1543,7 @@ export class GlobalRoomState {
 			rooms.push(room);
 		}
 
-		const roomTable: {[roomid: string]: BattleRoomTable} = {};
+		const roomTable: { [roomid: string]: BattleRoomTable } = {};
 		for (let i = rooms.length - 1; i >= rooms.length - 100 && i >= 0; i--) {
 			const room = rooms[i];
 			const roomData: BattleRoomTable = {};
@@ -2044,7 +2044,7 @@ export class GameRoom extends BasicRoom {
 		const log = this.getLog(hideDetails ? 0 : -1);
 		let rating: number | undefined;
 		if (battle.ended && this.rated) rating = this.rated;
-		let {id, password} = this.getReplayData();
+		let { id, password } = this.getReplayData();
 		const silent = options === 'forpunishment' || options === 'silent' || options === 'auto';
 		if (silent) connection = undefined;
 		const isPrivate = this.settings.isPrivate || this.hideReplay;
@@ -2118,10 +2118,10 @@ export class GameRoom extends BasicRoom {
 	}
 
 	getReplayData() {
-		if (!this.roomid.endsWith('pw')) return {id: this.roomid.slice(7), password: null};
+		if (!this.roomid.endsWith('pw')) return { id: this.roomid.slice(7), password: null };
 		const end = this.roomid.length - 2;
 		const lastHyphen = this.roomid.lastIndexOf('-', end);
-		return {id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen + 1, end)};
+		return { id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen + 1, end) };
 	}
 }
 

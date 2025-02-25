@@ -11,17 +11,17 @@ describe('Magnetic Flux', () => {
 	});
 
 	it('should boost the Defense and Special Defense of all active allies with Plus or Minus', () => {
-		battle = common.gen(5).createBattle({gameType: 'triples'});
-		battle.setPlayer('p1', {team: [
-			{species: "Minun", ability: 'minus', moves: ['sleeptalk']},
-			{species: "Klinklang", ability: 'plus', moves: ['magneticflux']},
-			{species: "Pyukumuku", ability: 'innardsout', moves: ['sleeptalk']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: "Plusle", ability: 'plus', moves: ['sleeptalk']},
-			{species: "Klinklang", ability: 'minus', moves: ['magneticflux']},
-			{species: "Pyukumuku", ability: 'innardsout', moves: ['sleeptalk']},
-		]});
+		battle = common.gen(5).createBattle({ gameType: 'triples' });
+		battle.setPlayer('p1', { team: [
+			{ species: "Minun", ability: 'minus', moves: ['sleeptalk'] },
+			{ species: "Klinklang", ability: 'plus', moves: ['magneticflux'] },
+			{ species: "Pyukumuku", ability: 'innardsout', moves: ['sleeptalk'] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: "Plusle", ability: 'plus', moves: ['sleeptalk'] },
+			{ species: "Klinklang", ability: 'minus', moves: ['magneticflux'] },
+			{ species: "Pyukumuku", ability: 'innardsout', moves: ['sleeptalk'] },
+		] });
 		battle.makeChoices('move sleeptalk, move magneticflux, move sleeptalk', 'move sleeptalk, move magneticflux, move sleeptalk');
 		for (const active of battle.getAllActive()) {
 			if (active.name === 'Pyukumuku') continue;

@@ -3,7 +3,7 @@
 const assert = require('assert').strict;
 
 global.Ladders = require('../../dist/server/ladders').Ladders;
-const {makeUser} = require('../users-utils');
+const { makeUser } = require('../users-utils');
 
 describe('Matchmaker', () => {
 	const FORMATID = 'gen7ou';
@@ -126,8 +126,8 @@ describe('Matchmaker', () => {
 				room = Rooms.createBattle({
 					format: FORMATID,
 					players: [
-						{user: this.p1, team: this.s1.team},
-						{user: this.p1, team: this.s2.team},
+						{ user: this.p1, team: this.s1.team },
+						{ user: this.p1, team: this.s2.team },
 					],
 					rated: 1000,
 				});
@@ -148,7 +148,7 @@ describe('Matchmaker', () => {
 		it('should prevent battles from starting if the server is in lockdown', function () {
 			const room = Rooms.createBattle({
 				format: FORMATID,
-				players: [{user: this.p1, team: this.s1.team}, {user: this.p2, team: this.s2.team}],
+				players: [{ user: this.p1, team: this.s1.team }, { user: this.p2, team: this.s2.team }],
 				rated: 1000,
 			});
 			assert.equal(room, null);

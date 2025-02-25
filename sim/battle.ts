@@ -14,16 +14,16 @@
  * @license MIT
  */
 
-import {Dex, toID} from './dex';
-import {Teams} from './teams';
-import {Field} from './field';
-import {Pokemon, type EffectState, RESTORATIVE_BERRIES} from './pokemon';
-import {PRNG, type PRNGSeed} from './prng';
-import {Side} from './side';
-import {State} from './state';
-import {BattleQueue, type Action} from './battle-queue';
-import {BattleActions} from './battle-actions';
-import {Utils} from '../lib/utils';
+import { Dex, toID } from './dex';
+import { Teams } from './teams';
+import { Field } from './field';
+import { Pokemon, type EffectState, RESTORATIVE_BERRIES } from './pokemon';
+import { PRNG, type PRNGSeed } from './prng';
+import { Side } from './side';
+import { State } from './state';
+import { BattleQueue, type Action } from './battle-queue';
+import { BattleActions } from './battle-actions';
+import { Utils } from '../lib/utils';
 declare const __version: any;
 
 export type ChannelID = 0 | 1 | 2 | 3 | 4;
@@ -213,7 +213,7 @@ export class Battle {
 			options.forceRandomChance : null;
 		this.deserialized = !!options.deserialized;
 		this.strictChoices = !!options.strictChoices;
-		this.formatData = this.initEffectState({id: format.id});
+		this.formatData = this.initEffectState({ id: format.id });
 		this.gameType = (format.gameType || 'singles');
 		this.field = new Field(this);
 		this.sides = Array(format.playerCount).fill(null) as any;
@@ -242,10 +242,10 @@ export class Battle {
 		this.started = false;
 		this.ended = false;
 
-		this.effect = {id: ''} as Effect;
-		this.effectState = this.initEffectState({id: ''});
+		this.effect = { id: '' } as Effect;
+		this.effectState = this.initEffectState({ id: '' });
 
-		this.event = {id: ''};
+		this.event = { id: '' };
 		this.events = null;
 		this.eventDepth = 0;
 
@@ -275,7 +275,7 @@ export class Battle {
 
 		this.send = options.send || (() => {});
 
-		const inputOptions: {formatid: ID, seed: PRNGSeed, rated?: string | true} = {
+		const inputOptions: { formatid: ID, seed: PRNGSeed, rated?: string | true } = {
 			formatid: options.formatid, seed: this.prngSeed,
 		};
 		if (this.rated) inputOptions.rated = this.rated;
@@ -591,7 +591,7 @@ export class Battle {
 
 		this.effect = effect;
 		this.effectState = state as EffectState || this.initEffectState({});
-		this.event = {id: eventid, target, source, effect: sourceEffect};
+		this.event = { id: eventid, target, source, effect: sourceEffect };
 		this.eventDepth++;
 
 		const args = [target, source, sourceEffect];
@@ -765,7 +765,7 @@ export class Battle {
 		}
 
 		const parentEvent = this.event;
-		this.event = {id: eventid, target, source, effect: sourceEffect, modifier: 1};
+		this.event = { id: eventid, target, source, effect: sourceEffect, modifier: 1 };
 		this.eventDepth++;
 
 		let targetRelayVars = [];
@@ -915,7 +915,7 @@ export class Battle {
 		handler.subOrder = (handler.effect as any)[`${callbackName}SubOrder`] || 0;
 		if (!handler.subOrder) {
 			// https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/page-59#post-8685465
-			const effectTypeOrder: {[k in EffectType]?: number} = {
+			const effectTypeOrder: { [k in EffectType]?: number } = {
 				// Z-Move: 1,
 				Condition: 2,
 				// Slot Condition: 3,
@@ -1244,7 +1244,7 @@ export class Battle {
 			}
 		}
 
-		const eventHandler = {callback, target, priority, order, subOrder};
+		const eventHandler = { callback, target, priority, order, subOrder };
 
 		if (!this.events) this.events = {};
 		const callbackName = `on${eventid}`;
@@ -1348,7 +1348,7 @@ export class Battle {
 				if (!side.pokemonLeft) continue;
 				const switchTable = side.active.map(pokemon => !!pokemon?.switchFlag);
 				if (switchTable.some(Boolean)) {
-					requests[i] = {forceSwitch: switchTable, side: side.getRequestData()};
+					requests[i] = { forceSwitch: switchTable, side: side.getRequestData() };
 				}
 			}
 			break;
@@ -1357,7 +1357,7 @@ export class Battle {
 			for (let i = 0; i < this.sides.length; i++) {
 				const side = this.sides[i];
 				const maxChosenTeamSize = this.ruleTable.pickedTeamSize || undefined;
-				requests[i] = {teamPreview: true, maxChosenTeamSize, side: side.getRequestData()};
+				requests[i] = { teamPreview: true, maxChosenTeamSize, side: side.getRequestData() };
 			}
 			break;
 
@@ -1366,7 +1366,7 @@ export class Battle {
 				const side = this.sides[i];
 				if (!side.pokemonLeft) continue;
 				const activeData = side.active.map(pokemon => pokemon?.getMoveRequestData());
-				requests[i] = {active: activeData, side: side.getRequestData()};
+				requests[i] = { active: activeData, side: side.getRequestData() };
 				if (side.allySide) {
 					requests[i].ally = side.allySide.getRequestData(true);
 				}
@@ -1379,7 +1379,7 @@ export class Battle {
 			if (requests[i]) {
 				if (!this.supportCancel || !multipleRequestsExist) requests[i].noCancel = true;
 			} else {
-				requests[i] = {wait: true, side: this.sides[i].getRequestData()};
+				requests[i] = { wait: true, side: this.sides[i].getRequestData() };
 			}
 		}
 
@@ -1478,7 +1478,7 @@ export class Battle {
 		side.active[0]?.faint();
 		this.faintMessages(false, true);
 		if (!this.ended && side.requestState) {
-			side.emitRequest({wait: true, side: side.getRequestData()});
+			side.emitRequest({ wait: true, side: side.getRequestData() });
 			side.clearChoice();
 			if (this.allChoicesDone()) this.commitChoices();
 		}
@@ -1882,7 +1882,7 @@ export class Battle {
 			subFormat.onTeamPreview?.call(this);
 		}
 
-		this.queue.addChoice({choice: 'start'});
+		this.queue.addChoice({ choice: 'start' });
 		this.midTurn = true;
 		if (!this.requestState) this.turnLoop();
 	}
@@ -1919,9 +1919,9 @@ export class Battle {
 		if (!target?.hp) return 0;
 		if (!target.isActive) return false;
 		if (this.gen > 5 && !target.side.foePokemonLeft()) return false;
-		boost = this.runEvent('ChangeBoost', target, source, effect, {...boost});
+		boost = this.runEvent('ChangeBoost', target, source, effect, { ...boost });
 		boost = target.getCappedBoost(boost);
-		boost = this.runEvent('TryBoost', target, source, effect, {...boost});
+		boost = this.runEvent('TryBoost', target, source, effect, { ...boost });
 		let success = null;
 		let boosted = isSecondary;
 		let boostName: BoostID;
@@ -2250,7 +2250,7 @@ export class Battle {
 
 	/** Given a table of base stats and a pokemon set, return the actual stats. */
 	spreadModify(baseStats: StatsTable, set: PokemonSet): StatsTable {
-		const modStats: SparseStatsTable = {atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
+		const modStats: SparseStatsTable = { atk: 10, def: 10, spa: 10, spd: 10, spe: 10 };
 		const tr = this.trunc;
 		let statName: keyof StatsTable;
 		for (statName in modStats) {
@@ -2598,7 +2598,7 @@ export class Battle {
 				pokemon.setAbility(species.abilities['0'], null, true);
 				pokemon.baseAbility = pokemon.ability;
 
-				const behemothMove: {[k: string]: string} = {
+				const behemothMove: { [k: string]: string } = {
 					'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 				};
 				const ironHead = pokemon.baseMoves.indexOf('ironhead');
@@ -2883,8 +2883,8 @@ export class Battle {
 		if (this.requestState) this.requestState = '';
 
 		if (!this.midTurn) {
-			this.queue.insertChoice({choice: 'beforeTurn'});
-			this.queue.addChoice({choice: 'residual'});
+			this.queue.insertChoice({ choice: 'beforeTurn' });
+			this.queue.addChoice({ choice: 'residual' });
 			this.midTurn = true;
 		}
 
@@ -3019,7 +3019,7 @@ export class Battle {
 		}
 	}
 
-	add(...parts: (Part | (() => {side: SideID, secret: string, shared: string}))[]) {
+	add(...parts: (Part | (() => { side: SideID, secret: string, shared: string }))[]) {
 		if (!parts.some(part => typeof part === 'function')) {
 			this.log.push(`|${parts.join('|')}`);
 			return;
@@ -3137,7 +3137,7 @@ export class Battle {
 				if ((toID(set.species) === 'zacian' && toID(set.item) === 'rustedsword') ||
 					(toID(set.species) === 'zamazenta' && toID(set.item) === 'rustedshield')) {
 					newSet.species = Dex.species.get(set.species + 'crowned').name;
-					const crowned: {[k: string]: string} = {
+					const crowned: { [k: string]: string } = {
 						'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 					};
 					const ironHead = set.moves.map(toID).indexOf('ironhead' as ID);
@@ -3189,7 +3189,7 @@ export class Battle {
 
 	/** @deprecated */
 	join(slot: SideID, name: string, avatar: string, team: PokemonSet[] | string | null) {
-		this.setPlayer(slot, {name, avatar, team});
+		this.setPlayer(slot, { name, avatar, team });
 		return this.getSide(slot);
 	}
 

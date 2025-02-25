@@ -181,7 +181,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					this.battle.hint("In Gen 1, if a player is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
 				}
 			}
-			this.useMove(move, pokemon, {target, sourceEffect});
+			this.useMove(move, pokemon, { target, sourceEffect });
 			// Restore PP if the move is the first turn of a charging move. Save the move from which PP should be deducted if the move succeeds.
 			if (pokemon.volatiles['twoturnmove']) {
 				pokemon.deductPP(move, -1, target);
@@ -215,7 +215,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// The charging turn of a two-turn move does not update pokemon.lastMove
 			if (!TWO_TURN_MOVES.includes(move.id) || pokemon.volatiles['twoturnmove']) pokemon.lastMove = move;
 
-			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, {target, sourceEffect});
+			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, { target, sourceEffect });
 
 			if (move.id !== 'metronome') {
 				if (move.id !== 'mirrormove' ||
@@ -321,7 +321,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Disable and Selfdestruct/Explosion boost rage, regardless of whether they miss/fail.
 			if (target.boosts.atk < 6 && (move.selfdestruct || move.id === 'disable') && target.volatiles['rage']) {
-				this.battle.boost({atk: 1}, target, pokemon, this.dex.conditions.get('rage'));
+				this.battle.boost({ atk: 1 }, target, pokemon, this.dex.conditions.get('rage'));
 				this.battle.hint(`In Gen 1, using ${move.name} causes the target to build Rage, ` +
 					`even if it misses or fails`, true);
 			}
@@ -971,7 +971,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (typeof effect === 'string') effect = this.dex.conditions.get(effect);
 		if (!target?.hp) return 0;
 		let success = null;
-		boost = this.runEvent('TryBoost', target, source, effect, {...boost});
+		boost = this.runEvent('TryBoost', target, source, effect, { ...boost });
 		let i: BoostID;
 		for (i in boost) {
 			const currentBoost: SparseBoostsTable = {};

@@ -103,14 +103,14 @@ export const Scripts: ModdedBattleScriptsData = {
 			} else {
 				sourceEffect = move;
 			}
-			this.battle.actions.useMove(move, pokemon, {target, sourceEffect});
+			this.battle.actions.useMove(move, pokemon, { target, sourceEffect });
 		},
 		// This function deals with AfterMoveSelf events.
 		// This leads with partial trapping moves shenanigans after the move has been used.
 		useMove(moveOrMoveName, pokemon, options) {
 			let sourceEffect = options?.sourceEffect;
 			let target = options?.target;
-			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, {target, sourceEffect});
+			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, { target, sourceEffect });
 
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			const baseMove = this.battle.dex.moves.get(moveOrMoveName);

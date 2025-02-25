@@ -11,12 +11,12 @@ describe('Shell Bell', () => {
 	});
 
 	it(`should heal from the damage against all targets of the move`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'tornadus', ability: 'compoundeyes', moves: ['superfang']},
-			{species: 'landorus', item: 'shellbell', moves: ['earthquake']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'tornadus', ability: 'compoundeyes', moves: ['superfang'] },
+			{ species: 'landorus', item: 'shellbell', moves: ['earthquake'] },
 		], [
-			{species: 'roggenrola', ability: 'sturdy', level: 1, moves: ['sleeptalk']},
-			{species: 'aron', ability: 'sturdy', level: 1, moves: ['sleeptalk']},
+			{ species: 'roggenrola', ability: 'sturdy', level: 1, moves: ['sleeptalk'] },
+			{ species: 'aron', ability: 'sturdy', level: 1, moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move superfang -2, move earthquake', 'auto');
 		const landorus = battle.p1.active[1];
@@ -26,11 +26,11 @@ describe('Shell Bell', () => {
 	// Also applies to Parental Bond
 	it(`should heal from the damage from all hits of multi-hit moves`, () => {
 		battle = common.createBattle([[
-			{species: 'shelmet', moves: ['finalgambit']},
-			{species: 'landorus', moves: ['sleeptalk']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'shelmet', moves: ['finalgambit'] },
+			{ species: 'landorus', moves: ['sleeptalk'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'cloyster', ability: 'skilllink', item: 'shellbell', evs: {hp: 4}, moves: ['sleeptalk', 'iciclespear']},
+			{ species: 'cloyster', ability: 'skilllink', item: 'shellbell', evs: { hp: 4 }, moves: ['sleeptalk', 'iciclespear'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('switch 2');

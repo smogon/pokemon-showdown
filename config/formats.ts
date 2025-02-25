@@ -154,7 +154,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		searchShow: false,
 		debug: true,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -230,7 +230,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		gameType: 'doubles',
 		searchShow: false,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		debug: true,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
@@ -535,8 +535,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				for (const pokemon of this.getAllActive(false, true)) {
 					// turn counter hasn't been incremented yet
 					if (this.turn & 1 && pokemon.position === (this.turn & 2 ? 0 : 1) && pokemon.hp && pokemon.allies().length) {
-						pokemon.volatiles['commanding'] = this.initEffectState({id: 'commanding', name: 'Commanding', target: pokemon});
-						pokemon.volatiles['gastroacid'] = this.initEffectState({id: 'gastroacid', name: 'Gastro Acid', target: pokemon});
+						pokemon.volatiles['commanding'] = this.initEffectState({ id: 'commanding', name: 'Commanding', target: pokemon });
+						pokemon.volatiles['gastroacid'] = this.initEffectState({ id: 'gastroacid', name: 'Gastro Acid', target: pokemon });
 						this.add('-message', `${pokemon.side.name}'s ${pokemon.name !== pokemon.species.name ? `${pokemon.name} (${pokemon.species.name})` : pokemon.name} will be skipped next turn.`);
 					} else {
 						pokemon.removeVolatile('commanding');
@@ -734,7 +734,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
 			for (const ability of format.getSharedPower!(pokemon)) {
 				const effect = 'ability:' + ability;
-				pokemon.volatiles[effect] = this.initEffectState({id: this.toID(effect), target: pokemon});
+				pokemon.volatiles[effect] = this.initEffectState({ id: this.toID(effect), target: pokemon });
 				if (!pokemon.m.abils) pokemon.m.abils = [];
 				if (!pokemon.m.abils.includes(effect)) pokemon.m.abils.push(effect);
 			}
@@ -1098,7 +1098,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onModifyMove(move, pokemon, target) {
 			const forte: ActiveMove = pokemon.m.forte;
 			if (move.category !== 'Status' && forte) {
-				move.flags = {...move.flags, ...forte.flags};
+				move.flags = { ...move.flags, ...forte.flags };
 				if (forte.self) {
 					if (forte.self.onHit && move.self?.onHit) {
 						for (const i in forte.self) {
@@ -1106,11 +1106,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 							(move.self as any)[i] = (forte.self as any)[i];
 						}
 					} else {
-						move.self = {...(move.self || {}), ...forte.self};
+						move.self = { ...(move.self || {}), ...forte.self };
 					}
 				}
 				if (forte.selfBoost?.boosts) {
-					if (!move.selfBoost?.boosts) move.selfBoost = {boosts: {}};
+					if (!move.selfBoost?.boosts) move.selfBoost = { boosts: {} };
 					let boostid: BoostID;
 					for (boostid in forte.selfBoost.boosts) {
 						if (!move.selfBoost.boosts![boostid]) move.selfBoost.boosts![boostid] = 0;
@@ -1342,7 +1342,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onValidateTeam(team, f, teamHas) {
 			if (this.ruleTable.has('abilityclause')) {
 				const abilityTable = new this.dex.Multiset<string>();
-				const base: {[k: string]: string} = {
+				const base: { [k: string]: string } = {
 					airlock: 'cloudnine',
 					armortail: 'queenlymajesty',
 					battlearmor: 'shellarmor',
@@ -1456,7 +1456,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 		battle: {
 			spreadModify(baseStats, set) {
-				const modStats: SparseStatsTable = {atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
+				const modStats: SparseStatsTable = { atk: 10, def: 10, spa: 10, spd: 10, spe: 10 };
 				const tr = this.trunc;
 				const nature = this.dex.natures.get(set.nature);
 				let statName: keyof StatsTable;
@@ -1526,13 +1526,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				if (!pokemon.m.innate && !BAD_ABILITIES.includes(this.toID(ally.ability))) {
 					pokemon.m.innate = 'ability:' + ally.ability;
 					if (!ngas || ally.getAbility().flags['cantsuppress'] || pokemon.hasItem('Ability Shield')) {
-						pokemon.volatiles[pokemon.m.innate] = this.initEffectState({id: pokemon.m.innate, target: pokemon, pic: ally});
+						pokemon.volatiles[pokemon.m.innate] = this.initEffectState({ id: pokemon.m.innate, target: pokemon, pic: ally });
 					}
 				}
 				if (!ally.m.innate && !BAD_ABILITIES.includes(this.toID(pokemon.ability))) {
 					ally.m.innate = 'ability:' + pokemon.ability;
 					if (!ngas || pokemon.getAbility().flags['cantsuppress'] || ally.hasItem('Ability Shield')) {
-						ally.volatiles[ally.m.innate] = this.initEffectState({id: ally.m.innate, target: ally, pic: pokemon});
+						ally.volatiles[ally.m.innate] = this.initEffectState({ id: ally.m.innate, target: ally, pic: pokemon });
 					}
 				}
 			}
@@ -1620,7 +1620,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				for (const innate of pokemon.m.innates) {
 					if (pokemon.hasAbility(innate)) continue;
 					const effect = 'ability:' + innate;
-					pokemon.volatiles[effect] = this.initEffectState({id: this.toID(effect), target: pokemon});
+					pokemon.volatiles[effect] = this.initEffectState({ id: this.toID(effect), target: pokemon });
 				}
 			}
 		},
@@ -1814,7 +1814,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			for (const item of format.getSharedItems!(pokemon)) {
 				if (pokemon.m.sharedItemsUsed.includes(item)) continue;
 				const effect = 'item:' + item;
-				pokemon.volatiles[effect] = this.initEffectState({id: this.toID(effect), target: pokemon});
+				pokemon.volatiles[effect] = this.initEffectState({ id: this.toID(effect), target: pokemon });
 			}
 		},
 	},
@@ -1863,7 +1863,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						move.category = 'Physical';
 					}
 					if (teraType === "Stellar") {
-						move.self = {boosts: {atk: -1, spa: -1}};
+						move.self = { boosts: { atk: -1, spa: -1 } };
 					}
 				}
 			}
@@ -2619,7 +2619,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (!format.getSharedPower) format = this.dex.formats.get('gen9sharedpower');
 			for (const ability of format.getSharedPower!(pokemon)) {
 				const effect = 'ability:' + ability;
-				pokemon.volatiles[effect] = this.initEffectState({id: this.toID(effect), target: pokemon});
+				pokemon.volatiles[effect] = this.initEffectState({ id: this.toID(effect), target: pokemon });
 				if (!pokemon.m.abils) pokemon.m.abils = [];
 				if (!pokemon.m.abils.includes(effect)) pokemon.m.abils.push(effect);
 			}
@@ -3077,7 +3077,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Nonexistent'],
 		onModifySpecies(species, target, source, effect) {
 			if (!target) return;
-			return {...species, ...(target.set as any).hc};
+			return { ...species, ...(target.set as any).hc };
 		},
 		onSwitchIn(pokemon) {
 			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[silent]');
@@ -3362,7 +3362,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen8',
 		searchShow: false,
 		debug: true,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -3435,7 +3435,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen8',
 		gameType: 'doubles',
 		searchShow: false,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		debug: true,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
@@ -3559,7 +3559,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen7',
 		searchShow: false,
 		debug: true,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -3632,7 +3632,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen7',
 		gameType: 'doubles',
 		searchShow: false,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		debug: true,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
@@ -3753,7 +3753,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen6',
 		searchShow: false,
 		debug: true,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -3806,7 +3806,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen6',
 		gameType: 'doubles',
 		searchShow: false,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		debug: true,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
@@ -3823,7 +3823,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen6',
 		gameType: 'triples',
 		searchShow: false,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		debug: true,
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
@@ -3952,7 +3952,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen5',
 		searchShow: false,
 		debug: true,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -3997,7 +3997,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		debug: true,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -4007,7 +4007,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'triples',
 		searchShow: false,
 		debug: true,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		// no restrictions, for serious (other than team preview)
 		ruleset: ['Team Preview', 'Cancel Mod'],
 	},
@@ -4113,7 +4113,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen4',
 		searchShow: false,
 		debug: true,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		// no restrictions
 		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -4148,7 +4148,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		debug: true,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		// no restrictions
 		ruleset: ['Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
@@ -4229,7 +4229,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen3',
 		searchShow: false,
 		debug: true,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 	{
@@ -4314,7 +4314,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen2',
 		searchShow: false,
 		debug: true,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 	{
@@ -4395,7 +4395,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen1',
 		searchShow: false,
 		debug: true,
-		battle: {trunc: Math.trunc},
+		battle: { trunc: Math.trunc },
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Max Team Size = 24', 'Max Move Count = 24', 'Max Level = 9999', 'Default Level = 100'],
 	},
 ];

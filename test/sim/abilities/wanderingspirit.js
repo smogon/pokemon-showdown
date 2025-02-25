@@ -10,9 +10,9 @@ describe('Wandering Spirit', () => {
 
 	it(`should exchange abilities with an attacker that makes contact`, () => {
 		battle = common.createBattle([[
-			{species: 'Decidueye', ability: 'overgrow', moves: ['shadowsneak']},
+			{ species: 'Decidueye', ability: 'overgrow', moves: ['shadowsneak'] },
 		], [
-			{species: 'Runerigus', ability: 'wanderingspirit', moves: ['sleeptalk']},
+			{ species: 'Runerigus', ability: 'wanderingspirit', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.p1.active[0].hasAbility('wanderingspirit'));
@@ -21,9 +21,9 @@ describe('Wandering Spirit', () => {
 
 	it(`should not activate while Dynamaxed`, () => {
 		battle = common.gen(8).createBattle([[
-			{species: 'Decidueye', ability: 'overgrow', moves: ['shadowsneak']},
+			{ species: 'Decidueye', ability: 'overgrow', moves: ['shadowsneak'] },
 		], [
-			{species: 'Runerigus', ability: 'wanderingspirit', moves: ['bodypress']},
+			{ species: 'Runerigus', ability: 'wanderingspirit', moves: ['bodypress'] },
 		]]);
 		battle.makeChoices('auto', 'move bodypress dynamax');
 		assert(battle.p1.active[0].hasAbility('overgrow'));
@@ -32,9 +32,9 @@ describe('Wandering Spirit', () => {
 
 	it(`should not swap with Wonder Guard`, () => {
 		battle = common.createBattle([[
-			{species: 'Shedinja', ability: 'wonderguard', moves: ['shadowsneak']},
+			{ species: 'Shedinja', ability: 'wonderguard', moves: ['shadowsneak'] },
 		], [
-			{species: 'Runerigus', ability: 'wanderingspirit', moves: ['sleeptalk']},
+			{ species: 'Runerigus', ability: 'wanderingspirit', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.p1.active[0].hasAbility('wonderguard'));

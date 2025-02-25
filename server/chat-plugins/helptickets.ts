@@ -1,9 +1,9 @@
-import {FS, Utils, Net, ProcessManager} from '../../lib';
-import {getCommonBattles} from '../chat-commands/info';
-import {checkRipgrepAvailability} from '../config-loader';
-import type {Punishment} from '../punishments';
-import type {PartialModlogEntry, ModlogID} from '../modlog';
-import {runPunishments} from './helptickets-auto';
+import { FS, Utils, Net, ProcessManager } from '../../lib';
+import { getCommonBattles } from '../chat-commands/info';
+import { checkRipgrepAvailability } from '../config-loader';
+import type { Punishment } from '../punishments';
+import type { PartialModlogEntry, ModlogID } from '../modlog';
+import { runPunishments } from './helptickets-auto';
 
 const TICKET_FILE = 'config/tickets.json';
 const SETTINGS_FILE = 'config/chat-plugins/ticket-settings.json';
@@ -13,7 +13,7 @@ export const BATTLES_REGEX = /\bbattle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]{31}p
 export const REPLAY_REGEX = new RegExp(
 	`${Utils.escapeRegex(Config.routes.replays)}/(?:[a-z0-9]-)?(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]{31}pw)?`, "g"
 );
-const REPORT_NAMECOLORS: {[k: string]: string} = {
+const REPORT_NAMECOLORS: { [k: string]: string } = {
 	p1: 'DodgerBlue',
 	p2: 'Crimson',
 	p3: '#FBa92C',
@@ -28,7 +28,7 @@ Punishments.addPunishmentType({
 
 interface TicketSettings {
 	// {[ticketType]: {[button title]: response}}
-	responses: {[ticketType: string]: {[title: string]: string}};
+	responses: { [ticketType: string]: { [title: string]: string } };
 }
 
 export interface TicketState {
@@ -47,11 +47,11 @@ export interface TicketState {
 	text?: [string, string];
 	resolved?: ResolvedTicketInfo;
 	meta?: string;
-	notes?: {[userid: string]: string};
+	notes?: { [userid: string]: string };
 	/** Extra info that they might need for displays or whatnot.
 	 * Use `TextTicketInfo#getState` to set it at creation (store properties of the user object, etc)
 	 */
-	state?: AnyObject & {claimTime?: number};
+	state?: AnyObject & { claimTime?: number };
 	/** Recommendations from the Artemis monitor, if it is set to only recommend. */
 	recommended?: string[];
 }
@@ -80,7 +80,7 @@ export interface TextTicketInfo {
 	/** Should this be displayed with all the other tickets of the type on a singular page? */
 	listOnly?: boolean;
 	getReviewDisplay: (
-		ticket: TicketState & {text: [string, string]}, staff: User, conn: Connection, state?: AnyObject
+		ticket: TicketState & { text: [string, string] }, staff: User, conn: Connection, state?: AnyObject
 	) => Promise<string | void> | string | void;
 	onSubmit?: (ticket: TicketState, text: [string, string], submitter: User, conn: Connection) => void | Promise<void>;
 	getState?: (ticket: TicketState, user: User) => AnyObject;
@@ -90,22 +90,22 @@ interface BattleInfo {
 	log: string[];
 	url: string;
 	title: string;
-	players: {p1: ID, p2: ID, p3?: ID, p4?: ID};
-	pokemon: Record<string, {species: string, name?: string}[]>;
+	players: { p1: ID, p2: ID, p3?: ID, p4?: ID };
+	pokemon: Record<string, { species: string, name?: string }[]>;
 }
 
 type TicketResult = 'approved' | 'valid' | 'assisted' | 'denied' | 'invalid' | 'unassisted' | 'ticketban' | 'deleted';
 
-const defaults: TicketSettings = {responses: {}};
+const defaults: TicketSettings = { responses: {} };
 
-export const tickets: {[k: string]: TicketState} = {};
+export const tickets: { [k: string]: TicketState } = {};
 export const settings: TicketSettings = (() => {
 	try {
 		// this ensures that if new settings are added to the defaults, they are added
 		// to the JSON as well
-		return {...defaults, ...JSON.parse(FS(SETTINGS_FILE).readSync())};
+		return { ...defaults, ...JSON.parse(FS(SETTINGS_FILE).readSync()) };
 	} catch {
-		return {...defaults};
+		return { ...defaults };
 	}
 })();
 
@@ -148,7 +148,7 @@ try {
 
 export function writeTickets() {
 	FS(TICKET_FILE).writeUpdate(
-		() => JSON.stringify(tickets), {throttle: 5000}
+		() => JSON.stringify(tickets), { throttle: 5000 }
 	);
 }
 
@@ -235,7 +235,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			}
 			tickets[this.ticket.userid] = this.ticket;
 			writeTickets();
-			this.room.modlog({action: 'TICKETCLAIM', isGlobal: false, loggedBy: user.id});
+			this.room.modlog({ action: 'TICKETCLAIM', isGlobal: false, loggedBy: user.id });
 			this.addText(`${user.name} claimed this ticket.`, user);
 			notifyStaff();
 		} else {
@@ -256,13 +256,13 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		if (toID(this.ticket.claimed) === user.id) {
 			if (this.claimQueue.length) {
 				this.ticket.claimed = this.claimQueue.shift() || null;
-				this.room.modlog({action: 'TICKETCLAIM', isGlobal: false, loggedBy: toID(this.ticket.claimed)});
+				this.room.modlog({ action: 'TICKETCLAIM', isGlobal: false, loggedBy: toID(this.ticket.claimed) });
 				this.addText(`This ticket is now claimed by ${this.ticket.claimed}.`, user);
 			} else {
 				const oldClaimed = this.ticket.claimed;
 				this.ticket.claimed = null;
 				this.lastUnclaimedStart = Date.now();
-				this.room.modlog({action: 'TICKETUNCLAIM', isGlobal: false, loggedBy: toID(oldClaimed)});
+				this.room.modlog({ action: 'TICKETUNCLAIM', isGlobal: false, loggedBy: toID(oldClaimed) });
 				this.addText(`This ticket is no longer claimed.`, user);
 				notifyStaff();
 			}
@@ -313,7 +313,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		if (!(user.id in this.playerTable)) return;
 		this.removePlayer(this.playerTable[user.id]);
 		if (!this.ticket.open) return;
-		this.room.modlog({action: 'TICKETABANDON', isGlobal: false, loggedBy: user.id});
+		this.room.modlog({ action: 'TICKETABANDON', isGlobal: false, loggedBy: user.id });
 		this.addText(`${user.name} is no longer interested in this ticket.`, user);
 		if (this.playerCount - 1 > 0) return; // There are still users in the ticket room, dont close the ticket
 		this.close(!!(this.firstClaimTime), user);
@@ -384,7 +384,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		this.ticket.open = false;
 		tickets[this.ticket.userid] = this.ticket;
 		writeTickets();
-		this.room.modlog({action: 'TICKETCLOSE', isGlobal: false, loggedBy: staff?.id || 'unknown' as ID});
+		this.room.modlog({ action: 'TICKETCLOSE', isGlobal: false, loggedBy: staff?.id || 'unknown' as ID });
 		this.addText(staff ? `${staff.name} closed this ticket.` : `This ticket was closed.`, staff);
 		notifyStaff();
 		this.room.pokeExpireTimer();
@@ -449,7 +449,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 
 	deleteTicket(staff: User) {
 		this.close('deleted', staff);
-		this.room.modlog({action: 'TICKETDELETE', isGlobal: false, loggedBy: staff.id});
+		this.room.modlog({ action: 'TICKETDELETE', isGlobal: false, loggedBy: staff.id });
 		this.addText(`${staff.name} deleted this ticket.`, staff);
 		delete tickets[this.ticket.userid];
 		writeTickets();
@@ -493,7 +493,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		}
 		return Utils.sortBy(Object.values(tickets), sorter);
 	}
-	static logTextResult(ticket: TicketState & {text: [string, string], resolved: ResolvedTicketInfo}) {
+	static logTextResult(ticket: TicketState & { text: [string, string], resolved: ResolvedTicketInfo }) {
 		const entry = {
 			text: ticket.text,
 			resolved: ticket.resolved,
@@ -544,7 +544,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 				if (e.stdout) {
 					lines = e;
 				} else {
-					lines = {stdout: ""};
+					lines = { stdout: "" };
 				}
 			}
 			for (const line of lines.stdout.split('\n')) {
@@ -638,7 +638,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		buf += `</div></details><br />`;
 		return buf;
 	}
-	static getTextButton(ticket: TicketState & {text: [string, string]}) {
+	static getTextButton(ticket: TicketState & { text: [string, string] }) {
 		let buf = '';
 		const titleBuf = [
 			...ticket.text[0].split('\n').map(Utils.escapeHTML),
@@ -691,7 +691,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 	}
 	static getBanMessage(userid: ID, punishment: Punishment) {
 		if (userid !== punishment.id) {
-			const {id: punished, reason} = punishment;
+			const { id: punished, reason } = punishment;
 			return (
 				`You are banned from creating help tickets` +
 				`${punished !== userid ? `, because you have the same IP as ${userid}` : ''}. ${reason ? `Reason: ${reason}` : ''}`
@@ -700,7 +700,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		return `You are banned from creating help tickets.`;
 	}
 	static notifyResolved(user: User, ticket: TicketState, userid = user.id) {
-		const {result, time, by, seen, note} = ticket.resolved!;
+		const { result, time, by, seen, note } = ticket.resolved!;
 		if (seen) return;
 		const timeString = (Date.now() - time) > 1000 ? `, ${Chat.toDurationString(Date.now() - time)} ago.` : '.';
 		user.send(`|pm|~Staff|${user.getIdentity()}|Hello! Your report was resolved by ${by}${timeString}`);
@@ -720,8 +720,8 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 
 const NOTIFY_ALL_TIMEOUT = 5 * 60 * 1000;
 const NOTIFY_ASSIST_TIMEOUT = 60 * 1000;
-const unclaimedTicketTimer: {[k: string]: NodeJS.Timeout | null} = {upperstaff: null, staff: null};
-const timerEnds: {[k: string]: number} = {upperstaff: 0, staff: 0};
+const unclaimedTicketTimer: { [k: string]: NodeJS.Timeout | null } = { upperstaff: null, staff: null };
+const timerEnds: { [k: string]: number } = { upperstaff: 0, staff: 0 };
 function pokeUnclaimedTicketTimer(hasUnclaimed: boolean, hasAssistRequest: boolean) {
 	const room = Rooms.get('staff');
 	if (!room) return;
@@ -807,7 +807,7 @@ export function notifyStaff() {
 			if (ticket.type === 'Public Room Assistance Request') hasAssistRequest = true;
 		}
 		if (ticket.text) {
-			buf += HelpTicket.getTextButton(ticket as TicketState & {text: [string, string]});
+			buf += HelpTicket.getTextButton(ticket as TicketState & { text: [string, string] });
 		} else if (ticketGame) {
 			buf += ticketGame.getButton();
 		}
@@ -885,7 +885,7 @@ function getReportedUser(ticket: TicketState) {
 }
 
 export async function listOpponentsFrom(
-	ticket: TicketState & {text: [string, string]}
+	ticket: TicketState & { text: [string, string] }
 ) {
 	const opps = new Utils.Multiset<string>();
 	const links = getBattleLinks(ticket.text[0]).concat(getBattleLinks(ticket.text[1]));
@@ -918,7 +918,7 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 export async function getBattleLog(battle: string, noReplay = false): Promise<BattleInfo | null> {
 	const battleRoom = Rooms.get(battle);
 	const seenPokemon = new Set<string>();
-	let data: {log: string, players: string[]} | null = null;
+	let data: { log: string, players: string[] } | null = null;
 	// try battle room first
 	if (battleRoom && battleRoom.type !== 'chat' && battleRoom.battle) {
 		data = {
@@ -996,7 +996,7 @@ for (const room of Rooms.rooms.values()) {
 void convertRoomPunishments();
 
 const delayWarningPreamble = `Hi! All global staff members are busy right now and we apologize for the delay. `;
-const delayWarnings: {[k: string]: string} = {
+const delayWarnings: { [k: string]: string } = {
 	'PM Harassment': `Please make sure you have given us the permission to check the PMs between you and the user you reported. You can also provide any relevant context; for example, a replay of a battle with the person you're reporting.`,
 	'Battle Harassment': `Please save the replay of the battle and provide a link to it in this chat, so we can see the harassment even if the battle expires. You can save the replay by clicking on the "Upload and share replay" button once the battle has ended.`,
 	'Inappropriate Username': `Make sure you have provided the correct username, and if its meaning or why it is offensive is not obvious, please explain why it should not be allowed.`,
@@ -1006,7 +1006,7 @@ const delayWarnings: {[k: string]: string} = {
 	'Public Room Assistance Request': `Please tell us which room you need assistance with and a global staff member will join your room as soon as possible.`,
 	other: `If your issue pertains to battle mechanics or is a question about Pokémon Showdown, you can ask in the <<help>> chatroom.`,
 };
-const ticketTitles: {[k: string]: string} = {
+const ticketTitles: { [k: string]: string } = {
 	pmharassment: `PM Harassment`,
 	battleharassment: `Battle Harassment`,
 	inapname: `Inappropriate Username`,
@@ -1016,7 +1016,7 @@ const ticketTitles: {[k: string]: string} = {
 	roomhelp: `Public Room Assistance Request`,
 	other: `Other`,
 };
-const ticketPages: {[k: string]: string} = {
+const ticketPages: { [k: string]: string } = {
 	report: `I want to report someone`,
 	pmharassment: `Someone is harassing me in PMs`,
 	battleharassment: `Someone is harassing me in a battle`,
@@ -1086,7 +1086,7 @@ const cheatingScenarios = [
 	],
 ];
 
-export const textTickets: {[k: string]: TextTicketInfo} = {
+export const textTickets: { [k: string]: TextTicketInfo } = {
 	pmharassment: {
 		title: "Who's harassing you in PMs?",
 		checker(input) {
@@ -1345,7 +1345,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				info = [];
 				if (ips?.length) {
 					for (const ip of ips) {
-						info.push({...await IPTools.lookup(ip), ip});
+						info.push({ ...await IPTools.lookup(ip), ip });
 					}
 					if (!ticket.state) {
 						ticket.state = info;
@@ -1388,7 +1388,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			return buf;
 		},
 		getState(ticket, user) {
-			return {ips: user.ips};
+			return { ips: user.ips };
 		},
 		checker(text, context, pageId, user) {
 			if (!toID(text)) {
@@ -1425,7 +1425,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 		async onSubmit(ticket, text, user) {
 			const ips = [];
 			for (const ip of user.ips) {
-				ips.push({...await IPTools.lookup(ip), ip});
+				ips.push({ ...await IPTools.lookup(ip), ip });
 			}
 			ticket.state = ips;
 			writeTickets();
@@ -1776,10 +1776,10 @@ export const pages: Chat.PageTable = {
 					count++;
 					buf += `<strong>Reporter:</strong> ${ticket.userid}`;
 					buf += await textTickets[typeId].getReviewDisplay(
-						ticket as TicketState & {text: [string, string]},
+						ticket as TicketState & { text: [string, string] },
 						user,
 						this.connection,
-						{list: true}
+						{ list: true }
 					);
 					buf += `<form data-submitsend="/helpticket resolve ${ticket.userid},{text} spoiler:{private}">`;
 					buf += `<br /><strong>Resolve:</strong><br />`;
@@ -1869,7 +1869,7 @@ export const pages: Chat.PageTable = {
 				if (entry.userids) ids = ids.concat(entry.userids);
 				buf += `<tr><td>${ids.map(Utils.escapeHTML).join(', ')}</td>`;
 				buf += `<td>${entry.ips.join(', ')}</td>`;
-				buf += `<td>${Chat.toDurationString(entry.expireTime - Date.now(), {precision: 1})}</td>`;
+				buf += `<td>${Chat.toDurationString(entry.expireTime - Date.now(), { precision: 1 })}</td>`;
 				buf += `<td>${entry.reason || ''}</td></tr>`;
 			}
 			buf += `</tbody></table></div>`;
@@ -1909,7 +1909,7 @@ export const pages: Chat.PageTable = {
 			buf += `${ticket.userid}</a></strong>`;
 			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${ticket.userid}'">Global Modlog</button><br />`;
-			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
+			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & { text: [string, string] }, user, connection);
 			buf += `<br />`;
 			buf += `<div class="infobox">`;
 			const [text, context] = ticket.text;
@@ -1987,8 +1987,8 @@ export const pages: Chat.PageTable = {
 				return buf;
 			}
 			const stringifyDate = (num: number) => {
-				const dateStrings = Chat.toTimestamp(new Date(num), {human: true}).split(' ');
-				return {day: dateStrings[0], time: dateStrings[1]};
+				const dateStrings = Chat.toTimestamp(new Date(num), { human: true }).split(' ');
+				return { day: dateStrings[0], time: dateStrings[1] };
 			};
 
 			Utils.sortBy(logs, log => -log.resolved.time);
@@ -2007,7 +2007,7 @@ export const pages: Chat.PageTable = {
 					buf += `<br /><strong>Claimed:</strong> ${ticket.claimed}<br />`;
 				}
 				buf += await ticketInfo.getReviewDisplay(
-					ticket as TicketState & {text: [string, string]},
+					ticket as TicketState & { text: [string, string] },
 					user,
 					connection,
 					ticket.state
@@ -2094,7 +2094,7 @@ export const pages: Chat.PageTable = {
 			}
 
 			let buf = `<div class="pad ladder"><div style="text-align: center">${buttonBar}</div><br />`;
-			buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="${table === 'tickets' ? 7 : 3}"><h2 style="margin: 5px auto">${this.tr`Help Ticket Stats`} - ${date.toLocaleString('en-us', {month: 'long', year: 'numeric'})}</h1></th></tr>`;
+			buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="${table === 'tickets' ? 7 : 3}"><h2 style="margin: 5px auto">${this.tr`Help Ticket Stats`} - ${date.toLocaleString('en-us', { month: 'long', year: 'numeric' })}</h1></th></tr>`;
 			if (table === 'tickets') {
 				if (!['type', 'totaltickets', 'total', 'initwait', 'wait', 'resolution', 'result'].includes(col)) col = 'type';
 				buf += `<tr><th><Button>type</Button></th><th><Button>totaltickets</Button></th><th><Button>total</Button></th><th><Button>initwait</Button></th><th><Button>wait</Button></th><th><Button>resolution</Button></th><th><Button>result</Button></th></tr>`;
@@ -2103,7 +2103,7 @@ export const pages: Chat.PageTable = {
 				buf += `<tr><th><Button>staff</Button></th><th><Button>num</Button></th><th><Button>time</Button></th></tr>`;
 			}
 
-			const ticketStats: {[k: string]: string}[] = rawTicketStats.split('\n').filter(
+			const ticketStats: { [k: string]: string }[] = rawTicketStats.split('\n').filter(
 				(line: string) => line
 			).map(
 				(line: string) => {
@@ -2120,7 +2120,7 @@ export const pages: Chat.PageTable = {
 				}
 			);
 			if (table === 'tickets') {
-				const typeStats: {[key: string]: {[key: string]: number}} = {};
+				const typeStats: { [key: string]: { [key: string]: number } } = {};
 				for (const stats of ticketStats) {
 					if (!typeStats[stats.type]) {
 						typeStats[stats.type] = {
@@ -2170,15 +2170,15 @@ export const pages: Chat.PageTable = {
 
 				for (const type of sortedStats) {
 					const resolution = `${this.tr`Resolved`}: ${typeStats[type].resolved}%<br/>${this.tr`Unresolved`}: ${typeStats[type].unresolved}%<br/>${this.tr`Dead`}: ${typeStats[type].dead}%`;
-					buf += `<tr><td>${type}</td><td>${typeStats[type].totaltickets}</td><td>${Chat.toDurationString(typeStats[type].total, {hhmmss: true})}</td><td>${Chat.toDurationString(typeStats[type].initwait, {hhmmss: true}) || '-'}</td><td>${Chat.toDurationString(typeStats[type].wait, {hhmmss: true}) || '-'}</td><td>${resolution}</td><td>${typeStats[type].result}%</td></tr>`;
+					buf += `<tr><td>${type}</td><td>${typeStats[type].totaltickets}</td><td>${Chat.toDurationString(typeStats[type].total, { hhmmss: true })}</td><td>${Chat.toDurationString(typeStats[type].initwait, { hhmmss: true }) || '-'}</td><td>${Chat.toDurationString(typeStats[type].wait, { hhmmss: true }) || '-'}</td><td>${resolution}</td><td>${typeStats[type].result}%</td></tr>`;
 				}
 			} else {
-				const staffStats: {[key: string]: {[key: string]: number}} = {};
+				const staffStats: { [key: string]: { [key: string]: number } } = {};
 				for (const stats of ticketStats) {
 					const staffArray = (typeof stats.staff === 'string' ? stats.staff.split(',') : []);
 					for (const staff of staffArray) {
 						if (!staff) continue;
-						if (!staffStats[staff]) staffStats[staff] = {num: 0, time: 0};
+						if (!staffStats[staff]) staffStats[staff] = { num: 0, time: 0 };
 						staffStats[staff].num++;
 						staffStats[staff].time += (parseInt(stats.total) - parseInt(stats.initwait));
 					}
@@ -2194,11 +2194,11 @@ export const pages: Chat.PageTable = {
 					return -staffStats[staff][col];
 				});
 				for (const staff of sortedStaff) {
-					buf += `<tr><td>${staff}</td><td>${staffStats[staff].num}</td><td>${Chat.toDurationString(staffStats[staff].time, {precision: 1})}</td></tr>`;
+					buf += `<tr><td>${staff}</td><td>${staffStats[staff].num}</td><td>${Chat.toDurationString(staffStats[staff].time, { precision: 1 })}</td></tr>`;
 				}
 			}
 			buf += `</tbody></table></div>`;
-			const headerTitles: {[id: string]: string} = {
+			const headerTitles: { [id: string]: string } = {
 				type: 'Type',
 				totaltickets: 'Total Tickets',
 				total: 'Average Total Time',
@@ -2294,7 +2294,7 @@ export const commands: Chat.ChatCommands = {
 			] = Utils.splitFirst(target, '|', 4).map(s => s.trim());
 			reportTarget = Utils.escapeHTML(reportTarget);
 			if (!Object.values(ticketTitles).includes(ticketType)) return this.parse('/helpticket');
-			const contexts: {[k: string]: string} = {
+			const contexts: { [k: string]: string } = {
 				'PM Harassment': `Hi! Who was harassing you in private messages?`,
 				'Battle Harassment': `Hi! Who was harassing you, and in which battle did it happen? Please post a link to the battle or a replay of the battle.`,
 				'Inappropriate Username': `Hi! Tell us the username that is inappropriate.`,
@@ -2305,7 +2305,7 @@ export const commands: Chat.ChatCommands = {
 				Other: `Hi! What seems to be the problem? Tell us about any people involved,` +
 					` and if this happened in a specific place on the site.`,
 			};
-			const staffContexts: {[k: string]: string} = {
+			const staffContexts: { [k: string]: string } = {
 				'IP-Appeal': `<p><strong>${user.name}'s IP Addresses</strong>: ${user.ips.map(ip => `<a href="https://whatismyipaddress.com/ip/${ip}" target="_blank">${ip}</a>`).join(', ')}</p>`,
 			};
 			ticket = {
@@ -2358,7 +2358,7 @@ export const commands: Chat.ChatCommands = {
 				writeTickets();
 				notifyStaff();
 				void textTicket.onSubmit?.(ticket, [text, contextString], this.user, this.connection);
-				void runPunishments(ticket as TicketState & {text: [string, string]}, typeId);
+				void runPunishments(ticket as TicketState & { text: [string, string] }, typeId);
 				if (textTicket.getState) {
 					ticket.state = textTicket.getState(ticket, user);
 				}
@@ -2446,7 +2446,7 @@ export const commands: Chat.ChatCommands = {
 					isHelp: true,
 					isPrivate: 'hidden',
 					modjoin: '%',
-					auth: {[user.id]: '+'},
+					auth: { [user.id]: '+' },
 					introMessage: introMsg,
 					staffMessage: staffMessage + staffHint + reportTargetInfo,
 				});
@@ -2460,7 +2460,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			const ticketGame = helpRoom.getGame(HelpTicket)!;
 			Chat.runHandlers('onTicketCreate', ticket, user);
-			helpRoom.modlog({action: 'TICKETOPEN', isGlobal: false, loggedBy: user.id, note: ticket.type});
+			helpRoom.modlog({ action: 'TICKETOPEN', isGlobal: false, loggedBy: user.id, note: ticket.type });
 			ticketGame.addText(`${user.name} opened a new ticket. Issue: ${ticket.type}`, user);
 			void this.parse(`/join help-${user.id}`);
 			if (!(user.id in ticketGame.playerTable)) {
@@ -2509,7 +2509,7 @@ export const commands: Chat.ChatCommands = {
 			if (!ticket.text) {
 				return this.popupReply(`That ticket cannot be resolved with /helpticket resolve. Join it instead.`);
 			}
-			const {publicReason, privateReason} = this.parseSpoiler(result);
+			const { publicReason, privateReason } = this.parseSpoiler(result);
 			ticket.resolved = {
 				result: publicReason,
 				time: Date.now(),
@@ -2532,7 +2532,7 @@ export const commands: Chat.ChatCommands = {
 				note: privateReason,
 				userid: ticketId,
 			});
-			HelpTicket.logTextResult(ticket as TicketState & {text: [string, string], resolved: ResolvedTicketInfo});
+			HelpTicket.logTextResult(ticket as TicketState & { text: [string, string], resolved: ResolvedTicketInfo });
 			notifyStaff();
 			// force a refresh for everyone in it, otherwise we potentially get two punishments at once
 			// from different people clicking at the same time and reading it separately.
@@ -2687,7 +2687,7 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply(`Invalid ticket type: ${target}.`);
 			}
 			buf += `${target ? `for the type ${target}:` : ""}</strong><hr />`;
-			const table = target ? {[target]: settings.responses[target]} : settings.responses;
+			const table = target ? { [target]: settings.responses[target] } : settings.responses;
 			if (!Object.keys(table).length) {
 				buf += `<p class="message-error">None</p>`;
 				return this.sendReplyBox(buf);
@@ -2742,7 +2742,7 @@ export const commands: Chat.ChatCommands = {
 		ticketban: 'ban',
 		async ban(target, room, user) {
 			if (!target) return this.parse('/help helpticket ban');
-			const {targetUser, targetUsername, rest: reason} = this.splitUser(target, {exactName: true});
+			const { targetUser, targetUsername, rest: reason } = this.splitUser(target, { exactName: true });
 			this.checkCan('lock', targetUser);
 
 			const punishment = Punishments.roomUserids.nestedGet('staff', toID(targetUsername));

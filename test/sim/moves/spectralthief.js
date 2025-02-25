@@ -10,8 +10,8 @@ describe(`Spectral Thief`, () => {
 
 	it(`should steal the target's boosts before hitting`, () => {
 		battle = common.createBattle([
-			[{species: "Smeargle", ability: 'technician', moves: ['calmmind', 'spectralthief']}],
-			[{species: "Litten", ability: 'intimidate', item: 'focussash', moves: ['swordsdance', 'roar']}],
+			[{ species: "Smeargle", ability: 'technician', moves: ['calmmind', 'spectralthief'] }],
+			[{ species: "Litten", ability: 'intimidate', item: 'focussash', moves: ['swordsdance', 'roar'] }],
 		]);
 		const [thief, victim] = battle.sides.map(s => s.active[0]);
 
@@ -33,8 +33,8 @@ describe(`Spectral Thief`, () => {
 
 	it(`should double the boosts if the user has Simple`, () => {
 		battle = common.createBattle([
-			[{species: "Smeargle", ability: 'simple', moves: ['calmmind', 'spectralthief']}],
-			[{species: "Mew", ability: 'pressure', moves: ['swordsdance', 'roar']}],
+			[{ species: "Smeargle", ability: 'simple', moves: ['calmmind', 'spectralthief'] }],
+			[{ species: "Mew", ability: 'pressure', moves: ['swordsdance', 'roar'] }],
 		]);
 		const [thief, victim] = battle.sides.map(s => s.active[0]);
 
@@ -49,8 +49,8 @@ describe(`Spectral Thief`, () => {
 
 	it(`should only steal boosts once if the user has Parental Bond`, () => {
 		battle = common.createBattle([
-			[{species: "Smeargle", ability: 'parentalbond', moves: ['calmmind', 'spectralthief']}],
-			[{species: "Mew", ability: 'pressure', item: 'weaknesspolicy', moves: ['swordsdance', 'roar']}],
+			[{ species: "Smeargle", ability: 'parentalbond', moves: ['calmmind', 'spectralthief'] }],
+			[{ species: "Mew", ability: 'pressure', item: 'weaknesspolicy', moves: ['swordsdance', 'roar'] }],
 		]);
 		const [thief, victim] = battle.sides.map(s => s.active[0]);
 
@@ -66,8 +66,8 @@ describe(`Spectral Thief`, () => {
 
 	it(`should not steal boosts if the target is immune to the hit`, () => {
 		battle = common.createBattle([
-			[{species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['spectralthief']}],
-			[{species: "Zangoose", ability: 'immunity', moves: ['swordsdance']}],
+			[{ species: "Smeargle", ability: 'owntempo', item: 'laggingtail', moves: ['spectralthief'] }],
+			[{ species: "Zangoose", ability: 'immunity', moves: ['swordsdance'] }],
 		]);
 		const [thief, victim] = battle.sides.map(s => s.active[0]);
 
@@ -78,8 +78,8 @@ describe(`Spectral Thief`, () => {
 
 	it(`should zero target's boosts if the target has Contrary`, () => {
 		battle = common.createBattle([
-			[{species: "Smeargle", ability: 'owntempo', item: 'focussash', moves: ['spectralthief']}],
-			[{species: "Serperior", ability: 'contrary', moves: ['leafstorm']}],
+			[{ species: "Smeargle", ability: 'owntempo', item: 'focussash', moves: ['spectralthief'] }],
+			[{ species: "Serperior", ability: 'contrary', moves: ['leafstorm'] }],
 		]);
 		const victim = battle.p2.active[0];
 		battle.makeChoices('move spectralthief', 'move leafstorm');
@@ -89,8 +89,8 @@ describe(`Spectral Thief`, () => {
 
 	it(`should zero target's boosts if the target has Clear Body`, () => {
 		battle = common.createBattle([
-			[{species: "Smeargle", ability: 'owntempo', moves: ['spectralthief']}],
-			[{species: "Tentacruel", ability: 'clearbody', moves: ['swordsdance']}],
+			[{ species: "Smeargle", ability: 'owntempo', moves: ['spectralthief'] }],
+			[{ species: "Tentacruel", ability: 'clearbody', moves: ['swordsdance'] }],
 		]);
 		const victim = battle.p2.active[0];
 		battle.makeChoices('move spectralthief', 'move swordsdance');
@@ -100,8 +100,8 @@ describe(`Spectral Thief`, () => {
 
 	it(`should zero target's boosts if the target has Simple`, () => {
 		battle = common.createBattle([
-			[{species: "Smeargle", ability: 'owntempo', moves: ['spectralthief']}],
-			[{species: "Swoobat", ability: 'simple', moves: ['amnesia']}],
+			[{ species: "Smeargle", ability: 'owntempo', moves: ['spectralthief'] }],
+			[{ species: "Swoobat", ability: 'simple', moves: ['amnesia'] }],
 		]);
 		const victim = battle.p2.active[0];
 		battle.makeChoices('move spectralthief', 'move amnesia');

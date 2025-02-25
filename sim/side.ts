@@ -19,11 +19,11 @@
  * @license MIT
  */
 
-import {Utils} from '../lib/utils';
-import type {RequestState} from './battle';
-import {Pokemon, type EffectState} from './pokemon';
-import {State} from './state';
-import {toID} from './dex';
+import { Utils } from '../lib/utils';
+import type { RequestState } from './battle';
+import { Pokemon, type EffectState } from './pokemon';
+import { State } from './state';
+import { toID } from './dex';
 
 /** A single action that can be chosen. */
 export interface ChosenAction {
@@ -91,8 +91,8 @@ export class Side {
 	lastSelectedMove: ID = '';
 
 	/** these point to the same object as the ally's, in multi battles */
-	sideConditions: {[id: string]: EffectState};
-	slotConditions: {[id: string]: EffectState}[];
+	sideConditions: { [id: string]: EffectState };
+	slotConditions: { [id: string]: EffectState }[];
 
 	activeRequest: AnyObject | null;
 	choice: Choice;

@@ -17,8 +17,8 @@ for (const move of moves) {
 
 		it('should double its Base Power every turn for five turns, then resets to 30 BP', () => {
 			battle = common.createBattle([
-				[{species: 'Shuckle', ability: 'gluttony', moves: [id]}],
-				[{species: 'Steelix', ability: 'noguard', moves: ['recover']}],
+				[{ species: 'Shuckle', ability: 'gluttony', moves: [id] }],
+				[{ species: 'Steelix', ability: 'noguard', moves: ['recover'] }],
 			]);
 
 			let ebp = 30;
@@ -41,8 +41,8 @@ for (const move of moves) {
 
 		it('should reset its Base Power if the move misses', () => {
 			battle = common.createBattle([
-				[{species: 'Shuckle', ability: 'gluttony', moves: [id]}],
-				[{species: 'Steelix', ability: 'furcoat', moves: ['recover']}],
+				[{ species: 'Shuckle', ability: 'gluttony', moves: [id] }],
+				[{ species: 'Steelix', ability: 'furcoat', moves: ['recover'] }],
 			]);
 
 			let ebp = 30;
@@ -71,8 +71,8 @@ for (const move of moves) {
 
 		it('should reset its Base Power if the Pokemon is immobilized', () => {
 			battle = common.createBattle([
-				[{species: 'Shuckle', ability: 'gluttony', moves: [id]}],
-				[{species: 'Steelix', ability: 'noguard', moves: ['recover']}],
+				[{ species: 'Shuckle', ability: 'gluttony', moves: [id] }],
+				[{ species: 'Steelix', ability: 'noguard', moves: ['recover'] }],
 			]);
 
 			let ebp = 30;
@@ -99,8 +99,8 @@ for (const move of moves) {
 
 		it('should have double Base Power if the Pokemon used Defense Curl earlier', () => {
 			battle = common.createBattle([
-				[{species: 'Shuckle', ability: 'gluttony', moves: [id, 'defensecurl']}],
-				[{species: 'Steelix', ability: 'noguard', moves: ['recover']}],
+				[{ species: 'Shuckle', ability: 'gluttony', moves: [id, 'defensecurl'] }],
+				[{ species: 'Steelix', ability: 'noguard', moves: ['recover'] }],
 			]);
 
 			let runCount = 0;
@@ -116,8 +116,8 @@ for (const move of moves) {
 
 		it('should not be affected by Parental Bond', () => {
 			battle = common.createBattle([
-				[{species: 'Shuckle', ability: 'parentalbond', moves: [id]}],
-				[{species: 'Steelix', ability: 'noguard', moves: ['recover']}],
+				[{ species: 'Shuckle', ability: 'parentalbond', moves: [id] }],
+				[{ species: 'Steelix', ability: 'noguard', moves: ['recover'] }],
 			]);
 
 			let hitCount = 0;
@@ -133,11 +133,11 @@ for (const move of moves) {
 		describe(`Rollout Storage glitch (Gen 7 / Gen 8DLC1)`, () => {
 			it(`should delay the Rollout multiplier when hitting Disguise or Ice Face`, () => {
 				battle = common.gen(7).createBattle([[
-					{species: 'wynaut', ability: 'compoundeyes', ivs: {atk: '0'}, nature: 'bold', moves: [id, 'watergun']},
+					{ species: 'wynaut', ability: 'compoundeyes', ivs: { atk: '0' }, nature: 'bold', moves: [id, 'watergun'] },
 				], [
-					{species: 'mimikyu', ability: 'disguise', evs: {hp: '252', def: '252'}, nature: 'bold', moves: ['gravity']},
-					{species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk']},
-					{species: 'wigglytuff', ability: 'battlearmor', moves: ['rest']},
+					{ species: 'mimikyu', ability: 'disguise', evs: { hp: '252', def: '252' }, nature: 'bold', moves: ['gravity'] },
+					{ species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk'] },
+					{ species: 'wigglytuff', ability: 'battlearmor', moves: ['rest'] },
 				]]);
 
 				for (let i = 0; i < 5; i++) { battle.makeChoices(); }
@@ -153,11 +153,11 @@ for (const move of moves) {
 
 			it(`should delay the Rollout multiplier when hitting multiple Disguise or Ice Face`, () => {
 				battle = common.gen(7).createBattle([[
-					{species: 'wynaut', ability: 'compoundeyes', ivs: {atk: '0'}, nature: 'bold', moves: [id, 'watergun']},
+					{ species: 'wynaut', ability: 'compoundeyes', ivs: { atk: '0' }, nature: 'bold', moves: [id, 'watergun'] },
 				], [
-					{species: 'mimikyu', ability: 'disguise', evs: {hp: '252', def: '252'}, nature: 'bold', moves: ['gravity']},
-					{species: 'mimikyu', ability: 'disguise', evs: {hp: '252', def: '252'}, nature: 'bold', moves: ['gravity']},
-					{species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk']},
+					{ species: 'mimikyu', ability: 'disguise', evs: { hp: '252', def: '252' }, nature: 'bold', moves: ['gravity'] },
+					{ species: 'mimikyu', ability: 'disguise', evs: { hp: '252', def: '252' }, nature: 'bold', moves: ['gravity'] },
+					{ species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk'] },
 				]]);
 
 				battle.makeChoices();
@@ -171,10 +171,10 @@ for (const move of moves) {
 
 			it(`should use the move's default BP when applying the modifier`, () => {
 				battle = common.gen(7).createBattle([[
-					{species: 'wynaut', ability: 'compoundeyes', ivs: {atk: '0'}, nature: 'bold', moves: [id, 'grassknot']},
+					{ species: 'wynaut', ability: 'compoundeyes', ivs: { atk: '0' }, nature: 'bold', moves: [id, 'grassknot'] },
 				], [
-					{species: 'mimikyu', ability: 'disguise', evs: {hp: '252', def: '252'}, nature: 'bold', moves: ['gravity']},
-					{species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk']},
+					{ species: 'mimikyu', ability: 'disguise', evs: { hp: '252', def: '252' }, nature: 'bold', moves: ['gravity'] },
+					{ species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk'] },
 				]]);
 
 				for (let i = 0; i < 5; i++) { battle.makeChoices(); }
@@ -185,12 +185,12 @@ for (const move of moves) {
 			});
 
 			it(`should only apply the Rollout Storage boost to the first target of a spread move`, () => {
-				battle = common.gen(7).createBattle({gameType: 'doubles'}, [[
-					{species: 'mimikyu', ability: 'disguise', evs: {hp: '252', def: '252'}, nature: 'bold', moves: ['gravity']},
-					{species: 'wynaut', ability: 'compoundeyes', ivs: {atk: '0'}, nature: 'bold', moves: [id, 'snarl']},
+				battle = common.gen(7).createBattle({ gameType: 'doubles' }, [[
+					{ species: 'mimikyu', ability: 'disguise', evs: { hp: '252', def: '252' }, nature: 'bold', moves: ['gravity'] },
+					{ species: 'wynaut', ability: 'compoundeyes', ivs: { atk: '0' }, nature: 'bold', moves: [id, 'snarl'] },
 				], [
-					{species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk']},
-					{species: 'hydreigon', ability: 'battlearmor', moves: ['sleeptalk']},
+					{ species: 'snorlax', ability: 'battlearmor', moves: ['sleeptalk'] },
+					{ species: 'hydreigon', ability: 'battlearmor', moves: ['sleeptalk'] },
 				]]);
 
 				battle.makeChoices('move gravity, move ' + id + ' -1', 'auto');

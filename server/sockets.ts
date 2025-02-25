@@ -15,9 +15,9 @@ import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
 import * as path from 'path';
-import {crashlogger, ProcessManager, Streams, Repl} from '../lib';
-import {IPTools} from './ip-tools';
-import {type ChannelID, extractChannelMessages} from '../sim/battle';
+import { crashlogger, ProcessManager, Streams, Repl } from '../lib';
+import { IPTools } from './ip-tools';
+import { type ChannelID, extractChannelMessages } from '../sim/battle';
 
 type StreamWorker = ProcessManager.StreamWorker;
 
@@ -87,7 +87,7 @@ export const Sockets = new class {
 			workerCount = (Config.workers !== undefined ? Config.workers : 1);
 		}
 
-		PM.env = {PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '0.0.0.0', PSNOSSL: Config.ssl ? 0 : 1};
+		PM.env = { PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '0.0.0.0', PSNOSSL: Config.ssl ? 0 : 1 };
 		PM.subscribeSpawn(worker => void this.onSpawn(worker));
 		PM.subscribeUnspawn(this.onUnspawn);
 
@@ -145,7 +145,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 
 	isTrustedProxyIp: (ip: string) => boolean;
 
-	receivers: {[k: string]: (this: ServerStream, data: string) => void} = {
+	receivers: { [k: string]: (this: ServerStream, data: string) => void } = {
 		'$'(data) {
 			// $code
 			// eslint-disable-next-line no-eval
@@ -325,7 +325,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			if (key && cert) {
 				try {
 					// In case there are additional SSL config settings besides the key and cert...
-					this.serverSsl = https.createServer({...config.ssl.options, key, cert});
+					this.serverSsl = https.createServer({ ...config.ssl.options, key, cert });
 				} catch (e: any) {
 					crashlogger(new Error(`The SSL settings are misconfigured:\n${e.stack}`), `Socket process ${process.pid}`);
 				}
@@ -384,7 +384,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		// and doing things on our server.
 
 		const sockjs: typeof import('sockjs') = (require as any)('sockjs');
-		const options: import('sockjs').ServerOptions & {faye_server_options?: {[key: string]: any}} = {
+		const options: import('sockjs').ServerOptions & { faye_server_options?: { [key: string]: any } } = {
 			sockjs_url: `//play.pokemonshowdown.com/js/lib/sockjs-1.4.0-nwjsfix.min.js`,
 			prefix: '/showdown',
 			log(severity: string, message: string) {
@@ -395,7 +395,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		if (config.wsdeflate !== null) {
 			try {
 				const deflate = (require as any)('permessage-deflate').configure(config.wsdeflate);
-				options.faye_server_options = {extensions: [deflate]};
+				options.faye_server_options = { extensions: [deflate] };
 			} catch {
 				crashlogger(
 					new Error("Dependency permessage-deflate is not installed or is otherwise unaccessable. No message compression will take place until server restart."),

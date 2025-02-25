@@ -12,9 +12,9 @@ describe('Glaive Rush', () => {
 
 	it(`should cause the user to take double damage after use`, () => {
 		battle = common.createBattle([[
-			{species: 'Baxcalibur', ability: 'battlearmor', moves: ['glaiverush']},
+			{ species: 'Baxcalibur', ability: 'battlearmor', moves: ['glaiverush'] },
 		], [
-			{species: 'Skeledirge', moves: ['shadowball']},
+			{ species: 'Skeledirge', moves: ['shadowball'] },
 		]]);
 		battle.makeChoices();
 		const baxcalibur = battle.p1.active[0];
@@ -24,9 +24,9 @@ describe('Glaive Rush', () => {
 
 	it(`should cause moves to never miss the user after use`, () => {
 		battle = common.createBattle([[
-			{species: 'Baxcalibur', ability: 'battlearmor', moves: ['glaiverush']},
+			{ species: 'Baxcalibur', ability: 'battlearmor', moves: ['glaiverush'] },
 		], [
-			{species: 'Dondozo', moves: ['fissure']},
+			{ species: 'Dondozo', moves: ['fissure'] },
 		]]);
 		battle.makeChoices();
 		assert.fainted(battle.p1.active[0]);
@@ -34,9 +34,9 @@ describe('Glaive Rush', () => {
 
 	it(`should only apply its drawback until the user's next turn`, () => {
 		battle = common.createBattle([[
-			{species: 'Baxcalibur', ability: 'battlearmor', item: 'safetygoggles', moves: ['glaiverush', 'shoreup']},
+			{ species: 'Baxcalibur', ability: 'battlearmor', item: 'safetygoggles', moves: ['glaiverush', 'shoreup'] },
 		], [
-			{species: 'Tyranitar', ability: 'sandstream', moves: ['icepunch']},
+			{ species: 'Tyranitar', ability: 'sandstream', moves: ['icepunch'] },
 		]]);
 		const baxcalibur = battle.p1.active[0];
 		battle.makeChoices();

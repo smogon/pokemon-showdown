@@ -1,7 +1,7 @@
 export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	acupressure: {
 		inherit: true,
-		flags: {snatch: 1, metronome: 1},
+		flags: { snatch: 1, metronome: 1 },
 		onHit(target) {
 			if (target.volatiles['substitute']) {
 				return false;
@@ -35,7 +35,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	aquaring: {
 		inherit: true,
-		flags: {metronome: 1},
+		flags: { metronome: 1 },
 		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'Aqua Ring');
@@ -151,7 +151,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						damage: this.effectState.totalDamage * 2,
 						category: "Physical",
 						priority: 1,
-						flags: {contact: 1, protect: 1},
+						flags: { contact: 1, protect: 1 },
 						ignoreImmunity: true,
 						effectType: 'Move',
 						type: 'Normal',
@@ -207,7 +207,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	conversion: {
 		inherit: true,
-		flags: {metronome: 1},
+		flags: { metronome: 1 },
 		onHit(target) {
 			const possibleTypes = target.moveSlots.map(moveSlot => {
 				const move = this.dex.moves.get(moveSlot.id);
@@ -263,12 +263,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	curse: {
 		inherit: true,
-		flags: {metronome: 1},
+		flags: { metronome: 1 },
 		onModifyMove(move, source, target) {
 			if (!source.hasType('Ghost')) {
 				delete move.volatileStatus;
 				delete move.onHit;
-				move.self = {boosts: {atk: 1, def: 1, spe: -1}};
+				move.self = { boosts: { atk: 1, def: 1, spe: -1 } };
 				move.target = move.nonGhostTarget!;
 			} else if (target?.volatiles['substitute']) {
 				delete move.volatileStatus;
@@ -289,7 +289,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	defog: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, bypasssub: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 	},
 	detect: {
 		inherit: true,
@@ -317,7 +317,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	disable: {
 		inherit: true,
 		accuracy: 80,
-		flags: {protect: 1, mirror: 1, bypasssub: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 		volatileStatus: 'disable',
 		condition: {
 			durationCallback() {
@@ -375,7 +375,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				name: "Doom Desire",
 				basePower: 120,
 				category: "Special",
-				flags: {metronome: 1, futuremove: 1},
+				flags: { metronome: 1, futuremove: 1 },
 				willCrit: false,
 				type: '???',
 			} as unknown as ActiveMove;
@@ -391,7 +391,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					basePower: 0,
 					damage,
 					category: "Special",
-					flags: {metronome: 1, futuremove: 1},
+					flags: { metronome: 1, futuremove: 1 },
 					effectType: 'Move',
 					type: '???',
 				},
@@ -417,7 +417,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	embargo: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onTryHit(pokemon) {
 			if (pokemon.ability === 'multitype' || pokemon.item === 'griseousorb') {
 				return false;
@@ -438,7 +438,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	encore: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, bypasssub: 1, metronome: 1, failencore: 1},
+		flags: { protect: 1, mirror: 1, bypasssub: 1, metronome: 1, failencore: 1 },
 		volatileStatus: 'encore',
 		condition: {
 			durationCallback() {
@@ -566,9 +566,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			} else {
 				if (!move.secondaries) move.secondaries = [];
 				if (item.fling.status) {
-					move.secondaries.push({status: item.fling.status});
+					move.secondaries.push({ status: item.fling.status });
 				} else if (item.fling.volatileStatus) {
-					move.secondaries.push({volatileStatus: item.fling.volatileStatus});
+					move.secondaries.push({ volatileStatus: item.fling.volatileStatus });
 				}
 			}
 			source.addVolatile('fling');
@@ -591,7 +591,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	foresight: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, bypasssub: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 	},
 	furycutter: {
 		inherit: true,
@@ -620,7 +620,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				name: "Future Sight",
 				basePower: 80,
 				category: "Special",
-				flags: {metronome: 1, futuremove: 1},
+				flags: { metronome: 1, futuremove: 1 },
 				willCrit: false,
 				type: '???',
 			} as unknown as ActiveMove;
@@ -636,7 +636,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					basePower: 0,
 					damage,
 					category: "Special",
-					flags: {metronome: 1, futuremove: 1},
+					flags: { metronome: 1, futuremove: 1 },
 					effectType: 'Move',
 					type: '???',
 				},
@@ -752,7 +752,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	healblock: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
 		condition: {
 			duration: 5,
 			durationCallback(target, source, effect) {
@@ -793,7 +793,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	healingwish: {
 		inherit: true,
-		flags: {heal: 1, metronome: 1},
+		flags: { heal: 1, metronome: 1 },
 		onAfterMove(pokemon) {
 			pokemon.switchFlag = true;
 		},
@@ -830,7 +830,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	imprison: {
 		inherit: true,
-		flags: {bypasssub: 1, metronome: 1},
+		flags: { bypasssub: 1, metronome: 1 },
 		onTryHit(pokemon) {
 			for (const target of pokemon.foes()) {
 				for (const move of pokemon.moves) {
@@ -953,7 +953,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	luckychant: {
 		inherit: true,
-		flags: {metronome: 1},
+		flags: { metronome: 1 },
 		condition: {
 			duration: 5,
 			onSideStart(side) {
@@ -968,7 +968,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	lunardance: {
 		inherit: true,
-		flags: {heal: 1, metronome: 1},
+		flags: { heal: 1, metronome: 1 },
 		onAfterMove(pokemon) {
 			pokemon.switchFlag = true;
 		},
@@ -1009,7 +1009,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				target.removeVolatile('magiccoat');
 				const newMove = this.dex.getActiveMove(move.id);
 				newMove.hasBounced = true;
-				this.actions.useMove(newMove, target, {target: source});
+				this.actions.useMove(newMove, target, { target: source });
 				return null;
 			},
 		},
@@ -1020,7 +1020,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	magnetrise: {
 		inherit: true,
-		flags: {gravity: 1, metronome: 1},
+		flags: { gravity: 1, metronome: 1 },
 		volatileStatus: 'magnetrise',
 		condition: {
 			duration: 5,
@@ -1049,11 +1049,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	metalburst: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
 	},
 	metronome: {
 		inherit: true,
-		flags: {noassist: 1, failcopycat: 1, nosleeptalk: 1, failmimic: 1},
+		flags: { noassist: 1, failcopycat: 1, nosleeptalk: 1, failmimic: 1 },
 		onHit(pokemon) {
 			const moves = this.dex.moves.all().filter(move => (
 				(![2, 4].includes(this.gen) || !pokemon.moves.includes(move.id)) &&
@@ -1107,7 +1107,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	miracleeye: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, bypasssub: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 	},
 	mirrormove: {
 		inherit: true,
@@ -1197,7 +1197,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	naturepower: {
 		inherit: true,
-		flags: {metronome: 1},
+		flags: { metronome: 1 },
 		onHit(pokemon) {
 			this.actions.useMove('triattack', pokemon);
 		},
@@ -1221,7 +1221,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	odorsleuth: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, bypasssub: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 	},
 	outrage: {
 		inherit: true,
@@ -1272,7 +1272,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	powertrick: {
 		inherit: true,
-		flags: {metronome: 1},
+		flags: { metronome: 1 },
 	},
 	protect: {
 		inherit: true,
@@ -1299,7 +1299,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	psychup: {
 		inherit: true,
-		flags: {snatch: 1, bypasssub: 1, metronome: 1},
+		flags: { snatch: 1, bypasssub: 1, metronome: 1 },
 	},
 	pursuit: {
 		inherit: true,
@@ -1351,7 +1351,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	recycle: {
 		inherit: true,
-		flags: {metronome: 1},
+		flags: { metronome: 1 },
 	},
 	reflect: {
 		inherit: true,
@@ -1405,7 +1405,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	roar: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
 	},
 	rockblast: {
 		inherit: true,
@@ -1530,7 +1530,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	snatch: {
 		inherit: true,
-		flags: {bypasssub: 1, noassist: 1, failcopycat: 1},
+		flags: { bypasssub: 1, noassist: 1, failcopycat: 1 },
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
@@ -1552,11 +1552,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	snore: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, sound: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, sound: 1, metronome: 1 },
 	},
 	spikes: {
 		inherit: true,
-		flags: {metronome: 1, mustpressure: 1},
+		flags: { metronome: 1, mustpressure: 1 },
 		condition: {
 			// this is a side condition
 			onSideStart(side) {
@@ -1577,11 +1577,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	spite: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, bypasssub: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 	},
 	stealthrock: {
 		inherit: true,
-		flags: {metronome: 1, mustpressure: 1},
+		flags: { metronome: 1, mustpressure: 1 },
 		condition: {
 			// this is a side condition
 			onSideStart(side) {
@@ -1728,7 +1728,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	taunt: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, bypasssub: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 		condition: {
 			durationCallback() {
 				return this.random(3, 6);
@@ -1765,7 +1765,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	torment: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, bypasssub: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 	},
 	toxic: {
 		inherit: true,
@@ -1773,7 +1773,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	toxicspikes: {
 		inherit: true,
-		flags: {metronome: 1, mustpressure: 1},
+		flags: { metronome: 1, mustpressure: 1 },
 		condition: {
 			// this is a side condition
 			onSideStart(side) {
@@ -1802,7 +1802,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	transform: {
 		inherit: true,
-		flags: {bypasssub: 1, metronome: 1, failencore: 1},
+		flags: { bypasssub: 1, metronome: 1, failencore: 1 },
 	},
 	trick: {
 		inherit: true,
@@ -1902,11 +1902,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	whirlwind: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, bypasssub: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 	},
 	wish: {
 		inherit: true,
-		flags: {heal: 1, metronome: 1},
+		flags: { heal: 1, metronome: 1 },
 		slotCondition: 'Wish',
 		condition: {
 			duration: 2,

@@ -12,8 +12,8 @@ describe('Substitute', () => {
 
 	it('should deduct 25% of max HP, rounded down', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute']}]});
-		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['recover']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['substitute'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['recover'] }] });
 		battle.makeChoices('move substitute', 'move recover');
 		const pokemon = battle.p1.active[0];
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
@@ -21,8 +21,8 @@ describe('Substitute', () => {
 
 	it('should not block the user\'s own moves from targetting itself', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute', 'calmmind']}]});
-		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['recover']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['substitute', 'calmmind'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['recover'] }] });
 		battle.makeChoices('move substitute', 'move recover');
 		battle.makeChoices('move calmmind', 'move recover');
 		assert.equal(battle.p1.active[0].boosts['spa'], 1);
@@ -31,8 +31,8 @@ describe('Substitute', () => {
 
 	it('should block damage from most moves', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute']}]});
-		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['psystrike']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['substitute'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['psystrike'] }] });
 		battle.makeChoices('move substitute', 'move psystrike');
 		const pokemon = battle.p1.active[0];
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
@@ -40,8 +40,8 @@ describe('Substitute', () => {
 
 	it('should not block recoil damage', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute', 'doubleedge']}]});
-		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['nastyplot']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['substitute', 'doubleedge'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['nastyplot'] }] });
 		battle.makeChoices('move substitute', 'move nastyplot');
 		battle.makeChoices('move doubleedge', 'move nastyplot');
 		const pokemon = battle.p1.active[0];
@@ -50,9 +50,9 @@ describe('Substitute', () => {
 
 	it('should take specific recoil damage in Gen 1', () => {
 		battle = common.gen(1).createBattle([[
-			{species: 'Hitmonlee', moves: ['substitute', 'highjumpkick']},
+			{ species: 'Hitmonlee', moves: ['substitute', 'highjumpkick'] },
 		], [
-			{species: 'Hitmonchan', moves: ['substitute', 'agility']},
+			{ species: 'Hitmonchan', moves: ['substitute', 'agility'] },
 		]]);
 
 		const hitmonlee = battle.p1.active[0];
@@ -89,8 +89,8 @@ describe('Substitute', () => {
 
 	it('should cause recoil damage from an opponent\'s moves to be based on damage dealt to the substitute', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'pressure', moves: ['substitute']}]});
-		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'noguard', moves: ['nastyplot', 'lightofruin']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['substitute'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Mewtwo', ability: 'noguard', moves: ['nastyplot', 'lightofruin'] }] });
 		battle.makeChoices('move substitute', 'move nastyplot');
 		battle.makeChoices('move substitute', 'move lightofruin');
 		const pokemon = battle.p2.active[0];
@@ -99,8 +99,8 @@ describe('Substitute', () => {
 
 	it('should cause recovery from an opponent\'s draining moves to be based on damage dealt to the substitute', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Zangoose', ability: 'pressure', moves: ['substitute']}]});
-		battle.setPlayer('p2', {team: [{species: 'Zangoose', ability: 'noguard', moves: ['bellydrum', 'drainpunch']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Zangoose', ability: 'pressure', moves: ['substitute'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Zangoose', ability: 'noguard', moves: ['bellydrum', 'drainpunch'] }] });
 		battle.makeChoices('move substitute', 'move bellydrum');
 		const hp = battle.p2.active[0].hp;
 		battle.makeChoices('move substitute', 'move drainpunch');
@@ -109,8 +109,8 @@ describe('Substitute', () => {
 
 	it('should block most status moves targetting the user', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Mewtwo', ability: 'noguard', moves: ['substitute']}]});
-		battle.setPlayer('p2', {team: [{species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['hypnosis', 'toxic', 'poisongas', 'thunderwave', 'willowisp']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Mewtwo', ability: 'noguard', moves: ['substitute'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['hypnosis', 'toxic', 'poisongas', 'thunderwave', 'willowisp'] }] });
 		for (let i = 1; i <= 5; i++) {
 			battle.makeChoices('move substitute', 'move ' + i);
 			assert.equal(battle.p1.active[0].status, '');
@@ -119,8 +119,8 @@ describe('Substitute', () => {
 
 	it('should allow multi-hit moves to continue after the substitute fades', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Dragonite', ability: 'noguard', item: 'focussash', moves: ['substitute', 'roost']}]});
-		battle.setPlayer('p2', {team: [{species: 'Dragonite', ability: 'hugepower', item: 'laggingtail', moves: ['roost', 'dualchop']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Dragonite', ability: 'noguard', item: 'focussash', moves: ['substitute', 'roost'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Dragonite', ability: 'hugepower', item: 'laggingtail', moves: ['roost', 'dualchop'] }] });
 		battle.makeChoices('move substitute', 'move roost');
 		battle.makeChoices('move roost', 'move dualchop');
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
@@ -128,9 +128,9 @@ describe('Substitute', () => {
 
 	it(`[Gen 1] should track what the actual damage would have been without the Substitute`, () => {
 		battle = common.gen(1).createBattle([[
-			{species: 'Ponyta', moves: ['substitute', 'growl'], evs: {hp: 252, spd: 252}},
+			{ species: 'Ponyta', moves: ['substitute', 'growl'], evs: { hp: 252, spd: 252 } },
 		], [
-			{species: 'Cloyster', moves: ['clamp'], evs: {spa: 252}},
+			{ species: 'Cloyster', moves: ['clamp'], evs: { spa: 252 } },
 		]]);
 
 		const ponyta = battle.p1.active[0];
@@ -143,10 +143,10 @@ describe('Substitute', () => {
 	});
 
 	it(`[Gen 1] Substitute should not block secondary effect confusion if it is unbroken`, () => {
-		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
-			{species: 'Magikarp', moves: ['psybeam']},
+		battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
+			{ species: 'Magikarp', moves: ['psybeam'] },
 		], [
-			{species: 'Alakazam', moves: ['substitute']},
+			{ species: 'Alakazam', moves: ['substitute'] },
 		]]);
 
 		battle.makeChoices();
@@ -154,10 +154,10 @@ describe('Substitute', () => {
 	});
 
 	it(`[Gen 1] if a Pokemon with a Substitute hurts itself due to confusion and the target does not have a Substitute, there is no damage dealt.`, () => {
-		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
-			{species: 'Magikarp', moves: ['substitute', 'agility']},
+		battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
+			{ species: 'Magikarp', moves: ['substitute', 'agility'] },
 		], [
-			{species: 'Alakazam', moves: ['confuseray', 'agility']},
+			{ species: 'Alakazam', moves: ['confuseray', 'agility'] },
 		]]);
 		const magikarp = battle.p1.active[0];
 		const alakazam = battle.p2.active[0];
@@ -177,10 +177,10 @@ describe('Substitute', () => {
 	});
 
 	it(`[Gen 1] if a Pokemon with a Substitute hurts itself due to confusion and the target has a Substitute, the target's Substitute takes the damage.`, () => {
-		battle = common.gen(1).createBattle({forceRandomChance: true}, [[
-			{species: 'Magikarp', moves: ['substitute', 'agility']},
+		battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
+			{ species: 'Magikarp', moves: ['substitute', 'agility'] },
 		], [
-			{species: 'Alakazam', moves: ['confuseray', 'substitute', 'agility']},
+			{ species: 'Alakazam', moves: ['confuseray', 'substitute', 'agility'] },
 		]]);
 		const magikarp = battle.p1.active[0];
 		const alakazam = battle.p2.active[0];

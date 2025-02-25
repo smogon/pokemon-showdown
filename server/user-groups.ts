@@ -1,6 +1,6 @@
-import {FS} from '../lib/fs';
-import type {RoomSection} from './chat-commands/room-settings';
-import {toID} from '../sim/dex-data';
+import { FS } from '../lib/fs';
+import type { RoomSection } from './chat-commands/room-settings';
+import { toID } from '../sim/dex-data';
 
 export type GroupSymbol = '~' | '#' | '★' | '*' | '@' | '%' | '☆' | '§' | '+' | '^' | ' ' | '‽' | '!';
 export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
@@ -265,7 +265,7 @@ export class RoomAuth extends Auth {
 			let group = Config.greatergroupscache[`${roomGroup}${parentGroup}`];
 			if (!group) {
 				// unrecognized groups always trump higher global rank
-				const roomRank = Auth.getGroup(roomGroup, {rank: Infinity}).rank;
+				const roomRank = Auth.getGroup(roomGroup, { rank: Infinity }).rank;
 				const globalRank = Auth.getGroup(parentGroup).rank;
 				if (roomGroup === Users.PLAYER_SYMBOL || roomGroup === Users.HOST_SYMBOL || roomGroup === '#') {
 					// Player, Host, and Room Owner always trump higher global rank

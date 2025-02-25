@@ -12,9 +12,9 @@ describe('Mummy', () => {
 
 	it(`should set the attacker's ability to Mummy when the user is hit by a contact move`, () => {
 		battle = common.createBattle([[
-			{species: 'Cofagrigus', ability: 'mummy', moves: ['sleeptalk']},
+			{ species: 'Cofagrigus', ability: 'mummy', moves: ['sleeptalk'] },
 		], [
-			{species: 'Mew', ability: 'synchronize', moves: ['aerialace']},
+			{ species: 'Mew', ability: 'synchronize', moves: ['aerialace'] },
 		]]);
 
 		battle.makeChoices();
@@ -23,9 +23,9 @@ describe('Mummy', () => {
 
 	it(`should not change abilities that can't be suppressed`, () => {
 		battle = common.createBattle([[
-			{species: 'Cofagrigus', ability: 'mummy', moves: ['sleeptalk']},
+			{ species: 'Cofagrigus', ability: 'mummy', moves: ['sleeptalk'] },
 		], [
-			{species: 'Mimikyu', ability: 'disguise', moves: ['aerialace']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['aerialace'] },
 		]]);
 
 		battle.makeChoices();
@@ -33,12 +33,12 @@ describe('Mummy', () => {
 	});
 
 	it(`should not activate before all damage calculation is complete`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Sableye', ability: 'toughclaws', moves: ['brutalswing']},
-			{species: 'Golisopod', ability: 'emergencyexit', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Sableye', ability: 'toughclaws', moves: ['brutalswing'] },
+			{ species: 'Golisopod', ability: 'emergencyexit', moves: ['sleeptalk'] },
 		], [
-			{species: 'Cofagrigus', ability: 'mummy', moves: ['sleeptalk']},
-			{species: 'Hoopa', ability: 'shellarmor', moves: ['sleeptalk']},
+			{ species: 'Cofagrigus', ability: 'mummy', moves: ['sleeptalk'] },
+			{ species: 'Hoopa', ability: 'shellarmor', moves: ['sleeptalk'] },
 		]]);
 
 		const hoopa = battle.p2.active[1];

@@ -28,7 +28,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				const calc = calculate(this, target, source);
 				if (calc) this.damage(calc * source.baseMaxhp / 4, source, target);
 				if (target.species.id === 'cramorantgulping') {
-					this.boost({def: -1}, source, target, null, true);
+					this.boost({ def: -1 }, source, target, null, true);
 				} else {
 					source.trySetStatus('par', target, move);
 				}

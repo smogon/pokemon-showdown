@@ -11,15 +11,15 @@ describe('Free-for-all', () => {
 	});
 
 	it(`should support forfeiting`, () => {
-		battle = common.createBattle({gameType: 'freeforall'}, [[
-			{species: 'wynaut', moves: ['vitalthrow']},
+		battle = common.createBattle({ gameType: 'freeforall' }, [[
+			{ species: 'wynaut', moves: ['vitalthrow'] },
 		], [
-			{species: 'scyther', moves: ['sleeptalk']},
+			{ species: 'scyther', moves: ['sleeptalk'] },
 		], [
-			{species: 'scyther', moves: ['sleeptalk', 'uturn']},
-			{species: 'wynaut', moves: ['vitalthrow']},
+			{ species: 'scyther', moves: ['sleeptalk', 'uturn'] },
+			{ species: 'wynaut', moves: ['vitalthrow'] },
 		], [
-			{species: 'scyther', moves: ['sleeptalk']},
+			{ species: 'scyther', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		battle.lose('p2');

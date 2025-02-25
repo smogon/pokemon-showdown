@@ -4,17 +4,17 @@
  * @author Kris
  */
 
-import {FS, Utils} from "../../lib";
+import { FS, Utils } from "../../lib";
 
 const SAMPLE_TEAMS = 'config/chat-plugins/sample-teams.json';
 
 interface SampleTeamsData {
-	whitelist: {[formatid: string]: RoomID[]};
+	whitelist: { [formatid: string]: RoomID[] };
 	/** Teams are stored in the packed format */
 	teams: {
 		[formatid: string]: {
-			uncategorized: {[k: string]: string},
-			[category: string]: {[teamName: string]: string},
+			uncategorized: { [k: string]: string },
+			[category: string]: { [teamName: string]: string },
 		},
 	};
 }
@@ -118,7 +118,7 @@ export const SampleTeams = new class SampleTeams {
 
 	initializeFormat(formatid: string) {
 		if (!teamData.teams[formatid]) {
-			teamData.teams[formatid] = {uncategorized: {}};
+			teamData.teams[formatid] = { uncategorized: {} };
 			save();
 		}
 	}

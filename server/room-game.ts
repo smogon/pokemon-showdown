@@ -122,7 +122,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	 * Not a source of truth. Should be kept in sync with
 	 * `Object.fromEntries(this.players.filter(p => p.id).map(p => [p.id, p]))`
 	 */
-	playerTable: {[userid: string]: PlayerClass} = Object.create(null);
+	playerTable: { [userid: string]: PlayerClass } = Object.create(null);
 	players: PlayerClass[] = [];
 	playerCount = 0;
 	playerCap = 0;
@@ -134,7 +134,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	 * We should really resolve this collision at _some_ point, but it will have
 	 * to be later. The /timer command is written to be resilient to this.
 	 */
-	timer?: {timerRequesters?: Set<ID>, start: (force?: User) => void, stop: (force?: User) => void} |
+	timer?: { timerRequesters?: Set<ID>, start: (force?: User) => void, stop: (force?: User) => void } |
 		NodeJS.Timeout | null;
 	constructor(room: Room, isSubGame = false) {
 		this.roomid = room.roomid;
@@ -195,7 +195,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 			}
 		}
 		if (userOrName) {
-			const {name, id} = typeof userOrName === 'string' ? {name: userOrName, id: toID(userOrName)} : userOrName;
+			const { name, id } = typeof userOrName === 'string' ? { name: userOrName, id: toID(userOrName) } : userOrName;
 			(player.id as string) = id;
 			player.name = name;
 			this.playerTable[player.id] = player;

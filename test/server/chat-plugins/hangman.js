@@ -1,7 +1,7 @@
 'use strict';
 
-const {Hangman} = require('../../../dist/server/chat-plugins/hangman');
-const {makeUser, destroyUser} = require('../../users-utils');
+const { Hangman } = require('../../../dist/server/chat-plugins/hangman');
+const { makeUser, destroyUser } = require('../../users-utils');
 const assert = require('../../assert');
 
 function createHangman(creator, word, hint) {

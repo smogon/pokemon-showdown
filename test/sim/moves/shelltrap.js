@@ -11,14 +11,14 @@ describe('Shell Trap', () => {
 	});
 
 	it('should deduct PP regardless if it was successful', () => {
-		battle = common.createBattle({gameType: 'doubles'}, [
+		battle = common.createBattle({ gameType: 'doubles' }, [
 			[
-				{species: 'Turtonator', ability: 'shellarmor', moves: ['shelltrap']},
-				{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+				{ species: 'Turtonator', ability: 'shellarmor', moves: ['shelltrap'] },
+				{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
 			],
 			[
-				{species: 'Turtonator', ability: 'shellarmor', moves: ['tackle', 'irondefense']},
-				{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
+				{ species: 'Turtonator', ability: 'shellarmor', moves: ['tackle', 'irondefense'] },
+				{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
 			],
 		]);
 
@@ -35,8 +35,8 @@ describe('Shell Trap', () => {
 
 	it('should not Z-power if hit by a Z-move', () => {
 		battle = common.createBattle({}, [
-			[{species: 'Turtonator', moves: ['shelltrap']}],
-			[{species: 'Magikarp', item: 'normaliumz', moves: ['flail']}],
+			[{ species: 'Turtonator', moves: ['shelltrap'] }],
+			[{ species: 'Magikarp', item: 'normaliumz', moves: ['flail'] }],
 		]);
 		battle.makeChoices('move shelltrap', 'move flail zmove');
 		assert(battle.log.some(line => line.includes('|Shell Trap|')));
@@ -44,8 +44,8 @@ describe('Shell Trap', () => {
 
 	it('should not Max if hit by a Max move', () => {
 		battle = common.gen(8).createBattle({}, [
-			[{species: 'Turtonator', moves: ['shelltrap']}],
-			[{species: 'Magikarp', moves: ['flail']}],
+			[{ species: 'Turtonator', moves: ['shelltrap'] }],
+			[{ species: 'Magikarp', moves: ['flail'] }],
 		]);
 		battle.makeChoices('move shelltrap', 'move flail dynamax');
 		assert(battle.log.some(line => line.includes('|Shell Trap|')));

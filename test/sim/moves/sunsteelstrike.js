@@ -12,9 +12,9 @@ describe('Sunsteel Strike', () => {
 
 	it(`should not ignore the user's own Ability`, () => {
 		battle = common.createBattle([[
-			{species: 'metagross', ability: 'clearbody', moves: ['sunsteelstrike']},
+			{ species: 'metagross', ability: 'clearbody', moves: ['sunsteelstrike'] },
 		], [
-			{species: 'goodra', ability: 'gooey', moves: ['sleeptalk']},
+			{ species: 'goodra', ability: 'gooey', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		const metagross = battle.p1.active[0];
@@ -23,9 +23,9 @@ describe('Sunsteel Strike', () => {
 
 	it(`should ignore the user's own Ability (Gen 7)`, () => {
 		battle = common.gen(7).createBattle([[
-			{species: 'metagross', ability: 'clearbody', moves: ['sunsteelstrike']},
+			{ species: 'metagross', ability: 'clearbody', moves: ['sunsteelstrike'] },
 		], [
-			{species: 'goodra', ability: 'gooey', moves: ['sleeptalk']},
+			{ species: 'goodra', ability: 'gooey', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		const metagross = battle.p1.active[0];

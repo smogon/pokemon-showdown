@@ -12,9 +12,9 @@ describe('Sky Drop', () => {
 
 	it(`should prevent its target from moving when it is caught by the effect`, () => {
 		battle = common.createBattle([[
-			{species: 'Aerodactyl', moves: ['skydrop']},
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		], [
-			{species: 'Lairon', moves: ['tackle']},
+			{ species: 'Lairon', moves: ['tackle'] },
 		]]);
 
 		const aerodactyl = battle.p1.active[0];
@@ -26,10 +26,10 @@ describe('Sky Drop', () => {
 
 	it(`should prevent its target from switching out when it is caught by the effect`, () => {
 		battle = common.createBattle([[
-			{species: 'Aerodactyl', moves: ['skydrop']},
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		], [
-			{species: 'Lairon', moves: ['tackle']},
-			{species: 'Aggron', moves: ['tackle']},
+			{ species: 'Lairon', moves: ['tackle'] },
+			{ species: 'Aggron', moves: ['tackle'] },
 		]]);
 
 		battle.makeChoices();
@@ -37,14 +37,14 @@ describe('Sky Drop', () => {
 	});
 
 	it(`should prevent both the user and the target from being forced out when caught by the effect`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Aerodactyl', moves: ['skydrop']},
-			{species: 'Machamp', ability: 'noguard', moves: ['circlethrow']},
-			{species: 'Kabutops', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
+			{ species: 'Machamp', ability: 'noguard', moves: ['circlethrow'] },
+			{ species: 'Kabutops', moves: ['sleeptalk'] },
 		], [
-			{species: 'Armaldo', moves: ['sleeptalk']},
-			{species: 'Aggron', ability: 'noguard', moves: ['dragontail']},
-			{species: 'Omastar', moves: ['sleeptalk']},
+			{ species: 'Armaldo', moves: ['sleeptalk'] },
+			{ species: 'Aggron', ability: 'noguard', moves: ['dragontail'] },
+			{ species: 'Omastar', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move skydrop 1, move circlethrow 1', 'move sleeptalk, move dragontail 1');
@@ -53,14 +53,14 @@ describe('Sky Drop', () => {
 	});
 
 	it(`should prevent both the user and the target from being forced out by Eject Button`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Aerodactyl', item: 'ejectbutton', moves: ['skydrop']},
-			{species: 'Machamp', ability: 'noguard', moves: ['tackle']},
-			{species: 'Kabutops', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Aerodactyl', item: 'ejectbutton', moves: ['skydrop'] },
+			{ species: 'Machamp', ability: 'noguard', moves: ['tackle'] },
+			{ species: 'Kabutops', moves: ['sleeptalk'] },
 		], [
-			{species: 'Armaldo', item: 'ejectbutton', moves: ['sleeptalk']},
-			{species: 'Aggron', ability: 'noguard', moves: ['watergun']},
-			{species: 'Omastar', moves: ['sleeptalk']},
+			{ species: 'Armaldo', item: 'ejectbutton', moves: ['sleeptalk'] },
+			{ species: 'Aggron', ability: 'noguard', moves: ['watergun'] },
+			{ species: 'Omastar', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move skydrop 1, move tackle 1', 'move sleeptalk, move watergun 1');
@@ -70,9 +70,9 @@ describe('Sky Drop', () => {
 
 	it(`should prevent its target from using Mega Evolution when it is caught by the effect`, () => {
 		battle = common.createBattle([[
-			{species: 'Aerodactyl', moves: ['skydrop']},
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		], [
-			{species: 'Manectric', item: 'manectite', moves: ['charge']},
+			{ species: 'Manectric', item: 'manectite', moves: ['charge'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('auto', 'move charge mega');
@@ -81,9 +81,9 @@ describe('Sky Drop', () => {
 
 	it(`should prevent its target from activating Stance Change when it is caught by the effect`, () => {
 		battle = common.createBattle([[
-			{species: 'Aerodactyl', moves: ['skydrop']},
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		], [
-			{species: 'Aegislash', ability: 'stancechange', moves: ['tackle', 'kingsshield']},
+			{ species: 'Aegislash', ability: 'stancechange', moves: ['tackle', 'kingsshield'] },
 		]]);
 
 		const aegi = battle.p2.active[0];
@@ -97,12 +97,12 @@ describe('Sky Drop', () => {
 	});
 
 	it(`should free its target and allow it to move if the user faints`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Aerodactyl', moves: ['skydrop']},
-			{species: 'Kyogre', ability: 'noguard', moves: ['sheercold']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
+			{ species: 'Kyogre', ability: 'noguard', moves: ['sheercold'] },
 		], [
-			{species: 'Lairon', moves: ['swordsdance']},
-			{species: 'Aggron', moves: ['sleeptalk']},
+			{ species: 'Lairon', moves: ['swordsdance'] },
+			{ species: 'Aggron', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move skydrop 1, move sheercold -1', 'auto');
@@ -112,9 +112,9 @@ describe('Sky Drop', () => {
 
 	it(`should pick up Flying-type Pokemon but do no damage`, () => {
 		battle = common.createBattle([[
-			{species: 'Aerodactyl', moves: ['skydrop']},
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		], [
-			{species: 'Salamence', moves: ['tackle']},
+			{ species: 'Salamence', moves: ['tackle'] },
 		]]);
 		battle.makeChoices();
 		assert.fullHP(battle.p1.active[0]);
@@ -124,10 +124,10 @@ describe('Sky Drop', () => {
 
 	it(`should pick up non-Flying weak Wonder Guard Pokemon but do no damage`, () => {
 		battle = common.createBattle([[
-			{species: 'Aerodactyl', moves: ['skydrop']},
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		], [
-			{species: 'Shuckle', ability: 'wonderguard', moves: ['tackle']},
-			{species: 'Shedinja', ability: 'wonderguard', moves: ['sleeptalk']},
+			{ species: 'Shuckle', ability: 'wonderguard', moves: ['tackle'] },
+			{ species: 'Shedinja', ability: 'wonderguard', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -141,10 +141,10 @@ describe('Sky Drop', () => {
 
 	it(`should only make contact on the way down`, () => {
 		battle = common.createBattle([[
-			{species: 'Aerodactyl', moves: ['skydrop']},
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		], [
-			{species: 'Aegislash', moves: ['kingsshield']},
-			{species: 'Ferrothorn', ability: 'ironbarbs', moves: ['sleeptalk']},
+			{ species: 'Aegislash', moves: ['kingsshield'] },
+			{ species: 'Ferrothorn', ability: 'ironbarbs', moves: ['sleeptalk'] },
 		]]);
 		const aerodactyl = battle.p1.active[0];
 		battle.makeChoices();
@@ -157,9 +157,9 @@ describe('Sky Drop', () => {
 
 	it(`should fail if the target has a Substitute`, () => {
 		battle = common.createBattle([[
-			{species: 'Aerodactyl', moves: ['sleeptalk', 'skydrop']},
+			{ species: 'Aerodactyl', moves: ['sleeptalk', 'skydrop'] },
 		], [
-			{species: 'Lairon', moves: ['substitute', 'tackle']},
+			{ species: 'Lairon', moves: ['substitute', 'tackle'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move skydrop', 'move tackle');
@@ -168,21 +168,21 @@ describe('Sky Drop', () => {
 
 	it(`should fail if the target is heavier than 200kg`, () => {
 		battle = common.createBattle([[
-			{species: 'Aerodactyl', moves: ['skydrop']},
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		], [
-			{species: 'Aggron', moves: ['tackle']},
+			{ species: 'Aggron', moves: ['tackle'] },
 		]]);
 		battle.makeChoices();
 		assert.false.fullHP(battle.p1.active[0]);
 	});
 
 	it(`should fail if used against an ally`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Aerodactyl', moves: ['skydrop']},
-			{species: 'Smeargle', moves: ['spore']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
+			{ species: 'Smeargle', moves: ['spore'] },
 		], [
-			{species: 'Lairon', moves: ['sleeptalk']},
-			{species: 'Aggron', moves: ['sleeptalk']},
+			{ species: 'Lairon', moves: ['sleeptalk'] },
+			{ species: 'Aggron', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move skydrop -2, move spore 1', 'auto');
@@ -190,12 +190,12 @@ describe('Sky Drop', () => {
 	});
 
 	it(`should hit its picked-up target even if its position changed with Ally Switch`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Aerodactyl', moves: ['skydrop']},
-			{species: 'Smeargle', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
+			{ species: 'Smeargle', moves: ['sleeptalk'] },
 		], [
-			{species: 'Lairon', moves: ['sleeptalk']},
-			{species: 'Aggron', moves: ['sleeptalk', 'allyswitch']},
+			{ species: 'Lairon', moves: ['sleeptalk'] },
+			{ species: 'Aggron', moves: ['sleeptalk', 'allyswitch'] },
 		]]);
 		battle.makeChoices('move skydrop 1, move sleeptalk', 'auto');
 		battle.makeChoices('move skydrop 1, move sleeptalk', 'move sleeptalk, move allyswitch');
@@ -205,12 +205,12 @@ describe('Sky Drop', () => {
 	});
 
 	it(`should hit its target even if Follow Me would have otherwise redirected it`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Aerodactyl', moves: ['skydrop']},
-			{species: 'Smeargle', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
+			{ species: 'Smeargle', moves: ['sleeptalk'] },
 		], [
-			{species: 'Lairon', moves: ['sleeptalk']},
-			{species: 'Clamperl', moves: ['followme']},
+			{ species: 'Lairon', moves: ['sleeptalk'] },
+			{ species: 'Clamperl', moves: ['followme'] },
 		]]);
 
 		battle.makeChoices('move skydrop 1, move sleeptalk', 'auto');
@@ -220,12 +220,12 @@ describe('Sky Drop', () => {
 	});
 
 	it(`should cause most moves aimed at the user or target to miss`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Aerodactyl', moves: ['skydrop']},
-			{species: 'Kabutops', moves: ['sleeptalk', 'aquajet']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
+			{ species: 'Kabutops', moves: ['sleeptalk', 'aquajet'] },
 		], [
-			{species: 'Charizard', moves: ['sleeptalk']},
-			{species: 'Azumarill', moves: ['sleeptalk', 'aquajet']},
+			{ species: 'Charizard', moves: ['sleeptalk'] },
+			{ species: 'Azumarill', moves: ['sleeptalk', 'aquajet'] },
 		]]);
 
 		battle.makeChoices('move skydrop 1, move sleeptalk', 'auto');
@@ -235,12 +235,12 @@ describe('Sky Drop', () => {
 	});
 
 	it(`should be canceled by Gravity and allow the target to use its move`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Aerodactyl', moves: ['skydrop']},
-			{species: 'Jirachi', moves: ['gravity']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
+			{ species: 'Jirachi', moves: ['gravity'] },
 		], [
-			{species: 'Lairon', moves: ['swordsdance']},
-			{species: 'Clamperl', moves: ['sleeptalk']},
+			{ species: 'Lairon', moves: ['swordsdance'] },
+			{ species: 'Clamperl', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.statStage(battle.p2.active[0], 'atk', 2);
@@ -248,9 +248,9 @@ describe('Sky Drop', () => {
 
 	it(`should not suppress Speed Boost`, () => {
 		battle = common.createBattle([[
-			{species: 'Aerodactyl', moves: ['skydrop']},
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		], [
-			{species: 'Mew', ability: 'speedboost', moves: ['splash']},
+			{ species: 'Mew', ability: 'speedboost', moves: ['splash'] },
 		]]);
 		battle.makeChoices();
 		assert.statStage(battle.p2.active[0], 'spe', 1);
@@ -258,10 +258,10 @@ describe('Sky Drop', () => {
 
 	it(`should not claim to have dropped a Pokemon if it is already fainted`, () => {
 		battle = common.createBattle([[
-			{species: 'Shedinja', item: 'stickybarb', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Shedinja', item: 'stickybarb', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Aerodactyl', moves: ['skydrop']},
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		]]);
 
 		battle.makeChoices();
@@ -278,9 +278,9 @@ describe('Sky Drop [Gen 5]', () => {
 
 	it(`should not fail even if the target is heavier than 200kg`, () => {
 		battle = common.gen(5).createBattle([[
-			{species: 'Aerodactyl', moves: ['skydrop']},
+			{ species: 'Aerodactyl', moves: ['skydrop'] },
 		], [
-			{species: 'Aggron', moves: ['tackle']},
+			{ species: 'Aggron', moves: ['tackle'] },
 		]]);
 		battle.makeChoices();
 		assert.fullHP(battle.p1.active[0]);
@@ -288,14 +288,14 @@ describe('Sky Drop [Gen 5]', () => {
 
 	describe.skip(`Sky Drop Glitch`, () => {
 		beforeEach(() => {
-			battle = common.gen(5).createBattle({gameType: 'doubles'}, [[
-				{species: 'Aerodactyl', moves: ['rockpolish', 'skydrop', 'dig']},
-				{species: 'Alakazam', moves: ['recover', 'gravity']},
-				{species: 'Aggron', moves: ['rest']},
+			battle = common.gen(5).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Aerodactyl', moves: ['rockpolish', 'skydrop', 'dig'] },
+				{ species: 'Alakazam', moves: ['recover', 'gravity'] },
+				{ species: 'Aggron', moves: ['rest'] },
 			], [
-				{species: 'Magikarp', moves: ['sleeptalk', 'tackle']},
-				{species: 'Deoxys-Attack', ability: 'sturdy', moves: ['nastyplot', 'thunderbolt', 'roar']},
-				{species: 'Azurill', ability: 'thickfat', moves: ['watersport']},
+				{ species: 'Magikarp', moves: ['sleeptalk', 'tackle'] },
+				{ species: 'Deoxys-Attack', ability: 'sturdy', moves: ['nastyplot', 'thunderbolt', 'roar'] },
+				{ species: 'Azurill', ability: 'thickfat', moves: ['watersport'] },
 			]]);
 			console.log('-------------------------------');
 			battle.makeChoices('move skydrop 1, move gravity', 'move sleeptalk, move nastyplot');

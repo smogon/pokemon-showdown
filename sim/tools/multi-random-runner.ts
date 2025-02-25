@@ -5,8 +5,8 @@
  * @license MIT
  */
 
-import {PRNG, type PRNGSeed} from '../prng';
-import {Runner, type RunnerOptions} from './runner';
+import { PRNG, type PRNGSeed } from '../prng';
+import { Runner, type RunnerOptions } from './runner';
 
 export interface MultiRandomRunnerOptions extends Partial<RunnerOptions> {
 	totalGames: number;
@@ -41,7 +41,7 @@ export class MultiRandomRunner {
 	private numGames: number;
 
 	constructor(options: MultiRandomRunnerOptions) {
-		this.options = {...options};
+		this.options = { ...options };
 
 		this.totalGames = options.totalGames;
 
@@ -70,7 +70,7 @@ export class MultiRandomRunner {
 			}
 
 			const seed = this.prng.getSeed();
-			const game = new Runner({format, ...this.options}).run().catch(err => {
+			const game = new Runner({ format, ...this.options }).run().catch(err => {
 				failures++;
 				console.error(
 					`Run \`node tools/simulate multi 1 --format=${format} --seed=${seed}\` ` +

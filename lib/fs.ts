@@ -23,7 +23,7 @@
 
 import * as fs from 'fs';
 import * as pathModule from 'path';
-import {ReadStream, WriteStream} from './streams';
+import { ReadStream, WriteStream } from './streams';
 
 // not sure why it's necessary to use path.sep, but testing with Windows showed it was
 const DIST = `${pathModule.sep}dist${pathModule.sep}`;
@@ -38,10 +38,10 @@ interface PendingUpdate {
 	throttleTimer: NodeJS.Timeout | null;
 }
 
-declare const __fsState: {pendingUpdates: Map<string, PendingUpdate>};
+declare const __fsState: { pendingUpdates: Map<string, PendingUpdate> };
 // config needs to be declared here since we access it as global.Config?.nofswriting
 // (so we can use it without the global)
-declare const global: {__fsState: typeof __fsState, Config: any};
+declare const global: { __fsState: typeof __fsState, Config: any };
 if (!global.__fsState) {
 	global.__fsState = {
 		pendingUpdates: new Map(),
@@ -74,7 +74,7 @@ export class FSPath {
 		if (typeof options !== 'string' && options.encoding === undefined) {
 			options.encoding = 'utf8';
 		}
-		return fs.readFileSync(this.path, options as {encoding: 'utf8'});
+		return fs.readFileSync(this.path, options as { encoding: 'utf8' });
 	}
 
 	readBuffer(options: AnyObject | BufferEncoding = {}): Promise<Buffer> {
@@ -86,7 +86,7 @@ export class FSPath {
 	}
 
 	readBufferSync(options: AnyObject | string = {}) {
-		return fs.readFileSync(this.path, options as {encoding: null});
+		return fs.readFileSync(this.path, options as { encoding: null });
 	}
 
 	exists(): Promise<boolean> {
@@ -210,7 +210,7 @@ export class FSPath {
 		if (!pendingUpdate) throw new Error(`FS: Pending update not found`);
 		if (pendingUpdate.isWriting) throw new Error(`FS: Conflicting update`);
 
-		const {pendingDataFetcher: dataFetcher, pendingOptions: options} = pendingUpdate;
+		const { pendingDataFetcher: dataFetcher, pendingOptions: options } = pendingUpdate;
 		if (!dataFetcher || !options) {
 			// no pending update
 			__fsState.pendingUpdates.delete(this.path);
@@ -313,14 +313,14 @@ export class FSPath {
 
 	createWriteStream(options = {}): WriteStream {
 		if (global.Config?.nofswriting) {
-			return new WriteStream({write() {}});
+			return new WriteStream({ write() {} });
 		}
 		return new WriteStream(fs.createWriteStream(this.path, options));
 	}
 
 	createAppendStream(options: AnyObject = {}): WriteStream {
 		if (global.Config?.nofswriting) {
-			return new WriteStream({write() {}});
+			return new WriteStream({ write() {} });
 		}
 		options.flags = options.flags || 'a';
 		return new WriteStream(fs.createWriteStream(this.path, options));
@@ -348,7 +348,7 @@ export class FSPath {
 	async rmdir(recursive?: boolean) {
 		if (global.Config?.nofswriting) return Promise.resolve();
 		return new Promise<void>((resolve, reject) => {
-			fs.rmdir(this.path, {recursive}, err => {
+			fs.rmdir(this.path, { recursive }, err => {
 				err ? reject(err) : resolve();
 			});
 		});
@@ -356,7 +356,7 @@ export class FSPath {
 
 	rmdirSync(recursive?: boolean) {
 		if (global.Config?.nofswriting) return;
-		return fs.rmdirSync(this.path, {recursive});
+		return fs.rmdirSync(this.path, { recursive });
 	}
 
 	mkdir(mode: string | number = 0o755) {

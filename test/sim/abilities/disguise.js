@@ -10,9 +10,9 @@ describe('Disguise', () => {
 
 	it('should block damage from one move', () => {
 		battle = common.gen(7).createBattle([[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
-			{species: 'Mewtwo', ability: 'pressure', moves: ['psystrike']},
+			{ species: 'Mewtwo', ability: 'pressure', moves: ['psystrike'] },
 		]]);
 		assert.false.hurts(battle.p1.active[0], () => battle.makeChoices());
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices());
@@ -20,18 +20,18 @@ describe('Disguise', () => {
 
 	it('should only block damage from the first hit of a move', () => {
 		battle = common.gen(7).createBattle([[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
-			{species: 'Beedrill', ability: 'swarm', moves: ['twineedle']},
+			{ species: 'Beedrill', ability: 'swarm', moves: ['twineedle'] },
 		]]);
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 
 	it(`should bust Disguise on self-hit confusion`, () => {
-		battle = common.gen(7).createBattle({forceRandomChance: true}, [[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
+		battle = common.gen(7).createBattle({ forceRandomChance: true }, [[
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
-			{species: 'Sableye', ability: 'prankster', moves: ['confuseray']},
+			{ species: 'Sableye', ability: 'prankster', moves: ['confuseray'] },
 		]]);
 
 		battle.makeChoices();
@@ -40,19 +40,19 @@ describe('Disguise', () => {
 
 	it('should not block damage from weather effects', () => {
 		battle = common.createBattle([[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
-			{species: 'Tyranitar', ability: 'sandstream', moves: ['rest']},
+			{ species: 'Tyranitar', ability: 'sandstream', moves: ['rest'] },
 		]]);
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices());
 	});
 
 	it('should not block damage from entry hazards', () => {
 		battle = common.createBattle([[
-			{species: 'Zangoose', ability: 'toxicboost', item: 'laggingtail', moves: ['return']},
-			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
+			{ species: 'Zangoose', ability: 'toxicboost', item: 'laggingtail', moves: ['return'] },
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
-			{species: 'forretress', ability: 'sturdy', item: 'redcard', moves: ['spikes']},
+			{ species: 'forretress', ability: 'sturdy', item: 'redcard', moves: ['spikes'] },
 		]]);
 		battle.makeChoices();
 		assert.false.fullHP(battle.p1.active[0]);
@@ -60,9 +60,9 @@ describe('Disguise', () => {
 
 	it('should not block status moves or damage from status', () => {
 		battle = common.createBattle([[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
-			{species: 'Ariados', ability: 'swarm', moves: ['toxicthread']},
+			{ species: 'Ariados', ability: 'swarm', moves: ['toxicthread'] },
 		]]);
 		const pokemon = battle.p1.active[0];
 		assert.sets(() => pokemon.status, 'psn', () => battle.makeChoices());
@@ -72,9 +72,9 @@ describe('Disguise', () => {
 
 	it('should not block secondary effects from damaging moves', () => {
 		battle = common.gen(7).createBattle([[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
-			{species: 'Pikachu', ability: 'lightningrod', moves: ['nuzzle']},
+			{ species: 'Pikachu', ability: 'lightningrod', moves: ['nuzzle'] },
 		]]);
 		const pokemon = battle.p1.active[0];
 		assert.sets(() => pokemon.status, 'par', () => battle.makeChoices());
@@ -83,18 +83,18 @@ describe('Disguise', () => {
 
 	it('should cause Counter to deal 1 damage if it blocks a move', () => {
 		battle = common.createBattle([[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['counter']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['counter'] },
 		], [
-			{species: 'Weavile', ability: 'pressure', moves: ['feintattack']},
+			{ species: 'Weavile', ability: 'pressure', moves: ['feintattack'] },
 		]]);
 		assert.hurtsBy(battle.p2.active[0], 1, () => battle.makeChoices());
 	});
 
 	it('should not trigger critical hits while active', () => {
 		battle = common.createBattle([[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['sleeptalk']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['sleeptalk'] },
 		], [
-			{species: 'Cryogonal', ability: 'noguard', moves: ['frostbreath']},
+			{ species: 'Cryogonal', ability: 'noguard', moves: ['frostbreath'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log.every(line => !line.startsWith('|-crit')));
@@ -102,9 +102,9 @@ describe('Disguise', () => {
 
 	it(`should not work while Transformed`, () => {
 		battle = common.createBattle([[
-			{species: 'Mimikyu', ability: 'disguise', moves: ['transform']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['transform'] },
 		], [
-			{species: 'Mimikyu', ability: 'disguise', moves: ['sleeptalk', 'aerialace']},
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['sleeptalk', 'aerialace'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('auto', 'move aerialace');

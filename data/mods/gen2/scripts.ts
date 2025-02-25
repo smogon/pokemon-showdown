@@ -135,7 +135,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			pokemon.moveUsed(move);
-			this.battle.actions.useMove(move, pokemon, {target, sourceEffect: options?.sourceEffect});
+			this.battle.actions.useMove(move, pokemon, { target, sourceEffect: options?.sourceEffect });
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 			if (!move.selfSwitch && pokemon.side.foe.active[0].hp) this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 		},
@@ -626,7 +626,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (move.id === 'present') {
-				const typeIndexes: {[k: string]: number} = {
+				const typeIndexes: { [k: string]: number } = {
 					Normal: 0, Fighting: 1, Flying: 2, Poison: 3, Ground: 4, Rock: 5, Bug: 7, Ghost: 8, Steel: 9,
 					Fire: 20, Water: 21, Grass: 22, Electric: 23, Psychic: 24, Ice: 25, Dragon: 26, Dark: 27,
 				};

@@ -11,12 +11,12 @@ describe('G-Max Chi Strike', () => {
 	});
 
 	it(`should boost the user and its ally's critical hit rate by 1 stage`, () => {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'Machamp', moves: ['rocksmash'], gigantamax: true},
-			{species: 'Wynaut', moves: ['tackle']},
+		battle = common.gen(8).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Machamp', moves: ['rocksmash'], gigantamax: true },
+			{ species: 'Wynaut', moves: ['tackle'] },
 		], [
-			{species: 'Wynaut', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 
 		battle.onEvent('ModifyCritRatio', battle.format, (critRatio, target, source, move) => {
@@ -29,12 +29,12 @@ describe('G-Max Chi Strike', () => {
 	});
 
 	it(`should provide a crit boost independent of Focus Energy`, () => {
-		battle = common.gen(8).createBattle({gameType: 'doubles'}, [[
-			{species: 'Machamp', moves: ['sleeptalk', 'rocksmash'], gigantamax: true},
-			{species: 'Wynaut', moves: ['focusenergy', 'tackle']},
+		battle = common.gen(8).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Machamp', moves: ['sleeptalk', 'rocksmash'], gigantamax: true },
+			{ species: 'Wynaut', moves: ['focusenergy', 'tackle'] },
 		], [
-			{species: 'Wynaut', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 
 		battle.onEvent('ModifyCritRatio', battle.format, (critRatio, target, source, move) => {
@@ -49,9 +49,9 @@ describe('G-Max Chi Strike', () => {
 
 	it(`should be copied by Psych Up`, () => {
 		battle = common.gen(8).createBattle([[
-			{species: 'Machamp', moves: ['rocksmash', 'sleeptalk'], gigantamax: true},
+			{ species: 'Machamp', moves: ['rocksmash', 'sleeptalk'], gigantamax: true },
 		], [
-			{species: 'Wynaut', moves: ['psychup', 'tackle']},
+			{ species: 'Wynaut', moves: ['psychup', 'tackle'] },
 		]]);
 
 		battle.onEvent('ModifyCritRatio', battle.format, (critRatio, target, source, move) => {
@@ -66,10 +66,10 @@ describe('G-Max Chi Strike', () => {
 
 	it(`should not be passed by Baton Pass`, () => {
 		battle = common.gen(8).createBattle([[
-			{species: 'Machamp', moves: ['rocksmash', 'batonpass'], gigantamax: true},
-			{species: 'Magikarp', moves: ['tackle']},
+			{ species: 'Machamp', moves: ['rocksmash', 'batonpass'], gigantamax: true },
+			{ species: 'Magikarp', moves: ['tackle'] },
 		], [
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 
 		battle.onEvent('ModifyCritRatio', battle.format, (critRatio, target, source, move) => {

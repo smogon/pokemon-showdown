@@ -114,7 +114,7 @@ class TestTools {
 		for (let i = 0; i < teams.length; i++) {
 			assert(Array.isArray(teams[i]), `Team provided is not an array`);
 			const playerSlot = `p${i + 1}`;
-			battleOptions[playerSlot] = {team: teams[i]};
+			battleOptions[playerSlot] = { team: teams[i] };
 		}
 
 		return new Sim.Battle(battleOptions);
@@ -132,7 +132,7 @@ class TestTools {
 		const battleLog = battle.getDebugLog();
 		if (!fileName) fileName = 'test-replay';
 		const filePath = path.resolve(__dirname, `./replays/${fileName}-${Date.now()}.html`);
-		const out = fs.createWriteStream(filePath, {flags: 'a'});
+		const out = fs.createWriteStream(filePath, { flags: 'a' });
 		out.on('open', () => {
 			out.write(
 				`<!DOCTYPE html>\n` +

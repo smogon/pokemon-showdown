@@ -12,9 +12,9 @@ describe('Psychic Noise', () => {
 
 	it(`should prevent the target from healing, like Heal Block`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', ability: 'battlearmor', moves: ['softboiled', 'sleeptalk']},
+			{ species: 'Wynaut', ability: 'battlearmor', moves: ['softboiled', 'sleeptalk'] },
 		], [
-			{species: 'Regieleki', moves: ['psychicnoise']},
+			{ species: 'Regieleki', moves: ['psychicnoise'] },
 		]]);
 		const wynaut = battle.p1.active[0];
 		battle.makeChoices();
@@ -23,12 +23,12 @@ describe('Psychic Noise', () => {
 	});
 
 	it.skip(`should prevent the target's ally from healing it with Life Dew`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Wynaut', ability: 'battlearmor', moves: ['sleeptalk']},
-			{species: 'Blissey', ability: 'battlearmor', moves: ['lifedew']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Wynaut', ability: 'battlearmor', moves: ['sleeptalk'] },
+			{ species: 'Blissey', ability: 'battlearmor', moves: ['lifedew'] },
 		], [
-			{species: 'Regieleki', moves: ['psychicnoise']},
-			{species: 'Mew', moves: ['watergun']},
+			{ species: 'Regieleki', moves: ['psychicnoise'] },
+			{ species: 'Mew', moves: ['watergun'] },
 		]]);
 		const wynaut = battle.p1.active[0];
 		const blissey = battle.p1.active[1];

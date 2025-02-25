@@ -11,13 +11,13 @@ describe('Red Card', () => {
 	});
 
 	it(`should not trigger if the target should be KOed from Destiny Bond and also not crash the client`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: "Aggron", item: 'redcard', moves: ['rockslide']},
-			{species: "Wynaut", ability: 'prankster', level: 1, moves: ['destinybond']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Aggron", item: 'redcard', moves: ['rockslide'] },
+			{ species: "Wynaut", ability: 'prankster', level: 1, moves: ['destinybond'] },
 		], [
-			{species: "Conkeldurr", moves: ['sleeptalk']},
-			{species: "Gardevoir", moves: ['strugglebug']},
-			{species: "Corsola", moves: ['sleeptalk']},
+			{ species: "Conkeldurr", moves: ['sleeptalk'] },
+			{ species: "Gardevoir", moves: ['strugglebug'] },
+			{ species: "Corsola", moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -26,13 +26,13 @@ describe('Red Card', () => {
 	});
 
 	it(`should trigger if the target is still in battle`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: "Aggron", item: 'redcard', moves: ['rockslide']},
-			{species: "Wynaut", ability: 'prankster', level: 1, moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Aggron", item: 'redcard', moves: ['rockslide'] },
+			{ species: "Wynaut", ability: 'prankster', level: 1, moves: ['sleeptalk'] },
 		], [
-			{species: "Conkeldurr", moves: ['sleeptalk']},
-			{species: "Gardevoir", moves: ['strugglebug']},
-			{species: "Corsola", moves: ['sleeptalk']},
+			{ species: "Conkeldurr", moves: ['sleeptalk'] },
+			{ species: "Gardevoir", moves: ['strugglebug'] },
+			{ species: "Corsola", moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();

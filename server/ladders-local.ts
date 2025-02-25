@@ -13,7 +13,7 @@
  * @license MIT
  */
 
-import {FS, Utils} from '../lib';
+import { FS, Utils } from '../lib';
 
 // ladderCaches = {formatid: ladder OR Promise(ladder)}
 // Use Ladders(formatid).ladder to guarantee a Promise(ladder).

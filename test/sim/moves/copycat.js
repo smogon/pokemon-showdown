@@ -12,9 +12,9 @@ describe('Copycat', () => {
 
 	it('should be able to copy called moves', () => {
 		battle = common.createBattle([[
-			{species: 'riolu', ability: 'steadfast', moves: ['copycat']},
+			{ species: 'riolu', ability: 'steadfast', moves: ['copycat'] },
 		], [
-			{species: 'luxray', moves: ['eerieimpulse', 'roar']},
+			{ species: 'luxray', moves: ['eerieimpulse', 'roar'] },
 		]]);
 
 		battle.makeChoices();
@@ -24,9 +24,9 @@ describe('Copycat', () => {
 
 	it('[Gen 4] should not be able to copy called moves', () => {
 		battle = common.gen(4).createBattle([[
-			{species: 'bonsly', ability: 'sturdy', moves: ['copycat']},
+			{ species: 'bonsly', ability: 'sturdy', moves: ['copycat'] },
 		], [
-			{species: 'ampharos', ability: 'static', moves: ['growl', 'counter']},
+			{ species: 'ampharos', ability: 'static', moves: ['growl', 'counter'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('auto', 'move counter');

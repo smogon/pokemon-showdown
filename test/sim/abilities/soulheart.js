@@ -11,12 +11,12 @@ describe('Soul-Heart', () => {
 	});
 
 	it(`should activate on each individual KO`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Toxapex', moves: ['sleeptalk']},
-			{species: 'Victini', moves: ['finalgambit']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Toxapex', moves: ['sleeptalk'] },
+			{ species: 'Victini', moves: ['finalgambit'] },
 		], [
-			{species: 'Magearna', ability: 'soulheart', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Magearna', ability: 'soulheart', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 
 		const magearna = battle.p2.active[0];
@@ -30,13 +30,13 @@ describe('Soul-Heart', () => {
 	});
 
 	it(`should not activate if two Soul-Hearts are KOed on the same side`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Gengar', moves: ['astralbarrage']},
-			{species: 'Aron', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Gengar', moves: ['astralbarrage'] },
+			{ species: 'Aron', moves: ['sleeptalk'] },
 		], [
-			{species: 'Magearna', ability: 'soulheart', level: 1, moves: ['sleeptalk']},
-			{species: 'Wynaut', ability: 'soulheart', level: 1, moves: ['sleeptalk']},
-			{species: 'Roggenrola', moves: ['sleeptalk']},
+			{ species: 'Magearna', ability: 'soulheart', level: 1, moves: ['sleeptalk'] },
+			{ species: 'Wynaut', ability: 'soulheart', level: 1, moves: ['sleeptalk'] },
+			{ species: 'Roggenrola', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 
@@ -46,12 +46,12 @@ describe('Soul-Heart', () => {
 	});
 
 	it.skip(`should activate an opposing Soul-Heart if the attacker's ally was first KOed in a spread move`, () => {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Landorus', moves: ['earthquake']},
-			{species: 'Aron', moves: ['sleeptalk']},
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Landorus', moves: ['earthquake'] },
+			{ species: 'Aron', moves: ['sleeptalk'] },
 		], [
-			{species: 'Magearna', ability: 'soulheart', level: 1, moves: ['sleeptalk']},
-			{species: 'Lugia', moves: ['sleeptalk']},
+			{ species: 'Magearna', ability: 'soulheart', level: 1, moves: ['sleeptalk'] },
+			{ species: 'Lugia', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 

@@ -8,14 +8,14 @@
  * @license MIT license
  */
 
-import {FS, Utils} from '../../lib';
-import {ScavMods, type TwistEvent} from './scavenger-games';
-import type {ChatHandler} from '../chat';
+import { FS, Utils } from '../../lib';
+import { ScavMods, type TwistEvent } from './scavenger-games';
+import type { ChatHandler } from '../chat';
 
 type GameTypes = 'official' | 'regular' | 'mini' | 'unrated' | 'practice' | 'recycled';
 
 export interface QueuedHunt {
-	hosts: {id: string, name: string, noUpdate?: boolean}[];
+	hosts: { id: string, name: string, noUpdate?: boolean }[];
 	questions: (string | string[])[];
 	isHTML: boolean;
 	staffHostId: string;
@@ -33,10 +33,10 @@ interface ModEvent {
 }
 
 const RATED_TYPES = ['official', 'regular', 'mini'];
-const DEFAULT_POINTS: {[k: string]: number[]} = {
+const DEFAULT_POINTS: { [k: string]: number[] } = {
 	official: [20, 15, 10, 5, 1],
 };
-const DEFAULT_BLITZ_POINTS: {[k: string]: number} = {
+const DEFAULT_BLITZ_POINTS: { [k: string]: number } = {
 	official: 10,
 };
 const DEFAULT_HOST_POINTS = 4;
@@ -54,7 +54,7 @@ const FILTER_LENIENCY = 7;
 const HISTORY_PERIOD = 6; // months
 
 const databaseContentsJSON = FS(DATABASE_FILE).readIfExistsSync();
-const scavengersData = databaseContentsJSON ? JSON.parse(databaseContentsJSON) : {recycledHunts: []};
+const scavengersData = databaseContentsJSON ? JSON.parse(databaseContentsJSON) : { recycledHunts: [] };
 
 const SCAVENGER_ROOMID = 'scavengers';
 function getScavsRoom(room?: Room) {
@@ -71,7 +71,7 @@ export function sanitizeAnswer(answer: string): string {
 
 class Ladder {
 	file: string;
-	data: {[userid: string]: AnyObject};
+	data: { [userid: string]: AnyObject };
 	constructor(file: string) {
 		this.file = file;
 		this.data = {};
@@ -88,7 +88,7 @@ class Ladder {
 		const userid = toID(name);
 
 		if (!userid || userid === 'constructor' || !points) return this;
-		if (!this.data[userid]) this.data[userid] = {name};
+		if (!this.data[userid]) this.data[userid] = { name };
 
 		if (!this.data[userid][aspect]) this.data[userid][aspect] = 0;
 		this.data[userid][aspect] += points;
@@ -107,8 +107,8 @@ class Ladder {
 		FS(this.file).writeUpdate(() => JSON.stringify(this.data));
 	}
 
-	visualize(sortBy: string): Promise<({rank: number} & AnyObject)[]>;
-	visualize(sortBy: string, userid: ID): Promise<({rank: number} & AnyObject) | undefined>;
+	visualize(sortBy: string): Promise<({ rank: number } & AnyObject)[]>;
+	visualize(sortBy: string, userid: ID): Promise<({ rank: number } & AnyObject) | undefined>;
 	visualize(sortBy: string, userid?: ID) {
 		// return a promise for async sorting - make this less exploitable
 		return new Promise((resolve, reject) => {
@@ -126,7 +126,7 @@ class Ladder {
 				return {
 					rank: lastPlacement,
 					...chunk,
-				} as {rank: number} & AnyObject;
+				} as { rank: number } & AnyObject;
 			}); // identify ties
 			if (userid) {
 				const rank = ladder.find(entry => toID(entry.name) === userid);
@@ -146,7 +146,7 @@ class PlayerLadder extends Ladder {
 		const userid = toID(name);
 
 		if (!userid || userid === 'constructor' || !points) return this;
-		if (!this.data[userid]) this.data[userid] = {name};
+		if (!this.data[userid]) this.data[userid] = { name };
 
 		if (!this.data[userid][aspect]) this.data[userid][aspect] = 0;
 		this.data[userid][aspect] += points;
@@ -258,12 +258,12 @@ class ScavengerHuntDatabase {
 	}
 
 	static addRecycledHuntToDatabase(hosts: FakeUser[], params: (string | string[])[]) {
-		const huntSchema: {hosts: FakeUser[], questions: AnyObject[]} = {
+		const huntSchema: { hosts: FakeUser[], questions: AnyObject[] } = {
 			hosts,
 			questions: [],
 		};
 
-		let questionSchema: {text: string, answers: string[], hints?: string[]} = {
+		let questionSchema: { text: string, answers: string[], hints?: string[] } = {
 			text: '',
 			answers: [],
 			hints: [],
@@ -316,7 +316,9 @@ class ScavengerHuntDatabase {
 		return !isNaN(hunt_number) && hunt_number > 0 && hunt_number <= scavengersData.recycledHunts.length;
 	}
 
-	static getFullTextOfHunt(hunt: {hosts: FakeUser[], questions: {text: string, answers: string[], hints?: string[]}[]}) {
+	static getFullTextOfHunt(
+		hunt: { hosts: FakeUser[], questions: { text: string, answers: string[], hints?: string[] }[] }
+	) {
 		return `${hunt.hosts.map(host => host.name).join(',')} | ${hunt.questions.map(question => `${question.text} | ${question.answers.join(';')}`).join(' | ')}`;
 	}
 }
@@ -325,13 +327,13 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	gameType: GameTypes;
 	joinedIps: string[];
 	startTime: number;
-	questions: {hint: string, answer: string[], spoilers: string[]}[];
+	questions: { hint: string, answer: string[], spoilers: string[] }[];
 	completed: AnyObject[];
-	leftHunt: {[userid: string]: 1 | undefined};
+	leftHunt: { [userid: string]: 1 | undefined };
 	hosts: FakeUser[];
 	isHTML: boolean;
 	modsList: string[];
-	mods: {[k: string]: ModEvent[]};
+	mods: { [k: string]: ModEvent[] };
 	staffHostId: string;
 	staffHostName: string;
 	scavGame: true;
@@ -341,7 +343,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	readonly checkChat = true;
 
 	[k: string]: any; // for purposes of adding new temporary properties for the purpose of twists.
-	constructor({room, staffHost, hosts, gameType, questions, isHTML, mod}:
+	constructor({ room, staffHost, hosts, gameType, questions, isHTML, mod }:
 	{
 		room: Room,
 		staffHost: User | FakeUser,
@@ -421,7 +423,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			if (!key.startsWith('on')) continue;
 			const priority = twist[key + 'Priority'] || 0;
 			if (!this.mods[key]) this.mods[key] = [];
-			this.mods[key].push({exec: twist[key], priority});
+			this.mods[key].push({ exec: twist[key], priority });
 		}
 		if (twist.isGameMode) {
 			this.announce(`This hunt is part of an ongoing ${twist.name}.`);
@@ -512,7 +514,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			const hint = q[i] as string;
 			const answer = q[i + 1] as string[];
 
-			this.questions.push({hint, answer, spoilers: []});
+			this.questions.push({ hint, answer, spoilers: [] });
 		}
 
 		const message = this.getCreationMessage(true);
@@ -691,7 +693,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		if (player.completed) return false;
 
 		const now = Date.now();
-		const time = Chat.toDurationString(now - this.startTime, {hhmmss: true});
+		const time = Chat.toDurationString(now - this.startTime, { hhmmss: true });
 		const canBlitz = this.completed.length < 3;
 
 		const blitz = now - this.startTime <= 60000 && canBlitz &&
@@ -700,7 +702,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		player.completed = true;
 		let result = this.runEvent('Complete', player, time, blitz);
 		if (result === true) return;
-		result = result || {name: player.name, time, blitz};
+		result = result || { name: player.name, time, blitz };
 		this.completed.push(result);
 		const place = Utils.formatOrder(this.completed.length);
 
@@ -835,7 +837,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 				room.game = new ScavengerHunt(
 					{
 						room,
-						staffHost: {id: next.staffHostId, name: next.staffHostName},
+						staffHost: { id: next.staffHostId, name: next.staffHostName },
 						hosts: next.hosts,
 						gameType: next.gameType,
 						questions: next.questions,
@@ -846,7 +848,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 				if (game) {
 					game.setTimer(duration); // auto timer for queue'd games.
 					room.add(`|c|~|[ScavengerManager] A scavenger hunt by ${Chat.toListString(next.hosts.map(h => h.name))} has been automatically started. It will automatically end in ${duration} minutes.`).update(); // highlight the users with "hunt by"
-					room.modlog({action: 'SCAV NEW', note: `${game.gameType.toUpperCase()}: creators - ${game.hosts.map(h => h.id)}`});
+					room.modlog({ action: 'SCAV NEW', note: `${game.gameType.toUpperCase()}: creators - ${game.hosts.map(h => h.id)}` });
 				}
 
 				// update the saved queue.
@@ -964,18 +966,18 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 
 			if (!user) {
 				// simply stick the ID's in there - don't keep any benign symbols passed by the hunt maker
-				hosts.push({name: id, id, noUpdate: true});
+				hosts.push({ name: id, id, noUpdate: true });
 				continue;
 			}
 
-			hosts.push({id: '' + user.id, name: '' + user.name});
+			hosts.push({ id: '' + user.id, name: '' + user.name });
 		}
 		return hosts;
 	}
 
 	static parseQuestions(questionArray: string[], force = false): AnyObject {
-		if (questionArray.length % 2 === 1 && !force) return {err: "Your final question is missing an answer"};
-		if (questionArray.length < 6 && !force) return {err: "You must have at least 3 hints and answers"};
+		if (questionArray.length % 2 === 1 && !force) return { err: "Your final question is missing an answer" };
+		if (questionArray.length < 6 && !force) return { err: "You must have at least 3 hints and answers" };
 
 		const formattedQuestions = [];
 
@@ -984,7 +986,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 				const answers = question.split(';').map(p => p.trim());
 				formattedQuestions[i] = answers;
 				if (!force && (!answers.length || answers.some(a => !toID(a)))) {
-					return {err: "Empty answer - only alphanumeric characters will count in answers."};
+					return { err: "Empty answer - only alphanumeric characters will count in answers." };
 				}
 			} else {
 				// Skip last question if there is no answer
@@ -992,11 +994,11 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 
 				question = question.trim();
 				formattedQuestions[i] = question;
-				if (!question && !force) return {err: "Empty question."};
+				if (!question && !force) return { err: "Empty question." };
 			}
 		}
 
-		return {result: formattedQuestions};
+		return { result: formattedQuestions };
 	}
 }
 
@@ -1188,7 +1190,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			if (!leaderUser) return this.errorReply('The user you specified is currently not online');
 			if (game.getPlayerTeam(leaderUser)) return this.errorReply('The user is already a member of another team.');
 
-			game.teams[teamName] = {name: teamName, answers: [], players: [leaderUser.id], question: 1, completed: false};
+			game.teams[teamName] = { name: teamName, answers: [], players: [leaderUser.id], question: 1, completed: false };
 			game.announce(Utils.html`A new team "${teamName}" has been created with ${leaderUser.name} as the leader.`);
 		},
 
@@ -1463,21 +1465,21 @@ const ScavengerCommands: Chat.ChatCommands = {
 		const game = room.getGame(ScavengerHunt);
 		if (!game) return this.errorReply(`There is no scavenger hunt currently running.`);
 
-		const elapsedMsg = Chat.toDurationString(Date.now() - game.startTime, {hhmmss: true});
+		const elapsedMsg = Chat.toDurationString(Date.now() - game.startTime, { hhmmss: true });
 		const gameTypeMsg = game.gameType ? `<em>${game.gameType}</em> ` : '';
 		const hostersMsg = Utils.escapeHTML(Chat.toListString(game.hosts.map(h => h.name)));
 		const hostMsg = game.hosts.some(h => h.id === game.staffHostId) ?
 			'' : Utils.html` (started by - ${game.staffHostName})`;
 		const finishers = Utils.html`${game.completed.map(u => u.name).join(', ')}`;
-		let buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), {hhmmss: true})}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
+		let buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), { hhmmss: true })}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
 		if (game.modsList.includes('timetrial')) {
 			const finisher = game.completed.find(player => player.id === user.id);
 			const timeTrialMsg = finisher ?
 				`You finished the hunt in: ${finisher.time}.` :
 				(game.startTimes?.[user.id] ?
-					`You joined the hunt ${Chat.toDurationString(Date.now() - game.startTimes[user.id], {hhmmss: true})} ago.` :
+					`You joined the hunt ${Chat.toDurationString(Date.now() - game.startTimes[user.id], { hhmmss: true })} ago.` :
 					'You have not joined the hunt.');
-			buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${timeTrialMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), {hhmmss: true})}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
+			buffer = `<div class="infobox" style="margin-top: 0px;">The current ${gameTypeMsg}scavenger hunt by <em>${hostersMsg}${hostMsg}</em> has been up for: ${elapsedMsg}<br />${timeTrialMsg}<br />${!game.timerEnd ? 'The timer is currently off.' : `The hunt ends in: ${Chat.toDurationString(game.timerEnd - Date.now(), { hhmmss: true })}`}<br />Completed (${game.completed.length}): ${finishers}</div>`;
 		}
 
 		if (game.hosts.some(h => h.id === user.id) || game.staffHostId === user.id) {
@@ -1871,7 +1873,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		room.game = new ScavengerHunt(
 			{
 				room,
-				staffHost: {id: next.staffHostId, name: next.staffHostName},
+				staffHost: { id: next.staffHostId, name: next.staffHostName },
 				hosts: next.hosts,
 				gameType: next.gameType,
 				questions: next.questions,
@@ -2364,7 +2366,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			const settings = room.settings.scavSettings.scavmod || {};
 			target = toID(target);
 
-			const setting: {[k: string]: boolean} = {
+			const setting: { [k: string]: boolean } = {
 				'on': true,
 				'off': false,
 				'toggle': !settings.ipcheck,
@@ -2427,7 +2429,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 
 		const params = target.split(',').map(param => param.trim()).filter(param => param !== '');
 
-		const usageMessages: {[k: string]: string} = {
+		const usageMessages: { [k: string]: string } = {
 			'removehunt': 'Usage: removehunt hunt_number',
 			'addhint': 'Usage: addhint hunt number, question number, hint text',
 			'removehint': 'Usage: removehint hunt number, question number, hint text',
@@ -2435,7 +2437,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 		};
 		if (!params) return this.errorReply(usageMessages[cmd]);
 
-		const numberOfRequiredParameters: {[k: string]: number} = {
+		const numberOfRequiredParameters: { [k: string]: number } = {
 			'removehunt': 1,
 			'addhint': 3,
 			'removehint': 3,

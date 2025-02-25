@@ -15,7 +15,7 @@
  *   that if it's English-specific, it should be left out of here.
  */
 
-export type Comparable = number | string | boolean | Comparable[] | {reverse: Comparable};
+export type Comparable = number | string | boolean | Comparable[] | { reverse: Comparable };
 
 /**
  * Safely converts the passed variable into a string. Unlike '' + str,
@@ -182,7 +182,7 @@ export function compare(a: Comparable, b: Comparable): number {
 		return 0;
 	}
 	if ('reverse' in a) {
-		return compare((b as {reverse: string}).reverse, a.reverse);
+		return compare((b as { reverse: string }).reverse, a.reverse);
 	}
 	throw new Error(`Passed value ${a} is not comparable`);
 }
@@ -303,7 +303,7 @@ export function clampIntRange(num: any, min?: number, max?: number): number {
 	return num;
 }
 
-export function clearRequireCache(options: {exclude?: string[]} = {}) {
+export function clearRequireCache(options: { exclude?: string[] } = {}) {
 	const excludes = options?.exclude || [];
 	excludes.push('/node_modules/');
 

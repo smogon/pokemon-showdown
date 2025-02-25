@@ -12,9 +12,9 @@ describe('No Retreat', () => {
 
 	it(`should not allow usage multiple times in a row normally`, () => {
 		battle = common.createBattle([[
-			{species: "Wynaut", moves: ['noretreat']},
+			{ species: "Wynaut", moves: ['noretreat'] },
 		], [
-			{species: "Caterpie", moves: ['sleeptalk']},
+			{ species: "Caterpie", moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -26,9 +26,9 @@ describe('No Retreat', () => {
 
 	it(`should allow usage multiple times in a row normally if it has the trapped volatile`, () => {
 		battle = common.createBattle([[
-			{species: "Wynaut", moves: ['noretreat']},
+			{ species: "Wynaut", moves: ['noretreat'] },
 		], [
-			{species: "Caterpie", moves: ['block']},
+			{ species: "Caterpie", moves: ['block'] },
 		]]);
 
 		battle.makeChoices();

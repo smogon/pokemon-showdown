@@ -77,7 +77,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.add('-item', source, yourItem, '[from] ability: Magic Resistance', `[of] ${target}`);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		name: "Magic Resistance",
 		rating: 3.5,
 		shortDesc: "This Pokemon steals foe's item after hitting them, and takes 50% damage from Fire/Ice.",
@@ -93,7 +93,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	stall: {
 		onBeforeMove(target, source, move) {
 			if (move.category === 'Status') {
-				this.actions.useMove(move, target, {target: source});
+				this.actions.useMove(move, target, { target: source });
 			}
 		},
 		onFractionalPriority: -0.1,
@@ -127,7 +127,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return null;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		shortDesc: "Effects of Unware and Water Absorb.",
 		name: "Go with the Flow",
 		rating: 4,
@@ -160,7 +160,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamagingHit(damage, target, source, move) {
 			target.addVolatile('charge');
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		shortDesc: "Effects of Fluffy and Electromorphosis.",
 		name: "Fluffy Charger",
 		rating: 4,

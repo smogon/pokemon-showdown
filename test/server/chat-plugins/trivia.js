@@ -2,7 +2,7 @@
 
 const assert = require('assert').strict;
 
-const {makeUser, destroyUser} = require('../../users-utils');
+const { makeUser, destroyUser } = require('../../users-utils');
 const trivia = require('../../../dist/server/chat-plugins/trivia/trivia');
 const Trivia = trivia.Trivia;
 const FirstModeTrivia = trivia.FirstModeTrivia;
@@ -23,7 +23,7 @@ describe('Trivia', () => {
 	});
 
 	beforeEach(function () {
-		const questions = [{question: '', answers: ['answer'], category: 'ae'}];
+		const questions = [{ question: '', answers: ['answer'], category: 'ae' }];
 		this.user = makeTriviaUser('Morfent', '127.0.0.1');
 		this.tarUser = makeTriviaUser('ReallyNotMorfent', '127.0.0.2');
 		this.game = this.room.game = new Trivia(this.room, 'first', ['ae'], true, 'short', questions);
@@ -149,7 +149,7 @@ describe('Trivia', () => {
 
 	context('marking player absence', () => {
 		beforeEach(async function () {
-			const questions = [null, null].fill({question: '', answers: ['answer'], category: 'ae'});
+			const questions = [null, null].fill({ question: '', answers: ['answer'], category: 'ae' });
 			const game = new FirstModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
 
 			this.user = makeTriviaUser('Morfent', '127.0.0.1');
@@ -193,7 +193,7 @@ describe('Trivia', () => {
 
 	context('first mode', () => {
 		beforeEach(async function () {
-			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
+			const questions = [{ question: '', answers: ['answer'], category: 'ae' }];
 			const game = new FirstModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
 
 			this.user = makeTriviaUser('Morfent', '127.0.0.1');
@@ -257,7 +257,7 @@ describe('Trivia', () => {
 
 	context('timer mode', () => {
 		beforeEach(async function () {
-			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
+			const questions = [{ question: '', answers: ['answer'], category: 'ae' }];
 			const game = new TimerModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
 
 			this.user = makeTriviaUser('Morfent', '127.0.0.1');
@@ -332,7 +332,7 @@ describe('Trivia', () => {
 
 	context('number mode', () => {
 		beforeEach(async function () {
-			const questions = [{question: '', answers: ['answer'], category: 'ae'}];
+			const questions = [{ question: '', answers: ['answer'], category: 'ae' }];
 			const game = new NumberModeTrivia(this.room, 'first', ['ae'], true, 'short', questions);
 
 			this.user = makeTriviaUser('Morfent', '127.0.0.1');
@@ -393,9 +393,9 @@ describe('Trivia', () => {
 		it('should only allow merging approved alts', async () => {
 			for (const user of ['annika', 'heartofetheria', 'somerandomreg']) {
 				await trivia.database.updateLeaderboardForUser(user, {
-					alltime: {score: 0, totalCorrectAnswers: 0, totalPoints: 0},
-					nonAlltime: {score: 0, totalCorrectAnswers: 0, totalPoints: 0},
-					cycle: {score: 0, totalCorrectAnswers: 0, totalPoints: 0},
+					alltime: { score: 0, totalCorrectAnswers: 0, totalPoints: 0 },
+					nonAlltime: { score: 0, totalCorrectAnswers: 0, totalPoints: 0 },
+					cycle: { score: 0, totalCorrectAnswers: 0, totalPoints: 0 },
 				});
 			}
 
@@ -412,14 +412,14 @@ describe('Trivia', () => {
 
 		it('should correctly merge alts', async () => {
 			await trivia.database.updateLeaderboardForUser('annika', {
-				alltime: {score: 3, totalCorrectAnswers: 2, totalPoints: 1},
-				nonAlltime: {score: 4, totalCorrectAnswers: 3, totalPoints: 2},
-				cycle: {score: 1, totalCorrectAnswers: 1, totalPoints: 1},
+				alltime: { score: 3, totalCorrectAnswers: 2, totalPoints: 1 },
+				nonAlltime: { score: 4, totalCorrectAnswers: 3, totalPoints: 2 },
+				cycle: { score: 1, totalCorrectAnswers: 1, totalPoints: 1 },
 			});
 			await trivia.database.updateLeaderboardForUser('heartofetheria', {
-				alltime: {score: 1, totalCorrectAnswers: 2, totalPoints: 3},
-				nonAlltime: {score: 2, totalCorrectAnswers: 3, totalPoints: 4},
-				cycle: {score: 1, totalCorrectAnswers: 2, totalPoints: 1},
+				alltime: { score: 1, totalCorrectAnswers: 2, totalPoints: 3 },
+				nonAlltime: { score: 2, totalCorrectAnswers: 3, totalPoints: 4 },
+				cycle: { score: 1, totalCorrectAnswers: 2, totalPoints: 1 },
 			});
 
 			await trivia.requestAltMerge('heartofetheria', 'annika');
@@ -427,15 +427,15 @@ describe('Trivia', () => {
 
 			assert.deepEqual(
 				await trivia.database.getLeaderboardEntry('annika', 'alltime'),
-				{score: 4, totalCorrectAnswers: 4, totalPoints: 4}
+				{ score: 4, totalCorrectAnswers: 4, totalPoints: 4 }
 			);
 			assert.deepEqual(
 				await trivia.database.getLeaderboardEntry('annika', 'nonAlltime'),
-				{score: 6, totalCorrectAnswers: 6, totalPoints: 6}
+				{ score: 6, totalCorrectAnswers: 6, totalPoints: 6 }
 			);
 			assert.deepEqual(
 				await trivia.database.getLeaderboardEntry('annika', 'cycle'),
-				{score: 2, totalCorrectAnswers: 3, totalPoints: 2}
+				{ score: 2, totalCorrectAnswers: 3, totalPoints: 2 }
 			);
 
 			// make sure it got deleted
