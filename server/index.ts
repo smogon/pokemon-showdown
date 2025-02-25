@@ -46,12 +46,12 @@
 require('source-map-support').install();
 // NOTE: This file intentionally doesn't use too many modern JavaScript
 // features, so that it doesn't crash old versions of Node.js, so we
-// can successfully print the "We require Node.js 16+" message.
+// can successfully print the "We require Node.js 18+" message.
 
 // Check for version
 const nodeVersion = parseInt(process.versions.node);
-if (isNaN(nodeVersion) || nodeVersion < 16) {
-	throw new Error("We require Node.js version 16 or later; you're using " + process.version);
+if (isNaN(nodeVersion) || nodeVersion < 18) {
+	throw new Error("We require Node.js version 18 or later; you're using " + process.version);
 }
 
 import {FS, Repl} from '../lib';
