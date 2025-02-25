@@ -2002,7 +2002,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (!possibleTarget.fainted) {
 					// If Ogerpon is in the last slot while the Illusion Pokemon is Terastallized
 					// Illusion will not disguise as anything
-					if (!pokemon.terastallized || possibleTarget.species.baseSpecies !== 'Ogerpon') {
+					if (!pokemon.terastallized || !['Ogerpon', 'Terapagos'].includes(possibleTarget.species.baseSpecies)) {
 						pokemon.illusion = possibleTarget;
 					}
 					break;

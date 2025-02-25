@@ -9,7 +9,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.hint("A Pokémon terastallized into Ogerpon or Terapagos cannot terastallize.");
 				return;
 			}
-			if (pokemon.species.baseSpecies === 'Ogerpon' && !['Fire', 'Grass', 'Rock', 'Water'].includes(pokemon.teraType)) {
+			if (pokemon.species.baseSpecies === 'Ogerpon' && !['Fire', 'Grass', 'Rock', 'Water'].includes(pokemon.teraType) &&
+				(!pokemon.illusion || pokemon.illusion.species.baseSpecies === 'Ogerpon')) {
 				this.battle.hint("If Ogerpon Terastallizes into a type other than Fire, Grass, Rock, or Water, the game softlocks.");
 				return;
 			}
