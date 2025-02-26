@@ -955,7 +955,7 @@ export class Pokemon {
 		if (this.maybePartiallyTrapping || this.maybePartiallyTrapped) {
 			return [{
 				move: 'Fight',
-				id: 'fight',
+				id: 'fight' as ID,
 			}];
 		}
 		const moves = [];
