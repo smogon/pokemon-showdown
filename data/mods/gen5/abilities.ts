@@ -21,7 +21,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart(pokemon) {
 			const target = pokemon.side.randomFoe();
 			if (target?.item) {
-				this.add('-item', '', target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon);
+				this.add('-item', '', target.getItem().name, '[from] ability: Frisk', `[of] ${pokemon}`);
 			}
 		},
 	},
@@ -32,6 +32,19 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	keeneye: {
 		inherit: true,
 		onModifyMove() {},
+	},
+	magicbounce: {
+		inherit: true,
+		onAllyTryHitSide(target, source, move) {
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
+				return;
+			}
+			const newMove = this.dex.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.actions.useMove(newMove, this.effectState.target, { target: source });
+			return null;
+		},
 	},
 	oblivious: {
 		inherit: true,
