@@ -392,7 +392,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	 * random/fixed teams. null if players can bring teams.
 	 */
 	declare readonly team?: string;
-	readonly effectType: FormatEffectType;
+	override readonly effectType: FormatEffectType;
 	readonly debug: boolean;
 	/**
 	 * Whether or not a format will update ladder points if searched

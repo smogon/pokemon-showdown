@@ -147,7 +147,7 @@ export class NetStream extends Streams.ReadWriteStream {
 		}
 		return out;
 	}
-	_write(data: string | Buffer): Promise<void> | void {
+	override _write(data: string | Buffer): Promise<void> | void {
 		if (!this.nodeWritableStream) {
 			throw new Error("You must specify opts.writable to write to a request.");
 		}
@@ -163,10 +163,10 @@ export class NetStream extends Streams.ReadWriteStream {
 			this.drainListeners.push(resolve);
 		});
 	}
-	_read() {
+	override _read() {
 		this.nodeReadableStream?.resume();
 	}
-	_pause() {
+	override _pause() {
 		this.nodeReadableStream?.pause();
 	}
 }

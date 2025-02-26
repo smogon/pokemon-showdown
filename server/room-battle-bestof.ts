@@ -352,7 +352,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		}
 	}
 
-	onBattleWin(room: Room, winnerid: ID) {
+	override onBattleWin(room: Room, winnerid: ID) {
 		if (this.ended) return; // can happen if the bo3 is destroyed fsr
 
 		const winner = winnerid ? this.playerTable[winnerid] : null;

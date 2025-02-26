@@ -15,7 +15,7 @@ const POWERFUL_ABILITIES = [
 ];
 
 export class RandomGen7ApexTeams extends RandomGen7Teams {
-	randomSet(
+	override randomSet(
 		species: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
