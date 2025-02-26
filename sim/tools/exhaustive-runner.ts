@@ -426,7 +426,9 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 		return super.chooseMove(active, moves);
 	}
 
-	protected override chooseSwitch(active: AnyObject | undefined, switches: { slot: number, pokemon: AnyObject }[]): number {
+	protected override chooseSwitch(
+		active: AnyObject | undefined, switches: { slot: number, pokemon: AnyObject }[]
+	): number {
 		this.markUsedIfGmax(active);
 		return this.choosePokemon(switches) || super.chooseSwitch(active, switches);
 	}
