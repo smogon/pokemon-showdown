@@ -1,3 +1,10 @@
+/**
+ * Pokemon Showdown standard style
+ *
+ * This is Showdown's shared ESLint configuration. Each project overrides
+ * at least a little of it here and there, but these are the rules we use
+ * unless there's a good reason otherwise.
+ */
 // @ts-check
 
 import eslint from '@eslint/js';
@@ -60,7 +67,7 @@ export const defaultRules = {
 	// }],
 	"@stylistic/max-len": ["warn", {
 		"code": 120, "tabWidth": 0,
-		// see bottom of file for source
+		// DO NOT EDIT DIRECTLY: see bottom of file for source
 		"ignorePattern": "^\\s*(?:\\/\\/ \\s*)?(?:(?:export )?(?:let |const |readonly )?[a-zA-Z0-9_$.]+(?: \\+?=>? )|[a-zA-Z0-9$]+: \\[?|(?:return |throw )?(?:new )?(?:[a-zA-Z0-9$.]+\\()?)?(?:Utils\\.html|(?:this\\.)?(?:room\\.)?tr|\\$\\()?['\"`/]",
 	}],
 	"prefer-const": ["warn", { "destructuring": "all" }],
@@ -322,7 +329,8 @@ export const defaultRulesES3 = {
 	"no-caller": "error",
 	"no-invalid-this": "error",
 	"no-new-wrappers": "error",
-	"no-restricted-globals": ["error", "Proxy", "Reflect", "Symbol", "WeakSet", "WeakMap"],
+	// Map/Set can be polyfilled but it's nontrivial and it's easier just to use bare objects
+	"no-restricted-globals": ["error", "Proxy", "Reflect", "Symbol", "WeakSet", "WeakMap", "Set", "Map"],
 	"unicode-bom": "error",
 };
 
@@ -335,7 +343,7 @@ export const defaultRulesES3 = {
 export const defaultRulesES3TSChecked = {
 	...defaultRulesTSChecked,
 	"radix": "off",
-	"no-restricted-globals": ["error", "Proxy", "Reflect", "Symbol", "WeakSet", "WeakMap"],
+	"no-restricted-globals": ["error", "Proxy", "Reflect", "Symbol", "WeakSet", "WeakMap", "Set", "Map"],
 	"no-restricted-syntax": ["error", "TaggedTemplateExpression", "YieldExpression", "AwaitExpression", "BigIntLiteral"],
 };
 
@@ -391,3 +399,37 @@ export const configs = {
 		},
 	}],
 };
+
+/*
+SOURCE FOR IGNOREPATTERN (compile with https://regexfree.k55.io/ )
+
+  # indentation
+  ^\s*
+  # possibly commented out
+  (\/\/\ \s*)?
+
+  (
+    # define a variable, append to a variable, or define a single-arg arrow function
+    (export\ )? (let\ |const\ |readonly\ )? [a-zA-Z0-9_$.]+ (\ \+?=>?\ )
+  |
+    # define a property (oversize arrays are only allowed in properties)
+    [a-zA-Z0-9$]+:\ \[?
+  |
+    # optionally return or throw
+    (return\ |throw\ )?
+    # call a function or constructor
+    (new\ )?([a-zA-Z0-9$.]+\()?
+  )?
+
+  (
+    Utils\.html
+  |
+    (this\.)?(room\.)?tr
+  |
+    \$\(
+  )?
+
+  # start of string or regex
+  ['"`\/]
+
+*/

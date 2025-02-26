@@ -8,7 +8,7 @@
  */
 
 /*
-REGEXFREE SOURCE FOR LINKREGEX
+SOURCE FOR LINKREGEX (compile with https://regexfree.k55.io/ )
 
 	(
 		(
