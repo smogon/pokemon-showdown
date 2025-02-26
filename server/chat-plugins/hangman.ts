@@ -57,7 +57,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 	letterGuesses: string[];
 	lastGuesser: string;
 	wordSoFar: string[];
-	readonly checkChat = true;
+	override readonly checkChat = true;
 
 	constructor(
 		room: Room,
@@ -91,7 +91,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	choose(user: User, word: string) {
+	override choose(user: User, word: string) {
 		if (user.id === this.creator && !this.options.allowCreator) {
 			throw new Chat.ErrorMessage("You can't guess in your own hangman game.");
 		}

@@ -62,7 +62,7 @@ export class RandomBabyTeams extends RandomTeams {
 		);
 	}
 
-	cullMovePool(
+	override cullMovePool(
 		types: string[],
 		moves: Set<string>,
 		abilities: string[],
@@ -162,7 +162,7 @@ export class RandomBabyTeams extends RandomTeams {
 	}
 
 	// Generate random moveset for a given species, role, tera type.
-	randomMoveset(
+	override randomMoveset(
 		types: string[],
 		abilities: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
@@ -421,7 +421,7 @@ export class RandomBabyTeams extends RandomTeams {
 		return moves;
 	}
 
-	getAbility(
+	override getAbility(
 		types: string[],
 		moves: Set<string>,
 		abilities: string[],
@@ -466,7 +466,7 @@ export class RandomBabyTeams extends RandomTeams {
 		return this.sample(abilities);
 	}
 
-	getPriorityItem(
+	override getPriorityItem(
 		ability: string,
 		types: string[],
 		moves: Set<string>,
@@ -495,7 +495,7 @@ export class RandomBabyTeams extends RandomTeams {
 		if (['Harvest', 'Ripen', 'Unburden'].includes(ability) || moves.has('bellydrum')) return 'Oran Berry';
 	}
 
-	getItem(
+	override getItem(
 		ability: string,
 		types: string[],
 		moves: Set<string>,
@@ -515,7 +515,7 @@ export class RandomBabyTeams extends RandomTeams {
 		return 'Eviolite';
 	}
 
-	getLevel(
+	override getLevel(
 		species: Species,
 	): number {
 		if (this.adjustLevel) return this.adjustLevel;
@@ -523,7 +523,7 @@ export class RandomBabyTeams extends RandomTeams {
 		return this.randomSets[species.id]?.level || 10;
 	}
 
-	getForme(species: Species): string {
+	override getForme(species: Species): string {
 		if (typeof species.battleOnly === 'string') {
 			// Only change the forme. The species has custom moves, and may have different typing and requirements.
 			return species.battleOnly;
@@ -537,7 +537,7 @@ export class RandomBabyTeams extends RandomTeams {
 		return species.name;
 	}
 
-	randomSet(
+	override randomSet(
 		s: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false,
@@ -662,7 +662,7 @@ export class RandomBabyTeams extends RandomTeams {
 		};
 	}
 
-	randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
+	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
 
 	randomBabyTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
