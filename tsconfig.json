@@ -22,7 +22,7 @@
     "types": ["node"],
     "exclude": [
         "/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/node_modules/typescript/lib/lib.dom.d.ts",
-        "./.*-dist/**/*",
+        "./dist/**/*",
         "./server/chat-plugins/private/*/*.d.ts"
     ],
     "include": [
