@@ -20,25 +20,25 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (targets && !targets.includes(active)) continue;
 				// The ally of the pokemon
 				const ally = active.side.active.find(mon => mon && mon !== active && !mon.fainted);
-				if (ally?.m.innate && targets && !targets.includes(ally)) {
-					const volatileState = active.volatiles[ally.m.innate];
-					const volatile = this.dex.conditions.getByID(ally.m.innate as ID);
-					// @ts-ignore - dynamic lookup
-					let callback = volatile[callbackName];
-					if (callback !== undefined || (getKey && volatileState[getKey])) {
-						handlers.push(this.resolvePriority({
-							effect: volatile, callback, state: volatileState, end: ally.removeVolatile, effectHolder: ally,
-						}, callbackName));
-					} else if (['ability', 'item'].includes(volatile.id.split(':')[0])) {
-						// Innate abilities/items; see comment below
-						// @ts-ignore - dynamic lookup
-						if (this.gen >= 5 && callbackName === 'onSwitchIn' && !volatile.onAnySwitchIn) {
+				if (eventid === 'SwitchIn' && ally?.m.innate && targets && !targets.includes(ally)) {
+					const volatileState = ally.volatiles[ally.m.innate];
+					if (volatileState) {
+						const volatile = this.dex.conditions.getByID(ally.m.innate as ID);
+						// @ts-expect-error dynamic lookup
+						let callback = volatile[callbackName];
+						// @ts-expect-error dynamic lookup
+						if (this.gen >= 5 && !volatile.onSwitchIn && !volatile.onAnySwitchIn) {
 							callback = volatile.onStart;
-							if (callback !== undefined || (getKey && volatileState[getKey])) {
-								handlers.push(this.resolvePriority({
-									effect: volatile, callback, state: volatileState, end: ally.removeVolatile, effectHolder: ally,
-								}, callbackName));
-							}
+						}
+						if (callback !== undefined) {
+							const allyHandler = this.resolvePriority({
+								effect: volatile, callback, state: volatileState, end: ally.removeVolatile, effectHolder: ally,
+							}, callbackName);
+							// if only one Pokemon is switching in, activate its ally's new innate at the speed of the one switching in
+							allyHandler.speed = this.resolvePriority({
+								effect: volatile, callback, state: volatileState, end: ally.removeVolatile, effectHolder: active,
+							}, callbackName).speed;
+							handlers.push(allyHandler);
 						}
 					}
 				}
@@ -53,8 +53,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			const handler = handlers[0];
 			handlers.shift();
 			const effect = handler.effect;
-			if ((handler.effectHolder as Pokemon).fainted) continue;
-			if (eventid === 'Residual' && handler.end && handler.state && handler.state.duration) {
+			if ((handler.effectHolder as Pokemon).fainted || (handler.state?.pic as Pokemon)?.fainted) continue;
+			if (eventid === 'Residual' && handler.end && handler.state?.duration) {
 				handler.state.duration--;
 				if (!handler.state.duration) {
 					const endCallArgs = handler.endCallArgs || [handler.effectHolder, effect.id];
@@ -88,7 +88,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const ally = side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
 				let allyMoves = ally ? this.dex.deepClone(ally.moveSlots) : [];
 				if (ally) {
-					// @ts-ignore
+					// @ts-expect-error modded
 					allyMoves = allyMoves.filter(move => !pokemon.moves.includes(move.id) && ally.m.curMoves.includes(move.id));
 					for (const aMove of allyMoves) {
 						aMove.pp = this.clampIntRange(aMove.maxpp - (pokemon.m.trackPP.get(aMove.id) || 0), 0);
@@ -290,11 +290,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				delete ally.m.innate;
 			}
 			if (this.battle.effect && this.battle.effect.effectType === 'Move' && !isFromFormeChange) {
-				this.battle.add('-endability', this, this.battle.dex.abilities.get(oldAbility), '[from] move: ' +
-					this.battle.dex.moves.get(this.battle.effect.id));
+				this.battle.add('-endability', this, this.battle.dex.abilities.get(oldAbility),
+					`[from] move: ${this.battle.dex.moves.get(this.battle.effect.id)}`);
 			}
 			this.ability = ability.id;
-			this.abilityState = this.battle.initEffectState({id: ability.id, target: this});
+			this.abilityState = this.battle.initEffectState({ id: ability.id, target: this });
 			if (ability.id && this.battle.gen > 3) {
 				this.battle.singleEvent('Start', ability, this.abilityState, this, source);
 				if (ally && ally.ability !== this.ability) {
@@ -309,7 +309,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			// Entrainment
-			if (this.m.innate && this.m.innate.endsWith(ability.id)) {
+			if (this.m.innate?.endsWith(ability.id)) {
 				this.removeVolatile(this.m.innate);
 				delete this.m.innate;
 			}
@@ -323,18 +323,20 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!Array.isArray(ability)) {
 				if (ownAbility === this.battle.toID(ability) || allyAbility === this.battle.toID(ability)) return true;
 			} else {
-				 if (ability.map(this.battle.toID).includes(ownAbility) || ability.map(this.battle.toID).includes(allyAbility)) {
-					 return true;
-				 }
+				if (ability.map(this.battle.toID).includes(ownAbility) || ability.map(this.battle.toID).includes(allyAbility)) {
+					return true;
+				}
 			}
 			return false;
 		},
 		transformInto(pokemon, effect) {
 			const species = pokemon.species;
-			if (pokemon.fainted || this.illusion || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
+			if (
+				pokemon.fainted || this.illusion || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 				(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
 				species.name === 'Eternatus-Eternamax' || (['Ogerpon', 'Terapagos'].includes(species.baseSpecies) &&
-				(this.terastallized || pokemon.terastallized))) {
+					(this.terastallized || pokemon.terastallized))
+			) {
 				return false;
 			}
 
