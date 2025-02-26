@@ -22,10 +22,10 @@ describe('Magician', () => {
 
 	it(`should steal the opponents item if the target faints`, () => {
 		battle = common.createBattle([[
-			{species: 'klefki', ability: 'magician', moves: ['flashcannon']},
+			{ species: 'klefki', ability: 'magician', moves: ['flashcannon'] },
 		], [
-			{species: 'wynaut', level: 1, item: 'tr69', moves: ['sleeptalk']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'wynaut', level: 1, item: 'tr69', moves: ['sleeptalk'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move flashcannon', 'move sleeptalk');
 		assert.equal(battle.p1.active[0].item, 'tr69');
@@ -33,10 +33,10 @@ describe('Magician', () => {
 
 	it(`should not steal the opponents item if the user faints`, () => {
 		battle = common.createBattle([[
-			{species: 'klefki', level: 1, ability: 'magician', moves: ['tackle']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'klefki', level: 1, ability: 'magician', moves: ['tackle'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', item: 'rockyhelmet', moves: ['falseswipe']},
+			{ species: 'wynaut', item: 'rockyhelmet', moves: ['falseswipe'] },
 		]]);
 		battle.makeChoices('move tackle', 'move falseswipe');
 		assert.false.holdsItem(battle.p1.active[0]);
@@ -45,10 +45,10 @@ describe('Magician', () => {
 
 	it(`should steal the opponents item if the user uses U-turn`, () => {
 		battle = common.createBattle([[
-			{species: 'klefki', ability: 'magician', moves: ['uturn']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'klefki', ability: 'magician', moves: ['uturn'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', item: 'tr69', moves: ['sleeptalk']},
+			{ species: 'wynaut', item: 'tr69', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].item, 'tr69');
@@ -56,10 +56,10 @@ describe('Magician', () => {
 
 	it(`should steal the opponents item if the user uses Dragon Tail`, () => {
 		battle = common.createBattle([[
-			{species: 'klefki', ability: 'magician', moves: ['dragontail']},
+			{ species: 'klefki', ability: 'magician', moves: ['dragontail'] },
 		], [
-			{species: 'wynaut', item: 'tr69', moves: ['sleeptalk']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'wynaut', item: 'tr69', moves: ['sleeptalk'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].item, 'tr69');
