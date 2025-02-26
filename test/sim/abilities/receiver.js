@@ -5,8 +5,8 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Receiver`, function () {
-	afterEach(function () {
+describe(`Receiver`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
@@ -15,8 +15,8 @@ describe(`Receiver`, function () {
 			{species: 'whimsicott', ability: 'soulheart', moves: ['memento']},
 			{species: 'passimian', ability: 'receiver', moves: ['sleeptalk']},
 		], [
-			{species: 'wynaut', moves: ['sleeptalk']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['sleeptalk'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		const passimian = battle.p1.active[1];
@@ -28,8 +28,8 @@ describe(`Receiver`, function () {
 			{species: 'Passimian', ability: 'receiver', moves: ['earthquake']},
 			{species: 'Magearna', ability: 'soulheart', level: 1, moves: ['sleeptalk']},
 		], [
-			{species: 'Lugia', ability: 'receiver', moves: ['sleeptalk']},
-			{species: 'Wynaut', ability: 'soulheart', level: 1, moves: ['sleeptalk']},
+			{ species: 'Lugia', ability: 'receiver', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', ability: 'soulheart', level: 1, moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
