@@ -332,10 +332,10 @@ export const Scripts: ModdedBattleScriptsData = {
 				// THIS IS PURELY A SANITY CHECK
 				// DO NOT TAKE ADVANTAGE OF THIS TO PREVENT A POKEMON FROM MOVING;
 				// USE this.queue.cancelMove INSTEAD
-				this.debug('' + pokemon.id + ' INCONSISTENT STATE, ALREADY MOVED: ' + pokemon.moveThisTurn);
+				this.debug(`${pokemon.id} INCONSISTENT STATE, ALREADY MOVED: ${pokemon.moveThisTurn}`);
 				this.clearActiveMove(true);
 				return;
-			} */
+				} */
 			const willTryMove = this.battle.runEvent('BeforeMove', pokemon, target, move);
 			if (!willTryMove) {
 				if (pokemon.volatiles['twoturnmove']?.move === move.id) {

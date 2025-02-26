@@ -25,7 +25,7 @@ import { Pokemon, type EffectState } from './pokemon';
 import { State } from './state';
 import { toID } from './dex';
 
-/** A single action that can be chosen. */
+/** A single action that can be chosen. Choices will have one Action for each pokemon. */
 export interface ChosenAction {
 	choice: 'move' | 'switch' | 'instaswitch' | 'revivalblessing' | 'team' | 'shift' | 'pass';// action type
 	pokemon?: Pokemon; // the pokemon doing the action
@@ -44,7 +44,7 @@ export interface ChosenAction {
 	priority?: number; // priority of the action
 }
 
-/** What the player has chosen to happen. */
+/** One single turn's choice for one single player. */
 export interface Choice {
 	cantUndo: boolean; // true if the choice can't be cancelled because of the maybeTrapped issue
 	error: string; // contains error text in the case of a choice error
@@ -196,6 +196,7 @@ export class Side {
 		return !this.dynamaxUsed;
 	}
 
+	/** convert a Choice into a choice string */
 	getChoice() {
 		if (this.choice.actions.length > 1 && this.choice.actions.every(action => action.choice === 'team')) {
 			return `team ` + this.choice.actions.map(action => action.pokemon!.position + 1).join(', ');

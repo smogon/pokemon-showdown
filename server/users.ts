@@ -925,7 +925,7 @@ export class User extends Chat.MessageContext {
 		if (isForceRenamed) this.userMessage = '';
 
 		for (const connection of this.connections) {
-			// console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
+			// console.log(`${name} renaming: socket ${i} of ${this.connections.length}`);
 			connection.send(this.getUpdateuserText());
 		}
 		for (const roomid of this.games) {
@@ -1065,7 +1065,7 @@ export class User extends Chat.MessageContext {
 		}
 		this.connections.push(connection);
 
-		// console.log('' + this.name + ' merging: connection ' + connection.socket.id);
+		// console.log(`${this.name} merging: connection ${connection.socket.id}`);
 		connection.send(this.getUpdateuserText());
 		connection.user = this;
 		for (const roomid of connection.inRooms) {

@@ -18,7 +18,7 @@
 export type Comparable = number | string | boolean | Comparable[] | { reverse: Comparable };
 
 /**
- * Safely converts the passed variable into a string. Unlike '' + str,
+ * Safely converts the passed variable into a string. Unlike `${str}`,
  * String(str), or str.toString(), Utils.getString is guaranteed not to
  * crash.
  *
@@ -207,10 +207,10 @@ export function sortBy<T>(array: T[], callback?: (a: T) => Comparable) {
 	return array.sort((a, b) => compare(callback(a), callback(b)));
 }
 
-export function splitFirst(str: string, delimiter: string): [string, string];
-export function splitFirst(str: string, delimiter: string, limit: 2): [string, string, string];
-export function splitFirst(str: string, delimiter: string, limit: 3): [string, string, string, string];
-export function splitFirst(str: string, delimiter: string, limit: number): string[];
+export function splitFirst(str: string, delimiter: string | RegExp): [string, string];
+export function splitFirst(str: string, delimiter: string | RegExp, limit: 2): [string, string, string];
+export function splitFirst(str: string, delimiter: string | RegExp, limit: 3): [string, string, string, string];
+export function splitFirst(str: string, delimiter: string | RegExp, limit: number): string[];
 /**
 * Like string.split(delimiter), but only recognizes the first `limit`
 * delimiters (default 1).
@@ -222,13 +222,22 @@ export function splitFirst(str: string, delimiter: string, limit: number): strin
 * Returns an array of length exactly limit + 1.
 *
 */
-export function splitFirst(str: string, delimiter: string, limit = 1) {
+export function splitFirst(str: string, delimiter: string | RegExp, limit = 1) {
 	const splitStr: string[] = [];
 	while (splitStr.length < limit) {
-		const delimiterIndex = str.indexOf(delimiter);
+		let delimiterIndex, delimiterLength;
+		if (typeof delimiter === 'string') {
+			delimiterIndex = str.indexOf(delimiter);
+			delimiterLength = delimiter.length;
+		} else {
+			delimiter.lastIndex = 0;
+			const match = delimiter.exec(str);
+			delimiterIndex = match ? match.index : -1;
+			delimiterLength = match ? match[0].length : 0;
+		}
 		if (delimiterIndex >= 0) {
 			splitStr.push(str.slice(0, delimiterIndex));
-			str = str.slice(delimiterIndex + delimiter.length);
+			str = str.slice(delimiterIndex + delimiterLength);
 		} else {
 			splitStr.push(str);
 			str = '';

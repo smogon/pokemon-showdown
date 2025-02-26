@@ -51,7 +51,7 @@ export class RandomPlayerAI extends BattlePlayer {
 					// not chosen for a simultaneous switch
 					!chosen.includes(j) &&
 					// not fainted or fainted and using Revival Blessing
-					!!(+!!pokemon[i].reviving ^ +!pokemon[j - 1].condition.endsWith(` fnt`))
+					!pokemon[j - 1].condition.endsWith(` fnt`) === !pokemon[i].reviving
 				));
 
 				if (!canSwitch.length) return `pass`;

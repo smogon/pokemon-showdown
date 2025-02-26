@@ -2919,9 +2919,9 @@ export class RandomGen8Teams {
 
 				// Limit 1 of any type combination
 				let typeCombo = types.slice().sort().join();
-				if (set.ability + '' === 'Drought' || set.ability + '' === 'Drizzle') {
+				if (set.ability === 'Drought' || set.ability === 'Drizzle') {
 				// Drought and Drizzle don't count towards the type combo limit
-					typeCombo = set.ability + '';
+					typeCombo = set.ability;
 				}
 				if (teamData.typeComboCount[typeCombo] >= limitFactor) continue;
 			}

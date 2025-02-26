@@ -977,7 +977,7 @@ export class Battle {
 		let handlers: EventListener[] = [];
 		if (Array.isArray(target)) {
 			for (const [i, pokemon] of target.entries()) {
-				// console.log(`Event: ${eventName}, Target: ${'' + pokemon}, ${i}`);
+				// console.log(`Event: ${eventName}, Target: ${pokemon}, ${i}`);
 				const curHandlers = this.findEventHandlers(pokemon, eventName, source);
 				for (const handler of curHandlers) {
 					handler.target = pokemon; // Original "effectHolder"
@@ -3160,7 +3160,7 @@ export class Battle {
 			// create player
 			const team = this.getTeam(options);
 			side = new Side(options.name || `Player ${slotNum + 1}`, this, slotNum, team);
-			if (options.avatar) side.avatar = '' + options.avatar;
+			if (options.avatar) side.avatar = `${options.avatar}`;
 			this.sides[slotNum] = side;
 		} else {
 			// edit player
@@ -3170,8 +3170,8 @@ export class Battle {
 				side.name = options.name;
 				didSomething = true;
 			}
-			if (options.avatar && side.avatar !== '' + options.avatar) {
-				side.avatar = '' + options.avatar;
+			if (options.avatar && side.avatar !== `${options.avatar}`) {
+				side.avatar = `${options.avatar}`;
 				didSomething = true;
 			}
 			if (options.team) throw new Error(`Player ${slot} already has a team!`);

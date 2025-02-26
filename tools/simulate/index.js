@@ -32,7 +32,7 @@ if (process.argv[2]) {
 		out('  Displays this reference');
 		out('');
 		out('Please refer to tools/SIMULATE.md for full documentation');
-		process.exit(+!help);
+		process.exit(help ? 0 : 1);
 	}
 }
 
