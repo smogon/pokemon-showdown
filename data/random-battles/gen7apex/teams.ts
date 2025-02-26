@@ -1,4 +1,4 @@
-import {RandomGen7Teams, ZeroAttackHPIVs} from '../gen7/teams';
+import { RandomGen7Teams, ZeroAttackHPIVs } from '../gen7/teams';
 
 const POWERFUL_ABILITIES = [
 	'Adaptability', 'Aftermath', 'Analytic', 'Arena Trap', 'Beast Boost', 'Berserk', 'Comatose', 'Competitive',
@@ -45,8 +45,8 @@ export class RandomGen7ApexTeams extends RandomGen7Teams {
 		let ability = '';
 		let item = undefined;
 
-		const evs = {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85};
-		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+		const evs = { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 };
+		const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 
 		const types = species.types;
 		const baseAbilities = set.abilities!;

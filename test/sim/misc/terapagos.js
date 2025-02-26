@@ -5,17 +5,17 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Terapagos`, function () {
-	afterEach(function () {
+describe(`Terapagos`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
 	it(`[Hackmons] should not cause Terapagos-Terastal to become Terapagos-Stellar if the user is Transformed`, function () {
 		battle = common.gen(9).createBattle([[
-			{species: 'terapagos', ability: 'terashift', moves: ['transform'], teraType: 'Stellar'},
-			{species: 'pikachu', moves: ['sleeptalk']},
+			{ species: 'terapagos', ability: 'terashift', moves: ['transform'], teraType: 'Stellar' },
+			{ species: 'pikachu', moves: ['sleeptalk'] },
 		], [
-			{species: 'silicobra', moves: ['sleeptalk']},
+			{ species: 'silicobra', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
