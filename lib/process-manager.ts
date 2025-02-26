@@ -13,27 +13,29 @@ import * as child_process from 'child_process';
 import * as cluster from 'cluster';
 import * as path from 'path';
 import * as Streams from './streams';
-import {FS} from './fs';
+import { FS } from './fs';
 
 type ChildProcess = child_process.ChildProcess;
 type Worker = cluster.Worker;
 
 export const processManagers: ProcessManager[] = [];
 
-export function exec(args: string, execOptions?: child_process.ExecOptions): Promise<{stderr: string, stdout: string}>;
+export function exec(
+	args: string, execOptions?: child_process.ExecOptions
+): Promise<{ stderr: string, stdout: string }>;
 export function exec(
 	args: [string, ...string[]], execOptions?: child_process.ExecFileOptions
-): Promise<{stderr: string, stdout: string}>;
+): Promise<{ stderr: string, stdout: string }>;
 export function exec(args: string | string[], execOptions?: AnyObject) {
 	if (Array.isArray(args)) {
 		const cmd = args.shift();
 		if (!cmd) throw new Error(`You must pass a command to ProcessManager.exec.`);
-		return new Promise<{stderr: string, stdout: string}>((resolve, reject) => {
+		return new Promise<{ stderr: string, stdout: string }>((resolve, reject) => {
 			child_process.execFile(cmd, args, execOptions, (err, stdout, stderr) => {
 				if (err) reject(err);
 				if (typeof stdout !== 'string') stdout = stdout.toString();
 				if (typeof stderr !== 'string') stderr = stderr.toString();
-				resolve({stdout, stderr});
+				resolve({ stdout, stderr });
 			});
 		});
 	} else {
@@ -111,7 +113,7 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 	file: string;
 
 	constructor(file: string, messageCallback?: (message: string) => any) {
-		this.process = child_process.fork(file, [], {cwd: FS.ROOT_PATH});
+		this.process = child_process.fork(file, [], { cwd: FS.ROOT_PATH });
 		this.taskId = 0;
 		this.file = file;
 		this.pendingTasks = new Map();
@@ -161,7 +163,7 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 			// it's also futureproofing in case other external modfules require this
 			// we also specifically do not throw here because this json might be sensitive,
 			// so we only want it to go to emails
-			global.Monitor?.crashlog?.(e, `a ${path.basename(this.file)} process`, {result: obj});
+			(global as any).Monitor?.crashlog?.(e, `a ${path.basename(this.file)} process`, { result: obj });
 			return undefined;
 		}
 	}
@@ -192,7 +194,7 @@ export class QueryProcessWrapper<T, U> implements ProcessWrapper {
 				this.resolveRelease = resolve;
 			});
 		}
-		return this.pendingRelease as Promise<void>;
+		return this.pendingRelease!;
 	}
 
 	destroy() {
@@ -230,7 +232,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 	messageCallback?: (message: string) => any;
 
 	constructor(file: string, messageCallback?: (message: string) => any) {
-		this.process = child_process.fork(file, [], {cwd: FS.ROOT_PATH});
+		this.process = child_process.fork(file, [], { cwd: FS.ROOT_PATH });
 		this.messageCallback = messageCallback;
 
 		this.process.on('message', (message: string) => {
@@ -265,7 +267,6 @@ export class StreamProcessWrapper implements ProcessWrapper {
 			if (messageType === 'END') {
 				stream.pushEnd();
 				this.deleteStream(taskId);
-				return;
 			} else if (messageType === 'PUSH') {
 				stream.push(message);
 			} else if (messageType === 'THROW') {
@@ -309,7 +310,7 @@ export class StreamProcessWrapper implements ProcessWrapper {
 				this.resolveRelease = resolve;
 			});
 		}
-		return this.pendingRelease as Promise<void>;
+		return this.pendingRelease!;
 	}
 
 	destroy() {
@@ -349,7 +350,7 @@ export class StreamWorker {
 
 /** Wraps the process object in the PARENT process. */
 export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
-	process: ChildProcess & {process: undefined} | Worker;
+	process: ChildProcess & { process: undefined } | Worker;
 	taskId = 0;
 	stream: RawSubprocessStream;
 	pendingRelease: Promise<void> | null = null;
@@ -369,7 +370,7 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
 			this.process = cluster.fork(env);
 			this.workerid = this.process.id;
 		} else {
-			this.process = child_process.fork(file, [], {cwd: FS.ROOT_PATH, env}) as any;
+			this.process = child_process.fork(file, [], { cwd: FS.ROOT_PATH, env }) as any;
 		}
 
 		this.process.on('message', (message: string) => {
@@ -395,7 +396,7 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
 				this.resolveRelease = resolve;
 			});
 		}
-		return this.pendingRelease as Promise<void>;
+		return this.pendingRelease!;
 	}
 
 	destroy() {
@@ -405,7 +406,6 @@ export class RawProcessWrapper implements ProcessWrapper, StreamWorker {
 		}
 		void this.stream.destroy();
 		this.process.disconnect();
-		return;
 	}
 }
 
@@ -630,7 +630,7 @@ export class StreamProcessManager extends ProcessManager<StreamProcessWrapper> {
 		while (!done) {
 			try {
 				let value;
-				({value, done} = await stream.next());
+				({ value, done } = await stream.next());
 				process.send!(`${taskId}\nPUSH\n${value}`);
 			} catch (err: any) {
 				process.send!(`${taskId}\nTHROW\n${err.stack}`);
@@ -718,7 +718,6 @@ export class RawProcessManager extends ProcessManager<RawProcessWrapper> {
 		if (this.isCluster && this.isParentProcess) {
 			cluster.setupMaster({
 				exec: this.filename,
-				// @ts-ignore TODO: update type definition
 				cwd: FS.ROOT_PATH,
 			});
 		}
@@ -756,7 +755,7 @@ export class RawProcessManager extends ProcessManager<RawProcessWrapper> {
 		while (!done) {
 			try {
 				let value;
-				({value, done} = await stream.next());
+				({ value, done } = await stream.next());
 				process.send!(value);
 			} catch (err: any) {
 				process.send!(`THROW\n${err.stack}`);

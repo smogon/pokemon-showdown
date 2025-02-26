@@ -88,7 +88,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (subFormat.onTeamPreview) subFormat.onTeamPreview.call(this);
 		}
 
-		this.queue.addChoice({choice: 'start'});
+		this.queue.addChoice({ choice: 'start' });
 		this.midTurn = true;
 		if (!this.requestState) this.turnLoop();
 	},
@@ -121,7 +121,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				pokemon.ability = this.toID(species.abilities['0']);
 				pokemon.baseAbility = pokemon.ability;
 
-				const behemothMove: {[k: string]: string} = {
+				const behemothMove: { [k: string]: string } = {
 					'Rusted Sword': 'behemothblade', 'Rusted Shield': 'behemothbash',
 				};
 				const ironHead = pokemon.baseMoves.indexOf('ironhead');
@@ -130,8 +130,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					pokemon.baseMoveSlots[ironHead] = {
 						move: move.name,
 						id: move.id,
-						pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
-						maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+						maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
 						target: move.target,
 						disabled: false,
 						disabledSource: '',
@@ -515,11 +515,13 @@ export const Scripts: ModdedBattleScriptsData = {
 		mutateOriginalSpecies(speciesOrForme, deltas) {
 			if (!deltas) throw new TypeError("Must specify deltas!");
 			const species = this.dex.deepClone(this.dex.species.get(speciesOrForme));
-			species.abilities = {'0': deltas.ability};
-			if (species.types[0] === deltas.type || deltas.formeType === 'Arceus') {
+			species.abilities = { '0': deltas.ability };
+			if (deltas.formeType === 'Arceus') {
 				const secondType = species.types[1];
 				species.types = [deltas.type];
 				if (secondType && secondType !== deltas.type) species.types.push(secondType);
+			} else if (species.types[0] === deltas.type) {
+				species.types = [deltas.type];
 			} else if (deltas.type === 'mono') {
 				species.types = [species.types[0]];
 			} else if (deltas.type) {

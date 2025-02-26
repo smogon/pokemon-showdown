@@ -1,22 +1,22 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
-	hazardabsorb: {
+	magmaticentrance: {
 		// implemented in moves.ts
 		flags: {},
 		shortDesc: "This Pokemon doesn't take damage from hazards.",
-		name: "Hazard Absorb",
+		name: "Magmatic Entrance",
 		rating: 4,
 	},
-	proteangen7: {
+	entertainer: {
 		onPrepareHit(source, target, move) {
 			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
-				this.add('-start', source, 'typechange', type, '[from] ability: Protean (Gen 7)');
+				this.add('-start', source, 'typechange', type, '[from] ability: Entertainer');
 			}
 		},
 		flags: {},
-		name: "Protean (Gen 7)",
+		name: "Entertainer",
 		shortDesc: "This Pokemon's type changes to the type of the move it is using.",
 		rating: 4,
 		num: -168,
@@ -74,10 +74,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
 					return;
 				}
-				this.add('-item', source, yourItem, '[from] ability: Magic Resistance', '[of] ' + target);
+				this.add('-item', source, yourItem, '[from] ability: Magic Resistance', `[of] ${target}`);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		name: "Magic Resistance",
 		rating: 3.5,
 		shortDesc: "This Pokemon steals foe's item after hitting them, and takes 50% damage from Fire/Ice.",
@@ -93,7 +93,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	stall: {
 		onBeforeMove(target, source, move) {
 			if (move.category === 'Status') {
-				this.actions.useMove(move, target, {target: source});
+				this.actions.useMove(move, target, { target: source });
 			}
 		},
 		onFractionalPriority: -0.1,
@@ -127,7 +127,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return null;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		shortDesc: "Effects of Unware and Water Absorb.",
 		name: "Go with the Flow",
 		rating: 4,
@@ -140,7 +140,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather(['hail', 'snow'])) {
+			if (this.field.isWeather(['hail', 'snowscape'])) {
 				return this.chainModify(2);
 			}
 		},
@@ -160,9 +160,36 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamagingHit(damage, target, source, move) {
 			target.addVolatile('charge');
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		shortDesc: "Effects of Fluffy and Electromorphosis.",
 		name: "Fluffy Charger",
 		rating: 4,
+	},
+	supremesurvivor: {
+		onPrepareHit(source, target, move) {
+			if (this.effectState.protean) return;
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
+			const type = move.type;
+			if (type && type !== '???' && source.getTypes().join() !== type) {
+				if (!source.setType(type)) return;
+				this.effectState.protean = true;
+				this.add('-start', source, 'typechange', type, '[from] ability: Supreme Survivor');
+			}
+		},
+		onModifySTAB(stab, source, target, move) {
+			if (move.forceSTAB || source.hasType(move.type)) {
+				if (stab === 2) {
+					return 2.25;
+				}
+				return 2;
+			}
+		},
+		onSwitchIn(pokemon) {
+			delete this.effectState.protean;
+		},
+		flags: {},
+		shortDesc: "Effects of Adaptability and Protean.",
+		name: "Supreme Survivor",
+		rating: 5,
 	},
 };
