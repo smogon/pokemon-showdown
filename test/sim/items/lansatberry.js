@@ -5,31 +5,31 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Lansat Berry', function () {
-	afterEach(function () {
+describe('Lansat Berry', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should apply a Focus Energy effect when consumed', function () {
+	it('should apply a Focus Energy effect when consumed', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: 'Aggron', ability: 'sturdy', item: 'lansatberry', moves: ['sleeptalk']}]});
-		battle.setPlayer('p2', {team: [{species: 'Lucario', ability: 'adaptability', moves: ['aurasphere']}]});
+		battle.setPlayer('p1', { team: [{ species: 'Aggron', ability: 'sturdy', item: 'lansatberry', moves: ['sleeptalk'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Lucario', ability: 'adaptability', moves: ['aurasphere'] }] });
 		const holder = battle.p1.active[0];
 		battle.makeChoices('move sleeptalk', 'move aurasphere');
 		assert.false.holdsItem(holder);
 		assert('focusenergy' in holder.volatiles);
 	});
 
-	it('should start to apply the effect even in middle of an attack', function () {
+	it('should start to apply the effect even in middle of an attack', () => {
 		battle = common.createBattle([
-			[{species: 'Makuhita', ability: 'guts', item: 'lansatberry', moves: ['triplekick']}],
-			[{species: 'Muk', ability: 'noguard', item: 'rockyhelmet', moves: ['acidarmor']}],
+			[{ species: 'Makuhita', ability: 'guts', item: 'lansatberry', moves: ['triplekick'] }],
+			[{ species: 'Muk', ability: 'noguard', item: 'rockyhelmet', moves: ['acidarmor'] }],
 		]);
 		const holder = battle.p1.active[0];
 
 		let i = 0;
 		const expectedRatio = [1, 1, 1, 1, 1, 3];
-		battle.onEvent('ModifyCritRatio', battle.format, -99, function (critRatio, pokemon) {
+		battle.onEvent('ModifyCritRatio', battle.format, -99, (critRatio, pokemon) => {
 			assert.equal(critRatio, expectedRatio[i++]);
 		});
 

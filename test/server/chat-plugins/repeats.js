@@ -16,7 +16,7 @@ describe("Repeats plugin", function () {
 	it('should add repeats correctly', () => {
 		assert(!Repeats.repeats.has(this.room));
 
-		Repeats.addRepeat(this.room, {id: 'happyface', phrase: "^_^", interval: 1});
+		Repeats.addRepeat(this.room, { id: 'happyface', phrase: "^_^", interval: 1 });
 
 		assert(Repeats.repeats.has(this.room));
 
@@ -29,7 +29,7 @@ describe("Repeats plugin", function () {
 	});
 
 	it('should remove repeats correctly', () => {
-		Repeats.addRepeat(this.room, {id: 'weirdface', phrase: "^_-", interval: 1});
+		Repeats.addRepeat(this.room, { id: 'weirdface', phrase: "^_-", interval: 1 });
 		assert(Repeats.repeats.get(this.room).get('weirdface').has("^_-"));
 		assert(this.room.settings.repeats.some(repeat => repeat.phrase === "^_-"));
 
@@ -41,7 +41,7 @@ describe("Repeats plugin", function () {
 	it('should be able to tell if a repeat exists or not', () => {
 		assert(!Repeats.hasRepeat(this.room, 'annoyedface'));
 
-		Repeats.addRepeat(this.room, {id: 'annoyedface', phrase: "-_-", interval: 1});
+		Repeats.addRepeat(this.room, { id: 'annoyedface', phrase: "-_-", interval: 1 });
 		assert(Repeats.hasRepeat(this.room, 'annoyedface'));
 
 		Repeats.removeRepeat(this.room, 'annoyedface');

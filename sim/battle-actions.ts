@@ -1,4 +1,4 @@
-import {Dex, toID} from './dex';
+import { Dex, toID } from './dex';
 
 const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
 
@@ -6,7 +6,7 @@ export class BattleActions {
 	battle: Battle;
 	dex: ModdedDex;
 
-	readonly MAX_MOVES: {readonly [k: string]: string} = {
+	readonly MAX_MOVES: { readonly [k: string]: string } = {
 		Flying: 'Max Airstream',
 		Dark: 'Max Darkness',
 		Fire: 'Max Flare',
@@ -28,7 +28,7 @@ export class BattleActions {
 		Dragon: 'Max Wyrmwind',
 	};
 
-	readonly Z_MOVES: {readonly [k: string]: string} = {
+	readonly Z_MOVES: { readonly [k: string]: string } = {
 		Poison: "Acid Downpour",
 		Fighting: "All-Out Pummeling",
 		Dark: "Black Hole Eclipse",
@@ -139,7 +139,7 @@ export class BattleActions {
 		pokemon.itemState.effectOrder = this.battle.effectOrder++;
 		this.battle.runEvent('BeforeSwitchIn', pokemon);
 		if (sourceEffect) {
-			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, '[from] ' + sourceEffect);
+			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, `[from] ${sourceEffect}`);
 		} else {
 			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 		}
@@ -150,7 +150,7 @@ export class BattleActions {
 			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
 			this.runSwitch(pokemon);
 		} else {
-			this.battle.queue.insertChoice({choice: 'runSwitch', pokemon});
+			this.battle.queue.insertChoice({ choice: 'runSwitch', pokemon });
 		}
 
 		return true;
@@ -176,7 +176,7 @@ export class BattleActions {
 		}
 		const allActive = this.battle.getAllActive(true);
 		this.battle.speedSort(allActive);
-		this.battle.speedOrder = allActive.map((a) => a.side.n * a.battle.sides.length + a.position);
+		this.battle.speedOrder = allActive.map(a => a.side.n * a.battle.sides.length + a.position);
 		this.battle.fieldEvent('SwitchIn', switchersIn);
 
 		for (const poke of switchersIn) {
@@ -244,7 +244,7 @@ export class BattleActions {
 			// THIS IS PURELY A SANITY CHECK
 			// DO NOT TAKE ADVANTAGE OF THIS TO PREVENT A POKEMON FROM MOVING;
 			// USE this.queue.cancelMove INSTEAD
-			this.battle.debug('' + pokemon.id + ' INCONSISTENT STATE, ALREADY MOVED: ' + pokemon.moveThisTurn);
+			this.battle.debug(`${pokemon.id} INCONSISTENT STATE, ALREADY MOVED: ${pokemon.moveThisTurn}`);
 			this.battle.clearActiveMove(true);
 			return;
 		} */
@@ -303,7 +303,7 @@ export class BattleActions {
 
 		const oldActiveMove = move;
 
-		const moveDidSomething = this.useMove(baseMove, pokemon, {target, sourceEffect, zMove, maxMove});
+		const moveDidSomething = this.useMove(baseMove, pokemon, { target, sourceEffect, zMove, maxMove });
 		this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
 		if (this.battle.activeMove) move = this.battle.activeMove;
 		this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
@@ -338,7 +338,7 @@ export class BattleActions {
 					targetOf1stDance :
 					pokemon;
 				const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-				this.runMove(move.id, dancer, dancersTargetLoc, {sourceEffect: this.dex.abilities.get('dancer'), externalMove: true});
+				this.runMove(move.id, dancer, dancersTargetLoc, { sourceEffect: this.dex.abilities.get('dancer'), externalMove: true });
 			}
 		}
 		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
@@ -410,7 +410,7 @@ export class BattleActions {
 			if (!move.hasBounced) move.pranksterBoosted = this.battle.activeMove.pranksterBoosted;
 		}
 		const baseTarget = move.target;
-		let targetRelayVar = {target};
+		let targetRelayVar = { target };
 		targetRelayVar = this.battle.runEvent('ModifyTarget', pokemon, target, move, targetRelayVar, true);
 		if (targetRelayVar.target !== undefined) target = targetRelayVar.target;
 		if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
@@ -449,10 +449,10 @@ export class BattleActions {
 		if (move.id === 'hiddenpower') movename = 'Hidden Power';
 		if (sourceEffect) attrs += `|[from] ${sourceEffect.fullname}`;
 		if (zMove && move.isZ === true) {
-			attrs = '|[anim]' + movename + attrs;
-			movename = 'Z-' + movename;
+			attrs = `|[anim]${movename}${attrs}`;
+			movename = `Z-${movename}`;
 		}
-		this.battle.addMove('move', pokemon, movename, target + attrs);
+		this.battle.addMove('move', pokemon, movename, `${target}${attrs}`);
 
 		if (zMove) this.runZPower(move, pokemon);
 
@@ -462,7 +462,7 @@ export class BattleActions {
 			return false;
 		}
 
-		const {targets, pressureTargets} = pokemon.getMoveTargets(move, target);
+		const { targets, pressureTargets } = pokemon.getMoveTargets(move, target);
 		if (targets.length) {
 			target = targets[targets.length - 1]; // in case of redirection
 		}
@@ -707,11 +707,11 @@ export class BattleActions {
 				if (accuracy !== true) {
 					let boost = 0;
 					if (!move.ignoreAccuracy) {
-						const boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, {...pokemon.boosts});
+						const boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
 						boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
 					}
 					if (!move.ignoreEvasion) {
-						const boosts = this.battle.runEvent('ModifyBoost', target, null, null, {...target.boosts});
+						const boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
 						boost = this.battle.clampIntRange(boost - boosts['evasion'], -6, 6);
 					}
 					if (boost > 0) {
@@ -721,8 +721,10 @@ export class BattleActions {
 					}
 				}
 			}
-			if (move.alwaysHit || (move.id === 'toxic' && this.battle.gen >= 8 && pokemon.hasType('Poison')) ||
-					(move.target === 'self' && move.category === 'Status' && !target.isSemiInvulnerable())) {
+			if (
+				move.alwaysHit || (move.id === 'toxic' && this.battle.gen >= 8 && pokemon.hasType('Poison')) ||
+				(move.target === 'self' && move.category === 'Status' && !target.isSemiInvulnerable())
+			) {
 				accuracy = true; // bypasses ohko accuracy modifiers
 			} else {
 				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
@@ -735,7 +737,7 @@ export class BattleActions {
 					this.battle.add('-miss', pokemon, target);
 				}
 				if (!move.ohko && pokemon.hasItem('blunderpolicy') && pokemon.useItem()) {
-					this.battle.boost({spe: 2}, pokemon);
+					this.battle.boost({ spe: 2 }, pokemon);
 				}
 				hitResults[i] = false;
 				continue;
@@ -762,7 +764,7 @@ export class BattleActions {
 					if (move.id === 'feint') {
 						this.battle.add('-activate', target, 'move: Feint');
 					} else {
-						this.battle.add('-activate', target, 'move: ' + move.name, '[broken]');
+						this.battle.add('-activate', target, `move: ${move.name}`, '[broken]');
 					}
 					if (this.battle.gen >= 6) delete target.volatiles['stall'];
 				}
@@ -905,7 +907,7 @@ export class BattleActions {
 				const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
 				if (accuracy !== true) {
 					if (!move.ignoreAccuracy) {
-						const boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, {...pokemon.boosts});
+						const boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
 						const boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
 						if (boost > 0) {
 							accuracy *= boostTable[boost];
@@ -914,7 +916,7 @@ export class BattleActions {
 						}
 					}
 					if (!move.ignoreEvasion) {
-						const boosts = this.battle.runEvent('ModifyBoost', target, null, null, {...target.boosts});
+						const boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
 						const boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
 						if (boost > 0) {
 							accuracy /= boostTable[boost];
@@ -953,7 +955,7 @@ export class BattleActions {
 				// purposes of Counter, Metal Burst, and Mirror Coat.
 				damage[i] = md === true || !md ? 0 : md;
 				// Total damage dealt is accumulated for the purposes of recoil (Parental Bond).
-				move.totalDamage += damage[i] as number;
+				move.totalDamage += damage[i];
 			}
 			if (move.mindBlownRecoil) {
 				const hpBeforeRecoil = pokemon.hp;
@@ -993,7 +995,7 @@ export class BattleActions {
 			} else {
 				recoilDamage = this.battle.clampIntRange(this.battle.trunc(pokemon.maxhp / 4), 1);
 			}
-			this.battle.directDamage(recoilDamage, pokemon, pokemon, {id: 'strugglerecoil'} as Condition);
+			this.battle.directDamage(recoilDamage, pokemon, pokemon, { id: 'strugglerecoil' } as Condition);
 			if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
 				this.battle.runEvent('EmergencyExit', pokemon, pokemon);
 			}
@@ -1019,7 +1021,7 @@ export class BattleActions {
 
 		this.battle.eachEvent('Update');
 
-		this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val) as Pokemon[], pokemon, move);
+		this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
 
 		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 			for (const [i, d] of damage.entries()) {
@@ -1465,7 +1467,7 @@ export class BattleActions {
 			if (zMoveName) {
 				const zMove = this.dex.moves.get(zMoveName);
 				if (!zMove.isZ && zMove.category === 'Status') zMoveName = "Z-" + zMoveName;
-				zMoves.push({move: zMoveName, target: zMove.target});
+				zMoves.push({ move: zMoveName, target: zMove.target });
 			} else {
 				zMoves.push(null);
 			}
@@ -1542,7 +1544,7 @@ export class BattleActions {
 				if (pokemon.hasType('Ghost')) {
 					this.battle.heal(pokemon.maxhp, pokemon, pokemon, zPower);
 				} else {
-					this.battle.boost({atk: 1}, pokemon, pokemon, zPower);
+					this.battle.boost({ atk: 1 }, pokemon, pokemon, zPower);
 				}
 			}
 		}
@@ -1676,7 +1678,7 @@ export class BattleActions {
 		let attackStat: StatIDExceptHP = move.overrideOffensiveStat || (isPhysical ? 'atk' : 'spa');
 		const defenseStat: StatIDExceptHP = move.overrideDefensiveStat || (isPhysical ? 'def' : 'spd');
 
-		const statTable = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
+		const statTable = { atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
 
 		let atkBoosts = attacker.boosts[attackStat];
 		let defBoosts = defender.boosts[defenseStat];
@@ -1734,7 +1736,7 @@ export class BattleActions {
 		if (move.spreadHit) {
 			// multi-target modifier (doubles only)
 			const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
-			this.battle.debug('Spread modifier: ' + spreadModifier);
+			this.battle.debug(`Spread modifier: ${spreadModifier}`);
 			baseDamage = this.battle.modify(baseDamage, spreadModifier);
 		} else if (move.multihitType === 'parentalbond' && move.hit > 1) {
 			// Parental Bond modifier
