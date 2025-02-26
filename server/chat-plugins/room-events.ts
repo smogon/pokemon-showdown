@@ -6,7 +6,7 @@
  *
  * @license MIT license
  */
-import {Utils} from '../../lib';
+import { Utils } from '../../lib';
 
 export interface RoomEvent {
 	eventName: string;
@@ -28,7 +28,7 @@ function convertAliasFormat(room: Room) {
 	for (const event of Object.values(room.settings.events) as AnyObject[]) {
 		if (!event.aliases) continue;
 		for (const alias of event.aliases) {
-			room.settings.events[alias] = {eventID: toID(event.eventName)};
+			room.settings.events[alias] = { eventID: toID(event.eventName) };
 		}
 		delete event.aliases;
 	}
@@ -41,7 +41,7 @@ function formatEvent(room: Room, event: RoomEvent, showAliases?: boolean, showCa
 	if (timeRemaining < 0) explanation = "This event will start soon";
 	if (event.started) explanation = "This event has started";
 	if (!isNaN(timeRemaining)) {
-		explanation = `This event will start in: ${Chat.toDurationString(timeRemaining, {precision: 2})}`;
+		explanation = `This event will start in: ${Chat.toDurationString(timeRemaining, { precision: 2 })}`;
 	}
 
 	const eventID = toID(event.eventName);
@@ -65,7 +65,7 @@ function getAliases(room: Room, eventID?: ID) {
 	for (const aliasID in room.settings.events) {
 		if (
 			'eventID' in room.settings.events[aliasID] &&
-			(!eventID || (room.settings.events[aliasID] as RoomEventAlias).eventID === eventID)
+			(!eventID || room.settings.events[aliasID].eventID === eventID)
 		) aliases.push(aliasID);
 	}
 	return aliases;
@@ -254,7 +254,7 @@ export const commands: Chat.ChatCommands = {
 			for (const alias of getAliases(room, eventID)) {
 				delete room.settings.events[alias];
 			}
-			for (const category of getAllCategories(room).map(cat => room!.settings.events?.[cat] as RoomEventCategory)) {
+			for (const category of getAllCategories(room).map(cat => room.settings.events?.[cat] as RoomEventCategory)) {
 				category.events = category.events.filter(event => event !== eventID);
 			}
 
@@ -280,7 +280,7 @@ export const commands: Chat.ChatCommands = {
 					const category = room.settings.events[categoryID];
 					if ('events' in category && categoryID === target) {
 						events = category.events
-							.map(e => room!.settings.events?.[e] as RoomEvent)
+							.map(e => room.settings.events?.[e] as RoomEvent)
 							.filter(e => e);
 						break;
 					}
@@ -301,7 +301,7 @@ export const commands: Chat.ChatCommands = {
 			for (const potentialCategory of getAllCategories(room)) {
 				if (
 					events.map(event => toID(event.eventName))
-						.filter(id => (room!.settings.events?.[potentialCategory] as RoomEventCategory).events.includes(id)).length
+						.filter(id => (room.settings.events?.[potentialCategory] as RoomEventCategory).events.includes(id)).length
 				) hasCategories = true; break;
 			}
 
@@ -339,7 +339,7 @@ export const commands: Chat.ChatCommands = {
 			if (!(event && 'eventName' in event)) return this.errorReply(`There is no event titled "${eventId}".`);
 			if (room.settings.events[alias]) return this.errorReply(`"${alias}" is already an event, alias, or category.`);
 
-			room.settings.events[alias] = {eventID: eventId};
+			room.settings.events[alias] = { eventID: eventId };
 			this.privateModAction(`${user.name} added an alias "${alias}" for the roomevent "${eventId}".`);
 			this.modlog('ROOMEVENT', null, `alias for "${eventId}": "${alias}"`);
 			room.saveSettings();
@@ -443,7 +443,7 @@ export const commands: Chat.ChatCommands = {
 			if (!room.settings.events) room.settings.events = Object.create(null);
 			if (room.settings.events?.[categoryId]) return this.errorReply(`The category "${target}" already exists.`);
 
-			room.settings.events![categoryId] = {events: []};
+			room.settings.events![categoryId] = { events: [] };
 
 			this.privateModAction(`${user.name} added the category "${categoryId}".`);
 			this.modlog('ROOMEVENT', null, `category: added "${categoryId}"`);
@@ -504,8 +504,7 @@ export const commands: Chat.ChatCommands = {
 			let columnName = "";
 			const delimited = target.split(target.includes('|') ? '|' : ',');
 			const sortable = Object.values(room.settings.events)
-				.filter(event => 'eventName' in event)
-				.map(event => event as RoomEvent);
+				.filter((event): event is RoomEvent => 'eventName' in event);
 
 			// id tokens
 			if (delimited.length === 1) {
@@ -524,8 +523,8 @@ export const commands: Chat.ChatCommands = {
 			case "eventdate":
 				sortable.sort(
 					(a, b) =>
-						(toID(a.date) < toID(b.date)) ? -1 * multiplier :
-						(toID(b.date) < toID(a.date)) ? 1 * multiplier : 0
+						(toID(a.date) < toID(b.date)) ? -multiplier :
+						(toID(b.date) < toID(a.date)) ? multiplier : 0
 				);
 				break;
 			case "desc":
@@ -533,16 +532,16 @@ export const commands: Chat.ChatCommands = {
 			case "eventdescription":
 				sortable.sort(
 					(a, b) =>
-						(toID(a.desc) < toID(b.desc)) ? -1 * multiplier :
-						(toID(b.desc) < toID(a.desc)) ? 1 * multiplier : 0
+						(toID(a.desc) < toID(b.desc)) ? -multiplier :
+						(toID(b.desc) < toID(a.desc)) ? multiplier : 0
 				);
 				break;
 			case "eventname":
 			case "name":
 				sortable.sort(
 					(a, b) =>
-						(toID(a.eventName) < toID(b.eventName)) ? -1 * multiplier :
-						(toID(b.eventName) < toID(a.eventName)) ? 1 * multiplier : 0
+						(toID(a.eventName) < toID(b.eventName)) ? -multiplier :
+						(toID(b.eventName) < toID(a.eventName)) ? multiplier : 0
 				);
 				break;
 			default:

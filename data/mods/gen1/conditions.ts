@@ -41,7 +41,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				if (pokemon.removeVolatile('twoturnmove')) {
 					if (pokemon.volatiles['invulnerability']) {
 						this.hint(`In Gen 1, when a Dig/Fly user is fully paralyzed while semi-invulnerable, ` +
-						`it will remain semi-invulnerable until it switches out or fully executes Dig/Fly`, true);
+							`it will remain semi-invulnerable until it switches out or fully executes Dig/Fly`, true);
 					}
 				}
 				pokemon.removeVolatile('partialtrappinglock');
@@ -55,7 +55,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Move') {
-				this.add('-status', target, 'slp', '[from] move: ' + sourceEffect.name);
+				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
 				this.add('-status', target, 'slp');
 			}
@@ -155,7 +155,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				pokemon.removeVolatile('lockedmove');
 				return false;
 			}
-			return;
 		},
 	},
 	flinch: {
@@ -252,7 +251,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			const move = this.dex.moves.get(this.effectState.move);
 			if (move.id) {
 				this.debug('Forcing into ' + move.id);
-				this.queue.changeAction(pokemon, {choice: 'move', moveid: move.id});
+				this.queue.changeAction(pokemon, { choice: 'move', moveid: move.id });
 			}
 		},
 	},

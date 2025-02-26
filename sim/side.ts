@@ -19,15 +19,15 @@
  * @license MIT
  */
 
-import {Utils} from '../lib/utils';
-import type {RequestState} from './battle';
-import {Pokemon, EffectState} from './pokemon';
-import {State} from './state';
-import {toID} from './dex';
+import { Utils } from '../lib/utils';
+import type { RequestState } from './battle';
+import { Pokemon, type EffectState } from './pokemon';
+import { State } from './state';
+import { toID } from './dex';
 
 /** A single action that can be chosen. */
 export interface ChosenAction {
-	choice: 'move' | 'switch' | 'instaswitch' | 'revivalblessing' | 'team' | 'shift' | 'pass'; 	// action type
+	choice: 'move' | 'switch' | 'instaswitch' | 'revivalblessing' | 'team' | 'shift' | 'pass';// action type
 	pokemon?: Pokemon; // the pokemon doing the action
 	targetLoc?: number; // relative location of the target to pokemon (move action only)
 	moveid: string; // a move to use (move action only)
@@ -91,8 +91,8 @@ export class Side {
 	lastSelectedMove: ID = '';
 
 	/** these point to the same object as the ally's, in multi battles */
-	sideConditions: {[id: string]: EffectState};
-	slotConditions: {[id: string]: EffectState}[];
+	sideConditions: { [id: string]: EffectState };
+	slotConditions: { [id: string]: EffectState }[];
 
 	activeRequest: AnyObject | null;
 	choice: Choice;
@@ -285,7 +285,7 @@ export class Side {
 	addSideCondition(
 		status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
 	): boolean {
-		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+		if (!source && this.battle.event?.target) source = this.battle.event.target;
 		if (source === 'debug') source = this.active[0];
 		if (!source) throw new Error(`setting sidecond without a source`);
 		if (!source.getSlot) source = (source as any as Side).active[0];
@@ -337,7 +337,7 @@ export class Side {
 		target: Pokemon | number, status: string | Condition, source: Pokemon | 'debug' | null = null,
 		sourceEffect: Effect | null = null
 	) {
-		if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+		source ??= this.battle.event?.target || null;
 		if (source === 'debug') source = this.active[0];
 		if (target instanceof Pokemon) target = target.position;
 		if (!source) throw new Error(`setting sidecond without a source`);
@@ -382,7 +382,6 @@ export class Side {
 		return true;
 	}
 
-	// eslint-disable-next-line @typescript-eslint/ban-types
 	send(...parts: (string | number | Function | AnyObject)[]) {
 		const sideUpdate = '|' + parts.map(part => {
 			if (typeof part !== 'function') return part;
@@ -542,7 +541,7 @@ export class Side {
 		if (lockedMove) {
 			let lockedMoveTargetLoc = pokemon.lastMoveTargetLoc || 0;
 			const lockedMoveID = toID(lockedMove);
-			if (pokemon.volatiles[lockedMoveID] && pokemon.volatiles[lockedMoveID].targetLoc) {
+			if (pokemon.volatiles[lockedMoveID]?.targetLoc) {
 				lockedMoveTargetLoc = pokemon.volatiles[lockedMoveID].targetLoc;
 			}
 			this.choice.actions.push({
@@ -683,8 +682,8 @@ export class Side {
 			targetLoc,
 			moveid,
 			mega: mega || ultra,
-			megax: megax,
-			megay: megay,
+			megax,
+			megay,
 			zmove: zMove,
 			maxMove: maxMove ? maxMove.id : undefined,
 			terastallize: terastallize ? pokemon.teraType : undefined,

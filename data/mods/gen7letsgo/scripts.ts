@@ -15,7 +15,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	init() {
 		this.modData('Abilities', 'noability').isNonstandard = null;
 		for (const i in this.data.Pokedex) {
-			this.modData('Pokedex', i).abilities = {0: 'No Ability'};
+			this.modData('Pokedex', i).abilities = { 0: 'No Ability' };
 			delete this.modData('Pokedex', i).requiredItem;
 		}
 	},
@@ -62,7 +62,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	 * Given a table of base stats and a pokemon set, return the actual stats.
 	 */
 	spreadModify(baseStats, set) {
-		const modStats: StatsTable = {hp: 10, atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
+		const modStats: StatsTable = { hp: 10, atk: 10, def: 10, spa: 10, spd: 10, spe: 10 };
 		let statName: StatID;
 		for (statName in modStats) {
 			const stat = baseStats[statName];

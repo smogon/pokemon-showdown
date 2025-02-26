@@ -1,6 +1,6 @@
-import {PRNG} from '../../../sim/prng';
-import {Pokemon} from '../../../sim/pokemon';
-import {Teams} from '../../../sim/teams';
+import { PRNG } from '../../../sim/prng';
+import { Pokemon } from '../../../sim/pokemon';
+import { Teams } from '../../../sim/teams';
 
 export const Scripts: ModdedBattleScriptsData = {
 	start() {
@@ -114,7 +114,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (subFormat.onTeamPreview) subFormat.onTeamPreview.call(this);
 		}
 
-		this.queue.addChoice({choice: 'start'});
+		this.queue.addChoice({ choice: 'start' });
 		this.midTurn = true;
 		if (!this.requestState) this.turnLoop();
 	},

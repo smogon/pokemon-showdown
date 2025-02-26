@@ -1,10 +1,10 @@
 /**
  * @author mia-pi-git
  */
-import {LocalClassifier} from './local';
-import {RemoteClassifier} from './remote';
+import { LocalClassifier } from './local';
+import { RemoteClassifier } from './remote';
 
-export {LocalClassifier, RemoteClassifier};
+export { LocalClassifier, RemoteClassifier };
 
 export function destroy() {
 	void LocalClassifier.destroy();
