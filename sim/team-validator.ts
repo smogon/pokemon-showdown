@@ -882,7 +882,16 @@ export class TeamValidator {
 				checkGoLegality = true;
 			}
 			for (const source of setSources.sources) {
-				if (isUnderleveled && source.charAt(1) !== 'S' && source !== '8V') continue;
+				if (isUnderleveled) {
+					if (source.charAt(1) === 'S') {
+						const eventSpecies = dex.species.get(source.substr(3)).baseSpecies;
+						const underleveledSpecies = dex.species.get(isUnderleveled).baseSpecies;
+						// Can only be an FE species or in a three-stage line, the prevo
+						if (eventSpecies !== species.baseSpecies && eventSpecies !== underleveledSpecies) continue;
+					} else if (source !== '8V') {
+						continue;
+					}
+				}
 				if (['2E', '3E'].includes(source.substr(0, 2)) && set.level < 5) continue;
 				skippedEggSource = false;
 				if (this.validateSource(set, source, setSources, outOfBattleSpecies)) continue;
@@ -967,7 +976,7 @@ export class TeamValidator {
 						problems.push(`${species.name} is only obtainable from events - it needs to match one of its events:`);
 					}
 					for (const [i, event] of eventData.entries()) {
-						if (event.generation <= dex.gen && event.generation >= this.minSourceGen) {
+						if (event.generation <= dex.gen && (event.generation >= this.minSourceGen || dex.gen > 8)) {
 							const eventInfo = event;
 							const eventNum = i + 1;
 							const eventName = eventData.length > 1 ? ` #${eventNum}` : ``;
