@@ -96,7 +96,7 @@ export interface PokemonMoveRequestData {
 	trapped?: boolean;
 	maybeTrapped?: boolean;
 	maybePartiallyTrapped?: boolean;
-	maybePartiallyTrapping?: boolean;
+	maybePartiallyTrapping?: string | false;
 	canMegaEvo?: boolean;
 	canMegaEvoX?: boolean;
 	canMegaEvoY?: boolean;
