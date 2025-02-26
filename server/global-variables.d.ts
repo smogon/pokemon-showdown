@@ -40,20 +40,20 @@ declare global {
 			__version: {head: string, origin?: string, tree?: string};
 		}
 	}
-	const Config: ConfigType;
-	const Chat: typeof ChatType.Chat;
-	const Dex: typeof DexType;
-	const Teams: typeof TeamsType;
-	const IPTools: typeof IPToolsType;
-	const Ladders: typeof LaddersType;
-	const LoginServer: typeof LoginServerType;
-	const Monitor: typeof MonitorType;
-	const Punishments: typeof PunishmentsType;
-	const Rooms: typeof RoomsType.Rooms;
-	const Sockets: typeof SocketsType.Sockets;
-	const TeamValidatorAsync: typeof TeamValidatorAsyncType;
-	const Tournaments: typeof TournamentsType;
-	const Users: typeof UsersType.Users;
-	const Verifier: typeof VerifierType;
-	const toID: typeof DexType.toID;
+	var Config: ConfigType;
+	var Chat: typeof ChatType.Chat;
+	var Dex: typeof DexType;
+	var Teams: typeof TeamsType;
+	var IPTools: typeof IPToolsType;
+	var Ladders: typeof LaddersType;
+	var LoginServer: typeof LoginServerType;
+	var Monitor: typeof MonitorType;
+	var Punishments: typeof PunishmentsType;
+	var Rooms: typeof RoomsType.Rooms;
+	var Sockets: typeof SocketsType.Sockets;
+	var TeamValidatorAsync: typeof TeamValidatorAsyncType;
+	var Tournaments: typeof TournamentsType;
+	var Users: typeof UsersType.Users;
+	var Verifier: typeof VerifierType;
+	var toID: typeof DexType.toID;
 }

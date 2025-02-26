@@ -5,17 +5,17 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Booster Energy', function () {
-	afterEach(function () {
+describe('Booster Energy', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should not activate before Sticky Web when switching in`, function () {
+	it(`should not activate before Sticky Web when switching in`, () => {
 		battle = common.createBattle([[
-			{species: 'Abra', ability: 'synchronize', moves: ['teleport']},
-			{species: 'Iron Bundle', ability: 'quarkdrive', item: 'boosterenergy', moves: ['sleeptalk']},
+			{ species: 'Abra', ability: 'synchronize', moves: ['teleport'] },
+			{ species: 'Iron Bundle', ability: 'quarkdrive', item: 'boosterenergy', moves: ['sleeptalk'] },
 		], [
-			{species: 'Ribombee', ability: 'shielddust', moves: ['stickyweb']},
+			{ species: 'Ribombee', ability: 'shielddust', moves: ['stickyweb'] },
 		]]);
 
 		battle.makeChoices();

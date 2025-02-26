@@ -5,21 +5,21 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Free-for-all', function () {
-	afterEach(function () {
+describe('Free-for-all', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should support forfeiting`, function () {
-		battle = common.createBattle({gameType: 'freeforall'}, [[
-			{species: 'wynaut', moves: ['vitalthrow']},
+	it(`should support forfeiting`, () => {
+		battle = common.createBattle({ gameType: 'freeforall' }, [[
+			{ species: 'wynaut', moves: ['vitalthrow'] },
 		], [
-			{species: 'scyther', moves: ['sleeptalk']},
+			{ species: 'scyther', moves: ['sleeptalk'] },
 		], [
-			{species: 'scyther', moves: ['sleeptalk', 'uturn']},
-			{species: 'wynaut', moves: ['vitalthrow']},
+			{ species: 'scyther', moves: ['sleeptalk', 'uturn'] },
+			{ species: 'wynaut', moves: ['vitalthrow'] },
 		], [
-			{species: 'scyther', moves: ['sleeptalk']},
+			{ species: 'scyther', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		battle.lose('p2');

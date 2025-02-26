@@ -60,7 +60,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onSwitchIn(pokemon) {
 			if (pokemon.isActive && !pokemon.species.isPrimal && !pokemon.transformed) {
-				// @ts-ignore
+				// @ts-expect-error modded
 				const species: Species = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Kyogre-Primal', pokemon);
 				if (pokemon.m.originalSpecies === 'Kyogre') {
 					pokemon.formeChange(species, this.effect, true);
@@ -211,7 +211,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		inherit: true,
 		onSwitchIn(pokemon) {
 			if (pokemon.isActive && !pokemon.species.isPrimal && !pokemon.transformed) {
-				// @ts-ignore
+				// @ts-expect-error modded
 				const species: Species = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Groudon-Primal', pokemon);
 				if (pokemon.m.originalSpecies === 'Groudon') {
 					pokemon.formeChange(species, this.effect, true);

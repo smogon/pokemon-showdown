@@ -1,4 +1,4 @@
-import {Utils, FS} from '../../lib';
+import { Utils, FS } from '../../lib';
 
 export const nameList = new Set<string>(JSON.parse(
 	FS('config/chat-plugins/usersearch.json').readIfExistsSync() || "[]"
@@ -7,28 +7,28 @@ export const nameList = new Set<string>(JSON.parse(
 const ONLINE_SYMBOL = ` \u25C9 `;
 const OFFLINE_SYMBOL = ` \u25CC `;
 
-class PunishmentHTML extends Chat.JSX.Component<{userid: ID, target: string}> {
+class PunishmentHTML extends Chat.JSX.Component<{ userid: ID, target: string }> {
 	render() {
-		const {userid, target} = {...this.props};
+		const { userid, target } = { ...this.props };
 		const buf = [];
 		for (const cmdName of ['Forcerename', 'Namelock', 'Weeknamelock']) {
 			// We have to use dangerouslySetInnerHTML here because otherwise the `value`
 			// property of the button tag is auto escaped, making &#10; into &amp;#10;
-			buf.push(<span dangerouslySetInnerHTML={
-				{
+			buf.push(<span
+				dangerouslySetInnerHTML={{
 					__html: `<button class="button" name="send" value="/msgroom staff,/${toID(cmdName)} ${userid}` +
-					`&#10;/uspage ${target}">${cmdName}</button>`,
-				}
-			} />);
+						`&#10;/uspage ${target}">${cmdName}</button>`,
+				}}
+			/>);
 		}
 		return buf;
 	}
 }
 
-class SearchUsernames extends Chat.JSX.Component<{target: string, page?: boolean}> {
+class SearchUsernames extends Chat.JSX.Component<{ target: string, page?: boolean }> {
 	render() {
-		const {target, page} = {...this.props};
-		const results: {offline: string[], online: string[]} = {
+		const { target, page } = { ...this.props };
+		const results: { offline: string[], online: string[] } = {
 			offline: [],
 			online: [],
 		};
@@ -47,19 +47,22 @@ class SearchUsernames extends Chat.JSX.Component<{target: string, page?: boolean
 		if (!page) {
 			return <>
 				Users with a name matching '{target}':<br />
-				{!results.offline.length && !results.online.length ?
-					<>No users found.</> : <>
+				{!results.offline.length && !results.online.length ? (
+					<>No users found.</>
+				) : (
+					<>
 						{results.online.join('; ')}
 						{!!results.offline.length &&
 							<>{!!results.online.length && <><br /><br /></>}{results.offline.join('; ')}</>}
 					</>
-				}
+				)}
 			</>;
 		}
 		return <div class="pad">
 			<h2>Usernames containing "{target}"</h2>
-			{!results.online.length && !results.offline.length ?
-				<p>No results found.</p> :
+			{!results.online.length && !results.offline.length ? (
+				<p>No results found.</p>
+			) : (
 				<>{!!results.online.length && <div class="ladder pad">
 					<h3>Online users</h3>
 					<table>
@@ -99,7 +102,7 @@ class SearchUsernames extends Chat.JSX.Component<{target: string, page?: boolean
 						})()}
 					</table>
 				</div>}</>
-			}
+			)}
 		</div>;
 	}
 }
@@ -214,7 +217,7 @@ export const pages: Chat.PageTable = {
 		const target = toID(query.shift());
 		if (!target) {
 			this.title = `[Usersearch Terms]`;
-			const sorted: {[k: string]: number} = {};
+			const sorted: { [k: string]: number } = {};
 			for (const curUser of Users.users.values()) {
 				for (const term of nameList) {
 					if (curUser.id.includes(term)) {
@@ -225,12 +228,13 @@ export const pages: Chat.PageTable = {
 			}
 			return <div class="pad">
 				<strong>Usersearch term list</strong>
-				<button style={{float: 'right'}} class="button" name="send" value="/uspage">
+				<button style={{ float: 'right' }} class="button" name="send" value="/uspage">
 					<i class="fa fa-refresh"></i> Refresh
 				</button>
 				<hr />
-				{!nameList.size ?
-					<p>None found.</p> :
+				{!nameList.size ? (
+					<p>None found.</p>
+				) : (
 					<div class="ladder pad">
 						<table>
 							<tr>
@@ -247,12 +251,12 @@ export const pages: Chat.PageTable = {
 										<td><button class="button" name="send" value={`/uspage ${k}`}>Search</button></td>
 									</tr>);
 								}
-								if (!buf.length) return <tr><td colSpan={3} style={{textAlign: 'center'}}>No names found.</td></tr>;
+								if (!buf.length) return <tr><td colSpan={3} style={{ textAlign: 'center' }}>No names found.</td></tr>;
 								return buf;
 							})()}
 						</table>
 					</div>
-				}
+				)}
 			</div>;
 		}
 		this.title = `[Usersearch] ${target}`;

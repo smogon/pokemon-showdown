@@ -15,8 +15,8 @@ const LadderStore: typeof import('./ladders-remote').LadderStore = (
 const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
 
-import type {ChallengeType} from './room-battle';
-import {BattleReady, BattleChallenge, GameChallenge, BattleInvite, challenges} from './ladders-challenges';
+import type { ChallengeType } from './room-battle';
+import { BattleReady, BattleChallenge, GameChallenge, BattleInvite, challenges } from './ladders-challenges';
 
 /**
  * Keys are formatids
@@ -33,10 +33,6 @@ const searches = new Map<string, {
  * attempting to make a match with looser restrictions until one can be made.
  */
 class Ladder extends LadderStore {
-	constructor(formatid: string) {
-		super(formatid);
-	}
-
 	async prepBattle(connection: Connection, challengeType: ChallengeType, team: string | null = null, isRated = false) {
 		// all validation for a battle goes through here
 		const user = connection.user;
@@ -73,7 +69,6 @@ class Ladder extends LadderStore {
 		let rating = 0;
 		let valResult;
 		let removeNicknames = !!(user.locked || user.namelocked);
-
 
 		const regex = /(?:^|])([^|]*)\|([^|]*)\|/g;
 		let match = regex.exec(team);
@@ -112,7 +107,7 @@ class Ladder extends LadderStore {
 		if (isRated && !Ladders.disabled) {
 			const uid = user.id;
 			[valResult, rating] = await Promise.all([
-				TeamValidatorAsync.get(this.formatid).validateTeam(team, {removeNicknames, user: uid}),
+				TeamValidatorAsync.get(this.formatid).validateTeam(team, { removeNicknames, user: uid }),
 				this.getRating(uid),
 			]);
 			if (uid !== user.id) {
@@ -126,7 +121,7 @@ class Ladder extends LadderStore {
 				rating = 1;
 			}
 			const validator = TeamValidatorAsync.get(this.formatid);
-			valResult = await validator.validateTeam(team, {removeNicknames, user: user.id});
+			valResult = await validator.validateTeam(team, { removeNicknames, user: user.id });
 		}
 
 		if (!valResult.startsWith('1')) {
@@ -137,7 +132,7 @@ class Ladder extends LadderStore {
 			return null;
 		}
 
-		const settings = {...user.battleSettings, team: valResult.slice(1)};
+		const settings = { ...user.battleSettings, team: valResult.slice(1) };
 		user.battleSettings.inviteOnly = false;
 		user.battleSettings.hidden = false;
 		return new BattleReady(userid, this.formatid, settings, rating, challengeType);
@@ -226,7 +221,6 @@ class Ladder extends LadderStore {
 		if (Ladders.challenges.remove(chall)) {
 			return Ladders.match([chall.ready, ready]);
 		}
-		return;
 	}
 
 	cancelSearch(user: User) {
@@ -278,7 +272,7 @@ class Ladder extends LadderStore {
 		return userSearches;
 	}
 	static updateSearch(user: User, connection: Connection | null = null) {
-		let games: {[k: string]: string} | null = {};
+		let games: { [k: string]: string } | null = {};
 		let atLeastOne = false;
 		for (const roomid of user.games) {
 			const room = Rooms.get(roomid);

@@ -187,7 +187,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 			if (statsLowered) {
-				this.boost({spa: 2}, target, target, null, false, true);
+				this.boost({ spa: 2 }, target, target, null, false, true);
 			}
 		},
 		rating: 2.5,
@@ -235,7 +235,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	dauntlessshield: {
 		inherit: true,
 		onStart(pokemon) {
-			this.boost({def: 1}, pokemon);
+			this.boost({ def: 1 }, pokemon);
 		},
 		rating: 3.5,
 	},
@@ -264,7 +264,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 			if (statsLowered) {
-				this.boost({atk: 2}, target, target, null, false, true);
+				this.boost({ atk: 2 }, target, target, null, false, true);
 			}
 		},
 		rating: 2.5,
@@ -407,7 +407,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	gulpmissile: {
 		inherit: true,
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1 },
 		rating: 2.5,
 	},
 	guts: {
@@ -517,7 +517,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	intrepidsword: {
 		inherit: true,
 		onStart(pokemon) {
-			this.boost({atk: 1}, pokemon);
+			this.boost({ atk: 1 }, pokemon);
 		},
 		rating: 4,
 	},
@@ -1198,7 +1198,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	wonderguard: {
 		inherit: true,
-		flags: {failroleplay: 1, noreceiver: 1, failskillswap: 1, breakable: 1},
+		flags: { failroleplay: 1, noreceiver: 1, failskillswap: 1, breakable: 1 },
 		rating: 5,
 	},
 	wonderskin: {

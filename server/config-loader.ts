@@ -6,13 +6,13 @@
  */
 
 import * as defaults from '../config/config-example';
-import type {GroupInfo, EffectiveGroupSymbol} from './user-groups';
-import {ProcessManager, FS} from '../lib';
+import type { GroupInfo, EffectiveGroupSymbol } from './user-groups';
+import { ProcessManager, FS } from '../lib';
 
 export type ConfigType = typeof defaults & {
-	groups: {[symbol: string]: GroupInfo},
+	groups: { [symbol: string]: GroupInfo },
 	groupsranking: EffectiveGroupSymbol[],
-	greatergroupscache: {[combo: string]: GroupSymbol},
+	greatergroupscache: { [combo: string]: GroupSymbol },
 	[k: string]: any,
 };
 /** Map<process flag, config settings for it to turn on> */
@@ -24,9 +24,9 @@ const CONFIG_PATH = FS('./config/config.js').path;
 
 export function load(invalidate = false) {
 	if (invalidate) delete require.cache[CONFIG_PATH];
-	const config = ({...defaults, ...require(CONFIG_PATH)}) as ConfigType;
+	const config = ({ ...defaults, ...require(CONFIG_PATH) }) as ConfigType;
 	// config.routes is nested - we need to ensure values are set for its keys as well.
-	config.routes = {...defaults.routes, ...config.routes};
+	config.routes = { ...defaults.routes, ...config.routes };
 
 	// Automatically stop startup if better-sqlite3 isn't installed and SQLite is enabled
 	if (config.usesqlite) {
@@ -65,7 +65,7 @@ export function cacheGroupData(config: ConfigType) {
 
 	const groups = config.groups;
 	const punishgroups = config.punishgroups;
-	const cachedGroups: {[k: string]: 'processing' | true} = {};
+	const cachedGroups: { [k: string]: 'processing' | true } = {};
 
 	function isPermission(key: string) {
 		return !['symbol', 'id', 'name', 'rank', 'globalGroupInPersonalRoom'].includes(key);
@@ -147,8 +147,8 @@ export function checkRipgrepAvailability() {
 		const cwd = FS.ROOT_PATH;
 		Config.ripgrepmodlog = (async () => {
 			try {
-				await ProcessManager.exec(['rg', '--version'], {cwd});
-				await ProcessManager.exec(['tac', '--version'], {cwd});
+				await ProcessManager.exec(['rg', '--version'], { cwd });
+				await ProcessManager.exec(['tac', '--version'], { cwd });
 				return true;
 			} catch {
 				return false;
@@ -158,12 +158,10 @@ export function checkRipgrepAvailability() {
 	return Config.ripgrepmodlog;
 }
 
-
 function reportError(msg: string) {
 	// This module generally loads before Monitor, so we put this in a setImmediate to wait for it to load.
 	// Most child processes don't have Monitor.error, but the main process should always have them, and Config
 	// errors should always be the same across processes, so this is a neat way to avoid unnecessary logging.
-	// @ts-ignore typescript doesn't like us accessing Monitor like this
 	setImmediate(() => global.Monitor?.error?.(msg));
 }
 export const Config = load();

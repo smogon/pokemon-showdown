@@ -6,8 +6,8 @@
  *
  * @license MIT
  */
-import {Utils} from '../../lib';
-import type {EffectiveGroupSymbol, RoomPermission} from '../user-groups';
+import { Utils } from '../../lib';
+import type { EffectiveGroupSymbol, RoomPermission } from '../user-groups';
 
 const RANKS = Config.groupsranking;
 
@@ -21,7 +21,7 @@ export const sections = [
 
 export type RoomSection = typeof sections[number];
 
-export const RoomSections: {sectionNames: {[k in RoomSection]: string}, sections: readonly RoomSection[]} = {
+export const RoomSections: { sectionNames: { [k in RoomSection]: string }, sections: readonly RoomSection[] } = {
 	sectionNames: {
 		official: 'Official',
 		battleformats: 'Battle formats',
@@ -162,7 +162,7 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		if (!target) {
 			if (!room.settings.autoModchat) return this.sendReply(`This room has automodchat OFF.`);
-			const {rank: curRank, time: curTime} = room.settings.autoModchat;
+			const { rank: curRank, time: curTime } = room.settings.autoModchat;
 			return this.sendReply(`Automodchat is currently set to set modchat to ${curRank} after ${curTime} minutes.`);
 		}
 		this.checkCan('declare', null, room);
@@ -315,14 +315,14 @@ export const commands: Chat.ChatCommands = {
 		}
 		room.saveSettings();
 		if (target === 'sync' && !room.settings.modchat) {
-			const lowestGroup = Config.groupsranking.filter(group => {
+			const lowestGroup = Config.groupsranking.find(group => {
 				const groupInfo = Users.Auth.getGroup(group);
 				return (
 					groupInfo.symbol !== Users.Auth.defaultSymbol() &&
-					room!.auth.atLeast(user, group) &&
+					room.auth.atLeast(user, group) &&
 					Users.Auth.isValidSymbol(groupInfo.symbol)
 				);
-			})[0];
+			});
 			if (lowestGroup) void this.parse(`/modchat ${lowestGroup}`);
 		}
 		if (!room.settings.isPrivate) return this.parse('/hiddenroom');
@@ -381,7 +381,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		const slowchatSetting = (room.settings.slowchat || "OFF");
 		this.privateModAction(`${user.name} set slowchat to ${slowchatSetting}`);
-		this.modlog('SLOWCHAT', null, '' + slowchatSetting);
+		this.modlog('SLOWCHAT', null, `${slowchatSetting}`);
 		room.saveSettings();
 	},
 	slowchathelp: [
@@ -466,7 +466,7 @@ export const commands: Chat.ChatCommands = {
 					if (handler?.isPrivate && !user.can('lock')) return false;
 					return (perm.startsWith('/') || perm.startsWith('!')) && perm.includes(' ');
 				});
-			const subPermissionsByNamespace: {[k: string]: string[]} = {};
+			const subPermissionsByNamespace: { [k: string]: string[] } = {};
 			for (const perm of subPermissions) {
 				const [namespace] = perm.split(' ', 1);
 				if (!subPermissionsByNamespace[namespace]) subPermissionsByNamespace[namespace] = [];
@@ -1075,7 +1075,7 @@ export const commands: Chat.ChatCommands = {
 			Rooms.global.notifyRooms(
 				room.settings.isPrivate === true ? ['upperstaff'] : ['upperstaff', 'staff'],
 				Utils.html`|raw|<div class="broadcast-green">${privacy} chat room <b>${oldTitle}</b> renamed to <b>${target}</b></div>`
-		  );
+			);
 		}
 		room.add(Utils.html`|raw|<div class="broadcast-green">The room has been renamed to <b>${target}</b></div>`).update();
 	},
@@ -1134,7 +1134,7 @@ export const commands: Chat.ChatCommands = {
 			if (!room.settings.isPrivate) {
 				return this.errorReply(`This room is already public.`);
 			}
-			if (room.parent && room.parent.settings.isPrivate) {
+			if (room.parent?.settings.isPrivate) {
 				return this.errorReply(`This room's parent ${room.parent.title} must be public for this room to be public.`);
 			}
 			if (room.settings.isPersonal && !battle) {
@@ -1263,7 +1263,7 @@ export const commands: Chat.ChatCommands = {
 		const settingsList = Rooms.global.settingsList;
 
 		const parentIndex = settingsList.findIndex(r => r.title === parent.title);
-		const index = settingsList.findIndex(r => r.title === room!.title);
+		const index = settingsList.findIndex(r => r.title === room.title);
 
 		// Ensure that the parent room gets loaded before the subroom.
 		if (parentIndex > index) {
@@ -1537,7 +1537,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.checkCan('declare', null, room);
 
-		const displayIDToName: {[k: string]: Room['settings']['dataCommandTierDisplay']} = {
+		const displayIDToName: { [k: string]: Room['settings']['dataCommandTierDisplay'] } = {
 			tiers: 'tiers',
 			doublestiers: 'doubles tiers',
 			nationaldextiers: 'National Dex tiers',
@@ -1618,7 +1618,7 @@ export const commands: Chat.ChatCommands = {
 		if (format.effectType === 'Format') {
 			target = format.name;
 		}
-		const {isMatch} = this.extractFormat(target);
+		const { isMatch } = this.extractFormat(target);
 		if (!isMatch) throw new Chat.ErrorMessage(`Unrecognized format or mod "${target}"`);
 
 		room.settings.defaultFormat = target;

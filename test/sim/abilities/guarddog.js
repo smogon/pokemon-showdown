@@ -5,7 +5,7 @@ const common = require('./../../common');
 
 let battle;
 
-const GUARD_DOG_MON = {species: "Mabosstiff", ability: 'guarddog', moves: ['sleeptalk']};
+const GUARD_DOG_MON = { species: "Mabosstiff", ability: 'guarddog', moves: ['sleeptalk'] };
 
 describe("Guard Dog", () => {
 	afterEach(() => battle.destroy());
@@ -14,7 +14,7 @@ describe("Guard Dog", () => {
 		battle = common.createBattle([[
 			GUARD_DOG_MON,
 		], [
-			{species: 'sandile', ability: 'intimidate', moves: ['sleeptalk']},
+			{ species: 'sandile', ability: 'intimidate', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.statStage(battle.p1.active[0], 'atk', 1);
@@ -23,9 +23,9 @@ describe("Guard Dog", () => {
 	it("should prevent phazing", () => {
 		battle = common.createBattle([[
 			GUARD_DOG_MON,
-			{species: 'azumarill', ability: 'thickfat', moves: ['rollout']},
+			{ species: 'azumarill', ability: 'thickfat', moves: ['rollout'] },
 		], [
-			{species: 'shinx', ability: 'rivalry', moves: ['roar']},
+			{ species: 'shinx', ability: 'rivalry', moves: ['roar'] },
 		]]);
 		battle.makeChoices();
 		assert.species(battle.p1.active[0], GUARD_DOG_MON.species);
@@ -34,9 +34,9 @@ describe("Guard Dog", () => {
 	it("should be bypassed by Mold Breaker", () => {
 		battle = common.createBattle([[
 			GUARD_DOG_MON,
-			{species: 'azumarill', ability: 'thickfat', moves: ['rollout']},
+			{ species: 'azumarill', ability: 'thickfat', moves: ['rollout'] },
 		], [
-			{species: 'shinx', ability: 'moldbreaker', moves: ['roar']},
+			{ species: 'shinx', ability: 'moldbreaker', moves: ['roar'] },
 		]]);
 		battle.makeChoices();
 		assert.species(battle.p1.active[0], "Azumarill");

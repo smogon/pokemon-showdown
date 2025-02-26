@@ -7,7 +7,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	pokemon: {
 		inherit: true,
 		getStat(statName, unboosted, unmodified, fastReturn) {
-			// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
+			// @ts-expect-error type checking prevents 'hp' from being passed, but we're paranoid
 			if (statName === 'hp') throw new Error("Please read `maxhp` directly");
 
 			// base stat
@@ -478,7 +478,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (typeof effect === 'string') effect = this.dex.conditions.get(effect);
 		if (!target?.hp) return 0;
 		let success = null;
-		boost = this.runEvent('TryBoost', target, source, effect, {...boost});
+		boost = this.runEvent('TryBoost', target, source, effect, { ...boost });
 		let i: BoostID;
 		for (i in boost) {
 			const currentBoost: SparseBoostsTable = {};
@@ -547,7 +547,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.queue.clear();
 			// Fainting clears accumulated Bide damage
 			for (const pokemon of this.getAllActive()) {
-				if (pokemon.volatiles['bide'] && pokemon.volatiles['bide'].damage) {
+				if (pokemon.volatiles['bide']?.damage) {
 					pokemon.volatiles['bide'].damage = 0;
 					this.hint("Desync Clause Mod activated!");
 					this.hint("In Gen 1, Bide's accumulated damage is reset to 0 when a Pokemon faints.");

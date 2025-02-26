@@ -5,19 +5,19 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Trump Card', function () {
-	afterEach(function () {
+describe('Trump Card', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should power-up the less PP the move has', function () {
+	it('should power-up the less PP the move has', () => {
 		battle = common.createBattle([
-			[{species: 'Eevee', ability: 'runaway', moves: ['trumpcard']}],
-			[{species: 'Lugia', ability: 'multiscale', moves: ['recover']}],
+			[{ species: 'Eevee', ability: 'runaway', moves: ['trumpcard'] }],
+			[{ species: 'Lugia', ability: 'multiscale', moves: ['recover'] }],
 		]);
 
 		const basePowers = [];
-		battle.onEvent('BasePower', battle.format, function (bp, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, (bp, attacker, defender, move) => {
 			if (move.id === 'trumpcard') {
 				basePowers.push(bp);
 			}
@@ -30,14 +30,14 @@ describe('Trump Card', function () {
 		assert.deepEqual(basePowers, [40, 50, 60, 80, 200]);
 	});
 
-	it('should get its base power calculated from a move calling it', function () {
+	it('should get its base power calculated from a move calling it', () => {
 		battle = common.createBattle([
-			[{species: 'Komala', ability: 'comatose', moves: ['sleeptalk', 'trumpcard']}],
-			[{species: 'Lugia', ability: 'multiscale', moves: ['recover']}],
+			[{ species: 'Komala', ability: 'comatose', moves: ['sleeptalk', 'trumpcard'] }],
+			[{ species: 'Lugia', ability: 'multiscale', moves: ['recover'] }],
 		]);
 
 		const basePowers = [];
-		battle.onEvent('BasePower', battle.format, function (bp, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, (bp, attacker, defender, move) => {
 			if (move.id === 'trumpcard') {
 				basePowers.push(bp);
 			}
@@ -52,14 +52,14 @@ describe('Trump Card', function () {
 		assert.deepEqual(basePowers, [80, 200]);
 	});
 
-	it('should work if called via Custap Berry in Gen 4', function () {
+	it('should work if called via Custap Berry in Gen 4', () => {
 		battle = common.gen(4).createBattle([
-			[{species: 'Eevee', level: 1, ability: 'runaway', item: 'custapberry', moves: ['trumpcard']}],
-			[{species: 'Scizor', ability: 'technician', moves: ['falseswipe']}],
+			[{ species: 'Eevee', level: 1, ability: 'runaway', item: 'custapberry', moves: ['trumpcard'] }],
+			[{ species: 'Scizor', ability: 'technician', moves: ['falseswipe'] }],
 		]);
 
 		const basePowers = [];
-		battle.onEvent('BasePower', battle.format, function (bp, attacker, defender, move) {
+		battle.onEvent('BasePower', battle.format, (bp, attacker, defender, move) => {
 			if (move.id === 'trumpcard') {
 				basePowers.push(bp);
 			}

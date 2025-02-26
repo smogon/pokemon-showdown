@@ -4,12 +4,12 @@
  * Original /adddatacenters command written by Zarel
  */
 
-import {Utils} from "../../lib";
-import {AddressRange} from "../ip-tools";
-import {GlobalPermission} from "../user-groups";
+import { Utils } from "../../lib";
+import type { AddressRange } from "../ip-tools";
+import type { GlobalPermission } from "../user-groups";
 
 const HOST_SUFFIXES = ['res', 'proxy', 'mobile'];
-const SUFFIX_ALIASES: {[k: string]: string} = {
+const SUFFIX_ALIASES: { [k: string]: string } = {
 	residential: 'res',
 };
 const WHITELISTED_USERIDS: ID[] = [];
@@ -263,7 +263,7 @@ export const commands: Chat.ChatCommands = {
 				// Remove the range that is being widened
 				IPTools.removeRange(IPTools.ranges[result].minIP, IPTools.ranges[result].maxIP);
 			}
-			IPTools.addRange(range as AddressRange & {host: string});
+			IPTools.addRange(range as AddressRange & { host: string });
 
 			this.privateGlobalModAction(`${user.name} added the IP range ${formatRange(range)} to the list of ${type} ranges.`);
 			this.globalModlog('IPRANGE ADD', null, formatRange(range, true));

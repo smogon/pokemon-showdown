@@ -10,7 +10,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				if (this.checkMoveMakesContact(move, source, target, !source.isAlly(target))) {
 					const oldAbility = source.setAbility('mummy', target);
 					if (oldAbility) {
-						this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(oldAbility).name, '[of] ' + source);
+						this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(oldAbility).name, `[of] ${source}`);
 					}
 				}
 			} else {
@@ -22,13 +22,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					if (abil === source.ability) {
 						const oldAbility = source.setAbility('mummy', target);
 						if (oldAbility) {
-							this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(oldAbility).name, '[of] ' + source);
+							this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(oldAbility).name, `[of] ${source}`);
 						}
 					} else {
 						source.removeVolatile('ability:' + abil);
 						source.addVolatile('ability:mummy', source);
 						if (abil) {
-							this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(abil).name, '[of] ' + source);
+							this.add('-activate', target, 'ability: Mummy', this.dex.abilities.get(abil).name, `[of] ${source}`);
 						}
 					}
 				}
@@ -48,12 +48,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				.filter(val => !this.dex.abilities.get(val).flags['noreceiver'] && !additionalBannedAbilities.includes(val));
 			if (!possibleAbilities.length) return;
 			const ability = this.dex.abilities.get(possibleAbilities[this.random(possibleAbilities.length)]);
-			this.add('-ability', pokemon, ability, '[from] ability: Power of Alchemy', '[of] ' + ally);
+			this.add('-ability', pokemon, ability, '[from] ability: Power of Alchemy', `[of] ${ally}`);
 			if (isAbility) {
 				pokemon.setAbility(ability);
 			} else {
 				pokemon.removeVolatile("ability:powerofalchemy");
-				pokemon.addVolatile("ability:" + ability, pokemon);
+				pokemon.addVolatile(`ability:${ability}`, pokemon);
 			}
 		},
 	},
@@ -70,12 +70,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				.filter(val => !this.dex.abilities.get(val).flags['noreceiver'] && !additionalBannedAbilities.includes(val));
 			if (!possibleAbilities.length) return;
 			const ability = this.dex.abilities.get(possibleAbilities[this.random(possibleAbilities.length)]);
-			this.add('-ability', pokemon, ability, '[from] ability: Receiver', '[of] ' + ally);
+			this.add('-ability', pokemon, ability, '[from] ability: Receiver', `[of] ${ally}`);
 			if (isAbility) {
 				pokemon.setAbility(ability);
 			} else {
 				pokemon.removeVolatile("ability:receiver");
-				pokemon.addVolatile("ability:" + ability, pokemon);
+				pokemon.addVolatile(`ability:${ability}`, pokemon);
 			}
 		},
 	},
@@ -103,12 +103,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					continue;
 				}
 				const ability = this.dex.abilities.get(this.sample(possibleAbilities));
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
 				if (isAbility) {
 					pokemon.setAbility(ability);
 				} else {
 					pokemon.removeVolatile("ability:trace");
-					pokemon.addVolatile("ability:" + ability, pokemon);
+					pokemon.addVolatile(`ability:${ability}`, pokemon);
 				}
 				return;
 			}

@@ -8,7 +8,7 @@
  */
 
 /*
-REGEXFREE SOURCE FOR LINKREGEX
+SOURCE FOR LINKREGEX (compile with https://regexfree.k55.io/ )
 
 	(
 		(
@@ -113,8 +113,8 @@ class TextFormatter {
 					let slashIndex = uri.lastIndexOf('/');
 					if (uri.length - slashIndex > 18) slashIndex = uri.length;
 					if (slashIndex - 4 > 19 + 3) {
-						uri = uri.slice(0, 19) +
-						'<small class="message-overflow">' + uri.slice(19, slashIndex - 4) + '</small>' + uri.slice(slashIndex - 4);
+						uri = `${uri.slice(0, 19)}<small class="message-overflow">${uri.slice(19, slashIndex - 4)}</small>` +
+							`${uri.slice(slashIndex - 4)}`;
 					}
 				}
 			}

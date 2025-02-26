@@ -2,8 +2,8 @@
  * SQL transactions for the modlog.
  */
 
-import type {TransactionEnvironment} from '../../lib/sql';
-import type {TransactionArguments} from '.';
+import type { TransactionEnvironment } from '../../lib/sql';
+import type { TransactionArguments } from '.';
 
 export const transactions = {
 	insertion: (args: TransactionArguments, env: TransactionEnvironment) => {

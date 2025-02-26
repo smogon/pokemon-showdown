@@ -1,11 +1,11 @@
 "use strict";
 const assert = require('assert').strict;
-const {PostgresDatabase} = require('../../dist/lib');
+const { PostgresDatabase } = require('../../dist/lib');
 
 function testMod(mod) {
 	try {
 		require(mod);
-	} catch (e) {
+	} catch {
 		return it.skip;
 	}
 	return it;
@@ -21,7 +21,7 @@ describe.skip("Postgres features", () => {
 			await this.database.query(`CREATE TABLE test (col TEXT, col2 TEXT)`);
 			await this.database.query(
 				`INSERT INTO test (col, col2) VALUES ($1, $2)`,
-				['foo', 'bar'],
+				['foo', 'bar']
 			);
 		});
 	});
@@ -38,7 +38,7 @@ describe.skip("Postgres features", () => {
 					`SELECT tablename FROM pg_catalog.pg_tables ` +
 					`WHERE tablename = 'test' LIMIT 1;`
 				);
-				for (const {tablename} of tables) {
+				for (const { tablename } of tables) {
 					await worker.query(`DROP TABLE ` + tablename);
 				}
 			});

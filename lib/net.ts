@@ -76,7 +76,7 @@ export class NetStream extends Streams.ReadWriteStream {
 			}
 		}
 
-		const protocol = url.parse(this.uri).protocol as string;
+		const protocol = url.parse(this.uri).protocol;
 		const net = protocol === 'https:' ? https : http;
 
 		let resolveResponse: ((value: http.IncomingMessage | null) => void) | null;
@@ -143,7 +143,7 @@ export class NetStream extends Streams.ReadWriteStream {
 		let out = '';
 		for (const key in data) {
 			if (out) out += `&`;
-			out += `${key}=${encodeURIComponent('' + data[key])}`;
+			out += `${key}=${encodeURIComponent(`${data[key]}`)}`;
 		}
 		return out;
 	}

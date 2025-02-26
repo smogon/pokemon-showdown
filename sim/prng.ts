@@ -12,8 +12,8 @@
  * @license MIT license
  */
 
-import {Chacha20} from 'ts-chacha20';
-import {Utils} from '../lib/utils';
+import { Chacha20 } from 'ts-chacha20';
+import { Utils } from '../lib/utils';
 import * as crypto from 'crypto';
 
 export type PRNGSeed = `${'sodium' | 'gen5' | number},${string}`;

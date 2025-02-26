@@ -5,25 +5,25 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Dazzling', function () {
-	afterEach(function () {
+describe('Dazzling', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should block moves with positive priority', function () {
+	it('should block moves with positive priority', () => {
 		battle = common.createBattle([
-			[{species: "Sableye", ability: 'prankster', moves: ['taunt']}],
-			[{species: "Bruxish", ability: 'dazzling', moves: ['swordsdance']}],
+			[{ species: "Sableye", ability: 'prankster', moves: ['taunt'] }],
+			[{ species: "Bruxish", ability: 'dazzling', moves: ['swordsdance'] }],
 		]);
 
 		battle.makeChoices('move taunt', 'move swordsdance');
 		assert.equal(battle.p2.active[0].boosts.atk, 2);
 	});
 
-	it('should not block moves that target all Pokemon, except Perish Song, Rototiller, and Flower Shield', function () {
+	it('should not block moves that target all Pokemon, except Perish Song, Rototiller, and Flower Shield', () => {
 		battle = common.createBattle([
-			[{species: "Bruxish", ability: 'dazzling', moves: ['swordsdance', 'sleeptalk']}],
-			[{species: "Mew", ability: 'prankster', moves: ['perishsong', 'haze']}],
+			[{ species: "Bruxish", ability: 'dazzling', moves: ['swordsdance', 'sleeptalk'] }],
+			[{ species: "Mew", ability: 'prankster', moves: ['perishsong', 'haze'] }],
 		]);
 
 		battle.makeChoices('move swordsdance', 'move perishsong');

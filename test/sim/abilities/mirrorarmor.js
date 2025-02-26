@@ -5,19 +5,19 @@ const common = require('./../../common');
 
 let battle;
 
-describe("Mirror Armor", function () {
-	afterEach(function () {
+describe("Mirror Armor", () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it("should bounce boosts back to the source", function () {
+	it("should bounce boosts back to the source", () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [
-			{species: 'Corviknight', ability: 'mirrorarmor', moves: ['endure']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: 'Machop', ability: 'noguard', moves: ['rocktomb', 'leer']},
-		]});
+		battle.setPlayer('p1', { team: [
+			{ species: 'Corviknight', ability: 'mirrorarmor', moves: ['endure'] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: 'Machop', ability: 'noguard', moves: ['rocktomb', 'leer'] },
+		] });
 		battle.makeChoices('auto', 'move rocktomb');
 		const corv = battle.p1.active[0];
 		const machop = battle.p2.active[0];
@@ -28,12 +28,12 @@ describe("Mirror Armor", function () {
 		assert.statStage(machop, 'def', -1);
 	});
 
-	it("should reflect Parting Shot's stat drops, then the Parting Shot user should switch", function () {
+	it("should reflect Parting Shot's stat drops, then the Parting Shot user should switch", () => {
 		battle = common.createBattle([[
-			{species: 'Corviknight', ability: 'mirrorarmor', moves: ['sleeptalk']},
+			{ species: 'Corviknight', ability: 'mirrorarmor', moves: ['sleeptalk'] },
 		], [
-			{species: 'Drapion', moves: ['partingshot']},
-			{species: 'Pangoro', moves: ['sleeptalk']},
+			{ species: 'Drapion', moves: ['partingshot'] },
+			{ species: 'Pangoro', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		const corv = battle.p1.active[0];
@@ -45,12 +45,12 @@ describe("Mirror Armor", function () {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it("should activate, but silently, if the source has fainted", function () {
+	it("should activate, but silently, if the source has fainted", () => {
 		battle = common.createBattle([[
-			{species: 'corviknight', ability: 'mirrorarmor', moves: ['bravebird']},
+			{ species: 'corviknight', ability: 'mirrorarmor', moves: ['bravebird'] },
 		], [
-			{species: 'gossifleur', ability: 'cottondown', moves: ['sleeptalk']},
-			{species: 'wynaut', ability: 'shadowtag', moves: ['sleeptalk']},
+			{ species: 'gossifleur', ability: 'cottondown', moves: ['sleeptalk'] },
+			{ species: 'wynaut', ability: 'shadowtag', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.statStage(battle.p1.active[0], 'spe', 0);

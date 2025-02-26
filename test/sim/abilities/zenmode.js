@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Zen Mode', function () {
-	afterEach(function () {
+describe('Zen Mode', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`can't be overriden in Gen 7 or later`, function () {
+	it(`can't be overriden in Gen 7 or later`, () => {
 		battle = common.createBattle([[
-			{species: "Darmanitan", ability: 'zenmode', moves: ['entrainment']},
+			{ species: "Darmanitan", ability: 'zenmode', moves: ['entrainment'] },
 		], [
-			{species: "Wynaut", ability: 'swiftswim', moves: ['skillswap', 'entrainment']},
+			{ species: "Wynaut", ability: 'swiftswim', moves: ['skillswap', 'entrainment'] },
 		]]);
 
 		const darm = battle.p1.active[0];
@@ -25,11 +25,11 @@ describe('Zen Mode', function () {
 		assert.equal(darm.ability, 'zenmode');
 	});
 
-	it(`can be overriden in Gen 6 and earlier`, function () {
+	it(`can be overriden in Gen 6 and earlier`, () => {
 		battle = common.gen(6).createBattle([[
-			{species: "Darmanitan", ability: 'zenmode', moves: ['entrainment', 'sleeptalk']},
+			{ species: "Darmanitan", ability: 'zenmode', moves: ['entrainment', 'sleeptalk'] },
 		], [
-			{species: "Wynaut", ability: 'swiftswim', moves: ['skillswap', 'entrainment']},
+			{ species: "Wynaut", ability: 'swiftswim', moves: ['skillswap', 'entrainment'] },
 		]]);
 
 		const darm = battle.p1.active[0];

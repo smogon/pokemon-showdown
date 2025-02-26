@@ -5,20 +5,20 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Skill Swap', function () {
-	afterEach(function () {
+describe('Skill Swap', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should not be able to Skill Swap certain abilities', function () {
+	it('should not be able to Skill Swap certain abilities', () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'moxie', moves: ['skillswap', 'sleeptalk']},
-			{species: 'wynaut', ability: 'schooling', moves: ['skillswap']},
-			{species: 'wynaut', ability: 'wonderguard', moves: ['skillswap']},
+			{ species: 'wynaut', ability: 'moxie', moves: ['skillswap', 'sleeptalk'] },
+			{ species: 'wynaut', ability: 'schooling', moves: ['skillswap'] },
+			{ species: 'wynaut', ability: 'wonderguard', moves: ['skillswap'] },
 		], [
-			{species: 'ferroseed', ability: 'overcoat', moves: ['skillswap', 'sleeptalk']},
-			{species: 'ferroseed', ability: 'schooling', moves: ['skillswap']},
-			{species: 'ferroseed', ability: 'wonderguard', moves: ['skillswap']},
+			{ species: 'ferroseed', ability: 'overcoat', moves: ['skillswap', 'sleeptalk'] },
+			{ species: 'ferroseed', ability: 'schooling', moves: ['skillswap'] },
+			{ species: 'ferroseed', ability: 'wonderguard', moves: ['skillswap'] },
 		]]);
 
 		let wynaut = battle.p1.active[0];

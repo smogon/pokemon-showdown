@@ -1,5 +1,5 @@
-import {Utils} from '../../lib';
-import {FS} from '../../lib/fs';
+import { Utils } from '../../lib';
+import { FS } from '../../lib/fs';
 
 const SUSPECTS_FILE = 'config/suspects.json';
 
@@ -12,7 +12,7 @@ interface SuspectTest {
 
 interface SuspectsFile {
 	whitelist: string[];
-	suspects: {[format: string]: SuspectTest};
+	suspects: { [format: string]: SuspectTest };
 }
 
 export let suspectTests: SuspectsFile = JSON.parse(FS(SUSPECTS_FILE).readIfExistsSync() || "{}");
@@ -27,8 +27,8 @@ const defaults: SuspectsFile = {
 };
 
 if (!suspectTests.whitelist && !suspectTests.suspects) {
-	const suspects = {...suspectTests} as unknown as {[format: string]: SuspectTest};
-	suspectTests = {...defaults, suspects};
+	const suspects = { ...suspectTests } as unknown as { [format: string]: SuspectTest };
+	suspectTests = { ...defaults, suspects };
 	saveSuspectTests();
 }
 

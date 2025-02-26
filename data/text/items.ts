@@ -1,4 +1,4 @@
-export const ItemsText: {[id: IDEntry]: ItemText} = {
+export const ItemsText: { [id: IDEntry]: ItemText } = {
 	abilityshield: {
 		name: "Ability Shield",
 		shortDesc: "Holder's Ability cannot be changed, suppressed, or ignored by any effect.",

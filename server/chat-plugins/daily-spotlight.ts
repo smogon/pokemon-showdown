@@ -1,4 +1,4 @@
-import {FS, Utils} from '../../lib';
+import { FS, Utils } from '../../lib';
 
 const DAY = 24 * 60 * 60 * 1000;
 const SPOTLIGHT_FILE = 'config/chat-plugins/spotlights.json';
@@ -14,7 +14,7 @@ interface Spotlight {
 }
 
 export let spotlights: {
-	[roomid: string]: {[k: string]: Spotlight[]},
+	[roomid: string]: { [k: string]: Spotlight[] },
 } = {};
 
 try {
@@ -56,7 +56,7 @@ let timeout = setTimeout(nextDaily, midnight.getTime() - Date.now());
 
 export async function renderSpotlight(roomid: RoomID, key: string, index: number) {
 	let imgHTML = '';
-	const {image, description} = spotlights[roomid][key][index];
+	const { image, description } = spotlights[roomid][key][index];
 
 	if (image) {
 		if (Array.isArray(image)) {
@@ -66,6 +66,7 @@ export async function renderSpotlight(roomid: RoomID, key: string, index: number
 			try {
 				const [width, height] = await Chat.fitImage(image, 150, 300);
 				imgHTML = `<td><img src="${image}" width="${width}" height="${height}" style="vertical-align:middle;"></td>`;
+				// eslint-disable-next-line require-atomic-updates
 				spotlights[roomid][key][index].image = [image, width, height];
 			} catch {}
 		}
@@ -249,7 +250,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply("Descriptions can be at most 500 characters long.");
 		}
 		if (img) img = [img, width, height] as StoredImage;
-		const obj = {image: img, description: desc, time: Date.now()};
+		const obj = { image: img, description: desc, time: Date.now() };
 		if (!spotlights[room.roomid][key]) spotlights[room.roomid][key] = [];
 		if (cmd === 'setdaily') {
 			spotlights[room.roomid][key].shift();
@@ -286,7 +287,7 @@ export const commands: Chat.ChatCommands = {
 
 		if (!this.runBroadcast()) return;
 
-		const {image, description} = spotlights[room.roomid][key][0];
+		const { image, description } = spotlights[room.roomid][key][0];
 		const html = await renderSpotlight(room.roomid, key, 0);
 
 		this.sendReplyBox(html);

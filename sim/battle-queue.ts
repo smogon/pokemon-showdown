@@ -13,7 +13,7 @@
  * @license MIT
  */
 
-import type {Battle} from './battle';
+import type { Battle } from './battle';
 
 /** A move action */
 export interface MoveAction {
@@ -146,7 +146,6 @@ export class BattleQueue {
 	unshift(action: Action) {
 		return this.list.unshift(action);
 	}
-	// eslint-disable-next-line no-restricted-globals
 	[Symbol.iterator]() { return this.list[Symbol.iterator](); }
 	entries() {
 		return this.list.entries();
@@ -166,7 +165,7 @@ export class BattleQueue {
 		if (!action.side && action.pokemon) action.side = action.pokemon.side;
 		if (!action.move && action.moveid) action.move = this.battle.dex.getActiveMove(action.moveid);
 		if (!action.order) {
-			const orders: {[choice: string]: number} = {
+			const orders: { [choice: string]: number } = {
 				team: 1,
 				start: 2,
 				instaswitch: 3,

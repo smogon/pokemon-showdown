@@ -25,7 +25,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			boosts = target.boosts.atk - originalStage;
 			target.boosts.atk = originalStage;
-			this.boost({atk: boosts});
+			this.boost({ atk: boosts });
 		},
 	},
 	destinybond: {

@@ -3,13 +3,13 @@
  * By Mia.
  * @author mia-pi-git
  */
-import {SQL, Utils} from '../../lib';
-import {Config} from '../config-loader';
-import {Auth} from '../user-groups';
-import {statements} from './database';
+import { SQL, Utils } from '../../lib';
+import { Config } from '../config-loader';
+import { Auth } from '../user-groups';
+import { statements } from './database';
 /** The time until a PM sent offline expires. Presently, 60 days. */
 export const EXPIRY_TIME = 60 * 24 * 60 * 60 * 1000;
-/** The time until a PM that has been seen by the user expires. Presently, one week.*/
+/** The time until a PM that has been seen by the user expires. Presently, one week. */
 export const SEEN_EXPIRY_TIME = 7 * 24 * 60 * 60 * 1000;
 /** The max PMs that one user can have pending to a specific user at one time */
 export const MAX_PENDING = 20;
@@ -95,7 +95,7 @@ export const PrivateMessages = new class {
 		}
 		return PM.run(statements.setBlock, [id, val]);
 	}
-	checkCanUse(user: User, options = {forceBool: false, isLogin: false}) {
+	checkCanUse(user: User, options = { forceBool: false, isLogin: false }) {
 		if (!this.offlineIsEnabled) {
 			if (options.forceBool) return false;
 			throw new Chat.ErrorMessage(`Offline PMs are currently disabled.`);
@@ -122,7 +122,7 @@ export const PrivateMessages = new class {
 		const userid = toID(user);
 		// we only want to send the unseen pms to them when they login - they can replay the rest at will otherwise
 		const messages = await this.fetchUnseen(userid);
-		for (const {message, time, sender} of messages) {
+		for (const { message, time, sender } of messages) {
 			user.send(
 				`|pm|${this.getIdentity(sender)}|${this.getIdentity(user)}|/html ` +
 				`${Utils.escapeHTML(message)} <i>[sent offline, <time>${new Date(time).toISOString()}</time>]</i>`
@@ -136,7 +136,7 @@ export const PrivateMessages = new class {
 		}
 		return `${Users.globalAuth.get(toID(user))}${user}`;
 	}
-	nextClear(): NodeJS.Timer {
+	nextClear(): NodeJS.Timeout {
 		if (!PM.isParentProcess) return null!;
 		const time = Date.now();
 		// even though we expire once a week atm, we check once a day
@@ -172,7 +172,7 @@ export const PrivateMessages = new class {
 		const all = await this.fetchAll(user);
 		let buf = `<div class="ladder pad">`;
 		buf += `<h2>PMs received offline in the last ${Chat.toDurationString(SEEN_EXPIRY_TIME)}</h2>`;
-		const sortedPMs: {[userid: string]: ReceivedPM[]} = {};
+		const sortedPMs: { [userid: string]: ReceivedPM[] } = {};
 		for (const curPM of all) {
 			if (!sortedPMs[curPM.sender]) sortedPMs[curPM.sender] = [];
 			sortedPMs[curPM.sender].push(curPM);
@@ -189,7 +189,7 @@ export const PrivateMessages = new class {
 			buf += Utils.html`<div class="pm-window pm-window-${id}" width="30px" data-userid="${id}" data-name="${group}${name}" style="width:300px">`;
 			buf += Utils.html`<h3><small>${group}</small>${name}</h3>`;
 			buf += `<div class="pm-log"><div class="pm-buttonbar">`;
-			for (const {message, time} of messages) {
+			for (const { message, time } of messages) {
 				buf += `<div class="chat chatmessage-${toID(sender)}">&nbsp;&nbsp;`;
 				buf += `<small>[<time>${new Date(time).toISOString()}</time>] </small>`;
 				buf += Utils.html`<small>${group}</small>`;

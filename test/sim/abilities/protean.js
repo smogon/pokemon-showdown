@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Protean', function () {
-	afterEach(function () {
+describe('Protean', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should change the user's type when using a move`, function () {
+	it(`should change the user's type when using a move`, () => {
 		battle = common.createBattle([[
-			{species: 'Cinderace', ability: 'protean', moves: ['highjumpkick']},
+			{ species: 'Cinderace', ability: 'protean', moves: ['highjumpkick'] },
 		], [
-			{species: 'Gengar', moves: ['sleeptalk']},
+			{ species: 'Gengar', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -22,11 +22,11 @@ describe('Protean', function () {
 		assert(cinder.hasType('Fighting'));
 	});
 
-	it(`should change the user's type for submoves to the type of that submove, not the move calling it`, function () {
+	it(`should change the user's type for submoves to the type of that submove, not the move calling it`, () => {
 		battle = common.gen(6).createBattle([[
-			{species: 'Wynaut', ability: 'protean', moves: ['sleeptalk', 'flamethrower']},
+			{ species: 'Wynaut', ability: 'protean', moves: ['sleeptalk', 'flamethrower'] },
 		], [
-			{species: 'Regieleki', moves: ['spore']},
+			{ species: 'Regieleki', moves: ['spore'] },
 		]]);
 
 		battle.makeChoices();
@@ -35,13 +35,13 @@ describe('Protean', function () {
 		assert(wynaut.hasType('Fire'));
 	});
 
-	it(`should not change the user's type when using moves that fail earlier than Protean will activate`, function () {
+	it(`should not change the user's type when using moves that fail earlier than Protean will activate`, () => {
 		battle = common.createBattle([[
-			{species: 'Kecleon', ability: 'protean', moves: ['fling', 'suckerpunch', 'steelroller', 'aurawheel']},
-			{species: 'Kecleon', ability: 'protean', moves: ['counter', 'metalburst']},
-			{species: 'Kecleon', ability: 'protean', moves: ['magnetrise', 'ingrain', 'burnup', 'auroraveil']},
+			{ species: 'Kecleon', ability: 'protean', moves: ['fling', 'suckerpunch', 'steelroller', 'aurawheel'] },
+			{ species: 'Kecleon', ability: 'protean', moves: ['counter', 'metalburst'] },
+			{ species: 'Kecleon', ability: 'protean', moves: ['magnetrise', 'ingrain', 'burnup', 'auroraveil'] },
 		], [
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 
 		let kecleon = battle.p1.active[0];
@@ -83,14 +83,14 @@ describe('Protean', function () {
 		// More examples: https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/post-8548957
 	});
 
-	it(`should not change the user's type when abilities that activate earlier than Protean will cause the user's moves to fail`, function () {
+	it(`should not change the user's type when abilities that activate earlier than Protean will cause the user's moves to fail`, () => {
 		battle = common.createBattle([[
-			{species: 'Kecleon', ability: 'protean', moves: ['aquajet', 'mindblown']},
+			{ species: 'Kecleon', ability: 'protean', moves: ['aquajet', 'mindblown'] },
 		], [
-			{species: 'Kyogre', ability: 'primordialsea', moves: ['sleeptalk']},
-			{species: 'Groudon', ability: 'desolateland', moves: ['powder']},
-			{species: 'Tsareena', ability: 'dazzling', moves: ['sleeptalk']},
-			{species: 'Golduck', ability: 'damp', moves: ['sleeptalk']},
+			{ species: 'Kyogre', ability: 'primordialsea', moves: ['sleeptalk'] },
+			{ species: 'Groudon', ability: 'desolateland', moves: ['powder'] },
+			{ species: 'Tsareena', ability: 'dazzling', moves: ['sleeptalk'] },
+			{ species: 'Golduck', ability: 'damp', moves: ['sleeptalk'] },
 		]]);
 
 		const kecleon = battle.p1.active[0];
@@ -113,11 +113,11 @@ describe('Protean', function () {
 		// More examples: https://www.smogon.com/forums/threads/sword-shield-battle-mechanics-research.3655528/post-8548957
 	});
 
-	it(`should not allow the user to change its typing twice`, function () {
+	it(`should not allow the user to change its typing twice`, () => {
 		battle = common.createBattle([[
-			{species: 'Cinderace', ability: 'protean', moves: ['tackle', 'watergun']},
+			{ species: 'Cinderace', ability: 'protean', moves: ['tackle', 'watergun'] },
 		], [
-			{species: 'Gengar', moves: ['sleeptalk']},
+			{ species: 'Gengar', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -128,12 +128,12 @@ describe('Protean', function () {
 		assert.false(cinder.hasType('Water'));
 	});
 
-	it(`should not allow the user to change its typing twice if the Ability was suppressed`, function () {
+	it(`should not allow the user to change its typing twice if the Ability was suppressed`, () => {
 		battle = common.createBattle([[
-			{species: 'Cinderace', ability: 'protean', moves: ['tackle', 'watergun']},
+			{ species: 'Cinderace', ability: 'protean', moves: ['tackle', 'watergun'] },
 		], [
-			{species: 'Gengar', moves: ['sleeptalk']},
-			{species: 'Weezing', ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{ species: 'Gengar', moves: ['sleeptalk'] },
+			{ species: 'Weezing', ability: 'neutralizinggas', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move tackle', 'auto');
@@ -146,11 +146,11 @@ describe('Protean', function () {
 		assert.false(cinder.hasType('Water'));
 	});
 
-	it(`should allow the user to change its typing twice if it lost and regained the Ability`, function () {
+	it(`should allow the user to change its typing twice if it lost and regained the Ability`, () => {
 		battle = common.createBattle([[
-			{species: 'Cinderace', ability: 'protean', moves: ['tackle', 'watergun']},
+			{ species: 'Cinderace', ability: 'protean', moves: ['tackle', 'watergun'] },
 		], [
-			{species: 'Gengar', ability: 'protean', moves: ['sleeptalk', 'skillswap']},
+			{ species: 'Gengar', ability: 'protean', moves: ['sleeptalk', 'skillswap'] },
 		]]);
 
 		battle.makeChoices('move tackle', 'move skillswap');
@@ -161,13 +161,13 @@ describe('Protean', function () {
 		assert(cinder.hasType('Water'));
 	});
 
-	it(`should not be prevented from resetting its effectState by Ability suppression`, function () {
+	it(`should not be prevented from resetting its effectState by Ability suppression`, () => {
 		battle = common.createBattle([[
-			{species: 'Cinderace', ability: 'protean', moves: ['tackle']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Cinderace', ability: 'protean', moves: ['tackle'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Gengar', ability: 'protean', moves: ['sleeptalk']},
-			{species: 'Weezing', ability: 'neutralizinggas', moves: ['sleeptalk']},
+			{ species: 'Gengar', ability: 'protean', moves: ['sleeptalk'] },
+			{ species: 'Weezing', ability: 'neutralizinggas', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move tackle', 'auto');
@@ -180,20 +180,20 @@ describe('Protean', function () {
 		assert(cinder.hasType('Normal'));
 	});
 
-	describe('Gen 6-8', function () {
-		it(`should activate on both turns of a charge move`, function () {
+	describe('Gen 6-8', () => {
+		it(`should activate on both turns of a charge move`, () => {
 			battle = common.gen(8).createBattle([[
-				{species: 'Wynaut', ability: 'protean', moves: ['bounce']},
+				{ species: 'Wynaut', ability: 'protean', moves: ['bounce'] },
 			], [
-				{species: 'Helioptile', ability: 'noguard', moves: ['soak']},
+				{ species: 'Helioptile', ability: 'noguard', moves: ['soak'] },
 			]]);
 			const wynaut = battle.p1.active[0];
 
-			//Turn 1 of Bounce
+			// Turn 1 of Bounce
 			battle.makeChoices();
 			assert(wynaut.hasType('Flying'));
 
-			//Turn 2 of Bounce
+			// Turn 2 of Bounce
 			battle.makeChoices();
 			assert(wynaut.hasType('Flying'));
 		});

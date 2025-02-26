@@ -1,9 +1,9 @@
 "use strict";
-const {SQL} = require('../../dist/lib/sql');
+const { SQL } = require('../../dist/lib/sql');
 const assert = require('../assert').strict;
 const common = require('../common');
 
-const database = SQL(module, {file: `:memory:`, processes: 1});
+const database = SQL(module, { file: `:memory:`, processes: 1 });
 
 (common.hasModule('better-sqlite3') ? describe : describe.skip)(`SQLite worker wrapper`, () => {
 	// prepare statements and set up table
@@ -27,7 +27,7 @@ const database = SQL(module, {file: `:memory:`, processes: 1});
 	it(`should support both inline and object params`, async () => {
 		const num = await database.prepare(`INSERT INTO test (col, col2) VALUES($col, $col2)`);
 		await database.run(insert, ['a', 'b']);
-		await database.run(num, {col: 'a', col2: 'b'});
+		await database.run(num, { col: 'a', col2: 'b' });
 	});
 	it(`should retrieve one line from Database.get`, async () => {
 		const result = await database.get(select);

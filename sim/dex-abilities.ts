@@ -1,6 +1,6 @@
-import type {PokemonEventMethods, ConditionData} from './dex-conditions';
-import {assignMissingFields, BasicEffect, toID} from './dex-data';
-import {Utils} from '../lib/utils';
+import type { PokemonEventMethods, ConditionData } from './dex-conditions';
+import { assignMissingFields, BasicEffect, toID } from './dex-data';
+import { Utils } from '../lib/utils';
 
 interface AbilityEventMethods {
 	onCheckShow?: (this: Battle, pokemon: Pokemon) => void;
@@ -24,9 +24,9 @@ export interface AbilityData extends Partial<Ability>, AbilityEventMethods, Poke
 	name: string;
 }
 
-export type ModdedAbilityData = AbilityData | Partial<AbilityData> & {inherit: true};
-export interface AbilityDataTable {[abilityid: IDEntry]: AbilityData}
-export interface ModdedAbilityDataTable {[abilityid: IDEntry]: ModdedAbilityData}
+export type ModdedAbilityData = AbilityData | Partial<AbilityData> & { inherit: true };
+export interface AbilityDataTable { [abilityid: IDEntry]: AbilityData }
+export interface ModdedAbilityDataTable { [abilityid: IDEntry]: ModdedAbilityData }
 
 export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly effectType: 'Ability';
@@ -67,7 +67,7 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	}
 }
 
-const EMPTY_ABILITY = Utils.deepFreeze(new Ability({id: '', name: '', exists: false}));
+const EMPTY_ABILITY = Utils.deepFreeze(new Ability({ id: '', name: '', exists: false }));
 
 export class DexAbilities {
 	readonly dex: ModdedDex;

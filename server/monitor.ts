@@ -7,8 +7,8 @@
  * @license MIT
  */
 
-import {exec, ExecException, ExecOptions} from 'child_process';
-import {crashlogger, FS} from "../lib";
+import { exec, type ExecException, type ExecOptions } from 'child_process';
+import { crashlogger, FS } from "../lib";
 import * as pathModule from 'path';
 
 const MONITOR_CLEAN_TIMEOUT = 2 * 60 * 60 * 1000;
@@ -47,7 +47,7 @@ export class TimedCounter extends Map<string, [number, number]> {
 // (4 is currently unused)
 // 5 = supposedly completely silent, but for now a lot of PS output doesn't respect loglevel
 if (('Config' in global) &&
-		(typeof Config.loglevel !== 'number' || Config.loglevel < 0 || Config.loglevel > 5)) {
+	(typeof Config.loglevel !== 'number' || Config.loglevel < 0 || Config.loglevel > 5)) {
 	Config.loglevel = 2;
 }
 
@@ -60,9 +60,9 @@ export const Monitor = new class {
 	tickets = new TimedCounter();
 
 	activeIp: string | null = null;
-	networkUse: {[k: string]: number} = {};
-	networkCount: {[k: string]: number} = {};
-	hotpatchLock: {[k: string]: {by: string, reason: string}} = {};
+	networkUse: { [k: string]: number } = {};
+	networkCount: { [k: string]: number } = {};
+	hotpatchLock: { [k: string]: { by: string, reason: string } } = {};
 
 	TimedCounter = TimedCounter;
 
@@ -300,7 +300,7 @@ export const Monitor = new class {
 	 * Counts roughly the size of an object to have an idea of the server load.
 	 */
 	sizeOfObject(object: AnyObject) {
-		const objectCache: Set<[] | object> = new Set();
+		const objectCache = new Set<[] | object>();
 		const stack: any[] = [object];
 		let bytes = 0;
 
@@ -333,7 +333,7 @@ export const Monitor = new class {
 	sh(command: string, options: ExecOptions = {}): Promise<[number, string, string]> {
 		return new Promise((resolve, reject) => {
 			exec(command, options, (error: ExecException | null, stdout: string | Buffer, stderr: string | Buffer) => {
-				resolve([error?.code || 0, '' + stdout, '' + stderr]);
+				resolve([error?.code || 0, `${stdout}`, `${stderr}`]);
 			});
 		});
 	}
@@ -345,7 +345,7 @@ export const Monitor = new class {
 			const index = Monitor.logPath('.gitindex');
 			const options = {
 				cwd: __dirname,
-				env: {GIT_INDEX_FILE: index.path},
+				env: { GIT_INDEX_FILE: index.path },
 			};
 
 			let [code, stdout, stderr] = await this.sh(`git add -A`, options);

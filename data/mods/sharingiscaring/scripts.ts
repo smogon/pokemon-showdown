@@ -1,4 +1,4 @@
-import {RESTORATIVE_BERRIES} from "../../../sim/pokemon";
+import { RESTORATIVE_BERRIES } from "../../../sim/pokemon";
 
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
@@ -30,7 +30,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const hasAnyItem = !!this.item || Object.keys(this.volatiles).some(v => v.startsWith('item:'));
 			// Best to declare everything early because ally might have a gem that needs proccing
 			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-			if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+			if (!source && this.battle.event?.target) source = this.battle.event.target;
 			const item = (sourceEffect?.id.startsWith('item:')) ? sourceEffect as Item : this.getItem();
 			if ((!this.hp && !item.isGem) || !this.isActive) return false;
 			if (!hasAnyItem) return false;
@@ -38,7 +38,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (this.battle.runEvent('UseItem', this, null, null, item)) {
 				switch (item.id.startsWith('item:') ? item.id.slice(5) : item.id) {
 				case 'redcard':
-					this.battle.add('-enditem', this, item.fullname, '[of] ' + source);
+					this.battle.add('-enditem', this, item.fullname, `[of] ${source}`);
 					break;
 				default:
 					if (item.isGem) {
@@ -71,7 +71,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		eatItem(force, source, sourceEffect) {
 			const hasAnyItem = !!this.item || Object.keys(this.volatiles).some(v => v.startsWith('item:'));
 			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-			if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+			if (!source && this.battle.event?.target) source = this.battle.event.target;
 			const item = (sourceEffect?.id.startsWith('item:')) ? sourceEffect as Item : this.getItem();
 			if (!hasAnyItem) return false;
 			if ((!this.hp && this.battle.toID(item.name) !== 'jabocaberry' && this.battle.toID(item.name) !== 'rowapberry') ||
@@ -129,13 +129,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			const oldItem = this.getItem();
 			const oldItemState = this.itemState;
 			this.item = item.id;
-			this.itemState = this.battle.initEffectState({id: item.id, target: this});
+			this.itemState = this.battle.initEffectState({ id: item.id, target: this });
 			if (oldItem.exists) this.battle.singleEvent('End', oldItem, oldItemState, this);
 			if (item.id) {
 				this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
 				for (const ally of this.side.pokemon) {
 					if (!ally.m.sharedItemsUsed) continue;
-					ally.m.sharedItemsUsed = ally.m.sharedItemsUsed.filter((i: ID) => i !== (item as Item).id);
+					ally.m.sharedItemsUsed = ally.m.sharedItemsUsed.filter((i: ID) => i !== item.id);
 				}
 			}
 			return true;

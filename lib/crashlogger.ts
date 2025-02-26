@@ -42,7 +42,7 @@ export function crashlogger(
 	}
 
 	console.error(`\nCRASH: ${stack}\n`);
-	const out = fs.createWriteStream(logPath, {flags: 'a'});
+	const out = fs.createWriteStream(logPath, { flags: 'a' });
 	out.on('open', () => {
 		out.write(`\n${stack}\n`);
 		out.end();

@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Confusion', function () {
-	afterEach(function () {
+describe('Confusion', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should not be affected by modifiers like Huge Power or Life Orb`, function () {
-		battle = common.createBattle({forceRandomChance: true}, [[
-			{species: 'Deoxys-Attack', ability: 'hugepower', item: 'lifeorb', moves: ['sleeptalk']},
+	it(`should not be affected by modifiers like Huge Power or Life Orb`, () => {
+		battle = common.createBattle({ forceRandomChance: true }, [[
+			{ species: 'Deoxys-Attack', ability: 'hugepower', item: 'lifeorb', moves: ['sleeptalk'] },
 		], [
-			{species: 'Sableye', ability: 'prankster', moves: ['confuseray']},
+			{ species: 'Sableye', ability: 'prankster', moves: ['confuseray'] },
 		]]);
 		battle.makeChoices();
 		const deoxys = battle.p1.active[0];

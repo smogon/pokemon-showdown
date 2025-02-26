@@ -1,4 +1,4 @@
-import type {ChallengeType} from './room-battle';
+import type { ChallengeType } from './room-battle';
 
 /**
  * A bundle of:
