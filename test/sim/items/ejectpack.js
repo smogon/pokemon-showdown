@@ -68,7 +68,7 @@ describe(`Eject Pack`, () => {
 		assert.equal(battle.p1.requestState, 'switch');
 	});
 
-	it(`should not switch out the user if the user acquired the Eject Pack after the stat drop occurred`, function () {
+	it(`should not switch out the user if the user acquired the Eject Pack after the stat drop occurred`, () => {
 		battle = common.createBattle([[
 			{ species: 'Klefki', ability: 'magician', moves: ['lowsweep'] },
 			{ species: 'Wynaut', moves: ['sleeptalk'] },
@@ -80,7 +80,7 @@ describe(`Eject Pack`, () => {
 		assert.false.equal(battle.requestState, 'switch');
 	});
 
-	it(`should wait until after all other end-turn effects have resolved before switching out the holder`, function () {
+	it(`should wait until after all other end-turn effects have resolved before switching out the holder`, () => {
 		battle = common.createBattle([[
 			{ species: 'Glalie', item: 'ejectpack', ability: 'moody', moves: ['icebeam'] },
 			{ species: 'Wynaut', moves: ['sleeptalk'] },
@@ -96,10 +96,10 @@ describe(`Eject Pack`, () => {
 		assert(powerConstructIndex < ejectPackIndex, 'Eject Pack should not activate before Power Construct');
 	});
 
-	it(`should not activate when another switching effect was triggered as part of the move`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Hydreigon', moves: ['breakingswipe']},
-			{species: 'Horsea', moves: ['sleeptalk']},
+	it(`should not activate when another switching effect was triggered as part of the move`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Hydreigon', moves: ['breakingswipe'] },
+			{ species: 'Horsea', moves: ['sleeptalk'] },
 		], [
 			{ species: 'Zeraora', item: 'ejectpack', moves: ['sleeptalk'] },
 			{ species: 'Mew', item: 'ejectbutton', moves: ['sleeptalk'] },
@@ -112,10 +112,10 @@ describe(`Eject Pack`, () => {
 		assert.species(battle.p2.active[1], 'Wynaut', `Mew should have switched out with its Eject Button.`);
 	});
 
-	it(`should only trigger the fastest Eject Pack when multiple targets with Eject Pack have stats lowered`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Hydreigon', moves: ['leer']},
-			{species: 'Horsea', moves: ['sleeptalk']},
+	it(`should only trigger the fastest Eject Pack when multiple targets with Eject Pack have stats lowered`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Hydreigon', moves: ['leer'] },
+			{ species: 'Horsea', moves: ['sleeptalk'] },
 		], [
 			{ species: 'Morelull', item: 'ejectpack', moves: ['sleeptalk'] },
 			{ species: 'Mew', item: 'ejectpack', moves: ['sleeptalk'] },
