@@ -4,7 +4,7 @@
  * @author mia-pi-git
  */
 
-import {FS, Utils} from '../../lib';
+import { FS, Utils } from '../../lib';
 
 const STAFF_REPOS = Config.staffrepos || [
 	'pokemon-showdown', 'pokemon-showdown-client', 'Pokemon-Showdown-Dex', 'pokemon-showdown-loginserver',
@@ -23,7 +23,7 @@ interface GitHookHandler {
 
 interface Push {
 	commits: Commit[];
-	sender: {login: string};
+	sender: { login: string };
 	compare: string;
 }
 
@@ -40,24 +40,24 @@ interface PullRequest {
 		},
 		merge_commit_sha: string,
 	};
-	sender: {login: string};
+	sender: { login: string };
 }
 
 interface Commit {
 	id: string;
 	message: string;
-	author: {name: string, avatar_url: string};
+	author: { name: string, avatar_url: string };
 	url: string;
 }
 
 interface GitData {
-	usernames?: {[username: string]: string};
-	bans?: {[username: string]: string};
+	usernames?: { [username: string]: string };
+	bans?: { [username: string]: string };
 }
 
 export const GitHub = new class {
 	readonly hook: GitHookHandler | null = null;
-	updates: {[k: string]: number} = Object.create(null);
+	updates: { [k: string]: number } = Object.create(null);
 	constructor() {
 		// config.github: https://github.com/nlf/node-github-hook#readme
 		if (!Config.github) return;
@@ -96,12 +96,12 @@ export const GitHub = new class {
 	handlePush(repo: string, ref: string, result: Push) {
 		const branch = /[^/]+$/.exec(ref)?.[0] || "";
 		if (branch !== 'master') return;
-		const messages: {[k: string]: string[]} = {
+		const messages: { [k: string]: string[] } = {
 			staff: [],
 			development: [],
 		};
 		for (const commit of result.commits) {
-			const {message, url} = commit;
+			const { message, url } = commit;
 			const [shortMessage] = message.split('\n\n');
 			const username = this.getUsername(commit.author.name);
 			const repoName = this.getRepoName(repo);

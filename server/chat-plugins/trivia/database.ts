@@ -4,10 +4,12 @@
  * @author Annika
  */
 
-import type {TriviaGame, TriviaHistory, TriviaLeaderboardData, TriviaLeaderboardScore, TriviaQuestion} from "./trivia";
-import {FS} from "../../../lib";
-import {formatSQLArray} from "../../../lib/utils";
-import type {Statement} from "../../../lib/sql";
+import type {
+	TriviaGame, TriviaHistory, TriviaLeaderboardData, TriviaLeaderboardScore, TriviaQuestion,
+} from "./trivia";
+import { FS } from "../../../lib";
+import { formatSQLArray } from "../../../lib/utils";
+import type { Statement } from "../../../lib/sql";
 
 export type Leaderboard = 'alltime' | 'nonAlltime' | 'cycle';
 /**
@@ -40,11 +42,11 @@ export interface TriviaDatabase {
 	editQuestion(oldQuestionText: string, newQuestionText?: string, newAnswers?: string[]): Promise<void>;
 
 	getHistory(numberOfLines: number): Promise<TriviaGame[]> | TriviaGame[];
-	getScoresForLastGame(): Promise<{[k: string]: number}> | {[k: string]: number};
+	getScoresForLastGame(): Promise<{ [k: string]: number }> | { [k: string]: number };
 	getQuestions(
 		categories: string[] | 'all',
 		limit: number,
-		options: {order: 'newestfirst' | 'oldestfirst' | 'random'}
+		options: { order: 'newestfirst' | 'oldestfirst' | 'random' }
 	): Promise<TriviaQuestion[]> | TriviaQuestion[];
 	getLeaderboardEntry(
 		id: ID,
@@ -56,10 +58,10 @@ export interface TriviaDatabase {
 	ensureQuestionExists(questionText: string): Promise<TriviaQuestion> | TriviaQuestion;
 	ensureQuestionDoesNotExist(questionText: string): Promise<void> | void;
 	getSubmissions(): Promise<TriviaQuestion[]> | TriviaQuestion[];
-	getQuestionCounts(): Promise<{[k: string]: number, total: number}> | {[k: string]: number, total: number};
+	getQuestionCounts(): Promise<{ [k: string]: number, total: number }> | { [k: string]: number, total: number };
 	searchQuestions(
 		search: string,
-		options: {searchSubmissions: boolean, caseSensitive?: boolean}
+		options: { searchSubmissions: boolean, caseSensitive?: boolean }
 	): Promise<TriviaQuestion[]> | TriviaQuestion[];
 
 	clearSubmissions(): Promise<void> | void;
@@ -171,9 +173,9 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		for (const [lb, discrim] of Object.entries(LEADERBOARD_ENUM) as [Leaderboard, number][]) {
 			if (!additions[lb]) continue;
 			await this.leaderboardChangeQuery!.run({
-				score: additions[lb]!.score,
-				totalPoints: additions[lb]!.totalPoints,
-				totalCorrectAnswers: additions[lb]!.totalCorrectAnswers,
+				score: additions[lb].score,
+				totalPoints: additions[lb].totalPoints,
+				totalCorrectAnswers: additions[lb].totalCorrectAnswers,
 				userid,
 				leaderboard: discrim,
 			});
@@ -272,7 +274,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 			throw new Chat.ErrorMessage(`Can't find out if we are moving event questions because SQLite is not enabled.`);
 		}
 
-		return (await this.eventQuestionQuery!.get([]) || {value: false}).value;
+		return (await this.eventQuestionQuery!.get([]) || { value: false }).value;
 	}
 
 	async moveQuestionToCategory(question: string, newCategory: string) {
@@ -289,7 +291,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 			throw new Chat.ErrorMessage(`Can't migrate categories because SQLite is not enabled.`);
 		}
 
-		const {changes} = await this.migrateCategoryQuery!.run([targetCategory, sourceCategory]);
+		const { changes } = await this.migrateCategoryQuery!.run([targetCategory, sourceCategory]);
 		return changes;
 	}
 
@@ -337,14 +339,14 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		}));
 	}
 
-	async getScoresForLastGame(): Promise<{[k: string]: number}> {
+	async getScoresForLastGame(): Promise<{ [k: string]: number }> {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Config.usesqlite) {
 			throw new Chat.ErrorMessage(`Can't get Trivia game scores because SQLite is not enabled.`);
 		}
-		const {game_id} = await this.historyQuery!.get([1]);
+		const { game_id } = await this.historyQuery!.get([1]);
 
-		const results: {[k: string]: number} = {};
+		const results: { [k: string]: number } = {};
 		for (const row of await this.historyScoresQuery!.all([game_id])) {
 			results[row.userid] = row.score;
 		}
@@ -354,7 +356,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 	async getQuestions(
 		categories: string[] | 'all',
 		limit: number,
-		options: {order: 'newestfirst' | 'oldestfirst' | 'random'}
+		options: { order: 'newestfirst' | 'oldestfirst' | 'random' }
 	): Promise<TriviaQuestion[]> {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Config.usesqlite) throw new Chat.ErrorMessage(`Can't get Trivia questions because SQLite is not enabled.`);
@@ -463,7 +465,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		return Promise.all(rows.map((row: AnyObject) => this.rowToQuestion(row)));
 	}
 
-	async getQuestionCounts(): Promise<{[k: string]: number, total: number}> {
+	async getQuestionCounts(): Promise<{ [k: string]: number, total: number }> {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Config.usesqlite) {
 			throw new Chat.ErrorMessage(`Can't retrieve the Trivia question counts because SQLite is not enabled.`);
@@ -472,7 +474,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		const allCategories = (await this.categoriesQuery!.all([])).map((row: AnyObject) => row.category);
 		const total = (await this.questionCountQuery!.get([])).count;
 
-		const result: {[k: string]: number, total: number} = {total};
+		const result: { [k: string]: number, total: number } = { total };
 		for (const category of allCategories) {
 			result[category] = (await this.categoryQuestionCountQuery!.get([category])).count;
 		}
@@ -481,7 +483,7 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 	async searchQuestions(
 		search: string,
-		options: {searchSubmissions: boolean, caseSensitive?: boolean}
+		options: { searchSubmissions: boolean, caseSensitive?: boolean }
 	): Promise<TriviaQuestion[]> {
 		if (this.readyPromise) await this.readyPromise;
 		if (!Config.usesqlite) {
@@ -494,7 +496,6 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 
 		return Promise.all(rows.map((row: AnyObject) => this.rowToQuestion(row)));
 	}
-
 
 	/*****************************
 	 * Methods for deleting data *
