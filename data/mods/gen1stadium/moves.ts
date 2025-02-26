@@ -59,7 +59,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						pokemon.removeVolatile('bide');
 						return false;
 					}
-					this.actions.moveHit(target, pokemon, move, {damage: this.effectState.totalDamage * 2} as ActiveMove);
+					this.actions.moveHit(target, pokemon, move, { damage: this.effectState.totalDamage * 2 } as ActiveMove);
 					pokemon.removeVolatile('bide');
 					return false;
 				}
@@ -167,7 +167,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onLockMove: 'rage',
 			onHit(target, source, move) {
 				if (target.boosts.atk < 6 && (move.category !== 'Status' || move.id === 'disable')) {
-					this.boost({atk: 1});
+					this.boost({ atk: 1 });
 				}
 			},
 		},
@@ -270,7 +270,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// Add here counter damage
 				const lastAttackedBy = target.getLastAttackedBy();
 				if (!lastAttackedBy) {
-					target.attackedBy.push({source: source, move: move.id, damage: damage, slot: source.getSlot(), thisTurn: true});
+					target.attackedBy.push({ source, move: move.id, damage, slot: source.getSlot(), thisTurn: true });
 				} else {
 					lastAttackedBy.move = move.id;
 					lastAttackedBy.damage = damage;
@@ -287,7 +287,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	struggle: {
 		inherit: true,
-		ignoreImmunity: {'Normal': true},
+		ignoreImmunity: { 'Normal': true },
 	},
 	wrap: {
 		inherit: true,
