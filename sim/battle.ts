@@ -19,7 +19,7 @@ import { Teams } from './teams';
 import { Field } from './field';
 import { Pokemon, type EffectState, RESTORATIVE_BERRIES } from './pokemon';
 import { PRNG, type PRNGSeed } from './prng';
-import { Side } from './side';
+import { type MoveRequest, type ChoiceRequest, Side } from './side';
 import { State } from './state';
 import { BattleQueue, type Action } from './battle-queue';
 import { BattleActions } from './battle-actions';
@@ -977,7 +977,7 @@ export class Battle {
 		let handlers: EventListener[] = [];
 		if (Array.isArray(target)) {
 			for (const [i, pokemon] of target.entries()) {
-				// console.log(`Event: ${eventName}, Target: ${'' + pokemon}, ${i}`);
+				// console.log(`Event: ${eventName}, Target: ${pokemon}, ${i}`);
 				const curHandlers = this.findEventHandlers(pokemon, eventName, source);
 				for (const handler of curHandlers) {
 					handler.target = pokemon; // Original "effectHolder"
@@ -1339,7 +1339,7 @@ export class Battle {
 
 	getRequests(type: RequestState) {
 		// default to no request
-		const requests: AnyObject[] = Array(this.sides.length).fill(null);
+		const requests: ChoiceRequest[] = Array(this.sides.length).fill(null);
 
 		switch (type) {
 		case 'switch':
@@ -1368,7 +1368,7 @@ export class Battle {
 				const activeData = side.active.map(pokemon => pokemon?.getMoveRequestData());
 				requests[i] = { active: activeData, side: side.getRequestData() };
 				if (side.allySide) {
-					requests[i].ally = side.allySide.getRequestData(true);
+					(requests[i] as MoveRequest).ally = side.allySide.getRequestData(true);
 				}
 			}
 			break;
@@ -3169,7 +3169,7 @@ export class Battle {
 			// create player
 			const team = this.getTeam(options);
 			side = new Side(options.name || `Player ${slotNum + 1}`, this, slotNum, team);
-			if (options.avatar) side.avatar = '' + options.avatar;
+			if (options.avatar) side.avatar = `${options.avatar}`;
 			this.sides[slotNum] = side;
 		} else {
 			// edit player
@@ -3179,8 +3179,8 @@ export class Battle {
 				side.name = options.name;
 				didSomething = true;
 			}
-			if (options.avatar && side.avatar !== '' + options.avatar) {
-				side.avatar = '' + options.avatar;
+			if (options.avatar && side.avatar !== `${options.avatar}`) {
+				side.avatar = `${options.avatar}`;
 				didSomething = true;
 			}
 			if (options.team) throw new Error(`Player ${slot} already has a team!`);

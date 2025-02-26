@@ -7,6 +7,7 @@
 
 import { State } from './state';
 import { toID } from './dex';
+import type { DynamaxOptions, PokemonMoveRequestData, PokemonSwitchRequestData } from './side';
 
 /** A Pokemon's move slot. */
 interface MoveSlot {
@@ -49,11 +50,12 @@ export class Pokemon {
 
 	readonly set: PokemonSet;
 	readonly name: string;
+	/** `` `${sideid}: ${name}` `` - used to refer to pokemon in the protocol */
 	readonly fullname: string;
 	readonly level: number;
 	readonly gender: GenderName;
 	readonly happiness: number;
-	readonly pokeball: string;
+	readonly pokeball: ID;
 	readonly dynamaxLevel: number;
 	readonly gigantamax: boolean;
 
@@ -73,6 +75,11 @@ export class Pokemon {
 	 * its field position in multi battles - use `getSlot()` for that.
 	 */
 	position: number;
+	/**
+	 * Information about this pokemon visible to opponents when in battle
+	 * (species, gender, level, shininess, tera state).
+	 * @see https://github.com/smogon/pokemon-showdown/blob/master/sim/SIM-PROTOCOL.md#identifying-pok%C3%A9mon
+	 */
 	details: string;
 
 	baseSpecies: Species;
@@ -317,7 +324,7 @@ export class Pokemon {
 		this.speciesState = this.battle.initEffectState({ id: this.species.id });
 
 		this.name = set.name.substr(0, 20);
-		this.fullname = this.side.id + ': ' + this.name;
+		this.fullname = `${this.side.id}: ${this.name}`;
 
 		set.level = this.battle.clampIntRange(set.adjustLevel || set.level || 100, 1, 9999);
 		this.level = set.level;
@@ -325,7 +332,7 @@ export class Pokemon {
 		this.gender = genders[set.gender] || this.species.gender || (this.battle.random(2) ? 'F' : 'M');
 		if (this.gender === 'N') this.gender = '';
 		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
-		this.pokeball = this.set.pokeball || 'pokeball';
+		this.pokeball = toID(this.set.pokeball) || 'pokeball' as ID;
 		this.dynamaxLevel = typeof set.dynamaxLevel === 'number' ? this.battle.clampIntRange(set.dynamaxLevel, 0, 10) : 10;
 		this.gigantamax = this.set.gigantamax || false;
 
@@ -914,13 +921,13 @@ export class Pokemon {
 	 * Sky Drop, which remove all choice (no dynamax, switching, etc).
 	 * Don't use it for "soft locks" like Choice Band.
 	 */
-	getLockedMove(): string | null {
+	getLockedMove(): ID | null {
 		const lockedMove = this.battle.runEvent('LockMove', this);
 		return (lockedMove === true) ? null : lockedMove;
 	}
 
-	getMoves(lockedMove?: string | null, restrictData?: boolean): {
-		move: string, id: string, disabled?: string | boolean, disabledSource?: string,
+	getMoves(lockedMove?: ID | null, restrictData?: boolean): {
+		move: string, id: ID, disabled?: string | boolean, disabledSource?: string,
 		target?: string, pp?: number, maxpp?: number,
 	}[] {
 		if (lockedMove) {
@@ -929,7 +936,7 @@ export class Pokemon {
 			if (lockedMove === 'recharge') {
 				return [{
 					move: 'Recharge',
-					id: 'recharge',
+					id: 'recharge' as ID,
 				}];
 			}
 			for (const moveSlot of this.moveSlots) {
@@ -1059,26 +1066,11 @@ export class Pokemon {
 		let moves = this.getMoves(lockedMove, isLastActive);
 
 		if (!moves.length) {
-			moves = [{ move: 'Struggle', id: 'struggle', target: 'randomNormal', disabled: false }];
-			lockedMove = 'struggle';
+			moves = [{ move: 'Struggle', id: 'struggle' as ID, target: 'randomNormal', disabled: false }];
+			lockedMove = 'struggle' as ID;
 		}
 
-		const data: {
-			moves: { move: string, id: string, target?: string, disabled?: string | boolean }[],
-			maybeDisabled?: boolean,
-			maybePartiallyTrapping?: string | false,
-			maybePartiallyTrapped?: boolean,
-			trapped?: boolean,
-			maybeTrapped?: boolean,
-			canMegaEvo?: boolean,
-			canMegaEvoX?: boolean,
-			canMegaEvoY?: boolean,
-			canUltraBurst?: boolean,
-			canZMove?: AnyObject | null,
-			canDynamax?: boolean,
-			maxMoves?: DynamaxOptions,
-			canTerastallize?: string,
-		} = {
+		const data: PokemonMoveRequestData = {
 			moves,
 		};
 
@@ -1120,8 +1112,8 @@ export class Pokemon {
 		return data;
 	}
 
-	getSwitchRequestData(forAlly?: boolean) {
-		const entry: AnyObject = {
+	getSwitchRequestData(forAlly?: boolean): PokemonSwitchRequestData {
+		const entry: PokemonSwitchRequestData = {
 			ident: this.fullname,
 			details: this.details,
 			condition: this.getHealth().secret,
@@ -1135,13 +1127,13 @@ export class Pokemon {
 			},
 			moves: this[forAlly ? 'baseMoves' : 'moves'].map(move => {
 				if (move === 'hiddenpower') {
-					return `${move}${toID(this.hpType)}${this.battle.gen < 6 ? '' : this.hpPower}`;
+					return `${move}${toID(this.hpType)}${this.battle.gen < 6 ? '' : this.hpPower}` as ID;
 				}
 				if (move === 'frustration' || move === 'return') {
 					const basePowerCallback = this.battle.dex.moves.get(move).basePowerCallback as (pokemon: Pokemon) => number;
-					return `${move}${basePowerCallback(this)}`;
+					return `${move}${basePowerCallback(this)}` as ID;
 				}
-				return move;
+				return move as ID;
 			}),
 			baseAbility: this.baseAbility,
 			item: this.item,

@@ -9,6 +9,7 @@
 import type { ObjectReadWriteStream } from '../../lib/streams';
 import { BattlePlayer } from '../battle-stream';
 import { PRNG, type PRNGSeed } from '../prng';
+import type { ChoiceRequest } from '../side';
 
 export class RandomPlayerAI extends BattlePlayer {
 	protected readonly move: number;
@@ -33,7 +34,7 @@ export class RandomPlayerAI extends BattlePlayer {
 		throw error;
 	}
 
-	receiveRequest(request: AnyObject) {
+	override receiveRequest(request: ChoiceRequest) {
 		if (request.wait) {
 			// wait request
 			// do nothing
@@ -41,7 +42,7 @@ export class RandomPlayerAI extends BattlePlayer {
 			// switch request
 			const pokemon = request.side.pokemon;
 			const chosen: number[] = [];
-			const choices = request.forceSwitch.map((mustSwitch: AnyObject, i: number) => {
+			const choices = request.forceSwitch.map((mustSwitch, i) => {
 				if (!mustSwitch) return `pass`;
 
 				const canSwitch = range(1, 6).filter(j => (
@@ -51,12 +52,12 @@ export class RandomPlayerAI extends BattlePlayer {
 					// not chosen for a simultaneous switch
 					!chosen.includes(j) &&
 					// not fainted or fainted and using Revival Blessing
-					!!(+!!pokemon[i].reviving ^ +!pokemon[j - 1].condition.endsWith(` fnt`))
+					!pokemon[j - 1].condition.endsWith(` fnt`) === !pokemon[i].reviving
 				));
 
 				if (!canSwitch.length) return `pass`;
 				const target = this.chooseSwitch(
-					request.active,
+					undefined,
 					canSwitch.map(slot => ({ slot, pokemon: pokemon[slot - 1] }))
 				);
 				chosen.push(target);
@@ -64,6 +65,8 @@ export class RandomPlayerAI extends BattlePlayer {
 			});
 
 			this.choose(choices.join(`, `));
+		} else if (request.teamPreview) {
+			this.choose(this.chooseTeamPreview(request.side.pokemon));
 		} else if (request.active) {
 			// move request
 			let [canMegaEvo, canUltraBurst, canZMove, canDynamax, canTerastallize] = [true, true, true, true, true];
@@ -184,9 +187,6 @@ export class RandomPlayerAI extends BattlePlayer {
 				}
 			});
 			this.choose(choices.join(`, `));
-		} else {
-			// team preview?
-			this.choose(this.chooseTeamPreview(request.side.pokemon));
 		}
 	}
 

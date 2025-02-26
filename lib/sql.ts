@@ -62,6 +62,8 @@ type ErrorHandler = (error: Error, data: DatabaseQuery, isParentProcess: boolean
 
 function getModule() {
 	try {
+		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+		// @ts-ignore does not exist while building NPM package???
 		return require('better-sqlite3') as typeof sqlite.default;
 	} catch {
 		return null;
