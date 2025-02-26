@@ -62,14 +62,14 @@ describe(`Fainted forme regression`, () => {
 		assert.hasAbility(pokemon, 'Drizzle');
 	});
 
-	it(`should revert Greninja-Ash and not allow it to transform again`, function () {
+	it(`should revert Greninja-Ash and not allow it to transform again`, () => {
 		battle = common.gen(7).createBattle([[
-			{species: 'greninjabond', ability: 'battlebond', moves: ['surf', 'memento']},
-			{species: 'pawmot', moves: ['revivalblessing']},
+			{ species: 'greninjabond', ability: 'battlebond', moves: ['surf', 'memento'] },
+			{ species: 'pawmot', moves: ['revivalblessing'] },
 		], [
-			{species: 'mareep', level: 5, ability: 'static', moves: ['sleeptalk']},
-			{species: 'mareep', level: 5, ability: 'static', moves: ['sleeptalk']},
-			{species: 'mareep', level: 5, ability: 'static', moves: ['sleeptalk']},
+			{ species: 'mareep', level: 5, ability: 'static', moves: ['sleeptalk'] },
+			{ species: 'mareep', level: 5, ability: 'static', moves: ['sleeptalk'] },
+			{ species: 'mareep', level: 5, ability: 'static', moves: ['sleeptalk'] },
 		]]);
 		const pokemon = battle.p1.active[0];
 		assert.species(pokemon, 'Greninja-Bond');
@@ -88,7 +88,7 @@ describe(`Fainted forme regression`, () => {
 		assert.species(pokemon, 'Greninja-Bond');
 	});
 
-	it(`should not revert Arceus-forms to base Arceus`, function () {
+	it(`should not revert Arceus-forms to base Arceus`, () => {
 		battle = common.createBattle([[
 			{ species: 'arceusfire', ability: 'multitype', item: 'flameplate', moves: ['memento'] },
 			{ species: 'darkrai', moves: ['darkpulse'] },
@@ -101,12 +101,12 @@ describe(`Fainted forme regression`, () => {
 		assert.hasAbility(pokemon, 'Multitype');
 	});
 
-	it(`should not revert Mimikyu-Busted to base Mimikyu`, function () {
+	it(`should not revert Mimikyu-Busted to base Mimikyu`, () => {
 		battle = common.createBattle([[
-			{species: 'mimikyu', ability: 'disguise', moves: ['memento']},
-			{species: 'pawmot', moves: ['revivalblessing']},
+			{ species: 'mimikyu', ability: 'disguise', moves: ['memento'] },
+			{ species: 'pawmot', moves: ['revivalblessing'] },
 		], [
-			{species: 'mareep', ability: 'static', moves: ['sleeptalk', 'aquajet']},
+			{ species: 'mareep', ability: 'static', moves: ['sleeptalk', 'aquajet'] },
 		]]);
 		battle.makeChoices('auto', 'move aquajet');
 		battle.makeChoices(); // switch
@@ -120,12 +120,12 @@ describe(`Fainted forme regression`, () => {
 		assert.equal(pokemon.hp, Math.floor(pokemon.maxhp / 2));
 	});
 
-	it(`Mimikyu should keep its disguise if it was not busted`, function () {
+	it(`Mimikyu should keep its disguise if it was not busted`, () => {
 		battle = common.createBattle([[
-			{species: 'mimikyu', ability: 'disguise', moves: ['memento']},
-			{species: 'pawmot', moves: ['revivalblessing']},
+			{ species: 'mimikyu', ability: 'disguise', moves: ['memento'] },
+			{ species: 'pawmot', moves: ['revivalblessing'] },
 		], [
-			{species: 'mareep', ability: 'static', moves: ['sleeptalk']},
+			{ species: 'mareep', ability: 'static', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices(); // switch
@@ -139,12 +139,12 @@ describe(`Fainted forme regression`, () => {
 		assert.equal(pokemon.hp, Math.floor(pokemon.maxhp / 2));
 	});
 
-	it(`[Gen 8] should revert Mimikyu-Busted to base Mimikyu`, function () {
+	it(`[Gen 8] should revert Mimikyu-Busted to base Mimikyu`, () => {
 		battle = common.gen(8).createBattle([[
-			{species: 'mimikyu', ability: 'disguise', moves: ['memento']},
-			{species: 'pawmot', moves: ['revivalblessing']},
+			{ species: 'mimikyu', ability: 'disguise', moves: ['memento'] },
+			{ species: 'pawmot', moves: ['revivalblessing'] },
 		], [
-			{species: 'mareep', ability: 'static', moves: ['sleeptalk', 'aquajet']},
+			{ species: 'mareep', ability: 'static', moves: ['sleeptalk', 'aquajet'] },
 		]]);
 		battle.makeChoices('auto', 'move aquajet');
 		battle.makeChoices(); // switch
@@ -158,12 +158,12 @@ describe(`Fainted forme regression`, () => {
 		assert.equal(pokemon.hp, Math.floor(pokemon.maxhp / 2));
 	});
 
-	it("should not revert Eiscue-Noice to base Eiscue", function () {
+	it("should not revert Eiscue-Noice to base Eiscue", () => {
 		battle = common.createBattle([[
-			{species: 'eiscuenoice', ability: 'iceface', moves: ['memento']},
-			{species: 'darkrai', moves: ['darkpulse']},
+			{ species: 'eiscuenoice', ability: 'iceface', moves: ['memento'] },
+			{ species: 'darkrai', moves: ['darkpulse'] },
 		], [
-			{species: 'mareep', ability: 'static', moves: ['quickattack']},
+			{ species: 'mareep', ability: 'static', moves: ['quickattack'] },
 		]]);
 		const pokemon = battle.p1.active[0];
 		battle.makeChoices();
@@ -171,10 +171,10 @@ describe(`Fainted forme regression`, () => {
 		assert.hasAbility(pokemon, 'Ice Face');
 	});
 
-	it("should revert Terastallized Morpeko-Hangry to base Morpeko", function () {
+	it("should revert Terastallized Morpeko-Hangry to base Morpeko", () => {
 		battle = common.createBattle([[
-			{species: 'Morpeko', ability: 'hungerswitch', moves: ['memento', 'sleeptalk']},
-			{species: 'darkrai', moves: ['darkpulse']},
+			{ species: 'Morpeko', ability: 'hungerswitch', moves: ['memento', 'sleeptalk'] },
+			{ species: 'darkrai', moves: ['darkpulse'] },
 		], [
 			{ species: 'mareep', ability: 'static', moves: ['sleeptalk'] },
 		]]);
@@ -186,7 +186,7 @@ describe(`Fainted forme regression`, () => {
 		assert.hasAbility(pokemon, 'Hunger Switch');
 	});
 
-	it(`should not revert Palafin-Hero to base Palafin`, function () {
+	it(`should not revert Palafin-Hero to base Palafin`, () => {
 		battle = common.createBattle([[
 			{ species: 'palafin', ability: 'zerotohero', moves: ['memento'] },
 			{ species: 'darkrai', moves: ['darkpulse'] },
@@ -218,7 +218,7 @@ describe(`Fainted forme regression`, () => {
 		assert.hasAbility(pokemon, 'Water Absorb');
 	});
 
-	it(`should not revert Terapagos-Terastal to base Terapagos`, function () {
+	it(`should not revert Terapagos-Terastal to base Terapagos`, () => {
 		battle = common.createBattle([[
 			{ species: 'terapagos', ability: 'terashift', moves: ['memento'] },
 			{ species: 'darkrai', moves: ['darkpulse'] },
