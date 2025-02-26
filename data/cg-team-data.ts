@@ -6,7 +6,7 @@ export const MOVE_PAIRINGS: { [moveID: IDEntry]: IDEntry } = {
 };
 
 // Bonuses to move ratings by ability
-export const ABILITY_MOVE_BONUSES: {[abilityID: IDEntry]: {[moveID: IDEntry]: number}} = {
+export const ABILITY_MOVE_BONUSES: { [abilityID: IDEntry]: { [moveID: IDEntry]: number } } = {
 	contrary: { terablast: 2 },
 	drought: { sunnyday: 0.2, solarbeam: 2 },
 	drizzle: { raindance: 0.2, solarbeam: 0.2, hurricane: 2 },
