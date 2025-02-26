@@ -9,9 +9,10 @@
  * @license MIT
  */
 
-import {Streams, Utils} from '../lib';
-import {Teams} from './teams';
-import {Battle, extractChannelMessages} from './battle';
+import { Streams, Utils } from '../lib';
+import { Teams } from './teams';
+import { Battle, extractChannelMessages } from './battle';
+import type { ChoiceRequest } from './side';
 
 /**
  * Like string.split(delimiter), but only recognizes the first `limit`
@@ -348,7 +349,7 @@ export abstract class BattlePlayer {
 		this.log.push(line);
 	}
 
-	abstract receiveRequest(request: AnyObject): void;
+	abstract receiveRequest(request: ChoiceRequest): void;
 
 	receiveError(error: Error) {
 		throw error;
@@ -363,7 +364,7 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 	readonly battleStream: BattleStream;
 	currentMessage: string;
 
-	constructor(options: {debug?: boolean}) {
+	constructor(options: { debug?: boolean }) {
 		super();
 		this.battleStream = new BattleStream(options);
 		this.currentMessage = '';
@@ -379,7 +380,7 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 	}
 
 	_write(message: string | Buffer) {
-		this.currentMessage += '' + message;
+		this.currentMessage += `${message}`;
 		const index = this.currentMessage.lastIndexOf('\n');
 		if (index >= 0) {
 			void this.battleStream.write(this.currentMessage.slice(0, index));
