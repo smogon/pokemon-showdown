@@ -66,12 +66,12 @@ describe('Flower Gift', () => {
 		assert(battle.log.every(line => !line.startsWith('|-formechange')));
 	});
 
-	it(`should not trigger if dragged in by a Mold Breaker Pokemon`, function () {
+	it(`should not trigger if dragged in by a Mold Breaker Pokemon`, () => {
 		battle = common.createBattle([[
-			{species: 'Torkoal', ability: 'drought', moves: ['sleeptalk']},
-			{species: 'Cherrim', ability: 'flowergift', moves: ['sleeptalk']},
+			{ species: 'Torkoal', ability: 'drought', moves: ['sleeptalk'] },
+			{ species: 'Cherrim', ability: 'flowergift', moves: ['sleeptalk'] },
 		], [
-			{species: 'Haxorus', ability: 'moldbreaker', moves: ['roar']},
+			{ species: 'Haxorus', ability: 'moldbreaker', moves: ['roar'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.field.weather, 'sunnyday');
