@@ -19,14 +19,14 @@ describe('Round', () => {
 		assert.equal(battle.p2.active[0].item, '');
 	});
 
-	it('should not take priority over abilities', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: "Charizard", moves: ['round']},
-			{species: "Venusaur", moves: ['round']},
+	it('should not take priority over abilities', () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Charizard", moves: ['round'] },
+			{ species: "Venusaur", moves: ['round'] },
 		], [
-			{species: "Blissey", item: 'ejectbutton', moves: ['sleeptalk']},
-			{species: "Blastoise", moves: ['sleeptalk']},
-			{species: "Incineroar", ability: 'intimidate', moves: ['sleeptalk']},
+			{ species: "Blissey", item: 'ejectbutton', moves: ['sleeptalk'] },
+			{ species: "Blastoise", moves: ['sleeptalk'] },
+			{ species: "Incineroar", ability: 'intimidate', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices();
