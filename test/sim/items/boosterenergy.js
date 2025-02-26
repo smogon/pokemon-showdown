@@ -25,13 +25,13 @@ describe('Booster Energy', () => {
 			`Iron Bundle's Speed should have been lowered before Booster Energy activated, boosting its SpA instead.`);
 	});
 
-	it(`should activate right after weather changes`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Ninetales-Alola', ability: 'snowwarning', moves: ['sleeptalk']},
-			{species: 'Roaring Moon', item: 'boosterenergy', ability: 'protosynthesis', moves: ['sleeptalk']},
+	it(`should activate right after weather changes`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Ninetales-Alola', ability: 'snowwarning', moves: ['sleeptalk'] },
+			{ species: 'Roaring Moon', item: 'boosterenergy', ability: 'protosynthesis', moves: ['sleeptalk'] },
 		], [
-			{species: 'Incineroar', ability: 'intimidate', moves: ['sleeptalk']},
-			{species: 'Torkoal', ability: 'drought', moves: ['sleeptalk']},
+			{ species: 'Incineroar', ability: 'intimidate', moves: ['sleeptalk'] },
+			{ species: 'Torkoal', ability: 'drought', moves: ['sleeptalk'] },
 		]]);
 
 		const roaringMoon = battle.p1.active[1];
