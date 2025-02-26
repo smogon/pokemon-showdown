@@ -62,7 +62,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 			const target = this.sample(possibleTargets);
 			const ability = target.getAbility();
-			this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+			this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
 			if (isAbility) {
 				pokemon.setAbility(ability);
 			} else {
