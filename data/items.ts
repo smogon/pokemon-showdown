@@ -5172,7 +5172,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		onEat() {
-			this.boost({spe: 1});
+			this.boost({ spe: 1 });
 		},
 		num: 203,
 		gen: 3,

@@ -165,7 +165,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!lastAttackedBy) return;
 			const damage = move.multihit ? move.totalDamage : lastAttackedBy.damage;
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
-				this.boost({atk: 1, spa: 1, spe: 1, def: -1, spd: -1}, target, target);
+				this.boost({ atk: 1, spa: 1, spe: 1, def: -1, spd: -1 }, target, target);
 				const item = target.getItem();
 				if (item.isBerry || item.id === 'berryjuice') this.runEvent('AfterDamage', target, null, null, damage);
 			}
@@ -424,7 +424,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!lastAttackedBy) return;
 			const damage = move.multihit && !move.smartTarget ? move.totalDamage : lastAttackedBy.damage;
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
-				this.boost({spa: 1}, target, target);
+				this.boost({ spa: 1 }, target, target);
 				const item = target.getItem();
 				if (item.isBerry || item.id === 'berryjuice') this.runEvent('AfterDamage', target, null, null, damage);
 			}
