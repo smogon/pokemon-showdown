@@ -1,4 +1,4 @@
-export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
+export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 	noability: {
 		name: "No Ability",
 		shortDesc: "Does nothing.",
