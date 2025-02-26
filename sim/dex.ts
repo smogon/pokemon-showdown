@@ -576,6 +576,16 @@ export declare namespace Dex {
 	export type HitEffect = import('./dex-moves').HitEffect;
 	export type SecondaryEffect = import('./dex-moves').SecondaryEffect;
 	export type RuleTable = import('./dex-formats').RuleTable;
+
+	export type GenderName = 'M' | 'F' | 'N' | '';
+	export type StatIDExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
+	export type StatID = 'hp' | StatIDExceptHP;
+	export type StatsExceptHPTable = { [stat in StatIDExceptHP]: number };
+	export type StatsTable = { [stat in StatID]: number };
+	export type SparseStatsTable = Partial<StatsTable>;
+	export type BoostID = StatIDExceptHP | 'accuracy' | 'evasion';
+	export type BoostsTable = { [boost in BoostID]: number };
+	export type SparseBoostsTable = Partial<BoostsTable>;
 }
 
 export default Dex;
