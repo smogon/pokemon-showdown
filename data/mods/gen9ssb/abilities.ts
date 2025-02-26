@@ -236,7 +236,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		desc: "Active Pokemon without this Ability have their Attack multiplied by 0.85x. This Pokemon ignores other Pokemon's stat stages when taking or doing damage.",
 		name: "Clod of Ruin",
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Clod of Ruin');
 		},
 		onAnyModifyAtk(atk, target, source, move) {
