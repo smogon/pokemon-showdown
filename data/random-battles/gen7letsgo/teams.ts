@@ -116,7 +116,9 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 
 		return { cull: false };
 	}
-	override randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
+	override randomSet(
+		species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}
+	): RandomTeamsTypes.RandomSet {
 		species = this.dex.species.get(species);
 		let forme = species.name;
 

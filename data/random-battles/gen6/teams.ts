@@ -889,7 +889,9 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		};
 	}
 
-	override randomFactorySets: { [format: string]: { [species: string]: BattleFactorySpecies } } = require('./factory-sets.json');
+	override randomFactorySets: {
+		[format: string]: { [species: string]: BattleFactorySpecies },
+	} = require('./factory-sets.json');
 
 	override randomFactorySet(
 		species: Species,
