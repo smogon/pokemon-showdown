@@ -4,9 +4,9 @@
  * Handles updating the level database for [Gen 9] Computer-Generated Teams.
  */
 
-import {SQL, Utils} from "../../lib";
-import {getSpeciesName} from "./randombattles/winrates";
-import {cgtDatabase} from "../../data/cg-teams";
+import { SQL, Utils } from "../../lib";
+import { getSpeciesName } from "./randombattles/winrates";
+import { cgtDatabase } from "../../data/cg-teams";
 
 export let addPokemon: SQL.Statement | null = null;
 export let incrementWins: SQL.Statement | null = null;

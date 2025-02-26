@@ -84,7 +84,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (target.hasType('Normal')) return 0;
 			}
 		},
-		ignoreImmunity: {'Fighting': true},
+		ignoreImmunity: { 'Fighting': true },
 	},
 	trickortreat: {
 		inherit: true,
@@ -113,7 +113,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			case 'raindance':
 			case 'primordialsea':
 			case 'hail':
-			case 'snow':
+			case 'snowscape':
 				move.type = 'Water';
 				break;
 			case 'sandstorm':
