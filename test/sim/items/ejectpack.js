@@ -5,63 +5,63 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Eject Pack`, function () {
-	afterEach(function () {
+describe(`Eject Pack`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should switch out the holder when its stats are lowered`, function () {
+	it(`should switch out the holder when its stats are lowered`, () => {
 		battle = common.createBattle([[
-			{species: 'Magikarp', item: 'ejectpack', moves: ['splash']},
-			{species: 'Mew', moves: ['splash']},
+			{ species: 'Magikarp', item: 'ejectpack', moves: ['splash'] },
+			{ species: 'Mew', moves: ['splash'] },
 		], [
-			{species: 'Machop', moves: ['leer']},
+			{ species: 'Machop', moves: ['leer'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.requestState, 'switch');
 	});
 
-	it(`should switch out the holder after Moody's stat drop`, function () {
+	it(`should switch out the holder after Moody's stat drop`, () => {
 		battle = common.createBattle([[
-			{species: 'Glalie', ability: 'moody', item: 'ejectpack', moves: ['protect']},
-			{species: 'Mew', moves: ['protect']},
+			{ species: 'Glalie', ability: 'moody', item: 'ejectpack', moves: ['protect'] },
+			{ species: 'Mew', moves: ['protect'] },
 		], [
-			{species: 'Mew', moves: ['protect']},
+			{ species: 'Mew', moves: ['protect'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.requestState, 'switch');
 	});
 
-	it(`should not switch the holder out if the move was Parting Shot and the opponent could switch`, function () {
+	it(`should not switch the holder out if the move was Parting Shot and the opponent could switch`, () => {
 		battle = common.createBattle([[
-			{species: 'Wynaut', item: 'ejectpack', moves: ['sleeptalk']},
-			{species: 'Mew', moves: ['sleeptalk']},
+			{ species: 'Wynaut', item: 'ejectpack', moves: ['sleeptalk'] },
+			{ species: 'Mew', moves: ['sleeptalk'] },
 		], [
-			{species: 'Mew', moves: ['partingshot']},
-			{species: 'Muk', moves: ['sleeptalk']},
+			{ species: 'Mew', moves: ['partingshot'] },
+			{ species: 'Muk', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.false.equal(battle.p1.requestState, 'switch');
 		assert.equal(battle.p2.requestState, 'switch');
 	});
 
-	it(`should switch out the holder if its stats are lowered during the semi-invulnerable state`, function () {
+	it(`should switch out the holder if its stats are lowered during the semi-invulnerable state`, () => {
 		battle = common.createBattle([[
-			{species: 'Charmeleon', item: 'ejectpack', moves: ['phantomforce']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Charmeleon', item: 'ejectpack', moves: ['phantomforce'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Wynaut', ability: 'noguard', moves: ['growl']},
+			{ species: 'Wynaut', ability: 'noguard', moves: ['growl'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.requestState, 'switch');
 	});
 
-	it(`should switch out the holder if its stats are lowered after using Swallow`, function () {
+	it(`should switch out the holder if its stats are lowered after using Swallow`, () => {
 		battle = common.createBattle([[
-			{species: 'Charmeleon', item: 'ejectpack', moves: ['stockpile', 'swallow']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Charmeleon', item: 'ejectpack', moves: ['stockpile', 'swallow'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Wynaut', moves: ['tackle']},
+			{ species: 'Wynaut', moves: ['tackle'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices('move swallow', 'auto');
@@ -70,11 +70,11 @@ describe(`Eject Pack`, function () {
 
 	it(`should not switch out the user if the user acquired the Eject Pack after the stat drop occurred`, function () {
 		battle = common.createBattle([[
-			{species: 'Klefki', ability: 'magician', moves: ['lowsweep']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Klefki', ability: 'magician', moves: ['lowsweep'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Grimmsnarl', ability: 'pickpocket', item: 'cheriberry', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Grimmsnarl', ability: 'pickpocket', item: 'cheriberry', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert.false.equal(battle.requestState, 'switch');
@@ -82,10 +82,10 @@ describe(`Eject Pack`, function () {
 
 	it(`should wait until after all other end-turn effects have resolved before switching out the holder`, function () {
 		battle = common.createBattle([[
-			{species: 'Glalie', item: 'ejectpack', ability: 'moody', moves: ['icebeam']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Glalie', item: 'ejectpack', ability: 'moody', moves: ['icebeam'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Zygarde', item: 'focussash', ability: 'powerconstruct', moves: ['octolock']},
+			{ species: 'Zygarde', item: 'focussash', ability: 'powerconstruct', moves: ['octolock'] },
 		]]);
 		battle.makeChoices();
 		const log = battle.getDebugLog();
@@ -101,10 +101,10 @@ describe(`Eject Pack`, function () {
 			{species: 'Hydreigon', moves: ['breakingswipe']},
 			{species: 'Horsea', moves: ['sleeptalk']},
 		], [
-			{species: 'Zeraora', item: 'ejectpack', moves: ['sleeptalk']},
-			{species: 'Mew', item: 'ejectbutton', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Zeraora', item: 'ejectpack', moves: ['sleeptalk'] },
+			{ species: 'Mew', item: 'ejectbutton', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices();
@@ -117,10 +117,10 @@ describe(`Eject Pack`, function () {
 			{species: 'Hydreigon', moves: ['leer']},
 			{species: 'Horsea', moves: ['sleeptalk']},
 		], [
-			{species: 'Morelull', item: 'ejectpack', moves: ['sleeptalk']},
-			{species: 'Mew', item: 'ejectpack', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Morelull', item: 'ejectpack', moves: ['sleeptalk'] },
+			{ species: 'Mew', item: 'ejectpack', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		battle.makeChoices();
@@ -128,29 +128,29 @@ describe(`Eject Pack`, function () {
 		assert.species(battle.p2.active[1], 'Wynaut');
 	});
 
-	it(`should not prevent entrance Abilities from resolving during simultaneous switches`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Hydreigon', ability: 'intimidate', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+	it(`should not prevent entrance Abilities from resolving during simultaneous switches`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Hydreigon', ability: 'intimidate', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		], [
-			{species: 'Morelull', ability: 'drought', item: 'ejectpack', moves: ['sleeptalk']},
-			{species: 'Mew', level: 1, ability: 'electricsurge', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Morelull', ability: 'drought', item: 'ejectpack', moves: ['sleeptalk'] },
+			{ species: 'Mew', level: 1, ability: 'electricsurge', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 		assert(battle.field.isWeather('sunnyday'));
 		assert(battle.field.isTerrain('electricterrain'));
 		assert.equal(battle.p2.requestState, 'switch');
 	});
 
-	it.skip(`should not prohibit switchins if a switch has already resolved to a slot replaced by Eject Pack`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'Pheromosa', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
-			{species: 'Incineroar', ability: 'intimidate', moves: ['sleeptalk']},
+	it.skip(`should not prohibit switchins if a switch has already resolved to a slot replaced by Eject Pack`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Pheromosa', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+			{ species: 'Incineroar', ability: 'intimidate', moves: ['sleeptalk'] },
 		], [
-			{species: 'Morelull', item: 'ejectpack', moves: ['sleeptalk']},
-			{species: 'Mew', moves: ['sleeptalk']},
-			{species: 'Wynaut', moves: ['sleeptalk']},
+			{ species: 'Morelull', item: 'ejectpack', moves: ['sleeptalk'] },
+			{ species: 'Mew', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('switch 3, move sleeptalk', 'move sleeptalk, switch 3');
 		battle.makeChoices();
