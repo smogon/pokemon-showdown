@@ -82,8 +82,8 @@ export const commands: Chat.ChatCommands = {
 	// Add maintenance commands here
 };
 
-interface MonCurrent {species_id: ID; wins: number; losses: number; level: number}
-interface MonHistory {level: number; species_id: ID; timestamp: number}
+interface MonCurrent { species_id: ID; wins: number; losses: number; level: number }
+interface MonHistory { level: number; species_id: ID; timestamp: number }
 
 export const pages: Chat.PageTable = {
 	async cgtwinrates(query, user) {
@@ -110,9 +110,9 @@ export const pages: Chat.PageTable = {
 			let sortFn: (val: MonCurrent) => Utils.Comparable;
 
 			if (sorter === 'alphabetical') {
-				sortFn = (data) => [data.species_id];
+				sortFn = data => [data.species_id];
 			} else {
-				sortFn = (data) => [-data.level];
+				sortFn = data => [-data.level];
 			}
 			const mons = Utils.sortBy(statData, sortFn);
 			buf += `<div class="ladder pad"><table><tr><th>Pokemon</th><th>Level</th><th>Wins</th><th>Losses</th>`;
@@ -129,7 +129,7 @@ export const pages: Chat.PageTable = {
 			let speciesID = query.shift();
 			let buf;
 			if (speciesID) {
-				speciesID = getLevelSpeciesID({species: query.shift() || ''} as PokemonSet);
+				speciesID = getLevelSpeciesID({ species: query.shift() || '' } as PokemonSet);
 				const species = Dex.species.get(speciesID);
 				if (!species.exists ||
 					species.isNonstandard || species.isNonstandard === 'Unobtainable' ||

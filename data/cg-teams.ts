@@ -33,7 +33,7 @@
  *   - Tracking type coverage to make it more likely that a moveset can hit every type
  */
 
-import { SQLDatabaseManager } from '../lib/sql';
+import type { SQLDatabaseManager } from '../lib/sql';
 import { Dex, PRNG, SQL } from '../sim';
 import type { EventMethods } from '../sim/dex-conditions';
 import {
@@ -650,10 +650,10 @@ export default class TeamGenerator {
 			(ABILITY_MOVE_TYPE_BONUSES[this.dex.toID(ability)]?.[moveType] || 1)
 		);
 
-		const misslePrimers = ['surf', 'dive'];
-		if (ability === 'Gulp Missle' && misslePrimers.includes(move.id)) {
+		const missilePrimers = ['surf', 'dive'];
+		if (ability === 'Gulp Missile' && missilePrimers.includes(move.id)) {
 			// we want exactly one move that activates gulp missile
-			if (!movesSoFar.find(m => m.id === (misslePrimers.filter(p => p !== move.id)[0]))) {
+			if (!movesSoFar.find(m => m.id === (missilePrimers.find(p => p !== move.id)))) {
 				abilityBonus = 3;
 			} else {
 				abilityBonus = 0.75;
