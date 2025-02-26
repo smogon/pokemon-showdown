@@ -7,7 +7,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Surging Lava",
 		pp: 20,
 		priority: 0,
-		flags: {snatch: 1, metronome: 1},
+		flags: { snatch: 1, metronome: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Morning Sun", target);
@@ -19,7 +19,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "self",
 		type: "Fire",
-		zMove: {effect: 'clearnegativeboost'},
+		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Cool",
 	},
 
@@ -32,7 +32,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Stealth Rock",
 		pp: 20,
 		priority: 0,
-		flags: {reflectable: 1, snatch: 1},
+		flags: { reflectable: 1, snatch: 1 },
 		sideCondition: 'stealthrock',
 		condition: {
 			// this is a side condition
@@ -40,15 +40,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
 			onSwitchIn(pokemon) {
-				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('hazardabsorb') || pokemon.hasAbility('hover')) return;
+				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('magmaticentrance') || pokemon.hasAbility('hover')) return;
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
-				this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+				this.damage(pokemon.maxhp * (2 ** typeMod) / 8);
 			},
 		},
 		secondary: null,
 		target: "foeSide",
 		type: "Rock",
-		zMove: {boost: {def: 1}},
+		zMove: { boost: { def: 1 } },
 		contestType: "Cool",
 	},
 	spikes: {
@@ -59,7 +59,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Spikes",
 		pp: 20,
 		priority: 0,
-		flags: {reflectable: 1, nonsky: 1, mustpressure: 1, snatch: 1},
+		flags: { reflectable: 1, nonsky: 1, mustpressure: 1, snatch: 1 },
 		sideCondition: 'spikes',
 		condition: {
 			// this is a side condition
@@ -74,7 +74,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded()) return;
-				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('hazardabsorb')) return;
+				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('magmaticentrance')) return;
 				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(damageAmounts[this.effectState.layers] * pokemon.maxhp / 24);
 			},
@@ -82,7 +82,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "foeSide",
 		type: "Ground",
-		zMove: {boost: {def: 1}},
+		zMove: { boost: { def: 1 } },
 		contestType: "Clever",
 	},
 };

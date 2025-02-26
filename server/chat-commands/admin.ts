@@ -12,7 +12,7 @@
 
 import * as path from 'path';
 import * as child_process from 'child_process';
-import {FS, Utils, ProcessManager, SQL} from '../../lib';
+import { FS, Utils, ProcessManager, SQL } from '../../lib';
 
 interface ProcessData {
 	cmd: string;
@@ -30,7 +30,7 @@ function bash(command: string, context: Chat.CommandContext, cwd?: string): Prom
 	context.stafflog(`$ ${command}`);
 	if (!cwd) cwd = FS.ROOT_PATH;
 	return new Promise(resolve => {
-		child_process.exec(command, {cwd}, (error, stdout, stderr) => {
+		child_process.exec(command, { cwd }, (error, stdout, stderr) => {
 			let log = `[o] ${stdout}[e] ${stderr}`;
 			if (error) log = `[c] ${error.code}\n${log}`;
 			context.stafflog(log);
@@ -322,7 +322,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('addhtml', null, room);
 		if (!target) return this.parse("/help pminfobox");
 
-		const {targetUser, rest: html} = this.requireUser(target);
+		const { targetUser, rest: html } = this.requireUser(target);
 		this.checkHTML(html);
 		this.checkPMHTML(targetUser);
 
@@ -343,7 +343,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('addhtml', null, room);
 		if (!target) return this.parse("/help " + cmd);
 
-		const {targetUser, rest: html} = this.requireUser(target);
+		const { targetUser, rest: html } = this.requireUser(target);
 		this.checkHTML(html);
 		this.checkPMHTML(targetUser);
 
@@ -458,7 +458,7 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	highlighthtmlpage(target, room, user) {
-		const {targetUser, rest} = this.requireUser(target);
+		const { targetUser, rest } = this.requireUser(target);
 		let [pageid, title, highlight] = Utils.splitFirst(rest, ',', 2);
 
 		pageid = `${user.id}-${toID(pageid)}`;
@@ -530,14 +530,13 @@ export const commands: Chat.ChatCommands = {
 				return errors.push(`${targetUser.name} [locked]`);
 			}
 
-			if (!(targetUser.id in room!.users)) {
+			if (!(targetUser.id in room.users)) {
 				return errors.push(`${targetUser.name} [not in room]`);
 			}
 
 			successes.push(targetUser.name);
 			targetUser.sendTo(room, `|${messageType}|${html}`);
 		});
-
 
 		if (successes.length) this.sendReply(`Sent private HTML to ${Chat.toListString(successes)}.`);
 		if (errors.length) this.errorReply(`Unable to send private HTML to ${Chat.toListString(errors)}.`);
@@ -551,12 +550,12 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	botmsg(target, room, user, connection) {
-		if (!target || !target.includes(',')) {
+		if (!target?.includes(',')) {
 			return this.parse('/help botmsg');
 		}
 		this.checkRecursion();
 
-		let {targetUser, rest: message} = this.requireUser(target);
+		let { targetUser, rest: message } = this.requireUser(target);
 
 		const auth = this.room ? this.room.auth : Users.globalAuth;
 		if (!['*', '#'].includes(auth.get(targetUser))) {
@@ -589,7 +588,7 @@ export const commands: Chat.ChatCommands = {
 		const units = ["B", "KiB", "MiB", "GiB", "TiB"];
 		const results = resultNums.map(num => {
 			const unitIndex = Math.floor(Math.log2(num) / 10); // 2^10 base log
-			return `${(num / Math.pow(2, 10 * unitIndex)).toFixed(2)} ${units[unitIndex]}`;
+			return `${(num / (2 ** (10 * unitIndex))).toFixed(2)} ${units[unitIndex]}`;
 		});
 		this.sendReply(`||[Main process] RSS: ${results[0]}, Heap: ${results[1]} / ${results[2]}`);
 	},
@@ -615,7 +614,7 @@ export const commands: Chat.ChatCommands = {
 
 		target = toID(target);
 		try {
-			Utils.clearRequireCache({exclude: ['/lib/process-manager']});
+			Utils.clearRequireCache({ exclude: ['/lib/process-manager'] });
 			if (target === 'all') {
 				if (lock['all']) {
 					return this.errorReply(`Hot-patching all has been disabled by ${lock['all'].by} (${lock['all'].reason})`);
@@ -671,7 +670,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply('Hotpatching processmanager prototypes...');
 
 				// keep references
-				const cache = {...require.cache};
+				const cache = { ...require.cache };
 				Utils.clearRequireCache();
 				const newPM = require('../../lib/process-manager');
 				require.cache = cache;
@@ -826,7 +825,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply("Hotpatching modlog...");
 
 				void Rooms.Modlog.database.destroy();
-				const {mainModlog} = require('../modlog');
+				const { mainModlog } = require('../modlog');
 				if (mainModlog.readyPromise) {
 					this.sendReply("Waiting for the new SQLite database to be ready...");
 					await mainModlog.readyPromise;
@@ -928,14 +927,14 @@ export const commands: Chat.ChatCommands = {
 
 		const cwd = FS.ROOT_PATH;
 		await new Promise<void>(resolve => {
-			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', {cwd}, (err, stdout) => {
+			const child = child_process.exec('ps -o pid,%cpu,time,rss,command', { cwd }, (err, stdout) => {
 				if (err) throw err;
 				const rows = stdout.split('\n').slice(1); // first line is the table header
 				for (const row of rows) {
 					if (!row.trim()) continue;
 					const [pid, cpu, time, ram, ...rest] = row.split(' ').filter(Boolean);
 					if (pid === `${child.pid}`) continue; // ignore this process
-					const entry: ProcessData = {cmd: rest.join(' ')};
+					const entry: ProcessData = { cmd: rest.join(' ') };
 					// at the point of 0:00.[num], it's in so few seconds we don't care, so
 					// we don't need to clutter the display
 					if (time && !time.startsWith('0:00')) {
@@ -945,7 +944,7 @@ export const commands: Chat.ChatCommands = {
 					const ramNum = parseInt(ram);
 					if (!isNaN(ramNum)) {
 						const unitIndex = Math.floor(Math.log2(ramNum) / 10); // 2^10 base log
-						entry.ram = `${(ramNum / Math.pow(2, 10 * unitIndex)).toFixed(2)} ${ramUnits[unitIndex]}`;
+						entry.ram = `${(ramNum / (2 ** (10 * unitIndex))).toFixed(2)} ${ramUnits[unitIndex]}`;
 					}
 					processes.set(pid, entry);
 				}
@@ -1030,7 +1029,7 @@ export const commands: Chat.ChatCommands = {
 				)).join('') +
 				`\t}},\n`
 			)).join('') +
-		`};\n`);
+			`};\n`);
 		this.sendReply("learnsets.js saved.");
 	},
 	savelearnsetshelp: [
@@ -1054,7 +1053,7 @@ export const commands: Chat.ChatCommands = {
 		if (!parsed) {
 			return this.errorReply(`Command "/${target}" is in an invalid format.`);
 		}
-		const {handler, fullCmd} = parsed;
+		const { handler, fullCmd } = parsed;
 		if (!handler) {
 			return this.errorReply(`Command "/${target}" not found.`);
 		}
@@ -1368,7 +1367,6 @@ export const commands: Chat.ChatCommands = {
 		target = toID(target);
 		Monitor.updateServerLock = true;
 
-
 		let success = true;
 		if (target === 'private') {
 			if (!validPrivateCodePath) {
@@ -1403,7 +1401,7 @@ export const commands: Chat.ChatCommands = {
 				['staff', 'development'],
 				`|c|${user.getIdentity()}|/log ${user.name} used /updateloginserver - but something failed while updating.`
 			);
-			return this.errorReply(err.message + '\n' + err.stack);
+			return this.errorReply(`${err.message}\n${err.stack}`);
 		}
 		if (!result) return this.errorReply('No result received.');
 		this.stafflog(`[o] ${result.success || ""} [e] ${result.actionerror || ""}`);
@@ -1436,7 +1434,7 @@ export const commands: Chat.ChatCommands = {
 				['staff', 'development'],
 				`|c|${user.getIdentity()}|/log ${user.name} used /updateclient - but something failed while updating.`
 			);
-			return this.errorReply(err.message + '\n' + err.stack);
+			return this.errorReply(`${err.message}\n${err.stack}`);
 		}
 		if (!result) return this.errorReply('No result received.');
 		this.stafflog(`[o] ${result.success || ""} [e] ${result.actionerror || ""}`);
@@ -1493,8 +1491,8 @@ export const commands: Chat.ChatCommands = {
 		}
 		const generateHTML = (direction: string, contents: string) => (
 			`<table border="0" cellspacing="0" cellpadding="0"><tr><td valign="top">` +
-				Utils.escapeHTML(direction).repeat(2) +
-				`&nbsp;</td><td>${Chat.getReadmoreCodeBlock(contents)}</td></tr><table>`
+			Utils.escapeHTML(direction).repeat(2) +
+			`&nbsp;</td><td>${Chat.getReadmoreCodeBlock(contents)}</td></tr><table>`
 		);
 		this.sendReply(`|html|${generateHTML('>', target)}`);
 		logRoom?.roomlog(`>> ${target}`);
@@ -1518,7 +1516,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			logRoom?.roomlog(`<< ${result}`);
 		} catch (e: any) {
-			const message = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
+			const message = `${e.stack}`.replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
 			const command = uhtmlId ? `|uhtmlchange|${uhtmlId}|` : '|html|';
 			this.sendReply(`${command}${generateHTML('<', message)}`);
 			logRoom?.roomlog(`<< ${message}`);
@@ -1550,7 +1548,7 @@ export const commands: Chat.ChatCommands = {
 		const database = SQL(module, {
 			file: `./databases/${db}.db`,
 			onError(err) {
-				return {err: err.message, stack: err.stack};
+				return { err: err.message, stack: err.stack };
 			},
 		});
 		function formatResult(result: any[] | string) {
@@ -1594,10 +1592,10 @@ export const commands: Chat.ChatCommands = {
 					if ((result as any).err) parseError(result as any);
 					result = Utils.visualize(result);
 				} catch (e: any) {
-					result = ('' + e.stack).replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
+					result = `${e.stack}`.replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
 				}
 			} else {
-				result = ('' + err.stack).replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
+				result = `${err.stack}`.replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
 			}
 		}
 		await database.destroy();
