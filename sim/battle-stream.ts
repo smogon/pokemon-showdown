@@ -12,6 +12,7 @@
 import { Streams, Utils } from '../lib';
 import { Teams } from './teams';
 import { Battle, extractChannelMessages } from './battle';
+import type { ChoiceRequest } from './side';
 
 /**
  * Like string.split(delimiter), but only recognizes the first `limit`
@@ -348,7 +349,7 @@ export abstract class BattlePlayer {
 		this.log.push(line);
 	}
 
-	abstract receiveRequest(request: AnyObject): void;
+	abstract receiveRequest(request: ChoiceRequest): void;
 
 	receiveError(error: Error) {
 		throw error;
