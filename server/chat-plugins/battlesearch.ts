@@ -1,9 +1,9 @@
 /**
  * Battle search - handles searching battle logs.
  */
-import {FS, Utils, ProcessManager, Repl} from '../../lib';
+import { FS, Utils, ProcessManager, Repl } from '../../lib';
 
-import {checkRipgrepAvailability, Config} from '../config-loader';
+import { checkRipgrepAvailability, Config } from '../config-loader';
 
 import * as path from 'path';
 import * as child_process from 'child_process';
@@ -18,19 +18,19 @@ interface BattleOutcome {
 
 interface BattleSearchResults {
 	totalBattles: number;
-	/** Total battle outcomes. Null when only searching for one userid.*/
+	/** Total battle outcomes. Null when only searching for one userid. */
 	totalOutcomes: BattleOutcome[] | null;
-	totalWins: {[k: string]: number};
-	totalLosses: {[k: string]: number};
+	totalWins: { [k: string]: number };
+	totalLosses: { [k: string]: number };
 	totalTies: number;
-	timesBattled: {[k: string]: number};
+	timesBattled: { [k: string]: number };
 }
 
 const MAX_BATTLESEARCH_PROCESSES = 1;
 export async function runBattleSearch(userids: ID[], month: string, tierid: ID, turnLimit?: number) {
 	const useRipgrep = await checkRipgrepAvailability();
 	const pathString = `${month}/${tierid}/`;
-	const results: {[k: string]: BattleSearchResults} = {};
+	const results: { [k: string]: BattleSearchResults } = {};
 	let files = [];
 	try {
 		files = await Monitor.logPath(pathString).readdir();
@@ -111,7 +111,7 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 
 			const outcomes = results[day].totalOutcomes;
 			if (outcomes) {
-				outcomes.push({won: winnerid, lost: loser, turns: data.turns});
+				outcomes.push({ won: winnerid, lost: loser, turns: data.turns });
 			}
 			// we only want foe data for single-userid searches
 			const foe = userids.length > 1 ? null : userid === toID(data.p1) ? toID(data.p2) : toID(data.p1);
@@ -167,7 +167,7 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 
 			const outcomes = results[day].totalOutcomes;
 			if (outcomes) {
-				outcomes.push({won: winnerid, lost: loser, turns: data.turns});
+				outcomes.push({ won: winnerid, lost: loser, turns: data.turns });
 			}
 
 			// we don't want foe data if we're searching for 2 userids
@@ -182,7 +182,7 @@ export async function runBattleSearch(userids: ID[], month: string, tierid: ID, 
 }
 
 function buildResults(
-	data: {[k: string]: BattleSearchResults}, userids: ID[],
+	data: { [k: string]: BattleSearchResults }, userids: ID[],
 	month: string, tierid: ID, turnLimit?: number
 ) {
 	let buf = `>view-battlesearch-${userids.join('-')}--${turnLimit}--${month}--${tierid}--confirm\n|init|html\n|title|[Battle Search][${userids.join('-')}][${tierid}][${month}]\n`;
@@ -201,7 +201,7 @@ function buildResults(
 		buf += `<table><tbody><tr><h3 style="margin: 5px auto">Full summary</h3></tr>`;
 		buf += `<tr><th>Won</th><th>Lost</th><th>Turns</th></tr>`;
 		for (const battle of outcomes) {
-			const {won, lost, turns} = battle;
+			const { won, lost, turns } = battle;
 			buf += `<tr><td>${won}</td><td>${lost}</td><td>${turns}</td></tr>`;
 		}
 	}
@@ -209,7 +209,7 @@ function buildResults(
 	for (const day in data) {
 		const dayStats = data[day];
 		buf += `<p style="text-align:left">`;
-		const {totalWins, totalLosses} = dayStats;
+		const { totalWins, totalLosses } = dayStats;
 		buf += `<table style=""><tbody><tr><th colspan="2"><h3 style="margin: 5px auto">${day}</h3>`;
 		buf += `</th></tr><tr><th>Category</th><th>Number</th></tr>`;
 		buf += `<tr><td>Total Battles</td><td>${dayStats.totalBattles}</td></tr>`;
@@ -245,7 +245,7 @@ async function rustBattleSearch(
 	if (!targetUser) {
 		throw new Chat.ErrorMessage(`No user specified.`);
 	}
-	const {connection, user} = context;
+	const { connection, user } = context;
 	const currentDayOfMonth = (new Date()).getDate();
 	if (days < 1 || days > 15) {
 		return context.errorReply(`Days must be between 1 and 15. To search longer ranges, use psbattletools manually on sim3.`);
@@ -253,9 +253,9 @@ async function rustBattleSearch(
 
 	try {
 		await ProcessManager.exec(`psbattletools --version`, {
-			env: {PATH: `${process.env.PATH}:${process.env.HOME}/.cargo/bin`},
+			env: { PATH: `${process.env.PATH}:${process.env.HOME}/.cargo/bin` },
 		});
-	} catch (e) {
+	} catch {
 		return context.errorReply(
 			`You must install <a href="https://crates.io/crates/psbattletools">psbattletools</a> to use the alternate battlesearch.`
 		);
@@ -293,7 +293,7 @@ async function rustBattleSearch(
 	const search = child_process.spawn(
 		'psbattletools',
 		['--threads', '3', 'search', targetUser, ...directories],
-		{env: {PATH: `${process.env.PATH}:${process.env.HOME}/.cargo/bin`}}
+		{ env: { PATH: `${process.env.PATH}:${process.env.HOME}/.cargo/bin` } }
 	);
 	search.stdout.on('data', data => {
 		buf = buf.replace('</div>', `${Chat.formatText(data.toString()).replace(/\n/g, '<br />')}</div>`);
@@ -313,7 +313,7 @@ async function fsBattleSearch(
 	const user = connection.user;
 	if (!user.can('forcewin')) return connection.popup(`/battlesearch - Access Denied`);
 
-	const response = await PM.query({userids, turnLimit, month, tierid});
+	const response = await PM.query({ userids, turnLimit, month, tierid });
 	connection.send(buildResults(response, userids as ID[], month, tierid, turnLimit));
 }
 
@@ -343,7 +343,7 @@ export const pages: Chat.PageTable = {
 
 		const months = Utils.sortBy(
 			(await Monitor.logPath('/').readdir()).filter(f => f.length === 7 && f.includes('-')),
-			name => ({reverse: name})
+			name => ({ reverse: name })
 		);
 		if (!month) {
 			buf += `<p>Please select a month:</p><ul style="list-style: none; display: block; padding: 0">`;
@@ -455,7 +455,7 @@ export const commands: Chat.ChatCommands = {
  *********************************************************/
 
 export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(module, async data => {
-	const {userids, turnLimit, month, tierid} = data;
+	const { userids, turnLimit, month, tierid } = data;
 	const start = Date.now();
 	try {
 		const result = await runBattleSearch(userids, month, tierid, turnLimit);

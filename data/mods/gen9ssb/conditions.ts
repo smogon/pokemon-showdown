@@ -1,8 +1,8 @@
-import {ssbSets} from "./random-teams";
-import {changeSet, getName, enemyStaff} from './scripts';
-import {ModdedConditionData} from "../../../sim/dex-conditions";
+import { ssbSets } from "./random-teams";
+import { changeSet, getName, enemyStaff } from './scripts';
+import type { ModdedConditionData } from "../../../sim/dex-conditions";
 
-export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: string}} = {
+export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: string } } = {
 	/*
 	// Example:
 	userid: {
@@ -496,7 +496,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		shortDesc: "This Pokemon's Defense is raised 2 stages if hit by a Fire move; Fire immunity.",
 		onTryHit(target, source, move) {
 			if (!target.illusion && target !== source && move.type === 'Fire') {
-				if (!this.boost({def: 2})) {
+				if (!this.boost({ def: 2 })) {
 					this.add('-immune', target, '[from] ability: Well-Baked Body');
 				}
 				return null;
@@ -619,7 +619,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			if (target.illusion) return;
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', '[of] ' + target);
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', `[of] ${target}`);
 			}
 		},
 	},
@@ -2667,7 +2667,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			if (pokemon.illusion) return;
 			pokemon.abilityState.gluttony = true;
 			this.add('-activate', pokemon, 'ability: Nutrient Boost');
-			this.boost({def: 1, spd: 1}, pokemon);
+			this.boost({ def: 1, spd: 1 }, pokemon);
 		},
 		onSwitchOut() {
 			this.add(`c:|${getName('WarriorGallade')}|amidst this tactical retreat, you didn't think i forgot about the pokeradar, did you? you can bet that my return with even more questions will be __eventful__ :3`);
@@ -3069,7 +3069,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onFieldStart(battle, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'StormSurge', '[from] ability: ' + effect.name, '[of] ' + source);
+				this.add('-weather', 'StormSurge', '[from] ability: ' + effect.name, `[of] ${source}`);
 			} else {
 				this.add('-weather', 'StormSurge');
 			}
@@ -3107,7 +3107,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'DesertedDunes', '[from] ability: ' + effect.name, '[of] ' + source);
+			this.add('-weather', 'DesertedDunes', '[from] ability: ' + effect.name, `[of] ${source}`);
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
@@ -3179,16 +3179,16 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			}
 
 			if (effect.name === 'Cute Charm') {
-				this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] ' + source);
+				this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', `[of] ${source}`);
 			} else if (effect.name === 'Destiny Knot') {
-				this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', '[of] ' + source);
+				this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', `[of] ${source}`);
 			} else {
 				this.add('-start', pokemon, 'Attract');
 			}
 		},
 		onUpdate(pokemon) {
 			if (this.effectState.source && !this.effectState.source.isActive && pokemon.volatiles['attract']) {
-				this.debug('Removing Attract volatile on ' + pokemon);
+				this.debug(`Removing Attract volatile on ${pokemon}`);
 				pokemon.removeVolatile('attract');
 			}
 		},
@@ -3329,13 +3329,13 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			this.activeTarget = pokemon;
 			const damage = this.actions.getConfusionDamage(pokemon, 40);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
-			const activeMove = {id: this.toID('confused'), effectType: 'Move', type: '???'};
+			const activeMove = { id: this.toID('confused'), effectType: 'Move', type: '???' };
 			this.damage(damage, pokemon, pokemon, activeMove as ActiveMove);
 			if (this.effectState.sourceEffect?.id === 'cringedadjoke') {
 				for (const target of this.getAllActive()) {
 					if (target === pokemon) continue;
 					if (target.volatiles['cringedadjoke']) {
-						this.boost({atk: 1, def: 1}, target);
+						this.boost({ atk: 1, def: 1 }, target);
 					}
 				}
 			}
