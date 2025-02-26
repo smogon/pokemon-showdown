@@ -3314,11 +3314,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const ability = target.getAbility();
 			if (ability.flags['noreceiver'] || ability.id === 'noability') return;
 			if (pokemon.setAbility(ability)) {
-				this.add('-ability', pokemon, ability, '[from] ability: Power of Alchemy', '[of] ' + target);
+				this.add('-ability', pokemon, ability, '[from] ability: Power of Alchemy', `[of] ${target}`);
 				const handlers: any[] = [];
 				for (const event of ['AllyFaint', 'AnyFaint']) {
 					const callbackName = 'on' + event;
-					// @ts-ignore - dynamic lookup
+					// @ts-expect-error dynamic lookup
 					const callback = ability[callbackName];
 					if (callback !== undefined) {
 						handlers.push(this.resolvePriority({
@@ -3716,11 +3716,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const ability = target.getAbility();
 			if (ability.flags['noreceiver'] || ability.id === 'noability') return;
 			if (pokemon.setAbility(ability)) {
-				this.add('-ability', pokemon, ability, '[from] ability: Receiver', '[of] ' + target);
+				this.add('-ability', pokemon, ability, '[from] ability: Receiver', `[of] ${target}`);
 				const handlers: any[] = [];
 				for (const event of ['AllyFaint', 'AnyFaint']) {
 					const callbackName = 'on' + event;
-					// @ts-ignore - dynamic lookup
+					// @ts-expect-error dynamic lookup
 					const callback = ability[callbackName];
 					if (callback !== undefined) {
 						handlers.push(this.resolvePriority({
