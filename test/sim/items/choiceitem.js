@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe("Choice Items", function () {
-	afterEach(function () {
+describe("Choice Items", () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it("should restore the same Choice lock after dynamax ends", function () {
+	it("should restore the same Choice lock after dynamax ends", () => {
 		battle = common.gen(8).createBattle([[
-			{species: 'gyarados', moves: ['sleeptalk', 'splash'], item: 'choicescarf'},
+			{ species: 'gyarados', moves: ['sleeptalk', 'splash'], item: 'choicescarf' },
 		], [
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('move 1', 'auto');
 		battle.makeChoices('move 1 dynamax', 'auto');
