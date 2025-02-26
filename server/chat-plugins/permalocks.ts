@@ -273,7 +273,7 @@ export const Nominations = new class {
 			for (const [i, { userid, banstate }] of matches.results.entries()) {
 				buf += `- ${userid}: `;
 				buf += `<form data-submitsend="/perma standing ${userid},{standing}">`;
-				buf += this.standingDropdown("standing", banstate + "");
+				buf += this.standingDropdown("standing", `${banstate}`);
 				buf += ` <button class="button notifying" type="submit">Change standing</button></form>`;
 				if (matches.results[i + 1]) buf += `<br />`;
 			}

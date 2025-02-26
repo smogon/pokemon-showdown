@@ -970,7 +970,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 				continue;
 			}
 
-			hosts.push({ id: '' + user.id, name: '' + user.name });
+			hosts.push({ id: `${user.id}`, name: `${user.name}` });
 		}
 		return hosts;
 	}
@@ -1539,8 +1539,8 @@ const ScavengerCommands: Chat.ChatCommands = {
 
 		if (game.staffHostId === user.id) return this.errorReply('You already have staff permissions for this hunt.');
 
-		game.staffHostId = '' + user.id;
-		game.staffHostName = '' + user.name;
+		game.staffHostId = `${user.id}`;
+		game.staffHostName = `${user.name}`;
 
 		// clear user's game progress and prevent user from ever entering again
 		game.eliminate(user.id);

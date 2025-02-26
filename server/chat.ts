@@ -1340,7 +1340,7 @@ export class CommandContext extends MessageContext {
 	 * `BattleLog.sanitizeHTML`.
 	 */
 	checkHTML(htmlContent: string | null) {
-		htmlContent = ('' + (htmlContent || '')).trim();
+		htmlContent = `${htmlContent || ''}`.trim();
 		if (!htmlContent) return '';
 		if (/>here.?</i.test(htmlContent) || /click here/i.test(htmlContent)) {
 			throw new Chat.ErrorMessage('Do not use "click here" – See [[Design standard #2 <https://github.com/smogon/pokemon-showdown/blob/master/CONTRIBUTING.md#design-standards>]]');
@@ -2284,7 +2284,7 @@ export const Chat = new class {
 	/**
 	 * Returns a timestamp in the form {yyyy}-{MM}-{dd} {hh}:{mm}:{ss}.
 	 *
-	 * options.human = true will reports hours human-readable
+	 * options.human = true will use a 12-hour clock
 	 */
 	toTimestamp(date: Date, options: { human?: boolean } = {}) {
 		const human = options.human;
@@ -2296,8 +2296,8 @@ export const Chat = new class {
 			parts.push(parts[3] >= 12 ? 'pm' : 'am');
 			parts[3] = parts[3] % 12 || 12;
 		}
-		parts = parts.map(val => val < 10 ? '0' + val : '' + val);
-		return parts.slice(0, 3).join("-") + " " + parts.slice(3, human ? 5 : 6).join(":") + (human ? "" + parts[6] : "");
+		parts = parts.map(val => `${val}`.padStart(2, '0'));
+		return parts.slice(0, 3).join("-") + " " + parts.slice(3, 6).join(":") + (parts[6] || '');
 	}
 
 	/**
@@ -2388,7 +2388,7 @@ export const Chat = new class {
 	 * @param str string to block
 	 */
 	getReadmoreBlock(str: string, isCode?: boolean, cutoff = 3) {
-		const params = str.slice(+str.startsWith('\n')).split('\n');
+		const params = str.slice(str.startsWith('\n') ? 1 : 0).split('\n');
 		const output: string[] = [];
 		for (const [i, param] of params.entries()) {
 			if (output.length < cutoff && param.length > 80 && cutoff > 2) cutoff--;
