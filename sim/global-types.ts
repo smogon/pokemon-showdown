@@ -145,10 +145,6 @@ type SideID = 'p1' | 'p2' | 'p3' | 'p4';
 type SpreadMoveTargets = (Pokemon | false | null)[];
 type SpreadMoveDamage = (number | boolean | undefined)[];
 type ZMoveOptions = ({ move: string, target: MoveTarget } | null)[];
-interface DynamaxOptions {
-	maxMoves: ({ move: string, target: MoveTarget, disabled?: boolean })[];
-	gigantamax?: string;
-}
 
 interface BattleScriptsData {
 	gen: number;
@@ -164,7 +160,7 @@ interface ModdedBattleActions {
 	canTerastallize?: (this: BattleActions, pokemon: Pokemon) => string | null;
 	canUltraBurst?: (this: BattleActions, pokemon: Pokemon) => string | null;
 	canZMove?: (this: BattleActions, pokemon: Pokemon) => ZMoveOptions | void;
-	canDynamax?: (this: BattleActions, pokemon: Pokemon, skipChecks?: boolean) => DynamaxOptions | void;
+	canDynamax?: (this: BattleActions, pokemon: Pokemon, skipChecks?: boolean) => import('./side').DynamaxOptions | void;
 	forceSwitch?: (
 		this: BattleActions, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon,
 		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean

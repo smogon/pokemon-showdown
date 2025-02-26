@@ -19,7 +19,7 @@ import { Teams } from './teams';
 import { Field } from './field';
 import { Pokemon, type EffectState, RESTORATIVE_BERRIES } from './pokemon';
 import { PRNG, type PRNGSeed } from './prng';
-import { Side } from './side';
+import { type MoveRequest, type ChoiceRequest, Side } from './side';
 import { State } from './state';
 import { BattleQueue, type Action } from './battle-queue';
 import { BattleActions } from './battle-actions';
@@ -1339,7 +1339,7 @@ export class Battle {
 
 	getRequests(type: RequestState) {
 		// default to no request
-		const requests: AnyObject[] = Array(this.sides.length).fill(null);
+		const requests: ChoiceRequest[] = Array(this.sides.length).fill(null);
 
 		switch (type) {
 		case 'switch':
@@ -1368,7 +1368,7 @@ export class Battle {
 				const activeData = side.active.map(pokemon => pokemon?.getMoveRequestData());
 				requests[i] = { active: activeData, side: side.getRequestData() };
 				if (side.allySide) {
-					requests[i].ally = side.allySide.getRequestData(true);
+					(requests[i] as MoveRequest).ally = side.allySide.getRequestData(true);
 				}
 			}
 			break;
