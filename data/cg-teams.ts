@@ -95,7 +95,7 @@ async function updateLevels(database: SQL.DatabaseManager) {
 	const updateHistory = await database.prepare(
 		`INSERT INTO gen9_historical_levels (level, species_id, timestamp) VALUES (?, ?, ${Date.now()})`
 	);
-	const data: {species_id: ID, wins: number, losses: number, level: number}[] = await database.all(
+	const data: { species_id: ID, wins: number, losses: number, level: number }[] = await database.all(
 		'SELECT species_id, wins, losses, level FROM gen9computergeneratedteams'
 	);
 	for (let { species_id, wins, losses, level } of data) {
