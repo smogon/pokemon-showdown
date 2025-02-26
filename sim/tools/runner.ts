@@ -163,7 +163,7 @@ class RawBattleStream extends BattleStreams.BattleStream {
 		this.rawInputLog = [];
 	}
 
-	_write(message: string) {
+	override _write(message: string) {
 		if (this.input) console.log(message);
 		this.rawInputLog.push(message);
 		super._write(message);

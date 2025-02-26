@@ -485,21 +485,21 @@ export class Trivia extends Rooms.RoomGame<TriviaPlayer> {
 		return new TriviaPlayer(user, this);
 	}
 
-	destroy() {
+	override destroy() {
 		if (this.phaseTimeout) clearTimeout(this.phaseTimeout);
 		this.phaseTimeout = null;
 		this.kickedUsers.clear();
 		super.destroy();
 	}
 
-	onConnect(user: User) {
+	override onConnect(user: User) {
 		const player = this.playerTable[user.id];
 		if (!player?.isAbsent) return false;
 
 		player.toggleAbsence();
 	}
 
-	onLeave(user: User, oldUserID: ID) {
+	override onLeave(user: User, oldUserID: ID) {
 		// The user cannot participate, but their score should be kept
 		// regardless in cases of disconnects.
 		const player = this.playerTable[oldUserID || user.id];
@@ -886,7 +886,7 @@ const hrtimeToNanoseconds = (hrtime: number[]) => hrtime[0] * 1e9 + hrtime[1];
  * correctly.
  */
 export class FirstModeTrivia extends Trivia {
-	answerQuestion(answer: string, user: User) {
+	override answerQuestion(answer: string, user: User) {
 		const player = this.playerTable[user.id];
 		if (!player) throw new Chat.ErrorMessage(this.room.tr`You are not a player in the current trivia game.`);
 		if (this.isPaused) throw new Chat.ErrorMessage(this.room.tr`The trivia game is paused.`);
@@ -923,11 +923,11 @@ export class FirstModeTrivia extends Trivia {
 		this.setAskTimeout();
 	}
 
-	calculatePoints() {
+	override calculatePoints() {
 		return 5;
 	}
 
-	tallyAnswers(): void {
+	override tallyAnswers(): void {
 		if (this.isPaused) return;
 		this.phase = INTERMISSION_PHASE;
 
@@ -957,7 +957,7 @@ export class FirstModeTrivia extends Trivia {
  * depending on how quickly they answer the question.
  */
 export class TimerModeTrivia extends Trivia {
-	answerQuestion(answer: string, user: User) {
+	override answerQuestion(answer: string, user: User) {
 		const player = this.playerTable[user.id];
 		if (!player) throw new Chat.ErrorMessage(this.room.tr`You are not a player in the current trivia game.`);
 		if (this.isPaused) throw new Chat.ErrorMessage(this.room.tr`The trivia game is paused.`);
@@ -973,11 +973,11 @@ export class TimerModeTrivia extends Trivia {
 	 * The difference between the time scoring began and the time the question
 	 * was asked, in nanoseconds.
 	 */
-	calculatePoints(diff: number, totalDiff: number) {
+	override calculatePoints(diff: number, totalDiff: number) {
 		return Math.floor(6 - 5 * diff / totalDiff);
 	}
 
-	tallyAnswers() {
+	override tallyAnswers() {
 		if (this.isPaused) return;
 		this.phase = INTERMISSION_PHASE;
 
@@ -1062,7 +1062,7 @@ export class TimerModeTrivia extends Trivia {
  * better).
  */
 export class NumberModeTrivia extends Trivia {
-	answerQuestion(answer: string, user: User) {
+	override answerQuestion(answer: string, user: User) {
 		const player = this.playerTable[user.id];
 		if (!player) throw new Chat.ErrorMessage(this.room.tr`You are not a player in the current trivia game.`);
 		if (this.isPaused) throw new Chat.ErrorMessage(this.room.tr`The trivia game is paused.`);
@@ -1072,15 +1072,15 @@ export class NumberModeTrivia extends Trivia {
 		player.setAnswer(answer, isCorrect);
 	}
 
-	calculatePoints(correctPlayers: number) {
+	override calculatePoints(correctPlayers: number) {
 		return correctPlayers && (6 - Math.floor(5 * correctPlayers / this.playerCount));
 	}
 
-	getRoundLength() {
+	override getRoundLength() {
 		return 6 * 1000;
 	}
 
-	tallyAnswers() {
+	override tallyAnswers() {
 		if (this.isPaused) return;
 		this.phase = INTERMISSION_PHASE;
 
@@ -1137,7 +1137,7 @@ export class NumberModeTrivia extends Trivia {
  * Triumvirate mode rewards points to the top three users to answer the question correctly.
  */
 export class TriumvirateModeTrivia extends Trivia {
-	answerQuestion(answer: string, user: User) {
+	override answerQuestion(answer: string, user: User) {
 		const player = this.playerTable[user.id];
 		if (!player) throw new Chat.ErrorMessage(this.room.tr`You are not a player in the current trivia game.`);
 		if (this.isPaused) throw new Chat.ErrorMessage(this.room.tr`The trivia game is paused.`);
@@ -1150,11 +1150,11 @@ export class TriumvirateModeTrivia extends Trivia {
 		}
 	}
 
-	calculatePoints(answerNumber: number) {
+	override calculatePoints(answerNumber: number) {
 		return 5 - answerNumber * 2; // 5 points to 1st, 3 points to 2nd, 1 point to 1st
 	}
 
-	tallyAnswers() {
+	override tallyAnswers() {
 		if (this.isPaused) return;
 		this.phase = INTERMISSION_PHASE;
 		const correctPlayers = Object.values(this.playerTable).filter(p => p.isCorrect);
@@ -1433,9 +1433,9 @@ export class MastermindRound extends FirstModeTrivia {
 		this.start();
 	}
 
-	init() {
+	override init() {
 	}
-	start() {
+	override start() {
 		const player = Object.values(this.playerTable)[0];
 		const name = Utils.escapeHTML(player.name);
 		broadcast(this.room, this.room.tr`A Mastermind round in the ${this.game.category} category for ${name} is starting!`);
@@ -1447,17 +1447,17 @@ export class MastermindRound extends FirstModeTrivia {
 		this.setPhaseTimeout(() => void this.askQuestion(), MASTERMIND_INTERMISSION_INTERVAL);
 	}
 
-	win(): Promise<void> {
+	override win(): Promise<void> {
 		if (this.phaseTimeout) clearTimeout(this.phaseTimeout);
 		this.phaseTimeout = null;
 		return Promise.resolve();
 	}
 
-	addTriviaPlayer(user: User): string | undefined {
+	override addTriviaPlayer(user: User): string | undefined {
 		throw new Chat.ErrorMessage(`This is a round of Mastermind; to join the overall game of Mastermind, use /mm join`);
 	}
 
-	setTallyTimeout() {
+	override setTallyTimeout() {
 		// Players must use /mastermind pass to pass on a question
 	}
 
@@ -1465,11 +1465,11 @@ export class MastermindRound extends FirstModeTrivia {
 		this.tallyAnswers();
 	}
 
-	setAskTimeout() {
+	override setAskTimeout() {
 		this.setPhaseTimeout(() => void this.askQuestion(), MASTERMIND_INTERMISSION_INTERVAL);
 	}
 
-	destroy() {
+	override destroy() {
 		super.destroy();
 	}
 }
@@ -1492,7 +1492,7 @@ export class MastermindFinals extends MastermindRound {
 		this.setPhaseTimeout(() => void this.askQuestion(), MASTERMIND_FINALS_START_TIMEOUT);
 	}
 
-	async win() {
+	override async win() {
 		await super.win();
 		const points = new Map<string, number>();
 		for (const id in this.playerTable) {
@@ -1500,9 +1500,9 @@ export class MastermindFinals extends MastermindRound {
 		}
 	}
 
-	setTallyTimeout = FirstModeTrivia.prototype.setTallyTimeout;
+	override setTallyTimeout = FirstModeTrivia.prototype.setTallyTimeout;
 
-	pass() {
+	override pass() {
 		throw new Chat.ErrorMessage(this.room.tr`You cannot pass in the finals.`);
 	}
 }

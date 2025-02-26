@@ -617,7 +617,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	onChatMessage(message: string, user: User) {
+	override onChatMessage(message: string, user: User) {
 		if (this.state !== 'bid' || this.type !== 'blind') return;
 		if (message.startsWith('.')) message = message.slice(1);
 		if (Number(message.replace(',', '.'))) {
@@ -626,7 +626,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	onLogMessage(message: string, user: User) {
+	override onLogMessage(message: string, user: User) {
 		if (this.state !== 'bid' || this.type === 'blind') return;
 		if (message.startsWith('.')) message = message.slice(1);
 		if (Number(message.replace(',', '.'))) {
@@ -740,7 +740,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.destroy();
 	}
 
-	destroy() {
+	override destroy() {
 		this.clearNomTimer();
 		this.clearBidTimer();
 		super.destroy();

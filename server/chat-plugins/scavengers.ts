@@ -139,7 +139,7 @@ class Ladder {
 }
 
 class PlayerLadder extends Ladder {
-	addPoints(name: string, aspect: string, points: number, noUpdate?: boolean) {
+	override addPoints(name: string, aspect: string, points: number, noUpdate?: boolean) {
 		if (!aspect.startsWith('cumulative-')) {
 			this.addPoints(name, `cumulative-${aspect}`, points, noUpdate);
 		}
@@ -338,9 +338,9 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	staffHostName: string;
 	scavGame: true;
 	timerEnd: number | null;
-	timer: NodeJS.Timeout | null;
+	override timer: NodeJS.Timeout | null;
 
-	readonly checkChat = true;
+	override readonly checkChat = true;
 
 	[k: string]: any; // for purposes of adding new temporary properties for the purpose of twists.
 	constructor({ room, staffHost, hosts, gameType, questions, isHTML, mod }:
@@ -433,7 +433,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	}
 
 	// alert new users that are joining the room about the current hunt.
-	onConnect(user: User, connection: Connection) {
+	override onConnect(user: User, connection: Connection) {
 		// send the fact that a hunt is currently going on.
 		connection.sendTo(this.room, this.getCreationMessage());
 		this.runEvent('Connect', user, connection);
@@ -462,7 +462,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			`(To answer, use <kbd>/scavenge <em>ANSWER</em></kbd>)</div>`;
 	}
 
-	joinGame(user: User) {
+	override joinGame(user: User) {
 		if (this.hosts.some(h => h.id === user.id) || user.id === this.staffHostId) {
 			return user.sendTo(
 				this.room,
@@ -492,7 +492,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		}
 	}
 
-	leaveGame(user: User) {
+	override leaveGame(user: User) {
 		const player = this.playerTable[user.id];
 
 		if (!player) return user.sendTo(this.room, "You have not joined the scavenger hunt.");
@@ -589,7 +589,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		return minutes;
 	}
 
-	choose(user: User, originalValue: string) {
+	override choose(user: User, originalValue: string) {
 		if (!(user.id in this.playerTable)) {
 			if (!this.joinGame(user)) return false;
 		}
@@ -858,7 +858,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 	}
 
 	// modify destroy to get rid of any timers in the current roomgame.
-	destroy() {
+	override destroy() {
 		if (this.timer) {
 			clearTimeout(this.timer);
 		}
@@ -925,9 +925,9 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		return true;
 	}
 
-	onUpdateConnection() {}
+	override onUpdateConnection() {}
 
-	onChatMessage(msg: string) {
+	override onChatMessage(msg: string) {
 		let msgId = toID(msg) as string;
 
 		// identify if there is a bot/dt command that failed
@@ -1004,7 +1004,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 
 export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer<ScavengerHunt> {
 	lastGuess: number;
-	completed: boolean;
+	override completed: boolean;
 	joinIps: string[];
 	currentQuestion: number;
 
@@ -1040,7 +1040,7 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer<ScavengerHunt> {
 		}
 	}
 
-	destroy() {
+	override destroy() {
 		const user = Users.getExact(this.id);
 		if (user) {
 			user.games.delete(this.game.roomid);

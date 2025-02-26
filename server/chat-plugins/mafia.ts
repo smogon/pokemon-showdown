@@ -322,7 +322,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	phase: 'signups' | 'locked' | 'IDEApicking' | 'IDEAlocked' | 'day' | 'night';
 	dayNum: number;
 
-	timer: NodeJS.Timeout | null;
+	override timer: NodeJS.Timeout | null;
 	dlAt: number;
 
 	IDEA: MafiaIDEAModule;
@@ -1777,7 +1777,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 	}
 
-	onChatMessage(message: string, user: User) {
+	override onChatMessage(message: string, user: User) {
 		const subIndex = this.hostRequestedSub.indexOf(user.id);
 		if (subIndex !== -1) {
 			this.hostRequestedSub.splice(subIndex, 1);
@@ -1821,11 +1821,11 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 	}
 
-	onConnect(user: User) {
+	override onConnect(user: User) {
 		this.sendUser(user, `|uhtml|mafia|${this.roomWindow()}`);
 	}
 
-	onJoin(user: User) {
+	override onJoin(user: User) {
 		const player = this.getPlayer(user.id);
 		if (player) {
 			return player.updateHtmlRoom();
@@ -1833,7 +1833,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (user.id === this.hostid || this.cohostids.includes(user.id)) return this.updateHost(user.id);
 	}
 
-	removeBannedUser(user: User) {
+	override removeBannedUser(user: User) {
 		// Player was banned, attempt to sub now
 		// If we can't sub now, make subbing them out the top priority
 		if (!this.getPlayer(user.id)) return;
@@ -1841,7 +1841,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.nextSub();
 	}
 
-	forfeit(user: User) {
+	override forfeit(user: User) {
 		// Add the player to the sub list.
 		const player = this.getPlayer(user.id);
 		if (!player || player.isEliminated()) return;

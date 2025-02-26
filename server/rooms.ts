@@ -1951,7 +1951,7 @@ export class GameRoom extends BasicRoom {
 		if (!(user.id in this.game.playerTable)) return this.getLog();
 		return this.getLog(this.game.playerTable[user.id].num as 0);
 	}
-	update(excludeUser: User | null = null) {
+	override update(excludeUser: User | null = null) {
 		if (!this.log.broadcastBuffer.length) return;
 
 		if (this.userCount) {
@@ -1961,7 +1961,7 @@ export class GameRoom extends BasicRoom {
 
 		this.pokeExpireTimer();
 	}
-	pokeExpireTimer() {
+	override pokeExpireTimer() {
 		// empty rooms time out after ten minutes
 		if (!this.userCount) {
 			if (this.expireTimer) clearTimeout(this.expireTimer);
@@ -1980,11 +1980,11 @@ export class GameRoom extends BasicRoom {
 			return "Modchat can only be changed by the user who turned it on, or by staff";
 		}
 	}
-	onConnect(user: User, connection: Connection) {
+	override onConnect(user: User, connection: Connection) {
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user));
 		this.game?.onConnect?.(user, connection);
 	}
-	onJoin(user: User, connection: Connection) {
+	override onJoin(user: User, connection: Connection) {
 		if (!user) return false; // ???
 		if (this.users[user.id]) return false;
 

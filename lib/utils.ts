@@ -440,7 +440,7 @@ export function bufReadHex(buf: Uint8Array, start = 0, end?: number) {
 }
 
 export class Multiset<T> extends Map<T, number> {
-	get(key: T) {
+	override get(key: T) {
 		return super.get(key) ?? 0;
 	}
 	add(key: T) {

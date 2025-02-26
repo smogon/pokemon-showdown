@@ -38,7 +38,7 @@ export class RandomCAPTeams extends RandomTeams {
 		if (ability === 'Mountaineer') return 'Life Orb';
 	}
 
-	getLevel(
+	override getLevel(
 		species: Species,
 		isDoubles: boolean,
 	): number {
@@ -182,7 +182,7 @@ export class RandomCAPTeams extends RandomTeams {
 
 	randomCAPSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
 
-	randomTeam() {
+	override randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const seed = this.prng.getSeed();

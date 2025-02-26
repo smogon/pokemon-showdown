@@ -465,8 +465,8 @@ export class WriteStream {
 }
 
 export class ReadWriteStream extends ReadStream implements WriteStream {
-	isReadable: true;
-	isWritable: true;
+	override isReadable: true;
+	override isWritable: true;
 	nodeWritableStream: NodeJS.WritableStream | null;
 	drainListeners: (() => void)[];
 
@@ -523,7 +523,7 @@ export class ReadWriteStream extends ReadStream implements WriteStream {
 	 * because it's valid for the read stream buffer to be filled only by
 	 * `_write`.
 	 */
-	_read(size?: number) {}
+	override _read(size?: number) {}
 
 	_writeEnd(): void | Promise<void> {}
 
@@ -818,8 +818,8 @@ interface ObjectReadWriteStreamOptions<T> {
 }
 
 export class ObjectReadWriteStream<T> extends ObjectReadStream<T> implements ObjectWriteStream<T> {
-	isReadable: true;
-	isWritable: true;
+	override isReadable: true;
+	override isWritable: true;
 	nodeWritableStream: NodeJS.WritableStream | null;
 
 	constructor(options: ObjectReadWriteStreamOptions<T> = {}) {
@@ -839,7 +839,7 @@ export class ObjectReadWriteStream<T> extends ObjectReadStream<T> implements Obj
 		throw new Error(`WriteStream needs to be subclassed and the _write function needs to be implemented.`);
 	}
 	/** In a ReadWriteStream, _read does not need to be implemented. */
-	_read() {}
+	override _read() {}
 
 	_writeEnd(): void | Promise<void> {}
 

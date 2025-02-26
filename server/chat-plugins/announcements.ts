@@ -43,7 +43,7 @@ export class Announcement extends Rooms.MinorActivity {
 		}
 	}
 
-	onConnect(user: User, connection: Connection | null = null) {
+	override onConnect(user: User, connection: Connection | null = null) {
 		this.displayTo(user, connection);
 	}
 

@@ -103,7 +103,7 @@ abstract class Giveaway extends Rooms.SimpleRoomGame {
 	gaNumber: number;
 	host: User;
 	giver: User;
-	room: Room;
+	override room: Room;
 	ot: string;
 	tid: string;
 	game: Game;
@@ -116,7 +116,7 @@ abstract class Giveaway extends Rooms.SimpleRoomGame {
 	 * IP:userid
 	 */
 	joined: Map<string, ID>;
-	timer: NodeJS.Timeout | null;
+	override timer: NodeJS.Timeout | null;
 	pokemonID: ID;
 	sprite: Chat.VNode;
 
@@ -146,7 +146,7 @@ abstract class Giveaway extends Rooms.SimpleRoomGame {
 		[this.pokemonID, this.sprite] = Giveaway.getSprite(prize);
 	}
 
-	destroy() {
+	override destroy() {
 		this.clearTimer();
 		super.destroy();
 	}
@@ -441,7 +441,7 @@ export class QuestionGiveaway extends Giveaway {
 		this.timer = setTimeout(() => this.end(false), 1000 * 60 * 5);
 	}
 
-	choose(user: User, guess: string) {
+	override choose(user: User, guess: string) {
 		if (this.phase !== 'started') return user.sendTo(this.room, "The giveaway has not started yet.");
 
 		if (this.checkJoined(user) && ![...this.joined.values()].includes(user.id)) {
@@ -551,7 +551,7 @@ export class QuestionGiveaway extends Giveaway {
 		);
 	}
 
-	checkExcluded(user: User) {
+	override checkExcluded(user: User) {
 		if (user === this.host) return true;
 		if (this.host.ips.includes(user.latestIp) && !Config.noipchecks) return true;
 		if (this.host.previousIDs.includes(toID(user))) return true;
@@ -631,7 +631,7 @@ export class LotteryGiveaway extends Giveaway {
 		};
 	}
 
-	generateReminder(joined = false) {
+	override generateReminder(joined = false) {
 		const cmd = (joined ? 'Leave' : 'Join');
 		return this.generateWindow(<>
 			The lottery drawing will occur in 2 minutes, and with {Chat.count(this.maxWinners, "winners")}!<br />
@@ -739,7 +739,7 @@ export class LotteryGiveaway extends Giveaway {
 export class GTS extends Rooms.SimpleRoomGame {
 	override readonly gameid = 'gts' as ID;
 	gtsNumber: number;
-	room: Room;
+	override room: Room;
 	giver: User;
 	left: number;
 	summary: string;
@@ -749,7 +749,7 @@ export class GTS extends Rooms.SimpleRoomGame {
 	sprite: Chat.VNode;
 	sent: string[];
 	noDeposits: boolean;
-	timer: NodeJS.Timeout | null;
+	override timer: NodeJS.Timeout | null;
 
 	constructor(
 		room: Room, giver: User, amount: number,

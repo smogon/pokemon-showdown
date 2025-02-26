@@ -16,7 +16,7 @@
         "incremental": true,
         "allowUnreachableCode": false,
         "esModuleInterop": true,
-        "noImplicitOverride": false,
+        "noImplicitOverride": true,
         "useDefineForClassFields": false
     },
     "types": ["node"],

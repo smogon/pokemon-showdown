@@ -175,7 +175,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		room.send(`|tournament|update|${JSON.stringify(update)}`);
 		this.update();
 	}
-	destroy() {
+	override destroy() {
 		this.forceEnd();
 	}
 	remove() {
@@ -379,7 +379,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		return Punishments.hasRoomPunishType(room, toID(user), 'TOURBAN');
 	}
 
-	removeBannedUser(userid: User | ID) {
+	override removeBannedUser(userid: User | ID) {
 		userid = toID(userid);
 		if (!(userid in this.playerTable)) return;
 		if (this.isTournamentStarted) {
@@ -1078,16 +1078,16 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	getDefaultCustomName() {
 		return Dex.formats.get(this.fullFormat).name + " (with custom rules)";
 	}
-	forfeit(user: User) {
+	override forfeit(user: User) {
 		return this.disqualifyUser(user.id, null, "You left the tournament", true);
 	}
-	onConnect(user: User, connection: Connection) {
+	override onConnect(user: User, connection: Connection) {
 		this.updateFor(user, connection);
 	}
-	onUpdateConnection(user: User, connection: Connection) {
+	override onUpdateConnection(user: User, connection: Connection) {
 		this.updateFor(user, connection);
 	}
-	onRename(user: User, oldUserid: ID) {
+	override onRename(user: User, oldUserid: ID) {
 		if (oldUserid in this.playerTable) {
 			this.renamePlayer(user, oldUserid);
 		}
@@ -1107,7 +1107,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			}
 		}
 	}
-	onBattleWin(room: GameRoom, winnerid: ID) {
+	override onBattleWin(room: GameRoom, winnerid: ID) {
 		if (this.completedMatches.has(room.roomid)) return;
 		this.completedMatches.add(room.roomid);
 		room.setParent(null);

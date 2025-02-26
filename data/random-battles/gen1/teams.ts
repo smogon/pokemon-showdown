@@ -15,10 +15,10 @@ interface Gen1RandomBattleSpecies {
 }
 
 export class RandomGen1Teams extends RandomGen2Teams {
-	randomData: { [species: IDEntry]: Gen1RandomBattleSpecies } = require('./data.json');
+	override randomData: { [species: IDEntry]: Gen1RandomBattleSpecies } = require('./data.json');
 
 	// Challenge Cup or CC teams are basically fully random teams.
-	randomCCTeam() {
+	override randomCCTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const team = [];
@@ -103,7 +103,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 	}
 
 	// Random team generation for Gen 1 Random Battles.
-	randomTeam() {
+	override randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		// Get what we need ready.
@@ -219,7 +219,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 	/**
 	 * Random set generation for Gen 1 Random Battles.
 	 */
-	randomSet(species: string | Species): RandomTeamsTypes.RandomSet {
+	override randomSet(species: string | Species): RandomTeamsTypes.RandomSet {
 		species = this.dex.species.get(species);
 		if (!species.exists) species = this.dex.species.get('pikachu'); // Because Gen 1.
 
@@ -299,7 +299,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		};
 	}
 
-	randomHCTeam(): PokemonSet[] {
+	override randomHCTeam(): PokemonSet[] {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const team = [];

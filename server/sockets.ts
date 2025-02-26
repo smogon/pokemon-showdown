@@ -505,7 +505,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		});
 	}
 
-	_write(data: string) {
+	override _write(data: string) {
 		// console.log('worker received: ' + data);
 
 		const receiver = this.receivers[data.charAt(0)];

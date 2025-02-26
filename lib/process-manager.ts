@@ -58,7 +58,7 @@ class SubprocessStream extends Streams.ObjectReadWriteStream<string> {
 		this.taskId = taskId;
 		this.process.process.send(`${taskId}\nNEW`);
 	}
-	_write(message: string) {
+	override _write(message: string) {
 		if (!this.process.process.connected) {
 			this.pushError(new Error(`Process disconnected (possibly crashed?)`));
 			return;
@@ -66,10 +66,10 @@ class SubprocessStream extends Streams.ObjectReadWriteStream<string> {
 		this.process.process.send(`${this.taskId}\nWRITE\n${message}`);
 		// responses are handled in ProcessWrapper
 	}
-	_writeEnd() {
+	override _writeEnd() {
 		this.process.process.send(`${this.taskId}\nWRITEEND`);
 	}
-	_destroy() {
+	override _destroy() {
 		if (!this.process.process.connected) return;
 		this.process.process.send(`${this.taskId}\nDESTROY`);
 		this.process.deleteStream(this.taskId);
@@ -83,7 +83,7 @@ class RawSubprocessStream extends Streams.ObjectReadWriteStream<string> {
 		super();
 		this.process = process;
 	}
-	_write(message: string) {
+	override _write(message: string) {
 		if (!this.process.getProcess().connected) {
 			// no error because the crash handler should already have shown an error, and
 			// sometimes harmless messages are sent during cleanup
@@ -730,7 +730,7 @@ export class RawProcessManager extends ProcessManager<RawProcessWrapper> {
 	subscribeUnspawn(callback: (worker: StreamWorker) => void) {
 		this.unspawnSubscription = callback;
 	}
-	spawn(count?: number) {
+	override spawn(count?: number) {
 		super.spawn(count);
 		if (!this.workers.length) {
 			this.masterWorker = new StreamWorker(this._setupChild());
@@ -744,7 +744,7 @@ export class RawProcessManager extends ProcessManager<RawProcessWrapper> {
 		this.spawnSubscription?.(process);
 		return process;
 	}
-	destroyProcess(process: RawProcessWrapper) {
+	override destroyProcess(process: RawProcessWrapper) {
 		const index = this.workers.indexOf(process);
 		if (index >= 0) this.workers.splice(index, 1);
 
