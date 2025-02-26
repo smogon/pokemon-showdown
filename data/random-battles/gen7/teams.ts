@@ -1382,7 +1382,8 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		return pokemon;
 	}
 
-	override randomFactorySets: { [format: string]: { [species: string]: BattleFactorySpecies } } = require('./factory-sets.json');
+	override randomFactorySets: { [format: string]: { [species: string]: BattleFactorySpecies } } =
+		require('./factory-sets.json');
 
 	override randomFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails, tier: string
