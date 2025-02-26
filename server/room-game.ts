@@ -122,7 +122,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	 * Not a source of truth. Should be kept in sync with
 	 * `Object.fromEntries(this.players.filter(p => p.id).map(p => [p.id, p]))`
 	 */
-	playerTable: {[userid: string]: PlayerClass} = Object.create(null);
+	playerTable: { [userid: string]: PlayerClass } = Object.create(null);
 	players: PlayerClass[] = [];
 	playerCount = 0;
 	playerCap = 0;
@@ -134,7 +134,8 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 	 * We should really resolve this collision at _some_ point, but it will have
 	 * to be later. The /timer command is written to be resilient to this.
 	 */
-	timer?: {timerRequesters?: Set<ID>, start: (force?: User) => void, stop: (force?: User) => void} | NodeJS.Timer | null;
+	timer?: { timerRequesters?: Set<ID>, start: (force?: User) => void, stop: (force?: User) => void } |
+		NodeJS.Timeout | null;
 	constructor(room: Room, isSubGame = false) {
 		this.roomid = room.roomid;
 		this.room = room;
@@ -154,15 +155,12 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 		} else {
 			this.room.game = null;
 		}
-		// @ts-ignore
-		this.room = null;
+		(this as any).room = null;
 		for (const player of this.players) {
 			player.destroy();
 		}
-		// @ts-ignore
-		this.players = null;
-		// @ts-ignore
-		this.playerTable = null;
+		(this as any).players = null;
+		(this as any).playerTable = null;
 	}
 
 	addPlayer(user: User | string | null = null, ...rest: any[]): PlayerClass | null {
@@ -197,7 +195,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
 			}
 		}
 		if (userOrName) {
-			const {name, id} = typeof userOrName === 'string' ? {name: userOrName, id: toID(userOrName)} : userOrName;
+			const { name, id } = typeof userOrName === 'string' ? { name: userOrName, id: toID(userOrName) } : userOrName;
 			(player.id as string) = id;
 			player.name = name;
 			this.playerTable[player.id] = player;
@@ -422,7 +420,7 @@ export abstract class RoomGame<PlayerClass extends RoomGamePlayer = RoomGamePlay
  *
  * A RoomGame without a custom player class. Gives a default implementation for makePlayer.
  */
-export abstract class SimpleRoomGame extends RoomGame<RoomGamePlayer> {
+export abstract class SimpleRoomGame extends RoomGame {
 	makePlayer(user: User | string | null, ...rest: any[]): RoomGamePlayer {
 		const num = this.players.length ? this.players[this.players.length - 1].num : 1;
 		return new RoomGamePlayer(user, this, num);

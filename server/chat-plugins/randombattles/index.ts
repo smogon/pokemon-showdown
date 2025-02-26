@@ -5,23 +5,21 @@
  * Set probability code written by Annika
  */
 
-import {FS, Utils} from '../../../lib';
-
+import { FS, Utils } from '../../../lib';
 
 interface SetCriteria {
-	moves: {mustHave: Move[], mustNotHave: Move[]};
-	ability: {mustHave?: Ability, mustNotHave: Ability[]};
-	item: {mustHave?: Item, mustNotHave: Item[]};
-	nature: {mustHave?: Nature, mustNotHave: Nature[]};
-	teraType: {mustHave?: TypeInfo, mustNotHave: TypeInfo[]};
+	moves: { mustHave: Move[], mustNotHave: Move[] };
+	ability: { mustHave?: Ability, mustNotHave: Ability[] };
+	item: { mustHave?: Item, mustNotHave: Item[] };
+	nature: { mustHave?: Nature, mustNotHave: Nature[] };
+	teraType: { mustHave?: TypeInfo, mustNotHave: TypeInfo[] };
 }
 
-
 function getHTMLCriteriaDescription(criteria: SetCriteria) {
-	const format = (list: {name: string}[]) => list.map(m => Utils.html`<strong>${m.name}</strong>`);
+	const format = (list: { name: string }[]) => list.map(m => Utils.html`<strong>${m.name}</strong>`);
 	const parts = [];
 
-	const {moves, ability, item, nature, teraType} = criteria;
+	const { moves, ability, item, nature, teraType } = criteria;
 
 	if (moves.mustHave.length) {
 		parts.push(`had the move${Chat.plural(moves.mustHave)} ${Chat.toListString(format(moves.mustHave))}`);
@@ -66,8 +64,8 @@ function setProbability(
 	format: Format,
 	criteria: SetCriteria,
 	rounds = 700
-): {rounds: number, matches: number} {
-	const results = {rounds, matches: 0};
+): { rounds: number, matches: number } {
+	const results = { rounds, matches: 0 };
 	const generator = Teams.getGenerator(format);
 
 	for (let i = 0; i < rounds; i++) {
@@ -104,16 +102,16 @@ function setProbability(
 	return results;
 }
 
-const GEN_NAMES: {[k: string]: string} = {
+const GEN_NAMES: { [k: string]: string } = {
 	gen1: '[Gen 1]', gen2: '[Gen 2]', gen3: '[Gen 3]', gen4: '[Gen 4]', gen5: '[Gen 5]', gen6: '[Gen 6]', gen7: '[Gen 7]',
 	gen8: '[Gen 8]', gen9: '[Gen 9]',
 };
 
-export const STAT_NAMES: {[k: string]: string} = {
+export const STAT_NAMES: { [k: string]: string } = {
 	hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe",
 };
 
-const TIERS: {[k: string]: string} = {
+const TIERS: { [k: string]: string } = {
 	uber: "Uber", ubers: "Uber",
 	ou: "OU", uu: "UU", ru: "RU", nu: "NU", pu: "PU",
 	mono: "Mono", monotype: "Mono", lc: "LC", littlecup: "LC",
@@ -175,7 +173,7 @@ function getSets(species: string | Species, format: string | Format = 'gen9rando
 /**
  * Gets the random battles data for a Pokemon for formats with the old schema.
  */
-function getData(species: string | Species, format: string | Format): any | null {
+function getData(species: string | Species, format: string | Format): AnyObject | null {
 	const dex = Dex.forFormat(format);
 	format = Dex.formats.get(format);
 	species = dex.species.get(species);
@@ -198,7 +196,7 @@ function getLevel(species: string | Species, format: string | Format): number {
 	switch (format.id) {
 	// Only formats where levels are not all manually assigned should be copied here
 	case 'gen2randombattle':
-		const levelScale: {[k: string]: number} = {
+		const levelScale: { [k: string]: number } = {
 			ZU: 81,
 			ZUBL: 79,
 			PU: 77,
@@ -273,15 +271,15 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 	if (!Object.keys(statsFile).length) return null;
 	let buf = ``;
 	if (!isBSS) {
-		if (!tier) return {e: `Please provide a valid tier.`};
-		if (!(toID(tier) in TIERS)) return {e: `That tier isn't supported.`};
+		if (!tier) throw new Chat.ErrorMessage(`Please provide a valid tier.`);
+		if (!(toID(tier) in TIERS)) throw new Chat.ErrorMessage(`That tier isn't supported.`);
 		if (!(TIERS[toID(tier)] in statsFile)) {
-			return {e: `${TIERS[toID(tier)]} is not included in [Gen ${genNum}] Battle Factory.`};
+			throw new Chat.ErrorMessage(`${TIERS[toID(tier)]} is not included in [Gen ${genNum}] Battle Factory.`);
 		}
 		const t = statsFile[TIERS[toID(tier)]];
 		if (!(species.id in t)) {
 			const formatName = Dex.formats.get(`${gen}battlefactory`).name;
-			return {e: `${species.name} doesn't have any sets in ${TIERS[toID(tier)]} for ${formatName}.`};
+			throw new Chat.ErrorMessage(`${species.name} doesn't have any sets in ${TIERS[toID(tier)]} for ${formatName}.`);
 		}
 		const setObj = t[species.id];
 		if (genNum >= 9) {
@@ -332,7 +330,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 		}
 	} else {
 		const format = Dex.formats.get(`${gen}bssfactory`);
-		if (!(species.id in statsFile)) return {e: `${species.name} doesn't have any sets in ${format.name}.`};
+		if (!(species.id in statsFile)) throw new Chat.ErrorMessage(`${species.name} doesn't have any sets in ${format.name}.`);
 		const setObj = statsFile[species.id];
 		if (genNum >= 9) {
 			buf += `Species rarity: ${setObj.weight} (higher is more common, max 10)<br />`;
@@ -426,7 +424,7 @@ function CAP1v1Sets(species: string | Species) {
 		};
 	}
 	if (species.isNonstandard === "CAP" && !(species.name in statsFile)) {
-		return {e: `${species.name} doesn't have any sets in [Gen 8] CAP 1v1.`};
+		return { e: `${species.name} doesn't have any sets in [Gen 8] CAP 1v1.` };
 	}
 	let buf = `<span style="color:#999999;">Sets for ${species.name} in [Gen 8] CAP 1v1:</span><br />`;
 	for (const [i, set] of statsFile[species.name].entries()) {
@@ -489,12 +487,12 @@ export const commands: Chat.ChatCommands = {
 		const args = target.split(',');
 		if (!args[0]) return this.parse(`/help randombattles`);
 
-		const {dex} = this.splitFormat(target, true);
+		const { dex } = this.splitFormat(target, true);
 		const isLetsGo = (dex.currentMod === 'gen7letsgo');
 
 		const searchResults = dex.dataSearch(args[0], ['Pokedex']);
 
-		if (!searchResults || !searchResults.length) {
+		if (!searchResults?.length) {
 			this.errorReply(`No Pok\u00e9mon named '${args[0]}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
 			return;
 		}
@@ -613,9 +611,6 @@ export const commands: Chat.ChatCommands = {
 			if (args[1] && toID(args[1]) in Dex.dexes && Dex.dexes[toID(args[1])].gen >= 7) mod = toID(args[1]);
 			const bssSets = battleFactorySets(species, null, mod, true);
 			if (!bssSets) return this.parse(`/help battlefactory`);
-			if (typeof bssSets !== 'string') {
-				return this.errorReply(`Error: ${bssSets.e}`);
-			}
 			return this.sendReplyBox(bssSets);
 		} else {
 			const args = target.split(',');
@@ -634,21 +629,18 @@ export const commands: Chat.ChatCommands = {
 			let bfSets;
 			if (species.name === 'Necrozma-Ultra') {
 				bfSets = battleFactorySets(Dex.species.get('necrozma-dawnwings'), tier, mod);
-				if (typeof bfSets === 'string') {
-					bfSets += battleFactorySets(Dex.species.get('necrozma-duskmane'), tier, mod);
+				if (bfSets) {
+					bfSets += battleFactorySets(Dex.species.get('necrozma-duskmane'), tier, mod)!;
 				}
 			} else if (species.name === 'Zygarde-Complete') {
 				bfSets = battleFactorySets(Dex.species.get('zygarde'), tier, mod);
-				if (typeof bfSets === 'string') {
-					bfSets += battleFactorySets(Dex.species.get('zygarde-10'), tier, mod);
+				if (bfSets) {
+					bfSets += battleFactorySets(Dex.species.get('zygarde-10'), tier, mod)!;
 				}
 			} else {
 				bfSets = battleFactorySets(species, tier, mod);
 			}
 			if (!bfSets) return this.parse(`/help battlefactory`);
-			if (typeof bfSets !== 'string') {
-				return this.errorReply(`Error: ${bfSets.e}`);
-			}
 			return this.sendReplyBox(bfSets);
 		}
 	},
@@ -682,7 +674,7 @@ export const commands: Chat.ChatCommands = {
 	randombattlesetprobabilities(target, room, user) {
 		// Restricted to global staff and randbats room auth
 		const randbatsRoom = Rooms.get('randombattles');
-		if (!(randbatsRoom && randbatsRoom.auth.has(user.id))) {
+		if (!randbatsRoom?.auth.has(user.id)) {
 			this.checkCan('lock');
 		}
 
@@ -730,11 +722,11 @@ export const commands: Chat.ChatCommands = {
 
 		// Criteria
 		const criteria: SetCriteria = {
-			moves: {mustHave: [], mustNotHave: []},
-			item: {mustNotHave: []},
-			ability: {mustNotHave: []},
-			nature: {mustNotHave: []},
-			teraType: {mustNotHave: []},
+			moves: { mustHave: [], mustNotHave: [] },
+			item: { mustNotHave: [] },
+			ability: { mustNotHave: [] },
+			nature: { mustNotHave: [] },
+			teraType: { mustNotHave: [] },
 		};
 
 		if (args.length < 1) {
