@@ -1516,7 +1516,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			logRoom?.roomlog(`<< ${result}`);
 		} catch (e: any) {
-			const message = ('' + e.stack).replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
+			const message = `${e.stack}`.replace(/\n *at CommandContext\.eval [\s\S]*/m, '');
 			const command = uhtmlId ? `|uhtmlchange|${uhtmlId}|` : '|html|';
 			this.sendReply(`${command}${generateHTML('<', message)}`);
 			logRoom?.roomlog(`<< ${message}`);
@@ -1592,10 +1592,10 @@ export const commands: Chat.ChatCommands = {
 					if ((result as any).err) parseError(result as any);
 					result = Utils.visualize(result);
 				} catch (e: any) {
-					result = ('' + e.stack).replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
+					result = `${e.stack}`.replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
 				}
 			} else {
-				result = ('' + err.stack).replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
+				result = `${err.stack}`.replace(/\n *at CommandContext\.evalsql [\s\S]*/m, '');
 			}
 		}
 		await database.destroy();

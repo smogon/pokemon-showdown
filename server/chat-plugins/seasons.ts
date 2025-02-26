@@ -310,7 +310,7 @@ export const pages: Chat.PageTable = {
 		const uppercase = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 		let formatName = Dex.formats.get(format).name;
 		// futureproofing for gen10/etc
-		const room = Rooms.search(format.split(/\d+/)[1] + "");
+		const room = Rooms.search(Utils.splitFirst(format, /\d+/)[1] || '');
 		if (room) {
 			formatName = `<a href="/${room.roomid}">${formatName}</a>`;
 		}

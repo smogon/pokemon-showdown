@@ -110,7 +110,7 @@ class OtdHandler {
 	}
 
 	static parseOldWinners(content: string, keyLabels: string[], keys: string[]) {
-		const data = ('' + content).split("\n");
+		const data = `${content}`.split("\n");
 		const winners = [];
 		for (const arg of data) {
 			if (!arg || arg === '\r') continue;
