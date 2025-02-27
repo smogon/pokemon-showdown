@@ -1107,7 +1107,6 @@ export class CommandContext extends MessageContext {
 
 		return true;
 	}
-	/* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
 	checkChat(message: string, room?: Room | null, targetUser?: User | null): string;
 	checkChat(message?: null, room?: Room | null, targetUser?: User | null): void;
 	checkChat(message: string | null = null, room: Room | null = null, targetUser: User | null = null) {

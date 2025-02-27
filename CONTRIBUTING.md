@@ -247,7 +247,7 @@ Our current quote convention is to use:
 - `'` as in `'fireblast'` for any string not meant to be displayed to the user; i.e. IDs
 - `"` as in `"Fire Blast"` for any string meant to be displayed verbatim to the user; i.e. names (i.e. usernames, move names, etc), most English text, and help entries of chat commands
 
-As far as I know, we don't use strings for anything else, but if you need to use strings in a way that doesn't conform to the above three, ask Zarel in the Development chatroom to decide (and default to `` ` `` in lieu of a decision).
+As far as I know, we don't use strings for anything else, but if you need to use strings in a way that doesn't conform to the above three, ask Zarel on Discord to decide (and default to `` ` `` in lieu of a decision).
 
 Unfortunately, since this is not a convention the linter can test for (and also because our older string standards predate PS), a lot of existing code is wrong on this, so you can't look at surrounding code to get an idea of what the convention should be. Refer to the above paragraph as the definitive rule.
 
@@ -279,13 +279,13 @@ If Water Absorb doesn't absorb Thunder Wave, Water Absorb's TryHit handler retur
 
 We prefer using `||` instead of `??` for fallback, for a few reasons:
 
-- `sucrase` (our TypeScript to JavaScript compiler) makes `??` rather more complicated than ideal.
-
 - We rarely treat `0` or `''` differently from `null` (the same reason we use `!foo` instead of `foo == null` for null checks)
 
 - TypeScript does not actually allow us to have "non-empty strings" or "positive integers" as a type, so we have to deal with those cases no matter what.
 
 If, at a future point, TypeScript does allow us to constrain types better, we might consider using `??` for clarity. But for now, I see no reason to use `??` except in very niche situations where the difference matters.
+
+It is, of course, completely fine to use `??` in the cases where we don't want `0` or `''` or `false` to fall back to something else.
 
 
 Modern JavaScript/TypeScript syntax convention
@@ -299,9 +299,9 @@ In general, we prefer modern ways of writing things as long as they're supported
 
 - `.reduce`: we usually prefer `for`...`of` for readability, but you can use it in code that you code-own if you really want to
 
-- Multiline template strings: A frequent source of bugs, so we prefer to explicitly use `\n` and concatenate over multiple lines.
+- Multiline template strings: A frequent source of bugs (and also weird for readability), so we prefer to explicitly use `\n` and concatenate over multiple lines.
 
-- `async`/`await`: We prefer it for readability, but in certain cases we use raw Promises or even callbacks for performance. Don't worry about it too much; we usually won't nitpick code that uses any async implementation (although we might insist on `async`/`await` if the reability difference is huge).
+- `async`/`await`: We prefer it for readability, but in certain cases we use raw Promises or even callbacks for performance. Don't worry about it too much; we usually won't nitpick code that uses any async implementation (although we might insist on `async`/`await` if the readability difference is huge).
 
 - getters/setters/`Proxy`: We are generally very anti-magic. There are certain places in the code we do use magic where it's massively DRYer (or for historical reasons), but we prefer to explicitly mark that setting a variable is actually running a function with many and varied side effects. Please have a better reason than "`.foo` is less visual clutter than `.getFoo()`".
 
