@@ -59,7 +59,9 @@ function generateSSBMoveInfo(sigMove: Move, dex: ModdedDex) {
 		};
 
 		if (sigMove.isNonstandard === "Past" && dex.gen >= 8) details["&#10007; Past Gens Only"] = "";
-		if (sigMove.secondary || sigMove.secondaries || sigMove.hasSheerForce) details["&#10003; Boosted by Sheer Force"] = "";
+		if (sigMove.secondary || sigMove.secondaries || sigMove.ignoresSheerForceSuppression) {
+			details["&#10003; Boosted by Sheer Force"] = "";
+		}
 		if (sigMove.flags['contact'] && dex.gen >= 3) details["&#10003; Contact"] = "";
 		if (sigMove.flags['sound'] && dex.gen >= 3) details["&#10003; Sound"] = "";
 		if (sigMove.flags['bullet'] && dex.gen >= 6) details["&#10003; Bullet"] = "";
