@@ -129,7 +129,7 @@ export const pages: Chat.PageTable = {
 			let speciesID = query.shift();
 			let buf;
 			if (speciesID) {
-				speciesID = getLevelSpeciesID({ species: query.shift() || '' } as PokemonSet);
+				speciesID = getLevelSpeciesID({ species: speciesID || '' } as PokemonSet);
 				const species = Dex.species.get(speciesID);
 				if (!species.exists ||
 					species.isNonstandard || species.isNonstandard === 'Unobtainable' ||
@@ -144,7 +144,7 @@ export const pages: Chat.PageTable = {
 			}
 			const history: MonHistory[] = await cgtDatabase.all(
 				'SELECT level, species_id, timestamp FROM gen9_historical_levels'
-			);
+			).reverse();
 			this.title = `[History] [Gen 9] Computer Generated Teams`;
 
 			const MAX_LINES = 100;
