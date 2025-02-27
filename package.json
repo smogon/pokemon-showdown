@@ -71,7 +71,7 @@
     "@stylistic/eslint-plugin": "^4.0.1",
     "@types/better-sqlite3": "^7.6.2",
     "@types/cloud-env": "^0.2.2",
-    "@types/node": "^14.18.63",
+    "@types/node": "^18.19.76",
     "@types/node-static": "^0.7.7",
     "@types/nodemailer": "^6.4.4",
     "@types/pg": "^8.6.5",
