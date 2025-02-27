@@ -95,6 +95,8 @@ export interface PokemonMoveRequestData {
 	maybeDisabled?: boolean;
 	trapped?: boolean;
 	maybeTrapped?: boolean;
+	maybePartiallyTrapped?: boolean;
+	maybePartiallyTrapping?: string | false;
 	canMegaEvo?: boolean;
 	canMegaEvoX?: boolean;
 	canMegaEvoY?: boolean;
@@ -626,6 +628,8 @@ export class Side {
 		}
 
 		const lockedMove = pokemon.getLockedMove();
+		const partiallytrapped = pokemon.maybePartiallyTrapping || pokemon.maybePartiallyTrapped;
+
 		if (lockedMove) {
 			let lockedMoveTargetLoc = pokemon.lastMoveTargetLoc || 0;
 			const lockedMoveID = toID(lockedMove);
@@ -639,6 +643,27 @@ export class Side {
 				moveid: lockedMoveID,
 			});
 			return true;
+		} else if (partiallytrapped && this.battle.gen === 1) {
+			if (pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partiallytrapped']) {
+				const fightButton = pokemon.maybePartiallyTrapping ? pokemon.maybePartiallyTrapping : 'Fight';
+				this.choice.actions.push({
+					choice: 'move',
+					pokemon,
+					targetLoc: pokemon.lastMoveTargetLoc || 0,
+					moveid: fightButton,
+				});
+				this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
+				return true;
+			} else {
+				pokemon.maybePartiallyTrapping = false;
+				pokemon.maybePartiallyTrapped = false;
+				this.updateRequestForPokemon(pokemon, req => {
+					req.moves = pokemon.getMoveRequestData().moves;
+					return true;
+				});
+				this.emitRequest(this.activeRequest!);
+				return this.emitChoiceError(`You are no longer partially trapped`, true);
+			}
 		} else if (!moves.length && !zMove) {
 			// Override action and use Struggle if there are no enabled moves with PP
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
