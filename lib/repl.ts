@@ -86,7 +86,10 @@ export const Repl = new class {
 					socket.end();
 					socket.destroy();
 				}).on('error', () => {
-					fs.unlinkSync(pathname);
+					try {
+						// race condition?
+						fs.unlinkSync(pathname);
+					} catch {}
 				});
 			}
 		}
