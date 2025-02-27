@@ -144,18 +144,17 @@ export const pages: Chat.PageTable = {
 			}
 			const history: MonHistory[] = await cgtDatabase.all(
 				'SELECT level, species_id, timestamp FROM gen9_historical_levels'
-			).reverse();
+			);
 			this.title = `[History] [Gen 9] Computer Generated Teams`;
 
 			const MAX_LINES = 100;
-			let lines = 0;
 			buf += `<div class="ladder pad"><table><tr><th>Pokemon</th><th>Level</th><th>Timestamp</th>`;
-			for (const entry of history) {
+			for (let i = history.length - 1; history.length - i <= MAX_LINES; i--) {
+				const entry = history[i];
 				if (speciesID && entry.species_id !== speciesID) continue;
 				buf += `<tr><td>${entry.species_id}</td><td>${entry.level}</td>`;
 				const timestamp = new Date(entry.timestamp);
 				buf += `<td>${timestamp.toLocaleDateString()}, ${timestamp.toLocaleTimeString()}</td></tr>`;
-				if (++lines >= MAX_LINES) break;
 			}
 			buf += `</table></div></div>`;
 			return buf;
