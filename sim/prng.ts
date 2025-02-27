@@ -14,7 +14,6 @@
 
 import { Chacha20 } from 'ts-chacha20';
 import { Utils } from '../lib/utils';
-import * as crypto from 'crypto';
 
 export type PRNGSeed = `${'sodium' | 'gen5' | number},${string}`;
 export type SodiumRNGSeed = ['sodium', string];
@@ -209,9 +208,17 @@ export class SodiumRNG implements RNG {
 	}
 
 	static generateSeed(): SodiumRNGSeed {
+		const seed = new Uint32Array(4);
+		// @ts-expect-error Web Crypto is available in Node
+		crypto.getRandomValues(seed);
+		// 32 bits each, 128 bits total (16 bytes)
+		const strSeed = seed[0].toString(16).padStart(8, '0') +
+			seed[1].toString(16).padStart(8, '0') +
+			seed[2].toString(16).padStart(8, '0') +
+			seed[3].toString(16).padStart(8, '0');
 		return [
 			'sodium',
-			crypto.randomBytes(16).toString('hex'),
+			strSeed,
 		];
 	}
 }
