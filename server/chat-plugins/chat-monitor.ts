@@ -369,8 +369,6 @@ Chat.registerMonitor('shorteners', {
  * Punishment: AUTOLOCK, WARN, FILTERTO, SHORTENER, MUTE, EVASION
  */
 
-/* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
-/* eslint-disable @typescript-eslint/prefer-optional-chain */
 export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	let lcMessage = message
 		.replace(/\u039d/g, 'N').toLowerCase()
@@ -384,15 +382,15 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	lcMessage = lcMessage.replace(/__|\*\*|``|\[\[|\]\]/g, '');
 
 	const isStaffRoom = room && (
-		(room.persist && room.roomid.endsWith('staff')
-		) || room.roomid.startsWith('help-'));
-	const isStaff = isStaffRoom || user.isStaff || !!(this.pmTarget && this.pmTarget.isStaff);
+		(room.persist && room.roomid.endsWith('staff')) || room.roomid.startsWith('help-')
+	);
+	const isStaff = isStaffRoom || user.isStaff || !!this.pmTarget?.isStaff;
 
 	for (const list in Chat.monitors) {
 		const { location, condition, monitor } = Chat.monitors[list];
 		if (!monitor) continue;
 		// Ignore challenge games, which are unrated and not part of roomtours.
-		if (location === 'BATTLES' && !(room && room.battle && room.battle.challengeType !== 'challenge')) continue;
+		if (location === 'BATTLES' && !(room?.battle && room.battle.challengeType !== 'challenge')) continue;
 		if (location === 'PUBLIC' && room && room.settings.isPrivate === true) continue;
 
 		switch (condition) {
@@ -420,7 +418,6 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 
 	return message;
 };
-/* eslint-enable @typescript-eslint/prefer-optional-chain */
 
 export const namefilter: Chat.NameFilter = (name, user) => {
 	const id = toID(name);
