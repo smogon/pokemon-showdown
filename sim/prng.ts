@@ -212,7 +212,7 @@ export class SodiumRNG implements RNG {
 		// TODO: Fix that @types/node >14 issue
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore Web Crypto isn't actually in Node 18
-		if (typeof crypto === 'undefined') crypto = require('node:crypto');
+		if (typeof crypto === 'undefined') globalThis.crypto = require('node:crypto');
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore Web Crypto _is_ available in newer Node
 		crypto.getRandomValues(seed);
