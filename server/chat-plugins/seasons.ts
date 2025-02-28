@@ -50,7 +50,7 @@ export function getBadges(user: User, curFormat: string) {
 	let curFormatBadge;
 	for (const [i, badge] of userBadges.entries()) {
 		if (badge.format === curFormat) {
-			userBadges.splice(i);
+			userBadges.splice(i, 1);
 			curFormatBadge = badge;
 		}
 	}
