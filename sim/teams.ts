@@ -466,7 +466,7 @@ export const Teams = new class Teams {
 			if (move.startsWith(`Hidden Power `) && move.charAt(13) !== '[') {
 				move = `Hidden Power [${move.slice(13)}]`;
 			}
-			if ((set.movePPUps?.[i] ?? 3) < 3) {
+			if (set.movePPUps && !isNaN(set.movePPUps[i]) && set.movePPUps[i] < 3) {
 				PPUps = ` (PP Ups: ${set.movePPUps[i]})`;
 			}
 			out += `- ${move}${PPUps}  \n`;
