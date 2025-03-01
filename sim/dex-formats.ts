@@ -726,17 +726,21 @@ export class DexFormats {
 
 		// apply rule repeals before other rules
 		// repeals is a ruleid:depth map (positive: unused, negative: used)
-		for (const rule of ruleset) {
-			if (rule.startsWith('!') && !rule.startsWith('!!')) {
-				const ruleSpec = this.validateRule(rule, format) as string;
+		const ruleSpecs = ruleset.map(rule => this.validateRule(rule, format));
+		for (const ruleSpec of ruleSpecs) {
+			if (typeof ruleSpec === 'string' && ruleSpec.startsWith('!') && !ruleSpec.startsWith('!!')) {
 				if (!repeals) repeals = new Map();
 				repeals.set(ruleSpec.slice(1), depth);
 			}
 		}
 
-		for (const rule of ruleset) {
-			const ruleSpec = this.validateRule(rule, format);
+		let skipPokemonBans = ruleSpecs.filter(r => r === '+pokemontag:allpokemon').length;
+		let hasPokemonBans = false;
+		const warnForNoPokemonBans = !!skipPokemonBans && !format.customRules;
+		skipPokemonBans += ruleSpecs.filter(r => r === '-pokemontag:allpokemon').length;
 
+		for (const ruleSpec of ruleSpecs) {
+			// complex ban/unban
 			if (typeof ruleSpec !== 'string') {
 				if (ruleSpec[0] === 'complexTeamBan') {
 					const complexTeamBan: ComplexTeamBan = ruleSpec.slice(1) as ComplexTeamBan;
@@ -750,24 +754,41 @@ export class DexFormats {
 				continue;
 			}
 
-			if (rule.startsWith('!') && !rule.startsWith('!!')) {
+			// repeal rule
+			if (ruleSpec.startsWith('!') && !ruleSpec.startsWith('!!')) {
 				const repealDepth = repeals!.get(ruleSpec.slice(1));
-				if (repealDepth === undefined) throw new Error(`Multiple "${rule}" rules in ${format.name}`);
+				if (repealDepth === undefined) throw new Error(`Multiple "${ruleSpec}" rules in ${format.name}`);
 				if (repealDepth === depth) {
-					throw new Error(`Rule "${rule}" did nothing because "${rule.slice(1)}" is not in effect`);
+					throw new Error(`Rule "${ruleSpec}" did nothing because "${ruleSpec.slice(1)}" is not in effect`);
 				}
 				if (repealDepth === -depth) repeals!.delete(ruleSpec.slice(1));
 				continue;
 			}
 
+			// individual ban/unban
 			if ('+*-'.includes(ruleSpec.charAt(0))) {
+				if (skipPokemonBans) {
+					if (ruleSpec === '-pokemontag:allpokemon' || ruleSpec === '+pokemontag:allpokemon') {
+						skipPokemonBans--;
+					} else if (
+						ruleSpec.slice(1).startsWith('pokemontag:') || ruleSpec.slice(1).startsWith('pokemon:') ||
+						ruleSpec.slice(1).startsWith('basepokemon:')
+					) {
+						if (!format.customRules) {
+							throw new Error(`Rule "${ruleSpec}" must go after any "All Pokemon" rule in ${format.name} ("+All Pokemon" should go in ruleset, not unbanlist)`);
+						}
+						continue;
+					}
+				}
 				if (ruleTable.has(ruleSpec)) {
-					throw new Error(`Rule "${rule}" in "${format.name}" already exists in "${ruleTable.get(ruleSpec) || format.name}"`);
+					throw new Error(`Rule "${ruleSpec}" in "${format.name}" already exists in "${ruleTable.get(ruleSpec) || format.name}"`);
 				}
 				for (const prefix of '+*-') ruleTable.delete(prefix + ruleSpec.slice(1));
 				ruleTable.set(ruleSpec, '');
 				continue;
 			}
+
+			// rule
 			let [formatid, value] = ruleSpec.split('=');
 			const subformat = this.get(formatid);
 			const repealAndReplace = ruleSpec.startsWith('!!');
@@ -824,7 +845,7 @@ export class DexFormats {
 				if (value !== undefined) throw new Error(`Rule "${ruleSpec}" should not have a value (no equals sign)`);
 				if (repealAndReplace) throw new Error(`"!!" is not supported for this rule`);
 				if (ruleTable.has(subformat.id) && !repealAndReplace) {
-					throw new Error(`Rule "${rule}" in "${format.name}" already exists in "${ruleTable.get(subformat.id) || format.name}"`);
+					throw new Error(`Rule "${ruleSpec}" in "${format.name}" already exists in "${ruleTable.get(subformat.id) || format.name}"`);
 				}
 			}
 			ruleTable.set(subformat.id, '');
@@ -834,26 +855,36 @@ export class DexFormats {
 			const subRuleTable = this.getRuleTable(subformat, depth + 1, repeals);
 			for (const [ruleid, sourceFormat] of subRuleTable) {
 				// don't check for "already exists" here; multiple inheritance is allowed
-				if (!repeals?.has(ruleid)) {
-					const newValue = subRuleTable.valueRules.get(ruleid);
-					const oldValue = ruleTable.valueRules.get(ruleid);
-					if (newValue !== undefined) {
-						// set a value
-						const subSubFormat = this.get(ruleid);
-						if (subSubFormat.mutuallyExclusiveWith && ruleTable.valueRules.has(subSubFormat.mutuallyExclusiveWith)) {
-							// mutually exclusive conflict!
-							throw new Error(`Rule "${ruleid}=${newValue}" from ${subformat.name}${subRuleTable.blame(ruleid)} conflicts with "${subSubFormat.mutuallyExclusiveWith}=${ruleTable.valueRules.get(subSubFormat.mutuallyExclusiveWith)}"${ruleTable.blame(subSubFormat.mutuallyExclusiveWith)} (Repeal one with ! before adding another)`);
-						}
-						if (newValue !== oldValue) {
-							if (oldValue !== undefined) {
-								// conflict!
-								throw new Error(`Rule "${ruleid}=${newValue}" from ${subformat.name}${subRuleTable.blame(ruleid)} conflicts with "${ruleid}=${oldValue}"${ruleTable.blame(ruleid)} (Repeal one with ! before adding another)`);
-							}
-							ruleTable.valueRules.set(ruleid, newValue);
-						}
+				if (repeals?.has(ruleid)) continue;
+
+				if (skipPokemonBans && '+*-'.includes(ruleid.charAt(0))) {
+					if (
+						ruleid.slice(1).startsWith('pokemontag:') || ruleid.slice(1).startsWith('pokemon:') ||
+						ruleid.slice(1).startsWith('basepokemon:')
+					) {
+						hasPokemonBans = true;
+						continue;
 					}
-					ruleTable.set(ruleid, sourceFormat || subformat.name);
 				}
+
+				const newValue = subRuleTable.valueRules.get(ruleid);
+				const oldValue = ruleTable.valueRules.get(ruleid);
+				if (newValue !== undefined) {
+					// set a value
+					const subSubFormat = this.get(ruleid);
+					if (subSubFormat.mutuallyExclusiveWith && ruleTable.valueRules.has(subSubFormat.mutuallyExclusiveWith)) {
+						// mutually exclusive conflict!
+						throw new Error(`Rule "${ruleid}=${newValue}" from ${subformat.name}${subRuleTable.blame(ruleid)} conflicts with "${subSubFormat.mutuallyExclusiveWith}=${ruleTable.valueRules.get(subSubFormat.mutuallyExclusiveWith)}"${ruleTable.blame(subSubFormat.mutuallyExclusiveWith)} (Repeal one with ! before adding another)`);
+					}
+					if (newValue !== oldValue) {
+						if (oldValue !== undefined) {
+							// conflict!
+							throw new Error(`Rule "${ruleid}=${newValue}" from ${subformat.name}${subRuleTable.blame(ruleid)} conflicts with "${ruleid}=${oldValue}"${ruleTable.blame(ruleid)} (Repeal one with ! before adding another)`);
+						}
+						ruleTable.valueRules.set(ruleid, newValue);
+					}
+				}
+				ruleTable.set(ruleid, sourceFormat || subformat.name);
 			}
 			for (const [subRule, source, limit, bans] of subRuleTable.complexBans) {
 				ruleTable.addComplexBan(subRule, source || subformat.name, limit, bans);
@@ -870,6 +901,9 @@ export class DexFormats {
 				}
 				ruleTable.checkCanLearn = subRuleTable.checkCanLearn;
 			}
+		}
+		if (!hasPokemonBans && warnForNoPokemonBans) {
+			throw new Error(`"+All Pokemon" rule has no effect (no species are banned by default, and it does not override obtainability rules)`);
 		}
 		ruleTable.getTagRules();
 

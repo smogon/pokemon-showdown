@@ -61,6 +61,27 @@ describe("Custom Rules", () => {
 			{ species: 'tyrantrum', ability: 'strongjaw', moves: ['protect'], evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen8nationaldex@@@-allpokemon');
+
+		// whitelist should not override -obtainable
+		team = [
+			{ species: 'pikachu-belle', ability: 'lightningrod', moves: ['thunderbolt'], evs: { hp: 1 } },
+		];
+		assert.false.legalTeam(team, 'gen7ou@@@-allpokemon,+pikachu');
+	});
+
+	it('should allow Pokemon to be force-whitelisted', () => {
+		// allpokemon should override all previous bans/unbans
+		let team = [
+			{ species: 'cloyster', ability: 'skilllink', moves: ['iciclespear'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen5monotype');
+		assert.false.legalTeam(team, 'gen5monotype@@@-allpokemon,+pikachu');
+
+		team = [
+			{ species: 'pikachu', ability: 'lightningrod', moves: ['thunderbolt'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen9ou@@@-allpokemon,+pikachu');
+		assert.false.legalTeam(team, 'gen9ou@@@+pikachu,-allpokemon');
 	});
 
 	it('should support banning/unbanning tag combinations', () => {
