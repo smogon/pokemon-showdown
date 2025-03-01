@@ -140,12 +140,10 @@ export const Teams = new class Teams {
 			buf += '|' + set.moves.map(this.packName).join(',');
 
 			// move PP
-			if (set.movePPUps && set.movePPUps.some(n => n < 3)) {
-				const PPUps = set.movePPUps.map(n => {
-					if (n === 3) return '';
-					return n.toString();
-				});
-				buf += ';' + PPUps.join(',');
+			if (set.movePPUps?.some(n => n < 3)) {
+				buf += ';' + set.movePPUps.map(
+					n => n === 3 ? '' : `${n}`
+				).join(',');
 			}
 
 			// nature
