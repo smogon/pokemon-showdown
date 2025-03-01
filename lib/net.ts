@@ -98,6 +98,9 @@ export class NetStream extends Streams.ReadWriteStream {
 			response.on('data', data => {
 				this.push(data);
 			});
+			response.on('error', error => {
+				if (!this.atEOF) this.pushError(error, true);
+			});
 			response.on('end', () => {
 				if (this.state === 'open') this.state = 'success';
 				if (!this.atEOF) this.pushEnd();
