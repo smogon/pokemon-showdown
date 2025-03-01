@@ -1,8 +1,8 @@
-import {ssbSets} from "./random-teams";
-import {changeSet, getName, enemyStaff} from './scripts';
-import {ModdedConditionData} from "../../../sim/dex-conditions";
+import { ssbSets } from "./random-teams";
+import { changeSet, getName, enemyStaff } from './scripts';
+import type { ModdedConditionData } from "../../../sim/dex-conditions";
 
-export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: string}} = {
+export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: string } } = {
 	/*
 	// Example:
 	userid: {
@@ -38,7 +38,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		},
 	},
 	aegiibpmsg: {
-		onSwap(target, source) {
+		onSwitchIn(target) {
 			if (!target.fainted) {
 				this.add(`c:|${getName('aegii')}|~yes ${target.name}`);
 				target.side.removeSlotCondition(target, 'aegiibpmsg');
@@ -476,27 +476,27 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			this.add(`c:|${getName('Blitz')}|https://www.youtube.com/watch?v=lPGipwoJiOM`);
 		},
 	},
-	breadstycks: {
+	breadey: {
 		noCopy: true,
 		onStart(pokemon) {
-			this.add(`c:|${getName('Breadstycks')}|I loeuf you <3`);
+			this.add(`c:|${getName('Breadey')}|I loeuf you <3`);
 		},
 		// onSwitchOut implemented in ability instead
 		onFaint() {
-			this.add(`c:|${getName('Breadstycks')}|Oh, ma vie... c'est 'pitable'...`);
+			this.add(`c:|${getName('Breadey')}|Oh, ma vie... c'est 'pitable'...`);
 		},
 		onFoeFaint(target, source, effect) {
 			if (source === this.effectState.target && effect?.name === 'Painful Exit') {
-				this.add(`c:|${getName('Breadstycks')}|Ashes to ashes, crust to crust.`);
+				this.add(`c:|${getName('Breadey')}|Ashes to ashes, crust to crust.`);
 			} else {
-				this.add(`c:|${getName('Breadstycks')}|Ope, someone's swallowing fishes.`);
+				this.add(`c:|${getName('Breadey')}|Ope, someone's swallowing fishes.`);
 			}
 		},
 		innateName: "Well-Baked Body",
 		shortDesc: "This Pokemon's Defense is raised 2 stages if hit by a Fire move; Fire immunity.",
 		onTryHit(target, source, move) {
 			if (!target.illusion && target !== source && move.type === 'Fire') {
-				if (!this.boost({def: 2})) {
+				if (!this.boost({ def: 2 })) {
 					this.add('-immune', target, '[from] ability: Well-Baked Body');
 				}
 				return null;
@@ -553,6 +553,18 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			this.add(`c:|${getName('Chloe')}|ouch :(`);
 		},
 	},
+	chris: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Chris')}|Sun is down, freezing cold`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Chris')}|She thought it was the ocean, it's just the pool!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Chris')}|Had me out like a light (like a light)`);
+		},
+	},
 	ciran: {
 		noCopy: true,
 		onStart() {
@@ -607,7 +619,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			if (target.illusion) return;
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', '[of] ' + target);
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Oblivious', `[of] ${target}`);
 			}
 		},
 	},
@@ -625,7 +637,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 				this.add(`c:|${getName('Clementine')}|I fucking love air-conditioning.`);
 			}
 		},
-		onFoeSwitchIn(pokemon) {
+		onAnySwitchIn(pokemon) {
 			if ((pokemon.illusion || pokemon).name === 'Kennedy') {
 				this.add(`c:|${getName('Clementine')}|yikes`);
 			}
@@ -677,17 +689,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		},
 		onFaint() {
 			this.add(`c:|${getName('Corthius')}|Maurice, I can't "move it move it" anymore.`);
-		},
-	},
-	daki: {
-		onStart() {
-			this.add(`c:|${getName('Daki')}|Sun is down, freezing cold`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Daki')}|She thought it was the ocean, it's just the pool!`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Daki')}|Had me out like a light (like a light)`);
 		},
 	},
 	dawnofartemis: {
@@ -852,18 +853,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		},
 		onFaint() {
 			this.add(`c:|${getName('Emboar02')}|Too much recoil D:`);
-		},
-	},
-	eva: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('eva')}|You kept me like a secret but I kept you like an oath`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('eva')}|They don't think it be like it is, but it do`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('eva')}|Aight Imma head out`);
 		},
 	},
 	fame: {
@@ -1075,18 +1064,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			this.add(`c:|${getName('in the hills')}|im starting to feel kinda stupid can i please leave`);
 		},
 	},
-	irly: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Irly')}|They see me rollin'`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Irly')}|They hatin'`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Irly')}|Em caso de investigação policial, eu declaro que não tenho envolvimento com este grupo e não sei como estou no mesmo, provavelmente fui inserido por terceiros, declaro que estou disposto a colaborar com as investigações e estou disposto a me apresentar a depoimento se necessário`);
-		},
-	},
 	ironwater: {
 		noCopy: true,
 		onStart() {
@@ -1227,7 +1204,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onSwitchOut() {
 			this.add(`c:|${getName('Kennedy')}|Stream some Taylor Swift whilst I'm gone!`); // TODO replace
 		},
-		onFoeSwitchIn(pokemon) {
+		onAnySwitchIn(pokemon) {
 			switch ((pokemon.illusion || pokemon).name) {
 			case 'Clementine':
 				this.add(`c:|${getName('Kennedy')}|Not the Fr*nch....`);
@@ -1405,11 +1382,11 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onStart(pokemon) {
 			const foe = enemyStaff(pokemon);
 			if (foe === 'WigglyTree') {
-				this.add(`c:|${getName('Loethalion')}|No, I'm not drawing Dialga on a bike again`);
+				this.add(`c:|${getName('Loethalion')}|No, I'm not drawing Dialga on a bike again.`);
 			} else if (foe === 'Swiffix') {
-				this.add(`c:|${getName('Loethalion')}|Oh hi Stinky`);
+				this.add(`c:|${getName('Loethalion')}|Oh hi Stinky.`);
 			} else if (foe === 'Mex') {
-				this.add(`c:|${getName('Loethalion')}|In spain without the A`);
+				this.add(`c:|${getName('Loethalion')}|I'm in Spain without the A.`);
 			} else if (foe === 'Billo') {
 				this.add(`c:|${getName('Loethalion')}|So your saying I can't ban myself?`);
 			} else if (foe === 'Clefable') {
@@ -1417,14 +1394,20 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			} else if (foe === 'Lunell') {
 				this.add(`c:|${getName('Loethalion')}|We bean posting?`);
 			} else if (foe === 'Ciran') {
-				this.add(`c:|${getName('Loethalion')}|So I have another great piplup drawing idea :>`);
+				this.add(`c:|${getName('Loethalion')}|THE FR*CK WORD STAYS BANNED.`);
+			} else if (foe === 'Appletun a la Mode') {
+				this.add(`c:|${getName('Loethalion')}|OOOUUGGHHHH OOOUUUWWAAAA.`);
+			} else if (foe === 'SexyMalasada') {
+				this.add(`c:|${getName('Loethalion')}|I forgot how to rng this mon again, what singular step did I miss?`);
 			} else {
-				this.add(`c:|${getName('Loethalion')}| ...from Zero`);
+				this.add(`c:|${getName('Loethalion')}|...from Zero`);
 			}
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (enemyStaff(source) === 'Swiffix') {
 				this.add(`c:|${getName('Loethalion')}|It's still pfp...`);
+			} else if (enemyStaff(source) === 'Appletun a la Mode') {
+				this.add(`c:|${getName('Loethalion')}|ᵒᵒᵘᵍʰʰ ᵒᵒᵘᵘʷᵃᵃ`);
 			}
 		},
 		onSwitchOut(pokemon) {
@@ -1521,6 +1504,18 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			this.add(`c:|${getName('Lyna 氷')}|${phrase}`);
 		},
 	},
+	maia: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('Maia')}|gm ${enemyStaff(pokemon)}`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Maia')}|(cat)ch you later`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Maia')}|gn`);
+		},
+	},
 	marillvibes: {
 		noCopy: true,
 		onStart() {
@@ -1531,21 +1526,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		},
 		onFaint() {
 			this.add(`c:|${getName('marillvibes ♫')}|The vibes are off... :(`);
-		},
-	},
-	maroon: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('maroon')}|It's not my fault you're, like, in love with me!`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('maroon')}|That's why her hair is so big. It's full of secrets.`);
-		},
-		onFoeSwitchOut() {
-			this.add(`c:|${getName('maroon')}|You wanna do something fun? You wanna go to Taco Bell?`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('maroon')}|Gretchen, I'm sorry I laughed at you that time you got diarrhea at Barnes & Noble. And I'm sorry for telling everyone about it. And I'm sorry for repeating it now.`);
 		},
 	},
 	mathy: {
@@ -1572,7 +1552,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			this.add(`c:|${getName('Merritty')}|congratulations to our winner`);
 		},
 		innateName: "Tourban",
-		shortDesc: "Takes half damage from Ghost moves, deals double damge to Ghost-types.",
+		shortDesc: "Takes half damage from Ghost moves, deals double damage to Ghost-types.",
 		onSourceModifyDamage(damage, source, target, move) {
 			if (source.illusion) return;
 			if (move.type === 'Ghost') {
@@ -1610,6 +1590,18 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		},
 		onFaint() {
 			this.add(`c:|${getName('Mex')}|pain.`);
+		},
+	},
+	miojo: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Miojo')}|They see me rollin'`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Miojo')}|They hatin'`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Miojo')}|Em caso de investigação policial, eu declaro que não tenho envolvimento com este grupo e não sei como estou no mesmo, provavelmente fui inserido por terceiros, declaro que estou disposto a colaborar com as investigações e estou disposto a me apresentar a depoimento se necessário`);
 		},
 	},
 	monkey: {
@@ -1701,22 +1693,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			}
 		},
 	},
-	nyx: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Nyx')}|good meowning, here's why you're wrong.`);
-		},
-		onSwitchOut(pokemon) {
-			this.add(`c:|${getName('Nyx')}|good nyight, I'm always right.`);
-			if (pokemon.illusion || !pokemon.status) return;
-			this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure');
-			pokemon.clearStatus();
-		},
-		onFaint() {
-			this.add(`c:|${getName('Nyx')}|We let TPP cook too hard...`);
-		},
-		innateName: "Natural Cure",
-	},
 	pants: {
 		noCopy: true,
 		onStart() {
@@ -1746,7 +1722,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			case 'beowulf':
 				message = 'BEE';
 				break;
-			case 'breadstycks':
+			case 'breadey':
 				message = 'BREADBOWL';
 				break;
 			case 'clerica':
@@ -1817,7 +1793,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onFaint() {
 			this.add(`c:|${getName('PartMan')}|Okay weeb`);
 		},
-		onFoeSwitchIn(pokemon) {
+		onAnySwitchIn(pokemon) {
 			if (pokemon.name === 'Hydrostatics') {
 				this.add(`c:|${getName('PartMan')}|LUAAAAA!`);
 				this.add(`c:|${getName('PartMan')}|/me pats`);
@@ -1908,6 +1884,22 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onFaint() {
 			this.add(`c:|${getName('pokemonvortex')}|人不可貌相，海水不可斗量`);
 		},
+	},
+	princessautumn: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Princess Autumn')}|good meowning, here's why you're wrong.`);
+		},
+		onSwitchOut(pokemon) {
+			this.add(`c:|${getName('Princess Autumn')}|good nyight, I'm always right.`);
+			if (pokemon.illusion || !pokemon.status) return;
+			this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure');
+			pokemon.clearStatus();
+		},
+		onFaint() {
+			this.add(`c:|${getName('Princess Autumn')}|We let TPP cook too hard...`);
+		},
+		innateName: "Natural Cure",
 	},
 	ptoad: {
 		noCopy: true,
@@ -2026,6 +2018,21 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			this.add(`c:|${getName('ReturnToMonkey')}|Reject the humanity...if you dare...`);
 		},
 	},
+	riovidal: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Rio Vidal')}|It's not my fault you're, like, in love with me!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Rio Vidal')}|That's why her hair is so big. It's full of secrets.`);
+		},
+		onFoeSwitchOut() {
+			this.add(`c:|${getName('Rio Vidal')}|You wanna do something fun? You wanna go to Taco Bell?`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Rio Vidal')}|Gretchen, I'm sorry I laughed at you that time you got diarrhea at Barnes & Noble. And I'm sorry for telling everyone about it. And I'm sorry for repeating it now.`);
+		},
+	},
 	rissoux: {
 		noCopy: true,
 		onStart() {
@@ -2040,7 +2047,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onStart(pokemon) {
 			this.add(`c:|${getName('RSB')}|Time to take a bite out of crime!`);
 			const dog = (this.toID(enemyStaff(pokemon)));
-			if (dog === 'rsb' || dog === 'shiloh' || dog === 'valerian' || dog === 'breadstycks' || dog === 'yuki') {
+			if (dog === 'rsb' || dog === 'shiloh' || dog === 'valerian' || dog === 'breadey' || dog === 'yuki') {
 				this.add(`c:|${getName('RSB')}|DOGGO!`);
 			}
 		},
@@ -2351,6 +2358,18 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			}
 		},
 	},
+	syrinix: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Syrinix')}|You kept me like a secret but I kept you like an oath`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Syrinix')}|They don't think it be like it is, but it do`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Syrinix')}|Aight Imma head out`);
+		},
+	},
 	teclis: {
 		noCopy: true,
 		onStart() {
@@ -2437,18 +2456,6 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		},
 		innateName: "Mold Breaker",
 	},
-	theia: {
-		noCopy: true,
-		onStart(pokemon) {
-			this.add(`c:|${getName('Theia')}|gm ${enemyStaff(pokemon)}`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Theia')}|(cat)ch you later`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Theia')}|gn`);
-		},
-	},
 	thejesucristoosama: {
 		noCopy: true,
 		onStart() {
@@ -2517,7 +2524,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 					type = 'Fire';
 				} else if (['sandstorm', 'deserteddunes'].includes(currentWeather) && !target.hasType('Rock')) {
 					type = 'Rock';
-				} else if (['hail', 'snow'].includes(currentWeather) && !target.hasType('Ice')) {
+				} else if (['hail', 'snowscape'].includes(currentWeather) && !target.hasType('Ice')) {
 					type = 'Ice';
 				} else {
 					// do nothing if it's not the 4 primary weathers...unless there are more?
@@ -2660,7 +2667,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			if (pokemon.illusion) return;
 			pokemon.abilityState.gluttony = true;
 			this.add('-activate', pokemon, 'ability: Nutrient Boost');
-			this.boost({def: 1, spd: 1}, pokemon);
+			this.boost({ def: 1, spd: 1 }, pokemon);
 		},
 		onSwitchOut() {
 			this.add(`c:|${getName('WarriorGallade')}|amidst this tactical retreat, you didn't think i forgot about the pokeradar, did you? you can bet that my return with even more questions will be __eventful__ :3`);
@@ -2776,7 +2783,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		innateName: "Snow Warning",
 		onStart(source) {
 			if (source.illusion) return;
-			this.field.setWeather('snow', source, this.dex.abilities.get('snowwarning'));
+			this.field.setWeather('snowscape', source, this.dex.abilities.get('snowwarning'));
 		},
 	},
 	yveltalnl: {
@@ -3062,7 +3069,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 		onFieldStart(battle, source, effect) {
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'StormSurge', '[from] ability: ' + effect.name, '[of] ' + source);
+				this.add('-weather', 'StormSurge', '[from] ability: ' + effect.name, `[of] ${source}`);
 			} else {
 				this.add('-weather', 'StormSurge');
 			}
@@ -3100,7 +3107,7 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			}
 		},
 		onFieldStart(field, source, effect) {
-			this.add('-weather', 'DesertedDunes', '[from] ability: ' + effect.name, '[of] ' + source);
+			this.add('-weather', 'DesertedDunes', '[from] ability: ' + effect.name, `[of] ${source}`);
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
@@ -3172,16 +3179,16 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			}
 
 			if (effect.name === 'Cute Charm') {
-				this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', '[of] ' + source);
+				this.add('-start', pokemon, 'Attract', '[from] ability: Cute Charm', `[of] ${source}`);
 			} else if (effect.name === 'Destiny Knot') {
-				this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', '[of] ' + source);
+				this.add('-start', pokemon, 'Attract', '[from] item: Destiny Knot', `[of] ${source}`);
 			} else {
 				this.add('-start', pokemon, 'Attract');
 			}
 		},
 		onUpdate(pokemon) {
 			if (this.effectState.source && !this.effectState.source.isActive && pokemon.volatiles['attract']) {
-				this.debug('Removing Attract volatile on ' + pokemon);
+				this.debug(`Removing Attract volatile on ${pokemon}`);
 				pokemon.removeVolatile('attract');
 			}
 		},
@@ -3322,13 +3329,13 @@ export const Conditions: {[id: IDEntry]: ModdedConditionData & {innateName?: str
 			this.activeTarget = pokemon;
 			const damage = this.actions.getConfusionDamage(pokemon, 40);
 			if (typeof damage !== 'number') throw new Error("Confusion damage not dealt");
-			const activeMove = {id: this.toID('confused'), effectType: 'Move', type: '???'};
+			const activeMove = { id: this.toID('confused'), effectType: 'Move', type: '???' };
 			this.damage(damage, pokemon, pokemon, activeMove as ActiveMove);
 			if (this.effectState.sourceEffect?.id === 'cringedadjoke') {
 				for (const target of this.getAllActive()) {
 					if (target === pokemon) continue;
 					if (target.volatiles['cringedadjoke']) {
-						this.boost({atk: 1, def: 1}, target);
+						this.boost({ atk: 1, def: 1 }, target);
 					}
 				}
 			}

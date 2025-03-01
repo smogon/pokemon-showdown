@@ -7,9 +7,9 @@
  * @license MIT
  */
 
-import {FS, Utils, type Streams} from '../lib';
-import {PGDatabase, SQL, SQLStatement} from '../lib/database';
-import type {PartialModlogEntry} from './modlog';
+import { FS, Utils, type Streams } from '../lib';
+import { PGDatabase, SQL, type SQLStatement } from '../lib/database';
+import type { PartialModlogEntry } from './modlog';
 
 interface RoomlogOptions {
 	isMultichannel?: boolean;
@@ -246,7 +246,7 @@ export class Roomlog {
 			// const section = !this.noLogTimes ? 4 : 3; // ['', 'c' timestamp?, author, message]
 			if (line.startsWith(messageStart)) {
 				const parts = Utils.splitFirst(line, '|', section);
-				return {user: parts[section - 1], message: parts[section]};
+				return { user: parts[section - 1], message: parts[section] };
 			}
 		}
 	}
@@ -257,12 +257,12 @@ export class Roomlog {
 			const chatData = this.parseChatLine(message);
 			const type = message.split('|')[1] || "";
 			void this.insertLog(SQL`INSERT INTO roomlogs (${{
-				type: type,
+				type,
 				roomid: this.roomid,
 				userid: toID(chatData?.user) || null,
 				time: SQL`now()`,
 				log: message,
-		  }})`);
+			}})`);
 
 			const dateStr = Chat.toTimestamp(date).split(' ')[0];
 			void this.insertLog(SQL`INSERT INTO roomlog_dates (${{
@@ -275,14 +275,25 @@ export class Roomlog {
 			void this.roomlogStream.write(timestamp + message + '\n');
 		}
 	}
-	private async insertLog(query: SQLStatement, ignoreFailure = false): Promise<void> {
+	private async insertLog(query: SQLStatement, ignoreFailure = false, retries = 3): Promise<void> {
 		try {
 			await this.roomlogTable?.query(query);
 		} catch (e: any) {
 			if (e?.code === '42P01') { // table not found
 				await roomlogDB!._query(FS('databases/schemas/roomlogs.sql').readSync(), []);
-				return this.insertLog(query, ignoreFailure);
+				return this.insertLog(query, ignoreFailure, retries);
 			}
+			// connection terminated / transient errors
+			if (
+				!ignoreFailure &&
+				retries > 0 &&
+				e.message?.includes('Connection terminated unexpectedly')
+			) {
+				// delay before retrying
+				await new Promise(resolve => { setTimeout(resolve, 2000); });
+				return this.insertLog(query, ignoreFailure, retries - 1);
+			}
+			// crashlog for all other errors
 			const [q, vals] = roomlogDB!._resolveSQL(query);
 			Monitor.crashlog(e, 'a roomlog database query', {
 				query: q, values: vals,
@@ -297,7 +308,7 @@ export class Roomlog {
 		const roomlogStreamExisted = this.roomlogStream !== null;
 		await this.destroy();
 		if (this.roomlogTable) {
-			await this.roomlogTable.updateAll({roomid: newID})`WHERE roomid = ${this.roomid}`;
+			await this.roomlogTable.updateAll({ roomid: newID })`WHERE roomid = ${this.roomid}`;
 		} else {
 			const roomlogPath = `chat`;
 			const [roomlogExists, newRoomlogExists] = await Promise.all([
@@ -317,7 +328,7 @@ export class Roomlog {
 		this.roomid = newID;
 		return true;
 	}
-	static rollLogs() {
+	static rollLogs(this: void) {
 		if (Roomlogs.rollLogTimer === true) return;
 		if (Roomlogs.rollLogTimer) {
 			clearTimeout(Roomlogs.rollLogTimer);
@@ -327,8 +338,8 @@ export class Roomlog {
 			log.setupRoomlogStream();
 		}
 		const time = Date.now();
-		const nextMidnight = new Date(time + 24 * 60 * 60 * 1000);
-		nextMidnight.setHours(0, 0, 1);
+		const nextMidnight = new Date();
+		nextMidnight.setHours(24, 0, 0, 0);
 		Roomlogs.rollLogTimer = setTimeout(() => Roomlog.rollLogs(), nextMidnight.getTime() - time);
 	}
 	truncate() {

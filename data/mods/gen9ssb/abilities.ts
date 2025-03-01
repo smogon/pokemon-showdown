@@ -1,5 +1,5 @@
-import {ssbSets} from "./random-teams";
-import {changeSet, getName, PSEUDO_WEATHERS} from "./scripts";
+import { ssbSets } from "./random-teams";
+import { changeSet, getName, PSEUDO_WEATHERS } from "./scripts";
 
 const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'deserteddunes', 'millenniumcastle'];
 
@@ -14,7 +14,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		// For more examples, see https://github.com/smogon/pokemon-showdown/blob/master/data/abilities.ts
 	},
 	*/
-	// Please keep abilites organized alphabetically based on staff member name!
+	// Please keep abilities organized alphabetically based on staff member name!
 	// Aelita
 	fortifiedmetal: {
 		shortDesc: "This Pokemon's weight is doubled and Attack is 1.5x when statused.",
@@ -29,7 +29,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(1.5);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		gen: 9,
 	},
 
@@ -71,7 +71,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify([powMod[this.effectState.fallen], 20]);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Akir
@@ -116,7 +116,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryBoost(boost, target, source, effect) {
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Paw Prints', '[of] ' + target);
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Paw Prints', `[of] ${target}`);
 			}
 		},
 		onModifyMove(move) {
@@ -124,7 +124,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				move.ignoreAbility = true;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Alexander489
@@ -134,7 +134,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onBasePowerPriority: 30,
 		onBasePower(basePower, attacker, defender, move) {
 			const basePowerAfterMultiplier = this.modify(basePower, this.event.modifier);
-			this.debug('Base Power: ' + basePowerAfterMultiplier);
+			this.debug(`Base Power: ${basePowerAfterMultiplier}`);
 			if (basePowerAfterMultiplier <= 60) {
 				this.debug('Confirmed Town boost');
 				return this.chainModify(1.5);
@@ -184,13 +184,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Served Cold",
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Ice') {
-				if (!this.boost({def: 2})) {
+				if (!this.boost({ def: 2 })) {
 					this.add('-immune', target, '[from] ability: Served Cold');
 				}
 				return null;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// aQrator
@@ -263,7 +263,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				boosts['accuracy'] = 0;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		gen: 9,
 	},
 
@@ -326,7 +326,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return null;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		gen: 9,
 	},
 
@@ -360,7 +360,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add("-fail", target, "unboost", "[from] ability: Supervised Learning", "[of] " + target);
+				this.add("-fail", target, "unboost", "[from] ability: Supervised Learning", `[of] ${target}`);
 			}
 		},
 		flags: {},
@@ -380,7 +380,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.5);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// ausma
@@ -398,7 +398,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.heal(pokemon.maxhp / 3);
 			if (this.field.pseudoWeather['trickroom']) {
 				this.field.removePseudoWeather('trickroom');
-				this.boost({spe: 2}, pokemon, pokemon, this.effect);
+				this.boost({ spe: 2 }, pokemon, pokemon, this.effect);
 			}
 		},
 		flags: {},
@@ -415,7 +415,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				move.accuracy = 40;
 				const target = pokemon.foes()[0];
 				if (target && !target.fainted) {
-					this.actions.useMove(move, pokemon, {target, sourceEffect: effect});
+					this.actions.useMove(move, pokemon, { target, sourceEffect: effect });
 				}
 			}
 		},
@@ -464,16 +464,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.75);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
-	// Breadstycks
+	// Breadey
 	painfulexit: {
 		shortDesc: "When this Pokemon switches out, foes lose 25% HP.",
 		name: "Painful Exit",
 		onBeforeSwitchOutPriority: -1,
 		onBeforeSwitchOut(pokemon) {
-			this.add(`c:|${getName('Breadstycks')}|Just kidding!! Take this KNUCKLE SANDWICH`);
+			this.add(`c:|${getName('Breadey')}|Just kidding!! Take this KNUCKLE SANDWICH`);
 			for (const foe of pokemon.foes()) {
 				if (!foe || foe.fainted || !foe.hp) continue;
 				this.add(`-anim`, pokemon, "Tackle", foe);
@@ -503,6 +503,23 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
 		},
 		flags: {},
+	},
+
+	// Chris
+	astrothunder: {
+		shortDesc: "Drizzle + Static.",
+		name: "Astrothunder",
+		onStart(source) {
+			if (source.species.id === 'kyogre' && source.item === 'blueorb') return;
+			this.field.setWeather('raindance');
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target)) {
+				if (this.randomChance(3, 10)) {
+					source.trySetStatus('par', target);
+				}
+			}
+		},
 	},
 
 	// Clefable
@@ -547,7 +564,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (target !== source && move.type === 'Fire') {
 				if (target.setType('Water')) {
 					this.add('-start', target, 'typechange', 'Water', '[from] ability: Melting Point');
-					this.boost({spe: 2}, target, source, this.dex.abilities.get('meltingpoint'));
+					this.boost({ spe: 2 }, target, source, this.dex.abilities.get('meltingpoint'));
 				} else {
 					this.add('-immune', target, '[from] ability: Melting Point');
 				}
@@ -600,11 +617,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				const speciesid = pokemon.species.id === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
 				pokemon.formeChange(speciesid, this.effect, true);
 				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.species.get(speciesid));
-				this.boost({atk: 1, spe: 1});
+				this.boost({ atk: 1, spe: 1 });
 				this.add(`c:|${getName('clerica')}|oop`);
 			}
 		},
-		flags: {breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
+		flags: { breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 	},
 
 	// Clouds
@@ -634,7 +651,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return false;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Coolcodename
@@ -649,7 +666,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return null;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Corthius
@@ -671,26 +688,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		flags: {},
-	},
-
-	// Daki
-	astrothunder: {
-		shortDesc: "Drizzle + Static.",
-		name: "Astrothunder",
-		onStart(source) {
-			for (const action of this.queue) {
-				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'kyogre') return;
-				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
-			}
-			this.field.setWeather('raindance');
-		},
-		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target)) {
-				if (this.randomChance(3, 10)) {
-					source.trySetStatus('par', target);
-				}
-			}
-		},
 	},
 
 	// Dawn of Artemis
@@ -765,7 +762,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			for (const ally of pokemon.side.pokemon) {
 				if (!ally.hp || ally === pokemon) continue;
 				if (ally.heal(this.modify(ally.baseMaxhp, pokemon.hp > pokemon.maxhp / 4 ? 0.05 : 0.1))) {
-					this.add('-heal', ally, ally.getHealth, '[from] ability: Coalescence', '[of] ' + pokemon);
+					this.add('-heal', ally, ally.getHealth, '[from] ability: Coalescence', `[of] ${pokemon}`);
 				}
 			}
 		},
@@ -797,7 +794,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamage(damage, target, source, effect) {
 			if (effect.id === 'recoil') {
 				let trueSource = source;
-				// For some reason, the source of the damage is the subsitute user when
+				// For some reason, the source of the damage is the substitute user when
 				// hitting a sub.
 				if (source !== target) trueSource = target;
 				if (!this.activeMove) throw new Error("Battle.activeMove is null");
@@ -835,13 +832,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Ice') {
-				if (!this.boost({atk: 1})) {
+				if (!this.boost({ atk: 1 })) {
 					this.add('-immune', target, '[from] ability: Snowballer');
 				}
 				return null;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Fame
@@ -876,14 +873,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onResidualOrder: 29,
 		onResidual(pokemon) {
 			if (!this.effectState.gamblingAddiction && pokemon.hp && pokemon.hp < pokemon.maxhp / 4) {
-				this.boost({spe: 1});
+				this.boost({ spe: 1 });
 				this.heal(pokemon.maxhp);
 				const move = this.dex.moves.get('finalgambit');
 				const finalGambit = {
 					move: move.name,
 					id: move.id,
-					pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
-					maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+					pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+					maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
 					target: move.target,
 					disabled: false,
 					used: false,
@@ -962,7 +959,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.add(
 				'message',
 				`${name} hacked into PS and looked at ${name === 'Hecate' ? 'her' : 'their'} opponent's sets. ` +
-					`${warnTarget.name}'s move ${warnMoveName} drew ${name === 'Hecate' ? 'her' : 'their'} eye.`
+				`${warnTarget.name}'s move ${warnMoveName} drew ${name === 'Hecate' ? 'her' : 'their'} eye.`
 			);
 			this.add(`c:|${getName(name)}|Interesting. With that in mind, bring it!`);
 		},
@@ -999,7 +996,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryHit(target, source, move) {
 			// Storm Drain
 			if (target !== source && move.type === 'Water') {
-				if (!this.boost({spa: 1})) {
+				if (!this.boost({ spa: 1 })) {
 					this.add('-immune', target, '[from] ability: Hydrostatic Positivity');
 				}
 				return null;
@@ -1007,7 +1004,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 			// Motor Drive
 			if (target !== source && move.type === 'Electric') {
-				if (!this.boost({spe: 1})) {
+				if (!this.boost({ spe: 1 })) {
 					this.add('-immune', target, '[from] ability: Hydrostatic Positivity');
 				}
 				return null;
@@ -1073,7 +1070,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (pokemon.baseSpecies.baseSpecies !== 'Kyurem' || pokemon.transformed || !pokemon.hp) return;
 			changeSet(this, pokemon, ssbSets['Imperial']);
 		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 	},
 
 	// in the hills
@@ -1087,59 +1084,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return null;
 			}
 		},
-		flags: {breakable: 1},
-	},
-
-	// Irly
-	therollingspheal: {
-		shortDesc: "1.5x dmg boost for every repeated move use. Up to 5 uses. +1 Spe when use contact.",
-		name: "The Rolling Spheal",
-		onStart(pokemon) {
-			pokemon.addVolatile('therollingspheal');
-		},
-		onSourceHit(target, source, move) {
-			if (move.flags['contact'] && move.category === 'Physical') {
-				this.add('-activate', source, 'ability: The Rolling Spheal');
-				this.boost({spe: 1}, source, source, move);
-			}
-		},
-		condition: {
-			onStart(pokemon) {
-				this.effectState.lastMove = '';
-				this.effectState.numConsecutive = 0;
-			},
-			onTryMovePriority: -2,
-			onTryMove(pokemon, target, move) {
-				if (!pokemon.hasAbility('therollingspheal')) {
-					pokemon.removeVolatile('therollingspheal');
-					return;
-				}
-				if (this.effectState.lastMove === move.id && pokemon.moveLastTurnResult) {
-					this.effectState.numConsecutive++;
-				} else if (pokemon.volatiles['twoturnmove']) {
-					if (this.effectState.lastMove !== move.id) {
-						this.effectState.numConsecutive = 1;
-					} else {
-						this.effectState.numConsecutive++;
-					}
-				} else {
-					this.effectState.numConsecutive = 0;
-				}
-				this.effectState.lastMove = move.id;
-			},
-			onModifyDamage(damage, source, target, move) {
-				if (this.effectState.numConsecutive > 0) {
-					this.debug(`Current Metronome boost: 6144/4096`);
-					return this.chainModify([6144, 4096]);
-				}
-			},
-			onAfterMove(source, target, move) {
-				if (this.effectState.numConsecutive > 5) {
-					this.effectState.numConsecutive = 0;
-				}
-			},
-		},
-		flags: {},
+		flags: { breakable: 1 },
 	},
 
 	// Irpachuza
@@ -1166,12 +1111,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Fortifying Frost",
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
-			if (['hail', 'snow'].includes(pokemon.effectiveWeather())) {
+			if (['hail', 'snowscape'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpD(spd, pokemon) {
-			if (['hail', 'snow'].includes(pokemon.effectiveWeather())) {
+			if (['hail', 'snowscape'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -1219,7 +1164,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				];
 				for (const sideCondition of remove) {
 					if (side.removeSideCondition(sideCondition)) {
-						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name, '[from] ability: Anfield', '[of] ' + target);
+						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name, '[from] ability: Anfield', `[of] ${target}`);
 					}
 				}
 			}
@@ -1268,7 +1213,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify([5120, 4096]);
 			}
 		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 	},
 
 	// kingbaruk
@@ -1328,7 +1273,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.5);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Kry
@@ -1362,7 +1307,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.75);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Lasen
@@ -1376,12 +1321,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const displayText = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			for (const targetCondition of Object.keys(target.sideConditions)) {
 				if (target.removeSideCondition(targetCondition) && displayText.includes(targetCondition)) {
-					this.add('-sideend', target, this.dex.conditions.get(targetCondition).name, '[from] ability: Idealized World', '[of] ' + pokemon);
+					this.add('-sideend', target, this.dex.conditions.get(targetCondition).name, '[from] ability: Idealized World', `[of] ${pokemon}`);
 				}
 			}
 			for (const sideCondition of Object.keys(pokemon.side.sideConditions)) {
 				if (pokemon.side.removeSideCondition(sideCondition) && displayText.includes(sideCondition)) {
-					this.add('-sideend', pokemon.side, this.dex.conditions.get(sideCondition).name, '[from] ability: Idealized World', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(sideCondition).name, '[from] ability: Idealized World', `[of] ${pokemon}`);
 				}
 			}
 			this.field.clearTerrain();
@@ -1432,7 +1377,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				pokemon.maybeTrapped = true;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Lyna
@@ -1453,7 +1398,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
-			this.actions.useMove(newMove, target, {target: source});
+			this.actions.useMove(newMove, target, { target: source });
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
@@ -1463,26 +1408,31 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
-			this.actions.useMove(newMove, this.effectState.target, {target: source});
+			this.actions.useMove(newMove, this.effectState.target, { target: source });
 			return null;
 		},
 		condition: {
 			duration: 1,
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
-	// maroon
-	builtdifferent: {
-		shortDesc: "Stamina + Normal-type moves get +1 priority.",
-		name: "Built Different",
-		onDamagingHit(damage, target, source, effect) {
-			this.boost({def: 1});
+	// Maia
+	powerabuse: {
+		shortDesc: "Drought + 60% damage reduction + 20% burn after physical move.",
+		name: "Power Abuse",
+		onStart() {
+			this.field.setWeather('sunnyday');
 		},
-		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.type === 'Normal') return priority + 1;
+		onSourceModifyDamage() {
+			return this.chainModify(0.4);
 		},
-		flags: {},
+		onDamagingHit(damage, target, source, move) {
+			if (move.category === "Physical" && this.randomChance(1, 5)) {
+				source.trySetStatus('brn', target);
+			}
+		},
+		flags: { breakable: 1 },
 	},
 
 	// Mathy
@@ -1520,7 +1470,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				];
 				for (const sideCondition of remove) {
 					if (side.removeSideCondition(sideCondition)) {
-						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name, '[from] ability: End Round', '[of] ' + pokemon);
+						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name, '[from] ability: End Round', `[of] ${pokemon}`);
 					}
 				}
 			}
@@ -1555,10 +1505,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					}
 				}
 				mon.clearBoosts();
-				this.add('-clearboost', mon, '[from] ability: End Round', '[of] ' + pokemon);
+				this.add('-clearboost', mon, '[from] ability: End Round', `[of] ${pokemon}`);
 			}
 		},
-		flags: {cantsuppress: 1},
+		flags: { cantsuppress: 1 },
 	},
 
 	// Meteordash
@@ -1572,7 +1522,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifyDef(def) {
 			return this.chainModify(2);
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Mex
@@ -1585,6 +1535,58 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			let bpMod = 1 + (0.1 * turnMultiplier);
 			if (bpMod > 2) bpMod = 2;
 			return this.chainModify(bpMod);
+		},
+		flags: {},
+	},
+
+	// Miojo
+	therollingspheal: {
+		shortDesc: "1.5x dmg boost for every repeated move use. Up to 5 uses. +1 Spe when use contact.",
+		name: "The Rolling Spheal",
+		onStart(pokemon) {
+			pokemon.addVolatile('therollingspheal');
+		},
+		onSourceHit(target, source, move) {
+			if (move.flags['contact'] && move.category === 'Physical') {
+				this.add('-activate', source, 'ability: The Rolling Spheal');
+				this.boost({ spe: 1 }, source, source, move);
+			}
+		},
+		condition: {
+			onStart(pokemon) {
+				this.effectState.lastMove = '';
+				this.effectState.numConsecutive = 0;
+			},
+			onTryMovePriority: -2,
+			onTryMove(pokemon, target, move) {
+				if (!pokemon.hasAbility('therollingspheal')) {
+					pokemon.removeVolatile('therollingspheal');
+					return;
+				}
+				if (this.effectState.lastMove === move.id && pokemon.moveLastTurnResult) {
+					this.effectState.numConsecutive++;
+				} else if (pokemon.volatiles['twoturnmove']) {
+					if (this.effectState.lastMove !== move.id) {
+						this.effectState.numConsecutive = 1;
+					} else {
+						this.effectState.numConsecutive++;
+					}
+				} else {
+					this.effectState.numConsecutive = 0;
+				}
+				this.effectState.lastMove = move.id;
+			},
+			onModifyDamage(damage, source, target, move) {
+				if (this.effectState.numConsecutive > 0) {
+					this.debug(`Current Metronome boost: 6144/4096`);
+					return this.chainModify([6144, 4096]);
+				}
+			},
+			onAfterMove(source, target, move) {
+				if (this.effectState.numConsecutive > 5) {
+					this.effectState.numConsecutive = 0;
+				}
+			},
 		},
 		flags: {},
 	},
@@ -1639,7 +1641,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.5);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Ney
@@ -1682,29 +1684,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		// Item chances modified in items.js
 	},
 
-	// Nyx
-	lasthymn: {
-		shortDesc: "Weakens incoming attacks by 10% for each Pokemon fainted.",
-		name: "Last Hymn",
-		onStart(pokemon) {
-			if (pokemon.side.totalFainted) {
-				this.add('-activate', pokemon, 'ability: Last Hymn');
-				const fallen = Math.min(pokemon.side.totalFainted, 5);
-				this.add('-start', pokemon, `fallen${fallen}`, '[silent]');
-				this.effectState.fallen = fallen;
-			}
-		},
-		onEnd(pokemon) {
-			this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
-		},
-		onBasePowerPriority: 21,
-		onFoeBasePower(basePower, attacker, defender, move) {
-			if (this.effectState.fallen) {
-				return this.chainModify([10, (10 + this.effectState.fallen)]);
-			}
-		},
-	},
-
 	// pants
 	drifting: {
 		shortDesc: "Wandering Spirit + Stakeout.",
@@ -1718,23 +1697,23 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				const sourceAbility = source.setAbility('drifting', target);
 				if (!sourceAbility) return;
 				if (target.isAlly(source)) {
-					this.add('-activate', target, 'Skill Swap', '', '', '[of] ' + source);
+					this.add('-activate', target, 'Skill Swap', '', '', `[of] ${source}`);
 				} else {
-					this.add('-activate', target, 'ability: Drifting', this.dex.abilities.get(sourceAbility).name, 'Drifting', '[of] ' + source);
+					this.add('-activate', target, 'ability: Drifting', this.dex.abilities.get(sourceAbility).name, 'Drifting', `[of] ${source}`);
 				}
 				target.setAbility(sourceAbility);
 			}
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender) {
-			if (!defender.activeTurns) {
+			if (defender && !defender.activeTurns) {
 				this.debug('Stakeout boost');
 				return this.chainModify(2);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender) {
-			if (!defender.activeTurns) {
+			if (defender && !defender.activeTurns) {
 				this.debug('Stakeout boost');
 				return this.chainModify(2);
 			}
@@ -1759,9 +1738,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					this.add(`c:|${getName('PartMan')}|That's it. Get ready to be rapid-fire hugged.`);
 					target.clearBoosts();
 					this.add('-clearboost', target);
-					this.boost({atk: 1, def: -1, spa: 1, spd: -1, spe: 1});
-					const details = target.species.name + (target.level === 100 ? '' : ', L' + target.level) +
-						(target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
+					this.boost({ atk: 1, def: -1, spa: 1, spd: -1, spe: 1 });
+					const details = target.getUpdatedDetails();
 					target.details = details;
 					this.add('replace', target, details);
 				}
@@ -1772,9 +1750,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onStart(pokemon) {
 			if (!pokemon.set.shiny) {
-				this.boost({atk: -1, def: 1, spa: -1, spd: 1});
+				this.boost({ atk: -1, def: 1, spa: -1, spd: 1 });
 			} else {
-				this.boost({atk: 1, def: -1, spa: 1, spd: -1, spe: 1});
+				this.boost({ atk: 1, def: -1, spa: 1, spd: -1, spe: 1 });
 			}
 		},
 	},
@@ -1802,6 +1780,29 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "I Did It Again",
 		flags: {},
 		// implemented in rulesets.ts
+	},
+
+	// Princess Autumn
+	lasthymn: {
+		shortDesc: "Weakens incoming attacks by 10% for each Pokemon fainted.",
+		name: "Last Hymn",
+		onStart(pokemon) {
+			if (pokemon.side.totalFainted) {
+				this.add('-activate', pokemon, 'ability: Last Hymn');
+				const fallen = Math.min(pokemon.side.totalFainted, 5);
+				this.add('-start', pokemon, `fallen${fallen}`, '[silent]');
+				this.effectState.fallen = fallen;
+			}
+		},
+		onEnd(pokemon) {
+			this.add('-end', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
+		},
+		onBasePowerPriority: 21,
+		onFoeBasePower(basePower, attacker, defender, move) {
+			if (this.effectState.fallen) {
+				return this.chainModify([10, (10 + this.effectState.fallen)]);
+			}
+		},
 	},
 
 	// Pulse_kS
@@ -1889,7 +1890,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Boosts Sp. Atk by 2 and sets a 25% Wish upon switch-in.",
 		name: "Anti-Pelau",
 		onStart(target) {
-			this.boost({spa: 2}, target);
+			this.boost({ spa: 2 }, target);
 			const wish = this.dex.getActiveMove('wish');
 			wish.condition = {
 				duration: 2,
@@ -1917,10 +1918,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Rainy's Aura",
 		onStart(source) {
 			if (this.suppressingAbility(source)) return;
-			for (const action of this.queue) {
-				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'kyogre') return;
-				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
-			}
+			if (source.species.id === 'kyogre' && source.item === 'blueorb') return;
 			this.field.setWeather('raindance');
 		},
 		onAnyBasePowerPriority: 20,
@@ -2012,9 +2010,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				totalspd += target.getStat('spd', false, true);
 			}
 			if (totaldef && totaldef >= totalspd) {
-				this.boost({spa: 1});
+				this.boost({ spa: 1 });
 			} else if (totalspd) {
-				this.boost({atk: 1});
+				this.boost({ atk: 1 });
 			}
 
 			// n.b. only affects Hackmons
@@ -2039,10 +2037,23 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const target = this.sample(possibleTargets);
 			const ability = target.getAbility();
 			if (pokemon.setAbility(ability)) {
-				this.add('-ability', pokemon, ability, '[from] ability: Monke See Monke Do', '[of] ' + target);
+				this.add('-ability', pokemon, ability, '[from] ability: Monke See Monke Do', `[of] ${target}`);
 			}
 		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1 },
+	},
+
+	// Rio Vidal
+	builtdifferent: {
+		shortDesc: "Stamina + Normal-type moves get +1 priority.",
+		name: "Built Different",
+		onDamagingHit(damage, target, source, effect) {
+			this.boost({ def: 1 });
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.type === 'Normal') return priority + 1;
+		},
+		flags: {},
 	},
 
 	// Rissoux
@@ -2206,7 +2217,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.5);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// skies
@@ -2239,7 +2250,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Every turn, raises a random stat by 1 stage if the foe has more raised stats.",
 		name: "Adaptive Engineering",
 		onResidual(source) {
-			if (source === undefined || source.foes() === undefined || source.foes()[0] === undefined) return;
+			if (source?.foes()?.[0] === undefined) return;
 			if (source.positiveBoosts() < source.foes()[0].positiveBoosts()) {
 				const stats: BoostID[] = [];
 				let stat: BoostID;
@@ -2251,7 +2262,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 				if (stats.length) {
 					const randomStat = this.sample(stats);
-					this.boost({[randomStat]: 1}, source, source);
+					this.boost({ [randomStat]: 1 }, source, source);
 				}
 			}
 		},
@@ -2264,10 +2275,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		desc: "On switch-in, this Pokemon summons Sunny Day. If Sunny Day is active, this Pokemon's Speed is 1.5x.",
 		name: "Ride the Sun!",
 		onStart(source) {
-			for (const action of this.queue) {
-				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'groudon') return;
-				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
-			}
+			if (source.species.id === 'groudon' && source.item === 'redorb') return;
 			this.field.setWeather('sunnyday');
 		},
 		onModifySpe(spe, pokemon) {
@@ -2303,7 +2311,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				this.boost({atk: -length}, source);
+				this.boost({ atk: -length }, source);
 			}
 		},
 		flags: {},
@@ -2330,7 +2338,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (target.lastMove && target.lastMove.id !== 'struggle') {
 				if (move.id === target.lastMove.id) {
 					this.attrLastMove('[still]');
-					this.add('cant', target, 'ability: Overasked Clause', move, '[of] ' + source);
+					this.add('cant', target, 'ability: Overasked Clause', move, `[of] ${source}`);
 					return false;
 				}
 			}
@@ -2348,7 +2356,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		onDamagingHit(damage, target, source, effect) {
-			this.boost({def: 1});
+			this.boost({ def: 1 });
 		},
 	},
 
@@ -2398,30 +2406,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				const dazzlingHolder = this.effectState.target;
 				if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
 					this.attrLastMove('[still]');
-					this.add('cant', target, 'ability: Sand Sleuth', move, '[of] ' + source);
+					this.add('cant', target, 'ability: Sand Sleuth', move, `[of] ${source}`);
 					return false;
 				}
 			}
 		},
 		flags: {},
-	},
-
-	// Theia
-	powerabuse: {
-		shortDesc: "Drought + 60% damage reduction + 20% burn after physical move.",
-		name: "Power Abuse",
-		onStart() {
-			this.field.setWeather('sunnyday');
-		},
-		onSourceModifyDamage() {
-			return this.chainModify(0.4);
-		},
-		onDamagingHit(damage, target, source, move) {
-			if (move.category === "Physical" && this.randomChance(1, 5)) {
-				source.trySetStatus('brn', target);
-			}
-		},
-		flags: {breakable: 1},
 	},
 
 	// Tico
@@ -2437,7 +2427,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return false;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// TheJesucristoOsAma
@@ -2539,7 +2529,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifyDef(def) {
 			return this.chainModify(2);
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// umuwo
@@ -2576,7 +2566,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if (target.runEffectiveness(move) > 0) {
-				this.boost({def: 1, spd: 1}, target);
+				this.boost({ def: 1, spd: 1 }, target);
 			}
 		},
 		flags: {},
@@ -2620,7 +2610,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(1.3);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Vistar
@@ -2640,7 +2630,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.5);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// vmnunes
@@ -2698,7 +2688,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.75);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// xy01
@@ -2715,7 +2705,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else {
-					this.boost({atk: -1, spa: -1}, target, pokemon, null, true);
+					this.boost({ atk: -1, spa: -1 }, target, pokemon, null, true);
 				}
 			}
 		},
@@ -2735,10 +2725,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					didSomething = !!this.heal(target.baseMaxhp / 4);
 					break;
 				case 1:
-					didSomething = !!this.boost({spa: 1}, target, target);
+					didSomething = !!this.boost({ spa: 1 }, target, target);
 					break;
 				case 2:
-					didSomething = !!this.boost({spe: 1}, target, target);
+					didSomething = !!this.boost({ spe: 1 }, target, target);
 					break;
 				case 3:
 					if (!target.volatiles['charge']) {
@@ -2757,13 +2747,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return null;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// yeet dab xd
 	treasurebag: {
 		shortDesc: "At the end of the turn and when top kek is used, use one Treasure Bag item in the cycle.",
-		desc: "At the end of each turn and when top kek is used, one of the following effects will occur, starting at the top and moving to the next item for each use of Treasure Bag: Deal 100 HP of damage to the foe, heal the user for 100 HP, paralyze the foe, set Aurora Veil for 5 turns, or grant the user a permanent Reviver Seed condition that causes it to revive to 50% upon reaching 0 HP once. If the Reviver Seed effect is set, all future cycles will replace that effect with a no-effect Reviser Seed item. The state of the cycle persists if the Pokemon switches out and back in.",
+		desc: "At the end of each turn and when top kek is used, one of the following effects will occur, starting at the top and moving to the next item for each use of Treasure Bag: Deal 50 HP of damage to the foe, heal the user for 100 HP, paralyze the foe, set Aurora Veil for 5 turns, or grant the user a permanent Reviver Seed condition that causes it to revive to 50% upon reaching 0 HP once. If the Reviver Seed effect is set, all future cycles will replace that effect with a no-effect Reviser Seed item. The state of the cycle persists if the Pokemon switches out and back in.",
 		name: "Treasure Bag",
 		onStart(target) {
 			this.add('-ability', target, 'Treasure Bag');
@@ -2790,7 +2780,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 						this.add('-activate', pokemon, 'ability: Treasure Bag');
 						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a ${currentItem}!`);
 						if (foe) {
-							this.damage(100, foe, pokemon, this.effect);
+							this.damage(50, foe, pokemon, this.effect);
 						} else {
 							this.add('-message', `But there was no target!`);
 						}
@@ -2921,7 +2911,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			target.setAbility(this.sample(abilities), target);
 			this.add('-ability', target, target.getAbility().name);
 		},
-		flags: {notrace: 1},
+		flags: { notrace: 1 },
 	},
 
 	// YveltalNL
@@ -2939,7 +2929,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					this.add('-immune', target);
 				} else {
 					if (this.dex.species.get(pokemon.species).heightm > this.dex.species.get(target.species).heightm) {
-						this.boost({atk: -1, spa: -1}, target, pokemon, null, true);
+						this.boost({ atk: -1, spa: -1 }, target, pokemon, null, true);
 					}
 				}
 			}
@@ -2972,7 +2962,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				changeSet(this, pokemon, ssbSets['Zarel'], true);
 			}
 		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1 },
 	},
 
 	// zoro
@@ -3000,7 +2990,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		// Yes, this looks very patchwork-y. declaring new persistent global variables seems to be a no-go here
 		// so i repurposed one which should likely not affect anything else - have tested with clerica/zoro on both sides
 		// and their disguise/sturdy state is unaffected by modifying anything here. but let wg know if this breaks stuff.
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Modified abilities
@@ -3054,7 +3044,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				if (pokemon.species.id !== 'castformrainy') forme = 'Castform-Rainy';
 				break;
 			case 'hail':
-			case 'snow':
+			case 'snowscape':
 				if (pokemon.species.id !== 'castformsnowy') forme = 'Castform-Snowy';
 				break;
 			default:
@@ -3062,7 +3052,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				break;
 			}
 			if (pokemon.isActive && forme) {
-				pokemon.formeChange(forme, this.effect, false, '[msg]');
+				pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
 			}
 		},
 	},
@@ -3078,7 +3068,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	neutralizinggas: {
 		inherit: true,
-		onPreStart(pokemon) {
+		onSwitchIn(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
 			for (const target of this.getAllActive()) {

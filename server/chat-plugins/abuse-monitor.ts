@@ -8,11 +8,11 @@
  * @author mia-pi-git
  */
 import * as Artemis from '../artemis';
-import {FS, Utils} from '../../lib';
-import {Config} from '../config-loader';
-import {toID} from '../../sim/dex-data';
-import {getBattleLog, getBattleLinks, HelpTicket} from './helptickets';
-import type {GlobalPermission} from '../user-groups';
+import { FS, Utils } from '../../lib';
+import { Config } from '../config-loader';
+import { toID } from '../../sim/dex-data';
+import { getBattleLog, getBattleLinks, HelpTicket } from './helptickets';
+import type { GlobalPermission } from '../user-groups';
 
 const WHITELIST = ["mia"];
 const MUTE_DURATION = 7 * 60 * 1000;
@@ -20,7 +20,7 @@ const DAY = 24 * 60 * 60 * 1000;
 const STAFF_NOTIF_INTERVAL = 10 * 60 * 1000;
 const MAX_MODLOG_TIME = 2 * 365 * DAY;
 const NON_PUNISHMENTS = ['MUTE', 'REPORT'];
-const NOJOIN_COMMAND_WHITELIST: {[k: string]: string} = {
+const NOJOIN_COMMAND_WHITELIST: { [k: string]: string } = {
 	'lock': '/lock',
 	'weeklock': '/weeklock',
 	'warn': '/warn',
@@ -38,7 +38,7 @@ export const cache: {
 		// todo: move this to just ID[]
 		staffNotified?: ID | ID[],
 		claimed?: ID,
-		recommended?: Record<string, {type: string, reason: string}>,
+		recommended?: Record<string, { type: string, reason: string }>,
 	},
 } = (() => {
 	const plugin = global.Chat?.oldPlugins['abuse-monitor'];
@@ -62,14 +62,14 @@ const defaults: FilterSettings = {
 	thresholdIncrement: null,
 	minScore: 0.65,
 	specials: {
-		THREAT: {0.96: 'MAXIMUM'},
-		IDENTITY_ATTACK: {0.8: 2},
-		SEVERE_TOXICITY: {0.8: 2},
+		THREAT: { 0.96: 'MAXIMUM' },
+		IDENTITY_ATTACK: { 0.8: 2 },
+		SEVERE_TOXICITY: { 0.8: 2 },
 	},
 	replacements: {},
 	recommendOnly: true,
 	punishments: [
-		{certainty: 0.93, type: 'IDENTITY_ATTACK', punishment: 'WARN', count: 2},
+		{ certainty: 0.93, type: 'IDENTITY_ATTACK', punishment: 'WARN', count: 2 },
 	],
 };
 
@@ -77,7 +77,7 @@ export const settings: FilterSettings = (() => {
 	try {
 		// accounting for data changes -
 		// make sure we do have the default data in case it's not in the stored data
-		return {...defaults, ...JSON.parse(FS('config/chat-plugins/nf.json').readSync())};
+		return { ...defaults, ...JSON.parse(FS('config/chat-plugins/nf.json').readSync()) };
 	} catch (e: any) {
 		if (e.code !== "ENOENT") throw e;
 		return defaults;
@@ -119,10 +119,10 @@ interface PunishmentSettings {
 
 interface FilterSettings {
 	disabled?: boolean;
-	thresholdIncrement: {turns: number, amount: number, minTurns?: number} | null;
+	thresholdIncrement: { turns: number, amount: number, minTurns?: number } | null;
 	threshold: number;
 	minScore: number;
-	specials: {[k: string]: {[k: number]: number | "MAXIMUM"}};
+	specials: { [k: string]: { [k: number]: number | "MAXIMUM" } };
 	/** Replaces [key] with [value] before processing the string. */
 	replacements: Record<string, string>;
 	punishments: PunishmentSettings[];
@@ -140,7 +140,7 @@ interface ReviewRequest {
 	room: string;
 	details: string;
 	time: number;
-	resolved?: {by: string, time: number, details: string, result: number};
+	resolved?: { by: string, time: number, details: string, result: number };
 }
 
 // stolen from chatlog. necessary here, but importing chatlog sucks.
@@ -197,7 +197,7 @@ export const punishmentCache: WeakMap<User, Record<string, number>> = (
 );
 
 export async function searchModlog(
-	query: {user: ID, ip?: string | string[], actions?: string[]}
+	query: { user: ID, ip?: string | string[], actions?: string[] }
 ) {
 	const userObj = Users.get(query.user);
 	if (userObj) {
@@ -217,11 +217,11 @@ export async function searchModlog(
 		actionTaker: [],
 		action: [],
 	};
-	if (query.user) search.user.push({search: query.user, isExact: true});
+	if (query.user) search.user.push({ search: query.user, isExact: true });
 	if (query.ip) {
 		if (!Array.isArray(query.ip)) query.ip = [query.ip];
 		for (const ip of query.ip) {
-			search.ip.push({search: ip});
+			search.ip.push({ search: ip });
 		}
 	}
 	const modlog = await Rooms.Modlog.search('global', search);
@@ -270,7 +270,8 @@ export const classifier = new Artemis.RemoteClassifier();
 export async function runActions(user: User, room: GameRoom, message: string, response: Record<string, number>) {
 	const keys = Utils.sortBy(Object.keys(response), k => -response[k]);
 	const recommended: [string, string, boolean][] = [];
-	const prevRecommend = cache[room.roomid]?.recommended?.[user.id];
+	const roomRecord = cache[room.roomid];
+	const prevRecommend = roomRecord?.recommended?.[user.id];
 	for (const punishment of settings.punishments) {
 		if (prevRecommend?.type) { // avoid making extra db queries by frontloading this check
 			if (PUNISHMENTS.indexOf(punishment.punishment) <= PUNISHMENTS.indexOf(prevRecommend?.type)) continue;
@@ -322,9 +323,9 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 		}
 		// go by most severe
 		const [punishment, reason] = recommended[0];
-		if (cache[room.roomid]) {
-			if (!cache[room.roomid].recommended) cache[room.roomid].recommended = {};
-			cache[room.roomid].recommended![user.id] = {type: punishment, reason: reason.replace(/_/g, ' ').toLowerCase()};
+		if (roomRecord) {
+			if (!roomRecord.recommended) roomRecord.recommended = {};
+			roomRecord.recommended[user.id] = { type: punishment, reason: reason.replace(/_/g, ' ').toLowerCase() };
 		}
 		if (user.trusted) {
 			// force just logging for any sort of punishment. requested by staff
@@ -344,26 +345,26 @@ export async function runActions(user: User, room: GameRoom, message: string, re
 		});
 		if (result !== false) {
 			// returning false means not to close the 'ticket'
-			const notified = cache[room.roomid].staffNotified;
+			const notified = roomRecord?.staffNotified;
 			if (notified) {
 				if (typeof notified === 'string') {
-					if (notified === user.id) delete cache[room.roomid].staffNotified;
+					if (notified === user.id) delete roomRecord.staffNotified;
 				} else {
 					notified.splice(notified.indexOf(user.id), 1);
 					if (!notified.length) {
 						delete cache[room.roomid].staffNotified;
 						void Chat.database.run(
 							`INSERT INTO perspective_stats (staff, roomid, result, timestamp) VALUES ($staff, $roomid, $result, $timestamp) ` +
-								`ON CONFLICT (roomid) DO UPDATE SET result = $result, timestamp = $timestamp`,
+							`ON CONFLICT (roomid) DO UPDATE SET result = $result, timestamp = $timestamp`,
 							// todo: maybe use 3 to indicate punishment?
-							{staff: '', roomid: room.roomid, result: 1, timestamp: Date.now()}
+							{ staff: '', roomid: room.roomid, result: 1, timestamp: Date.now() }
 						);
 					}
 				}
 			}
-			delete cache[room.roomid].users[user.id]; // user has been punished, reset their counter
+			delete roomRecord?.users[user.id]; // user has been punished, reset their counter
 			// keep the cache object only if there are other users in it, since they still need to be monitored
-			if (!Object.keys(cache[room.roomid].users).length) {
+			if (roomRecord && !Object.keys(roomRecord.users).length) {
 				delete cache[room.roomid];
 			}
 			notifyStaff();
@@ -537,7 +538,7 @@ function makeScore(roomid: RoomID, result: Record<string, number>) {
 		}
 		if (score !== curScore) flags.add(type);
 	}
-	return {score, flags: [...flags], main};
+	return { score, flags: [...flags], main };
 }
 
 export const chatfilter: Chat.ChatFilter = function (message, user, room) {
@@ -575,9 +576,9 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 		}
 
 		const response = await classifier.classify(message);
-		const {score, flags, main} = makeScore(roomid, response || {});
+		const { score, flags, main } = makeScore(roomid, response || {});
 		if (score) {
-			if (!cache[roomid]) cache[roomid] = {users: {}};
+			if (!cache[roomid]) cache[roomid] = { users: {} };
 			if (!cache[roomid].users[user.id]) cache[roomid].users[user.id] = 0;
 			cache[roomid].users[user.id] += score;
 			let hitThreshold = 0;
@@ -625,7 +626,7 @@ function calcThreshold(roomid: RoomID) {
 	const incr = settings.thresholdIncrement;
 	let num = settings.threshold;
 	const room = Rooms.get(roomid);
-	if (!room || !room.battle || !incr) return num;
+	if (!room?.battle || !incr) return num;
 	if (!incr.minTurns || room.battle.turn >= incr.minTurns) {
 		num += (Math.floor(room.battle.turn / incr.turns) * incr.amount);
 	}
@@ -643,7 +644,7 @@ export const handlers: Chat.Handlers = {
 					`INSERT INTO perspective_stats (staff, roomid, result, timestamp) VALUES ($staff, $roomid, $result, $timestamp) ` +
 					`ON CONFLICT (roomid) DO UPDATE SET result = $result, timestamp = $timestamp`,
 					// 2 means dead
-					{staff: '', roomid, result: 2, timestamp: Date.now()}
+					{ staff: '', roomid, result: 2, timestamp: Date.now() }
 				);
 			}
 		}
@@ -745,10 +746,10 @@ export const commands: Chat.ChatCommands = {
 				target = target.replace(new RegExp(k, 'gi'), settings.replacements[k]);
 			}
 			// intentionally hardcoded to staff to ensure threshold is never altered.
-			const {score, flags} = makeScore('staff', response);
+			const { score, flags } = makeScore('staff', response);
 			let buf = `<strong>Score for "${text}"${target === text ? '' : ` (alt: "${target}")`}:</strong> ${score}<br />`;
 			buf += `<strong>Flags:</strong> ${flags.join(', ')}<br />`;
-			const punishments: {punishment: PunishmentSettings, desc: string[], index: number}[] = [];
+			const punishments: { punishment: PunishmentSettings, desc: string[], index: number }[] = [];
 			for (const [i, p] of settings.punishments.entries()) {
 				const matches = [];
 				for (const k in response) {
@@ -763,7 +764,7 @@ export const commands: Chat.ChatCommands = {
 					}
 					const secondaries = Object.entries(p.secondaryTypes || {});
 					if (secondaries.length) {
-						if (!secondaries.every(([sK, sV]) => response![sK] >= sV)) continue;
+						if (!secondaries.every(([sK, sV]) => response[sK] >= sV)) continue;
 						descriptors.push('secondary');
 					}
 					if (descriptors.length) { // ignore modlog / flag -only based actions
@@ -830,7 +831,7 @@ export const commands: Chat.ChatCommands = {
 			target = target.trim();
 			if (!target) return this.parse(`/help abusemonitor`);
 			const [text, scoreText] = Utils.splitFirst(target, ',').map(f => f.trim());
-			const args = Chat.parseArguments(scoreText, ',', {useIDs: false});
+			const args = Chat.parseArguments(scoreText, ',', { useIDs: false });
 			const scores: Record<string, number> = {};
 			for (let k in args) {
 				const vals = args[k];
@@ -925,7 +926,7 @@ export const commands: Chat.ChatCommands = {
 				// on conflict in case it's re-triggered later.
 				// (we want it to be updated to success if it is now a success where it was previously inaccurate)
 				`ON CONFLICT (roomid) DO UPDATE SET result = $result, timestamp = $timestamp`,
-				{staff: this.user.id, roomid, result, timestamp: Date.now()}
+				{ staff: this.user.id, roomid, result, timestamp: Date.now() }
 			);
 			return this.parse(`/j view-abusemonitor-flagged`);
 		},
@@ -965,7 +966,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			this.room = tarRoom;
 			this.room.reportJoin('j', user.getIdentityWithStatus(this.room), user);
-			const result = await this.parse(`${cmd} ${rest}`, {bypassRoomCheck: true});
+			const result = await this.parse(`${cmd} ${rest}`, { bypassRoomCheck: true });
 			if (result) { // command succeeded - send followup
 				this.add(
 					'|c|~|/raw If you have questions about this action, please contact staff ' +
@@ -1064,7 +1065,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		async userclear(target, room, user) {
 			checkAccess(this);
-			const {targetUsername, rest} = this.splitUser(target);
+			const { targetUsername, rest } = this.splitUser(target);
 			const targetId = toID(targetUsername);
 			if (!targetId) return this.parse(`/help abusemonitor`);
 			if (user.lastCommand !== `am userclear ${targetId}`) {
@@ -1116,7 +1117,7 @@ export const commands: Chat.ChatCommands = {
 			let [rawType, rawPercent, rawScore] = target.split(',');
 			const type = rawType.toUpperCase().replace(/\s/g, '_');
 			rawScore = toID(rawScore);
-			const types = {...Artemis.RemoteClassifier.ATTRIBUTES, "ALL": {}};
+			const types = { ...Artemis.RemoteClassifier.ATTRIBUTES, "ALL": {} };
 			if (!(type in types)) {
 				return this.errorReply(`Invalid type: ${type}. Valid types: ${Object.keys(types).join(', ')}.`);
 			}
@@ -1154,7 +1155,7 @@ export const commands: Chat.ChatCommands = {
 			checkAccess(this);
 			const [rawType, rawPercent] = target.split(',');
 			const type = rawType.toUpperCase().replace(/\s/g, '_');
-			const types = {...Artemis.RemoteClassifier.ATTRIBUTES, "ALL": {}};
+			const types = { ...Artemis.RemoteClassifier.ATTRIBUTES, "ALL": {} };
 			if (!(type in types)) {
 				return this.errorReply(`Invalid type: ${type}. Valid types: ${Object.keys(types).join(', ')}.`);
 			}
@@ -1186,7 +1187,7 @@ export const commands: Chat.ChatCommands = {
 			saveSettings();
 			this.refreshPage('abusemonitor-settings');
 			this.privateGlobalModAction(`${user.name} set the abuse monitor minimum score to ${num}.`);
-			this.globalModlog("ABUSEMONITOR MIN", null, "" + num);
+			this.globalModlog("ABUSEMONITOR MIN", null, `${num}`);
 			this.sendReply(`|html|Remember to use <code>/am respawn</code> to deploy the settings to the child processes.`);
 		},
 		ex: 'exportpunishment',
@@ -1236,34 +1237,15 @@ export const commands: Chat.ChatCommands = {
 			checkAccess(this);
 			let buf = settings.punishments.map(punishment => {
 				const line = [];
-				for (const k in punishment) {
-					// simplifies code to not need to cast every time.
-					const key = k as keyof PunishmentSettings;
-					const val = punishment[key];
-					switch (key) {
-					case 'modlogCount':
-						line.push(`mlc=${val}`);
-						break;
-					case 'modlogActions':
-						line.push(`${(val as string[]).map(f => `mla=${f}`).join(', ')}`);
-						break;
-					case 'punishment':
-						line.push(`p=${val}`);
-						break;
-					case 'type':
-						line.push(`t=${val}`);
-						break;
-					case 'count':
-						line.push(`c=${val}`);
-						break;
-					case 'certainty':
-						line.push(`ct=${val}`);
-						break;
-					case 'secondaryTypes':
-						for (const type in (val as any)) {
-							line.push(`st=${type}|${(val as any)[type]}`);
-						}
-						break;
+				if ('modlogCount' in punishment) line.push(`mlc=${punishment.modlogCount}`);
+				if (punishment.modlogActions) line.push(`${punishment.modlogActions.map(f => `mla=${f}`).join(', ')}`);
+				line.push(`p=${punishment.punishment}`);
+				if ('type' in punishment) line.push(`t=${punishment.type}`);
+				if ('count' in punishment) line.push(`c=${punishment.count}`);
+				if ('certainty' in punishment) line.push(`ct=${punishment.certainty}`);
+				if ('secondaryTypes' in punishment) {
+					for (const type in punishment.secondaryTypes) {
+						line.push(`st=${type}|${punishment.secondaryTypes[type]}`);
 					}
 				}
 				return line.join(', ');
@@ -1416,6 +1398,7 @@ export const commands: Chat.ChatCommands = {
 			this.privateGlobalModAction(`${user.name} removed the abuse-monitor punishment indexed at ${idx + 1}.`);
 			this.stafflog(
 				`Punishment: ` +
+				// eslint-disable-next-line @typescript-eslint/no-base-to-string
 				`${Object.keys(punishment).map(f => `${f}: ${punishment[f as keyof PunishmentSettings]}`).join(', ')}`
 			);
 			this.globalModlog(`ABUSEMONITOR REMOVEPUNISHMENT`, null, `${idx + 1}`);
@@ -1445,7 +1428,7 @@ export const commands: Chat.ChatCommands = {
 			if (rawMin && isNaN(min)) {
 				return this.errorReply(`Invalid minimum (must be a number).`);
 			}
-			settings.thresholdIncrement = {amount: increment, turns};
+			settings.thresholdIncrement = { amount: increment, turns };
 			if (min) {
 				settings.thresholdIncrement.minTurns = min;
 			}
@@ -1769,7 +1752,7 @@ export const commands: Chat.ChatCommands = {
 			`/am respawn - Respawns abuse monitor processes. Requires: whitelist ~`,
 			`/am logs [count][, userid] - View logs of recent matches by the abuse monitor. `,
 			`If a userid is given, searches only logs from that userid. Requires: whitelist ~`,
-			`/am edithistory [user] - Clear specific abuse monitor hit(s) for a user. Requires: @ ~`,
+			`/am edithistory [user] - Clear specific abuse monitor hit(s) for a user. Requires: % @ ~`,
 			`/am userclear [user] - Clear all logged abuse monitor hits for a user. Requires: whitelist ~`,
 			`/am deletelog [number] - Deletes a abuse monitor log matching the row ID [number] given. Requires: whitelist ~`,
 			`/am editspecial [type], [percent], [score] - Sets a special case for the abuse monitor. Requires: whitelist ~`,
@@ -1930,7 +1913,7 @@ export const pages: Chat.PageTable = {
 			buf += `<div class="ladder pad"><table><tr><th>Date</th><th>Room</th><th>User</th><th>Message</th></tr>`;
 			Utils.sortBy(logs, log => -log.time);
 			for (const log of logs) {
-				buf += `<tr><td>${Chat.toTimestamp(new Date(log.time), {human: true})}</td>`;
+				buf += `<tr><td>${Chat.toTimestamp(new Date(log.time), { human: true })}</td>`;
 				buf += `<td><a href="/${log.roomid}">${log.roomid}</a></td>`;
 				buf += Utils.html`<td>${log.userid}</td><td>${log.message}</td></tr>`;
 			}
@@ -1976,7 +1959,7 @@ export const pages: Chat.PageTable = {
 			buf += `<th>Time</th><th>Score / Flags</th><th>Other data</th><th>Manage</th></tr>`;
 			const prettifyFlag = (flag: string) => flag.toLowerCase().replace(/_/g, ' ');
 			for (const log of logs) {
-				const {roomid} = log;
+				const { roomid } = log;
 				buf += `<tr>`;
 				buf += `<td><a href="https://${Config.routes.replays}/${roomid.slice(7)}">${roomid}</a></td>`;
 				if (!userid) buf += `<td>${log.userid}</td>`;
@@ -2028,10 +2011,10 @@ export const pages: Chat.PageTable = {
 			let failures = 0;
 			let dead = 0;
 			const staffStats: Record<string, number> = {};
-			const dayStats: Record<string, {successes: number, failures: number, dead: number, total: number}> = {};
+			const dayStats: Record<string, { successes: number, failures: number, dead: number, total: number }> = {};
 			for (const log of logs) {
 				const cur = Chat.toTimestamp(new Date(log.timestamp)).split(' ')[0];
-				if (!dayStats[cur]) dayStats[cur] = {successes: 0, failures: 0, dead: 0, total: 0};
+				if (!dayStats[cur]) dayStats[cur] = { successes: 0, failures: 0, dead: 0, total: 0 };
 				if (log.result === 2) {
 					dead++;
 					dayStats[cur].dead++;
@@ -2088,7 +2071,7 @@ export const pages: Chat.PageTable = {
 			const punishmentStats = {
 				inaccurate: 0,
 				total: 0,
-				byDay: {} as Record<string, {total: number, inaccurate: number}>,
+				byDay: {} as Record<string, { total: number, inaccurate: number }>,
 				types: {} as Record<string, number>,
 			};
 			const inaccurate = new Set();
@@ -2102,7 +2085,7 @@ export const pages: Chat.PageTable = {
 					if (!punishmentStats.types[chunk.punishment]) punishmentStats.types[chunk.punishment] = 0;
 					punishmentStats.types[chunk.punishment]++;
 					const day = Chat.toTimestamp(new Date(chunk.timestamp)).split(' ')[0];
-					if (!punishmentStats.byDay[day]) punishmentStats.byDay[day] = {total: 0, inaccurate: 0};
+					if (!punishmentStats.byDay[day]) punishmentStats.byDay[day] = { total: 0, inaccurate: 0 };
 					punishmentStats.byDay[day].total++;
 				}
 			}
@@ -2117,7 +2100,7 @@ export const pages: Chat.PageTable = {
 						punishmentStats.inaccurate++;
 						inaccurate.add(chunk.room);
 						const day = Chat.toTimestamp(new Date(chunk.time)).split(' ')[0];
-						if (!punishmentStats.byDay[day]) punishmentStats.byDay[day] = {total: 0, inaccurate: 0};
+						if (!punishmentStats.byDay[day]) punishmentStats.byDay[day] = { total: 0, inaccurate: 0 };
 						punishmentStats.byDay[day].inaccurate++;
 					}
 				}
@@ -2320,7 +2303,7 @@ export const pages: Chat.PageTable = {
 			this.title = `[Artemis History] ${targetUser}`;
 			let buf = `<div class="pad"><h2>Artemis modlog handling for ${targetUser}</h2><hr />`;
 			const modlogEntries = await Rooms.Modlog.search('global', {
-				user: [{search: targetUser, isExact: true}],
+				user: [{ search: targetUser, isExact: true }],
 				note: [],
 				ip: [],
 				action: [],

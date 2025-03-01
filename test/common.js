@@ -16,7 +16,7 @@ function capitalize(word) {
 /**
  * The default random number generator seed used if one is not given.
  */
-const DEFAULT_SEED = [0x09917, 0x06924, 0x0e1c8, 0x06af0];
+const DEFAULT_SEED = 'gen5,99176924e1c86af0';
 
 class TestTools {
 	constructor(mod = 'base') {
@@ -42,7 +42,11 @@ class TestTools {
 	}
 
 	getFormat(options) {
-		if (options.formatid) return Dex.formats.get(options.formatid);
+		if (options.formatid) {
+			const format = Dex.formats.get(options.formatid);
+			if (format.effectType !== 'Format') throw new Error(`Unidentified format: ${options.formatid}`);
+			return format;
+		}
 
 		const gameType = Dex.toID(options.gameType || 'singles');
 		const customRules = [
@@ -73,7 +77,7 @@ class TestTools {
 		if (format) return format;
 
 		format = Dex.formats.get(formatName);
-		if (!format.exists) throw new Error(`Unidentified format: ${formatName}`);
+		if (format.effectType !== 'Format') throw new Error(`Unidentified format: ${formatName}`);
 
 		formatsCache.set(formatName, format);
 		return format;
@@ -96,12 +100,12 @@ class TestTools {
 
 		const battleOptions = {
 			debug: true,
-			forceRandomChance: null || options.forceRandomChance,
-			format: format,
+			forceRandomChance: options.forceRandomChance,
+			format,
 			// If a seed for the pseudo-random number generator is not provided,
 			// a default seed (guaranteed to be the same across test executions)
 			// will be used.
-			seed: options.seed || DEFAULT_SEED,
+			seed: options.seed === undefined ? DEFAULT_SEED : (options.seed || undefined),
 			strictChoices: options.strictChoices !== false,
 		};
 
@@ -110,7 +114,7 @@ class TestTools {
 		for (let i = 0; i < teams.length; i++) {
 			assert(Array.isArray(teams[i]), `Team provided is not an array`);
 			const playerSlot = `p${i + 1}`;
-			battleOptions[playerSlot] = {team: teams[i]};
+			battleOptions[playerSlot] = { team: teams[i] };
 		}
 
 		return new Sim.Battle(battleOptions);
@@ -128,7 +132,7 @@ class TestTools {
 		const battleLog = battle.getDebugLog();
 		if (!fileName) fileName = 'test-replay';
 		const filePath = path.resolve(__dirname, `./replays/${fileName}-${Date.now()}.html`);
-		const out = fs.createWriteStream(filePath, {flags: 'a'});
+		const out = fs.createWriteStream(filePath, { flags: 'a' });
 		out.on('open', () => {
 			out.write(
 				`<!DOCTYPE html>\n` +

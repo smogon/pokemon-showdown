@@ -5,9 +5,9 @@
  * @license MIT
  */
 
-import {Utils, FS, Dashycode, ProcessManager, Net, Streams} from '../../lib';
-import {SQL} from '../../lib/database';
-import {roomlogTable} from '../roomlogs';
+import { Utils, FS, Dashycode, ProcessManager, Net, Streams } from '../../lib';
+import { SQL } from '../../lib/database';
+import { roomlogTable } from '../roomlogs';
 
 const DAY = 24 * 60 * 60 * 1000;
 const MAX_MEMORY = 67108864; // 64MB
@@ -28,9 +28,9 @@ interface RoomStats {
 	/**
 	 * Lines per user.
 	 */
-	lines: {[k: string]: number};
+	lines: { [k: string]: number };
 	// guessed from |J| (number of joins)
-	users: {[k: string]: number};
+	users: { [k: string]: number };
 	days: number;
 	/**
 	 * Average wait time between each line ("dead")
@@ -93,7 +93,7 @@ export class LogReaderRoom {
 			)`WHERE roomid = ${this.roomid} AND time BETWEEN ${dayStart}::int::timestamp AND ${dayEnd}::int::timestamp`;
 			return new Streams.ObjectReadStream<string>({
 				read(this: Streams.ObjectReadStream<string>) {
-					for (const {log, time} of logs) {
+					for (const { log, time } of logs) {
 						this.buf.push(`${Chat.toTimestamp(time).split(' ')[1]} ${log}`);
 					}
 					this.pushEnd();
@@ -175,7 +175,7 @@ export const LogReader = new class {
 		}
 
 		if (!atLeastOne) return null;
-		return {official, normal, hidden, secret, deleted, personal, deletedPersonal};
+		return { official, normal, hidden, secret, deleted, personal, deletedPersonal };
 	}
 
 	/** @returns [dayStart, dayEnd] as seconds (NOT milliseconds) since Unix epoch */
@@ -258,7 +258,7 @@ export const LogViewer = new class {
 			for await (const line of stream) {
 				// sometimes there can be newlines in there. parse accordingly
 				for (const part of line.split('\n')) {
-					buf += this.renderLine(part, opts, {roomid, date: day});
+					buf += this.renderLine(part, opts, { roomid, date: day });
 				}
 			}
 		}
@@ -277,12 +277,12 @@ export const LogViewer = new class {
 		const [timestamp, type, ...rest] = line.split('|');
 		if (type === 'c:') {
 			const [time, username, ...message] = rest;
-			return {time: new Date(time), username, message: message.join('|')};
+			return { time: new Date(time), username, message: message.join('|') };
 		}
-		return {time: new Date(timestamp + day), username: rest[0], message: rest.join('|')};
+		return { time: new Date(timestamp + day), username: rest[0], message: rest.join('|') };
 	}
 
-	renderLine(fullLine: string, opts?: string, data?: {roomid: RoomID, date: string}) {
+	renderLine(fullLine: string, opts?: string, data?: { roomid: RoomID, date: string }) {
 		if (!fullLine) return ``;
 		let timestamp = fullLine.slice(0, 8);
 		let line;
@@ -420,7 +420,7 @@ export const LogViewer = new class {
 		let buf = `<div class="pad"><p>` +
 			`<strong>All logs</strong></p><hr />`;
 
-		const categories: {[k: string]: string} = {
+		const categories: { [k: string]: string } = {
 			'official': "Official",
 			'normal': "Public",
 			'hidden': "Hidden",
@@ -429,7 +429,7 @@ export const LogViewer = new class {
 			'personal': "Personal",
 			'deletedPersonal': "Deleted Personal",
 		};
-		const list = await LogReader.listCategorized(user, opts) as {[k: string]: RoomID[]};
+		const list = await LogReader.listCategorized(user, opts) as { [k: string]: RoomID[] };
 
 		if (!list) {
 			buf += `<p class="message-error">You must be a staff member of a room to view its logs</p></div>`;
@@ -477,13 +477,13 @@ export abstract class Searcher {
 	}
 	abstract searchLinecounts(roomid: RoomID, month: string, user?: ID): Promise<string>;
 	renderLinecountResults(
-		results: {[date: string]: {[userid: string]: number}} | null,
+		results: { [date: string]: { [userid: string]: number } } | null,
 		roomid: RoomID, month: string, user?: ID
 	) {
 		let buf = Utils.html`<div class="pad"><h2>Linecounts on `;
 		buf += `${roomid}${user ? ` for the user ${user}` : ` (top ${MAX_TOPUSERS})`}</h2>`;
 		buf += `<strong>Total lines: {total}</strong><br />`;
-		buf += `<strong>Month: ${month}:</strong><br />`;
+		buf += `<strong>Month: ${month}</strong><br />`;
 		const nextMonth = LogReader.nextMonth(month);
 		const prevMonth = LogReader.prevMonth(month);
 		if (Monitor.logPath(`chat/${roomid}/${prevMonth}`).existsSync()) {
@@ -511,7 +511,7 @@ export abstract class Searcher {
 		} else {
 			buf += '<hr /><ol>';
 			// squish the results together
-			const totalResults: {[k: string]: number} = {};
+			const totalResults: { [k: string]: number } = {};
 			for (const date of Utils.sortBy(Object.keys(results))) {
 				for (const userid in results[date]) {
 					if (!totalResults[userid]) totalResults[userid] = 0;
@@ -560,7 +560,7 @@ export abstract class Searcher {
 		}
 		if (nextExists) {
 			buf += `${prevExists ? `` : `<br />`}<a roomid="view-roominfo-${room}--${next}">Next month</a><br />`;
-		}*/
+		} */
 		buf += this.visualizeStats(stats.average);
 		buf += `<hr />`;
 		buf += `<details class="readmore"><summary><strong>Stats by day</strong></summary>`;
@@ -573,7 +573,7 @@ export abstract class Searcher {
 		return LogViewer.linkify(buf);
 	}
 	visualizeStats(stats: RoomStats) {
-		const titles: {[k: string]: string} = {
+		const titles: { [k: string]: string } = {
 			deadTime: 'Average time between lines',
 			deadPercent: 'Average % of the day spent more than 5 minutes inactive',
 			linesPerUser: 'Average lines per user',
@@ -587,7 +587,7 @@ export abstract class Searcher {
 			buf += `<td>`;
 			switch (k) {
 			case 'deadTime':
-				buf += Chat.toDurationString(stats.deadTime, {precision: 2});
+				buf += Chat.toDurationString(stats.deadTime, { precision: 2 });
 				break;
 
 			case 'linesPerUser': case 'totalLines': case 'averagePresent': case 'deadPercent':
@@ -599,7 +599,7 @@ export abstract class Searcher {
 		buf += `</tr></table></div>`;
 		return buf;
 	}
-	abstract activityStats(room: RoomID, month: string): Promise<{average: RoomStats, days: RoomStats[]}>;
+	abstract activityStats(room: RoomID, month: string): Promise<{ average: RoomStats, days: RoomStats[] }>;
 }
 
 export class FSLogSearcher extends Searcher {
@@ -614,7 +614,7 @@ export class FSLogSearcher extends Searcher {
 			return this.renderLinecountResults(null, roomid, month, user);
 		}
 		const files = await directory.readdir();
-		const results: {[date: string]: {[userid: string]: number}} = {};
+		const results: { [date: string]: { [userid: string]: number } } = {};
 		for (const file of files) {
 			const day = file.slice(0, -4);
 			const stream = Monitor.logPath(`chat/${roomid}/${month}/${file}`).createReadStream();
@@ -635,7 +635,7 @@ export class FSLogSearcher extends Searcher {
 	async dayStats(room: RoomID, day: string) {
 		const cached = this.roomstatsCache.get(room + '-' + day);
 		if (cached) return cached;
-		const results: RoomStats & {day: string} = {
+		const results: RoomStats & { day: string } = {
 			deadTime: 0,
 			deadPercent: 0,
 			lines: {},
@@ -666,7 +666,7 @@ export class FSLogSearcher extends Searcher {
 				break;
 			}
 			case 'c:': case 'c': {
-				const {time, username} = LogViewer.parseChatLine(line, day);
+				const { time, username } = LogViewer.parseChatLine(line, day);
 				const curTime = time.getTime();
 				if (curTime - lastTime > 5 * 60 * 1000) { // more than 5 minutes
 					waitIncrements.push(curTime - lastTime);
@@ -690,7 +690,7 @@ export class FSLogSearcher extends Searcher {
 		results.deadTime = waitIncrements.length ? this.calculateDead(waitIncrements) : 0;
 		results.deadPercent = !results.totalLines ? 100 : (waitIncrements.length / results.totalLines) * 100;
 		results.linesPerUser = (results.totalLines / Object.keys(results.users).length) || 0;
-		results.averagePresent = results.averagePresent / userstatCount;
+		results.averagePresent /= userstatCount;
 
 		// we don't cache the current day's stats because that could be inaccurate, whereas old days will always be the same
 		if (day !== LogReader.today()) {
@@ -747,17 +747,17 @@ export class FSLogSearcher extends Searcher {
 			collected[k] /= stats.length;
 		}
 
-		return {average: collected, days: stats};
+		return { average: collected, days: stats };
 	}
 }
 
 export class RipgrepLogSearcher extends FSLogSearcher {
 	async ripgrepSearchMonth(opts: ChatlogSearch) {
-		const {search, room: roomid, date: month, args} = opts;
+		const { search, room: roomid, date: month, args } = opts;
 		let results: string[];
 		let lineCount = 0;
 		if (Config.disableripgrep) {
-			return {lineCount: 0, results: []};
+			return { lineCount: 0, results: [] };
 		}
 		const resultSep = args?.includes('-m') ? '--' : '\n';
 		try {
@@ -769,7 +769,7 @@ export class RipgrepLogSearcher extends FSLogSearcher {
 			if (args) {
 				options.push(...args);
 			}
-			const {stdout} = await ProcessManager.exec(['rg', ...options], {
+			const { stdout } = await ProcessManager.exec(['rg', ...options], {
 				maxBuffer: MAX_MEMORY,
 				cwd: FS.ROOT_PATH,
 			});
@@ -785,19 +785,19 @@ export class RipgrepLogSearcher extends FSLogSearcher {
 			}
 		}
 		lineCount += results.length;
-		return {results, lineCount};
+		return { results, lineCount };
 	}
-	async searchLinecounts(room: RoomID, month: string, user?: ID) {
+	override async searchLinecounts(room: RoomID, month: string, user?: ID) {
 		// don't need to check if logs exist since ripgrepSearchMonth does that
 		const regexString = (
 			user ? `\\|c\\|${this.constructUserRegex(user)}\\|` : `\\|c\\|([^|]+)\\|`
 		) + `(?!\\/uhtml(change)?)`;
 		const args: string[] = user ? ['--count'] : [];
 		args.push(`--pcre2`);
-		const {results: rawResults} = await this.ripgrepSearchMonth({
+		const { results: rawResults } = await this.ripgrepSearchMonth({
 			search: regexString, raw: true, date: month, room, args,
 		});
-		const results: {[k: string]: {[userid: string]: number}} = {};
+		const results: { [k: string]: { [userid: string]: number } } = {};
 		for (const fullLine of rawResults) {
 			const [data, line] = fullLine.split('.txt:');
 			const date = data.split('/').pop()!;
@@ -824,7 +824,7 @@ export class DatabaseLogSearcher extends Searcher {
 	async searchLinecounts(roomid: RoomID, month: string, user?: ID) {
 		user = toID(user);
 		if (!Rooms.Roomlogs.table) throw new Error(`Database search made while database is disabled.`);
-		const results: {[date: string]: {[user: string]: number}} = {};
+		const results: { [date: string]: { [user: string]: number } } = {};
 		const [monthStart, monthEnd] = LogReader.monthToRange(month);
 		const rows = await Rooms.Roomlogs.table.selectAll()`
 			WHERE ${user ? SQL`userid = ${user} AND ` : SQL``}roomid = ${roomid} AND
@@ -844,7 +844,7 @@ export class DatabaseLogSearcher extends Searcher {
 
 		return this.renderLinecountResults(results, roomid, month, user);
 	}
-	activityStats(room: RoomID, month: string): Promise<{average: RoomStats, days: RoomStats[]}> {
+	activityStats(room: RoomID, month: string): Promise<{ average: RoomStats, days: RoomStats[] }> {
 		throw new Chat.ErrorMessage('This is not yet implemented for the new logs database.');
 	}
 }
@@ -862,11 +862,11 @@ export const pages: Chat.PageTable = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		let [roomid, date, opts] = Utils.splitFirst(args.join('-'), '--', 2) as
 			[RoomID, string | undefined, string | undefined];
-		if (date) date = date.trim();
 		if (!roomid || roomid.startsWith('-')) {
 			this.title = '[Logs]';
 			return LogViewer.list(user, roomid?.slice(1));
 		}
+		this.title = '[Logs] ' + roomid;
 
 		// permission check
 		const room = Rooms.get(roomid);
@@ -900,25 +900,30 @@ export const pages: Chat.PageTable = {
 		}
 
 		void accessLog.writeLine(`${user.id}: <${roomid}> ${date}`);
-		this.title = '[Logs] ' + roomid;
+
+		if (!date) {
+			return LogViewer.room(roomid);
+		}
+
+		date = date.trim();
 		let search;
 
-		const parsedDate = new Date(date as string);
+		const parsedDate = new Date(date);
 		const validDateStrings = ['all', 'alltime'];
-		const validNonDateTerm = search ? validDateStrings.includes(date!) : date === 'today';
+		const validNonDateTerm = search ? validDateStrings.includes(date) : date === 'today';
 		// this is apparently the best way to tell if a date is invalid
-		if (date && isNaN(parsedDate.getTime()) && !validNonDateTerm) {
+		if (isNaN(parsedDate.getTime()) && !validNonDateTerm) {
 			return this.errorReply(`Invalid date.`);
 		}
 
 		const isTime = opts?.startsWith('time-');
 		if (isTime && opts) opts = toID(opts.slice(5));
 
-		if (date && search) {
+		if (search) {
 			Searcher.checkEnabled();
 			this.checkCan('bypassall');
 			return LogSearcher.runSearch();
-		} else if (date) {
+		} else {
 			if (date === 'today') {
 				this.setHTML(await LogViewer.day(roomid, LogReader.today(), opts));
 				if (isTime) this.send(`|scroll|div[data-server="${opts}"]`);
@@ -928,8 +933,6 @@ export const pages: Chat.PageTable = {
 			} else {
 				return LogViewer.month(roomid, parsedDate.toISOString().slice(0, 7));
 			}
-		} else {
-			return LogViewer.room(roomid);
 		}
 	},
 	roomstats(args, user) {
@@ -1077,7 +1080,7 @@ export const commands: Chat.ChatCommands = {
 	roomstats: 'linecount',
 	linecount(target, room, user) {
 		const params = target.split(',').map(f => f.trim());
-		const search: Partial<{roomid: RoomID, date: string, user: string}> = {};
+		const search: Partial<{ roomid: RoomID, date: string, user: string }> = {};
 		for (const [i, param] of params.entries()) {
 			let [key, val] = param.split('=');
 			if (!val) {
@@ -1162,7 +1165,6 @@ export const commands: Chat.ChatCommands = {
 		`Requires: % @ ~`,
 	],
 
-
 	gbc: 'getbattlechat',
 	async getbattlechat(target, room, user) {
 		this.checkCan('lock');
@@ -1182,6 +1184,10 @@ export const commands: Chat.ChatCommands = {
 			roomName = `battle-${roomName.slice(Config.routes.replays.length + 1)}`;
 		}
 		if (roomName.startsWith('psim.us/')) roomName = roomName.slice(8);
+		const queryStringStart = roomName.indexOf('?');
+		if (queryStringStart > -1) {
+			roomName = roomName.slice(0, queryStringStart);
+		}
 		const roomid = roomName.toLowerCase().replace(/[^a-z0-9-]+/g, '') as RoomID;
 		if (!roomid) return this.parse('/help getbattlechat');
 		const userid = toID(userName);
@@ -1250,7 +1256,6 @@ export const commands: Chat.ChatCommands = {
 		`If no arguments are given, shows the entire access log.`,
 		`Requires: ~`,
 	],
-
 
 	gcsearch: 'groupchatsearch',
 	async groupchatsearch(target, room, user) {

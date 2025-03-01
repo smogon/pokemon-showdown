@@ -1,8 +1,8 @@
-import {Utils} from '../lib';
-import {toID, BasicEffect} from './dex-data';
-import {EventMethods} from './dex-conditions';
-import {SpeciesData} from './dex-species';
-import {Tags} from '../data/tags';
+import { Utils } from '../lib/utils';
+import { assignMissingFields, toID, BasicEffect } from './dex-data';
+import type { EventMethods } from './dex-conditions';
+import type { SpeciesData } from './dex-species';
+import { Tags } from '../data/tags';
 
 const DEFAULT_MOD = 'gen9';
 
@@ -10,10 +10,10 @@ export interface FormatData extends Partial<Format>, EventMethods {
 	name: string;
 }
 
-export type FormatList = (FormatData | {section: string, column?: number})[];
-export type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & {inherit: true};
-export interface FormatDataTable {[id: IDEntry]: FormatData}
-export interface ModdedFormatDataTable {[id: IDEntry]: ModdedFormatData}
+export type FormatList = (FormatData | { section: string, column?: number })[];
+export type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & { inherit: true };
+export interface FormatDataTable { [id: IDEntry]: FormatData }
+export interface ModdedFormatDataTable { [id: IDEntry]: ModdedFormatData }
 
 type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 
@@ -149,7 +149,7 @@ export class RuleTable extends Map<string, string> {
 	 * - '': whitelisted
 	 * - null: neither whitelisted nor banned
 	 */
-	check(thing: string, setHas: {[id: string]: true} | null = null) {
+	check(thing: string, setHas: { [id: string]: true } | null = null) {
 		if (this.has(`+${thing}`)) return '';
 		if (setHas) setHas[thing] = true;
 		return this.getReason(`-${thing}`);
@@ -392,7 +392,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	 * random/fixed teams. null if players can bring teams.
 	 */
 	declare readonly team?: string;
-	readonly effectType: FormatEffectType;
+	override readonly effectType: FormatEffectType;
 	readonly debug: boolean;
 	/**
 	 * Whether or not a format will update ladder points if searched
@@ -431,7 +431,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	 */
 	declare readonly hasValue?: boolean | 'integer' | 'positive-integer';
 	declare readonly onValidateRule?: (
-		this: {format: Format, ruleTable: RuleTable, dex: ModdedDex}, value: string
+		this: { format: Format, ruleTable: RuleTable, dex: ModdedDex }, value: string
 	) => string | void;
 	/** ID of rule that can't be combined with this rule */
 	declare readonly mutuallyExclusiveWith?: string;
@@ -441,6 +441,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly queue?: ModdedBattleQueue;
 	declare readonly field?: ModdedField;
 	declare readonly actions?: ModdedBattleActions;
+	declare readonly side?: ModdedBattleSide;
 	declare readonly challengeShow?: boolean;
 	declare readonly searchShow?: boolean;
 	declare readonly bestOfDefault?: boolean;
@@ -471,18 +472,16 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly validateSet?: (this: TeamValidator, set: PokemonSet, teamHas: AnyObject) => string[] | null;
 	declare readonly validateTeam?: (this: TeamValidator, team: PokemonSet[], options?: {
 		removeNicknames?: boolean,
-		skipSets?: {[name: string]: {[key: string]: boolean}},
+		skipSets?: { [name: string]: { [key: string]: boolean } },
 	}) => string[] | void;
 	declare readonly section?: string;
 	declare readonly column?: number;
 
 	constructor(data: AnyObject) {
 		super(data);
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		data = this;
 
 		this.mod = Utils.getString(data.mod) || 'gen9';
-		this.effectType = Utils.getString(data.effectType) as FormatEffectType || 'Format';
+		this.effectType = Utils.getString(data.effectType) as FormatEffectType || 'Condition';
 		this.debug = !!data.debug;
 		this.rated = (typeof data.rated === 'string' ? data.rated : data.rated !== false);
 		this.gameType = data.gameType || 'singles';
@@ -496,6 +495,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 		this.onBegin = data.onBegin || undefined;
 		this.noLog = !!data.noLog;
 		this.playerCount = (this.gameType === 'multi' || this.gameType === 'freeforall' ? 4 : 2);
+		assignMissingFields(this, data);
 	}
 }
 
@@ -515,13 +515,13 @@ function mergeFormatLists(main: FormatList, custom: FormatList | undefined): For
 	const build: FormatSection[] = [];
 
 	// used to track current section to keep formats under their sections.
-	let current: FormatSection | undefined = {section: "", formats: []};
+	let current: FormatSection | undefined = { section: "", formats: [] };
 
 	// populates the original sections and formats easily
 	// there should be no repeat sections at this point.
 	for (const element of main) {
 		if (element.section) {
-			current = {section: element.section, column: element.column, formats: []};
+			current = { section: element.section, column: element.column, formats: [] };
 			build.push(current);
 		} else if ((element as FormatData).name) {
 			current.formats.push((element as FormatData));
@@ -537,7 +537,7 @@ function mergeFormatLists(main: FormatList, custom: FormatList | undefined): For
 
 				// if it's new it makes a new entry.
 				if (current === undefined) {
-					current = {section: element.section, column: element.column, formats: []};
+					current = { section: element.section, column: element.column, formats: [] };
 					build.push(current);
 				}
 			} else if ((element as FormatData).name) { // otherwise, adds the element to its section.
@@ -549,7 +549,7 @@ function mergeFormatLists(main: FormatList, custom: FormatList | undefined): For
 	// builds the final result.
 	for (const element of build) {
 		// adds the section to the list.
-		result.push({section: element.section, column: element.column}, ...element.formats);
+		result.push({ section: element.section, column: element.column }, ...element.formats);
 	}
 
 	return result;
@@ -628,7 +628,7 @@ export class DexFormats {
 	validate(name: string) {
 		const [formatName, customRulesString] = name.split('@@@', 2);
 		const format = this.get(formatName);
-		if (!format.exists) throw new Error(`Unrecognized format "${formatName}"`);
+		if (format.effectType !== 'Format') throw new Error(`Unrecognized format "${formatName}"`);
 		if (!customRulesString) return format.id;
 		const ruleTable = this.getRuleTable(format);
 		const customRules = customRulesString.split(',').map(rule => {
@@ -682,9 +682,9 @@ export class DexFormats {
 		}
 		let effect;
 		if (this.dex.data.Rulesets.hasOwnProperty(id)) {
-			effect = new Format({name, ...this.dex.data.Rulesets[id] as any, ...supplementaryAttributes});
+			effect = new Format({ name, ...this.dex.data.Rulesets[id] as any, ...supplementaryAttributes });
 		} else {
-			effect = new Format({id, name, exists: false});
+			effect = new Format({ id, name, exists: false });
 		}
 		return effect;
 	}
@@ -889,7 +889,9 @@ export class DexFormats {
 			if ("+*-!".includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
 			if (subFormat.exists) {
-				const value = subFormat.onValidateRule?.call({format, ruleTable, dex: this.dex}, ruleTable.valueRules.get(rule as ID)!);
+				const value = subFormat.onValidateRule?.call(
+					{ format, ruleTable, dex: this.dex }, ruleTable.valueRules.get(rule as ID)!
+				);
 				if (typeof value === 'string') ruleTable.valueRules.set(subFormat.id, value);
 			}
 		}

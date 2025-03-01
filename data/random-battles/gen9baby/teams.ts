@@ -1,6 +1,6 @@
-import {PRNG, PRNGSeed} from "../../../sim/prng";
-import {RandomTeams, MoveCounter} from "../gen9/teams";
-import {Utils} from '../../../lib';
+import type { PRNG, PRNGSeed } from "../../../sim/prng";
+import { RandomTeams, type MoveCounter } from "../gen9/teams";
+import { Utils } from '../../../lib';
 
 // First, some lists of moves that can be used for rules throughout set generation. Taken from regular gen9.
 
@@ -62,8 +62,7 @@ export class RandomBabyTeams extends RandomTeams {
 		);
 	}
 
-
-	cullMovePool(
+	override cullMovePool(
 		types: string[],
 		moves: Set<string>,
 		abilities: string[],
@@ -102,9 +101,7 @@ export class RandomBabyTeams extends RandomTeams {
 		}
 
 		// Create list of all status moves to be used later
-		const statusMoves = this.dex.moves.all()
-			.filter(move => move.category === 'Status')
-			.map(move => move.id);
+		const statusMoves = this.cachedStatusMoves;
 
 		// Team-based move culls
 		if (teamDetails.screens && movePool.length >= this.maxMoveCount + 2) {
@@ -147,7 +144,7 @@ export class RandomBabyTeams extends RandomTeams {
 			// These moves are redundant with each other
 			[
 				['alluringvoice', 'dazzlinggleam', 'drainingkiss', 'moonblast'],
-			    ['alluringvoice', 'dazzlinggleam', 'drainingkiss', 'moonblast'],
+				['alluringvoice', 'dazzlinggleam', 'drainingkiss', 'moonblast'],
 			],
 			[['bulletseed', 'gigadrain', 'leafstorm', 'seedbomb'], ['bulletseed', 'gigadrain', 'leafstorm', 'seedbomb']],
 			[['hypnosis', 'thunderwave', 'toxic', 'willowisp', 'yawn'], ['hypnosis', 'thunderwave', 'toxic', 'willowisp', 'yawn']],
@@ -165,7 +162,7 @@ export class RandomBabyTeams extends RandomTeams {
 	}
 
 	// Generate random moveset for a given species, role, tera type.
-	randomMoveset(
+	override randomMoveset(
 		types: string[],
 		abilities: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
@@ -219,6 +216,12 @@ export class RandomBabyTeams extends RandomTeams {
 		// Enforce Sticky Web
 		if (movePool.includes('stickyweb')) {
 			counter = this.addMove('stickyweb', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
+		}
+
+		// Enforce Knock Off on most roles
+		if (movePool.includes('knockoff') && role !== 'Bulky Support') {
+			counter = this.addMove('knockoff', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 				movePool, teraType, role);
 		}
 
@@ -372,7 +375,7 @@ export class RandomBabyTeams extends RandomTeams {
 		if (!['Fast Support', 'Bulky Support'].includes(role) || species.id === 'magnemite') {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
-				const currentAttackType = counter.damagingMoves.values().next().value.type;
+				const currentAttackType = counter.damagingMoves.values().next().value!.type;
 				// Choose an attacking move that is of different type to the current single attack
 				const coverageMoves = [];
 				for (const moveid of movePool) {
@@ -418,7 +421,7 @@ export class RandomBabyTeams extends RandomTeams {
 		return moves;
 	}
 
-	getAbility(
+	override getAbility(
 		types: string[],
 		moves: Set<string>,
 		abilities: string[],
@@ -463,7 +466,7 @@ export class RandomBabyTeams extends RandomTeams {
 		return this.sample(abilities);
 	}
 
-	getPriorityItem(
+	override getPriorityItem(
 		ability: string,
 		types: string[],
 		moves: Set<string>,
@@ -479,8 +482,6 @@ export class RandomBabyTeams extends RandomTeams {
 			return this.sample(species.requiredItems);
 		}
 
-		if (species.id === 'nymble') return 'Silver Powder';
-
 		if (moves.has('focusenergy')) return 'Scope Lens';
 		if (moves.has('thief')) return '';
 		if (moves.has('trick') || moves.has('switcheroo')) return 'Choice Scarf';
@@ -494,7 +495,7 @@ export class RandomBabyTeams extends RandomTeams {
 		if (['Harvest', 'Ripen', 'Unburden'].includes(ability) || moves.has('bellydrum')) return 'Oran Berry';
 	}
 
-	getItem(
+	override getItem(
 		ability: string,
 		types: string[],
 		moves: Set<string>,
@@ -514,7 +515,7 @@ export class RandomBabyTeams extends RandomTeams {
 		return 'Eviolite';
 	}
 
-	getLevel(
+	override getLevel(
 		species: Species,
 	): number {
 		if (this.adjustLevel) return this.adjustLevel;
@@ -522,7 +523,7 @@ export class RandomBabyTeams extends RandomTeams {
 		return this.randomSets[species.id]?.level || 10;
 	}
 
-	getForme(species: Species): string {
+	override getForme(species: Species): string {
 		if (typeof species.battleOnly === 'string') {
 			// Only change the forme. The species has custom moves, and may have different typing and requirements.
 			return species.battleOnly;
@@ -536,7 +537,7 @@ export class RandomBabyTeams extends RandomTeams {
 		return species.name;
 	}
 
-	randomSet(
+	override randomSet(
 		s: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false,
@@ -568,8 +569,8 @@ export class RandomBabyTeams extends RandomTeams {
 		let ability = '';
 		let item = undefined;
 
-		const evs = {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85};
-		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+		const evs = { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 };
+		const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 
 		const types = species.types;
 		const abilities = set.abilities!;
@@ -590,7 +591,6 @@ export class RandomBabyTeams extends RandomTeams {
 
 		// Get level
 		const level = this.getLevel(species);
-
 
 		// Prepare optimal HP for Belly Drum and Life Orb
 		let hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
@@ -662,12 +662,12 @@ export class RandomBabyTeams extends RandomTeams {
 		};
 	}
 
-	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
+	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
 
 	randomBabyTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
-		const seed = this.prng.seed;
+		const seed = this.prng.getSeed();
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
@@ -729,7 +729,7 @@ export class RandomBabyTeams extends RandomTeams {
 						}
 					}
 					if (this.dex.getEffectiveness(typeName, species) > 1) {
-						if (typeDoubleWeaknesses.get(typeName) >= 1 * limitFactor) {
+						if (typeDoubleWeaknesses.get(typeName) >= limitFactor) {
 							skip = true;
 							break;
 						}
@@ -755,7 +755,6 @@ export class RandomBabyTeams extends RandomTeams {
 
 			const set: RandomTeamsTypes.RandomSet = this.randomSet(species, teamDetails, false, false);
 			pokemon.push(set);
-
 
 			// Don't bother tracking details for the last Pokemon
 			if (pokemon.length === this.maxTeamSize) break;

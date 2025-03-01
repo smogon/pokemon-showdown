@@ -2,7 +2,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	trace: {
 		inherit: true,
 		onUpdate(pokemon) {
-			if (!pokemon.isStarted || this.effectState.gaveUp) return;
+			if (!this.effectState.seek) return;
 			const isAbility = pokemon.ability === 'trace';
 
 			const possibleTargets = pokemon.adjacentFoes().filter(
@@ -15,19 +15,19 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 			if (isAbility) {
 				if (pokemon.setAbility(ability)) {
-					this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+					this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
 				}
 			} else {
 				pokemon.removeVolatile('ability:trace');
 				pokemon.addVolatile('ability:' + ability.id, pokemon);
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
 			}
 		},
 	},
 	neutralizinggas: {
 		inherit: true,
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
-		onPreStart(pokemon) {
+		onSwitchIn(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
 			// Remove setter's innates before the ability starts

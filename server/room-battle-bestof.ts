@@ -1,18 +1,18 @@
-import {Utils} from '../lib';
-import {RoomGamePlayer, RoomGame} from "./room-game";
-import type {RoomBattlePlayerOptions, RoomBattleOptions} from './room-battle';
-import type {PrivacySetting, RoomSettings} from './rooms';
+import { Utils } from '../lib';
+import { RoomGamePlayer, RoomGame } from "./room-game";
+import type { RoomBattlePlayerOptions, RoomBattleOptions } from './room-battle';
+import type { PrivacySetting, RoomSettings } from './rooms';
 
 const BEST_OF_IN_BETWEEN_TIME = 40;
 
 export class BestOfPlayer extends RoomGamePlayer<BestOfGame> {
 	wins = 0;
 	ready: boolean | null = null;
-	options: Omit<RoomBattlePlayerOptions, 'user'> & {user: null};
+	options: Omit<RoomBattlePlayerOptions, 'user'> & { user: null };
 	dcAutoloseTime: number | null = null;
 	constructor(user: User | null, game: BestOfGame, num: number, options: RoomBattlePlayerOptions) {
 		super(user, game, num);
-		this.options = {...options, user: null};
+		this.options = { ...options, user: null };
 	}
 	avatar() {
 		let avatar = Users.get(this.id)?.avatar;
@@ -54,7 +54,8 @@ export class BestOfPlayer extends RoomGamePlayer<BestOfGame> {
 		const button = `|c|~|/uhtml controls,<div class="infobox"><p style="margin:6px">Are you ready for game ${gameNum}, ${this.name}?</p><p style="margin:6px">` +
 			(this.ready ?
 				`<button class="button" disabled><i class="fa fa-check"></i> I'm ready!</button> &ndash; waiting for opponent...` :
-				`<button class="button notifying" name="send" value="${cmd}">I'm ready!</button>`) +
+				`<button class="button notifying" name="send" value="${cmd}">I'm ready!</button>`
+			) +
 			`</p></div>`;
 		this.sendRoom(button);
 		battleRoom?.sendUser(user, button);
@@ -68,22 +69,23 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	bestOf: number;
 	format: Format;
 	winThreshold: number;
-	options: Omit<RoomBattleOptions, 'players'> & {parent: Room, players: null};
-	forcedSettings: {modchat?: string | null, privacy?: string | null} = {};
+	options: Omit<RoomBattleOptions, 'players'> & { parent: Room, players: null };
+	forcedSettings: { modchat?: string | null, privacy?: string | null } = {};
 	ties = 0;
-	games: {room: GameRoom, winner: BestOfPlayer | null | undefined, rated: number}[] = [];
+	games: { room: GameRoom, winner: BestOfPlayer | null | undefined, rated: number }[] = [];
 	playerNum = 0;
 	/** null = tie, undefined = not ended */
 	winner: BestOfPlayer | null | undefined = undefined;
 	/** when waiting between battles, this is the just-ended battle room, the one with the |tempnotify| */
 	waitingBattle: GameRoom | null = null;
 	nextBattleTimerEnd: number | null = null;
-	nextBattleTimer: NodeJS.Timer | null = null;
+	nextBattleTimer: NodeJS.Timeout | null = null;
 	/** Does NOT control bestof's own timer, which is always-on. Controls timers in sub-battles. */
 	needsTimer = false;
 	score: number[] | null = null;
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
+		this.gameid = 'bestof' as ID;
 		this.format = Dex.formats.get(options.format);
 		this.bestOf = Number(Dex.formats.getRuleTable(this.format).valueRules.get('bestof'))!;
 		this.winThreshold = Math.floor(this.bestOf / 2) + 1;
@@ -328,7 +330,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 		buf += `</tr></table>`;
 		this.room.add(`|fieldhtml|<center>${buf}</center>`);
 
-		buf = this.games.map(({room, winner}, index) => {
+		buf = this.games.map(({ room, winner }, index) => {
 			let progress = `being played`;
 			if (winner) progress = Utils.html`won by ${winner.name}`;
 			if (winner === null) progress = `tied`;
@@ -345,19 +347,19 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 
 	override startTimer() {
 		this.needsTimer = true;
-		for (const {room} of this.games) {
+		for (const { room } of this.games) {
 			room.battle?.timer.start();
 		}
 	}
 
-	onBattleWin(room: Room, winnerid: ID) {
+	override onBattleWin(room: Room, winnerid: ID) {
 		if (this.ended) return; // can happen if the bo3 is destroyed fsr
 
 		const winner = winnerid ? this.playerTable[winnerid] : null;
 		this.games[this.games.length - 1].winner = winner;
 		if (winner) {
 			winner.wins++;
-			const loserPlayer = room.battle!.players.filter(p => p.num !== winner.num)[0];
+			const loserPlayer = room.battle!.players.find(p => p.num !== winner.num);
 			if (loserPlayer && loserPlayer.dcSecondsLeft <= 0) { // disconnection means opp wins the set
 				return this.forfeit(loserPlayer.name, ` lost the series due to inactivity.`);
 			}
@@ -462,7 +464,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 			p1score = 0;
 		}
 
-		const {rated, room} = this.games[this.games.length - 1];
+		const { rated, room } = this.games[this.games.length - 1];
 		if (rated) {
 			void room.battle?.updateLadder(p1score, winnerid);
 		}
@@ -476,7 +478,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	forfeitPlayer(loser: BestOfPlayer, message = '') {
 		if (this.ended || this.winner) return false;
 
-		this.winner = this.players.filter(p => p !== loser)[0];
+		this.winner = this.players.find(p => p !== loser)!;
 		this.room.add(`||${loser.name}${message || ' forfeited.'}`);
 		this.end(this.winner.id);
 
@@ -486,7 +488,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	}
 	override destroy() {
 		this.setEnded();
-		for (const {room} of this.games) room.expire();
+		for (const { room } of this.games) room.expire();
 		this.games = [];
 		for (const p of this.players) p.destroy();
 		this.players = [];

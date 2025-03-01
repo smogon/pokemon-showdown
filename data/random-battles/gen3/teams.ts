@@ -1,6 +1,6 @@
 import RandomGen4Teams from '../gen4/teams';
-import {PRNG, PRNGSeed} from '../../../sim/prng';
-import type {MoveCounter} from '../gen8/teams';
+import type { PRNG, PRNGSeed } from '../../../sim/prng';
+import type { MoveCounter } from '../gen8/teams';
 
 // Moves that restore HP:
 const RECOVERY_MOVES = [
@@ -30,7 +30,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 	battleHasDitto: boolean;
 	battleHasWobbuffet: boolean;
 
-	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
+	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -60,7 +60,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		};
 	}
 
-	cullMovePool(
+	override cullMovePool(
 		types: string[],
 		moves: Set<string>,
 		abilities: string[],
@@ -121,6 +121,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 			if (movePool.includes('rapidspin')) this.fastPop(movePool, movePool.indexOf('rapidspin'));
 			if (moves.size + movePool.length <= this.maxMoveCount) return;
 		}
+		if (teamDetails.spikes && teamDetails.spikes >= 2) {
+			if (movePool.includes('spikes')) this.fastPop(movePool, movePool.indexOf('spikes'));
+			if (moves.size + movePool.length <= this.maxMoveCount) return;
+		}
 		if (teamDetails.statusCure) {
 			if (movePool.includes('aromatherapy')) this.fastPop(movePool, movePool.indexOf('aromatherapy'));
 			if (movePool.includes('healbell')) this.fastPop(movePool, movePool.indexOf('healbell'));
@@ -129,9 +133,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 		// Develop additional move lists
 		const badWithSetup = ['knockoff', 'rapidspin', 'toxic'];
-		const statusMoves = this.dex.moves.all()
-			.filter(move => move.category === 'Status')
-			.map(move => move.id);
+		const statusMoves = this.cachedStatusMoves;
 
 		// General incompatibilities
 		const incompatiblePairs = [
@@ -162,7 +164,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 	}
 
 	// Generate random moveset for a given species, role, preferred type.
-	randomMoveset(
+	override randomMoveset(
 		types: string[],
 		abilities: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
@@ -347,7 +349,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		if (['Fast Attacker', 'Setup Sweeper', 'Bulky Attacker', 'Wallbreaker', 'Berry Sweeper'].includes(role)) {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
-				const currentAttackType = counter.damagingMoves.values().next().value.type;
+				const currentAttackType = counter.damagingMoves.values().next().value!.type;
 				// Choose an attacking move that is of different type to the current single attack
 				const coverageMoves = [];
 				for (const moveid of movePool) {
@@ -384,7 +386,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		return moves;
 	}
 
-	shouldCullAbility(
+	override shouldCullAbility(
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,
@@ -408,8 +410,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		return false;
 	}
 
-
-	getAbility(
+	override getAbility(
 		types: Set<string>,
 		moves: Set<string>,
 		abilities: string[],
@@ -448,7 +449,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		return this.sample(abilities);
 	}
 
-	getItem(
+	override getItem(
 		ability: string,
 		types: string[],
 		moves: Set<string>,
@@ -519,7 +520,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		return 'Leftovers';
 	}
 
-	randomSet(
+	override randomSet(
 		species: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
@@ -538,8 +539,8 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		let ability = '';
 		let item = undefined;
 
-		const evs = {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85};
-		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+		const evs = { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 };
+		const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 
 		const types = species.types;
 		const abilities = set.abilities!;
@@ -634,10 +635,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		};
 	}
 
-	randomTeam() {
+	override randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
-		const seed = this.prng.seed;
+		const seed = this.prng.getSeed();
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
 
@@ -646,10 +647,10 @@ export class RandomGen3Teams extends RandomGen4Teams {
 		const typePool = this.dex.types.names();
 		const type = this.forceMonotype || this.sample(typePool);
 
-		const baseFormes: {[k: string]: number} = {};
-		const typeCount: {[k: string]: number} = {};
-		const typeWeaknesses: {[k: string]: number} = {};
-		const typeDoubleWeaknesses: {[k: string]: number} = {};
+		const baseFormes: { [k: string]: number } = {};
+		const typeCount: { [k: string]: number } = {};
+		const typeWeaknesses: { [k: string]: number } = {};
+		const typeDoubleWeaknesses: { [k: string]: number } = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 		let numMaxLevelPokemon = 0;
 
@@ -662,6 +663,9 @@ export class RandomGen3Teams extends RandomGen4Teams {
 
 			// Limit to one of each species (Species Clause)
 			if (baseFormes[species.baseSpecies]) continue;
+
+			// Prevent Shedinja from generating after Tyranitar
+			if (species.name === 'Shedinja' && teamDetails.sand) continue;
 
 			// Limit to one Wobbuffet per battle (not just per team)
 			if (species.name === 'Wobbuffet' && this.battleHasWobbuffet) continue;
@@ -696,7 +700,7 @@ export class RandomGen3Teams extends RandomGen4Teams {
 					}
 					if (this.dex.getEffectiveness(typeName, species) > 1) {
 						if (!typeDoubleWeaknesses[typeName]) typeDoubleWeaknesses[typeName] = 0;
-						if (typeDoubleWeaknesses[typeName] >= 1 * limitFactor) {
+						if (typeDoubleWeaknesses[typeName] >= limitFactor) {
 							skip = true;
 							break;
 						}

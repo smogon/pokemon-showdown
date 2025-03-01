@@ -1,5 +1,5 @@
-import {Utils} from '../../lib';
-import {FS} from '../../lib/fs';
+import { Utils } from '../../lib';
+import { FS } from '../../lib/fs';
 
 const SUSPECTS_FILE = 'config/suspects.json';
 
@@ -12,7 +12,7 @@ interface SuspectTest {
 
 interface SuspectsFile {
 	whitelist: string[];
-	suspects: {[format: string]: SuspectTest};
+	suspects: { [format: string]: SuspectTest };
 }
 
 export let suspectTests: SuspectsFile = JSON.parse(FS(SUSPECTS_FILE).readIfExistsSync() || "{}");
@@ -27,8 +27,8 @@ const defaults: SuspectsFile = {
 };
 
 if (!suspectTests.whitelist && !suspectTests.suspects) {
-	const suspects = {...suspectTests} as unknown as {[format: string]: SuspectTest};
-	suspectTests = {...defaults, suspects};
+	const suspects = { ...suspectTests } as unknown as { [format: string]: SuspectTest };
+	suspectTests = { ...defaults, suspects };
 	saveSuspectTests();
 }
 
@@ -58,16 +58,16 @@ export const commands: Chat.ChatCommands = {
 		},
 
 		edit: 'add',
-		add(target, room, user) {
+		async add(target, room, user) {
 			checkPermissions(this);
 
-			const [tier, suspect, date, url, coil] = target.split(',');
-			if (!(tier && suspect && date && url)) {
+			const [tier, suspect, date, url, ...reqs] = target.split(',').map(x => x.trim());
+			if (!(tier && suspect && date && url && reqs)) {
 				return this.parse('/help suspects');
 			}
 
 			const format = Dex.formats.get(tier);
-			if (!format.exists) throw new Chat.ErrorMessage(`"${tier}" is not a valid tier.`);
+			if (format.effectType !== 'Format') throw new Chat.ErrorMessage(`"${tier}" is not a valid tier.`);
 
 			const suspectString = suspect.trim();
 
@@ -81,6 +81,41 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage("Suspect test URLs must be Smogon threads or posts.");
 			}
 
+			const reqData: Record<string, number> = {};
+			if (!reqs.length) {
+				return this.errorReply("At least one requirement for qualifying must be provided.");
+			}
+			for (const req of reqs) {
+				let [k, v] = req.split('=');
+				k = toID(k);
+				if (k === 'b') {
+					await this.parse(`/suspects setcoil ${format},${v}`);
+					continue;
+				}
+				if (!['elo', 'gxe', 'coil'].includes(k)) {
+					return this.errorReply(`Invalid requirement type: ${k}. Must be 'coil', 'gxe', or 'elo'.`);
+				}
+				if (k === 'coil' && !reqs.some(x => toID(x).startsWith('b'))) {
+					throw new Chat.ErrorMessage("COIL reqs are specified, but you have not provided a B value (with the argument `b=num`)");
+				}
+				const val = Number(v);
+				if (isNaN(val) || val < 0) {
+					return this.errorReply(`Invalid value: ${v}`);
+				}
+				if (reqData[k]) {
+					return this.errorReply(`Requirement type ${k} specified twice.`);
+				}
+				reqData[k] = val;
+			}
+			const [out, error] = await LoginServer.request(suspectTests.suspects[format.id] ? "suspects/edit" : "suspects/add", {
+				format: format.id,
+				reqs: JSON.stringify(reqData),
+				url: urlActual,
+			});
+			if (out?.actionerror || error) {
+				throw new Chat.ErrorMessage("Error adding suspect test: " + (out?.actionerror || error?.message));
+			}
+
 			this.privateGlobalModAction(`${user.name} ${suspectTests.suspects[format.id] ? "edited the" : "added a"} ${format.name} suspect test.`);
 			this.globalModlog('SUSPECTTEST', null, `${suspectTests.suspects[format.id] ? "edited" : "added"} ${format.name}`);
 
@@ -92,19 +127,24 @@ export const commands: Chat.ChatCommands = {
 			};
 			saveSuspectTests();
 			this.sendReply(`Added a suspect test notice for ${suspectString} in ${format.name}.`);
-			if (coil) {
-				this.parse(`/suspects setcoil ${format.id},${coil}`);
-			}
+			if (reqData.coil) this.sendReply('Remember to add a B value for your test\'s COIL setting with /suspects setbvalue.');
 		},
 
 		end: 'remove',
 		delete: 'remove',
-		remove(target, room, user) {
+		async remove(target, room, user) {
 			checkPermissions(this);
 
 			const format = toID(target);
 			const test = suspectTests.suspects[format];
 			if (!test) return this.errorReply(`There is no suspect test for '${target}'. Check spelling?`);
+
+			const [out, error] = await LoginServer.request('suspects/end', {
+				format,
+			});
+			if (out?.actionerror || error) {
+				throw new Chat.ErrorMessage(`Error ending suspect: ${out?.actionerror || error?.message}`);
+			}
 
 			this.privateGlobalModAction(`${user.name} removed the ${test.tier} suspect test.`);
 			this.globalModlog('SUSPECTTEST', null, `removed ${test.tier}`);
@@ -160,52 +200,78 @@ export const commands: Chat.ChatCommands = {
 			saveSuspectTests();
 		},
 
+		async verify(target, room, user) {
+			const formatid = toID(target);
+			if (!suspectTests.suspects[formatid]) {
+				throw new Chat.ErrorMessage("There is no suspect test running for the given format.");
+			}
+			const [out, error] = await LoginServer.request("suspects/verify", {
+				formatid,
+				userid: user.id,
+			});
+			if (error) {
+				throw new Chat.ErrorMessage("Error verifying for suspect: " + error.message);
+			}
+			if (out?.actionerror) {
+				throw new Chat.ErrorMessage(out.actionerror);
+			}
+			this.sendReply(
+				out.result ?
+					`You have successfully verified for the ${formatid} suspect test.` :
+					`You could not verify for the ${formatid} suspect test, as you do not meet the requirements.`
+			);
+		},
+
 		help() {
 			return this.parse('/help suspects');
 		},
 
-		deletecoil: 'setcoil',
-		sc: 'setcoil',
-		dc: 'setcoil',
-		async setcoil(target, room, user, connection, cmd) {
+		deletebvalue: 'setbvalue',
+		deletecoil: 'setbvalue',
+		sbv: 'setbvalue',
+		dbv: 'setbvalue',
+		sc: 'setbvalue',
+		dc: 'setbvalue',
+		setcoil: 'setbvalue',
+		async setbvalue(target, room, user, connection, cmd) {
 			checkPermissions(this);
 			if (!toID(target)) {
 				return this.parse(`/help ${cmd}`);
 			}
-			const [format, source] = this.splitOne(target);
-			const formatid = toID(format);
+			const [formatStr, source] = this.splitOne(target);
+			const format = Dex.formats.get(formatStr);
 			let bVal: number | undefined = parseFloat(source);
 			if (cmd.startsWith('d')) {
 				bVal = undefined;
 			} else if (!source || isNaN(bVal) || bVal < 1) {
-				return this.errorReply(`Specify a valid COIL B value.`);
+				throw new Chat.ErrorMessage(`Specify a valid COIL B value.`);
 			}
-			if (!formatid || !Dex.formats.get(formatid).exists) {
-				return this.errorReply(`Specify a valid format to set COIL for.`);
+			if (!toID(formatStr) || !format.exists) {
+				throw new Chat.ErrorMessage(`Specify a valid format to set a COIL B value for. Check spelling?`);
 			}
 			this.sendReply(`Updating...`);
 			const [res, error] = await LoginServer.request('updatecoil', {
-				format: formatid,
+				format: format.id,
 				coil_b: bVal,
 			});
 			if (error) {
-				return this.errorReply(error.message);
+				throw new Chat.ErrorMessage(error.message);
 			}
 			if (!res || res.actionerror) {
-				return this.errorReply(res?.actionerror || "The loginserver is currently disabled.");
+				throw new Chat.ErrorMessage(res?.actionerror || "The loginserver is currently disabled.");
 			}
-			this.globalModlog(`${source ? 'SET' : 'REMOVE'}COIL`, null, `${formatid}${bVal ? ` to ${bVal}` : ""}`);
+			this.globalModlog(`${source ? 'SET' : 'REMOVE'}BVALUE`, null, `${format.id}${bVal ? ` to ${bVal}` : ""}`);
 			this.addGlobalModAction(
-				`${user.name} ${bVal ? `set COIL for ${formatid} to ${bVal}` : `removed COIL values for ${formatid}`}`
+				`${user.name} ${bVal ? `set B value for ${format.name} to ${bVal}` : `removed B value for ${format.name}`}.`
 			);
 			if (source) {
-				return this.sendReply(`COIL B value for ${formatid} set to ${bVal}`);
+				return this.sendReply(`COIL B value for ${format.name} set to ${bVal}.`);
 			} else {
-				return this.sendReply(`Removed COIL for ${formatid}.`);
+				return this.sendReply(`Removed COIL B value for ${format.name}.`);
 			}
 		},
-		setcoilhelp: [
-			`/suspects setcoil OR /suspects sc [formatid], [B value] - Activate COIL ranking for the given [formatid] with the given [B value].`,
+		setbvaluehelp: [
+			`/suspects setbvalue OR /suspects sbv [formatid], [B value] - Activate COIL ranking for the given [formatid] with the given [B value].`,
 			`Requires: suspect whitelist ~`,
 		],
 	},
@@ -214,11 +280,13 @@ export const commands: Chat.ChatCommands = {
 		this.sendReplyBox(
 			`Commands to manage suspect tests:<br />` +
 			`<code>/suspects</code>: displays currently running suspect tests.<br />` +
-			`<code>/suspects add [tier], [suspect], [date], [link]</code>: adds a suspect test. Date in the format MM/DD. Requires: ~<br />` +
+			`<code>/suspects add [tier], [suspect], [date], [link], [...reqs]</code>: adds a suspect test. Date in the format MM/DD. ` +
+			`Reqs in the format [key]=[value], where valid keys are 'coil', 'elo', and 'gxe', delimited by commas. At least one is required. <br />` +
+			`(note that if you are using COIL, you must set a B value indepedently with <code>/suspects setcoil</code>). Requires: ~<br />` +
 			`<code>/suspects remove [tier]</code>: deletes a suspect test. Requires: ~<br />` +
 			`<code>/suspects whitelist [username]</code>: allows [username] to add suspect tests. Requires: ~<br />` +
 			`<code>/suspects unwhitelist [username]</code>: disallows [username] from adding suspect tests. Requires: ~<br />` +
-			`<code>/suspects setcoil OR /suspects sc [formatid], [B value]</code>: Activate COIL ranking for the given [formatid] with the given [B value].` +
+			`<code>/suspects setbvalue OR /suspects sbv [formatid], [B value]</code>: Activate COIL ranking for the given [formatid] with the given [B value].` +
 			`Requires: suspect whitelist ~`
 		);
 	},
