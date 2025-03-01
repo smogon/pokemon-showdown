@@ -346,7 +346,7 @@ export class Pokemon {
 				if (!set.hpType) set.hpType = move.type;
 				move = this.battle.dex.moves.get('hiddenpower');
 			}
-			const defaultPPUps = move.id === 'trumpcard' ? 0 : 3
+			const defaultPPUps = move.id === 'trumpcard' ? 0 : 3;
 			let PPUps = this.set.movePPUps ? this.set.movePPUps[this.set.moves.indexOf(moveid)] : defaultPPUps;
 			PPUps = this.battle.clampIntRange(PPUps, 0, 3);
 			let basepp = move.noPPBoosts ? move.pp : move.pp * (5 + PPUps) / 5;
