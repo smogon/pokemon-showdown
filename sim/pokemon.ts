@@ -350,7 +350,7 @@ export class Pokemon {
 			let PPUps = this.set.movePPUps ? this.set.movePPUps[this.set.moves.indexOf(moveid)] : defaultPPUps;
 			PPUps = this.battle.clampIntRange(PPUps, 0, 3);
 			let basepp = move.noPPBoosts ? move.pp : move.pp * (5 + PPUps) / 5;
-			if (this.battle.gen < 3) basepp = Math.min(61, basepp);
+			if (this.battle.gen < 3 && move.pp === 40) basepp -= PPUps;
 			this.baseMoveSlots.push({
 				move: move.name,
 				id: move.id,
