@@ -271,20 +271,20 @@ export const Teams = new class Teams {
 				if (j < 0) return null;
 			}
 			set.moves = buf.substring(i, j).split(',', 24).map(name => this.unpackName(name, Dex.moves));
+			i = j + 1;
 
 			// move PP ups
 			if (buf.charAt(j) === ';') {
-				i = j + 1;
 				j = buf.indexOf('|', i);
 				if (j < 0) return null;
 				set.movePPUps = buf.substring(i, j).split(',', 24).map(n => {
 					if (!n) return 3;
 					return parseInt(n);
 				});
+				i = j + 1;
 			} else {
-				set.movePPUps = buf.substring(i, j).split(',', 24).map(() => 3);
+				set.movePPUps = set.moves.map(() => 3);
 			}
-			i = j + 1;
 
 			// nature
 			j = buf.indexOf('|', i);
