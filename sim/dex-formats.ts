@@ -778,6 +778,7 @@ export class DexFormats {
 				continue;
 			}
 
+			// ^ is undocumented because I really don't want it used outside of tests
 			const noWarn = ruleSpec.startsWith('^');
 			if (noWarn) ruleSpec = ruleSpec.slice(1);
 

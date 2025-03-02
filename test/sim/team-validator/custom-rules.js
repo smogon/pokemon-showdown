@@ -89,6 +89,17 @@ describe("Custom Rules", () => {
 		assert.throws(() => Dex.formats.validate('gen9ou@@@+pikachu,-allpokemon'));
 	});
 
+	it('should warn when rules do nothing', () => {
+		assert.throws(() => Dex.formats.validate('gen9anythinggoes@@@obtainable'));
+		Dex.formats.validate('gen9anythinggoes@@@!obtainable');
+
+		assert.throws(() => Dex.formats.validate('gen9customgame@@@!obtainable'));
+		Dex.formats.validate('gen9customgame@@@obtainable');
+
+		assert.throws(() => Dex.formats.validate('gen9customgame@@@+cloyster,-allpokemon'));
+		Dex.formats.validate('gen9customgame@@@-allpokemon,+cloyster');
+	});
+
 	it('should support banning/unbanning tag combinations', () => {
 		let team = [
 			{ species: 'Crucibelle-Mega', ability: 'Regenerator', moves: ['protect'], evs: { hp: 1 } },
