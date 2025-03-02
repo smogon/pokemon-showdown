@@ -5673,12 +5673,12 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["bulletpunch", "drainpunch", "gunkshot", "icepunch", "knockoff", "superpower"],
+                "movepool": ["drainpunch", "gunkshot", "icepunch", "knockoff", "superpower"],
                 "abilities": ["Iron Fist"]
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["bulletpunch", "drainpunch", "knockoff", "swordsdance"],
+                "movepool": ["drainpunch", "gunkshot", "knockoff", "swordsdance"],
                 "abilities": ["Iron Fist"]
             }
         ]
