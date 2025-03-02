@@ -100,17 +100,18 @@ describe('value rule support (slow)', () => {
 
 	for (const format of Dex.formats.all()) {
 		if (!format.team) continue;
-		if (Dex.formats.getRuleTable(format).has('adjustleveldown') || Dex.formats.getRuleTable(format).has('adjustlevel')) continue; // already adjusts level
+		it(`${format.name} should support Adjust Level`, () => {
+			const ruleTable = Dex.formats.getRuleTable(format);
+			if (ruleTable.has('adjustleveldown') || ruleTable.has('adjustlevel')) return; // already adjusts level
 
-		for (const level of [1, 99999]) {
-			it(`${format.name} should support Adjust Level = ${level}`, () => {
+			for (const level of [1, 99999]) {
 				testTeam({ format: `${format.id}@@@Adjust Level = ${level}`, rounds: 50 }, team => {
 					for (const set of team) {
 						assert.equal(set.level, level);
 					}
 				});
-			});
-		}
+			}
+		});
 	}
 });
 

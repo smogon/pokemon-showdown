@@ -49,7 +49,7 @@ describe('Team Validator', () => {
 		team = [
 			{ species: 'raichualola', ability: 'surgesurfer', moves: ['fakeout'], evs: { hp: 1 } },
 		];
-		assert.legalTeam(team, 'gen9anythinggoes@@@minsourcegen=9');
+		assert.legalTeam(team, 'gen9anythinggoes');
 	});
 
 	it('should prevent Pokemon that don\'t evolve via level-up and evolve from a Pokemon that does evolve via level-up from being underleveled.', () => {
