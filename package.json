@@ -15,7 +15,7 @@
     "ts-chacha20": "^1.2.0"
   },
   "optionalDependencies": {
-    "better-sqlite3": "^7.6.2",
+    "better-sqlite3": "^11.8.1",
     "cloud-env": "^0.2.3",
     "githubhook": "^1.9.3",
     "node-static": "^0.7.11",
@@ -23,7 +23,8 @@
     "permessage-deflate": "^0.1.7",
     "pg": "^8.11.3",
     "sql-template-strings": "^2.2.2",
-    "sqlite": "^3.0.6",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
     "sucrase": "^3.15.0"
   },
   "secretDependencies": {
@@ -69,7 +70,7 @@
   "license": "MIT",
   "devDependencies": {
     "@stylistic/eslint-plugin": "^4.0.1",
-    "@types/better-sqlite3": "^7.6.2",
+    "@types/better-sqlite3": "7.6.3",
     "@types/cloud-env": "^0.2.2",
     "@types/node": "^14.18.63",
     "@types/node-static": "^0.7.7",
