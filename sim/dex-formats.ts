@@ -631,19 +631,33 @@ export class DexFormats {
 		if (format.effectType !== 'Format') throw new Error(`Unrecognized format "${formatName}"`);
 		if (!customRulesString) return format.id;
 		const ruleTable = this.getRuleTable(format);
+		let hasCustomRules = false;
+		let hasPokemonRule = false;
 		const customRules = customRulesString.split(',').map(rule => {
 			rule = rule.replace(/[\r\n|]*/g, '').trim();
 			const ruleSpec = this.validateRule(rule);
-			if (typeof ruleSpec === 'string' && ruleTable.has(ruleSpec)) return null;
+			if (typeof ruleSpec === 'string') {
+				if (ruleSpec === '-pokemontag:allpokemon' || ruleSpec === '+pokemontag:allpokemon') {
+					if (hasPokemonRule) throw new Error(`You can't ban/unban pokemon before banning/unbanning all Pokemon.`);
+				}
+				if (this.isPokemonRule(ruleSpec)) hasPokemonRule = true;
+			}
+			if (typeof ruleSpec !== 'string' || !ruleTable.has(ruleSpec)) hasCustomRules = true;
 			return rule;
-		}).filter(Boolean);
-		if (!customRules.length) throw new Error(`The format already has your custom rules`);
+		});
+		if (!hasCustomRules) throw new Error(`None of your custom rules change anything`);
 		const validatedFormatid = format.id + '@@@' + customRules.join(',');
 		const moddedFormat = this.get(validatedFormatid, true);
 		this.getRuleTable(moddedFormat);
 		return validatedFormatid;
 	}
 
+	/**
+	 * The default mode is `isTrusted = false`, which is a bit of a
+	 * footgun. PS will never do anything unsafe, but `isTrusted = true`
+	 * will throw if the format string is invalid, while
+	 * `isTrusted = false` will silently fall back to the original format.
+	 */
 	get(name?: string | Format, isTrusted = false): Format {
 		if (name && typeof name !== 'string') return name;
 
@@ -694,6 +708,12 @@ export class DexFormats {
 		return this.formatsListCache!;
 	}
 
+	isPokemonRule(ruleSpec: string) {
+		return (
+			ruleSpec.slice(1).startsWith('pokemontag:') || ruleSpec.slice(1).startsWith('pokemon:') ||
+			ruleSpec.slice(1).startsWith('basepokemon:')
+		);
+	}
 	getRuleTable(format: Format, depth = 1, repeals?: Map<string, number>): RuleTable {
 		if (format.ruleTable && !repeals) return format.ruleTable;
 		if (format.name.length > 50) {
@@ -727,9 +747,11 @@ export class DexFormats {
 		// apply rule repeals before other rules
 		// repeals is a ruleid:depth map (positive: unused, negative: used)
 		const ruleSpecs = ruleset.map(rule => this.validateRule(rule, format));
-		for (const ruleSpec of ruleSpecs) {
-			if (typeof ruleSpec === 'string' && ruleSpec.startsWith('!') && !ruleSpec.startsWith('!!')) {
-				if (!repeals) repeals = new Map();
+		for (let ruleSpec of ruleSpecs) {
+			if (typeof ruleSpec !== 'string') continue;
+			if (ruleSpec.startsWith('^')) ruleSpec = ruleSpec.slice(1);
+			if (ruleSpec.startsWith('!') && !ruleSpec.startsWith('!!')) {
+				repeals ||= new Map();
 				repeals.set(ruleSpec.slice(1), depth);
 			}
 		}
@@ -739,7 +761,9 @@ export class DexFormats {
 		const warnForNoPokemonBans = !!skipPokemonBans && !format.customRules;
 		skipPokemonBans += ruleSpecs.filter(r => r === '-pokemontag:allpokemon').length;
 
-		for (const ruleSpec of ruleSpecs) {
+		// if (format.customRules) console.log(`${format.id}: ${format.customRules.join(', ')}`);
+
+		for (let ruleSpec of ruleSpecs) {
 			// complex ban/unban
 			if (typeof ruleSpec !== 'string') {
 				if (ruleSpec[0] === 'complexTeamBan') {
@@ -754,11 +778,14 @@ export class DexFormats {
 				continue;
 			}
 
+			const noWarn = ruleSpec.startsWith('^');
+			if (noWarn) ruleSpec = ruleSpec.slice(1);
+
 			// repeal rule
 			if (ruleSpec.startsWith('!') && !ruleSpec.startsWith('!!')) {
 				const repealDepth = repeals!.get(ruleSpec.slice(1));
 				if (repealDepth === undefined) throw new Error(`Multiple "${ruleSpec}" rules in ${format.name}`);
-				if (repealDepth === depth) {
+				if (repealDepth === depth && !noWarn) {
 					throw new Error(`Rule "${ruleSpec}" did nothing because "${ruleSpec.slice(1)}" is not in effect`);
 				}
 				if (repealDepth === -depth) repeals!.delete(ruleSpec.slice(1));
@@ -767,21 +794,18 @@ export class DexFormats {
 
 			// individual ban/unban
 			if ('+*-'.includes(ruleSpec.charAt(0))) {
+				if (ruleTable.has(ruleSpec)) {
+					throw new Error(`Rule "${ruleSpec}" in "${format.name}" already exists in "${ruleTable.get(ruleSpec) || format.name}"`);
+				}
 				if (skipPokemonBans) {
 					if (ruleSpec === '-pokemontag:allpokemon' || ruleSpec === '+pokemontag:allpokemon') {
 						skipPokemonBans--;
-					} else if (
-						ruleSpec.slice(1).startsWith('pokemontag:') || ruleSpec.slice(1).startsWith('pokemon:') ||
-						ruleSpec.slice(1).startsWith('basepokemon:')
-					) {
+					} else if (this.isPokemonRule(ruleSpec)) {
 						if (!format.customRules) {
 							throw new Error(`Rule "${ruleSpec}" must go after any "All Pokemon" rule in ${format.name} ("+All Pokemon" should go in ruleset, not unbanlist)`);
 						}
 						continue;
 					}
-				}
-				if (ruleTable.has(ruleSpec)) {
-					throw new Error(`Rule "${ruleSpec}" in "${format.name}" already exists in "${ruleTable.get(ruleSpec) || format.name}"`);
 				}
 				for (const prefix of '+*-') ruleTable.delete(prefix + ruleSpec.slice(1));
 				ruleTable.set(ruleSpec, '');
@@ -818,7 +842,9 @@ export class DexFormats {
 
 				const oldValue = ruleTable.valueRules.get(subformat.id);
 				if (oldValue === value) {
-					throw new Error(`Rule "${ruleSpec}" is redundant with existing rule "${subformat.id}=${value}"${ruleTable.blame(subformat.id)}.`);
+					if (!noWarn) {
+						throw new Error(`Rule "${ruleSpec}" is redundant with existing rule "${subformat.id}=${value}"${ruleTable.blame(subformat.id)}.`);
+					}
 				} else if (repealAndReplace) {
 					if (oldValue === undefined) {
 						if (subformat.mutuallyExclusiveWith && ruleTable.valueRules.has(subformat.mutuallyExclusiveWith)) {
@@ -844,7 +870,7 @@ export class DexFormats {
 			} else {
 				if (value !== undefined) throw new Error(`Rule "${ruleSpec}" should not have a value (no equals sign)`);
 				if (repealAndReplace) throw new Error(`"!!" is not supported for this rule`);
-				if (ruleTable.has(subformat.id) && !repealAndReplace) {
+				if (ruleTable.has(subformat.id) && !repealAndReplace && !noWarn) {
 					throw new Error(`Rule "${ruleSpec}" in "${format.name}" already exists in "${ruleTable.get(subformat.id) || format.name}"`);
 				}
 			}
@@ -858,10 +884,7 @@ export class DexFormats {
 				if (repeals?.has(ruleid)) continue;
 
 				if (skipPokemonBans && '+*-'.includes(ruleid.charAt(0))) {
-					if (
-						ruleid.slice(1).startsWith('pokemontag:') || ruleid.slice(1).startsWith('pokemon:') ||
-						ruleid.slice(1).startsWith('basepokemon:')
-					) {
+					if (this.isPokemonRule(ruleid)) {
 						hasPokemonBans = true;
 						continue;
 					}
@@ -971,6 +994,8 @@ export class DexFormats {
 				throw new Error(`Unrecognized rule "${rule}"`);
 			}
 			if (typeof value === 'string') id = `${id}=${value.trim()}`;
+			if (rule.startsWith('^!')) return `^!${id}`;
+			if (rule.startsWith('^')) return `^${id}`;
 			if (rule.startsWith('!!')) return `!!${id}`;
 			if (rule.startsWith('!')) return `!${id}`;
 			return id;

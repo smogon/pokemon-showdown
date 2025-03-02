@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('../../assert');
+const Dex = require('../../../dist/sim/dex').Dex;
 
 describe("Custom Rules", () => {
 	it('should support legality tags', () => {
@@ -57,12 +58,13 @@ describe("Custom Rules", () => {
 		];
 		assert.false.legalTeam(team, 'gen7ubers@@@-allpokemon,+giratinaaltered');
 
+		// -allpokemon should override +past
 		team = [
 			{ species: 'tyrantrum', ability: 'strongjaw', moves: ['protect'], evs: { hp: 1 } },
 		];
 		assert.false.legalTeam(team, 'gen8nationaldex@@@-allpokemon');
 
-		// whitelist should not override -obtainable
+		// +pikachu should not override -past
 		team = [
 			{ species: 'pikachu-belle', ability: 'lightningrod', moves: ['thunderbolt'], evs: { hp: 1 } },
 		];
@@ -70,18 +72,21 @@ describe("Custom Rules", () => {
 	});
 
 	it('should allow Pokemon to be force-whitelisted', () => {
-		// allpokemon should override all previous bans/unbans
+		// -allpokemon should override +cloyster before it, but not after it
 		let team = [
 			{ species: 'cloyster', ability: 'skilllink', moves: ['iciclespear'], evs: { hp: 1 } },
 		];
+
 		assert.legalTeam(team, 'gen5monotype');
-		assert.false.legalTeam(team, 'gen5monotype@@@-allpokemon,+pikachu');
+		assert.false.legalTeam(team, 'gen5monotype@@@-allpokemon');
+		assert.throws(() => Dex.formats.validate('gen5monotype@@@+cloyster,-allpokemon'));
+		assert.legalTeam(team, 'gen5monotype@@@-allpokemon,+cloyster');
 
 		team = [
 			{ species: 'pikachu', ability: 'lightningrod', moves: ['thunderbolt'], evs: { hp: 1 } },
 		];
 		assert.legalTeam(team, 'gen9ou@@@-allpokemon,+pikachu');
-		assert.false.legalTeam(team, 'gen9ou@@@+pikachu,-allpokemon');
+		assert.throws(() => Dex.formats.validate('gen9ou@@@+pikachu,-allpokemon'));
 	});
 
 	it('should support banning/unbanning tag combinations', () => {
