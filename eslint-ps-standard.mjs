@@ -103,6 +103,7 @@ export const defaultRules = {
 	"no-template-curly-in-string": "error",
 	"no-throw-literal": "warn",
 	"no-unmodified-loop-condition": "error",
+	"no-unreachable": "warn",
 	// best way to read first key of object
 	// "no-unreachable-loop": "error",
 	// ternary is used to convert callbacks to Promises
@@ -268,7 +269,7 @@ export const defaultRulesTSChecked = {
 	// style
 	// =====
 	"@typescript-eslint/no-unnecessary-type-arguments": "error",
-	"@typescript-eslint/restrict-plus-operands": ["error", {
+	"@typescript-eslint/restrict-plus-operands": ["warn", {
 		allowBoolean: false, allowNullish: false, allowNumberAndString: false, allowRegExp: false,
 	}],
 	"@typescript-eslint/restrict-template-expressions": ["error", {

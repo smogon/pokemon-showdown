@@ -41,10 +41,8 @@ export default configure([
 	{
 		name: "TypeScript",
 		files: [
-			"config/*.ts", "data/**/*.ts", "lib/*.ts",
-			"server/**/*.ts", "server/**/*.tsx",
-			"sim/**/*.ts",
-			"tools/set-import/*.ts",
+			"**/*.ts",
+			"**/*.tsx",
 		],
 		extends: [configs.ts],
 		languageOptions: {
@@ -67,6 +65,8 @@ export default configure([
 			// }],
 			"@typescript-eslint/restrict-template-expressions": "off",
 
+			// used in translations
+			"no-template-curly-in-string": "off",
 			// hotpatching, of course
 			"@typescript-eslint/no-require-imports": "off",
 			// too new, let's give it more time
