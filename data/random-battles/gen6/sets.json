@@ -505,8 +505,8 @@
         "level": 81,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["calmmind", "fireblast", "psyshock", "scald", "slackoff"],
+                "role": "Bulky Setup",
+                "movepool": ["calmmind", "psyshock", "scald", "slackoff"],
                 "abilities": ["Regenerator"]
             }
         ]
@@ -2479,7 +2479,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["darkpulse", "focusblast", "gigadrain", "spikes", "suckerpunch"],
+                "movepool": ["darkpulse", "gigadrain", "spikes", "suckerpunch", "superpower"],
                 "abilities": ["Water Absorb"]
             },
             {
@@ -5673,9 +5673,13 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["drainpunch", "gunkshot", "icepunch", "knockoff", "partingshot", "superpower", "swordsdance"],
-                "abilities": ["Iron Fist", "Scrappy"],
-                "preferredTypes": ["Poison"]
+                "movepool": ["drainpunch", "gunkshot", "icepunch", "knockoff", "superpower"],
+                "abilities": ["Iron Fist"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["drainpunch", "gunkshot", "knockoff", "swordsdance"],
+                "abilities": ["Iron Fist"]
             }
         ]
     },
@@ -6030,7 +6034,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["dragondance", "earthquake", "extremespeed", "glare", "outrage", "substitute"],
+                "movepool": ["dragondance", "earthquake", "extremespeed", "glare", "outrage", "stoneedge", "substitute"],
                 "abilities": ["Aura Break"]
             }
         ]

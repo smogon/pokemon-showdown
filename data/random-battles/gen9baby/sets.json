@@ -2731,6 +2731,12 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
+                "movepool": ["Bug Buzz", "Icicle Spear", "Rest", "Sleep Talk"],
+                "abilities": ["Ice Scales"],
+                "teraTypes": ["Steel", "Water"]
+            },
+            {
+                "role": "Bulky Support",
                 "movepool": ["Bug Buzz", "Icy Wind", "Rest", "Sleep Talk"],
                 "abilities": ["Ice Scales"],
                 "teraTypes": ["Steel", "Water"]
@@ -2951,12 +2957,6 @@
                 "movepool": ["Acid Spray", "Discharge", "Muddy Water", "Thunder Wave", "Volt Switch"],
                 "abilities": ["Static"],
                 "teraTypes": ["Water"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Rain Dance", "Thunder", "Volt Switch", "Weather Ball"],
-                "abilities": ["Static"],
-                "teraTypes": ["Water"]
             }
         ]
     },
@@ -2987,7 +2987,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Crunch", "Earthquake", "Facade", "Swords Dance"],
+                "movepool": ["Close Combat", "Crunch", "Facade", "Swords Dance"],
                 "abilities": ["Quick Feet"],
                 "teraTypes": ["Normal"]
             }

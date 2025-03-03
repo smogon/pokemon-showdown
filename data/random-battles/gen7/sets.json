@@ -646,8 +646,8 @@
         "level": 84,
         "sets": [
             {
-                "role": "Bulky Attacker",
-                "movepool": ["calmmind", "fireblast", "psyshock", "scald", "slackoff"],
+                "role": "Bulky Setup",
+                "movepool": ["calmmind", "psyshock", "scald", "slackoff"],
                 "abilities": ["Regenerator"]
             }
         ]
@@ -2714,7 +2714,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["darkpulse", "focusblast", "gigadrain", "spikes", "suckerpunch"],
+                "movepool": ["darkpulse", "gigadrain", "spikes", "suckerpunch", "superpower"],
                 "abilities": ["Water Absorb"]
             },
             {
@@ -6121,9 +6121,14 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["bulletpunch", "drainpunch", "gunkshot", "icepunch", "knockoff", "partingshot", "superpower", "swordsdance"],
-                "abilities": ["Iron Fist", "Scrappy"],
+                "movepool": ["bulletpunch", "drainpunch", "gunkshot", "icepunch", "knockoff", "superpower"],
+                "abilities": ["Iron Fist"],
                 "preferredTypes": ["Poison"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["bulletpunch", "drainpunch", "knockoff", "swordsdance"],
+                "abilities": ["Iron Fist"]
             }
         ]
     },
@@ -6782,7 +6787,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["hiddenpowergrass", "hydropump", "icebeam", "scald"],
+                "movepool": ["hiddenpowergrass", "hydropump", "icebeam", "scald", "uturn"],
                 "abilities": ["Schooling"]
             }
         ]
@@ -7655,8 +7660,8 @@
                 "abilities": ["Volt Absorb"]
             },
             {
-                "role": "AV Pivot",
-                "movepool": ["closecombat", "grassknot", "hiddenpowerice", "knockoff", "plasmafists", "voltswitch"],
+                "role": "Fast Attacker",
+                "movepool": ["closecombat", "grassknot", "hiddenpowerice", "knockoff", "plasmafists", "taunt", "voltswitch"],
                 "abilities": ["Volt Absorb"],
                 "preferredTypes": ["Fighting"]
             }
