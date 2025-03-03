@@ -2711,7 +2711,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["brickbreak", "doubleedge", "hiddenpowerflying", "surf", "swordsdance"],
+                "movepool": ["brickbreak", "doubleedge", "hiddenpowerflying", "hiddenpowerghost", "surf", "swordsdance"],
                 "abilities": ["Hyper Cutter"],
                 "preferredTypes": ["Normal"]
             }
