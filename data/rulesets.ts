@@ -8,13 +8,21 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	// Rulesets
 	///////////////////////////////////////////////////////////////////
 
+	standardag: {
+		effectType: 'ValidatorRule',
+		name: 'Standard AG',
+		desc: "The minimal ruleset for Anything Goes",
+		ruleset: [
+			'Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
+		],
+	},
 	standard: {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
 		desc: "The standard ruleset for all offical Smogon singles tiers (Ubers, OU, etc.)",
 		ruleset: [
-			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
-			'Min Source Gen = 9',
+			'Standard AG',
+			'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
 		],
 	},
 	standardnext: {
@@ -68,8 +76,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Standard Doubles',
 		desc: "The standard ruleset for all official Smogon doubles tiers",
 		ruleset: [
-			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
-			'Min Source Gen = 9',
+			'Standard AG',
+			'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause',
 		],
 	},
 	standardoms: {
@@ -77,8 +85,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Standard OMs',
 		desc: "The standard ruleset for all Smogon OMs (Almost Any Ability, STABmons, etc.)",
 		ruleset: [
-			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Overflow Stat Mod',
-			'Min Source Gen = 9',
+			'Standard AG',
+			'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Overflow Stat Mod',
 		],
 	},
 	standardnatdex: {
@@ -86,7 +94,16 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Standard NatDex',
 		desc: "The standard ruleset for all National Dex tiers",
 		ruleset: [
-			'Obtainable', '+Unobtainable', '+Past', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
+			'Standard AG', 'NatDex Mod',
+			'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Clause', 'Sleep Clause Mod',
+		],
+	},
+	natdexmod: {
+		effectType: 'ValidatorRule',
+		name: 'NatDex Mod',
+		desc: "Mechanics for National Dex formats",
+		ruleset: [
+			'+Unobtainable', '+Past', 'Sketch Post-Gen 7 Moves', 'Min Source Gen = 1',
 		],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
@@ -1564,13 +1581,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
 		ruleset: ['OM Unobtainable Moves'],
 		checkCanLearn(move, species, setSources, set) {
-			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
+			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('natdexmod');
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
 				const speciesTypes: string[] = [];
 				const moveTypes: string[] = [];
 				// BDSP can't import Pokemon from Home, so it shouldn't grant moves from archaic species types
 				const minObtainableSpeciesGen = this.dex.currentMod === 'gen8bdsp' ||
-					(this.dex.gen === 9 && !this.ruleTable.has('standardnatdex')) ?
+					(this.dex.gen === 9 && !this.ruleTable.has('natdexmod')) ?
 					this.dex.gen : species.gen;
 				for (let i = this.dex.gen; i >= minObtainableSpeciesGen && i >= move.gen; i--) {
 					const dex = this.dex.forGen(i);
@@ -1615,7 +1632,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Allows Pok&eacute;mon to use any move that shares the same first letter as their name or a previous evolution's name.",
 		ruleset: ['OM Unobtainable Moves'],
 		checkCanLearn(move, species, setSources, set) {
-			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
+			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('natdexmod');
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
 				const letters = [species.id.charAt(0)];
 				let prevo = species.prevo;
