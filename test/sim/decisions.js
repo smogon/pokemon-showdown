@@ -867,7 +867,7 @@ describe('Choice extensions', () => {
 			});
 
 			it(`should disallow to ${mode} switch decisions on move requests for unconfirmed trapping-immune Pokémon that would otherwise be trapped`, () => {
-				battle = common.createBattle({ cancel: true, pokemon: true, legality: true }, [
+				battle = common.createBattle({ cancel: true, legality: true }, [
 					[
 						{ species: 'Starmie', ability: 'naturalcure', moves: ['reflecttype', 'recover'] },
 						{ species: 'Mandibuzz', ability: 'overcoat', moves: ['knockoff'] },
