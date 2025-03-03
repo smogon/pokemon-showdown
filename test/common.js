@@ -50,8 +50,8 @@ class TestTools {
 
 		const gameType = Dex.toID(options.gameType || 'singles');
 		let basicFormat = this.currentMod === 'base' && gameType === 'singles' ? 'Anything Goes' : 'Custom Game';
+		if (options.pokemon) throw new Error(`The 'pokemon' option is no longer supported`);
 		const customRules = [
-			!options.pokemon && '+Nonexistent',
 			options.legality ? '^Obtainable' : '^!Obtainable',
 			options.preview ? '^Team Preview' : '^!Team Preview',
 			options.sleepClause && 'Sleep Clause Mod',
