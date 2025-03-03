@@ -185,30 +185,67 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	partiallytrapped: {
 		name: 'partiallytrapped',
+		// this is the duration of the partial trap if the user switches out.
+		// the full duration of the partial trap is tracked in partialtrappinglock
 		duration: 2,
 		onBeforeMovePriority: 9,
 		onBeforeMove(pokemon) {
-			this.add('cant', pokemon, 'partiallytrapped');
 			return false;
+		},
+		onRestart(pokemon) {
+			this.effectState.duration = 2;
+		},
+		onDisableMove(target) {
+			target.maybeDisabled = true;
+		},
+	},
+	fakepartiallytrapped: {
+		name: 'fakepartiallytrapped',
+		// you are not partially trapped but you think you might be
+		duration: 2,
+		onDisableMove(target) {
+			target.maybeDisabled = true;
 		},
 	},
 	partialtrappinglock: {
 		name: 'partialtrappinglock',
 		durationCallback() {
-			const duration = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
+			// duration is 1 more than real duration, to handle `maybeDisabled` on the last turn
+			const duration = this.sample([2, 2, 2, 3, 3, 3, 4, 5]) + 1;
 			return duration;
 		},
 		onStart(target, source, effect) {
+			const foe = target.foes()[0];
+			if (!foe) return false;
+
 			this.effectState.move = effect.id;
+			this.effectState.totalDuration = this.effectState.duration! - 1;
+			this.effectState.damage = target.lastDamage;
+			this.effectState.trapTarget = foe;
+			foe.addVolatile('partiallytrapped', target, effect);
+			this.add('cant', foe, 'partiallytrapped');
+		},
+		onOverrideAction(pokemon, target, move) {
+			if (this.effectState.duration !== 1) return this.effectState.move;
+		},
+		onBeforeMove(pokemon, target, move) {
+			const foe = pokemon.foes()[0];
+			if (!foe || foe !== this.effectState.trapTarget) {
+				pokemon.removeVolatile('partialtrappinglock');
+			} else if (this.effectState.duration !== 1) {
+				this.add('move', pokemon, this.effectState.move, foe, `[from] ${this.effectState.move}`);
+				this.damage(this.effectState.damage, foe, pokemon, move);
+				foe.addVolatile(this.effectState.duration === 2 ? 'fakepartiallytrapped' : 'partiallytrapped', pokemon, move);
+				return false;
+			}
 		},
 		onDisableMove(pokemon) {
 			if (!pokemon.hasMove(this.effectState.move)) {
 				return;
 			}
-			for (const moveSlot of pokemon.moveSlots) {
-				if (moveSlot.id !== this.effectState.move) {
-					pokemon.disableMove(moveSlot.id);
-				}
+			if (this.effectState.totalDuration !== 5 || this.effectState.duration !== 1) {
+				// definitely free to move after the 5th turn of a 5-turn Wrap
+				pokemon.maybeDisabled = true;
 			}
 		},
 	},
