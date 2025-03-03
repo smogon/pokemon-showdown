@@ -185,14 +185,15 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	partiallytrapped: {
 		name: 'partiallytrapped',
-		// this is the duration of the partial trap if the user switches out.
-		// the full duration of the partial trap is tracked in partialtrappinglock
+		// this is the duration of Wrap if it doesn't continue.
+		// (i.e. if the attacker switches out.)
+		// the full duration is tracked in partialtrappinglock
 		duration: 2,
 		onBeforeMovePriority: 9,
-		onBeforeMove(pokemon) {
+		onBeforeMove() {
 			return false;
 		},
-		onRestart(pokemon) {
+		onRestart() {
 			this.effectState.duration = 2;
 		},
 		onDisableMove(target) {
@@ -201,7 +202,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	fakepartiallytrapped: {
 		name: 'fakepartiallytrapped',
-		// you are not partially trapped but you think you might be
+		// Wrap ended this turn, but you don't know that
+		// until you try to use an attack
 		duration: 2,
 		onDisableMove(target) {
 			target.maybeDisabled = true;
@@ -210,43 +212,43 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	partialtrappinglock: {
 		name: 'partialtrappinglock',
 		durationCallback() {
-			// duration is 1 more than real duration, to handle `maybeDisabled` on the last turn
-			const duration = this.sample([2, 2, 2, 3, 3, 3, 4, 5]) + 1;
-			return duration;
+			return this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 		},
 		onStart(target, source, effect) {
 			const foe = target.foes()[0];
 			if (!foe) return false;
 
 			this.effectState.move = effect.id;
-			this.effectState.totalDuration = this.effectState.duration! - 1;
+			this.effectState.totalDuration = this.effectState.duration!;
 			this.effectState.damage = target.lastDamage;
 			this.effectState.trapTarget = foe;
 			foe.addVolatile('partiallytrapped', target, effect);
 			this.add('cant', foe, 'partiallytrapped');
 		},
 		onOverrideAction(pokemon, target, move) {
-			if (this.effectState.duration !== 1) return this.effectState.move;
+			return this.effectState.move;
 		},
 		onBeforeMove(pokemon, target, move) {
 			const foe = pokemon.foes()[0];
 			if (!foe || foe !== this.effectState.trapTarget) {
 				pokemon.removeVolatile('partialtrappinglock');
-			} else if (this.effectState.duration !== 1) {
-				this.add('move', pokemon, this.effectState.move, foe, `[from] ${this.effectState.move}`);
-				this.damage(this.effectState.damage, foe, pokemon, move);
-				foe.addVolatile(this.effectState.duration === 2 ? 'fakepartiallytrapped' : 'partiallytrapped', pokemon, move);
-				return false;
-			}
-		},
-		onDisableMove(pokemon) {
-			if (!pokemon.hasMove(this.effectState.move)) {
 				return;
 			}
-			if (this.effectState.totalDuration !== 5 || this.effectState.duration !== 1) {
-				// definitely free to move after the 5th turn of a 5-turn Wrap
-				pokemon.maybeDisabled = true;
+
+			this.add('move', pokemon, this.effectState.move, foe, `[from] ${this.effectState.move}`);
+			this.damage(this.effectState.damage, foe, pokemon, move);
+			if (this.effectState.duration === 1) {
+				if (this.effectState.totalDuration !== 5) {
+					pokemon.addVolatile('fakepartiallytrapped');
+					foe.addVolatile('fakepartiallytrapped');
+				}
+			} else {
+				foe.addVolatile('partiallytrapped', pokemon, move);
 			}
+			return false;
+		},
+		onDisableMove(pokemon) {
+			pokemon.maybeDisabled = true;
 		},
 	},
 	mustrecharge: {
