@@ -228,6 +228,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onOverrideAction(pokemon, target, move) {
 			return this.effectState.move;
 		},
+		// attacker still takes PSN damage, etc
+		onBeforeMovePriority: 0,
 		onBeforeMove(pokemon, target, move) {
 			const foe = pokemon.foes()[0];
 			if (!foe || foe !== this.effectState.trapTarget) {
