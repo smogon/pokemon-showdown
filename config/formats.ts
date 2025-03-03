@@ -2523,7 +2523,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 3,
 	},
 	{
-		name: "[Gen 9] Bring 6 Pick 4 Random Doubles Battle (Bo3)",
+		name: "[Gen 9] B6P4 Random Doubles Battle (Bo3)",
 		desc: `[Gen 9] Random Doubles Battle, but with open team sheets and each player selects four Pok&eacute;mon to battle with.`,
 		mod: 'gen9',
 		gameType: 'doubles',
