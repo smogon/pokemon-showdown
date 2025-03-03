@@ -2198,11 +2198,6 @@
                 "role": "Setup Sweeper",
                 "movepool": ["seedbomb", "suckerpunch", "superpower", "swordsdance"],
                 "abilities": ["Sand Veil"]
-            },
-            {
-                "role": "Bulky Attacker",
-                "movepool": ["focuspunch", "seedbomb", "substitute", "suckerpunch"],
-                "abilities": ["Sand Veil"]
             }
         ]
     },
