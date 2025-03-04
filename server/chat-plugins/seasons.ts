@@ -2,7 +2,7 @@
  * @author mia-pi-git
  */
 
-import {FS, Net, Utils} from '../../lib';
+import { FS, Net, Utils } from '../../lib';
 
 export const SEASONS_PER_YEAR = 4;
 export const FORMATS_PER_SEASON = 4;
@@ -16,8 +16,8 @@ export const FORMAT_POOL = ['ubers', 'uu', 'ru', 'nu', 'pu', 'lc', 'doublesou', 
 export const PUBLIC_PHASE_LENGTH = 3;
 
 interface SeasonData {
-	current: {period: number, year: number, formatsGeneratedAt: number, season: number};
-	badgeholders: {[period: string]: {[format: string]: {[badgeType: string]: string[]}}};
+	current: { period: number, year: number, formatsGeneratedAt: number, season: number };
+	badgeholders: { [period: string]: { [format: string]: { [badgeType: string]: string[] } } };
 	formatSchedule: Record<string, string[]>;
 }
 
@@ -28,21 +28,21 @@ try {
 } catch {
 	data = {
 		// force a reroll
-		current: {season: null!, year: null!, formatsGeneratedAt: null!, period: null!},
+		current: { season: null!, year: null!, formatsGeneratedAt: null!, period: null! },
 		formatSchedule: {},
 		badgeholders: {},
 	};
 }
 
 export function getBadges(user: User, curFormat: string) {
-	let userBadges: {type: string, format: string}[] = [];
+	let userBadges: { type: string, format: string }[] = [];
 	const season = data.current.season; // don't factor in old badges
 	for (const format in data.badgeholders[season]) {
 		const badges = data.badgeholders[season][format];
 		for (const type in badges) {
 			if (badges[type].includes(user.id)) {
 				// ex badge-bronze-gen9ou-250-1-2024
-				userBadges.push({type, format});
+				userBadges.push({ type, format });
 			}
 		}
 	}
@@ -50,7 +50,7 @@ export function getBadges(user: User, curFormat: string) {
 	let curFormatBadge;
 	for (const [i, badge] of userBadges.entries()) {
 		if (badge.format === curFormat) {
-			userBadges.splice(i);
+			userBadges.splice(i, 1);
 			curFormatBadge = badge;
 		}
 	}
@@ -64,7 +64,7 @@ export function getBadges(user: User, curFormat: string) {
 
 function getUserHTML(user: User, format: string) {
 	const buf = `<username>${user.name}</username>`;
-	const badgeType = getBadges(user, format).filter(x => x.format === format)[0]?.type;
+	const badgeType = getBadges(user, format).find(x => x.format === format)?.type;
 	if (badgeType) {
 		let formatType = format.split(/gen\d+/)[1];
 		if (!['ou', 'randombattle'].includes(formatType)) formatType = 'rotating';
@@ -217,7 +217,7 @@ export function rollSeason() {
 	}
 }
 
-export let updateTimeout: NodeJS.Timer | true | null = null;
+export let updateTimeout: NodeJS.Timeout | true | null = null;
 
 export function rollTimer() {
 	if (updateTimeout === true) return;
@@ -310,7 +310,7 @@ export const pages: Chat.PageTable = {
 		const uppercase = (str: string) => str.charAt(0).toUpperCase() + str.slice(1);
 		let formatName = Dex.formats.get(format).name;
 		// futureproofing for gen10/etc
-		const room = Rooms.search(format.split(/\d+/)[1] + "");
+		const room = Rooms.search(Utils.splitFirst(format, /\d+/)[1] || '');
 		if (room) {
 			formatName = `<a href="/${room.roomid}">${formatName}</a>`;
 		}

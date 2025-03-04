@@ -43,7 +43,7 @@ export class Announcement extends Rooms.MinorActivity {
 		}
 	}
 
-	onConnect(user: User, connection: Connection | null = null) {
+	override onConnect(user: User, connection: Connection | null = null) {
 		this.displayTo(user, connection);
 	}
 
@@ -92,7 +92,7 @@ export const commands: Chat.ChatCommands = {
 
 			const source = supportHTML ? this.checkHTML(Chat.collapseLineBreaksHTML(target)) : Chat.formatText(target, true);
 
-			room.setMinorActivity(new Announcement(room, {source}));
+			room.setMinorActivity(new Announcement(room, { source }));
 
 			this.roomlog(`${user.name} used ${message}`);
 			this.modlog('ANNOUNCEMENT');
@@ -141,7 +141,7 @@ export const commands: Chat.ChatCommands = {
 				if (isNaN(timeoutMins) || timeoutMins <= 0 || timeoutMins > 7 * 24 * 60) {
 					return this.errorReply(this.tr`Time should be a number of minutes less than one week.`);
 				}
-				announcement.setTimer({timeoutMins});
+				announcement.setTimer({ timeoutMins });
 				room.add(`The announcement timer was turned on: the announcement will end in ${timeoutMins} minute${Chat.plural(timeoutMins)}.`);
 				this.modlog('ANNOUNCEMENT TIMER', null, `${timeoutMins} minutes`);
 				return this.privateModAction(`The announcement timer was set to ${timeoutMins} minute${Chat.plural(timeoutMins)} by ${user.name}.`);

@@ -12,8 +12,8 @@ import * as fs from 'fs';
 import * as net from 'net';
 import * as path from 'path';
 import * as repl from 'repl';
-import {crashlogger} from './crashlogger';
-import {FS} from './fs';
+import { crashlogger } from './crashlogger';
+import { FS } from './fs';
 declare const Config: any;
 
 export const Repl = new class {
@@ -86,7 +86,10 @@ export const Repl = new class {
 					socket.end();
 					socket.destroy();
 				}).on('error', () => {
-					fs.unlinkSync(pathname);
+					try {
+						// race condition?
+						fs.unlinkSync(pathname);
+					} catch {}
 				});
 			}
 		}

@@ -2086,7 +2086,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	torkoal: {
-		tier: "PU",
+		tier: "ZU",
 		doublesTier: "DOU",
 		natDexTier: "RU",
 	},
@@ -4878,7 +4878,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "LC",
 	},
 	polteageist: {
-		tier: "UU",
+		tier: "UUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
@@ -5611,7 +5611,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	archaludon: {
 		tier: "Uber",
-		doublesTier: "DOU",
+		doublesTier: "DUber",
 		natDexTier: "UU",
 	},
 	hydrapple: {

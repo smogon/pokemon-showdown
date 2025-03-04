@@ -1,37 +1,38 @@
 // Data for computer-generated teams
 
-export const MOVE_PAIRINGS: {[moveID: IDEntry]: IDEntry} = {
+export const MOVE_PAIRINGS: { [moveID: IDEntry]: IDEntry } = {
 	rest: 'sleeptalk',
 	sleeptalk: 'rest',
 };
 
 // Bonuses to move ratings by ability
-export const ABILITY_MOVE_BONUSES: {[abilityID: IDEntry]: {[moveID: IDEntry]: number}} = {
-	drought: {sunnyday: 0.2, solarbeam: 2},
-	contrary: {terablast: 2},
+export const ABILITY_MOVE_BONUSES: { [abilityID: IDEntry]: { [moveID: IDEntry]: number } } = {
+	contrary: { terablast: 2 },
+	drought: { sunnyday: 0.2, solarbeam: 2 },
+	drizzle: { raindance: 0.2, solarbeam: 0.2, hurricane: 2 },
 };
 // Bonuses to move ratings by move type
-export const ABILITY_MOVE_TYPE_BONUSES: {[abilityID: IDEntry]: {[typeName: string]: number}} = {
-	darkaura: {Dark: 1.33},
-	dragonsmaw: {Dragon: 1.5},
-	fairyaura: {Fairy: 1.33},
-	steelworker: {Steel: 1.5},
-	steelyspirit: {Steel: 1.5},
-	transistor: {Electric: 1.3},
+export const ABILITY_MOVE_TYPE_BONUSES: { [abilityID: IDEntry]: { [typeName: string]: number } } = {
+	darkaura: { Dark: 1.33 },
+	dragonsmaw: { Dragon: 1.5 },
+	fairyaura: { Fairy: 1.33 },
+	steelworker: { Steel: 1.5 },
+	steelyspirit: { Steel: 1.5 },
+	transistor: { Electric: 1.3 },
 
 	// -ate moves
-	pixilate: {Normal: 1.5 * 1.2},
-	refrigerate: {Normal: 1.5 * 1.2},
-	aerilate: {Normal: 1.5 * 1.2},
-	normalize: {Normal: 1.2},
+	pixilate: { Normal: 1.5 * 1.2 },
+	refrigerate: { Normal: 1.5 * 1.2 },
+	aerilate: { Normal: 1.5 * 1.2 },
+	normalize: { Normal: 1.2 },
 
 	// weather
-	drizzle: {Water: 1.4, Fire: 0.6},
-	drought: {Fire: 1.4, Water: 0.6},
+	drizzle: { Water: 1.4, Fire: 0.6 },
+	drought: { Fire: 1.4, Water: 0.6 },
 };
 // For moves whose quality isn't obvious from data
 // USE SPARINGLY!
-export const HARDCODED_MOVE_WEIGHTS: {[moveID: IDEntry]: number} = {
+export const HARDCODED_MOVE_WEIGHTS: { [moveID: IDEntry]: number } = {
 	// Fails unless user is asleep
 	snore: 0,
 	// Hard to use

@@ -1,8 +1,8 @@
-import type {PRNG} from '../../../sim';
-import {MoveCounter, RandomGen8Teams, OldRandomBattleSpecies} from '../gen8/teams';
+import type { PRNG } from '../../../sim';
+import { type MoveCounter, RandomGen8Teams, type OldRandomBattleSpecies } from '../gen8/teams';
 
 export class RandomLetsGoTeams extends RandomGen8Teams {
-	randomData: {[species: string]: OldRandomBattleSpecies} = require('./data.json');
+	override randomData: { [species: string]: OldRandomBattleSpecies } = require('./data.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -20,7 +20,7 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 			Water: (movePool, moves, abilities, types, counter) => !counter.get('Water') || !counter.get('stab'),
 		};
 	}
-	shouldCullMove(
+	override shouldCullMove(
 		move: Move,
 		types: Set<string>,
 		moves: Set<string>,
@@ -28,7 +28,7 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 		counter: MoveCounter,
 		movePool: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
-	): {cull: boolean, isSetup?: boolean} {
+	): { cull: boolean, isSetup?: boolean } {
 		switch (move.id) {
 		// Set up once and only if we have the moves for it
 		case 'bulkup': case 'swordsdance':
@@ -65,45 +65,45 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 
 		// Bad after setup
 		case 'dragontail':
-			return {cull: (
+			return { cull: (
 				!!counter.setupType || !!counter.get('speedsetup') || ['encore', 'roar', 'whirlwind'].some(m => moves.has(m))
-			)};
+			) };
 		case 'fakeout': case 'uturn': case 'teleport':
-			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('substitute')};
+			return { cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('substitute') };
 		case 'haze': case 'leechseed': case 'roar': case 'whirlwind':
-			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('dragontail')};
+			return { cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('dragontail') };
 		case 'protect':
-			return {cull: !!counter.setupType || ['rest', 'lightscreen', 'reflect'].some(m => moves.has(m))};
+			return { cull: !!counter.setupType || ['rest', 'lightscreen', 'reflect'].some(m => moves.has(m)) };
 		case 'seismictoss':
-			return {cull: counter.damagingMoves.size > 1 || !!counter.setupType};
+			return { cull: counter.damagingMoves.size > 1 || !!counter.setupType };
 		case 'stealthrock':
-			return {cull: !!counter.setupType || !!counter.get('speedsetup') || !!teamDetails.stealthRock};
+			return { cull: !!counter.setupType || !!counter.get('speedsetup') || !!teamDetails.stealthRock };
 
 		// Bit redundant to have both
 		case 'leechlife': case 'substitute':
-			return {cull: moves.has('uturn')};
+			return { cull: moves.has('uturn') };
 		case 'dragonpulse':
-			return {cull: moves.has('dragontail') || moves.has('outrage')};
+			return { cull: moves.has('dragontail') || moves.has('outrage') };
 		case 'thunderbolt':
-			return {cull: moves.has('thunder')};
+			return { cull: moves.has('thunder') };
 		case 'flareblitz': case 'flamethrower':
-			return {cull: moves.has('fireblast') || moves.has('firepunch')};
+			return { cull: moves.has('fireblast') || moves.has('firepunch') };
 		case 'megadrain':
-			return {cull: moves.has('petaldance') || moves.has('powerwhip')};
+			return { cull: moves.has('petaldance') || moves.has('powerwhip') };
 		case 'bonemerang':
-			return {cull: moves.has('earthquake')};
+			return { cull: moves.has('earthquake') };
 		case 'icebeam':
-			return {cull: moves.has('blizzard')};
+			return { cull: moves.has('blizzard') };
 		case 'rockslide':
-			return {cull: moves.has('stoneedge')};
+			return { cull: moves.has('stoneedge') };
 		case 'hydropump': case 'willowisp':
-			return {cull: moves.has('scald')};
+			return { cull: moves.has('scald') };
 		case 'surf':
-			return {cull: moves.has('hydropump') || moves.has('scald')};
+			return { cull: moves.has('hydropump') || moves.has('scald') };
 		}
 
 		// Increased/decreased priority moves are unneeded with moves that boost only speed
-		if (move.priority !== 0 && !!counter.get('speedsetup')) return {cull: true};
+		if (move.priority !== 0 && !!counter.get('speedsetup')) return { cull: true };
 
 		// This move doesn't satisfy our setup requirements:
 		if (
@@ -111,12 +111,14 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 			(move.category === 'Special' && counter.setupType === 'Physical')
 		) {
 			// Reject STABs last in case the setup type changes later on
-			if (!types.has(move.type) || counter.get('stab') > 1 || counter.get(move.category) < 2) return {cull: true};
+			if (!types.has(move.type) || counter.get('stab') > 1 || counter.get(move.category) < 2) return { cull: true };
 		}
 
-		return {cull: false};
+		return { cull: false };
 	}
-	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
+	override randomSet(
+		species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}
+	): RandomTeamsTypes.RandomSet {
 		species = this.dex.species.get(species);
 		let forme = species.name;
 
@@ -146,7 +148,7 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 			for (const moveid of moves) {
 				const move = this.dex.moves.get(moveid);
 
-				let {cull, isSetup} = this.shouldCullMove(move, types, moves, [], counter, movePool, teamDetails);
+				let { cull, isSetup } = this.shouldCullMove(move, types, moves, [], counter, movePool, teamDetails);
 
 				if (
 					!isSetup &&
@@ -197,7 +199,7 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 			}
 		} while (moves.size < this.maxMoveCount && movePool.length);
 
-		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+		const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 		// Minimize confusion damage
 		if (!counter.get('Physical') && !moves.has('transform')) ivs.atk = 0;
 
@@ -211,13 +213,13 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 			shiny: this.randomChance(1, 1024),
 			item: (requiredItem || ''),
 			ability: 'No Ability',
-			evs: {hp: 20, atk: 20, def: 20, spa: 20, spd: 20, spe: 20},
+			evs: { hp: 20, atk: 20, def: 20, spa: 20, spd: 20, spe: 20 },
 			moves: Array.from(moves),
 			ivs,
 		};
 	}
 
-	randomTeam() {
+	override randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];
@@ -238,9 +240,9 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 			pokemonPool.push(id);
 		}
 
-		const typeCount: {[k: string]: number} = {};
-		const typeComboCount: {[k: string]: number} = {};
-		const baseFormes: {[k: string]: number} = {};
+		const typeCount: { [k: string]: number } = {};
+		const typeComboCount: { [k: string]: number } = {};
+		const baseFormes: { [k: string]: number } = {};
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 
 		while (pokemonPool.length && pokemon.length < this.maxTeamSize) {

@@ -9,9 +9,10 @@
  * @license MIT
  */
 
-import {Streams, Utils} from '../lib';
-import {Teams} from './teams';
-import {Battle, extractChannelMessages} from './battle';
+import { Streams, Utils } from '../lib';
+import { Teams } from './teams';
+import { Battle, extractChannelMessages } from './battle';
+import type { ChoiceRequest } from './side';
 
 /**
  * Like string.split(delimiter), but only recognizes the first `limit`
@@ -57,7 +58,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		this.battle = null;
 	}
 
-	_write(chunk: string) {
+	override _write(chunk: string) {
 		if (this.noCatch) {
 			this._writeLines(chunk);
 		} else {
@@ -234,13 +235,13 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		}
 	}
 
-	_writeEnd() {
+	override _writeEnd() {
 		// if battle already ended, we don't need to pushEnd.
 		if (!this.atEOF) this.pushEnd();
 		this._destroy();
 	}
 
-	_destroy() {
+	override _destroy() {
 		if (this.battle) this.battle.destroy();
 	}
 }
@@ -348,7 +349,7 @@ export abstract class BattlePlayer {
 		this.log.push(line);
 	}
 
-	abstract receiveRequest(request: AnyObject): void;
+	abstract receiveRequest(request: ChoiceRequest): void;
 
 	receiveError(error: Error) {
 		throw error;
@@ -363,7 +364,7 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 	readonly battleStream: BattleStream;
 	currentMessage: string;
 
-	constructor(options: {debug?: boolean}) {
+	constructor(options: { debug?: boolean }) {
 		super();
 		this.battleStream = new BattleStream(options);
 		this.currentMessage = '';
@@ -378,8 +379,8 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 		this.pushEnd();
 	}
 
-	_write(message: string | Buffer) {
-		this.currentMessage += '' + message;
+	override _write(message: string | Buffer) {
+		this.currentMessage += `${message}`;
 		const index = this.currentMessage.lastIndexOf('\n');
 		if (index >= 0) {
 			void this.battleStream.write(this.currentMessage.slice(0, index));
@@ -387,7 +388,7 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 		}
 	}
 
-	_writeEnd() {
+	override _writeEnd() {
 		return this.battleStream.writeEnd();
 	}
 }

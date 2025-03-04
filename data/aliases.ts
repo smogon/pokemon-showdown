@@ -90,8 +90,8 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 9] Cross Evolution",
 	mayhem: "[Gen 9] Random Battle Mayhem",
-	omotm: "[Gen 9] Alphabet Cup",
-	lcotm: "[Gen 9] 1-2 Switch",
+	omotm: "[Gen 9] Frantic Fusions",
+	lcotm: "[Gen 9] Cross Evolution",
 
 	// mega evos
 	fabio: "Ampharos-Mega",
@@ -208,6 +208,10 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	eiscuen: "Eiscue-Noice",
 	eternalfloette: "Floette-Eternal",
 	eternamax: "Eternatus-Eternamax",
+	genesectwater: "Genesect-Douse",
+	genesectelectric: "Genesect-Shock",
+	genesectfire: "Genesect-Burn",
+	genesectice: "Genesect-Chill",
 	girao: "Giratina-Origin",
 	giratinao: "Giratina-Origin",
 	gourgeists: "Gourgeist-Small",

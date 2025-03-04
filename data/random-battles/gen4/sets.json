@@ -164,7 +164,7 @@
         ]
     },
     "nidoking": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -251,7 +251,7 @@
         ]
     },
     "venomoth": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Support",
@@ -472,7 +472,7 @@
         ]
     },
     "muk": {
-        "level": 88,
+        "level": 89,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -721,7 +721,7 @@
         ]
     },
     "gyarados": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -909,7 +909,7 @@
         ]
     },
     "dragonite": {
-        "level": 76,
+        "level": 75,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -976,7 +976,7 @@
         ]
     },
     "feraligatr": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1140,7 +1140,7 @@
         ]
     },
     "jumpluff": {
-        "level": 92,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1495,7 +1495,7 @@
         ]
     },
     "stantler": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1597,7 +1597,7 @@
         ]
     },
     "tyranitar": {
-        "level": 77,
+        "level": 76,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1708,7 +1708,7 @@
         ]
     },
     "mightyena": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1915,7 +1915,7 @@
         ]
     },
     "hariyama": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2100,7 +2100,7 @@
         ]
     },
     "wailord": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2187,7 +2187,7 @@
         ]
     },
     "cacturne": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2197,11 +2197,6 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["seedbomb", "suckerpunch", "superpower", "swordsdance"],
-                "abilities": ["Sand Veil"]
-            },
-            {
-                "role": "Bulky Attacker",
-                "movepool": ["focuspunch", "seedbomb", "substitute", "suckerpunch"],
                 "abilities": ["Sand Veil"]
             }
         ]
@@ -2310,7 +2305,7 @@
         ]
     },
     "armaldo": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Spinner",
@@ -3707,7 +3702,7 @@
         ]
     },
     "shaymin": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Fast Support",
@@ -3718,7 +3713,7 @@
         ]
     },
     "shayminsky": {
-        "level": 70,
+        "level": 69,
         "sets": [
             {
                 "role": "Fast Attacker",

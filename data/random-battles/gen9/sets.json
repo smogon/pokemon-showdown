@@ -338,7 +338,7 @@
         ]
     },
     "arcaninehisui": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1749,7 +1749,7 @@
                 "role": "Bulky Setup",
                 "movepool": ["Calm Mind", "Scald", "Substitute", "Thunderbolt"],
                 "abilities": ["Pressure"],
-                "teraTypes": ["Water"]
+                "teraTypes": ["Grass", "Water"]
             },
             {
                 "role": "Bulky Attacker",
@@ -2267,7 +2267,7 @@
                 "role": "Bulky Support",
                 "movepool": ["Earthquake", "Hydro Pump", "Ice Beam", "Spikes", "Stealth Rock"],
                 "abilities": ["Oblivious"],
-                "teraTypes": ["Poison", "Steel"]
+                "teraTypes": ["Ghost", "Poison", "Steel"]
             },
             {
                 "role": "Setup Sweeper",
@@ -2604,7 +2604,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Knock Off", "Psychic Noise", "Recover", "Spikes", "Stealth Rock", "Teleport"],
+                "movepool": ["Knock Off", "Psychic Noise", "Recover", "Spikes", "Stealth Rock"],
                 "abilities": ["Pressure"],
                 "teraTypes": ["Dark", "Fairy", "Steel"]
             }
@@ -3008,13 +3008,13 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Close Combat", "Dire Claw", "Gunk Shot", "Throat Chop", "U-turn"],
+                "movepool": ["Close Combat", "Dire Claw", "Throat Chop", "U-turn"],
                 "abilities": ["Poison Touch"],
                 "teraTypes": ["Dark", "Fighting"]
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Acrobatics", "Close Combat", "Gunk Shot", "Swords Dance"],
+                "movepool": ["Acrobatics", "Close Combat", "Dire Claw", "Gunk Shot", "Swords Dance"],
                 "abilities": ["Unburden"],
                 "teraTypes": ["Flying"]
             }
@@ -3150,7 +3150,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Earthquake", "Knock Off", "Protect", "Toxic", "Toxic Spikes", "U-turn"],
+                "movepool": ["Earthquake", "Knock Off", "Protect", "Toxic", "Toxic Spikes"],
                 "abilities": ["Poison Heal"],
                 "teraTypes": ["Water"]
             }
@@ -3258,7 +3258,7 @@
         ]
     },
     "rotomwash": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3305,7 +3305,7 @@
         "level": 87,
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Bulky Attacker",
                 "movepool": ["Leaf Storm", "Nasty Plot", "Thunderbolt", "Trick", "Volt Switch", "Will-O-Wisp"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Electric", "Grass"]
@@ -4939,7 +4939,7 @@
                 "role": "AV Pivot",
                 "movepool": ["Draco Meteor", "Dragon Tail", "Earthquake", "Fire Blast", "Knock Off", "Power Whip", "Scald", "Sludge Bomb"],
                 "abilities": ["Sap Sipper"],
-                "teraTypes": ["Fire", "Grass", "Ground", "Poison", "Water"]
+                "teraTypes": ["Fire", "Grass", "Ground", "Poison", "Steel", "Water"]
             }
         ]
     },
@@ -5258,7 +5258,7 @@
         ]
     },
     "ribombee": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Support",
@@ -5297,7 +5297,7 @@
         ]
     },
     "lycanrocdusk": {
-        "level": 80,
+        "level": 81,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -5319,7 +5319,7 @@
         ]
     },
     "mudsdale": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -5525,13 +5525,13 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Close Combat", "Flame Charge", "Knock Off", "Psychic", "Sunsteel Strike"],
+                "movepool": ["Close Combat", "Earthquake", "Flame Charge", "Knock Off", "Psychic", "Sunsteel Strike"],
                 "abilities": ["Full Metal Body"],
-                "teraTypes": ["Dark", "Fighting"]
+                "teraTypes": ["Dark", "Fighting", "Ground"]
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Close Combat", "Flare Blitz", "Knock Off", "Morning Sun", "Psychic Fangs", "Sunsteel Strike"],
+                "movepool": ["Close Combat", "Earthquake", "Flare Blitz", "Knock Off", "Morning Sun", "Psychic Fangs", "Sunsteel Strike"],
                 "abilities": ["Full Metal Body"],
                 "teraTypes": ["Water"]
             }
@@ -6061,7 +6061,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Draco Meteor", "Fire Blast", "Shadow Ball", "Thunderbolt", "U-turn"],
+                "movepool": ["Draco Meteor", "Fire Blast", "Shadow Ball", "U-turn"],
                 "abilities": ["Infiltrator"],
                 "teraTypes": ["Dragon", "Fire", "Ghost"]
             },
