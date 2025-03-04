@@ -521,6 +521,15 @@ export class Battle {
 				}
 			}
 
+			// effect may have been removed by a prior handler, i.e. Toxic Spikes being absorbed during a double switch
+			if (handler.state?.target instanceof Pokemon) {
+				if ((handler.state.target.volatiles[effect.id] !== handler.state)) continue;
+			} else if (handler.state?.target instanceof Side) {
+				if ((handler.state.target.sideConditions[effect.id] !== handler.state)) continue;
+			} else if (handler.state?.target instanceof Field) {
+				if ((handler.state.target.pseudoWeather[effect.id] !== handler.state)) continue;
+			}
+
 			let handlerEventid = eventid;
 			if ((handler.effectHolder as Side).sideConditions) handlerEventid = `Side${eventid}`;
 			if ((handler.effectHolder as Field).pseudoWeather) handlerEventid = `Field${eventid}`;
