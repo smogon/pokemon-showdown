@@ -19563,8 +19563,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: -77,
 		name: "Shox",
 		types: ["Electric", "Normal"],
-		baseStats: {hp: 136, atk: 55, def: 87, spa: 108, spd: 108, spe: 56},
-		abilities: {0: "Electromorphosis", 1: "Sticky Hold", H: "Cud Chew"},
 		baseStats: { hp: 136, atk: 55, def: 87, spa: 108, spd: 108, spe: 56 },
 		abilities: { 0: "Electromorphosis", 1: "Sticky Hold", H: "Cud Chew" },
 		heightm: 3,
