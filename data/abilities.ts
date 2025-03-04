@@ -4741,8 +4741,32 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 21,
 	},
 	superluck: {
-		onModifyCritRatio(critRatio) {
-			return critRatio + 1;
+		onModifyCritRatio(critRatio, pokemon) {
+			if ((pokemon.volatiles['superluck']?.turns >= 3 && pokemon.item !== 'scopelens')) {
+				pokemon.volatiles['superluck'].turns = 0;
+				this.add('-activate', pokemon, 'ability: Super Luck');
+				return 5;
+			} else if ((pokemon.volatiles['superluck']?.turns >= 2 && pokemon.item === 'scopelens')){
+				pokemon.volatiles['superluck'].turns = 0;
+				this.add('-activate', pokemon, 'ability: Super Luck');
+				return 5;
+			}
+			return critRatio;
+		},
+		onStart(pokemon) {
+			pokemon.addVolatile('superluck');
+		},
+		onResidualOrder: 1,
+		onResidualSubOrder: 1,
+		onResidual(pokemon) {
+			if (pokemon.volatiles['superluck']) {
+				pokemon.volatiles['superluck'].turns++;
+			}
+		},
+		condition: {
+			onStart() {
+				this.effectState.turns = 0;
+			},
 		},
 		flags: {},
 		name: "Super Luck",
