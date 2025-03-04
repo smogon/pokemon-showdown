@@ -203,7 +203,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	/**
 	 * Tags, boolean "are you or are you not on this list" data.
 	 */
-	readonly tags: (TableGenericTag | TableSpeciesTag)[];
+	override readonly tags: (TableGenericTag | TableSpeciesTag)[];
 	/** Does this Pokemon have an unreleased hidden ability? */
 	readonly unreleasedHidden: boolean | 'Past';
 	/**
