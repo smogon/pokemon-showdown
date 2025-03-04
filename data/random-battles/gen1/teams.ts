@@ -1,5 +1,5 @@
 import RandomGen2Teams from '../gen2/teams';
-import {Utils} from '../../../lib';
+import { Utils } from '../../../lib';
 
 interface HackmonsCupEntry {
 	types: string[];
@@ -15,10 +15,10 @@ interface Gen1RandomBattleSpecies {
 }
 
 export class RandomGen1Teams extends RandomGen2Teams {
-	randomData: {[species: IDEntry]: Gen1RandomBattleSpecies} = require('./data.json');
+	override randomData: { [species: IDEntry]: Gen1RandomBattleSpecies } = require('./data.json');
 
 	// Challenge Cup or CC teams are basically fully random teams.
-	randomCCTeam() {
+	override randomCCTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const team = [];
@@ -77,7 +77,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 			ivs["spe"] *= 2;
 
 			// Maxed EVs.
-			const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255};
+			const evs = { hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255 };
 
 			// Four random unique moves from movepool. don't worry about "attacking" or "viable".
 			// Since Gens 1 and 2 learnsets are shared, we need to weed out Gen 2 moves.
@@ -89,8 +89,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 				moves: this.multipleSamplesNoReplace(pool, 4),
 				gender: false,
 				ability: 'No Ability',
-				evs: evs,
-				ivs: ivs,
+				evs,
+				ivs,
 				item: '',
 				level,
 				happiness: 0,
@@ -103,7 +103,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 	}
 
 	// Random team generation for Gen 1 Random Battles.
-	randomTeam() {
+	override randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		// Get what we need ready.
@@ -120,8 +120,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const rejectedButNotInvalidPool: string[] = [];
 
 		// Now let's store what we are getting.
-		const typeCount: {[k: string]: number} = {};
-		const weaknessCount: {[k: string]: number} = {Electric: 0, Psychic: 0, Water: 0, Ice: 0, Ground: 0, Fire: 0};
+		const typeCount: { [k: string]: number } = {};
+		const weaknessCount: { [k: string]: number } = { Electric: 0, Psychic: 0, Water: 0, Ice: 0, Ground: 0, Fire: 0 };
 		let numMaxLevelPokemon = 0;
 
 		const pokemonPool = Object.keys(this.getPokemonPool(type, pokemon, isMonotype, Object.keys(this.randomData))[0]);
@@ -219,7 +219,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 	/**
 	 * Random set generation for Gen 1 Random Battles.
 	 */
-	randomSet(species: string | Species): RandomTeamsTypes.RandomSet {
+	override randomSet(species: string | Species): RandomTeamsTypes.RandomSet {
 		species = this.dex.species.get(species);
 		if (!species.exists) species = this.dex.species.get('pikachu'); // Because Gen 1.
 
@@ -257,8 +257,8 @@ export class RandomGen1Teams extends RandomGen2Teams {
 
 		const level = this.getLevel(species);
 
-		const evs = {hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255};
-		const ivs = {hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30};
+		const evs = { hp: 255, atk: 255, def: 255, spa: 255, spd: 255, spe: 255 };
+		const ivs = { hp: 30, atk: 30, def: 30, spa: 30, spd: 30, spe: 30 };
 
 		// Should be able to use Substitute four times from full HP without fainting
 		if (moves.has('substitute')) {
@@ -299,7 +299,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		};
 	}
 
-	randomHCTeam(): PokemonSet[] {
+	override randomHCTeam(): PokemonSet[] {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const team = [];
@@ -308,7 +308,7 @@ export class RandomGen1Teams extends RandomGen2Teams {
 		const typesPool = ['Bird', ...this.dex.types.names()];
 
 		const randomN = this.randomNPokemon(this.maxTeamSize);
-		const hackmonsCup: {[k: string]: HackmonsCupEntry} = {};
+		const hackmonsCup: { [k: string]: HackmonsCupEntry } = {};
 
 		for (const forme of randomN) {
 			// Choose forme

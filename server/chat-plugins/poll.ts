@@ -2,7 +2,7 @@
  * Poll chat plugin
  * By bumbadadabum and Zarel.
  */
-import {Utils} from '../../lib';
+import { Utils } from '../../lib';
 
 const MINUTES = 60000;
 const MAX_QUESTIONS = 10;
@@ -16,9 +16,9 @@ export interface PollOptions {
 	question: string;
 	supportHTML: boolean;
 	multiPoll: boolean;
-	pendingVotes?: {[userid: string]: number[]};
-	voters?: {[k: string]: number[]};
-	voterIps?: {[k: string]: number[]};
+	pendingVotes?: { [userid: string]: number[] };
+	voters?: { [k: string]: number[] };
+	voterIps?: { [k: string]: number[] };
 	maxVotes?: number;
 	totalVotes?: number;
 	timeoutMins?: number;
@@ -37,9 +37,9 @@ export class Poll extends Rooms.MinorActivity {
 	activityNumber: number;
 	question: string;
 	multiPoll: boolean;
-	pendingVotes: {[userid: string]: number[]};
-	voters: {[k: string]: number[]};
-	voterIps: {[k: string]: number[]};
+	pendingVotes: { [userid: string]: number[] };
+	voters: { [k: string]: number[] };
+	voterIps: { [k: string]: number[] };
 	totalVotes: number;
 	isQuiz: boolean;
 	/** Max votes of 0 means no vote cap */
@@ -303,11 +303,11 @@ export class Poll extends Rooms.MinorActivity {
 		}
 	}
 
-	onConnect(user: User, connection: Connection | null = null) {
+	override onConnect(user: User, connection: Connection | null = null) {
 		this.displayTo(user, connection);
 	}
 
-	onRename(user: User, oldid: ID, joining: boolean) {
+	override onRename(user: User, oldid: ID, joining: boolean) {
 		if (user.id in this.voters) {
 			this.updateFor(user);
 		}
@@ -571,7 +571,7 @@ export const commands: Chat.ChatCommands = {
 				if (isNaN(timeoutMins) || timeoutMins <= 0 || timeoutMins > 7 * 24 * 60) {
 					return this.errorReply(this.tr`Time should be a number of minutes less than one week.`);
 				}
-				poll.setTimer({timeoutMins});
+				poll.setTimer({ timeoutMins });
 				room.add(this.tr`The poll timer was turned on: the poll will end in ${Chat.toDurationString(timeoutMins * MINUTES)}.`);
 				this.modlog('POLL TIMER', null, `${timeoutMins} minutes`);
 				return this.privateModAction(room.tr`The poll timer was set to ${timeoutMins} minute(s) by ${user.name}.`);
@@ -708,20 +708,20 @@ process.nextTick(() => {
 	Chat.multiLinePattern.register('/poll (new|create|createmulti|htmlcreate|htmlcreatemulti|queue|queuemulti|htmlqueuemulti) ');
 });
 
-// should handle restarts and also hotpatches
+// convert from old format (should handle restarts and also hotpatches)
 for (const room of Rooms.rooms.values()) {
 	if (room.getMinorActivityQueue(true)) {
 		for (const poll of room.getMinorActivityQueue(true)!) {
 			if (!poll.activityid) {
-				// @ts-ignore
+				// @ts-expect-error old format
 				poll.activityid = poll.activityId;
-				// @ts-ignore
+				// @ts-expect-error old format
 				delete poll.activityId;
 			}
 			if (!poll.activityNumber) {
-				// @ts-ignore
+				// @ts-expect-error old format
 				poll.activityNumber = poll.pollNumber;
-				// @ts-ignore
+				// @ts-expect-error old format
 				delete poll.pollNumber;
 			}
 			room.saveSettings();
@@ -729,15 +729,15 @@ for (const room of Rooms.rooms.values()) {
 	}
 	if (room.settings.minorActivity) {
 		if (!room.settings.minorActivity.activityid) {
-			// @ts-ignore
+			// @ts-expect-error old format
 			room.settings.minorActivity.activityid = room.settings.minorActivity.activityId;
-			// @ts-ignore
+			// @ts-expect-error old format
 			delete room.settings.minorActivity.activityId;
 		}
 		if (typeof room.settings.minorActivity.activityNumber !== 'number') {
-			// @ts-ignore
+			// @ts-expect-error old format
 			room.settings.minorActivity.activityNumber = room.settings.minorActivity.pollNumber ||
-				// @ts-ignore
+				// @ts-expect-error old format
 				room.settings.minorActivity.announcementNumber;
 		}
 		room.saveSettings();

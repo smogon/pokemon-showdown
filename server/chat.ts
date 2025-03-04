@@ -23,14 +23,14 @@ To reload chat commands:
 
 */
 
-import type {RoomPermission, GlobalPermission} from './user-groups';
-import type {Punishment} from './punishments';
-import type {PartialModlogEntry} from './modlog';
-import {FriendsDatabase, PM} from './friends';
-import {SQL, Repl, FS, Utils} from '../lib';
+import type { RoomPermission, GlobalPermission } from './user-groups';
+import type { Punishment } from './punishments';
+import type { PartialModlogEntry } from './modlog';
+import { FriendsDatabase, PM } from './friends';
+import { SQL, Repl, FS, Utils } from '../lib';
 import * as Artemis from './artemis';
-import {Dex} from '../sim';
-import {PrivateMessages} from './private-messages';
+import { Dex } from '../sim';
+import { PrivateMessages } from './private-messages';
 import * as pathModule from 'path';
 import * as JSX from './chat-jsx';
 
@@ -67,7 +67,7 @@ export interface AnnotatedChatCommands {
 	[k: string]: AnnotatedChatHandler | string | string[] | AnnotatedChatCommands;
 }
 
-export type HandlerTable = {[key in keyof Handlers]?: Handlers[key]};
+export type HandlerTable = { [key in keyof Handlers]?: Handlers[key] };
 
 interface Handlers {
 	onRoomClose: (id: string, user: User, connection: Connection, page: boolean) => any;
@@ -98,8 +98,8 @@ export interface ChatPlugin {
 	roomSettings?: SettingsHandler | SettingsHandler[];
 	[k: string]: any;
 }
-
 export type SettingsHandler = (
+
 	room: Room,
 	user: User,
 	connection: Connection
@@ -127,7 +127,7 @@ export type ChatFilter = ((
 	connection: Connection,
 	targetUser: User | null,
 	originalMessage: string
-) => string | false | null | undefined | void) & {priority?: number};
+) => string | false | null | undefined | void) & { priority?: number };
 
 export type NameFilter = (name: string, user: User) => string;
 export type NicknameFilter = (name: string, user: User) => string | false;
@@ -138,7 +138,7 @@ export type HostFilter = (host: string, user: User, connection: Connection, host
 
 export interface Translations {
 	name?: string;
-	strings: {[english: string]: string};
+	strings: { [english: string]: string };
 }
 
 const LINK_WHITELIST = [
@@ -159,11 +159,11 @@ const BROADCAST_TOKEN = '!';
 const PLUGIN_DATABASE_PATH = './databases/chat-plugins.db';
 const MAX_PLUGIN_LOADING_DEPTH = 3;
 
-import {formatText, linkRegex, stripFormatting} from './chat-formatter';
+import { formatText, linkRegex, stripFormatting } from './chat-formatter';
 
-// @ts-ignore no typedef available
+// @ts-expect-error no typedef available
 import ProbeModule = require('probe-image-size');
-const probe: (url: string) => Promise<{width: number, height: number}> = ProbeModule;
+const probe: (url: string) => Promise<{ width: number, height: number }> = ProbeModule;
 
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
 
@@ -296,41 +296,41 @@ export abstract class MessageContext {
 		if (!targets[0].trim()) targets.pop();
 
 		if (targets.length > (atLeastOneTarget ? 1 : 0)) {
-			const {dex, format, isMatch} = this.extractFormat(targets[0].trim(), allowRules);
+			const { dex, format, isMatch } = this.extractFormat(targets[0].trim(), allowRules);
 			if (isMatch) {
 				targets.shift();
-				return {dex, format, targets};
+				return { dex, format, targets };
 			}
 		}
 		if (targets.length > 1) {
-			const {dex, format, isMatch} = this.extractFormat(targets[targets.length - 1].trim(), allowRules);
+			const { dex, format, isMatch } = this.extractFormat(targets[targets.length - 1].trim(), allowRules);
 			if (isMatch) {
 				targets.pop();
-				return {dex, format, targets};
+				return { dex, format, targets };
 			}
 		}
 
 		const room = (this as any as CommandContext).room;
-		const {dex, format} = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format, allowRules);
-		return {dex, format, targets};
+		const { dex, format } = this.extractFormat(room?.settings.defaultFormat || room?.battle?.format, allowRules);
+		return { dex, format, targets };
 	}
-	extractFormat(formatOrMod?: string, allowRules?: boolean): {dex: ModdedDex, format: Format | null, isMatch: boolean} {
+	extractFormat(formatOrMod?: string, allowRules?: boolean): { dex: ModdedDex, format: Format | null, isMatch: boolean } {
 		if (!formatOrMod) {
-			return {dex: Dex.includeData(), format: null, isMatch: false};
+			return { dex: Dex.includeData(), format: null, isMatch: false };
 		}
 
 		const format = Dex.formats.get(formatOrMod);
 		if (format.effectType === 'Format' || allowRules && format.effectType === 'Rule') {
-			return {dex: Dex.forFormat(format), format: format, isMatch: true};
+			return { dex: Dex.forFormat(format), format, isMatch: true };
 		}
 
 		if (toID(formatOrMod) in Dex.dexes) {
-			return {dex: Dex.mod(toID(formatOrMod)), format: null, isMatch: true};
+			return { dex: Dex.mod(toID(formatOrMod)), format: null, isMatch: true };
 		}
 
 		return this.extractFormat();
 	}
-	splitUser(target: string, {exactName}: {exactName?: boolean} = {}) {
+	splitUser(target: string, { exactName }: { exactName?: boolean } = {}) {
 		const [inputUsername, rest] = this.splitOne(target).map(str => str.trim());
 		const targetUser = Users.get(inputUsername, exactName);
 
@@ -341,8 +341,8 @@ export abstract class MessageContext {
 			rest,
 		};
 	}
-	requireUser(target: string, options: {allowOffline?: boolean, exactName?: boolean} = {}) {
-		const {targetUser, targetUsername, rest} = this.splitUser(target, options);
+	requireUser(target: string, options: { allowOffline?: boolean, exactName?: boolean } = {}) {
+		const { targetUser, targetUsername, rest } = this.splitUser(target, options);
 
 		if (!targetUser) {
 			throw new Chat.ErrorMessage(`The user "${targetUsername}" is offline or misspelled.`);
@@ -353,9 +353,9 @@ export abstract class MessageContext {
 
 		// `inputUsername` and `targetUsername` are never needed because we already handle the "user not found" error messages
 		// just use `targetUser.name` where previously necessary
-		return {targetUser, rest};
+		return { targetUser, rest };
 	}
-	getUserOrSelf(target: string, {exactName}: {exactName?: boolean} = {}) {
+	getUserOrSelf(target: string, { exactName }: { exactName?: boolean } = {}) {
 		if (!target.trim()) return this.user;
 
 		return Users.get(target, exactName);
@@ -372,7 +372,7 @@ export class PageContext extends MessageContext {
 	initialized: boolean;
 	title: string;
 	args: string[];
-	constructor(options: {pageid: string, user: User, connection: Connection, language?: ID}) {
+	constructor(options: { pageid: string, user: User, connection: Connection, language?: ID }) {
 		super(options.user, options.language);
 
 		this.connection = options.connection;
@@ -561,7 +561,7 @@ export class CommandContext extends MessageContext {
 	// TODO: return should be void | boolean | Promise<void | boolean>
 	parse(
 		msg?: string,
-		options: Partial<{isQuiet: boolean, broadcastPrefix: string, bypassRoomCheck: boolean}> = {}
+		options: Partial<{ isQuiet: boolean, broadcastPrefix: string, bypassRoomCheck: boolean }> = {}
 	): any {
 		if (typeof msg === 'string') {
 			// spawn subcontext
@@ -614,8 +614,10 @@ export class CommandContext extends MessageContext {
 					if (!(this.shouldBroadcast() && !/[a-z0-9]/.test(this.cmd.charAt(0)))) {
 						this.commandDoesNotExist();
 					}
-				} else if (!VALID_COMMAND_TOKENS.includes(message.charAt(0)) &&
-						VALID_COMMAND_TOKENS.includes(message.trim().charAt(0))) {
+				} else if (
+					!VALID_COMMAND_TOKENS.includes(message.charAt(0)) &&
+					VALID_COMMAND_TOKENS.includes(message.trim().charAt(0))
+				) {
 					message = message.trim();
 					if (!message.startsWith(BROADCAST_TOKEN)) {
 						message = message.charAt(0) + message;
@@ -744,6 +746,7 @@ export class CommandContext extends MessageContext {
 			throw new Chat.ErrorMessage(`Your username contains emojis, which this room doesn't allow.`);
 		}
 		// Removes extra spaces and null characters
+		// eslint-disable-next-line no-control-regex
 		message = message.trim().replace(/[ \u0000\u200B-\u200F]+/g, ' ');
 
 		if (room.settings.filterStretching && /(.+?)\1{7,}/i.test(message)) {
@@ -772,7 +775,7 @@ export class CommandContext extends MessageContext {
 	checkBanwords(room: BasicRoom | null | undefined, message: string): boolean {
 		if (!room) return true;
 		if (!room.banwordRegex) {
-			if (room.settings.banwords && room.settings.banwords.length) {
+			if (room.settings.banwords?.length) {
 				room.banwordRegex = new RegExp('(?:\\b|(?!\\w))(?:' + room.settings.banwords.join('|') + ')(?:\\b|\\B(?!\\w))', 'i');
 			} else {
 				room.banwordRegex = true;
@@ -943,7 +946,7 @@ export class CommandContext extends MessageContext {
 		action: string,
 		user: string | User | null = null,
 		note: string | null = null,
-		options: Partial<{noalts: any, noip: any}> = {}
+		options: Partial<{ noalts: any, noip: any }> = {}
 	) {
 		const entry: PartialModlogEntry = {
 			action,
@@ -967,7 +970,7 @@ export class CommandContext extends MessageContext {
 		(this.room || Rooms.global).modlog(entry);
 	}
 	parseSpoiler(reason: string) {
-		if (!reason) return {publicReason: "", privateReason: ""};
+		if (!reason) return { publicReason: "", privateReason: "" };
 
 		let publicReason = reason;
 		let privateReason = reason;
@@ -979,7 +982,7 @@ export class CommandContext extends MessageContext {
 			publicReason = reason.slice(0, proofIndex).trim();
 			privateReason = `${publicReason}${proof ? ` (PROOF: ${proof})` : ''}`;
 		}
-		return {publicReason, privateReason};
+		return { publicReason, privateReason };
 	}
 	roomlog(data: string) {
 		if (this.room) this.room.roomlog(data);
@@ -1104,8 +1107,6 @@ export class CommandContext extends MessageContext {
 
 		return true;
 	}
-	/* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
-	/* eslint-disable @typescript-eslint/prefer-optional-chain */
 	checkChat(message: string, room?: Room | null, targetUser?: User | null): string;
 	checkChat(message?: null, room?: Room | null, targetUser?: User | null): void;
 	checkChat(message: string | null = null, room: Room | null = null, targetUser: User | null = null) {
@@ -1115,7 +1116,6 @@ export class CommandContext extends MessageContext {
 		if (targetUser) {
 			room = null;
 		} else if (!room) {
-			// @ts-ignore excludes GlobalRoom above
 			room = this.room;
 		}
 		const user = this.user;
@@ -1295,11 +1295,12 @@ export class CommandContext extends MessageContext {
 			throw new Chat.ErrorMessage("You do not have permission to use PM HTML to users who are not in this room.");
 		}
 		const friends = targetUser.friends || new Set();
-		if (targetUser.settings.blockPMs &&
+		if (
+			targetUser.settings.blockPMs &&
 			(targetUser.settings.blockPMs === true ||
-			(targetUser.settings.blockPMs === 'friends' && !friends.has(this.user.id)) ||
-			!Users.globalAuth.atLeast(this.user, targetUser.settings.blockPMs as AuthLevel)) &&
-			!this.user.can('lock')
+				(targetUser.settings.blockPMs === 'friends' && !friends.has(this.user.id)) ||
+				!Users.globalAuth.atLeast(this.user, targetUser.settings.blockPMs as AuthLevel)) &&
+				!this.user.can('lock')
 		) {
 			Chat.maybeNotifyBlocked('pm', targetUser, this.user);
 			throw new Chat.ErrorMessage("This user is currently blocking PMs.");
@@ -1312,7 +1313,6 @@ export class CommandContext extends MessageContext {
 
 	checkBannedLinks(message: string) {
 		// RegExp#exec only returns one match, String#match returns all of them
-		// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
 		return (message.match(Chat.linkRegex) || []).filter(link => {
 			link = link.toLowerCase();
 			const domainMatches = /^(?:http:\/\/|https:\/\/)?(?:[^/]*\.)?([^/.]*\.[^/.]*)\.?($|\/|:)/.exec(link);
@@ -1324,7 +1324,6 @@ export class CommandContext extends MessageContext {
 			return !(LINK_WHITELIST.includes(host) || LINK_WHITELIST.includes(`*.${domain}`));
 		});
 	}
-	/* eslint-enable @typescript-eslint/prefer-optional-chain */
 	checkEmbedURI(uri: string) {
 		if (uri.startsWith('https://')) return uri;
 		if (uri.startsWith('//')) return uri;
@@ -1340,7 +1339,7 @@ export class CommandContext extends MessageContext {
 	 * `BattleLog.sanitizeHTML`.
 	 */
 	checkHTML(htmlContent: string | null) {
-		htmlContent = ('' + (htmlContent || '')).trim();
+		htmlContent = `${htmlContent || ''}`.trim();
 		if (!htmlContent) return '';
 		if (/>here.?</i.test(htmlContent) || /click here/i.test(htmlContent)) {
 			throw new Chat.ErrorMessage('Do not use "click here" – See [[Design standard #2 <https://github.com/smogon/pokemon-showdown/blob/master/CONTRIBUTING.md#design-standards>]]');
@@ -1465,7 +1464,6 @@ export class CommandContext extends MessageContext {
 		}
 		return this.room;
 	}
-	// eslint-disable-next-line @typescript-eslint/type-annotation-spacing
 	requireGame<T extends RoomGame>(constructor: new (...args: any[]) => T, subGame = false) {
 		const room = this.requireRoom();
 		if (subGame) {
@@ -1554,12 +1552,12 @@ export const Chat = new class {
 	basePages!: PageTable;
 	pages!: PageTable;
 	readonly destroyHandlers: (() => void)[] = [Artemis.destroy];
-	readonly crqHandlers: {[k: string]: CRQHandler} = {};
-	readonly handlers: {[k: string]: ((...args: any) => any)[]} = Object.create(null);
+	readonly crqHandlers: { [k: string]: CRQHandler } = {};
+	readonly handlers: { [k: string]: ((...args: any) => any)[] } = Object.create(null);
 	/** The key is the name of the plugin. */
-	readonly plugins: {[k: string]: ChatPlugin} = {};
+	readonly plugins: { [k: string]: ChatPlugin } = {};
 	/** Will be empty except during hotpatch */
-	oldPlugins: {[k: string]: ChatPlugin} = {};
+	oldPlugins: { [k: string]: ChatPlugin } = {};
 	roomSettings: SettingsHandler[] = [];
 
 	/*********************************************************
@@ -1766,7 +1764,7 @@ export const Chat = new class {
 			throw new Error(`Trying to translate to a nonexistent language: ${language}`);
 		}
 		if (!strings.length) {
-			return ((fStrings: TemplateStringsArray | string, ...fKeys: any) => Chat.tr(language, fStrings, ...fKeys));
+			return (fStrings: TemplateStringsArray | string, ...fKeys: any) => Chat.tr(language, fStrings, ...fKeys);
 		}
 
 		const entry = Chat.translations.get(language)?.get(trString);
@@ -1803,7 +1801,7 @@ export const Chat = new class {
 	 * Chat.databaseReadyPromise will be truthy if the database is not yet ready.
 	 */
 	database = SQL(module, {
-		file: ('Config' in global && Config.nofswriting) ? ':memory:' : PLUGIN_DATABASE_PATH,
+		file: global.Config?.nofswriting ? ':memory:' : PLUGIN_DATABASE_PATH,
 		processes: global.Config?.chatdbprocesses,
 	});
 	databaseReadyPromise: Promise<void> | null = null;
@@ -1815,7 +1813,7 @@ export const Chat = new class {
 		if (process.send) return; // We don't need a database in a subprocess that requires Chat.
 		if (!Config.usesqlite) return;
 		// check if we have the db_info table, which will always be present unless the schema needs to be initialized
-		const {hasDBInfo} = await this.database.get(
+		const { hasDBInfo } = await this.database.get(
 			`SELECT count(*) AS hasDBInfo FROM sqlite_master WHERE type = 'table' AND name = 'db_info'`
 		);
 		if (!hasDBInfo) await this.database.runFile('./databases/schemas/chat-plugins.sql');
@@ -1833,12 +1831,12 @@ export const Chat = new class {
 			const migrationVersion = parseInt(/v(\d+)\.sql$/.exec(migrationFile)?.[1] || '');
 			if (!migrationVersion) continue;
 			if (migrationVersion > curVersion) {
-				migrationsToRun.push({version: migrationVersion, file: migrationFile});
+				migrationsToRun.push({ version: migrationVersion, file: migrationFile });
 				Monitor.adminlog(`Pushing to migrationsToRun: ${migrationVersion} at ${migrationFile} - mainModule ${process.mainModule === module} !process.send ${!process.send}`);
 			}
 		}
-		Utils.sortBy(migrationsToRun, ({version}) => version);
-		for (const {file} of migrationsToRun) {
+		Utils.sortBy(migrationsToRun, ({ version }) => version);
+		for (const { file } of migrationsToRun) {
 			await this.database.runFile(pathModule.resolve(migrationsFolder, file));
 		}
 
@@ -1891,7 +1889,7 @@ export const Chat = new class {
 		Chat.loadPlugins();
 
 		const initialRoomlogLength = room?.log.getLineCount();
-		const context = new CommandContext({message, room, user, connection});
+		const context = new CommandContext({ message, room, user, connection });
 		const start = Date.now();
 		const result = context.parse();
 		if (typeof result?.then === 'function') {
@@ -2000,7 +1998,7 @@ export const Chat = new class {
 	loadPlugin(plugin: AnyObject, name: string) {
 		// esbuild builds cjs exports in such a way that they use getters, leading to crashes
 		// in the plugin.roomSettings = [plugin.roomSettings] action. So, we have to make them not getters
-		plugin = {...plugin};
+		plugin = { ...plugin };
 		if (plugin.commands) {
 			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
 		}
@@ -2041,7 +2039,7 @@ export const Chat = new class {
 		}
 		Chat.plugins[name] = plugin;
 	}
-	loadPlugins(oldPlugins?: {[k: string]: ChatPlugin}) {
+	loadPlugins(oldPlugins?: { [k: string]: ChatPlugin }) {
 		if (Chat.commands) return;
 		if (oldPlugins) Chat.oldPlugins = oldPlugins;
 
@@ -2050,7 +2048,6 @@ export const Chat = new class {
 		});
 
 		// Install plug-in commands and chat filters
-
 
 		Chat.commands = Object.create(null);
 		Chat.pages = Object.create(null);
@@ -2172,8 +2169,10 @@ export const Chat = new class {
 					return this.parseCommand(`/promote ${target}, ${g}`, true);
 				} else if (fullCmd === 'global' + groupid) {
 					return this.parseCommand(`/globalpromote ${target}, ${g}`, true);
-				} else if (fullCmd === 'de' + groupid || fullCmd === 'un' + groupid ||
-						fullCmd === 'globalde' + groupid || fullCmd === 'deglobal' + groupid) {
+				} else if (
+					fullCmd === 'de' + groupid || fullCmd === 'un' + groupid ||
+					fullCmd === 'globalde' + groupid || fullCmd === 'deglobal' + groupid
+				) {
 					return this.parseCommand(`/demote ${target}`, true);
 				} else if (fullCmd === 'room' + groupid) {
 					return this.parseCommand(`/roompromote ${target}, ${g}`, true);
@@ -2186,10 +2185,10 @@ export const Chat = new class {
 		}
 
 		return {
-			cmd: cmd,
-			cmdToken: cmdToken,
-			target: target,
-			fullCmd: fullCmd,
+			cmd,
+			cmdToken,
+			target,
+			fullCmd,
 			handler: commandHandler as AnnotatedChatHandler | null,
 		};
 	}
@@ -2226,7 +2225,6 @@ export const Chat = new class {
 			throw new Chat.ErrorMessage(`Your regex was rejected because it included an unterminated |.`);
 		}
 		try {
-			// eslint-disable-next-line no-new
 			new RegExp(word);
 		} catch (e: any) {
 			throw new Chat.ErrorMessage(
@@ -2285,9 +2283,9 @@ export const Chat = new class {
 	/**
 	 * Returns a timestamp in the form {yyyy}-{MM}-{dd} {hh}:{mm}:{ss}.
 	 *
-	 * options.human = true will reports hours human-readable
+	 * options.human = true will use a 12-hour clock
 	 */
-	toTimestamp(date: Date, options: {human?: boolean} = {}) {
+	toTimestamp(date: Date, options: { human?: boolean } = {}) {
 		const human = options.human;
 		let parts: any[] = [
 			date.getFullYear(),	date.getMonth() + 1, date.getDate(),
@@ -2297,8 +2295,8 @@ export const Chat = new class {
 			parts.push(parts[3] >= 12 ? 'pm' : 'am');
 			parts[3] = parts[3] % 12 || 12;
 		}
-		parts = parts.map(val => val < 10 ? '0' + val : '' + val);
-		return parts.slice(0, 3).join("-") + " " + parts.slice(3, human ? 5 : 6).join(":") + (human ? "" + parts[6] : "");
+		parts = parts.map(val => `${val}`.padStart(2, '0'));
+		return parts.slice(0, 3).join("-") + " " + parts.slice(3, 6).join(":") + (parts[6] || '');
 	}
 
 	/**
@@ -2307,7 +2305,7 @@ export const Chat = new class {
 	 * options.hhmmss = true will instead report the duration in 00:00:00 format
 	 *
 	 */
-	toDurationString(val: number, options: {hhmmss?: boolean, precision?: number} = {}) {
+	toDurationString(val: number, options: { hhmmss?: boolean, precision?: number } = {}) {
 		// TODO: replace by Intl.DurationFormat or equivalent when it becomes available (ECMA-402)
 		// https://github.com/tc39/ecma402/issues/47
 		const date = new Date(+val);
@@ -2322,7 +2320,7 @@ export const Chat = new class {
 		const positiveIndex = parts.findIndex(elem => elem > 0);
 		let precision = (options?.precision ? options.precision : 3);
 		if (options?.hhmmss) {
-			const str = parts.slice(positiveIndex).map(value => value < 10 ? "0" + value : "" + value).join(":");
+			const str = parts.slice(positiveIndex).map(value => `${value}`.padStart(2, '0')).join(":");
 			return str.length === 2 ? "00:" + str : str;
 		}
 
@@ -2389,7 +2387,7 @@ export const Chat = new class {
 	 * @param str string to block
 	 */
 	getReadmoreBlock(str: string, isCode?: boolean, cutoff = 3) {
-		const params = str.slice(+str.startsWith('\n')).split('\n');
+		const params = str.slice(str.startsWith('\n') ? 1 : 0).split('\n');
 		const output: string[] = [];
 		for (const [i, param] of params.entries()) {
 			if (output.length < cutoff && param.length > 80 && cutoff > 2) cutoff--;
@@ -2417,7 +2415,7 @@ export const Chat = new class {
 
 	getDataPokemonHTML(species: Species, gen = 8, tier = '') {
 		let buf = '<li class="result">';
-		buf += '<span class="col numcol">' + (tier || species.tier) + '</span> ';
+		buf += `<span class="col numcol">${tier || species.tier}</span> `;
 		buf += `<span class="col iconcol"><psicon pokemon="${species.id}"/></span> `;
 		buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${species.id}" target="_blank">${species.name}</a></span> `;
 		buf += '<span class="col typecol">';
@@ -2430,34 +2428,34 @@ export const Chat = new class {
 		if (gen >= 3) {
 			buf += '<span style="float:left;min-height:26px">';
 			if (species.abilities['1'] && (gen >= 4 || Dex.abilities.get(species.abilities['1']).gen === 3)) {
-				buf += '<span class="col twoabilitycol">' + species.abilities['0'] + '<br />' + species.abilities['1'] + '</span>';
+				buf += `<span class="col twoabilitycol">${species.abilities['0']}<br />${species.abilities['1']}</span>`;
 			} else {
-				buf += '<span class="col abilitycol">' + species.abilities['0'] + '</span>';
+				buf += `<span class="col abilitycol">${species.abilities['0']}</span>`;
 			}
 			if (species.abilities['H'] && species.abilities['S']) {
-				buf += '<span class="col twoabilitycol' + (species.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + species.abilities['H'] + '<br />(' + species.abilities['S'] + ')</em></span>';
+				buf += `<span class="col twoabilitycol${species.unreleasedHidden ? ' unreleasedhacol' : ''}"><em>${species.abilities['H']}<br />(${species.abilities['S']})</em></span>`;
 			} else if (species.abilities['H']) {
-				buf += '<span class="col abilitycol' + (species.unreleasedHidden ? ' unreleasedhacol' : '') + '"><em>' + species.abilities['H'] + '</em></span>';
+				buf += `<span class="col abilitycol${species.unreleasedHidden ? ' unreleasedhacol' : ''}"><em>${species.abilities['H']}</em></span>`;
 			} else if (species.abilities['S']) {
 				// special case for Zygarde
-				buf += '<span class="col abilitycol"><em>(' + species.abilities['S'] + ')</em></span>';
+				buf += `<span class="col abilitycol"><em>(${species.abilities['S']})</em></span>`;
 			} else {
 				buf += '<span class="col abilitycol"></span>';
 			}
 			buf += '</span>';
 		}
 		buf += '<span style="float:left;min-height:26px">';
-		buf += '<span class="col statcol"><em>HP</em><br />' + species.baseStats.hp + '</span> ';
-		buf += '<span class="col statcol"><em>Atk</em><br />' + species.baseStats.atk + '</span> ';
-		buf += '<span class="col statcol"><em>Def</em><br />' + species.baseStats.def + '</span> ';
+		buf += `<span class="col statcol"><em>HP</em><br />${species.baseStats.hp}</span> `;
+		buf += `<span class="col statcol"><em>Atk</em><br />${species.baseStats.atk}</span> `;
+		buf += `<span class="col statcol"><em>Def</em><br />${species.baseStats.def}</span> `;
 		if (gen <= 1) {
-			buf += '<span class="col statcol"><em>Spc</em><br />' + species.baseStats.spa + '</span> ';
+			buf += `<span class="col statcol"><em>Spc</em><br />${species.baseStats.spa}</span> `;
 		} else {
-			buf += '<span class="col statcol"><em>SpA</em><br />' + species.baseStats.spa + '</span> ';
-			buf += '<span class="col statcol"><em>SpD</em><br />' + species.baseStats.spd + '</span> ';
+			buf += `<span class="col statcol"><em>SpA</em><br />${species.baseStats.spa}</span> `;
+			buf += `<span class="col statcol"><em>SpD</em><br />${species.baseStats.spd}</span> `;
 		}
-		buf += '<span class="col statcol"><em>Spe</em><br />' + species.baseStats.spe + '</span> ';
-		buf += '<span class="col bstcol"><em>BST<br />' + species.bst + '</em></span> ';
+		buf += `<span class="col statcol"><em>Spe</em><br />${species.baseStats.spe}</span> `;
+		buf += `<span class="col bstcol"><em>BST<br />${species.bst}</em></span> `;
 		buf += '</span>';
 		buf += '</li>';
 		return `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
@@ -2472,7 +2470,7 @@ export const Chat = new class {
 		if (move.basePower) {
 			buf += `<span class="col labelcol"><em>Power</em><br>${typeof move.basePower === 'number' ? move.basePower : '—'}</span> `;
 		}
-		buf += `<span class="col widelabelcol"><em>Accuracy</em><br>${typeof move.accuracy === 'number' ? (move.accuracy + '%') : '—'}</span> `;
+		buf += `<span class="col widelabelcol"><em>Accuracy</em><br>${typeof move.accuracy === 'number' ? (`${move.accuracy}%`) : '—'}</span> `;
 		const basePP = move.pp || 1;
 		const pp = Math.floor(move.noPPBoosts ? basePP : basePP * 8 / 5);
 		buf += `<span class="col pplabelcol"><em>PP</em><br>${pp}</span> `;
@@ -2498,14 +2496,14 @@ export const Chat = new class {
 	/**
 	 * Gets the dimension of the image at url. Returns 0x0 if the image isn't found, as well as the relevant error.
 	 */
-	getImageDimensions(url: string): Promise<{height: number, width: number}> {
+	getImageDimensions(url: string): Promise<{ height: number, width: number }> {
 		return probe(url);
 	}
 
 	parseArguments(
 		str: string,
 		delim = ',',
-		opts: Partial<{paramDelim: string, useIDs: boolean, allowEmpty: boolean}> = {useIDs: true}
+		opts: Partial<{ paramDelim: string, useIDs: boolean, allowEmpty: boolean }> = { useIDs: true }
 	) {
 		const result: Record<string, string[]> = {};
 		for (const part of str.split(delim)) {
@@ -2542,7 +2540,7 @@ export const Chat = new class {
 	 * @return [width, height, resized]
 	 */
 	async fitImage(url: string, maxHeight = 300, maxWidth = 300): Promise<[number, number, boolean]> {
-		const {height, width} = await Chat.getImageDimensions(url);
+		const { height, width } = await Chat.getImageDimensions(url);
 
 		if (width <= maxWidth && height <= maxHeight) return [width, height, false];
 
@@ -2613,8 +2611,8 @@ export const Chat = new class {
 		return this.linkRegex.test(possibleUrl);
 	}
 
-	readonly filterWords: {[k: string]: FilterWord[]} = {};
-	readonly monitors: {[k: string]: Monitor} = {};
+	readonly filterWords: { [k: string]: FilterWord[] } = {};
+	readonly monitors: { [k: string]: Monitor } = {};
 
 	registerMonitor(id: string, entry: Monitor) {
 		if (!Chat.filterWords[id]) Chat.filterWords[id] = [];
@@ -2622,7 +2620,7 @@ export const Chat = new class {
 	}
 
 	resolvePage(pageid: string, user: User, connection: Connection) {
-		return (new PageContext({pageid, user, connection, language: user.language!})).resolve();
+		return (new PageContext({ pageid, user, connection, language: user.language! })).resolve();
 	}
 };
 
@@ -2646,7 +2644,7 @@ export const Chat = new class {
 	return user;
 };
 (CommandContext.prototype as any).splitTarget = function (this: any, target: string, exactName: boolean) {
-	const {targetUser, inputUsername, targetUsername, rest} = this.splitUser(target, exactName);
+	const { targetUser, inputUsername, targetUsername, rest } = this.splitUser(target, exactName);
 	this.targetUser = targetUser;
 	this.inputUsername = inputUsername;
 	this.targetUsername = targetUsername;
@@ -2694,7 +2692,7 @@ if (!process.send) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
 			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
 		},
-	};
+	} as any;
 	process.on('uncaughtException', err => {
 		Monitor.crashlog(err, 'A chat database process');
 	});

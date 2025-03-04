@@ -30,19 +30,19 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import * as Data from './dex-data';
-import {Condition, DexConditions} from './dex-conditions';
-import {DataMove, DexMoves} from './dex-moves';
-import {Item, DexItems} from './dex-items';
-import {Ability, DexAbilities} from './dex-abilities';
-import {Species, DexSpecies} from './dex-species';
-import {Format, DexFormats} from './dex-formats';
-import {Utils} from '../lib/utils';
+import { Condition, DexConditions } from './dex-conditions';
+import { DataMove, DexMoves } from './dex-moves';
+import { Item, DexItems } from './dex-items';
+import { Ability, DexAbilities } from './dex-abilities';
+import { Species, DexSpecies } from './dex-species';
+import { Format, DexFormats } from './dex-formats';
+import { Utils } from '../lib/utils';
 
 const BASE_MOD = 'gen9' as ID;
 const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(DATA_DIR, './mods');
 
-const dexes: {[mod: string]: ModdedDex} = Object.create(null);
+const dexes: { [mod: string]: ModdedDex } = Object.create(null);
 
 type DataType =
 	'Abilities' | 'Rulesets' | 'FormatsData' | 'Items' | 'Learnsets' | 'Moves' |
@@ -69,8 +69,8 @@ const DATA_FILES = {
 };
 
 /** Unfortunately we do for..in too much to want to deal with the casts */
-export interface DexTable<T> {[id: string]: T}
-export interface AliasesTable {[id: IDEntry]: string}
+export interface DexTable<T> { [id: string]: T }
+export interface AliasesTable { [id: IDEntry]: string }
 
 interface DexTableData {
 	Abilities: DexTable<import('./dex-abilities').AbilityData>;
@@ -158,7 +158,7 @@ export class ModdedDex {
 		return this.loadData();
 	}
 
-	get dexes(): {[mod: string]: ModdedDex} {
+	get dexes(): { [mod: string]: ModdedDex } {
 		this.includeMods();
 		return dexes;
 	}
@@ -212,7 +212,7 @@ export class ModdedDex {
 	 */
 	getName(name: any): string {
 		if (typeof name !== 'string' && typeof name !== 'number') return '';
-		name = ('' + name).replace(/[|\s[\],\u202e]+/g, ' ').trim();
+		name = `${name}`.replace(/[|\s[\],\u202e]+/g, ' ').trim();
 		if (name.length > 18) name = name.substr(0, 18).trim();
 
 		// remove zalgo
@@ -230,11 +230,11 @@ export class ModdedDex {
 	 * Also checks immunity to some statuses.
 	 */
 	getImmunity(
-		source: {type: string} | string,
-		target: {getTypes: () => string[]} | {types: string[]} | string[] | string
+		source: { type: string } | string,
+		target: { getTypes: () => string[] } | { types: string[] } | string[] | string
 	): boolean {
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
-		// @ts-ignore
+		// @ts-expect-error really wish TS would support this
 		const targetTyping: string[] | string = target.getTypes?.() || target.types || target;
 		if (Array.isArray(targetTyping)) {
 			for (const type of targetTyping) {
@@ -248,11 +248,11 @@ export class ModdedDex {
 	}
 
 	getEffectiveness(
-		source: {type: string} | string,
-		target: {getTypes: () => string[]} | {types: string[]} | string[] | string
+		source: { type: string } | string,
+		target: { getTypes: () => string[] } | { types: string[] } | string[] | string
 	): number {
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
-		// @ts-ignore
+		// @ts-expect-error really wish TS would support this
 		const targetTyping: string[] | string = target.getTypes?.() || target.types || target;
 		let totalTypeMod = 0;
 		if (Array.isArray(targetTyping)) {
@@ -323,7 +323,7 @@ export class ModdedDex {
 			'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark',
 		];
 		const tr = this.trunc;
-		const stats = {hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31};
+		const stats = { hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31 };
 		if (this.gen <= 2) {
 			// Gen 2 specific Hidden Power check. IVs are still treated 0-31 so we get them 0-15
 			const atkDV = tr(ivs.atk / 2);
@@ -358,7 +358,7 @@ export class ModdedDex {
 	 * Truncate a number into an unsigned 32-bit integer, for
 	 * compatibility with the cartridge games' math systems.
 	 */
-	trunc(num: number, bits = 0) {
+	trunc(this: void, num: number, bits = 0) {
 		if (bits) return (num >>> 0) % (2 ** bits);
 		return num >>> 0;
 	}
@@ -485,7 +485,7 @@ export class ModdedDex {
 	loadData(): DexTableData {
 		if (this.dataCache) return this.dataCache;
 		dexes['base'].includeMods();
-		const dataCache: {[k in keyof DexTableData]?: any} = {};
+		const dataCache: { [k in keyof DexTableData]?: any } = {};
 
 		const basePath = this.dataDir + '/';
 
@@ -512,7 +512,7 @@ export class ModdedDex {
 			dataCache[dataType] = this.loadDataFile(basePath, dataType);
 			if (dataType === 'Rulesets' && !parentDex) {
 				for (const format of this.formats.all()) {
-					dataCache.Rulesets[format.id] = {...format, ruleTable: null};
+					dataCache.Rulesets[format.id] = { ...format, ruleTable: null };
 				}
 			}
 		}
@@ -531,13 +531,13 @@ export class ModdedDex {
 					} else if (!(entryId in childTypedData)) {
 						// If it doesn't exist it's inherited from the parent data
 						childTypedData[entryId] = parentTypedData[entryId];
-					} else if (childTypedData[entryId] && childTypedData[entryId].inherit) {
+					} else if (childTypedData[entryId]?.inherit) {
 						// {inherit: true} can be used to modify only parts of the parent data,
 						// instead of overwriting entirely
 						delete childTypedData[entryId].inherit;
 
-						// Merge parent into children entry, preserving existing childs' properties.
-						childTypedData[entryId] = {...parentTypedData[entryId], ...childTypedData[entryId]};
+						// Merge parent and child's entry, with child overwriting parent.
+						childTypedData[entryId] = { ...parentTypedData[entryId], ...childTypedData[entryId] };
 					}
 				}
 			}
@@ -567,7 +567,7 @@ dexes['base'] = new ModdedDex();
 dexes[BASE_MOD] = dexes['base'];
 
 export const Dex = dexes['base'];
-export namespace Dex {
+export declare namespace Dex {
 	export type Species = import('./dex-species').Species;
 	export type Item = import('./dex-items').Item;
 	export type Move = import('./dex-moves').Move;
@@ -576,6 +576,16 @@ export namespace Dex {
 	export type HitEffect = import('./dex-moves').HitEffect;
 	export type SecondaryEffect = import('./dex-moves').SecondaryEffect;
 	export type RuleTable = import('./dex-formats').RuleTable;
+
+	export type GenderName = 'M' | 'F' | 'N' | '';
+	export type StatIDExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
+	export type StatID = 'hp' | StatIDExceptHP;
+	export type StatsExceptHPTable = { [stat in StatIDExceptHP]: number };
+	export type StatsTable = { [stat in StatID]: number };
+	export type SparseStatsTable = Partial<StatsTable>;
+	export type BoostID = StatIDExceptHP | 'accuracy' | 'evasion';
+	export type BoostsTable = { [boost in BoostID]: number };
+	export type SparseBoostsTable = Partial<BoostsTable>;
 }
 
 export default Dex;

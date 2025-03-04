@@ -5,7 +5,7 @@
  * https://github.com/Hidden50/Pokemon-Showdown-Node-Bot/blob/master/commands/base-auctions.js
  * @author Karthik
  */
-import {Net, Utils} from '../../lib';
+import { Net, Utils } from '../../lib';
 
 interface Player {
 	id: ID;
@@ -86,10 +86,10 @@ function parseCredits(amount: string) {
 
 export class Auction extends Rooms.SimpleRoomGame {
 	override readonly gameid = 'auction' as ID;
-	owners: Set<ID> = new Set();
-	teams: Map<string, Team> = new Map();
-	managers: Map<string, Manager> = new Map();
-	auctionPlayers: Map<string, Player> = new Map();
+	owners = new Set<ID>();
+	teams = new Map<string, Team>();
+	managers = new Map<string, Manager>();
+	auctionPlayers = new Map<string, Player>();
 
 	startingCredits: number;
 	minBid = 3000;
@@ -99,10 +99,10 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	lastQueue: Team[] | null = null;
 	queue: Team[] = [];
-	nomTimer: NodeJS.Timer = null!;
+	nomTimer: NodeJS.Timeout = null!;
 	nomTimeLimit = 0;
 	nomTimeRemaining = 0;
-	bidTimer: NodeJS.Timer = null!;
+	bidTimer: NodeJS.Timeout = null!;
 	bidTimeLimit = 10;
 	bidTimeRemaining = 10;
 	nominatingTeam: Team = null!;
@@ -110,7 +110,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	highestBidder: Team = null!;
 	highestBid = 0;
 	/** Used for blind mode */
-	bidsPlaced: Map<Team, number> = new Map();
+	bidsPlaced = new Map<Team, number>();
 	state: 'setup' | 'nom' | 'bid' = 'setup';
 	constructor(room: Room, startingCredits = 100000) {
 		super(room);
@@ -261,7 +261,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	sendTimer(change = false, nom = false) {
 		let buf = `<div class="infobox message-error">`;
-		buf += `<i class="fa fa-hourglass-start"></i> ${Chat.toDurationString((nom ? this.nomTimeRemaining : this.bidTimeRemaining) * 1000, {hhmmss: true}).slice(1)}`;
+		buf += `<i class="fa fa-hourglass-start"></i> ${Chat.toDurationString((nom ? this.nomTimeRemaining : this.bidTimeRemaining) * 1000, { hhmmss: true }).slice(1)}`;
 		buf += `</div>`;
 		this.room.add(`|uhtml${change ? 'change' : ''}|timer|${buf}`).update();
 	}
@@ -465,7 +465,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		for (const id of users.map(toID)) {
 			const manager = this.managers.get(id);
 			if (!manager) {
-				this.managers.set(id, {id, team});
+				this.managers.set(id, { id, team });
 			} else {
 				manager.team = team;
 			}
@@ -617,7 +617,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	onChatMessage(message: string, user: User) {
+	override onChatMessage(message: string, user: User) {
 		if (this.state !== 'bid' || this.type !== 'blind') return;
 		if (message.startsWith('.')) message = message.slice(1);
 		if (Number(message.replace(',', '.'))) {
@@ -626,7 +626,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	onLogMessage(message: string, user: User) {
+	override onLogMessage(message: string, user: User) {
 		if (this.state !== 'bid' || this.type === 'blind') return;
 		if (message.startsWith('.')) message = message.slice(1);
 		if (Number(message.replace(',', '.'))) {
@@ -740,7 +740,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.destroy();
 	}
 
-	destroy() {
+	override destroy() {
 		this.clearNomTimer();
 		this.clearBidTimer();
 		super.destroy();

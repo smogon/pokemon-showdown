@@ -1,7 +1,7 @@
-import {FS, Utils} from '../../lib';
-import type {ModlogSearch, ModlogEntry} from '../modlog';
+import { FS, Utils } from '../../lib';
+import type { ModlogSearch, ModlogEntry } from '../modlog';
 import {
-	TicketState, getBattleLog, getBattleLinks,
+	type TicketState, getBattleLog, getBattleLinks,
 	writeTickets, notifyStaff, writeStats, HelpTicket,
 	tickets,
 } from './helptickets';
@@ -13,7 +13,7 @@ const WHITELIST = ['mia'];
 
 export interface AutoPunishment {
 	modlogCount?: number;
-	severity?: {type: string[], certainty: number};
+	severity?: { type: string[], certainty: number };
 	/**
 	 * Should it be run on just one message?
 	 * or is it safe to run on averages (for the types that use averages)
@@ -32,11 +32,11 @@ const defaults: AutoSettings = {
 	punishments: [{
 		ticketType: 'inapname',
 		punishment: 'forcerename',
-		severity: {type: ['sexual_explicit', 'severe_toxicity', 'identity_attack'], certainty: 0.4},
+		severity: { type: ['sexual_explicit', 'severe_toxicity', 'identity_attack'], certainty: 0.4 },
 	}, {
 		ticketType: 'pmharassment',
 		punishment: 'warn',
-		severity: {type: ['sexual_explicit', 'severe_toxicity', 'identity_attack'], certainty: 0.15},
+		severity: { type: ['sexual_explicit', 'severe_toxicity', 'identity_attack'], certainty: 0.15 },
 	}],
 	applyPunishments: false,
 };
@@ -45,7 +45,7 @@ export const settings: AutoSettings = (() => {
 	try {
 		// spreading w/ default means that
 		// adding new things won't crash by not existing
-		return {...defaults, ...JSON.parse(FS('config/chat-plugins/ht-auto.json').readSync())};
+		return { ...defaults, ...JSON.parse(FS('config/chat-plugins/ht-auto.json').readSync()) };
 	} catch {
 		return defaults;
 	}
@@ -107,7 +107,7 @@ export function determinePunishment(
 			action = punishment.punishment;
 		}
 	}
-	return {action, types};
+	return { action, types };
 }
 
 export function globalModlog(action: string, user: User | ID | null, note: string, roomid?: string) {
@@ -125,7 +125,7 @@ export function addModAction(message: string) {
 	Rooms.get('staff')?.add(`|c|~|/log ${message}`).update();
 }
 
-export async function getModlog(params: {user?: ID, ip?: string, actions?: string[]}) {
+export async function getModlog(params: { user?: ID, ip?: string, actions?: string[] }) {
 	const search: ModlogSearch = {
 		note: [],
 		user: [],
@@ -133,9 +133,9 @@ export async function getModlog(params: {user?: ID, ip?: string, actions?: strin
 		action: [],
 		actionTaker: [],
 	};
-	if (params.user) search.user = [{search: params.user, isExact: true}];
-	if (params.ip) search.ip = [{search: params.ip}];
-	if (params.actions) search.action = params.actions.map(s => ({search: s}));
+	if (params.user) search.user = [{ search: params.user, isExact: true }];
+	if (params.ip) search.ip = [{ search: params.ip }];
+	if (params.actions) search.action = params.actions.map(s => ({ search: s }));
 	const res = await Rooms.Modlog.search('global', search);
 	return res?.results || [];
 }
@@ -274,7 +274,7 @@ function shouldNotProcess(message: string) {
 }
 
 export async function getMessageAverages(messages: string[]) {
-	const counts: Record<string, {count: number, raw: number}> = {};
+	const counts: Record<string, { count: number, raw: number }> = {};
 	const classified = [];
 	for (const message of messages) {
 		if (shouldNotProcess(message)) continue;
@@ -282,7 +282,7 @@ export async function getMessageAverages(messages: string[]) {
 		if (!res) continue;
 		classified.push(res);
 		for (const k in res) {
-			if (!counts[k]) counts[k] = {count: 0, raw: 0};
+			if (!counts[k]) counts[k] = { count: 0, raw: 0 };
 			counts[k].count++;
 			counts[k].raw += res[k];
 		}
@@ -291,7 +291,7 @@ export async function getMessageAverages(messages: string[]) {
 	for (const k in counts) {
 		averages[k] = counts[k].raw / counts[k].count;
 	}
-	return {averages, classified};
+	return { averages, classified };
 }
 
 interface CheckerResult {
@@ -307,7 +307,7 @@ interface CheckerResult {
 type CheckerOutput = void | Map<string, CheckerResult>;
 
 export const checkers: {
-	[k: string]: (ticket: TicketState & {text: [string, string]}) => CheckerOutput | Promise<CheckerOutput>,
+	[k: string]: (ticket: TicketState & { text: [string, string] }) => CheckerOutput | Promise<CheckerOutput>,
 } = {
 	async inapname(ticket) {
 		const id = toID(ticket.text[0]);
@@ -322,7 +322,7 @@ export const checkers: {
 					ip: user.latestIp,
 					actions: ['FORCERENAME', 'NAMELOCK', 'WEEKNAMELOCK'],
 				});
-				let {action} = determinePunishment('inapname', result, modlog);
+				let { action } = determinePunishment('inapname', result, modlog);
 				if (!action) action = 'forcerename';
 				return new Map([[user.id, {
 					action,
@@ -351,7 +351,7 @@ export const checkers: {
 					// atm don't factor in modlog
 					const curAction = determinePunishment('inappokemon', results, []).action;
 					if (curAction && (!result || supersedes(curAction, result.action))) {
-						result = {action: curAction, name: set.name, result: results, replay: link};
+						result = { action: curAction, name: set.name, result: results, replay: link };
 					}
 				}
 				if (result) {
@@ -382,8 +382,8 @@ export const checkers: {
 				messages[id].push(text);
 			}
 			for (const [id, messageList] of Object.entries(messages)) {
-				const {averages, classified} = await getMessageAverages(messageList);
-				const {action} = determinePunishment('battleharassment', averages, []);
+				const { averages, classified } = await getMessageAverages(messageList);
+				const { action } = determinePunishment('battleharassment', averages, []);
 				if (action) {
 					const existingPunishment = actions.get(id);
 					if (!existingPunishment || supersedes(action, existingPunishment.action)) {
@@ -436,7 +436,7 @@ export const checkers: {
 		const messages: Record<string, string[]> = {};
 		const ids = new Set<ID>();
 		// sort messages by user who sent them, also filter out old ones
-		for (const {from, message, timestamp} of pmLog) {
+		for (const { from, message, timestamp } of pmLog) {
 			// ignore pmlogs more than 24h old
 			if ((Date.now() - new Date(timestamp).getTime()) > PMLOG_IGNORE_TIME) continue;
 			const id = toID(from);
@@ -446,7 +446,7 @@ export const checkers: {
 		}
 		for (const id of ids) {
 			let punishment;
-			const {averages, classified} = await getMessageAverages(messages[id]);
+			const { averages, classified } = await getMessageAverages(messages[id]);
 			const curPunishment = determinePunishment('pmharassment', averages, []).action;
 			if (curPunishment) {
 				if (!punishment || supersedes(curPunishment, punishment)) {
@@ -462,7 +462,7 @@ export const checkers: {
 				}
 			}
 			for (const result of classified) {
-				const {action} = determinePunishment('pmharassment', result, [], true);
+				const { action } = determinePunishment('pmharassment', result, [], true);
 				if (!action) continue;
 				const exists = actions.get(id);
 				if (!exists || supersedes(action, exists.action)) {
@@ -491,7 +491,7 @@ export const checkers: {
 
 export const classifier = new Artemis.LocalClassifier();
 
-export async function runPunishments(ticket: TicketState & {text: [string, string]}, typeId: string) {
+export async function runPunishments(ticket: TicketState & { text: [string, string] }, typeId: string) {
 	let result: Map<string, CheckerResult> | null = null;
 	if (checkers[typeId]) {
 		result = await checkers[typeId](ticket) || null;
@@ -515,6 +515,7 @@ export async function runPunishments(ticket: TicketState & {text: [string, strin
 				closeTicket(ticket); // no good response. just close it, because we __have__ dispatched an action.
 			}
 		} else {
+			// eslint-disable-next-line require-atomic-updates
 			ticket.recommended = [];
 			for (const res of result.values()) {
 				Rooms.get('abuselog')?.add(
@@ -566,7 +567,7 @@ export const commands: Chat.ChatCommands = {
 						}
 					}
 					if (!punishment.severity) {
-						punishment.severity = {certainty: 0, type: []};
+						punishment.severity = { certainty: 0, type: [] };
 					}
 					punishment.severity.type.push(...types);
 					break;
@@ -576,7 +577,7 @@ export const commands: Chat.ChatCommands = {
 						return this.errorReply(`Certainty must be a number below 1 and above 0.`);
 					}
 					if (!punishment.severity) {
-						punishment.severity = {certainty: 0, type: []};
+						punishment.severity = { certainty: 0, type: [] };
 					}
 					punishment.severity.certainty = num;
 					break;
@@ -751,12 +752,12 @@ export const pages: Chat.PageTable = {
 			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
 			buf += `<i class="fa fa-refresh"></i> Refresh</button>`;
 			buf += `<h3>Artemis ticket stats</h3><hr />`;
-			const dayStats: Record<string, {successes: number, failures: number, total: number}> = {};
-			const total = {successes: 0, failures: 0, total: 0};
+			const dayStats: Record<string, { successes: number, failures: number, total: number }> = {};
+			const total = { successes: 0, failures: 0, total: 0 };
 			const failed = [];
 			for (const ticket of found) {
 				const day = Chat.toTimestamp(new Date(ticket.created)).split(' ')[0];
-				if (!dayStats[day]) dayStats[day] = {successes: 0, failures: 0, total: 0};
+				if (!dayStats[day]) dayStats[day] = { successes: 0, failures: 0, total: 0 };
 				dayStats[day].total++;
 				total.total++;
 				switch (ticket.state.recommendResult) {

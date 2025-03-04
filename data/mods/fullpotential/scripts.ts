@@ -80,7 +80,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const isPhysical = move.category === 'Physical';
 			const defenseStat: StatIDExceptHP = move.overrideDefensiveStat || (isPhysical ? 'def' : 'spd');
 
-			const statTable: {[k in StatIDExceptHP]: string} = {atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe'};
+			const statTable: { [k in StatIDExceptHP]: string } = { atk: 'Atk', def: 'Def', spa: 'SpA', spd: 'SpD', spe: 'Spe' };
 
 			let maxAttack = 0;
 

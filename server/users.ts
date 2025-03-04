@@ -45,16 +45,15 @@ const PERMALOCK_CACHE_TIME = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 const DEFAULT_TRAINER_SPRITES = [1, 2, 101, 102, 169, 170, 265, 266];
 
-import {Utils, ProcessManager} from '../lib';
+import { Utils, type ProcessManager } from '../lib';
 import {
-	Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL, RoomPermission, GlobalPermission,
+	Auth, GlobalAuth, PLAYER_SYMBOL, HOST_SYMBOL, type RoomPermission, type GlobalPermission,
 } from './user-groups';
 
 const MINUTES = 60 * 1000;
 const IDLE_TIMER = 60 * MINUTES;
 const STAFF_IDLE_TIMER = 30 * MINUTES;
 const CONNECTION_EXPIRY_TIME = 24 * 60 * MINUTES;
-
 
 /*********************************************************
  * Utility functions
@@ -89,7 +88,7 @@ function add(user: User) {
 	users.set(user.id, user);
 }
 function deleteUser(user: User) {
-	prevUsers.delete('guest' + user.guestNum as ID);
+	prevUsers.delete(`guest${user.guestNum}` as ID);
 	users.delete(user.id);
 }
 function merge(toRemain: User, toDestroy: User) {
@@ -148,7 +147,7 @@ function getExactUser(name: string | User) {
  * Usage:
  *   Users.findUsers([userids], [ips])
  */
-function findUsers(userids: ID[], ips: string[], options: {forPunishment?: boolean, includeTrusted?: boolean} = {}) {
+function findUsers(userids: ID[], ips: string[], options: { forPunishment?: boolean, includeTrusted?: boolean } = {}) {
 	const matches: User[] = [];
 	if (options.forPunishment) ips = ips.filter(ip => !Punishments.isSharedIp(ip));
 	const ipMatcher = IPTools.checker(ips);
@@ -338,7 +337,7 @@ export interface UserSettings {
 // User
 export class User extends Chat.MessageContext {
 	/** In addition to needing it to implement MessageContext, this is also nice for compatibility with Connection. */
-	readonly user: User;
+	override readonly user: User;
 	/**
 	 * Not a source of truth - should always be in sync with
 	 * `[...Rooms.rooms.values()].filter(room => this.id in room.users)`
@@ -351,7 +350,7 @@ export class User extends Chat.MessageContext {
 	 * `)`
 	 */
 	readonly games: Set<RoomID>;
-	mmrCache: {[format: string]: number};
+	mmrCache: { [format: string]: number };
 	guestNum: number;
 	name: string;
 	named: boolean;
@@ -359,7 +358,7 @@ export class User extends Chat.MessageContext {
 	id: ID;
 	tempGroup: GroupSymbol;
 	avatar: string | number;
-	language: ID | null;
+	override language: ID | null;
 
 	connected: boolean;
 	connections: Connection[];
@@ -371,7 +370,7 @@ export class User extends Chat.MessageContext {
 	semilocked: ID | PunishType | null;
 	namelocked: ID | PunishType | null;
 	permalocked: ID | PunishType | null;
-	punishmentTimer: NodeJS.Timer | null;
+	punishmentTimer: NodeJS.Timeout | null;
 	previousIDs: ID[];
 
 	lastChallenge: number;
@@ -392,7 +391,7 @@ export class User extends Chat.MessageContext {
 	isPublicBot: boolean;
 	lastDisconnected: number;
 	lastConnected: number;
-	foodfight?: {generatedTeam: string[], dish: string, ingredients: string[], timestamp: number};
+	foodfight?: { generatedTeam: string[], dish: string, ingredients: string[], timestamp: number };
 	friends?: Set<string>;
 
 	chatQueue: ChatQueueEntry[] | null;
@@ -541,20 +540,20 @@ export class User extends Chat.MessageContext {
 		this.send(`|popup|` + message.replace(/\n/g, '||'));
 	}
 	getIdentity(room: BasicRoom | null = null) {
-		const punishgroups = Config.punishgroups || {locked: null, muted: null};
+		const punishgroups = Config.punishgroups || { locked: null, muted: null };
 		if (this.locked || this.namelocked) {
-			const lockedSymbol = (punishgroups.locked && punishgroups.locked.symbol || '\u203d');
+			const lockedSymbol = (punishgroups.locked?.symbol || '\u203d');
 			return lockedSymbol + this.name;
 		}
 		if (room) {
 			if (room.isMuted(this)) {
-				const mutedSymbol = (punishgroups.muted && punishgroups.muted.symbol || '!');
+				const mutedSymbol = (punishgroups.muted?.symbol || '!');
 				return mutedSymbol + this.name;
 			}
 			return room.auth.get(this) + this.name;
 		}
 		if (this.semilocked) {
-			const mutedSymbol = (punishgroups.muted && punishgroups.muted.symbol || '!');
+			const mutedSymbol = (punishgroups.muted?.symbol || '!');
 			return mutedSymbol + this.name;
 		}
 		return this.tempGroup + this.name;
@@ -626,7 +625,7 @@ export class User extends Chat.MessageContext {
 		return whitelist.includes(connection.ip) || whitelist.includes(this.id);
 	}
 	resetName(isForceRenamed = false) {
-		return this.forceRename('Guest ' + this.guestNum, false, isForceRenamed);
+		return this.forceRename(`Guest ${this.guestNum}`, false, isForceRenamed);
 	}
 	updateIdentity(roomid: RoomID | null = null) {
 		if (roomid) {
@@ -788,6 +787,7 @@ export class User extends Chat.MessageContext {
 		}
 
 		this.handleRename(name, userid, newlyRegistered, userType);
+		void Punishments.checkIp(this, connection); // namelock enforcement and the like after merge
 	}
 
 	handleRename(name: string, userid: ID, newlyRegistered: boolean, userType: string) {
@@ -926,7 +926,7 @@ export class User extends Chat.MessageContext {
 		if (isForceRenamed) this.userMessage = '';
 
 		for (const connection of this.connections) {
-			// console.log('' + name + ' renaming: socket ' + i + ' of ' + this.connections.length);
+			// console.log(`${name} renaming: socket ${i} of ${this.connections.length}`);
 			connection.send(this.getUpdateuserText());
 		}
 		for (const roomid of this.games) {
@@ -1066,7 +1066,7 @@ export class User extends Chat.MessageContext {
 		}
 		this.connections.push(connection);
 
-		// console.log('' + this.name + ' merging: connection ' + connection.socket.id);
+		// console.log(`${this.name} merging: connection ${connection.socket.id}`);
 		connection.send(this.getUpdateuserText());
 		connection.user = this;
 		for (const roomid of connection.inRooms) {
@@ -1278,7 +1278,7 @@ export class User extends Chat.MessageContext {
 	 * alts (i.e. when forPunishment is true), they will always be the first element of that list.
 	 */
 	getAltUsers(includeTrusted = false, forPunishment = false) {
-		let alts = findUsers([this.getLastId()], this.ips, {includeTrusted, forPunishment});
+		let alts = findUsers([this.getLastId()], this.ips, { includeTrusted, forPunishment });
 		alts = alts.filter(user => user !== this);
 		if (forPunishment) alts.unshift(this);
 		return alts;
@@ -1376,7 +1376,6 @@ export class User extends Chat.MessageContext {
 
 		let stillInRoom = false;
 		if (connection) {
-			// @ts-ignore TypeScript inferring wrong type for room
 			stillInRoom = this.connections.some(conn => conn.inRooms.has(room.roomid));
 		}
 		if (!stillInRoom) {
@@ -1395,9 +1394,8 @@ export class User extends Chat.MessageContext {
 		// cancel tour challenges
 		// no need for a popup because users can't change their name while in a tournament anyway
 		for (const roomid of this.games) {
-			const room = Rooms.get(roomid);
-			// @ts-ignore Tournaments aren't TS'd yet
-			if (room.game && room.game.cancelChallenge) room.game.cancelChallenge(this);
+			// @ts-expect-error Tournaments aren't TS'd yet
+			Rooms.get(roomid)?.game?.cancelChallenge?.(this);
 		}
 	}
 	updateReady(connection: Connection | null = null) {
@@ -1559,7 +1557,7 @@ export class User extends Chat.MessageContext {
 			this.punishmentTimer = null;
 		}
 	}
-	toString() {
+	override toString() {
 		return this.id;
 	}
 }
@@ -1632,7 +1630,7 @@ function socketConnect(
 	ip: string,
 	protocol: string
 ) {
-	const id = '' + workerid + '-' + socketid;
+	const id = `${workerid}-${socketid}`;
 	const connection = new Connection(id, worker, socketid, null, ip, protocol);
 	connections.set(id, connection);
 
@@ -1668,7 +1666,7 @@ function socketConnect(
 	Rooms.global.handleConnect(user, connection);
 }
 function socketDisconnect(worker: ProcessManager.StreamWorker, workerid: number, socketid: string) {
-	const id = '' + workerid + '-' + socketid;
+	const id = `${workerid}-${socketid}`;
 
 	const connection = connections.get(id);
 	if (!connection) return;
@@ -1720,10 +1718,9 @@ function socketReceive(worker: ProcessManager.StreamWorker, workerid: number, so
 
 	const lines = message.split('\n');
 	if (!lines[lines.length - 1]) lines.pop();
-	// eslint-disable-next-line @typescript-eslint/prefer-optional-chain
 	const maxLineCount = (
 		user.can('bypassall') ? THROTTLE_MULTILINE_WARN_ADMIN :
-		(user.isStaff || (room && room.auth.isStaff(user.id))) ?
+		(user.isStaff || room?.auth.isStaff(user.id)) ?
 			THROTTLE_MULTILINE_WARN_STAFF : THROTTLE_MULTILINE_WARN
 	);
 	if (lines.length > maxLineCount && !Config.nothrottle) {

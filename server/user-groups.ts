@@ -1,6 +1,6 @@
-import {FS} from '../lib/fs';
-import type {RoomSection} from './chat-commands/room-settings';
-import {toID} from '../sim/dex-data';
+import { FS } from '../lib/fs';
+import type { RoomSection } from './chat-commands/room-settings';
+import { toID } from '../sim/dex-data';
 
 export type GroupSymbol = '~' | '#' | '★' | '*' | '@' | '%' | '☆' | '§' | '+' | '^' | ' ' | '‽' | '!';
 export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
@@ -53,7 +53,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	 * Passing a User will read `user.group`, which is relevant for unregistered
 	 * users with temporary global auth.
 	 */
-	get(user: ID | User) {
+	override get(user: ID | User) {
 		if (typeof user !== 'string') return user.tempGroup;
 		return super.get(user) || Auth.defaultSymbol();
 	}
@@ -174,7 +174,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 					// if /permissions has granted unranked users permission to use the command,
 					// grant jurisdiction over unranked (since unranked users don't have jurisdiction over unranked)
 					// see https://github.com/smogon/pokemon-showdown/pull/9534#issuecomment-1565719315
-					jurisdiction += Users.Auth.defaultSymbol();
+					(jurisdiction as string) += Users.Auth.defaultSymbol();
 				}
 			}
 			if (!foundSpecificPermission && roomPermissions[permission]) {
@@ -252,7 +252,7 @@ export class RoomAuth extends Auth {
 		super();
 		this.room = room;
 	}
-	get(userOrID: ID | User): GroupSymbol {
+	override get(userOrID: ID | User): GroupSymbol {
 		const id = typeof userOrID === 'string' ? userOrID : userOrID.id;
 
 		const parentAuth: Auth | null = this.room.parent ? this.room.parent.auth :
@@ -265,7 +265,7 @@ export class RoomAuth extends Auth {
 			let group = Config.greatergroupscache[`${roomGroup}${parentGroup}`];
 			if (!group) {
 				// unrecognized groups always trump higher global rank
-				const roomRank = Auth.getGroup(roomGroup, {rank: Infinity}).rank;
+				const roomRank = Auth.getGroup(roomGroup, { rank: Infinity }).rank;
 				const globalRank = Auth.getGroup(parentGroup).rank;
 				if (roomGroup === Users.PLAYER_SYMBOL || roomGroup === Users.HOST_SYMBOL || roomGroup === '#') {
 					// Player, Host, and Room Owner always trump higher global rank
@@ -280,7 +280,7 @@ export class RoomAuth extends Auth {
 
 		return parentGroup;
 	}
-	getEffectiveSymbol(user: User) {
+	override getEffectiveSymbol(user: User) {
 		const symbol = super.getEffectiveSymbol(user);
 		if (!this.room.persist && symbol === user.tempGroup) {
 			const replaceGroup = Auth.getGroup(symbol).globalGroupInPersonalRoom;
@@ -315,7 +315,7 @@ export class RoomAuth extends Auth {
 			super.set(userid as ID, this.room.settings.auth[userid]);
 		}
 	}
-	set(id: ID, symbol: GroupSymbol) {
+	override set(id: ID, symbol: GroupSymbol) {
 		if (symbol === 'whitelist' as GroupSymbol) {
 			symbol = Auth.defaultSymbol();
 		}
@@ -327,7 +327,7 @@ export class RoomAuth extends Auth {
 		if (user) this.room.onUpdateIdentity(user);
 		return this;
 	}
-	delete(id: ID) {
+	override delete(id: ID) {
 		if (!this.has(id)) return false;
 		super.delete(id);
 		delete this.room.settings.auth[id];
@@ -379,7 +379,7 @@ export class GlobalAuth extends Auth {
 			super.set(id, newSymbol);
 		}
 	}
-	set(id: ID, group: GroupSymbol, username?: string) {
+	override set(id: ID, group: GroupSymbol, username?: string) {
 		if (!username) username = id;
 		const user = Users.get(id, true);
 		if (user) {
@@ -393,7 +393,7 @@ export class GlobalAuth extends Auth {
 		void this.save();
 		return this;
 	}
-	delete(id: ID) {
+	override delete(id: ID) {
 		if (!super.has(id)) return false;
 		super.delete(id);
 		const user = Users.get(id);
