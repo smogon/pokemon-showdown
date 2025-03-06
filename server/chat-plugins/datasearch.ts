@@ -502,28 +502,27 @@ export const commands: Chat.ChatCommands = {
 
 	learnset: 'learn',
 	learnall: 'learn',
+	learnlc: 'learn',
+	learn1: 'learn',
+	learn2: 'learn',
+	learn3: 'learn',
+	learn4: 'learn',
 	learn5: 'learn',
-	rbylearn: 'learn',
-	gsclearn: 'learn',
-	advlearn: 'learn',
-	dpplearn: 'learn',
-	bw2learn: 'learn',
-	oraslearn: 'learn',
-	usumlearn: 'learn',
-	sslearn: 'learn',
+	learn6: 'learn',
+	learn7: 'learn',
+	learn8: 'learn',
 	async learn(target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help learn');
 		if (target.length > 300) throw new Chat.ErrorMessage(`Query too long.`);
 
-		const GENS: { [k: string]: number } = { rby: 1, gsc: 2, adv: 3, dpp: 4, bw2: 5, oras: 6, usum: 7, ss: 8 };
-		const cmdGen = GENS[cmd.slice(0, -5)];
+		const cmdGen = Number(cmd.slice(5));
 		if (cmdGen) target = `gen${cmdGen}, ${target}`;
 
 		this.checkBroadcast();
 		const { format, dex, targets } = this.splitFormat(target);
 
 		const formatid = format ? format.id : dex.currentMod;
-		if (cmd === 'learn5') targets.unshift('level5');
+		if (cmd === 'learnlc') targets.unshift('level5');
 
 		const response = await runSearch({
 			target: targets.join(','),
@@ -543,9 +542,9 @@ export const commands: Chat.ChatCommands = {
 		`!learn [ruleset], [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ # ~`,
 		`Specifying a ruleset is entirely optional. The ruleset can be a format, a generation (e.g.: gen3) or "min source gen [number]".`,
 		`A value of 'min source gen [number]' indicates that trading (or Pokémon Bank) from generations before [number] is not allowed.`,
-		`/learn5 displays how the Pok\u00e9mon can learn the given moves at level 5, if it can at all.`,
+		`/learnlc displays how the Pok\u00e9mon can learn the given moves at level 5, if it can at all.`,
 		`/learnall displays all of the possible fathers for egg moves.`,
-		`/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras usum ss`,
+		`A generation number can also be appended to /learn (e.g.: /learn4) to indicate which generation is used.`,
 	],
 	randtype: 'randomtype',
 	async randomtype(target, room, user, connection, cmd, message) {
