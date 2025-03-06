@@ -6120,7 +6120,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	liberaalmas: {
 		onStart(pokemon) {
-			if(pokemon.side.faintedLastTurn){
+			if(pokemon.side.faintedLastTurn || pokemon.side.faintedThisTurn){
 				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, pokemon);
 			}
 		},
