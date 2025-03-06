@@ -486,10 +486,14 @@ export class Side {
 		this.activeRequest = update;
 	}
 
-	emitChoiceError(message: string, unavailable?: boolean) {
+	emitChoiceError(
+		message: string, update?: { pokemon: Pokemon, update: (req: PokemonMoveRequestData) => boolean | void }
+	) {
 		this.choice.error = message;
-		const type = `[${unavailable ? 'Unavailable' : 'Invalid'} choice]`;
+		const updated = update ? this.updateRequestForPokemon(update.pokemon, update.update) : null;
+		const type = `[${updated ? 'Unavailable' : 'Invalid'} choice]`;
 		this.battle.send('sideupdate', `${this.id}\n|error|${type} ${message}`);
+		if (updated) this.emitRequest(this.activeRequest!);
 		if (this.battle.strictChoices) throw new Error(`${type} ${message}`);
 		return false;
 	}
@@ -647,12 +651,9 @@ export class Side {
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s Fight button is known to be safe`);
 			}
 			pokemon.maybeLocked = false;
-			this.updateRequestForPokemon(pokemon, req => {
+			return this.emitChoiceError(`${pokemon.name} is not locked`, { pokemon, update: req => {
 				delete req.maybeLocked;
-			});
-			this.emitChoiceError(`Can't move: ${pokemon.name} is not locked`, true);
-			this.emitRequest(this.activeRequest!);
-			return false;
+			} });
 		} else if (!moves.length && !zMove) {
 			// Override action and use Struggle if there are no enabled moves with PP
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
@@ -679,7 +680,7 @@ export class Side {
 			if (!isEnabled) {
 				// Request a different choice
 				if (autoChoose) throw new Error(`autoChoose chose a disabled move`);
-				const includeRequest = this.updateRequestForPokemon(pokemon, req => {
+				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`, { pokemon, update: req => {
 					let updated = false;
 					for (const m of req.moves) {
 						if (m.id === moveid) {
@@ -695,10 +696,7 @@ export class Side {
 						}
 					}
 					return updated;
-				});
-				this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`, includeRequest);
-				if (includeRequest) this.emitRequest(this.activeRequest!);
-				return false;
+				} });
 			}
 			// The chosen move is valid yay
 		}
@@ -863,7 +861,7 @@ export class Side {
 
 		if (this.requestState === 'move') {
 			if (pokemon.trapped) {
-				const includeRequest = this.updateRequestForPokemon(pokemon, req => {
+				return this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, { pokemon, update: req => {
 					let updated = false;
 					if (req.maybeTrapped) {
 						delete req.maybeTrapped;
@@ -874,10 +872,7 @@ export class Side {
 						updated = true;
 					}
 					return updated;
-				});
-				const status = this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, includeRequest);
-				if (includeRequest) this.emitRequest(this.activeRequest!);
-				return status;
+				} });
 			} else if (pokemon.maybeTrapped) {
 				this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
 			}
