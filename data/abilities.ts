@@ -6130,12 +6130,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: -119,
 	},
 	almapura: {
-		onSourceModifyDamage(damage, source, target, move) {
-			if (target.getMoveHitData(move).typeMod > 0) {
-				this.debug('Alma Pura neutralize');
-				return target.getMoveHitData(move).typeMod = 0;
-			}
-		},
+		onEffectiveness(typeMod, target, type, move) {
+				if (!target) return;
+				if (move.category === 'Status' || move.id === 'struggle') return;
+				if (!target.runImmunity(move.type)) return; // immunity has priority
+				if(target.getMoveHitData(move).typeMod > 0){
+				this.add('-activate', target, 'ability: Alma Pura');
+				this.effectState.resisted = false;
+				return 0;}
+			},
 		flags: {breakable: 1},
 		name: "Alma Pura",
 		rating: 3,
