@@ -348,7 +348,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] Bad 'n Boosted",
-		desc: `A Gen 9 Ubers solomod where base stats of 70 and lower are doubled.`,
+		desc: `A Gen 9 Ubers solomod where all base stats of 70 and lower are doubled.`,
 		mod: 'badnboosted',
 		ruleset: ['Standard'],
 		banlist: ['AG', 'Cyclizar', 'Espathra', 'Polteageist', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Eviolite', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects'],
@@ -358,18 +358,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			this.add('-message', `You can join our Discord now:`);
 			this.add('-message', `https://discord.gg/vYdSwRreNd`);
 		},
-	  onModifySpeciesPriority: 2,
-	  onModifySpecies(species) {
+		onModifySpeciesPriority: 2,
+		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
 			newSpecies.bst = 0;
 			for (const stat in newSpecies.baseStats) {
-				 if (newSpecies.baseStats[stat] <= 70) {
-					  newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * 2, 1, 255);
-					  newSpecies.bst += newSpecies.baseStats[stat];
+				if (newSpecies.baseStats[stat] <= 70) {
+					 newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * 2, 1, 255);
+					 newSpecies.bst += newSpecies.baseStats[stat];
 				 }
 			}
 			return newSpecies;
-	  },
+		},
 	},
 	{
 		name: "[Gen 2] GSC Doubles",
