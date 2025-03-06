@@ -196,19 +196,23 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onRestart() {
 			this.effectState.duration = 2;
 		},
-		// onDisableMove(target) {
-		// 	target.maybeDisabled = true;
-		// },
+		onLockMove() {
+			// exact move doesn't matter, no move is ever actually used
+			return 'struggle';
+		},
+		onDisableMove(target) {
+			target.maybeLocked = true;
+		},
 	},
-	// fakepartiallytrapped: {
-	// 	name: 'fakepartiallytrapped',
-	// 	// Wrap ended this turn, but you don't know that
-	// 	// until you try to use an attack
-	// 	duration: 2,
-	// 	onDisableMove(target) {
-	// 		target.maybeDisabled = true;
-	// 	},
-	// },
+	fakepartiallytrapped: {
+		name: 'fakepartiallytrapped',
+		// Wrap ended this turn, but you don't know that
+		// until you try to use an attack
+		duration: 2,
+		onDisableMove(target) {
+			target.maybeLocked = true;
+		},
+	},
 	partialtrappinglock: {
 		name: 'partialtrappinglock',
 		durationCallback() {
@@ -240,18 +244,21 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.add('move', pokemon, this.effectState.move, foe, `[from] ${this.effectState.move}`);
 			this.damage(this.effectState.damage, foe, pokemon, move);
 			if (this.effectState.duration === 1) {
-				// if (this.effectState.totalDuration !== 5) {
-				// 	pokemon.addVolatile('fakepartiallytrapped');
-				// 	foe.addVolatile('fakepartiallytrapped');
-				// }
+				if (this.effectState.totalDuration !== 5) {
+					pokemon.addVolatile('fakepartiallytrapped');
+					foe.addVolatile('fakepartiallytrapped');
+				}
 			} else {
 				foe.addVolatile('partiallytrapped', pokemon, move);
 			}
 			return false;
 		},
-		// onDisableMove(pokemon) {
-		// 	pokemon.maybeDisabled = true;
-		// },
+		onLockMove() {
+			return this.effectState.move;
+		},
+		onDisableMove(pokemon) {
+			pokemon.maybeLocked = true;
+		},
 	},
 	mustrecharge: {
 		inherit: true,

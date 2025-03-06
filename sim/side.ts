@@ -91,8 +91,9 @@ export interface PokemonSwitchRequestData {
 	terastallized?: string;
 }
 export interface PokemonMoveRequestData {
-	moves: { move: string, id: ID, target?: string, disabled?: string | boolean }[];
+	moves: { move: string, id: ID, target?: string, disabled?: string | boolean, disabledSource?: string }[];
 	maybeDisabled?: boolean;
+	maybeLocked?: boolean;
 	trapped?: boolean;
 	maybeTrapped?: boolean;
 	canMegaEvo?: boolean;
@@ -638,7 +639,20 @@ export class Side {
 				targetLoc: lockedMoveTargetLoc,
 				moveid: lockedMoveID,
 			});
+			if (moveid === 'fight') this.choice.cantUndo = true;
 			return true;
+		} else if (moveid === 'fight') {
+			// test fight button
+			if (!pokemon.maybeLocked) {
+				return this.emitChoiceError(`Can't move: ${pokemon.name}'s Fight button is known to be safe`);
+			}
+			pokemon.maybeLocked = false;
+			this.updateRequestForPokemon(pokemon, req => {
+				delete req.maybeLocked;
+			});
+			this.emitChoiceError(`Can't move: ${pokemon.name} is not locked`, true);
+			this.emitRequest(this.activeRequest!);
+			return false;
 		} else if (!moves.length && !zMove) {
 			// Override action and use Struggle if there are no enabled moves with PP
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
@@ -682,9 +696,9 @@ export class Side {
 					}
 					return updated;
 				});
-				const status = this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`, includeRequest);
+				this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`, includeRequest);
 				if (includeRequest) this.emitRequest(this.activeRequest!);
-				return status;
+				return false;
 			}
 			// The chosen move is valid yay
 		}
@@ -769,13 +783,13 @@ export class Side {
 		return true;
 	}
 
-	updateRequestForPokemon(pokemon: Pokemon, update: (req: AnyObject) => boolean) {
+	updateRequestForPokemon(pokemon: Pokemon, update: (req: PokemonMoveRequestData) => boolean | void) {
 		if (!(this.activeRequest as MoveRequest)?.active) {
 			throw new Error(`Can't update a request without active Pokemon`);
 		}
 		const req = (this.activeRequest as MoveRequest).active[pokemon.position];
 		if (!req) throw new Error(`Pokemon not found in request's active field`);
-		return update(req);
+		return update(req) ?? true;
 	}
 
 	chooseSwitch(slotText?: string) {
