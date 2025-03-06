@@ -364,9 +364,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			newSpecies.bst = 0;
 			for (const stat in newSpecies.baseStats) {
 				if (newSpecies.baseStats[stat] <= 70) {
-					 newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * 2, 1, 255);
-					 newSpecies.bst += newSpecies.baseStats[stat];
-				 }
+					newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * 2, 1, 255);
+					newSpecies.bst += newSpecies.baseStats[stat];
+				}
 			}
 			return newSpecies;
 		},
