@@ -230,7 +230,7 @@ export class RuleTable extends Map<string, string> {
 		this.evLimit = Number(this.valueRules.get('evlimit'));
 		if (isNaN(this.evLimit)) this.evLimit = null;
 		if (!this.minSourceGen) {
-			if (dex.gen >= 9 && this.has('obtainable') && !this.has('+past')) {
+			if (dex.gen >= 9 && this.has('obtainable') && !this.has('+pokemontag:past')) {
 				this.minSourceGen = dex.gen;
 			} else {
 				this.minSourceGen = 1;
@@ -716,10 +716,16 @@ export class DexFormats {
 	}
 
 	isPokemonRule(ruleSpec: string) {
-		return (
-			ruleSpec.slice(1).startsWith('pokemontag:') || ruleSpec.slice(1).startsWith('pokemon:') ||
-			ruleSpec.slice(1).startsWith('basepokemon:')
+		const rule = ruleSpec.slice(1);
+		const isExistenceTag = [
+			'pokemontag:past', 'pokemontag:future', 'pokemontag:lgpe', 'pokemontag:unobtainable',
+			'pokemontag:cap', 'pokemontag:custom', 'pokemontag:nonexistent',
+		].includes(rule);
+		const isPokemonTag = (
+			rule.startsWith('pokemontag:') || rule.startsWith('pokemon:') ||
+			rule.startsWith('basepokemon:')
 		);
+		return (!isExistenceTag && isPokemonTag);
 	}
 	getRuleTable(format: Format, depth = 1, repeals?: Map<string, number>): RuleTable {
 		if (format.ruleTable && !repeals) return format.ruleTable;
