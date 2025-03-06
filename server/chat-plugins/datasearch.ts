@@ -101,7 +101,7 @@ export const commands: Chat.ChatCommands = {
 			if (dex) target += `, mod=${dex.currentMod}`;
 		}
 		if (cmd === 'nds' ||
-			(defaultFormat.format && Dex.formats.getRuleTable(defaultFormat.format).has('standardnatdex'))) {
+			(defaultFormat.format && Dex.formats.getRuleTable(defaultFormat.format).has('natdexmod'))) {
 			target += ', natdex';
 		}
 		const response = await runSearch({
@@ -1102,7 +1102,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9ou';
 		const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
 		const additionalRules = [];
-		if (nationalSearch && !ruleTable.has('standardnatdex')) additionalRules.push('standardnatdex');
+		if (nationalSearch && !ruleTable.has('natdexmod')) additionalRules.push('natdexmod');
 		if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
 		validator = TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
 	}
