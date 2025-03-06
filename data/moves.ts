@@ -3162,6 +3162,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					const targetSide = sides[(i + offset) % 4]; // the next side in rotation
 					for (const id in sourceSideConditions) {
 						targetSide.sideConditions[id] = sourceSideConditions[id];
+						targetSide.sideConditions[id].target = targetSide;
 						const effectName = this.dex.conditions.get(id).name;
 						let layers = sourceSideConditions[id].layers || 1;
 						for (; layers > 0; layers--) this.add('-sidestart', targetSide, effectName, '[silent]');
@@ -3186,9 +3187,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 				for (const id in sourceTemp) {
 					targetSideConditions[id] = sourceTemp[id];
+					targetSideConditions[id].target = source.side.foe;
 				}
 				for (const id in targetTemp) {
 					sourceSideConditions[id] = targetTemp[id];
+					sourceSideConditions[id].target = source.side;
 				}
 				this.add('-swapsideconditions');
 			}
@@ -4669,6 +4672,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { nonsky: 1, metronome: 1 },
 		terrain: 'electricterrain',
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -7960,6 +7964,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { nonsky: 1, metronome: 1 },
 		terrain: 'grassyterrain',
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -12600,6 +12605,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { nonsky: 1, metronome: 1 },
 		terrain: 'mistyterrain',
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -14646,6 +14652,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { nonsky: 1, metronome: 1 },
 		terrain: 'psychicterrain',
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {

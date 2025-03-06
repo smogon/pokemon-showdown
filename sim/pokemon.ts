@@ -1196,7 +1196,7 @@ export class Pokemon {
 			if (switchCause === 'shedtail' && i !== 'substitute') continue;
 			if (this.battle.dex.conditions.getByID(i as ID).noCopy) continue;
 			// shallow clones
-			this.volatiles[i] = this.battle.initEffectState({ ...pokemon.volatiles[i] });
+			this.volatiles[i] = this.battle.initEffectState({ ...pokemon.volatiles[i], target: this });
 			if (this.volatiles[i].linkedPokemon) {
 				delete pokemon.volatiles[i].linkedPokemon;
 				delete pokemon.volatiles[i].linkedStatus;
