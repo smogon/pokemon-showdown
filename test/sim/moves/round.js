@@ -28,7 +28,7 @@ describe('Round', () => {
 			{ species: "Blastoise", moves: ['sleeptalk'] },
 			{ species: "Incineroar", ability: 'intimidate', moves: ['sleeptalk'] },
 		]]);
-		battle.makeChoices();
+		battle.makeChoices('move round 1, move round 1', 'auto');
 		battle.makeChoices();
 		const log = battle.getDebugLog();
 		const intimidateIndex = log.lastIndexOf('|-ability|p2a: Incineroar|Intimidate|boost');
