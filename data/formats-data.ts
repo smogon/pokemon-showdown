@@ -585,7 +585,12 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	slowking: {
-		tier: "Illegal",
+		tier: "Pendiente",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
+	},
+	slowkingfeudal: {
+		tier: "Pendiente",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
@@ -1272,6 +1277,10 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "Pendiente",
 		natDexTier: "RU",
 	},
+	xatutotem: {
+		tier: "Pendiente",
+		natDexTier: "RU",
+	},
 	mareep: {
 		tier: "Illegal",
 	},
@@ -1307,6 +1316,11 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
+	disdowoodion: {
+		tier: "Pendiente",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
+	},
 	hoppip: {
 		tier: "Illegal",
 	},
@@ -1334,6 +1348,11 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
+	sunfulwer: {
+		tier: "Pendiente",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
+	},
 	yanma: {
 		tier: "Illegal",
 	},
@@ -1349,7 +1368,12 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "Illegal",
 	},
 	quagsire: {
-		tier: "Illegal",
+		tier: "Pendiente",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
+	},
+	quagsirefeudal: {
+		tier: "Pendiente",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
@@ -1403,6 +1427,11 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	dunsparce: {
 		tier: "Illegal",
+	},
+	wungsparce: {
+		tier: "Pendiente",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
 	},
 	dudunsparce: {
 		tier: "Illegal",
