@@ -689,11 +689,14 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let fullyEvolvedSearch = null;
 	let singleTypeSearch = null;
 	let randomOutput = 0;
+	let tierInequalitySearch = false;
 	const validParameter = (cat: string, param: string, isNotSearch: boolean, input: string) => {
 		const uniqueTraits = ['colors', 'gens'];
+		const tierTraits = ['tiers', 'doubles tiers'];
 		for (const group of searches) {
 			const g = group[cat as keyof DexOrGroup];
 			if (g === undefined) continue;
+			if (tierTraits.includes(cat) && tierInequalitySearch) continue;
 			if (typeof g !== 'boolean' && g[param] === undefined) {
 				if (uniqueTraits.includes(cat)) {
 					for (const currentParam in g) {
@@ -726,14 +729,16 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				target = target.substr(1);
 			}
 
-			let tierInequality: boolean[] = [];
+			let isTierInequalityParam = false;
+			const tierInequality: boolean[] = [];
 			if (target.startsWith('tier')) {
 				if (isNotSearch) return { error: "You cannot use the negation symbol '!' with inequality tier searches." };
 				target = target.substr(4).trim();
 				if (!target.startsWith('>') && !target.startsWith('<')) {
 					return { error: "You must use an inequality operator '>' or '<' with performing tier inequality searchs." };
 				}
-				tierInequality = [];
+				isTierInequalityParam = true;
+				tierInequalitySearch = true;
 				tierInequality[0] = target.startsWith('>');
 				target = target.substr(1).trim();
 				tierInequality[1] = target.startsWith('=');
@@ -757,7 +762,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				const invalid = validParameter("tiers", target, isNotSearch, target);
 				if (invalid) return { error: invalid };
 				tierSearch = tierSearch || !isNotSearch;
-				if (tierInequality[0] != null) {
+				if (isTierInequalityParam) {
 					const tierValue = singlesTiersValues[target];
 					const entires = Object.entries(singlesTiersValues);
 					for (const [key, value] of entires) {
@@ -779,7 +784,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				const invalid = validParameter("doubles tiers", target, isNotSearch, target);
 				if (invalid) return { error: invalid };
 				tierSearch = tierSearch || !isNotSearch;
-				if (tierInequality[0] != null) {
+				if (isTierInequalityParam) {
 					const tierValue = doublesTiersValues[target];
 					const entires = Object.entries(doublesTiersValues);
 					for (const [key, value] of entires) {
