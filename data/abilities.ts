@@ -6210,8 +6210,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			},
 		onFoeModifyPriority(priority, pokemon, target, move) {
-			if (move.priority > 0) {
-				return priority = 0;
+			if (move.priority = 1) {
+				return priority - 1;
+			} else if (move.priority = 2){
+				return priority - 2;
 			}
 		},
 		flags: {breakable: 1},
