@@ -4212,6 +4212,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Wooper",
 		evoLevel: 20,
 		eggGroups: ["Water 1", "Field"],
+		otherFormes: ["Quagsire-Feudal"],
+		formeOrder: ["Quagsire", "Quagsire-Feudal"],
 	},
 	quagsirefeudal: {
 		num: 195,

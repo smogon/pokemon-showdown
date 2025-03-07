@@ -7690,7 +7690,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onTakeItem(item, source) {
          return false;
 		},
-		itemUser: ["Raticate-Alola", 'Marowak-Alola', "Electrode-Hisui", "Arcanine-Hisui"],
+		itemUser: ["Raticate-Alola", 'Marowak-Alola', "Electrode-Hisui", "Arcanine-Hisui", "Xatu"],
 		num: -103,
 		gen: 6,
 
@@ -7745,5 +7745,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: -106,
 		gen: 6,
 
+	},
+	piedraantigua: {
+		name: "Piedra Antigua",
+		spritenum: 743,
+		onTakeItem(item, pokemon, source) {
+				return false;
+		},
+		itemUser: ["Quagsire-Feudal"],
+		num: -107,
+		gen: 8,
 	},
 };
