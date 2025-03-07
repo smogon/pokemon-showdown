@@ -119,7 +119,7 @@ export const LogReader = new class {
 
 	async list() {
 		if (roomlogTable) {
-			const roomids = await roomlogTable.query()`SELECT DISTINCT roomid FROM roomlogs`;
+			const roomids = await roomlogTable.query()`SELECT DISTINCT roomid FROM roomlog_dates`;
 			return roomids.map(x => x.roomid) as RoomID[];
 		}
 		const listing = await Monitor.logPath(`chat`).readdir();
