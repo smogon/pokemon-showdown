@@ -579,7 +579,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Aromatherapy",
 		pp: 5,
 		priority: 0,
-		flags: {snatch: 1, distance: 1, metronome: 1, wind: 1,},
+		flags: {snatch: 1, distance: 1, metronome: 1, wind: 1, heal: 1,},
 		onHit(target, source, move) {
 			this.add('-activate', source, 'move: Aromatherapy');
 			let success = false;
@@ -10512,7 +10512,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Leech Seed",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, reflectable: 1, mirror: 1, metronome: 1},
+		flags: {protect: 1, reflectable: 1, mirror: 1, metronome: 1, heal: 1,},
 		volatileStatus: 'leechseed',
 		condition: {
 			onStart(target) {
