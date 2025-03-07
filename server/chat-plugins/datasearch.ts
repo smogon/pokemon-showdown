@@ -132,7 +132,7 @@ export const commands: Chat.ChatCommands = {
 			`<code>resists</code> followed by a type or move will show Pok\u00e9mon that resist that typing or move (e.g. <code>resists normal</code>).<br/>` +
 			`<code>weak</code> followed by a type or move will show Pok\u00e9mon that are weak to that typing or move (e.g. <code>weak fire</code>).<br/>` +
 			`<code>asc</code> or <code>desc</code> following a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively (e.g. <code>speed asc</code>).<br/>` +
-			`Inequality ranges use the characters <code>>=</code> for <code>≥</code> and <code><=</code> for <code>≤</code>; e.g., <code>hp <= 95</code> searches all Pok\u00e9mon with HP less than or equal to 95.<br/>` +
+			`Inequality ranges use the characters <code>>=</code> for <code>≥</code> and <code><=</code> for <code>≤</code>; e.g., <code>hp <= 95</code> searches all Pok\u00e9mon with HP less than or equal to 95; <code>tier <= uu</code> searches all Pok\u00e9mon in singles tiers lower than UU.<br/>` +
 			`Parameters can be excluded through the use of <code>!</code>; e.g., <code>!water type</code> excludes all Water types.<br/>` +
 			`The parameter <code>mega</code> can be added to search for Mega Evolutions only, the parameter <code>gmax</code> can be added to search for Pok\u00e9mon capable of Gigantamaxing only, and the parameter <code>Fully Evolved</code> (or <code>FE</code>) can be added to search for fully-evolved Pok\u00e9mon.<br/>` +
 			`<code>Alola</code>, <code>Galar</code>, <code>Therian</code>, <code>Totem</code>, or <code>Primal</code> can be used as parameters to search for those formes.<br/>` +
@@ -627,12 +627,28 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		lc: 'LC',
 		cap: 'CAP', caplc: 'CAP LC', capnfe: 'CAP NFE',
 	});
+	const singlesTiersValues: { [k: string]: number } = Object.assign(Object.create(null), {
+		'AG': 15, 'Uber': 14,
+		'OU': 13, 'CAP': 12,
+		'UUBL': 11, 'UU': 10,
+		'RUBL': 9, 'RU': 8,
+		'NUBL': 7, 'NU': 6,
+		'PUBL': 5, 'PU': 4,
+		'ZUBL': 3, 'ZU': 2,
+		'NFE': 1, 'CAP NFE': 1,
+		'LC': 0, 'CAP LC': 0,
+	});
 	const allDoublesTiers: { [k: string]: TierTypes.Singles | TierTypes.Other } = Object.assign(Object.create(null), {
 		doublesubers: 'DUber', doublesuber: 'DUber', duber: 'DUber', dubers: 'DUber',
 		doublesou: 'DOU', dou: 'DOU',
 		doublesbl: 'DBL', dbl: 'DBL',
 		doublesuu: 'DUU', duu: 'DUU',
 		doublesnu: '(DUU)', dnu: '(DUU)',
+	});
+	const doublesTiersValues: { [k: string]: number } = Object.assign(Object.create(null), {
+		'DUber': 4, 'DOU': 3,
+		'DBL': 2, 'DUU': 1,
+		'(DUU)': 0,
 	});
 	const allTypes = Object.create(null);
 	for (const type of mod.types.all()) {
@@ -710,6 +726,20 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				target = target.substr(1);
 			}
 
+			let tierInequality: boolean[] = [];
+			if (target.startsWith('tier')) {
+				if (isNotSearch) return { error: "You cannot use the negation symbol '!' with inequality tier searches." };
+				target = target.substr(4).trim();
+				if (!target.startsWith('>') && !target.startsWith('<')) {
+					return { error: "You must use an inequality operator '>' or '<' with performing tier inequality searchs." };
+				}
+				tierInequality = [];
+				tierInequality[0] = target.startsWith('>');
+				target = target.substr(1).trim();
+				tierInequality[1] = target.startsWith('=');
+				if (tierInequality[1]) target = target.substr(1).trim();
+			}
+
 			const targetAbility = mod.abilities.get(target);
 			if (targetAbility.exists) {
 				const invalid = validParameter("abilities", targetAbility.id, isNotSearch, targetAbility.name);
@@ -727,7 +757,20 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				const invalid = validParameter("tiers", target, isNotSearch, target);
 				if (invalid) return { error: invalid };
 				tierSearch = tierSearch || !isNotSearch;
-				orGroup.tiers[target] = !isNotSearch;
+				if (tierInequality[0] != null) {
+					const tierValue = singlesTiersValues[target];
+					const entires = Object.entries(singlesTiersValues);
+					for (const [key, value] of entires) {
+						const useTier = (value > tierValue && tierInequality[0]) || (value < tierValue && !tierInequality[0]);
+						if (useTier && (!key.startsWith('CAP') || capSearch)) {
+							orGroup.tiers[key] = true;
+						} else if (tierValue === value && tierInequality[1]) {
+							orGroup.tiers[key] = true;
+						}
+					}
+				} else {
+					orGroup.tiers[target] = !isNotSearch;
+				}
 				continue;
 			}
 
@@ -736,7 +779,19 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				const invalid = validParameter("doubles tiers", target, isNotSearch, target);
 				if (invalid) return { error: invalid };
 				tierSearch = tierSearch || !isNotSearch;
-				orGroup.doublesTiers[target] = !isNotSearch;
+				if (tierInequality[0] != null) {
+					const tierValue = doublesTiersValues[target];
+					const entires = Object.entries(doublesTiersValues);
+					for (const [key, value] of entires) {
+						if ((value > tierValue && tierInequality[0]) || (value < tierValue && !tierInequality[0])) {
+							orGroup.doublesTiers[key] = true;
+						} else if (tierValue === value && tierInequality[1]) {
+							orGroup.doublesTiers[key] = true;
+						}
+					}
+				} else {
+					orGroup.doublesTiers[target] = !isNotSearch;
+				}
 				continue;
 			}
 
