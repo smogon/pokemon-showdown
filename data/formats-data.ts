@@ -1232,6 +1232,10 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "Pendiente",
 		natDexTier: "RU",
 	},
+	ledstar: {
+		tier: "Pendiente",
+		natDexTier: "RU",
+	},
 	spinarak: {
 		tier: "Pendiente",
 	},
