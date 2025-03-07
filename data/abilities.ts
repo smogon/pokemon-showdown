@@ -6289,4 +6289,47 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4,
 		num: -128,
 	},
+	conocimiento: {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Psychic') {
+				this.debug('Malicia boost');
+				return this.chainModify(1.2);
+			}
+		},
+		flags: {},
+		name: "Conocimiento",
+		rating: 2,
+		num: -129,
+	},
+	oscuridadenvolvente: {
+		onTryHit(pokemon, target, move) {
+			if (move.flags['light']) {
+				this.add('-immune', pokemon, '[from] ability: Oscuridad Envolvente');
+				return null;
+			}
+		},
+		onAnyAccuracy(accuracy, target, source, move) {
+			if (move && (source === this.effectState.target) && move.type === 'Dark') {
+				return true;
+			}
+			return accuracy;
+		},
+		flags: {breakable: 1},
+		name: "Oscuridad Envolvente",
+		rating: 3,
+		num: -130,
+	},
+	sacodeboxeo: {
+		// crear condicion propia
+		onStart(pokemon) {
+			for (const target of pokemon.foes()) {
+					target.addVolatile("taunt")
+			}
+		},
+		flags: {},
+		name: "Saco de Boxeo",
+		rating: 1.5,
+		num: -131,
+	},
 };
