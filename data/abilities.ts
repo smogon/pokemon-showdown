@@ -6242,4 +6242,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 		num: -126,
 	},
+	tectoanclaje: {
+		onDragOut(pokemon, source) {
+			if((source && source != pokemon) && !source.hasType('Flying')){
+			this.add('-activate', pokemon, 'ability: Tectoanclaje');
+			this.damage(source.baseMaxhp / 3.333, source, pokemon)
+			return null;
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if ((!target.hp) && !source.hasType('Flying')) {
+				this.damage(source.baseMaxhp / 3.333, source, target);
+			}
+		},
+		onModifyDef(def) {
+			return this.chainModify(1.15);
+		},
+		flags: {},
+		name: "Tectoanclaje",
+		rating: 3.5,
+		num: -127,
+	},
 };
