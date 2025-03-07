@@ -6201,6 +6201,43 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Jovial",
 		rating: 1,
-		num: 83,
+		num: -124,
+	},
+	heroismo: {
+			onDamagingHit(damage, target, source, move) {
+				if(target.getMoveHitData(move).typeMod > 0){
+				this.boost({spe: 1});
+				}
+			},
+		onFoeModifyPriority(priority, pokemon, target, move) {
+			if (move.priority > 0) {
+				return priority = 0;
+			}
+		},
+		flags: {breakable: 1},
+		name: "Heroismo",
+		rating: 2.5,
+		num: -125,
+	},
+	manopesada: {
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['contact'] || move.type === 'Fire') {
+				return this.chainModify(1.15);
+			}
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
+			if (move.flags['contact']) {
+				const r = this.random(100);
+				if (r < 10) {
+					target.addVolatile('flinch');
+				}
+			}
+		},
+		flags: {},
+		name: "Mano Pesada",
+		rating: 3.5,
+		num: -126,
 	},
 };
