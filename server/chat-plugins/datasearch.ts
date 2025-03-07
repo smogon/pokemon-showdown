@@ -628,8 +628,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		cap: 'CAP', caplc: 'CAP LC', capnfe: 'CAP NFE',
 	});
 	const singlesTiersValues: { [k: string]: number } = Object.assign(Object.create(null), {
-		'AG': 15, 'Uber': 14,
-		'OU': 13, 'CAP': 12,
+		'AG': 14, 'Uber': 13,
+		'OU': 12, 'CAP': 12,
 		'UUBL': 11, 'UU': 10,
 		'RUBL': 9, 'RU': 8,
 		'NUBL': 7, 'NU': 6,
