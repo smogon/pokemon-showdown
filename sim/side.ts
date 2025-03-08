@@ -575,7 +575,11 @@ export class Side {
 				}
 			}
 			if (!targetType) {
-				return this.emitChoiceError(`Can't move: Your ${pokemon.name} doesn't have a move matching ${moveid}`);
+				if (moveid === 'testfight') {
+					targetType = 'normal';
+				} else {
+					return this.emitChoiceError(`Can't move: Your ${pokemon.name} doesn't have a move matching ${moveid}`);
+				}
 			}
 		}
 
