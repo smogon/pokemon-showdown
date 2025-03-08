@@ -1080,7 +1080,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		const megaSearchResult = megaSearch === null || megaSearch === !!species.isMega;
 		const gmaxSearchResult = gmaxSearch === null || gmaxSearch === species.name.endsWith('-Gmax');
 		const fullyEvolvedSearchResult = fullyEvolvedSearch === null || fullyEvolvedSearch !== species.nfe;
-		const restrictedSearchResult = restrictedSearch === null || restrictedSearch === species.tags.includes('Restricted Legendary');
+		const restrictedSearchResult = restrictedSearch === null ||
+			restrictedSearch === species.tags.includes('Restricted Legendary');
 		if (
 			species.gen <= mod.gen &&
 			(
