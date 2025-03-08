@@ -189,7 +189,9 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		// (i.e. if the attacker switches out.)
 		// the full duration is tracked in partialtrappinglock
 		duration: 2,
-		onBeforeMovePriority: 9,
+		// defender still takes PSN damage, etc
+		// TODO: research exact mechanics
+		onBeforeMovePriority: 0,
 		onBeforeMove() {
 			return false;
 		},
