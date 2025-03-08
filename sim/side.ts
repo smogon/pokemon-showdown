@@ -643,9 +643,9 @@ export class Side {
 				targetLoc: lockedMoveTargetLoc,
 				moveid: lockedMoveID,
 			});
-			if (moveid === 'fight') this.choice.cantUndo = true;
+			if (moveid === 'testfight') this.choice.cantUndo = true;
 			return true;
-		} else if (moveid === 'fight') {
+		} else if (moveid === 'testfight') {
 			// test fight button
 			if (!pokemon.maybeLocked) {
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s Fight button is known to be safe`);
@@ -1054,6 +1054,10 @@ export class Side {
 		for (const choiceString of choiceStrings) {
 			let [choiceType, data] = Utils.splitFirst(choiceString.trim(), ' ');
 			data = data.trim();
+			if (choiceType === 'testfight') {
+				choiceType = 'move';
+				data = 'testfight';
+			}
 
 			switch (choiceType) {
 			case 'move':
