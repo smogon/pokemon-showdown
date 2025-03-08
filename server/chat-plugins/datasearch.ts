@@ -511,11 +511,23 @@ export const commands: Chat.ChatCommands = {
 	learn6: 'learn',
 	learn7: 'learn',
 	learn8: 'learn',
+	rbylearn: 'learn',
+	gsclearn: 'learn',
+	advlearn: 'learn',
+	dpplearn: 'learn',
+	bw2learn: 'learn',
+	oraslearn: 'learn',
+	usumlearn: 'learn',
+	sslearn: 'learn',
 	async learn(target, room, user, connection, cmd, message) {
 		if (!target) return this.parse('/help learn');
 		if (target.length > 300) throw new Chat.ErrorMessage(`Query too long.`);
 
-		const cmdGen = Number(cmd.slice(5));
+		const GENS: { [k: string]: number } = { rby: 1, gsc: 2, adv: 3, dpp: 4, bw2: 5, oras: 6, usum: 7, ss: 8 };
+		let cmdGen = GENS[cmd.slice(0, -5)];
+		if (cmdGen) target = `gen${cmdGen}, ${target}`;
+
+		cmdGen = Number(cmd.slice(5));
 		if (cmdGen) target = `gen${cmdGen}, ${target}`;
 
 		this.checkBroadcast();
