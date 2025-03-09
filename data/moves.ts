@@ -22239,7 +22239,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			target: "normal",
 			type: "Bug",
 		},
-		ritoancestral1: {
+		ritoancestralquagsire: {
 			num: 0,
 			accuracy: true,
 			basePower: 0,
@@ -22266,7 +22266,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Beautiful",
 		},
-		ritoancestral2: {
+		ritoancestralslowking: {
 			num: 0,
 			accuracy: true,
 			basePower: 0,
@@ -22293,7 +22293,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Beautiful",
 		},
-		ritoancestral3: {
+		ritoancestralwungsparce: {
 			num: 0,
 			accuracy: true,
 			basePower: 0,
@@ -22320,7 +22320,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Beautiful",
 		},
-		ritoancestral4: {
+		ritoancestralgrandbull: {
 			num: 0,
 			accuracy: true,
 			basePower: 0,
@@ -22347,7 +22347,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Beautiful",
 		},
-		ritoancestral5: {
+		ritoancestralqwilfish: {
 			num: 0,
 			accuracy: true,
 			basePower: 0,
@@ -22374,7 +22374,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Beautiful",
 		},
-		ritoancestral6: {
+		ritoancestralursaring: {
 			num: 0,
 			accuracy: true,
 			basePower: 0,
@@ -22401,7 +22401,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Beautiful",
 		},
-		ritoancestral7: {
+		ritoancestralmantine: {
 			num: 0,
 			accuracy: true,
 			basePower: 0,
@@ -22428,7 +22428,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Beautiful",
 		},
-		ritoancestral8: {
+		ritoancestralkingdra: {
 			num: 0,
 			accuracy: true,
 			basePower: 0,
@@ -22455,7 +22455,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Beautiful",
 		},
-		ritoancestral9: {
+		ritoancestraldonphan: {
 			num: 0,
 			accuracy: true,
 			basePower: 0,
@@ -22482,7 +22482,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Beautiful",
 		},
-		ritoancestral10: {
+		ritoancestralcelebi: {
 			num: 0,
 			accuracy: true,
 			basePower: 0,
