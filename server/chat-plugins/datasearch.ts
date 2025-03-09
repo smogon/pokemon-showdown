@@ -646,8 +646,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		doublesnu: '(DUU)', dnu: '(DUU)',
 	});
 	const doublesTiersValues: { [k: string]: number } = Object.assign(Object.create(null), {
-		'DUber': 4, 'DOU': 3,
-		'DBL': 2, 'DUU': 1,
+		DUber: 4, DOU: 3,
+		DBL: 2, DUU: 1,
 		'(DUU)': 0,
 	});
 	const allTypes = Object.create(null);
