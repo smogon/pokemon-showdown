@@ -4741,7 +4741,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 22,
 		color: "Red",
 		eggGroups: ["Amorphous"],
-		requiredAbility: "Caparazon Inestable",
 		battleOnly: "Slastma",
 	},
 	slastma: {
@@ -4758,6 +4757,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 70,
 		otherFormes: ["Slastma-Liberado"],
 		formeOrder: ["Slastma", "Slastma-Liberado"],
+		requiredAbility: "Caparazon Inestable",
 		eggGroups: ["Amorphous"],
 	},
 	swinub: {
