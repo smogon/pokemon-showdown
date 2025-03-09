@@ -357,17 +357,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			this.add('-message', `You can join our Discord now:`);
 			this.add('-message', `https://discord.gg/vYdSwRreNd`);
 		},
-		onModifySpeciesPriority: 2,
-		onModifySpecies(species) {
-			const newSpecies = this.dex.deepClone(species);
-			newSpecies.bst = 0;
-			for (const stat in newSpecies.baseStats) {
-				if (newSpecies.baseStats[stat] <= 70) {
-					newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * 2, 1, 255);
-					newSpecies.bst += newSpecies.baseStats[stat];
-				}
-			}
-			return newSpecies;
 		},
 	},
 	{
