@@ -4418,9 +4418,22 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 1.5,
 		weightkg: 14,
 		color: "Yellow",
-		evos: ["Dudunsparce", "Dudunsparce-Three-Segment"],
 		prevo: "Dunsparce",
 		eggGroups: ["Field"],
+	},
+	wungsparcefeudal: {
+		num: -1009,
+		name: "Wungsparce-Feudal",
+		forme: "Feudal",
+		types: ["Dragon", "Flying"],
+		baseStats: {hp: 120, atk: 90, def: 80, spa: 85, spd: 75, spe: 75},
+		abilities: {0: "Sabio"},
+		heightm: 1.5,
+		weightkg: 14,
+		color: "Yellow",
+		eggGroups: ["Field"],
+		requiredItem: "Piedra Antigua",
+		changesFrom: "Wungsparce",
 	},
 	gligar: {
 		num: 207,
@@ -4496,6 +4509,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	granbullfeudal: {
 		num: 210,
 		name: "Granbull-Feudal",
+		forme: "Feudal",
 		types: ["Fairy", "Fight"],
 		genderRatio: {M: 0.25, F: 0.75},
 		baseStats: {hp: 110, atk: 130, def: 75, spa: 60, spd: 70, spe: 45},
@@ -4523,6 +4537,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	qwilfishfeudal: {
 		num: 211,
 		name: "Qwilfish-Feudal",
+		forme: "Feudal",
 		types: ["Poison", "Water"],
 		baseStats: {hp: 105, atk: 105, def: 85, spa: 55, spd: 65, spe: 90},
 		abilities: {0: "Sabio"},
@@ -4674,6 +4689,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	ursaringfeudal: {
 		num: 217,
 		name: "Ursaring-Feudal",
+		forme: "Feudal",
 		types: ["Normal", "Bug"],
 		baseStats: {hp: 110, atk: 130, def: 75, spa: 75, spd: 75, spe: 55},
 		abilities: {0: "Sabio"},
@@ -4886,6 +4902,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	mantinefeudal: {
 		num: 226,
 		name: "Mantine-Feudal",
+		forme: "Feudal",
 		types: ["Flying"],
 		baseStats: {hp: 105, atk: 40, def: 70, spa: 80, spd: 140, spe: 70},
 		abilities: {0: "Sabio"},
@@ -4968,6 +4985,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	kingdrafeudal: {
 		num: 230,
 		name: "Kingdra-Feudal",
+		forme: "Feudal",
 		types: ["Dragon", "Water"],
 		baseStats: {hp: 95, atk: 105, def: 85, spa: 105, spd: 85, spe: 85},
 		abilities: {0: "Sabio"},
@@ -5008,6 +5026,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	donphanfeudal: {
 		num: 232,
 		name: "Donphan-Feudal",
+		forme: "Feudal",
 		types: ["Ground", "Psychic"],
 		baseStats: {hp: 110, atk: 120, def: 120, spa: 60, spd: 60, spe: 50},
 		abilities: {0: "Sabio"},
@@ -5315,6 +5334,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	celebifeudal: {
 		num: 251,
 		name: "Celebi-Feudal",
+		forme: "Feudal",
 		types: ["Psychic", "Grass"],
 		gender: "N",
 		baseStats: {hp: 120, atk: 70, def: 100, spa: 130, spd: 100, spe: 100},
