@@ -425,7 +425,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		searchShow: false,
 		teraPreviewDefault: true,
-		ruleset: ['[Gen 9] NatDex Draft', 'NatDex Mod', 'Item Clause = 2', 'Little Cup'],
+		ruleset: ['[Gen 9] NatDex Draft', 'Item Clause = 2', 'Little Cup'],
 		banlist: ['Dragon Rage', 'Sonic Boom'],
 	},
 	{
