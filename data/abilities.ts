@@ -6209,13 +6209,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({spe: 1});
 				}
 			},
-		onFoeModifyPriority(priority, pokemon, target, move) {
-			if (move.priority = 1) {
-				return priority - 1;
-			} else if (move.priority = 2){
-				return priority - 2;
-			}
-		},
+			onFoeModifyPriority(priority, pokemon, target, move) {
+				if (priority > 0) {
+					return 0;
+				}
+			},
 		flags: {breakable: 1},
 		name: "Heroismo",
 		rating: 2.5,
@@ -6224,7 +6222,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	manopesada: {
 		onBasePowerPriority: 21,
 		onBasePower(basePower, attacker, defender, move) {
-			if (move.flags['contact'] || move.type === 'Fire') {
+			if (move.flags['contact']) {
 				return this.chainModify(1.15);
 			}
 		},
