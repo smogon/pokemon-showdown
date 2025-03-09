@@ -4733,6 +4733,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	slastmaliberado: {
 		num: -1010,
 		name: "Slastma-Liberado",
+		baseSpecies: "Slastma",
 		types: ["Fire"],
 		baseStats: {hp: 65, atk: 111, def: 49, spa: 133, spd: 49, spe: 93},
 		abilities: {0: "Blaze"},
@@ -4754,6 +4755,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Red",
 		prevo: "Magcargo",
 		evoLevel: 70,
+		otherFormes: ["Slastma-Liberado"],
+		formeOrder: ["Slastma", "Slastma-Liberado"],
 		eggGroups: ["Amorphous"],
 	},
 	swinub: {

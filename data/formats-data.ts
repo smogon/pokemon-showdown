@@ -1545,7 +1545,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
-	slastmashell: {
+	slastma: {
 		tier: "OU",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
