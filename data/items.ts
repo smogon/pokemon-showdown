@@ -7752,7 +7752,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onTakeItem(item, pokemon, source) {
 				return false;
 		},
-		itemUser: ["Quagsire-Feudal"],
+		itemUser: ["Quagsire-Feudal", "Slowking-Feudal", "Wungsparce-Feudal", "Granbull-Feudal", "Qwilfish-Feudal", "Ursaring-Feudal", "Mantine-Feudal", "Kingdra-Feudal", "Donphan-Feudal", "Celebi-Feudal"],
 		num: -107,
 		gen: 8,
 	},
