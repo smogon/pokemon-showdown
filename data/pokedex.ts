@@ -4734,6 +4734,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: -1010,
 		name: "Slastma-Liberado",
 		baseSpecies: "Slastma",
+		forme: "Liberado",
 		types: ["Fire"],
 		baseStats: {hp: 65, atk: 111, def: 49, spa: 133, spd: 49, spe: 93},
 		abilities: {0: "Blaze"},
@@ -4757,7 +4758,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 70,
 		otherFormes: ["Slastma-Liberado"],
 		formeOrder: ["Slastma", "Slastma-Liberado"],
-		requiredAbility: "Caparazon Inestable",
 		eggGroups: ["Amorphous"],
 	},
 	swinub: {
