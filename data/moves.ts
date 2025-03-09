@@ -8425,7 +8425,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Headbutt",
 		pp: 15,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, head:1},
 		secondary: {
 			chance: 30,
 			volatileStatus: 'flinch',
@@ -22503,5 +22503,101 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			type: "Grass",
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Beautiful",
+		},
+		bloqueooculto: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Bloqueo Oculto",
+			pp: 15,
+			priority: 4,
+			flags: {noassist: 1, failcopycat: 1},
+			stallingMove: true,
+			volatileStatus: 'bloqueooculto',
+			onPrepareHit(pokemon) {
+				return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+			},
+			onHit(pokemon) {
+				pokemon.addVolatile('stall');
+			},
+			condition: {
+				duration: 1,
+				onStart(target) {
+					this.add('-singleturn', target, 'move: Protect');
+				},
+				onTryHitPriority: 3,
+				onTryHit(target, source, move) {
+					if (!move.flags['protect']) {
+						if (['gmaxoneblow', 'gmaxrapidflow'].includes(move.id)) return;
+						if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+						return;
+					}
+					if (move.smartTarget) {
+						move.smartTarget = false;
+					} else {
+						this.add('-activate', target, 'move: Protect');
+					}
+					const lockedmove = source.getVolatile('lockedmove');
+					if (lockedmove) {
+						// Outrage counter is reset
+						if (source.volatiles['lockedmove'].duration === 2) {
+							delete source.volatiles['lockedmove'];
+						}
+					}
+					if (this.checkMoveMakesContact(move, source, target)) {
+						this.damage(source.baseMaxhp / 8, source, target);
+					}
+					return this.NOT_FAIL;
+				},
+				onHit(target, source, move) {
+					if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
+						source.addVolatile('gastroacid', target);
+					}
+				},
+			},
+			secondary: null,
+			target: "self",
+			type: "Psychic",
+			zMove: {boost: {def: 1}},
+			contestType: "Tough",
+		},
+		esferaciclon: {
+			num: 0,
+			accuracy: 80,
+			basePower: 100,
+			category: "Special",
+			name: "Esfera Ciclon",
+			pp: 10,
+			priority: 0,
+			flags: {protect: 1, mirror: 1, distance: 1, metronome: 1, wind: 1, snatch: 1, pulse: 1},
+			secondary: {
+				chance: 100,
+				boosts: {
+					evasion: -1,
+				},
+			},
+			target: "any",
+			type: "Flying",
+			contestType: "Cool",
+		},
+		astarcilla: {
+			num: 0,
+			accuracy: 90,
+			basePower: 100,
+			category: "Physical",
+			name: "Astarcilla",
+			pp: 10,
+			priority: 0,
+			flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, head:1},
+			secondary: {
+				chance: 100,
+				boosts: {
+					spe: -1,
+				},
+			},
+			target: "any",
+			type: "Ground",
+			contestType: "Cool",
 		},
 };

@@ -859,6 +859,11 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
+	kingdrafeudal: {
+		tier: "OU",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
+	},
 	goldeen: {
 		tier: "LC",
 		natDexTier: "LC",
@@ -1389,7 +1394,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "LC",
 	},
 	mismagius: {
-		tier: "LC",
+		tier: "Illegal",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
@@ -1540,10 +1545,13 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
-	slastmashell: {
+	slastma: {
 		tier: "OU",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
+	},
+	slastmaliberado: {
+		
 	},
 	swinub: {
 		tier: "LC",
@@ -1565,7 +1573,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "NFE",
 	},
 	crowthsola: {
-		tier: "LC",
+		tier: "OU",
 		natDexTier: "RU",
 	},
 	cursola: {
