@@ -4730,9 +4730,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 38,
 		eggGroups: ["Amorphous"],
 	},
-	slastma: {
+	slastmaliberado: {
 		num: -1010,
-		name: "Slastma",
+		name: "Slastma-Liberado",
 		types: ["Fire"],
 		baseStats: {hp: 65, atk: 111, def: 49, spa: 133, spd: 49, spe: 93},
 		abilities: {0: "Blaze"},
@@ -4743,7 +4743,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoLevel: 70,
 		eggGroups: ["Amorphous"],
 	},
-	slastmashell: {
+	slastma: {
 		num: -1010,
 		name: "Slastma",
 		types: ["Rock", "Fire"],
