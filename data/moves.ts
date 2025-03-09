@@ -14315,7 +14315,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 40,
 		category: "Physical",
-
 		name: "Power-Up Punch",
 		pp: 20,
 		priority: 0,
@@ -22238,5 +22237,272 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			secondary: {}, // Sheer Force-boosted
 			target: "normal",
 			type: "Bug",
+		},
+		ritoancestralquagsire: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral (Quagsire)",
+			pp: 5,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1, heal: 1},
+			heal: [1, 2],
+			onHit(target, source) {
+				this.add('-activate', source, 'move: Rito Ancestral');
+				let success = false;
+				const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
+				for (const ally of allies) {
+					if (ally.cureStatus()) success = true;
+				}
+				return success;
+			},
+			target: "allyTeam",
+			type: "Water",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestralslowking: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral (Slowking)",
+			pp: 5,
+			priority: 0,
+			flags: {snatch: 1, dance: 1 ,protect: 1, reflectable: 1, mirror: 1, allyanim: 1, nosketch: 1, cantusetwice: 1},
+			onTryHit(target) {
+				if (target.getAbility().flags['cantsuppress']) {
+					return false;
+				}
+			},
+			onHit(pokemon) {
+				const oldAbility = pokemon.setAbility('truant');
+				if (oldAbility) {
+					this.add('-ability', pokemon, 'Truant', '[from] move: Rito Ancestral');
+					if (pokemon.status === 'slp') {
+						pokemon.cureStatus();
+					}
+					return;
+				}
+				return oldAbility as false | null;
+			},
+			secondary: {
+				chance: 100,
+				self: {
+					boosts: {
+						spa: 1,
+					},
+				},
+			},
+			target: "normal",
+			type: "Psychic",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestralwungsparce: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral (Wungsparce)",
+			pp: 5,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
+			boosts: {
+				atk: 1,
+				spe: 1,
+				spa: 1,
+			},
+			secondary: null,
+			target: "self",
+			type: "Dragon",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestralgrandbull: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral (Grandbull)",
+			pp: 5,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
+			boosts: {
+				atk: 3,
+			},
+			secondary: null,
+			target: "self",
+			type: "Fighting",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestralqwilfish: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral (Qwilfish)",
+			pp: 5,
+			priority: 0,
+			flags: {reflectable: 1, nonsky: 1, mustpressure: 1, dance: 1, nosketch: 1},
+			onAfterMove(target, source, move) {
+				if (!move.hasSheerForce && source.hp) {
+					for (const side of target.side.foeSidesWithConditions()) {
+						side.addSideCondition('spikes');
+						side.addSideCondition('spikes');
+						side.addSideCondition('toxicspikes');
+					}
+				}
+			},
+			secondary: null,
+			target: "normal",
+			type: "Poison",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestralursaring: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral (Ursaring)",
+			pp: 5,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
+			boosts: {
+				atk: 1,
+				def: 1,
+				spd: 1,
+			},
+			secondary: null,
+			target: "self",
+			type: "Bug",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestralmantine: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral (Mantine)",
+			pp: 5,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1, heal: 1},
+			heal: [1, 2],
+			sideCondition: 'tailwind',
+			secondary: null,
+			target: "self",
+			type: "Flying",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestralkingdra: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral (Kingdra)",
+			pp: 5,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
+			onTryHit(source) {
+				if (source.volatiles['substitute']) {
+					this.add('-fail', source, 'move: Substitute');
+					return this.NOT_FAIL;
+				}
+				if (source.hp <= source.maxhp / 4 || source.maxhp === 1) { // Shedinja clause
+					this.add('-fail', source, 'move: Substitute', '[weak]');
+					return this.NOT_FAIL;
+				}
+			},
+			onHit(target) {
+				this.directDamage(target.maxhp / 4);
+				target.addVolatile('substitute',this.effectState.target)
+			},
+			volatileStatus: 'ritoancestralkingdra',
+			condition: {
+				onStart(target, source, effect) {
+					if (target.volatiles['dragoncheer']) return false;
+					if (effect?.id === 'zpower') {
+						this.add('-start', target, 'move: Rito Ancestral (Kingdra)', '[zeffect]');
+					} else if (effect && (['costar', 'imposter', 'psychup', 'transform'].includes(effect.id))) {
+						this.add('-start', target, 'move: Rito Ancestral (Kingdra)', '[silent]');
+					} else {
+						this.add('-start', target, 'move: Rito Ancestral (Kingdra)');
+					}
+				},
+				onModifyCritRatio(critRatio) {
+					return critRatio + 2;
+				},
+			},
+			secondary: null,
+			target: "self",
+			type: "Dragon",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestraldonphan: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral (Donphan)",
+			pp: 5,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1, heal: 1},
+			heal: [1, 4],
+			boosts: {
+				atk: 1,
+				spd: 1,
+			},
+			secondary: null,
+			target: "self",
+			type: "Psychic",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestralcelebi: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral (Celebi)",
+			pp: 5,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1, heal: 1},
+			onHit(target, source) {
+				this.add('-activate', source, 'move: Rito Ancestral');
+				let success = false;
+				const allies = [...source.side.pokemon, ...source.side.allySide?.pokemon || []];
+				for (const ally of allies) {
+					if (ally.cureStatus()){
+						 success = true;
+						 this.boost({spe: 1, def: 1, spd: 1}, source, source, null, false, true)
+					}
+				}
+				return success;
+			},
+			volatileStatus: 'ritoancestralcelebi',
+			condition: {
+			onStart(pokemon) {
+				if (pokemon.terastallized) return false;
+				this.add('-start', pokemon, 'Rito Ancestral (Celebi)');
+			},
+			onEffectivenessPriority: -2,
+			onEffectiveness(typeMod, target, type, move) {
+				if (move.type !== 'Grass') return;
+				if (!target) return;
+				if (type !== target.getTypes()[0]) return;
+				return typeMod + 1;
+			},
+		},
+			secondary: null,
+			target: "normal",
+			type: "Grass",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
 		},
 };
