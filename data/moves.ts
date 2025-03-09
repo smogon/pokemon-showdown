@@ -5980,7 +5980,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		secondary: null,
-		target: "normal",
+		target: "self",
 		type: "Fairy",
 		zMove: {effect: 'clearnegativeboost'},
 		contestType: "Beautiful",
@@ -22564,8 +22564,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		esferaciclon: {
 			num: 0,
-			accuracy: 80,
-			basePower: 100,
+			accuracy: 100,
+			basePower: 80,
 			category: "Special",
 			name: "Esfera Ciclon",
 			pp: 10,
@@ -22583,8 +22583,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		astarcilla: {
 			num: 0,
-			accuracy: 90,
-			basePower: 100,
+			accuracy: 100,
+			basePower: 90,
 			category: "Physical",
 			name: "Astarcilla",
 			pp: 10,
@@ -22623,5 +22623,55 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			secondary: null,
 			target: "normal",
 			type: "Bug",
+		},
+		aumentosecreto: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Aumento Secreto",
+			pp: 15,
+			priority: 0,
+			flags: {snatch: 1, metronome: 1},
+			boosts: {
+				spa: 1,
+				spd: 1,
+			},
+			secondary: null,
+			target: "self",
+			type: "Psychic",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Clever",
+		},
+		reintegracionsecreta: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Reintegracion Secreta",
+			pp: 5,
+			priority: 0,
+			flags: {snatch: 1, heal: 1, metronome: 1},
+			heal: [1, 2],
+			onAfterMoveSecondarySelf(pokemon, target, move) {
+				let activate = false;
+				const boosts: SparseBoostsTable = {};
+				let i: BoostID;
+				for (i in pokemon.boosts) {
+					if (pokemon.boosts[i] < 0) {
+						activate = true;
+						boosts[i] = 0;
+					}
+				}
+				if (activate) {
+					pokemon.setBoost(boosts);
+					this.add('-clearnegativeboost', pokemon, '[silent]');
+				}
+			},
+			secondary: null,
+			target: "self",
+			type: "Normal",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Clever",
 		},
 };
