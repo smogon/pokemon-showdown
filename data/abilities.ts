@@ -6476,4 +6476,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 2,
 		num: -139,
 	},
+	marino: {
+		onModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Water') {
+				return this.chainModify(2);
+			}
+		},
+		onModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Water') {
+				return this.chainModify(2);
+			}
+		},
+		flags: {breakable: 1},
+		name: "Marino",
+		rating: 4.5,
+		num: -140,
+	},
 };
