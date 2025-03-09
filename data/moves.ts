@@ -22251,15 +22251,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			boosts: {
 				atk: 2,
 			},
-			onTry(source) {
-				if (source.species.name === 'Quagsire-Feudal') {
-					return;
-				}
-				this.hint("Only a Pokemon whose form is Feudal can use this move.");
-				this.attrLastMove('[still]');
-				this.add('-fail', source, 'move: Hyperspace Fury');
-				return null;
-			},
 			secondary: null,
 			target: "self",
 			type: "Water",
@@ -22277,15 +22268,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
 				atk: 2,
-			},
-			onTry(source) {
-				if (source.species.name === 'Slowking-Feudal') {
-					return;
-				}
-				this.hint("Only a Pokemon whose form is Feudal can use this move.");
-				this.attrLastMove('[still]');
-				this.add('-fail', source, 'move: Hyperspace Fury');
-				return null;
 			},
 			secondary: null,
 			target: "self",
@@ -22305,15 +22287,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			boosts: {
 				atk: 2,
 			},
-			onTry(source) {
-				if (source.species.name === 'Wungsparce-Feudal') {
-					return;
-				}
-				this.hint("Only a Pokemon whose form is Feudal can use this move.");
-				this.attrLastMove('[still]');
-				this.add('-fail', source, 'move: Hyperspace Fury');
-				return null;
-			},
 			secondary: null,
 			target: "self",
 			type: "Dragon",
@@ -22331,15 +22304,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
 				atk: 2,
-			},
-			onTry(source) {
-				if (source.species.name === 'Grandbull-Feudal') {
-					return;
-				}
-				this.hint("Only a Pokemon whose form is Feudal can use this move.");
-				this.attrLastMove('[still]');
-				this.add('-fail', source, 'move: Hyperspace Fury');
-				return null;
 			},
 			secondary: null,
 			target: "self",
@@ -22359,15 +22323,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			boosts: {
 				atk: 2,
 			},
-			onTry(source) {
-				if (source.species.name === 'Qwilfish-Feudal') {
-					return;
-				}
-				this.hint("Only a Pokemon whose form is Feudal can use this move.");
-				this.attrLastMove('[still]');
-				this.add('-fail', source, 'move: Hyperspace Fury');
-				return null;
-			},
 			secondary: null,
 			target: "self",
 			type: "Poison",
@@ -22385,15 +22340,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
 				atk: 2,
-			},
-			onTry(source) {
-				if (source.species.name === 'Ursaring-Feudal') {
-					return;
-				}
-				this.hint("Only a Pokemon whose form is Feudal can use this move.");
-				this.attrLastMove('[still]');
-				this.add('-fail', source, 'move: Hyperspace Fury');
-				return null;
 			},
 			secondary: null,
 			target: "self",
@@ -22413,15 +22359,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			boosts: {
 				atk: 2,
 			},
-			onTry(source) {
-				if (source.species.name === 'Mantine-Feudal') {
-					return;
-				}
-				this.hint("Only a Pokemon whose form is Feudal can use this move.");
-				this.attrLastMove('[still]');
-				this.add('-fail', source, 'move: Hyperspace Fury');
-				return null;
-			},
 			secondary: null,
 			target: "self",
 			type: "Flying",
@@ -22439,15 +22376,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
 				atk: 2,
-			},
-			onTry(source) {
-				if (source.species.name === 'Kingdra-Feudal') {
-					return;
-				}
-				this.hint("Only a Pokemon whose form is Feudal can use this move.");
-				this.attrLastMove('[still]');
-				this.add('-fail', source, 'move: Hyperspace Fury');
-				return null;
 			},
 			secondary: null,
 			target: "self",
@@ -22467,15 +22395,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			boosts: {
 				atk: 2,
 			},
-			onTry(source) {
-				if (source.species.name === 'Donphan-Feudal') {
-					return;
-				}
-				this.hint("Only a Pokemon whose form is Feudal can use this move.");
-				this.attrLastMove('[still]');
-				this.add('-fail', source, 'move: Hyperspace Fury');
-				return null;
-			},
 			secondary: null,
 			target: "self",
 			type: "Psychic",
@@ -22493,15 +22412,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
 				atk: 2,
-			},
-			onTry(source) {
-				if (source.species.name === 'Celebi-Feudal') {
-					return;
-				}
-				this.hint("Only a Pokemon whose form is Feudal can use this move.");
-				this.attrLastMove('[still]');
-				this.add('-fail', source, 'move: Hyperspace Fury');
-				return null;
 			},
 			secondary: null,
 			target: "self",
