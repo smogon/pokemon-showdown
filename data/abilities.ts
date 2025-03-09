@@ -6527,7 +6527,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	rating: 2.5,
 	num: -142,
 },
-sabiodelbosque: {
+	sabiodelbosque: {
 	onAnyModifyBoost(boosts, pokemon) {
 		const unawareUser = this.effectState.target;
 		if (unawareUser === pokemon) return;
@@ -6557,5 +6557,39 @@ sabiodelbosque: {
 	name: "Sabio del Bosque",
 	rating: 3.5,
 	num: -143,
+},
+cabezajerarquica: {
+	onSourceModifyDamage(damage, source, target, move) {
+		let mod = 1;
+		if (target.hp >= target.maxhp / 1.5) mod *= 0.50;
+		return this.chainModify(mod);
+	},
+	onTryBoost(boost, target, source, effect) {
+		if((target.hp <= target.maxhp / 1.5) && (target.hp >= target.maxhp / 3)){
+		if (source && target === source) return;
+		let showMsg = false;
+		let i: BoostID;
+		for (i in boost) {
+			if (boost[i]! < 0) {
+				delete boost[i];
+				showMsg = true;
+			}
+		}
+		if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+			this.add("-fail", target, "unboost", "[from] ability: Clear Body", "[of] " + target);
+		}
+	}
+	},
+	onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (attacker.hp <= attacker.maxhp / 3) {
+				this.debug('Cabeza Jerarquica boost');
+				return this.chainModify(1.33);
+			}
+		},
+	flags: {breakable: 1},
+	name: "Cabeza Jerarquica",
+	rating: 1.5,
+	num: -144,
 },
 };
