@@ -6492,4 +6492,70 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 4.5,
 		num: -140,
 	},
+	plumaarcoiris: {
+		onModifyMove(move, pokemon, target) {
+			if (move.type === 'Flying') {
+				if(this.randomChance(33, 100)){
+				const r = this.random(100);
+				if (r < 20) {
+					this.boost({atk: 1});
+				} else if (r < 40) {
+					this.boost({spa: 1});
+				} else if (r < 60) {
+					this.boost({def: 1});
+				} else if (r < 80) {
+					this.boost({spd: 1});
+				} else if (r < 100) {
+					this.boost({spe: 1});
+				}
+			}
+			}
+		},
+		flags: {},
+		name: "Pluma Arcoiris",
+		rating: 2,
+		num: -141,
+	},
+	protectordelbosque: {
+		onDamagingHit(damage, target, source, move) {
+			if(target.getMoveHitData(move).typeMod > 0){
+			this.boost({spa: 2});
+			}
+		},
+	flags: {},
+	name: "Protector del Bosque",
+	rating: 2.5,
+	num: -142,
+},
+sabiodelbosque: {
+	onAnyModifyBoost(boosts, pokemon) {
+		const unawareUser = this.effectState.target;
+		if (unawareUser === pokemon) return;
+		if (unawareUser === this.activePokemon && pokemon === this.activeTarget) {
+			boosts['def'] = 0;
+			boosts['spd'] = 0;
+			boosts['evasion'] = 0;
+		}
+		if (pokemon === this.activePokemon && unawareUser === this.activeTarget) {
+			boosts['atk'] = 0;
+			boosts['def'] = 0;
+			boosts['spa'] = 0;
+			boosts['accuracy'] = 0;
+		}
+	},
+	onTryAddVolatile(status, pokemon) {
+		if (status.id === 'confusion') return null;
+		if (status.id === 'taunt') return null;
+		if (status.id === 'torment') return null;
+	},
+	onDamagingHit(damage, target, source, move) {
+		if(target.getMoveHitData(move).typeMod > 0){
+		this.boost({spa: 2});
+		}
+	},
+	flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, breakable: 1},
+	name: "Sabio del Bosque",
+	rating: 3.5,
+	num: -143,
+},
 };
