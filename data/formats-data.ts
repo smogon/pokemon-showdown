@@ -1389,7 +1389,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "LC",
 	},
 	mismagius: {
-		tier: "LC",
+		tier: "Illegal",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
@@ -1565,7 +1565,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "NFE",
 	},
 	crowthsola: {
-		tier: "LC",
+		tier: "OU",
 		natDexTier: "RU",
 	},
 	cursola: {
