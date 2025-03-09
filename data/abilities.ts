@@ -6320,7 +6320,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3,
 		num: -130,
 	},
-	sacodeboxeo: {
+	provocador: {
 		// crear condicion propia
 		onStart(pokemon) {
 			for (const target of pokemon.foes()) {
@@ -6328,7 +6328,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		flags: {},
-		name: "Saco de Boxeo",
+		name: "Provocador",
 		rating: 1.5,
 		num: -131,
 	},
