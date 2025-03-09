@@ -6343,6 +6343,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Defensa Abrumadora",
 		rating: 3,
-		num: -116,
+		num: -132,
+	},
+	cuerpobendito: {
+		onDamagingHit(damage, target, source, effect) {
+			const r = this.random(100);
+				if (r < 20) {
+					this.boost({atk: 1});
+				} else if (r < 40) {
+					this.boost({spa: 1});
+				} else if (r < 60) {
+					this.boost({def: 1});
+				} else if (r < 80) {
+					this.boost({spd: 1});
+				} else if (r < 100) {
+					this.boost({spe: 1});
+				}
+		},
+		flags: {},
+		name: "Cuerpo Bendito",
+		rating: 1,
+		num: -133,
 	},
 };
