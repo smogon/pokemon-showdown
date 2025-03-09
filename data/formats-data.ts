@@ -341,7 +341,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "NFE",
 	},
 	crobat: {
-		tier: "Illegal",
+		tier: "OU",
 		natDexTier: "RU",
 	},
 	oddish: {
@@ -783,7 +783,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	hitmontop: {
-		tier: "Illegal",
+		tier: "OU",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
