@@ -1564,7 +1564,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			pokemon.abilityState.gluttony = true;
 		},
-		onDamage(item, pokemon) {
+		onAfterDamage(damage, pokemon) {
 			pokemon.abilityState.gluttony = true;
 		},
 		flags: {},
