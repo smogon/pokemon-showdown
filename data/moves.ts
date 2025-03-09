@@ -22247,7 +22247,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Rito Ancestral (Quagsire)",
 			pp: 20,
 			priority: 0,
-			flags: {snatch: 1, dance: 1, metronome: 1},
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
 				atk: 2,
 			},
@@ -22274,7 +22274,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Rito Ancestral (Slowking)",
 			pp: 20,
 			priority: 0,
-			flags: {snatch: 1, dance: 1, metronome: 1},
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
 				atk: 2,
 			},
@@ -22301,7 +22301,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Rito Ancestral (Wungsparce)",
 			pp: 20,
 			priority: 0,
-			flags: {snatch: 1, dance: 1, metronome: 1},
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
 				atk: 2,
 			},
@@ -22328,7 +22328,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Rito Ancestral (Grandbull)",
 			pp: 20,
 			priority: 0,
-			flags: {snatch: 1, dance: 1, metronome: 1},
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
 				atk: 2,
 			},
@@ -22355,7 +22355,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Rito Ancestral (Qwilfish)",
 			pp: 20,
 			priority: 0,
-			flags: {snatch: 1, dance: 1, metronome: 1},
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
 				atk: 2,
 			},
@@ -22382,7 +22382,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Rito Ancestral (Ursaring)",
 			pp: 20,
 			priority: 0,
-			flags: {snatch: 1, dance: 1, metronome: 1},
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
 				atk: 2,
 			},
@@ -22409,7 +22409,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Rito Ancestral (Mantine)",
 			pp: 20,
 			priority: 0,
-			flags: {snatch: 1, dance: 1, metronome: 1},
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
 				atk: 2,
 			},
@@ -22436,7 +22436,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Rito Ancestral (Kingdra)",
 			pp: 20,
 			priority: 0,
-			flags: {snatch: 1, dance: 1, metronome: 1},
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
 				atk: 2,
 			},
@@ -22463,7 +22463,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Rito Ancestral (Donphan)",
 			pp: 20,
 			priority: 0,
-			flags: {snatch: 1, dance: 1, metronome: 1},
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
 				atk: 2,
 			},
@@ -22490,7 +22490,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Rito Ancestral (Celebi)",
 			pp: 20,
 			priority: 0,
-			flags: {snatch: 1, dance: 1, metronome: 1},
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
 				atk: 2,
 			},
