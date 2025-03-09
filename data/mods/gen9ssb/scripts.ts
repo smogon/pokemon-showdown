@@ -1947,7 +1947,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (this.requestState === 'move') {
 				if (pokemon.trapped) {
-					const includeRequest = this.updateRequestForPokemon(pokemon, req => {
+					return this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, { pokemon, update: req => {
 						let updated = false;
 						if (req.maybeTrapped) {
 							delete req.maybeTrapped;
@@ -1958,10 +1958,7 @@ export const Scripts: ModdedBattleScriptsData = {
 							updated = true;
 						}
 						return updated;
-					});
-					const status = this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, includeRequest);
-					if (includeRequest) this.emitRequest(this.activeRequest!);
-					return status;
+					} });
 				} else if (pokemon.maybeTrapped) {
 					this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
 				}
