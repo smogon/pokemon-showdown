@@ -14315,7 +14315,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 40,
 		category: "Physical",
-
 		name: "Power-Up Punch",
 		pp: 20,
 		priority: 0,
@@ -22247,7 +22246,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Rito Ancestral (Quagsire)",
 			pp: 5,
 			priority: 0,
-			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1, heal: 1},
 			heal: [1, 2],
 			onHit(target, source) {
 				this.add('-activate', source, 'move: Rito Ancestral');
@@ -22271,12 +22270,32 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Rito Ancestral (Slowking)",
 			pp: 5,
 			priority: 0,
-			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
-			boosts: {
-				atk: 2,
+			flags: {snatch: 1, dance: 1 ,protect: 1, reflectable: 1, mirror: 1, allyanim: 1, nosketch: 1, cantusetwice: 1},
+			onTryHit(target) {
+				if (target.getAbility().flags['cantsuppress']) {
+					return false;
+				}
 			},
-			secondary: null,
-			target: "self",
+			onHit(pokemon) {
+				const oldAbility = pokemon.setAbility('truant');
+				if (oldAbility) {
+					this.add('-ability', pokemon, 'Truant', '[from] move: Rito Ancestral');
+					if (pokemon.status === 'slp') {
+						pokemon.cureStatus();
+					}
+					return;
+				}
+				return oldAbility as false | null;
+			},
+			secondary: {
+				chance: 100,
+				self: {
+					boosts: {
+						spa: 1,
+					},
+				},
+			},
+			target: "normal",
 			type: "Psychic",
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Beautiful",
@@ -22291,7 +22310,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			priority: 0,
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
-				atk: 2,
+				atk: 1,
+				spe: 1,
+				spa: 1,
 			},
 			secondary: null,
 			target: "self",
@@ -22309,7 +22330,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			priority: 0,
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
-				atk: 2,
+				atk: 3,
 			},
 			secondary: null,
 			target: "self",
@@ -22325,12 +22346,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Rito Ancestral (Qwilfish)",
 			pp: 5,
 			priority: 0,
-			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
-			boosts: {
-				atk: 2,
+			flags: {reflectable: 1, nonsky: 1, mustpressure: 1, dance: 1, nosketch: 1},
+			onAfterMove(target, source, move) {
+				if (!move.hasSheerForce && source.hp) {
+					for (const side of target.side.foeSidesWithConditions()) {
+						side.addSideCondition('spikes');
+						side.addSideCondition('spikes');
+						side.addSideCondition('toxicspikes');
+					}
+				}
 			},
 			secondary: null,
-			target: "self",
+			target: "normal",
 			type: "Poison",
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Beautiful",
@@ -22345,7 +22372,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			priority: 0,
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
-				atk: 2,
+				atk: 1,
+				def: 1,
+				spd: 1,
 			},
 			secondary: null,
 			target: "self",
@@ -22361,10 +22390,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Rito Ancestral (Mantine)",
 			pp: 5,
 			priority: 0,
-			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
-			boosts: {
-				atk: 2,
-			},
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1, heal: 1},
+			heal: [1, 2],
+			sideCondition: 'tailwind',
 			secondary: null,
 			target: "self",
 			type: "Flying",
@@ -22380,9 +22408,37 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			pp: 5,
 			priority: 0,
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
-			boosts: {
-				atk: 2,
+			onTryHit(source) {
+				if (source.volatiles['substitute']) {
+					this.add('-fail', source, 'move: Substitute');
+					return this.NOT_FAIL;
+				}
+				if (source.hp <= source.maxhp / 4 || source.maxhp === 1) { // Shedinja clause
+					this.add('-fail', source, 'move: Substitute', '[weak]');
+					return this.NOT_FAIL;
+				}
 			},
+			onHit(target) {
+				this.directDamage(target.maxhp / 4);
+				target.addVolatile('substitute',this.effectState.target)
+				target.addVolatile('ritoancestral',this.effectState.target)
+			},
+			volatileStatus: 'ritoancestral',
+			condition: {
+			onStart(target, source, effect) {
+				if (target.volatiles['dragoncheer'] || target.volatiles['focusenergy']) return false;
+				if (effect?.id === 'zpower') {
+					this.add('-start', target, 'move: Rito Ancestral', '[zeffect]');
+				} else if (effect && (['costar', 'imposter', 'psychup', 'transform'].includes(effect.id))) {
+					this.add('-start', target, 'move: Rito Ancestral', '[silent]');
+				} else {
+					this.add('-start', target, 'move: Rito Ancestral');
+				}
+			},
+			onModifyCritRatio(critRatio) {
+				return critRatio + 1;
+			},
+		},
 			secondary: null,
 			target: "self",
 			type: "Dragon",
