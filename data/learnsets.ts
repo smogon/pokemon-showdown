@@ -31451,6 +31451,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			earthquake: ["9M", "9M", "9M", "9M", "9M", "9M", "9M"],
 			encore: ["9M", "9L5", "9M", "9L5", "9L5", "5D", "9L9", "9L14", "3S1"],
 			endure: ["9M", "9M", "9M", "9T"],
+			enredodiscreto: ["9M"],
 			facade: ["9M", "9M", "9M", "9M", "9M", "9M"],
 			finalgambit: ["9E", "9E", "9E", "9E"],
 			flash: ["9M", "9M", "9M", "9M", "9M"],
@@ -31509,7 +31510,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			venoshock: ["9M", "9M", "9M", "9M"],
 			withdraw: ["9L1", "9L1", "9M", "9L1", "9L1", "9L1", "9L1", "9M"],
 			wrap: ["9L1", "9L9", "9M", "9L9", "9L9", "9L22", "9L9", "9M"],
-			enredosecreto: ["9M"],
 		},
 		eventData: [
 			{generation: 3, level: 10, gender: "M", abilities: ["sturdy"], moves: ["constrict", "withdraw", "wrap"], pokeball: "pokeball"},
