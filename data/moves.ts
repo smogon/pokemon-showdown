@@ -22600,4 +22600,28 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			type: "Ground",
 			contestType: "Cool",
 		},
+		enredodiscreto: {
+			num: 0,
+			accuracy: 100,
+			basePower: 75,
+			category: "Physical",
+			name: "Enredo Discreto",
+			pp: 10,
+			priority: 0,
+			flags: {contact: 1, protect: 1, mirror: 1},
+			overrideOffensiveStat: 'def',
+			onModifyMove(move, pokemon, target) {
+				if (!target) return;
+				const def = pokemon.getStat('def', false, true);
+				const spd = pokemon.getStat('spd', false, true);
+				if (spd > def){
+					move.overrideOffensiveStat = 'spd'
+				} else {
+					move.overrideOffensiveStat = 'def'
+				}
+			},
+			secondary: null,
+			target: "normal",
+			type: "Bug",
+		},
 };
