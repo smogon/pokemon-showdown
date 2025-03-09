@@ -4743,6 +4743,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Magcargo",
 		evoLevel: 70,
 		eggGroups: ["Amorphous"],
+		battleOnly: "Slastma",
 	},
 	slastma: {
 		num: -1010,
