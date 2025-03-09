@@ -6418,7 +6418,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	voltioemergente: {
 		onModifyPriority(priority, pokemon, target, move) {
-			if (((pokemon.baseMaxhp / 2) < pokemon.hp) && move.type === "Electric") {
+			if (((pokemon.baseMaxhp / 2) < pokemon.hp) && move.type === 'Electric') {
 				move.pranksterBoosted = true;
 				return priority + 1;
 			}
@@ -6427,5 +6427,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: "Voltio Emergente",
 		rating: 4,
 		num: -137,
+	},
+	auravolcan: {
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Water') {
+				this.add('-immune', target, '[from] ability: Aura Volcan');
+				return null;
+			}
+		},
+		flags: {},
+		name: "Aura Volcan",
+		rating: 3.5,
+		num: -138,
 	},
 };
