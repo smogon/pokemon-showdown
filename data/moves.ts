@@ -22421,24 +22421,23 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onHit(target) {
 				this.directDamage(target.maxhp / 4);
 				target.addVolatile('substitute',this.effectState.target)
-				target.addVolatile('ritoancestral',this.effectState.target)
 			},
-			volatileStatus: 'ritoancestral',
+			volatileStatus: 'ritoancestralkingdra',
 			condition: {
-			onStart(target, source, effect) {
-				if (target.volatiles['dragoncheer'] || target.volatiles['focusenergy']) return false;
-				if (effect?.id === 'zpower') {
-					this.add('-start', target, 'move: Rito Ancestral', '[zeffect]');
-				} else if (effect && (['costar', 'imposter', 'psychup', 'transform'].includes(effect.id))) {
-					this.add('-start', target, 'move: Rito Ancestral', '[silent]');
-				} else {
-					this.add('-start', target, 'move: Rito Ancestral');
-				}
+				onStart(target, source, effect) {
+					if (target.volatiles['dragoncheer']) return false;
+					if (effect?.id === 'zpower') {
+						this.add('-start', target, 'move: Rito Ancestral (Kingdra)', '[zeffect]');
+					} else if (effect && (['costar', 'imposter', 'psychup', 'transform'].includes(effect.id))) {
+						this.add('-start', target, 'move: Rito Ancestral (Kingdra)', '[silent]');
+					} else {
+						this.add('-start', target, 'move: Rito Ancestral (Kingdra)');
+					}
+				},
+				onModifyCritRatio(critRatio) {
+					return critRatio + 2;
+				},
 			},
-			onModifyCritRatio(critRatio) {
-				return critRatio + 1;
-			},
-		},
 			secondary: null,
 			target: "self",
 			type: "Dragon",
@@ -22453,9 +22452,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Rito Ancestral (Donphan)",
 			pp: 5,
 			priority: 0,
-			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1, heal: 1},
+			heal: [1, 4],
 			boosts: {
-				atk: 2,
+				atk: 1,
+				spd: 1,
 			},
 			secondary: null,
 			target: "self",
@@ -22471,12 +22472,35 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			name: "Rito Ancestral (Celebi)",
 			pp: 5,
 			priority: 0,
-			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
-			boosts: {
-				atk: 2,
+			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1, heal: 1},
+			onHit(target, source) {
+				this.add('-activate', source, 'move: Rito Ancestral');
+				let success = false;
+				const allies = [...source.side.pokemon, ...source.side.allySide?.pokemon || []];
+				for (const ally of allies) {
+					if (ally.cureStatus()){
+						 success = true;
+						 this.boost({spe: 1, def: 1, spd: 1}, source, source, null, false, true)
+					}
+				}
+				return success;
 			},
+			volatileStatus: 'ritoancestralcelebi',
+			condition: {
+			onStart(pokemon) {
+				if (pokemon.terastallized) return false;
+				this.add('-start', pokemon, 'Rito Ancestral (Celebi)');
+			},
+			onEffectivenessPriority: -2,
+			onEffectiveness(typeMod, target, type, move) {
+				if (move.type !== 'Grass') return;
+				if (!target) return;
+				if (type !== target.getTypes()[0]) return;
+				return typeMod + 1;
+			},
+		},
 			secondary: null,
-			target: "self",
+			target: "normal",
 			type: "Grass",
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Beautiful",
