@@ -22633,12 +22633,21 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			pp: 15,
 			priority: 0,
 			flags: {snatch: 1, metronome: 1},
-			boosts: {
-				spa: 1,
-				spd: 1,
+			onModifyMove(move, pokemon, target) {
+				if (!target) return;
+				const stats = {
+					atk: target.getStat('atk', false, true),
+					def: target.getStat('def', false, true),
+					spa: target.getStat('spa', false, true),
+					spd: target.getStat('spd', false, true),
+					spe: target.getStat('spe', false, true),
+				};
+				const sortedStats = Object.entries(stats).sort((a, b) => b[1] - a[1]);
+				const [stat1, stat2] = sortedStats.slice(0, 2).map(s => s[0]);
+				this.boost({[stat1]: 2, [stat2]: 2}, pokemon, pokemon, move);
 			},
 			secondary: null,
-			target: "self",
+			target: "normal",
 			type: "Psychic",
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Clever",
@@ -22649,7 +22658,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			basePower: 0,
 			category: "Status",
 			name: "Reintegracion Secreta",
-			pp: 5,
+			pp: 15,
 			priority: 0,
 			flags: {snatch: 1, heal: 1, metronome: 1},
 			heal: [1, 2],
