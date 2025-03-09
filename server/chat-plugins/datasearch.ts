@@ -698,6 +698,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let nationalSearch = null;
 	let unreleasedSearch = null;
 	let fullyEvolvedSearch = null;
+	let restrictedSearch = null;
 	let singleTypeSearch = null;
 	let randomOutput = 0;
 	let tierInequalitySearch = false;
@@ -957,6 +958,14 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				break;
 			}
 
+			if (['restricted legendary', 'restrictedlegendary', 'restricted'].includes(target)) {
+				if (restrictedSearch === isNotSearch) return { error: "A search cannot include and exclude 'restricted legendary'." };
+				if (parameters.length > 1) return { error: "The parameter 'restricted legendary' cannot have alternative parameters." };
+				restrictedSearch = !isNotSearch;
+				orGroup.skip = true;
+				break;
+			}
+
 			if (target === 'recovery') {
 				const recoveryMoves = [
 					"healorder", "junglehealing", "lifedew", "milkdrink", "moonlight", "morningsun", "recover",
@@ -1130,7 +1139,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 	if (
 		showAll && searches.length === 0 && singleTypeSearch === null &&
-		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null && sort === null
+		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null && restrictedSearch === null && sort === null
 	) {
 		return {
 			error: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.",
@@ -1142,6 +1151,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		const megaSearchResult = megaSearch === null || megaSearch === !!species.isMega;
 		const gmaxSearchResult = gmaxSearch === null || gmaxSearch === species.name.endsWith('-Gmax');
 		const fullyEvolvedSearchResult = fullyEvolvedSearch === null || fullyEvolvedSearch !== species.nfe;
+		const restrictedSearchResult = restrictedSearch === null ||
+			restrictedSearch === species.tags.includes('Restricted Legendary');
 		if (
 			species.gen <= mod.gen &&
 			(
@@ -1151,7 +1162,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			(!species.tier.startsWith("CAP") || capSearch) &&
 			megaSearchResult &&
 			gmaxSearchResult &&
-			fullyEvolvedSearchResult
+			fullyEvolvedSearchResult &&
+			restrictedSearchResult
 		) {
 			dex[species.id] = species;
 		}
