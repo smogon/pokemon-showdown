@@ -6332,4 +6332,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1.5,
 		num: -131,
 	},
+	defensaabrumadora: {
+		onModifyMove(move, pokemon, target) {
+			if (move.category === "Special"){
+				move.overrideOffensiveStat = 'spd';
+			} else if (move.category === "Physical"){
+				move.overrideOffensiveStat = 'def';
+			}
+		},
+		flags: {},
+		name: "Defensa Abrumadora",
+		rating: 3,
+		num: -116,
+	},
 };
