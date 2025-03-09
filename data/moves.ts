@@ -22420,6 +22420,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onHit(target) {
 				this.directDamage(target.maxhp / 4);
 				target.addVolatile('substitute',this.effectState.target)
+				target.addVolatile('ritoancestralkingdra',this.effectState.target)
 			},
 			volatileStatus: 'ritoancestralkingdra',
 			condition: {
@@ -22434,7 +22435,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 				},
 				onModifyCritRatio(critRatio) {
-					return critRatio + 2;
+					return critRatio + 1;
 				},
 			},
 			secondary: null,
