@@ -157,7 +157,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "LC",
 	},
 	pichuspikyeared: {
-		tier: "Pendiente",
+		tier: "OU",
 	},
 	pikachu: {
 		tier: "PU",
