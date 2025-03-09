@@ -357,7 +357,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			this.add('-message', `You can join our Discord now:`);
 			this.add('-message', `https://discord.gg/vYdSwRreNd`);
 		},
-		},
 	},
 	{
 		name: "[Gen 2] GSC Doubles",
