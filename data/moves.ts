@@ -22245,14 +22245,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			basePower: 0,
 			category: "Status",
 			name: "Rito Ancestral (Quagsire)",
-			pp: 20,
+			pp: 5,
 			priority: 0,
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
-			boosts: {
-				atk: 2,
+			heal: [1, 2],
+			onHit(target, source) {
+				this.add('-activate', source, 'move: Rito Ancestral');
+				let success = false;
+				const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
+				for (const ally of allies) {
+					if (ally.cureStatus()) success = true;
+				}
+				return success;
 			},
-			secondary: null,
-			target: "self",
+			target: "allyTeam",
 			type: "Water",
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Beautiful",
@@ -22263,7 +22269,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			basePower: 0,
 			category: "Status",
 			name: "Rito Ancestral (Slowking)",
-			pp: 20,
+			pp: 5,
 			priority: 0,
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
@@ -22281,7 +22287,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			basePower: 0,
 			category: "Status",
 			name: "Rito Ancestral (Wungsparce)",
-			pp: 20,
+			pp: 5,
 			priority: 0,
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
@@ -22299,7 +22305,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			basePower: 0,
 			category: "Status",
 			name: "Rito Ancestral (Grandbull)",
-			pp: 20,
+			pp: 5,
 			priority: 0,
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
@@ -22317,7 +22323,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			basePower: 0,
 			category: "Status",
 			name: "Rito Ancestral (Qwilfish)",
-			pp: 20,
+			pp: 5,
 			priority: 0,
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
@@ -22335,7 +22341,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			basePower: 0,
 			category: "Status",
 			name: "Rito Ancestral (Ursaring)",
-			pp: 20,
+			pp: 5,
 			priority: 0,
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
@@ -22353,7 +22359,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			basePower: 0,
 			category: "Status",
 			name: "Rito Ancestral (Mantine)",
-			pp: 20,
+			pp: 5,
 			priority: 0,
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
@@ -22371,7 +22377,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			basePower: 0,
 			category: "Status",
 			name: "Rito Ancestral (Kingdra)",
-			pp: 20,
+			pp: 5,
 			priority: 0,
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
@@ -22389,7 +22395,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			basePower: 0,
 			category: "Status",
 			name: "Rito Ancestral (Donphan)",
-			pp: 20,
+			pp: 5,
 			priority: 0,
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
@@ -22407,7 +22413,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			basePower: 0,
 			category: "Status",
 			name: "Rito Ancestral (Celebi)",
-			pp: 20,
+			pp: 5,
 			priority: 0,
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
 			boosts: {
