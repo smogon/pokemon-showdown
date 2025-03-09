@@ -4424,6 +4424,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	wungsparcefeudal: {
 		num: -1009,
 		name: "Wungsparce-Feudal",
+		baseSpecies: "Wungsparce",
 		forme: "Feudal",
 		types: ["Dragon", "Flying"],
 		baseStats: {hp: 120, atk: 90, def: 80, spa: 85, spd: 75, spe: 75},
@@ -4509,6 +4510,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	granbullfeudal: {
 		num: 210,
 		name: "Granbull-Feudal",
+		baseSpecies: "Granbull",
 		forme: "Feudal",
 		types: ["Fairy", "Fight"],
 		genderRatio: {M: 0.25, F: 0.75},
@@ -4537,6 +4539,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	qwilfishfeudal: {
 		num: 211,
 		name: "Qwilfish-Feudal",
+		baseSpecies: "Qwilfish",
 		forme: "Feudal",
 		types: ["Poison", "Water"],
 		baseStats: {hp: 105, atk: 105, def: 85, spa: 55, spd: 65, spe: 90},
@@ -4689,6 +4692,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	ursaringfeudal: {
 		num: 217,
 		name: "Ursaring-Feudal",
+		baseSpecies: "Ursaring",
 		forme: "Feudal",
 		types: ["Normal", "Bug"],
 		baseStats: {hp: 110, atk: 130, def: 75, spa: 75, spd: 75, spe: 55},
@@ -4902,6 +4906,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	mantinefeudal: {
 		num: 226,
 		name: "Mantine-Feudal",
+		baseSpecies: "Mantine",
 		forme: "Feudal",
 		types: ["Flying"],
 		baseStats: {hp: 105, atk: 40, def: 70, spa: 80, spd: 140, spe: 70},
@@ -4985,6 +4990,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	kingdrafeudal: {
 		num: 230,
 		name: "Kingdra-Feudal",
+		baseSpecies: "Kingdra",
 		forme: "Feudal",
 		types: ["Dragon", "Water"],
 		baseStats: {hp: 95, atk: 105, def: 85, spa: 105, spd: 85, spe: 85},
@@ -5026,6 +5032,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	donphanfeudal: {
 		num: 232,
 		name: "Donphan-Feudal",
+		baseSpecies: "Donphan",
 		forme: "Feudal",
 		types: ["Ground", "Psychic"],
 		baseStats: {hp: 110, atk: 120, def: 120, spa: 60, spd: 60, spe: 50},
@@ -5334,6 +5341,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	celebifeudal: {
 		num: 251,
 		name: "Celebi-Feudal",
+		baseSpecies: "Celebi",
 		forme: "Feudal",
 		types: ["Psychic", "Grass"],
 		gender: "N",
