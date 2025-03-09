@@ -22239,4 +22239,274 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			target: "normal",
 			type: "Bug",
 		},
+		ritoancestral1: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral",
+			pp: 20,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1},
+			boosts: {
+				atk: 2,
+			},
+			onTry(source) {
+				if (source.species.name === 'Quagsire-Feudal') {
+					return;
+				}
+				this.hint("Only a Pokemon whose form is Feudal can use this move.");
+				this.attrLastMove('[still]');
+				this.add('-fail', source, 'move: Hyperspace Fury');
+				return null;
+			},
+			secondary: null,
+			target: "self",
+			type: "Water",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestral2: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral",
+			pp: 20,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1},
+			boosts: {
+				atk: 2,
+			},
+			onTry(source) {
+				if (source.species.name === 'Slowking-Feudal') {
+					return;
+				}
+				this.hint("Only a Pokemon whose form is Feudal can use this move.");
+				this.attrLastMove('[still]');
+				this.add('-fail', source, 'move: Hyperspace Fury');
+				return null;
+			},
+			secondary: null,
+			target: "self",
+			type: "Psychic",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestral3: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral",
+			pp: 20,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1},
+			boosts: {
+				atk: 2,
+			},
+			onTry(source) {
+				if (source.species.name === 'Wungsparce-Feudal') {
+					return;
+				}
+				this.hint("Only a Pokemon whose form is Feudal can use this move.");
+				this.attrLastMove('[still]');
+				this.add('-fail', source, 'move: Hyperspace Fury');
+				return null;
+			},
+			secondary: null,
+			target: "self",
+			type: "Dragon",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestral4: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral",
+			pp: 20,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1},
+			boosts: {
+				atk: 2,
+			},
+			onTry(source) {
+				if (source.species.name === 'Grandbull-Feudal') {
+					return;
+				}
+				this.hint("Only a Pokemon whose form is Feudal can use this move.");
+				this.attrLastMove('[still]');
+				this.add('-fail', source, 'move: Hyperspace Fury');
+				return null;
+			},
+			secondary: null,
+			target: "self",
+			type: "Fighting",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestral5: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral",
+			pp: 20,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1},
+			boosts: {
+				atk: 2,
+			},
+			onTry(source) {
+				if (source.species.name === 'Qwilfish-Feudal') {
+					return;
+				}
+				this.hint("Only a Pokemon whose form is Feudal can use this move.");
+				this.attrLastMove('[still]');
+				this.add('-fail', source, 'move: Hyperspace Fury');
+				return null;
+			},
+			secondary: null,
+			target: "self",
+			type: "Poison",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestral6: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral",
+			pp: 20,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1},
+			boosts: {
+				atk: 2,
+			},
+			onTry(source) {
+				if (source.species.name === 'Ursaring-Feudal') {
+					return;
+				}
+				this.hint("Only a Pokemon whose form is Feudal can use this move.");
+				this.attrLastMove('[still]');
+				this.add('-fail', source, 'move: Hyperspace Fury');
+				return null;
+			},
+			secondary: null,
+			target: "self",
+			type: "Bug",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestral7: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral",
+			pp: 20,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1},
+			boosts: {
+				atk: 2,
+			},
+			onTry(source) {
+				if (source.species.name === 'Mantine-Feudal') {
+					return;
+				}
+				this.hint("Only a Pokemon whose form is Feudal can use this move.");
+				this.attrLastMove('[still]');
+				this.add('-fail', source, 'move: Hyperspace Fury');
+				return null;
+			},
+			secondary: null,
+			target: "self",
+			type: "Flying",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestral8: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral",
+			pp: 20,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1},
+			boosts: {
+				atk: 2,
+			},
+			onTry(source) {
+				if (source.species.name === 'Kingdra-Feudal') {
+					return;
+				}
+				this.hint("Only a Pokemon whose form is Feudal can use this move.");
+				this.attrLastMove('[still]');
+				this.add('-fail', source, 'move: Hyperspace Fury');
+				return null;
+			},
+			secondary: null,
+			target: "self",
+			type: "Dragon",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestral9: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral",
+			pp: 20,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1},
+			boosts: {
+				atk: 2,
+			},
+			onTry(source) {
+				if (source.species.name === 'Donphan-Feudal') {
+					return;
+				}
+				this.hint("Only a Pokemon whose form is Feudal can use this move.");
+				this.attrLastMove('[still]');
+				this.add('-fail', source, 'move: Hyperspace Fury');
+				return null;
+			},
+			secondary: null,
+			target: "self",
+			type: "Psychic",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
+		ritoancestral10: {
+			num: 0,
+			accuracy: true,
+			basePower: 0,
+			category: "Status",
+			name: "Rito Ancestral",
+			pp: 20,
+			priority: 0,
+			flags: {snatch: 1, dance: 1, metronome: 1},
+			boosts: {
+				atk: 2,
+			},
+			onTry(source) {
+				if (source.species.name === 'Celebi-Feudal') {
+					return;
+				}
+				this.hint("Only a Pokemon whose form is Feudal can use this move.");
+				this.attrLastMove('[still]');
+				this.add('-fail', source, 'move: Hyperspace Fury');
+				return null;
+			},
+			secondary: null,
+			target: "self",
+			type: "Grass",
+			zMove: {effect: 'clearnegativeboost'},
+			contestType: "Beautiful",
+		},
 };
