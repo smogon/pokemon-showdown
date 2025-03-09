@@ -22564,8 +22564,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		esferaciclon: {
 			num: 0,
-			accuracy: 80,
-			basePower: 100,
+			accuracy: 100,
+			basePower: 80,
 			category: "Special",
 			name: "Esfera Ciclon",
 			pp: 10,
@@ -22583,8 +22583,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		astarcilla: {
 			num: 0,
-			accuracy: 90,
-			basePower: 100,
+			accuracy: 100,
+			basePower: 90,
 			category: "Physical",
 			name: "Astarcilla",
 			pp: 10,
