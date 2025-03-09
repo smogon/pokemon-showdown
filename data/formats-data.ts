@@ -859,6 +859,11 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
+	kingdrafeudal: {
+		tier: "OU",
+		doublesTier: "(DUU)",
+		natDexTier: "RU",
+	},
 	goldeen: {
 		tier: "LC",
 		natDexTier: "LC",
