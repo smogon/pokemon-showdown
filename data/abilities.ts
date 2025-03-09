@@ -6365,4 +6365,55 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 1,
 		num: -133,
 	},
+	artilleriapesada: {
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['bullet']) {
+				this.debug('Artilleria Pesada boost');
+				return this.chainModify(2);
+			}
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (source && source !== target && move && move.category !== 'Status' && !source.forceSwitchFlag) {
+				this.damage(source.baseMaxhp / 6.66, source, source);
+			}
+		},
+		flags: {},
+		name: "Artilleria Pesada",
+		rating: 3,
+		num: -134,
+	},
+	cabezadura: {
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['head']) {
+				this.debug('Cabeza Dura boost');
+				return this.chainModify(1.5);
+			}
+		},
+		flags: {},
+		name: "Cabeza Dura",
+		rating: 3.5,
+		num: -135,
+	},
+	conjurador: {
+		onStart(pokemon) {
+			let activated = false;
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Conjurador', 'boost');
+					activated = true;
+				}
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else {
+					this.boost({spa: -1}, target, pokemon, null, true);
+				}
+			}
+		},
+		flags: {},
+		name: "Conjurador",
+		rating: 3.5,
+		num: 22,
+	},
 };
