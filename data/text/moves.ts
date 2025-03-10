@@ -1030,8 +1030,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	confusion: {
 		name: "Confusion",
-		desc: "Has a 10% chance to confuse the target.",
-		shortDesc: "10% chance to confuse the target.",
+		desc: "Has a 100% chance to confuse the target.",
+		shortDesc: "100% chance to confuse the target.",
 	},
 	constrict: {
 		name: "Constrict",
@@ -1702,8 +1702,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	eeriespell: {
 		name: "Eerie Spell",
-		desc: "If this move is successful and the user has not fainted, the target loses 3 PP from its last move.",
-		shortDesc: "Removes 3 PP from the target's last move.",
+		desc: "If this move is successful and the user has not fainted, the target loses 5 PP from its last move.",
+		shortDesc: "Removes 5 PP from the target's last move.",
 
 		activate: "#spite",
 	},
@@ -1888,8 +1888,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	extrasensory: {
 		name: "Extrasensory",
-		desc: "Has a 10% chance to make the target flinch.",
-		shortDesc: "10% chance to make the target flinch.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 		gen3: {
 			desc: "Has a 10% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
@@ -2972,8 +2972,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	heartstamp: {
 		name: "Heart Stamp",
-		desc: "Has a 30% chance to make the target flinch.",
-		shortDesc: "30% chance to make the target flinch.",
+		desc: "Has a 30% chance infatuation the target.",
+		shortDesc: "30% chance infatuation the target.",
 	},
 	heartswap: {
 		name: "Heart Swap",
@@ -3462,8 +3462,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	kinesis: {
 		name: "Kinesis",
-		desc: "Lowers the target's accuracy by 1 stage.",
-		shortDesc: "Lowers the target's accuracy by 1.",
+		desc: "Lowers the target's attack by 3 stage.",
+		shortDesc: "Lowers the target's attack by 3.",
 	},
 	kingsshield: {
 		name: "King's Shield",
@@ -3693,13 +3693,13 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	luminacrash: {
 		name: "Lumina Crash",
-		desc: "Has a 100% chance to lower the target's Special Defense by 2 stages.",
-		shortDesc: "100% chance to lower the target's Sp. Def by 2.",
+		desc: "Has a 100% chance to lower the target's Special Defense by 1 stages.",
+		shortDesc: "100% chance to lower the target's Sp. Def by 1.",
 	},
 	lunarblessing: {
 		name: "Lunar Blessing",
-		desc: "Each Pokemon on the user's side restores 1/4 of its maximum HP, rounded half up, and has its status condition cured.",
-		shortDesc: "User and allies: healed 1/4 max HP, status cured.",
+		desc: "Each Pokemon on the user's side restores 1/3 of its maximum HP, rounded half up, and has its status condition cured.",
+		shortDesc: "User and allies: healed 1/3 max HP, status cured.",
 	},
 	lunardance: {
 		name: "Lunar Dance",
@@ -3973,8 +3973,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	meditate: {
 		name: "Meditate",
-		desc: "Raises the user's Attack by 1 stage.",
-		shortDesc: "Raises the user's Attack by 1.",
+		desc: "Raises the user's Attack, Special Defense by 1 stage.",
+		shortDesc: "Raises the user's Atk, Spd by 1.",
 	},
 	mefirst: {
 		name: "Me First",
@@ -4895,8 +4895,9 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	prismaticlaser: {
 		name: "Prismatic Laser",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "Whether or not this move is successful and even if it would cause fainting, the user loses 1/4 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
+		shortDesc: "User loses 25% max HP.",
+		damage: "#mindblown",
 	},
 	protect: {
 		name: "Protect",
@@ -4929,8 +4930,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	psybeam: {
 		name: "Psybeam",
-		desc: "Has a 10% chance to confuse the target.",
-		shortDesc: "10% chance to confuse the target.",
+		desc: "Has a 50% chance to confuse the target.",
+		shortDesc: "50% chance to confuse the target.",
 	},
 	psyblade: {
 		name: "Psyblade",
@@ -5004,8 +5005,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	psywave: {
 		name: "Psywave",
-		desc: "Deals damage to the target equal to (user's level) * (X + 50) / 100, where X is a random number from 0 to 100, rounded down, but not less than 1 HP.",
-		shortDesc: "Random damage equal to 0.5x-1.5x user's level.",
+		desc: "Deals damage to the target equal to half of its current HP, rounded down, but not less than 1 HP.",
+		shortDesc: "Does damage equal to 1/2 target's current HP.",
 		gen4: {
 			desc: "Deals damage to the target equal to (user's level) * (X * 10 + 50) / 100, where X is a random number from 0 to 10, rounded down, but not less than 1 HP.",
 		},
@@ -6368,7 +6369,6 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 		name: "Steel Beam",
 		desc: "Whether or not this move is successful and even if it would cause fainting, the user loses 1/4 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
 		shortDesc: "User loses 25% max HP.",
-
 		damage: "#mindblown",
 	},
 	steelroller: {
@@ -6707,8 +6707,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	synchronoise: {
 		name: "Synchronoise",
-		desc: "The target is immune if it does not share a type with the user.",
-		shortDesc: "Hits adjacent Pokemon sharing the user's type.",
+		shortDesc: "Acquires user's primary type.",
 	},
 	synthesis: {
 		name: "Synthesis",
@@ -6804,8 +6803,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	tarshot: {
 		name: "Tar Shot",
-		desc: "Lowers the target's Speed by 1 stage. Until the target switches out, the effectiveness of Fire-type moves is doubled against it.",
-		shortDesc: "Target gets -1 Spe and becomes weaker to Fire.",
+		shortDesc: "The affected pokemon takes 50% more damage.",
 
 		start: "  [POKEMON] became weaker to fire!",
 	},
@@ -7401,7 +7399,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	watersport: {
 		name: "Water Sport",
 		desc: "The next fire moves directed at the user will not damage and raise the best stat from the user",
-		shortDesc: "fire moves will not damage and raise the best stat from the user",
+		shortDesc: "fire moves will not damage. Raise the best stat from the user",
 		gen5: {
 			desc: "While the user is active, all Fire-type attacks used by any active Pokemon have their power multiplied by 0.33. Fails if this effect is already active for any Pokemon.",
 			shortDesc: "Weakens Fire-type attacks to 1/3 their power.",
