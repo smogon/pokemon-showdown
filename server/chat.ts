@@ -2061,6 +2061,9 @@ export const Chat = new class {
 		this.loadPlugin(Config, 'config');
 		this.loadPlugin(Tournaments, 'tournaments');
 
+		// Load Custom Plugins From /impulse
+		this.loadPluginDirectory('dist/impulse');
+
 		this.loadPluginDirectory('dist/server/chat-plugins');
 		Chat.oldPlugins = {};
 		// lower priority should run later
