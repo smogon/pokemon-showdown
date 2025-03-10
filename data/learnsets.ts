@@ -25791,6 +25791,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			terablast: ["9M"],
 			thief: ["9M", "9M", "9M", "9M", "9M", "9M", "9M", "9M"],
 			toxic: ["9M", "9M", "9M", "9M", "9M", "9M"],
+			trickroom: ["9M"],
 			twister: ["9T"],
 			uproar: ["9M", "9L33", "9M", "9L33", "9T", "9L39", "9T", "9L13", "9T", "9L13", "9T", "9L13"],
 			workup: ["9M", "9M", "9M"],
