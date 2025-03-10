@@ -677,7 +677,6 @@ for (const avatar of OFFICIAL_AVATARS_SELENA) OFFICIAL_AVATARS.add(avatar);
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
 		if (!target) return this.parse(`${this.cmdToken}avatars`);
-
 		const [maybeAvatar, silent] = target.split(',');
 		const avatar = Avatars.userCanUse(user, maybeAvatar);
 
