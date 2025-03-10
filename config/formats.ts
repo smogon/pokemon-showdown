@@ -55,7 +55,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Ubers",
 		mod: 'gen9',
-		ruleset: ['Standard', 'Sleep Clause Mod', 'Terastal Clause'],
+		ruleset: ['Standard', 'Terastal Clause'],
 		banlist: ['AG', 'Moody', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects'],
 	},
 	{
