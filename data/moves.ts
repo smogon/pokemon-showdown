@@ -19297,7 +19297,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, metronome: 1},
 		boosts: {
-			evasion: -2,
+			evasion: -3,
 		},
 		secondary: null,
 		target: "allAdjacentFoes",
