@@ -55,6 +55,9 @@ if (isNaN(nodeVersion) || nodeVersion < 18) {
 }
 
 import { FS, Repl } from '../lib';
+// Initialise node-persist
+import { Economy } from '../impulse/economy/economy-config';
+export { Economy };
 
 /*********************************************************
  * Set up most of our globals
