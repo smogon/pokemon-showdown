@@ -676,9 +676,7 @@ for (const avatar of OFFICIAL_AVATARS_SELENA) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
-		const shouldBroadcast = this.shouldBroadcast();
-
-		if (!target && !shouldBroadcast) return this.parse(`${this.cmdToken}avatars`);
+		if (!target) return this.parse(`${this.cmdToken}avatars`);
 
 		const [maybeAvatar, silent] = !target ? [user.avatar.toString(), false] : target.split(',');
 		const avatar = Avatars.userCanUse(user, maybeAvatar);
@@ -699,16 +697,9 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (!silent || this.broadcasting) {
 			if (!this.broadcasting) {
-				this.sendReply(
-					`${this.tr`Avatar changed to:`}\n` +
-					Chat.html`|raw|${Avatars.img(avatar)}`
-				);
-			} else {
-				this.sendReply(
-					`${this.tr`${avatar}:`}\n` +
-					Chat.html`|raw|${Avatars.img(avatar)}`
-				);
+				this.sendReply(`${this.tr`Avatar changed to:`}`);
 			}
+			this.sendReply(Chat.html`|raw|${Avatars.img(avatar)}`);
 			if (OFFICIAL_AVATARS_BELIOT419.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.deviantart.com/beliot419">Beliot419</a>)`);
 			}
