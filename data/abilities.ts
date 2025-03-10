@@ -6171,7 +6171,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onModifyMove(move) {
+			if (move.flags['bite']) {
 			move.drain = [1, 2];
+			}
 		},
 		flags: {},
 		name: "Vampirismo",
