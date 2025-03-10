@@ -1,0 +1,1 @@
+stores economy data.
