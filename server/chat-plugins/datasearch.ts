@@ -1656,6 +1656,15 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				continue;
 			}
 
+			if (target === 'trap' || target === 'traps' || target === 'trapping') {
+				if (orGroup.other.trapping === undefined) {
+					orGroup.other.trapping = !isNotSearch;
+				} else if ((orGroup.other.trapping && isNotSearch) || (!orGroup.other.trapping && !isNotSearch)) {
+					return { error: 'A search cannot both exclude and include trapping moves.' };
+				}
+				continue;
+			}
+
 			if (target.substr(0, 6) === 'random' && cmd === 'randmove') {
 				// Validation for this is in the /randmove command
 				randomOutput = parseInt(target.substr(6));
@@ -1829,7 +1838,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			case 'freeze': target = 'frz'; break;
 			case 'sleep': target = 'slp'; break;
 			case 'confuse': target = 'confusion'; break;
-			case 'trap': target = 'partiallytrapped'; break;
+			case 'partiallytrap': target = 'partiallytrapped'; break;
 			case 'flinche': target = 'flinch'; break;
 			}
 
@@ -2008,6 +2017,20 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (alts.other.recoil !== undefined) {
 				const recoil = move.recoil || move.hasCrashDamage;
 				if (recoil && alts.other.recoil || !(recoil || alts.other.recoil)) matched = true;
+			}
+			if (matched) continue;
+			if (alts.other.trapping !== undefined) {
+				let onHitString = null;
+				if (move.onHit) {
+					onHitString = move.onHit.toString();
+				} else if (move.secondary?.onHit) {
+					onHitString = move.secondary.onHit.toString();
+				} else if (move.self?.onHit) {
+					onHitString = move.self.onHit.toString();
+				}
+				const trapping = move.volatileStatus === 'partiallytrapped' || move.condition?.onTrapPokemon ||
+					(onHitString && /\b(?:target|pokemon)\.addVolatile\("(partially){0,1}trapped",/.test(onHitString));
+				if (trapping && alts.other.trapping || !(trapping || alts.other.trapping)) matched = true;
 			}
 			if (matched) continue;
 			for (const prop in alts.property) {
