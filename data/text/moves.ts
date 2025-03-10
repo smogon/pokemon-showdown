@@ -1461,8 +1461,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	doomdesire: {
 		name: "Doom Desire",
-		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move or Future Sight is already in effect for the target's position.",
-		shortDesc: "Hits two turns after being used.",
+		shortDesc: "Cannot be selected the turn after it's used.",
 		gen4: {
 			desc: "Deals typeless damage that cannot be a critical hit two turns after this move is used. Damage is calculated against the target on use, and at the end of the final turn that damage is dealt to the Pokemon at the position the original target had at the time. Fails if this move or Future Sight is already in effect for the target's position.",
 		},
@@ -2434,8 +2433,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	gearup: {
 		name: "Gear Up",
-		desc: "Raises the Attack and Special Attack of Pokemon on the user's side with the Plus or Minus Abilities by 1 stage.",
-		shortDesc: "Raises Atk, Sp. Atk of allies with Plus/Minus by 1.",
+		desc: "Raises the Attack and Special Attack of Pokemon. Raises the Attack and Special Attack of Pokemon on the user's side with the Plus or Minus Abilities by 2 stage.",
+		shortDesc: "Raises Atk, Sp. Atk. Raises Atk, Sp. Atk by 2 with Plus/Minus ",
 	},
 	genesissupernova: {
 		name: "Genesis Supernova",
@@ -2865,8 +2864,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	hardpress: {
 		name: "Hard Press",
-		desc: "Power is equal to 100 * (target's current HP / target's maximum HP), rounded half down, but not less than 1.",
-		shortDesc: "More power the more HP the target has left.",
+		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
+		shortDesc: "Less power as user's HP decreases. Hits foe(s).",
 	},
 	haze: {
 		name: "Haze",
@@ -3792,7 +3791,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	magnetbomb: {
 		name: "Magnet Bomb",
-		shortDesc: "This move does not check accuracy.",
+		shortDesc: "Prevents the steel type pokemon from switching out.",
 	},
 	magneticflux: {
 		name: "Magnetic Flux",
@@ -4052,8 +4051,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	metalclaw: {
 		name: "Metal Claw",
-		desc: "Has a 10% chance to raise the user's Attack by 1 stage.",
-		shortDesc: "10% chance to raise the user's Attack by 1.",
+		shortDesc: "Raise the user's Attack by 1.",
 	},
 	metalsound: {
 		name: "Metal Sound",
@@ -4243,8 +4241,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	mirrorshot: {
 		name: "Mirror Shot",
-		desc: "Has a 30% chance to lower the target's accuracy by 1 stage.",
-		shortDesc: "30% chance to lower the target's accuracy by 1.",
+		desc: "Has a 50% chance to lower the target's Attack by 1 stage.",
+		shortDesc: "50% chance to lower the target's Attack by 1.",
 	},
 	mist: {
 		name: "Mist",
@@ -5771,8 +5769,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	shelter: {
 		name: "Shelter",
-		desc: "Raises the user's Defense by 2 stages.",
-		shortDesc: "Raises the user's Defense by 2.",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact increase the user's physical defense. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Burning Bulwark, Detect, Endure, King's Shield, Max Guard, Obstruct, Protect, Quick Guard, Silk Trap, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		shortDesc: "Protects from damaging attacks. Contact: +1 Def.",
 	},
 	shiftgear: {
 		name: "Shift Gear",
@@ -6166,8 +6164,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	sparklingaria: {
 		name: "Sparkling Aria",
-		desc: "If the user has not fainted, the target is cured of its burn.",
-		shortDesc: "The target is cured of its burn.",
+		desc: "In Doubles Battles heals the maxhp from ally a 25%",
+		shortDesc: "In Doubles battles heals the ally",
 	},
 	sparklyswirl: {
 		name: "Sparkly Swirl",
@@ -6368,15 +6366,15 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	steelbeam: {
 		name: "Steel Beam",
-		desc: "Whether or not this move is successful and even if it would cause fainting, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
-		shortDesc: "User loses 50% max HP.",
+		desc: "Whether or not this move is successful and even if it would cause fainting, the user loses 1/4 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
+		shortDesc: "User loses 25% max HP.",
 
 		damage: "#mindblown",
 	},
 	steelroller: {
 		name: "Steel Roller",
-		desc: "Fails if there is no terrain active. Ends the effects of Electric Terrain, Grassy Terrain, Misty Terrain, and Psychic Terrain.",
-		shortDesc: "Fails if there is no terrain active. Ends the terrain.",
+		desc: "User on terrain: increase the power to 130. Ends the terrain.",
+		shortDesc: "User on terrain: increase the power. Ends the terrain.",
 	},
 	steelwing: {
 		name: "Steel Wing",
@@ -7378,8 +7376,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	waterpledge: {
 		name: "Water Pledge",
-		desc: "If one of the user's allies chose to use Fire Pledge or Grass Pledge this turn and has not moved yet, it takes its turn immediately after the user and the user's move does nothing. If combined with Fire Pledge, the ally uses Water Pledge with 150 power and a rainbow appears on the user's side for 4 turns, which doubles secondary effect chances and stacks with the Serene Grace Ability, except effects that cause flinching can only have their chance doubled once. If combined with Grass Pledge, the ally uses Grass Pledge with 150 power and a swamp appears on the target's side for 4 turns, which quarters the Speed of each Pokemon on that side. When used as a combined move, this move gains STAB no matter what the user's type is. This move does not consume the user's Water Gem, and cannot be redirected by the Storm Drain Ability.",
-		shortDesc: "Use with Grass or Fire Pledge for added effect.",
+		desc: "When used, reduces the power of the next fire moves in the same turn",
+		shortDesc: "When used, reduces the power of fire moves.",
 
 		start: "  Fire's power was weakened!",
 		end: "  The effects of Water Pledge have faded.",
@@ -7402,8 +7400,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	watersport: {
 		name: "Water Sport",
-		desc: "For 5 turns, all Fire-type attacks used by any active Pokemon have their power multiplied by 0.33. Fails if this effect is already active.",
-		shortDesc: "For 5 turns, Fire-type attacks have 1/3 power.",
+		desc: "The next fire moves directed at the user will not damage and raise the best stat from the user",
+		shortDesc: "fire moves will not damage and raise the best stat from the user",
 		gen5: {
 			desc: "While the user is active, all Fire-type attacks used by any active Pokemon have their power multiplied by 0.33. Fails if this effect is already active for any Pokemon.",
 			shortDesc: "Weakens Fire-type attacks to 1/3 their power.",
