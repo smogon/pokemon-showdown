@@ -2001,8 +2001,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	filletaway: {
 		name: "Fillet Away",
-		desc: "Raises the user's Attack, Special Attack, and Speed by 2 stages in exchange for the user losing 1/2 of its maximum HP, rounded down. Fails if the user would faint or if its Attack, Special Attack, and Speed stat stages would not change.",
-		shortDesc: "+2 Attack, Sp. Atk, Speed for 1/2 user's max HP.",
+		desc: "Raises the user's Attack, Special Attack, and Speed by 2 stages in exchange for the user losing 1/4 of its maximum HP, rounded down. Fails if the user would faint or if its Attack, Special Attack, and Speed stat stages would not change.",
+		shortDesc: "+2 Attack, Sp. Atk, Speed for 1/4 user's max HP.",
 	},
 	finalgambit: {
 		name: "Final Gambit",
@@ -2146,8 +2146,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	flash: {
 		name: "Flash",
-		desc: "Lowers the target's accuracy by 1 stage.",
-		shortDesc: "Lowers the target's accuracy by 1.",
+		desc: "Lowers the target's Special Attack by 1 stage.",
+		shortDesc: "Lowers the target's Spa by 1.",
 	},
 	flashcannon: {
 		name: "Flash Cannon",
@@ -2285,8 +2285,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	foresight: {
 		name: "Foresight",
-		desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Normal- and Fighting-type attacks can hit the target if it is a Ghost type. Fails if the target is already affected, or affected by Miracle Eye or Odor Sleuth.",
-		shortDesc: "Fighting, Normal hit Ghost. Evasiveness ignored.",
+		desc: "Deals damage two turns after this move is used. At the end of that turn, the damage is calculated at that time and dealt to the Pokemon at the position the target had when the move was used. If the user is no longer active at the time, damage is calculated based on the user's natural Special Attack stat, types, and level, with no boosts from its held item or Ability. Fails if this move or Doom Desire is already in effect for the target's position.",
+		shortDesc: "Hits two turns after being used.",
 		gen4: {
 			desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Normal- and Fighting-type attacks can hit the target if it is a Ghost type.",
 		},
@@ -2852,14 +2852,14 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	happyhour: {
 		name: "Happy Hour",
-		shortDesc: "No competitive use.",
+		shortDesc: "if you hace maxhp for 3 turns, all stats are increased.",
 
 		activate: "  Everyone is caught up in the happy atmosphere!",
 	},
 	harden: {
 		name: "Harden",
-		desc: "Raises the user's Defense by 1 stage.",
-		shortDesc: "Raises the user's Defense by 1.",
+		desc: "Raises the user's Defense by 1 stage. Prevents critical hits",
+		shortDesc: "Raises the user's Def by 1. Prevents critical hits",
 	},
 	hardpress: {
 		name: "Hard Press",
@@ -2885,8 +2885,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	headcharge: {
 		name: "Head Charge",
-		desc: "If the target lost HP, the user takes recoil damage equal to 1/4 the HP lost by the target, rounded half up, but not less than 1 HP.",
-		shortDesc: "Has 1/4 recoil.",
+		desc: "If the target lost HP, the user takes recoil damage equal to 1/6 the HP lost by the target, rounded half up, but not less than 1 HP.",
+		shortDesc: "Has 1/6 recoil.",
 	},
 	headlongrush: {
 		name: "Headlong Rush",
@@ -3103,8 +3103,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	holdhands: {
 		name: "Hold Hands",
-		desc: "No competitive use. Fails if there is no ally adjacent to the user.",
-		shortDesc: "No competitive use.",
+		desc: "if you receive a hit when switching. this move increases all stats.",
+		shortDesc: "receive a hit when switching. this move increases all stats.",
 	},
 	honeclaws: {
 		name: "Hone Claws",
@@ -3113,7 +3113,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	hornattack: {
 		name: "Horn Attack",
-		shortDesc: "No additional effect.",
+		shortDesc: "30% chance to make the target flinch. High critical hit ratio.",
 	},
 	horndrill: {
 		name: "Horn Drill",
@@ -3135,7 +3135,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	howl: {
 		name: "Howl",
 		desc: "Raises the Attack of the user and all allies 1 stage.",
-		shortDesc: "Raises the user's and ally's Attack by 1.",
+		shortDesc: "Raises the user's and ally's Atk by 1. Heals 25% max HP.",
 		gen7: {
 			desc: "Raises the user's Attack by 1 stage.",
 			shortDesc: "Raises the user's Attack by 1.",
@@ -3515,7 +3515,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	laserfocus: {
 		name: "Laser Focus",
 		desc: "Until the end of the next turn, the user's attacks will be critical hits.",
-		shortDesc: "Until the end of the next turn, user's moves crit.",
+		shortDesc: "Raises the user's Atk by 1. Next move will be critical hit",
 
 		start: "  [POKEMON] concentrated intensely!",
 	},
@@ -3652,8 +3652,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	lockon: {
 		name: "Lock-On",
-		desc: "Until the end of the next turn, the target cannot avoid the user's moves, even if the target is in the middle of a two-turn move. The effect ends if either the user or the target leaves the field. Fails if this effect is active for the user.",
-		shortDesc: "User's next move will not miss the target.",
+		desc: "Until the end of the next turn, the target cannot avoid the user's moves, even if the target is in the middle of a two-turn move. The effect ends if either the user or the target leaves the field. Fails if this effect is active for the user and its power will increase x1.5",
+		shortDesc: "User's next move will not miss and its power will increase x1.5",
 		gen4: {
 			desc: "Until the end of the next turn, the target cannot avoid the user's moves, even if the target is in the middle of a two-turn move. When this effect is started against the target, this and Mind Reader's effects end for every other Pokemon against that target. If the target leaves the field using Baton Pass, the replacement remains under this effect. If the user leaves the field using Baton Pass, this effect is restarted against the same target for the replacement. The effect ends if either the user or the target leaves the field.",
 		},
@@ -4013,7 +4013,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	megakick: {
 		name: "Mega Kick",
-		shortDesc: "No additional effect.",
+		desc: "If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Magic Guard Ability are unaffected by crash damage.",
+		shortDesc: "User is hurt by 50% of its max HP if it misses.",
 	},
 	megapunch: {
 		name: "Mega Punch",
@@ -4155,8 +4156,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	mindreader: {
 		name: "Mind Reader",
-		desc: "Until the end of the next turn, the target cannot avoid the user's moves, even if the target is in the middle of a two-turn move. The effect ends if either the user or the target leaves the field. Fails if this effect is active for the user.",
-		shortDesc: "User's next move will not miss the target.",
+		desc: "Until the end of the next turn, the target cannot avoid the user's moves, even if the target is in the middle of a two-turn move. The effect ends if either the user or the target leaves the field. Fails if this effect is active for the user and reduces the target's defense and special defense",
+		shortDesc: "User's next move will not miss and reduces the target's def and spd",
 		gen4: {
 			desc: "Until the end of the next turn, the target cannot avoid the user's moves, even if the target is in the middle of a two-turn move. When this effect is started against the target, this and Lock-On's effects end for every other Pokemon against that target. If the target leaves the field using Baton Pass, the replacement remains under this effect. If the user leaves the field using Baton Pass, this effect is restarted against the same target for the replacement. The effect ends if either the user or the target leaves the field.",
 		},
@@ -4407,15 +4408,15 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	naturalgift: {
 		name: "Natural Gift",
 		desc: "The type and power of this move depend on the user's held Berry, and the Berry is lost. Fails if the user is not holding a Berry, if the user has the Klutz Ability, or if Embargo or Magic Room is in effect for the user.",
-		shortDesc: "Power and type depends on the user's Berry.",
+		shortDesc: "type depends on berry equipped.",
 		gen4: {
 			desc: "The type and power of this move depend on the user's held Berry, and the Berry is lost. Fails if the user is not holding a Berry, if the user has the Klutz Ability, or if Embargo is in effect for the user.",
 		},
 	},
 	naturepower: {
 		name: "Nature Power",
-		desc: "This move calls another move for use based on the battle terrain. Tri Attack on the regular Wi-Fi terrain, Thunderbolt during Electric Terrain, Moonblast during Misty Terrain, Energy Ball during Grassy Terrain, and Psychic during Psychic Terrain.",
-		shortDesc: "Attack depends on terrain (default Tri Attack).",
+		desc: "the type depends on the terrain of combat. The power is doubled in any weather or field.",
+		shortDesc: "type depends on the terrain of combat. Power x2 in any weather or field.",
 		gen6: {
 			desc: "This move calls another move for use based on the battle terrain. Tri Attack on the regular Wi-Fi terrain, Thunderbolt during Electric Terrain, Moonblast during Misty Terrain, and Energy Ball during Grassy Terrain.",
 		},
@@ -4480,8 +4481,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	nobleroar: {
 		name: "Noble Roar",
-		desc: "Lowers the target's Attack and Special Attack by 1 stage.",
-		shortDesc: "Lowers the target's Attack and Sp. Atk by 1.",
+		desc: "Lowers the target's Attack, Special Attack, defense and special defense by 2 stage.",
+		shortDesc: "Lowers the target's Atk, Spa, def and spd by 2.",
 	},
 	nonallamas: {
 		name: "Nonallamas",
@@ -4636,8 +4637,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	payday: {
 		name: "Pay Day",
-		desc: "No additional effect.",
-		shortDesc: "Scatters coins.",
+		desc: "Hits two to five times. Has a 35% chance to hit two or three times and a 15% chance to hit four or five times. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit five times. If the user is holding Loaded Dice, this move will hit 4-5 times.",
+		shortDesc: "Hits 2-5 times in one turn.",
 
 		activate: "  Coins were scattered everywhere!",
 	},
@@ -4729,8 +4730,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	playnice: {
 		name: "Play Nice",
-		desc: "Lowers the target's Attack by 1 stage.",
-		shortDesc: "Lowers the target's Attack by 1.",
+		desc: "Lowers the target's Attack by 2 stage.",
+		shortDesc: "Lowers the target's Attack by 2.",
 	},
 	playrough: {
 		name: "Play Rough",
@@ -4811,7 +4812,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	pound: {
 		name: "Pound",
-		shortDesc: "No additional effect.",
+		desc: "If this attack does not miss, the effects of Reflect, Light Screen, and Aurora Veil end for the target's side of the field before damage is calculated.",
+		shortDesc: "Destroys screens, unless the target is immune. Hits first",
 	},
 	powder: {
 		name: "Powder",
@@ -4886,8 +4888,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	present: {
 		name: "Present",
-		desc: "If this move is successful, it deals damage or heals the target. 40% chance for 40 power, 30% chance for 80 power, 10% chance for 120 power, and 20% chance to heal the target by 1/4 of its maximum HP, rounded down.",
-		shortDesc: "40, 80, 120 power, or heals target 1/4 max HP.",
+		desc: "If the target is an ally, this move restores 1/2 of its maximum HP, rounded down, instead of dealing damage. change to delibird form",
+		shortDesc: "If the target is an ally, heals 50% of its max HP.",
 		gen2: {
 			desc: "If this move is successful, it deals damage or heals the target. 102/256 chance for 40 power, 76/256 chance for 80 power, 26/256 chance for 120 power, or 52/256 chance to heal the target by 1/4 of its maximum HP, rounded down. If this move deals damage, it uses an abnormal version of the damage formula by substituting certain values. The user's Attack stat is replaced with 10 times the effectiveness of this move against the target, the target's Defense stat is replaced with the index number of the user's secondary type, and the user's level is replaced with the index number of the target's secondary type. If a Pokemon does not have a secondary type, its primary type is used. The index numbers for each type are Normal: 0, Fighting: 1, Flying: 2, Poison: 3, Ground: 4, Rock: 5, Bug: 7, Ghost: 8, Steel: 9, Fire: 20, Water: 21, Grass: 22, Electric: 23, Psychic: 24, Ice: 25, Dragon: 26, Dark: 27. If at any point a division by 0 would happen in the damage formula, it divides by 1 instead.",
 		},
@@ -5621,8 +5623,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	secretpower: {
 		name: "Secret Power",
-		desc: "Has a 30% chance to cause a secondary effect on the target based on the battle terrain. Causes paralysis on the regular Wi-Fi terrain, causes paralysis during Electric Terrain, lowers Special Attack by 1 stage during Misty Terrain, causes sleep during Grassy Terrain and lowers Speed by 1 stage during Psychic Terrain.",
-		shortDesc: "Effect varies with terrain. (30% paralysis chance)",
+		desc: "the type depends on the terrain of combat. The power is doubled in any weather or field.",
+		shortDesc: "type depends on the terrain of combat. Power x2 in any weather or field.",
 		gen6: {
 			desc: "Has a 30% chance to cause a secondary effect on the target based on the battle terrain. Causes paralysis on the regular Wi-Fi terrain, causes paralysis during Electric Terrain, lowers Special Attack by 1 stage during Misty Terrain, and causes sleep during Grassy Terrain.",
 		},
@@ -5722,8 +5724,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	sharpen: {
 		name: "Sharpen",
-		desc: "Raises the user's Attack by 1 stage.",
-		shortDesc: "Raises the user's Attack by 1.",
+		desc: "Raises the user's Attack by 3 stage.",
+		shortDesc: "Raises the user's Attack by 3.",
 	},
 	shatteredpsyche: {
 		name: "Shattered Psyche",
@@ -5731,8 +5733,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	shedtail: {
 		name: "Shed Tail",
-		desc: "The user takes 1/2 of its maximum HP, rounded up, and creates a substitute that has 1/4 of the user's maximum HP, rounded down. The user is replaced with another Pokemon in its party and the selected Pokemon has the substitute transferred to it. Fails if the user would faint, or if there are no unfainted party members.",
-		shortDesc: "User takes 1/2 its max HP to pass a substitute.",
+		desc: "The user takes 1/1.1 of its maximum HP, rounded up, and creates a substitute that has 1/4 of the user's maximum HP, rounded down. The user is replaced with another Pokemon in its party and the selected Pokemon has the substitute transferred to it. Fails if the user would faint, or if there are no unfainted party members.",
+		shortDesc: "User takes 1/1.1 its max HP to pass a substitute.",
 
 		start: "  [POKEMON] shed its tail to create a decoy!",
 		alreadyStarted: "#substitute",
@@ -6011,8 +6013,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	smellingsalts: {
 		name: "Smelling Salts",
-		desc: "Power doubles if the target is paralyzed. If the user has not fainted, the target is cured of paralysis.",
-		shortDesc: "Power doubles if target is paralyzed, and cures it.",
+		desc: "Power doubles if the target has a non-volatile status condition.",
+		shortDesc: "Power doubles if the target has a status ailment.",
 		gen4: {
 			desc: "Power doubles if the target is paralyzed. If this move is successful, the target is cured of paralysis.",
 		},
@@ -6028,8 +6030,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	smokescreen: {
 		name: "Smokescreen",
-		desc: "Lowers the target's accuracy by 1 stage.",
-		shortDesc: "Lowers the target's accuracy by 1.",
+		desc: "Lowers the target's evasiveness by 3 stage.",
+		shortDesc: "Lowers the target's evasiveness by 3.",
 	},
 	snaptrap: {
 		name: "Snap Trap",
@@ -6141,8 +6143,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	sonicboom: {
 		name: "Sonic Boom",
-		desc: "Deals 20 HP of damage to the target.",
-		shortDesc: "Always does 20 HP of damage.",
+		shortDesc: "No additional effect.",
 		gen1: {
 			desc: "Deals 20 HP of damage to the target. This move ignores type immunity.",
 		},
@@ -6163,7 +6164,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	sparklingaria: {
 		name: "Sparkling Aria",
-		desc: "In Doubles Battles heals the maxhp from ally a 25%",
+		desc: "In Doubles Battles heals the max HP from ally a 25%",
 		shortDesc: "In Doubles battles heals the ally",
 	},
 	sparklyswirl: {
@@ -6304,7 +6305,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	splash: {
 		name: "Splash",
-		shortDesc: "No competitive use.",
+		shortDesc: "if the user is a first evolution, increases all stats by 1.",
 
 		activate: "  But nothing happened!",
 	},
@@ -6324,8 +6325,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	spotlight: {
 		name: "Spotlight",
-		desc: "Until the end of the turn, all single-target attacks from opponents of the target are redirected to the target. Such attacks are redirected to the target before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double Battle or Battle Royal.",
-		shortDesc: "Target's foes' moves are redirected to it this turn.",
+		desc: "Until the end of the turn, all single-target attacks from opponents of the target are redirected to the target. Such attacks are redirected to the target before they can be reflected by Magic Coat or the Magic Bounce Ability, or drawn in by the Lightning Rod or Storm Drain Abilities. Fails if it is not a Double Battle or Battle Royal. Paralyze on contact",
+		shortDesc: "Target's foes' moves are redirected to it. Paralyze on contact",
 
 		start: "#followme",
 		startFromZEffect: "#followme",
@@ -6660,8 +6661,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	sweetscent: {
 		name: "Sweet Scent",
-		desc: "Lowers the target's evasiveness by 2 stages.",
-		shortDesc: "Lowers the foe(s) evasiveness by 2.",
+		desc: "Lowers the target's evasiveness by 3 stages.",
+		shortDesc: "Lowers the foe(s) evasiveness by 3.",
 		gen5: {
 			desc: "Lowers the target's evasiveness by 1 stage.",
 			shortDesc: "Lowers the foe(s) evasiveness by 1.",
