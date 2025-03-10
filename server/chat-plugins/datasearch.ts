@@ -2029,7 +2029,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 					onHitString = move.self.onHit.toString();
 				}
 				const trapping = move.volatileStatus === 'partiallytrapped' || move.condition?.onTrapPokemon ||
-					(onHitString && /\b(?:target|pokemon)\.addVolatile\("(partially){0,1}trapped",/.test(onHitString));
+					(onHitString && /\b(?:target|pokemon)\.addVolatile\("(?:partially){0,1}trapped",/.test(onHitString));
 				if (trapping && alts.other.trapping || !(trapping || alts.other.trapping)) matched = true;
 			}
 			if (matched) continue;
