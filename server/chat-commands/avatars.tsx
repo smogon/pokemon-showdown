@@ -678,7 +678,7 @@ export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
 		if (!target) return this.parse(`${this.cmdToken}avatars`);
 
-		const [maybeAvatar, silent] = !target ? [user.avatar.toString(), false] : target.split(',');
+		const [maybeAvatar, silent] = target.split(',');
 		const avatar = Avatars.userCanUse(user, maybeAvatar);
 
 		if (!avatar) {
