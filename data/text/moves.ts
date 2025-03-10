@@ -54,7 +54,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	acidspray: {
 		name: "Acid Spray",
 		desc: "Has a 100% chance to lower the target's Special Defense by 2 stages.",
-		shortDesc: "100% chance to lower the target's Sp. Def by 2.",
+		shortDesc: "Lower the target's Sp. Def by 2. Hits Steel type.",
 	},
 	acrobatics: {
 		name: "Acrobatics",
@@ -160,8 +160,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	aquaring: {
 		name: "Aqua Ring",
-		desc: "The user has 1/16 of its maximum HP, rounded down, restored at the end of each turn while it remains active. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. If the user uses Baton Pass, the replacement will receive the healing effect.",
-		shortDesc: "User recovers 1/16 max HP per turn.",
+		desc: "The user has 1/8 of its maximum HP, rounded down, restored at the end of each turn while it remains active. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down. If the user uses Baton Pass, the replacement will receive the healing effect.",
+		shortDesc: "User recovers 1/8 max HP per turn.",
 
 		start: "  [POKEMON] surrounded itself with a veil of water!",
 		heal: "  A veil of water restored [POKEMON]'s HP!",
@@ -351,8 +351,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	barbbarrage: {
 		name: "Barb Barrage",
-		desc: "Has a 50% chance to poison the target. Power doubles if the target is already poisoned.",
-		shortDesc: "50% psn. 2x power if target already poisoned.",
+		desc: "Each hit increases the power by 10 to a maximun of 150.",
+		shortDesc: "Each hit increases the power by 10.",
 	},
 	barrage: {
 		name: "Barrage",
@@ -417,8 +417,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	belch: {
 		name: "Belch",
-		desc: "This move cannot be selected until the user eats a Berry, either by eating one that was held, stealing and eating one off another Pokemon with Bug Bite or Pluck, or eating one that was thrown at it with Fling. Once the condition is met, this move can be selected and used for the rest of the battle even if the user gains or uses another item or switches out. Consuming a Berry with Natural Gift does not count for the purposes of eating one.",
-		shortDesc: "Cannot be selected until the user eats a Berry.",
+		shortDesc: "Power doubles if the user has no held item.",
 	},
 	bellydrum: {
 		name: "Belly Drum",
@@ -445,8 +444,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	bide: {
 		name: "Bide",
-		desc: "The user spends two turns locked into this move and then, on the second turn after using this move, the user attacks the last Pokemon that hit it, inflicting double the damage in HP it lost to attacks during the two turns. If the last Pokemon that hit it is no longer active, the user attacks a random opposing Pokemon instead. If the user is prevented from moving during this move's use, the effect ends. This move does not check accuracy and does not ignore type immunity.",
-		shortDesc: "Waits 2 turns; deals double the damage taken.",
+		desc: "hits with the user's second type, its power is doubled if it was attacked first.",
+		shortDesc: "Power doubles if user is damaged by the target.",
 		gen4: {
 			desc: "The user spends two turns locked into this move and then, on the second turn after using this move, the user attacks the last Pokemon that hit it, inflicting double the damage in HP it lost to attacks during the two turns. If the last Pokemon that hit it is no longer active, the user attacks a random opposing Pokemon instead. If the user is prevented from moving during this move's use, the effect ends. This move does not check accuracy and ignores type immunity.",
 		},
@@ -852,7 +851,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	celebrate: {
 		name: "Celebrate",
-		shortDesc: "No competitive use.",
+		shortDesc: "if used after fainted an opponent it increases all stats",
 
 		activate: "  Congratulations, [TRAINER]!",
 	},
@@ -909,7 +908,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	chipaway: {
 		name: "Chip Away",
-		desc: "Ignores the target's stat stage changes, including evasiveness.",
+		desc: "Ignores the target's stat stage changes, including evasiveness. If the target increased its defense the previous turn, the move doubles its power",
 		shortDesc: "Ignores the target's stat stage changes.",
 	},
 	chloroblast: {
@@ -1035,8 +1034,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	constrict: {
 		name: "Constrict",
-		desc: "Has a 10% chance to lower the target's Speed by 1 stage.",
-		shortDesc: "10% chance to lower the target's Speed by 1.",
+		desc: "Has a 100% chance to lower the target's Speed by 2 stage.",
+		shortDesc: "100% chance to lower the target's Speed by 2.",
 		gen1: {
 			desc: "Has a 33% chance to lower the target's Speed by 1 stage.",
 			shortDesc: "33% chance to lower the target's Speed by 1.",
@@ -1120,7 +1119,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	corrosivegas: {
 		name: "Corrosive Gas",
-		desc: "The target loses its held item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item or cause a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, a Silvally, a Zacian, or a Zamazenta to lose their Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability. 30% chance to badly poison the target.",
+		desc: "The target loses its held item. This move cannot cause Pokemon with the Sticky Hold Ability to lose their held item or cause a Kyogre, a Groudon, a Giratina, an Arceus, a Genesect, a Silvally, a Zacian, or a Zamazenta to lose their Blue Orb, Red Orb, Griseous Orb, Plate, Drive, Memory, Rusted Sword, or Rusted Shield respectively. Items lost to this move cannot be regained with Recycle or the Harvest Ability. 30% chance to badly poison the target. Hits Steel type pokemon",
 		shortDesc: "Removes adjacent Pokemon's held items and 30% chance to badly poison the target.",
 
 		fail: "#healblock",
@@ -1220,13 +1219,13 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	crushclaw: {
 		name: "Crush Claw",
-		desc: "Has a 50% chance to lower the target's Defense by 1 stage.",
-		shortDesc: "50% chance to lower the target's Defense by 1.",
+		desc: "Has a 100% chance to lower the target's Defense by 1 stage.",
+		shortDesc: "100% chance to lower the target's Defense by 1.",
 	},
 	crushgrip: {
 		name: "Crush Grip",
-		desc: "Power is equal to 120 * (target's current HP / target's maximum HP), rounded half down, but not less than 1.",
-		shortDesc: "More power the more HP the target has left.",
+		desc: "Power is equal to (user's current HP * 150 / user's maximum HP), rounded down, but not less than 1.",
+		shortDesc: "Less power as user's HP decreases. Hits foe(s).",
 		gen4: {
 			desc: "Power is equal to 120 * (target's current HP / target's maximum HP) + 1, rounded down.",
 		},
@@ -1289,8 +1288,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	defensecurl: {
 		name: "Defense Curl",
-		desc: "Raises the user's Defense by 1 stage. As long as the user remains active, the power of the user's Ice Ball and Rollout will be doubled (this effect is not stackable).",
-		shortDesc: "Raises the user's Defense by 1.",
+		desc: "Raises the user's Defense by 2 stage. As long as the user remains active, the power of the user's Ice Ball and Rollout will be doubled (this effect is not stackable).",
+		shortDesc: "Raises the user's Defense by 2.",
 		gen2: {
 			desc: "Raises the user's Defense by 1 stage. While the user remains active, the power of the user's Rollout will be doubled (this effect is not stackable). Baton Pass can be used to transfer this effect to an ally.",
 		},
@@ -1447,8 +1446,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	dizzypunch: {
 		name: "Dizzy Punch",
-		desc: "Has a 20% chance to confuse the target.",
-		shortDesc: "20% chance to confuse the target.",
+		desc: "Has a 100% chance to confuse the target.",
+		shortDesc: "100% chance to confuse the target.",
 		gen1: {
 			desc: "No additional effect.",
 			shortDesc: "No additional effect.",
@@ -1535,7 +1534,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	doubleteam: {
 		name: "Double Team",
-		desc: "Raises the user's evasiveness by 1 stage.",
+		desc: "Change pokémon, the switching pokémon increases its speed by 1.",
 		shortDesc: "Raises the user's evasiveness by 1.",
 	},
 	dracometeor: {
@@ -4777,8 +4776,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	poisonsting: {
 		name: "Poison Sting",
-		desc: "Has a 30% chance to poison the target.",
-		shortDesc: "30% chance to poison the target.",
+		desc: "Has a 10% chance to poison the target. Hits first",
+		shortDesc: "10% chance to poison the target. Hits first",
 		gen1: {
 			desc: "Has a 20% chance to poison the target.",
 			shortDesc: "20% chance to poison the target.",
@@ -5479,8 +5478,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	round: {
 		name: "Round",
-		desc: "If there are other active Pokemon that chose this move for use this turn, those Pokemon take their turn immediately after the user, in Speed order, and this move's power is 120 for each other user.",
-		shortDesc: "Power doubles if others used Round this turn.",
+		shortDesc: "Each hit increases the power by 10.",
 	},
 	ruination: {
 		name: "Ruination",
@@ -5983,8 +5981,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	sludge: {
 		name: "Sludge",
-		desc: "Has a 30% chance to poison the target.",
-		shortDesc: "30% chance to poison the target.",
+		desc: "Has a 20% chance to poison the target. Always results in a critical hit",
+		shortDesc: "20% chance to poison the target. Always is critical hit",
 		gen1: {
 			desc: "Has a 40% chance to poison the target.",
 			shortDesc: "40% chance to poison the target.",
@@ -6025,8 +6023,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	smog: {
 		name: "Smog",
-		desc: "Has a 40% chance to poison the target.",
-		shortDesc: "40% chance to poison the target.",
+		desc: "Lowers the target's Defense, Special Defense by 1.",
+		shortDesc: "Lowers the target's Def, Spd by 1.",
 	},
 	smokescreen: {
 		name: "Smokescreen",
@@ -7091,8 +7089,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	toxicthread: {
 		name: "Toxic Thread",
-		desc: "Lowers the target's Speed by 1 stage and poisons it.",
-		shortDesc: "Lowers the target's Speed by 1 and poisons it.",
+		desc: "Lowers the target's Speed by 2 stage and badly poisons it.",
+		shortDesc: "Lowers the target's Spe by 2 and badly poisons it.",
 	},
 	trailblaze: {
 		name: "Trailblaze",
@@ -7301,13 +7299,13 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	venomdrench: {
 		name: "Venom Drench",
-		desc: "Lowers the target's Attack, Special Attack, and Speed by 1 stage if the target is poisoned. Fails if the target is not poisoned.",
-		shortDesc: "Lowers Atk/Sp. Atk/Speed of poisoned foes by 1.",
+		desc: "Lowers the target's all stats by 1 stage if the target is poisoned. Lowers the target's all stats by 2 stage if the target is badly poisoned. Fails if the target is not poisoned or badly poisoned.",
+		shortDesc: "Lowers all stats of PSN foes by 1. Lowers all stats of TOX foes by 2.",
 	},
 	venoshock: {
 		name: "Venoshock",
-		desc: "Power doubles if the target is poisoned.",
-		shortDesc: "Power doubles if the target is poisoned.",
+		desc: "Power doubles if the target is poisoned; Power is triples if the target is badly poisoned",
+		shortDesc: "Power x2 if the target is PSN; Power x3 if the target is TOX.",
 	},
 	victorydance: {
 		name: "Victory Dance",
