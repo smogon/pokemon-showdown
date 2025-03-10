@@ -676,8 +676,11 @@ for (const avatar of OFFICIAL_AVATARS_SELENA) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
-		if (!target) return this.parse(`${this.cmdToken}avatars`);
-		const [maybeAvatar, silent] = target.split(',');
+		const shouldBroadcast = this.shouldBroadcast();
+
+		if (!target && !shouldBroadcast) return this.parse(`${this.cmdToken}avatars`);
+
+		const [maybeAvatar, silent] = !target ? [user.avatar.toString(), false] : target.split(',');
 		const avatar = Avatars.userCanUse(user, maybeAvatar);
 
 		if (!avatar) {
@@ -686,15 +689,26 @@ export const commands: Chat.ChatCommands = {
 			return false;
 		}
 
-		user.avatar = avatar;
-		if (user.id in customAvatars && !avatar.endsWith('xmas')) {
-			Avatars.setDefault(user.id, avatar);
+		this.runBroadcast();
+		if (!this.broadcasting) {
+			user.avatar = avatar;
+
+			if (user.id in customAvatars && !avatar.endsWith('xmas')) {
+				Avatars.setDefault(user.id, avatar);
+			}
 		}
-		if (!silent) {
-			this.sendReply(
-				`${this.tr`Avatar changed to:`}\n` +
-				Chat.html`|raw|${Avatars.img(avatar)}`
-			);
+		if (!silent || this.broadcasting) {
+			if (!this.broadcasting) {
+				this.sendReply(
+					`${this.tr`Avatar changed to:`}\n` +
+					Chat.html`|raw|${Avatars.img(avatar)}`
+				);
+			} else {
+				this.sendReply(
+					`${this.tr`${avatar}:`}\n` +
+					Chat.html`|raw|${Avatars.img(avatar)}`
+				);
+			}
 			if (OFFICIAL_AVATARS_BELIOT419.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.deviantart.com/beliot419">Beliot419</a>)`);
 			}
@@ -727,7 +741,10 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 	},
-	avatarhelp: [`/avatar [avatar name or number] - Change your trainer sprite.`],
+	avatarhelp: [
+		`/avatar [avatar name or number] - Change your trainer sprite.`,
+		`!avatar [avatar name or number] - Show the specified trainer sprite and credits. Requires: + % @ # ~`,
+	],
 
 	avatars(target, room, user) {
 		this.runBroadcast();
