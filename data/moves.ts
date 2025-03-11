@@ -8624,7 +8624,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onTryHeal(damage, target, source, effect) {
 				if (effect && (effect.id === 'zpower' || (effect as Move).isZ)) return damage;
-				if (source && target !== source && target.hp !== target.maxhp) {
+				if (source && target !== source && target.hp !== target.maxhp && effect.effectType === 'Move') {
 					this.attrLastMove('[still]');
 					// FIXME: Wrong error message, correct one not supported yet
 					this.add('cant', source, 'move: Heal Block', effect);
