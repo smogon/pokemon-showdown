@@ -180,12 +180,13 @@ export default class TeamGenerator {
 		return team;
 	}
 
+	
 	protected makeSet(species: Species, teamStats: TeamStats): PokemonSet {
 		const abilityPool: string[] = Object.values(species.abilities);
 		const abilityWeights = abilityPool.map(a => this.getAbilityWeight(this.dex.abilities.get(a)));
 		const ability = this.weightedRandomPick(abilityPool, abilityWeights);
 		const level = this.forceLevel || TeamGenerator.getLevel(species);
-
+	
 		const moves: Move[] = [];
 		let movesStats: MovesStats = {
 			setup: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
@@ -196,23 +197,14 @@ export default class TeamGenerator {
 			healing: 0,
 			nonStatusMoves: 0,
 		};
-
+	
 		let movePool: IDEntry[] = [...this.dex.species.getMovePool(species.id)];
 		if (!movePool.length) throw new Error(`No moves for ${species.id}`);
-
+	
 		// Consider either the top 15 moves or top 30% of moves, whichever is greater.
 		const numberOfMovesToConsider = Math.min(movePool.length, Math.max(15, Math.trunc(movePool.length * 0.3)));
 		let movePoolIsTrimmed = false;
-		// Many moves' weights, such as Swords Dance, are dependent on having other moves in the moveset already
-		// and end up very low when calculated with no moves chosen. This makes it difficult to add these moves without
-		// weighing every move 4 times, and trimming once after the initial weighing makes them impossible for most Pokemon.
-		// To get around this, after weighing against an empty moveset, trimming, and adding three moves, we weigh ALL
-		// moves again against the populated moveset, then put the chosen 3 moves back into the pool with their
-		// original empty-set weights, trim the pool again, and start over. This process results in about 15% fewer calls
-		// to getMoveWeight than considering every move every time does.
 		let isRound2 = false;
-		// this is just a second reference the array because movePool gets set to point to a new array before the old one
-		// gets mutated
 		const movePoolCopy = movePool;
 		let interimMovePool: { move: IDEntry, weight: number }[] = [];
 		while (moves.length < 4 && movePool.length) {
@@ -224,7 +216,7 @@ export default class TeamGenerator {
 						const weight = this.getMoveWeight(move, teamStats, species, moves, movesStats, ability, level);
 						interimMovePool.push({ move: moveID, weight });
 					}
-
+	
 					interimMovePool.sort((a, b) => b.weight - a.weight);
 				} else {
 					const originalWeights: typeof interimMovePool = [];
@@ -232,14 +224,14 @@ export default class TeamGenerator {
 						originalWeights.push(interimMovePool.find(m => m.move === move.id)!);
 					}
 					interimMovePool = originalWeights;
-
+	
 					for (const moveID of movePoolCopy) {
 						const move = this.dex.moves.get(moveID);
 						if (moves.includes(move)) continue;
 						const weight = this.getMoveWeight(move, teamStats, species, moves, movesStats, ability, level);
 						interimMovePool.push({ move: moveID, weight });
 					}
-
+	
 					interimMovePool.sort((a, b) => b.weight - a.weight);
 					moves.splice(0);
 					movesStats = {
@@ -254,7 +246,7 @@ export default class TeamGenerator {
 				}
 				movePool = [];
 				weights = [];
-
+	
 				for (let i = 0; i < numberOfMovesToConsider; i++) {
 					movePool.push(interimMovePool[i].move);
 					weights.push(interimMovePool[i].weight);
@@ -265,9 +257,9 @@ export default class TeamGenerator {
 					m => this.getMoveWeight(this.dex.moves.get(m), teamStats, species, moves, movesStats, ability, level)
 				);
 			}
-
+	
 			const moveID = this.weightedRandomPick(movePool, weights, { remove: true });
-
+	
 			const move = this.dex.moves.get(moveID);
 			moves.push(move);
 			if (TeamGenerator.moveIsHazard(moves[moves.length - 1])) {
@@ -302,14 +294,14 @@ export default class TeamGenerator {
 				const moveType = TeamGenerator.moveType(move, species);
 				if ((movesStats.attackTypes[moveType] || 0) < bp) movesStats.attackTypes[moveType] = bp;
 			}
-
+	
 			if (!isRound2 && moves.length === 3) {
 				isRound2 = true;
 				movePoolIsTrimmed = false;
 				continue;
 			}
-
-			// add paired moves, like RestTalk
+	
+			// Add paired moves, like RestTalk
 			const pairedMove = MOVE_PAIRINGS[moveID];
 			const alreadyHavePairedMove = moves.some(m => m.id === pairedMove);
 			if (
@@ -325,7 +317,7 @@ export default class TeamGenerator {
 				if (pairedMoveIndex > -1) movePool.splice(pairedMoveIndex, 1);
 			}
 		}
-
+	
 		let item = '';
 		const nonStatusMoves = moves.filter(m => this.dex.moves.get(m).category !== 'Status');
 		if (species.requiredItem) {
@@ -350,7 +342,7 @@ export default class TeamGenerator {
 			// ...unless the Pokemon can use Booster Energy
 			item = 'Booster Energy';
 		}
-
+	
 		const ivs: PokemonSet['ivs'] = {
 			hp: 31,
 			atk: moves.some(move => this.dex.moves.get(move).category === 'Physical') ? 31 : 0,
@@ -359,7 +351,7 @@ export default class TeamGenerator {
 			spd: 31,
 			spe: 31,
 		};
-
+	
 		// For Tera Type, we just pick a random type if it's got Tera Blast, Revelation Dance, or no attacking moves
 		// In the latter case, we avoid picking a type the Pokemon already is, and in the other two we avoid picking a
 		// type that matches the Pokemon's other moves
@@ -390,7 +382,7 @@ export default class TeamGenerator {
 			}
 			teraType = this.prng.sample(attackingTypes);
 		}
-
+	
 		return {
 			name: species.name,
 			species: species.name,
