@@ -730,14 +730,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					activated = true;
 				}
 				this.boost({spe: -1}, pokemon, target, null, true);
-			}
-		},
-		onTryMove(pokemon, target, move) {
-			if (move.type === 'Flying') {
-				this.add('-activate', pokemon, 'ability: Pelusa');
-				this.damage(this.clampIntRange(Math.round(pokemon.maxhp / 4), 1));
-				this.attrLastMove('[still]');
-				return false;
+				if(move.type === 'Flying'){
+					this.damage(pokemon.baseMaxhp / 4, pokemon, target);
+				}
 			}
 		},
 		flags: {},
