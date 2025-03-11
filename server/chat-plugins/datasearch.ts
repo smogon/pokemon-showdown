@@ -2115,9 +2115,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 					// This is slightly hacky, but none of the proper trapping moves in moves.ts mechanically use 'trapped' as
 					// a volatilestatus despite it being one.
 					(('trapped' === searchStatus) &&
-						(move.onHit && /\b(?:target|pokemon)\.addVolatile\("trapped",/.test(move.onHit.toString())) ||
-						(move.secondary?.onHit && /\b(?:target|pokemon)\.addVolatile\("trapped",/.test(move.secondary.onHit.toString())) ||
-						(move.self?.onHit && /\b(?:target|pokemon)\.addVolatile\("trapped",/.test(move.self.onHit.toString())))
+						((move.onHit && /\b(?:target|pokemon)\.addVolatile\("trapped",/.test(move.onHit.toString())) ||
+							(move.secondary?.onHit && /\b(?:target|pokemon)\.addVolatile\("trapped",/.test(move.secondary.onHit.toString())) ||
+							(move.self?.onHit && /\b(?:target|pokemon)\.addVolatile\("trapped",/.test(move.self.onHit.toString()))))
 				);
 				if (searchStatus === 'partiallytrapped') {
 					canStatus = canStatus || moveid === 'gmaxcentiferno' || moveid === 'gmaxsandblast';
