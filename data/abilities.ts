@@ -1790,6 +1790,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	healer: {
 		onResidualOrder: 5,
 		onResidualSubOrder: 3,
+		onStart(pokemon) {
+			for (const ally of pokemon.adjacentAllies()) {
+				ally.cureStatus();
+				this.add('-activate', pokemon, 'ability: Healer');
+			}
+		},
 		onResidual(pokemon) {
 			for (const allyActive of pokemon.adjacentAllies()) {
 				if (allyActive.status && this.randomChance(3, 10)) {
@@ -1851,6 +1857,26 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 134,
 	},
 	honeygather: {
+		onStart(pokemon) {
+			pokemon.addVolatile('honeygather');
+		},
+		onResidualOrder: 1,
+		onResidualSubOrder: 1,
+		onResidual(pokemon) {
+			if (pokemon.volatiles['honeygather']) {
+				pokemon.volatiles['honeygather'].turns++;
+			}
+			if (pokemon.volatiles['honeygather']?.turns >= 3) {
+				pokemon.volatiles['honeygather'].turns = 0;
+				this.add('-activate', pokemon, 'ability: Honey Gather');
+				this.heal(pokemon.baseMaxhp / 4, pokemon, pokemon);
+			}
+		},
+		condition: {
+			onStart() {
+				this.effectState.turns = 0;
+			},
+		},
 		flags: {},
 		name: "Honey Gather",
 		rating: 0,
@@ -2753,7 +2779,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (randomStat) boost[randomStat] = 2;
 
 			stats = [];
-			
+
 
 			this.boost(boost, pokemon, pokemon);
 		}
@@ -3845,6 +3871,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.status) {
 				return this.chainModify(1.5);
 			}
+		},
+		onUpdate(pokemon) {
+			if (pokemon.status === 'par') {
+				this.add('-activate', pokemon, 'ability: Quick Feet');
+				pokemon.cureStatus();
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (status.id !== 'par') return;
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Quick Feet');
+			}
+			return false;
 		},
 		flags: {},
 		name: "Quick Feet",
@@ -6759,5 +6798,20 @@ letrassagradas: {
 	name: "Letras Sagradas",
 	rating: 4,
 	num: -146,
+},
+entradatriunfal: {
+	onStart(pokemon) {
+		let activated = false;
+		const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				for (const condition of sideConditions) {
+					if (pokemon.hp && pokemon.side.removeSideCondition(condition) && !pokemon.hasItem('heavydutyboots')) {
+						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] ability: Entrada Triunfal', '[of] ' + pokemon);
+					}
+				}
+	},
+	flags: {},
+	name: "Entrada Triunfal",
+	rating: 2,
+	num: 251,
 },
 };
