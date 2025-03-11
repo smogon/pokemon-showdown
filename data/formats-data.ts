@@ -190,14 +190,14 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "OU",
     },
     sandshrew: {
-      tier: "LC",
+      tier: "Uber",
     },
     sandshrewalola: {
       isNonstandard: "Past",
       tier: "Illegal",
     },
     sandslash: {
-      tier: "OU",
+      tier: "Uber",
     },
     sandslashalola: {
       isNonstandard: "Past",
@@ -234,13 +234,13 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "NFE",
     },
     vulpixalola: {
-      tier: "LC",
+      tier: "Uber",
     },
     ninetales: {
       tier: "OU",
     },
     ninetalesalola: {
-      tier: "OU",
+      tier: "Uber",
     },
     igglybuff: {
       tier: "LC",
@@ -291,7 +291,7 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "LC",
     },
     dugtrio: {
-      tier: "OU",
+      tier: "Uber",
     },
     dugtrioalola: {
       tier: "OU",
@@ -772,7 +772,7 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "OU",
     },
     glaceon: {
-      tier: "OU",
+      tier: "Uber",
     },
     sylveon: {
       tier: "OU",
@@ -1029,10 +1029,10 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "Illegal",
     },
     wynaut: {
-      tier: "LC",
+      tier: "Uber",
     },
     wobbuffet: {
-      tier: "OU",
+      tier: "Uber",
     },
     girafarig: {
       tier: "NFE",
@@ -1535,10 +1535,10 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "OU",
     },
     cacnea: {
-      tier: "NFE",
+      tier: "Uber",
     },
     cacturne: {
-      tier: "OU",
+      tier: "Uber",
     },
     swablu: {
       isNonstandard: "Past",
@@ -1671,7 +1671,7 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "Illegal",
     },
     froslass: {
-      tier: "OU",
+      tier: "Illegal",
     },
     spheal: {
       tier: "LC",
@@ -1963,13 +1963,13 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "OU",
     },
     gible: {
-      tier: "LC",
+      tier: "Uber",
     },
     gabite: {
-      tier: "NFE",
+      tier: "Uber",
     },
     garchomp: {
-      tier: "OU",
+      tier: "Uber",
     },
     garchompmega: {
       isNonstandard: "Past",
