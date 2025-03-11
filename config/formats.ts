@@ -50,7 +50,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] OU",
 		mod: 'gen9',
 		ruleset: ['Standard', 'Terastal Clause'],
-		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass'],
+		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Shadow Tag', 'Baton Pass', 'Sand Veil', 'Snow Cloak'],
 	},
 	{
 		name: "[Gen 9] Ubers",
@@ -65,7 +65,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: [
 			'Aipom', 'Basculin-White-Striped', 'Cutiefly', 'Diglett-Base', 'Dunsparce', 'Duraludon', 'Flittle', 'Gastly', 'Girafarig', 'Gligar',
 			'Meditite', 'Misdreavus', 'Murkrow', 'Porygon', 'Qwilfish-Hisui', 'Rufflet', 'Scraggy', 'Scyther', 'Sneasel', 'Sneasel-Hisui',
-			'Snivy', 'Stantler', 'Voltorb-Hisui', 'Vulpix', 'Vulpix-Alola', 'Yanma', 'Moody', 'Baton Pass', 'Sticky Web',
+			'Snivy', 'Stantler', 'Voltorb-Hisui', 'Vulpix', 'Vulpix-Alola', 'Yanma', 'Moody', 'Baton Pass', 'Sticky Web', 'Sand Veil', 'Snow Cloak'
 		],
 	},
 	{
@@ -73,7 +73,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		ruleset: ['Standard', 'Evasion Abilities Clause', 'Same Type Clause', 'Terastal Clause'],
 		banlist: [
-			'Moody', 'Shadow Tag', 'Booster Energy', 'Damp Rock', 'Focus Band', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Smooth Rock', 'Acupressure', 'Baton Pass', 'Last Respects', 'Shed Tail',
+			'Moody', 'Shadow Tag', 'Booster Energy', 'Damp Rock', 'Focus Band', 'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Smooth Rock', 'Acupressure', 'Baton Pass', 'Last Respects', 'Shed Tail', 'Sand Veil', 'Snow Cloak'
 		],
 	},
 
@@ -88,34 +88,27 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		gameType: 'doubles',
 		team: 'random',
-		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Sleep Clause Mod'],
+		ruleset: ['PotD', 'Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Illusion Level Mod', 'Sleep Clause Mod', 'Terastal Clause'],
 	},
 	{
 		name: "[Gen 9] Doubles OU",
 		mod: 'gen9',
 		gameType: 'doubles',
-		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
+		ruleset: ['Standard Doubles', 'Evasion Abilities Clause', 'Terastal Clause'],
 		banlist: ['DUber', 'Shadow Tag'],
 	},
 	{
 		name: "[Gen 9] Doubles Ubers",
 		mod: 'gen9',
 		gameType: 'doubles',
-		ruleset: ['Standard Doubles', '!Gravity Sleep Clause'],
+		ruleset: ['Standard Doubles', '!Gravity Sleep Clause', 'Terastal Clause'],
 	},
-	// {
-	// 	name: "[Gen 9] Doubles UU",
-	// 	mod: 'gen9',
-	// 	gameType: 'doubles',
-	// 	ruleset: ['[Gen 9] Doubles OU'],
-	// 	banlist: ['DOU', 'DBL'],
-	// },
 	{
 		name: "[Gen 9] Doubles LC",
 		mod: 'gen9',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Standard Doubles', 'Little Cup', 'Sleep Clause Mod'],
+		ruleset: ['Standard Doubles', 'Little Cup', 'Sleep Clause Mod', 'Terastal Clause'],
 		banlist: ['Basculin-White-Striped', 'Dunsparce', 'Duraludon', 'Girafarig', 'Gligar', 'Murkrow', 'Qwilfish-Hisui', 'Scyther', 'Sneasel', 'Sneasel-Hisui', 'Vulpix', 'Vulpix-Alola', 'Yanma'],
 	},
 
@@ -156,32 +149,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		ruleset: ['Min Source Gen = 9', 'Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause', 'Terastal Clause'],
 	},
-	// {
-	// 	name: "[Gen 9] Ubers UU",
-	// 	mod: 'gen9',
-	// 	ruleset: ['[Gen 9] Ubers'],
-	// 	banlist: [
-	// 		// Ubers OU
-	// 		'Arceus-Normal', 'Arceus-Fairy', 'Arceus-Ghost', 'Arceus-Ground', 'Arceus-Water', 'Calyrex-Ice', 'Chien-Pao', 'Deoxys-Attack', 'Deoxys-Speed', 'Eternatus',
-	// 		'Flutter Mane', 'Giratina-Origin', 'Glimmora', 'Gliscor', 'Grimmsnarl', 'Groudon', 'Ho-Oh', 'Kingambit', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Landorus-Therian',
-	// 		'Lunala', 'Mewtwo', 'Miraidon', 'Necrozma-Dusk-Mane', 'Rayquaza', 'Ribombee', 'Skeledirge', 'Ting-Lu', 'Zacian-Crowned',
-	// 		// Ubers UUBL + Lunala, Arceus-Ghost, Arceus-Water
-	// 		'Arceus-Dragon', 'Arceus-Fire', 'Arceus-Flying', 'Arceus-Steel', 'Necrozma-Dawn-Wings', 'Shaymin-Sky', 'Zekrom',
-	// 	],
-	// },
-	// {
-	// 	name: "[Gen 9] ZU",
-	// 	mod: 'gen9',
-	// 	ruleset: ['[Gen 9] PU'],
-	// 	banlist: ['PU', 'ZUBL', 'Unburden'],
-	// },
 	{
 		name: "[Gen 9] Free-For-All",
 		mod: 'gen9',
 		gameType: 'freeforall',
 		rated: false,
 		tournamentShow: false,
-		ruleset: ['Standard', 'Sleep Moves Clause', '!Sleep Clause Mod', '!Evasion Items Clause'],
+		ruleset: ['Standard', 'Sleep Moves Clause', '!Sleep Clause Mod', '!Evasion Items Clause', 'Terastal Clause'],
 		banlist: [
 			'Dondozo', 'Ursaluna',
 			'Moody', 'Shadow Tag', 'Toxic Chain', 'Toxic Debris', 'Acupressure', 'Aromatic Mist', 'Baton Pass', 'Coaching',
@@ -189,17 +163,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Malignant Chain', 'Poison Fang', 'Rage Powder', 'Skill Swap', 'Spicy Extract', 'Swagger', 'Toxic', 'Toxic Spikes',
 		],
 	},
-	// {
-	// 	name: "[Gen 9] LC UU",
-	// 	mod: 'gen9',
-	// 	searchShow: false,
-	// 	ruleset: ['[Gen 9] LC'],
-	// 	banlist: [
-	// 		'Bulbasaur', 'Chinchou', 'Diglett-Alola', 'Drifloon', 'Elekid', 'Foongus', 'Glimmet', 'Gothita', 'Grookey', 'Growlithe-Hisui', 'Houndour',
-	// 		'Magby', 'Mareanie', 'Mienfoo', 'Minccino', 'Mudbray', 'Pawniard', 'Sandshrew-Alola', 'Shellder', 'Shellos', 'Snover', 'Stunky', 'Timburr',
-	// 		'Tinkatink', 'Toedscool', 'Torchic', 'Vullaby', 'Wingull', 'Zorua-Hisui',
-	// 	],
-	// },
 	{
 		name: "[Gen 9] NFE",
 		desc: `Only Pok&eacute;mon that can evolve are allowed.`,
