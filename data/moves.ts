@@ -22685,7 +22685,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			contestType: "Clever",
 		},
 		caparazoninestable: {
-			num: -0,
+			num: 0,
 			accuracy: true,
 			basePower: 40,
 			category: "Special",
@@ -22696,5 +22696,28 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			target: "allAdjacent",
 			type: "Fire",
 			contestType: "Tough",
+		},
+		bombatintarefinada: {
+			num: 0,
+			accuracy: 95,
+			basePower: 40,
+			category: "Special",
+			name: "Bomba Tinta Refinada",
+			pp: 5,
+			priority: 0,
+			flags: {contact: 1, protect: 1, mirror: 1},
+			secondary: {
+				chance: 100,
+				boosts: {
+					atk: -1,
+					spa: -1,
+					def: -1,
+					spd: -1,
+					spe: -1,
+					evasion: -1
+				},
+			},
+			target: "normal",
+			type: "Water",
 		},
 };
