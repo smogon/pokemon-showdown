@@ -1632,6 +1632,7 @@ export class Battle {
 				}
 
 				pokemon.maybeDisabled = false;
+				pokemon.maybeLocked = false;
 				for (const moveSlot of pokemon.moveSlots) {
 					moveSlot.disabled = false;
 					moveSlot.disabledSource = '';
