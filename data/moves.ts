@@ -22699,13 +22699,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		bombatintarefinada: {
 			num: 0,
-			accuracy: 95,
+			accuracy: 90,
 			basePower: 40,
 			category: "Special",
 			name: "Bomba Tinta Refinada",
 			pp: 5,
 			priority: 0,
-			flags: {contact: 1, protect: 1, mirror: 1},
+			flags: {contact: 1, protect: 1, mirror: 1, bullet: 1},
 			secondary: {
 				chance: 100,
 				boosts: {
