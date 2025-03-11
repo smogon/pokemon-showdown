@@ -17063,7 +17063,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Silver Wind",
 		pp: 5,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1},
+		flags: {protect: 1, mirror: 1, metronome: 1, wind: 1, nosketch: 1},
 		secondary: {
 			chance: 10,
 			self: {
@@ -22683,5 +22683,18 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			type: "Normal",
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Clever",
+		},
+		caparazoninestable: {
+			num: -0,
+			accuracy: true,
+			basePower: 40,
+			category: "Special",
+			name: "Caparazon Inestable",
+			pp: 1,
+			priority: 0,
+			flags: {protect: 1, mirror: 1, nosketch: 1},
+			target: "allAdjacent",
+			type: "Fire",
+			contestType: "Tough",
 		},
 };

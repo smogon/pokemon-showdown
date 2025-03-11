@@ -6629,4 +6629,24 @@ cabezajerarquica: {
 	rating: 1.5,
 	num: -144,
 },
+caparazoninestable: {
+	onResidualOrder: 29,
+	onResidual(pokemon) {
+		if (pokemon.baseSpecies.baseSpecies !== 'Slastma' || pokemon.transformed || !pokemon.hp) return;
+		if (pokemon.species.id === 'slastmaliberado' || pokemon.hp > pokemon.maxhp / 2) return;
+		this.add('-activate', pokemon, 'ability: Caparazon Inestable');
+		pokemon.formeChange('Slastma-Liberado', this.effect, true);
+		pokemon.baseMaxhp = Math.floor(Math.floor(
+			2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
+		) * pokemon.level / 100 + 10);
+		const newMaxHP = pokemon.volatiles['dynamax'] ? (2 * pokemon.baseMaxhp) : pokemon.baseMaxhp;
+		pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
+		pokemon.maxhp = newMaxHP;
+		this.actions.useMove('caparazoninestable', pokemon);
+	},
+	flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
+	name: "Caparazon Inestable",
+	rating: 5,
+	num: -145,
+},
 };
