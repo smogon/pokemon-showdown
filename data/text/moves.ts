@@ -611,8 +611,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	boneclub: {
 		name: "Bone Club",
-		desc: "Has a 10% chance to make the target flinch.",
-		shortDesc: "10% chance to make the target flinch.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	bonemerang: {
 		name: "Bonemerang",
@@ -4354,8 +4354,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	mudbomb: {
 		name: "Mud Bomb",
-		desc: "Has a 30% chance to lower the target's accuracy by 1 stage.",
-		shortDesc: "30% chance to lower the target's accuracy by 1.",
+		desc: "Has a 100% chance to lower the target's Attack by 1 stage.",
+		shortDesc: "100% chance to lower the target's Attack by 1.",
 	},
 	mudshot: {
 		name: "Mud Shot",
@@ -4364,13 +4364,13 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	mudslap: {
 		name: "Mud-Slap",
-		desc: "Has a 100% chance to lower the target's accuracy by 1 stage.",
-		shortDesc: "100% chance to lower the target's accuracy by 1.",
+		desc: "Has a 100% chance to lower the target's Attack by 2 stage.",
+		shortDesc: "100% chance to lower the target's Attack by 2.",
 	},
 	mudsport: {
 		name: "Mud Sport",
-		desc: "For 5 turns, all Electric-type attacks used by any active Pokemon have their power multiplied by 0.33. Fails if this effect is already active.",
-		shortDesc: "For 5 turns, Electric-type attacks have 1/3 power.",
+		desc: "The next electric moves directed at the user will not damage and raise the best stat from the user",
+		shortDesc: "electric moves will not damage. Raise the best stat from the user",
 		gen5: {
 			desc: "While the user is active, all Electric-type attacks used by any active Pokemon have their power multiplied by 0.33. Fails if this effect is already active for any Pokemon.",
 			shortDesc: "Weakens Electric-type attacks to 1/3 their power.",
@@ -5475,8 +5475,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	rototiller: {
 		name: "Rototiller",
-		desc: "Raises the Attack and Special Attack of all grounded Grass-type Pokemon on the field by 1 stage.",
-		shortDesc: "Raises Atk/Sp. Atk of grounded Grass types by 1.",
+		desc: "Raises attack and special attack by 1. Raises attack and Special attack from Grass types by 2.",
+		shortDesc: "Raises atk spa by 1. Raises Atk, Spa from Grass types by 2.",
 	},
 	round: {
 		name: "Round",
@@ -5522,8 +5522,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	sandattack: {
 		name: "Sand Attack",
-		desc: "Lowers the target's accuracy by 1 stage.",
-		shortDesc: "Lowers the target's accuracy by 1.",
+		shortDesc: "Causes the target to become confused.",
 	},
 	sandsearstorm: {
 		name: "Sandsear Storm",
@@ -6930,8 +6929,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	thousandwaves: {
 		name: "Thousand Waves",
-		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
-		shortDesc: "Hits adjacent foes. Prevents them from switching.",
+		desc: "Each hit increases the power by 15 to a maximun of 130.",
+		shortDesc: "Each hit increases the power by 15.",
 		gen7: {
 			desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
 		},
