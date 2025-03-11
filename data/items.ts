@@ -7750,10 +7750,51 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Piedra Antigua",
 		spritenum: 743,
 		onTakeItem(item, pokemon, source) {
-				return false;
+			 return false;
+		},
+		onStart(pokemon) {
+			 const stats = {
+				  atk: pokemon.getStat('atk', true, true),
+				  def: pokemon.getStat('def', true, true),
+				  spa: pokemon.getStat('spa', true, true),
+				  spd: pokemon.getStat('spd', true, true),
+				  spe: pokemon.getStat('spe', true, true),
+			 };
+			 const sortedStats = Object.entries(stats).sort((a, b) => b[1] - a[1]);
+			 this.effectState.bestStats = sortedStats.slice(0, 2).map(s => s[0]); // Store top 2 stats
+			 this.debug(`Piedra Antigua boosts: ${this.effectState.bestStats.join(', ')}`);
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			 if (!this.effectState.bestStats?.includes('atk')) return;
+			 this.debug('Piedra Antigua atk boost');
+			 return this.chainModify(1.5);
+		},
+		onModifyDefPriority: 6,
+		onModifyDef(def, pokemon) {
+			 if (!this.effectState.bestStats?.includes('def')) return;
+			 this.debug('Piedra Antigua def boost');
+			 return this.chainModify(1.5);
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			 if (!this.effectState.bestStats?.includes('spa')) return;
+			 this.debug('Piedra Antigua spa boost');
+			 return this.chainModify(1.5);
+		},
+		onModifySpDPriority: 6,
+		onModifySpD(spd, pokemon) {
+			 if (!this.effectState.bestStats?.includes('spd')) return;
+			 this.debug('Piedra Antigua spd boost');
+			 return this.chainModify(1.5);
+		},
+		onModifySpe(spe, pokemon) {
+			 if (!this.effectState.bestStats?.includes('spe')) return;
+			 this.debug('Piedra Antigua spe boost');
+			 return this.chainModify(1.5);
 		},
 		itemUser: ["Quagsire-Feudal", "Slowking-Feudal", "Wungsparce-Feudal", "Granbull-Feudal", "Qwilfish-Feudal", "Ursaring-Feudal", "Mantine-Feudal", "Kingdra-Feudal", "Donphan-Feudal", "Celebi-Feudal"],
 		num: -107,
 		gen: 8,
-	},
+  },
 };
