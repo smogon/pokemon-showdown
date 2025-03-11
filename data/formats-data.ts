@@ -5017,7 +5017,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	dragapult: {
 		tier: "OU",
 		doublesTier: "DUU",
-		natDexTier: "OU",
+		natDexTier: "Uber",
 	},
 	zacian: {
 		tier: "Uber",
