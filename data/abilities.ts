@@ -3319,7 +3319,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add("-fail", target, "unboost", "[from] ability: Clear Body", "[of] " + target);
+				this.add("-fail", target, "unboost", "[from] ability: Plus", "[of] " + target);
 			}
 		},
 		flags: {},
