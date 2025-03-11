@@ -1833,6 +1833,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyWeight(weighthg) {
 			return weighthg * 2;
 		},
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Steel') {
+				this.debug('Heavy Metal boost');
+				return this.chainModify(1.8);
+			}
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move.type === 'Steel') {
+				return priority - 1;
+			}
+		},
 		flags: {breakable: 1},
 		name: "Heavy Metal",
 		rating: 0,
@@ -2299,6 +2311,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	lightmetal: {
 		onModifyWeight(weighthg) {
 			return this.trunc(weighthg / 2);
+		},
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Steel') {
+				this.debug('Light Metal boost');
+				return this.chainModify(0.5);
+			}
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move.type === 'Steel') {
+				move.pranksterBoosted = true;
+				return priority + 1;
+			}
 		},
 		flags: {breakable: 1},
 		name: "Light Metal",
@@ -3094,6 +3119,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-immune', target, '[from] ability: Overcoat');
 				return null;
 			}
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			let mod = 1;
+			if (move.flags['bullet']) mod /= 1.5;
+			return this.chainModify(mod);
 		},
 		flags: {breakable: 1},
 		name: "Overcoat",
@@ -5045,6 +5075,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-activate', target, 'ability: Telepathy');
 				return null;
 			}
+		},
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			move.ignoreImmunity = true;
 		},
 		flags: {breakable: 1},
 		name: "Telepathy",
