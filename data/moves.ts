@@ -22699,7 +22699,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		bombatintarefinada: {
 			num: 0,
-			accuracy: 90,
+			accuracy: 85,
 			basePower: 40,
 			category: "Special",
 			name: "Bomba Tinta Refinada",
