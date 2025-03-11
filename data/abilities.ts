@@ -6645,4 +6645,31 @@ caparazoninestable: {
 	rating: 5,
 	num: -145,
 },
+letrassagradas: {
+	onPrepareHit(source, target, move) {
+		if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
+		const type = move.type;
+		if (type && type !== '???' && source.getTypes().join() !== type && (move.id === 'hiddenpower' || move.realMove === "Hidden Power")) {
+			if (!source.setType(type)) return;
+			this.effectState.protean = true;
+			this.add('-start', source, 'typechange', type, '[from] ability: Letras Sagradas');
+		}
+	},
+	onSwitchIn(pokemon) {
+		delete this.effectState.protean;
+	},
+	onTryMove(source, target, move) {
+		let type = "Normal"
+		if((target.hasType('Normal') || target.hasType('Rock') || target.hasType('Ice') || target.hasType('Steel') || target.hasType('Dark')) && !(target.hasType('Ghost') || target.hasType('Flying') || target.hasType('Poison') || target.hasType('Bug') || target.hasType('Psychic') || target.hasType('Fairy'))){
+			type = "Fighting"
+		}
+		 if(move.id === 'hiddenpower' || move.realMove === "Hidden Power"){
+			move.type = type
+		 }
+	},
+	flags: {},
+	name: "Letras Sagradas",
+	rating: 4,
+	num: -146,
+},
 };
