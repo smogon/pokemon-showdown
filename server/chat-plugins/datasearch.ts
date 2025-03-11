@@ -1851,10 +1851,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				orGroup.volatileStatus[target] = !isNotSearch;
 				continue;
 			} else if (target === 'trap' || target === 'trapping') {
-				orGroup.volatileStatus['partiallytrapped'] =
-					orGroup.volatileStatus['partiallytrapped'] ? orGroup.volatileStatus['partiallytrapped'] : !isNotSearch;
-				orGroup.volatileStatus['trapped'] =
-					orGroup.volatileStatus['trapped'] ? orGroup.volatileStatus['trapped'] : !isNotSearch;
+				for (const trappingType of ['partiallytrapped', 'trapped']) {
+					if (!orGroup.volatileStatus[trappingType]) orGroup.volatileStatus[trappingType] = !isNotSearch;
+				}
 				continue;
 			}
 
@@ -2101,7 +2100,6 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				if (searchStatus === 'brn' || searchStatus === 'frz' || searchStatus === 'par') {
 					canStatus = canStatus || moveid === 'triattack';
 				}
-
 				if (canStatus === alts.status[searchStatus]) {
 					matched = true;
 					break;
