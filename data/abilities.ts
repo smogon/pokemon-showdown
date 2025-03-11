@@ -3279,6 +3279,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-item', target, yourItem, '[from] ability: Pickpocket', '[of] ' + source);
 			}
 		},
+		onSourceDamagingHit(damage, target, source, move) {
+			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
+			if (target.hasItem('covertcloak')) return;
+			if (this.checkMoveMakesContact(move, target, source)) {
+				const r = this.random(100);
+				if (r < 34) {
+					const item = target.takeItem();
+				if (item) {
+					this.add('-enditem', target, item.name, '[from] ability: Pickpocket', '[of] ' + source);
+				}
+				}
+			}
+		},
 		flags: {},
 		name: "Pickpocket",
 		rating: 1,
