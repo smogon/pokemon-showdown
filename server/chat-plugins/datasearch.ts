@@ -1472,7 +1472,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		'zmove', 'maxmove', 'gmaxmove',
 	];
 	const allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
-	const allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped'];
+	const allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped', 'trapped'];
 	const allBoosts = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
 	const allTargets: { [k: string]: string } = {
 		oneally: 'adjacentAlly',
@@ -1652,15 +1652,6 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 					orGroup.other.recoil = !isNotSearch;
 				} else if ((orGroup.other.recoil && isNotSearch) || (!orGroup.other.recoil && !isNotSearch)) {
 					return { error: 'A search cannot both exclude and include recoil moves.' };
-				}
-				continue;
-			}
-
-			if (target === 'trap' || target === 'traps' || target === 'trapping') {
-				if (orGroup.other.trapping === undefined) {
-					orGroup.other.trapping = !isNotSearch;
-				} else if ((orGroup.other.trapping && isNotSearch) || (!orGroup.other.trapping && !isNotSearch)) {
-					return { error: 'A search cannot both exclude and include trapping moves.' };
 				}
 				continue;
 			}
@@ -1859,6 +1850,12 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				}
 				orGroup.volatileStatus[target] = !isNotSearch;
 				continue;
+			} else if (target === 'trap' || target === 'trapping') {
+				orGroup.volatileStatus['partiallytrapped'] =
+					orGroup.volatileStatus['partiallytrapped'] ? orGroup.volatileStatus['partiallytrapped'] : !isNotSearch;
+				orGroup.volatileStatus['trapped'] =
+					orGroup.volatileStatus['trapped'] ? orGroup.volatileStatus['trapped'] : !isNotSearch;
+				continue;
 			}
 
 			return { error: `'${oldTarget}' could not be found in any of the search categories.` };
@@ -2019,20 +2016,6 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				if (recoil && alts.other.recoil || !(recoil || alts.other.recoil)) matched = true;
 			}
 			if (matched) continue;
-			if (alts.other.trapping !== undefined) {
-				let onHitString = null;
-				if (move.onHit) {
-					onHitString = move.onHit.toString();
-				} else if (move.secondary?.onHit) {
-					onHitString = move.secondary.onHit.toString();
-				} else if (move.self?.onHit) {
-					onHitString = move.self.onHit.toString();
-				}
-				const trapping = move.volatileStatus === 'partiallytrapped' || move.condition?.onTrapPokemon ||
-					(onHitString && /\b(?:target|pokemon)\.addVolatile\("(?:partially){0,1}trapped",/.test(onHitString));
-				if (trapping && alts.other.trapping || !(trapping || alts.other.trapping)) matched = true;
-			}
-			if (matched) continue;
 			for (const prop in alts.property) {
 				if (typeof alts.property[prop].less === "number") {
 					if (
@@ -2118,6 +2101,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				if (searchStatus === 'brn' || searchStatus === 'frz' || searchStatus === 'par') {
 					canStatus = canStatus || moveid === 'triattack';
 				}
+
 				if (canStatus === alts.status[searchStatus]) {
 					matched = true;
 					break;
@@ -2126,11 +2110,23 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (matched) continue;
 
 			for (const searchStatus in alts.volatileStatus) {
-				const canStatus = !!(
+				let canStatus = !!(
 					(move.secondary && move.secondary.volatileStatus === searchStatus) ||
 					(move.secondaries?.some(entry => entry.volatileStatus === searchStatus)) ||
-					(move.volatileStatus === searchStatus)
+					(move.volatileStatus === searchStatus) ||
+					// This is slightly hacky, but none of the proper trapping moves in moves.ts mechanically use 'trapped' as
+					// a volatilestatus despite it being one.
+					(('trapped' === searchStatus) &&
+						(move.onHit && /\b(?:target|pokemon)\.addVolatile\("trapped",/.test(move.onHit.toString())) ||
+						(move.secondary?.onHit && /\b(?:target|pokemon)\.addVolatile\("trapped",/.test(move.secondary.onHit.toString())) ||
+						(move.self?.onHit && /\b(?:target|pokemon)\.addVolatile\("trapped",/.test(move.self.onHit.toString())))
 				);
+				if (searchStatus === 'partiallytrapped') {
+					canStatus = canStatus || moveid === 'gmaxcentiferno' || moveid === 'gmaxsandblast';
+				}
+				if (searchStatus === 'trapped') {
+					canStatus = canStatus || moveid === 'fairylock' || moveid === 'octolock';
+				}
 				if (canStatus === alts.volatileStatus[searchStatus]) {
 					matched = true;
 					break;
