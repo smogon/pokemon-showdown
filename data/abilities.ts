@@ -2516,6 +2516,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onImmunity(type, pokemon) {
 			if (type === 'frz') return false;
 		},
+		onSourceModifyDamage(damage, source, target, move) {
+			let mod = 1;
+			if (move.type === 'Grass') mod *= 0.66;
+			if (move.type === 'Ice') mod *= 0.66;
+			if (move.type === 'Water') mod *= 0.66;
+			return this.chainModify(mod);
+		},
 		flags: {breakable: 1},
 		name: "Magma Armor",
 		rating: 0.5,
