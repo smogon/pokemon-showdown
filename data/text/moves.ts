@@ -287,8 +287,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	aurorabeam: {
 		name: "Aurora Beam",
-		desc: "Has a 10% chance to lower the target's Attack by 1 stage.",
-		shortDesc: "10% chance to lower the target's Attack by 1.",
+		desc: "Has a 100% chance to lower the target's Attack by 1 stage.",
+		shortDesc: "100% chance to lower the target's Attack by 1.",
 		gen1: {
 			desc: "Has a 33% chance to lower the target's Attack by 1 stage.",
 			shortDesc: "33% chance to lower the target's Attack by 1.",
@@ -2316,8 +2316,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	freezeshock: {
 		name: "Freeze Shock",
-		desc: "Has a 30% chance to paralyze the target. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Charges turn 1. Hits turn 2. 30% paralyze.",
+		desc: "Has a 100% chance to lower the target's Attack by 1 stage. Has 30% chance to paralyze the target.",
+		shortDesc: "Lower the target's Attack by 1. 30% chance to paralyze the target.",
 
 		prepare: "  [POKEMON] became cloaked in a freezing light!",
 	},
@@ -3237,8 +3237,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	iceburn: {
 		name: "Ice Burn",
-		desc: "Has a 30% chance to burn the target. This attack charges on the first turn and executes on the second. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Charges turn 1. Hits turn 2. 30% burn.",
+		desc: "Has a 100% chance to lower the target's Special Attack by 1 stage. Has 30% chance to burn the target.",
+		shortDesc: "Lower the target's Spa by 1. 30% chance to burn the target.",
 
 		prepare: "  [POKEMON] became cloaked in freezing air!",
 	},
@@ -4829,8 +4829,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	powdersnow: {
 		name: "Powder Snow",
-		desc: "Has a 10% chance to freeze the target.",
-		shortDesc: "10% chance to freeze the foe(s).",
+		desc: "Has a 100% chance to frozen the target.",
+		shortDesc: "100% chance to frozen the target.",
 		gen2: {
 			shortDesc: "10% chance to freeze the target.",
 		},
@@ -6509,8 +6509,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	stuffcheeks: {
 		name: "Stuff Cheeks",
-		desc: "This move cannot be selected unless the user is holding a Berry. The user eats its Berry and raises its Defense by 2 stages. This effect is not prevented by the Klutz or Unnerve Abilities, or the effects of Embargo or Magic Room. Fails if the user is not holding a Berry.",
-		shortDesc: "Must hold Berry to use. User eats Berry, Def +2.",
+		desc: "This move cannot be selected unless the user is holding a Berry. The user eats its Berry and raises its Defense by 2 stages. This effect is not prevented by the Klutz or Unnerve Abilities, or the effects of Embargo or Magic Room. Fails if the user is not holding a Berry. Increase all stats by 1",
+		shortDesc: "Must hold Berry to use. User eats Berry, All stats +1.",
 	},
 	stunspore: {
 		name: "Stun Spore",
@@ -6737,7 +6737,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	tackle: {
 		name: "Tackle",
-		shortDesc: "No additional effect.",
+		desc: "Has a 40% chance to make the target flinch.",
+		shortDesc: "40% chance to make the target flinch.",
 	},
 	tachyoncutter: {
 		name: "Tachyon Cutter",
@@ -6783,8 +6784,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	takedown: {
 		name: "Take Down",
-		desc: "If the target lost HP, the user takes recoil damage equal to 1/4 the HP lost by the target, rounded half up, but not less than 1 HP.",
-		shortDesc: "Has 1/4 recoil.",
+		desc: "If the target lost HP, the user takes recoil damage equal to 1/4 the HP lost by the target, rounded half up, but not less than 1 HP. 30% chance to make the target flinch.",
+		shortDesc: "Has 1/4 recoil. 30% chance to make the target flinch.",
 		gen4: {
 			desc: "If the target lost HP, the user takes recoil damage equal to 1/4 the HP lost by the target, rounded down, but not less than 1 HP.",
 		},
@@ -6839,8 +6840,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	teatime: {
 		name: "Teatime",
-		desc: "All active Pokemon consume their held Berries. This effect is not prevented by substitutes, the Klutz or Unnerve Abilities, or the effects of Embargo or Magic Room. Fails if no active Pokemon is holding a Berry.",
-		shortDesc: "All active Pokemon consume held Berries.",
+		desc: "if the move is used on turn 3 or 5 it increases all stats.",
+		shortDesc: "if the move is used on turn 3 or 5 it increases all stats.",
 
 		activate: "  It's teatime! Everyone dug in to their Berries!",
 		fail: "  But nothing happened!",
@@ -7117,8 +7118,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	triattack: {
 		name: "Tri Attack",
-		desc: "Has a 20% chance to either burn, freeze, or paralyze the target.",
-		shortDesc: "20% chance to paralyze or burn or freeze target.",
+		desc: "Hits three times. The first hit 10% chance to Paralize, second hit 10% Burn, third hit 10% Frozen target.",
+		shortDesc: "Hits three times. 10% chance to PRZ or BRN or FRZ target.",
 		gen2: {
 			desc: "This move selects burn, freeze, or paralysis at random, and has a 20% chance to inflict the target with that status. If the target is frozen and burn was selected, it thaws out.",
 		},
@@ -7201,8 +7202,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	trumpcard: {
 		name: "Trump Card",
-		desc: "The power of this move is based on the amount of PP remaining after normal PP reduction and the Pressure Ability resolve. 200 power for 0 PP, 80 power for 1 PP, 60 power for 2 PP, 50 power for 3 PP, and 40 power for 4 or more PP.",
-		shortDesc: "More power the fewer PP this move has left.",
+		shortDesc: "Can be used once per battle.",
 	},
 	twinbeam: {
 		name: "Twin Beam",
@@ -7319,7 +7319,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	visegrip: {
 		name: "Vise Grip",
-		shortDesc: "No additional effect.",
+		desc: "Has a 30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch.",
 	},
 	vitalthrow: {
 		name: "Vital Throw",
@@ -7555,8 +7556,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	workup: {
 		name: "Work Up",
-		desc: "Raises the user's Attack and Special Attack by 1 stage.",
-		shortDesc: "Raises the user's Attack and Sp. Atk by 1.",
+		desc: "Raises the user's Attack and Special Attack by 1 stage. Double effect when life is below half",
+		shortDesc: "Raises the user's Attack and Sp. Atk by 1. Effect x2 if max HP below 50%",
 	},
 	worryseed: {
 		name: "Worry Seed",
@@ -7581,7 +7582,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	wrap: {
 		name: "Wrap",
 		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
-		shortDesc: "Traps and damages the target for 4-5 turns.",
+		shortDesc: "Hits 2-5 times in one turn. Prevents switching out.",
 		gen8: {
 			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		},
