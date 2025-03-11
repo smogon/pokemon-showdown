@@ -2739,6 +2739,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
+			if(pokemon.activeTurns < 9){
 			let stats: BoostID[] = [];
 			const boost: SparseBoostsTable = {};
 			let statPlus: BoostID;
@@ -2752,17 +2753,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (randomStat) boost[randomStat] = 2;
 
 			stats = [];
-			let statMinus: BoostID;
-			for (statMinus in pokemon.boosts) {
-				if (statMinus === 'accuracy' || statMinus === 'evasion') continue;
-				if (pokemon.boosts[statMinus] > -6 && statMinus !== randomStat) {
-					stats.push(statMinus);
-				}
-			}
-			randomStat = stats.length ? this.sample(stats) : undefined;
-			if (randomStat) boost[randomStat] = -1;
+			
 
 			this.boost(boost, pokemon, pokemon);
+		}
 		},
 		flags: {},
 		name: "Moody",
@@ -4819,6 +4813,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onDragOut(pokemon) {
 			this.add('-activate', pokemon, 'ability: Suction Cups');
 			return null;
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
+			if (target.hasItem('covertcloak')) return;
+			if (this.checkMoveMakesContact(move, target, source)) {
+				target.addVolatile('trapped', source, move, 'trapper')
+			}
 		},
 		flags: {breakable: 1},
 		name: "Suction Cups",
