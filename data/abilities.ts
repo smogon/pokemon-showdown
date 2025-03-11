@@ -779,6 +779,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			for (const ally of pokemon.adjacentAllies()) {
 				ally.clearBoosts();
+				ally.cureStatus();
 				this.add('-clearboost', ally, '[from] ability: Curious Medicine', '[of] ' + pokemon);
 			}
 		},
