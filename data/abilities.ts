@@ -6660,8 +6660,41 @@ letrassagradas: {
 	},
 	onTryMove(source, target, move) {
 		let type = "Normal"
+		if (move.type === type) return;
 		if((target.hasType('Normal') || target.hasType('Rock') || target.hasType('Ice') || target.hasType('Steel') || target.hasType('Dark')) && !(target.hasType('Ghost') || target.hasType('Flying') || target.hasType('Poison') || target.hasType('Bug') || target.hasType('Psychic') || target.hasType('Fairy'))){
 			type = "Fighting"
+		} else if((target.hasType('Bug') || target.hasType('Grass') || target.hasType('Ice') || target.hasType('Steel')) && !(target.hasType('Rock') || target.hasType('Fire') || target.hasType('Water') || target.hasType('Dragon'))) {
+			type = "Fire"
+		} else if((target.hasType('Ground') || target.hasType('Rock') || target.hasType('Fire')) && !(target.hasType('Water') || target.hasType('Grass') || target.hasType('Dragon'))) {
+			type = "Water"
+		} else if((target.hasType('Fighting') || target.hasType('Bug') || target.hasType('Grass')) && !(target.hasType('Rock') || target.hasType('Electric') || target.hasType('Steel'))) {
+			type = "Flying"
+		} else if((target.hasType('Ground') || target.hasType('Rock') || target.hasType('Water')) && !(target.hasType('Flying') || target.hasType('Poison') || target.hasType('Bug') || target.hasType('Fire') || target.hasType('Grass') || target.hasType('Dragon') || target.hasType('Steel'))) {
+			type = "Grass"
+		} else if((target.hasType('Grass') || target.hasType('Fairy')) && !(target.hasType('Poison') || target.hasType('Ground') || target.hasType('Rock') || target.hasType('Ghost') || target.hasType('Steel'))) {
+			type = "Poison"
+		} else if((target.hasType('Flying') || target.hasType('Water')) && !(target.hasType('Grass') || target.hasType('Electric') || target.hasType('Ground') || target.hasType('Dragon'))) {
+			type = "Electric"
+		} else if((target.hasType('Poison') || target.hasType('Rock') || target.hasType('Fire') || target.hasType('Electric')|| target.hasType('Steel')) && !(target.hasType('Bug') || target.hasType('Grass') || target.hasType('Flying'))) {
+			type = "Ground"
+		} else if((target.hasType('Fighting') || target.hasType('Poison')) && !(target.hasType('Psychic') || target.hasType('Steel') || target.hasType('Dark'))) {
+			type = "Psychic"
+		} else if((target.hasType('Flying') || target.hasType('Bug') || target.hasType('Fire') || target.hasType('Ice')) && !(target.hasType('Fighting') || target.hasType('Ground') || target.hasType('Steel'))) {
+			type = "Rock"
+		} else if((target.hasType('Flying') || target.hasType('Ground') || target.hasType('Grass') || target.hasType('Dragon')) && !(target.hasType('Water') || target.hasType('Ice') || target.hasType('Steel') || target.hasType('Fire'))) {
+			type = "Ice"
+		} else if((target.hasType('Grass') || target.hasType('Psychic') || target.hasType('Dark')) && !(target.hasType('Fighting') || target.hasType('Flying') || target.hasType('Poison') || target.hasType('Ghost') || target.hasType('Steel') || target.hasType('Fire') || target.hasType('Fairy'))) {
+			type = "Bug"
+		} else if((target.hasType('Dragon')) && !(target.hasType('Steel') || target.hasType('Fairy'))) {
+			type = "Dragon"
+		} else if((target.hasType('Ghost') || target.hasType('Psychic')) && !(target.hasType('Dark') || target.hasType('Normal'))) {
+			type = "Ghost"
+		} else if((target.hasType('Ghost') || target.hasType('Psychic')) && !(target.hasType('Dark') || target.hasType('Fighting') || target.hasType('Fairy'))) {
+			type = "Dark"
+		} else if((target.hasType('Rock') || target.hasType('Ice') || target.hasType('Fairy')) && !(target.hasType('Steel') || target.hasType('Fire') || target.hasType('Water') || target.hasType('Electric'))) {
+			type = "Steel"
+		} else if((target.hasType('Fighting') || target.hasType('Dragon') || target.hasType('Dark')) && !(target.hasType('Poison') || target.hasType('Steel') || target.hasType('Fire'))) {
+			type = "Fairy"
 		}
 		 if(move.id === 'hiddenpower' || move.realMove === "Hidden Power"){
 			move.type = type
