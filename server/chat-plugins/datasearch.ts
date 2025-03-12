@@ -9,6 +9,7 @@
  */
 
 import { ProcessManager, Utils } from '../../lib';
+import type { FormatData } from '../../sim/dex-formats';
 import { TeamValidator } from '../../sim/team-validator';
 import { Chat } from '../chat';
 
@@ -632,12 +633,28 @@ function getRule(target: string) {
 	return { splitTarget: arr, usedRule: ruleTerm ? toID(ruleTerm.split(/ ?= ?/)[1]) : '', count };
 }
 
+function prepareDexsearchValidator(usedMod: string | undefined, rule: FormatData, nationalSearch: boolean | null) {
+	const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9anythinggoes';
+	const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
+	const additionalRules = [];
+	if (!ruleTable.has(toID(rule.name))) additionalRules.push(toID(rule.name));
+	if (nationalSearch && !ruleTable.has('natdexmod')) additionalRules.push('natdexmod');
+	if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
+	return TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
+}
+
 function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
 	const searches: DexOrGroup[] = [];
 	const { splitTarget: remainingTargets, usedMod, count: modCount } = getMod(target);
 	const { splitTarget, usedRule, count: ruleCount } = getRule(remainingTargets.join(','));
 	if (modCount > 1 || ruleCount > 1) {
 		return { error: `You can't run searches for multiple mods or rules.` };
+	}
+
+	const validRules = ['stabmonsmovelegality', 'alphabetcupmovelegality', '350cupmod', 'flippedmod', 'scalemonsmod',
+		'badnboostedmod', 'reevolutionmod', 'convergencelegality'];
+	if (!validRules.includes(usedRule) || usedRule.endsWith('pokedex')) {
+		return { error: `Invalid rule, All valid rule names are: ${validRules}` };
 	}
 
 	const mod = Dex.mod(usedMod || 'base');
@@ -1162,6 +1179,15 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		};
 	}
 
+	// Prepare move validator and pokemonSource outside the hot loop
+	// but don't prepare them at all if there are no moves to check...
+	// These only ever get accessed if there are moves to filter by.
+	let validator;
+	let pokemonSource;
+	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0)) {
+		validator = prepareDexsearchValidator(usedMod, rule, nationalSearch);
+	}
+
 	const dex: { [k: string]: Species } = {};
 	for (const species of mod.species.all()) {
 		const megaSearchResult = megaSearch === null || megaSearch === !!species.isMega;
@@ -1169,6 +1195,13 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		const fullyEvolvedSearchResult = fullyEvolvedSearch === null || fullyEvolvedSearch !== species.nfe;
 		const restrictedSearchResult = restrictedSearch === null ||
 			restrictedSearch === species.tags.includes('Restricted Legendary');
+		let ruleResult = !rule?.banlist?.includes(species.name);
+
+		if (ruleResult && rule?.onValidateSet) {
+			if (!validator) validator = prepareDexsearchValidator(usedMod, rule, nationalSearch);
+			ruleResult = !rule.onValidateSet.call(validator,
+				{ name: species.name, species: species.id } as PokemonSet, validator.format, {}, {});
+		}
 
 		if (
 			species.gen <= mod.gen &&
@@ -1180,7 +1213,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			megaSearchResult &&
 			gmaxSearchResult &&
 			fullyEvolvedSearchResult &&
-			restrictedSearchResult
+			restrictedSearchResult &&
+			ruleResult
 		) {
 			dex[species.id] = rule?.onModifySpecies?.call({ dex: mod, clampIntRange: Utils.clampIntRange, toID } as Battle,
 				species) || species;
@@ -1194,20 +1228,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		Object.values(search).reduce(accumulateKeyCount, 0)
 	));
 
-	// Prepare move validator and pokemonSource outside the hot loop
-	// but don't prepare them at all if there are no moves to check...
-	// These only ever get accessed if there are moves to filter by.
-	let validator;
-	let pokemonSource;
-	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0)) {
-		const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9ou';
-		const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
-		const additionalRules = [];
-		if (!ruleTable.has(toID(rule.name))) additionalRules.push(toID(rule.name));
-		if (nationalSearch && !ruleTable.has('natdexmod')) additionalRules.push('natdexmod');
-		if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
-		validator = TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
-	}
 	for (const alts of searches) {
 		if (alts.skip) continue;
 		const altsMoves = Object.keys(alts.moves).map(x => mod.moves.get(x)).filter(move => move.gen <= mod.gen);
