@@ -168,15 +168,10 @@ export const Scripts: ModdedBattleScriptsData = {
 					pokemon.deductPP(pokemon.volatiles['twoturnmove'].originalMove, null, target);
 				}
 			}
-			if (
-				(pokemon.volatiles['partialtrappinglock'] && target !== pokemon.volatiles['partialtrappinglock'].locked) ||
-				autoHyperBeam
-			) {
-				const moveSlot = pokemon.moveSlots.find(ms => ms.id === move.id);
-				if (moveSlot && moveSlot.pp < 0) {
-					moveSlot.pp = 63;
-					this.battle.hint("In Gen 1, if a player is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
-				}
+			const moveSlot = pokemon.moveSlots.find(ms => ms.id === move.id);
+			if (moveSlot && moveSlot.pp < 0) {
+				moveSlot.pp += 64;
+				this.battle.hint("In Gen 1, if a player is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
 			}
 			this.useMove(move, pokemon, { target, sourceEffect });
 			// Restore PP if the move is the first turn of a charging move. Save the move from which PP should be deducted if the move succeeds.
