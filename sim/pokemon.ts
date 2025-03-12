@@ -1526,6 +1526,7 @@ export class Pokemon {
 		if (this.fainted || this.faintQueued) return 0;
 		const d = this.hp;
 		this.hp = 0;
+		this.status = '';
 		this.switchFlag = false;
 		this.faintQueued = true;
 		this.battle.faintQueue.push({
