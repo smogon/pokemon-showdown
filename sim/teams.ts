@@ -136,15 +136,19 @@ export const Teams = new class Teams {
 			// ability
 			buf += `|${this.packName(set.ability)}`;
 
-			// moves
-			buf += '|' + set.moves.map(this.packName).join(',');
-
-			// move PP
-			if (set.movePPUps?.some(n => n < 3)) {
-				buf += ';' + set.movePPUps.map(
-					n => n === 3 ? '' : `${n}`
-				).join(',');
+			// moves and PP Ups
+			let moves = '';
+			let PPUps = '';
+			for (let i = 0; i < set.moves.length; i++) {
+				moves += (i ? ',' : '|') + this.packName(set.moves[i]);
+				PPUps += (i ? ',' : ';');
+				const defaultPPUps = toID(set.moves[i]) === 'trumpcard' ? 0 : 3;
+				if ((set.movePPUps?.[i] ?? defaultPPUps) !== defaultPPUps) {
+					PPUps += set.movePPUps![i];
+				}
 			}
+			if (PPUps.length === set.moves.length) PPUps = '';
+			buf += moves + PPUps;
 
 			// nature
 			buf += `|${set.nature || ''}`;
@@ -277,13 +281,15 @@ export const Teams = new class Teams {
 			if (buf.charAt(j) === ';') {
 				j = buf.indexOf('|', i);
 				if (j < 0) return null;
-				set.movePPUps = buf.substring(i, j).split(',', 24).map(n => {
-					if (!n) return 3;
-					return parseInt(n);
-				});
+				const PPUps = buf.substring(i, j).split(',', 24);
+				for (let index = 0; index < set.moves.length; index++) {
+					const defaultPPUps = toID(set.moves[index]) === 'trumpcard' ? 0 : 3;
+					if (!set.movePPUps) set.movePPUps = [];
+					set.movePPUps.push(PPUps[index] ? parseInt(PPUps[index]) : defaultPPUps);
+				}
 				i = j + 1;
 			} else {
-				set.movePPUps = set.moves.map(() => 3);
+				set.movePPUps = set.moves.map(move => toID(move) === 'trumpcard' ? 0 : 3);
 			}
 
 			// nature
@@ -468,7 +474,8 @@ export const Teams = new class Teams {
 			if (move.startsWith(`Hidden Power `) && move.charAt(13) !== '[') {
 				move = `Hidden Power [${move.slice(13)}]`;
 			}
-			if ((set.movePPUps?.[i] ?? 3) < 3) {
+			const defaultPPUps = toID(set.moves[i]) === 'trumpcard' ? 0 : 3;
+			if ((set.movePPUps?.[i] ?? defaultPPUps) !== defaultPPUps) {
 				PPUps = ` (PP Ups: ${set.movePPUps![i]})`;
 			}
 			out += `- ${move}${PPUps}  \n`;
@@ -570,7 +577,8 @@ export const Teams = new class Teams {
 				}
 			}
 			if (!set.movePPUps) set.movePPUps = [];
-			set.movePPUps.push(parseInt(PPUps?.charAt(0)) || 3);
+			const defaultPPUps = toID(move) === 'trumpcard' ? 0 : 3;
+			set.movePPUps.push(parseInt(PPUps?.charAt(0)) ?? defaultPPUps);
 			if (move === 'Frustration' && set.happiness === undefined) {
 				set.happiness = 0;
 			}
