@@ -144,7 +144,7 @@ export const Teams = new class Teams {
 				PPUps += (i ? ',' : ';');
 				const defaultPPUps = toID(set.moves[i]) === 'trumpcard' ? 0 : 3;
 				if ((set.movePPUps?.[i] ?? defaultPPUps) !== defaultPPUps) {
-					PPUps += set.movePPUps![i];
+					PPUps += set.movePPUps![i].toString();
 				}
 			}
 			if (PPUps.length === set.moves.length) PPUps = '';
