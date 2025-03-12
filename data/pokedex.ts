@@ -4878,10 +4878,14 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 16,
 		color: "Red",
 		eggGroups: ["Water 1", "Field"],
+		otherFormes: ["Delibird-Holiday"],
+		formeOrder: ["Delibird", "Delibird-Holiday"],
 	},
 	delibirdholiday: {
 		num: 225,
 		name: "Delibird-Holiday",
+		baseSpecies: "Delibird",
+		forme: "Holiday",
 		types: ["Ice", "Flying"],
 		baseStats: {hp: 65, atk: 105, def: 90, spa: 105, spd: 90, spe: 80},
 		abilities: {0: "Snow Warning"},
@@ -4889,6 +4893,8 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 16,
 		color: "Red",
 		eggGroups: ["Water 1", "Field"],
+		requiredMove: "Present",
+		battleOnly: "Delibird",
 	},
 	mantine: {
 		num: 226,
