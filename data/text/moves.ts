@@ -6,8 +6,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	absorb: {
 		name: "Absorb",
-		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
-		shortDesc: "User recovers 50% of the damage dealt.",
+		desc: "The user recovers 3/4 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
+		shortDesc: "User recovers 75% of the damage dealt.",
 		gen4: {
 			desc: "The user recovers 1/2 the HP lost by the target, rounded down. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded down.",
 		},
@@ -670,8 +670,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	branchpoke: {
 		name: "Branch Poke",
-		desc: "No additional effect.",
-		shortDesc: "No additional effect.",
+		desc: "Has a 100% chance to lower the target's Defense by 2 stage.",
+		shortDesc: "100% chance to lower the target's Defense by 2.",
 	},
 	bravebird: {
 		name: "Brave Bird",
@@ -913,7 +913,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	chloroblast: {
 		name: "Chloroblast",
-		desc: "If this move is successful, the user loses 1/4 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
+		desc: "Whether or not this move is successful and even if it would cause fainting, the user loses 1/4 of its maximum HP, rounded up, unless the user has the Magic Guard Ability.",
 		shortDesc: "User loses 25% max HP.",
 	},
 	circlethrow: {
@@ -2694,8 +2694,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	grasspledge: {
 		name: "Grass Pledge",
-		desc: "If one of the user's allies chose to use Fire Pledge or Water Pledge this turn and has not moved yet, it takes its turn immediately after the user and the user's move does nothing. If combined with Fire Pledge, the ally uses Fire Pledge with 150 power and a sea of fire appears on the target's side for 4 turns, which causes damage to non-Fire types equal to 1/8 of their maximum HP, rounded down, at the end of each turn during effect, including the last turn. If combined with Water Pledge, the ally uses Grass Pledge with 150 power and a swamp appears on the target's side for 4 turns, which quarters the Speed of each Pokemon on that side. When used as a combined move, this move gains STAB no matter what the user's type is. This move does not consume the user's Grass Gem.",
-		shortDesc: "Use with Fire or Water Pledge for added effect.",
+		desc: "When used, reduces the power of the next water moves in the same turn",
+		shortDesc: "When used, reduces the power of water moves.",
 
 		activate: "#waterpledge",
 		start: "  A swamp enveloped [TEAM]!",
@@ -3351,8 +3351,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	ingrain: {
 		name: "Ingrain",
-		desc: "The user has 1/16 of its maximum HP restored at the end of each turn, but it is prevented from switching out and other Pokemon cannot force the user to switch out. The user can still switch out if it uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. If the user leaves the field using Baton Pass, the replacement will remain trapped and still receive the healing effect. During the effect, the user can be hit normally by Ground-type attacks and be affected by Spikes, Toxic Spikes, and Sticky Web, even if the user is a Flying type or has the Levitate Ability.",
-		shortDesc: "Traps/grounds user; heals 1/16 max HP per turn.",
+		desc: "The user has 1/6 of its maximum HP restored at the end of each turn, but it is prevented from switching out and other Pokemon cannot force the user to switch out. The user can still switch out if it uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. If the user leaves the field using Baton Pass, the replacement will remain trapped and still receive the healing effect. During the effect, the user can be hit normally by Ground-type attacks and be affected by Spikes, Toxic Spikes, and Sticky Web, even if the user is a Flying type or has the Levitate Ability.",
+		shortDesc: "Traps/grounds user; heals 1/6 max HP per turn.",
 		gen7: {
 			desc: "The user has 1/16 of its maximum HP restored at the end of each turn, but it is prevented from switching out and other Pokemon cannot force the user to switch out. The user can still switch out if it uses Baton Pass, Parting Shot, U-turn, or Volt Switch. If the user leaves the field using Baton Pass, the replacement will remain trapped and still receive the healing effect. During the effect, the user can be hit normally by Ground-type attacks and be affected by Spikes, Toxic Spikes, and Sticky Web, even if the user is a Flying type or has the Levitate Ability.",
 		},
@@ -3451,8 +3451,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	junglehealing: {
 		name: "Jungle Healing",
-		desc: "Each Pokemon on the user's side restores 1/4 of its maximum HP, rounded half up, and has its status condition cured.",
-		shortDesc: "User and allies: healed 1/4 max HP, status cured.",
+		desc: "Each Pokemon on the user's side restores 1/2 of its maximum HP, rounded half up, and has its status condition cured.",
+		shortDesc: "User and allies: healed 1/2 max HP, status cured.",
 	},
 	karatechop: {
 		name: "Karate Chop",
@@ -3541,7 +3541,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	leafage: {
 		name: "Leafage",
-		shortDesc: "No additional effect.",
+		shortDesc: "Hit first.",
 	},
 	leafblade: {
 		name: "Leaf Blade",
@@ -3731,7 +3731,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	magicalleaf: {
 		name: "Magical Leaf",
-		shortDesc: "This move does not check accuracy.",
+		desc: "Lowers the target's Special Attack by 1 stage.",
+		shortDesc: "Lowers the target's Spa by 1.",
 	},
 	magicaltorque: {
 		name: "Magical Torque",
@@ -4442,8 +4443,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	needlearm: {
 		name: "Needle Arm",
-		desc: "Has a 30% chance to make the target flinch.",
-		shortDesc: "30% chance to make the target flinch.",
+		shortDesc: "30% chance to make the target flinch. Ignore stage changes",
 		gen3: {
 			desc: "Has a 30% chance to make the target flinch. Damage doubles if the target has used Minimize while active.",
 		},
@@ -5643,8 +5643,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	seedbomb: {
 		name: "Seed Bomb",
-		desc: "Power doubles if the target has a non-volatile status condition.",
-		shortDesc: "Power doubles if the target has a status ailment.",
+		desc: "Power x1.5 if the target has a non-volatile status condition.",
+		shortDesc: "Power x1.5 if the target has a status ailment.",
 	},
 	seedflare: {
 		name: "Seed Flare",
@@ -6034,8 +6034,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	snaptrap: {
 		name: "Snap Trap",
-		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
-		shortDesc: "Traps and damages the target for 4-5 turns.",
+		desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Shed Tail, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Mortal Spin, Rapid Spin, or Substitute successfully. This effect is not stackable or reset by using this or another binding move. Change to primary user type",
+		shortDesc: "Traps and damages the target for 4-5 turns. Change to user type",
 		gen8: {
 			desc: "Prevents the target from switching for four or five turns (seven turns if the user is holding Grip Claw). Causes damage to the target equal to 1/8 of its maximum HP (1/6 if the user is holding Binding Band), rounded down, at the end of each turn during effect. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field, or if the target uses Rapid Spin or Substitute successfully. This effect is not stackable or reset by using this or another binding move.",
 		},
@@ -6187,8 +6187,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	spicyextract: {
 		name: "Spicy Extract",
-		desc: "Raises the target's Attack by 2 stages and lowers its Defense by 2 stages.",
-		shortDesc: "Raises target's Atk by 2 and lowers its Def by 2.",
+		desc: "Lowers the user's Defense and Special Defense by 3 stage. Raises the user's Attack and Special Attack by 3 stages.",
+		shortDesc: "Lowers Def, SpD by 3; raises Atk, SpA by 3.",
 	},
 	spiderweb: {
 		name: "Spider Web",
@@ -7314,7 +7314,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	vinewhip: {
 		name: "Vine Whip",
-		shortDesc: "No additional effect.",
+		shortDesc: "Hits twice.",
 	},
 	visegrip: {
 		name: "Vise Grip",
@@ -7560,8 +7560,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	worryseed: {
 		name: "Worry Seed",
-		desc: "Causes the target's Ability to become Insomnia. Fails if the target's Ability is As One, Battle Bond, Comatose, Disguise, Gulp Missile, Ice Face, Insomnia, Multitype, Power Construct, RKS System, Schooling, Shields Down, Stance Change, Tera Shift, Truant, Zen Mode, or Zero to Hero.",
-		shortDesc: "The target's Ability becomes Insomnia.",
+		desc: "Causes the target's Ability to become Insomnia. Fails if the target's Ability is As One, Battle Bond, Comatose, Disguise, Gulp Missile, Ice Face, Insomnia, Multitype, Power Construct, RKS System, Schooling, Shields Down, Stance Change, Tera Shift, Truant, Zen Mode, or Zero to Hero. Reduces all target stats",
+		shortDesc: "The target's Ability becomes Insomnia. Reduces all target stats",
 		gen8: {
 			desc: "Causes the target's Ability to become Insomnia. Fails if the target's Ability is As One, Battle Bond, Comatose, Disguise, Gulp Missile, Ice Face, Insomnia, Multitype, Power Construct, RKS System, Schooling, Shields Down, Stance Change, Truant, or Zen Mode.",
 		},
