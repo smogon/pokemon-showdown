@@ -159,10 +159,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			let lockedMove = this.battle.runEvent('LockMove', pokemon);
 			if (lockedMove === true) lockedMove = false;
-			if (
-				!lockedMove &&
-				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)
-			) {
+			if (!lockedMove) {
 				pokemon.deductPP(move, null, target);
 			} else {
 				sourceEffect = move;
