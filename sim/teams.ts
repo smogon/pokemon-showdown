@@ -137,10 +137,10 @@ export const Teams = new class Teams {
 			buf += `|${this.packName(set.ability)}`;
 
 			// moves and PP Ups
-			let moves = '';
+			let moves = '|';
 			let PPUps = '';
 			for (let i = 0; i < set.moves.length; i++) {
-				moves += (i ? ',' : '|') + this.packName(set.moves[i]);
+				moves += (i ? ',' : '') + this.packName(set.moves[i]);
 				PPUps += (i ? ',' : ';');
 				const defaultPPUps = toID(set.moves[i]) === 'trumpcard' ? 0 : 3;
 				if ((set.movePPUps?.[i] ?? defaultPPUps) !== defaultPPUps) {
