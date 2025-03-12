@@ -618,39 +618,30 @@ function getMod(target: string) {
 	return { splitTarget: arr, usedMod: modTerm ? toID(modTerm.split(/ ?= ?/)[1]) : undefined, count };
 }
 
-function getRule(target: string, ruleType: string) {
+function getRule(target: string) {
 	const arr = target.split(',').map(x => x.trim());
-	const ruleTerms: string[] = [];
-	const ruleTypeID = toID(ruleType);
-	arr.forEach(x => {
+	const ruleTerm = arr.find(x => {
 		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
-		if (sanitizedStr.startsWith(`${ruleTypeID}=`) && Object.values(Dex.data.Rulesets)
-			.filter(rule => rule.effectType !== ruleType)
-			.filter(rule => rule.id === toID(sanitizedStr.split('=')[1]))) {
-			arr.splice(arr.indexOf(x), 1);
-			ruleTerms.push(sanitizedStr.split('=')[1]);
-		}
+		return sanitizedStr.startsWith('rule=') && Dex.data.Rulesets[toID(sanitizedStr.split('=')[1])];
 	});
-	return { splitTarget: arr, usedRules: ruleTerms, count: ruleTerms.length };
+	const count = arr.filter(x => {
+		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
+		return sanitizedStr.startsWith('rule=');
+	}).length;
+	if (ruleTerm) arr.splice(arr.indexOf(ruleTerm), 1);
+	return { splitTarget: arr, usedRule: ruleTerm ? toID(ruleTerm.split(/ ?= ?/)[1]) : '', count };
 }
 
 function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
 	const searches: DexOrGroup[] = [];
-	const { splitTarget: remainingTargets, usedMod, count: c } = getMod(target);
-	if (c > 1) {
-		return { error: `You can't run searches for multiple mods.` };
+	const { splitTarget: remainingTargets, usedMod, count: modCount } = getMod(target);
+	const { splitTarget, usedRule, count: ruleCount } = getRule(remainingTargets.join(','));
+	if (modCount > 1 || ruleCount > 1) {
+		return { error: `You can't run searches for multiple mods or rules.` };
 	}
 
-	let tempTargets = remainingTargets;
-	const rules = [];
-	for (const ruleType of ['Validator Rule', 'Rule']) {
-		const { splitTarget, usedRules } = getRule(tempTargets.join(','), ruleType);
-		tempTargets = splitTarget;
-		rules.push(usedRules);
-	}
-
-	const splitTarget = tempTargets;
 	const mod = Dex.mod(usedMod || 'base');
+	const rule = Dex.data.Rulesets[usedRule];
 	const allTiers: { [k: string]: TierTypes.Singles | TierTypes.Other } = Object.assign(Object.create(null), {
 		anythinggoes: 'AG', ag: 'AG',
 		uber: 'Uber', ubers: 'Uber', ou: 'OU',
@@ -1191,7 +1182,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			fullyEvolvedSearchResult &&
 			restrictedSearchResult
 		) {
-			dex[species.id] = species;
+			dex[species.id] = rule?.onModifySpecies?.call({ dex: mod, clampIntRange: Utils.clampIntRange, toID } as Battle,
+				species) || species;
 		}
 	}
 
@@ -1207,15 +1199,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	// These only ever get accessed if there are moves to filter by.
 	let validator;
 	let pokemonSource;
-	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0) || rules[0]) {
-		const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9anythinggoes';
+	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0)) {
+		const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9ou';
 		const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
 		const additionalRules = [];
-		if (rules[0]) {
-			for (const rule of rules[0]) {
-				if (!ruleTable.has(rule)) additionalRules.push(rule);
-			}
-		}
+		if (!ruleTable.has(toID(rule.name))) additionalRules.push(toID(rule.name));
 		if (nationalSearch && !ruleTable.has('natdexmod')) additionalRules.push('natdexmod');
 		if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
 		validator = TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
@@ -1386,7 +1374,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			for (const move of altsMoves) {
 				pokemonSource = validator?.allSources();
 				if (validator && (!validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id] ||
-					(rules[0] && !validator.omCheckCanLearn(move, dex[mon], pokemonSource)))) {
+					(rule && !validator.omCheckCanLearn(move, dex[mon], pokemonSource)))) {
 					matched = true;
 					break;
 				}
@@ -1400,42 +1388,41 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 	const stat = sort?.slice(0, -1);
 
-	function getSortValue(name: string) {
+	function getSortValue(species: Species) {
 		if (!stat) return 0;
-		const mon = mod.species.get(name);
+
 		if (stat === 'bst') {
-			return mon.bst;
+			return species.bst;
 		} else if (stat === 'weight') {
-			return mon.weighthg;
+			return species.weighthg;
 		} else if (stat === 'height') {
-			return mon.heightm;
+			return species.heightm;
 		} else if (stat === 'gen') {
-			return mon.gen;
+			return species.gen;
 		} else {
-			return mon.baseStats[stat as StatID];
+			return species.baseStats[stat as StatID];
 		}
 	}
 
-	let results: string[] = [];
-	for (const mon of Object.keys(dex).sort()) {
-		if (singleTypeSearch !== null && (dex[mon].types.length === 1) !== singleTypeSearch) continue;
-		const isRegionalForm = (["Alola", "Galar", "Hisui"].includes(dex[mon].forme) || dex[mon].forme.startsWith("Paldea")) &&
-			dex[mon].baseSpecies !== "Pikachu";
-		const maskForm = dex[mon].baseSpecies === "Ogerpon" && !dex[mon].forme.endsWith("Tera");
+	let results: Species[] = [];
+	for (const mon of Object.values(dex).sort()) {
+		if (singleTypeSearch !== null && (mon.types.length === 1) !== singleTypeSearch) continue;
+		const isRegionalForm = (["Alola", "Galar", "Hisui"].includes(mon.forme) || mon.forme.startsWith("Paldea")) &&
+			mon.baseSpecies !== "Pikachu";
+		const maskForm = mon.baseSpecies === "Ogerpon" && !mon.forme.endsWith("Tera");
 		const allowGmax = (gmaxSearch || tierSearch);
-		if (!isRegionalForm && !maskForm && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies) &&
-			getSortValue(mon) === getSortValue(dex[mon].baseSpecies)) continue;
-		const teraFormeChangesFrom = dex[mon].forme.endsWith("Tera") ? !Array.isArray(dex[mon].battleOnly) ?
-			dex[mon].battleOnly! : null : null;
-		if (teraFormeChangesFrom && results.includes(teraFormeChangesFrom) &&
-			getSortValue(mon) === getSortValue(teraFormeChangesFrom)) continue;
-		if (dex[mon].isNonstandard === 'Gigantamax' && !allowGmax) continue;
-		results.push(dex[mon].name);
+		if (!isRegionalForm && !maskForm && mon.baseSpecies && results.includes(dex[mon.baseSpecies]) &&
+			getSortValue(mon) === getSortValue(dex[mon.baseSpecies])) continue;
+		const teraFormeChangesFrom = mon.forme.endsWith("Tera") ? !Array.isArray(mon.battleOnly) ?
+			mon.battleOnly! : null : null;
+		if (teraFormeChangesFrom && results.includes(dex[teraFormeChangesFrom]) &&
+			getSortValue(mon) === getSortValue(dex[teraFormeChangesFrom])) continue;
+		if (mon.isNonstandard === 'Gigantamax' && !allowGmax) continue;
+		results.push(mon);
 	}
 
 	if (usedMod === 'gen7letsgo') {
-		results = results.filter(name => {
-			const species = mod.species.get(name);
+		results = results.filter(species => {
 			return (species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
 				(!species.forme || (['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme) &&
 					species.name !== 'Pikachu-Alola'));
@@ -1443,8 +1430,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 
 	if (usedMod === 'gen8bdsp') {
-		results = results.filter(name => {
-			const species = mod.species.get(name);
+		results = results.filter(species => {
 			if (species.id === 'pichuspikyeared') return false;
 			if (capSearch) return species.gen <= 4;
 			return species.gen <= 4 && species.num >= 1;
@@ -1460,7 +1446,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		results.sort();
 		if (sort) {
 			const direction = sort.slice(-1);
-			Utils.sortBy(results, name => getSortValue(name) * (direction === '+' ? 1 : -1));
+			Utils.sortBy(results, species => getSortValue(species) * (direction === '+' ? 1 : -1));
 		}
 		let notShown = 0;
 		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
@@ -1468,7 +1454,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
 		resultsStr += results.map(
-			result => `<a href="//${Config.routes.dex}/pokemon/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result}" style="vertical-align:-7px;margin:-2px" />${result}</a>`
+			result => `<a href="//${Config.routes.dex}/pokemon/${toID(result.name)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result.name}" style="vertical-align:-7px;margin:-2px" />${result.name}</a>`
 		).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
