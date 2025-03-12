@@ -474,7 +474,7 @@ export const Teams = new class Teams {
 			if (move.startsWith(`Hidden Power `) && move.charAt(13) !== '[') {
 				move = `Hidden Power [${move.slice(13)}]`;
 			}
-			const defaultPPUps = toID(set.moves[i]) === 'trumpcard' ? 0 : 3;
+			const defaultPPUps = toID(move) === 'trumpcard' ? 0 : 3;
 			if ((set.movePPUps?.[i] ?? defaultPPUps) !== defaultPPUps) {
 				PPUps = ` (PP Ups: ${set.movePPUps![i]})`;
 			}
