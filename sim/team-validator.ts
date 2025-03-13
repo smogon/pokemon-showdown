@@ -535,11 +535,14 @@ export class TeamValidator {
 				tierSpecies = dex.species.get('Zacian-Crowned');
 			} else if (item.id === 'rustedshield' && species.id === 'zamazenta') {
 				tierSpecies = dex.species.get('Zamazenta-Crowned');
+			} else if (item.id === 'piedraantigua' && (species.id === 'quagsire' || species.id === 'slowking' || species.id === 'wungsparce' || species.id === 'granbull' || species.id === 'qwilfish' || species.id === 'ursaring' || species.id === 'mantine' || species.id === 'kingdra' || species.id === 'donphan' || species.id === 'celebi')) {
+				let name = species.baseSpecies + "-Feudal"
+				tierSpecies = dex.species.get(name);
 			}
 		}
 		if (ruleTable.has('obtainableformes')) {
 			const canTotem = dex.gen <= 7 || ruleTable.has('+pokemontag:past');
-			if (item.id === 'totemgigante' && (species.id === 'Raticate-Alola' || species.id === 'Marowak-Alola' || species.id === 'Electrode-Hisui' || species.id === 'Arcanine-Hisui')) {
+			if (item.id === 'totemgigante' && (species.id === 'Raticate-Alola' || species.id === 'Marowak-Alola' || species.id === 'Electrode-Hisui' || species.id === 'Arcanine-Hisui' || species.id === 'Xatu')) {
 				tierSpecies = dex.species.get(species.id + '-Totem');
 			}
 		}

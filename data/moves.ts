@@ -14380,6 +14380,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onHit(target, source, move) {
+			if (source.baseSpecies.baseSpecies === 'Delibird' && !source.transformed) {
+				move.willChangeForme = true;
+			}
 			if (source.isAlly(target)) {
 				if (!this.heal(Math.floor(target.baseMaxhp * 0.5))) {
 					if (target.volatiles['healblock'] && target.hp !== target.maxhp) {
@@ -14393,9 +14396,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			}
 		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (move.willChangeForme) {
+				const meloettaForme = pokemon.species.id === 'delibirdholiday' ? '' : '-Holiday';
+				pokemon.formeChange('Delibird' + meloettaForme, this.effect, false, '0', '[msg]');
+			}
+		},
 		secondary: null,
 		target: "normal",
-		type: "Normal",
+		type: "Ice",
 		contestType: "Cute",
 	},
 	prismaticlaser: {
