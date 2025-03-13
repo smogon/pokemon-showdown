@@ -578,8 +578,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	blueflare: {
 		name: "Blue Flare",
-		desc: "Has a 20% chance to burn the target.",
-		shortDesc: "20% chance to burn the target.",
+		desc: "Has a 30% chance to burn the target. Cannot be selected the turn after it's used.",
+		shortDesc: "30% chance to BRN the target. Cannot be selected the turn after it's used.",
 	},
 	bodypress: {
 		name: "Body Press",
@@ -798,8 +798,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	burnup: {
 		name: "Burn Up",
-		desc: "Fails unless the user is a Fire type. If this move is successful and the user is not Terastallized, the user's Fire type becomes typeless as long as it remains active.",
-		shortDesc: "User's Fire type becomes typeless; must be Fire.",
+		shortDesc: "The category changes depending on the user's attack.",
 		gen8: {
 			desc: "Fails unless the user is a Fire type. If this move is successful, the user's Fire type becomes typeless as long as it remains active.",
 		},
@@ -1232,7 +1231,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	curse: {
 		name: "Curse",
-		desc: "If the user is not a Ghost type, lowers the user's Speed by 1 stage and raises the user's Attack and Defense by 1 stage. If the user is a Ghost type, the user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. Fails if there is no target or if the target is already affected.",
+		desc: "If the user is not a Ghost type, lowers the user's Speed by 1 stage and raises the user's Attack and Defense by 1 stage. If the user is a Ghost type, the user loses 1/4 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. Fails if there is no target or if the target is already affected.",
 		shortDesc: "Curses if Ghost, else -1 Spe, +1 Atk, +1 Def.",
 		gen4: {
 			desc: "If the user is not a Ghost type, lowers the user's Speed by 1 stage and raises the user's Attack and Defense by 1 stage. If the user is a Ghost type, the user loses 1/2 of its maximum HP, rounded down and even if it would cause fainting, in exchange for the target losing 1/4 of its maximum HP, rounded down, at the end of each turn while it is active. If the target uses Baton Pass, the replacement will continue to be affected. Fails if there is no target or if the target is already affected or has a substitute.",
@@ -1634,7 +1633,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	drillpeck: {
 		name: "Drill Peck",
-		shortDesc: "No additional effect.",
+		desc: "Has a higher chance for a critical hit.",
+		shortDesc: "High critical hit ratio.",
 	},
 	drillrun: {
 		name: "Drill Run",
@@ -1950,8 +1950,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	featherdance: {
 		name: "Feather Dance",
-		desc: "Lowers the target's Attack by 2 stages.",
-		shortDesc: "Lowers the target's Attack by 2.",
+		desc: "Raises the user's Special Attack and Speed by 1 stage.",
+		shortDesc: "Raises the user's  Special Attack and Speed by 1.",
 	},
 	feint: {
 		name: "Feint",
@@ -2033,8 +2033,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	firepledge: {
 		name: "Fire Pledge",
-		desc: "If one of the user's allies chose to use Grass Pledge or Water Pledge this turn and has not moved yet, it takes its turn immediately after the user and the user's move does nothing. If combined with Grass Pledge, the ally uses Fire Pledge with 150 power and a sea of fire appears on the target's side for 4 turns, which causes damage to non-Fire types equal to 1/8 of their maximum HP, rounded down, at the end of each turn during effect, including the last turn. If combined with Water Pledge, the ally uses Water Pledge with 150 power and a rainbow appears on the user's side for 4 turns, which doubles secondary effect chances and stacks with the Serene Grace Ability, except effects that cause flinching can only have their chance doubled once. When used as a combined move, this move gains STAB no matter what the user's type is. This move does not consume the user's Fire Gem.",
-		shortDesc: "Use with Grass or Water Pledge for added effect.",
+		desc: "When used, reduces the power of the next grass moves in the same turn",
+		shortDesc: "When used, reduces the power of grass moves.",
 
 		activate: "#waterpledge",
 		start: "  A sea of fire enveloped [TEAM]!",
@@ -2112,8 +2112,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	flameburst: {
 		name: "Flame Burst",
-		desc: "If this move is successful, the target's ally loses 1/16 of its maximum HP, rounded down, unless it has the Magic Guard Ability.",
-		shortDesc: "Damages Pokemon next to the target as well.",
+		shortDesc: "Bypasses protection and substitute without breaking it.",
 		gen6: {
 			desc: "If this move is successful, each ally adjacent to the target loses 1/16 of its maximum HP, rounded down, unless it has the Magic Guard Ability.",
 		},
@@ -2127,8 +2126,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	flamewheel: {
 		name: "Flame Wheel",
-		desc: "Has a 10% chance to burn the target.",
-		shortDesc: "10% chance to burn the target. Thaws user.",
+		desc: "Has a 30% chance to burn the target.",
+		shortDesc: "30% chance to burn the target. Thaws user.",
 	},
 	flamethrower: {
 		name: "Flamethrower",
@@ -2811,8 +2810,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	gust: {
 		name: "Gust",
-		desc: "Power doubles if the target is using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop.",
-		shortDesc: "Power doubles during Bounce, Fly, and Sky Drop.",
+		desc: "Hit first.",
+		shortDesc: "Hit first.",
 		gen4: {
 			desc: "Power doubles if the target is using Bounce or Fly.",
 			shortDesc: "Power doubles during Bounce and Fly.",
@@ -3324,8 +3323,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	infernalparade: {
 		name: "Infernal Parade",
-		desc: "Has a 30% chance to burn the target. Power doubles if the target has a non-volatile status condition.",
-		shortDesc: "30% burn. 2x power if target is already statused.",
+		desc: "Has a 20% chance to burn the target.",
+		shortDesc: "20% burn.",
 	},
 	inferno: {
 		name: "Inferno",
@@ -3531,8 +3530,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	lastrespects: {
 		name: "Last Respects",
-		desc: "Power is equal to 50+(X*50), where X is the total number of times any Pokemon has fainted on the user's side, and X cannot be greater than 100.",
-		shortDesc: "+50 power for each time a party member fainted.",
+		desc: "Power is equal to 50+(X*25), where X is the total number of times any Pokemon has fainted on the user's side, and X cannot be greater than 100.",
+		shortDesc: "+25 power for each time a party member fainted.",
 	},
 	lavaplume: {
 		name: "Lava Plume",
@@ -3601,8 +3600,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	lick: {
 		name: "Lick",
-		desc: "Has a 30% chance to paralyze the target.",
-		shortDesc: "30% chance to paralyze the target.",
+		desc: "Has a 30% chance to curse the target.",
+		shortDesc: "30% chance to curse the target.",
 	},
 	lifedew: {
 		name: "Life Dew",
@@ -4150,8 +4149,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	mindblown: {
 		name: "Mind Blown",
-		desc: "Whether or not this move is successful and even if it would cause fainting, the user loses 1/2 of its maximum HP, rounded up, unless the user has the Magic Guard Ability. This move is prevented from executing and the user does not lose HP if any active Pokemon has the Damp Ability, or if this move is Fire type and the user is affected by Powder or the weather is Primordial Sea.",
-		shortDesc: "User loses 50% max HP. Hits adjacent Pokemon.",
+		desc: "Whether or not this move is successful and even if it would cause fainting, the user loses 1/4 of its maximum HP, rounded up, unless the user has the Magic Guard Ability. This move is prevented from executing and the user does not lose HP if any active Pokemon has the Damp Ability, or if this move is Fire type and the user is affected by Powder or the weather is Primordial Sea.",
+		shortDesc: "User loses 25% max HP. Hits adjacent Pokemon.",
 
 		damage: "  ([POKEMON] cut its own HP to power up its move!)",
 	},
@@ -4225,8 +4224,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	mirrormove: {
 		name: "Mirror Move",
-		desc: "The user uses the last move used by the target. The copied move is used against that target, if possible. Fails if the target has not made a move, or if the last move used cannot be copied by this move.",
-		shortDesc: "User uses the target's last used move against it.",
+		desc: "The target's stat stages are stolen from it and applied to the user before dealing damage.",
+		shortDesc: "Steals target's boosts before dealing damage.",
 		gen4: {
 			desc: "The user uses the last move that successfully targeted the user. The copied move is used with no specific target. Fails if no move has targeted the user, if the move was called by another move, if the move is Encore, or if the move cannot be copied by this move.",
 		},
@@ -4556,8 +4555,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	ominouswind: {
 		name: "Ominous Wind",
-		desc: "Has a 10% chance to raise the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
-		shortDesc: "10% chance to raise all stats by 1 (not acc/eva).",
+		desc: "50% more power in flying pokemon.",
+		shortDesc: "50% more power in flying pokemon",
 	},
 	orderup: {
 		name: "Order Up",
@@ -4644,7 +4643,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	peck: {
 		name: "Peck",
-		shortDesc: "No additional effect.",
+		shortDesc: "Hit first.",
 	},
 	perishsong: {
 		name: "Perish Song",
@@ -5695,8 +5694,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	shadowforce: {
 		name: "Shadow Force",
-		desc: "If this move is successful, it breaks through the target's Baneful Bunker, Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn.",
-		shortDesc: "Disappears turn 1. Hits turn 2. Breaks protection.",
+		desc: "If this move is successful, it breaks through the target's Baneful Bunker, Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Has 1/2 recoil.",
+		shortDesc: "Breaks protection. Has 1/2 recoil.",
 		gen6: {
 			desc: "If this move is successful, it breaks through the target's Detect, King's Shield, Protect, or Spiky Shield for this turn, allowing other Pokemon to attack the target normally. If the target's side is protected by Crafty Shield, Mat Block, Quick Guard, or Wide Guard, that protection is also broken for this turn and other Pokemon may attack the target's side normally. This attack charges on the first turn and executes on the second. On the first turn, the user avoids all attacks. If the user is holding a Power Herb, the move completes in one turn. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
 		},
@@ -5760,8 +5759,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	shelltrap: {
 		name: "Shell Trap",
-		desc: "Fails unless the user is hit by a physical attack from an opponent this turn before it can execute the move. If the user was hit and has not fainted, it attacks immediately after being hit, and the effect ends. If the opponent's physical attack had a secondary effect removed by the Sheer Force Ability, it does not count for the purposes of this effect.",
-		shortDesc: "User must take physical damage before moving.",
+		desc: "Prevents the target from switching out. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
+		shortDesc: "Prevents the target from switching out.",
 
 		start: "  [POKEMON] set a shell trap!",
 		prepare: "  [POKEMON] set a shell trap!",
@@ -5913,8 +5912,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	skydrop: {
 		name: "Sky Drop",
-		desc: "This attack takes the target into the air with the user on the first turn and executes on the second. Pokemon weighing 200 kg or more cannot be lifted. On the first turn, the user and the target avoid all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thousand Arrows, Thunder, and Twister. The user and the target cannot make a move between turns, but the target can select a move to use. This move cannot damage Flying-type Pokemon. Fails on the first turn if the target is an ally, if the target has a substitute, or if the target is using Bounce, Dig, Dive, Fly, Phantom Force, Shadow Force, or Sky Drop.",
-		shortDesc: "User and foe fly up turn 1. Damages on turn 2.",
+		desc: "Has a 50% chance to confuse the target.",
+		shortDesc: "50% chance to confuse the target.",
 		gen5: {
 			desc: "This attack takes the target into the air with the user on the first turn and executes on the second. On the first turn, the user and the target avoid all attacks other than Gust, Hurricane, Sky Uppercut, Smack Down, Thunder, and Twister. The user and the target cannot make a move between turns, but the target can select a move to use. This move cannot damage Flying-type Pokemon. Fails on the first turn if the target is an ally, if the target has a substitute, or if the target is using Bounce, Dig, Dive, Fly, Shadow Force, or Sky Drop. If the effect of Gravity ends this effect before the second turn, both the user and the target return to the ground, but the target will otherwise remain under this effect until the user leaves the field or successfully executes the second turn of any two-turn move.",
 		},
@@ -7521,7 +7520,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	wingattack: {
 		name: "Wing Attack",
-		shortDesc: "No additional effect.",
+		shortDesc: "Bypasses protection and substitute without breaking it.",
 	},
 	wish: {
 		name: "Wish",
