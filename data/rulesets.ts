@@ -891,9 +891,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
-	formeclause: {
+	formesclause: {
 		effectType: 'ValidatorRule',
-		name: 'Forme Clause',
+		name: 'Formes Clause',
 		desc: "Prevents teams from having more than one Pok&eacute;mon with the same forme",
 		onBegin() {
 			this.add('rule', 'Species Clause: Limit one of each forme');
@@ -903,7 +903,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			for (const set of team) {
 				const species = this.dex.species.get(set.species);
 				if (speciesTable.has(species.forme)) {
-					return [`You are limited to one of each forme by Forme Clause.`, `(You have more than one ${species.forme})`];
+					return [`You are limited to one of each forme by Formes Clause.`, `(You have more than one ${species.forme})`];
 				}
 				speciesTable.add(species.forme);
 			}
