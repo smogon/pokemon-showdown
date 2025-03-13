@@ -542,7 +542,7 @@ export class TeamValidator {
 		}
 		if (ruleTable.has('obtainableformes')) {
 			const canTotem = dex.gen <= 7 || ruleTable.has('+pokemontag:past');
-			if (item.id === 'totemgigante' && (species.id === 'Raticate-Alola' || species.id === 'Marowak-Alola' || species.id === 'Electrode-Hisui' || species.id === 'Arcanine-Hisui')) {
+			if (item.id === 'totemgigante' && (species.id === 'Raticate-Alola' || species.id === 'Marowak-Alola' || species.id === 'Electrode-Hisui' || species.id === 'Arcanine-Hisui' || species.id === 'Xatu')) {
 				tierSpecies = dex.species.get(species.id + '-Totem');
 			}
 		}
