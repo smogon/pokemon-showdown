@@ -907,16 +907,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 				speciesTable.add(species.forme);
 			}
-			const itemsTable = new Set<string>();
-			for (const set of team) {
-				const species = this.dex.species.get(set.species);
-				if(species.requiredItem){
-				if (itemsTable.has(species.requiredItem) ) {
-					return [`You are limited to one of each forme by Formes Clause.`, `(You have more than one ${species.forme})`];
-				}
-				itemsTable.add(species.forme);
-			}
-			}
 		},
 	},
 	nicknameclause: {
