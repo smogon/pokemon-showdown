@@ -132,13 +132,10 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// If a faster partial trapping move misses against a user of Hyper Beam during a recharge turn,
 			// the user of Hyper Beam will automatically use Hyper Beam during that turn.
-			const autoHyperBeam = (
-				move.id === 'recharge' && !pokemon.volatiles['mustrecharge'] && !pokemon.volatiles['partiallytrapped']
-			);
-			if (autoHyperBeam) {
+			if (move.id === 'recharge' && !pokemon.volatiles['mustrecharge'] && !pokemon.volatiles['partiallytrapped']) {
 				move = this.battle.dex.getActiveMove('hyperbeam');
-				this.battle.hint(`In Gen 1, If a faster partial trapping move misses against a user of Hyper Beam during a recharge turn, ` +
-					`the user of Hyper Beam will automatically use Hyper Beam during that turn.`, true);
+				this.battle.hint(`In Gen 1, partial trapping moves like Wrap remove Hyper Beam recharges. ` +
+					`If the target would have recharged, it will automatically use Hyper Beam instead.`, true);
 			}
 
 			if (target?.subFainted) target.subFainted = null;
