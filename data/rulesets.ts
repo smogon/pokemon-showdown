@@ -906,7 +906,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					return [`You are limited to one of each forme by Formes Clause.`, `(You have more than one ${species.forme})`];
 				}
 				speciesTable.add(species.forme);
-			}
+			}	
 		},
 	},
 	nicknameclause: {
