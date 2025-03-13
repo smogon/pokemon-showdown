@@ -53,7 +53,13 @@ type Direction = 'less' | 'greater' | 'equal';
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
 const MAX_RANDOM_RESULTS = 30;
-const dexesHelp = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
+const dexesHelpMods = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
+const supportedDexsearchRules = ['stabmonsmovelegality', 'alphabetcupmovelegality',
+	'350cupmod', 'flippedmod', 'scalemonsmod', 'badnboostedmod', 'reevolutionmod', 'convergencelegality',
+	'hoennpokedex', 'sinnohpokedex', 'oldunovapokedex', 'newunovapokedex', 'kalospokedex', 'oldalolapokedex',
+	'newalolapokedex', 'galarpokedex', 'isleofarmorpokedex', 'crowntundrapokedex', 'galarexpansionpokedex',
+	'paldeapokedex', 'kitakamipokedex', 'blueberrypokedex'];
+const dexsearchHelpRules = supportedDexsearchRules.filter(x => x).join('</code>, <code>');
 
 function toListString(arr: string[]) {
 	if (!arr.length) return '';
@@ -139,7 +145,8 @@ export const commands: Chat.ChatCommands = {
 			`<code>Alola</code>, <code>Galar</code>, <code>Therian</code>, <code>Totem</code>, or <code>Primal</code> can be used as parameters to search for those formes.<br/>` +
 			`Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g., <code>trick | switcheroo</code> searches for all Pok\u00e9mon that learn either Trick or Switcheroo.<br/>` +
 			`You can search for info in a specific generation by appending the generation to ds or by using the <code>maxgen</code> keyword; e.g. <code>/ds1 normal</code> or <code>/ds normal, maxgen1</code> searches for all Pok\u00e9mon that were Normal type in Generation I.<br/>` +
-			`You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nds mod=ssb, protean</code>. All valid mod names are: <code>${dexesHelp}</code><br />` +
+			`You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nds mod=ssb, protean</code>. All valid mod names are: <code>${dexesHelpMods}</code><br/>` +
+			`You can search for info in a specific rule defined metagame by using <code>rule=[rule name]</code>; e.g. <code>/nds rule=alphabetcupmovelegality, v-create</code>. All supported rule names are: <code>${dexsearchHelpRules}</code><br/>` +
 			`By default, <code>/dexsearch</code> will search only Pok\u00e9mon obtainable in the current generation. Add the parameter <code>unreleased</code> to include unreleased Pok\u00e9mon. Add the parameter <code>natdex</code> (or use the command <code>/nds</code>) to include all past Pok\u00e9mon.<br/>` +
 			`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix <code>group</code> onto the egg group parameter; e.g., seaching for <code>grass, grass group</code> will show all Grass types in the Grass egg group.<br/>` +
 			`The parameter <code>monotype</code> will only show Pok\u00e9mon that are single-typed.<br/>` +
@@ -364,7 +371,7 @@ export const commands: Chat.ChatCommands = {
 			`- Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g. <code>fire | water</code> searches for all moves that are either Fire type or Water type.<br/>` +
 			`- If a Pok\u00e9mon is included as a parameter, only moves from its movepool will be included in the search.<br/>` +
 			`- You can search for info in a specific generation by appending the generation to ms; e.g. <code>/ms1 normal</code> searches for all moves that were Normal type in Generation I.<br/>` +
-			`- You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nms mod=ssb, dark, bp=100</code>. All valid mod names are: <code>${dexesHelp}</code><br />` +
+			`- You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nms mod=ssb, dark, bp=100</code>. All valid mod names are: <code>${dexesHelpMods}</code><br/>` +
 			`- <code>/ms</code> will search all non-dexited moves (clickable in that game); you can include dexited moves by using <code>/nms</code> or by adding <code>natdex</code> as a parameter.<br/>` +
 			`- The order of the parameters does not matter.` +
 			`</details>`
@@ -650,14 +657,14 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	if (modCount > 1 || ruleCount > 1) {
 		return { error: `You can't run searches for multiple mods or rules.` };
 	}
-
-	const validRules = ['stabmonsmovelegality', 'alphabetcupmovelegality',
-		'350cupmod', 'flippedmod', 'scalemonsmod', 'badnboostedmod', 'reevolutionmod', 'convergencelegality',
-		'hoennpokedex', 'sinnohpokedex', 'oldunovapokedex', 'newunovapokedex', 'kalospokedex', 'oldalolapokedex',
-		'newalolapokedex', 'galarpokedex', 'isleofarmorpokedex', 'crowntundrapokedex', 'galarexpansionpokedex',
-		'paldeapokedex', 'kitakamipokedex', 'blueberrypokedex'];
-	if (usedRule && !(validRules.includes(usedRule))) {
-		return { error: `Invalid rule, All valid rule names are: ${validRules}` };
+	for (const str of splitTarget) {
+		const sanatizedStr = str.toLowerCase().replace(/[^a-z0-9=]+/g, '');
+		if (sanatizedStr.startsWith('mod=') || sanatizedStr.startsWith('rule=')) {
+			return { error: `Invalid mod or rule, see /dexsearchhelp.` };
+		}
+	}
+	if (usedRule && !(supportedDexsearchRules.includes(usedRule))) {
+		return { error: `Invalid rule, see /dexsearchhelp` };
 	}
 
 	const mod = Dex.mod(usedMod || 'base');
