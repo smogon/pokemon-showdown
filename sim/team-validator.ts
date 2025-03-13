@@ -535,6 +535,9 @@ export class TeamValidator {
 				tierSpecies = dex.species.get('Zacian-Crowned');
 			} else if (item.id === 'rustedshield' && species.id === 'zamazenta') {
 				tierSpecies = dex.species.get('Zamazenta-Crowned');
+			} else if (item.id === 'piedraantigua' && (species.id === 'quagsire' || species.id === 'slowking' || species.id === 'wungsparce' || species.id === 'granbull' || species.id === 'qwilfish' || species.id === 'ursaring' || species.id === 'mantine' || species.id === 'kingdra' || species.id === 'donphan' || species.id === 'celebi')) {
+				let name = species.baseSpecies + "-Feudal"
+				tierSpecies = dex.species.get(name);
 			}
 		}
 		if (ruleTable.has('obtainableformes')) {
