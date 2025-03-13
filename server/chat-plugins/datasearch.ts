@@ -637,7 +637,7 @@ function prepareDexsearchValidator(usedMod: string | undefined, rule: FormatData
 	const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9anythinggoes';
 	const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
 	const additionalRules = [];
-	if (!ruleTable.has(toID(rule.name))) additionalRules.push(toID(rule.name));
+	if (rule && !ruleTable.has(toID(rule.name))) additionalRules.push(toID(rule.name));
 	if (nationalSearch && !ruleTable.has('natdexmod')) additionalRules.push('natdexmod');
 	if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
 	return TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
@@ -651,9 +651,12 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		return { error: `You can't run searches for multiple mods or rules.` };
 	}
 
-	const validRules = ['stabmonsmovelegality', 'alphabetcupmovelegality', '350cupmod', 'flippedmod', 'scalemonsmod',
-		'badnboostedmod', 'reevolutionmod', 'convergencelegality'];
-	if (!validRules.includes(usedRule) || usedRule.endsWith('pokedex')) {
+	const validRules = ['stabmonsmovelegality', 'alphabetcupmovelegality',
+		'350cupmod', 'flippedmod', 'scalemonsmod', 'badnboostedmod', 'reevolutionmod', 'convergencelegality',
+		'hoennpokedex', 'sinnohpokedex', 'oldunovapokedex', 'newunovapokedex', 'kalospokedex', 'oldalolapokedex',
+		'newalolapokedex', 'galarpokedex', 'isleofarmorpokedex', 'crowntundrapokedex', 'galarexpansionpokedex',
+		'paldeapokedex', 'kitakamipokedex', 'blueberrypokedex'];
+	if (usedRule && !(validRules.includes(usedRule))) {
 		return { error: `Invalid rule, All valid rule names are: ${validRules}` };
 	}
 
@@ -1184,7 +1187,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	// These only ever get accessed if there are moves to filter by.
 	let validator;
 	let pokemonSource;
-	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0)) {
+	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0) ||
+		usedRule === 'convergencelegality') {
 		validator = prepareDexsearchValidator(usedMod, rule, nationalSearch);
 	}
 
@@ -1197,7 +1201,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			restrictedSearch === species.tags.includes('Restricted Legendary');
 		let ruleResult = !rule?.banlist?.includes(species.name);
 
-		if (ruleResult && rule?.onValidateSet) {
+		if (ruleResult && usedRule?.endsWith('pokedex') && rule?.onValidateSet) {
 			if (!validator) validator = prepareDexsearchValidator(usedMod, rule, nationalSearch);
 			ruleResult = !rule.onValidateSet.call(validator,
 				{ name: species.name, species: species.id } as PokemonSet, validator.format, {}, {});
@@ -1342,7 +1346,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			if (matched) continue;
 
 			for (const ability in alts.abilities) {
-				if (Object.values(dex[mon].abilities).includes(ability) === alts.abilities[ability]) {
+				if (Object.values(dex[mon].abilities).includes(ability) === alts.abilities[ability] ||
+					(usedRule === 'convergencelegality' && validator && !rule?.onValidateSet?.call( // Convergence runs O(n^2)
+						validator, { name: dex[mon].name, species: dex[mon].id, item: '', ability } as PokemonSet, validator.format, {}, {}))) {
 					matched = true;
 					break;
 				}
@@ -1393,8 +1399,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			for (const move of altsMoves) {
 				pokemonSource = validator?.allSources();
-				if (validator && (!validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id] ||
-					(rule && !validator.omCheckCanLearn(move, dex[mon], pokemonSource)))) {
+				if ((rule && usedRule.endsWith('legality') && validator?.ruleTable?.checkCanLearn &&
+					!validator.ruleTable.checkCanLearn[0].call(validator, move, dex[mon], pokemonSource, {} as Partial<PokemonSet>)) ||
+					!validator?.checkCanLearn(move, dex[mon], pokemonSource)) {
 					matched = true;
 					break;
 				}
