@@ -18311,7 +18311,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {gravity: 1, metronome: 1},
 		onTry(source, target, move) {
-			if(source.species.prevo){
+			if(!source.species.prevo && source.species.evos){
 				this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1}, source, source)
 			}
 		},
