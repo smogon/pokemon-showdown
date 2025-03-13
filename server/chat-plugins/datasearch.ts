@@ -669,6 +669,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 	const mod = Dex.mod(usedMod || 'base');
 	const rule = Dex.data.Rulesets[usedRule];
+	const convergenceSearch = usedRule === 'convergencelegality';
 	const allTiers: { [k: string]: TierTypes.Singles | TierTypes.Other } = Object.assign(Object.create(null), {
 		anythinggoes: 'AG', ag: 'AG',
 		uber: 'Uber', ubers: 'Uber', ou: 'OU',
@@ -1194,8 +1195,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	// These only ever get accessed if there are moves to filter by.
 	let validator;
 	let pokemonSource;
-	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0) ||
-		usedRule === 'convergencelegality') {
+	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0) || convergenceSearch) {
 		validator = prepareDexsearchValidator(usedMod, rule, nationalSearch);
 	}
 
@@ -1354,8 +1354,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			for (const ability in alts.abilities) {
 				if (Object.values(dex[mon].abilities).includes(ability) === alts.abilities[ability] ||
-					(usedRule === 'convergencelegality' && validator && !rule?.onValidateSet?.call( // Convergence runs O(n^2)
-						validator, { name: dex[mon].name, species: dex[mon].id, item: '', ability } as PokemonSet, validator.format, {}, {}))) {
+					(convergenceSearch && validator && !rule.onValidateSet?.call(validator, { name: dex[mon].name,
+						species: dex[mon].id, item: '', ability } as PokemonSet, validator.format, {}, {}) === alts.abilities[ability])) {
 					matched = true;
 					break;
 				}
@@ -1407,8 +1407,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			for (const move of altsMoves) {
 				pokemonSource = validator?.allSources();
 				if ((rule && usedRule.endsWith('legality') && validator?.ruleTable?.checkCanLearn &&
-					!validator.ruleTable.checkCanLearn[0].call(validator, move, dex[mon], pokemonSource, {} as Partial<PokemonSet>)) ||
-					!validator?.checkCanLearn(move, dex[mon], pokemonSource)) {
+					!validator.ruleTable.checkCanLearn[0].call(validator, move, dex[mon], pokemonSource, {}) === alts.moves[move.id]) ||
+					!validator?.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
 					matched = true;
 					break;
 				}
