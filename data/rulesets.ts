@@ -891,7 +891,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
-	formesclause: {
+	/*formesclause: {
 		effectType: 'ValidatorRule',
 		name: 'Formes Clause',
 		desc: "Prevents teams from having more than one Pok&eacute;mon with the same forme",
@@ -906,9 +906,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					return [`You are limited to one of each forme by Formes Clause.`, `(You have more than one ${species.forme})`];
 				}
 				speciesTable.add(species.forme);
-			}	
+			}
 		},
-	},
+	},*/
 	nicknameclause: {
 		effectType: 'ValidatorRule',
 		name: 'Nickname Clause',
