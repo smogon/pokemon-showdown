@@ -218,6 +218,31 @@ describe('Freeze', () => {
 		assert.equal(battle.p1.active[0].species.name, 'Shaymin-Sky');
 	});
 
+	it('should not linger after fainting from switch-out', () => {
+		battle = common.createBattle({
+			formatid: 'gen4customgame@@@freezeclausemod',
+		}, [[
+			{ species: 'weavile', moves: ['icebeam', 'pursuit'] },
+		], [
+			{ species: 'gastly', moves: ['splash'] },
+			{ species: 'seaking', moves: ['splash'] },
+		]]);
+		battle.onEvent('ModifyMove', battle.format, function (move) {
+			if (move.secondaries) {
+				this.debug('Freeze test: Guaranteeing secondary');
+				for (const secondary of move.secondaries) {
+					secondary.chance = 100;
+				}
+			}
+		});
+		battle.makeChoices('move icebeam', 'auto');
+		battle.makeChoices('move pursuit', 'switch seaking');
+		// battle.makeChoices('', 'switch seaking'); // in modern gens
+		battle.makeChoices('move icebeam', 'auto');
+		assert.equal(battle.p2.active[0].status, 'frz');
+		assert.equal(battle.p2.active[0].species.name, 'Seaking');
+	});
+
 	it(`should not be possible to burn a frozen target when using a move that thaws that target`, () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', ability: 'serenegrace', item: 'widelens', moves: ['sleeptalk', 'sacredfire'] },
