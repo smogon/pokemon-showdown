@@ -4187,7 +4187,8 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "OU",
     },
     kingambit: {
-      tier: "OU",
+      isNonstandard: "Past",
+      tier: "Illegal",
     },
     clodsire: {
       tier: "OU",
