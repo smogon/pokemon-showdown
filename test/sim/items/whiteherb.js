@@ -24,7 +24,7 @@ describe("White Herb", () => {
 		assert.statStage(wynaut, 'spa', 0);
 	});
 
-	it.skip('should activate after Abilities that boost stats on KOs', () => {
+	it('should activate after Abilities that boost stats on KOs', () => {
 		battle = common.createBattle([[
 			{ species: 'litten', level: 1, ability: 'noguard', moves: ['sleeptalk'] },
 			{ species: 'torracat', moves: ['partingshot'] },
