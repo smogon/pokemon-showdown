@@ -177,16 +177,12 @@ export class RandomTeams {
 	protected cachedStatusMoves: ID[];
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
-		console.log('entered constructor')
 		format = Dex.formats.get(format);
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
 		this.noStab = NO_STAB;
 
 		const ruleTable = Dex.formats.getRuleTable(format);
-		console.log(`format: ${format}`)
-		console.log(`ruletable: ${ruleTable}`);
-		console.log(`ruletable values: ${ruleTable.valueRules}`);
 		this.maxTeamSize = ruleTable.maxTeamSize;
 		this.adjustLevel = ruleTable.adjustLevel;
 		this.maxMoveCount = ruleTable.maxMoveCount;
@@ -194,10 +190,8 @@ export class RandomTeams {
 		this.forceMonotype = forceMonotype && this.dex.types.get(forceMonotype).exists ?
 			this.dex.types.get(forceMonotype).name : undefined;
 		const forceTeraType = ruleTable.valueRules.get('forceteratype');
-		console.log(`from ruletable: ${forceTeraType}`);
 		this.forceTeraType = forceTeraType && this.dex.types.get(forceTeraType).exists ?
 			this.dex.types.get(forceTeraType).name : undefined;
-		console.log(`from decl: ${this.forceTeraType}`);
 
 		this.factoryTier = '';
 		this.format = format;
@@ -1847,7 +1841,6 @@ export class RandomTeams {
 	}
 
 	randomCCTeam(): RandomTeamsTypes.RandomSet[] {
-		console.log('randomCCgen')
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const dex = this.dex;
@@ -1999,7 +1992,6 @@ export class RandomTeams {
 				shiny,
 			};
 			if (this.gen === 9) {
-				console.log('set gen ran')
 				// Tera type
 				if (species.forceTeraType) {
 					set.teraType = species.forceTeraType;
