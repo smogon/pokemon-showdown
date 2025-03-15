@@ -55,15 +55,15 @@ const RESULTS_MAX_LENGTH = 10;
 const MAX_RANDOM_RESULTS = 30;
 const dexesHelpMods = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
 const supportedDexsearchRules: { [k: string]: string[] } = Object.assign(Object.create(null), {
+	movevalidation: ['stabmonsmovelegality', 'alphabetcupmovelegality'],
+	statmodification: ['350cupmod', 'flippedmod', 'scalemonsmod', 'badnboostedmod', 'reevolutionmod'],
 	banlist: [
 		'hoennpokedex', 'sinnohpokedex', 'oldunovapokedex', 'newunovapokedex', 'kalospokedex', 'oldalolapokedex',
 		'newalolapokedex', 'galarpokedex', 'isleofarmorpokedex', 'crowntundrapokedex', 'galarexpansionpokedex',
 		'paldeapokedex', 'kitakamipokedex', 'blueberrypokedex',
 	],
-	movevalidation: ['stabmonsmovelegality', 'alphabetcupmovelegality'],
-	statmodification: ['350cupmod', 'flippedmod', 'scalemonsmod', 'badnboostedmod', 'reevolutionmod'],
 });
-const dexsearchHelpRules = Object.values((supportedDexsearchRules || {})).filter(arr => arr).join('</code>, <code>');
+const dexsearchHelpRules = Object.values((supportedDexsearchRules)).flat().filter(x => x).join('</code>, <code>');
 
 function toListString(arr: string[]) {
 	if (!arr.length) return '';
