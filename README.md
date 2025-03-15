@@ -6,7 +6,7 @@ Fork Summary
 ------------------------------------------------------------------------
 This fork of the Pokémon Showdown codebase provides Pokémon battle simulation capabilities for the Pokémon Ultra RPG community. 
 
-Fork Credits:
+Fork Contributors:
 - Elrond 
 
 The remainder of this README is duplicated in its entirety from the original codebase.
