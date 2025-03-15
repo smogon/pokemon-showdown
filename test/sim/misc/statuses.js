@@ -31,6 +31,17 @@ describe('Burn', () => {
 		assert.bounded(damage, [37, 44]);
 	});
 
+	it(`should halve damage after fainting`, () => {
+		battle = common.gen(4).createBattle([[
+			{ species: 'Electrode', ability: 'noguard', moves: ['explosion'] },
+		], [
+			{ species: 'Wailord', ability: 'prankster', moves: ['willowisp'] },
+		]]);
+		battle.makeChoices();
+		const wailord = battle.p2.active[0];
+		assert.bounded(wailord.hp, [200, 300]);
+	});
+
 	it('should reduce atk to 50% of its original value in Stadium', () => {
 		// I know WoW doesn't exist in Stadium, but the engine supports future gen moves
 		// and this is easier than digging for a seed that makes Flamethrower burn
