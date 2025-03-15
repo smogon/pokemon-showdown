@@ -1463,12 +1463,12 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			mon.baseSpecies !== "Pikachu";
 		const maskForm = mon.baseSpecies === "Ogerpon" && !mon.forme.endsWith("Tera");
 		const allowGmax = (gmaxSearch || tierSearch);
-		if (!isRegionalForm && !maskForm && mon.baseSpecies && results.includes(dex[mon.baseSpecies]) &&
-			getSortValue(mon) === getSortValue(dex[mon.baseSpecies])) continue;
+		if (!isRegionalForm && !maskForm && mon.baseSpecies && results.includes(Dex.species.get(mon.baseSpecies)) &&
+			getSortValue(mon) === getSortValue(Dex.species.get(mon.baseSpecies))) continue;
 		const teraFormeChangesFrom = mon.forme.endsWith("Tera") ? !Array.isArray(mon.battleOnly) ?
 			mon.battleOnly! : null : null;
-		if (teraFormeChangesFrom && results.includes(dex[teraFormeChangesFrom]) &&
-			getSortValue(mon) === getSortValue(dex[teraFormeChangesFrom])) continue;
+		if (teraFormeChangesFrom && results.includes(Dex.species.get(teraFormeChangesFrom)) &&
+			getSortValue(mon) === getSortValue(Dex.species.get(teraFormeChangesFrom))) continue;
 		if (mon.isNonstandard === 'Gigantamax' && !allowGmax) continue;
 		results.push(mon);
 	}
@@ -1516,7 +1516,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	} else {
 		resultsStr += "No Pok&eacute;mon found.";
 	}
-	if (isTest) return { results, reply: resultsStr };
+	if (isTest) return { results: results.map(species => species.name), reply: resultsStr };
 	return { reply: resultsStr };
 }
 
