@@ -1993,8 +1993,8 @@ export class RandomTeams {
 			};
 			if (this.gen === 9) {
 				// Tera type
-				if (this.forceTeraType) {
-					set.teraType = this.forceTeraType;
+				if (species.forceTeraType) {
+					set.teraType = species.forceTeraType;
 				} else {
 					set.teraType = this.sample(this.dex.types.names());
 				}
