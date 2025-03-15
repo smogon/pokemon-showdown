@@ -1,4 +1,4 @@
-Pokémon Showdown - Forked as URPG Battle Bot
+Pokémon Showdown - Forked as URPG Battle Bot Calc
 ========================================================================
 
 
