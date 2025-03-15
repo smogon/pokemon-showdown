@@ -54,12 +54,16 @@ const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
 const MAX_RANDOM_RESULTS = 30;
 const dexesHelpMods = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
-const supportedDexsearchRules = ['stabmonsmovelegality', 'alphabetcupmovelegality',
-	'350cupmod', 'flippedmod', 'scalemonsmod', 'badnboostedmod', 'reevolutionmod', 'convergencelegality',
-	'hoennpokedex', 'sinnohpokedex', 'oldunovapokedex', 'newunovapokedex', 'kalospokedex', 'oldalolapokedex',
-	'newalolapokedex', 'galarpokedex', 'isleofarmorpokedex', 'crowntundrapokedex', 'galarexpansionpokedex',
-	'paldeapokedex', 'kitakamipokedex', 'blueberrypokedex'];
-const dexsearchHelpRules = supportedDexsearchRules.filter(x => x).join('</code>, <code>');
+const supportedDexsearchRules: { [k: string]: string[] } = Object.assign(Object.create(null), {
+	banlist: [
+		'hoennpokedex', 'sinnohpokedex', 'oldunovapokedex', 'newunovapokedex', 'kalospokedex', 'oldalolapokedex',
+		'newalolapokedex', 'galarpokedex', 'isleofarmorpokedex', 'crowntundrapokedex', 'galarexpansionpokedex',
+		'paldeapokedex', 'kitakamipokedex', 'blueberrypokedex',
+	],
+	movevalidation: ['stabmonsmovelegality', 'alphabetcupmovelegality'],
+	statmodification: ['350cupmod', 'flippedmod', 'scalemonsmod', 'badnboostedmod', 'reevolutionmod'],
+});
+const dexsearchHelpRules = Object.values((supportedDexsearchRules || {})).filter(arr => arr).join('</code>, <code>');
 
 function toListString(arr: string[]) {
 	if (!arr.length) return '';
@@ -641,7 +645,7 @@ function getRule(target: string) {
 }
 
 function prepareDexsearchValidator(usedMod: string | undefined, rule: FormatData, nationalSearch: boolean | null) {
-	const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9anythinggoes';
+	const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9ou';
 	const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
 	const additionalRules = [];
 	if (rule && !ruleTable.has(toID(rule.name))) additionalRules.push(toID(rule.name));
@@ -663,13 +667,19 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			return { error: `Invalid mod or rule, see /dexsearchhelp.` };
 		}
 	}
-	if (usedRule && !(supportedDexsearchRules.includes(usedRule))) {
+	const ruleType = [];
+	for (const key of Object.keys(supportedDexsearchRules)) {
+		if (supportedDexsearchRules[key].includes(usedRule)) {
+			ruleType.push(key);
+			break;
+		}
+	}
+	if (usedRule && !ruleType.length) {
 		return { error: `Invalid rule, see /dexsearchhelp` };
 	}
-
 	const mod = Dex.mod(usedMod || 'base');
 	const rule = Dex.data.Rulesets[usedRule];
-	const convergenceSearch = usedRule === 'convergencelegality';
+
 	const allTiers: { [k: string]: TierTypes.Singles | TierTypes.Other } = Object.assign(Object.create(null), {
 		anythinggoes: 'AG', ag: 'AG',
 		uber: 'Uber', ubers: 'Uber', ou: 'OU',
@@ -1192,10 +1202,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 	// Prepare move validator and pokemonSource outside the hot loop
 	// but don't prepare them at all if there are no moves to check...
-	// These only ever get accessed if there are moves to filter by.
+	// These only ever get accessed if there are moves or banlists to filter by.
 	let validator;
 	let pokemonSource;
-	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0) || convergenceSearch) {
+	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0) ||
+		ruleType.includes('movevalidation') || ruleType.includes('banlist')) {
 		validator = prepareDexsearchValidator(usedMod, rule, nationalSearch);
 	}
 
@@ -1208,8 +1219,13 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			restrictedSearch === species.tags.includes('Restricted Legendary');
 		let ruleResult = !rule?.banlist?.includes(species.name);
 
-		if (ruleResult && usedRule?.endsWith('pokedex') && rule?.onValidateSet) {
-			if (!validator) validator = prepareDexsearchValidator(usedMod, rule, nationalSearch);
+		/**
+		 * Not every ruleset with an onValidateSet function is specifically to exclude mons.
+		 * In the current list of supported rules only the Pokedex rules do such which is
+		 * why this step is ignored for other rules. Rules can be added for this functionality
+		 * in the supportedDexSearchTypes mapping at the top of the function.
+		 */
+		if (ruleResult && validator && ruleType.includes('banlist') && rule?.onValidateSet) {
 			ruleResult = !rule.onValidateSet.call(validator,
 				{ name: species.name, species: species.id } as PokemonSet, validator.format, {}, {});
 		}
@@ -1353,9 +1369,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			if (matched) continue;
 
 			for (const ability in alts.abilities) {
-				if (Object.values(dex[mon].abilities).includes(ability) === alts.abilities[ability] ||
-					(convergenceSearch && validator && !rule.onValidateSet?.call(validator, { name: dex[mon].name,
-						species: dex[mon].id, item: '', ability } as PokemonSet, validator.format, {}, {}) === alts.abilities[ability])) {
+				if (Object.values(dex[mon].abilities).includes(ability) === alts.abilities[ability]) {
 					matched = true;
 					break;
 				}
@@ -1406,9 +1420,13 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 			for (const move of altsMoves) {
 				pokemonSource = validator?.allSources();
-				if ((rule && usedRule.endsWith('legality') && validator?.ruleTable?.checkCanLearn &&
-					!validator.ruleTable.checkCanLearn[0].call(validator, move, dex[mon], pokemonSource, {}) === alts.moves[move.id]) ||
-					!validator?.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
+				// Match rule must be tried first due to NOT searches providing failed hits
+				// when only checking vanilla legality first.
+				const matchRule = ruleType.includes('movevalidation') &&
+					!validator?.omCheckCanLearn(move, dex[mon], pokemonSource, {}) === alts.moves[move.id];
+				const matchNormally = !matchRule && !validator?.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id];
+
+				if (matchNormally || matchRule) {
 					matched = true;
 					break;
 				}
