@@ -196,6 +196,6 @@ describe('Dancer', () => {
 		const suicune = battle.p2.pokemon[2];
 		battle.makeChoices('move sleeptalk, move fierydance 1', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices();
-		assert.notEqual(suicune.fullHP, suicune.hp);
+		assert.notEqual(suicune.hp, suicune.fullHP);
 	});
 });

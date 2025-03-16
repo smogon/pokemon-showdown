@@ -843,8 +843,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Ties go to whichever Pokemon has had the ability for the least amount of time
 			this.queue.insertChoice({
 				choice: 'move',
-				order: 198 + dancer.storedStats['spe'] / 100000, // HACK
-				// speed: -source.storedStats['spe'], // speed gets reset
+				order: 198 + dancer.storedStats['spe'] / 100000, // FIXME HACK
+				speed: -source.storedStats['spe'], // speed gets reset
 				effectOrder: dancer.abilityState.effectOrder,
 				pokemon: dancer,
 				moveid: move.id,

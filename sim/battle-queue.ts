@@ -44,7 +44,7 @@ export interface MoveAction {
 	maxMove?: string;
 	/** effect that called the move (eg Instruct) if any */
 	sourceEffect?: Effect | null;
-	/** TODO */
+	/** if external, skips LockMove and PP deduction, mostly for use by Dancer */
 	externalMove?: boolean;
 }
 
