@@ -3872,19 +3872,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(1.5);
 			}
 		},
-		onUpdate(pokemon) {
-			if (pokemon.status === 'par') {
-				this.add('-activate', pokemon, 'ability: Quick Feet');
-				pokemon.cureStatus();
-			}
-		},
-		onSetStatus(status, target, source, effect) {
-			if (status.id !== 'par') return;
-			if ((effect as Move)?.status) {
-				this.add('-immune', target, '[from] ability: Quick Feet');
-			}
-			return false;
-		},
 		flags: {},
 		name: "Quick Feet",
 		rating: 2.5,

@@ -40,7 +40,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onBeforeMovePriority: 1,
 		onBeforeMove(pokemon) {
 			pokemon.statusState.time += 1;
-			if (pokemon.statusState.time >= 4) {
+			if (pokemon.statusState.time >= 4 && !pokemon.hasAbility('quickfeet')) {
 				this.add('cant', pokemon, 'par');
 				pokemon.statusState.time = 1;
 				return false;
