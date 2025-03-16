@@ -290,8 +290,6 @@ export interface Move extends Readonly<BasicEffect & MoveData> {
 
 interface MoveHitData {
 	[targetSlotid: string]: {
-		/** Did this move do damage to the target? */
-		successful: boolean,
 		/** Did this move crit against the target? */
 		crit: boolean,
 		/** The type effectiveness of this move against the target */
@@ -314,6 +312,7 @@ export interface ActiveMove extends MutableMove {
 	status?: ID;
 	hit: number;
 	moveHitData?: MoveHitData;
+	hitTargets?: Pokemon[];
 	ability?: Ability;
 	allies?: Pokemon[];
 	auraBooster?: Pokemon;
