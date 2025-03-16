@@ -2484,11 +2484,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {},
-		// TODO show prepare message before the "POKEMON used MOVE!" message
-		// This happens even before sleep shows its "POKEMON is fast asleep." message
+		priorityChargeCallback(source) {
+			source.addVolatile('chillyreception');
+		},
 		weather: 'snowscape',
 		selfSwitch: true,
 		secondary: null,
+		condition: {
+			duration: 1,
+			onBeforeMovePriority: 100,
+			onBeforeMove(source, target, move) {
+				if (move.id !== 'chillyreception') return;
+				this.add('-prepare', source, 'Chilly Reception', '[premajor]');
+			},
+		},
 		target: "all",
 		type: "Ice",
 	},
