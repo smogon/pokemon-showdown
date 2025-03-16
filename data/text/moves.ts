@@ -974,8 +974,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	coaching: {
 		name: "Coaching",
-		desc: "Raises the target's Attack and Defense by 1 stage. Fails if there is no ally adjacent to the user.",
-		shortDesc: "Raises an ally's Attack and Defense by 1.",
+		desc: "Raises the user's Attack and Defense by 1 stage. Fails if HP above half",
+		shortDesc: "Raises the user's Attack and Defense by 2. Fails if HP above half",
 	},
 	coil: {
 		name: "Coil",
@@ -1328,8 +1328,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	detect: {
 		name: "Detect",
-		desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Burning Bulwark, Detect, Endure, King's Shield, Max Guard, Obstruct, Protect, Quick Guard, Silk Trap, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
-		shortDesc: "Prevents moves from affecting the user this turn.",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make contact with the user, next user hit priority +1. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Burning Bulwark, Detect, Endure, King's Shield, Max Guard, Obstruct, Protect, Quick Guard, Silk Trap, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		shortDesc: "Protects from damaging attacks. Contact: Next hit priority +1.",
 		gen8: {
 			desc: "The user is protected from most attacks made by other Pokemon during this turn. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Detect, Endure, King's Shield, Max Guard, Obstruct, Protect, Quick Guard, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
 		},
@@ -2224,8 +2224,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	flyingpress: {
 		name: "Flying Press",
-		desc: "This move combines Flying in its type effectiveness against the target. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
-		shortDesc: "Combines Flying in its type effectiveness.",
+		desc: "This move's type effectiveness against Grass, Bug and Fight is changed to be super effective no matter what this move's type is.",
+		shortDesc: "Super effective on Grass, Bug and Fight.",
 	},
 	focusblast: {
 		name: "Focus Blast",
@@ -2310,8 +2310,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	freezedry: {
 		name: "Freeze-Dry",
-		desc: "Has a 10% chance to freeze the target. This move's type effectiveness against Water is changed to be super effective no matter what this move's type is.",
-		shortDesc: "10% chance to freeze. Super effective on Water.",
+		desc: "Has a 30% chance to freeze the target. This move's type effectiveness against Water is changed to be super effective no matter what this move's type is.",
+		shortDesc: "30% chance to freeze. Super effective on Water.",
 	},
 	freezeshock: {
 		name: "Freeze Shock",
@@ -3845,8 +3845,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	matblock: {
 		name: "Mat Block",
-		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn. Fails unless it is the user's first turn on the field, if the user moves last this turn, or if this move is already in effect for the user's side.",
-		shortDesc: "Protects allies from damaging attacks. Turn 1 only.",
+		desc: "The user and its party members are protected from damaging attacks made by other Pokemon, including allies, during this turn. Fails unless it is the user's first turn on the field, if the user moves last this turn, or if this move is already in effect for the user's side. Reflects 25% of damage",
+		shortDesc: "Protects allies from damaging attacks. Turn 1 only. Reflects damage",
 
 		start: "  [POKEMON] intends to flip up a mat and block incoming attacks!",
 		block: "  [MOVE] was blocked by the kicked-up mat!",
@@ -4060,8 +4060,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	meteorassault: {
 		name: "Meteor Assault",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		desc: "Hits three times. Has a higher chance for a critical hit.",
+		shortDesc: "Hits three times. High critical hit ratio.",
 	},
 	meteorbeam: {
 		name: "Meteor Beam",
@@ -4498,8 +4498,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	noretreat: {
 		name: "No Retreat",
-		desc: "Raises the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage, but it becomes prevented from switching out. The user can still switch out if it uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. If the user leaves the field using Baton Pass, the replacement will remain trapped. Fails if the user has already been prevented from switching by this effect.",
-		shortDesc: "Raises all stats by 1 (not acc/eva). Traps user.",
+		desc: "Raises the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage, but it becomes prevented from switching out for 3 turns. The user can still switch out if it uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. If the user leaves the field using Baton Pass, the replacement will remain trapped. Fails if the user has already been prevented from switching by this effect.",
+		shortDesc: "Raises all stats by 1 (not acc/eva). Traps user for 3 turns.",
 
 		start: "  [POKEMON] can no longer escape because it used No Retreat!",
 	},
@@ -4537,8 +4537,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	octolock: {
 		name: "Octolock",
-		desc: "Prevents the target from switching out. At the end of each turn during effect, the target's Defense and Special Defense are lowered by 1 stage. The target can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. If the target leaves the field using Baton Pass, the replacement will remain trapped. The effect ends if the user leaves the field.",
-		shortDesc: "Traps target, lowers Def and SpD by 1 each turn.",
+		desc: "Has a 100% chance to lower the target's Defense and Special defense by 1 stage.",
+		shortDesc: "100% chance to lower the target's def and spd by 1.",
 
 		start: "  [POKEMON] can no longer escape because of Octolock!",
 	},
@@ -5400,8 +5400,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	rocksmash: {
 		name: "Rock Smash",
-		desc: "Has a 50% chance to lower the target's Defense by 1 stage.",
-		shortDesc: "50% chance to lower the target's Defense by 1.",
+		desc: "Has a 100% chance to lower the target's Defense by 2 stage.",
+		shortDesc: "100% chance to lower the target's Defense by 2.",
 	},
 	rockthrow: {
 		name: "Rock Throw",
@@ -5445,8 +5445,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	rollingkick: {
 		name: "Rolling Kick",
-		desc: "Has a 30% chance to make the target flinch.",
-		shortDesc: "30% chance to make the target flinch.",
+		desc: "Has a 30% chance to make the target flinch. Free user from hazards/bind/Leech Seed",
+		shortDesc: "30% chance to make the target flinch. Clears the field.",
 	},
 	rollout: {
 		name: "Rollout",
@@ -6523,8 +6523,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	submission: {
 		name: "Submission",
-		desc: "If the target lost HP, the user takes recoil damage equal to 1/4 the HP lost by the target, rounded half up, but not less than 1 HP.",
-		shortDesc: "Has 1/4 recoil.",
+		desc: "If the target lost HP, the user takes recoil damage equal to 1/6 the HP lost by the target, rounded half up, but not less than 1 HP.",
+		shortDesc: "Has 1/6 recoil.",
 		gen4: {
 			desc: "If the target lost HP, the user takes recoil damage equal to 1/4 the HP lost by the target, rounded down, but not less than 1 HP.",
 		},
@@ -7180,7 +7180,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	triplekick: {
 		name: "Triple Kick",
-		desc: "Hits three times. Power increases to 20 for the second hit and 30 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit three times.",
+		desc: "Hits three times. Power increases to 40 for the second hit and 60 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the user has the Skill Link Ability, this move will always hit three times.",
 		shortDesc: "Hits 3 times. Each hit can miss, but power rises.",
 		gen4: {
 			desc: "Hits three times. Power increases to 20 for the second hit and 30 for the third. This move checks accuracy for each hit, and the attack ends if the target avoids a hit. If one of the hits breaks the target's substitute, it will take damage for the remaining hits. If the target has a Focus Sash and had full HP when this move started, it will not be knocked out regardless of the number of hits.",
@@ -7350,8 +7350,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	wakeupslap: {
 		name: "Wake-Up Slap",
-		desc: "Power doubles if the target is asleep. If the user has not fainted, the target wakes up.",
-		shortDesc: "Power doubles if target is asleep, and wakes it.",
+		shortDesc: "Power doubles if target is asleep.",
 		gen4: {
 			desc: "Power doubles if the target is asleep. If this move is successful, the target wakes up.",
 		},

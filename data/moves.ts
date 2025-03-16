@@ -6328,7 +6328,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (type === 'Water') return 1;
 		},
 		secondary: {
-			chance: 10,
+			chance: 30,
 			status: 'frz',
 		},
 		target: "normal",
