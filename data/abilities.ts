@@ -857,14 +857,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onBeforeMovePriority: 200,
 			onBeforeMove(source, target, move) {
-				this.add('-activate', source, 'ability: Dancer');
-				this.effectState.noLock = move.isExternal && !source.volatiles['lockedmove'];
+				if (move.isExternal) {
+					this.add('-activate', source, 'ability: Dancer');
+					this.effectState.noLock = move.isExternal && !source.volatiles['lockedmove'];
+				}
 			},
 			onTryAddVolatile(status) {
 				if (status.id === 'lockedmove' && this.effectState.noLock) return null;
 			},
-			onAfterMove(source) {
-				delete source.volatiles['dancer'];
+			onAfterMove(source, target, move) {
+				if (move.isExternal) {
+					delete source.volatiles['dancer'];
+				}
 			},
 		},
 		rating: 1.5,
