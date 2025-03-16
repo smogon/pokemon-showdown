@@ -183,4 +183,19 @@ describe('Dancer', () => {
 		assert.equal(fletchinder.boosts.atk, -2);
 		assert.equal(squawkabilly.boosts.atk, -4);
 	});
+
+	it('should activate after Eject Button', () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'oricoriopau', ability: 'dancer', moves: ['sleeptalk'] },
+			{ species: 'volcarona', moves: ['fierydance'] },
+		], [
+			{ species: 'fletchinder', item: 'ejectbutton', moves: ['sleeptalk'] },
+			{ species: 'squawkabilly', moves: ['sleeptalk'] },
+			{ species: 'suicune', moves: ['sleeptalk'] },
+		]]);
+		const suicune = battle.p2.pokemon[2];
+		battle.makeChoices('move sleeptalk, move fierydance 1', 'move sleeptalk, move sleeptalk');
+		battle.makeChoices();
+		assert.notEqual(suicune.fullHP, suicune.hp);
+	});
 });

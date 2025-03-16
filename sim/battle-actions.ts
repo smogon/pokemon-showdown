@@ -323,23 +323,28 @@ export class BattleActions {
 					dancers.push(currentPoke);
 				}
 			}
-			// Dancer activates in order of lowest speed stat to highest
-			// Note that the speed stat used is after any volatile replacements like Speed Swap,
-			// but before any multipliers like Agility or Choice Scarf
-			// Ties go to whichever Pokemon has had the ability for the least amount of time
-			dancers.sort(
-				(a, b) => -(b.storedStats['spe'] - a.storedStats['spe']) || b.abilityState.effectOrder - a.abilityState.effectOrder
-			);
 			const targetOf1stDance = this.battle.activeTarget!;
 			for (const dancer of dancers) {
 				if (this.battle.faintMessages()) break;
 				if (dancer.fainted) continue;
-				this.battle.add('-activate', dancer, 'ability: Dancer');
+				dancer.addVolatile('dancer');
 				const dancersTarget = !targetOf1stDance.isAlly(dancer) && pokemon.isAlly(dancer) ?
-					targetOf1stDance :
-					pokemon;
+					targetOf1stDance : pokemon;
 				const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-				this.runMove(move.id, dancer, dancersTargetLoc, { sourceEffect: this.dex.abilities.get('dancer'), externalMove: true });
+				// Dancer activates in order of lowest speed stat to highest
+				// Note that the speed stat used is after any volatile replacements like Speed Swap,
+				// but before any multipliers like Agility or Choice Scarf
+				// Ties go to whichever Pokemon has had the ability for the least amount of time
+				this.battle.queue.insertChoice({
+					choice: 'move',
+					order: 198 + dancer.storedStats['spe'] / 100000,
+					effectOrder: dancer.abilityState.effectOrder,
+					pokemon: dancer,
+					moveid: move.id,
+					targetLoc: dancersTargetLoc,
+					sourceEffect: this.dex.abilities.get('dancer'),
+					externalMove: true,
+				});
 			}
 		}
 		if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];

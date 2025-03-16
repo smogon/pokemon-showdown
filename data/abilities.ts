@@ -828,6 +828,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Dancer",
 		// implemented in runMove in scripts.js
+		condition: {
+			noCopy: true, // doesn't get copied by Baton Pass
+			onBeforeMovePriority: 200,
+			onBeforeMove(source) {
+				this.add('-activate', source, 'ability: Dancer');
+			},
+			onTryAddVolatile(status, target) {
+				// if (status.id === 'lockedmove' && target.abilityState.noLock) return null;
+			},
+			onAfterMove(source) {
+				source.removeVolatile('dancer');
+			},
+		},
 		rating: 1.5,
 		num: 216,
 	},

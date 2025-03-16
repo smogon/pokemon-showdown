@@ -44,6 +44,8 @@ export interface MoveAction {
 	maxMove?: string;
 	/** effect that called the move (eg Instruct) if any */
 	sourceEffect?: Effect | null;
+	/** TODO */
+	externalMove?: boolean;
 }
 
 /** A switch action */
