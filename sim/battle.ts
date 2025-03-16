@@ -2565,7 +2565,7 @@ export class Battle {
 		}
 	}
 
-	getActionSpeed(action: AnyObject) {
+	getActionSpeed(action: AnyObject, updateSpeed = true) {
 		if (action.choice === 'move') {
 			let move = action.move;
 			if (action.zmove) {
@@ -2597,7 +2597,7 @@ export class Battle {
 			if (this.gen > 5) action.move.priority = priority;
 		}
 
-		if (!action.speed) {
+		if (updateSpeed) {
 			if (!action.pokemon) {
 				action.speed = 1;
 			} else {
