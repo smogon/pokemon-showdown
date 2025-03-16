@@ -718,8 +718,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	brutalswing: {
 		name: "Brutal Swing",
-		desc: "No additional effect.",
-		shortDesc: "No additional effect. Hits adjacent Pokemon.",
+		shortDesc: "100% chance to lower the target's Atk by 1. Hits adjacent pokemon",
 	},
 	bubble: {
 		name: "Bubble",
@@ -1013,8 +1012,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	comeuppance: {
 		name: "Comeuppance",
-		desc: "Deals damage to the last opposing Pokemon to hit the user with a physical or special attack this turn equal to 1.5 times the HP lost by the user from that attack, rounded down. If the user did not lose HP from that attack, this move deals 1 HP of damage instead. If that opposing Pokemon's position is no longer in use and there is another opposing Pokemon on the field, the damage is done to it instead. Only the last hit of a multi-hit attack is counted. Fails if the user was not hit by an opposing Pokemon's physical or special attack this turn.",
-		shortDesc: "If hit by an attack, returns 1.5x damage.",
+		shortDesc: "if the target has an increased stat(s), power is double.",
 	},
 	confide: {
 		name: "Confide",
@@ -1589,7 +1587,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	dragonrage: {
 		name: "Dragon Rage",
-		shortDesc: "Deals 40 HP of damage to the target.",
+		shortDesc: "Dragon hits Fairy.",
 	},
 	dragonrush: {
 		name: "Dragon Rush",
@@ -1859,8 +1857,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	eternabeam: {
 		name: "Eternabeam",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		shortDesc: "Cannot be selected the turn after it's used.",
 	},
 	expandingforce: {
 		name: "Expanding Force",
@@ -1971,7 +1968,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	feintattack: {
 		name: "Feint Attack",
-		shortDesc: "This move does not check accuracy.",
+		shortDesc: "Hit first.",
 	},
 	fellstinger: {
 		name: "Fell Stinger",
@@ -1984,7 +1981,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	ficklebeam: {
 		name: "Fickle Beam",
-		shortDesc: "Has a 30% chance this move's power is doubled.",
+		shortDesc: "Hits 5 times in one turn. Increase a random stat +1",
 
 		activate: "  [POKEMON] is going all out for this attack!",
 	},
@@ -3411,8 +3408,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	jawlock: {
 		name: "Jaw Lock",
-		desc: "Prevents the user and the target from switching out. The user and the target can still switch out if either of them is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field.",
-		shortDesc: "Prevents both user and target from switching out.",
+		desc: "Prevents the user and the target from switching out. The user and the target can still switch out if either of them is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. The effect ends if either the user or the target leaves the field. Type depends on the user's secondary type",
+		shortDesc: "Prevents both user and target from switching out. Type depends on the user.",
 	},
 	jetpunch: {
 		name: "Jet Punch",
@@ -3519,8 +3516,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	lashout: {
 		name: "Lash Out",
-		desc: "Power doubles if the user had a stat stage lowered this turn.",
-		shortDesc: "2x power if the user had a stat lowered this turn.",
+		desc: "Power doubles if the user had a stat stage lowered this turn. Power doubles if user is burn/poison/paralyzed.",
+		shortDesc: "2x power if the user had a stat lowered or user is burn/poison/paralyzed.",
 	},
 	lastresort: {
 		name: "Last Resort",
@@ -4195,7 +4192,6 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	miracleeye: {
 		name: "Miracle Eye",
-		desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Psychic-type attacks can hit the target if it is a Dark type. Fails if the target is already affected, or affected by Foresight or Odor Sleuth.",
 		shortDesc: "Psychic hits Dark. Evasiveness ignored.",
 		gen4: {
 			desc: "As long as the target remains active, its evasiveness stat stage is ignored during accuracy checks against it if it is greater than 0, and Psychic-type attacks can hit the target if it is a Dark type.",
@@ -4451,8 +4447,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	nightdaze: {
 		name: "Night Daze",
-		desc: "Has a 40% chance to lower the target's accuracy by 1 stage.",
-		shortDesc: "40% chance to lower the target's accuracy by 1.",
+		desc: "Has a 100% chance to lower the target's Speed by 1 stage.",
+		shortDesc: "100% chance to lower the foe(s) Speed by 1.",
 	},
 	nightmare: {
 		name: "Nightmare",
@@ -5352,8 +5348,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	roaroftime: {
 		name: "Roar of Time",
-		desc: "If this move is successful, the user must recharge on the following turn and cannot select a move.",
-		shortDesc: "User cannot move next turn.",
+		shortDesc: "Has 1/2 recoil. Nullifies the object of the target",
 	},
 	rocagalvanizada: {
 		name: "Roca Galvanizada",
@@ -7229,8 +7224,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	twister: {
 		name: "Twister",
-		desc: "Has a 20% chance to make the target flinch. Power doubles if the target is using Bounce, Fly, or Sky Drop, or is under the effect of Sky Drop.",
-		shortDesc: "20% chance to make the foe(s) flinch.",
+		shortDesc: "Hit first.",
 		gen4: {
 			desc: "Has a 20% chance to make the target flinch. Power doubles if the target is using Bounce or Fly.",
 		},
