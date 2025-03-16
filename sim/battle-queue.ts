@@ -159,7 +159,7 @@ export class BattleQueue {
 	 * Returns an array of Actions because some ActionChoices (like mega moves)
 	 * resolve to two Actions (mega evolution + use move)
 	 */
-	resolveAction(action: ActionChoice, midTurn = false, updateSpeed = true): Action[] {
+	resolveAction(action: ActionChoice, midTurn = false): Action[] {
 		if (!action) throw new Error(`Action not passed to resolveAction`);
 		if (action.choice === 'pass') return [];
 		const actions = [action];
@@ -263,7 +263,7 @@ export class BattleQueue {
 			}
 			action.originalTarget = action.pokemon.getAtLoc(action.targetLoc);
 		}
-		if (!deferPriority) this.battle.getActionSpeed(action, updateSpeed);
+		if (!deferPriority) this.battle.getActionSpeed(action);
 		return actions as any;
 	}
 
@@ -362,7 +362,7 @@ export class BattleQueue {
 	 * would have happened (sorting by priority/speed), without
 	 * re-sorting the existing actions.
 	 */
-	insertChoice(choices: ActionChoice | ActionChoice[], midTurn = false, updateSpeed = true) {
+	insertChoice(choices: ActionChoice | ActionChoice[], midTurn = false) {
 		if (Array.isArray(choices)) {
 			for (const choice of choices) {
 				this.insertChoice(choice);
@@ -374,7 +374,7 @@ export class BattleQueue {
 		if (choice.pokemon) {
 			choice.pokemon.updateSpeed();
 		}
-		const actions = this.resolveAction(choice, midTurn, updateSpeed);
+		const actions = this.resolveAction(choice, midTurn);
 
 		let firstIndex = null;
 		let lastIndex = null;
