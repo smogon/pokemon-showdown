@@ -767,6 +767,13 @@ export const commands: Chat.ChatCommands = {
 					if (move.flags['dance'] && dex.gen >= 7) details["&#10003; Dance move"] = "";
 					if (move.flags['slicing'] && dex.gen >= 9) details["&#10003; Slicing move"] = "";
 					if (move.flags['wind'] && dex.gen >= 9) details["&#10003; Wind move"] = "";
+					if (move.flags['tail'] && dex.gen >= 9) details["&#10003; Tail move"] = "";
+					if (move.flags['head'] && dex.gen >= 9) details["&#10003; Head move"] = "";
+					if (move.flags['wing'] && dex.gen >= 9) details["&#10003; Wing move"] = "";
+					if (move.flags['kick'] && dex.gen >= 9) details["&#10003; Kick move"] = "";
+					if (move.flags['light'] && dex.gen >= 9) details["&#10003; Light move"] = "";
+					if (move.flags['beam'] && dex.gen >= 9) details["&#10003; Beam move"] = "";
+
 
 					if (dex.gen >= 7) {
 						if (move.gen >= 8 && move.isMax) {
