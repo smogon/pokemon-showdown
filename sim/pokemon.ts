@@ -680,7 +680,6 @@ export class Pokemon {
 		if (!move.moveHitData) move.moveHitData = {};
 		const slot = this.getSlot();
 		return move.moveHitData[slot] || (move.moveHitData[slot] = {
-			successful: false,
 			crit: false,
 			typeMod: 0,
 			zBrokeProtect: false,
