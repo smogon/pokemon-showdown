@@ -19,34 +19,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 1881,
 		gen: 9,
 	},
-	abomasite: {
-		name: "Abomasite",
-		spritenum: 575,
-		megaStone: "Abomasnow-Mega",
-		megaEvolves: "Abomasnow",
-		itemUser: ["Abomasnow"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 674,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	absolite: {
-		name: "Absolite",
-		spritenum: 576,
-		megaStone: "Absol-Mega",
-		megaEvolves: "Absol",
-		itemUser: ["Absol"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 677,
-		gen: 6,
-		isNonstandard: "Past",
-	},
 	absorbbulb: {
 		name: "Absorb Bulb",
 		spritenum: 2,
@@ -63,94 +35,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 545,
 		gen: 5,
-	},
-	adamantcrystal: {
-		name: "Adamant Crystal",
-		spritenum: 741,
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.num === 483 && (move.type === 'Steel' || move.type === 'Dragon')) {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if (source?.baseSpecies.num === 483 || pokemon.baseSpecies.num === 483) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Dialga-Origin",
-		itemUser: ["Dialga-Origin"],
-		num: 1777,
-		gen: 8,
-	},
-	adamantorb: {
-		name: "Adamant Orb",
-		spritenum: 4,
-		fling: {
-			basePower: 60,
-		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.num === 483 && (move.type === 'Steel' || move.type === 'Dragon')) {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		itemUser: ["Dialga"],
-		num: 135,
-		gen: 4,
-	},
-	adrenalineorb: {
-		name: "Adrenaline Orb",
-		spritenum: 660,
-		fling: {
-			basePower: 30,
-		},
-		onAfterBoost(boost, target, source, effect) {
-			// Adrenaline Orb activates if Intimidate is blocked by an ability like Hyper Cutter,
-			// which deletes boost.atk,
-			// but not if the holder's attack is already at -6 (or +6 if it has Contrary),
-			// which sets boost.atk to 0
-			if (target.boosts['spe'] === 6 || boost.atk === 0) {
-				return;
-			}
-			if (effect.name === 'Intimidate') {
-				target.useItem();
-			}
-		},
-		boosts: {
-			spe: 1,
-		},
-		num: 846,
-		gen: 7,
-	},
-	aerodactylite: {
-		name: "Aerodactylite",
-		spritenum: 577,
-		megaStone: "Aerodactyl-Mega",
-		megaEvolves: "Aerodactyl",
-		itemUser: ["Aerodactyl"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 672,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	aggronite: {
-		name: "Aggronite",
-		spritenum: 578,
-		megaStone: "Aggron-Mega",
-		megaEvolves: "Aggron",
-		itemUser: ["Aggron"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 667,
-		gen: 6,
-		isNonstandard: "Past",
 	},
 	aguavberry: {
 		name: "Aguav Berry",
@@ -208,59 +92,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 541,
 		gen: 5,
 	},
-	alakazite: {
-		name: "Alakazite",
-		spritenum: 579,
-		megaStone: "Alakazam-Mega",
-		megaEvolves: "Alakazam",
-		itemUser: ["Alakazam"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 679,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	aloraichiumz: {
-		name: "Aloraichium Z",
-		spritenum: 655,
-		onTakeItem: false,
-		zMove: "Stoked Sparksurfer",
-		zMoveFrom: "Thunderbolt",
-		itemUser: ["Raichu-Alola"],
-		num: 803,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	altarianite: {
-		name: "Altarianite",
-		spritenum: 615,
-		megaStone: "Altaria-Mega",
-		megaEvolves: "Altaria",
-		itemUser: ["Altaria"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 755,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	ampharosite: {
-		name: "Ampharosite",
-		spritenum: 580,
-		megaStone: "Ampharos-Mega",
-		megaEvolves: "Ampharos",
-		itemUser: ["Ampharos"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 658,
-		gen: 6,
-		isNonstandard: "Past",
-	},
 	apicotberry: {
 		name: "Apicot Berry",
 		spritenum: 10,
@@ -280,16 +111,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 205,
 		gen: 3,
-	},
-	armorfossil: {
-		name: "Armor Fossil",
-		spritenum: 12,
-		fling: {
-			basePower: 100,
-		},
-		num: 104,
-		gen: 4,
-		isNonstandard: "Past",
 	},
 	aspearberry: {
 		name: "Aspear Berry",
@@ -333,29 +154,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 640,
 		gen: 6,
 	},
-	audinite: {
-		name: "Audinite",
-		spritenum: 617,
-		megaStone: "Audino-Mega",
-		megaEvolves: "Audino",
-		itemUser: ["Audino"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 757,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	auspiciousarmor: {
-		name: "Auspicious Armor",
-		spritenum: 753,
-		fling: {
-			basePower: 30,
-		},
-		num: 2344,
-		gen: 9,
-	},
 	babiriberry: {
 		name: "Babiri Berry",
 		spritenum: 17,
@@ -379,41 +177,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onEat() { },
 		num: 199,
 		gen: 4,
-	},
-	banettite: {
-		name: "Banettite",
-		spritenum: 582,
-		megaStone: "Banette-Mega",
-		megaEvolves: "Banette",
-		itemUser: ["Banette"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 668,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	beastball: {
-		name: "Beast Ball",
-		spritenum: 661,
-		num: 851,
-		gen: 7,
-		isPokeball: true,
-	},
-	beedrillite: {
-		name: "Beedrillite",
-		spritenum: 628,
-		megaStone: "Beedrill-Mega",
-		megaEvolves: "Beedrill",
-		itemUser: ["Beedrill"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 770,
-		gen: 6,
-		isNonstandard: "Past",
 	},
 	belueberry: {
 		name: "Belue Berry",
@@ -444,24 +207,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 43,
 		gen: 2,
 		isNonstandard: "Past",
-	},
-	berrysweet: {
-		name: "Berry Sweet",
-		spritenum: 706,
-		fling: {
-			basePower: 10,
-		},
-		num: 1111,
-		gen: 8,
-	},
-	bignugget: {
-		name: "Big Nugget",
-		spritenum: 27,
-		fling: {
-			basePower: 130,
-		},
-		num: 581,
-		gen: 5,
 	},
 	bigroot: {
 		name: "Big Root",
@@ -537,53 +282,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 281,
 		gen: 4,
 	},
-	blastoisinite: {
-		name: "Blastoisinite",
-		spritenum: 583,
-		megaStone: "Blastoise-Mega",
-		megaEvolves: "Blastoise",
-		itemUser: ["Blastoise"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 661,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	blazikenite: {
-		name: "Blazikenite",
-		spritenum: 584,
-		megaStone: "Blaziken-Mega",
-		megaEvolves: "Blaziken",
-		itemUser: ["Blaziken"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 664,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	blueorb: {
-		name: "Blue Orb",
-		spritenum: 41,
-		onSwitchInPriority: -1,
-		onSwitchIn(pokemon) {
-			if (pokemon.isActive && pokemon.baseSpecies.name === 'Kyogre' && !pokemon.transformed) {
-				pokemon.formeChange('Kyogre-Primal', this.effect, true);
-			}
-		},
-		onTakeItem(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Kyogre') return false;
-			return true;
-		},
-		itemUser: ["Kyogre"],
-		isPrimalOrb: true,
-		num: 535,
-		gen: 6,
-		isNonstandard: "Past",
-	},
 	blukberry: {
 		name: "Bluk Berry",
 		spritenum: 44,
@@ -606,43 +304,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		// Item activation located in scripts.js
 		num: 1121,
 		gen: 8,
-	},
-	boosterenergy: {
-		name: "Booster Energy",
-		spritenum: 745,
-		fling: {
-			basePower: 30,
-		},
-		onSwitchInPriority: -2,
-		onStart(pokemon) {
-			this.effectState.started = true;
-			((this.effect as any).onUpdate as (p: Pokemon) => void).call(this, pokemon);
-		},
-		onUpdate(pokemon) {
-			if (!this.effectState.started || pokemon.transformed) return;
-
-			if (pokemon.hasAbility('protosynthesis') && !this.field.isWeather('sunnyday') && pokemon.useItem()) {
-				pokemon.addVolatile('protosynthesis');
-			}
-			if (pokemon.hasAbility('quarkdrive') && !this.field.isTerrain('electricterrain') && pokemon.useItem()) {
-				pokemon.addVolatile('quarkdrive');
-			}
-		},
-		onTakeItem(item, source) {
-			if (source.baseSpecies.tags.includes("Paradox")) return false;
-			return true;
-		},
-		num: 1880,
-		gen: 9,
-	},
-	bottlecap: {
-		name: "Bottle Cap",
-		spritenum: 696,
-		fling: {
-			basePower: 30,
-		},
-		num: 795,
-		gen: 7,
 	},
 	brightpowder: {
 		name: "Bright Powder",
@@ -671,65 +332,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 558,
 		gen: 5,
-		isNonstandard: "Past",
-	},
-	bugmemory: {
-		name: "Bug Memory",
-		spritenum: 673,
-		onMemory: 'Bug',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Bug",
-		itemUser: ["Silvally-Bug"],
-		num: 909,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	buginiumz: {
-		name: "Buginium Z",
-		spritenum: 642,
-		onPlate: 'Bug',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Bug",
-		forcedForme: "Arceus-Bug",
-		num: 787,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	burndrive: {
-		name: "Burn Drive",
-		spritenum: 54,
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
-				return false;
-			}
-			return true;
-		},
-		onDrive: 'Fire',
-		forcedForme: "Genesect-Burn",
-		itemUser: ["Genesect-Burn"],
-		num: 118,
-		gen: 5,
-		isNonstandard: "Past",
-	},
-	cameruptite: {
-		name: "Cameruptite",
-		spritenum: 625,
-		megaStone: "Camerupt-Mega",
-		megaEvolves: "Camerupt",
-		itemUser: ["Camerupt"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 767,
-		gen: 6,
-		isNonstandard: "Past",
 	},
 	cellbattery: {
 		name: "Cell Battery",
@@ -762,34 +364,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 249,
 		gen: 2,
-	},
-	charizarditex: {
-		name: "Charizardite X",
-		spritenum: 585,
-		megaStone: "Charizard-Mega-X",
-		megaEvolves: "Charizard",
-		itemUser: ["Charizard"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 660,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	charizarditey: {
-		name: "Charizardite Y",
-		spritenum: 586,
-		megaStone: "Charizard-Mega-Y",
-		megaEvolves: "Charizard",
-		itemUser: ["Charizard"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 678,
-		gen: 6,
-		isNonstandard: "Past",
 	},
 	chartiberry: {
 		name: "Charti Berry",
@@ -836,14 +410,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 149,
 		gen: 3,
 	},
-	cherishball: {
-		name: "Cherish Ball",
-		spritenum: 64,
-		num: 16,
-		gen: 4,
-		isPokeball: true,
-		isNonstandard: "Unobtainable",
-	},
 	chestoberry: {
 		name: "Chesto Berry",
 		spritenum: 65,
@@ -888,31 +454,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onEat() { },
 		num: 200,
 		gen: 4,
-	},
-	chilldrive: {
-		name: "Chill Drive",
-		spritenum: 67,
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
-				return false;
-			}
-			return true;
-		},
-		onDrive: 'Ice',
-		forcedForme: "Genesect-Chill",
-		itemUser: ["Genesect-Chill"],
-		num: 119,
-		gen: 5,
-		isNonstandard: "Past",
-	},
-	chippedpot: {
-		name: "Chipped Pot",
-		spritenum: 720,
-		fling: {
-			basePower: 80,
-		},
-		num: 1254,
-		gen: 8,
 	},
 	choiceband: {
 		name: "Choice Band",
@@ -1009,49 +550,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 189,
 		gen: 4,
 	},
-	clawfossil: {
-		name: "Claw Fossil",
-		spritenum: 72,
-		fling: {
-			basePower: 100,
-		},
-		num: 100,
-		gen: 3,
-		isNonstandard: "Past",
-	},
-	clearamulet: {
-		name: "Clear Amulet",
-		spritenum: 747,
-		fling: {
-			basePower: 30,
-		},
-		onTryBoostPriority: 1,
-		onTryBoost(boost, target, source, effect) {
-			if (source && target === source) return;
-			let showMsg = false;
-			let i: BoostID;
-			for (i in boost) {
-				if (boost[i]! < 0) {
-					delete boost[i];
-					showMsg = true;
-				}
-			}
-			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add('-fail', target, 'unboost', '[from] item: Clear Amulet', `[of] ${target}`);
-			}
-		},
-		num: 1882,
-		gen: 9,
-	},
-	cloversweet: {
-		name: "Clover Sweet",
-		spritenum: 707,
-		fling: {
-			basePower: 10,
-		},
-		num: 1112,
-		gen: 8,
-	},
 	cobaberry: {
 		name: "Coba Berry",
 		spritenum: 76,
@@ -1100,27 +598,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 198,
 		gen: 4,
 	},
-	cornerstonemask: {
-		name: "Cornerstone Mask",
-		spritenum: 758,
-		fling: {
-			basePower: 60,
-		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.name.startsWith('Ogerpon-Cornerstone')) {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
-			return true;
-		},
-		forcedForme: "Ogerpon-Cornerstone",
-		itemUser: ["Ogerpon-Cornerstone"],
-		num: 2406,
-		gen: 9,
-	},
 	cornnberry: {
 		name: "Cornn Berry",
 		spritenum: 81,
@@ -1132,16 +609,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onEat: false,
 		num: 175,
 		gen: 3,
-		isNonstandard: "Past",
-	},
-	coverfossil: {
-		name: "Cover Fossil",
-		spritenum: 85,
-		fling: {
-			basePower: 100,
-		},
-		num: 572,
-		gen: 5,
 		isNonstandard: "Past",
 	},
 	covertcloak: {
@@ -1156,15 +623,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 1885,
 		gen: 9,
-	},
-	crackedpot: {
-		name: "Cracked Pot",
-		spritenum: 719,
-		fling: {
-			basePower: 80,
-		},
-		num: 1253,
-		gen: 8,
 	},
 	custapberry: {
 		name: "Custap Berry",
@@ -1212,55 +670,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 562,
 		gen: 5,
-		isNonstandard: "Past",
-	},
-	darkmemory: {
-		name: "Dark Memory",
-		spritenum: 683,
-		onMemory: 'Dark',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Dark",
-		itemUser: ["Silvally-Dark"],
-		num: 919,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	darkiniumz: {
-		name: "Darkinium Z",
-		spritenum: 646,
-		onPlate: 'Dark',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Dark",
-		forcedForme: "Arceus-Dark",
-		num: 791,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	dawnstone: {
-		name: "Dawn Stone",
-		spritenum: 92,
-		fling: {
-			basePower: 80,
-		},
-		num: 109,
-		gen: 4,
-	},
-	decidiumz: {
-		name: "Decidium Z",
-		spritenum: 650,
-		onTakeItem: false,
-		zMove: "Sinister Arrow Raid",
-		zMoveFrom: "Spirit Shackle",
-		itemUser: ["Decidueye"],
-		num: 798,
-		gen: 7,
-		isNonstandard: "Past",
 	},
 	deepseascale: {
 		name: "Deep Sea Scale",
@@ -1311,73 +720,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 280,
 		gen: 4,
 	},
-	diancite: {
-		name: "Diancite",
-		spritenum: 624,
-		megaStone: "Diancie-Mega",
-		megaEvolves: "Diancie",
-		itemUser: ["Diancie"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 764,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	diveball: {
-		name: "Dive Ball",
-		spritenum: 101,
-		num: 7,
-		gen: 3,
-		isPokeball: true,
-	},
-	domefossil: {
-		name: "Dome Fossil",
-		spritenum: 102,
-		fling: {
-			basePower: 100,
-		},
-		num: 102,
-		gen: 3,
-		isNonstandard: "Past",
-	},
-	dousedrive: {
-		name: "Douse Drive",
-		spritenum: 103,
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
-				return false;
-			}
-			return true;
-		},
-		onDrive: 'Water',
-		forcedForme: "Genesect-Douse",
-		itemUser: ["Genesect-Douse"],
-		num: 116,
-		gen: 5,
-		isNonstandard: "Past",
-	},
-	dracoplate: {
-		name: "Draco Plate",
-		spritenum: 105,
-		onPlate: 'Dragon',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Dragon') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Dragon",
-		num: 311,
-		gen: 4,
-	},
 	dragonfang: {
 		name: "Dragon Fang",
 		spritenum: 106,
@@ -1405,80 +747,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 561,
 		gen: 5,
-		isNonstandard: "Past",
-	},
-	dragonmemory: {
-		name: "Dragon Memory",
-		spritenum: 682,
-		onMemory: 'Dragon',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Dragon",
-		itemUser: ["Silvally-Dragon"],
-		num: 918,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	dragonscale: {
-		name: "Dragon Scale",
-		spritenum: 108,
-		fling: {
-			basePower: 30,
-		},
-		num: 235,
-		gen: 2,
-	},
-	dragoniumz: {
-		name: "Dragonium Z",
-		spritenum: 645,
-		onPlate: 'Dragon',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Dragon",
-		forcedForme: "Arceus-Dragon",
-		num: 790,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	dreadplate: {
-		name: "Dread Plate",
-		spritenum: 110,
-		onPlate: 'Dark',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Dark') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Dark",
-		num: 312,
-		gen: 4,
-	},
-	dreamball: {
-		name: "Dream Ball",
-		spritenum: 111,
-		num: 576,
-		gen: 5,
-		isPokeball: true,
-	},
-	dubiousdisc: {
-		name: "Dubious Disc",
-		spritenum: 113,
-		fling: {
-			basePower: 50,
-		},
-		num: 324,
-		gen: 4,
 	},
 	durinberry: {
 		name: "Durin Berry",
@@ -1491,53 +759,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onEat: false,
 		num: 182,
 		gen: 3,
-		isNonstandard: "Past",
-	},
-	duskball: {
-		name: "Dusk Ball",
-		spritenum: 115,
-		num: 13,
-		gen: 4,
-		isPokeball: true,
-	},
-	duskstone: {
-		name: "Dusk Stone",
-		spritenum: 116,
-		fling: {
-			basePower: 80,
-		},
-		num: 108,
-		gen: 4,
-	},
-	earthplate: {
-		name: "Earth Plate",
-		spritenum: 117,
-		onPlate: 'Ground',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Ground') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Ground",
-		num: 305,
-		gen: 4,
-	},
-	eeviumz: {
-		name: "Eevium Z",
-		spritenum: 657,
-		onTakeItem: false,
-		zMove: "Extreme Evoboost",
-		zMoveFrom: "Last Resort",
-		itemUser: ["Eevee"],
-		num: 805,
-		gen: 7,
 		isNonstandard: "Past",
 	},
 	ejectbutton: {
@@ -1594,15 +815,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 1119,
 		gen: 8,
 	},
-	electirizer: {
-		name: "Electirizer",
-		spritenum: 119,
-		fling: {
-			basePower: 80,
-		},
-		num: 322,
-		gen: 4,
-	},
 	electricgem: {
 		name: "Electric Gem",
 		spritenum: 120,
@@ -1615,23 +827,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 550,
 		gen: 5,
-		isNonstandard: "Past",
-	},
-	electricmemory: {
-		name: "Electric Memory",
-		spritenum: 679,
-		onMemory: 'Electric',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Electric",
-		itemUser: ["Silvally-Electric"],
-		num: 915,
-		gen: 7,
-		isNonstandard: "Past",
 	},
 	electricseed: {
 		name: "Electric Seed",
@@ -1655,18 +850,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 881,
 		gen: 7,
-	},
-	electriumz: {
-		name: "Electrium Z",
-		spritenum: 634,
-		onPlate: 'Electric',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Electric",
-		forcedForme: "Arceus-Electric",
-		num: 779,
-		gen: 7,
-		isNonstandard: "Past",
 	},
 	enigmaberry: {
 		name: "Enigma Berry",
@@ -1725,18 +908,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 268,
 		gen: 4,
 	},
-	fairiumz: {
-		name: "Fairium Z",
-		spritenum: 648,
-		onPlate: 'Fairy',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Fairy",
-		forcedForme: "Arceus-Fairy",
-		num: 793,
-		gen: 7,
-		isNonstandard: "Past",
-	},
 	fairyfeather: {
 		name: "Fairy Feather",
 		spritenum: 754,
@@ -1764,30 +935,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 715,
 		gen: 6,
-		isNonstandard: "Past",
-	},
-	fairymemory: {
-		name: "Fairy Memory",
-		spritenum: 684,
-		onMemory: 'Fairy',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Fairy",
-		itemUser: ["Silvally-Fairy"],
-		num: 920,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	fastball: {
-		name: "Fast Ball",
-		spritenum: 137,
-		num: 492,
-		gen: 2,
-		isPokeball: true,
 	},
 	fightinggem: {
 		name: "Fighting Gem",
@@ -1801,35 +948,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 553,
 		gen: 5,
-		isNonstandard: "Past",
-	},
-	fightingmemory: {
-		name: "Fighting Memory",
-		spritenum: 668,
-		onMemory: 'Fighting',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Fighting",
-		itemUser: ["Silvally-Fighting"],
-		num: 904,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	fightiniumz: {
-		name: "Fightinium Z",
-		spritenum: 637,
-		onPlate: 'Fighting',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Fighting",
-		forcedForme: "Arceus-Fighting",
-		num: 782,
-		gen: 7,
-		isNonstandard: "Past",
 	},
 	figyberry: {
 		name: "Figy Berry",
@@ -1869,64 +987,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 548,
 		gen: 5,
-		isNonstandard: "Past",
-	},
-	firememory: {
-		name: "Fire Memory",
-		spritenum: 676,
-		onMemory: 'Fire',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Fire",
-		itemUser: ["Silvally-Fire"],
-		num: 912,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	firestone: {
-		name: "Fire Stone",
-		spritenum: 142,
-		fling: {
-			basePower: 30,
-		},
-		num: 82,
-		gen: 1,
-	},
-	firiumz: {
-		name: "Firium Z",
-		spritenum: 632,
-		onPlate: 'Fire',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Fire",
-		forcedForme: "Arceus-Fire",
-		num: 777,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	fistplate: {
-		name: "Fist Plate",
-		spritenum: 143,
-		onPlate: 'Fighting',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Fighting') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Fighting",
-		num: 303,
-		gen: 4,
 	},
 	flameorb: {
 		name: "Flame Orb",
@@ -1943,26 +1003,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 273,
 		gen: 4,
 	},
-	flameplate: {
-		name: "Flame Plate",
-		spritenum: 146,
-		onPlate: 'Fire',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Fire') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Fire",
-		num: 298,
-		gen: 4,
-	},
 	floatstone: {
 		name: "Float Stone",
 		spritenum: 147,
@@ -1974,15 +1014,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 539,
 		gen: 5,
-	},
-	flowersweet: {
-		name: "Flower Sweet",
-		spritenum: 708,
-		fling: {
-			basePower: 0,
-		},
-		num: 1113,
-		gen: 8,
 	},
 	flyinggem: {
 		name: "Flying Gem",
@@ -1996,35 +1027,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 556,
 		gen: 5,
-		isNonstandard: "Past",
-	},
-	flyingmemory: {
-		name: "Flying Memory",
-		spritenum: 669,
-		onMemory: 'Flying',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Flying",
-		itemUser: ["Silvally-Flying"],
-		num: 905,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	flyiniumz: {
-		name: "Flyinium Z",
-		spritenum: 640,
-		onPlate: 'Flying',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Flying",
-		forcedForme: "Arceus-Flying",
-		num: 785,
-		gen: 7,
-		isNonstandard: "Past",
 	},
 	focusband: {
 		name: "Focus Band",
@@ -2059,96 +1061,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 275,
 		gen: 4,
 	},
-	fossilizedbird: {
-		name: "Fossilized Bird",
-		spritenum: 700,
-		fling: {
-			basePower: 100,
-		},
-		num: 1105,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	fossilizeddino: {
-		name: "Fossilized Dino",
-		spritenum: 703,
-		fling: {
-			basePower: 100,
-		},
-		num: 1108,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	fossilizeddrake: {
-		name: "Fossilized Drake",
-		spritenum: 702,
-		fling: {
-			basePower: 100,
-		},
-		num: 1107,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	fossilizedfish: {
-		name: "Fossilized Fish",
-		spritenum: 701,
-		fling: {
-			basePower: 100,
-		},
-		num: 1106,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	friendball: {
-		name: "Friend Ball",
-		spritenum: 153,
-		num: 497,
-		gen: 2,
-		isPokeball: true,
-	},
-	fullincense: {
-		name: "Full Incense",
-		spritenum: 155,
-		fling: {
-			basePower: 10,
-		},
-		onFractionalPriority: -0.1,
-		num: 316,
-		gen: 4,
-		isNonstandard: "Past",
-	},
-	galaricacuff: {
-		name: "Galarica Cuff",
-		spritenum: 739,
-		fling: {
-			basePower: 30,
-		},
-		num: 1582,
-		gen: 8,
-	},
-	galaricawreath: {
-		name: "Galarica Wreath",
-		spritenum: 740,
-		fling: {
-			basePower: 30,
-		},
-		num: 1592,
-		gen: 8,
-	},
-	galladite: {
-		name: "Galladite",
-		spritenum: 616,
-		megaStone: "Gallade-Mega",
-		megaEvolves: "Gallade",
-		itemUser: ["Gallade"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 756,
-		gen: 6,
-		isNonstandard: "Past",
-	},
 	ganlonberry: {
 		name: "Ganlon Berry",
 		spritenum: 158,
@@ -2169,48 +1081,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 202,
 		gen: 3,
 	},
-	garchompite: {
-		name: "Garchompite",
-		spritenum: 589,
-		megaStone: "Garchomp-Mega",
-		megaEvolves: "Garchomp",
-		itemUser: ["Garchomp"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 683,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	gardevoirite: {
-		name: "Gardevoirite",
-		spritenum: 587,
-		megaStone: "Gardevoir-Mega",
-		megaEvolves: "Gardevoir",
-		itemUser: ["Gardevoir"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 657,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	gengarite: {
-		name: "Gengarite",
-		spritenum: 588,
-		megaStone: "Gengar-Mega",
-		megaEvolves: "Gengar",
-		itemUser: ["Gengar"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 656,
-		gen: 6,
-		isNonstandard: "Past",
-	},
 	ghostgem: {
 		name: "Ghost Gem",
 		spritenum: 161,
@@ -2223,58 +1093,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 560,
 		gen: 5,
-		isNonstandard: "Past",
-	},
-	ghostmemory: {
-		name: "Ghost Memory",
-		spritenum: 674,
-		onMemory: 'Ghost',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Ghost",
-		itemUser: ["Silvally-Ghost"],
-		num: 910,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	ghostiumz: {
-		name: "Ghostium Z",
-		spritenum: 644,
-		onPlate: 'Ghost',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Ghost",
-		forcedForme: "Arceus-Ghost",
-		num: 789,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	glalitite: {
-		name: "Glalitite",
-		spritenum: 623,
-		megaStone: "Glalie-Mega",
-		megaEvolves: "Glalie",
-		itemUser: ["Glalie"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 763,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	goldbottlecap: {
-		name: "Gold Bottle Cap",
-		spritenum: 697,
-		fling: {
-			basePower: 30,
-		},
-		num: 796,
-		gen: 7,
 	},
 	grassgem: {
 		name: "Grass Gem",
@@ -2288,35 +1106,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 551,
 		gen: 5,
-		isNonstandard: "Past",
-	},
-	grassmemory: {
-		name: "Grass Memory",
-		spritenum: 678,
-		onMemory: 'Grass',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Grass",
-		itemUser: ["Silvally-Grass"],
-		num: 914,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	grassiumz: {
-		name: "Grassium Z",
-		spritenum: 635,
-		onPlate: 'Grass',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Grass",
-		forcedForme: "Arceus-Grass",
-		num: 780,
-		gen: 7,
-		isNonstandard: "Past",
 	},
 	grassyseed: {
 		name: "Grassy Seed",
@@ -2341,13 +1130,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 884,
 		gen: 7,
 	},
-	greatball: {
-		name: "Great Ball",
-		spritenum: 174,
-		num: 3,
-		gen: 1,
-		isPokeball: true,
-	},
 	grepaberry: {
 		name: "Grepa Berry",
 		spritenum: 178,
@@ -2359,52 +1141,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onEat: false,
 		num: 173,
 		gen: 3,
-	},
-	gripclaw: {
-		name: "Grip Claw",
-		spritenum: 179,
-		fling: {
-			basePower: 90,
-		},
-		// implemented in statuses
-		num: 286,
-		gen: 4,
-	},
-	griseouscore: {
-		name: "Griseous Core",
-		spritenum: 743,
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if (source?.baseSpecies.num === 487 || pokemon.baseSpecies.num === 487) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Giratina-Origin",
-		itemUser: ["Giratina-Origin"],
-		num: 1779,
-		gen: 8,
-	},
-	griseousorb: {
-		name: "Griseous Orb",
-		spritenum: 180,
-		fling: {
-			basePower: 60,
-		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.num === 487 && (move.type === 'Ghost' || move.type === 'Dragon')) {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		itemUser: ["Giratina"],
-		num: 112,
-		gen: 4,
 	},
 	groundgem: {
 		name: "Ground Gem",
@@ -2418,49 +1154,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 555,
 		gen: 5,
-		isNonstandard: "Past",
-	},
-	groundmemory: {
-		name: "Ground Memory",
-		spritenum: 671,
-		onMemory: 'Ground',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Ground",
-		itemUser: ["Silvally-Ground"],
-		num: 907,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	groundiumz: {
-		name: "Groundium Z",
-		spritenum: 639,
-		onPlate: 'Ground',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Ground",
-		forcedForme: "Arceus-Ground",
-		num: 784,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	gyaradosite: {
-		name: "Gyaradosite",
-		spritenum: 589,
-		megaStone: "Gyarados-Mega",
-		megaEvolves: "Gyarados",
-		itemUser: ["Gyarados"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 676,
-		gen: 6,
-		isNonstandard: "Past",
 	},
 	habanberry: {
 		name: "Haban Berry",
@@ -2501,34 +1194,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 238,
 		gen: 2,
 	},
-	healball: {
-		name: "Heal Ball",
-		spritenum: 188,
-		num: 14,
-		gen: 4,
-		isPokeball: true,
-	},
-	hearthflamemask: {
-		name: "Hearthflame Mask",
-		spritenum: 760,
-		fling: {
-			basePower: 60,
-		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.name.startsWith('Ogerpon-Hearthflame')) {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
-			return true;
-		},
-		forcedForme: "Ogerpon-Hearthflame",
-		itemUser: ["Ogerpon-Hearthflame"],
-		num: 2408,
-		gen: 9,
-	},
 	heatrock: {
 		name: "Heat Rock",
 		spritenum: 193,
@@ -2537,13 +1202,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 284,
 		gen: 4,
-	},
-	heavyball: {
-		name: "Heavy Ball",
-		spritenum: 194,
-		num: 495,
-		gen: 2,
-		isPokeball: true,
 	},
 	heavydutyboots: {
 		name: "Heavy-Duty Boots",
@@ -2554,30 +1212,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 1120,
 		gen: 8,
 		// Hazard Immunity implemented in moves.ts
-	},
-	helixfossil: {
-		name: "Helix Fossil",
-		spritenum: 195,
-		fling: {
-			basePower: 100,
-		},
-		num: 101,
-		gen: 3,
-		isNonstandard: "Past",
-	},
-	heracronite: {
-		name: "Heracronite",
-		spritenum: 590,
-		megaStone: "Heracross-Mega",
-		megaEvolves: "Heracross",
-		itemUser: ["Heracross"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 680,
-		gen: 6,
-		isNonstandard: "Past",
 	},
 	hondewberry: {
 		name: "Hondew Berry",
@@ -2590,20 +1224,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onEat: false,
 		num: 172,
 		gen: 3,
-	},
-	houndoominite: {
-		name: "Houndoominite",
-		spritenum: 591,
-		megaStone: "Houndoom-Mega",
-		megaEvolves: "Houndoom",
-		itemUser: ["Houndoom"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 666,
-		gen: 6,
-		isNonstandard: "Past",
 	},
 	iapapaberry: {
 		name: "Iapapa Berry",
@@ -2643,64 +1263,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 552,
 		gen: 5,
-		isNonstandard: "Past",
-	},
-	icememory: {
-		name: "Ice Memory",
-		spritenum: 681,
-		onMemory: 'Ice',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Ice",
-		itemUser: ["Silvally-Ice"],
-		num: 917,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	icestone: {
-		name: "Ice Stone",
-		spritenum: 693,
-		fling: {
-			basePower: 30,
-		},
-		num: 849,
-		gen: 7,
-	},
-	icicleplate: {
-		name: "Icicle Plate",
-		spritenum: 220,
-		onPlate: 'Ice',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Ice') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Ice",
-		num: 302,
-		gen: 4,
-	},
-	iciumz: {
-		name: "Icium Z",
-		spritenum: 636,
-		onPlate: 'Ice',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Ice",
-		forcedForme: "Arceus-Ice",
-		num: 781,
-		gen: 7,
-		isNonstandard: "Past",
 	},
 	icyrock: {
 		name: "Icy Rock",
@@ -2709,37 +1271,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 40,
 		},
 		num: 282,
-		gen: 4,
-	},
-	inciniumz: {
-		name: "Incinium Z",
-		spritenum: 651,
-		onTakeItem: false,
-		zMove: "Malicious Moonsault",
-		zMoveFrom: "Darkest Lariat",
-		itemUser: ["Incineroar"],
-		num: 799,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	insectplate: {
-		name: "Insect Plate",
-		spritenum: 223,
-		onPlate: 'Bug',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Bug') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Bug",
-		num: 308,
 		gen: 4,
 	},
 	ironball: {
@@ -2760,26 +1291,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 278,
 		gen: 4,
 	},
-	ironplate: {
-		name: "Iron Plate",
-		spritenum: 225,
-		onPlate: 'Steel',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Steel') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Steel",
-		num: 313,
-		gen: 4,
-	},
 	jabocaberry: {
 		name: "Jaboca Berry",
 		spritenum: 230,
@@ -2798,16 +1309,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onEat() { },
 		num: 211,
 		gen: 4,
-	},
-	jawfossil: {
-		name: "Jaw Fossil",
-		spritenum: 694,
-		fling: {
-			basePower: 100,
-		},
-		num: 710,
-		gen: 6,
-		isNonstandard: "Past",
 	},
 	kasibberry: {
 		name: "Kasib Berry",
@@ -2889,20 +1390,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 170,
 		gen: 3,
 	},
-	kangaskhanite: {
-		name: "Kangaskhanite",
-		spritenum: 592,
-		megaStone: "Kangaskhan-Mega",
-		megaEvolves: "Kangaskhan",
-		itemUser: ["Kangaskhan"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 675,
-		gen: 6,
-		isNonstandard: "Past",
-	},
 	kingsrock: {
 		name: "King's Rock",
 		spritenum: 236,
@@ -2926,27 +1413,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 221,
 		gen: 2,
 	},
-	kommoniumz: {
-		name: "Kommonium Z",
-		spritenum: 690,
-		onTakeItem: false,
-		zMove: "Clangorous Soulblaze",
-		zMoveFrom: "Clanging Scales",
-		itemUser: ["Kommo-o", "Kommo-o-Totem"],
-		num: 926,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	laggingtail: {
-		name: "Lagging Tail",
-		spritenum: 237,
-		fling: {
-			basePower: 10,
-		},
-		onFractionalPriority: -0.1,
-		num: 279,
-		gen: 4,
-	},
 	lansatberry: {
 		name: "Lansat Berry",
 		spritenum: 238,
@@ -2966,59 +1432,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 206,
 		gen: 3,
-	},
-	latiasite: {
-		name: "Latiasite",
-		spritenum: 629,
-		megaStone: "Latias-Mega",
-		megaEvolves: "Latias",
-		itemUser: ["Latias"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 684,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	latiosite: {
-		name: "Latiosite",
-		spritenum: 630,
-		megaStone: "Latios-Mega",
-		megaEvolves: "Latios",
-		itemUser: ["Latios"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 685,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	laxincense: {
-		name: "Lax Incense",
-		spritenum: 240,
-		fling: {
-			basePower: 10,
-		},
-		onModifyAccuracyPriority: -2,
-		onModifyAccuracy(accuracy) {
-			if (typeof accuracy !== 'number') return;
-			this.debug('lax incense - decreasing accuracy');
-			return this.chainModify([3686, 4096]);
-		},
-		num: 255,
-		gen: 3,
-		isNonstandard: "Past",
-	},
-	leafstone: {
-		name: "Leaf Stone",
-		spritenum: 241,
-		fling: {
-			basePower: 30,
-		},
-		num: 85,
-		gen: 1,
 	},
 	leek: {
 		name: "Leek",
@@ -3074,13 +1487,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 154,
 		gen: 3,
-	},
-	levelball: {
-		name: "Level Ball",
-		spritenum: 246,
-		num: 493,
-		gen: 2,
-		isPokeball: true,
 	},
 	liechiberry: {
 		name: "Liechi Berry",
@@ -3167,66 +1573,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 1886,
 		gen: 9,
 	},
-	lopunnite: {
-		name: "Lopunnite",
-		spritenum: 626,
-		megaStone: "Lopunny-Mega",
-		megaEvolves: "Lopunny",
-		itemUser: ["Lopunny"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 768,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	loveball: {
-		name: "Love Ball",
-		spritenum: 258,
-		num: 496,
-		gen: 2,
-		isPokeball: true,
-	},
-	lovesweet: {
-		name: "Love Sweet",
-		spritenum: 705,
-		fling: {
-			basePower: 10,
-		},
-		num: 1110,
-		gen: 8,
-	},
-	lucarionite: {
-		name: "Lucarionite",
-		spritenum: 594,
-		megaStone: "Lucario-Mega",
-		megaEvolves: "Lucario",
-		itemUser: ["Lucario"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 673,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	luckypunch: {
-		name: "Lucky Punch",
-		spritenum: 261,
-		fling: {
-			basePower: 40,
-		},
-		onModifyCritRatio(critRatio, user) {
-			if (user.baseSpecies.name === 'Chansey') {
-				return critRatio + 2;
-			}
-		},
-		itemUser: ["Chansey"],
-		num: 256,
-		gen: 2,
-		isNonstandard: "Past",
-	},
 	lumberry: {
 		name: "Lum Berry",
 		spritenum: 262,
@@ -3250,118 +1596,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 157,
 		gen: 3,
-	},
-	luminousmoss: {
-		name: "Luminous Moss",
-		spritenum: 595,
-		fling: {
-			basePower: 30,
-		},
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === 'Water') {
-				target.useItem();
-			}
-		},
-		boosts: {
-			spd: 1,
-		},
-		num: 648,
-		gen: 6,
-	},
-	lunaliumz: {
-		name: "Lunalium Z",
-		spritenum: 686,
-		onTakeItem: false,
-		zMove: "Menacing Moonraze Maelstrom",
-		zMoveFrom: "Moongeist Beam",
-		itemUser: ["Lunala", "Necrozma-Dawn-Wings"],
-		num: 922,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	lureball: {
-		name: "Lure Ball",
-		spritenum: 264,
-		num: 494,
-		gen: 2,
-		isPokeball: true,
-	},
-	lustrousglobe: {
-		name: "Lustrous Globe",
-		spritenum: 742,
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.num === 484 && (move.type === 'Water' || move.type === 'Dragon')) {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if (source?.baseSpecies.num === 484 || pokemon.baseSpecies.num === 484) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Palkia-Origin",
-		itemUser: ["Palkia-Origin"],
-		num: 1778,
-		gen: 8,
-	},
-	lustrousorb: {
-		name: "Lustrous Orb",
-		spritenum: 265,
-		fling: {
-			basePower: 60,
-		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.num === 484 && (move.type === 'Water' || move.type === 'Dragon')) {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		itemUser: ["Palkia"],
-		num: 136,
-		gen: 4,
-	},
-	luxuryball: {
-		name: "Luxury Ball",
-		spritenum: 266,
-		num: 11,
-		gen: 3,
-		isPokeball: true,
-	},
-	lycaniumz: {
-		name: "Lycanium Z",
-		spritenum: 689,
-		onTakeItem: false,
-		zMove: "Splintered Stormshards",
-		zMoveFrom: "Stone Edge",
-		itemUser: ["Lycanroc", "Lycanroc-Midnight", "Lycanroc-Dusk"],
-		num: 925,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	machobrace: {
-		name: "Macho Brace",
-		spritenum: 269,
-		ignoreKlutz: true,
-		fling: {
-			basePower: 60,
-		},
-		onModifySpe(spe) {
-			return this.chainModify(0.5);
-		},
-		num: 215,
-		gen: 3,
-		isNonstandard: "Past",
-	},
-	magmarizer: {
-		name: "Magmarizer",
-		spritenum: 272,
-		fling: {
-			basePower: 80,
-		},
-		num: 323,
-		gen: 4,
 	},
 	magnet: {
 		name: "Magnet",
@@ -3417,40 +1651,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 3,
 		isNonstandard: "Past",
 	},
-	mail: {
-		name: "Mail",
-		spritenum: 403,
-		onTakeItem(item, source) {
-			if (!this.activeMove) return false;
-			if (this.activeMove.id !== 'knockoff' && this.activeMove.id !== 'thief' && this.activeMove.id !== 'covet') return false;
-		},
-		num: 137,
-		gen: 2,
-		isNonstandard: "Past",
-	},
-	maliciousarmor: {
-		name: "Malicious Armor",
-		spritenum: 744,
-		fling: {
-			basePower: 30,
-		},
-		num: 1861,
-		gen: 9,
-	},
-	manectite: {
-		name: "Manectite",
-		spritenum: 596,
-		megaStone: "Manectric-Mega",
-		megaEvolves: "Manectric",
-		itemUser: ["Manectric"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 682,
-		gen: 6,
-		isNonstandard: "Past",
-	},
 	marangaberry: {
 		name: "Maranga Berry",
 		spritenum: 597,
@@ -3469,81 +1669,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 688,
 		gen: 6,
-	},
-	marshadiumz: {
-		name: "Marshadium Z",
-		spritenum: 654,
-		onTakeItem: false,
-		zMove: "Soul-Stealing 7-Star Strike",
-		zMoveFrom: "Spectral Thief",
-		itemUser: ["Marshadow"],
-		num: 802,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	masterball: {
-		name: "Master Ball",
-		spritenum: 276,
-		num: 1,
-		gen: 1,
-		isPokeball: true,
-	},
-	masterpieceteacup: {
-		name: "Masterpiece Teacup",
-		spritenum: 757,
-		fling: {
-			basePower: 80,
-		},
-		num: 2404,
-		gen: 9,
-	},
-	mawilite: {
-		name: "Mawilite",
-		spritenum: 598,
-		megaStone: "Mawile-Mega",
-		megaEvolves: "Mawile",
-		itemUser: ["Mawile"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 681,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	meadowplate: {
-		name: "Meadow Plate",
-		spritenum: 282,
-		onPlate: 'Grass',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Grass') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Grass",
-		num: 301,
-		gen: 4,
-	},
-	medichamite: {
-		name: "Medichamite",
-		spritenum: 599,
-		megaStone: "Medicham-Mega",
-		megaEvolves: "Medicham",
-		itemUser: ["Medicham"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 665,
-		gen: 6,
-		isNonstandard: "Past",
 	},
 	mentalherb: {
 		name: "Mental Herb",
@@ -3582,26 +1707,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 219,
 		gen: 3,
-	},
-	metagrossite: {
-		name: "Metagrossite",
-		spritenum: 618,
-		megaStone: "Metagross-Mega",
-		megaEvolves: "Metagross",
-		itemUser: ["Metagross"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 758,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	metalalloy: {
-		name: "Metal Alloy",
-		spritenum: 761,
-		num: 2482,
-		gen: 9,
 	},
 	metalcoat: {
 		name: "Metal Coat",
@@ -3679,45 +1784,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 277,
 		gen: 4,
 	},
-	mewniumz: {
-		name: "Mewnium Z",
-		spritenum: 658,
-		onTakeItem: false,
-		zMove: "Genesis Supernova",
-		zMoveFrom: "Psychic",
-		itemUser: ["Mew"],
-		num: 806,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	mewtwonitex: {
-		name: "Mewtwonite X",
-		spritenum: 600,
-		megaStone: "Mewtwo-Mega-X",
-		megaEvolves: "Mewtwo",
-		itemUser: ["Mewtwo"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 662,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	mewtwonitey: {
-		name: "Mewtwonite Y",
-		spritenum: 601,
-		megaStone: "Mewtwo-Mega-Y",
-		megaEvolves: "Mewtwo",
-		itemUser: ["Mewtwo"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 663,
-		gen: 6,
-		isNonstandard: "Past",
-	},
 	micleberry: {
 		name: "Micle Berry",
 		spritenum: 290,
@@ -3748,37 +1814,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			},
 		},
 		num: 209,
-		gen: 4,
-	},
-	mimikiumz: {
-		name: "Mimikium Z",
-		spritenum: 688,
-		onTakeItem: false,
-		zMove: "Let's Snuggle Forever",
-		zMoveFrom: "Play Rough",
-		itemUser: ["Mimikyu", "Mimikyu-Busted", "Mimikyu-Totem", "Mimikyu-Busted-Totem"],
-		num: 924,
-		isNonstandard: "Past",
-		gen: 7,
-	},
-	mindplate: {
-		name: "Mind Plate",
-		spritenum: 291,
-		onPlate: 'Psychic',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Psychic') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Psychic",
-		num: 307,
 		gen: 4,
 	},
 	miracleseed: {
@@ -3861,22 +1896,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 883,
 		gen: 7,
 	},
-	moonball: {
-		name: "Moon Ball",
-		spritenum: 294,
-		num: 498,
-		gen: 2,
-		isPokeball: true,
-	},
-	moonstone: {
-		name: "Moon Stone",
-		spritenum: 295,
-		fling: {
-			basePower: 30,
-		},
-		num: 81,
-		gen: 1,
-	},
 	muscleband: {
 		name: "Muscle Band",
 		spritenum: 297,
@@ -3920,20 +1939,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 3,
 		isNonstandard: "Past",
 	},
-	nestball: {
-		name: "Nest Ball",
-		spritenum: 303,
-		num: 8,
-		gen: 3,
-		isPokeball: true,
-	},
-	netball: {
-		name: "Net Ball",
-		spritenum: 304,
-		num: 6,
-		gen: 3,
-		isPokeball: true,
-	},
 	nevermeltice: {
 		name: "Never-Melt Ice",
 		spritenum: 305,
@@ -3975,16 +1980,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 564,
 		gen: 5,
 	},
-	normaliumz: {
-		name: "Normalium Z",
-		spritenum: 631,
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Normal",
-		num: 776,
-		gen: 7,
-		isNonstandard: "Past",
-	},
 	occaberry: {
 		name: "Occa Berry",
 		spritenum: 311,
@@ -4009,32 +2004,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 184,
 		gen: 4,
 	},
-	oddincense: {
-		name: "Odd Incense",
-		spritenum: 312,
-		fling: {
-			basePower: 10,
-		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Psychic') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		num: 314,
-		gen: 4,
-		isNonstandard: "Past",
-	},
-	oldamber: {
-		name: "Old Amber",
-		spritenum: 314,
-		fling: {
-			basePower: 100,
-		},
-		num: 103,
-		gen: 3,
-		isNonstandard: "Past",
-	},
 	oranberry: {
 		name: "Oran Berry",
 		spritenum: 319,
@@ -4057,15 +2026,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 155,
 		gen: 3,
 	},
-	ovalstone: {
-		name: "Oval Stone",
-		spritenum: 321,
-		fling: {
-			basePower: 80,
-		},
-		num: 110,
-		gen: 4,
-	},
 	pamtreberry: {
 		name: "Pamtre Berry",
 		spritenum: 323,
@@ -4078,14 +2038,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 180,
 		gen: 3,
 		isNonstandard: "Past",
-	},
-	parkball: {
-		name: "Park Ball",
-		spritenum: 325,
-		num: 500,
-		gen: 4,
-		isPokeball: true,
-		isNonstandard: "Unobtainable",
 	},
 	passhoberry: {
 		name: "Passho Berry",
@@ -4195,42 +2147,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 204,
 		gen: 3,
 	},
-	pidgeotite: {
-		name: "Pidgeotite",
-		spritenum: 622,
-		megaStone: "Pidgeot-Mega",
-		megaEvolves: "Pidgeot",
-		itemUser: ["Pidgeot"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 762,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	pikaniumz: {
-		name: "Pikanium Z",
-		spritenum: 649,
-		onTakeItem: false,
-		zMove: "Catastropika",
-		zMoveFrom: "Volt Tackle",
-		itemUser: ["Pikachu"],
-		num: 794,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	pikashuniumz: {
-		name: "Pikashunium Z",
-		spritenum: 659,
-		onTakeItem: false,
-		zMove: "10,000,000 Volt Thunderbolt",
-		zMoveFrom: "Thunderbolt",
-		itemUser: ["Pikachu-Original", "Pikachu-Hoenn", "Pikachu-Sinnoh", "Pikachu-Unova", "Pikachu-Kalos", "Pikachu-Alola", "Pikachu-Partner"],
-		num: 836,
-		isNonstandard: "Past",
-		gen: 7,
-	},
 	pinapberry: {
 		name: "Pinap Berry",
 		spritenum: 337,
@@ -4242,50 +2158,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onEat: false,
 		num: 168,
 		gen: 3,
-		isNonstandard: "Past",
-	},
-	pinsirite: {
-		name: "Pinsirite",
-		spritenum: 602,
-		megaStone: "Pinsir-Mega",
-		megaEvolves: "Pinsir",
-		itemUser: ["Pinsir"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 671,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	pixieplate: {
-		name: "Pixie Plate",
-		spritenum: 610,
-		onPlate: 'Fairy',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Fairy') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Fairy",
-		num: 644,
-		gen: 6,
-	},
-	plumefossil: {
-		name: "Plume Fossil",
-		spritenum: 339,
-		fling: {
-			basePower: 100,
-		},
-		num: 573,
-		gen: 5,
 		isNonstandard: "Past",
 	},
 	poisonbarb: {
@@ -4316,42 +2188,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 554,
 		gen: 5,
-		isNonstandard: "Past",
-	},
-	poisonmemory: {
-		name: "Poison Memory",
-		spritenum: 670,
-		onMemory: 'Poison',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Poison",
-		itemUser: ["Silvally-Poison"],
-		num: 906,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	poisoniumz: {
-		name: "Poisonium Z",
-		spritenum: 638,
-		onPlate: 'Poison',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Poison",
-		forcedForme: "Arceus-Poison",
-		num: 783,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	pokeball: {
-		name: "Poke Ball",
-		spritenum: 345,
-		num: 4,
-		gen: 1,
-		isPokeball: true,
 	},
 	pomegberry: {
 		name: "Pomeg Berry",
@@ -4460,33 +2296,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 294,
 		gen: 4,
 	},
-	premierball: {
-		name: "Premier Ball",
-		spritenum: 363,
-		num: 12,
-		gen: 3,
-		isPokeball: true,
-	},
-	primariumz: {
-		name: "Primarium Z",
-		spritenum: 652,
-		onTakeItem: false,
-		zMove: "Oceanic Operetta",
-		zMoveFrom: "Sparkling Aria",
-		itemUser: ["Primarina"],
-		num: 800,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	prismscale: {
-		name: "Prism Scale",
-		spritenum: 365,
-		fling: {
-			basePower: 30,
-		},
-		num: 537,
-		gen: 5,
-	},
 	protectivepads: {
 		name: "Protective Pads",
 		spritenum: 663,
@@ -4496,15 +2305,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		// protective effect handled in Battle#checkMoveMakesContact
 		num: 880,
 		gen: 7,
-	},
-	protector: {
-		name: "Protector",
-		spritenum: 367,
-		fling: {
-			basePower: 80,
-		},
-		num: 321,
-		gen: 4,
 	},
 	psychicgem: {
 		name: "Psychic Gem",
@@ -4518,23 +2318,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 557,
 		gen: 5,
-		isNonstandard: "Past",
-	},
-	psychicmemory: {
-		name: "Psychic Memory",
-		spritenum: 680,
-		onMemory: 'Psychic',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Psychic",
-		itemUser: ["Silvally-Psychic"],
-		num: 916,
-		gen: 7,
-		isNonstandard: "Past",
 	},
 	psychicseed: {
 		name: "Psychic Seed",
@@ -4558,18 +2341,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 882,
 		gen: 7,
-	},
-	psychiumz: {
-		name: "Psychium Z",
-		spritenum: 641,
-		onPlate: 'Psychic',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Psychic",
-		forcedForme: "Arceus-Psychic",
-		num: 786,
-		gen: 7,
-		isNonstandard: "Past",
 	},
 	punchingglove: {
 		name: "Punching Glove",
@@ -4602,13 +2373,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onEat: false,
 		num: 171,
 		gen: 3,
-	},
-	quickball: {
-		name: "Quick Ball",
-		spritenum: 372,
-		num: 15,
-		gen: 4,
-		isPokeball: true,
 	},
 	quickclaw: {
 		onFractionalPriorityPriority: -2,
@@ -4655,15 +2419,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 177,
 		gen: 3,
 		isNonstandard: "Past",
-	},
-	rarebone: {
-		name: "Rare Bone",
-		spritenum: 379,
-		fling: {
-			basePower: 100,
-		},
-		num: 106,
-		gen: 4,
 	},
 	rawstberry: {
 		name: "Rawst Berry",
@@ -4734,15 +2489,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 3,
 		isNonstandard: "Past",
 	},
-	reapercloth: {
-		name: "Reaper Cloth",
-		spritenum: 385,
-		fling: {
-			basePower: 10,
-		},
-		num: 325,
-		gen: 4,
-	},
 	redcard: {
 		name: "Red Card",
 		spritenum: 387,
@@ -4764,41 +2510,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 542,
 		gen: 5,
-	},
-	redorb: {
-		name: "Red Orb",
-		spritenum: 390,
-		onSwitchInPriority: -1,
-		onSwitchIn(pokemon) {
-			if (pokemon.isActive && pokemon.baseSpecies.name === 'Groudon' && !pokemon.transformed) {
-				pokemon.formeChange('Groudon-Primal', this.effect, true);
-			}
-		},
-		onTakeItem(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Groudon') return false;
-			return true;
-		},
-		itemUser: ["Groudon"],
-		isPrimalOrb: true,
-		num: 534,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	repeatball: {
-		name: "Repeat Ball",
-		spritenum: 401,
-		num: 9,
-		gen: 3,
-		isPokeball: true,
-	},
-	ribbonsweet: {
-		name: "Ribbon Sweet",
-		spritenum: 710,
-		fling: {
-			basePower: 10,
-		},
-		num: 1115,
-		gen: 8,
 	},
 	rindoberry: {
 		name: "Rindo Berry",
@@ -4846,51 +2557,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 559,
 		gen: 5,
-		isNonstandard: "Past",
-	},
-	rockincense: {
-		name: "Rock Incense",
-		spritenum: 416,
-		fling: {
-			basePower: 10,
-		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Rock') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		num: 315,
-		gen: 4,
-		isNonstandard: "Past",
-	},
-	rockmemory: {
-		name: "Rock Memory",
-		spritenum: 672,
-		onMemory: 'Rock',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Rock",
-		itemUser: ["Silvally-Rock"],
-		num: 908,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	rockiumz: {
-		name: "Rockium Z",
-		spritenum: 643,
-		onPlate: 'Rock',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Rock",
-		forcedForme: "Arceus-Rock",
-		num: 788,
-		gen: 7,
-		isNonstandard: "Past",
 	},
 	rockyhelmet: {
 		name: "Rocky Helmet",
@@ -4930,32 +2596,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 1122,
 		gen: 8,
-	},
-	rootfossil: {
-		name: "Root Fossil",
-		spritenum: 418,
-		fling: {
-			basePower: 100,
-		},
-		num: 99,
-		gen: 3,
-		isNonstandard: "Past",
-	},
-	roseincense: {
-		name: "Rose Incense",
-		spritenum: 419,
-		fling: {
-			basePower: 10,
-		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Grass') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		num: 318,
-		gen: 4,
-		isNonstandard: "Past",
 	},
 	roseliberry: {
 		name: "Roseli Berry",
@@ -5000,63 +2640,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 212,
 		gen: 4,
 	},
-	rustedshield: {
-		name: "Rusted Shield",
-		spritenum: 699,
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 889) || pokemon.baseSpecies.num === 889) {
-				return false;
-			}
-			return true;
-		},
-		itemUser: ["Zamazenta-Crowned"],
-		num: 1104,
-		gen: 8,
-	},
-	rustedsword: {
-		name: "Rusted Sword",
-		spritenum: 698,
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 888) || pokemon.baseSpecies.num === 888) {
-				return false;
-			}
-			return true;
-		},
-		itemUser: ["Zacian-Crowned"],
-		num: 1103,
-		gen: 8,
-	},
-	sablenite: {
-		name: "Sablenite",
-		spritenum: 614,
-		megaStone: "Sableye-Mega",
-		megaEvolves: "Sableye",
-		itemUser: ["Sableye"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 754,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	sachet: {
-		name: "Sachet",
-		spritenum: 691,
-		fling: {
-			basePower: 80,
-		},
-		num: 647,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	safariball: {
-		name: "Safari Ball",
-		spritenum: 425,
-		num: 5,
-		gen: 1,
-		isPokeball: true,
-	},
 	safetygoggles: {
 		name: "Safety Goggles",
 		spritenum: 604,
@@ -5074,16 +2657,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 650,
 		gen: 6,
-	},
-	sailfossil: {
-		name: "Sail Fossil",
-		spritenum: 695,
-		fling: {
-			basePower: 100,
-		},
-		num: 711,
-		gen: 6,
-		isNonstandard: "Past",
 	},
 	salacberry: {
 		name: "Salac Berry",
@@ -5105,48 +2678,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 203,
 		gen: 3,
 	},
-	salamencite: {
-		name: "Salamencite",
-		spritenum: 627,
-		megaStone: "Salamence-Mega",
-		megaEvolves: "Salamence",
-		itemUser: ["Salamence"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 769,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	sceptilite: {
-		name: "Sceptilite",
-		spritenum: 613,
-		megaStone: "Sceptile-Mega",
-		megaEvolves: "Sceptile",
-		itemUser: ["Sceptile"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 753,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	scizorite: {
-		name: "Scizorite",
-		spritenum: 605,
-		megaStone: "Scizor-Mega",
-		megaEvolves: "Scizor",
-		itemUser: ["Scizor"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 670,
-		gen: 6,
-		isNonstandard: "Past",
-	},
 	scopelens: {
 		name: "Scope Lens",
 		spritenum: 429,
@@ -5158,22 +2689,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 232,
 		gen: 2,
-	},
-	seaincense: {
-		name: "Sea Incense",
-		spritenum: 430,
-		fling: {
-			basePower: 10,
-		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Water') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		num: 254,
-		gen: 3,
-		isNonstandard: "Past",
 	},
 	sharpbeak: {
 		name: "Sharp Beak",
@@ -5189,20 +2704,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 244,
 		gen: 2,
-	},
-	sharpedonite: {
-		name: "Sharpedonite",
-		spritenum: 619,
-		megaStone: "Sharpedo-Mega",
-		megaEvolves: "Sharpedo",
-		itemUser: ["Sharpedo"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 759,
-		gen: 6,
-		isNonstandard: "Past",
 	},
 	shedshell: {
 		name: "Shed Shell",
@@ -5231,31 +2732,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 253,
 		gen: 3,
-	},
-	shinystone: {
-		name: "Shiny Stone",
-		spritenum: 439,
-		fling: {
-			basePower: 80,
-		},
-		num: 107,
-		gen: 4,
-	},
-	shockdrive: {
-		name: "Shock Drive",
-		spritenum: 442,
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 649) || pokemon.baseSpecies.num === 649) {
-				return false;
-			}
-			return true;
-		},
-		onDrive: 'Electric',
-		forcedForme: "Genesect-Shock",
-		itemUser: ["Genesect-Shock"],
-		num: 117,
-		gen: 5,
-		isNonstandard: "Past",
 	},
 	shucaberry: {
 		name: "Shuca Berry",
@@ -5333,50 +2809,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 158,
 		gen: 3,
 	},
-	skullfossil: {
-		name: "Skull Fossil",
-		spritenum: 449,
-		fling: {
-			basePower: 100,
-		},
-		num: 105,
-		gen: 4,
-		isNonstandard: "Past",
-	},
-	skyplate: {
-		name: "Sky Plate",
-		spritenum: 450,
-		onPlate: 'Flying',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Flying') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Flying",
-		num: 306,
-		gen: 4,
-	},
-	slowbronite: {
-		name: "Slowbronite",
-		spritenum: 620,
-		megaStone: "Slowbro-Mega",
-		megaEvolves: "Slowbro",
-		itemUser: ["Slowbro"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 760,
-		gen: 6,
-		isNonstandard: "Past",
-	},
 	smoothrock: {
 		name: "Smooth Rock",
 		spritenum: 453,
@@ -5385,17 +2817,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 283,
 		gen: 4,
-	},
-	snorliumz: {
-		name: "Snorlium Z",
-		spritenum: 656,
-		onTakeItem: false,
-		zMove: "Pulverizing Pancake",
-		zMoveFrom: "Giga Impact",
-		itemUser: ["Snorlax"],
-		num: 804,
-		gen: 7,
-		isNonstandard: "Past",
 	},
 	snowball: {
 		name: "Snowball",
@@ -5429,36 +2850,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 237,
 		gen: 2,
 	},
-	solganiumz: {
-		name: "Solganium Z",
-		spritenum: 685,
-		onTakeItem: false,
-		zMove: "Searing Sunraze Smash",
-		zMoveFrom: "Sunsteel Strike",
-		itemUser: ["Solgaleo", "Necrozma-Dusk-Mane"],
-		num: 921,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	souldew: {
-		name: "Soul Dew",
-		spritenum: 459,
-		fling: {
-			basePower: 30,
-		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (
-				move && (user.baseSpecies.num === 380 || user.baseSpecies.num === 381) &&
-				(move.type === 'Psychic' || move.type === 'Dragon')
-			) {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		itemUser: ["Latios", "Latias"],
-		num: 225,
-		gen: 3,
-	},
 	spelltag: {
 		name: "Spell Tag",
 		spritenum: 461,
@@ -5486,53 +2877,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 179,
 		gen: 3,
 		isNonstandard: "Past",
-	},
-	splashplate: {
-		name: "Splash Plate",
-		spritenum: 463,
-		onPlate: 'Water',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Water') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Water",
-		num: 299,
-		gen: 4,
-	},
-	spookyplate: {
-		name: "Spooky Plate",
-		spritenum: 464,
-		onPlate: 'Ghost',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Ghost') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Ghost",
-		num: 310,
-		gen: 4,
-	},
-	sportball: {
-		name: "Sport Ball",
-		spritenum: 465,
-		num: 499,
-		gen: 2,
-		isPokeball: true,
 	},
 	starfberry: {
 		name: "Starf Berry",
@@ -5566,29 +2910,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 207,
 		gen: 3,
 	},
-	starsweet: {
-		name: "Star Sweet",
-		spritenum: 709,
-		fling: {
-			basePower: 10,
-		},
-		num: 1114,
-		gen: 8,
-	},
-	steelixite: {
-		name: "Steelixite",
-		spritenum: 621,
-		megaStone: "Steelix-Mega",
-		megaEvolves: "Steelix",
-		itemUser: ["Steelix"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 761,
-		gen: 6,
-		isNonstandard: "Past",
-	},
 	steelgem: {
 		name: "Steel Gem",
 		spritenum: 473,
@@ -5601,35 +2922,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 563,
 		gen: 5,
-		isNonstandard: "Past",
-	},
-	steelmemory: {
-		name: "Steel Memory",
-		spritenum: 675,
-		onMemory: 'Steel',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Steel",
-		itemUser: ["Silvally-Steel"],
-		num: 911,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	steeliumz: {
-		name: "Steelium Z",
-		spritenum: 647,
-		onPlate: 'Steel',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Steel",
-		forcedForme: "Arceus-Steel",
-		num: 792,
-		gen: 7,
-		isNonstandard: "Past",
 	},
 	stick: {
 		name: "Stick",
@@ -5669,84 +2961,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 288,
 		gen: 4,
 	},
-	stoneplate: {
-		name: "Stone Plate",
-		spritenum: 477,
-		onPlate: 'Rock',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Rock') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Rock",
-		num: 309,
-		gen: 4,
-	},
-	strangeball: {
-		name: "Strange Ball",
-		spritenum: 308,
-		num: 1785,
-		gen: 8,
-		isPokeball: true,
-		isNonstandard: "Unobtainable",
-	},
-	strawberrysweet: {
-		name: "Strawberry Sweet",
-		spritenum: 704,
-		fling: {
-			basePower: 10,
-		},
-		num: 1109,
-		gen: 8,
-	},
-	sunstone: {
-		name: "Sun Stone",
-		spritenum: 480,
-		fling: {
-			basePower: 30,
-		},
-		num: 80,
-		gen: 2,
-	},
-	swampertite: {
-		name: "Swampertite",
-		spritenum: 612,
-		megaStone: "Swampert-Mega",
-		megaEvolves: "Swampert",
-		itemUser: ["Swampert"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 752,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	sweetapple: {
-		name: "Sweet Apple",
-		spritenum: 711,
-		fling: {
-			basePower: 30,
-		},
-		num: 1116,
-		gen: 8,
-	},
-	syrupyapple: {
-		name: "Syrupy Apple",
-		spritenum: 755,
-		fling: {
-			basePower: 30,
-		},
-		num: 2402,
-		gen: 9,
-	},
 	tamatoberry: {
 		name: "Tamato Berry",
 		spritenum: 486,
@@ -5783,26 +2997,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 194,
 		gen: 4,
 	},
-	tapuniumz: {
-		name: "Tapunium Z",
-		spritenum: 653,
-		onTakeItem: false,
-		zMove: "Guardian of Alola",
-		zMoveFrom: "Nature's Madness",
-		itemUser: ["Tapu Koko", "Tapu Lele", "Tapu Bulu", "Tapu Fini"],
-		num: 801,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	tartapple: {
-		name: "Tart Apple",
-		spritenum: 712,
-		fling: {
-			basePower: 30,
-		},
-		num: 1117,
-		gen: 8,
-	},
 	terrainextender: {
 		name: "Terrain Extender",
 		spritenum: 662,
@@ -5827,7 +3021,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		itemUser: ["Marowak", "Marowak-Alola", "Marowak-Alola-Totem", "Cubone"],
 		num: 258,
 		gen: 2,
-		isNonstandard: "Past",
 	},
 	throatspray: {
 		name: "Throat Spray",
@@ -5846,22 +3039,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 1118,
 		gen: 8,
 	},
-	thunderstone: {
-		name: "Thunder Stone",
-		spritenum: 492,
-		fling: {
-			basePower: 30,
-		},
-		num: 83,
-		gen: 1,
-	},
-	timerball: {
-		name: "Timer Ball",
-		spritenum: 494,
-		num: 10,
-		gen: 3,
-		isPokeball: true,
-	},
 	toxicorb: {
 		name: "Toxic Orb",
 		spritenum: 515,
@@ -5877,1026 +3054,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 272,
 		gen: 4,
 	},
-	toxicplate: {
-		name: "Toxic Plate",
-		spritenum: 516,
-		onPlate: 'Poison',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Poison') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Poison",
-		num: 304,
-		gen: 4,
-	},
-	tr00: {
-		name: "TR00",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 721,
-		num: 1130,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr01: {
-		name: "TR01",
-		fling: {
-			basePower: 85,
-		},
-		spritenum: 721,
-		num: 1131,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr02: {
-		name: "TR02",
-		fling: {
-			basePower: 90,
-		},
-		spritenum: 730,
-		num: 1132,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr03: {
-		name: "TR03",
-		fling: {
-			basePower: 110,
-		},
-		spritenum: 731,
-		num: 1133,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr04: {
-		name: "TR04",
-		fling: {
-			basePower: 90,
-		},
-		spritenum: 731,
-		num: 1134,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr05: {
-		name: "TR05",
-		fling: {
-			basePower: 90,
-		},
-		spritenum: 735,
-		num: 1135,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr06: {
-		name: "TR06",
-		fling: {
-			basePower: 110,
-		},
-		spritenum: 735,
-		num: 1136,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr07: {
-		name: "TR07",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 722,
-		num: 1137,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr08: {
-		name: "TR08",
-		fling: {
-			basePower: 90,
-		},
-		spritenum: 733,
-		num: 1138,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr09: {
-		name: "TR09",
-		fling: {
-			basePower: 110,
-		},
-		spritenum: 733,
-		num: 1139,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr10: {
-		name: "TR10",
-		fling: {
-			basePower: 100,
-		},
-		spritenum: 725,
-		num: 1140,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr11: {
-		name: "TR11",
-		fling: {
-			basePower: 90,
-		},
-		spritenum: 734,
-		num: 1141,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr12: {
-		name: "TR12",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 734,
-		num: 1142,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr13: {
-		name: "TR13",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 721,
-		num: 1143,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr14: {
-		name: "TR14",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 721,
-		num: 1144,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr15: {
-		name: "TR15",
-		fling: {
-			basePower: 110,
-		},
-		spritenum: 730,
-		num: 1145,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr16: {
-		name: "TR16",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 731,
-		num: 1146,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr17: {
-		name: "TR17",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 734,
-		num: 1147,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr18: {
-		name: "TR18",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 727,
-		num: 1148,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr19: {
-		name: "TR19",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 721,
-		num: 1149,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr20: {
-		name: "TR20",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 721,
-		num: 1150,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr21: {
-		name: "TR21",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 722,
-		num: 1151,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr22: {
-		name: "TR22",
-		fling: {
-			basePower: 90,
-		},
-		spritenum: 724,
-		num: 1152,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr23: {
-		name: "TR23",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 725,
-		num: 1153,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr24: {
-		name: "TR24",
-		fling: {
-			basePower: 120,
-		},
-		spritenum: 736,
-		num: 1154,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr25: {
-		name: "TR25",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 734,
-		num: 1155,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr26: {
-		name: "TR26",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 721,
-		num: 1156,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr27: {
-		name: "TR27",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 721,
-		num: 1157,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr28: {
-		name: "TR28",
-		fling: {
-			basePower: 120,
-		},
-		spritenum: 727,
-		num: 1158,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr29: {
-		name: "TR29",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 721,
-		num: 1159,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr30: {
-		name: "TR30",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 721,
-		num: 1160,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr31: {
-		name: "TR31",
-		fling: {
-			basePower: 100,
-		},
-		spritenum: 729,
-		num: 1161,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr32: {
-		name: "TR32",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 737,
-		num: 1162,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr33: {
-		name: "TR33",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 728,
-		num: 1163,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr34: {
-		name: "TR34",
-		fling: {
-			basePower: 120,
-		},
-		spritenum: 734,
-		num: 1164,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr35: {
-		name: "TR35",
-		fling: {
-			basePower: 90,
-		},
-		spritenum: 721,
-		num: 1165,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr36: {
-		name: "TR36",
-		fling: {
-			basePower: 95,
-		},
-		spritenum: 730,
-		num: 1166,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr37: {
-		name: "TR37",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 737,
-		num: 1167,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr38: {
-		name: "TR38",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 734,
-		num: 1168,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr39: {
-		name: "TR39",
-		fling: {
-			basePower: 120,
-		},
-		spritenum: 722,
-		num: 1169,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr40: {
-		name: "TR40",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 734,
-		num: 1170,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr41: {
-		name: "TR41",
-		fling: {
-			basePower: 85,
-		},
-		spritenum: 730,
-		num: 1171,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr42: {
-		name: "TR42",
-		fling: {
-			basePower: 90,
-		},
-		spritenum: 721,
-		num: 1172,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr43: {
-		name: "TR43",
-		fling: {
-			basePower: 130,
-		},
-		spritenum: 730,
-		num: 1173,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr44: {
-		name: "TR44",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 734,
-		num: 1174,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr45: {
-		name: "TR45",
-		fling: {
-			basePower: 90,
-		},
-		spritenum: 731,
-		num: 1175,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr46: {
-		name: "TR46",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 729,
-		num: 1176,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr47: {
-		name: "TR47",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 736,
-		num: 1177,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr48: {
-		name: "TR48",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 722,
-		num: 1178,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr49: {
-		name: "TR49",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 734,
-		num: 1179,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr50: {
-		name: "TR50",
-		fling: {
-			basePower: 90,
-		},
-		spritenum: 732,
-		num: 1180,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr51: {
-		name: "TR51",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 736,
-		num: 1181,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr52: {
-		name: "TR52",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 729,
-		num: 1182,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr53: {
-		name: "TR53",
-		fling: {
-			basePower: 120,
-		},
-		spritenum: 722,
-		num: 1183,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr54: {
-		name: "TR54",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 724,
-		num: 1184,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr55: {
-		name: "TR55",
-		fling: {
-			basePower: 120,
-		},
-		spritenum: 730,
-		num: 1185,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr56: {
-		name: "TR56",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 722,
-		num: 1186,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr57: {
-		name: "TR57",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 724,
-		num: 1187,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr58: {
-		name: "TR58",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 737,
-		num: 1188,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr59: {
-		name: "TR59",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 732,
-		num: 1189,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr60: {
-		name: "TR60",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 727,
-		num: 1190,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr61: {
-		name: "TR61",
-		fling: {
-			basePower: 90,
-		},
-		spritenum: 727,
-		num: 1191,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr62: {
-		name: "TR62",
-		fling: {
-			basePower: 85,
-		},
-		spritenum: 736,
-		num: 1192,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr63: {
-		name: "TR63",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 726,
-		num: 1193,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr64: {
-		name: "TR64",
-		fling: {
-			basePower: 120,
-		},
-		spritenum: 722,
-		num: 1194,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr65: {
-		name: "TR65",
-		fling: {
-			basePower: 90,
-		},
-		spritenum: 732,
-		num: 1195,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr66: {
-		name: "TR66",
-		fling: {
-			basePower: 120,
-		},
-		spritenum: 723,
-		num: 1196,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr67: {
-		name: "TR67",
-		fling: {
-			basePower: 90,
-		},
-		spritenum: 725,
-		num: 1197,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr68: {
-		name: "TR68",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 737,
-		num: 1198,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr69: {
-		name: "TR69",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 734,
-		num: 1199,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr70: {
-		name: "TR70",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 729,
-		num: 1200,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr71: {
-		name: "TR71",
-		fling: {
-			basePower: 130,
-		},
-		spritenum: 732,
-		num: 1201,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr72: {
-		name: "TR72",
-		fling: {
-			basePower: 120,
-		},
-		spritenum: 732,
-		num: 1202,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr73: {
-		name: "TR73",
-		fling: {
-			basePower: 120,
-		},
-		spritenum: 724,
-		num: 1203,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr74: {
-		name: "TR74",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 729,
-		num: 1204,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr75: {
-		name: "TR75",
-		fling: {
-			basePower: 100,
-		},
-		spritenum: 726,
-		num: 1205,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr76: {
-		name: "TR76",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 726,
-		num: 1206,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr77: {
-		name: "TR77",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 732,
-		num: 1207,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr78: {
-		name: "TR78",
-		fling: {
-			basePower: 95,
-		},
-		spritenum: 724,
-		num: 1208,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr79: {
-		name: "TR79",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 729,
-		num: 1209,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr80: {
-		name: "TR80",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 733,
-		num: 1210,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr81: {
-		name: "TR81",
-		fling: {
-			basePower: 95,
-		},
-		spritenum: 737,
-		num: 1211,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr82: {
-		name: "TR82",
-		fling: {
-			basePower: 20,
-		},
-		spritenum: 734,
-		num: 1212,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr83: {
-		name: "TR83",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 734,
-		num: 1213,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr84: {
-		name: "TR84",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 731,
-		num: 1214,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr85: {
-		name: "TR85",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 721,
-		num: 1215,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr86: {
-		name: "TR86",
-		fling: {
-			basePower: 90,
-		},
-		spritenum: 733,
-		num: 1216,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr87: {
-		name: "TR87",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 725,
-		num: 1217,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr88: {
-		name: "TR88",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 730,
-		num: 1218,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr89: {
-		name: "TR89",
-		fling: {
-			basePower: 110,
-		},
-		spritenum: 723,
-		num: 1219,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr90: {
-		name: "TR90",
-		fling: {
-			basePower: 90,
-		},
-		spritenum: 738,
-		num: 1220,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr91: {
-		name: "TR91",
-		fling: {
-			basePower: 10,
-		},
-		spritenum: 724,
-		num: 1221,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr92: {
-		name: "TR92",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 738,
-		num: 1222,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr93: {
-		name: "TR93",
-		fling: {
-			basePower: 85,
-		},
-		spritenum: 737,
-		num: 1223,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr94: {
-		name: "TR94",
-		fling: {
-			basePower: 95,
-		},
-		spritenum: 725,
-		num: 1224,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr95: {
-		name: "TR95",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 737,
-		num: 1225,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr96: {
-		name: "TR96",
-		fling: {
-			basePower: 90,
-		},
-		spritenum: 727,
-		num: 1226,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr97: {
-		name: "TR97",
-		fling: {
-			basePower: 85,
-		},
-		spritenum: 734,
-		num: 1227,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr98: {
-		name: "TR98",
-		fling: {
-			basePower: 85,
-		},
-		spritenum: 731,
-		num: 1228,
-		gen: 8,
-		isNonstandard: "Past",
-	},
-	tr99: {
-		name: "TR99",
-		fling: {
-			basePower: 80,
-		},
-		spritenum: 722,
-		num: 1229,
-		gen: 8,
-		isNonstandard: "Past",
-	},
 	twistedspoon: {
 		name: "Twisted Spoon",
 		spritenum: 520,
@@ -6910,56 +3067,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		num: 248,
-		gen: 2,
-	},
-	tyranitarite: {
-		name: "Tyranitarite",
-		spritenum: 607,
-		megaStone: "Tyranitar-Mega",
-		megaEvolves: "Tyranitar",
-		itemUser: ["Tyranitar"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 669,
-		gen: 6,
-		isNonstandard: "Past",
-	},
-	ultraball: {
-		name: "Ultra Ball",
-		spritenum: 521,
-		num: 2,
-		gen: 1,
-		isPokeball: true,
-	},
-	ultranecroziumz: {
-		name: "Ultranecrozium Z",
-		spritenum: 687,
-		onTakeItem: false,
-		zMove: "Light That Burns the Sky",
-		zMoveFrom: "Photon Geyser",
-		itemUser: ["Necrozma-Ultra"],
-		num: 923,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	unremarkableteacup: {
-		name: "Unremarkable Teacup",
-		spritenum: 756,
-		fling: {
-			basePower: 80,
-		},
-		num: 2403,
-		gen: 9,
-	},
-	upgrade: {
-		name: "Up-Grade",
-		spritenum: 523,
-		fling: {
-			basePower: 30,
-		},
-		num: 252,
 		gen: 2,
 	},
 	utilityumbrella: {
@@ -6990,20 +3097,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 1123,
 		gen: 8,
-	},
-	venusaurite: {
-		name: "Venusaurite",
-		spritenum: 608,
-		megaStone: "Venusaur-Mega",
-		megaEvolves: "Venusaur",
-		itemUser: ["Venusaur"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: 659,
-		gen: 6,
-		isNonstandard: "Past",
 	},
 	wacanberry: {
 		name: "Wacan Berry",
@@ -7040,44 +3133,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 549,
 		gen: 5,
-		isNonstandard: "Past",
-	},
-	watermemory: {
-		name: "Water Memory",
-		spritenum: 677,
-		onMemory: 'Water',
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 773) || pokemon.baseSpecies.num === 773) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Silvally-Water",
-		itemUser: ["Silvally-Water"],
-		num: 913,
-		gen: 7,
-		isNonstandard: "Past",
-	},
-	waterstone: {
-		name: "Water Stone",
-		spritenum: 529,
-		fling: {
-			basePower: 30,
-		},
-		num: 84,
-		gen: 1,
-	},
-	wateriumz: {
-		name: "Waterium Z",
-		spritenum: 633,
-		onPlate: 'Water',
-		onTakeItem: false,
-		zMove: true,
-		zMoveType: "Water",
-		forcedForme: "Arceus-Water",
-		num: 778,
-		gen: 7,
-		isNonstandard: "Past",
 	},
 	watmelberry: {
 		name: "Watmel Berry",
@@ -7090,22 +3145,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onEat: false,
 		num: 181,
 		gen: 3,
-		isNonstandard: "Past",
-	},
-	waveincense: {
-		name: "Wave Incense",
-		spritenum: 531,
-		fling: {
-			basePower: 10,
-		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Water') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		num: 317,
-		gen: 4,
 		isNonstandard: "Past",
 	},
 	weaknesspolicy: {
@@ -7125,27 +3164,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 639,
 		gen: 6,
-	},
-	wellspringmask: {
-		name: "Wellspring Mask",
-		spritenum: 759,
-		fling: {
-			basePower: 60,
-		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.name.startsWith('Ogerpon-Wellspring')) {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Ogerpon') return false;
-			return true;
-		},
-		forcedForme: "Ogerpon-Wellspring",
-		itemUser: ["Ogerpon-Wellspring"],
-		num: 2407,
-		gen: 9,
 	},
 	wepearberry: {
 		name: "Wepear Berry",
@@ -7296,26 +3314,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: 188,
 		gen: 4,
 	},
-	zapplate: {
-		name: "Zap Plate",
-		spritenum: 572,
-		onPlate: 'Electric',
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Electric') {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if ((source && source.baseSpecies.num === 493) || pokemon.baseSpecies.num === 493) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Arceus-Electric",
-		num: 300,
-		gen: 4,
-	},
 	zoomlens: {
 		name: "Zoom Lens",
 		spritenum: 574,
@@ -7331,326 +3329,5 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 276,
 		gen: 4,
-	},
-
-	// Gen 2 items
-
-	berserkgene: {
-		name: "Berserk Gene",
-		spritenum: 388,
-		onUpdate(pokemon) {
-			if (pokemon.useItem()) {
-				pokemon.addVolatile('confusion');
-			}
-		},
-		boosts: {
-			atk: 2,
-		},
-		num: 0,
-		gen: 2,
-		isNonstandard: "Past",
-	},
-	berry: {
-		name: "Berry",
-		spritenum: 319,
-		isBerry: true,
-		naturalGift: {
-			basePower: 80,
-			type: "Poison",
-		},
-		onResidualOrder: 10,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
-				pokemon.eatItem();
-			}
-		},
-		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon, null, this.effect, 10)) return false;
-		},
-		onEat(pokemon) {
-			this.heal(10);
-		},
-		num: 155,
-		gen: 2,
-		isNonstandard: "Past",
-	},
-	bitterberry: {
-		name: "Bitter Berry",
-		spritenum: 334,
-		isBerry: true,
-		naturalGift: {
-			basePower: 80,
-			type: "Ground",
-		},
-		onUpdate(pokemon) {
-			if (pokemon.volatiles['confusion']) {
-				pokemon.eatItem();
-			}
-		},
-		onEat(pokemon) {
-			pokemon.removeVolatile('confusion');
-		},
-		num: 156,
-		gen: 2,
-		isNonstandard: "Past",
-	},
-	burntberry: {
-		name: "Burnt Berry",
-		spritenum: 13,
-		isBerry: true,
-		naturalGift: {
-			basePower: 80,
-			type: "Ice",
-		},
-		onUpdate(pokemon) {
-			if (pokemon.status === 'frz') {
-				pokemon.eatItem();
-			}
-		},
-		onEat(pokemon) {
-			if (pokemon.status === 'frz') {
-				pokemon.cureStatus();
-			}
-		},
-		num: 153,
-		gen: 2,
-		isNonstandard: "Past",
-	},
-	goldberry: {
-		name: "Gold Berry",
-		spritenum: 448,
-		isBerry: true,
-		naturalGift: {
-			basePower: 80,
-			type: "Psychic",
-		},
-		onResidualOrder: 10,
-		onResidual(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
-				pokemon.eatItem();
-			}
-		},
-		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon, null, this.effect, 30)) return false;
-		},
-		onEat(pokemon) {
-			this.heal(30);
-		},
-		num: 158,
-		gen: 2,
-		isNonstandard: "Past",
-	},
-	iceberry: {
-		name: "Ice Berry",
-		spritenum: 381,
-		isBerry: true,
-		naturalGift: {
-			basePower: 80,
-			type: "Grass",
-		},
-		onUpdate(pokemon) {
-			if (pokemon.status === 'brn') {
-				pokemon.eatItem();
-			}
-		},
-		onEat(pokemon) {
-			if (pokemon.status === 'brn') {
-				pokemon.cureStatus();
-			}
-		},
-		num: 152,
-		gen: 2,
-		isNonstandard: "Past",
-	},
-	mintberry: {
-		name: "Mint Berry",
-		spritenum: 65,
-		isBerry: true,
-		naturalGift: {
-			basePower: 80,
-			type: "Water",
-		},
-		onUpdate(pokemon) {
-			if (pokemon.status === 'slp') {
-				pokemon.eatItem();
-			}
-		},
-		onEat(pokemon) {
-			if (pokemon.status === 'slp') {
-				pokemon.cureStatus();
-			}
-		},
-		num: 150,
-		gen: 2,
-		isNonstandard: "Past",
-	},
-	miracleberry: {
-		name: "Miracle Berry",
-		spritenum: 262,
-		isBerry: true,
-		naturalGift: {
-			basePower: 80,
-			type: "Flying",
-		},
-		onUpdate(pokemon) {
-			if (pokemon.status || pokemon.volatiles['confusion']) {
-				pokemon.eatItem();
-			}
-		},
-		onEat(pokemon) {
-			pokemon.cureStatus();
-			pokemon.removeVolatile('confusion');
-		},
-		num: 157,
-		gen: 2,
-		isNonstandard: "Past",
-	},
-	mysteryberry: {
-		name: "Mystery Berry",
-		spritenum: 244,
-		isBerry: true,
-		naturalGift: {
-			basePower: 80,
-			type: "Fighting",
-		},
-		onUpdate(pokemon) {
-			if (!pokemon.hp) return;
-			const moveSlot = pokemon.lastMove && pokemon.getMoveData(pokemon.lastMove.id);
-			if (moveSlot && moveSlot.pp === 0) {
-				pokemon.addVolatile('leppaberry');
-				pokemon.volatiles['leppaberry'].moveSlot = moveSlot;
-				pokemon.eatItem();
-			}
-		},
-		onEat(pokemon) {
-			let moveSlot;
-			if (pokemon.volatiles['leppaberry']) {
-				moveSlot = pokemon.volatiles['leppaberry'].moveSlot;
-				pokemon.removeVolatile('leppaberry');
-			} else {
-				let pp = 99;
-				for (const possibleMoveSlot of pokemon.moveSlots) {
-					if (possibleMoveSlot.pp < pp) {
-						moveSlot = possibleMoveSlot;
-						pp = moveSlot.pp;
-					}
-				}
-			}
-			moveSlot.pp += 5;
-			if (moveSlot.pp > moveSlot.maxpp) moveSlot.pp = moveSlot.maxpp;
-			this.add('-activate', pokemon, 'item: Mystery Berry', moveSlot.move);
-		},
-		num: 154,
-		gen: 2,
-		isNonstandard: "Past",
-	},
-	pinkbow: {
-		name: "Pink Bow",
-		spritenum: 444,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Normal') {
-				return basePower * 1.1;
-			}
-		},
-		num: 251,
-		gen: 2,
-		isNonstandard: "Past",
-	},
-	polkadotbow: {
-		name: "Polkadot Bow",
-		spritenum: 444,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Normal') {
-				return basePower * 1.1;
-			}
-		},
-		num: 251,
-		gen: 2,
-		isNonstandard: "Past",
-	},
-	przcureberry: {
-		name: "PRZ Cure Berry",
-		spritenum: 63,
-		isBerry: true,
-		naturalGift: {
-			basePower: 80,
-			type: "Fire",
-		},
-		onUpdate(pokemon) {
-			if (pokemon.status === 'par') {
-				pokemon.eatItem();
-			}
-		},
-		onEat(pokemon) {
-			if (pokemon.status === 'par') {
-				pokemon.cureStatus();
-			}
-		},
-		num: 149,
-		gen: 2,
-		isNonstandard: "Past",
-	},
-	psncureberry: {
-		name: "PSN Cure Berry",
-		spritenum: 333,
-		isBerry: true,
-		naturalGift: {
-			basePower: 80,
-			type: "Electric",
-		},
-		onUpdate(pokemon) {
-			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
-				pokemon.eatItem();
-			}
-		},
-		onEat(pokemon) {
-			if (pokemon.status === 'psn' || pokemon.status === 'tox') {
-				pokemon.cureStatus();
-			}
-		},
-		num: 151,
-		gen: 2,
-		isNonstandard: "Past",
-	},
-
-	// CAP items
-
-	crucibellite: {
-		name: "Crucibellite",
-		spritenum: 577,
-		megaStone: "Crucibelle-Mega",
-		megaEvolves: "Crucibelle",
-		itemUser: ["Crucibelle"],
-		onTakeItem(item, source) {
-			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
-			return true;
-		},
-		num: -1,
-		gen: 6,
-		isNonstandard: "CAP",
-	},
-	vilevial: {
-		name: "Vile Vial",
-		spritenum: 752,
-		fling: {
-			basePower: 60,
-		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (user.baseSpecies.num === -66 && ['Poison', 'Flying'].includes(move.type)) {
-				return this.chainModify([4915, 4096]);
-			}
-		},
-		onTakeItem(item, pokemon, source) {
-			if (source?.baseSpecies.num === -66 || pokemon.baseSpecies.num === -66) {
-				return false;
-			}
-			return true;
-		},
-		forcedForme: "Venomicon-Epilogue",
-		itemUser: ["Venomicon-Epilogue"],
-		num: -2,
-		gen: 8,
-		isNonstandard: "CAP",
 	},
 };
