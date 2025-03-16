@@ -22328,12 +22328,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			zMove: {effect: 'clearnegativeboost'},
 			contestType: "Beautiful",
 		},
-		ritoancestralgrandbull: {
+		ritoancestralgranbull: {
 			num: 0,
 			accuracy: true,
 			basePower: 0,
 			category: "Status",
-			name: "Rito Ancestral (Grandbull)",
+			name: "Rito Ancestral (Granbull)",
 			pp: 5,
 			priority: 0,
 			flags: {snatch: 1, dance: 1, metronome: 1, nosketch: 1},
