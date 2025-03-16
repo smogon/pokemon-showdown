@@ -827,18 +827,44 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	dancer: {
 		flags: {},
 		name: "Dancer",
-		// implemented in runMove in scripts.js
+		onAnyAfterMovePriority: -200,
+		onAnyAfterMove(source, target, move) {
+			const dancer = this.effectState.target as Pokemon;
+			if (dancer === source || dancer.isSemiInvulnerable() || !move.flags['dance'] ||
+				!this.lastSuccessfulMoveThisTurn || move.isExternal) return;
+			const targetOf1stDance = this.activeTarget!;
+			dancer.addVolatile('dancer');
+			const dancersTarget = !targetOf1stDance.isAlly(dancer) && source.isAlly(dancer) ?
+				targetOf1stDance : source;
+			const dancersTargetLoc = dancer.getLocOf(dancersTarget);
+			// Dancer activates in order of lowest speed stat to highest
+			// Note that the speed stat used is after any volatile replacements like Speed Swap,
+			// but before any multipliers like Agility or Choice Scarf
+			// Ties go to whichever Pokemon has had the ability for the least amount of time
+			this.queue.insertChoice({
+				choice: 'move',
+				order: 198 + dancer.storedStats['spe'] / 100000, // HACK
+				// speed: -source.storedStats['spe'], // speed gets reset
+				effectOrder: dancer.abilityState.effectOrder,
+				pokemon: dancer,
+				moveid: move.id,
+				targetLoc: dancersTargetLoc,
+				sourceEffect: this.dex.abilities.get('dancer'),
+				externalMove: true,
+			});
+		},
 		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass
 			onBeforeMovePriority: 200,
-			onBeforeMove(source) {
+			onBeforeMove(source, target, move) {
 				this.add('-activate', source, 'ability: Dancer');
+				this.effectState.noLock = move.isExternal && !source.volatiles['lockedmove'];
 			},
-			onTryAddVolatile(status, target) {
-				// if (status.id === 'lockedmove' && target.abilityState.noLock) return null;
+			onTryAddVolatile(status) {
+				if (status.id === 'lockedmove' && this.effectState.noLock) return null;
 			},
 			onAfterMove(source) {
-				source.removeVolatile('dancer');
+				delete source.volatiles['dancer'];
 			},
 		},
 		rating: 1.5,
