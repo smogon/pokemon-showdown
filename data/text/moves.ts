@@ -351,8 +351,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	barbbarrage: {
 		name: "Barb Barrage",
-		desc: "Each hit increases the power by 10 to a maximun of 150.",
-		shortDesc: "Each hit increases the power by 10.",
+		desc: "Each hit increases the power by 15 to a maximun of 150.",
+		shortDesc: "Each hit increases the power by 15.",
 	},
 	barrage: {
 		name: "Barrage",
@@ -835,8 +835,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	captivate: {
 		name: "Captivate",
-		desc: "Lowers the target's Special Attack by 2 stages. The target is unaffected if both the user and the target are the same gender, or if either is genderless. Pokemon with the Oblivious Ability are immune.",
-		shortDesc: "Lowers the foe(s) Sp. Atk by 2 if opposite gender.",
+		desc: "Lowers the target's Special Attack by 6 stages. The target is unaffected if both the user and the target are the same gender, or if either is genderless. Pokemon with the Oblivious Ability are immune.",
+		shortDesc: "Lowers the foe(s) Sp. Atk by 6 if opposite gender.",
 	},
 	catastropika: {
 		name: "Catastropika",
@@ -855,8 +855,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	charge: {
 		name: "Charge",
-		desc: "Raises the user's Special Defense by 1 stage. The user's next Electric-type attack will have its power doubled; the effect ends when the user is no longer active, or after the user attempts to use any Electric-type move besides Charge, even if it is not successful.",
-		shortDesc: "+1 SpD, user's next Electric move 2x power.",
+		desc: "Raises the user's Special Defense and Special Attack by 1 stage. The user's next Electric-type attack will have its power doubled; the effect ends when the user is no longer active, or after the user attempts to use any Electric-type move besides Charge, even if it is not successful.",
+		shortDesc: "+1 SpD ans SpA, user's next Electric move 2x power.",
 		gen8: {
 			desc: "Raises the user's Special Defense by 1 stage. If the user uses an Electric-type attack on the next turn, its power will be doubled.",
 			shortDesc: "+1 SpD, user's Electric move next turn 2x power.",
@@ -893,8 +893,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	chillingwater: {
 		name: "Chilling Water",
-		desc: "Has a 50% chance to lower the target's Attack by 1 stage and a 30% chance to freeze the target.",
-		shortDesc: "Target: 50% -1 Defense, 30% flinch.",
+		desc: "Has a 100% chance to lower the target's Attack by 1 stage and a 30% chance to freeze the target.",
+		shortDesc: "Target: 100% -1 Attack, 30% freeze.",
 	},
 	chillyreception: {
 		name: "Chilly Reception",
@@ -1531,8 +1531,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	doubleteam: {
 		name: "Double Team",
-		desc: "Change pokémon, the switching pokémon increases its speed by 1.",
-		shortDesc: "Raises the user's evasiveness by 1.",
+		shortDesc: "Changes and increases the speed of the incoming pokemon.",
 	},
 	dracometeor: {
 		name: "Draco Meteor",
@@ -1972,8 +1971,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	fellstinger: {
 		name: "Fell Stinger",
-		desc: "Raises the user's Attack by 3 stages if this move knocks out the target.",
-		shortDesc: "Raises user's Attack by 3 if this KOes the target.",
+		desc: "Raises the user's Attack by 2 stages if this move knocks out the target.",
+		shortDesc: "Raises user's Attack by 2 if this KOes the target.",
 		gen6: {
 			desc: "Raises the user's Attack by 2 stages if this move knocks out the target.",
 			shortDesc: "Raises user's Attack by 2 if this KOes the target.",
@@ -2360,8 +2359,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	furycutter: {
 		name: "Fury Cutter",
-		desc: "Power doubles with each successful hit, up to a maximum of 160 power. The power is reset if this move misses or another move is used.",
-		shortDesc: "Power doubles with each hit, up to 160.",
+		desc: "Each hit increases the power by 15 to a maximun of 150.",
+		shortDesc: "Each hit increases the power by 15.",
 	},
 	furyswipes: {
 		name: "Fury Swipes",
@@ -4050,8 +4049,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	metalsound: {
 		name: "Metal Sound",
-		desc: "Lowers the target's Special Defense by 2 stages.",
-		shortDesc: "Lowers the target's Sp. Def by 2.",
+		desc: "Lowers the target's Special Defense by 3 stages.",
+		shortDesc: "Lowers the target's Sp. Def by 3.",
 	},
 	meteorassault: {
 		name: "Meteor Assault",
@@ -4810,8 +4809,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	powder: {
 		name: "Powder",
-		desc: "If the target uses a Fire-type move this turn, it is prevented from executing and the target loses 1/4 of its maximum HP, rounded half up. This effect does not happen if the Fire-type move is prevented by Primordial Sea.",
-		shortDesc: "If using a Fire move, target loses 1/4 max HP.",
+		desc: "If the target uses a Fire-type move this turn, it is prevented from executing and the target loses 1/4 of its maximum HP, rounded half up. This effect does not happen if the Fire-type move is prevented by Primordial Sea. Active for 5 turns",
+		shortDesc: "If using a Fire move, target loses 1/4 max HP. Active for 5 turns",
 		gen6: {
 			desc: "If the target uses a Fire-type move this turn, it is prevented from executing and the target loses 1/4 of its maximum HP, rounded half up. This effect happens before the Fire-type move would be prevented by Primordial Sea.",
 		},
@@ -5055,7 +5054,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	quash: {
 		name: "Quash",
 		desc: "Causes the target to take its turn after all other Pokemon this turn, no matter the priority of its selected move. Fails if the target already moved this turn.",
-		shortDesc: "Forces the target to move last this turn.",
+		shortDesc: "Forces target to move last for 5 turns.",
 
 		activate: "  [TARGET]'s move was postponed!",
 	},
@@ -6897,8 +6896,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	thief: {
 		name: "Thief",
-		desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail or Z-Crystal, or if the target is a Kyogre holding a Blue Orb, a Groudon holding a Red Orb, a Giratina holding a Griseous Orb, an Arceus holding a Plate, a Genesect holding a Drive, a Silvally holding a Memory, or a Pokemon that can Mega Evolve holding the Mega Stone for its species. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
-		shortDesc: "If the user has no item, it steals the target's.",
+		desc: "If target has an object, power is doubled. If it is a single-use object, consumes it",
+		shortDesc: "If target has an object, power is doubled.",
 		gen6: {
 			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail, or if the target is a Kyogre holding a Blue Orb, a Groudon holding a Red Orb, a Giratina holding a Griseous Orb, an Arceus holding a Plate, a Genesect holding a Drive, or a Pokemon that can Mega Evolve holding the Mega Stone for its species. Items lost to this move cannot be regained with Recycle or the Harvest Ability.",
 		},
