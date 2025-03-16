@@ -339,15 +339,15 @@ export class Pokemon {
 		if (!this.set.moves?.length) {
 			throw new Error(`Set ${this.name} has no moves`);
 		}
-		for (const moveid of this.set.moves) {
-			let move = this.battle.dex.moves.get(moveid);
+		for (let moveslot = 0; moveslot < this.set.moves.length; moveslot++) {
+			let move = this.battle.dex.moves.get(this.set.moves[moveslot]);
 			if (!move.id) continue;
 			if (move.id === 'hiddenpower' && move.type !== 'Normal') {
 				if (!set.hpType) set.hpType = move.type;
 				move = this.battle.dex.moves.get('hiddenpower');
 			}
 			const defaultPPUps = move.id === 'trumpcard' ? 0 : 3;
-			let PPUps = this.set.movePPUps ? this.set.movePPUps[this.set.moves.indexOf(moveid)] : defaultPPUps;
+			let PPUps = this.set.movePPUps ? this.set.movePPUps[moveslot] : defaultPPUps;
 			PPUps = this.battle.clampIntRange(PPUps, 0, 3);
 			let basepp = move.noPPBoosts ? move.pp : move.pp * (5 + PPUps) / 5;
 			if (this.battle.gen < 3 && move.pp === 40) basepp -= PPUps;
