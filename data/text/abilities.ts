@@ -32,8 +32,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	analytic: {
 		name: "Analytic",
-		desc: "If the pokemon is the last to move, the move it uses will never misses and will have 30% more power.",
-		shortDesc: "If the pokemon is the last to move, the move it uses will never misses and will have 30% more power.",
+		desc: "If the pokemon is the last to move, the move it uses will never misses and will have 50% more power.",
+		shortDesc: "If the pokemon is the last to move, the move it uses will never misses and will have 50% more power.",
 	},
 	angerpoint: {
 		name: "Anger Point",
@@ -292,8 +292,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	damp: {
 		name: "Damp",
-		desc: "While this Pokemon is active, Explosion, Mind Blown, Misty Explosion, Self-Destruct, and the Aftermath Ability are prevented from having an effect. Reduces the power of fire-type moves by 30%.",
-		shortDesc: "Prevents Explosion/Mind Blown/Misty Explosion/Self-Destruct/Aftermath while active. Reduces the power of fire-type moves by 30%.",
+		desc: "While this Pokemon is active, Explosion, Mind Blown, Misty Explosion, Self-Destruct, and the Aftermath Ability are prevented from having an effect. Reduces the power of fire-type moves by 75%.",
+		shortDesc: "Prevents Explosion/Mind Blown/Misty Explosion/Self-Destruct/Aftermath while active. Reduces the power of fire-type moves by 75%.",
 		gen7: {
 			desc: "While this Pokemon is active, Explosion, Mind Blown, Self-Destruct, and the Aftermath Ability are prevented from having an effect.",
 			shortDesc: "Prevents Explosion/Mind Blown/Self-Destruct/Aftermath while this Pokemon is active.",
@@ -827,8 +827,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	leafguard: {
 		name: "Leaf Guard",
-		desc: "While the user has more than 50% of his HP, incoming damage is reduced by 20%. If Sunny Day is active, the threshold is 25% HP.",
-		shortDesc: "While the user has more than 50% of his HP, incoming damage is reduced by 20%.",
+		desc: "While the user has more than 50% of his HP, incoming damage is reduced by 25%. If Sunny Day is active, the threshold is 25% HP.",
+		shortDesc: "While the user has more than 50% of his HP, incoming damage is reduced by 25%.",
 		gen7: {
 			desc: "If Sunny Day is active, this Pokemon cannot become affected by a non-volatile status condition or Yawn, and Rest will fail for it.",
 		},
@@ -1399,7 +1399,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	quickdraw: {
 		name: "Quick Draw",
-		shortDesc: "This Pokemon has a 30% chance to move first in its priority bracket with attacking moves.",
+		shortDesc: "Every third hit adquires priority.",
 
 		activate: "  Quick Draw made [POKEMON] move faster!",
 	},
@@ -1526,8 +1526,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	sandveil: {
 		name: "Sand Veil",
-		desc: "While the user has more than 50% of his HP, incoming damage is reduced by 20%. If Sandstorm is active, the threshold is 25% HP.",
-		shortDesc: "While the user has more than 50% of his HP, incoming damage is reduced by 20%.",
+		desc: "While the user has more than 50% of his HP, incoming damage is reduced by 25%. If Sandstorm is active, the threshold is 25% HP.",
+		shortDesc: "While the user has more than 50% of his HP, incoming damage is reduced by 25%.",
 	},
 	sapsipper: {
 		name: "Sap Sipper",
@@ -1616,7 +1616,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	shellarmor: {
 		name: "Shell Armor",
-		shortDesc: "This Pokemon cannot be struck by a critical hit."/* ignores increased damage from objects"*/,
+		shortDesc: "This Pokemon cannot be struck by a critical hit. Ignores increased damage from objects",
 	},
 	shielddust: {
 		name: "Shield Dust",
@@ -1681,8 +1681,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	snowcloak: {
 		name: "Snow Cloak",
-		desc: "While the user has more than 50% of his HP, incoming damage is reduced by 20%. If Snow is active, the threshold is 25% HP.",
-		shortDesc: "While the user has more than 50% of his HP, incoming damage is reduced by 20%.",
+		desc: "While the user has more than 50% of his HP, incoming damage is reduced by 25%. If Snow is active, the threshold is 25% HP.",
+		shortDesc: "While the user has more than 50% of his HP, incoming damage is reduced by 25%.",
 		gen8: {
 			desc: "If Hail is active, the accuracy of moves used against this Pokemon is multiplied by 0.8. This Pokemon takes no damage from Hail.",
 			shortDesc: "If Hail is active, this Pokemon's evasiveness is 1.25x; immunity to Hail.",
@@ -1759,7 +1759,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	static: {
 		name: "Static",
-		shortDesc: "30% chance a Pokemon making contact with this Pokemon will be paralyzed.",
+		shortDesc: "50% chance a Pokemon making contact with this Pokemon will be paralyzed.",
 		gen4: {
 			desc: "30% chance a Pokemon making contact with this Pokemon will be paralyzed. This effect does not happen if this Pokemon did not lose HP from the attack.",
 		},
@@ -1770,7 +1770,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	steadfast: {
 		name: "Steadfast",
-		shortDesc: "If this Pokemon would flinch, its Speed is raised by 1 stage instead. Immmune to flinch."/* Its effect is activated with indirect damage"*/,
+		shortDesc: "If this Pokemon would flinch, its Speed is raised by 1 stage instead. Immmune to flinch. Its effect is activated with indirect damage",
 	},
 	steamengine: {
 		name: "Steam Engine",
@@ -1840,7 +1840,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	superluck: {
 		name: "Super Luck",
-		shortDesc: "This Pokemon's critical hit ratio is raised by 1 stage.",
+		shortDesc: "Hits a critical hit every three turns. power critical hits x1.75.",
 	},
 	supersweetsyrup: {
 		name: "Supersweet Syrup",
@@ -1922,7 +1922,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	tanglinghair: {
 		name: "Tangling Hair",
-		shortDesc: "Pokemon making contact with this Pokemon have their Speed lowered by 1 stage. Damage taken from the first attack is reduced by 40%",
+		shortDesc: "Pokemon making contact with this Pokemon have their Speed lowered by 1 stage. Damage taken from the first attack is reduced by 60%",
 	},
 	technician: {
 		name: "Technician",
@@ -2126,7 +2126,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	vitalspirit: {
 		name: "Vital Spirit",
-		shortDesc: "At less than half health, recovers 25% of MAX HP. Activated once per battle",
+		shortDesc: "At less than half health, recovers 50% of MAX HP. Activated once per battle",
 	},
 	voltabsorb: {
 		name: "Volt Absorb",

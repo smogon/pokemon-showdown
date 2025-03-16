@@ -846,7 +846,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			let mod = 1;
-			if (move.type === 'Fire') mod *= 0.7;
+			if (move.type === 'Fire') mod *= 0.25;
 			return this.chainModify(mod);
 		},
 		flags: {breakable: 1},
@@ -5524,7 +5524,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target.swordBoost) return;
 			if(target.hp <= target.maxhp / 2){
 			target.swordBoost = true;
-			this.heal(target.baseMaxhp / 4, target, target);
+			this.heal(target.baseMaxhp / 2, target, target);
 			}
 		},
 		flags: {},
