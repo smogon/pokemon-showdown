@@ -50,7 +50,7 @@
         ]
     },
     "butterfree": {
-        "level": 93,
+        "level": 92,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -515,7 +515,7 @@
         ]
     },
     "cloyster": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -948,7 +948,7 @@
         ]
     },
     "dragonair": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1401,7 +1401,7 @@
         ]
     },
     "shuckle": {
-        "level": 90,
+        "level": 89,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1747,7 +1747,7 @@
         ]
     },
     "blaziken": {
-        "level": 75,
+        "level": 76,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1950,7 +1950,7 @@
         ]
     },
     "shedinja": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1996,7 +1996,7 @@
         ]
     },
     "delcatty": {
-        "level": 98,
+        "level": 99,
         "sets": [
             {
                 "role": "Fast Support",
@@ -2059,7 +2059,7 @@
         ]
     },
     "manectric": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2167,7 +2167,7 @@
         ]
     },
     "torkoal": {
-        "level": 88,
+        "level": 89,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2222,7 +2222,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["darkpulse", "focusblast", "gigadrain", "spikes", "suckerpunch"],
+                "movepool": ["darkpulse", "gigadrain", "spikes", "suckerpunch", "superpower"],
                 "abilities": ["Water Absorb"]
             },
             {
@@ -2353,7 +2353,7 @@
         ]
     },
     "armaldo": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Spinner",
@@ -2388,7 +2388,7 @@
         ]
     },
     "kecleon": {
-        "level": 93,
+        "level": 94,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2717,7 +2717,7 @@
         ]
     },
     "deoxysattack": {
-        "level": 72,
+        "level": 71,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2924,7 +2924,7 @@
         ]
     },
     "wormadamtrash": {
-        "level": 89,
+        "level": 88,
         "sets": [
             {
                 "role": "Staller",
@@ -2954,7 +2954,7 @@
         ]
     },
     "pachirisu": {
-        "level": 93,
+        "level": 94,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3106,7 +3106,7 @@
         ]
     },
     "chatot": {
-        "level": 93,
+        "level": 94,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3167,7 +3167,7 @@
         ]
     },
     "hippowdon": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3243,7 +3243,7 @@
         ]
     },
     "weavile": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3377,7 +3377,7 @@
         ]
     },
     "glaceon": {
-        "level": 91,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3457,7 +3457,7 @@
         ]
     },
     "dusknoir": {
-        "level": 85,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3595,7 +3595,7 @@
         ]
     },
     "palkia": {
-        "level": 70,
+        "level": 71,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -4266,7 +4266,7 @@
         ]
     },
     "lilligant": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -4576,7 +4576,7 @@
         ]
     },
     "klinklang": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -4612,7 +4612,7 @@
         ]
     },
     "chandelure": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -4638,7 +4638,7 @@
         ]
     },
     "beartic": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -4855,7 +4855,7 @@
         ]
     },
     "tornadus": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -4962,7 +4962,7 @@
         ]
     },
     "kyurem": {
-        "level": 77,
+        "level": 76,
         "sets": [
             {
                 "role": "Staller",

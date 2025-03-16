@@ -393,7 +393,7 @@ export class GroupWatch extends Rooms.SimpleRoomGame {
 		this.url = url;
 		this.info = videoInfo;
 	}
-	onJoin(user: User) {
+	override onJoin(user: User) {
 		const hints = this.hints();
 		for (const hint of hints) {
 			user.sendTo(this.room.roomid, `|html|${hint}`);
@@ -478,7 +478,7 @@ export class GroupWatch extends Rooms.SimpleRoomGame {
 		this.info = info;
 		this.update();
 	}
-	destroy() {
+	override destroy() {
 		GroupWatch.groupwatches.delete(this.id);
 		this.room.game = null;
 		this.room = null!;

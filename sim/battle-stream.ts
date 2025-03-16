@@ -58,7 +58,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		this.battle = null;
 	}
 
-	_write(chunk: string) {
+	override _write(chunk: string) {
 		if (this.noCatch) {
 			this._writeLines(chunk);
 		} else {
@@ -235,13 +235,13 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		}
 	}
 
-	_writeEnd() {
+	override _writeEnd() {
 		// if battle already ended, we don't need to pushEnd.
 		if (!this.atEOF) this.pushEnd();
 		this._destroy();
 	}
 
-	_destroy() {
+	override _destroy() {
 		if (this.battle) this.battle.destroy();
 	}
 }
@@ -379,7 +379,7 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 		this.pushEnd();
 	}
 
-	_write(message: string | Buffer) {
+	override _write(message: string | Buffer) {
 		this.currentMessage += `${message}`;
 		const index = this.currentMessage.lastIndexOf('\n');
 		if (index >= 0) {
@@ -388,7 +388,7 @@ export class BattleTextStream extends Streams.ReadWriteStream {
 		}
 	}
 
-	_writeEnd() {
+	override _writeEnd() {
 		return this.battleStream.writeEnd();
 	}
 }

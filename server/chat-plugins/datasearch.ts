@@ -101,7 +101,7 @@ export const commands: Chat.ChatCommands = {
 			if (dex) target += `, mod=${dex.currentMod}`;
 		}
 		if (cmd === 'nds' ||
-			(defaultFormat.format && Dex.formats.getRuleTable(defaultFormat.format).has('standardnatdex'))) {
+			(defaultFormat.format && Dex.formats.getRuleTable(defaultFormat.format).has('natdexmod'))) {
 			target += ', natdex';
 		}
 		const response = await runSearch({
@@ -132,7 +132,7 @@ export const commands: Chat.ChatCommands = {
 			`<code>resists</code> followed by a type or move will show Pok\u00e9mon that resist that typing or move (e.g. <code>resists normal</code>).<br/>` +
 			`<code>weak</code> followed by a type or move will show Pok\u00e9mon that are weak to that typing or move (e.g. <code>weak fire</code>).<br/>` +
 			`<code>asc</code> or <code>desc</code> following a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively (e.g. <code>speed asc</code>).<br/>` +
-			`Inequality ranges use the characters <code>>=</code> for <code>≥</code> and <code><=</code> for <code>≤</code>; e.g., <code>hp <= 95</code> searches all Pok\u00e9mon with HP less than or equal to 95.<br/>` +
+			`Inequality ranges use the characters <code>>=</code> for <code>≥</code> and <code><=</code> for <code>≤</code>; e.g., <code>hp <= 95</code> searches all Pok\u00e9mon with HP less than or equal to 95; <code>tier <= uu</code> searches all Pok\u00e9mon in singles tiers lower than UU.<br/>` +
 			`Parameters can be excluded through the use of <code>!</code>; e.g., <code>!water type</code> excludes all Water types.<br/>` +
 			`The parameter <code>mega</code> can be added to search for Mega Evolutions only, the parameter <code>gmax</code> can be added to search for Pok\u00e9mon capable of Gigantamaxing only, and the parameter <code>Fully Evolved</code> (or <code>FE</code>) can be added to search for fully-evolved Pok\u00e9mon.<br/>` +
 			`<code>Alola</code>, <code>Galar</code>, <code>Therian</code>, <code>Totem</code>, or <code>Primal</code> can be used as parameters to search for those formes.<br/>` +
@@ -502,7 +502,15 @@ export const commands: Chat.ChatCommands = {
 
 	learnset: 'learn',
 	learnall: 'learn',
+	learnlc: 'learn',
+	learn1: 'learn',
+	learn2: 'learn',
+	learn3: 'learn',
+	learn4: 'learn',
 	learn5: 'learn',
+	learn6: 'learn',
+	learn7: 'learn',
+	learn8: 'learn',
 	rbylearn: 'learn',
 	gsclearn: 'learn',
 	advlearn: 'learn',
@@ -516,14 +524,17 @@ export const commands: Chat.ChatCommands = {
 		if (target.length > 300) throw new Chat.ErrorMessage(`Query too long.`);
 
 		const GENS: { [k: string]: number } = { rby: 1, gsc: 2, adv: 3, dpp: 4, bw2: 5, oras: 6, usum: 7, ss: 8 };
-		const cmdGen = GENS[cmd.slice(0, -5)];
+		let cmdGen = GENS[cmd.slice(0, -5)];
+		if (cmdGen) target = `gen${cmdGen}, ${target}`;
+
+		cmdGen = Number(cmd.slice(5));
 		if (cmdGen) target = `gen${cmdGen}, ${target}`;
 
 		this.checkBroadcast();
 		const { format, dex, targets } = this.splitFormat(target);
 
 		const formatid = format ? format.id : dex.currentMod;
-		if (cmd === 'learn5') targets.unshift('level5');
+		if (cmd === 'learnlc') targets.unshift('level5');
 
 		const response = await runSearch({
 			target: targets.join(','),
@@ -543,9 +554,9 @@ export const commands: Chat.ChatCommands = {
 		`!learn [ruleset], [pokemon], [move, move, ...] - Show everyone that information. Requires: + % @ # ~`,
 		`Specifying a ruleset is entirely optional. The ruleset can be a format, a generation (e.g.: gen3) or "min source gen [number]".`,
 		`A value of 'min source gen [number]' indicates that trading (or Pokémon Bank) from generations before [number] is not allowed.`,
-		`/learn5 displays how the Pok\u00e9mon can learn the given moves at level 5, if it can at all.`,
+		`/learnlc displays how the Pok\u00e9mon can learn the given moves at level 5, if it can at all.`,
 		`/learnall displays all of the possible fathers for egg moves.`,
-		`/learn can also be prefixed by a generation acronym (e.g.: /dpplearn) to indicate which generation is used. Valid options are: rby gsc adv dpp bw2 oras usum ss`,
+		`A generation number can also be appended to /learn (e.g.: /learn4) to indicate which generation is used.`,
 	],
 	randtype: 'randomtype',
 	async randomtype(target, room, user, connection, cmd, message) {
@@ -627,12 +638,28 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		lc: 'LC',
 		cap: 'CAP', caplc: 'CAP LC', capnfe: 'CAP NFE',
 	});
+	const singlesTiersValues: { [k: string]: number } = Object.assign(Object.create(null), {
+		AG: 14, Uber: 13,
+		OU: 12, CAP: 12,
+		UUBL: 11, UU: 10,
+		RUBL: 9, RU: 8,
+		NUBL: 7, NU: 6,
+		PUBL: 5, PU: 4,
+		ZUBL: 3, ZU: 2,
+		NFE: 1, 'CAP NFE': 1,
+		LC: 0, 'CAP LC': 0,
+	});
 	const allDoublesTiers: { [k: string]: TierTypes.Singles | TierTypes.Other } = Object.assign(Object.create(null), {
 		doublesubers: 'DUber', doublesuber: 'DUber', duber: 'DUber', dubers: 'DUber',
 		doublesou: 'DOU', dou: 'DOU',
 		doublesbl: 'DBL', dbl: 'DBL',
 		doublesuu: 'DUU', duu: 'DUU',
 		doublesnu: '(DUU)', dnu: '(DUU)',
+	});
+	const doublesTiersValues: { [k: string]: number } = Object.assign(Object.create(null), {
+		DUber: 4, DOU: 3,
+		DBL: 2, DUU: 1,
+		'(DUU)': 0,
 	});
 	const allTypes = Object.create(null);
 	for (const type of mod.types.all()) {
@@ -671,13 +698,17 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	let nationalSearch = null;
 	let unreleasedSearch = null;
 	let fullyEvolvedSearch = null;
+	let restrictedSearch = null;
 	let singleTypeSearch = null;
 	let randomOutput = 0;
+	let tierInequalitySearch = false;
 	const validParameter = (cat: string, param: string, isNotSearch: boolean, input: string) => {
 		const uniqueTraits = ['colors', 'gens'];
+		const tierTraits = ['tiers', 'doubles tiers'];
 		for (const group of searches) {
 			const g = group[cat as keyof DexOrGroup];
 			if (g === undefined) continue;
+			if (tierTraits.includes(cat) && tierInequalitySearch) continue;
 			if (typeof g !== 'boolean' && g[param] === undefined) {
 				if (uniqueTraits.includes(cat)) {
 					for (const currentParam in g) {
@@ -710,6 +741,22 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				target = target.substr(1);
 			}
 
+			let isTierInequalityParam = false;
+			const tierInequality: boolean[] = [];
+			if (target.startsWith('tier')) {
+				if (isNotSearch) return { error: "You cannot use the negation symbol '!' with inequality tier searches." };
+				target = target.substr(4).trim();
+				if (!target.startsWith('>') && !target.startsWith('<')) {
+					return { error: "You must use an inequality operator '>' or '<' with performing tier inequality searchs." };
+				}
+				isTierInequalityParam = true;
+				tierInequalitySearch = true;
+				tierInequality[0] = target.startsWith('>');
+				target = target.substr(1).trim();
+				tierInequality[1] = target.startsWith('=');
+				if (tierInequality[1]) target = target.substr(1).trim();
+			}
+
 			const targetAbility = mod.abilities.get(target);
 			if (targetAbility.exists) {
 				const invalid = validParameter("abilities", targetAbility.id, isNotSearch, targetAbility.name);
@@ -727,7 +774,20 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				const invalid = validParameter("tiers", target, isNotSearch, target);
 				if (invalid) return { error: invalid };
 				tierSearch = tierSearch || !isNotSearch;
-				orGroup.tiers[target] = !isNotSearch;
+				if (isTierInequalityParam) {
+					const tierValue = singlesTiersValues[target];
+					const entires = Object.entries(singlesTiersValues);
+					for (const [key, value] of entires) {
+						const useTier = (value > tierValue && tierInequality[0]) || (value < tierValue && !tierInequality[0]);
+						if (useTier && (!key.startsWith('CAP') || capSearch)) {
+							orGroup.tiers[key] = true;
+						} else if (tierValue === value && tierInequality[1]) {
+							orGroup.tiers[key] = true;
+						}
+					}
+				} else {
+					orGroup.tiers[target] = !isNotSearch;
+				}
 				continue;
 			}
 
@@ -736,7 +796,19 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				const invalid = validParameter("doubles tiers", target, isNotSearch, target);
 				if (invalid) return { error: invalid };
 				tierSearch = tierSearch || !isNotSearch;
-				orGroup.doublesTiers[target] = !isNotSearch;
+				if (isTierInequalityParam) {
+					const tierValue = doublesTiersValues[target];
+					const entires = Object.entries(doublesTiersValues);
+					for (const [key, value] of entires) {
+						if ((value > tierValue && tierInequality[0]) || (value < tierValue && !tierInequality[0])) {
+							orGroup.doublesTiers[key] = true;
+						} else if (tierValue === value && tierInequality[1]) {
+							orGroup.doublesTiers[key] = true;
+						}
+					}
+				} else {
+					orGroup.doublesTiers[target] = !isNotSearch;
+				}
 				continue;
 			}
 
@@ -882,6 +954,14 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				if (fullyEvolvedSearch === isNotSearch) return { error: "A search cannot include and exclude 'fully evolved'." };
 				if (parameters.length > 1) return { error: "The parameter 'fully evolved' cannot have alternative parameters." };
 				fullyEvolvedSearch = !isNotSearch;
+				orGroup.skip = true;
+				break;
+			}
+
+			if (['restricted legendary', 'restrictedlegendary', 'restricted'].includes(target)) {
+				if (restrictedSearch === isNotSearch) return { error: "A search cannot include and exclude 'restricted legendary'." };
+				if (parameters.length > 1) return { error: "The parameter 'restricted legendary' cannot have alternative parameters." };
+				restrictedSearch = !isNotSearch;
 				orGroup.skip = true;
 				break;
 			}
@@ -1059,7 +1139,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 	if (
 		showAll && searches.length === 0 && singleTypeSearch === null &&
-		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null && sort === null
+		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null && restrictedSearch === null && sort === null
 	) {
 		return {
 			error: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.",
@@ -1071,6 +1151,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		const megaSearchResult = megaSearch === null || megaSearch === !!species.isMega;
 		const gmaxSearchResult = gmaxSearch === null || gmaxSearch === species.name.endsWith('-Gmax');
 		const fullyEvolvedSearchResult = fullyEvolvedSearch === null || fullyEvolvedSearch !== species.nfe;
+		const restrictedSearchResult = restrictedSearch === null ||
+			restrictedSearch === species.tags.includes('Restricted Legendary');
 		if (
 			species.gen <= mod.gen &&
 			(
@@ -1080,7 +1162,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			(!species.tier.startsWith("CAP") || capSearch) &&
 			megaSearchResult &&
 			gmaxSearchResult &&
-			fullyEvolvedSearchResult
+			fullyEvolvedSearchResult &&
+			restrictedSearchResult
 		) {
 			dex[species.id] = species;
 		}
@@ -1102,7 +1185,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9ou';
 		const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
 		const additionalRules = [];
-		if (nationalSearch && !ruleTable.has('standardnatdex')) additionalRules.push('standardnatdex');
+		if (nationalSearch && !ruleTable.has('natdexmod')) additionalRules.push('natdexmod');
 		if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
 		validator = TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
 	}
@@ -1389,7 +1472,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 		'zmove', 'maxmove', 'gmaxmove',
 	];
 	const allStatus = ['psn', 'tox', 'brn', 'par', 'frz', 'slp'];
-	const allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped'];
+	const allVolatileStatus = ['flinch', 'confusion', 'partiallytrapped', 'trapped'];
 	const allBoosts = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'accuracy', 'evasion'];
 	const allTargets: { [k: string]: string } = {
 		oneally: 'adjacentAlly',
@@ -1746,7 +1829,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			case 'freeze': target = 'frz'; break;
 			case 'sleep': target = 'slp'; break;
 			case 'confuse': target = 'confusion'; break;
-			case 'trap': target = 'partiallytrapped'; break;
+			case 'partiallytrap': target = 'partiallytrapped'; break;
 			case 'flinche': target = 'flinch'; break;
 			}
 
@@ -1766,6 +1849,11 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 					return { error: 'A search cannot both exclude and include a volatile status.' };
 				}
 				orGroup.volatileStatus[target] = !isNotSearch;
+				continue;
+			} else if (target === 'trap' || target === 'trapping') {
+				for (const trappingType of ['partiallytrapped', 'trapped']) {
+					if (!orGroup.volatileStatus[trappingType]) orGroup.volatileStatus[trappingType] = !isNotSearch;
+				}
 				continue;
 			}
 
@@ -2020,11 +2108,23 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			if (matched) continue;
 
 			for (const searchStatus in alts.volatileStatus) {
-				const canStatus = !!(
+				let canStatus = !!(
 					(move.secondary && move.secondary.volatileStatus === searchStatus) ||
 					(move.secondaries?.some(entry => entry.volatileStatus === searchStatus)) ||
-					(move.volatileStatus === searchStatus)
+					(move.volatileStatus === searchStatus) ||
+					// This is slightly hacky, but none of the proper trapping moves in moves.ts mechanically use 'trapped' as
+					// a volatilestatus despite it being one.
+					(('trapped' === searchStatus) &&
+						((move.onHit && /\b(?:target|pokemon)\.addVolatile\("trapped",/.test(move.onHit.toString())) ||
+							(move.secondary?.onHit && /\b(?:target|pokemon)\.addVolatile\("trapped",/.test(move.secondary.onHit.toString())) ||
+							(move.self?.onHit && /\b(?:target|pokemon)\.addVolatile\("trapped",/.test(move.self.onHit.toString()))))
 				);
+				if (searchStatus === 'partiallytrapped') {
+					canStatus = canStatus || moveid === 'gmaxcentiferno' || moveid === 'gmaxsandblast';
+				}
+				if (searchStatus === 'trapped') {
+					canStatus = canStatus || moveid === 'fairylock' || moveid === 'octolock';
+				}
 				if (canStatus === alts.volatileStatus[searchStatus]) {
 					matched = true;
 					break;

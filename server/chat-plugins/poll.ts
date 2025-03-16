@@ -303,11 +303,11 @@ export class Poll extends Rooms.MinorActivity {
 		}
 	}
 
-	onConnect(user: User, connection: Connection | null = null) {
+	override onConnect(user: User, connection: Connection | null = null) {
 		this.displayTo(user, connection);
 	}
 
-	onRename(user: User, oldid: ID, joining: boolean) {
+	override onRename(user: User, oldid: ID, joining: boolean) {
 		if (user.id in this.voters) {
 			this.updateFor(user);
 		}

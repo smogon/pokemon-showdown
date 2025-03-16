@@ -119,7 +119,7 @@ export const LogReader = new class {
 
 	async list() {
 		if (roomlogTable) {
-			const roomids = await roomlogTable.query()`SELECT DISTINCT roomid FROM roomlogs`;
+			const roomids = await roomlogTable.query()`SELECT DISTINCT roomid FROM roomlog_dates`;
 			return roomids.map(x => x.roomid) as RoomID[];
 		}
 		const listing = await Monitor.logPath(`chat`).readdir();
@@ -787,7 +787,7 @@ export class RipgrepLogSearcher extends FSLogSearcher {
 		lineCount += results.length;
 		return { results, lineCount };
 	}
-	async searchLinecounts(room: RoomID, month: string, user?: ID) {
+	override async searchLinecounts(room: RoomID, month: string, user?: ID) {
 		// don't need to check if logs exist since ripgrepSearchMonth does that
 		const regexString = (
 			user ? `\\|c\\|${this.constructUserRegex(user)}\\|` : `\\|c\\|([^|]+)\\|`

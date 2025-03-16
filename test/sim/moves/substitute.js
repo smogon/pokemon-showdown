@@ -78,7 +78,7 @@ describe('Substitute', () => {
 		battle.makeChoices('move highjumpkick', 'move agility');
 
 		// Modding accuracy so High Jump Kick will miss and cause recoil
-		battle.onEvent('Accuracy', battle.format, true);
+		battle.onEvent('Accuracy', battle.format, false);
 		battle.makeChoices('move highjumpkick', 'move agility');
 
 		// Only P1 has a substitute, so no one takes recoil damage.

@@ -206,7 +206,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		this.lastUnclaimedStart = (ticket.active ? this.createTime : 0);
 	}
 
-	onJoin(user: User, connection: Connection) {
+	override onJoin(user: User, connection: Connection) {
 		if (!this.ticket.open) return false;
 		if (!user.isStaff || user.id === this.ticket.userid) {
 			if (this.emptyRoom) this.emptyRoom = false;
@@ -243,7 +243,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	onLeave(user: User, oldUserid: ID) {
+	override onLeave(user: User, oldUserid: ID) {
 		const player = this.playerTable[oldUserid || user.id];
 		if (player) {
 			this.removePlayer(player);
@@ -274,7 +274,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	onLogMessage(message: string, user: User) {
+	override onLogMessage(message: string, user: User) {
 		if (!this.ticket.open) return;
 		if (user.isStaff && this.ticket.userid !== user.id) this.involvedStaff.add(user.id);
 		if (this.ticket.active) return;
@@ -309,7 +309,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	forfeit(user: User) {
+	override forfeit(user: User) {
 		if (!(user.id in this.playerTable)) return;
 		this.removePlayer(this.playerTable[user.id]);
 		if (!this.ticket.open) return;
@@ -458,7 +458,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 	}
 
 	// Modified version of RoomGame.destory
-	destroy() {
+	override destroy() {
 		if (tickets[this.ticket.userid] && this.ticket.open) {
 			// Ticket was not deleted - deleted tickets already have this done to them - and was not closed.
 			// Write stats and change flags as appropriate prior to deletion.
@@ -476,7 +476,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		(this.players as any) = null;
 		(this.playerTable as any) = null;
 	}
-	onChatMessage(message: string, user: User) {
+	override onChatMessage(message: string, user: User) {
 		HelpTicket.uploadReplaysFrom(message, user, user.connections[0]);
 	}
 	// workaround to modlog for no room
@@ -1157,7 +1157,7 @@ export const textTickets: { [k: string]: TextTicketInfo } = {
 			];
 			const tar = toID(ticket.text[0]); // should always be the reported userid
 			const name = Utils.escapeHTML(Users.getExact(tar)?.name || tar);
-			buf += `<br /><strong>Reported user:</strong> <a href="https://${Config.routes.root}/users/${name}">${name}</a> `;
+			buf += `<br /><strong>Reported user:</strong> <a href="https://${Config.routes.root}/users/${tar}">${name}</a> `;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${tar}'">Global Modlog</button><br />`;
 			buf += `<details ${state?.list ? 'open' : ''} class="readmore">`;
 			buf += `<summary>Punish <strong>${name}</strong> (reported user)</summary>`;

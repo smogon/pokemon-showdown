@@ -409,11 +409,11 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 		this.pools = pools;
 	}
 
-	protected chooseTeamPreview(team: AnyObject[]): string {
+	protected override chooseTeamPreview(team: AnyObject[]): string {
 		return `team ${this.choosePokemon(team.map((p, i) => ({ slot: i + 1, pokemon: p }))) || 1}`;
 	}
 
-	protected chooseMove(active: AnyObject, moves: { choice: string, move: AnyObject }[]): string {
+	protected override chooseMove(active: AnyObject, moves: { choice: string, move: AnyObject }[]): string {
 		this.markUsedIfGmax(active);
 		// Prefer to use a move which hasn't been used yet.
 		for (const { choice, move } of moves) {
@@ -426,7 +426,9 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 		return super.chooseMove(active, moves);
 	}
 
-	protected chooseSwitch(active: AnyObject | undefined, switches: { slot: number, pokemon: AnyObject }[]): number {
+	protected override chooseSwitch(
+		active: AnyObject | undefined, switches: { slot: number, pokemon: AnyObject }[]
+	): number {
 		this.markUsedIfGmax(active);
 		return this.choosePokemon(switches) || super.chooseSwitch(active, switches);
 	}
