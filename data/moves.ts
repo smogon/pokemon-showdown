@@ -14981,7 +14981,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onFractionalPriorityPriority: -1,
 		onFractionalPriority(priority, pokemon, target, move) {
-				return -0.1;
+				return -6;
 		},
 
 		},
