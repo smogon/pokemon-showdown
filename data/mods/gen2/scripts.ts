@@ -503,8 +503,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			const moveHit = target.getMoveHitData(move);
-			moveHit.successful = true;
 			// Is it an OHKO move?
 			if (move.ohko) {
 				return target.maxhp;
@@ -512,9 +510,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// We edit the damage through move's damage callback
 			if (move.damageCallback) {
-				const damageCallabackResult = move.damageCallback.call(this.battle, source, target);
-				moveHit.successful = damageCallabackResult !== false && damageCallabackResult !== null;
-				return damageCallabackResult;
+				return move.damageCallback.call(this.battle, source, target);
 			}
 
 			// We take damage from damage=level moves
@@ -558,7 +554,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (isCrit && this.battle.runEvent('CriticalHit', target, null, move)) {
-				moveHit.crit = true;
+				target.getMoveHitData(move).crit = true;
 			}
 
 			// Happens after crit calculation
@@ -693,7 +689,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// Type effectiveness
 			const totalTypeMod = target.runEffectiveness(move);
-			moveHit.typeMod = totalTypeMod;
 			// Super effective attack
 			if (totalTypeMod > 0) {
 				if (!suppressMessages) this.battle.add('-supereffective', target);
