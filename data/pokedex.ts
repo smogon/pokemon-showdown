@@ -3731,7 +3731,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Ledstar",
 		types: ["Bug", "Electric"],
 		baseStats: {hp: 80, atk: 100, def: 70, spa: 45, spd: 115, spe: 110},
-		abilities: {0: "Heroismo"},
+		abilities: {0: "Heroismo", H:"Ultimo Golpe"},
 		heightm: 1.7,
 		weightkg: 30.6,
 		color: "Red",

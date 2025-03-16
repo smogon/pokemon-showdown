@@ -206,8 +206,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	aromaticmist: {
 		name: "Aromatic Mist",
-		desc: "Raises the target's Special Defense by 1 stage. Fails if there is no ally adjacent to the user.",
-		shortDesc: "Raises an ally's Sp. Def by 1.",
+		desc: "Raises the target's Special Defense by 1 stage. Fails if there is no ally adjacent to the user. Every Pokemon in the user's party is cured of its non-volatile status condition. Active Pokemon with the Sap Sipper Ability are not cured, unless they are the user.",
+		shortDesc: "Cures the user's party of all status. Raises an ally's Sp. Def by 2.",
 	},
 	assist: {
 		name: "Assist",
@@ -1191,8 +1191,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	craftyshield: {
 		name: "Crafty Shield",
-		desc: "The user and its party members are protected from non-damaging attacks made by other Pokemon, including allies, during this turn. Fails if the user moves last this turn or if this move is already in effect for the user's side.",
-		shortDesc: "Protects allies from Status moves this turn.",
+		desc: "Deals damage to the target based on its Special Defense instead of Defense.",
+		shortDesc: "Damages target based on Sp. Def, not Defense.",
 
 		start: "  Crafty Shield protected [TEAM]!",
 		block: "  Crafty Shield protected [POKEMON]!",
@@ -1277,8 +1277,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	decorate: {
 		name: "Decorate",
-		desc: "Raises the target's Attack and Special Attack by 2 stages.",
-		shortDesc: "Raises the target's Attack and Sp. Atk by 2.",
+		desc: "Raises the user's Attack and Special Attack by 2 stage.",
+		shortDesc: "Raises the user's Attack and Sp. Atk by 2.",
 	},
 	defendorder: {
 		name: "Defend Order",
@@ -1422,8 +1422,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	disarmingvoice: {
 		name: "Disarming Voice",
-		desc: "This move does not check accuracy.",
-		shortDesc: "This move does not check accuracy. Hits foes.",
+		desc: "Has a 100% chance to infatuated the target.",
+		shortDesc: "100% chance to infatuated the target.",
 	},
 	discharge: {
 		name: "Discharge",
@@ -1916,8 +1916,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	fairylock: {
 		name: "Fairy Lock",
-		desc: "Prevents all active Pokemon from switching next turn. A Pokemon can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. Fails if the effect is already active.",
-		shortDesc: "Prevents all Pokemon from switching next turn.",
+		desc: "Prevents all active Pokemon from switching next turn. A Pokemon can still switch out if it is holding Shed Shell or uses Baton Pass, Flip Turn, Parting Shot, Teleport, U-turn, or Volt Switch. Fails if the effect is already active. This move's type effectiveness against Rock, Fairy and Ice is changed to be super effective no matter what this move's type is.",
+		shortDesc: "Prevents all Pokemon from switching. Super effective on Fairy, Rock and Ice.",
 		gen7: {
 			desc: "Prevents all active Pokemon from switching next turn. A Pokemon can still switch out if it is holding Shed Shell or uses Baton Pass, Parting Shot, U-turn, or Volt Switch. Fails if the effect is already active.",
 		},
@@ -1926,7 +1926,6 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	fairywind: {
 		name: "Fairy Wind",
-		desc: "No additional effect.",
 		shortDesc: "Usually goes first.",
 	},
 	fakeout: {
@@ -2187,8 +2186,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	floralhealing: {
 		name: "Floral Healing",
-		desc: "The target restores 1/2 of its maximum HP, rounded half up. If the terrain is Grassy Terrain, the target instead restores 2/3 of its maximum HP, rounded half down.",
-		shortDesc: "Heals the target by 50% of its max HP.",
+		desc: "The user restores 1/2 of its maximum HP, rounded half up. Resets stats below 0",
+		shortDesc: "Heals the user by 50% of its max HP. Resets stats below 0",
 	},
 	flowershield: {
 		name: "Flower Shield",
