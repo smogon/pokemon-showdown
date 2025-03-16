@@ -282,7 +282,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	aurawheel: {
 		name: "Aura Wheel",
-		desc: "Has a 100% chance to raise the user's Speed by 1 stage. If the user is a Morpeko in Full Belly Mode, this move is Electric type. If the user is a Morpeko in Hangry Mode, this move is Dark type. This move cannot be used successfully unless the user's current form, while considering Transform, is Full Belly or Hangry Mode Morpeko.",
+		desc: "Has a 100% chance to raise the user's Speed by 1 stage. If the user is a Morpeko in Full Belly Mode, this move is Electric type. If the user is a Morpeko in Hangry Mode, this move is Dark type.",
 		shortDesc: "Morpeko: Electric; Hangry: Dark; 100% +1 Spe.",
 	},
 	aurorabeam: {
@@ -601,8 +601,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	boltstrike: {
 		name: "Bolt Strike",
-		desc: "Has a 20% chance to paralyze the target.",
-		shortDesc: "20% chance to paralyze the target.",
+		desc: "Has a 30% chance to paralize the target. Cannot be selected the turn after it's used.",
+		shortDesc: "30% chance to PRZ the target. Cannot be selected the turn after it's used.",
 	},
 	bombapegajosa: {
 		name: "Bomba Pegajosa",
@@ -2191,8 +2191,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	flowershield: {
 		name: "Flower Shield",
-		desc: "Raises the Defense of all active Grass-type Pokemon by 1 stage. Fails if there are no active Grass-type Pokemon.",
-		shortDesc: "Raises Defense by 1 of all active Grass types.",
+		desc: "The user is protected from most attacks made by other Pokemon during this turn, and Pokemon trying to make no contact with the user have their Special Attack lowered by 1 stage. Non-damaging moves go through this protection. This move has a 1/X chance of being successful, where X starts at 1 and triples each time this move is successfully used. X resets to 1 if this move fails, if the user's last move used is not Baneful Bunker, Burning Bulwark, Detect, Endure, King's Shield, Max Guard, Obstruct, Protect, Quick Guard, Silk Trap, Spiky Shield, or Wide Guard, or if it was one of those moves and the user's protection was broken. Fails if the user moves last this turn.",
+		shortDesc: "Protects from damaging attacks. No contact: -1 Spa.",
 	},
 	flowertrick: {
 		name: "Flower Trick",
@@ -3384,8 +3384,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	iondeluge: {
 		name: "Ion Deluge",
-		desc: "Causes Normal-type moves to become Electric type this turn. The effect happens after other effects that change a move's type.",
-		shortDesc: "Normal moves become Electric type this turn.",
+		desc: "Does 12.5% damage to pokémon other than electric or ground types",
+		shortDesc: "Set Ion Deluge trap.",
 
 		activate: "  A deluge of ions showers the battlefield!",
 	},
@@ -3793,13 +3793,12 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	magneticflux: {
 		name: "Magnetic Flux",
-		desc: "Raises the Defense and Special Defense of Pokemon on the user's side with the Plus or Minus Abilities by 1 stage.",
-		shortDesc: "Raises Def, Sp. Def of allies with Plus/Minus by 1.",
+		shortDesc: "Set charge to steel and electric pokemon. Raises spa and atk with plus and minus.",
 	},
 	magnetrise: {
 		name: "Magnet Rise",
-		desc: "For 5 turns, the user is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability as long as it remains active. If the user uses Baton Pass, the replacement will gain the effect. Ingrain, Smack Down, Thousand Arrows, and Iron Ball override this move if the user is under any of their effects. Fails if the user is already under this effect or the effects of Ingrain, Smack Down, or Thousand Arrows.",
-		shortDesc: "For 5 turns, the user has immunity to Ground.",
+		desc: "The user is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, Sticky Web, and the Arena Trap Ability as long as it remains active. If the user uses Baton Pass, the replacement will gain the effect. Ingrain, Smack Down, Thousand Arrows, and Iron Ball override this move if the user is under any of their effects. Fails if the user is already under this effect or the effects of Ingrain, Smack Down, or Thousand Arrows. effect is lost when switching",
+		shortDesc: "The user has immunity to Ground.",
 		gen5: {
 			desc: "For 5 turns, the user is immune to Ground-type attacks and the effects of Spikes, Toxic Spikes, and the Arena Trap Ability as long as it remains active. If the user uses Baton Pass, the replacement will gain the effect. Ingrain, Smack Down, and Iron Ball override this move if the user is under any of their effects. Fails if the user is already under this effect or the effects of Ingrain or Smack Down.",
 		},
@@ -5777,7 +5776,8 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	shockwave: {
 		name: "Shock Wave",
-		shortDesc: "This move does not check accuracy.",
+		desc: "Has a 10% chance to paralyze the target.",
+		shortDesc: "10% chance to paralyze the target.",
 	},
 	shoreup: {
 		name: "Shore Up",
@@ -7022,8 +7022,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	thundershock: {
 		name: "Thunder Shock",
-		desc: "Has a 10% chance to paralyze the target.",
-		shortDesc: "10% chance to paralyze the target.",
+		shortDesc: "Hit first.",
 	},
 	thunderwave: {
 		name: "Thunder Wave",
@@ -7640,8 +7639,7 @@ export const MovesText: {[id: IDEntry]: MoveText} = {
 	},
 	zippyzap: {
 		name: "Zippy Zap",
-		desc: "Has a 100% chance to raise the user's evasion by 1 stage.",
-		shortDesc: "Goes first. Raises user's evasion by 1.",
+		shortDesc: "Goes first. Lowers the user's Speed by 1..",
 		gen7: {
 			desc: "Will always result in a critical hit.",
 			shortDesc: "Nearly always goes first. Always crits.",
