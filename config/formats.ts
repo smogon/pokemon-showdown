@@ -107,7 +107,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Doubles LC",
 		mod: 'gen9',
 		gameType: 'doubles',
-		searchShow: false,
 		ruleset: ['Standard Doubles', 'Little Cup', 'Sleep Clause Mod', 'Terastal Clause'],
 		banlist: ['Basculin-White-Striped', 'Dunsparce', 'Duraludon', 'Girafarig', 'Gligar', 'Murkrow', 'Qwilfish-Hisui', 'Scyther', 'Sneasel', 'Sneasel-Hisui', 'Vulpix', 'Vulpix-Alola', 'Yanma'],
 	},
@@ -166,7 +165,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] NFE",
 		desc: `Only Pok&eacute;mon that can evolve are allowed.`,
 		mod: 'gen9',
-		searchShow: false,
 		ruleset: ['Standard OMs', 'Not Fully Evolved', 'Sleep Moves Clause', 'Terastal Clause'],
 		banlist: [
 			'Arena Trap', 'Magnet Pull', 'Shadow Tag', 'Baton Pass',
