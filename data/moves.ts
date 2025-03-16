@@ -1075,7 +1075,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onRestart() {
 				if (this.effectState.increase < 80) {
-					this.effectState.increase += 10;
+					this.effectState.increase += 15;
 				}
 			},
 		},
@@ -2420,7 +2420,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: {protect: 1, mirror: 1},
 		secondaries: [
 			{
-				chance: 50,
+				chance: 100,
 				boosts: {
 					atk: -1,
 				},
@@ -12067,7 +12067,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, sound: 1, bypasssub: 1, allyanim: 1, metronome: 1},
 		boosts: {
-			spd: -2,
+			spd: -3,
 		},
 		secondary: null,
 		target: "normal",
