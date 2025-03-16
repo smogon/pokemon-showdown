@@ -1241,7 +1241,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	plus: {
 		name: "Plus",
-		desc: "If an active ally has this Ability or the Minus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
+		desc: "If an active ally has this Ability or the Minus Ability, this Pokemon's Special Attack is multiplied by 1.5. Prevents other Pokemon from lowering this Pokemon's stat stages.",
 		shortDesc: "If an active ally has this Ability or the Minus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		gen4: {
 			desc: "If an active ally has the Minus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
