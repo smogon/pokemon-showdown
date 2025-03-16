@@ -623,27 +623,27 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			}
 		},
 	},
-	clementine: {
+	clem: {
 		noCopy: true,
 		onStart() {
-			this.add(`c:|${getName('Clementine')}|Je suis peut-être con comme une table`);
+			this.add(`c:|${getName('Clem')}|Je suis peut-être con comme une table`);
 		},
 		onSwitchOut(pokemon) {
 			if (pokemon.volatiles['flipped']) {
 				pokemon.removeVolatile('flipped');
-				changeSet(this, pokemon, ssbSets['Clementine']);
-				this.add(`c:|${getName('Clementine')}|┬──┬◡ﾉ(° -°ﾉ)`);
+				changeSet(this, pokemon, ssbSets['Clem']);
+				this.add(`c:|${getName('Clem')}|┬──┬◡ﾉ(° -°ﾉ)`);
 			} else {
-				this.add(`c:|${getName('Clementine')}|I fucking love air-conditioning.`);
+				this.add(`c:|${getName('Clem')}|I fucking love air-conditioning.`);
 			}
 		},
 		onAnySwitchIn(pokemon) {
 			if ((pokemon.illusion || pokemon).name === 'Kennedy') {
-				this.add(`c:|${getName('Clementine')}|yikes`);
+				this.add(`c:|${getName('Clem')}|yikes`);
 			}
 		},
 		onFaint() {
-			this.add(`c:|${getName('Clementine')}|ofc`);
+			this.add(`c:|${getName('Clem')}|ofc`);
 		},
 	},
 	clerica: {
@@ -927,7 +927,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		onSwitchOut() {
 			this.add(`c:|${getName('Frozoid')}|Wait let me finish what i was doi-`);
 		},
-		onFaint(pokemon) {
+		onFaint() {
 			this.add(`c:|${getName('Frozoid')}|Man.`);
 		},
 	},
@@ -1186,14 +1186,14 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		onStart(target, source, effect) {
 			const message = this.sample(['Justice for the 97', 'up the reds']);
 			this.add(`c:|${getName('Kennedy')}|${message}`);
-			if (source && source.name === 'Clementine') {
+			if (source?.name === 'Clem') {
 				if (source.volatiles['flipped']) {
 					source.removeVolatile('flipped');
-					changeSet(this, source, ssbSets['Clementine']);
+					changeSet(this, source, ssbSets['Clem']);
 					this.add(`c:|${getName('Kennedy')}|┬──┬◡ﾉ(° -°ﾉ)`);
 				} else {
 					source.addVolatile('flipped', target, this.effect);
-					changeSet(this, source, ssbSets['Clementine-Flipped']);
+					changeSet(this, source, ssbSets['Clem-Flipped']);
 					this.add(`c:|${getName('Kennedy')}|(╯°o°）╯︵ ┻━┻`);
 				}
 			}
@@ -1206,7 +1206,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		onAnySwitchIn(pokemon) {
 			switch ((pokemon.illusion || pokemon).name) {
-			case 'Clementine':
+			case 'Clem':
 				this.add(`c:|${getName('Kennedy')}|Not the Fr*nch....`);
 				break;
 			case 'dhelmise':
@@ -1449,7 +1449,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				this.add(`c:|${getName('Lyna 氷')}|Oh, a cat <3`);
 				break;
 			case 'r8':
-			case 'clementine':
+			case 'clem':
 			case 'teclis':
 			case 'swiffix':
 			case 'ironwater':
@@ -1469,7 +1469,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				phrase = 'You\'re so cute, I can\'t hit you...';
 				break;
 			case 'r8':
-			case 'clementine':
+			case 'clem':
 			case 'teclis':
 			case 'swiffix':
 			case 'ironwater':
@@ -1491,7 +1491,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			case 'r8':
 				phrase = 'ok mais on dit pain au chocolat.';
 				break;
-			case 'clementine':
+			case 'clem':
 			case 'teclis':
 			case 'swiffix':
 			case 'ironwater':
@@ -2518,7 +2518,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				}
 				type = 'Dark';
 			} else if (currentWeather) {
-				if (['raindance', 'primordialsea'].includes(currentWeather) && !target.hasType('Water')) {
+				if (['raindance', 'primordialsea', 'stormsurge'].includes(currentWeather) && !target.hasType('Water')) {
 					type = 'Water';
 				} else if (['sunnyday', 'desolateland'].includes(currentWeather) && !target.hasType('Fire')) {
 					type = 'Fire';
@@ -2600,6 +2600,16 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		onFaint() {
 			this.add(`c:|${getName('Venous')}|teachin bitches how to swim`);
+		},
+		innateName: "Stored Power",
+		shortDesc: "Moves gain 20 additional Base Power per each positive stat boost.",
+		onModifyMove(move, pokemon, target) {
+			if (move.basePowerCallback) return;
+			if (pokemon.species.baseSpecies !== 'Mantine') return;
+			move.basePowerCallback = function (p, t, m) {
+				const bp = m.basePower + 20 * p.positiveBoosts();
+				return bp;
+			};
 		},
 	},
 	violet: {
@@ -2852,7 +2862,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 
 	// Custom effects
 
-	// Clementine
+	// Clem
 	flipped: {
 		name: 'Flipped',
 		onStart(target) {
@@ -2966,7 +2976,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onResidual(target, source, effect) {
-			this.heal(target.baseMaxhp / 4);
+			this.heal(target.baseMaxhp / 3);
 		},
 	},
 
@@ -3051,15 +3061,15 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			if (defender.hasItem('utilityumbrella')) return;
 			if (move.flags['wind']) {
 				this.debug('Storm Surge wind boost');
-				return this.chainModify(1.2);
+				return this.chainModify(1.1);
 			}
 			if (move.type === 'Water') {
 				this.debug('Storm Surge water boost');
-				return this.chainModify(1.5);
+				return this.chainModify(1.3);
 			}
 			if (move.type === 'Fire') {
 				this.debug('Storm Surge fire suppress');
-				return this.chainModify(0.5);
+				return this.chainModify(0.7);
 			}
 		},
 		onAccuracy(accuracy, attacker, defender, move) {
@@ -3103,7 +3113,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		onModifySpDPriority: 10,
 		onModifySpD(spd, pokemon) {
 			if (pokemon.hasType('Rock') && this.field.isWeather('deserteddunes')) {
-				return this.modify(spd, 1.5);
+				return this.modify(spd, 1.25);
 			}
 		},
 		onFieldStart(field, source, effect) {
@@ -3340,6 +3350,31 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				}
 			}
 			return false;
+		},
+	},
+	wish: {
+		onStart(pokemon, source, effect) {
+			this.effectState.hp = source.maxhp / 2;
+			if (effect.name === 'Anti-Pelau') {
+				this.effectState.hp = source.maxhp / 4;
+			}
+			this.effectState.startingTurn = this.getOverflowedTurnCount();
+			if (this.effectState.startingTurn === 255) {
+				this.hint(`In Gen 8+, Wish will never resolve when used on the ${this.turn}th turn.`);
+			}
+		},
+		onResidualOrder: 4,
+		onResidual(target: Pokemon) {
+			if (this.getOverflowedTurnCount() <= this.effectState.startingTurn) return;
+			target.side.removeSlotCondition(this.getAtSlot(this.effectState.sourceSlot), 'wish');
+		},
+		onEnd(target) {
+			if (target && !target.fainted) {
+				const damage = this.heal(this.effectState.hp, target, target);
+				if (damage) {
+					this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
+				}
+			}
 		},
 	},
 };
