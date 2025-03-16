@@ -14960,12 +14960,30 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 5,
 		flags: {protect: 1, mirror: 1},
 		onHit(target) {
-			if (this.activePerHalf === 1) return false; // fails in singles
 			const action = this.queue.willMove(target);
 			if (!action) return false;
 
 			action.order = 201;
 			this.add('-activate', target, 'move: Quash');
+		},
+		volatileStatus: 'quash',
+		condition: {
+			duration: 5,
+			onStart(target) {
+				if (target.activeTurns && !this.queue.willMove(target)) {
+					this.effectState.duration++;
+				}
+				this.add('-start', target, 'move: Quash');
+			},
+			onResidualOrder: 15,
+			onEnd(target) {
+				this.add('-end', target, 'move: Quash');
+			},
+			onFractionalPriorityPriority: -1,
+		onFractionalPriority(priority, pokemon, target, move) {
+				return -0.1;
+		},
+
 		},
 		secondary: null,
 		target: "normal",
