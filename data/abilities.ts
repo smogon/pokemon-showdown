@@ -203,12 +203,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						this.dex.getImmunity(moveType, pokemon) && this.dex.getEffectiveness(moveType, pokemon) > 0 ||
 						move.ohko
 					) {
+						target.addVolatile('disable')
 						this.add('-ability', pokemon, 'Anticipation');
 						return;
 					}
 				}
 			}
 		},
+
 		flags: {},
 		name: "Anticipation",
 		rating: 0.5,
@@ -5461,20 +5463,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	unnerve: {
 		onPreStart(pokemon) {
 			this.add('-ability', pokemon, 'Unnerve');
-			this.effectState.unnerved = true;
+			this.field.addPseudoWeather('unnerved');
 		},
 		onStart(pokemon) {
-			if (this.effectState.unnerved) return;
+			if (this.field.pseudoWeather['unnerved']) return;
 			this.add('-ability', pokemon, 'Unnerve');
-			this.effectState.unnerved = true;
+			this.field.addPseudoWeather('unnerved');
 		},
 		onEnd() {
-			this.effectState.unnerved = false;
+			this.field.removePseudoWeather('unnerved');
 		},
 		onFoeTryEatItem() {
-			return !this.effectState.unnerved;
+			return !this.field.pseudoWeather['unnerved'];
 		},
-
 		flags: {},
 		name: "Unnerve",
 		rating: 1,
