@@ -203,7 +203,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 						this.dex.getImmunity(moveType, pokemon) && this.dex.getEffectiveness(moveType, pokemon) > 0 ||
 						move.ohko
 					) {
-						target.addVolatile('disable')
+						target.addVolatile('disable', pokemon)
 						this.add('-ability', pokemon, 'Anticipation');
 						return;
 					}
@@ -792,7 +792,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	cursedbody: {
 		onDamagingHit(damage, target, source, move) {
-			if (source.volatiles['disable']) return;
+			if (source.volatiles['curse']) return;
 			if (!move.isMax && !move.flags['futuremove'] && move.id !== 'struggle') {
 				if (this.randomChance(5, 10)) {
 					source.addVolatile('curse', this.effectState.target);
