@@ -655,7 +655,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	honeygather: {
 		name: "Honey Gather",
-		shortDesc: "No competitive use.",
+		shortDesc: "Every 3 turns, this Pokemon heals 1/4 of its max HP .",
 	},
 	hospitality: {
 		name: "Hospitality",
@@ -1402,8 +1402,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	quickfeet: {
 		name: "Quick Feet",
-		desc: "If this Pokemon has a non-volatile status condition, its Speed is multiplied by 1.5. This Pokemon ignores the paralysis effect of halving Speed.",
-		shortDesc: "If this Pokemon is statused, its Speed is 1.5x; ignores Speed drop from paralysis.",
+		desc: "If this Pokemon has a non-volatile status condition, its Speed is multiplied by 1.5. This Pokemon ignores the paralysis effect.",
+		shortDesc: "If this Pokemon is statused, its Speed is 1.5x; ignores Speed drop and full paralysis from paralysis.",
 		gen6: {
 			desc: "If this Pokemon has a non-volatile status condition, its Speed is multiplied by 1.5. This Pokemon ignores the paralysis effect of quartering Speed.",
 		},
