@@ -672,9 +672,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		return { error: `You can't run searches for multiple mods.` };
 	}
 	for (const str of splitTarget) {
-		const sanatizedStr = str.toLowerCase().replace(/[^a-z0-9=]+/g, '');
-		if (sanatizedStr.startsWith('mod=') || sanatizedStr.startsWith('rule=')) {
-			return { error: `${sanatizedStr.split('=')[1]} is an invalid mod or rule, see /dexsearchhelp.` };
+		const sanitizedStr = str.toLowerCase().replace(/[^a-z0-9=]+/g, '');
+		if (sanitizedStr.startsWith('mod=') || sanitizedStr.startsWith('rule=')) {
+			return { error: `${sanitizedStr.split('=')[1]} is an invalid mod or rule, see /dexsearchhelp.` };
 		}
 	}
 	const mod = Dex.mod(usedMod || 'base');
@@ -1215,7 +1215,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 
 	const dex: { [k: string]: Species } = {};
-	for (let species of mod.species.all()) {
+	for (const species of mod.species.all()) {
 		const megaSearchResult = megaSearch === null || megaSearch === !!species.isMega;
 		const gmaxSearchResult = gmaxSearch === null || gmaxSearch === species.name.endsWith('-Gmax');
 		const fullyEvolvedSearchResult = fullyEvolvedSearch === null || fullyEvolvedSearch !== species.nfe;
@@ -1250,11 +1250,12 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			restrictedSearchResult &&
 			ruleResult
 		) {
+			let newSpecies = species;
 			for (const rule of rules) {
-				species = rule?.onModifySpecies?.call({ dex: mod, clampIntRange: Utils.clampIntRange, toID } as Battle,
-					species) || species;
+				newSpecies  = rule?.onModifySpecies?.call({ dex: mod, clampIntRange: Utils.clampIntRange, toID } as Battle,
+					newSpecies) || newSpecies;
 			}
-			dex[species.id] = species;
+			dex[newSpecies.id] = newSpecies;
 		}
 	}
 
