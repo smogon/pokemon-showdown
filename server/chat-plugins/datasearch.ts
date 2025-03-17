@@ -632,23 +632,33 @@ function getMod(target: string) {
 
 function getRule(target: string) {
 	const arr = target.split(',').map(x => x.trim());
-	const ruleTerm = arr.find(x => {
-		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
-		return sanitizedStr.startsWith('rule=') && Dex.data.Rulesets[toID(sanitizedStr.split('=')[1])];
-	});
+	const ruleTerms: string[] = [];
+	for (const term of arr) {
+		const sanitizedStr = term.toLowerCase().replace(/[^a-z0-9=]+/g, '');
+		if (sanitizedStr.startsWith('rule=') && Dex.data.Rulesets[toID(sanitizedStr.split('=')[1])]) {
+			ruleTerms.push(term);
+		}
+	}
 	const count = arr.filter(x => {
 		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
 		return sanitizedStr.startsWith('rule=');
 	}).length;
-	if (ruleTerm) arr.splice(arr.indexOf(ruleTerm), 1);
-	return { splitTarget: arr, usedRule: ruleTerm ? toID(ruleTerm.split(/ ?= ?/)[1]) : '', count };
+	if (ruleTerms.length > 0) {
+		for (const rule of ruleTerms) {
+			arr.splice(arr.indexOf(rule), 1);
+		}
+	}
+	return { splitTarget: arr, usedRules: ruleTerms.map(
+		x => x.toLowerCase().replace(/[^a-z0-9=]+/g, '').split('rule=')[1]), count };
 }
 
-function prepareDexsearchValidator(usedMod: string | undefined, rule: FormatData, nationalSearch: boolean | null) {
+function prepareDexsearchValidator(usedMod: string | undefined, rules: FormatData[], nationalSearch: boolean | null) {
 	const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9ou';
 	const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
 	const additionalRules = [];
-	if (rule && !ruleTable.has(toID(rule.name))) additionalRules.push(toID(rule.name));
+	for (const rule of rules) {
+		if (!ruleTable.has(toID(rule.name))) additionalRules.push(toID(rule.name));
+	}
 	if (nationalSearch && !ruleTable.has('natdexmod')) additionalRules.push('natdexmod');
 	if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
 	return TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
@@ -657,28 +667,23 @@ function prepareDexsearchValidator(usedMod: string | undefined, rule: FormatData
 function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
 	const searches: DexOrGroup[] = [];
 	const { splitTarget: remainingTargets, usedMod, count: modCount } = getMod(target);
-	const { splitTarget, usedRule, count: ruleCount } = getRule(remainingTargets.join(','));
-	if (modCount > 1 || ruleCount > 1) {
-		return { error: `You can't run searches for multiple mods or rules.` };
+	const { splitTarget, usedRules } = getRule(remainingTargets.join(','));
+	if (modCount > 1) {
+		return { error: `You can't run searches for multiple mods.` };
 	}
 	for (const str of splitTarget) {
 		const sanatizedStr = str.toLowerCase().replace(/[^a-z0-9=]+/g, '');
 		if (sanatizedStr.startsWith('mod=') || sanatizedStr.startsWith('rule=')) {
-			return { error: `Invalid mod or rule, see /dexsearchhelp.` };
+			return { error: `${sanatizedStr.split('=')[1]} is an invalid mod or rule, see /dexsearchhelp.` };
 		}
-	}
-	const ruleType = [];
-	for (const key of Object.keys(supportedDexsearchRules)) {
-		if (supportedDexsearchRules[key].includes(usedRule)) {
-			ruleType.push(key);
-			break;
-		}
-	}
-	if (usedRule && !ruleType.length) {
-		return { error: `Invalid rule, see /dexsearchhelp` };
 	}
 	const mod = Dex.mod(usedMod || 'base');
-	const rule = Dex.data.Rulesets[usedRule];
+	const rules: FormatData[] = [];
+	for (const rule of usedRules) {
+		if (!dexsearchHelpRules.includes(rule))
+			return { error: `${rule} is an unsupported rule, see /dexsearchhelp` };
+		rules.push(Dex.data.Rulesets[rule]);
+	}
 
 	const allTiers: { [k: string]: TierTypes.Singles | TierTypes.Other } = Object.assign(Object.create(null), {
 		anythinggoes: 'AG', ag: 'AG',
@@ -1205,19 +1210,17 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	// These only ever get accessed if there are moves or banlists to filter by.
 	let validator;
 	let pokemonSource;
-	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0) ||
-		ruleType.includes('movevalidation') || ruleType.includes('banlist')) {
-		validator = prepareDexsearchValidator(usedMod, rule, nationalSearch);
+	if (Object.values(searches).some(search => !!Object.keys(search.moves).length)) {
+		validator = prepareDexsearchValidator(usedMod, rules, nationalSearch);
 	}
 
 	const dex: { [k: string]: Species } = {};
-	for (const species of mod.species.all()) {
+	for (let species of mod.species.all()) {
 		const megaSearchResult = megaSearch === null || megaSearch === !!species.isMega;
 		const gmaxSearchResult = gmaxSearch === null || gmaxSearch === species.name.endsWith('-Gmax');
 		const fullyEvolvedSearchResult = fullyEvolvedSearch === null || fullyEvolvedSearch !== species.nfe;
 		const restrictedSearchResult = restrictedSearch === null ||
 			restrictedSearch === species.tags.includes('Restricted Legendary');
-		let ruleResult = !rule?.banlist?.includes(species.name);
 
 		/**
 		 * Not every ruleset with an onValidateSet function is specifically to exclude mons.
@@ -1225,8 +1228,12 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		 * why this step is ignored for other rules. Rules can be added for this functionality
 		 * in the supportedDexSearchTypes mapping at the top of the function.
 		 */
-		if (ruleResult && validator && ruleType.includes('banlist') && rule?.onValidateSet) {
-			ruleResult = !rule.onValidateSet.call(validator,
+		let ruleResult = true;
+		for (const rule of rules) {
+			if (!ruleResult) break;
+			if (!supportedDexsearchRules['banlist'].includes(toID(rule.name))) continue;
+			if (!validator) validator = prepareDexsearchValidator(usedMod, rules, nationalSearch);
+			ruleResult = !rule.onValidateSet?.call(validator,
 				{ name: species.name, species: species.id } as PokemonSet, validator.format, {}, {});
 		}
 
@@ -1243,8 +1250,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			restrictedSearchResult &&
 			ruleResult
 		) {
-			dex[species.id] = rule?.onModifySpecies?.call({ dex: mod, clampIntRange: Utils.clampIntRange, toID } as Battle,
-				species) || species;
+			for (const rule of rules) {
+				species = rule?.onModifySpecies?.call({ dex: mod, clampIntRange: Utils.clampIntRange, toID } as Battle,
+					species) || species;
+			}
+			dex[species.id] = species;
 		}
 	}
 
@@ -1418,19 +1428,29 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			if (matched) continue;
 
-			for (const move of altsMoves) {
-				pokemonSource = validator?.allSources();
-				// Match rule must be tried first due to NOT searches providing failed hits
-				// when only checking vanilla legality first.
-				const matchRule = ruleType.includes('movevalidation') &&
-					!validator?.omCheckCanLearn(move, dex[mon], pokemonSource, {}) === alts.moves[move.id];
-				const matchNormally = !matchRule && !validator?.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id];
+			if (validator) {
+				for (const move of altsMoves) {
+					pokemonSource = validator.allSources();
+					const isNotSearch = !alts.moves[move.id];
 
-				if (matchNormally || matchRule) {
-					matched = true;
-					break;
+					let matchRule = false;
+					let numMoveValidationRules = 0;
+					for (const rule of rules) {
+						if (!supportedDexsearchRules['movevalidation'].includes(toID(rule.name))) continue;
+						else numMoveValidationRules++;
+						matchRule = !rule.checkCanLearn?.call(
+							validator, move, dex[mon], pokemonSource, {} as PokemonSet) === !isNotSearch;
+						if (matchRule === !isNotSearch) break;
+					}
+					const matchNormally = !validator.checkCanLearn(move, dex[mon], pokemonSource) === !isNotSearch;
+
+					if ((!isNotSearch && (matchNormally || (numMoveValidationRules > 0 && matchRule))) ||
+						(isNotSearch && matchNormally && (numMoveValidationRules === 0 || matchRule))) {
+						matched = true;
+						break;
+					}
+					if (pokemonSource && !pokemonSource.size()) break;
 				}
-				if (pokemonSource && !pokemonSource.size()) break;
 			}
 			if (matched) continue;
 
@@ -1441,9 +1461,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	const stat = sort?.slice(0, -1);
 
 	function getSortValue(species: Species) {
-		if (!stat) return 0;
-
-		if (stat === 'bst') {
+		if (!stat) {
+			return 0;
+		} else if (stat === 'bst') {
 			return species.bst;
 		} else if (stat === 'weight') {
 			return species.weighthg;
@@ -1463,12 +1483,12 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			mon.baseSpecies !== "Pikachu";
 		const maskForm = mon.baseSpecies === "Ogerpon" && !mon.forme.endsWith("Tera");
 		const allowGmax = (gmaxSearch || tierSearch);
-		if (!isRegionalForm && !maskForm && mon.baseSpecies && results.includes(Dex.species.get(mon.baseSpecies)) &&
-			getSortValue(mon) === getSortValue(Dex.species.get(mon.baseSpecies))) continue;
+		if (!isRegionalForm && !maskForm && mon.baseSpecies && results.includes(mod.species.get(mon.baseSpecies)) &&
+			getSortValue(mon) === getSortValue(mod.species.get(mon.baseSpecies))) continue;
 		const teraFormeChangesFrom = mon.forme.endsWith("Tera") ? !Array.isArray(mon.battleOnly) ?
 			mon.battleOnly! : null : null;
-		if (teraFormeChangesFrom && results.includes(Dex.species.get(teraFormeChangesFrom)) &&
-			getSortValue(mon) === getSortValue(Dex.species.get(teraFormeChangesFrom))) continue;
+		if (teraFormeChangesFrom && results.includes(mod.species.get(teraFormeChangesFrom)) &&
+			getSortValue(mon) === getSortValue(mod.species.get(teraFormeChangesFrom))) continue;
 		if (mon.isNonstandard === 'Gigantamax' && !allowGmax) continue;
 		results.push(mon);
 	}
