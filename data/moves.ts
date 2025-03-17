@@ -3785,7 +3785,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				} else {
 					this.add('-start', pokemon, 'Disable', pokemon.lastMove.name);
 				}
-				this.effectState.move = pokemon.lastMove.id;
+				if(source.hasAbility('anticipation')){
+					this.effectState.move = pokemon.lastMove.id;
+				} else {
+					this.effectState.move = pokemon.lastMove.id;
+				}
 			},
 			onResidualOrder: 17,
 			onEnd(pokemon) {
