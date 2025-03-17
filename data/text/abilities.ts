@@ -263,7 +263,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	cottondown: {
 		name: "Cotton Down",
-		desc: "When this Pokemon is hit by an attack, the Speed of all other Pokemon on the field is lowered by 1 stage.",
+		desc: "When this Pokemon is hit by an attack, the Speed of all other Pokemon on the field is lowered by 1 stage. if hit by a flying type move reduces the opponent's max HP 25%.",
 		shortDesc: "If this Pokemon is hit, it lowers the Speed of all other Pokemon on the field 1 stage.",
 	},
 	cudchew: {
@@ -272,7 +272,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	curiousmedicine: {
 		name: "Curious Medicine",
-		shortDesc: "On switch-in, this Pokemon's allies have their stat stages reset to 0.",
+		shortDesc: "On switch-in, this Pokemon's allies have their stat stages reset to 0. Non-volatile state condition cured when entering the field",
 	},
 	cursedbody: {
 		name: "Cursed Body",
@@ -651,8 +651,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	heavymetal: {
 		name: "Heavy Metal",
-		desc: "This Pokemon's weight is doubled. This effect is calculated after the effect of Autotomize, and before the effect of Float Stone.",
-		shortDesc: "This Pokemon's weight is doubled.",
+		shortDesc: "Increases the power of steel movements 80%, but they adquire -1 priority.",
 	},
 	honeygather: {
 		name: "Honey Gather",
@@ -864,8 +863,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	lightmetal: {
 		name: "Light Metal",
-		desc: "This Pokemon's weight is halved, rounded down to a tenth of a kilogram. This effect is calculated after the effect of Autotomize, and before the effect of Float Stone. A Pokemon's weight will not drop below 0.1 kg.",
-		shortDesc: "This Pokemon's weight is halved.",
+		shortDesc: "Reduces half the power of steel-type movements, but they adquire +1 prority.",
 	},
 	lightningrod: {
 		name: "Lightning Rod",
@@ -940,7 +938,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	magmaarmor: {
 		name: "Magma Armor",
-		shortDesc: "This Pokemon cannot be frozen. Gaining this Ability while frozen cures it.",
+		shortDesc: "Reduces damage by grass, ice and water 33%.",
 	},
 	magnetpull: {
 		name: "Magnet Pull",
@@ -997,7 +995,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 			shortDesc: "If an active ally has the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		},
 		gen3: {
-			desc: "If an active Pokemon has the Plus Ability, this Pokemon's Special Attack is multiplied by 1.5.",
+			desc: "If an active Pokemon has the Plus Ability, this Pokemon's Special Attack is multiplied by 1.5. When one of this Pokemon's stat stages would be lowered by another Pokemon, that Pokemon's stat stage is lowered instead. This effect does not happen if this Pokemon's stat stage was already -6. If the other Pokemon has a substitute, neither Pokemon has its stat stage lowered.",
 			shortDesc: "If an active Pokemon has the Plus Ability, this Pokemon's Sp. Atk is 1.5x.",
 		},
 	},
@@ -1156,8 +1154,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	overcoat: {
 		name: "Overcoat",
-		desc: "This Pokemon is immune to powder moves, damage from Sandstorm, and the effects of Rage Powder and the Effect Spore Ability.",
-		shortDesc: "This Pokemon is immune to powder moves, Sandstorm damage, and Effect Spore.",
+		desc: "This Pokemon is immune to powder moves, damage from Sandstorm, and the effects of Rage Powder and the Effect Spore Ability. Reduces the power of incoming bullet movements by 33%.",
+		shortDesc: "This Pokemon is immune to powder moves, Sandstorm damage, and Effect Spore. Reduces the power of incoming bullet movements by 33%.",
 		gen8: {
 			desc: "This Pokemon is immune to powder moves, damage from Sandstorm or Hail, and the effects of Rage Powder and the Effect Spore Ability.",
 			shortDesc: "This Pokemon is immune to powder moves, Sandstorm or Hail damage, Effect Spore.",
@@ -1213,8 +1211,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	pickpocket: {
 		name: "Pickpocket",
-		desc: "If this Pokemon has no item and is hit by a contact move, it steals the attacker's item. This effect applies after all hits from a multi-hit move. This effect is prevented if the move had a secondary effect removed by the Sheer Force Ability.",
-		shortDesc: "If this Pokemon has no item and is hit by a contact move, it steals the attacker's item.",
+		shortDesc: "Contact movements have a 33% chance of removing the object from target.",
 	},
 	pickup: {
 		name: "Pickup",
@@ -1935,7 +1932,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	telepathy: {
 		name: "Telepathy",
-		shortDesc: "This Pokemon does not take damage from attacks made by its allies.",
+		shortDesc: "This Pokemon does not take damage from attacks made by its allies. Nullifies opponent's immunities",
 
 		block: "  [POKEMON] can't be hit by attacks from its ally Pok\u00E9mon!",
 	},
