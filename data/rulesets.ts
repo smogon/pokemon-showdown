@@ -1056,6 +1056,123 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'Swagger Clause: Swagger is banned');
 		},
 	},
+	limitstatpass: {
+		effectType: 'ValidatorRule',
+		name: 'Limit Stat Pass',
+		desc: 'Limits the number of Pok&eacute;mon with Baton Pass that has any way to boost stats, and their stat boost sources. Usage: Limit Stat Pass = [Passers] / [Sources], e.g. "Limit Stat Pass = 2 / 1" Either side can be left blank, but not both sides.',
+		hasValue: true,
+		onValidateRule(value) {
+			if (!value) throw new Error(`To remove Stat Pass limitations, use "! Limit Stat Pass"`);
+			const values = value.split('/', 2).map(Number);
+			if(values.every(Number.isNaN)) throw new Error('Invalid input for Limit Stat Pass rule.');
+		},
+		onValidateTeam(team, format, teamHas) {
+			const input = this.ruleTable.valueRules.get('limitstatpass')!;
+			const [ maxPassers, maxSources ] = input.split('/').map(Number);
+
+			const problems: string[] = [];
+			const boostPassers: string[] = [];
+
+			// Exceptions can be specified by unbanning 'Baton Pass + exception'
+			const bprule = this.dex.formats.validateRule('+batonpass', format).slice(1) as string;
+			const checkUnban = (test: string) => {
+				const rule = this.dex.formats.validateRule(`+${test}`, format).slice(1) as string;
+				return this.ruleTable.complexBans.some((x) => x[2] > 0 && x[3].includes(rule) && x[3].includes(bprule));
+			}
+
+			const checkBoosts = (effect: Move | Item | Ability, set: PokemonSet) => {
+				const alias = effect.clauseData?.canStatBoost;
+				const boosts = typeof alias === 'function' ? alias.call(this, set) : alias;
+				return boosts;
+			}
+
+			for(const set of team) {
+				const moves = set.moves.map((x) => this.dex.moves.get(x));
+				const item = this.dex.items.get(set.item);
+				const ability = this.dex.abilities.get(set.ability);
+
+				if (!moves.some((x) => x.name === 'Baton Pass')) continue;
+				const boostSources: string[] = [];
+
+				// moves (including cfz and hacked max)
+				for(const move of moves) {
+					if(!checkUnban(move.name) && checkBoosts(move, set)) {
+						boostSources.push(move.name);
+					}
+				}
+
+				// item
+				if(!checkUnban(item.name) && checkBoosts(item, set)) {
+					boostSources.push(item.name);
+				}
+
+				// ability
+				if(!checkUnban(ability.name) && checkBoosts(ability, set)){
+					boostSources.push(ability.name);
+				}
+
+				// ability of mega
+				if(!checkUnban(item.name) && item.megaStone && set.species === item.megaEvolves) {
+					const mega = this.dex.species.get(item.megaStone);
+					const megaAbilities = Object.values(mega.abilities).map((x) => this.dex.abilities.get(x));
+					// if the set and its mega have the same ability, skip this check.
+					if(!megaAbilities.some((x) => x.name === set.ability)) {
+						for(const megaAbility of megaAbilities) {
+							if(!checkUnban(megaAbility.name) && checkBoosts(megaAbility, set)) {
+								boostSources.push(`${megaAbility.name} after mega evolution`);
+							}
+						}
+					}
+				}
+
+				// z moves
+				if(!checkUnban(item.name) && item.zMove) {
+					// status
+					if(item.zMoveType && moves.some((x) => x.zMove?.boost && x.type === item.zMoveType)) {
+						boostSources.push(item.name);
+					}
+
+					// signature
+					else if(item.zMoveFrom && moves.some((x) => x.name === item.zMoveFrom)) {
+						const zMove = this.dex.moves.get(this.toID(item.zMove));
+						const zMoveBoosts = checkBoosts(zMove, set);
+						if(zMoveBoosts) boostSources.push(item.name);
+					}
+				}
+
+				// max moves
+				// FIXME: call checkUnban with something here so that an exception can be made for passing boosts after dynamax.
+				if(this.dex.gen === 8 && !this.ruleTable.has('dynamaxclause')) {
+					const boostingTypes = ['Fighting', 'Steel', 'Poison', 'Ground', 'Flying'];
+					if(moves.some((x) => x.category !== 'Status' && boostingTypes.includes(x.type))) {
+						boostSources.push('Dynamax stat boosts');
+					}
+				}
+
+				// Ogerpon is hardcoded to transform and receive Embody Aspect upon tera.
+				if(
+					!checkUnban('Embody Aspect') && this.dex.gen === 9 && !this.ruleTable.has('terastalclause') &&
+					['Ogerpon', 'Ogerpon-Wellspring', 'Ogerpon-Hearthflame', 'Ogerpon-Cornerstone'].includes(set.species)
+				) {
+					boostSources.push('Embody Aspect');
+				}
+
+				if(boostSources.length) {
+					const pokemonName = set.name || set.species;
+					boostPassers.push(pokemonName);
+					if(boostSources.length > maxSources) {
+						problems.push(`${pokemonName} has Baton Pass and ${boostSources.join(', ')}; which is more sources of stat boosts than the limit of ${maxSources} set by Limit Stat Pass rule.`);
+					}
+				}
+			}
+
+			if(boostPassers.length > maxPassers) {
+				problems.push(`${boostPassers.join(', ')} have Baton Pass and a way to boost their stats; which is more Pokemon than the limit of ${maxPassers} set by Limit Stat Pass rule.`);
+			}
+
+			if(problems.length) return problems;
+		},
+	},
 	drypassclause: {
 		effectType: 'ValidatorRule',
 		name: 'DryPass Clause',
