@@ -18053,11 +18053,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			volatileStatus: 'sparklingaria',
 		},
 		onAfterMove(source, target, move) {
-			if (move.hasSheerForce) return;
-			if (source.fainted) return;
-			const numberTargets = move.hitTargets?.length || 0;
-			for (const pokemon of this.getAllActive()) {
-				if (pokemon !== source && (pokemon.removeVolatile('sparklingaria') || numberTargets > 1) && pokemon.status === 'brn') {
+			if (source.fainted || !move.hitTargets || move.hasSheerForce) return;
+			const numberTargets = move.hitTargets.length;
+			for (const pokemon of move.hitTargets) {
+				if (pokemon !== source && pokemon.isActive && (pokemon.removeVolatile('sparklingaria') || numberTargets > 1) && pokemon.status === 'brn') {
 					pokemon.cureStatus();
 				}
 			}
