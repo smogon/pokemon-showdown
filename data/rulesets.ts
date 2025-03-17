@@ -951,7 +951,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Evasion Items Clause',
 		desc: "Bans items that lower the accuracy of moves used against the user",
-		banlist: ['Bright Powder', 'Lax Incense'],
+		banlist: ['Bright Powder'],
 		onBegin() {
 			this.add('rule', 'Evasion Items Clause: Evasion items are banned');
 		},
@@ -1108,7 +1108,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 
 			const speedBoostedAbilities = ['motordrive', 'rattled', 'speedboost', 'steadfast', 'weakarmor'];
-			const speedBoostedItems = ['blazikenite', 'eeviumz', 'kommoniumz', 'salacberry'];
+			const speedBoostedItems = ['salacberry'];
 			if (speedBoostedAbilities.includes(ability) || speedBoostedItems.includes(item.id)) {
 				speedBoosted = true;
 			}
@@ -1118,8 +1118,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				'angerpoint', 'competitive', 'defiant', 'download', 'justified', 'lightningrod', 'moxie', 'sapsipper', 'stormdrain',
 			];
 			const nonSpeedBoostedItems = [
-				'absorbbulb', 'apicotberry', 'cellbattery', 'eeviumz', 'ganlonberry', 'keeberry', 'kommoniumz', 'liechiberry',
-				'luminousmoss', 'marangaberry', 'petayaberry', 'snowball', 'starfberry', 'weaknesspolicy',
+				'absorbbulb', 'apicotberry', 'cellbattery', 'ganlonberry', 'keeberry', 'liechiberry',
+				'marangaberry', 'petayaberry', 'snowball', 'starfberry', 'weaknesspolicy',
 			];
 			if (nonSpeedBoostedAbilities.includes(ability) || nonSpeedBoostedItems.includes(item.id)) {
 				nonSpeedBoosted = true;
@@ -1233,7 +1233,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				'Iron Defense', 'Ingrain', 'Mean Look', 'Meteor Mash', 'Meditate', 'Metal Claw', 'Nasty Plot', 'Ominous Wind', 'Power Trick', 'Psych Up', 'Rage',
 				'Rock Polish', 'Sharpen', 'Silver Wind', 'Skull Bash', 'Spider Web', 'Steel Wing', 'Stockpile', 'Swords Dance', 'Tail Glow', 'Withdraw', 'Speed Boost',
 				'Apicot Berry', 'Ganlon Berry', 'Liechi Berry', 'Petaya Berry', 'Salac Berry', 'Starf Berry', 'Kee Berry', 'Maranga Berry', 'Weakness Policy',
-				'Blunder Policy', 'Luminiscent Moss', 'Snowball', 'Throat Spray', 'Mirror Herb', 'Adrenaline Orb',
+				'Blunder Policy', 'Snowball', 'Throat Spray', 'Mirror Herb',
 			].map(this.toID);
 			for (const set of team) {
 				if (!set.moves.map(this.toID).includes('batonpass' as ID)) continue;
@@ -2526,8 +2526,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				let species = this.dex.species.get(set.species);
 				if (typeof species.battleOnly === 'string') species = this.dex.species.get(species.battleOnly);
 				if (
-					(species.baseSpecies === 'Zamazenta' && this.toID(set.item) === 'rustedshield') ||
-					(species.baseSpecies === 'Zacian' && this.toID(set.item) === 'rustedsword')
+					(species.baseSpecies === 'Zamazenta' && this.toID(set.item)) ||
+					(species.baseSpecies === 'Zacian' && this.toID(set.item))
 				) {
 					species = this.dex.species.get(`${species.baseSpecies}-Crowned`);
 				}
