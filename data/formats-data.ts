@@ -1282,19 +1282,19 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "OU",
     },
     wurmple: {
-      tier: "LC",
+      tier: "Illegal",
     },
     silcoon: {
-      tier: "NFE",
+      tier: "Illegal",
     },
     beautifly: {
-      tier: "OU",
+      tier: "Illegal",
     },
     cascoon: {
-      tier: "NFE",
+      tier: "Illegal",
     },
     dustox: {
-      tier: "OU",
+      tier: "Illegal",
     },
     lotad: {
       tier: "LC",
@@ -2636,7 +2636,7 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "LC",
     },
     mandibuzz: {
-      tier: "OU",
+      tier: "Illegal",
     },
     heatmor: {
       tier: "OU",
@@ -2754,6 +2754,9 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
     greninja: {
       tier: "OU",
     },
+    greninjabond: {
+      tier: "Illegal",
+    },
     greninjaash: {
       isNonstandard: "Past",
       tier: "Illegal",
@@ -2797,7 +2800,7 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "NFE",
     },
     floetteeternal: {
-      tier: "NFE",
+      tier: "Illegal",
     },
     florges: {
       tier: "OU",
@@ -3697,10 +3700,10 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "OU",
     },
     snom: {
-      tier: "LC",
+      tier: "Illegal",
     },
     frosmoth: {
-      tier: "OU",
+      tier: "Illegal",
     },
     stonjourner: {
       tier: "OU",
@@ -3936,13 +3939,13 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "OU",
     },
     smoliv: {
-      tier: "LC",
+      tier: "Illegal",
     },
     dolliv: {
-      tier: "NFE",
+      tier: "Illegal",
     },
     arboliva: {
-      tier: "OU",
+      tier: "Illegal",
     },
     capsakid: {
       isNonstandard: "Past",
