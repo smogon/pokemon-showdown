@@ -1993,6 +1993,7 @@ export class RandomTeams {
 			};
 			if (this.gen === 9) {
 				// Tera type
+				if (species.forceTeraType) set.teraType = species.forceTeraType;
 				if (this.forceTeraType) {
 					set.teraType = this.forceTeraType;
 				} else {
