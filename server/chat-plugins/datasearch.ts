@@ -1252,7 +1252,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		) {
 			let newSpecies = species;
 			for (const rule of rules) {
-				newSpecies  = rule?.onModifySpecies?.call({ dex: mod, clampIntRange: Utils.clampIntRange, toID } as Battle,
+				newSpecies = rule?.onModifySpecies?.call({ dex: mod, clampIntRange: Utils.clampIntRange, toID } as Battle,
 					newSpecies) || newSpecies;
 			}
 			dex[newSpecies.id] = newSpecies;
