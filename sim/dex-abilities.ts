@@ -37,6 +37,8 @@ export class Ability extends BasicEffect implements Readonly<BasicEffect> {
 	readonly flags: AbilityFlags;
 	declare readonly condition?: ConditionData;
 
+	declare readonly clauseData?: ClauseData;
+
 	constructor(data: AnyObject) {
 		super(data);
 

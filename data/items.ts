@@ -53,6 +53,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		clauseData: {
+			canStatBoost: {
+				spa: true,
+			},
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Water') {
 				target.useItem();
@@ -105,6 +110,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 660,
 		fling: {
 			basePower: 30,
+		},
+		clauseData: {
+			canStatBoost: {
+				spe: true,
+			},
 		},
 		onAfterBoost(boost, target, source, effect) {
 			// Adrenaline Orb activates if Intimidate is blocked by an ability like Hyper Cutter,
@@ -603,6 +613,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		clauseData: {
+			canStatBoost: {
+				spe: true,
+			},
+		},
 		// Item activation located in scripts.js
 		num: 1121,
 		gen: 8,
@@ -736,6 +751,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 60,
 		fling: {
 			basePower: 30,
+		},
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+			},
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Electric') {
@@ -1639,6 +1659,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		clauseData: {
+			canStatBoost: {
+				def: true,
+			},
+		},
 		onSwitchInPriority: -1,
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem() && this.field.isTerrain('electricterrain')) {
@@ -2324,6 +2349,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		clauseData: {
+			canStatBoost: {
+				def: true,
+			},
+		},
 		onSwitchInPriority: -1,
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem() && this.field.isTerrain('grassyterrain')) {
@@ -2865,6 +2895,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Fairy",
 		},
+		clauseData: {
+			canStatBoost: {
+				def: true,
+			},
+		},
 		onAfterMoveSecondary(target, source, move) {
 			if (move.category === 'Physical') {
 				if (move.id === 'present' && move.heal) return;
@@ -2954,6 +2989,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		naturalGift: {
 			basePower: 100,
 			type: "Flying",
+		},
+		clauseData: {
+			canStatBoost: {
+				crit: true,
+			},
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
@@ -3089,6 +3129,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		naturalGift: {
 			basePower: 100,
 			type: "Grass",
+		},
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+			},
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
@@ -3256,6 +3301,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 595,
 		fling: {
 			basePower: 30,
+		},
+		clauseData: {
+			canStatBoost: {
+				spd: true,
+			},
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Water') {
@@ -3458,6 +3508,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		naturalGift: {
 			basePower: 100,
 			type: "Dark",
+		},
+		clauseData: {
+			canStatBoost: {
+				spd: true,
+			},
 		},
 		onAfterMoveSecondary(target, source, move) {
 			if (move.category === 'Special') {
@@ -3802,6 +3857,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		onFoeAfterBoost(boost, target, source, effect) {
 			if (effect?.name === 'Opportunist' || effect?.name === 'Mirror Herb') return;
 			if (!this.effectState.boosts) this.effectState.boosts = {} as SparseBoostsTable;
@@ -3843,6 +3909,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 666,
 		fling: {
 			basePower: 10,
+		},
+		clauseData: {
+			canStatBoost: {
+				spd: true,
+			},
 		},
 		onSwitchInPriority: -1,
 		onStart(pokemon) {
@@ -4182,6 +4253,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		naturalGift: {
 			basePower: 100,
 			type: "Poison",
+		},
+		clauseData: {
+			canStatBoost: {
+				spa: true,
+			},
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
@@ -4541,6 +4617,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 665,
 		fling: {
 			basePower: 10,
+		},
+		clauseData: {
+			canStatBoost: {
+				spd: true,
+			},
 		},
 		onSwitchInPriority: -1,
 		onStart(pokemon) {
@@ -5093,6 +5174,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Fighting",
 		},
+		clauseData: {
+			canStatBoost: {
+				spe: true,
+			},
+		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
 				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
@@ -5403,6 +5489,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+			},
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Ice') {
 				target.useItem();
@@ -5541,6 +5632,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		naturalGift: {
 			basePower: 100,
 			type: "Psychic",
+		},
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+				def: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
@@ -5834,6 +5934,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 713,
 		fling: {
 			basePower: 30,
+		},
+		clauseData: {
+			canStatBoost(set) {
+				const canUse = set.moves.some((x) => this.dex.moves.get(this.toID(x)).flags.sound);
+				if(canUse) return { spa: true };
+			},
 		},
 		onAfterMoveSecondarySelf(target, source, move) {
 			if (move.flags['sound']) {
@@ -7114,6 +7220,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+				spa: true,
+			},
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (!move.damage && !move.damageCallback && target.getMoveHitData(move).typeMod > 0) {
 				target.useItem();
@@ -7342,6 +7454,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (pokemon.useItem()) {
 				pokemon.addVolatile('confusion');
 			}
+		},
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+			},
 		},
 		boosts: {
 			atk: 2,

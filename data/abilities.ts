@@ -129,6 +129,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 148,
 	},
 	angerpoint: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+			},
+		},
 		onHit(target, source, move) {
 			if (!target.hp) return;
 			if (move?.effectType === 'Move' && target.getMoveHitData(move).crit) {
@@ -141,6 +146,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 83,
 	},
 	angershell: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+				spa: true,
+				spe: true,
+			},
+		},
 		onDamage(damage, target, source, effect) {
 			if (
 				effect.effectType === "Move" &&
@@ -252,6 +264,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 165,
 	},
 	asoneglastrier: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+			},
+		},
 		onSwitchInPriority: 1,
 		onStart(pokemon) {
 			if (this.effectState.unnerved) return;
@@ -276,6 +293,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 266,
 	},
 	asonespectrier: {
+		clauseData: {
+			canStatBoost: {
+				spa: true,
+			},
+		},
 		onSwitchInPriority: 1,
 		onStart(pokemon) {
 			if (this.effectState.unnerved) return;
@@ -356,6 +378,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 4,
 	},
 	battlebond: {
+		clauseData: {
+			canStatBoost(set) {
+				if(set.species === 'Greninja-Bond') return {
+					atk: true,
+					spa: true,
+					spe: true,
+				};
+			},
+		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect?.effectType !== 'Move') return;
 			if (source.abilityState.battleBondTriggered) return;
@@ -389,6 +420,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 284,
 	},
 	beastboost: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+				def: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				const bestStat = source.getBestStat(true, true);
@@ -401,6 +441,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 224,
 	},
 	berserk: {
+		clauseData: {
+			canStatBoost: {
+				spa: true,
+			},
+		},
 		onDamage(damage, target, source, effect) {
 			if (
 				effect.effectType === "Move" &&
@@ -493,6 +538,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 167,
 	},
 	chillingneigh: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+			},
+		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.boost({ atk: length }, source);
@@ -637,6 +687,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 279,
 	},
 	competitive: {
+		clauseData: {
+			canStatBoost: {
+				spa: true,
+			},
+		},
 		onAfterEachBoost(boost, target, source, effect) {
 			if (!source || target.isAlly(source)) {
 				return;
@@ -670,6 +725,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 14,
 	},
 	contrary: {
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		onChangeBoost(boost, target, source, effect) {
 			if (effect && effect.id === 'zpower') return;
 			let i: BoostID;
@@ -825,6 +891,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 6,
 	},
 	dancer: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+				def: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		flags: {},
 		name: "Dancer",
 		// implemented in runMove in scripts.js
@@ -849,6 +924,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 186,
 	},
 	dauntlessshield: {
+		clauseData: {
+			canStatBoost: {
+				def: true,
+			},
+		},
 		onStart(pokemon) {
 			if (pokemon.shieldBoost) return;
 			pokemon.shieldBoost = true;
@@ -897,6 +977,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 129,
 	},
 	defiant: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+			},
+		},
 		onAfterEachBoost(boost, target, source, effect) {
 			if (!source || target.isAlly(source)) {
 				return;
@@ -1013,6 +1098,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 209,
 	},
 	download: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+				spa: true,
+			},
+		},
 		onStart(pokemon) {
 			let totaldef = 0;
 			let totalspd = 0;
@@ -1158,6 +1249,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 280,
 	},
 	embodyaspectcornerstone: {
+		clauseData: {
+			canStatBoost: {
+				def: true,
+			},
+		},
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.name === 'Ogerpon-Cornerstone-Tera' &&
 				this.effectState.embodied !== pokemon.previouslySwitchedIn) {
@@ -1171,6 +1267,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 304,
 	},
 	embodyaspecthearthflame: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+			},
+		},
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.name === 'Ogerpon-Hearthflame-Tera' &&
 				this.effectState.embodied !== pokemon.previouslySwitchedIn) {
@@ -1184,6 +1285,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 303,
 	},
 	embodyaspectteal: {
+		clauseData: {
+			canStatBoost: {
+				spe: true,
+			},
+		},
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.name === 'Ogerpon-Teal-Tera' &&
 				this.effectState.embodied !== pokemon.previouslySwitchedIn) {
@@ -1197,6 +1303,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 301,
 	},
 	embodyaspectwellspring: {
+		clauseData: {
+			canStatBoost: {
+				spd: true,
+			},
+		},
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.name === 'Ogerpon-Wellspring-Tera' &&
 				this.effectState.embodied !== pokemon.previouslySwitchedIn) {
@@ -1655,6 +1766,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 229,
 	},
 	grimneigh: {
+		clauseData: {
+			canStatBoost: {
+				spa: true,
+			},
+		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.boost({ spa: length }, source);
@@ -1666,6 +1782,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 265,
 	},
 	guarddog: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+			},
+		},
 		onDragOutPriority: 1,
 		onDragOut(pokemon) {
 			this.add('-activate', pokemon, 'ability: Guard Dog');
@@ -2151,6 +2272,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 22,
 	},
 	intrepidsword: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+			},
+		},
 		onStart(pokemon) {
 			if (pokemon.swordBoost) return;
 			pokemon.swordBoost = true;
@@ -2187,6 +2313,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 89,
 	},
 	justified: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+			},
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Dark') {
 				this.boost({ atk: 1 });
@@ -2281,6 +2412,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 135,
 	},
 	lightningrod: {
+		clauseData: {
+			canStatBoost: {
+				spa: true,
+			},
+		},
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Electric') {
 				if (!this.boost({ spa: 1 })) {
@@ -2625,6 +2761,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 104,
 	},
 	moody: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+				def: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
@@ -2659,6 +2804,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 141,
 	},
 	motordrive: {
+		clauseData: {
+			canStatBoost: {
+				spe: true,
+			},
+		},
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Electric') {
 				if (!this.boost({ spe: 1 })) {
@@ -2673,6 +2823,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 78,
 	},
 	moxie: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+			},
+		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.boost({ atk: length }, source);
@@ -2968,6 +3123,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 12,
 	},
 	opportunist: {
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		onFoeAfterBoost(boost, target, source, effect) {
 			if (effect?.name === 'Opportunist' || effect?.name === 'Mirror Herb') return;
 			if (!this.effectState.boosts) this.effectState.boosts = {} as SparseBoostsTable;
@@ -3681,6 +3847,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 44,
 	},
 	rattled: {
+		clauseData: {
+			canStatBoost: {
+				spe: true,
+			},
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (['Dark', 'Bug', 'Ghost'].includes(move.type)) {
 				this.boost({ spe: 1 });
@@ -3935,6 +4106,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 8,
 	},
 	sapsipper: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+			},
+		},
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Grass') {
@@ -4338,6 +4514,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 116,
 	},
 	soulheart: {
+		clauseData: {
+			canStatBoost: {
+				spa: true,
+			},
+		},
 		onAnyFaintPriority: 1,
 		onAnyFaint() {
 			this.boost({ spa: 1 }, this.effectState.target);
@@ -4365,6 +4546,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 43,
 	},
 	speedboost: {
+		clauseData: {
+			canStatBoost: {
+				spe: true,
+			},
+		},
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
@@ -4416,6 +4602,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 242,
 	},
 	stamina: {
+		clauseData: {
+			canStatBoost: {
+				def: true,
+			},
+		},
 		onDamagingHit(damage, target, source, effect) {
 			this.boost({ def: 1 });
 		},
@@ -4451,6 +4642,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 9,
 	},
 	steadfast: {
+		clauseData: {
+			canStatBoost: {
+				spe: true,
+			},
+		},
 		onFlinch(pokemon) {
 			this.boost({ spe: 1 });
 		},
@@ -4460,6 +4656,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 80,
 	},
 	steamengine: {
+		clauseData: {
+			canStatBoost: {
+				spe: true,
+			},
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (['Water', 'Fire'].includes(move.type)) {
 				this.boost({ spe: 6 });
@@ -4538,6 +4739,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 60,
 	},
 	stormdrain: {
+		clauseData: {
+			canStatBoost: {
+				spa: true,
+			},
+		},
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Water') {
 				if (!this.boost({ spa: 1 })) {
@@ -4907,6 +5113,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 164,
 	},
 	thermalexchange: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+			},
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Fire') {
 				this.boost({ atk: 1 });
@@ -5350,6 +5561,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 199,
 	},
 	watercompaction: {
+		clauseData: {
+			canStatBoost: {
+				def: true,
+			},
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Water') {
 				this.boost({ def: 2 });
@@ -5380,6 +5596,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 41,
 	},
 	weakarmor: {
+		clauseData: {
+			canStatBoost: {
+				spe: true,
+			},
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.category === 'Physical') {
 				this.boost({ def: -1, spe: 2 }, target, target);
@@ -5391,6 +5612,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 133,
 	},
 	wellbakedbody: {
+		clauseData: {
+			canStatBoost: {
+				def: true,
+			},
+		},
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Fire') {
 				if (!this.boost({ def: 2 })) {
@@ -5459,6 +5685,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 277,
 	},
 	windrider: {
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+			},
+		},
 		onStart(pokemon) {
 			if (pokemon.side.sideConditions['tailwind']) {
 				this.boost({ atk: 1 }, pokemon, pokemon);
