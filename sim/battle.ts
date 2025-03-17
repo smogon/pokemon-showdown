@@ -2597,12 +2597,10 @@ export class Battle {
 			if (this.gen > 5) action.move.priority = priority;
 		}
 
-		if (!action.externalMove) {
-			if (!action.pokemon) {
-				action.speed = 1;
-			} else {
-				action.speed = action.pokemon.getActionSpeed();
-			}
+		if (!action.pokemon) {
+			action.speed = 1;
+		} else if (!action.externalMove) { // FIXME HACK
+			action.speed = action.pokemon.getActionSpeed();
 		}
 	}
 
