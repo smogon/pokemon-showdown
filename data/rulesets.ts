@@ -1087,6 +1087,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			};
 
 			for (const set of team) {
+				// These are user input and can be invalid, which crashes the validator, so always check exists first.
 				const moves = set.moves.map(x => this.dex.moves.get(x));
 				const item = this.dex.items.get(set.item);
 				const ability = this.dex.abilities.get(set.ability);
@@ -1096,27 +1097,27 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 
 				// moves (including cfz and hacked max)
 				for (const move of moves) {
-					if (!checkUnban(move.name) && checkBoosts(move, set)) {
+					if (move.exists && !checkUnban(move.name) && checkBoosts(move, set)) {
 						boostSources.push(move.name);
 					}
 				}
 
 				// item
-				if (!checkUnban(item.name) && checkBoosts(item, set)) {
+				if (item.exists && !checkUnban(item.name) && checkBoosts(item, set)) {
 					boostSources.push(item.name);
 				}
 
 				// ability
-				if (!checkUnban(ability.name) && checkBoosts(ability, set)) {
+				if (ability.exists && !checkUnban(ability.name) && checkBoosts(ability, set)) {
 					boostSources.push(ability.name);
 				}
 
 				// ability of mega
-				if (!checkUnban(item.name) && item.megaStone && set.species === item.megaEvolves) {
+				if (item.exists && !checkUnban(item.name) && item.megaStone && set.species === item.megaEvolves) {
 					const mega = this.dex.species.get(item.megaStone);
 					const megaAbilities = Object.values(mega.abilities).map(x => this.dex.abilities.get(x));
-					// if the set and its mega have the same ability, skip this check.
-					if (!megaAbilities.some(x => x.name === set.ability)) {
+					// If the set and its mega have the same ability, skip this check.
+					if (!megaAbilities.some(x => x.name === ability.name)) {
 						for (const megaAbility of megaAbilities) {
 							if (!checkUnban(megaAbility.name) && checkBoosts(megaAbility, set)) {
 								boostSources.push(`${megaAbility.name} after mega evolution`);
@@ -1126,7 +1127,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 
 				// z moves
-				if (!checkUnban(item.name) && item.zMove) {
+				if (item.exists && !checkUnban(item.name) && item.zMove) {
 					if (item.zMoveType && moves.some(x => x.zMove?.boost && x.type === item.zMoveType)) {
 						// status
 						boostSources.push(item.name);
@@ -1148,7 +1149,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 
 				// Ogerpon is hardcoded to transform and receive Embody Aspect upon tera.
 				if (
-					!checkUnban('Embody Aspect') && this.dex.gen === 9 && !this.ruleTable.has('terastalclause') &&
+					this.dex.gen === 9 && !checkUnban('Embody Aspect') && !this.ruleTable.has('terastalclause') &&
 					['Ogerpon', 'Ogerpon-Wellspring', 'Ogerpon-Hearthflame', 'Ogerpon-Cornerstone'].includes(set.species)
 				) {
 					boostSources.push('Embody Aspect');
