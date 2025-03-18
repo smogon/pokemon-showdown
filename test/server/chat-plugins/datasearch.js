@@ -111,4 +111,36 @@ describe("Datasearch Plugin", () => {
 		search = datasearch.testables.runDexsearch(target, cmd, true, `/${cmd} ${target}`);
 		assert.false(search.reply.includes('Eiscue-Noice'));
 	});
+
+	it('should include Pokemon capable of learning normally unobtainable moves under the provided rulsets', () => {
+		const cmd = 'ds';
+		const target = 'mod=gen8, rule=stabmonsmovelegality, rule=alphabetcupmovelegality, calm mind, boomburst, steel';
+		const search = datasearch.testables.runDexsearch(target, cmd, true, `/${cmd} ${target}`);
+		assert(search.reply.includes('Metagross'));
+	});
+
+	it('should exclude Pokemon capable of learning moves under normal circumstances or the provided rulesets', () => {
+		const cmd = 'ds';
+		const target = 'mod=gen9, rule=stabmonsmovelegality, !wish';
+		const search = datasearch.testables.runDexsearch(target, cmd, true, `/${cmd} ${target}`);
+		assert.false(search.reply.includes('Alomomola'));
+		assert.false(search.reply.includes('Altaria'));
+	});
+
+	it('should include only Pokemon allowed by the provided rulesets', () => {
+		const cmd = 'ds';
+		const target = 'mod=gen8, rule=kalospokedex, rule=hoennpokedex, water, ground';
+		const search = datasearch.testables.runDexsearch(target, cmd, true, `/${cmd} ${target}`);
+		assert(search.reply.includes('Whiscash'));
+		assert.false(search.reply.includes('Swampert'));
+		assert.false(search.reply.includes('Quagsire'));
+		assert.false(search.reply.includes('Gastrodon'));
+	});
+
+	it('should sort Pokemon with modified stats based on rulesets', () => {
+		const cmd = 'ds';
+		const target = 'mod=gen8, rule=reevolutionmod, water, bst desc';
+		const search = datasearch.testables.runDexsearch(target, cmd, true, `/${cmd} ${target}`);
+		assert(search.reply.includes('Milotic'));
+	});
 });

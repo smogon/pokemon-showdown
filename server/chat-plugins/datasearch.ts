@@ -9,6 +9,7 @@
  */
 
 import { ProcessManager, Utils } from '../../lib';
+import type { FormatData } from '../../sim/dex-formats';
 import { TeamValidator } from '../../sim/team-validator';
 import { Chat } from '../chat';
 
@@ -52,7 +53,17 @@ type Direction = 'less' | 'greater' | 'equal';
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
 const MAX_RANDOM_RESULTS = 30;
-const dexesHelp = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
+const dexesHelpMods = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
+const supportedDexsearchRules: { [k: string]: string[] } = Object.assign(Object.create(null), {
+	movevalidation: ['stabmonsmovelegality', 'alphabetcupmovelegality'],
+	statmodification: ['350cupmod', 'flippedmod', 'scalemonsmod', 'badnboostedmod', 'reevolutionmod'],
+	banlist: [
+		'hoennpokedex', 'sinnohpokedex', 'oldunovapokedex', 'newunovapokedex', 'kalospokedex', 'oldalolapokedex',
+		'newalolapokedex', 'galarpokedex', 'isleofarmorpokedex', 'crowntundrapokedex', 'galarexpansionpokedex',
+		'paldeapokedex', 'kitakamipokedex', 'blueberrypokedex',
+	],
+});
+const dexsearchHelpRules = Object.values((supportedDexsearchRules)).flat().filter(x => x).join('</code>, <code>');
 
 function toListString(arr: string[]) {
 	if (!arr.length) return '';
@@ -138,7 +149,8 @@ export const commands: Chat.ChatCommands = {
 			`<code>Alola</code>, <code>Galar</code>, <code>Therian</code>, <code>Totem</code>, or <code>Primal</code> can be used as parameters to search for those formes.<br/>` +
 			`Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g., <code>trick | switcheroo</code> searches for all Pok\u00e9mon that learn either Trick or Switcheroo.<br/>` +
 			`You can search for info in a specific generation by appending the generation to ds or by using the <code>maxgen</code> keyword; e.g. <code>/ds1 normal</code> or <code>/ds normal, maxgen1</code> searches for all Pok\u00e9mon that were Normal type in Generation I.<br/>` +
-			`You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nds mod=ssb, protean</code>. All valid mod names are: <code>${dexesHelp}</code><br />` +
+			`You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nds mod=ssb, protean</code>. All valid mod names are: <code>${dexesHelpMods}</code><br/>` +
+			`You can search for info in a specific rule defined metagame by using <code>rule=[rule name]</code>; e.g. <code>/nds rule=alphabetcupmovelegality, v-create</code>. All supported rule names are: <code>${dexsearchHelpRules}</code><br/>` +
 			`By default, <code>/dexsearch</code> will search only Pok\u00e9mon obtainable in the current generation. Add the parameter <code>unreleased</code> to include unreleased Pok\u00e9mon. Add the parameter <code>natdex</code> (or use the command <code>/nds</code>) to include all past Pok\u00e9mon.<br/>` +
 			`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix <code>group</code> onto the egg group parameter; e.g., seaching for <code>grass, grass group</code> will show all Grass types in the Grass egg group.<br/>` +
 			`The parameter <code>monotype</code> will only show Pok\u00e9mon that are single-typed.<br/>` +
@@ -363,7 +375,7 @@ export const commands: Chat.ChatCommands = {
 			`- Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g. <code>fire | water</code> searches for all moves that are either Fire type or Water type.<br/>` +
 			`- If a Pok\u00e9mon is included as a parameter, only moves from its movepool will be included in the search.<br/>` +
 			`- You can search for info in a specific generation by appending the generation to ms; e.g. <code>/ms1 normal</code> searches for all moves that were Normal type in Generation I.<br/>` +
-			`- You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nms mod=ssb, dark, bp=100</code>. All valid mod names are: <code>${dexesHelp}</code><br />` +
+			`- You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nms mod=ssb, dark, bp=100</code>. All valid mod names are: <code>${dexesHelpMods}</code><br/>` +
 			`- <code>/ms</code> will search all non-dexited moves (clickable in that game); you can include dexited moves by using <code>/nms</code> or by adding <code>natdex</code> as a parameter.<br/>` +
 			`- The order of the parameters does not matter.` +
 			`</details>`
@@ -618,14 +630,61 @@ function getMod(target: string) {
 	return { splitTarget: arr, usedMod: modTerm ? toID(modTerm.split(/ ?= ?/)[1]) : undefined, count };
 }
 
+function getRule(target: string) {
+	const arr = target.split(',').map(x => x.trim());
+	const ruleTerms: string[] = [];
+	for (const term of arr) {
+		const sanitizedStr = term.toLowerCase().replace(/[^a-z0-9=]+/g, '');
+		if (sanitizedStr.startsWith('rule=') && Dex.data.Rulesets[toID(sanitizedStr.split('=')[1])]) {
+			ruleTerms.push(term);
+		}
+	}
+	const count = arr.filter(x => {
+		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
+		return sanitizedStr.startsWith('rule=');
+	}).length;
+	if (ruleTerms.length > 0) {
+		for (const rule of ruleTerms) {
+			arr.splice(arr.indexOf(rule), 1);
+		}
+	}
+	return { splitTarget: arr, usedRules: ruleTerms.map(
+		x => x.toLowerCase().replace(/[^a-z0-9=]+/g, '').split('rule=')[1]), count };
+}
+
+function prepareDexsearchValidator(usedMod: string | undefined, rules: FormatData[], nationalSearch: boolean | null) {
+	const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9ou';
+	const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
+	const additionalRules = [];
+	for (const rule of rules) {
+		if (!ruleTable.has(toID(rule.name))) additionalRules.push(toID(rule.name));
+	}
+	if (nationalSearch && !ruleTable.has('natdexmod')) additionalRules.push('natdexmod');
+	if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
+	return TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
+}
+
 function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
 	const searches: DexOrGroup[] = [];
-	const { splitTarget, usedMod, count: c } = getMod(target);
-	if (c > 1) {
+	const { splitTarget: remainingTargets, usedMod, count: modCount } = getMod(target);
+	const { splitTarget, usedRules } = getRule(remainingTargets.join(','));
+	if (modCount > 1) {
 		return { error: `You can't run searches for multiple mods.` };
 	}
-
+	for (const str of splitTarget) {
+		const sanitizedStr = str.toLowerCase().replace(/[^a-z0-9=]+/g, '');
+		if (sanitizedStr.startsWith('mod=') || sanitizedStr.startsWith('rule=')) {
+			return { error: `${sanitizedStr.split('=')[1]} is an invalid mod or rule, see /dexsearchhelp.` };
+		}
+	}
 	const mod = Dex.mod(usedMod || 'base');
+	const rules: FormatData[] = [];
+	for (const rule of usedRules) {
+		if (!dexsearchHelpRules.includes(rule))
+			return { error: `${rule} is an unsupported rule, see /dexsearchhelp` };
+		rules.push(Dex.data.Rulesets[rule]);
+	}
+
 	const allTiers: { [k: string]: TierTypes.Singles | TierTypes.Other } = Object.assign(Object.create(null), {
 		anythinggoes: 'AG', ag: 'AG',
 		uber: 'Uber', ubers: 'Uber', ou: 'OU',
@@ -1146,6 +1205,15 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		};
 	}
 
+	// Prepare move validator and pokemonSource outside the hot loop
+	// but don't prepare them at all if there are no moves to check...
+	// These only ever get accessed if there are moves or banlists to filter by.
+	let validator;
+	let pokemonSource;
+	if (Object.values(searches).some(search => !!Object.keys(search.moves).length)) {
+		validator = prepareDexsearchValidator(usedMod, rules, nationalSearch);
+	}
+
 	const dex: { [k: string]: Species } = {};
 	for (const species of mod.species.all()) {
 		const megaSearchResult = megaSearch === null || megaSearch === !!species.isMega;
@@ -1153,6 +1221,22 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		const fullyEvolvedSearchResult = fullyEvolvedSearch === null || fullyEvolvedSearch !== species.nfe;
 		const restrictedSearchResult = restrictedSearch === null ||
 			restrictedSearch === species.tags.includes('Restricted Legendary');
+
+		/**
+		 * Not every ruleset with an onValidateSet function is specifically to exclude mons.
+		 * In the current list of supported rules only the Pokedex rules do such which is
+		 * why this step is ignored for other rules. Rules can be added for this functionality
+		 * in the supportedDexSearchTypes mapping at the top of the function.
+		 */
+		let ruleResult = true;
+		for (const rule of rules) {
+			if (!ruleResult) break;
+			if (!supportedDexsearchRules['banlist'].includes(toID(rule.name))) continue;
+			if (!validator) validator = prepareDexsearchValidator(usedMod, rules, nationalSearch);
+			ruleResult = !rule.onValidateSet?.call(validator,
+				{ name: species.name, species: species.id } as PokemonSet, validator.format, {}, {});
+		}
+
 		if (
 			species.gen <= mod.gen &&
 			(
@@ -1163,9 +1247,15 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			megaSearchResult &&
 			gmaxSearchResult &&
 			fullyEvolvedSearchResult &&
-			restrictedSearchResult
+			restrictedSearchResult &&
+			ruleResult
 		) {
-			dex[species.id] = species;
+			let newSpecies = species;
+			for (const rule of rules) {
+				newSpecies = rule?.onModifySpecies?.call({ dex: mod, clampIntRange: Utils.clampIntRange, toID } as Battle,
+					newSpecies) || newSpecies;
+			}
+			dex[newSpecies.id] = newSpecies;
 		}
 	}
 
@@ -1176,19 +1266,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		Object.values(search).reduce(accumulateKeyCount, 0)
 	));
 
-	// Prepare move validator and pokemonSource outside the hot loop
-	// but don't prepare them at all if there are no moves to check...
-	// These only ever get accessed if there are moves to filter by.
-	let validator;
-	let pokemonSource;
-	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0)) {
-		const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9ou';
-		const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
-		const additionalRules = [];
-		if (nationalSearch && !ruleTable.has('natdexmod')) additionalRules.push('natdexmod');
-		if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
-		validator = TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
-	}
 	for (const alts of searches) {
 		if (alts.skip) continue;
 		const altsMoves = Object.keys(alts.moves).map(x => mod.moves.get(x)).filter(move => move.gen <= mod.gen);
@@ -1352,13 +1429,29 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			if (matched) continue;
 
-			for (const move of altsMoves) {
-				pokemonSource = validator?.allSources();
-				if (validator && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
-					matched = true;
-					break;
+			if (validator) {
+				for (const move of altsMoves) {
+					pokemonSource = validator.allSources();
+					const isNotSearch = !alts.moves[move.id];
+
+					let matchRule = false;
+					let numMoveValidationRules = 0;
+					for (const rule of rules) {
+						if (!supportedDexsearchRules['movevalidation'].includes(toID(rule.name))) continue;
+						else numMoveValidationRules++;
+						matchRule = !rule.checkCanLearn?.call(
+							validator, move, dex[mon], pokemonSource, {} as PokemonSet) === !isNotSearch;
+						if (matchRule === !isNotSearch) break;
+					}
+					const matchNormally = !validator.checkCanLearn(move, dex[mon], pokemonSource) === !isNotSearch;
+
+					if ((!isNotSearch && (matchNormally || (numMoveValidationRules > 0 && matchRule))) ||
+						(isNotSearch && matchNormally && (numMoveValidationRules === 0 || matchRule))) {
+						matched = true;
+						break;
+					}
+					if (pokemonSource && !pokemonSource.size()) break;
 				}
-				if (pokemonSource && !pokemonSource.size()) break;
 			}
 			if (matched) continue;
 
@@ -1368,42 +1461,41 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 	const stat = sort?.slice(0, -1);
 
-	function getSortValue(name: string) {
-		if (!stat) return 0;
-		const mon = mod.species.get(name);
-		if (stat === 'bst') {
-			return mon.bst;
+	function getSortValue(species: Species) {
+		if (!stat) {
+			return 0;
+		} else if (stat === 'bst') {
+			return species.bst;
 		} else if (stat === 'weight') {
-			return mon.weighthg;
+			return species.weighthg;
 		} else if (stat === 'height') {
-			return mon.heightm;
+			return species.heightm;
 		} else if (stat === 'gen') {
-			return mon.gen;
+			return species.gen;
 		} else {
-			return mon.baseStats[stat as StatID];
+			return species.baseStats[stat as StatID];
 		}
 	}
 
-	let results: string[] = [];
-	for (const mon of Object.keys(dex).sort()) {
-		if (singleTypeSearch !== null && (dex[mon].types.length === 1) !== singleTypeSearch) continue;
-		const isRegionalForm = (["Alola", "Galar", "Hisui"].includes(dex[mon].forme) || dex[mon].forme.startsWith("Paldea")) &&
-			dex[mon].baseSpecies !== "Pikachu";
-		const maskForm = dex[mon].baseSpecies === "Ogerpon" && !dex[mon].forme.endsWith("Tera");
+	let results: Species[] = [];
+	for (const mon of Object.values(dex).sort()) {
+		if (singleTypeSearch !== null && (mon.types.length === 1) !== singleTypeSearch) continue;
+		const isRegionalForm = (["Alola", "Galar", "Hisui"].includes(mon.forme) || mon.forme.startsWith("Paldea")) &&
+			mon.baseSpecies !== "Pikachu";
+		const maskForm = mon.baseSpecies === "Ogerpon" && !mon.forme.endsWith("Tera");
 		const allowGmax = (gmaxSearch || tierSearch);
-		if (!isRegionalForm && !maskForm && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies) &&
-			getSortValue(mon) === getSortValue(dex[mon].baseSpecies)) continue;
-		const teraFormeChangesFrom = dex[mon].forme.endsWith("Tera") ? !Array.isArray(dex[mon].battleOnly) ?
-			dex[mon].battleOnly! : null : null;
-		if (teraFormeChangesFrom && results.includes(teraFormeChangesFrom) &&
-			getSortValue(mon) === getSortValue(teraFormeChangesFrom)) continue;
-		if (dex[mon].isNonstandard === 'Gigantamax' && !allowGmax) continue;
-		results.push(dex[mon].name);
+		if (!isRegionalForm && !maskForm && mon.baseSpecies && results.includes(mod.species.get(mon.baseSpecies)) &&
+			getSortValue(mon) === getSortValue(mod.species.get(mon.baseSpecies))) continue;
+		const teraFormeChangesFrom = mon.forme.endsWith("Tera") ? !Array.isArray(mon.battleOnly) ?
+			mon.battleOnly! : null : null;
+		if (teraFormeChangesFrom && results.includes(mod.species.get(teraFormeChangesFrom)) &&
+			getSortValue(mon) === getSortValue(mod.species.get(teraFormeChangesFrom))) continue;
+		if (mon.isNonstandard === 'Gigantamax' && !allowGmax) continue;
+		results.push(mon);
 	}
 
 	if (usedMod === 'gen7letsgo') {
-		results = results.filter(name => {
-			const species = mod.species.get(name);
+		results = results.filter(species => {
 			return (species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
 				(!species.forme || (['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme) &&
 					species.name !== 'Pikachu-Alola'));
@@ -1411,8 +1503,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 
 	if (usedMod === 'gen8bdsp') {
-		results = results.filter(name => {
-			const species = mod.species.get(name);
+		results = results.filter(species => {
 			if (species.id === 'pichuspikyeared') return false;
 			if (capSearch) return species.gen <= 4;
 			return species.gen <= 4 && species.num >= 1;
@@ -1428,7 +1519,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		results.sort();
 		if (sort) {
 			const direction = sort.slice(-1);
-			Utils.sortBy(results, name => getSortValue(name) * (direction === '+' ? 1 : -1));
+			Utils.sortBy(results, species => getSortValue(species) * (direction === '+' ? 1 : -1));
 		}
 		let notShown = 0;
 		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
@@ -1436,7 +1527,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			results = results.slice(0, RESULTS_MAX_LENGTH);
 		}
 		resultsStr += results.map(
-			result => `<a href="//${Config.routes.dex}/pokemon/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result}" style="vertical-align:-7px;margin:-2px" />${result}</a>`
+			result => `<a href="//${Config.routes.dex}/pokemon/${toID(result.name)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result.name}" style="vertical-align:-7px;margin:-2px" />${result.name}</a>`
 		).join(", ");
 		if (notShown) {
 			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
@@ -1446,7 +1537,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	} else {
 		resultsStr += "No Pok&eacute;mon found.";
 	}
-	if (isTest) return { results, reply: resultsStr };
+	if (isTest) return { results: results.map(species => species.name), reply: resultsStr };
 	return { reply: resultsStr };
 }
 
