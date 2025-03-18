@@ -844,7 +844,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.queue.insertChoice({
 				choice: 'move',
 				order: 198,
-				speed: -source.storedStats['spe'],
 				effectOrder: dancer.abilityState.effectOrder,
 				pokemon: dancer,
 				moveid: move.id,
