@@ -380,7 +380,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	battlebond: {
 		clauseData: {
 			canStatBoost(set) {
-				if(set.species === 'Greninja-Bond') return {
+				if (set.species === 'Greninja-Bond') return {
 					atk: true,
 					spa: true,
 					spe: true,

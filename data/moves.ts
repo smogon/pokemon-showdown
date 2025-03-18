@@ -16468,7 +16468,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			canStatBoost(set) {
 				const id = this.toID(set.species);
 				const { types } = this.dex.species.get(id);
-				if(types.includes("Grass")) return {
+				if (types.includes("Grass")) return {
 					atk: true,
 					spa: true,
 				};
@@ -19453,9 +19453,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			canStatBoost(set) {
 				const id = this.toID(set.item);
 				const { isBerry } = this.dex.items.get(id);
-				if(isBerry) return {
+				if (isBerry) return {
 					def: true,
-				}
+				};
 			},
 		},
 		flags: { snatch: 1, metronome: 1 },

@@ -5937,8 +5937,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		clauseData: {
 			canStatBoost(set) {
-				const canUse = set.moves.some((x) => this.dex.moves.get(this.toID(x)).flags.sound);
-				if(canUse) return { spa: true };
+				const canUse = set.moves.some(x => this.dex.moves.get(this.toID(x)).flags.sound);
+				if (canUse) return { spa: true };
 			},
 		},
 		onAfterMoveSecondarySelf(target, source, move) {
