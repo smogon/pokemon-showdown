@@ -25,7 +25,7 @@ interface DexOrGroup {
 	types: { [k: string]: boolean };
 	resists: { [k: string]: boolean };
 	weak: { [k: string]: boolean };
-	stats: { [k: string]: { [k in Direction]: number } };
+	stats: { [k: string]: { [k in Direction]: number | string } };
 	skip: boolean;
 }
 
@@ -1162,23 +1162,30 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					inequalityString = target.charAt(inequality);
 				}
 				const targetParts = target.replace(/\s/g, '').split(inequalityString);
-				let num;
+				let compareTo;
 				let stat;
 				const directions: Direction[] = [];
 				if (!isNaN(parseFloat(targetParts[0]))) {
 					// e.g. 100 < spe
-					num = parseFloat(targetParts[0]);
+					compareTo = parseFloat(targetParts[0]);
 					stat = targetParts[1];
 					if (inequalityString.startsWith('>')) directions.push('less');
 					if (inequalityString.startsWith('<')) directions.push('greater');
 				} else if (!isNaN(parseFloat(targetParts[1]))) {
 					// e.g. spe > 100
-					num = parseFloat(targetParts[1]);
+					compareTo = parseFloat(targetParts[1]);
 					stat = targetParts[0];
 					if (inequalityString.startsWith('<')) directions.push('less');
 					if (inequalityString.startsWith('>')) directions.push('greater');
 				} else {
-					return { error: `No value given to compare with '${target}'.` };
+					// e.g. atk = spatk
+					compareTo = targetParts[0];
+					stat = targetParts[1];
+					if (inequalityString.startsWith('>')) directions.push('less');
+					if (inequalityString.startsWith('<')) directions.push('greater');
+
+					if (compareTo in allStatAliases) compareTo = allStatAliases[compareTo];
+					if (!allStats.includes(compareTo)) return { error: `'${target}' did not contain a valid stat.` };
 				}
 				if (inequalityString.endsWith('=')) directions.push('equal');
 				if (stat in allStatAliases) stat = allStatAliases[stat];
@@ -1186,7 +1193,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				if (!orGroup.stats[stat]) orGroup.stats[stat] = Object.create(null);
 				for (const direction of directions) {
 					if (orGroup.stats[stat][direction]) return { error: `Invalid stat range for ${stat}.` };
-					orGroup.stats[stat][direction] = num;
+					orGroup.stats[stat][direction] = compareTo;
 				}
 				continue;
 			}
@@ -1395,33 +1402,43 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			if (matched) continue;
 
-			for (const stat in alts.stats) {
+			function retrieveStat(species: Species, stat: string | number) {
 				let monStat = 0;
-				if (stat === 'bst') {
-					monStat = dex[mon].bst;
+				if (typeof stat === 'number') {
+					monStat = stat;
+				} else if (stat === 'bst') {
+					monStat = species.bst;
 				} else if (stat === 'weight') {
-					monStat = dex[mon].weighthg / 10;
+					monStat = species.weighthg / 10;
 				} else if (stat === 'height') {
-					monStat = dex[mon].heightm;
+					monStat = species.heightm;
 				} else if (stat === 'gen') {
-					monStat = dex[mon].gen;
+					monStat = species.gen;
 				} else {
-					monStat = dex[mon].baseStats[stat as StatID];
+					monStat = species.baseStats[stat as StatID];
 				}
-				if (typeof alts.stats[stat].less === 'number') {
-					if (monStat < alts.stats[stat].less) {
+				return monStat;
+			}
+
+			for (const stat in alts.stats) {
+				const monStat = retrieveStat(dex[mon], stat);
+				if (alts.stats[stat].less) {
+					const compareTo = retrieveStat(dex[mon], alts.stats[stat].less);
+					if (monStat < compareTo) {
 						matched = true;
 						break;
 					}
 				}
-				if (typeof alts.stats[stat].greater === 'number') {
-					if (monStat > alts.stats[stat].greater) {
+				if (alts.stats[stat].greater) {
+					const compareTo = retrieveStat(dex[mon], alts.stats[stat].greater);
+					if (monStat > compareTo) {
 						matched = true;
 						break;
 					}
 				}
-				if (typeof alts.stats[stat].equal === 'number') {
-					if (monStat === alts.stats[stat].equal) {
+				if (alts.stats[stat].equal) {
+					const compareTo = retrieveStat(dex[mon], alts.stats[stat].equal);
+					if (monStat === compareTo) {
 						matched = true;
 						break;
 					}
