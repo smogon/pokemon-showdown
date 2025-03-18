@@ -21,34 +21,17 @@ describe('Dancer', () => {
 		assert.statStage(battle.p2.active[0], 'atk', 3);
 	});
 
-	it('should activate in order of lowest to highest raw speed', () => {
+	it('should activate in order of fastest to slowest', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
-			{ species: 'Shedinja', level: 98, ability: 'dancer', item: 'focussash', moves: ['sleeptalk'] },
+			{ species: 'Shedinja', ability: 'dancer', item: 'focussash', moves: ['sleeptalk'] },
 			{ species: 'Shedinja', level: 99, ability: 'dancer', moves: ['sleeptalk'] },
 		], [
 			{ species: 'Shedinja', ability: 'wonderguard', moves: ['fierydance'] },
-			{ species: 'Shedinja', ability: 'dancer', moves: ['sleeptalk'] },
+			{ species: 'Shedinja', level: 98, ability: 'dancer', moves: ['sleeptalk'] },
 		]]);
 		const [, fastDancer] = battle.p1.active;
 		const [wwDanceSource, foeDancer] = battle.p2.active;
 		fastDancer.boostBy({ spe: 6 });
-		battle.makeChoices('move sleeptalk, move sleeptalk', 'move fierydance 1, move sleeptalk');
-		assert.fainted(wwDanceSource);
-		assert.fainted(foeDancer);
-	});
-
-	it('should activate in order of lowest to highest raw speed inside Trick Room', () => {
-		battle = common.createBattle({ gameType: 'doubles' }, [[
-			{ species: 'Shedinja', level: 98, ability: 'dancer', item: 'focussash', moves: ['sleeptalk'] },
-			{ species: 'Shedinja', level: 99, ability: 'dancer', moves: ['sleeptalk'] },
-		], [
-			{ species: 'Shedinja', ability: 'wonderguard', moves: ['fierydance', 'trickroom'] },
-			{ species: 'Shedinja', ability: 'dancer', moves: ['sleeptalk'] },
-		]]);
-		const [, fastDancer] = battle.p1.active;
-		const [wwDanceSource, foeDancer] = battle.p2.active;
-		fastDancer.boostBy({ spe: 6 });
-		battle.makeChoices('move sleeptalk, move sleeptalk', 'move trickroom, move sleeptalk');
 		battle.makeChoices('move sleeptalk, move sleeptalk', 'move fierydance 1, move sleeptalk');
 		assert.fainted(wwDanceSource);
 		assert.fainted(foeDancer);
@@ -197,5 +180,44 @@ describe('Dancer', () => {
 		battle.makeChoices('move sleeptalk, move fierydance 1', 'move sleeptalk, move sleeptalk');
 		battle.makeChoices();
 		assert.notEqual(suicune.hp, suicune.fullHP);
+	});
+});
+
+describe('[Gen 7] Dancer', () => {
+	afterEach(() => {
+		battle.destroy();
+	});
+
+	it('should activate in order of lowest to highest raw speed', () => {
+		battle = common.gen(7).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Shedinja', level: 98, ability: 'dancer', item: 'focussash', moves: ['sleeptalk'] },
+			{ species: 'Shedinja', level: 99, ability: 'dancer', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Shedinja', ability: 'wonderguard', moves: ['fierydance'] },
+			{ species: 'Shedinja', ability: 'dancer', moves: ['sleeptalk'] },
+		]]);
+		const [, fastDancer] = battle.p1.active;
+		const [wwDanceSource, foeDancer] = battle.p2.active;
+		fastDancer.boostBy({ spe: 6 });
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move fierydance 1, move sleeptalk');
+		assert.fainted(wwDanceSource);
+		assert.fainted(foeDancer);
+	});
+
+	it('should activate in order of lowest to highest raw speed inside Trick Room', () => {
+		battle = common.gen(7).createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Shedinja', level: 98, ability: 'dancer', item: 'focussash', moves: ['sleeptalk'] },
+			{ species: 'Shedinja', level: 99, ability: 'dancer', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Shedinja', ability: 'wonderguard', moves: ['fierydance', 'trickroom'] },
+			{ species: 'Shedinja', ability: 'dancer', moves: ['sleeptalk'] },
+		]]);
+		const [, fastDancer] = battle.p1.active;
+		const [wwDanceSource, foeDancer] = battle.p2.active;
+		fastDancer.boostBy({ spe: 6 });
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move trickroom, move sleeptalk');
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move fierydance 1, move sleeptalk');
+		assert.fainted(wwDanceSource);
+		assert.fainted(foeDancer);
 	});
 });

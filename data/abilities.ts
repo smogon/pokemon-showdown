@@ -837,11 +837,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const dancersTarget = !targetOf1stDance.isAlly(dancer) && source.isAlly(dancer) ?
 				targetOf1stDance : source;
 			const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-			// Dancer activates in order of lowest speed stat to highest
-			// Note that the speed stat used is after any volatile replacements like Speed Swap,
-			// but before any multipliers like Agility or Choice Scarf
-			// Ties go to whichever Pokemon has had the ability for the least amount of time
-			this.queue.insertChoice({
+			const action = this.queue.resolveAction({
 				choice: 'move',
 				order: 198,
 				effectOrder: dancer.abilityState.effectOrder,
@@ -850,7 +846,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				targetLoc: dancersTargetLoc,
 				sourceEffect: this.dex.abilities.get('dancer'),
 				externalMove: true,
-			});
+			})[0];
+			// Gen 7: Dancer activates in order of lowest speed stat to highest
+			// Note that the speed stat used is after any volatile replacements like Speed Swap,
+			// but before any multipliers like Agility or Choice Scarf
+			// Ties go to whichever Pokemon has had the ability for the least amount of time
+			action.speed = -dancer.getStat('spe', true, true);
+			this.queue.insertAction(action);
 		},
 		condition: {
 			noCopy: true, // doesn't get copied by Baton Pass

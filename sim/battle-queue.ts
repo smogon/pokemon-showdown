@@ -376,6 +376,14 @@ export class BattleQueue {
 		}
 		const actions = this.resolveAction(choice, midTurn);
 
+		this.insertAction(actions);
+	}
+
+	insertAction(actions: Action | Action[]) {
+		if (!Array.isArray(actions)) {
+			actions = [actions];
+		}
+
 		let firstIndex = null;
 		let lastIndex = null;
 		for (const [i, curAction] of this.list.entries()) {

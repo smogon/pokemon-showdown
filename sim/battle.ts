@@ -2599,8 +2599,6 @@ export class Battle {
 
 		if (!action.pokemon) {
 			action.speed = 1;
-		} else if (action.sourceEffect?.id === 'dancer') {
-			action.speed = -action.pokemon.getStat('spe', true, true);
 		} else {
 			action.speed = action.pokemon.getActionSpeed();
 		}
