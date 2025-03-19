@@ -112,6 +112,7 @@ export interface MoveEventMethods {
 
 	onAfterHit?: CommonHandlers['VoidSourceMove'];
 	onAfterSubDamage?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
+	onAfterMoveSecondaryLast?: CommonHandlers['VoidMove'];
 	onAfterMoveSecondarySelf?: CommonHandlers['VoidSourceMove'];
 	onAfterMoveSecondary?: CommonHandlers['VoidMove'];
 	onAfterMove?: CommonHandlers['VoidSourceMove'];
