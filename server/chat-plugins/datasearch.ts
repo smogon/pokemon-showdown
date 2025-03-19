@@ -1514,23 +1514,35 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		results = Utils.shuffle(results).slice(0, randomOutput);
 	}
 
-	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${Utils.escapeHTML(message)}:</span><br />`);
+	let resultsStr = (message === "" ? message :
+		`<span style="color:#999999;">${Utils.escapeHTML(message)}:</span><br/>`);
 	if (results.length > 1) {
 		results.sort();
 		if (sort) {
 			const direction = sort.slice(-1);
 			Utils.sortBy(results, species => getSortValue(species) * (direction === '+' ? 1 : -1));
 		}
-		let notShown = 0;
+
 		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
-			notShown = results.length - RESULTS_MAX_LENGTH;
-			results = results.slice(0, RESULTS_MAX_LENGTH);
-		}
-		resultsStr += results.map(
-			result => `<a href="//${Config.routes.dex}/pokemon/${toID(result.name)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result.name}" style="vertical-align:-7px;margin:-2px" />${result.name}</a>`
-		).join(", ");
-		if (notShown) {
-			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
+			const notShown = results.length - RESULTS_MAX_LENGTH;
+			const amountStr = `${results.length} Results (${notShown} Hidden)`;
+
+			resultsStr = message === "" ? amountStr :
+				`<span style="color:#999999;">${Utils.escapeHTML(message + `: ${amountStr}`)}</span><br/>`;
+
+			const resultsSummary = results.slice(0, RESULTS_MAX_LENGTH).map(
+				result => `<a href="//${Config.routes.dex}/pokemon/${toID(result.name)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result.name}" style="vertical-align:-7px;margin:-2px" />${result.name}</a>`
+			).join(", ") + ', ';
+
+			const resultsHidden = results.slice(RESULTS_MAX_LENGTH).map(
+				result => `<a href="//${Config.routes.dex}/pokemon/${toID(result.name)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result.name}" style="vertical-align:-7px;margin:-2px" />${result.name}</a>`
+			).join(", ");
+
+			resultsStr += `<details class="readmore"><summary style="display: inline" readmore-text="[${notShown} Hidden]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
+		} else {
+			resultsStr += results.map(
+				result => `<a href="//${Config.routes.dex}/pokemon/${toID(result.name)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result.name}" style="vertical-align:-7px;margin:-2px" />${result.name}</a>`
+			).join(", ");
 		}
 	} else if (results.length === 1) {
 		return { dt: `${results[0]}${usedMod ? `,${usedMod}` : ''}` };
