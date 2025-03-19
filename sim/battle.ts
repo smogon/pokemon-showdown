@@ -2682,7 +2682,7 @@ export class Battle {
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
 			this.actions.runMove(action.move, action.pokemon, action.targetLoc, {
-				sourceEffect: action.sourceEffect, zMove: action.zmove,
+				sourceEffect: action.sourceEffect, zMove: action.zmove, externalMove: action.externalMove,
 				maxMove: action.maxMove, originalTarget: action.originalTarget,
 			});
 			break;

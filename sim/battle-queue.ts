@@ -19,7 +19,7 @@ import type { Battle } from './battle';
 export interface MoveAction {
 	/** action type */
 	choice: 'move' | 'beforeTurnMove' | 'priorityChargeMove';
-	order: 3 | 5 | 200 | 201 | 199 | 106;
+	order: 3 | 5 | 107 | 198 | 199 | 200 | 201;
 	/** priority of the action (lower first) */
 	priority: number;
 	/** fractional priority of the action (lower first) */
@@ -44,6 +44,8 @@ export interface MoveAction {
 	maxMove?: string;
 	/** effect that called the move (eg Instruct) if any */
 	sourceEffect?: Effect | null;
+	/** if external, skips LockMove and PP deduction, mostly for use by Dancer */
+	externalMove?: boolean;
 }
 
 /** A switch action */
@@ -373,6 +375,14 @@ export class BattleQueue {
 			choice.pokemon.updateSpeed();
 		}
 		const actions = this.resolveAction(choice, midTurn);
+
+		this.insertAction(actions);
+	}
+
+	insertAction(actions: Action | Action[]) {
+		if (!Array.isArray(actions)) {
+			actions = [actions];
+		}
 
 		let firstIndex = null;
 		let lastIndex = null;
