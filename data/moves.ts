@@ -1179,9 +1179,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	beatup: {
 		num: 251,
 		accuracy: 100,
-		basePower: 140,
+		basePower: 100,
 		basePowerCallback(pokemon, target, move) {
-			return 140 - 20 * pokemon.side.totalFainted;
+			return 100 - 5 * pokemon.side.totalFainted;
 		},
 		category: "Physical",
 		name: "Beat Up",
@@ -1508,7 +1508,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (this.field.isWeather(['hail', 'snow'])) move.accuracy = true;
 		},
 		secondary: {
-			chance: 10,
+			chance: 30,
 			status: 'frz',
 		},
 		target: "allAdjacentFoes",
@@ -22116,7 +22116,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				},
 				onResidualOrder: 13,
 				onResidual(pokemon) {
-					this.damage(pokemon.baseMaxhp /20);
+					this.damage(pokemon.baseMaxhp /16);
 				},
 				onEnd(pokemon) {
 					this.add('-end', pokemon, 'Nonaesquirla');

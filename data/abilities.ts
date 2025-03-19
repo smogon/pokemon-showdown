@@ -3416,8 +3416,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	poisonpoint: {
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target)) {
-				if (this.randomChance(3, 10)) {
-					source.trySetStatus('psn', target);
+				if (this.randomChance(5, 10)) {
+					source.trySetStatus('tox', target);
 				}
 			}
 		},
@@ -3545,7 +3545,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onDeductPP(target, source) {
 			if (target.isAlly(source)) return;
-			return 1;
+			return 2;
 		},
 		flags: {},
 		name: "Pressure",
@@ -6022,7 +6022,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
 			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
 			if (move.flags['sound']) {
-				if (this.randomChance(3, 10)) {
+				if (this.randomChance(5, 10)) {
 					target.trySetStatus('frz', source);
 				}
 			}
@@ -6081,7 +6081,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onBasePowerPriority: 19,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.category === 'Special' && !move.flags['contact']) {
-				return this.chainModify(1.15);
+				return this.chainModify(1.3);
 			}
 		},
 		onSourceDamagingHit(damage, target, source, move) {
@@ -6089,7 +6089,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
 			if (!this.checkMoveMakesContact(move, target, source) && move.category === 'Special') {
 				const r = this.random(100);
-				if (r < 30) {
+				if (r < 50) {
 					target.trySetStatus('frz', source);
 				}
 			}
@@ -6109,7 +6109,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Despite not being a secondary, Shield Dust / Covert Cloak block Poison Touch's effect
 			if (target.hasAbility('shielddust') || target.hasItem('covertcloak')) return;
 			if (!this.checkMoveMakesContact(move, target, source) && move.type === "Dark") {
+				if (this.randomChance(5, 10)) {
 					target.trySetStatus('brn', source);
+				}
 			}
 		},
 		flags: {},
@@ -6197,7 +6199,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if(typeof move.accuracy === 'number' ){
 			 let change = 100 - move.accuracy
 			 move.accuracy += change
-			 move.basePower -= change*0.5
+			 move.basePower -= change*0.25
 			}
 		},
 		flags: {},
