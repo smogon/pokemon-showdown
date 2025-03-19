@@ -3785,10 +3785,21 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				} else {
 					this.add('-start', pokemon, 'Disable', pokemon.lastMove.name);
 				}
-				if(source.hasAbility('anticipation')){
-					this.effectState.move = pokemon.lastMove.id;
+				if (source.hasAbility('anticipation')) {
+					this.effectState.move = [];
+					for (const moveSlot of pokemon.moveSlots) {
+						const move = this.dex.moves.get(moveSlot.move);
+						if (move.category === 'Status') continue;
+						const moveType = move.id === 'hiddenpower' ? pokemon.hpType : move.type;
+						if (
+							this.dex.getImmunity(moveType, source) && this.dex.getEffectiveness(moveType, source) > 0 ||
+							move.ohko
+						) {
+							this.effectState.move.push(move.id);
+						}
+					}
 				} else {
-					this.effectState.move = pokemon.lastMove.id;
+					this.effectState.move = [pokemon.lastMove.id];
 				}
 			},
 			onResidualOrder: 17,
@@ -3797,14 +3808,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onBeforeMovePriority: 7,
 			onBeforeMove(attacker, defender, move) {
-				if (!move.isZ && move.id === this.effectState.move) {
+				if (!move.isZ && this.effectState.move.includes(move.id)) {
 					this.add('cant', attacker, 'Disable', move);
 					return false;
 				}
 			},
 			onDisableMove(pokemon) {
+				if (!this.effectState.move) return;
 				for (const moveSlot of pokemon.moveSlots) {
-					if (moveSlot.id === this.effectState.move) {
+					if (this.effectState.move.includes(moveSlot.id)) {
 						pokemon.disableMove(moveSlot.id);
 					}
 				}

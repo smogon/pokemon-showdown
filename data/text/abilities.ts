@@ -633,8 +633,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	healer: {
 		name: "Healer",
-		desc: "30% chance this Pokemon's ally has its non-volatile status condition cured at the end of each turn.",
-		shortDesc: "30% chance this Pokemon's ally has its status cured at the end of each turn.",
+		desc: "On switch-in, this Pokemon's allies have their non-volatile status condition cured.",
+		shortDesc: "On switch-in, this Pokemon's allies have their status cured.",
 		gen6: {
 			desc: "30% chance each of this Pokemon's adjacent allies has its non-volatile status condition cured at the end of each turn.",
 			shortDesc: "30% chance each adjacent ally has its status cured at the end of each turn.",
@@ -655,7 +655,7 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	honeygather: {
 		name: "Honey Gather",
-		shortDesc: "No competitive use.",
+		shortDesc: "Every 3 turns, this Pokemon heals 1/4 of its max HP .",
 	},
 	hospitality: {
 		name: "Hospitality",
@@ -1032,8 +1032,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	moody: {
 		name: "Moody",
-		desc: "This Pokemon has a random stat, other than accuracy or evasiveness, raised by 2 stages and another stat lowered by 1 stage at the end of each turn.",
-		shortDesc: "Boosts a random stat (except accuracy/evasion) +2 and another stat -1 every turn.",
+		desc: "This Pokemon has a random stat, other than accuracy or evasiveness, raised by 1 stage at the end of each turn, up to 8 times.",
+		shortDesc: "Boosts a random stat (except accuracy/evasion) +1 every turn, last 8 turns.",
 		gen7: {
 			desc: "This Pokemon has a random stat raised by 2 stages and another stat lowered by 1 stage at the end of each turn.",
 			shortDesc: "Raises a random stat by 2 and lowers another stat by 1 at the end of each turn.",
@@ -1402,8 +1402,8 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 	},
 	quickfeet: {
 		name: "Quick Feet",
-		desc: "If this Pokemon has a non-volatile status condition, its Speed is multiplied by 1.5. This Pokemon ignores the paralysis effect of halving Speed.",
-		shortDesc: "If this Pokemon is statused, its Speed is 1.5x; ignores Speed drop from paralysis.",
+		desc: "If this Pokemon has a non-volatile status condition, its Speed is multiplied by 1.5. This Pokemon ignores the paralysis effect.",
+		shortDesc: "If this Pokemon is statused, its Speed is 1.5x; ignores Speed drop and full paralysis from paralysis.",
 		gen6: {
 			desc: "If this Pokemon has a non-volatile status condition, its Speed is multiplied by 1.5. This Pokemon ignores the paralysis effect of quartering Speed.",
 		},

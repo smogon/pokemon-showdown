@@ -5,7 +5,7 @@
   "main": "dist/sim/index.js",
   "dependencies": {
     "@ngrok/ngrok": "^1.4.1",
-    "esbuild": "^0.16.10",
+    "esbuild": "^0.25.1",
     "mysql2": "^3.9.7",
     "pokemon-showdown": "file:",
     "preact": "^10.5.15",

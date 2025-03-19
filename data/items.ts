@@ -7797,4 +7797,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		num: -107,
 		gen: 8,
   },
+  criosfera: {
+	name: "Criosfera",
+	spritenum: 219,
+	fling: {
+		basePower: 30,
+		status: 'frz',
+	},
+	onResidualOrder: 28,
+	onResidualSubOrder: 3,
+	onResidual(pokemon) {
+		pokemon.trySetStatus('frz', pokemon);
+	},
+	num: -108,
+	gen: 4,
+},
 };
