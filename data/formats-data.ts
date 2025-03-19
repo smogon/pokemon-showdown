@@ -974,7 +974,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	magby: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	magmar: {
 		tier: "NFE",
