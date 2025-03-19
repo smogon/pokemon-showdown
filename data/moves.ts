@@ -4834,7 +4834,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return null;
 		},
 		secondary: null,
-		hasSheerForce: true,
+		ignoresSheerForceSuppression: true,
 		target: "normal",
 		type: "Electric",
 	},
@@ -13533,7 +13533,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		secondary: null,
-		hasSheerForce: true,
+		ignoresSheerForceSuppression: true,
 		target: "normal",
 		type: "Dragon",
 	},
