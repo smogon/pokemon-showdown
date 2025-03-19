@@ -833,7 +833,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (dancer === source || dancer.isSemiInvulnerable() || !move.flags['dance'] ||
 				!this.lastSuccessfulMoveThisTurn || move.isExternal) return;
 			const targetOf1stDance = this.activeTarget!;
-			dancer.addVolatile('dancer');
 			const dancersTarget = !targetOf1stDance.isAlly(dancer) && source.isAlly(dancer) ?
 				targetOf1stDance : source;
 			const dancersTargetLoc = dancer.getLocOf(dancersTarget);
@@ -854,23 +853,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			action.speed = -dancer.getStat('spe', true, true);
 			this.queue.insertAction(action);
 		},
-		condition: {
-			noCopy: true, // doesn't get copied by Baton Pass
-			onBeforeMovePriority: 200,
-			onBeforeMove(source, target, move) {
-				if (move.isExternal) {
-					this.add('-activate', source, 'ability: Dancer');
-					this.effectState.noLock = move.isExternal && !source.volatiles['lockedmove'];
-				}
-			},
-			onTryAddVolatile(status) {
-				if (status.id === 'lockedmove' && this.effectState.noLock) return null;
-			},
-			onAfterMove(source, target, move) {
-				if (move.isExternal) {
-					delete source.volatiles['dancer'];
-				}
-			},
+		onBeforeMovePriority: 200,
+		onBeforeMove(source, target, move) {
+			if (move.isExternal) {
+				this.add('-activate', source, 'ability: Dancer');
+			}
+		},
+		onTryAddVolatile(status, target, source, sourceEffect) {
+			if (status.id === 'lockedmove' && (sourceEffect as ActiveMove)?.isExternal) {
+				return null;
+			}
 		},
 		rating: 1.5,
 		num: 216,
