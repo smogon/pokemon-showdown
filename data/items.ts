@@ -59,7 +59,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		boosts: {
-			spa: 1,
+			spa: 2,
+			atk: 2,
 		},
 		num: 545,
 		gen: 5,
@@ -107,19 +108,29 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onAfterBoost(boost, target, source, effect) {
-			// Adrenaline Orb activates if Intimidate is blocked by an ability like Hyper Cutter,
-			// which deletes boost.atk,
-			// but not if the holder's attack is already at -6 (or +6 if it has Contrary),
-			// which sets boost.atk to 0
-			if (target.boosts['spe'] === 6 || boost.atk === 0) {
-				return;
+			if (source && target === source) return;
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					if (target.useItem(source)) {
+						if (this.runEvent('DragOut', source, target, effect)) {
+							source.forceSwitchFlag = true;
+						}
+						if (target.hp) {
+							if (!this.canSwitch(target.side)) return;
+							if (target.volatiles['commanding'] || target.volatiles['commanded']) return;
+							for (const pokemon of this.getAllActive()) {
+								if (pokemon.switchFlag === true) return;
+							}
+							target.switchFlag = true;
+						}
+					}
+				}
 			}
-			if (effect.name === 'Intimidate') {
-				target.useItem();
+			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+				this.add("-fail", target, "unboost", "[from] ability: Clear Body", "[of] " + target);
 			}
-		},
-		boosts: {
-			spe: 1,
 		},
 		num: 846,
 		gen: 7,
