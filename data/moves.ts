@@ -9964,11 +9964,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 95,
 		basePower: 0,
 		category: "Status",
-
 		name: "Ion Deluge",
 		pp: 25,
 		priority: 1,
 		flags: {metronome: 1, light: 1,},
+		volatileStatus: 'iondeluge',
 		condition: {
 			duration: 4,
 			onSideStart(targetSide) {
