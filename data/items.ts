@@ -281,7 +281,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Ground",
 		},
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+			if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
 			}
@@ -2168,7 +2168,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Ice",
 		},
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+			if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
 			}
@@ -2965,7 +2965,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Flying",
 		},
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+			if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
 			}
@@ -3100,7 +3100,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Grass",
 		},
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+			if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
 			}
@@ -4189,7 +4189,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Poison",
 		},
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+			if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
 			}
