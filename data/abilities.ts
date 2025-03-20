@@ -6057,7 +6057,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon){
 			let success = false;
 			for (const active of this.getAllActive()) {
-				if (active.removeVolatile('substitute')) success = true;
 			}
 			const removeAll = ['stealthrock'];
 			const sides = [pokemon.side, ...pokemon.side.foeSidesWithConditions()];
