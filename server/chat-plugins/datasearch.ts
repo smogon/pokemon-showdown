@@ -72,13 +72,6 @@ function toListString(arr: string[]) {
 	return `${arr.slice(0, -1).join(", ")}, and ${arr.slice(-1)[0]}`;
 }
 
-function checkCanAll(room: Room | null) {
-	if (!room) return false; // no, no good reason for using `all` in pms
-	const { isPersonal, isHelp } = room.settings;
-	// allowed if it's a groupchat
-	return !room.battle && !!isPersonal && !isHelp;
-}
-
 export const commands: Chat.ChatCommands = {
 	ds: 'dexsearch',
 	ds1: 'dexsearch',
@@ -118,7 +111,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'dexsearch',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast()) return;
@@ -189,7 +181,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randmove',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -240,7 +231,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randpoke',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -286,7 +276,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randability',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		});
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -339,7 +328,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'movesearch',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast()) return;
@@ -401,7 +389,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'itemsearch',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast()) return;
@@ -452,7 +439,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randitem',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		});
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -489,7 +475,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'abilitysearch',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast()) return;
@@ -551,7 +536,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targets.join(','),
 			cmd: 'learn',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: formatid,
 		}, user);
 		if (!response.error && !this.runBroadcast()) return;
@@ -596,7 +580,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randtype',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		});
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -664,7 +647,7 @@ function prepareDexsearchValidator(usedMod: string | undefined, rules: FormatDat
 	return TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
 }
 
-function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
+function runDexsearch(target: string, cmd: string, message: string, isTest: boolean) {
 	const searches: DexOrGroup[] = [];
 	const { splitTarget: remainingTargets, usedMod, count: modCount } = getMod(target);
 	const { splitTarget, usedRules } = getRule(remainingTargets.join(','));
@@ -748,7 +731,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		attack: 'atk', defense: 'def', specialattack: 'spa', spc: 'spa', special: 'spa', spatk: 'spa',
 		specialdefense: 'spd', spdef: 'spd', speed: 'spe', wt: 'weight', ht: 'height', generation: 'gen',
 	};
-	let showAll = false;
 	let sort = null;
 	let megaSearch = null;
 	let gmaxSearch = null;
@@ -972,14 +954,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				break;
 			}
 
-			if (target === 'all') {
-				if (!canAll) return { error: "A search with the parameter 'all' cannot be broadcast." };
-				if (parameters.length > 1) return { error: "The parameter 'all' cannot have alternative parameters." };
-				showAll = true;
-				orGroup.skip = true;
-				break;
-			}
-
 			if (target.substr(0, 6) === 'random' && cmd === 'randpoke') {
 				// Validation for this is in the /randpoke command
 				randomOutput = parseInt(target.substr(6));
@@ -1197,11 +1171,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		}
 	}
 	if (
-		showAll && searches.length === 0 && singleTypeSearch === null &&
+		searches.length === 0 && singleTypeSearch === null &&
 		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null && restrictedSearch === null && sort === null
 	) {
 		return {
-			error: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.",
+			error: "No search parameters were found. Try '/help dexsearch' for more information on this command.",
 		};
 	}
 
@@ -1529,7 +1503,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			).join(", ");
 		}
 
-		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
+		if (results.length > MAX_RANDOM_RESULTS) {
 			const notShown = results.length - RESULTS_MAX_LENGTH;
 			const amountStr = `${results.length} Results (${notShown} Hidden)`;
 
@@ -1551,7 +1525,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	return { reply: resultsStr };
 }
 
-function runMovesearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
+function runMovesearch(target: string, cmd: string, message: string, isTest: boolean) {
 	const searches: MoveOrGroup[] = [];
 	const { splitTarget, usedMod, count } = getMod(target);
 	if (count > 1) {
@@ -1596,7 +1570,6 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	for (const type of mod.types.all()) {
 		allTypes[type.id] = type.name;
 	}
-	let showAll = false;
 	let sort: string | null = null;
 	const targetMons: { name: string, shouldBeExcluded: boolean }[] = [];
 	let nationalSearch = null;
@@ -1704,14 +1677,6 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 					return { error: `A search cannot both exclude and include '${target}'.` };
 				}
 				orGroup.gens[targetInt] = !isNotSearch;
-				continue;
-			}
-
-			if (target === 'all') {
-				if (!canAll) return { error: "A search with the parameter 'all' cannot be broadcast." };
-				if (parameters.length > 1) return { error: "The parameter 'all' cannot have alternative parameters." };
-				showAll = true;
-				orGroup.skip = true;
 				continue;
 			}
 
@@ -1964,9 +1929,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			searches.push(orGroup);
 		}
 	}
-	if (showAll && !searches.length && !targetMons.length && !sort) {
+	if (!searches.length && !targetMons.length && !sort) {
 		return {
-			error: "No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command.",
+			error: "No search parameters were found. Try '/help movesearch' for more information on this command.",
 		};
 	}
 
@@ -2279,7 +2244,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			).join(", ");
 		}
 
-		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
+		if (results.length > MAX_RANDOM_RESULTS) {
 			const notShown = results.length - RESULTS_MAX_LENGTH;
 			const amountStr = `${results.length} Results (${notShown} Hidden)`;
 
@@ -2302,18 +2267,12 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	return { reply: resultsStr };
 }
 
-function runItemsearch(target: string, cmd: string, canAll: boolean, message: string) {
-	let showAll = false;
+function runItemsearch(target: string, cmd: string, message: string) {
 	let maxGen = 0;
 	let gen = 0;
 	let randomOutput = 0;
 
 	const targetSplit = target.split(',');
-	if (targetSplit[targetSplit.length - 1].trim() === 'all') {
-		if (!canAll) return { error: "A search ending in ', all' cannot be broadcast." };
-		showAll = true;
-		targetSplit.pop();
-	}
 
 	const sanitizedTargets = [];
 	for (const index of targetSplit.keys()) {
@@ -2571,7 +2530,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 
 	if (foundItems.length > 0) {
 		foundItems.sort();
-		if (!showAll && foundItems.length > MAX_RANDOM_RESULTS) {
+		if (foundItems.length > MAX_RANDOM_RESULTS) {
 			const notShown = foundItems.length - RESULTS_MAX_LENGTH;
 			const amountStr = `${foundItems.length} Results (${notShown} Hidden)`;
 
@@ -2591,19 +2550,13 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 	return { reply: resultsStr };
 }
 
-function runAbilitysearch(target: string, cmd: string, canAll: boolean, message: string) {
+function runAbilitysearch(target: string, cmd: string, message: string) {
 	// based heavily on runItemsearch()
-	let showAll = false;
 	let maxGen = 0;
 	let gen = 0;
 	let randomOutput = 0;
 
 	const targetSplit = target.split(',');
-	if (targetSplit[targetSplit.length - 1].trim() === 'all') {
-		if (!canAll) return { error: "A search ending in ', all' cannot be broadcast." };
-		showAll = true;
-		targetSplit.pop();
-	}
 
 	const sanitizedTargets = [];
 	for (const index of targetSplit.keys()) {
@@ -2768,7 +2721,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 
 	if (foundAbilities.length > 0) {
 		foundAbilities.sort();
-		if (!showAll && foundAbilities.length > MAX_RANDOM_RESULTS) {
+		if (foundAbilities.length > MAX_RANDOM_RESULTS) {
 			const notShown = foundAbilities.length - RESULTS_MAX_LENGTH;
 			const amountStr = `${foundAbilities.length} Results (${notShown} Hidden)`;
 
@@ -2788,7 +2741,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 	return { reply: resultsStr };
 }
 
-function runLearn(target: string, cmd: string, canAll: boolean, formatid: string) {
+function runLearn(target: string, cmd: string, formatid: string) {
 	let format: Format = Dex.formats.get(formatid);
 	const targets = target.split(',');
 	let formatName = format.name;
@@ -2972,7 +2925,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 	return { reply: buffer };
 }
 
-function runSearch(query: { target: string, cmd: string, canAll: boolean, message: string }, user?: User) {
+function runSearch(query: { target: string, cmd: string, message: string }, user?: User) {
 	if (user) {
 		if (user.lastCommand.startsWith('/datasearch ')) {
 			throw new Chat.ErrorMessage(
@@ -2988,7 +2941,7 @@ function runSearch(query: { target: string, cmd: string, canAll: boolean, messag
 	});
 }
 
-function runRandtype(target: string, cmd: string, canAll: boolean, message: string) {
+function runRandtype(target: string, cmd: string, message: string) {
 	const icon: any = {};
 	for (const type of Dex.types.names()) {
 		icon[type] = `<img src="https://${Config.routes.client}/sprites/types/${type}.png" width="32" height="14">`;
@@ -3028,20 +2981,20 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 		switch (query.cmd) {
 		case 'randpoke':
 		case 'dexsearch':
-			return runDexsearch(query.target, query.cmd, query.canAll, query.message, false);
+			return runDexsearch(query.target, query.cmd, query.message, false);
 		case 'randmove':
 		case 'movesearch':
-			return runMovesearch(query.target, query.cmd, query.canAll, query.message, false);
+			return runMovesearch(query.target, query.cmd, query.message, false);
 		case 'randitem':
 		case 'itemsearch':
-			return runItemsearch(query.target, query.cmd, query.canAll, query.message);
+			return runItemsearch(query.target, query.cmd, query.message);
 		case 'randability':
 		case 'abilitysearch':
-			return runAbilitysearch(query.target, query.cmd, query.canAll, query.message);
+			return runAbilitysearch(query.target, query.cmd, query.message);
 		case 'learn':
-			return runLearn(query.target, query.cmd, query.canAll, query.message);
+			return runLearn(query.target, query.cmd, query.message);
 		case 'randtype':
-			return runRandtype(query.target, query.cmd, query.canAll, query.message);
+			return runRandtype(query.target, query.cmd, query.message);
 		default:
 			throw new Error(`Unrecognized Dexsearch command "${query.cmd}"`);
 		}
@@ -3079,10 +3032,10 @@ if (!PM.isParentProcess) {
 }
 
 export const testables = {
-	runAbilitysearch: (target: string, cmd: string, canAll: boolean, message: string) =>
-		runAbilitysearch(target, cmd, canAll, message),
-	runDexsearch: (target: string, cmd: string, canAll: boolean, message: string) =>
-		runDexsearch(target, cmd, canAll, message, true),
-	runMovesearch: (target: string, cmd: string, canAll: boolean, message: string) =>
-		runMovesearch(target, cmd, canAll, message, true),
+	runAbilitysearch: (target: string, cmd: string, message: string) =>
+		runAbilitysearch(target, cmd, message),
+	runDexsearch: (target: string, cmd: string, message: string) =>
+		runDexsearch(target, cmd, message, true),
+	runMovesearch: (target: string, cmd: string, message: string) =>
+		runMovesearch(target, cmd, message, true),
 };
