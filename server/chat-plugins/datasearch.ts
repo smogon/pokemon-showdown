@@ -1512,7 +1512,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 
 			const resultsSummary = mapPokemonResults(results.slice(0, RESULTS_MAX_LENGTH)) + ', ';
 			const resultsHidden = mapPokemonResults(results.slice(RESULTS_MAX_LENGTH));
-			resultsStr += `<details class="searchresults"><summary style="display: inline" show-hidden-results-text="[${notShown} Hidden]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
+			resultsStr += `<details class="readmore"><summary style="display: inline" show-text="[${notShown} Hidden]" hide-text="[-]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
 		} else {
 			resultsStr += mapPokemonResults(results);
 		}
@@ -2254,7 +2254,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 			const resultsSummary = mapMoves(results.slice(0, RESULTS_MAX_LENGTH)) + ', ';
 			const resultsHidden = mapMoves(results.slice(RESULTS_MAX_LENGTH));
 
-			resultsStr += `<details class="searchresults"><summary style="display: inline" show-hidden-results-text="[${notShown} Hidden]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
+			resultsStr += `<details class="readmore"><summary style="display: inline" show-text="[${notShown} Hidden]" hide-text="[-]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
 		} else {
 			resultsStr += mapMoves(results);
 		}
@@ -2540,7 +2540,7 @@ function runItemsearch(target: string, cmd: string, message: string) {
 			const resultsSummary = mapItemResults(foundItems.slice(0, RESULTS_MAX_LENGTH)) + ', ';
 			const resultsHidden = mapItemResults(foundItems.slice(RESULTS_MAX_LENGTH));
 
-			resultsStr += `<details class="searchresults"><summary style="display: inline" show-hidden-results-text="[${notShown} Hidden]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
+			resultsStr += `<details class="readmore"><summary style="display: inline" show-text="[${notShown} Hidden]" hide-text="[-]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
 		} else {
 			resultsStr += mapItemResults(foundItems);
 		}
@@ -2731,7 +2731,7 @@ function runAbilitysearch(target: string, cmd: string, message: string) {
 			const resultsSummary = mapAbilityResults(foundAbilities.slice(0, RESULTS_MAX_LENGTH)) + ', ';
 			const resultsHidden = mapAbilityResults(foundAbilities.slice(RESULTS_MAX_LENGTH));
 
-			resultsStr += `<details class="searchresults"><summary style="display: inline" show-hidden-results-text="[${notShown} Hidden]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
+			resultsStr += `<details class="readmore"><summary style="display: inline" show-text="[${notShown} Hidden]" hide-text="[-]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
 		} else {
 			resultsStr += mapAbilityResults(foundAbilities);
 		}
