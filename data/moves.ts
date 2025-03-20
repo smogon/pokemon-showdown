@@ -10591,7 +10591,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	lick: {
 		num: 122,
-		accuracy: 100,
+		accuracy: 85,
 		basePower: 20,
 		category: "Physical",
 		name: "Lick",
@@ -10599,8 +10599,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		secondary: {
-			chance: 30,
-			status: 'Curse',
+			chance: 100,
+			volatileStatus: 'curse',
 		},
 		target: "normal",
 		type: "Ghost",
