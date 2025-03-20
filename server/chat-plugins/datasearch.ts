@@ -1523,6 +1523,12 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			Utils.sortBy(results, species => getSortValue(species) * (direction === '+' ? 1 : -1));
 		}
 
+		function mapPokemonResults(inputArr: Species[]) {
+			return inputArr.map(
+				result => `<a href="//${Config.routes.dex}/pokemon/${toID(result.name)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result.name}" style="vertical-align:-7px;margin:-2px" />${result.name}</a>`
+			).join(", ");
+		}
+
 		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
 			const notShown = results.length - RESULTS_MAX_LENGTH;
 			const amountStr = `${results.length} Results (${notShown} Hidden)`;
@@ -1530,19 +1536,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			resultsStr = message === "" ? amountStr :
 				`<span style="color:#999999;">${Utils.escapeHTML(message + `: ${amountStr}`)}</span><br/>`;
 
-			const resultsSummary = results.slice(0, RESULTS_MAX_LENGTH).map(
-				result => `<a href="//${Config.routes.dex}/pokemon/${toID(result.name)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result.name}" style="vertical-align:-7px;margin:-2px" />${result.name}</a>`
-			).join(", ") + ', ';
-
-			const resultsHidden = results.slice(RESULTS_MAX_LENGTH).map(
-				result => `<a href="//${Config.routes.dex}/pokemon/${toID(result.name)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result.name}" style="vertical-align:-7px;margin:-2px" />${result.name}</a>`
-			).join(", ");
-
-			resultsStr += `<details class="readmore"><summary style="display: inline" readmore-text="[${notShown} Hidden]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
+			const resultsSummary = mapPokemonResults(results.slice(0, RESULTS_MAX_LENGTH)) + ', ';
+			const resultsHidden = mapPokemonResults(results.slice(RESULTS_MAX_LENGTH));
+			resultsStr += `<details class="searchresults"><summary style="display: inline" show-hidden-results-text="[${notShown} Hidden]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
 		} else {
-			resultsStr += results.map(
-				result => `<a href="//${Config.routes.dex}/pokemon/${toID(result.name)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result.name}" style="vertical-align:-7px;margin:-2px" />${result.name}</a>`
-			).join(", ");
+			resultsStr += mapPokemonResults(results);
 		}
 	} else if (results.length === 1) {
 		return { dt: `${results[0]}${usedMod ? `,${usedMod}` : ''}` };
@@ -2270,20 +2268,30 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				return moveProp * (direction === '+' ? 1 : -1);
 			});
 		}
-		let notShown = 0;
-		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
-			notShown = results.length - RESULTS_MAX_LENGTH;
-			results = results.slice(0, RESULTS_MAX_LENGTH);
+
+		function mapMoves(inputArray: string[]) {
+			return inputArray.map(
+				result => `<a href="//${Config.routes.dex}/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
+					(sort ?
+						// eslint-disable-next-line @typescript-eslint/no-base-to-string
+						` (${dex[toID(result)][sort.slice(0, -1) as keyof Move] === true ? '-' : dex[toID(result)][sort.slice(0, -1) as keyof Move]})` :
+						'')
+			).join(", ");
 		}
-		resultsStr += results.map(
-			result => `<a href="//${Config.routes.dex}/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
-				(sort ?
-					// eslint-disable-next-line @typescript-eslint/no-base-to-string
-					` (${dex[toID(result)][sort.slice(0, -1) as keyof Move] === true ? '-' : dex[toID(result)][sort.slice(0, -1) as keyof Move]})` :
-					'')
-		).join(", ");
-		if (notShown) {
-			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
+
+		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
+			const notShown = results.length - RESULTS_MAX_LENGTH;
+			const amountStr = `${results.length} Results (${notShown} Hidden)`;
+
+			resultsStr = message === "" ? amountStr :
+				`<span style="color:#999999;">${Utils.escapeHTML(message + `: ${amountStr}`)}</span><br/>`;
+
+			const resultsSummary = mapMoves(results.slice(0, RESULTS_MAX_LENGTH)) + ', ';
+			const resultsHidden = mapMoves(results.slice(RESULTS_MAX_LENGTH));
+
+			resultsStr += `<details class="searchresults"><summary style="display: inline" show-hidden-results-text="[${notShown} Hidden]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
+		} else {
+			resultsStr += mapMoves(results);
 		}
 	} else if (results.length === 1) {
 		return { dt: `${results[0]}${usedMod ? `,${usedMod}` : ''}` };
@@ -2555,18 +2563,27 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		return { reply: resultsStr };
 	}
 
-	if (foundItems.length > 0) {
-		foundItems.sort();
-		let notShown = 0;
-		if (!showAll && foundItems.length > RESULTS_MAX_LENGTH + 5) {
-			notShown = foundItems.length - RESULTS_MAX_LENGTH;
-			foundItems = foundItems.slice(0, RESULTS_MAX_LENGTH);
-		}
-		resultsStr += foundItems.map(
+	function mapItemResults(inputArr: string[]) {
+		return inputArr.map(
 			result => `<a href="//${Config.routes.dex}/items/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon item="${result}" style="vertical-align:-7px" />${result}</a>`
 		).join(", ");
-		if (notShown) {
-			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
+	}
+
+	if (foundItems.length > 0) {
+		foundItems.sort();
+		if (!showAll && foundItems.length > MAX_RANDOM_RESULTS) {
+			const notShown = foundItems.length - RESULTS_MAX_LENGTH;
+			const amountStr = `${foundItems.length} Results (${notShown} Hidden)`;
+
+			resultsStr = message === "" ? amountStr :
+				`<span style="color:#999999;">${Utils.escapeHTML(message + `: ${amountStr}`)}</span><br/>`;
+
+			const resultsSummary = mapItemResults(foundItems.slice(0, RESULTS_MAX_LENGTH)) + ', ';
+			const resultsHidden = mapItemResults(foundItems.slice(RESULTS_MAX_LENGTH));
+
+			resultsStr += `<details class="searchresults"><summary style="display: inline" show-hidden-results-text="[${notShown} Hidden]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
+		} else {
+			resultsStr += mapItemResults(foundItems);
 		}
 	} else {
 		resultsStr += "No items found. Try a more general search";
@@ -2743,18 +2760,27 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 		return { reply: resultsStr };
 	}
 
-	if (foundAbilities.length > 0) {
-		foundAbilities.sort();
-		let notShown = 0;
-		if (!showAll && foundAbilities.length > RESULTS_MAX_LENGTH + 5) {
-			notShown = foundAbilities.length - RESULTS_MAX_LENGTH;
-			foundAbilities = foundAbilities.slice(0, RESULTS_MAX_LENGTH);
-		}
-		resultsStr += foundAbilities.map(
+	function mapAbilityResults(inputArr: string[]) {
+		return inputArr.map(
 			result => `<a href="//${Config.routes.dex}/abilities/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>`
 		).join(", ");
-		if (notShown) {
-			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
+	}
+
+	if (foundAbilities.length > 0) {
+		foundAbilities.sort();
+		if (!showAll && foundAbilities.length > MAX_RANDOM_RESULTS) {
+			const notShown = foundAbilities.length - RESULTS_MAX_LENGTH;
+			const amountStr = `${foundAbilities.length} Results (${notShown} Hidden)`;
+
+			resultsStr = message === "" ? amountStr :
+				`<span style="color:#999999;">${Utils.escapeHTML(message + `: ${amountStr}`)}</span><br/>`;
+
+			const resultsSummary = mapAbilityResults(foundAbilities.slice(0, RESULTS_MAX_LENGTH)) + ', ';
+			const resultsHidden = mapAbilityResults(foundAbilities.slice(RESULTS_MAX_LENGTH));
+
+			resultsStr += `<details class="searchresults"><summary style="display: inline" show-hidden-results-text="[${notShown} Hidden]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
+		} else {
+			resultsStr += mapAbilityResults(foundAbilities);
 		}
 	} else {
 		resultsStr += "No abilities found. Try a more general search.";
