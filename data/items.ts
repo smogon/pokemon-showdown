@@ -673,11 +673,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onModifyAccuracyPriority: -2,
-		onModifyAccuracy(accuracy) {
-			if (typeof accuracy !== 'number') return;
-			this.debug('brightpowder - decreasing accuracy');
-			return this.chainModify([3686, 4096]);
+		onAnyAccuracy(accuracy, target, source, move) {
+			if (move && (source === this.effectState.target) && move.flags['light']) {
+				return true;
+			}
+			return accuracy;
 		},
 		num: 213,
 		gen: 2,
@@ -766,7 +766,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		boosts: {
-			atk: 1,
+			atk: 2,
+			spa: 2,
 		},
 		num: 546,
 		gen: 5,
