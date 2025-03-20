@@ -188,7 +188,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		name: 'partiallytrapped',
 		duration: 5,
 		durationCallback(target, source) {
-			if (source?.hasItem('gripclaw')) return 8;
+			if (source?.hasItem('gripclaw')) return 11;
 			return this.random(5, 7);
 		},
 		onStart(pokemon, source) {
