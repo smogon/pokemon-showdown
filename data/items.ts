@@ -2438,7 +2438,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Flying",
 		},
-		onEat: false,
+		onDamagingHitOrder: 2,
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target) && target.eatItem()) {
+				this.damage(source.baseMaxhp / 5, source, target);
+			}
+		},
+		onEat() { },
 		num: 173,
 		gen: 3,
 	},
