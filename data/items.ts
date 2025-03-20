@@ -2953,14 +2953,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Fairy",
 		},
-		onAfterMoveSecondary(target, source, move) {
-			if (move.category === 'Physical') {
+		onFoeBeforeMove(source, target, move) {
+			if (move.category === 'Physical' && target.eatItem()) {
 				if (move.id === 'present' && move.heal) return;
-				target.eatItem();
+			}
+		},
+		onAfterMoveSecondary(target, source, move) {
+			if (move.category === 'Physical' && target.eatItem()) {
+				if (move.id === 'present' && move.heal) return;
+
 			}
 		},
 		onEat(pokemon) {
-			this.boost({def: 1});
+			this.boost({def: 2});
 		},
 		num: 687,
 		gen: 6,
