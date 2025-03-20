@@ -2135,7 +2135,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onFractionalPriority: -0.1,
+		onFoeTryMove(target, source, move) {
+			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
+				return;
+			}
+
+			const dazzlingHolder = this.effectState.target;
+			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
+				this.attrLastMove('[still]');
+				source.useItem()
+				return false;
+			}
+		},
 		num: 316,
 		gen: 4,
 
