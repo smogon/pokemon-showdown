@@ -445,12 +445,24 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
-				if (this.runEvent('TryHeal', pokemon, null, this.effect, 20) && pokemon.useItem()) {
-					this.heal(20);
-				}
+		onResidualOrder: 5,
+		onResidualSubOrder: 4,
+		onStart(pokemon) {
+			pokemon.addVolatile('berryjuice')
+		},
+		onResidual(pokemon) {
+			if(pokemon.maxhp !== pokemon.hp && pokemon.volatiles['berryjuice'].turns < 5){
+				this.heal(pokemon.baseMaxhp / 8);
+				pokemon.volatiles['berryjuice'].turns += 1
 			}
+			if (pokemon.volatiles['berryjuice'].turns >= 5){
+				pokemon.useItem();
+			}
+		},
+		condition: {
+			onStart() {
+				this.effectState.turns = 0;
+			},
 		},
 		num: 43,
 		gen: 2,
