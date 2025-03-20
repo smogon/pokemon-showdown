@@ -1666,15 +1666,39 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem() && this.field.isTerrain('electricterrain')) {
 				pokemon.useItem();
+				pokemon.addVolatile('electricseed')
 			}
 		},
 		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('electricterrain')) {
 				pokemon.useItem();
+				pokemon.addVolatile('electricseed')
 			}
 		},
 		boosts: {
 			def: 1,
+		},
+		condition: {
+			duration: 2,
+			noCopy: true, // doesn't get copied by Baton Pass
+			onStart(target) {
+				this.add('-start', target, 'item: Electric Seed');
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, attacker, defender, move) {
+					this.debug('Electric Seed boost');
+					return this.chainModify(1.5);
+
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(atk, attacker, defender, move) {
+					this.debug('Electric Seed boost');
+					return this.chainModify(1.5);
+
+			},
+			onEnd(target) {
+				this.add('-end', target, 'item: Electric Seed', '[silent]');
+			},
 		},
 		num: 881,
 		gen: 7,
@@ -2362,15 +2386,39 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem() && this.field.isTerrain('grassyterrain')) {
 				pokemon.useItem();
+				pokemon.addVolatile('grassyseed')
 			}
 		},
 		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('grassyterrain')) {
 				pokemon.useItem();
+				pokemon.addVolatile('grassyseed')
 			}
 		},
 		boosts: {
 			def: 1,
+		},
+		condition: {
+			duration: 2,
+			noCopy: true, // doesn't get copied by Baton Pass
+			onStart(target) {
+				this.add('-start', target, 'item: Grassy Seed');
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, attacker, defender, move) {
+					this.debug('Grassy Seed boost');
+					return this.chainModify(1.5);
+
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(atk, attacker, defender, move) {
+					this.debug('Grassy Seed boost');
+					return this.chainModify(1.5);
+
+			},
+			onEnd(target) {
+				this.add('-end', target, 'item: Grassy Seed', '[silent]');
+			},
 		},
 		num: 884,
 		gen: 7,
@@ -3878,15 +3926,39 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem() && this.field.isTerrain('mistyterrain')) {
 				pokemon.useItem();
+				pokemon.addVolatile('mistyseed')
 			}
 		},
 		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('mistyterrain')) {
 				pokemon.useItem();
+				pokemon.addVolatile('mistyseed')
 			}
 		},
 		boosts: {
 			spd: 1,
+		},
+		condition: {
+			duration: 2,
+			noCopy: true, // doesn't get copied by Baton Pass
+			onStart(target) {
+				this.add('-start', target, 'item: Misty Seed');
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, attacker, defender, move) {
+					this.debug('Misty Seed boost');
+					return this.chainModify(1.5);
+
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(atk, attacker, defender, move) {
+					this.debug('Misty Seed boost');
+					return this.chainModify(1.5);
+
+			},
+			onEnd(target) {
+				this.add('-end', target, 'item: Misty Seed', '[silent]');
+			},
 		},
 		num: 883,
 		gen: 7,
@@ -4575,15 +4647,39 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem() && this.field.isTerrain('psychicterrain')) {
 				pokemon.useItem();
+				pokemon.addVolatile('psychicseed')
 			}
 		},
 		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('psychicterrain')) {
 				pokemon.useItem();
+				pokemon.addVolatile('psychicseed')
 			}
 		},
 		boosts: {
 			spd: 1,
+		},
+		condition: {
+			duration: 2,
+			noCopy: true, // doesn't get copied by Baton Pass
+			onStart(target) {
+				this.add('-start', target, 'item: Psychic Seed');
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, attacker, defender, move) {
+					this.debug('Psychic Seed boost');
+					return this.chainModify(1.5);
+
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(atk, attacker, defender, move) {
+					this.debug('Psychic Seed boost');
+					return this.chainModify(1.5);
+
+			},
+			onEnd(target) {
+				this.add('-end', target, 'item: Psychic Seed', '[silent]');
+			},
 		},
 		num: 882,
 		gen: 7,
