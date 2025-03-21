@@ -216,9 +216,93 @@ describe('Team Validator', () => {
 
 	describe('Limit Stat Pass', () => {
 		it('should enforce the limits correctly', () => {
-			'gen9customgame@@@limitstatpass='
+			// Any number of stat passers, max of 1 source of stat boosts each.
+			let format = 'gen9customgame@@@limitstatpass=/1';
 
-			let team = [{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass'], evs: { hp: 1 } }];
+			let team = [{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance'], evs: { hp: 1 } }];
+			assert.legalTeam(team, format);
+
+			team = [
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance'], evs: { hp: 1 } },
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance'], evs: { hp: 1 } },
+			];
+			assert.legalTeam(team, format);
+
+			team = [{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance', 'agility'], evs: { hp: 1 } }];
+			assert.false.legalTeam(team, format);
+
+			team = [
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance'], evs: { hp: 1 } },
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance', 'agility'], evs: { hp: 1 } },
+			];
+			assert.false.legalTeam(team, format);
+
+			// Max of 1 stat passers, any number of stat boosts each.
+			format = 'gen9customgame@@@limitstatpass=1/';
+
+			team = [{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance'], evs: { hp: 1 } }];
+			assert.legalTeam(team, format);
+
+			team = [{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance', 'agility'], evs: { hp: 1 } }];
+			assert.legalTeam(team, format);
+
+			team = [
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance'], evs: { hp: 1 } },
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance'], evs: { hp: 1 } },
+			];
+			assert.false.legalTeam(team, format);
+
+			team = [
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance'], evs: { hp: 1 } },
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance', 'agility'], evs: { hp: 1 } },
+			];
+			assert.false.legalTeam(team, format);
+
+			// Max of 2 stat passers, max of 3 sources of stat boosts each.
+			format = 'gen9customgame@@@limitstatpass=2/3';
+
+			team = [
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance', 'agility', 'nastyplot'], evs: { hp: 1 } },
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance', 'agility', 'nastyplot'], evs: { hp: 1 } },
+			];
+			assert.legalTeam(team, format);
+
+			team = [
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance', 'agility', 'nastyplot'], evs: { hp: 1 } },
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance', 'agility', 'nastyplot'], evs: { hp: 1 } },
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass'], evs: { hp: 1 } },
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass'], evs: { hp: 1 } },
+			];
+			assert.legalTeam(team, format);
+
+			team = [
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance', 'agility', 'nastyplot'], evs: { hp: 1 } },
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance', 'agility'], evs: { hp: 1 } },
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance'], evs: { hp: 1 } },
+			];
+			assert.false.legalTeam(team, format);
+
+			team = [
+				{ species: 'rattata', ability: 'noability', item: 'weaknesspolicy', moves: ['batonpass', 'swordsdance', 'agility', 'nastyplot'], evs: { hp: 1 } },
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance', 'agility', 'nastyplot'], evs: { hp: 1 } },
+			];
+			assert.false.legalTeam(team, format);
+		});
+
+		it('should detect if Ogerpon can stat pass, and allow making an exception for it', () => {
+			const team = [{ species: 'ogerponhearthflame', ability: 'moldbreaker', item: 'hearthflamemask', moves: ['batonpass'], evs: { hp: 1 } }];
+
+			let format = 'gen5customgame@@@batonpassstatclause';
+			assert.legalTeam(team, format);
+
+			format = 'gen9customgame@@@batonpassstatclause';
+			assert.false.legalTeam(team, format);
+
+			format = 'gen9customgame@@@batonpassstatclause,terastalclause';
+			assert.legalTeam(team, format);
+
+			format = 'gen9customgame@@@batonpassstatclause,+batonpass+embodyaspecthearthflame';
+			assert.legalTeam(team, format);
 		});
 
 		it('should not change validation for existing metagames with the Baton Pass Stat Clause', () => {
@@ -260,19 +344,19 @@ describe('Team Validator', () => {
 
 			format = 'gen5ou@@@!obtainable';
 
-			for(const { id } of gen5.moves.all().filter(x => !x.isNonstandard)) {
+			for (const { id } of gen5.moves.all().filter(x => !x.isNonstandard)) {
 				if (['assist', 'darkvoid', 'doubleteam', 'fissure', 'grasswhistle', 'guillotine', 'horndrill', 'hypnosis', 'lovelykiss', 'minimize', 'sheercold', 'sing', 'sleeppowder', 'spore', 'swagger', 'yawn'].includes(id)) continue; // banned elsewhere
 				team[0].moves.push(id);
 				runAssert(oldClause, id, team, format);
 				team[0].moves.pop();
 			}
-			for(const { id } of gen5.items.all().filter(x => !x.isNonstandard)) {
+			for (const { id } of gen5.items.all().filter(x => !x.isNonstandard)) {
 				if (['brightpowder', 'laxincense', 'buggem', 'darkgem', 'dragongem', 'electricgem', 'fairygem', 'fightinggem', 'firegem', 'flyinggem', 'ghostgem', 'grassgem', 'groundgem', 'icegem', 'normalgem', 'poisongem', 'psychicgem', 'rockgem', 'steelgem', 'watergem', 'souldew', 'razorfang', 'kingsrock'].includes(id)) continue; // banned elsewhere
 				team[0].item = id;
 				runAssert(oldClause, id, team, format);
 				team[0].item = '';
 			}
-			for(const { id } of gen5.abilities.all().filter(x => !x.isNonstandard)) {
+			for (const { id } of gen5.abilities.all().filter(x => !x.isNonstandard)) {
 				if (['arenatrap', 'moody', 'sandrush', 'sandveil', 'shadowtag', 'snowcloak'].includes(id)) continue; // banned elsewhere
 				team[0].ability = id;
 				runAssert(oldClause, id, team, format);
@@ -298,19 +382,19 @@ describe('Team Validator', () => {
 
 			let format = 'gen4ou@@@!obtainable';
 
-			for(const { id } of gen4.moves.all().filter(x => !x.isNonstandard)) {
+			for (const { id } of gen4.moves.all().filter(x => !x.isNonstandard)) {
 				if (['doubleteam', 'fissure', 'guillotine', 'horndrill', 'minimize', 'sheercold', 'swagger'].includes(id)) continue; // banned elsewhere
 				team[0].moves.push(id);
 				runAssert(oldClause, id, team, format);
 				team[0].moves.pop();
 			}
-			for(const { id } of gen4.items.all().filter(x => !x.isNonstandard)) {
+			for (const { id } of gen4.items.all().filter(x => !x.isNonstandard)) {
 				if (['brightpowder', 'laxincense', 'quickclaw', 'souldew'].includes(id)) continue; // banned elsewhere
 				team[0].item = id;
 				runAssert(oldClause, id, team, format);
 				team[0].item = '';
 			}
-			for(const { id } of gen4.abilities.all().filter(x => !x.isNonstandard)) {
+			for (const { id } of gen4.abilities.all().filter(x => !x.isNonstandard)) {
 				if (['arenatrap', 'sandveil', 'snowcloak'].includes(id)) continue; // banned elsewhere
 				team[0].ability = id;
 				runAssert(oldClause, id, team, format);
@@ -319,7 +403,7 @@ describe('Team Validator', () => {
 
 			format = 'gen3zu@@@!obtainable';
 
-			for(const { id } of gen3.moves.all().filter(x => !x.isNonstandard)) {
+			for (const { id } of gen3.moves.all().filter(x => !x.isNonstandard)) {
 				if (['doubleteam', 'fissure', 'guillotine', 'horndrill', 'minimize', 'sheercold', 'swagger', 'darkvoid', 'grasswhistle', 'hypnosis', 'lovelykiss', 'sing', 'sleeppowder', 'spore', 'yawn', 'substitute'].includes(id)) continue; // banned elsewhere
 				team[0].moves.push(id);
 				runAssert(oldClause, id, team, format);
@@ -352,9 +436,9 @@ describe('Team Validator', () => {
 				{ species: 'pidgey', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance'], evs: { hp: 1 } },
 			];
 
-			let format = 'gen3ou@@@!obtainable';
+			const format = 'gen3ou@@@!obtainable';
 
-			for(const { id } of gen3.moves.all().filter(x => !x.isNonstandard)) {
+			for (const { id } of gen3.moves.all().filter(x => !x.isNonstandard)) {
 				if (['assist', 'doubleteam', 'fissure', 'guillotine', 'horndrill', 'minimize', 'sheercold', 'swagger', 'block', 'meanlook', 'spiderweb'].includes(id)) continue; // banned elsewhere
 				team[0].moves.push(id);
 				runAssert(oldClause, id, team, format);
@@ -375,7 +459,7 @@ describe('Team Validator', () => {
 		});
 
 		function runAssert(clause, effect, team, format) {
-			console.log(`Testing ${effect} in ${format} ...`);
+			// console.log(`Testing ${effect} in ${format} ...`);
 			if (clause.includes(effect)) assert.false.legalTeam(team, format);
 			else assert.legalTeam(team, format);
 		};

@@ -1156,11 +1156,16 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 
 				// Ogerpon is hardcoded to transform and receive Embody Aspect upon tera.
-				if (
-					this.dex.gen === 9 && !checkUnban('+ability:embodyaspect') && !this.ruleTable.has('terastalclause') &&
-					['Ogerpon', 'Ogerpon-Wellspring', 'Ogerpon-Hearthflame', 'Ogerpon-Cornerstone'].includes(set.species)
-				) {
-					boostSources.push('Embody Aspect');
+				if (this.dex.gen === 9 && !this.ruleTable.has('terastalclause')) {
+					if (set.species === 'Ogerpon' && !checkUnban('+ability:embodyaspectteal')) {
+						boostSources.push('Embody Aspect (Teal)');
+					} else if (set.species === 'Ogerpon-Wellspring' && !checkUnban('+ability:embodyaspectwellspring')) {
+						boostSources.push('Embody Aspect (Wellspring)');
+					} else if (set.species === 'Ogerpon-Hearthflame' && !checkUnban('+ability:embodyaspecthearthflame')) {
+						boostSources.push('Embody Aspect (Hearthflame)');
+					} else if (set.species === 'Ogerpon-Cornerstone' && !checkUnban('+ability:embodyaspectcornerstone')) {
+						boostSources.push('Embody Aspect (Cornerstone)');
+					}
 				}
 
 				if (boostSources.length) {
