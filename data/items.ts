@@ -279,6 +279,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Ground",
 		},
+		clauseData: {
+			canStatBoost: {
+				spd: true,
+			},
+		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
 				pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
@@ -2181,6 +2186,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		naturalGift: {
 			basePower: 100,
 			type: "Ice",
+		},
+		clauseData: {
+			canStatBoost: {
+				def: true,
+			},
 		},
 		onUpdate(pokemon) {
 			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&

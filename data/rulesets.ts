@@ -1077,10 +1077,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			const boostPassers: string[] = [];
 
 			// Exceptions can be specified by unbanning 'Baton Pass + exception'
-			const bprule = this.dex.formats.validateRule('+batonpass', format).slice(1) as string;
+			const bprule = this.dex.formats.validateRule('+move:batonpass', format).slice(1) as string;
 			const checkUnban = (test: string) => {
 				// console.log(`checking ${test}`);
-				const rule = this.dex.formats.validateRule(`+${test}`, format).slice(1) as string;
+				const rule = this.dex.formats.validateRule(test, format).slice(1) as string;
 				const unban = this.ruleTable.complexBans.some(x => x[2] > 0 && x[3].includes(rule) && x[3].includes(bprule));
 				// console.log(unban);
 				return unban;
@@ -1100,34 +1100,34 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				const item = this.dex.items.get(set.item);
 				const ability = this.dex.abilities.get(set.ability);
 
-				if (!moves.some(x => x.name === 'Baton Pass')) continue;
+				if (!moves.some(x => x.id === 'batonpass')) continue;
 				const boostSources: string[] = [];
 
 				// moves (including cfz and hacked max)
 				for (const move of moves) {
-					if (move.exists && !checkUnban(move.name) && checkBoosts(move, set)) {
+					if (move.exists && !checkUnban(`+move:${move.id}`) && checkBoosts(move, set)) {
 						boostSources.push(move.name);
 					}
 				}
 
 				// item
-				if (item.exists && !checkUnban(item.name) && checkBoosts(item, set)) {
+				if (item.exists && !checkUnban(`+item:${item.id}`) && checkBoosts(item, set)) {
 					boostSources.push(item.name);
 				}
 
 				// ability
-				if (ability.exists && !checkUnban(ability.name) && checkBoosts(ability, set)) {
+				if (ability.exists && !checkUnban(`+ability:${ability.id}`) && checkBoosts(ability, set)) {
 					boostSources.push(ability.name);
 				}
 
 				// ability of mega
-				if (item.exists && !checkUnban(item.name) && item.megaStone && set.species === item.megaEvolves) {
+				if (item.exists && !checkUnban(`+item:${item.id}`) && item.megaStone && set.species === item.megaEvolves) {
 					const mega = this.dex.species.get(item.megaStone);
 					const megaAbilities = Object.values(mega.abilities).map(x => this.dex.abilities.get(x));
 					// If the set and its mega have the same ability, skip this check.
 					if (!megaAbilities.some(x => x.name === ability.name)) {
 						for (const megaAbility of megaAbilities) {
-							if (!checkUnban(megaAbility.name) && checkBoosts(megaAbility, set)) {
+							if (!checkUnban(`+ability:${megaAbility.id}`) && checkBoosts(megaAbility, set)) {
 								boostSources.push(`${megaAbility.name} after mega evolution`);
 							}
 						}
@@ -1135,7 +1135,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 
 				// z moves
-				if (item.exists && !checkUnban(item.name) && item.zMove) {
+				if (item.exists && !checkUnban(`+item:${item.id}`) && item.zMove) {
 					if (item.zMoveType && moves.some(x => x.zMove?.boost && x.type === item.zMoveType)) {
 						// status
 						boostSources.push(item.name);
@@ -1157,7 +1157,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 
 				// Ogerpon is hardcoded to transform and receive Embody Aspect upon tera.
 				if (
-					this.dex.gen === 9 && !checkUnban('Embody Aspect') && !this.ruleTable.has('terastalclause') &&
+					this.dex.gen === 9 && !checkUnban('+ability:embodyaspect') && !this.ruleTable.has('terastalclause') &&
 					['Ogerpon', 'Ogerpon-Wellspring', 'Ogerpon-Hearthflame', 'Ogerpon-Cornerstone'].includes(set.species)
 				) {
 					boostSources.push('Embody Aspect');

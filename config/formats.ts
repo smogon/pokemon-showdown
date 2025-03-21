@@ -3148,18 +3148,21 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen5',
 		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', 'Swagger Clause', 'Gems Clause', 'Baton Pass Stat Clause'],
 		banlist: ['Uber', 'Arena Trap', 'Drizzle ++ Swift Swim', 'Drought ++ Chlorophyll', 'Sand Rush', 'Shadow Tag', 'King\'s Rock', 'Razor Fang', 'Soul Dew', 'Acupressure', 'Assist'],
+		unbanlist: ['Baton Pass + Psych Up', 'Baton Pass + Heart Swap', 'Baton Pass + Charge', 'Baton Pass + Defense Curl', 'Baton Pass + Guard Swap', 'Baton Pass + Power Swap', 'Baton Pass + Lansat Berry', 'Baton Pass + Contrary'],
 	},
 	{
 		name: "[Gen 4] OU",
 		mod: 'gen4',
 		ruleset: ['Standard', 'Evasion Abilities Clause', 'Baton Pass Stat Trap Clause', 'Freeze Clause Mod'],
-		banlist: ['AG', 'Uber', 'Arena Trap', 'Quick Claw', 'Soul Dew', 'Swagger'],
+		banlist: ['AG', 'Uber', 'Arena Trap', 'Quick Claw', 'Soul Dew', 'Swagger', 'Baton Pass + Power Trick'],
+		unbanlist: ['Baton Pass + Focus Energy', 'Baton Pass + Power Swap', 'Baton Pass + Lansat Berry', 'Baton Pass + Anger Point', 'Baton Pass + Download', 'Baton Pass + Motor Drive', 'Baton Pass + Steadfast'],
 	},
 	{
 		name: "[Gen 3] OU",
 		mod: 'gen3',
 		ruleset: ['Standard', 'One Boost Passer Clause', 'Freeze Clause Mod'],
 		banlist: ['Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
+		unbanlist: ['Baton Pass + Ancient Power', 'Baton Pass + Psych Up', 'Baton Pass + Meteor Mash', 'Baton Pass + Skull Bash', 'Baton Pass + Rage', 'Baton Pass + Silver Wind', 'Baton Pass + Focus Energy', 'Baton Pass + Metal Claw', 'Baton Pass + Steel Wing', 'Baton Pass + Lansat Berry'],
 	},
 	{
 		name: "[Gen 2] OU",
@@ -4185,7 +4188,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen3',
 		searchShow: false,
 		ruleset: ['Standard', 'Baton Pass Stat Clause'],
-		banlist: ['Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL'],
+		banlist: ['Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'Baton Pass + Stockpile', 'Baton Pass + Lightning Rod'],
+		unbanlist: ['Baton Pass + Assist', 'Baton Pass + Psych Up', 'Baton Pass + Defense Curl', 'Baton Pass + Lansat Berry'],
 	},
 	{
 		name: "[Gen 3] LC",
@@ -4214,7 +4218,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen3',
 		searchShow: false,
 		ruleset: ['Standard', 'Sleep Moves Clause', 'Baton Pass Stat Trap Clause', 'Swagger Clause'],
-		banlist: ['Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'Baton Pass + Substitute'],
+		banlist: ['Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'RU', 'NUBL', 'NU', 'PUBL', 'PU', 'ZUBL', 'Baton Pass + Substitute', 'Baton Pass + Charge', 'Baton Pass + Stockpile'],
+		unbanlist: ['Baton Pass + Focus Energy', 'Baton Pass + Lansat Berry'],
 	},
 	{
 		name: "[Gen 3] Custom Game",

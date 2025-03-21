@@ -213,4 +213,169 @@ describe('Team Validator', () => {
 		];
 		assert.legalTeam(team, 'gen8ou');
 	});
+
+	describe('Limit Stat Pass', () => {
+		it('should enforce the limits correctly', () => {});
+
+		it('should not change validation for existing metagames with the Baton Pass Stat Clause', () => {
+			const oldBatonPassStatClause = [
+				'absorbbulb', 'acidarmor', 'acupressure', 'agility', 'amnesia', 'ancientpower', 'angerpoint', 'apicotberry', 'autotomize',
+				'barrier', 'bellydrum', 'bulkup', 'calmmind', 'cellbattery', 'chargebeam', 'coil', 'cosmicpower', 'cottonguard', 'curse',
+				'defendorder', 'defiant', 'download', 'dragondance', 'fierydance', 'flamecharge', 'focusenergy', 'ganlonberry', 'growth',
+				'harden', 'honeclaws', 'howl', 'irondefense', 'justified', 'liechiberry', 'lightningrod', 'meditate', 'metalclaw',
+				'meteormash', 'motordrive', 'moxie', 'nastyplot', 'ominouswind', 'petayaberry', 'quiverdance', 'rage', 'rattled',
+				'rockpolish', 'salacberry', 'sapsipper', 'sharpen', 'shellsmash', 'shiftgear', 'silverwind', 'skullbash', 'speedboost',
+				'starfberry', 'steadfast', 'steelwing', 'stockpile', 'stormdrain', 'swordsdance', 'tailglow', 'weakarmor', 'withdraw',
+				'workup',
+			];
+
+			const gen3 = Dex.mod('gen3');
+			const gen5 = Dex.mod('gen5');
+
+			const team = [{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass'], evs: { hp: 1 } }];
+
+			const runAssert = (clause, effect, format) => {
+				console.log(`Testing ${effect} in ${format} ...`);
+				if (clause.includes(effect)) assert.false.legalTeam(team, format);
+				else assert.legalTeam(team, format);
+			};
+
+			for (const { id } of gen3.moves.all().filter(x => !x.isNonstandard)) {
+				if (['doubleteam', 'fissure', 'guillotine', 'horndrill', 'minimize', 'sheercold'].includes(id)) continue; // banned elsewhere
+				team[0].moves.push(id);
+				runAssert(oldBatonPassStatClause, id, 'gen3pu@@@!obtainable');
+				team[0].moves.pop();
+			}
+			for (const { id } of gen3.items.all().filter(x => !x.isNonstandard)) {
+				if (['brightpowder', 'laxincense'].includes(id)) continue; // banned elsewhere
+				team[0].item = id;
+				runAssert(oldBatonPassStatClause, id, 'gen3pu@@@!obtainable');
+				team[0].item = '';
+			}
+			for (const { id } of gen3.abilities.all().filter(x => !x.isNonstandard)) {
+				team[0].ability = id;
+				runAssert(oldBatonPassStatClause, id, 'gen3pu@@@!obtainable');
+				team[0].ability = 'noability';
+			}
+
+			for(const { id } of gen5.moves.all().filter(x => !x.isNonstandard)) {
+				if (['assist', 'darkvoid', 'doubleteam', 'fissure', 'grasswhistle', 'guillotine', 'horndrill', 'hypnosis', 'lovelykiss', 'minimize', 'sheercold', 'sing', 'sleeppowder', 'spore', 'swagger', 'yawn'].includes(id)) continue; // banned elsewhere
+				team[0].moves.push(id);
+				runAssert(oldBatonPassStatClause, id, 'gen5ou@@@!obtainable');
+				team[0].moves.pop();
+			}
+			for(const { id } of gen5.items.all().filter(x => !x.isNonstandard)) {
+				if (['brightpowder', 'laxincense', 'buggem', 'darkgem', 'dragongem', 'electricgem', 'fairygem', 'fightinggem', 'firegem', 'flyinggem', 'ghostgem', 'grassgem', 'groundgem', 'icegem', 'normalgem', 'poisongem', 'psychicgem', 'rockgem', 'steelgem', 'watergem', 'souldew', 'razorfang', 'kingsrock'].includes(id)) continue; // banned elsewhere
+				team[0].item = id;
+				runAssert(oldBatonPassStatClause, id, 'gen5ou@@@!obtainable');
+				team[0].item = '';
+			}
+			for(const { id } of gen5.abilities.all().filter(x => !x.isNonstandard)) {
+				if (['arenatrap', 'moody', 'sandrush', 'sandveil', 'shadowtag', 'snowcloak'].includes(id)) continue; // banned elsewhere
+				team[0].ability = id;
+				runAssert(oldBatonPassStatClause, id, 'gen5ou@@@!obtainable');
+				team[0].ability = 'noability';
+			}
+		});
+
+		it('should not change validation for existing metagames with the Baton Pass Stat Trap Clause', () => {
+			const oldBatonPassStatTrapClause = [
+				'acidarmor', 'acupressure', 'agility', 'amnesia', 'ancientpower', 'assist', 'barrier', 'bellydrum', 'block', 'bulkup',
+				'calmmind', 'charge', 'chargebeam', 'cosmicpower', 'curse', 'defendorder', 'defensecurl', 'dragondance', 'growth',
+				'guardswap', 'harden', 'heartswap', 'howl', 'irondefense', 'ingrain', 'meanlook', 'meteormash', 'meditate', 'metalclaw',
+				'nastyplot', 'ominouswind', 'powertrick', 'psychup', 'rage', 'rockpolish', 'sharpen', 'silverwind', 'skullbash',
+				'spiderweb', 'steelwing', 'stockpile', 'swordsdance', 'tailglow', 'withdraw', 'speedboost', 'apicotberry', 'ganlonberry',
+				'liechiberry', 'petayaberry', 'salacberry', 'starfberry', 'keeberry', 'marangaberry', 'weaknesspolicy', 'blunderpolicy',
+				'luminiscentmoss', 'snowball', 'throatspray', 'mirrorherb', 'adrenalineorb',
+			];
+
+			const gen3 = Dex.mod('gen3');
+			const gen4 = Dex.mod('gen4');
+
+			const team = [{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass'], evs: { hp: 1 } }];
+
+			const runAssert = (clause, effect, format) => {
+				console.log(`Testing ${effect} in ${format} ...`);
+				if (clause.includes(effect)) assert.false.legalTeam(team, format);
+				else assert.legalTeam(team, format);
+			};
+
+			for(const { id } of gen4.moves.all().filter(x => !x.isNonstandard)) {
+				if (['doubleteam', 'fissure', 'guillotine', 'horndrill', 'minimize', 'sheercold', 'swagger'].includes(id)) continue; // banned elsewhere
+				team[0].moves.push(id);
+				runAssert(oldBatonPassStatTrapClause, id, 'gen4ou@@@!obtainable');
+				team[0].moves.pop();
+			}
+			for(const { id } of gen4.items.all().filter(x => !x.isNonstandard)) {
+				if (['brightpowder', 'laxincense', 'quickclaw', 'souldew'].includes(id)) continue; // banned elsewhere
+				team[0].item = id;
+				runAssert(oldBatonPassStatTrapClause, id, 'gen4ou@@@!obtainable');
+				team[0].item = '';
+			}
+			for(const { id } of gen4.abilities.all().filter(x => !x.isNonstandard)) {
+				if (['arenatrap', 'sandveil', 'snowcloak'].includes(id)) continue; // banned elsewhere
+				team[0].ability = id;
+				runAssert(oldBatonPassStatTrapClause, id, 'gen4ou@@@!obtainable');
+				team[0].ability = 'noability';
+			}
+
+			for(const { id } of gen3.moves.all().filter(x => !x.isNonstandard)) {
+				if (['doubleteam', 'fissure', 'guillotine', 'horndrill', 'minimize', 'sheercold', 'swagger', 'darkvoid', 'grasswhistle', 'hypnosis', 'lovelykiss', 'sing', 'sleeppowder', 'spore', 'yawn', 'substitute'].includes(id)) continue; // banned elsewhere
+				team[0].moves.push(id);
+				runAssert(oldBatonPassStatTrapClause, id, 'gen3zu@@@!obtainable');
+				team[0].moves.pop();
+			}
+			for (const { id } of gen3.items.all().filter(x => !x.isNonstandard)) {
+				if (['brightpowder', 'laxincense'].includes(id)) continue; // banned elsewhere
+				team[0].item = id;
+				runAssert(oldBatonPassStatTrapClause, id, 'gen3zu@@@!obtainable');
+				team[0].item = '';
+			}
+			for (const { id } of gen3.abilities.all().filter(x => !x.isNonstandard)) {
+				team[0].ability = id;
+				runAssert(oldBatonPassStatTrapClause, id, 'gen3zu@@@!obtainable');
+				team[0].ability = 'noability';
+			}
+		});
+
+		it('should not change validation for existing metagames with the One Boost Passer Clause', () => {
+			const oldOneBoostPasserClause = [
+				'acidarmor', 'agility', 'amnesia', 'apicotberry', 'barrier', 'bellydrum', 'bulkup', 'calmmind', 'cosmicpower', 'curse',
+				'defensecurl', 'dragondance', 'ganlonberry', 'growth', 'harden', 'howl', 'irondefense', 'liechiberry', 'meditate',
+				'petayaberry', 'salacberry', 'sharpen', 'speedboost', 'starfberry', 'swordsdance', 'tailglow', 'withdraw',
+			];
+
+			const gen3 = Dex.mod('gen3');
+
+			const team = [
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass'], evs: { hp: 1 } },
+				{ species: 'pidgey', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance'], evs: { hp: 1 } },
+			];
+
+			const runAssert = (clause, effect, format) => {
+				console.log(`Testing ${effect} in ${format} ...`);
+				if (clause.includes(effect)) assert.false.legalTeam(team, format);
+				else assert.legalTeam(team, format);
+			};
+
+			for(const { id } of gen3.moves.all().filter(x => !x.isNonstandard)) {
+				if (['assist', 'doubleteam', 'fissure', 'guillotine', 'horndrill', 'minimize', 'sheercold', 'swagger', 'block', 'meanlook', 'spiderweb'].includes(id)) continue; // banned elsewhere
+				team[0].moves.push(id);
+				runAssert(oldOneBoostPasserClause, id, 'gen3ou@@@!obtainable');
+				team[0].moves.pop();
+			}
+			for (const { id } of gen3.items.all().filter(x => !x.isNonstandard)) {
+				if (['brightpowder', 'laxincense'].includes(id)) continue; // banned elsewhere
+				team[0].item = id;
+				runAssert(oldOneBoostPasserClause, id, 'gen3ou@@@!obtainable');
+				team[0].item = '';
+			}
+			for (const { id } of gen3.abilities.all().filter(x => !x.isNonstandard)) {
+				if (['sandveil', 'soundproof'].includes(id)) continue; // banned elsewhere
+				team[0].ability = id;
+				runAssert(oldOneBoostPasserClause, id, 'gen3ou@@@!obtainable');
+				team[0].ability = 'noability';
+			}
+		});
+	});
 });
