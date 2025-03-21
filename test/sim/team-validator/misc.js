@@ -289,6 +289,22 @@ describe('Team Validator', () => {
 			assert.false.legalTeam(team, format);
 		});
 
+		it('should detect potential stat boosts from dynamax', () => {
+			let format = 'gen8customgame@@@batonpassstatclause';
+
+			let team = [{ species: 'hawlucha', ability: 'moldbreaker', item: '', moves: ['batonpass', 'roost'], evs: { hp: 1 } }];
+			assert.legalTeam(team, format);
+
+			team = [{ species: 'hawlucha', ability: 'moldbreaker', item: '', moves: ['batonpass', 'roost', 'acrobatics'], evs: { hp: 1 } }];
+			assert.false.legalTeam(team, format);
+
+			format = 'gen8customgame@@@batonpassstatclause,dynamaxclause';
+			assert.legalTeam(team, format);
+
+			format = 'gen9customgame@@@batonpassstatclause';
+			assert.legalTeam(team, format);
+		});
+
 		it('should detect if Ogerpon can stat pass, and allow making an exception for it', () => {
 			const team = [{ species: 'ogerponhearthflame', ability: 'moldbreaker', item: 'hearthflamemask', moves: ['batonpass'], evs: { hp: 1 } }];
 
