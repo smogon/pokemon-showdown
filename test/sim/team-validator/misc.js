@@ -305,6 +305,16 @@ describe('Team Validator', () => {
 			assert.legalTeam(team, format);
 		});
 
+		it('should take into account things that changed across generations', () => {
+			const team = [{ species: 'excadrill', ability: 'noability', item: '', moves: ['batonpass', 'rapidspin'], evs: { hp: 1 } }];
+
+			let format = 'gen7customgame@@@batonpassstatclause';
+			assert.legalTeam(team, format);
+
+			format = 'gen8customgame@@@batonpassstatclause';
+			assert.false.legalTeam(team, format);
+		});
+
 		it('should detect if Ogerpon can stat pass, and allow making an exception for it', () => {
 			const team = [{ species: 'ogerponhearthflame', ability: 'moldbreaker', item: 'hearthflamemask', moves: ['batonpass'], evs: { hp: 1 } }];
 
