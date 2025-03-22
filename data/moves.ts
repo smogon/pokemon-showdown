@@ -16552,7 +16552,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			canStatBoost: {
 				atk: true,
 				spa: true,
-			}
+			},
 		},
 		flags: { distance: 1, nonsky: 1, metronome: 1 },
 		onHitField(target, source) {

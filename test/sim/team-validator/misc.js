@@ -342,7 +342,7 @@ describe('Team Validator', () => {
 				'minimize', 'sheercold', 'sing', 'sleeppowder', 'spore', 'swagger', 'yawn', 'brightpowder', 'laxincense', 'buggem',
 				'darkgem', 'dragongem', 'electricgem', 'fairygem', 'fightinggem', 'firegem', 'flyinggem', 'ghostgem', 'grassgem',
 				'groundgem', 'icegem', 'normalgem', 'poisongem', 'psychicgem', 'rockgem', 'steelgem', 'watergem', 'souldew', 'razorfang',
-				'kingsrock', 'arenatrap', 'moody', 'sandrush', 'sandveil', 'shadowtag', 'snowcloak'
+				'kingsrock', 'arenatrap', 'moody', 'sandrush', 'sandveil', 'shadowtag', 'snowcloak',
 			];
 			const format = 'gen5ou@@@!obtainable';
 			const team = [{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass'], evs: { hp: 1 } }];
