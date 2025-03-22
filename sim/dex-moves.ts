@@ -275,6 +275,8 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	isConfusionSelfHit?: boolean;
 	stallingMove?: boolean;
 	baseMove?: ID;
+
+	clauseData?: ClauseData;
 }
 
 export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {
