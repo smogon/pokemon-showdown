@@ -25,7 +25,7 @@ interface DexOrGroup {
 	types: { [k: string]: boolean };
 	resists: { [k: string]: boolean };
 	weak: { [k: string]: boolean };
-	stats: { [k: string]: { [k in Direction]: number } };
+	stats: { [k: string]: { [k in Direction]: { [s: string]: number | boolean } } };
 	skip: boolean;
 }
 
@@ -1162,31 +1162,48 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					inequalityString = target.charAt(inequality);
 				}
 				const targetParts = target.replace(/\s/g, '').split(inequalityString);
-				let num;
-				let stat;
+				let compareType: string;
+				let statKey: string;
+				let value: number | boolean;
 				const directions: Direction[] = [];
 				if (!isNaN(parseFloat(targetParts[0]))) {
 					// e.g. 100 < spe
-					num = parseFloat(targetParts[0]);
-					stat = targetParts[1];
+					value = parseFloat(targetParts[0]);
+					statKey = targetParts[1];
+					compareType = 'numeric';
 					if (inequalityString.startsWith('>')) directions.push('less');
 					if (inequalityString.startsWith('<')) directions.push('greater');
 				} else if (!isNaN(parseFloat(targetParts[1]))) {
 					// e.g. spe > 100
-					num = parseFloat(targetParts[1]);
-					stat = targetParts[0];
+					value = parseFloat(targetParts[1]);
+					statKey = targetParts[0];
+					compareType = 'numeric';
 					if (inequalityString.startsWith('<')) directions.push('less');
 					if (inequalityString.startsWith('>')) directions.push('greater');
 				} else {
-					return { error: `No value given to compare with '${target}'.` };
+					// e.g. atk = spatk
+					value = true;
+					statKey = targetParts[0];
+					compareType = targetParts[1];
+					if (inequalityString.startsWith('<')) directions.push('less');
+					if (inequalityString.startsWith('>')) directions.push('greater');
+					if (statKey in allStatAliases) statKey = allStatAliases[statKey];
+					if (compareType in allStatAliases) compareType = allStatAliases[compareType];
+					if (!allStats.slice(0, 6).includes(statKey) || !allStats.slice(0, 6).includes(compareType))
+						return { error: `'${target}' did not contain a valid stat to compare with another stat.` };
 				}
 				if (inequalityString.endsWith('=')) directions.push('equal');
-				if (stat in allStatAliases) stat = allStatAliases[stat];
-				if (!allStats.includes(stat)) return { error: `'${target}' did not contain a valid stat.` };
-				if (!orGroup.stats[stat]) orGroup.stats[stat] = Object.create(null);
+				if (statKey in allStatAliases) statKey = allStatAliases[statKey];
+				if (!allStats.includes(statKey)) return { error: `'${target}' contained an invalid stat.` };
+				if (typeof value === 'number' && value <= 0) return { error: `Specify a positive value for numeric comparison.` };
+				if (!orGroup.stats[statKey]) orGroup.stats[statKey] = Object.create(null);
+				// Prevents numeric searches from being overwritten and prevent duplicate searches of other types.
 				for (const direction of directions) {
-					if (orGroup.stats[stat][direction]) return { error: `Invalid stat range for ${stat}.` };
-					orGroup.stats[stat][direction] = num;
+					if (!orGroup.stats[statKey][direction])
+						orGroup.stats[statKey][direction] = Object.create(null);
+					else if (orGroup.stats[statKey][direction][compareType])
+						return { error: `Duplicate stat inequality and type for ${statKey}.` };
+					orGroup.stats[statKey][direction][compareType] = value;
 				}
 				continue;
 			}
@@ -1395,37 +1412,40 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			if (matched) continue;
 
-			for (const stat in alts.stats) {
+			function retrieveStat(species: Species, stat: string) {
 				let monStat = 0;
 				if (stat === 'bst') {
-					monStat = dex[mon].bst;
+					monStat = species.bst;
 				} else if (stat === 'weight') {
-					monStat = dex[mon].weighthg / 10;
+					monStat = species.weighthg / 10;
 				} else if (stat === 'height') {
-					monStat = dex[mon].heightm;
+					monStat = species.heightm;
 				} else if (stat === 'gen') {
-					monStat = dex[mon].gen;
+					monStat = species.gen;
 				} else {
-					monStat = dex[mon].baseStats[stat as StatID];
+					monStat = species.baseStats[stat as StatID];
 				}
-				if (typeof alts.stats[stat].less === 'number') {
-					if (monStat < alts.stats[stat].less) {
-						matched = true;
-						break;
+				return monStat;
+			}
+
+			for (const stat in alts.stats) {
+				const monStat = retrieveStat(dex[mon], stat);
+				for (const direction in alts.stats[stat]) {
+					for (const comparisonStat in alts.stats[stat][direction as Direction]) {
+						const checkStat = alts.stats[stat][direction as Direction][comparisonStat];
+						if (!checkStat) continue;
+						const compareTo = typeof checkStat === 'number' ?
+							checkStat : retrieveStat(dex[mon], comparisonStat);
+						if ((direction === 'less' && monStat < compareTo) ||
+							(direction === 'greater' && monStat > compareTo) ||
+							(direction === 'equal' && monStat === compareTo)) {
+							matched = true;
+							break;
+						}
 					}
+					if (matched) break;
 				}
-				if (typeof alts.stats[stat].greater === 'number') {
-					if (monStat > alts.stats[stat].greater) {
-						matched = true;
-						break;
-					}
-				}
-				if (typeof alts.stats[stat].equal === 'number') {
-					if (monStat === alts.stats[stat].equal) {
-						matched = true;
-						break;
-					}
-				}
+				if (matched) break;
 			}
 			if (matched) continue;
 
