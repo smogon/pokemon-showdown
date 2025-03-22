@@ -10,6 +10,7 @@
  */
 import { Utils } from '../../lib';
 import { type RoomSection, RoomSections } from './room-settings';
+import { ROOMBAN_DURATION, LOCK_DURATION } from '../../server/punishments';
 
 /* eslint no-else-return: "error" */
 
@@ -788,17 +789,19 @@ export const commands: Chat.ChatCommands = {
 			Monitor.log(`[CrisisMonitor] Trusted user ${targetUser.name} ${(targetUser.trusted !== targetUser.id ? ` (${targetUser.trusted})` : ``)} was roombanned from ${room.roomid} by ${user.name}, and should probably be demoted.`);
 		}
 
+		const durationMsg = week ? 'a week' : Chat.toDurationString(ROOMBAN_DURATION);
+
 		if (targetUser.id in room.users || user.can('lock')) {
 			targetUser.popup(
 				`|modal||html|<p>${Utils.escapeHTML(user.name)} has banned you from the room ${room.roomid} ` +
-				`${(room.subRooms ? ` and its subrooms` : ``)}${week ? ' for a week' : ''}.` +
+				`${(room.subRooms ? ` and its subrooms` : ``)} for ${durationMsg}.` +
 				`</p>${(publicReason ? `<p>Reason: ${Utils.escapeHTML(publicReason)}</p>` : ``)}` +
 				`<p>To appeal the ban, PM the staff member that banned you${room.persist ? ` or a room owner. ` +
 				`</p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`}`
 			);
 		}
 
-		this.addModAction(`${name} was banned${week ? ' for a week' : ''} from ${room.title} by ${user.name}.${publicReason ? ` (${publicReason})` : ``}`);
+		this.addModAction(`${name} was banned for ${durationMsg} from ${room.title} by ${user.name}.${publicReason ? ` (${publicReason})` : ``}`);
 
 		const time = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : null;
 		const affected = Punishments.roomBan(room, targetUser, time, null, privateReason);
@@ -928,8 +931,8 @@ export const commands: Chat.ChatCommands = {
 			(force ? `FORCE` : ``) + (week ? "WEEKLOCK" : (month ? "MONTHLOCK" : "LOCK")), targetUser || userid, privateReason
 		);
 
-		const durationMsg = week ? ' for a week' : (month ? ' for a month' : '');
-		this.addGlobalModAction(`${name} was locked from talking${durationMsg} by ${user.name}.` + (publicReason ? ` (${publicReason})` : ""));
+		const durationMsg = week ? 'a week' : (month ? 'a month' : Chat.toDurationString(LOCK_DURATION));
+		this.addGlobalModAction(`${name} was locked from talking for ${durationMsg} by ${user.name}.` + (publicReason ? ` (${publicReason})` : ""));
 
 		if (room && !room.settings.isHelp) {
 			room.hideText([
@@ -949,7 +952,7 @@ export const commands: Chat.ChatCommands = {
 		}
 
 		if (targetUser) {
-			let message = `|popup||html|${user.name} has locked you from talking in chats, battles, and PMing regular users${durationMsg}`;
+			let message = `|popup||html|${user.name} has locked you from talking in chats, battles, and PMing regular users for ${durationMsg}`;
 			if (publicReason) message += `\n\nReason: ${publicReason}`;
 
 			let appeal = '';
