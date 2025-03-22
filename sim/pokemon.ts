@@ -45,6 +45,7 @@ export const RESTORATIVE_BERRIES = new Set([
 ] as ID[]);
 
 export class Pokemon {
+	readonly id: string;
 	readonly side: Side;
 	readonly battle: Battle;
 
@@ -323,6 +324,7 @@ export class Pokemon {
 		}
 		this.speciesState = this.battle.initEffectState({ id: this.species.id });
 
+		this.id = set.id;
 		this.name = set.name.substr(0, 20);
 		this.fullname = `${this.side.id}: ${this.name}`;
 
@@ -341,7 +343,47 @@ export class Pokemon {
 		if (!this.set.moves?.length) {
 			throw new Error(`Set ${this.name} has no moves`);
 		}
-		for (const moveid of this.set.moves) {
+
+		let speciesName = this.baseSpecies.name.replace(/[^A-Za-z0-9]/g, "").toLowerCase();
+		let learnset = this.battle.dex.dataCache?.Learnsets[speciesName].learnset;
+		let knownMoves = new Set<string>();
+		if (learnset != undefined) {
+			Object.keys(learnset).forEach(move => knownMoves.add(move));
+		}
+		if (this.baseSpecies.changesFrom != undefined) {
+			let changesFromSpeciesName = this.baseSpecies.changesFrom.replace(/[^A-Za-z0-9]/g, "").toLowerCase();
+			let changesFromLearnset = this.battle.dex.dataCache?.Learnsets[changesFromSpeciesName].learnset;
+
+			if (changesFromLearnset != undefined) {
+				Object.keys(changesFromLearnset).forEach(move => knownMoves.add(move));
+				
+				let changesFromSpecies = this.battle.dex.species.get(changesFromSpeciesName);
+				let currSpecies = changesFromSpecies;
+				while (currSpecies.prevo) {
+					let prevo = this.battle.dex.species.get(currSpecies.prevo);
+					let prevoName = prevo.name.replace(/[^A-Za-z0-9]/g, "").toLowerCase();
+					let prevoLearnset = this.battle.dex.dataCache?.Learnsets[prevoName].learnset;
+					if (prevoLearnset != undefined) {
+						Object.keys(prevoLearnset).forEach(move => knownMoves.add(move));
+					}
+					currSpecies = prevo;
+				}
+			}
+		}
+		else {
+			let currSpecies = this.species;
+			while (currSpecies.prevo) {
+				let prevo = this.battle.dex.species.get(currSpecies.prevo);
+				let prevoName = prevo.name.replace(/[^A-Za-z0-9]/g, "").toLowerCase();
+				let prevoLearnset = this.battle.dex.dataCache?.Learnsets[prevoName].learnset;
+				if (prevoLearnset != undefined) {
+					Object.keys(prevoLearnset).forEach(move => knownMoves.add(move));
+				}
+				currSpecies = prevo;
+			}
+		}
+
+		for (const moveid of knownMoves) {
 			let move = this.battle.dex.moves.get(moveid);
 			if (!move.id) continue;
 			if (move.id === 'hiddenpower' && move.type !== 'Normal') {
@@ -511,7 +553,7 @@ export class Pokemon {
 	}
 
 	toString() {
-		const fullname = (this.illusion) ? this.illusion.fullname : this.fullname;
+		let fullname = (this.illusion) ? this.illusion.fullname : this.fullname;
 		return this.isActive ? this.getSlot() + fullname.slice(2) : fullname;
 	}
 
@@ -519,7 +561,7 @@ export class Pokemon {
 		let name = this.species.name;
 		if (['Greninja-Bond', 'Rockruff-Dusk'].includes(name)) name = this.species.baseSpecies;
 		if (!level) level = this.level;
-		return name + (level === 100 ? '' : `, L${level}`) +
+		return `${this.id}|` + name + (level === 100 ? '' : `, L${level}`) +
 			(this.gender === '' ? '' : `, ${this.gender}`) + (this.set.shiny ? ', shiny' : '');
 	}
 
@@ -925,6 +967,7 @@ export class Pokemon {
 		return (lockedMove === true) ? null : lockedMove;
 	}
 
+	
 	getMoves(lockedMove?: ID | null, restrictData?: boolean): {
 		move: string, id: ID, disabled?: string | boolean, disabledSource?: string,
 		target?: string, pp?: number, maxpp?: number,

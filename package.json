@@ -1,5 +1,5 @@
 {
-  "name": "pokemon-showdown",
+  "name": "urpg-battle-bot-calc",
   "description": "The server for the Pokémon Showdown battle simulator",
   "version": "0.11.10",
   "main": "dist/sim/index.js",

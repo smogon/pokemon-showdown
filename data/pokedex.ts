@@ -8708,7 +8708,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 0.4,
 		weightkg: 3.1,
 		color: "Blue",
-		tags: ["Mythical"],
 		eggGroups: ["Water 1", "Fairy"],
 	},
 	manaphy: {
@@ -13746,7 +13745,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 1.9,
 		weightkg: 120.5,
 		color: "Gray",
-		tags: ["Sub-Legendary"],
 		evos: ["Silvally"],
 		eggGroups: ["Undiscovered"],
 	},
@@ -13760,7 +13758,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 2.3,
 		weightkg: 100.5,
 		color: "Gray",
-		tags: ["Sub-Legendary"],
 		prevo: "Type: Null",
 		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],

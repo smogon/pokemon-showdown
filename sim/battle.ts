@@ -2062,7 +2062,7 @@ export class Battle {
 			if (targetDamage !== 0) target.hurtThisTurn = target.hp;
 			if (source && effect.effectType === 'Move') source.lastDamage = targetDamage;
 
-			const name = effect.fullname === 'tox' ? 'psn' : effect.fullname;
+			let name = effect.fullname === 'tox' ? 'psn' : effect.fullname;
 			switch (effect.id) {
 			case 'partiallytrapped':
 				this.add('-damage', target, target.getHealth, '[from] ' + this.effectState.sourceEffect.fullname, '[partiallytrapped]');
@@ -2077,6 +2077,9 @@ export class Battle {
 				if (effect.effectType === 'Move' || !name) {
 					this.add('-damage', target, target.getHealth);
 				} else if (source && (source !== target || effect.effectType === 'Ability')) {
+					if (name == "Leech Seed") {
+						name = "move: Leech Seed";
+					}
 					this.add('-damage', target, target.getHealth, `[from] ${name}`, `[of] ${source}`);
 				} else {
 					this.add('-damage', target, target.getHealth, `[from] ${name}`);
@@ -3150,6 +3153,7 @@ export class Battle {
 			const team = side.pokemon.map(pokemon => {
 				const set = pokemon.set;
 				const newSet: PokemonSet = {
+					id: '',
 					name: '',
 					species: set.species,
 					item: set.item,

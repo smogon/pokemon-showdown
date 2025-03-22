@@ -15420,12 +15420,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				}
 			},
 			onSideStart(side) {
-				this.add('-sidestart', side, 'Reflect');
+				this.add('-sidestart', side, 'move: Reflect');
 			},
 			onSideResidualOrder: 26,
 			onSideResidualSubOrder: 1,
 			onSideEnd(side) {
-				this.add('-sideend', side, 'Reflect');
+				this.add('-sideend', side, 'move: Reflect');
 			},
 		},
 		secondary: null,

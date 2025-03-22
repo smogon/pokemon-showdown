@@ -11,6 +11,8 @@ import { Dex, toID } from './dex';
 import type { PRNG, PRNGSeed } from './prng';
 
 export interface PokemonSet {
+	id: string;
+	
 	/**
 	 * Nickname. Should be identical to its base species if not specified
 	 * by the player, e.g. "Minior".
@@ -225,6 +227,12 @@ export const Teams = new class Teams {
 		for (let count = 0; count < 24; count++) {
 			const set: PokemonSet = {} as PokemonSet;
 			team.push(set);
+
+			// name
+			j = buf.indexOf('|', i);
+			if (j < 0) return null;
+			set.id = buf.substring(i, j);
+			i = j + 1;
 
 			// name
 			j = buf.indexOf('|', i);
@@ -600,7 +608,7 @@ export const Teams = new class Teams {
 				// team backup format; ignore
 			} else if (!curSet) {
 				curSet = {
-					name: '', species: '', item: '', ability: '', gender: '',
+					id: '', name: '', species: '', item: '', ability: '', gender: '',
 					nature: '',
 					evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
 					ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
