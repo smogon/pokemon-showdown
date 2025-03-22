@@ -331,6 +331,23 @@ describe('Team Validator', () => {
 			assert.legalTeam(team, format);
 		});
 
+		it('should refuse to work in non-singles formats', () => {
+			const team = [
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['tackle'], evs: { hp: 1 } },
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['tackle'], evs: { hp: 1 } },
+				{ species: 'rattata', ability: 'noability', item: '', moves: ['tackle'], evs: { hp: 1 } },
+			];
+
+			let format = 'gen6customgame@@@batonpassstatclause';
+			assert.legalTeam(team, format);
+
+			format = 'gen6doublescustomgame@@@batonpassstatclause';
+			assert.false.legalTeam(team, format);
+
+			format = 'gen6triplescustomgame@@@batonpassstatclause';
+			assert.false.legalTeam(team, format);
+		});
+
 		const gen3 = Dex.mod('gen3');
 		const gen4 = Dex.mod('gen4');
 		const gen5 = Dex.mod('gen5');
