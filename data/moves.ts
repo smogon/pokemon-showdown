@@ -2052,6 +2052,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Bug Bite",
 		pp: 20,
 		priority: 0,
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+				def: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onHit(target, source) {
 			const item = target.getItem();
@@ -3071,6 +3080,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Copycat",
 		pp: 20,
 		priority: 0,
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		flags: { failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
 		onHit(pokemon) {
 			let move: Move | ActiveMove | null = this.lastMove;
@@ -3348,6 +3368,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Covet",
 		pp: 25,
 		priority: 0,
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		flags: { contact: 1, protect: 1, mirror: 1, failmefirst: 1, noassist: 1, failcopycat: 1 },
 		onAfterHit(target, source, move) {
 			if (source.item || source.volatiles['gem']) {
@@ -4116,6 +4147,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: {},
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		onHit(target, source, move) {
 			let success: boolean | null = false;
 			if (!target.getAbility().flags['failroleplay']) {
@@ -12548,6 +12590,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Metronome",
 		pp: 10,
 		priority: 0,
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		flags: { failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
 		onHit(pokemon) {
 			const moves = this.dex.moves.all().filter(move => (
@@ -12605,6 +12658,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Mimic",
 		pp: 10,
 		priority: 0,
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		flags: {
 			protect: 1, bypasssub: 1, allyanim: 1,
 			failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1,
@@ -14297,6 +14361,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Pluck",
 		pp: 20,
 		priority: 0,
+		clauseData: {
+			canStatBoost: {
+				atk: true,
+				def: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		flags: { contact: 1, protect: 1, mirror: 1, distance: 1, metronome: 1 },
 		onHit(target, source) {
 			const item = target.getItem();
@@ -16315,6 +16388,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Role Play",
 		pp: 10,
 		priority: 0,
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		flags: { bypasssub: 1, allyanim: 1, metronome: 1 },
 		onTryHit(target, source) {
 			if (target.ability === source.ability) return false;
@@ -16465,14 +16549,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		clauseData: {
-			canStatBoost(set) {
-				const id = this.toID(set.species);
-				const { types } = this.dex.species.get(id);
-				if (types.includes("Grass")) return {
-					atk: true,
-					spa: true,
-				};
-			},
+			canStatBoost: {
+				atk: true,
+				spa: true,
+			}
 		},
 		flags: { distance: 1, nonsky: 1, metronome: 1 },
 		onHitField(target, source) {
@@ -17643,6 +17723,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 1,
 		noPPBoosts: true,
 		priority: 0,
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		flags: {
 			bypasssub: 1, allyanim: 1, failencore: 1, nosleeptalk: 1, noassist: 1,
 			failcopycat: 1, failmimic: 1, failinstruct: 1, nosketch: 1,
@@ -17680,6 +17771,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Skill Swap",
 		pp: 10,
 		priority: 0,
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		flags: { protect: 1, mirror: 1, bypasssub: 1, allyanim: 1, metronome: 1 },
 		onTryHit(target, source) {
 			const targetAbility = target.getAbility();
@@ -18240,6 +18342,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Snatch",
 		pp: 10,
 		priority: 4,
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		flags: { bypasssub: 1, mustpressure: 1, noassist: 1, failcopycat: 1 },
 		volatileStatus: 'snatch',
 		condition: {
@@ -19874,6 +19987,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Switcheroo",
 		pp: 10,
 		priority: 0,
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		flags: { protect: 1, mirror: 1, allyanim: 1, noassist: 1, failcopycat: 1 },
 		onTryImmunity(target) {
 			return !target.hasAbility('stickyhold');
@@ -20573,6 +20697,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Thief",
 		pp: 25,
 		priority: 0,
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		flags: { contact: 1, protect: 1, mirror: 1, failmefirst: 1, noassist: 1, failcopycat: 1 },
 		onAfterHit(target, source, move) {
 			if (source.item || source.volatiles['gem']) {
@@ -21180,6 +21315,17 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Trick",
 		pp: 10,
 		priority: 0,
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		flags: { protect: 1, mirror: 1, allyanim: 1, noassist: 1, failcopycat: 1 },
 		onTryImmunity(target) {
 			return !target.hasAbility('stickyhold');

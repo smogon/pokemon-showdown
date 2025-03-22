@@ -1189,7 +1189,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'DryPass Clause',
 		desc: "Stops teams from bringing Pok&eacute;mon with Baton Pass + any form of trapping, residual recovery, boosting, or Substitute.",
 		ruleset: ['Limit Stat Pass = / 0'],
-		banlist: ['Baton Pass + Substitute', 'Baton Pass + Ingrain', 'Baton Pass + Aqua Ring', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web'],
+		banlist: ['Baton Pass + Substitute', 'Baton Pass + Ingrain', 'Baton Pass + Aqua Ring', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Baton Pass + Octolock', 'Baton Pass + Power Trick'],
 		onBegin() {
 			this.add('rule', 'DryPass Clause: No Baton Passer may have a way to gain beneficial passable properties');
 		},
@@ -1297,7 +1297,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Baton Pass Stat Trap Clause',
 		desc: "Stops teams from having a Pok&eacute;mon with Baton Pass that has any way to boost its stats or trap Pok&eacute;mon.",
 		ruleset: ['Limit Stat Pass = / 0'],
-		banlist: ['Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Baton Pass + Ingrain'],
+		banlist: ['Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Baton Pass + Octolock', 'Baton Pass + Ingrain'],
 		onBegin() {
 			this.add('rule', 'Baton Pass Stat Trap Clause: No Baton Passer may have a way to boost stats or trap Pok\u00e9mon');
 		},

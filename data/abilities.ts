@@ -2556,6 +2556,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 98,
 	},
 	magician: {
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (!move || !target || source.switchFlag === true) return;
 			if (target !== source && move.category !== 'Status') {
@@ -3322,6 +3333,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 253,
 	},
 	pickpocket: {
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		onAfterMoveSecondary(target, source, move) {
 			if (source && source !== target && move?.flags['contact']) {
 				if (target.item || target.switchFlag || target.forceSwitchFlag || source.switchFlag === true) {
@@ -3345,6 +3367,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 124,
 	},
 	pickup: {
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
@@ -5246,6 +5279,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 295,
 	},
 	trace: {
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		onStart(pokemon) {
 			this.effectState.seek = true;
 			// n.b. only affects Hackmons
@@ -5484,6 +5528,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 10,
 	},
 	wanderingspirit: {
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (source.getAbility().flags['failskillswap'] || target.volatiles['dynamax']) return;
 
