@@ -3113,12 +3113,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onModifyAccuracyPriority: -2,
-		onModifyAccuracy(accuracy) {
-			if (typeof accuracy !== 'number') return;
-			this.debug('lax incense - decreasing accuracy');
-			return this.chainModify([3686, 4096]);
-		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.chainModify(0.9);
+	},
 		num: 255,
 		gen: 3,
 
