@@ -318,7 +318,7 @@ export class BattleActions {
 				const dancersTarget = !targetOf1stDance.isAlly(dancer) && pokemon.isAlly(dancer) ?
 					targetOf1stDance : pokemon;
 				const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-				actions.push(this.battle.queue.resolveAction({
+				actions.push(...this.battle.queue.resolveAction({
 					choice: 'move',
 					order: 198,
 					rawSpeed: true,
@@ -328,7 +328,7 @@ export class BattleActions {
 					targetLoc: dancersTargetLoc,
 					sourceEffect: this.dex.abilities.get('dancer'),
 					externalMove: true,
-				})[0]);
+				}));
 			}
 			this.battle.speedSort(actions);
 			actions.forEach(action => this.battle.queue.unshift(action));
