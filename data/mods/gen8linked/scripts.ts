@@ -107,7 +107,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					const validTarget = this.validTargetLoc(action.targetLoc, action.pokemon, linkedMoves[i].target);
 					const targetLoc = validTarget ? action.targetLoc : 0;
 					const pseudoAction: Action = {
-						choice: 'move', priority: action.priority, speed: action.speed, pokemon: action.pokemon,
+						choice: 'move', priority: action.priority, speed: action.speed, rawSpeed: false, pokemon: action.pokemon,
 						targetLoc, moveid: linkedMoves[i].id, move: linkedMoves[i], mega: action.mega,
 						order: action.order, fractionalPriority: action.fractionalPriority, originalTarget: action.originalTarget,
 					};
