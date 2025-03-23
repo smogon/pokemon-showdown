@@ -3049,7 +3049,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onFractionalPriority: -0.1,
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['tail']) {
+				this.debug('Lagging Tail boost');
+				return this.chainModify(1.25);
+			}
+		},
 		num: 279,
 		gen: 4,
 	},
