@@ -3557,13 +3557,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Dark",
 		},
+		onFoeBeforeMove(source, target, move) {
+			if (move.category === 'Special' && target.eatItem()) {
+				if (move.id === 'present' && move.heal) return;
+			}
+		},
 		onAfterMoveSecondary(target, source, move) {
-			if (move.category === 'Special') {
-				target.eatItem();
+			if (move.category === 'Special' && target.eatItem()) {
+				if (move.id === 'present' && move.heal) return;
+
 			}
 		},
 		onEat(pokemon) {
-			this.boost({spd: 1});
+			this.boost({spd: 2});
 		},
 		num: 688,
 		gen: 6,
