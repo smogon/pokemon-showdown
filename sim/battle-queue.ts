@@ -27,7 +27,7 @@ export interface MoveAction {
 	/** speed of pokemon using move (higher first if priority tie) */
 	speed: number;
 	/** if rawSpeed, should sort using Pokemon's raw speed */
-	rawSpeed: boolean;
+	rawSpeed?: boolean;
 	/** the pokemon doing the move */
 	pokemon: Pokemon;
 	/** location of the target, relative to pokemon's side */
