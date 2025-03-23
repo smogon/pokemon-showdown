@@ -309,31 +309,6 @@ export class BattleActions {
 			this.battle.add('-hint', `Some effects can force a Pokemon to use ${move.name} again in a row.`);
 		}
 
-		if (move.flags['dance'] && moveDidSomething && !move.isExternal) {
-			const targetOf1stDance = this.battle.activeTarget!;
-			const actions = [];
-			for (const dancer of this.battle.getAllActive()) {
-				if (pokemon === dancer || !dancer.hasAbility('dancer') || dancer.isSemiInvulnerable() ||
-					dancer.fainted) continue;
-				const dancersTarget = !targetOf1stDance.isAlly(dancer) && pokemon.isAlly(dancer) ?
-					targetOf1stDance : pokemon;
-				const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-				actions.push(...this.battle.queue.resolveAction({
-					choice: 'move',
-					order: 198,
-					rawSpeed: true,
-					effectOrder: dancer.abilityState.effectOrder,
-					pokemon: dancer,
-					moveid: move.id,
-					targetLoc: dancersTargetLoc,
-					sourceEffect: this.dex.abilities.get('dancer'),
-					externalMove: true,
-				}));
-			}
-			this.battle.speedSort(actions);
-			actions.forEach(action => this.battle.queue.unshift(action));
-		}
-
 		this.battle.faintMessages();
 		this.battle.checkWin();
 

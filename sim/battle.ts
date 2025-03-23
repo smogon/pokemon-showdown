@@ -995,6 +995,10 @@ export class Battle {
 		if (handler.effectHolder && (handler.effectHolder as Pokemon).getStat) {
 			const pokemon = handler.effectHolder as Pokemon;
 			handler.speed = pokemon.speed;
+			if (handler.effect.effectType === 'Ability' && handler.effect.name === 'Dancer' &&
+				callbackName === 'onAnyAfterMove') {
+				handler.speed = pokemon.getStat('spe', true, true);
+			}
 			if (callbackName.endsWith('SwitchIn')) {
 				// Pokemon speeds including ties are resolved before all onSwitchIn handlers and aren't re-sorted in-between
 				// so we subtract a fractional speed from each Pokemon's respective event handlers by using the index of their
