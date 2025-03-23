@@ -427,7 +427,6 @@ export interface EventMethods {
 	onAfterMoveSecondarySelfPriority?: number;
 	onAfterMoveSelfPriority?: number;
 	onAfterSetStatusPriority?: number;
-	onAnyAfterMovePriority?: number;
 	onAnyBasePowerPriority?: number;
 	onAnyInvulnerabilityPriority?: number;
 	onAnyModifyAccuracyPriority?: number;

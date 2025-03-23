@@ -309,6 +309,43 @@ export class BattleActions {
 			this.battle.add('-hint', `Some effects can force a Pokemon to use ${move.name} again in a row.`);
 		}
 
+		if (move.flags['dance'] && moveDidSomething && !move.isExternal) {
+			const dancers = [];
+			for (const currentPoke of this.battle.getAllActive()) {
+				if (pokemon === currentPoke) continue;
+				if (currentPoke.hasAbility('dancer') && !currentPoke.isSemiInvulnerable()) {
+					dancers.push(currentPoke);
+				}
+			}
+			// Gen 7: Dancer activates in order of lowest speed stat to highest
+			// Note that the speed stat used is after any volatile replacements like Speed Swap,
+			// but before any multipliers like Agility or Choice Scarf
+			// Ties go to whichever Pokemon has had the ability for the least amount of time
+			this.battle.speedSort(dancers,
+				(a, b) => (b.storedStats['spe'] - a.storedStats['spe']) || -(b.abilityState.effectOrder - a.abilityState.effectOrder)
+			);
+			const targetOf1stDance = this.battle.activeTarget!;
+			for (const dancer of dancers) {
+				if (this.battle.faintMessages()) break;
+				if (dancer.fainted) continue;
+				this.battle.add('-activate', dancer, 'ability: Dancer');
+				const dancersTarget = !targetOf1stDance.isAlly(dancer) && pokemon.isAlly(dancer) ?
+					targetOf1stDance :
+					pokemon;
+				const dancersTargetLoc = dancer.getLocOf(dancersTarget);
+				this.battle.queue.unshift(this.battle.queue.resolveAction({
+					choice: 'move',
+					order: 198,
+					effectOrder: dancer.abilityState.effectOrder,
+					pokemon: dancer,
+					moveid: move.id,
+					targetLoc: dancersTargetLoc,
+					sourceEffect: this.dex.abilities.get('dancer'),
+					externalMove: true,
+				})[0]);
+			}
+		}
+
 		this.battle.faintMessages();
 		this.battle.checkWin();
 

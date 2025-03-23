@@ -827,32 +827,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	dancer: {
 		flags: {},
 		name: "Dancer",
-		onAnyAfterMovePriority: -200,
-		onAnyAfterMove(source, target, move) {
-			const dancer = this.effectState.target as Pokemon;
-			if (dancer === source || dancer.isSemiInvulnerable() || !move.flags['dance'] ||
-				!this.lastSuccessfulMoveThisTurn || move.isExternal) return;
-			const targetOf1stDance = this.activeTarget!;
-			const dancersTarget = !targetOf1stDance.isAlly(dancer) && source.isAlly(dancer) ?
-				targetOf1stDance : source;
-			const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-			const action = this.queue.resolveAction({
-				choice: 'move',
-				order: 198,
-				effectOrder: dancer.abilityState.effectOrder,
-				pokemon: dancer,
-				moveid: move.id,
-				targetLoc: dancersTargetLoc,
-				sourceEffect: this.dex.abilities.get('dancer'),
-				externalMove: true,
-			})[0];
-			// Gen 7: Dancer activates in order of lowest speed stat to highest
-			// Note that the speed stat used is after any volatile replacements like Speed Swap,
-			// but before any multipliers like Agility or Choice Scarf
-			// Ties go to whichever Pokemon has had the ability for the least amount of time
-			action.speed = -dancer.getStat('spe', true, true);
-			this.queue.insertAction(action);
-		},
+		// implemented in runMove in scripts.js
 		onBeforeMovePriority: 200,
 		onBeforeMove(source, target, move) {
 			if (move.isExternal) {
