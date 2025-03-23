@@ -2984,6 +2984,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 					for (const condition of sideConditions) {
 						if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
 							this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] item: Kelpsy Berry', '[of] ' + pokemon);
+							activated = true
 						}
 					}
 					if(activated){
@@ -4624,6 +4625,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['punch']) {
+				this.debug('Protective Pads boost');
+				return this.chainModify(1.1);
+			}
+		},
 		// protective effect handled in Battle#checkMoveMakesContact
 		num: 880,
 		gen: 7,
@@ -4735,12 +4743,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
 				this.debug('Punching Glove boost');
-				return this.chainModify([4506, 4096]);
+				return this.chainModify(1.25);
 			}
-		},
-		onModifyMovePriority: 1,
-		onModifyMove(move) {
-			if (move.flags['punch']) delete move.flags['contact'];
 		},
 		num: 1884,
 		gen: 9,
