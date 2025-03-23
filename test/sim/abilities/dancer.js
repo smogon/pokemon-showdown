@@ -38,7 +38,7 @@ describe('Dancer', () => {
 	});
 
 	it('should activate in order of slowest to faster inside Trick Room', () => {
-		battle = common.gen(7).createBattle({ gameType: 'doubles' }, [[
+		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Shedinja', ability: 'dancer', item: 'focussash', moves: ['sleeptalk'] },
 			{ species: 'Shedinja', level: 98, ability: 'dancer', moves: ['sleeptalk'] },
 		], [
