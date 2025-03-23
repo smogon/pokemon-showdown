@@ -2978,7 +2978,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Fighting",
 		},
-		onEat: false,
+		onStart(pokemon) {
+			let activated = false;
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+					for (const condition of sideConditions) {
+						if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
+							this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] item: Kelpsy Berry', '[of] ' + pokemon);
+						}
+					}
+					if(activated){
+						pokemon.eatItem()
+					}
+		},
+		onEat() { },
 		num: 170,
 		gen: 3,
 	},
