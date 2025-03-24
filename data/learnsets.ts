@@ -86843,7 +86843,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			astonish: ["9L1"],
 			bodyslam: ["9M"],
 			calmmind: ["9M"],
-			crunch: ["9S1"],
 			dazzlinggleam: ["9M", "9L40"],
 			disarmingvoice: ["9M"],
 			drainingkiss: ["9M", "9L20", "9S1"],
@@ -86893,7 +86892,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 		},
 		eventData: [
 			{generation: 8, level: 70, perfectIVs: 3, moves: ["extrasensory", "moonblast", "springtidestorm"], pokeball: "strangeball"}, // Legends: Arceus
-			{generation: 9, level: 50, shiny: true, nature: "Naive", ivs: {hp: 20, atk: 31, def: 20, spa: 31, spd: 20, spe: 31}, moves: ["drainingkiss", "extrasensory", "crunch", "moonblast"], pokeball: "cherishball"},
+			{generation: 9, level: 50, shiny: true, nature: "Naive", ivs: {hp: 20, atk: 31, def: 20, spa: 31, spd: 20, spe: 31}, moves: ["drainingkiss", "extrasensory", "moonblast"], pokeball: "cherishball"},
 		],
 		eventOnly: true,
 	},
