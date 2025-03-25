@@ -4773,13 +4773,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		isPokeball: true,
 	},
 	quickclaw: {
-		onFractionalPriorityPriority: -2,
-		onFractionalPriority(priority, pokemon, target, move) {
-			if (move.category === "Status" && pokemon.hasAbility("myceliummight")) return;
-			if (priority <= 0 && this.randomChance(1, 5)) {
-				this.add('-activate', pokemon, 'item: Quick Claw');
-				return 0.1;
-			}
+		onModifySpe(spe, pokemon) {
+			if (pokemon.volatiles['dynamax']) return;
+			return this.chainModify(1.1);
 		},
 		name: "Quick Claw",
 		spritenum: 373,
@@ -4857,7 +4853,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 		},
 		onModifyCritRatio(critRatio) {
-			return critRatio + 1;
+			return critRatio + 2;
 		},
 		num: 326,
 		gen: 4,
