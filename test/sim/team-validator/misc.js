@@ -215,9 +215,24 @@ describe('Team Validator', () => {
 	});
 
 	describe('Limit Stat Pass', () => {
+		it('should reject invalid inputs', () => {
+			const team = [{ species: 'rattata', ability: 'noability', item: '', moves: ['tackle'], evs: { hp: 1 } }];
+
+			// should hint !limitstatpass
+			let format = 'gen9customgame@@@limitstatpass=';
+			assert.false.legalTeam(team, format);
+			format = 'gen9customgame@@@limitstatpass=    ';
+			assert.false.legalTeam(team, format);
+
+			format = 'gen9customgame@@@limitstatpass=abcdefg123';
+			assert.false.legalTeam(team, format);
+			format = 'gen9customgame@@@limitstatpass=sources1/asdf';
+			assert.false.legalTeam(team, format);
+		});
+
 		it('should enforce the limits correctly', () => {
 			// Any number of stat passers, max of 1 source of stat boosts each.
-			let format = 'gen9customgame@@@limitstatpass=/1';
+			let format = 'gen9customgame@@@limitstatpass=sources1';
 
 			let team = [{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance'], evs: { hp: 1 } }];
 			assert.legalTeam(team, format);
@@ -238,7 +253,7 @@ describe('Team Validator', () => {
 			assert.false.legalTeam(team, format);
 
 			// Max of 1 stat passers, any number of stat boosts each.
-			format = 'gen9customgame@@@limitstatpass=1/';
+			format = 'gen9customgame@@@limitstatpass=passers1';
 
 			team = [{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance'], evs: { hp: 1 } }];
 			assert.legalTeam(team, format);
@@ -259,7 +274,7 @@ describe('Team Validator', () => {
 			assert.false.legalTeam(team, format);
 
 			// Max of 2 stat passers, max of 3 sources of stat boosts each.
-			format = 'gen9customgame@@@limitstatpass=2/3';
+			format = 'gen9customgame@@@limitstatpass=passers2/sources3';
 
 			team = [
 				{ species: 'rattata', ability: 'noability', item: '', moves: ['batonpass', 'swordsdance', 'agility', 'nastyplot'], evs: { hp: 1 } },

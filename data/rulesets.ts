@@ -1059,18 +1059,29 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	limitstatpass: {
 		effectType: 'ValidatorRule',
 		name: 'Limit Stat Pass',
-		desc: 'Limits the number of Pok&eacute;mon with Baton Pass that has any way to boost stats, and their stat boost sources. Usage: Limit Stat Pass = [Passers?] / [Sources?], e.g. "Limit Stat Pass = 2 / 1"',
+		desc: 'Limits the number of Pok&eacute;mon with Baton Pass that has any way to boost stats, and their stat boost sources. Usage: Limit Stat Pass = [Passers] [Value] / [Sources] [Value], e.g. "Limit Stat Pass = Passers 2 / Sources 1"',
 		hasValue: true,
-		onValidateRule(value) {
-			if (!value) throw new Error('To remove Stat Pass limitations, use "! Limit Stat Pass"');
-			const values = /^\s*(\d{1,3})?\s*\/\s*(\d{1,3})?\s*$/.exec(value);
-			// Reject if the rule would do nothing.
-			if (!values || (!values[1] && !values[2])) throw new Error('Invalid input for Limit Stat Pass rule.');
+		onValidateRule(input) {
+			if (!['singles', 'rotation', 'freeforall'].includes(this.format.gameType)) {
+				throw new Error('Baton Pass restrictions are only supported in singles battles currently');
+			}
+
+			input = input.replace(/\s/g, '').toLowerCase();
+			if (!input) throw new Error('To remove Stat Pass limitations, use "! Limit Stat Pass"');
+
+			const stage1 = input.split('/');
+			const stage2 = stage1.map(x => /^(passers|sources)(\d{1,3})$/.exec(x));
+
+			stage2.forEach((value, i) => {
+				if (!value) throw new Error(`Invalid input "${stage1[i]}" in Limit Stat Pass rule`);
+			});
+
+			return input;
 		},
 		onValidateTeam(team, format, teamHas) {
 			const input = this.ruleTable.valueRules.get('limitstatpass')!;
-			const inputParsed = /^\s*(\d{1,3})?\s*\/\s*(\d{1,3})?\s*$/.exec(input)!;
-			const [maxPassers, maxSources] = inputParsed.slice(1).map(Number);
+			const maxPassers = Number(/passers(\d{1,3})/.exec(input)?.[1]);
+			const maxSources = Number(/sources(\d{1,3})/.exec(input)?.[1]);
 			// console.log(`Passers: ${maxPassers} / Sources: ${maxSources}`);
 
 			const problems: string[] = [];
@@ -1188,7 +1199,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'DryPass Clause',
 		desc: "Stops teams from bringing Pok&eacute;mon with Baton Pass + any form of trapping, residual recovery, boosting, or Substitute.",
-		ruleset: ['Limit Stat Pass = / 0'],
+		ruleset: ['Limit Stat Pass = Sources 0'],
 		banlist: ['Baton Pass + Substitute', 'Baton Pass + Ingrain', 'Baton Pass + Aqua Ring', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Baton Pass + Octolock', 'Baton Pass + Power Trick'],
 		onBegin() {
 			this.add('rule', 'DryPass Clause: No Baton Passer may have a way to gain beneficial passable properties');
@@ -1278,7 +1289,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'One Boost Passer Clause',
 		desc: "Stops teams from having a Pok&eacute;mon with Baton Pass that has multiple ways to boost its stats, and no more than one Baton Passer may be able to boost its stats",
-		ruleset: ['Limit Stat Pass = 1 / 1'],
+		ruleset: ['Limit Stat Pass = Passers 1 / Sources 1'],
 		onBegin() {
 			this.add('rule', 'One Boost Passer Clause: Limit one Baton Passer that has a way to boost its stats');
 		},
@@ -1287,7 +1298,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Baton Pass Stat Clause',
 		desc: "Stops teams from having a Pok&eacute;mon with Baton Pass that has any way to boost its stats",
-		ruleset: ['Limit Stat Pass = / 0'],
+		ruleset: ['Limit Stat Pass = Sources 0'],
 		onBegin() {
 			this.add('rule', 'Baton Pass Stat Clause: No Baton Passer may have a way to boost its stats');
 		},
@@ -1296,7 +1307,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Baton Pass Stat Trap Clause',
 		desc: "Stops teams from having a Pok&eacute;mon with Baton Pass that has any way to boost its stats or trap Pok&eacute;mon.",
-		ruleset: ['Limit Stat Pass = / 0'],
+		ruleset: ['Limit Stat Pass = Sources 0'],
 		banlist: ['Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Baton Pass + Octolock', 'Baton Pass + Ingrain'],
 		onBegin() {
 			this.add('rule', 'Baton Pass Stat Trap Clause: No Baton Passer may have a way to boost stats or trap Pok\u00e9mon');
