@@ -4865,17 +4865,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 			volatileStatus: 'flinch',
 		},
-		onModifyMovePriority: -1,
-		onModifyMove(move) {
-			if (move.category !== "Status") {
-				if (!move.secondaries) move.secondaries = [];
-				for (const secondary of move.secondaries) {
-					if (secondary.volatileStatus === 'flinch') return;
-				}
-				move.secondaries.push({
-					chance: 10,
-					volatileStatus: 'flinch',
-				});
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['bite']) {
+				this.debug('Razor Fang boost');
+				return this.chainModify(1.25);
 			}
 		},
 		num: 327,
@@ -5015,11 +5009,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Rock') {
-				return this.chainModify([4915, 4096]);
-			}
+		onDamagingHit(damage, target, source, move) {
+			this.field.setWeather('sandstorm');
+			target.useItem()
 		},
 		num: 315,
 		gen: 4,
@@ -5086,7 +5078,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		boosts: {
-			spe: -1,
+			spe: -3,
 		},
 		num: 1122,
 		gen: 8,
@@ -5107,11 +5099,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Grass') {
-				return this.chainModify([4915, 4096]);
-			}
+		onDamagingHit(damage, target, source, move) {
+			this.field.setTerrain('grassyterrain');
+			target.useItem()
 		},
 		num: 318,
 		gen: 4,
@@ -5375,6 +5365,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onTrapPokemonPriority: -10,
 		onTrapPokemon(pokemon) {
 			pokemon.trapped = pokemon.maybeTrapped = false;
+		},
+		condition: {
+			onStart() {
+				this.effectState.turns = 0;
+			},
 		},
 		num: 295,
 		gen: 4,
@@ -7260,11 +7255,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Water') {
-				return this.chainModify([4915, 4096]);
-			}
+		onDamagingHit(damage, target, source, move) {
+			this.field.setWeather('raindance');
+			target.useItem()
 		},
 		num: 317,
 		gen: 4,
