@@ -81489,7 +81489,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			toxic: ["8V", "7M"],
 		},
 		eventData: [
-			{generation: 9, level: 50, shiny: true, nature: "Adamant", moves: ["headbutt", "acidarmor", "thunderwave", "flashcannon"], pokeball: "cherishball"}
+			{generation: 9, level: 50, shiny: true, nature: "Adamant", moves: ["headbutt", "acidarmor", "thunderwave", "flashcannon"], ivs: {hp: 31, atk: 31, def: 31, spa: 20, spd: 20, spe: 20}, pokeball: "cherishball"}
 		]
 	},
 	melmetal: {
