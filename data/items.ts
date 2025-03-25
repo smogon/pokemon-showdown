@@ -7424,11 +7424,25 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 16,
-		onBasePower(basePower, user, target, move) {
-			if (move.category === 'Special') {
-				return this.chainModify([4505, 4096]);
+		onStart(pokemon) {
+			pokemon.addVolatile('wiseglasses');
+		},
+		onEnd(target) {
+			 target.removeVolatile('wiseglasses');
+		},
+		onBeforeMove(pokemon, target, move) {
+			if (pokemon.volatiles['wiseglasses'] && move.category === 'Special') {
+				pokemon.volatiles['wiseglasses'].turns++;
 			}
+			if (pokemon.volatiles['wiseglasses']?.turns >= 3) {
+				this.boost({spa: 1}, pokemon)
+				pokemon.volatiles['wiseglasses'].turns = 0;
+			}
+		},
+		condition: {
+			onStart() {
+				this.effectState.turns = 0;
+			},
 		},
 		num: 267,
 		gen: 4,
