@@ -1446,14 +1446,14 @@
                 "movepool": ["Coil", "Roost", "Dual Wingbeat", "Poison Fang"],
                 "abilities": ["Inner Focus"],
                 "teraTypes": ["Water"],
-                "items": "Eviolite",
-                "nature": "careful",
-                "hpEVs": 252,
-                "atkEVs": 4,
+                "items": "Berserk Gene",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
                 "defEVs": 0,
                 "spaEVs": 0,
-                "spdEVs": 252,
-                "speEVs": 0
+                "spdEVs": 4,
+                "speEVs": 252
             },
             {
                 "role": "Specially Defensive",
@@ -5299,6 +5299,166 @@
                 "spaEVs": 0,
                 "spdEVs": 4,
                 "speEVs": 252
+            }
+        ]
+    },
+    "furrip": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Last Respects", "U-turn", "Giga Impact", "Shadow Sneak"],
+                "abilities": ["Come Almas"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Shadow Ball", "Hyper Beam", "U-turn", "Flamethrower"],
+                "abilities": ["Come Almas"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Flamethrower", "U-turn", "Last Respects", "Knock Off"],
+                "abilities": ["Come Almas"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "hasty",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "furrum": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Chilling Water", "Wish", "Protect", "Knock Off"],
+                "abilities": ["Frisk"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "sassy",
+                "hpEVs": 252,
+                "atkEVs": 4,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Wish", "Double Team", "Knock Off", "Moonblast"],
+                "abilities": ["Frisk"],
+                "teraTypes": ["Water"],
+                "items": "Sitrus Berry",
+                "nature": "calm",
+                "hpEVs": 248,
+                "atkEVs": 8,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Special Sweeper",
+                "movepool": ["Moonlight", "Light of Ruin", "Flamethrower", "Ice Beam"],
+                "abilities": ["Libera Almas"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "modest",
+                "hpEVs": 248,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 8,
+                "speEVs": 0
+            }
+        ]
+    },
+    "furrful": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["U-turn", "Giga Impact", "Strength", "Ice Punch"],
+                "abilities": ["Alma Pura"],
+                "teraTypes": ["Water"],
+                "items": "Clear Amulet",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Bulk Up", "Brick Break", "Covet", "Body Slam"],
+                "abilities": ["Alma Pura"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Band",
+                "movepool": ["Dynamic Punch", "U-turn", "Giga Impact", "Iron Tail"],
+                "abilities": ["Keen Eye"],
+                "teraTypes": ["Water"],
+                "items": "Choice Band",
+                "nature": "jolly",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "Noctowl": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Night Shade", "Roost", "Defog", "Double Team"],
+                "abilities": ["Insomnia"],
+                "teraTypes": ["Water"],
+                "items": "Eviolite",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
             }
         ]
     }
