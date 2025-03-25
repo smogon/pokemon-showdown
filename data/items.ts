@@ -3371,13 +3371,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === 'Water') {
-				target.useItem();
-			}
+		onAfterMove(pokemon, target, move) {
+				if(target && pokemon !== target){
+					if(move.type === 'Grass'){
+						pokemon.useItem()
+					}
+				}
 		},
-		boosts: {
-			spd: 1,
+		onSourceEffectiveness(typeMod, target, type, move) {
+			if (target && (target.hasType('Water') || target.hasType('Flying')) && move.type === 'Grass'){
+				return 1
+			};
 		},
 		num: 648,
 		gen: 6,
