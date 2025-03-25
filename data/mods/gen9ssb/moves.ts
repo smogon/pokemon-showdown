@@ -330,9 +330,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				pokemon.setItem(item);
 			}
 			const boost: SparseBoostsTable = {};
-			let boostedStats: BoostID[] = [];
+			const boostedStats: BoostID[] = [];
 			for (let i = 0; i < 3; i++) {
-				let stats: BoostID[] = [];
+				const stats: BoostID[] = [];
 				let statPlus: BoostID;
 				for (statPlus in pokemon.boosts) {
 					if (statPlus === 'accuracy' || statPlus === 'evasion' || boostedStats.includes(statPlus)) continue;
@@ -340,7 +340,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						stats.push(statPlus);
 					}
 				}
-				let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+				const randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
 				if (randomStat) {
 					boost[randomStat] = 1;
 					boostedStats.push(randomStat);
@@ -1803,49 +1803,44 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 
 	// dhelmise
-	avatarlifestream: {
+	emp: {
 		accuracy: true,
 		basePower: 0,
-		category: "Status",
-		shortDesc: "Heal 2 allies for 38%, heal self for 14%.",
-		desc: "Shoots a healing life stream that bounces twice, hitting the user once. Heals allies for 38% of their max HP, heals the user for 14% of its max HP. If there is only 1 ally remaining, heals the ally for 38% of its max HP, and heals the user for 28%. Otherwise, Heals the user for 42% of its max HP.",
-		name: "Avatar Life Stream",
+		damageCallback(pokemon, target) {
+			return this.clampIntRange(Math.floor(target.getUndynamaxedHP() / 3), 1);
+		},
+		category: "Special",
+		shortDesc: "Hacks target, trapping + disabling a move.",
+		desc: "Inflicts the target with the Hacked volatile status. When a Pokemon is inflicted with Hacked, they become trapped for 3 turns and have 1 of their moves disabled at random.",
+		name: "EMP",
 		gen: 9,
 		pp: 5,
 		priority: 0,
+		ignoreImmunity: true,
 		flags: {},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Wish', source);
+			this.add('-anim', source, 'Boomburst', target);
+		},
+		onTryHit(target, source, move) {
+			if (target?.volatiles['hacked']) {
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
+				return this.NOT_FAIL;
+			}
 		},
 		onHit(target, source, move) {
-			let success = false;
-			const allies = [...source.side.pokemon, ...source.side.allySide?.pokemon || []].filter(x => x !== source && !x.fainted);
-			let randomAlly1;
-			let randomAlly2;
-			if (allies.length >= 2) {
-				randomAlly1 = this.sample(allies);
-				randomAlly2 = this.sample(allies);
-			} else if (allies.length === 1) {
-				randomAlly1 = this.sample(allies);
-				randomAlly2 = source;
-			} else {
-				randomAlly1 = randomAlly2 = source;
+			if (source.m.stealth) {
+				source.m.stealth = false;
+				this.add('-end', source, 'stealth');
 			}
-			const selectedAllies = [randomAlly1, randomAlly2, source];
-			for (const ally of selectedAllies) {
-				if (ally.heal(this.modify(ally.maxhp, ally === source ? 0.14 : 0.38))) {
-					this.add('-heal', ally, ally.getHealth);
-					success = true;
-				}
-			}
-			return success;
+			target.addVolatile('hacked');
 		},
 		secondary: null,
-		target: "allySide",
-		type: "Grass",
+		target: "normal",
+		type: "Ghost",
 	},
 
 	// DianaNicole

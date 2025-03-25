@@ -293,7 +293,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	// dhelmise
 	dhelmise: {
 		inherit: true,
-		abilities: { 0: "Coalescence" },
+		abilities: { 0: "Virus" },
 	},
 
 	// DianaNicole
@@ -525,7 +525,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	// Kiwi
 	minccino: {
 		inherit: true,
-		baseStats: {hp: 75, atk: 70, def: 60, spa: 60, spd: 60, spe: 75 },
+		baseStats: { hp: 75, atk: 70, def: 60, spa: 60, spd: 60, spe: 75 },
 		abilities: { 0: "Sure Hit Sorcery" },
 	},
 

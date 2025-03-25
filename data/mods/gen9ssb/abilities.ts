@@ -742,46 +742,33 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 
 	// dhelmise
-	soulbond: {
-		shortDesc: "Allies recover 15% HP. Damage is shared between all living allies, up to 400 dmg per ally.",
-		desc: "Allies recover 15% HP. Damage is shared between all living allies, up to 400 damage per ally. Allows this Pokemon to live one fatal hit, breaking the Soul Bond in the process.",
-		name: "Soul Bond",
-		onDamage(damage, target, source, effect) {
-			if (this.effectState.soulBondSturdyBurned) return;
-			this.effectState.splitDamageAmounts = {};
-			const allies = target.side.pokemon.filter(ally => ally !== target && !ally.fainted && ally.hp);
-			const splitDamage = Math.floor(damage / allies.length);
-			if (allies.length) this.add('-activate', target, 'ability: Soul Bond');
-			for (const ally of allies) {
-				if (!this.effectState.splitDamageAmounts[ally.name]) this.effectState.splitDamageAmounts[ally.name] = 0;
-				if (this.effectState.splitDamageAmounts[ally.name] >= 400) continue;
-				ally.hp -= splitDamage;
-				this.add('-damage', ally, ally.getHealth, `[from] Soul Bond`, `[of] ${target}`);
-				this.effectState.splitDamageAmounts[ally.name] += splitDamage;
-			}
-			if (splitDamage >= target.hp) {
-				this.add('-activate', target, 'ability: Soul Bond');
-				this.add('-message', `${target.name}'s Soul Bond broke!`);
-				this.effectState.soulBondSturdyBurned = true;
-				return target.hp - 1;
-			}
-			return splitDamage;
+	virus: {
+		shortDesc: "Causes hacked enemies to catch a virus that deals 145 damage over 3 turns.",
+		name: "Virus",
+		onAfterMove(source, target, move) {
+			if (move.id === 'emp') target?.addVolatile('virus');
 		},
-		onResidualOrder: 5,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			for (const ally of pokemon.side.pokemon) {
-				if (!ally.hp || ally === pokemon) continue;
-				const oldHealth = ally.hp;
-				if (ally.heal(this.modify(ally.baseMaxhp, 0.15))) {
-					if (this.effectState.splitDamageAmounts[ally.name]) {
-						this.effectState.splitDamageAmounts[ally.name] -= ally.hp - oldHealth;
-					}
-					this.add('-heal', ally, ally.getHealth, '[from] ability: Soul Bond', `[of] ${pokemon}`);
+		condition: {
+			duration: 4,
+			onStart(target, source, sourceEffect) {
+				this.add('-start', target, 'virus');
+			},
+			onEnd(target) {
+				this.add('-end', target, 'virus');
+			},
+			onResidual(target, source, effect) {
+				let damage: number;
+				if (this.effectState.duration === 1) {
+					damage = 70;
+				} else if (this.effectState.duration === 2) {
+					damage = 34;
+				} else {
+					damage = 35;
 				}
-			}
+				this.damage(damage, target);
+			},
 		},
-		flags: {},
+		flags: { breakable: 1 },
 	},
 
 	// Elly

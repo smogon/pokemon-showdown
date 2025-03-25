@@ -731,67 +731,36 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 	dhelmiseuser: {
 		noCopy: true,
 		onStart(pokemon) {
-			let quotes: string[] = [];
-			if (!pokemon.m.sentOutBefore) {
-				quotes = [
-					`Humanity is shackled. I will find the key.`,
-					`Humanity is shackled. I hold the key.`,
-					`Our minds are shackled. Submission is the key.`,
-				];
-				pokemon.m.sentOutBefore = true;
-			} else {
-				quotes = [
-					`If it must be done, let it be done quickly.`,
-					`Let us keep our questionable choices to a minimum.`,
-					`On with it.`,
-					`I'll see this matter resolved.`,
-					`Knowledge is its own reward.`,
-					`More field research? Grand...`,
-					`Much lies in store. Let us see to it.`,
-					`Push your limits. Nothing breaks that I cannot mend.`,
-					`Your work is a hypothesis. Prove it.`,
-					`Let us go on to the end.`,
-					`Victory grows more certain by the minute.`,
-					`Victory is within our grasp.`,
-					`I have come not to sve, but to __empower__.`,
-					`Now our true work begins.`,
-					`My soul hungers.`,
-					`Do not fight your true nature.`,
-				];
-				if (pokemon.side.pokemonLeft > pokemon.side.foe.pokemonLeft) {
-					quotes.push(`We hold the advantage. Shall we keep it?`);
-				} else if (pokemon.side.pokemonLeft === pokemon.side.foe.pokemonLeft) {
-					quotes.push(
-						`If we're hopingto win, now's the time.`,
-						`It all comes down to this.`,
-						`Prepare yourselves for the decisive battle.`,
-						`This fight is all that remains.`
-					);
-				} else {
-					quotes.push(
-						`Another setback and all will be lost.`,
-						`One more mistake, and we fail.`,
-						`We cannot tolerate any more missteps.`,
-						`We must reverse the course that we are on.`
-					);
-				}
-			}
-			this.add(`c:|${getName('dhelmise')}|${this.sample(quotes)}`);
+			this.add(`c:|${getName('dhelmise')}|skibidi`);
+			pokemon.m.stealth = true;
+			this.add('-message', `${pokemon.name}'s Stealth made it harder to hit!`);
+			this.add('-start', pokemon, 'stealth');
 		},
 		onSwitchOut() {
-			const quotes = [
-				`Fading.`,
-				`Like shadow.`,
-				`Obscured.`,
-				`Of the Void.`,
-				`Dissolution.`,
-				`Into darkness.`,
-				`Unknowable.`,
-			];
-			this.add(`c:|${getName('dhelmise')}|${this.sample(quotes)}`);
+			this.add(`c:|${getName('dhelmise')}|skibidi`);
 		},
 		onFaint() {
-			this.add(`c:|${getName('dhelmise')}|Revive me.`);
+			this.add(`c:|${getName('dhelmise')}|skibidi`);
+		},
+		innateName: "Stealth",
+		desc: "Until using EMP, targeted moves are 25% less accurate, this Pokemon's moves do half damage, and this Pokemon only takes 3/4 damage.",
+		onModifyAccuracyPriority: -1,
+		onModifyAccuracy(accuracy, target, source) {
+			if (typeof accuracy !== 'number') return;
+			if (target.illusion) return;
+			if (!target.m.stealth) return;
+			this.debug('Sand Veil - decreasing accuracy');
+			return this.chainModify(0.75);
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.illusion) return;
+			if (!target.m.stealth) return;
+			return this.chainModify(0.75);
+		},
+		onModifyDamage(damage, source, target, move) {
+			if (target.illusion) return;
+			if (!target.m.stealth) return;
+			return this.chainModify(0.5);
 		},
 	},
 	diananicole: {
@@ -2874,92 +2843,33 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 	},
 
 	// dhelmise
-	bioticorbself: {
-		name: "Biotic Orb (Self)",
-		// side condition
-		effectType: 'Condition',
+	hacked: {
+		name: "Hacked",
 		duration: 4,
-		onSideStart(side, source) {
-			this.effectState.source = source;
-			this.add('-sidestart', side, 'move: Biotic Orb (Self)');
+		onStart(pokemon, source) {
+			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, `[of] ${source}`);
+			this.add('-start', pokemon, 'hacked');
 		},
-		onResidualOrder: 5,
-		onResidualSubOrder: 1,
-		onResidual(target, pokemon, effect) {
-			const source = this.effectState.source;
-			const quotes: string[] = [
-				`A cure for all that ails.`,
-				`A sip for the parched.`,
-				`Be nourished!`,
-				`I offer something more.`,
-				`Receive my aid.`,
-				`Be nurtured.`,
-				`Know mother's kindness.`,
-				`A salve for all that ails.`,
-				`An eldritch blessing.`,
-				`Flourish.`,
-				`Now feast.`,
-				`Recover your strength.`,
-			];
-			if (target.hp) {
-				let amount = 65;
-				if (this.effectState.duration === 4) amount = 40;
-				this.heal(amount, target, source, effect);
+		onEnd(pokemon) {
+			this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]');
+			this.add('-end', pokemon, 'hacked');
+		},
+		onTrapPokemon(pokemon) {
+			pokemon.tryTrap();
+		},
+		onDisableMove(pokemon) {
+			let disabledMove = false;
+			for (const moveSlot of pokemon.moveSlots) {
+				const move = this.dex.getActiveMove(moveSlot.id);
+				if (move.selfSwitch) {
+					pokemon.disableMove(moveSlot.id);
+					disabledMove = true;
+				}
 			}
-			this.add(`c:|${getName((source.illusion || source).name)}|${this.sample(quotes)}`);
-		},
-		onSideResidualOrder: 26,
-		onSideResidualSubOrder: 5,
-		onSideEnd(side) {
-			this.add('-sideend', side, 'move: Biotic Orb (Self)');
-		},
-	},
-	bioticorbfoe: {
-		name: "Biotic Orb (Foe)",
-		// side condition
-		effectType: 'Condition',
-		duration: 4,
-		onSideStart(side, source) {
-			this.effectState.source = source;
-			this.add('-sidestart', side, 'move: Biotic Orb (Foe)');
-		},
-		onResidualOrder: 5,
-		onResidualSubOrder: 1,
-		onResidual(target, pokemon, effect) {
-			const source = this.effectState.source;
-			let quotes: string[] = [
-				`A taste of poison.`,
-				`Misery made manifest.`,
-				`Pain is inevitable.`,
-				`You cannot escape me!`,
-				`Your end is within my reach.`,
-				`Bí ag stangadh leat.`,
-				`Ruination is imminent.`,
-				`The weak can fend for themselves.`,
-				`Know darkness.`,
-				`Let shadow consume you.`,
-				`Your pain will be endless.`,
-			];
-			if (target.hp) {
-				this.damage(50, target, source, effect);
+			if (!disabledMove) {
+				const moveSlot = this.sample(pokemon.moveSlots);
+				pokemon.disableMove(moveSlot.id);
 			}
-			if (target.fainted || target.hp <= 0) {
-				quotes = [
-					`Expect the unexpected.`,
-					`In chaos lies opportunity.`,
-					`Mind your surroundings.`,
-					`Perhaps next time you should not stand in the way of the orb.`,
-					`A torturous gift.`,
-					`The darkness will find them.`,
-					`The gloom takes you.`,
-				];
-			}
-			this.add(`c:|${getName((source.illusion || source).name)}|${this.sample(quotes)}`);
-		},
-		onSideResidualOrder: 26,
-		onSideResidualSubOrder: 5,
-		onSideEnd(side) {
-			this.add('-sideend', side, 'move: Biotic Orb (Foe)');
 		},
 	},
 

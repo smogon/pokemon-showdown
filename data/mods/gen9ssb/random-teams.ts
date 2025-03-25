@@ -337,10 +337,10 @@ export const ssbSets: SSBSets = {
 		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Adamant', teraType: 'Poison',
 	},
 	dhelmise: {
-		species: 'Dhelmise', ability: 'Soul Bond', item: 'Black Sludge', gender: 'N',
-		moves: ['Spectral Thief', 'Revival Blessing', 'Shadow Sneak'],
-		signatureMove: 'Avatar Life Stream',
-		evs: { atk: 252, def: 4, spd: 252 }, nature: 'Impish', teraType: ['Ghost'],
+		species: 'Dhelmise', ability: 'Virus', item: 'Big Root', gender: 'N',
+		moves: ['Spectral Thief', 'Horn Leech', 'Shadow Sneak'],
+		signatureMove: 'EMP',
+		evs: { atk: 252, def: 4, spd: 252 }, nature: 'Adamant', teraType: ['Ghost'],
 	},
 	DianaNicole: {
 		species: 'Abomasnow', ability: 'Snow Warning', item: 'Abomasite', gender: 'F',
@@ -1120,7 +1120,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const team: PokemonSet[] = [];
-		const debug: string[] = ['dhelmise']; // Set this to a list of SSB sets to override the normal pool for debugging.
+		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const meme = ruleTable.has('dynamaxclause') && !debug.length;
 		const monotype = this.forceMonotype || (ruleTable.has('sametypeclause') ?
