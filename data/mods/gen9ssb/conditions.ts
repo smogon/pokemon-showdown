@@ -3263,6 +3263,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 	},
 	wish: {
+		inherit: true,
 		onStart(pokemon, source, effect) {
 			this.effectState.hp = source.maxhp / 2;
 			if (effect.name === 'Anti-Pelau') {
