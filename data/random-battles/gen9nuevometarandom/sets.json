@@ -4112,7 +4112,7 @@
             },
             {
                 "role": "Fast Special Sweeper",
-                "movepool": ["Volt Switch", "Signal Beam", "Electro Ball", "Hidden Power Grass"],
+                "movepool": ["Volt Switch", "Signal Beam", "Synchronoise", "Hidden Power Grass"],
                 "abilities": ["Lightning Rod"],
                 "teraTypes": ["Water"],
                 "items": "Life Orb",
@@ -4708,7 +4708,7 @@
                 "movepool": ["Close Combat", "Substitute", "Brave Bird", "Protect"],
                 "abilities": ["Pluma Watt"],
                 "teraTypes": ["Water"],
-                "items": "Leftovers",
+                "items": "Light Ball",
                 "nature": "jolly",
                 "hpEVs": 0,
                 "atkEVs": 252,
@@ -5105,6 +5105,194 @@
                 "teraTypes": ["Water"],
                 "items": "White Herb",
                 "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "meganium": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Reflect", "Light Screen", "Aromatherapy", "Leech Seed"],
+                "abilities": ["Triage"],
+                "teraTypes": ["Water"],
+                "items": "Light Clay",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Leech Seed", "Draining Kiss", "Giga Drain", "Knock Off"],
+                "abilities": ["Triage"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "sassy",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Physically Defensive",
+                "movepool": ["Leech Seed", "Draining Kiss", "Mega Drain", "Calm Mind"],
+                "abilities": ["Triage"],
+                "teraTypes": ["Water"],
+                "items": "Big Root",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            }
+        ]
+    },
+    "typhlosion": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Fast Specs",
+                "movepool": ["Eruption", "Burn Up", "Earth Power", "Ember"],
+                "abilities": ["Blaze"],
+                "teraTypes": ["Water"],
+                "items": "Choice Specs",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Earth Power", "Flamethrower", "Shadow Ball", "Extrasensory"],
+                "abilities": ["Sheer Force"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Special Scarf",
+                "movepool": ["Earth Power", "Eruption", "Incinerate", "Flamethrower"],
+                "abilities": ["Sheer Force"],
+                "teraTypes": ["Water"],
+                "items": "Choice Scarf",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "typhlosionhisui": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Specially Defensive",
+                "movepool": ["Ember", "Hex", "Sleep Talk", "Rest"],
+                "abilities": ["Cursed Body"],
+                "teraTypes": ["Water"],
+                "items": "Rocky Helmet",
+                "nature": "calm",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 4,
+                "spdEVs": 252,
+                "speEVs": 0
+            },
+            {
+                "role": "Bulky Special Sweeper",
+                "movepool": ["Infernal Parade", "Calm Mind", "Swift", "Incinerate"],
+                "abilities": ["Cursed Body"],
+                "teraTypes": ["Water"],
+                "items": "Leftovers",
+                "nature": "bold",
+                "hpEVs": 252,
+                "atkEVs": 0,
+                "defEVs": 252,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 0
+            },
+            {
+                "role": "Fast Special Sweeper",
+                "movepool": ["Lava Plume", "Hex", "Rest", "Snore"],
+                "abilities": ["Cursed Body"],
+                "teraTypes": ["Water"],
+                "items": "Chesto Berry",
+                "nature": "timid",
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
+            }
+        ]
+    },
+    "feraligatr": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Colmillo Burbuja", "Mordida Dragon", "Ice Fang"],
+                "abilities": ["Strong Jaw"],
+                "teraTypes": ["Water"],
+                "items": "Life Orb",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Physical Sweeper",
+                "movepool": ["Dragon Dance", "Colmillo Burbuja", "Mordida Dragon", "Ice Fang"],
+                "abilities": ["Strong Jaw"],
+                "teraTypes": ["Water"],
+                "items": "Clear Amulet",
+                "nature": "adamant",
+                "hpEVs": 0,
+                "atkEVs": 252,
+                "defEVs": 0,
+                "spaEVs": 0,
+                "spdEVs": 4,
+                "speEVs": 252
+            },
+            {
+                "role": "Fast Band",
+                "movepool": ["Psychic Fangs", "Colmillo Burbuja", "Mordida Dragon", "Ice Fang"],
+                "abilities": ["Strong Jaw"],
+                "teraTypes": ["Water"],
+                "items": "Choice Band",
+                "nature": "jolly",
                 "hpEVs": 0,
                 "atkEVs": 252,
                 "defEVs": 0,
