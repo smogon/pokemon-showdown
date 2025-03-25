@@ -521,7 +521,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fighting') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 241,
@@ -536,7 +536,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dark') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 240,
@@ -705,6 +705,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return false;
 			}
 			return true;
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Bug' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
 		},
 		forcedForme: "Silvally-Bug",
 		itemUser: ["Silvally-Bug"],
@@ -1248,6 +1254,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			return true;
 		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Dark' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
+		},
 		forcedForme: "Silvally-Dark",
 		itemUser: ["Silvally-Dark"],
 		num: 919,
@@ -1292,9 +1304,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onModifySpDPriority: 2,
-		onModifySpD(spd, pokemon) {
-			if (pokemon.baseSpecies.name === 'Clamperl') {
+		onModifySpAPriority: 2,
+		onModifySpA(spa, pokemon) {
+			if (pokemon.baseSpecies.name === 'Gorebyss') {
 				return this.chainModify(2);
 			}
 		},
@@ -1309,9 +1321,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 90,
 		},
-		onModifySpAPriority: 1,
-		onModifySpA(spa, pokemon) {
-			if (pokemon.baseSpecies.name === 'Clamperl') {
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.baseSpecies.name === 'Huntail') {
 				return this.chainModify(2);
 			}
 		},
@@ -1411,7 +1423,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Dragon') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 250,
@@ -1440,6 +1452,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return false;
 			}
 			return true;
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Dragon' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
 		},
 		forcedForme: "Silvally-Dragon",
 		itemUser: ["Silvally-Dragon"],
@@ -1651,6 +1669,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			return true;
 		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Electric' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
+		},
 		forcedForme: "Silvally-Electric",
 		itemUser: ["Silvally-Electric"],
 		num: 915,
@@ -1793,7 +1817,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Fairy') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 2401,
@@ -1822,6 +1846,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return false;
 			}
 			return true;
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Fairy' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
 		},
 		forcedForme: "Silvally-Fairy",
 		itemUser: ["Silvally-Fairy"],
@@ -1859,6 +1889,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return false;
 			}
 			return true;
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Fighting' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
 		},
 		forcedForme: "Silvally-Fighting",
 		itemUser: ["Silvally-Fighting"],
@@ -1927,6 +1963,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return false;
 			}
 			return true;
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Fire' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
 		},
 		forcedForme: "Silvally-Fire",
 		itemUser: ["Silvally-Fire"],
@@ -2054,6 +2096,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return false;
 			}
 			return true;
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Flying' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
 		},
 		forcedForme: "Silvally-Flying",
 		itemUser: ["Silvally-Flying"],
@@ -2294,6 +2342,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			return true;
 		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Ghost' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
+		},
 		forcedForme: "Silvally-Ghost",
 		itemUser: ["Silvally-Ghost"],
 		num: 910,
@@ -2358,6 +2412,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return false;
 			}
 			return true;
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Grass' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
 		},
 		forcedForme: "Silvally-Grass",
 		itemUser: ["Silvally-Grass"],
@@ -2518,6 +2578,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			return true;
 		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Ground' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
+		},
 		forcedForme: "Silvally-Ground",
 		itemUser: ["Silvally-Ground"],
 		num: 907,
@@ -2583,7 +2649,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Rock') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 238,
@@ -2742,6 +2808,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return false;
 			}
 			return true;
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Ice' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
 		},
 		forcedForme: "Silvally-Ice",
 		itemUser: ["Silvally-Ice"],
@@ -3135,12 +3207,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 60,
 		},
 		spritenum: 475,
-		onModifyCritRatio(critRatio, user) {
-			if (["farfetchd", "sirfetchd"].includes(this.toID(user.baseSpecies.baseSpecies))) {
-				return critRatio + 2;
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.baseSpecies.name === 'Sirfetch\u2019d') {
+				return this.chainModify(1.5);
 			}
 		},
-		itemUser: ["Farfetch\u2019d", "Farfetch\u2019d-Galar", "Sirfetch\u2019d"],
+		onModifyDefPriority: 1,
+		onModifyDef(def, pokemon) {
+			if (pokemon.baseSpecies.name === 'Sirfetch\u2019d') {
+				return this.chainModify(1.5);
+			}
+		},
+		itemUser: ["Sirfetch\u2019d"],
 		num: 259,
 		gen: 8,
 
@@ -3490,7 +3569,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Electric') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 242,
@@ -3736,7 +3815,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Steel') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 233,
@@ -3908,7 +3987,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Grass') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 239,
@@ -4039,7 +4118,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Water') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 243,
@@ -4081,7 +4160,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ice') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 246,
@@ -4434,7 +4513,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Poison') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 245,
@@ -4463,6 +4542,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return false;
 			}
 			return true;
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Poison' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
 		},
 		forcedForme: "Silvally-Poison",
 		itemUser: ["Silvally-Poison"],
@@ -4672,6 +4757,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return false;
 			}
 			return true;
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Psychic' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
 		},
 		forcedForme: "Silvally-Psychic",
 		itemUser: ["Silvally-Psychic"],
@@ -5027,6 +5118,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			return true;
 		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Rock' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
+		},
 		forcedForme: "Silvally-Rock",
 		itemUser: ["Silvally-Rock"],
 		num: 908,
@@ -5336,7 +5433,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move && move.type === 'Flying') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 244,
@@ -5447,7 +5544,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Normal') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 251,
@@ -5462,7 +5559,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Bug') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 222,
@@ -5580,7 +5677,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ground') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 237,
@@ -5609,7 +5706,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				move && (user.baseSpecies.num === 380 || user.baseSpecies.num === 381) &&
 				(move.type === 'Psychic' || move.type === 'Dragon')
 			) {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([6144, 4096]);
 			}
 		},
 		itemUser: ["Latios", "Latias"],
@@ -5625,7 +5722,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Ghost') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 247,
@@ -5770,6 +5867,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			return true;
 		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Steel' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
+		},
 		forcedForme: "Silvally-Steel",
 		itemUser: ["Silvally-Steel"],
 		num: 911,
@@ -5794,12 +5897,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 60,
 		},
 		spritenum: 475,
-		onModifyCritRatio(critRatio, user) {
-			if (this.toID(user.baseSpecies.baseSpecies) === 'farfetchd') {
-				return critRatio + 2;
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.baseSpecies.name === 'Farfetch\u2019d-Galar') {
+				return this.chainModify(2);
 			}
 		},
-		itemUser: ["Farfetch\u2019d"],
+		onModifyDefPriority: 1,
+		onModifyDef(def, pokemon) {
+			if (pokemon.baseSpecies.name === 'Farfetch\u2019d-Galar') {
+				return this.chainModify(2);
+			}
+		},
+		itemUser: ["Farfetch\u2019d-Galar"],
 		num: 259,
 		gen: 2,
 
@@ -7063,7 +7173,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePowerPriority: 15,
 		onBasePower(basePower, user, target, move) {
 			if (move.type === 'Psychic') {
-				return this.chainModify([4915, 4096]);
+				return this.chainModify([5120, 4096]);
 			}
 		},
 		num: 248,
@@ -7208,6 +7318,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return false;
 			}
 			return true;
+		},
+		onBasePowerPriority: 15,
+		onBasePower(basePower, user, target, move) {
+			if (move.type === 'Water' && user.baseSpecies.num === 773) {
+				return this.chainModify([5120, 4096]);
+			}
 		},
 		forcedForme: "Silvally-Water",
 		itemUser: ["Silvally-Water"],
@@ -7373,7 +7489,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onSourceModifyAccuracyPriority: -2,
 		onSourceModifyAccuracy(accuracy) {
 			if (typeof accuracy === 'number') {
-				return this.chainModify([4505, 4096]);
+				return this.chainModify([4710, 4096]);
 			}
 		},
 		num: 265,
