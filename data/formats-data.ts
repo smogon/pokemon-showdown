@@ -1282,18 +1282,23 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "OU",
     },
     wurmple: {
+      isNonstandard: "Past",
       tier: "Illegal",
     },
     silcoon: {
+      isNonstandard: "Past",
       tier: "Illegal",
     },
     beautifly: {
+      isNonstandard: "Past",
       tier: "Illegal",
     },
     cascoon: {
+      isNonstandard: "Past",
       tier: "Illegal",
     },
     dustox: {
+      isNonstandard: "Past",
       tier: "Illegal",
     },
     lotad: {
@@ -1671,6 +1676,7 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "Illegal",
     },
     froslass: {
+      isNonstandard: "Past",
       tier: "Illegal",
     },
     spheal: {
@@ -2633,9 +2639,11 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "Illegal",
     },
     vullaby: {
-      tier: "LC",
+      isNonstandard: "Past",
+      tier: "Illegal",
     },
     mandibuzz: {
+      isNonstandard: "Past",
       tier: "Illegal",
     },
     heatmor: {
@@ -2755,6 +2763,7 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "OU",
     },
     greninjabond: {
+      isNonstandard: "Past",
       tier: "Illegal",
     },
     greninjaash: {
@@ -2800,6 +2809,7 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "NFE",
     },
     floetteeternal: {
+      isNonstandard: "Past",
       tier: "Illegal",
     },
     florges: {
@@ -3700,9 +3710,11 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "OU",
     },
     snom: {
+      isNonstandard: "Past",
       tier: "Illegal",
     },
     frosmoth: {
+      isNonstandard: "Past",
       tier: "Illegal",
     },
     stonjourner: {
@@ -3939,12 +3951,15 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "OU",
     },
     smoliv: {
+      isNonstandard: "Past",
       tier: "Illegal",
     },
     dolliv: {
+      isNonstandard: "Past",
       tier: "Illegal",
     },
     arboliva: {
+      isNonstandard: "Past",
       tier: "Illegal",
     },
     capsakid: {

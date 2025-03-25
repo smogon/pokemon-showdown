@@ -71,27 +71,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Cobblemon Doubles",
 	},
 	{
-		name: "[Gen 9] Doubles OU",
+		name: "[Gen 9] VGCs",
 		mod: 'gen9',
-		gameType: 'doubles',
-		ruleset: ['Standard Doubles', 'Evasion Abilities Clause', 'Terastal Clause'],
-		banlist: ['DUber', 'Shadow Tag'],
-	},
-	{
-		name: "[Gen 9] Doubles Ubers",
-		mod: 'gen9',
-		gameType: 'doubles',
-		ruleset: ['Standard Doubles', '!Gravity Sleep Clause', 'Terastal Clause'],
-	},
-	{
-		name: "[Gen 9] Doubles LC",
-		mod: 'gen9',
-		gameType: 'doubles',
-		ruleset: ['Standard Doubles', 'Little Cup', 'Sleep Clause Mod', 'Terastal Clause'],
-		banlist: ['Basculin-White-Striped', 'Girafarig', 'Gligar', 'Murkrow', 'Qwilfish-Hisui', 'Scyther', 'Sneasel', 'Sneasel-Hisui', 'Vulpix', 'Vulpix-Alola', 'Yanma'],
+		bestOfDefault: true,
+		ruleset: ['Standard', 'Flat Rules', '!! Adjust Level = 50', 'VGC Timer'],
 	},
 
-	// S/V Doubles
+	// Other Metagames
 	///////////////////////////////////////////////////////////////////
 	{
 		section: "Cobblemon Unofficial Metagames",
