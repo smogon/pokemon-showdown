@@ -3777,12 +3777,16 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart(pokemon) {
 			pokemon.addVolatile('metronome');
 		},
+		onEnd(target) {
+			 target.removeVolatile('metronome');
+		},
 		onResidual(pokemon) {
 			if (pokemon.volatiles['metronome']) {
 				pokemon.volatiles['metronome'].turns++;
 			}
 			if (pokemon.volatiles['metronome']?.turns >= 4) {
 				this.boost({spe: 1}, pokemon)
+				pokemon.volatiles['quickdraw'].turns = 0;
 			}
 		},
 		condition: {
