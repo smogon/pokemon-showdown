@@ -59,7 +59,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		boosts: {
-			spa: 1,
+			spa: 2,
+			atk: 2,
 		},
 		num: 545,
 		gen: 5,
@@ -107,19 +108,29 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onAfterBoost(boost, target, source, effect) {
-			// Adrenaline Orb activates if Intimidate is blocked by an ability like Hyper Cutter,
-			// which deletes boost.atk,
-			// but not if the holder's attack is already at -6 (or +6 if it has Contrary),
-			// which sets boost.atk to 0
-			if (target.boosts['spe'] === 6 || boost.atk === 0) {
-				return;
+			if (source && target === source) return;
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					if (target.useItem(source)) {
+						if (this.runEvent('DragOut', source, target, effect)) {
+							source.forceSwitchFlag = true;
+						}
+						if (target.hp) {
+							if (!this.canSwitch(target.side)) return;
+							if (target.volatiles['commanding'] || target.volatiles['commanded']) return;
+							for (const pokemon of this.getAllActive()) {
+								if (pokemon.switchFlag === true) return;
+							}
+							target.switchFlag = true;
+						}
+					}
+				}
 			}
-			if (effect.name === 'Intimidate') {
-				target.useItem();
+			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
+				this.add("-fail", target, "unboost", "[from] ability: Clear Body", "[of] " + target);
 			}
-		},
-		boosts: {
-			spe: 1,
 		},
 		num: 846,
 		gen: 7,
@@ -270,7 +281,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Ground",
 		},
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+			if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
 			}
@@ -434,12 +445,24 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 2) {
-				if (this.runEvent('TryHeal', pokemon, null, this.effect, 20) && pokemon.useItem()) {
-					this.heal(20);
-				}
+		onResidualOrder: 5,
+		onResidualSubOrder: 4,
+		onStart(pokemon) {
+			pokemon.addVolatile('berryjuice')
+		},
+		onResidual(pokemon) {
+			if(pokemon.maxhp !== pokemon.hp && pokemon.volatiles['berryjuice'].turns < 5){
+				this.heal(pokemon.baseMaxhp / 8);
+				pokemon.volatiles['berryjuice'].turns += 1
 			}
+			if (pokemon.volatiles['berryjuice'].turns >= 5){
+				pokemon.useItem();
+			}
+		},
+		condition: {
+			onStart() {
+				this.effectState.turns = 0;
+			},
 		},
 		num: 43,
 		gen: 2,
@@ -650,11 +673,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onModifyAccuracyPriority: -2,
-		onModifyAccuracy(accuracy) {
-			if (typeof accuracy !== 'number') return;
-			this.debug('brightpowder - decreasing accuracy');
-			return this.chainModify([3686, 4096]);
+		onAnyAccuracy(accuracy, target, source, move) {
+			if (move && (source === this.effectState.target) && move.flags['light']) {
+				return true;
+			}
+			return accuracy;
 		},
 		num: 213,
 		gen: 2,
@@ -743,7 +766,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 		},
 		boosts: {
-			atk: 1,
+			atk: 2,
+			spa: 2,
 		},
 		num: 546,
 		gen: 5,
@@ -1642,15 +1666,39 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem() && this.field.isTerrain('electricterrain')) {
 				pokemon.useItem();
+				pokemon.addVolatile('electricseed')
 			}
 		},
 		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('electricterrain')) {
 				pokemon.useItem();
+				pokemon.addVolatile('electricseed')
 			}
 		},
 		boosts: {
 			def: 1,
+		},
+		condition: {
+			duration: 2,
+			noCopy: true, // doesn't get copied by Baton Pass
+			onStart(target) {
+				this.add('-start', target, 'item: Electric Seed');
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, attacker, defender, move) {
+					this.debug('Electric Seed boost');
+					return this.chainModify(1.5);
+
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(atk, attacker, defender, move) {
+					this.debug('Electric Seed boost');
+					return this.chainModify(1.5);
+
+			},
+			onEnd(target) {
+				this.add('-end', target, 'item: Electric Seed', '[silent]');
+			},
 		},
 		num: 881,
 		gen: 7,
@@ -2111,7 +2159,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onFractionalPriority: -0.1,
+		onFoeTryMove(target, source, move) {
+			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
+			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
+				return;
+			}
+
+			const dazzlingHolder = this.effectState.target;
+			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
+				this.attrLastMove('[still]');
+				source.useItem()
+				return false;
+			}
+		},
 		num: 316,
 		gen: 4,
 
@@ -2157,7 +2217,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Ice",
 		},
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+			if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
 			}
@@ -2326,15 +2386,39 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem() && this.field.isTerrain('grassyterrain')) {
 				pokemon.useItem();
+				pokemon.addVolatile('grassyseed')
 			}
 		},
 		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('grassyterrain')) {
 				pokemon.useItem();
+				pokemon.addVolatile('grassyseed')
 			}
 		},
 		boosts: {
 			def: 1,
+		},
+		condition: {
+			duration: 2,
+			noCopy: true, // doesn't get copied by Baton Pass
+			onStart(target) {
+				this.add('-start', target, 'item: Grassy Seed');
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, attacker, defender, move) {
+					this.debug('Grassy Seed boost');
+					return this.chainModify(1.5);
+
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(atk, attacker, defender, move) {
+					this.debug('Grassy Seed boost');
+					return this.chainModify(1.5);
+
+			},
+			onEnd(target) {
+				this.add('-end', target, 'item: Grassy Seed', '[silent]');
+			},
 		},
 		num: 884,
 		gen: 7,
@@ -2354,7 +2438,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Flying",
 		},
-		onEat: false,
+		onDamagingHitOrder: 2,
+		onDamagingHit(damage, target, source, move) {
+			if (this.checkMoveMakesContact(move, source, target) && target.eatItem()) {
+				this.damage(source.baseMaxhp / 5, source, target);
+			}
+		},
+		onEat() { },
 		num: 173,
 		gen: 3,
 	},
@@ -2863,14 +2953,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Fairy",
 		},
-		onAfterMoveSecondary(target, source, move) {
-			if (move.category === 'Physical') {
+		onFoeBeforeMove(source, target, move) {
+			if (move.category === 'Physical' && target.eatItem()) {
 				if (move.id === 'present' && move.heal) return;
-				target.eatItem();
+			}
+		},
+		onAfterMoveSecondary(target, source, move) {
+			if (move.category === 'Physical' && target.eatItem()) {
+				if (move.id === 'present' && move.heal) return;
+
 			}
 		},
 		onEat(pokemon) {
-			this.boost({def: 1});
+			this.boost({def: 2});
 		},
 		num: 687,
 		gen: 6,
@@ -2883,7 +2978,20 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Fighting",
 		},
-		onEat: false,
+		onStart(pokemon) {
+			let activated = false;
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+					for (const condition of sideConditions) {
+						if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
+							this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] item: Kelpsy Berry', '[of] ' + pokemon);
+							activated = true
+						}
+					}
+					if(activated){
+						pokemon.eatItem()
+					}
+		},
+		onEat() { },
 		num: 170,
 		gen: 3,
 	},
@@ -2941,7 +3049,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onFractionalPriority: -0.1,
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['tail']) {
+				this.debug('Lagging Tail boost');
+				return this.chainModify(1.25);
+			}
+		},
 		num: 279,
 		gen: 4,
 	},
@@ -2954,7 +3068,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Flying",
 		},
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+			if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
 			}
@@ -2999,12 +3113,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onModifyAccuracyPriority: -2,
-		onModifyAccuracy(accuracy) {
-			if (typeof accuracy !== 'number') return;
-			this.debug('lax incense - decreasing accuracy');
-			return this.chainModify([3686, 4096]);
-		},
+		onSourceModifyDamage(damage, source, target, move) {
+			return this.chainModify(0.9);
+	},
 		num: 255,
 		gen: 3,
 
@@ -3089,7 +3200,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Grass",
 		},
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+			if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
 			}
@@ -3462,13 +3573,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Dark",
 		},
+		onFoeBeforeMove(source, target, move) {
+			if (move.category === 'Special' && target.eatItem()) {
+				if (move.id === 'present' && move.heal) return;
+			}
+		},
 		onAfterMoveSecondary(target, source, move) {
-			if (move.category === 'Special') {
-				target.eatItem();
+			if (move.category === 'Special' && target.eatItem()) {
+				if (move.id === 'present' && move.heal) return;
+
 			}
 		},
 		onEat(pokemon) {
-			this.boost({spd: 1});
+			this.boost({spd: 2});
 		},
 		num: 688,
 		gen: 6,
@@ -3842,15 +3959,39 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem() && this.field.isTerrain('mistyterrain')) {
 				pokemon.useItem();
+				pokemon.addVolatile('mistyseed')
 			}
 		},
 		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('mistyterrain')) {
 				pokemon.useItem();
+				pokemon.addVolatile('mistyseed')
 			}
 		},
 		boosts: {
 			spd: 1,
+		},
+		condition: {
+			duration: 2,
+			noCopy: true, // doesn't get copied by Baton Pass
+			onStart(target) {
+				this.add('-start', target, 'item: Misty Seed');
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, attacker, defender, move) {
+					this.debug('Misty Seed boost');
+					return this.chainModify(1.5);
+
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(atk, attacker, defender, move) {
+					this.debug('Misty Seed boost');
+					return this.chainModify(1.5);
+
+			},
+			onEnd(target) {
+				this.add('-end', target, 'item: Misty Seed', '[silent]');
+			},
 		},
 		num: 883,
 		gen: 7,
@@ -4178,7 +4319,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Poison",
 		},
 		onUpdate(pokemon) {
-			if (pokemon.hp <= pokemon.maxhp / 4 || (pokemon.hp <= pokemon.maxhp / 2 &&
+			if (pokemon.hp <= pokemon.maxhp / 2 || (pokemon.hp <= pokemon.maxhp / 2 &&
 					pokemon.hasAbility('gluttony') && pokemon.abilityState.gluttony)) {
 				pokemon.eatItem();
 			}
@@ -4487,6 +4628,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['punch']) {
+				this.debug('Protective Pads boost');
+				return this.chainModify(1.1);
+			}
+		},
 		// protective effect handled in Battle#checkMoveMakesContact
 		num: 880,
 		gen: 7,
@@ -4539,15 +4687,39 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart(pokemon) {
 			if (!pokemon.ignoringItem() && this.field.isTerrain('psychicterrain')) {
 				pokemon.useItem();
+				pokemon.addVolatile('psychicseed')
 			}
 		},
 		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('psychicterrain')) {
 				pokemon.useItem();
+				pokemon.addVolatile('psychicseed')
 			}
 		},
 		boosts: {
 			spd: 1,
+		},
+		condition: {
+			duration: 2,
+			noCopy: true, // doesn't get copied by Baton Pass
+			onStart(target) {
+				this.add('-start', target, 'item: Psychic Seed');
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, attacker, defender, move) {
+					this.debug('Psychic Seed boost');
+					return this.chainModify(1.5);
+
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(atk, attacker, defender, move) {
+					this.debug('Psychic Seed boost');
+					return this.chainModify(1.5);
+
+			},
+			onEnd(target) {
+				this.add('-end', target, 'item: Psychic Seed', '[silent]');
+			},
 		},
 		num: 882,
 		gen: 7,
@@ -4574,12 +4746,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
 				this.debug('Punching Glove boost');
-				return this.chainModify([4506, 4096]);
+				return this.chainModify(1.25);
 			}
-		},
-		onModifyMovePriority: 1,
-		onModifyMove(move) {
-			if (move.flags['punch']) delete move.flags['contact'];
 		},
 		num: 1884,
 		gen: 9,

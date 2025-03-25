@@ -9964,11 +9964,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 95,
 		basePower: 0,
 		category: "Status",
-
 		name: "Ion Deluge",
 		pp: 25,
 		priority: 1,
 		flags: {metronome: 1, light: 1,},
+		volatileStatus: 'iondeluge',
 		condition: {
 			duration: 4,
 			onSideStart(targetSide) {
@@ -10591,7 +10591,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	lick: {
 		num: 122,
-		accuracy: 100,
+		accuracy: 85,
 		basePower: 20,
 		category: "Physical",
 		name: "Lick",
@@ -10599,8 +10599,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
 		secondary: {
-			chance: 30,
-			status: 'Curse',
+			chance: 100,
+			volatileStatus: 'curse',
 		},
 		target: "normal",
 		type: "Ghost",
