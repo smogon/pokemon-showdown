@@ -2,6 +2,5 @@
   "editor.insertSpaces": false,
   "typescript.tsdk": "node_modules/typescript/lib",
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
-  "typescript.format.semicolons": "insert",
-  "workbench.colorTheme": "Solarized Dark"
+  "typescript.format.semicolons": "insert"
 }

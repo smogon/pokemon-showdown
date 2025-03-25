@@ -65,7 +65,8 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "OU",
     },
     butterfreegmax: {
-      tier: "OU",
+      isNonstandard: "Past",
+      tier: "Illegal",
     },
     weedle: {
       tier: "LC",
@@ -152,25 +153,32 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "Illegal",
     },
     pikachuoriginal: {
-      tier: "OU",
+      isNonstandard: "Past",
+      tier: "Illegal",
     },
     pikachuhoenn: {
-      tier: "OU",
+      isNonstandard: "Past",
+      tier: "Illegal",
     },
     pikachusinnoh: {
-      tier: "OU",
+      isNonstandard: "Past",
+      tier: "Illegal",
     },
     pikachuunova: {
-      tier: "OU",
+      isNonstandard: "Past",
+      tier: "Illegal",
     },
     pikachukalos: {
-      tier: "OU",
+      isNonstandard: "Past",
+      tier: "Illegal",
     },
     pikachualola: {
-      tier: "OU",
+      isNonstandard: "Past",
+      tier: "Illegal",
     },
     pikachupartner: {
-      tier: "OU",
+      isNonstandard: "Past",
+      tier: "Illegal",
     },
     pikachustarter: {
       isNonstandard: "LGPE",
@@ -181,7 +189,8 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "Illegal",
     },
     pikachuworld: {
-      tier: "OU",
+      isNonstandard: "Past",
+      tier: "Illegal",
     },
     raichu: {
       tier: "OU",
@@ -1051,6 +1060,10 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "Illegal",
     },
     dudunsparce: {
+      isNonstandard: "Past",
+      tier: "Illegal",
+    },
+    dudunsparcethreesegment: {
       isNonstandard: "Past",
       tier: "Illegal",
     },
@@ -2333,6 +2346,12 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
     basculin: {
       tier: "OU",
     },
+    basculinbluestriped: {
+      tier: "OU",
+    },
+    basculinwhitestriped: {
+      tier: "OU",
+    },
     basculegion: {
       tier: "OU",
     },
@@ -2794,6 +2813,12 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
     vivillon: {
       tier: "OU",
     },
+    vivillonfancy: {
+      tier: "OU",
+    },
+    vivillonpokeball: {
+      tier: "OU",
+    },
     litleo: {
       isNonstandard: "Past",
       tier: "Illegal",
@@ -2840,6 +2865,10 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "Illegal",
     },
     meowstic: {
+      isNonstandard: "Past",
+      tier: "Illegal",
+    },
+    meowsticf: {
       isNonstandard: "Past",
       tier: "Illegal",
     },
@@ -3416,6 +3445,10 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       isNonstandard: "Past",
       tier: "Illegal",
     },
+    magearnaoriginal: {
+      isNonstandard: "Past",
+      tier: "Illegal",
+    },
     marshadow: {
       isNonstandard: "Past",
       tier: "Illegal",
@@ -3633,6 +3666,10 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       isNonstandard: "Past",
       tier: "Illegal",
     },
+    toxtricitylowkey: {
+      isNonstandard: "Past",
+      tier: "Illegal",
+    },
     toxtricitygmax: {
       isNonstandard: "Past",
       tier: "Illegal",
@@ -3663,7 +3700,15 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       isNonstandard: "Past",
       tier: "Illegal",
     },
+    sinisteaantique: {
+      isNonstandard: "Past",
+      tier: "Illegal",
+    },
     polteageist: {
+      isNonstandard: "Past",
+      tier: "Illegal",
+    },
+    polteageistantique: {
       isNonstandard: "Past",
       tier: "Illegal",
     },
@@ -3822,6 +3867,10 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       isNonstandard: "Past",
       tier: "Illegal",
     },
+    zarudedada: {
+      isNonstandard: "Past",
+      tier: "Illegal",
+    },
     regieleki: {
       isNonstandard: "Past",
       tier: "Illegal",
@@ -3950,6 +3999,9 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
     palafin: {
       tier: "OU",
     },
+    palafinhero: {
+      tier: "OU",
+    },
     smoliv: {
       isNonstandard: "Past",
       tier: "Illegal",
@@ -3992,6 +4044,9 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "NFE",
     },
     maushold: {
+      tier: "OU",
+    },
+    mausholdfour: {
       tier: "OU",
     },
     cetoddle: {
@@ -4042,6 +4097,15 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "Illegal",
     },
     squawkabilly: {
+      tier: "OU",
+    },
+    squawkabillyblue: {
+      tier: "OU",
+    },
+    squawkabillyyellow: {
+      tier: "OU",
+    },
+    squawkabillywhite: {
       tier: "OU",
     },
     flamigo: {
@@ -4226,7 +4290,15 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       isNonstandard: "Past",
       tier: "Illegal",
     },
+    poltchageistartisan: {
+      isNonstandard: "Past",
+      tier: "Illegal",
+    },
     sinistcha: {
+      isNonstandard: "Past",
+      tier: "Illegal",
+    },
+    sinistchamasterpiece: {
       isNonstandard: "Past",
       tier: "Illegal",
     },
@@ -4594,6 +4666,14 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
         isNonstandard: "CAP",
         tier: "CAP",
     },
+    chuggon: {
+        isNonstandard: "CAP",
+        tier: "CAP LC",
+    },
+    draggalong: {
+        isNonstandard: "CAP",
+        tier: "CAP NFE",
+  },
     chuggalong: {
         isNonstandard: "CAP",
         tier: "CAP",
