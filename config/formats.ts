@@ -71,10 +71,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Cobblemon Doubles",
 	},
 	{
-		name: "[Gen 9] VGCs",
+		name: "[Gen 9] VGC 2025 Reg G",
 		mod: 'gen9',
+		gameType: 'doubles',
 		bestOfDefault: true,
-		ruleset: ['Standard', 'Flat Rules', '!! Adjust Level = 50', 'VGC Timer'],
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets', 'Terastral Clause'],
+		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects'],
 	},
 
 	// Other Metagames
