@@ -3378,7 +3378,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 					}
 				}
 		},
-		onSourceEffectiveness(typeMod, target, type, move) {
+		onFoeEffectiveness(typeMod, target, type, move) {
 			if (target && (target.hasType('Water') || target.hasType('Flying')) && move.type === 'Grass'){
 				return 1
 			};
