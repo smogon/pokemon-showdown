@@ -768,6 +768,13 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			const g = group[cat as keyof DexOrGroup];
 			if (g === undefined) continue;
 			if (tierTraits.includes(cat) && tierInequalitySearch) continue;
+			if (cat === 'stats') {
+				const ineqality = param.split(',');
+				const result = validStatInequality(group['stats'], ineqality[0],
+					ineqality[1] as Direction, ineqality[2], +ineqality[3], input);
+				if (!result) continue;
+				return result;
+			}
 			if (typeof g !== 'boolean' && g[param] === undefined) {
 				if (uniqueTraits.includes(cat)) {
 					for (const currentParam in g) {
@@ -780,6 +787,55 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				return `A search cannot both include and exclude '${input}'.`;
 			} else {
 				return `The search included '${(isNotSearch ? "!" : "") + input}' more than once.`;
+			}
+		}
+		return false;
+	};
+	const validStatInequality = (g: { [k: string]: { [k in Direction]: { [s: string]: number | boolean } } },
+		statKey: string, direction: Direction, compareTo: string, value: number, input: string) => {
+		const gValue = g[statKey]?.[direction]?.[compareTo]; // Duplicate value
+		const swapValue = g[compareTo]?.[direction]?.[statKey]; // Creates invalid ranges. non-numeric
+
+		if (direction === 'equal') {
+			const gEquality = gValue || swapValue;
+			const greater = g[statKey]?.['greater']?.[compareTo] || g[compareTo]?.['greater']?.[statKey];
+			const less = g[statKey]?.['less']?.[compareTo] || g[compareTo]?.['less']?.[statKey];
+			const inclusiveGreater = gEquality && gEquality === greater; // Group has a matching = and > or inverse
+			const inclusiveLess = gEquality && gEquality === less; // Group has a matching = and < or inverse
+			const gInclusiveIneq = ((greater && inclusiveGreater) || (less && inclusiveLess)); // Group has a = and matching > or <
+
+			// Skip over combined inequality operations because they present separately.
+			if (gEquality && !(input.search(/([><]{1}=)/) >= 0 || gInclusiveIneq)) {
+				return `The search already included '${input}' or another inequality which makes it redunant.`;
+			} else if (compareTo === 'numeric') {
+				if ((greater && ((inclusiveGreater && value < +greater) || (!inclusiveGreater && value <= +greater))) ||
+					(less && ((inclusiveLess && value > +less) || (!inclusiveLess && value >= +less)))) {
+					return `The search '${input}' creates an invalid range.`;
+				}
+			// Only string stat comparisons are left which are never valid without an = on both sides.
+			} else if (!gEquality && (greater || less)) {
+				return `The search '${input}' creates an invalid range.`;
+			}
+		} else {
+			const inverseDirection = direction === 'greater' ? 'less' : 'greater';
+			const inverseValue = g[statKey]?.[inverseDirection]?.[compareTo]; // Creates invalid ranges
+			const inverseSwapValue = g[compareTo]?.[inverseDirection]?.[statKey]; // Duplicate value, non-numeric
+			const gEquality = g[statKey]?.['equal']?.[compareTo] || g[compareTo]?.['equal']?.[statKey]; // Group has an = op
+			const checkEquality = input.includes('=') && gEquality;
+
+			if (gValue || inverseSwapValue) {
+				return `The search already included '${input}' or another inequality which makes it redunant.`;
+			} else if (compareTo === 'numeric' && (inverseValue || gEquality)) {
+				const result = value - Number(inverseValue || gEquality);
+				if ((direction === 'greater' && ((checkEquality && result > 0) || (!checkEquality && result >= 0))) ||
+					(direction === 'less' && ((checkEquality && result < 0) || (!checkEquality && result <= 0)))) {
+					return `The search '${input}' creates an invalid range.`;
+				}
+			// Only string stat comparisons are left which are never valid without an = on both sides.
+			// Second part catches searches like atk = spatk, spatk > atk but not def = spe, spatk > atk
+			} else if (compareTo !== 'numeric' && ((!checkEquality && (swapValue || inverseValue)) ||
+				(!input.includes('=') && gEquality))) {
+				return `The search '${input}' creates an invalid range.`;
 			}
 		}
 		return false;
@@ -1162,6 +1218,9 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					inequalityString = target.charAt(inequality);
 				}
 				const targetParts = target.replace(/\s/g, '').split(inequalityString);
+				if (targetParts[1].search(/>|<|=/) >= 0 || targetParts.length > 2) {
+					return { error: `'${target}' contained more than one inequality symbol.` };
+				}
 				let compareType: string;
 				let statKey: string;
 				let value: number | boolean;
@@ -1203,6 +1262,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 						orGroup.stats[statKey][direction] = Object.create(null);
 					else if (orGroup.stats[statKey][direction][compareType])
 						return { error: `Duplicate stat inequality and type for ${statKey}.` };
+					const invalid = validParameter('stats', [statKey, direction, compareType, value].join(','), isNotSearch, target);
+					if (invalid) return { error: invalid };
 					orGroup.stats[statKey][direction][compareType] = value;
 				}
 				continue;
