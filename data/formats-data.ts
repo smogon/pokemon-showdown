@@ -2639,7 +2639,8 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "Illegal",
     },
     vullaby: {
-      tier: "LC",
+      isNonstandard: "Past",
+      tier: "Illegal",
     },
     mandibuzz: {
       isNonstandard: "Past",
