@@ -2770,7 +2770,7 @@
             },
             {
                 "role": "Fast Special Sweeper",
-                "movepool": ["Nasty Plot", "Nightmare", "Focus Blast", "Nasty Plot"],
+                "movepool": ["Nasty Plot", "Nightmare", "Focus Blast", "Hypnosis"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Water"],
                 "items": "Gengarite",

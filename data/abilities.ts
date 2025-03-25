@@ -3545,7 +3545,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onDeductPP(target, source) {
 			if (target.isAlly(source)) return;
-			return 2;
+			return 3;
 		},
 		flags: {},
 		name: "Pressure",
