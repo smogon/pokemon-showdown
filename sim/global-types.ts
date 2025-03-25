@@ -34,6 +34,9 @@ type SparseStatsTable = Partial<StatsTable>;
 type BoostID = StatIDExceptHP | 'accuracy' | 'evasion';
 type BoostsTable = { [boost in BoostID]: number };
 type SparseBoostsTable = Partial<BoostsTable>;
+type PassableBoostID = BoostID | 'crit';
+type PassableBoostsTable = { [passable in PassableBoostID]: boolean };
+type SparsePassableBoostsTable = Partial<PassableBoostsTable>;
 type Nonstandard = 'Past' | 'Future' | 'Unobtainable' | 'CAP' | 'LGPE' | 'Custom' | 'Gigantamax';
 
 type PokemonSet = import('./teams').PokemonSet;
@@ -371,6 +374,13 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	fieldEvent?: (this: Battle, eventid: string, targets?: Pokemon[]) => void;
 	getAllActive?: (this: Battle, includeFainted?: boolean, includeCommanding?: boolean) => Pokemon[];
 }
+
+/**
+ * Misc properties that some clauses depend on.
+ */
+interface ClauseData {
+	canStatBoost?: ((this: TeamValidator, set: PokemonSet) => SparsePassableBoostsTable | void) | SparsePassableBoostsTable;
+};
 
 type TypeInfo = import('./dex-data').TypeInfo;
 
