@@ -4901,7 +4901,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Mantine",
 		types: ["Water", "Flying"],
 		baseStats: {hp: 85, atk: 40, def: 70, spa: 80, spd: 140, spe: 70},
-		abilities: {0: "Aerialite", 1: "Water Absorb", H: "Water Veil"},
+		abilities: {0: "Aerilate", 1: "Water Absorb", H: "Water Veil"},
 		heightm: 2.1,
 		weightkg: 220,
 		color: "Purple",

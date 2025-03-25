@@ -3371,13 +3371,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (move.type === 'Water') {
-				target.useItem();
-			}
+		onAfterMove(pokemon, target, move) {
+				if(target && pokemon !== target){
+					if(move.type === 'Grass'){
+						pokemon.useItem()
+					}
+				}
 		},
-		boosts: {
-			spd: 1,
+		onFoeEffectiveness(typeMod, target, type, move) {
+			if (target && (target.hasType('Water') || target.hasType('Flying')) && move.type === 'Grass'){
+				return 1
+			};
 		},
 		num: 648,
 		gen: 6,
@@ -3773,36 +3777,21 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart(pokemon) {
 			pokemon.addVolatile('metronome');
 		},
+		onEnd(target) {
+			 target.removeVolatile('metronome');
+		},
+		onResidual(pokemon) {
+			if (pokemon.volatiles['metronome']) {
+				pokemon.volatiles['metronome'].turns++;
+			}
+			if (pokemon.volatiles['metronome']?.turns >= 4) {
+				this.boost({spe: 1}, pokemon)
+				pokemon.volatiles['metronome'].turns = 0;
+			}
+		},
 		condition: {
-			onStart(pokemon) {
-				this.effectState.lastMove = '';
-				this.effectState.numConsecutive = 0;
-			},
-			onTryMovePriority: -2,
-			onTryMove(pokemon, target, move) {
-				if (!pokemon.hasItem('metronome')) {
-					pokemon.removeVolatile('metronome');
-					return;
-				}
-				if (move.callsMove) return;
-				if (this.effectState.lastMove === move.id && pokemon.moveLastTurnResult) {
-					this.effectState.numConsecutive++;
-				} else if (pokemon.volatiles['twoturnmove']) {
-					if (this.effectState.lastMove !== move.id) {
-						this.effectState.numConsecutive = 1;
-					} else {
-						this.effectState.numConsecutive++;
-					}
-				} else {
-					this.effectState.numConsecutive = 0;
-				}
-				this.effectState.lastMove = move.id;
-			},
-			onModifyDamage(damage, source, target, move) {
-				const dmgMod = [4096, 4915, 5734, 6553, 7372, 8192];
-				const numConsecutive = this.effectState.numConsecutive > 5 ? 5 : this.effectState.numConsecutive;
-				this.debug(`Current Metronome boost: ${dmgMod[numConsecutive]}/4096`);
-				return this.chainModify([dmgMod[numConsecutive], 4096]);
+			onStart() {
+				this.effectState.turns = 0;
 			},
 		},
 		num: 277,
@@ -3871,7 +3860,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 					this.add('-enditem', source, 'Micle Berry');
 					source.removeVolatile('micleberry');
 					if (typeof accuracy === 'number') {
-						return this.chainModify([4915, 4096]);
+						return true;
 					}
 				}
 			},
@@ -4018,11 +4007,25 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 16,
-		onBasePower(basePower, user, target, move) {
-			if (move.category === 'Physical') {
-				return this.chainModify([4505, 4096]);
+		onStart(pokemon) {
+			pokemon.addVolatile('muscleband');
+		},
+		onEnd(target) {
+			 target.removeVolatile('muscleband');
+		},
+		onBeforeMove(pokemon, target, move) {
+			if (pokemon.volatiles['muscleband'] && move.category === 'Physical') {
+				pokemon.volatiles['muscleband'].turns++;
 			}
+			if (pokemon.volatiles['muscleband']?.turns >= 3) {
+				this.boost({atk: 1}, pokemon)
+				pokemon.volatiles['muscleband'].turns = 0;
+			}
+		},
+		condition: {
+			onStart() {
+				this.effectState.turns = 0;
+			},
 		},
 		num: 266,
 		gen: 4,
@@ -4150,11 +4153,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Psychic') {
-				return this.chainModify([4915, 4096]);
-			}
+		onDamagingHit(damage, target, source, move) {
+			this.field.setTerrain('psychicterrain');
+			target.useItem()
 		},
 		num: 314,
 		gen: 4,
@@ -4772,13 +4773,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		isPokeball: true,
 	},
 	quickclaw: {
-		onFractionalPriorityPriority: -2,
-		onFractionalPriority(priority, pokemon, target, move) {
-			if (move.category === "Status" && pokemon.hasAbility("myceliummight")) return;
-			if (priority <= 0 && this.randomChance(1, 5)) {
-				this.add('-activate', pokemon, 'item: Quick Claw');
-				return 0.1;
-			}
+		onModifySpe(spe, pokemon) {
+			if (pokemon.volatiles['dynamax']) return;
+			return this.chainModify(1.1);
 		},
 		name: "Quick Claw",
 		spritenum: 373,
@@ -4856,7 +4853,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 		},
 		onModifyCritRatio(critRatio) {
-			return critRatio + 1;
+			return critRatio + 2;
 		},
 		num: 326,
 		gen: 4,
@@ -7421,11 +7418,25 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 16,
-		onBasePower(basePower, user, target, move) {
-			if (move.category === 'Special') {
-				return this.chainModify([4505, 4096]);
+		onStart(pokemon) {
+			pokemon.addVolatile('wiseglasses');
+		},
+		onEnd(target) {
+			 target.removeVolatile('wiseglasses');
+		},
+		onBeforeMove(pokemon, target, move) {
+			if (pokemon.volatiles['wiseglasses'] && move.category === 'Special') {
+				pokemon.volatiles['wiseglasses'].turns++;
 			}
+			if (pokemon.volatiles['wiseglasses']?.turns >= 3) {
+				this.boost({spa: 1}, pokemon)
+				pokemon.volatiles['wiseglasses'].turns = 0;
+			}
+		},
+		condition: {
+			onStart() {
+				this.effectState.turns = 0;
+			},
 		},
 		num: 267,
 		gen: 4,
