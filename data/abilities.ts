@@ -2052,7 +2052,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	illuminate: {
 		onAnyAccuracy(accuracy, target, source, move) {
 			if (move && (source === this.effectState.target)) {
-				return true;
+				return accuracy += 10;
 			}
 			return accuracy;
 		},
