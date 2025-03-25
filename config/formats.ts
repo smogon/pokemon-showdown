@@ -71,10 +71,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Cobblemon Doubles",
 	},
 	{
-		name: "[Gen 9] BSS Reg G",
+		name: "[Gen 9] VGCs",
 		mod: 'gen9',
 		bestOfDefault: true,
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer'],
+		ruleset: ['Standard', 'Flat Rules', '!! Adjust Level = 50', 'VGC Timer'],
 	},
 
 	// Other Metagames
