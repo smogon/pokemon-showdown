@@ -3692,7 +3692,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		name: "Noceadowl",
 		types: ["Ghost", "Flying"],
 		baseStats: {hp: 125, atk: 50, def: 55, spa: 90, spd: 105, spe: 75},
-		abilities: {0: "Insomnia", 1: "Tinted Lens", H: "Magic Guard"},
+		abilities: {0: "Insomnia", 1: "Pressure", H: "Magic Guard"},
 		heightm: 1.6,
 		weightkg: 40.8,
 		color: "Brown",
