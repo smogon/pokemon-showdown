@@ -4153,11 +4153,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move.type === 'Psychic') {
-				return this.chainModify([4915, 4096]);
-			}
+		onDamagingHit(damage, target, source, move) {
+			this.field.setTerrain('psychicterrain');
+			target.useItem()
 		},
 		num: 314,
 		gen: 4,
