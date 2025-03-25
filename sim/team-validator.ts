@@ -1571,6 +1571,9 @@ export class TeamValidator {
 			} else {
 				problems.push(`Necrozma-Ultra must start the battle as Necrozma-Dusk-Mane or Necrozma-Dawn-Wings holding Ultranecrozium Z. Please specify which Necrozma it should start as.`);
 			}
+		} else if (species.name === 'Slastma-Liberado') {
+			set.species = 'Slastma';
+			set.ability = 'Caparazon Inestable';
 		} else if (species.name === 'Zygarde-Complete') {
 			problems.push(`Zygarde-Complete must start the battle as Zygarde or Zygarde-10% with Power Construct. Please specify which Zygarde it should start as.`);
 		} else if (species.baseSpecies === 'Terapagos') {
