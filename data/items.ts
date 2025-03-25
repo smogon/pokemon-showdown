@@ -3786,7 +3786,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			if (pokemon.volatiles['metronome']?.turns >= 4) {
 				this.boost({spe: 1}, pokemon)
-				pokemon.volatiles['quickdraw'].turns = 0;
+				pokemon.volatiles['metronome'].turns = 0;
 			}
 		},
 		condition: {
@@ -3860,7 +3860,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 					this.add('-enditem', source, 'Micle Berry');
 					source.removeVolatile('micleberry');
 					if (typeof accuracy === 'number') {
-						return this.chainModify([4915, 4096]);
+						return true;
 					}
 				}
 			},
@@ -4007,11 +4007,25 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 16,
-		onBasePower(basePower, user, target, move) {
-			if (move.category === 'Physical') {
-				return this.chainModify([4505, 4096]);
+		onStart(pokemon) {
+			pokemon.addVolatile('muscleband');
+		},
+		onEnd(target) {
+			 target.removeVolatile('muscleband');
+		},
+		onBeforeMove(pokemon, target, move) {
+			if (pokemon.volatiles['muscleband'] && move.category === 'Physical') {
+				pokemon.volatiles['muscleband'].turns++;
 			}
+			if (pokemon.volatiles['muscleband']?.turns >= 3) {
+				this.boost({atk: 1}, pokemon)
+				pokemon.volatiles['muscleband'].turns = 0;
+			}
+		},
+		condition: {
+			onStart() {
+				this.effectState.turns = 0;
+			},
 		},
 		num: 266,
 		gen: 4,
