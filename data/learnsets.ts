@@ -26006,6 +26006,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			hyperbeam: ["9M", "9M", "9M", "9M", "9M", "9M"],
 			icepunch: ["9T", "9M", "9T", "9T", "9T", "9T"],
 			infestation: ["9M", "9M"],
+			iondeluge: ["9M", "9M"],
 			knockoff: ["9T", "9T", "9T", "9T"],
 			lightscreen: ["9M", "9L12", "9M", "9M", "9L14", "9M", "9L14", "9M", "9L14", "9M", "9L24"],
 			machpunch: ["9L15", "9L17", "9L17", "9L17"],

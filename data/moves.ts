@@ -4664,7 +4664,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
-					return 8;
+					return 10;
 				}
 				return 5;
 			},
@@ -7903,7 +7903,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
-					return 8;
+					return 10;
 				}
 				return 5;
 			},
@@ -12555,7 +12555,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
-					return 8;
+					return 10;
 				}
 				return 5;
 			},
@@ -14636,7 +14636,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
-					return 8;
+					return 10;
 				}
 				return 5;
 			},

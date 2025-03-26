@@ -5411,14 +5411,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	seaincense: {
 		name: "Sea Incense",
 		spritenum: 430,
+		isIncense: true,
 		fling: {
 			basePower: 10,
 		},
-		onBasePowerPriority: 15,
-		onBasePower(basePower, user, target, move) {
-			if (move && move.type === 'Water') {
-				return this.chainModify([4915, 4096]);
+		onSourceTryPrimaryHit(target, source, move) {
+			if (move.type === 'Water' && source.useItem()) {
+				source.addVolatile('incense');
 			}
+		},
+		boosts: {
+			spe: -1
 		},
 		num: 254,
 		gen: 3,
@@ -5467,6 +5470,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			onStart() {
 				this.effectState.turns = 0;
 			},
+			onResidualOrder: 5,
+			onResidualSubOrder: 3,
+			onResidual(pokemon) {
+				this.effectState.turns++;
+				if (this.effectState.turns >= 5) {
+					if (pokemon.status) {
+						this.add('-activate', pokemon, 'item: Shed Shell');
+						this.add('-message', `${pokemon.name}'s Shed Shell cured its status!`);
+						pokemon.cureStatus();
+					}
+					this.effectState.turns = 0;
+				}
+			},
 		},
 		num: 295,
 		gen: 4,
@@ -5480,7 +5496,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onAfterMoveSecondarySelfPriority: -1,
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (move.totalDamage && !pokemon.forceSwitchFlag) {
-				this.heal(move.totalDamage / 8, pokemon);
+				this.heal(move.totalDamage / 6, pokemon);
 			}
 		},
 		num: 253,
@@ -5659,11 +5675,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Ice') {
-				target.useItem();
+				this.boost({ atk: 2, spa: 2 }, target, target); 
+				this.add('-activate', target, 'item: Snowball'); 
+				this.add('-message', `${target.name}'s Snowball boosted its stats!`);
 			}
-		},
-		boosts: {
-			atk: 1,
 		},
 		num: 649,
 		gen: 6,
@@ -5813,7 +5828,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (stats.length) {
 				const randomStat = this.sample(stats);
 				const boost: SparseBoostsTable = {};
-				boost[randomStat] = 2;
+				boost[randomStat] = 3;
 				this.boost(boost);
 			}
 		},
@@ -5920,18 +5935,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
-		onResidualOrder: 28,
-		onResidualSubOrder: 3,
-		onResidual(pokemon) {
-			this.damage(pokemon.baseMaxhp / 8);
-		},
-		onHit(target, source, move) {
-			if (source && source !== target && !source.item && move && this.checkMoveMakesContact(move, source, target)) {
-				const barb = target.takeItem();
-				if (!barb) return; // Gen 4 Multitype
-				source.setItem(barb);
-				// no message for Sticky Barb changing hands
-			}
+		onModifyMove(move) {
+			move.ignoreDefensive = true;
 		},
 		num: 288,
 		gen: 4,

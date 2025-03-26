@@ -431,6 +431,16 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			return this.chainModify([6144, 4096]);
 		},
 	},
+	incense: {
+		name: 'incense',
+		duration: 1,
+		affectsFainted: true,
+		onBasePowerPriority: 14,
+		onBasePower(basePower, user, target, move) {
+			this.debug('Incense Boost');
+			return this.chainModify([8192, 4096]);
+		},
+	},
 
 	// weather is implemented here since it's so important to the game
 
