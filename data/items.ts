@@ -1339,7 +1339,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onTryAddVolatile(status, pokemon) {
-			if (status.id === 'attract') {
+			if (status.id === 'attract' || status.id === 'destinybond') {
 				this.add('-immune', pokemon, '[from] item: Destiny Knot');
 				return null;
 			}
