@@ -1338,11 +1338,17 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onAttractPriority: -100,
-		onAttract(target, source) {
-			this.debug('attract intercepted: ' + target + ' from ' + source);
-			if (!source || source === target) return;
-			if (!source.volatiles['attract']) source.addVolatile('attract', target);
+		onTryAddVolatile(status, pokemon) {
+			if (status.id === 'attract') {
+				this.add('-immune', pokemon, '[from] item: Destiny Knot');
+				return null;
+			}
+		},
+		onTryHit(pokemon, target, move) {
+			if (move.id === 'futuresight' || move.id === 'foresight' || move.id === 'doomdesire') {
+				this.add('-immune', pokemon, '[from] item: Destiny Knot');
+				return null;
+			}
 		},
 		num: 280,
 		gen: 4,
@@ -3410,15 +3416,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 40,
 		},
-		onModifyCritRatio(critRatio, user) {
-			if (user.baseSpecies.name === 'Chansey') {
-				return critRatio + 2;
+		onModifyMove(move, pokemon) {
+			if (move.flags?.punch) {
+				move.willCrit = true;
 			}
 		},
-		itemUser: ["Chansey"],
+		onModifyDamage(damage, source, target, move) {
+			if (move.willCrit) {
+				this.debug('Lucky Punch crit damage modifier');
+				return this.chainModify([1.1, 1]);
+			}
+		},
 		num: 256,
 		gen: 2,
-
 	},
 	lumberry: {
 		name: "Lum Berry",
@@ -7605,11 +7615,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onSourceModifyAccuracyPriority: -2,
-		onSourceModifyAccuracy(accuracy, target) {
-			if (typeof accuracy === 'number' && !this.queue.willMove(target)) {
-				this.debug('Zoom Lens boosting accuracy');
-				return this.chainModify([4915, 4096]);
+		onModifyMove(move, pokemon) {
+			if (!this.queue.willMove(pokemon)) {
+				move.accuracy = true;
+				this.add('-message', `${pokemon.name}'s Zoom Lens Active`);
 			}
 		},
 		num: 276,

@@ -19625,6 +19625,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.add('-activate', source, 'ability: Persistent', '[move] Tailwind');
 					return 6;
 				}
+				if (source?.hasItem('utilityumbrella')) {
+					this.add('-activate', source, 'item: utilityumbrella', '[move] Tailwind');
+					return 6;
+				}
 				return 4;
 			},
 			onSideStart(side, source) {

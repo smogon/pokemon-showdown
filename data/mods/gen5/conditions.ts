@@ -9,7 +9,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		inherit: true,
 		onStart(pokemon, source) {
 			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, '[of] ' + source);
-			this.effectState.boundDivisor = source.hasItem('bindingband') ? 8 : 16;
+			this.effectState.boundDivisor = source.hasItem('bindingband') ? 6 : 16;
 		},
 		onResidual(pokemon) {
 			const trapper = this.effectState.source;
