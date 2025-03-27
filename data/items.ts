@@ -1754,9 +1754,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Bug",
 		},
 		onAfterMoveSecondary(target, source, move) {
-			if (target.hp <= target.maxhp / 2 && move && target.getMoveHitData(move).typeMod > 0) {
+			if (target.hp <= target.maxhp / 2 && move) {
 				if (target.eatItem()) {
-					this.heal(target.baseMaxhp / 10); 
+					this.heal(target.baseMaxhp / 5); 
 					this.add('-heal', target, target.getHealth, '[from] item: Enigma Berry');
 					this.actions.useMove('metronome', target); 
 				}
@@ -2067,6 +2067,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onModifyWeight(weighthg) {
 			return this.trunc(weighthg / 2);
+		},
+		onModifyMove(move, pokemon, target) {
+			if (target)
+				target.addVolatile('smackdown');
 		},
 		num: 539,
 		gen: 5,
