@@ -5473,27 +5473,31 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onStart(pokemon) {
+			pokemon.addVolatile('shedshell');
+		},
+		onEnd(target) {
+			 target.removeVolatile('shedshell');
+		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 3,
+		onResidual(pokemon) {
+			if (pokemon.volatiles['shedshell']) {
+				pokemon.volatiles['shedshell'].turns++;
+			}
+				if (pokemon.volatiles['shedshell']?.turns >= 5) {
+				if (pokemon.status) {
+					this.add('-activate', pokemon, 'item: Shed Shell');
+					this.add('-message', `${pokemon.name}'s Shed Shell cured its status!`);
+					pokemon.cureStatus();
+				}
+				this.effectState.turns = 0;
+				}
+			},
 		onTrapPokemonPriority: -10,
 		onTrapPokemon(pokemon) {
 			pokemon.trapped = pokemon.maybeTrapped = false;
 		},
-		condition: {
-			onStart() {
-				this.effectState.turns = 0;
-			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 3,
-			onResidual(pokemon) {
-				this.effectState.turns++;
-				if (this.effectState.turns >= 5) {
-					if (pokemon.status) {
-						this.add('-activate', pokemon, 'item: Shed Shell');
-						this.add('-message', `${pokemon.name}'s Shed Shell cured its status!`);
-						pokemon.cureStatus();
-					}
-					this.effectState.turns = 0;
-				}
-			},
 		condition: {
 			onStart() {
 				this.effectState.turns = 0;

@@ -905,7 +905,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		baseSpecies: "Sandslash",
 		forme: "Alola",
 		types: ["Ice", "Steel"],
-		baseStats: {hp: 75, atk: 100, def: 135, spa: 25, spd: 70, spe: 65},
+		baseStats: {hp: 75, atk: 100, def: 85, spa: 25, spd: 70, spe: 115},
 		abilities: {0: "Snow Cloak", H: "Slush Rush"},
 		heightm: 1.2,
 		weightkg: 55,
