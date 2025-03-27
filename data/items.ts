@@ -2148,8 +2148,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (target.volatiles['focusband'] ) {
 				target.volatiles['focusband'].turns++;
 			}
-			if (target.volatiles['focusband']?.turns >= 3) {
-				this.boost({spa: 1}, target)
+			if (target.volatiles['focusband']?.turns >= 3 && move.category == 'Physical') {
+				this.boost({def: 1}, target)
+				target.volatiles['focusband'].turns = 0;
+			}
+			else if (target.volatiles['focusband']?.turns >= 3 && move.category == 'Special') {
+				this.boost({spd: 1}, target)
 				target.volatiles['focusband'].turns = 0;
 			}
 		},
