@@ -2138,12 +2138,25 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onDamagePriority: -40,
-		onDamage(damage, target, source, effect) {
-			if (this.randomChance(1, 10) && damage >= target.hp && effect && effect.effectType === 'Move') {
-				this.add("-activate", target, "item: Focus Band");
-				return target.hp - 1;
+		onStart(pokemon) {
+			pokemon.addVolatile('focusband');
+		},
+		onEnd(target) {
+			 target.removeVolatile('focusband');
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (target.volatiles['focusband'] ) {
+				target.volatiles['focusband'].turns++;
 			}
+			if (target.volatiles['focusband']?.turns >= 3) {
+				this.boost({spa: 1}, target)
+				target.volatiles['focusband'].turns = 0;
+			}
+		},
+		condition: {
+			onStart() {
+				this.effectState.turns = 0;
+			},
 		},
 		num: 230,
 		gen: 2,
