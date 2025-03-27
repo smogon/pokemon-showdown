@@ -1339,7 +1339,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onTryAddVolatile(status, pokemon) {
-			if (status.id === 'attract' || status.id === 'destinybond') {
+			if (status.id === 'attract') {
 				this.add('-immune', pokemon, '[from] item: Destiny Knot');
 				return null;
 			}
@@ -1753,17 +1753,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Bug",
 		},
-		onHit(target, source, move) {
-			if (move && target.getMoveHitData(move).typeMod > 0) {
+		onAfterMoveSecondary(target, source, move) {
+			if (target.hp <= target.maxhp / 2 && move && target.getMoveHitData(move).typeMod > 0) {
 				if (target.eatItem()) {
-					this.heal(target.baseMaxhp / 4);
+					this.heal(target.baseMaxhp / 10); 
+					this.add('-heal', target, target.getHealth, '[from] item: Enigma Berry');
+					this.actions.useMove('metronome', target); 
 				}
 			}
 		},
 		onTryEatItem(item, pokemon) {
-			if (!this.runEvent('TryHeal', pokemon, null, this.effect, pokemon.baseMaxhp / 4)) return false;
+			if (!this.runEvent('TryHeal', pokemon) || pokemon.hp > pokemon.maxhp / 2) return false;
 		},
-		onEat() { },
 		num: 208,
 		gen: 3,
 	},
