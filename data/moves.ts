@@ -3574,7 +3574,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				this.add('-singlemove', pokemon, 'Destiny Bond');
 			},
 			onFaint(target, source, effect) {
-				if (!source || !effect || target.isAlly(source)) return;
+				if (!source || !effect || target.isAlly(source) || source.hasItem('destinyknot')) return;
 				if (effect.effectType === 'Move' && !effect.flags['futuremove']) {
 					if (source.volatiles['dynamax']) {
 						this.add('-hint', "Dynamaxed Pokémon are immune to Destiny Bond.");
@@ -3594,6 +3594,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				pokemon.removeVolatile('destinybond');
 			},
 		},
+
 		secondary: null,
 		target: "self",
 		type: "Ghost",
@@ -17970,7 +17971,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	spark: {
 		num: 209,
 		accuracy: 100,
-		basePower: 65,
+		basePower: 60,
 		category: "Physical",
 		name: "Spark",
 		pp: 20,
