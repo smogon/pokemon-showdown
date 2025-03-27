@@ -5472,6 +5472,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onStart(pokemon) {
+			pokemon.addVolatile('shedshell');
+		},
+		onEnd(target) {
+			 target.removeVolatile('shedshell');
+		},
+		onResidualOrder: 5,
+			onResidualSubOrder: 3,
 		onTrapPokemonPriority: -10,
 		onTrapPokemon(pokemon) {
 			pokemon.trapped = pokemon.maybeTrapped = false;
@@ -5480,8 +5488,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			onStart() {
 				this.effectState.turns = 0;
 			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 3,
 			onResidual(pokemon) {
 				this.effectState.turns++;
 				if (this.effectState.turns >= 5) {
@@ -5492,10 +5498,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 					}
 					this.effectState.turns = 0;
 				}
-			},
-		condition: {
-			onStart() {
-				this.effectState.turns = 0;
 			},
 		},
 		num: 295,
@@ -5689,8 +5691,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (move.type === 'Ice') {
-				this.boost({ atk: 2, spa: 2 }, target, target);
-				this.add('-activate', target, 'item: Snowball');
+				this.boost({ atk: 2, spa: 2 }, target, target); 
+				this.add('-activate', target, 'item: Snowball'); 
 				this.add('-message', `${target.name}'s Snowball boosted its stats!`);
 			}
 		},
