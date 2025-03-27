@@ -1,0 +1,24 @@
+name: Auto Sync Fork
+
+on:
+  schedule:
+    - cron: '0 0 * * *'  # Runs at midnight every day (change as needed)
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v2
+
+      - name: Set up Git
+        uses: actions/setup-git@v2
+
+      - name: Sync with upstream repository
+        run: |
+          git remote add upstream https://github.com/ORIGINAL_OWNER/REPO_NAME.git
+          git fetch upstream
+          git checkout main  # or master depending on the branch name
+          git merge upstream/main
+          git push origin main  # Pushes changes to your fork
