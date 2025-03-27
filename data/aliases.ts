@@ -1,5 +1,6 @@
 export const Aliases: import('../sim/dex').AliasesTable = {
 	// formats
+	nmrandbats: "[Gen 9] Random Battle",
 	randbats: "[Gen 9] Random Battle",
 	uber: "[Gen 9] Ubers",
 	anythinggoes: "[Gen 9] Anything Goes",
