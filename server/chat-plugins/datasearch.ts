@@ -1505,14 +1505,10 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 
 		if (results.length > MAX_RANDOM_RESULTS) {
 			const notShown = results.length - RESULTS_MAX_LENGTH;
-			const amountStr = `${results.length} Results (${notShown} Hidden)`;
-
-			resultsStr = message === "" ? amountStr :
-				`<span style="color:#999999;">${Utils.escapeHTML(message + `: ${amountStr}`)}</span><br/>`;
-
-			const resultsSummary = mapPokemonResults(results.slice(0, RESULTS_MAX_LENGTH)) + ', ';
-			const resultsHidden = mapPokemonResults(results.slice(RESULTS_MAX_LENGTH));
-			resultsStr += `<details class="readmore"><summary style="display: inline" show-text="[${notShown} Hidden]" hide-text="[-]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
+			resultsStr = `<div class="datasearch" style="cursor: pointer"><span style="color:#999999">${Utils.escapeHTML(message)}<button class="subtle" style="float: right">[+]</button></span><br/>`;
+			const resultsSummary = `${mapPokemonResults(results.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
+			const resultsHidden = mapPokemonResults(results);
+			resultsStr += `<div class="datasearch-body" style="display: block">${resultsSummary}</div><div class="datasearch-body" style="display: none">${resultsHidden}</div></div>`;
 		} else {
 			resultsStr += mapPokemonResults(results);
 		}
@@ -2234,7 +2230,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 			});
 		}
 
-		function mapMoves(inputArray: string[]) {
+		function mapMoveResults(inputArray: string[]) {
 			return inputArray.map(
 				result => `<a href="//${Config.routes.dex}/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
 					(sort ?
@@ -2246,17 +2242,12 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 
 		if (results.length > MAX_RANDOM_RESULTS) {
 			const notShown = results.length - RESULTS_MAX_LENGTH;
-			const amountStr = `${results.length} Results (${notShown} Hidden)`;
-
-			resultsStr = message === "" ? amountStr :
-				`<span style="color:#999999;">${Utils.escapeHTML(message + `: ${amountStr}`)}</span><br/>`;
-
-			const resultsSummary = mapMoves(results.slice(0, RESULTS_MAX_LENGTH)) + ', ';
-			const resultsHidden = mapMoves(results.slice(RESULTS_MAX_LENGTH));
-
-			resultsStr += `<details class="readmore"><summary style="display: inline" show-text="[${notShown} Hidden]" hide-text="[-]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
+			resultsStr = `<div class="datasearch" style="cursor: pointer"><span style="color:#999999">${Utils.escapeHTML(message)}<button class="subtle" style="float: right">[+]</button></span><br/>`;
+			const resultsSummary = `${mapMoveResults(results.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
+			const resultsHidden = mapMoveResults(results);
+			resultsStr += `<div class="datasearch-body" style="display: block">${resultsSummary}</div><div class="datasearch-body" style="display: none">${resultsHidden}</div></div>`;
 		} else {
-			resultsStr += mapMoves(results);
+			resultsStr += mapMoveResults(results);
 		}
 	} else if (results.length === 1) {
 		return { dt: `${results[0]}${usedMod ? `,${usedMod}` : ''}` };
@@ -2532,15 +2523,10 @@ function runItemsearch(target: string, cmd: string, message: string) {
 		foundItems.sort();
 		if (foundItems.length > MAX_RANDOM_RESULTS) {
 			const notShown = foundItems.length - RESULTS_MAX_LENGTH;
-			const amountStr = `${foundItems.length} Results (${notShown} Hidden)`;
-
-			resultsStr = message === "" ? amountStr :
-				`<span style="color:#999999;">${Utils.escapeHTML(message + `: ${amountStr}`)}</span><br/>`;
-
-			const resultsSummary = mapItemResults(foundItems.slice(0, RESULTS_MAX_LENGTH)) + ', ';
-			const resultsHidden = mapItemResults(foundItems.slice(RESULTS_MAX_LENGTH));
-
-			resultsStr += `<details class="readmore"><summary style="display: inline" show-text="[${notShown} Hidden]" hide-text="[-]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
+			resultsStr = `<div class="datasearch" style="cursor: pointer"><span style="color:#999999">${Utils.escapeHTML(message)}<button class="subtle" style="float: right">[+]</button></span><br/>`;
+			const resultsSummary = `${mapItemResults(foundItems.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
+			const resultsHidden = mapItemResults(foundItems);
+			resultsStr += `<div class="datasearch-body" style="display: block">${resultsSummary}</div><div class="datasearch-body" style="display: none">${resultsHidden}</div></div>`;
 		} else {
 			resultsStr += mapItemResults(foundItems);
 		}
@@ -2723,15 +2709,10 @@ function runAbilitysearch(target: string, cmd: string, message: string) {
 		foundAbilities.sort();
 		if (foundAbilities.length > MAX_RANDOM_RESULTS) {
 			const notShown = foundAbilities.length - RESULTS_MAX_LENGTH;
-			const amountStr = `${foundAbilities.length} Results (${notShown} Hidden)`;
-
-			resultsStr = message === "" ? amountStr :
-				`<span style="color:#999999;">${Utils.escapeHTML(message + `: ${amountStr}`)}</span><br/>`;
-
-			const resultsSummary = mapAbilityResults(foundAbilities.slice(0, RESULTS_MAX_LENGTH)) + ', ';
-			const resultsHidden = mapAbilityResults(foundAbilities.slice(RESULTS_MAX_LENGTH));
-
-			resultsStr += `<details class="readmore"><summary style="display: inline" show-text="[${notShown} Hidden]" hide-text="[-]">${resultsSummary}</br></summary>${resultsHidden}</details>`;
+			resultsStr = `<div class="datasearch" style="cursor: pointer"><span style="color:#999999">${Utils.escapeHTML(message)}<button class="subtle" style="float: right">[+]</button></span><br/>`;
+			const resultsSummary = `${mapAbilityResults(foundAbilities.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
+			const resultsHidden = mapAbilityResults(foundAbilities);
+			resultsStr += `<div class="datasearch-body" style="display: block">${resultsSummary}</div><div class="datasearch-body" style="display: none">${resultsHidden}</div></div>`;
 		} else {
 			resultsStr += mapAbilityResults(foundAbilities);
 		}
