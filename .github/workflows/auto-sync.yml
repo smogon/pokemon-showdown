@@ -2,7 +2,7 @@ name: Auto Sync Fork
 
 on:
   schedule:
-    - cron: '0 0 * * *'  # Runs at midnight every day (change as needed)
+    - cron: '0 0 * * *'
 
 jobs:
   sync:
@@ -17,8 +17,9 @@ jobs:
 
       - name: Sync with upstream repository
         run: |
-          git remote add upstream https://github.com/ORIGINAL_OWNER/REPO_NAME.git
+          git remote add upstream https://github.com/smogon/pokemon-showdown.git
           git fetch upstream
-          git checkout main  # or master depending on the branch name
-          git merge upstream/main
-          git push origin main  # Pushes changes to your fork
+          git checkout master
+          git merge upstream/master
+          git push origin master
+
