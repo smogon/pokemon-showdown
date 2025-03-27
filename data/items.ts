@@ -5472,6 +5472,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onStart(pokemon) {
+			pokemon.addVolatile('shedshell');
+		},
+		onEnd(target) {
+			 target.removeVolatile('shedshell');
+		},
+		onResidualOrder: 5,
+			onResidualSubOrder: 3,
 		onTrapPokemonPriority: -10,
 		onTrapPokemon(pokemon) {
 			pokemon.trapped = pokemon.maybeTrapped = false;
@@ -5480,8 +5488,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			onStart() {
 				this.effectState.turns = 0;
 			},
-			onResidualOrder: 5,
-			onResidualSubOrder: 3,
 			onResidual(pokemon) {
 				this.effectState.turns++;
 				if (this.effectState.turns >= 5) {
