@@ -368,6 +368,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onChargeMove(pokemon, target, move) {
+			if (pokemon.species.name === 'Armarouge') {
+				this.debug('auspicious armor - remove charge turn for ' + move.id);
+				this.attrLastMove('[still]');
+				this.addMove('-anim', pokemon, move.name, target);
+				return false; // skip charge turn
+			}
+		},
 		num: 2344,
 		gen: 9,
 	},
