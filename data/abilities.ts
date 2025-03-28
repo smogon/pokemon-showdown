@@ -4800,6 +4800,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.effectState.target;
 			}
 		},
+		onStart(pokemon) {
+			this.boost({spa: 1}, pokemon)
+		},
 		flags: {breakable: 1},
 		name: "Storm Drain",
 		rating: 3,
