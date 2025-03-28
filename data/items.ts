@@ -486,6 +486,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onModifySpD(spd, pokemon) {
+			 if(pokemon.baseSpecies.name === "Alcremie"){
+				return this.chainModify(1.5);
+			}
+		},
 		num: 1111,
 		gen: 8,
 	},
