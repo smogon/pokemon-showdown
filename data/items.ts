@@ -1096,6 +1096,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onModifySpD(spd, pokemon) {
+			if(pokemon.baseSpecies.name === "Alcremie"){
+			  return this.chainModify(1.5);
+		  }
+	  },
 		num: 1112,
 		gen: 8,
 	},
@@ -2098,6 +2103,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 0,
 		},
+		onModifySpD(spd, pokemon) {
+			if(pokemon.baseSpecies.name === "Alcremie"){
+			  return this.chainModify(1.5);
+		  }
+	  },
 		num: 1113,
 		gen: 8,
 	},
@@ -3449,6 +3459,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onModifySpD(spd, pokemon) {
+			if(pokemon.baseSpecies.name === "Alcremie"){
+			  return this.chainModify(1.5);
+		  }
+	  },
 		num: 1110,
 		gen: 8,
 	},
@@ -5142,6 +5157,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onModifySpD(spd, pokemon) {
+			if(pokemon.baseSpecies.name === "Alcremie"){
+			  return this.chainModify(1.5);
+		  }
+	  },
 		num: 1115,
 		gen: 8,
 	},
@@ -5953,6 +5973,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onModifySpD(spd, pokemon) {
+			if(pokemon.baseSpecies.name === "Alcremie"){
+			  return this.chainModify(1.5);
+		  }
+	  },
 		num: 1114,
 		gen: 8,
 	},
@@ -6087,6 +6112,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onModifySpD(spd, pokemon) {
+			if(pokemon.baseSpecies.name === "Alcremie"){
+			  return this.chainModify(1.5);
+		  }
+	  },
 		num: 1109,
 		gen: 8,
 	},

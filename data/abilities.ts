@@ -4808,9 +4808,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onStart(pokemon) {
-			if (pokemon.getItem().name == 'Dive Ball')
+			if (pokemon.getItem().name == 'Dive Ball'){
 			this.boost({spa: 1}, pokemon)
 			pokemon.useItem()
+		}
 		},
 		flags: {breakable: 1},
 		name: "Storm Drain",
