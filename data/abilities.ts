@@ -5085,6 +5085,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 77,
 	},
 	tanglinghair: {
+		onStart(target) {
+			target.swordBoost = false
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (this.checkMoveMakesContact(move, source, target, true)) {
 				this.add('-ability', target, 'Tangling Hair');

@@ -2945,6 +2945,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onModifySpe(spe) {
 			return this.chainModify(0.5);
 		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['bullet']) {
+				this.debug('iron ball boost');
+				return this.chainModify(1.25);
+			}
+		},
 		num: 278,
 		gen: 4,
 	},
@@ -2976,11 +2983,21 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Dragon",
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (move.category === 'Physical' && source.hp && source.isActive && !source.hasAbility('magicguard')) {
-				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 8), source, target);
+		onModifyMove(move, pokemon) {
+			if (move.id === 'explosion' || move.id === 'selfdestruct') {
+				const types = pokemon.getTypes();
+				if(pokemon.types[0]){
+				let type = types[0];
+				if (type === 'Bird') type = '???';
+				if (type === '???' && types[1]) type = types[1];
+				move.type = type;
+				} else if (pokemon.types[1]){
+					let type = types[1];
+				if (type === 'Bird') type = '???';
+				if (type === '???' && types[0]) type = types[0];
+				move.type = type;
 				}
+				pokemon.eatItem();
 			}
 		},
 		onEat() { },
@@ -3578,6 +3595,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onModifySpe(spe) {
 			return this.chainModify(0.5);
+		},
+		onModifyMove(move) {
+			move.ignoreAbility = true;
 		},
 		num: 215,
 		gen: 3,
@@ -4628,6 +4648,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onModifySpe(spe) {
 			return this.chainModify(0.5);
 		},
+		onModifyDef(def) {
+			return this.chainModify(1.25);
+		},
 		num: 293,
 		gen: 4,
 	},
@@ -4640,6 +4663,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onModifySpe(spe) {
 			return this.chainModify(0.5);
+		},
+		onModifySpD(spd) {
+			return this.chainModify(1.25);
 		},
 		num: 292,
 		gen: 4,
@@ -4654,6 +4680,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onModifySpe(spe) {
 			return this.chainModify(0.5);
 		},
+		onModifySpA(spa) {
+			return this.chainModify(1.25);
+		},
 		num: 290,
 		gen: 4,
 	},
@@ -4666,6 +4695,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onModifySpe(spe) {
 			return this.chainModify(0.5);
+		},
+		onModifyAtk(atk) {
+			return this.chainModify(1.25);
 		},
 		num: 289,
 		gen: 4,
@@ -4697,6 +4729,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onModifySpe(spe) {
 			return this.chainModify(0.5);
 		},
+		onModifyAccuracy(accuracy) {
+			return this.chainModify(1.25);
+		},
 		num: 291,
 		gen: 4,
 	},
@@ -4709,6 +4744,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onModifySpe(spe) {
 			return this.chainModify(0.5);
+		},
+		onBasePower(basePower, user, target, move) {
+			if (move.category === 'Special' || move.category === 'Physical') {
+				return this.chainModify([5120, 4096]);
+			}
 		},
 		num: 294,
 		gen: 4,
@@ -5108,7 +5148,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
-		onNegateImmunity: false,
+		onModifyMove(move, pokemon, target){
+			if (pokemon.useItem() && pokemon.getMoveHitData(move).typeMod > 2)
+			move.ignoreImmunity = true;
+		},
 		num: 543,
 		gen: 5,
 	},

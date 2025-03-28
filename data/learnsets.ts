@@ -2843,9 +2843,11 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	},
 	pikachubelle: {
 		learnset: {
+			iceshard: ["9M"],
 			iciclecrash: ["9R"],
 			icywind: ["9M"],
 			thundercage: ["9M"],
+			zingzap: ["9M"],
 		},
 		eventOnly: true,
 	},
@@ -2860,6 +2862,8 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 	pikachuphd: {
 		learnset: {
 			electricterrain: ["9R"],
+			psyshock: ["9M"],
+			psychicnoise: ["9M"],
 			zingzap: ["9M"],
 			zenheadbutt: ["9M"],
 		},
