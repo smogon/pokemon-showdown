@@ -425,6 +425,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({[bestStat]: length}, source);
 			}
 		},
+		onStart(pokemon) {
+			if (pokemon.getItem().name === 'Beast Ball' && pokemon.useItem()) {
+				const bestStat = pokemon.getBestStat(true, true);
+				this.boost({[bestStat]: 1}, pokemon);
+
+			}
+		},
 		flags: {},
 		name: "Beast Boost",
 		rating: 3.5,
