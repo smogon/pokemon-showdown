@@ -4989,7 +4989,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	swiftswim: {
 		onModifySpe(spe, pokemon) {
-			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather())) {
+			if (['raindance', 'primordialsea'].includes(pokemon.effectiveWeather() ) || pokemon.volatiles['lureball']) {
 				return this.chainModify(2);
 			}
 		},
