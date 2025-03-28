@@ -19757,6 +19757,18 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
         color: "Green",
         eggGroups: ["Undead", "Human-Like"],
     },
+	goku: {
+        num: 2000,
+        name: "Goku",
+        types: ["Fighting"],
+        gender: "M",
+        baseStats: {hp: 100, atk: 120, def: 90, spa: 95, spd: 85, spe: 100},
+        abilities: {0: "Defiant", 1: "Inner Focus"},
+        heightm: 1.6,
+        weightkg: 130,
+        color: "Gray",
+        eggGroups: ["Human-Like"],
+    },
 };
 
 	

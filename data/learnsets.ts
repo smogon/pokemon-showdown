@@ -99624,6 +99624,14 @@ export const Learnsets: {[k: string]: LearnsetData} = {
             superfang: ["8L31"],
     },
   },
+  goku: {
+	learnset: {
+		afteryou: ["9L1", "8L1", "7T", "6T", "5T"],
+		alluringvoice: ["9M"],
+		allyswitch: ["8M"],
+		amnesia: ["9M", "8M"],
+   },
+},
  
 };
 

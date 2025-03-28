@@ -6046,6 +6046,11 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	zombie: {
         tier: "OU", // Set the appropriate tier for your Pokémon
     },
+	goku: {
+        tier: "OU",
+        doublesTier: "(DUU)",
+        natDexTier: "UU",
+    }
 	
 };
 
