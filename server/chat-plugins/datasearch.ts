@@ -1505,9 +1505,9 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 
 		if (results.length > MAX_RANDOM_RESULTS) {
 			const notShown = results.length - RESULTS_MAX_LENGTH;
-			resultsStr = `<div class="datasearch" style="cursor: pointer"><span style="color:#999999">${Utils.escapeHTML(message)}<button class="subtle" style="float: right">[+]</button></span><br/>`;
 			const resultsSummary = `${mapPokemonResults(results.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
 			const resultsHidden = mapPokemonResults(results);
+			resultsStr = `<div class="datasearch" style="cursor: pointer">${message === "" ? "" : `<span style="color:#999999">${Utils.escapeHTML(message)}`}<button class="subtle" style="float: right">[+]</button>${message === "" ? "" : `</span><br/>`}`;
 			resultsStr += `<div class="datasearch-body" style="display: block">${resultsSummary}</div><div class="datasearch-body" style="display: none">${resultsHidden}</div></div>`;
 		} else {
 			resultsStr += mapPokemonResults(results);
@@ -2242,9 +2242,9 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 
 		if (results.length > MAX_RANDOM_RESULTS) {
 			const notShown = results.length - RESULTS_MAX_LENGTH;
-			resultsStr = `<div class="datasearch" style="cursor: pointer"><span style="color:#999999">${Utils.escapeHTML(message)}<button class="subtle" style="float: right">[+]</button></span><br/>`;
 			const resultsSummary = `${mapMoveResults(results.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
 			const resultsHidden = mapMoveResults(results);
+			resultsStr = `<div class="datasearch" style="cursor: pointer">${message === "" ? "" : `<span style="color:#999999">${Utils.escapeHTML(message)}`}<button class="subtle" style="float: right">[+]</button>${message === "" ? "" : `</span><br/>`}`;
 			resultsStr += `<div class="datasearch-body" style="display: block">${resultsSummary}</div><div class="datasearch-body" style="display: none">${resultsHidden}</div></div>`;
 		} else {
 			resultsStr += mapMoveResults(results);
@@ -2523,9 +2523,9 @@ function runItemsearch(target: string, cmd: string, message: string) {
 		foundItems.sort();
 		if (foundItems.length > MAX_RANDOM_RESULTS) {
 			const notShown = foundItems.length - RESULTS_MAX_LENGTH;
-			resultsStr = `<div class="datasearch" style="cursor: pointer"><span style="color:#999999">${Utils.escapeHTML(message)}<button class="subtle" style="float: right">[+]</button></span><br/>`;
 			const resultsSummary = `${mapItemResults(foundItems.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
 			const resultsHidden = mapItemResults(foundItems);
+			resultsStr = `<div class="datasearch" style="cursor: pointer">${message === "" ? "" : `<span style="color:#999999">${Utils.escapeHTML(message)}`}<button class="subtle" style="float: right">[+]</button>${message === "" ? "" : `</span><br/>`}`;
 			resultsStr += `<div class="datasearch-body" style="display: block">${resultsSummary}</div><div class="datasearch-body" style="display: none">${resultsHidden}</div></div>`;
 		} else {
 			resultsStr += mapItemResults(foundItems);
@@ -2709,9 +2709,9 @@ function runAbilitysearch(target: string, cmd: string, message: string) {
 		foundAbilities.sort();
 		if (foundAbilities.length > MAX_RANDOM_RESULTS) {
 			const notShown = foundAbilities.length - RESULTS_MAX_LENGTH;
-			resultsStr = `<div class="datasearch" style="cursor: pointer"><span style="color:#999999">${Utils.escapeHTML(message)}<button class="subtle" style="float: right">[+]</button></span><br/>`;
 			const resultsSummary = `${mapAbilityResults(foundAbilities.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
 			const resultsHidden = mapAbilityResults(foundAbilities);
+			resultsStr = `<div class="datasearch" style="cursor: pointer">${message === "" ? "" : `<span style="color:#999999">${Utils.escapeHTML(message)}`}<button class="subtle" style="float: right">[+]</button>${message === "" ? "" : `</span><br/>`}`;
 			resultsStr += `<div class="datasearch-body" style="display: block">${resultsSummary}</div><div class="datasearch-body" style="display: none">${resultsHidden}</div></div>`;
 		} else {
 			resultsStr += mapAbilityResults(foundAbilities);
