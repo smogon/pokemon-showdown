@@ -732,6 +732,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		noCopy: true,
 		onStart(pokemon) {
 			this.add(`c:|${getName('dhelmise')}|skibidi`);
+			if (pokemon.illusion) return;
 			pokemon.m.stealth = true;
 			this.add('-message', `${pokemon.name}'s Stealth made it harder to hit!`);
 			this.add('-start', pokemon, 'stealth');
@@ -759,7 +760,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		onModifyDamage(damage, source, target, move) {
 			if (target.illusion) return;
-			if (!target.m.stealth) return;
+			if (!target.m.stealth) return this.chainModify(1.1);
 			return this.chainModify(0.5);
 		},
 	},

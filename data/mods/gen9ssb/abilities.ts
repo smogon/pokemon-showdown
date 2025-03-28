@@ -406,13 +406,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	// Bert122
 	pesteringassault: {
-		shortDesc: "Uses Knock Off, Taunt, Torment, Soak, and Confuse Ray with 35% accuracy at turn end.",
+		shortDesc: "Uses Knock Off, Taunt, Torment, Soak, and Confuse Ray with 33% accuracy at turn end.",
 		name: "Pestering Assault",
 		onResidual(pokemon, s, effect) {
 			const moves = ['knockoff', 'taunt', 'torment', 'soak', 'confuseray'];
 			for (const moveid of moves) {
 				const move = this.dex.getActiveMove(moveid);
-				move.accuracy = 35;
+				move.accuracy = 33;
 				const target = pokemon.foes()[0];
 				if (target && !target.fainted) {
 					this.actions.useMove(move, pokemon, { target, sourceEffect: effect });
