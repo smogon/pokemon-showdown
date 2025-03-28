@@ -419,20 +419,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		types: ["Electric", "Water"],
 	},
 
-	// Imperial
-	kyurem: {
-		inherit: true,
-		abilities: { 0: "Frozen Fortuity" },
-	},
-	kyuremblack: {
-		inherit: true,
-		abilities: { 0: "Frozen Fortuity" },
-	},
-	kyuremwhite: {
-		inherit: true,
-		abilities: { 0: "Frozen Fortuity" },
-	},
-
 	// in the hills
 	gligar: {
 		inherit: true,

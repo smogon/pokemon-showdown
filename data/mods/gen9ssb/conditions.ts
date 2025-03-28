@@ -1006,21 +1006,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			}
 		},
 	},
-	imperial: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Imperial')}|gmcat`);
-		},
-		onSwitchOut(pokemon) {
-			const foe = pokemon.side.foes()[0]?.name;
-			if (foe) {
-				this.add(`c:|${getName('Imperial')}|ofc u have ${foe}. bad mu as always...`);
-			}
-		},
-		onFaint() {
-			this.add(`c:|${getName('Imperial')}|crazy rng`);
-		},
-	},
 	inthehills: {
 		noCopy: true,
 		onStart() {
