@@ -4995,6 +4995,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(2);
 			}
 		},
+		onEnd(pokemon) {
+			if (pokemon.getItem().name == 'Lure Ball')
+			pokemon.useItem()
+		},
 		flags: {},
 		name: "Swift Swim",
 		rating: 3,
