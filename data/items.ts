@@ -3540,6 +3540,16 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	lureball: {
 		name: "Lure Ball",
 		spritenum: 264,
+		onStart(pokemon) {
+			pokemon.addVolatile('lureball')
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('lureball')
+			pokemon.useItem()
+		},
+		condition: {
+
+		},
 		num: 494,
 		gen: 2,
 		isPokeball: true,
