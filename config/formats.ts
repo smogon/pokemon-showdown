@@ -4330,7 +4330,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 1] NU",
 		mod: 'gen1',
 		searchShow: false,
-		ruleset: ['[Gen 1] UU', '!APT Clause'],
+		ruleset: ['[Gen 1] UU'],
 		banlist: ['UU', 'NUBL'],
 	},
 	{
