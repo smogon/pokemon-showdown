@@ -301,7 +301,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart(pokemon) {
 			pokemon.useItem()
 		},
-		boosts: {atk: 1},
+		boosts: {def: 1},
 		num: 104,
 		gen: 4,
 
