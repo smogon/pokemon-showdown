@@ -276,17 +276,17 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Giveaway!',
 		evs: { hp: 252, def: 200, spd: 56 }, nature: 'Calm', teraType: 'Any', shiny: true,
 	},
-	Clementine: {
+	Clem: {
 		species: 'Avalugg', ability: 'Melting Point', item: 'Heavy-Duty Boots', gender: '',
 		moves: ['Land\'s Wrath', 'Flip Turn', 'Milk Drink'],
 		signatureMove: '(╯°o°）╯︵ ┻━┻',
 		nature: 'Quirky', teraType: ['Poison', 'Steel'],
 	},
-	'Clementine-Flipped': {
+	'Clem-Flipped': {
 		species: 'Avalugg-Hisui', ability: 'Melting Point', item: 'Heavy-Duty Boots', gender: '',
 		moves: ['Earth Power', 'Volt Switch', 'Heal Pulse'],
 		signatureMove: '(╯°o°）╯︵ ┻━┻',
-		nature: 'Quirky', teraType: ['Poison', 'Steel'], skip: 'Clementine',
+		nature: 'Quirky', teraType: ['Poison', 'Steel'], skip: 'Clem',
 	},
 	clerica: {
 		species: 'Mimikyu', ability: 'Masquerade', item: 'Ghostium Z', gender: 'F',
@@ -337,10 +337,10 @@ export const ssbSets: SSBSets = {
 		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Adamant', teraType: 'Poison',
 	},
 	dhelmise: {
-		species: 'Slowking-Galar', ability: 'Coalescence', item: 'Black Sludge', gender: 'N',
-		moves: ['Sludge Bomb', 'Psychic Noise', 'Parting Shot'],
-		signatureMove: 'Biotic Orb',
-		evs: { hp: 252, def: 252, spa: 4 }, nature: 'Bold', teraType: ['Psychic', 'Poison'],
+		species: 'Dhelmise', ability: 'Virus', item: 'Big Root', gender: 'N',
+		moves: ['Spectral Thief', 'Horn Leech', 'Shadow Sneak'],
+		signatureMove: 'EMP',
+		evs: { hp: 252, atk: 4, spd: 252 }, nature: 'Careful', teraType: ['Ghost'],
 	},
 	DianaNicole: {
 		species: 'Abomasnow', ability: 'Snow Warning', item: 'Abomasite', gender: 'F',
@@ -450,24 +450,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Hydro Pump', 'Thunder', 'Ice Beam'],
 		signatureMove: 'Hydrostatics',
 		evs: { def: 4, spa: 252, spe: 252 }, nature: 'Modest', teraType: 'Water', shiny: 2,
-	},
-	Imperial: {
-		species: 'Kyurem', ability: 'Frozen Fortuity', item: 'Never-Melt Ice', gender: 'N',
-		moves: ['Chilly Reception', 'Fusion Bolt', 'Fusion Flare'],
-		signatureMove: 'Storm Shroud',
-		evs: { atk: 128, spa: 128, spe: 252 }, nature: 'Docile', teraType: 'Ice', shiny: 193,
-	},
-	'Imperial-Black': {
-		species: 'Kyurem-Black', ability: 'Frozen Fortuity', item: 'Never-Melt Ice', gender: 'N',
-		moves: ['Mountain Gale', 'Fusion Bolt', 'Ice Shard'],
-		signatureMove: 'Storm Shroud',
-		evs: { atk: 252, def: 4, spe: 252 }, nature: 'Adamant', teraType: 'Electric', shiny: 193, skip: 'Imperial',
-	},
-	'Imperial-White': {
-		species: 'Kyurem-White', ability: 'Frozen Fortuity', item: 'Never-Melt Ice', gender: 'N',
-		moves: ['Ice Beam', 'Freeze-Dry', 'Fusion Flare'],
-		signatureMove: 'Storm Shroud',
-		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Modest', teraType: 'Fire', shiny: 193, skip: 'Imperial',
 	},
 	'in the hills': {
 		species: 'Gligar', ability: 'Illiterit', item: 'Eviolite', gender: 'M',
@@ -1053,7 +1035,7 @@ export const ssbSets: SSBSets = {
 	},
 	'Yellow Paint': {
 		species: 'Rotom-Frost', ability: 'Yellow Magic', item: 'Chilan Berry', gender: 'N',
-		moves: ['Thunderbolt', 'Blizzard', 'Ion Deluge'],
+		moves: ['Thunder Cage', 'Blizzard', 'Ion Deluge'],
 		signatureMove: 'Whiteout',
 		evs: { hp: 252, spa: 252, spe: 4 }, nature: 'Modest', teraType: 'Steel', shiny: 2,
 	},
@@ -1095,7 +1077,7 @@ export const ssbSets: SSBSets = {
 	},
 	zee: {
 		species: 'Lilligant-Hisui', ability: 'Chlorophyll', item: 'Heat Rock', gender: 'F',
-		moves: [['Close Combat', 'Axe Kick'], ['Solar Blade', 'Seed Bomb'], 'Victory Dance'],
+		moves: ['Axe Kick', 'Solar Blade', 'Victory Dance'],
 		signatureMove: 'Solar Summon',
 		evs: { hp: 80, atk: 176, spe: 252 }, nature: 'Adamant', teraType: 'Fire',
 	},
