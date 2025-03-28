@@ -298,6 +298,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onStart(pokemon) {
+			pokemon.useItem()
+		},
+		boosts: {def: 1},
 		num: 104,
 		gen: 4,
 
@@ -363,6 +367,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 753,
 		fling: {
 			basePower: 30,
+		},
+		onChargeMove(pokemon, target, move) {
+			if (pokemon.species.name === 'Armarouge') {
+				this.debug('auspicious armor - remove charge turn for ' + move.id);
+				this.attrLastMove('[still]');
+				this.addMove('-anim', pokemon, move.name, target);
+				return false; // skip charge turn
+			}
 		},
 		num: 2344,
 		gen: 9,
@@ -1756,9 +1768,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onAfterMoveSecondary(target, source, move) {
 			if (target.hp <= target.maxhp / 2 && move) {
 				if (target.eatItem()) {
-					this.heal(target.baseMaxhp / 5); 
+					this.heal(target.baseMaxhp / 5);
 					this.add('-heal', target, target.getHealth, '[from] item: Enigma Berry');
-					this.actions.useMove('metronome', target); 
+					this.actions.useMove('metronome', target);
 				}
 			}
 		},
@@ -5312,10 +5324,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Dark",
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (move.category === 'Special' && source.hp && source.isActive && !source.hasAbility('magicguard')) {
-				if (target.eatItem()) {
-					this.damage(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 8), source, target);
-				}
+			const side = source.isAlly(target) ? source.side.foe : source.side;
+			const spikes = side.sideConditions['spikes'];
+			if (move.category === 'Physical' && (!spikes || spikes.layers < 2) && target.eatItem()) {
+				side.addSideCondition('spikes', target);
+				side.addSideCondition('spikes', target);
 			}
 		},
 		onEat() { },
