@@ -5161,14 +5161,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onModifyMove(move, pokemon, target){
-			if (pokemon.useItem() && pokemon.getMoveHitData(move).typeMod > 2)
+			if (target && !target.runImmunity(move.type)){
 			move.ignoreImmunity = true;
+			pokemon.useItem()}
 		},
-		onModifyDamage(damage, source, target, move) {
-			if (move && target.getMoveHitData(move).typeMod > 1) {
-				return this.chainModify([8182, 4096]);
-			}
-		},
+
 		num: 543,
 		gen: 5,
 	},
