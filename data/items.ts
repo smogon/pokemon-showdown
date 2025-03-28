@@ -5157,13 +5157,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	ringtarget: {
 		name: "Ring Target",
 		spritenum: 410,
-		fling: { basePower: 10 },
-		onSourceTryPrimaryHit(target, source, move) {
-			if (target.runImmunity(move.type) === false) {
-				this.add('-activate', source, 'item: Ring Target');
-				move.ignoreImmunity = true; 
-				target.useItem(); 
-			}
+		fling: {
+			basePower: 10,
+		},
+		onModifyMove(move, pokemon, target){
+			if (pokemon.useItem() && pokemon.getMoveHitData(move).typeMod > 2)
+			move.ignoreImmunity = true;
 		},
 		num: 543,
 		gen: 5,
