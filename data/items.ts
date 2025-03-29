@@ -6393,7 +6393,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 	},
 	onStart(pokemon) {
-		pokemon.useItem
+		pokemon.useItem()
 	},
 	boosts: {
 		spe: 1,
