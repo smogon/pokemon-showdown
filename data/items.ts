@@ -369,7 +369,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 30,
 		},
 		onChargeMove(pokemon, target, move) {
-			if (pokemon.species.name === 'Armarouge') {
+			if (pokemon.species.name === 'Armarouge' && target && move.flags['charge']) {
 				this.debug('auspicious armor - remove charge turn for ' + move.id);
 				this.attrLastMove('[still]');
 				this.addMove('-anim', pokemon, move.name, target);
@@ -3800,8 +3800,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onChargeMove(pokemon, target, move) {
-			if (pokemon.species.name === 'Ceruledge') {
+		onModifyMove(move, pokemon, target) {
+			if (pokemon.species.name === 'Ceruledge' && target && move.flags['charge']) {
 				this.debug('malicious armor - remove charge turn for ' + move.id);
 				this.attrLastMove('[still]');
 				this.addMove('-anim', pokemon, move.name, target);
