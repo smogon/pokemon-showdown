@@ -2316,6 +2316,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return null;
 			}
 		},
+		onStart(pokemon) {
+			if (pokemon.getItem().name == 'Master Ball')
+			this.boost({atk: 1}, pokemon)
+			pokemon.useItem()
+		},
 		flags: {},
 		name: "Justified",
 		rating: 2.5,
