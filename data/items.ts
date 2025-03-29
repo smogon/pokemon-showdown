@@ -6319,6 +6319,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		isBerry: true,
+		onStart(pokemon) {
+			if (pokemon.baseSpecies.name == 'Flapple') {
+				const r = this.random(2);
+				if (r == 1) {
+					this.boost({spd: 1}, pokemon);
+				} else {
+					this.boost({def: 1}, pokemon);
+				pokemon.useItem()
+				}
+			}
+			
+		},
 		num: 1116,
 		gen: 8,
 	},
@@ -6327,6 +6340,16 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 755,
 		fling: {
 			basePower: 30,
+		},
+		isBerry: true,
+		onStart(pokemon) {
+			if (pokemon.baseSpecies.name == 'Flapple'){
+				this.boost({atk: 2}, pokemon)
+			}
+			if (pokemon.baseSpecies.name == 'Appletun'){
+				this.boost({def: 2, spd: 2}, pokemon)
+			}
+			pokemon.useItem()
 		},
 		num: 2402,
 		gen: 9,
@@ -6391,12 +6414,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-	onStart(pokemon) {
-		pokemon.useItem()
-	},
-	boosts: {
-		spe: 1,
-	},
+		isBerry: true,
+		onStart(pokemon) {
+			if (pokemon.baseSpecies.name == 'Flapple'){
+				this.boost({spe: 1}, pokemon)
+			}
+			pokemon.useItem()
+		},
 		num: 1117,
 		gen: 8,
 	},
@@ -7780,6 +7804,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 692,
 		fling: {
 			basePower: 80,
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (target.baseSpecies.name == 'Slurpuff')
+			this.chainModify(0)
+			target.useItem()
 		},
 		num: 646,
 		gen: 6,
