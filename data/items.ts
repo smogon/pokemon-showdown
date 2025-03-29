@@ -497,6 +497,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return this.chainModify(1.5);
 			}
 		},
+		forcedForme: "Alcremie-Water",
 		num: 1111,
 		gen: 8,
 	},
