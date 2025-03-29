@@ -112,13 +112,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				source.formeChange('Greninja-Ash', this.effect, true);
 			}
 		},
-		onModifyMovePriority: -1,
-		onModifyMove(move, attacker) {
-			if (move.id === 'watershuriken' && attacker.species.name === 'Greninja-Ash' &&
-				!attacker.transformed) {
-				move.multihit = 3;
-			}
-		},
 		isNonstandard: null,
 		rating: 4,
 	},
