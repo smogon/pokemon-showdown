@@ -4343,6 +4343,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Dragon",
 		},
+		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if ((move.type === 'Dragon' || move.type === 'Flying') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
@@ -4648,10 +4649,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Grass",
 		},
+		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if ((move.type === 'Grass' || move.type === 'Fairy') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
+			if ((move.type === 'Grass' || move.type === 'Fairy') && source.hp < source.baseMaxhp / 2) {
 				source.addVolatile('gem');
+				source.eatItem()
 			}
 		},
 		onEat() { },
@@ -5079,6 +5082,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Poison",
 		},
+		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if ((move.type === 'Poison' || move.type === 'Ground') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
@@ -5135,6 +5139,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Ghost",
 		},
+		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if ((move.type === 'Ghost' || move.type === 'Rock') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
@@ -5213,6 +5218,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Steel",
 		},
+		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if ((move.type === 'Steel' || move.type === 'Water') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
@@ -6025,6 +6031,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Dark",
 		},
+		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if ((move.type === 'Dark' || move.type === 'Normal') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
@@ -6317,6 +6324,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Psychic",
 		},
+		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if ((move.type === 'Psychic' || move.type === 'Fighting') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
@@ -7661,6 +7669,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Fire",
 		},
+		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if ((move.type === 'Fire' || move.type === 'Bug') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
@@ -7733,6 +7742,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Electric",
 		},
+		isGem: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if ((move.type === 'Electric' || move.type === 'Ice') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
