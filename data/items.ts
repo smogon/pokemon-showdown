@@ -2814,7 +2814,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Ground",
 		},
-		onEat: false,
+		onSourceDamagingHit(damage, target, source, move) {
+			if((source.baseMaxhp / 2 > source.hp) ){
+				this.heal(source.baseMaxhp / 5, source)
+				source.trySetStatus('par', target);
+			}
+		},
+		onEat() { },
 		num: 172,
 		gen: 3,
 	},
@@ -3721,7 +3727,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Rock",
 		},
-		onEat: false,
+		onSourceDamagingHit(damage, target, source, move) {
+			if((source.baseMaxhp / 2 > source.hp) ){
+				this.heal(source.baseMaxhp / 5, source)
+				target.addVolatile('attract');
+			}
+		},
+		onEat() { },
 		num: 176,
 		gen: 3,
 
@@ -4244,7 +4256,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Water",
 		},
-		onEat: false,
+		onSourceDamagingHit(damage, target, source, move) {
+			if((source.baseMaxhp / 2 > source.hp) ){
+				this.heal(source.baseMaxhp / 5, source)
+				target.addVolatile('confusion');
+			}
+		},
+		onEat() { },
 		num: 166,
 		gen: 3,
 
@@ -4401,7 +4419,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Steel",
 		},
-		onEat: false,
+		onSourceDamagingHit(damage, target, source, move) {
+			if((source.baseMaxhp / 2 > source.hp) ){
+				this.heal(source.baseMaxhp / 5, source)
+				target.addVolatile('curse');
+			}
+		},
+		onEat() { },
 		num: 180,
 		gen: 3,
 
@@ -4694,7 +4718,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Ice",
 		},
-		onEat: false,
+		onSourceDamagingHit(damage, target, source, move) {
+			if((source.baseMaxhp / 2 > source.hp) ){
+				this.heal(source.baseMaxhp / 5, source)
+				source.trySetStatus('frz', target);
+			}
+		},
+		onEat() { },
 		num: 169,
 		gen: 3,
 	},
