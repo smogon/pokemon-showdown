@@ -3733,6 +3733,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if((source.baseMaxhp / 2 > source.hp) ){
 				this.heal(source.baseMaxhp / 5, source)
 				target.addVolatile('attract');
+				source.eatItem()
 			}
 		},
 		onEat() { },
@@ -4273,6 +4274,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if((source.baseMaxhp / 2 > source.hp) ){
 				this.heal(source.baseMaxhp / 5, source)
 				target.addVolatile('confusion');
+				source.eatItem()
 			}
 		},
 		onEat() { },
@@ -4446,6 +4448,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if((source.baseMaxhp / 2 > source.hp) ){
 				this.heal(source.baseMaxhp / 5, source)
 				target.addVolatile('curse');
+				source.eatItem()
 			}
 		},
 		onEat() { },
