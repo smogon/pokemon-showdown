@@ -639,7 +639,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Fire",
 		},
-		onEat: false,
+		onSourceDamagingHit(damage, target, source, move) {
+			if((source.baseMaxhp / 2 > source.hp) ){
+				this.heal(source.baseMaxhp / 5, source)
+				source.trySetStatus('brn', target);
+			}
+		},
+		onEat() { },
 		num: 165,
 		gen: 3,
 
