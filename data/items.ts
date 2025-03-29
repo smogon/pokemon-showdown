@@ -4304,7 +4304,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Dragon",
 		},
-		onEat: false,
+		onSourceTryPrimaryHit(target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			if ((move.type === 'Dragon' || move.type === 'Flying') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
+				source.addVolatile('gem');
+			}
+		},
+		onEat() { },
 		num: 178,
 		gen: 3,
 
@@ -4590,7 +4596,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Grass",
 		},
-		onEat: false,
+		onSourceTryPrimaryHit(target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			if ((move.type === 'Grass' || move.type === 'Fairy') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
+				source.addVolatile('gem');
+			}
+		},
+		onEat() { },
 		num: 168,
 		gen: 3,
 
@@ -5014,7 +5026,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Poison",
 		},
-		onEat: false,
+		onSourceTryPrimaryHit(target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			if ((move.type === 'Poison' || move.type === 'Ground') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
+				source.addVolatile('gem');
+			}
+		},
+		onEat() { },
 		num: 171,
 		gen: 3,
 	},
@@ -5064,7 +5082,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Ghost",
 		},
-		onEat: false,
+		onSourceTryPrimaryHit(target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			if ((move.type === 'Ghost' || move.type === 'Rock') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
+				source.addVolatile('gem');
+			}
+		},
+		onEat() { },
 		num: 177,
 		gen: 3,
 
@@ -5136,7 +5160,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 			type: "Steel",
 		},
-		onEat: false,
+		onSourceTryPrimaryHit(target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			if ((move.type === 'Steel' || move.type === 'Water') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
+				source.addVolatile('gem');
+			}
+		},
+		onEat() { },
 		num: 164,
 		gen: 3,
 
@@ -5931,7 +5961,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Dark",
 		},
-		onEat: false,
+		onSourceTryPrimaryHit(target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			if ((move.type === 'Dark' || move.type === 'Normal') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
+				source.addVolatile('gem');
+			}
+		},
+		onEat() { },
 		num: 179,
 		gen: 3,
 
@@ -6217,7 +6253,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Psychic",
 		},
-		onEat: false,
+		onSourceTryPrimaryHit(target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			if ((move.type === 'Psychic' || move.type === 'Fighting') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
+				source.addVolatile('gem');
+			}
+		},
+		onEat() { },
 		num: 174,
 		gen: 3,
 	},
@@ -7555,7 +7597,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Fire",
 		},
-		onEat: false,
+		onSourceTryPrimaryHit(target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			if ((move.type === 'Fire' || move.type === 'Bug') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
+				source.addVolatile('gem');
+			}
+		},
+		onEat() { },
 		num: 181,
 		gen: 3,
 
@@ -7621,7 +7669,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 90,
 			type: "Electric",
 		},
-		onEat: false,
+		onSourceTryPrimaryHit(target, source, move) {
+			if (target === source || move.category === 'Status') return;
+			if ((move.type === 'Electric' || move.type === 'Ice') && source.hp < source.baseMaxhp / 2 && source.eatItem()) {
+				source.addVolatile('gem');
+			}
+		},
+		onEat() { },
 		num: 167,
 		gen: 3,
 
