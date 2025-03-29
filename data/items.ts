@@ -497,7 +497,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return this.chainModify(1.5);
 			}
 		},
-		forcedForme: "Alcremie-Water",
+		forcedForme: "Alcremie-Berry",
+		itemUser: ["Alcremie-Berry"],
 		num: 1111,
 		gen: 8,
 	},
@@ -4664,7 +4665,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Grass",
 		},
 		isGem: true,
-		onSourceTryPrimaryHit(target, source, move) {
+		onSourceTryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if ((move.type === 'Grass' || move.type === 'Fairy') && source.hp < source.baseMaxhp / 2) {
 				source.addVolatile('gem');
