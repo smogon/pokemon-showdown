@@ -376,6 +376,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return false; // skip charge turn
 			}
 		},
+		itemUser: ["Armarouge"],
 		num: 2344,
 		gen: 9,
 	},
@@ -3807,6 +3808,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				return false; // skip charge turn
 			}
 		},
+		itemUser: ["Ceruledge"],
 		num: 1861,
 		gen: 9,
 	},
