@@ -368,7 +368,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onChargeMove(pokemon, target, move) {
+		onModifyMove(move, pokemon, target) {
 			if (pokemon.species.name === 'Armarouge' && target && move.flags['charge']) {
 				this.debug('auspicious armor - remove charge turn for ' + move.id);
 				this.attrLastMove('[still]');
