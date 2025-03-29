@@ -5238,7 +5238,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 10,
 		},
 		onSetStatus(status, target, source, effect) {
-			if ((effect as Move)?.status) {
+			if ((effect as Move)?.status && source.baseSpecies.num === 773) {
 				this.add('-immune', target, '[from] ability: Immunity');
 			}
 			return false;
