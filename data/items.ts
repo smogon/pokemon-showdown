@@ -7830,10 +7830,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
-		onDamagingHit(damage, target, source, move) {
-			if (target.baseSpecies.name == 'Slurpuff')
+		onSourceModifyDamage(damage, target, source, move) {
+			if (source.baseSpecies.name == 'Slurpuff')
 			this.chainModify(0)
-			target.useItem()
+			source.useItem()
 		},
 		itemUser: ['Slurpuff'],
 		num: 646,
