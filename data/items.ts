@@ -446,7 +446,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 			type: "Electric",
 		},
-		onEat: false,
+		onModifyMove(move, pokemon, target){
+			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.eatItem()){	
+				this.heal(pokemon.baseMaxhp / 5, pokemon)
+				move.ignoreImmunity = true;
+			}
+		},
+		onEat() { },
 		num: 183,
 		gen: 3,
 
