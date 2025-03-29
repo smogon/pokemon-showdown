@@ -642,7 +642,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onSourceDamagingHit(damage, target, source, move) {
 			if((source.baseMaxhp / 2 > source.hp) ){
 				this.heal(source.baseMaxhp / 5, source)
-				source.trySetStatus('brn', target);
+				target.trySetStatus('brn', source);
+				source.eatItem()
 			}
 		},
 		onEat() { },
@@ -1196,7 +1197,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onSourceDamagingHit(damage, target, source, move) {
 			if((source.baseMaxhp / 2 > source.hp) ){
 				this.heal(source.baseMaxhp / 5, source)
-				source.trySetStatus('tox', target);
+				target.trySetStatus('tox', source);
+				source.eatItem()
 			}
 		},
 		onEat() { },
@@ -2829,7 +2831,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onSourceDamagingHit(damage, target, source, move) {
 			if((source.baseMaxhp / 2 > source.hp) ){
 				this.heal(source.baseMaxhp / 5, source)
-				source.trySetStatus('par', target);
+				target.trySetStatus('par', source);
+				source.eatItem()
 			}
 		},
 		onEat() { },
@@ -3737,6 +3740,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if((source.baseMaxhp / 2 > source.hp) ){
 				this.heal(source.baseMaxhp / 5, source)
 				target.addVolatile('attract');
+				source.eatItem()
 			}
 		},
 		onEat() { },
@@ -4277,6 +4281,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if((source.baseMaxhp / 2 > source.hp) ){
 				this.heal(source.baseMaxhp / 5, source)
 				target.addVolatile('confusion');
+				source.eatItem()
 			}
 		},
 		onEat() { },
@@ -4450,6 +4455,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if((source.baseMaxhp / 2 > source.hp) ){
 				this.heal(source.baseMaxhp / 5, source)
 				target.addVolatile('curse');
+				source.eatItem()
 			}
 		},
 		onEat() { },
@@ -4754,7 +4760,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onSourceDamagingHit(damage, target, source, move) {
 			if((source.baseMaxhp / 2 > source.hp) ){
 				this.heal(source.baseMaxhp / 5, source)
-				source.trySetStatus('frz', target);
+				target.trySetStatus('frz', source);
+				source.eatItem()
 			}
 		},
 		onEat() { },
