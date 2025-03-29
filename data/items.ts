@@ -1519,6 +1519,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.baseSpecies.name === 'Seadra') {
+				return this.chainModify(1.75);
+			}
+		},
+		onModifySpAPriority: 1,
+		onModifySpA(spa, pokemon) {
+			if (pokemon.baseSpecies.name === 'Seadra') {
+				return this.chainModify(1.75);
+			}
+		},
+		itemUser: ['Seadra'],
 		num: 235,
 		gen: 2,
 	},
@@ -4440,6 +4453,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onModifyAtkPriority: 1,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.baseSpecies.nfe) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpAPriority: 1,
+		onModifySpA(spa, pokemon) {
+			if (pokemon.baseSpecies.nfe) {
+				return this.chainModify(1.5);
+			}
+		},
 		num: 110,
 		gen: 4,
 	},
@@ -5205,6 +5230,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onSetStatus(status, target, source, effect) {
+			if ((effect as Move)?.status) {
+				this.add('-immune', target, '[from] ability: Immunity');
+			}
+			return false;
+		},
+		itemUser: ['Dusknoir'],
 		num: 325,
 		gen: 4,
 	},
