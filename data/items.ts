@@ -6391,9 +6391,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-	},
 	onStart(pokemon) {
-		pokemon.useItem
+		pokemon.useItem()
 	},
 	boosts: {
 		spe: 1,
