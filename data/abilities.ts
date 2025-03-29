@@ -1173,7 +1173,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Early Bird",
 		onModifyPriority(priority, source, target, move) {
-			if(['sunnyday', 'desolateland'].includes(source.effectiveWeather())){
+			if(['sunnyday', 'desolateland'].includes(source.effectiveWeather()) || source.volatiles['dreamball']){
 				return priority + 1;
 			}
 		},

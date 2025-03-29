@@ -1555,6 +1555,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	dreamball: {
 		name: "Dream Ball",
 		spritenum: 111,
+		onStart(pokemon) {
+			pokemon.addVolatile('dreamball')
+		},
+		condition: {},
 		num: 576,
 		gen: 5,
 		isPokeball: true,
