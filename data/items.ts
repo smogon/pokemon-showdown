@@ -6351,6 +6351,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			
 		},
+		itemUser: ['Appletun'],
 		num: 1116,
 		gen: 8,
 	},
@@ -6370,6 +6371,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			pokemon.useItem()
 		},
+		itemUser: ['Appletun', 'Flapple'],
 		num: 2402,
 		gen: 9,
 	},
@@ -6441,6 +6443,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			}
 			pokemon.useItem()
 		},
+		itemUser: ['Flapple'],
 		num: 1117,
 		gen: 8,
 	},
@@ -7832,6 +7835,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			this.chainModify(0)
 			target.useItem()
 		},
+		itemUser: ['Slurpuff'],
 		num: 646,
 		gen: 6,
 
