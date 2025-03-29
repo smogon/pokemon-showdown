@@ -1116,6 +1116,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			  return this.chainModify(1.5);
 		  }
 	  },
+	  forcedForme: "Alcremie-Clover",
+		itemUser: ["Alcremie-Clover"],
 		num: 1112,
 		gen: 8,
 	},
@@ -2160,6 +2162,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			  return this.chainModify(1.5);
 		  }
 	  },
+	  forcedForme: "Alcremie-Flower",
+		itemUser: ["Alcremie-Flower"],
 		num: 1113,
 		gen: 8,
 	},
@@ -3531,6 +3535,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			  return this.chainModify(1.5);
 		  }
 	  },
+	  forcedForme: "Alcremie-Love",
+		itemUser: ["Alcremie-Love"],
 		num: 1110,
 		gen: 8,
 	},
@@ -5325,6 +5331,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			  return this.chainModify(1.5);
 		  }
 	  },
+	  forcedForme: "Alcremie-Ribbon",
+		itemUser: ["Alcremie-Ribbon"],
 		num: 1115,
 		gen: 8,
 	},
@@ -6153,6 +6161,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			  return this.chainModify(1.5);
 		  }
 	  },
+	  forcedForme: "Alcremie-Star",
+		itemUser: ["Alcremie-Star"],
 		num: 1114,
 		gen: 8,
 	},
@@ -6292,6 +6302,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			  return this.chainModify(1.5);
 		  }
 	  },
+	  forcedForme: "Alcremie-Star",
+		itemUser: ["Alcremie-Star"],
 		num: 1109,
 		gen: 8,
 	},
