@@ -2731,6 +2731,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	healball: {
 		name: "Heal Ball",
 		spritenum: 188,
+		onStart(pokemon) {
+			pokemon.addVolatile('healball')
+		},
+		condition: {
+			onBasePower(basepower) {
+				this.chainModify(1.15)
+			}
+		},
 		num: 14,
 		gen: 4,
 		isPokeball: true,
@@ -3587,13 +3595,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart(pokemon) {
 			pokemon.addVolatile('lureball')
 		},
-		onEnd(pokemon) {
-			pokemon.removeVolatile('lureball')
-			pokemon.useItem()
-		},
-		condition: {
-
-		},
+		condition: {},
 		num: 494,
 		gen: 2,
 		isPokeball: true,
@@ -4199,6 +4201,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	moonball: {
 		name: "Moon Ball",
 		spritenum: 294,
+		onStart(pokemon) {
+			pokemon.addVolatile('moonball')
+		},
 		num: 498,
 		gen: 2,
 		isPokeball: true,
@@ -4278,6 +4283,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	nestball: {
 		name: "Nest Ball",
 		spritenum: 303,
+		onStart(pokemon) {
+			pokemon.addVolatile('nestball')
+		},
+		condition: {},
 		num: 8,
 		gen: 3,
 		isPokeball: true,
@@ -5510,6 +5519,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	safariball: {
 		name: "Safari Ball",
 		spritenum: 425,
+		onStart(pokemon) {
+			pokemon.addVolatile('safariball')
+		},
+		condition: {},
 		num: 5,
 		gen: 1,
 		isPokeball: true,

@@ -78,8 +78,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	aftermath: {
 		onDamagingHitOrder: 1,
 		onDamagingHit(damage, target, source, move) {
-			if (!target.hp) {
+			if (!target.hp || target.getItem().name === 'Heavy Ball') {
 				this.damage(source.baseMaxhp / 3.33, source, target);
+				target.useItem()
 			}
 		},
 		flags: {},
@@ -186,6 +187,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target.hp <= target.maxhp / 2 && target.hp + damage > target.maxhp / 2) {
 				this.boost({atk: 1, spa: 1, spe: 1, def: -1, spd: -1}, target, target);
 			}
+		},
+		onStart(pokemon) {
+			if (pokemon.getItem().name == 'Level Ball')
+			this.boost({spe: 1, def: -1, spa: 1, spd: -1, atk: 1}, pokemon)
+			pokemon.useItem()
 		},
 		flags: {},
 		name: "Anger Shell",
@@ -395,6 +401,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				source.abilityState.battleBondTriggered = true;
 			}
 		},
+		onStart(pokemon) {
+			if (pokemon.getItem().name == 'Strange Ball')
+			this.boost({spe: 1, spa: 1, atk: 1}, pokemon)
+			this.damage(pokemon.baseMaxhp / 3.33, pokemon);
+			pokemon.useItem()
+		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
 		name: "Battle Bond",
 		rating: 3.5,
@@ -429,7 +441,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.getItem().name === 'Beast Ball' && pokemon.useItem()) {
 				const bestStat = pokemon.getBestStat(true, true);
 				this.boost({[bestStat]: 1}, pokemon);
-
 			}
 		},
 		flags: {},
@@ -531,9 +542,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	chlorophyll: {
 		onModifySpe(spe, pokemon) {
-			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather()) || pokemon.volatiles['safariball']) {
 				return this.chainModify(2);
 			}
+		},
+		onEnd(pokemon) {
+			if (pokemon.getItem().name == 'Safari Ball')
+			pokemon.useItem()
 		},
 		flags: {},
 		name: "Chlorophyll",
@@ -665,6 +680,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (statsLowered) {
 				this.boost({spa: 2}, target, target, null, false, true);
 			}
+		},
+		onStart(pokemon) {
+			if (pokemon.getItem().name == 'Love Ball')
+			this.boost({spa: 2}, pokemon)
+			pokemon.useItem()
 		},
 		flags: {},
 		name: "Competitive",
@@ -950,6 +970,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (statsLowered) {
 				this.boost({atk: 2}, target, target, null, false, true);
 			}
+		},
+		onStart(pokemon) {
+			if (pokemon.getItem().name == 'Competi Ball')
+			this.boost({atk: 2}, pokemon)
+			pokemon.useItem()
 		},
 		flags: {},
 		name: "Defiant",
@@ -1374,6 +1399,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.add('-end', target, 'ability: Flash Fire', '[silent]');
 			},
 		},
+		onStart(pokemon) {
+			if (pokemon.getItem().name == 'Chrish Ball')
+			pokemon.addVolatile('flashfire')
+			pokemon.useItem()
+		},
 		flags: {breakable: 1},
 		name: "Flash Fire",
 		rating: 3.5,
@@ -1623,10 +1653,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	gooey: {
 		onDamagingHit(damage, target, source, move) {
-			if (this.checkMoveMakesContact(move, source, target, true)) {
+			if (this.checkMoveMakesContact(move, source, target, true) || target.getItem().name == 'Net Ball') {
 				this.add('-ability', target, 'Gooey');
-				this.boost({spe: -1}, source, target, null, true);
+				this.boost({spe: -1, atk: -1}, source, target, null, true);
 			}
+		},
+		onEnd(pokemon) {
+			if (pokemon.getItem().name == 'Net Ball')
+			pokemon.useItem()
 		},
 		flags: {},
 		name: "Gooey",
@@ -2385,6 +2419,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.effectState.target;
 			}
 		},
+		onStart(pokemon) {
+			if (pokemon.getItem().name == 'Fast Ball')
+			this.boost({spa: 1}, pokemon)
+			pokemon.useItem()
+		},
 		flags: {breakable: 1},
 		name: "Lightning Rod",
 		rating: 3,
@@ -2786,12 +2825,29 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
 			if (randomStat) boost[randomStat] = 1;
-
 			stats = [];
-
-
+			
 			this.boost(boost, pokemon, pokemon);
 		}
+		},
+		onStart(pokemon) {
+			if (pokemon.getItem().name == 'Park Ball'){
+				let stats: BoostID[] = [];
+			const boost: SparseBoostsTable = {};
+			let statPlus: BoostID;
+			for (statPlus in pokemon.boosts) {
+				if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
+				if (pokemon.boosts[statPlus] < 6) {
+					stats.push(statPlus);
+				}
+			}
+			let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+			if (randomStat) boost[randomStat] = 1;
+			stats = [];
+			
+			this.boost(boost, pokemon, pokemon);
+			}
+			pokemon.useItem()
 		},
 		flags: {},
 		name: "Moody",
@@ -2807,6 +2863,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return null;
 			}
 		},
+		onStart(pokemon) {
+			if (pokemon.getItem().name == 'Quick Ball')
+			this.boost({spe: 1}, pokemon)
+			pokemon.useItem()
+		},
 		flags: {breakable: 1},
 		name: "Motor Drive",
 		rating: 3,
@@ -2817,6 +2878,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (effect && effect.effectType === 'Move') {
 				this.boost({atk: length}, source);
 			}
+		},
+		onStart(pokemon) {
+			if (pokemon.getItem().name == 'Luxury Ball')
+			this.boost({atk: 1}, pokemon)
+			pokemon.useItem()
 		},
 		flags: {},
 		name: "Moxie",
@@ -3909,6 +3975,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({spe: 2});
 			}
 		},
+		onStart(pokemon) {
+			if (pokemon.getItem().name == 'Dusk Ball')
+			this.boost({spe: 2}, pokemon)
+			pokemon.useItem()
+		},
 		flags: {},
 		name: "Rattled",
 		rating: 1,
@@ -4116,12 +4187,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	sandrush: {
 		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather('sandstorm')) {
+			if (this.field.isWeather('sandstorm') || pokemon.volatiles['nestball']) {
 				return this.chainModify(2);
 			}
 		},
 		onImmunity(type, pokemon) {
 			if (type === 'sandstorm') return false;
+		},
+		onEnd(pokemon) {
+			if (pokemon.getItem().name == 'Nest Ball')
+			pokemon.useItem()
 		},
 		flags: {},
 		name: "Sand Rush",
@@ -4172,6 +4247,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.type === 'Grass') {
 				this.boost({atk: 1}, this.effectState.target);
 			}
+		},
+		onStart(pokemon) {
+			if (pokemon.getItem().name == 'Friend Ball')
+			this.boost({atk: 1}, pokemon)
+			pokemon.useItem()
 		},
 		flags: {breakable: 1},
 		name: "Sap Sipper",
@@ -4484,9 +4564,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	slushrush: {
 		onModifySpe(spe, pokemon) {
-			if (this.field.isWeather(['hail', 'snow'])) {
+			if (this.field.isWeather(['hail', 'snow']) || pokemon.volatiles['moonball']) {
 				return this.chainModify(2);
 			}
+		},
+		onEnd(pokemon) {
+			if (pokemon.getItem().name == 'Moon Ball')
+			pokemon.useItem()
 		},
 		flags: {},
 		name: "Slush Rush",
@@ -4699,6 +4783,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({spe: 1}, pokemon);
 				return null;
 			}
+		},
+		onDamage(damage, target, source, effect) {
+			if (effect.effectType !== 'Move') {
+				this.boost({spe: 1}, target);
+				this.add('-activate', source, 'ability: ' + effect.name);
+			}
+		},
+		onStart(pokemon) {
+			if (pokemon.getItem().name == 'Repeat Ball')
+			this.boost({spe: 1}, pokemon)
+			pokemon.useItem()
 		},
 		flags: {breakable: 1},
 		name: "Steadfast",
@@ -5467,6 +5562,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onEnd(pokemon) {
 			pokemon.removeVolatile('unburden');
+			pokemon.removeVolatile('healball')
 		},
 		condition: {
 			onModifySpe(spe, pokemon) {
@@ -5474,6 +5570,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					return this.chainModify(2);
 				}
 			},
+		},
+		onStart(pokemon) {
+			if (pokemon.getItem().name == 'Heal Ball')
+			pokemon.useItem()
 		},
 		flags: {},
 		name: "Unburden",
@@ -5682,6 +5782,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (move.category === 'Physical') {
 				this.boost({def: -1, spe: 2}, target, target);
 			}
+		},
+		onStart(pokemon) {
+			if (pokemon.getItem().name == 'Timer Ball')
+			this.boost({spe: 2, def: -1}, pokemon)
+			pokemon.useItem()
 		},
 		flags: {},
 		name: "Weak Armor",
