@@ -1177,6 +1177,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return priority + 1;
 			}
 		},
+		onEnd(pokemon) {
+			pokemon.useItem()
+		},
 		// Implemented in statuses.js
 		rating: 1.5,
 		num: 48,
