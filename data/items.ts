@@ -3876,6 +3876,25 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 4,
+		onStart(pokemon) {
+			pokemon.addVolatile('masterpieceteacup')
+		},
+		onResidual(pokemon) {
+			if(pokemon.maxhp !== pokemon.hp && pokemon.volatiles['masterpieceteacup'].turns < 5){
+				pokemon.volatiles['masterpieceteacup'].turns += 1
+			}
+			if (pokemon.volatiles['masterpieceteacup'].turns >= 5){
+				this.heal(pokemon.baseMaxhp / 2);
+			}
+		},
+		condition: {
+			onStart() {
+				this.effectState.turns = 0;
+			},
+		},
+		itemUser: ['Sinistcha-Masterpiece'],
 		num: 2404,
 		gen: 9,
 	},
@@ -3982,6 +4001,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	metalalloy: {
 		name: "Metal Alloy",
 		spritenum: 761,
+		onModifyMove(move, pokemon) {
+			if (pokemon.baseSpecies.name == 'Archaludon' && (move.type === 'Steel' || move.type === 'Electric')){
+				return this.chainModify([6144, 4096]);
+			}
+		},
+		itemUser: ['Archaludon'],
 		num: 2482,
 		gen: 9,
 	},
@@ -4960,6 +4985,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onStart(pokemon) {
+			if (pokemon.baseSpecies.name == 'Milotic'){
+				this.boost({spa: 1}, pokemon)
+			}
+		},
+		itemUser: ['Milotic'],
 		num: 537,
 		gen: 5,
 	},
@@ -4986,6 +5017,19 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onModifySpDPriority: 1,
+		onModifySpD(spd, pokemon) {
+			if (pokemon.baseSpecies.name === 'Rhyperior') {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifyDefPriority: 1,
+		onModifyDef(def, pokemon) {
+			if (pokemon.baseSpecies.name === 'Rhyperior') {
+				return this.chainModify(1.5);
+			}
+		},
+		itemUser: ["Rhyperior"],
 		num: 321,
 		gen: 4,
 	},
@@ -6416,7 +6460,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (move.type === 'Bug' && target.getMoveHitData(move).typeMod > 0) {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -7603,6 +7646,25 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 4,
+		onStart(pokemon) {
+			pokemon.addVolatile('unremarkableteacup')
+		},
+		onResidual(pokemon) {
+			if(pokemon.maxhp !== pokemon.hp && pokemon.volatiles['unremarkableteacup'].turns < 3){
+				pokemon.volatiles['unremarkableteacup'].turns += 1
+			}
+			if (pokemon.volatiles['unremarkableteacup'].turns >= 3){
+				this.heal(pokemon.baseMaxhp / 4);
+			}
+		},
+		condition: {
+			onStart() {
+				this.effectState.turns = 0;
+			},
+		},
+		itemUser: ['Sinistcha'],
 		num: 2403,
 		gen: 9,
 	},
