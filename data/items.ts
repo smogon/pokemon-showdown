@@ -1602,6 +1602,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onSwitchIn(pokemon) {
 			delete this.effectState.protean;
 		},
+		itemUser: ['Porygon-Z'],
 		num: 324,
 		gen: 4,
 	},
@@ -5590,9 +5591,16 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onResidualOrder: 5,
+		onResidualSubOrder: 4,
+		onResidual(pokemon) {
+			if (pokemon.baseSpecies.name == 'Aromatisse'){
+				this.heal(pokemon.baseMaxhp / 8);
+			}
+		},
+		itemUser: ["Aromatisse"],
 		num: 647,
 		gen: 6,
-
 	},
 	safariball: {
 		name: "Safari Ball",
@@ -6365,11 +6373,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.name == 'Flapple'){
 				this.boost({atk: 2}, pokemon)
+				pokemon.useItem()
 			}
 			if (pokemon.baseSpecies.name == 'Appletun'){
 				this.boost({def: 2, spd: 2}, pokemon)
+				pokemon.useItem()
 			}
-			pokemon.useItem()
 		},
 		itemUser: ['Appletun', 'Flapple'],
 		num: 2402,
@@ -6440,8 +6449,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onStart(pokemon) {
 			if (pokemon.baseSpecies.name == 'Flapple'){
 				this.boost({spe: 1}, pokemon)
+				pokemon.useItem()
 			}
-			pokemon.useItem()
 		},
 		itemUser: ['Flapple'],
 		num: 1117,
@@ -7603,6 +7612,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onStart(pokemon) {
+			if (pokemon.baseSpecies.name == 'Porygon-Z'){
+				this.boost({spe: 1}, pokemon)
+			}
+			pokemon.useItem()
+		},
+		itemUser: ['Porygon-Z'],
 		num: 252,
 		gen: 2,
 	},
