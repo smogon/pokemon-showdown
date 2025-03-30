@@ -227,7 +227,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			}
 			if (species.id === 'bastiodon') {
 				// Enforces Toxic too, for good measure.
-				this.incompatibleMoves(moves, movePool, ['metalburst', 'protect', 'roar'], ['metalburst', 'protect'])
+				this.incompatibleMoves(moves, movePool, ['metalburst', 'protect', 'roar'], ['metalburst', 'protect']);
 			}
 		}
 	}
