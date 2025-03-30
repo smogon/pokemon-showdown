@@ -2044,7 +2044,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Lunge", "Rapid Spin", "Rock Blast", "Spikes", "Stealth Rock", "Toxic Spikes"],
+                "movepool": ["Pin Missile", "Rapid Spin", "Rock Blast", "Spikes", "Stealth Rock", "Toxic Spikes"],
                 "abilities": ["Sturdy"],
                 "teraTypes": ["Ghost"]
             }
