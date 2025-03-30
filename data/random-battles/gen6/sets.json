@@ -1230,7 +1230,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["discharge", "dragonpulse", "focusblast", "healbell", "rest", "sleeptalk", "voltswitch"],
+                "movepool": ["discharge", "dragonpulse", "focusblast", "rest", "sleeptalk", "voltswitch"],
                 "abilities": ["Static"]
             }
         ]
