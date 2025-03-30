@@ -1281,7 +1281,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["Dazzling Gleam", "Calm Mind", "Draining Kiss", "Mystical Fire", "Psychic"],
+                "movepool": ["Calm Mind", "Dazzling Gleam", "Draining Kiss", "Mystical Fire", "Psychic"],
                 "abilities": ["Magic Bounce"],
                 "teraTypes": ["Fairy", "Steel"]
             }
