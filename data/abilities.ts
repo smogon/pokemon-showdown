@@ -3960,7 +3960,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.volatiles['quickdraw'].turns = 0;
 				this.add('-activate', pokemon, 'ability: Quick Draw');
 				return 0.1;
-			} else if (pokemon.volatiles['quickdraw']?.turns >= 2 && pokemon.item === 'galaricacuff' && pokemon.species.name === 'Slowbro-Galar') {
+			} else if (pokemon.volatiles['quickdraw']?.turns >= 2 && pokemon.volatiles['galaricawreath']) {
 				pokemon.volatiles['quickdraw'].turns = 0;
 				this.add('-activate', pokemon, 'ability: Quick Draw');
 				return 0.1;

@@ -2399,7 +2399,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onStart(pokemon) {
 			if (pokemon.species.name == 'Slowbro-Galar')
-			pokemon.addVolatile('galaricacuff')
+			pokemon.addVolatile('galaricawreath')
 		},
 		condition: {},
 		itemUser: ['Slowbro-Galar'],
