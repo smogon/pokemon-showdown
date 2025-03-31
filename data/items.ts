@@ -3879,7 +3879,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onStart(pokemon) {
+			if (pokemon.species.name == 'Sinistcha-Masterpiece') {
 			pokemon.addVolatile('masterpieceteacup')
+			}
 		},
 		onResidual(pokemon) {
 			if(pokemon.maxhp !== pokemon.hp && pokemon.volatiles['masterpieceteacup'].turns < 5){
@@ -7649,7 +7651,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onStart(pokemon) {
+			if (pokemon.species.name == 'Sinistcha-Masterpiece') {
 			pokemon.addVolatile('unremarkableteacup')
+			}
 		},
 		onResidual(pokemon) {
 			if(pokemon.maxhp !== pokemon.hp && pokemon.volatiles['unremarkableteacup'].turns < 3){
