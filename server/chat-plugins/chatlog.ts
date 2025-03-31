@@ -1109,10 +1109,12 @@ export const commands: Chat.ChatCommands = {
 			switch (key) {
 			case 'room': case 'roomid':
 				const tarRoom = Rooms.search(val);
-				if (!tarRoom) {
+				if (!tarRoom && !user.can('bypassall')) {
 					return this.errorReply(`Room '${val}' not found.`);
 				}
-				search.roomid = tarRoom.roomid;
+				search.roomid = (
+					tarRoom?.roomid || val.toLowerCase().replace(/[^a-z0-9-]/g, '') as RoomID
+				);
 				break;
 			case 'user': case 'id': case 'userid':
 				search.user = toID(val);
