@@ -1466,18 +1466,18 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	function getSortValue(species: Species) {
 		if (!stat) return 0;
 		switch (stat) {
-			case 'bst':
-				return species.bst;
-			case 'weight':
-				return species.weighthg;
-			case 'height':
-				return species.heightm;
-			case 'gen':
-				return species.gen;
-			case 'num':
-				return species.num;
-			default:
-				return species.baseStats[stat as StatID];
+		case 'bst':
+			return species.bst;
+		case 'weight':
+			return species.weighthg;
+		case 'height':
+			return species.heightm;
+		case 'gen':
+			return species.gen;
+		case 'num':
+			return species.num;
+		default:
+			return species.baseStats[stat as StatID];
 		}
 	}
 
