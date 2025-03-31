@@ -4561,6 +4561,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			pokemon.addVolatile('slowstart');
 		},
+		onModifyAtk(atk, pokemon) {
+			if(!pokemon.volatiles['slowstart'])
+			return this.chainModify(1.05);
+		},
+		onModifySpe(spe, pokemon) {
+			if(!pokemon.volatiles['slowstart'])
+			return this.chainModify(1.05);
+		},
 		onEnd(pokemon) {
 			delete pokemon.volatiles['slowstart'];
 			this.add('-end', pokemon, 'Slow Start', '[silent]');
@@ -4575,14 +4583,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			onResidual(pokemon) {
 				if (!pokemon.activeTurns) {
 					this.effectState.duration += 1;
+
 				}
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
-				return this.chainModify(0.5);
+				let debuff = 1.05 - (0.05 * this.effectState.duration)
+				return this.chainModify(debuff);
 			},
 			onModifySpe(spe, pokemon) {
-				return this.chainModify(0.5);
+				let debuff = 0.8 - (0.05 * this.effectState.duration)
+				return this.chainModify(debuff);
 			},
 			onEnd(target) {
 				this.add('-end', target, 'Slow Start');
