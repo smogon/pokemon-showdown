@@ -7011,6 +7011,6 @@ patadabrutal: {
 	flags: {},
 	name: "Patada Brutal",
 	rating: 3.5,
-	num: 173,
+	num: -149,
 },
 };
