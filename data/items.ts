@@ -703,6 +703,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onStart(pokemon) {
+			pokemon.addVolatile('bottlecap')
+		},
+		condition:{
+			duration: 3,
+			onModifyMove(move) {
+				move.ignoreAbility = true;
+			},
+		},
 		num: 795,
 		gen: 7,
 	},
