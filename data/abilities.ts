@@ -5956,7 +5956,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	wonderskin: {
 		onTryHit(target, source, move) {
 			if (move.category === 'Status') {
-				this.add('-immune', target, '[from] ability: Good as Gold');
+				this.add('-immune', target, '[from] ability: Wonder Skin');
 				return null;
 			}
 		},
@@ -6976,9 +6976,9 @@ entradatriunfal: {
 },
 ignomotor: {
 	onTryHit(target, source, move) {
-		if (target !== source && move.type === 'Electric') {
+		if (target !== source && move.type === 'Fire') {
 			if (!this.boost({spe: 1})) {
-				this.add('-immune', target, '[from] ability: Motor Drive');
+				this.add('-immune', target, '[from] ability: Ignomotor');
 			}
 			return null;
 		}

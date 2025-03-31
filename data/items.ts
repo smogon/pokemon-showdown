@@ -299,7 +299,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 		},
 		onStart(pokemon) {
+			if(pokemon.hasAbility("Mineralizacion")){
 			pokemon.useItem()
+			}
 		},
 		boosts: {def: 1},
 		num: 104,
@@ -703,6 +705,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onStart(pokemon) {
+			pokemon.addVolatile('bottlecap')
+		},
+		condition:{
+			duration: 3,
+			onModifyMove(move) {
+				move.ignoreAbility = true;
+			},
+		},
 		num: 795,
 		gen: 7,
 	},
@@ -1091,6 +1102,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onStart(pokemon) {
+			if(pokemon.hasAbility("Mineralizacion")){
+			pokemon.useItem()
+			}
+		},
+		boosts: {atk: 1},
 		num: 100,
 		gen: 3,
 
@@ -4530,6 +4547,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onStart(pokemon) {
+			if(pokemon.hasAbility("Mineralizacion")){
+			pokemon.useItem()
+			}
+		},
+		boosts: {spe: 1},
 		num: 103,
 		gen: 3,
 
@@ -5585,6 +5608,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onStart(pokemon) {
+			if(pokemon.hasAbility("Mineralizacion")){
+			pokemon.useItem()
+			}
+		},
+		boosts: {spd: 1},
 		num: 99,
 		gen: 3,
 
@@ -5739,6 +5768,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onStart(pokemon) {
+			if(pokemon.hasAbility("Mineralizacion")){
+			pokemon.useItem()
+			}
+		},
+		boosts: {spa: 1},
 		num: 711,
 		gen: 6,
 
