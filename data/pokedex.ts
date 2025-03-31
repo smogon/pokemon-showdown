@@ -3148,6 +3148,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 7.5,
 		color: "Blue",
 		evos: ["Omastar"],
+		tags: ["Fossil"],
 		eggGroups: ["Water 1", "Water 3"],
 	},
 	omastar: {
@@ -3162,6 +3163,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		prevo: "Omanyte",
 		evoLevel: 40,
+		tags: ["Fossil"],
 		eggGroups: ["Water 1", "Water 3"],
 	},
 	kabuto: {
@@ -3175,6 +3177,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 11.5,
 		color: "Brown",
 		evos: ["Kabutops"],
+		tags: ["Fossil"],
 		eggGroups: ["Water 1", "Water 3"],
 	},
 	kabutops: {
@@ -3189,6 +3192,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Brown",
 		prevo: "Kabuto",
 		evoLevel: 40,
+		tags: ["Fossil"],
 		eggGroups: ["Water 1", "Water 3"],
 	},
 	aerodactyl: {
@@ -3201,6 +3205,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 1.8,
 		weightkg: 59,
 		color: "Purple",
+		tags: ["Fossil"],
 		eggGroups: ["Flying"],
 		otherFormes: ["Aerodactyl-Mega"],
 		formeOrder: ["Aerodactyl", "Aerodactyl-Mega"],
@@ -6798,6 +6803,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 23.8,
 		color: "Purple",
 		evos: ["Cradily"],
+		tags: ["Fossil"],
 		eggGroups: ["Water 3"],
 	},
 	cradily: {
@@ -6812,6 +6818,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		prevo: "Lileep",
 		evoLevel: 40,
+		tags: ["Fossil"],
 		eggGroups: ["Water 3"],
 	},
 	anorith: {
@@ -6825,6 +6832,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 12.5,
 		color: "Gray",
 		evos: ["Armaldo"],
+		tags: ["Fossil"],
 		eggGroups: ["Water 3"],
 	},
 	armaldo: {
@@ -6839,6 +6847,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Gray",
 		prevo: "Anorith",
 		evoLevel: 40,
+		tags: ["Fossil"],
 		eggGroups: ["Water 3"],
 	},
 	feebas: {
@@ -7882,6 +7891,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 31.5,
 		color: "Blue",
 		evos: ["Rampardos"],
+		tags: ["Fossil"],
 		eggGroups: ["Monster"],
 	},
 	rampardos: {
@@ -7896,6 +7906,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		prevo: "Cranidos",
 		evoLevel: 30,
+		tags: ["Fossil"],
 		eggGroups: ["Monster"],
 	},
 	shieldon: {
@@ -7909,6 +7920,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 57,
 		color: "Gray",
 		evos: ["Bastiodon"],
+		tags: ["Fossil"],
 		eggGroups: ["Monster"],
 	},
 	bastiodon: {
@@ -7923,6 +7935,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Gray",
 		prevo: "Shieldon",
 		evoLevel: 30,
+		tags: ["Fossil"],
 		eggGroups: ["Monster"],
 	},
 	burmy: {
@@ -10674,6 +10687,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 16.5,
 		color: "Blue",
 		evos: ["Carracosta"],
+		tags: ["Fossil"],
 		eggGroups: ["Water 1", "Water 3"],
 	},
 	carracosta: {
@@ -10688,6 +10702,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		prevo: "Tirtouga",
 		evoLevel: 37,
+		tags: ["Fossil"],
 		eggGroups: ["Water 1", "Water 3"],
 	},
 	archen: {
@@ -10701,6 +10716,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 9.5,
 		color: "Yellow",
 		evos: ["Archeops"],
+		tags: ["Fossil"],
 		eggGroups: ["Flying", "Water 3"],
 	},
 	archeops: {
@@ -10715,6 +10731,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Yellow",
 		prevo: "Archen",
 		evoLevel: 37,
+		tags: ["Fossil"],
 		eggGroups: ["Flying", "Water 3"],
 	},
 	trubbish: {
@@ -12831,6 +12848,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 26,
 		color: "Brown",
 		evos: ["Tyrantrum"],
+		tags: ["Fossil"],
 		eggGroups: ["Monster", "Dragon"],
 	},
 	tyrantrum: {
@@ -12846,6 +12864,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Tyrunt",
 		evoLevel: 39,
 		evoCondition: "during the day",
+		tags: ["Fossil"],
 		eggGroups: ["Monster", "Dragon"],
 	},
 	amaura: {
@@ -12859,6 +12878,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 25.2,
 		color: "Blue",
 		evos: ["Aurorus"],
+		tags: ["Fossil"],
 		eggGroups: ["Monster"],
 	},
 	aurorus: {
@@ -12874,6 +12894,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Amaura",
 		evoLevel: 39,
 		evoCondition: "at night",
+		tags: ["Fossil"],
 		eggGroups: ["Monster"],
 	},
 	sylveon: {
@@ -16647,6 +16668,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 1.8,
 		weightkg: 190,
 		color: "Green",
+		tags: ["Fossil"],
 		eggGroups: ["Undiscovered"],
 	},
 	arctozolt: {
@@ -16659,6 +16681,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 2.3,
 		weightkg: 150,
 		color: "Blue",
+		tags: ["Fossil"],
 		eggGroups: ["Undiscovered"],
 	},
 	dracovish: {
@@ -16671,6 +16694,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 2.3,
 		weightkg: 215,
 		color: "Green",
+		tags: ["Fossil"],
 		eggGroups: ["Undiscovered"],
 	},
 	arctovish: {
@@ -16683,6 +16707,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		heightm: 2,
 		weightkg: 175,
 		color: "Blue",
+		tags: ["Fossil"],
 		eggGroups: ["Undiscovered"],
 	},
 	duraludon: {
