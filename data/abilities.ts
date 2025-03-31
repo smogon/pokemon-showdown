@@ -722,6 +722,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	corrosion: {
 		// Implemented in sim/pokemon.js:Pokemon#setStatus
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Poison'] = true;
+			}
+		},
 		flags: {},
 		name: "Corrosion",
 		rating: 2.5,
@@ -2845,7 +2852,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
 			if (randomStat) boost[randomStat] = 1;
 			stats = [];
-			
+
 			this.boost(boost, pokemon, pokemon);
 		}
 		},
@@ -2863,7 +2870,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
 			if (randomStat) boost[randomStat] = 1;
 			stats = [];
-			
+
 			this.boost(boost, pokemon, pokemon);
 			pokemon.useItem()
 			}
@@ -4554,6 +4561,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(pokemon) {
 			pokemon.addVolatile('slowstart');
 		},
+		onModifyAtk(atk, pokemon) {
+			if(!pokemon.volatiles['slowstart'])
+			return this.chainModify(1.05);
+		},
+		onModifySpe(spe, pokemon) {
+			if(!pokemon.volatiles['slowstart'])
+			return this.chainModify(1.05);
+		},
 		onEnd(pokemon) {
 			delete pokemon.volatiles['slowstart'];
 			this.add('-end', pokemon, 'Slow Start', '[silent]');
@@ -4568,14 +4583,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			onResidual(pokemon) {
 				if (!pokemon.activeTurns) {
 					this.effectState.duration += 1;
+
 				}
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
-				return this.chainModify(0.5);
+				let debuff = 1.05 - (0.05 * this.effectState.duration)
+				return this.chainModify(debuff);
 			},
 			onModifySpe(spe, pokemon) {
-				return this.chainModify(0.5);
+				let debuff = 0.8 - (0.05 * this.effectState.duration)
+				return this.chainModify(debuff);
 			},
 			onEnd(target) {
 				this.add('-end', target, 'Slow Start');
@@ -5936,11 +5954,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 25,
 	},
 	wonderskin: {
-		onModifyAccuracyPriority: 10,
-		onModifyAccuracy(accuracy, target, source, move) {
-			if (move.category === 'Status' && typeof accuracy === 'number') {
-				this.debug('Wonder Skin - setting accuracy to 50');
-				return 50;
+		onTryHit(target, source, move) {
+			if (move.category === 'Status') {
+				this.add('-immune', target, '[from] ability: Good as Gold');
+				return null;
 			}
 		},
 		flags: {breakable: 1},
@@ -6956,5 +6973,37 @@ entradatriunfal: {
 	name: "Entrada Triunfal",
 	rating: 2,
 	num: -147,
+},
+ignomotor: {
+	onTryHit(target, source, move) {
+		if (target !== source && move.type === 'Electric') {
+			if (!this.boost({spe: 1})) {
+				this.add('-immune', target, '[from] ability: Motor Drive');
+			}
+			return null;
+		}
+	},
+	/*onStart(pokemon) {
+		if (pokemon.getItem().name == 'Quick Ball') {
+		this.boost({spe: 1}, pokemon)
+		pokemon.useItem()
+		}
+	},*/
+	flags: {breakable: 1},
+	name: "Ignomotor",
+	rating: 3,
+	num: -148,
+},
+patadabrutal: {
+	onBasePowerPriority: 19,
+	onBasePower(basePower, attacker, defender, move) {
+		if (move.flags['kick']) {
+			return this.chainModify(1.5);
+		}
+	},
+	flags: {},
+	name: "Patada Brutal",
+	rating: 3.5,
+	num: 173,
 },
 };
