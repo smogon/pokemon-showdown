@@ -1247,6 +1247,20 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onStart(pokemon) {
+			if(pokemon.hasAbility("Mineralizacion")){
+				pokemon.addVolatile('coverfossil')
+			pokemon.useItem()
+			}
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('coverfossil')
+		},
+		condition:{
+			onSourceModifyDamage(damage, target, source, move) {
+				this.chainModify(0.7)
+			},
+		},
 		num: 572,
 		gen: 5,
 
