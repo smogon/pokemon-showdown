@@ -299,8 +299,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 		},
 		onStart(pokemon) {
-			if(pokemon.hasAbility("Mineralizacion"))
+			if(pokemon.hasAbility("Mineralizacion")){
 			pokemon.useItem()
+			}
 		},
 		boosts: {def: 1},
 		num: 104,
@@ -1102,8 +1103,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 		},
 		onStart(pokemon) {
-			if(pokemon.hasAbility("Mineralizacion"))
+			if(pokemon.hasAbility("Mineralizacion")){
 			pokemon.useItem()
+			}
 		},
 		boosts: {atk: 1},
 		num: 100,
@@ -4509,8 +4511,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 		},
 		onStart(pokemon) {
-			if(pokemon.hasAbility("Mineralizacion"))
+			if(pokemon.hasAbility("Mineralizacion")){
 			pokemon.useItem()
+			}
 		},
 		boosts: {spe: 1},
 		num: 103,
@@ -5569,8 +5572,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 		},
 		onStart(pokemon) {
-			if(pokemon.hasAbility("Mineralizacion"))
+			if(pokemon.hasAbility("Mineralizacion")){
 			pokemon.useItem()
+			}
 		},
 		boosts: {spd: 1},
 		num: 99,
@@ -5728,8 +5732,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 100,
 		},
 		onStart(pokemon) {
-			if(pokemon.hasAbility("Mineralizacion"))
+			if(pokemon.hasAbility("Mineralizacion")){
 			pokemon.useItem()
+			}
 		},
 		boosts: {spa: 1},
 		num: 711,
