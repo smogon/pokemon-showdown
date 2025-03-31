@@ -822,6 +822,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				ally.cureStatus();
 				this.add('-clearboost', ally, '[from] ability: Curious Medicine', '[of] ' + pokemon);
 			}
+			if (pokemon.volatiles['galaricawreath']) {
+				pokemon.heal(pokemon.baseMaxhp / 4);
+			}
 		},
 		flags: {},
 		name: "Curious Medicine",
@@ -3953,7 +3956,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onFractionalPriorityPriority: -1,
 		onFractionalPriority(priority, pokemon, target, move) {
-			if (pokemon.volatiles['quickdraw']?.turns >= 3) {
+			if (pokemon.volatiles['quickdraw']?.turns >= 3 && pokemon.item !== 'galaricacuff') {
+				pokemon.volatiles['quickdraw'].turns = 0;
+				this.add('-activate', pokemon, 'ability: Quick Draw');
+				return 0.1;
+			} else if (pokemon.volatiles['quickdraw']?.turns >= 2 && pokemon.volatiles['galaricawreath']) {
 				pokemon.volatiles['quickdraw'].turns = 0;
 				this.add('-activate', pokemon, 'ability: Quick Draw');
 				return 0.1;

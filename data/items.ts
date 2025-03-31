@@ -1367,6 +1367,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onStart(pokemon) {
+			if (pokemon.baseSpecies.evoItem == 'Shiny Stone') {
+				const bestStat = pokemon.getBestStat(true, true);
+				this.boost({[bestStat]: 1}, pokemon);
+			}
+		},
+		itemUser: ['Gallade', 'Froslass'],
 		num: 109,
 		gen: 4,
 	},
@@ -1668,6 +1675,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onModifyDamage(damage, source, target, move) {
+			if (source.baseSpecies.evoItem == 'Dusk Stone' && move.type === 'Ghost') {
+				return this.chainModify([8192, 4096]);
+			}
+		},
+		itemUser: ['Honchkrow', 'Mismagius', 'Chandelure', 'Aegislash'],
 		num: 108,
 		gen: 4,
 	},
@@ -2095,7 +2108,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		itemUser: ["Silvally-Fire"],
 		num: 912,
 		gen: 7,
-
 	},
 	firestone: {
 		name: "Fire Stone",
@@ -2103,6 +2115,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onModifyDamage(damage, source, target, move) {
+			if (source.baseSpecies.evoItem == 'Fire Stone' && move.type === 'Fire') {
+				return this.chainModify([8192, 4096]);
+			}
+		},
+		itemUser: ['Ninetales', 'Arcanine', 'Arcanine-Hisui', 'Flareon', 'Simisear', 'Scovillain'],
 		num: 82,
 		gen: 1,
 	},
@@ -2379,6 +2397,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onStart(pokemon) {
+			if (pokemon.species.name == 'Slowbro-Galar')
+			pokemon.addVolatile('galaricawreath')
+		},
+		condition: {},
+		itemUser: ['Slowbro-Galar'],
 		num: 1582,
 		gen: 8,
 	},
@@ -2388,6 +2412,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onStart(pokemon) {
+			if (pokemon.species.name == 'Slowking-Galar')
+			pokemon.addVolatile('galaricawreath')
+		},
+		condition: {},
+		itemUser: ['Slowking-Galar'],
 		num: 1592,
 		gen: 8,
 	},
@@ -3001,6 +3031,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onModifyDamage(damage, source, target, move) {
+			if (source.baseSpecies.evoItem == 'Ice Stone' && move.type === 'Ice') {
+				return this.chainModify([8192, 4096]);
+			}
+		},
+		itemUser: ['Sandslash-Alola', 'Ninetales-Alola', 'Glaceon', 'Darmanitan-Galar', 'Crabominable', 'Cetitan'],
 		num: 849,
 		gen: 7,
 	},
@@ -3389,6 +3425,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onModifyDamage(damage, source, target, move) {
+			if (source.baseSpecies.evoItem == 'Leaf Stone' && move.type === 'Grass') {
+				return this.chainModify([8192, 4096]);
+			}
+		},
+		itemUser: ['Vileplume', 'Victreebel', 'Electrode-Hisui', 'Exeggutor', 'Exeggutor-Alola', 'Leafeon', 'Shiftry', 'Simisage'],
 		num: 85,
 		gen: 1,
 	},
@@ -4049,8 +4091,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	metalalloy: {
 		name: "Metal Alloy",
 		spritenum: 761,
-		onModifyMove(move, pokemon) {
-			if (pokemon.baseSpecies.name == 'Archaludon' && (move.type === 'Steel' || move.type === 'Electric')){
+		onModifyDamage(damage, source, target, move) {
+			if (source.baseSpecies.name == 'Archaludon' && (move.type === 'Steel' || move.type === 'Electric')){
 				return this.chainModify([6144, 4096]);
 			}
 		},
@@ -4332,6 +4374,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onStart(pokemon) {
+			if (pokemon.baseSpecies.evoItem == 'Shiny Stone') {
+				const bestStat = pokemon.getBestStat(true, true);
+				this.boost({[bestStat]: 1}, pokemon);
+			}
+		},
+		itemUser: ['Nidoqueen', 'Nidoking', 'Clefable', 'Wigglytuff', 'Delcatty', 'Musharna'],
 		num: 81,
 		gen: 1,
 	},
@@ -5935,6 +5984,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onModifyDamage(damage, source, target, move) {
+			if (source.baseSpecies.evoItem == 'Sun Stone' && move.type === 'Fairy') {
+				return this.chainModify([8192, 4096]);
+			}
+		},
+		itemUser: ['Togekiss', 'Roserade', 'Cinccino', 'Florges'],
 		num: 107,
 		gen: 4,
 	},
@@ -6433,6 +6488,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onStart(pokemon) {
+			if (pokemon.baseSpecies.evoItem == 'Shiny Stone') {
+				const bestStat = pokemon.getBestStat(true, true);
+				this.boost({[bestStat]: 1}, pokemon);
+			}
+		},
+		itemUser: ['Bellosom', 'Sunflora', 'Sunfulwer', 'Whimsicott', 'Liligant', 'Liligant-Hisui', 'Heliolisk'],
 		num: 80,
 		gen: 2,
 	},
@@ -6614,6 +6676,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onModifyDamage(damage, source, target, move) {
+			if (source.baseSpecies.evoItem == 'Thunder Stone' && move.type === 'Electric') {
+				return this.chainModify([8192, 4096]);
+			}
+		},
+		itemUser: ['Reichu', 'Reaichu-Alola', 'Magnezone', 'Jolteon', 'Probopass', 'Eelektross', 'Vikavolt', 'Bellibolt'],
 		num: 83,
 		gen: 1,
 	},
@@ -7852,7 +7920,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		itemUser: ["Silvally-Water"],
 		num: 913,
 		gen: 7,
-
 	},
 	waterstone: {
 		name: "Water Stone",
@@ -7860,6 +7927,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
+		onModifyDamage(damage, source, target, move) {
+			if (source.baseSpecies.evoItem == 'Water Stone' && move.type === 'Water') {
+				return this.chainModify([8192, 4096]);
+			}
+		},
+		itemUser: ['Poliwrath', 'Cloyster', 'Starmie', 'Vaporeon', 'Ludicolo', 'Simipour'],
 		num: 84,
 		gen: 1,
 	},
