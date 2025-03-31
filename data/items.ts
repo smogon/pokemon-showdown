@@ -4886,6 +4886,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onFractionalPriorityPriority: -2,
+		onFractionalPriority(priority, pokemon) {
+			if (
+				priority <= 0 &&
+				(pokemon.hasAbility("Mineralizacion"))
+			) {
+				if (pokemon.useItem()) {
+					this.add('-activate', pokemon, 'item: Plume Fossil');
+					return 0.1;
+				}
+			}
+		},
 		num: 573,
 		gen: 5,
 
