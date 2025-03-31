@@ -448,7 +448,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			type: "Electric",
 		},
 		onModifyMove(move, pokemon, target){
-			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.eatItem()){	
+			if (pokemon.hp <= pokemon.maxhp / 2 && pokemon.eatItem()){
 				this.heal(pokemon.baseMaxhp / 5, pokemon)
 				move.ignoreImmunity = true;
 			}
@@ -6403,7 +6403,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				pokemon.useItem()
 				}
 			}
-			
+
 		},
 		itemUser: ['Appletun'],
 		num: 1116,
@@ -7651,7 +7651,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onResidualOrder: 5,
 		onResidualSubOrder: 4,
 		onStart(pokemon) {
-			if (pokemon.species.name == 'Sinistcha-Masterpiece') {
+			if (pokemon.species.name == 'Sinistcha') {
 			pokemon.addVolatile('unremarkableteacup')
 			}
 		},
