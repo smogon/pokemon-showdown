@@ -1484,6 +1484,23 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onStart(pokemon) {
+			if(pokemon.hasAbility("Mineralizacion")){
+				pokemon.addVolatile('domefossil')
+			pokemon.useItem()
+			}
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('domefossil')
+		},
+		condition:{
+			onSetStatus(status, target, source, effect) {
+				if ((effect as Move)?.status) {
+					this.add('-immune', target, '[from] item: Dome Fossil');
+				}
+				return false;
+			},
+		},
 		num: 102,
 		gen: 3,
 
