@@ -2358,6 +2358,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if(source.hasAbility("Mineralizacion")){
+				target.trySetStatus('par', source);
+				source.useItem()
+			}
+		},
 		num: 1105,
 		gen: 8,
 
