@@ -509,6 +509,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 130,
 		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if(move.type === 'Steel'){
+				target.trySetStatus('par', source);
+				source.useItem()
+			}
+		},
 		num: 581,
 		gen: 5,
 	},
