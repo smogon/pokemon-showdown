@@ -2392,7 +2392,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onSourceDamagingHit(damage, target, source, move) {
 			if(source.hasAbility("Mineralizacion")){
-				target.addVolatile('confusion', source);
+				target.addVolatile('flinch', source);
 				source.useItem()
 			}
 		},
