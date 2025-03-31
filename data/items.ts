@@ -974,6 +974,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onSourceModifyDamage(damage, target, source, move) {
+			if (source.baseSpecies.name == 'Polteageist-Antique') {
+			this.chainModify(0.5)
+			source.useItem()
+			}
+		},
+		itemUser: ['Polteageist-Antique'],
 		num: 1254,
 		gen: 8,
 	},
@@ -1240,6 +1247,13 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onSourceModifyDamage(damage, target, source, move) {
+			if (source.baseSpecies.name == 'Polteageist') {
+			this.chainModify(0.8)
+			source.useItem()
+			}
+		},
+		itemUser: ['Polteageist'],
 		num: 1253,
 		gen: 8,
 	},
