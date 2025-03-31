@@ -711,10 +711,10 @@ export class FSLogSearcher extends Searcher {
 			averagePresent: 0,
 		};
 		if (!Monitor.logPath(`chat/${room}`).existsSync()) {
-			return {days: [], average: collected};
+			return { days: [], average: collected };
 		}
 		if (!Monitor.logPath(`chat/${room}/${month}`).existsSync()) {
-			return {days: [], average: collected};
+			return { days: [], average: collected };
 		}
 		const days = (await Monitor.logPath(`chat/${room}/${month}`).readdir()).map(f => f.slice(0, -4));
 		const stats: RoomStats[] = [];
