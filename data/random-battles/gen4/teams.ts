@@ -225,10 +225,10 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				if (movePool.includes('suckerpunch')) this.fastPop(movePool, movePool.indexOf('suckerpunch'));
 				if (moves.size + movePool.length <= this.maxMoveCount) return;
 			}
-			if (species.id === 'bastiodon') {
-				// Enforces Toxic too, for good measure.
-				this.incompatibleMoves(moves, movePool, ['metalburst', 'protect', 'roar'], ['metalburst', 'protect']);
-			}
+		}
+		if (species.id === 'bastiodon') {
+			// Enforces Toxic too, for good measure.
+			this.incompatibleMoves(moves, movePool, ['metalburst', 'protect', 'roar'], ['metalburst', 'protect']);
 		}
 	}
 
