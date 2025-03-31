@@ -2845,7 +2845,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
 			if (randomStat) boost[randomStat] = 1;
 			stats = [];
-			
+
 			this.boost(boost, pokemon, pokemon);
 		}
 		},
@@ -2863,7 +2863,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
 			if (randomStat) boost[randomStat] = 1;
 			stats = [];
-			
+
 			this.boost(boost, pokemon, pokemon);
 			pokemon.useItem()
 			}
@@ -5936,11 +5936,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 25,
 	},
 	wonderskin: {
-		onModifyAccuracyPriority: 10,
-		onModifyAccuracy(accuracy, target, source, move) {
-			if (move.category === 'Status' && typeof accuracy === 'number') {
-				this.debug('Wonder Skin - setting accuracy to 50');
-				return 50;
+		onTryHit(target, source, move) {
+			if (move.category === 'Status') {
+				this.add('-immune', target, '[from] ability: Good as Gold');
+				return null;
 			}
 		},
 		flags: {breakable: 1},
