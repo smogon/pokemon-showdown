@@ -1256,7 +1256,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onSourceModifyDamage(damage, target, source, move) {
 			if (source.baseSpecies.name == 'Polteageist') {
 			this.chainModify(0.8)
-			source.useItem()
 			}
 		},
 		itemUser: ['Polteageist'],
