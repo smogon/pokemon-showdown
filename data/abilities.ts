@@ -722,6 +722,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	corrosion: {
 		// Implemented in sim/pokemon.js:Pokemon#setStatus
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Poison'] = true;
+			}
+		},
 		flags: {},
 		name: "Corrosion",
 		rating: 2.5,
@@ -6955,5 +6962,37 @@ entradatriunfal: {
 	name: "Entrada Triunfal",
 	rating: 2,
 	num: -147,
+},
+ignomotor: {
+	onTryHit(target, source, move) {
+		if (target !== source && move.type === 'Electric') {
+			if (!this.boost({spe: 1})) {
+				this.add('-immune', target, '[from] ability: Motor Drive');
+			}
+			return null;
+		}
+	},
+	/*onStart(pokemon) {
+		if (pokemon.getItem().name == 'Quick Ball') {
+		this.boost({spe: 1}, pokemon)
+		pokemon.useItem()
+		}
+	},*/
+	flags: {breakable: 1},
+	name: "Ignomotor",
+	rating: 3,
+	num: -148,
+},
+patadabrutal: {
+	onBasePowerPriority: 19,
+	onBasePower(basePower, attacker, defender, move) {
+		if (move.flags['kick']) {
+			return this.chainModify(1.5);
+		}
+	},
+	flags: {},
+	name: "Patada Brutal",
+	rating: 3.5,
+	num: 173,
 },
 };
