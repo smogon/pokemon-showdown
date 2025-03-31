@@ -2374,6 +2374,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if(source.hasAbility("Mineralizacion")){
+				target.trySetStatus('frz', source);
+				source.useItem()
+			}
+		},
 		num: 1108,
 		gen: 8,
 
@@ -2384,6 +2390,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if(source.hasAbility("Mineralizacion")){
+				target.addVolatile('confusion', source);
+				source.useItem()
+			}
+		},
 		num: 1107,
 		gen: 8,
 
@@ -2393,6 +2405,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 701,
 		fling: {
 			basePower: 100,
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if(source.hasAbility("Mineralizacion")){
+				target.addVolatile('confusion', source);
+				source.useItem()
+			}
 		},
 		num: 1106,
 		gen: 8,
