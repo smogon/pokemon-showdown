@@ -954,7 +954,7 @@ export const pages: Chat.PageTable = {
 			return this.errorReply(`You must specify an exact month - both a year and a month.`);
 		}
 		this.title = `[Log Stats] ${date}`;
-		return LogSearcher.runLinecountSearch(this, room ? room.roomid : args[2] as RoomID, date, toID(target));
+		return LogSearcher.runLinecountSearch(this, room ? room.roomid : args[0] as RoomID, date, toID(target));
 	},
 	async logsaccess(query) {
 		this.checkCan('rangeban');
