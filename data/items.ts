@@ -2467,11 +2467,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 30,
 		},
-		onStart(pokemon) {
-			if (pokemon.species.name == 'Slowking-Galar')
-			pokemon.addVolatile('galaricawreath')
-		},
-		condition: {},
 		itemUser: ['Slowking-Galar'],
 		num: 1592,
 		gen: 8,
