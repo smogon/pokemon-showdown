@@ -582,7 +582,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 							switchCopyFlag = (sourceEffect as Move).selfSwitch!;
 						}
 					} else {
-						switchCopyFlag = 'copyvolatile';
+						if (!isDrag) switchCopyFlag = 'copyvolatile';
 					}
 					if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
 						this.battle.runEvent('BeforeSwitchOut', oldActive);
