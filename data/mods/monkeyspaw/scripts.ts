@@ -175,7 +175,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		buf += `&bullet; <b>Mega Evolution X:</b> <span style="font-size: 9px;">Gain a +2 boost in the current Pokemon's dominant attack and defense stat</span><br />`;
 		buf += `&bullet; <b>Mega Evolution Y:</b> <span style="font-size: 9px;">Give the current Pokemon innate Serene Grace + Focus Energy for the rest of the game</span><br />`;
 		buf += `&bullet; <b>Terastallize:</b> <span style="font-size: 9px;">Scout the active Pokemon for one of their moves</span><br />`;
-		buf += `<details></div>`;
+		buf += `</details></div>`;
 		this.add(`raw|${buf}`);
 
 		this.makeRequest('move');

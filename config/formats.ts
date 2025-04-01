@@ -38,7 +38,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			buf += `&bullet; <b>Mega Evolution X:</b> Wish for power &ndash; <span style="font-size: 9px;">Gain a +2 boost in the current Pokemon's dominant attack and defense stat</span><br />`;
 			buf += `&bullet; <b>Mega Evolution Y:</b> Wish for luck &ndash; <span style="font-size: 9px;">Give the current Pokemon innate Serene Grace + Focus Energy for the rest of the game</span><br />`;
 			buf += `&bullet; <b>Terastallize:</b> Wish for knowledge &ndash; <span style="font-size: 9px;">Scout the active Pokemon for one of their moves</span><br />`;
-			buf += `<details></div>`;
+			buf += `</details></div>`;
 			this.add('message', `You've found a Monkey's Paw. You have 4 wishes.`);
 			this.add(`raw|${buf}`);
 		},
