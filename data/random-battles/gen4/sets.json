@@ -157,9 +157,8 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["earthquake", "fireblast", "icebeam", "roar", "stealthrock", "toxicspikes"],
-                "abilities": ["Poison Point"],
-                "preferredTypes": ["Ice"]
+                "movepool": ["earthquake", "fireblast", "icebeam", "roar", "sludgebomb", "stealthrock", "toxicspikes"],
+                "abilities": ["Poison Point"]
             }
         ]
     },
@@ -168,9 +167,8 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["earthquake", "fireblast", "icebeam", "megahorn", "stealthrock", "suckerpunch", "thunderbolt"],
-                "abilities": ["Poison Point"],
-                "preferredTypes": ["Ice"]
+                "movepool": ["earthquake", "fireblast", "icebeam", "megahorn", "sludgebomb", "stealthrock", "suckerpunch", "thunderbolt"],
+                "abilities": ["Poison Point"]
             }
         ]
     },
@@ -608,7 +606,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["fireblast", "haze", "painsplit", "sludgebomb", "willowisp"],
+                "movepool": ["explosion", "fireblast", "haze", "painsplit", "sludgebomb", "willowisp"],
                 "abilities": ["Levitate"]
             },
             {
@@ -2854,11 +2852,6 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["metalburst", "roar", "rockslide", "stealthrock", "toxic"],
-                "abilities": ["Sturdy"]
-            },
-            {
-                "role": "Staller",
                 "movepool": ["metalburst", "protect", "roar", "rockslide", "stealthrock", "toxic"],
                 "abilities": ["Sturdy"]
             }

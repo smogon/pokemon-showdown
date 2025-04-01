@@ -352,6 +352,12 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				movePool, preferredType, role);
 		}
 
+		// Enforce Destiny Bond on Mega Banette, since that move is its entire reason to exist
+		if (movePool.includes('destinybond') && species.id === 'banettemega') {
+			counter = this.addMove('destinybond', moves, types, abilities, teamDetails, species, isLead,
+				movePool, preferredType, role);
+		}
+
 		// Enforce hazard removal on Bulky Support if the team doesn't already have it
 		if (role === 'Bulky Support' && !teamDetails.defog && !teamDetails.rapidSpin) {
 			if (movePool.includes('rapidspin')) {

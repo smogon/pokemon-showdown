@@ -2233,7 +2233,7 @@
     },
     "tapubulu": {
         "level": 82,
-        "moves": ["closecombat", "hornleech", "megahorn", "stoneedge", "swordsdance", "woodhammer"],
+        "moves": ["closecombat", "highhorsepower", "hornleech", "megahorn", "stoneedge", "swordsdance", "woodhammer"],
         "doublesLevel": 83,
         "doublesMoves": ["closecombat", "hornleech", "protect", "stoneedge", "swordsdance", "woodhammer"]
     },
@@ -2481,7 +2481,7 @@
     },
     "barraskewda": {
         "level": 80,
-        "moves": ["closecombat", "crunch", "liquidation", "poisonjab", "psychicfangs"],
+        "moves": ["closecombat", "crunch", "flipturn", "liquidation"],
         "doublesLevel": 84,
         "doublesMoves": ["closecombat", "drillrun", "flipturn", "liquidation", "poisonjab"]
     },

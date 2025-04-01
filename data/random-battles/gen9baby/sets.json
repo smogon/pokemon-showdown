@@ -1246,7 +1246,7 @@
                 "teraTypes": ["Dark", "Grass"]
             },
             {
-                "role": "Setup Sweeper",
+                "role": "Bulky Setup",
                 "movepool": ["Bullet Seed", "Fire Punch", "Gunk Shot", "Swords Dance"],
                 "abilities": ["Sticky Hold"],
                 "teraTypes": ["Fire", "Grass", "Poison"]
@@ -1275,13 +1275,13 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Draining Kiss", "Mystical Fire", "Nuzzle", "Psychic"],
+                "movepool": ["Dazzling Gleam", "Draining Kiss", "Mystical Fire", "Nuzzle", "Psychic"],
                 "abilities": ["Magic Bounce"],
                 "teraTypes": ["Electric", "Fairy"]
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["Calm Mind", "Draining Kiss", "Mystical Fire", "Psychic"],
+                "movepool": ["Calm Mind", "Dazzling Gleam", "Draining Kiss", "Mystical Fire", "Psychic"],
                 "abilities": ["Magic Bounce"],
                 "teraTypes": ["Fairy", "Steel"]
             }
@@ -1437,7 +1437,7 @@
         "level": 7,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["Flamethrower", "Pain Split", "Sludge Bomb", "Toxic Spikes", "Will-O-Wisp"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Steel"]
@@ -1487,16 +1487,16 @@
         "level": 7,
         "sets": [
             {
-                "role": "Bulky Setup",
-                "movepool": ["Body Slam", "Bulldoze", "Curse", "Play Rough"],
-                "abilities": ["Thick Fat"],
-                "teraTypes": ["Fairy", "Ground"]
-            },
-            {
                 "role": "Bulky Attacker",
                 "movepool": ["Body Slam", "Bullet Seed", "Double-Edge", "Play Rough", "Thief", "Yawn"],
                 "abilities": ["Thick Fat"],
                 "teraTypes": ["Fairy", "Grass"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Body Slam", "Curse", "Rest", "Sleep Talk"],
+                "abilities": ["Thick Fat"],
+                "teraTypes": ["Fairy"]  
             }
         ]
     },
@@ -1579,7 +1579,7 @@
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["Cross Chop", "Fire Blast", "Flare Blitz", "Thunder Punch", "Will-O-Wisp"],
+                "movepool": ["Cross Chop", "Fire Blast", "Flare Blitz", "Thunder Punch"],
                 "abilities": ["Flame Body", "Vital Spirit"],
                 "teraTypes": ["Electric", "Fire", "Grass"]
             },
@@ -2044,7 +2044,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Lunge", "Rapid Spin", "Rock Blast", "Spikes", "Stealth Rock", "Toxic Spikes"],
+                "movepool": ["Pin Missile", "Rapid Spin", "Rock Blast", "Spikes", "Stealth Rock", "Toxic Spikes"],
                 "abilities": ["Sturdy"],
                 "teraTypes": ["Ghost"]
             }
@@ -2630,7 +2630,7 @@
                 "teraTypes": ["Fairy", "Fighting", "Normal"]
             },
             {
-                "role": "Wallbreaker",
+                "role": "Bulky Attacker",
                 "movepool": ["Body Slam", "Hammer Arm", "Slack Off", "Throat Chop"],
                 "abilities": ["Truant"],
                 "teraTypes": ["Ghost", "Poison"]
@@ -3033,7 +3033,7 @@
         ]
     },
     "tinkatink": {
-        "level": 7,
+        "level": 6,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3085,6 +3085,12 @@
                 "movepool": ["Dragon Dance", "Ice Punch", "Liquidation", "Trailblaze"],
                 "abilities": ["Sheer Force"],
                 "teraTypes": ["Grass", "Water"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Crunch", "Dragon Dance", "Ice Punch", "Liquidation"],
+                "abilities": ["Sheer Force"],
+                "teraTypes": ["Dark", "Water"]
             }
         ]
     },
