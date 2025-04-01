@@ -6158,6 +6158,27 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onStart(pokemon) {
+			if(pokemon.hasAbility("Mineralizacion")){
+			pokemon.useItem()
+			}
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('coverfossil')
+		},
+		condition: {
+			onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+				this.debug('Inteligencia Artificial boost');
+				return this.chainModify(1.5);
+		},
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
+			if (typeof accuracy === 'number') {
+				return this.chainModify(0.9);
+			}
+		},
+		},
 		num: 105,
 		gen: 4,
 
