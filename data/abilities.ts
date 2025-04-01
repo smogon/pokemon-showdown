@@ -822,6 +822,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				ally.cureStatus();
 				this.add('-clearboost', ally, '[from] ability: Curious Medicine', '[of] ' + pokemon);
 			}
+		},
+		onSwitchIn(pokemon) {
 			if (pokemon.hasItem('galaricawreath') && pokemon.species.name === 'Slowking-Galar') {
 				pokemon.heal(pokemon.baseMaxhp / 4);
 				this.add('-heal', pokemon, '[from] ability: Curious Medicine', '[of] ' + pokemon);
