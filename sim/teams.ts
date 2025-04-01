@@ -624,7 +624,7 @@ export const Teams = new class Teams {
 		const formatID = toID(format);
 		if (formatID.includes('gen9computergeneratedteams')) {
 			TeamGenerator = require(Dex.forFormat(format).dataDir + '/cg-teams').default;
-		} else if (formatID.includes('gen9superstaffbrosultimate')) {
+		} else if (mod === 'gen9ssb') {
 			TeamGenerator = require(`../data/mods/gen9ssb/random-teams`).default;
 		} else if (formatID.includes('gen9babyrandombattle')) {
 			TeamGenerator = require(`../data/random-battles/gen9baby/teams`).default;

@@ -84,6 +84,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: "Extra Course",
 		evs: { hp: 252, spa: 4, spd: 252 }, nature: 'Calm', teraType: 'Ground',
 	},
+	April: {
+		species: 'Leafeon', ability: 'Twin Fantasy', item: 'Leftovers', gender: 'F',
+		moves: ['Bitter Blade', ['Razor Shell', 'Strength Sap'], 'Tidy Up'],
+		signatureMove: "Herbal Dagger",
+		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Fire', shiny: 50,
+	},
 	aQrator: {
 		species: 'Totodile', ability: 'Neverending fHunt', item: 'Eviolite', gender: 'F',
 		moves: ['Whirlpool', 'Noble Roar', 'Slack Off'],
@@ -1105,6 +1111,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const meme = ruleTable.has('dynamaxclause') && !debug.length;
+		const afd = this.format.id.includes('april');
 		const monotype = this.forceMonotype || (ruleTable.has('sametypeclause') ?
 			this.sample([...this.dex.types.names().filter(x => x !== 'Stellar')]) : false);
 
@@ -1128,12 +1135,12 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		while (pool.length && team.length < this.maxTeamSize) {
 			if (depth >= 200) throw new Error(`Infinite loop in Super Staff Bros team generation.`);
 			depth++;
-			const name = meme ? this.sample(pool) : this.sampleNoReplace(pool);
+			const name = meme ? this.sample(pool) : afd ? 'April' : this.sampleNoReplace(pool);
 			const ssbSet: SSBSet = meme ? this.dex.deepClone(afdSSBSets[name]) : this.dex.deepClone(ssbSets[name]);
 			if (ssbSet.skip) continue;
 
 			// Enforce typing limits
-			if (!(debug.length || monotype || meme)) { // Type limits are ignored for debugging, monotype, or memes.
+			if (!(debug.length || monotype || meme || afd)) { // Type limits are ignored for debugging, monotype, or memes.
 				const species = this.dex.species.get(ssbSet.species);
 
 				const weaknesses = [];

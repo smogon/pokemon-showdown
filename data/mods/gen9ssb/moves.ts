@@ -352,6 +352,29 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Normal",
 	},
 
+	// April
+	herbaldagger: {
+		accuracy: 95,
+		basePower: 95,
+		category: "Physical",
+		shortDesc: "No additional effect.",
+		name: "Herbal Dagger",
+		gen: 9,
+		pp: 20,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, slicing: 1, contact: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Flower Trick', target);
+			this.add('-anim', source, 'Flower Trick', target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Grass",
+	},
+
 	// aQrator
 	torisstori: {
 		accuracy: 100,

@@ -165,6 +165,21 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			pokemon.abilityState.berryWeaken = weakenBerries.includes(item.name);
 		},
 	},
+	april: {
+		noCopy: true,
+		onStart(pokemon) {
+			this.add(`c:|${getName('April')}|Fool's Day`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('April')}|Fool's Day`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('April')}|Fool's Day`);
+		},
+		onTryHit() {
+			this.add(`c:|${getName('April')}|Fool's Day`);
+		},
+	},
 	aqrator: {
 		noCopy: true,
 		onStart(pokemon) {

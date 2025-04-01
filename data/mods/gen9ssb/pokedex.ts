@@ -56,6 +56,12 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Served Cold" },
 	},
 
+	// April
+	leafeon: {
+		inherit: true,
+		abilities: { 0: "Twin Fantasy" },
+	},
+
 	// aQrator
 	totodile: {
 		inherit: true,
