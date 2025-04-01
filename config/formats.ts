@@ -32,6 +32,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		ruleset: ['[Gen 9] Random Battle'],
 		onBegin() {
+			for (const side of this.sides) {
+				// @ts-expect-error I hate references with all of my life force
+				side.wishes = { luck: 1, knowledge: 1, power: 1, life: 1 };
+				// @ts-expect-error
+				side.wishesRemaining = 4;
+			}
 			let buf = `<div class="broadcast-blue"><h3>What does which wish do?</h3><hr />`;
 			buf += `<details><summary>What does which wish do?</summary>`;
 			buf += `&bullet; <b>Mega Evolution:</b> Wish for life &ndash; <span style="font-size: 9px;">Revive one fainted Pokemon</span><br />`;

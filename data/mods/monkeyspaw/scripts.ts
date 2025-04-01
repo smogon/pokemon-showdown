@@ -180,7 +180,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		this.makeRequest('move');
 	},
-	runAction(action: Action) {
+	runAction(action) {
 		const pokemonOriginalHP = action.pokemon?.hp;
 		let residualPokemon: (readonly [Pokemon, number])[] = [];
 		// returns whether or not we ended in a callback
