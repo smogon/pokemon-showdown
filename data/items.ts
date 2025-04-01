@@ -3934,6 +3934,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (!this.activeMove) return false;
 			if (this.activeMove.id !== 'knockoff' && this.activeMove.id !== 'thief' && this.activeMove.id !== 'covet') return false;
 		},
+		onSourceDamagingHit(damage, target, source, move) {
+			 if(move.selfSwitch){
+				this.boost({atk: -1, spa: -1}, target, source)
+			 }
+		},
 		num: 137,
 		gen: 2,
 
