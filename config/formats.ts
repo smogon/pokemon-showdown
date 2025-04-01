@@ -2291,9 +2291,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Last Respects', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin',
 		],
 		unbanlist: [
-			'Kingdra', 'Crustle', 'Corsola-Base', 'Dipplin', 'Dusknoir', 'Drampa', 'Pincurchin', 'Type: Null', 'Camerupt', 'Rotom-Base', 'Raticate-Base', 'Bombirdier', 'Cradily', 'Beedrill',
-			'Gastrodon', 'Donphan', 'Chimecho', 'Coalossal', 'Dustox', 'Dedenne', 'Kecleon', 'Flareon', 'Cyclizar', 'Grumpig', 'Tentacruel', 'Miltank', 'Arcanine-Base',
-			'Shelgon', 'Spinda', 'Wormadam-Sandy', 'Exploud', 'Marowak-Base', 'Hypno', 'Furret', 'Bastiodon',
+			'Kingdra', 'Crustle', 'Corsola-Base', 'Dipplin', 'Dusknoir', 'Drampa', 'Pincurchin', 'Type: Null', 'Camerupt-Base', 'Rotom-Base', 'Raticate-Base', 'Bombirdier',
+			'Cradily', 'Beedrill-Base', 'Gastrodon', 'Donphan', 'Chimecho', 'Coalossal', 'Dustox', 'Dedenne', 'Kecleon', 'Flareon', 'Cyclizar', 'Grumpig', 'Tentacruel', 'Miltank',
+			'Arcanine-Base', 'Shelgon', 'Spinda', 'Wormadam-Sandy', 'Exploud', 'Marowak-Base', 'Hypno', 'Furret', 'Bastiodon',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
