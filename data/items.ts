@@ -6829,6 +6829,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			 if(move.name === 'Swords Dance'){
+				this.boost({spe: 1}, source, source)
+			 }
+		},
 		spritenum: 721,
 		num: 1130,
 		gen: 8,
