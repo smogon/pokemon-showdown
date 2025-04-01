@@ -619,6 +619,8 @@ export const Teams = new class Teams {
 	getGenerator(format: Format | string, seed: PRNG | PRNGSeed | null = null) {
 		let TeamGenerator;
 		format = Dex.formats.get(format);
+		let mod = format.mod;
+		if (format.mod === 'monkeyspaw') mod = 'gen9';
 		const formatID = toID(format);
 		if (formatID.includes('gen9computergeneratedteams')) {
 			TeamGenerator = require(Dex.forFormat(format).dataDir + '/cg-teams').default;
@@ -629,7 +631,7 @@ export const Teams = new class Teams {
 		} else if (formatID.includes('gen9randombattle') && format.ruleTable?.has('+pokemontag:cap')) {
 			TeamGenerator = require(`../data/random-battles/gen9cap/teams`).default;
 		} else {
-			TeamGenerator = require(`../data/random-battles/${format.mod}/teams`).default;
+			TeamGenerator = require(`../data/random-battles/${mod}/teams`).default;
 		}
 
 		return new TeamGenerator(format, seed);
