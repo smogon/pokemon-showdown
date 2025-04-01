@@ -193,6 +193,23 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: { breakable: 1 },
 	},
 
+	// April
+	twinfantasy: {
+		shortDesc: "Slicing moves hit 2 times at 65% power.",
+		name: "Twin Fantasy",
+		onModifyMove(move, pokemon, target) {
+			if (move.flags['slicing'] && !move.multihit) {
+				move.multihit = 2;
+			}
+		},
+		onBasePower(relayVar, source, target, move) {
+			if (move.flags['slicing'] && move.multihit === 2) {
+				return this.chainModify(0.65);
+			}
+		},
+		flags: {},
+	},
+
 	// aQrator
 	neverendingfhunt: {
 		desc: "This Pokemon's non-damaging moves have their priority increased by 1. Opposing Dark-type Pokemon are immune to these moves, and any move called by these moves, if the resulting user of the move has this Ability.",
