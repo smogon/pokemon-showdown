@@ -88,7 +88,7 @@ export const ssbSets: SSBSets = {
 		species: 'Leafeon', ability: 'Twin Fantasy', item: 'Leftovers', gender: 'F',
 		moves: ['Bitter Blade', ['Razor Shell', 'Strength Sap'], 'Tidy Up'],
 		signatureMove: "Herbal Dagger",
-		evs: {atk: 252, def: 4, spe: 252}, nature: 'Jolly', teraType: 'Fire', shiny: 50,
+		evs: { atk: 252, def: 4, spe: 252 }, nature: 'Jolly', teraType: 'Fire', shiny: 50,
 	},
 	aQrator: {
 		species: 'Totodile', ability: 'Neverending fHunt', item: 'Eviolite', gender: 'F',

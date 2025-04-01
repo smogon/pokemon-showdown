@@ -774,8 +774,8 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			return this.chainModify(0.75);
 		},
 		onModifyDamage(damage, source, target, move) {
-			if (target.illusion) return;
-			if (!target.m.stealth) return this.chainModify(1.1);
+			if (source.illusion) return;
+			if (!source.m.stealth) return this.chainModify(1.1);
 			return this.chainModify(0.5);
 		},
 	},
