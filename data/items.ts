@@ -6844,6 +6844,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 85,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Body Slam'){
+			  this.boost({atk: 1}, source, source)
+			}
+	  },
 		spritenum: 721,
 		num: 1131,
 		gen: 8,
@@ -6854,6 +6859,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 90,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Flamethrower'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 730,
 		num: 1132,
 		gen: 8,
@@ -6864,6 +6874,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 110,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Hydro Pump'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 731,
 		num: 1133,
 		gen: 8,
