@@ -6844,6 +6844,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 85,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Body Slam'){
+			  this.boost({atk: 1}, source, source)
+			}
+	  },
 		spritenum: 721,
 		num: 1131,
 		gen: 8,
@@ -6854,6 +6859,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 90,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Flamethrower'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 730,
 		num: 1132,
 		gen: 8,
@@ -6864,6 +6874,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 110,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Hydro Pump'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 731,
 		num: 1133,
 		gen: 8,
@@ -6874,6 +6889,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 90,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Surf'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 731,
 		num: 1134,
 		gen: 8,
@@ -6884,6 +6904,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 90,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Ice Beam'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 735,
 		num: 1135,
 		gen: 8,
@@ -6894,6 +6919,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 110,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Blizzard'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 735,
 		num: 1136,
 		gen: 8,
@@ -6904,6 +6934,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Low Kick'){
+			  this.boost({atk: 1}, source, source)
+			}
+	  },
 		spritenum: 722,
 		num: 1137,
 		gen: 8,
@@ -6914,6 +6949,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 90,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Thunderbolt'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 733,
 		num: 1138,
 		gen: 8,
@@ -6924,6 +6964,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 110,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Thunder'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 733,
 		num: 1139,
 		gen: 8,
@@ -6934,6 +6979,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Earthquake'){
+			  this.boost({atk: 1}, source, source)
+			}
+	  },
 		spritenum: 725,
 		num: 1140,
 		gen: 8,
@@ -6944,6 +6994,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 90,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Psychic'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 734,
 		num: 1141,
 		gen: 8,
@@ -6954,6 +7009,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Agility'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 734,
 		num: 1142,
 		gen: 8,
@@ -6964,6 +7024,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Focus Energy'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 721,
 		num: 1143,
 		gen: 8,
@@ -6974,6 +7039,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Metronome'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 721,
 		num: 1144,
 		gen: 8,
@@ -6984,6 +7054,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 110,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Fire Blast'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 730,
 		num: 1145,
 		gen: 8,
@@ -6994,6 +7069,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Waterfall'){
+			  this.boost({atk: 1}, source, source)
+			}
+	  },
 		spritenum: 731,
 		num: 1146,
 		gen: 8,
@@ -7004,6 +7084,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Amnesia'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 734,
 		num: 1147,
 		gen: 8,
@@ -7014,6 +7099,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Leech Life'){
+			  this.boost({atk: 1}, source, source)
+			}
+	  },
 		spritenum: 727,
 		num: 1148,
 		gen: 8,
@@ -7024,6 +7114,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Tri Attack'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 721,
 		num: 1149,
 		gen: 8,
@@ -7034,6 +7129,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Substitute'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 721,
 		num: 1150,
 		gen: 8,
@@ -7044,6 +7144,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Reversal'){
+			  this.boost({atk: 1}, source, source)
+			}
+	  },
 		spritenum: 722,
 		num: 1151,
 		gen: 8,
@@ -7054,6 +7159,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 90,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Sludge bomb'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 724,
 		num: 1152,
 		gen: 8,
@@ -7064,6 +7174,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Spikes'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 725,
 		num: 1153,
 		gen: 8,
@@ -7074,6 +7189,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 120,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Outrage'){
+			  this.boost({atk: 1}, source, source)
+			}
+	  },
 		spritenum: 736,
 		num: 1154,
 		gen: 8,
@@ -7084,6 +7204,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Psyshock'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 734,
 		num: 1155,
 		gen: 8,
@@ -7094,6 +7219,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Endure'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 721,
 		num: 1156,
 		gen: 8,
@@ -7104,6 +7234,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Sleep Talk'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 721,
 		num: 1157,
 		gen: 8,
@@ -7114,6 +7249,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 120,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Megahorn'){
+			  this.boost({atk: 1}, source, source)
+			}
+	  },
 		spritenum: 727,
 		num: 1158,
 		gen: 8,
@@ -7124,6 +7264,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Baton Pass'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 721,
 		num: 1159,
 		gen: 8,
@@ -7134,6 +7279,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Encore'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 721,
 		num: 1160,
 		gen: 8,
@@ -7144,6 +7294,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Iron Tail'){
+			  this.boost({atk: 1}, source, source)
+			}
+	  },
 		spritenum: 729,
 		num: 1161,
 		gen: 8,
@@ -7154,6 +7309,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Crunch'){
+			  this.boost({atk: 1}, source, source)
+			}
+	  },
 		spritenum: 737,
 		num: 1162,
 		gen: 8,
@@ -7164,6 +7324,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Shadow Ball'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 728,
 		num: 1163,
 		gen: 8,
@@ -7174,6 +7339,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 120,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Future Sight'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 734,
 		num: 1164,
 		gen: 8,
@@ -7184,6 +7354,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 90,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Uproar'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 721,
 		num: 1165,
 		gen: 8,
@@ -7194,6 +7369,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 95,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Heat Wave'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 730,
 		num: 1166,
 		gen: 8,
@@ -7204,6 +7384,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Taunt'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 737,
 		num: 1167,
 		gen: 8,
@@ -7214,6 +7399,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Trick'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 734,
 		num: 1168,
 		gen: 8,
@@ -7224,6 +7414,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 120,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Superpower'){
+			  this.boost({atk: 1}, source, source)
+			}
+	  },
 		spritenum: 722,
 		num: 1169,
 		gen: 8,
@@ -7234,6 +7429,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Skill Swap'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 734,
 		num: 1170,
 		gen: 8,
@@ -7244,6 +7444,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 85,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Blaze Kick'){
+			  this.boost({atk: 1}, source, source)
+			}
+	  },
 		spritenum: 730,
 		num: 1171,
 		gen: 8,
@@ -7254,6 +7459,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 90,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Hyper Voice'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 721,
 		num: 1172,
 		gen: 8,
@@ -7264,6 +7474,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 130,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Overheat'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 730,
 		num: 1173,
 		gen: 8,
@@ -7274,6 +7489,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Cosmic Power'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 734,
 		num: 1174,
 		gen: 8,
@@ -7284,6 +7504,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 90,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Muddy Water'){
+			  this.boost({spa: 1}, source, source)
+			}
+	  },
 		spritenum: 731,
 		num: 1175,
 		gen: 8,
@@ -7294,6 +7519,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Iron Defense'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 729,
 		num: 1176,
 		gen: 8,
@@ -7304,6 +7534,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Dragon Claw'){
+			  this.boost({atk: 1}, source, source)
+			}
+	  },
 		spritenum: 736,
 		num: 1177,
 		gen: 8,
@@ -7314,6 +7549,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Bulk Up'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 722,
 		num: 1178,
 		gen: 8,
@@ -7324,6 +7564,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 10,
 		},
+		onAfterMove(source, target, move) {
+			if(move.name === 'Calm Mind'){
+			  this.boost({spe: 1}, source, source)
+			}
+	  },
 		spritenum: 734,
 		num: 1179,
 		gen: 8,
