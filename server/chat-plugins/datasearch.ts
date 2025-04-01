@@ -743,7 +743,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		water3: 'Water 3',
 	});
 	const allFormes = ['alola', 'galar', 'hisui', 'paldea', 'primal', 'therian', 'totem'];
-	const allStats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'bst', 'weight', 'height', 'gen'];
+	const allStats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'bst', 'weight', 'height', 'gen', 'num'];
 	const allStatAliases: { [k: string]: string } = {
 		attack: 'atk', defense: 'def', specialattack: 'spa', spc: 'spa', special: 'spa', spatk: 'spa',
 		specialdefense: 'spd', spdef: 'spd', speed: 'spe', wt: 'weight', ht: 'height', generation: 'gen',
@@ -1405,6 +1405,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					monStat = dex[mon].heightm;
 				} else if (stat === 'gen') {
 					monStat = dex[mon].gen;
+				} else if (stat === 'num') {
+					monStat = dex[mon].num;
 				} else {
 					monStat = dex[mon].baseStats[stat as StatID];
 				}
@@ -1462,17 +1464,19 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	const stat = sort?.slice(0, -1);
 
 	function getSortValue(species: Species) {
-		if (!stat) {
-			return 0;
-		} else if (stat === 'bst') {
+		if (!stat) return 0;
+		switch (stat) {
+		case 'bst':
 			return species.bst;
-		} else if (stat === 'weight') {
+		case 'weight':
 			return species.weighthg;
-		} else if (stat === 'height') {
+		case 'height':
 			return species.heightm;
-		} else if (stat === 'gen') {
+		case 'gen':
 			return species.gen;
-		} else {
+		case 'num':
+			return species.num;
+		default:
 			return species.baseStats[stat as StatID];
 		}
 	}
