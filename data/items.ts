@@ -1247,6 +1247,20 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onStart(pokemon) {
+			if(pokemon.hasAbility("Mineralizacion")){
+				pokemon.addVolatile('coverfossil')
+			pokemon.useItem()
+			}
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('coverfossil')
+		},
+		condition:{
+			onSourceModifyDamage(damage, target, source, move) {
+				this.chainModify(0.7)
+			},
+		},
 		num: 572,
 		gen: 5,
 
@@ -1469,6 +1483,23 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 102,
 		fling: {
 			basePower: 100,
+		},
+		onStart(pokemon) {
+			if(pokemon.hasAbility("Mineralizacion")){
+				pokemon.addVolatile('domefossil')
+			pokemon.useItem()
+			}
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('domefossil')
+		},
+		condition:{
+			onSetStatus(status, target, source, effect) {
+				if ((effect as Move)?.status) {
+					this.add('-immune', target, '[from] item: Dome Fossil');
+				}
+				return false;
+			},
 		},
 		num: 102,
 		gen: 3,
@@ -2327,6 +2358,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if(source.hasAbility("Mineralizacion")){
+				target.trySetStatus('par', source);
+				source.useItem()
+			}
+		},
 		num: 1105,
 		gen: 8,
 
@@ -2336,6 +2373,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 703,
 		fling: {
 			basePower: 100,
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if(source.hasAbility("Mineralizacion")){
+				target.trySetStatus('frz', source);
+				source.useItem()
+			}
 		},
 		num: 1108,
 		gen: 8,
@@ -2347,6 +2390,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if(source.hasAbility("Mineralizacion")){
+				target.addVolatile('flinch', source);
+				source.useItem()
+			}
+		},
 		num: 1107,
 		gen: 8,
 
@@ -2356,6 +2405,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 701,
 		fling: {
 			basePower: 100,
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if(source.hasAbility("Mineralizacion")){
+				target.addVolatile('confusion', source);
+				source.useItem()
+			}
 		},
 		num: 1106,
 		gen: 8,
@@ -2564,6 +2619,16 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 697,
 		fling: {
 			basePower: 30,
+		},
+		onStart(pokemon) {
+			pokemon.addVolatile('goldbottlecap')
+		},
+		condition:{
+			duration: 3,
+			onModifyMove(move) {
+				move.ignoreEvasion = true;
+				move.ignoreDefensive = true;
+			},
 		},
 		num: 796,
 		gen: 7,
@@ -3869,6 +3934,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (!this.activeMove) return false;
 			if (this.activeMove.id !== 'knockoff' && this.activeMove.id !== 'thief' && this.activeMove.id !== 'covet') return false;
 		},
+		onSourceDamagingHit(damage, target, source, move) {
+			 if(move.selfSwitch && source.useItem()){
+				this.boost({atk: -1, spa: -1}, target, source)
+			 }
+		},
 		num: 137,
 		gen: 2,
 
@@ -4845,6 +4915,18 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onFractionalPriorityPriority: -2,
+		onFractionalPriority(priority, pokemon) {
+			if (
+				priority <= 0 &&
+				(pokemon.hasAbility("Mineralizacion"))
+			) {
+				if (pokemon.useItem()) {
+					this.add('-activate', pokemon, 'item: Plume Fossil');
+					return 0.1;
+				}
+			}
+		},
 		num: 573,
 		gen: 5,
 
@@ -5057,6 +5139,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	premierball: {
 		name: "Premier Ball",
 		spritenum: 363,
+		onStart(pokemon) {
+			pokemon.addVolatile('premierball')
+		},
+		condition: {},
 		num: 12,
 		gen: 3,
 		isPokeball: true,
@@ -6081,6 +6167,27 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 100,
 		},
+		onStart(pokemon) {
+			if(pokemon.hasAbility("Mineralizacion")){
+			pokemon.useItem()
+			}
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('coverfossil')
+		},
+		condition: {
+			onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+				this.debug('Inteligencia Artificial boost');
+				return this.chainModify(1.5);
+		},
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
+			if (typeof accuracy === 'number') {
+				return this.chainModify(0.9);
+			}
+		},
+		},
 		num: 105,
 		gen: 4,
 
@@ -6721,6 +6828,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "TR00",
 		fling: {
 			basePower: 10,
+		},
+		onAfterMove(source, target, move) {
+			 if(move.name === 'Swords Dance'){
+				this.boost({spe: 1}, source, source)
+			 }
 		},
 		spritenum: 721,
 		num: 1130,
