@@ -824,6 +824,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (pokemon.hasItem('galaricawreath') && pokemon.species.name === 'Slowking-Galar') {
 				pokemon.heal(pokemon.baseMaxhp / 4);
+				this.add('-message', pokemon, '[from] ability: Curious Medicine', '[of] ' + pokemon);
 			}
 		},
 		flags: {},
