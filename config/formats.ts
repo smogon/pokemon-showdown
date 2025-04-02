@@ -557,10 +557,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Relay Race",
 		desc: `The effects of the move Baton Pass are triggered upon manually withdrawing a Pokémon from battle.`,
 		mod: 'gen9',
-		ruleset: [
-			'Standard AG', 'Evasion Clause', 'Forme Clause', 'OHKO Clause', 'Overflow Stat Mod',
-			'Sleep Moves Clause', 'Species Reveal Clause', 'Hackmons Forme Legality',
-		],
+		ruleset: ['Standard OMs', 'Sleep Moves Clause'],
 		actions: {
 			switchIn(pokemon, pos, sourceEffect, isDrag) {
 				if (!pokemon || pokemon.isActive) {
