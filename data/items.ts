@@ -2731,7 +2731,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Great Ball",
 		spritenum: 174,
 		onStart(pokemon) {
-			if (pokemon.ability == 'effect spore'){
+			if (pokemon.hasAbility('effectspore')){
 			pokemon.addVolatile(`greatball`)
 			}
 		},

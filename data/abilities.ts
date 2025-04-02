@@ -2902,7 +2902,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.add('-immune', target, '[from] ability: Motor Drive');
 				}
 				return null;
-			} else if (source.hasItem('Electirizer') && move.type == 'Electric') {
+			}
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (source.hasItem('Electirizer') && move.type == 'Electric' && source.species.name === 'Electivire') {
 				this.boost({spe: 1}, source)
 			}
 		},
