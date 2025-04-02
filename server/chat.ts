@@ -1600,11 +1600,22 @@ export const Chat = new class {
 			// \u2E80-\u32FF              CJK symbols
 			// \u3400-\u9FFF              CJK
 			// \uF900-\uFAFF\uFE00-\uFE6F CJK extended
+			// \uAC00-\uD7A3              Hangul syllables
+			// \u1100-\u11F9              Hangul jamo
+			// \u3131-\u318E              Hangul compatibility jamo
 			name = name.replace(
 				// eslint-disable-next-line no-misleading-character-class
-				/[^a-zA-Z0-9 /\\.~()<>^*%&=+$#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F-]+/g,
+				/[^a-zA-Z0-9 /\\.~()<>^*%&=+$#_'?!"\u00A1-\u00BF\u00D7\u00F7\u02B9-\u0362\u2012-\u2027\u2030-\u205E\u2050-\u205F\u2190-\u23FA\u2500-\u2BD1\u2E80-\u32FF\u3400-\u9FFF\uF900-\uFAFF\uFE00-\uFE6F\uAC00-\uD7A3\u1100-\u11F9\u3131-\u318E-]+/g,
 				''
 			);
+
+			// \u110B\u114C\u11BC\u11EE\u11F0\u3147\u3180 Hangul characters that could be used for impersonation
+			// allowed only in the middle of other Hangul
+			if (
+				/[^\uAC00-\uD7A3\u1100-\u11F9\u3131-\u318E][\u110B\u114C\u11BC\u11EE\u11F0\u3147\u3180]+[^\uAC00-\uD7A3\u1100-\u11F9\u3131-\u318E]/.test(name)
+			) {
+				name = name.replace(/[\u110B\u114C\u11BC\u11EE\u11F0\u3147\u3180]+/g, '');
+			}
 
 			// blacklist
 			// \u00a1 upside-down exclamation mark (i)
