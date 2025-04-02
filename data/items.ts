@@ -1807,7 +1807,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 		},
 		onModifyMove(move, pokemon, target) {
-			if (move.type === 'Electric' && pokemon.species.name === 'Electivire') {
+			if (move.type === 'Electric' && pokemon.species.name === 'Electivire' && pokemon.hasAbility('motordrive')) {
 			pokemon.addVolatile('charge')
 			}
 		},
@@ -3875,7 +3875,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 		},
 		onModifyMove(move, pokemon, target) {
-			if (move.type === 'Fire' && pokemon.species.name === 'Magmortar') {
+			if (move.type === 'Fire' && pokemon.species.name === 'Magmortar' && pokemon.hasAbility('ignomotor')) {
 			pokemon.addVolatile('flashfire')
 			}
 		},
