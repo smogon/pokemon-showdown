@@ -1806,6 +1806,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 80,
 		},
+		onModifyMove(move, pokemon, target) {
+			if (move.type === 'Electric' && pokemon.species.name === 'Electivire') {
+			pokemon.addVolatile('charge')
+			}
+		},
 		num: 322,
 		gen: 4,
 	},
@@ -2725,6 +2730,16 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	greatball: {
 		name: "Great Ball",
 		spritenum: 174,
+		onStart(pokemon) {
+			if (pokemon.ability == 'effect spore')
+			pokemon.addVolatile(`greatball`)
+		},
+		condition: {
+			onSourceTryPrimaryHit(target, source, move) {
+				target.trySetStatus('slp', source);
+				source.useItem()
+			},
+		},
 		num: 3,
 		gen: 1,
 		isPokeball: true,
@@ -3857,6 +3872,11 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 272,
 		fling: {
 			basePower: 80,
+		},
+		onModifyMove(move, pokemon, target) {
+			if (move.type === 'fire' && pokemon.species.name === 'Magmortar') {
+			pokemon.addVolatile('flashfire')
+			}
 		},
 		num: 323,
 		gen: 4,

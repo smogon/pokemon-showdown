@@ -589,6 +589,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				this.boost({spa: 1});
 			} else if (this.field.isWeather('sandstorm')){
 				this.boost({spd: 1});
+			} else if (source.hasItem('pokeball')) {
+				this.boost({spd: 1, spa: 1, atk: 1, def: 1}, source);
+				source.useItem()
 			}
 			this.field.clearWeather();
 		},
@@ -2660,6 +2663,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.debug('Magnet Pull Def drop');
 			return this.chainModify(0.75);
 		},
+		onSwitchIn(pokemon) {
+			if (pokemon.hasItem('ultraball')) {
+				this.boost({spa: 1, atk: 1}, pokemon)
+				pokemon.useItem()
+			}
+		},
 		flags: {},
 		name: "Magnet Pull",
 		rating: 4,
@@ -2856,7 +2865,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 			let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
-			if (randomStat) boost[randomStat] = 1;
+			if (randomStat) boost[randomStat] = 1; 
 			stats = [];
 
 			this.boost(boost, pokemon, pokemon);
@@ -2893,6 +2902,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.add('-immune', target, '[from] ability: Motor Drive');
 				}
 				return null;
+			} else if (source.hasItem('Electirizer') && move.type == 'fire') {
+				this.boost({spe: 1}, source)
 			}
 		},
 		onStart(pokemon) {
@@ -7004,11 +7015,13 @@ entradatriunfal: {
 },
 ignomotor: {
 	onTryHit(target, source, move) {
-		if (target !== source && move.type === 'Fire') {
+		if (target !== source && move.type === 'Fire' ) {
 			if (!this.boost({spe: 1})) {
 				this.add('-immune', target, '[from] ability: Ignomotor');
 			}
 			return null;
+		} else if (source.hasItem('Magmarizer') && move.type == 'fire') {
+			this.boost({spe: 1}, source)
 		}
 	},
 	/*onStart(pokemon) {
