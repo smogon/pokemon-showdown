@@ -1882,7 +1882,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				move.accuracy = 100;
 				move.flags = {};
 				move.flags['protect'] = 1;
-				move.category = species.baseStats['spa'] >= species.baseStats['atk'] ? 'Special' : 'Physical';
+				move.category = species.baseStats['spa'] > species.baseStats['atk'] 
+								? 'Special' 
+								: species.baseStats['spa'] < species.baseStats['atk'] 
+								? 'Physical' 
+								: pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)
+								? 'Physical' 
+								: 'Special';
 				move.onAfterHit = function (t, s, m) {
 					if (s.getAbility().name === species.abilities['0']) return;
 					const effect = 'ability:' + this.toID(species.abilities['0']);
