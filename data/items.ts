@@ -3874,7 +3874,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			basePower: 80,
 		},
 		onModifyMove(move, pokemon, target) {
-			if (move.type === 'fire' && pokemon.species.name === 'Magmortar') {
+			if (move.type === 'Fire' && pokemon.species.name === 'Magmortar') {
 			pokemon.addVolatile('flashfire')
 			}
 		},
