@@ -168,16 +168,30 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 	april: {
 		noCopy: true,
 		onStart(pokemon) {
-			this.add(`c:|${getName('April')}|Fool's Day`);
+			if (this.ruleTable.has('zmovesclause')) {
+				this.add(`c:|${getName('April')}|Fool's Day`);
+			} else {
+				this.add(`c:|${getName('April')}|I said, "Do you have something against dogs?"`);
+			}
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('April')}|Fool's Day`);
+			if (this.ruleTable.has('zmovesclause')) {
+				this.add(`c:|${getName('April')}|Fool's Day`);
+			} else {
+				this.add(`c:|${getName('April')}|(Is it the chorus yet?)`);
+			}
 		},
 		onFaint() {
-			this.add(`c:|${getName('April')}|Fool's Day`);
+			if (this.ruleTable.has('zmovesclause')) {
+				this.add(`c:|${getName('April')}|Fool's Day`);
+			} else {
+				this.add(`c:|${getName('April')}|Don't get too impressed, you might lose your breath...`);
+			}
 		},
 		onTryHit() {
-			this.add(`c:|${getName('April')}|Fool's Day`);
+			if (this.ruleTable.has('zmovesclause')) {
+				this.add(`c:|${getName('April')}|Fool's Day`);
+			}
 		},
 	},
 	aqrator: {

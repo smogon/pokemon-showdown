@@ -557,7 +557,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let boost: BoostID;
 			for (boost in pokemon.boosts) {
-				if (boost === 'accuracy' || boost === 'evasion') continue;
+				if (boost === 'accuracy' || boost === 'evasion' || boost === 'spe') continue;
 				if (positiveBoosts.includes(boost)) {
 					boostsTable[boost] = 2;
 				} else {
