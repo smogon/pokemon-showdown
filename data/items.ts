@@ -2731,11 +2731,12 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		name: "Great Ball",
 		spritenum: 174,
 		onStart(pokemon) {
-			if (pokemon.ability == 'effect spore')
+			if (pokemon.ability == 'effect spore'){
 			pokemon.addVolatile(`greatball`)
+			}
 		},
 		condition: {
-			onSourceTryPrimaryHit(target, source, move) {
+			onSourceTryHit(target, source, move) {
 				target.trySetStatus('slp', source);
 				source.useItem()
 			},
