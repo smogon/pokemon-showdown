@@ -2902,7 +2902,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.add('-immune', target, '[from] ability: Motor Drive');
 				}
 				return null;
-			} else if (source.hasItem('Electirizer') && move.type == 'fire') {
+			} else if (source.hasItem('Electirizer') && move.type == 'Electric') {
 				this.boost({spe: 1}, source)
 			}
 		},
@@ -4424,16 +4424,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 231,
 	},
 	shadowtag: {
-		onFoeTrapPokemon(pokemon) {
+		/*onFoeTrapPokemon(pokemon) {
 			if (!pokemon.hasAbility('shadowtag') && pokemon.isAdjacent(this.effectState.target) && (pokemon.hasType('Ghost') || pokemon.hasType('Bug') || pokemon.hasType('Dark')) && pokemon.hp <= pokemon.baseMaxhp / 2) {
 				pokemon.tryTrap(true);
 			}
+
 		},
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectState.target;
 			if (!source || !pokemon.isAdjacent(source)) return;
 			if (!pokemon.hasAbility('shadowtag')) {
 				pokemon.maybeTrapped = true;
+			}
+		},*/
+		onStart(pokemon){
+			for (const target of pokemon.adjacentFoes()) {
+				if(!target.hasAbility('shadowtag') && target.isAdjacent(this.effectState.target) && (target.hasType('Ghost') || target.hasType('Bug') || target.hasType('Dark')) && target.hp <= target.baseMaxhp / 2 && pokemon.activeTurns < 3){
+					target.addVolatile('trapped', pokemon)
+				}
 			}
 		},
 		flags: {},
@@ -7020,7 +7028,7 @@ ignomotor: {
 				this.add('-immune', target, '[from] ability: Ignomotor');
 			}
 			return null;
-		} else if (source.hasItem('Magmarizer') && move.type == 'fire') {
+		} else if (source.hasItem('Magmarizer') && move.type == 'Fire') {
 			this.boost({spe: 1}, source)
 		}
 	},
