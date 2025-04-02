@@ -226,7 +226,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	arenatrap: {
 		onFoeTrapPokemon(pokemon) {
 			if (!pokemon.isAdjacent(this.effectState.target)) return;
-			if ((pokemon.hasType('Ground') || pokemon.hasType('Bug') || pokemon.hasType('Flying')) && pokemon.hp <= pokemon.baseMaxhp / 2) {
+			if (!(pokemon.hasType('Ground') || pokemon.hasType('Bug') || pokemon.hasType('Flying')) && pokemon.hp <= pokemon.baseMaxhp / 2) {
 				pokemon.tryTrap(true);
 			}
 		},
@@ -4427,8 +4427,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 231,
 	},
 	shadowtag: {
-		/*onFoeTrapPokemon(pokemon) {
-			if (!pokemon.hasAbility('shadowtag') && pokemon.isAdjacent(this.effectState.target) && (pokemon.hasType('Ghost') || pokemon.hasType('Bug') || pokemon.hasType('Dark')) && pokemon.hp <= pokemon.baseMaxhp / 2) {
+		onFoeTrapPokemon(pokemon) {
+			if (!pokemon.hasAbility('shadowtag') && pokemon.isAdjacent(this.effectState.target) && !(pokemon.hasType('Ghost') || pokemon.hasType('Bug') || pokemon.hasType('Dark')) && pokemon.hp <= pokemon.baseMaxhp / 2) {
 				pokemon.tryTrap(true);
 			}
 
@@ -4436,16 +4436,31 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onFoeMaybeTrapPokemon(pokemon, source) {
 			if (!source) source = this.effectState.target;
 			if (!source || !pokemon.isAdjacent(source)) return;
-			if (!pokemon.hasAbility('shadowtag')) {
+			if (!pokemon.hasAbility('shadowtag') && pokemon.isAdjacent(this.effectState.target) && !(pokemon.hasType('Ghost') || pokemon.hasType('Bug') || pokemon.hasType('Dark')) && pokemon.hp <= pokemon.baseMaxhp / 2) {
 				pokemon.maybeTrapped = true;
 			}
-		},*/
-		onStart(pokemon){
+		},
+		onResidual(pokemon){
 			for (const target of pokemon.adjacentFoes()) {
-				if(!target.hasAbility('shadowtag') && target.isAdjacent(this.effectState.target) && (target.hasType('Ghost') || target.hasType('Bug') || target.hasType('Dark')) && target.hp <= target.baseMaxhp / 2 && pokemon.activeTurns < 3){
-					target.addVolatile('trapped', pokemon)
+				if(!target.volatiles['shadowtag']){
+				target.addVolatile('shadowtag')
 				}
 			}
+		},
+		condition:{
+			onStart() {
+				this.effectState.turns = 0;
+			},
+			onResidual(pokemon) {
+				if (pokemon.volatiles['shadowtag']) {
+					pokemon.volatiles['shadowtag'].turns++;
+				}
+			},
+			onTrapPokemon(pokemon) {
+				if(pokemon.volatiles['shadowtag']?.turns >= 2){
+				pokemon.trapped = pokemon.maybeTrapped = false;
+				}
+			},
 		},
 		flags: {},
 		name: "Shadow Tag",
