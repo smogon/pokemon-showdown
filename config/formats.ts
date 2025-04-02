@@ -555,7 +555,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] Relay Race",
-		desc: `The effects of the move Baton Pass are triggered upon manually withdrawing a Pokémon from battle.`,
+		desc: `The effects of the move Baton Pass are triggered upon manually withdrawing a Pok&eacute;mon from battle.`,
 		mod: 'gen9',
 		ruleset: ['Standard OMs', 'Sleep Moves Clause'],
 		banlist: [
