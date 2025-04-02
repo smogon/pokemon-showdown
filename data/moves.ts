@@ -2959,21 +2959,27 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	},
 	corrosivegas: {
 		num: 810,
-		accuracy: 100,
-		basePower: 0,
-		category: "Status",
+		accuracy: 90,
+		basePower: 65,
+		category: "Special",
 		isNonstandard: "Unobtainable",
 		name: "Corrosive Gas",
 		pp: 40,
 		priority: 0,
 		flags: {protect: 1, reflectable: 1, mirror: 1, allyanim: 1, metronome: 1},
-		ignoreImmunity: true,
-		onHit(target, source) {
-			const item = target.takeItem(source);
-			if (item) {
-				this.add('-enditem', target, item.name, '[from] move: Corrosive Gas', '[of] ' + source);
-			} else {
-				this.add('-fail', target, 'move: Corrosive Gas');
+		onBasePower(basePower, source, target, move) {
+			const item = target.getItem();
+			if (!this.singleEvent('TakeItem', item, target.itemState, target, target, move, item)) return;
+			if (item.id) {
+				return this.chainModify(1.5);
+			}
+		},
+		onAfterHit(target, source) {
+			if (source.hp) {
+				const item = target.takeItem();
+				if (item) {
+					this.add('-enditem', target, item.name, '[from] move: Incinerate', '[of] ' + source);
+				}
 			}
 		},
 		secondary: {
@@ -8101,7 +8107,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
-
 		name: "Grudge",
 		pp: 5,
 		priority: 0,
@@ -8116,7 +8121,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (effect.effectType === 'Move' && !effect.flags['futuremove'] && source.lastMove) {
 					let move: Move = source.lastMove;
 					if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
-
 					for (const moveSlot of source.moveSlots) {
 						if (moveSlot.id === move.id) {
 							moveSlot.pp = 0;
@@ -18322,7 +18326,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (!move || move.isZ) return false;
 			if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 
-			const ppDeducted = target.deductPP(move.id, 4);
+			const ppDeducted = target.deductPP(move.id, 3);
 			if (!ppDeducted) return false;
 			this.add("-activate", target, 'move: Spite', move.name, ppDeducted);
 		},

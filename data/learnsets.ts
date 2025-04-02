@@ -16603,6 +16603,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			tackle: ["9L1", "9L1", "9M", "9L1", "9M", "9L1", "9L1", "9L1", "9L1"],
 			takedown: ["9M"],
 			taunt: ["9M", "9M", "9M", "9M", "9M", "9M", "9M", "9M"],
+			temperflare: ["9M"],
 			terablast: ["9M"],
 			thief: ["9M", "9M", "9M", "9M", "9M", "9M", "9M", "9M"],
 			thunder: ["9M", "9M", "9M", "9M", "9M", "9M", "9M", "9M", "9M"],
