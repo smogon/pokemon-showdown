@@ -149,13 +149,13 @@ describe('Mega Evolution', () => {
 			assertCanMega('gen8anythinggoes@@@+past');
 		});
 
-		it.skip('should not be allowed to Mega Evolve in formats that have the Mega Rayquaza Clause', () => {
+		it('should not be allowed to Mega Evolve in formats that have the Mega Rayquaza Clause', () => {
 			assertLegalButCantMega('gen6ubers');
 			battle.destroy();
 			assertLegalButCantMega('gen9nationaldexubers');
 		});
 
-		it.skip('should implicitly add the Mega Rayquaza Clause when banned', () => {
+		it('should implicitly add the Mega Rayquaza Clause when banned', () => {
 			assertLegalButCantMega('gen9nationaldexag@@@-rayquaza-mega');
 			battle.destroy();
 			assertLegalButCantMega('gen9nationaldexag@@@-mega');
