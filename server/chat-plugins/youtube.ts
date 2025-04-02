@@ -11,7 +11,7 @@ import { Utils, FS, Net } from '../../lib';
 const ROOT = 'https://www.googleapis.com/youtube/v3/';
 const STORAGE_PATH = 'config/chat-plugins/youtube.json';
 const GROUPWATCH_ROOMS = [
-	'youtube', 'pokemongames', 'videogames', 'smashbros', 'pokemongo', 'hindi', 'franais', 'arcade',
+	'internetexplorers', 'pokemongames', 'videogames', 'smashbros', 'pokemongo', 'hindi', 'franais', 'arcade',
 ];
 
 export const videoDataCache: Map<string, VideoData> = Chat.oldPlugins.youtube?.videoDataCache || new Map();
@@ -296,7 +296,7 @@ export class YoutubeInterface {
 		if (this.interval) clearInterval(this.interval);
 		this.interval = setInterval(() => {
 			void (async () => {
-				const room = Rooms.get('youtube');
+				const room = Rooms.search('youtube');
 				if (!room) return; // do nothing if the room doesn't exist anymore
 				const res = await YouTube.randChannel();
 				room.add(`|html|${res}`).update();

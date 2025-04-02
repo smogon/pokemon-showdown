@@ -19,7 +19,7 @@ const FINISH_HANDLERS: { [k: string]: (winner: AnyObject) => Promise<void> } = {
 		if (result) {
 			if (YouTube.data.channels[result]) return;
 			void YouTube.getChannelData(`https://www.youtube.com/channel/${result}`);
-			const yt = Rooms.get('youtube');
+			const yt = Rooms.search('youtube');
 			if (!yt) return;
 			yt.sendMods(
 				`|c|~|/log The channel with ID ${result} was added to the YouTube channel database.`

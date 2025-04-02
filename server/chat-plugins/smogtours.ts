@@ -109,7 +109,6 @@ export const commands: Chat.ChatCommands = {
 			const isEdit = cmd === 'edit';
 			const tourID = isEdit ? toID(targets.shift()) : null;
 			// {title}|{category}|{url}|{end date}|{img}|{credit}|{artist}{shortDesc}|{desc}
-			console.log(targets);
 			const [
 				title, rawSection, url, rawEnds, rawImg, rawCredit, rawArtistName, rawShort, rawDesc,
 			] = Utils.splitFirst(targets.join('|'), '|', 8).map(f => f.trim());
