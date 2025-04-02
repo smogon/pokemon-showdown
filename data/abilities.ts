@@ -226,7 +226,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	arenatrap: {
 		onFoeTrapPokemon(pokemon) {
 			if (!pokemon.isAdjacent(this.effectState.target)) return;
-			if ((pokemon.hasType('Ground') || pokemon.hasType('Bug') || pokemon.hasType('Flying')) && pokemon.hp <= pokemon.baseMaxhp / 3) {
+			if ((pokemon.hasType('Ground') || pokemon.hasType('Bug') || pokemon.hasType('Flying')) && pokemon.hp <= pokemon.baseMaxhp / 2) {
 				pokemon.tryTrap(true);
 			}
 		},
@@ -2865,7 +2865,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 			let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
-			if (randomStat) boost[randomStat] = 1; 
+			if (randomStat) boost[randomStat] = 1;
 			stats = [];
 
 			this.boost(boost, pokemon, pokemon);
@@ -4425,7 +4425,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	shadowtag: {
 		onFoeTrapPokemon(pokemon) {
-			if (!pokemon.hasAbility('shadowtag') && pokemon.isAdjacent(this.effectState.target) && (pokemon.hasType('Ghost') || pokemon.hasType('Bug') || pokemon.hasType('Dark')) && pokemon.hp <= pokemon.baseMaxhp / 3) {
+			if (!pokemon.hasAbility('shadowtag') && pokemon.isAdjacent(this.effectState.target) && (pokemon.hasType('Ghost') || pokemon.hasType('Bug') || pokemon.hasType('Dark')) && pokemon.hp <= pokemon.baseMaxhp / 2) {
 				pokemon.tryTrap(true);
 			}
 		},
