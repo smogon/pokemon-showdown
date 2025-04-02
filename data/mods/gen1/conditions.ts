@@ -243,7 +243,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				return;
 			}
 
-			this.add('move', pokemon, this.effectState.move, foe, `[from] ${this.effectState.move}`);
+			const moveName = this.dex.moves.get(this.effectState.move).name;
+			this.add('move', pokemon, moveName, foe, `[from] ${moveName}`);
 			this.damage(this.effectState.damage, foe, pokemon, move);
 			if (this.effectState.duration === 1) {
 				if (this.effectState.totalDuration !== 5) {
