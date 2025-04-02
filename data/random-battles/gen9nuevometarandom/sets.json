@@ -17,7 +17,7 @@
                 "speEVs": 252
             },
             {
-                "role": "Fast Special Sweeper",
+                "role": "Bulky Attacker",
                 "movepool": ["Giga Drain", "Toxic", "Sludge Bomb", "Knock Off", "Synthesis"],
                 "abilities": ["Overgrow", "Chlorophyll"],
                 "teraTypes": ["Water"],
