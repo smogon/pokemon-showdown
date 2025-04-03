@@ -14,7 +14,7 @@
                 "item": ["Life Orb"],
                 "nature": "modest",
                 "evs": {"spa": 252, "spd": 4, "spe": 252},
-                "ability": ["Chlorophyll", "Overgrow"]
+                "ability": ["Chlorophyll"]
             },
             {
                 "species": "Venusaur",
@@ -28,7 +28,7 @@
                 "item": ["Black Sludge"],
                 "nature": "modest",
                 "evs": {"spd": 252, "spda": 8, "hp": 248},
-                "ability": ["Chlorophyll", "Overgrow"]
+                "ability": ["Overgrow"]
             },
             {
                 "species": "Venusaur",
@@ -42,7 +42,7 @@
                 "item": ["Heavy-Duty Boots"],
                 "nature": "modest",
                 "evs": {"hp": 252, "spd": 4, "spa": 252},
-                "ability": ["Chlorophyll", "Overgrow"]
+                "ability": ["Overgrow"]
             }
         ]
     },
