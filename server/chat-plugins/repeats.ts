@@ -4,8 +4,8 @@
  * @author Annika, Zarel
  */
 
-import {roomFaqs, getAlias, visualizeFaq} from './room-faqs';
-import type {MessageHandler} from '../rooms';
+import { roomFaqs, getAlias, visualizeFaq } from './room-faqs';
+import type { MessageHandler } from '../rooms';
 
 export interface RepeatedPhrase {
 	/** Identifier for deleting */
@@ -82,7 +82,7 @@ export const Repeats = new class {
 			roomRepeats = new Map();
 			this.repeats.set(room, roomRepeats);
 		}
-		const {id, phrase, interval} = repeat;
+		const { id, phrase, interval } = repeat;
 
 		if (roomRepeats.has(id)) {
 			throw new Error(`Repeat already exists`);
@@ -160,6 +160,7 @@ export const commands: Chat.ChatCommands = {
 		const isHTML = cmd.includes('html');
 		const isByMessages = cmd.includes('bymessages');
 		room = this.requireRoom();
+		if (room.settings.isPersonal) return this.errorReply(`Personal rooms do not support repeated messages.`);
 		this.checkCan(isHTML ? 'addhtml' : 'mute', null, room);
 		const [intervalString, name, ...messageArray] = target.split(',');
 		const id = toID(name);
@@ -210,6 +211,7 @@ export const commands: Chat.ChatCommands = {
 	repeatfaq(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkCan('mute', null, room);
+		if (room.settings.isPersonal) return this.errorReply(`Personal rooms do not support repeated messages.`);
 		const isByMessages = cmd.includes('bymessages');
 
 		let [intervalString, topic] = target.split(',');
@@ -276,7 +278,7 @@ export const commands: Chat.ChatCommands = {
 			return this.errorReply(this.tr`There are no repeated phrases in this room.`);
 		}
 
-		for (const {id} of room.settings.repeats) {
+		for (const { id } of room.settings.repeats) {
 			Repeats.removeRepeat(room, id);
 		}
 

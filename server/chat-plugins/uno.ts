@@ -6,7 +6,7 @@
  *
  * @license MIT license
  */
-import {Utils} from '../../lib';
+import { Utils } from '../../lib';
 
 type Color = 'Green' | 'Yellow' | 'Red' | 'Blue' | 'Black';
 interface Card {
@@ -18,7 +18,7 @@ interface Card {
 
 const MAX_TIME = 60; // seconds
 
-const rgbGradients: {[k in Color]: string} = {
+const rgbGradients: { [k in Color]: string } = {
 	Green: "rgba(0, 122, 0, 1), rgba(0, 185, 0, 0.9)",
 	Yellow: "rgba(255, 225, 0, 1), rgba(255, 255, 85, 0.9)",
 	Blue: "rgba(40, 40, 255, 1), rgba(125, 125, 255, 0.9)",
@@ -26,7 +26,7 @@ const rgbGradients: {[k in Color]: string} = {
 	Black: "rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.55)",
 };
 
-const textColors: {[k in Color]: string} = {
+const textColors: { [k in Color]: string } = {
 	Green: "rgb(0, 128, 0)",
 	Yellow: "rgb(175, 165, 40)",
 	Blue: "rgb(75, 75, 255)",
@@ -52,7 +52,7 @@ function createDeck() {
 
 	for (const color of colors) {
 		basic.push(...values.map(v => {
-			const c: Card = {value: v, color: color, name: `${color} ${v}`};
+			const c: Card = { value: v, color, name: `${color} ${v}` };
 			return c;
 		}));
 	}
@@ -63,17 +63,17 @@ function createDeck() {
 		...basic,
 		// The four 0s
 		...[0, 1, 2, 3].map(v => {
-			const c: Card = {color: colors[v], value: '0', name: `${colors[v]} 0`};
+			const c: Card = { color: colors[v], value: '0', name: `${colors[v]} 0` };
 			return c;
 		}),
-		 // Wild cards
+		// Wild cards
 		...[0, 1, 2, 3].map(v => {
-			const c: Card = {color: 'Black', value: 'Wild', name: 'Wild'};
+			const c: Card = { color: 'Black', value: 'Wild', name: 'Wild' };
 			return c;
 		}),
 		// Wild +4 cards
 		...[0, 1, 2, 3].map(v => {
-			const c: Card = {color: 'Black', value: '+4', name: 'Wild +4'};
+			const c: Card = { color: 'Black', value: '+4', name: 'Wild +4' };
 			return c;
 		}),
 	]; // 108 cards
@@ -83,9 +83,9 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 	override readonly gameid = 'uno' as ID;
 	override title = 'UNO';
 	override readonly allowRenames = true;
-	override timer: NodeJS.Timer | null = null;
+	override timer: NodeJS.Timeout | null = null;
 	maxTime = MAX_TIME;
-	autostartTimer: NodeJS.Timer | null = null;
+	autostartTimer: NodeJS.Timeout | null = null;
 	state: 'signups' | 'color' | 'play' | 'uno' = 'signups';
 	currentPlayer: UNOPlayer | null = null;
 	deck: Card[] = Utils.shuffle(createDeck());
@@ -95,7 +95,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 	unoId: ID | null = null;
 	direction: 1 | -1 = 1;
 	suppressMessages: boolean;
-	spectators: {[k: string]: number} = Object.create(null);
+	spectators: { [k: string]: number } = Object.create(null);
 	isPlusFour = false;
 	gameNumber: number;
 
@@ -176,13 +176,10 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 	}
 
 	override leaveGame(user: User) {
-		if (!(user.id in this.playerTable)) return false;
 		const player = this.playerTable[user.id];
-		if ((this.state === 'signups' && this.removePlayer(player)) || this.eliminate(user.id)) {
-			this.sendToRoom(`${user.name} has left the game of UNO.`);
-			return true;
-		}
-		return false;
+		if (!player) return false;
+		this.sendToRoom(`${user.name} has left the game of UNO.`);
+		return this.state === 'signups' ? this.removePlayer(player) : this.eliminate(player);
 	}
 
 	/**
@@ -202,17 +199,14 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 		this.renamePlayer(user, oldUserid);
 	}
 
-	eliminate(userid: ID | undefined) {
-		if (!userid) return null;
-		const player = this.playerTable[userid];
+	eliminate(player: UNOPlayer | null) {
 		if (!player) return false;
-
 		const name = player.name;
 
 		if (this.playerCount === 2) {
 			this.removePlayer(player);
 			this.onWin(this.players[0]);
-			return name;
+			return true;
 		}
 
 		// handle current player...
@@ -243,7 +237,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 		if (removingCurrentPlayer) {
 			this.nextTurn(true);
 		}
-		return name;
+		return true;
 	}
 
 	sendToRoom(msg: string, overrideSuppress = false) {
@@ -283,7 +277,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 
 	onAwaitUno() {
 		return new Promise<void>(resolve => {
-			if (!this.awaitUnoPlayer) return resolve();
+			if (!this.awaitUnoPlayer) return void resolve();
 
 			this.state = "uno";
 			// the throttle for sending messages is at 600ms for non-authed users,
@@ -310,7 +304,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 
 			this.timer = setTimeout(() => {
 				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|${player.name} has been automatically disqualified.`);
-				this.eliminate(player.id);
+				this.eliminate(player);
 			}, this.maxTime * 1000);
 		});
 	}
@@ -425,7 +419,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 			this.isPlusFour = true;
 			this.timer = setTimeout(() => {
 				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|${this.currentPlayer!.name} has been automatically disqualified.`);
-				this.eliminate(this.currentPlayer!.id);
+				this.eliminate(this.currentPlayer);
 			}, this.maxTime * 1000);
 			break;
 		case 'Wild':
@@ -433,7 +427,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 			this.state = 'color';
 			this.timer = setTimeout(() => {
 				this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|${this.currentPlayer!.name} has been automatically disqualified.`);
-				this.eliminate(this.currentPlayer!.id);
+				this.eliminate(this.currentPlayer);
 			}, this.maxTime * 1000);
 			break;
 		}
@@ -709,7 +703,7 @@ export const commands: Chat.ChatCommands = {
 			game.maxTime = amount;
 			if (game.timer) clearTimeout(game.timer);
 			game.timer = setTimeout(() => {
-				game.eliminate(game.currentPlayer?.id);
+				game.eliminate(game.currentPlayer);
 			}, amount * 1000);
 			this.addModAction(`${user.name} has set the UNO automatic disqualification timer to ${amount} seconds.`);
 			this.modlog('UNO TIMER', null, `${amount} seconds`);
@@ -743,11 +737,12 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('minigame', null, room);
 			const game = this.requireGame(UNO);
 
-			const disqualified = game.eliminate(toID(target));
-			if (disqualified === false) throw new Chat.ErrorMessage(`Unable to disqualify ${target}.`);
-			this.privateModAction(`${user.name} has disqualified ${disqualified} from the UNO game.`);
+			const player = game.playerTable[toID(target)];
+			if (!player) throw new Chat.ErrorMessage(`Player "${target}" not found.`);
+			game.eliminate(player);
+			this.privateModAction(`${user.name} has disqualified ${player.name} from the UNO game.`);
 			this.modlog('UNO DQ', toID(target));
-			room.add(`${disqualified} has been disqualified from the UNO game.`).update();
+			room.add(`${player.name} has been disqualified from the UNO game.`).update();
 		},
 
 		// player/user commands

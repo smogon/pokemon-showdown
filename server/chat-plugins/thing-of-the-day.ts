@@ -1,5 +1,5 @@
-import {FS, Utils} from '../../lib';
-import {YouTube} from './youtube';
+import { FS, Utils } from '../../lib';
+import { YouTube } from './youtube';
 
 const MINUTE = 60 * 1000;
 const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
@@ -7,19 +7,19 @@ const PRENOM_BUMP_TIME = 2 * 60 * MINUTE;
 const PRENOMS_FILE = 'config/chat-plugins/otd-prenoms.json';
 const DATA_FILE = 'config/chat-plugins/otds.json';
 
-export const prenoms: {[k: string]: [string, AnyObject][]} = JSON.parse(FS(PRENOMS_FILE).readIfExistsSync() || "{}");
+export const prenoms: { [k: string]: [string, AnyObject][] } = JSON.parse(FS(PRENOMS_FILE).readIfExistsSync() || "{}");
 export const otdData: OtdData = JSON.parse(FS(DATA_FILE).readIfExistsSync() || "{}");
 export const otds = new Map<string, OtdHandler>();
 
-const FINISH_HANDLERS: {[k: string]: (winner: AnyObject) => Promise<void>} = {
+const FINISH_HANDLERS: { [k: string]: (winner: AnyObject) => Promise<void> } = {
 	cotw: async winner => {
-		const {channel, nominator} = winner;
+		const { channel, nominator } = winner;
 		const searchResults = await YouTube.searchChannel(channel, 1);
 		const result = searchResults?.[0];
 		if (result) {
 			if (YouTube.data.channels[result]) return;
 			void YouTube.getChannelData(`https://www.youtube.com/channel/${result}`);
-			const yt = Rooms.get('youtube');
+			const yt = Rooms.search('youtube');
 			if (!yt) return;
 			yt.sendMods(
 				`|c|~|/log The channel with ID ${result} was added to the YouTube channel database.`
@@ -44,7 +44,7 @@ interface OtdSettings {
 }
 
 interface OtdData {
-	[k: string]: {settings: OtdSettings, winners: AnyObject[]};
+	[k: string]: { settings: OtdSettings, winners: AnyObject[] };
 }
 
 function savePrenoms() {
@@ -93,7 +93,7 @@ class OtdHandler {
 	}
 
 	static create(room: Room, settings: OtdSettings) {
-		const {title, timeLabel} = settings;
+		const { title, timeLabel } = settings;
 		const id = settings.id || toID(title).charAt(0) + 'ot' + timeLabel.charAt(0);
 		const handler = new OtdHandler(id, room, settings);
 		otds.set(id, handler);
@@ -110,7 +110,7 @@ class OtdHandler {
 	}
 
 	static parseOldWinners(content: string, keyLabels: string[], keys: string[]) {
-		const data = ('' + content).split("\n");
+		const data = `${content}`.split("\n");
 		const winners = [];
 		for (const arg of data) {
 			if (!arg || arg === '\r') continue;
@@ -195,11 +195,11 @@ class OtdHandler {
 			}
 		}
 
-		const obj: {[k: string]: string} = {};
+		const obj: { [k: string]: string } = {};
 		obj[user.id] = user.name;
 
 		const nomObj = {
-			nomination: nomination,
+			nomination,
 			name: user.name,
 			userids: user.previousIDs.concat(user.id),
 			ips: user.ips.slice(),
@@ -294,7 +294,7 @@ class OtdHandler {
 			void finishHandler(winnerEntry);
 		}
 		this.room.add(
-			Utils.html `|uhtml|otd|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">` +
+			Utils.html`|uhtml|otd|<div class="broadcast-blue"><p style="font-weight:bold;text-align:center;font-size:12pt;">` +
 			`Nominations for ${this.name} of the ${this.timeLabel} are over!</p><p style="tex-align:center;font-size:10pt;">` +
 			`Out of ${keys.length} nominations, we randomly selected <strong>${winner.nomination}</strong> as the winner! ` +
 			`(Nomination by ${winner.name})</p><p style="font-weight:bold;">Thanks to today's participants:` + namesHTML
@@ -334,7 +334,7 @@ class OtdHandler {
 	}
 
 	appendWinner(nomination: string, user: string): AnyObject {
-		const entry: AnyObject = {time: Date.now(), nominator: user};
+		const entry: AnyObject = { time: Date.now(), nominator: user };
 		entry[this.keys[0]] = nomination;
 		this.winners.push(entry);
 		this.save();
@@ -352,7 +352,7 @@ class OtdHandler {
 		throw new Chat.ErrorMessage(`The winner with nomination ${nominationName} could not be found.`);
 	}
 
-	setWinnerProperty(properties: {[k: string]: string}) {
+	setWinnerProperty(properties: { [k: string]: string }) {
 		if (!this.winners.length) return;
 		for (const i in properties) {
 			this.winners[this.winners.length - 1][i] = properties[i];
@@ -383,46 +383,46 @@ class OtdHandler {
 		if (!this.winners.length) return false;
 		const winner = this.winners[this.winners.length - 1];
 
-		let output = Utils.html `<div class="broadcast-blue" style="text-align:center;">` +
-		`<p><span style="font-weight:bold;font-size:11pt">The ${this.name} of the ${this.timeLabel} is ` +
-		`${winner[this.keys[0]]}${winner.author ? ` by ${winner.author}` : ''}.</span>`;
+		let output = `<div class="broadcast-blue" style="text-align:center;">` +
+			Utils.html`<p><span style="font-weight:bold;font-size:11pt">The ${this.name} of the ${this.timeLabel} is ` +
+			Utils.html`${winner[this.keys[0]]}${winner.author ? ` by ${winner.author}` : ''}.</span>`;
 
-		if (winner.quote) output += Utils.html `<br /><span style="font-style:italic;">"${winner.quote}"</span>`;
-		if (winner.tagline) output += Utils.html `<br />${winner.tagline}`;
+		if (winner.quote) output += Utils.html`<br /><span style="font-style:italic;">"${winner.quote}"</span>`;
+		if (winner.tagline) output += Utils.html`<br />${winner.tagline}`;
 		output += `</p><table style="margin:auto;"><tr>`;
 		if (winner.image) {
 			try {
 				const [width, height] = await Chat.fitImage(winner.image, 100, 100);
-				output += Utils.html `<td><img src="${winner.image}" width=${width} height=${height}></td>`;
+				output += Utils.html`<td><img src="${winner.image}" width=${width} height=${height}></td>`;
 			} catch {}
 		}
 		output += `<td style="text-align:right;margin:5px;">`;
-		if (winner.event) output += Utils.html `<b>Event:</b> ${winner.event}<br />`;
+		if (winner.event) output += Utils.html`<b>Event:</b> ${winner.event}<br />`;
 		if (winner.song) {
 			output += `<b>Song:</b> `;
 			if (winner.link) {
-				output += Utils.html `<a href="${winner.link}">${winner.song}</a>`;
+				output += Utils.html`<a href="${winner.link}">${winner.song}</a>`;
 			} else {
 				output += Utils.escapeHTML(winner.song);
 			}
 			output += `<br />`;
 		} else if (winner.link) {
-			output += Utils.html `<b>Link:</b> <a href="${winner.link}">${winner.link}</a><br />`;
+			output += Utils.html`<b>Link:</b> <a href="${winner.link}">${winner.link}</a><br />`;
 		}
 
 		// Batch these together on 2 lines. Order intentional.
 		const athleteDetails = [];
-		if (winner.sport) athleteDetails.push(Utils.html `<b>Sport:</b> ${winner.sport}`);
-		if (winner.team) athleteDetails.push(Utils.html `<b>Team:</b> ${winner.team}`);
-		if (winner.age) athleteDetails.push(Utils.html `<b>Age:</b> ${winner.age}`);
-		if (winner.country) athleteDetails.push(Utils.html `<b>Nationality:</b> ${winner.country}`);
+		if (winner.sport) athleteDetails.push(Utils.html`<b>Sport:</b> ${winner.sport}`);
+		if (winner.team) athleteDetails.push(Utils.html`<b>Team:</b> ${winner.team}`);
+		if (winner.age) athleteDetails.push(Utils.html`<b>Age:</b> ${winner.age}`);
+		if (winner.country) athleteDetails.push(Utils.html`<b>Nationality:</b> ${winner.country}`);
 
 		if (athleteDetails.length) {
 			output += athleteDetails.slice(0, 2).join(' | ') + '<br />';
 			if (athleteDetails.length > 2) output += athleteDetails.slice(2).join(' | ') + '<br />';
 		}
 
-		output += Utils.html `Nominated by ${winner.nominator}.`;
+		output += Utils.html`Nominated by ${winner.nominator}.`;
 		output += `</td></tr></table></div>`;
 
 		return output;
@@ -460,7 +460,7 @@ class OtdHandler {
 				case 'time':
 					const date = new Date(parseInt(this.winners[i].time));
 
-					const pad = (num: number) => num < 10 ? '0' + num : num;
+					const pad = (num: number) => `${num}`.padStart(2, '0');
 
 					return Utils.html`${pad(date.getMonth() + 1)}-${pad(date.getDate())}-${date.getFullYear()}`;
 				case 'song':
@@ -472,7 +472,7 @@ class OtdHandler {
 					val = `${val}${this.winners[i].author ? ` by ${this.winners[i].author}` : ''}`;
 					// falls through
 				case columns[0]:
-					return `${Utils.escapeHTML(val)}${this.winners[i].nominator ? Utils.html `<br /><span style="font-style:italic;font-size:8pt;">nominated by ${this.winners[i].nominator}</span>` : ''}`;
+					return `${Utils.escapeHTML(val)}${this.winners[i].nominator ? Utils.html`<br /><span style="font-style:italic;font-size:8pt;">nominated by ${this.winners[i].nominator}</span>` : ''}`;
 				default:
 					return Utils.escapeHTML(val);
 				}
@@ -596,7 +596,7 @@ export const otdCommands: Chat.ChatCommands = {
 	},
 	removehelp: [
 		`/-otd remove [username] - Remove a user's nomination for the Thing of the Day.`,
-		 `Prevents them from voting again until the next round. Requires: % @ # ~`,
+		`Prevents them from voting again until the next round. Requires: % @ # ~`,
 	],
 
 	removewinner(target, room, user) {
@@ -669,7 +669,7 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const params = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
 
-		const changelist: {[k: string]: string} = {};
+		const changelist: { [k: string]: string } = {};
 
 		for (const param of params) {
 			let [key, ...values] = param.split(':');
@@ -802,7 +802,7 @@ export const commands: Chat.ChatCommands = {
 			if (room.settings.isPrivate) {
 				return this.errorReply(`This command is only available in public rooms`);
 			}
-			const count = [...otds.values()].filter(otd => otd.room.roomid === room!.roomid).length;
+			const count = [...otds.values()].filter(otd => otd.room.roomid === room.roomid).length;
 			if (count > 3) {
 				return this.errorReply(`This room already has 3+ -otd's.`);
 			}

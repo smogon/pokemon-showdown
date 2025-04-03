@@ -2,7 +2,7 @@
 * Hangman chat plugin
 * By bumbadadabum and Zarel. Art by crobat.
 */
-import {FS, Utils} from '../../lib';
+import { FS, Utils } from '../../lib';
 
 const HANGMAN_FILE = 'config/chat-plugins/hangman.json';
 
@@ -22,7 +22,7 @@ interface HangmanOptions {
 	allowCreator?: boolean;
 }
 
-export let hangmanData: {[roomid: string]: {[phrase: string]: HangmanEntry}} = {};
+export let hangmanData: { [roomid: string]: { [phrase: string]: HangmanEntry } } = {};
 
 try {
 	hangmanData = JSON.parse(FS(HANGMAN_FILE).readSync());
@@ -33,7 +33,7 @@ try {
 		if (roomKeys.length && !roomData[roomKeys[0]].hints) {
 			save = true;
 			for (const key of roomKeys) {
-				roomData[key] = {hints: roomData[key] as any};
+				roomData[key] = { hints: roomData[key] as any };
 			}
 		}
 	}
@@ -57,7 +57,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 	letterGuesses: string[];
 	lastGuesser: string;
 	wordSoFar: string[];
-	readonly checkChat = true;
+	override readonly checkChat = true;
 
 	constructor(
 		room: Room,
@@ -91,7 +91,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	choose(user: User, word: string) {
+	override choose(user: User, word: string) {
 		if (user.id === this.creator && !this.options.allowCreator) {
 			throw new Chat.ErrorMessage("You can't guess in your own hangman game.");
 		}
@@ -312,7 +312,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 				throw new Chat.ErrorMessage(`Hint must be less than ${MAX_HINT_LENGTH} characters long.`);
 			}
 		}
-		return {phrase, hint};
+		return { phrase, hint };
 	}
 }
 
@@ -332,7 +332,7 @@ export const commands: Chat.ChatCommands = {
 			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
 
 			if (!params) return this.errorReply("No word entered.");
-			const {phrase, hint} = Hangman.validateParams(params);
+			const { phrase, hint } = Hangman.validateParams(params);
 
 			const game = new Hangman(room, user, phrase, hint);
 			room.game = game;
@@ -407,8 +407,8 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage(`There is already a game of ${room.game.title} running.`);
 			}
 			target = toID(target);
-			const {question, hint} = Hangman.getRandom(room.roomid, target);
-			const game = new Hangman(room, user, question, hint, {allowCreator: true});
+			const { question, hint } = Hangman.getRandom(room.roomid, target);
+			const game = new Hangman(room, user, question, hint, { allowCreator: true });
 			room.game = game;
 			this.addModAction(`${user.name} started a random game of hangman - use /guess to play!`);
 			game.display(user, true);
@@ -421,8 +421,8 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse('/help hangman');
 			// validation
 			const args = target.split(target.includes('|') ? '|' : ',');
-			const {phrase} = Hangman.validateParams(args);
-			if (!hangmanData[room.roomid][phrase]) hangmanData[room.roomid][phrase] = {hints: []};
+			const { phrase } = Hangman.validateParams(args);
+			if (!hangmanData[room.roomid][phrase]) hangmanData[room.roomid][phrase] = { hints: [] };
 			args.shift();
 			hangmanData[room.roomid][phrase].hints.push(...args);
 			Hangman.save();
@@ -481,7 +481,7 @@ export const commands: Chat.ChatCommands = {
 			// only a .trim() because toID will make it unable to find the term if it has caps
 			term = term.trim();
 			tags = tags.map(i => toID(i)).filter(Boolean);
-			if (!term || !tags || !tags.length) {
+			if (!term || !tags?.length) {
 				return this.parse('/help hangman');
 			}
 			if (!hangmanData[room.roomid]) {

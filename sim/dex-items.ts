@@ -18,8 +18,8 @@ export type ModdedItemData = ItemData | Partial<Omit<ItemData, 'name'>> & {
 	onCustap?: (this: Battle, pokemon: Pokemon) => void,
 };
 
-export interface ItemDataTable {[itemid: IDEntry]: ItemData}
-export interface ModdedItemDataTable {[itemid: IDEntry]: ModdedItemData}
+export interface ItemDataTable { [itemid: IDEntry]: ItemData }
+export interface ModdedItemDataTable { [itemid: IDEntry]: ModdedItemData }
 
 export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly effectType: 'Item';
@@ -103,15 +103,16 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 	/** Is this item a TR? */
 	readonly isTR: boolean;
 
+
 	declare readonly condition?: ConditionData;
 	declare readonly forcedForme?: string;
 	declare readonly isChoice?: boolean;
-	declare readonly naturalGift?: {basePower: number, type: string};
+	declare readonly naturalGift?: { basePower: number, type: string };
 	declare readonly spritenum?: number;
 	declare readonly boosts?: SparseBoostsTable | false;
 
 	declare readonly onEat?: ((this: Battle, pokemon: Pokemon) => void) | false;
-	declare readonly onPrimal?: (this: Battle, pokemon: Pokemon) => void;
+	declare readonly onUse?: ((this: Battle, pokemon: Pokemon) => void) | false;
 	declare readonly onStart?: (this: Battle, target: Pokemon) => void;
 	declare readonly onEnd?: (this: Battle, target: Pokemon) => void;
 
@@ -138,6 +139,7 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 		this.isIncense = !!data.isIncense;
 		this.isTR = !!data.isTR;
 
+
 		if (!this.gen) {
 			if (this.num >= 1124) {
 				this.gen = 9;
@@ -158,17 +160,17 @@ export class Item extends BasicEffect implements Readonly<BasicEffect> {
 			// specified manually
 		}
 
-		if (this.isBerry) this.fling = {basePower: 10};
-		if (this.id.endsWith('plate')) this.fling = {basePower: 90};
-		if (this.onDrive) this.fling = {basePower: 70};
-		if (this.megaStone) this.fling = {basePower: 80};
-		if (this.onMemory) this.fling = {basePower: 50};
+		if (this.isBerry) this.fling = { basePower: 10 };
+		if (this.id.endsWith('plate')) this.fling = { basePower: 90 };
+		if (this.onDrive) this.fling = { basePower: 70 };
+		if (this.megaStone) this.fling = { basePower: 80 };
+		if (this.onMemory) this.fling = { basePower: 50 };
 
 		assignMissingFields(this, data);
 	}
 }
 
-const EMPTY_ITEM = Utils.deepFreeze(new Item({name: '', exists: false}));
+const EMPTY_ITEM = Utils.deepFreeze(new Item({ name: '', exists: false }));
 
 export class DexItems {
 	readonly dex: ModdedDex;
@@ -217,15 +219,17 @@ export class DexItems {
 				const parent = this.dex.mod(this.dex.parentMod);
 				if (itemData === parent.data.Items[id]) {
 					const parentItem = parent.items.getByID(id);
-					if (item.isNonstandard === parentItem.isNonstandard &&
-					    item.desc === parentItem.desc &&
-					    item.shortDesc === parentItem.shortDesc) {
+					if (
+						item.isNonstandard === parentItem.isNonstandard &&
+						item.desc === parentItem.desc &&
+						item.shortDesc === parentItem.shortDesc
+					) {
 						item = parentItem;
 					}
 				}
 			}
 		} else {
-			item = new Item({name: id, exists: false});
+			item = new Item({ name: id, exists: false });
 		}
 
 		if (item.exists) this.itemCache.set(id, this.dex.deepFreeze(item));

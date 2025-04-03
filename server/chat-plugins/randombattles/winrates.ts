@@ -3,7 +3,7 @@
  * @author mia-pi-git
  */
 
-import {FS, Utils} from '../../../lib';
+import { FS, Utils } from '../../../lib';
 
 interface Stats {
 	elo: number;
@@ -63,7 +63,7 @@ function getDefaultStats() {
 
 export function saveStats(month = getMonth()) {
 	// clone to avoid race conditions with the data getting deleted later (on month rollover)
-	const curStats = {...stats};
+	const curStats = { ...stats };
 	FS(STATS_PATH.replace('{{MONTH}}', month)).writeUpdate(() => JSON.stringify(curStats));
 }
 
@@ -74,7 +74,7 @@ function getMonth() {
 // no, this cannot be baseSpecies - some formes matter, ex arceus formes
 // no, there is no better way to do this.
 // yes, i tried.
-function getSpeciesName(set: PokemonSet, format: Format) {
+export function getSpeciesName(set: PokemonSet, format: Format) {
 	const species = set.species;
 	const item = Dex.items.get(set.item);
 	const moves = set.moves;
@@ -82,11 +82,11 @@ function getSpeciesName(set: PokemonSet, format: Format) {
 	if (species.startsWith("Pikachu-")) {
 		return 'Pikachu';
 	} else if (species.startsWith("Unown-")) {
-	  return 'Unown';
+		return 'Unown';
 	} else if (species === "Gastrodon-East") {
 		return 'Gastrodon';
 	} else if (species === "Magearna-Original") {
-	  return "Magearna";
+		return "Magearna";
 	} else if (species === "Genesect-Douse") {
 		return "Genesect";
 	} else if (species === "Dudunsparce-Three-Segment") {
@@ -164,7 +164,6 @@ const getZScore = (data: MonEntry) => (
 	2 * Math.sqrt(data.timesGenerated) * (data.numWins / data.timesGenerated - 0.5)
 );
 
-
 export const handlers: Chat.Handlers = {
 	onBattleEnd(battle, winner, players) {
 		void collectStats(battle, winner, players);
@@ -191,7 +190,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 		if (!team) return; // ???
 		const mons = team.map(f => getSpeciesName(f, format));
 		for (const mon of mons) {
-			if (!formatData.mons[mon]) formatData.mons[mon] = {timesGenerated: 0, numWins: 0};
+			if (!formatData.mons[mon]) formatData.mons[mon] = { timesGenerated: 0, numWins: 0 };
 			formatData.mons[mon].timesGenerated++;
 			if (toID(winner) === toID(p.name)) {
 				formatData.mons[mon].numWins++;
@@ -293,7 +292,7 @@ export const pages: Chat.PageTable = {
 		buf += `<th>Raw wins</th><th>Times generated</th></tr>`;
 		for (const [mon, data] of mons) {
 			buf += `<tr><td>${Dex.species.get(mon).name}</td>`;
-			const {timesGenerated, numWins} = data;
+			const { timesGenerated, numWins } = data;
 			buf += `<td>${((numWins / timesGenerated) * 100).toFixed(2)}%</td>`;
 			buf += `<td>${getZScore(data).toFixed(3)}</td>`;
 			buf += `<td>${numWins}</td><td>${timesGenerated}</td>`;
