@@ -107,11 +107,11 @@ interface EffectData {
 	shortDesc?: string;
 }
 
-type ModdedEffectData = EffectData | Partial<EffectData> & {inherit: true};
+type ModdedEffectData = EffectData | Partial<EffectData> & { inherit: true };
 
 type EffectType =
 	'Condition' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' |
-	'Nature' | 'Ruleset' | 'Weather' | 'Status' | 'Terastal' | 'Rule' | 'ValidatorRule';
+	'Nature' | 'Ruleset' | 'Weather' | 'Status' | 'Terrain' | 'Rule' | 'ValidatorRule';
 
 interface BasicEffect extends EffectData {
 	id: ID;
@@ -122,6 +122,7 @@ interface BasicEffect extends EffectData {
 	sourceEffect: string;
 	toString: () => string;
 }
+
 
 type Condition = import('./dex-conditions').Condition;
 
