@@ -1160,10 +1160,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	drizzle: {
 		onStart(source) {
-			for (const action of this.queue) {
-				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'kyogre') return;
-				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
-			}
+			if (source.species.id === 'kyogre' && source.item === 'blueorb') return;
 			this.field.setWeather('raindance');
 		},
 		flags: {},
@@ -1173,10 +1170,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	drought: {
 		onStart(source) {
-			for (const action of this.queue) {
-				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'groudon') return;
-				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
-			}
+			if (source.species.id === 'groudon' && source.item === 'redorb') return;
 			this.field.setWeather('sunnyday');
 		},
 		flags: {},
@@ -3381,11 +3375,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				pokemon.cureStatus();
 			}
 		},
-		onAllySwitchIn(pokemon) {
-			if (['psn', 'tox'].includes(pokemon.status)) {
-				this.add('-activate', this.effectState.target, 'ability: Pastel Veil');
-				pokemon.cureStatus();
-			}
+		onAnySwitchIn() {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onSetStatus(status, target, source, effect) {
 			if (!['psn', 'tox'].includes(status.id)) return;
@@ -3398,7 +3389,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!['psn', 'tox'].includes(status.id)) return;
 			if ((effect as Move)?.status) {
 				const effectHolder = this.effectState.target;
-				this.add('-block', target, 'ability: Pastel Veil', '[of] ' + effectHolder);
+				this.add('-block', target, 'ability: Pastel Veil', `[of] ${effectHolder}`);
 			}
 			return false;
 		},
@@ -3409,7 +3400,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return this.chainModify(1.1);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		name: "Pastel Veil",
 		rating: 2,
 		num: 257,
@@ -4657,26 +4648,27 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			},
 			onResidual(pokemon) {
 				if (!pokemon.activeTurns) {
-					this.effectState.duration += 1;
-
+					if (this.effectState) {
+						this.effectState.duration = (this.effectState.duration ?? 0) + 1;
+					}
 				}
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
 				if(pokemon.volatiles['premierball']){
-				let debuff = 1.3 - (0.1 * this.effectState.duration)
+				let debuff = 1.3 - (0.1 * this.effectState.duration!)
 				return this.chainModify(debuff);}
 				else {
-				let debuff = 1.05 - (0.05 * this.effectState.duration)
+				let debuff = 1.05 - (0.05 * this.effectState.duration!)
 				return this.chainModify(debuff);
 			}
 		},
 			onModifySpe(spe, pokemon) {
 				if(pokemon.volatiles['premierball']){
-					let debuff = 1.3 - (0.1 * this.effectState.duration)
+					let debuff = 1.3 - (0.1 * this.effectState.duration!)
 					return this.chainModify(debuff);}
 					else {
-					let debuff = 1.05 - (0.05 * this.effectState.duration)
+					let debuff = 1.05 - (0.05 * this.effectState.duration!)
 					return this.chainModify(debuff);
 				}
 			},
