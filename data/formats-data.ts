@@ -11,12 +11,10 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	venusaurmega: {
-
 		tier: "UU",
 		natDexTier: "UU",
 	},
 	venusaurgmax: {
-
 		tier: "Illegal",
 	},
 	charmander: {
@@ -39,7 +37,6 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "OU",
 	},
 	charizardgmax: {
-
 		tier: "Illegal",
 	},
 	squirtle: {
@@ -58,7 +55,6 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "OU",
 	},
 	blastoisegmax: {
-
 		tier: "Illegal",
 	},
 	caterpie: {
@@ -78,7 +74,6 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	butterfreegmax: {
-
 		tier: "Illegal",
 	},
 	weedle: {
@@ -165,11 +160,9 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	pikachucosplay: {
-
-		tier: "Illegal",
+		tier: "PU",
 	},
 	pikachurockstar: {
-
 		tier: "RU",
 		natDexTier: "OU",
 	},
@@ -179,7 +172,6 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "OU",
 	},
 	pikachupopstar: {
-
 		tier: "OU",
 		natDexTier: "OU",
 	},
@@ -1551,7 +1543,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	slastmaliberado: {
-		
+
 	},
 	swinub: {
 		tier: "LC",
