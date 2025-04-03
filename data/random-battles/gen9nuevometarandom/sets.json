@@ -3,46 +3,46 @@
         "level": 83,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["Growth", "Earth Power", "Mega Drain", "Sludge Bomb", "Weather Ball", "Giga Drain"],
-                "abilities": ["Chlorophyll", "Overgrow"],
-                "teraTypes": ["Ground"],
-                "items": "Life Orb",
+                "species": "Venusaur",
+                "weight": 50,
+                "moves": [
+                    ["Mega Drain", "Giga Drain"],
+                    ["Earth Power", "Weather Ball"],
+                    ["Sludge Bomb"],
+                    ["Growth"]
+                ],
+                "item": ["Life Orb"],
                 "nature": "modest",
-                "hpEVs": 0,
-                "atkEVs": 0,
-                "defEVs": 0,
-                "spaEVs": 252,
-                "spdEVs": 4,
-                "speEVs": 252
+                "evs": {"spa": 252, "spd": 4, "spe": 252},
+                "ability": ["Chlorophyll", "Overgrow"]
             },
             {
-                "role": "Fast Special Sweeper",
-                "movepool": ["Giga Drain", "Toxic", "Sludge Bomb", "Knock Off", "Synthesis"],
-                "abilities": ["Overgrow", "Chlorophyll"],
-                "teraTypes": ["Water"],
-                "items": "Heavy-Duty Boots",
+                "species": "Venusaur",
+                "weight": 30,
+                "moves": [
+                    ["Mega Drain", "Giga Drain"],
+                    ["Sludge Bomb", "Poison Powder"],
+                    ["Substitute"],
+                    ["Leech Seed"]
+                ],
+                "item": ["Black Sludge"],
                 "nature": "modest",
-                "hpEVs": 252,
-                "atkEVs": 0,
-                "defEVs": 0,
-                "spaEVs": 252,
-                "spdEVs": 4,
-                "speEVs": 0
+                "evs": {"spd": 252, "spda": 8, "hp": 248},
+                "ability": ["Chlorophyll", "Overgrow"]
             },
             {
-                "role": "Bulky Support",
-                "movepool": ["Leech Seed", "Substitute", "Sleep Powder", "Mega Drain", "Sludge Bomb"],
-                "abilities": ["Overgrow", "Chlorophyll"],
-                "teraTypes": ["Water"],
-                "items": "Black Sludge",
-                "nature": "calm",
-                "hpEVs": 248,
-                "atkEVs": 0,
-                "defEVs": 0,
-                "spaEVs": 8,
-                "spdEVs": 252,
-                "speEVs": 0
+                "species": "Venusaur",
+                "weight": 20,
+                "moves": [
+                    ["Giga Drain"],
+                    ["Acid Spray", "Sludge Bomb"],
+                    ["Toxic", "Sleep Powder", "Poison Powder"],
+                    ["Knock Off"]
+                ],
+                "item": ["Life Orb"],
+                "nature": "modest",
+                "evs": {"spa": 252, "spd": 4, "spe": 252},
+                "ability": ["Chlorophyll", "Overgrow"]
             }
         ]
     },
