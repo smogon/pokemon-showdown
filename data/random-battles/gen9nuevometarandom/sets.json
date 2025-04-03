@@ -39,9 +39,9 @@
                     ["Toxic", "Sleep Powder", "Poison Powder"],
                     ["Knock Off"]
                 ],
-                "item": ["Life Orb"],
+                "item": ["Heavy-Duty Boots"],
                 "nature": "modest",
-                "evs": {"spa": 252, "spd": 4, "spe": 252},
+                "evs": {"hp": 252, "spd": 4, "spa": 252},
                 "ability": ["Chlorophyll", "Overgrow"]
             }
         ]
