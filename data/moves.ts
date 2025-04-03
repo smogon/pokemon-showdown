@@ -6140,7 +6140,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	focusblast: {
 		num: 411,
 		accuracy: true,
-		basePower: 100,
+		basePower: 110,
 		category: "Special",
 		name: "Focus Blast",
 		pp: 5,
@@ -6191,7 +6191,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	focuspunch: {
 		num: 264,
 		accuracy: true,
-		basePower: 100,
+		basePower: 110,
 		category: "Physical",
 		name: "Focus Punch",
 		pp: 20,
