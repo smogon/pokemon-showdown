@@ -2348,4 +2348,41 @@ export const AbilitiesText: {[id: IDEntry]: AbilityText} = {
 
 		activate: "  Pluma Watt made [POKEMON] move faster!",
 	},
+	liberaalmas: {
+		name: "Libera Almas",
+		shortDesc: "After an ally has fainted, if user switches-in, user's all stats +1.",
+		activate: "  [POKEMON] has led the fallen one along the path of light!",
+	},
+	almapura: {
+		name: "Alma Pura",
+		shortDesc: "User does't receive supereffective damage.",
+	},
+	ultimogolpe: {
+		name: "Ultimo Golpe",
+		shortDesc: "On Switching in, automatically knocks out foes with less than 25% HP when.",
+	},
+	vampirismo: {
+		name: "Vampirismo",
+		shortDesc: "Boosts the power of biting moves by 20% and heals 50% of the damage dealt.",
+	},
+	cabellogalvanico: {
+		name: "Cabello Galvanico",
+		shortDesc: "Special attacks have a 20% chance to inflict paralysis.",
+	},
+	jovial: {
+		name: "Jovial",
+		shortDesc: "This Pokemon's Special Attack is raised by 1 stage after it is damaged by a move.",
+	},
+	cabezajerarquica: {
+		name: "Cabeza Jerarquica",
+		shortDesc: "Reduces damage by 50% at >66% HP, prevents stat drops at >33% HP, and boosts move power by 33% at <33% HP.",
+	},
+	heroismo: {
+		name: "Heroismo",
+		shortDesc: "Negates opponent's priority moves, and boosts Speed when hit by a super effective move.",
+	},
+	manopesada: {
+		name: "Mano Pesada",
+		shortDesc: "Boosts contact and Steel-type moves by 15%. Contact moves have a 10% chance to flinch the target.",
+	}
 };
