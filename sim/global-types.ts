@@ -478,20 +478,20 @@ namespace RandomTeamsTypes {
 	export interface RandomSet {
 		name: string;
 		species: string;
-		gender: string | boolean;
-		moves: string[];
+		gender: string;
+		item: string;
 		ability: string;
+		shiny: boolean;
+		level: number;
+		happiness: number;
 		evs: SparseStatsTable;
 		ivs: SparseStatsTable;
-		item: string;
-		level: number;
-		shiny: boolean;
-		nature?: string;
-		happiness?: number;
+		nature: string;
+		moves: string[];
 		dynamaxLevel?: number;
 		gigantamax?: boolean;
+		wantsTera?: boolean;
 		teraType?: string;
-		role?: Role;
 	}
 	export interface RandomFactorySet {
 		name: string;
