@@ -13,19 +13,19 @@
                 ],
                 "item": ["Life Orb"],
                 "nature": "modest",
-                "evs": {"spa": 252, "spd": 4, "spe": 252},
-                "ability": ["Chlorophyll", "Overgrow"]
+                "hpEVs": 0,
+                "atkEVs": 0,
+                "defEVs": 0,
+                "spaEVs": 252,
+                "spdEVs": 4,
+                "speEVs": 252
             },
             {
-                "species": "Venusaur",
-                "weight": 30,
-                "moves": [
-                    ["Mega Drain", "Giga Drain"],
-                    ["Sludge Bomb", "Poison Powder"],
-                    ["Substitute"],
-                    ["Leech Seed"]
-                ],
-                "item": ["Black Sludge"],
+                "role": "Fast Special Sweeper",
+                "movepool": ["Giga Drain", "Toxic", "Sludge Bomb", "Knock Off", "Synthesis"],
+                "abilities": ["Overgrow", "Chlorophyll"],
+                "teraTypes": ["Water"],
+                "items": "Heavy-Duty Boots",
                 "nature": "modest",
                 "evs": {"spd": 252, "spda": 8, "hp": 248},
                 "ability": ["Chlorophyll", "Overgrow"]
