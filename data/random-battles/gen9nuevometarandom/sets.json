@@ -17,9 +17,9 @@
                 "speEVs": 252
             },
             {
-                "role": "Bulky Support",
+                "role": "Fast Special Sweeper",
                 "movepool": ["Giga Drain", "Toxic", "Sludge Bomb", "Knock Off", "Synthesis"],
-                "abilities": ["Overgrow"],
+                "abilities": ["Overgrow", "Chlorophyll"],
                 "teraTypes": ["Water"],
                 "items": "Heavy-Duty Boots",
                 "nature": "modest",
