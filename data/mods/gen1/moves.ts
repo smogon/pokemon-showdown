@@ -16,6 +16,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	amnesia: {
 		inherit: true,
+		clauseData: {
+			canStatBoost: {
+				spa: true,
+				spd: true,
+			},
+		},
 		boosts: {
 			spa: 2,
 			spd: 2,
@@ -318,6 +324,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	focusenergy: {
 		inherit: true,
+		clauseData: {},
 		condition: {
 			onStart(pokemon) {
 				this.add('-start', pokemon, 'move: Focus Energy');
@@ -332,6 +339,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	growth: {
 		inherit: true,
+		clauseData: {
+			canStatBoost: {
+				spa: true,
+				spd: true,
+			},
+		},
 		boosts: {
 			spa: 1,
 			spd: 1,
@@ -690,6 +703,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	skullbash: {
 		inherit: true,
+		clauseData: {},
 		onTryMove(attacker, defender, move) {
 			if (attacker.removeVolatile('twoturnmove')) {
 				attacker.removeVolatile('invulnerability');
