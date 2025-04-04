@@ -3,13 +3,13 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	raichu: {
-		tier: "PU"
+		tier: "PU",
 	},
 	golbat: {
-		tier: "NFE"
+		tier: "NFE",
 	},
 	vileplume: {
-		tier: "NU"
+		tier: "NU",
 	},
 	dugtrio: {
 		tier: "OU",
