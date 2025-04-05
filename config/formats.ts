@@ -4471,7 +4471,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: [
 			'Alakazam', 'Celebi', 'Clefable', 'Ho-Oh', 'Lugia', 'Mew', 'Mewtwo', 'Snorlax', 'Zapdos',
 			'Berserk Gene', 'Focus Band', 'King\'s Rock', 'Quick Claw', 'Attract', 'Destiny Bond',
-			'Explosion', 'Perish Song', 'Present', 'Self-Destruct', 'Swagger',
+			'Explosion', 'Perish Song', 'Present', 'Self-Destruct', 'Confuse Ray', 'Supersonic', 'Swagger',
+			'Sweet Kiss',
 		],
 	},
 	{
