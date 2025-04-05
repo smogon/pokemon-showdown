@@ -1805,50 +1805,77 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Vulpix-Alola', 'Yanma', 'Yanmega',
 		],
 		validateSet(set, teamHas) {
-			let pokemoves = 0;
-			const problems: string[] = [];
-			const moves = [];
+			const problems = [];
+			const pokemovesArray = [];
+			// First, identify all Pokemoves
 			if (set.moves?.length) {
-				if (set.moves.length > this.ruleTable.maxMoveCount) {
-					problems.push(`${set.name} has ${set.moves.length} moves, which is more than the limit of ${this.ruleTable.maxMoveCount}.`);
-					return problems;
-				}
-				for (const [i, moveid] of set.moves.entries()) {
+				for (const moveid of set.moves) {
 					const pokemove = this.dex.species.get(moveid);
-					if (!pokemove.exists) continue;
-					if (pokemove.isNonstandard &&
-						!(this.ruleTable.has(`+pokemontag:${this.toID(pokemove.isNonstandard)}`) ||
-							this.ruleTable.has(`+pokemon:${pokemove.id}`) ||
-							this.ruleTable.has(`+basepokemon:${this.toID(pokemove.baseSpecies)}`))) {
-						problems.push(`${pokemove.isNonstandard} Pok\u00e9mon are not allowed to be used as Pokemoves.`);
+					if (pokemove.exists) {
+						// This is a Pokemove
+						pokemovesArray.push(moveid);
+						// Check if Pokemove is allowed (non-standard check)
+						if (pokemove.isNonstandard &&
+							!(this.ruleTable.has(`+pokemontag:${this.toID(pokemove.isNonstandard)}`) ||
+								this.ruleTable.has(`+pokemon:${pokemove.id}`) ||
+								this.ruleTable.has(`+basepokemon:${this.toID(pokemove.baseSpecies)}`))) {
+							problems.push(`${pokemove.isNonstandard} Pok\u00e9mon are not allowed to be used as Pokemoves.`);
+						}
+						// Check if Pokemove is restricted or banned
+						if (this.ruleTable.isRestrictedSpecies(pokemove) || this.ruleTable.isBannedSpecies(pokemove)) {
+							problems.push(`${pokemove.name} is unable to be used as a Pokemove.`);
+						}
 					}
-					if (this.ruleTable.isRestrictedSpecies(pokemove) || this.ruleTable.isBannedSpecies(pokemove)) {
-						problems.push(`${pokemove.name} is unable to be used as a Pokemove.`);
-					}
-					pokemoves++;
-					moves.push(moveid);
-					set.moves.splice(i, 1);
 				}
 			}
+			// Get the allowed Pokemoves count from the ruleset
 			const allowedPokemoves = Number(this.ruleTable.valueRules.get('allowedpokemoves') || '1');
-			if (pokemoves > allowedPokemoves) {
+			// Check if the Pokemon has too many Pokemoves
+			if (pokemovesArray.length > allowedPokemoves) {
 				problems.push(
-					`${set.species} has ${pokemoves} Pokemoves.`,
+					`${set.species} has ${pokemovesArray.length} Pokemoves.`,
 					`(Pok\u00e9mon can only have ${allowedPokemoves} Pokemove${allowedPokemoves === 1 ? '' : 's'} each.)`
 				);
 			}
-			if (this.validateSet(set, teamHas)) {
-				return this.validateSet(set, teamHas);
+			// Check total move count (regular moves + Pokemoves)
+			if (set.moves.length > this.ruleTable.maxMoveCount) {
+				problems.push(`${set.name} has ${set.moves.length} moves (including ${pokemovesArray.length} Pokemove${pokemovesArray.length === 1 ? '' : 's'}), which is more than the limit of ${this.ruleTable.maxMoveCount}.`);
+				return problems;
 			}
-			set.moves.push(...moves);
+			// Temporarily remove Pokemoves for standard validation
+			const originalMoves = [...set.moves];
+			set.moves = set.moves.filter(moveid => !pokemovesArray.includes(moveid));
+			// Use a recursive call, but we've removed the Pokemoves, so it won't loop infinitely
+			// Store the current function to avoid calling itself
+			const currentValidateSet = this.validateSet;
+			this.validateSet = null;
+			// Get the "parent" validator's validateSet method
+			let standardProblems = null;
+			try {
+				// Try using the Format's validator directly
+				standardProblems = this.dex.formats.get('')?.validator?.validateSet?.call(this, set, teamHas) || null;
+			} catch {
+				// If that fails, continue without validating
+			}
+			// Restore the original validateSet method
+			this.validateSet = currentValidateSet;
+			// If we got validation problems, add them
+			if (standardProblems) {
+				problems.push(...standardProblems);
+			}
+			// Restore original moves including Pokemoves
+			set.moves = originalMoves;
 			return problems.length ? problems : null;
 		},
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
+			// Initialize the pokemoves array if it doesn't exist
+				if (!pokemon.m.pokemoves) pokemon.m.pokemoves = [];
 				for (const move of pokemon.moves) {
 					const pokemove = this.dex.species.get(move);
 					if (pokemove.exists) {
-						pokemon.m.pokemove = pokemove;
+						// Add the Pokemove to the array instead of just setting a single one
+						pokemon.m.pokemoves.push(pokemove);
 						const idx = pokemon.moveSlots.findIndex(x => x.id === pokemove.id);
 						if (idx >= 0) {
 							pokemon.moveSlots[idx] = pokemon.baseMoveSlots[idx] = {
@@ -1867,11 +1894,16 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			}
 		},
 		onSwitchIn(pokemon) {
-			if (!pokemon.m.pokemove) return;
-			const pokemove = pokemon.m.pokemove;
-			if (!pokemove.exists) return;
-			// Place volatiles on the Pokémon to show the pokemove.
-			this.add('-start', pokemon, pokemove.name, '[silent]');
+			// Check if the pokemon has any Pokemoves
+			if (!(pokemon.m.pokemoves?.length ?? 0)) return;
+		  
+			// Add a volatile for each Pokemove
+			for (const pokemove of pokemon.m.pokemoves) {
+				if (pokemove.exists) {
+					// Place volatiles on the Pokémon to show each pokemove
+					this.add('-start', pokemon, pokemove.name, '[silent]');
+				}
+			}
 		},
 		onModifyMovePriority: 999,
 		onModifyMove(move, pokemon, target) {
@@ -1882,7 +1914,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				move.accuracy = 100;
 				move.flags = {};
 				move.flags['protect'] = 1;
-				move.category = species.baseStats['spa'] >= species.baseStats['atk'] ? 'Special' : 'Physical';
+				move.category = species.baseStats['spa'] > species.baseStats['atk'] ?
+					'Special' :
+					species.baseStats['spa'] < species.baseStats['atk'] ?
+						'Physical' :
+						pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true) ?
+							'Physical' :
+							'Special';
 				move.onAfterHit = function (t, s, m) {
 					if (s.getAbility().name === species.abilities['0']) return;
 					const effect = 'ability:' + this.toID(species.abilities['0']);
