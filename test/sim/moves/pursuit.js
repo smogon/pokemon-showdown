@@ -133,4 +133,31 @@ describe(`Pursuit`, () => {
 		battle.makeChoices('move pursuit 1, move sleeptalk', 'auto');
 		assert.false.fullHP(gengar);
 	});
+
+	it(`should not be redirected by Follow Me if activated by a switch`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Beedrill', moves: ['pursuit'] },
+			{ species: 'Clefable', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Gengar', moves: ['uturn'] },
+			{ species: 'Alakazam', moves: ['followme'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+		]]);
+		const gengar = battle.p2.active[0];
+		battle.makeChoices('move pursuit 1, move sleeptalk', 'auto');
+		assert.false.fullHP(gengar);
+	});
+
+	it(`should not double in power if Red Card activates`, () => {
+		battle = common.createBattle([[
+			{ species: 'Steelix', item: 'redcard', moves: ['pursuit'] },
+		], [
+			{ species: 'Darkrai', moves: ['tackle'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+		]]);
+		const darkrai = battle.p2.active[0];
+		battle.makeChoices('move pursuit', 'auto');
+		assert.fullHP(darkrai);
+		assert.false.fullHP(battle.p2.active[0]);
+	});
 });
