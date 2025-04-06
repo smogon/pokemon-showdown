@@ -83,7 +83,7 @@ export const commands: Chat.ChatCommands = {
 
 			const reqData: Record<string, number> = {};
 			if (!reqs.length) {
-				return this.errorReply("At least one requirement for qualifying must be provided.");
+				throw new Chat.ErrorMessage("At least one requirement for qualifying must be provided.");
 			}
 			for (const req of reqs) {
 				let [k, v] = req.split('=');
@@ -93,17 +93,17 @@ export const commands: Chat.ChatCommands = {
 					continue;
 				}
 				if (!['elo', 'gxe', 'coil'].includes(k)) {
-					return this.errorReply(`Invalid requirement type: ${k}. Must be 'coil', 'gxe', or 'elo'.`);
+					throw new Chat.ErrorMessage(`Invalid requirement type: ${k}. Must be 'coil', 'gxe', or 'elo'.`);
 				}
 				if (k === 'coil' && !reqs.some(x => toID(x).startsWith('b'))) {
 					throw new Chat.ErrorMessage("COIL reqs are specified, but you have not provided a B value (with the argument `b=num`)");
 				}
 				const val = Number(v);
 				if (isNaN(val) || val < 0) {
-					return this.errorReply(`Invalid value: ${v}`);
+					throw new Chat.ErrorMessage(`Invalid value: ${v}`);
 				}
 				if (reqData[k]) {
-					return this.errorReply(`Requirement type ${k} specified twice.`);
+					throw new Chat.ErrorMessage(`Requirement type ${k} specified twice.`);
 				}
 				reqData[k] = val;
 			}
@@ -137,7 +137,7 @@ export const commands: Chat.ChatCommands = {
 
 			const format = toID(target);
 			const test = suspectTests.suspects[format];
-			if (!test) return this.errorReply(`There is no suspect test for '${target}'. Check spelling?`);
+			if (!test) throw new Chat.ErrorMessage(`There is no suspect test for '${target}'. Check spelling?`);
 
 			const [out, error] = await LoginServer.request('suspects/end', {
 				format,

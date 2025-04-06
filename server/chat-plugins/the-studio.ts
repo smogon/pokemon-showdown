@@ -470,7 +470,7 @@ export const commands: Chat.ChatCommands = {
 
 	async lastfm(target, room, user) {
 		this.checkChat();
-		if (!user.autoconfirmed) return this.errorReply(`You cannot use this command while not autoconfirmed.`);
+		if (!user.autoconfirmed) throw new Chat.ErrorMessage(`You cannot use this command while not autoconfirmed.`);
 		this.runBroadcast(true);
 		const targetUsername = this.splitUser(target).targetUsername || (user.named ? user.name : '');
 		const username = LastFM.getAccountName(targetUsername);
@@ -484,7 +484,7 @@ export const commands: Chat.ChatCommands = {
 	async track(target, room, user) {
 		if (!target) return this.parse('/help track');
 		this.checkChat();
-		if (!user.autoconfirmed) return this.errorReply(`You cannot use this command while not autoconfirmed.`);
+		if (!user.autoconfirmed) throw new Chat.ErrorMessage(`You cannot use this command while not autoconfirmed.`);
 		const [track, artist] = this.splitOne(target);
 		if (!track) return this.parse('/help track');
 		this.runBroadcast(true);
@@ -541,7 +541,7 @@ export const commands: Chat.ChatCommands = {
 			return this.parse('/help suggestrecommendation');
 		}
 		this.checkChat(target);
-		if (!user.autoconfirmed) return this.errorReply(`You cannot use this command while not autoconfirmed.`);
+		if (!user.autoconfirmed) throw new Chat.ErrorMessage(`You cannot use this command while not autoconfirmed.`);
 		const [artist, title, url, description, ...tags] = target.split('|').map(x => x.trim());
 		if (!(artist && title && url && description && tags?.length)) {
 			return this.parse(`/help suggestrecommendation`);
