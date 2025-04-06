@@ -61,8 +61,8 @@ export const commands: Chat.ChatCommands = {
 		async add(target, room, user) {
 			checkPermissions(this);
 
-			const [tier, suspect, date, url, ...reqs] = target.split(',').map(x => x.trim());
-			if (!(tier && suspect && date && url && reqs)) {
+			const [tier, suspect, date, ...reqs] = target.split(',').map(x => x.trim());
+			if (!(tier && suspect && date && reqs)) {
 				return this.parse('/help suspects');
 			}
 
@@ -75,11 +75,6 @@ export const commands: Chat.ChatCommands = {
 			const isValidDate = /[0-1]?[0-9]/.test(month) && /[0-3]?[0-9]/.test(day);
 			if (!isValidDate) throw new Chat.ErrorMessage("Dates must be in the format MM/DD.");
 			const dateActual = `${month}/${day}`;
-
-			const urlActual = url.trim();
-			if (!/^https:\/\/www\.smogon\.com\/forums\/(threads|posts)\//.test(urlActual)) {
-				throw new Chat.ErrorMessage("Suspect test URLs must be Smogon threads or posts.");
-			}
 
 			const reqData: Record<string, number> = {};
 			if (!reqs.length) {
@@ -110,7 +105,6 @@ export const commands: Chat.ChatCommands = {
 			const [out, error] = await LoginServer.request(suspectTests.suspects[format.id] ? "suspects/edit" : "suspects/add", {
 				format: format.id,
 				reqs: JSON.stringify(reqData),
-				url: urlActual,
 			});
 			if (out?.actionerror || error) {
 				throw new Chat.ErrorMessage("Error adding suspect test: " + (out?.actionerror || error?.message));
@@ -123,7 +117,7 @@ export const commands: Chat.ChatCommands = {
 				tier: format.name,
 				suspect: suspectString,
 				date: dateActual,
-				url: urlActual,
+				url: out.url,
 			};
 			saveSuspectTests();
 			this.sendReply(`Added a suspect test notice for ${suspectString} in ${format.name}.`);
@@ -280,7 +274,7 @@ export const commands: Chat.ChatCommands = {
 		this.sendReplyBox(
 			`Commands to manage suspect tests:<br />` +
 			`<code>/suspects</code>: displays currently running suspect tests.<br />` +
-			`<code>/suspects add [tier], [suspect], [date], [link], [...reqs]</code>: adds a suspect test. Date in the format MM/DD. ` +
+			`<code>/suspects add [tier], [suspect], [date], [...reqs]</code>: adds a suspect test. Date in the format MM/DD. ` +
 			`Reqs in the format [key]=[value], where valid keys are 'coil', 'elo', and 'gxe', delimited by commas. At least one is required. <br />` +
 			`(note that if you are using COIL, you must set a B value indepedently with <code>/suspects setcoil</code>). Requires: ~<br />` +
 			`<code>/suspects remove [tier]</code>: deletes a suspect test. Requires: ~<br />` +
