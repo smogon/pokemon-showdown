@@ -87,6 +87,12 @@ function setupGlobals() {
 		});
 	}
 
+	/* Impulse Globals */
+	
+	global.Impulse = {};
+
+	/* Impulse Globals End */
+
 	const { Dex } = require('../sim/dex');
 	global.Dex = Dex;
 	global.toID = Dex.toID;
