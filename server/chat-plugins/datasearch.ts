@@ -72,13 +72,6 @@ function toListString(arr: string[]) {
 	return `${arr.slice(0, -1).join(", ")}, and ${arr.slice(-1)[0]}`;
 }
 
-function checkCanAll(room: Room | null) {
-	if (!room) return false; // no, no good reason for using `all` in pms
-	const { isPersonal, isHelp } = room.settings;
-	// allowed if it's a groupchat
-	return !room.battle && !!isPersonal && !isHelp;
-}
-
 export const commands: Chat.ChatCommands = {
 	ds: 'dexsearch',
 	ds1: 'dexsearch',
@@ -118,7 +111,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'dexsearch',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast()) return;
@@ -189,7 +181,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randmove',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -240,7 +231,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randpoke',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -286,7 +276,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randability',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		});
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -339,7 +328,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'movesearch',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast()) return;
@@ -401,7 +389,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'itemsearch',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast()) return;
@@ -452,7 +439,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randitem',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		});
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -489,7 +475,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'abilitysearch',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast()) return;
@@ -551,7 +536,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targets.join(','),
 			cmd: 'learn',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: formatid,
 		}, user);
 		if (!response.error && !this.runBroadcast()) return;
@@ -596,7 +580,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randtype',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		});
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -664,7 +647,7 @@ function prepareDexsearchValidator(usedMod: string | undefined, rules: FormatDat
 	return TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
 }
 
-function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
+function runDexsearch(target: string, cmd: string, message: string, isTest: boolean) {
 	const searches: DexOrGroup[] = [];
 	const { splitTarget: remainingTargets, usedMod, count: modCount } = getMod(target);
 	const { splitTarget, usedRules } = getRule(remainingTargets.join(','));
@@ -748,7 +731,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		attack: 'atk', defense: 'def', specialattack: 'spa', spc: 'spa', special: 'spa', spatk: 'spa',
 		specialdefense: 'spd', spdef: 'spd', speed: 'spe', wt: 'weight', ht: 'height', generation: 'gen',
 	};
-	let showAll = false;
 	let sort = null;
 	let megaSearch = null;
 	let gmaxSearch = null;
@@ -972,14 +954,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				break;
 			}
 
-			if (target === 'all') {
-				if (!canAll) return { error: "A search with the parameter 'all' cannot be broadcast." };
-				if (parameters.length > 1) return { error: "The parameter 'all' cannot have alternative parameters." };
-				showAll = true;
-				orGroup.skip = true;
-				break;
-			}
-
 			if (target.substr(0, 6) === 'random' && cmd === 'randpoke') {
 				// Validation for this is in the /randpoke command
 				randomOutput = parseInt(target.substr(6));
@@ -1197,11 +1171,11 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		}
 	}
 	if (
-		showAll && searches.length === 0 && singleTypeSearch === null &&
+		searches.length === 0 && singleTypeSearch === null &&
 		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null && restrictedSearch === null && sort === null
 	) {
 		return {
-			error: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.",
+			error: "No search parameters were found. Try '/help dexsearch' for more information on this command.",
 		};
 	}
 
@@ -1518,23 +1492,29 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		results = Utils.shuffle(results).slice(0, randomOutput);
 	}
 
-	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${Utils.escapeHTML(message)}:</span><br />`);
+	let resultsStr = (message === "" ? message :
+		`<span style="color:#999999;">${Utils.escapeHTML(message)}:</span><br/>`);
 	if (results.length > 1) {
 		results.sort();
 		if (sort) {
 			const direction = sort.slice(-1);
 			Utils.sortBy(results, species => getSortValue(species) * (direction === '+' ? 1 : -1));
 		}
-		let notShown = 0;
-		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
-			notShown = results.length - RESULTS_MAX_LENGTH;
-			results = results.slice(0, RESULTS_MAX_LENGTH);
+
+		function mapPokemonResults(inputArr: Species[]) {
+			return inputArr.map(
+				result => `<a href="//${Config.routes.dex}/pokemon/${toID(result.name)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result.name}" style="vertical-align:-7px;margin:-2px" />${result.name}</a>`
+			).join(", ");
 		}
-		resultsStr += results.map(
-			result => `<a href="//${Config.routes.dex}/pokemon/${toID(result.name)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result.name}" style="vertical-align:-7px;margin:-2px" />${result.name}</a>`
-		).join(", ");
-		if (notShown) {
-			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
+
+		if (results.length > MAX_RANDOM_RESULTS) {
+			const notShown = results.length - RESULTS_MAX_LENGTH;
+			const resultsSummary = `${mapPokemonResults(results.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
+			const resultsHidden = mapPokemonResults(results);
+			resultsStr = `<div class="datasearch" style="cursor: pointer">${message === "" ? "" : `<span style="color:#999999">${Utils.escapeHTML(message)}`}<button class="subtle" style="float: right">[+]</button>${message === "" ? "" : `</span><br/>`}`;
+			resultsStr += `<div class="datasearch-body" style="display: block">${resultsSummary}</div><div class="datasearch-body" style="display: none">${resultsHidden}</div></div>`;
+		} else {
+			resultsStr += mapPokemonResults(results);
 		}
 	} else if (results.length === 1) {
 		return { dt: `${results[0]}${usedMod ? `,${usedMod}` : ''}` };
@@ -1545,7 +1525,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	return { reply: resultsStr };
 }
 
-function runMovesearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
+function runMovesearch(target: string, cmd: string, message: string, isTest: boolean) {
 	const searches: MoveOrGroup[] = [];
 	const { splitTarget, usedMod, count } = getMod(target);
 	if (count > 1) {
@@ -1590,7 +1570,6 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	for (const type of mod.types.all()) {
 		allTypes[type.id] = type.name;
 	}
-	let showAll = false;
 	let sort: string | null = null;
 	const targetMons: { name: string, shouldBeExcluded: boolean }[] = [];
 	let nationalSearch = null;
@@ -1698,14 +1677,6 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 					return { error: `A search cannot both exclude and include '${target}'.` };
 				}
 				orGroup.gens[targetInt] = !isNotSearch;
-				continue;
-			}
-
-			if (target === 'all') {
-				if (!canAll) return { error: "A search with the parameter 'all' cannot be broadcast." };
-				if (parameters.length > 1) return { error: "The parameter 'all' cannot have alternative parameters." };
-				showAll = true;
-				orGroup.skip = true;
 				continue;
 			}
 
@@ -1958,9 +1929,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			searches.push(orGroup);
 		}
 	}
-	if (showAll && !searches.length && !targetMons.length && !sort) {
+	if (!searches.length && !targetMons.length && !sort) {
 		return {
-			error: "No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command.",
+			error: "No search parameters were found. Try '/help movesearch' for more information on this command.",
 		};
 	}
 
@@ -2262,20 +2233,25 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				return moveProp * (direction === '+' ? 1 : -1);
 			});
 		}
-		let notShown = 0;
-		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
-			notShown = results.length - RESULTS_MAX_LENGTH;
-			results = results.slice(0, RESULTS_MAX_LENGTH);
+
+		function mapMoveResults(inputArray: string[]) {
+			return inputArray.map(
+				result => `<a href="//${Config.routes.dex}/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
+					(sort ?
+						// eslint-disable-next-line @typescript-eslint/no-base-to-string
+						` (${dex[toID(result)][sort.slice(0, -1) as keyof Move] === true ? '-' : dex[toID(result)][sort.slice(0, -1) as keyof Move]})` :
+						'')
+			).join(", ");
 		}
-		resultsStr += results.map(
-			result => `<a href="//${Config.routes.dex}/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
-				(sort ?
-					// eslint-disable-next-line @typescript-eslint/no-base-to-string
-					` (${dex[toID(result)][sort.slice(0, -1) as keyof Move] === true ? '-' : dex[toID(result)][sort.slice(0, -1) as keyof Move]})` :
-					'')
-		).join(", ");
-		if (notShown) {
-			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
+
+		if (results.length > MAX_RANDOM_RESULTS) {
+			const notShown = results.length - RESULTS_MAX_LENGTH;
+			const resultsSummary = `${mapMoveResults(results.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
+			const resultsHidden = mapMoveResults(results);
+			resultsStr = `<div class="datasearch" style="cursor: pointer">${message === "" ? "" : `<span style="color:#999999">${Utils.escapeHTML(message)}`}<button class="subtle" style="float: right">[+]</button>${message === "" ? "" : `</span><br/>`}`;
+			resultsStr += `<div class="datasearch-body" style="display: block">${resultsSummary}</div><div class="datasearch-body" style="display: none">${resultsHidden}</div></div>`;
+		} else {
+			resultsStr += mapMoveResults(results);
 		}
 	} else if (results.length === 1) {
 		return { dt: `${results[0]}${usedMod ? `,${usedMod}` : ''}` };
@@ -2286,18 +2262,12 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	return { reply: resultsStr };
 }
 
-function runItemsearch(target: string, cmd: string, canAll: boolean, message: string) {
-	let showAll = false;
+function runItemsearch(target: string, cmd: string, message: string) {
 	let maxGen = 0;
 	let gen = 0;
 	let randomOutput = 0;
 
 	const targetSplit = target.split(',');
-	if (targetSplit[targetSplit.length - 1].trim() === 'all') {
-		if (!canAll) return { error: "A search ending in ', all' cannot be broadcast." };
-		showAll = true;
-		targetSplit.pop();
-	}
 
 	const sanitizedTargets = [];
 	for (const index of targetSplit.keys()) {
@@ -2547,18 +2517,22 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		return { reply: resultsStr };
 	}
 
-	if (foundItems.length > 0) {
-		foundItems.sort();
-		let notShown = 0;
-		if (!showAll && foundItems.length > RESULTS_MAX_LENGTH + 5) {
-			notShown = foundItems.length - RESULTS_MAX_LENGTH;
-			foundItems = foundItems.slice(0, RESULTS_MAX_LENGTH);
-		}
-		resultsStr += foundItems.map(
+	function mapItemResults(inputArr: string[]) {
+		return inputArr.map(
 			result => `<a href="//${Config.routes.dex}/items/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon item="${result}" style="vertical-align:-7px" />${result}</a>`
 		).join(", ");
-		if (notShown) {
-			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
+	}
+
+	if (foundItems.length > 0) {
+		foundItems.sort();
+		if (foundItems.length > MAX_RANDOM_RESULTS) {
+			const notShown = foundItems.length - RESULTS_MAX_LENGTH;
+			const resultsSummary = `${mapItemResults(foundItems.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
+			const resultsHidden = mapItemResults(foundItems);
+			resultsStr = `<div class="datasearch" style="cursor: pointer">${message === "" ? "" : `<span style="color:#999999">${Utils.escapeHTML(message)}`}<button class="subtle" style="float: right">[+]</button>${message === "" ? "" : `</span><br/>`}`;
+			resultsStr += `<div class="datasearch-body" style="display: block">${resultsSummary}</div><div class="datasearch-body" style="display: none">${resultsHidden}</div></div>`;
+		} else {
+			resultsStr += mapItemResults(foundItems);
 		}
 	} else {
 		resultsStr += "No items found. Try a more general search";
@@ -2566,19 +2540,13 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 	return { reply: resultsStr };
 }
 
-function runAbilitysearch(target: string, cmd: string, canAll: boolean, message: string) {
+function runAbilitysearch(target: string, cmd: string, message: string) {
 	// based heavily on runItemsearch()
-	let showAll = false;
 	let maxGen = 0;
 	let gen = 0;
 	let randomOutput = 0;
 
 	const targetSplit = target.split(',');
-	if (targetSplit[targetSplit.length - 1].trim() === 'all') {
-		if (!canAll) return { error: "A search ending in ', all' cannot be broadcast." };
-		showAll = true;
-		targetSplit.pop();
-	}
 
 	const sanitizedTargets = [];
 	for (const index of targetSplit.keys()) {
@@ -2735,18 +2703,22 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 		return { reply: resultsStr };
 	}
 
-	if (foundAbilities.length > 0) {
-		foundAbilities.sort();
-		let notShown = 0;
-		if (!showAll && foundAbilities.length > RESULTS_MAX_LENGTH + 5) {
-			notShown = foundAbilities.length - RESULTS_MAX_LENGTH;
-			foundAbilities = foundAbilities.slice(0, RESULTS_MAX_LENGTH);
-		}
-		resultsStr += foundAbilities.map(
+	function mapAbilityResults(inputArr: string[]) {
+		return inputArr.map(
 			result => `<a href="//${Config.routes.dex}/abilities/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>`
 		).join(", ");
-		if (notShown) {
-			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
+	}
+
+	if (foundAbilities.length > 0) {
+		foundAbilities.sort();
+		if (foundAbilities.length > MAX_RANDOM_RESULTS) {
+			const notShown = foundAbilities.length - RESULTS_MAX_LENGTH;
+			const resultsSummary = `${mapAbilityResults(foundAbilities.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
+			const resultsHidden = mapAbilityResults(foundAbilities);
+			resultsStr = `<div class="datasearch" style="cursor: pointer">${message === "" ? "" : `<span style="color:#999999">${Utils.escapeHTML(message)}`}<button class="subtle" style="float: right">[+]</button>${message === "" ? "" : `</span><br/>`}`;
+			resultsStr += `<div class="datasearch-body" style="display: block">${resultsSummary}</div><div class="datasearch-body" style="display: none">${resultsHidden}</div></div>`;
+		} else {
+			resultsStr += mapAbilityResults(foundAbilities);
 		}
 	} else {
 		resultsStr += "No abilities found. Try a more general search.";
@@ -2754,7 +2726,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 	return { reply: resultsStr };
 }
 
-function runLearn(target: string, cmd: string, canAll: boolean, formatid: string) {
+function runLearn(target: string, cmd: string, formatid: string) {
 	let format: Format = Dex.formats.get(formatid);
 	const targets = target.split(',');
 	let formatName = format.name;
@@ -2938,7 +2910,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 	return { reply: buffer };
 }
 
-function runSearch(query: { target: string, cmd: string, canAll: boolean, message: string }, user?: User) {
+function runSearch(query: { target: string, cmd: string, message: string }, user?: User) {
 	if (user) {
 		if (user.lastCommand.startsWith('/datasearch ')) {
 			throw new Chat.ErrorMessage(
@@ -2954,7 +2926,7 @@ function runSearch(query: { target: string, cmd: string, canAll: boolean, messag
 	});
 }
 
-function runRandtype(target: string, cmd: string, canAll: boolean, message: string) {
+function runRandtype(target: string, cmd: string, message: string) {
 	const icon: any = {};
 	for (const type of Dex.types.names()) {
 		icon[type] = `<img src="https://${Config.routes.client}/sprites/types/${type}.png" width="32" height="14">`;
@@ -2994,20 +2966,20 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 		switch (query.cmd) {
 		case 'randpoke':
 		case 'dexsearch':
-			return runDexsearch(query.target, query.cmd, query.canAll, query.message, false);
+			return runDexsearch(query.target, query.cmd, query.message, false);
 		case 'randmove':
 		case 'movesearch':
-			return runMovesearch(query.target, query.cmd, query.canAll, query.message, false);
+			return runMovesearch(query.target, query.cmd, query.message, false);
 		case 'randitem':
 		case 'itemsearch':
-			return runItemsearch(query.target, query.cmd, query.canAll, query.message);
+			return runItemsearch(query.target, query.cmd, query.message);
 		case 'randability':
 		case 'abilitysearch':
-			return runAbilitysearch(query.target, query.cmd, query.canAll, query.message);
+			return runAbilitysearch(query.target, query.cmd, query.message);
 		case 'learn':
-			return runLearn(query.target, query.cmd, query.canAll, query.message);
+			return runLearn(query.target, query.cmd, query.message);
 		case 'randtype':
-			return runRandtype(query.target, query.cmd, query.canAll, query.message);
+			return runRandtype(query.target, query.cmd, query.message);
 		default:
 			throw new Error(`Unrecognized Dexsearch command "${query.cmd}"`);
 		}
@@ -3045,10 +3017,10 @@ if (!PM.isParentProcess) {
 }
 
 export const testables = {
-	runAbilitysearch: (target: string, cmd: string, canAll: boolean, message: string) =>
-		runAbilitysearch(target, cmd, canAll, message),
-	runDexsearch: (target: string, cmd: string, canAll: boolean, message: string) =>
-		runDexsearch(target, cmd, canAll, message, true),
-	runMovesearch: (target: string, cmd: string, canAll: boolean, message: string) =>
-		runMovesearch(target, cmd, canAll, message, true),
+	runAbilitysearch: (target: string, cmd: string, message: string) =>
+		runAbilitysearch(target, cmd, message),
+	runDexsearch: (target: string, cmd: string, message: string) =>
+		runDexsearch(target, cmd, message, true),
+	runMovesearch: (target: string, cmd: string, message: string) =>
+		runMovesearch(target, cmd, message, true),
 };
