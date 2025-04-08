@@ -44,7 +44,7 @@ function updateSC() {
 	FS(CSS_FILE).writeUpdate(() => (
 		file.join("\n") + newCss
 	));
-	global.Server?.reloadCSS?.();
+	Impulse.reloadCSS();
 }
 
 function generateCSS(name: string, color: string) {
