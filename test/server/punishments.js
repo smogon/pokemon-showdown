@@ -130,7 +130,7 @@ describe('broader, more integrated Punishments tests', function () {
 			await this.parse("/msgroom lobby,Hi! I'm no longer locked!");
 			// we can't just check the roomlog length because unlocking adds a |n| message to
 			const lastMessage = this.room.log.log.pop();
-			assert(lastMessage.endsWith(` Lock Me Please|Hi! I'm no longer locked!`), `user should have successfuly sent a message after being locked`);
+			assert(lastMessage.endsWith(` Lock Me Please|Hi! I'm no longer locked!`), `user should have successfully sent a message after being locked`);
 		});
 
 		// This test relies on Chat#parse returning `false` when permission is denied.
