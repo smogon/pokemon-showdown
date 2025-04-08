@@ -1248,14 +1248,6 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 			searches.push(orGroup);
 		}
 	}
-	if (
-		searches.length === 0 && singleTypeSearch === null &&
-		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null && restrictedSearch === null && sort === null
-	) {
-		return {
-			error: "No search parameters were found. Try '/help dexsearch' for more information on this command.",
-		};
-	}
 
 	// Prepare move validator and pokemonSource outside the hot loop
 	// but don't prepare them at all if there are no moves to check...
@@ -2009,11 +2001,6 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 		if (!orGroup.skip) {
 			searches.push(orGroup);
 		}
-	}
-	if (!searches.length && !targetMons.length && !sort) {
-		return {
-			error: "No search parameters were found. Try '/help movesearch' for more information on this command.",
-		};
 	}
 
 	// Since we assume we have no target mons at first
