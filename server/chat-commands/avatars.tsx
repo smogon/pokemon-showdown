@@ -682,19 +682,21 @@ export const commands: Chat.ChatCommands = {
 
 		if (!avatar) {
 			if (silent) return false;
-			this.errorReply("Unrecognized avatar - make sure you're on the right account?");
-			return false;
+			throw new Chat.ErrorMessage("Unrecognized avatar - make sure you're on the right account?");
 		}
 
-		user.avatar = avatar;
-		if (user.id in customAvatars && !avatar.endsWith('xmas')) {
-			Avatars.setDefault(user.id, avatar);
+		this.runBroadcast();
+		if (!this.broadcasting) {
+			user.avatar = avatar;
+			if (user.id in customAvatars && !avatar.endsWith('xmas')) {
+				Avatars.setDefault(user.id, avatar);
+			}
 		}
-		if (!silent) {
-			this.sendReply(
-				`${this.tr`Avatar changed to:`}\n` +
-				Chat.html`|raw|${Avatars.img(avatar)}`
-			);
+		if (!silent || this.broadcasting) {
+			if (!this.broadcasting) {
+				this.sendReply(`${this.tr`Avatar changed to:`}`);
+			}
+			this.sendReply(Chat.html`|raw|${Avatars.img(avatar)}`);
 			if (OFFICIAL_AVATARS_BELIOT419.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.deviantart.com/beliot419">Beliot419</a>)`);
 			}
@@ -727,7 +729,10 @@ export const commands: Chat.ChatCommands = {
 			}
 		}
 	},
-	avatarhelp: [`/avatar [avatar name or number] - Change your trainer sprite.`],
+	avatarhelp: [
+		`/avatar [avatar name or number] - Change your trainer sprite.`,
+		`!avatar [avatar name or number] - Show the specified trainer sprite and credits. Requires: + % @ # ~`,
+	],
 
 	avatars(target, room, user) {
 		this.runBroadcast();
@@ -923,7 +928,7 @@ export const commands: Chat.ChatCommands = {
 			return this.parse(`/help moveavatars`);
 		}
 		if (!customAvatars[from]?.allowed.length) {
-			return this.errorReply(`That user has no avatars.`);
+			throw new Chat.ErrorMessage(`That user has no avatars.`);
 		}
 		const existing = customAvatars[to]?.allowed.filter(Boolean);
 		customAvatars[to] = { ...customAvatars[from] };

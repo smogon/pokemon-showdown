@@ -59,6 +59,7 @@ class TestTools {
 			options.endlessBattleClause ? '^Endless Battle Clause' : '^!Endless Battle Clause',
 			options.inverseMod && 'Inverse Mod',
 			options.overflowStatMod && 'Overflow Stat Mod',
+			options.customRules,
 		].filter(Boolean);
 		const customRulesID = customRules.length ? `@@@${customRules.join(',')}` : ``;
 

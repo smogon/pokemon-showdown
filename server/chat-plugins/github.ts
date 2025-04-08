@@ -177,13 +177,13 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('mute', null, room);
 			const [username, reason] = Utils.splitFirst(target, ',').map(u => u.trim());
 			if (!toID(target)) return this.parse(`/help github`);
-			if (!toID(username)) return this.errorReply("Provide a username.");
+			if (!toID(username)) throw new Chat.ErrorMessage("Provide a username.");
 			if (room.auth.has(toID(GitHub.getUsername(username)))) {
-				return this.errorReply("That user is Dev roomauth. If you need to do this, demote them and try again.");
+				throw new Chat.ErrorMessage("That user is Dev roomauth. If you need to do this, demote them and try again.");
 			}
 			if (!gitData.bans) gitData.bans = {};
 			if (gitData.bans[toID(username)]) {
-				return this.errorReply(`${username} is already gitbanned.`);
+				throw new Chat.ErrorMessage(`${username} is already gitbanned.`);
 			}
 			gitData.bans[toID(username)] = reason || " "; // to ensure it's truthy
 			GitHub.save();
@@ -195,7 +195,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('mute', null, room);
 			target = toID(target);
 			if (!target) return this.parse('/help github');
-			if (!gitData.bans?.[target]) return this.errorReply("That user is not gitbanned.");
+			if (!gitData.bans?.[target]) throw new Chat.ErrorMessage("That user is not gitbanned.");
 			delete gitData.bans[target];
 			if (!Object.keys(gitData.bans).length) delete gitData.bans;
 			GitHub.save();
@@ -226,7 +226,7 @@ export const commands: Chat.ChatCommands = {
 			target = toID(target);
 			if (!target) return this.parse(`/help github`);
 			const name = gitData.usernames?.[target];
-			if (!name) return this.errorReply(`${target} is not a GitHub username on our list.`);
+			if (!name) throw new Chat.ErrorMessage(`${target} is not a GitHub username on our list.`);
 			delete gitData.usernames?.[target];
 			if (!Object.keys(gitData.usernames || {}).length) delete gitData.usernames;
 			GitHub.save();
@@ -251,9 +251,9 @@ export const pages: Chat.PageTable = {
 	github: {
 		bans(query, user) {
 			const room = Rooms.get('development');
-			if (!room) return this.errorReply("No Development room found.");
+			if (!room) throw new Chat.ErrorMessage("No Development room found.");
 			this.checkCan('mute', null, room);
-			if (!gitData.bans) return this.errorReply("There are no gitbans at this time.");
+			if (!gitData.bans) throw new Chat.ErrorMessage("There are no gitbans at this time.");
 			let buf = `<div class="pad"><h2>Current Gitbans:</h2><hr /><ol>`;
 			for (const [username, reason] of Object.entries(gitData.bans)) {
 				buf += `<li><strong>${username}</strong> - ${reason.trim() || '(No reason found)'}</li>`;
@@ -262,7 +262,7 @@ export const pages: Chat.PageTable = {
 			return buf;
 		},
 		names() {
-			if (!gitData.usernames) return this.errorReply("There are no GitHub usernames in the list.");
+			if (!gitData.usernames) throw new Chat.ErrorMessage("There are no GitHub usernames in the list.");
 			let buf = `<div class="pad"><h2>Current GitHub username mappings:</h2><hr /><ol>`;
 			for (const [username, name] of Object.entries(gitData.usernames)) {
 				buf += `<li><strong>${username}</strong> - ${name}</li>`;

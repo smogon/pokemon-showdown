@@ -89,7 +89,7 @@ export const pages: Chat.PageTable = {
 	async cgtwinrates(query, user) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		if (!cgtDatabase) {
-			return this.errorReply(`CGT win rates are not being tracked due to the server's SQL settings.`);
+			throw new Chat.ErrorMessage(`CGT win rates are not being tracked due to the server's SQL settings.`);
 		}
 		query = query.join('-').split('--');
 		const mode = query.shift();
@@ -97,7 +97,7 @@ export const pages: Chat.PageTable = {
 			let buf = `<div class="pad"><h2>Winrates for [Gen 9] Computer Generated Teams</h2>`;
 			const sorter = toID(query.shift() || 'alphabetical');
 			if (!['alphabetical', 'level'].includes(sorter)) {
-				return this.errorReply(`Invalid sorting method. Must be either 'alphabetical' or 'level'.`);
+				throw new Chat.ErrorMessage(`Invalid sorting method. Must be either 'alphabetical' or 'level'.`);
 			}
 			const otherSort = sorter === 'alphabetical' ? 'Level' : 'Alphabetical';
 			buf += `<a class="button" target="replace" href="/view-cgtwinrates-current--${toID(otherSort)}">`;
@@ -129,7 +129,7 @@ export const pages: Chat.PageTable = {
 			let speciesID = query.shift();
 			let buf;
 			if (speciesID) {
-				speciesID = getLevelSpeciesID({ species: query.shift() || '' } as PokemonSet);
+				speciesID = getLevelSpeciesID({ species: speciesID || '' } as PokemonSet);
 				const species = Dex.species.get(speciesID);
 				if (!species.exists ||
 					species.isNonstandard || species.isNonstandard === 'Unobtainable' ||
@@ -148,14 +148,13 @@ export const pages: Chat.PageTable = {
 			this.title = `[History] [Gen 9] Computer Generated Teams`;
 
 			const MAX_LINES = 100;
-			let lines = 0;
 			buf += `<div class="ladder pad"><table><tr><th>Pokemon</th><th>Level</th><th>Timestamp</th>`;
-			for (const entry of history) {
+			for (let i = history.length - 1; history.length - i <= MAX_LINES; i--) {
+				const entry = history[i];
 				if (speciesID && entry.species_id !== speciesID) continue;
 				buf += `<tr><td>${entry.species_id}</td><td>${entry.level}</td>`;
 				const timestamp = new Date(entry.timestamp);
 				buf += `<td>${timestamp.toLocaleDateString()}, ${timestamp.toLocaleTimeString()}</td></tr>`;
-				if (++lines >= MAX_LINES) break;
 			}
 			buf += `</table></div></div>`;
 			return buf;

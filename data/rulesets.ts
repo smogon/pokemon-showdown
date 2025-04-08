@@ -8,13 +8,21 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	// Rulesets
 	///////////////////////////////////////////////////////////////////
 
+	standardag: {
+		effectType: 'ValidatorRule',
+		name: 'Standard AG',
+		desc: "The minimal ruleset for Anything Goes",
+		ruleset: [
+			'Obtainable', 'Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
+		],
+	},
 	standard: {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
 		desc: "The standard ruleset for all offical Smogon singles tiers (Ubers, OU, etc.)",
 		ruleset: [
-			'Obtainable', 'Team Preview', 'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
-			'Min Source Gen = 9',
+			'Standard AG',
+			'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
 		],
 	},
 	standardnext: {
@@ -68,8 +76,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Standard Doubles',
 		desc: "The standard ruleset for all official Smogon doubles tiers",
 		ruleset: [
-			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
-			'Min Source Gen = 9',
+			'Standard AG',
+			'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Gravity Sleep Clause',
 		],
 	},
 	standardoms: {
@@ -77,8 +85,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Standard OMs',
 		desc: "The standard ruleset for all Smogon OMs (Almost Any Ability, STABmons, etc.)",
 		ruleset: [
-			'Obtainable', 'Team Preview', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod', 'Overflow Stat Mod',
-			'Min Source Gen = 9',
+			'Standard AG',
+			'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Moves Clause', 'Overflow Stat Mod',
 		],
 	},
 	standardnatdex: {
@@ -86,7 +94,16 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Standard NatDex',
 		desc: "The standard ruleset for all National Dex tiers",
 		ruleset: [
-			'Obtainable', '+Unobtainable', '+Past', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Nickname Clause', 'HP Percentage Mod', 'Cancel Mod', 'Endless Battle Clause',
+			'Standard AG', 'NatDex Mod',
+			'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Clause', 'Sleep Clause Mod',
+		],
+	},
+	natdexmod: {
+		effectType: 'ValidatorRule',
+		name: 'NatDex Mod',
+		desc: "Mechanics for National Dex formats",
+		ruleset: [
+			'+Unobtainable', '+Past', 'Sketch Post-Gen 7 Moves',
 		],
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
@@ -1174,9 +1191,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onValidateTeam(team) {
 			const boostingEffects = [
 				'absorbbulb', 'acidarmor', 'acupressure', 'agility', 'amnesia', 'ancientpower', 'angerpoint', 'apicotberry', 'autotomize',
-				'barrier', 'bellydrum', 'bulkup', 'calmmind', 'cellbattery', 'chargebeam', 'coil', 'cosmicpower', 'cottonguard', 'curse',
-				'defendorder', 'defiant', 'download', 'dragondance', 'fierydance', 'flamecharge', 'focusenergy', 'ganlonberry', 'growth',
-				'harden', 'honeclaws', 'howl', 'irondefense', 'justified', 'liechiberry', 'lightningrod', 'meditate', 'metalclaw',
+				'barrier', 'bellydrum', 'bulkup', 'calmmind', 'cellbattery', 'charge', 'chargebeam', 'coil', 'cosmicpower', 'cottonguard', 'curse',
+				'defensecurl', 'defendorder', 'defiant', 'download', 'dragondance', 'fierydance', 'flamecharge', 'focusenergy', 'ganlonberry', 'growth',
+				'harden', 'honeclaws', 'howl', 'irondefense', 'justified', 'lansatberry', 'liechiberry', 'lightningrod', 'meditate', 'metalclaw',
 				'meteormash', 'motordrive', 'moxie', 'nastyplot', 'ominouswind', 'petayaberry', 'quiverdance', 'rage', 'rattled',
 				'rockpolish', 'salacberry', 'sapsipper', 'sharpen', 'shellsmash', 'shiftgear', 'silverwind', 'skullbash', 'speedboost',
 				'starfberry', 'steadfast', 'steelwing', 'stockpile', 'stormdrain', 'swordsdance', 'tailglow', 'weakarmor', 'withdraw',
@@ -1564,13 +1581,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Allows Pok&eacute;mon to use any move that they or a previous evolution/out-of-battle forme share a type with",
 		ruleset: ['OM Unobtainable Moves'],
 		checkCanLearn(move, species, setSources, set) {
-			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
+			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('natdexmod');
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
 				const speciesTypes: string[] = [];
 				const moveTypes: string[] = [];
 				// BDSP can't import Pokemon from Home, so it shouldn't grant moves from archaic species types
 				const minObtainableSpeciesGen = this.dex.currentMod === 'gen8bdsp' ||
-					(this.dex.gen === 9 && !this.ruleTable.has('standardnatdex')) ?
+					(this.dex.gen === 9 && !this.ruleTable.has('natdexmod')) ?
 					this.dex.gen : species.gen;
 				for (let i = this.dex.gen; i >= minObtainableSpeciesGen && i >= move.gen; i--) {
 					const dex = this.dex.forGen(i);
@@ -1615,7 +1632,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Allows Pok&eacute;mon to use any move that shares the same first letter as their name or a previous evolution's name.",
 		ruleset: ['OM Unobtainable Moves'],
 		checkCanLearn(move, species, setSources, set) {
-			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('standardnatdex');
+			const nonstandard = move.isNonstandard === 'Past' && !this.ruleTable.has('natdexmod');
 			if (!nonstandard && !move.isZ && !move.isMax && !this.ruleTable.isRestricted(`move:${move.id}`)) {
 				const letters = [species.id.charAt(0)];
 				let prevo = species.prevo;
@@ -2100,6 +2117,19 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		},
 		onTrapPokemon(pokemon) {
 			pokemon.trapped = true;
+		},
+	},
+	guaranteedsecondarymod: {
+		effectType: 'Rule',
+		name: 'Guaranteed Secondary Mod',
+		desc: 'All moves\' secondary effect chances are set to 100% (Tri Attack and Dire Claw set a random status; Poison Touch is not a real secondary and remains at 30%).',
+		onModifyMove(move) {
+			if (move.secondaries) {
+				this.debug('Freeze test: Guaranteeing secondary');
+				for (const secondary of move.secondaries) {
+					secondary.chance = 100;
+				}
+			}
 		},
 	},
 	chimera1v1rule: {
@@ -2613,12 +2643,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: "Hackmons Forme Legality",
 		desc: `Enforces proper forme legality for hackmons-based metagames.`,
-		banlist: ['CAP', 'LGPE', 'Future'],
+		banlist: ['CAP', 'Future'],
 		onChangeSet(set, format, setHas, teamHas) {
 			let species = this.dex.species.get(set.species);
 			if (
 				(species.natDexTier === 'Illegal' || species.forme.includes('Totem')) &&
-				!['Floette-Eternal', 'Greninja-Ash', 'Xerneas-Neutral'].includes(species.name) &&
+				!['Eevee-Starter', 'Floette-Eternal', 'Greninja-Ash', 'Pikachu-Starter', 'Xerneas-Neutral'].includes(species.name) &&
 				!this.ruleTable.has(`+pokemon:${species.id}`)
 			) {
 				return [`${species.name} is illegal.`];
@@ -2892,5 +2922,25 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: "Mix and Mega Old Aggronite",
 		desc: `Causes Aggronite to no longer give the Steel type in Mix and Mega.`,
 		// implemented in mods/mixandmega/scripts.ts
+	},
+	badnboostedmod: {
+		effectType: 'Rule',
+		name: "Bad 'n Boosted Mod",
+		desc: "All of a Pok&eacute;mon's base stats below 70 are doubled.",
+		onBegin() {
+			this.add('rule', 'Bad \'n Boosted Mod: All of a Pokemon\'s base stats below 70 are doubled.');
+		},
+		onModifySpeciesPriority: 2,
+		onModifySpecies(species) {
+			const newSpecies = this.dex.deepClone(species);
+			newSpecies.bst = 0;
+			for (const stat in newSpecies.baseStats) {
+				if (newSpecies.baseStats[stat] <= 70) {
+					newSpecies.baseStats[stat] = this.clampIntRange(newSpecies.baseStats[stat] * 2, 1, 255);
+				}
+				newSpecies.bst += newSpecies.baseStats[stat];
+			}
+			return newSpecies;
+		},
 	},
 };
