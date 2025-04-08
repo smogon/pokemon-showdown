@@ -144,7 +144,7 @@ represented by a space), and the rest of the string being their username.
 
 `|uhtml|NAME|HTML`
 
-> We recieved an HTML message (NAME) that can change what it's displaying,
+> We received an HTML message (NAME) that can change what it's displaying,
 > this is used in things like our Polls system, for example.
 
 `|uhtmlchange|NAME|HTML`
@@ -305,7 +305,7 @@ represented by a space), and the rest of the string being their username.
 `|tournament|update|JSON`
 
 > `JSON` is a JSON object representing the changes in the tournament
-> since the last update you recieved or the start of the tournament.
+> since the last update you received or the start of the tournament.
 > These include:
 >
     format: the tournament's custom name or the format being used
