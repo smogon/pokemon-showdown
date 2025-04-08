@@ -458,7 +458,7 @@ export const commands: Chat.ChatCommands = {
 			const teamData = await TeamsHandler.get(teamid);
 			if (!teamData) return this.popupReply(`Team not found.`);
 			if (teamData.ownerid !== user.id && !user.can('rangeban')) {
-				return this.errorReply("You cannot delete teams you do not own.");
+				throw new Chat.ErrorMessage("You cannot delete teams you do not own.");
 			}
 			await TeamsHandler.delete(teamid);
 			this.popupReply(`Team ${teamid} deleted.`);
@@ -598,11 +598,11 @@ export const pages: Chat.PageTable = {
 			const team = await TeamsHandler.get(teamid);
 			if (!team) {
 				this.title = `[Invalid Team]`;
-				return this.errorReply(`No team with the ID ${teamid} was found.`);
+				throw new Chat.ErrorMessage(`No team with the ID ${teamid} was found.`);
 			}
 			if (team?.private && user.id !== team.ownerid && password !== team.private) {
 				this.title = `[Private Team]`;
-				return this.errorReply(`That team is private.`);
+				throw new Chat.ErrorMessage(`That team is private.`);
 			}
 			this.title = `[Team] ${team.teamid}`;
 			if (user.id !== team.ownerid && team.views >= 0) {
@@ -639,12 +639,12 @@ export const pages: Chat.PageTable = {
 			TeamsHandler.validateAccess(connection);
 			const teamID = toID(query.shift() || "");
 			if (!teamID.length) {
-				return this.errorReply(`Invalid team ID.`);
+				throw new Chat.ErrorMessage(`Invalid team ID.`);
 			}
 			this.title = `[Edit Team] ${teamID}`;
 			const data = await TeamsHandler.get(teamID);
 			if (!data) {
-				return this.errorReply(`Team ${teamID} not found.`);
+				throw new Chat.ErrorMessage(`Team ${teamID} not found.`);
 			}
 			let buf = `<div class="ladder pad"><h2>Edit team ${teamID}</h2>${refresh(this)}<hr />`;
 			// let [teamName, formatid, rawPrivacy, rawTeam] = Utils.splitFirst(target, ',', 4);
@@ -702,15 +702,15 @@ export const pages: Chat.PageTable = {
 			const [rawOwner, rawFormat, rawPokemon, rawMoves, rawAbilities, rawGen] = query;
 			const owner = toID(rawOwner);
 			if (owner.length > 18) {
-				return this.errorReply(`Invalid owner name. Names must be under 18 characters long.`);
+				throw new Chat.ErrorMessage(`Invalid owner name. Names must be under 18 characters long.`);
 			}
 			const format = toID(rawFormat);
 			if (format && !Dex.formats.get(format).exists) {
-				return this.errorReply(`Format ${format} not found.`);
+				throw new Chat.ErrorMessage(`Format ${format} not found.`);
 			}
 			const gen = Number(rawGen);
 			if (rawGen && (isNaN(gen) || (gen < 1 || gen > Dex.gen))) {
-				return this.errorReply(`Invalid generation: '${rawGen}'`);
+				throw new Chat.ErrorMessage(`Invalid generation: '${rawGen}'`);
 			}
 
 			const pokemon = rawPokemon?.split(',').map(toID).filter(Boolean);
@@ -764,7 +764,7 @@ export const pages: Chat.PageTable = {
 				queryStr += ` ORDER BY date DESC`;
 				break;
 			default:
-				return this.errorReply(`Invalid sort term '${sorter}'. Must be either 'views' or 'latest'.`);
+				throw new Chat.ErrorMessage(`Invalid sort term '${sorter}'. Must be either 'views' or 'latest'.`);
 			}
 			queryStr += ` LIMIT ${count}`;
 			let buf = `<div class="pad"><h2>Browse ${name} teams</h2>`;

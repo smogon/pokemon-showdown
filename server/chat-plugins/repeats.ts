@@ -160,7 +160,7 @@ export const commands: Chat.ChatCommands = {
 		const isHTML = cmd.includes('html');
 		const isByMessages = cmd.includes('bymessages');
 		room = this.requireRoom();
-		if (room.settings.isPersonal) return this.errorReply(`Personal rooms do not support repeated messages.`);
+		if (room.settings.isPersonal) throw new Chat.ErrorMessage(`Personal rooms do not support repeated messages.`);
 		this.checkCan(isHTML ? 'addhtml' : 'mute', null, room);
 		const [intervalString, name, ...messageArray] = target.split(',');
 		const id = toID(name);
@@ -211,7 +211,7 @@ export const commands: Chat.ChatCommands = {
 	repeatfaq(target, room, user, connection, cmd) {
 		room = this.requireRoom();
 		this.checkCan('mute', null, room);
-		if (room.settings.isPersonal) return this.errorReply(`Personal rooms do not support repeated messages.`);
+		if (room.settings.isPersonal) throw new Chat.ErrorMessage(`Personal rooms do not support repeated messages.`);
 		const isByMessages = cmd.includes('bymessages');
 
 		let [intervalString, topic] = target.split(',');
@@ -257,11 +257,11 @@ export const commands: Chat.ChatCommands = {
 		}
 		this.checkCan('mute', null, room);
 		if (!room.settings.repeats?.length) {
-			return this.errorReply(this.tr`There are no repeated phrases in this room.`);
+			throw new Chat.ErrorMessage(this.tr`There are no repeated phrases in this room.`);
 		}
 
 		if (!Repeats.hasRepeat(room, id)) {
-			return this.errorReply(this.tr`The phrase labeled with "${id}" is not being repeated in this room.`);
+			throw new Chat.ErrorMessage(this.tr`The phrase labeled with "${id}" is not being repeated in this room.`);
 		}
 
 		Repeats.removeRepeat(room, id);
@@ -275,7 +275,7 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		this.checkCan('declare', null, room);
 		if (!room.settings.repeats?.length) {
-			return this.errorReply(this.tr`There are no repeated phrases in this room.`);
+			throw new Chat.ErrorMessage(this.tr`There are no repeated phrases in this room.`);
 		}
 
 		for (const { id } of room.settings.repeats) {
@@ -289,7 +289,7 @@ export const commands: Chat.ChatCommands = {
 	repeats: 'viewrepeats',
 	viewrepeats(target, room, user) {
 		const roomid = toID(target) || room?.roomid;
-		if (!roomid) return this.errorReply(this.tr`You must specify a room when using this command in PMs.`);
+		if (!roomid) throw new Chat.ErrorMessage(this.tr`You must specify a room when using this command in PMs.`);
 		this.parse(`/j view-repeats-${roomid}`);
 	},
 };

@@ -502,14 +502,12 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 		this.checkCan('mute', null, room);
 
 		if (handler.voting) {
-			return this.errorReply(
-				`The nomination for the ${handler.name} of the ${handler.timeLabel} nomination is already in progress.`
-			);
+			throw new Chat.ErrorMessage(`The nomination for the ${handler.name} of the ${handler.timeLabel} nomination is already in progress.`);
 		}
 		handler.startVote();
 
@@ -523,15 +521,15 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 		this.checkCan('mute', null, room);
 
 		if (!handler.voting) {
-			return this.errorReply(`There is no ${handler.name} of the ${handler.timeLabel} nomination in progress.`);
+			throw new Chat.ErrorMessage(`There is no ${handler.name} of the ${handler.timeLabel} nomination in progress.`);
 		}
 		if (!handler.nominations.size) {
-			return this.errorReply(`Can't select the ${handler.name} of the ${handler.timeLabel} without nominations.`);
+			throw new Chat.ErrorMessage(`Can't select the ${handler.name} of the ${handler.timeLabel} without nominations.`);
 		}
 		handler.rollWinner();
 
@@ -548,8 +546,8 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 
 		if (!toNominationId(target).length || target.length > 75) {
 			return this.sendReply(`'${target}' is not a valid ${handler.name.toLowerCase()} name.`);
@@ -564,8 +562,8 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 
 		if (this.broadcasting) {
 			selectHandler(this.message).display();
@@ -580,12 +578,12 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 		this.checkCan('mute', null, room);
 
 		const userid = toID(target);
-		if (!userid) return this.errorReply(`'${target}' is not a valid username.`);
+		if (!userid) throw new Chat.ErrorMessage(`'${target}' is not a valid username.`);
 
 		if (handler.removeNomination(userid)) {
 			this.privateModAction(`${user.name} removed ${target}'s nomination for the ${handler.name} of the ${handler.timeLabel}.`);
@@ -622,8 +620,8 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 		this.checkCan('declare', null, room);
 
 		if (!toNominationId(target).length || target.length > 50) {
@@ -643,12 +641,12 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 		this.checkCan('mute', null, room);
 
 		if (!(handler.voting && handler.timer)) {
-			return this.errorReply(`There is no ${handler.name} of the ${handler.timeLabel} nomination to disable the timer for.`);
+			throw new Chat.ErrorMessage(`There is no ${handler.name} of the ${handler.timeLabel} nomination to disable the timer for.`);
 		}
 		clearTimeout(handler.timer);
 
@@ -663,8 +661,8 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 		this.checkCan('mute', null, room);
 
 		const params = target.split(target.includes('|') ? '|' : ',').map(param => param.trim());
@@ -673,13 +671,13 @@ export const otdCommands: Chat.ChatCommands = {
 
 		for (const param of params) {
 			let [key, ...values] = param.split(':');
-			if (!key || !values.length) return this.errorReply(`Syntax error in '${param}'`);
+			if (!key || !values.length) throw new Chat.ErrorMessage(`Syntax error in '${param}'`);
 
 			key = key.trim();
 			const value = values.join(':').trim();
 
 			if (!handler.keys.includes(key)) {
-				return this.errorReply(`Invalid key: '${key}'. Valid keys: ${handler.keys.join(', ')}`);
+				throw new Chat.ErrorMessage(`Invalid key: '${key}'. Valid keys: ${handler.keys.join(', ')}`);
 			}
 
 			switch (key) {
@@ -690,38 +688,38 @@ export const otdCommands: Chat.ChatCommands = {
 			case 'book':
 			case 'author':
 			case 'athlete':
-				if (!toNominationId(value) || value.length > 50) return this.errorReply(`Please enter a valid ${key} name.`);
+				if (!toNominationId(value) || value.length > 50) throw new Chat.ErrorMessage(`Please enter a valid ${key} name.`);
 				break;
 			case 'quote':
 			case 'tagline':
 			case 'match':
 			case 'event':
 			case 'videogame':
-				if (!value.length || value.length > 150) return this.errorReply(`Please enter a valid ${key}.`);
+				if (!value.length || value.length > 150) throw new Chat.ErrorMessage(`Please enter a valid ${key}.`);
 				break;
 			case 'sport':
 			case 'team':
 			case 'song':
 			case 'country':
-				if (!value.length || value.length > 50) return this.errorReply(`Please enter a valid ${key} name.`);
+				if (!value.length || value.length > 50) throw new Chat.ErrorMessage(`Please enter a valid ${key} name.`);
 				break;
 			case 'link':
 			case 'image':
 				if (!/https?:\/\//.test(value)) {
-					return this.errorReply(`Please enter a valid URL for the ${key} (starting with http:// or https://)`);
+					throw new Chat.ErrorMessage(`Please enter a valid URL for the ${key} (starting with http:// or https://)`);
 				}
-				if (value.length > 200) return this.errorReply("URL too long.");
+				if (value.length > 200) throw new Chat.ErrorMessage("URL too long.");
 				break;
 			case 'age':
 				const num = parseInt(value);
 				// let's assume someone isn't over 100 years old? Maybe we should for the memes
 				// but i doubt there's any legit athlete over 100.
-				if (isNaN(num) || num < 1 || num > 100) return this.errorReply('Please enter a valid number as an age');
+				if (isNaN(num) || num < 1 || num > 100) throw new Chat.ErrorMessage('Please enter a valid number as an age');
 				break;
 			default:
 				// another custom key w/o validation
 				if (!toNominationId(value)) {
-					return this.errorReply(`No value provided for key ${key}.`);
+					throw new Chat.ErrorMessage(`No value provided for key ${key}.`);
 				}
 				break;
 			}
@@ -772,8 +770,8 @@ export const otdCommands: Chat.ChatCommands = {
 
 		const handler = selectHandler(this.message);
 
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 
 		return this.parse(`/join view-${handler.id}`);
 	},
@@ -784,12 +782,12 @@ export const otdCommands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return false;
 
 		const handler = selectHandler(this.message);
-		if (!handler.room) return this.errorReply(`The room for this -otd doesn't exist.`);
+		if (!handler.room) throw new Chat.ErrorMessage(`The room for this -otd doesn't exist.`);
 
-		if (room !== handler.room) return this.errorReply(`This command can only be used in ${handler.room.title}.`);
+		if (room !== handler.room) throw new Chat.ErrorMessage(`This command can only be used in ${handler.room.title}.`);
 
 		const text = await handler.generateWinnerDisplay();
-		if (!text) return this.errorReply("There is no winner yet.");
+		if (!text) throw new Chat.ErrorMessage("There is no winner yet.");
 		this.sendReplyBox(text);
 	},
 };
@@ -800,11 +798,11 @@ export const commands: Chat.ChatCommands = {
 		create(target, room, user) {
 			room = this.requireRoom();
 			if (room.settings.isPrivate) {
-				return this.errorReply(`This command is only available in public rooms`);
+				throw new Chat.ErrorMessage(`This command is only available in public rooms`);
 			}
 			const count = [...otds.values()].filter(otd => otd.room.roomid === room.roomid).length;
 			if (count > 3) {
-				return this.errorReply(`This room already has 3+ -otd's.`);
+				throw new Chat.ErrorMessage(`This room already has 3+ -otd's.`);
 			}
 			this.checkCan('rangeban');
 
@@ -813,17 +811,19 @@ export const commands: Chat.ChatCommands = {
 			}
 			const [title, time, ...keyLabels] = target.split(',').map(i => i.trim());
 			if (!toID(title)) {
-				return this.errorReply(`Invalid title.`);
+				throw new Chat.ErrorMessage(`Invalid title.`);
 			}
 			const timeLabel = toID(time);
 			if (!['week', 'day'].includes(timeLabel)) {
-				return this.errorReply("Invalid time label - use 'week' or 'month'");
+				throw new Chat.ErrorMessage("Invalid time label - use 'week' or 'month'");
 			}
 			const id = `${title.charAt(0)}ot${timeLabel.charAt(0)}`;
 			const existing = otds.get(id);
 			if (existing) {
-				this.errorReply(`That -OTD already exists (${existing.name} of the ${existing.timeLabel}, in ${existing.room.title})`);
-				return this.errorReply(`Try picking a new title.`);
+				throw new Chat.ErrorMessage([
+					`That -OTD already exists (${existing.name} of the ${existing.timeLabel}, in ${existing.room.title})`,
+					`Try picking a new title.`,
+				]);
 			}
 			const titleIdx = keyLabels.map(toID).indexOf(toID(title));
 			if (titleIdx > -1) {
@@ -833,16 +833,16 @@ export const commands: Chat.ChatCommands = {
 
 			const filteredKeys = keyLabels.map(toNominationId).filter(Boolean);
 			if (!filteredKeys.length) {
-				return this.errorReply(`No valid key labels given.`);
+				throw new Chat.ErrorMessage(`No valid key labels given.`);
 			}
 			if (new Set(filteredKeys).size !== keyLabels.length) {
-				return this.errorReply(`Invalid keys in set - do not use duplicate key labels.`);
+				throw new Chat.ErrorMessage(`Invalid keys in set - do not use duplicate key labels.`);
 			}
 			if (filteredKeys.length < 3) {
-				return this.errorReply(`Specify at least 3 key labels.`);
+				throw new Chat.ErrorMessage(`Specify at least 3 key labels.`);
 			}
 			if (filteredKeys.some(k => k.length < 3 || k.length > 50)) {
-				return this.errorReply(`All labels must be more than 3 characters and less than 50 characters long.`);
+				throw new Chat.ErrorMessage(`All labels must be more than 3 characters and less than 50 characters long.`);
 			}
 			const otd = OtdHandler.create(room, {
 				keyLabels, keys: filteredKeys, title, timeLabel, roomid: room.roomid,
@@ -860,11 +860,11 @@ export const commands: Chat.ChatCommands = {
 			}
 			const otd = otds.get(otdId);
 			if (!otd) {
-				return this.errorReply(`OTD ${otd} not found.`);
+				throw new Chat.ErrorMessage(`OTD ${otd} not found.`);
 			}
 			const targetRoom = Rooms.get(roomid);
 			if (!targetRoom) {
-				return this.errorReply(`Room ${roomid} not found.`);
+				throw new Chat.ErrorMessage(`Room ${roomid} not found.`);
 			}
 			const oldRoom = otd.settings.roomid.slice();
 			otd.settings.roomid = targetRoom.roomid;
@@ -882,7 +882,7 @@ export const commands: Chat.ChatCommands = {
 				return this.parse(`/help otd`);
 			}
 			const otd = otds.get(target);
-			if (!otd) return this.errorReply(`OTD ${target} not found.`);
+			if (!otd) throw new Chat.ErrorMessage(`OTD ${target} not found.`);
 			otd.destroy();
 			this.globalModlog(`OTD DELETE`, null, target);
 			this.privateGlobalModAction(`${user.name} deleted the OTD ${otd.name} of the ${otd.timeLabel}`);

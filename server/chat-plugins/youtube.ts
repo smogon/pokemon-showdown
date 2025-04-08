@@ -494,7 +494,7 @@ export function destroy() {
 export const commands: Chat.ChatCommands = {
 	async randchannel(target, room, user) {
 		room = this.requireRoom('internetexplorers' as RoomID);
-		if (Object.keys(YouTube.data.channels).length < 1) return this.errorReply(`No channels in the database.`);
+		if (Object.keys(YouTube.data.channels).length < 1) throw new Chat.ErrorMessage(`No channels in the database.`);
 		target = toID(target);
 		this.runBroadcast();
 		const data = await YouTube.randChannel(target);
@@ -508,7 +508,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom('internetexplorers' as RoomID);
 			this.checkCan('mute', null, room);
 			const [id, name] = target.split(',').map(t => t.trim());
-			if (!id) return this.errorReply('Specify a channel ID.');
+			if (!id) throw new Chat.ErrorMessage('Specify a channel ID.');
 			await YouTube.getChannelData(id, name);
 			this.modlog('ADDCHANNEL', null, `${id} ${name ? `username: ${name}` : ''}`);
 			return this.privateModAction(
@@ -521,7 +521,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom('internetexplorers' as RoomID);
 			this.checkCan('mute', null, room);
 			const id = YouTube.channelSearch(target);
-			if (!id) return this.errorReply(`Channel with ID or name ${target} not found.`);
+			if (!id) throw new Chat.ErrorMessage(`Channel with ID or name ${target} not found.`);
 			delete YouTube.data.channels[id];
 			YouTube.save();
 			this.privateModAction(`${user.name} deleted channel with ID or name ${target}.`);
@@ -532,7 +532,7 @@ export const commands: Chat.ChatCommands = {
 		async channel(target, room, user) {
 			room = this.requireRoom('internetexplorers' as RoomID);
 			const channel = YouTube.channelSearch(target);
-			if (!channel) return this.errorReply(`No channels with ID or name ${target} found.`);
+			if (!channel) throw new Chat.ErrorMessage(`No channels with ID or name ${target} found.`);
 			const data = await YouTube.generateChannelDisplay(channel);
 			this.runBroadcast();
 			return this.sendReply(`|html|${data}`);
@@ -565,7 +565,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('mute', null, room);
 			const [channel, name] = target.split(',');
 			const id = YouTube.channelSearch(channel);
-			if (!id) return this.errorReply(`Channel ${channel} is not in the database.`);
+			if (!id) throw new Chat.ErrorMessage(`Channel ${channel} is not in the database.`);
 			YouTube.data.channels[id].username = name;
 			this.modlog(`UPDATECHANNEL`, null, name);
 			this.privateModAction(`${user.name} updated channel ${id}'s username to ${name}.`);
@@ -576,19 +576,19 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom('internetexplorers' as RoomID);
 			this.checkCan('declare', null, room);
 			if (!target) {
-				if (!YouTube.interval) return this.errorReply(`The YouTube plugin is not currently running an interval.`);
+				if (!YouTube.interval) throw new Chat.ErrorMessage(`The YouTube plugin is not currently running an interval.`);
 				return this.sendReply(`Interval is currently set to ${Chat.toDurationString(YouTube.intervalTime * 60 * 1000)}.`);
 			}
 			if (this.meansNo(target)) {
-				if (!YouTube.interval) return this.errorReply(`The interval is not currently running`);
+				if (!YouTube.interval) throw new Chat.ErrorMessage(`The interval is not currently running`);
 				clearInterval(YouTube.interval);
 				delete YouTube.data.intervalTime;
 				YouTube.save();
 				this.privateModAction(`${user.name} turned off the YouTube interval`);
 				return this.modlog(`YOUTUBE INTERVAL`, null, 'OFF');
 			}
-			if (Object.keys(channelData).length < 1) return this.errorReply(`No channels in the database.`);
-			if (isNaN(parseInt(target))) return this.errorReply(`Specify a number (in minutes) for the interval.`);
+			if (Object.keys(channelData).length < 1) throw new Chat.ErrorMessage(`No channels in the database.`);
+			if (isNaN(parseInt(target))) throw new Chat.ErrorMessage(`Specify a number (in minutes) for the interval.`);
 			YouTube.runInterval(target);
 			YouTube.save();
 			this.privateModAction(`${user.name} set a randchannel interval to ${target} minutes`);
@@ -600,7 +600,7 @@ export const commands: Chat.ChatCommands = {
 			const categoryID = toID(target);
 			if (!categoryID) return this.parse(`/help youtube`);
 			if (YouTube.data.categories.map(toID).includes(categoryID)) {
-				return this.errorReply(`This category is already added. To change it, remove it and re-add it.`);
+				throw new Chat.ErrorMessage(`This category is already added. To change it, remove it and re-add it.`);
 			}
 			YouTube.data.categories.push(target);
 			this.modlog(`YOUTUBE ADDCATEGORY`, null, target);
@@ -614,7 +614,7 @@ export const commands: Chat.ChatCommands = {
 			if (!categoryID) return this.parse(`/help youtube`);
 			const index = YouTube.data.categories.indexOf(target);
 			if (index < 0) {
-				return this.errorReply(`${target} is not a valid category.`);
+				throw new Chat.ErrorMessage(`${target} is not a valid category.`);
 			}
 			for (const id in YouTube.data.channels) {
 				const channel = YouTube.data.channels[id];
@@ -633,10 +633,10 @@ export const commands: Chat.ChatCommands = {
 				return this.parse('/help youtube');
 			}
 			if (!YouTube.data.categories.includes(category)) {
-				return this.errorReply(`Invalid category.`);
+				throw new Chat.ErrorMessage(`Invalid category.`);
 			}
 			const name = YouTube.channelSearch(id);
-			if (!name) return this.errorReply(`Invalid channel.`);
+			if (!name) throw new Chat.ErrorMessage(`Invalid channel.`);
 			const channel = YouTube.data.channels[name];
 			YouTube.data.channels[name].category = category;
 			YouTube.save();
@@ -651,10 +651,10 @@ export const commands: Chat.ChatCommands = {
 				return this.parse('/help youtube');
 			}
 			const name = YouTube.channelSearch(target);
-			if (!name) return this.errorReply(`Invalid channel.`);
+			if (!name) throw new Chat.ErrorMessage(`Invalid channel.`);
 			const channel = YouTube.data.channels[name];
 			const category = channel.category;
-			if (!category) return this.errorReply(`That channel does not have a category.`);
+			if (!category) throw new Chat.ErrorMessage(`That channel does not have a category.`);
 			delete channel.category;
 			YouTube.save();
 			this.modlog(`YOUTUBE DECATEGORIZE`, null, target);
@@ -681,11 +681,11 @@ export const commands: Chat.ChatCommands = {
 		async create(target, room, user) {
 			room = this.requireRoom();
 			if (!GROUPWATCH_ROOMS.includes(room.roomid)) {
-				return this.errorReply(`This room is not allowed to use the groupwatch function.`);
+				throw new Chat.ErrorMessage(`This room is not allowed to use the groupwatch function.`);
 			}
 			this.checkCan('mute', null, room);
 			const [url, title] = Utils.splitFirst(target, ',').map(p => p.trim());
-			if (!url || !title) return this.errorReply(`You must specify a video to watch and a title for the group watch.`);
+			if (!url || !title) throw new Chat.ErrorMessage(`You must specify a video to watch and a title for the group watch.`);
 			const game = await YouTube.createGroupWatch(url, room, title);
 			this.modlog(`YOUTUBE GROUPWATCH`, null, `${url} (${title})`);
 			room.add(
@@ -735,9 +735,9 @@ export const commands: Chat.ChatCommands = {
 	twitch: {
 		async channel(target, room, user) {
 			room = this.requireRoom('internetexplorers' as RoomID);
-			if (!Config.twitchKey) return this.errorReply(`Twitch is not configured`);
+			if (!Config.twitchKey) throw new Chat.ErrorMessage(`Twitch is not configured`);
 			const data = await Twitch.getChannel(target);
-			if (!data) return this.errorReply(`Channel not found`);
+			if (!data) throw new Chat.ErrorMessage(`Channel not found`);
 			const html = Twitch.visualizeChannel(data);
 			this.runBroadcast();
 			return this.sendReplyBox(html);
@@ -761,7 +761,7 @@ export const pages: Chat.PageTable = {
 		switch (toID(type)) {
 		case 'categories':
 			if (!YouTube.data.categories.length) {
-				return this.errorReply(`There are currently no categories in the Youtube channel database.`);
+				throw new Chat.ErrorMessage(`There are currently no categories in the Youtube channel database.`);
 			}
 			const sorted: { [k: string]: string[] } = {};
 			const channels = YouTube.data.channels;
@@ -802,7 +802,7 @@ export const pages: Chat.PageTable = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		const [roomid, num] = query;
 		const watch = GroupWatch.groupwatches.get(`${roomid}-${num}`);
-		if (!watch) return this.errorReply(`Groupwatch ${roomid}-${num} not found.`);
+		if (!watch) throw new Chat.ErrorMessage(`Groupwatch ${roomid}-${num} not found.`);
 		this.title = `[Groupwatch] ${watch.title}`;
 		return watch.display();
 	},

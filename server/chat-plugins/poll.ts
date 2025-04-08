@@ -377,11 +377,11 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			if (!target) return this.parse('/help poll new');
 			target = target.trim();
-			if (target.length > 1024) return this.errorReply(this.tr`Poll too long.`);
-			if (room.battle) return this.errorReply(this.tr`Battles do not support polls.`);
+			if (target.length > 1024) throw new Chat.ErrorMessage(this.tr`Poll too long.`);
+			if (room.battle) throw new Chat.ErrorMessage(this.tr`Battles do not support polls.`);
 
 			const text = this.filter(target);
-			if (target !== text) return this.errorReply(this.tr`You are not allowed to use filtered words in polls.`);
+			if (target !== text) throw new Chat.ErrorMessage(this.tr`You are not allowed to use filtered words in polls.`);
 
 			const supportHTML = cmd.includes('html');
 			const multiPoll = cmd.includes('multi');
@@ -396,7 +396,7 @@ export const commands: Chat.ChatCommands = {
 			} else if (text.includes(',')) {
 				separator = ',';
 			} else {
-				return this.errorReply(this.tr`Not enough arguments for /poll new.`);
+				throw new Chat.ErrorMessage(this.tr`Not enough arguments for /poll new.`);
 			}
 
 			let currentParam = "";
@@ -412,7 +412,7 @@ export const commands: Chat.ChatCommands = {
 						currentParam += nextCharacter;
 						i += 1;
 					} else {
-						return this.errorReply(this.tr`Extra escape character. To end a poll with '\\', enter it as '\\\\'`);
+						throw new Chat.ErrorMessage(this.tr`Extra escape character. To end a poll with '\\', enter it as '\\\\'`);
 					}
 					continue;
 				}
@@ -436,21 +436,21 @@ export const commands: Chat.ChatCommands = {
 			if (supportHTML) this.checkCan('declare', null, room);
 			this.checkChat();
 			if (room.minorActivity && !queue) {
-				return this.errorReply(this.tr`There is already a poll or announcement in progress in this room.`);
+				throw new Chat.ErrorMessage(this.tr`There is already a poll or announcement in progress in this room.`);
 			}
 
-			if (params.length < 3) return this.errorReply(this.tr`Not enough arguments for /poll new.`);
+			if (params.length < 3) throw new Chat.ErrorMessage(this.tr`Not enough arguments for /poll new.`);
 
 			// the function throws on failure, so no handling needs to be done anymore
 			if (supportHTML) params = params.map(parameter => this.checkHTML(parameter));
 
 			const questions = params.splice(1);
 			if (questions.length > MAX_QUESTIONS) {
-				return this.errorReply(this.tr`Too many options for poll (maximum is ${MAX_QUESTIONS}).`);
+				throw new Chat.ErrorMessage(this.tr`Too many options for poll (maximum is ${MAX_QUESTIONS}).`);
 			}
 
 			if (new Set(questions).size !== questions.length) {
-				return this.errorReply(this.tr`There are duplicate options in the poll.`);
+				throw new Chat.ErrorMessage(this.tr`There are duplicate options in the poll.`);
 			}
 
 			if (room.minorActivity) {
@@ -489,13 +489,13 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('mute', null, room);
 			const queue = room.getMinorActivityQueue();
 			if (!queue) {
-				return this.errorReply(this.tr`The queue is already empty.`);
+				throw new Chat.ErrorMessage(this.tr`The queue is already empty.`);
 			}
 			const slot = parseInt(target);
 			if (isNaN(slot)) {
-				return this.errorReply(this.tr`Can't delete poll at slot ${target} - "${target}" is not a number.`);
+				throw new Chat.ErrorMessage(this.tr`Can't delete poll at slot ${target} - "${target}" is not a number.`);
 			}
-			if (!queue[slot - 1]) return this.errorReply(this.tr`There is no poll in queue at slot ${slot}.`);
+			if (!queue[slot - 1]) throw new Chat.ErrorMessage(this.tr`There is no poll in queue at slot ${slot}.`);
 
 			room.clearMinorActivityQueue(slot - 1);
 
@@ -516,7 +516,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('mute', null, room);
 			const queue = room.getMinorActivityQueue();
 			if (!queue) {
-				return this.errorReply(this.tr`The queue is already empty.`);
+				throw new Chat.ErrorMessage(this.tr`The queue is already empty.`);
 			}
 			room.clearMinorActivityQueue();
 			this.modlog('CLEARQUEUE');
@@ -534,7 +534,7 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse('/help poll vote');
 
 			const parsed = parseInt(target);
-			if (isNaN(parsed)) return this.errorReply(this.tr`To vote, specify the number of the option.`);
+			if (isNaN(parsed)) throw new Chat.ErrorMessage(this.tr`To vote, specify the number of the option.`);
 
 			if (!poll.answers.has(parsed)) return this.sendReply(this.tr`Option not in poll.`);
 
@@ -564,12 +564,12 @@ export const commands: Chat.ChatCommands = {
 			if (target) {
 				this.checkCan('minigame', null, room);
 				if (target === 'clear') {
-					if (!poll.endTimer()) return this.errorReply(this.tr("There is no timer to clear."));
+					if (!poll.endTimer()) throw new Chat.ErrorMessage(this.tr("There is no timer to clear."));
 					return this.add(this.tr`The poll timer was turned off.`);
 				}
 				const timeoutMins = parseFloat(target);
 				if (isNaN(timeoutMins) || timeoutMins <= 0 || timeoutMins > 7 * 24 * 60) {
-					return this.errorReply(this.tr`Time should be a number of minutes less than one week.`);
+					throw new Chat.ErrorMessage(this.tr`Time should be a number of minutes less than one week.`);
 				}
 				poll.setTimer({ timeoutMins });
 				room.add(this.tr`The poll timer was turned on: the poll will end in ${Chat.toDurationString(timeoutMins * MINUTES)}.`);
@@ -638,10 +638,10 @@ export const commands: Chat.ChatCommands = {
 				num = 0;
 			}
 			if (isNaN(num)) {
-				return this.errorReply(`Invalid max vote cap: '${target}'`);
+				throw new Chat.ErrorMessage(`Invalid max vote cap: '${target}'`);
 			}
 			if (poll.maxVotes === num) {
-				return this.errorReply(`The poll's vote cap is already set to ${num}.`);
+				throw new Chat.ErrorMessage(`The poll's vote cap is already set to ${num}.`);
 			}
 			poll.maxVotes = num;
 			this.addModAction(`${user.name} set the poll's vote cap to ${num}.`);

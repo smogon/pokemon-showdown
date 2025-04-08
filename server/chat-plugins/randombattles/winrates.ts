@@ -216,11 +216,11 @@ export const commands: Chat.ChatCommands = {
 	async removewinrates(target, room, user) {
 		this.checkCan('rangeban');
 		if (!/^[0-9]{4}-[0-9]{2}$/.test(target) || target === getMonth()) {
-			return this.errorReply(`Invalid month: ${target}`);
+			throw new Chat.ErrorMessage(`Invalid month: ${target}`);
 		}
 		const path = STATS_PATH.replace('{{MON}}', target);
 		if (!(await FS(path).exists())) {
-			return this.errorReply(`No stats for the month ${target}.`);
+			throw new Chat.ErrorMessage(`No stats for the month ${target}.`);
 		}
 		await FS(path).unlinkIfExists();
 		this.globalModlog('REMOVEWINRATES', null, target);
@@ -233,22 +233,22 @@ export const pages: Chat.PageTable = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		query = query.join('-').split('--');
 		const format = toID(query.shift());
-		if (!format) return this.errorReply(`Specify a format to view winrates for.`);
+		if (!format) throw new Chat.ErrorMessage(`Specify a format to view winrates for.`);
 		if (!stats.formats[format]) {
-			return this.errorReply(`That format does not have winrates tracked.`);
+			throw new Chat.ErrorMessage(`That format does not have winrates tracked.`);
 		}
 		checkRollover();
 		const sorter = toID(query.shift() || 'zscore');
 		if (!['zscore', 'raw'].includes(sorter)) {
-			return this.errorReply(`Invalid sorting method. Must be either 'zscore' or 'raw'.`);
+			throw new Chat.ErrorMessage(`Invalid sorting method. Must be either 'zscore' or 'raw'.`);
 		}
 		const month = query.shift() || getMonth();
 		if (!/^[0-9]{4}-[0-9]{2}$/.test(month)) {
-			return this.errorReply(`Invalid month: ${month}`);
+			throw new Chat.ErrorMessage(`Invalid month: ${month}`);
 		}
 		const isOldMonth = month !== getMonth();
 		if (isOldMonth && !(await FS(STATS_PATH.replace('{{MONTH}}', month)).exists())) {
-			return this.errorReply(`There are no winrates for that month.`);
+			throw new Chat.ErrorMessage(`There are no winrates for that month.`);
 		}
 		const formatTitle = Dex.formats.get(format).name;
 		let buf = `<div class="pad"><h2>Winrates for ${formatTitle} (${month})</h2>`;

@@ -286,11 +286,11 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'lines': case 'maxlines':
 				lines = parseInt(value);
-				if (isNaN(lines) || lines < 1) return this.errorReply(`Invalid linecount: '${value}'.`);
+				if (isNaN(lines) || lines < 1) throw new Chat.ErrorMessage(`Invalid linecount: '${value}'.`);
 				break;
 			default:
-				this.errorReply(`Invalid modlog parameter: '${param}'.`);
-				return this.errorReply(`Please specify 'room', 'note', 'user', 'ip', 'action', 'staff', or 'lines'.`);
+				throw new Chat.ErrorMessage([`Invalid modlog parameter: '${param}'.`,
+					`Please specify 'room', 'note', 'user', 'ip', 'action', 'staff', or 'lines'.`]);
 			}
 		}
 
@@ -303,7 +303,7 @@ export const commands: Chat.ChatCommands = {
 				// default to global modlog for staff convenience
 				roomid = 'global';
 			} else {
-				return this.errorReply(`Only global staff may view battle and groupchat modlogs.`);
+				throw new Chat.ErrorMessage(`Only global staff may view battle and groupchat modlogs.`);
 			}
 		}
 
@@ -364,7 +364,7 @@ export const pages: Chat.PageTable = {
 		this.checkCan('lock');
 		const target = toID(query.shift());
 		if (!target || target.length > 18) {
-			return this.errorReply(`Invalid userid - must be between 1 and 18 characters long.`);
+			throw new Chat.ErrorMessage(`Invalid userid - must be between 1 and 18 characters long.`);
 		}
 		this.title = `[Modlog Stats] ${target}`;
 		this.setHTML(`<div class="pad"><strong>Running modlog search...</strong></div>`);
@@ -375,7 +375,7 @@ export const pages: Chat.PageTable = {
 			}], note: [], ip: [], action: [], actionTaker: [],
 		}, 1000);
 		if (!entries?.results.length) {
-			return this.errorReply(`No data found.`);
+			throw new Chat.ErrorMessage(`No data found.`);
 		}
 		const punishmentTable = new Utils.Multiset<string>();
 		const punishmentsByIp = new Map<string, Utils.Multiset<string>>();
