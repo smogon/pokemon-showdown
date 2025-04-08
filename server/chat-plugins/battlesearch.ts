@@ -248,7 +248,7 @@ async function rustBattleSearch(
 	const { connection, user } = context;
 	const currentDayOfMonth = (new Date()).getDate();
 	if (days < 1 || days > 15) {
-		return context.errorReply(`Days must be between 1 and 15. To search longer ranges, use psbattletools manually on sim3.`);
+		throw new Chat.ErrorMessage(`Days must be between 1 and 15. To search longer ranges, use psbattletools manually on sim3.`);
 	}
 
 	try {
@@ -256,9 +256,7 @@ async function rustBattleSearch(
 			env: { PATH: `${process.env.PATH}:${process.env.HOME}/.cargo/bin` },
 		});
 	} catch {
-		return context.errorReply(
-			`You must install <a href="https://crates.io/crates/psbattletools">psbattletools</a> to use the alternate battlesearch.`
-		);
+		throw new Chat.ErrorMessage(`You must install <a href="https://crates.io/crates/psbattletools">psbattletools</a> to use the alternate battlesearch.`);
 	}
 	if (user.lastCommand !== '/battlesearch' && [30, 31, 1].includes(currentDayOfMonth)) {
 		const buf = [`Warning: Usage stats may be running currently.`];
@@ -266,7 +264,7 @@ async function rustBattleSearch(
 		buf.push(`Please exercise caution.`);
 		buf.push(`Type the command again to confirm.`);
 		user.lastCommand = '/battlesearch';
-		throw new Chat.ErrorMessage(buf.join('<br />'));
+		throw new Chat.ErrorMessage(buf);
 	}
 	user.lastCommand = '';
 
@@ -322,7 +320,7 @@ export const pages: Chat.PageTable = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		this.checkCan('forcewin');
 		if (Config.nobattlesearch === true) {
-			return this.errorReply(`Battlesearch has been temporarily disabled due to load issues.`);
+			throw new Chat.ErrorMessage(`Battlesearch has been temporarily disabled due to load issues.`);
 		}
 		if (Config.nobattlesearch === 'psbattletools') {
 			return rustBattleSearch(this, args[0], args[1], toID(args[2]));
@@ -423,7 +421,7 @@ export const commands: Chat.ChatCommands = {
 			if (part.startsWith('limit=')) {
 				const n = parseInt(part.slice('limit='.length).trim());
 				if (isNaN(n)) {
-					return this.errorReply(`Invalid limit: ${part.slice('limit='.length)}`);
+					throw new Chat.ErrorMessage(`Invalid limit: ${part.slice('limit='.length)}`);
 				}
 				turnLimit = n;
 				continue;

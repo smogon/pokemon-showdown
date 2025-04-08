@@ -118,7 +118,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			const section = tours[sectionID];
 			if (!section) {
-				return this.errorReply(`Invalid section ID: "${sectionID}"`);
+				return this.popupReply(`Invalid section ID: "${sectionID}"`);
 			}
 			if (!isEdit && section.tours.find(f => toID(title) === f.id)) {
 				return this.popupReply(`A tour with that ID already exists. Please choose another.`);
@@ -152,7 +152,7 @@ export const commands: Chat.ChatCommands = {
 			if (rawCredit || rawArtistName) { // if one exists, both should, as verified above
 				const artistUrl = (Chat.linkRegex.exec(rawCredit))?.[0];
 				if (!artistUrl) {
-					return this.errorReply(`Invalid artist credit URL.`);
+					return this.popupReply(`Invalid artist credit URL.`);
 				}
 				artistCredit = { url: artistUrl, name: rawArtistName.trim() };
 			}
@@ -205,10 +205,10 @@ export const commands: Chat.ChatCommands = {
 			}
 			const section = tours[sectionID];
 			if (!section) {
-				return this.errorReply(`Invalid section ID: "${sectionID}". Valid IDs: ${Object.keys(tours).join(', ')}`);
+				throw new Chat.ErrorMessage(`Invalid section ID: "${sectionID}". Valid IDs: ${Object.keys(tours).join(', ')}`);
 			}
 			if (section.whitelist?.includes(targetID)) {
-				return this.errorReply(`That user is already whitelisted on that section.`);
+				throw new Chat.ErrorMessage(`That user is already whitelisted on that section.`);
 			}
 			if (!section.whitelist) section.whitelist = [];
 			section.whitelist.push(targetID);
@@ -226,11 +226,11 @@ export const commands: Chat.ChatCommands = {
 			}
 			const section = tours[sectionID];
 			if (!section) {
-				return this.errorReply(`Invalid section ID: "${sectionID}". Valid IDs: ${Object.keys(tours).join(', ')}`);
+				throw new Chat.ErrorMessage(`Invalid section ID: "${sectionID}". Valid IDs: ${Object.keys(tours).join(', ')}`);
 			}
 			const idx = section.whitelist?.indexOf(targetID) ?? -1;
 			if (!section.whitelist || idx < 0) {
-				return this.errorReply(`${targetID} is not whitelisted in that section.`);
+				throw new Chat.ErrorMessage(`${targetID} is not whitelisted in that section.`);
 			}
 			section.whitelist.splice(idx, 1);
 			if (!section.whitelist.length) {

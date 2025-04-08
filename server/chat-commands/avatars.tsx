@@ -682,8 +682,7 @@ export const commands: Chat.ChatCommands = {
 
 		if (!avatar) {
 			if (silent) return false;
-			this.errorReply("Unrecognized avatar - make sure you're on the right account?");
-			return false;
+			throw new Chat.ErrorMessage("Unrecognized avatar - make sure you're on the right account?");
 		}
 
 		this.runBroadcast();
@@ -929,7 +928,7 @@ export const commands: Chat.ChatCommands = {
 			return this.parse(`/help moveavatars`);
 		}
 		if (!customAvatars[from]?.allowed.length) {
-			return this.errorReply(`That user has no avatars.`);
+			throw new Chat.ErrorMessage(`That user has no avatars.`);
 		}
 		const existing = customAvatars[to]?.allowed.filter(Boolean);
 		customAvatars[to] = { ...customAvatars[from] };

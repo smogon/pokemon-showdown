@@ -1881,14 +1881,14 @@ export const pages: Chat.PageTable = {
 			this.checkCan('lock');
 			const userid = query.shift();
 			if (!userid) {
-				return this.errorReply(`Specify a userid to view the ticket for.`);
+				throw new Chat.ErrorMessage(`Specify a userid to view the ticket for.`);
 			}
 			const ticket = tickets[toID(userid)];
 			if (!ticket) {
-				return this.errorReply(`Ticket not found.`);
+				throw new Chat.ErrorMessage(`Ticket not found.`);
 			}
 			if (!ticket.text) {
-				return this.errorReply(`That is either not a text ticket, or it has not yet been submitted.`);
+				throw new Chat.ErrorMessage(`That is either not a text ticket, or it has not yet been submitted.`);
 			}
 			const ticketInfo = textTickets[HelpTicket.getTypeId(ticket.type)];
 			this.title = `[Text Ticket] ${ticket.userid}`;
@@ -1968,12 +1968,12 @@ export const pages: Chat.PageTable = {
 			this.checkCan('lock');
 			const args = query.join('-').split('--');
 			const userid = toID(args.shift());
-			if (!userid) return this.errorReply(`Specify a userid to view ticket logs for.`);
+			if (!userid) throw new Chat.ErrorMessage(`Specify a userid to view ticket logs for.`);
 			const date = args.shift();
 			if (date) {
 				const parsed = new Date(date);
 				if (!/[0-9]{4}-[0-9]{2}/.test(date) || isNaN(parsed.getTime())) {
-					return this.errorReply(`Invalid date.`);
+					throw new Chat.ErrorMessage(`Invalid date.`);
 				}
 			}
 			const logs = await HelpTicket.getTextLogs(['userid', userid], date);
@@ -2254,7 +2254,7 @@ export const commands: Chat.ChatCommands = {
 			if (user.can('lock')) {
 				return this.parse('/join view-help-request'); // Globals automatically get the form for reference.
 			}
-			if (!user.named) return this.errorReply(this.tr`You need to choose a username before doing this.`);
+			if (!user.named) throw new Chat.ErrorMessage(this.tr`You need to choose a username before doing this.`);
 			return this.parse(`/join view-help-request${meta}`);
 		},
 		createhelp: [`/helpticket create - Creates a new ticket requesting help from global staff.`],
@@ -2573,11 +2573,11 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse(`/help helpticket addnote`);
 			const [ticketName, note] = Utils.splitFirst(target, ',').map(i => i.trim());
 			const ticketId = toID(ticketName);
-			if (!ticketId) return this.errorReply(`Specify the userid that created the ticket you want to mark.`);
+			if (!ticketId) throw new Chat.ErrorMessage(`Specify the userid that created the ticket you want to mark.`);
 			const ticket = tickets[ticketId];
-			if (!ticket) return this.errorReply(`${ticketId} does not have an active ticket.`);
-			if (ticket.resolved) return this.errorReply(`${ticketId}'s ticket has already been resolved.`);
-			if (!note) return this.errorReply(`You must specify a note to add.`);
+			if (!ticket) throw new Chat.ErrorMessage(`${ticketId} does not have an active ticket.`);
+			if (ticket.resolved) throw new Chat.ErrorMessage(`${ticketId}'s ticket has already been resolved.`);
+			if (!note) throw new Chat.ErrorMessage(`You must specify a note to add.`);
 			if (!ticket.notes) ticket.notes = {};
 			ticket.notes[user.id] = note;
 			writeTickets();
@@ -2596,14 +2596,16 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse(`/help helpticket removenote`);
 			let [ticketName, staff] = Utils.splitFirst(target, ',').map(i => i.trim());
 			const targetId = toID(ticketName);
-			if (!targetId) return this.errorReply(`Specify the userid that created the ticket you want to remove a note from.`);
+			if (!targetId) {
+				throw new Chat.ErrorMessage(`Specify the userid that created the ticket you want to remove a note from.`);
+			}
 			const ticket = tickets[targetId];
-			if (!ticket || ticket.resolved) return this.errorReply(`${targetId} does not have a pending ticket.`);
+			if (!ticket || ticket.resolved) throw new Chat.ErrorMessage(`${targetId} does not have a pending ticket.`);
 			staff = toID(staff) || user.id;
-			if (!ticket.notes) return this.errorReply(`${targetId}'s ticket does not have any notes.`);
+			if (!ticket.notes) throw new Chat.ErrorMessage(`${targetId}'s ticket does not have any notes.`);
 			const note = ticket.notes[staff];
 			if (!note) {
-				return this.errorReply(`${staff === user.id ? 'you do' : `'${staff}' does`} not have a note on that ticket.`);
+				throw new Chat.ErrorMessage(`${staff === user.id ? 'you do' : `'${staff}' does`} not have a note on that ticket.`);
 			}
 			if (!room || room.roomid !== 'staff') {
 				this.sendReply(`You removed the note '${note}' (by ${staff}) on ${ticket.userid}'s ticket.`);
@@ -2633,15 +2635,15 @@ export const commands: Chat.ChatCommands = {
 			}
 			const typeId = HelpTicket.getTypeId(type);
 			if (!(typeId in textTickets)) {
-				this.errorReply(`'${type}' is not a valid text ticket type.`);
-				return this.errorReply(`Valid types: ${Object.keys(textTickets).join(', ')}.`);
+				throw new Chat.ErrorMessage([`'${type}' is not a valid text ticket type.`,
+					`Valid types: ${Object.keys(textTickets).join(', ')}.`]);
 			}
 			if (!settings.responses[typeId]) {
 				settings.responses[typeId] = {};
 			}
 			if (settings.responses[typeId][name] && !this.cmd.includes('f')) {
-				this.errorReply(`That button already exists for that ticket type.`);
-				return this.errorReply(`Use /ht forceaddresponse to override it if you're sure.`);
+				throw new Chat.ErrorMessage([`That button already exists for that ticket type.`,
+					`Use /ht forceaddresponse to override it if you're sure.`]);
 			}
 			settings.responses[typeId][name] = response;
 			writeSettings();
@@ -2660,10 +2662,10 @@ export const commands: Chat.ChatCommands = {
 			if (!toID(type) || !toID(name)) return this.parse(`/help helpticket removeresponse`);
 			const typeId = HelpTicket.getTypeId(type);
 			if (!(type in textTickets)) {
-				return this.errorReply(`'${type}' is not a valid text ticket type.`);
+				throw new Chat.ErrorMessage(`'${type}' is not a valid text ticket type.`);
 			}
 			if (!settings.responses[typeId]?.[name]) {
-				return this.errorReply(`'${name}' is not a response for the ${typeId} ticket type .`);
+				throw new Chat.ErrorMessage(`'${name}' is not a response for the ${typeId} ticket type .`);
 			}
 			delete settings.responses[typeId][name];
 			if (!Object.keys(settings.responses[typeId]).length) {
@@ -2684,7 +2686,7 @@ export const commands: Chat.ChatCommands = {
 			let buf = `<strong>Help ticket response buttons `;
 			target = toID(target);
 			if (target && !(target in textTickets)) {
-				return this.errorReply(`Invalid ticket type: ${target}.`);
+				throw new Chat.ErrorMessage(`Invalid ticket type: ${target}.`);
 			}
 			buf += `${target ? `for the type ${target}:` : ""}</strong><hr />`;
 			const table = target ? { [target]: settings.responses[target] } : settings.responses;
@@ -2716,7 +2718,7 @@ export const commands: Chat.ChatCommands = {
 			let result = rest !== 'false';
 			const ticket = tickets[toID(targetUsername)];
 			if (!ticket?.open || (ticket.userid !== user.id && !user.can('lock'))) {
-				return this.errorReply(this.tr`${targetUsername} does not have an open ticket.`);
+				throw new Chat.ErrorMessage(this.tr`${targetUsername} does not have an open ticket.`);
 			}
 			if (typeof ticket.text !== 'undefined') {
 				return this.parse(`/helpticket resolve ${target}`);
@@ -2747,10 +2749,10 @@ export const commands: Chat.ChatCommands = {
 
 			const punishment = Punishments.roomUserids.nestedGet('staff', toID(targetUsername));
 			if (!targetUser && !Punishments.search(toID(targetUsername)).length) {
-				return this.errorReply(this.tr`User '${targetUsername}' not found.`);
+				throw new Chat.ErrorMessage(this.tr`User '${targetUsername}' not found.`);
 			}
 			if (reason.length > 300) {
-				return this.errorReply(this.tr`The reason is too long. It cannot exceed 300 characters.`);
+				throw new Chat.ErrorMessage(this.tr`The reason is too long. It cannot exceed 300 characters.`);
 			}
 
 			let username;
@@ -2846,7 +2848,7 @@ export const commands: Chat.ChatCommands = {
 			const targetID: ID = Users.get(target)?.id || target as ID;
 			const banned = Punishments.isTicketBanned(targetID);
 			if (!banned) {
-				return this.errorReply(this.tr`${target} is not ticket banned.`);
+				throw new Chat.ErrorMessage(this.tr`${target} is not ticket banned.`);
 			}
 
 			const affected = HelpTicket.unban(targetID);
@@ -2859,7 +2861,7 @@ export const commands: Chat.ChatCommands = {
 		ignore(target, room, user) {
 			this.checkCan('lock');
 			if (user.settings.ignoreTickets) {
-				return this.errorReply(this.tr`You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.`);
+				throw new Chat.ErrorMessage(this.tr`You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.`);
 			}
 			user.settings.ignoreTickets = true;
 			user.update();
@@ -2870,7 +2872,7 @@ export const commands: Chat.ChatCommands = {
 		unignore(target, room, user) {
 			this.checkCan('lock');
 			if (!user.settings.ignoreTickets) {
-				return this.errorReply(this.tr`You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.`);
+				throw new Chat.ErrorMessage(this.tr`You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.`);
 			}
 			user.settings.ignoreTickets = false;
 			user.update();
@@ -2883,7 +2885,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('makeroom');
 			if (!target) return this.parse(`/help helpticket delete`);
 			const ticket = tickets[toID(target)];
-			if (!ticket) return this.errorReply(this.tr`${target} does not have a ticket.`);
+			if (!ticket) throw new Chat.ErrorMessage(this.tr`${target} does not have a ticket.`);
 			const targetRoom = Rooms.get(`help-${ticket.userid}`);
 			if (targetRoom) {
 				targetRoom.getGame(HelpTicket)!.deleteTicket(user);
@@ -2900,7 +2902,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('lock');
 			const [targetString, dateString] = Utils.splitFirst(target, ',').map(i => i.trim());
 			const id = toID(targetString);
-			if (!id) return this.errorReply(`Specify a userid.`);
+			if (!id) throw new Chat.ErrorMessage(`Specify a userid.`);
 			return this.parse(`/j view-help-logs-${id}${dateString ? `--${dateString}` : ''}`);
 		},
 		logshelp: [
@@ -2916,11 +2918,11 @@ export const commands: Chat.ChatCommands = {
 			const userid = toID(username);
 			if (!userid) return this.parse(`/help helpticket`);
 			if (!/[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(date)) {
-				return this.errorReply(`Invalid date (must be YYYY-MM-DD format).`);
+				throw new Chat.ErrorMessage(`Invalid date (must be YYYY-MM-DD format).`);
 			}
 			const logPath = Monitor.logPath(`chat/help-${userid}/${date.slice(0, -3)}/${date}.txt`);
 			if (!(await logPath.exists())) {
-				return this.errorReply(`There are no logs for tickets from '${userid}' on the date '${date}'.`);
+				throw new Chat.ErrorMessage(`There are no logs for tickets from '${userid}' on the date '${date}'.`);
 			}
 			if (!(await Monitor.logPath(`private/${userid}`).exists())) {
 				await Monitor.logPath(`private/${userid}`).mkdirp();
@@ -2940,11 +2942,11 @@ export const commands: Chat.ChatCommands = {
 			const userid = toID(username);
 			if (!userid) return this.parse(`/help helpticket`);
 			if (!/[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(date)) {
-				return this.errorReply(`Invalid date (must be YYYY-MM-DD format).`);
+				throw new Chat.ErrorMessage(`Invalid date (must be YYYY-MM-DD format).`);
 			}
 			const logPath = Monitor.logPath(`private/${userid}/${date}.txt`);
 			if (!(await logPath.exists())) {
-				return this.errorReply(`There are no logs for tickets from '${userid}' on the date '${date}'.`);
+				throw new Chat.ErrorMessage(`There are no logs for tickets from '${userid}' on the date '${date}'.`);
 			}
 			const monthPath = Monitor.logPath(`chat/help-${userid}/${date.slice(0, -3)}`);
 			if (!(await monthPath.exists())) {
