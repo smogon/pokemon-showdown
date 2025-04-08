@@ -365,6 +365,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				source.abilityState.battleBondTriggered = true;
 			}
 		},
+		onModifyMovePriority: -1,
+		onModifyMove(move, attacker) {
+			if (move.id === 'watershuriken' && attacker.species.name === 'Greninja-Ash' &&
+				!attacker.transformed) {
+				move.multihit = 3;
+			}
+		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Battle Bond",
 		rating: 3.5,

@@ -633,8 +633,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 			this.room.update();
 			try {
 				this.bid(user, parseCredits(message));
-			} catch (e) {
-				if (e instanceof Chat.ErrorMessage) {
+			} catch (e: any) {
+				if (e.name?.endsWith('ErrorMessage')) {
 					user.sendTo(this.room, Utils.html`|raw|<span class="message-error">${e.message}</span>`);
 				} else {
 					user.sendTo(this.room, `|raw|<span class="message-error">An unexpected error occurred while placing your bid.</span>`);
@@ -752,14 +752,14 @@ export const commands: Chat.ChatCommands = {
 		create(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
-			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
-			if (room.settings.auctionDisabled) return this.errorReply('Auctions are currently disabled in this room.');
+			if (room.game) throw new Chat.ErrorMessage(`There is already a game of ${room.game.title} in progress in this room.`);
+			if (room.settings.auctionDisabled) throw new Chat.ErrorMessage('Auctions are currently disabled in this room.');
 
 			let startingCredits;
 			if (target) {
 				startingCredits = parseCredits(target);
 				if (startingCredits < 10000 || startingCredits > 10000000) {
-					return this.errorReply(`Starting credits must be between 10,000 and 10,000,000.`);
+					throw new Chat.ErrorMessage(`Starting credits must be between 10,000 and 10,000,000.`);
 				}
 			}
 			const auction = new Auction(room, startingCredits);
@@ -915,13 +915,13 @@ export const commands: Chat.ChatCommands = {
 
 			if (!target) return this.parse('/help auction importplayers');
 			if (!/^https?:\/\/pastebin\.com\/[a-zA-Z0-9]+$/.test(target)) {
-				return this.errorReply('Invalid pastebin URL.');
+				throw new Chat.ErrorMessage('Invalid pastebin URL.');
 			}
 			let data = '';
 			try {
 				data = await Net(`https://pastebin.com/raw/${target.split('/').pop()}`).get();
 			} catch {}
-			if (!data) return this.errorReply('Error fetching data from pastebin.');
+			if (!data) throw new Chat.ErrorMessage('Error fetching data from pastebin.');
 
 			auction.importPlayers(data);
 			this.addModAction(`${user.name} imported the player list from ${target}.`);
@@ -1091,7 +1091,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('gamemanagement', null, room);
 			if (room.settings.auctionDisabled) {
-				return this.errorReply('Auctions are already disabled.');
+				throw new Chat.ErrorMessage('Auctions are already disabled.');
 			}
 			room.settings.auctionDisabled = true;
 			room.saveSettings();
@@ -1101,7 +1101,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('gamemanagement', null, room);
 			if (!room.settings.auctionDisabled) {
-				return this.errorReply('Auctions are already enabled.');
+				throw new Chat.ErrorMessage('Auctions are already enabled.');
 			}
 			delete room.settings.auctionDisabled;
 			room.saveSettings();
@@ -1161,7 +1161,7 @@ export const commands: Chat.ChatCommands = {
 		this.parse(`/auction nominate ${target}`);
 	},
 	bid() {
-		this.errorReply(`/bid is no longer supported. Send the amount by itself in the chat to place your bid.`);
+		throw new Chat.ErrorMessage(`/bid is no longer supported. Send the amount by itself in the chat to place your bid.`);
 	},
 	overpay() {
 		this.requireGame(Auction);
