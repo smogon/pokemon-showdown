@@ -365,7 +365,7 @@ export const commands: ChatCommands = {
         pagination += `<button onclick="send('/economylogs${useridFilter ? ` ${targetUser!.name}` : ''}, ${page + 1}')">Next &raquo;</button>`;
       }
       pagination += `</div>`;
-      this.sendReplyBox(pagination);
+      this.ImpulseReplyBox(pagination);
     }
   },
 
