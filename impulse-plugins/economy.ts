@@ -341,7 +341,7 @@ export const commands: ChatCommands = {
       return this.sendReplyBox(`No economy logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}.`);
     }
 
-    const title = `${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} (Page <span class="math-inline">\{page\}/</span>{totalPages})`;
+    const title = `${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} (Page <span class="math-inline">${page}/</span>${totalPages})`;
     const header = ['Time', 'Action', 'By', 'From', 'To', 'Amount'];
     const data = logs.map (log => {
       const timestamp = new Date(log.timestamp).toLocaleString();
