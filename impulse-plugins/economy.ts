@@ -256,7 +256,7 @@ export const commands: ChatCommands = {
     const styleBy = Impulse.nameColor('TurboRx', true, true);
 
     const output = generateThemedTable(title, header, data, styleBy);
-    this.sendReplyBox(output);
+    this.ImpulseReplyBox(output);
   },
 
   economyhelp(target, room, user) {
