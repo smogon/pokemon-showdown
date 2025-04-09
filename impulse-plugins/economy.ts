@@ -214,7 +214,7 @@ export const commands: ChatCommands = {
       return this.sendReplyBox(`No users have any ${CURRENCY} yet.`);
     }
 
-    let output = `<center><div style="border: 1px solid #ddd; padding: 10px; background-color: #f9f9f9; border-radius: 5px;">`;
+    let output = `<div style="border: 1px solid #ddd; padding: 10px; border-radius: 5px;">`;
     output += `<h3 style="text-align: center; margin-top: 0;">Top ${richest.length} Richest Users</h3>`;
     output += `<table style="width: 100%; border-collapse: collapse;">`;
     output += `<tr style="background-color: #eee;">`;
@@ -227,8 +227,8 @@ export const commands: ChatCommands = {
       output += `<tr>`;
       output += `<td style="padding: 8px; text-align: right; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">${i + 1}</td>`;
       output += `<td style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">${Impulse.nameColor(userid, true, true)}</td>`;
-      output += `<td style="padding: 8px; text-align: right; border-bottom: 1px solid #ddd;">${balance}</td>`;
-      output += `</tr></center>`;
+      output += `<td style="padding: 8px; text-align: right; border-bottom: 1px solid #ddd;">${balance} ${CURRENCY}</td>`;
+      output += `</tr>`;
     }
 
     output += `</table></div>`;
