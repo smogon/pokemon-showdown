@@ -216,18 +216,18 @@ export const commands: ChatCommands = {
 
     let output = `<div style="border: 1px solid #ddd; padding: 10px; border-radius: 5px;">`;
     output += `<h3 style="text-align: center; margin-top: 0;">Top ${richest.length} Richest Users</h3>`;
-    output += `<table style="width: 100%; border-collapse: collapse;">`;
-    output += `<tr style="background-color: #eee;">`;
-    output += `<th style="padding: 8px; text-align: right; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">Rank</th>`;
-    output += `<th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">User</th>`;
-    output += `<th style="padding: 8px; text-align: right; border-bottom: 1px solid #ddd;">Balance</th>`;
+    output += `<table style="width: 100%; border-collapse: collapse; text-align: center;">`;
+    output += `<tr>`;
+    output += `<th style="padding: 8px; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">Rank</th>`;
+    output += `<th style="padding: 8px; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">User</th>`;
+    output += `<th style="padding: 8px; border-bottom: 1px solid #ddd;">Balance</th>`;
     output += `</tr>`;
 
     for (const [i, [userid, balance]] of richest.entries()) {
       output += `<tr>`;
-      output += `<td style="padding: 8px; text-align: right; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">${i + 1}</td>`;
-      output += `<td style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">${Impulse.nameColor(userid, true, true)}</td>`;
-      output += `<td style="padding: 8px; text-align: right; border-bottom: 1px solid #ddd;">${balance} ${CURRENCY}</td>`;
+      output += `<td style="padding: 8px; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">${i + 1}</td>`;
+      output += `<td style="padding: 8px; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">${Impulse.nameColor(userid, true, true)}</td>`;
+      output += `<td style="padding: 8px; border-bottom: 1px solid #ddd;">${balance} ${CURRENCY}</td>`;
       output += `</tr>`;
     }
 
