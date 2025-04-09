@@ -149,7 +149,6 @@ export class Economy {
     }
     return Math.ceil(filteredLogs.length / entriesPerPage) || 1;
   }
-}
 
 global.Economy = Economy;
 
@@ -327,13 +326,13 @@ export const commands: ChatCommands = {
     this.ImpulseReplyBox(output);
   },
 
-  economylogs(target, room, user) {
+	economylogs(target, room, user) {
     if (!this.runBroadcast()) return;
     const parts = target.split(',').map(p => p.trim());
     const targetUser = parts[0] ? Users.get(parts[0]) : null;
     const pageStr = parts[1] || '1';
     const page = parseInt(pageStr, 10) || 1;
-    const entriesPerPageStr = parts[2] || '100'; // Default to 100 if not provided
+    const entriesPerPageStr = parts[2] || '100';
     const entriesPerPage = parseInt(entriesPerPageStr, 10) || 100;
     const useridFilter = targetUser?.id;
 
@@ -368,7 +367,7 @@ export const commands: ChatCommands = {
     let fullOutput = `<div style="max-height: 400px; overflow: auto;">${output}</div>`;
     this.ImpulseReplyBox(fullOutput);
   },
-
+	
   economyhelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
