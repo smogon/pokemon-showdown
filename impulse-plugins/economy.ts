@@ -140,7 +140,7 @@ export class Economy {
     return reversedLogs.slice(startIndex, endIndex);
   }
 
-  static getTotalLogPages(userid?: string, entriesPerPage: number = 50): number {
+  static getTotalLogPages(userid?: string, entriesPerPage: number = 100): number {
     let filteredLogs = this.logs.logs;
     if (userid) {
       const id = toID(userid);
