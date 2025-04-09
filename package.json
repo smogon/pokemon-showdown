@@ -7,6 +7,8 @@
   "dependencies": {
     "esbuild": "^0.25.0",
     "mysql2": "^3.9.7",
+    "nef": "^1.1.0",
+    "nef-fs": "^1.0.0",
     "preact": "^10.5.15",
     "preact-render-to-string": "^6.5.13",
     "probe-image-size": "^7.2.3",
