@@ -327,19 +327,16 @@ export const commands: ChatCommands = {
     this.ImpulseReplyBox(output);
   },
 
-	economylogs(target, room, user) {
+  economylogs(target, room, user) {
     if (!this.runBroadcast()) return;
     const parts = target.split(',').map(p => p.trim());
     const targetUser = parts[0] ? Users.get(parts[0]) : null;
-    const pageStr = parts[1] || '1';
-    const page = parseInt(pageStr, 10) || 1;
-    const entriesPerPageStr = parts[2] || '100';
-    const entriesPerPage = parseInt(entriesPerPageStr, 10) || 100;
+    const page = parseInt(parts[1], 10) || 1;
     const useridFilter = targetUser?.id;
 
-    const logs = Economy.getEconomyLogs(useridFilter, page, entriesPerPage);
-    const totalPages = Economy.getTotalLogPages(useridFilter, entriesPerPage);
-    const allLogsCount = Economy['logs'].logs.length;
+    const logs = Economy.getEconomyLogs(useridFilter, page);
+    const totalPages = Economy.getTotalLogPages(useridFilter);
+    const allLogsCount = Economy['logs'].logs.length; // Get the total number of logs
 
     let logCountMessage = ``;
     if (useridFilter) {
@@ -368,7 +365,7 @@ export const commands: ChatCommands = {
     let fullOutput = `<div style="max-height: 400px; overflow: auto;">${output}</div>`;
     this.ImpulseReplyBox(fullOutput);
   },
-	
+
   economyhelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
