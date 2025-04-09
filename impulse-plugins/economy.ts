@@ -214,20 +214,21 @@ export const commands: ChatCommands = {
       return this.sendReplyBox(`No users have any ${CURRENCY} yet.`);
     }
 
-    let output = `<div style="border: 1px solid #ddd; padding: 10px; border-radius: 5px;">`;
-    output += `<h3 style="text-align: center; margin-top: 0;">Top ${richest.length} Richest Users</h3>`;
+    let output = `<div style="border: 1px solid black; padding: 10px; border-radius: 5px;">`;
+    output += `<h3 style="text-align: center; margin-top: 0;">Top ${richest.length} Richest Users</h3><br>`;
+	 output += `<center><p>Style By ${Impulse.nameColor('Turbo Rx', true, true)}</p></center>`;
     output += `<table style="width: 100%; border-collapse: collapse; text-align: center;">`;
     output += `<tr>`;
-    output += `<th style="padding: 8px; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">Rank</th>`;
-    output += `<th style="padding: 8px; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">User</th>`;
-    output += `<th style="padding: 8px; border-bottom: 1px solid #ddd;">Balance</th>`;
+    output += `<th style="padding: 8px; border: 1px solid black;">Rank</th>`;
+    output += `<th style="padding: 8px; border: 1px solid black;">User</th>`;
+    output += `<th style="padding: 8px; border: 1px solid black;">Balance</th>`;
     output += `</tr>`;
 
     for (const [i, [userid, balance]] of richest.entries()) {
       output += `<tr>`;
-      output += `<td style="padding: 8px; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">${i + 1}</td>`;
-      output += `<td style="padding: 8px; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">${Impulse.nameColor(userid, true, true)}</td>`;
-      output += `<td style="padding: 8px; border-bottom: 1px solid #ddd;">${balance} ${CURRENCY}</td>`;
+      output += `<td style="padding: 8px; border-bottom: 1px solid black; border-right: 1px solid black;">${i + 1}</td>`;
+      output += `<td style="padding: 8px; border-bottom: 1px solid black; border-right: 1px solid black;">${Impulse.nameColor(userid, true, true)}</td>`;
+      output += `<td style="padding: 8px; border-bottom: 1px solid black;">${balance} ${CURRENCY}</td>`;
       output += `</tr>`;
     }
 
