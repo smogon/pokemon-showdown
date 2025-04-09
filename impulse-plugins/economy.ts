@@ -76,7 +76,7 @@ export class Economy {
   }
 
   private static logMoneyAction(entry: Omit<EconomyLogEntry, 'timestamp'>): void {
-    this.logs.logs.unshift({ timestamp: Date.now(), ...entry });
+    this.logs.logs.push({ timestamp: Date.now(), ...entry }); // Append to the end
     this.saveMoneyLogs();
   }
 
@@ -93,25 +93,21 @@ export class Economy {
     return this.readMoney(userid) >= amount;
   }
 
-  static addMoney(userid: string, amount: number, reason?: string, by?: string, skipLog: boolean = false): number {
+  static addMoney(userid: string, amount: number, reason?: string, by?: string): number {
     const id = toID(userid);
     this.data[id] = (this.data[id] || 0) + amount;
     this.saveMoneyData();
-    if (!skipLog) {
-      this.logMoneyAction({ action: 'give', to: id, amount, by });
-    }
+    this.logMoneyAction({ action: 'give', to: id, amount, by });
     return this.data[id];
   }
 
-  static takeMoney(userid: string, amount: number, reason?: string, by?: string, skipLog: boolean = false): number {
+  static takeMoney(userid: string, amount: number, reason?: string, by?: string): number {
     const id = toID(userid);
     const currentMoney = this.data[id] || 0;
     if (currentMoney >= amount) {
       this.data[id] = currentMoney - amount;
       this.saveMoneyData();
-      if (!skipLog) {
-        this.logMoneyAction({ action: 'take', to: id, amount, by });
-      }
+      this.logMoneyAction({ action: 'take', to: id, amount, by });
       return this.data[id];
     }
     return currentMoney;
@@ -136,9 +132,12 @@ export class Economy {
       filteredLogs = filteredLogs.filter(log => log.to === id || log.from === id || log.by === id);
     }
 
+    // Reverse the filtered logs to show the newest first
+    const reversedLogs = [...filteredLogs].reverse();
+
     const startIndex = (page - 1) * entriesPerPage;
     const endIndex = startIndex + entriesPerPage;
-    return filteredLogs.slice(startIndex, endIndex);
+    return reversedLogs.slice(startIndex, endIndex);
   }
 
   static getTotalLogPages(userid?: string, entriesPerPage: number = 50): number {
@@ -238,7 +237,7 @@ export const commands: ChatCommands = {
     }
 
     Economy.takeMoney(targetUser.id, amount, reason, user.id);
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} took ${amount} ${CURRENCY} ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ${Impulse.nameColor(targetUser.name, true, true)} now has ${Economy.readMoney(targetUser.id)} ${CURRENCY}.`);
+    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} took ${amount} ${CURRENCY} from ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ${Impulse.nameColor(targetUser.name, true, true)} now has ${Economy.readMoney(targetUser.id)} ${CURRENCY}.`);
     this.modlog('TAKEMONEY', targetUser, `${amount} ${CURRENCY}`, { by: user.id, reason });
     if (targetUser.connected) {
       targetUser.popup(`|html|<b>${Impulse.nameColor(user.name, true, true)}</b> took <b>${amount} ${CURRENCY}</b> from you.<br>Reason: ${reason}`);
@@ -268,9 +267,9 @@ export const commands: ChatCommands = {
       return this.errorReply(`You do not have enough ${CURRENCY} to transfer ${amount}.`);
     }
 
-    Economy.takeMoney(user.id, amount, undefined, user.id, true); // skipLog is true
-    Economy.addMoney(recipient.id, amount, reason, user.id, true); // skipLog is true
-    Economy.logMoneyAction({ action: 'transfer', from: user.id, to: recipient.id, amount, by: user.id }); // Logged once for the transfer
+    Economy.takeMoney(user.id, amount, undefined, user.id);
+    Economy.addMoney(recipient.id, amount, reason, user.id);
+    Economy.logMoneyAction({ action: 'transfer', from: user.id, to: recipient.id, amount, by: user.id });
     this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} transferred ${amount} ${CURRENCY} to ${Impulse.nameColor(recipient.name, true, true)} (${reason}). Your new balance is ${Economy.readMoney(user.id)} ${CURRENCY}, and ${Impulse.nameColor(recipient.name, true, true)}'s new balance is ${Economy.readMoney(recipient.id)} ${CURRENCY}.`);
     if (recipient.connected) {
       recipient.popup(`|html|<b>${Impulse.nameColor(user.name, true, true)}</b> transferred <b>${amount} ${CURRENCY}</b> to you.<br>Reason: ${reason}`);
@@ -302,6 +301,7 @@ export const commands: ChatCommands = {
     const reason = target.trim() || 'No reason specified.';
 
     Economy.resetAllMoney();
+    this.logMoneyAction({ action: 'reset', to: 'all', amount: DEFAULT_AMOUNT, by: user.id });
     this.sendReplyBox(`All user balances have been reset to ${DEFAULT_AMOUNT} <span class="math-inline">\{CURRENCY\} \(</span>{reason}).`);
     this.modlog('RESETMONEYALL', null, `all balances to ${DEFAULT_AMOUNT} ${CURRENCY}`, { by: user.id, reason });
     room?.add(`|html|<center><div class="broadcast-blue"><b>${Impulse.nameColor(user.name, true, true)}</b> has reset all ${CURRENCY} balances to <b>${DEFAULT_AMOUNT}</b>.<br>Reason: ${reason}</div></center>`);
@@ -350,7 +350,7 @@ export const commands: ChatCommands = {
       return this.sendReplyBox(`No economy logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}${logCountMessage}.`);
     }
 
-    const title = `${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} ${logCountMessage}`;
+    const title = `${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} ${logCountMessage} (Page ${page} of ${totalPages})`;
     const header = ['Time', 'Action', 'By', 'From', 'To', 'Amount'];
     const data = logs.map (log => {
       const timestamp = new Date(log.timestamp).toLocaleString();
@@ -363,6 +363,16 @@ export const commands: ChatCommands = {
 
     const output = generateThemedTable(title, header, data);
     let fullOutput = `<div style="max-height: 400px; overflow: auto;">${output}</div>`;
+    if (totalPages > 1) {
+      fullOutput += `<div style="text-align: center; margin-top: 5px;">Page: ${page} / ${totalPages}`;
+      if (page > 1) {
+        fullOutput += ` | <button onclick="send('/economylogs${useridFilter ? ` ${targetUser.name}` : ''}, ${page - 1}')">Previous</button>`;
+      }
+      if (page < totalPages) {
+        fullOutput += ` | <button onclick="send('/economylogs${useridFilter ? ` ${targetUser.name}` : ''}, ${page + 1}')">Next</button>`;
+      }
+      fullOutput += `</div>`;
+    }
     this.ImpulseReplyBox(fullOutput);
   },
 
