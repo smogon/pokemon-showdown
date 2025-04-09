@@ -331,12 +331,15 @@ export const commands: ChatCommands = {
     if (!this.runBroadcast()) return;
     const parts = target.split(',').map(p => p.trim());
     const targetUser = parts[0] ? Users.get(parts[0]) : null;
-    const page = parseInt(parts[1], 10) || 1;
+    const pageStr = parts[1] || '1';
+    const page = parseInt(pageStr, 10) || 1;
+    const entriesPerPageStr = parts[2] || '100'; // Default to 100 if not provided
+    const entriesPerPage = parseInt(entriesPerPageStr, 10) || 100;
     const useridFilter = targetUser?.id;
 
-    const logs = Economy.getEconomyLogs(useridFilter, page);
-    const totalPages = Economy.getTotalLogPages(useridFilter);
-    const allLogsCount = Economy['logs'].logs.length; // Get the total number of logs
+    const logs = Economy.getEconomyLogs(useridFilter, page, entriesPerPage);
+    const totalPages = Economy.getTotalLogPages(useridFilter, entriesPerPage);
+    const allLogsCount = Economy['logs'].logs.length;
 
     let logCountMessage = ``;
     if (useridFilter) {
