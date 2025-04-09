@@ -149,6 +149,7 @@ export class Economy {
     }
     return Math.ceil(filteredLogs.length / entriesPerPage) || 1;
   }
+}
 
 global.Economy = Economy;
 
