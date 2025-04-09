@@ -129,7 +129,7 @@ export class Economy {
       .slice(0, limit);
   }
 
-  static getEconomyLogs(userid?: string, page: number = 1, entriesPerPage: number = 50): EconomyLogEntry[] {
+  static getEconomyLogs(userid?: string, page: number = 1, entriesPerPage: number = 100): EconomyLogEntry[] {
     let filteredLogs = this.logs.logs;
     if (userid) {
       const id = toID(userid);
@@ -363,19 +363,6 @@ export const commands: ChatCommands = {
 
     const output = generateThemedTable(title, header, data);
     let fullOutput = `<div style="max-height: 400px; overflow: auto;">${output}</div>`;
-
-    if (totalPages > 1) {
-      let pagination = `<div style="text-align: center; margin-top: 10px;">`;
-      if (page > 1) {
-        pagination += `<button onclick="send('/economylogs${useridFilter ? ` ${targetUser!.name}, ${page - 1}` : `, ${page - 1}`}')">&laquo; Previous</button>`;
-      }
-      pagination += ` Page ${page} of ${totalPages} `;
-      if (page < totalPages) {
-        pagination += `<button onclick="send('/economylogs${useridFilter ? ` ${targetUser!.name}, ${page + 1}` : `, ${page + 1}`}')">Next &raquo;</button>`;
-      }
-      pagination += `</div>`;
-      fullOutput += pagination;
-    }
     this.ImpulseReplyBox(fullOutput);
   },
 
