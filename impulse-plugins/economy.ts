@@ -329,6 +329,7 @@ export const commands: ChatCommands = {
 
 	economylogs(target, room, user) {
     if (!this.runBroadcast()) return;
+	 this.checkCan('globalban');
     const parts = target.split(',').map(p => p.trim());
     const targetUser = parts[0] ? Users.get(parts[0]) : null;
     const page = parseInt(parts[1], 10) || 1;
