@@ -186,6 +186,8 @@ export const commands: Chat.ChatCommands = {
 		this.sendReplyBox(`${Impulse.nameColor(target, true, true)} was last seen <b>${Chat.toDurationString(Date.now() - seen, { precision: true })}</b> ago.`);
 	},
 
+	seenhelp: [`/seen [user] - Shows when the user last connected on the server.`],
+
   mischelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
