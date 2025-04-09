@@ -478,7 +478,9 @@ If the challenge is accepted, you will receive a room initialization message.
 `JSON.searching` will be an array of format IDs you're currently searching for
 games in.
 
-`JSON.games` will be a `{roomid: title}` table of games you're currently in.
+`JSON.games` will be a `{roomid: title}` table of games you're currently in,
+or `null` if you're in no games.
+
 Note that this includes ALL games, so `|updatesearch|` will be sent when you
 start/end challenge battles, and even non-Pokémon games like Mafia.
 
