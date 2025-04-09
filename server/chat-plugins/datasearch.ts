@@ -731,6 +731,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 		attack: 'atk', defense: 'def', specialattack: 'spa', spc: 'spa', special: 'spa', spatk: 'spa',
 		specialdefense: 'spd', spdef: 'spd', speed: 'spe', wt: 'weight', ht: 'height', generation: 'gen',
 	};
+	let showAll = false;
 	let sort = null;
 	let megaSearch = null;
 	let gmaxSearch = null;
@@ -1010,6 +1011,13 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 				break;
 			}
 
+			if (target === 'all') {
+				if (parameters.length > 1) return { error: "The parameter 'all' cannot have alternative parameters." };
+				showAll = true;
+				orGroup.skip = true;
+				break;
+			}
+
 			if (target.substr(0, 6) === 'random' && cmd === 'randpoke') {
 				// Validation for this is in the /randpoke command
 				randomOutput = parseInt(target.substr(6));
@@ -1249,11 +1257,11 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 		}
 	}
 	if (
-		searches.length === 0 && singleTypeSearch === null &&
+		showAll && searches.length === 0 && singleTypeSearch === null &&
 		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null && restrictedSearch === null && sort === null
 	) {
 		return {
-			error: "No search parameters were found. Try '/help dexsearch' for more information on this command.",
+			error: "No search parameters other than all were found. Try '/help dexsearch' for more information on this command.",
 		};
 	}
 
@@ -1589,11 +1597,12 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 		}
 
 		if (results.length > MAX_RANDOM_RESULTS) {
+			showAll = showAll && message !== "";
 			const notShown = results.length - RESULTS_MAX_LENGTH;
 			const resultsSummary = `${mapPokemonResults(results.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
 			const resultsHidden = mapPokemonResults(results);
-			resultsStr = `<div class="datasearch" style="cursor: pointer">${message === "" ? "" : `<span style="color:#999999">${Utils.escapeHTML(message)}`}<button class="subtle" style="float: right">[+]</button>${message === "" ? "" : `</span><br/>`}`;
-			resultsStr += `<div class="datasearch-body" style="display: block">${resultsSummary}</div><div class="datasearch-body" style="display: none">${resultsHidden}</div></div>`;
+			resultsStr = `<div class="datasearch" style="cursor: pointer">${message === "" ? "" : `<span style="color:#999999">${Utils.escapeHTML(message)}`}<button class="subtle" style="float: right">${showAll ? '[-]' : '[+]'}</button>${message === "" ? "" : `</span><br/>`}`;
+			resultsStr += `<div class="datasearch-body" style="display: ${showAll ? 'none' : 'block'}">${resultsSummary}</div><div class="datasearch-body" style="display: ${showAll ? 'block' : 'none'}>${resultsHidden}</div></div>`;
 		} else {
 			resultsStr += mapPokemonResults(results);
 		}
@@ -1651,6 +1660,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 	for (const type of mod.types.all()) {
 		allTypes[type.id] = type.name;
 	}
+	let showAll = false;
 	let sort: string | null = null;
 	const targetMons: { name: string, shouldBeExcluded: boolean }[] = [];
 	let nationalSearch = null;
@@ -1758,6 +1768,13 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 					return { error: `A search cannot both exclude and include '${target}'.` };
 				}
 				orGroup.gens[targetInt] = !isNotSearch;
+				continue;
+			}
+
+			if (target === 'all') {
+				if (parameters.length > 1) return { error: "The parameter 'all' cannot have alternative parameters." };
+				showAll = true;
+				orGroup.skip = true;
 				continue;
 			}
 
@@ -2010,9 +2027,9 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 			searches.push(orGroup);
 		}
 	}
-	if (!searches.length && !targetMons.length && !sort) {
+	if (showAll && !searches.length && !targetMons.length && !sort) {
 		return {
-			error: "No search parameters were found. Try '/help movesearch' for more information on this command.",
+			error: "No search parameters other than all were found. Try '/help movesearch' for more information on this command.",
 		};
 	}
 
@@ -2326,11 +2343,12 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 		}
 
 		if (results.length > MAX_RANDOM_RESULTS) {
+			showAll = showAll && message !== "";
 			const notShown = results.length - RESULTS_MAX_LENGTH;
 			const resultsSummary = `${mapMoveResults(results.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
 			const resultsHidden = mapMoveResults(results);
-			resultsStr = `<div class="datasearch" style="cursor: pointer">${message === "" ? "" : `<span style="color:#999999">${Utils.escapeHTML(message)}`}<button class="subtle" style="float: right">[+]</button>${message === "" ? "" : `</span><br/>`}`;
-			resultsStr += `<div class="datasearch-body" style="display: block">${resultsSummary}</div><div class="datasearch-body" style="display: none">${resultsHidden}</div></div>`;
+			resultsStr = `<div class="datasearch" style="cursor: pointer">${message === "" ? "" : `<span style="color:#999999">${Utils.escapeHTML(message)}`}<button class="subtle" style="float: right">${showAll ? '[-]' : '[+]'}</button>${message === "" ? "" : `</span><br/>`}`;
+			resultsStr += `<div class="datasearch-body" style="display: ${showAll ? 'none' : 'block'}">${resultsSummary}</div><div class="datasearch-body" style="display: ${showAll ? 'block' : 'none'}>${resultsHidden}</div></div>`;
 		} else {
 			resultsStr += mapMoveResults(results);
 		}
@@ -2344,11 +2362,16 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 }
 
 function runItemsearch(target: string, cmd: string, message: string) {
+	let showAll = false;
 	let maxGen = 0;
 	let gen = 0;
 	let randomOutput = 0;
 
 	const targetSplit = target.split(',');
+	if (targetSplit[targetSplit.length - 1].trim() === 'all') {
+		showAll = true;
+		targetSplit.pop();
+	}
 
 	const sanitizedTargets = [];
 	for (const index of targetSplit.keys()) {
@@ -2607,11 +2630,12 @@ function runItemsearch(target: string, cmd: string, message: string) {
 	if (foundItems.length > 0) {
 		foundItems.sort();
 		if (foundItems.length > MAX_RANDOM_RESULTS) {
+			showAll = showAll && message !== "";
 			const notShown = foundItems.length - RESULTS_MAX_LENGTH;
 			const resultsSummary = `${mapItemResults(foundItems.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
 			const resultsHidden = mapItemResults(foundItems);
-			resultsStr = `<div class="datasearch" style="cursor: pointer">${message === "" ? "" : `<span style="color:#999999">${Utils.escapeHTML(message)}`}<button class="subtle" style="float: right">[+]</button>${message === "" ? "" : `</span><br/>`}`;
-			resultsStr += `<div class="datasearch-body" style="display: block">${resultsSummary}</div><div class="datasearch-body" style="display: none">${resultsHidden}</div></div>`;
+			resultsStr = `<div class="datasearch" style="cursor: pointer">${message === "" ? "" : `<span style="color:#999999">${Utils.escapeHTML(message)}`}<button class="subtle" style="float: right">${showAll ? '[-]' : '[+]'}</button>${message === "" ? "" : `</span><br/>`}`;
+			resultsStr += `<div class="datasearch-body" style="display: ${showAll ? 'none' : 'block'}">${resultsSummary}</div><div class="datasearch-body" style="display: ${showAll ? 'block' : 'none'}>${resultsHidden}</div></div>`;
 		} else {
 			resultsStr += mapItemResults(foundItems);
 		}
@@ -2623,11 +2647,16 @@ function runItemsearch(target: string, cmd: string, message: string) {
 
 function runAbilitysearch(target: string, cmd: string, message: string) {
 	// based heavily on runItemsearch()
+	let showAll = false;
 	let maxGen = 0;
 	let gen = 0;
 	let randomOutput = 0;
 
 	const targetSplit = target.split(',');
+	if (targetSplit[targetSplit.length - 1].trim() === 'all') {
+		showAll = true;
+		targetSplit.pop();
+	}
 
 	const sanitizedTargets = [];
 	for (const index of targetSplit.keys()) {
@@ -2793,11 +2822,12 @@ function runAbilitysearch(target: string, cmd: string, message: string) {
 	if (foundAbilities.length > 0) {
 		foundAbilities.sort();
 		if (foundAbilities.length > MAX_RANDOM_RESULTS) {
+			showAll = showAll && message !== "";
 			const notShown = foundAbilities.length - RESULTS_MAX_LENGTH;
 			const resultsSummary = `${mapAbilityResults(foundAbilities.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
 			const resultsHidden = mapAbilityResults(foundAbilities);
-			resultsStr = `<div class="datasearch" style="cursor: pointer">${message === "" ? "" : `<span style="color:#999999">${Utils.escapeHTML(message)}`}<button class="subtle" style="float: right">[+]</button>${message === "" ? "" : `</span><br/>`}`;
-			resultsStr += `<div class="datasearch-body" style="display: block">${resultsSummary}</div><div class="datasearch-body" style="display: none">${resultsHidden}</div></div>`;
+			resultsStr = `<div class="datasearch" style="cursor: pointer">${message === "" ? "" : `<span style="color:#999999">${Utils.escapeHTML(message)}`}<button class="subtle" style="float: right">${showAll ? '[-]' : '[+]'}</button>${message === "" ? "" : `</span><br/>`}`;
+			resultsStr += `<div class="datasearch-body" style="display: ${showAll ? 'none' : 'block'}">${resultsSummary}</div><div class="datasearch-body" style="display: ${showAll ? 'block' : 'none'}>${resultsHidden}</div></div>`;
 		} else {
 			resultsStr += mapAbilityResults(foundAbilities);
 		}
