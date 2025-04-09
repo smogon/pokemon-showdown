@@ -156,12 +156,12 @@ function generateThemedTable(
   dataRows: string[][],
   styleBy?: string
 ): string {
-  let output = `<div class="themed-table-container">`;
+  let output = `<div class="themed-table-container" style="max-width: 100%;">`;
   output += `<h3 class="themed-table-title">${title}</h3>`;
   if (styleBy) {
     output += `<p class="themed-table-by">Style By ${styleBy}</p>`;
   }
-  output += `<table class="themed-table">`;
+  output += `<table class="themed-table" style="width: 100%;">`;
   output += `<tr class="themed-table-header">`;
   headerRow.forEach(header => {
     output += `<th>${header}</th>`;
@@ -267,7 +267,7 @@ export const commands: ChatCommands = {
 
     Economy.takeMoney(user.id, amount);
     Economy.addMoney(recipient.id, amount);
-    Economy.logMoneyAction({ action: 'transfer', from: user.id, to: recipient.id, amount, reason });
+    Economy.logMoneyAction({ action: 'transfer', from: user.id, to: recipient.id, amount, reason, by: user.id }); // Logged by the sender
     this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} transferred ${amount} ${CURRENCY} to <span class="math-inline">\{Impulse\.nameColor\(recipient\.name, true, true\)\} \(</span>{reason}). Your new balance is ${Economy.readMoney(user.id)} ${CURRENCY}, and ${Impulse.nameColor(recipient.name, true, true)}'s new balance is ${Economy.readMoney(recipient.id)} ${CURRENCY}.`);
     if (recipient.connected) {
       recipient.popup(`|html|<b><span class="math-inline">\{Impulse\.nameColor\(user\.name, true, true\)\}</b\> transferred <b\></span>{amount} ${CURRENCY}</b> to you.<br>Reason: ${reason}`);
@@ -325,7 +325,6 @@ export const commands: ChatCommands = {
   },
 
   economylogs(target, room, user) {
-	 this.checkCan('globalban');
     if (!this.runBroadcast()) return;
     const parts = target.split(',').map(p => p.trim());
     const targetUser = parts[0] ? Users.get(parts[0]) : null;
@@ -340,15 +339,15 @@ export const commands: ChatCommands = {
     }
 
     const title = `${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} (Page <span class="math-inline">\{page\}/</span>{totalPages})`;
-    const header = ['Timestamp', 'Action', 'From', 'To', 'Amount', 'Reason', 'By'];
-    const data = logs.map(log => {
+    const header = ['Time', 'Action', 'By', 'From', 'To', 'Amount', 'Reason'];
+    const data = logs.map (log => {
       const timestamp = new Date(log.timestamp).toLocaleString();
       const from = log.from ? Impulse.nameColor(log.from, true, true) : '-';
       const to = Impulse.nameColor(log.to, true, true);
       const amount = `${log.amount} ${CURRENCY}`;
       const reason = log.reason || '-';
       const by = log.by ? Impulse.nameColor(log.by, true, true) : '-';
-      return [timestamp, log.action, from, to, amount, reason, by];
+      return [timestamp, log.action, by, from, to, amount, reason];
     });
 
     const output = generateThemedTable(title, header, data);
