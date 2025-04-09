@@ -204,13 +204,13 @@ export const commands: ChatCommands = {
   economyhelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
-		 `<div><b><center>Economy Commands By ${Impulse.nameColor('Prince Sky', true, true)}</center></b>`,
-		 `<ul><li><code>/balance</code> (or <code>/atm</code>) - Check your or another user's ${CURRENCY} balance.</li>`,
-		 `<li><code>/givemoney [user], [amount] ,[reason]</code> - Give a specified amount of ${CURRENCY} to a user. (Requires: @ and higher).</li>`,
-		 `<li><code>/takemoney [user], [amount] ,[reason]</code> - Take a specified amount of ${CURRENCY} from a user. (Requires: @ and higher).</li>`,
-		 `<li><code>/transfermoney [user], [amount] [, reason]</code> - Transfer a specified amount of your ${CURRENCY} to another user.</li>`,
-		 `<li><code>/resetmoney [user], [reason]</code> - Reset a user's ${CURRENCY} balance to ${DEFAULT_AMOUNT}. (Requires: @ and higher).</li>`,
-		 `<li><code>/resetmoneyall [reason]</code> - Reset all users' ${CURRENCY} balances to ${DEFAULT_AMOUNT}. (Requires: @ and higher).</li>`,
+		 `<div><b><center>Economy Commands By ${Impulse.nameColor('Prince Sky', true, true)}</center></b>` +
+		 `<ul><li><code>/balance</code> (or <code>/atm</code>) - Check your or another user's ${CURRENCY} balance.</li>` +
+		 `<li><code>/givemoney [user], [amount] ,[reason]</code> - Give a specified amount of ${CURRENCY} to a user. (Requires: @ and higher).</li>` +
+		 `<li><code>/takemoney [user], [amount] ,[reason]</code> - Take a specified amount of ${CURRENCY} from a user. (Requires: @ and higher).</li>` +
+		 `<li><code>/transfermoney [user], [amount] [, reason]</code> - Transfer a specified amount of your ${CURRENCY} to another user.</li>` +
+		 `<li><code>/resetmoney [user], [reason]</code> - Reset a user's ${CURRENCY} balance to ${DEFAULT_AMOUNT}. (Requires: @ and higher).</li>` +
+		 `<li><code>/resetmoneyall [reason]</code> - Reset all users' ${CURRENCY} balances to ${DEFAULT_AMOUNT}. (Requires: @ and higher).</li>` +
 		 `</ul></div>`);
   },
 };
