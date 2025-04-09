@@ -93,21 +93,25 @@ export class Economy {
     return this.readMoney(userid) >= amount;
   }
 
-  static addMoney(userid: string, amount: number, reason?: string, by?: string): number {
+  static addMoney(userid: string, amount: number, reason?: string, by?: string, skipLog: boolean = false): number {
     const id = toID(userid);
     this.data[id] = (this.data[id] || 0) + amount;
     this.saveMoneyData();
-    this.logMoneyAction({ action: 'give', to: id, amount, by });
+    if (!skipLog) {
+      this.logMoneyAction({ action: 'give', to: id, amount, by });
+    }
     return this.data[id];
   }
 
-static takeMoney(userid: string, amount: number, reason?: string, by?: string): number {
+  static takeMoney(userid: string, amount: number, reason?: string, by?: string, skipLog: boolean = false): number {
     const id = toID(userid);
     const currentMoney = this.data[id] || 0;
     if (currentMoney >= amount) {
       this.data[id] = currentMoney - amount;
       this.saveMoneyData();
-      this.logMoneyAction({ action: 'take', to: id, amount, by });
+      if (!skipLog) {
+        this.logMoneyAction({ action: 'take', to: id, amount, by });
+      }
       return this.data[id];
     }
     return currentMoney;
@@ -241,7 +245,7 @@ export const commands: ChatCommands = {
     }
   },
 
-	transfermoney(target, room, user) {
+  transfermoney(target, room, user) {
     if (!target) return this.sendReply(`Usage: /transfermoney [user], [amount], [reason]`);
     const parts = target.split(',').map(p => p.trim());
     if (parts.length < 2) return this.sendReply(`Usage: /transfermoney [user], [amount], [reason]`);
@@ -264,8 +268,8 @@ export const commands: ChatCommands = {
       return this.errorReply(`You do not have enough ${CURRENCY} to transfer ${amount}.`);
     }
 
-    Economy.takeMoney(user.id, amount);
-    Economy.addMoney(recipient.id, amount);
+    Economy.takeMoney(user.id, amount, undefined, user.id, true); // skipLog is true
+    Economy.addMoney(recipient.id, amount, reason, user.id, true); // skipLog is true
     Economy.logMoneyAction({ action: 'transfer', from: user.id, to: recipient.id, amount, by: user.id }); // Logged once for the transfer
     this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} transferred ${amount} ${CURRENCY} to <span class="math-inline">\{Impulse\.nameColor\(recipient\.name, true, true\)\} \(</span>{reason}). Your new balance is ${Economy.readMoney(user.id)} ${CURRENCY}, and ${Impulse.nameColor(recipient.name, true, true)}'s new balance is ${Economy.readMoney(recipient.id)} ${CURRENCY}.`);
     if (recipient.connected) {
@@ -293,7 +297,7 @@ export const commands: ChatCommands = {
     }
   },
 
- resetmoneyall(target, room, user) {
+  resetmoneyall(target, room, user) {
     this.checkCan('globalban');
     const reason = target.trim() || 'No reason specified.';
 
@@ -349,7 +353,7 @@ export const commands: ChatCommands = {
     });
 
     const output = generateThemedTable(title, header, data);
-    this.ImpulseReplyBox(output);
+    this.ImpulseReplyBox(`<div style="max-height: 400px; overflow: auto;">${output}</div>`);
 
     if (totalPages > 1) {
       let pagination = `<div class="pagination">`;
@@ -365,7 +369,7 @@ export const commands: ChatCommands = {
     }
   },
 
-	economyhelp(target, room, user) {
+  economyhelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
 		 `<div><b><center>Economy Commands By ${Impulse.nameColor('Prince Sky', true, true)}</center></b>` +
