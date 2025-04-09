@@ -1219,7 +1219,7 @@ export class User extends Chat.MessageContext {
 				Chat.handleRoomClose(page as RoomID, this, connection);
 			}
 		}
-		if (!this.named) Db.seen.set(this.userid, Date.now());
+		if (!this.named) Db.seen.set(this.user.id, Date.now());
 		for (const [i, connected] of this.connections.entries()) {
 			if (connected === connection) {
 				this.connections.splice(i, 1);
