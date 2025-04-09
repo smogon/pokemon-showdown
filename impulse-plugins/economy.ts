@@ -327,7 +327,7 @@ export const commands: ChatCommands = {
     this.ImpulseReplyBox(output);
   },
 
-  economylogs(target, room, user) {
+	economylogs(target, room, user) {
     if (!this.runBroadcast()) return;
     const parts = target.split(',').map(p => p.trim());
     const targetUser = parts[0] ? Users.get(parts[0]) : null;
@@ -336,7 +336,7 @@ export const commands: ChatCommands = {
 
     const logs = Economy.getEconomyLogs(useridFilter, page);
     const totalPages = Economy.getTotalLogPages(useridFilter);
-    const allLogsCount = Economy['logs'].logs.length; // Get the total number of logs
+    const allLogsCount = Economy['logs'].logs.length;
 
     let logCountMessage = ``;
     if (useridFilter) {
@@ -361,18 +361,21 @@ export const commands: ChatCommands = {
       return [timestamp, log.action, by, from, to, amount];
     });
 
-    const output = generateThemedTable(title, header, data);
-    let fullOutput = `<div style="max-height: 400px; overflow: auto;">${output}</div>`;
+    const tableHTML = generateThemedTable(title, header, data);
+    let paginationHTML = '';
+
     if (totalPages > 1) {
-      fullOutput += `<div style="text-align: center; margin-top: 5px;">Page: ${page} / ${totalPages}`;
+      paginationHTML += `<div style="text-align: center; margin-top: 5px;">Page: ${page} / ${totalPages}`;
       if (page > 1) {
-        fullOutput += ` | <button onclick="send('/economylogs${useridFilter ? ` ${targetUser.name}` : ''}, ${page - 1}')">Previous</button>`;
+        paginationHTML += ` | <button name="send" value="/economylogs ${useridFilter ? ` ${targetUser.name}` : ''}, ${page - 1}">Previous</button>`;
       }
       if (page < totalPages) {
-        fullOutput += ` | <button onclick="send('/economylogs${useridFilter ? ` ${targetUser.name}` : ''}, ${page + 1}')">Next</button>`;
+        paginationHTML += ` | <button name="send" value="/economylogs ${useridFilter ? ` ${targetUser.name}` : ''}, ${page + 1}">Next</button>`;
       }
-      fullOutput += `</div>`;
+      paginationHTML += `</div>`;
     }
+
+    const fullOutput = `<div style="max-height: 400px; overflow: auto;" data-uhtml="${useridFilter}-${page}">${tableHTML}</div>${paginationHTML}`;
     this.ImpulseReplyBox(fullOutput);
   },
 
