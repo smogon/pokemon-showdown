@@ -159,12 +159,12 @@ function generateThemedTable(
   dataRows: string[][],
   styleBy?: string
 ): string {
-  let output = `<div class="themed-table-container" style="max-width: 100%;">`;
+  let output = `<div class="themed-table-container" style="max-width: 100%; overflow-x: auto;">`; // Added overflow-x: auto here
   output += `<h3 class="themed-table-title">${title}</h3>`;
   if (styleBy) {
     output += `<p class="themed-table-by">Style By ${styleBy}</p>`;
   }
-  output += `<table class="themed-table" style="width: 100%;">`;
+  output += `<table class="themed-table" style="width: 100%; border-collapse: collapse;">`; // Added border-collapse for better visual
   output += `<tr class="themed-table-header">`;
   headerRow.forEach(header => {
     output += `<th>${header}</th>`;
