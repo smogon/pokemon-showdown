@@ -170,4 +170,14 @@ export const commands: Chat.ChatCommands = {
     user.lastPoofMessage = message;
     user.disconnectAll();
   },
+
+  mischelp(target, room, user) {
+    if (!this.runBroadcast()) return;
+    this.sendReplyBox(
+		 `<div><b><center>Miscellaneous Commands</center></b>` +
+		 `<ul><li><code>/clearall</code> - Clears chatroom. (Requires: #)</li>` +
+		 `<li><code>/globalclearall</code> - Clears all chatrooms. (Requires: @ and higher)</li>` +
+		 `<li><code>/poof</code> - Disconnect from server with random message.</li>` +
+		 `</ul></div>`);
+  },
 };
