@@ -358,11 +358,11 @@ export const commands: ChatCommands = {
     if (totalPages > 1) {
       let pagination = `<div class="pagination">`;
       if (page > 1) {
-        pagination += `<button onclick="send('/economylogs${useridFilter ? ` ${targetUser!.name}` : ''}, ${page - 1}')">&laquo; Previous</button>`;
+        pagination += `<button onclick="send('/economylogs ${useridFilter ? ` ${targetUser!.name}` : ''}, ${page - 1}')">&laquo; Previous</button>`;
       }
       pagination += ` Page ${page} of ${totalPages} `;
       if (page < totalPages) {
-        pagination += `<button onclick="send('/economylogs${useridFilter ? ` ${targetUser!.name}` : ''}, ${page + 1}')">Next &raquo;</button>`;
+        pagination += `<button onclick="send('/economylogs ${useridFilter ? ` ${targetUser!.name}` : ''}, ${page + 1}')">Next &raquo;</button>`;
       }
       pagination += `</div>`;
       this.ImpulseReplyBox(pagination);
