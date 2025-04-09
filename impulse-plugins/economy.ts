@@ -22,7 +22,6 @@ interface EconomyLogEntry {
   from?: string;
   to: string;
   amount: number;
-  reason?: string;
   by?: string;
 }
 
@@ -98,17 +97,17 @@ export class Economy {
     const id = toID(userid);
     this.data[id] = (this.data[id] || 0) + amount;
     this.saveMoneyData();
-    this.logMoneyAction({ action: 'give', to: id, amount, reason, by });
+    this.logMoneyAction({ action: 'give', to: id, amount, by });
     return this.data[id];
   }
 
-  static takeMoney(userid: string, amount: number, reason?: string, by?: string): number {
+static takeMoney(userid: string, amount: number, reason?: string, by?: string): number {
     const id = toID(userid);
     const currentMoney = this.data[id] || 0;
     if (currentMoney >= amount) {
       this.data[id] = currentMoney - amount;
       this.saveMoneyData();
-      this.logMoneyAction({ action: 'take', to: id, amount, reason, by });
+      this.logMoneyAction({ action: 'take', to: id, amount, by });
       return this.data[id];
     }
     return currentMoney;
@@ -117,7 +116,7 @@ export class Economy {
  static resetAllMoney(): void {
     this.data = {};
     this.saveMoneyData();
-    this.logMoneyAction({ action: 'reset', to: 'all', amount: 0, reason: 'All balances reset' });
+    this.logMoneyAction({ action: 'reset', to: 'all', amount: 0 });
  }
 
  static getRichestUsers(limit: number = 100): [string, number][] {
@@ -265,15 +264,10 @@ export const commands: ChatCommands = {
       return this.errorReply(`You do not have enough ${CURRENCY} to transfer ${amount}.`);
     }
 
-    const senderId = toID(user.id);
-    const recipientId = toID(recipient.id);
-
-    this.data[senderId] = (this.data[senderId] || 0) - amount;
-    this.data[recipientId] = (this.data[recipientId] || 0) + amount;
-    this.saveMoneyData();
-    this.logMoneyAction({ action: 'transfer', from: senderId, to: recipientId, amount, reason, by: senderId });
-
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} transferred ${amount} ${CURRENCY} to <span class="math-inline">\{Impulse\.nameColor\(recipient\.name, true, true\)\} \(</span>{reason}). Your new balance is ${Economy.readMoney(senderId)} ${CURRENCY}, and ${Impulse.nameColor(recipient.name, true, true)}'s new balance is ${Economy.readMoney(recipientId)} ${CURRENCY}.`);
+    Economy.takeMoney(user.id, amount);
+    Economy.addMoney(recipient.id, amount);
+    Economy.logMoneyAction({ action: 'transfer', from: user.id, to: recipient.id, amount, by: user.id }); // Logged by the sender
+    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} transferred ${amount} ${CURRENCY} to <span class="math-inline">\{Impulse\.nameColor\(recipient\.name, true, true\)\} \(</span>{reason}). Your new balance is ${Economy.readMoney(user.id)} ${CURRENCY}, and ${Impulse.nameColor(recipient.name, true, true)}'s new balance is ${Economy.readMoney(recipient.id)} ${CURRENCY}.`);
     if (recipient.connected) {
       recipient.popup(`|html|<b><span class="math-inline">\{Impulse\.nameColor\(user\.name, true, true\)\}</b\> transferred <b\></span>{amount} ${CURRENCY}</b> to you.<br>Reason: ${reason}`);
     }
@@ -291,7 +285,7 @@ export const commands: ChatCommands = {
     }
 
     Economy.writeMoney(targetUser.id, DEFAULT_AMOUNT);
-    Economy.logMoneyAction({ action: 'reset', to: targetUser.id, amount: DEFAULT_AMOUNT, reason, by: user.id });
+    Economy.logMoneyAction({ action: 'reset', to: targetUser.id, amount: DEFAULT_AMOUNT, by: user.id });
     this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} reset ${Impulse.nameColor(targetUser.name, true, true)}'s balance to ${DEFAULT_AMOUNT} <span class="math-inline">\{CURRENCY\} \(</span>{reason}).`);
     this.modlog('RESETMONEY', targetUser, `${DEFAULT_AMOUNT} ${CURRENCY}`, { by: user.id, reason });
     if (targetUser.connected) {
@@ -344,15 +338,14 @@ export const commands: ChatCommands = {
     }
 
     const title = `${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} (Page <span class="math-inline">\{page\}/</span>{totalPages})`;
-    const header = ['Time', 'Action', 'By', 'From', 'To', 'Amount', 'Reason'];
-    const data = logs.map(log => {
+    const header = ['Time', 'Action', 'By', 'From', 'To', 'Amount'];
+    const data = logs.map (log => {
       const timestamp = new Date(log.timestamp).toLocaleString();
       const from = log.from ? Impulse.nameColor(log.from, true, true) : '-';
       const to = Impulse.nameColor(log.to, true, true);
       const amount = `${log.amount} ${CURRENCY}`;
-      const reason = log.reason || '-';
       const by = log.by ? Impulse.nameColor(log.by, true, true) : '-';
-      return [timestamp, log.action, by, from, to, amount, reason];
+      return [timestamp, log.action, by, from, to, amount];
     });
 
     const output = generateThemedTable(title, header, data);
@@ -372,7 +365,7 @@ export const commands: ChatCommands = {
     }
   },
 
-  economyhelp(target, room, user) {
+	economyhelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
 		 `<div><b><center>Economy Commands By ${Impulse.nameColor('Prince Sky', true, true)}</center></b>` +
