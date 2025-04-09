@@ -87,6 +87,38 @@ export class Economy {
 
 global.Economy = Economy;
 
+function generateThemedTable(
+  title: string,
+  headerRow: string[],
+  dataRows: string[][],
+  styleBy?: string
+): string {
+  let output = `<div class="themed-table-container">`;
+  output += `<h3 class="themed-table-title">${title}</h3>`;
+  if (styleBy) {
+    output += `<p class="themed-table-by">Style By ${styleBy}</p>`;
+  }
+  output += `<table class="themed-table">`;
+  output += `<tr class="themed-table-header">`;
+  headerRow.forEach(header => {
+    output += `<th>${header}</th>`;
+  });
+  output += `</tr>`;
+
+  dataRows.forEach(row => {
+    output += `<tr class="themed-table-row">`;
+    row.forEach(cell => {
+      output += `<td>${cell}</td>`;
+    });
+    output += `</tr>`;
+  });
+
+  output += `</table></div>`;
+  return output;
+}
+
+Impulse.generateThemedTable = generateThemedTable;
+
 export const commands: ChatCommands = {
   atm: 'balance',
   balance(target, room, user) {
@@ -209,30 +241,21 @@ export const commands: ChatCommands = {
 
   richestusers(target, room, user) {
     if (!this.runBroadcast()) return;
-    const richest = Economy.getRichestUsers(100); // Get top 100
+    const richest = Economy.getRichestUsers(100);
     if (!richest.length) {
       return this.sendReplyBox(`No users have any ${CURRENCY} yet.`);
     }
 
-    let output = `<div style="border: 1px solid black; padding: 10px; border-radius: 5px;">`;
-    output += `<h3 style="text-align: center; margin-top: 0;">Top ${richest.length} Richest Users</h3>`;
-    output += `<p style="text-align: center; margin-bottom: 5px;">Style By ${Impulse.nameColor('TurboRx', true, true)}</p>`;
-    output += `<table style="width: 100%; border-collapse: collapse; text-align: center;">`;
-    output += `<tr>`;
-    output += `<th style="padding: 8px; border: 1px solid black;">Rank</th>`;
-    output += `<th style="padding: 8px; border: 1px solid black;">User</th>`;
-    output += `<th style="padding: 8px; border: 1px solid black;">Balance</th>`;
-    output += `</tr>`;
+    const title = `Top ${richest.length} Richest Users`;
+    const header = ['Rank', 'User', 'Balance'];
+    const data = richest.map(([userid, balance], index) => [
+      (index + 1).toString(),
+      Impulse.nameColor(userid, true, true),
+      `${balance} ${CURRENCY}`,
+    ]);
+    const styleBy = Impulse.nameColor('TurboRx', true, true);
 
-    for (const [i, [userid, balance]] of richest.entries()) {
-      output += `<tr>`;
-      output += `<td style="padding: 8px; border: 1px solid black;">${i + 1}</td>`;
-      output += `<td style="padding: 8px; border: 1px solid black;">${Impulse.nameColor(userid, true, true)}</td>`;
-      output += `<td style="padding: 8px; border: 1px solid black;">${balance} ${CURRENCY}</td>`;
-      output += `</tr>`;
-    }
-
-    output += `</table></div>`;
+    const output = generateThemedTable(title, header, data, styleBy);
     this.sendReplyBox(output);
   },
 
