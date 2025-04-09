@@ -241,7 +241,7 @@ export const commands: ChatCommands = {
     }
   },
 
-  transfermoney(target, room, user) {
+	transfermoney(target, room, user) {
     if (!target) return this.sendReply(`Usage: /transfermoney [user], [amount], [reason]`);
     const parts = target.split(',').map(p => p.trim());
     if (parts.length < 2) return this.sendReply(`Usage: /transfermoney [user], [amount], [reason]`);
@@ -266,7 +266,7 @@ export const commands: ChatCommands = {
 
     Economy.takeMoney(user.id, amount);
     Economy.addMoney(recipient.id, amount);
-    Economy.logMoneyAction({ action: 'transfer', from: user.id, to: recipient.id, amount, by: user.id }); // Logged by the sender
+    Economy.logMoneyAction({ action: 'transfer', from: user.id, to: recipient.id, amount, by: user.id }); // Logged once for the transfer
     this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} transferred ${amount} ${CURRENCY} to <span class="math-inline">\{Impulse\.nameColor\(recipient\.name, true, true\)\} \(</span>{reason}). Your new balance is ${Economy.readMoney(user.id)} ${CURRENCY}, and ${Impulse.nameColor(recipient.name, true, true)}'s new balance is ${Economy.readMoney(recipient.id)} ${CURRENCY}.`);
     if (recipient.connected) {
       recipient.popup(`|html|<b><span class="math-inline">\{Impulse\.nameColor\(user\.name, true, true\)\}</b\> transferred <b\></span>{amount} ${CURRENCY}</b> to you.<br>Reason: ${reason}`);
