@@ -213,7 +213,7 @@ export const commands: ChatCommands = {
     }
 
     Economy.addMoney(targetUser.id, amount, reason, user.id);
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} gave ${amount} ${CURRENCY} to ${Impulse.nameColor(targetUser.name, true, true}} (${reason}). ${Impulse.nameColor(targetUser.name, true, true)} now has ${Economy.readMoney(targetUser.id)} ${CURRENCY}.`);
+    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} gave ${amount} ${CURRENCY} to ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ${Impulse.nameColor(targetUser.name, true, true)} now has ${Economy.readMoney(targetUser.id)} ${CURRENCY}.`);
     this.modlog('GIVEMONEY', targetUser, `${amount} ${CURRENCY}`, { by: user.id, reason });
     if (targetUser.connected) {
       targetUser.popup(`|html|You received <b>${amount} ${CURRENCY}</b> from <b> ${Impulse.nameColor(user.name, true, true)}</b>.<br>Reason: ${reason}`);
