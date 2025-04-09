@@ -1519,8 +1519,6 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	ursaring: {
 		tier: "NFE",
-		doublesTier: "NFE",
-		natDexTier: "NFE",
 	},
 	ursaluna: {
 		tier: "UUBL",
@@ -3061,8 +3059,6 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	gurdurr: {
 		tier: "NFE",
-		doublesTier: "NFE",
-		natDexTier: "NFE",
 	},
 	conkeldurr: {
 		tier: "UU",
@@ -4889,6 +4885,8 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	hattrem: {
 		tier: "ZU",
+		doublesTier: "NFE",
+		natDexTier: "NFE",
 	},
 	hatterene: {
 		tier: "OU",
