@@ -7,6 +7,7 @@
 import { FS } from '../lib/fs';
 
 const MONEY_FILE_PATH = 'impulse-db/money.json';
+const MONEY_LOGS_PATH = 'impulse-db/moneylogs.json';
 const DEFAULT_AMOUNT = 0;
 const CURRENCY = `coins`;
 Impulse.currency = CURRENCY;
@@ -15,8 +16,23 @@ interface EconomyData {
   [userid: string]: number;
 }
 
+interface EconomyLogEntry {
+  timestamp: number;
+  action: 'give' | 'take' | 'transfer' | 'reset';
+  from?: string;
+  to: string;
+  amount: number;
+  reason?: string;
+  by?: string;
+}
+
+interface EconomyLogs {
+  logs: EconomyLogEntry[];
+}
+
 export class Economy {
   private static data: EconomyData = Economy.loadMoneyData();
+  private static logs: EconomyLogs = Economy.loadMoneyLogs();
 
   private static loadMoneyData(): EconomyData {
     try {
@@ -42,6 +58,29 @@ export class Economy {
     }
   }
 
+  private static loadMoneyLogs(): EconomyLogs {
+    try {
+      const rawLogs = FS(MONEY_LOGS_PATH).readIfExistsSync();
+      return rawLogs ? (JSON.parse(rawLogs) as EconomyLogs) : { logs: [] };
+    } catch (error) {
+      console.error(`Error reading economy logs: ${error}`);
+      return { logs: [] };
+    }
+  }
+
+  private static saveMoneyLogs(): void {
+    try {
+      FS(MONEY_LOGS_PATH).writeUpdate(() => JSON.stringify(this.logs, null, 2));
+    } catch (error) {
+      console.error(`Error saving economy logs: ${error}`);
+    }
+  }
+
+  private static logMoneyAction(entry: Omit<EconomyLogEntry, 'timestamp'>): void {
+    this.logs.logs.unshift({ timestamp: Date.now(), ...entry });
+    this.saveMoneyLogs();
+  }
+
   static writeMoney(userid: string, amount: number): void {
     this.data[toID(userid)] = amount;
     this.saveMoneyData();
@@ -55,19 +94,21 @@ export class Economy {
     return this.readMoney(userid) >= amount;
   }
 
-  static addMoney(userid: string, amount: number): number {
+  static addMoney(userid: string, amount: number, reason?: string, by?: string): number {
     const id = toID(userid);
     this.data[id] = (this.data[id] || 0) + amount;
     this.saveMoneyData();
+    this.logMoneyAction({ action: 'give', to: id, amount, reason, by });
     return this.data[id];
   }
 
-  static takeMoney(userid: string, amount: number): number {
+  static takeMoney(userid: string, amount: number, reason?: string, by?: string): number {
     const id = toID(userid);
     const currentMoney = this.data[id] || 0;
     if (currentMoney >= amount) {
       this.data[id] = currentMoney - amount;
       this.saveMoneyData();
+      this.logMoneyAction({ action: 'take', to: id, amount, reason, by });
       return this.data[id];
     }
     return currentMoney;
@@ -76,12 +117,34 @@ export class Economy {
  static resetAllMoney(): void {
     this.data = {};
     this.saveMoneyData();
+    this.logMoneyAction({ action: 'reset', to: 'all', amount: 0, reason: 'All balances reset' });
  }
 
  static getRichestUsers(limit: number = 100): [string, number][] {
     return Object.entries(this.data)
       .sort(([, a], [, b]) => b - a)
       .slice(0, limit);
+  }
+
+  static getEconomyLogs(userid?: string, page: number = 1, entriesPerPage: number = 50): EconomyLogEntry[] {
+    let filteredLogs = this.logs.logs;
+    if (userid) {
+      const id = toID(userid);
+      filteredLogs = filteredLogs.filter(log => log.to === id || log.from === id || log.by === id);
+    }
+
+    const startIndex = (page - 1) * entriesPerPage;
+    const endIndex = startIndex + entriesPerPage;
+    return filteredLogs.slice(startIndex, endIndex);
+  }
+
+  static getTotalLogPages(userid?: string, entriesPerPage: number = 50): number {
+    let filteredLogs = this.logs.logs;
+    if (userid) {
+      const id = toID(userid);
+      filteredLogs = filteredLogs.filter(log => log.to === id || log.from === id || log.by === id);
+    }
+    return Math.ceil(filteredLogs.length / entriesPerPage) || 1;
   }
 }
 
@@ -146,11 +209,11 @@ export const commands: ChatCommands = {
       return this.errorReply(`Please specify a valid positive amount.`);
     }
 
-    Economy.addMoney(targetUser.id, amount);
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} gave ${amount} ${CURRENCY} to ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ${Impulse.nameColor(targetUser.name, true, true)} now has ${Economy.readMoney(targetUser.id)} ${CURRENCY}.`);
+    Economy.addMoney(targetUser.id, amount, reason, user.id);
+    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} gave ${amount} ${CURRENCY} to <span class="math-inline">\{Impulse\.nameColor\(targetUser\.name, true, true\)\} \(</span>{reason}). ${Impulse.nameColor(targetUser.name, true, true)} now has ${Economy.readMoney(targetUser.id)} ${CURRENCY}.`);
     this.modlog('GIVEMONEY', targetUser, `${amount} ${CURRENCY}`, { by: user.id, reason });
     if (targetUser.connected) {
-      targetUser.popup(`|html|You received <b>${amount} ${CURRENCY}</b> from <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>Reason: ${reason}`);
+      targetUser.popup(`|html|You received <b>${amount} <span class="math-inline">\{CURRENCY\}</b\> from <b\></span>{Impulse.nameColor(user.name, true, true)}</b>.<br>Reason: ${reason}`);
     }
   },
 
@@ -171,11 +234,11 @@ export const commands: ChatCommands = {
       return this.errorReply(`Please specify a valid positive amount.`);
     }
 
-    Economy.takeMoney(targetUser.id, amount);
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} took ${amount} ${CURRENCY} from ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ${Impulse.nameColor(targetUser.name, true, true)} now has ${Economy.readMoney(targetUser.id)} ${CURRENCY}.`);
+    Economy.takeMoney(targetUser.id, amount, reason, user.id);
+    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} took ${amount} ${CURRENCY} from <span class="math-inline">\{Impulse\.nameColor\(targetUser\.name, true, true\)\} \(</span>{reason}). ${Impulse.nameColor(targetUser.name, true, true)} now has ${Economy.readMoney(targetUser.id)} ${CURRENCY}.`);
     this.modlog('TAKEMONEY', targetUser, `${amount} ${CURRENCY}`, { by: user.id, reason });
     if (targetUser.connected) {
-      targetUser.popup(`|html|<b>${Impulse.nameColor(user.name, true, true)}</b> took <b>${amount} ${CURRENCY}</b> from you.<br>Reason: ${reason}`);
+      targetUser.popup(`|html|<b><span class="math-inline">\{Impulse\.nameColor\(user\.name, true, true\)\}</b\> took <b\></span>{amount} ${CURRENCY}</b> from you.<br>Reason: ${reason}`);
     }
   },
 
@@ -204,9 +267,10 @@ export const commands: ChatCommands = {
 
     Economy.takeMoney(user.id, amount);
     Economy.addMoney(recipient.id, amount);
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} transferred ${amount} ${CURRENCY} to ${Impulse.nameColor(recipient.name, true, true)} (${reason}). Your new balance is ${Economy.readMoney(user.id)} ${CURRENCY}, and ${Impulse.nameColor(recipient.name, true, true)}'s new balance is ${Economy.readMoney(recipient.id)} ${CURRENCY}.`);
+    Economy.logMoneyAction({ action: 'transfer', from: user.id, to: recipient.id, amount, reason });
+    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} transferred ${amount} ${CURRENCY} to <span class="math-inline">\{Impulse\.nameColor\(recipient\.name, true, true\)\} \(</span>{reason}). Your new balance is ${Economy.readMoney(user.id)} ${CURRENCY}, and ${Impulse.nameColor(recipient.name, true, true)}'s new balance is ${Economy.readMoney(recipient.id)} ${CURRENCY}.`);
     if (recipient.connected) {
-      recipient.popup(`|html|<b>${Impulse.nameColor(user.name, true, true)}</b> transferred <b>${amount} ${CURRENCY}</b> to you.<br>Reason: ${reason}`);
+      recipient.popup(`|html|<b><span class="math-inline">\{Impulse\.nameColor\(user\.name, true, true\)\}</b\> transferred <b\></span>{amount} ${CURRENCY}</b> to you.<br>Reason: ${reason}`);
     }
   },
 
@@ -222,10 +286,11 @@ export const commands: ChatCommands = {
     }
 
     Economy.writeMoney(targetUser.id, DEFAULT_AMOUNT);
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} reset ${Impulse.nameColor(targetUser.name, true, true)}'s balance to ${DEFAULT_AMOUNT} ${CURRENCY} (${reason}).`);
+    Economy.logMoneyAction({ action: 'reset', to: targetUser.id, amount: DEFAULT_AMOUNT, reason, by: user.id });
+    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} reset ${Impulse.nameColor(targetUser.name, true, true)}'s balance to ${DEFAULT_AMOUNT} <span class="math-inline">\{CURRENCY\} \(</span>{reason}).`);
     this.modlog('RESETMONEY', targetUser, `${DEFAULT_AMOUNT} ${CURRENCY}`, { by: user.id, reason });
     if (targetUser.connected) {
-      targetUser.popup(`|html|Your ${CURRENCY} balance has been reset to <b>${DEFAULT_AMOUNT}</b> by <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>Reason: ${reason}`);
+      targetUser.popup(`|html|Your <span class="math-inline">\{CURRENCY\} balance has been reset to <b\></span>{DEFAULT_AMOUNT}</b> by <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>Reason: ${reason}`);
     }
   },
 
@@ -234,9 +299,9 @@ export const commands: ChatCommands = {
     const reason = target.trim() || 'No reason specified.';
 
     Economy.resetAllMoney();
-    this.sendReplyBox(`All user balances have been reset to ${DEFAULT_AMOUNT} ${CURRENCY} (${reason}).`);
+    this.sendReplyBox(`All user balances have been reset to ${DEFAULT_AMOUNT} <span class="math-inline">\{CURRENCY\} \(</span>{reason}).`);
     this.modlog('RESETMONEYALL', null, `all balances to ${DEFAULT_AMOUNT} ${CURRENCY}`, { by: user.id, reason });
-    room?.add(`|html|<center><div class="broadcast-blue"><b>${Impulse.nameColor(user.name, true, true)}</b> has reset all ${CURRENCY} balances to <b>${DEFAULT_AMOUNT}</b>.<br>Reason: ${reason}</div></center>`);
+    room?.add(`|html|<center><div class="broadcast-blue"><b>${Impulse.nameColor(user.name, true, true)}</b> has reset all <span class="math-inline">\{CURRENCY\} balances to <b\></span>{DEFAULT_AMOUNT}</b>.<br>Reason: ${reason}</div></center>`);
   },
 
   richestusers(target, room, user) {
@@ -259,6 +324,49 @@ export const commands: ChatCommands = {
     this.ImpulseReplyBox(output);
   },
 
+  economylogs(target, room, user) {
+    if (!this.runBroadcast()) return;
+    const parts = target.split(',').map(p => p.trim());
+    const targetUser = parts[0] ? Users.get(parts[0]) : null;
+    const page = parseInt(parts[1], 10) || 1;
+    const useridFilter = targetUser?.id;
+
+    const logs = Economy.getEconomyLogs(useridFilter, page);
+    const totalPages = Economy.getTotalLogPages(useridFilter);
+
+    if (!logs.length) {
+      return this.sendReplyBox(`No economy logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}.`);
+    }
+
+    const title = `${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} (Page <span class="math-inline">\{page\}/</span>{totalPages})`;
+    const header = ['Timestamp', 'Action', 'From', 'To', 'Amount', 'Reason', 'By'];
+    const data = logs.map(log => {
+      const timestamp = new Date(log.timestamp).toLocaleString();
+      const from = log.from ? Impulse.nameColor(log.from, true, true) : '-';
+      const to = Impulse.nameColor(log.to, true, true);
+      const amount = `${log.amount} ${CURRENCY}`;
+      const reason = log.reason || '-';
+      const by = log.by ? Impulse.nameColor(log.by, true, true) : '-';
+      return [timestamp, log.action, from, to, amount, reason, by];
+    });
+
+    const output = generateThemedTable(title, header, data);
+    this.ImpulseReplyBox(output);
+
+    if (totalPages > 1) {
+      let pagination = `<div class="pagination">`;
+      if (page > 1) {
+        pagination += `<button onclick="send('/economylogs${useridFilter ? ` ${targetUser!.name}` : ''}, ${page - 1}')">&laquo; Previous</button>`;
+      }
+      pagination += ` Page ${page} of ${totalPages} `;
+      if (page < totalPages) {
+        pagination += `<button onclick="send('/economylogs${useridFilter ? ` ${targetUser!.name}` : ''}, ${page + 1}')">Next &raquo;</button>`;
+      }
+      pagination += `</div>`;
+      this.sendReplyBox(pagination);
+    }
+  },
+
   economyhelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
@@ -270,6 +378,7 @@ export const commands: ChatCommands = {
 		 `<li><code>/resetmoney [user], [reason]</code> - Reset a user's ${CURRENCY} balance to ${DEFAULT_AMOUNT}. (Requires: @ and higher).</li>` +
 		 `<li><code>/resetmoneyall [reason]</code> - Reset all users' ${CURRENCY} balances to ${DEFAULT_AMOUNT}. (Requires: @ and higher).</li>` +
 		 `<li><code>/richestusers</code> - View the top 100 users with the most ${CURRENCY}.</li>` +
+		 `<li><code>/economylogs [user], [page]</code> - View economy logs, optionally filtered by user and page number.</li>` +
 		 `</ul></div>`);
   },
 };
