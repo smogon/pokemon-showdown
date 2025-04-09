@@ -77,6 +77,12 @@ export class Economy {
     this.data = {};
     this.saveMoneyData();
  }
+
+ static getRichestUsers(limit: number = 100): [string, number][] {
+    return Object.entries(this.data)
+      .sort(([, a], [, b]) => b - a)
+      .slice(0, limit);
+  }
 }
 
 global.Economy = Economy;
@@ -201,6 +207,34 @@ export const commands: ChatCommands = {
     room?.add(`|html|<center><div class="broadcast-blue"><b>${Impulse.nameColor(user.name, true, true)}</b> has reset all ${CURRENCY} balances to <b>${DEFAULT_AMOUNT}</b>.<br>Reason: ${reason}</div></center>`);
   },
 
+  richestusers(target, room, user) {
+    if (!this.runBroadcast()) return;
+    const richest = Economy.getRichestUsers(3); // Limit to top 3
+    if (!richest.length) {
+      return this.sendReplyBox(`No users have any ${CURRENCY} yet.`);
+    }
+
+    let output = `<center><div style="border: 1px solid #ddd; padding: 10px; background-color: #f9f9f9; border-radius: 5px;">`;
+    output += `<h3 style="text-align: center; margin-top: 0;">Top ${richest.length} Richest Users</h3>`;
+    output += `<table style="width: 100%; border-collapse: collapse;">`;
+    output += `<tr style="background-color: #eee;">`;
+    output += `<th style="padding: 8px; text-align: right; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">Rank</th>`;
+    output += `<th style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">User</th>`;
+    output += `<th style="padding: 8px; text-align: right; border-bottom: 1px solid #ddd;">Balance</th>`;
+    output += `</tr>`;
+
+    for (const [i, [userid, balance]] of richest.entries()) {
+      output += `<tr>`;
+      output += `<td style="padding: 8px; text-align: right; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">${i + 1}</td>`;
+      output += `<td style="padding: 8px; text-align: left; border-bottom: 1px solid #ddd; border-right: 1px solid #ddd;">${Impulse.nameColor(userid, true, true)}</td>`;
+      output += `<td style="padding: 8px; text-align: right; border-bottom: 1px solid #ddd;">${balance}</td>`;
+      output += `</tr></center>`;
+    }
+
+    output += `</table></div>`;
+    this.sendReplyBox(output);
+  },
+
   economyhelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
@@ -211,6 +245,7 @@ export const commands: ChatCommands = {
 		 `<li><code>/transfermoney [user], [amount] , [reason]</code> - Transfer a specified amount of your ${CURRENCY} to another user.</li>` +
 		 `<li><code>/resetmoney [user], [reason]</code> - Reset a user's ${CURRENCY} balance to ${DEFAULT_AMOUNT}. (Requires: @ and higher).</li>` +
 		 `<li><code>/resetmoneyall [reason]</code> - Reset all users' ${CURRENCY} balances to ${DEFAULT_AMOUNT}. (Requires: @ and higher).</li>` +
+		 `<li><code>/richestusers</code> - View the top 100 users with the most ${CURRENCY}.</li>` +
 		 `</ul></div>`);
   },
 };
