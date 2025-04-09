@@ -336,37 +336,47 @@ export const commands: ChatCommands = {
 
     const logs = Economy.getEconomyLogs(useridFilter, page);
     const totalPages = Economy.getTotalLogPages(useridFilter);
+    const allLogsCount = Economy['logs'].logs.length; // Get the total number of logs
 
-    if (!logs.length) {
-      return this.sendReplyBox(`No economy logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}.`);
+    let logCountMessage = ``;
+    if (useridFilter) {
+      const filteredLogsCount = Economy['logs'].logs.filter(log => log.to === useridFilter || log.from === useridFilter || log.by === useridFilter).length;
+      logCountMessage = ` (${filteredLogsCount} logs for ${Impulse.nameColor(useridFilter, true, true)})`;
+    } else {
+      logCountMessage = ` (${allLogsCount} total logs)`;
     }
 
-    const title = `${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} (Page <span class="math-inline">${page}/</span>${totalPages})`;
+    if (!logs.length) {
+      return this.sendReplyBox(`No economy logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}${logCountMessage}.`);
+    }
+
+    const title = `${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} (Page ${page}/${totalPages})${logCountMessage}`;
     const header = ['Time', 'Action', 'By', 'From', 'To', 'Amount'];
     const data = logs.map (log => {
       const timestamp = new Date(log.timestamp).toLocaleString();
-      const from = log.from ? Impulse.nameColor(log.from, true, true) : '-';
-      const to = Impulse.nameColor(log.to, true, true);
+      const from = log.from ? Impulse.nameColor(log.from, false, false) : '-';
+      const to = Impulse.nameColor(log.to, false, false);
       const amount = `${log.amount} ${CURRENCY}`;
-      const by = log.by ? Impulse.nameColor(log.by, true, true) : '-';
+      const by = log.by ? Impulse.nameColor(log.by, false, false) : '-';
       return [timestamp, log.action, by, from, to, amount];
     });
 
     const output = generateThemedTable(title, header, data);
-    this.ImpulseReplyBox(`<div style="max-height: 400px; overflow: auto;">${output}</div>`);
+    let fullOutput = `<div style="max-height: 400px; overflow: auto;">${output}</div>`;
 
     if (totalPages > 1) {
-      let pagination = `<div class="pagination">`;
+      let pagination = `<div style="text-align: center; margin-top: 10px;">`;
       if (page > 1) {
-        pagination += `<button onclick="send('/economylogs ${useridFilter ? ` ${targetUser!.name}` : ''}, ${page - 1}')">&laquo; Previous</button>`;
+        pagination += `<button onclick="send('/economylogs${useridFilter ? ` ${targetUser!.name}, ${page - 1}` : `, ${page - 1}`}')">&laquo; Previous</button>`;
       }
       pagination += ` Page ${page} of ${totalPages} `;
       if (page < totalPages) {
-        pagination += `<button onclick="send('/economylogs ${useridFilter ? ` ${targetUser!.name}` : ''}, ${page + 1}')">Next &raquo;</button>`;
+        pagination += `<button onclick="send('/economylogs${useridFilter ? ` ${targetUser!.name}, ${page + 1}` : `, ${page + 1}`}')">Next &raquo;</button>`;
       }
       pagination += `</div>`;
-      this.ImpulseReplyBox(pagination);
+      fullOutput += pagination;
     }
+    this.ImpulseReplyBox(fullOutput);
   },
 
   economyhelp(target, room, user) {
