@@ -1597,7 +1597,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 		}
 
 		if (results.length > MAX_RANDOM_RESULTS) {
-			showAll = showAll && message !== "";
+			showAll = showAll && message !== "" && !message.startsWith('!');
 			const notShown = results.length - RESULTS_MAX_LENGTH;
 			const resultsSummary = `${mapPokemonResults(results.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
 			const resultsHidden = mapPokemonResults(results);
@@ -2343,7 +2343,7 @@ function runMovesearch(target: string, cmd: string, message: string, isTest: boo
 		}
 
 		if (results.length > MAX_RANDOM_RESULTS) {
-			showAll = showAll && message !== "";
+			showAll = showAll && message !== "" && !message.startsWith('!');
 			const notShown = results.length - RESULTS_MAX_LENGTH;
 			const resultsSummary = `${mapMoveResults(results.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
 			const resultsHidden = mapMoveResults(results);
@@ -2630,7 +2630,7 @@ function runItemsearch(target: string, cmd: string, message: string) {
 	if (foundItems.length > 0) {
 		foundItems.sort();
 		if (foundItems.length > MAX_RANDOM_RESULTS) {
-			showAll = showAll && message !== "";
+			showAll = showAll && message !== "" && !message.startsWith('!');
 			const notShown = foundItems.length - RESULTS_MAX_LENGTH;
 			const resultsSummary = `${mapItemResults(foundItems.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
 			const resultsHidden = mapItemResults(foundItems);
@@ -2822,7 +2822,7 @@ function runAbilitysearch(target: string, cmd: string, message: string) {
 	if (foundAbilities.length > 0) {
 		foundAbilities.sort();
 		if (foundAbilities.length > MAX_RANDOM_RESULTS) {
-			showAll = showAll && message !== "";
+			showAll = showAll && message !== "" && !message.startsWith('!');
 			const notShown = foundAbilities.length - RESULTS_MAX_LENGTH;
 			const resultsSummary = `${mapAbilityResults(foundAbilities.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <button class="subtle">Click to show all results.</button>`;
 			const resultsHidden = mapAbilityResults(foundAbilities);
