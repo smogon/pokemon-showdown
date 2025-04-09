@@ -100,15 +100,14 @@ export const commands: Chat.ChatCommands = {
       this.parse(`/removeavatar ${userid}`);
     },
 
-    '': 'help',
-    help: function (this: CommandContext): void {
-      this.parse(`/help customavatar`);
-    },
+	customavatarhelp(target, room, user) {
+    if (!this.runBroadcast()) return;
+    this.sendReplyBox(
+		 `<div><b><center>Custom Avatar Commands</center></b>` +
+		 `<ul><li><code>/customavatar set [username], [image link]</code> - Set a user's avatar. (Requires: ~)</li>` +
+		 `<li><code>/customavatar delete [username]</code> - Delete a user's avatar. (Requires: ~)</li>` +
+		 `</ul></div>`);
+	 },
   },
-
-  customavatarhelp: [
-    `Commands for /customavatar are:`,
-    `/customavatar set [username], [image link] - Set a user's avatar. (Requires: ~)`,
-    `/customavatar delete [username] - Delete a user's avatar. (Requires: ~)`,
-  ],
+		 
 };
