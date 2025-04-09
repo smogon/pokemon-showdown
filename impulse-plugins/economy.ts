@@ -265,10 +265,15 @@ export const commands: ChatCommands = {
       return this.errorReply(`You do not have enough ${CURRENCY} to transfer ${amount}.`);
     }
 
-    Economy.takeMoney(user.id, amount);
-    Economy.addMoney(recipient.id, amount);
-    Economy.logMoneyAction({ action: 'transfer', from: user.id, to: recipient.id, amount, reason, by: user.id }); // Logged by the sender
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} transferred ${amount} ${CURRENCY} to <span class="math-inline">\{Impulse\.nameColor\(recipient\.name, true, true\)\} \(</span>{reason}). Your new balance is ${Economy.readMoney(user.id)} ${CURRENCY}, and ${Impulse.nameColor(recipient.name, true, true)}'s new balance is ${Economy.readMoney(recipient.id)} ${CURRENCY}.`);
+    const senderId = toID(user.id);
+    const recipientId = toID(recipient.id);
+
+    this.data[senderId] = (this.data[senderId] || 0) - amount;
+    this.data[recipientId] = (this.data[recipientId] || 0) + amount;
+    this.saveMoneyData();
+    this.logMoneyAction({ action: 'transfer', from: senderId, to: recipientId, amount, reason, by: senderId });
+
+    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} transferred ${amount} ${CURRENCY} to <span class="math-inline">\{Impulse\.nameColor\(recipient\.name, true, true\)\} \(</span>{reason}). Your new balance is ${Economy.readMoney(senderId)} ${CURRENCY}, and ${Impulse.nameColor(recipient.name, true, true)}'s new balance is ${Economy.readMoney(recipientId)} ${CURRENCY}.`);
     if (recipient.connected) {
       recipient.popup(`|html|<b><span class="math-inline">\{Impulse\.nameColor\(user\.name, true, true\)\}</b\> transferred <b\></span>{amount} ${CURRENCY}</b> to you.<br>Reason: ${reason}`);
     }
@@ -340,7 +345,7 @@ export const commands: ChatCommands = {
 
     const title = `${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} (Page <span class="math-inline">\{page\}/</span>{totalPages})`;
     const header = ['Time', 'Action', 'By', 'From', 'To', 'Amount', 'Reason'];
-    const data = logs.map (log => {
+    const data = logs.map(log => {
       const timestamp = new Date(log.timestamp).toLocaleString();
       const from = log.from ? Impulse.nameColor(log.from, true, true) : '-';
       const to = Impulse.nameColor(log.to, true, true);
