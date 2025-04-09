@@ -213,10 +213,10 @@ export const commands: ChatCommands = {
     }
 
     Economy.addMoney(targetUser.id, amount, reason, user.id);
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} gave ${amount} ${CURRENCY} to <span class="math-inline">\{Impulse\.nameColor\(targetUser\.name, true, true\)\} \(</span>{reason}). ${Impulse.nameColor(targetUser.name, true, true)} now has ${Economy.readMoney(targetUser.id)} ${CURRENCY}.`);
+    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} gave ${amount} ${CURRENCY} to ${Impulse.nameColor(targetUser.name, true, true}} (${reason}). ${Impulse.nameColor(targetUser.name, true, true)} now has ${Economy.readMoney(targetUser.id)} ${CURRENCY}.`);
     this.modlog('GIVEMONEY', targetUser, `${amount} ${CURRENCY}`, { by: user.id, reason });
     if (targetUser.connected) {
-      targetUser.popup(`|html|You received <b>${amount} <span class="math-inline">\{CURRENCY\}</b\> from <b\></span>{Impulse.nameColor(user.name, true, true)}</b>.<br>Reason: ${reason}`);
+      targetUser.popup(`|html|You received <b>${amount} ${CURRENCY}</b> from <b> ${Impulse.nameColor(user.name, true, true)}</b>.<br>Reason: ${reason}`);
     }
   },
 
@@ -238,10 +238,10 @@ export const commands: ChatCommands = {
     }
 
     Economy.takeMoney(targetUser.id, amount, reason, user.id);
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} took ${amount} ${CURRENCY} from <span class="math-inline">\{Impulse\.nameColor\(targetUser\.name, true, true\)\} \(</span>{reason}). ${Impulse.nameColor(targetUser.name, true, true)} now has ${Economy.readMoney(targetUser.id)} ${CURRENCY}.`);
+    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} took ${amount} ${CURRENCY} ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ${Impulse.nameColor(targetUser.name, true, true)} now has ${Economy.readMoney(targetUser.id)} ${CURRENCY}.`);
     this.modlog('TAKEMONEY', targetUser, `${amount} ${CURRENCY}`, { by: user.id, reason });
     if (targetUser.connected) {
-      targetUser.popup(`|html|<b><span class="math-inline">\{Impulse\.nameColor\(user\.name, true, true\)\}</b\> took <b\></span>{amount} ${CURRENCY}</b> from you.<br>Reason: ${reason}`);
+      targetUser.popup(`|html|<b>${Impulse.nameColor(user.name, true, true)}</b> took <b>${amount} ${CURRENCY}</b> from you.<br>Reason: ${reason}`);
     }
   },
 
@@ -271,9 +271,9 @@ export const commands: ChatCommands = {
     Economy.takeMoney(user.id, amount, undefined, user.id, true); // skipLog is true
     Economy.addMoney(recipient.id, amount, reason, user.id, true); // skipLog is true
     Economy.logMoneyAction({ action: 'transfer', from: user.id, to: recipient.id, amount, by: user.id }); // Logged once for the transfer
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} transferred ${amount} ${CURRENCY} to <span class="math-inline">\{Impulse\.nameColor\(recipient\.name, true, true\)\} \(</span>{reason}). Your new balance is ${Economy.readMoney(user.id)} ${CURRENCY}, and ${Impulse.nameColor(recipient.name, true, true)}'s new balance is ${Economy.readMoney(recipient.id)} ${CURRENCY}.`);
+    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} transferred ${amount} ${CURRENCY} to ${Impulse.nameColor(recipient.name, true, true)} (${reason}). Your new balance is ${Economy.readMoney(user.id)} ${CURRENCY}, and ${Impulse.nameColor(recipient.name, true, true)}'s new balance is ${Economy.readMoney(recipient.id)} ${CURRENCY}.`);
     if (recipient.connected) {
-      recipient.popup(`|html|<b><span class="math-inline">\{Impulse\.nameColor\(user\.name, true, true\)\}</b\> transferred <b\></span>{amount} ${CURRENCY}</b> to you.<br>Reason: ${reason}`);
+      recipient.popup(`|html|<b>${Impulse.nameColor(user.name, true, true)}</b> transferred <b>${amount} ${CURRENCY}</b> to you.<br>Reason: ${reason}`);
     }
   },
 
@@ -290,10 +290,10 @@ export const commands: ChatCommands = {
 
     Economy.writeMoney(targetUser.id, DEFAULT_AMOUNT);
     Economy.logMoneyAction({ action: 'reset', to: targetUser.id, amount: DEFAULT_AMOUNT, by: user.id });
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} reset ${Impulse.nameColor(targetUser.name, true, true)}'s balance to ${DEFAULT_AMOUNT} <span class="math-inline">\{CURRENCY\} \(</span>{reason}).`);
+    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} reset ${Impulse.nameColor(targetUser.name, true, true)}'s balance to ${DEFAULT_AMOUNT} ${CURRENCY} (${reason}).`);
     this.modlog('RESETMONEY', targetUser, `${DEFAULT_AMOUNT} ${CURRENCY}`, { by: user.id, reason });
     if (targetUser.connected) {
-      targetUser.popup(`|html|Your <span class="math-inline">\{CURRENCY\} balance has been reset to <b\></span>{DEFAULT_AMOUNT}</b> by <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>Reason: ${reason}`);
+      targetUser.popup(`|html|Your ${CURRENCY} balance has been reset to <b>${DEFAULT_AMOUNT}</b> by <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>Reason: ${reason}`);
     }
   },
 
@@ -304,7 +304,7 @@ export const commands: ChatCommands = {
     Economy.resetAllMoney();
     this.sendReplyBox(`All user balances have been reset to ${DEFAULT_AMOUNT} <span class="math-inline">\{CURRENCY\} \(</span>{reason}).`);
     this.modlog('RESETMONEYALL', null, `all balances to ${DEFAULT_AMOUNT} ${CURRENCY}`, { by: user.id, reason });
-    room?.add(`|html|<center><div class="broadcast-blue"><b>${Impulse.nameColor(user.name, true, true)}</b> has reset all <span class="math-inline">\{CURRENCY\} balances to <b\></span>{DEFAULT_AMOUNT}</b>.<br>Reason: ${reason}</div></center>`);
+    room?.add(`|html|<center><div class="broadcast-blue"><b>${Impulse.nameColor(user.name, true, true)}</b> has reset all ${CURRENCY} balances to <b>${DEFAULT_AMOUNT}</b>.<br>Reason: ${reason}</div></center>`);
   },
 
   richestusers(target, room, user) {
