@@ -165,13 +165,16 @@ export const commands: Chat.ChatCommands = {
     },
   },
 
-  customcolorhelp: [
-    "Commands for /customcolor are:",
-    "/customcolor set [user], [hex] - Gives [user] a custom color of [hex] (Requires: @ and higher)",
-    "/customcolor delete [user] - Deletes a user's custom color (Requires: @ and higher)",
-    "/customcolor reload - Reloads colors. (Requires: ~)",
-    "/customcolor preview [user], [hex] - Previews what that username looks like with [hex] as the color.",
-  ],
+  customcolorhelp(target, room, user) {
+    if (!this.runBroadcast()) return;
+    this.sendReplyBox(
+		 `<div><b><center>Custom Color Commands</center></b>` +
+		 `<ul><li><code>/customcolor set [user], [hex]</code> - Gives [user] a custom color of [hex] (Requires: @ and higher)</li>` +
+		 `<li><code>/customcolor delete [user]</code> - Deletes a user's custom color (Requires: @ and higher)</li>` +
+		 `<li><code>/customcolor reload</code> - Reloads colors. (Requires: ~)</li>` +
+		 `<li><code>/customcolor preview [user], [hex]</code> - Previews what that username looks like with [hex] as the color.</li>` +
+		 `</ul></div>`);
+  },
 
   '!hex': true,
   hex(target: string, room: ChatRoom, user: User): void {
