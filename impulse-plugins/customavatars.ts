@@ -6,7 +6,7 @@
 import { FS } from '../lib/fs';
 
 const AVATAR_PATH: string = 'config/avatars/';
-const STAFF_ROOM_ID = 'staff'; // Replace 'staff' with your staff room ID
+const STAFF_ROOM_ID = 'staff';
 const VALID_EXTENSIONS: string[] = ['.jpg', '.png', '.gif'];
 
 async function downloadImage(image_url: string, name: string, extension: string): Promise<void> {
