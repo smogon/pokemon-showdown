@@ -1,5 +1,4 @@
 import { FS } from '../lib/fs';
-import path from 'path';
 
 interface ShopItem {
     id: string;
@@ -12,72 +11,32 @@ interface ShopData {
     [itemId: string]: ShopItem;
 }
 
-const SHOP_FILE_PATH = 'impulse-db/shop.json';
-const SHOP_LOGS_FILE_PATH = 'impulse-db/shop_transactions.log';
-
-const CURRENCY = Impulse.currency;
-
 interface ShopLogEntry {
     timestamp: number;
-    action: string; // e.g., 'buy'
-    user: string; // User ID
-    itemName: string;
-    price: number;
-    currency: string;
-    // Add other relevant details you want to log
+    action: 'add' | 'delete' | 'save' | 'buy';
+    userid: string;
+    ip?: string;
+    itemId?: string;
+    itemName?: string;
+    price?: number;
+    description?: string;
+    details?: string;
 }
- 
+
 interface ShopLogs {
     logs: ShopLogEntry[];
 }
- 
-// Helper function to parse a single log line (adjust based on your logging format)
-function parseShopLogLine(line: string): ShopLogEntry | null {
-    try {
-        const parts = line.split(' - '); // Adjust the delimiter if your log format is different
-        if (parts.length >= 2) {
-            const timestampPart = parts[0];
-            const dataPart = parts[1];
-            const dataRegex = /User: ([^ ]+) \(([^)]+)\) bought "([^"]+)" for (\d+) ([^ ]+)/; // Adjust regex to match your log format
-            const match = dataRegex.exec(dataPart);
-            if (match) {
-                return {
-                    timestamp: new Date(timestampPart).getTime(),
-                    action: 'buy', // Assuming your log indicates a 'buy' action
-                    user: match[1], // User ID
-                    itemName: match[3],
-                    price: parseInt(match[4], 10),
-                    currency: match[5],
-                };
-            }
-        }
-        return null;
-    } catch (error) {
-        console.error(`Error parsing shop log line: ${line}`, error);
-        return null;
-    }
-}
- 
-function loadShopLogs(): ShopLogs {
-    try {
-        if (!FS(SHOP_LOGS_FILE_PATH).existsSync()) {
-            return { logs: [] };
-        }
-        const rawLogs = FS(SHOP_LOGS_FILE_PATH).readIfExistsSync();
-        if (!rawLogs) {
-            return { logs: [] };
-        }
-        const logLines = rawLogs.split('\n').filter(line => line.trim() !== '');
-        const parsedLogs = logLines.map(parseShopLogLine).filter((log): log is ShopLogEntry => log !== null);
-        return { logs: parsedLogs };
-    } catch (error) {
-        console.error(`Error loading shop logs: ${error}`);
-        return { logs: [] };
-    }
-}
+
+
+const SHOP_FILE_PATH = 'impulse-db/shop.json';
+const SHOP_LOGS_FILE_PATH = 'impulse-db/shoplogs.json';
+const CURRENCY = Impulse.currency;
+const MAX_SHOP_LOG_SIZE = 5000;
+
 
 export class Shop {
     private static items: ShopData = Shop.loadShopData();
+    private static logs: ShopLogs = Shop.loadShopLogs();
 
     private static loadShopData(): ShopData {
         try {
@@ -97,14 +56,60 @@ export class Shop {
         }
     }
 
-
-    private static saveShopData(): void {
+    static saveShopData(): void {
         try {
             FS(SHOP_FILE_PATH).safeWriteUpdate(() => JSON.stringify(this.items, null, 2));
         } catch (error) {
             console.error(`Error saving shop data: ${error}`);
         }
     }
+
+
+    private static loadShopLogs(): ShopLogs {
+        try {
+            const rawData = FS(SHOP_LOGS_FILE_PATH).readIfExistsSync();
+            const parsedData = rawData ? JSON.parse(rawData) : { logs: [] };
+            return (parsedData && Array.isArray(parsedData.logs)) ? parsedData : { logs: [] };
+        } catch (error) {
+            console.error(`Error reading or parsing shop logs: ${error}`);
+             try {
+                if (!FS(SHOP_LOGS_FILE_PATH).existsSync()) {
+                   FS(SHOP_LOGS_FILE_PATH).safeWriteSync('{"logs":[]}');
+                }
+            } catch (writeError) {
+                console.error(`Failed to create shop log file after read error: ${writeError}`);
+            }
+            return { logs: [] };
+        }
+    }
+
+    private static saveShopLogs(): void {
+        try {
+            FS(SHOP_LOGS_FILE_PATH).safeWriteUpdate(() => JSON.stringify(this.logs, null, 2));
+        } catch (error) {
+            console.error(`Error saving shop logs: ${error}`);
+        }
+    }
+
+    static logShopAction(entry: Omit<ShopLogEntry, 'timestamp'>): void {
+        if (this.logs.logs.length > MAX_SHOP_LOG_SIZE) {
+            this.logs.logs = this.logs.logs.slice(this.logs.logs.length - MAX_SHOP_LOG_SIZE);
+        }
+        this.logs.logs.push({ timestamp: Date.now(), ...entry });
+        this.saveShopLogs();
+    }
+
+    static getShopLogs(page: number = 1, entriesPerPage: number = 100): ShopLogEntry[] {
+        const reversedLogs = [...this.logs.logs].reverse();
+        const startIndex = (page - 1) * entriesPerPage;
+        const endIndex = startIndex + entriesPerPage;
+        return reversedLogs.slice(startIndex, endIndex);
+    }
+
+    static getTotalShopLogPages(entriesPerPage: number = 100): number {
+        return Math.ceil(this.logs.logs.length / entriesPerPage) || 1;
+    }
+
 
     static addItem(item: ShopItem): boolean {
         const itemId = item.id;
@@ -135,6 +140,7 @@ export class Shop {
     }
 }
 
+
 export const commands: ChatCommands = {
     shop: 'viewshop',
     viewshop(target, room, user) {
@@ -146,7 +152,7 @@ export const commands: ChatCommands = {
         }
 
         const title = `${Impulse.serverName} Shop`;
-        const header = ['Item', 'Description', 'Price', 'Buy'];
+        const header = ['Item Name', 'Description', 'Price', 'Buy'];
         const data = items.map(item => {
             const buyButton = `<button class="button" name="send" value="/buyitem ${item.name}">Buy</button>`;
             return [
@@ -172,28 +178,26 @@ export const commands: ChatCommands = {
         const price = parseInt(parts[1], 10);
         const description = parts.slice(2).join(',').trim();
 
-        if (!name) {
-            return this.errorReply(`Item name cannot be empty.`);
-        }
-        if (isNaN(price) || price <= 0) {
-            return this.errorReply(`Please specify a valid positive number for the price.`);
-        }
-        if (!description) {
-            return this.errorReply(`Please provide a description for the item.`);
-        }
+        if (!name) return this.errorReply(`Item name cannot be empty.`);
+        if (isNaN(price) || price <= 0) return this.errorReply(`Please specify a valid positive number for the price.`);
+        if (!description) return this.errorReply(`Please provide a description for the item.`);
         if (name.length > 50) return this.errorReply("Item name is too long (max 50 characters).");
         if (description.length > 200) return this.errorReply("Item description is too long (max 200 characters).");
 
-        const newItem: ShopItem = {
-            id: toID(name),
-            name: name,
-            price: price,
-            description: description,
-        };
+        const newItem: ShopItem = { id: toID(name), name, price, description };
 
         if (Shop.addItem(newItem)) {
-            this.sendReply(`Item "${Chat.escapeHTML(name)}" has been added to the shop for ${price} ${CURRENCY}.`);
+            this.ImpulseReplyBox(`Item "${Chat.escapeHTML(name)}" has been added to the shop for ${price} ${CURRENCY}.`);
             this.modlog('ADDSHOPITEM', null, `"${Chat.escapeHTML(name)}" (Price: ${price} ${CURRENCY})`, { by: user.id });
+            Shop.logShopAction({
+                action: 'add',
+                userid: user.id,
+                ip: user.latestIp,
+                itemId: newItem.id,
+                itemName: newItem.name,
+                price: newItem.price,
+                description: newItem.description,
+            });
         } else {
             this.errorReply(`An item with the name/ID "${Chat.escapeHTML(name)}" already exists. Use a different name or delete the existing item first.`);
         }
@@ -212,10 +216,17 @@ export const commands: ChatCommands = {
         }
 
         if (Shop.deleteItem(itemId)) {
-            this.sendReply(`Item "${Chat.escapeHTML(item.name)}" has been removed from the shop.`);
+            this.ImpulseReplyBox(`Item "${Chat.escapeHTML(item.name)}" has been removed from the shop.`);
             this.modlog('REMOVESHOPITEM', null, `"${Chat.escapeHTML(item.name)}" (ID: ${itemId})`, { by: user.id });
+            Shop.logShopAction({
+                action: 'delete',
+                userid: user.id,
+                ip: user.latestIp,
+                itemId: item.id,
+                itemName: item.name,
+            });
         } else {
-            this.errorReply(`Failed to remove item "${Chat.escapeHTML(target)}". It might have been deleted by someone else.`);
+            this.errorReply(`Failed to remove item "${Chat.escapeHTML(target)}". It might have already been deleted.`);
         }
     },
 
@@ -237,8 +248,15 @@ export const commands: ChatCommands = {
 
         if (newBalance !== undefined && newBalance === userBalance - item.price) {
             this.sendReply(`You have successfully purchased "${Chat.escapeHTML(item.name)}" for ${item.price} ${CURRENCY}. Your new balance is ${newBalance} ${CURRENCY}.`);
-			  const logMessage = `${new Date().toISOString()} - User: ${user.id} (${user.name}) bought "${item.name}" for ${item.price} ${CURRENCY}`;
-			  FS(SHOP_LOGS_FILE_PATH).appendFileSync(logMessage + '\n');
+
+            Shop.logShopAction({
+                action: 'buy',
+                userid: user.id,
+                ip: user.latestIp,
+                itemId: item.id,
+                itemName: item.name,
+                price: item.price,
+            });
 
         } else {
             this.errorReply(`There was an error processing your purchase for "${Chat.escapeHTML(item.name)}". Your balance has not been changed. Please contact staff if this issue persists.`);
@@ -246,66 +264,87 @@ export const commands: ChatCommands = {
         }
     },
 
-	shoplogs: function (target, room, user) {
-        this.checkCan('globalban'); // Adjust permission as needed
- 
-        const parts = target.split(',').map(p => p.trim());
-        const targetUser = parts[0] ? Users.get(parts[0]) : null;
-        const page = parseInt(parts[1], 10) || 1;
-        const useridFilter = targetUser?.id;
-        const entriesPerPage = 10; // You can adjust this
- 
-        const allShopLogs = loadShopLogs().logs;
-        let filteredLogs = allShopLogs;
- 
-        if (useridFilter) {
-            filteredLogs = filteredLogs.filter(log => log.user === useridFilter);
+    shopsave(target, room, user) {
+        this.checkCan('globalban');
+        try {
+            Shop.saveShopData();
+            this.sendReply("Shop item data saved successfully.");
+            this.modlog('SHOPSAVE', null, `manually saved shop item data`, { by: user.id });
+            Shop.logShopAction({
+                action: 'save',
+                userid: user.id,
+                ip: user.latestIp,
+                details: 'Manually triggered shop item save',
+            });
+        } catch (e) {
+            this.errorReply(`Failed to save shop item data. Check console for errors.`);
+            console.error(`Error during /shopsave: ${e}`);
         }
- 
-        // Sort by timestamp, newest first
-        filteredLogs.sort((a, b) => b.timestamp - a.timestamp);
- 
-        const startIndex = (page - 1) * entriesPerPage;
-        const endIndex = startIndex + entriesPerPage;
-        const paginatedLogs = filteredLogs.slice(startIndex, endIndex);
-        const totalPages = Math.ceil(filteredLogs.length / entriesPerPage) || 1;
- 
-        if (!paginatedLogs.length) {
-            return this.sendReplyBox(`No shop logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}.`);
+    },
+
+
+    shoplogs(target, room, user) {
+        this.checkCan('globalban');
+        const page = parseInt(target) || 1;
+        const entriesPerPage = 50;
+
+        const logs = Shop.getShopLogs(page, entriesPerPage);
+        const totalPages = Shop.getTotalShopLogPages(entriesPerPage);
+        const totalLogCount = Shop['logs'].logs.length;
+
+        if (!logs.length && page === 1) {
+            return this.ImpulseReplyBox(`No shop logs found.`);
+        } else if (!logs.length) {
+             return this.errorReply(`Invalid page number. Page ${page} does not exist (Total pages: ${totalPages}).`);
         }
- 
-        const title = `${useridFilter ? `Shop Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Shop Logs'} (Page ${page} of ${totalPages})`;
-        const header = ['Time', 'User', 'Item', 'Price'];
-        const data = paginatedLogs.map(log => {
-            const timestamp = new Date(log.timestamp).toLocaleString();
-            const userName = Impulse.nameColor(log.user, false, false);
-            return [timestamp, userName, Chat.escapeHTML(log.itemName), `${log.price} ${log.currency}`];
+
+        const title = `Shop Logs (${totalLogCount} total entries) - Page ${page} of ${totalPages}`;
+        const header = ['Time', 'Action', 'User', 'Item ID', 'Item Name', 'Price', 'Details'];
+
+        const data = logs.map(log => {
+            const timestamp = new Date(log.timestamp).toLocaleString('en-US', {
+                year: 'numeric', month: 'short', day: 'numeric',
+                hour: 'numeric', minute: '2-digit', second: '2-digit', hour12: true
+            });
+            const userName = Impulse.nameColor(log.userid, true, true);
+            const action = log.action.toUpperCase();
+            const itemId = log.itemId || '-';
+            const itemName = log.itemName ? Chat.escapeHTML(log.itemName) : '-';
+            const price = ((log.action === 'add' || log.action === 'buy') && log.price !== undefined) ? `${log.price} ${CURRENCY}` : '-';
+
+            let details = '-';
+            if (log.action === 'add' && log.description) {
+                details = Chat.escapeHTML(log.description);
+            } else if (log.action === 'save' && log.details) {
+                 details = Chat.escapeHTML(log.details);
+            }
+
+            if (details.length > 100) details = details.substring(0, 97) + '...';
+
+            return [timestamp, action, userName, itemId, itemName, price, details];
         });
- 
+
         const tableHTML = Impulse.generateThemedTable(title, header, data);
         let paginationHTML = '';
- 
+
         if (totalPages > 1) {
             paginationHTML += `<div style="text-align: center; margin-top: 5px;">Page: ${page} / ${totalPages}`;
-            if (page > 1) {
-                paginationHTML += ` | <button name="send" value="/shoplogs ${useridFilter ? ` ${targetUser.name}` : ''}, ${page - 1}">Previous</button>`;
-            }
-            if (page < totalPages) {
-                paginationHTML += ` | <button name="send" value="/shoplogs ${useridFilter ? ` ${targetUser.name}` : ''}, ${page + 1}">Next</button>`;
-            }
+            const cmd = `/shoplogs`;
+            if (page > 1) paginationHTML += ` | <button name="send" value="${cmd} ${page - 1}">Previous</button>`;
+            if (page < totalPages) paginationHTML += ` | <button name="send" value="${cmd} ${page + 1}">Next</button>`;
             paginationHTML += `</div>`;
         }
- 
-        const fullOutput = `<div style="max-height: 400px; overflow: auto;" data-uhtml="shoplogs-${useridFilter}-${page}">${tableHTML}</div>${paginationHTML}`;
-        this.sendReplyBox(fullOutput);
+
+        const uhtmlID = `shoplogs-${page}`;
+        const fullOutput = `<div style="max-height: 400px; overflow-y: auto;" data-uhtml="${uhtmlID}">${tableHTML}</div>${paginationHTML}`;
+        this.ImpulseReplyBox(fullOutput);
     },
-    shoplogshelp: [
-        `/shoplogs [user], [page] - View shop transaction logs, optionally filtered by user and page number. Requires # or higher permission.`,
-    ],
+
 
      shophelp(target, room, user) {
         if (!this.runBroadcast()) return;
-        this.sendReplyBox(
+
+        this.ImpulseReplyBox(
          `<div><b><center>Shop Commands</center></b>` +
          `<details open><summary><b>User Commands</b></summary>` +
          `<ul><li><code>/shop</code> (or <code>/viewshop</code>) - View available items in the shop.</li>` +
@@ -313,10 +352,11 @@ export const commands: ChatCommands = {
          `<li><code>/shophelp</code> - Shows this help message.</li>` +
          `<li><code>/economyhelp</code> - Shows commands related to ${CURRENCY} balance and transfers.</li>`+
          `</ul></details>` +
-         `<details><summary><b>Admin Shop Commands</b> (Requires: @ and higher )</summary>` +
+         `<details><summary><b>Admin Shop Commands</b> (Requires: @ and higher)</summary>` +
          `<ul><li><code>/additem [item name], [price], [description]</code> - Add an item to the shop.</li>` +
          `<li><code>/deleteitem [item name]</code> (or <code>/removeitem</code>) - Remove an item from the shop.</li>` +
-			`<li><code>/shoplogs [user], [page]</code> - View shop transaction logs.</li>` +
+         `<li><code>/shopsave</code> - Manually save the current shop items to file.</li>` +
+         `<li><code>/shoplogs [page]</code> - View logs of item purchases and administrative shop actions.</li>` +
          `</ul></details></div>`);
     },
 };
