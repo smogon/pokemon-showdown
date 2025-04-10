@@ -1,4 +1,5 @@
 import { FS } from '../lib/fs';
+import path from 'path';
 
 interface ShopItem {
     id: string;
@@ -12,7 +13,7 @@ interface ShopData {
 }
 
 const SHOP_FILE_PATH = 'impulse-db/shop.json';
-const SHOP_LOGS_FILE_PATH = 'impulse-logs/shop_transactions.log';
+const SHOP_LOGS_FILE_PATH = 'impulse-db/shop_transactions.log';
 
 const CURRENCY = Impulse.currency;
 
