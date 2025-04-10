@@ -889,6 +889,10 @@ export class User extends Chat.MessageContext {
 		}
 		Rooms.global.checkAutojoin(this);
 		Rooms.global.rejoinGames(this);
+		if (this.connected) {
+			// News Test
+		Impulse.NewsManager.onUserConnect(this);
+		}
 		Chat.loginfilter(this, null, userType);
 		return true;
 	}
@@ -1215,10 +1219,6 @@ export class User extends Chat.MessageContext {
 	onDisconnect(connection: Connection) {
 		if (this.named) {
  			Db.seen.set(this.id, Date.now());
-		}
-		if (this.connected) {
-			// News Test
-		Impulse.NewsManager.onUserConnect(this);
 		}
 		// slightly safer to do this here so that we can do this before Conn#user is nulled.
 		if (connection.openPages) {
