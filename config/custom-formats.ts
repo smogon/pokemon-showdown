@@ -4,7 +4,7 @@ export const Formats: FormatList = [
   {
     name: "[Gen 9] Impulse Random Red",
     desc: "Randomized teams of Pokémon with red color only.",
-    section: "Impulse Custom Formats",
+    section: "S/V Singles",
 
     mod: 'gen9',
     team: 'random',
