@@ -1216,6 +1216,10 @@ export class User extends Chat.MessageContext {
 		if (this.named) {
  			Db.seen.set(this.id, Date.now());
 		}
+		if (this.connected) {
+			// News Test
+		Impulse.NewsManager.onUserConnect(this);
+		}
 		// slightly safer to do this here so that we can do this before Conn#user is nulled.
 		if (connection.openPages) {
 			for (const page of connection.openPages) {
@@ -1665,9 +1669,6 @@ function socketConnect(
 			connection.sendTo(null, `|challstr|${keyid}|${connection.challenge}`);
 		}
 	});
-
-		// News Test
-		Impulse.NewsManager.onUserConnect(this);
 
 	Rooms.global.handleConnect(user, connection);
 }
