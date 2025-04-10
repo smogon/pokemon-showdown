@@ -285,6 +285,7 @@ export const commands: ChatCommands = {
 
     shoplogs(target, room, user) {
         this.checkCan('globalban');
+		  if (!this.runBroadcast()) return;
         const page = parseInt(target) || 1;
         const entriesPerPage = 50;
 
