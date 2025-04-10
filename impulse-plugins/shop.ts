@@ -3,6 +3,7 @@
 */
 
 import { FS } from '../lib/fs';
+
 interface ShopItem {
   name: string;
   cost: number;
@@ -30,7 +31,7 @@ function loadShopItems(): { [itemid: string]: Omit<ShopItem, 'itemid'> } {
   }
 }
 
-class Shop {
+export class Shop {
   static getItem(itemid: string): ShopItem | undefined {
     const itemData = SHOP_ITEMS[itemid];
     if (itemData) {
@@ -128,13 +129,13 @@ class Shop {
 global.Shop = Shop;
 
 export const commands: Chat.Commands = {
-  shop(target, room, user) {
-    if (!this.runBroadcast()) return;
-    this.ImpulseReplyBox(Shop.viewShop());
-  },
-
-  buy(target, room, user) {
-    if (!target) return this.sendReply(`Usage: /buy [itemid], [quantity]`);
+	shop(target, room, user) {
+		if (!this.runBroadcast()) return;
+		this.ImpulseReplyBox(Shop.viewShop());
+	},
+	
+	buy(target, room, user) {
+		if (!target) return this.sendReply(`Usage: /buy [itemid], [quantity]`);
     const parts = target.split(',').map(p => p.trim());
     const itemid = toID(parts[0]);
     const quantity = parts[1] ? parseInt(parts[1], 10) : 1;
