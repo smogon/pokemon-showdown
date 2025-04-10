@@ -28,7 +28,7 @@ try {
 }
 
 const colorCache: Record<string, string> = {};
-const STAFF_ROOM_ID = 'staff'; // Replace 'staff' with your staff room ID
+const STAFF_ROOM_ID = 'staff';
 
 function nameColor(name: string): string {
   const id = toID(name);
