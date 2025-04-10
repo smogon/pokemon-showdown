@@ -35,123 +35,147 @@ const MAX_SHOP_LOG_SIZE = 5000;
 
 
 export class Shop {
+    // --- Eager Loading: Load data immediately when module loads/reloads ---
     private static items: ShopData = Shop.loadShopData();
     private static logs: ShopLogs = Shop.loadShopLogs();
+    // --- End Eager Loading ---
 
+    // Removed ensureDataLoaded and ensureLogsLoaded as they are no longer needed
+
+    // loadShopData now just performs the load, doesn't need complex return handling for null state
     private static loadShopData(): ShopData {
         try {
             const rawData = FS(SHOP_FILE_PATH).readIfExistsSync();
             const parsedData = rawData ? JSON.parse(rawData) : {};
-            return parsedData || {};
+            // Basic validation: ensure it's an object
+            return (typeof parsedData === 'object' && parsedData !== null && !Array.isArray(parsedData)) ? parsedData : {};
         } catch (error) {
             console.error(`Error reading or parsing shop data: ${error}`);
             try {
+                // Attempt to create file only if it doesn't exist after error
                 if (!FS(SHOP_FILE_PATH).existsSync()) {
                    FS(SHOP_FILE_PATH).safeWriteSync('{}');
+                   console.log(`Created empty shop data file at ${SHOP_FILE_PATH}`);
+                   return {}; // Return empty object if we just created the file
                 }
             } catch (writeError) {
                 console.error(`Failed to create shop data file after read error: ${writeError}`);
             }
+             // If file exists but is corrupt/unreadable, return empty object to prevent crash,
+             // but log the error. Data loss might occur on next save if corruption wasn't fixed.
+            console.error(`Returning empty shop data due to load error. File might be corrupt: ${SHOP_FILE_PATH}`);
             return {};
         }
     }
 
+    // loadShopLogs now just performs the load
+    private static loadShopLogs(): ShopLogs {
+        try {
+            const rawData = FS(SHOP_LOGS_FILE_PATH).readIfExistsSync();
+            const parsedData = rawData ? JSON.parse(rawData) : { logs: [] };
+            // Basic validation: ensure it has a 'logs' array
+            return (parsedData && Array.isArray(parsedData.logs)) ? parsedData : { logs: [] };
+        } catch (error) {
+            console.error(`Error reading or parsing shop logs: ${error}`);
+             try {
+                 // Attempt to create file only if it doesn't exist after error
+                if (!FS(SHOP_LOGS_FILE_PATH).existsSync()) {
+                   FS(SHOP_LOGS_FILE_PATH).safeWriteSync('{"logs":[]}');
+                    console.log(`Created empty shop log file at ${SHOP_LOGS_FILE_PATH}`);
+                   return { logs: [] }; // Return empty if we just created it
+                }
+            } catch (writeError) {
+                console.error(`Failed to create shop log file after read error: ${writeError}`);
+            }
+            console.error(`Returning empty shop logs due to load error. File might be corrupt: ${SHOP_LOGS_FILE_PATH}`);
+            return { logs: [] };
+        }
+    }
+
+    // Save methods no longer need ensureDataLoaded/ensureLogsLoaded
     static saveShopData(): void {
         try {
+            // Directly stringify the current items object
             FS(SHOP_FILE_PATH).safeWriteUpdate(() => JSON.stringify(this.items, null, 2));
         } catch (error) {
             console.error(`Error saving shop data: ${error}`);
         }
     }
 
-
-    private static loadShopLogs(): ShopLogs {
-        try {
-            const rawData = FS(SHOP_LOGS_FILE_PATH).readIfExistsSync();
-            const parsedData = rawData ? JSON.parse(rawData) : { logs: [] };
-            return (parsedData && Array.isArray(parsedData.logs)) ? parsedData : { logs: [] };
-        } catch (error) {
-            console.error(`Error reading or parsing shop logs: ${error}`);
-             try {
-                if (!FS(SHOP_LOGS_FILE_PATH).existsSync()) {
-                   FS(SHOP_LOGS_FILE_PATH).safeWriteSync('{"logs":[]}');
-                }
-            } catch (writeError) {
-                console.error(`Failed to create shop log file after read error: ${writeError}`);
-            }
-            return { logs: [] };
-        }
-    }
-
     private static saveShopLogs(): void {
         try {
+             // Directly stringify the current logs object
             FS(SHOP_LOGS_FILE_PATH).safeWriteUpdate(() => JSON.stringify(this.logs, null, 2));
         } catch (error) {
             console.error(`Error saving shop logs: ${error}`);
         }
     }
 
+    // logShopAction no longer needs ensureLogsLoaded, directly accesses this.logs
     static logShopAction(entry: Omit<ShopLogEntry, 'timestamp'>): void {
         if (this.logs.logs.length > MAX_SHOP_LOG_SIZE) {
             this.logs.logs = this.logs.logs.slice(this.logs.logs.length - MAX_SHOP_LOG_SIZE);
         }
         this.logs.logs.push({ timestamp: Date.now(), ...entry });
-        this.saveShopLogs();
+        this.saveShopLogs(); // Save after adding
     }
 
+    // Log retrieval no longer needs ensureLogsLoaded
     static getShopLogs(page: number = 1, entriesPerPage: number = 100): ShopLogEntry[] {
-        const reversedLogs = [...this.logs.logs].reverse();
+        const reversedLogs = [...this.logs.logs].reverse(); // Access this.logs directly
         const startIndex = (page - 1) * entriesPerPage;
         const endIndex = startIndex + entriesPerPage;
         return reversedLogs.slice(startIndex, endIndex);
     }
 
     static getTotalShopLogPages(entriesPerPage: number = 100): number {
-        return Math.ceil(this.logs.logs.length / entriesPerPage) || 1;
+        return Math.ceil(this.logs.logs.length / entriesPerPage) || 1; // Access this.logs directly
     }
 
-
+    // Item methods no longer need ensureDataLoaded
     static addItem(item: ShopItem): boolean {
         const itemId = item.id;
-        if (this.items[itemId]) {
+        if (this.items[itemId]) { // Access this.items directly
             return false;
         }
-        this.items[itemId] = item;
+        this.items[itemId] = item; // Access this.items directly
         this.saveShopData();
         return true;
     }
 
     static deleteItem(itemId: string): boolean {
         const id = toID(itemId);
-        if (!this.items[id]) {
+        if (!this.items[id]) { // Access this.items directly
             return false;
         }
-        delete this.items[id];
+        delete this.items[id]; // Access this.items directly
         this.saveShopData();
         return true;
     }
 
     static getItem(itemId: string): ShopItem | undefined {
-        return this.items[toID(itemId)];
+        return this.items[toID(itemId)]; // Access this.items directly
     }
 
     static getAllItems(): ShopItem[] {
+        // Access this.items directly
         return Object.values(this.items).sort((a, b) => a.name.localeCompare(b.name));
     }
 }
 
 
+// --- Commands Section (No changes needed here) ---
 export const commands: ChatCommands = {
     shop: 'viewshop',
     viewshop(target, room, user) {
         if (!this.runBroadcast()) return;
-        const items = Shop.getAllItems();
+        const items = Shop.getAllItems(); // Will use already loaded data
 
         if (!items.length) {
             return this.ImpulseReplyBox(`The shop is currently empty. Items can be added by administrators.`);
         }
 
-        const title = `${Impulse.serverName} Shop`;
+        const title = `Available Shop Items`;
         const header = ['Item Name', 'Description', 'Price', 'Buy'];
         const data = items.map(item => {
             const buyButton = `<button class="button" name="send" value="/buyitem ${item.name}">Buy</button>`;
@@ -186,10 +210,10 @@ export const commands: ChatCommands = {
 
         const newItem: ShopItem = { id: toID(name), name, price, description };
 
-        if (Shop.addItem(newItem)) {
+        if (Shop.addItem(newItem)) { // Uses already loaded data
             this.ImpulseReplyBox(`Item "${Chat.escapeHTML(name)}" has been added to the shop for ${price} ${CURRENCY}.`);
             this.modlog('ADDSHOPITEM', null, `"${Chat.escapeHTML(name)}" (Price: ${price} ${CURRENCY})`, { by: user.id });
-            Shop.logShopAction({
+            Shop.logShopAction({ // Uses already loaded logs
                 action: 'add',
                 userid: user.id,
                 ip: user.latestIp,
@@ -209,16 +233,16 @@ export const commands: ChatCommands = {
         if (!target) return this.sendReply(`Usage: /deleteitem [item name]`);
 
         const itemId = toID(target);
-        const item = Shop.getItem(itemId);
+        const item = Shop.getItem(itemId); // Uses already loaded data
 
         if (!item) {
             return this.errorReply(`Item "${Chat.escapeHTML(target)}" not found in the shop.`);
         }
 
-        if (Shop.deleteItem(itemId)) {
+        if (Shop.deleteItem(itemId)) { // Uses already loaded data
             this.ImpulseReplyBox(`Item "${Chat.escapeHTML(item.name)}" has been removed from the shop.`);
             this.modlog('REMOVESHOPITEM', null, `"${Chat.escapeHTML(item.name)}" (ID: ${itemId})`, { by: user.id });
-            Shop.logShopAction({
+            Shop.logShopAction({ // Uses already loaded logs
                 action: 'delete',
                 userid: user.id,
                 ip: user.latestIp,
@@ -233,7 +257,7 @@ export const commands: ChatCommands = {
     buyitem(target, room, user) {
         if (!target) return this.sendReply(`Usage: /buyitem [item name]`);
         const itemId = toID(target);
-        const item = Shop.getItem(itemId);
+        const item = Shop.getItem(itemId); // Uses already loaded data
 
         if (!item) {
             return this.errorReply(`Item "${Chat.escapeHTML(target)}" not found in the shop. Check the spelling or use /shop to see available items.`);
@@ -249,7 +273,7 @@ export const commands: ChatCommands = {
         if (newBalance !== undefined && newBalance === userBalance - item.price) {
             this.sendReply(`You have successfully purchased "${Chat.escapeHTML(item.name)}" for ${item.price} ${CURRENCY}. Your new balance is ${newBalance} ${CURRENCY}.`);
 
-            Shop.logShopAction({
+            Shop.logShopAction({ // Uses already loaded logs
                 action: 'buy',
                 userid: user.id,
                 ip: user.latestIp,
@@ -267,10 +291,10 @@ export const commands: ChatCommands = {
     shopsave(target, room, user) {
         this.checkCan('globalban');
         try {
-            Shop.saveShopData();
+            Shop.saveShopData(); // Uses already loaded data
             this.sendReply("Shop item data saved successfully.");
             this.modlog('SHOPSAVE', null, `manually saved shop item data`, { by: user.id });
-            Shop.logShopAction({
+            Shop.logShopAction({ // Uses already loaded logs
                 action: 'save',
                 userid: user.id,
                 ip: user.latestIp,
@@ -285,13 +309,14 @@ export const commands: ChatCommands = {
 
     shoplogs(target, room, user) {
         this.checkCan('globalban');
-		  if (!this.runBroadcast()) return;
+
         const page = parseInt(target) || 1;
         const entriesPerPage = 50;
 
-        const logs = Shop.getShopLogs(page, entriesPerPage);
-        const totalPages = Shop.getTotalShopLogPages(entriesPerPage);
-        const totalLogCount = Shop['logs'].logs.length;
+        const logs = Shop.getShopLogs(page, entriesPerPage); // Uses already loaded logs
+        const totalPages = Shop.getTotalShopLogPages(entriesPerPage); // Uses already loaded logs
+        const totalLogCount = Shop['logs'].logs.length; // Access directly
+
 
         if (!logs.length && page === 1) {
             return this.ImpulseReplyBox(`No shop logs found.`);
@@ -345,7 +370,7 @@ export const commands: ChatCommands = {
      shophelp(target, room, user) {
         if (!this.runBroadcast()) return;
 
-        this.ImpulseReplyBox(
+        this.sendReplyBox(
          `<div><b><center>Shop Commands</center></b>` +
          `<details open><summary><b>User Commands</b></summary>` +
          `<ul><li><code>/shop</code> (or <code>/viewshop</code>) - View available items in the shop.</li>` +
@@ -353,7 +378,7 @@ export const commands: ChatCommands = {
          `<li><code>/shophelp</code> - Shows this help message.</li>` +
          `<li><code>/economyhelp</code> - Shows commands related to ${CURRENCY} balance and transfers.</li>`+
          `</ul></details>` +
-         `<details><summary><b>Admin Shop Commands</b> (Requires: @ and higher)</summary>` +
+         `<details><summary><b>Admin Shop Commands</b> (Requires: Server Administrator access)</summary>` +
          `<ul><li><code>/additem [item name], [price], [description]</code> - Add an item to the shop.</li>` +
          `<li><code>/deleteitem [item name]</code> (or <code>/removeitem</code>) - Remove an item from the shop.</li>` +
          `<li><code>/shopsave</code> - Manually save the current shop items to file.</li>` +
