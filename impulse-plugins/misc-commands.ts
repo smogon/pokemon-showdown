@@ -170,7 +170,7 @@ export const commands: Chat.ChatCommands = {
     user.lastPoofMessage = message;
     user.disconnectAll();
   },
-	
+
 	seen(target: string | null, room: Room | User, user: User) {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.parse('/help seen');
@@ -195,7 +195,7 @@ export const commands: Chat.ChatCommands = {
 		 `<ul><li><code>/clearall</code> - Clears chatroom. (Requires: #)</li>` +
 		 `<li><code>/globalclearall</code> - Clears all chatrooms. (Requires: @ and higher)</li>` +
 		 `<li><code>/poof</code> - Disconnect from server with random message.</li>` +
-		 `<li><code>/seen [user]</code> - Shows when the user last connected on the server.` +
+		 `<li><code>/seen [user]</code> - Shows when the user last connected on the server.</li>` +
 		 `</ul></div>`);
   },
 };
