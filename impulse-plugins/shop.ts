@@ -72,7 +72,7 @@ class Shop {
   static getShopItems(): ShopItem[] {
     return this.shopData.items.sort((a, b) => a.name.localeCompare(b.name));
   }
-	
+
   static addItem(name: string, price: number, description: string): void {
     this.shopData.items.push({ name, price, description });
     this.saveShopData();
@@ -205,7 +205,8 @@ export const commands: ChatCommands = {
       receipt.amount.toString(),
     ]);
 
-    this.sendReplyBox(Impulse.generateThemedTable('Your Purchase Receipts', header, data));
+    const tableHTML = Impulse.generateThemedTable('Your Purchase Receipts', header, data);
+    this.sendReplyBox(`<div style="max-height: 400px; overflow-y: auto;">${tableHTML}</div>`);
   },
 
   receiptlogs(target, room, user) {
@@ -228,7 +229,8 @@ export const commands: ChatCommands = {
       receipt.amount.toString(),
     ]);
 
-    this.sendReplyBox(Impulse.generateThemedTable(`Purchase Logs ${filterUserid ? `for ${filterUserid}` : ''}`, header, data));
+    const tableHTML = Impulse.generateThemedTable(`Purchase Logs ${filterUserid ? `for ${filterUserid}` : ''}`, header, data);
+    this.sendReplyBox(`<div style="max-height: 400px; overflow-y: auto;">${tableHTML}</div>`);
   },
 
   shophelp(target, room, user) {
