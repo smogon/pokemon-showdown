@@ -1,6 +1,7 @@
 /* Custom Avatars Commands
  * Credits: CreaturePhil And Others
- * Updates & Typescript Conversion: Prince Sky
+ * Updates & Typescript Conversion: 
+ * Prince Sky
  */
 
 import { FS } from '../lib/fs';
@@ -104,10 +105,10 @@ export const commands: Chat.ChatCommands = {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
 		 `<div><b><center>Custom Avatar Commands</center></b>` +
-		 `<ul><li><code>/customavatar set [username], [image link]</code> - Set a user's avatar. (Requires: ~)</li>` +
+		 `<ul><li><code>/customavatar set [username],\t[image link]</code> - Set a user's avatar. (Requires: ~)</li>` +
 		 `<li><code>/customavatar delete [username]</code> - Delete a user's avatar. (Requires: ~)</li>` +
 		 `</ul></div>`);
 	 },
   },
-		 
+
 };
