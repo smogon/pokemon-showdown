@@ -73,15 +73,6 @@ class Shop {
     return this.shopData.items.sort((a, b) => a.name.localeCompare(b.name));
   }
 
-  private static generateRandomString(length: number): string {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-    for (let i = 0; i < length; i++) {
-      result += characters.charAt(Math.floor(Math.random() * characters.length));
-    }
-    return result;
-  }
-
   static addItem(name: string, price: number, description: string): void {
     this.shopData.items.push({ name, price, description });
     this.saveShopData();
@@ -111,7 +102,7 @@ class Shop {
 
     Economy.takeMoney(userid, item.price, `Purchase of "${itemName}"`);
 
-    const receiptId = Shop.generateRandomString(10);
+    const receiptId = Impulse.generateRandomString(10);
     const newReceipt: Receipt = {
       receiptId,
       userId: userid,
