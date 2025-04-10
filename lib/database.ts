@@ -32,7 +32,7 @@ export function isSQL(value: any): value is SQLStatement {
 export class SQLStatement {
 	sql: string[];
 	values: BasicSQLValue[];
-	constructor(strings: TemplateStringsArray, values: SQLValue[]) {
+	constructor(strings: TemplateStringsArray | string[], values: SQLValue[]) {
 		this.sql = [strings[0]];
 		this.values = [];
 		for (let i = 0; i < strings.length; i++) {
@@ -123,8 +123,20 @@ export class SQLStatement {
  *
  * * `` SQL`INSERT INTO table ("${['a', 'b']}") VALUES (${[1, 2]})` ``
  *   * `` `INSERT INTO table ("a", "b") VALUES (1, 2)` ``
+ *
+ * SQL statements can be nested:
+ *
+ * * `` SQL`SELECT * FR${SQL`OM table`})` ``
+ *   * `` `SELECT * FROM table` ``
+ *
+ * Raw unescaped strings can be put inside SQL() but I can't actually think of a
+ * use case, so probably don't ever do this:
+ *
+ * * `` secondPart = SQL('OM table'); SQL`SELECT * FR${secondPart})` ``
+ *   * `` `SELECT * FROM table` ``
  */
-export function SQL(strings: TemplateStringsArray, ...values: SQLValue[]) {
+export function SQL(strings: TemplateStringsArray | string[] | string, ...values: SQLValue[]) {
+	if (typeof strings === 'string') strings = [strings];
 	return new SQLStatement(strings, values);
 }
 
