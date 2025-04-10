@@ -236,6 +236,8 @@ export const commands: ChatCommands = {
 
         if (newBalance !== undefined && newBalance === userBalance - item.price) {
             this.sendReply(`You have successfully purchased "${Chat.escapeHTML(item.name)}" for ${item.price} ${CURRENCY}. Your new balance is ${newBalance} ${CURRENCY}.`);
+			  const logMessage = `${new Date().toISOString()} - User: ${user.id} (${user.name}) bought "${item.name}" for ${item.price} ${CURRENCY}`;
+			  FS(SHOP_LOGS_FILE_PATH).appendFileSync(logMessage + '\n');
 
         } else {
             this.errorReply(`There was an error processing your purchase for "${Chat.escapeHTML(item.name)}". Your balance has not been changed. Please contact staff if this issue persists.`);
