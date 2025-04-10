@@ -1,5 +1,6 @@
 import { Dex } from '@pkmn/dex';
 import { TeamGenerators } from '@pkmn/randoms';
+import { FormatList } from '@pkmn/sim';
 
 const gen9 = Dex.forGen(9);
 
@@ -70,10 +71,6 @@ const redPokemonList = new Set([
 	'miraidon', // Red accents
 ]);
 
-function isRedPokemon(species: import('@pkmn/dex').Species) {
-	return redPokemonList.has(species.id);
-}
-
 export const Formats: FormatList = [
 	{
 		section: "Impulse Custom Formats",
@@ -93,34 +90,33 @@ export const Formats: FormatList = [
 			const teamSize = 6;
 			const team: string[] = [];
 			const usedPokemon: Set<string> = new Set();
-			const allRedPokemon = Array.from(gen9.species.all()).filter(isRedPokemon).filter(s => s.exists);
 			const generator = TeamGenerators.getTeamGenerator('gen9randombattle');
 
 			if (!generator) {
 				return "Error: Could not initialize the random team generator for Gen 9.";
 			}
 
-			const viableRedPokemon = allRedPokemon.filter(species => generator.speciesPool.includes(species.id));
+			// Filter our redPokemonList to only include Pokémon that are in the generator's pool
+			const viableRedPokemon = Array.from(redPokemonList).filter(pokemonId =>
+				generator.speciesPool.includes(pokemonId)
+			);
+
+			if (viableRedPokemon.length === 0) {
+				return "Error: No viable red Pokémon found in the Gen 9 Random Battle pool.";
+			}
 
 			for (let i = 0; i < teamSize; i++) {
-				if (viableRedPokemon.length === usedPokemon.size) {
-					break;
+				if (usedPokemon.size === viableRedPokemon.length) {
+					break; // Stop if all viable red Pokémon have been used
 				}
 
-				let randomSpecies;
-				let attempts = 0;
-				do {
-					randomSpecies = viableRedPokemon[Math.floor(Math.random() * viableRedPokemon.length)];
-					attempts++;
-					if (attempts > 100) {
-						const allViablePokemon = Array.from(gen9.species.all()).filter(s => s.exists && generator.speciesPool.includes(s.id));
-						randomSpecies = allViablePokemon[Math.floor(Math.random() * allViablePokemon.length)];
-						console.warn("Could not find a unique viable red Pokémon after multiple attempts. Using a random viable Pokémon instead.");
-						break;
-					}
-				} while (usedPokemon.has(randomSpecies.name));
+				const availableRedPokemon = viableRedPokemon.filter(id => !usedPokemon.has(id));
+				if (availableRedPokemon.length === 0) break;
 
-				if (!randomSpecies) break;
+				const randomPokemonId = availableRedPokemon[Math.floor(Math.random() * availableRedPokemon.length)];
+				const randomSpecies = gen9.species.get(randomPokemonId);
+
+				if (!randomSpecies) continue; // Should not happen, but for safety
 
 				const randomSet = generator.randomSet(randomSpecies.id);
 				team.push(randomSet.species + (randomSet.nickname ? ` (${randomSet.nickname})` : '') + (randomSet.item ? ` @ ${randomSet.item}` : ''));
