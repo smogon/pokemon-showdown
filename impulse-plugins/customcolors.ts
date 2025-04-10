@@ -104,7 +104,7 @@ function updateColor(): void {
 function generateCSS(name: string, color: string): string {
   const id: string = toID(name);
   let css: string = `[class$="chatmessage-${id}"] strong, [class$="chatmessage-${id} mine"] strong, [class$="chatmessage-${id} highlighted"] strong, [id$="-userlist-user-${id}"] strong em, [id$="-userlist-user-${id}"] strong, [id$="-userlist-user-${id}"] span`;
-  css += `{\n  color: ${color} !important;\n}\n`;
+  css += `{\n\tcolor: ${color} !important;\n}\n`;
   return css;
 }
 
@@ -169,10 +169,10 @@ export const commands: Chat.ChatCommands = {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
 		 `<div><b><center>Custom Color Commands</center></b>` +
-		 `<ul><li><code>/customcolor set [user], [hex]</code> - Gives [user] a custom color of [hex] (Requires: @ and higher)</li>` +
+		 `<ul><li><code>/customcolor set [user],\t[hex]</code> - Gives [user] a custom color of [hex] (Requires: @ and higher)</li>` +
 		 `<li><code>/customcolor delete [user]</code> - Deletes a user's custom color (Requires: @ and higher)</li>` +
 		 `<li><code>/customcolor reload</code> - Reloads colors. (Requires: ~)</li>` +
-		 `<li><code>/customcolor preview [user], [hex]</code> - Previews what that username looks like with [hex] as the color.</li>` +
+		 `<li><code>/customcolor preview [user],\t[hex]</code> - Previews what that username looks like with [hex] as the color.</li>` +
 		 `</ul></div>`);
   },
 
