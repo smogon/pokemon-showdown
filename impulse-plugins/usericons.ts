@@ -53,7 +53,7 @@ function updateIcons() {
 
 function generateCSS(name: string, icon: string): string {
   const id = toID(name);
-  return `[id$="-userlist-user-${id}"] {\nbackground: ${backgroundColor} url("${icon}") right no-repeat !important;\n}\n`;
+  return `[id$="-userlist-user-${id}"] {\n\tbackground: ${backgroundColor} url("${icon}") right no-repeat !important;\n}\n`;
 }
 
 export const commands: ChatCommands = {
@@ -109,7 +109,7 @@ export const commands: ChatCommands = {
 
   iconhelp: [
     `Commands for /icon are:`,
-    `/icon set [user], [image url] - Gives [user] an icon of [image url] ( Requires: @ and higher ).`,
+    `/icon set [user],\t[image url] - Gives [user] an icon of [image url] ( Requires: @ and higher ).`,
     `/icon delete [user] - Deletes a user's icon ( Requires: @ and higher ).`,
   ],
 };
