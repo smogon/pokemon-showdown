@@ -7,7 +7,7 @@ interface ShopItem {
   name: string;
   cost: number;
   description?: string;
-  itemid: string; // Added itemid to the ShopItem interface
+  itemid: string;
 }
 
 const SHOP_ITEMS: { [itemid: string]: Omit<ShopItem, 'itemid'> } = Shop.loadShopItems();
@@ -58,7 +58,7 @@ class Shop {
   }
 
   static viewShop(): string {
-    const title = 'Pokémon Shop';
+    const title = '${Impulse.serverName} Shop';
     const header = ['Item', 'Description', 'Cost', 'Buy'];
     const sortedItems = Object.entries(SHOP_ITEMS)
       .sort(([, a], [, b]) => a.name.localeCompare(b.name)); // Sort by name (A-Z)
@@ -124,6 +124,8 @@ class Shop {
     return `Item "${itemid}"'s ${property} has been updated to "${value}".`;
   }
 }
+
+global.Shop = Shop;
 
 export const commands: Chat.Commands = {
   shop(target, room, user) {
