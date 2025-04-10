@@ -48,7 +48,7 @@ class NewsManager {
 		const newsDisplay: string[] = [];
 		for (const title in this.news) {
 			const newsData = this.news[title];
-			newsDisplay.push(`<h4>${title}</h4>${newsData.desc}<br /><br />—${Impulse.nameColor(newsData.postedBy, true, true)} <small>on ${newsData.postTime}</small>`);
+			newsDisplay.push(`<h4><center>${title}</center></h4>${newsData.desc}<br /><br />—${Impulse.nameColor(newsData.postedBy, true, true)} <small>on ${newsData.postTime}</small>`);
 		}
 		return newsDisplay;
 	}
@@ -61,7 +61,7 @@ class NewsManager {
 		const newsDisplay = this.generateNewsDisplay();
 		if (newsDisplay.length > 0) {
 			const recentNews = newsDisplay.slice(-2).join(`<hr>`);
-			const message = `|pm| Server News|${user.getIdentity()}|/raw <div class="infobox">${recentNews}</div>`;
+			const message = `|pm| ${Impulse.serverName} News|${user.getIdentity()}|/raw <div class="infobox">${recentNews}</div>`;
 			user.send(message);
 			/*notifiedUsers[userid] = setTimeout(() => {
 				delete notifiedUsers[userid];
