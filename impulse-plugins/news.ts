@@ -63,9 +63,9 @@ class NewsManager {
 			const recentNews = newsDisplay.slice(-2).join(`<hr>`);
 			const message = `|pm| Server News|${user.getIdentity()}|/raw <div class="infobox">${recentNews}</div>`;
 			user.send(message);
-			notifiedUsers[userid] = setTimeout(() => {
+			/*notifiedUsers[userid] = setTimeout(() => {
 				delete notifiedUsers[userid];
-			}, 60 * 60 * 1000);
+			}, 60 * 60 * 1000);*/
 		}
 	}
 
