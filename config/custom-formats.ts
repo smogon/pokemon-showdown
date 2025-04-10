@@ -550,6 +550,7 @@ export const Formats: FormatList = [
         name: "[Gen 9] Impulse Red Team (AG Rules)",
         desc: `Randomized teams of red colored Pok&eacute;mon (with Mega Evolutions holding their stones) under standard Anything Goes rules.`,
         mod: 'gen9',
+		  team: 'random',
         team: (options) => {
             const teamSize = 6;
             const team: string[] = [];
