@@ -1,4 +1,4 @@
-import { FS } from '../lib/fs';
+import { FS } from '../lib/fs'; // Assumes this path points to your provided FS wrapper code
 
 interface ShopItem {
     id: string;
@@ -82,6 +82,7 @@ export class Shop {
 
     static saveShopData(): void {
         try {
+            // Using safeWriteUpdate is appropriate here
             FS(SHOP_FILE_PATH).safeWriteUpdate(() => JSON.stringify(this.items, null, 2));
         } catch (error) {
             console.error(`Error saving shop data: ${error}`);
@@ -90,6 +91,7 @@ export class Shop {
 
     private static saveShopLogs(): void {
         try {
+            // Using safeWriteUpdate is appropriate here
             FS(SHOP_LOGS_FILE_PATH).safeWriteUpdate(() => JSON.stringify(this.logs, null, 2));
         } catch (error) {
             console.error(`Error saving shop logs: ${error}`);
@@ -289,7 +291,7 @@ export const commands: ChatCommands = {
 
     shoplogs(target, room, user) {
         this.checkCan('globalban');
-
+		 if (!this.runBroadcast()) return;
         const page = parseInt(target) || 1;
         const entriesPerPage = 50;
 
@@ -349,8 +351,7 @@ export const commands: ChatCommands = {
 
      shophelp(target, room, user) {
         if (!this.runBroadcast()) return;
-
-        this.sendReplyBox(
+        this.ImpulseReplyBox(
          `<div><b><center>Shop Commands</center></b>` +
          `<details open><summary><b>User Commands</b></summary>` +
          `<ul><li><code>/shop</code> (or <code>/viewshop</code>) - View available items in the shop.</li>` +
