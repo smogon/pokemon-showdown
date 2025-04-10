@@ -12,7 +12,68 @@ interface ShopData {
 }
 
 const SHOP_FILE_PATH = 'impulse-db/shop.json';
+const SHOP_LOGS_FILE_PATH = 'impulse-logs/shop_transactions.log';
+
 const CURRENCY = Impulse.currency;
+
+interface ShopLogEntry {
+    timestamp: number;
+    action: string; // e.g., 'buy'
+    user: string; // User ID
+    itemName: string;
+    price: number;
+    currency: string;
+    // Add other relevant details you want to log
+}
+ 
+interface ShopLogs {
+    logs: ShopLogEntry[];
+}
+ 
+// Helper function to parse a single log line (adjust based on your logging format)
+function parseShopLogLine(line: string): ShopLogEntry | null {
+    try {
+        const parts = line.split(' - '); // Adjust the delimiter if your log format is different
+        if (parts.length >= 2) {
+            const timestampPart = parts[0];
+            const dataPart = parts[1];
+            const dataRegex = /User: ([^ ]+) \(([^)]+)\) bought "([^"]+)" for (\d+) ([^ ]+)/; // Adjust regex to match your log format
+            const match = dataRegex.exec(dataPart);
+            if (match) {
+                return {
+                    timestamp: new Date(timestampPart).getTime(),
+                    action: 'buy', // Assuming your log indicates a 'buy' action
+                    user: match[1], // User ID
+                    itemName: match[3],
+                    price: parseInt(match[4], 10),
+                    currency: match[5],
+                };
+            }
+        }
+        return null;
+    } catch (error) {
+        console.error(`Error parsing shop log line: ${line}`, error);
+        return null;
+    }
+}
+ 
+function loadShopLogs(): ShopLogs {
+    try {
+        if (!FS(SHOP_LOGS_FILE_PATH).existsSync()) {
+            return { logs: [] };
+        }
+        const rawLogs = FS(SHOP_LOGS_FILE_PATH).readIfExistsSync();
+        if (!rawLogs) {
+            return { logs: [] };
+        }
+        const logLines = rawLogs.split('\n').filter(line => line.trim() !== '');
+        const parsedLogs = logLines.map(parseShopLogLine).filter((log): log is ShopLogEntry => log !== null);
+        return { logs: parsedLogs };
+    } catch (error) {
+        console.error(`Error loading shop logs: ${error}`);
+        return { logs: [] };
+    }
+}
 
 export class Shop {
     private static items: ShopData = Shop.loadShopData();
@@ -182,6 +243,63 @@ export const commands: ChatCommands = {
         }
     },
 
+	shoplogs: function (target, room, user) {
+        this.checkCan('globalban'); // Adjust permission as needed
+ 
+        const parts = target.split(',').map(p => p.trim());
+        const targetUser = parts[0] ? Users.get(parts[0]) : null;
+        const page = parseInt(parts[1], 10) || 1;
+        const useridFilter = targetUser?.id;
+        const entriesPerPage = 10; // You can adjust this
+ 
+        const allShopLogs = loadShopLogs().logs;
+        let filteredLogs = allShopLogs;
+ 
+        if (useridFilter) {
+            filteredLogs = filteredLogs.filter(log => log.user === useridFilter);
+        }
+ 
+        // Sort by timestamp, newest first
+        filteredLogs.sort((a, b) => b.timestamp - a.timestamp);
+ 
+        const startIndex = (page - 1) * entriesPerPage;
+        const endIndex = startIndex + entriesPerPage;
+        const paginatedLogs = filteredLogs.slice(startIndex, endIndex);
+        const totalPages = Math.ceil(filteredLogs.length / entriesPerPage) || 1;
+ 
+        if (!paginatedLogs.length) {
+            return this.sendReplyBox(`No shop logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}.`);
+        }
+ 
+        const title = `${useridFilter ? `Shop Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Shop Logs'} (Page ${page} of ${totalPages})`;
+        const header = ['Time', 'User', 'Item', 'Price'];
+        const data = paginatedLogs.map(log => {
+            const timestamp = new Date(log.timestamp).toLocaleString();
+            const userName = Impulse.nameColor(log.user, false, false);
+            return [timestamp, userName, Chat.escapeHTML(log.itemName), `${log.price} ${log.currency}`];
+        });
+ 
+        const tableHTML = Impulse.generateThemedTable(title, header, data);
+        let paginationHTML = '';
+ 
+        if (totalPages > 1) {
+            paginationHTML += `<div style="text-align: center; margin-top: 5px;">Page: ${page} / ${totalPages}`;
+            if (page > 1) {
+                paginationHTML += ` | <button name="send" value="/shoplogs ${useridFilter ? ` ${targetUser.name}` : ''}, ${page - 1}">Previous</button>`;
+            }
+            if (page < totalPages) {
+                paginationHTML += ` | <button name="send" value="/shoplogs ${useridFilter ? ` ${targetUser.name}` : ''}, ${page + 1}">Next</button>`;
+            }
+            paginationHTML += `</div>`;
+        }
+ 
+        const fullOutput = `<div style="max-height: 400px; overflow: auto;" data-uhtml="shoplogs-${useridFilter}-${page}">${tableHTML}</div>${paginationHTML}`;
+        this.sendReplyBox(fullOutput);
+    },
+    shoplogshelp: [
+        `/shoplogs [user], [page] - View shop transaction logs, optionally filtered by user and page number. Requires # or higher permission.`,
+    ],
+
      shophelp(target, room, user) {
         if (!this.runBroadcast()) return;
         this.sendReplyBox(
@@ -192,9 +310,10 @@ export const commands: ChatCommands = {
          `<li><code>/shophelp</code> - Shows this help message.</li>` +
          `<li><code>/economyhelp</code> - Shows commands related to ${CURRENCY} balance and transfers.</li>`+
          `</ul></details>` +
-         `<details><summary><b>Admin Shop Commands</b> (Requires: Server Administrator access)</summary>` +
+         `<details><summary><b>Admin Shop Commands</b> (Requires: @ and higher )</summary>` +
          `<ul><li><code>/additem [item name], [price], [description]</code> - Add an item to the shop.</li>` +
          `<li><code>/deleteitem [item name]</code> (or <code>/removeitem</code>) - Remove an item from the shop.</li>` +
+			`<li><code>/shoplogs [user], [page]</code> - View shop transaction logs.</li>` +
          `</ul></details></div>`);
     },
 };
