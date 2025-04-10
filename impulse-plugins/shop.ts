@@ -175,7 +175,7 @@ export const commands: ChatCommands = {
             return this.ImpulseReplyBox(`The shop is currently empty. Items can be added by administrators.`);
         }
 
-        const title = `Available Shop Items`;
+        const title = `${Impulse.serverName} Shop`;
         const header = ['Item Name', 'Description', 'Price', 'Buy'];
         const data = items.map(item => {
             const buyButton = `<button class="button" name="send" value="/buyitem ${item.name}">Buy</button>`;
@@ -309,7 +309,7 @@ export const commands: ChatCommands = {
 
     shoplogs(target, room, user) {
         this.checkCan('globalban');
-
+		 if (!this.runBroadcast()) return;
         const page = parseInt(target) || 1;
         const entriesPerPage = 50;
 
