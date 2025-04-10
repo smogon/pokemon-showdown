@@ -128,7 +128,7 @@ export class Shop {
 
 global.Shop = Shop;
 
-export const commands: Chat.Commands = {
+export const commands: ChatCommands = {
 	shop(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.ImpulseReplyBox(Shop.viewShop());
