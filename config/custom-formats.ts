@@ -1,6 +1,5 @@
 import { Dex } from '@pkmn/dex';
 import { TeamGenerators } from '@pkmn/randoms';
-import { FormatList } from '@pkmn/sim';
 
 const gen9 = Dex.forGen(9);
 
