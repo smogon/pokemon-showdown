@@ -72,7 +72,7 @@ class Shop {
   static getShopItems(): ShopItem[] {
     return this.shopData.items.sort((a, b) => a.name.localeCompare(b.name));
   }
-
+	
   static addItem(name: string, price: number, description: string): void {
     this.shopData.items.push({ name, price, description });
     this.saveShopData();
