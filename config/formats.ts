@@ -72,7 +72,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		section: "S/V Singles",
 	},
-	 {
+	{
     name: "[Gen 9] Impulse Random Battle",
     desc: "Randomized teams of Pokémon in Gen 9 with well-balanced rules for competitive play.",
     mod: 'gen9',
@@ -87,11 +87,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
       'Evasion Moves Clause', 
       'Endless Battle Clause',
     ],
-    banlist: ['Moody', 'Shadow Tag', 'Arena Trap', 'Baton Pass'],
-    unbanlist: ['Darmanitan-Galar', 'Dracovish'],
-    onBegin() {
-      this.add('message', `Welcome to [Gen 9] Impulse Random Battle! Enjoy competitive battles with balanced rules.`);
-    },
     teamGenerator: 'randomGen9Teams',
   },
 	{
