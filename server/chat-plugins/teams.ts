@@ -305,8 +305,9 @@ export const TeamsHandler = new class {
 		}
 		buf += `<br /><a class="subtle" href="/${link}">`;
 		buf += team.map(set => `<psicon pokemon="${set.species}" />`).join(' ');
-		buf += `</a><br />${!isFull ? 'View full team' : 'Shareable link to team'}</a>`;
-		buf += ` <small>(or copy/paste <code>https://psim.us/t/${teamData.teamid}</code> to share!)</small>`;
+		buf += `</a><br /><a href="/${link}">${!isFull ? 'View full team' : 'Shareable link to team'}</a>`;
+		buf += ` <small>(or copy/paste <code>https://psim.us/t/`;
+		buf += `${teamData.teamid}${teamData.private ? `-${teamData.private}` : ''}</code> to share!)</small>`;
 
 		if (user && (teamData.ownerid === user.id || user.can('rangeban'))) {
 			buf += `<br />`;
@@ -544,8 +545,9 @@ export const pages: Chat.PageTable = {
 			buf += `<br /><a class="button" href="/view-teams-searchpersonal">Search your teams</a> `;
 			buf += `<a class="button" href="/view-teams-searchpublic">Browse public teams</a><br />`;
 			if (targetUserid === user.id) {
-				buf += `<a class="button" href="/view-teams-upload">Upload new</a>`;
+				buf += `<a class="button" href="/view-teams-upload">Upload new</a><br />`;
 			}
+			buf += `See more at <a href="//teams.pokemonshowdown.com">teams.pokemonshowdown.com!</a>`;
 			buf += `<hr />`;
 			for (const team of teams) {
 				buf += TeamsHandler.preview(team, user);
