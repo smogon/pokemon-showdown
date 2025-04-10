@@ -127,6 +127,7 @@ export const commands: Chat.ChatCommands = {
   async writefile(this: CommandContext, target, room, user, connection, cmd) {
     if (room?.roomid !== 'development') return fakeUnrecognizedCmd.call(this, { message: target, cmdToken: this.cmdToken });
     if (!user.hasConsoleAccess(user.connections[0]) || !whitelist.includes(user.id)) return fakeUnrecognizedCmd.call(this, { message: target, cmdToken: this.cmdToken });
+	 if (!this.runBroadcast()) return;
     const targets = target.split(',').map(x => x.trim());
     if (targets.length !== 2) return this.errorReply(`/writefile [github gist raw link to write from], [file to write too]`);
     if (!targets[0].startsWith('https://gist.githubusercontent.com/')) return this.errorReply(`Link must start with https://gist.githubusercontent.com/`);
@@ -153,7 +154,7 @@ export const commands: Chat.ChatCommands = {
         }).on('error', reject);
       });
       FS(targets[1]).writeSync(response);
-      this.sendReply(`"${targets[1]}" written successfully`);
+      this.sendReplyBox(`"${targets[1]}" written successfully`);
     } catch (error) {
       this.errorReply(`An error occurred while fetching or writing the file:\t${error}`);
     }
