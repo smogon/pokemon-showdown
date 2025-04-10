@@ -16,7 +16,6 @@ interface Icons {
 let iconsData = FS('impulse-db/usericons.json').readIfExistsSync();
 let icons: Icons = {};
 
-// Replace 'staff' with the actual ID of your staff or log room
 const STAFF_ROOM_ID = 'staff';
 
 if (iconsData) {
