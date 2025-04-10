@@ -5,7 +5,8 @@ const gen9 = Dex.forGen(9);
 
 const redPokemonList = new Set([
 	// Generation 1
-	'charmander', 'charmeleon', 'charizard', 'vulpix', 'ninetales', 'magmar', 'magikarp', 'gyarados', 'flareon', 'moltres',
+	'charmander', 'charmeleon', 'charizard', 'vulpix', 'ninetales', 'magmar', 'magikarp', 'gyarados', // Considering shiny
+	'flareon', 'moltres',
 
 	// Generation 2
 	'typhlosion', 'scizor', 'magby', 'entei',
@@ -31,9 +32,11 @@ const redPokemonList = new Set([
 	// Generation 9
 	'fuecoco', 'crocalor', 'skeledirge', 'armarouge', 'annihilape',
 
-	// Some Legendaries/Mythicals with red elements
-	'mew', 'ho-oh', 'kyogre', // Primal Kyogre has red accents
-	'rayquaza', // Has red markings
+	// Other Pokémon with significant red elements or variations
+	'mew', // Pinkish-red
+	'ho-oh',
+	'kyogre-primal', // Red markings
+	'rayquaza', // Red markings
 	'deoxys-attack', 'deoxys-speed', // Red forms
 	'dialga', // Red accents
 	'palkia', // Red accents
@@ -41,12 +44,30 @@ const redPokemonList = new Set([
 	'victini',
 	'genesect', // Red parts
 	'yveltal',
-	'volcarona', // Orange-red wings
+	'volcarona', // Orange-red
 	'ceruledge', // Red energy
+	'ursaluna-bloodmoon', // Red eyes and accents
+	'walking wake', // Red fins
 
-	// Regional Forms or other variations
-	'growlithe-hisui', 'arcanine-hisui', // Reddish hues
+	// Hisuian Forms with red elements
+	'growlithe-hisui', 'arcanine-hisui',
+
+	// Galarian Forms with red elements
 	'darmanitan-galar-zen', // Red aura
+
+	// Paradox Pokémon with red elements
+	'great tusk', // Red tusks and accents
+	'brute bonnet', // Red cap
+	'flutter mane', // Red eyes and accents
+	'slither wing', // Red body
+	'roaring moon', // Red wings and accents
+	'iron hands', // Red accents
+	'iron bundle', // Red scarf
+	'iron jugulis', // Red eyes and accents
+	'iron thorns', // Red spines
+	'iron valiant', // Red horns and accents
+	'koraidon',
+	'miraidon', // Red accents
 ]);
 
 function isRedPokemon(species: import('@pkmn/dex').Species) {
@@ -66,7 +87,7 @@ export const Formats: FormatList = [
 	},
 	{
 		name: "[Gen 9] Impulse Red Team Random Battle",
-		desc: `Randomized teams of red colored Pok&eacute;mon with competitively viable movesets.`,
+		desc: `Randomized teams of Pok&eacute;mon considered red, with competitively viable movesets.`,
 		mod: 'gen9',
 		team: (options) => {
 			const teamSize = 6;
