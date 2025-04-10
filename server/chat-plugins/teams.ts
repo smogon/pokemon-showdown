@@ -306,7 +306,8 @@ export const TeamsHandler = new class {
 		buf += `<br /><a class="subtle" href="/${link}">`;
 		buf += team.map(set => `<psicon pokemon="${set.species}" />`).join(' ');
 		buf += `</a><br />${isFull ? 'View full team' : 'Shareable link to team'}</a>`;
-		buf += ` <small>(or copy/paste <code>&lt;&lt;${link}&gt;&gt;</code> in chat to share!)</small>`;
+		buf += ` <small>(copy/paste <code>&lt;&lt;${link}&gt;&gt;</code> in chat `;
+		buf += `or <code>https://psim.us/t/${teamData.teamid}</code> to share!)</small>`;
 
 		if (user && (teamData.ownerid === user.id || user.can('rangeban'))) {
 			buf += `<br />`;
