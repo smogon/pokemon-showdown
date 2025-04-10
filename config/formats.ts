@@ -1813,21 +1813,27 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					problems.push(`${set.name} has ${set.moves.length} moves, which is more than the limit of ${this.ruleTable.maxMoveCount}.`);
 					return problems;
 				}
-				for (const [i, moveid] of set.moves.entries()) {
+				const originalMoves = [...set.moves];
+				set.moves = [];
+				for (const moveid of originalMoves) {
 					const pokemove = this.dex.species.get(moveid);
-					if (!pokemove.exists) continue;
+					if (!pokemove.exists) {
+						set.moves.push(moveid);
+						continue;
+					}
 					if (pokemove.isNonstandard &&
 						!(this.ruleTable.has(`+pokemontag:${this.toID(pokemove.isNonstandard)}`) ||
 							this.ruleTable.has(`+pokemon:${pokemove.id}`) ||
 							this.ruleTable.has(`+basepokemon:${this.toID(pokemove.baseSpecies)}`))) {
 						problems.push(`${pokemove.isNonstandard} Pok\u00e9mon are not allowed to be used as Pokemoves.`);
+						continue;
 					}
 					if (this.ruleTable.isRestrictedSpecies(pokemove) || this.ruleTable.isBannedSpecies(pokemove)) {
 						problems.push(`${pokemove.name} is unable to be used as a Pokemove.`);
+						continue;
 					}
 					pokemoves++;
 					moves.push(moveid);
-					set.moves.splice(i, 1);
 				}
 			}
 			const allowedPokemoves = Number(this.ruleTable.valueRules.get('allowedpokemoves') || '1');
@@ -1837,18 +1843,16 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					`(Pok\u00e9mon can only have ${allowedPokemoves} Pokemove${allowedPokemoves === 1 ? '' : 's'} each.)`
 				);
 			}
-			if (this.validateSet(set, teamHas)) {
-				return this.validateSet(set, teamHas);
-			}
 			set.moves.push(...moves);
 			return problems.length ? problems : null;
 		},
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
+				pokemon.m.pokemoves = [];
 				for (const move of pokemon.moves) {
 					const pokemove = this.dex.species.get(move);
 					if (pokemove.exists) {
-						pokemon.m.pokemove = pokemove;
+						pokemon.m.pokemoves.push(pokemove);
 						const idx = pokemon.moveSlots.findIndex(x => x.id === pokemove.id);
 						if (idx >= 0) {
 							pokemon.moveSlots[idx] = pokemon.baseMoveSlots[idx] = {
@@ -1867,11 +1871,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			}
 		},
 		onSwitchIn(pokemon) {
-			if (!pokemon.m.pokemove) return;
-			const pokemove = pokemon.m.pokemove;
-			if (!pokemove.exists) return;
-			// Place volatiles on the Pokémon to show the pokemove.
-			this.add('-start', pokemon, pokemove.name, '[silent]');
+			if (!pokemon.m.pokemoves?.length) return;
+			for (const pokemove of pokemon.m.pokemoves) {
+				if (pokemove.exists) {
+					this.add('-start', pokemon, pokemove.name, '[silent]');
+				}
+			}
 		},
 		onModifyMovePriority: 999,
 		onModifyMove(move, pokemon, target) {
@@ -1882,8 +1887,24 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				move.accuracy = 100;
 				move.flags = {};
 				move.flags['protect'] = 1;
-				move.category = species.baseStats['spa'] >= species.baseStats['atk'] ? 'Special' : 'Physical';
+				move.category = species.baseStats['spa'] > species.baseStats['atk'] ?
+					'Special' :
+					species.baseStats['spa'] < species.baseStats['atk'] ?
+						'Physical' :
+						pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true) ?
+							'Physical' :
+							'Special';
 				move.onAfterHit = function (t, s, m) {
+					if (s.getAbility().name === species.abilities['0']) return;
+					const effect = 'ability:' + this.toID(species.abilities['0']);
+					if (s.volatiles[effect]) return;
+					s.addVolatile(effect);
+					if (s.volatiles[effect]) {
+						(s.volatiles[effect] as any).id = this.toID(effect);
+						(s.volatiles[effect] as any).target = s;
+					}
+				};
+				move.onAfterSubDamage = function (d, t, s, m) {
 					if (s.getAbility().name === species.abilities['0']) return;
 					const effect = 'ability:' + this.toID(species.abilities['0']);
 					if (s.volatiles[effect]) return;
