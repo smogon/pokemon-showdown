@@ -155,7 +155,7 @@ export const commands: Chat.ChatCommands = {
       FS(targets[1]).writeSync(response);
       this.sendReply(`"${targets[1]}" written successfully`);
     } catch (error) {
-      this.errorReply(`An error occurred while fetching or writing the file: ${error}`);
+      this.errorReply(`An error occurred while fetching or writing the file:\t${error}`);
     }
   },
 };
