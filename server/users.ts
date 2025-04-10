@@ -873,6 +873,8 @@ export class User extends Chat.MessageContext {
 
 			Rooms.global.checkAutojoin(user);
 			Rooms.global.rejoinGames(user);
+			// News Test
+			Impulse.NewsManager.onUserConnect(user);
 			Chat.loginfilter(user, this, userType);
 			return true;
 		}
@@ -889,10 +891,6 @@ export class User extends Chat.MessageContext {
 		}
 		Rooms.global.checkAutojoin(this);
 		Rooms.global.rejoinGames(this);
-		if (this.connected) {
-			// News Test
-		Impulse.NewsManager.onUserConnect(this);
-		}
 		Chat.loginfilter(this, null, userType);
 		return true;
 	}
