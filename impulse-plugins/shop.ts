@@ -96,7 +96,7 @@ export const commands: ChatCommands = {
         });
 
         const output = Impulse.generateThemedTable(title, header, data);
-        this.sendReply(output);
+        this.ImpulseReplyBox(output);
     },
 
     additem(target, room, user) {
