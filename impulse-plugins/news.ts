@@ -55,9 +55,9 @@ class NewsManager {
 
 	static onUserConnect(user: User): void {
 		const userid = user.id;
-		if (notifiedUsers[userid]) {
+		/*if (notifiedUsers[userid]) {
 			return;
-		}
+		}*/
 		const newsDisplay = this.generateNewsDisplay();
 		if (newsDisplay.length > 0) {
 			const recentNews = newsDisplay.slice(-2).join(`<hr>`);
