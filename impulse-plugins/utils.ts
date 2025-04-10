@@ -1,4 +1,4 @@
-/* Utility Functions 
+/* Utility Functions
 * Credits: Unknown
 * Updates & Typescript Conversion:
 * Prince Sky
