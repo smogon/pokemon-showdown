@@ -17,6 +17,51 @@ New sections will be added to the bottom of the specified column.
 The column value will be ignored for repeat sections.
 */
 
+export const TeamGenerators: { [k: string]: TeamGenerator } = {
+  randomGen9Teams(battle: Battle): PokemonSet[] {
+    const allPokemon = Object.values(Dex.species.all()).filter(species =>
+      species.gen === 9 && !species.isNonstandard && !species.isUnreleased
+    );
+ 
+    if (allPokemon.length === 0) throw new Error("No Pokémon found for Gen 9.");
+ 
+    this.prng.shuffle(allPokemon);
+ 
+    const team: PokemonSet[] = [];
+    for (let i = 0; i < 6; i++) {
+      const species = allPokemon[i % allPokemon.length];
+      team.push({
+        name: species.name,
+        species: species.name,
+        item: this.sample(Dex.items.all()).name,
+        ability: this.sample(Object.keys(species.abilities)),
+        moves: this.sampleMany(Dex.moves.all(), 4).map(move => move.name),
+        nature: this.sample(['Adamant', 'Jolly', 'Modest', 'Timid']),
+        evs: {
+          hp: this.random(252),
+          atk: this.random(252),
+          def: this.random(252),
+          spa: this.random(252),
+          spd: this.random(252),
+          spe: this.random(252),
+        },
+        ivs: {
+          hp: 31,
+          atk: 31,
+          def: 31,
+          spa: 31,
+          spd: 31,
+          spe: 31,
+        },
+        level: 100, // Default level
+        shiny: this.randomChance(1, 1024), // 1/1024 chance for shiny
+      });
+    }
+ 
+    return team;
+  },
+};
+
 export const Formats: import('../sim/dex-formats').FormatList = [
 
 	// S/V Singles
@@ -25,6 +70,28 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		section: "S/V Singles",
 	},
+	 {
+    name: "[Gen 9] Impulse Random Battle",
+    desc: "Randomized teams of Pokémon in Gen 9 with well-balanced rules for competitive play.",
+    mod: 'gen9',
+    team: 'random',
+    ruleset: [
+      'Obtainable', 
+      'Standard', 
+      'Team Preview', 
+      'Sleep Clause Mod', 
+      'Species Clause', 
+      'OHKO Clause', 
+      'Evasion Moves Clause', 
+      'Endless Battle Clause',
+    ],
+    banlist: ['Moody', 'Shadow Tag', 'Arena Trap', 'Baton Pass'],
+    unbanlist: ['Darmanitan-Galar', 'Dracovish'],
+    onBegin() {
+      this.add('message', `Welcome to [Gen 9] Impulse Random Battle! Enjoy competitive battles with balanced rules.`);
+    },
+    teamGenerator: 'randomGen9Teams',
+  },
 	{
 		name: "[Gen 9] Random Battle",
 		desc: `Randomized teams of Pok&eacute;mon with sets that are generated to be competitively viable.`,
