@@ -53,7 +53,7 @@ class Shop {
       return `You do not have enough ${Impulse.currency} to buy ${quantity} ${item.name}(s). You need ${totalCost} ${Impulse.currency}.`;
     }
 
-    Economy.takeMoney(userid, totalCost, `Bought ${quantity} ${item.name}`, 'shop');
+    Economy.takeMoney(userid, totalCost);
     return `You have successfully bought ${quantity} ${item.name}(s) for ${totalCost} ${Impulse.currency}.`;
   }
 
