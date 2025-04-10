@@ -1843,6 +1843,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					`(Pok\u00e9mon can only have ${allowedPokemoves} Pokemove${allowedPokemoves === 1 ? '' : 's'} each.)`
 				);
 			}
+			if (this.validateSet(set, teamHas)) {
+				return this.validateSet(set, teamHas);
+			}
 			set.moves.push(...moves);
 			return problems.length ? problems : null;
 		},
