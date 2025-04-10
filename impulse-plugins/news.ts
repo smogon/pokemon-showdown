@@ -1,10 +1,7 @@
-/**
- * News System for the server
- * This shows News via the /news view command and sends news PMs when users connect.
- * Everyone will receive the news on connect.
- * Uses persistent data storage for news.
+/* News Commands
  * Credits: Lord Haji, HoeenHero (adapted for current PS code)
- * @license MIT license
+ * Updates & Typescript Conversion:
+ * Prince Sky & Turbo Rx
  */
 
 import { FS } from '../lib/fs';
@@ -20,8 +17,6 @@ interface NewsEntry {
 interface NewsData {
 	[title: string]: NewsEntry;
 }
-
-const notifiedUsers: { [userid: string]: NodeJS.Timeout } = {};
 
 class NewsManager {
 	private static news: NewsData = NewsManager.loadNews();
@@ -45,9 +40,11 @@ class NewsManager {
 	}
 
 	static generateNewsDisplay(): string[] {
+		const newsArray = Object.entries(this.news);
+		newsArray.sort(([, a], [, b]) => new Date(b.postTime).getTime() - new Date(a.postTime).getTime());
+
 		const newsDisplay: string[] = [];
-		for (const title in this.news) {
-			const newsData = this.news[title];
+		for (const [title, newsData] of newsArray) {
 			newsDisplay.push(`<h4><center>${title}</center></h4>${newsData.desc}<br /><br />—${Impulse.nameColor(newsData.postedBy, true, true)} <small>on ${newsData.postTime}</small>`);
 		}
 		return newsDisplay;
@@ -55,17 +52,11 @@ class NewsManager {
 
 	static onUserConnect(user: User): void {
 		const userid = user.id;
-		/*if (notifiedUsers[userid]) {
-			return;
-		}*/
 		const newsDisplay = this.generateNewsDisplay();
 		if (newsDisplay.length > 0) {
-			const recentNews = newsDisplay.slice(-2).join(`<hr>`);
+			const recentNews = newsDisplay.slice(0, 2).join(`<hr>`);
 			const message = `|pm| ${Impulse.serverName} News|${user.getIdentity()}|/raw <div class="infobox">${recentNews}</div>`;
 			user.send(message);
-			/*notifiedUsers[userid] = setTimeout(() => {
-				delete notifiedUsers[userid];
-			}, 60 * 60 * 1000);*/
 		}
 	}
 
@@ -74,7 +65,7 @@ class NewsManager {
 		const now = new Date();
 		const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
 		const postTime = `${monthNames[now.getUTCMonth()]} ${now.getUTCDate()}, ${now.getUTCFullYear()}`;
-		this.news[title] = { postedBy, desc, postTime };
+		this.news = {[title]: { postedBy, desc, postTime }, ...this.news};
 		this.saveNews();
 		return `Added Server News: ${title}`;
 	}
@@ -98,7 +89,7 @@ export const commands: Chat.Commands = {
 		display: 'view',
 		view: function (target, room, user) {
 			if (!this.runBroadcast()) return;
-			const output = `<center><strong>Server News:</strong></center>${NewsManager.generateNewsDisplay().join(`<hr>`)})`;
+			const output = `<center><strong>Server News:</strong></center>${NewsManager.generateNewsDisplay().join(`<hr>`)}`;
 			if (this.broadcasting) {
 				return this.sendReplyBox(`<div class="infobox-limited">${output}</div>`);
 			}
