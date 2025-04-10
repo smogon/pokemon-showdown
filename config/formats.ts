@@ -17,6 +17,8 @@ New sections will be added to the bottom of the specified column.
 The column value will be ignored for repeat sections.
 */
 
+import { Dex } from '../sim/dex';
+
 export const TeamGenerators: { [k: string]: TeamGenerator } = {
   randomGen9Teams(battle: Battle): PokemonSet[] {
     const allPokemon = Object.values(Dex.species.all()).filter(species =>
