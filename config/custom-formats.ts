@@ -1,4 +1,5 @@
 import { Dex } from '@pkmn/dex';
+import { FormatList } from '@pkmn/sim';
 import redPokemonData from './red_pokemon_data.json'; // Ensure the path is correct
 
 const gen9 = Dex.forGen(9);
