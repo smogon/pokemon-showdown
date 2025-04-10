@@ -96,7 +96,7 @@ export const commands: ChatCommands = {
         });
 
         const output = Impulse.generateThemedTable(title, header, data);
-        this.ImpulseReplyBox(output);
+        this.sendReply(output);
     },
 
     additem(target, room, user) {
@@ -130,7 +130,7 @@ export const commands: ChatCommands = {
         };
 
         if (Shop.addItem(newItem)) {
-            this.ImpulseReplyBox(`Item "${Chat.escapeHTML(name)}" has been added to the shop for ${price} ${CURRENCY}.`);
+            this.sendReply(`Item "${Chat.escapeHTML(name)}" has been added to the shop for ${price} ${CURRENCY}.`);
             this.modlog('ADDSHOPITEM', null, `"${Chat.escapeHTML(name)}" (Price: ${price} ${CURRENCY})`, { by: user.id });
         } else {
             this.errorReply(`An item with the name/ID "${Chat.escapeHTML(name)}" already exists. Use a different name or delete the existing item first.`);
@@ -150,7 +150,7 @@ export const commands: ChatCommands = {
         }
 
         if (Shop.deleteItem(itemId)) {
-            this.ImpulseReplyBox(`Item "${Chat.escapeHTML(item.name)}" has been removed from the shop.`);
+            this.sendReply(`Item "${Chat.escapeHTML(item.name)}" has been removed from the shop.`);
             this.modlog('REMOVESHOPITEM', null, `"${Chat.escapeHTML(item.name)}" (ID: ${itemId})`, { by: user.id });
         } else {
             this.errorReply(`Failed to remove item "${Chat.escapeHTML(target)}". It might have been deleted by someone else.`);
@@ -174,7 +174,7 @@ export const commands: ChatCommands = {
         const newBalance = Economy.takeMoney(user.id, item.price, `Bought item: ${item.name}`, user.id, item.name);
 
         if (newBalance !== undefined && newBalance === userBalance - item.price) {
-            this.ImpulseReplyBox(`You have successfully purchased "${Chat.escapeHTML(item.name)}" for ${item.price} ${CURRENCY}. Your new balance is ${newBalance} ${CURRENCY}.`);
+            this.sendReply(`You have successfully purchased "${Chat.escapeHTML(item.name)}" for ${item.price} ${CURRENCY}. Your new balance is ${newBalance} ${CURRENCY}.`);
 
         } else {
             this.errorReply(`There was an error processing your purchase for "${Chat.escapeHTML(item.name)}". Your balance has not been changed. Please contact staff if this issue persists.`);
