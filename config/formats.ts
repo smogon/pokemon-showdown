@@ -1876,9 +1876,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onSwitchIn(pokemon) {
 			if (!pokemon.m.pokemoves?.length) return;
 			for (const pokemove of pokemon.m.pokemoves) {
-				if (pokemove.exists) {
-					this.add('-start', pokemon, pokemove.name, '[silent]');
-				}
+				this.add('-start', pokemon, pokemove.name, '[silent]');
 			}
 		},
 		onModifyMovePriority: 999,
