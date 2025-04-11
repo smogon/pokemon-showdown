@@ -148,7 +148,7 @@ export const commands: ChatCommands = {
 		if (target || (!target && this.broadcasting)) {
 			if (!target) targetId = user.userid;
 			EXP.readExp(targetId, exp => {
-				this.sendReplyBox(`${(Impulse.nameColor(targetId, true, true)} has ${exp} exp and is level ${Impulse.ExpControl.level(targetId)} and needs ${Impulse.ExpControl.nextLevel(targetId)} to reach the next level.`);
+				this.sendReplyBox(`${Impulse.nameColor(targetId, true, true)} has ${exp} exp and is level ${Impulse.ExpControl.level(targetId)} and needs ${Impulse.ExpControl.nextLevel(targetId)} to reach the next level.`);
 			});
 		} else {
 			EXP.readExp(user.userid, exp => {
