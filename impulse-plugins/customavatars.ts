@@ -106,7 +106,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 		
-		help(target: string, room: ChatRoom | null, user: User) {
+		customavatarhelp(target: string, room: ChatRoom | null, user: User) {
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
 				`<b>Custom Avatar Commands:</b><br>` +
