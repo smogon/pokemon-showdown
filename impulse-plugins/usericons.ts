@@ -90,14 +90,14 @@ export const commands: Chat.ChatCommands = {
         staffRoom.add(`|html|<div class="infobox">${Impulse.nameColor(user.name, true, true)} removed icon for ${Impulse.nameColor(target, true, false)}.</div>`).update();
 			}
 		},
-		
-		iconhelp(target: string, room: ChatRoom | null, user: User) {
-			if (!this.runBroadcast()) return;
-			this.sendReplyBox(
-				`<b>Custom Icon Commands:</b><br>` +
-				`• <code>/icon set [username], [image url]</code> - Gives [user] an icon (Requires: @ and higher)<br>` +
-				`• <code>/icon delete [username]</code> - Removes a user's icon (Requires: @ and higher)`
-			);
-		},
+	},
+	
+	iconhelp(target: string, room: ChatRoom | null, user: User) {
+		if (!this.runBroadcast()) return;
+		this.sendReplyBox(
+			`<b>Custom Icon Commands:</b><br>` +
+			`• <code>/icon set [username], [image url]</code> - Gives [user] an icon (Requires: @ and higher)<br>` +
+			`• <code>/icon delete [username]</code> - Removes a user's icon (Requires: @ and higher)`
+		);
 	},
 };
