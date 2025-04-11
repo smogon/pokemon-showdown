@@ -1,5 +1,5 @@
 /* News Commands
- * Credits: Lord Haji, HoeenHero (adapted for current PS code)
+ * Credits: Lord Haji, HoeenHero
  * Updates & Typescript Conversion:
  * Prince Sky & Turbo Rx
  */
