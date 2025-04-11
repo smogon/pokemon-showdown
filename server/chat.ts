@@ -624,11 +624,6 @@ export class CommandContext extends MessageContext {
 						message = message.charAt(0) + message;
 					}
 				}
-
-			
-				let lastMessageTime = this.user.lastMessageTime;
-				message = this.canTalk(message);
-				
 				// Exp Code
 				let lastMessageTime = this.user.lastMessageTime;
 				// Original Showdown Code
