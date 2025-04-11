@@ -1,8 +1,8 @@
-/* User Icons Commands
- * Credits: Lord Haji, panpawn
- * Updates & Typescript Conversion:
- * Prince Sky
- */
+/******************************************
+* Pokemon Showdown Custom Icon Commands   *
+* Original Code By: Lord Haji, Panpawn    *
+* Updated To Typescript By: Prince Sky    *
+*******************************************/
 
 import { FS } from '../lib/fs';
 
