@@ -291,7 +291,7 @@ export const commands: ChatCommands = {
     ]);
     const styleBy = Impulse.nameColor('TurboRx', true, true);
 
-    const output = generateThemedTable(title, header, data, styleBy);
+    const output = Impulse.generateThemedTable(title, header, data, styleBy);
     Impulse.ReplyBox(output);
   },
 
@@ -330,7 +330,7 @@ export const commands: ChatCommands = {
       return [timestamp, log.action, by, from, to, amount];
     });
 
-    const tableHTML = generateThemedTable(title, header, data);
+    const tableHTML = Impulse.generateThemedTable(title, header, data);
     let paginationHTML = '';
 
     if (totalPages > 1) {
