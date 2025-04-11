@@ -3,6 +3,11 @@
 * Original Code By: Lord Haji, HoeenHero         *
 * Updated To Typescript By: PrinceSky & Turbo Rx *
 **************************************************/
+/**********************""*************"*****
+* Add this code inside server/users.ts     *
+* handleRename function                    *
+* Impulse.NewsManager.onUserConnect(user); *
+********************************************/
 
 import { FS } from '../lib/fs';
 
