@@ -1,7 +1,5 @@
 /* Experience (EXP) System Commands
- * Credits: Unknown (for the base economy system)
- * Updates & Typescript Conversion & EXP System:
- * Prince Sky
+ * Credits: Prince Sky
  */
 
 import { FS } from '../lib/fs';
