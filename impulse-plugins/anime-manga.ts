@@ -40,14 +40,6 @@ interface JikanManga {
   rating: string | null;
 }
 
-interface JikanNews {
-  title: string;
-  date: string;
-  author_username: string;
-  forum_url: string;
-  image_url: string | null;
-  excerpt: string;
-}
 
 /* Adult content filter */
 const adultRatings = ['Rx - Hentai', 'R+ - Mild Nudity', 'R - 17+ (Violence & Profanity)'];
