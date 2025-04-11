@@ -12,7 +12,7 @@ const EXP_UNIT = `EXP`;
 Impulse.expUnit = EXP_UNIT;
 
 const MIN_LEVEL_EXP = 15;
-const MULTIPLIER = 1.9;
+const MULTIPLIER = 1.4;
 let DOUBLE_EXP = false;
 
 interface ExpData {
