@@ -135,6 +135,9 @@ if (Impulse.ExpControl) {
 
 Impulse.ExpControl = new ExpFunctions();
 
+// Grant Exp Once Every 30 seconds
+Impulse.expTimer = 30000;
+
 export const commands: ChatCommands = {
 	'!exp': true,
 	level: 'exp',
