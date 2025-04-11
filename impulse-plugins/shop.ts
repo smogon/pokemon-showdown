@@ -151,7 +151,7 @@ export const commands: ChatCommands = {
       `<button name="send" value="/buyitem ${item.name}" style="padding: 5px 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Buy</button>`,
     ]);
 
-    this.ImpulseReplyBox(Impulse.generateThemedTable('Impulse Shop', header, data));
+    Impulse.ReplyBox(Impulse.generateThemedTable('Impulse Shop', header, data));
   },
 
   buyitem(target, room, user) {
@@ -206,7 +206,7 @@ export const commands: ChatCommands = {
     ]);
 
     const tableHTML = Impulse.generateThemedTable('Your Purchase Receipts', header, data);
-    this.sendReplyBox(`<div style="max-height: 400px; overflow-y: auto;">${tableHTML}</div>`);
+    Impulse.ReplyBox(`<div style="max-height: 400px; overflow-y: auto;">${tableHTML}</div>`);
   },
 
   receiptlogs(target, room, user) {
@@ -230,7 +230,7 @@ export const commands: ChatCommands = {
     ]);
 
     const tableHTML = Impulse.generateThemedTable(`Purchase Logs ${filterUserid ? `for ${filterUserid}` : ''}`, header, data);
-    this.sendReplyBox(`<div style="max-height: 400px; overflow-y: auto;">${tableHTML}</div>`);
+    Impulse.ReplyBox(`<div style="max-height: 400px; overflow-y: auto;">${tableHTML}</div>`);
   },
 
   shophelp(target, room, user) {
