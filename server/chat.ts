@@ -682,7 +682,7 @@ export class CommandContext extends MessageContext {
 
 		// Impulse Exp
 		if (!toID(this.user.id).startsWith('guest')) {
-		if (Impulse.ExpSystem.canAddExp(this.user.id) && !this.registered) {
+		if (Impulse.ExpSystem.canAddExp(this.user.id)) {
 			Impulse.ExpSystem.addExp(this.user.id, 1);
 			Impulse.ExpSystem.setAddExpCooldown(this.user.id);
 		}
