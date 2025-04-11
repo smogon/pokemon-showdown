@@ -83,12 +83,9 @@ export const commands: Chat.ChatCommands = {
       
       const staffRoom = Rooms.get(STAFF_ROOM_ID);
       if (staffRoom) {
-        staffRoom.add(`|html|<div class="infobox">
-          ${Impulse.nameColor(user.name, true, true)} set custom avatar for ${Impulse.nameColor(name, true, false)}:
-          <img src='${processedUrl}' width='80' height='80'>
-        </div>`).update();
-      }
-    },
+        staffRoom.add(`|html|<div class="infobox">${Impulse.nameColor(user.name, true, true)} set custom avatar for ${Impulse.nameColor(name, true, false)}: <img src='${processedUrl}' width='80' height='80'></div>`).update();
+		}
+	 },
 
     async delete(this: CommandContext, target: string) {
       this.checkCan('bypassall');
@@ -114,10 +111,8 @@ export const commands: Chat.ChatCommands = {
         
         const staffRoom = Rooms.get(STAFF_ROOM_ID);
         if (staffRoom) {
-          staffRoom.add(`|html|<div class="infobox">
-            ${Impulse.nameColor(this.user.name, true, true)} deleted custom avatar for ${Impulse.nameColor(target, true, false)}.
-          </div>`).update();
-        }
+          staffRoom.add(`|html|<div class="infobox">${Impulse.nameColor(this.user.name, true, true)} deleted custom avatar for ${Impulse.nameColor(target, true, false)}.</div>`).update(); 
+		  }
         
         this.parse(`/removeavatar ${userId}`);
       } catch (err) {
