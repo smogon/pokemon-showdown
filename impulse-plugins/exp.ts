@@ -1,5 +1,6 @@
 /* Experience (EXP) System Commands
- * Credits: Prince Sky
+ * Credits: Unknown 
+ * Updates: Prince Sky
  */
 
 import { FS } from '../lib/fs';
@@ -64,6 +65,14 @@ export class ExpSystem {
     this.saveExpData();
     return this.data[id];
   }
+	
+	static grantExp() {
+		Users.users.forEach(user => {
+			if (!user || !user.named || !user.connected || !user.lastPublicMessage) return;
+			if (Date.now() - user.lastPublicMessage > 300000) return;
+			this.addExp(user, null, 1);
+		});
+	}
 
   static takeExp(userid: string, amount: number, reason?: string, by?: string): number {
     const id = toID(userid);
