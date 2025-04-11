@@ -242,7 +242,7 @@ export const commands: ChatCommands = {
     const styleBy = Impulse.nameColor('TurboRx', true, true);
 
     const output = Impulse.generateThemedTable(title, header, data, styleBy);
-    this.ImpulseReplyBox(output);
+    Impulse.ReplyBox(output);
   },
 
   explogs(target, room, user) {
