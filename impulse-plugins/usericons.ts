@@ -90,6 +90,10 @@ export const commands: Chat.ChatCommands = {
         staffRoom.add(`|html|<div class="infobox">${Impulse.nameColor(user.name, true, true)} removed icon for ${Impulse.nameColor(target, true, false)}.</div>`).update();
 			}
 		},
+
+		''(target, room, user) {
+			this.parse('/iconhelp');
+		},
 	},
 	
 	iconhelp(target: string, room: ChatRoom | null, user: User) {
