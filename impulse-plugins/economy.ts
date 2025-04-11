@@ -324,7 +324,7 @@ export const commands: ChatCommands = {
     const styleBy = Impulse.nameColor('TurboRx', true, true);
 
     const output = generateThemedTable(title, header, data, styleBy);
-    this.ImpulseReplyBox(output);
+    Impulse.ReplyBox(output);
   },
 
 	economylogs(target, room, user) {
@@ -377,7 +377,7 @@ export const commands: ChatCommands = {
     }
 
     const fullOutput = `<div style="max-height: 400px; overflow: auto;" data-uhtml="${useridFilter}-${page}">${tableHTML}</div>${paginationHTML}`;
-    this.ImpulseReplyBox(fullOutput);
+    Impulse.ReplyBox(fullOutput);
   },
 
   economyhelp(target, room, user) {
