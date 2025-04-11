@@ -1,7 +1,7 @@
 /* Utility Functions
 * Credits: Unknown
 * Updates & Typescript Conversion:
-* Prince Sky
+* Prince Sky.
 */
 
 import https from 'https';
