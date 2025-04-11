@@ -38,6 +38,20 @@ interface JikanManga {
   };
 }
 
+interface JikanAnimeAiring {
+  mal_id: number;
+  title: string;
+  title_english: string | null;
+  episodes: number | null;
+  status: string | null;
+  images: {
+    jpg: {
+      image_url: string;
+    };
+  };
+}
+
+
 async function fetchAnimeInfoJikan(query: string): Promise<JikanAnime | null> {
   try {
     const response = await fetch(`https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=1`);
@@ -68,6 +82,23 @@ async function fetchMangaInfoJikan(query: string): Promise<JikanManga | null> {
     }
   } catch (error) {
     console.error('Error fetching data from Jikan API:', error);
+    return null;
+  }
+}
+
+async function fetchAiringAnimeJikan(): Promise<JikanAnimeAiring[] | null> {
+  try {
+    const response = await fetch(`https://api.jikan.moe/v4/anime?status=airing&limit=10`); // Adjust limit as needed
+    const data = await response.json();
+
+    if (data.data && data.data.length > 0) {
+      return data.data as JikanAnimeAiring[];
+    } else {
+      console.log('No currently airing anime found on Jikan.');
+      return null;
+    }
+  } catch (error) {
+    console.error('Error fetching airing anime data from Jikan API:', error);
     return null;
   }
 }
@@ -185,6 +216,36 @@ export const commands: Chat.ChatCommands = {
     help: [
       `/manga [manga name] - Searches Jikan for information about the specified manga and displays it in a compact layout.`,
       `The displayed information includes Japanese and English titles, cover image (on the side), status, number of chapters and volumes, genres, truncated synopsis (with "Read More" link), and a link to MyAnimeList.`,
+    ],
+  },
+
+	animenow: {
+    '': async function (target, room, user) {
+      if (!this.runBroadcast()) return;
+      this.sendReply('Fetching currently airing anime from Jikan...');
+      const airingAnime = await fetchAiringAnimeJikan();
+      if (airingAnime && airingAnime.length > 0) {
+        let reply = `<div style="border: 1px solid #ccc; border-radius: 5px; padding: 5px; margin: 5px;">`;
+        reply += `<strong>Currently Airing Anime:</strong><br>`;
+        for (const anime of airingAnime) {
+          reply += `<div style="display: flex; align-items: center; margin-bottom: 5px;">`;
+          if (anime.images?.jpg?.image_url) {
+            reply += `<img src="${Chat.escapeHTML(anime.images.jpg.image_url)}" alt="Cover" style="width: 50px; height: 75px; margin-right: 10px;">`;
+          }
+          reply += `<a href="https://myanimelist.net/anime/${anime.mal_id}" target="_blank" style="text-decoration: none;">${Chat.escapeHTML(anime.title)}</a>`;
+          if (anime.title_english) {
+            reply += ` (${Chat.escapeHTML(anime.title_english)})`;
+          }
+          reply += `</div>`;
+        }
+        reply += `</div>`;
+        this.sendReplyBox(reply);
+      } else {
+        this.sendReplyBox('Could not retrieve currently airing anime information from Jikan.');
+      }
+    },
+    help: [
+      `/animenow - Displays a list of currently airing anime from Jikan.`,
     ],
   },
 };
