@@ -113,6 +113,6 @@ export const commands: Chat.ChatCommands = {
 				`• <code>/customavatar set [username], [image url]</code> - Sets a user's avatar (Requires ~)<br>` +
 				`• <code>/customavatar delete [username]</code> - Removes a user's avatar (Requires ~)`
 			);
-		}
-	}
+		},
+	},
 };
