@@ -625,7 +625,16 @@ export class CommandContext extends MessageContext {
 					}
 				}
 
+			
+				let lastMessageTime = this.user.lastMessageTime;
+				message = this.canTalk(message);
+				
+				// Exp Code
+				let lastMessageTime = this.user.lastMessageTime;
+				// Original Showdown Code
 				message = this.checkChat(message);
+				// Exp Code
+				if (message && Date.now() > (lastMessageTime + Impulse.expTimer)) giveExp = true;
 			}
 		} catch (err: any) {
 			if (err.name?.endsWith('ErrorMessage')) {
@@ -680,7 +689,11 @@ export class CommandContext extends MessageContext {
 			message = true;
 		}
 
+		// Exp Code
+		if (this.user.registered && giveExp) Impulse.ExpControl.addExp(this.user.userid, this.room, 1);
+
 		this.update();
+
 
 		return message;
 	}
