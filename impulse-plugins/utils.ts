@@ -9,6 +9,14 @@ import https from 'https';
 // Usage Impulse.serverName
 Impulse.serverName = 'Impulse';
 
+// Usage Impulse.ReplyBox(); - Same as this.sendReplyBox but without borders.
+function ImpulseReplyBox(htmlContent: string | JSX.VNode) {
+	if (typeof htmlContent !== 'string') htmlContent = JSX.render(htmlContent);
+	this.sendReply(`|c|${this.room && this.broadcasting ? this.user.getIdentity() : '~'}|/raw ${htmlContent}`);
+}
+
+Impulse.ReplyBox = ImpulseReplyBox;
+
 // Usage: Impulse.nameColor("username", true, true, room);
 function nameColor(name: string, bold: boolean = false, userGroup: boolean = false, room: Room | null = null): string {
   const userId = toID(name);
