@@ -84,52 +84,45 @@ function createDisplayBox(info: JikanAnime | JikanManga, type: 'anime' | 'manga'
 }
 
 export const commands: Chat.ChatCommands = {
-	anime: {
-		async '': function(target, room, user) {
-			if (!this.runBroadcast()) return;
-			if (!target) return this.sendReply('Usage: /anime [anime name]');
-
-			const [animeInfo] = await fetchJikanData<JikanAnime>('anime', target.trim());
-			this.sendReplyBox(animeInfo ? createDisplayBox(animeInfo, 'anime') : `No information found for '${Chat.escapeHTML(target)}'`);
-		},
-		help: [`/anime [anime name] - Searches for information about the specified anime.`],
+	async anime(target, room, user) {
+		if (!this.runBroadcast()) return;
+		if (!target) return this.sendReply('Usage: /anime [anime name]');
+		const [animeInfo] = await fetchJikanData<JikanAnime>('anime', target.trim());
+		this.sendReplyBox(animeInfo ? createDisplayBox(animeInfo, 'anime') : `No information found for '${Chat.escapeHTML(target)}'`);
 	},
+	help: [`/anime [anime name] - Searches for information about the specified anime.`],
 	
-	manga: {
-		async '': function(target, room, user) {
-			if (!this.runBroadcast()) return;
-			if (!target) return this.sendReply('Usage: /manga [manga name]');
-			const [mangaInfo] = await fetchJikanData<JikanManga>('manga', target.trim());
-			this.sendReplyBox(mangaInfo ? createDisplayBox(mangaInfo, 'manga') : `No manga information found for '${Chat.escapeHTML(target)}'`);
-		},
-		help: [`/manga [manga name] - Searches for information about the specified manga.`],
+	async manga(target, room, user) {
+		if (!this.runBroadcast()) return;
+		if (!target) return this.sendReply('Usage: /manga [manga name]');
+		const [mangaInfo] = await fetchJikanData<JikanManga>('manga', target.trim());
+		this.sendReplyBox(mangaInfo ? createDisplayBox(mangaInfo, 'manga') : `No manga information found for '${Chat.escapeHTML(target)}'`);
 	},
+	help: [`/manga [manga name] - Searches for information about the specified manga.`],
 	
-	upcominganime: {
-		async '': function(target, room, user) {
-			if (!this.runBroadcast()) return;
-			const genreQuery = target.trim().toLowerCase();
-			const upcomingAnime = await fetchJikanData<JikanAnime>('anime');
-			if (!upcomingAnime.length) return this.sendReplyBox('No upcoming anime found.');
-			
-			const filteredAnime = genreQuery ? 
-				upcomingAnime.filter(anime => anime.genres.some(g => g.name.toLowerCase() === genreQuery)) : 
-				upcomingAnime;
-			if (!filteredAnime.length) {
-				return this.sendReplyBox(`No upcoming anime found with genre "${Chat.escapeHTML(genreQuery)}".`);
-			}
-			let html = `<div style="max-height: 350px; overflow-y: auto; border: 1px solid #ccc; border-radius: 5px; padding: 10px;">` +
-				`<strong>Top Upcoming Anime${genreQuery ? ` in "${Chat.escapeHTML(genreQuery)}"` : ''}:</strong><br>`;
-			html += filteredAnime.map((anime, i) => 
-				createDisplayBox(anime, 'anime', 200) + 
-				(i < filteredAnime.length - 1 ? '<hr style="border: 0; border-top: 1px solid #ccc; margin: 10px 0;">' : '')
-											 ).join('');
-			html += '</div>';
-			this.sendReplyBox(html);
-		},
-		help: [
-			`/upcominganime [genre] - Shows upcoming anime, optionally filtered by genre.`,
-			`Examples: /upcominganime action, /upcominganime romance`,
-		],
+	async upcominganime(target, room, user) {
+		if (!this.runBroadcast()) return;
+		const genreQuery = target.trim().toLowerCase();
+		const upcomingAnime = await fetchJikanData<JikanAnime>('anime');
+		if (!upcomingAnime.length) return this.sendReplyBox('No upcoming anime found.');
+		
+		const filteredAnime = genreQuery ? 
+			upcomingAnime.filter(anime => anime.genres.some(g => g.name.toLowerCase() === genreQuery)) : 
+			upcomingAnime;
+		if (!filteredAnime.length) {
+			return this.sendReplyBox(`No upcoming anime found with genre "${Chat.escapeHTML(genreQuery)}".`);
+		}
+		let html = `<div style="max-height: 350px; overflow-y: auto; border: 1px solid #ccc; border-radius: 5px; padding: 10px;">` +
+			`<strong>Top Upcoming Anime${genreQuery ? ` in "${Chat.escapeHTML(genreQuery)}"` : ''}:</strong><br>`;
+		html += filteredAnime.map((anime, i) => 
+			createDisplayBox(anime, 'anime', 200) + 
+			(i < filteredAnime.length - 1 ? '<hr style="border: 0; border-top: 1px solid #ccc; margin: 10px 0;">' : '')
+										 ).join('');
+		html += '</div>';
+		this.sendReplyBox(html);
 	},
+	help: [
+		`/upcominganime [genre] - Shows upcoming anime, optionally filtered by genre.`,
+		`Examples: /upcominganime action, /upcominganime romance`,
+	],
 };
