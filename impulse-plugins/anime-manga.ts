@@ -90,7 +90,6 @@ export const commands: Chat.ChatCommands = {
 		const [animeInfo] = await fetchJikanData<JikanAnime>('anime', target.trim());
 		this.sendReplyBox(animeInfo ? createDisplayBox(animeInfo, 'anime') : `No information found for '${Chat.escapeHTML(target)}'`);
 	},
-	help: [`/anime [anime name] - Searches for information about the specified anime.`],
 	
 	async manga(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -98,7 +97,6 @@ export const commands: Chat.ChatCommands = {
 		const [mangaInfo] = await fetchJikanData<JikanManga>('manga', target.trim());
 		this.sendReplyBox(mangaInfo ? createDisplayBox(mangaInfo, 'manga') : `No manga information found for '${Chat.escapeHTML(target)}'`);
 	},
-	help: [`/manga [manga name] - Searches for information about the specified manga.`],
 	
 	async upcominganime(target, room, user) {
 		if (!this.runBroadcast()) return;
@@ -121,8 +119,4 @@ export const commands: Chat.ChatCommands = {
 		html += '</div>';
 		this.sendReplyBox(html);
 	},
-	help: [
-		`/upcominganime [genre] - Shows upcoming anime, optionally filtered by genre.`,
-		`Examples: /upcominganime action, /upcominganime romance`,
-	],
 };
