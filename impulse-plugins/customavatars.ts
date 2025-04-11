@@ -105,6 +105,10 @@ export const commands: Chat.ChatCommands = {
 				console.error('Error deleting avatar:', err);
 			}
 		},
+
+		''(target, room, user) {
+			this.parse('/customavatarhelp');
+		},
 	},
 	
 	customavatarhelp(target: string, room: ChatRoom | null, user: User) {
