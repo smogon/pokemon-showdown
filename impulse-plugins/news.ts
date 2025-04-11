@@ -55,7 +55,7 @@ class NewsManager {
 		const newsDisplay = this.generateNewsDisplay();
 		if (newsDisplay.length > 0) {
 			const recentNews = newsDisplay.slice(0, 2).join(`<hr>`);
-			const message = `|pm| ${Impulse.serverName} News|${user.getIdentity()}|/raw <div class="infobox">${recentNews}</div>`;
+			const message = `|pm| ${Impulse.serverName} News|${user.getIdentity()}|/raw ${recentNews}`;
 			user.send(message);
 		}
 	}
