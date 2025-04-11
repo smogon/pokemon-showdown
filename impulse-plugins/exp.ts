@@ -154,7 +154,8 @@ function generateThemedTable(
 Impulse.generateThemedTable = generateThemedTable;
 
 export const commands: ChatCommands = {
-  level(target, room, user) {
+  level: 'exp',
+	exp(target, room, user) {
     if (!target) target = user.name;
     if (!this.runBroadcast()) return;
     const userid = toID(target);
@@ -249,7 +250,7 @@ export const commands: ChatCommands = {
     room?.add(`|html|<center><div class="broadcast-blue"><b>${Impulse.nameColor(user.name, true, true)}</b> has reset all ${EXP_UNIT} to <b>${DEFAULT_EXP}</b> (Level 0).<br>Reason: ${reason}</div></center>`);
   },
 
-  richestusers(target, room, user) {
+  expladder(target, room, user) {
     if (!this.runBroadcast()) return;
     const richest = ExpSystem.getRichestUsers(100);
     if (!richest.length) {
@@ -285,12 +286,12 @@ export const commands: ChatCommands = {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
 		 `<div><b><center>EXP System Commands By ${Impulse.nameColor('Prince Sky', true, true)}</center></b>` +
-		 `<ul><li><code>/level [user]</code> - Check your or another user's EXP, current level, and EXP needed for the next level.</li>` +
+		 `<ul><li><code>/level [user]</code> (Or <code>/exp</code>) - Check your or another user's EXP, current level, and EXP needed for the next level.</li>` +
 		 `<li><code>/giveexp [user], [amount] ,[reason]</code> - Give a specified amount of EXP to a user. (Requires: @ and higher).</li>` +
 		 `<li><code>/takeexp [user], [amount] ,[reason]</code> - Take a specified amount of EXP from a user. (Requires: @ and higher).</li>` +
 		 `<li><code>/resetexp [user], [reason]</code> - Reset a user's EXP to ${DEFAULT_EXP}. (Requires: @ and higher).</li>` +
 		 `<li><code>/resetexpall [reason]</code> - Reset all users' EXP to ${DEFAULT_EXP}. (Requires: @ and higher).</li>` +
-		 `<li><code>/richestusers</code> - View the top 100 users with the most EXP and their levels.</li>` +
+		 `<li><code>/expladder</code> - View the top 100 users with the most EXP and their levels.</li>` +
 		 `</ul></div>`);
   },
 };
