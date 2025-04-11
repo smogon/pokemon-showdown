@@ -91,7 +91,7 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 		
-		help(target: string, room: ChatRoom | null, user: User) {
+		iconhelp(target: string, room: ChatRoom | null, user: User) {
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(
 				`<b>Custom Icon Commands:</b><br>` +
