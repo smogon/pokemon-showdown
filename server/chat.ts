@@ -681,11 +681,9 @@ export class CommandContext extends MessageContext {
 		}
 
 		// Impulse Exp
-		if (!this.named) {
-		if (Impulse.ExpSystem.canAddExp(this.user.id)) {
+		if (Impulse.ExpSystem.canAddExp(this.user.id) $$ !this.registered) {
 			Impulse.ExpSystem.addExp(this.user.id, 1);
 			Impulse.ExpSystem.setAddExpCooldown(this.user.id);
-		}
 		}
 			
 		this.update();
