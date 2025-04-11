@@ -624,12 +624,8 @@ export class CommandContext extends MessageContext {
 						message = message.charAt(0) + message;
 					}
 				}
-				// Exp Code
-				let lastMessageTime = this.user.lastMessageTime;
-				// Original Showdown Code
+				
 				message = this.checkChat(message);
-				// Exp Code
-				if (message && Date.now() > (lastMessageTime + Impulse.expTimer)) Impulse.giveExp = true;
 			}
 		} catch (err: any) {
 			if (err.name?.endsWith('ErrorMessage')) {
