@@ -629,7 +629,7 @@ export class CommandContext extends MessageContext {
 				// Original Showdown Code
 				message = this.checkChat(message);
 				// Exp Code
-				if (message && Date.now() > (lastMessageTime + Impulse.expTimer)) giveExp = true;
+				if (message && Date.now() > (lastMessageTime + Impulse.expTimer)) Impulse.giveExp = true;
 			}
 		} catch (err: any) {
 			if (err.name?.endsWith('ErrorMessage')) {
@@ -685,7 +685,7 @@ export class CommandContext extends MessageContext {
 		}
 
 		// Exp Code
-		if (this.user.registered && giveExp) Impulse.ExpControl.addExp(this.user.userid, this.room, 1);
+		if (this.user.registered && Impulse.giveExp) Impulse.ExpControl.addExp(this.user.userid, this.room, 1);
 
 		this.update();
 
