@@ -17,6 +17,13 @@ interface ExpData {
   [userid: string]: number;
 }
 
+interface Cooldowns {
+  [userid: string]: number;
+}
+
+const ADD_EXP_COOLDOWN = 30 * 1000; // 30 seconds in milliseconds
+const expAddCooldowns: Cooldowns = {};
+
 export class ExpSystem {
   private static data: ExpData = ExpSystem.loadExpData();
 
@@ -108,44 +115,22 @@ export class ExpSystem {
     }
     return requiredExp;
   }
+
+  static canAddExp(userid: string): boolean {
+    const now = Date.now();
+    return !expAddCooldowns[toID(userid)] || now - expAddCooldowns[toID(userid)] >= ADD_EXP_COOLDOWN;
+  }
+
+  static setAddExpCooldown(userid: string): void {
+    expAddCooldowns[toID(userid)] = Date.now();
+  }
 }
 
 Impulse.ExpSystem = ExpSystem;
 
-function generateThemedTable(
-  title: string,
-  headerRow: string[],
-  dataRows: string[][],
-  styleBy?: string
-): string {
-  let output = `<div class="themed-table-container" style="max-width: 100%; overflow-x: auto;">`; // Added overflow-x: auto here
-  output += `<h3 class="themed-table-title">${title}</h3>`;
-  if (styleBy) {
-    output += `<p class="themed-table-by">Style By ${styleBy}</p>`;
-  }
-  output += `<table class="themed-table" style="width: 100%; border-collapse: collapse;">`; // Added border-collapse for better visual
-  output += `<tr class="themed-table-header">`;
-  headerRow.forEach(header => {
-    output += `<th>${header}</th>`;
-  });
-  output += `</tr>`;
-
-  dataRows.forEach(row => {
-    output += `<tr class="themed-table-row">`;
-    row.forEach(cell => {
-      output += `<td>${cell}</td>`;
-    });
-    output += `</tr>`;
-  });
-
-  output += `</table></div>`;
-  return output;
-}
-
-Impulse.generateThemedTable = generateThemedTable;
-
 export const commands: ChatCommands = {
-  level(target, room, user) {
+  level: 'exp',
+	exp(target, room, user) {
     if (!target) target = user.name;
     if (!this.runBroadcast()) return;
     const userid = toID(target);
@@ -240,7 +225,7 @@ export const commands: ChatCommands = {
     room?.add(`|html|<center><div class="broadcast-blue"><b>${Impulse.nameColor(user.name, true, true)}</b> has reset all ${EXP_UNIT} to <b>${DEFAULT_EXP}</b> (Level 0).<br>Reason: ${reason}</div></center>`);
   },
 
-  richestusers(target, room, user) {
+  expladder(target, room, user) {
     if (!this.runBroadcast()) return;
     const richest = ExpSystem.getRichestUsers(100);
     if (!richest.length) {
@@ -262,7 +247,7 @@ export const commands: ChatCommands = {
     });
     const styleBy = Impulse.nameColor('TurboRx', true, true);
 
-    const output = generateThemedTable(title, header, data, styleBy);
+    const output = Impulse.generateThemedTable(title, header, data, styleBy);
     this.ImpulseReplyBox(output);
   },
 
@@ -276,12 +261,12 @@ export const commands: ChatCommands = {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
 		 `<div><b><center>EXP System Commands By ${Impulse.nameColor('Prince Sky', true, true)}</center></b>` +
-		 `<ul><li><code>/level [user]</code> - Check your or another user's EXP, current level, and EXP needed for the next level.</li>` +
+		 `<ul><li><code>/level [user]</code> (or <code>/atm</code>) - Check your or another user's EXP, current level, and EXP needed for the next level.</li>` +
 		 `<li><code>/giveexp [user], [amount] ,[reason]</code> - Give a specified amount of EXP to a user. (Requires: @ and higher).</li>` +
 		 `<li><code>/takeexp [user], [amount] ,[reason]</code> - Take a specified amount of EXP from a user. (Requires: @ and higher).</li>` +
 		 `<li><code>/resetexp [user], [reason]</code> - Reset a user's EXP to ${DEFAULT_EXP}. (Requires: @ and higher).</li>` +
 		 `<li><code>/resetexpall [reason]</code> - Reset all users' EXP to ${DEFAULT_EXP}. (Requires: @ and higher).</li>` +
-		 `<li><code>/richestusers</code> - View the top 100 users with the most EXP and their levels.</li>` +
+		 `<li><code>/expladder</code> - View the top 100 users with the most EXP and their levels.</li>` +
 		 `</ul></div>`);
   },
 };
