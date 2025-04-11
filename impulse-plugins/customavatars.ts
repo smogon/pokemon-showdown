@@ -105,14 +105,14 @@ export const commands: Chat.ChatCommands = {
 				console.error('Error deleting avatar:', err);
 			}
 		},
-		
-		customavatarhelp(target: string, room: ChatRoom | null, user: User) {
-			if (!this.runBroadcast()) return;
-			this.sendReplyBox(
-				`<b>Custom Avatar Commands:</b><br>` +
-				`• <code>/customavatar set [username], [image url]</code> - Sets a user's avatar (Requires ~)<br>` +
-				`• <code>/customavatar delete [username]</code> - Removes a user's avatar (Requires ~)`
-			);
-		},
+	},
+	
+	customavatarhelp(target: string, room: ChatRoom | null, user: User) {
+		if (!this.runBroadcast()) return;
+		this.sendReplyBox(
+			`<b>Custom Avatar Commands:</b><br>` +
+			`• <code>/customavatar set [username], [image url]</code> - Sets a user's avatar (Requires ~)<br>` +
+			`• <code>/customavatar delete [username]</code> - Removes a user's avatar (Requires ~)`
+		);
 	},
 };
