@@ -1,114 +1,137 @@
-/* Custom Avatars Commands
- * Credits: CreaturePhil And Others
- * Updates & Typescript Conversion: 
- * Prince Sky
- */
+/******************************************
+* Pokemon Showdown Custom Avatar Commands *
+* Original Code By: CreatePhil And Others *
+* Updated To Typescript By: Prince Sky    *
+*******************************************/
 
 import { FS } from '../lib/fs';
 
-const AVATAR_PATH: string = 'config/avatars/';
+const AVATAR_PATH = 'config/avatars/';
 const STAFF_ROOM_ID = 'staff';
-const VALID_EXTENSIONS: string[] = ['.jpg', '.png', '.gif'];
+const VALID_EXTENSIONS = ['.jpg', '.png', '.gif'];
 
-async function downloadImage(image_url: string, name: string, extension: string): Promise<void> {
+async function downloadImage(imageUrl: string, name: string, extension: string): Promise<void> {
   try {
-    const response: Response = await fetch(image_url);
+    const response = await fetch(imageUrl);
     if (!response.ok) return;
-    const contentType: string | null = response.headers.get('content-type');
-    if (!contentType || !contentType.startsWith('image/')) return;
-    const buffer: ArrayBuffer = await response.arrayBuffer();
+    
+    const contentType = response.headers.get('content-type');
+    if (!contentType?.startsWith('image/')) return;
+    
+    const buffer = await response.arrayBuffer();
     await FS(AVATAR_PATH + name + extension).write(Buffer.from(buffer));
-  } catch (err: any) {
-    console.error(err);
+  } catch (err) {
+    console.error('Error downloading avatar:', err);
   }
 }
 
 function getExtension(filename: string): string {
-  const lastDotIndex: number = filename.lastIndexOf('.');
-  if (lastDotIndex === -1) return '';
-  return filename.slice(lastDotIndex);
+  const ext = filename.slice(filename.lastIndexOf('.'));
+  return ext || '';
 }
 
-function loadCustomAvatars(): void {
-  FS(AVATAR_PATH).readdir().then((files: string[] | null) => {
-    if (!files) files = [];
+async function initializeAvatars(): Promise<void> {
+  try {
+    const files = await FS(AVATAR_PATH).readdir();
+    if (!files) return;
+    
     files
-      .filter((file: string) => VALID_EXTENSIONS.includes(getExtension(file)))
-      .forEach((file: string) => {
-        const ext: string = getExtension(file);
-        const name: string = file.slice(0, file.length - ext.length);
-        if (!Config.customavatars) Config.customavatars = {};
+      .filter(file => VALID_EXTENSIONS.includes(getExtension(file)))
+      .forEach(file => {
+        const ext = getExtension(file);
+        const name = file.slice(0, -ext.length);
+        Config.customavatars = Config.customavatars || {};
         Config.customavatars[name] = file;
       });
-  }).catch((err: any) => {
-    console.log(`Error loading custom avatars: ${err}`);
-  });
+  } catch (err) {
+    console.log('Error loading avatars:', err);
+  }
 }
 
-loadCustomAvatars();
+initializeAvatars();
 
 export const commands: Chat.ChatCommands = {
   customavatar: {
-    set: async function (this: CommandContext, target: string, room: ChatRoom | null, user: User): Promise<void> {
+    async set(this: CommandContext, target: string, room: ChatRoom | null, user: User) {
       this.checkCan('bypassall');
-      const parts: string[] = target.split(',').map((param: string) => param.trim());
-      if (parts.length < 2) return this.parse(`/help customavatar`);
-      const name: string = toID(parts[0]);
-      let avatarUrl: string = parts[1];
-      if (!/^https?:\/\//i.test(avatarUrl)) avatarUrl = `http://${avatarUrl}`;
-      const ext: string = getExtension(avatarUrl);
+      
+      const [name, avatarUrl] = target.split(',').map(s => s.trim());
+      if (!name || !avatarUrl) return this.parse('/help customavatar');
+      
+      const userId = toID(name);
+      const processedUrl = /^https?:\/\//i.test(avatarUrl) ? avatarUrl : `http://${avatarUrl}`;
+      const ext = getExtension(processedUrl);
+      
       if (!VALID_EXTENSIONS.includes(ext)) {
-        return this.errorReply(`Image url must have .jpg, .png, or .gif extension.`);
+        return this.errorReply('Image must have .jpg, .png, or .gif extension.');
       }
-      if (!Config.customavatars) Config.customavatars = {};
-      Config.customavatars[name] = name + ext;
-      await downloadImage(avatarUrl, name, ext);
-      this.sendReply(`|raw|${name}'s avatar was successfully set. Avatar:<br /><img src='${avatarUrl}' width='80' height='80'>`);
-      const targetUser: User | null = Users.get(name);
+      
+      Config.customavatars = Config.customavatars || {};
+      Config.customavatars[userId] = userId + ext;
+      
+      await downloadImage(processedUrl, userId, ext);
+      
+      this.sendReply(`|raw|${name}'s avatar was successfully set. Avatar:<br /><img src='${processedUrl}' width='80' height='80'>`);
+      
+      const targetUser = Users.get(userId);
       if (targetUser) {
-        targetUser.popup(`|html|${Impulse.nameColor(user.name, true, true)} set your custom avatar.<br /><center><img src='${avatarUrl}' width='80' height='80'></center><br /> Refresh your page if you don't see it.`);
+        targetUser.popup(`|html|${Impulse.nameColor(user.name, true, true)} set your custom avatar.<br />
+          <center><img src='${processedUrl}' width='80' height='80'></center>`);
       }
-      this.parse(`/personalavatar ${name},${Config.customavatars[name]}`);
-
+      
+      this.parse(`/personalavatar ${userId},${Config.customavatars[userId]}`);
+      
       const staffRoom = Rooms.get(STAFF_ROOM_ID);
       if (staffRoom) {
-        staffRoom.add(`|html|<div class="infobox">${Impulse.nameColor(user.name, true, true)} set custom avatar for ${Impulse.nameColor(name, true, false)}: <img src='${avatarUrl}' width='80' height='80'></div>`).update();
+        staffRoom.add(`|html|<div class="infobox">
+          ${Impulse.nameColor(user.name, true, true)} set custom avatar for ${Impulse.nameColor(name, true, false)}:
+          <img src='${processedUrl}' width='80' height='80'>
+        </div>`).update();
       }
     },
 
-    remove: 'delete',
-    delete: function (this: CommandContext, target: string, room: ChatRoom | null, user: User): void {
+    async delete(this: CommandContext, target: string) {
       this.checkCan('bypassall');
-      const userid: string = toID(target);
-      const image: string | undefined = Config.customavatars?.[userid];
-      if (!image) return this.errorReply(`${target} does not have a custom avatar.`);
-      const originalName = Object.keys(Config.customavatars || {}).find(key => toID(key) === userid) || target;
-      if (Config.customavatars) delete Config.customavatars[userid];
-      FS(AVATAR_PATH + image).unlinkIfExists().then(() => {
-        const targetUser: User | null = Users.get(userid);
+      
+      const userId = toID(target);
+      const image = Config.customavatars?.[userId];
+      
+      if (!image) {
+        return this.errorReply(`${target} does not have a custom avatar.`);
+      }
+      
+      if (Config.customavatars) delete Config.customavatars[userId];
+      
+      try {
+        await FS(AVATAR_PATH + image).unlinkIfExists();
+        
+        const targetUser = Users.get(userId);
         if (targetUser) {
-          targetUser.popup(`|html|${Impulse.nameColor(user.name, true, true)} has deleted your custom avatar.`);
+          targetUser.popup(`|html|${Impulse.nameColor(this.user.name, true, true)} has deleted your custom avatar.`);
         }
-        this.sendReply(`${originalName}'s avatar has been successfully removed.`);
-
+        
+        this.sendReply(`${target}'s avatar has been removed.`);
+        
         const staffRoom = Rooms.get(STAFF_ROOM_ID);
         if (staffRoom) {
-          staffRoom.add(`|html|<div class="infobox">${Impulse.nameColor(user.name, true, true)} deleted custom avatar for ${Impulse.nameColor(originalName, true, false)}.</div>`).update();
+          staffRoom.add(`|html|<div class="infobox">
+            ${Impulse.nameColor(this.user.name, true, true)} deleted custom avatar for ${Impulse.nameColor(target, true, false)}.
+          </div>`).update();
         }
-      }).catch((err: any) => {
-        console.error(err);
-      });
-      this.parse(`/removeavatar ${userid}`);
+        
+        this.parse(`/removeavatar ${userId}`);
+      } catch (err) {
+        console.error('Error deleting avatar:', err);
+      }
     },
 
-	customavatarhelp(target, room, user) {
-    if (!this.runBroadcast()) return;
-    this.sendReplyBox(
-		 `<div><b><center>Custom Avatar Commands</center></b>` +
-		 `<ul><li><code>/customavatar set [username],\t[image link]</code> - Set a user's avatar. (Requires: ~)</li>` +
-		 `<li><code>/customavatar delete [username]</code> - Delete a user's avatar. (Requires: ~)</li>` +
-		 `</ul></div>`);
-	 },
-  },
-
+    help(target: string, room: ChatRoom | null, user: User) {
+      if (!this.runBroadcast()) return;
+      this.sendReplyBox(
+        `<b>Custom Avatar Commands:</b><br>` +
+        `• <code>/customavatar set [username], [image url]</code> - Sets a user's avatar (Requires ~)<br>` +
+        `• <code>/customavatar delete [username]</code> - Removes a user's avatar (Requires ~)`
+      );
+    }
+  }
 };
