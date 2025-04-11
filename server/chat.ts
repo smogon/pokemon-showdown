@@ -865,6 +865,12 @@ export class CommandContext extends MessageContext {
 		if (typeof htmlContent !== 'string') htmlContent = JSX.render(htmlContent);
 		this.sendReply(`|c|${this.room && this.broadcasting ? this.user.getIdentity() : '~'}|/raw <div class="infobox">${htmlContent}</div>`);
 	}
+	/* Impulse ReplyBox */
+	ImpulseReplyBox(htmlContent: string | JSX.VNode) {
+		if (typeof htmlContent !== 'string') htmlContent = JSX.render(htmlContent);
+		this.sendReply(`|c|${this.room && this.broadcasting ? this.user.getIdentity() : '~'}|/raw ${htmlContent}`);
+	}
+	/* Impulse ReplyBox Ends */
 	popupReply(message: string) {
 		this.connection.popup(message);
 	}
