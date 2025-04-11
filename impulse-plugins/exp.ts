@@ -66,6 +66,10 @@ export class ExpSystem {
 
   static addExp(userid: string, amount: number, reason?: string, by?: string): number {
     const id = toID(userid);
+	  // Prevent adding EXP to guests
+	  if (id.startsWith('guest')) {
+		  return this.data[id] || 0;
+	  }
     const gainedAmount = DOUBLE_EXP ? amount * 2 : amount;
     this.data[id] = (this.data[id] || 0) + gainedAmount;
     this.saveExpData();
@@ -118,11 +122,17 @@ export class ExpSystem {
 
   static canAddExp(userid: string): boolean {
     const now = Date.now();
+	  if (id.startsWith('guest')) {
+		  return false; // Guests can't trigger the cooldown either
+	  }
     return !expAddCooldowns[toID(userid)] || now - expAddCooldowns[toID(userid)] >= ADD_EXP_COOLDOWN;
   }
 
   static setAddExpCooldown(userid: string): void {
-    expAddCooldowns[toID(userid)] = Date.now();
+    const id = toID(userid);
+    if (!id.startsWith('guest')) {
+      expAddCooldowns[id] = Date.now();
+    }
   }
 }
 
