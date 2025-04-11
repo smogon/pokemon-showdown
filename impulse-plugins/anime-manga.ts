@@ -1,4 +1,4 @@
-/* Anime And Manga Commands
+/* Anime And Manga Commands - Adult Content Filtering
  * Initial Release
  * Credits: Prince Sky, TurboRx
  */
@@ -18,6 +18,7 @@ interface JikanAnime {
       image_url: string;
     };
   };
+  rating: string | null; // Added rating field
 }
 
 interface JikanManga {
@@ -36,18 +37,7 @@ interface JikanManga {
       image_url: string;
     };
   };
-}
-
-interface JikanCharacter {
-  mal_id: number;
-  name: string;
-  name_kanji: string | null;
-  about: string | null;
-  images: {
-    jpg: {
-      image_url: string;
-    };
-  };
+  rating: string | null;
 }
 
 async function fetchAnimeInfoJikan(query: string): Promise<JikanAnime | null> {
@@ -84,23 +74,6 @@ async function fetchMangaInfoJikan(query: string): Promise<JikanManga | null> {
   }
 }
 
-async function fetchCharacterInfoJikan(query: string): Promise<JikanCharacter | null> {
-  try {
-    const response = await fetch(`https://api.jikan.moe/v4/characters?q=${encodeURIComponent(query)}&limit=1`);
-    const data = await response.json();
-
-    if (data.data && data.data.length > 0) {
-      return data.data[0] as JikanCharacter;
-    } else {
-      console.log(`No character found for '${query}' on Jikan.`);
-      return null;
-    }
-  } catch (error) {
-    console.error('Error fetching character data from Jikan API:', error);
-    return null;
-  }
-}
-
 export const commands: Chat.ChatCommands = {
   anime: {
     '': async function (target, room, user) {
@@ -112,6 +85,12 @@ export const commands: Chat.ChatCommands = {
       this.sendReply(`Searching Jikan for: ${animeName}...`);
       const animeInfo = await fetchAnimeInfoJikan(animeName);
       if (animeInfo) {
+        // Check for adult ratings
+        const adultRatings = ['Rx - Hentai', 'R+ - Mild Nudity', 'R - 17+ (Violence & Profanity)'];
+        if (animeInfo.rating && adultRatings.includes(animeInfo.rating)) {
+          return this.sendReplyBox(`Warning: The anime '${Chat.escapeHTML(animeInfo.title)}' may contain mature content (rated ${Chat.escapeHTML(animeInfo.rating)}). Viewer discretion is advised.`);
+        }
+
         let reply = `<div style="display: flex; border: 1px solid #ccc; border-radius: 5px; padding: 5px; margin: 5px; overflow: hidden;">`;
 
         if (animeInfo.images?.jpg?.image_url) {
@@ -156,10 +135,11 @@ export const commands: Chat.ChatCommands = {
     help: [
       `/anime [anime name] - Searches Jikan for information about the specified anime and displays it in a compact layout.`,
       `The displayed information includes Japanese and English titles, cover image (on the side), status, number of episodes, genres, truncated synopsis (with "Read More" link), and a link to MyAnimeList.`,
+      `A warning will be displayed if the anime is rated for mature audiences.`,
     ],
   },
-	
-	manga: {
+
+  manga: {
     '': async function (target, room, user) {
       if (!this.runBroadcast()) return;
       if (!target) {
@@ -169,6 +149,12 @@ export const commands: Chat.ChatCommands = {
       this.sendReply(`Searching Jikan for manga: ${mangaName}...`);
       const mangaInfo = await fetchMangaInfoJikan(mangaName);
       if (mangaInfo) {
+        // Check for adult ratings
+        const adultRatings = ['Rx - Hentai', 'R+ - Mild Nudity', 'R - 17+ (Violence & Profanity)'];
+        if (mangaInfo.rating && adultRatings.includes(mangaInfo.rating)) {
+          return this.sendReplyBox(`Warning: The manga '${Chat.escapeHTML(mangaInfo.title)}' may contain mature content (rated ${Chat.escapeHTML(mangaInfo.rating)}). Viewer discretion is advised.`);
+        }
+
         let reply = `<div style="display: flex; border: 1px solid #ccc; border-radius: 5px; padding: 5px; margin: 5px; overflow: hidden;">`;
 
         if (mangaInfo.images?.jpg?.image_url) {
@@ -214,56 +200,7 @@ export const commands: Chat.ChatCommands = {
     help: [
       `/manga [manga name] - Searches Jikan for information about the specified manga and displays it in a compact layout.`,
       `The displayed information includes Japanese and English titles, cover image (on the side), status, number of chapters and volumes, genres, truncated synopsis (with "Read More" link), and a link to MyAnimeList.`,
-    ],
-  },
-
-	character: {
-    '': async function (target, room, user) {
-      if (!this.runBroadcast()) return;
-      if (!target) {
-        return this.sendReply('Usage: /character <character name>');
-      }
-      const characterName = target.trim();
-      this.sendReply(`Searching Jikan for character: ${characterName}...`);
-      const characterInfo = await fetchCharacterInfoJikan(characterName);
-      if (characterInfo) {
-        let reply = `<div style="display: flex; border: 1px solid #ccc; border-radius: 5px; padding: 5px; margin: 5px; overflow: hidden;">`;
-        if (characterInfo.images?.jpg?.image_url) {
-          reply += `<div style="flex: 0 0 auto; margin-right: 10px;">`;
-          reply += `<img src="${Chat.escapeHTML(characterInfo.images.jpg.image_url)}" alt="Character Image" style="width: 100px; height: 150px; object-fit: cover;">`;
-          reply += `</div>`;
-        }
-
-        reply += `<div style="flex: 1 1 auto; font-size: 0.9em;">`;
-        reply += `<strong>${Chat.escapeHTML(characterInfo.name)}`;
-        if (characterInfo.name_kanji) {
-          reply += ` (${Chat.escapeHTML(characterInfo.name_kanji)})`;
-        }
-        reply += `</strong><br>`;
-
-        if (characterInfo.about) {
-          const cleanedAbout = characterInfo.about.replace(/\\n/g, '<br>');
-          const truncatedAbout = cleanedAbout.length > 500
-            ? `${Chat.escapeHTML(cleanedAbout.slice(0, 500))}...`
-            : Chat.escapeHTML(cleanedAbout);
-
-          reply += `<strong>About:</strong> ${truncatedAbout}`;
-          if (cleanedAbout.length > 500) {
-            reply += ` <a href="https://myanimelist.net/character/${characterInfo.mal_id}" target="_blank">Read more</a>`;
-          }
-          reply += `<br>`;
-		  }
-        reply += `<a href="https://myanimelist.net/character/${characterInfo.mal_id}" target="_blank" style="text-decoration: none;">View on MyAnimeList</a>`;
-        reply += `</div></div>`;
-
-        this.sendReplyBox(reply);
-      } else {
-        this.sendReplyBox(`No character information found for '${Chat.escapeHTML(characterName)}' on Jikan.`);
-      }
-    },
-    help: [
-      `/character [character name] - Searches Jikan for information about the specified anime character.`,
-      `The displayed information includes the character's name (and Japanese name if available), a cover image, a truncated "About" section (with a "Read More" link), and a link to their MyAnimeList page.`,
+      `A warning will be displayed if the manga is rated for mature audiences.`,
     ],
   },
 };
