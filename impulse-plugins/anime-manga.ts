@@ -1,13 +1,3 @@
-
-musaddiktemkar/anime.ts Secret
-Last active now
-Clone this repository at &lt;script src=&quot;https://gist.github.com/musaddiktemkar/aaaf878881a161ca8956fa5b16f2f3a0.js&quot;&gt;&lt;/script&gt;
-<script src="https://gist.github.com/musaddiktemkar/aaaf878881a161ca8956fa5b16f2f3a0.js"></script>
-Code
-Revisions
-6
-File: impulse-plugins/anime.ts uploaded by princesky
-anime.ts
 /* Anime And Manga Commands
  * Initial Release
  * Credits: Prince Sky, TurboRx
