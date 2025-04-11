@@ -1,3 +1,13 @@
+
+musaddiktemkar/anime.ts Secret
+Last active now
+Clone this repository at &lt;script src=&quot;https://gist.github.com/musaddiktemkar/aaaf878881a161ca8956fa5b16f2f3a0.js&quot;&gt;&lt;/script&gt;
+<script src="https://gist.github.com/musaddiktemkar/aaaf878881a161ca8956fa5b16f2f3a0.js"></script>
+Code
+Revisions
+6
+File: impulse-plugins/anime.ts uploaded by princesky
+anime.ts
 /* Anime And Manga Commands
  * Initial Release
  * Credits: Prince Sky, TurboRx
@@ -38,19 +48,17 @@ interface JikanManga {
   };
 }
 
-interface JikanAnimeAiring {
+interface JikanCharacter {
   mal_id: number;
-  title: string;
-  title_english: string | null;
-  episodes: number | null;
-  status: string | null;
+  name: string;
+  name_kanji: string | null;
+  about: string | null;
   images: {
     jpg: {
       image_url: string;
     };
   };
 }
-
 
 async function fetchAnimeInfoJikan(query: string): Promise<JikanAnime | null> {
   try {
@@ -86,19 +94,19 @@ async function fetchMangaInfoJikan(query: string): Promise<JikanManga | null> {
   }
 }
 
-async function fetchAiringAnimeJikan(): Promise<JikanAnimeAiring[] | null> {
+async function fetchCharacterInfoJikan(query: string): Promise<JikanCharacter | null> {
   try {
-    const response = await fetch(`https://api.jikan.moe/v4/anime?status=airing&limit=10`); // Adjust limit as needed
+    const response = await fetch(`https://api.jikan.moe/v4/characters?q=${encodeURIComponent(query)}&limit=1`);
     const data = await response.json();
 
     if (data.data && data.data.length > 0) {
-      return data.data as JikanAnimeAiring[];
+      return data.data[0] as JikanCharacter;
     } else {
-      console.log('No currently airing anime found on Jikan.');
+      console.log(`No character found for '${query}' on Jikan.`);
       return null;
     }
   } catch (error) {
-    console.error('Error fetching airing anime data from Jikan API:', error);
+    console.error('Error fetching character data from Jikan API:', error);
     return null;
   }
 }
@@ -219,33 +227,53 @@ export const commands: Chat.ChatCommands = {
     ],
   },
 
-	animenow: {
+	character: {
     '': async function (target, room, user) {
       if (!this.runBroadcast()) return;
-      this.sendReply('Fetching currently airing anime from Jikan...');
-      const airingAnime = await fetchAiringAnimeJikan();
-      if (airingAnime && airingAnime.length > 0) {
-        let reply = `<div style="border: 1px solid #ccc; border-radius: 5px; padding: 5px; margin: 5px;">`;
-        reply += `<strong>Currently Airing Anime:</strong><br>`;
-        for (const anime of airingAnime) {
-          reply += `<div style="display: flex; align-items: center; margin-bottom: 5px;">`;
-          if (anime.images?.jpg?.image_url) {
-            reply += `<img src="${Chat.escapeHTML(anime.images.jpg.image_url)}" alt="Cover" style="width: 50px; height: 75px; margin-right: 10px;">`;
-          }
-          reply += `<a href="https://myanimelist.net/anime/${anime.mal_id}" target="_blank" style="text-decoration: none;">${Chat.escapeHTML(anime.title)}</a>`;
-          if (anime.title_english) {
-            reply += ` (${Chat.escapeHTML(anime.title_english)})`;
-          }
+      if (!target) {
+        return this.sendReply('Usage: /character <character name>');
+      }
+      const characterName = target.trim();
+      this.sendReply(`Searching Jikan for character: ${characterName}...`);
+      const characterInfo = await fetchCharacterInfoJikan(characterName);
+      if (characterInfo) {
+        let reply = `<div style="display: flex; border: 1px solid #ccc; border-radius: 5px; padding: 5px; margin: 5px; overflow: hidden;">`;
+        if (characterInfo.images?.jpg?.image_url) {
+          reply += `<div style="flex: 0 0 auto; margin-right: 10px;">`;
+          reply += `<img src="${Chat.escapeHTML(characterInfo.images.jpg.image_url)}" alt="Character Image" style="width: 100px; height: 150px; object-fit: cover;">`;
           reply += `</div>`;
         }
-        reply += `</div>`;
+
+        reply += `<div style="flex: 1 1 auto; font-size: 0.9em;">`;
+        reply += `<strong>${Chat.escapeHTML(characterInfo.name)}`;
+        if (characterInfo.name_kanji) {
+          reply += ` (${Chat.escapeHTML(characterInfo.name_kanji)})`;
+        }
+        reply += `</strong><br>`;
+
+        if (characterInfo.about) {
+          const cleanedAbout = characterInfo.about.replace(/\\n/g, '<br>');
+          const truncatedAbout = cleanedAbout.length > 500
+            ? `${Chat.escapeHTML(cleanedAbout.slice(0, 500))}...`
+            : Chat.escapeHTML(cleanedAbout);
+
+          reply += `<strong>About:</strong> ${truncatedAbout}`;
+          if (cleanedAbout.length > 500) {
+            reply += ` <a href="https://myanimelist.net/character/${characterInfo.mal_id}" target="_blank">Read more</a>`;
+          }
+          reply += `<br>`;
+		  }
+        reply += `<a href="https://myanimelist.net/character/${characterInfo.mal_id}" target="_blank" style="text-decoration: none;">View on MyAnimeList</a>`;
+        reply += `</div></div>`;
+
         this.sendReplyBox(reply);
       } else {
-        this.sendReplyBox('Could not retrieve currently airing anime information from Jikan.');
+        this.sendReplyBox(`No character information found for '${Chat.escapeHTML(characterName)}' on Jikan.`);
       }
     },
     help: [
-      `/animenow - Displays a list of currently airing anime from Jikan.`,
+      `/character [character name] - Searches Jikan for information about the specified anime character.`,
+      `The displayed information includes the character's name (and Japanese name if available), a cover image, a truncated "About" section (with a "Read More" link), and a link to their MyAnimeList page.`,
     ],
   },
 };
