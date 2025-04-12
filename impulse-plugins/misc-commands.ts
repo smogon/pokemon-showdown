@@ -119,13 +119,13 @@ const messages: string[] = [
 
 export const commands: Chat.ChatCommands = {
   clearall(target: string, room: ChatRoom | null, user: User): void {
-    this.checkCan('roomvoice');
-    if (room?.battle) {
-      return this.sendReply("You cannot clearall in battle rooms.");
-    }
+	  if (room?.battle) {
+		  return this.sendReply("You cannot clearall in battle rooms.");
+	  }
     if (!room) {
       return this.errorReply("This command requires a room.");
-    }
+	 }
+	  this.checkCan('roomvoice', null, room);
     Impulse.clearRooms([room], user);
   },
 
