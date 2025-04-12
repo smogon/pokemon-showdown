@@ -288,7 +288,7 @@ export const commands: ChatCommands = {
 		const logs = Economy.getEconomyLogs(useridFilter, parsedPage);
 		const totalPages = Economy.getTotalLogPages(useridFilter);
 		if (!logs.length) {
-			return this.sendReply(`|uhtml|economylogs${useridFilter || ''}-${parsedPage}|No economy logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}.`);
+			return this.sendReply(`economylogs${useridFilter || ''}-${parsedPage}|No economy logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}.`);
 		}
 		const totalLogs = useridFilter
 			? Economy.logs.logs.filter(log => log.to === useridFilter || log.from === useridFilter || log.by === useridFilter).length
