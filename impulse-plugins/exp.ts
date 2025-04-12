@@ -1,3 +1,12 @@
+/**
+ * Experience System
+ * Impulse - https://github.com/musaddiktemkar/impulse
+ *
+ * Credits:
+ * - Implemented by musaddiktemkar
+ * - Modified by musaddiktemkar (2025-04-12)
+ */
+
 import { FS } from '../lib/fs';
 
 const EXP_FILE_PATH = 'impulse-db/exp.json';
@@ -8,13 +17,19 @@ Impulse.expUnit = EXP_UNIT;
 const MIN_LEVEL_EXP = 15;
 const MULTIPLIER = 1.4;
 let DOUBLE_EXP = false;
+const EXP_COOLDOWN = 30000; // 30 seconds in milliseconds
 
 interface ExpData {
   [userid: string]: number;
 }
 
+interface CooldownData {
+  [userid: string]: number;
+}
+
 export class ExpSystem {
   private static data: ExpData = ExpSystem.loadExpData();
+  private static cooldowns: CooldownData = {};
 
   private static loadExpData(): ExpData {
     try {
@@ -37,6 +52,11 @@ export class ExpSystem {
     }
   }
 
+  private static isOnCooldown(userid: string): boolean {
+    const lastExp = this.cooldowns[userid] || 0;
+    return Date.now() - lastExp < EXP_COOLDOWN;
+  }
+
   static writeExp(userid: string, amount: number): void {
     this.data[toID(userid)] = amount;
     this.saveExpData();
@@ -52,8 +72,20 @@ export class ExpSystem {
 
   static addExp(userid: string, amount: number, reason?: string, by?: string): number {
     const id = toID(userid);
+    
+    // Skip if user is on cooldown (unless added by staff)
+    if (!by && this.isOnCooldown(id)) {
+      return this.readExp(id);
+    }
+
     const gainedAmount = DOUBLE_EXP ? amount * 2 : amount;
     this.data[id] = (this.data[id] || 0) + gainedAmount;
+    
+    // Update cooldown timestamp (only for natural exp gain)
+    if (!by) {
+      this.cooldowns[id] = Date.now();
+    }
+    
     this.saveExpData();
     return this.data[id];
   }
@@ -113,10 +145,10 @@ export class ExpSystem {
 Impulse.ExpSystem = ExpSystem;
 
 export const commands: ChatCommands = {
-	level: 'exp',
-	exp(target, room, user) {
-		if (!target) target = user.name;
-		if (!this.runBroadcast()) return;    
+  level: 'exp',
+  exp(target, room, user) {
+    if (!target) target = user.name;
+    if (!this.runBroadcast()) return;    
     const userid = toID(target);
     const currentExp = ExpSystem.readExp(userid);
     const currentLevel = ExpSystem.getLevel(currentExp);
@@ -131,9 +163,9 @@ export const commands: ChatCommands = {
     // Create a smooth, green progress bar
     const progressBarWidth = 200; // Width of the progress bar in pixels
     const progressBarHTML = `<div style="width: ${progressBarWidth}px; height: 15px; background: #e0e0e0; border-radius: 10px; overflow: hidden; display: inline-block;">` +
-		 `<div style="width: ${progressPercentage}%; height: 100%; background: linear-gradient(90deg, #2ecc71, #27ae60); transition: width 0.3s ease;"></div></div> ${progressPercentage}%`;
-		const expNeeded = nextLevelExp - currentExp;
-		const executedBy = user.name === target ? '' : ` (Checked by ${Impulse.nameColor(user.name, true, true)})`;
+     `<div style="width: ${progressPercentage}%; height: 100%; background: linear-gradient(90deg, #2ecc71, #27ae60); transition: width 0.3s ease;"></div></div> ${progressPercentage}%`;
+    const expNeeded = nextLevelExp - currentExp;
+    const executedBy = user.name === target ? '' : ` (Checked by ${Impulse.nameColor(user.name, true, true)})`;
     
     this.sendReplyBox(
       `<div class="infobox">` +
@@ -144,7 +176,7 @@ export const commands: ChatCommands = {
       `<strong>EXP needed:</strong> ${expNeeded} more for Level ${currentLevel + 1}<br>` +
       `</div>`
     );
-},
+  },
 
   giveexp(target, room, user) {
     this.checkCan('globalban');
