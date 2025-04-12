@@ -399,7 +399,7 @@ export const commands: Chat.Commands = {
         `</div>`;
     Users.users.forEach(u => {
         if (u.connected) {
-            u.send(`|pm|${Impulse.nameColor('Server', true, true)}|${u.id}|/raw ${message}`);
+            u.send(`|pm|${Impulse.serverName}|${u.id}|/raw ${message}`);
         }
     });
     if (room) {
