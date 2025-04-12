@@ -1,7 +1,8 @@
-/**************************************
-* Pokemon Showdown EXP Commands       *
-* author: @PrinceSky                  *
-**************************************/
+/***************************************
+* Pokemon Showdown EXP Commands        *
+* Original Code By: Volco & Insist     *
+* Updated To Typescript By: Prince Sky *
+***************************************/
 
 import { FS } from '../lib/fs';
 
