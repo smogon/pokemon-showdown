@@ -342,9 +342,6 @@ export const commands: ChatCommands = {
         const lastFilter = user.lastEconomyLogFilter;
         if (lastFilter === useridFilter) {
             this.sendReplyBox(`>${roomid}\n|uhtmlchange|${uhtmlId}|${content}`);
-        } else {
-            this.sendReplyBox(`>${roomid}\n|uhtml|${uhtmlId}|${content}`);
-            user.lastEconomyLogFilter = useridFilter;
         }
     }
 },
