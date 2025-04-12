@@ -333,7 +333,7 @@ export const commands: ChatCommands = {
         ${paginationHTML}
     </div>`;
 
-    this.sendReply(`|uhtml|economylogs|${content}`);
+    this.sendReplyBox(`|uhtml|economylogs|${content}`);
 },
 	economyhelp(target, room, user) {
 		if (!this.runBroadcast()) return;
