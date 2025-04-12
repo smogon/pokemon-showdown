@@ -113,7 +113,7 @@ export class ExpSystem {
         DOUBLE_EXP = false;
         DOUBLE_EXP_END_TIME = null;
         
-        const message = 
+        /*const message = 
             `<div class="broadcast-blue">` +
             `<b>Double EXP period has ended!</b><br>` +
             `EXP gains have returned to normal.` +
@@ -123,7 +123,7 @@ export class ExpSystem {
             if (u.connected) {
                 u.send(`|pm|${Impulse.serverName}|${u.id}|/raw ${message}`);
             }
-        });
+        });*/
     }
   }
 
