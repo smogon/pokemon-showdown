@@ -288,7 +288,7 @@ export const commands: ChatCommands = {
 		const logs = Economy.getEconomyLogs(useridFilter, parsedPage);
 		const totalPages = Economy.getTotalLogPages(useridFilter);
 		if (!logs.length) {
-			return this.sendReplyBox(`No economy logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}.`);
+			return this.sendReply(`|uhtml|economylogs${useridFilter || ''}-${parsedPage}|No economy logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}.`);
 		}
 		const totalLogs = useridFilter
 			? Economy.logs.logs.filter(log => log.to === useridFilter || log.from === useridFilter || log.by === useridFilter).length
@@ -306,18 +306,18 @@ export const commands: ChatCommands = {
 			['Time', 'Action', 'By', 'From', 'To', 'Amount'],
 			data
 		);
-		const paginationHTML = totalPages > 1
-			? `<div style="text-align: center; margin-top: 5px;">Page: ${parsedPage} / ${totalPages}${
-				parsedPage > 1 
-				? ` <button class="button" name="send" value="/economylogs ${targetUser || ''}, ${parsedPage - 1}">Previous</button>` 
-				: ''
-			}${
-				parsedPage < totalPages 
-				? ` <button class="button" name="send" value="/economylogs ${targetUser || ''}, ${parsedPage + 1}">Next</button>` 
-				: ''
-			}</div>`
+		const paginationButtons = totalPages > 1
+			? `<div style="text-align: center; margin-top: 5px;">${parsedPage > 1 ? `<button class="button" name="send" value="/economylogs ${targetUser || ''}, ${parsedPage - 1}">Previous</button>` : ''}` +
+			`<span style="margin: 0 10px;">Page ${parsedPage} / ${totalPages}</span>` +
+			`${parsedPage < totalPages ? `<button class="button" name="send" value="/economylogs ${targetUser || ''}, ${parsedPage + 1}">Next</button>` : ''}` +
+			`</div>`
 			: '';
-		this.ImpulseReplyBox(`<div style="max-height: 340px; overflow: auto;" data-uhtml="${useridFilter}-${parsedPage}">${tableHTML}</div>${paginationHTML}`);
+		const output = `<div style="max-height: 400px; overflow: auto;">${tableHTML}${paginationButtons}</div>`;
+		if (this.broadcasting) {
+			return this.sendReply(`|uhtml|economylogs${useridFilter || ''}-${parsedPage}|${output}`);
+		} else {
+			return this.sendReply(`|uhtmlchange|economylogs${useridFilter || ''}-${parsedPage}|${output}`);
+		}
 	},
 	
 	economyhelp(target, room, user) {
