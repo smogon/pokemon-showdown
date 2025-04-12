@@ -330,13 +330,10 @@ export const commands: ChatCommands = {
            </div>`
         : '';
 
-    const content = `<div style="max-height: 340px; overflow: auto;">
-        ${tableHTML}
-        ${paginationHTML}
-    </div>`;
+    const content = `<div style="max-height: 340px; overflow: auto;">${tableHTML} ${paginationHTML}</div>`;
 
     if (this.broadcasting) {
-        this.ImpulseReplyBox(`|raw|${content}`);
+        this.sendReplyBox(`|raw|${content}`);
     } else {
         const roomid = room?.roomid || user.id;
         const uhtmlId = `economylogs-${useridFilter || 'all'}`;
@@ -344,9 +341,9 @@ export const commands: ChatCommands = {
         // Use uhtmlchange if we're on the same filter, otherwise use new uhtml
         const lastFilter = user.lastEconomyLogFilter;
         if (lastFilter === useridFilter) {
-            this.ImpulseReplyBox(`>${roomid}\n|uhtmlchange|${uhtmlId}|${content}`);
+            this.sendReplyBox(`>${roomid}\n|uhtmlchange|${uhtmlId}|${content}`);
         } else {
-            this.ImpulseReplyBox(`>${roomid}\n|uhtml|${uhtmlId}|${content}`);
+            this.sendReplyBox(`>${roomid}\n|uhtml|${uhtmlId}|${content}`);
             user.lastEconomyLogFilter = useridFilter;
         }
     }
