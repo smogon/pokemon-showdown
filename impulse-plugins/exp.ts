@@ -181,25 +181,6 @@ export class ExpSystem {
 
 Impulse.ExpSystem = ExpSystem;
 
-sendDoubleExpMessage(room: Room | null, user: User, enabled: boolean, duration: string) {
-	const status = enabled ? 'enabled' : 'disabled';
-	const message = 
-		`<div class="broadcast-blue">` +
-		`<b>Double EXP has been ${status} by ${Impulse.nameColor(user.name, true, true)}!</b><br>` +
-		`Duration: ${duration}<br>` +
-		`All EXP gains will now be ${enabled ? 'doubled' : 'normal'}.` +
-		`</div>`;
-	Users.users.forEach(u => {
-		if (u.connected) {
-			u.send(`|pm|${Impulse.nameColor('Server', true, true)}|${u.id}|/raw ${message}`);
-		}
-	});
-	if (room) {
-		 room.add(`|html|${message}`).update();
-	 }
-	this.modlog('TOGGLEDOUBLEEXP', null, `${status} - ${duration}`, { by: user.id });
-}
-
 export const commands: Chat.Commands = {
   level: 'exp',
   exp(target, room, user) {
@@ -352,19 +333,48 @@ export const commands: Chat.Commands = {
     }
   },
 
-  toggledoubleexp(target, room, user) {
+	toggledoubleexp(target, room, user) {
     this.checkCan('globalban');
     
     if (!target) {
         DOUBLE_EXP = !DOUBLE_EXP;
-        this.sendDoubleExpMessage(room, user, DOUBLE_EXP, 'No duration specified');
+        const status = DOUBLE_EXP ? 'enabled' : 'disabled';
+        const message = 
+            `<div class="broadcast-blue">` +
+            `<b>Double EXP has been ${status} by ${Impulse.nameColor(user.name, true, true)}!</b><br>` +
+            `Duration: No duration specified<br>` +
+            `All EXP gains will now be ${DOUBLE_EXP ? 'doubled' : 'normal'}.` +
+            `</div>`;
+        Users.users.forEach(u => {
+            if (u.connected) {
+                u.send(`|pm|${Impulse.nameColor('Server', true, true)}|${u.id}|/raw ${message}`);
+            }
+        });
+        if (room) {
+            room.add(`|html|${message}`).update();
+        }
+        this.modlog('TOGGLEDOUBLEEXP', null, `${status} - No duration specified`, { by: user.id });
         return;
     }
 
     if (target.toLowerCase() === 'off') {
         DOUBLE_EXP = false;
         DOUBLE_EXP_END_TIME = null;
-        this.sendDoubleExpMessage(room, user, false, 'Manually disabled');
+        const message = 
+            `<div class="broadcast-blue">` +
+            `<b>Double EXP has been disabled by ${Impulse.nameColor(user.name, true, true)}!</b><br>` +
+            `Duration: Manually disabled<br>` +
+            `All EXP gains will now be normal.` +
+            `</div>`;
+        Users.users.forEach(u => {
+            if (u.connected) {
+                u.send(`|pm|${Impulse.nameColor('Server', true, true)}|${u.id}|/raw ${message}`);
+            }
+        });
+        if (room) {
+            room.add(`|html|${message}`).update();
+        }
+        this.modlog('TOGGLEDOUBLEEXP', null, `disabled - Manually disabled`, { by: user.id });
         return;
     }
 
@@ -381,10 +391,24 @@ export const commands: Chat.Commands = {
     DOUBLE_EXP = true;
     DOUBLE_EXP_END_TIME = endTime;
 
-    this.sendDoubleExpMessage(room, user, true, durationText);
+    const message = 
+        `<div class="broadcast-blue">` +
+        `<b>Double EXP has been enabled by ${Impulse.nameColor(user.name, true, true)}!</b><br>` +
+        `Duration: ${durationText}<br>` +
+        `All EXP gains will now be doubled.` +
+        `</div>`;
+    Users.users.forEach(u => {
+        if (u.connected) {
+            u.send(`|pm|${Impulse.nameColor('Server', true, true)}|${u.id}|/raw ${message}`);
+        }
+    });
+    if (room) {
+        room.add(`|html|${message}`).update();
+    }
+    this.modlog('TOGGLEDOUBLEEXP', null, `enabled - ${durationText}`, { by: user.id });
 
     setTimeout(() => ExpSystem.checkDoubleExpStatus(), duration);
-  },
+},
 
   expladder(target, room, user) {
     if (!this.runBroadcast()) return;
