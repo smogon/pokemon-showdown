@@ -297,7 +297,6 @@ export const commands: ChatCommands = {
         ? Economy.logs.logs.filter(log => log.to === useridFilter || log.from === useridFilter || log.by === useridFilter).length
         : Economy.logs.logs.length;
 
-    // Convert logs to table data
     const data = logs.map(log => [
         new Date(log.timestamp).toLocaleString(),
         log.action,
@@ -307,7 +306,6 @@ export const commands: ChatCommands = {
         `${log.amount} ${ECONOMY_SETTINGS.CURRENCY}`
     ]);
 
-    // Generate table with title including filter and page info
     const title = `${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} ` +
                  `(${totalLogs} total logs) (Page ${parsedPage} of ${totalPages})`;
     
@@ -315,10 +313,10 @@ export const commands: ChatCommands = {
         title,
         ['Time', 'Action', 'By', 'From', 'To', 'Amount'],
         data,
+        Impulse.nameColor('musaddiktemkar', true, true)
     );
 
-    // Generate pagination buttons
-		const paginationHTML = totalPages > 1
+    const paginationHTML = totalPages > 1
 			? `<div style="text-align: center; margin-top: 5px;">Page: ${parsedPage} / ${totalPages}${
 				parsedPage > 1 
 				? ` <button class="button" name="send" value="/economylogs ${targetUser || ''}, ${parsedPage - 1}">Previous</button>` 
@@ -330,20 +328,12 @@ export const commands: ChatCommands = {
 			}</div>`
 			: '';
 
-    const content = `<div style="max-height: 340px; overflow: auto;">${tableHTML} ${paginationHTML}</div>`;
+    const content = `<div style="max-height: 340px; overflow: auto;">
+        ${tableHTML}
+        ${paginationHTML}
+    </div>`;
 
-    if (this.broadcasting) {
-        this.sendReplyBox(`|raw|${content}`);
-    } else {
-        const roomid = room?.roomid || user.id;
-        const uhtmlId = `economylogs-${useridFilter || 'all'}`;
-        
-        // Use uhtmlchange if we're on the same filter, otherwise use new uhtml
-        const lastFilter = user.lastEconomyLogFilter;
-        if (lastFilter === useridFilter) {
-            this.sendReplyBox(`>${roomid}\n|uhtmlchange|${uhtmlId}|${content}`);
-        }
-    }
+    this.sendReply(`|uhtml|economylogs|${content}`);
 },
 	economyhelp(target, room, user) {
 		if (!this.runBroadcast()) return;
