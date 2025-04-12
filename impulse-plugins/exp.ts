@@ -1,11 +1,7 @@
-/**
- * Experience System
- * Impulse - https://github.com/musaddiktemkar/impulse
- *
- * Credits:
- * - Implemented by musaddiktemkar
- * - Modified by musaddiktemkar (2025-04-12)
- */
+/**************************************
+* Pokemon Showdown EXP Commands       *
+* author: @PrinceSky                  *
+**************************************/
 
 import { FS } from '../lib/fs';
 
@@ -17,7 +13,7 @@ Impulse.expUnit = EXP_UNIT;
 const MIN_LEVEL_EXP = 15;
 const MULTIPLIER = 1.4;
 let DOUBLE_EXP = false;
-const EXP_COOLDOWN = 30000; // 30 seconds in milliseconds
+const EXP_COOLDOWN = 30000;
 
 interface ExpData {
   [userid: string]: number;
@@ -73,7 +69,6 @@ export class ExpSystem {
   static addExp(userid: string, amount: number, reason?: string, by?: string): number {
     const id = toID(userid);
     
-    // Skip if user is on cooldown (unless added by staff)
     if (!by && this.isOnCooldown(id)) {
       return this.readExp(id);
     }
@@ -81,7 +76,6 @@ export class ExpSystem {
     const gainedAmount = DOUBLE_EXP ? amount * 2 : amount;
     this.data[id] = (this.data[id] || 0) + gainedAmount;
     
-    // Update cooldown timestamp (only for natural exp gain)
     if (!by) {
       this.cooldowns[id] = Date.now();
     }
@@ -155,13 +149,13 @@ export const commands: ChatCommands = {
     const nextLevelExp = ExpSystem.getExpForNextLevel(currentLevel + 1);
     const previousLevelExp = ExpSystem.getExpForNextLevel(currentLevel);
     
-    // Calculate progress percentage for the current level
+    
     const expInCurrentLevel = currentExp - previousLevelExp;
     const expNeededForNextLevel = nextLevelExp - previousLevelExp;
     const progressPercentage = Math.floor((expInCurrentLevel / expNeededForNextLevel) * 100);
     
-    // Create a smooth, green progress bar
-    const progressBarWidth = 200; // Width of the progress bar in pixels
+    
+    const progressBarWidth = 200;
     const progressBarHTML = `<div style="width: ${progressBarWidth}px; height: 15px; background: #e0e0e0; border-radius: 10px; overflow: hidden; display: inline-block;">` +
      `<div style="width: ${progressPercentage}%; height: 100%; background: linear-gradient(90deg, #2ecc71, #27ae60); transition: width 0.3s ease;"></div></div> ${progressPercentage}%`;
     const expNeeded = nextLevelExp - currentExp;
