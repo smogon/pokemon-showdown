@@ -357,7 +357,7 @@ export const commands: Chat.Commands = {
         return;
     }
 
-    if (target.toLowerCase() === 'off') {
+    /*if (target.toLowerCase() === 'off') {
         DOUBLE_EXP = false;
         DOUBLE_EXP_END_TIME = null;
         const message = 
@@ -376,7 +376,7 @@ export const commands: Chat.Commands = {
         }
         this.modlog('TOGGLEDOUBLEEXP', null, `disabled - Manually disabled`, { by: user.id });
         return;
-    }
+    }*/
 
     const match = target.match(/^(\d+)\s*(minute|hour|day)s?$/i);
     if (!match) {
