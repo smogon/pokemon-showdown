@@ -1,7 +1,5 @@
 /* Experience (EXP) System Commands
- * Credits: Unknown 
- * Updates & Typescript Conversion:
- * Prince Sky
+ * Credits: Prince Sky
  */
 
 import { FS } from '../lib/fs';
@@ -12,12 +10,19 @@ const EXP_UNIT = `EXP`;
 Impulse.expUnit = EXP_UNIT;
 
 const MIN_LEVEL_EXP = 15;
-const MULTIPLIER = 1.4;
+const MULTIPLIER = 1.9;
 let DOUBLE_EXP = false;
 
 interface ExpData {
   [userid: string]: number;
 }
+
+interface Cooldowns {
+  [userid: string]: number;
+}
+
+const ADD_EXP_COOLDOWN = 30 * 1000; // 30 seconds in milliseconds
+const expAddCooldowns: Cooldowns = {};
 
 export class ExpSystem {
   private static data: ExpData = ExpSystem.loadExpData();
@@ -66,14 +71,6 @@ export class ExpSystem {
     this.saveExpData();
     return this.data[id];
   }
-	
-	static grantExp() {
-		Users.users.forEach(user => {
-			if (!user || !user.named || !user.connected || !user.lastPublicMessage) return;
-			if (Date.now() - user.lastPublicMessage > 300000) return;
-			this.addExp(user, null, 1);
-		});
-	}
 
   static takeExp(userid: string, amount: number, reason?: string, by?: string): number {
     const id = toID(userid);
@@ -117,6 +114,15 @@ export class ExpSystem {
       requiredExp = Math.floor(requiredExp * MULTIPLIER);
     }
     return requiredExp;
+  }
+
+  static canAddExp(userid: string): boolean {
+    const now = Date.now();
+    return !expAddCooldowns[toID(userid)] || now - expAddCooldowns[toID(userid)] >= ADD_EXP_COOLDOWN;
+  }
+
+  static setAddExpCooldown(userid: string): void {
+    expAddCooldowns[toID(userid)] = Date.now();
   }
 }
 
@@ -254,8 +260,8 @@ export const commands: ChatCommands = {
   exphelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
-		 `<div><b><center>EXP System Commands By ${Impulse.nameColor('Prince Sky', true, true)}</center></b>` +
-		 `<ul><li><code>/level [user]</code> (Or <code>/exp</code>) - Check your or another user's EXP, current level, and EXP needed for the next level.</li>` +
+		 `<div><b><center>EXP System Commands</center></b>` +
+		 `<ul><li><code>/level [user]</code> (or <code>/atm</code>) - Check your or another user's EXP, current level, and EXP needed for the next level.</li>` +
 		 `<li><code>/giveexp [user], [amount] ,[reason]</code> - Give a specified amount of EXP to a user. (Requires: @ and higher).</li>` +
 		 `<li><code>/takeexp [user], [amount] ,[reason]</code> - Take a specified amount of EXP from a user. (Requires: @ and higher).</li>` +
 		 `<li><code>/resetexp [user], [reason]</code> - Reset a user's EXP to ${DEFAULT_EXP}. (Requires: @ and higher).</li>` +
