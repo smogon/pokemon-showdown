@@ -113,11 +113,10 @@ export class ExpSystem {
 Impulse.ExpSystem = ExpSystem;
 
 export const commands: ChatCommands = {
-  level: 'exp',
-  exp(target, room, user) {
-    if (!target) target = user.name;
-    if (!this.runBroadcast()) return;
-    
+	level: 'exp',
+	exp(target, room, user) {
+		if (!target) target = user.name;
+		if (!this.runBroadcast()) return;    
     const userid = toID(target);
     const currentExp = ExpSystem.readExp(userid);
     const currentLevel = ExpSystem.getLevel(currentExp);
@@ -129,36 +128,23 @@ export const commands: ChatCommands = {
     const expNeededForNextLevel = nextLevelExp - previousLevelExp;
     const progressPercentage = Math.floor((expInCurrentLevel / expNeededForNextLevel) * 100);
     
-    // Create progress bar (20 segments)
-    const segments = 20;
-    const filledSegments = Math.floor((progressPercentage * segments) / 100);
-    const progressBar = `[${'■'.repeat(filledSegments)}${'□'.repeat(segments - filledSegments)}]`;
-    
-    const expNeeded = nextLevelExp - currentExp;
-
-    // Format current date and time
-    const now = new Date();
-    const formattedDate = now.toISOString()
-        .replace('T', ' ')
-        .replace(/\..+/, '');
-    
-    // Get the user's login information
-    const userLogin = user.id || 'Guest';
-    const executedBy = user.name === target ? '' : ` (Checked by ${Impulse.nameColor(user.name, true, true)})`;
+    // Create a smooth, green progress bar
+    const progressBarWidth = 200; // Width of the progress bar in pixels
+    const progressBarHTML = `<div style="width: ${progressBarWidth}px; height: 15px; background: #e0e0e0; border-radius: 10px; overflow: hidden; display: inline-block;">` +
+		 `<div style="width: ${progressPercentage}%; height: 100%; background: linear-gradient(90deg, #2ecc71, #27ae60); transition: width 0.3s ease;"></div></div> ${progressPercentage}%`;
+		const expNeeded = nextLevelExp - currentExp;
+		const executedBy = user.name === target ? '' : ` (Checked by ${Impulse.nameColor(user.name, true, true)})`;
     
     this.sendReplyBox(
       `<div class="infobox">` +
       `<strong>${Impulse.nameColor(userid, true, true)}</strong>${executedBy}<br>` +
       `<strong>Level:</strong> ${currentLevel}<br>` +
-      `<strong>Progress:</strong> ${progressBar} ${progressPercentage}%<br>` +
+      `<strong>Progress:</strong> ${progressBarHTML}<br>` +
       `<strong>Current EXP:</strong> ${currentExp} ${EXP_UNIT}<br>` +
       `<strong>EXP needed:</strong> ${expNeeded} more for Level ${currentLevel + 1}<br>` +
-      `<strong>Total EXP required:</strong> ${nextLevelExp} ${EXP_UNIT}<br>` +
-      `<strong>Current Date and Time (UTC):</strong> ${formattedDate}<br>` +
-      `<strong>Current User's Login:</strong> ${userLogin}` +
       `</div>`
     );
-  },
+},
 
   giveexp(target, room, user) {
     this.checkCan('globalban');
