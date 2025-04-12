@@ -1,6 +1,7 @@
 /*************************************
 * Pokemon Showdown Economy Commands  *
 * author: @PrinceSky                 *
+* Html By: Turbo Rx                  *
 **************************************/
 
 import { FS } from '../lib/fs';
@@ -316,7 +317,7 @@ export const commands: ChatCommands = {
 				: ''
 			}</div>`
 			: '';
-		this.ImpulseReplyBox(`<div style="max-height: 400px; overflow: auto;" data-uhtml="${useridFilter}-${parsedPage}">${tableHTML}</div>${paginationHTML}`);
+		this.ImpulseReplyBox(`<div style="max-height: 340px; overflow: auto;" data-uhtml="${useridFilter}-${parsedPage}">${tableHTML}</div>${paginationHTML}`);
 	},
 	
 	economyhelp(target, room, user) {
