@@ -328,7 +328,7 @@ export const commands: ChatCommands = {
 			}</div>`
 			: '';
 
-    const content = `<div style="max-height: 340px; overflow: auto;">${tableHTML} ${paginationHTML}</div>`;
+    const content = `<div style="max-height: 340px; overflow: auto; data-uhtml="economylogs">${tableHTML} ${paginationHTML}</div>`;
 
     this.sendReplyBox(`|uhtml|economylogs|${content}`);
 },
