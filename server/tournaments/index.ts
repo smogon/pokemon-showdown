@@ -1172,13 +1172,14 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	onTournamentEnd() {
 		const results = (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames);
     const originalResults = this.generator.getResults() as TournamentPlayer[][];
+    const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
     
-    const winner = results[0]?.[0]; // First place player's name
-    const winnerId = originalResults[0]?.[0]?.id;
+    const winner = results[0]?.[0]; // "Impulse Breaker"
+    const winnerId = originalResults[0]?.[0]?.id; // "impulsebreaker"
     
-    // Safely handle runner-up which might not exist
-    const runnerup = results[1]?.[0] || 'Unknown'; // Default to 'Unknown' if no runner-up
-    const runnerupId = originalResults[1]?.[0]?.id || 'unknown'; // Default to 'unknown' if no runner-up
+    const runnerup = results[1]?.[0]; // "Prince Sky"
+    // Get the actual ID from the player table instead of the results
+    const runnerupId = runnerup ? toID(runnerup) : 'unknown'; // This will convert "Prince Sky" to "princesky"
     
     const update = {
         results: results,
@@ -1187,17 +1188,15 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
         bracketData: this.getBracketData(),
         winnerId,
         runnerupId,
-        timestamp: '2025-04-12 11:18:03' // Current UTC time
+        timestamp: currentDate // "2025-04-12 11:22:54"
     };
     
     this.room.add(`|tournament|end|${JSON.stringify(update)}`);
     
-    // Log the results with safe checks
-    if (winner) {
-        this.room.add(`Tournament ended! Winner: ${winner} (${winnerId})`);
-        if (runnerup !== 'Unknown') {
-            this.room.add(`Runner-up: ${runnerup} (${runnerupId})`);
-        }
+    // Tournament end messages
+    this.room.add(`Congratulations to ${winner} for winning the ${this.name} Tournament!`);
+    if (runnerup) {
+        this.room.add(`Runner-up: ${runnerup}`);
 	 }
 		Economy.addMoney(winnerId, 10);
 		Economy.addMoney(runnerupId, 5);
