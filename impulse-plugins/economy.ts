@@ -278,45 +278,35 @@ export const commands: ChatCommands = {
 		);
 		this.ImpulseReplyBox(output);
 	},
-
+	
 	economylogs(target, room, user) {
-    if (!this.runBroadcast()) return;
-    this.checkCan('globalban');
-    
-    const [targetUser, page = '1'] = target.split(',').map(p => p.trim());
-    const parsedPage = parseInt(page) || 1;
-    const useridFilter = targetUser ? Users.get(targetUser)?.id : null;
-    const logs = Economy.getEconomyLogs(useridFilter, parsedPage);
-    const totalPages = Economy.getTotalLogPages(useridFilter);
-    
-    if (!logs.length) {
-        return this.sendReplyBox(`No economy logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}.`);
-    }
-
-    const totalLogs = useridFilter
-        ? Economy.logs.logs.filter(log => log.to === useridFilter || log.from === useridFilter || log.by === useridFilter).length
-        : Economy.logs.logs.length;
-
-    const data = logs.map(log => [
-        new Date(log.timestamp).toLocaleString(),
-        log.action,
-        log.by ? Impulse.nameColor(log.by, false, false) : '-',
-        log.from ? Impulse.nameColor(log.from, false, false) : '-',
-        Impulse.nameColor(log.to, false, false),
-        `${log.amount} ${ECONOMY_SETTINGS.CURRENCY}`
-    ]);
-
-    const title = `${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} ` +
-                 `(${totalLogs} total logs) (Page ${parsedPage} of ${totalPages})`;
-    
-    const tableHTML = Impulse.generateThemedTable(
-        title,
-        ['Time', 'Action', 'By', 'From', 'To', 'Amount'],
-        data,
-        Impulse.nameColor('musaddiktemkar', true, true)
-    );
-
-    const paginationHTML = totalPages > 1
+		if (!this.runBroadcast()) return;
+		this.checkCan('globalban');
+		const [targetUser, page = '1'] = target.split(',').map(p => p.trim());
+		const parsedPage = parseInt(page) || 1;
+		const useridFilter = targetUser ? Users.get(targetUser)?.id : null;
+		const logs = Economy.getEconomyLogs(useridFilter, parsedPage);
+		const totalPages = Economy.getTotalLogPages(useridFilter);
+		if (!logs.length) {
+			return this.sendReplyBox(`No economy logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}.`);
+		}
+		const totalLogs = useridFilter
+			? Economy.logs.logs.filter(log => log.to === useridFilter || log.from === useridFilter || log.by === useridFilter).length
+			: Economy.logs.logs.length;
+		const data = logs.map(log => [
+			new Date(log.timestamp).toLocaleString(),
+			log.action,
+			log.by ? Impulse.nameColor(log.by, false, false) : '-',
+			log.from ? Impulse.nameColor(log.from, false, false) : '-',
+			Impulse.nameColor(log.to, false, false),
+			`${log.amount} ${ECONOMY_SETTINGS.CURRENCY}`
+		]);
+		const tableHTML = Impulse.generateThemedTable(
+			`${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} (${totalLogs} total logs) (Page ${parsedPage} of ${totalPages})`,
+			['Time', 'Action', 'By', 'From', 'To', 'Amount'],
+			data
+		);
+		const paginationHTML = totalPages > 1
 			? `<div style="text-align: center; margin-top: 5px;">Page: ${parsedPage} / ${totalPages}${
 				parsedPage > 1 
 				? ` <button class="button" name="send" value="/economylogs ${targetUser || ''}, ${parsedPage - 1}">Previous</button>` 
@@ -327,11 +317,9 @@ export const commands: ChatCommands = {
 				: ''
 			}</div>`
 			: '';
-
-    const content = `<div style="max-height: 340px; overflow: auto; data-uhtml="economylogs">${tableHTML} ${paginationHTML}</div>`;
-
-    this.sendReplyBox(`|uhtml|economylogs|${content}`);
-},
+		this.ImpulseReplyBox(`<div style="max-height: 340px; overflow: auto;" data-uhtml="${useridFilter}-${parsedPage}">${tableHTML}</div>${paginationHTML}`);
+	},
+	
 	economyhelp(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
