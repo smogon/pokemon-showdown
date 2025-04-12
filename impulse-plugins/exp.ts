@@ -113,7 +113,7 @@ export class ExpSystem {
         DOUBLE_EXP = false;
         DOUBLE_EXP_END_TIME = null;
         
-        /*const message = 
+        const message = 
             `<div class="broadcast-blue">` +
             `<b>Double EXP period has ended!</b><br>` +
             `EXP gains have returned to normal.` +
@@ -123,7 +123,7 @@ export class ExpSystem {
             if (u.connected) {
                 u.send(`|pm|${Impulse.serverName}|${u.id}|/raw ${message}`);
             }
-        });*/
+        });
     }
   }
 
@@ -357,7 +357,7 @@ export const commands: Chat.Commands = {
         return;
     }
 
-    /*if (target.toLowerCase() === 'off') {
+    if (target.toLowerCase() === 'off') {
         DOUBLE_EXP = false;
         DOUBLE_EXP_END_TIME = null;
         const message = 
@@ -376,7 +376,7 @@ export const commands: Chat.Commands = {
         }
         this.modlog('TOGGLEDOUBLEEXP', null, `disabled - Manually disabled`, { by: user.id });
         return;
-    }*/
+    }
 
     const match = target.match(/^(\d+)\s*(minute|hour|day)s?$/i);
     if (!match) {
@@ -391,7 +391,7 @@ export const commands: Chat.Commands = {
     DOUBLE_EXP = true;
     DOUBLE_EXP_END_TIME = endTime;
 
-    /*const message = 
+    const message = 
         `<div class="broadcast-blue">` +
         `<b>Double EXP has been enabled by ${Impulse.nameColor(user.name, true, true)}!</b><br>` +
         `Duration: ${durationText}<br>` +
@@ -405,7 +405,7 @@ export const commands: Chat.Commands = {
     if (room) {
         room.add(`|html|${message}`).update();
     }
-    this.modlog('TOGGLEDOUBLEEXP', null, `enabled - ${durationText}`, { by: user.id });*/
+    this.modlog('TOGGLEDOUBLEEXP', null, `enabled - ${durationText}`, { by: user.id });
 
     setTimeout(() => ExpSystem.checkDoubleExpStatus(), duration);
 },
