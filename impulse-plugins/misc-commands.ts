@@ -119,7 +119,7 @@ const messages: string[] = [
 
 export const commands: Chat.ChatCommands = {
   clearall(target: string, room: ChatRoom | null, user: User): void {
-    this.checkCan('roomban');
+    this.checkCan('roomvoice');
     if (room?.battle) {
       return this.sendReply("You cannot clearall in battle rooms.");
     }
