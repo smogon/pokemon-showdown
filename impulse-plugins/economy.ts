@@ -318,17 +318,17 @@ export const commands: ChatCommands = {
     );
 
     // Generate pagination buttons
-    const paginationHTML = totalPages > 1
-        ? `<div style="text-align: center; margin-top: 5px;">
-            ${parsedPage > 1 
-                ? `<button name="send" value="/economylogs ${targetUser || ''}, ${parsedPage - 1}">Previous</button> `
-                : ''}
-            <span>Page ${parsedPage} / ${totalPages}</span>
-            ${parsedPage < totalPages
-                ? ` <button name="send" value="/economylogs ${targetUser || ''}, ${parsedPage + 1}">Next</button>`
-                : ''}
-           </div>`
-        : '';
+		const paginationHTML = totalPages > 1
+			? `<div style="text-align: center; margin-top: 5px;">Page: ${parsedPage} / ${totalPages}${
+				parsedPage > 1 
+				? ` <button class="button" name="send" value="/economylogs ${targetUser || ''}, ${parsedPage - 1}">Previous</button>` 
+				: ''
+			}${
+				parsedPage < totalPages 
+				? ` <button class="button" name="send" value="/economylogs ${targetUser || ''}, ${parsedPage + 1}">Next</button>` 
+				: ''
+			}</div>`
+			: '';
 
     const content = `<div style="max-height: 340px; overflow: auto;">${tableHTML} ${paginationHTML}</div>`;
 
