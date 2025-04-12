@@ -1170,19 +1170,26 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 
 	/* IMPULSE REWARDS TEST */
 	onTournamentEnd() {
-		const results = this.generator.getResults() as TournamentPlayer[][];
-		const winner = results[0][0];
-		const runnerup = results[1][0];
-		const winnerId = winner.id;
-		const runnerupId = runnerup.id;
+		const results = (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames);
+    const winner = results[0][0]; // First place player's name
+    const runnerup = results[1][0]; // Second place player's name
+    
+    // Since usersToNames maps TournamentPlayer to their names, 
+    // we need to get IDs from the original players
+    const originalResults = this.generator.getResults() as TournamentPlayer[][];
+    const winnerId = originalResults[0][0].id;
+    const runnerupId = originalResults[1][0].id;
+    
+    const update = {
+        results: results,
+        format: this.name,
+        generator: this.generator.name,
+        bracketData: this.getBracketData(),
+        winnerId: winnerId,
+        runnerupId: runnerupId
+    };
 		Economy.addMoney(winnerId, 10);
 		Economy.addMoney(runnerupId, 5);
-		const update = {
-			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
-			format: this.name,
-			generator: this.generator.name,
-			bracketData: this.getBracketData(),
-		};
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
 		// Impulse
 		this.room.add(`|tournament|end|Congratulations ${winnerId} you have won 10 ${Impulse.currency} for winning the tournament.`);
