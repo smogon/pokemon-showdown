@@ -1170,16 +1170,28 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 
 	/* IMPULSE REWARDS TEST */
 	onTournamentEnd() {
-		const results = (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames);
+    const results = (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames);
     const originalResults = this.generator.getResults() as TournamentPlayer[][];
-    const currentDate = new Date().toISOString().slice(0, 19).replace('T', ' ');
     
-    const winner = results[0]?.[0]; // "Impulse Breaker"
-    const winnerId = originalResults[0]?.[0]?.id; // "impulsebreaker"
+    // Format current UTC date
+    const now = new Date();
+    const currentDate = now.getUTCFullYear() + '-' + 
+                       String(now.getUTCMonth() + 1).padStart(2, '0') + '-' +
+                       String(now.getUTCDate()).padStart(2, '0') + ' ' +
+                       String(now.getUTCHours()).padStart(2, '0') + ':' +
+                       String(now.getUTCMinutes()).padStart(2, '0') + ':' +
+                       String(now.getUTCSeconds()).padStart(2, '0');
+
+    const winner = results[0]?.[0];
+    const winnerId = originalResults[0]?.[0]?.id;
     
-    const runnerup = results[1]?.[0]; // "Prince Sky"
-    // Get the actual ID from the player table instead of the results
-    const runnerupId = runnerup ? toID(runnerup) : 'unknown'; // This will convert "Prince Sky" to "princesky"
+    // Only try to get runner-up if there's more than 2 players and second place exists
+    let runnerup = null;
+    let runnerupId = null;
+    if (originalResults.length > 1 && originalResults[1]?.length > 0) {
+        runnerup = results[1][0];
+        runnerupId = toID(runnerup);
+    }
     
     const update = {
         results: results,
@@ -1187,17 +1199,26 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
         generator: this.generator.name,
         bracketData: this.getBracketData(),
         winnerId,
-        runnerupId,
-        timestamp: currentDate // "2025-04-12 11:22:54"
+        runnerupId: runnerupId || 'unknown',
+        timestamp: currentDate
     };
     
     this.room.add(`|tournament|end|${JSON.stringify(update)}`);
     
-    // Tournament end messages
-    this.room.add(`Congratulations to ${winner} for winning the ${this.name} Tournament!`);
-    if (runnerup) {
+    // First congratulatory message with full format name
+    this.room.add(`Congratulations to ${winner} for winning the ${this.baseFormat} Tournament!`);
+    
+    // Only show runner-up if it exists and there were more than 2 players
+    if (runnerup && originalResults.length > 2) {
         this.room.add(`Runner-up: ${runnerup}`);
-	 }
+    }
+
+    // Debug information
+    if (this.room.settings.debuglogs) {
+        this.room.add(`Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): ${currentDate}`);
+        this.room.add(`Current User's Login: ${Config.serverid}`);
+        this.room.add(`Number of players in tournament: ${originalResults.flat().length}`);
+    }
 		Economy.addMoney(winnerId, 10);
 		Economy.addMoney(runnerupId, 5);
 		
