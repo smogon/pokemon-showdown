@@ -1167,78 +1167,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		}
 		this.room.update();
 	}
-
-	/* IMPULSE REWARDS TEST */
-	onTournamentEnd() {
-    const results = (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames);
-    const originalResults = this.generator.getResults() as TournamentPlayer[][];
-    
-    // Format current UTC date
-    const now = new Date();
-    const currentDate = now.getUTCFullYear() + '-' + 
-                       String(now.getUTCMonth() + 1).padStart(2, '0') + '-' +
-                       String(now.getUTCDate()).padStart(2, '0') + ' ' +
-                       String(now.getUTCHours()).padStart(2, '0') + ':' +
-                       String(now.getUTCMinutes()).padStart(2, '0') + ':' +
-                       String(now.getUTCSeconds()).padStart(2, '0');
-
-    const winner = results[0]?.[0];
-    const winnerId = originalResults[0]?.[0]?.id;
-    
-    // Only try to get runner-up if there's more than 2 players and second place exists
-    let runnerup = null;
-    let runnerupId = null;
-    if (originalResults.length > 1 && originalResults[1]?.length > 0) {
-        runnerup = results[1][0];
-        runnerupId = toID(runnerup);
-    }
-    
-    const update = {
-        results: results,
-        format: this.name,
-        generator: this.generator.name,
-        bracketData: this.getBracketData(),
-        winnerId,
-        runnerupId: runnerupId || 'unknown',
-        timestamp: currentDate
-    };
-    
-    this.room.add(`|tournament|end|${JSON.stringify(update)}`);
-    
-    // First congratulatory message with full format name
-    this.room.add(`Congratulations to ${winner} for winning the ${this.baseFormat} Tournament!`);
-    
-    // Only show runner-up if it exists and there were more than 2 players
-    if (runnerup && originalResults.length > 2) {
-        this.room.add(`Runner-up: ${runnerup}`);
-    }
-
-    // Debug information
-    if (this.room.settings.debuglogs) {
-        this.room.add(`Current Date and Time (UTC - YYYY-MM-DD HH:MM:SS formatted): ${currentDate}`);
-        this.room.add(`Current User's Login: ${Config.serverid}`);
-        this.room.add(`Number of players in tournament: ${originalResults.flat().length}`);
-    }
-		Economy.addMoney(winnerId, 10);
-		Economy.addMoney(runnerupId, 5);
-		
-		const settings = this.room.settings.tournaments;
-		if (settings?.recentToursLength) {
-			if (!settings.recentTours) settings.recentTours = [];
-			const name = Dex.formats.get(this.name).exists ? Dex.formats.get(this.name).name :
-				`${this.name} (${Dex.formats.get(this.baseFormat).name})`;
-			settings.recentTours.unshift({ name, baseFormat: this.baseFormat, time: Date.now() });
-			// Use a while loop here in case the threshold gets lowered with /tour settings recenttours
-			// to trim down multiple at once
-			while (settings.recentTours.length > settings.recentToursLength) {
-				settings.recentTours.pop();
-			}
-			this.room.saveSettings();
-		}
-		this.remove();
-	}
-}
-	/*
+	
 	onTournamentEnd() {
 		const update = {
 			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
@@ -1263,7 +1192,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		this.remove();
 	}
 }
-*/
+
 function getGenerator(generator: string | undefined) {
 	generator = toID(generator);
 	switch (generator) {
