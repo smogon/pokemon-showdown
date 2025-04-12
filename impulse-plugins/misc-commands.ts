@@ -125,17 +125,12 @@ export const commands: Chat.ChatCommands = {
     if (!room) {
       return this.errorReply("This command requires a room.");
 	 }
-	  this.checkCan('roomvoice', null, room);
+	  this.checkCan('roommod', null, room);
     Impulse.clearRooms([room], user);
   },
 
   globalclearall(target: string, room: ChatRoom | null, user: User): void {
-    // Option 1: Check for specific userid (replace 'princesky' with your own)
-    if (user.id !== 'princesky' && !this.checkCan('globalban')) {
-      return this.errorReply(`/globalclearall - Access denied.`);
-    }
-    // Option 2: Use globalban check (uncomment the line below and comment out the above if statement)
-    // this.checkCan('globalban');
+	  this.checkCan('globalban', null, room);
 
     const roomsToClear = Rooms.global.chatRooms.filter((chatRoom): chatRoom is Room => !!chatRoom && !chatRoom.battle);
     const clearedRooms = Impulse.clearRooms(roomsToClear, user);
