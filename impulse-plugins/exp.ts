@@ -1,7 +1,3 @@
-/* Experience (EXP) System Commands
- * Credits: Prince Sky
- */
-
 import { FS } from '../lib/fs';
 
 const EXP_FILE_PATH = 'impulse-db/exp.json';
@@ -10,19 +6,12 @@ const EXP_UNIT = `EXP`;
 Impulse.expUnit = EXP_UNIT;
 
 const MIN_LEVEL_EXP = 15;
-const MULTIPLIER = 1.9;
+const MULTIPLIER = 1.4;
 let DOUBLE_EXP = false;
 
 interface ExpData {
   [userid: string]: number;
 }
-
-interface Cooldowns {
-  [userid: string]: number;
-}
-
-const ADD_EXP_COOLDOWN = 30 * 1000; // 30 seconds in milliseconds
-const expAddCooldowns: Cooldowns = {};
 
 export class ExpSystem {
   private static data: ExpData = ExpSystem.loadExpData();
@@ -39,12 +28,9 @@ export class ExpSystem {
 
   private static saveExpData(): void {
     try {
-      const dataToWrite: ExpData = {};
-      for (const id in this.data) {
-        if (Object.prototype.hasOwnProperty.call(this.data, id)) {
-          dataToWrite[toID(id)] = this.data[id];
-        }
-      }
+      const dataToWrite = Object.fromEntries(
+        Object.entries(this.data).map(([id, amount]) => [toID(id), amount])
+      );
       FS(EXP_FILE_PATH).writeUpdate(() => JSON.stringify(dataToWrite, null, 2));
     } catch (error) {
       console.error(`Error saving EXP data: ${error}`);
@@ -72,6 +58,14 @@ export class ExpSystem {
     return this.data[id];
   }
 
+  static grantExp() {
+    Users.users.forEach(user => {
+      if (!user || !user.named || !user.connected || !user.lastPublicMessage) return;
+      if (Date.now() - user.lastPublicMessage > 300000) return;
+      this.addExp(user.id, 1);
+    });
+  }
+
   static takeExp(userid: string, amount: number, reason?: string, by?: string): number {
     const id = toID(userid);
     const currentExp = this.data[id] || 0;
@@ -83,12 +77,12 @@ export class ExpSystem {
     return currentExp;
   }
 
- static resetAllExp(): void {
+  static resetAllExp(): void {
     this.data = {};
     this.saveExpData();
- }
+  }
 
- static getRichestUsers(limit: number = 100): [string, number][] {
+  static getRichestUsers(limit: number = 100): [string, number][] {
     return Object.entries(this.data)
       .sort(([, a], [, b]) => b - a)
       .slice(0, limit);
@@ -97,32 +91,22 @@ export class ExpSystem {
   static getLevel(exp: number): number {
     if (exp < MIN_LEVEL_EXP) return 0;
     let level = 1;
-    let requiredExp = MIN_LEVEL_EXP;
-    let remainingExp = exp - requiredExp;
-    while (remainingExp >= Math.floor(requiredExp * MULTIPLIER)) {
-      requiredExp = Math.floor(requiredExp * MULTIPLIER);
-      remainingExp -= requiredExp;
+    let totalExp = MIN_LEVEL_EXP;
+    
+    while (exp >= totalExp) {
+      totalExp += Math.floor(MIN_LEVEL_EXP * Math.pow(MULTIPLIER, level));
       level++;
     }
-    return level;
+    return level - 1;
   }
 
   static getExpForNextLevel(level: number): number {
-    if (level < 0) return MIN_LEVEL_EXP;
-    let requiredExp = MIN_LEVEL_EXP;
+    if (level <= 0) return MIN_LEVEL_EXP;
+    let totalExp = MIN_LEVEL_EXP;
     for (let i = 1; i < level; i++) {
-      requiredExp = Math.floor(requiredExp * MULTIPLIER);
+      totalExp += Math.floor(MIN_LEVEL_EXP * Math.pow(MULTIPLIER, i));
     }
-    return requiredExp;
-  }
-
-  static canAddExp(userid: string): boolean {
-    const now = Date.now();
-    return !expAddCooldowns[toID(userid)] || now - expAddCooldowns[toID(userid)] >= ADD_EXP_COOLDOWN;
-  }
-
-  static setAddExpCooldown(userid: string): void {
-    expAddCooldowns[toID(userid)] = Date.now();
+    return totalExp;
   }
 }
 
@@ -130,14 +114,28 @@ Impulse.ExpSystem = ExpSystem;
 
 export const commands: ChatCommands = {
   level: 'exp',
-	exp(target, room, user) {
+  exp(target, room, user) {
     if (!target) target = user.name;
     if (!this.runBroadcast()) return;
+    
     const userid = toID(target);
-    const exp = ExpSystem.readExp(userid);
-    const level = ExpSystem.getLevel(exp);
-    const expForNext = ExpSystem.getExpForNextLevel(level + 1);
-    this.sendReplyBox(`${Impulse.nameColor(userid, true, true)} is Level ${level} with ${exp} ${EXP_UNIT}. Needs ${expForNext - exp} more ${EXP_UNIT} to reach Level ${level + 1}.`);
+    const currentExp = ExpSystem.readExp(userid);
+    const currentLevel = ExpSystem.getLevel(currentExp);
+    const nextLevelExp = ExpSystem.getExpForNextLevel(currentLevel + 1);
+    const expNeeded = nextLevelExp - currentExp;
+    
+    const date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    
+    this.sendReplyBox(
+      `<div class="infobox">` +
+      `<strong>${Impulse.nameColor(userid, true, true)}</strong><br>` +
+      `Level: ${currentLevel}<br>` +
+      `Current EXP: ${currentExp}<br>` +
+      `EXP needed for Level ${currentLevel + 1}: ${expNeeded}<br>` +
+      `Total EXP required: ${nextLevelExp}<br>` +
+      `<small>Last updated: ${date}</small>` +
+      `</div>`
+    );
   },
 
   giveexp(target, room, user) {
@@ -161,10 +159,19 @@ export const commands: ChatCommands = {
     const newExp = ExpSystem.readExp(targetUser.id);
     const newLevel = ExpSystem.getLevel(newExp);
     const expForNext = ExpSystem.getExpForNextLevel(newLevel + 1);
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} gave ${amount} ${EXP_UNIT}${DOUBLE_EXP ? ' (Double EXP)' : ''} to ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ${Impulse.nameColor(targetUser.name, true, true)} is now Level ${newLevel} with ${newExp} ${EXP_UNIT}. Needs ${expForNext - newExp} more ${EXP_UNIT} to reach Level ${newLevel + 1}.`);
+    
+    this.sendReplyBox(
+      `${Impulse.nameColor(user.name, true, true)} gave ${amount} ${EXP_UNIT}${DOUBLE_EXP ? ' (Double EXP)' : ''} to ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ` +
+      `New Level: ${newLevel} (${newExp}/${expForNext} ${EXP_UNIT})`
+    );
+    
     this.modlog('GIVEEXP', targetUser, `${amount} ${EXP_UNIT}${DOUBLE_EXP ? ' (Double EXP)' : ''}`, { by: user.id, reason });
     if (targetUser.connected) {
-      targetUser.popup(`|html|You received <b>${amount} ${EXP_UNIT}${DOUBLE_EXP ? ' (Double EXP)' : ''}</b> from <b> ${Impulse.nameColor(user.name, true, true)}</b>.<br>Reason: ${reason}<br>You are now Level ${newLevel} with ${newExp} ${EXP_UNIT}.`);
+      targetUser.popup(
+        `|html|You received <b>${amount} ${EXP_UNIT}${DOUBLE_EXP ? ' (Double EXP)' : ''}</b> from <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>` +
+        `Reason: ${reason}<br>` +
+        `You are now Level ${newLevel} (${newExp}/${expForNext} ${EXP_UNIT})`
+      );
     }
   },
 
@@ -189,10 +196,19 @@ export const commands: ChatCommands = {
     const newExp = ExpSystem.readExp(targetUser.id);
     const newLevel = ExpSystem.getLevel(newExp);
     const expForNext = ExpSystem.getExpForNextLevel(newLevel + 1);
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} took ${amount} ${EXP_UNIT} from ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ${Impulse.nameColor(targetUser.name, true, true)} is now Level ${newLevel} with ${newExp} ${EXP_UNIT}. Needs ${expForNext - newExp} more ${EXP_UNIT} to reach Level ${newLevel + 1}.`);
+    
+    this.sendReplyBox(
+      `${Impulse.nameColor(user.name, true, true)} took ${amount} ${EXP_UNIT} from ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ` +
+      `New Level: ${newLevel} (${newExp}/${expForNext} ${EXP_UNIT})`
+    );
+    
     this.modlog('TAKEEXP', targetUser, `${amount} ${EXP_UNIT}`, { by: user.id, reason });
     if (targetUser.connected) {
-      targetUser.popup(`|html|<b>${Impulse.nameColor(user.name, true, true)}</b> took <b>${amount} ${EXP_UNIT}</b> from you.<br>Reason: ${reason}<br>You are now Level ${newLevel} with ${newExp} ${EXP_UNIT}.`);
+      targetUser.popup(
+        `|html|<b>${Impulse.nameColor(user.name, true, true)}</b> took <b>${amount} ${EXP_UNIT}</b> from you.<br>` +
+        `Reason: ${reason}<br>` +
+        `You are now Level ${newLevel} (${newExp}/${expForNext} ${EXP_UNIT})`
+      );
     }
   },
 
@@ -208,10 +224,16 @@ export const commands: ChatCommands = {
     }
 
     ExpSystem.writeExp(targetUser.id, DEFAULT_EXP);
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} reset ${Impulse.nameColor(targetUser.name, true, true)}'s EXP to ${DEFAULT_EXP} ${EXP_UNIT} (Level 0) (${reason}).`);
+    this.sendReplyBox(
+      `${Impulse.nameColor(user.name, true, true)} reset ${Impulse.nameColor(targetUser.name, true, true)}'s EXP to ${DEFAULT_EXP} ${EXP_UNIT} (Level 0) (${reason}).`
+    );
+    
     this.modlog('RESETEXP', targetUser, `${DEFAULT_EXP} ${EXP_UNIT}`, { by: user.id, reason });
     if (targetUser.connected) {
-      targetUser.popup(`|html|Your ${EXP_UNIT} has been reset to <b>${DEFAULT_EXP}</b> (Level 0) by <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>Reason: ${reason}`);
+      targetUser.popup(
+        `|html|Your ${EXP_UNIT} has been reset to <b>${DEFAULT_EXP}</b> (Level 0) by <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>` +
+        `Reason: ${reason}`
+      );
     }
   },
 
@@ -220,9 +242,20 @@ export const commands: ChatCommands = {
     const reason = target.trim() || 'No reason specified.';
 
     ExpSystem.resetAllExp();
-    this.sendReplyBox(`All user EXP has been reset to ${DEFAULT_EXP} ${EXP_UNIT} (Level 0) (${reason}).`);
+    this.sendReplyBox(
+      `All user EXP has been reset to ${DEFAULT_EXP} ${EXP_UNIT} (Level 0) (${reason}).`
+    );
+    
     this.modlog('RESETEXPALL', null, `all EXP to ${DEFAULT_EXP} ${EXP_UNIT}`, { by: user.id, reason });
-    room?.add(`|html|<center><div class="broadcast-blue"><b>${Impulse.nameColor(user.name, true, true)}</b> has reset all ${EXP_UNIT} to <b>${DEFAULT_EXP}</b> (Level 0).<br>Reason: ${reason}</div></center>`);
+    if (room) {
+      room.add(
+        `|html|<center><div class="broadcast-blue">` +
+        `<b>${Impulse.nameColor(user.name, true, true)}</b> has reset all ${EXP_UNIT} to <b>${DEFAULT_EXP}</b> (Level 0).<br>` +
+        `Reason: ${reason}` +
+        `</div></center>`
+      );
+      room.update();
+    }
   },
 
   expladder(target, room, user) {
@@ -232,8 +265,6 @@ export const commands: ChatCommands = {
       return this.sendReplyBox(`No users have any ${EXP_UNIT} yet.`);
     }
 
-    const title = `Top ${richest.length} Users by ${EXP_UNIT}`;
-    const header = ['Rank', 'User', 'EXP', 'Level', 'Next Level'];
     const data = richest.map(([userid, exp], index) => {
       const level = ExpSystem.getLevel(exp);
       const expForNext = ExpSystem.getExpForNextLevel(level + 1);
@@ -245,28 +276,28 @@ export const commands: ChatCommands = {
         `${expForNext} ${EXP_UNIT}`,
       ];
     });
-    const styleBy = Impulse.nameColor('TurboRx', true, true);
 
-    const output = Impulse.generateThemedTable(title, header, data, styleBy);
+    const output = Impulse.generateThemedTable(
+      `Top ${richest.length} Users by ${EXP_UNIT}`,
+      ['Rank', 'User', 'EXP', 'Level', 'Next Level At'],
+      data,
+      Impulse.nameColor('TurboRx', true, true)
+    );
     this.ImpulseReplyBox(output);
-  },
-
-  explogs(target, room, user) {
-    if (!this.runBroadcast()) return;
-	 this.checkCan('globalban');
-    this.sendReplyBox(`The EXP logs feature has been removed.`);
   },
 
   exphelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
-		 `<div><b><center>EXP System Commands</center></b>` +
-		 `<ul><li><code>/level [user]</code> (or <code>/atm</code>) - Check your or another user's EXP, current level, and EXP needed for the next level.</li>` +
-		 `<li><code>/giveexp [user], [amount] ,[reason]</code> - Give a specified amount of EXP to a user. (Requires: @ and higher).</li>` +
-		 `<li><code>/takeexp [user], [amount] ,[reason]</code> - Take a specified amount of EXP from a user. (Requires: @ and higher).</li>` +
-		 `<li><code>/resetexp [user], [reason]</code> - Reset a user's EXP to ${DEFAULT_EXP}. (Requires: @ and higher).</li>` +
-		 `<li><code>/resetexpall [reason]</code> - Reset all users' EXP to ${DEFAULT_EXP}. (Requires: @ and higher).</li>` +
-		 `<li><code>/expladder</code> - View the top 100 users with the most EXP and their levels.</li>` +
-		 `</ul></div>`);
+      `<div><b><center>EXP System Commands</center></b>` +
+      `<ul>` +
+      `<li><code>/level [user]</code> (Or <code>/exp</code>) - Check your or another user's EXP, current level, and EXP needed for the next level.</li>` +
+      `<li><code>/giveexp [user], [amount], [reason]</code> - Give a specified amount of EXP to a user. (Requires: @ and higher)</li>` +
+      `<li><code>/takeexp [user], [amount], [reason]</code> - Take a specified amount of EXP from a user. (Requires: @ and higher)</li>` +
+      `<li><code>/resetexp [user], [reason]</code> - Reset a user's EXP to ${DEFAULT_EXP}. (Requires: @ and higher)</li>` +
+      `<li><code>/resetexpall [reason]</code> - Reset all users' EXP to ${DEFAULT_EXP}. (Requires: @ and higher)</li>` +
+      `<li><code>/expladder</code> - View the top 100 users with the most EXP and their levels.</li>` +
+      `</ul></div>`
+    );
   },
 };
