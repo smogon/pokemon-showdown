@@ -1,16 +1,20 @@
-/* Economy System Commands
- * Credits: Unknown
- * Updates & Typescript Conversion:
- * Prince Sky
- */
+/*************************************
+* Pokemon Showdown Economy Commands  *
+* author: @PrinceSky                 *
+**************************************/
 
 import { FS } from '../lib/fs';
 
-const MONEY_FILE_PATH = 'impulse-db/money.json';
-const MONEY_LOGS_PATH = 'impulse-db/moneylogs.json';
-const DEFAULT_AMOUNT = 0;
-const CURRENCY = `coins`;
-Impulse.currency = CURRENCY;
+const ECONOMY_SETTINGS = {
+  MONEY_FILE: 'impulse-db/money.json',
+  LOGS_FILE: 'impulse-db/moneylogs.json',
+  DEFAULT_AMOUNT: 0,
+  CURRENCY: 'coins'
+} as const;
+
+Impulse.currency = ECONOMY_SETTINGS.CURRENCY;
+
+type MoneyAction = 'give' | 'take' | 'transfer' | 'reset';
 
 interface EconomyData {
   [userid: string]: number;
@@ -18,7 +22,7 @@ interface EconomyData {
 
 interface EconomyLogEntry {
   timestamp: number;
-  action: 'give' | 'take' | 'transfer' | 'reset';
+  action: MoneyAction;
   from?: string;
   to: string;
   amount: number;
@@ -30,63 +34,60 @@ interface EconomyLogs {
 }
 
 export class Economy {
-  private static data: EconomyData = Economy.loadMoneyData();
-  private static logs: EconomyLogs = Economy.loadMoneyLogs();
+  private static data: EconomyData = Economy.loadData();
+  private static logs: EconomyLogs = Economy.loadLogs();
 
-  private static loadMoneyData(): EconomyData {
+  private static loadData(): EconomyData {
     try {
-      const rawData = FS(MONEY_FILE_PATH).readIfExistsSync();
-      return rawData ? (JSON.parse(rawData) as EconomyData) : {};
+      const rawData = FS(ECONOMY_SETTINGS.MONEY_FILE).readIfExistsSync();
+      return rawData ? JSON.parse(rawData) : {};
     } catch (error) {
       console.error(`Error reading economy data: ${error}`);
       return {};
     }
   }
 
-  private static saveMoneyData(): void {
+  private static saveData(): void {
     try {
-      const dataToWrite: EconomyData = {};
-      for (const id in this.data) {
-        if (Object.prototype.hasOwnProperty.call(this.data, id)) {
-          dataToWrite[toID(id)] = this.data[id];
-        }
-      }
-      FS(MONEY_FILE_PATH).writeUpdate(() => JSON.stringify(dataToWrite, null, 2));
+      const dataToWrite = Object.fromEntries(
+        Object.entries(this.data).map(([id, amount]) => [toID(id), amount])
+      );
+      FS(ECONOMY_SETTINGS.MONEY_FILE).writeUpdate(() => JSON.stringify(dataToWrite, null, 2));
     } catch (error) {
       console.error(`Error saving economy data: ${error}`);
     }
   }
 
-  private static loadMoneyLogs(): EconomyLogs {
+  private static loadLogs(): EconomyLogs {
     try {
-      const rawLogs = FS(MONEY_LOGS_PATH).readIfExistsSync();
-      return rawLogs ? (JSON.parse(rawLogs) as EconomyLogs) : { logs: [] };
+      const rawLogs = FS(ECONOMY_SETTINGS.LOGS_FILE).readIfExistsSync();
+      return rawLogs ? JSON.parse(rawLogs) : { logs: [] };
     } catch (error) {
       console.error(`Error reading economy logs: ${error}`);
       return { logs: [] };
     }
   }
 
-  private static saveMoneyLogs(): void {
+  private static saveLogs(): void {
     try {
-      FS(MONEY_LOGS_PATH).writeUpdate(() => JSON.stringify(this.logs, null, 2));
+      FS(ECONOMY_SETTINGS.LOGS_FILE).writeUpdate(() => JSON.stringify(this.logs, null, 2));
     } catch (error) {
       console.error(`Error saving economy logs: ${error}`);
     }
   }
 
-  private static logMoneyAction(entry: Omit<EconomyLogEntry, 'timestamp'>): void {
-    this.logs.logs.push({ timestamp: Date.now(), ...entry }); // Append to the end
-    this.saveMoneyLogs();
+  private static logAction(entry: Omit<EconomyLogEntry, 'timestamp'>): void {
+    this.logs.logs.push({ timestamp: Date.now(), ...entry });
+    this.saveLogs();
   }
 
   static writeMoney(userid: string, amount: number): void {
     this.data[toID(userid)] = amount;
-    this.saveMoneyData();
+    this.saveData();
   }
 
   static readMoney(userid: string): number {
-    return this.data[toID(userid)] || DEFAULT_AMOUNT;
+    return this.data[toID(userid)] || ECONOMY_SETTINGS.DEFAULT_AMOUNT;
   }
 
   static hasMoney(userid: string, amount: number): boolean {
@@ -96,8 +97,8 @@ export class Economy {
   static addMoney(userid: string, amount: number, reason?: string, by?: string): number {
     const id = toID(userid);
     this.data[id] = (this.data[id] || 0) + amount;
-    this.saveMoneyData();
-    this.logMoneyAction({ action: 'give', to: id, amount, by });
+    this.saveData();
+    this.logAction({ action: 'give', to: id, amount, by });
     return this.data[id];
   }
 
@@ -106,162 +107,159 @@ export class Economy {
     const currentMoney = this.data[id] || 0;
     if (currentMoney >= amount) {
       this.data[id] = currentMoney - amount;
-      this.saveMoneyData();
-      this.logMoneyAction({ action: 'take', to: id, amount, by });
-      return this.data[id];
+      this.saveData();
+      this.logAction({ action: 'take', to: id, amount, by });
     }
-    return currentMoney;
+    return this.data[id] || currentMoney;
   }
 
- static resetAllMoney(): void {
+  static resetAllMoney(): void {
     this.data = {};
-    this.saveMoneyData();
-    this.logMoneyAction({ action: 'reset', to: 'all', amount: 0 });
- }
+    this.saveData();
+    this.logAction({ action: 'reset', to: 'all', amount: 0 });
+  }
 
- static getRichestUsers(limit: number = 100): [string, number][] {
+  static getRichestUsers(limit: number = 100): [string, number][] {
     return Object.entries(this.data)
       .sort(([, a], [, b]) => b - a)
       .slice(0, limit);
   }
 
   static getEconomyLogs(userid?: string, page: number = 1, entriesPerPage: number = 100): EconomyLogEntry[] {
-    let filteredLogs = this.logs.logs;
+    let logs = this.logs.logs;
     if (userid) {
       const id = toID(userid);
-      filteredLogs = filteredLogs.filter(log => log.to === id || log.from === id || log.by === id);
+      logs = logs.filter(log => log.to === id || log.from === id || log.by === id);
     }
-
-    // Reverse the filtered logs to show the newest first
-    const reversedLogs = [...filteredLogs].reverse();
-
     const startIndex = (page - 1) * entriesPerPage;
-    const endIndex = startIndex + entriesPerPage;
-    return reversedLogs.slice(startIndex, endIndex);
+    return [...logs].reverse().slice(startIndex, startIndex + entriesPerPage);
   }
 
   static getTotalLogPages(userid?: string, entriesPerPage: number = 100): number {
-    let filteredLogs = this.logs.logs;
+    let logsCount = this.logs.logs.length;
     if (userid) {
       const id = toID(userid);
-      filteredLogs = filteredLogs.filter(log => log.to === id || log.from === id || log.by === id);
+      logsCount = this.logs.logs.filter(
+        log => log.to === id || log.from === id || log.by === id
+      ).length;
     }
-    return Math.ceil(filteredLogs.length / entriesPerPage) || 1;
+    return Math.ceil(logsCount / entriesPerPage) || 1;
   }
 }
 
 global.Economy = Economy;
 
+const createPopup = (user: any, message: string) => {
+  if (user.connected) {
+    user.popup(`|html|${message}`);
+  }
+};
+
+const formatMoneyMessage = (user: string, target: string, amount: number, reason: string) => {
+  return `${Impulse.nameColor(user, true, true)} ${amount} ${ECONOMY_SETTINGS.CURRENCY} ${target} ${Impulse.nameColor(target, true, true)} (${reason})`;
+};
+
 export const commands: ChatCommands = {
   atm: 'balance',
   balance(target, room, user) {
-    if (!target) target = user.name;
     if (!this.runBroadcast()) return;
-    const userid = toID(target);
+    const userid = toID(target || user.name);
     const balance = Economy.readMoney(userid);
-    this.sendReplyBox(`${Impulse.nameColor(userid, true, true)} has ${balance} ${CURRENCY}.`);
+    this.sendReplyBox(`${Impulse.nameColor(userid, true, true)} has ${balance} ${ECONOMY_SETTINGS.CURRENCY}.`);
   },
 
   givemoney(target, room, user) {
     this.checkCan('globalban');
-    if (!target) return this.sendReply(`Usage: /givemoney [user], [amount], [reason]`);
-    const parts = target.split(',').map(p => p.trim());
-    if (parts.length < 2) return this.sendReply(`Usage: /givemoney [user], [amount], [reason]`);
-
-    const targetUser = Users.get(parts[0]);
-    const amount = parseInt(parts[1], 10);
-    const reason = parts.slice(2).join(',').trim() || 'No reason specified.';
-
-    if (!targetUser) {
-      return this.errorReply(`User "${parts[0]}" not found.`);
+    const [targetUser, amount, ...reasonParts] = target.split(',').map(p => p.trim());
+    const reason = reasonParts.join(',') || 'No reason specified.';
+    
+    if (!targetUser || !amount) {
+      return this.sendReply(`Usage: /givemoney [user], [amount], [reason]`);
     }
-    if (isNaN(amount) || amount <= 0) {
+
+    const recipient = Users.get(targetUser);
+    const parsedAmount = parseInt(amount);
+
+    if (!recipient) return this.errorReply(`User "${targetUser}" not found.`);
+    if (isNaN(parsedAmount) || parsedAmount <= 0) {
       return this.errorReply(`Please specify a valid positive amount.`);
     }
 
-    Economy.addMoney(targetUser.id, amount, reason, user.id);
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} gave ${amount} ${CURRENCY} to ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ${Impulse.nameColor(targetUser.name, true, true)} now has ${Economy.readMoney(targetUser.id)} ${CURRENCY}.`);
-    this.modlog('GIVEMONEY', targetUser, `${amount} ${CURRENCY}`, { by: user.id, reason });
-    if (targetUser.connected) {
-      targetUser.popup(`|html|You received <b>${amount} ${CURRENCY}</b> from <b> ${Impulse.nameColor(user.name, true, true)}</b>.<br>Reason: ${reason}`);
-    }
+    Economy.addMoney(recipient.id, parsedAmount, reason, user.id);
+    this.sendReplyBox(formatMoneyMessage(user.name, 'gave to', parsedAmount, reason));
+    this.modlog('GIVEMONEY', recipient, `${parsedAmount} ${ECONOMY_SETTINGS.CURRENCY}`, { by: user.id, reason });
+    createPopup(recipient, `You received <b>${parsedAmount} ${ECONOMY_SETTINGS.CURRENCY}</b> from <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>Reason: ${reason}`);
   },
 
   takemoney(target, room, user) {
     this.checkCan('globalban');
-    if (!target) return this.sendReply(`Usage: /takemoney [user], [amount], [reason]`);
-    const parts = target.split(',').map(p => p.trim());
-    if (parts.length < 2) return this.sendReply(`Usage: /takemoney [user], [amount], [reason]`);
+    const [targetUser, amount, ...reasonParts] = target.split(',').map(p => p.trim());
+    const reason = reasonParts.join(',') || 'No reason specified.';
 
-    const targetUser = Users.get(parts[0]);
-    const amount = parseInt(parts[1], 10);
-    const reason = parts.slice(2).join(',').trim() || 'No reason specified.';
-
-    if (!targetUser) {
-      return this.errorReply(`User "${parts[0]}" not found.`);
+    if (!targetUser || !amount) {
+      return this.sendReply(`Usage: /takemoney [user], [amount], [reason]`);
     }
-    if (isNaN(amount) || amount <= 0) {
+
+    const recipient = Users.get(targetUser);
+    const parsedAmount = parseInt(amount);
+
+    if (!recipient) return this.errorReply(`User "${targetUser}" not found.`);
+    if (isNaN(parsedAmount) || parsedAmount <= 0) {
       return this.errorReply(`Please specify a valid positive amount.`);
     }
 
-    Economy.takeMoney(targetUser.id, amount, reason, user.id);
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} took ${amount} ${CURRENCY} from ${Impulse.nameColor(targetUser.name, true, true)} (${reason}). ${Impulse.nameColor(targetUser.name, true, true)} now has ${Economy.readMoney(targetUser.id)} ${CURRENCY}.`);
-    this.modlog('TAKEMONEY', targetUser, `${amount} ${CURRENCY}`, { by: user.id, reason });
-    if (targetUser.connected) {
-      targetUser.popup(`|html|<b>${Impulse.nameColor(user.name, true, true)}</b> took <b>${amount} ${CURRENCY}</b> from you.<br>Reason: ${reason}`);
-    }
+    Economy.takeMoney(recipient.id, parsedAmount, reason, user.id);
+    this.sendReplyBox(formatMoneyMessage(user.name, 'took from', parsedAmount, reason));
+    this.modlog('TAKEMONEY', recipient, `${parsedAmount} ${ECONOMY_SETTINGS.CURRENCY}`, { by: user.id, reason });
+    createPopup(recipient, `<b>${Impulse.nameColor(user.name, true, true)}</b> took <b>${parsedAmount} ${ECONOMY_SETTINGS.CURRENCY}</b> from you.<br>Reason: ${reason}`);
   },
 
   transfermoney(target, room, user) {
-    if (!target) return this.sendReply(`Usage: /transfermoney [user], [amount], [reason]`);
-    const parts = target.split(',').map(p => p.trim());
-    if (parts.length < 2) return this.sendReply(`Usage: /transfermoney [user], [amount], [reason]`);
+    const [recipient, amount, ...reasonParts] = target.split(',').map(p => p.trim());
+    const reason = reasonParts.join(',') || 'No reason specified.';
 
-    const recipient = Users.get(parts[0]);
-    const amount = parseInt(parts[1], 10);
-    const reason = parts.slice(2).join(',').trim() || 'No reason specified.';
-
-    if (!recipient) {
-      return this.errorReply(`User "${parts[0]}" not found.`);
+    if (!recipient || !amount) {
+      return this.sendReply(`Usage: /transfermoney [user], [amount], [reason]`);
     }
-    if (recipient.id === user.id) {
+
+    const targetUser = Users.get(recipient);
+    const parsedAmount = parseInt(amount);
+
+    if (!targetUser) return this.errorReply(`User "${recipient}" not found.`);
+    if (targetUser.id === user.id) {
       return this.errorReply(`You cannot transfer money to yourself.`);
     }
-    if (isNaN(amount) || amount <= 0) {
+    if (isNaN(parsedAmount) || parsedAmount <= 0) {
       return this.errorReply(`Please specify a valid positive amount.`);
     }
-
-    if (!Economy.hasMoney(user.id, amount)) {
-      return this.errorReply(`You do not have enough ${CURRENCY} to transfer ${amount}.`);
+    if (!Economy.hasMoney(user.id, parsedAmount)) {
+      return this.errorReply(`You do not have enough ${ECONOMY_SETTINGS.CURRENCY} to transfer ${parsedAmount}.`);
     }
 
-    Economy.takeMoney(user.id, amount, undefined, user.id);
-    Economy.addMoney(recipient.id, amount, reason, user.id);
-    Economy.logMoneyAction({ action: 'transfer', from: user.id, to: recipient.id, amount, by: user.id });
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} transferred ${amount} ${CURRENCY} to ${Impulse.nameColor(recipient.name, true, true)} (${reason}). Your new balance is ${Economy.readMoney(user.id)} ${CURRENCY}, and ${Impulse.nameColor(recipient.name, true, true)}'s new balance is ${Economy.readMoney(recipient.id)} ${CURRENCY}.`);
-    if (recipient.connected) {
-      recipient.popup(`|html|<b>${Impulse.nameColor(user.name, true, true)}</b> transferred <b>${amount} ${CURRENCY}</b> to you.<br>Reason: ${reason}`);
-    }
+    Economy.takeMoney(user.id, parsedAmount);
+    Economy.addMoney(targetUser.id, parsedAmount, reason, user.id);
+    Economy.logAction({ action: 'transfer', from: user.id, to: targetUser.id, amount: parsedAmount, by: user.id });
+    
+    this.sendReplyBox(`${formatMoneyMessage(user.name, 'transferred to', parsedAmount, reason)}<br/>Your new balance is ${Economy.readMoney(user.id)} ${ECONOMY_SETTINGS.CURRENCY}.`);
+    createPopup(targetUser, `<b>${Impulse.nameColor(user.name, true, true)}</b> transferred <b>${parsedAmount} ${ECONOMY_SETTINGS.CURRENCY}</b> to you.<br>Reason: ${reason}`);
   },
 
- resetmoney(target, room, user) {
+  resetmoney(target, room, user) {
     this.checkCan('globalban');
-    if (!target) return this.sendReply(`Usage: /resetmoney [user], [reason]`);
-    const parts = target.split(',').map(p => p.trim());
-    const targetUser = Users.get(parts[0]);
-    const reason = parts.slice(1).join(',').trim() || 'No reason specified.';
+    const [targetUser, ...reasonParts] = target.split(',').map(p => p.trim());
+    const reason = reasonParts.join(',') || 'No reason specified.';
 
-    if (!targetUser) {
-      return this.errorReply(`User "${parts[0]}" not found.`);
-    }
+    if (!targetUser) return this.sendReply(`Usage: /resetmoney [user], [reason]`);
 
-    Economy.writeMoney(targetUser.id, DEFAULT_AMOUNT);
-    Economy.logMoneyAction({ action: 'reset', to: targetUser.id, amount: DEFAULT_AMOUNT, by: user.id });
-    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} reset ${Impulse.nameColor(targetUser.name, true, true)}'s balance to ${DEFAULT_AMOUNT} ${CURRENCY} (${reason}).`);
-    this.modlog('RESETMONEY', targetUser, `${DEFAULT_AMOUNT} ${CURRENCY}`, { by: user.id, reason });
-    if (targetUser.connected) {
-      targetUser.popup(`|html|Your ${CURRENCY} balance has been reset to <b>${DEFAULT_AMOUNT}</b> by <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>Reason: ${reason}`);
-    }
+    const recipient = Users.get(targetUser);
+    if (!recipient) return this.errorReply(`User "${targetUser}" not found.`);
+
+    Economy.writeMoney(recipient.id, ECONOMY_SETTINGS.DEFAULT_AMOUNT);
+    Economy.logAction({ action: 'reset', to: recipient.id, amount: ECONOMY_SETTINGS.DEFAULT_AMOUNT, by: user.id });
+    
+    this.sendReplyBox(`${Impulse.nameColor(user.name, true, true)} reset ${Impulse.nameColor(recipient.name, true, true)}'s balance to ${ECONOMY_SETTINGS.DEFAULT_AMOUNT} ${ECONOMY_SETTINGS.CURRENCY} (${reason}).`);
+    this.modlog('RESETMONEY', recipient, `${ECONOMY_SETTINGS.DEFAULT_AMOUNT} ${ECONOMY_SETTINGS.CURRENCY}`, { by: user.id, reason });
+    createPopup(recipient, `Your ${ECONOMY_SETTINGS.CURRENCY} balance has been reset to <b>${ECONOMY_SETTINGS.DEFAULT_AMOUNT}</b> by <b>${Impulse.nameColor(user.name, true, true)}</b>.<br>Reason: ${reason}`);
   },
 
   resetmoneyall(target, room, user) {
@@ -269,97 +267,96 @@ export const commands: ChatCommands = {
     const reason = target.trim() || 'No reason specified.';
 
     Economy.resetAllMoney();
-    this.logMoneyAction({ action: 'reset', to: 'all', amount: DEFAULT_AMOUNT, by: user.id });
-    this.sendReplyBox(`All user balances have been reset to ${DEFAULT_AMOUNT} <span class="math-inline">\{CURRENCY\} \(</span>{reason}).`);
-    this.modlog('RESETMONEYALL', null, `all balances to ${DEFAULT_AMOUNT} ${CURRENCY}`, { by: user.id, reason });
-    room?.add(`|html|<center><div class="broadcast-blue"><b>${Impulse.nameColor(user.name, true, true)}</b> has reset all ${CURRENCY} balances to <b>${DEFAULT_AMOUNT}</b>.<br>Reason: ${reason}</div></center>`);
+    this.sendReplyBox(`All user balances have been reset to ${ECONOMY_SETTINGS.DEFAULT_AMOUNT} ${ECONOMY_SETTINGS.CURRENCY} (${reason}).`);
+    this.modlog('RESETMONEYALL', null, `all balances to ${ECONOMY_SETTINGS.DEFAULT_AMOUNT} ${ECONOMY_SETTINGS.CURRENCY}`, { by: user.id, reason });
+    
+    if (room) {
+      room.add(`|html|<center><div class="broadcast-blue"><b>${Impulse.nameColor(user.name, true, true)}</b> has reset all ${ECONOMY_SETTINGS.CURRENCY} balances to <b>${ECONOMY_SETTINGS.DEFAULT_AMOUNT}</b>.<br>Reason: ${reason}</div></center>`);
+      room.update();
+    }
   },
 
   richestusers(target, room, user) {
     if (!this.runBroadcast()) return;
     const richest = Economy.getRichestUsers(100);
     if (!richest.length) {
-      return this.sendReplyBox(`No users have any ${CURRENCY} yet.`);
+      return this.sendReplyBox(`No users have any ${ECONOMY_SETTINGS.CURRENCY} yet.`);
     }
 
-    const title = `Top ${richest.length} Richest Users`;
-    const header = ['Rank', 'User', 'Balance'];
     const data = richest.map(([userid, balance], index) => [
       (index + 1).toString(),
       Impulse.nameColor(userid, true, true),
-      `${balance} ${CURRENCY}`,
+      `${balance} ${ECONOMY_SETTINGS.CURRENCY}`,
     ]);
-    const styleBy = Impulse.nameColor('TurboRx', true, true);
 
-    const output = Impulse.generateThemedTable(title, header, data, styleBy);
+    const output = Impulse.generateThemedTable(
+      `Top ${richest.length} Richest Users`,
+      ['Rank', 'User', 'Balance'],
+      data,
+      Impulse.nameColor('TurboRx', true, true)
+    );
     this.ImpulseReplyBox(output);
   },
 
-	economylogs(target, room, user) {
+  economylogs(target, room, user) {
     if (!this.runBroadcast()) return;
-	 this.checkCan('globalban');
-    const parts = target.split(',').map(p => p.trim());
-    const targetUser = parts[0] ? Users.get(parts[0]) : null;
-    const page = parseInt(parts[1], 10) || 1;
-    const useridFilter = targetUser?.id;
+    this.checkCan('globalban');
+    
+    const [targetUser, page = '1'] = target.split(',').map(p => p.trim());
+    const parsedPage = parseInt(page) || 1;
+    const useridFilter = targetUser ? Users.get(targetUser)?.id : null;
 
-    const logs = Economy.getEconomyLogs(useridFilter, page);
+    const logs = Economy.getEconomyLogs(useridFilter, parsedPage);
     const totalPages = Economy.getTotalLogPages(useridFilter);
-    const allLogsCount = Economy['logs'].logs.length;
-
-    let logCountMessage = ``;
-    if (useridFilter) {
-      const filteredLogsCount = Economy['logs'].logs.filter(log => log.to === useridFilter || log.from === useridFilter || log.by === useridFilter).length;
-      logCountMessage = ` (${filteredLogsCount} logs for ${Impulse.nameColor(useridFilter, true, true)})`;
-    } else {
-      logCountMessage = ` (${allLogsCount} total logs)`;
-    }
-
+    
     if (!logs.length) {
-      return this.sendReplyBox(`No economy logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}${logCountMessage}.`);
+      return this.sendReplyBox(`No economy logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}.`);
     }
 
-    const title = `${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} ${logCountMessage} (Page ${page} of ${totalPages})`;
-    const header = ['Time', 'Action', 'By', 'From', 'To', 'Amount'];
-    const data = logs.map (log => {
-      const timestamp = new Date(log.timestamp).toLocaleString();
-      const from = log.from ? Impulse.nameColor(log.from, false, false) : '-';
-      const to = Impulse.nameColor(log.to, false, false);
-      const amount = `${log.amount} ${CURRENCY}`;
-      const by = log.by ? Impulse.nameColor(log.by, false, false) : '-';
-      return [timestamp, log.action, by, from, to, amount];
-    });
+    const totalLogs = useridFilter
+      ? Economy.logs.logs.filter(log => log.to === useridFilter || log.from === useridFilter || log.by === useridFilter).length
+      : Economy.logs.logs.length;
 
-    const tableHTML = Impulse.generateThemedTable(title, header, data);
-    let paginationHTML = '';
+    const data = logs.map(log => [
+      new Date(log.timestamp).toLocaleString(),
+      log.action,
+      log.by ? Impulse.nameColor(log.by, false, false) : '-',
+      log.from ? Impulse.nameColor(log.from, false, false) : '-',
+      Impulse.nameColor(log.to, false, false),
+      `${log.amount} ${ECONOMY_SETTINGS.CURRENCY}`
+    ]);
 
-    if (totalPages > 1) {
-      paginationHTML += `<div style="text-align: center; margin-top: 5px;">Page: ${page} / ${totalPages}`;
-      if (page > 1) {
-        paginationHTML += ` | <button name="send" value="/economylogs ${useridFilter ? ` ${targetUser.name}` : ''}, ${page - 1}">Previous</button>`;
-      }
-      if (page < totalPages) {
-        paginationHTML += ` | <button name="send" value="/economylogs ${useridFilter ? ` ${targetUser.name}` : ''}, ${page + 1}">Next</button>`;
-      }
-      paginationHTML += `</div>`;
-    }
+    const tableHTML = Impulse.generateThemedTable(
+      `${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} (${totalLogs} total logs) (Page ${parsedPage} of ${totalPages})`,
+      ['Time', 'Action', 'By', 'From', 'To', 'Amount'],
+      data
+    );
 
-    const fullOutput = `<div style="max-height: 400px; overflow: auto;" data-uhtml="${useridFilter}-${page}">${tableHTML}</div>${paginationHTML}`;
-    this.ImpulseReplyBox(fullOutput);
+    const paginationHTML = totalPages > 1
+      ? `<div style="text-align: center; margin-top: 5px;">
+          Page: ${parsedPage} / ${totalPages}
+          ${parsedPage > 1 ? `| <button name="send" value="/economylogs ${targetUser || ''}, ${parsedPage - 1}">Previous</button>` : ''}
+          ${parsedPage < totalPages ? `| <button name="send" value="/economylogs ${targetUser || ''}, ${parsedPage + 1}">Next</button>` : ''}
+         </div>`
+      : '';
+
+    this.ImpulseReplyBox(`<div style="max-height: 400px; overflow: auto;" data-uhtml="${useridFilter}-${parsedPage}">${tableHTML}</div>${paginationHTML}`);
   },
 
   economyhelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
-		 `<div><b><center>Economy Commands By ${Impulse.nameColor('Prince Sky', true, true)}</center></b>` +
-		 `<ul><li><code>/balance</code> (or <code>/atm</code>) - Check your or another user's ${CURRENCY} balance.</li>` +
-		 `<li><code>/givemoney [user], [amount] ,[reason]</code> - Give a specified amount of ${CURRENCY} to a user. (Requires: @ and higher).</li>` +
-		 `<li><code>/takemoney [user], [amount] ,[reason]</code> - Take a specified amount of ${CURRENCY} from a user. (Requires: @ and higher).</li>` +
-		 `<li><code>/transfermoney [user], [amount] , [reason]</code> - Transfer a specified amount of your ${CURRENCY} to another user.</li>` +
-		 `<li><code>/resetmoney [user], [reason]</code> - Reset a user's ${CURRENCY} balance to ${DEFAULT_AMOUNT}. (Requires: @ and higher).</li>` +
-		 `<li><code>/resetmoneyall [reason]</code> - Reset all users' ${CURRENCY} balances to ${DEFAULT_AMOUNT}. (Requires: @ and higher).</li>` +
-		 `<li><code>/richestusers</code> - View the top 100 users with the most ${CURRENCY}.</li>` +
-		 `<li><code>/economylogs [user], [page]</code> - View economy logs, optionally filtered by user and page number.</li>` +
-		 `</ul></div>`);
+      `<div><b><center>Economy Commands By ${Impulse.nameColor('Prince Sky', true, true)}</center></b>
+       <ul>
+         <li><code>/balance</code> (or <code>/atm</code>) - Check your or another user's ${ECONOMY_SETTINGS.CURRENCY} balance.</li>
+         <li><code>/givemoney [user], [amount], [reason]</code> - Give a specified amount of ${ECONOMY_SETTINGS.CURRENCY} to a user. (Requires: @ and higher)</li>
+         <li><code>/takemoney [user], [amount], [reason]</code> - Take a specified amount of ${ECONOMY_SETTINGS.CURRENCY} from a user. (Requires: @ and higher)</li>
+         <li><code>/transfermoney [user], [amount], [reason]</code> - Transfer a specified amount of your ${ECONOMY_SETTINGS.CURRENCY} to another user.</li>
+         <li><code>/resetmoney [user], [reason]</code> - Reset a user's ${ECONOMY_SETTINGS.CURRENCY} balance to ${ECONOMY_SETTINGS.DEFAULT_AMOUNT}. (Requires: @ and higher)</li>
+         <li><code>/resetmoneyall [reason]</code> - Reset all users' ${ECONOMY_SETTINGS.CURRENCY} balances to ${ECONOMY_SETTINGS.DEFAULT_AMOUNT}. (Requires: @ and higher)</li>
+         <li><code>/richestusers</code> - View the top 100 users with the most ${ECONOMY_SETTINGS.CURRENCY}.</li>
+         <li><code>/economylogs [user], [page]</code> - View economy logs, optionally filtered by user and page number.</li>
+       </ul></div>`
+    );
   },
 };
