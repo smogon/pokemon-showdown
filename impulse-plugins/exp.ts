@@ -122,18 +122,40 @@ export const commands: ChatCommands = {
     const currentExp = ExpSystem.readExp(userid);
     const currentLevel = ExpSystem.getLevel(currentExp);
     const nextLevelExp = ExpSystem.getExpForNextLevel(currentLevel + 1);
-    const expNeeded = nextLevelExp - currentExp;
+    const previousLevelExp = ExpSystem.getExpForNextLevel(currentLevel);
     
-    const date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    // Calculate progress percentage for the current level
+    const expInCurrentLevel = currentExp - previousLevelExp;
+    const expNeededForNextLevel = nextLevelExp - previousLevelExp;
+    const progressPercentage = Math.floor((expInCurrentLevel / expNeededForNextLevel) * 100);
+    
+    // Create progress bar (20 segments)
+    const segments = 20;
+    const filledSegments = Math.floor((progressPercentage * segments) / 100);
+    const progressBar = `[${'■'.repeat(filledSegments)}${'□'.repeat(segments - filledSegments)}]`;
+    
+    const expNeeded = nextLevelExp - currentExp;
+
+    // Format current date and time
+    const now = new Date();
+    const formattedDate = now.toISOString()
+        .replace('T', ' ')
+        .replace(/\..+/, '');
+    
+    // Get the user's login information
+    const userLogin = user.id || 'Guest';
+    const executedBy = user.name === target ? '' : ` (Checked by ${Impulse.nameColor(user.name, true, true)})`;
     
     this.sendReplyBox(
       `<div class="infobox">` +
-      `<strong>${Impulse.nameColor(userid, true, true)}</strong><br>` +
-      `Level: ${currentLevel}<br>` +
-      `Current EXP: ${currentExp}<br>` +
-      `EXP needed for Level ${currentLevel + 1}: ${expNeeded}<br>` +
-      `Total EXP required: ${nextLevelExp}<br>` +
-      `<small>Last updated: ${date}</small>` +
+      `<strong>${Impulse.nameColor(userid, true, true)}</strong>${executedBy}<br>` +
+      `<strong>Level:</strong> ${currentLevel}<br>` +
+      `<strong>Progress:</strong> ${progressBar} ${progressPercentage}%<br>` +
+      `<strong>Current EXP:</strong> ${currentExp} ${EXP_UNIT}<br>` +
+      `<strong>EXP needed:</strong> ${expNeeded} more for Level ${currentLevel + 1}<br>` +
+      `<strong>Total EXP required:</strong> ${nextLevelExp} ${EXP_UNIT}<br>` +
+      `<strong>Current Date and Time (UTC):</strong> ${formattedDate}<br>` +
+      `<strong>Current User's Login:</strong> ${userLogin}` +
       `</div>`
     );
   },
@@ -289,7 +311,7 @@ export const commands: ChatCommands = {
   exphelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
-      `<div><b><center>EXP System Commands</center></b>` +
+      `<div><b><center>EXP System Commands By ${Impulse.nameColor('Prince Sky', true, true)}</center></b>` +
       `<ul>` +
       `<li><code>/level [user]</code> (Or <code>/exp</code>) - Check your or another user's EXP, current level, and EXP needed for the next level.</li>` +
       `<li><code>/giveexp [user], [amount], [reason]</code> - Give a specified amount of EXP to a user. (Requires: @ and higher)</li>` +
