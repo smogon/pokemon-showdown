@@ -391,7 +391,7 @@ export const commands: Chat.Commands = {
     DOUBLE_EXP = true;
     DOUBLE_EXP_END_TIME = endTime;
 
-    const message = 
+    /*const message = 
         `<div class="broadcast-blue">` +
         `<b>Double EXP has been enabled by ${Impulse.nameColor(user.name, true, true)}!</b><br>` +
         `Duration: ${durationText}<br>` +
@@ -405,7 +405,7 @@ export const commands: Chat.Commands = {
     if (room) {
         room.add(`|html|${message}`).update();
     }
-    this.modlog('TOGGLEDOUBLEEXP', null, `enabled - ${durationText}`, { by: user.id });
+    this.modlog('TOGGLEDOUBLEEXP', null, `enabled - ${durationText}`, { by: user.id });*/
 
     setTimeout(() => ExpSystem.checkDoubleExpStatus(), duration);
 },
