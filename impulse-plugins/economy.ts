@@ -278,48 +278,80 @@ export const commands: ChatCommands = {
 		);
 		this.ImpulseReplyBox(output);
 	},
-	
+
 	economylogs(target, room, user) {
-		if (!this.runBroadcast()) return;
-		this.checkCan('globalban');
-		const [targetUser, page = '1'] = target.split(',').map(p => p.trim());
-		const parsedPage = parseInt(page) || 1;
-		const useridFilter = targetUser ? Users.get(targetUser)?.id : null;
-		const logs = Economy.getEconomyLogs(useridFilter, parsedPage);
-		const totalPages = Economy.getTotalLogPages(useridFilter);
-		if (!logs.length) {
-			return this.sendReplyBox(`No economy logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}.`);
-		}
-		const totalLogs = useridFilter
-			? Economy.logs.logs.filter(log => log.to === useridFilter || log.from === useridFilter || log.by === useridFilter).length
-			: Economy.logs.logs.length;
-		const data = logs.map(log => [
-			new Date(log.timestamp).toLocaleString(),
-			log.action,
-			log.by ? Impulse.nameColor(log.by, false, false) : '-',
-			log.from ? Impulse.nameColor(log.from, false, false) : '-',
-			Impulse.nameColor(log.to, false, false),
-			`${log.amount} ${ECONOMY_SETTINGS.CURRENCY}`
-		]);
-		const tableHTML = Impulse.generateThemedTable(
-			`${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} (${totalLogs} total logs) (Page ${parsedPage} of ${totalPages})`,
-			['Time', 'Action', 'By', 'From', 'To', 'Amount'],
-			data
-		);
-		const paginationHTML = totalPages > 1
-			? `<div style="text-align: center; margin-top: 5px;">Page: ${parsedPage} / ${totalPages}${
-				parsedPage > 1 
-				? ` <button class="button" name="send" value="/economylogs ${targetUser || ''}, ${parsedPage - 1}">Previous</button>` 
-				: ''
-			}${
-				parsedPage < totalPages 
-				? ` <button class="button" name="send" value="/economylogs ${targetUser || ''}, ${parsedPage + 1}">Next</button>` 
-				: ''
-			}</div>`
-			: '';
-		this.ImpulseReplyBox(`<div style="max-height: 340px; overflow: auto;" data-uhtml="${useridFilter}-${parsedPage}">${tableHTML}</div>${paginationHTML}`);
-	},
-	
+    if (!this.runBroadcast()) return;
+    this.checkCan('globalban');
+    
+    const [targetUser, page = '1'] = target.split(',').map(p => p.trim());
+    const parsedPage = parseInt(page) || 1;
+    const useridFilter = targetUser ? Users.get(targetUser)?.id : null;
+    const logs = Economy.getEconomyLogs(useridFilter, parsedPage);
+    const totalPages = Economy.getTotalLogPages(useridFilter);
+    
+    if (!logs.length) {
+        return this.sendReplyBox(`No economy logs found${useridFilter ? ` for ${Impulse.nameColor(useridFilter, true, true)}` : ''}.`);
+    }
+
+    const totalLogs = useridFilter
+        ? Economy.logs.logs.filter(log => log.to === useridFilter || log.from === useridFilter || log.by === useridFilter).length
+        : Economy.logs.logs.length;
+
+    // Convert logs to table data
+    const data = logs.map(log => [
+        new Date(log.timestamp).toLocaleString(),
+        log.action,
+        log.by ? Impulse.nameColor(log.by, false, false) : '-',
+        log.from ? Impulse.nameColor(log.from, false, false) : '-',
+        Impulse.nameColor(log.to, false, false),
+        `${log.amount} ${ECONOMY_SETTINGS.CURRENCY}`
+    ]);
+
+    // Generate table with title including filter and page info
+    const title = `${useridFilter ? `Economy Logs for ${Impulse.nameColor(useridFilter, true, true)}` : 'Recent Economy Logs'} ` +
+                 `(${totalLogs} total logs) (Page ${parsedPage} of ${totalPages})`;
+    
+    const tableHTML = Impulse.generateThemedTable(
+        title,
+        ['Time', 'Action', 'By', 'From', 'To', 'Amount'],
+        data,
+        Impulse.nameColor('Prince Sky', true, true)
+    );
+
+    // Generate pagination buttons
+    const paginationHTML = totalPages > 1
+        ? `<div style="text-align: center; margin-top: 5px;">
+            ${parsedPage > 1 
+                ? `<button name="send" value="/economylogs ${targetUser || ''}, ${parsedPage - 1}">Previous</button> `
+                : ''}
+            <span>Page ${parsedPage} / ${totalPages}</span>
+            ${parsedPage < totalPages
+                ? ` <button name="send" value="/economylogs ${targetUser || ''}, ${parsedPage + 1}">Next</button>`
+                : ''}
+           </div>`
+        : '';
+
+    const content = `<div style="max-height: 340px; overflow: auto;">
+        ${tableHTML}
+        ${paginationHTML}
+    </div>`;
+
+    if (this.broadcasting) {
+        this.sendReply(`|raw|${content}`);
+    } else {
+        const roomid = room?.roomid || user.id;
+        const uhtmlId = `economylogs-${useridFilter || 'all'}`;
+        
+        // Use uhtmlchange if we're on the same filter, otherwise use new uhtml
+        const lastFilter = user.lastEconomyLogFilter;
+        if (lastFilter === useridFilter) {
+            this.sendReply(`>${roomid}\n|uhtmlchange|${uhtmlId}|${content}`);
+        } else {
+            this.sendReply(`>${roomid}\n|uhtml|${uhtmlId}|${content}`);
+            user.lastEconomyLogFilter = useridFilter;
+        }
+    }
+},
 	economyhelp(target, room, user) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
