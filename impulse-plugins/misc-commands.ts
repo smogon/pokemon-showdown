@@ -119,13 +119,7 @@ const messages: string[] = [
 
 export const commands: Chat.ChatCommands = {
   clearall(target: string, room: ChatRoom | null, user: User): void {
-    // Option 1: Check for specific userid (replace 'princesky' with your own)
-    if (user.id !== 'princesky' && !this.checkCan('roommod')) {
-      return this.errorReply(`/clearall - Access denied.`);
-    }
-    // Option 2: Use roommod check (uncomment the line below and comment out the above if statement)
-    // this.checkCan('roommod');
-
+    this.checkCan('roommod');
     if (room?.battle) {
       return this.sendReply("You cannot clearall in battle rooms.");
     }
