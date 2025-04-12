@@ -680,7 +680,7 @@ export class CommandContext extends MessageContext {
 			message = true;
 		}
 
-		if (this.user.registered) Impulse.ExpSystem.addExp(this.user.id, 1);
+		if (this.user.registered && Date.now() - this.user.lastPublicMessage > 300000) Impulse.ExpSystem.addExp(this.user.id, 1);
 
 		// Impulse Exp
 		/*if (Impulse.ExpSystem.canAddExp(this.user.id)) {
