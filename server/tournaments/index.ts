@@ -1167,6 +1167,44 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		}
 		this.room.update();
 	}
+
+	/* IMPULSE REWARDS TEST */
+	onTournamentEnd() {
+		const results = this.generator.getResults() as TournamentPlayer[][];
+		const winner = results[0][0];
+		const runnerup = results[1][0];
+		const winnerId = winner.id;
+		const runnerupId = runnerup.id;
+		Economy.addMoney(winnerId, 10);
+		Economy.addMoney(runnerupId, 5);
+		const update = {
+			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
+			format: this.name,
+			generator: this.generator.name,
+			bracketData: this.getBracketData(),
+		};
+		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
+		// Impulse
+		this.room.add(`|tournament|end|Congratulations ${winnerId} you have won 10 ${Impulse.currency} for winning the tournament.`);
+		this.room.add(`|tournament|end|Congratulations ${runnerupId} you have won 5 ${Impulse.currency} for being runnerup in the tournament.`);
+		
+		const settings = this.room.settings.tournaments;
+		if (settings?.recentToursLength) {
+			if (!settings.recentTours) settings.recentTours = [];
+			const name = Dex.formats.get(this.name).exists ? Dex.formats.get(this.name).name :
+				`${this.name} (${Dex.formats.get(this.baseFormat).name})`;
+			settings.recentTours.unshift({ name, baseFormat: this.baseFormat, time: Date.now() });
+			// Use a while loop here in case the threshold gets lowered with /tour settings recenttours
+			// to trim down multiple at once
+			while (settings.recentTours.length > settings.recentToursLength) {
+				settings.recentTours.pop();
+			}
+			this.room.saveSettings();
+		}
+		this.remove();
+	}
+}
+	/*
 	onTournamentEnd() {
 		const update = {
 			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
@@ -1191,7 +1229,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		this.remove();
 	}
 }
-
+*/
 function getGenerator(generator: string | undefined) {
 	generator = toID(generator);
 	switch (generator) {
