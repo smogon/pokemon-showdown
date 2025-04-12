@@ -160,6 +160,14 @@ export const commands: Chat.ChatCommands = {
     user.disconnectAll();
   },
 
+	/************************************
+    * Add this code in server/users.ts *
+	 * In onDisconnect Function         *
+    * if (this.named) {                *
+ 	 * Db.seen.set(this.id, Date.now());*
+	 * }                                *
+    ***********************************/
+
 	seen(target: string | null, room: Room | User, user: User) {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.parse('/help seen');
