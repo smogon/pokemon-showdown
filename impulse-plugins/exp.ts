@@ -4,6 +4,13 @@
 * Updated To Typescript By: Prince Sky *
 ***************************************/
 
+/*********************************************
+* Add this code in server/chat.ts            *
+* In parse function//Output the message      *
+* if (this.user.registered)                  *
+* Impulse.ExpSystem.addExp(this.user.id, 1); *
+*********************************************/
+
 import { FS } from '../lib/fs';
 
 const EXP_FILE_PATH = 'impulse-db/exp.json';
