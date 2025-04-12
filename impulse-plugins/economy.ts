@@ -315,7 +315,6 @@ export const commands: ChatCommands = {
         title,
         ['Time', 'Action', 'By', 'From', 'To', 'Amount'],
         data,
-        Impulse.nameColor('Prince Sky', true, true)
     );
 
     // Generate pagination buttons
@@ -337,7 +336,7 @@ export const commands: ChatCommands = {
     </div>`;
 
     if (this.broadcasting) {
-        this.sendReply(`|raw|${content}`);
+        this.ImpulseReplyBox(`|raw|${content}`);
     } else {
         const roomid = room?.roomid || user.id;
         const uhtmlId = `economylogs-${useridFilter || 'all'}`;
@@ -345,9 +344,9 @@ export const commands: ChatCommands = {
         // Use uhtmlchange if we're on the same filter, otherwise use new uhtml
         const lastFilter = user.lastEconomyLogFilter;
         if (lastFilter === useridFilter) {
-            this.sendReply(`>${roomid}\n|uhtmlchange|${uhtmlId}|${content}`);
+            this.ImpulseReplyBox(`>${roomid}\n|uhtmlchange|${uhtmlId}|${content}`);
         } else {
-            this.sendReply(`>${roomid}\n|uhtml|${uhtmlId}|${content}`);
+            this.ImpulseReplyBox(`>${roomid}\n|uhtml|${uhtmlId}|${content}`);
             user.lastEconomyLogFilter = useridFilter;
         }
     }
