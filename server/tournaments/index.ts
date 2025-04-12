@@ -1171,29 +1171,36 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	/* IMPULSE REWARDS TEST */
 	onTournamentEnd() {
 		const results = (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames);
-    const winner = results[0][0]; // First place player's name
-    const runnerup = results[1][0]; // Second place player's name
-    
-    // Since usersToNames maps TournamentPlayer to their names, 
-    // we need to get IDs from the original players
     const originalResults = this.generator.getResults() as TournamentPlayer[][];
-    const winnerId = originalResults[0][0].id;
-    const runnerupId = originalResults[1][0].id;
+    
+    const winner = results[0]?.[0]; // First place player's name
+    const winnerId = originalResults[0]?.[0]?.id;
+    
+    // Safely handle runner-up which might not exist
+    const runnerup = results[1]?.[0] || 'Unknown'; // Default to 'Unknown' if no runner-up
+    const runnerupId = originalResults[1]?.[0]?.id || 'unknown'; // Default to 'unknown' if no runner-up
     
     const update = {
         results: results,
         format: this.name,
         generator: this.generator.name,
         bracketData: this.getBracketData(),
-        winnerId: winnerId,
-        runnerupId: runnerupId
+        winnerId,
+        runnerupId,
+        timestamp: '2025-04-12 11:18:03' // Current UTC time
     };
+    
+    this.room.add(`|tournament|end|${JSON.stringify(update)}`);
+    
+    // Log the results with safe checks
+    if (winner) {
+        this.room.add(`Tournament ended! Winner: ${winner} (${winnerId})`);
+        if (runnerup !== 'Unknown') {
+            this.room.add(`Runner-up: ${runnerup} (${runnerupId})`);
+        }
+	 }
 		Economy.addMoney(winnerId, 10);
 		Economy.addMoney(runnerupId, 5);
-		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
-		// Impulse
-		this.room.add(`|tournament|end|Congratulations ${winnerId} you have won 10 ${Impulse.currency} for winning the tournament.`);
-		this.room.add(`|tournament|end|Congratulations ${runnerupId} you have won 5 ${Impulse.currency} for being runnerup in the tournament.`);
 		
 		const settings = this.room.settings.tournaments;
 		if (settings?.recentToursLength) {
