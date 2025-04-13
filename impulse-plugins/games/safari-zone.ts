@@ -99,7 +99,7 @@ class SafariGame {
                 `<button class="button" name="send" value="/safari join">Click to join!</button>` +
                 `</div></div>`;
             
-            this.room.add(`|uhtmlchange|${this.gameId}|${startMsg}`).update();
+            this.room.add(`|uhtmlchange|${this.gameId}|${startMsg}`, -1000).update();
             return;
         }
 
@@ -132,7 +132,7 @@ class SafariGame {
         }
 
         buf += `</div></div>`;
-        this.room.add(`|uhtmlchange|${this.gameId}|${buf}`).update();
+        this.room.add(`|uhtmlchange|${this.gameId}|${buf}`, -1000).update();
     }
 
     addPlayer(user: User): string | null {
