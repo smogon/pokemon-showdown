@@ -658,8 +658,80 @@ export const commands: Chat.ChatCommands = {
         const [cmd, ...args] = target.split(' ');
 
         switch ((cmd || '').toLowerCase()) {
-            case 'new':
+			  case 'new':
             case 'create': {
                 this.checkCan('mute', null, room);
                 if (room.safari) return this.errorReply("A Safari game is already running in this room.");
-                const entryFee = parseInt(args[0
+                const entryFee = parseInt(args[0]);
+                if (isNaN(entryFee) || entryFee < 1) return this.errorReply("Please enter a valid entry fee.");
+                
+                room.safari = new SafariGame(room, entryFee, user.name);
+                this.modlog('SAFARI', null, `started by ${user.name} with ${entryFee} coin entry fee`);
+                return this.privateModAction(`${user.name} started a Safari game with ${entryFee} coin entry fee.`);
+            }
+
+            case 'join': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                const error = room.safari.addPlayer(user);
+                if (error) return this.errorReply(error);
+                return this.sendReply("You have joined the Safari game!");
+            }
+
+            case 'start': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                const error = room.safari.start(user);
+                if (error) return this.errorReply(error);
+                this.modlog('SAFARI', null, `started by ${user.name}`);
+                return this.privateModAction(`${user.name} started the Safari game.`);
+            }
+
+            case 'throw': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                const error = room.safari.throwBall(user);
+                if (error) return this.errorReply(error);
+                return;
+            }
+
+            case 'rounds': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                room.safari.viewRoundSummaries(user);
+                return;
+            }
+
+            case 'end': {
+                this.checkCan('mute', null, room);
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                room.safari.end(false);
+                this.modlog('SAFARI', null, `ended by ${user.name}`);
+                return this.privateModAction(`${user.name} ended the Safari game.`);
+            }
+
+            default:
+                return this.parse('/help safari');
+        }
+    },
+
+    safarihelp(target, room, user) {
+        if (!this.runBroadcast()) return;
+        return this.sendReplyBox(
+            '<center><strong>Safari Zone Commands</strong></center>' +
+            '<hr />' +
+            '<code>/safari create [fee]</code>: Creates a new Safari game with the specified entry fee. Requires @.<br />' +
+            '<code>/safari join</code>: Joins the current Safari game.<br />' +
+            '<code>/safari start</code>: Starts the Safari game if enough players have joined.<br />' +
+            '<code>/safari throw</code>: Throws a Safari Ball at a Pokemon.<br />' +
+            '<code>/safari rounds</code>: View round summaries.<br />' +
+            '<code>/safari end</code>: Ends the current Safari game. Requires @.<br />' +
+            '<hr />' +
+            '<strong>Game Rules:</strong><br />' +
+            `- Players must pay an entry fee to join<br />` +
+            `- Minimum ${SafariGame.MIN_PLAYERS} players required to start<br />` +
+            `- ${SafariGame.MAX_ROUNDS} rounds total (1 ball per round)<br />` +
+            `- ${SafariGame.TURN_TIME / 1000} second time limit per turn<br />` +
+            '- Game ends after all rounds or when all balls are used<br />' +
+            '- Prizes: 1st (60%), 2nd (30%), 3rd (10%) of pool<br />' +
+            `- Current Time: ${SafariGame.CURRENT_UTC_TIME} UTC<br />` +
+            `- Current User: ${SafariGame.CURRENT_USER}`
+        );
+    }
+};
