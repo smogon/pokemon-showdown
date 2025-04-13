@@ -511,34 +511,10 @@ export const commands: Chat.ChatCommands = {
         const [cmd, ...args] = target.split(' ');
 
         switch ((cmd || '').toLowerCase()) {
-				case: 'off':
-				case: 'disable': {
-				  room = this.requireRoom();
-				  this.checkCan('gamemanagement', null, room);
-				  if (room.settings.safariDisabled) {
-					  throw new Chat.ErrorMessage("Safari Zone is already disabled in this room.");
-				  }
-				  room.settings.safariDisabled = true;
-				  room.saveSettings();
-				  return this.sendReply("Safari Zone has been disabled for this room.");
-		     }
-		      case: 'on':
-		      case: 'enable': {
-					room = this.requireRoom();
-					this.checkCan('gamemanagement', null, room);
-					if (!room.settings.safariDisabled) {
-						throw new Chat.ErrorMessage("Safari Zone is already enabled in this room.");
-					}
-					delete room.settings.safariDisabled;
-					room.saveSettings();
-					return this.sendReply("Safari Zone has been enabled for this room.");
-				}
             case 'new':
             case 'create': {
-					room = this.requireRoom();
-					this.checkCan('minigame', null, room);
-					if (room.settings.safariDisabled) throw new Chat.ErrorMessage("Safari Zone is currently disabled for this room.");
-					if (room.safari) return this.errorReply("A Safari game is already running in this room.");
+                this.checkCan('mute', null, room);
+                if (room.safari) return this.errorReply("A Safari game is already running in this room.");
                 const entryFee = parseInt(args[0]);
                 if (isNaN(entryFee) || entryFee < 1) return this.errorReply("Please enter a valid entry fee.");
                 
@@ -602,7 +578,7 @@ export const commands: Chat.ChatCommands = {
             }
 
             case 'end': {
-                this.checkCan('minigame', null, room);
+                this.checkCan('mute', null, room);
                 if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
                 room.safari.end(false);
                 this.modlog('SAFARI', null, `ended by ${user.name}`);
@@ -619,14 +595,14 @@ export const commands: Chat.ChatCommands = {
         return this.sendReplyBox(
             '<center><strong>Safari Zone Commands</strong></center>' +
             '<hr />' +
-            '<code>/safari create [fee]</code>: Creates a new Safari game with the specified entry fee. Requires #.<br />' +
+            '<code>/safari create [fee]</code>: Creates a new Safari game with the specified entry fee. Requires @.<br />' +
             '<code>/safari join</code>: Joins the current Safari game.<br />' +
             '<code>/safari start</code>: Starts the Safari game if enough players have joined.<br />' +
             '<code>/safari throw</code>: Throws a Safari Ball at a Pokemon.<br />' +
             '<code>/safari spectate</code>: Watch an ongoing Safari game.<br />' +
             '<code>/safari unspectate</code>: Stop watching a Safari game.<br />' +
             '<code>/safari dq [player]</code>: Disqualifies a player from the game (only usable by game creator).<br />' +
-            '<code>/safari end</code>: Ends the current Safari game. Requires #.<br />' +
+            '<code>/safari end</code>: Ends the current Safari game. Requires @.<br />' +
             '<hr />' +
             '<strong>Game Rules:</strong><br />' +
             `- Players must pay an entry fee to join<br />` +
@@ -639,12 +615,3 @@ export const commands: Chat.ChatCommands = {
         );
     }
 };
-
-export const roomSettings: Chat.SettingsHandler = room => ({
-    label: "Safari Zone",
-    permission: 'editroom',
-    options: [
-        [`disabled`, room.settings.safariDisabled || 'safari disable'],
-        [`enabled`, !room.settings.safariDisabled || 'safari enable'],
-    ],
-});
