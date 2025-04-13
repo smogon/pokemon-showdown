@@ -184,7 +184,9 @@ class SafariGame {
         const now = Date.now();
         if (now - player.lastCatch < SafariGame.CATCH_COOLDOWN) {
             const remaining = Math.ceil((SafariGame.CATCH_COOLDOWN - (now - player.lastCatch)) / 1000);
-            return `Please wait ${remaining} seconds before throwing again!`;
+            this.lastCatchMessage = `Please wait ${remaining} seconds before throwing again!`;
+            this.display();
+            return null;
         }
 
         player.lastCatch = now;
@@ -205,7 +207,7 @@ class SafariGame {
                     this.checkGameEnd();
                 }
 
-                return this.lastCatchMessage;
+                return null;
             }
         }
 
@@ -214,7 +216,7 @@ class SafariGame {
         if (player.ballsLeft === 0) {
             this.checkGameEnd();
         }
-        return this.lastCatchMessage;
+        return null;
     }
 
     disqualifyPlayer(targetId: string, executor: string): string | null {
@@ -323,7 +325,7 @@ export const commands: Chat.ChatCommands = {
             case 'throw': {
                 if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
                 const result = room.safari.throwBall(user);
-                if (result) this.errorReply(result);
+                if (result) return this.errorReply(result);
                 return;
             }
 
