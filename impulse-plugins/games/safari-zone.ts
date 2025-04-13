@@ -1,7 +1,7 @@
 /*************************************
  * Pokemon Safari Zone Game          *
  * Author: @musaddiktemkar          *
- * Updated: 2025-04-13 12:37:51 UTC *
+ * Updated: 2025-04-13 16:27:12 UTC *
  **************************************/
 
 import { FS } from '../../lib/fs';
@@ -227,7 +227,6 @@ class SafariGame {
                     buf += `<td>${p.points}</td>`;
                     buf += `<td>${p.ballsLeft}</td>`;
                     buf += `<td>${p.catches.map(pk => `<img src="${pk.sprite}" width="40" height="30" title="${pk.name}">`).join('')}</td>`;
-                    /*buf += `<td>${p.lastCatch ? this.formatUTCTime(p.lastCatch) : 'Never'}</td>`;*/
                     buf += `</tr>`;
                 }
                 buf += `</table>`;
@@ -266,18 +265,30 @@ class SafariGame {
             }
         }
 
-        // Show spectator display with minimal information
-        if (this.status !== 'ended') {
-            let spectatorBuf = `<div class="infobox"><div style="text-align:center">`;
-            spectatorBuf += `<h2>Safari Zone Game in Progress</h2>`;
-            spectatorBuf += `<small>Game Time: ${this.formatUTCTime(now)} UTC</small><br />`;
-            spectatorBuf += `<b>Host:</b> ${Impulse.nameColor(this.host, true, true)}<br />`;
-            spectatorBuf += `<b>Current Turn:</b> ${Impulse.nameColor(this.players[currentPlayerId].name, true, true)} (${timeLeft}s left)<br />`;
-            spectatorBuf += `<b>Players:</b> ${this.getPlayerList()}<br />`;
-            spectatorBuf += `<i>Game in progress - Join the next round!</i>`;
-            spectatorBuf += `</div></div>`;
+        // Only show the spectator view at the end of the game
+        if (this.status === 'ended') {
+            const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
+            let buf = `<div class="infobox"><center><h2>Safari Zone Results</h2>`;
+            buf += `<small>Game Ended: ${this.formatUTCTime(now)} UTC</small><br />`;
+            buf += `<small>Duration: ${Math.floor((now - this.gameStartTime) / 1000)} seconds</small><br /><br />`;
+            
+            if (sortedPlayers.length > 0) {
+                const prizes = [0.6, 0.3, 0.1];
+                sortedPlayers.forEach((player, index) => {
+                    if (index < 3) {
+                        const prize = Math.floor(this.prizePool * prizes[index]);
+                        buf += `${index + 1}. ${Impulse.nameColor(player.name, true, true)} - ${player.points} points (Won ${prize} coins)<br>`;
+                    }
+                });
+            } else {
+                buf += `No winners in this game.`;
+            }
+            buf += `</center></div>`;
 
-            this.room.add(`|uhtml|safari-spectator|${spectatorBuf}`, -1000).update();
+            this.room.add(`|uhtml|safari-spectator|${buf}`, -1000).update();
+        } else {
+            // Clear spectator view when game is in progress
+            this.room.add(`|uhtmlchange|safari-spectator|`, -1000).update();
         }
     }
 
@@ -413,7 +424,6 @@ class SafariGame {
         }
 
         const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
-
         if (sortedPlayers.length > 0) {
             const prizes = [0.6, 0.3, 0.1];
             for (let i = 0; i < Math.min(3, sortedPlayers.length); i++) {
@@ -423,30 +433,17 @@ class SafariGame {
                 }
             }
 
-            let buf = `<div class="infobox"><center><h2>Safari Zone Results</h2>`;
-            buf += `<small>Game Ended: ${this.formatUTCTime(Date.now())} UTC</small><br />`;
-            buf += `<small>Duration: ${Math.floor((Date.now() - this.gameStartTime) / 1000)} seconds</small><br /><br />`;
-            
-            sortedPlayers.forEach((player, index) => {
-                if (index < 3) {
-                    const prize = Math.floor(this.prizePool * prizes[index]);
-                    buf += `${index + 1}. ${Impulse.nameColor(player.name, true, true)} - ${player.points} points (Won ${prize} coins)<br>`;
-                }
-            });
-            buf += `</center></div>`;
-
-            this.room.add(`|uhtmlchange|safari-spectator|${buf}`, -1000).update();
-
+            // Clear all player views
             for (const userid in this.players) {
                 const roomUser = Users.get(userid);
                 if (roomUser?.connected) {
                     roomUser.sendTo(this.room, `|uhtmlchange|safari-player-${userid}|`);
                 }
             }
-        } else {
-            this.room.add(`|uhtmlchange|safari-spectator|<div class="infobox">The Safari Zone game has ended with no winners.</div>`, -1000).update();
         }
 
+        // Final display is handled by the display() method
+        this.display();
         delete this.room.safari;
     }
 }
