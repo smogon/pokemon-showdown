@@ -1,5 +1,6 @@
 /*************************************
  * Pokemon Safari Zone Game          *
+ * Last Updated: 2025-04-13 09:58:00 *
  * Author: @musaddiktemkar           *
  **************************************/
 
@@ -220,7 +221,7 @@ class SafariGame {
     }
 
     disqualifyPlayer(targetId: string, executor: string): string | null {
-        if (executor !== this.host) return "Only the game creator can disqualify players.";
+        if (toID(executor) !== toID(this.host)) return "Only the game creator can disqualify players.";
         if (this.status === 'ended') return "The game has already ended.";
         
         const player = this.players[targetId];
@@ -356,7 +357,7 @@ export const commands: Chat.ChatCommands = {
                 if (!targetUser) return this.errorReply("Please specify a player to disqualify.");
                 
                 const targetId = toID(targetUser);
-                const result = room.safari.disqualifyPlayer(targetId, user.id);
+                const result = room.safari.disqualifyPlayer(targetId, user.name);
                 if (result) {
                     this.modlog('SAFARIDQ', targetUser, `by ${user.name}`);
                     this.privateModAction(result);
