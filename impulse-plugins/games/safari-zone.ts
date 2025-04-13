@@ -30,6 +30,7 @@ class SafariGame {
     private prizePool: number;
     private gameId: string;
     private host: string;
+    private startMessage: string;
 
     private static readonly INACTIVE_TIME = 2 * 60 * 1000;
     private static readonly CATCH_COOLDOWN = 2 * 1000;
@@ -55,9 +56,25 @@ class SafariGame {
         this.status = 'waiting';
         this.prizePool = 0;
         this.gameId = `safari-${Date.now()}`;
-
+        
+        // Initialize startMessage with Players: None
+        this.startMessage = this.generateStartMessage();
         this.setInactivityTimer();
         this.display();
+    }
+
+    private generateStartMessage(): string {
+        return `<div class="infobox">` +
+            `<div style="text-align:center;margin:5px">` +
+            `<h2 style="color:#24678d">Safari Zone Game</h2>` +
+            `<b>Started by:</b> ${Impulse.nameColor(this.host, true, true)}<br />` +
+            `<b>Entry Fee:</b> ${this.entryFee} coins<br />` +
+            `<b>Pokeballs:</b> ${SafariGame.BALLS_PER_PLAYER} per player<br />` +
+            `<b>Players:</b> ${this.getPlayerList()}<br /><br />` +
+            `<img src="https://play.pokemonshowdown.com/sprites/ani/chansey.gif" width="80" height="80" style="margin-right:30px">` +
+            `<img src="https://play.pokemonshowdown.com/sprites/ani/tauros.gif" width="80" height="80" style="margin-left:30px"><br />` +
+            `<button class="button" name="send" value="/safari join">Click to join!</button>` +
+            `</div></div>`;
     }
 
     private getPlayerList(): string {
@@ -83,20 +100,8 @@ class SafariGame {
 
     private display() {
         if (this.status === 'waiting') {
-            const startMsg = 
-                `<div class="infobox">` +
-                `<div style="text-align:center;margin:5px">` +
-                `<h2 style="color:#24678d">Safari Zone Game</h2>` +
-                `<b>Started by:</b> ${Impulse.nameColor(this.host, true, true)}<br />` +
-                `<b>Entry Fee:</b> ${this.entryFee} coins<br />` +
-                `<b>Pokeballs:</b> ${SafariGame.BALLS_PER_PLAYER} per player<br />` +
-                `<b>Players:</b> ${this.getPlayerList()}<br /><br />` +
-                `<img src="https://play.pokemonshowdown.com/sprites/ani/chansey.gif" width="80" height="80" style="margin-right:30px">` +
-                `<img src="https://play.pokemonshowdown.com/sprites/ani/tauros.gif" width="80" height="80" style="margin-left:30px"><br />` +
-                `<button class="button" name="send" value="/safari join">Click to join!</button>` +
-                `</div></div>`;
-            
-            this.room.add(`|uhtmlchange|${this.gameId}|${startMsg}`).update();
+            this.startMessage = this.generateStartMessage();
+            this.room.add(`|uhtmlchange|${this.gameId}|${this.startMessage}`).update();
             return;
         }
 
@@ -152,6 +157,7 @@ class SafariGame {
             this.start(user);
         }
 
+        // Send join notification only to the user who joined
         user.sendTo(this.room, `|html|<div class="broadcast-green"><b>You have successfully joined the Safari Zone game!</b></div>`);
         
         return null;
