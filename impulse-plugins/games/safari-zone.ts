@@ -5,7 +5,6 @@
  **************************************/
 
 import { FS } from '../../lib/fs';
-import { Economy } from '../economy';
 
 interface Player {
     name: string;
