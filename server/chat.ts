@@ -697,6 +697,7 @@ export class CommandContext extends MessageContext {
 
 		// Output the message
 		if (message && typeof (message as any).then === 'function') {
+			if (this.pmTarget) {
 			Chat.sendPM(message, this.user, this.pmTarget);
 		} else {
 			let emoticons = Impulse.parseEmoticons(message);
@@ -704,6 +705,7 @@ export class CommandContext extends MessageContext {
 						let curUser = Users(u);
 						if (!curUser || !curUser.connected) continue;
 						curUser.sendTo(this.room, (this.room.type === 'chat' ? '|c:|' + (~~(Date.now() / 1000)) + '|' : '|c|') + this.user.getIdentity(this.room.id) + '|/html ' + emoticons);
+			}
 			}
 			this.update();
 			return (message as Promise<string | boolean | void>).then(resolvedMessage => {
