@@ -703,7 +703,7 @@ export class CommandContext extends MessageContext {
 			}
 			Chat.PrivateMessages.send(message, this.user, this.pmTarget);
 		} else if (this.room) {
-			this.room.add(`|c|${this.user.getIdentity(this.room)}|${message}`); */
+			this.room.add(`|c|${this.user.getIdentity(this.room)}|${message}`);
 			this.room.game?.onLogMessage?.(message, this.user);
 		} else {
 			this.connection.popup(`Your message could not be sent:\n\n${message}\n\nIt needs to be sent to a user or room.`);
