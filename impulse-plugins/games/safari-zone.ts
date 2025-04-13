@@ -4,6 +4,7 @@
  **************************************/
 
 import { FS } from '../../lib/fs';
+import { Dex } from '../../sim/dex';
 
 interface Player {
     name: string;
@@ -38,6 +39,7 @@ class SafariGame {
     private turnStartTime: number;
     private gameStartTime: number;
     private spectators: Set<string>;
+    private readonly pokemonPool: Pokemon[];
 
     private static readonly INACTIVE_TIME = 2 * 60 * 1000;
     private static readonly CATCH_COOLDOWN = 2 * 1000;
@@ -45,15 +47,6 @@ class SafariGame {
     private static readonly MAX_PLAYERS = 10;
     private static readonly BALLS_PER_PLAYER = 20;
     private static readonly TURN_TIME = 30 * 1000; // 30 seconds per turn
-
-    private readonly pokemonPool: Pokemon[] = [
-        { name: 'Pidgey', rarity: 0.3, points: 10, sprite: 'https://play.pokemonshowdown.com/sprites/ani/pidgey.gif' },
-        { name: 'Rattata', rarity: 0.3, points: 10, sprite: 'https://play.pokemonshowdown.com/sprites/ani/rattata.gif' },
-        { name: 'Pikachu', rarity: 0.15, points: 30, sprite: 'https://play.pokemonshowdown.com/sprites/ani/pikachu.gif' },
-        { name: 'Chansey', rarity: 0.1, points: 50, sprite: 'https://play.pokemonshowdown.com/sprites/ani/chansey.gif' },
-        { name: 'Tauros', rarity: 0.1, points: 50, sprite: 'https://play.pokemonshowdown.com/sprites/ani/tauros.gif' },
-        { name: 'Dratini', rarity: 0.05, points: 100, sprite: 'https://play.pokemonshowdown.com/sprites/ani/dratini.gif' }
-    ];
 
     constructor(room: ChatRoom, entryFee: number, host: string) {
         this.room = room;
@@ -72,9 +65,46 @@ class SafariGame {
         this.turnStartTime = 0;
         this.gameStartTime = Date.now();
         this.spectators = new Set();
+        this.pokemonPool = this.generatePokemonPool();
 
         this.setInactivityTimer();
         this.display();
+    }
+
+    private generatePokemonPool(): Pokemon[] {
+        const pool: Pokemon[] = [];
+        const dex = Dex.mod('gen9');
+
+        // Define rarity and points based on base stats
+        const getDetails = (species: Species) => {
+            const baseStats = species.baseStats;
+            const bst = Object.values(baseStats).reduce((a, b) => a + b, 0);
+            
+            // Assign rarity and points based on BST
+            if (bst >= 600) return { rarity: 0.05, points: 100 };      // Legendaries/Very Strong
+            if (bst >= 500) return { rarity: 0.1, points: 50 };        // Strong
+            if (bst >= 400) return { rarity: 0.15, points: 30 };       // Medium
+            return { rarity: 0.3, points: 10 };                        // Common
+        };
+
+        // Get available species
+        const allSpecies = Array.from(dex.species.all())
+            .filter(species => !species.isNonstandard && !species.forme)
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 20); // Limit total pool size
+
+        // Create pool with dynamic rarity/points based on stats
+        for (const species of allSpecies) {
+            const { rarity, points } = getDetails(species);
+            pool.push({
+                name: species.name,
+                rarity,
+                points,
+                sprite: `https://play.pokemonshowdown.com/sprites/ani/${species.id}.gif`
+            });
+        }
+
+        return pool;
     }
 
     private formatUTCTime(timestamp: number): string {
@@ -611,7 +641,4 @@ export const commands: Chat.ChatCommands = {
             `- ${SafariGame.TURN_TIME / 1000} second time limit per turn<br />` +
             '- Game ends when all players use their balls<br />' +
             '- Prizes: 1st (60%), 2nd (30%), 3rd (10%) of pool<br />' +
-            '- Players can be disqualified by the game creator'
-        );
-    }
-};
+            '- Players can be disqualifie
