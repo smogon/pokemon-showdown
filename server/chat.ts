@@ -697,16 +697,6 @@ export class CommandContext extends MessageContext {
 
 		// Output the message
 		if (message && typeof (message as any).then === 'function') {
-			if (this.pmTarget) {
-			Chat.sendPM(message, this.user, this.pmTarget);
-		} else {
-			let emoticons = Impulse.parseEmoticons(message);
-			for (let u in this.room.users) {
-						let curUser = Users(u);
-						if (!curUser || !curUser.connected) continue;
-						curUser.sendTo(this.room, (this.room.type === 'chat' ? '|c:|' + (~~(Date.now() / 1000)) + '|' : '|c|') + this.user.getIdentity(this.room.id) + '|/html ' + emoticons);
-			}
-			}
 			this.update();
 			return (message as Promise<string | boolean | void>).then(resolvedMessage => {
 				if (resolvedMessage && resolvedMessage !== true) {
@@ -766,7 +756,9 @@ export class CommandContext extends MessageContext {
 			}
 			Chat.PrivateMessages.send(message, this.user, this.pmTarget);
 		} else if (this.room) {
-			this.room.add(`|c|${this.user.getIdentity(this.room)}|${message}`);
+			let emoticons = Impulse.parseEmoticons(message);
+			this.room.add(`|c|${this.user.getIdentity(this.room)}|/html ${emoticons}`);
+			/* this.room.add(`|c|${this.user.getIdentity(this.room)}|${message}`); */
 			this.room.game?.onLogMessage?.(message, this.user);
 		} else {
 			this.connection.popup(`Your message could not be sent:\n\n${message}\n\nIt needs to be sent to a user or room.`);
