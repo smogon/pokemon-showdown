@@ -465,4 +465,153 @@ class SafariGame {
         }
 
         const allFinished = Object.values(this.players).every(p => p.ballsLeft === 0);
-        if (allFini
+        if (allFinished) {
+            this.end(false);
+        }
+    }
+
+    end(inactive: boolean = false) {
+        if (this.status === 'ended') return;
+
+        this.clearTimer();
+        if (this.turnTimer) {
+            clearTimeout(this.turnTimer);
+            this.turnTimer = null;
+        }
+        this.status = 'ended';
+
+        if (inactive && Object.keys(this.players).length < SafariGame.MIN_PLAYERS) {
+            for (const id in this.players) {
+                Economy.addMoney(id, this.entryFee, "Safari Zone refund");
+            }
+            this.room.add(`|uhtmlchange|safari-spectator|<div class="infobox">The Safari Zone game has been canceled due to inactivity. Entry fees have been refunded.</div>`, -1000).update();
+            delete this.room.safari;
+            return;
+        }
+
+        const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
+        if (sortedPlayers.length > 0) {
+            const prizes = [0.6, 0.3, 0.1];
+            for (let i = 0; i < Math.min(3, sortedPlayers.length); i++) {
+                const prize = Math.floor(this.prizePool * prizes[i]);
+                if (prize > 0) {
+                    Economy.addMoney(sortedPlayers[i].id, prize, `Safari Zone ${i + 1}${['st', 'nd', 'rd'][i]} place`);
+                }
+            }
+        }
+
+        this.display();
+        delete this.room.safari;
+    }
+}
+
+export const commands: Chat.ChatCommands = {
+    safari(target, room, user) {
+        if (!room) return this.errorReply("This command can only be used in a room.");
+        const [cmd, ...args] = target.split(' ');
+
+        switch ((cmd || '').toLowerCase()) {
+            case 'new':
+            case 'create': {
+                this.checkCan('mute', null, room);
+                if (room.safari) return this.errorReply("A Safari game is already running in this room.");
+                const entryFee = parseInt(args[0]);
+                if (isNaN(entryFee) || entryFee < 1) return this.errorReply("Please enter a valid entry fee.");
+                
+                room.safari = new SafariGame(room, entryFee, user.name);
+                this.modlog('SAFARI', null, `started by ${user.name} with ${entryFee} coin entry fee`);
+                return this.privateModAction(`${user.name} started a Safari game with ${entryFee} coin entry fee.`);
+            }
+
+            case 'join': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                const error = room.safari.addPlayer(user);
+                if (error) return this.errorReply(error);
+                
+                this.sendReply(`|uhtmlchange|safari-spectator|`);
+                return;
+            }
+
+            case 'spectate': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                if (room.safari.players[user.id]) return this.errorReply("You are already in the game!");
+                
+                room.safari.addSpectator(user.id);
+                return;
+            }
+
+            case 'unspectate': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                room.safari.removeSpectator(user.id);
+                return;
+            }
+
+            case 'start': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                const error = room.safari.start(user);
+                if (error) return this.errorReply(error);
+                this.modlog('SAFARI', null, `started by ${user.name}`);
+                return this.privateModAction(`${user.name} started the Safari game.`);
+            }
+
+            case 'throw': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                const result = room.safari.throwBall(user);
+                if (result) return this.errorReply(result);
+                return;
+            }
+
+            case 'dq':
+            case 'disqualify': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                const targetUser = args.join(' ').trim();
+                if (!targetUser) return this.errorReply("Please specify a player to disqualify.");
+                
+                const targetId = toID(targetUser);
+                const result = room.safari.disqualifyPlayer(targetId, user.name);
+                if (result) {
+                    this.modlog('SAFARIDQ', targetUser, `by ${user.name}`);
+                    this.privateModAction(result);
+                    return;
+                }
+                return this.errorReply("Failed to disqualify player.");
+            }
+
+            case 'end': {
+                this.checkCan('mute', null, room);
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                room.safari.end(false);
+                this.modlog('SAFARI', null, `ended by ${user.name}`);
+                return this.privateModAction(`${user.name} ended the Safari game.`);
+            }
+
+            default:
+                return this.parse('/help safari');
+        }
+    },
+
+    safarihelp(target, room, user) {
+        if (!this.runBroadcast()) return;
+        return this.sendReplyBox(
+            '<center><strong>Safari Zone Commands</strong></center>' +
+            '<hr />' +
+            '<code>/safari create [fee]</code>: Creates a new Safari game with the specified entry fee. Requires @.<br />' +
+            '<code>/safari join</code>: Joins the current Safari game.<br />' +
+            '<code>/safari start</code>: Starts the Safari game if enough players have joined.<br />' +
+            '<code>/safari throw</code>: Throws a Safari Ball at a Pokemon.<br />' +
+            '<code>/safari spectate</code>: Watch an ongoing Safari game.<br />' +
+            '<code>/safari unspectate</code>: Stop watching a Safari game.<br />' +
+            '<code>/safari dq [player]</code>: Disqualifies a player from the game (only usable by game creator).<br />' +
+            '<code>/safari end</code>: Ends the current Safari game. Requires @.<br />' +
+            '<hr />' +
+            '<strong>Game Rules:</strong><br />' +
+            `- Players must pay an entry fee to join<br />` +
+            `- Minimum ${SafariGame.MIN_PLAYERS} players required to start<br />` +
+            `- Each player gets ${SafariGame.BALLS_PER_PLAYER} Safari Balls<br />` +
+            `- ${SafariGame.TURN_TIME / 1000} second time limit per turn<br />` +
+            '- Game ends when all players use their balls<br />' +
+            '- Prizes: 1st (60%), 2nd (30%), 3rd (10%) of pool<br />' +
+            '- Players can be disqualified by the game creator'
+        );
+    }
+};
