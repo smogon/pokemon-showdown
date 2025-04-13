@@ -530,8 +530,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Necrozma-Dusk-Mane', 'Ogerpon-Hearthflame', 'Ogerpon-Wellspring', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regieleki', 'Reshiram', 'Shaymin-Sky',
 			'Sneasler', 'Solgaleo', 'Skeledirge', 'Spectrier', 'Terapagos', 'Ursaluna-Bloodmoon', 'Urshifu', 'Urshifu-Rapid-Strike', 'Zacian', 'Zacian-Crowned',
 			'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'Speed Boost', 'Bright Powder', 'King\'s Rock', 'Razor Fang',
-			'Clangorous Soul', 'Last Respects', 'Mud-Slap', 'Muddy Water', 'Night Daze', 'No Retreat', 'Perish Song', 'Sand Attack', 'Shell Smash', 'Smokescreen',
-			'Quiver Dance', 'Victory Dance',
+			'Acupressure', 'Clangorous Soul', 'Last Respects', 'Mud-Slap', 'Muddy Water', 'Night Daze', 'No Retreat', 'Perish Song', 'Sand Attack', 'Shell Smash',
+			'Smokescreen', 'Quiver Dance', 'Victory Dance',
 		],
 		actions: {
 			switchIn(pokemon, pos, sourceEffect, isDrag) {
