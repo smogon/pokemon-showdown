@@ -1,7 +1,6 @@
 /*************************************
  * Pokemon Safari Zone Game          *
- * Author: @musaddiktemkar          *
- * Updated: 2025-04-13 17:04:37 UTC *
+ * Author: @musaddiktemkar           *
  **************************************/
 
 import { FS } from '../../lib/fs';
@@ -618,7 +617,7 @@ export const commands: Chat.ChatCommands = {
         }
     },
 
-    safarihelp(target, room, user) {
+	    safarihelp(target, room, user) {
         if (!this.runBroadcast()) return;
         return this.sendReplyBox(
             '<center><strong>Safari Zone Commands</strong></center>' +
@@ -632,4 +631,14 @@ export const commands: Chat.ChatCommands = {
             '<code>/safari dq [player]</code>: Disqualifies a player from the game (only usable by game creator).<br />' +
             '<code>/safari end</code>: Ends the current Safari game. Requires @.<br />' +
             '<hr />' +
-            '<strong>Game Rules
+            '<strong>Game Rules:</strong><br />' +
+            `- Players must pay an entry fee to join<br />` +
+            `- Minimum ${SafariGame.MIN_PLAYERS} players required to start<br />` +
+            `- Each player gets ${SafariGame.BALLS_PER_PLAYER} Safari Balls<br />` +
+            `- ${SafariGame.TURN_TIME / 1000} second time limit per turn<br />` +
+            '- Game ends when all players use their balls<br />' +
+            '- Prizes: 1st (60%), 2nd (30%), 3rd (10%) of pool<br />' +
+            '- Players can be disqualified by the game creator'
+        );
+    }
+};
