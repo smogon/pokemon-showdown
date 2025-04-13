@@ -4,7 +4,6 @@
  **************************************/
 
 import { FS } from '../../lib/fs';
-import { Dex } from '../../sim/dex';
 
 interface Player {
     name: string;
@@ -641,4 +640,7 @@ export const commands: Chat.ChatCommands = {
             `- ${SafariGame.TURN_TIME / 1000} second time limit per turn<br />` +
             '- Game ends when all players use their balls<br />' +
             '- Prizes: 1st (60%), 2nd (30%), 3rd (10%) of pool<br />' +
-            '- Players can be disqualifie
+			   '- Players can be disqualified by the game creator'
+        );
+    }
+};
