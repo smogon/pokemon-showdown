@@ -122,7 +122,7 @@ class SafariGame {
         // Notify player their turn is starting
         const roomUser = Users.get(currentPlayerId);
         if (roomUser?.connected) {
-            roomUser.sendTo(this.room, `|html|<div class="broadcast-blue">It's your turn! You have 30 seconds to throw a Safari Ball.</div>`);
+            roomUser.sendTo(this.room, `|html|<div class="broadcast-blue">It's your turn! You have 30 seconds to throw a Safari Ball.</div>`, -1000);
         }
         
         this.turnTimer = setTimeout(() => {
