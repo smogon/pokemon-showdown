@@ -1,6 +1,6 @@
 /*************************************
  * Pokemon Safari Zone Game          *
- * nitial Release                    *
+ * Initial Release                    *
  * Author: @musaddiktemkar           *
  **************************************/
 
