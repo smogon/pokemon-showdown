@@ -4,9 +4,6 @@
  * Updated: 2025-04-13              *
  *************************************/
 
-import { Utils } from '../../lib';
-import type { Room, User } from '../../server/rooms';
-
 // Type definitions
 type PokemonRarity = 'Common' | 'Uncommon' | 'Rare' | 'VeryRare';
 type GameState = 'signups' | 'started' | 'ended';
