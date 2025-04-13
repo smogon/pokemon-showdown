@@ -1,8 +1,11 @@
 /*************************************
  * Pokemon Safari Zone Game          *
  * Author: @musaddiktemkar          *
- * Updated: 2025-04-13              *
+ * Last Updated: 2025-04-13 11:42:43 *
  *************************************/
+
+import { Utils } from '../../lib';
+import type { Room, User } from '../../server/rooms';
 
 // Type definitions
 type PokemonRarity = 'Common' | 'Uncommon' | 'Rare' | 'VeryRare';
@@ -70,7 +73,7 @@ export class SafariGame extends Rooms.RoomGame<SafariPlayer> {
     private lastCatchMessage: string | null;
     private spectators: { [k: string]: number };
 
-    private readonly pokemonPool: Pokemon[] = [
+    public readonly pokemonPool: Pokemon[] = [
         { name: 'Pidgey', rarity: 'Common', catchRate: 0.7, points: 10, sprite: 'https://play.pokemonshowdown.com/sprites/ani/pidgey.gif' },
         { name: 'Rattata', rarity: 'Common', catchRate: 0.7, points: 10, sprite: 'https://play.pokemonshowdown.com/sprites/ani/rattata.gif' },
         { name: 'Pikachu', rarity: 'Uncommon', catchRate: 0.4, points: 30, sprite: 'https://play.pokemonshowdown.com/sprites/ani/pikachu.gif' },
@@ -254,11 +257,11 @@ export class SafariGame extends Rooms.RoomGame<SafariPlayer> {
         player.lastCatch = now;
         player.ballsLeft--;
 
-        // Randomly select a Pokemon based on rarity
-        const random = Math.random();
+        // Random Pokemon selection and catch attempt
         const pokemon = this.selectRandomPokemon();
+        const caught = Math.random() <= pokemon.catchRate;
         
-        if (Math.random() <= pokemon.catchRate) {
+        if (caught) {
             player.catches.push(pokemon);
             player.points += pokemon.points;
             this.lastCatchMessage = `${player.name} caught a ${pokemon.name} worth ${pokemon.points} points!`;
@@ -268,7 +271,6 @@ export class SafariGame extends Rooms.RoomGame<SafariPlayer> {
 
         this.display();
         
-        // Check if player is out of balls
         if (player.ballsLeft === 0) {
             this.checkGameEnd();
         }
@@ -290,7 +292,7 @@ export class SafariGame extends Rooms.RoomGame<SafariPlayer> {
             if (random <= cumulativeProbability) return pokemon;
         }
 
-        return this.pokemonPool[0]; // Fallback to first Pokemon
+        return this.pokemonPool[0];
     }
 
     private checkGameEnd() {
@@ -306,13 +308,11 @@ export class SafariGame extends Rooms.RoomGame<SafariPlayer> {
         this.state = 'ended';
 
         if (inactive && Object.keys(this.players).length < GAME_CONFIG.MIN_PLAYERS) {
-            // Refund entry fees if game didn't properly start
             for (const player of Object.values(this.players)) {
                 Economy.addMoney(player.id, this.entryFee, "Safari Zone refund - game canceled");
             }
             this.room.add(`The Safari Zone game was canceled due to insufficient players. Entry fees have been refunded.`).update();
         } else {
-            // Distribute prizes
             const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
             const prizes = [
                 Math.floor(this.prizePool * GAME_CONFIG.PRIZE_DISTRIBUTION.FIRST),
@@ -344,10 +344,8 @@ export class SafariGame extends Rooms.RoomGame<SafariPlayer> {
         this.sendToRoom(`${user.name} has left the Safari Zone game.`);
         
         if (this.state === 'started') {
-            // Only check for game end if the game has started
             this.checkGameEnd();
         } else if (this.state === 'signups') {
-            // Refund half the entry fee if leaving during signups
             const refund = Math.floor(this.entryFee / 2);
             Economy.addMoney(user.id, refund, "Safari Zone partial refund - left during signups");
             this.prizePool -= refund;
@@ -360,7 +358,6 @@ export class SafariGame extends Rooms.RoomGame<SafariPlayer> {
         if (!this.suppressMessages || overrideSuppress) {
             this.room.add(message).update();
         } else {
-            // Send to players and spectators
             for (const player of Object.values(this.players)) {
                 player.sendRoom(message);
             }
@@ -406,6 +403,81 @@ class SafariPlayer extends Rooms.RoomGamePlayer<SafariGame> {
         this.sendRoom(`|uhtml|safari-${this.game.gameNumber}-${this.id}|${display}`);
     }
 }
+
+export const pages: Chat.PageTable = {
+    safari(args, user, connection) {
+        const pageid = `safari-${args[0]}`;
+        const room = this.requireRoom();
+        const game = this.requireGame(SafariGame);
+
+        let buf = `<div class="pad">`;
+        
+        switch (args[0]) {
+            case 'rules':
+                buf += `<h2>Safari Zone Rules</h2>`;
+                buf += `<p><strong>Game Basics:</strong></p>`;
+                buf += `<ul>`;
+                buf += `<li>Each player starts with ${GAME_CONFIG.BALLS_PER_PLAYER} Safari Balls</li>`;
+                buf += `<li>Use /safari throw to attempt catching Pokemon</li>`;
+                buf += `<li>Different Pokemon have different catch rates and point values</li>`;
+                buf += `<li>The game ends when all players use their balls</li>`;
+                buf += `<li>Prizes are distributed to top 3 players:</li>`;
+                buf += `<ul>`;
+                buf += `<li>1st place: ${GAME_CONFIG.PRIZE_DISTRIBUTION.FIRST * 100}% of prize pool</li>`;
+                buf += `<li>2nd place: ${GAME_CONFIG.PRIZE_DISTRIBUTION.SECOND * 100}% of prize pool</li>`;
+                buf += `<li>3rd place: ${GAME_CONFIG.PRIZE_DISTRIBUTION.THIRD * 100}% of prize pool</li>`;
+                buf += `</ul>`;
+                buf += `</ul>`;
+                break;
+
+            case 'pokemon':
+                buf += `<h2>Available Pokemon</h2>`;
+                buf += `<table border="1" cellspacing="0" cellpadding="3">`;
+                buf += `<tr><th>Pokemon</th><th>Rarity</th><th>Points</th><th>Catch Rate</th></tr>`;
+                for (const pokemon of game.pokemonPool) {
+                    buf += `<tr>`;
+                    buf += `<td><img src="${pokemon.sprite}" width="40" height="30"> ${pokemon.name}</td>`;
+                    buf += `<td style="color: ${textColors[pokemon.rarity]}">${pokemon.rarity}</td>`;
+                    buf += `<td>${pokemon.points}</td>`;
+                    buf += `<td>${Math.floor(pokemon.catchRate * 100)}%</td>`;
+                    buf += `</tr>`;
+                }
+                buf += `</table>`;
+                break;
+
+            case 'scores':
+                buf += `<h2>Current Scores</h2>`;
+                const players = Object.values(game.players).sort((a, b) => b.points - a.points);
+                buf += `<table border="1" cellspacing="0" cellpadding="3">`;
+                buf += `<tr><th>Player</th><th>Points</th><th>Balls Left</th><th>Catches</th></tr>`;
+                for (const player of players) {
+                    buf += `<tr>`;
+                    buf += `<td>${Impulse.nameColor(player.name, true, true)}</td>`;
+                    buf += `<td>${player.points}</td>`;
+                    buf += `<td>${player.ballsLeft}</td>`;
+                    buf += `<td>${player.catches.map(p => 
+                        `<img src="${p.sprite}" width="40" height="30" title="${p.name} (${p.points} points)">`
+                    ).join('')}</td>`;
+                    buf += `</tr>`;
+                }
+                buf += `</table>`;
+                break;
+
+            default:
+                buf += `<h2>Safari Zone Menu</h2>`;
+                buf += `<p>Welcome to the Safari Zone! Select an option:</p>`;
+                buf += `<p>`;
+                buf += `<button class="button" name="send" value="/safari rules">Rules</button> `;
+                buf += `<button class="button" name="send" value="/safari pokemon">Pokemon List</button> `;
+                buf += `<button class="button" name="send" value="/safari scores">Current Scores</button>`;
+                buf += `</p>`;
+                break;
+        }
+
+        buf += `</div>`;
+        return user.sendTo(room, `|popup||wide||html|${buf}`);
+    },
+};
 
 export const commands: Chat.ChatCommands = {
     safari: {
@@ -496,6 +568,24 @@ export const commands: Chat.ChatCommands = {
             if (error) throw new Chat.ErrorMessage(error);
         },
 
+        // Page commands
+        rules(target, room, user) {
+            this.parse(`/j view-safari-rules`);
+        },
+
+        pokemon(target, room, user) {
+            this.parse(`/j view-safari-pokemon`);
+        },
+
+        scores(target, room, user) {
+            this.parse(`/j view-safari-scores`);
+        },
+
+        menu(target, room, user) {
+            this.parse(`/j view-safari`);
+        },
+
+        // Spectator commands
         spectate(target, room, user) {
             const game = this.requireGame(SafariGame);
             if (!game.suppressMessages) {
@@ -553,6 +643,10 @@ export const commands: Chat.ChatCommands = {
         `/safari throw - Throws a Safari Ball at a Pokemon.`,
         `/safari status - Shows your current game status.`,
         `/safari players - Shows the list of players in the game.`,
+        `/safari menu - Opens the Safari Zone menu.`,
+        `/safari rules - Shows the game rules.`,
+        `/safari pokemon - Shows available Pokemon and their details.`,
+        `/safari scores - Shows current game scores.`,
         `/safari spectate - Spectates the current game (only in suppress mode).`,
         `/safari unspectate - Stops spectating the current game.`,
     ],
