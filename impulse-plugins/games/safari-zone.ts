@@ -102,7 +102,7 @@ class SafariGame {
             return;
         }
 
-        // For started games, show different displays for players and spectators
+        // First, send individual displays to each player
         for (const userid in this.players) {
             const player = this.players[userid];
             let buf = `<div class="infobox"><div style="text-align:center">`;
@@ -136,13 +136,18 @@ class SafariGame {
             }
 
             buf += `</div></div>`;
+            
+            // Send the player-specific display
             const roomUser = Users.get(userid);
-            if (roomUser) {
-                roomUser.sendTo(this.room, `|uhtmlchange|${this.gameId}|${buf}`);
+            if (roomUser?.connected) {
+                roomUser.sendTo(
+                    this.room, 
+                    `|uhtml|${this.gameId}-${userid}|${buf}`
+                );
             }
         }
 
-        // Show minimal display for spectators
+        // Then show minimal display for spectators
         let spectatorBuf = `<div class="infobox"><div style="text-align:center">`;
         spectatorBuf += `<h2>Safari Zone Game${this.status === 'ended' ? ' (Ended)' : ''}</h2>`;
         spectatorBuf += `<b>Host:</b> ${Impulse.nameColor(this.host, true, true)}<br />`;
@@ -151,8 +156,7 @@ class SafariGame {
         spectatorBuf += `</div></div>`;
 
         // Update room display for spectators
-        this.room.send(`|uhtmlchange|${this.gameId}|${spectatorBuf}`);
-        this.room.update();
+        this.room.add(`|uhtml|${this.gameId}|${spectatorBuf}`, -1000).update();
     }
 
     addPlayer(user: User): string | null {
@@ -294,7 +298,7 @@ class SafariGame {
             for (const id in this.players) {
                 Economy.addMoney(id, this.entryFee, "Safari Zone refund");
             }
-            this.room.add(`|uhtmlchange|${this.gameId}|<div class="infobox">The Safari Zone game has been canceled due to inactivity. Entry fees have been refunded.</div>`, -1000).update();
+            this.room.add(`|uhtml|${this.gameId}|<div class="infobox">The Safari Zone game has been canceled due to inactivity. Entry fees have been refunded.</div>`, -1000).update();
             delete this.room.safari;
             return;
         }
@@ -320,10 +324,10 @@ class SafariGame {
             });
             buf += `</center></div>`;
 
-            this.room.add(`|uhtmlchange|${this.gameId}|${buf}`, -1000).update();
+            this.room.add(`|uhtml|${this.gameId}|${buf}`, -1000).update();
         } else {
             // If no players are left
-            this.room.add(`|uhtmlchange|${this.gameId}|<div class="infobox">The Safari Zone game has ended with no winners.</div>`, -1000).update();
+            this.room.add(`|uhtml|${this.gameId}|<div class="infobox">The Safari Zone game has ended with no winners.</div>`, -1000).update();
         }
 
         delete this.room.safari;
