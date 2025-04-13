@@ -120,10 +120,10 @@ class SafariGame {
         const player = this.players[currentPlayerId];
 
         // Notify player their turn is starting
-        const roomUser = Users.get(currentPlayerId);
+       /* const roomUser = Users.get(currentPlayerId);
         if (roomUser?.connected) {
             roomUser.sendTo(this.room, `|html|<div class="broadcast-blue">It's your turn! You have 30 seconds to throw a Safari Ball.</div>`, -1000);
-        }
+        } */
         
         this.turnTimer = setTimeout(() => {
             // Auto-forfeit the turn and take a ball if player doesn't throw
@@ -227,7 +227,7 @@ class SafariGame {
                     buf += `<td>${p.points}</td>`;
                     buf += `<td>${p.ballsLeft}</td>`;
                     buf += `<td>${p.catches.map(pk => `<img src="${pk.sprite}" width="40" height="30" title="${pk.name}">`).join('')}</td>`;
-                    buf += `<td>${p.lastCatch ? this.formatUTCTime(p.lastCatch) : 'Never'}</td>`;
+                    /*buf += `<td>${p.lastCatch ? this.formatUTCTime(p.lastCatch) : 'Never'}</td>`;*/
                     buf += `</tr>`;
                 }
                 buf += `</table>`;
