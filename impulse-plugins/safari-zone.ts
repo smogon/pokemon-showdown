@@ -5,8 +5,7 @@
  * Created: 2025-04-13 07:03:00     *
  **************************************/
 
-import { FS } from '../../lib/fs';
-import { Economy } from '../economy';
+import { FS } from '../lib/fs';
 
 interface Player {
     name: string;
