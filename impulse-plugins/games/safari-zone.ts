@@ -218,7 +218,7 @@ class SafariGame {
 
             if (Object.keys(this.players).length) {
                 buf += `<table border="1" cellspacing="0" cellpadding="3" style="margin:auto;margin-top:5px">`;
-                buf += `<tr><th>Player</th><th>Points</th><th>Balls Left</th><th>Catches</th><th>Last Action</th></tr>`;
+                buf += `<tr><th>Player</th><th>Points</th><th>Balls Left</th><th>Catches</th></tr>`;
                 const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
                 for (const p of sortedPlayers) {
                     const isCurrentTurn = p.id === currentPlayerId;
