@@ -767,6 +767,8 @@ if (this.user.registered) Impulse.ExpSystem.addExp(this.user.id, 1);
 this.update();
 
 return message;
+
+	}
 	
 	sendChatMessage(message: string) {
 		if (this.pmTarget) {
