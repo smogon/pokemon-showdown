@@ -1,6 +1,5 @@
 /*************************************
  * Pokemon Safari Zone Game          *
- * Initial Release                    *
  * Author: @musaddiktemkar           *
  **************************************/
 
@@ -31,6 +30,7 @@ class SafariGame {
     private prizePool: number;
     private gameId: string;
     private host: string;
+    private lastCatchMessage: string | null;
 
     private static readonly INACTIVE_TIME = 2 * 60 * 1000;
     private static readonly CATCH_COOLDOWN = 2 * 1000;
@@ -56,6 +56,7 @@ class SafariGame {
         this.status = 'waiting';
         this.prizePool = 0;
         this.gameId = `safari-${Date.now()}`;
+        this.lastCatchMessage = null;
 
         this.setInactivityTimer();
         this.display();
@@ -123,6 +124,9 @@ class SafariGame {
         }
 
         if (this.status === 'started') {
+            if (this.lastCatchMessage) {
+                buf += `<br /><div style="color: #008000; margin: 5px 0;">${this.lastCatchMessage}</div>`;
+            }
             buf += `<br /><button class="button" name="send" value="/safari throw">Throw Safari Ball</button>`;
         }
 
@@ -194,21 +198,23 @@ class SafariGame {
             if (random <= cumulativeProbability) {
                 player.catches.push(pokemon);
                 player.points += pokemon.points;
+                this.lastCatchMessage = `Congratulations! You caught a ${pokemon.name} worth ${pokemon.points} points! (${player.ballsLeft} balls left)`;
                 this.display();
 
                 if (player.ballsLeft === 0) {
                     this.checkGameEnd();
                 }
 
-                return `Congratulations! You caught a ${pokemon.name} worth ${pokemon.points} points! (${player.ballsLeft} balls left)`;
+                return this.lastCatchMessage;
             }
         }
 
+        this.lastCatchMessage = `The Pokemon got away! (${player.ballsLeft} balls left)`;
         this.display();
         if (player.ballsLeft === 0) {
             this.checkGameEnd();
         }
-        return `The Pokemon got away! (${player.ballsLeft} balls left)`;
+        return this.lastCatchMessage;
     }
 
     disqualifyPlayer(targetId: string, executor: string): string | null {
