@@ -1,7 +1,7 @@
 /*************************************
  * Pokemon Safari Zone Game          *
  * Author: @musaddiktemkar          *
- * Updated: 2025-04-13 16:55:56 UTC *
+ * Updated: 2025-04-13 17:04:37 UTC *
  **************************************/
 
 import { FS } from '../../lib/fs';
@@ -37,6 +37,7 @@ class SafariGame {
     private turnTimer: NodeJS.Timeout | null;
     private turnStartTime: number;
     private gameStartTime: number;
+    private spectators: Set<string>;
 
     private static readonly INACTIVE_TIME = 2 * 60 * 1000;
     private static readonly CATCH_COOLDOWN = 2 * 1000;
@@ -69,6 +70,7 @@ class SafariGame {
         this.turnTimer = null;
         this.turnStartTime = 0;
         this.gameStartTime = Date.now();
+        this.spectators = new Set();
 
         this.setInactivityTimer();
         this.display();
@@ -110,6 +112,69 @@ class SafariGame {
             [this.turnOrder[i], this.turnOrder[j]] = [this.turnOrder[j], this.turnOrder[i]];
         }
         this.currentTurn = 0;
+    }
+
+    private addSpectator(userid: string): void {
+        this.spectators.add(userid);
+        this.displayToSpectator(userid);
+    }
+
+    private removeSpectator(userid: string): void {
+        this.spectators.delete(userid);
+        const roomUser = Users.get(userid);
+        if (roomUser?.connected) {
+            roomUser.sendTo(this.room, `|uhtmlchange|safari-spectator-${userid}|`);
+        }
+    }
+
+    private displayToSpectator(userid: string): void {
+        if (!this.spectators.has(userid)) return;
+        
+        const now = Date.now();
+        const currentPlayerId = this.turnOrder[this.currentTurn];
+        const timeLeft = Math.max(0, Math.ceil((SafariGame.TURN_TIME - (now - this.turnStartTime)) / 1000));
+        
+        let buf = `<div class="infobox"><div style="text-align:center">`;
+        buf += `<h2>Safari Zone Game${this.status === 'ended' ? ' (Ended)' : ''}</h2>`;
+        buf += `<small>Game Time: ${this.formatUTCTime(now)} UTC</small><br />`;
+        buf += `<small>Game Duration: ${Math.floor((now - this.gameStartTime) / 1000)}s</small><br />`;
+        
+        buf += `<b>Host:</b> ${Impulse.nameColor(this.host, true, true)}<br />`;
+        buf += `<b>Status:</b> ${this.status}<br />`;
+        buf += `<b>Prize Pool:</b> ${this.prizePool} coins<br />`;
+
+        if (this.status === 'started' && currentPlayerId) {
+            buf += `<b>Current Turn:</b> ${Impulse.nameColor(this.players[currentPlayerId].name, true, true)}`;
+            buf += ` <b style="color: ${timeLeft <= 10 ? '#ff5555' : '#5555ff'}">(${timeLeft}s left)</b><br />`;
+        }
+
+        if (Object.keys(this.players).length) {
+            buf += `<table border="1" cellspacing="0" cellpadding="3" style="margin:auto;margin-top:5px">`;
+            buf += `<tr><th>Player</th><th>Points</th><th>Balls Left</th><th>Catches</th></tr>`;
+            const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
+            for (const p of sortedPlayers) {
+                const isCurrentTurn = p.id === currentPlayerId;
+                buf += `<tr${isCurrentTurn ? ' style="background-color: rgba(85, 85, 255, 0.1)"' : ''}>`;
+                buf += `<td>${Impulse.nameColor(p.name, true, true)}${isCurrentTurn ? ' ⭐' : ''}</td>`;
+                buf += `<td>${p.points}</td>`;
+                buf += `<td>${p.ballsLeft}</td>`;
+                buf += `<td>${p.catches.map(pk => `<img src="${pk.sprite}" width="40" height="30" title="${pk.name}">`).join('')}</td>`;
+                buf += `</tr>`;
+            }
+            buf += `</table>`;
+        }
+
+        if (this.status === 'started' && this.lastCatchMessage) {
+            buf += `<br /><div style="color: #008000; margin: 5px 0;">${this.lastCatchMessage}</div>`;
+        }
+
+        buf += `<br /><small style="color: #666666">You are spectating this game</small>`;
+        buf += `</div></div>`;
+
+        const roomUser = Users.get(userid);
+        if (roomUser?.connected) {
+            roomUser.sendTo(this.room, `|uhtml|safari-spectator-${userid}|${buf}`);
+        }
     }
 
     private startTurnTimer() {
@@ -297,6 +362,18 @@ class SafariGame {
             // Clear spectator view when game is in progress
             this.room.add(`|uhtmlchange|safari-spectator|`, -1000).update();
         }
+
+        // Update all spectators
+        for (const spectatorId of this.spectators) {
+            if (this.status === 'ended') {
+                const roomUser = Users.get(spectatorId);
+                if (roomUser?.connected) {
+                    roomUser.sendTo(this.room, `|uhtmlchange|safari-spectator-${spectatorId}|`);
+                }
+            } else {
+                this.displayToSpectator(spectatorId);
+            }
+        }
     }
 
     addPlayer(user: User): string | null {
@@ -441,6 +518,15 @@ class SafariGame {
             }
         }
 
+        // Clear all spectator views
+        for (const spectatorId of this.spectators) {
+            const roomUser = Users.get(spectatorId);
+            if (roomUser?.connected) {
+                roomUser.sendTo(this.room, `|uhtmlchange|safari-spectator-${spectatorId}|`);
+            }
+        }
+        this.spectators.clear();
+
         // Final display update will clear player UIs and show results
         this.display();
         delete this.room.safari;
@@ -471,6 +557,20 @@ export const commands: Chat.ChatCommands = {
                 if (error) return this.errorReply(error);
                 
                 this.sendReply(`|uhtmlchange|safari-spectator|`);
+                return;
+            }
+
+            case 'spectate': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                if (room.safari.players[user.id]) return this.errorReply("You are already in the game!");
+                
+                room.safari.addSpectator(user.id);
+                return;
+            }
+
+            case 'unspectate': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                room.safari.removeSpectator(user.id);
                 return;
             }
 
@@ -527,17 +627,9 @@ export const commands: Chat.ChatCommands = {
             '<code>/safari join</code>: Joins the current Safari game.<br />' +
             '<code>/safari start</code>: Starts the Safari game if enough players have joined.<br />' +
             '<code>/safari throw</code>: Throws a Safari Ball at a Pokemon.<br />' +
+            '<code>/safari spectate</code>: Watch an ongoing Safari game.<br />' +
+            '<code>/safari unspectate</code>: Stop watching a Safari game.<br />' +
             '<code>/safari dq [player]</code>: Disqualifies a player from the game (only usable by game creator).<br />' +
             '<code>/safari end</code>: Ends the current Safari game. Requires @.<br />' +
             '<hr />' +
-            '<strong>Game Rules:</strong><br />' +
-            `- Players must pay an entry fee to join<br />` +
-            `- Minimum ${SafariGame.MIN_PLAYERS} players required to start<br />` +
-            `- Each player gets ${SafariGame.BALLS_PER_PLAYER} Safari Balls<br />` +
-            `- ${SafariGame.TURN_TIME / 1000} second time limit per turn<br />` +
-            '- Game ends when all players use their balls<br />' +
-            '- Prizes: 1st (60%), 2nd (30%), 3rd (10%) of pool<br />' +
-            '- Players can be disqualified by the game creator'
-        );
-    }
-};
+            '<strong>Game Rules
