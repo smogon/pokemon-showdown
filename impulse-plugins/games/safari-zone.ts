@@ -235,15 +235,27 @@ class SafariGame {
         delete this.players[targetId];
         this.display();
 
-        if (this.status === 'started' && Object.keys(this.players).length < SafariGame.MIN_PLAYERS) {
-            this.end(false);
-            return `${player.name} was disqualified. Game ended due to insufficient players.`;
+        // Check if we should end the game
+        if (this.status === 'started') {
+            if (Object.keys(this.players).length < SafariGame.MIN_PLAYERS) {
+                this.end(false);
+                return `${player.name} was disqualified. Game ended due to insufficient players.`;
+            }
+            // Check if all remaining players have used their balls
+            this.checkGameEnd();
         }
 
         return `${player.name} was disqualified from the Safari Zone game.`;
     }
 
     private checkGameEnd() {
+        // Check if any players are left
+        if (Object.keys(this.players).length === 0) {
+            this.end(false);
+            return;
+        }
+
+        // Check if all remaining players have used their balls
         const allFinished = Object.values(this.players).every(p => p.ballsLeft === 0);
         if (allFinished) {
             this.end(false);
@@ -256,6 +268,7 @@ class SafariGame {
         this.clearTimer();
         this.status = 'ended';
 
+        // If the game is ending due to inactivity and not enough players
         if (inactive && Object.keys(this.players).length < SafariGame.MIN_PLAYERS) {
             for (const id in this.players) {
                 Economy.addMoney(id, this.entryFee, "Safari Zone refund");
@@ -267,24 +280,31 @@ class SafariGame {
 
         const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
 
-        const prizes = [0.6, 0.3, 0.1];
-        for (let i = 0; i < Math.min(3, sortedPlayers.length); i++) {
-            const prize = Math.floor(this.prizePool * prizes[i]);
-            if (prize > 0) {
-                Economy.addMoney(sortedPlayers[i].id, prize, `Safari Zone ${i + 1}${['st', 'nd', 'rd'][i]} place`);
+        // Only distribute prizes if there are players
+        if (sortedPlayers.length > 0) {
+            const prizes = [0.6, 0.3, 0.1];
+            for (let i = 0; i < Math.min(3, sortedPlayers.length); i++) {
+                const prize = Math.floor(this.prizePool * prizes[i]);
+                if (prize > 0) {
+                    Economy.addMoney(sortedPlayers[i].id, prize, `Safari Zone ${i + 1}${['st', 'nd', 'rd'][i]} place`);
+                }
             }
+
+            let buf = `<div class="infobox"><center><h2>Safari Zone Results</h2>`;
+            sortedPlayers.forEach((player, index) => {
+                if (index < 3) {
+                    const prize = Math.floor(this.prizePool * prizes[index]);
+                    buf += `${index + 1}. ${Impulse.nameColor(player.name, true, true)} - ${player.points} points (Won ${prize} coins)<br>`;
+                }
+            });
+            buf += `</center></div>`;
+
+            this.room.add(`|uhtmlchange|${this.gameId}|${buf}`).update();
+        } else {
+            // If no players are left
+            this.room.add(`|uhtmlchange|${this.gameId}|<div class="infobox">The Safari Zone game has ended with no winners.</div>`).update();
         }
 
-        let buf = `<div class="infobox"><center><h2>Safari Zone Results</h2>`;
-        sortedPlayers.forEach((player, index) => {
-            if (index < 3) {
-                const prize = Math.floor(this.prizePool * prizes[index]);
-                buf += `${index + 1}. ${Impulse.nameColor(player.name, true, true)} - ${player.points} points (Won ${prize} coins)<br>`;
-            }
-        });
-        buf += `</center></div>`;
-
-        this.room.add(`|uhtmlchange|${this.gameId}|${buf}`).update();
         delete this.room.safari;
     }
 }
@@ -329,7 +349,8 @@ export const commands: Chat.ChatCommands = {
                 return;
             }
 
-            case 'dq': case 'disqualify': {
+            case 'dq':
+            case 'disqualify': {
                 if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
                 const targetUser = args.join(' ').trim();
                 if (!targetUser) return this.errorReply("Please specify a player to disqualify.");
@@ -338,7 +359,8 @@ export const commands: Chat.ChatCommands = {
                 const result = room.safari.disqualifyPlayer(targetId, user.id);
                 if (result) {
                     this.modlog('SAFARIDQ', targetUser, `by ${user.name}`);
-                    return this.privateModAction(result);
+                    this.privateModAction(result);
+                    return;
                 }
                 return this.errorReply("Failed to disqualify player.");
             }
