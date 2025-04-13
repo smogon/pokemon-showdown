@@ -1,6 +1,6 @@
 /*************************************
  * Pokemon Safari Zone Game          *
- * Last Updated: 2025-04-13 09:58:00 *
+ * Last Updated: 2025-04-13 10:07:45 *
  * Author: @musaddiktemkar           *
  **************************************/
 
@@ -99,7 +99,7 @@ class SafariGame {
                 `<button class="button" name="send" value="/safari join">Click to join!</button>` +
                 `</div></div>`;
             
-            this.room.add(`|uhtmlchange|${this.gameId}|${startMsg}`, -1000).update();
+            this.room.add(`|uhtml|${this.gameId}|${startMsg}`, -1000).update();
             return;
         }
 
@@ -274,7 +274,7 @@ class SafariGame {
             for (const id in this.players) {
                 Economy.addMoney(id, this.entryFee, "Safari Zone refund");
             }
-            this.room.add(`|uhtmlchange|${this.gameId}|<div class="infobox">The Safari Zone game has been canceled due to inactivity. Entry fees have been refunded.</div>`).update();
+            this.room.add(`|uhtmlchange|${this.gameId}|<div class="infobox">The Safari Zone game has been canceled due to inactivity. Entry fees have been refunded.</div>`, -1000).update();
             delete this.room.safari;
             return;
         }
@@ -300,10 +300,10 @@ class SafariGame {
             });
             buf += `</center></div>`;
 
-            this.room.add(`|uhtmlchange|${this.gameId}|${buf}`).update();
+            this.room.add(`|uhtmlchange|${this.gameId}|${buf}`, -1000).update();
         } else {
             // If no players are left
-            this.room.add(`|uhtmlchange|${this.gameId}|<div class="infobox">The Safari Zone game has ended with no winners.</div>`).update();
+            this.room.add(`|uhtmlchange|${this.gameId}|<div class="infobox">The Safari Zone game has ended with no winners.</div>`, -1000).update();
         }
 
         delete this.room.safari;
