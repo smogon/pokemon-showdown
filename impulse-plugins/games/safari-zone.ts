@@ -98,14 +98,11 @@ class SafariGame {
                 `<button class="button" name="send" value="/safari join">Click to join!</button>` +
                 `</div></div>`;
             
-            this.room.add(`|uhtml|safari-waiting|${startMsg}`, -1000).update();
+            this.room.add(`|uhtml|${this.gameId}|${startMsg}`, -1000).update();
             return;
         }
 
-        // Clear any waiting state display
-        this.room.add(`|uhtmlchange|safari-waiting|`, -1000);
-
-        // Send individual displays to each player
+        // First, send individual displays to each player
         for (const userid in this.players) {
             const player = this.players[userid];
             let buf = `<div class="infobox"><div style="text-align:center">`;
@@ -143,22 +140,23 @@ class SafariGame {
             // Send the player-specific display
             const roomUser = Users.get(userid);
             if (roomUser?.connected) {
-                roomUser.sendTo(this.room, `|uhtml|safari-player-${userid}|${buf}`);
+                roomUser.sendTo(
+                    this.room, 
+                    `|uhtml|${this.gameId}-${userid}|${buf}`
+                );
             }
         }
 
-        // Show minimal display for spectators in the room
-        if (this.status !== 'ended') {
-            let spectatorBuf = `<div class="infobox"><div style="text-align:center">`;
-            spectatorBuf += `<h2>Safari Zone Game${this.status === 'ended' ? ' (Ended)' : ''}</h2>`;
-            spectatorBuf += `<b>Host:</b> ${Impulse.nameColor(this.host, true, true)}<br />`;
-            spectatorBuf += `<b>Players:</b> ${this.getPlayerList()}<br />`;
-            spectatorBuf += `<i>Game in progress - Join the next round!</i>`;
-            spectatorBuf += `</div></div>`;
+        // Then show minimal display for spectators
+        let spectatorBuf = `<div class="infobox"><div style="text-align:center">`;
+        spectatorBuf += `<h2>Safari Zone Game${this.status === 'ended' ? ' (Ended)' : ''}</h2>`;
+        spectatorBuf += `<b>Host:</b> ${Impulse.nameColor(this.host, true, true)}<br />`;
+        spectatorBuf += `<b>Players:</b> ${this.getPlayerList()}<br />`;
+        spectatorBuf += `<i>Game in progress - Join the next round!</i>`;
+        spectatorBuf += `</div></div>`;
 
-            // Update room display for spectators
-            this.room.add(`|uhtml|safari-spectator|${spectatorBuf}`, -1000).update();
-        }
+        // Update room display for spectators
+        this.room.add(`|uhtml|${this.gameId}|${spectatorBuf}`, -1000).update();
     }
 
     addPlayer(user: User): string | null {
@@ -227,7 +225,7 @@ class SafariGame {
             if (random <= cumulativeProbability) {
                 player.catches.push(pokemon);
                 player.points += pokemon.points;
-                this.lastCatchMessage = `${player.name} caught a ${pokemon.name} worth ${pokemon.points} points! (${player.ballsLeft} balls left)`;
+                this.lastCatchMessage = `Congratulations! You caught a ${pokemon.name} worth ${pokemon.points} points! (${player.ballsLeft} balls left)`;
                 this.display();
 
                 if (player.ballsLeft === 0) {
@@ -238,7 +236,7 @@ class SafariGame {
             }
         }
 
-        this.lastCatchMessage = `${player.name}'s Safari Ball missed! (${player.ballsLeft} balls left)`;
+        this.lastCatchMessage = `The Pokemon got away! (${player.ballsLeft} balls left)`;
         this.display();
         if (player.ballsLeft === 0) {
             this.checkGameEnd();
@@ -300,7 +298,7 @@ class SafariGame {
             for (const id in this.players) {
                 Economy.addMoney(id, this.entryFee, "Safari Zone refund");
             }
-            this.room.add(`|uhtmlchange|safari-spectator|<div class="infobox">The Safari Zone game has been canceled due to inactivity. Entry fees have been refunded.</div>`, -1000).update();
+            this.room.add(`|uhtml|${this.gameId}|<div class="infobox">The Safari Zone game has been canceled due to inactivity. Entry fees have been refunded.</div>`, -1000).update();
             delete this.room.safari;
             return;
         }
@@ -326,18 +324,10 @@ class SafariGame {
             });
             buf += `</center></div>`;
 
-            this.room.add(`|uhtmlchange|safari-spectator|${buf}`, -1000).update();
-
-            // Clear player displays
-            for (const userid in this.players) {
-                const roomUser = Users.get(userid);
-                if (roomUser?.connected) {
-                    roomUser.sendTo(this.room, `|uhtmlchange|safari-player-${userid}|`);
-                }
-            }
+            this.room.add(`|uhtml|${this.gameId}|${buf}`, -1000).update();
         } else {
             // If no players are left
-            this.room.add(`|uhtmlchange|safari-spectator|<div class="infobox">The Safari Zone game has ended with no winners.</div>`, -1000).update();
+            this.room.add(`|uhtml|${this.gameId}|<div class="infobox">The Safari Zone game has ended with no winners.</div>`, -1000).update();
         }
 
         delete this.room.safari;
@@ -366,9 +356,6 @@ export const commands: Chat.ChatCommands = {
                 if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
                 const error = room.safari.addPlayer(user);
                 if (error) return this.errorReply(error);
-                
-                // Clear the spectator view for the joining player
-                this.sendReply(`|uhtmlchange|safari-spectator|`);
                 return;
             }
 
