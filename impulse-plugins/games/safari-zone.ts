@@ -1,10 +1,11 @@
 /*************************************
- * Pokemon Safari Zone Game Commands *
- * Initial Release                   *
+ * Pokemon Safari Zone Game          *
+ * Iitial Release                    *
  * Author: @musaddiktemkar           *
  **************************************/
 
 import { FS } from '../../lib/fs';
+import { Economy } from '../economy';
 
 interface Player {
     name: string;
@@ -153,7 +154,7 @@ class SafariGame {
             this.start(user);
         }
 
-        this.room.add(`|html|<div class="broadcast-blue"><b>${Impulse.nameColor(user.name, true, true)} has joined the Safari Zone game!</b></div>`).update();
+        user.sendTo(this.room, `|html|<div class="broadcast-green"><b>You have successfully joined the Safari Zone game!</b></div>`);
         
         return null;
     }
