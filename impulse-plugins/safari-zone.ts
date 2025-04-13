@@ -202,7 +202,7 @@ export class SafariZone {
         if (!room) return;
 
         const html = this.generateGameHTML(game);
-        room.add(`|uhtmlchange|safari-${game.id}|${html}`).update();
+        this.room.add(`|uhtmlchange|safari-${game.id}|${html}`).update();
     }
 
     private static generateGameHTML(game: SafariGame): string {
@@ -214,14 +214,7 @@ export class SafariZone {
         // Sort players by points
         const sortedPlayers = [...game.players].sort((a, b) => b.points - a.points);
         
-        const playerList = sortedPlayers.map((p, index) => `
-            <tr>
-                <td>${index + 1}</td>
-                <td>${Impulse.nameColor(p.username, true, true)}</td>
-                <td>${p.points}</td>
-                <td>${p.catches.map(c => c.emoji).join(' ')}</td>
-            </tr>
-        `).join('');
+        const playerList = sortedPlayers.map((p, index) => `<tr><td>${index + 1}</td><td>${Impulse.nameColor(p.username, true, true)}</td><td>${p.points}</td><td>${p.catches.map(c => c.emoji).join(' ')}</td></tr>`).join('');
 
         const joinButton = game.status === 'waiting' ? 
             `<button class="button" name="send" value="/safari join ${game.id}">Join Game (${game.entryFee} coins)</button>` : '';
@@ -257,21 +250,11 @@ export class SafariZone {
         `;
 
         if (game.status === 'ended' && game.winners.length > 0) {
-            html += `
-                <br />
-                <center>
-                    <h3>Winners</h3>
-                    ${game.winners.map((w, i) => `
-                        ${i + 1}. ${Impulse.nameColor(w.username, true, true)} - ${w.points} points
-                        <br />Prize: ${w.prize} coins
-                    `).join('<br />')}
-                </center>
-            `;
-        }
-
-        html += `</div>`;
-        return html;
-    }
+            html += `<br /><center><h3>Winners</h3>${game.winners.map((w, i) => `${i + 1}. ${Impulse.nameColor(w.username, true, true)} - ${w.points} points<br />Prize: ${w.prize} coins`).join('<br />')}</center>`;
+		  }
+		 html += `</div>`;
+		 return html;
+	 }
 
     static getGameStatus(gameId: string): SafariGame | null {
         return this.games.get(gameId) || null;
