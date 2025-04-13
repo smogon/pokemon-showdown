@@ -1,7 +1,7 @@
 /*************************************
  * Pokemon Safari Zone Game          *
  * Author: @musaddiktemkar          *
- * Updated: 2025-04-13 16:27:12 UTC *
+ * Updated: 2025-04-13 16:55:56 UTC *
  **************************************/
 
 import { FS } from '../../lib/fs';
@@ -197,42 +197,41 @@ class SafariGame {
         const now = Date.now();
         const timeLeft = Math.max(0, Math.ceil((SafariGame.TURN_TIME - (now - this.turnStartTime)) / 1000));
 
-        // Send individual displays to each player
-        for (const userid in this.players) {
-            const player = this.players[userid];
-            let buf = `<div class="infobox"><div style="text-align:center">`;
-            buf += `<h2>Safari Zone Game${this.status === 'ended' ? ' (Ended)' : ''}</h2>`;
-            
-            // Show current time
-            buf += `<small>Game Time: ${this.formatUTCTime(now)} UTC</small><br />`;
-            buf += `<small>Game Duration: ${Math.floor((now - this.gameStartTime) / 1000)}s</small><br />`;
-            
-            buf += `<b>Host:</b> ${Impulse.nameColor(this.host, true, true)}<br />`;
-            buf += `<b>Status:</b> ${this.status}<br />`;
-            buf += `<b>Prize Pool:</b> ${this.prizePool} coins<br />`;
+        // Only send player displays if game is still in progress
+        if (this.status === 'started') {
+            // Send individual displays to each player
+            for (const userid in this.players) {
+                const player = this.players[userid];
+                let buf = `<div class="infobox"><div style="text-align:center">`;
+                buf += `<h2>Safari Zone Game</h2>`;
+                
+                // Show current time
+                buf += `<small>Game Time: ${this.formatUTCTime(now)} UTC</small><br />`;
+                buf += `<small>Game Duration: ${Math.floor((now - this.gameStartTime) / 1000)}s</small><br />`;
+                
+                buf += `<b>Host:</b> ${Impulse.nameColor(this.host, true, true)}<br />`;
+                buf += `<b>Status:</b> ${this.status}<br />`;
+                buf += `<b>Prize Pool:</b> ${this.prizePool} coins<br />`;
 
-            if (this.status === 'started') {
                 buf += `<b>Current Turn:</b> ${Impulse.nameColor(this.players[currentPlayerId].name, true, true)}`;
                 buf += ` <b style="color: ${timeLeft <= 10 ? '#ff5555' : '#5555ff'}">(${timeLeft}s left)</b><br />`;
-            }
 
-            if (Object.keys(this.players).length) {
-                buf += `<table border="1" cellspacing="0" cellpadding="3" style="margin:auto;margin-top:5px">`;
-                buf += `<tr><th>Player</th><th>Points</th><th>Balls Left</th><th>Catches</th></tr>`;
-                const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
-                for (const p of sortedPlayers) {
-                    const isCurrentTurn = p.id === currentPlayerId;
-                    buf += `<tr${isCurrentTurn ? ' style="background-color: rgba(85, 85, 255, 0.1)"' : ''}>`;
-                    buf += `<td>${Impulse.nameColor(p.name, true, true)}${p.id === userid ? ' (You)' : ''}${isCurrentTurn ? ' ⭐' : ''}</td>`;
-                    buf += `<td>${p.points}</td>`;
-                    buf += `<td>${p.ballsLeft}</td>`;
-                    buf += `<td>${p.catches.map(pk => `<img src="${pk.sprite}" width="40" height="30" title="${pk.name}">`).join('')}</td>`;
-                    buf += `</tr>`;
+                if (Object.keys(this.players).length) {
+                    buf += `<table border="1" cellspacing="0" cellpadding="3" style="margin:auto;margin-top:5px">`;
+                    buf += `<tr><th>Player</th><th>Points</th><th>Balls Left</th><th>Catches</th></tr>`;
+                    const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
+                    for (const p of sortedPlayers) {
+                        const isCurrentTurn = p.id === currentPlayerId;
+                        buf += `<tr${isCurrentTurn ? ' style="background-color: rgba(85, 85, 255, 0.1)"' : ''}>`;
+                        buf += `<td>${Impulse.nameColor(p.name, true, true)}${p.id === userid ? ' (You)' : ''}${isCurrentTurn ? ' ⭐' : ''}</td>`;
+                        buf += `<td>${p.points}</td>`;
+                        buf += `<td>${p.ballsLeft}</td>`;
+                        buf += `<td>${p.catches.map(pk => `<img src="${pk.sprite}" width="40" height="30" title="${pk.name}">`).join('')}</td>`;
+                        buf += `</tr>`;
+                    }
+                    buf += `</table>`;
                 }
-                buf += `</table>`;
-            }
 
-            if (this.status === 'started') {
                 if (this.lastCatchMessage) {
                     buf += `<br /><div style="color: #008000; margin: 5px 0;">${this.lastCatchMessage}</div>`;
                 }
@@ -254,18 +253,26 @@ class SafariGame {
                     const currentPlayer = this.players[currentPlayerId];
                     buf += `<br /><div style="color: #666666">Waiting for ${currentPlayer.name}'s turn... (${timeLeft}s left)</div>`;
                 }
-            }
 
-            buf += `</div></div>`;
-            
-            // Send the player-specific display
-            const roomUser = Users.get(userid);
-            if (roomUser?.connected) {
-                roomUser.sendTo(this.room, `|uhtml|safari-player-${userid}|${buf}`);
+                buf += `</div></div>`;
+                
+                // Send the player-specific display
+                const roomUser = Users.get(userid);
+                if (roomUser?.connected) {
+                    roomUser.sendTo(this.room, `|uhtml|safari-player-${userid}|${buf}`);
+                }
+            }
+        } else if (this.status === 'ended') {
+            // Clear all player UIs when game ends
+            for (const userid in this.players) {
+                const roomUser = Users.get(userid);
+                if (roomUser?.connected) {
+                    roomUser.sendTo(this.room, `|uhtmlchange|safari-player-${userid}|`);
+                }
             }
         }
 
-        // Only show the spectator view at the end of the game
+        // Show results to everyone when game ends
         if (this.status === 'ended') {
             const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
             let buf = `<div class="infobox"><center><h2>Safari Zone Results</h2>`;
@@ -432,17 +439,9 @@ class SafariGame {
                     Economy.addMoney(sortedPlayers[i].id, prize, `Safari Zone ${i + 1}${['st', 'nd', 'rd'][i]} place`);
                 }
             }
-
-            // Clear all player views
-            for (const userid in this.players) {
-                const roomUser = Users.get(userid);
-                if (roomUser?.connected) {
-                    roomUser.sendTo(this.room, `|uhtmlchange|safari-player-${userid}|`);
-                }
-            }
         }
 
-        // Final display is handled by the display() method
+        // Final display update will clear player UIs and show results
         this.display();
         delete this.room.safari;
     }
