@@ -39,6 +39,8 @@ export function parseEmoticons(message: string): string {
     return parsedMessage;
 }
 
+Impulse.parseEmoticons = parseEmoticons;
+
 export const commands: Chat.ChatCommands = {
     emoticon: 'emote',
     emote: {
