@@ -646,54 +646,6 @@ export class CommandContext extends MessageContext {
 			this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
 			return;
 		}
-/*
-		// Output the message
-		if (message && typeof (message as any).then === 'function') {
-			this.update();
-			return (message as Promise<string | boolean | void>).then(resolvedMessage => {
-				if (resolvedMessage && resolvedMessage !== true) {
-					this.sendChatMessage(resolvedMessage);
-				}
-				this.update();
-				if (resolvedMessage === false) return false;
-			}).catch(err => {
-				if (err.name?.endsWith('ErrorMessage')) {
-					this.errorReply(err.message);
-					this.update();
-					return false;
-				}
-				if (err.name.endsWith('Interruption')) {
-					this.update();
-					return;
-				}
-				Monitor.crashlog(err, 'An async chat command', {
-					user: this.user.name,
-					room: this.room?.roomid,
-					pmTarget: this.pmTarget?.name,
-					message: this.message,
-				});
-				this.sendReply(`|html|<div class="broadcast-red"><b>Pokemon Showdown crashed!</b><br />Don't worry, we're working on fixing it.</div>`);
-				return false;
-			});
-		} else if (message && message !== true) {
-			this.sendChatMessage(message as string);
-			message = true;
-		}
-
-		if (this.user.registered) Impulse.ExpSystem.addExp(this.user.id, 1);
-
-		// Impulse Exp
-		if (Impulse.ExpSystem.canAddExp(this.user.id)) {
-			Impulse.ExpSystem.addExp(this.user.id, 1);
-			Impulse.ExpSystem.setAddExpCooldown(this.user.id);
-		}
-			
-		this.update();
-
-
-		return message;
-	}
-*/
 
 		// Output the message
 		if (message && typeof (message as any).then === 'function') {
@@ -729,18 +681,13 @@ export class CommandContext extends MessageContext {
 		}
 
 		if (this.user.registered) Impulse.ExpSystem.addExp(this.user.id, 1);
-
-		// Impulse Exp
-		/*if (Impulse.ExpSystem.canAddExp(this.user.id)) {
-			Impulse.ExpSystem.addExp(this.user.id, 1);
-			Impulse.ExpSystem.setAddExpCooldown(this.user.id);
-		}*/
 			
 		this.update();
 
 
 		return message;
 	}
+
 	
 	sendChatMessage(message: string) {
 		if (this.pmTarget) {
@@ -756,9 +703,7 @@ export class CommandContext extends MessageContext {
 			}
 			Chat.PrivateMessages.send(message, this.user, this.pmTarget);
 		} else if (this.room) {
-			let emoticons = Impulse.parseEmoticons(message);
-			this.room.add(`|c|${this.user.getIdentity(this.room)}|/html ${emoticons}`);
-			/* this.room.add(`|c|${this.user.getIdentity(this.room)}|${message}`); */
+			this.room.add(`|c|${this.user.getIdentity(this.room)}|${message}`); */
 			this.room.game?.onLogMessage?.(message, this.user);
 		} else {
 			this.connection.popup(`Your message could not be sent:\n\n${message}\n\nIt needs to be sent to a user or room.`);
