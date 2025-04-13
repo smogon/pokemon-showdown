@@ -1,6 +1,5 @@
 /*************************************
  * Pokemon Safari Zone Game          *
- * Last Updated: 2025-04-13 09:58:00 *
  * Author: @musaddiktemkar           *
  **************************************/
 
@@ -32,6 +31,7 @@ class SafariGame {
     private gameId: string;
     private host: string;
     private lastCatchMessage: string | null;
+    private lastCatchPlayer: string | null;
 
     private static readonly INACTIVE_TIME = 2 * 60 * 1000;
     private static readonly CATCH_COOLDOWN = 2 * 1000;
@@ -58,6 +58,7 @@ class SafariGame {
         this.prizePool = 0;
         this.gameId = `safari-${Date.now()}`;
         this.lastCatchMessage = null;
+        this.lastCatchPlayer = null;
 
         this.setInactivityTimer();
         this.display();
@@ -99,17 +100,21 @@ class SafariGame {
                 `<button class="button" name="send" value="/safari join">Click to join!</button>` +
                 `</div></div>`;
             
-            this.room.add(`|uhtmlchange|${this.gameId}|${startMsg}`, -1000).update();
+            this.room.add(`|uhtml|${this.gameId}|${startMsg}`, -1000).update();
             return;
         }
 
+        // Get list of active players
+        const activePlayers = Object.keys(this.players);
+
+        // Generate base display
         let buf = `<div class="infobox"><div style="text-align:center">`;
         buf += `<h2>Safari Zone Game${this.status === 'ended' ? ' (Ended)' : ''}</h2>`;
         buf += `<b>Host:</b> ${Impulse.nameColor(this.host, true, true)}<br />`;
         buf += `<b>Status:</b> ${this.status}<br />`;
         buf += `<b>Prize Pool:</b> ${this.prizePool} coins<br />`;
 
-        if (Object.keys(this.players).length) {
+        if (activePlayers.length) {
             buf += `<table border="1" cellspacing="0" cellpadding="3" style="margin:auto;margin-top:5px">`;
             buf += `<tr><th>Player</th><th>Points</th><th>Balls Left</th><th>Catches</th></tr>`;
             const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
@@ -124,15 +129,38 @@ class SafariGame {
             buf += `</table>`;
         }
 
+        // Create different versions for players and spectators
+        let playerBuf = buf;
+        let spectatorBuf = buf;
+
         if (this.status === 'started') {
-            if (this.lastCatchMessage) {
-                buf += `<br /><div style="color: #008000; margin: 5px 0;">${this.lastCatchMessage}</div>`;
+            // Add catch message and throw button only for active players
+            if (this.lastCatchMessage && this.lastCatchPlayer) {
+                // Only show catch message to the player who made the catch
+                playerBuf += `<br /><div style="color: #008000; margin: 5px 0;">${this.lastCatchMessage}</div>`;
             }
-            buf += `<br /><button class="button" name="send" value="/safari throw">Throw Safari Ball</button>`;
+            playerBuf += `<br /><button class="button" name="send" value="/safari throw">Throw Safari Ball</button>`;
         }
 
-        buf += `</div></div>`;
-        this.room.add(`|uhtmlchange|${this.gameId}|${buf}`, -1000).update();
+        playerBuf += `</div></div>`;
+        spectatorBuf += `</div></div>`;
+
+        // Display different versions to players and spectators
+        for (const userid of this.room.users.keys()) {
+            const isPlayer = activePlayers.includes(toID(userid));
+            if (isPlayer) {
+                const isLastCatcher = this.lastCatchPlayer === toID(userid);
+                let displayBuf = playerBuf;
+                if (!isLastCatcher) {
+                    // Remove catch message for other players
+                    displayBuf = displayBuf.replace(/<br \/><div style="color: #008000; margin: 5px 0;">.*?<\/div>/, '');
+                }
+                this.room.sendUser(userid, `|uhtmlchange|${this.gameId}|${displayBuf}`);
+            } else {
+                this.room.sendUser(userid, `|uhtmlchange|${this.gameId}|${spectatorBuf}`);
+            }
+        }
+        this.room.update();
     }
 
     addPlayer(user: User): string | null {
@@ -186,6 +214,7 @@ class SafariGame {
         if (now - player.lastCatch < SafariGame.CATCH_COOLDOWN) {
             const remaining = Math.ceil((SafariGame.CATCH_COOLDOWN - (now - player.lastCatch)) / 1000);
             this.lastCatchMessage = `Please wait ${remaining} seconds before throwing again!`;
+            this.lastCatchPlayer = user.id;
             this.display();
             return null;
         }
@@ -202,6 +231,7 @@ class SafariGame {
                 player.catches.push(pokemon);
                 player.points += pokemon.points;
                 this.lastCatchMessage = `Congratulations! You caught a ${pokemon.name} worth ${pokemon.points} points! (${player.ballsLeft} balls left)`;
+                this.lastCatchPlayer = user.id;
                 this.display();
 
                 if (player.ballsLeft === 0) {
@@ -213,6 +243,7 @@ class SafariGame {
         }
 
         this.lastCatchMessage = `The Pokemon got away! (${player.ballsLeft} balls left)`;
+        this.lastCatchPlayer = user.id;
         this.display();
         if (player.ballsLeft === 0) {
             this.checkGameEnd();
@@ -274,7 +305,7 @@ class SafariGame {
             for (const id in this.players) {
                 Economy.addMoney(id, this.entryFee, "Safari Zone refund");
             }
-            this.room.add(`|uhtmlchange|${this.gameId}|<div class="infobox">The Safari Zone game has been canceled due to inactivity. Entry fees have been refunded.</div>`).update();
+            this.room.add(`|uhtmlchange|${this.gameId}|<div class="infobox">The Safari Zone game has been canceled due to inactivity. Entry fees have been refunded.</div>`, -1000).update();
             delete this.room.safari;
             return;
         }
@@ -300,10 +331,10 @@ class SafariGame {
             });
             buf += `</center></div>`;
 
-            this.room.add(`|uhtmlchange|${this.gameId}|${buf}`).update();
+            this.room.add(`|uhtmlchange|${this.gameId}|${buf}`, -1000).update();
         } else {
             // If no players are left
-            this.room.add(`|uhtmlchange|${this.gameId}|<div class="infobox">The Safari Zone game has ended with no winners.</div>`).update();
+            this.room.add(`|uhtmlchange|${this.gameId}|<div class="infobox">The Safari Zone game has ended with no winners.</div>`, -1000).update();
         }
 
         delete this.room.safari;
