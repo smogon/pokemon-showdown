@@ -4,8 +4,6 @@
 * Updated To Typescript By: TurboRx        *
 *******************************************/
 
-import { Economy } from './economy';
-
 const INACTIVE_END_TIME = 1 * 60 * 1000; // 1 minute
 const TAX = 0; // No tax by default
 
