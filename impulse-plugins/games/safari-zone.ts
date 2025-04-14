@@ -643,3 +643,48 @@ export const commands: Chat.ChatCommands = {
                     this.modlog('SAFARIDQ', targetUser, `by ${user.name}`);
                     this.privateModAction(result);
                     return;
+					 }
+					return this.errorReply("Failed to disqualify player.");
+				}
+
+            case 'end': {
+                this.checkCan('mute', null, room);
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                room.safari.end(false);
+                this.modlog('SAFARI', null, `ended by ${user.name}`);
+                return this.privateModAction(`${user.name} ended the Safari game.`);
+            }
+
+            default:
+                return this.parse('/help safari');
+        }
+    },
+
+    safarihelp(target, room, user) {
+        if (!this.runBroadcast()) return;
+        return this.sendReplyBox(
+            '<center><strong>Safari Zone Commands</strong></center>' +
+            '<hr />' +
+            `<code>/safari create [prizePool],[balls]</code>: Creates a new Safari game with the specified prize pool (${SafariGame.MIN_PRIZE_POOL}-${SafariGame.MAX_PRIZE_POOL} coins) and balls per player. Requires: @ # &<br />` +
+            '<code>/safari join</code>: Joins the current Safari game.<br />' +
+            '<code>/safari start</code>: Starts the Safari game if enough players have joined.<br />' +
+            '<code>/safari move [up/down/left/right]</code>: Move in a direction to find a Pokemon.<br />' +
+            '<code>/safari throw</code>: Throws a Safari Ball at the encountered Pokemon.<br />' +
+            '<code>/safari spectate</code>: Watch an ongoing Safari game.<br />' +
+            '<code>/safari unspectate</code>: Stop watching a Safari game.<br />' +
+            '<code>/safari dq [player]</code>: Disqualifies a player from the game (only usable by game creator).<br />' +
+            '<code>/safari end</code>: Ends the current Safari game. Requires: @ # &<br />' +
+            '<hr />' +
+            '<strong>Game Rules:</strong><br />' +
+            `- No entry fee required<br />` +
+            `- Minimum ${SafariGame.MIN_PLAYERS} players required to start<br />` +
+            `- Each player gets ${SafariGame.MIN_BALLS}-${SafariGame.MAX_BALLS} Safari Balls (default: ${SafariGame.DEFAULT_BALLS})<br />` +
+            `- On your turn, first choose a direction to move<br />` +
+            `- After moving, a Pokemon may appear which you can try to catch<br />` +
+            `- ${SafariGame.TURN_TIME / 1000} second time limit per turn<br />` +
+            '- Game ends when all players use their balls<br />' +
+            '- Prizes: 1st (60%), 2nd (30%), 3rd (10%) of prize pool<br />' +
+            '- Players can be disqualified by the game creator'
+        );
+    }
+};
