@@ -4,7 +4,7 @@
  **************************************/
 
 import { SafariGame } from './safari-game-core';
-import { SAFARI_CONSTANTS, MovementDirection } from '../safari-types';
+import { SAFARI_CONSTANTS, MovementDirection } from './safari-types';
 
 export const commands: Chat.ChatCommands = {
     safari(target, room, user) {
