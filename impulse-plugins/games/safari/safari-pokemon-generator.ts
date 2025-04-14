@@ -11,12 +11,17 @@ import { Pokemon } from './safari-types';
 export class PokemonGenerator {
     /**
      * Generates a pool of Pokemon with varied rarities and point values
+     * @param ballsPerPlayer Number of balls each player gets
      * @returns An array of Pokemon objects
      */
-    static generatePokemonPool(): Pokemon[] {
+    static generatePokemonPool(ballsPerPlayer: number): Pokemon[] {
         const pool: Pokemon[] = [];
-        const dex = Dex.mod('gen9');
-
+        // Use gen4 dex specifically to limit Pokémon to gen1-4
+        const dex = Dex.mod('gen4');
+        
+        // Calculate pool size - 3x the number of balls per player
+        const poolSize = ballsPerPlayer * 3;
+        
         // Define rarity and points based on base stats
         const getDetails = (species: Species) => {
             const baseStats = species.baseStats;
@@ -29,11 +34,22 @@ export class PokemonGenerator {
             return { rarity: 0.3, points: 10 };                        // Common
         };
 
-        // Get available species
+        // Get available species from gen1-4 only
         const allSpecies = Array.from(dex.species.all())
-            .filter(species => !species.isNonstandard && !species.forme)
+            // Filter out non-standard species, formes, and ensure it's gen 1-4 only
+            .filter(species => {
+                // Filter out non-standard Pokémon
+                if (species.isNonstandard) return false;
+                // Filter out alternate formes
+                if (species.forme) return false;
+                // Filter by generation (1-4 only)
+                const gen = parseInt(species.gen);
+                return gen >= 1 && gen <= 4;
+            })
+            // Shuffle the array
             .sort(() => Math.random() - 0.5)
-            .slice(0, 20); // Limit total pool size
+            // Limit pool size based on balls per player
+            .slice(0, poolSize);
 
         // Create pool with dynamic rarity/points based on stats
         for (const species of allSpecies) {
