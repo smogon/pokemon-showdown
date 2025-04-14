@@ -208,9 +208,9 @@ Impulse.ExpSystem = ExpSystem;
 
 export const commands: Chat.Commands = {
   level: 'exp',
-  exp(target, room, user) {
+	exp(target, room, user) {
   if (!target) target = user.name;
-  const isBroadcast = this.runBroadcast();
+  if (!this.runBroadcast()) return;    
   const userid = toID(target);
   const currentExp = ExpSystem.readExp(userid);
   const currentLevel = ExpSystem.getLevel(currentExp);
@@ -221,46 +221,43 @@ export const commands: Chat.Commands = {
   const expNeededForNextLevel = nextLevelExp - previousLevelExp;
   const progressPercentage = Math.floor((expInCurrentLevel / expNeededForNextLevel) * 100);
   const expNeeded = nextLevelExp - currentExp;
+  const executedBy = user.name === target ? '' : ` (Checked by ${Impulse.nameColor(user.name, true, true)})`;
+  
+  // Create a theme-neutral progress bar with better visibility on both light/dark themes
   const progressBarHTML = 
     `<div style="width: 200px; height: 18px; background: rgba(200, 200, 200, 0.2); border-radius: 10px; overflow: hidden; border: 1px solid rgba(150, 150, 150, 0.3); margin: 5px auto;">` +
     `<div style="width: ${progressPercentage}%; height: 100%; background: linear-gradient(90deg, #3498db, #2980b9); box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);"></div>` +
     `</div>`;
   
-  if (isBroadcast) {
-    // This is the public broadcast command (!exp) - Only show name, level, progress bar and % complete
-    this.sendReplyBox(
-      `<div style="background: rgba(0, 0, 0, 0.05); border-radius: 8px; padding: 10px; border: 1px solid rgba(125, 125, 125, 0.2);">` +
-      `<div style="text-align: center; font-weight: bold; font-size: 1.2em; margin-bottom: 5px;">` +
-      `${Impulse.nameColor(userid, true, false)} - Level ${currentLevel}` +
-      `</div>` +
-      `<div style="width: 100%; height: 10px; background: rgba(200, 200, 200, 0.3); border-radius: 5px; overflow: hidden; margin: 5px 0;">` +
-      `<div style="width: ${progressPercentage}%; height: 100%; background: #3498db;"></div>` +
-      `</div>` +
-      `<div style="text-align: center; font-size: 0.8em; margin-top: 5px;">` +
-      `${progressPercentage}% complete` +
-      `</div>` +
-      `</div>`
-    );
-    return;
-  } else {
+  // Create a more visually appealing EXP display with stats, ensuring proper string concatenation
   this.sendReplyBox(
     `<div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.05)); border-radius: 10px; padding: 12px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); border: 1px solid rgba(125, 125, 125, 0.2);">` +
+    
+    // Name at the top
     `<div style="text-align: center; margin-bottom: 8px;">` +
     `<div style="font-size: 1.5em; font-weight: bold;">` +
     `<span>${Impulse.nameColor(userid, true, false)}</span>` +
     `</div>` +
     `</div>` +
+    
+    // Level display
     `<div style="text-align: center; margin-bottom: 10px;">` +
     `<div style="font-size: 1.3em; font-weight: bold; display: inline-block; padding: 3px 12px; border-radius: 15px; background: linear-gradient(90deg, rgba(52, 152, 219, 0.2), rgba(155, 89, 182, 0.2)); color: #3498db;">` +
     `Level ${currentLevel}` +
     `</div>` +
     `</div>` +
+    
+    // Progress bar
     `<div style="margin: 12px 0;">` +
     `${progressBarHTML}` +
     `</div>` +
+    
+    // Completion percentage
     `<div style="text-align: center; font-size: 0.9em; margin-bottom: 10px;">` +
     `${progressPercentage}% complete` +
     `</div>` +
+    
+    // Stats boxes
     `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px;">` +
     `<div style="background: rgba(150, 150, 150, 0.1); padding: 8px; border-radius: 8px; text-align: center;">` +
     `<div style="font-size: 0.8em; opacity: 0.7;">Current EXP</div>` +
@@ -271,13 +268,13 @@ export const commands: Chat.Commands = {
     `<div style="font-weight: bold; color: #e74c3c;">${expNeeded} ${EXP_UNIT}</div>` +
     `</div>` +
     `</div>` +
+    
     `<div style="font-size: 0.8em; margin-top: 10px; text-align: center; opacity: 0.7;">` +
     `Total progress: ${currentExp}/${nextLevelExp} ${EXP_UNIT}` +
     `</div>` +
     `</div>`
   );
-}
-  },
+	},
 
   giveexp(target, room, user) {
     this.checkCan('globalban');
