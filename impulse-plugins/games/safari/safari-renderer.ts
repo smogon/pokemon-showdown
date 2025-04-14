@@ -66,11 +66,56 @@ export class SafariRenderer {
         // Update spectator view
         this.updateSpectatorsView(status);
     }
+	
+	private displayWaitingScreen() {
+		const startMsg = 
+			`<div class="infobox" style="background: linear-gradient(to bottom, #a8e063, #56ab2f); border: 8px double #8B4513; padding: 10px; border-radius: 15px;">` +
+			`<div style="text-align:center;">` +
+			`<div style="font-family: 'Arial Black', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); color: #2E4053; margin-bottom: 10px;">` +
+			`<h1>SAFARI ZONE</h1>` +
+			`<div style="font-size: 14px; font-style: italic; margin-top: -15px;">A wild Pokémon adventure awaits!</div>` +
+			`</div>` +
+			`<div style="display: flex; justify-content: space-between; margin: 15px 0; background: rgba(255,255,255,0.5); border-radius: 10px; padding: 10px;">` +
+			`<div style="flex: 1; text-align: left; padding: 5px 15px;">` +
+			`<div style="font-weight: bold; font-size: 15px; color: #8B4513; border-bottom: 1px dashed #8B4513; padding-bottom: 5px; margin-bottom: 8px;">SAFARI INFO</div>` +
+			`<div><b>Guide:</b> ${Impulse.nameColor(this.game.getHost(), true, true)}</div>` +
+			`<div><b>Time:</b> ${this.formatUTCTime(Date.now())} UTC</div>` +
+			`<div><b>Safari Balls:</b> ${this.game.getBallsPerPlayer()} per explorer</div>` +
+			`<div><b>Prize Pool:</b> ${this.game.getPrizePool()} coins</div>` +
+			`</div>` +
+			`<div style="flex: 1; text-align: left; padding: 5px 15px;">` +
+			`<div style="font-weight: bold; font-size: 15px; color: #8B4513; border-bottom: 1px dashed #8B4513; padding-bottom: 5px; margin-bottom: 8px;">EXPLORERS</div>` +
+			`<div>${this.getPlayerList()}</div>` +
+			`<div style="margin-top: 10px; font-size: 12px; color: #505050;">` +
+			`Min players: ${SAFARI_CONSTANTS.MIN_PLAYERS} | Max: ${SAFARI_CONSTANTS.MAX_PLAYERS}` +
+			`</div>` +
+			`</div>` +
+			`</div>` +
+			`<div style="position: relative; background: url('https://play.pokemonshowdown.com/sprites/trainers/roughneck.png') no-repeat right bottom, url('https://play.pokemonshowdown.com/sprites/gen3-back/chansey.png') no-repeat left bottom, #D4E6A5; height: 120px; border-radius: 10px; margin: 10px 0; border: 2px solid #8B4513;">` +
+			`<div style="position: absolute; bottom: 5px; left: 50%; transform: translateX(-50%); width: 100%;">` +
+			`<img src="https://play.pokemonshowdown.com/sprites/ani/scyther.gif" width="80" height="80" style="margin-right:10px">` +
+			`<img src="https://play.pokemonshowdown.com/sprites/ani/tauros.gif" width="80" height="80">` +
+			`<img src="https://play.pokemonshowdown.com/sprites/ani/kangaskhan.gif" width="80" height="80" style="margin-left:10px">` +
+			`</div>` +
+			`</div>` +
+			`<div style="margin: 15px 0;">` +
+			`<button class="button" name="send" value="/safari join" style="background: #FF7043; color: white; padding: 12px 30px; font-size: 16px; font-weight: bold; border: none; border-radius: 30px; cursor: pointer; box-shadow: 0 4px #B71C1C; transition: all 0.3s ease;">JOIN SAFARI EXPEDITION</button>` +
+			`</div>` +
+			`<div style="background: rgba(255,255,255,0.6); border-radius: 8px; padding: 8px; margin-top: 10px; font-size: 13px;">` +
+			`<div style="font-weight: bold; color: #2E4053;">SAFARI TIPS:</div>` +
+			`<div>• Move carefully to find rare Pokémon!</div>` +
+			`<div>• Stronger Pokémon are worth more points</div>` +
+			`<div>• Each Safari Ball is precious - use them wisely</div>` +
+			`</div>` +
+			`</div>` +
+			`</div>`;
+		this.game.room.add(`|uhtml|safari-waiting|${startMsg}`, -1000).update();
+	}
 
     /**
      * Displays the waiting screen when the game is in waiting state
      */
-    private displayWaitingScreen() {
+    /*private displayWaitingScreen() {
         const startMsg = 
             `<div class="infobox">` +
             `<div style="text-align:center;margin:5px">` +
@@ -86,7 +131,7 @@ export class SafariRenderer {
             `</div></div>`;
         
         this.game.room.add(`|uhtml|safari-waiting|${startMsg}`, -1000).update();
-    }
+    }*/
 
     /**
      * Displays the active game UI for all players
