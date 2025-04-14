@@ -47,8 +47,9 @@ export class SafariGame {
         this.turnStartTime = 0;
         this.gameStartTime = Date.now();
         this.spectators = new Set();
-        this.pokemonPool = PokemonGenerator.generatePokemonPool();
         this.ballsPerPlayer = Math.max(SAFARI_CONSTANTS.MIN_BALLS, Math.min(SAFARI_CONSTANTS.MAX_BALLS, balls));
+        // Generate Pokemon pool based on the number of balls per player (3x)
+        this.pokemonPool = PokemonGenerator.generatePokemonPool(this.ballsPerPlayer);
         this.movementStates = {};
         this.renderer = new SafariRenderer(this);
 
@@ -275,7 +276,7 @@ export class SafariGame {
     }
 
     display() {
-        this.renderer.display(this.status, this.players, this.turnOrder, this.currentTurn, this.turnStartTime);
+        this.renderer.display();
     }
 
     // Getter methods for renderer
