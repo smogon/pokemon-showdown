@@ -46,6 +46,7 @@ class SafariGame {
     private readonly pokemonPool: Pokemon[];
     private ballsPerPlayer: number;
     private movementStates: { [k: string]: MovementState };
+    private winnerCount: number;
 
     private static readonly INACTIVE_TIME = 2 * 60 * 1000;
     private static readonly CATCH_COOLDOWN = 2 * 1000;
@@ -57,8 +58,11 @@ class SafariGame {
     private static readonly MIN_PRIZE_POOL = 10;
     private static readonly MAX_PRIZE_POOL = 1000000;
     private static readonly TURN_TIME = 30 * 1000;
+    private static readonly DEFAULT_WINNER_COUNT = 2;
+    private static readonly MIN_WINNER_COUNT = 1;
+    private static readonly MAX_WINNER_COUNT = 5;
 
-    constructor(room: ChatRoom, host: string, prizePool: number = 1000, balls: number = SafariGame.DEFAULT_BALLS) {
+    constructor(room: ChatRoom, host: string, prizePool: number = 1000, balls: number = SafariGame.DEFAULT_BALLS, winnerCount: number = SafariGame.DEFAULT_WINNER_COUNT) {
         this.room = room;
         this.host = host;
         this.players = {};
@@ -77,6 +81,7 @@ class SafariGame {
         this.pokemonPool = this.generatePokemonPool();
         this.ballsPerPlayer = Math.max(SafariGame.MIN_BALLS, Math.min(SafariGame.MAX_BALLS, balls));
         this.movementStates = {};
+        this.winnerCount = Math.max(SafariGame.MIN_WINNER_COUNT, Math.min(SafariGame.MAX_WINNER_COUNT, winnerCount));
 
         this.setInactivityTimer();
         this.display();
@@ -235,19 +240,6 @@ class SafariGame {
         this.startTurnTimer();
     }
 
-    private addSpectator(userid: string): void {
-        this.spectators.add(userid);
-        this.displayToSpectator(userid);
-    }
-
-    private removeSpectator(userid: string): void {
-        this.spectators.delete(userid);
-        const roomUser = Users.get(userid);
-        if (roomUser?.connected) {
-            roomUser.sendTo(this.room, `|uhtmlchange|safari-spectator-${userid}|`);
-        }
-    }
-
     private displayToSpectator(userid: string): void {
         if (!this.spectators.has(userid)) return;
         
@@ -262,7 +254,7 @@ class SafariGame {
         
         buf += `<b>Host:</b> ${Impulse.nameColor(this.host, true, true)}<br />`;
         buf += `<b>Status:</b> ${this.status}<br />`;
-        buf += `<b>Prize Pool:</b> ${this.prizePool} coins<br />`;
+        buf += `<b>Prize Pool:</b> ${this.prizePool} coins (Top ${this.winnerCount} players)<br />`;
 
         if (this.status === 'started' && currentPlayerId) {
             buf += `<b>Current Turn:</b> ${Impulse.nameColor(this.players[currentPlayerId].name, true, true)}`;
@@ -306,7 +298,7 @@ class SafariGame {
                 `<h2 style="color:#24678d">Safari Zone Game</h2>` +
                 `<small>Game Time: ${this.formatUTCTime(Date.now())} UTC</small><br />` +
                 `<b>Started by:</b> ${Impulse.nameColor(this.host, true, true)}<br />` +
-                `<b>Prize Pool:</b> ${this.prizePool} coins<br />` +
+                `<b>Prize Pool:</b> ${this.prizePool} coins (Top ${this.winnerCount} players)<br />` +
                 `<b>Pokeballs:</b> ${this.ballsPerPlayer} per player<br />` +
                 `<b>Players:</b> ${this.getPlayerList()}<br /><br />` +
                 `<img src="https://play.pokemonshowdown.com/sprites/ani/chansey.gif" width="80" height="80" style="margin-right:30px">` +
@@ -335,7 +327,7 @@ class SafariGame {
                 
                 buf += `<b>Host:</b> ${Impulse.nameColor(this.host, true, true)}<br />`;
                 buf += `<b>Status:</b> ${this.status}<br />`;
-                buf += `<b>Prize Pool:</b> ${this.prizePool} coins<br />`;
+                buf += `<b>Prize Pool:</b> ${this.prizePool} coins (Top ${this.winnerCount} players)<br />`;
 
                 buf += `<b>Current Turn:</b> ${Impulse.nameColor(this.players[currentPlayerId].name, true, true)}`;
                 buf += ` <b style="color: ${timeLeft <= 10 ? '#ff5555' : '#5555ff'}">(${timeLeft}s left)</b><br />`;
@@ -525,7 +517,7 @@ class SafariGame {
         }
     }
 
-    /*end(inactive: boolean = false) {
+    end(inactive: boolean = false) {
         if (this.status === 'ended') return;
 
         this.clearTimer();
@@ -535,100 +527,90 @@ class SafariGame {
         }
         this.status = 'ended';
 
+        const now = Date.now();
         if (inactive && Object.keys(this.players).length < SafariGame.MIN_PLAYERS) {
-            this.room.add(`|uhtmlchange|safari-spectator|<div class="infobox">The Safari Zone game has been canceled due to inactivity.</div>`, -1000).update();
+            const inactiveMsg = `<div class="infobox">The Safari Zone game has been canceled due to inactivity.</div>`;
+            this.room.add(`|uhtml|safari-end|${inactiveMsg}`).update();
             delete this.room.safari;
             return;
         }
 
         const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
+        let endMsg = `<div class="infobox"><center><h2>Safari Zone Results</h2>`;
+        endMsg += `<small>Game Ended: ${this.formatUTCTime(now)} UTC</small><br />`;
+        endMsg += `<small>Duration: ${Math.floor((now - this.gameStartTime) / 1000)} seconds</small><br /><br />`;
+        
         if (sortedPlayers.length > 0) {
-            const prizes = [0.6, 0.3, 0.1];
-            for (let i = 0; i < Math.min(3, sortedPlayers.length); i++) {
-                const prize = Math.floor(this.prizePool * prizes[i]);
+            // Calculate prize distribution based on winnerCount
+            const prizes = [];
+            let remaining = 1;
+            for (let i = 0; i < this.winnerCount - 1; i++) {
+                const share = Math.floor(remaining * 0.6); // 60% of remaining pool
+                prizes.push(share);
+                remaining -= share;
+            }
+            prizes.push(remaining); // Last place gets what's left
+
+            const winners = sortedPlayers.slice(0, this.winnerCount);
+            
+            endMsg += `<table border="1" cellspacing="0" cellpadding="3">`;
+            endMsg += `<tr><th>Place</th><th>Player</th><th>Points</th><th>Prize</th><th>Catches</th></tr>`;
+            
+            winners.forEach((player, index) => {
+                const prize = Math.floor(this.prizePool * prizes[index]);
+                endMsg += `<tr>`;
+                endMsg += `<td>${index + 1}${['st', 'nd', 'rd', 'th'][Math.min(3, index)]}</td>`;
+                endMsg += `<td>${Impulse.nameColor(player.name, true, true)}</td>`;
+                endMsg += `<td>${player.points}</td>`;
+                endMsg += `<td>${prize} coins</td>`;
+                endMsg += `<td>${player.catches.map(pk => 
+                    `<img src="${pk.sprite}" width="40" height="30" title="${pk.name}">`
+                ).join('')}</td>`;
+                endMsg += `</tr>`;
+                
                 if (prize > 0) {
-                    Economy.addMoney(sortedPlayers[i].id, prize, `Safari Zone ${i + 1}${['st', 'nd', 'rd'][i]} place`);
+                    Economy.addMoney(player.id, prize, `Safari Zone ${index + 1}${['st', 'nd', 'rd', 'th'][Math.min(3, index)]} place`);
                 }
+            });
+            endMsg += `</table>`;
+        } else {
+            endMsg += `No winners in this game.`;
+        }
+        endMsg += `</center></div>`;
+
+        // Clear all player displays
+        for (const userid in this.players) {
+            const roomUser = Users.get(userid);
+            if (roomUser?.connected) {
+                roomUser.sendTo(this.room, `|uhtmlchange|safari-player-${userid}|`);
             }
         }
 
-        this.display();
-        delete this.room.safari;
-    }
-}*/
-
-	end(inactive: boolean = false) {
-    if (this.status === 'ended') return;
-
-    this.clearTimer();
-    if (this.turnTimer) {
-        clearTimeout(this.turnTimer);
-        this.turnTimer = null;
-    }
-    this.status = 'ended';
-
-    const now = Date.now();
-    if (inactive && Object.keys(this.players).length < SafariGame.MIN_PLAYERS) {
-        const inactiveMsg = `<div class="infobox">The Safari Zone game has been canceled due to inactivity.</div>`;
-        this.room.add(`|uhtml|safari-end|${inactiveMsg}`).update();
-        delete this.room.safari;
-        return;
-    }
-
-    const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
-    let endMsg = `<div class="infobox"><center><h2>Safari Zone Results</h2>`;
-    endMsg += `<small>Game Ended: ${this.formatUTCTime(now)} UTC</small><br />`;
-    endMsg += `<small>Duration: ${Math.floor((now - this.gameStartTime) / 1000)} seconds</small><br /><br />`;
-    
-    if (sortedPlayers.length > 0) {
-        const prizes = [0.6, 0.3, 0.1];
-        const top3Players = sortedPlayers.slice(0, 3);
-        
-        endMsg += `<table border="1" cellspacing="0" cellpadding="3">`;
-        endMsg += `<tr><th>Place</th><th>Player</th><th>Points</th><th>Prize</th><th>Catches</th></tr>`;
-        
-        top3Players.forEach((player, index) => {
-            const prize = Math.floor(this.prizePool * prizes[index]);
-            endMsg += `<tr>`;
-            endMsg += `<td>${index + 1}${['st', 'nd', 'rd'][index]}</td>`;
-            endMsg += `<td>${Impulse.nameColor(player.name, true, true)}</td>`;
-            endMsg += `<td>${player.points}</td>`;
-            endMsg += `<td>${prize} coins</td>`;
-            endMsg += `<td>${player.catches.map(pk => 
-                `<img src="${pk.sprite}" width="40" height="30" title="${pk.name}">`
-            ).join('')}</td>`;
-            endMsg += `</tr>`;
-            
-            if (prize > 0) {
-                Economy.addMoney(player.id, prize, `Safari Zone ${index + 1}${['st', 'nd', 'rd'][index]} place`);
+        // Clear all spectator displays
+        for (const spectatorId of this.spectators) {
+            const roomUser = Users.get(spectatorId);
+            if (roomUser?.connected) {
+                roomUser.sendTo(this.room, `|uhtmlchange|safari-spectator-${spectatorId}|`);
             }
-        });
-        endMsg += `</table>`;
-    } else {
-        endMsg += `No winners in this game.`;
-    }
-    endMsg += `</center></div>`;
+        }
 
-    // Clear all player displays
-    for (const userid in this.players) {
+        // Display the final results
+        this.room.add(`|uhtml|safari-end|${endMsg}`).update();
+        delete this.room.safari;
+    }
+
+    addSpectator(userid: string): void {
+        this.spectators.add(userid);
+        this.displayToSpectator(userid);
+    }
+
+    removeSpectator(userid: string): void {
+        this.spectators.delete(userid);
         const roomUser = Users.get(userid);
         if (roomUser?.connected) {
-            roomUser.sendTo(this.room, `|uhtmlchange|safari-player-${userid}|`);
+            roomUser.sendTo(this.room, `|uhtmlchange|safari-spectator-${userid}|`);
         }
     }
-
-    // Clear all spectator displays
-    for (const spectatorId of this.spectators) {
-        const roomUser = Users.get(spectatorId);
-        if (roomUser?.connected) {
-            roomUser.sendTo(this.room, `|uhtmlchange|safari-spectator-${spectatorId}|`);
-        }
-    }
-
-    // Display the final results
-    this.room.add(`|uhtml|safari-end|${endMsg}`).update();
-    delete this.room.safari;
-	}
 }
 
 export const commands: Chat.ChatCommands = {
@@ -642,123 +624,14 @@ export const commands: Chat.ChatCommands = {
                 this.checkCan('mute', null, room);
                 if (room.safari) return this.errorReply("A Safari game is already running in this room.");
                 
-                const [prizePoolStr, ballsStr] = args.join(' ').split(',').map(arg => arg.trim());
+                const [prizePoolStr, ballsStr, winnerCountStr] = args.join(' ').split(',').map(arg => arg.trim());
                 const prizePool = parseInt(prizePoolStr);
                 const balls = parseInt(ballsStr);
+                const winnerCount = parseInt(winnerCountStr);
                 
                 if (!prizePoolStr || isNaN(prizePool) || prizePool < SafariGame.MIN_PRIZE_POOL || prizePool > SafariGame.MAX_PRIZE_POOL) {
                     return this.errorReply(`Please enter a valid prize pool amount (${SafariGame.MIN_PRIZE_POOL}-${SafariGame.MAX_PRIZE_POOL} coins).`);
                 }
 
                 if (ballsStr && (isNaN(balls) || balls < SafariGame.MIN_BALLS || balls > SafariGame.MAX_BALLS)) {
-                    return this.errorReply(`Please enter a valid number of balls (${SafariGame.MIN_BALLS}-${SafariGame.MAX_BALLS}).`);
-                }
-                
-                room.safari = new SafariGame(room, user.name, prizePool, balls);
-                this.modlog('SAFARI', null, `started by ${user.name} with ${prizePool} coin prize pool and ${balls || SafariGame.DEFAULT_BALLS} balls`);
-                return this.privateModAction(`${user.name} started a Safari game with ${prizePool} coin prize pool and ${balls || SafariGame.DEFAULT_BALLS} balls per player.`);
-            }
-
-            case 'join': {
-                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
-                const error = room.safari.addPlayer(user);
-                if (error) return this.errorReply(error);
-                return;
-            }
-
-            case 'move': {
-                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
-                const direction = args[0]?.toLowerCase();
-                if (!['up', 'down', 'left', 'right'].includes(direction)) {
-                    return this.errorReply("Invalid direction! Use up, down, left, or right.");
-                }
-                const result = room.safari.handleMovement(user.id, direction as 'up' | 'down' | 'left' | 'right');
-                if (result) return this.errorReply(result);
-                return;
-            }
-
-            case 'spectate': {
-                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
-                if (room.safari.players[user.id]) return this.errorReply("You are already in the game!");
-                room.safari.addSpectator(user.id);
-                return;
-            }
-
-            case 'unspectate': {
-                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
-                room.safari.removeSpectator(user.id);
-                return;
-            }
-
-            case 'start': {
-                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
-                const error = room.safari.start(user);
-                if (error) return this.errorReply(error);
-                this.modlog('SAFARI', null, `started by ${user.name}`);
-                return this.privateModAction(`${user.name} started the Safari game.`);
-            }
-
-            case 'throw': {
-                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
-                const result = room.safari.throwBall(user);
-                if (result) return this.errorReply(result);
-                return;
-            }
-
-            case 'dq':
-            case 'disqualify': {
-                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
-                const targetUser = args.join(' ').trim();
-                if (!targetUser) return this.errorReply("Please specify a player to disqualify.");
-                
-                const targetId = toID(targetUser);
-                const result = room.safari.disqualifyPlayer(targetId, user.name);
-                if (result) {
-                    this.modlog('SAFARIDQ', targetUser, `by ${user.name}`);
-                    this.privateModAction(result);
-                    return;
-					 }
-					return this.errorReply("Failed to disqualify player.");
-				}
-
-            case 'end': {
-                this.checkCan('mute', null, room);
-                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
-                room.safari.end(false);
-                this.modlog('SAFARI', null, `ended by ${user.name}`);
-                return this.privateModAction(`${user.name} ended the Safari game.`);
-            }
-
-            default:
-                return this.parse('/help safari');
-        }
-    },
-
-    safarihelp(target, room, user) {
-        if (!this.runBroadcast()) return;
-        return this.sendReplyBox(
-            '<center><strong>Safari Zone Commands</strong></center>' +
-            '<hr />' +
-            `<code>/safari create [prizePool],[balls]</code>: Creates a new Safari game with the specified prize pool (${SafariGame.MIN_PRIZE_POOL}-${SafariGame.MAX_PRIZE_POOL} coins) and balls per player. Requires: @ # &<br />` +
-            '<code>/safari join</code>: Joins the current Safari game.<br />' +
-            '<code>/safari start</code>: Starts the Safari game if enough players have joined.<br />' +
-            '<code>/safari move [up/down/left/right]</code>: Move in a direction to find a Pokemon.<br />' +
-            '<code>/safari throw</code>: Throws a Safari Ball at the encountered Pokemon.<br />' +
-            '<code>/safari spectate</code>: Watch an ongoing Safari game.<br />' +
-            '<code>/safari unspectate</code>: Stop watching a Safari game.<br />' +
-            '<code>/safari dq [player]</code>: Disqualifies a player from the game (only usable by game creator).<br />' +
-            '<code>/safari end</code>: Ends the current Safari game. Requires: @ # &<br />' +
-            '<hr />' +
-            '<strong>Game Rules:</strong><br />' +
-            `- No entry fee required<br />` +
-            `- Minimum ${SafariGame.MIN_PLAYERS} players required to start<br />` +
-            `- Each player gets ${SafariGame.MIN_BALLS}-${SafariGame.MAX_BALLS} Safari Balls (default: ${SafariGame.DEFAULT_BALLS})<br />` +
-            `- On your turn, first choose a direction to move<br />` +
-            `- After moving, a Pokemon may appear which you can try to catch<br />` +
-            `- ${SafariGame.TURN_TIME / 1000} second time limit per turn<br />` +
-            '- Game ends when all players use their balls<br />' +
-            '- Prizes: 1st (60%), 2nd (30%), 3rd (10%) of prize pool<br />' +
-            '- Players can be disqualified by the game creator'
-        );
-    }
-};
+                    return this.errorReply(`Please enter
