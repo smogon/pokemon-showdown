@@ -209,33 +209,51 @@ Impulse.ExpSystem = ExpSystem;
 export const commands: Chat.Commands = {
   level: 'exp',
   exp(target, room, user) {
-    if (!target) target = user.name;
-    if (!this.runBroadcast()) return;    
-    const userid = toID(target);
-    const currentExp = ExpSystem.readExp(userid);
-    const currentLevel = ExpSystem.getLevel(currentExp);
-    const nextLevelExp = ExpSystem.getExpForNextLevel(currentLevel + 1);
-    const previousLevelExp = ExpSystem.getExpForNextLevel(currentLevel);
-    
-    const expInCurrentLevel = currentExp - previousLevelExp;
-    const expNeededForNextLevel = nextLevelExp - previousLevelExp;
-    const progressPercentage = Math.floor((expInCurrentLevel / expNeededForNextLevel) * 100);
-    
-    const progressBarWidth = 200;
-    const progressBarHTML = `<div style="width: ${progressBarWidth}px; height: 15px; background: #e0e0e0; border-radius: 10px; overflow: hidden; display: inline-block;">` +
-     `<div style="width: ${progressPercentage}%; height: 100%; background: linear-gradient(90deg, #2ecc71, #27ae60); transition: width 0.3s ease;"></div></div> ${progressPercentage}%`;
-    const expNeeded = nextLevelExp - currentExp;
-    const executedBy = user.name === target ? '' : ` (Checked by ${Impulse.nameColor(user.name, true, true)})`;
-    
-    this.sendReplyBox(
-      `<div class="infobox">` +
-      `<strong>${Impulse.nameColor(userid, true, true)}</strong>${executedBy}<br>` +
-      `<strong>Level:</strong> ${currentLevel}<br>` +
-      `<strong>Progress:</strong> ${progressBarHTML}<br>` +
-      `<strong>Current EXP:</strong> ${currentExp} ${EXP_UNIT}<br>` +
-      `<strong>EXP needed:</strong> ${expNeeded} more for Level ${currentLevel + 1}<br>` +
-      `</div>`
-    );
+	  if (!target) target = user.name;
+	  if (!this.runBroadcast()) return;    
+	  const userid = toID(target);
+	  const currentExp = ExpSystem.readExp(userid);
+	  const currentLevel = ExpSystem.getLevel(currentExp);
+	  const nextLevelExp = ExpSystem.getExpForNextLevel(currentLevel + 1);
+	  const previousLevelExp = ExpSystem.getExpForNextLevel(currentLevel);
+	  
+	  const expInCurrentLevel = currentExp - previousLevelExp;
+	  const expNeededForNextLevel = nextLevelExp - previousLevelExp;
+	  const progressPercentage = Math.floor((expInCurrentLevel / expNeededForNextLevel) * 100);
+	  const expNeeded = nextLevelExp - currentExp;
+	  const executedBy = user.name === target ? '' : ` (Checked by ${Impulse.nameColor(user.name, true, true)})`;
+	  const progressBarHTML = 
+		  `<div style="width: 200px; height: 18px; background: rgba(200, 200, 200, 0.2); border-radius: 10px; overflow: hidden; border: 1px solid rgba(150, 150, 150, 0.3); margin: 5px 0;">` +
+		  `<div style="width: ${progressPercentage}%; height: 100%; background: linear-gradient(90deg, #3498db, #2980b9); box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);"></div>` +
+		  `</div>` +
+		  `<div style="text-align: center; font-size: 0.9em; margin-top: -2px; margin-bottom: 5px;">${progressPercentage}% complete</div>`;
+	  this.sendReplyBox(
+		  `<div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.05)); border-radius: 10px; padding: 12px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); border: 1px solid rgba(125, 125, 125, 0.2);">` +
+		  `<div style="display: flex; align-items: center; margin-bottom: 10px;">` +
+		  `<div style="font-size: 1.4em; font-weight: bold; display: flex; align-items: center;">` +
+		  `<span style="background: linear-gradient(90deg, #3498db, #9b59b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-right: 5px;">Level ${currentLevel}</span>` +
+		  `<span>${Impulse.nameColor(userid, true, true)}</span>` +
+		  `</div>` +
+		  `<div style="margin-left: auto; font-size: 0.8em; opacity: 0.8;">${executedBy}</div>` +
+		  `</div>` +
+		  `<div style="margin: 8px 0;">` +
+		  `${progressBarHTML}` +
+		  `</div>` +
+		  `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px;">` +
+		  `<div style="background: rgba(150, 150, 150, 0.1); padding: 8px; border-radius: 8px; text-align: center;">` +
+		  `<div style="font-size: 0.8em; opacity: 0.7;">Current EXP</div>` +
+		  `<div style="font-weight: bold; color: #3498db;">${currentExp} ${EXP_UNIT}</div>` +
+		  `</div>` +
+		  `<div style="background: rgba(150, 150, 150, 0.1); padding: 8px; border-radius: 8px; text-align: center;">` +
+		  `<div style="font-size: 0.8em; opacity: 0.7;">Needed for Level ${currentLevel + 1}</div>` +
+		  `<div style="font-weight: bold; color: #e74c3c;">${expNeeded} ${EXP_UNIT}</div>` +
+		  `</div>` +
+		  `</div>` +
+		  `<div style="font-size: 0.8em; margin-top: 10px; text-align: center; opacity: 0.7;">` +
+		  `Total progress: ${currentExp}/${nextLevelExp} ${EXP_UNIT}` +
+		  `</div>` +
+		  `</div>`
+	  );
   },
 
   giveexp(target, room, user) {
