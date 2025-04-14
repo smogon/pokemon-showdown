@@ -238,13 +238,7 @@ export const commands: Chat.Commands = {
       `</div>`
     );
     return;
-  }
-    
-  // This is the private command (/exp) - Full detailed output
-  const progressBarHTML = 
-    `<div style="width: 200px; height: 18px; background: rgba(200, 200, 200, 0.2); border-radius: 10px; overflow: hidden; border: 1px solid rgba(150, 150, 150, 0.3); margin: 5px auto;">` +
-    `<div style="width: ${progressPercentage}%; height: 100%; background: linear-gradient(90deg, #3498db, #2980b9); box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);"></div>` +
-    `</div>`;
+  } else {
   this.sendReplyBox(
     `<div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.05)); border-radius: 10px; padding: 12px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); border: 1px solid rgba(125, 125, 125, 0.2);">` +
     `<div style="text-align: center; margin-bottom: 8px;">` +
@@ -278,7 +272,8 @@ export const commands: Chat.Commands = {
     `</div>` +
     `</div>`
   );
-},
+}
+  },
 
   giveexp(target, room, user) {
     this.checkCan('globalban');
