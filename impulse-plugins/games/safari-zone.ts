@@ -730,3 +730,4 @@ export const commands: Chat.ChatCommands = {
         );
     }
 };
+*/
