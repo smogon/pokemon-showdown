@@ -148,7 +148,7 @@ class SafariGame {
                     `<div style="background: #162C19; color: #FFFFFF; padding: 8px; text-align: center;">` +
                         `<strong style="font-size: 14pt;">Safari Zone</strong>` +
                     `</div>` +
-                    `<div style="background: url('https://play.pokemonshowdown.com/sprites/gen6bgs/forest.png'); padding: 10px; text-align: center;">` +
+                    `<div style="background: url('https://play.pokemonshowdown.com/sprites/gen6bgs/bg-forest.jpg'); padding: 10px; text-align: center;">` +
                         `<div style="background: rgba(255, 255, 255, 0.8); padding: 8px; border-radius: 4px;">` +
                             `<table style="margin: 0 auto; width: 100%;">` +
                                 `<tr>` +
@@ -217,7 +217,7 @@ class SafariGame {
                         `<div style="background: #162C19; color: #FFFFFF; padding: 8px; text-align: center;">` +
                             `<strong style="font-size: 14pt;">Safari Zone</strong>` +
                         `</div>` +
-                        `<div style="background: url('https://play.pokemonshowdown.com/sprites/gen6bgs/forest.png');">` +
+                        `<div style="background: url('https://play.pokemonshowdown.com/sprites/gen6bgs/bg-forest.jpg');">` +
                             `<div style="background: rgba(255, 255, 255, 0.8); padding: 10px;">` +
                                 `<table style="margin: 0 auto; width: 100%;">` +
                                     `<tr>` +
@@ -313,7 +313,7 @@ class SafariGame {
                     `<div style="background: #162C19; color: #FFFFFF; padding: 8px; text-align: center;">` +
                         `<strong style="font-size: 14pt;">Safari Zone Results</strong>` +
                     `</div>` +
-                    `<div style="background: url('https://play.pokemonshowdown.com/sprites/gen6bgs/forest.png'); padding: 10px;">` +
+                    `<div style="background: url('https://play.pokemonshowdown.com/sprites/gen6bgs/bg-forest.jpg'); padding: 10px;">` +
                         `<div style="background: rgba(255, 255, 255, 0.8); padding: 8px; border-radius: 4px; text-align: center;">` +
                             `<div style="margin-bottom: 10px;">` +
                                 `<small>Game Ended: ${this.formatUTCTime(Date.now())}</small><br>` +
@@ -366,7 +366,7 @@ class SafariGame {
                 `<div style="background: #162C19; color: #FFFFFF; padding: 8px; text-align: center;">` +
                     `<strong style="font-size: 14pt;">Safari Zone (Spectator View)</strong>` +
                 `</div>` +
-                `<div style="background: url('https://play.pokemonshowdown.com/sprites/gen6bgs/forest.png');">` +
+                `<div style="background: url('https://play.pokemonshowdown.com/sprites/gen6bgs/bg-forest.jpg');">` +
                     `<div style="background: rgba(255, 255, 255, 0.8); padding: 10px;">` +
                         `<table style="margin: 0 auto; width: 100%;">` +
                             `<tr>` +
