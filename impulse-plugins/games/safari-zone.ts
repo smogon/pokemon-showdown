@@ -525,7 +525,7 @@ class SafariGame {
         }
     }
 
-    end(inactive: boolean = false) {
+    /*end(inactive: boolean = false) {
         if (this.status === 'ended') return;
 
         this.clearTimer();
@@ -555,6 +555,80 @@ class SafariGame {
         this.display();
         delete this.room.safari;
     }
+}*/
+
+	end(inactive: boolean = false) {
+    if (this.status === 'ended') return;
+
+    this.clearTimer();
+    if (this.turnTimer) {
+        clearTimeout(this.turnTimer);
+        this.turnTimer = null;
+    }
+    this.status = 'ended';
+
+    const now = Date.now();
+    if (inactive && Object.keys(this.players).length < SafariGame.MIN_PLAYERS) {
+        const inactiveMsg = `<div class="infobox">The Safari Zone game has been canceled due to inactivity.</div>`;
+        this.room.add(`|uhtml|safari-end|${inactiveMsg}`).update();
+        delete this.room.safari;
+        return;
+    }
+
+    const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
+    let endMsg = `<div class="infobox"><center><h2>Safari Zone Results</h2>`;
+    endMsg += `<small>Game Ended: ${this.formatUTCTime(now)} UTC</small><br />`;
+    endMsg += `<small>Duration: ${Math.floor((now - this.gameStartTime) / 1000)} seconds</small><br /><br />`;
+    
+    if (sortedPlayers.length > 0) {
+        const prizes = [0.6, 0.3, 0.1];
+        const top3Players = sortedPlayers.slice(0, 3);
+        
+        endMsg += `<table border="1" cellspacing="0" cellpadding="3">`;
+        endMsg += `<tr><th>Place</th><th>Player</th><th>Points</th><th>Prize</th><th>Catches</th></tr>`;
+        
+        top3Players.forEach((player, index) => {
+            const prize = Math.floor(this.prizePool * prizes[index]);
+            endMsg += `<tr>`;
+            endMsg += `<td>${index + 1}${['st', 'nd', 'rd'][index]}</td>`;
+            endMsg += `<td>${Impulse.nameColor(player.name, true, true)}</td>`;
+            endMsg += `<td>${player.points}</td>`;
+            endMsg += `<td>${prize} coins</td>`;
+            endMsg += `<td>${player.catches.map(pk => 
+                `<img src="${pk.sprite}" width="40" height="30" title="${pk.name}">`
+            ).join('')}</td>`;
+            endMsg += `</tr>`;
+            
+            if (prize > 0) {
+                Economy.addMoney(player.id, prize, `Safari Zone ${index + 1}${['st', 'nd', 'rd'][index]} place`);
+            }
+        });
+        endMsg += `</table>`;
+    } else {
+        endMsg += `No winners in this game.`;
+    }
+    endMsg += `</center></div>`;
+
+    // Clear all player displays
+    for (const userid in this.players) {
+        const roomUser = Users.get(userid);
+        if (roomUser?.connected) {
+            roomUser.sendTo(this.room, `|uhtmlchange|safari-player-${userid}|`);
+        }
+    }
+
+    // Clear all spectator displays
+    for (const spectatorId of this.spectators) {
+        const roomUser = Users.get(spectatorId);
+        if (roomUser?.connected) {
+            roomUser.sendTo(this.room, `|uhtmlchange|safari-spectator-${spectatorId}|`);
+        }
+    }
+
+    // Display the final results
+    this.room.add(`|uhtml|safari-end|${endMsg}`).update();
+    delete this.room.safari;
+	}
 }
 
 export const commands: Chat.ChatCommands = {
