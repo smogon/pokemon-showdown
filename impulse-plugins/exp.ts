@@ -208,7 +208,7 @@ Impulse.ExpSystem = ExpSystem;
 
 export const commands: Chat.Commands = {
   level: 'exp',
-  exp(target, room, user) {
+	exp(target, room, user) {
   if (!target) target = user.name;
   if (!this.runBroadcast()) return;    
   const userid = toID(target);
@@ -227,25 +227,38 @@ export const commands: Chat.Commands = {
   const progressBarHTML = 
     `<div style="width: 200px; height: 18px; background: rgba(200, 200, 200, 0.2); border-radius: 10px; overflow: hidden; border: 1px solid rgba(150, 150, 150, 0.3); margin: 5px auto;">` +
     `<div style="width: ${progressPercentage}%; height: 100%; background: linear-gradient(90deg, #3498db, #2980b9); box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);"></div>` +
-    `</div>` +
-    `<div style="text-align: center; font-size: 0.9em; margin-top: -2px; margin-bottom: 5px;">${progressPercentage}% complete</div>`;
+    `</div>`;
   
   // Create a more visually appealing EXP display with stats, ensuring proper string concatenation
   this.sendReplyBox(
     `<div style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.05)); border-radius: 10px; padding: 12px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); border: 1px solid rgba(125, 125, 125, 0.2);">` +
     
-    `<div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-bottom: 6px;">` +
-    `<div style="font-size: 1.5em; font-weight: bold; margin-bottom: 3px;">` +
-    `<span style="background: linear-gradient(90deg, #3498db, #9b59b6); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Level ${currentLevel}</span>` +
+    // Name at the top
+    `<div style="text-align: center; margin-bottom: 8px;">` +
+    `<div style="font-size: 1.5em; font-weight: bold;">` +
+    `<span>${Impulse.nameColor(userid, true, true)}</span>` +
+    `<span style="font-size: 0.7em; opacity: 0.8;">${executedBy}</span>` +
     `</div>` +
-    `<div style="font-size: 1.2em;">${Impulse.nameColor(userid, true, true)}</div>` +
-    `<div style="font-size: 0.8em; opacity: 0.8; margin-top: 2px;">${executedBy}</div>` +
     `</div>` +
     
-    `<div style="margin: 8px 0; display: flex; justify-content: center; flex-direction: column; align-items: center;">` +
+    // Level display
+    `<div style="text-align: center; margin-bottom: 10px;">` +
+    `<div style="font-size: 1.3em; font-weight: bold; display: inline-block; padding: 3px 12px; border-radius: 15px; background: linear-gradient(90deg, rgba(52, 152, 219, 0.2), rgba(155, 89, 182, 0.2)); color: #3498db;">` +
+    `Level ${currentLevel}` +
+    `</div>` +
+    `</div>` +
+    
+    // Progress bar
+    `<div style="margin: 12px 0;">` +
     `${progressBarHTML}` +
     `</div>` +
     
+    // Completion percentage
+    `<div style="text-align: center; font-size: 0.9em; margin-bottom: 10px;">` +
+    `${progressPercentage}% complete` +
+    `</div>` +
+    
+    // Stats boxes
     `<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 5px;">` +
     `<div style="background: rgba(150, 150, 150, 0.1); padding: 8px; border-radius: 8px; text-align: center;">` +
     `<div style="font-size: 0.8em; opacity: 0.7;">Current EXP</div>` +
@@ -262,7 +275,7 @@ export const commands: Chat.Commands = {
     `</div>` +
     `</div>`
   );
-  },
+	},
 
   giveexp(target, room, user) {
     this.checkCan('globalban');
