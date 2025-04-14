@@ -2,7 +2,7 @@
  * Pokemon Safari Zone Game          *
  * Author: @musaddiktemkar           *
  **************************************/
-
+/*
 import { FS } from '../../lib/fs';
 
 interface Player {
@@ -730,3 +730,4 @@ export const commands: Chat.ChatCommands = {
         );
     }
 };
+*/
