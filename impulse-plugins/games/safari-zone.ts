@@ -661,31 +661,29 @@ export const commands: Chat.ChatCommands = {
 
         switch ((cmd || '').toLowerCase()) {
             case 'new':
-            case 'create': {
-                this.checkCan('mute', null, room);
-                if (room.safari) return this.errorReply("A Safari game is already running in this room.");
-                
-                const [prizePoolStr, ballsStr, winnerCountStr] = args.join(' ').split(',').map(arg => arg.trim());
-                const prizePool = parseInt(prizePoolStr);
-                const balls = parseInt(ballsStr);
-                const winnerCount = parseInt(winnerCountStr);
-                
-                if (!prizePoolStr || isNaN(prizePool) || prizePool < SafariGame.MIN_PRIZE_POOL || prizePool > SafariGame.MAX_PRIZE_POOL) {
-                    return this.errorReply(`Please enter a valid prize pool amount (${SafariGame.MIN_PRIZE_POOL}-${SafariGame.MAX_PRIZE_POOL} coins).`);
-                }
-					
-					if (ballsStr && (isNaN(balls) || balls < SafariGame.MIN_BALLS || balls > SafariGame.MAX_BALLS)) {
-                    return this.errorReply(`Please enter a valid number of balls (${SafariGame.MIN_BALLS}-${SafariGame.MAX_BALLS}).`);
-                }
-
-                if (winnerCountStr && (isNaN(winnerCount) || winnerCount < SafariGame.MIN_WINNER_COUNT || winnerCount > SafariGame.MAX_WINNER_COUNT)) {
-                    return this.errorReply(`Please enter a valid number of winners (${SafariGame.MIN_WINNER_COUNT}-${SafariGame.MAX_WINNER_COUNT}).`);
-                }
-                
-                room.safari = new SafariGame(room, user.name, prizePool, balls, winnerCount);
-                this.modlog('SAFARI', null, `started by ${user.name} with ${prizePool} coin prize pool, ${balls || SafariGame.DEFAULT_BALLS} balls, and ${winnerCount || SafariGame.DEFAULT_WINNER_COUNT} winners`);
-                return this.privateModAction(`${user.name} started a Safari game with ${prizePool} coin prize pool, ${balls || SafariGame.DEFAULT_BALLS} balls per player, and prizes for ${winnerCount || SafariGame.DEFAULT_WINNER_COUNT} winners.`);
-            }
+			  case 'create': {
+				  this.checkCan('mute', null, room);
+				  if (room.safari) return this.errorReply("A Safari game is already running in this room.");
+				  const params = args.join(' ').replace(/\s+/g, '').split(',');
+				  const [prizePoolStr, ballsStr, winnerCountStr] = params;
+				  const prizePool = parseInt(prizePoolStr);
+				  const balls = parseInt(ballsStr || String(SafariGame.DEFAULT_BALLS));
+				  const winnerCount = parseInt(winnerCountStr || String(SafariGame.DEFAULT_WINNER_COUNT));
+				  if (!prizePoolStr || isNaN(prizePool) || prizePool < SafariGame.MIN_PRIZE_POOL || prizePool > SafariGame.MAX_PRIZE_POOL) {
+					  return this.errorReply(`Please enter a valid prize pool amount (${SafariGame.MIN_PRIZE_POOL}-${SafariGame.MAX_PRIZE_POOL} coins).`);
+				  }
+				  
+				  if (ballsStr && (isNaN(balls) || balls < SafariGame.MIN_BALLS || balls > SafariGame.MAX_BALLS)) {
+					  return this.errorReply(`Please enter a valid number of balls (${SafariGame.MIN_BALLS}-${SafariGame.MAX_BALLS}).`);
+				  }
+				  if (winnerCountStr && (isNaN(winnerCount) || winnerCount < SafariGame.MIN_WINNER_COUNT || winnerCount > SafariGame.MAX_WINNER_COUNT)) {
+					  return this.errorReply(`Please enter a valid number of winners (${SafariGame.MIN_WINNER_COUNT}-${SafariGame.MAX_WINNER_COUNT}).`);
+				  }
+				  
+				  room.safari = new SafariGame(room, user.name, prizePool, balls, winnerCount);
+				  this.modlog('SAFARI', null, `started by ${user.name} with ${prizePool} coin prize pool, ${balls} balls, and ${winnerCount} winners`);
+				  return this.privateModAction(`${user.name} started a Safari game with ${prizePool} coin prize pool, ${balls} balls per player, and prizes for ${winnerCount} winners.`);
+			  }
 
             case 'join': {
                 if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
