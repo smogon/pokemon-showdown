@@ -38,7 +38,6 @@ export interface MovementState {
  * Game constants
  */
 export const SAFARI_CONSTANTS = {
-    INACTIVE_TIME: 2 * 60 * 1000,
     CATCH_COOLDOWN: 2 * 1000,
     MIN_PLAYERS: 2,
     MAX_PLAYERS: 10,
