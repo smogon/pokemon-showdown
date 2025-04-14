@@ -108,35 +108,32 @@ export const commands: Chat.ChatCommands = {
                 return this.parse('/help safari');
         }
     },
-	
-	safarihelp(target, room, user) {
-		if (!this.runBroadcast()) return;
-		return this.sendReplyBox(
-			'<center><strong>Safari Zone Commands</strong></center>' +
-			'<hr />' +
-        `<code>/safari create [prizePool],[balls]</code>: Creates a new Safari game with the specified prize pool (${SAFARI_CONSTANTS.MIN_PRIZE_POOL}-${SAFARI_CONSTANTS.MAX_PRIZE_POOL} coins) and balls per player<br />` +
-        '<code>/safari join</code>: Joins the current Safari game.<br />' +
-        '<code>/safari start</code>: Starts the Safari game if enough players have joined.<br />' +
-        '<code>/safari move [up/down/left/right]</code>: Move in a direction to find a Pokemon.<br />' +
-        '<code>/safari throw</code>: Throws a Safari Ball at the encountered Pokemon.<br />' +
-        '<code>/safari spectate</code>: Watch an ongoing Safari game.<br />' +
-        '<code>/safari unspectate</code>: Stop watching a Safari game.<br />' +
-        '<code>/safari dq [player]</code>: Disqualifies a player from the game (only usable by game creator).<br />' +
-        '<code>/safari end</code>: Ends the current Safari game. Requires: @ # &<br />' +
-        '<hr />' +
-        '<strong>Game Rules:</strong><br />' +
-        `- No entry fee required<br />` +
-        `- Minimum ${SAFARI_CONSTANTS.MIN_PLAYERS} players required to start<br />` +
-        `- Each player gets ${SAFARI_CONSTANTS.MIN_BALLS}-${SAFARI_CONSTANTS.MAX_BALLS} Safari Balls (default: ${SAFARI_CONSTANTS.DEFAULT_BALLS})<br />` +
-        `- On your turn, first choose a direction to move<br />` +
-        `- After moving, a Pokemon may appear which you can try to catch<br />` +
-        `- Pokemon have different catch rates based on their rarity<br />` +
-        `- Rarer and stronger Pokemon are worth more points!<br />` +
-        `- Pokemon catch rates: Common (~40%), Medium (~55%), Strong (~60%), Legendary (~65%)<br />` +
-        `- ${SAFARI_CONSTANTS.TURN_TIME / 1000} second time limit per turn<br />` +
-        '- Game ends when all players use their balls<br />' +
-        '- Prizes: 1st (60%), 2nd (30%), 3rd (10%) of prize pool<br />' +
-        '- Players can be disqualified by the game creator'
-    );
-	}
+
+    safarihelp(target, room, user) {
+        if (!this.runBroadcast()) return;
+        return this.sendReplyBox(
+            '<center><strong>Safari Zone Commands</strong></center>' +
+            '<hr />' +
+            `<code>/safari create [prizePool],[balls]</code>: Creates a new Safari game with the specified prize pool (${SAFARI_CONSTANTS.MIN_PRIZE_POOL}-${SAFARI_CONSTANTS.MAX_PRIZE_POOL} coins) and balls per player<br />` +
+            '<code>/safari join</code>: Joins the current Safari game.<br />' +
+            '<code>/safari start</code>: Starts the Safari game if enough players have joined.<br />' +
+            '<code>/safari move [up/down/left/right]</code>: Move in a direction to find a Pokemon.<br />' +
+            '<code>/safari throw</code>: Throws a Safari Ball at the encountered Pokemon.<br />' +
+            '<code>/safari spectate</code>: Watch an ongoing Safari game.<br />' +
+            '<code>/safari unspectate</code>: Stop watching a Safari game.<br />' +
+            '<code>/safari dq [player]</code>: Disqualifies a player from the game (only usable by game creator).<br />' +
+            '<code>/safari end</code>: Ends the current Safari game. Requires: @ # &<br />' +
+            '<hr />' +
+            '<strong>Game Rules:</strong><br />' +
+            `- No entry fee required<br />` +
+            `- Minimum ${SAFARI_CONSTANTS.MIN_PLAYERS} players required to start<br />` +
+            `- Each player gets ${SAFARI_CONSTANTS.MIN_BALLS}-${SAFARI_CONSTANTS.MAX_BALLS} Safari Balls (default: ${SAFARI_CONSTANTS.DEFAULT_BALLS})<br />` +
+            `- On your turn, first choose a direction to move<br />` +
+            `- After moving, a Pokemon may appear which you can try to catch<br />` +
+            `- ${SAFARI_CONSTANTS.TURN_TIME / 1000} second time limit per turn<br />` +
+            '- Game ends when all players use their balls<br />' +
+            '- Prizes: 1st (60%), 2nd (30%), 3rd (10%) of prize pool<br />' +
+            '- Players can be disqualified by the game creator'
+        );
+    }
 };
