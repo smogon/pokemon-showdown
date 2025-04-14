@@ -13,7 +13,6 @@ import { SafariRenderer } from './safari-renderer';
 export class SafariGame {
     private room: ChatRoom;
     private players: {[k: string]: Player};
-    private timer: NodeJS.Timeout | null;
     private status: GameStatus;
     private prizePool: number;
     private gameId: string;
@@ -35,7 +34,6 @@ export class SafariGame {
         this.room = room;
         this.host = host;
         this.players = {};
-        this.timer = null;
         this.status = 'waiting';
         this.prizePool = Math.max(SAFARI_CONSTANTS.MIN_PRIZE_POOL, Math.min(SAFARI_CONSTANTS.MAX_PRIZE_POOL, prizePool));
         this.gameId = `safari-${Date.now()}`;
@@ -53,23 +51,7 @@ export class SafariGame {
         this.movementStates = {};
         this.renderer = new SafariRenderer(this);
 
-        this.setInactivityTimer();
         this.display();
-    }
-
-    private setInactivityTimer() {
-        this.timer = setTimeout(() => {
-            if (this.status === 'waiting') {
-                this.end(true);
-            }
-        }, SAFARI_CONSTANTS.INACTIVE_TIME);
-    }
-
-    private clearTimer() {
-        if (this.timer) {
-            clearTimeout(this.timer);
-            this.timer = null;
-        }
     }
 
     private initializeTurnOrder() {
@@ -235,7 +217,6 @@ export class SafariGame {
         if (!this.players[userId]) return "You must be in the game to start it!";
 
         this.status = 'started';
-        this.clearTimer();
         this.initializeTurnOrder();
         this.display();
         this.startTurnTimer();
@@ -319,7 +300,6 @@ export class SafariGame {
     end(inactive: boolean = false) {
         if (this.status === 'ended') return;
 
-        this.clearTimer();
         if (this.turnTimer) {
             clearTimeout(this.turnTimer);
             this.turnTimer = null;
