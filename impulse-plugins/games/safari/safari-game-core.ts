@@ -224,52 +224,67 @@ export class SafariGame {
     }
 	
 	disqualifyPlayer(targetId: string, executor: string): string | null {
-		if (toID(executor) !== toID(this.host)) return "Only the game creator can disqualify players.";
-		if (this.status === 'ended') return "The game has already ended.";
+    if (toID(executor) !== toID(this.host)) return "Only the game creator can disqualify players.";
+    if (this.status === 'ended') return "The game has already ended.";
     
-		const player = this.players[targetId];
-		if (!player) return "That player is not in this game.";
-		// Remove player from players object
-		delete this.players[targetId];
-		
-		// If the game has started, we need to update turnOrder
-		if (this.status === 'started') {
-			// Find index of the player in turnOrder
-			const playerIndex = this.turnOrder.indexOf(targetId);
-			if (playerIndex !== -1) {
-				// Remove the player from turnOrder
-				this.turnOrder.splice(playerIndex, 1);
-				// If the removed player was before the current turn index,
-				// adjust the current turn index to point to the right player
-				if (playerIndex < this.currentTurn) {
-					this.currentTurn--;
-				}
-					// If the removed player was the current player
-				else if (playerIndex === this.currentTurn) {
-					// If currentTurn is now out of bounds, reset to the start of the array
-					if (this.currentTurn >= this.turnOrder.length) {
-						this.currentTurn = 0;
-					}
-					// Clear the turn timer and start a new turn for the next player
-					if (this.turnTimer) {
-						clearTimeout(this.turnTimer);
-						this.turnTimer = null;
-					}
-					// Only start a new turn if any players remain
-					if (this.turnOrder.length > 0) {
-						this.startTurnTimer();
-					}
-				}
-			}
-			
-			// Check if game should end due to insufficient players
-			if (Object.keys(this.players).length < SAFARI_CONSTANTS.MIN_PLAYERS) {
-				this.end(false);
-				return `${player.name} was disqualified. Game ended due to insufficient players.`;
-			}
-		}
-		this.display();
-		return `${player.name} was disqualified from the Safari Zone game.`;
+    const player = this.players[targetId];
+    if (!player) return "That player is not in this game.";
+
+    // Remove player from players object
+    delete this.players[targetId];
+    
+    // Clear the UI for the disqualified player
+    const roomUser = Users.get(targetId);
+    if (roomUser?.connected) {
+        roomUser.sendTo(this.room, `|uhtmlchange|safari-player-${targetId}|`);
+        
+        // Send a notification to the disqualified player
+        roomUser.sendTo(this.room, `|html|<div class="broadcast-red"><b>You were disqualified from the Safari Zone game by ${Impulse.nameColor(this.host, true, true)}.</b></div>`);
+    }
+    
+    // If the game has started, we need to update turnOrder
+    if (this.status === 'started') {
+        // Find index of the player in turnOrder
+        const playerIndex = this.turnOrder.indexOf(targetId);
+        
+        if (playerIndex !== -1) {
+            // Remove the player from turnOrder
+            this.turnOrder.splice(playerIndex, 1);
+            
+            // If the removed player was before the current turn index,
+            // adjust the current turn index to point to the right player
+            if (playerIndex < this.currentTurn) {
+                this.currentTurn--;
+            }
+            // If the removed player was the current player
+            else if (playerIndex === this.currentTurn) {
+                // If currentTurn is now out of bounds, reset to the start of the array
+                if (this.currentTurn >= this.turnOrder.length) {
+                    this.currentTurn = 0;
+                }
+                
+                // Clear the turn timer and start a new turn for the next player
+                if (this.turnTimer) {
+                    clearTimeout(this.turnTimer);
+                    this.turnTimer = null;
+                }
+                
+                // Only start a new turn if any players remain
+                if (this.turnOrder.length > 0) {
+                    this.startTurnTimer();
+                }
+            }
+        }
+        
+        // Check if game should end due to insufficient players
+        if (Object.keys(this.players).length < SAFARI_CONSTANTS.MIN_PLAYERS) {
+            this.end(false);
+            return `${player.name} was disqualified. Game ended due to insufficient players.`;
+        }
+    }
+
+    this.display();
+    return `${player.name} was disqualified from the Safari Zone game.`;
 	}
 
     display() {
