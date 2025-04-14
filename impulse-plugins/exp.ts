@@ -208,9 +208,9 @@ Impulse.ExpSystem = ExpSystem;
 
 export const commands: Chat.Commands = {
   level: 'exp',
-	exp(target, room, user) {
+  exp(target, room, user) {
   if (!target) target = user.name;
-  if (!this.runBroadcast()) return;    
+  const isBroadcast = this.runBroadcast();
   const userid = toID(target);
   const currentExp = ExpSystem.readExp(userid);
   const currentLevel = ExpSystem.getLevel(currentExp);
@@ -221,6 +221,26 @@ export const commands: Chat.Commands = {
   const expNeededForNextLevel = nextLevelExp - previousLevelExp;
   const progressPercentage = Math.floor((expInCurrentLevel / expNeededForNextLevel) * 100);
   const expNeeded = nextLevelExp - currentExp;
+  
+  if (isBroadcast) {
+    // This is the public broadcast command (!exp) - Only show name, level, progress bar and % complete
+    this.sendReplyBox(
+      `<div style="background: rgba(0, 0, 0, 0.05); border-radius: 8px; padding: 10px; border: 1px solid rgba(125, 125, 125, 0.2);">` +
+      `<div style="text-align: center; font-weight: bold; font-size: 1.2em; margin-bottom: 5px;">` +
+      `${Impulse.nameColor(userid, true, false)} - Level ${currentLevel}` +
+      `</div>` +
+      `<div style="width: 100%; height: 10px; background: rgba(200, 200, 200, 0.3); border-radius: 5px; overflow: hidden; margin: 5px 0;">` +
+      `<div style="width: ${progressPercentage}%; height: 100%; background: #3498db;"></div>` +
+      `</div>` +
+      `<div style="text-align: center; font-size: 0.8em; margin-top: 5px;">` +
+      `${progressPercentage}% complete` +
+      `</div>` +
+      `</div>`
+    );
+    return;
+  }
+    
+  // This is the private command (/exp) - Full detailed output
   const progressBarHTML = 
     `<div style="width: 200px; height: 18px; background: rgba(200, 200, 200, 0.2); border-radius: 10px; overflow: hidden; border: 1px solid rgba(150, 150, 150, 0.3); margin: 5px auto;">` +
     `<div style="width: ${progressPercentage}%; height: 100%; background: linear-gradient(90deg, #3498db, #2980b9); box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);"></div>` +
@@ -258,7 +278,7 @@ export const commands: Chat.Commands = {
     `</div>` +
     `</div>`
   );
-	},
+},
 
   giveexp(target, room, user) {
     this.checkCan('globalban');
