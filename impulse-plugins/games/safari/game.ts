@@ -3,7 +3,7 @@
  * Author: @musaddiktemkar            *
  **************************************/
 
-import { FS } from '../../lib/fs';
+import { FS } from '../../../lib/fs';
 import { Player, Pokemon, MovementState } from './types';
 import { SafariConstants } from './constants';
 
