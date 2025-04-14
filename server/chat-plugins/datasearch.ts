@@ -752,9 +752,9 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 			if (g === undefined) continue;
 			if (tierTraits.includes(cat) && tierInequalitySearch) continue;
 			if (cat === 'stats') {
-				const ineqality = param.split(',');
-				const result = validStatInequality(group['stats'], ineqality[0],
-					ineqality[1] as Direction, ineqality[2], +ineqality[3], input);
+				const inequality = param.split(',');
+				const result = validStatInequality(group['stats'], inequality[0],
+					inequality[1] as Direction, inequality[2], +inequality[3], input);
 				if (!result) continue;
 				return result;
 			}
@@ -789,7 +789,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 
 			// Skip over combined inequality operations because they present separately.
 			if (gEquality && !(input.search(/([><]{1}=)/) >= 0 || gInclusiveIneq)) {
-				return `The search already included '${input}' or another inequality which makes it redunant.`;
+				return `The search already included '${input}' or another inequality which makes it redundant.`;
 			} else if (compareTo === 'numeric') {
 				if ((greater && ((inclusiveGreater && value < +greater) || (!inclusiveGreater && value <= +greater))) ||
 					(less && ((inclusiveLess && value > +less) || (!inclusiveLess && value >= +less)))) {
@@ -807,7 +807,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 			const checkEquality = input.includes('=') && gEquality;
 
 			if (gValue || inverseSwapValue) {
-				return `The search already included '${input}' or another inequality which makes it redunant.`;
+				return `The search already included '${input}' or another inequality which makes it redundant.`;
 			} else if (compareTo === 'numeric' && (inverseValue || gEquality)) {
 				const result = value - Number(inverseValue || gEquality);
 				if ((direction === 'greater' && ((checkEquality && result > 0) || (!checkEquality && result >= 0))) ||
@@ -874,8 +874,8 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 				tierSearch = tierSearch || !isNotSearch;
 				if (isTierInequalityParam) {
 					const tierValue = singlesTiersValues[target];
-					const entires = Object.entries(singlesTiersValues);
-					for (const [key, value] of entires) {
+					const entries = Object.entries(singlesTiersValues);
+					for (const [key, value] of entries) {
 						const useTier = (value > tierValue && tierInequality[0]) || (value < tierValue && !tierInequality[0]);
 						if (useTier && (!key.startsWith('CAP') || capSearch)) {
 							orGroup.tiers[key] = true;
@@ -896,8 +896,8 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 				tierSearch = tierSearch || !isNotSearch;
 				if (isTierInequalityParam) {
 					const tierValue = doublesTiersValues[target];
-					const entires = Object.entries(doublesTiersValues);
-					for (const [key, value] of entires) {
+					const entries = Object.entries(doublesTiersValues);
+					for (const [key, value] of entries) {
 						if ((value > tierValue && tierInequality[0]) || (value < tierValue && !tierInequality[0])) {
 							orGroup.doublesTiers[key] = true;
 						} else if (tierValue === value && tierInequality[1]) {
