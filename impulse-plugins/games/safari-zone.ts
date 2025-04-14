@@ -632,6 +632,121 @@ export const commands: Chat.ChatCommands = {
                 if (!prizePoolStr || isNaN(prizePool) || prizePool < SafariGame.MIN_PRIZE_POOL || prizePool > SafariGame.MAX_PRIZE_POOL) {
                     return this.errorReply(`Please enter a valid prize pool amount (${SafariGame.MIN_PRIZE_POOL}-${SafariGame.MAX_PRIZE_POOL} coins).`);
                 }
+					
+					if (ballsStr && (isNaN(balls) || balls < SafariGame.MIN_BALLS || balls > SafariGame.MAX_BALLS)) {
+                    return this.errorReply(`Please enter a valid number of balls (${SafariGame.MIN_BALLS}-${SafariGame.MAX_BALLS}).`);
+                }
 
-                if (ballsStr && (isNaN(balls) || balls < SafariGame.MIN_BALLS || balls > SafariGame.MAX_BALLS)) {
-                    return this.errorReply(`Please enter
+                if (winnerCountStr && (isNaN(winnerCount) || winnerCount < SafariGame.MIN_WINNER_COUNT || winnerCount > SafariGame.MAX_WINNER_COUNT)) {
+                    return this.errorReply(`Please enter a valid number of winners (${SafariGame.MIN_WINNER_COUNT}-${SafariGame.MAX_WINNER_COUNT}).`);
+                }
+                
+                room.safari = new SafariGame(room, user.name, prizePool, balls, winnerCount);
+                this.modlog('SAFARI', null, `started by ${user.name} with ${prizePool} coin prize pool, ${balls || SafariGame.DEFAULT_BALLS} balls, and ${winnerCount || SafariGame.DEFAULT_WINNER_COUNT} winners`);
+                return this.privateModAction(`${user.name} started a Safari game with ${prizePool} coin prize pool, ${balls || SafariGame.DEFAULT_BALLS} balls per player, and prizes for ${winnerCount || SafariGame.DEFAULT_WINNER_COUNT} winners.`);
+            }
+
+            case 'join': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                const error = room.safari.addPlayer(user);
+                if (error) return this.errorReply(error);
+                return;
+            }
+
+            case 'move': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                const direction = args[0]?.toLowerCase();
+                if (!['up', 'down', 'left', 'right'].includes(direction)) {
+                    return this.errorReply("Invalid direction! Use up, down, left, or right.");
+                }
+                const result = room.safari.handleMovement(user.id, direction as 'up' | 'down' | 'left' | 'right');
+                if (result) return this.errorReply(result);
+                return;
+            }
+
+            case 'throw': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                const result = room.safari.throwBall(user);
+                if (result) return this.errorReply(result);
+                return;
+            }
+
+            case 'spectate': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                if (room.safari.players[user.id]) return this.errorReply("You are already in the game!");
+                room.safari.addSpectator(user.id);
+                return;
+            }
+
+            case 'unspectate': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                room.safari.removeSpectator(user.id);
+                return;
+            }
+
+            case 'start': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                const error = room.safari.start(user);
+                if (error) return this.errorReply(error);
+                this.modlog('SAFARI', null, `started by ${user.name}`);
+                return this.privateModAction(`${user.name} started the Safari game.`);
+            }
+
+            case 'dq':
+            case 'disqualify': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                const targetUser = args.join(' ').trim();
+                if (!targetUser) return this.errorReply("Please specify a player to disqualify.");
+                
+                const targetId = toID(targetUser);
+                const result = room.safari.disqualifyPlayer(targetId, user.name);
+                if (result) {
+                    this.modlog('SAFARIDQ', targetUser, `by ${user.name}`);
+                    this.privateModAction(result);
+                    return;
+                }
+                return this.errorReply("Failed to disqualify player.");
+            }
+
+            case 'end': {
+                this.checkCan('mute', null, room);
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                room.safari.end(false);
+                this.modlog('SAFARI', null, `ended by ${user.name}`);
+                return this.privateModAction(`${user.name} ended the Safari game.`);
+            }
+
+            default:
+                return this.parse('/help safari');
+        }
+    },
+
+    safarihelp(target, room, user) {
+        if (!this.runBroadcast()) return;
+        return this.sendReplyBox(
+            '<center><strong>Safari Zone Commands</strong></center>' +
+            '<hr />' +
+            `<code>/safari create [prizePool],[balls],[winners]</code>: Creates a new Safari game with the specified prize pool (${SafariGame.MIN_PRIZE_POOL}-${SafariGame.MAX_PRIZE_POOL} coins), balls per player (${SafariGame.MIN_BALLS}-${SafariGame.MAX_BALLS}), and number of winners (${SafariGame.MIN_WINNER_COUNT}-${SafariGame.MAX_WINNER_COUNT}, default: ${SafariGame.DEFAULT_WINNER_COUNT}).<br />` +
+            '<code>/safari join</code>: Joins the current Safari game.<br />' +
+            '<code>/safari start</code>: Starts the Safari game if enough players have joined.<br />' +
+            '<code>/safari move [up/down/left/right]</code>: Move in a direction to find a Pokemon.<br />' +
+            '<code>/safari throw</code>: Throws a Safari Ball at the encountered Pokemon.<br />' +
+            '<code>/safari spectate</code>: Watch an ongoing Safari game.<br />' +
+            '<code>/safari unspectate</code>: Stop watching a Safari game.<br />' +
+            '<code>/safari dq [player]</code>: Disqualifies a player from the game (only usable by game creator).<br />' +
+            '<code>/safari end</code>: Ends the current Safari game. Requires: @ # &<br />' +
+            '<hr />' +
+            '<strong>Game Rules:</strong><br />' +
+            `- No entry fee required<br />` +
+            `- Minimum ${SafariGame.MIN_PLAYERS} players required to start<br />` +
+            `- Each player gets ${SafariGame.DEFAULT_BALLS} Safari Balls (configurable ${SafariGame.MIN_BALLS}-${SafariGame.MAX_BALLS})<br />` +
+            `- On your turn, first choose a direction to move<br />` +
+            `- After moving, a Pokemon may appear which you can try to catch<br />` +
+            `- ${SafariGame.TURN_TIME / 1000} second time limit per turn<br />` +
+            '- Game ends when all players use their balls<br />' +
+            `- Top ${SafariGame.DEFAULT_WINNER_COUNT} players (configurable ${SafariGame.MIN_WINNER_COUNT}-${SafariGame.MAX_WINNER_COUNT}) receive prizes<br />` +
+            '- Each winner gets a share of the prize pool (60% of remaining for each position until last)<br />' +
+            '- Players can be disqualified by the game creator'
+        );
+    }
+};
