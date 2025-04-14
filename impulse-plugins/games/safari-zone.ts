@@ -1,9 +1,11 @@
 /*************************************
  * Pokemon Safari Zone Game          *
- * Author: @musaddiktemkar           *
- **************************************/
+ * Author: @musaddiktemkar          *
+ * Last Updated: 2025-04-13         *
+ *************************************/
 
 import { FS } from '../../lib/fs';
+import { Dex } from '../../sim/dex';
 
 interface Player {
     name: string;
@@ -73,26 +75,22 @@ class SafariGame {
     private generatePokemonPool(): Pokemon[] {
         const pool: Pokemon[] = [];
         const dex = Dex.mod('gen9');
-
-        // Define rarity and points based on base stats
+        
         const getDetails = (species: Species) => {
             const baseStats = species.baseStats;
             const bst = Object.values(baseStats).reduce((a, b) => a + b, 0);
             
-            // Assign rarity and points based on BST
             if (bst >= 600) return { rarity: 0.05, points: 100 };      // Legendaries/Very Strong
             if (bst >= 500) return { rarity: 0.1, points: 50 };        // Strong
             if (bst >= 400) return { rarity: 0.15, points: 30 };       // Medium
             return { rarity: 0.3, points: 10 };                        // Common
         };
 
-        // Get available species
         const allSpecies = Array.from(dex.species.all())
             .filter(species => !species.isNonstandard && !species.forme)
             .sort(() => Math.random() - 0.5)
-            .slice(0, 20); // Limit total pool size
+            .slice(0, 20);
 
-        // Create pool with dynamic rarity/points based on stats
         for (const species of allSpecies) {
             const { rarity, points } = getDetails(species);
             pool.push({
@@ -143,16 +141,216 @@ class SafariGame {
         this.currentTurn = 0;
     }
 
-    private addSpectator(userid: string): void {
-        this.spectators.add(userid);
-        this.displayToSpectator(userid);
-    }
+    private display() {
+        if (this.status === 'waiting') {
+            const startMsg = `` +
+                `<div class="infobox">` +
+                    `<div style="background: #162C19; color: #FFFFFF; padding: 8px; text-align: center;">` +
+                        `<strong style="font-size: 14pt;">Safari Zone</strong>` +
+                    `</div>` +
+                    `<div style="background: url('https://play.pokemonshowdown.com/sprites/gen6bgs/forest.png'); padding: 10px; text-align: center;">` +
+                        `<div style="background: rgba(255, 255, 255, 0.8); padding: 8px; border-radius: 4px;">` +
+                            `<table style="margin: 0 auto; width: 100%;">` +
+                                `<tr>` +
+                                    `<td colspan="2" style="padding: 8px;">` +
+                                        `<img src="https://play.pokemonshowdown.com/sprites/ani/chansey.gif" width="80" height="80">` +
+                                        `<img src="https://play.pokemonshowdown.com/sprites/ani/tauros.gif" width="80" height="80">` +
+                                    `</td>` +
+                                `</tr>` +
+                                `<tr>` +
+                                    `<td style="padding: 4px; text-align: right; width: 50%;"><b>Host:</b></td>` +
+                                    `<td style="padding: 4px; text-align: left;">${Impulse.nameColor(this.host, true, true)}</td>` +
+                                `</tr>` +
+                                `<tr>` +
+                                    `<td style="padding: 4px; text-align: right;"><b>Entry Fee:</b></td>` +
+                                    `<td style="padding: 4px; text-align: left;">${this.entryFee} coins</td>` +
+                                `</tr>` +
+                                `<tr>` +
+                                    `<td style="padding: 4px; text-align: right;"><b>Safari Balls:</b></td>` +
+                                    `<td style="padding: 4px; text-align: left;">${SafariGame.BALLS_PER_PLAYER} per player</td>` +
+                                `</tr>` +
+                                `<tr>` +
+                                    `<td style="padding: 4px; text-align: right;"><b>Players:</b></td>` +
+                                    `<td style="padding: 4px; text-align: left;">${this.getPlayerList()}</td>` +
+                                `</tr>` +
+                                `<tr>` +
+                                    `<td colspan="2" style="padding: 4px; text-align: center;">` +
+                                        `<small>${this.formatUTCTime(Date.now())}</small>` +
+                                    `</td>` +
+                                `</tr>` +
+                                `<tr>` +
+                                    `<td colspan="2" style="padding: 8px;">` +
+                                        `<button class="button" style="background: #4CAF50; color: white; padding: 8px 16px;" ` +
+                                            `name="send" value="/safari join">Enter Safari Zone!</button>` +
+                                        `<br><br>` +
+                                        `<button class="button" style="background: #5555FF; color: white; padding: 4px 8px;" ` +
+                                            `name="send" value="/safari spectate">Spectate Game</button>` +
+                                    `</td>` +
+                                `</tr>` +
+                            `</table>` +
+                        `</div>` +
+                    `</div>` +
+                `</div>`;
+            
+            this.room.add(`|uhtml|safari-waiting|${startMsg}`, -1000).update();
+            return;
+        }
 
-    private removeSpectator(userid: string): void {
-        this.spectators.delete(userid);
-        const roomUser = Users.get(userid);
-        if (roomUser?.connected) {
-            roomUser.sendTo(this.room, `|uhtmlchange|safari-spectator-${userid}|`);
+        // Game Started UI for Players
+        if (this.status === 'started') {
+            const currentPlayerId = this.turnOrder[this.currentTurn];
+            const now = Date.now();
+            const timeLeft = Math.max(0, Math.ceil((SafariGame.TURN_TIME - (now - this.turnStartTime)) / 1000));
+
+            // Update spectator view
+            for (const spectatorId of this.spectators) {
+                this.displayToSpectator(spectatorId);
+            }
+
+            // Update player views
+            for (const userid in this.players) {
+                const player = this.players[userid];
+                const isCurrentPlayer = userid === currentPlayerId;
+                
+                let buf = `` +
+                    `<div class="infobox">` +
+                        `<div style="background: #162C19; color: #FFFFFF; padding: 8px; text-align: center;">` +
+                            `<strong style="font-size: 14pt;">Safari Zone</strong>` +
+                        `</div>` +
+                        `<div style="background: url('https://play.pokemonshowdown.com/sprites/gen6bgs/forest.png');">` +
+                            `<div style="background: rgba(255, 255, 255, 0.8); padding: 10px;">` +
+                                `<table style="margin: 0 auto; width: 100%;">` +
+                                    `<tr>` +
+                                        `<td style="padding: 8px; text-align: center;">` +
+                                            `<strong>${this.formatUTCTime(now)}</strong><br>` +
+                                            `<strong>Turn: ${Impulse.nameColor(this.players[currentPlayerId].name, true, true)}</strong>` +
+                                            `<strong style="color: ${timeLeft <= 10 ? '#ff5555' : '#5555ff'}"> (${timeLeft}s)</strong>` +
+                                        `</td>` +
+                                    `</tr>`;
+
+                if (isCurrentPlayer && player.ballsLeft > 0) {
+                    const randomPokemon = this.pokemonPool[Math.floor(Math.random() * this.pokemonPool.length)];
+                    buf += `` +
+                        `<tr>` +
+                            `<td style="padding: 15px; text-align: center; background: rgba(245, 245, 245, 0.9);">` +
+                                `<div style="margin: 10px 0;">` +
+                                    `<img src="${randomPokemon.sprite}" width="120" height="120">` +
+                                `</div>` +
+                                `<div style="margin: 10px 0;">` +
+                                    `<strong>A wild Pokémon appeared!</strong>` +
+                                `</div>` +
+                            `</td>` +
+                        `</tr>`;
+                }
+
+                buf += `` +
+                    `<tr>` +
+                        `<td style="padding: 8px; background: rgba(249, 249, 249, 0.9);">` +
+                            `<table style="width: 100%;">` +
+                                `<tr>` +
+                                    `<td style="text-align: left;">` +
+                                        `<strong>Safari Balls:</strong> ${player.ballsLeft}` +
+                                        `<strong style="margin-left: 15px;">Points:</strong> ${player.points}` +
+                                    `</td>` +
+                                `</tr>` +
+                            `</table>` +
+                        `</td>` +
+                    `</tr>`;
+
+                if (isCurrentPlayer && player.ballsLeft > 0) {
+                    buf += `` +
+                        `<tr>` +
+                            `<td style="padding: 8px; text-align: center;">` +
+                                `<button class="button" style="background: ${timeLeft <= 10 ? '#ff5555' : '#4CAF50'}; color: white; padding: 8px 16px;" ` +
+                                    `name="send" value="/safari throw">Throw Safari Ball!</button>` +
+                            `</td>` +
+                        `</tr>`;
+                }
+
+                if (player.catches.length > 0) {
+                    buf += `` +
+                        `<tr>` +
+                            `<td style="padding: 8px;">` +
+                                `<div style="margin-bottom: 5px;"><strong>Your Catches:</strong></div>` +
+                                `<div style="background: rgba(245, 245, 245, 0.9); padding: 8px;">` +
+                                    player.catches.map(pk => `` +
+                                        `<div style="display: inline-block; margin: 2px; background: rgba(255, 255, 255, 0.9); padding: 4px;">` +
+                                            `<img src="${pk.sprite}" width="40" height="30" title="${pk.name}">` +
+                                            `<div style="font-size: 0.8em;">${pk.points}pts</div>` +
+                                        `</div>`
+                                    ).join('') +
+                                `</div>` +
+                            `</td>` +
+                        `</tr>`;
+                }
+
+                if (this.lastCatchMessage) {
+                    buf += `` +
+                        `<tr>` +
+                            `<td style="padding: 8px; text-align: center; background: ${this.lastWasCatch ? 'rgba(232, 245, 233, 0.9)' : 'rgba(255, 235, 238, 0.9)'};">` +
+                                `<strong style="color: ${this.lastWasCatch ? '#2E7D32' : '#C62828'};">` +
+                                    `${this.lastCatchMessage}` +
+                                `</strong>` +
+                            `</td>` +
+                        `</tr>`;
+                }
+
+                buf += `` +
+                    `</table></div></div></div>`;
+
+                const roomUser = Users.get(userid);
+                if (roomUser?.connected) {
+                    roomUser.sendTo(this.room, `|uhtml|safari-player-${userid}|${buf}`);
+                }
+            }
+        }
+
+        // End game display
+        if (this.status === 'ended') {
+            const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
+            let endMsg = `` +
+                `<div class="infobox">` +
+                    `<div style="background: #162C19; color: #FFFFFF; padding: 8px; text-align: center;">` +
+                        `<strong style="font-size: 14pt;">Safari Zone Results</strong>` +
+                    `</div>` +
+                    `<div style="background: url('https://play.pokemonshowdown.com/sprites/gen6bgs/forest.png'); padding: 10px;">` +
+                        `<div style="background: rgba(255, 255, 255, 0.8); padding: 8px; border-radius: 4px; text-align: center;">` +
+                            `<div style="margin-bottom: 10px;">` +
+                                `<small>Game Ended: ${this.formatUTCTime(Date.now())}</small><br>` +
+                                `<small>Duration: ${Math.floor((Date.now() - this.gameStartTime) / 1000)} seconds</small>` +
+                            `</div>`;
+
+            if (sortedPlayers.length > 0) {
+                const prizes = [0.6, 0.3, 0.1];
+                sortedPlayers.forEach((player, index) => {
+                    if (index < 3) {
+                        const prize = Math.floor(this.prizePool * prizes[index]);
+                        endMsg += `` +
+                            `<div style="margin: 5px 0;">` +
+                                `${index + 1}. ${Impulse.nameColor(player.name, true, true)} - ${player.points} points ` +
+                                `<span style="color: #4CAF50;">(Won ${prize} coins)</span>` +
+                            `</div>`;
+                    }
+                });
+            } else {
+                endMsg += `<div>No winners in this game.</div>`;
+            }
+
+            endMsg += `</div></div></div>`;
+            this.room.add(`|uhtml|safari-results|${endMsg}`, -1000).update();
+
+            // Clear all player displays
+            for (const userid in this.players) {
+                const roomUser = Users.get(userid);
+                if (roomUser?.connected) {
+                    roomUser.sendTo(this.room, `|uhtmlchange|safari-player-${userid}|`);
+                }
+            }
+
+            // Clear all spectator displays
+            for (const spectatorId of this.spectators) {
+                this.removeSpectator(spectatorId);
+            }
         }
     }
 
@@ -163,46 +361,99 @@ class SafariGame {
         const currentPlayerId = this.turnOrder[this.currentTurn];
         const timeLeft = Math.max(0, Math.ceil((SafariGame.TURN_TIME - (now - this.turnStartTime)) / 1000));
         
-        let buf = `<div class="infobox"><div style="text-align:center">`;
-        buf += `<h2>Safari Zone Game${this.status === 'ended' ? ' (Ended)' : ''}</h2>`;
-        buf += `<small>Game Time: ${this.formatUTCTime(now)} UTC</small><br />`;
-        buf += `<small>Game Duration: ${Math.floor((now - this.gameStartTime) / 1000)}s</small><br />`;
-        
-        buf += `<b>Host:</b> ${Impulse.nameColor(this.host, true, true)}<br />`;
-        buf += `<b>Status:</b> ${this.status}<br />`;
-        buf += `<b>Prize Pool:</b> ${this.prizePool} coins<br />`;
+        let buf = `` +
+            `<div class="infobox">` +
+                `<div style="background: #162C19; color: #FFFFFF; padding: 8px; text-align: center;">` +
+                    `<strong style="font-size: 14pt;">Safari Zone (Spectator View)</strong>` +
+                `</div>` +
+                `<div style="background: url('https://play.pokemonshowdown.com/sprites/gen6bgs/forest.png');">` +
+                    `<div style="background: rgba(255, 255, 255, 0.8); padding: 10px;">` +
+                        `<table style="margin: 0 auto; width: 100%;">` +
+                            `<tr>` +
+                                `<td style="padding: 8px; text-align: center;">` +
+                                    `<strong>${this.formatUTCTime(now)} UTC</strong><br>` +
+                                    `<strong>Game Duration:</strong> ${Math.floor((now - this.gameStartTime) / 1000)}s<br>` +
+                                    `<strong>Prize Pool:</strong> ${this.prizePool} coins` +
+                                `</td>` +
+                            `</tr>`;
 
         if (this.status === 'started' && currentPlayerId) {
-            buf += `<b>Current Turn:</b> ${Impulse.nameColor(this.players[currentPlayerId].name, true, true)}`;
-            buf += ` <b style="color: ${timeLeft <= 10 ? '#ff5555' : '#5555ff'}">(${timeLeft}s left)</b><br />`;
+            buf += `` +
+                `<tr>` +
+                    `<td style="padding: 8px; text-align: center; background: rgba(245, 245, 245, 0.9);">` +
+                        `<strong>Current Turn:</strong> ${Impulse.nameColor(this.players[currentPlayerId].name, true, true)}` +
+                        `<strong style="color: ${timeLeft <= 10 ? '#ff5555' : '#5555ff'}"> (${timeLeft}s)</strong>` +
+                    `</td>` +
+                `</tr>`;
         }
 
         if (Object.keys(this.players).length) {
-            buf += `<table border="1" cellspacing="0" cellpadding="3" style="margin:auto;margin-top:5px">`;
-            buf += `<tr><th>Player</th><th>Points</th><th>Balls Left</th><th>Catches</th></tr>`;
+            buf += `` +
+                `<tr>` +
+                    `<td style="padding: 8px;">` +
+                        `<table style="width: 100%; background: rgba(249, 249, 249, 0.9);">` +
+                            `<tr style="background: rgba(232, 245, 233, 0.9);">` +
+                                `<th style="padding: 4px;">Player</th>` +
+                                `<th style="padding: 4px;">Points</th>` +
+                                `<th style="padding: 4px;">Balls</th>` +
+                                `<th style="padding: 4px;">Catches</th>` +
+                            `</tr>`;
+
             const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
             for (const p of sortedPlayers) {
                 const isCurrentTurn = p.id === currentPlayerId;
-                buf += `<tr${isCurrentTurn ? ' style="background-color: rgba(85, 85, 255, 0.1)"' : ''}>`;
-                buf += `<td>${Impulse.nameColor(p.name, true, true)}${isCurrentTurn ? ' ⭐' : ''}</td>`;
-                buf += `<td>${p.points}</td>`;
-                buf += `<td>${p.ballsLeft}</td>`;
-                buf += `<td>${p.catches.map(pk => `<img src="${pk.sprite}" width="40" height="30" title="${pk.name}">`).join('')}</td>`;
-                buf += `</tr>`;
+                buf += `` +
+                    `<tr${isCurrentTurn ? ` style="background: rgba(232, 245, 233, 0.9);"` : ``}>` +
+                        `<td style="padding: 4px;">${Impulse.nameColor(p.name, true, true)}${isCurrentTurn ? ' ⭐' : ''}</td>` +
+                        `<td style="padding: 4px;">${p.points}</td>` +
+                        `<td style="padding: 4px;">${p.ballsLeft}</td>` +
+                        `<td style="padding: 4px;">${p.catches.map(pk => 
+                            `<img src="${pk.sprite}" width="40" height="30" title="${pk.name} (${pk.points}pts)">`
+                        ).join('')}</td>` +
+                    `</tr>`;
             }
-            buf += `</table>`;
+            buf += `</table></td></tr>`;
         }
 
-        if (this.status === 'started' && this.lastCatchMessage) {
-            buf += `<br /><div style="color: ${this.lastWasCatch ? '#008000' : '#ff5555'}; margin: 5px 0;">${this.lastCatchMessage}</div>`;
+        if (this.lastCatchMessage) {
+            buf += `` +
+                `<tr>` +
+                    `<td style="padding: 8px; text-align: center; background: ${this.lastWasCatch ? 'rgba(232, 245, 233, 0.9)' : 'rgba(255, 235, 238, 0.9)'};">` +
+                        `<strong style="color: ${this.lastWasCatch ? '#2E7D32' : '#C62828'};">` +
+                            `${this.lastCatchMessage}` +
+                        `</strong>` +
+                    `</td>` +
+                `</tr>`;
         }
 
-        buf += `<br /><small style="color: #666666">You are spectating this game</small>`;
-        buf += `</div></div>`;
+        buf += `` +
+            `<tr>` +
+                `<td style="padding: 8px; text-align: center;">` +
+                    `<small style="color: #666666">You are spectating this game - ` +
+                    `<button class="button" style="background: #ff5555; color: white; font-size: 8pt; padding: 2px 4px;" ` +
+                        `name="send" value="/safari unspectate">Stop Spectating</button>` +
+                    `</small>` +
+                `</td>` +
+            `</tr>` +
+            `</table></div></div></div>`;
 
         const roomUser = Users.get(userid);
         if (roomUser?.connected) {
             roomUser.sendTo(this.room, `|uhtml|safari-spectator-${userid}|${buf}`);
+        }
+    }
+
+    addSpectator(userid: string): void {
+        if (this.players[userid]) return; // Players can't spectate
+        this.spectators.add(userid);
+        this.displayToSpectator(userid);
+    }
+
+    removeSpectator(userid: string): void {
+        this.spectators.delete(userid);
+        const roomUser = Users.get(userid);
+        if (roomUser?.connected) {
+            roomUser.sendTo(this.room, `|uhtmlchange|safari-spectator-${userid}|`);
         }
     }
 
@@ -251,138 +502,6 @@ class SafariGame {
 
         this.display();
         this.startTurnTimer();
-    }
-
-    private display() {
-        if (this.status === 'waiting') {
-            const startMsg = 
-                `<div class="infobox">` +
-                `<div style="text-align:center;margin:5px">` +
-                `<h2 style="color:#24678d">Safari Zone Game</h2>` +
-                `<small>Game Time: ${this.formatUTCTime(Date.now())} UTC</small><br />` +
-                `<b>Started by:</b> ${Impulse.nameColor(this.host, true, true)}<br />` +
-                `<b>Entry Fee:</b> ${this.entryFee} coins<br />` +
-                `<b>Pokeballs:</b> ${SafariGame.BALLS_PER_PLAYER} per player<br />` +
-                `<b>Players:</b> ${this.getPlayerList()}<br /><br />` +
-                `<img src="https://play.pokemonshowdown.com/sprites/ani/chansey.gif" width="80" height="80" style="margin-right:30px">` +
-                `<img src="https://play.pokemonshowdown.com/sprites/ani/tauros.gif" width="80" height="80" style="margin-left:30px"><br />` +
-                `<button class="button" name="send" value="/safari join">Click to join!</button>` +
-                `</div></div>`;
-            
-            this.room.add(`|uhtml|safari-waiting|${startMsg}`, -1000).update();
-            return;
-        }
-
-        this.room.add(`|uhtmlchange|safari-waiting|`, -1000);
-
-        const currentPlayerId = this.turnOrder[this.currentTurn];
-        const now = Date.now();
-        const timeLeft = Math.max(0, Math.ceil((SafariGame.TURN_TIME - (now - this.turnStartTime)) / 1000));
-
-        if (this.status === 'started') {
-            for (const userid in this.players) {
-                const player = this.players[userid];
-                let buf = `<div class="infobox"><div style="text-align:center">`;
-                buf += `<h2>Safari Zone Game</h2>`;
-                
-                buf += `<small>Game Time: ${this.formatUTCTime(now)} UTC</small><br />`;
-                buf += `<small>Game Duration: ${Math.floor((now - this.gameStartTime) / 1000)}s</small><br />`;
-                
-                buf += `<b>Host:</b> ${Impulse.nameColor(this.host, true, true)}<br />`;
-                buf += `<b>Status:</b> ${this.status}<br />`;
-                buf += `<b>Prize Pool:</b> ${this.prizePool} coins<br />`;
-
-                buf += `<b>Current Turn:</b> ${Impulse.nameColor(this.players[currentPlayerId].name, true, true)}`;
-                buf += ` <b style="color: ${timeLeft <= 10 ? '#ff5555' : '#5555ff'}">(${timeLeft}s left)</b><br />`;
-
-                if (Object.keys(this.players).length) {
-                    buf += `<table border="1" cellspacing="0" cellpadding="3" style="margin:auto;margin-top:5px">`;
-                    buf += `<tr><th>Player</th><th>Points</th><th>Balls Left</th><th>Catches</th></tr>`;
-                    const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
-                    for (const p of sortedPlayers) {
-                        const isCurrentTurn = p.id === currentPlayerId;
-                        buf += `<tr${isCurrentTurn ? ' style="background-color: rgba(85, 85, 255, 0.1)"' : ''}>`;
-                        buf += `<td>${Impulse.nameColor(p.name, true, true)}${p.id === userid ? ' (You)' : ''}${isCurrentTurn ? ' ⭐' : ''}</td>`;
-                        buf += `<td>${p.points}</td>`;
-                        buf += `<td>${p.ballsLeft}</td>`;
-                        buf += `<td>${p.catches.map(pk => `<img src="${pk.sprite}" width="40" height="30" title="${pk.name}">`).join('')}</td>`;
-                        buf += `</tr>`;
-                    }
-                    buf += `</table>`;
-                }
-
-                if (this.lastCatchMessage) {
-                    buf += `<br /><div style="color: ${this.lastWasCatch ? '#008000' : '#ff5555'}; margin: 5px 0;">${this.lastCatchMessage}</div>`;
-                }
-                
-                if (userid === currentPlayerId) {
-                    if (player.ballsLeft > 0) {
-                        buf += `<br />`;
-                        buf += `<button class="button" style="font-size: 12pt; padding: 8px 16px; ${timeLeft <= 10 ? 'background-color: #ff5555;' : ''}" `;
-                        buf += `name="send" value="/safari throw">Throw Safari Ball</button>`;
-                        buf += `<br /><b style="color: ${timeLeft <= 10 ? '#ff5555' : '#5555ff'}">`;
-                        buf += `You have ${timeLeft} second${timeLeft !== 1 ? 's' : ''} to throw!</b>`;
-                        if (timeLeft <= 10) {
-                            buf += `<br /><small style="color: #ff5555">Warning: You'll lose a ball if you don't throw!</small>`;
-                        }
-                    } else {
-                        buf += `<br /><div style="color: #ff5555">You have no Safari Balls left!</div>`;
-                    }
-                } else {
-                    const currentPlayer = this.players[currentPlayerId];
-                    buf += `<br /><div style="color: #666666">Waiting for ${currentPlayer.name}'s turn... (${timeLeft}s left)</div>`;
-                }
-
-                buf += `</div></div>`;
-                
-                const roomUser = Users.get(userid);
-                if (roomUser?.connected) {
-                    roomUser.sendTo(this.room, `|uhtml|safari-player-${userid}|${buf}`);
-                }
-            }
-        } else if (this.status === 'ended') {
-            for (const userid in this.players) {
-                const roomUser = Users.get(userid);
-                if (roomUser?.connected) {
-                    roomUser.sendTo(this.room, `|uhtmlchange|safari-player-${userid}|`);
-                }
-            }
-        }
-
-        if (this.status === 'ended') {
-            const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
-            let buf = `<div class="infobox"><center><h2>Safari Zone Results</h2>`;
-            buf += `<small>Game Ended: ${this.formatUTCTime(now)} UTC</small><br />`;
-            buf += `<small>Duration: ${Math.floor((now - this.gameStartTime) / 1000)} seconds</small><br /><br />`;
-            
-            if (sortedPlayers.length > 0) {
-                const prizes = [0.6, 0.3, 0.1];
-                sortedPlayers.forEach((player, index) => {
-                    if (index < 3) {
-                        const prize = Math.floor(this.prizePool * prizes[index]);
-                        buf += `${index + 1}. ${Impulse.nameColor(player.name, true, true)} - ${player.points} points (Won ${prize} coins)<br>`;
-                    }
-                });
-            } else {
-                buf += `No winners in this game.`;
-            }
-            buf += `</center></div>`;
-
-            this.room.add(`|uhtml|safari-spectator|${buf}`, -1000).update();
-        } else {
-            this.room.add(`|uhtmlchange|safari-spectator|`, -1000).update();
-        }
-
-        for (const spectatorId of this.spectators) {
-            if (this.status === 'ended') {
-                const roomUser = Users.get(spectatorId);
-                if (roomUser?.connected) {
-                    roomUser.sendTo(this.room, `|uhtmlchange|safari-spectator-${spectatorId}|`);
-                }
-            } else {
-                this.displayToSpectator(spectatorId);
-            }
-        }
     }
 
     addPlayer(user: User): string | null {
@@ -509,138 +628,11 @@ class SafariGame {
         }
         this.status = 'ended';
 
+        // Clear all spectators
+        for (const spectatorId of this.spectators) {
+            this.removeSpectator(spectatorId);
+        }
+        this.spectators.clear();
+
         if (inactive && Object.keys(this.players).length < SafariGame.MIN_PLAYERS) {
-            for (const id in this.players) {
-                Economy.addMoney(id, this.entryFee, "Safari Zone refund");
-            }
-            this.room.add(`|uhtmlchange|safari-spectator|<div class="infobox">The Safari Zone game has been canceled due to inactivity. Entry fees have been refunded.</div>`, -1000).update();
-            delete this.room.safari;
-            return;
-        }
-
-        const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
-        if (sortedPlayers.length > 0) {
-            const prizes = [0.6, 0.3, 0.1];
-            for (let i = 0; i < Math.min(3, sortedPlayers.length); i++) {
-                const prize = Math.floor(this.prizePool * prizes[i]);
-                if (prize > 0) {
-                    Economy.addMoney(sortedPlayers[i].id, prize, `Safari Zone ${i + 1}${['st', 'nd', 'rd'][i]} place`);
-                }
-            }
-        }
-
-        this.display();
-        delete this.room.safari;
-    }
-}
-
-export const commands: Chat.ChatCommands = {
-    safari(target, room, user) {
-        if (!room) return this.errorReply("This command can only be used in a room.");
-        const [cmd, ...args] = target.split(' ');
-
-        switch ((cmd || '').toLowerCase()) {
-            case 'new':
-            case 'create': {
-                this.checkCan('mute', null, room);
-                if (room.safari) return this.errorReply("A Safari game is already running in this room.");
-                const entryFee = parseInt(args[0]);
-                if (isNaN(entryFee) || entryFee < 1) return this.errorReply("Please enter a valid entry fee.");
-                
-                room.safari = new SafariGame(room, entryFee, user.name);
-                this.modlog('SAFARI', null, `started by ${user.name} with ${entryFee} coin entry fee`);
-                return this.privateModAction(`${user.name} started a Safari game with ${entryFee} coin entry fee.`);
-            }
-
-            case 'join': {
-                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
-                const error = room.safari.addPlayer(user);
-                if (error) return this.errorReply(error);
-                
-                this.sendReply(`|uhtmlchange|safari-spectator|`);
-                return;
-            }
-
-            case 'spectate': {
-                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
-                if (room.safari.players[user.id]) return this.errorReply("You are already in the game!");
-                
-                room.safari.addSpectator(user.id);
-                return;
-            }
-
-            case 'unspectate': {
-                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
-                room.safari.removeSpectator(user.id);
-                return;
-            }
-
-            case 'start': {
-                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
-                const error = room.safari.start(user);
-                if (error) return this.errorReply(error);
-                this.modlog('SAFARI', null, `started by ${user.name}`);
-                return this.privateModAction(`${user.name} started the Safari game.`);
-            }
-
-            case 'throw': {
-                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
-                const result = room.safari.throwBall(user);
-                if (result) return this.errorReply(result);
-                return;
-            }
-
-            case 'dq':
-            case 'disqualify': {
-                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
-                const targetUser = args.join(' ').trim();
-                if (!targetUser) return this.errorReply("Please specify a player to disqualify.");
-                
-                const targetId = toID(targetUser);
-                const result = room.safari.disqualifyPlayer(targetId, user.name);
-                if (result) {
-                    this.modlog('SAFARIDQ', targetUser, `by ${user.name}`);
-                    this.privateModAction(result);
-                    return;
-                }
-                return this.errorReply("Failed to disqualify player.");
-            }
-
-            case 'end': {
-                this.checkCan('mute', null, room);
-                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
-                room.safari.end(false);
-                this.modlog('SAFARI', null, `ended by ${user.name}`);
-                return this.privateModAction(`${user.name} ended the Safari game.`);
-            }
-
-            default:
-                return this.parse('/help safari');
-        }
-    },
-
-    safarihelp(target, room, user) {
-        if (!this.runBroadcast()) return;
-        return this.sendReplyBox(
-            '<center><strong>Safari Zone Commands</strong></center>' +
-            '<hr />' +
-            '<code>/safari create [fee]</code>: Creates a new Safari game with the specified entry fee. Requires @.<br />' +
-            '<code>/safari join</code>: Joins the current Safari game.<br />' +
-            '<code>/safari start</code>: Starts the Safari game if enough players have joined.<br />' +
-            '<code>/safari throw</code>: Throws a Safari Ball at a Pokemon.<br />' +
-            '<code>/safari spectate</code>: Watch an ongoing Safari game.<br />' +
-            '<code>/safari unspectate</code>: Stop watching a Safari game.<br />' +
-            '<code>/safari dq [player]</code>: Disqualifies a player from the game (only usable by game creator).<br />' +
-            '<code>/safari end</code>: Ends the current Safari game. Requires @.<br />' +
-            '<hr />' +
-            '<strong>Game Rules:</strong><br />' +
-            `- Players must pay an entry fee to join<br />` +
-            `- Minimum ${SafariGame.MIN_PLAYERS} players required to start<br />` +
-            `- Each player gets ${SafariGame.BALLS_PER_PLAYER} Safari Balls<br />` +
-            `- ${SafariGame.TURN_TIME / 1000} second time limit per turn<br />` +
-            '- Game ends when all players use their balls<br />' +
-            '- Prizes: 1st (60%), 2nd (30%), 3rd (10%) of pool<br />' +
-			   '- Players can be disqualified by the game creator'
-        );
-    }
-};
+            for (const id in
