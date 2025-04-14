@@ -39,7 +39,7 @@ describe('Acupressure', () => {
 	});
 
 	// https://www.smogon.com/forums/threads/acupressure-targeting.3733779/post-9920405
-	it(`should redirect to the user if a targetted ally faints`, () => {
+	it(`should redirect to the user if a targeted ally faints`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Pincurchin', moves: ['acupressure'] },
 			{ species: 'Flutter Mane', moves: ['memento'] },
@@ -54,7 +54,7 @@ describe('Acupressure', () => {
 		assert(Object.values(battle.p1.active[0].boosts).some(n => n === 2));
 	});
 
-	it(`in Gen 5, should not redirect to the uesr if a targetted ally faints`, () => {
+	it(`in Gen 5, should not redirect to the uesr if a targeted ally faints`, () => {
 		battle = common.gen(5).createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Shuckle', moves: ['acupressure'] },
 			{ species: 'Dugtrio', moves: ['memento'] },

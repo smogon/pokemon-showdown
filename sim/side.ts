@@ -619,7 +619,7 @@ export class Side {
 
 		if (maxMove) targetType = this.battle.dex.moves.get(maxMove).target;
 
-		// Validate targetting
+		// Validate targeting
 
 		if (autoChoose) {
 			targetLoc = 0;

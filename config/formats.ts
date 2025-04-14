@@ -2783,7 +2783,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			if (this.dex.species.get(name).exists || this.dex.moves.get(name).exists ||
 				this.dex.abilities.get(name).exists || name === 'blitz') {
 				// Certain pokemon have volatiles named after their id
-				// To prevent overwriting those, and to prevent accidentaly leaking
+				// To prevent overwriting those, and to prevent accidentally leaking
 				// that a pokemon is on a team through the onStart even triggering
 				// at the start of a match, users with pokemon names will need their
 				// statuses to end in "user".

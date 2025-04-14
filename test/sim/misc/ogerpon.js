@@ -7,7 +7,7 @@ let battle;
 
 describe(`[Hackmons] Ogerpon`, () => {
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9838633
-	it(`should keep permanent abilites after Terastallizing until it switches out`, () => {
+	it(`should keep permanent abilities after Terastallizing until it switches out`, () => {
 		battle = common.gen(9).createBattle([[
 			{ species: 'ogerpon', ability: 'multitype', moves: ['sleeptalk'] },
 			{ species: 'shedinja', moves: ['splash'] },

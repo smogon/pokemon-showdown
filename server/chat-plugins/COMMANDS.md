@@ -87,7 +87,7 @@ As an example:
 Plines
 ------------------------------------------------------------------------
 
-A lot of the functions refering "plines". A pline is a protocol line,
+A lot of the functions referring "plines". A pline is a protocol line,
 documented in [PROTOCOL.md][https://github.com/smogon/pokemon-showdown/blob/master/PROTOCOL.md]
 
 Plines are the ones that usually start with `|MESSAGETYPE|`, but a pline

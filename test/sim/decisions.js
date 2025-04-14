@@ -608,7 +608,7 @@ describe('Choices', () => {
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
-		it('should privately log the target of targetted chosen moves', () => {
+		it('should privately log the target of targeted chosen moves', () => {
 			battle = common.createBattle({ gameType: 'doubles' }, [[
 				{ species: "Bulbasaur", ability: 'overgrow', moves: ['tackle'] },
 				{ species: "Ivysaur", ability: 'overgrow', moves: ['tackle'] },

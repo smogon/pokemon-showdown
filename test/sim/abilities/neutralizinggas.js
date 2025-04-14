@@ -49,7 +49,7 @@ describe('Neutralizing Gas', () => {
 		assert.statStage(battle.p2.active[0], 'atk', -1);
 	});
 
-	it(`should negate abilites that activate on switch-out`, () => {
+	it(`should negate abilities that activate on switch-out`, () => {
 		battle = common.createBattle([
 			[{ species: "Weezing", ability: 'neutralizinggas', moves: ['toxic'] },
 				{ species: "Type: Null", ability: 'battlearmor', moves: ['facade'] }],

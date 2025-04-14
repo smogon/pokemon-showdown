@@ -276,7 +276,7 @@ export const commands: Chat.ChatCommands = {
 			`<code>/suspects</code>: displays currently running suspect tests.<br />` +
 			`<code>/suspects add [tier], [suspect], [date], [...reqs]</code>: adds a suspect test. Date in the format MM/DD. ` +
 			`Reqs in the format [key]=[value], where valid keys are 'coil', 'elo', and 'gxe', delimited by commas. At least one is required. <br />` +
-			`(note that if you are using COIL, you must set a B value indepedently with <code>/suspects setcoil</code>). Requires: ~<br />` +
+			`(note that if you are using COIL, you must set a B value independently with <code>/suspects setcoil</code>). Requires: ~<br />` +
 			`<code>/suspects remove [tier]</code>: deletes a suspect test. Requires: ~<br />` +
 			`<code>/suspects whitelist [username]</code>: allows [username] to add suspect tests. Requires: ~<br />` +
 			`<code>/suspects unwhitelist [username]</code>: disallows [username] from adding suspect tests. Requires: ~<br />` +

@@ -165,7 +165,7 @@ async function convertRoomPunishments() {
 }
 
 export function writeStats(line: string) {
-	// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,seperated,with,commas
+	// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,separated,with,commas
 	const date = new Date();
 	const month = Chat.toTimestamp(date).split(' ')[0].split('-', 2).join('-');
 	try {
@@ -442,7 +442,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			involvedStaff = Array.from(this.involvedStaff.entries()).map(s => s[0]).join(',');
 		}
 		// Write to TSV
-		// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,seperated,with,commas
+		// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,separated,with,commas
 		const line = `${this.ticket.type}\t${(this.closeTime - this.createTime)}\t${firstClaimWait}\t${this.unclaimedTime}\t${this.resolution}\t${this.result}\t${involvedStaff}`;
 		writeStats(line);
 	}
@@ -2523,7 +2523,7 @@ export const commands: Chat.ChatCommands = {
 			if (tarUser) {
 				HelpTicket.notifyResolved(tarUser, ticket, ticketId);
 			}
-			// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,seperated,with,commas
+			// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,separated,with,commas
 			writeStats(`${ticket.type}\t${Date.now() - ticket.created}\t0\t0\tresolved\tvalid\t${user.id}`);
 			this.popupReply(`You resolved ${ticketId}'s ticket.`);
 			await HelpTicket.modlog({
