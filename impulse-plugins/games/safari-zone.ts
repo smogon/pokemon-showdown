@@ -47,7 +47,7 @@ class SafariGame {
     private static readonly DEFAULT_BALLS = 20;
     private static readonly MIN_BALLS = 5;
     private static readonly MAX_BALLS = 50;
-    private static readonly MIN_PRIZE_POOL = 100;
+    private static readonly MIN_PRIZE_POOL = 10;
     private static readonly MAX_PRIZE_POOL = 1000000;
     private static readonly TURN_TIME = 30 * 1000;
 
@@ -620,7 +620,7 @@ export const commands: Chat.ChatCommands = {
         }
     },
 
-    safarihelp(target, room, user) {
+	    safarihelp(target, room, user) {
         if (!this.runBroadcast()) return;
         return this.sendReplyBox(
             '<center><strong>Safari Zone Commands</strong></center>' +
@@ -632,4 +632,16 @@ export const commands: Chat.ChatCommands = {
             '<code>/safari spectate</code>: Watch an ongoing Safari game.<br />' +
             '<code>/safari unspectate</code>: Stop watching a Safari game.<br />' +
             '<code>/safari dq [player]</code>: Disqualifies a player from the game (only usable by game creator).<br />' +
-            '<code>/safari end</code>: Ends
+            '<code>/safari end</code>: Ends the current Safari game. Requires @.<br />' +
+            '<hr />' +
+            '<strong>Game Rules:</strong><br />' +
+            `- No entry fee required<br />` +
+            `- Minimum ${SafariGame.MIN_PLAYERS} players required to start<br />` +
+            `- Each player gets ${SafariGame.MIN_BALLS}-${SafariGame.MAX_BALLS} Safari Balls (default: ${SafariGame.DEFAULT_BALLS})<br />` +
+            `- ${SafariGame.TURN_TIME / 1000} second time limit per turn<br />` +
+            '- Game ends when all players use their balls<br />' +
+            '- Prizes: 1st (60%), 2nd (30%), 3rd (10%) of prize pool<br />' +
+            '- Players can be disqualified by the game creator'
+        );
+    }
+};
