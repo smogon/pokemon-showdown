@@ -405,7 +405,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			this.roles.push(player.role);
 			this.played.push(player.id);
 		} else {
-			// TODO improve reseting roles
+			// TODO improve resetting roles
 			this.originalRoles = [];
 			this.originalRoleString = '';
 			this.roles = [];
@@ -1854,7 +1854,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.sendHTML(this.roomWindow());
 		this.updatePlayers();
 		if (this.room.roomid === 'mafia' && this.started) {
-			// Intead of using this.played, which shows players who have subbed out as well
+			// Instead of using this.played, which shows players who have subbed out as well
 			// We check who played through to the end when recording playlogs
 			const played = this.players.map(p => p.id);
 			const month = new Date().toLocaleString("en-us", { month: "numeric", year: "numeric" });
@@ -2111,12 +2111,12 @@ export const pages: Chat.PageTable = {
 			}
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">How to setup roles</summary>`;
 			buf += `<h3>Setting the roles</h3>`;
-			buf += `<p>To set the roles, use /mafia setroles [comma seperated list of roles] OR /mafia setroles [theme] in ${room.title}.</p>`;
+			buf += `<p>To set the roles, use /mafia setroles [comma separated list of roles] OR /mafia setroles [theme] in ${room.title}.</p>`;
 			buf += `<p>If you set the roles from a theme, the role parser will get all the correct roles for you. (Not all themes are supported).</p>`;
 			buf += `<p>The following key words determine a role's alignment (If none are found, the default alignment is town):</p>`;
 			buf += `<p style="font-weight:bold">${Object.values(MafiaData.alignments).map(a => `<span style="color:${a.color || '#FFF'}">${a.name}</span>`).join(', ')}</p>`;
 			buf += `<p>Please note that anything inside (parentheses) is ignored by the role parser.</p>`;
-			buf += `<p>If you have roles that have conflicting alignments or base roles, you can use /mafia forcesetroles [comma seperated list of roles] to forcibly set the roles.</p>`;
+			buf += `<p>If you have roles that have conflicting alignments or base roles, you can use /mafia forcesetroles [comma separated list of roles] to forcibly set the roles.</p>`;
 			buf += `<p>Please note that you will have to PM all the players their alignment, partners (if any), and other information about their role because the server will not provide it.</p>`;
 			buf += `<hr/></details></p>`;
 			buf += `<p style="font-weight:bold;">Players who will be subbed unless they talk: ${game.hostRequestedSub.join(', ')}</p>`;
@@ -3461,7 +3461,7 @@ export const commands: Chat.ChatCommands = {
 				this.modlog('MAFIASUBHOST', targetUser, `replacing ${oldHostid}`, { noalts: true, noip: true });
 			}
 		},
-		subhosthelp: [`/mafia subhost [user] - Substitues the user as the new game host.`],
+		subhosthelp: [`/mafia subhost [user] - Substitutes the user as the new game host.`],
 		cohosthelp: [
 			`/mafia cohost [user] - Adds the user as a cohost. Cohosts can talk during the game, as well as perform host actions.`,
 		],
@@ -4113,7 +4113,7 @@ export const commands: Chat.ChatCommands = {
 			`/mafia players - Display the current list of players, will highlight players.`,
 			`/mafia [rl|orl] - Display the role list or the original role list for the current game.`,
 			`/mafia data [alignment|role|modifier|theme|term] - Get information on a mafia alignment, role, modifier, theme, or term.`,
-			`/mafia subhost [user] - Substitues the user as the new game host. Requires % @ # ~`,
+			`/mafia subhost [user] - Substitutes the user as the new game host. Requires % @ # ~`,
 			`/mafia (un)cohost [user] - Adds/removes the user as a cohost. Cohosts can talk during the game, as well as perform host actions. Requires % @ # ~`,
 			`/mafia [enable|disable] - Enables/disables mafia in this room. Requires # ~`,
 		].join('<br/>');
@@ -4143,8 +4143,8 @@ export const commands: Chat.ChatCommands = {
 			`/mafia votelock [on|off] - Allows or disallows players to change their vote. Requires host % @ # ~`,
 			`/mafia voting [on|off] - Allows or disallows voting. Requires host % @ # ~`,
 			`/mafia forcevote [yes/no] - Forces players' votes onto themselves, and prevents unvoting. Requires host % @ # ~`,
-			`/mafia setroles [comma seperated roles] - Set the roles for a game of mafia. You need to provide one role per player. Requires host % @ # ~`,
-			`/mafia forcesetroles [comma seperated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set. Requires host % @ # ~`,
+			`/mafia setroles [comma separated roles] - Set the roles for a game of mafia. You need to provide one role per player. Requires host % @ # ~`,
+			`/mafia forcesetroles [comma separated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set. Requires host % @ # ~`,
 			`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ # ~`,
 			`/mafia [day|night] - Move to the next game day or night. Requires host % @ # ~`,
 			`/mafia extend (minutes) - Return to the previous game day. If (minutes) is provided, set the deadline for (minutes) minutes. Requires host % @ # ~`,
@@ -4162,7 +4162,7 @@ export const commands: Chat.ChatCommands = {
 			`/mafia (un)[priest|actor] [player] - Makes [player] a priest (can't hammer) or actor (can only hammer). Requires host % @ # ~`,
 			`/mafia deadline [minutes|off] - Sets or removes the deadline for the game. Cannot be more than 20 minutes.`,
 			`/mafia sub next, [player] - Forcibly sub [player] out of the game. Requires host % @ # ~`,
-			`/mafia sub remove, [user] - Forcibly remove [user] from the sublist. Requres host % @ # ~`,
+			`/mafia sub remove, [user] - Forcibly remove [user] from the sublist. Requires host % @ # ~`,
 			`/mafia sub unrequest, [player] - Remove's a player's request to sub out of the game. Requires host % @ # ~`,
 			`/mafia sub [player], [user] - Forcibly sub [player] for [user]. Requires host % @ # ~`,
 			`/mafia autosub [yes|no] - Sets if players will automatically sub out if a user is on the sublist. Defaults to yes. Requires host % @ # ~`,
