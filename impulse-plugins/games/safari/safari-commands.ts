@@ -3,7 +3,7 @@
  * Author: @musaddiktemkar            *
  **************************************/
 
-import { SafariGame } from '../safari-game-core';
+import { SafariGame } from './safari-game-core';
 import { SAFARI_CONSTANTS, MovementDirection } from '../safari-types';
 
 export const commands: Chat.ChatCommands = {
