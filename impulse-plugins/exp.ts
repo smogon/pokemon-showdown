@@ -236,7 +236,7 @@ export const commands: Chat.Commands = {
     // Name at the top
     `<div style="text-align: center; margin-bottom: 8px;">` +
     `<div style="font-size: 1.5em; font-weight: bold;">` +
-    `<span>${Impulse.nameColor(userid, true, true)}</span>` +
+    `<span>${Impulse.nameColor(userid, true, false)}</span>` +
     `</div>` +
     `</div>` +
     
