@@ -525,38 +525,6 @@ class SafariGame {
         }
     }
 
-    /*end(inactive: boolean = false) {
-        if (this.status === 'ended') return;
-
-        this.clearTimer();
-        if (this.turnTimer) {
-            clearTimeout(this.turnTimer);
-            this.turnTimer = null;
-        }
-        this.status = 'ended';
-
-        if (inactive && Object.keys(this.players).length < SafariGame.MIN_PLAYERS) {
-            this.room.add(`|uhtmlchange|safari-spectator|<div class="infobox">The Safari Zone game has been canceled due to inactivity.</div>`, -1000).update();
-            delete this.room.safari;
-            return;
-        }
-
-        const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
-        if (sortedPlayers.length > 0) {
-            const prizes = [0.6, 0.3, 0.1];
-            for (let i = 0; i < Math.min(3, sortedPlayers.length); i++) {
-                const prize = Math.floor(this.prizePool * prizes[i]);
-                if (prize > 0) {
-                    Economy.addMoney(sortedPlayers[i].id, prize, `Safari Zone ${i + 1}${['st', 'nd', 'rd'][i]} place`);
-                }
-            }
-        }
-
-        this.display();
-        delete this.room.safari;
-    }
-}*/
-
 	end(inactive: boolean = false) {
     if (this.status === 'ended') return;
 
