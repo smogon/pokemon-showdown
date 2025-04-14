@@ -111,7 +111,7 @@ export interface PokemonSet {
 	/**
 	 * Default gimmick mechanic
 	 */
-	gimmick?: string;
+	gimmick?: "tera" | "dmax" | "mega" | "zpower" | null;
 }
 
 export const Teams = new class Teams {
@@ -206,7 +206,13 @@ export const Teams = new class Teams {
 			}
 
 			if (!set.gimmick){
-				set.gimmick = (set.gigantamax || (set.dynamaxLevel !== undefined && set.dynamaxLevel !== 10)) ? "dmax" : "tera";
+				if (set.item.indexOf("ium Z") > -1){
+					set.gimmick = "zpower";
+				} else if (set.item.indexOf("ite") > -1 && set.item != "Eviolite"){
+					set.gimmick = "mega";
+				} else {
+					set.gimmick = (set.gigantamax || (set.dynamaxLevel == 10)) ? "dmax" : "tera";
+				}
 			}
 		}
 
@@ -338,7 +344,12 @@ export const Teams = new class Teams {
 				set.gigantamax = !!misc[3];
 				set.dynamaxLevel = (misc[4] ? Number(misc[4]) : 10);
 				set.teraType = misc[5];
-				set.gimmick = misc[6];
+				set.gimmick = 
+					(misc[6] === "tera") ||
+					(misc[6] === "dmax") ||
+					(misc[6] === "mega") ||
+					(misc[6] === "zpower")
+				? misc[6] : null;
 			}
 			if (j < 0) break;
 			i = j + 1;
