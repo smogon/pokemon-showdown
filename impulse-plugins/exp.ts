@@ -221,6 +221,10 @@ export const commands: Chat.Commands = {
   const expNeededForNextLevel = nextLevelExp - previousLevelExp;
   const progressPercentage = Math.floor((expInCurrentLevel / expNeededForNextLevel) * 100);
   const expNeeded = nextLevelExp - currentExp;
+  const progressBarHTML = 
+    `<div style="width: 200px; height: 18px; background: rgba(200, 200, 200, 0.2); border-radius: 10px; overflow: hidden; border: 1px solid rgba(150, 150, 150, 0.3); margin: 5px auto;">` +
+    `<div style="width: ${progressPercentage}%; height: 100%; background: linear-gradient(90deg, #3498db, #2980b9); box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);"></div>` +
+    `</div>`;
   
   if (isBroadcast) {
     // This is the public broadcast command (!exp) - Only show name, level, progress bar and % complete
