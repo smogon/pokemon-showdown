@@ -21,6 +21,12 @@ interface Pokemon {
     sprite: string;
 }
 
+interface MovementState {
+    canMove: boolean;
+    pokemonDisplayed: boolean;
+    currentPokemon: Pokemon | null;
+}
+
 class SafariGame {
     private room: ChatRoom;
     private players: {[k: string]: Player};
@@ -39,6 +45,7 @@ class SafariGame {
     private spectators: Set<string>;
     private readonly pokemonPool: Pokemon[];
     private ballsPerPlayer: number;
+    private movementStates: { [k: string]: MovementState };
 
     private static readonly INACTIVE_TIME = 2 * 60 * 1000;
     private static readonly CATCH_COOLDOWN = 2 * 1000;
@@ -69,6 +76,7 @@ class SafariGame {
         this.spectators = new Set();
         this.pokemonPool = this.generatePokemonPool();
         this.ballsPerPlayer = Math.max(SafariGame.MIN_BALLS, Math.min(SafariGame.MAX_BALLS, balls));
+        this.movementStates = {};
 
         this.setInactivityTimer();
         this.display();
@@ -123,6 +131,37 @@ class SafariGame {
         return players.map(p => Impulse.nameColor(p.name, true, true)).join(', ');
     }
 
+    private handleMovement(userId: string, direction: 'up' | 'down' | 'left' | 'right'): string | null {
+        const player = this.players[userId];
+        if (!player) return "You're not in this game!";
+        
+        const currentPlayerId = this.turnOrder[this.currentTurn];
+        if (userId !== currentPlayerId) return "It's not your turn!";
+
+        if (!this.movementStates[userId]) {
+            this.movementStates[userId] = {
+                canMove: true,
+                pokemonDisplayed: false,
+                currentPokemon: null
+            };
+        }
+
+        const state = this.movementStates[userId];
+        if (!state.canMove) return "You've already moved this turn!";
+        if (player.ballsLeft <= 0) return "You have no Safari Balls left!";
+
+        // Handle the movement and display a random Pokemon
+        state.canMove = false;
+        state.pokemonDisplayed = true;
+        
+        // Select a random Pokemon from the pool
+        const randomIndex = Math.floor(Math.random() * this.pokemonPool.length);
+        state.currentPokemon = this.pokemonPool[randomIndex];
+        
+        this.display(); // Update the display to show the new state
+        return null;
+    }
+
     private setInactivityTimer() {
         this.timer = setTimeout(() => {
             if (this.status === 'waiting') {
@@ -145,6 +184,55 @@ class SafariGame {
             [this.turnOrder[i], this.turnOrder[j]] = [this.turnOrder[j], this.turnOrder[i]];
         }
         this.currentTurn = 0;
+    }
+
+    private startTurnTimer() {
+        if (this.turnTimer) clearTimeout(this.turnTimer);
+        
+        this.turnStartTime = Date.now();
+        const currentPlayerId = this.turnOrder[this.currentTurn];
+        const player = this.players[currentPlayerId];
+        
+        this.turnTimer = setTimeout(() => {
+            if (player && player.ballsLeft > 0) {
+                player.ballsLeft--;
+                this.lastWasCatch = false;
+                this.lastCatchMessage = `${player.name} lost a Safari Ball due to not acting within 30 seconds! (${player.ballsLeft} balls left)`;
+                player.lastCatch = Date.now();
+            }
+            this.nextTurn();
+        }, SafariGame.TURN_TIME);
+
+        this.display();
+    }
+
+    private nextTurn() {
+        if (this.turnTimer) clearTimeout(this.turnTimer);
+        
+        this.currentTurn = (this.currentTurn + 1) % this.turnOrder.length;
+        
+        if (this.currentTurn === 0) {
+            const anyActivePlayers = Object.values(this.players).some(p => p.ballsLeft > 0);
+            if (!anyActivePlayers) {
+                this.end(false);
+                return;
+            }
+        }
+
+        while (this.players[this.turnOrder[this.currentTurn]]?.ballsLeft === 0) {
+            this.currentTurn = (this.currentTurn + 1) % this.turnOrder.length;
+            if (this.currentTurn === 0) {
+                if (!Object.values(this.players).some(p => p.ballsLeft > 0)) {
+                    this.end(false);
+                    return;
+                }
+            }
+        }
+
+        // Reset movement state for the new turn
+        delete this.movementStates[this.turnOrder[this.currentTurn]];
+        this.display();
+        this.startTurnTimer();
     }
 
     private addSpectator(userid: string): void {
@@ -210,53 +298,6 @@ class SafariGame {
         }
     }
 
-    private startTurnTimer() {
-        if (this.turnTimer) clearTimeout(this.turnTimer);
-        
-        this.turnStartTime = Date.now();
-        const currentPlayerId = this.turnOrder[this.currentTurn];
-        const player = this.players[currentPlayerId];
-        
-        this.turnTimer = setTimeout(() => {
-            if (player && player.ballsLeft > 0) {
-                player.ballsLeft--;
-                this.lastWasCatch = false;
-                this.lastCatchMessage = `${player.name} lost a Safari Ball due to not throwing within 30 seconds! (${player.ballsLeft} balls left)`;
-                player.lastCatch = Date.now();
-            }
-            this.nextTurn();
-        }, SafariGame.TURN_TIME);
-
-        this.display();
-    }
-
-    private nextTurn() {
-        if (this.turnTimer) clearTimeout(this.turnTimer);
-        
-        this.currentTurn = (this.currentTurn + 1) % this.turnOrder.length;
-        
-        if (this.currentTurn === 0) {
-            const anyActivePlayers = Object.values(this.players).some(p => p.ballsLeft > 0);
-            if (!anyActivePlayers) {
-                this.end(false);
-                return;
-            }
-        }
-
-        while (this.players[this.turnOrder[this.currentTurn]]?.ballsLeft === 0) {
-            this.currentTurn = (this.currentTurn + 1) % this.turnOrder.length;
-            if (this.currentTurn === 0) {
-                if (!Object.values(this.players).some(p => p.ballsLeft > 0)) {
-                    this.end(false);
-                    return;
-                }
-            }
-        }
-
-        this.display();
-        this.startTurnTimer();
-    }
-
     private display() {
         if (this.status === 'waiting') {
             const startMsg = 
@@ -318,16 +359,32 @@ class SafariGame {
                 if (this.lastCatchMessage) {
                     buf += `<br /><div style="color: ${this.lastWasCatch ? '#008000' : '#ff5555'}; margin: 5px 0;">${this.lastCatchMessage}</div>`;
                 }
-                
+
                 if (userid === currentPlayerId) {
                     if (player.ballsLeft > 0) {
-                        buf += `<br />`;
-                        buf += `<button class="button" style="font-size: 12pt; padding: 8px 16px; ${timeLeft <= 10 ? 'background-color: #ff5555;' : ''}" `;
-                        buf += `name="send" value="/safari throw">Throw Safari Ball</button>`;
-                        buf += `<br /><b style="color: ${timeLeft <= 10 ? '#ff5555' : '#5555ff'}">`;
-                        buf += `You have ${timeLeft} second${timeLeft !== 1 ? 's' : ''} to throw!</b>`;
+                        const state = this.movementStates[userid];
+                        
+                        if (!state || state.canMove) {
+                            // Show movement buttons
+                            buf += `<br /><div style="margin: 10px;">`;
+                            buf += `<button class="button" style="margin: 5px;" name="send" value="/safari move up">↑</button><br />`;
+                            buf += `<button class="button" style="margin: 5px;" name="send" value="/safari move left">←</button>`;
+                            buf += `<button class="button" style="margin: 5px;" name="send" value="/safari move right">→</button><br />`;
+                            buf += `<button class="button" style="margin: 5px;" name="send" value="/safari move down">↓</button>`;
+                            buf += `</div>`;
+                            buf += `<br /><b>Choose a direction to move!</b>`;
+                        } else if (state.pokemonDisplayed && state.currentPokemon) {
+                            // Show the Pokemon and throw button
+                            buf += `<br /><div style="margin: 10px;">`;
+                            buf += `<img src="${state.currentPokemon.sprite}" width="80" height="80">`;
+                            buf += `<br /><b>A wild ${state.currentPokemon.name} appeared!</b>`;
+                            buf += `<br /><button class="button" style="font-size: 12pt; padding: 8px 16px; margin-top: 10px;" `;
+                            buf += `name="send" value="/safari throw">Throw Safari Ball</button>`;
+                            buf += `</div>`;
+                        }
+
                         if (timeLeft <= 10) {
-                            buf += `<br /><small style="color: #ff5555">Warning: You'll lose a ball if you don't throw!</small>`;
+                            buf += `<br /><small style="color: #ff5555">Warning: You'll lose a ball if you don't act!</small>`;
                         }
                     } else {
                         buf += `<br /><div style="color: #ff5555">You have no Safari Balls left!</div>`;
@@ -353,30 +410,7 @@ class SafariGame {
             }
         }
 
-        if (this.status === 'ended') {
-            const sortedPlayers = Object.values(this.players).sort((a, b) => b.points - a.points);
-            let buf = `<div class="infobox"><center><h2>Safari Zone Results</h2>`;
-            buf += `<small>Game Ended: ${this.formatUTCTime(now)} UTC</small><br />`;
-            buf += `<small>Duration: ${Math.floor((now - this.gameStartTime) / 1000)} seconds</small><br /><br />`;
-            
-            if (sortedPlayers.length > 0) {
-                const prizes = [0.6, 0.3, 0.1];
-                sortedPlayers.forEach((player, index) => {
-                    if (index < 3) {
-                        const prize = Math.floor(this.prizePool * prizes[index]);
-                        buf += `${index + 1}. ${Impulse.nameColor(player.name, true, true)} - ${player.points} points (Won ${prize} coins)<br>`;
-                    }
-                });
-            } else {
-                buf += `No winners in this game.`;
-            }
-            buf += `</center></div>`;
-
-            this.room.add(`|uhtml|safari-spectator|${buf}`, -1000).update();
-        } else {
-            this.room.add(`|uhtmlchange|safari-spectator|`, -1000).update();
-        }
-
+        // Update spectator view
         for (const spectatorId of this.spectators) {
             if (this.status === 'ended') {
                 const roomUser = Users.get(spectatorId);
@@ -413,6 +447,38 @@ class SafariGame {
         return null;
     }
 
+    throwBall(user: User): string | null {
+        if (this.status !== 'started') return "The game hasn't started yet!";
+        if (!this.players[user.id]) return "You're not in this game!";
+        
+        const currentPlayerId = this.turnOrder[this.currentTurn];
+        if (user.id !== currentPlayerId) return "It's not your turn!";
+
+        const state = this.movementStates[user.id];
+        if (!state?.pokemonDisplayed) return "You need to move first!";
+        
+        const player = this.players[user.id];
+        if (player.ballsLeft <= 0) return "You have no Safari Balls left!";
+
+        player.lastCatch = Date.now();
+        player.ballsLeft--;
+
+        if (state.currentPokemon) {
+            player.catches.push(state.currentPokemon);
+            player.points += state.currentPokemon.points;
+            this.lastWasCatch = true;
+            this.lastCatchMessage = `${player.name} caught a ${state.currentPokemon.name} worth ${state.currentPokemon.points} points! (${player.ballsLeft} balls left)`;
+        } else {
+            this.lastWasCatch = false;
+            this.lastCatchMessage = `${player.name}'s Safari Ball missed! (${player.ballsLeft} balls left)`;
+        }
+
+        // Reset movement state for next turn
+        delete this.movementStates[user.id];
+        this.nextTurn();
+        return null;
+    }
+
     start(user: User): string | null {
         if (this.status !== 'waiting') return "The game has already started!";
         if (Object.keys(this.players).length < SafariGame.MIN_PLAYERS) return "Not enough players to start!";
@@ -423,40 +489,6 @@ class SafariGame {
         this.initializeTurnOrder();
         this.display();
         this.startTurnTimer();
-        return null;
-    }
-
-    throwBall(user: User): string | null {
-        if (this.status !== 'started') return "The game hasn't started yet!";
-        if (!this.players[user.id]) return "You're not in this game!";
-        
-        const currentPlayerId = this.turnOrder[this.currentTurn];
-        if (user.id !== currentPlayerId) return "It's not your turn!";
-
-        const player = this.players[user.id];
-        if (player.ballsLeft <= 0) return "You have no Safari Balls left!";
-
-        player.lastCatch = Date.now();
-        player.ballsLeft--;
-
-        const random = Math.random();
-        let cumulativeProbability = 0;
-
-        for (const pokemon of this.pokemonPool) {
-            cumulativeProbability += pokemon.rarity;
-            if (random <= cumulativeProbability) {
-                player.catches.push(pokemon);
-                player.points += pokemon.points;
-                this.lastWasCatch = true;
-                this.lastCatchMessage = `${player.name} caught a ${pokemon.name} worth ${pokemon.points} points! (${player.ballsLeft} balls left)`;
-                this.nextTurn();
-                return null;
-            }
-        }
-
-        this.lastWasCatch = false;
-        this.lastCatchMessage = `${player.name}'s Safari Ball missed! (${player.ballsLeft} balls left)`;
-        this.nextTurn();
         return null;
     }
 
@@ -557,15 +589,23 @@ export const commands: Chat.ChatCommands = {
                 if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
                 const error = room.safari.addPlayer(user);
                 if (error) return this.errorReply(error);
-                
-                this.sendReply(`|uhtmlchange|safari-spectator|`);
+                return;
+            }
+
+            case 'move': {
+                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
+                const direction = args[0]?.toLowerCase();
+                if (!['up', 'down', 'left', 'right'].includes(direction)) {
+                    return this.errorReply("Invalid direction! Use up, down, left, or right.");
+                }
+                const result = room.safari.handleMovement(user.id, direction as 'up' | 'down' | 'left' | 'right');
+                if (result) return this.errorReply(result);
                 return;
             }
 
             case 'spectate': {
                 if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
                 if (room.safari.players[user.id]) return this.errorReply("You are already in the game!");
-                
                 room.safari.addSpectator(user.id);
                 return;
             }
@@ -603,45 +643,3 @@ export const commands: Chat.ChatCommands = {
                     this.modlog('SAFARIDQ', targetUser, `by ${user.name}`);
                     this.privateModAction(result);
                     return;
-                }
-                return this.errorReply("Failed to disqualify player.");
-            }
-
-            case 'end': {
-                this.checkCan('mute', null, room);
-                if (!room.safari) return this.errorReply("There is no Safari game running in this room.");
-                room.safari.end(false);
-                this.modlog('SAFARI', null, `ended by ${user.name}`);
-                return this.privateModAction(`${user.name} ended the Safari game.`);
-            }
-
-            default:
-                return this.parse('/help safari');
-        }
-    },
-
-	    safarihelp(target, room, user) {
-        if (!this.runBroadcast()) return;
-        return this.sendReplyBox(
-            '<center><strong>Safari Zone Commands</strong></center>' +
-            '<hr />' +
-            `<code>/safari create [prizePool],[balls]</code>: Creates a new Safari game with the specified prize pool (${SafariGame.MIN_PRIZE_POOL}-${SafariGame.MAX_PRIZE_POOL} coins) and balls per player. Balls default to 20 if not specified (range: ${SafariGame.MIN_BALLS}-${SafariGame.MAX_BALLS}). Requires @.<br />` +
-            '<code>/safari join</code>: Joins the current Safari game.<br />' +
-            '<code>/safari start</code>: Starts the Safari game if enough players have joined.<br />' +
-            '<code>/safari throw</code>: Throws a Safari Ball at a Pokemon.<br />' +
-            '<code>/safari spectate</code>: Watch an ongoing Safari game.<br />' +
-            '<code>/safari unspectate</code>: Stop watching a Safari game.<br />' +
-            '<code>/safari dq [player]</code>: Disqualifies a player from the game (only usable by game creator).<br />' +
-            '<code>/safari end</code>: Ends the current Safari game. Requires @.<br />' +
-            '<hr />' +
-            '<strong>Game Rules:</strong><br />' +
-            `- No entry fee required<br />` +
-            `- Minimum ${SafariGame.MIN_PLAYERS} players required to start<br />` +
-            `- Each player gets ${SafariGame.MIN_BALLS}-${SafariGame.MAX_BALLS} Safari Balls (default: ${SafariGame.DEFAULT_BALLS})<br />` +
-            `- ${SafariGame.TURN_TIME / 1000} second time limit per turn<br />` +
-            '- Game ends when all players use their balls<br />' +
-            '- Prizes: 1st (60%), 2nd (30%), 3rd (10%) of prize pool<br />' +
-            '- Players can be disqualified by the game creator'
-        );
-    }
-};
