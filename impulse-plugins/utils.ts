@@ -88,27 +88,28 @@ function generateThemedTable(
   dataRows: string[][],
   styleBy?: string
 ): string {
-  let output = `<div class="themed-table-container" style="max-width: 100%; overflow-x: auto; font-family: 'Segoe UI', sans-serif;">`;
-  output += `<h3 class="themed-table-title" style="margin: 0 0 0.5em; font-size: 1.25em; color: var(--table-text-color);">${title}</h3>`;
+  let output = `<div class="themed-table-container" style="max-width: 100%; overflow-x: auto;">`;
+  output += `<h3 class="themed-table-title">${title}</h3>`;
   if (styleBy) {
-    output += `<p class="themed-table-by" style="margin: 0 0 1em; font-size: 0.9em; color: var(--table-subtext-color);">Style By ${styleBy}</p>`;
+    output += `<p class="themed-table-by">Style By ${styleBy}</p>`;
   }
-  output += `<table class="themed-table" style="width: 100%; border-collapse: collapse; background: var(--table-bg); color: var(--table-text-color); box-shadow: 0 0 6px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden;">`;
-  output += `<tr class="themed-table-header" style="background: var(--table-header-bg); font-weight: bold;">`;
+  output += `<div class="themed-table-scroll" style="max-height: 340px; overflow-y: auto;">`;
+  output += `<table class="themed-table">`;
+  output += `<thead><tr class="themed-table-header">`;
   headerRow.forEach(header => {
-    output += `<th style="padding: 12px; text-align: left; border-bottom: 2px solid var(--table-border-color);">${header}</th>`;
+    output += `<th>${header}</th>`;
   });
-  output += `</tr>`;
+  output += `</tr></thead><tbody>`;
 
   dataRows.forEach(row => {
-    output += `<tr class="themed-table-row" style="background: var(--table-row-bg); transition: background 0.2s;" onmouseover="this.style.background='var(--table-row-hover)'" onmouseout="this.style.background='var(--table-row-bg)'">`;
+    output += `<tr class="themed-table-row">`;
     row.forEach(cell => {
-      output += `<td style="padding: 12px; border-bottom: 1px solid var(--table-border-color);">${cell}</td>`;
+      output += `<td>${cell}</td>`;
     });
     output += `</tr>`;
   });
 
-  output += `</table></div>`;
+  output += `</tbody></table></div></div>`;
   return output;
 }
 
