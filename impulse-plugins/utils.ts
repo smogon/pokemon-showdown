@@ -93,7 +93,7 @@ function generateThemedTable(
   if (styleBy) {
     output += `<p class="themed-table-by">Style By ${styleBy}</p>`;
   }
-  output += `<div class="themed-table-scroll" style="max-height: 340px; overflow-y: auto;">`;
+  output += `<div class="themed-table-scroll" style="max-height: 350px; overflow-y: auto;">`;
   output += `<table class="themed-table">`;
   output += `<thead><tr class="themed-table-header">`;
   headerRow.forEach(header => {
@@ -112,5 +112,6 @@ function generateThemedTable(
   output += `</tbody></table></div></div>`;
   return output;
 }
+
 
 Impulse.generateThemedTable = generateThemedTable;
