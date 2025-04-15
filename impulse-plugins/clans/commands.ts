@@ -267,7 +267,7 @@ export const commands: ChatCommands = {
         }
     },
 	
-	clans(target, room, user) {
+    clans(target, room, user) {
         this.runBroadcast();
 
         if (this.broadcasting) {
@@ -287,37 +287,36 @@ export const commands: ChatCommands = {
                 const leaderName = Users.get(clan.leader)?.name || clan.leader;
                 
                 // Count members by rank
-                const rankCounts = new Map<ClanRank, number>();
+                const rankCounts = new Map<number, number>();
                 clan.members.forEach(member => {
                     rankCounts.set(member.rank, (rankCounts.get(member.rank) || 0) + 1);
                 });
 
                 // Get member composition
                 const memberComposition = Object.values(ClanRank)
-                    .filter(rank => typeof rank === 'number')
+                    .filter((rank): rank is number => typeof rank === 'number')
                     .map(rank => {
-                        const count = rankCounts.get(rank as ClanRank) || 0;
+                        const count = rankCounts.get(rank) || 0;
                         if (count > 0) {
-                            return `${count} ${ClanRankNames[rank as ClanRank]}${count > 1 ? 's' : ''}`;
+                            return `${count} ${ClanRankNames[rank]}${count > 1 ? 's' : ''}`;
                         }
                         return null;
                     })
                     .filter(Boolean)
                     .join(', ');
 
-                return {
-                    'Name': clan.name,
-                    'Leader': leaderName,
-                    'Members': `${clan.members.length} (${memberComposition})`,
-                    'Status': roomStatus,
-                    'Created': Chat.toTimestamp(new Date(clan.createdAt))
-                };
+                return [
+                    clan.name,
+                    leaderName,
+                    `${clan.members.length} (${memberComposition})`,
+                    roomStatus,
+                    Chat.toTimestamp(new Date(clan.createdAt))
+                ];
             });
 
             const table = Impulse.generateThemedTable(['Name', 'Leader', 'Members', 'Status', 'Created'], tableData, {
-                title: 'Active Clans',
                 border: true,
-                headerAlign: 'center'
+                title: 'Active Clans'
             });
 
             const footer = '<br /><small>Use /clans [name] to view detailed information about a specific clan.</small>';
@@ -335,12 +334,12 @@ export const commands: ChatCommands = {
         const roomStatus = clanRoom ? 'Active' : 'Inactive';
 
         // Group members by rank for better organization
-        const membersByRank = new Map<ClanRank, string[]>();
-        for (const rank of Object.values(ClanRank)) {
-            if (typeof rank === 'number') {
-                membersByRank.set(rank as ClanRank, []);
-            }
-        }
+        const membersByRank = new Map<number, string[]>();
+        Object.values(ClanRank)
+            .filter((rank): rank is number => typeof rank === 'number')
+            .forEach(rank => {
+                membersByRank.set(rank, []);
+            });
 
         clan.members.forEach(member => {
             const username = Users.get(member.id)?.name || member.id;
@@ -352,42 +351,42 @@ export const commands: ChatCommands = {
             }
         });
 
-        const detailRows = [
-            { 'Property': 'Name', 'Value': clan.name },
-            { 'Property': 'Leader', 'Value': Users.get(clan.leader)?.name || clan.leader },
-            { 'Property': 'Room Status', 'Value': roomStatus },
-            { 'Property': 'Total Members', 'Value': clan.members.length.toString() },
-            { 'Property': 'Created', 'Value': Chat.toTimestamp(new Date(clan.createdAt)) }
+        const detailData = [
+            ['Name', clan.name],
+            ['Leader', Users.get(clan.leader)?.name || clan.leader],
+            ['Room Status', roomStatus],
+            ['Total Members', clan.members.length.toString()],
+            ['Created', Chat.toTimestamp(new Date(clan.createdAt))]
         ];
 
         // Add member lists by rank
-        for (const [rank, members] of membersByRank) {
+        membersByRank.forEach((members, rank) => {
             if (members.length > 0) {
-                detailRows.push({
-                    'Property': `${ClanRankNames[rank]}s (${members.length})`,
-                    'Value': members.join(', ')
-                });
+                detailData.push([
+                    `${ClanRankNames[rank]}s (${members.length})`,
+                    members.join(', ')
+                ]);
             }
-        }
+        });
 
-        const statsRows = [
-            { 'Stat': 'Total Members', 'Count': clan.members.length.toString() }
+        const statsData = [
+            ['Total Members', clan.members.length.toString(), '100%']
         ];
 
         // Add rank statistics
-        for (const [rank, members] of membersByRank) {
+        membersByRank.forEach((members, rank) => {
             if (members.length > 0) {
-                statsRows.push({
-                    'Stat': ClanRankNames[rank],
-                    'Count': members.length.toString(),
-                    'Percentage': `${((members.length / clan.members.length) * 100).toFixed(1)}%`
-                });
+                statsData.push([
+                    ClanRankNames[rank],
+                    members.length.toString(),
+                    `${((members.length / clan.members.length) * 100).toFixed(1)}%`
+                ]);
             }
-        }
+        });
 
         const detailTable = Impulse.generateThemedTable(
             ['Property', 'Value'],
-            detailRows,
+            detailData,
             {
                 title: `Clan Details: ${Chat.escapeHTML(clan.name)}`,
                 border: true
@@ -396,11 +395,10 @@ export const commands: ChatCommands = {
 
         const statsTable = Impulse.generateThemedTable(
             ['Stat', 'Count', 'Percentage'],
-            statsRows,
+            statsData,
             {
                 title: 'Clan Statistics',
-                border: true,
-                headerAlign: 'center'
+                border: true
             }
         );
 
