@@ -10,10 +10,8 @@ import {
 } from './types';
 
 export const commands: Chat.Commands = {
-    createclan: {
-        requiresAdmin: true,
-        help: `[clan name], [leader] - Creates a new clan. Requires admin privileges.`,
-        command(target, room, user) {
+    createclan(target, room, user) {
+		      this.checkCan('bypassall');
             if (!target) return this.parse('/help createclan');
             
             const [name, leaderId] = target.split(',').map(part => part.trim());
@@ -34,13 +32,10 @@ export const commands: Chat.Commands = {
             } else {
                 return this.errorReply('Failed to create clan. The name might be taken.');
             }
-        }
-    },
+        },
 
-    deleteclan: {
-        requiresAdmin: true,
-        help: `[clan name] - Deletes a clan. Requires admin privileges.`,
-        command(target, room, user) {
+    deleteclan(target, room, user) {
+		      this.checkCan('bypassall');
             if (!target) return this.parse('/help deleteclan');
             
             const clanId = toID(target);
@@ -57,12 +52,9 @@ export const commands: Chat.Commands = {
             } else {
                 return this.errorReply('Failed to delete clan.');
             }
-        }
-    },
+        },
 
-    clanicon: {
-        help: `[url] - Sets the clan icon. Requires Co-Leader or higher.`,
-        command(target, room, user) {
+    clanicon(target, room, user) {
             if (!target) return this.parse('/help clanicon');
 
             const clan = Clans.getUserClan(user.id);
@@ -87,12 +79,9 @@ export const commands: Chat.Commands = {
             } else {
                 return this.errorReply('Failed to update clan icon.');
             }
-        }
-    },
+        },
 
-    clandesc: {
-        help: `[description] - Sets the clan description. Requires Co-Leader or higher.`,
-        command(target, room, user) {
+    clandesc(target, room, user) {
             if (!target) return this.parse('/help clandesc');
 
             const clan = Clans.getUserClan(user.id);
@@ -113,12 +102,9 @@ export const commands: Chat.Commands = {
             } else {
                 return this.errorReply('Failed to update clan description.');
             }
-        }
-    },
+        },
 
-    clanrank: {
-        help: `[user], [rank] - Sets a user's clan rank. Requires appropriate privileges.`,
-        command(target, room, user) {
+    clanrank(target, room, user) {
             if (!target) return this.parse('/help clanrank');
             
             const [targetUsername, rankStr] = target.split(',').map(part => part.trim());
@@ -150,12 +136,9 @@ export const commands: Chat.Commands = {
             } else {
                 return this.errorReply(`Failed to set ${targetUser.name}'s rank. They might not be in your clan or you might not have permission.`);
             }
-        }
-    },
+        },
 
-    claninvite: {
-        help: `[user] - Invites a user to your clan. Requires Veteran rank or higher.`,
-        command(target, room, user) {
+    claninvite(target, room, user) {
             if (!target) return this.parse('/help claninvite');
             
             const targetUser = Users.get(toID(target));
@@ -177,12 +160,9 @@ export const commands: Chat.Commands = {
             } else {
                 return this.errorReply('Failed to invite user. They might already be in a clan or have a pending invite.');
             }
-        }
-    },
+        },
 
-    clanaccept: {
-        help: `[clan name] - Accepts an invitation to join a clan.`,
-        command(target, room, user) {
+    clanaccept(target, room, user) {
             if (!target) return this.parse('/help clanaccept');
             
             const clanId = toID(target);
@@ -199,12 +179,9 @@ export const commands: Chat.Commands = {
             } else {
                 return this.errorReply('Failed to accept invite. The invite might have expired.');
             }
-        }
-    },
+        },
 
-    claninvites: {
-        help: `Shows your pending clan invites.`,
-        command(target, room, user) {
+    claninvites(target, room, user) {
             const invites = Clans.getInvites(user.id);
             
             if (!invites.length) {
@@ -225,12 +202,9 @@ export const commands: Chat.Commands = {
             });
             buf += `</div>`;
             return this.sendReplyBox(buf);
-        }
-    },
+	 },
 
-    clanwar: {
-        help: `[clan], [size], [format] - Challenges another clan to a war. Size can be 1-7, format must be a valid battle format.`,
-        command(target, room, user) {
+    clanwar(target, room, user) {
             if (!target) return this.parse('/help clanwar');
             
             const [targetClan, sizeStr, format] = target.split(',').map(part => part.trim());
@@ -281,12 +255,9 @@ export const commands: Chat.Commands = {
             });
 
             return this.sendReply(`War challenge sent to ${targetClanObj.name}.`);
-        }
-    },
+        },
 
-    clanwaraccept: {
-        help: `[war ID] - Accepts a clan war challenge.`,
-        command(target, room, user) {
+    clanwaraccept(target, room, user) {
             if (!target) return this.parse('/help clanwaraccept');
             
             const clan = Clans.getUserClan(user.id);
@@ -313,12 +284,9 @@ export const commands: Chat.Commands = {
             } else {
                 return this.errorReply('Failed to accept war challenge.');
             }
-        }
-    },
+        },
 
-    clanwardecline: {
-        help: `[war ID] - Declines a clan war challenge.`,
-        command(target, room, user) {
+    clanwardecline(target, room, user) {
             if (!target) return this.parse('/help clanwardecline');
             
             const clan = Clans.getUserClan(user.id);
@@ -345,12 +313,9 @@ export const commands: Chat.Commands = {
             } else {
                 return this.errorReply('Failed to decline war challenge.');
             }
-        }
-    },
+        },
 
-    clanwarstart: {
-        help: `[user] - Starts a clan war match with the specified opponent.`,
-        command(target, room, user) {
+    clanwarstart(target, room, user) {
             if (!target) return this.parse('/help clanwarstart');
             if (!room?.battle) return this.errorReply('This command can only be used in battle rooms.');
             
@@ -376,12 +341,9 @@ export const commands: Chat.Commands = {
             } else {
                 return this.errorReply('Failed to start match. Players might already be in other matches.');
             }
-        }
-    },
+        },
 
-    clanwarhistory: {
-        help: `[clan] - Shows the war history of a clan.`,
-        command(target, room, user) {
+    clanwarhistory(target, room, user) {
             const clan = target ? Clans.getClan(toID(target)) : Clans.getUserClan(user.id);
             if (!clan) {
                 return this.errorReply(target ? 'That clan does not exist.' : 'You are not in a clan.');
@@ -401,12 +363,9 @@ export const commands: Chat.Commands = {
             });
             buf += `</div>`;
             return this.sendReplyBox(buf);
-        }
-    },
+        },
 
-	    clanwarstatus: {
-        help: `[clan] - Shows the current war status of a clan with detailed match information and statistics.`,
-        command(target, room, user) {
+	    clanwarstatus(target, room, user) {
             const clan = target ? Clans.getClan(toID(target)) : Clans.getUserClan(user.id);
             if (!clan) {
                 return this.errorReply(target ? 'That clan does not exist.' : 'You are not in a clan.');
@@ -521,12 +480,9 @@ export const commands: Chat.Commands = {
 
             buf += `</div>`;
             return this.sendReplyBox(buf);
-        }
-		 },
+        },
 
-	    leaveclan: {
-        help: `Leaves your current clan. Leaders cannot use this command.`,
-        command(target, room, user) {
+	    leaveclan(target, room, user) {
             const clan = Clans.getUserClan(user.id);
             if (!clan) return this.errorReply('You are not in a clan.');
 
@@ -541,12 +497,9 @@ export const commands: Chat.Commands = {
             } else {
                 return this.errorReply('Failed to leave clan.');
             }
-        }
-    },
+        },
 
-    clanhelp: {
-        help: `Shows the list of clan commands and their usage.`,
-        command(target, room, user) {
+    clanhelp(target, room, user) {
             let buf = `<details class="readmore"><summary><h2>Clan Commands:</h2></summary>`;
             buf += `<h3>General Commands:</h3>`;
             buf += `<code>/clan [name]</code> - Shows information about a clan.<br />`;
@@ -588,8 +541,7 @@ export const commands: Chat.Commands = {
             
             buf += `</details>`;
             return this.sendReplyBox(buf);
-        }
-    }
+        },
 };
 
 // Add battle room integration for clan wars
