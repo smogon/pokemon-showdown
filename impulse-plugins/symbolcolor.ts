@@ -25,12 +25,12 @@ try {
 async function updateSymbolColors(): Promise<void> {
 	try {
 		await FS('impulse-db/symbolcolors.json').writeUpdate(() => JSON.stringify(symbolcolors));
-		let newCss = '/* SYMBOLCOLORS START */';
+		let newCss = '/* SYMBOLCOLORS START */\n';
 		for (const name in symbolcolors) {
 			newCss += `[id$="-userlist-user-${toID(name)}"] button > em.group {\n color: ${symbolcolors[name]}; \n}\n` +
 				`\n[class$="chatmessage-${toID(name)}"] groupsymbol {\n color: ${symbolcolors[name]}; \n}\n`;
 		}
-		newCss += '/* SYMBOLCOLORS END */';
+		newCss += '/* SYMBOLCOLORS END */\n';
 
 		const file = FS('config/custom.css').readIfExistsSync().split('\n');
 		const start = file.indexOf('/* SYMBOLCOLORS START */');
