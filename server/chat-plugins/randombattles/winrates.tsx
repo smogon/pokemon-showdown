@@ -22,7 +22,7 @@ interface FormatData {
 }
 
 const STATS_PATH = Monitor.logPath('randbats/{{MONTH}}-winrates.json').path;
-export const stats: Stats = getDefaultStats();
+export const stats = getDefaultStats();
 
 try {
 	const path = STATS_PATH.replace('{{MONTH}}', getMonth());
@@ -37,7 +37,7 @@ try {
 	}
 } catch {}
 
-function getDefaultStats() {
+function getDefaultStats(): Stats {
 	return {
 		elo: 1500,
 		month: getMonth(),
@@ -57,7 +57,7 @@ function getDefaultStats() {
 			gen2randombattle: { mons: {} },
 			gen1randombattle: { mons: {} },
 		},
-	} as Stats;
+	};
 }
 
 export function saveStats(month = getMonth()) {
@@ -250,31 +250,21 @@ export const pages: Chat.PageTable = {
 		if (isOldMonth && !(await FS(STATS_PATH.replace('{{MONTH}}', month)).exists())) {
 			throw new Chat.ErrorMessage(`There are no winrates for that month.`);
 		}
-		const formatTitle = Dex.formats.get(format).name;
-		let buf = `<div class="pad"><h2>Winrates for ${formatTitle} (${month})</h2>`;
 		const prevMonth = new Date(new Date(`${month}-15`).getTime() - (30 * 24 * 60 * 60 * 1000)).toISOString().slice(0, 7);
-		let hasButton = false;
-		if (await FS(STATS_PATH.replace('{{MONTH}}', prevMonth)).exists()) {
-			buf += `<a class="button" href="/view-winrates-${format}--${sorter}--${prevMonth}">Previous month</a>`;
-			hasButton = true;
-		}
 		const nextMonth = new Date(new Date(`${month}-15`).getTime() + (30 * 24 * 60 * 60 * 1000)).toISOString().slice(0, 7);
-		if (await FS(STATS_PATH.replace('{{MONTH}}', nextMonth)).exists()) {
-			if (hasButton) buf += ` | `;
-			buf += `<a class="button" href="/view-winrates-${format}--${sorter}--${nextMonth}">Next month</a>`;
-			hasButton = true;
-		}
-		buf += hasButton ? ` | ` : '';
-		const otherSort = sorter === 'zscore' ? 'Raw' : 'Z-Score';
-		buf += `<a class="button" target="replace" href="/view-winrates-${format}--${toID(otherSort)}--${month}">`;
-		buf += `Sort by ${otherSort} descending</a>`;
-		buf += `<hr />`;
+		const prevMonthExists = await FS(STATS_PATH.replace('{{MONTH}}', prevMonth)).exists();
+		const nextMonthExists = await FS(STATS_PATH.replace('{{MONTH}}', nextMonth)).exists();
 		const statData: Stats = month === stats.month ?
 			stats : JSON.parse(await FS(STATS_PATH.replace('{{MONTH}}', month)).read());
 		const formatData = statData.formats[format];
 		if (!formatData) {
-			buf += `<div class="message-error">No stats for that format found on that month.</div>`;
-			return buf;
+			return <div class="pad">
+				<WinratesHeader
+					formatID={format} month={month} sorter={sorter} prevMonth={prevMonth}
+					prevMonthExists={prevMonthExists} nextMonth={nextMonth} nextMonthExists={nextMonthExists}
+				/>
+				<div class="message-error">No stats for that format found on that month.</div>
+			</div>;
 		}
 		this.title = `[Winrates] [${format}] ${month}`;
 		let sortFn: (val: [string, MonEntry]) => Utils.Comparable;
@@ -287,17 +277,53 @@ export const pages: Chat.PageTable = {
 			];
 		}
 		const mons = Utils.sortBy(Object.entries(formatData.mons), sortFn);
-		buf += `<div class="ladder pad"><table><tr><th>Pokemon</th><th>Win %</th><th>Z-Score</th>`;
-		buf += `<th>Raw wins</th><th>Times generated</th></tr>`;
-		for (const [mon, data] of mons) {
-			buf += `<tr><td>${Dex.species.get(mon).name}</td>`;
-			const { timesGenerated, numWins } = data;
-			buf += `<td>${((numWins / timesGenerated) * 100).toFixed(2)}%</td>`;
-			buf += `<td>${getZScore(data).toFixed(3)}</td>`;
-			buf += `<td>${numWins}</td><td>${timesGenerated}</td>`;
-			buf += `</tr>`;
-		}
-		buf += `</table></div></div>`;
-		return buf;
+		return <div class="pad">
+			<WinratesHeader
+				formatID={format} month={month} sorter={sorter} prevMonth={prevMonth}
+				prevMonthExists={prevMonthExists} nextMonth={nextMonth} nextMonthExists={nextMonthExists}
+			/>
+			<div class="ladder pad">
+				<table>
+					<tr>
+						<th>Pokemon</th>
+						<th>Win %</th>
+						<th>Z-Score</th>
+						<th>Raw wins</th>
+						<th>Times generated</th>
+					</tr>
+					{mons.map(([mon, data]) => (<tr>
+						<td>{Dex.species.get(mon).name}</td>
+						<td>{((data.numWins / data.timesGenerated) * 100).toFixed(2)}%</td>
+						<td>{getZScore(data).toFixed(3)}</td>
+						<td>{data.numWins}</td>
+						<td>{data.timesGenerated}</td>
+					</tr>))}
+				</table>
+			</div>
+		</div>;
 	},
 };
+
+class WinratesHeader extends Chat.JSX.Component<{
+	formatID: ID, month: string, sorter: string, prevMonth: string,
+	prevMonthExists: boolean, nextMonth: string, nextMonthExists: boolean,
+}> {
+	render() {
+		const { formatID, month, sorter, prevMonth, prevMonthExists, nextMonth, nextMonthExists } = this.props;
+		const formatName = Dex.formats.get(formatID).name;
+		const otherSort = sorter === 'zscore' ? 'Raw' : 'Z-Score';
+		return <>
+			<h2>Winrates for {formatName} ({month})</h2>
+			{prevMonthExists &&
+				<a class="button" href={`/view-winrates-${formatID}--${sorter}--${prevMonth}`}>Previous month</a>}
+			{(prevMonthExists && nextMonthExists) && ' | '}
+			{nextMonthExists &&
+				<a class="button" href={`/view-winrates-${formatID}--${sorter}--${nextMonth}`}>Next month</a>}
+			{(prevMonthExists || nextMonthExists) && ' | '}
+			<a class="button" target="replace" href={`/view-winrates-${formatID}--${toID(otherSort)}--${month}`}>
+				Sort by {otherSort} descending
+			</a>
+			<hr />
+		</>;
+	}
+}
