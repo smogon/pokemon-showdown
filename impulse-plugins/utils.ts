@@ -88,30 +88,28 @@ function generateThemedTable(
   dataRows: string[][],
   styleBy?: string
 ): string {
-  let output = `<div class="themed-table-container" style="max-width: 100%; max-height: 380px; overflow: auto;">`;
-  output += `<h3 class="themed-table-title" style="max-width: 100%;">${title}</h3>`;
+  let output = `<div class="themed-table-container" style="max-width: 100%; overflow-x: auto;">`; // Added overflow-x: auto here
+  output += `<h3 class="themed-table-title">${title}</h3>`;
   if (styleBy) {
-    output += `<p class="themed-table-by" style="max-width: 100%;">Style By ${styleBy}</p>`;
+    output += `<p class="themed-table-by">Style By ${styleBy}</p>`;
   }
-  output += `<table class="themed-table" style="max-width: 100%;">`;
-  output += `<thead><tr class="themed-table-header">`;
+  output += `<table class="themed-table" style="width: 100%; border-collapse: collapse;">`; // Added border-collapse for better visual
+  output += `<tr class="themed-table-header">`;
   headerRow.forEach(header => {
-    output += `<th style="max-width: 100%;">${header}</th>`;
+    output += `<th>${header}</th>`;
   });
-  output += `</tr></thead><tbody>`;
+  output += `</tr>`;
 
   dataRows.forEach(row => {
     output += `<tr class="themed-table-row">`;
     row.forEach(cell => {
-      output += `<td style="max-width: 100%;">${cell}</td>`;
+      output += `<td>${cell}</td>`;
     });
     output += `</tr>`;
   });
 
-  output += `</tbody></table></div>`;
+  output += `</table></div>`;
   return output;
 }
-
-
 
 Impulse.generateThemedTable = generateThemedTable;
