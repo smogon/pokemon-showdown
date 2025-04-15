@@ -38,6 +38,7 @@ class ClanManagerImpl implements ClanManager {
             leader: leaderId,
             members: [leaderMember],
             createdAt: Date.now(),
+            points: 1000 // Initialize points
         };
 
         await clanDatabase.saveClan(clanData);

@@ -19,6 +19,10 @@ class ClanDatabase {
 
             const clansData = JSON.parse(data);
             for (const clan of clansData) {
+                // Ensure backward compatibility by setting default points for existing clans
+                if (!clan.points) {
+                    clan.points = 1000;
+                }
                 this.clans.set(clan.id, clan);
             }
         } catch (error) {
