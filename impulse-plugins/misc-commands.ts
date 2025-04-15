@@ -208,7 +208,8 @@ export const commands: Chat.ChatCommands = {
 		  `<li><code>/mischelp</code> - Shows Misc Commands</li>` +
 		  `<li><code>/servernewshelp</code> - Shows Server News Commands</li>` +
 		  `<li><code>/shophelp</code> - Shows Shop Commands</li>` +
-		  `<li><code>/iconhelp</code> - Shows User Icon Commands</li>`
+		  `<li><code>/iconhelp</code> - Shows User Icon Commands</li>` +
+		  `</ul>`
 		  );
   },
 		  
