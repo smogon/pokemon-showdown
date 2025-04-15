@@ -404,8 +404,8 @@ export const commands: Chat.Commands = {
         }
     },
 
-    clanwarstatus: {
-        help: `[clan] - Shows the current war status of a clan.`,
+	    clanwarstatus: {
+        help: `[clan] - Shows the current war status of a clan with detailed match information and statistics.`,
         command(target, room, user) {
             const clan = target ? Clans.getClan(toID(target)) : Clans.getUserClan(user.id);
             if (!clan) {
@@ -419,28 +419,209 @@ export const commands: Chat.Commands = {
 
             if (activeWar) {
                 const opponent = Clans.getClan(activeWar.clanA === clan.id ? activeWar.clanB : activeWar.clanA)!;
+                const warDuration = Date.now() - activeWar.startTime.getTime();
+                const warDurationHours = Math.floor(warDuration / (1000 * 60 * 60));
+                const warDurationMinutes = Math.floor((warDuration % (1000 * 60 * 60)) / (1000 * 60));
+
                 buf += `<h3>Active War</h3>`;
                 buf += `<strong>Opponent:</strong> ${opponent.name}<br />`;
                 buf += `<strong>Format:</strong> ${activeWar.format}<br />`;
-                buf += `<strong>Score:</strong> ${activeWar.score[clan.id]}-${activeWar.score[opponent.id]}<br />`;
+                buf += `<strong>War Size:</strong> ${activeWar.size} battles<br />`;
+                buf += `<strong>Duration:</strong> ${warDurationHours}h ${warDurationMinutes}m<br />`;
+                buf += `<strong>Score:</strong> <span style="color: ${activeWar.score[clan.id] > activeWar.score[opponent.id] ? 'green' : 'red'}">${activeWar.score[clan.id]}-${activeWar.score[opponent.id]}</span><br />`;
+                
+                // Progress bar
+                const totalMatches = activeWar.size;
+                const completedMatches = activeWar.matches.filter(m => m.completed).length;
+                const progressPercent = (completedMatches / totalMatches) * 100;
+                buf += `<br /><strong>Progress:</strong><br />`;
+                buf += `<div style="width: 100%; height: 20px; background-color: #eee; border-radius: 10px;">`;
+                buf += `<div style="width: ${progressPercent}%; height: 100%; background-color: #007bff; border-radius: 10px;"></div>`;
+                buf += `</div>`;
+                buf += `${completedMatches}/${totalMatches} matches completed<br /><br />`;
+
+                // Match details
                 buf += `<strong>Matches:</strong><br />`;
+                const currentTime = new Date('2025-04-15T06:55:42Z'); // Using the provided UTC time
+
                 activeWar.matches.forEach((match, i) => {
                     const playerA = Users.get(match.playerA)?.name || match.playerA;
                     const playerB = Users.get(match.playerB)?.name || match.playerB;
+                    const matchNumber = i + 1;
+
+                    buf += `<div style="margin: 5px 0; padding: 5px; ${match.completed ? 'background-color: #f8f9fa' : 'background-color: #e9ecef'}; border-radius: 5px;">`;
+                    buf += `<strong>Match ${matchNumber}:</strong> `;
+
                     if (match.completed) {
                         const winner = Users.get(match.winner!)?.name || match.winner;
-                        buf += `&bull; Match ${i + 1}: ${playerA} vs ${playerB} - Winner: ${winner}<br />`;
+                        const matchDuration = match.timestamp ? 
+                            Math.floor((currentTime.getTime() - match.timestamp.getTime()) / (1000 * 60)) : 0;
+                        
+                        buf += `${playerA} vs ${playerB}<br />`;
+                        buf += `Winner: <strong style="color: green">${winner}</strong><br />`;
+                        buf += `Duration: ${Math.floor(matchDuration / 60)}h ${matchDuration % 60}m<br />`;
+                    } else if (match.roomid) {
+                        const matchDuration = match.timestamp ? 
+                            Math.floor((currentTime.getTime() - match.timestamp.getTime()) / (1000 * 60)) : 0;
+                        
+                        buf += `${playerA} vs ${playerB}<br />`;
+                        buf += `Status: <span style="color: orange">In Progress</span><br />`;
+                        buf += `Duration: ${Math.floor(matchDuration / 60)}h ${matchDuration % 60}m<br />`;
+                        buf += `<button class="button" name="send" value="/join ${match.roomid}">Watch Battle</button>`;
                     } else {
-                        buf += `&bull; Match ${i + 1}: ${playerA} vs ${playerB} - In Progress<br />`;
+                        buf += `<span style="color: #666">Waiting for players...</span>`;
                     }
+                    buf += `</div>`;
                 });
+
+                // War Statistics
+                buf += `<br /><h4>War Statistics:</h4>`;
+                const clanWins = activeWar.matches.filter(m => m.completed && 
+                    m.winner && Clans.getUserClan(m.winner)?.id === clan.id).length;
+                const opponentWins = activeWar.matches.filter(m => m.completed && 
+                    m.winner && Clans.getUserClan(m.winner)?.id === opponent.id).length;
+                const remainingMatches = activeWar.size - completedMatches;
+
+                buf += `<table style="width: 100%; border-collapse: collapse;">`;
+                buf += `<tr><td>Clan Wins:</td><td>${clanWins}</td></tr>`;
+                buf += `<tr><td>Opponent Wins:</td><td>${opponentWins}</td></tr>`;
+                buf += `<tr><td>Remaining Matches:</td><td>${remainingMatches}</td></tr>`;
+                buf += `<tr><td>Win Rate:</td><td>${completedMatches > 0 ? 
+                    Math.round((clanWins / completedMatches) * 100) : 0}%</td></tr>`;
+                buf += `</table>`;
+
+                // Required wins calculation
+                const requiredWins = Math.ceil(activeWar.size / 2);
+                const remainingWinsNeeded = requiredWins - activeWar.score[clan.id];
+                if (remainingWinsNeeded > 0 && remainingMatches >= remainingWinsNeeded) {
+                    buf += `<br /><strong>Needs ${remainingWinsNeeded} more win${remainingWinsNeeded === 1 ? '' : 's'} to win the war.</strong>`;
+                } else if (remainingWinsNeeded > remainingMatches) {
+                    buf += `<br /><strong style="color: red">Cannot win the war - insufficient remaining matches.</strong>`;
+                }
+
             } else if (pendingWar) {
                 const opponent = Clans.getClan(pendingWar.clanA === clan.id ? pendingWar.clanB : pendingWar.clanA)!;
+                const pendingDuration = Math.floor((currentTime.getTime() - pendingWar.startTime.getTime()) / (1000 * 60));
+                
                 buf += `<h3>Pending War</h3>`;
                 buf += `<strong>Against:</strong> ${opponent.name}<br />`;
                 buf += `<strong>Format:</strong> ${pendingWar.format}<br />`;
                 buf += `<strong>Size:</strong> ${pendingWar.size} battles<br />`;
+                buf += `<strong>Pending for:</strong> ${Math.floor(pendingDuration / 60)}h ${pendingDuration % 60}m<br />`;
                 buf += `<strong>Status:</strong> Waiting for ${pendingWar.clanA === clan.id ? opponent.name : clan.name} to accept<br />`;
+                
+                if (pendingWar.clanB === clan.id) {
+                    buf += `<br /><button class="button" name="send" value="/clanwaraccept ${pendingWar.id}">Accept War</button> `;
+                    buf += `<button class="button" name="send" value="/clanwardecline ${pendingWar.id}">Decline War</button>`;
+                }
             } else {
-                buf += `No active or pending wars.`;
-    
+                buf += `No active or pending wars.<br /><br />`;
+                buf += `Use /clanwar [clan], [size], [format] to challenge another clan!`;
+            }
+
+            buf += `</div>`;
+            return this.sendReplyBox(buf);
+        }
+		 },
+
+	    leaveclan: {
+        help: `Leaves your current clan. Leaders cannot use this command.`,
+        command(target, room, user) {
+            const clan = Clans.getUserClan(user.id);
+            if (!clan) return this.errorReply('You are not in a clan.');
+
+            if (clan.leader === user.id) {
+                return this.errorReply('Clan leaders cannot leave their clan. Transfer leadership first using /clanrank.');
+            }
+
+            if (Clans.leaveClan(user.id)) {
+                this.addModAction(`${user.name} left clan ${clan.name}.`);
+                this.modlog('CLANLEAVE', null, clan.name);
+                return this.sendReply(`You have left clan ${clan.name}.`);
+            } else {
+                return this.errorReply('Failed to leave clan.');
+            }
+        }
+    },
+
+    clanhelp: {
+        help: `Shows the list of clan commands and their usage.`,
+        command(target, room, user) {
+            let buf = `<details class="readmore"><summary><h2>Clan Commands:</h2></summary>`;
+            buf += `<h3>General Commands:</h3>`;
+            buf += `<code>/clan [name]</code> - Shows information about a clan.<br />`;
+            buf += `<code>/clans</code> - Shows the list of all clans.<br />`;
+            buf += `<code>/clanranks</code> - Shows the clan rank hierarchy and permissions.<br />`;
+            buf += `<code>/leaveclan</code> - Leaves your current clan.<br />`;
+            
+            buf += `<h3>Invitation Commands:</h3>`;
+            buf += `<code>/claninvite [user]</code> - Invites a user to your clan (requires Veteran+).<br />`;
+            buf += `<code>/claninvites</code> - Shows your pending clan invites.<br />`;
+            buf += `<code>/clanaccept [clan name]</code> - Accepts an invitation to join a clan.<br />`;
+            
+            buf += `<h3>Management Commands:</h3>`;
+            buf += `<code>/clanrank [user], [rank]</code> - Sets a user's clan rank (requires appropriate privileges).<br />`;
+            buf += `<code>/clanicon [url]</code> - Sets the clan icon (requires Co-Leader+).<br />`;
+            buf += `<code>/clandesc [description]</code> - Sets the clan description (requires Co-Leader+).<br />`;
+            
+            buf += `<h3>War Commands:</h3>`;
+            buf += `<code>/clanwar [clan], [size], [format]</code> - Challenges another clan to a war (requires Officer+).<br />`;
+            buf += `<code>/clanwaraccept [war ID]</code> - Accepts a clan war challenge (requires Officer+).<br />`;
+            buf += `<code>/clanwardecline [war ID]</code> - Declines a clan war challenge (requires Officer+).<br />`;
+            buf += `<code>/clanwarstart [user]</code> - Starts a clan war match with the specified opponent.<br />`;
+            buf += `<code>/clanwarhistory [clan]</code> - Shows the war history of a clan.<br />`;
+            buf += `<code>/clanwarstatus [clan]</code> - Shows the current war status of a clan.<br />`;
+            
+            if (user.can('admin')) {
+                buf += `<h3>Admin Commands:</h3>`;
+                buf += `<code>/createclan [clan name], [leader]</code> - Creates a new clan.<br />`;
+                buf += `<code>/deleteclan [clan name]</code> - Deletes a clan.<br />`;
+            }
+
+            buf += `<h3>Ranks and Permissions:</h3>`;
+            buf += `<strong>Leader:</strong> Full control over clan<br />`;
+            buf += `<strong>Co-Leader:</strong> Can manage all ranks except leader, change clan icon and description<br />`;
+            buf += `<strong>Officer:</strong> Can invite members, manage lower ranks, and manage clan wars<br />`;
+            buf += `<strong>Veteran:</strong> Can invite new members<br />`;
+            buf += `<strong>Elite:</strong> Experienced member status<br />`;
+            buf += `<strong>Member:</strong> Basic member permissions<br />`;
+            
+            buf += `</details>`;
+            return this.sendReplyBox(buf);
+        }
+    }
+};
+
+// Add battle room integration for clan wars
+export const handlers = {
+    onBattleEnd: function (room: GameRoom, winner: string) {
+        // Skip if no winner or room
+        if (!room || !winner) return;
+
+        // Get clans for both players
+        const p1 = Users.get(room.p1.id);
+        const p2 = Users.get(room.p2.id);
+        if (!p1 || !p2) return;
+
+        const p1Clan = Clans.getUserClan(p1.id);
+        const p2Clan = Clans.getUserClan(p2.id);
+        if (!p1Clan || !p2Clan) return;
+
+        // Check for active war between these clans
+        const war = Clans.getActiveClanWar(p1Clan.id);
+        if (!war || (war.clanA !== p2Clan.id && war.clanB !== p2Clan.id)) return;
+
+        // Find matching battle in war
+        const match = war.matches.find(m => m.roomid === room.id && !m.completed);
+        if (!match) return;
+
+        // End the match
+        if (Clans.endWarMatch(war.id, room.id, winner)) {
+            room.add(`|raw|<div class="broadcast-green">Clan war match completed! Winner: ${winner}</div>`);
+            if (war.state === ClanWarState.COMPLETED) {
+                const winnerClan = Clans.getClan(war.winner!)!;
+                room.add(`|raw|<div class="broadcast-green">The clan war has ended! Winner: ${winnerClan.name}</div>`);
+            }
+        }
+    }
+};
