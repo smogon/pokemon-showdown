@@ -6988,7 +6988,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 392,
 		color: "Green",
 		eggGroups: ["Undiscovered"],
-		requiredMove: "Dragon Ascent",
+		requiredItem: "Meteorite",
 	},
 	jirachi: {
 		num: 385,

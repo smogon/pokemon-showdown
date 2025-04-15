@@ -273,7 +273,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		startFromItem: "  [POKEMON] fell in love because of the [ITEM]!",
 		end: "  [POKEMON] got over its infatuation!",
 		endFromItem: "  [POKEMON] cured its infatuation using its [ITEM]!",
-		activate: "  [POKEMON] is in love with [TARGET]!",
+		activate: "  [POKEMON] is in love with [SOURCE]!",
 		cant: "[POKEMON] is immobilized by love!",
 	},
 	aurasphere: {
@@ -326,7 +326,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "Has a 30% chance to confuse the target. If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Magic Guard Ability are unaffected by crash damage.",
 		shortDesc: "30% confusion. User loses 50% max HP if miss.",
 
-		damage: "#crash",
+		damage: "  [POKEMON] kept going and crashed!",
 	},
 	babydolleyes: {
 		name: "Baby-Doll Eyes",
@@ -441,7 +441,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The target receives the user's held item. Fails if the user has no item or is holding a Mail, if the target is already holding an item, if the user is a Giratina holding a Griseous Orb, an Arceus holding a Plate, a Genesect holding a Drive, or if the target is one of those Pokemon and the user is holding the respective item.",
 		},
 
-		takeItem: "  [SOURCE] gave [POKEMON] its [ITEM]!",
+		activate: "  [POKEMON] gave [TARGET] its [ITEM]!",
 	},
 	bide: {
 		name: "Bide",
@@ -743,7 +743,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user steals the target's held Berry if it is holding one and eats it immediately, gaining its effects unless the user's item is being ignored. Items lost to this move can be regained with Recycle.",
 		},
 
-		removeItem: "  [SOURCE] stole and ate its target's [ITEM]!",
+		activate: "  [SOURCE] stole and ate its target's [ITEM]!",
 	},
 	bugbuzz: {
 		name: "Bug Buzz",
@@ -1111,7 +1111,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "Removes adjacent Pokemon's held items.",
 
 		fail: "#healblock",
-		removeItem: "  [SOURCE] corroded [POKEMON]'s [ITEM]!",
+		activate: "  [SOURCE] corroded [POKEMON]'s [ITEM]!",
 	},
 	cosmicpower: {
 		name: "Cosmic Power",
@@ -1172,6 +1172,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		gen3: {
 			desc: "If this attack was successful and the user has not fainted, it steals the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail or Enigma Berry. Items lost to this move cannot be regained with Recycle.",
 		},
+		activate: "  [POKEMON] stole [SOURCE]'s [ITEM]!"
 	},
 	crabhammer: {
 		name: "Crabhammer",
@@ -2159,7 +2160,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The power of this move is based on the user's held item. The held item is lost and it activates for the target if applicable. If the target avoids this move by protecting itself, the user's held item is still lost. The user can regain a thrown item with Recycle. Fails if the user has no held item, if the held item cannot be thrown, or if the user is under the effect of Embargo.",
 		},
 
-		removeItem: "  [POKEMON] flung its [ITEM]!",
+		activate: "  [POKEMON] flung its [ITEM]!",
 	},
 	flipturn: {
 		name: "Flip Turn",
@@ -3081,7 +3082,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "User takes 1 HP of damage if it misses.",
 		},
 
-		damage: "#crash",
+		damage: "  [POKEMON] kept going and crashed!",
 	},
 	holdback: {
 		name: "Hold Back",
@@ -3306,7 +3307,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Destroys the foe(s) Berry.",
 		},
 
-		removeItem: "  [POKEMON]'s [ITEM] was burned up!",
+		activate: "  [POKEMON]'s [ITEM] was burned up!",
 	},
 	infernalparade: {
 		name: "Infernal Parade",
@@ -3433,7 +3434,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "User takes 1 HP of damage if it misses.",
 		},
 
-		damage: "#crash",
+		damage: "  [POKEMON] kept going and crashed!",
 	},
 	junglehealing: {
 		name: "Jungle Healing",
@@ -3487,7 +3488,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The target's held item is lost for the rest of the battle, unless it has the Sticky Hold Ability. During the effect, the target cannot gain a new item by any means.",
 		},
 
-		removeItem: "  [SOURCE] knocked off [POKEMON]'s [ITEM]!",
+		activate: "  [SOURCE] knocked off [POKEMON]'s [ITEM]!",
 	},
 	kowtowcleave: {
 		name: "Kowtow Cleave",
@@ -3648,7 +3649,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "The next move will not miss the target.",
 		},
 
-		start: "  [SOURCE] took aim at [POKEMON]!",
+		activate: "  [POKEMON] took aim at [SOURCE]!",
 	},
 	lovelykiss: {
 		name: "Lovely Kiss",
@@ -3830,7 +3831,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "Protects allies from damaging attacks. Turn 1 only.",
 
 		start: "  [POKEMON] intends to flip up a mat and block incoming attacks!",
-		block: "  [MOVE] was blocked by the kicked-up mat!",
+		activate: "  [MOVE] was blocked by the kicked-up mat!",
 	},
 	matchagotcha: {
 		name: "Matcha Gotcha",
@@ -4146,7 +4147,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "The next move will not miss the target.",
 		},
 
-		start: "#lockon",
+		activate: "#lockon",
 	},
 	minimize: {
 		name: "Minimize",
@@ -4698,7 +4699,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user steals the target's held Berry if it is holding one and eats it immediately, gaining its effects unless the user's item is being ignored. Items lost to this move can be regained with Recycle.",
 		},
 
-		removeItem: "#bugbite",
+		activate: "#bugbite",
 	},
 	poisonfang: {
 		name: "Poison Fang",
@@ -4876,6 +4877,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		start: "  [POKEMON] protected itself!",
+		activate: "  [POKEMON] protected itself!",
 		block: "  [POKEMON] protected itself!",
 	},
 	psybeam: {
@@ -5172,7 +5174,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "The user regains the item last used by a Pokemon in its current position on the field, even if that Pokemon was not the user. Fails if the user is holding an item, if no items have been used at the user's position, or if the item was lost to Covet, Knock Off, or Thief. Items thrown with Fling can be regained.",
 		},
 
-		addItem: "  [POKEMON] found one [ITEM]!",
+		activate: "  [POKEMON] found one [ITEM]!",
 	},
 	reflect: {
 		name: "Reflect",
@@ -5679,7 +5681,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		shortDesc: "User takes 1/2 its max HP to pass a substitute.",
 
 		start: "  [POKEMON] shed its tail to create a decoy!",
-		alreadyStarted: "#substitute",
+		failweak: "#substitute",
 		fail: "#substitute",
 	},
 	sheercold: {
@@ -5994,7 +5996,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		start: "  [POKEMON] is waiting for a target to make a move!",
-		activate: "  [POKEMON] snatched [TARGET]'s move!",
+		activate: "  [POKEMON] snatched [SOURCE]'s move!",
 	},
 	snipeshot: {
 		name: "Snipe Shot",
@@ -6239,7 +6241,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			desc: "Causes the target's last move used to lose 2 to 5 PP, at random. Fails if the target has not made a move, or if the move has 0 PP.",
 		},
 
-		activate: "  It reduced the PP of [TARGET]'s [MOVE] by [NUMBER]!",
+		activate: "  It reduced the PP of [POKEMON]'s [MOVE] by [NUMBER]!",
 	},
 	splash: {
 		name: "Splash",
@@ -6492,9 +6494,9 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 
 		start: "  [POKEMON] put in a substitute!",
-		alreadyStarted: "  [POKEMON] already has a substitute!",
+		fail: "  [POKEMON] already has a substitute!",
 		end: "  [POKEMON]'s substitute faded!",
-		fail: "  But it does not have enough HP left to make a substitute!",
+		failweak: "  But it does not have enough HP left to make a substitute!",
 		activate: "  The substitute took damage for [POKEMON]!",
 	},
 	subzeroslammer: {
@@ -6530,7 +6532,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		desc: "If this attack is not successful, the user loses half of its maximum HP, rounded down, as crash damage. Pokemon with the Magic Guard Ability are unaffected by crash damage. Damage doubles and no accuracy check is done if the target has used Minimize while active.",
 		shortDesc: "User is hurt by 50% of its max HP if it misses.",
 
-		damage: "#crash",
+		damage: "  [POKEMON] kept going and crashed!",
 	},
 	superfang: {
 		name: "Super Fang",
@@ -6862,6 +6864,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		gen2: {
 			desc: "Has a 100% chance to steal the target's held item if the user is not holding one. The target's item is not stolen if it is a Mail.",
 		},
+		activate: "  [POKEMON] stole [SOURCE]'s [ITEM]!"
 	},
 	thousandarrows: {
 		name: "Thousand Arrows",

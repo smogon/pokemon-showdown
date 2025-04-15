@@ -8,6 +8,7 @@
 import { State } from './state';
 import { toID } from './dex';
 import type { DynamaxOptions, PokemonMoveRequestData, PokemonSwitchRequestData } from './side';
+import { SecondaryEffect } from './dex-moves';
 
 /** A Pokemon's move slot. */
 interface MoveSlot {
@@ -69,6 +70,8 @@ export class Pokemon {
 
 	hpType: string;
 	hpPower: number;
+
+	conversionType: string;
 
 	/**
 	 * Index of `pokemon.side.pokemon` and `pokemon.side.active`, which are
@@ -437,12 +440,14 @@ export class Pokemon {
 			}
 		}
 
-		const hpData = this.battle.dex.getHiddenPower(this.set.ivs);
-		this.hpType = set.hpType || hpData.type;
-		this.hpPower = hpData.power;
+		//const hpData = this.battle.dex.getHiddenPower(this.set.ivs);
+		this.hpType = set.hpType;
+		this.hpPower = 60;
 
 		this.baseHpType = this.hpType;
 		this.baseHpPower = this.hpPower;
+
+		this.conversionType = set.conversionType;
 
 		// initialized in this.setSpecies(this.baseSpecies)
 		this.baseStoredStats = null!;
@@ -561,7 +566,7 @@ export class Pokemon {
 		let name = this.species.name;
 		if (['Greninja-Bond', 'Rockruff-Dusk'].includes(name)) name = this.species.baseSpecies;
 		if (!level) level = this.level;
-		return `${this.id}|` + name + (level === 100 ? '' : `, L${level}`) +
+		return name + (level === 100 ? '' : `, L${level}`) +
 			(this.gender === '' ? '' : `, ${this.gender}`) + (this.set.shiny ? ', shiny' : '');
 	}
 
@@ -1066,8 +1071,8 @@ export class Pokemon {
 		if (!skipChecks) {
 			if (!this.side.canDynamaxNow()) return;
 			if (
-				this.species.isMega || this.species.isPrimal || this.species.forme === "Ultra" ||
-				this.getItem().zMove || this.canMegaEvo
+				this.species.isMega || this.species.isPrimal || this.species.forme === "Ultra" /*||
+				this.getItem().zMove || this.canMegaEvo*/
 			) {
 				return;
 			}
@@ -1437,7 +1442,7 @@ export class Pokemon {
 			this.details = this.getUpdatedDetails();
 			let details = (this.illusion || this).details;
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
-			this.battle.add('detailschange', this, details);
+			let sentMessage = false;
 			if (!source) {
 				// Tera forme
 				// Ogerpon/Terapagos text goes here
@@ -1456,9 +1461,13 @@ export class Pokemon {
 				} else {
 					this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
 					this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
+					if (!sentMessage) {
+						this.battle.add('-formechange', this, species.name);
+					}
 				}
 			} else if (source.effectType === 'Status') {
 				// Shaymin-Sky -> Shaymin
+				sentMessage = true;
 				this.battle.add('-formechange', this, species.name, message);
 			}
 		} else {
@@ -1704,6 +1713,29 @@ export class Pokemon {
 				return false;
 			}
 		}
+
+		let sleepingAlly = this.side.pokemon.find(pokemon => !pokemon.fainted && pokemon.status === 'slp');
+		if (status.id === 'slp' && this.battle.rules.sleepClause && sleepingAlly && (!sourceEffect || sourceEffect.fullname != "move: Rest")) {
+			let json = JSON.parse(JSON.stringify(sourceEffect));
+			let status: ID = json['status'];
+			if (status === 'slp') {
+				this.battle.add('-fail', this, sourceEffect!.fullname);
+			}
+			return false;
+		}
+
+		let frozenAlly = this.side.pokemon.find(pokemon => !pokemon.fainted && pokemon.status === 'frz');
+		if (status.id === 'frz' && this.battle.rules.freezeClause && frozenAlly) { 
+			if (sourceEffect) {
+				let json = JSON.parse(JSON.stringify(sourceEffect));
+				let status: ID = json['status'];
+				if (status === 'frz') {
+					this.battle.add('-fail', this, sourceEffect!.fullname);
+				}
+			} 
+			return false;
+		}
+
 		const prevStatus = this.status;
 		const prevStatusState = this.statusState;
 		if (status.id) {

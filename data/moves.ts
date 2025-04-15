@@ -1035,7 +1035,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(target) {
-				this.add('-singleturn', target, 'move: Protect');
+				this.add('-start', target, 'move: Protect');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
@@ -1172,7 +1172,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
-				this.add('-singleturn', pokemon, 'move: Beak Blast');
+				this.add('-start', pokemon, 'move: Beak Blast');
 			},
 			onHit(target, source, move) {
 				if (this.checkMoveMakesContact(move, source, target)) {
@@ -2106,7 +2106,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(target) {
-				this.add('-singleturn', target, 'move: Protect');
+				this.add('-start', target, 'move: Protect');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
@@ -2890,7 +2890,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		onHit(target) {
-			const type = this.dex.moves.get(target.moveSlots[0].id).type;
+			let type;
+			if (target.conversionType) {
+				type = target.conversionType;
+			}
+			else {
+				type = this.dex.moves.get(target.moveSlots[0].id).type;
+			}
 			if (target.hasType(type) || !target.setType(type)) return false;
 			this.add('-start', target, 'typechange', type);
 		},
@@ -3265,7 +3271,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onSideStart(target, source) {
-				this.add('-singleturn', source, 'Crafty Shield');
+				this.add('-start', source, 'Crafty Shield');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
@@ -3619,7 +3625,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		condition: {
 			onStart(pokemon) {
-				this.add('-singlemove', pokemon, 'Destiny Bond');
+				this.add('-start', pokemon, 'Destiny Bond');
 			},
 			onFaint(target, source, effect) {
 				if (!source || !effect || target.isAlly(source)) return;
@@ -3793,9 +3799,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 				}
 				if (effect.effectType === 'Ability') {
-					this.add('-start', pokemon, 'Disable', pokemon.lastMove.name, '[from] ability: ' + effect.name, `[of] ${source}`);
+					this.add('-start', pokemon, 'Disable', "outputmove: " + pokemon.lastMove.name, '[from] ability: ' + effect.name, `[of] ${source}`);
 				} else {
-					this.add('-start', pokemon, 'Disable', pokemon.lastMove.name);
+					this.add('-start', pokemon, 'Disable', "outputmove: " + pokemon.lastMove.name);
 				}
 				this.effectState.move = pokemon.lastMove.id;
 			},
@@ -4138,6 +4144,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { snatch: 1, metronome: 1 },
 		boosts: {
 			evasion: 1,
+		},
+		onTryMove(pokemon, target, move) {
+			if (!this.rules.evaClause) return;
+			this.add('-fail', pokemon, 'move: Double Team');
+			return null;
 		},
 		secondary: null,
 		target: "self",
@@ -4640,7 +4651,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 
 				const ppDeducted = target.deductPP(move.id, 3);
 				if (!ppDeducted) return;
-				this.add('-activate', target, 'move: Eerie Spell', move.name, ppDeducted);
+				this.add('-activate', target, 'move: Eerie Spell', 'outputmove: ' + move.name, 'number: ' + ppDeducted);
 			},
 		},
 		target: "normal",
@@ -4738,7 +4749,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(target) {
-				this.add('-singleturn', target, 'move: Electrify');
+				this.add('-start', target, 'move: Electrify');
 			},
 			onModifyTypePriority: -2,
 			onModifyType(move) {
@@ -4913,6 +4924,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 
 				if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
 				const moveIndex = target.moves.indexOf(move.id);
+				if (target.volatiles['encoreimmune']) {
+					return false;
+				}
 				if (move.isZ || move.flags['failencore'] || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
 					// it failed
 					return false;
@@ -4928,6 +4942,22 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onResidualOrder: 16,
 			onResidual(target) {
+				let encore = target.volatiles['encore'];
+				if (encore) {
+					let encoreSource = encore.source;
+					if (encoreSource.baseSpecies != 'Wynaut' && encoreSource.baseSpecies != 'Wobbuffet') {
+						let shadowTag = target.volatiles['shadowtag'];
+						if (shadowTag) {
+							let shadowTagSource = shadowTag.source;
+							if (shadowTagSource.baseSpecies != 'Wynaut' && shadowTagSource.baseSpecies != 'Wobbuffet') {
+								target.addVolatile('encoreimmune');
+								this.add("-activate", shadowTagSource, 'ability: Shadow Tag', `[of] ${target}`);
+								target.removeVolatile('encore');
+							}
+						}
+					}
+				}
+
 				if (!target.moves.includes(this.effectState.move) ||
 					target.moveSlots[target.moves.indexOf(this.effectState.move)].pp <= 0) {
 					// early termination if you run out of PP
@@ -4996,7 +5026,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(target) {
-				this.add('-singleturn', target, 'move: Endure');
+				this.add('-start', target, 'move: Endure');
 			},
 			onDamagePriority: -10,
 			onDamage(damage, target, source, effect) {
@@ -6235,7 +6265,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
-				this.add('-singleturn', pokemon, 'move: Focus Punch');
+				this.add('-start', pokemon, 'move: Focus Punch');
 			},
 			onHit(pokemon, source, move) {
 				if (move.category !== 'Status') {
@@ -6268,9 +6298,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			duration: 1,
 			onStart(target, source, effect) {
 				if (effect?.id === 'zpower') {
-					this.add('-singleturn', target, 'move: Follow Me', '[zeffect]');
+					this.add('-start', target, 'move: Follow Me', '[zeffect]');
 				} else {
-					this.add('-singleturn', target, 'move: Follow Me');
+					this.add('-start', target, 'move: Follow Me');
 				}
 			},
 			onFoeRedirectTargetPriority: 1,
@@ -8178,7 +8208,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		volatileStatus: 'grudge',
 		condition: {
 			onStart(pokemon) {
-				this.add('-singlemove', pokemon, 'Grudge');
+				this.add('-start', pokemon, 'Grudge');
 			},
 			onFaint(target, source, effect) {
 				if (!source || source.fainted || !effect) return;
@@ -8189,7 +8219,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					for (const moveSlot of source.moveSlots) {
 						if (moveSlot.id === move.id) {
 							moveSlot.pp = 0;
-							this.add('-activate', source, 'move: Grudge', move.name);
+							this.add('-activate', source, 'move: Grudge', 'outputmove: ' + move.name);
 						}
 					}
 				}
@@ -8895,11 +8925,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			duration: 1,
 			onStart(target, source) {
 				this.effectState.multiplier = 1.5;
-				this.add('-singleturn', target, 'Helping Hand', `[of] ${source}`);
+				this.add('-start', target, 'Helping Hand', `[of] ${source}`);
 			},
 			onRestart(target, source) {
 				this.effectState.multiplier *= 1.5;
-				this.add('-singleturn', target, 'Helping Hand', `[of] ${source}`);
+				this.add('-start', target, 'Helping Hand', `[of] ${source}`);
 			},
 			onBasePowerPriority: 10,
 			onBasePower(basePower) {
@@ -8945,6 +8975,14 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
+		onTry(source) {
+			if (!source.hpType) {
+				this.attrLastMove('[still]');
+				this.add('-fail', source, 'move: Hidden Power');
+				return null;
+			}
+			return;
+		},
 		onModifyType(move, pokemon) {
 			move.type = pokemon.hpType || 'Dark';
 		},
@@ -10017,7 +10055,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			) {
 				return false;
 			}
-			this.add('-singleturn', target, 'move: Instruct', `[of] ${source}`);
+			this.add('-start', target, 'move: Instruct', `[of] ${source}`);
 			this.queue.prioritizeAction(this.queue.resolveAction({
 				choice: 'move',
 				pokemon: target,
@@ -10292,7 +10330,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(target) {
-				this.add('-singleturn', target, 'Protect');
+				this.add('-start', target, 'Protect');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
@@ -11103,7 +11141,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(target, source, effect) {
-				this.add('-singleturn', target, 'move: Magic Coat');
+				this.add('-start', target, 'move: Magic Coat');
 				if (effect?.effectType === 'Move') {
 					this.effectState.pranksterBoosted = effect.pranksterBoosted;
 				}
@@ -11330,7 +11368,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onUseMoveMessage(pokemon, target, move) {
-			this.add('-activate', pokemon, 'move: Magnitude', move.magnitude);
+			this.add('-activate', pokemon, 'move: Magnitude', 'number: ' + move.magnitude);
 		},
 		secondary: null,
 		target: "allAdjacent",
@@ -11412,7 +11450,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onSideStart(target, source) {
-				this.add('-singleturn', source, 'Mat Block');
+				this.add('-start', source, 'Mat Block');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
@@ -11422,7 +11460,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					return;
 				}
 				if (move && (move.target === 'self' || move.category === 'Status')) return;
-				this.add('-activate', target, 'move: Mat Block', move.name);
+				this.add('-activate', target, 'move: Mat Block', 'outputmove: ' + move.name);
 				const lockedmove = source.getVolatile('lockedmove');
 				if (lockedmove) {
 					// Outrage counter is reset
@@ -11590,7 +11628,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(target) {
-				this.add('-singleturn', target, 'Max Guard');
+				this.add('-start', target, 'Max Guard');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
@@ -12387,6 +12425,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		boosts: {
 			evasion: 2,
+		},
+		onTryMove(pokemon, target, move) {
+			if (!this.rules.evaClause) return;
+			this.add('-fail', pokemon, 'move: Double Team');
+			return null;
 		},
 		secondary: null,
 		target: "self",
@@ -13344,7 +13387,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(target) {
-				this.add('-singleturn', target, 'Protect');
+				this.add('-start', target, 'Protect');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
@@ -14099,7 +14142,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return !!target.item;
 		},
 		onTryHit(target, source, move) {
-			this.add('-activate', target, 'move: Poltergeist', this.dex.items.get(target.item).name);
+			this.add('-activate', target, 'move: Poltergeist', 'item: ' + this.dex.items.get(target.item).name);
 		},
 		secondary: null,
 		target: "normal",
@@ -14167,7 +14210,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(target) {
-				this.add('-singleturn', target, 'Powder');
+				this.add('-start', target, 'Powder');
 			},
 			onTryMovePriority: -1,
 			onTryMove(pokemon, target, move) {
@@ -14485,7 +14528,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(target) {
-				this.add('-singleturn', target, 'Protect');
+				this.add('-start', target, 'Protect');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
@@ -15037,7 +15080,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onSideStart(target, source) {
-				this.add('-singleturn', source, 'Quick Guard');
+				this.add('-start', source, 'Quick Guard');
 			},
 			onTryHitPriority: 4,
 			onTryHit(target, source, move) {
@@ -15101,7 +15144,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		condition: {
 			onStart(pokemon) {
-				this.add('-singlemove', pokemon, 'Rage');
+				this.add('-start', pokemon, 'Rage');
 			},
 			onHit(target, source, move) {
 				if (target !== source && move.category !== 'Status') {
@@ -15151,7 +15194,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
-				this.add('-singleturn', pokemon, 'move: Rage Powder');
+				this.add('-start', pokemon, 'move: Rage Powder');
 			},
 			onFoeRedirectTargetPriority: 1,
 			onFoeRedirectTarget(target, source, source2, move) {
@@ -16029,7 +16072,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					}
 					return false;
 				}
-				this.add('-singleturn', target, 'move: Roost');
+				this.add('-start', target, 'move: Roost');
 			},
 			onTypePriority: -1,
 			onType(types, pokemon) {
@@ -16906,7 +16949,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
-				this.add('-singleturn', pokemon, 'move: Shell Trap');
+				this.add('-start', pokemon, 'move: Shell Trap');
 			},
 			onHit(pokemon, source, move) {
 				if (!pokemon.isAlly(source) && move.category === 'Physical') {
@@ -17037,7 +17080,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(target) {
-				this.add('-singleturn', target, 'Protect');
+				this.add('-start', target, 'Protect');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
@@ -17205,7 +17248,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			};
 			source.moveSlots[sketchIndex] = sketchedMove;
 			source.baseMoveSlots[sketchIndex] = sketchedMove;
-			this.add('-activate', source, 'move: Sketch', move.name);
+			this.add('-activate', source, 'move: Sketch', 'outputmove: ' + move.name);
 		},
 		secondary: null,
 		target: "normal",
@@ -17781,7 +17824,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(pokemon) {
-				this.add('-singleturn', pokemon, 'Snatch');
+				this.add('-start', pokemon, 'Snatch');
 			},
 			onAnyPrepareHitPriority: -1,
 			onAnyPrepareHit(source, target, move) {
@@ -18225,7 +18268,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onStart(target) {
-				this.add('-singleturn', target, 'move: Protect');
+				this.add('-start', target, 'move: Protect');
 			},
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
@@ -18358,7 +18401,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 
 			const ppDeducted = target.deductPP(move.id, 4);
 			if (!ppDeducted) return false;
-			this.add("-activate", target, 'move: Spite', move.name, ppDeducted);
+			this.add("-activate", target, 'move: Spite', 'outputmove: ' + move.name, 'number: ' + ppDeducted);
 		},
 		secondary: null,
 		target: "normal",
@@ -18465,7 +18508,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			duration: 1,
 			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon) {
-				this.add('-singleturn', pokemon, 'move: Spotlight');
+				this.add('-start', pokemon, 'move: Spotlight');
 			},
 			onFoeRedirectTargetPriority: 2,
 			onFoeRedirectTarget(target, source, source2, move) {
@@ -19399,7 +19442,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (myItem) source.item = myItem.id;
 				return false;
 			}
-			this.add('-activate', source, 'move: Trick', `[of] ${target}`);
+			//this.add('-activate', source, 'move: Trick', `[of] ${target}`);
 			if (myItem) {
 				target.setItem(myItem);
 				this.add('-item', target, myItem, '[from] move: Switcheroo');
@@ -20673,7 +20716,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (myItem) source.item = myItem.id;
 				return false;
 			}
-			this.add('-activate', source, 'move: Trick', `[of] ${target}`);
+			//this.add('-activate', source, 'move: Trick', `[of] ${target}`);
 			if (myItem) {
 				target.setItem(myItem);
 				this.add('-item', target, myItem, '[from] move: Trick');
@@ -21640,7 +21683,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		condition: {
 			duration: 1,
 			onSideStart(target, source) {
-				this.add('-singleturn', source, 'Wide Guard');
+				this.add('-start', source, 'Wide Guard');
 			},
 			onTryHitPriority: 4,
 			onTryHit(target, source, move) {

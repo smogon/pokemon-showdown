@@ -3635,6 +3635,22 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 2,
 		isNonstandard: "Past",
 	},
+	meteorite: {
+		name: "Meteorite",
+		megaStone: "Rayquaza-Mega",
+		megaEvolves: "Rayquaza",
+		itemUser: ["Rayquaza"],
+		onSwitchInPriority: -1,
+		onSwitchIn(pokemon) {
+			if (pokemon.isActive && pokemon.baseSpecies.name === 'Rayquaza' && !pokemon.transformed) {
+				pokemon.formeChange('Rayquaza-Mega', this.effect, true);
+			}
+		},
+		onTakeItem(item, source) {
+			if (source.baseSpecies.baseSpecies === 'Rayquaza') return false;
+			return true;
+		}
+	},
 	metronome: {
 		name: "Metronome",
 		spritenum: 289,
@@ -5068,7 +5084,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onTryHit(pokemon, source, move) {
 			if (move.flags['powder'] && pokemon !== source && this.dex.getImmunity('powder', pokemon)) {
-				this.add('-activate', pokemon, 'item: Safety Goggles', move.name);
+				this.add('-block', pokemon, 'item: Safety Goggles', move.name);
 				return null;
 			}
 		},

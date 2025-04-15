@@ -375,7 +375,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		},
 
 		block: "  Its disguise served it as a decoy!",
-		transform: "[POKEMON]'s disguise was busted!",
+		activate: "[POKEMON]'s disguise was busted!",
 	},
 	download: {
 		name: "Download",
@@ -544,7 +544,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "On switch-in, this Pokemon is alerted to the move with the highest power, at random, known by an opposing Pokemon. This effect considers OHKO moves to have 150 power, Counter, Mirror Coat, and Metal Burst to have 120 power, and every other attacking move with an unspecified power to have 80 power.",
 		},
 
-		activate: "  [TARGET]'s [MOVE] was revealed!",
+		activate: "  [SOURCE]'s [MOVE] was revealed!",
 		activateNoTarget: "  [POKEMON]'s Forewarn alerted it to [MOVE]!",
 	},
 	friendguard: {
@@ -639,7 +639,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		desc: "If the last item this Pokemon used is a Berry, there is a 50% chance it gets restored at the end of each turn. If Sunny Day is active, this chance is 100%.",
 		shortDesc: "If last item used is a Berry, 50% chance to restore it each end of turn. 100% in Sun.",
 
-		addItem: "  [POKEMON] harvested one [ITEM]!",
+		activate: "  [POKEMON] harvested one [ITEM]!",
 	},
 	healer: {
 		name: "Healer",
@@ -905,7 +905,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "Pokemon making contact with this Pokemon have their Ability changed to Lingering Aroma. Does not affect Pokemon with the As One, Battle Bond, Comatose, Disguise, Gulp Missile, Ice Face, Lingering Aroma, Multitype, Power Construct, RKS System, Schooling, Shields Down, Stance Change, or Zen Mode Abilities.",
 		},
 
-		changeAbility: "  A lingering aroma clings to [TARGET]!",
+		activate: "  A lingering aroma clings to [SOURCE]!",
 	},
 	liquidooze: {
 		name: "Liquid Ooze",
@@ -948,6 +948,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Magician",
 		desc: "If this Pokemon has no item, it steals the item off a Pokemon it hits with an attack. Does not affect Doom Desire and Future Sight.",
 		shortDesc: "If this Pokemon has no item, it steals the item off a Pokemon it hits with an attack.",
+		activate: "  [POKEMON] stole [SOURCE]'s [ITEM]!"
 	},
 	magmaarmor: {
 		name: "Magma Armor",
@@ -1096,7 +1097,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "Pokemon making contact with this Pokemon have their Ability changed to Mummy. Does not affect Pokemon with the Multitype or Mummy Abilities.",
 		},
 
-		changeAbility: "  [TARGET]'s Ability became Mummy!",
+		activate: "  [SOURCE]'s Ability became Mummy!",
 	},
 	myceliummight: {
 		name: "Mycelium Might",
@@ -1227,6 +1228,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Pickpocket",
 		desc: "If this Pokemon has no item and is hit by a contact move, it steals the attacker's item. This effect applies after all hits from a multi-hit move. This effect is prevented if the move had a secondary effect removed by the Sheer Force Ability.",
 		shortDesc: "If this Pokemon has no item and is hit by a contact move, it steals the attacker's item.",
+		activate: "  [POKEMON] stole [SOURCE]'s [ITEM]!"
 	},
 	pickup: {
 		name: "Pickup",
@@ -1240,7 +1242,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			shortDesc: "No competitive use.",
 		},
 
-		addItem: "#recycle",
+		activate: "  [POKEMON] found one [ITEM]!",
 	},
 	pixilate: {
 		name: "Pixilate",
@@ -1603,6 +1605,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "Prevents opposing Pokemon from choosing to switch out.",
 			shortDesc: "Prevents opposing Pokemon from choosing to switch out.",
 		},
+		activate: "[SOURCE] is too scared of [POKEMON]'s Shadow Tag to perform an encore!"
 	},
 	sharpness: {
 		name: "Sharpness",
@@ -2158,7 +2161,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 			desc: "Pokemon making contact with this Pokemon have their Ability swapped with this one. Does not affect Pokemon with the Abilities As One, Battle Bond, Comatose, Disguise, Gulp Missile, Hunger Switch, Ice Face, Illusion, Multitype, Neutralizing Gas, Power Construct, RKS System, Schooling, Shields Down, Stance Change, Wonder Guard, or Zen Mode.",
 		},
 
-		activate: "#skillswap",
+		activate: "  [POKEMON] swapped Abilities with its target!",
 	},
 	waterabsorb: {
 		name: "Water Absorb",

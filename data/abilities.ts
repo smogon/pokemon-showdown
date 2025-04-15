@@ -1464,7 +1464,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			if (!warnMoves.length) return;
 			const [warnMoveName, warnTarget] = this.sample(warnMoves);
-			this.add('-activate', pokemon, 'ability: Forewarn', warnMoveName, `[of] ${warnTarget}`);
+			this.add('-activate', pokemon, 'ability: Forewarn', "move: " + warnMoveName, `[of] ${warnTarget}`);
 		},
 		flags: {},
 		name: "Forewarn",
@@ -3449,7 +3449,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.add('-activate', pokemon, 'ability: Protosynthesis');
 				}
 				this.effectState.bestStat = pokemon.getBestStat(false, true);
-				this.add('-start', pokemon, 'protosynthesis' + this.effectState.bestStat);
+				this.add('-start', pokemon, 'protosynthesis|stat: ' + this.effectState.bestStat);
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
@@ -4068,6 +4068,32 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 231,
 	},
 	shadowtag: {
+		onStart(pokemon) {
+			for (let side of this.sides) {
+				for (let target of side.active) {
+					if (target != pokemon && !target.hasAbility('shadowtag') && target.isAdjacent(pokemon)) {
+						let trapped = target.tryTrap(true);
+						if (trapped) {
+							target.addVolatile('shadowtag', pokemon);
+						}
+					}
+				}
+			}
+		},
+		onEnd(pokemon) {
+			for (let side of this.sides) {
+				for (let target of side.active) {
+					for (let volatileName of Object.keys(target.volatiles)) {
+						if (volatileName == 'shadowtag') {
+							let volatile = target.volatiles[volatileName];
+							if (volatile.source == pokemon) {
+								target.removeVolatile('shadowtag');
+							}
+						}
+					}
+				}
+			}
+		},
 		onFoeTrapPokemon(pokemon) {
 			if (!pokemon.hasAbility('shadowtag') && pokemon.isAdjacent(this.effectState.target)) {
 				pokemon.tryTrap(true);
@@ -4079,6 +4105,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!pokemon.hasAbility('shadowtag')) {
 				pokemon.maybeTrapped = true;
 			}
+		},
+		onSwitchOut(pokemon) {
+			if (!pokemon.status) return;
+
+			// if pokemon.showCure is undefined, it was skipped because its ability
+			// is known
+			if (pokemon.showCure === undefined) pokemon.showCure = true;
+
+			if (pokemon.showCure) this.add('-curestatus', pokemon, pokemon.status, '[from] ability: Natural Cure');
+			pokemon.clearStatus();
+
+			// only reset .showCure if it's false
+			// (once you know a Pokemon has Natural Cure, its cures are always known)
+			if (!pokemon.showCure) pokemon.showCure = undefined;
 		},
 		flags: {},
 		name: "Shadow Tag",
@@ -5282,9 +5322,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const sourceAbility = source.setAbility('wanderingspirit', target);
 				if (!sourceAbility) return;
 				if (target.isAlly(source)) {
-					this.add('-activate', target, 'Skill Swap', '', '', `[of] ${source}`);
+					this.add('-activate', source, 'Skill Swap', '', '', `[of] ${target}`);
 				} else {
-					this.add('-activate', target, 'ability: Wandering Spirit', this.dex.abilities.get(sourceAbility).name, 'Wandering Spirit', `[of] ${source}`);
+					this.add('-activate', source, 'ability: Wandering Spirit', this.dex.abilities.get(sourceAbility).name, 'Wandering Spirit', `[of] ${target}`);
 				}
 				target.setAbility(sourceAbility);
 			}

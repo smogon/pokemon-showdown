@@ -24,23 +24,22 @@ import { State } from './state';
 import { BattleQueue, type Action } from './battle-queue';
 import { BattleActions } from './battle-actions';
 import { Utils } from '../lib/utils';
+import { UrpgBattleRules } from './battle-rules';
+import { SecondaryEffect } from './dex-moves';
 declare const __version: any;
 
-export type ChannelID = 0 | 1 | 2 | 3 | 4;
+export type ChannelID = number;
 
 export type ChannelMessages<T extends ChannelID | -1> = Record<T, string[]>;
 
 const splitRegex = /^\|split\|p([1234])\n(.*)\n(.*)|.+/gm;
+export const isSideID = (x: string): x is SideID => x.match(/p\d+/) ? true : false;
 
 export function extractChannelMessages<T extends ChannelID | -1>(message: string, channelIds: T[]): ChannelMessages<T> {
 	const channelIdSet = new Set(channelIds);
 	const channelMessages: ChannelMessages<ChannelID | -1> = {
 		[-1]: [],
 		0: [],
-		1: [],
-		2: [],
-		3: [],
-		4: [],
 	};
 
 	for (const [lineMatch, playerMatch, secretMessage, sharedMessage] of message.matchAll(splitRegex)) {
@@ -50,6 +49,9 @@ export function extractChannelMessages<T extends ChannelID | -1>(message: string
 			if (player) {
 				line = channelId === -1 || player === channelId ? secretMessage : sharedMessage;
 				if (!line) continue;
+			}
+			if (!channelMessages[channelId]) {
+				channelMessages[channelId] = [];
 			}
 			channelMessages[channelId].push(line);
 		}
@@ -66,14 +68,16 @@ interface BattleOptions {
 	prng?: PRNG; // PRNG override (you usually don't need this, just pass a seed)
 	seed?: PRNGSeed; // PRNG seed
 	rated?: boolean | string; // Rated string
-	p1?: PlayerOptions; // Player 1 data
+	/*p1?: PlayerOptions; // Player 1 data
 	p2?: PlayerOptions; // Player 2 data
 	p3?: PlayerOptions; // Player 3 data
-	p4?: PlayerOptions; // Player 4 data
+	p4?: PlayerOptions; // Player 4 data*/
+	playerOptions: PlayerOptions[],
 	debug?: boolean; // show debug mode option
 	forceRandomChance?: boolean; // force Battle#randomChance to always return true or false (used in some tests)
 	deserialized?: boolean;
 	strictChoices?: boolean; // whether invalid choices should throw
+	rules: UrpgBattleRules;
 }
 
 interface EventListenerWithoutPriority {
@@ -115,6 +119,7 @@ export class Battle {
 	readonly format: Format;
 	readonly formatData: EffectState;
 	readonly gameType: GameType;
+	readonly rules: UrpgBattleRules;
 	/**
 	 * The number of active pokemon per half-field.
 	 * See header comment in side.ts for details.
@@ -215,6 +220,7 @@ export class Battle {
 		this.strictChoices = !!options.strictChoices;
 		this.formatData = this.initEffectState({ id: format.id });
 		this.gameType = (format.gameType || 'singles');
+		this.rules = options.rules;
 		this.field = new Field(this);
 		this.sides = Array(format.playerCount).fill(null) as any;
 		this.activePerHalf = this.gameType === 'triples' ? 3 :
@@ -305,13 +311,13 @@ export class Battle {
 				if (hasEventHandler) this.field.addPseudoWeather(rule);
 			}
 		}
-
-		const sides: SideID[] = ['p1', 'p2', 'p3', 'p4'];
+		
+		/*const sides: SideID[] = ['p1', 'p2', 'p3', 'p4'];
 		for (const side of sides) {
 			if (options[side]) {
 				this.setPlayer(side, options[side]);
 			}
-		}
+		}*/
 	}
 
 	toJSON(): AnyObject {
@@ -320,22 +326,6 @@ export class Battle {
 
 	static fromJSON(serialized: string | AnyObject): Battle {
 		return State.deserializeBattle(serialized);
-	}
-
-	get p1() {
-		return this.sides[0];
-	}
-
-	get p2() {
-		return this.sides[1];
-	}
-
-	get p3() {
-		return this.sides[2];
-	}
-
-	get p4() {
-		return this.sides[3];
 	}
 
 	toString() {
@@ -1959,10 +1949,30 @@ export class Battle {
 		let success = null;
 		let boosted = isSecondary;
 		let boostName: BoostID;
+		let nullifiedByRules = true;
 		for (boostName in boost) {
 			const currentBoost: SparseBoostsTable = {
 				[boostName]: boost[boostName],
 			};
+			
+			if (boostName == "evasion" && boost[boostName]! > 0 && this.rules.evaClause) {
+				continue;
+			}
+			if (boostName == "accuracy" && boost[boostName]! < 0 && this.rules.accClause) {
+				if (effect) {
+					let json = JSON.parse(JSON.stringify(effect));
+					let boosts: SparseBoostsTable | null = json['boosts'];
+					if (boosts && boosts.accuracy && boosts.accuracy < 0) {
+						this.add('-fail', target, effect!.fullname);
+						continue;
+					}
+					let secondaries: SecondaryEffect[] | null = json['secondaries'];
+					if (secondaries && secondaries.find(secondary => secondary.chance == 100 && secondary.boosts && secondary.boosts.accuracy && secondary.boosts.accuracy < 0)) {
+						continue;
+					}
+				} 
+			}
+
 			let boostBy = target.boostBy(currentBoost);
 			let msg = '-boost';
 			if (boost[boostName]! < 0 || target.boosts[boostName] === -6) {
@@ -2003,8 +2013,12 @@ export class Battle {
 			} else if (!isSecondary && !isSelf) {
 				this.add(msg, target, boostName, boostBy);
 			}
+
+			nullifiedByRules = false;
 		}
-		this.runEvent('AfterBoost', target, source, effect, boost);
+		if (!nullifiedByRules) {
+			this.runEvent('AfterBoost', target, source, effect, boost);
+		}
 		if (success) {
 			if (Object.values(boost).some(x => x > 0)) target.statsRaisedThisTurn = true;
 			if (Object.values(boost).some(x => x < 0)) target.statsLoweredThisTurn = true;
@@ -2332,7 +2346,7 @@ export class Battle {
 
 	randomizer(baseDamage: number) {
 		const tr = this.trunc;
-		return tr(tr(baseDamage * (100 - this.random(16))) / 100);
+		return tr(tr(baseDamage * 92.5) / 100);
 	}
 
 	/**
@@ -2661,6 +2675,12 @@ export class Battle {
 				const subFormat = this.dex.formats.get(rule);
 				if (subFormat.onBattleStart) subFormat.onBattleStart.call(this);
 			}
+
+			/*if (this.rules.startingWeather) {
+				const weathers = ["raindance", "sunnyday", "hail", "sandstorm" ];
+				
+				this.field.setWeather('snowscape');
+			}*/
 
 			for (const side of this.sides) {
 				for (let i = 0; i < side.active.length; i++) {
@@ -3197,7 +3217,7 @@ export class Battle {
 		if (!this.sides[slotNum]) {
 			// create player
 			const team = this.getTeam(options);
-			side = new Side(options.name || `Player ${slotNum + 1}`, this, slotNum, team);
+			side = new Side(options.name || `Player ${slotNum + 1}`, options.discordId, this, slotNum, team);
 			if (options.avatar) side.avatar = `${options.avatar}`;
 			this.sides[slotNum] = side;
 		} else {
@@ -3219,16 +3239,10 @@ export class Battle {
 		}
 		if (!didSomething) return;
 		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));
-		this.add('player', side.id, side.name, side.avatar, options.rating || '');
+		this.add('player', side.id, side.discordId, side.avatar, options.rating || '');
 
 		// Start the battle if it's ready to start
 		if (this.sides.every(playerSide => !!playerSide) && !this.started) this.start();
-	}
-
-	/** @deprecated */
-	join(slot: SideID, name: string, avatar: string, team: PokemonSet[] | string | null) {
-		this.setPlayer(slot, { name, avatar, team });
-		return this.getSide(slot);
 	}
 
 	sendUpdates() {
@@ -3252,7 +3266,7 @@ export class Battle {
 	}
 
 	getSide(sideid: SideID): Side {
-		return this.sides[parseInt(sideid[1]) - 1];
+		return this.sides[parseInt(sideid.slice(1)) - 1];
 	}
 
 	/**

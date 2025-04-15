@@ -1399,7 +1399,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 		name: "Protective Pads",
 		shortDesc: "Holder's moves are protected from adverse contact effects, except Pickpocket.",
 
-		block: "  [POKEMON] protected itself with its Protective Pads!",
+		activate: "  [POKEMON] protected itself with its Protective Pads!",
 	},
 	protector: {
 		name: "Protector",

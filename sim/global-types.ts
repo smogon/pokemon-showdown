@@ -140,11 +140,11 @@ type Format = import('./dex-formats').Format;
 type Nature = import('./dex-data').Nature;
 
 type GameType = 'singles' | 'doubles' | 'triples' | 'rotation' | 'multi' | 'freeforall';
-type SideID = 'p1' | 'p2' | 'p3' | 'p4';
+type SideID = `p${number}`;
 
 type SpreadMoveTargets = (Pokemon | false | null)[];
 type SpreadMoveDamage = (number | boolean | undefined)[];
-type ZMoveOptions = ({ move: string, target: MoveTarget } | null)[];
+type ZMoveOptions = ({ move: string, target: MoveTarget, baseMove: string } | null)[];
 
 interface BattleScriptsData {
 	gen: number;
@@ -376,6 +376,7 @@ type TypeInfo = import('./dex-data').TypeInfo;
 
 interface PlayerOptions {
 	name?: string;
+	discordId: string;
 	avatar?: string;
 	rating?: number;
 	team?: PokemonSet[] | string | null;
@@ -410,6 +411,7 @@ interface MoveTextData extends ConditionTextData {
 	failSelect?: string;
 	failTooHeavy?: string;
 	failWrongForme?: string;
+	failweak?: string;
 	megaNoItem?: string;
 	prepare?: string;
 	removeItem?: string;

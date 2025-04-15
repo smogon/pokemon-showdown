@@ -34,6 +34,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		megaGen6: "  [POKEMON]'s [ITEM] is reacting to [TRAINER]'s Mega Bracelet!",
 		transformMega: "[POKEMON] has Mega Evolved into Mega [SPECIES]!",
 		primal: "[POKEMON]'s Primal Reversion! It reverted to its primal state!",
+		ultraburst: "[POKEMON] regained its true power through Ultra Burst!",
 		zPower: "  [POKEMON] surrounded itself with its Z-Power!",
 		zBroken: "  [POKEMON] couldn't fully protect itself and got hurt!",
 		terastallize: "  [POKEMON] has Terastallized into the [TYPE]-type!", // filler
@@ -154,10 +155,10 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		statShortName: "Spe",
 	},
 	accuracy: {
-		statName: "accuracy",
+		statName: "Accuracy",
 	},
 	evasion: {
-		statName: "evasiveness",
+		statName: "Evasion",
 	},
 	spc: {
 		statName: "Special",
@@ -217,6 +218,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 
 	// misc effects
 	confusion: {
+		volatileName: "Confusion",
 		start: "  [POKEMON] became confused!",
 		startFromFatigue: "  [POKEMON] became confused due to fatigue!",
 		end: "  [POKEMON] snapped out of its confusion!",
@@ -253,14 +255,141 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	struggle: {
 		activate: "  [POKEMON] has no moves left!",
 	},
-	trapped: {
+	partiallytrapped: {
+		activate: "  [POKEMON] can no longer escape!",
 		start: "  [POKEMON] can no longer escape!",
+		volatileName: "Trapped"
+	},
+	trapped: {
+		activate: "  [POKEMON] can no longer escape!",
+		start: "  [POKEMON] can no longer escape!",
+		volatileName: "Trapped"
 	},
 	dynamax: {
-		start: "  ([POKEMON]'s Dynamax!)",
-		end: "  ([POKEMON] returned to normal!)",
+		start: "By the power of Dynamax, [POKEMON] grew to giant proportions!",
+		end: "  [POKEMON] returned to normal!",
 		block: "  The move was blocked by the power of Dynamax!",
 		fail: "  [POKEMON] shook its head. It seems like it can't use this move...",
+		volatileName: "Dynamax"
+	},
+	gigantamax: {
+		start: "By the power of Gigantamax, [POKEMON] grew to epic proportions!"
+	},
+	trapper: {
+		volatileName: "[silent]"
+	},
+
+	// volatiles
+	taunt: {
+		volatileName: "Taunt"
+	},
+	leechseed: {
+		volatileName: "Leech Seed"
+	},
+	stall: {
+		volatileName: "[silent]"
+	},
+	gastroacid: {
+		volatileName: "Gastro Acid"
+	},
+	choicelock: {
+		volatileName: "[silent]"
+	},
+	cudchew: {
+		volatileName: "[silent]"
+	},
+	protosynthesis: {
+		volatileName: "[silent]"
+	},
+	attract: {
+		volatileName: "Attract"
+	},
+	rollout: {
+		volatileName: "Rollout"
+	},
+	lockon: {
+		volatileName: "Lock-On"
+	},
+	twoturnmove: {
+		volatileName: "[silent]"
+	},
+	fly: {
+		volatileName: "Fly"
+	},
+	dig: {
+		volatileName: "Dig"
+	},
+	dive: {
+		volatileName: "Dive"
+	},
+	skydrop: {
+		volatileName: "Sky Drop"
+	},
+	bounce: {
+		volatileName: "Bounce"
+	},
+	electroshot: {
+		volatileName: "Electroshot"
+	},
+	freezeshock: {
+		volatileName: "Freeze Shock"
+	},
+	geomancy: {
+		volatileName: "Geomancy"
+	},
+	iceburn: {
+		volatileName: "Ice Burn"
+	},
+	meteorbeam: {
+		volatileName: "Meteor Beam"
+	},
+	phantomforce: {
+		volatileName: "Phantom Force"
+	},
+	razorwind: {
+		volatileName: "Razor Wind"
+	},
+	shadowforce: {
+		volatileName: "Shadow Force"
+	},
+	skullbash: {
+		volatileName: "Skull Bash"
+	},
+	skyattack: {
+		volatileName: "Sky Attack"
+	},
+	solarbeam: {
+		volatileName: "Solar Beam"
+	},
+	solarblade: {
+		volatileName: "Solar Blade"
+	},
+	mustrecharge: {
+		volatileName: "Recharge"
+	},
+	encore: {
+		volatileName: "Encore"
+	},
+	torment: {
+		volatileName: "Torment"
+	},
+	disable: {
+		volatileName: "Disable"
+	},
+	healblock: {
+		volatileName: "Heal Block"
+	},
+	imprison: {
+		volatileName: "Imprison"
+	},
+	shadowtag: {
+		volatileName: "[silent]"
+	},
+	encoreimmune: {
+		volatileName: "Encore: Immune"
+	},
+	minimize: {
+		volatileName: "Minimize"
 	},
 
 	// weather
@@ -268,33 +397,33 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		weatherName: "Sandstorm",
 		start: "  A sandstorm kicked up!",
 		end: "  The sandstorm subsided.",
-		upkeep: "  (The sandstorm is raging.)",
+		upkeep: "  The sandstorm is raging.",
 		damage: "  [POKEMON] is buffeted by the sandstorm!",
 	},
 	sunnyday: {
 		weatherName: "Sun",
 		start: "  The sunlight turned harsh!",
 		end: "  The harsh sunlight faded.",
-		upkeep: "  (The sunlight is strong.)",
+		upkeep: "  The sunlight is strong.",
 	},
 	raindance: {
 		weatherName: "Rain",
 		start: "  It started to rain!",
 		end: "  The rain stopped.",
-		upkeep: "  (Rain continues to fall.)",
+		upkeep: "  Rain continues to fall.",
 	},
 	hail: {
 		weatherName: "Hail",
 		start: "  It started to hail!",
 		end: "  The hail stopped.",
-		upkeep: "  (The hail is crashing down.)",
+		upkeep: "  The hail is crashing down.",
 		damage: "  [POKEMON] is buffeted by the hail!",
 	},
 	snowscape: {
 		weatherName: "Snow",
 		start: "  It started to snow!",
 		end: "  The snow stopped.",
-		upkeep: "  (The snow is falling down.)",
+		upkeep: "  The snow is falling down.",
 	},
 	desolateland: {
 		weatherName: "Intense Sun",
@@ -302,6 +431,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		end: "  The extremely harsh sunlight faded.",
 		block: "  The extremely harsh sunlight was not lessened at all!",
 		blockMove: "  The Water-type attack evaporated in the harsh sunlight!",
+		upkeep: "  The sunlight is extremely harsh.",
 	},
 	primordialsea: {
 		weatherName: "Heavy Rain",
@@ -309,6 +439,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		end: "  The heavy rain has lifted!",
 		block: "  There is no relief from this heavy rain!",
 		blockMove: "  The Fire-type attack fizzled out in the heavy rain!",
+		upkeep: "  Heavy rain continues to fall.",
 	},
 	deltastream: {
 		weatherName: "Strong Winds",
@@ -316,6 +447,7 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		end: "  The mysterious strong winds have dissipated!",
 		activate: "  The mysterious strong winds weakened the attack!",
 		block: "  The mysterious strong winds blow on regardless!",
+		upkeep: "  The mysterious strong winds blow on.",
 	},
 
 	// terrain
@@ -323,49 +455,62 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 		start: "  An electric current ran across the battlefield!",
 		end: "  The electricity disappeared from the battlefield.",
 		block: "  [POKEMON] is protected by the Electric Terrain!",
+		terrainName: "Electric Terrain",
 	},
 	grassyterrain: {
 		start: "  Grass grew to cover the battlefield!",
 		end: "  The grass disappeared from the battlefield.",
 		heal: "  [POKEMON]'s HP was restored.",
+		terrainName: "Grassy Terrain",
 	},
 	mistyterrain: {
 		start: "  Mist swirled around the battlefield!",
 		end: "  The mist disappeared from the battlefield.",
 		block: "  [POKEMON] surrounds itself with a protective mist!",
+		terrainName: "Misty Terrain",
 	},
 	psychicterrain: {
 		start: "  The battlefield got weird!",
 		end: "  The weirdness disappeared from the battlefield!",
 		block: "  [POKEMON] is protected by the Psychic Terrain!",
+		terrainName: "Psychic Terrain",
 	},
 
 	// field effects
 	gravity: {
+		effectName: "Gravity",
 		start: "  Gravity intensified!",
 		end: "  Gravity returned to normal!",
 		cant: "[POKEMON] can't use [MOVE] because of gravity!",
 		activate: "[POKEMON] fell from the sky due to the gravity!",
 	},
 	magicroom: {
+		effectName: "Magic Room",
 		start: "  It created a bizarre area in which Pok\u00E9mon's held items lose their effects!",
 		end: "  Magic Room wore off, and held items' effects returned to normal!",
 	},
 	mudsport: {
+		effectName: "Mud Sport",
 		start: "  Electricity's power was weakened!",
 		end: "  The effects of Mud Sport have faded.",
 	},
 	trickroom: {
+		effectName: "Trick Room",
 		start: "  [POKEMON] twisted the dimensions!",
 		end: "  The twisted dimensions returned to normal!",
 	},
 	watersport: {
+		effectName: "Water Sport",
 		start: "  Fire's power was weakened!",
 		end: "  The effects of Water Sport have faded.",
 	},
 	wonderroom: {
+		effectName: "Wonder Room",
 		start: "  It created a bizarre area in which Defense and Sp. Def stats are swapped!",
 		end: "  Wonder Room wore off, and Defense and Sp. Def stats returned to normal!",
+	},
+	echoedvoice: {
+		effectName: "[silent]"
 	},
 
 	// misc

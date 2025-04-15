@@ -1469,7 +1469,7 @@ export class BattleActions {
 			if (zMoveName) {
 				const zMove = this.dex.moves.get(zMoveName);
 				if (!zMove.isZ && zMove.category === 'Status') zMoveName = "Z-" + zMoveName;
-				zMoves.push({ move: zMoveName, target: zMove.target });
+				zMoves.push({ move: zMoveName, target: zMove.target, baseMove: move.name });
 			} else {
 				zMoves.push(null);
 			}
@@ -1624,20 +1624,20 @@ export class BattleActions {
 		let critRatio = this.battle.runEvent('ModifyCritRatio', source, target, move, move.critRatio || 0);
 		if (this.battle.gen <= 5) {
 			critRatio = this.battle.clampIntRange(critRatio, 0, 5);
-			critMult = [0, 16, 8, 4, 3, 2];
+			critMult = [0, 1000, 8, 4, 3, 2];
 		} else {
 			critRatio = this.battle.clampIntRange(critRatio, 0, 4);
 			if (this.battle.gen === 6) {
-				critMult = [0, 16, 8, 2, 1];
+				critMult = [0, 1000, 8, 2, 1];
 			} else {
-				critMult = [0, 24, 8, 2, 1];
+				critMult = [0, 1000, 8, 2, 1];
 			}
 		}
 
 		const moveHit = target.getMoveHitData(move);
 		moveHit.crit = move.willCrit || false;
 		if (move.willCrit === undefined) {
-			if (critRatio) {
+			if (critRatio && critMult[critRatio] < 1000) {
 				moveHit.crit = this.battle.randomChance(1, critMult[critRatio]);
 			}
 		}
@@ -1867,8 +1867,7 @@ export class BattleActions {
 		const altForme = species.otherFormes && this.dex.species.get(species.otherFormes[0]);
 		const item = pokemon.getItem();
 		// Mega Rayquaza
-		if ((this.battle.gen <= 7 || this.battle.ruleTable.has('+pokemontag:past')) &&
-			altForme?.isMega && altForme?.requiredMove &&
+		if (altForme?.isMega && altForme?.requiredMove &&
 			pokemon.baseMoves.includes(toID(altForme.requiredMove)) && !item.zMove) {
 			return altForme.name;
 		}
@@ -1914,9 +1913,9 @@ export class BattleActions {
 	runMegaEvoY?: (this: BattleActions, pokemon: Pokemon) => boolean;
 
 	canTerastallize(pokemon: Pokemon) {
-		if (pokemon.getItem().zMove || pokemon.canMegaEvo || this.dex.gen !== 9) {
+		/*if (pokemon.getItem().zMove || pokemon.canMegaEvo || this.dex.gen !== 9) {
 			return null;
-		}
+		}*/
 		return pokemon.teraType;
 	}
 
