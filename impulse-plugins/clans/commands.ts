@@ -314,4 +314,19 @@ export const commands: ChatCommands = {
 
         return this.sendReplyBox(output);
     },
+
+	clanshelp() {
+    this.runBroadcast();
+    const helpMessage = [
+        `<strong>Clan System Commands:</strong>`,
+        `</code>/createclan [name], [leader]</code> - Creates a new clan. Requires: &`,
+        `</code>/deleteclan [name]</code> - Deletes an existing clan. Requires: &`,
+        `</code>/clanrank [username], [rank]</code> - Changes a user's rank in their clan. Ranks: Leader, Deputy, Senior, Member.`,
+        `</code>/claninvite [username]</code> - Invites a user to your clan. Requires: Leader or Deputy`,
+        `</code>/clanaccept [invite code]</code> - Accepts a pending clan invite.`,
+        `</code>/clans</code> - Lists all clans.`,
+        `</code>/clans [clan name]</code> - Shows info about a specific clan.`,
+    ].map(line => Chat.html`${line}`).join(`<br />`);
+    return this.sendReplyBox(helpMessage);
+},
 };
