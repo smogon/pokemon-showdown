@@ -119,4 +119,15 @@ export const commands: Chat.ChatCommands = {
 		html += '</div>';
 		this.sendReplyBox(html);
 	},
+	
+	animemamgahelp(target: string, room: ChatRoom | null, user: User) {
+		if (!this.runBroadcast()) return;
+		this.sendReplyBox(
+		  `<div><b><center>Anime & Manga Commands</center></b>` +
+		  `<ul><li><code>/anime [name]</code> - Shows Information About Anime [name]</li>` +
+		  `<li><code>/manga [name]</code> - Shows Information About Manga [name]</li>` +
+		  `<li><code>/upcominganime</code> - Shows Top 5 Upcoming Animes</li>` +
+			`</ul>`
+			);
+	},
 };
