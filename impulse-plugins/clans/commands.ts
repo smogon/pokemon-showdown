@@ -1,6 +1,7 @@
 import { clanManager } from './manager';
 import { ClanRank, ClanRankNames } from './types';
 import { clanDatabase, clanInviteDatabase } from './database';
+import type { Room } from '../rooms';
 
 function sendClanMessage(clanId: ID, message: string) {
     const clanRoom = Rooms.get(clanId);
@@ -40,7 +41,7 @@ export const commands: ChatCommands = {
             // Create the room
             const clanRoom = Rooms.createChatRoom(clanRoomId, clan.name, {
                 isPrivate: true,
-                modjoin: '%',
+                modjoin: '+',
                 auth: {
                     [targetUser.id]: '#',
                 },
@@ -49,7 +50,7 @@ export const commands: ChatCommands = {
                     `<h2>${Chat.escapeHTML(clan.name)}</h2>` +
                     `<p>Welcome to the ${Chat.escapeHTML(clan.name)} clan room!</p>` +
                     `<p><strong>Clan Leader:</strong> ${Chat.escapeHTML(targetUser.name)}</p>` +
-                    `<p><strong>Created:</strong> ${Chat.toTimestamp(new Date(clan.createdAt))}</p>` +
+                    `<p><strong>Created:</strong> ${Chat.toTimestamp(new Date())}</p>` +
                     `</div></div>`,
                 staffMessage: `<div class="infobox">` +
                     `<h3>Clan Room Staff Guide</h3>` +
@@ -59,7 +60,6 @@ export const commands: ChatCommands = {
                     `<li><strong>@</strong> - Clan Deputy</li>` +
                     `<li><strong>%</strong> - Clan Senior</li>` +
                     `<li><strong>+</strong> - Clan Member</li>` +
-                    `<li><strong> </strong> - Clan Recruit (can see room but not chat)</li>` +
                     `</ul></div>`,
             });
 
@@ -69,7 +69,7 @@ export const commands: ChatCommands = {
 
             // Save room settings
             clanRoom.persist = true;
-            clanRoom.settings.modjoin = '%';
+            clanRoom.settings.modjoin = '+';
             clanRoom.settings.isPrivate = true;
             clanRoom.saveSettings();
 
@@ -178,9 +178,6 @@ export const commands: ChatCommands = {
                     case ClanRank.MEMBER:
                         clanRoom.auth.set(targetUser.id, '+');
                         break;
-                    case ClanRank.RECRUIT:
-                        clanRoom.auth.delete(targetUser.id);
-                        break;
                 }
                 clanRoom.saveSettings();
             }
@@ -256,16 +253,16 @@ export const commands: ChatCommands = {
 
             await clanManager.acceptInvite(invite.id);
 
-            // Add room auth for new member
+            // Add room auth for new member - directly as Member (+)
             const clanRoom = Rooms.get(clan.id);
             if (clanRoom) {
-                // New members start as recruits (no room auth)
+                clanRoom.auth.set(user.id, '+');
                 clanRoom.saveSettings();
             }
             
             this.globalModlog('CLANACCEPT', user, `joined ${clan.name}`);
-            sendClanMessage(clan.id, `${user.name} has joined the clan!`);
-            return this.sendReply(`You have successfully joined clan ${clan.name}.`);
+            sendClanMessage(clan.id, `${user.name} has joined the clan as a Member!`);
+            return this.sendReply(`You have successfully joined clan ${clan.name} as a Member.`);
         } catch (error) {
             throw new Chat.ErrorMessage(error.message);
         }

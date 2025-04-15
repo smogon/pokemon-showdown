@@ -143,10 +143,10 @@ class ClanManagerImpl implements ClanManager {
             throw new Error('You are already in a clan');
         }
 
-        // Add member to clan
+        // Add member to clan - directly as Member
         const newMember: ClanMember = {
             id: invite.inviteeId,
-            rank: ClanRank.RECRUIT,
+            rank: ClanRank.MEMBER,
             joinedAt: now
         };
 

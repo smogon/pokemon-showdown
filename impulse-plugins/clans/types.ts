@@ -1,17 +1,15 @@
 export enum ClanRank {
-    LEADER = 5,
-    DEPUTY = 4,
-    SENIOR = 3,
-    MEMBER = 2,
-    RECRUIT = 1
+    LEADER = 4,
+    DEPUTY = 3,
+    SENIOR = 2,
+    MEMBER = 1
 }
 
 export const ClanRankNames: { [key in ClanRank]: string } = {
     [ClanRank.LEADER]: 'Leader',
     [ClanRank.DEPUTY]: 'Deputy',
     [ClanRank.SENIOR]: 'Senior',
-    [ClanRank.MEMBER]: 'Member',
-    [ClanRank.RECRUIT]: 'Recruit',
+    [ClanRank.MEMBER]: 'Member'
 };
 
 export interface ClanMember {
