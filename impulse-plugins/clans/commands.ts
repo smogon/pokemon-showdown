@@ -1,7 +1,13 @@
 import { clanManager } from './manager';
 import { ClanRank, ClanRankNames } from './types';
 import { clanDatabase, clanInviteDatabase } from './database';
-import type { Room } from '../rooms';
+
+function sendClanMessage(clanId: ID, message: string) {
+    const clanRoom = Rooms.get(clanId);
+    if (clanRoom) {
+        clanRoom.add(`|c|~|${message}`).update();
+    }
+}
 
 export const commands: ChatCommands = {
     async createclan(target, room, user) {
@@ -43,7 +49,7 @@ export const commands: ChatCommands = {
                     `<h2>${Chat.escapeHTML(clan.name)}</h2>` +
                     `<p>Welcome to the ${Chat.escapeHTML(clan.name)} clan room!</p>` +
                     `<p><strong>Clan Leader:</strong> ${Chat.escapeHTML(targetUser.name)}</p>` +
-                    `<p><strong>Created:</strong> ${Chat.toTimestamp(new Date())}</p>` +
+                    `<p><strong>Created:</strong> ${Chat.toTimestamp(new Date(clan.createdAt))}</p>` +
                     `</div></div>`,
                 staffMessage: `<div class="infobox">` +
                     `<h3>Clan Room Staff Guide</h3>` +
@@ -68,9 +74,7 @@ export const commands: ChatCommands = {
             clanRoom.saveSettings();
 
             this.globalModlog('CLANCREATE', targetUser, `${clan.name} (by ${user.name})`);
-            this.addModAction(
-                `${user.name} created the clan ${clan.name} with ${targetUser.name} as the leader.`
-            );
+            sendClanMessage(clan.id, `The clan ${clan.name} has been created with ${targetUser.name} as the leader.`);
             return this.sendReply(
                 `Clan "${clan.name}" has been created with ${targetUser.name} as the leader. ` +
                 `The clan chatroom "${clanRoomId}" has been created.`
@@ -94,6 +98,9 @@ export const commands: ChatCommands = {
         }
 
         try {
+            // Announce deletion in clan room before destroying it
+            sendClanMessage(clan.id, `The clan ${clan.name} has been deleted by ${user.name}.`);
+
             // Delete clan room if it exists
             const clanRoom = Rooms.get(clanId);
             if (clanRoom) {
@@ -102,9 +109,7 @@ export const commands: ChatCommands = {
 
             await clanManager.deleteClan(clan.id);
             this.globalModlog('CLANDELETE', null, `${clan.name} (by ${user.name})`);
-            return this.addModAction(
-                `${user.name} deleted the clan ${clan.name} and its chatroom.`
-            );
+            return this.sendReply(`Successfully deleted clan ${clan.name} and its chatroom.`);
         } catch (error) {
             throw new Chat.ErrorMessage(`Failed to delete clan: ${error.message}`);
         }
@@ -182,9 +187,8 @@ export const commands: ChatCommands = {
 
             this.globalModlog('CLANRANK', targetUser, 
                 `changed to ${ClanRankNames[newRank]} in ${clan.name} (by ${user.name})`);
-            return this.addModAction(
-                `${user.name} changed ${targetUser.name}'s rank to ${ClanRankNames[newRank]} in clan ${clan.name}.`
-            );
+            sendClanMessage(clan.id, `${targetUser.name}'s rank has been changed to ${ClanRankNames[newRank]} by ${user.name}.`);
+            return this.sendReply(`Changed ${targetUser.name}'s rank to ${ClanRankNames[newRank]}.`);
         } catch (error) {
             throw new Chat.ErrorMessage(error.message);
         }
@@ -223,6 +227,7 @@ export const commands: ChatCommands = {
             
             targetUser.send(`|pm|${user.name}|${targetUser.name}|${pmMessage}`);
 
+            sendClanMessage(clan.id, `${user.name} has invited ${targetUser.name} to join the clan.`);
             return this.sendReply(`Invitation sent to ${targetUser.name}. They have 24 hours to accept.`);
         } catch (error) {
             throw new Chat.ErrorMessage(error.message);
@@ -259,13 +264,14 @@ export const commands: ChatCommands = {
             }
             
             this.globalModlog('CLANACCEPT', user, `joined ${clan.name}`);
-            return this.addModAction(`${user.name} joined clan ${clan.name}.`);
+            sendClanMessage(clan.id, `${user.name} has joined the clan!`);
+            return this.sendReply(`You have successfully joined clan ${clan.name}.`);
         } catch (error) {
             throw new Chat.ErrorMessage(error.message);
         }
     },
 
-	    clans(target, room, user) {
+    clans(target, room, user) {
         this.runBroadcast();
 
         if (this.broadcasting) {
@@ -298,7 +304,6 @@ export const commands: ChatCommands = {
             return `${username} (${ClanRankNames[member.rank]})`;
         }).join(', ');
 
-        // Changed variable name from 'room' to 'clanRoom' to avoid conflict
         const clanRoom = Rooms.get(clan.id);
         const roomStatus = clanRoom ? 'Active' : 'Inactive';
 
