@@ -4,7 +4,7 @@ import { ClanData } from './types';
 const CLANS_FILE = 'config/clans.json';
 
 class ClanDatabase {
-    private clans: Map<string, ClanData>;
+    private clans: Map<ID, ClanData>;
 
     constructor() {
         this.clans = new Map();
@@ -40,11 +40,11 @@ class ClanDatabase {
         await this.saveClansToFile();
     }
 
-    async getClan(clanId: string): Promise<ClanData | null> {
+    async getClan(clanId: ID): Promise<ClanData | null> {
         return this.clans.get(clanId) || null;
     }
 
-    async deleteClan(clanId: string): Promise<boolean> {
+    async deleteClan(clanId: ID): Promise<boolean> {
         const deleted = this.clans.delete(clanId);
         if (deleted) {
             await this.saveClansToFile();
@@ -55,7 +55,17 @@ class ClanDatabase {
     async getClanByName(name: string): Promise<ClanData | null> {
         const searchId = toID(name);
         for (const clan of this.clans.values()) {
-            if (toID(clan.name) === searchId) {
+            if (clan.id === searchId) {
+                return clan;
+            }
+        }
+        return null;
+    }
+
+    async findClanByMemberId(userId: ID): Promise<ClanData | null> {
+        userId = toID(userId);
+        for (const clan of this.clans.values()) {
+            if (clan.members.some(member => member.id === userId)) {
                 return clan;
             }
         }
