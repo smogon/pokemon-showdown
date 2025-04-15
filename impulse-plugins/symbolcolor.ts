@@ -1,8 +1,6 @@
 /******************************************
 * Pokemon Showdown Custom Symbol Colors   *
-* Original Code By: Lord Haji, Panpawn    *
-* Updated To Typescript By: Prince Sky    *
-* Renamed and Updated by: You             *
+* Author: @musaddiktemkar                 *
 *******************************************/
 
 import { FS } from '../lib/fs';
