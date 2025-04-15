@@ -265,7 +265,7 @@ export const commands: ChatCommands = {
         }
     },
 
-    clans(target, room, user) {
+	    clans(target, room, user) {
         this.runBroadcast();
 
         if (this.broadcasting) {
@@ -279,8 +279,8 @@ export const commands: ChatCommands = {
 
         if (!target) {
             const output = clans.map(clan => {
-                const room = Rooms.get(clan.id);
-                const roomStatus = room ? 'Active' : 'Inactive';
+                const clanRoom = Rooms.get(clan.id);
+                const roomStatus = clanRoom ? 'Active' : 'Inactive';
                 return `${clan.name} - Leader: ${Users.get(clan.leader)?.name || clan.leader} ` +
                     `(${clan.members.length} members) [${roomStatus}]`;
             }).join('<br />');
@@ -298,8 +298,9 @@ export const commands: ChatCommands = {
             return `${username} (${ClanRankNames[member.rank]})`;
         }).join(', ');
 
-        const room = Rooms.get(clan.id);
-        const roomStatus = room ? 'Active' : 'Inactive';
+        // Changed variable name from 'room' to 'clanRoom' to avoid conflict
+        const clanRoom = Rooms.get(clan.id);
+        const roomStatus = clanRoom ? 'Active' : 'Inactive';
 
         const output = [
             `<strong>Clan: ${Chat.escapeHTML(clan.name)}</strong>`,
