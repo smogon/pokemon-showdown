@@ -11,7 +11,8 @@ function sendClanMessage(clanId: ID, message: string) {
 }
 
 export const commands: ChatCommands = {
-    async createclan(target, room, user) {
+
+	 async createclan(target, room, user) {
         this.checkCan('bypassall');
 
         if (!target) {
@@ -51,6 +52,7 @@ export const commands: ChatCommands = {
                     `<p>Welcome to the ${Chat.escapeHTML(clan.name)} clan room!</p>` +
                     `<p><strong>Clan Leader:</strong> ${Chat.escapeHTML(targetUser.name)}</p>` +
                     `<p><strong>Created:</strong> ${Chat.toTimestamp(new Date())}</p>` +
+                    `<p><strong>Points:</strong> 1000</p>` +
                     `</div></div>`,
                 staffMessage: `<div class="infobox">` +
                     `<h3>Clan Room Staff Guide</h3>` +
@@ -268,7 +270,7 @@ export const commands: ChatCommands = {
         }
     },
 
-    clans(target, room, user) {
+	clans(target, room, user) {
         this.runBroadcast();
 
         if (this.broadcasting) {
@@ -285,7 +287,7 @@ export const commands: ChatCommands = {
                 const clanRoom = Rooms.get(clan.id);
                 const roomStatus = clanRoom ? 'Active' : 'Inactive';
                 return `${clan.name} - Leader: ${Users.get(clan.leader)?.name || clan.leader} ` +
-                    `(${clan.members.length} members) [${roomStatus}]`;
+                    `(${clan.members.length} members, ${clan.points} points) [${roomStatus}]`;
             }).join('<br />');
             return this.sendReplyBox(`<strong>Clans:</strong><br />` + output);
         }
@@ -308,6 +310,7 @@ export const commands: ChatCommands = {
             `<strong>Clan: ${Chat.escapeHTML(clan.name)}</strong>`,
             `Leader: ${Users.get(clan.leader)?.name || clan.leader}`,
             `Members (${clan.members.length}): ${members}`,
+            `Points: ${clan.points}`, // Display points
             `Room Status: ${roomStatus}`,
             `Created: ${Chat.toTimestamp(new Date(clan.createdAt))}`
         ].join('<br />');
@@ -329,4 +332,62 @@ export const commands: ChatCommands = {
     ].map(line => Chat.html`${line}`).join(`<br />`);
     return this.sendReplyBox(helpMessage);
 },
+
+	async givepoints(target, room, user) {
+        this.checkCan('bypassall');
+
+        if (!target) {
+            throw new Chat.ErrorMessage(`/givepoints [clan name],[points] - Gives points to a clan.`);
+        }
+
+        const [clanName, pointsStr] = target.split(',').map(param => param.trim());
+        const points = Number(pointsStr);
+
+        if (!clanName || isNaN(points) || points <= 0) {
+            throw new Chat.ErrorMessage(`Usage: /givepoints [clan name],[points]. Points must be a positive number.`);
+        }
+
+        const clan = await clanDatabase.getClan(toID(clanName));
+        if (!clan) {
+            throw new Chat.ErrorMessage(`Clan "${clanName}" not found.`);
+        }
+
+        clan.points += points; // Add points
+        await clanDatabase.saveClan(clan);
+
+        this.globalModlog('GIVEPOINTS', null, `${points} points to ${clan.name} (by ${user.name})`);
+        sendClanMessage(clan.id, `${user.name} has given ${points} points to the clan. Total points: ${clan.points}`);
+        return this.sendReply(`Successfully gave ${points} points to clan "${clan.name}". Total points: ${clan.points}`);
+    },
+
+    async takepoints(target, room, user) {
+        this.checkCan('bypassall');
+
+        if (!target) {
+            throw new Chat.ErrorMessage(`/takepoints [clan name],[points] - Deducts points from a clan.`);
+        }
+
+        const [clanName, pointsStr] = target.split(',').map(param => param.trim());
+        const points = Number(pointsStr);
+
+        if (!clanName || isNaN(points) || points <= 0) {
+            throw new Chat.ErrorMessage(`Usage: /takepoints [clan name],[points]. Points must be a positive number.`);
+        }
+
+        const clan = await clanDatabase.getClan(toID(clanName));
+        if (!clan) {
+            throw new Chat.ErrorMessage(`Clan "${clanName}" not found.`);
+        }
+
+        if (clan.points - points < 0) {
+            throw new Chat.ErrorMessage(`Cannot deduct ${points} points from clan "${clan.name}" as it would result in negative points.`);
+        }
+
+        clan.points -= points; // Deduct points
+        await clanDatabase.saveClan(clan);
+
+        this.globalModlog('TAKEPOINTS', null, `${points} points from ${clan.name} (by ${user.name})`);
+        sendClanMessage(clan.id, `${user.name} has deducted ${points} points from the clan. Total points: ${clan.points}`);
+        return this.sendReply(`Successfully deducted ${points} points from clan "${clan.name}". Total points: ${clan.points}`);
+    },
 };
