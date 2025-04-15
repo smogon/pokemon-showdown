@@ -6,7 +6,6 @@
  **************************************/
 
 import { Player, GameStatus, SAFARI_CONSTANTS } from './safari-types';
-import './safari.css';
 
 /**
  * Handles all rendering and UI functionality for the Safari Zone game
