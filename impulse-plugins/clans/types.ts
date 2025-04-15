@@ -24,6 +24,7 @@ export interface ClanData {
     leader: ID;
     members: ClanMember[];
     createdAt: number;
+    points: number;
 }
 
 export interface ClanInvite {
