@@ -1338,7 +1338,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	azumarill: {
 		tier: "UU",
 		doublesTier: "(DUU)",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	bonsly: {
 		tier: "LC",
@@ -5356,7 +5356,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	garganacl: {
 		tier: "OU",
 		doublesTier: "DUU",
-		natDexTier: "UUBL",
+		natDexTier: "UU",
 	},
 	glimmet: {
 		tier: "LC",
