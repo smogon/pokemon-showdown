@@ -773,7 +773,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			this.add(`c:|${getName('dhelmise')}|skibidi`);
 		},
 		innateName: "Stealth",
-		desc: "Until using EMP, targeted moves are 25% less accurate, this Pokemon's moves do half damage, and this Pokemon only takes 3/4 damage.",
+		shortDesc: "Until using EMP, targeted moves are 25% less accurate, this Pokemon's moves do half damage, and this Pokemon only takes 3/4 damage.",
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy, target, source) {
 			if (typeof accuracy !== 'number') return;
