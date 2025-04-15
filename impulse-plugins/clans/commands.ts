@@ -3,8 +3,6 @@ import { ClanRank, ClanRankNames } from './types';
 import { clanDatabase, clanInviteDatabase } from './database';
 import type { Room } from '../rooms';
 
-const BUTTON_MAX_CLICKS = 10;
-
 export const commands: ChatCommands = {
     async createclan(target, room, user) {
         this.checkCan('bypassall');
@@ -266,8 +264,8 @@ export const commands: ChatCommands = {
             throw new Chat.ErrorMessage(error.message);
         }
     },
-	
-    clans(target, room, user) {
+
+	    clans(target, room, user) {
         this.runBroadcast();
 
         if (this.broadcasting) {
@@ -280,24 +278,13 @@ export const commands: ChatCommands = {
         }
 
         if (!target) {
-            const buf = [`<div class="pad"><h2>Clans</h2>`];
-            
-            for (const clan of clans) {
+            const output = clans.map(clan => {
                 const clanRoom = Rooms.get(clan.id);
                 const roomStatus = clanRoom ? 'Active' : 'Inactive';
-                const leaderName = Users.get(clan.leader)?.name || clan.leader;
-                
-                buf.push(`<div class="infobox">` +
-                    `<strong>${Chat.escapeHTML(clan.name)}</strong><br />` +
-                    `Leader: ${Chat.escapeHTML(leaderName)}<br />` +
-                    `Members: ${clan.members.length} | Status: ${roomStatus}<br />` +
-                    `<button class="button" name="send" value="/clans ${clan.id}">` +
-                    `View Details</button></div>`
-                );
-            }
-            
-            buf.push(`</div>`);
-            return this.sendReplyBox(buf.join(''));
+                return `${clan.name} - Leader: ${Users.get(clan.leader)?.name || clan.leader} ` +
+                    `(${clan.members.length} members) [${roomStatus}]`;
+            }).join('<br />');
+            return this.sendReplyBox(`<strong>Clans:</strong><br />` + output);
         }
 
         const clanId = toID(target);
@@ -311,234 +298,18 @@ export const commands: ChatCommands = {
             return `${username} (${ClanRankNames[member.rank]})`;
         }).join(', ');
 
+        // Changed variable name from 'room' to 'clanRoom' to avoid conflict
         const clanRoom = Rooms.get(clan.id);
         const roomStatus = clanRoom ? 'Active' : 'Inactive';
-        const leaderName = Users.get(clan.leader)?.name || clan.leader;
 
-        const buf = [
-            `<div class="pad"><h2>${Chat.escapeHTML(clan.name)}</h2>`,
-            `<strong>Leader:</strong> ${Chat.escapeHTML(leaderName)}<br />`,
-            `<strong>Members (${clan.members.length}):</strong> ${members}<br />`,
-            `<strong>Room Status:</strong> ${roomStatus}<br />`,
-            `<strong>Created:</strong> ${Chat.toTimestamp(new Date(clan.createdAt))}<br />`
-        ];
+        const output = [
+            `<strong>Clan: ${Chat.escapeHTML(clan.name)}</strong>`,
+            `Leader: ${Users.get(clan.leader)?.name || clan.leader}`,
+            `Members (${clan.members.length}): ${members}`,
+            `Room Status: ${roomStatus}`,
+            `Created: ${Chat.toTimestamp(new Date(clan.createdAt))}`
+        ].join('<br />');
 
-        // Add management buttons if user has permission
-        const userMember = clan.members.find(m => m.id === toID(user.id));
-        if (userMember) {
-            buf.push(`<hr /><h3>Management</h3>`);
-            
-            if (userMember.rank >= ClanRank.DEPUTY) {
-                buf.push(
-                    `<button class="button" name="send" value="/claninvite">` +
-                    `Invite Member</button> `
-                );
-            }
-            
-            if (userMember.rank === ClanRank.LEADER) {
-                buf.push(
-                    `<button class="button" name="send" value="/clanmanage ${clan.id}">` +
-                    `Manage Clan</button>`
-                );
-            }
-        }
-
-        if (clanRoom) {
-            buf.push(
-                `<hr />` +
-                `<button class="button" name="join" value="${clan.id}">` +
-                `Join Clan Room</button>`
-            );
-        }
-
-        buf.push(`</div>`);
-        return this.sendReplyBox(buf.join(''));
-    },
-
-    clanmanage(target, room, user) {
-        const clanId = toID(target);
-        if (!clanId) {
-            return this.errorReply(`Usage: /clanmanage [clan]`);
-        }
-
-        const clan = clanDatabase.getAllClans().find(c => c.id === clanId);
-        if (!clan) {
-            return this.errorReply(`Clan "${target}" not found.`);
-        }
-
-        const member = clan.members.find(m => m.id === toID(user.id));
-        if (!member || member.rank !== ClanRank.LEADER) {
-            return this.errorReply(`Access denied. You must be the clan leader to use this command.`);
-        }
-
-        const buf = [
-            `<div class="pad"><h2>Managing ${Chat.escapeHTML(clan.name)}</h2>`,
-            `<h3>Members</h3>`
-        ];
-
-        // Member management
-        for (const member of clan.members) {
-            const memberName = Users.get(member.id)?.name || member.id;
-            buf.push(
-                `<div class="infobox">` +
-                `<strong>${Chat.escapeHTML(memberName)}</strong> ` +
-                `(${ClanRankNames[member.rank]})<br />`
-            );
-
-            if (member.id !== clan.leader) {
-                // Rank change buttons
-                buf.push(`<details><summary>Change Rank</summary>`);
-                for (const [rank, rankName] of Object.entries(ClanRankNames)) {
-                    if (Number(rank) !== member.rank && Number(rank) !== ClanRank.LEADER) {
-                        buf.push(
-                            `<button class="button" name="send" ` +
-                            `value="/clanrank ${memberName},${rankName}">` +
-                            `Set as ${rankName}</button> `
-                        );
-                    }
-                }
-                buf.push(`</details>`);
-
-                // Kick button
-                buf.push(
-                    `<button class="button" name="send" ` +
-                    `value="/clankick ${memberName},${clan.id}">` +
-                    `Kick from Clan</button>`
-                );
-            }
-            buf.push(`</div>`);
-        }
-
-        // Clan settings
-        buf.push(
-            `<hr /><h3>Clan Settings</h3>` +
-            `<button class="button" name="send" value="/claninfo ${clan.id}">` +
-            `View Clan Info</button> ` +
-            `<button class="button" name="send" value="/claninvites ${clan.id}">` +
-            `View Pending Invites</button>`
-        );
-
-        buf.push(`</div>`);
-        return this.sendReplyBox(buf.join(''));
-    },
-
-    clankick: 'removemember',
-    removemember(target, room, user) {
-        if (!target) return this.errorReply(`Usage: /clankick [username],[clan]`);
-
-        const [targetUsername, clanId] = target.split(',').map(toID);
-        if (!targetUsername || !clanId) {
-            return this.errorReply(`Usage: /clankick [username],[clan]`);
-        }
-
-        const clan = clanDatabase.getAllClans().find(c => c.id === clanId);
-        if (!clan) {
-            return this.errorReply(`Clan not found.`);
-        }
-
-        const requester = clan.members.find(m => m.id === toID(user.id));
-        if (!requester || requester.rank < ClanRank.DEPUTY) {
-            return this.errorReply(`Access denied. You must be a clan deputy or leader to kick members.`);
-        }
-
-        const targetMember = clan.members.find(m => m.id === targetUsername);
-        if (!targetMember) {
-            return this.errorReply(`That user is not in the clan.`);
-        }
-
-        if (targetMember.rank >= requester.rank) {
-            return this.errorReply(`You cannot kick someone of equal or higher rank.`);
-        }
-
-        clan.members = clan.members.filter(m => m.id !== targetUsername);
-        void clanDatabase.saveClan(clan);
-
-        // Remove from clan room
-        const clanRoom = Rooms.get(clan.id);
-        if (clanRoom) {
-            clanRoom.auth.delete(targetUsername);
-            clanRoom.saveSettings();
-        }
-
-        this.globalModlog('CLANKICK', targetMember.id, `from ${clan.name} (by ${user.name})`);
-        return this.addModAction(
-            `${user.name} kicked ${targetMember.id} from clan ${clan.name}.`
-        );
-    },
-
-    claninvites(target, room, user) {
-        if (!target) return this.errorReply(`Usage: /claninvites [clan]`);
-
-        const clanId = toID(target);
-        const clan = clanDatabase.getAllClans().find(c => c.id === clanId);
-        if (!clan) {
-            return this.errorReply(`Clan "${target}" not found.`);
-        }
-
-        const member = clan.members.find(m => m.id === toID(user.id));
-        if (!member || member.rank < ClanRank.DEPUTY) {
-            return this.errorReply(`Access denied. You must be a clan deputy or leader to view invites.`);
-        }
-
-        const invites = clanInviteDatabase.getInvites()
-            .filter(invite => invite.clanId === clanId && invite.expiresAt > Date.now());
-
-        if (!invites.length) {
-            return this.sendReplyBox(
-                `<div class="pad"><h2>${Chat.escapeHTML(clan.name)} - Pending Invites</h2>` +
-                `<i>No pending invites</i></div>`
-            );
-        }
-
-        const buf = [
-            `<div class="pad"><h2>${Chat.escapeHTML(clan.name)} - Pending Invites</h2>`
-        ];
-
-        for (const invite of invites) {
-            const inviter = Users.get(invite.inviterId)?.name || invite.inviterId;
-            const invitee = Users.get(invite.inviteeId)?.name || invite.inviteeId;
-            const expires = Chat.toDurationString(invite.expiresAt - Date.now(), {precision: 1});
-
-            buf.push(
-                `<div class="infobox">` +
-                `Invited User: ${Chat.escapeHTML(invitee)}<br />` +
-                `Invited By: ${Chat.escapeHTML(inviter)}<br />` +
-                `Expires: ${expires}<br />` +
-                `<button class="button" name="send" value="/clancancel ${invite.id}">` +
-                `Cancel Invite</button></div>`
-            );
-        }
-
-        buf.push(`</div>`);
-        return this.sendReplyBox(buf.join(''));
-    },
-
-    clancancel(target, room, user) {
-        if (!target) return this.errorReply(`Usage: /clancancel [invite code]`);
-
-        const invite = clanInviteDatabase.getInvites().find(i => i.id === target);
-        if (!invite) {
-            return this.errorReply(`Invalid invite code.`);
-        }
-
-        const clan = clanDatabase.getAllClans().find(c => c.id === invite.clanId);
-        if (!clan) {
-            return this.errorReply(`The clan no longer exists.`);
-        }
-
-        const member = clan.members.find(m => m.id === toID(user.id));
-        if (!member || member.rank < ClanRank.DEPUTY) {
-            return this.errorReply(`Access denied. You must be a clan deputy or leader to cancel invites.`);
-        }
-
-        void clanInviteDatabase.removeInvite(invite.id);
-
-        const invitee = Users.get(invite.inviteeId);
-        if (invitee?.connected) {
-            invitee.send(`|pm|${user.name}|${invitee.name}|Your clan invitation to ${clan.name} has been cancelled.`);
-        }
-
-        this.globalModlog('CLANINVITECANCEL', invite.inviteeId, `to ${clan.name} (by ${user.name})`);
-        return this.sendReply(`The clan invitation for ${invite.inviteeId} has been cancelled.`);
+        return this.sendReplyBox(output);
     },
 };
