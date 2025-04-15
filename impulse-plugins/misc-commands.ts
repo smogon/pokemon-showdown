@@ -195,4 +195,21 @@ export const commands: Chat.ChatCommands = {
 		 `<li><code>/seen [user]</code> - Shows when the user last connected on the server.</li>` +
 		 `</ul></div>`);
   },
+
+  impulsehelp(target, room, user) {
+	  if (!this.runBroadcast()) return;
+	  this.sendReplyBox(
+		  `<div><b><center>Impulse Server Commands</center></b>` +
+		  `<ul><li><code>/animemangahelp</code> - Shows Anime & Manga Commands</li>` +
+		  `<li><code>/customavatarhelp</code> - Shows Custom Avatar Commands</li>` +
+		  `<li><code>/customcolorhelp</code> - Shows Custom Color Commands</li>` +
+		  `<li><code>/economyhelp</code> - Shows Economy Commands</li>` +
+		  `<li><code>/exphelp</code> - Shows Exp Commands</li>` +
+		  `<li><code>/mischelp</code> - Shows Misc Commands</li>` +
+		  `<li><code>/servernewshelp</code> - Shows Server News Commands</li>` +
+		  `<li><code>/shophelp</code> - Shows Shop Commands</li>` +
+		  `<li><code>/iconhelp</code> - Shows User Icon Commands</li>`
+		  );
+  },
+		  
 };
