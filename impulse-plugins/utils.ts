@@ -88,12 +88,11 @@ function generateThemedTable(
   dataRows: string[][],
   styleBy?: string
 ): string {
-  let output = `<div class="themed-table-container" style="max-width: 100%; overflow-x: auto;">`;
+  let output = `<div class="themed-table-container" style="max-width: 100%; max-height: 380px; overflow: auto;">`;
   output += `<h3 class="themed-table-title">${title}</h3>`;
   if (styleBy) {
     output += `<p class="themed-table-by">Style By ${styleBy}</p>`;
   }
-  output += `<div class="themed-table-scroll" style="max-height: 350px; overflow-y: auto;">`;
   output += `<table class="themed-table">`;
   output += `<thead><tr class="themed-table-header">`;
   headerRow.forEach(header => {
@@ -109,9 +108,8 @@ function generateThemedTable(
     output += `</tr>`;
   });
 
-  output += `</tbody></table></div></div>`;
+  output += `</tbody></table></div>`;
   return output;
 }
-
 
 Impulse.generateThemedTable = generateThemedTable;
