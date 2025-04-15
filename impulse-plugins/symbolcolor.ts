@@ -25,11 +25,11 @@ try {
 async function updateSymbolColors(): Promise<void> {
 	try {
 		await FS('impulse-db/symbolcolors.json').writeUpdate(() => JSON.stringify(symbolcolors));
-		let newCss = '/* SYMBOLCOLORS START */\n';
+		let newCss = '\n/* SYMBOLCOLORS START */\n';
 		for (const name in symbolcolors) {
 			newCss += `[id$="-userlist-user-${toID(name)}"] button > em.group {\n color: ${symbolcolors[name]}; \n}\n`;
 		}
-		newCss += '/* SYMBOLCOLORS END */\n';
+		newCss += '* SYMBOLCOLORS END */\n';
 
 		const file = FS('config/custom.css').readIfExistsSync().split('\n');
 		const start = file.indexOf('/* SYMBOLCOLORS START */');
@@ -96,7 +96,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 			`<b>Custom Symbol Color Commands:</b><br>` +
-			`• <code>/symbolcolor set [username], [image url]</code> - Gives [user] a symbol color (Requires: @ and higher)<br>` +
+			`• <code>/symbolcolor set [username], [hex]</code> - Gives [user] a symbol color (Requires: @ and higher)<br>` +
 			`• <code>/symbolcolor delete [username]</code> - Removes a user's symbol color (Requires: @ and higher)`
 		);
 	},
