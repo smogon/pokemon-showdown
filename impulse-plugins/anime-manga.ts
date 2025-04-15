@@ -120,7 +120,7 @@ export const commands: Chat.ChatCommands = {
 		this.sendReplyBox(html);
 	},
 	
-	animemamgahelp(target: string, room: ChatRoom | null, user: User) {
+	animemangahelp(target: string, room: ChatRoom | null, user: User) {
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(
 		  `<div><b><center>Anime & Manga Commands</center></b>` +
