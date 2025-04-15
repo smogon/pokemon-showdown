@@ -1,7 +1,8 @@
 import { FS } from '../../lib/fs';
-import { ClanData } from './types';
+import { ClanData, ClanInvite } from './types';
 
 const CLANS_FILE = 'config/clans.json';
+const INVITES_FILE = 'config/clan-invites.json';
 
 class ClanDatabase {
     private clans: Map<ID, ClanData>;
@@ -71,6 +72,89 @@ class ClanDatabase {
         }
         return null;
     }
+
+    getAllClans(): ClanData[] {
+        return Array.from(this.clans.values());
+    }
+}
+
+class ClanInviteDatabase {
+    private invites: Map<string, ClanInvite>;
+
+    constructor() {
+        this.invites = new Map();
+        void this.loadInvites();
+    }
+
+    private async loadInvites() {
+        try {
+            const data = await FS(INVITES_FILE).readIfExists();
+            if (!data) return;
+
+            const invitesData = JSON.parse(data);
+            for (const invite of invitesData) {
+                this.invites.set(invite.id, invite);
+            }
+        } catch (error) {
+            Monitor.error(`Error loading clan invites: ${error}`);
+        }
+    }
+
+    private async saveInvitesToFile() {
+        try {
+            const data = Array.from(this.invites.values());
+            await FS(INVITES_FILE).write(JSON.stringify(data, null, 2));
+        } catch (error) {
+            Monitor.error(`Error saving clan invites: ${error}`);
+            throw new Error('Failed to save clan invites');
+        }
+    }
+
+    async addInvite(invite: ClanInvite): Promise<void> {
+        this.invites.set(invite.id, invite);
+        await this.saveInvitesToFile();
+    }
+
+    async removeInvite(inviteId: string): Promise<boolean> {
+        const deleted = this.invites.delete(inviteId);
+        if (deleted) {
+            await this.saveInvitesToFile();
+        }
+        return deleted;
+    }
+
+    async getPendingInvite(inviteeId: ID): Promise<ClanInvite | null> {
+        inviteeId = toID(inviteeId);
+        const now = Date.now();
+        
+        for (const invite of this.invites.values()) {
+            if (invite.inviteeId === inviteeId && invite.expiresAt > now) {
+                return invite;
+            }
+        }
+        return null;
+    }
+
+    async cleanExpiredInvites(): Promise<void> {
+        const now = Date.now();
+        let changed = false;
+
+        for (const [id, invite] of this.invites) {
+            if (invite.expiresAt <= now) {
+                this.invites.delete(id);
+                changed = true;
+            }
+        }
+
+        if (changed) {
+            await this.saveInvitesToFile();
+        }
+    }
+
+    getInvites(): ClanInvite[] {
+        return Array.from(this.invites.values());
+    }
 }
 
 export const clanDatabase = new ClanDatabase();
+export const clanInviteDatabase = new ClanInviteDatabase();

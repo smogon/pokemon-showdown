@@ -1,5 +1,6 @@
-import { ClanData, ClanManager, ClanRank, ClanMember } from './types';
-import { clanDatabase } from './database';
+import { ClanData, ClanManager, ClanRank, ClanMember, ClanInvite } from './types';
+import { clanDatabase, clanInviteDatabase } from './database';
+import { randomUUID } from 'crypto';
 
 class ClanManagerImpl implements ClanManager {
     async createClan(name: string, leaderId: ID): Promise<ClanData> {
@@ -78,6 +79,86 @@ class ClanManagerImpl implements ClanManager {
 
         await clanDatabase.saveClan(clan);
         return true;
+    }
+
+    async inviteMember(clanId: ID, inviterId: ID, inviteeId: ID): Promise<ClanInvite> {
+        clanId = toID(clanId);
+        inviterId = toID(inviterId);
+        inviteeId = toID(inviteeId);
+
+        const clan = await this.getClan(clanId);
+        if (!clan) {
+            throw new Error('Clan not found');
+        }
+
+        // Check if inviter has permission (Leader or Deputy)
+        const inviter = clan.members.find(m => m.id === inviterId);
+        if (!inviter || (inviter.rank !== ClanRank.LEADER && inviter.rank !== ClanRank.DEPUTY)) {
+            throw new Error('You must be a clan leader or deputy to invite members');
+        }
+
+        // Check if invitee is already in a clan
+        const inviteeClan = await clanDatabase.findClanByMemberId(inviteeId);
+        if (inviteeClan) {
+            throw new Error('This user is already in a clan');
+        }
+
+        // Check if there's already a pending invite
+        const existingInvite = await clanInviteDatabase.getPendingInvite(inviteeId);
+        if (existingInvite) {
+            throw new Error('This user already has a pending clan invite');
+        }
+
+        // Create new invite (expires in 24 hours)
+        const invite: ClanInvite = {
+            id: randomUUID(),
+            clanId,
+            inviterId,
+            inviteeId,
+            createdAt: Date.now(),
+            expiresAt: Date.now() + (24 * 60 * 60 * 1000) // 24 hours
+        };
+
+        await clanInviteDatabase.addInvite(invite);
+        return invite;
+    }
+
+    async acceptInvite(inviteId: string): Promise<boolean> {
+        const now = Date.now();
+        const invites = clanInviteDatabase.getInvites();
+        const invite = invites.find(inv => inv.id === inviteId);
+
+        if (!invite || invite.expiresAt <= now) {
+            throw new Error('Invalid or expired invite');
+        }
+
+        const clan = await this.getClan(invite.clanId);
+        if (!clan) {
+            throw new Error('Clan no longer exists');
+        }
+
+        // Check if user is already in a clan (double-check in case they joined another way)
+        const userClan = await clanDatabase.findClanByMemberId(invite.inviteeId);
+        if (userClan) {
+            throw new Error('You are already in a clan');
+        }
+
+        // Add member to clan
+        const newMember: ClanMember = {
+            id: invite.inviteeId,
+            rank: ClanRank.RECRUIT,
+            joinedAt: now
+        };
+
+        clan.members.push(newMember);
+        await clanDatabase.saveClan(clan);
+        await clanInviteDatabase.removeInvite(invite.id);
+
+        return true;
+    }
+
+    async getPendingInvite(inviteeId: ID): Promise<ClanInvite | null> {
+        return clanInviteDatabase.getPendingInvite(toID(inviteeId));
     }
 }
 

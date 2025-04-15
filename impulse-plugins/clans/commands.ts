@@ -1,6 +1,6 @@
 import { clanManager } from './manager';
 import { ClanRank, ClanRankNames } from './types';
-import { clanDatabase } from './database';
+import { clanDatabase, clanInviteDatabase } from './database';
 
 export const commands: ChatCommands = {
     async createclan(target, room, user) {
@@ -113,6 +113,76 @@ export const commands: ChatCommands = {
         }
     },
 
+    async claninvite(target, room, user) {
+        if (!target) {
+            throw new Chat.ErrorMessage(`/claninvite [username] - Invites a user to your clan.`);
+        }
+
+        const targetUser = Users.getExact(target);
+        if (!targetUser?.connected) {
+            throw new Chat.ErrorMessage(`User '${target}' not found or not online.`);
+        }
+
+        // Find inviter's clan
+        const clan = await clanDatabase.findClanByMemberId(user.id);
+        if (!clan) {
+            throw new Chat.ErrorMessage(`You are not in a clan.`);
+        }
+
+        // Check if user has permission to invite
+        const member = clan.members.find(m => m.id === toID(user.id));
+        if (!member || (member.rank !== ClanRank.LEADER && member.rank !== ClanRank.DEPUTY)) {
+            throw new Chat.ErrorMessage(`You must be a clan leader or deputy to invite members.`);
+        }
+
+        try {
+            const invite = await clanManager.inviteMember(clan.id, user.id, targetUser.id);
+            
+            this.globalModlog('CLANINVITE', targetUser, `to ${clan.name} (by ${user.name})`);
+            
+            // Notify the invited user
+            targetUser.send(
+                `|pm|${user.name}|${targetUser.name}|/raw You have been invited to join the clan "${clan.name}". ` +
+                `Use <code>/clanaccept ${invite.id}</code> to accept. This invite expires in 24 hours.`
+            );
+
+            return this.sendReply(`Invitation sent to ${targetUser.name}. They have 24 hours to accept.`);
+        } catch (error) {
+            throw new Chat.ErrorMessage(error.message);
+        }
+    },
+
+    async clanaccept(target, room, user) {
+        if (!target) {
+            throw new Chat.ErrorMessage(`/clanaccept [invite code] - Accepts a clan invitation.`);
+        }
+
+        try {
+            // Clean expired invites first
+            await clanInviteDatabase.cleanExpiredInvites();
+
+            // Check if user has a pending invite
+            const invite = await clanManager.getPendingInvite(user.id);
+            if (!invite || invite.id !== target) {
+                throw new Chat.ErrorMessage(`Invalid or expired invite code.`);
+            }
+
+            const clan = await clanManager.getClan(invite.clanId);
+            if (!clan) {
+                throw new Chat.ErrorMessage(`The clan no longer exists.`);
+            }
+
+            await clanManager.acceptInvite(invite.id);
+            
+            this.globalModlog('CLANACCEPT', user, `joined ${clan.name}`);
+            return this.addModAction(
+                `${user.name} joined clan ${clan.name}.`
+            );
+        } catch (error) {
+            throw new Chat.ErrorMessage(error.message);
+        }
+    },
+
     clans(target, room, user) {
         // View all clans or specific clan info
         this.runBroadcast();
@@ -121,7 +191,7 @@ export const commands: ChatCommands = {
             if (!this.canBroadcast()) return;
         }
 
-        const clans = Array.from(clanDatabase['clans'].values());
+        const clans = clanDatabase.getAllClans();
         if (!clans.length) {
             return this.sendReply("There are no clans.");
         }

@@ -28,9 +28,21 @@ export interface ClanData {
     createdAt: number;
 }
 
+export interface ClanInvite {
+    id: string;
+    clanId: ID;
+    inviterId: ID;
+    inviteeId: ID;
+    createdAt: number;
+    expiresAt: number;
+}
+
 export interface ClanManager {
     createClan(name: string, leaderId: ID): Promise<ClanData>;
     deleteClan(clanId: ID): Promise<boolean>;
     getClan(clanId: ID): Promise<ClanData | null>;
     setRank(clanId: ID, userId: ID, rank: ClanRank): Promise<boolean>;
+    inviteMember(clanId: ID, inviterId: ID, inviteeId: ID): Promise<ClanInvite>;
+    acceptInvite(inviteId: string): Promise<boolean>;
+    getPendingInvite(inviteeId: ID): Promise<ClanInvite | null>;
 }
