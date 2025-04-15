@@ -5,7 +5,6 @@
 
 import { FS } from '../lib/fs';
 
-const backgroundColor = `rgba(17, 72, 79, 0.6)`;
 const STAFF_ROOM_ID = 'staff';
 
 interface SymbolColors {
@@ -60,12 +59,12 @@ export const commands: Chat.ChatCommands = {
 
 			const targetUser = Users.get(userId);
 			if (targetUser?.connected) {
-				targetUser.popup(`|html|${Impulse.nameColor(user.name, true, true)} has set your userlist symbol color to: <img src="${imageUrl}" width="32" height="32"><br /><center>Refresh, If you don't see it.</center>`);
+				targetUser.popup(`|html|${Impulse.nameColor(user.name, true, true)} has set your userlist symbol color<br /><center>Refresh, If you don't see it.</center>`);
 			}
 
 			const staffRoom = Rooms.get(STAFF_ROOM_ID);
 			if (staffRoom) {
-				staffRoom.add(`|html|<div class="infobox"> ${Impulse.nameColor(user.name, true, true)} set symbol color for ${Impulse.nameColor(name, true, false)}: <img src="${imageUrl}" width="32" height="32"></div>`).update();
+				staffRoom.add(`|html|<div class="infobox"> ${Impulse.nameColor(user.name, true, true)} set symbol color for ${Impulse.nameColor(name, true, false)}</div>`).update();
 			}
 		},
 
