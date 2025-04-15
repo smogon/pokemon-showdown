@@ -1,6 +1,7 @@
 import { clanManager } from './manager';
 import { ClanRank, ClanRankNames } from './types';
 import { clanDatabase, clanInviteDatabase } from './database';
+import type { Room } from '../rooms';
 
 function sendClanMessage(clanId: ID, message: string) {
     const clanRoom = Rooms.get(clanId);
@@ -266,7 +267,7 @@ export const commands: ChatCommands = {
             throw new Chat.ErrorMessage(error.message);
         }
     },
-	
+
     clans(target, room, user) {
         this.runBroadcast();
 
@@ -280,47 +281,13 @@ export const commands: ChatCommands = {
         }
 
         if (!target) {
-            // Format clan data for table
-            const tableData = clans.map(clan => {
+            const output = clans.map(clan => {
                 const clanRoom = Rooms.get(clan.id);
                 const roomStatus = clanRoom ? 'Active' : 'Inactive';
-                const leaderName = Users.get(clan.leader)?.name || clan.leader;
-                
-                // Count members by rank
-                const rankCounts = new Map<number, number>();
-                clan.members.forEach(member => {
-                    rankCounts.set(member.rank, (rankCounts.get(member.rank) || 0) + 1);
-                });
-
-                // Get member composition
-                const memberComposition = Object.values(ClanRank)
-                    .filter((rank): rank is number => typeof rank === 'number')
-                    .map(rank => {
-                        const count = rankCounts.get(rank) || 0;
-                        if (count > 0) {
-                            return `${count} ${ClanRankNames[rank]}${count > 1 ? 's' : ''}`;
-                        }
-                        return null;
-                    })
-                    .filter(Boolean)
-                    .join(', ');
-
-                return [
-                    clan.name,
-                    leaderName,
-                    `${clan.members.length} (${memberComposition})`,
-                    roomStatus,
-                    Chat.toTimestamp(new Date(clan.createdAt))
-                ];
-            });
-
-            const table = Impulse.generateThemedTable(['Name', 'Leader', 'Members', 'Status', 'Created'], tableData, {
-                border: true,
-                title: 'Active Clans'
-            });
-
-            const footer = '<br /><small>Use /clans [name] to view detailed information about a specific clan.</small>';
-            return this.sendReplyBox(table + footer);
+                return `${clan.name} - Leader: ${Users.get(clan.leader)?.name || clan.leader} ` +
+                    `(${clan.members.length} members) [${roomStatus}]`;
+            }).join('<br />');
+            return this.sendReplyBox(`<strong>Clans:</strong><br />` + output);
         }
 
         const clanId = toID(target);
@@ -329,80 +296,22 @@ export const commands: ChatCommands = {
             return this.errorReply(`Clan "${target}" not found.`);
         }
 
-        // Detailed view of a specific clan
+        const members = clan.members.map(member => {
+            const username = Users.get(member.id)?.name || member.id;
+            return `${username} (${ClanRankNames[member.rank]})`;
+        }).join(', ');
+
         const clanRoom = Rooms.get(clan.id);
         const roomStatus = clanRoom ? 'Active' : 'Inactive';
 
-        // Group members by rank for better organization
-        const membersByRank = new Map<number, string[]>();
-        Object.values(ClanRank)
-            .filter((rank): rank is number => typeof rank === 'number')
-            .forEach(rank => {
-                membersByRank.set(rank, []);
-            });
+        const output = [
+            `<strong>Clan: ${Chat.escapeHTML(clan.name)}</strong>`,
+            `Leader: ${Users.get(clan.leader)?.name || clan.leader}`,
+            `Members (${clan.members.length}): ${members}`,
+            `Room Status: ${roomStatus}`,
+            `Created: ${Chat.toTimestamp(new Date(clan.createdAt))}`
+        ].join('<br />');
 
-        clan.members.forEach(member => {
-            const username = Users.get(member.id)?.name || member.id;
-            const online = Users.get(member.id)?.connected ? '⦿' : '○';
-            const memberString = `${online} ${username}`;
-            const rankMembers = membersByRank.get(member.rank);
-            if (rankMembers) {
-                rankMembers.push(memberString);
-            }
-        });
-
-        const detailData = [
-            ['Name', clan.name],
-            ['Leader', Users.get(clan.leader)?.name || clan.leader],
-            ['Room Status', roomStatus],
-            ['Total Members', clan.members.length.toString()],
-            ['Created', Chat.toTimestamp(new Date(clan.createdAt))]
-        ];
-
-        // Add member lists by rank
-        membersByRank.forEach((members, rank) => {
-            if (members.length > 0) {
-                detailData.push([
-                    `${ClanRankNames[rank]}s (${members.length})`,
-                    members.join(', ')
-                ]);
-            }
-        });
-
-        const statsData = [
-            ['Total Members', clan.members.length.toString(), '100%']
-        ];
-
-        // Add rank statistics
-        membersByRank.forEach((members, rank) => {
-            if (members.length > 0) {
-                statsData.push([
-                    ClanRankNames[rank],
-                    members.length.toString(),
-                    `${((members.length / clan.members.length) * 100).toFixed(1)}%`
-                ]);
-            }
-        });
-
-        const detailTable = Impulse.generateThemedTable(
-            ['Property', 'Value'],
-            detailData,
-            {
-                title: `Clan Details: ${Chat.escapeHTML(clan.name)}`,
-                border: true
-            }
-        );
-
-        const statsTable = Impulse.generateThemedTable(
-            ['Stat', 'Count', 'Percentage'],
-            statsData,
-            {
-                title: 'Clan Statistics',
-                border: true
-            }
-        );
-
-        const legend = '<br /><small>⦿ Online | ○ Offline</small>';
-        return this.sendReplyBox(detailTable + '<br /><br />' + statsTable + legend);
+        return this.sendReplyBox(output);
     },
 };
