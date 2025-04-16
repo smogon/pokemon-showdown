@@ -84,38 +84,32 @@ class ClanManagerImpl implements ClanManager {
         return true;
     }
 
-    async setClanIcon(clanId: ID, icon: string | undefined, userId: ID): Promise<boolean> {
+    async setClanIcon(clanId: ID, icon: string | undefined): Promise<boolean> {
         const clan = await this.getClan(toID(clanId));
         if (!clan) return false;
-
-        const member = clan.members.find(m => m.id === toID(userId));
-        if (!member || (member.rank !== ClanRank.LEADER && member.rank !== ClanRank.DEPUTY)) {
-            throw new Error('Only clan leaders or deputies can set the clan icon.');
-        }
 
         if (icon === undefined) {
             delete clan.icon;
         } else {
             // Validate icon URL format
-            const urlPattern = /^https?:\/\/.+\.(png|jpg|jpeg|gif)$/i;
-            if (!urlPattern.test(icon)) {
-                throw new Error('Invalid image URL format');
+            try {
+                const urlPattern = /^https?:\/\/.+\.(png|jpg|jpeg|gif)$/i;
+                if (!urlPattern.test(icon)) {
+                    throw new Error('Invalid image URL format');
+                }
+                clan.icon = icon;
+            } catch (e) {
+                throw new Error('Invalid icon URL');
             }
-            clan.icon = icon;
         }
 
         await clanDatabase.saveClan(clan);
         return true;
     }
 
-    async setClanDescription(clanId: ID, description: string | undefined, userId: ID): Promise<boolean> {
+    async setClanDescription(clanId: ID, description: string | undefined): Promise<boolean> {
         const clan = await this.getClan(toID(clanId));
         if (!clan) return false;
-
-        const member = clan.members.find(m => m.id === toID(userId));
-        if (!member || (member.rank !== ClanRank.LEADER && member.rank !== ClanRank.DEPUTY)) {
-            throw new Error('Only clan leaders or deputies can set the clan description.');
-        }
 
         if (description === undefined) {
             delete clan.description;
