@@ -361,4 +361,62 @@ async clanauth(target, room, user) {
 
     return this.sendReplyBox(`${popupContent.join('')} ${targetClan.name} Authority`);
 },
+	async clancall(target, room, user) {
+    if (!target) {
+        throw new Chat.ErrorMessage(`/clancall [message] - Sends a notification to all online clan members. Requires: Clan Leader or Deputy`);
+    }
+
+    // Find the user's clan
+    const clan = await clanDatabase.findClanByMemberId(user.id);
+    if (!clan) {
+        throw new Chat.ErrorMessage(`You are not in a clan.`);
+    }
+
+    // Check if user is Leader or Deputy
+    const member = clan.members.find(m => m.id === toID(user.id));
+    if (!member || (member.rank !== ClanRank.LEADER && member.rank !== ClanRank.DEPUTY)) {
+        throw new Chat.ErrorMessage(`You must be a clan leader or deputy to use /clancall.`);
+    }
+
+    // Check if the message is too long
+    if (target.length > 500) {
+        throw new Chat.ErrorMessage(`The message cannot exceed 500 characters.`);
+    }
+
+    // Create a formatted message for the popup
+    const popupContent = [
+        `<div class="infobox">`,
+        `<div style="text-align: center; margin-bottom: 10px;">`,
+        `<h2>${Chat.escapeHTML(clan.name)} - Clan Call</h2>`,
+        `</div>`,
+        `<div style="margin: 10px 0;">`,
+        `<strong>From:</strong> ${Chat.escapeHTML(user.name)}`,
+        `<br><br>`,
+        `<strong>Message:</strong><br>`,
+        `${Chat.escapeHTML(target)}`,
+        `</div>`,
+        `<div style="text-align: right; font-size: 0.9em; color: #666;">`,
+        `Sent: ${Chat.toTimestamp(new Date())}`,
+        `</div>`,
+        `</div>`
+    ].join('');
+
+    let notifiedCount = 0;
+
+    // Send popup to all online clan members
+    for (const member of clan.members) {
+        const targetUser = Users.get(member.id);
+        if (targetUser?.connected && targetUser.id !== user.id) { // Don't send to the caller
+            targetUser.popup(popupContent);
+            notifiedCount++;
+        }
+    }
+
+    // Log the clan call
+    this.globalModlog('CLANCALL', user, `to ${clan.name}`);
+
+    // Send confirmation messages
+    sendClanMessage(clan.id, `${user.name} has sent a clan call: ${target}`);
+    return this.sendReply(`Your message has been sent to ${notifiedCount} online clan member${notifiedCount !== 1 ? 's' : ''}.`);
+},
 };
