@@ -25,6 +25,8 @@ export interface ClanData {
     members: ClanMember[];
     createdAt: number;
     points: number;
+    icon?: string;           // Optional URL to the clan's icon
+    description?: string;    // Optional clan description
 }
 
 export interface ClanInvite {
@@ -44,4 +46,7 @@ export interface ClanManager {
     inviteMember(clanId: ID, inviterId: ID, inviteeId: ID): Promise<ClanInvite>;
     acceptInvite(inviteId: string): Promise<boolean>;
     getPendingInvite(inviteeId: ID): Promise<ClanInvite | null>;
+    // Add new methods for icon and description management
+    setClanIcon(clanId: ID, icon: string | undefined): Promise<boolean>;
+    setClanDescription(clanId: ID, description: string | undefined): Promise<boolean>;
 }
