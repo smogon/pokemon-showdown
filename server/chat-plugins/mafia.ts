@@ -391,7 +391,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.canJoin(user, !staffAdd, force);
 		if (this.playerCount >= this.playerCap) return this.sendUser(user, `|error|The game of ${this.title} is full.`);
 
-		const player = this.addPlayer(user, force);
+		const player = this.addPlayer(user);
 		if (!player) return this.sendUser(user, `|error|You have already joined the game of ${this.title}.`);
 		if (this.started) {
 			player.role = {
