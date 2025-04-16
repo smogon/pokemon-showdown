@@ -518,4 +518,125 @@ async clanlist(target, room, user) {
 
     return this.sendReplyBox(tableHtml);
 },
+	
+	async clankick(target, room, user) {
+    if (!target) {
+        throw new Chat.ErrorMessage(`/clankick [username] - Kicks a user from your clan. Requires: Clan Leader or Deputy`);
+    }
+
+    const targetUser = Users.getExact(target);
+    const targetId = toID(target);
+    if (!targetId) {
+        throw new Chat.ErrorMessage(`Please specify a valid username to kick.`);
+    }
+
+    // Find the kicker's clan
+    const kickerClan = await clanDatabase.findClanByMemberId(user.id);
+    if (!kickerClan) {
+        throw new Chat.ErrorMessage(`You are not in a clan.`);
+    }
+
+    // Check if kicker has permission (must be leader or deputy)
+    const kicker = kickerClan.members.find(m => m.id === user.id);
+    if (!kicker || (kicker.rank !== ClanRank.LEADER && kicker.rank !== ClanRank.DEPUTY)) {
+        throw new Chat.ErrorMessage(`You must be a clan leader or deputy to kick members.`);
+    }
+
+    // Find target member in the clan
+    const targetMember = kickerClan.members.find(m => m.id === targetId);
+    if (!targetMember) {
+        throw new Chat.ErrorMessage(`${targetUser ? targetUser.name : target} is not in your clan.`);
+    }
+
+    // Prevent kicking leaders
+    if (targetMember.rank === ClanRank.LEADER) {
+        throw new Chat.ErrorMessage(`You cannot kick the clan leader.`);
+    }
+
+    // Prevent deputies from kicking other deputies
+    if (kicker.rank === ClanRank.DEPUTY && targetMember.rank === ClanRank.DEPUTY) {
+        throw new Chat.ErrorMessage(`Deputies cannot kick other deputies.`);
+    }
+
+    // Remove member from clan
+    kickerClan.members = kickerClan.members.filter(m => m.id !== targetId);
+    await clanDatabase.saveClan(kickerClan);
+
+    // Remove room auth if clan room exists
+    const clanRoom = Rooms.get(kickerClan.id);
+    if (clanRoom) {
+        clanRoom.auth.delete(targetId);
+        clanRoom.saveSettings();
+    }
+
+    // Notify the kicked user if they're online
+    if (targetUser?.connected) {
+        targetUser.send(`|pm|${user.name}|${targetUser.name}|You have been kicked from clan ${kickerClan.name}.`);
+    }
+
+    // Log the action and send notifications
+    this.globalModlog('CLANKICK', targetUser || targetId, `from ${kickerClan.name} (by ${user.name})`);
+    sendClanMessage(kickerClan.id, `${targetUser ? targetUser.name : target} has been kicked from the clan by ${user.name}.`);
+    
+    return this.sendReply(`Successfully kicked ${targetUser ? targetUser.name : target} from clan ${kickerClan.name}.`);
+},
+	
+	async clanleave(target, room, user) {
+    // Find user's clan
+    const clan = await clanDatabase.findClanByMemberId(user.id);
+    if (!clan) {
+        throw new Chat.ErrorMessage(`You are not in a clan.`);
+    }
+
+    // Find the member in the clan
+    const member = clan.members.find(m => m.id === user.id);
+    if (!member) {
+        throw new Chat.ErrorMessage(`An error occurred finding your clan membership.`);
+    }
+
+    // Prevent leader from leaving without transferring leadership
+    if (member.rank === ClanRank.LEADER) {
+        throw new Chat.ErrorMessage(`As the clan leader, you must transfer leadership before leaving. Use /clanrank [new leader], Leader`);
+    }
+
+    // Create confirmation button
+    if (!target || target !== 'confirm') {
+        return this.sendReply(
+            `Are you sure you want to leave clan ${clan.name}? ` +
+            `This cannot be undone. Use /clanleave confirm to confirm.`
+        );
+    }
+
+    // Remove member from clan
+    clan.members = clan.members.filter(m => m.id !== user.id);
+    await clanDatabase.saveClan(clan);
+
+    // Remove room auth if clan room exists
+    const clanRoom = Rooms.get(clan.id);
+    if (clanRoom) {
+        clanRoom.auth.delete(user.id);
+        clanRoom.saveSettings();
+
+        // Remove user from clan room if they're in it
+        if (clanRoom.users[user.id]) {
+            for (const connection of user.connections) {
+                user.leaveRoom(clanRoom, connection);
+            }
+        }
+    }
+
+    // Log the action and send notifications
+    const leaveTime = Chat.toTimestamp(new Date()).split(' ')[1];
+    this.globalModlog('CLANLEAVE', user, `left ${clan.name}`);
+    sendClanMessage(clan.id, `${user.name} has left the clan at ${leaveTime}.`);
+
+    // Send confirmation to the user
+    const confirmationMessage = [
+        `You have successfully left clan ${clan.name}.`,
+        `You have lost your clan rank of ${ClanRankNames[member.rank]}.`,
+        `To join another clan, you'll need to be invited using /claninvite.`
+    ].join(' ');
+
+    return this.sendReply(confirmationMessage);
+},
 };
