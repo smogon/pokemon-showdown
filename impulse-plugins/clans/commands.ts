@@ -273,9 +273,7 @@ export const commands: Chat.Commands = {
 	
 async clanauth(target, room, user) {
     // Don't allow broadcasting for popups
-    if (this.broadcasting) {
-        throw new Chat.ErrorMessage(`This command can't be broadcast.`);
-    }
+	 if (!this.runBroadcast()) return;
 
     let targetClan;
     if (!target) {
