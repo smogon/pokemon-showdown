@@ -361,6 +361,6 @@ async clanauth(target, room, user) {
 
     popupContent.push(`</div>`);
 
-    return this.popup(`${popupContent.join('')} ${targetClan.name} Authority`);
+    return this.sendMinipage(`${popupContent.join('')} ${targetClan.name} Authority`);
 },
 };
