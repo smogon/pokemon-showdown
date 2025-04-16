@@ -180,8 +180,15 @@ export const commands: Chat.Commands = {
             const output = clans.map(clan => {
                 const clanRoom = Rooms.get(clan.id);
                 const roomStatus = clanRoom ? 'Active' : 'Inactive';
-                return `${clan.name} - Leader: ${Users.get(clan.leader)?.name || clan.leader} ` +
+                let clanDisplay = `${clan.name} - Leader: ${Users.get(clan.leader)?.name || clan.leader} ` +
                     `(${clan.members.length} members, ${clan.points} points) [${roomStatus}]`;
+                
+                // Add icon indicator if clan has one
+                if (clan.icon) {
+                    clanDisplay = `<img src="${Chat.escapeHTML(clan.icon)}" width="16" height="16" alt="Icon" /> ${clanDisplay}`;
+                }
+                
+                return clanDisplay;
             }).join('<br />');
             return this.sendReplyBox(`<strong>Clans:</strong><br />` + output);
         }
@@ -190,9 +197,9 @@ export const commands: Chat.Commands = {
         const clan = clans.find(c => c.id === clanId);
         if (!clan) {
             return this.errorReply(`Clan "${target}" not found.`);
-        }
+		  }
 
-        const members = clan.members.map(member => {
+		const members = clan.members.map(member => {
             const username = Users.get(member.id)?.name || member.id;
             return `${username} (${ClanRankNames[member.rank]})`;
         }).join(', ');
@@ -201,29 +208,46 @@ export const commands: Chat.Commands = {
         const roomStatus = clanRoom ? 'Active' : 'Inactive';
 
         const output = [
-            `<strong>Clan: ${Chat.escapeHTML(clan.name)}</strong>`,
+            `<strong>Clan: ${Chat.escapeHTML(clan.name)}</strong>`
+        ];
+
+        // Add icon if exists
+        if (clan.icon) {
+            output.push(`<img src="${Chat.escapeHTML(clan.icon)}" width="32" height="32" alt="${Chat.escapeHTML(clan.name)} Icon" />`);
+        }
+
+        output.push(
             `Leader: ${Users.get(clan.leader)?.name || clan.leader}`,
             `Members (${clan.members.length}): ${members}`,
-            `Points: ${clan.points}`, // Display points
+            `Points: ${clan.points}`,
             `Room Status: ${roomStatus}`,
             `Created: ${Chat.toTimestamp(new Date(clan.createdAt))}`
-        ].join('<br />');
+        );
 
-        return this.sendReplyBox(output);
+        // Add description if exists
+        if (clan.description) {
+            output.push(`Description: ${Chat.escapeHTML(clan.description)}`);
+        }
+
+        return this.sendReplyBox(output.join('<br />'));
     },
 
-	clanshelp() {
-    this.runBroadcast();
-    const helpMessage = [
-        `<strong>Clan System Commands:</strong>`,
-        `</code>/createclan [name], [leader]</code> - Creates a new clan. Requires: &`,
-        `</code>/deleteclan [name]</code> - Deletes an existing clan. Requires: &`,
-        `</code>/clanrank [username], [rank]</code> - Changes a user's rank in their clan. Ranks: Leader, Deputy, Senior, Member.`,
-        `</code>/claninvite [username]</code> - Invites a user to your clan. Requires: Leader or Deputy`,
-        `</code>/clanaccept [invite code]</code> - Accepts a pending clan invite.`,
-        `</code>/clans</code> - Lists all clans.`,
-        `</code>/clans [clan name]</code> - Shows info about a specific clan.`,
-    ].map(line => Chat.html`${line}`).join(`<br />`);
-    return this.sendReplyBox(helpMessage);
-},
+    clanshelp() {
+        this.runBroadcast();
+        const helpMessage = [
+            `<strong>Clan System Commands:</strong>`,
+            `</code>/createclan [name], [leader]</code> - Creates a new clan. Requires: &`,
+            `</code>/deleteclan [name]</code> - Deletes an existing clan. Requires: &`,
+            `</code>/clanrank [username], [rank]</code> - Changes a user's rank in their clan. Ranks: Leader, Deputy, Senior, Member.`,
+            `</code>/claninvite [username]</code> - Invites a user to your clan. Requires: Leader or Deputy`,
+            `</code>/clanaccept [invite code]</code> - Accepts a pending clan invite.`,
+            `</code>/setclanicon [clan name], [icon URL]</code> - Sets your clan's icon. Requires: Leader`,
+            `</code>/removeclanicon [clan name]</code> - Removes your clan's icon. Requires: Leader`,
+            `</code>/setclandesc [clan name], [description]</code> - Sets your clan's description. Requires: Leader`,
+            `</code>/removeclandesc [clan name]</code> - Removes your clan's description. Requires: Leader`,
+            `</code>/clans</code> - Lists all clans.`,
+            `</code>/clans [clan name]</code> - Shows info about a specific clan.`,
+        ].map(line => Chat.html`${line}`).join(`<br />`);
+        return this.sendReplyBox(helpMessage);
+    },
 };
