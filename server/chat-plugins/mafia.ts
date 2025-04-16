@@ -2352,7 +2352,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
-			if (game.phase !== 'signups') throw new Chat.ErrorMessage(`Signups are already closed.`);
+			if (game.started) throw new Chat.ErrorMessage(`The game already started.`);
 			const num = parseInt(target);
 			if (isNaN(num) || num > 50 || num < 2) return this.parse('/help mafia playercap');
 			if (num < game.playerCount) {
@@ -2852,6 +2852,9 @@ export const commands: Chat.ChatCommands = {
 			const targetUser = Users.get(target);
 			if (!targetUser) {
 				throw new Chat.ErrorMessage(`The user "${target}" was not found.`);
+			}
+			if (game.playerCount >= game.playerCap) {
+				throw new Chat.ErrorMessage(`The game is full. Please change the playercap first.`);
 			}
 			game.join(targetUser, user, cmd === 'forceadd');
 		},
