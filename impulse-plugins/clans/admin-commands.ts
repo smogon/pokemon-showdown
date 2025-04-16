@@ -12,7 +12,8 @@ function sendClanMessage(clanId: ID, message: string) {
 
 export const commands: Chat.Commands = {
     clanadmin: {
-        async create(target, room, user) {
+        create: 'createclan',
+        async createclan(target, room, user) {
             this.checkCan('bypassall');
             if (!target) {
                 throw new Chat.ErrorMessage(`/clanadmin create [clan name],[leader username] - Creates a new clan.`);
@@ -79,7 +80,8 @@ export const commands: Chat.Commands = {
             }
         },
 
-        async delete(target, room, user) {
+        delete: 'deleteclan',
+        async deleteclan(target, room, user) {
             this.checkCan('bypassall');
             if (!target) {
                 throw new Chat.ErrorMessage(`/clanadmin delete [clan name] - Deletes a clan.`);
@@ -90,7 +92,9 @@ export const commands: Chat.Commands = {
                 throw new Chat.ErrorMessage(`Clan "${target}" not found.`);
             }
             try {
+                // Announce deletion in clan room before destroying it
                 sendClanMessage(clan.id, `The clan ${clan.name} has been deleted by ${user.name}.`);
+                // Delete clan room if it exists
                 const clanRoom = Rooms.get(clanId);
                 if (clanRoom) {
                     clanRoom.destroy();
@@ -103,91 +107,73 @@ export const commands: Chat.Commands = {
             }
         },
 
-        async givepoints(target, room, user) {
+        givepoints(target, room, user) {
             this.checkCan('bypassall');
             if (!target) {
                 throw new Chat.ErrorMessage(`/clanadmin givepoints [clan name],[points] - Gives points to a clan.`);
             }
             const [clanName, pointsStr] = target.split(',').map(param => param.trim());
             const points = Number(pointsStr);
-
             if (!clanName || isNaN(points) || points <= 0) {
                 throw new Chat.ErrorMessage(`Usage: /clanadmin givepoints [clan name],[points]. Points must be a positive number.`);
             }
-
             const clan = await clanDatabase.getClan(toID(clanName));
             if (!clan) {
                 throw new Chat.ErrorMessage(`Clan "${clanName}" not found.`);
             }
-
             clan.points += points;
             await clanDatabase.saveClan(clan);
-
             this.globalModlog('GIVEPOINTS', null, `${points} points to ${clan.name} (by ${user.name})`);
             sendClanMessage(clan.id, `${user.name} has given ${points} points to the clan. Total points: ${clan.points}`);
             return this.sendReply(`Successfully gave ${points} points to clan "${clan.name}". Total points: ${clan.points}`);
         },
 
-        async takepoints(target, room, user) {
+        takepoints(target, room, user) {
             this.checkCan('bypassall');
             if (!target) {
                 throw new Chat.ErrorMessage(`/clanadmin takepoints [clan name],[points] - Deducts points from a clan.`);
             }
             const [clanName, pointsStr] = target.split(',').map(param => param.trim());
             const points = Number(pointsStr);
-
             if (!clanName || isNaN(points) || points <= 0) {
                 throw new Chat.ErrorMessage(`Usage: /clanadmin takepoints [clan name],[points]. Points must be a positive number.`);
             }
-
             const clan = await clanDatabase.getClan(toID(clanName));
             if (!clan) {
                 throw new Chat.ErrorMessage(`Clan "${clanName}" not found.`);
             }
-
             if (clan.points - points < 0) {
                 throw new Chat.ErrorMessage(`Cannot deduct ${points} points from clan "${clan.name}" as it would result in negative points.`);
             }
-
             clan.points -= points;
             await clanDatabase.saveClan(clan);
-
             this.globalModlog('TAKEPOINTS', null, `${points} points from ${clan.name} (by ${user.name})`);
             sendClanMessage(clan.id, `${user.name} has deducted ${points} points from the clan. Total points: ${clan.points}`);
             return this.sendReply(`Successfully deducted ${points} points from clan "${clan.name}". Total points: ${clan.points}`);
         },
 
-        async seticon(target, room, user) {
+        seticon: 'setclanicon',
+        async setclanicon(target, room, user) {
             if (!target) {
                 throw new Chat.ErrorMessage(`/clanadmin seticon [clan name], [icon URL] - Sets a clan's icon. Requires: Clan Leader or Deputy`);
             }
-
             const [clanName, iconUrl] = target.split(',').map(param => param.trim());
             if (!clanName || !iconUrl) {
                 throw new Chat.ErrorMessage(`Usage: /clanadmin seticon [clan name], [icon URL]`);
             }
-
             const clan = await clanDatabase.getClan(toID(clanName));
             if (!clan) {
                 throw new Chat.ErrorMessage(`Clan "${clanName}" not found.`);
             }
-
             const member = clan.members.find(m => m.id === toID(user.id));
-            // First check if user is a member of the clan
-            if (!member) {
-                throw new Chat.ErrorMessage(`You must be a member of clan "${clan.name}" to modify its icon.`);
-            }
-            // Then check if they have the required rank
-            if (member.rank !== ClanRank.LEADER && member.rank !== ClanRank.DEPUTY) {
+            if (!member || (member.rank !== ClanRank.LEADER && member.rank !== ClanRank.DEPUTY)) {
                 throw new Chat.ErrorMessage(`You must be a clan leader or deputy to set the clan icon.`);
             }
-
             try {
                 const success = await clanManager.setClanIcon(clan.id, iconUrl);
                 if (!success) {
                     throw new Error('Failed to set clan icon.');
                 }
-
                 const clanRoom = Rooms.get(clan.id);
                 if (clanRoom) {
                     const iconHtml = `<div id="clan-icon"><img src="${Chat.escapeHTML(iconUrl)}" width="32" height="32" alt="${Chat.escapeHTML(clan.name)} Icon" /></div>`;
@@ -197,7 +183,6 @@ export const commands: Chat.Commands = {
                     );
                     clanRoom.saveSettings();
                 }
-
                 this.globalModlog('SETCLANICON', user, `${clan.name}`);
                 sendClanMessage(clan.id, `${user.name} has set a new clan icon.`);
                 return this.sendReply(`Successfully set icon for clan "${clan.name}".`);
@@ -206,32 +191,24 @@ export const commands: Chat.Commands = {
             }
         },
 
-        async removeicon(target, room, user) {
+        removeicon: 'removeclanicon',
+        async removeclanicon(target, room, user) {
             if (!target) {
                 throw new Chat.ErrorMessage(`/clanadmin removeicon [clan name] - Removes a clan's icon. Requires: Clan Leader or Deputy`);
             }
-
             const clan = await clanDatabase.getClan(toID(target));
             if (!clan) {
                 throw new Chat.ErrorMessage(`Clan "${target}" not found.`);
             }
-
             const member = clan.members.find(m => m.id === toID(user.id));
-            // First check if user is a member of the clan
-            if (!member) {
-                throw new Chat.ErrorMessage(`You must be a member of clan "${clan.name}" to remove its icon.`);
-            }
-            // Then check if they have the required rank
-            if (member.rank !== ClanRank.LEADER && member.rank !== ClanRank.DEPUTY) {
+            if (!member || (member.rank !== ClanRank.LEADER && member.rank !== ClanRank.DEPUTY)) {
                 throw new Chat.ErrorMessage(`You must be a clan leader or deputy to remove the clan icon.`);
             }
-
             try {
                 const success = await clanManager.setClanIcon(clan.id, undefined);
                 if (!success) {
                     throw new Error('Failed to remove clan icon.');
                 }
-
                 const clanRoom = Rooms.get(clan.id);
                 if (clanRoom) {
                     clanRoom.settings.introMessage = clanRoom.settings.introMessage.replace(
@@ -240,7 +217,6 @@ export const commands: Chat.Commands = {
                     );
                     clanRoom.saveSettings();
                 }
-
                 this.globalModlog('REMOVECLANICON', user, `${clan.name}`);
                 sendClanMessage(clan.id, `${user.name} has removed the clan icon.`);
                 return this.sendReply(`Successfully removed icon from clan "${clan.name}".`);
@@ -249,37 +225,28 @@ export const commands: Chat.Commands = {
             }
         },
 
-        async setdesc(target, room, user) {
+        setdesc: 'setclandesc',
+        async setclandesc(target, room, user) {
             if (!target) {
                 throw new Chat.ErrorMessage(`/clanadmin setdesc [clan name], [description] - Sets a clan's description. Requires: Clan Leader or Deputy`);
             }
-
             const [clanName, description] = target.split(',').map(param => param.trim());
             if (!clanName || !description) {
                 throw new Chat.ErrorMessage(`Usage: /clanadmin setdesc [clan name], [description]`);
             }
-
             const clan = await clanDatabase.getClan(toID(clanName));
             if (!clan) {
                 throw new Chat.ErrorMessage(`Clan "${clanName}" not found.`);
             }
-
             const member = clan.members.find(m => m.id === toID(user.id));
-            // First check if user is a member of the clan
-            if (!member) {
-                throw new Chat.ErrorMessage(`You must be a member of clan "${clan.name}" to modify its description.`);
-            }
-            // Then check if they have the required rank
-            if (member.rank !== ClanRank.LEADER && member.rank !== ClanRank.DEPUTY) {
+            if (!member || (member.rank !== ClanRank.LEADER && member.rank !== ClanRank.DEPUTY)) {
                 throw new Chat.ErrorMessage(`You must be a clan leader or deputy to set the clan description.`);
             }
-
             try {
                 const success = await clanManager.setClanDescription(clan.id, description);
                 if (!success) {
                     throw new Error('Failed to set clan description.');
                 }
-
                 const clanRoom = Rooms.get(clan.id);
                 if (clanRoom) {
                     clanRoom.settings.introMessage = clanRoom.settings.introMessage.replace(
@@ -288,7 +255,6 @@ export const commands: Chat.Commands = {
                     );
                     clanRoom.saveSettings();
                 }
-
                 this.globalModlog('SETCLANDESC', user, `${clan.name}`);
                 sendClanMessage(clan.id, `${user.name} has set a new clan description.`);
                 return this.sendReply(`Successfully set description for clan "${clan.name}".`);
@@ -297,32 +263,24 @@ export const commands: Chat.Commands = {
             }
         },
 
-        async removedesc(target, room, user) {
+        removedesc: 'removeclandesc',
+        async removeclandesc(target, room, user) {
             if (!target) {
                 throw new Chat.ErrorMessage(`/clanadmin removedesc [clan name] - Removes a clan's description. Requires: Clan Leader or Deputy`);
             }
-
             const clan = await clanDatabase.getClan(toID(target));
             if (!clan) {
                 throw new Chat.ErrorMessage(`Clan "${target}" not found.`);
             }
-
             const member = clan.members.find(m => m.id === toID(user.id));
-            // First check if user is a member of the clan
-            if (!member) {
-                throw new Chat.ErrorMessage(`You must be a member of clan "${clan.name}" to remove its description.`);
-            }
-            // Then check if they have the required rank
-            if (member.rank !== ClanRank.LEADER && member.rank !== ClanRank.DEPUTY) {
+            if (!member || (member.rank !== ClanRank.LEADER && member.rank !== ClanRank.DEPUTY)) {
                 throw new Chat.ErrorMessage(`You must be a clan leader or deputy to remove the clan description.`);
             }
-
             try {
                 const success = await clanManager.setClanDescription(clan.id, undefined);
                 if (!success) {
                     throw new Error('Failed to remove clan description.');
                 }
-
                 const clanRoom = Rooms.get(clan.id);
                 if (clanRoom) {
                     clanRoom.settings.introMessage = clanRoom.settings.introMessage.replace(
@@ -331,7 +289,6 @@ export const commands: Chat.Commands = {
                     );
                     clanRoom.saveSettings();
                 }
-
                 this.globalModlog('REMOVECLANDESC', user, `${clan.name}`);
                 sendClanMessage(clan.id, `${user.name} has removed the clan description.`);
                 return this.sendReply(`Successfully removed description from clan "${clan.name}".`);
@@ -340,22 +297,110 @@ export const commands: Chat.Commands = {
             }
         },
 
+        close: 'clanclose',
+        async clanclose(target, room, user) {
+            if (!room) {
+                throw new Chat.ErrorMessage(`This command can only be used in a clan room.`);
+            }
+            const clan = await clanDatabase.getClan(room.roomid);
+            if (!clan) {
+                throw new Chat.ErrorMessage(`This command can only be used in a clan room.`);
+            }
+            const member = clan.members.find(m => m.id === toID(user.id));
+            const hasPermission = this.checkCan('bypassall') || 
+                (member && (member.rank === ClanRank.LEADER || member.rank === ClanRank.DEPUTY));
+            
+            if (!hasPermission) {
+                throw new Chat.ErrorMessage(`You must be a clan leader, deputy, or admin to close the clan room.`);
+            }
+            const isRoomClosed = await clanManager.isClanRoomClosed(clan.id);
+            if (isRoomClosed) {
+                throw new Chat.ErrorMessage(`The clan room is already closed.`);
+            }
+            room.settings.isPrivate = true;
+            room.settings.modjoin = 'clan';
+            room.saveSettings();
+            await clanManager.setClanRoomClosed(clan.id, true);
+            room.auth.checkPersonal = function(user: User) {
+                if (user.can('bypassall')) return '+';
+                const userId = toID(user.id);
+                const clan = clanDatabase.getAllClans().find(c => 
+                    c.id === this.room.roomid && 
+                    c.members.some(m => m.id === userId)
+                );
+                if (clan) {
+                    const member = clan.members.find(m => m.id === userId);
+                    if (member) {
+                        switch (member.rank) {
+                            case ClanRank.LEADER: return '#';
+                            case ClanRank.DEPUTY: return '@';
+                            case ClanRank.SENIOR: return '%';
+                            case ClanRank.MEMBER: return '+';
+                        }
+                    }
+                }
+                return false;
+            };
+            for (const userId in room.users) {
+                const roomUser = Users.get(userId);
+                if (!roomUser) continue;
+                const isMember = clan.members.some(m => m.id === toID(userId));
+                const isAdmin = roomUser.can('bypassall');
+                if (!isMember && !isAdmin) {
+                    roomUser.leaveRoom(room);
+                }
+            }
+            this.modlog('CLANCLOSE', null, `by ${user.name}`);
+            this.addModAction(`${user.name} closed the clan room to non-members.`);
+            return this.sendReply(`The clan room has been closed. Only clan members and administrators can join.`);
+        },
+
+        open: 'clanopen',
+        async clanopen(target, room, user) {
+            if (!room) {
+                throw new Chat.ErrorMessage(`This command can only be used in a clan room.`);
+            }
+            const clan = await clanDatabase.getClan(room.roomid);
+            if (!clan) {
+                throw new Chat.ErrorMessage(`This command can only be used in a clan room.`);
+            }
+            const member = clan.members.find(m => m.id === toID(user.id));
+            const hasPermission = this.checkCan('bypassall') || 
+                (member && (member.rank === ClanRank.LEADER || member.rank === ClanRank.DEPUTY));
+            
+            if (!hasPermission) {
+                throw new Chat.ErrorMessage(`You must be a clan leader, deputy, or admin to open the clan room.`);
+            }
+            const isRoomClosed = await clanManager.isClanRoomClosed(clan.id);
+            if (!isRoomClosed) {
+                throw new Chat.ErrorMessage(`The clan room is already open.`);
+            }
+            room.settings.isPrivate = true;
+            room.settings.modjoin = '+';
+            room.saveSettings();
+            await clanManager.setClanRoomClosed(clan.id, false);
+            delete room.auth.checkPersonal;
+            this.modlog('CLANOPEN', null, `by ${user.name}`);
+            this.addModAction(`${user.name} opened the clan room to all users.`);
+            return this.sendReply(`The clan room has been opened. Users with voice or higher can now join.`);
+        },
+
         help(target, room, user) {
-            if (!this.runBroadcast()) return;
-            this.sendReplyBox(
-                `<div class="infobox">` +
-                `<center><strong>Clan Admin Commands:</strong></center><br/>` +
+            this.sendReply(
+                `|html|<details><summary><strong>Clan Admin Commands:</strong></summary>` +
                 `<ul>` +
-                `<li><code>/clanadmin create [clan name],[leader]</code> - Creates a new clan with the specified leader. Requires: &</li>` +
-                `<li><code>/clanadmin delete [clan name]</code> - Deletes a clan. Requires: &</li>` +
-                `<li><code>/clanadmin givepoints [clan name],[points]</code> - Gives points to a clan. Requires: &</li>` +
-                `<li><code>/clanadmin takepoints [clan name],[points]</code> - Takes points from a clan. Requires: &</li>` +
-                `<li><code>/clanadmin seticon [clan name],[icon URL]</code> - Sets a clan's icon. Requires: Clan Leader or Deputy</li>` +
-                `<li><code>/clanadmin removeicon [clan name]</code> - Removes a clan's icon. Requires: Clan Leader or Deputy</li>` +
-                `<li><code>/clanadmin setdesc [clan name],[description]</code> - Sets a clan's description. Requires: Clan Leader or Deputy</li>` +
-                `<li><code>/clanadmin removedesc [clan name]</code> - Removes a clan's description. Requires: Clan Leader or Deputy</li>` +
+                `<li><code>/clanadmin create [name], [leader]</code> - Creates a new clan. Requires: &</li>` +
+                `<li><code>/clanadmin delete [name]</code> - Deletes a clan. Requires: &</li>` +
+                `<li><code>/clanadmin givepoints [clan], [amount]</code> - Gives points to a clan. Requires: &</li>` +
+                `<li><code>/clanadmin takepoints [clan], [amount]</code> - Takes points from a clan. Requires: &</li>` +
+                `<li><code>/clanadmin seticon [clan], [url]</code> - Sets a clan's icon. Requires: Clan Leader/Deputy</li>` +
+                `<li><code>/clanadmin removeicon [clan]</code> - Removes a clan's icon. Requires: Clan Leader/Deputy</li>` +
+                `<li><code>/clanadmin setdesc [clan], [description]</code> - Sets a clan's description. Requires: Clan Leader/Deputy</li>` +
+                `<li><code>/clanadmin removedesc [clan]</code> - Removes a clan's description. Requires: Clan Leader/Deputy</li>` +
+                `<li><code>/clanadmin close</code> - Closes the clan room to non-members. Requires: Clan Leader/Deputy/&</li>` +
+                `<li><code>/clanadmin open</code> - Opens the clan room to all users. Requires: Clan Leader/Deputy/&</li>` +
                 `</ul>` +
-                `</div>`
+                `</details>`
             );
         },
     },
