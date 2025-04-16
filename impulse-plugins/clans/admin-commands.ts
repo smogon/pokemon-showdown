@@ -164,7 +164,7 @@ export const commands: Chat.Commands = {
 
     async setclanicon(target, room, user) {
         if (!target) {
-            throw new Chat.ErrorMessage(`/setclanicon [clan name], [icon URL] - Sets a clan's icon. Requires: Clan Leader or &`);
+            throw new Chat.ErrorMessage(`/setclanicon [clan name], [icon URL] - Sets a clan's icon. Requires: Clan Leader or Deputy`);
         }
 
         const [clanName, iconUrl] = target.split(',').map(param => param.trim());
@@ -178,11 +178,9 @@ export const commands: Chat.Commands = {
         }
 
         // Check permissions
-        if (!this.can('bypassall')) {
-            const member = clan.members.find(m => m.id === toID(user.id));
-            if (!member || member.rank !== ClanRank.LEADER) {
-                throw new Chat.ErrorMessage(`You must be the clan leader to set the clan icon.`);
-            }
+        const member = clan.members.find(m => m.id === toID(user.id));
+        if (!member || (member.rank !== ClanRank.LEADER && member.rank !== ClanRank.DEPUTY)) {
+            throw new Chat.ErrorMessage(`You must be a clan leader or deputy to set the clan icon.`);
         }
 
         try {
@@ -212,7 +210,7 @@ export const commands: Chat.Commands = {
 
     async removeclanicon(target, room, user) {
         if (!target) {
-            throw new Chat.ErrorMessage(`/removeclanicon [clan name] - Removes a clan's icon. Requires: Clan Leader or &`);
+            throw new Chat.ErrorMessage(`/removeclanicon [clan name] - Removes a clan's icon. Requires: Clan Leader or Deputy`);
         }
 
         const clan = await clanDatabase.getClan(toID(target));
@@ -221,11 +219,9 @@ export const commands: Chat.Commands = {
         }
 
         // Check permissions
-        if (!this.can('bypassall')) {
-            const member = clan.members.find(m => m.id === toID(user.id));
-            if (!member || member.rank !== ClanRank.LEADER) {
-                throw new Chat.ErrorMessage(`You must be the clan leader to remove the clan icon.`);
-            }
+        const member = clan.members.find(m => m.id === toID(user.id));
+        if (!member || (member.rank !== ClanRank.LEADER && member.rank !== ClanRank.DEPUTY)) {
+            throw new Chat.ErrorMessage(`You must be a clan leader or deputy to remove the clan icon.`);
         }
 
         try {
@@ -254,7 +250,7 @@ export const commands: Chat.Commands = {
 
     async setclandesc(target, room, user) {
         if (!target) {
-            throw new Chat.ErrorMessage(`/setclandesc [clan name], [description] - Sets a clan's description. Requires: Clan Leader or &`);
+            throw new Chat.ErrorMessage(`/setclandesc [clan name], [description] - Sets a clan's description. Requires: Clan Leader or Deputy`);
         }
 
         const [clanName, description] = target.split(',').map(param => param.trim());
@@ -268,11 +264,9 @@ export const commands: Chat.Commands = {
         }
 
         // Check permissions
-        if (!this.can('bypassall')) {
-            const member = clan.members.find(m => m.id === toID(user.id));
-            if (!member || member.rank !== ClanRank.LEADER) {
-                throw new Chat.ErrorMessage(`You must be the clan leader to set the clan description.`);
-            }
+        const member = clan.members.find(m => m.id === toID(user.id));
+        if (!member || (member.rank !== ClanRank.LEADER && member.rank !== ClanRank.DEPUTY)) {
+            throw new Chat.ErrorMessage(`You must be a clan leader or deputy to set the clan description.`);
         }
 
         try {
@@ -301,7 +295,7 @@ export const commands: Chat.Commands = {
 
     async removeclandesc(target, room, user) {
         if (!target) {
-            throw new Chat.ErrorMessage(`/removeclandesc [clan name] - Removes a clan's description. Requires: Clan Leader or &`);
+            throw new Chat.ErrorMessage(`/removeclandesc [clan name] - Removes a clan's description. Requires: Clan Leader or Deputy`);
         }
 
         const clan = await clanDatabase.getClan(toID(target));
@@ -310,11 +304,9 @@ export const commands: Chat.Commands = {
         }
 
         // Check permissions
-        if (!this.can('bypassall')) {
-            const member = clan.members.find(m => m.id === toID(user.id));
-            if (!member || member.rank !== ClanRank.LEADER) {
-                throw new Chat.ErrorMessage(`You must be the clan leader to remove the clan description.`);
-            }
+        const member = clan.members.find(m => m.id === toID(user.id));
+        if (!member || (member.rank !== ClanRank.LEADER && member.rank !== ClanRank.DEPUTY)) {
+            throw new Chat.ErrorMessage(`You must be a clan leader or deputy to remove the clan description.`);
         }
 
         try {

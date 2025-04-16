@@ -232,22 +232,42 @@ export const commands: Chat.Commands = {
         return this.sendReplyBox(output.join('<br />'));
     },
 
-    clanshelp() {
-        this.runBroadcast();
-        const helpMessage = [
-            `<strong>Clan System Commands:</strong>`,
-            `</code>/createclan [name], [leader]</code> - Creates a new clan. Requires: &`,
-            `</code>/deleteclan [name]</code> - Deletes an existing clan. Requires: &`,
-            `</code>/clanrank [username], [rank]</code> - Changes a user's rank in their clan. Ranks: Leader, Deputy, Senior, Member.`,
-            `</code>/claninvite [username]</code> - Invites a user to your clan. Requires: Leader or Deputy`,
-            `</code>/clanaccept [invite code]</code> - Accepts a pending clan invite.`,
-            `</code>/setclanicon [clan name], [icon URL]</code> - Sets your clan's icon. Requires: Leader`,
-            `</code>/removeclanicon [clan name]</code> - Removes your clan's icon. Requires: Leader`,
-            `</code>/setclandesc [clan name], [description]</code> - Sets your clan's description. Requires: Leader`,
-            `</code>/removeclandesc [clan name]</code> - Removes your clan's description. Requires: Leader`,
-            `</code>/clans</code> - Lists all clans.`,
-            `</code>/clans [clan name]</code> - Shows info about a specific clan.`,
-        ].map(line => Chat.html`${line}`).join(`<br />`);
-        return this.sendReplyBox(helpMessage);
-    },
+	async viewclaninvite(target, room, user) {
+    if (!user.id) {
+        throw new Chat.ErrorMessage(`You must be logged in to view clan invites.`);
+    }
+
+    const invite = await clanManager.getPendingInvite(user.id);
+    if (!invite) {
+        throw new Chat.ErrorMessage(`You have no pending clan invites.`);
+    }
+
+    const clan = await clanDatabase.getClan(invite.clanId);
+    if (!clan) {
+        // Clean up orphaned invite if clan no longer exists
+        await clanInviteDatabase.removeInvite(invite.id);
+        throw new Chat.ErrorMessage(`The clan associated with your invite no longer exists.`);
+    }
+
+    const inviter = Users.get(invite.inviterId);
+    const inviterName = inviter?.name || invite.inviterId;
+
+    const expiresIn = invite.expiresAt - Date.now();
+    const hoursLeft = Math.floor(expiresIn / (60 * 60 * 1000));
+    const minutesLeft = Math.floor((expiresIn % (60 * 60 * 1000)) / (60 * 1000));
+
+    const output = [
+        `<div class="infobox">`,
+        `<strong>Your Pending Clan Invite:</strong><br />`,
+        `<strong>Clan:</strong> ${Chat.escapeHTML(clan.name)}<br />`,
+        `<strong>Invited By:</strong> ${Chat.escapeHTML(inviterName)}<br />`,
+        `<strong>Expires In:</strong> ${hoursLeft} hours and ${minutesLeft} minutes<br />`,
+        `<strong>Invite ID:</strong> ${invite.id}<br />`,
+        `<br />`,
+        `To accept this invite, use: /clanaccept ${invite.id}`,
+        `</div>`
+    ].join('');
+
+    this.sendReplyBox(`|raw|${output}`);
+	},
 };
