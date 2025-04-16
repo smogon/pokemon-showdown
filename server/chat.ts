@@ -494,6 +494,11 @@ export class PageContext extends MessageContext {
 			this.setHTML(res);
 			res = undefined;
 		}
+		if (res === Rooms.RETRY_AFTER_LOGIN) {
+			this.setHTML(
+				`Please log in before accessing this page (don't worry, it will load automatically once you do so).`
+			);
+		}
 		return res;
 	}
 }
