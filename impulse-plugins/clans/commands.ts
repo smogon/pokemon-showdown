@@ -419,4 +419,103 @@ async clanauth(target, room, user) {
     sendClanMessage(clan.id, `${user.name} has sent a clan call: ${target}`);
     return this.sendReply(`Your message has been sent to ${notifiedCount} online clan member${notifiedCount !== 1 ? 's' : ''}.`);
 },
+
+	// Add this to the existing commands object in commands.ts
+
+async clanlist(target, room, user) {
+    // Allow broadcasting this command
+    this.runBroadcast();
+
+    const clans = clanDatabase.getAllClans();
+    if (!clans.length) {
+        return this.sendReply("There are no clans.");
+    }
+
+    // Sort clans by points (highest to lowest)
+    const sortedClans = [...clans].sort((a, b) => b.points - a.points);
+
+    // Define table headers
+    const headers = ['Rank', 'Clan', 'Leader', 'Members', 'Points', 'Status'];
+
+    // Create data rows
+    const dataRows = sortedClans.map((clan, index) => {
+        const leader = Users.get(clan.leader)?.name || clan.leader;
+        const clanRoom = Rooms.get(clan.id);
+        const roomStatus = clanRoom ? '<span style="color: green">Active</span>' : '<span style="color: gray">Inactive</span>';
+        
+        // Create clan name with icon if exists
+        let clanDisplay = Chat.escapeHTML(clan.name);
+        if (clan.icon) {
+            clanDisplay = `<img src="${Chat.escapeHTML(clan.icon)}" width="16" height="16" alt="Icon" style="vertical-align: middle; margin-right: 5px;" /> ${clanDisplay}`;
+        }
+
+        return [
+            `#${index + 1}`,
+            clanDisplay,
+            Impulse.nameColor(leader, true),
+            String(clan.members.length),
+            String(clan.points),
+            roomStatus
+        ];
+    });
+
+    // Generate the themed table
+    const tableHtml = Impulse.generateThemedTable(
+        `${Impulse.serverName} Clan Rankings`,
+        headers,
+        dataRows,
+       /* 'Prince Sky'*/
+    );
+
+    // Add custom styling for the table
+/*    const customStyle = `
+        <style>
+            .themed-table-container {
+                background: rgba(240, 240, 240, 0.8);
+                border-radius: 8px;
+                padding: 10px;
+                margin: 5px;
+            }
+            .themed-table-title {
+                text-align: center;
+                color: #333;
+                margin-bottom: 10px;
+                font-size: 1.2em;
+            }
+            .themed-table {
+                width: 100%;
+                background: white;
+                border-radius: 5px;
+                overflow: hidden;
+            }
+            .themed-table-header {
+                background: #4CAF50;
+                color: white;
+            }
+            .themed-table-header th {
+                padding: 10px;
+                text-align: left;
+            }
+            .themed-table-row td {
+                padding: 8px;
+                border-bottom: 1px solid #ddd;
+            }
+            .themed-table-row:nth-child(even) {
+                background: #f9f9f9;
+            }
+            .themed-table-row:hover {
+                background: #f5f5f5;
+            }
+            .themed-table-by {
+                text-align: right;
+                font-style: italic;
+                color: #666;
+                font-size: 0.9em;
+                margin: 5px 0;
+            }
+        </style>
+    `;*/
+
+    return this.sendReplyBox(tableHtml);
+},
 };
