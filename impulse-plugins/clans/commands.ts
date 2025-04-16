@@ -407,7 +407,7 @@ async clanauth(target, room, user) {
     for (const member of clan.members) {
         const targetUser = Users.get(member.id);
         if (targetUser?.connected && targetUser.id !== user.id) { // Don't send to the caller
-            targetUser.popup(`|raw|${popupContent}`);
+            targetUser.popup(`|uhtml|${popupContent}`);
             notifiedCount++;
         }
     }
