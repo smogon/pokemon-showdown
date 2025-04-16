@@ -19,9 +19,16 @@ class ClanDatabase {
 
             const clansData = JSON.parse(data);
             for (const clan of clansData) {
-                // Ensure backward compatibility by setting default points for existing clans
+                // Ensure backward compatibility by setting default values for existing clans
                 if (!clan.points) {
                     clan.points = 1000;
+                }
+                // Initialize new fields if they don't exist
+                if (!clan.hasOwnProperty('icon')) {
+                    clan.icon = undefined;
+                }
+                if (!clan.hasOwnProperty('description')) {
+                    clan.description = undefined;
                 }
                 this.clans.set(clan.id, clan);
             }
@@ -41,6 +48,13 @@ class ClanDatabase {
     }
 
     async saveClan(clan: ClanData): Promise<void> {
+        // Ensure the clan object has all required fields before saving
+        if (!clan.hasOwnProperty('icon')) {
+            clan.icon = undefined;
+        }
+        if (!clan.hasOwnProperty('description')) {
+            clan.description = undefined;
+        }
         this.clans.set(clan.id, clan);
         await this.saveClansToFile();
     }
