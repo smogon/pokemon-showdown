@@ -270,4 +270,97 @@ export const commands: Chat.Commands = {
 
     this.sendReplyBox(`|raw|${output}`);
 	},
+	
+async clanauth(target, room, user) {
+    // Don't allow broadcasting for popups
+    if (this.broadcasting) {
+        throw new Chat.ErrorMessage(`This command can't be broadcast.`);
+    }
+
+    let targetClan;
+    if (!target) {
+        // If no target specified, try to get the user's clan
+        targetClan = await clanDatabase.findClanByMemberId(user.id);
+        if (!targetClan) {
+            throw new Chat.ErrorMessage(`You are not in a clan. Use /clanauth [clan name] to view another clan's auth list.`);
+        }
+    } else {
+        // If target specified, try to find that clan
+        targetClan = await clanDatabase.getClan(toID(target));
+        if (!targetClan) {
+            throw new Chat.ErrorMessage(`Clan "${target}" not found.`);
+        }
+    }
+
+    // Sort members by rank (highest to lowest) and then by join date
+    const sortedMembers = [...targetClan.members].sort((a, b) => {
+        if (b.rank !== a.rank) return b.rank - a.rank;
+        return a.joinedAt - b.joinedAt;
+    });
+
+    // Group members by rank
+    const authByRank: { [key: number]: string[] } = {};
+    for (const member of sortedMembers) {
+        const username = Users.get(member.id)?.name || member.id;
+        if (!authByRank[member.rank]) authByRank[member.rank] = [];
+        authByRank[member.rank].push(username);
+    }
+
+    // Create the popup content with CSS styling
+    const popupContent = [`<div class="infobox">`];
+    
+    // Header with clan name and icon
+    popupContent.push(`<div style="text-align: center; margin-bottom: 10px;">`);
+    if (targetClan.icon) {
+        popupContent.push(`<img src="${Chat.escapeHTML(targetClan.icon)}" width="32" height="32" alt="Icon" style="vertical-align: middle; margin-right: 10px;" />`);
+    }
+    popupContent.push(`<h2 style="display: inline-block; margin: 0;">${Chat.escapeHTML(targetClan.name)} Authority</h2></div>`);
+
+    // Description if it exists
+    if (targetClan.description) {
+        popupContent.push(`<div style="text-align: center; margin-bottom: 10px; font-style: italic;">${Chat.escapeHTML(targetClan.description)}</div>`);
+    }
+
+    // Auth lists with styling
+    popupContent.push(`<div style="margin: 10px 0;">`);
+    if (authByRank[ClanRank.LEADER]?.length) {
+        popupContent.push(`<div style="margin: 5px 0;"><strong style="color: #6B1FA6;">Leader (#)</strong>: ${authByRank[ClanRank.LEADER].join(', ')}</div>`);
+    }
+    if (authByRank[ClanRank.DEPUTY]?.length) {
+        popupContent.push(`<div style="margin: 5px 0;"><strong style="color: #007AA3;">Deputies (@)</strong>: ${authByRank[ClanRank.DEPUTY].join(', ')}</div>`);
+    }
+    if (authByRank[ClanRank.SENIOR]?.length) {
+        popupContent.push(`<div style="margin: 5px 0;"><strong style="color: #44934A;">Seniors (%)</strong>: ${authByRank[ClanRank.SENIOR].join(', ')}</div>`);
+    }
+    if (authByRank[ClanRank.MEMBER]?.length) {
+        popupContent.push(`<div style="margin: 5px 0;"><strong style="color: #6E7175;">Members (+)</strong>: ${authByRank[ClanRank.MEMBER].join(', ')}</div>`);
+    }
+    popupContent.push(`</div>`);
+
+    // Statistics section
+    popupContent.push(`<div style="border-top: 1px solid #AAA; margin-top: 10px; padding-top: 10px;">`);
+    popupContent.push(`<strong>Statistics:</strong>`);
+    popupContent.push(`<div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 5px; margin-top: 5px;">`);
+    popupContent.push(`<div>Leaders: ${authByRank[ClanRank.LEADER]?.length || 0}</div>`);
+    popupContent.push(`<div>Deputies: ${authByRank[ClanRank.DEPUTY]?.length || 0}</div>`);
+    popupContent.push(`<div>Seniors: ${authByRank[ClanRank.SENIOR]?.length || 0}</div>`);
+    popupContent.push(`<div>Members: ${authByRank[ClanRank.MEMBER]?.length || 0}</div>`);
+    popupContent.push(`<div style="grid-column: span 2; text-align: center; margin-top: 5px;">`);
+    popupContent.push(`<strong>Total Members: ${sortedMembers.length}</strong>`);
+    popupContent.push(`</div></div></div>`);
+
+    // Points display
+    popupContent.push(`<div style="text-align: center; margin-top: 10px;">`);
+    popupContent.push(`<strong>Clan Points:</strong> ${targetClan.points}`);
+    popupContent.push(`</div>`);
+
+    // Created date
+    popupContent.push(`<div style="text-align: center; margin-top: 10px; font-size: 0.9em; color: #666;">`);
+    popupContent.push(`Created: ${Chat.toTimestamp(new Date(targetClan.createdAt))}`);
+    popupContent.push(`</div>`);
+
+    popupContent.push(`</div>`);
+
+    return this.sendMinipage(popupContent.join(''), `${targetClan.name} Authority`);
+},
 };
