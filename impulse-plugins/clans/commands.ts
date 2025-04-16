@@ -163,74 +163,106 @@ export const commands: Chat.Commands = {
             throw new Chat.ErrorMessage(error.message);
         }
     },
+	
+	async clans(target, room, user) {
+    this.runBroadcast();
 
-	clans(target, room, user) {
-        this.runBroadcast();
+    if (this.broadcasting) {
+        if (!this.canBroadcast()) return;
+    }
 
-        if (this.broadcasting) {
-            if (!this.canBroadcast()) return;
+    // If no target, show user's clan info
+    if (!target) {
+        const userClan = await clanDatabase.findClanByMemberId(user.id);
+        if (!userClan) {
+            return this.sendReply("You are not in a clan. Use /clanlist to see all clans.");
         }
+        return this.displayClanInfo(userClan, user.id);
+    }
 
-        const clans = clanDatabase.getAllClans();
-        if (!clans.length) {
-            return this.sendReply("There are no clans.");
+    // If target provided, show that clan's info
+    const targetClan = await clanDatabase.getClan(toID(target));
+    if (!targetClan) {
+        return this.errorReply(`Clan "${target}" not found. Use /clanlist to see all clans.`);
+    }
+    return this.displayClanInfo(targetClan);
+},
+
+// Add this helper method to the Chat.CommandContext prototype
+displayClanInfo(clan: ClanData, viewerId?: ID) {
+    const output = [`<div class="infobox">`];
+
+    // Header with clan name and icon
+    output.push(`<div style="text-align: center; margin-bottom: 5px;">`);
+    if (clan.icon) {
+        output.push(`<img src="${Chat.escapeHTML(clan.icon)}" width="32" height="32" alt="Icon" style="vertical-align: middle; margin-right: 10px;" />`);
+    }
+    output.push(`<h2 style="display: inline-block; margin: 0;">${Chat.escapeHTML(clan.name)}</h2></div>`);
+
+    // Description if it exists
+    if (clan.description) {
+        output.push(`<div style="text-align: center; margin: 5px 0; font-style: italic;">${Chat.escapeHTML(clan.description)}</div>`);
+    }
+
+    // Points and creation date
+    output.push(`<div style="margin: 10px 0;">`);
+    output.push(`<strong>Points:</strong> ${clan.points}`);
+    output.push(`<br /><strong>Created:</strong> ${Chat.toTimestamp(new Date(clan.createdAt))}`);
+    output.push(`</div>`);
+
+    // Room status
+    const clanRoom = Rooms.get(clan.id);
+    output.push(`<div style="margin: 5px 0;">`);
+    output.push(`<strong>Room Status:</strong> `);
+    output.push(clanRoom ? 
+        `<span style="color: green">Active</span>` : 
+        `<span style="color: gray">Inactive</span>`);
+    output.push(`</div>`);
+
+    // Members section
+    output.push(`<div style="margin: 10px 0;">`);
+    output.push(`<strong>Members (${clan.members.length}):</strong>`);
+
+    // Group members by rank
+    const membersByRank: { [key in ClanRank]?: string[] } = {};
+    clan.members.forEach(member => {
+        const username = Users.get(member.id)?.name || member.id;
+        if (!membersByRank[member.rank]) membersByRank[member.rank] = [];
+        membersByRank[member.rank].push(Impulse.nameColor(username, member.id === clan.leader));
+    });
+
+    // Display members by rank
+    const rankColors = {
+        [ClanRank.LEADER]: '#6B1FA6',
+        [ClanRank.DEPUTY]: '#007AA3',
+        [ClanRank.SENIOR]: '#44934A',
+        [ClanRank.MEMBER]: '#6E7175'
+    };
+
+    // Display each rank group
+    [ClanRank.LEADER, ClanRank.DEPUTY, ClanRank.SENIOR, ClanRank.MEMBER].forEach(rank => {
+        if (membersByRank[rank]?.length) {
+            output.push(`<br /><strong style="color: ${rankColors[rank]}">${ClanRankNames[rank]}s (${membersByRank[rank].length}):</strong> `);
+            output.push(membersByRank[rank].join(', '));
         }
+    });
+    output.push(`</div>`);
 
-        if (!target) {
-            const output = clans.map(clan => {
-                const clanRoom = Rooms.get(clan.id);
-                const roomStatus = clanRoom ? 'Active' : 'Inactive';
-                let clanDisplay = `${clan.name} - Leader: ${Users.get(clan.leader)?.name || clan.leader} ` +
-                    `(${clan.members.length} members, ${clan.points} points) [${roomStatus}]`;
-                
-                // Add icon indicator if clan has one
-                if (clan.icon) {
-                    clanDisplay = `<img src="${Chat.escapeHTML(clan.icon)}" width="16" height="16" alt="Icon" /> ${clanDisplay}`;
-                }
-                
-                return clanDisplay;
-            }).join('<br />');
-            return this.sendReplyBox(`<strong>Clans:</strong><br />` + output);
+    // If viewing own clan, show additional information
+    if (viewerId) {
+        const viewerMember = clan.members.find(m => m.id === viewerId);
+        if (viewerMember) {
+            output.push(`<div style="margin-top: 10px; padding-top: 10px; border-top: 1px solid #DDD;">`);
+            output.push(`<strong>Your Information:</strong><br />`);
+            output.push(`Rank: ${ClanRankNames[viewerMember.rank]}<br />`);
+            output.push(`Joined: ${Chat.toTimestamp(new Date(viewerMember.joinedAt))}`);
+            output.push(`</div>`);
         }
+    }
 
-        const clanId = toID(target);
-        const clan = clans.find(c => c.id === clanId);
-        if (!clan) {
-            return this.errorReply(`Clan "${target}" not found.`);
-		  }
-
-		const members = clan.members.map(member => {
-            const username = Users.get(member.id)?.name || member.id;
-            return `${username} (${ClanRankNames[member.rank]})`;
-        }).join(', ');
-
-        const clanRoom = Rooms.get(clan.id);
-        const roomStatus = clanRoom ? 'Active' : 'Inactive';
-
-        const output = [
-            `<strong>Clan: ${Chat.escapeHTML(clan.name)}</strong>`
-        ];
-
-        // Add icon if exists
-        if (clan.icon) {
-            output.push(`<img src="${Chat.escapeHTML(clan.icon)}" width="32" height="32" alt="${Chat.escapeHTML(clan.name)} Icon" />`);
-        }
-
-        output.push(
-            `Leader: ${Users.get(clan.leader)?.name || clan.leader}`,
-            `Members (${clan.members.length}): ${members}`,
-            `Points: ${clan.points}`,
-            `Room Status: ${roomStatus}`,
-            `Created: ${Chat.toTimestamp(new Date(clan.createdAt))}`
-        );
-
-        // Add description if exists
-        if (clan.description) {
-            output.push(`Description: ${Chat.escapeHTML(clan.description)}`);
-        }
-
-        return this.sendReplyBox(output.join('<br />'));
-    },
+    output.push(`</div>`);
+    return this.sendReplyBox(output.join(''));
+},
 
 	async viewclaninvite(target, room, user) {
     if (!user.id) {
