@@ -446,4 +446,7 @@ export const commands: Chat.Commands = {
                 `<li><code>/clan leave</code> - Leaves your current clan. Leaders must transfer leadership first.</li>` +
                 `</ul>` +
                 `</div>`
+				);
+        },
+};
       
