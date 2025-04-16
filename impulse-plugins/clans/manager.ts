@@ -38,7 +38,9 @@ class ClanManagerImpl implements ClanManager {
             leader: leaderId,
             members: [leaderMember],
             createdAt: Date.now(),
-            points: 1000 // Initialize points
+            points: 1000, // Initialize points
+            icon: undefined,
+            description: undefined
         };
 
         await clanDatabase.saveClan(clanData);
@@ -76,6 +78,47 @@ class ClanManagerImpl implements ClanManager {
                 oldLeader.rank = ClanRank.DEPUTY;
             }
             clan.leader = userId;
+        }
+
+        await clanDatabase.saveClan(clan);
+        return true;
+    }
+
+    async setClanIcon(clanId: ID, icon: string | undefined): Promise<boolean> {
+        const clan = await this.getClan(toID(clanId));
+        if (!clan) return false;
+
+        if (icon === undefined) {
+            delete clan.icon;
+        } else {
+            // Validate icon URL format
+            try {
+                const urlPattern = /^https?:\/\/.+\.(png|jpg|jpeg|gif)$/i;
+                if (!urlPattern.test(icon)) {
+                    throw new Error('Invalid image URL format');
+                }
+                clan.icon = icon;
+            } catch (e) {
+                throw new Error('Invalid icon URL');
+            }
+        }
+
+        await clanDatabase.saveClan(clan);
+        return true;
+    }
+
+    async setClanDescription(clanId: ID, description: string | undefined): Promise<boolean> {
+        const clan = await this.getClan(toID(clanId));
+        if (!clan) return false;
+
+        if (description === undefined) {
+            delete clan.description;
+        } else {
+            // Validate description length
+            if (description.length > 500) {
+                throw new Error('Description cannot exceed 500 characters');
+            }
+            clan.description = description;
         }
 
         await clanDatabase.saveClan(clan);
