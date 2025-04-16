@@ -965,6 +965,7 @@ export class User extends Chat.MessageContext {
 			hiddenNextBattle: this.battleSettings.hidden,
 			inviteOnlyNextBattle: this.battleSettings.inviteOnly,
 			language: this.language,
+			registered: this.registered,
 		};
 		return `|updateuser|${this.getIdentityWithStatus()}|${named}|${this.avatar}|${JSON.stringify(settings)}`;
 	}
