@@ -307,58 +307,7 @@ async clanlist(target, room, user) {
         `${Impulse.serverName} Clan Rankings`,
         headers,
         dataRows,
-       /* 'Prince Sky'*/
     );
-
-    // Add custom styling for the table
-/*    const customStyle = `
-        <style>
-            .themed-table-container {
-                background: rgba(240, 240, 240, 0.8);
-                border-radius: 8px;
-                padding: 10px;
-                margin: 5px;
-            }
-            .themed-table-title {
-                text-align: center;
-                color: #333;
-                margin-bottom: 10px;
-                font-size: 1.2em;
-            }
-            .themed-table {
-                width: 100%;
-                background: white;
-                border-radius: 5px;
-                overflow: hidden;
-            }
-            .themed-table-header {
-                background: #4CAF50;
-                color: white;
-            }
-            .themed-table-header th {
-                padding: 10px;
-                text-align: left;
-            }
-            .themed-table-row td {
-                padding: 8px;
-                border-bottom: 1px solid #ddd;
-            }
-            .themed-table-row:nth-child(even) {
-                background: #f9f9f9;
-            }
-            .themed-table-row:hover {
-                background: #f5f5f5;
-            }
-            .themed-table-by {
-                text-align: right;
-                font-style: italic;
-                color: #666;
-                font-size: 0.9em;
-                margin: 5px 0;
-            }
-        </style>
-    `;*/
-
     return this.sendReplyBox(tableHtml);
 },
 	
