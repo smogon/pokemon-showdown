@@ -391,7 +391,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.canJoin(user, !staffAdd, force);
 		if (this.playerCount >= this.playerCap) return this.sendUser(user, `|error|The game of ${this.title} is full.`);
 
-		const player = this.addPlayer(user);
+		const player = this.addPlayer(user, force);
 		if (!player) return this.sendUser(user, `|error|You have already joined the game of ${this.title}.`);
 		if (this.started) {
 			player.role = {
@@ -2352,7 +2352,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
-			if (game.phase !== 'signups') throw new Chat.ErrorMessage(`Signups are already closed.`);
+			if (game.phase == 'day' || game.phase == 'night') throw new Chat.ErrorMessage(`The game already started.`);
 			const num = parseInt(target);
 			if (isNaN(num) || num > 50 || num < 2) return this.parse('/help mafia playercap');
 			if (num < game.playerCount) {
@@ -2852,6 +2852,9 @@ export const commands: Chat.ChatCommands = {
 			const targetUser = Users.get(target);
 			if (!targetUser) {
 				throw new Chat.ErrorMessage(`The user "${target}" was not found.`);
+			}
+			if (game.playerCount >= game.playerCap) {
+				throw new Chat.ErrorMessage(`The game is full. Please change the playercap first.`);
 			}
 			game.join(targetUser, user, cmd === 'forceadd');
 		},
