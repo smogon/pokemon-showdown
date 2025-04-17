@@ -1175,6 +1175,16 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			generator: this.generator.name,
 			bracketData: this.getBracketData(),
 		};
+
+		// Cpan Test
+    const results = this.generator.getResults();
+    if (results[0] && results[0].length) {
+        const winner = Users.get(results[0][0].id);
+        if (winner) {
+            // Award clan points
+            void (Chat as any).commands.clan?.manager?.awardTournamentPoints(winner.id, this.room.roomid);
+        }
+	 }
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
 		const settings = this.room.settings.tournaments;
 		if (settings?.recentToursLength) {
