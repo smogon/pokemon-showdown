@@ -269,7 +269,7 @@ export const commands: ChatCommands = {
     const reason = target.trim() || 'No reason specified.';
 
     Economy.resetAllMoney();
-    this.logMoneyAction({ action: 'reset', to: 'all', amount: DEFAULT_AMOUNT, by: user.id });
+    Economy.logMoneyAction({ action: 'reset', to: 'all', amount: DEFAULT_AMOUNT, by: user.id });
     this.sendReplyBox(`All user balances have been reset to ${DEFAULT_AMOUNT} <span class="math-inline">\{CURRENCY\} \(</span>{reason}).`);
     this.modlog('RESETMONEYALL', null, `all balances to ${DEFAULT_AMOUNT} ${CURRENCY}`, { by: user.id, reason });
     room?.add(`|html|<center><div class="broadcast-blue"><b>${Impulse.nameColor(user.name, true, true)}</b> has reset all ${CURRENCY} balances to <b>${DEFAULT_AMOUNT}</b>.<br>Reason: ${reason}</div></center>`);
