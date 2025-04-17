@@ -387,7 +387,8 @@ export const commands: Chat.Commands = {
 	 },
 
         clanadminhelp(target, room, user) {
-            this.sendReply(
+			   if (!this.runBroadcast()) return;
+            this.sendReplyBox(
                 `|html|<details><summary><strong>Clan Admin Commands:</strong></summary>` +
                 `<ul>` +
                 `<li><code>/clanadmin create [name], [leader]</code> - Creates a new clan. Requires: &</li>` +
