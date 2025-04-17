@@ -1166,7 +1166,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		}
 		this.room.update();
 	}
-	/*
+	
 	onTournamentEnd() {
 		const update = {
 			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
@@ -1176,64 +1176,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		};
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
 		const settings = this.room.settings.tournaments;
-		if (settings?.recentToursLength) {
-			if (!settings.recentTours) settings.recentTours = [];
-			const name = Dex.formats.get(this.name).exists ? Dex.formats.get(this.name).name :
-				`${this.name} (${Dex.formats.get(this.baseFormat).name})`;
-			settings.recentTours.unshift({ name, baseFormat: this.baseFormat, time: Date.now() });
-			// Use a while loop here in case the threshold gets lowered with /tour settings recenttours
-			// to trim down multiple at once
-			while (settings.recentTours.length > settings.recentToursLength) {
-				settings.recentTours.pop();
-			}
-			this.room.saveSettings();
-		}
-		this.remove();
-	}*/
-
-	onTournamentEnd() {
-    const results = this.generator.getResults() as TournamentPlayer[][];
-    
-    // Get winner and runner-up IDs
-    const winnerId = toID(results[0][0]?.id || results[0][0]?.name);
-    const runnerId = toID(results[1][0]?.id || results[1][0]?.name);
-    
-    // Get the actual User objects
-    const winner = Users.get(winnerId);
-    const runnerUp = Users.get(runnerId);
-    
-    // Award rewards
-    if (winner) {
-        // Add winner rewards here
-        // For example:
-        // winner.addReward('tournament_win');
-		 Economy.addMoney(winner, 5000000);
-        this.room.add(`|raw|<div class="broadcast-green">Congratulations to ${winner.name} for winning the tournament!</div>`);
-    }
-    
-    if (runnerUp) {
-        // Add runner-up rewards here
-        // For example:
-        // runnerUp.addReward('tournament_runnerup');
-		 Economy.addMoney(runnerUp, 50000);
-        this.room.add(`|raw|<div class="broadcast-green">Congratulations to ${runnerUp.name} for being the runner-up!</div>`);
-    }
-
-    // Store tournament results
-    const update = {
-        results: results.map(usersToNames),
-        format: this.name,
-        generator: this.generator.name,
-        bracketData: this.getBracketData(),
-        winner: winnerId,
-        runnerUp: runnerId,
-        timestamp: '2025-04-17 08:35:51'
-    };
-
-    // Announce results
-    this.room.add(`|tournament|end|${JSON.stringify(update)}`);
-	
-	const settings = this.room.settings.tournaments;
 		if (settings?.recentToursLength) {
 			if (!settings.recentTours) settings.recentTours = [];
 			const name = Dex.formats.get(this.name).exists ? Dex.formats.get(this.name).name :
