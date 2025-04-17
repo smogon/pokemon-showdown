@@ -384,8 +384,9 @@ export const commands: Chat.Commands = {
             this.addModAction(`${user.name} opened the clan room to all users.`);
             return this.sendReply(`The clan room has been opened. Users with voice or higher can now join.`);
         },
+	 },
 
-        help(target, room, user) {
+        clanadminhelp(target, room, user) {
             this.sendReply(
                 `|html|<details><summary><strong>Clan Admin Commands:</strong></summary>` +
                 `<ul>` +
@@ -403,5 +404,4 @@ export const commands: Chat.Commands = {
                 `</details>`
             );
         },
-    },
 };
