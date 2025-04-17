@@ -84,7 +84,10 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	override readonly gameid = 'tournament' as ID;
 	readonly isTournament: true;
 	readonly completedMatches: Set<RoomID>;
-	static readonly TOURNAMENT_WIN_REWARD = 10; // Additional reward for winning the whole tournament
+	static readonly TOURNAMENT_REWARDS = {
+    winner: 20,     // 1st place
+    runnerup: 10,   // 2nd place
+	}
 	/** Format ID not including custom rules */
 	readonly baseFormat: ID;
 	/**
@@ -1175,15 +1178,35 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			generator: this.generator.name,
 			bracketData: this.getBracketData(),
 		};
-		const winners = this.generator.getResults()[0];
-		if (winners?.length) {
-			const winnerId = toID(winners[0].name);
-			const winnerUser = Users.get(winnerId);
-			if (winnerUser) {
-				Economy.addMoney(winnerId, Tournament.TOURNAMENT_WIN_REWARD, 'Tournament victory');
-				winnerUser.send(`|popup||html|Congratulations! You received ${Tournament.TOURNAMENT_WIN_REWARD} ${Economy.currency} for winning the tournament!`);
-			}
-  }
+		const results = this.generator.getResults() as TournamentPlayer[][];
+  
+  // Distribute rewards based on placement
+  if (results.length) {
+    // First place (winner)
+    if (results[0]?.length) {
+      const winnerId = toID(results[0][0].name);
+      const winnerUser = Users.get(winnerId);
+      if (winnerUser) {
+        Economy.addMoney(winnerId, Tournament.TOURNAMENT_REWARDS.winner, 'Tournament victory - 1st place');
+        winnerUser.send(
+          `|popup||html|Congratulations on winning the tournament! ` +
+          `You received ${Tournament.TOURNAMENT_REWARDS.winner} ${Economy.currency}!`
+        );
+      }
+    }
+
+    // Second place (runner-up)
+    if (results[1]?.length) {
+      const runnerId = toID(results[1][0].name);
+      const runnerUser = Users.get(runnerId);
+      if (runnerUser) {
+        Economy.addMoney(runnerId, Tournament.TOURNAMENT_REWARDS.runnerup, 'Tournament runner-up - 2nd place');
+        runnerUser.send(
+          `|popup||html|Congratulations on reaching second place! ` +
+          `You received ${Tournament.TOURNAMENT_REWARDS.runnerup} ${Economy.currency}!`
+        );
+      }
+	 }
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
 		const settings = this.room.settings.tournaments;
 		if (settings?.recentToursLength) {
