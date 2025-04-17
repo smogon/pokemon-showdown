@@ -2,6 +2,7 @@ import { FS, Utils } from '../../lib';
 
 export const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
 const MAX_ROOMFAQ_LENGTH = 8192;
+const MAX_HTML_ROOMFAQ_LENGTH = 10000;
 
 export const roomFaqs: { [k: string]: { [k: string]: RoomFAQ } } = (() => {
 	const data = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync() || "{}");
@@ -77,8 +78,8 @@ export const commands: Chat.ChatCommands = {
 		if (topic.length > 25) throw new Chat.ErrorMessage("FAQ topics should not exceed 25 characters.");
 
 		const lengthWithoutFormatting = Chat.stripFormatting(text).length;
-		if (lengthWithoutFormatting > MAX_ROOMFAQ_LENGTH) {
-			throw new Chat.ErrorMessage(`FAQ entries must not exceed ${MAX_ROOMFAQ_LENGTH} characters.`);
+		if (lengthWithoutFormatting > (useHTML ? MAX_HTML_ROOMFAQ_LENGTH : MAX_ROOMFAQ_LENGTH)) {
+			throw new Chat.ErrorMessage(`FAQ entries must not exceed ${(useHTML ? MAX_HTML_ROOMFAQ_LENGTH : MAX_ROOMFAQ_LENGTH)} characters.`);
 		} else if (lengthWithoutFormatting < 1) {
 			throw new Chat.ErrorMessage(`FAQ entries must include at least one character.`);
 		}

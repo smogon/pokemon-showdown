@@ -1301,19 +1301,43 @@ const commands: Chat.ChatCommands = {
 	tournaments: 'tournament',
 	tournament: {
 		''(target, room, user) {
-			room = this.requireRoom();
 			if (!this.runBroadcast()) return;
-			const update = [];
+			const tours = [];
 			for (const tourRoom of Rooms.rooms.values()) {
 				const tournament = tourRoom.getGame(Tournament);
 				if (!tournament) continue;
 				if (tourRoom.settings.isPrivate || tourRoom.settings.isPersonal || tourRoom.settings.staffRoom) continue;
-				update.push({
-					room: tourRoom.roomid, title: room.title, format: tournament.name,
-					generator: tournament.generator.name, isStarted: tournament.isTournamentStarted,
+				tours.push({
+					room: tourRoom.roomid, format: tournament.name, generator: tournament.generator.name,
+					isStarted: tournament.isTournamentStarted,
 				});
 			}
-			this.sendReply(`|tournaments|info|${JSON.stringify(update)}`);
+			if (!tours.length) {
+				throw new Chat.ErrorMessage(`No tournaments are currently running.`);
+			}
+			const started = Utils.sortBy(tours.filter(tour => tour.isStarted), tour => tour.room);
+			const signups = Utils.sortBy(tours.filter(tour => !tour.isStarted), tour => tour.room);
+			let buf = `<div class="notice"><div class="infobox tournaments-info">`;
+			if (signups.length) {
+				buf += `<strong>Accepting Signups:</strong><ul>`;
+				for (const tour of signups) {
+					const formatName = Dex.formats.get(tour.format).exists ? Dex.formats.get(tour.format).name : tour.format;
+					buf += `<li>&laquo;<a href="/${tour.room}" class="ilink">${tour.room}</a>&raquo;: ${Utils.escapeHTML(formatName)} ${tour.generator}</li>`;
+				}
+				buf += `</ul>`;
+			}
+			if (started.length) {
+				if (signups.length) buf += `<br />`;
+				buf += `<strong>Started:</strong><ul>`;
+				for (const tour of started) {
+					const formatName = Dex.formats.get(tour.format).exists ? Dex.formats.get(tour.format).name : tour.format;
+					buf += `<li>&laquo;<a href="/${tour.room}" class="ilink">${tour.room}</a>&raquo;: ${Utils.escapeHTML(formatName)} ${tour.generator}</li>`;
+				}
+				buf += `</ul>`;
+			}
+			buf += `</div></div>`;
+
+			this.sendReply(`|c|${room && this.broadcasting ? user.getIdentity() : '~'}|/raw ${buf}`);
 		},
 		help() {
 			return this.parse('/help tournament');
