@@ -1192,9 +1192,24 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	}*/
 
 	onTournamentEnd() {
+
 		const results = this.generator.getResults() as TournamentPlayer[][];
-    const winnerId = toID(results[0][0].id);
-    const runnerId = toID(results[1][0].id);
+    
+    // Debug the full results array
+    this.room.add(`|raw|<div class="broadcast-blue">Debug - Full Results: ${JSON.stringify(results)}</div>`);
+    
+    // Add checks for array existence and elements
+    if (!results || !results[0] || !results[1]) {
+        this.room.add(`|raw|<div class="broadcast-red">Debug - Error: Incomplete results array</div>`);
+        return;
+    }
+
+    // Debug individual player objects
+    this.room.add(`|raw|<div class="broadcast-blue">Debug - Winner object: ${JSON.stringify(results[0][0])}</div>`);
+    this.room.add(`|raw|<div class="broadcast-blue">Debug - Runner-up object: ${JSON.stringify(results[1][0])}</div>`);
+
+    const winnerId = toID(results[0][0]?.id || results[0][0]?.name);
+    const runnerId = toID(results[1][0]?.id || results[1][0]?.name);
     
     const update = {
         results: results.map(usersToNames),
@@ -1203,12 +1218,13 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
         bracketData: this.getBracketData(),
         winner: winnerId,
         runnerup: runnerId,
+        timestamp: '2025-04-17 08:21:27'
     };
 
     // Original tournament end message
     this.room.add(`|tournament|end|${JSON.stringify(update)}`);
     
-    // Debug message to check IDs
+    // Debug message with IDs
     this.room.add(`|raw|<div class="broadcast-blue">Debug - Tournament End - Winner ID: ${winnerId}, Runner-up ID: ${runnerId}</div>`);
 		const settings = this.room.settings.tournaments;
 		if (settings?.recentToursLength) {
