@@ -1192,41 +1192,48 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	}*/
 
 	onTournamentEnd() {
-
-		const results = this.generator.getResults() as TournamentPlayer[][];
+    const results = this.generator.getResults() as TournamentPlayer[][];
     
-    // Debug the full results array
-    this.room.add(`|raw|<div class="broadcast-blue">Debug - Full Results: ${JSON.stringify(results)}</div>`);
-    
-    // Add checks for array existence and elements
-    if (!results || !results[0] || !results[1]) {
-        this.room.add(`|raw|<div class="broadcast-red">Debug - Error: Incomplete results array</div>`);
-        return;
-    }
-
-    // Debug individual player objects
-    this.room.add(`|raw|<div class="broadcast-blue">Debug - Winner object: ${JSON.stringify(results[0][0])}</div>`);
-    this.room.add(`|raw|<div class="broadcast-blue">Debug - Runner-up object: ${JSON.stringify(results[1][0])}</div>`);
-
+    // Get winner and runner-up IDs
     const winnerId = toID(results[0][0]?.id || results[0][0]?.name);
     const runnerId = toID(results[1][0]?.id || results[1][0]?.name);
     
+    // Get the actual User objects
+    const winner = Users.get(winnerId);
+    const runnerUp = Users.get(runnerId);
+    
+    // Award rewards
+    if (winner) {
+        // Add winner rewards here
+        // For example:
+        // winner.addReward('tournament_win');
+		 Economy.addMoney(winner, 5000000);
+        this.room.add(`|raw|<div class="broadcast-green">Congratulations to ${winner.name} for winning the tournament!</div>`);
+    }
+    
+    if (runnerUp) {
+        // Add runner-up rewards here
+        // For example:
+        // runnerUp.addReward('tournament_runnerup');
+		 Economy.addMoney(runnerUp, 50000);
+        this.room.add(`|raw|<div class="broadcast-green">Congratulations to ${runnerUp.name} for being the runner-up!</div>`);
+    }
+
+    // Store tournament results
     const update = {
         results: results.map(usersToNames),
         format: this.name,
         generator: this.generator.name,
         bracketData: this.getBracketData(),
         winner: winnerId,
-        runnerup: runnerId,
-        timestamp: '2025-04-17 08:21:27'
+        runnerUp: runnerId,
+        timestamp: '2025-04-17 08:35:51'
     };
 
-    // Original tournament end message
+    // Announce results
     this.room.add(`|tournament|end|${JSON.stringify(update)}`);
-    
-    // Debug message with IDs
-    this.room.add(`|raw|<div class="broadcast-blue">Debug - Tournament End - Winner ID: ${winnerId}, Runner-up ID: ${runnerId}</div>`);
-		const settings = this.room.settings.tournaments;
+	
+	const settings = this.room.settings.tournaments;
 		if (settings?.recentToursLength) {
 			if (!settings.recentTours) settings.recentTours = [];
 			const name = Dex.formats.get(this.name).exists ? Dex.formats.get(this.name).name :
