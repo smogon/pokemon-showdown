@@ -443,7 +443,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		return Punishments.hasRoomPunishType(room, toID(user), 'MAFIAGAMEBAN');
 	}
 
-	static gameBan(room: Room, user: User, reason: string, duration: number) {
+	static gameBan(room: Room, user: User | ID, reason: string, duration: number) {
 		Punishments.roomPunish(room, user, {
 			type: 'MAFIAGAMEBAN',
 			id: toID(user),
@@ -457,10 +457,10 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	static isHostBanned(room: Room, user: User) {
-		return Mafia.isGameBanned(room, user) || Punishments.hasRoomPunishType(room, toID(user), 'MAFIAGAMEBAN');
+		return Mafia.isGameBanned(room, user) || Punishments.hasRoomPunishType(room, toID(user), 'MAFIAHOSTBAN');
 	}
 
-	static hostBan(room: Room, user: User, reason: string, duration: number) {
+	static hostBan(room: Room, user: User | ID, reason: string, duration: number) {
 		Punishments.roomPunish(room, user, {
 			type: 'MAFIAHOSTBAN',
 			id: toID(user),
@@ -3436,6 +3436,10 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage(`${targetUser.name} cannot become a host because they are playing.`);
 			}
 
+			if (Mafia.isHostBanned(room, targetUser)) {
+				throw new Chat.ErrorMessage(`${targetUser.name} is banned from hosting mafia games.`);
+			}
+
 			if (game.subs.includes(targetUser.id)) game.subs.splice(game.subs.indexOf(targetUser.id), 1);
 			if (cmd.includes('cohost')) {
 				game.cohostids.push(targetUser.id);
@@ -3760,6 +3764,10 @@ export const commands: Chat.ChatCommands = {
 				Mafia.gameBan(room, targetUser, reason, duration);
 			}
 
+			if (targetUser.id in room.users) {
+				targetUser.popup(`|modal|${user.name} has ${cmd}ned you in ${room.roomid} for ${Chat.toDurationString(duration * 60 * 60 * 24 * 1000)}. ${reason}`);
+			}
+
 			this.modlog(`MAFIA${cmd.toUpperCase()}`, targetUser, reason);
 			this.privateModAction(`${targetUser.name} was banned from ${cmd === 'hostban' ? 'hosting' : 'playing'} mafia games by ${user.name}.`);
 		},
@@ -3771,6 +3779,62 @@ export const commands: Chat.ChatCommands = {
 		ban: 'gamebanhelp',
 		banhelp: 'gamebanhelp',
 		gamebanhelp() {
+			this.parse('/mafia hostbanhelp');
+		},
+
+		gamebanname: 'namehostban',
+		namegameban: 'namehostban',
+		hostbanname: 'namehostban',
+		namehostban(target, room, user, connection, cmd) {
+			if (!target) return this.parse('/help mafia namehostban');
+			room = this.requireRoom();
+			this.checkCan('warn', null, room);
+
+			const [targetUser, rest] = this.splitOne(target);
+			const [string1, string2] = this.splitOne(rest);
+			let duration, reason;
+			if (parseInt(string1)) {
+				duration = parseInt(string1);
+				reason = string2;
+			} else {
+				duration = parseInt(string2);
+				reason = string1;
+			}
+
+			if (!duration) duration = 2;
+			if (!reason) reason = '';
+			if (reason.length > 300) {
+				throw new Chat.ErrorMessage("The reason is too long. It cannot exceed 300 characters.");
+			}
+
+			const userid = toID(targetUser);
+			const commandType = cmd.includes('hostban') ? 'hostban' : 'gameban';
+			if (Punishments.hasRoomPunishType(room, userid, `MAFIA${commandType.toUpperCase()}`)) {
+				throw new Chat.ErrorMessage(`User '${targetUser}' is already ${commandType}ned in this room.`);
+			} else if (Punishments.hasRoomPunishType(room, userid, `MAFIAGAMEBAN`)) {
+				throw new Chat.ErrorMessage(`User '${targetUser}' is already gamebanned in this room, which also means they can't host.`);
+			} else if (Punishments.hasRoomPunishType(room, userid, `MAFIAHOSTBAN`)) {
+				user.sendTo(room, `User '${targetUser}' is already hostbanned in this room, but they will now be gamebanned.`);
+				this.parse(`/mafia unhostban ${targetUser}`);
+			}
+
+			if (cmd.includes('hostban')) {
+				Mafia.hostBan(room, userid, reason, duration);
+			} else {
+				Mafia.gameBan(room, userid, reason, duration);
+			}
+
+			this.modlog(`MAFIA${cmd.toUpperCase()}`, targetUser, reason);
+			this.privateModAction(`${targetUser} was (name)banned from ${cmd.includes('hostban') ? 'hosting' : 'playing'} mafia games by ${user.name}.`);
+		},
+		namehostbanhelp: [
+			`/mafia hostbanname [user], [reason], [duration] - Ban a username from hosting games for [duration] days. Requires % @ # ~`,
+			`/mafia gamebanname [user], [reason], [duration] - Ban a username from playing games for [duration] days. Requires % @ # ~`,
+		],
+
+		nameban: 'gamebanhelp',
+		namebanhelp: 'gamebanhelp',
+		namegamebanhelp() {
 			this.parse('/mafia hostbanhelp');
 		},
 
