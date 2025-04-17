@@ -1321,7 +1321,7 @@ const commands: Chat.ChatCommands = {
 				buf += `<strong>Accepting Signups:</strong><ul>`;
 				for (const tour of signups) {
 					const formatName = Dex.formats.get(tour.format).exists ? Dex.formats.get(tour.format).name : tour.format;
-					buf += `<li>&laquo;<a href="/${tour.room}" target="_blank" class="ilink">${tour.room}</a>&raquo;: ${Utils.escapeHTML(formatName)} ${tour.generator}</li>`;
+					buf += `<li>&laquo;<a href="/${tour.room}" class="ilink">${tour.room}</a>&raquo;: ${Utils.escapeHTML(formatName)} ${tour.generator}</li>`;
 				}
 				buf += `</ul>`;
 			}
@@ -1330,7 +1330,7 @@ const commands: Chat.ChatCommands = {
 				buf += `<strong>Started:</strong><ul>`;
 				for (const tour of started) {
 					const formatName = Dex.formats.get(tour.format).exists ? Dex.formats.get(tour.format).name : tour.format;
-					buf += `<li>&laquo;<a href="/${tour.room}" target="_blank" class="ilink">${tour.room}</a>&raquo;: ${Utils.escapeHTML(formatName)} ${tour.generator}</li>`;
+					buf += `<li>&laquo;<a href="/${tour.room}" class="ilink">${tour.room}</a>&raquo;: ${Utils.escapeHTML(formatName)} ${tour.generator}</li>`;
 				}
 				buf += `</ul>`;
 			}
