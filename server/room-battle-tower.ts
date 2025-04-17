@@ -1,30 +1,59 @@
 import type {User} from './users';
-import {RoomGame} from './room-game';
+import type {RoomGame} from './room-game';
 import type {GameRoom} from './rooms';
 
 interface BattleTowerState {
     level: number;
     wins: number;
     streak: number;
-    currentBattle: string | null;
+    currentBattleId: string | null;
 }
 
-export class BattleTower extends RoomGame {
-    readonly playerStates: Map<string, BattleTowerState>;
-    readonly format: string;
+export class BattleTower {
+    room: GameRoom; 
+    playerStates: Map<string, BattleTowerState>;
+    format: string;
 
     constructor(room: GameRoom) {
-        super(room);
+        this.room = room;
         this.playerStates = new Map();
         this.format = 'gen9randombattle'; // Using random battles for testing
+        
+        // Register our battle end handler
+        Chat.addPlugin({
+            onBattleEnd: (battle: RoomGame, winnerid: string, playerids: string[]) => {
+                if (!battle.room.roomid.startsWith('tower-')) return;
+                this.onBattleEnd(winnerid);
+            }
+        });
+
         this.room.title = `Battle Tower`;
+        this.room.add(
+            `|raw|<div class="broadcast-blue"><h2>Welcome to the Battle Tower!</h2>` +
+            `Use /tower challenge to start climbing.<br />` +
+            `Win streaks will increase your level and face tougher opponents.</div>`
+        ).update();
+    }
+
+    getPlayerState(userid: string): BattleTowerState {
+        let state = this.playerStates.get(userid);
+        if (!state) {
+            state = {
+                level: 1,
+                wins: 0,
+                streak: 0,
+                currentBattleId: null
+            };
+            this.playerStates.set(userid, state);
+        }
+        return state;
     }
 
     async startChallenge(user: User) {
         if (!user.connected) return false;
         
-        const state = this.getPlayerState(user);
-        if (state.currentBattle) {
+        const state = this.getPlayerState(user.id);
+        if (state.currentBattleId) {
             user.popup(`You already have an active battle in the tower!`);
             return false;
         }
@@ -36,7 +65,7 @@ export class BattleTower extends RoomGame {
             isPrivate: false,
             roomid: roomid,
             challengeType: 'challenge',
-            players: [{user: user}, {user: null, team: ''}],
+            players: [{user: user}, {user: null, team: ''}], // AI opponent handled by sim
             rated: false,
             tour: null
         });
@@ -46,50 +75,38 @@ export class BattleTower extends RoomGame {
             return false;
         }
 
-        state.currentBattle = roomid;
+        state.currentBattleId = roomid;
         this.updateDisplay();
         return true;
     }
 
-    onBattleEnd(winner: User | null, roomid: string) {
-        for (const [userid, state] of this.playerStates) {
-            if (state.currentBattle === roomid) {
-                const user = Users.get(userid);
-                if (!user) continue;
+    onBattleEnd(winnerid: string) {
+        const state = this.playerStates.get(winnerid);
+        if (!state) return;
 
-                if (winner?.id === userid) {
-                    state.wins++;
-                    state.streak++;
-                    if (state.streak > 0 && state.streak % 3 === 0) {
-                        state.level++;
-                        this.room.add(`|raw|<div class="broadcast-green">Congratulations ${user.name}! You've reached Level ${state.level}!</div>`);
-                    }
-                } else {
-                    state.streak = 0;
+        if (state.currentBattleId) {
+            state.wins++;
+            state.streak++;
+            if (state.streak > 0 && state.streak % 3 === 0) {
+                state.level++;
+                const user = Users.get(winnerid);
+                if (user) {
+                    this.room.add(
+                        `|raw|<div class="broadcast-green">Congratulations ${user.name}! ` +
+                        `You've reached Level ${state.level} in the Battle Tower!</div>`
+                    ).update();
                 }
-                state.currentBattle = null;
-                break;
             }
         }
+        
+        state.currentBattleId = null;
         this.updateDisplay();
     }
 
-    private getPlayerState(user: User): BattleTowerState {
-        let state = this.playerStates.get(user.id);
-        if (!state) {
-            state = {
-                level: 1,
-                wins: 0,
-                streak: 0,
-                currentBattle: null
-            };
-            this.playerStates.set(user.id, state);
-        }
-        return state;
-    }
-
     updateDisplay() {
-        let buf = `|uhtml|battletower|<div class="infobox"><center><h3>Battle Tower Rankings</h3></center><hr />`;
+        let buf = `|uhtmlchange|battletower|<div class="infobox"><center><h3>Battle Tower Rankings</h3></center><hr />`;
+        
+        // Sort players by level and wins
         const rankings = [...this.playerStates.entries()]
             .sort(([,a], [,b]) => b.level - a.level || b.wins - a.wins);
 
@@ -97,21 +114,24 @@ export class BattleTower extends RoomGame {
             const user = Users.get(userid);
             if (!user) continue;
             buf += `<strong>${user.name}</strong> - Level ${state.level} (${state.wins} wins, ${state.streak} streak)`;
-            if (state.currentBattle) buf += ` - <em>In Battle</em>`;
+            if (state.currentBattleId) buf += ` - <em>In Battle</em>`;
             buf += `<br />`;
         }
         buf += `</div>`;
+        
         this.room.add(buf).update();
     }
 
     destroy() {
         // Clean up any active battles
         for (const [userid, state] of this.playerStates) {
-            if (state.currentBattle) {
-                const battle = Rooms.get(state.currentBattle);
+            if (state.currentBattleId) {
+                const battle = Rooms.get(state.currentBattleId);
                 if (battle?.battle) battle.battle.destroy();
             }
         }
-        super.destroy();
+
+        // Remove our battle end handler
+        // Chat.removePlugin(this); // Uncomment if you implement plugin removal
     }
 }
