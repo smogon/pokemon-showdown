@@ -1174,6 +1174,15 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			generator: this.generator.name,
 			bracketData: this.getBracketData(),
 		};
+		const winners = this.generator.getResults()[0];
+		if (winners?.length) {
+			const winnerId = toID(winners[0].name);
+			const winnerUser = Users.get(winnerId);
+			if (winnerUser) {
+				Economy.addMoney(winnerId, Tournament.TOURNAMENT_WIN_REWARD, 'Tournament victory');
+				winnerUser.send(`|popup||html|Congratulations! You received ${Tournament.TOURNAMENT_WIN_REWARD} ${Economy.currency} for winning the tournament!`);
+			}
+  }
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
 		const settings = this.room.settings.tournaments;
 		if (settings?.recentToursLength) {
