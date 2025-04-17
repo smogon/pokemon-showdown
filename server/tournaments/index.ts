@@ -1265,25 +1265,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
         );
       }
     }
-
-    // Semi-finalists (players who made it to semi-finals but didn't advance)
-    // They will be in results[1]
-    if (results[1]?.length) {
-      for (const semifinalist of results[1]) {
-        const semifinalistId = toID(semifinalist.name);
-        // Skip if this is the runner-up (who we already rewarded)
-        if (runnerup && semifinalistId === toID(runnerup.name)) continue;
-        
-        const semifinalistUser = Users.get(semifinalistId);
-        if (semifinalistUser) {
-          Economy.addMoney(semifinalistId, Tournament.TOURNAMENT_REWARDS.semifinal, 'Tournament semi-finalist - Top 4');
-          semifinalistUser.send(
-            `|popup||html|Congratulations on reaching the semi-finals! ` +
-            `You received ${Tournament.TOURNAMENT_REWARDS.semifinal} ${Economy.currency}!`
-          );
-        }
-      }
-    }
   }
 
   // Tournament completion announcement with rewards
