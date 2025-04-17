@@ -13,7 +13,7 @@ export const commands: Chat.Commands = {
 
             // @ts-ignore
             room.game = new BattleTower(room);
-            room.add(
+            this.room.add(
                 `|raw|<div class="broadcast-blue"><strong>A Battle Tower has been created by ${user.name}!</strong><br />` +
                 `Use /tower challenge to start climbing!</div>`
             ).update();
