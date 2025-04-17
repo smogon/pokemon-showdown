@@ -1166,7 +1166,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		}
 		this.room.update();
 	}
-	
+	/*
 	onTournamentEnd() {
 		const update = {
 			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
@@ -1175,6 +1175,41 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			bracketData: this.getBracketData(),
 		};
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
+		const settings = this.room.settings.tournaments;
+		if (settings?.recentToursLength) {
+			if (!settings.recentTours) settings.recentTours = [];
+			const name = Dex.formats.get(this.name).exists ? Dex.formats.get(this.name).name :
+				`${this.name} (${Dex.formats.get(this.baseFormat).name})`;
+			settings.recentTours.unshift({ name, baseFormat: this.baseFormat, time: Date.now() });
+			// Use a while loop here in case the threshold gets lowered with /tour settings recenttours
+			// to trim down multiple at once
+			while (settings.recentTours.length > settings.recentToursLength) {
+				settings.recentTours.pop();
+			}
+			this.room.saveSettings();
+		}
+		this.remove();
+	}*/
+
+	onTournamentEnd() {
+		const results = this.generator.getResults() as TournamentPlayer[][];
+    const winnerId = toID(results[0][0].id);
+    const runnerId = toID(results[1][0].id);
+    
+    const update = {
+        results: results.map(usersToNames),
+        format: this.name,
+        generator: this.generator.name,
+        bracketData: this.getBracketData(),
+        winner: winnerId,
+        runnerup: runnerId,
+    };
+
+    // Original tournament end message
+    this.room.add(`|tournament|end|${JSON.stringify(update)}`);
+    
+    // Debug message to check IDs
+    this.room.add(`|raw|<div class="broadcast-blue">Debug - Tournament End - Winner ID: ${winnerId}, Runner-up ID: ${runnerId}</div>`);
 		const settings = this.room.settings.tournaments;
 		if (settings?.recentToursLength) {
 			if (!settings.recentTours) settings.recentTours = [];
