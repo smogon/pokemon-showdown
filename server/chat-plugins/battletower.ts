@@ -1,6 +1,6 @@
 import {BattleTower} from './server/room-battle-tower';
 
-export const commands: ChatCommands = {
+export const commands: Chat.Commands = {
     tower: 'battletower',
     battletower: {
         create(target, room, user) {
