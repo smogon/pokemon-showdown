@@ -84,6 +84,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	override readonly gameid = 'tournament' as ID;
 	readonly isTournament: true;
 	readonly completedMatches: Set<RoomID>;
+	static readonly TOURNAMENT_WIN_REWARD = 10; // Additional reward for winning the whole tournament
 	/** Format ID not including custom rules */
 	readonly baseFormat: ID;
 	/**
