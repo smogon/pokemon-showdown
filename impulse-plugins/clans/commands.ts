@@ -429,6 +429,7 @@ export const commands: Chat.Commands = {
 
             return this.sendReply(confirmationMessage);
         },
+	 },
 
         help(target, room, user) {
             if (!this.runBroadcast()) return;
