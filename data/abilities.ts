@@ -2023,6 +2023,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onEnd(pokemon) {
 			if (pokemon.illusion) {
+				pokemon.apparentType = pokemon.illusion.apparentType;
 				this.debug('illusion cleared');
 				pokemon.illusion = null;
 				const details = pokemon.getUpdatedDetails();
