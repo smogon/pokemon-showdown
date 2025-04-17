@@ -431,7 +431,7 @@ export const commands: Chat.Commands = {
         },
 	 },
 
-        help(target, room, user) {
+        clanadminhelp(target, room, user) {
             if (!this.runBroadcast()) return;
             this.sendReplyBox(
                 `<div class="infobox">` +
