@@ -27,6 +27,7 @@ export interface ClanData {
     points: number;
     icon?: string;           // Optional URL to the clan's icon
     description?: string;    // Optional clan description
+    isRoomClosed?: boolean;  // Track if the clan room is closed to non-members
 }
 
 export interface ClanInvite {
@@ -46,7 +47,8 @@ export interface ClanManager {
     inviteMember(clanId: ID, inviterId: ID, inviteeId: ID): Promise<ClanInvite>;
     acceptInvite(inviteId: string): Promise<boolean>;
     getPendingInvite(inviteeId: ID): Promise<ClanInvite | null>;
-    // Add new methods for icon and description management
     setClanIcon(clanId: ID, icon: string | undefined): Promise<boolean>;
     setClanDescription(clanId: ID, description: string | undefined): Promise<boolean>;
+    setClanRoomClosed(clanId: ID, isClosed: boolean): Promise<boolean>;
+    isClanRoomClosed(clanId: ID): Promise<boolean>;
 }

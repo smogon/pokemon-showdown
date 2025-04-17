@@ -40,7 +40,8 @@ class ClanManagerImpl implements ClanManager {
             createdAt: Date.now(),
             points: 1000, // Initialize points
             icon: undefined,
-            description: undefined
+            description: undefined,
+            isRoomClosed: false // Initialize room state
         };
 
         await clanDatabase.saveClan(clanData);
@@ -203,6 +204,20 @@ class ClanManagerImpl implements ClanManager {
 
     async getPendingInvite(inviteeId: ID): Promise<ClanInvite | null> {
         return clanInviteDatabase.getPendingInvite(toID(inviteeId));
+    }
+
+    async setClanRoomClosed(clanId: ID, isClosed: boolean): Promise<boolean> {
+        const clan = await this.getClan(toID(clanId));
+        if (!clan) return false;
+
+        clan.isRoomClosed = isClosed;
+        await clanDatabase.saveClan(clan);
+        return true;
+    }
+
+    async isClanRoomClosed(clanId: ID): Promise<boolean> {
+        const clan = await this.getClan(toID(clanId));
+        return clan?.isRoomClosed || false;
     }
 }
 
