@@ -1,4 +1,4 @@
-import {BattleTower} from './server/room-battle-tower';
+import {BattleTower} from '../../server/room-battle-tower';
 
 export const commands: Chat.Commands = {
     tower: 'battletower',
