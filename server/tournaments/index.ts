@@ -2,8 +2,6 @@ import { Elimination } from './generator-elimination';
 import { RoundRobin } from './generator-round-robin';
 import { Utils } from '../../lib';
 import { PRNG } from '../../sim/prng';
-import type { BestOfGame } from '../room-battle-bestof';
-import { clanManager } from '../../impulse-plugins/clans/manager';
 
 export interface TournamentRoomSettings {
 	allowModjoin?: boolean;
@@ -1177,16 +1175,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			bracketData: this.getBracketData(),
 		};
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
-
-		// Get tournament winner
-    const results = this.generator.getResults();
-    if (results[0] && results[0].length) {
-        const winner = Users.get(results[0][0].id);
-        if (winner) {
-            // Award clan points using the imported clanManager
-            void clanManager.awardTournamentPoints(winner.id, this.room.roomid);
-        }
-	 }
 		const settings = this.room.settings.tournaments;
 		if (settings?.recentToursLength) {
 			if (!settings.recentTours) settings.recentTours = [];
