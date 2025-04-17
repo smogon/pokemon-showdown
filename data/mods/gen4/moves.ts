@@ -731,6 +731,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	growth: {
 		inherit: true,
+		clauseData: {
+			canStatBoost: {
+				spa: true,
+			},
+		},
 		onModifyMove() {},
 		boosts: {
 			spa: 1,
