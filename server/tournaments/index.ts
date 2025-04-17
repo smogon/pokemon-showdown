@@ -131,7 +131,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		this.baseFormat = formatId;
 		this.fullFormat = formatId;
 		// This will sometimes be sent alone in updates as "format", if the tour doesn't have a custom name
-		this.name = name || formatId;
+		this.name = name || Dex.formats.get(formatId).name;
 		this.customRules = [];
 		this.generator = generator;
 		this.isRated = isRated;
@@ -1301,32 +1301,33 @@ const commands: Chat.ChatCommands = {
 	tournament: {
 		''(target, room, user) {
 			if (!this.runBroadcast()) return;
-			const tours = [];
+			const roomTours = [];
 			for (const tourRoom of Rooms.rooms.values()) {
 				const tournament = tourRoom.getGame(Tournament);
 				if (!tournament) continue;
 				if (tourRoom.settings.isPrivate || tourRoom.settings.isPersonal || tourRoom.settings.staffRoom) continue;
-				tours.push({
-					room: tourRoom.roomid, format: tournament.name, generator: tournament.generator.name,
-					isStarted: tournament.isTournamentStarted, players: tournament.players.length,
-				});
+				roomTours.push(tournament);
 			}
-			if (!tours.length) {
+			if (!roomTours.length) {
 				throw new Chat.ErrorMessage(`No tournaments are currently running.`);
 			}
-			const started = Utils.sortBy(tours.filter(tour => tour.isStarted), tour => tour.room);
-			const signups = Utils.sortBy(tours.filter(tour => !tour.isStarted), tour => tour.room);
+			const started = Utils.sortBy(roomTours.filter(tour => tour.isTournamentStarted), tour => tour.room.roomid);
+			const signups = Utils.sortBy(roomTours.filter(tour => !tour.isTournamentStarted), tour => tour.room.roomid);
+
+			function renderLink(tour: Tournament) {
+				const name = Dex.formats.get(tour.name).exists ? Dex.formats.get(tour.name).name : tour.name;
+				const icon = tour.generator.name === 'Round Robin' ? '<i class="fa fa-th"></i>' :
+					tour.generator.name === 'Single Elimination' ? '<i class="fa fa-share-alt"></i>' :
+					'<i class="fa fa-share-alt"></i><i class="fa fa-share-alt"></i>';
+				const plural = tour.players.length !== 1 ? 's' : '';
+				return `<li><a href="/${tour.room.roomid}" class="blocklink">&laquo;<strong>${tour.room.roomid}</strong>&raquo;<small style="float:right">(${tour.players.length} player${plural})</small><br />${icon} <small>${Utils.escapeHTML(name)} ${tour.generator.name}</small></a></li>`;
+			}
 
 			let buf = ``;
 			if (signups.length) {
 				buf += `<strong>Accepting Signups:</strong><ul class="roomlist">`;
 				for (const tour of signups) {
-					const formatName = Dex.formats.get(tour.format).exists ? Dex.formats.get(tour.format).name : tour.format;
-					const icon = tour.generator === 'Round Robin' ? '<i class="fa fa-th"></i>' :
-						tour.generator === 'Single Elimination' ? '<i class="fa fa-share-alt"></i>' :
-						'<i class="fa fa-share-alt"></i><i class="fa fa-share-alt"></i>';
-					const plural = tour.players !== 1 ? 's' : '';
-					buf += `<li><a href="/${tour.room}" class="blocklink">&laquo;<strong>${tour.room}</strong>&raquo;<small style="float:right">(${tour.players} player${plural})</small><br />${icon} <small>${Utils.escapeHTML(formatName)} ${tour.generator}</small></a></li>`;
+					buf += renderLink(tour);
 				}
 				buf += `</ul>`;
 			}
@@ -1334,16 +1335,10 @@ const commands: Chat.ChatCommands = {
 				if (signups.length) buf += `<br />`;
 				buf += `<strong>Started:</strong><ul class="roomlist">`;
 				for (const tour of started) {
-					const formatName = Dex.formats.get(tour.format).exists ? Dex.formats.get(tour.format).name : tour.format;
-					const icon = tour.generator === 'Round Robin' ? '<i class="fa fa-th"></i>' :
-						tour.generator === 'Single Elimination' ? '<i class="fa fa-share-alt"></i>' :
-						'<i class="fa fa-share-alt"></i><i class="fa fa-share-alt"></i>';
-					const plural = tour.players !== 1 ? 's' : '';
-					buf += `<li><a href="/${tour.room}" class="blocklink">&laquo;<strong>${tour.room}</strong>&raquo;<small style="float:right">(${tour.players} player${plural})</small><br />${icon} <small>${Utils.escapeHTML(formatName)} ${tour.generator}</small></a></li>`;
+					buf += renderLink(tour);
 				}
 				buf += `</ul>`;
 			}
-			buf += ``;
 
 			this.sendReplyBox(buf);
 		},
@@ -1706,7 +1701,7 @@ const commands: Chat.ChatCommands = {
 			tournament.customRules = [];
 			tournament.fullFormat = tournament.baseFormat;
 			if (tournament.name === tournament.getDefaultCustomName()) {
-				tournament.name = tournament.baseFormat;
+				tournament.name = Dex.formats.get(tournament.baseFormat).name;
 				room.send(`|tournament|update|${JSON.stringify({ format: tournament.name })}`);
 				tournament.update();
 			}
@@ -1743,7 +1738,7 @@ const commands: Chat.ChatCommands = {
 			this.checkCan('tournaments', null, room);
 			const tournament = this.requireGame(Tournament);
 			if (tournament.name === tournament.baseFormat) throw new Chat.ErrorMessage("The tournament does not have a name.");
-			tournament.name = tournament.baseFormat;
+			tournament.name = Dex.formats.get(tournament.baseFormat).name;
 			room.send(`|tournament|update|${JSON.stringify({ format: tournament.name })}`);
 			this.privateModAction(`${user.name} cleared the tournament's name.`);
 			this.modlog('TOUR CLEARNAME');
