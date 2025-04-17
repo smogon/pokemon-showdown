@@ -107,7 +107,7 @@ export const commands: Chat.Commands = {
             }
         },
 
-        givepoints(target, room, user) {
+        async givepoints(target, room, user) {
             this.checkCan('bypassall');
             if (!target) {
                 throw new Chat.ErrorMessage(`/clanadmin givepoints [clan name],[points] - Gives points to a clan.`);
@@ -128,7 +128,7 @@ export const commands: Chat.Commands = {
             return this.sendReply(`Successfully gave ${points} points to clan "${clan.name}". Total points: ${clan.points}`);
         },
 
-        takepoints(target, room, user) {
+        async takepoints(target, room, user) {
             this.checkCan('bypassall');
             if (!target) {
                 throw new Chat.ErrorMessage(`/clanadmin takepoints [clan name],[points] - Deducts points from a clan.`);
