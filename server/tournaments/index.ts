@@ -2,6 +2,7 @@ import { Elimination } from './generator-elimination';
 import { RoundRobin } from './generator-round-robin';
 import { Utils } from '../../lib';
 import { PRNG } from '../../sim/prng';
+import type { BestOfGame } from '../room-battle-bestof';
 
 export interface TournamentRoomSettings {
 	allowModjoin?: boolean;
@@ -84,10 +85,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 	override readonly gameid = 'tournament' as ID;
 	readonly isTournament: true;
 	readonly completedMatches: Set<RoomID>;
-	static readonly TOURNAMENT_REWARDS = {
-    winner: 20,     // 1st place
-    runnerup: 10,   // 2nd place
-	}
 	/** Format ID not including custom rules */
 	readonly baseFormat: ID;
 	/**
@@ -1170,7 +1167,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 		}
 		this.room.update();
 	}
-	/*
+	
 	onTournamentEnd() {
 		const update = {
 			results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
@@ -1178,36 +1175,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			generator: this.generator.name,
 			bracketData: this.getBracketData(),
 		};
-		const results = this.generator.getResults() as TournamentPlayer[][];
-  
-  // Distribute rewards based on placement
-  if (results.length) {
-    // First place (winner)
-    if (results[0]?.length) {
-      const winnerId = toID(results[0][0].name);
-      const winnerUser = Users.get(winnerId);
-      if (winnerUser) {
-        Economy.addMoney(winnerId,100, 'Tournament victory - 1st place');
-        winnerUser.send(
-          `|popup||html|Congratulations on winning the tournament! ` +
-          `You received ${Tournament.TOURNAMENT_REWARDS.winner} ${Impulse.currency}!`
-        );
-      }
-    }
-
-    // Second place (runner-up)
-    if (results[1]?.length) {
-      const runnerId = toID(results[1][0].name);
-      const runnerUser = Users.get(runnerId);
-      if (runnerUser) {
-        Economy.addMoney(runnerId,10, 'Tournament runner-up - 2nd place');
-        runnerUser.send(
-          `|popup||html|Congratulations on reaching second place! ` +
-          `You received ${Tournament.TOURNAMENT_REWARDS.runnerup} ${Impulse.currency}!`
-        );
-      }
-	 }
-  }
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
 		const settings = this.room.settings.tournaments;
 		if (settings?.recentToursLength) {
@@ -1223,73 +1190,6 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			this.room.saveSettings();
 		}
 		this.remove();
-	}*/
-
-	onTournamentEnd() {
-  const update = {
-    results: (this.generator.getResults() as TournamentPlayer[][]).map(usersToNames),
-    format: this.name,
-    generator: this.generator.name,
-    bracketData: this.getBracketData(),
-  };
-
-  // Get tournament results
-  const results = this.generator.getResults() as TournamentPlayer[][];
-  
-  // Distribute rewards based on placement
-  if (results.length) {
-    // First place (winner)
-    const winner = results[0]?.[0];
-    if (winner) {
-      const winnerId = toID(winner.name);
-      const winnerUser = Users.get(winnerId);
-      if (winnerUser) {
-        Economy.addMoney(winnerId, Tournament.TOURNAMENT_REWARDS.winner, 'Tournament victory - 1st place');
-        winnerUser.send(
-          `|popup||html|Congratulations on winning the tournament! ` +
-          `You received ${Tournament.TOURNAMENT_REWARDS.winner} ${Economy.currency}!`
-        );
-      }
-    }
-
-    // Runner-up is the first player in the second array that isn't the winner
-    const runnerup = results[0]?.[1];
-    if (runnerup) {
-      const runnerupId = toID(runnerup.name);
-      const runnerupUser = Users.get(runnerupId);
-      if (runnerupUser) {
-        Economy.addMoney(runnerupId, Tournament.TOURNAMENT_REWARDS.runnerup, 'Tournament runner-up - 2nd place');
-        runnerupUser.send(
-          `|popup||html|Congratulations on reaching second place! ` +
-          `You received ${Tournament.TOURNAMENT_REWARDS.runnerup} ${Economy.currency}!`
-        );
-      }
-    }
-  }
-
-  // Tournament completion announcement with rewards
-  const rewardsAnnouncement = 
-    `|html|<div class="infobox">Tournament rewards distribution:<br />` +
-    `1st place (${winner ? Impulse.nameColor(winner.name, true, true) : 'N/A'}): ${Tournament.TOURNAMENT_REWARDS.winner} ${Economy.currency}<br />` +
-    `2nd place (${runnerup ? Impulse.nameColor(runnerup.name, true, true) : 'N/A'}): ${Tournament.TOURNAMENT_REWARDS.runnerup} ${Economy.currency}<br />` +
-    `Semi-finalists: ${Tournament.TOURNAMENT_REWARDS.semifinal} ${Economy.currency}<br />` +
-    `Plus ${Tournament.BATTLE_WIN_REWARD} ${Economy.currency} per battle win!</div>`;
-  
-  this.room.add(rewardsAnnouncement);
-  this.room.add(`|tournament|end|${JSON.stringify(update)}`);
-
-  const settings = this.room.settings.tournaments;
-  if (settings?.recentToursLength) {
-    if (!settings.recentTours) settings.recentTours = [];
-    const name = Dex.formats.get(this.name).exists ? Dex.formats.get(this.name).name :
-      `${this.name} (${Dex.formats.get(this.baseFormat).name})`;
-    settings.recentTours.unshift({ name, baseFormat: this.baseFormat, time: Date.now() });
-    while (settings.recentTours.length > settings.recentToursLength) {
-      settings.recentTours.pop();
-    }
-    this.room.saveSettings();
-  }
-  this.remove();
 	}
 }
 
