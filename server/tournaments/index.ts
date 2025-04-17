@@ -1187,10 +1187,10 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
       const winnerId = toID(results[0][0].name);
       const winnerUser = Users.get(winnerId);
       if (winnerUser) {
-        Economy.addMoney(winnerId, Tournament.TOURNAMENT_REWARDS.winner, 'Tournament victory - 1st place');
+        Economy.addMoney(winnerId,100, 'Tournament victory - 1st place');
         winnerUser.send(
           `|popup||html|Congratulations on winning the tournament! ` +
-          `You received ${Tournament.TOURNAMENT_REWARDS.winner} ${Economy.currency}!`
+          `You received ${Tournament.TOURNAMENT_REWARDS.winner} ${Impulse.currency}!`
         );
       }
     }
@@ -1200,10 +1200,10 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
       const runnerId = toID(results[1][0].name);
       const runnerUser = Users.get(runnerId);
       if (runnerUser) {
-        Economy.addMoney(runnerId, Tournament.TOURNAMENT_REWARDS.runnerup, 'Tournament runner-up - 2nd place');
+        Economy.addMoney(runnerId,10, 'Tournament runner-up - 2nd place');
         runnerUser.send(
           `|popup||html|Congratulations on reaching second place! ` +
-          `You received ${Tournament.TOURNAMENT_REWARDS.runnerup} ${Economy.currency}!`
+          `You received ${Tournament.TOURNAMENT_REWARDS.runnerup} ${Impulse.currency}!`
         );
       }
 	 }
