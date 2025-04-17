@@ -219,6 +219,42 @@ class ClanManagerImpl implements ClanManager {
         const clan = await this.getClan(toID(clanId));
         return clan?.isRoomClosed || false;
     }
+
+	// POINTS TEST
+	
+	async awardTournamentPoints(winnerId: ID, roomid: ID): Promise<void> {
+    winnerId = toID(winnerId);
+    
+    // Find winner's clan
+    const clan = await clanDatabase.findClanByMemberId(winnerId);
+    if (!clan) return; // Winner is not in a clan
+    
+    // Calculate points based on room size
+    const room = Rooms.get(roomid);
+    if (!room?.tournament) return;
+    
+    const playerCount = room.tournament.players.size;
+    
+    // Calculate points: base 50 points + 10 points per additional player beyond 4
+    let pointsAwarded = 50;
+    if (playerCount > 4) {
+        pointsAwarded += (playerCount - 4) * 10;
+    }
+    
+    // Cap maximum points at 200
+    pointsAwarded = Math.min(pointsAwarded, 200);
+    
+    // Award points to clan
+    clan.points += pointsAwarded;
+    await clanDatabase.saveClan(clan);
+    
+    // Announce in clan room
+    const winner = Users.get(winnerId);
+    const winnerName = winner ? winner.name : winnerId;
+    const message = `Congratulations! ${winnerName} won a tournament in ${room.title}! The clan has been awarded ${pointsAwarded} points!`;
+    
+    sendClanMessage(clan.id, message);
+}
 }
 
 export const clanManager = new ClanManagerImpl();
