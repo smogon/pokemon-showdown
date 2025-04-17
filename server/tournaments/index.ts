@@ -1178,7 +1178,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
 			generator: this.generator.name,
 			bracketData: this.getBracketData(),
 		};
-		const results = (this.generator.getResults() as TournamentPlayer[][]);
+		const results = this.generator.getResults() as TournamentPlayer[][];
   
   // Distribute rewards based on placement
   if (results.length) {
@@ -1207,6 +1207,7 @@ export class Tournament extends Rooms.RoomGame<TournamentPlayer> {
         );
       }
 	 }
+  }
 		this.room.add(`|tournament|end|${JSON.stringify(update)}`);
 		const settings = this.room.settings.tournaments;
 		if (settings?.recentToursLength) {
