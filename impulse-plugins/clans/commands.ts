@@ -429,8 +429,9 @@ export const commands: Chat.Commands = {
 
             return this.sendReply(confirmationMessage);
         },
+	 },
 
-        help(target, room, user) {
+        clanhelp(target, room, user) {
             if (!this.runBroadcast()) return;
             this.sendReplyBox(
                 `<div class="infobox">` +
