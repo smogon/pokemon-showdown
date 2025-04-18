@@ -160,7 +160,6 @@ export class Economy {
 
 global.Economy = Economy;
 
-// ================ Pages ================
 export const pages: Chat.PageTable = {
   economylogs(args, user) {
     // Check permissions
@@ -223,7 +222,7 @@ export const pages: Chat.PageTable = {
     return `<div class="pad">` +
       `<div style="float: right">` +
       `<small>Last Updated: ${currentTimestamp} UTC</small> ` +
-      `<button class="button" name="send" value="/join view-economylogs-${useridFilter || ''}-${page}">` +
+      `<button class="button" name="send" value="/economylogs ${useridFilter || ''}, ${page}">` +
       `<i class="fa fa-refresh"></i> Refresh</button>` +
       `</div>` +
       `<div style="clear: both"></div>` +
@@ -233,15 +232,15 @@ export const pages: Chat.PageTable = {
       `<br />` +
       `<div class="spacer">` +
       `<div class="buttonbar" style="text-align: center">` +
-      `${up ? `<button class="button" name="send" value="/join view-economylogs-${useridFilter || ''}-${page - 1}">` +
+      `${up ? `<button class="button" name="send" value="/economylogs ${useridFilter || ''}, ${page - 1}">` +
         `<i class="fa fa-chevron-left"></i> Previous</button> ` : ''}` +
-      `<button class="button" name="send" value="/join view-economylogs-${useridFilter || ''}-1">` +
+      `<button class="button" name="send" value="/economylogs ${useridFilter || ''}, 1">` +
         `<i class="fa fa-angle-double-left"></i> First</button> ` +
       `<span style="border: 1px solid #6688AA; padding: 2px 8px; border-radius: 4px;">` +
         `Page ${page} of ${totalPages}</span> ` +
-      `<button class="button" name="send" value="/join view-economylogs-${useridFilter || ''}-${totalPages}">` +
+      `<button class="button" name="send" value="/economylogs ${useridFilter || ''}, ${totalPages}">` +
         `Last <i class="fa fa-angle-double-right"></i></button>` +
-      `${down ? ` <button class="button" name="send" value="/join view-economylogs-${useridFilter || ''}-${page + 1}">` +
+      `${down ? ` <button class="button" name="send" value="/economylogs ${useridFilter || ''}, ${page + 1}">` +
         `Next <i class="fa fa-chevron-right"></i></button>` : ''}` +
       `</div>` +
       `</div>` +
@@ -456,9 +455,29 @@ export const commands: Chat.Commands = {
     const targetUser = parts[0] || '';
     const page = parseInt(parts[1]) || 1;
     
-    return this.parse(`/join view-economylogs-${toID(targetUser)}-${page}`);
-  },
+    // Create or get the room
+    const ecologsRoom = Rooms.get('economylogs') || Rooms.createChatRoom('economylogs', 'Economy Logs', {
+      isPrivate: 'hidden',
+      modjoin: '%',
+      auth: {},
+    });
 
+    if (!ecologsRoom) return this.errorReply(`Failed to create Economy Logs room.`);
+
+    // Update the room's content
+    const pageContent = pages.economylogs([targetUser, String(page)], user);
+    if (typeof pageContent === 'string') {
+      ecologsRoom.add(`|uhtmlchange|economylogs|${pageContent}`);
+      ecologsRoom.add(`|uhtml|economylogs|${pageContent}`);
+      ecologsRoom.update();
+    }
+
+    // Join the room
+    if (!room || room.roomid !== 'economylogs') {
+      return this.parse(`/join economylogs`);
+    }
+  },
+	
   economyhelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
