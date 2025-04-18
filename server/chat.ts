@@ -758,6 +758,18 @@ export class CommandContext extends MessageContext {
     }
 	}
 
+	run(handler: string | AnnotatedChatHandler) {
+		if (typeof handler === 'string') handler = Chat.commands[handler] as AnnotatedChatHandler;
+		if (!handler.broadcastable && this.cmdToken === '!') {
+			throw new Chat.ErrorMessage([`The command "${this.fullCmd}" can't be broadcast.`,
+				`Use /${this.fullCmd} instead.`]);
+		}
+		let result: any = handler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
+		if (result === undefined) result = false;
+
+		return result;
+	}
+
 	checkFormat(room: BasicRoom | null | undefined, user: User, message: string) {
 		if (!room) return true;
 		if (
