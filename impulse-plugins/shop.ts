@@ -1,12 +1,20 @@
-/* Shop Commands
- * Credits: Prince Sky, Turbo Rx
- */
+/***************************************
+* Pokemon Showdown Shop System         *
+* Credits: Prince Sky, Turbo Rx       *
+***************************************/
 
 import { FS } from '../lib/fs';
 
+// ================ Configuration ================
 const SHOP_FILE_PATH = 'impulse-db/shop.json';
 const RECEIPTS_FILE_PATH = 'impulse-db/receipts.json';
 
+// ================ Helper Functions ================
+function formatUTCTimestamp(date: Date): string {
+  return date.toISOString().slice(0, 19).replace('T', ' ');
+}
+
+// ================ Interfaces ================
 interface ShopItem {
   name: string;
   price: number;
@@ -29,10 +37,12 @@ interface ReceiptsData {
   [userId: string]: Receipt[];
 }
 
+// ================ Shop Class ================
 class Shop {
   private static shopData: ShopData = Shop.loadShopData();
   private static receiptsData: ReceiptsData = Shop.loadReceiptsData();
 
+  // Data Loading & Saving Methods
   private static loadShopData(): ShopData {
     try {
       const rawData = FS(SHOP_FILE_PATH).readIfExistsSync();
@@ -69,6 +79,7 @@ class Shop {
     }
   }
 
+  // Shop Item Management
   static getShopItems(): ShopItem[] {
     return this.shopData.items.sort((a, b) => a.name.localeCompare(b.name));
   }
@@ -89,6 +100,7 @@ class Shop {
     }
   }
 
+  // Purchase & Receipts Management
   static buyItem(userid: string, itemName: string): string {
     const item = this.shopData.items.find(item => item.name === itemName);
     if (!item) {
@@ -120,6 +132,7 @@ class Shop {
     return `You successfully purchased "${itemName}" for ${item.price} ${Impulse.currency}. Your receipt ID is: ${receiptId}`;
   }
 
+  // Receipt Query Methods
   static getUserReceipts(userid: string): Receipt[] {
     return this.receiptsData[userid] || [];
   }
@@ -135,23 +148,135 @@ class Shop {
   }
 }
 
-export const commands: ChatCommands = {
-  shop(target, room, user) {
-    if (!this.runBroadcast()) return;
+// ================ Pages ================
+export const pages: Chat.PageTable = {
+  shop(args, user) {
     const items = Shop.getShopItems();
     if (!items.length) {
-      return this.sendReplyBox(`<b>The shop is currently empty.</b>`);
+      return `<div class="pad"><h2>The shop is currently empty.</h2></div>`;
     }
 
     const header = ['Item', 'Description', 'Price', 'Buy'];
     const data = items.map(item => [
       item.name,
       item.description,
-      item.price.toString(),
-      `<button name="send" value="/buyitem ${item.name}" style="padding: 5px 10px; background-color: #4CAF50; color: white; border: none; border-radius: 5px; cursor: pointer;">Buy</button>`,
+      `${item.price} ${Impulse.currency}`,
+      `<button class="button" name="send" value="/buyitem ${item.name}">` +
+        `<i class="fa fa-shopping-cart"></i> Buy</button>`,
     ]);
 
-    this.ImpulseReplyBox(Impulse.generateThemedTable('Impulse Shop', header, data));
+    return `<div class="pad">` +
+      `<div style="float: right">` +
+      `<small>Last Updated: ${formatUTCTimestamp(new Date())} UTC</small> ` +
+      `<button class="button" name="send" value="/shop">` +
+      `<i class="fa fa-refresh"></i> Refresh</button>` +
+      `</div>` +
+      `<div style="clear: both"></div>` +
+      `<div class="ladder">` +
+      `${Impulse.generateThemedTable('Impulse Shop', header, data)}` +
+      `</div>` +
+      `</div>`;
+  },
+
+  receiptlogs(args, user) {
+    // Check permissions
+    if (!user.can('globalban')) {
+      return `<div class="pad"><h2>Access denied.</h2></div>`;
+    }
+
+    // Parse arguments
+    const [targetUser, pageStr] = args;
+    const page = parseInt(pageStr) || 1;
+    const entriesPerPage = 50;
+    const filterUserid = targetUser ? toID(targetUser) : null;
+
+    // Get all receipts
+    const allReceipts = Shop.getAllReceipts(filterUserid);
+    const totalPages = Math.ceil(allReceipts.length / entriesPerPage);
+    const startIndex = (page - 1) * entriesPerPage;
+    const endIndex = startIndex + entriesPerPage;
+    const receiptsToShow = allReceipts.slice(startIndex, endIndex);
+
+    if (!allReceipts.length) {
+      return `<div class="pad">` +
+        `<h2>No purchase logs found${filterUserid ? ` for ${Impulse.nameColor(filterUserid, true, true)}` : ''}.</h2>` +
+        `</div>`;
+    }
+
+    // Generate table data
+    const header = ['Receipt ID', 'User ID', 'Time of Purchase', 'Item Name', `Amount (${Impulse.currency})`];
+    const data = receiptsToShow.map(receipt => [
+      receipt.receiptId,
+      Impulse.nameColor(receipt.userId, true, true),
+      formatUTCTimestamp(new Date(receipt.timestamp)),
+      receipt.itemName,
+      receipt.amount.toString(),
+    ]);
+
+    // Generate table HTML
+    const title = `Purchase Logs${filterUserid ? ` for ${Impulse.nameColor(filterUserid, true, true)}` : ''} ` +
+      `(Page ${page} of ${totalPages})`;
+    const tableHTML = Impulse.generateThemedTable(title, header, data);
+
+    // Generate pagination links
+    const up = page > 1;
+    const down = page < totalPages;
+
+    return `<div class="pad">` +
+      `<div style="float: right">` +
+      `<small>Last Updated: ${formatUTCTimestamp(new Date())} UTC</small> ` +
+      `<button class="button" name="send" value="/receiptlogs ${filterUserid || ''}, ${page}">` +
+      `<i class="fa fa-refresh"></i> Refresh</button>` +
+      `</div>` +
+      `<div style="clear: both"></div>` +
+      `<div class="ladder">` +
+      `${tableHTML}` +
+      `</div>` +
+      `<br />` +
+      `<div class="spacer">` +
+      `<div class="buttonbar" style="text-align: center">` +
+      `${up ? `<button class="button" name="send" value="/receiptlogs ${filterUserid || ''}, ${page - 1}">` +
+        `<i class="fa fa-chevron-left"></i> Previous</button> ` : ''}` +
+      `<button class="button" name="send" value="/receiptlogs ${filterUserid || ''}, 1">` +
+        `<i class="fa fa-angle-double-left"></i> First</button> ` +
+      `<span style="border: 1px solid #6688AA; padding: 2px 8px; border-radius: 4px;">` +
+        `Page ${page} of ${totalPages}</span> ` +
+      `<button class="button" name="send" value="/receiptlogs ${filterUserid || ''}, ${totalPages}">` +
+        `Last <i class="fa fa-angle-double-right"></i></button>` +
+      `${down ? ` <button class="button" name="send" value="/receiptlogs ${filterUserid || ''}, ${page + 1}">` +
+        `Next <i class="fa fa-chevron-right"></i></button>` : ''}` +
+      `</div>` +
+      `</div>` +
+      `</div>`;
+  },
+};
+
+// ================ Chat Commands ================
+export const commands: ChatCommands = {
+  // User Commands
+  shop(target, room, user) {
+    if (!this.runBroadcast()) return;
+
+    // Create or get the room
+    const shopRoom = Rooms.get('shop') || Rooms.createChatRoom('shop', 'Impulse Shop', {
+      isPrivate: 'hidden',
+      auth: {},
+    });
+
+    if (!shopRoom) return this.errorReply(`Failed to create Shop room.`);
+
+    // Update the room's content
+    const pageContent = pages.shop([], user);
+    if (typeof pageContent === 'string') {
+      shopRoom.add(`|uhtmlchange|shop|${pageContent}`);
+      shopRoom.add(`|uhtml|shop|${pageContent}`);
+      shopRoom.update();
+    }
+
+    // Join the room
+    if (!room || room.roomid !== 'shop') {
+      return this.parse(`/join shop`);
+    }
   },
 
   buyitem(target, room, user) {
@@ -161,8 +286,47 @@ export const commands: ChatCommands = {
 
     const result = Shop.buyItem(user.id, target);
     this.sendReply(result);
+
+    // Refresh shop room if purchase was successful
+    if (result.includes('successfully purchased')) {
+      const shopRoom = Rooms.get('shop');
+      if (shopRoom) {
+        const pageContent = pages.shop([], user);
+        if (typeof pageContent === 'string') {
+          shopRoom.add(`|uhtmlchange|shop|${pageContent}`);
+          shopRoom.add(`|uhtml|shop|${pageContent}`);
+          shopRoom.update();
+        }
+      }
+    }
   },
 
+  receipts(target, room, user) {
+    if (!this.runBroadcast()) return;
+    const userReceipts = Shop.getUserReceipts(user.id);
+    if (!userReceipts.length) {
+      return this.sendReplyBox(
+        Impulse.generateThemedTable(
+          'Your Purchase Receipts',
+          ['Receipt ID', 'Time of Purchase', 'Item Name', `Amount (${Impulse.currency})`],
+          []
+        )
+      );
+    }
+
+    const header = ['Receipt ID', 'Time of Purchase', 'Item Name', `Amount (${Impulse.currency})`];
+    const data = userReceipts.map(receipt => [
+      receipt.receiptId,
+      formatUTCTimestamp(new Date(receipt.timestamp)),
+      receipt.itemName,
+      receipt.amount.toString(),
+    ]);
+
+    const tableHTML = Impulse.generateThemedTable('Your Purchase Receipts', header, data);
+    this.ImpulseReplyBox(`<div style="max-height: 400px; overflow-y: auto;">${tableHTML}</div>`);
+  },
+
+  // Admin Commands
   additem(target, room, user) {
     this.checkCan('globalban');
     const [name, priceString, ...descriptionParts] = target.split(',').map(part => part.trim());
@@ -177,7 +341,18 @@ export const commands: ChatCommands = {
 
     const description = descriptionParts.join(', ');
     Shop.addItem(name, price, description);
-    this.sendReplyBox(`Item "${name}" added to the shop for ${price} ${Impulse.currency}.`);
+    this.sendReply(`Item "${name}" added to the shop for ${price} ${Impulse.currency}.`);
+
+    // Refresh shop room
+    const shopRoom = Rooms.get('shop');
+    if (shopRoom) {
+      const pageContent = pages.shop([], user);
+      if (typeof pageContent === 'string') {
+        shopRoom.add(`|uhtmlchange|shop|${pageContent}`);
+        shopRoom.add(`|uhtml|shop|${pageContent}`);
+        shopRoom.update();
+      }
+    }
   },
 
   deleteitem(target, room, user) {
@@ -186,57 +361,57 @@ export const commands: ChatCommands = {
       return this.sendReply(`Usage: /deleteitem [item name]`);
     }
     const result = Shop.deleteItem(target);
-    this.sendReplyBox(result);
-  },
+    this.sendReply(result);
 
-  receipts(target, room, user) {
-    if (!this.runBroadcast()) return;
-    const userReceipts = Shop.getUserReceipts(user.id);
-    if (!userReceipts.length) {
-      return this.sendReplyBox(Impulse.generateThemedTable('Your Purchase Receipts', ['Receipt ID', 'Time of Purchase', 'Item Name', `Amount (${Impulse.currency})`], []));
+    // Refresh shop room
+    const shopRoom = Rooms.get('shop');
+    if (shopRoom) {
+      const pageContent = pages.shop([], user);
+      if (typeof pageContent === 'string') {
+        shopRoom.add(`|uhtmlchange|shop|${pageContent}`);
+        shopRoom.add(`|uhtml|shop|${pageContent}`);
+        shopRoom.update();
+      }
     }
-
-    const header = ['Receipt ID', 'Time of Purchase', 'Item Name', `Amount (${Impulse.currency})`];
-    const dateFormatter = new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' });
-    const data = userReceipts.map(receipt => [
-      receipt.receiptId,
-      dateFormatter.format(receipt.timestamp),
-      receipt.itemName,
-      receipt.amount.toString(),
-    ]);
-
-    const tableHTML = Impulse.generateThemedTable('Your Purchase Receipts', header, data);
-    this.ImpulseReplyBox(`<div style="max-height: 400px; overflow-y: auto;">${tableHTML}</div>`);
   },
 
   receiptlogs(target, room, user) {
     this.checkCan('globalban');
     if (!this.runBroadcast()) return;
-    const filterUserid = toID(target);
-    const allReceipts = Shop.getAllReceipts(filterUserid);
+    
+    // Create or get the room
+    const logsRoom = Rooms.get('receiptlogs') || Rooms.createChatRoom('receiptlogs', 'Purchase Logs', {
+      isPrivate: 'hidden',
+      modjoin: '%',
+      auth: {},
+    });
 
-    if (!allReceipts.length) {
-      return this.sendReplyBox(Impulse.generateThemedTable(`Purchase Logs ${filterUserid ? `for ${filterUserid}` : ''}`, ['Receipt ID', 'User ID', 'Time of Purchase', 'Item Name', `Amount (${Impulse.currency})`], []));
+    if (!logsRoom) return this.errorReply(`Failed to create Purchase Logs room.`);
+
+    // Parse target
+    const parts = target.split(',').map(p => p.trim());
+    const targetUser = parts[0] || '';
+    const page = parseInt(parts[1]) || 1;
+
+    // Update the room's content
+    const pageContent = pages.receiptlogs([targetUser, String(page)], user);
+    if (typeof pageContent === 'string') {
+      logsRoom.add(`|uhtmlchange|receiptlogs|${pageContent}`);
+      logsRoom.add(`|uhtml|receiptlogs|${pageContent}`);
+      logsRoom.update();
     }
 
-    const header = ['Receipt ID', 'User ID', 'Time of Purchase', 'Item Name', `Amount (${Impulse.currency})`];
-    const dateFormatter = new Intl.DateTimeFormat(undefined, { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' });
-    const data = allReceipts.map(receipt => [
-      receipt.receiptId,
-      receipt.userId,
-      dateFormatter.format(receipt.timestamp),
-      receipt.itemName,
-      receipt.amount.toString(),
-    ]);
-
-    const tableHTML = Impulse.generateThemedTable(`Purchase Logs ${filterUserid ? `for ${filterUserid}` : ''}`, header, data);
-    this.ImpulseReplyBox(`<div style="max-height: 400px; overflow-y: auto;">${tableHTML}</div>`);
+    // Join the room
+    if (!room || room.roomid !== 'receiptlogs') {
+      return this.parse(`/join receiptlogs`);
+    }
   },
 
+  // Help Command
   shophelp(target, room, user) {
     if (!this.runBroadcast()) return;
     this.sendReplyBox(
-      `<b><center>Shop Commands</center></b><br>` +
+      `<details><summary><b><center>Shop Commands By ${Impulse.nameColor('Prince Sky', true, true)}</center></b></summary>` +
       `<b>User Commands</b><br>` +
       `<ul>` +
       `<li><b>/shop</b> - View available items in the shop.</li>` +
@@ -246,10 +421,10 @@ export const commands: ChatCommands = {
       `</ul><br>` +
       `<b>Admin Commands</b> (Requires: @ and higher)<br>` +
       `<ul>` +
-        `<li><b>/additem [item name], [price], [description]</b> - Add an item to the shop.</li>` +
-        `<li><b>/deleteitem [item name]</b> - Remove an item from the shop.</li>` +
-        `<li><b>/receiptlogs [userid]</b> - View purchase logs, optionally filtered by [userid].</li>` +
-      `</ul>`
+      `<li><b>/additem [item name], [price], [description]</b> - Add an item to the shop.</li>` +
+      `<li><b>/deleteitem [item name]</b> - Remove an item from the shop.</li>` +
+      `<li><b>/receiptlogs [userid]</b> - View purchase logs, optionally filtered by [userid].</li>` +
+      `</ul></details>`
     );
   },
 };
