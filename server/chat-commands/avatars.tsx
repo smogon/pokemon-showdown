@@ -641,6 +641,7 @@ const OFFICIAL_AVATARS_KYLEDOVE = new Set([
 	'rosa-pokestar3', 'sabrina-frlg', 'selene-masters', 'sierra', 'spark-casual', 'spark', 'spenser', 'toddsnap', 'toddsnap2',
 	'victor-masters', 'vince', 'wally-rse', 'willow-casual', 'willow', 'yancy', 'zinnia-masters',
 	'acerola-masters3', 'bianca-masters', 'cheren-masters', 'gardenia-masters', 'nemona-masters',
+	'baoba', 'bill', 'daisy', 'harmony', 'paxton', 'trace',
 ]);
 
 const OFFICIAL_AVATARS_HYOOPPA = new Set([
@@ -663,6 +664,18 @@ const OFFICIAL_AVATARS_SELENA = new Set([
 	'kris',
 ]);
 
+const OFFICIAL_AVATARS_WISTERIAPURPLE = new Set([
+	'miku-fairy',
+]);
+
+const OFFICIAL_AVATARS_FLAMIBANE = new Set([
+	'miku-ghost',
+]);
+
+const OFFICIAL_AVATARS_RADU = new Set([
+	'miku-ice',
+]);
+
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_GNOMOWLADNY) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_BRUMIRAGE) OFFICIAL_AVATARS.add(avatar);
@@ -673,6 +686,9 @@ for (const avatar of OFFICIAL_AVATARS_GRAPO) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_FIFTY) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_HORO) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_SELENA) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_WISTERIAPURPLE) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_FLAMIBANE) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_RADU) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
@@ -726,6 +742,15 @@ export const commands: Chat.ChatCommands = {
 			}
 			if (OFFICIAL_AVATARS_SELENA.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/SelenaStar00">Selena</a>)`);
+			}
+			if (OFFICIAL_AVATARS_WISTERIAPURPLE.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.smogon.com/forums/members/664887/">wisteriapurple</a>)`);
+			}
+			if (OFFICIAL_AVATARS_FLAMIBANE.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.smogon.com/forums/members/706228/">Flamibane</a>)`);
+			}
+			if (OFFICIAL_AVATARS_RADU.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.smogon.com/forums/members/455774/">RADU</a>)`);
 			}
 		}
 	},
