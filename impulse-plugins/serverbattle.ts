@@ -32,9 +32,6 @@ export class ServerAI {
     }
 }
 
-// Create a unique ID for the server bot
-const SERVER_BOT_USERID = 'servbot' as ID;
-
 export const commands: Chat.ChatCommands = {
     serverbattle: 'battleserver',
     battleserver: {
@@ -50,22 +47,6 @@ export const commands: Chat.ChatCommands = {
                     throw new Chat.ErrorMessage(`Invalid format: ${formatId}`);
                 }
 
-                // Create or get the server bot user
-                let serverBot = Users.get(SERVER_BOT_USERID);
-                if (!serverBot) {
-                    // Create a new user object for the server bot
-                    const connection = new Users.Connection('', {
-                        ip: '127.0.0.1',
-                        protocol: 'websocket',
-                        socketid: `${Date.now()}`,
-                    });
-                    serverBot = Users.add(connection, SERVER_BOT_USERID);
-                    serverBot.forceRename('Server Bot', true);
-                    serverBot.trusted = true;
-                    serverBot.avatarNum = 1;
-                    serverBot.connections[0].authedAs = serverBot.id;
-                }
-
                 // Generate teams
                 const generator = Teams.getGenerator(formatId);
                 const p1team = Teams.pack(generator.getTeam());
@@ -76,11 +57,13 @@ export const commands: Chat.ChatCommands = {
                     format: formatId,
                     roomid,
                     p1: {
-                        user: user,
+                        name: user.name,
+                        userid: user.id,
                         team: p1team,
                     },
                     p2: {
-                        user: serverBot,
+                        name: 'Server Bot',
+                        userid: 'serverbot' as ID,
                         team: p2team,
                     },
                     rated: false,
@@ -113,6 +96,9 @@ export const commands: Chat.ChatCommands = {
                         }
                     }
                 });
+
+                // Start the battle
+                battle.startGame();
 
                 // Join the user to the battle
                 user.joinRoom(battle.room);
