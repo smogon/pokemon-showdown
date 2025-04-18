@@ -55,6 +55,8 @@ if (isNaN(nodeVersion) || nodeVersion < 18) {
 }
 
 import { FS, Repl } from '../lib';
+// For Restoring Clans Rooms On Restart
+import { restoreClanRooms } from '../../clans/manager';
 
 /*********************************************************
  * Set up most of our globals
@@ -88,6 +90,13 @@ function setupGlobals() {
 	}
 
 	/* Impulse Globals */
+	
+	const Init = {
+		async init() {
+			// Restore clan rooms when the server starts
+			await restoreClanRooms();
+		}
+	}
 	
 	global.Impulse = {};
 
