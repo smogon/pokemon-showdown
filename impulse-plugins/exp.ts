@@ -206,6 +206,36 @@ export class ExpSystem {
 
 Impulse.ExpSystem = ExpSystem;
 
+export const pages: Chat.PageTable = {
+  expladder(args, user) {
+    const richest = ExpSystem.getRichestUsers(100);
+    if (!richest.length) {
+      return `<div class="pad"><h2>No users have any ${EXP_UNIT} yet.</h2></div>`;
+    }
+
+    const data = richest.map(([userid, exp], index) => {
+      const level = ExpSystem.getLevel(exp);
+      const expForNext = ExpSystem.getExpForNextLevel(level + 1);
+      return [
+        (index + 1).toString(),
+        Impulse.nameColor(userid, true, true),
+        `${exp} ${EXP_UNIT}`,
+        level.toString(),
+        `${expForNext} ${EXP_UNIT}`,
+      ];
+    });
+
+    const output = Impulse.generateThemedTable(
+      `Top ${richest.length} Users by ${EXP_UNIT}`,
+      ['Rank', 'User', 'EXP', 'Level', 'Next Level At'],
+      data,
+      Impulse.nameColor('TurboRx', true, true)
+    );
+    return `<div class="pad ladder">${output}</div>`;
+  },
+};
+
+
 export const commands: Chat.Commands = {
   level: 'exp',
 	exp(target, room, user) {
@@ -429,7 +459,7 @@ export const commands: Chat.Commands = {
     setTimeout(() => ExpSystem.checkDoubleExpStatus(), duration);
 },
 
-  expladder(target, room, user) {
+  /*expladder(target, room, user) {
     if (!this.runBroadcast()) return;
     const richest = ExpSystem.getRichestUsers(100);
     if (!richest.length) {
@@ -455,7 +485,11 @@ export const commands: Chat.Commands = {
       Impulse.nameColor('TurboRx', true, true)
     );
     this.ImpulseReplyBox(output);
-  },
+  },*/
+	expladder(target, room, user) {
+		if (!this.runBroadcast()) return;
+		return this.parse(`/join view-expladder`);
+	},
 
   exphelp(target, room, user) {
     if (!this.runBroadcast()) return;
