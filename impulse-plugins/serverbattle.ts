@@ -7,7 +7,7 @@
  * @author musaddiktemkar
  */
 
-import {ServerAI} from './serverbattle/ai';
+import {ServerAI} from './ai';
 import type {Battle} from '../sim/battle';
 
 interface ServerBattleSettings {
