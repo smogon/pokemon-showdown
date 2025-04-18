@@ -64,10 +64,6 @@ function parseEmoticons(message: string, room?: Room): string | false {
 	parsedMessage = parsedMessage.replace(/\~\~([^< ](?:[^<]*?[^< ])?)\~\~/g, '<strike>$1</strike>'); // strikethrough
 	parsedMessage = parsedMessage.replace(/&lt;&lt;([a-z0-9-]+)&gt;&gt;/g, '&laquo;<a href="/$1" target="_blank">$1</a>&raquo;'); // <<roomid>>
 	
-	// Add autolinks last
-	if (typeof Autolinker !== 'undefined') {
-		parsedMessage = Autolinker.link(parsedMessage, {stripPrefix: false, phone: false, twitter: false});
-	}
 	
 	return parsedMessage;
 }
