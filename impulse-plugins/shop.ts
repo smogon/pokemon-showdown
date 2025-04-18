@@ -278,17 +278,17 @@ export const pages: Chat.PageTable = {
     // Pagination
     output += `<div class="spacer"><div class="buttonbar" style="text-align: center">`;
     if (page > 1) {
-      output += `<button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-${page - 1}">` +
+      output += `<button class="button" name="send" value="/join view-receiptlogs-${filterUserid || ''}-${page - 1}">` +
         `<i class="fa fa-chevron-left"></i> Previous</button> `;
     }
-    output += `<button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-1">` +
+    output += `<button class="button" name="send" value="/join view-receiptlogs-${filterUserid || ''}-1">` +
       `<i class="fa fa-angle-double-left"></i> First</button> ` +
       `<span style="border: 1px solid #6688AA; padding: 2px 8px; border-radius: 4px;">` +
       `Page ${page} of ${totalPages}</span> ` +
-      `<button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-${totalPages}">` +
+      `<button class="button" name="send" value="/join view-receiptlogs-${filterUserid || ''}-${totalPages}">` +
       `Last <i class="fa fa-angle-double-right"></i></button>`;
     if (page < totalPages) {
-      output += ` <button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-${page + 1}">` +
+      output += ` <button class="button" name="send" value="/join view-receiptlogs-${filterUserid || ''}-${page + 1}">` +
         `Next <i class="fa fa-chevron-right"></i></button>`;
     }
     output += `</div></div></div>`;
