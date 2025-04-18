@@ -9,21 +9,26 @@ import type {Battle} from '../sim/battle';
 
 export class ServerAI {
     makeDecision(battle: Battle, serverSide: number): string {
-        const activePokemon = battle.sides[serverSide].active[0];
-        if (!activePokemon) return 'default';
+        try {
+            const activePokemon = battle.sides[serverSide].active[0];
+            if (!activePokemon) return 'default';
 
-        const possibleMoves = [];
-        for (const moveSlot of activePokemon.moveSlots) {
-            if (!moveSlot.disabled) {
-                possibleMoves.push(moveSlot.id);
+            const possibleMoves = [];
+            for (const moveSlot of activePokemon.moveSlots) {
+                if (!moveSlot.disabled) {
+                    possibleMoves.push(moveSlot.id);
+                }
             }
+
+            if (possibleMoves.length === 0) return 'default'; // Use struggle
+
+            // Pick a random move
+            const move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+            return `move ${move}`;
+        } catch (e) {
+            console.error("Error in makeDecision:", e);
+            return 'default';
         }
-
-        if (possibleMoves.length === 0) return 'default'; // Use struggle
-
-        // Pick a random move
-        const move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
-        return `move ${move}`;
     }
 }
 
@@ -33,52 +38,72 @@ export const commands: Chat.ChatCommands = {
         async ''(target, room, user) {
             if (!this.canTalk()) return;
             
-            // Default to random battle format
-            const format = 'gen9randombattle';
-            
-            // Create the battle room
-            const battle = await Rooms.createBattle({
-                format: format,
-                players: [{name: user.name, user: user}, {name: 'Server', user: null}],
-                rated: false,
-                challengeType: 'challenge',
-            });
+            try {
+                // Default to random battle format
+                const format = Dex.formats.get('gen9randombattle');
+                if (!format.exists) {
+                    throw new Chat.ErrorMessage(`Format gen9randombattle not found.`);
+                }
 
-            if (!battle) throw new Chat.ErrorMessage(`Failed to create battle.`);
+                // Create teams for both players
+                const teams = [null, null]; // Use random teams
+                
+                // Create battle options
+                const options = {
+                    format: format,
+                    rated: false
+                };
 
-            // Initialize server AI
-            const serverAI = new ServerAI();
-            
-            // Set up battle listeners
-            battle.stream.write(`>start {"formatid":"${format}"}`);
-            battle.stream.write(`>player p1 ${JSON.stringify({name: user.name, avatar: user.avatar})}`);
-            battle.stream.write(`>player p2 ${JSON.stringify({name: "Musaddik Temkar Ggggggggg", avatar: 1})}`);
+                // Create the battle
+                const battle = await Rooms.createBattle(options);
+                if (!battle) {
+                    throw new Chat.ErrorMessage(`Failed to create battle.`);
+                }
 
-            // Handle server's turns
-            battle.stream.on('message', (chunk: string) => {
-                const parts = chunk.split('\n');
-                for (const part of parts) {
-                    if (part.startsWith('|request|')) {
-                        try {
-                            const request = JSON.parse(part.slice(9));
-                            if (request.side.id === 'p2') { // Server's turn
-                                const decision = serverAI.makeDecision(battle, 1);
-                                if (decision) {
-                                    void battle.makeChoices('default', decision);
+                // Set up the players
+                battle.setPlayer('p1', {
+                    name: user.name,
+                    avatar: user.avatar,
+                    team: teams[0]
+                });
+
+                battle.setPlayer('p2', {
+                    name: "Server",
+                    avatar: "1",
+                    team: teams[1]
+                });
+
+                // Initialize server AI
+                const serverAI = new ServerAI();
+                
+                // Handle server's turns
+                battle.battle?.stream.on('message', (chunk: string) => {
+                    const lines = chunk.split('\n');
+                    for (const line of lines) {
+                        if (line.startsWith('|request|')) {
+                            try {
+                                const request = JSON.parse(line.slice(9));
+                                if (request.side?.id === 'p2') { // Server's turn
+                                    const decision = serverAI.makeDecision(battle.battle!, 1);
+                                    void battle.battle?.makeChoices('default', decision);
                                 }
+                            } catch (e) {
+                                console.error('Error handling battle request:', e);
                             }
-                        } catch (e) {
-                            // Handle JSON parse error
-                            console.error('Error parsing request:', e);
                         }
                     }
-                }
-            });
+                });
 
-            // Join the user to the battle room
-            user.joinRoom(battle.room);
-            
-            return this.parse(`/join ${battle.roomid}`);
+                // Join the battle room
+                if (battle.roomid) {
+                    user.joinRoom(battle.roomid);
+                    this.parse(`/join ${battle.roomid}`);
+                }
+
+            } catch (e) {
+                console.error("Error in serverbattle command:", e);
+                throw new Chat.ErrorMessage(`Failed to create server battle: ${(e as Error).message}`);
+            }
         },
 
         help() {
