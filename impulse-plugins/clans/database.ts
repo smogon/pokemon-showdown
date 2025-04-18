@@ -30,10 +30,6 @@ class ClanDatabase {
                 if (!clan.hasOwnProperty('description')) {
                     clan.description = undefined;
                 }
-                // Add new isRoomClosed property with default value
-                if (!clan.hasOwnProperty('isRoomClosed')) {
-                    clan.isRoomClosed = false;
-                }
                 this.clans.set(clan.id, clan);
             }
         } catch (error) {
@@ -58,9 +54,6 @@ class ClanDatabase {
         }
         if (!clan.hasOwnProperty('description')) {
             clan.description = undefined;
-        }
-        if (!clan.hasOwnProperty('isRoomClosed')) {
-            clan.isRoomClosed = false;
         }
         this.clans.set(clan.id, clan);
         await this.saveClansToFile();

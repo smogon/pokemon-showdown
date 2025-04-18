@@ -429,13 +429,12 @@ export const commands: Chat.Commands = {
 
             return this.sendReply(confirmationMessage);
         },
-	 },
 
-        clanhelp(target, room, user) {
+        help(target, room, user) {
             if (!this.runBroadcast()) return;
-            this.ImpulseReplyBox(
+            this.sendReplyBox(
                 `<div class="infobox">` +
-                `<details><summary><center><strong>Clan Commands:</strong></center></summary><br/>` +
+                `<center><strong>Clan Commands:</strong></center><br/>` +
                 `<ul>` +
                 `<li><code>/clan rank [username], [rank]</code> - Changes a user's clan rank. Requires: Clan Leader</li>` +
                 `<li><code>/clan invite [username]</code> - Invites a user to your clan. Requires: Clan Leader or Deputy</li>` +
@@ -446,7 +445,7 @@ export const commands: Chat.Commands = {
                 `<li><code>/clan kick [username]</code> - Kicks a user from your clan. Requires: Clan Leader or Deputy</li>` +
                 `<li><code>/clan leave</code> - Leaves your current clan. Leaders must transfer leadership first.</li>` +
                 `</ul>` +
-                `</details></div>`
+                `</div>`
 				);
         },
 };

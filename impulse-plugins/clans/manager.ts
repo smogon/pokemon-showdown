@@ -40,8 +40,7 @@ class ClanManagerImpl implements ClanManager {
             createdAt: Date.now(),
             points: 1000, // Initialize points
             icon: undefined,
-            description: undefined,
-            isRoomClosed: false // Initialize room state
+            description: undefined
         };
 
         await clanDatabase.saveClan(clanData);
@@ -205,116 +204,6 @@ class ClanManagerImpl implements ClanManager {
     async getPendingInvite(inviteeId: ID): Promise<ClanInvite | null> {
         return clanInviteDatabase.getPendingInvite(toID(inviteeId));
     }
-
-    async setClanRoomClosed(clanId: ID, isClosed: boolean): Promise<boolean> {
-        const clan = await this.getClan(toID(clanId));
-        if (!clan) return false;
-
-        clan.isRoomClosed = isClosed;
-        await clanDatabase.saveClan(clan);
-        return true;
-    }
-
-    async isClanRoomClosed(clanId: ID): Promise<boolean> {
-        const clan = await this.getClan(toID(clanId));
-        return clan?.isRoomClosed || false;
-    }
 }
 
 export const clanManager = new ClanManagerImpl();
-
-/**
- * Restores all clan rooms when the server starts up
- * Should be called during server initialization to avoid clan rooms being deleted on restart
- */
-export async function restoreClanRooms() {
-    const clans = clanDatabase.getAllClans();
-    for (const clan of clans) {
-        const clanRoomId = clan.id;
-        
-        // Skip if the room already exists
-        if (Rooms.get(clanRoomId)) continue;
-        
-        // Create the room
-        const clanRoom = Rooms.createChatRoom(clanRoomId, clan.name, {
-            isPrivate: true,
-            modjoin: clan.isRoomClosed ? 'clan' : '+',
-            auth: {},
-            introMessage: `<div class="infobox">` +
-                `<div style="text-align: center">` +
-                `<h2>${Chat.escapeHTML(clan.name)}</h2>` +
-                `<p>Welcome to the ${Chat.escapeHTML(clan.name)} clan room!</p>` +
-                `<p><strong>Clan Leader:</strong> ${Chat.escapeHTML(Users.get(clan.leader)?.name || clan.leader)}</p>` +
-                `<p><strong>Created:</strong> ${Chat.toTimestamp(new Date(clan.createdAt))}</p>` +
-                `<p><strong>Points:</strong> ${clan.points}</p>` +
-                `${clan.icon ? `<div id="clan-icon"><img src="${Chat.escapeHTML(clan.icon)}" width="32" height="32" alt="${Chat.escapeHTML(clan.name)} Icon" /></div>` : '<div id="clan-icon"></div>'}` +  
-                `${clan.description ? `<p id="clan-description">${Chat.escapeHTML(clan.description)}</p>` : '<p id="clan-description"></p>'}` +
-                `</div></div>`,
-            staffMessage: `<div class="infobox">` +
-                `<h3>Clan Room Staff Guide</h3>` +
-                `<p>Room ranks:</p>` +
-                `<ul>` +
-                `<li><strong>#</strong> - Clan Leader</li>` +
-                `<li><strong>@</strong> - Clan Deputy</li>` +
-                `<li><strong>%</strong> - Clan Senior</li>` +
-                `<li><strong>+</strong> - Clan Member</li>` +
-                `</ul></div>`,
-        });
-
-        if (!clanRoom) {
-            Monitor.error(`Failed to restore clan room: ${clanRoomId}`);
-            continue;
-        }
-
-        // Set up room auth based on clan member ranks
-        for (const member of clan.members) {
-            let authSymbol = '+'; // Default for members
-            
-            switch (member.rank) {
-                case ClanRank.LEADER:
-                    authSymbol = '#';
-                    break;
-                case ClanRank.DEPUTY:
-                    authSymbol = '@';
-                    break;
-                case ClanRank.SENIOR:
-                    authSymbol = '%';
-                    break;
-            }
-            
-            clanRoom.auth.set(member.id, authSymbol);
-        }
-        
-        // Save room settings
-        clanRoom.persist = true;
-        clanRoom.settings.modjoin = clan.isRoomClosed ? 'clan' : '+';
-        clanRoom.settings.isPrivate = true;
-        
-        // Set up personal room auth check for closed rooms
-        if (clan.isRoomClosed) {
-            clanRoom.auth.checkPersonal = function(user: User) {
-                if (user.can('bypassall')) return '+';
-                const userId = toID(user.id);
-                const clan = clanDatabase.getAllClans().find(c => 
-                    c.id === this.room.roomid && 
-                    c.members.some(m => m.id === userId)
-                );
-                if (clan) {
-                    const member = clan.members.find(m => m.id === userId);
-                    if (member) {
-                        switch (member.rank) {
-                            case ClanRank.LEADER: return '#';
-                            case ClanRank.DEPUTY: return '@';
-                            case ClanRank.SENIOR: return '%';
-                            case ClanRank.MEMBER: return '+';
-                        }
-                    }
-                }
-                return false;
-            };
-        }
-        
-        clanRoom.saveSettings();
-        Monitor.log(`Restored clan room: ${clan.name}`);
-    }
-}
