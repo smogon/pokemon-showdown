@@ -1,4 +1,4 @@
-import { FS } from '../lib/fs';
+import { FS } from '../../lib/fs';
 
 // Type definitions
 export interface NewsEntry {
