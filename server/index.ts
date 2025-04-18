@@ -56,7 +56,7 @@ if (isNaN(nodeVersion) || nodeVersion < 18) {
 
 import { FS, Repl } from '../lib';
 // For Restoring Clans Rooms On Restart
-import { restoreClanRooms } from '../../impulse-plugins/clans/manager';
+import { restoreClanRooms } from '../impulse-plugins/clans/manager';
 
 /*********************************************************
  * Set up most of our globals
