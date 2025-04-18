@@ -441,9 +441,7 @@ export class RoomBattleTimer {
 		}
 		let didSomething = false;
 		for (const player of players) {
-			if (!player.id) continue; // already eliminated, relevant for FFA gamesif it
-			// https://play.pokemonshowdown.com/battle-gen9unratedrandombattle-2255606027-5a6bcd9zlb93e6id5pp7juvhcg5w41spw
-			// why is this line here?
+			if (player.eliminated) continue;
 			if (player.turnSecondsLeft > 0) continue;
 			if (this.settings.timeoutAutoChoose && player.secondsLeft > 0 && player.knownActive) {
 				void this.battle.stream.write(`>${player.slot} default`);
