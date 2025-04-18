@@ -451,6 +451,51 @@ const TWISTS: { [k: string]: Twist } = {
 		},
 	},
 
+	pointless: {
+		id: 'pointless',
+		name: 'Pointless',
+		desc: 'Players get bonus points for guessing the least commonly guessed answers.',
+		onAfterLoad() {
+			this.correct = this.questions.map(() => ({}));
+		},
+
+		onCorrectAnswer(player: ScavengerHuntPlayer, value: string) {
+			const curr = player.currentQuestion;
+
+			if (!this.correct[curr][value]) this.correct[curr][value] = [];
+			if (this.correct[curr][value].includes(player.id)) return;
+
+			this.correct[curr][value].push(player.id);
+		},
+
+		onAfterEnd(isReset) {
+			if (isReset) return;
+
+			const buffer = [];
+
+			for (const [idx, data] of this.correct.entries()) {
+				// collect the data for each question
+				let collection = [];
+
+				for (const str in data) {
+					collection.push({ players: data[str], count: data[str].length, value: str });
+				}
+
+				const minValue = collection.reduce((prev, next) => prev.count > next.count ? next : prev).count;
+
+				const matches = collection.filter(entry => entry.count === minValue).map(entry => [entry.value]).reduce((prev, next) => prev.concat(next));
+				const matchedPlayers = collection.filter(entry => entry.count === minValue).map(entry => entry.players).reduce((prev, next) => prev.concat(next));
+
+				// display the data
+				const matchDisplay = matches.join(', ');
+				const playerDisplay = `- ${matchedPlayers.join(', ')}`;
+				buffer.push(`Q${idx + 1}: ${matchDisplay} ${playerDisplay}`);
+			}
+
+			this.announce(`<h3>Least frequent correct answers:</h3>${buffer.join('<br />')}`);
+		},
+	},
+
 	minesweeper: {
 		id: 'minesweeper',
 		name: 'Minesweeper',
