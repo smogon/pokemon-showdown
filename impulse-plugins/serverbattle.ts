@@ -3,107 +3,82 @@
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
  * This plugin allows users to battle against a server-controlled AI opponent.
- * 
- * @author musaddiktemkar
  */
 
-import {ServerAI} from './ai';
 import type {Battle} from '../sim/battle';
 
-interface ServerBattleSettings {
-    format: string;
-    allowedFormats: string[];
-    aiDifficulty: 'easy' | 'medium' | 'hard';
-}
+export class ServerAI {
+    makeDecision(battle: Battle, serverSide: number): string {
+        const activePokemon = battle.sides[serverSide].active[0];
+        if (!activePokemon) return 'default';
 
-export class ServerBattleManager {
-    private settings: ServerBattleSettings = {
-        format: 'gen9randombattle',
-        allowedFormats: ['gen9randombattle'],
-        aiDifficulty: 'easy',
-    };
-
-    private battles: Map<string, Battle> = new Map();
-    private readonly ai: ServerAI;
-
-    constructor() {
-        this.ai = new ServerAI();
-    }
-
-    async createBattle(user: User): Promise<string> {
-        // Create battle options
-        const options = {
-            formatid: this.settings.format,
-            rated: false,
-        };
-
-        // Create battle room
-        const roomid = Rooms.global.prepBattleRoom(this.settings.format);
-        const room = Rooms.global.addRoom({
-            title: `${user.name} vs. Server`,
-            type: 'battle',
-            id: roomid,
-            ...options,
-        }, true);
-
-        if (!room) throw new Chat.ErrorMessage(`Failed to create battle room.`);
-
-        // Set up players
-        const p1 = user;
-        const p2spec = {
-            name: "Server",
-            avatar: "1",
-        };
-
-        const battle = Rooms.createBattle({
-            format: this.settings.format,
-            roomid: roomid,
-            players: [p1.name, p2spec.name],
-            playerids: [p1.id, 'server'],
-            rated: false,
-        });
-
-        if (!battle) throw new Chat.ErrorMessage(`Failed to create battle.`);
-
-        // Store battle reference
-        this.battles.set(roomid, battle);
-
-        // Set up AI handler
-        battle.onEvent('request', (request, side) => {
-            if (side.id === 'p2') { // Server's turn
-                const decision = this.ai.makeDecision(battle, 1);
-                void this.executeDecision(battle, decision);
+        const possibleMoves = [];
+        for (const moveSlot of activePokemon.moveSlots) {
+            if (!moveSlot.disabled) {
+                possibleMoves.push(moveSlot.id);
             }
-        });
+        }
 
-        // Join user to room
-        p1.joinRoom(room);
+        if (possibleMoves.length === 0) return 'default'; // Use struggle
 
-        return roomid;
-    }
-
-    private async executeDecision(battle: Battle, decision: string) {
-        if (!decision) return;
-        battle.makeChoices('default', decision);
-    }
-
-    endBattle(roomid: string) {
-        this.battles.delete(roomid);
+        // Pick a random move
+        const move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+        return `move ${move}`;
     }
 }
 
-export const ServerBattle = new ServerBattleManager();
-
-export const commands: Chat.Commands = {
-        async serverbattle(target, room, user) {
+export const commands: Chat.ChatCommands = {
+    serverbattle: 'battleserver',
+    battleserver: {
+        async ''(target, room, user) {
             if (!this.canTalk()) return;
             
-            try {
-                const roomid = await ServerBattle.createBattle(user);
-                return this.parse(`/join ${roomid}`);
-            } catch (e) {
-                throw new Chat.ErrorMessage(`Failed to create server battle: ${(e as Error).message}`);
-            }
+            // Default to random battle format
+            const format = 'gen9randombattle';
+            
+            // Create the battle room
+            const battle = await Rooms.createBattle({
+                format: format,
+                players: [{name: user.name, user: user}, {name: 'Server', user: null}],
+                rated: false,
+                challengeType: 'challenge',
+            });
+
+            if (!battle) throw new Chat.ErrorMessage(`Failed to create battle.`);
+
+            // Initialize server AI
+            const serverAI = new ServerAI();
+            
+            // Set up battle listeners
+            battle.stream.write(`>start {"formatid":"${format}"}`);
+            battle.stream.write(`>player p1 ${JSON.stringify({name: user.name, avatar: user.avatar})}`);
+            battle.stream.write(`>player p2 ${JSON.stringify({name: "Server", avatar: 1})}`);
+
+            // Handle server's turns
+            battle.stream.on('message', (chunk: string) => {
+                const parts = chunk.split('\n');
+                for (const part of parts) {
+                    if (part.startsWith('|request|')) {
+                        try {
+                            const request = JSON.parse(part.slice(9));
+                            if (request.side.id === 'p2') { // Server's turn
+                                const decision = serverAI.makeDecision(battle, 1);
+                                if (decision) {
+                                    void battle.makeChoices('default', decision);
+                                }
+                            }
+                        } catch (e) {
+                            // Handle JSON parse error
+                            console.error('Error parsing request:', e);
+                        }
+                    }
+                }
+            });
+
+            // Join the user to the battle room
+            user.joinRoom(battle.room);
+            
+            return this.parse(`/join ${battle.roomid}`);
         },
 
         help() {
@@ -113,4 +88,5 @@ export const commands: Chat.Commands = {
                 `The server currently uses basic AI with random move selection.`
             );
         },
-    };
+    },
+};
