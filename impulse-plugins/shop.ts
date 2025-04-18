@@ -37,10 +37,17 @@ interface ReceiptsData {
   [userId: string]: Receipt[];
 }
 
+interface ShopMessage {
+  timestamp: number;
+  message: string;
+}
+
 // ================ Shop Class ================
 class Shop {
   private static shopData: ShopData = Shop.loadShopData();
   private static receiptsData: ReceiptsData = Shop.loadReceiptsData();
+  private static messages: ShopMessage[] = [];
+  private static readonly MAX_MESSAGES = 50;
 
   // Data Loading & Saving Methods
   private static loadShopData(): ShopData {
@@ -77,6 +84,21 @@ class Shop {
     } catch (error) {
       console.error(`Error saving receipts data:\t${error}`);
     }
+  }
+
+  // Shop Message Management
+  static addShopMessage(message: string): void {
+    this.messages.unshift({
+      timestamp: Date.now(),
+      message,
+    });
+    if (this.messages.length > this.MAX_MESSAGES) {
+      this.messages = this.messages.slice(0, this.MAX_MESSAGES);
+    }
+  }
+
+  static getShopMessages(): ShopMessage[] {
+    return this.messages;
   }
 
   // Shop Item Management
@@ -129,6 +151,9 @@ class Shop {
     this.receiptsData[userid].unshift(newReceipt);
     this.saveReceiptsData();
 
+    // Add purchase message
+    this.addShopMessage(`${Impulse.nameColor(userid, true, true)} purchased ${itemName} for ${item.price} ${Impulse.currency}`);
+
     return `You successfully purchased "${itemName}" for ${item.price} ${Impulse.currency}. Your receipt ID is: ${receiptId}`;
   }
 
@@ -148,61 +173,94 @@ class Shop {
   }
 }
 
+// ================ Pages ================
 export const pages: Chat.PageTable = {
   shop(args, user) {
     const items = Shop.getShopItems();
+    const messages = Shop.getShopMessages();
+    
+    // Shop Items Section
+    let output = `<div class="pad">`;
+
+    // Header with timestamp and user info
+    output += `<div class="infobox">` +
+      `<strong>Current Date and Time (UTC):</strong> ${formatUTCTimestamp(new Date())}<br>` +
+      `<strong>Current User:</strong> ${Impulse.nameColor(user.id, true, true)}` +
+      `</div><br>`;
+
+    // Refresh button
+    output += `<div style="float: right">` +
+      `<button class="button" name="send" value="/viewpage shop">` +
+      `<i class="fa fa-refresh"></i> Refresh Shop</button>` +
+      `</div>` +
+      `<div style="clear: both"></div>`;
+
+    // Items table
     if (!items.length) {
-      return `<div class="pad"><h2>The shop is currently empty.</h2></div>`;
+      output += `<h2>The shop is currently empty.</h2>`;
+    } else {
+      const header = ['Item', 'Description', 'Price', 'Buy'];
+      const data = items.map(item => [
+        item.name,
+        item.description,
+        `${item.price} ${Impulse.currency}`,
+        `<button class="button" name="send" value="/buyitem ${item.name}">` +
+          `<i class="fa fa-shopping-cart"></i> Buy</button>`,
+      ]);
+      output += `<div class="ladder">` +
+        `${Impulse.generateThemedTable('Impulse Shop', header, data)}` +
+        `</div>`;
     }
 
-    const header = ['Item', 'Description', 'Price', 'Buy'];
-    const data = items.map(item => [
-      item.name,
-      item.description,
-      `${item.price} ${Impulse.currency}`,
-      `<button class="button" name="send" value="/buyitem ${item.name}">` +
-        `<i class="fa fa-shopping-cart"></i> Buy</button>`,
-    ]);
+    // Recent Activity Section
+    output += `<div style="margin-top: 20px;">` +
+      `<h3><i class="fa fa-history"></i> Recent Activity</h3>` +
+      `<div class="infobox" style="max-height: 300px; overflow-y: auto;">`;
+    
+    if (messages.length) {
+      messages.forEach(msg => {
+        const time = formatUTCTimestamp(new Date(msg.timestamp));
+        output += `<div style="margin: 2px 0;">` +
+          `<small style="color: #666;">[${time}]</small> ${msg.message}` +
+          `</div>`;
+      });
+    } else {
+      output += `<div style="text-align: center; color: #666;">No recent activity</div>`;
+    }
+    
+    output += `</div></div></div>`;
 
-    return `<div class="pad">` +
-      `<div style="float: right">` +
-      `<small>Last Updated: ${formatUTCTimestamp(new Date())} UTC</small> ` +
-      `<button class="button" name="send" value="/viewpage shop">` +
-      `<i class="fa fa-refresh"></i> Refresh</button>` +
-      `</div>` +
-      `<div style="clear: both"></div>` +
-      `<div class="ladder">` +
-      `${Impulse.generateThemedTable('Impulse Shop', header, data)}` +
-      `</div>` +
-      `</div>`;
+    return output;
   },
 
   receiptlogs(args, user) {
-    // Check permissions
     if (!user.can('globalban')) {
       return `<div class="pad"><h2>Access denied.</h2></div>`;
     }
 
-    // Parse arguments
     const [targetUser, pageStr] = args;
     const page = parseInt(pageStr) || 1;
     const entriesPerPage = 50;
     const filterUserid = targetUser ? toID(targetUser) : null;
 
-    // Get all receipts
     const allReceipts = Shop.getAllReceipts(filterUserid);
     const totalPages = Math.ceil(allReceipts.length / entriesPerPage);
     const startIndex = (page - 1) * entriesPerPage;
     const endIndex = startIndex + entriesPerPage;
     const receiptsToShow = allReceipts.slice(startIndex, endIndex);
 
+    let output = `<div class="pad">`;
+
+    // Header with timestamp and user info
+    output += `<div class="infobox">` +
+      `<strong>Current Date and Time (UTC):</strong> ${formatUTCTimestamp(new Date())}<br>` +
+      `<strong>Current User:</strong> ${Impulse.nameColor(user.id, true, true)}` +
+      `</div><br>`;
+
     if (!allReceipts.length) {
-      return `<div class="pad">` +
-        `<h2>No purchase logs found${filterUserid ? ` for ${Impulse.nameColor(filterUserid, true, true)}` : ''}.</h2>` +
-        `</div>`;
+      return output + `<h2>No purchase logs found${filterUserid ? ` for ${Impulse.nameColor(filterUserid, true, true)}` : ''}.</h2></div>`;
     }
 
-    // Generate table data
     const header = ['Receipt ID', 'User ID', 'Time of Purchase', 'Item Name', `Amount (${Impulse.currency})`];
     const data = receiptsToShow.map(receipt => [
       receipt.receiptId,
@@ -212,47 +270,37 @@ export const pages: Chat.PageTable = {
       receipt.amount.toString(),
     ]);
 
-    // Generate table HTML
     const title = `Purchase Logs${filterUserid ? ` for ${Impulse.nameColor(filterUserid, true, true)}` : ''} ` +
       `(Page ${page} of ${totalPages})`;
-    const tableHTML = Impulse.generateThemedTable(title, header, data);
 
-    // Generate pagination links
-    const up = page > 1;
-    const down = page < totalPages;
+    output += `<div class="ladder">${Impulse.generateThemedTable(title, header, data)}</div>`;
 
-    return `<div class="pad">` +
-      `<div style="float: right">` +
-      `<small>Last Updated: ${formatUTCTimestamp(new Date())} UTC</small> ` +
-      `<button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-${page}">` +
-      `<i class="fa fa-refresh"></i> Refresh</button>` +
-      `</div>` +
-      `<div style="clear: both"></div>` +
-      `<div class="ladder">` +
-      `${tableHTML}` +
-      `</div>` +
-      `<br />` +
-      `<div class="spacer">` +
-      `<div class="buttonbar" style="text-align: center">` +
-      `${up ? `<button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-${page - 1}">` +
-        `<i class="fa fa-chevron-left"></i> Previous</button> ` : ''}` +
-      `<button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-1">` +
-        `<i class="fa fa-angle-double-left"></i> First</button> ` +
+    // Pagination
+    output += `<div class="spacer"><div class="buttonbar" style="text-align: center">`;
+    if (page > 1) {
+      output += `<button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-${page - 1}">` +
+        `<i class="fa fa-chevron-left"></i> Previous</button> `;
+    }
+    output += `<button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-1">` +
+      `<i class="fa fa-angle-double-left"></i> First</button> ` +
       `<span style="border: 1px solid #6688AA; padding: 2px 8px; border-radius: 4px;">` +
-        `Page ${page} of ${totalPages}</span> ` +
+      `Page ${page} of ${totalPages}</span> ` +
       `<button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-${totalPages}">` +
-        `Last <i class="fa fa-angle-double-right"></i></button>` +
-      `${down ? ` <button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-${page + 1}">` +
-        `Next <i class="fa fa-chevron-right"></i></button>` : ''}` +
-      `</div>` +
-      `</div>` +
-      `</div>`;
+      `Last <i class="fa fa-angle-double-right"></i></button>`;
+    if (page < totalPages) {
+      output += ` <button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-${page + 1}">` +
+        `Next <i class="fa fa-chevron-right"></i></button>`;
+    }
+    output += `</div></div></div>`;
+
+    return output;
   },
 };
 
 // ================ Chat Commands ================
 export const commands: ChatCommands = {
-	shop(target, room, user) {
+  // User Commands
+  shop(target, room, user) {
     if (!this.runBroadcast()) return;
     return this.parse(`/join view-shop`);
   },
@@ -265,17 +313,8 @@ export const commands: ChatCommands = {
     const result = Shop.buyItem(user.id, target);
     this.sendReply(result);
 
-    // Refresh shop room if purchase was successful
     if (result.includes('successfully purchased')) {
-      const shopRoom = Rooms.get('shop');
-      if (shopRoom) {
-        const pageContent = pages.shop([], user);
-        if (typeof pageContent === 'string') {
-          shopRoom.add(`|uhtmlchange|shop|${pageContent}`);
-          shopRoom.add(`|uhtml|shop|${pageContent}`);
-          shopRoom.update();
-        }
-      }
+      this.parse(`/join view-shop`);
     }
   },
 
@@ -301,7 +340,7 @@ export const commands: ChatCommands = {
     ]);
 
     const tableHTML = Impulse.generateThemedTable('Your Purchase Receipts', header, data);
-    this.ImpulseReplyBox(`<div style="max-height: 400px; overflow-y: auto;">${tableHTML}</div>`);
+    this.sendReplyBox(`<div style="max-height: 400px; overflow-y: auto;">${tableHTML}</div>`);
   },
 
   // Admin Commands
@@ -319,18 +358,10 @@ export const commands: ChatCommands = {
 
     const description = descriptionParts.join(', ');
     Shop.addItem(name, price, description);
+    Shop.addShopMessage(`${Impulse.nameColor(user.name, true, true)} added new item: ${name}`);
+    
     this.sendReply(`Item "${name}" added to the shop for ${price} ${Impulse.currency}.`);
-
-    // Refresh shop room
-    const shopRoom = Rooms.get('shop');
-    if (shopRoom) {
-      const pageContent = pages.shop([], user);
-      if (typeof pageContent === 'string') {
-        shopRoom.add(`|uhtmlchange|shop|${pageContent}`);
-        shopRoom.add(`|uhtml|shop|${pageContent}`);
-        shopRoom.update();
-      }
-    }
+    this.parse(`/join view-shop`);
   },
 
   deleteitem(target, room, user) {
@@ -339,21 +370,14 @@ export const commands: ChatCommands = {
       return this.sendReply(`Usage: /deleteitem [item name]`);
     }
     const result = Shop.deleteItem(target);
-    this.sendReply(result);
-
-    // Refresh shop room
-    const shopRoom = Rooms.get('shop');
-    if (shopRoom) {
-      const pageContent = pages.shop([], user);
-      if (typeof pageContent === 'string') {
-        shopRoom.add(`|uhtmlchange|shop|${pageContent}`);
-        shopRoom.add(`|uhtml|shop|${pageContent}`);
-        shopRoom.update();
-      }
+    if (!result.includes('not found')) {
+      Shop.addShopMessage(`${Impulse.nameColor(user.name, true, true)} removed item: ${target}`);
     }
+    this.sendReply(result);
+    this.parse(`/join view-shop`);
   },
 
-	receiptlogs(target, room, user) {
+  receiptlogs(target, room, user) {
     this.checkCan('globalban');
     if (!this.runBroadcast()) return;
     
