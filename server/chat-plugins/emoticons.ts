@@ -53,7 +53,7 @@ function parseEmoticons(message: string, room?: Room): string | false {
 	}
 
 	// Handle regular messages - we need to process emoticons before other formatting
-	let parsedMessage = Utils.escapeHTML(message).replace(/&#x2f;/g, '/');
+	let parsedMessage = Chat.escapeHTML(message).replace(/&#x2f;/g, '/');
 	parsedMessage = parsedMessage.replace(emoteRegex, match => (
 		`<img src="${emoticons[match]}" title="${match}" height="${size}" width="${size}">`
 	));
