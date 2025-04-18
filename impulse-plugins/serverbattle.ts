@@ -52,7 +52,7 @@ export const commands: Chat.ChatCommands = {
             // Set up battle listeners
             battle.stream.write(`>start {"formatid":"${format}"}`);
             battle.stream.write(`>player p1 ${JSON.stringify({name: user.name, avatar: user.avatar})}`);
-            battle.stream.write(`>player p2 ${JSON.stringify({name: "Server", avatar: 1})}`);
+            battle.stream.write(`>player p2 ${JSON.stringify({name: "Musaddik Temkar Ggggggggg", avatar: 1})}`);
 
             // Handle server's turns
             battle.stream.on('message', (chunk: string) => {
