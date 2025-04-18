@@ -190,7 +190,7 @@ export const pages: Chat.PageTable = {
 
     // Refresh button
     output += `<div style="float: right">` +
-      `<button class="button" name="send" value="/viewpage shop">` +
+      `<button class="button" name="send" value="/join view-shop">` +
       `<i class="fa fa-refresh"></i> Refresh Shop</button>` +
       `</div>` +
       `<div style="clear: both"></div>`;
