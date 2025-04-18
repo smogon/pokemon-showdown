@@ -40,52 +40,56 @@ export const commands: Chat.ChatCommands = {
             
             try {
                 // Default to random battle format
-                const format = Dex.formats.get('gen9randombattle');
-                if (!format.exists) {
-                    throw new Chat.ErrorMessage(`Format gen9randombattle not found.`);
-                }
-
-                // Create teams for both players
-                const teams = [null, null]; // Use random teams
+                const format = 'gen9randombattle';
                 
-                // Create battle options
-                const options = {
-                    format: format,
-                    rated: false
-                };
+                // Generate random teams for both players
+                const generator = Teams.getGenerator(format);
+                const playerTeam = generator.getTeam();
+                const serverTeam = generator.getTeam();
 
                 // Create the battle
-                const battle = await Rooms.createBattle(options);
+                const battle = await Rooms.createBattle({
+                    format: format,
+                    players: [
+                        {
+                            user: user,
+                            team: Teams.pack(playerTeam),
+                            rating: 1000,
+                        },
+                        {
+                            user: null,
+                            name: 'Server',
+                            team: Teams.pack(serverTeam),
+                            rating: 1000,
+                        }
+                    ],
+                    rated: false,
+                    challengeType: 'challenge',
+                });
+
                 if (!battle) {
                     throw new Chat.ErrorMessage(`Failed to create battle.`);
                 }
-
-                // Set up the players
-                battle.setPlayer('p1', {
-                    name: user.name,
-                    avatar: user.avatar,
-                    team: teams[0]
-                });
-
-                battle.setPlayer('p2', {
-                    name: "Server",
-                    avatar: "1",
-                    team: teams[1]
-                });
 
                 // Initialize server AI
                 const serverAI = new ServerAI();
                 
                 // Handle server's turns
-                battle.battle?.stream.on('message', (chunk: string) => {
+                battle.stream.write(`>start {"formatid":"${format}"}`);
+                battle.stream.write(`>player p1 ${JSON.stringify({name: user.name, avatar: user.avatar})}`);
+                battle.stream.write(`>player p2 ${JSON.stringify({name: "Server", avatar: 1})}`);
+
+                battle.stream.on('message', (chunk: string) => {
                     const lines = chunk.split('\n');
                     for (const line of lines) {
                         if (line.startsWith('|request|')) {
                             try {
                                 const request = JSON.parse(line.slice(9));
                                 if (request.side?.id === 'p2') { // Server's turn
-                                    const decision = serverAI.makeDecision(battle.battle!, 1);
-                                    void battle.battle?.makeChoices('default', decision);
+                                    const decision = serverAI.makeDecision(battle, 1);
+                                    if (decision) {
+                                        void battle.makeChoices('default', decision);
+                                    }
                                 }
                             } catch (e) {
                                 console.error('Error handling battle request:', e);
@@ -95,10 +99,7 @@ export const commands: Chat.ChatCommands = {
                 });
 
                 // Join the battle room
-                if (battle.roomid) {
-                    user.joinRoom(battle.roomid);
-                    this.parse(`/join ${battle.roomid}`);
-                }
+                this.parse(`/join ${battle.roomid}`);
 
             } catch (e) {
                 console.error("Error in serverbattle command:", e);
