@@ -694,7 +694,7 @@ export class CommandContext extends MessageContext {
 	}
 
 	
-	sendChatMessage(message: string) {
+	/*sendChatMessage(message: string) {
 		if (this.pmTarget) {
 			const blockInvites = this.pmTarget.settings.blockInvites;
 			if (blockInvites && /^<<.*>>$/.test(message.trim())) {
@@ -724,6 +724,38 @@ export class CommandContext extends MessageContext {
 		if (result === undefined) result = false;
 
 		return result;
+	}*/
+
+	sendChatMessage(message: string) {
+    // First check for HTML in the message
+    let isHTML = false;
+    if (message.substr(0, 5) === "/html") {
+        message = message.substr(5);
+        isHTML = true;
+    }
+
+    // Process emoticons
+    const parsedMessage = Chat.plugins.emoticons?.Chat?.parseMessage?.(message, this.room) || message;
+
+    // Now handle sending based on the target (PM or room)
+    if (this.pmTarget) {
+        const blockInvites = this.pmTarget.settings.blockInvites;
+        if (blockInvites && /^<<.*>>$/.test(message.trim())) {
+            if (
+                !this.user.can('lock') && blockInvites === true ||
+                !Users.globalAuth.atLeast(this.user, blockInvites as GroupSymbol)
+            ) {
+                Chat.maybeNotifyBlocked('invite', this.pmTarget, this.user);
+                throw new Chat.ErrorMessage(`${this.pmTarget.name} is blocking room invites.`);
+            }
+        }
+        Chat.PrivateMessages.send(parsedMessage, this.user, this.pmTarget);
+    } else if (this.room) {
+        this.room.add(`|c|${this.user.getIdentity(this.room)}|${parsedMessage}`);
+        this.room.game?.onLogMessage?.(parsedMessage, this.user);
+    } else {
+        this.connection.popup(`Your message could not be sent:\n\n${message}\n\nIt needs to be sent to a user or room.`);
+    }
 	}
 
 	checkFormat(room: BasicRoom | null | undefined, user: User, message: string) {
