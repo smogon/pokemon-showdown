@@ -148,7 +148,6 @@ class Shop {
   }
 }
 
-// ================ Pages ================
 export const pages: Chat.PageTable = {
   shop(args, user) {
     const items = Shop.getShopItems();
@@ -168,7 +167,7 @@ export const pages: Chat.PageTable = {
     return `<div class="pad">` +
       `<div style="float: right">` +
       `<small>Last Updated: ${formatUTCTimestamp(new Date())} UTC</small> ` +
-      `<button class="button" name="send" value="/shop">` +
+      `<button class="button" name="send" value="/viewpage shop">` +
       `<i class="fa fa-refresh"></i> Refresh</button>` +
       `</div>` +
       `<div style="clear: both"></div>` +
@@ -225,7 +224,7 @@ export const pages: Chat.PageTable = {
     return `<div class="pad">` +
       `<div style="float: right">` +
       `<small>Last Updated: ${formatUTCTimestamp(new Date())} UTC</small> ` +
-      `<button class="button" name="send" value="/receiptlogs ${filterUserid || ''}, ${page}">` +
+      `<button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-${page}">` +
       `<i class="fa fa-refresh"></i> Refresh</button>` +
       `</div>` +
       `<div style="clear: both"></div>` +
@@ -235,15 +234,15 @@ export const pages: Chat.PageTable = {
       `<br />` +
       `<div class="spacer">` +
       `<div class="buttonbar" style="text-align: center">` +
-      `${up ? `<button class="button" name="send" value="/receiptlogs ${filterUserid || ''}, ${page - 1}">` +
+      `${up ? `<button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-${page - 1}">` +
         `<i class="fa fa-chevron-left"></i> Previous</button> ` : ''}` +
-      `<button class="button" name="send" value="/receiptlogs ${filterUserid || ''}, 1">` +
+      `<button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-1">` +
         `<i class="fa fa-angle-double-left"></i> First</button> ` +
       `<span style="border: 1px solid #6688AA; padding: 2px 8px; border-radius: 4px;">` +
         `Page ${page} of ${totalPages}</span> ` +
-      `<button class="button" name="send" value="/receiptlogs ${filterUserid || ''}, ${totalPages}">` +
+      `<button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-${totalPages}">` +
         `Last <i class="fa fa-angle-double-right"></i></button>` +
-      `${down ? ` <button class="button" name="send" value="/receiptlogs ${filterUserid || ''}, ${page + 1}">` +
+      `${down ? ` <button class="button" name="send" value="/viewpage receiptlogs-${filterUserid || ''}-${page + 1}">` +
         `Next <i class="fa fa-chevron-right"></i></button>` : ''}` +
       `</div>` +
       `</div>` +
@@ -253,30 +252,9 @@ export const pages: Chat.PageTable = {
 
 // ================ Chat Commands ================
 export const commands: ChatCommands = {
-  // User Commands
-  shop(target, room, user) {
+	shop(target, room, user) {
     if (!this.runBroadcast()) return;
-
-    // Create or get the room
-    const shopRoom = Rooms.get('shop') || Rooms.createChatRoom('shop', 'Impulse Shop', {
-      isPrivate: 'hidden',
-      auth: {},
-    });
-
-    if (!shopRoom) return this.errorReply(`Failed to create Shop room.`);
-
-    // Update the room's content
-    const pageContent = pages.shop([], user);
-    if (typeof pageContent === 'string') {
-      shopRoom.add(`|uhtmlchange|shop|${pageContent}`);
-      shopRoom.add(`|uhtml|shop|${pageContent}`);
-      shopRoom.update();
-    }
-
-    // Join the room
-    if (!room || room.roomid !== 'shop') {
-      return this.parse(`/join shop`);
-    }
+    return this.parse(`/viewpage shop`);
   },
 
   buyitem(target, room, user) {
@@ -375,36 +353,15 @@ export const commands: ChatCommands = {
     }
   },
 
-  receiptlogs(target, room, user) {
+	receiptlogs(target, room, user) {
     this.checkCan('globalban');
     if (!this.runBroadcast()) return;
     
-    // Create or get the room
-    const logsRoom = Rooms.get('receiptlogs') || Rooms.createChatRoom('receiptlogs', 'Purchase Logs', {
-      isPrivate: 'hidden',
-      modjoin: '%',
-      auth: {},
-    });
-
-    if (!logsRoom) return this.errorReply(`Failed to create Purchase Logs room.`);
-
-    // Parse target
     const parts = target.split(',').map(p => p.trim());
     const targetUser = parts[0] || '';
     const page = parseInt(parts[1]) || 1;
-
-    // Update the room's content
-    const pageContent = pages.receiptlogs([targetUser, String(page)], user);
-    if (typeof pageContent === 'string') {
-      logsRoom.add(`|uhtmlchange|receiptlogs|${pageContent}`);
-      logsRoom.add(`|uhtml|receiptlogs|${pageContent}`);
-      logsRoom.update();
-    }
-
-    // Join the room
-    if (!room || room.roomid !== 'receiptlogs') {
-      return this.parse(`/join receiptlogs`);
-    }
+    
+    return this.parse(`/viewpage receiptlogs-${toID(targetUser)}-${page}`);
   },
 
   // Help Command
