@@ -49,6 +49,7 @@ export const commands: Chat.Commands = {
 			
 			const result = newsManager.addNews(title.trim(), descParts.join(',').trim(), user.name);
 			this.modlog('NEWS', null, result);
+			this.sendReply(`You have successfully added news ${title}`);
 		},
 		
 		remove: 'delete',
@@ -59,6 +60,7 @@ export const commands: Chat.Commands = {
 			const result = newsManager.deleteNews(target);
 			if (result) {
 				this.modlog('NEWS', null, result);
+				this.sendReply(`You have successfully deleted news titled ${target}`);
 			} else {
 				this.errorReply("News with this title doesn't exist.");
 			}
