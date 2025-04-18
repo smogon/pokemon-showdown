@@ -95,9 +95,7 @@ export class ServerBattleManager {
 export const ServerBattle = new ServerBattleManager();
 
 export const commands: Chat.Commands = {
-    serverbattle: 'battleserver',
-    battleserver: {
-        async ''(target, room, user) {
+        async serverbattle(target, room, user) {
             if (!this.canTalk()) return;
             
             try {
@@ -115,5 +113,4 @@ export const commands: Chat.Commands = {
                 `The server currently uses basic AI with random move selection.`
             );
         },
-    },
-};
+    };
