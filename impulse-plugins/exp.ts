@@ -458,34 +458,7 @@ export const commands: Chat.Commands = {
     ExpSystem.checkDoubleExpStatus(room, user);
     setTimeout(() => ExpSystem.checkDoubleExpStatus(), duration);
 },
-
-  /*expladder(target, room, user) {
-    if (!this.runBroadcast()) return;
-    const richest = ExpSystem.getRichestUsers(100);
-    if (!richest.length) {
-      return this.sendReplyBox(`No users have any ${EXP_UNIT} yet.`);
-    }
-
-    const data = richest.map(([userid, exp], index) => {
-      const level = ExpSystem.getLevel(exp);
-      const expForNext = ExpSystem.getExpForNextLevel(level + 1);
-      return [
-        (index + 1).toString(),
-        Impulse.nameColor(userid, true, true),
-        `${exp} ${EXP_UNIT}`,
-        level.toString(),
-        `${expForNext} ${EXP_UNIT}`,
-      ];
-    });
-
-    const output = Impulse.generateThemedTable(
-      `Top ${richest.length} Users by ${EXP_UNIT}`,
-      ['Rank', 'User', 'EXP', 'Level', 'Next Level At'],
-      data,
-      Impulse.nameColor('TurboRx', true, true)
-    );
-    this.ImpulseReplyBox(output);
-  },*/
+	
 	expladder(target, room, user) {
 		if (!this.runBroadcast()) return;
 		return this.parse(`/join view-expladder`);
