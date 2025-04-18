@@ -6,7 +6,6 @@
  */
 
 import type {Battle} from '../sim/battle';
-import {BattleStream} from '../sim/battle-stream';
 
 export class ServerAI {
     makeDecision(battle: Battle, serverSide: number): string {
@@ -33,6 +32,9 @@ export class ServerAI {
     }
 }
 
+// Create a unique ID for the server bot
+const SERVER_BOT_USERID = 'servbot' as ID;
+
 export const commands: Chat.ChatCommands = {
     serverbattle: 'battleserver',
     battleserver: {
@@ -48,33 +50,41 @@ export const commands: Chat.ChatCommands = {
                     throw new Chat.ErrorMessage(`Invalid format: ${formatId}`);
                 }
 
+                // Create or get the server bot user
+                let serverBot = Users.get(SERVER_BOT_USERID);
+                if (!serverBot) {
+                    // Create a new user object for the server bot
+                    const connection = new Users.Connection('', {
+                        ip: '127.0.0.1',
+                        protocol: 'websocket',
+                        socketid: `${Date.now()}`,
+                    });
+                    serverBot = Users.add(connection, SERVER_BOT_USERID);
+                    serverBot.forceRename('Server Bot', true);
+                    serverBot.trusted = true;
+                    serverBot.avatarNum = 1;
+                    serverBot.connections[0].authedAs = serverBot.id;
+                }
+
                 // Generate teams
                 const generator = Teams.getGenerator(formatId);
                 const p1team = Teams.pack(generator.getTeam());
                 const p2team = Teams.pack(generator.getTeam());
 
-                // Create battle
-                const players: [Player, Player] = [
-                    {
-                        name: user.name,
-                        avatar: user.avatar,
-                        team: p1team,
-                    },
-                    {
-                        name: "Server",
-                        avatar: "1",
-                        team: p2team,
-                    },
-                ];
-
                 const roomid = `battle-${formatId}-${Date.now()}`;
                 const battle = await Rooms.createBattle({
                     format: formatId,
                     roomid,
-                    players,
+                    p1: {
+                        user: user,
+                        team: p1team,
+                    },
+                    p2: {
+                        user: serverBot,
+                        team: p2team,
+                    },
                     rated: false,
-                    p1: {name: user.name, userid: user.id},
-                    p2: {name: "Server", userid: "server"},
+                    challengeType: 'challenge',
                 });
 
                 if (!battle || !battle.room) {
@@ -126,10 +136,3 @@ export const commands: Chat.ChatCommands = {
         },
     },
 };
-
-// Add types for TypeScript
-interface Player {
-    name: string;
-    avatar: string | number;
-    team: string;
-}
