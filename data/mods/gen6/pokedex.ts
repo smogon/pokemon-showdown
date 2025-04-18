@@ -164,6 +164,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		color: "Pink",
 	},
+	shelloseast: {
+		inherit: true,
+		color: "Purple",
+	},
+	gastrodoneast: {
+		inherit: true,
+		color: "Purple",
+	},
 	arceus: {
 		inherit: true,
 		color: "Gray",
