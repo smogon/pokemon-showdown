@@ -7,7 +7,7 @@
  * Updated for modern Pokemon Showdown by: impulseserver
  */
 
-import {FS, Utils} from '../../lib';
+import {FS, Utils} from '../../lib/fs';
 
 interface Emoticons {
 	[key: string]: string;
