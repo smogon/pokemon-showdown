@@ -7,11 +7,16 @@
 
 import type {Battle} from '../sim/battle';
 
+interface AIDecision {
+    choice: string;
+    type: 'move' | 'switch' | 'default';
+}
+
 export class ServerAI {
-    makeDecision(battle: Battle, serverSide: number): string {
+    makeDecision(battle: Battle, serverSide: number): AIDecision {
         try {
             const activePokemon = battle.sides[serverSide].active[0];
-            if (!activePokemon) return 'default';
+            if (!activePokemon) return { choice: 'default', type: 'default' };
 
             const possibleMoves = [];
             for (const moveSlot of activePokemon.moveSlots) {
@@ -20,17 +25,22 @@ export class ServerAI {
                 }
             }
 
-            if (possibleMoves.length === 0) return 'default'; // Use struggle
+            if (possibleMoves.length === 0) {
+                return { choice: 'default', type: 'default' }; // Use struggle
+            }
 
             // Pick a random move
             const move = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
-            return `move ${move}`;
+            return { choice: `move ${move}`, type: 'move' };
         } catch (e) {
             console.error("Error in makeDecision:", e);
-            return 'default';
+            return { choice: 'default', type: 'default' };
         }
     }
 }
+
+// Create a global instance of the AI
+const serverAI = new ServerAI();
 
 export const commands: Chat.ChatCommands = {
     serverbattle: 'battleserver',
@@ -40,46 +50,55 @@ export const commands: Chat.ChatCommands = {
             
             try {
                 // Default to random battle format
-                const format = 'gen9randombattle';
+                const formatid = 'gen9randombattle';
+                const format = Dex.formats.get(formatid);
                 
-                // Generate random teams for both players
-                const generator = Teams.getGenerator(format);
-                const playerTeam = generator.getTeam();
-                const serverTeam = generator.getTeam();
+                if (!format.exists) {
+                    throw new Chat.ErrorMessage(`Invalid format: ${formatid}`);
+                }
 
-                // Create the battle
-                const battle = await Rooms.createBattle({
-                    format: format,
-                    players: [
-                        {
-                            user: user,
-                            team: Teams.pack(playerTeam),
-                            rating: 1000,
-                        },
-                        {
-                            user: null,
-                            name: 'Server',
-                            team: Teams.pack(serverTeam),
-                            rating: 1000,
-                        }
-                    ],
-                    rated: false,
-                    challengeType: 'challenge',
-                });
+                if (!format.team) {
+                    throw new Chat.ErrorMessage(`Format ${format.name} requires a team - try using gen9randombattle instead.`);
+                }
 
+                // Create battle room
+                const options = {
+                    format: formatid,
+                    auth: {
+                        p1: user.id,
+                        p2: 'server',
+                    },
+                };
+
+                const roomid = `battle-${format.id}-${Date.now()}`;
+                const battleRoom = Rooms.createGameRoom(roomid, `[${format.name}] ${user.name} vs. Server`, options);
+                
+                if (!battleRoom) {
+                    throw new Chat.ErrorMessage(`Failed to create battle room.`);
+                }
+
+                const battle = battleRoom.game as Battle;
                 if (!battle) {
                     throw new Chat.ErrorMessage(`Failed to create battle.`);
                 }
 
-                // Initialize server AI
-                const serverAI = new ServerAI();
-                
-                // Handle server's turns
-                battle.stream.write(`>start {"formatid":"${format}"}`);
-                battle.stream.write(`>player p1 ${JSON.stringify({name: user.name, avatar: user.avatar})}`);
-                battle.stream.write(`>player p2 ${JSON.stringify({name: "Server", avatar: 1})}`);
+                // Set up players
+                const p1 = {
+                    user: user,
+                    team: null, // Let the simulator generate a random team
+                };
 
-                battle.stream.on('message', (chunk: string) => {
+                const p2 = {
+                    user: null,
+                    name: 'Server',
+                    team: null, // Let the simulator generate a random team
+                };
+
+                battle.setPlayer('p1', p1);
+                battle.setPlayer('p2', p2);
+
+                // Handle server's moves
+                battleRoom.battle?.stream.on('message', async (chunk: string) => {
                     const lines = chunk.split('\n');
                     for (const line of lines) {
                         if (line.startsWith('|request|')) {
@@ -87,8 +106,8 @@ export const commands: Chat.ChatCommands = {
                                 const request = JSON.parse(line.slice(9));
                                 if (request.side?.id === 'p2') { // Server's turn
                                     const decision = serverAI.makeDecision(battle, 1);
-                                    if (decision) {
-                                        void battle.makeChoices('default', decision);
+                                    if (decision.choice) {
+                                        await battle.choose('p2', decision.choice);
                                     }
                                 }
                             } catch (e) {
@@ -98,8 +117,15 @@ export const commands: Chat.ChatCommands = {
                     }
                 });
 
-                // Join the battle room
-                this.parse(`/join ${battle.roomid}`);
+                // Join user to the room
+                if (!user.games.has(roomid)) {
+                    user.games.add(roomid);
+                }
+
+                battleRoom.update();
+
+                // Send user to battle room
+                return this.parse(`/join ${roomid}`);
 
             } catch (e) {
                 console.error("Error in serverbattle command:", e);
