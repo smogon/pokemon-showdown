@@ -94,7 +94,7 @@ export class ServerBattleManager {
 
 export const ServerBattle = new ServerBattleManager();
 
-export const commands: Chat.ChatCommands = {
+export const commands: Chat.Commands = {
     serverbattle: 'battleserver',
     battleserver: {
         async ''(target, room, user) {
