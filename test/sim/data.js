@@ -336,45 +336,45 @@ describe('Dex data', () => {
 		2: 0,
 		3: 3 + 3, // Deoxys (3) + Castform (3)
 	};
-	// Wormadam (2) + Cherrim (1) + Arceus (16) + Pichu (1) +
-	// Rotom (5) + Giratina (1) + Shaymin (1)
-	formes[4] = formes[3] + 2 + 1 + 16 + 1 + 5 + 1 + 1;
-	// Basculin (1) + Darmanitan (1) + *-Therian (3) + Keldeo (1) +
-	// Kyurem (2) + Meloetta (1) + Genesect (4) - Pichu (1)
-	formes[5] = formes[4] + 1 + 1 + 3 + 1 + 2 + 1 + 4 - 1;
-	// Arceus (1) + Vivillon (2) + Meowstic (1) + Primal (2) +
+	// Burmy (2) + Wormadam (2) + Mothim (2) + Cherrim (1) + Shellos (1) + Gastrodon (1) +
+	// Arceus (16) + Pichu (1) + Rotom (5) + Giratina (1) + Shaymin (1)
+	formes[4] = formes[3] + 2 + 2 + 2 + 1 + 1 + 1 + 16 + 1 + 5 + 1 + 1;
+	// Basculin (1) + Darmanitan (1) + Deerling (3) + Sawsbuck (3) + *-Therian (3) +
+	// Keldeo (1) + Kyurem (2) + Meloetta (1) + Genesect (4) - Pichu (1)
+	formes[5] = formes[4] + 1 + 1 + 3 + 3 + 3 + 1 + 2 + 1 + 4 - 1;
+	// Arceus (1) + Vivillon (19) + Meowstic (1) + Primal (2) +
 	// Aegislash (1) + Pumpkaboo (3) + Gourgeist (3) + Hoopa (1) +
 	// Pikachu (6) + Mega (48) [Floette (1)]
-	formes[6] = formes[5] + 1 + 2 + 1 + 2 + 1 + 3 + 3 + 1 + 6 + 48;
+	formes[6] = formes[5] + 1 + 19 + 1 + 2 + 1 + 3 + 3 + 1 + 6 + 48;
 	// Alola (18) + Totem (12) + Pikachu (7) - Pikachu (6) + Greninja (2) + Zygarde (2) +
-	// Oricorio (3) + Rockruff (1) + Lycanroc (2) + Wishiwashi (1) + Silvally (17) + Minior (1)
+	// Oricorio (3) + Rockruff (1) + Lycanroc (2) + Wishiwashi (1) + Silvally (17) + Minior (7)
 	// Mimikyu (1) + Necrozma (3) [Magearna (1) + LGPE Starters/Meltan/Melmetal (4)]
-	formes[7] = formes[6] + 18 + 12 + 7 - 6 + 2 + 2 + 3 + 1 + 2 + 1 + 17 + 1 + 1 + 3;
+	formes[7] = formes[6] + 18 + 12 + 7 - 6 + 2 + 2 + 3 + 1 + 2 + 1 + 17 + 7 + 1 + 3;
 	// Silvally (17) + Rotom (5) + Basculin (1) + Meowstic (1) +
-	// Aegislash (1) + Pumpkaboo (3) + Gourgeist (3) + Pikachu (7) + Galar (14) +
-	// Alola (8) + Indeedee (1) + Morpeko (1) + Eiscue (1) + Zacian/Zamazenta (2) +
-	// Toxtricity (1) + Cramorant (2) + Necrozma (2) + Mimikyu (2) + Wishiwashi (1) +
-	// Keldeo (1) + Kyruem (2) + Darmanitan (2) + Cherrim (1)
+	// Aegislash (1) + Alcremie (8) + Pumpkaboo (3) + Gourgeist (3) + Pikachu (7) +
+	// Shellos (1) + Gastrodon (1) + Galar (14) + Alola (8) + Indeedee (1) + Morpeko (1) +
+	// Eiscue (1) + Zacian/Zamazenta (2) + Toxtricity (1) + Cramorant (2) + Necrozma (2) + Mimikyu (2) +
+	// Wishiwashi (1) + Keldeo (1) + Kyurem (2) + Darmanitan (2) + Cherrim (1) +
 	// {DLC1} Alola (4) + Galar (1) + Magearna (1) + Urshifu (1) +
 	// Rockruff (1) + Lycanroc (2) + [Pikachu (1) + Zarude (1)]
 	// {DLC2} Giratina (1) + *-Therian (3) + Genesect (4) + Zygarde (2) +
 	// Birds (3) + Slowking (1) + Calyrex (2)
 	// {GMax} 26 + 7
-	formes[8] = 17 + 5 + 1 + 1 + 1 + 3 + 3 + 7 + 14 + 8 +
+	formes[8] = 17 + 5 + 1 + 1 + 1 + 8 + 3 + 3 + 7 + 1 + 1 + 14 + 8 +
 		1 + 1 + 1 + 2 + 1 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 +
 		(4 + 1 + 1 + 1 + 1 + 2 + (1 + 1)) + (1 + 3 + 4 + 2 + 3 + 1 + 2);
 	// Pikachu (8) + Origin (3) + Therian (4) + Alola (16) + Galar (7) + Paldea (4) + Hisui (16) +
 	// Deoxys (3) + Rotom (5) + Shaymin (1) + Arceus (17) + Basculin (2) + Kyurem (2) + Keldeo (1) +
-	// Meloetta (1) + Greninja (1) + Vivillon (2) + Meowstic (1) + Hoopa (1) + Oricorio (3) + Rockruff (1) +
-	// Lycanroc (2) + Minior (1) + Mimikyu (1) + Necrozma (2) + Magearna (1) + Toxtricity (1) +
-	// Antique (2) + Eiscue (1) + Indeedee (1) + Cramorant (2) + Morpeko (1) + Crowned (2) +
-	// Urshifu (1) + Zarude (1) + Calyrex (2) + Oinkologne (1) + Ursaluna (1) + Dudunsparce (1) +
-	// Palafin (1) + Maushold (1) + Squawkabilly (3) + Gimmighoul (1) + Basculegion (1) +
-	// Masterpiece (2) + Ogerpon (7) + Terapagos (2)
+	// Meloetta (1) + Greninja (1) + Vivillon (19) + Meowstic (1) + Hoopa (1) + Oricorio (3) + Rockruff (1) +
+	// Lycanroc (2) + Minior (7) + Mimikyu (1) + Necrozma (2) + Magearna (1) + Toxtricity (1) +
+	// Antique (2) + Eiscue (1) + Shellos (1) + Gastrodon (1) + Indeedee (1) + Cramorant (2) + Morpeko (1) +
+	// Crowned (2) + Urshifu (1) + Zarude (1) + Calyrex (2) + Oinkologne (1) + Ursaluna (1) + Dudunsparce (1) +
+	// Deerling (3) + Sawsbuck (3) + Palafin (1) + Maushold (1) + Squawkabilly (3) + Tatsugiri (2) + Gimmighoul (1) +
+	// Basculegion (1) + Masterpiece (2) + Ogerpon (7) + Alcremie (8) + Terapagos (2)
 	formes[9] = 8 + 3 + 4 + 16 + 7 + 4 + 16 + 3 + 5 + 1 + 17 +
-		2 + 2 + 1 + 1 + 1 + 2 + 1 + 1 + 3 + 1 + 2 + 1 + 1 + 2 +
-		1 + 1 + 2 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 1 + 2 + 1 + 1 +
-		1 + 1 + 3 + 1 + 1 + 2 + 7 + 2;
+		2 + 2 + 1 + 1 + 1 + 19 + 1 + 1 + 3 + 1 + 2 + 7 + 1 + 2 +
+		1 + 1 + 2 + 1 + 1 + 1 + 1 + 2 + 1 + 2 + 1 + 1 + 2 + 1 +
+		1 + 1 + 3 + 3 + 1 + 1 + 3 + 2 + 1 + 1 + 2 + 7 + 8 + 2;
 
 	for (const gen of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
 		it(`Gen ${gen} should have ${species[gen]} species and ${formes[gen]} formes`, () => {
