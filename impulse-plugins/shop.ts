@@ -254,7 +254,7 @@ export const pages: Chat.PageTable = {
 export const commands: ChatCommands = {
 	shop(target, room, user) {
     if (!this.runBroadcast()) return;
-    return this.parse(`/viewpage shop`);
+    return this.parse(`/join view-shop`);
   },
 
   buyitem(target, room, user) {
@@ -361,7 +361,7 @@ export const commands: ChatCommands = {
     const targetUser = parts[0] || '';
     const page = parseInt(parts[1]) || 1;
     
-    return this.parse(`/viewpage receiptlogs-${toID(targetUser)}-${page}`);
+    return this.parse(`/join view-receiptlogs-${toID(targetUser)}-${page}`);
   },
 
   // Help Command
