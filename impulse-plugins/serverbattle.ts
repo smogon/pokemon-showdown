@@ -41,71 +41,79 @@ export const commands: Chat.ChatCommands = {
             try {
                 // Default to random battle format
                 const formatId = 'gen9randombattle';
-                const format = Dex.formats.get(formatId);
                 
+                // Validate format
+                const format = Dex.formats.get(formatId);
                 if (!format.exists) {
                     throw new Chat.ErrorMessage(`Invalid format: ${formatId}`);
                 }
 
-                // Generate teams
+                // Generate teams using the Teams API
                 const generator = Teams.getGenerator(formatId);
-                const p1team = Teams.pack(generator.getTeam());
-                const p2team = Teams.pack(generator.getTeam());
+                if (!generator) {
+                    throw new Chat.ErrorMessage(`Failed to get team generator for format: ${formatId}`);
+                }
 
-                const roomid = `battle-${formatId}-${Date.now()}`;
-                const battle = await Rooms.createBattle({
-                    format: formatId,
-                    roomid,
+                const p1team = generator.getTeam();
+                const p2team = generator.getTeam();
+
+                // Create the battle
+                const battleRoom = await Rooms.createBattle({
+                    format: format,
                     p1: {
-                        name: user.name,
                         userid: user.id,
-                        team: p1team,
+                        name: user.name,
+                        avatar: user.avatar,
+                        team: Teams.pack(p1team),
                     },
                     p2: {
-                        name: 'Server Bot',
                         userid: 'serverbot' as ID,
-                        team: p2team,
+                        name: 'Server Bot',
+                        avatar: '1',
+                        team: Teams.pack(p2team),
                     },
                     rated: false,
                     challengeType: 'challenge',
+                    tour: null,
                 });
 
-                if (!battle || !battle.room) {
-                    throw new Chat.ErrorMessage(`Failed to create battle room.`);
+                if (!battleRoom) {
+                    throw new Chat.ErrorMessage('Failed to create battle room.');
                 }
 
                 // Initialize server AI
                 const serverAI = new ServerAI();
 
-                // Set up battle listeners for server's turns
-                battle.stream.on('message', (chunk: string) => {
-                    const lines = chunk.split('\n');
-                    for (const line of lines) {
-                        if (line.startsWith('|request|')) {
-                            try {
-                                const request = JSON.parse(line.slice(9));
-                                if (request.side?.id === 'p2') { // Server's turn
-                                    const decision = serverAI.makeDecision(battle, 1);
-                                    if (decision) {
-                                        void battle.makeChoices('default', decision);
+                // Set up AI response to battle requests
+                if (battleRoom.battle) {
+                    battleRoom.battle.stream.on('message', (chunk: string) => {
+                        const lines = chunk.split('\n');
+                        for (const line of lines) {
+                            if (line.startsWith('|request|')) {
+                                try {
+                                    const request = JSON.parse(line.slice(9));
+                                    if (request.side?.id === 'p2') {
+                                        const decision = serverAI.makeDecision(battleRoom.battle!, 1);
+                                        if (decision) {
+                                            void battleRoom.battle!.makeChoices('default', decision);
+                                        }
                                     }
+                                } catch (e) {
+                                    console.error('Error handling battle request:', e);
                                 }
-                            } catch (e) {
-                                console.error('Error handling battle request:', e);
                             }
                         }
-                    }
-                });
+                    });
+                }
 
-                // Start the battle
-                battle.startGame();
+                // Add the user to the battle room
+                if (!user.games.has(battleRoom.roomid)) {
+                    user.games.add(battleRoom.roomid);
+                }
+                battleRoom.auth.set(user.id, Users.PLAYER_SYMBOL);
 
-                // Join the user to the battle
-                user.joinRoom(battle.room);
-                
-                battle.room.update();
-                
-                return this.parse(`/join ${battle.roomid}`);
+                // Send the user to the battle room
+                this.parse(`/join ${battleRoom.roomid}`);
 
             } catch (e) {
                 console.error("Error in serverbattle command:", e);
