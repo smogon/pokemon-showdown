@@ -1,4 +1,4 @@
-export class NPC extends User {
+export class NPC extends Users {
     isNPC: boolean;
 
     constructor(name: string, group: string) {
