@@ -2,7 +2,7 @@ import { FS } from '../lib/fs';
 import type { RoomSection } from './chat-commands/room-settings';
 import { toID } from '../sim/dex-data';
 
-export type GroupSymbol = '~' | '#' | '★' | '*' | '@' | '%' | '☆' | '§' | '+' | '^' | ' ' | '‽' | '!';
+export type GroupSymbol = '~' | '&' | '#' | '★' | '*' | '@' | '%' | '☆' | '§' | '+' | '^' | ' ' | '‽' | '!';
 export type EffectiveGroupSymbol = GroupSymbol | 'whitelist';
 export type AuthLevel = EffectiveGroupSymbol | 'unlocked' | 'trusted' | 'autoconfirmed';
 
@@ -15,7 +15,7 @@ export const ROOM_PERMISSIONS = [
 
 export const GLOBAL_PERMISSIONS = [
 	// administrative
-	'bypassall', 'console', 'disableladder', 'lockdown', 'potd',
+	'bypassall', 'console', 'manager', 'disableladder', 'lockdown', 'potd',
 	// other
 	'addhtml', 'alts', 'altsself', 'autotimer', 'globalban', 'bypassblocks', 'bypassafktimer', 'forcepromote', 'forcerename', 'forcewin', 'gdeclare', 'hiderank', 'ignorelimits', 'importinputlog', 'ip', 'ipself', 'lock', 'makeroom', 'modlog', 'rangeban', 'promote',
 ] as const;
