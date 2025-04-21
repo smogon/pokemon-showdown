@@ -3623,6 +3623,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return !pokemon.removeVolatile('destinybond');
 		},
 		condition: {
+			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon) {
 				this.add('-singlemove', pokemon, 'Destiny Bond');
 			},

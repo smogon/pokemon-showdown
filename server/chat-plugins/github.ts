@@ -131,7 +131,7 @@ export const GitHub = new class {
 	report(roomid: RoomID, repo: string, messages: string[] | string) {
 		if (!STAFF_REPOS.includes(repo) && roomid === 'staff') return;
 		if (Array.isArray(messages)) messages = messages.join('<br />');
-		Rooms.get(roomid)?.add(`|html|<div class="infobox">${messages}</div>`).update();
+		Rooms.get(roomid)?.add(`|c| GitHub|/raw <div class="infobox">${messages}</div>`).update();
 	}
 	isGitbanned(result: PullRequest) {
 		if (!gitData.bans) return false;
