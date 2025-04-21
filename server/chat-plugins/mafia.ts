@@ -3754,8 +3754,7 @@ export const commands: Chat.ChatCommands = {
 			} else if (Punishments.hasRoomPunishType(room, userid, `MAFIAGAMEBAN`)) {
 				throw new Chat.ErrorMessage(`User '${targetUser.name}' is already gamebanned in this room, which also means they can't host.`);
 			} else if (Punishments.hasRoomPunishType(room, userid, `MAFIAHOSTBAN`)) {
-				user.sendTo(room, `User '${targetUser.name}' is already hostbanned in this room, but they will now be gamebanned.`);
-				this.parse(`/mafia unhostban ${targetUser.name}`);
+				user.sendTo(room, `User '${targetUser.name}' is already hostbanned in this room, but they will now be gamebanned too.`);
 			}
 
 			if (cmd === 'hostban') {
@@ -3814,8 +3813,7 @@ export const commands: Chat.ChatCommands = {
 			} else if (Punishments.hasRoomPunishType(room, userid, `MAFIAGAMEBAN`)) {
 				throw new Chat.ErrorMessage(`User '${targetUser}' is already gamebanned in this room, which also means they can't host.`);
 			} else if (Punishments.hasRoomPunishType(room, userid, `MAFIAHOSTBAN`)) {
-				user.sendTo(room, `User '${targetUser}' is already hostbanned in this room, but they will now be gamebanned.`);
-				this.parse(`/mafia unhostban ${targetUser}`);
+				user.sendTo(room, `User '${targetUser}' is already hostbanned in this room, but they will now be gamebanned too.`);
 			}
 
 			if (cmd.includes('hostban')) {
@@ -3832,8 +3830,8 @@ export const commands: Chat.ChatCommands = {
 			`/mafia gamebanname [user], [reason], [duration] - Ban a username from playing games for [duration] days. Requires % @ # ~`,
 		],
 
-		nameban: 'gamebanhelp',
-		namebanhelp: 'gamebanhelp',
+		nameban: 'namegamebanhelp',
+		namebanhelp: 'namegamebanhelp',
 		namegamebanhelp() {
 			this.parse('/mafia hostbanhelp');
 		},
