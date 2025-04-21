@@ -2778,6 +2778,12 @@ function runAbilitysearch(target: string, cmd: string, message: string) {
 		}
 	}
 
+	function mapAbilityResults(inputArr: (string | Ability)[]) {
+		return inputArr.map(
+			result => `<a href="//${Config.routes.dex}/abilities/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>`
+		).join(", ");
+	}
+
 	if (foundAbilities.length === 1) return { dt: foundAbilities[0] };
 	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${Utils.escapeHTML(message)}:</span><br />`);
 
@@ -2799,16 +2805,8 @@ function runAbilitysearch(target: string, cmd: string, message: string) {
 				randomAbilities.push(foundAbilities[Math.floor(Math.random() * foundAbilities.length)]);
 			}
 		}
-		resultsStr += randomAbilities.map(
-			result => `<a href="//${Config.routes.dex}/abilities/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>`
-		).join(", ");
+		resultsStr += mapAbilityResults(randomAbilities);
 		return { reply: resultsStr };
-	}
-
-	function mapAbilityResults(inputArr: string[]) {
-		return inputArr.map(
-			result => `<a href="//${Config.routes.dex}/abilities/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>`
-		).join(", ");
 	}
 
 	if (foundAbilities.length > 0) {
