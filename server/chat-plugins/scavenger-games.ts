@@ -475,7 +475,7 @@ const TWISTS: { [k: string]: Twist } = {
 
 			for (const [idx, data] of this.correct.entries()) {
 				// collect the data for each question
-				let collection = [];
+				const collection = [];
 
 				for (const str in data) {
 					collection.push({ players: data[str], count: data[str].length, value: str });
@@ -483,8 +483,10 @@ const TWISTS: { [k: string]: Twist } = {
 
 				const minValue = collection.reduce((prev, next) => prev.count > next.count ? next : prev).count;
 
-				const matches = collection.filter(entry => entry.count === minValue).map(entry => [entry.value]).reduce((prev, next) => prev.concat(next));
-				const matchedPlayers = collection.filter(entry => entry.count === minValue).map(entry => entry.players).reduce((prev, next) => prev.concat(next));
+				const matches = collection.filter(entry => entry.count === minValue)
+					.map(entry => [entry.value]).reduce((prev, next) => prev.concat(next));
+				const matchedPlayers = collection.filter(entry => entry.count === minValue)
+					.map(entry => entry.players).reduce((prev, next) => prev.concat(next));
 
 				// display the data
 				const matchDisplay = matches.join(', ');
