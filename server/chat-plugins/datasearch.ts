@@ -1616,7 +1616,7 @@ function formatCollapsible(message: string, showall: boolean, results: any[], ma
 	const notShown = results.length - RESULTS_MAX_LENGTH;
 	const resultsSummary = `${mapfunc(results.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <span class="ilink">Show all</span>`;
 	const resultsHidden = mapfunc(results);
-	return `<details class="details"${expand ? 'open=""' : ''}><summary><span style="color:#999999">${Utils.escapeHTML(header)}</span><br/><span class="details-preview">${resultsSummary}</span></summary>${resultsHidden}</details>`;
+	return `<details class="details"${expand ? ' open' : ''}><summary><span style="color:#999999">${Utils.escapeHTML(header)}</span><br/><span class="details-preview">${resultsSummary}</span></summary>${resultsHidden}</details>`;
 }
 
 function runMovesearch(target: string, cmd: string, message: string, isTest: boolean) {
