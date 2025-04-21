@@ -314,7 +314,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	covertcloak: {
 		name: "Covert Cloak",
-		shortDesc: "Holder is not affected by the secondary effect of another Pokemon's attack.",
+		shortDesc: "Holder is not affected by the secondary effect of another Pokemon's attack. Prevents effects of Toxic Chain and Poison Touch.",
 	},
 	crackedpot: {
 		name: "Cracked Pot",
