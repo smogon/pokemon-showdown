@@ -786,7 +786,7 @@ export const commands: Chat.ChatCommands = {
 		if (targetUser.id in room.users || user.can('lock')) {
 			targetUser.popup(
 				`|modal||html|<p>${Utils.escapeHTML(user.name)} has banned you from the room ${room.roomid} ` +
-				`${(room.subRooms ? ` and its subrooms` : ``)}${week ? ' for a week' : ''}.` +
+				`${(room.subRooms ? ` and its subrooms` : ``)}${week ? ' for 1 week' : ' for 2 days'}.` +
 				`</p>${(publicReason ? `<p>Reason: ${Utils.escapeHTML(publicReason)}</p>` : ``)}` +
 				`<p>To appeal the ban, PM the staff member that banned you${room.persist ? ` or a room owner. ` +
 				`</p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`}`
