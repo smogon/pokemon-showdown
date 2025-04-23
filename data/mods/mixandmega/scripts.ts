@@ -82,7 +82,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 
 		if (format.customRules) {
-			this.add(`raw|<div class="broadcast-blue"><b>Custom challenges applied for this battle: ${format.customRules.join(', ')}</div>`);
+			this.add(`raw|<div class="broadcast-blue"><b>Custom rules applied for this battle: ${format.customRules.join(', ')}</b></div>`);
 		}
 
 		if (format.onTeamPreview) format.onTeamPreview.call(this);
