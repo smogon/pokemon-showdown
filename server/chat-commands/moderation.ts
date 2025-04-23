@@ -793,8 +793,10 @@ export const commands: Chat.ChatCommands = {
 			);
 		}
 
-		const durationText = week ? ' for 1 week' : ' for 2 days';
-		this.addModAction(`${name} was banned${durationText} from ${room.title} by ${user.name}.${publicReason ? ` (${publicReason})` : ``}`);
+		this.addModAction(
+			`${name} was banned${week ? ' for 1 week' : ' for 2 days'} from ${room.title}` +
+			` by ${user.name}.${publicReason ? ` (${publicReason})` : ``}`
+		);
 
 		const time = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : null;
 		const affected = Punishments.roomBan(room, targetUser, time, null, privateReason);
