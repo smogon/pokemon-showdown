@@ -18060,6 +18060,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 			const numberTargets = move.hitTargets.length;
 			for (const pokemon of move.hitTargets) {
+				// bypasses Shield Dust when hitting multiple targets
 				if (pokemon !== source && pokemon.isActive && (pokemon.removeVolatile('sparklingaria') || numberTargets > 1) &&
 					pokemon.status === 'brn') {
 					pokemon.cureStatus();
