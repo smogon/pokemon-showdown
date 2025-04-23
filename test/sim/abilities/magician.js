@@ -74,4 +74,18 @@ describe('Magician', () => {
 		battle.makeChoices();
 		assert.false.holdsItem(battle.p1.active[0], 'Klefki should not have stolen Weakness Policy.');
 	});
+
+	it(`should steal the item from the faster opponent hit`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Hoopa", ability: 'magician', moves: ['expandingforce'] },
+			{ species: "Tapu Lele", ability: 'psychicsurge', moves: ['sleeptalk'] },
+		], [
+			{ species: "Shuckle", item: 'tr68', moves: ['sleeptalk'] },
+			{ species: "Zapdos", item: 'tr69', moves: ['sleeptalk'] }],
+		]);
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].item, 'tr69');
+		assert.equal(battle.p2.active[0].item, 'tr68');
+		assert.equal(battle.p2.active[1].item, '');
+	});
 });
