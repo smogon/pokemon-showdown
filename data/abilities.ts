@@ -2428,16 +2428,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	magician: {
 		onAfterMoveSecondarySelf(source, target, move) {
-			if (!move || !target || source.switchFlag === true) return;
-			if (target !== source && move.category !== 'Status') {
-				if (source.item || source.volatiles['gem'] || move.id === 'fling') return;
-				const yourItem = target.takeItem(source);
-				if (!yourItem) return;
-				if (!source.setItem(yourItem)) {
-					target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+			if (!move || source.switchFlag === true || !move.hitTargets || source.item || source.volatiles['gem'] ||
+				move.id === 'fling') return;
+			const hitTargets = move.hitTargets;
+			this.speedSort(hitTargets);
+			for (const pokemon of hitTargets) {
+				if (pokemon !== source && move.category !== 'Status') {
+					const yourItem = pokemon.takeItem(source);
+					if (!yourItem) continue;
+					if (!source.setItem(yourItem)) {
+						pokemon.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+						continue;
+					}
+					this.add('-item', source, yourItem, '[from] ability: Magician', `[of] ${pokemon}`);
 					return;
 				}
-				this.add('-item', source, yourItem, '[from] ability: Magician', `[of] ${target}`);
 			}
 		},
 		flags: {},
@@ -4150,7 +4155,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	shielddust: {
 		onModifySecondaries(secondaries) {
 			this.debug('Shield Dust prevent secondary');
-			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+			return secondaries.filter(effect => !!effect.self);
 		},
 		flags: { breakable: 1 },
 		name: "Shield Dust",
