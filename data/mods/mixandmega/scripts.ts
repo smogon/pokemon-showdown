@@ -81,6 +81,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.checkEVBalance();
 		}
 
+		if (format.customRules) {
+			this.add(`raw|<div class="broadcast-blue"><b>Custom challenges applied for this battle: ${format.customRules.join(', ')}</div>`);
+		}
+
 		if (format.onTeamPreview) format.onTeamPreview.call(this);
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
