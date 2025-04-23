@@ -1909,6 +1909,10 @@ export class Battle {
 			this.checkEVBalance();
 		}
 
+		if (format.customRules) {
+			this.add(`raw|<div class="broadcast-blue"><b>Custom challenges applied for this battle: ${format.customRules.join(', ')}</div>`);
+		}
+
 		format.onTeamPreview?.call(this);
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
