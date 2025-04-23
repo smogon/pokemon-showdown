@@ -1091,7 +1091,7 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "UU",
     },
     qwilfishhisui: {
-      tier: "NFE",
+      tier: "UU",
     },
     overqwil: {
       tier: "UU",
@@ -2399,7 +2399,7 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "UU",
     },
     dwebble: {
-      tier: "NFE",
+      tier: "LC",
     },
     crustle: {
       tier: "UU",
@@ -2689,7 +2689,7 @@ export const FormatsData: import("../sim/dex-species").SpeciesFormatsDataTable =
       tier: "UU",
     },
     larvesta: {
-      tier: "NFE",
+      tier: "LC",
     },
     volcarona: {
       tier: "OU",
