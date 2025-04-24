@@ -1854,14 +1854,17 @@ export class Battle {
 	start() {
 		// Deserialized games should use restart()
 		if (this.deserialized) return;
-		// need all players to start
-		if (!this.sides.every(side => !!side)) throw new Error(`Missing sides: ${this.sides}`);
+		// need two players to start
+		const activeSides = this.sides.filter(side => !!side);
+		if (activeSides.length < 2) throw new Error(`At least two players are required to start a battle`);
 
 		if (this.started) throw new Error(`Battle already started`);
 
 		const format = this.format;
 		this.started = true;
 		if (this.gameType === 'multi') {
+			// Keep original 4P multi-team logic unchanged
+			if (this.sides.length < 4) throw new Error(`Multiplayer battles require 4 players`);
 			this.sides[1].foe = this.sides[2]!;
 			this.sides[0].foe = this.sides[3]!;
 			this.sides[2]!.foe = this.sides[1];
@@ -1870,15 +1873,13 @@ export class Battle {
 			this.sides[0].allySide = this.sides[2]!;
 			this.sides[2]!.allySide = this.sides[0];
 			this.sides[3]!.allySide = this.sides[1];
-			// sync side conditions
 			this.sides[2]!.sideConditions = this.sides[0].sideConditions;
 			this.sides[3]!.sideConditions = this.sides[1].sideConditions;
 		} else {
-			this.sides[1].foe = this.sides[0];
-			this.sides[0].foe = this.sides[1];
-			if (this.sides.length > 2) { // ffa
-				this.sides[2]!.foe = this.sides[3]!;
-				this.sides[3]!.foe = this.sides[2]!;
+			if (this.sides.length === 2) {
+				// Singles fallback for 2P FFA
+				this.sides[0].foe = this.sides[1];
+				this.sides[1].foe = this.sides[0];
 			}
 		}
 
@@ -1901,8 +1902,8 @@ export class Battle {
 			subFormat.onBegin?.call(this);
 		}
 
-		if (this.sides.some(side => !side.pokemon[0])) {
-			throw new Error('Battle not started: A player has an empty team.');
+		if (this.sides.some(side => !side || !side.pokemon[0])) {
+			throw new Error('Battle not started: A player has an empty or missing team.');
 		}
 
 		if (this.debugMode) {
