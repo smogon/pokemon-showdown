@@ -230,15 +230,36 @@ export class BattleActions {
 				target = this.battle.getRandomTarget(pokemon, baseMove);
 			}
 		}
+		// Fetch the move data
 		let move = baseMove;
+
+		// Apply Z-Move or Max-Move overrides
 		if (zMove) {
 			move = this.getActiveZMove(baseMove, pokemon);
 		} else if (maxMove) {
 			move = this.getActiveMaxMove(baseMove, pokemon);
 		}
-		//console.log(move)
-		if (move.target === 'randomNormal'){
+
+		// Error: Check if user tried to specify a target for a move that shouldn't have one
+		if (move.target === 'randomNormal') {
+			if (typeof targetLoc !== 'undefined') {
+				return this.battle.add('-error', pokemon.side.id, `${move.name} cannot have a target specified`);
+			}
+			// Randomize target internally
 			target = this.battle.getRandomTarget(pokemon, move);
+		}
+
+		// Error: Check if user failed to specify a target for a move that needs one
+		else if (CHOOSABLE_TARGETS.has(move.target)) {
+			if (typeof targetLoc === 'undefined') {
+				return this.battle.add('-error', pokemon.side.id, `You must specify a target for ${move.name}`);
+			}
+		}
+
+		// Additional safeguard: if the move normally requires targeting but `target` still ends up undefined,
+		// catch it here. This is a safety net for edge cases or bad target mapping logic.
+		if (!target && move.target !== 'self' && move.target !== 'all' && move.target !== 'allySide' && move.target !== 'foeSide') {
+			return this.battle.add('-error', pokemon.side.id, `Failed to determine a valid target for ${move.name}`);
 		}
 			
 		move.isExternal = externalMove;
