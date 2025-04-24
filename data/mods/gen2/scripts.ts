@@ -206,6 +206,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
+			if (move.ohko && pokemon.level < target.level) {
+				this.battle.add('-immune', target, '[ohko]');
+				return false;
+			}
+
 			let accuracy = move.accuracy;
 			if (move.alwaysHit) {
 				accuracy = true;
@@ -216,13 +221,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (accuracy !== true) {
 				accuracy = Math.floor(accuracy * 255 / 100);
 				if (move.ohko) {
-					if (pokemon.level >= target.level) {
-						accuracy += (pokemon.level - target.level) * 2;
-						accuracy = Math.min(accuracy, 255);
-					} else {
-						this.battle.add('-immune', target, '[ohko]');
-						return false;
-					}
+					accuracy += (pokemon.level - target.level) * 2;
+					accuracy = Math.min(accuracy, 255);
 				}
 				if (!move.ignoreAccuracy) {
 					if (pokemon.boosts.accuracy > 0) {
