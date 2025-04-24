@@ -1910,7 +1910,7 @@ export class Battle {
 		}
 
 		if (format.customRules) {
-			this.add(`raw|<div class="infobox">Custom rules applied for this battle: ${format.customRules.join(', ')}</div>`);
+			this.add(`raw|<div class="infobox">Custom rules: ${format.customRules.join(', ')}</div>`);
 		}
 
 		format.onTeamPreview?.call(this);
