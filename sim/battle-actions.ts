@@ -228,6 +228,14 @@ export class BattleActions {
 				baseMove.priority = priority;
 				if (pranksterBoosted) baseMove.pranksterBoosted = pranksterBoosted;
 				target = this.battle.getRandomTarget(pokemon, baseMove);
+				if (changedMove) {
+					try {
+						baseMove = this.dex.getActiveMove(changedMove);
+					} catch {
+						this.battle.add('-error', `Invalid move override: ${changedMove}`);
+						return;
+					}
+				}
 			}
 		}
 		// Fetch the move data
@@ -254,6 +262,14 @@ export class BattleActions {
 			if (typeof targetLoc === 'undefined') {
 				return this.battle.add('-error', pokemon.side.id, `You must specify a target for ${move.name}`);
 			}
+		}
+
+		if (CHOOSABLE_TARGETS.has(move.target) && move.target !== 'randomNormal' && targetLoc === undefined) {
+			return this.battle.add('-error', 'You must specify a target');
+		}
+
+		if (!target && move.target === 'randomNormal') {
+			return this.battle.add('-error', `${pokemon.name}'s move failed because there were no valid targets`);
 		}
 
 		// Additional safeguard: if the move normally requires targeting but `target` still ends up undefined,
