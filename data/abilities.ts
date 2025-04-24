@@ -2429,11 +2429,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	magician: {
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (!move || source.switchFlag === true || !move.hitTargets || source.item || source.volatiles['gem'] ||
-				move.id === 'fling') return;
+				move.id === 'fling' || move.category === 'Status') return;
 			const hitTargets = move.hitTargets;
 			this.speedSort(hitTargets);
 			for (const pokemon of hitTargets) {
-				if (pokemon !== source && move.category !== 'Status') {
+				if (pokemon !== source) {
 					const yourItem = pokemon.takeItem(source);
 					if (!yourItem) continue;
 					if (!source.setItem(yourItem)) {
