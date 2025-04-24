@@ -56,7 +56,7 @@ export const cpmSets: CPMSets = {
 		evs: { hp: 252, spa: 252, spe: 4 }, nature: 'Modest', teraType: 'Fire',
 	},
 	Boogeymancer: {
-		species: 'Boogeymancer', ability: 'Broken Wand', item: 'Life Orb', gender: '',
+		species: 'Boogeymancer', ability: 'Broken Wand', item: 'Heavy-Duty Boots', gender: '',
 		moves: ['Shadow Ball', 'Energy Ball', ['Parting Shot', 'Calm Mind']],
 		signatureMove: 'Lava Plume',
 		evs: { atk: 4, spa: 252, spd: 252 }, nature: 'Timid', teraType: 'Dragon',
