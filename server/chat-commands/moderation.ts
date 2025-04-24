@@ -786,14 +786,17 @@ export const commands: Chat.ChatCommands = {
 		if (targetUser.id in room.users || user.can('lock')) {
 			targetUser.popup(
 				`|modal||html|<p>${Utils.escapeHTML(user.name)} has banned you from the room ${room.roomid} ` +
-				`${(room.subRooms ? ` and its subrooms` : ``)}${week ? ' for a week' : ''}.` +
+				`${(room.subRooms ? ` and its subrooms` : ``)}${week ? ' for 1 week' : ' for 2 days'}.` +
 				`</p>${(publicReason ? `<p>Reason: ${Utils.escapeHTML(publicReason)}</p>` : ``)}` +
 				`<p>To appeal the ban, PM the staff member that banned you${room.persist ? ` or a room owner. ` +
 				`</p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`}`
 			);
 		}
 
-		this.addModAction(`${name} was banned${week ? ' for a week' : ''} from ${room.title} by ${user.name}.${publicReason ? ` (${publicReason})` : ``}`);
+		this.addModAction(
+			`${name} was banned${week ? ' for 1 week' : ' for 2 days'} from ${room.title}` +
+			` by ${user.name}.${publicReason ? ` (${publicReason})` : ``}`
+		);
 
 		const time = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : null;
 		const affected = Punishments.roomBan(room, targetUser, time, null, privateReason);
