@@ -1,6 +1,6 @@
 import { Dex, toID } from './dex';
 
-const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe']);
+const CHOOSABLE_TARGETS = new Set(['normal', 'any', 'adjacentAlly', 'adjacentAllyOrSelf', 'adjacentFoe','randomNormal']);
 
 export class BattleActions {
 	battle: Battle;
@@ -236,7 +236,11 @@ export class BattleActions {
 		} else if (maxMove) {
 			move = this.getActiveMaxMove(baseMove, pokemon);
 		}
-
+		//console.log(move)
+		if (move.target === 'randomNormal'){
+			target = this.battle.getRandomTarget(pokemon, move);
+		}
+			
 		move.isExternal = externalMove;
 
 		this.battle.setActiveMove(move, pokemon, target);
