@@ -110,7 +110,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (format.customRules) {
 			const plural = format.customRules.length === 1 ? '' : 's';
 			const open = format.customRules.length <= 5 ? ' open' : '';
-			this.add(`raw|<div class="infobox"><details class="readmore"${open}><summary><strong>${format.customRules.length} custom rule${plural}:</strong></summary> ${format.customRules.join(', ')}</details></div>`);```
+			this.add(`raw|<div class="infobox"><details class="readmore"${open}><summary><strong>${format.customRules.length} custom rule${plural}:</strong></summary> ${format.customRules.join(', ')}</details></div>`);
 		}
 
 		if (format.onTeamPreview) format.onTeamPreview.call(this);
