@@ -34,6 +34,7 @@
     "node": ">=16.0.0"
   },
   "scripts": {
+    "start:8000": "node pokemon-showdown 8000",
     "start": "node pokemon-showdown start",
     "build": "node build",
     "build-npm": "node build && npx tsc sim/global-types.ts sim/index.ts --declaration --emitDeclarationOnly --declarationDir dist/ --target es2020 --strict --moduleResolution node --types node --lib es2020",

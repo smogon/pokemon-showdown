@@ -3160,9 +3160,12 @@ export class Battle {
 					evs: null!,
 					ivs: null!,
 					level: set.level,
+					gimmick: set.gimmick,
 				};
 				if (this.gen === 8) newSet.gigantamax = set.gigantamax;
-				if (this.gen === 9) newSet.teraType = set.teraType;
+				if (this.gen === 9 && set.gimmick != "D-Max"){ 
+					newSet.teraType = set.teraType;
+				}
 				// Only display Hidden Power type if the Pokemon has Hidden Power
 				// This is based on how team sheets were written in past VGC formats
 				if (set.moves.some(m => this.dex.moves.get(m).id === 'hiddenpower')) newSet.hpType = set.hpType;
