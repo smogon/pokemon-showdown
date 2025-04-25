@@ -1,7 +1,7 @@
-import {MoveCounter, TeamData} from '../gen8/teams';
-import RandomGen7Teams, {BattleFactorySpecies, ZeroAttackHPIVs} from '../gen7/teams';
-import {PRNG, PRNGSeed} from '../../../sim/prng';
-import {toID} from '../../../sim/dex';
+import { type MoveCounter, type TeamData } from '../gen8/teams';
+import RandomGen7Teams, { type BattleFactorySpecies, ZeroAttackHPIVs } from '../gen7/teams';
+import { type PRNG, type PRNGSeed } from '../../../sim/prng';
+import { toID } from '../../../sim/dex';
 
 // Moves that restore HP:
 const RECOVERY_MOVES = [
@@ -62,7 +62,7 @@ const PRIORITY_POKEMON = [
 ];
 
 export class RandomGen6Teams extends RandomGen7Teams {
-	randomSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./sets.json');
+	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -108,7 +108,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			.map(move => move.id);
 	}
 
-	cullMovePool(
+	override cullMovePool(
 		types: string[],
 		moves: Set<string>,
 		abilities: string[],
@@ -284,7 +284,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 	}
 
 	// Generate random moveset for a given species, role, preferred type.
-	randomMoveset(
+	override randomMoveset(
 		types: string[],
 		abilities: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
@@ -349,6 +349,12 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		// Enforce Shadow Sneak on Kecleon
 		if (movePool.includes('shadowsneak') && species.id === 'kecleon') {
 			counter = this.addMove('shadowsneak', moves, types, abilities, teamDetails, species, isLead,
+				movePool, preferredType, role);
+		}
+
+		// Enforce Destiny Bond on Mega Banette, since that move is its entire reason to exist
+		if (movePool.includes('destinybond') && species.id === 'banettemega') {
+			counter = this.addMove('destinybond', moves, types, abilities, teamDetails, species, isLead,
 				movePool, preferredType, role);
 		}
 
@@ -490,7 +496,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (['Fast Attacker', 'Setup Sweeper', 'Bulky Attacker', 'Wallbreaker'].includes(role)) {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
-				const currentAttackType = counter.damagingMoves.values().next().value.type;
+				const currentAttackType = counter.damagingMoves.values().next().value!.type;
 				// Choose an attacking move that is of different type to the current single attack
 				const coverageMoves = [];
 				for (const moveid of movePool) {
@@ -527,7 +533,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		return moves;
 	}
 
-	shouldCullAbility(
+	override shouldCullAbility(
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,
@@ -561,8 +567,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		return false;
 	}
 
-
-	getAbility(
+	override getAbility(
 		types: Set<string>,
 		moves: Set<string>,
 		abilities: string[],
@@ -608,7 +613,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		return this.sample(abilities);
 	}
 
-	getPriorityItem(
+	override getPriorityItem(
 		ability: string,
 		types: string[],
 		moves: Set<string>,
@@ -665,7 +670,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (role === 'Staller') return 'Leftovers';
 	}
 
-	getItem(
+	override getItem(
 		ability: string,
 		types: string[],
 		moves: Set<string>,
@@ -758,7 +763,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		return 'Leftovers';
 	}
 
-	randomSet(
+	override randomSet(
 		species: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false
@@ -777,8 +782,8 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		let ability = '';
 		let item = undefined;
 
-		const evs = {hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85};
-		const ivs = {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31};
+		const evs = { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 };
+		const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 };
 
 		const types = species.types;
 		const baseAbilities = set.abilities!;
@@ -890,9 +895,11 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		};
 	}
 
-	randomFactorySets: {[format: string]: {[species: string]: BattleFactorySpecies}} = require('./factory-sets.json');
+	override randomFactorySets: {
+		[format: string]: { [species: string]: BattleFactorySpecies },
+	} = require('./factory-sets.json');
 
-	randomFactorySet(
+	override randomFactorySet(
 		species: Species,
 		teamData: RandomTeamsTypes.FactoryTeamDetails,
 		tier: string
@@ -901,12 +908,14 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		// const flags = this.randomFactorySets[tier][id].flags;
 		const setList = this.randomFactorySets[tier][id].sets;
 
-		const itemsMax: {[k: string]: number} = {choicespecs: 1, choiceband: 1, choicescarf: 1};
-		const movesMax: {[k: string]: number} = {
+		const itemsMax: { [k: string]: number } = { choicespecs: 1, choiceband: 1, choicescarf: 1 };
+		const movesMax: { [k: string]: number } = {
 			rapidspin: 1, batonpass: 1, stealthrock: 1, defog: 1, spikes: 1, toxicspikes: 1,
 		};
-		const requiredMoves: {[k: string]: string} = {stealthrock: 'hazardSet', rapidspin: 'hazardClear', defog: 'hazardClear'};
-		const weatherAbilitiesRequire: {[k: string]: string} = {
+		const requiredMoves: { [k: string]: string } = {
+			stealthrock: 'hazardSet', rapidspin: 'hazardClear', defog: 'hazardClear',
+		};
+		const weatherAbilitiesRequire: { [k: string]: string } = {
 			hydration: 'raindance', swiftswim: 'raindance',
 			leafguard: 'sunnyday', solarpower: 'sunnyday', chlorophyll: 'sunnyday',
 			sandforce: 'sandstorm', sandrush: 'sandstorm', sandveil: 'sandstorm',
@@ -916,7 +925,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 
 		// Build a pool of eligible sets, given the team partners
 		// Also keep track of sets with moves the team requires
-		let effectivePool: {set: AnyObject, moveVariants?: number[], itemVariants?: number, abilityVariants?: number}[] = [];
+		let effectivePool: { set: AnyObject, moveVariants?: number[], itemVariants?: number, abilityVariants?: number }[] = [];
 		const priorityPool = [];
 		for (const curSet of setList) {
 			if (this.forceMonotype && !species.types.includes(this.forceMonotype)) continue;
@@ -945,15 +954,15 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				curSetVariants.push(variantIndex);
 			}
 			if (reject) continue;
-			effectivePool.push({set: curSet, moveVariants: curSetVariants});
-			if (hasRequiredMove) priorityPool.push({set: curSet, moveVariants: curSetVariants});
+			effectivePool.push({ set: curSet, moveVariants: curSetVariants });
+			if (hasRequiredMove) priorityPool.push({ set: curSet, moveVariants: curSetVariants });
 		}
 		if (priorityPool.length) effectivePool = priorityPool;
 
 		if (!effectivePool.length) {
 			if (!teamData.forceResult) return null;
 			for (const curSet of setList) {
-				effectivePool.push({set: curSet});
+				effectivePool.push({ set: curSet });
 			}
 		}
 
@@ -972,14 +981,14 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			shiny: typeof setData.set.shiny === 'undefined' ? this.randomChance(1, 1024) : setData.set.shiny,
 			level: this.adjustLevel || 100,
 			happiness: typeof setData.set.happiness === 'undefined' ? 255 : setData.set.happiness,
-			evs: setData.set.evs || {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
-			ivs: setData.set.ivs || {hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31},
+			evs: setData.set.evs || { hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84 },
+			ivs: setData.set.ivs || { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 },
 			nature: setData.set.nature || 'Serious',
-			moves: moves,
+			moves,
 		};
 	}
 
-	randomFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
+	override randomFactoryTeam(side: PlayerOptions, depth = 0): RandomTeamsTypes.RandomFactorySet[] {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const forceResult = (depth >= 12);
@@ -998,11 +1007,13 @@ export class RandomGen6Teams extends RandomGen7Teams {
 			weaknesses: {}, resistances: {},
 		};
 		const requiredMoveFamilies = ['hazardSet', 'hazardClear'];
-		const requiredMoves: {[k: string]: string} = {stealthrock: 'hazardSet', rapidspin: 'hazardClear', defog: 'hazardClear'};
-		const weatherAbilitiesSet: {[k: string]: string} = {
+		const requiredMoves: { [k: string]: string } = {
+			stealthrock: 'hazardSet', rapidspin: 'hazardClear', defog: 'hazardClear',
+		};
+		const weatherAbilitiesSet: { [k: string]: string } = {
 			drizzle: 'raindance', drought: 'sunnyday', snowwarning: 'hail', sandstream: 'sandstorm',
 		};
-		const resistanceAbilities: {[k: string]: string[]} = {
+		const resistanceAbilities: { [k: string]: string[] } = {
 			dryskin: ['Water'], waterabsorb: ['Water'], stormdrain: ['Water'],
 			flashfire: ['Fire'], heatproof: ['Fire'],
 			lightningrod: ['Electric'], motordrive: ['Electric'], voltabsorb: ['Electric'],
@@ -1047,7 +1058,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 				// Drought and Drizzle don't count towards the type combo limit
 				typeCombo = set.ability;
 			}
-			if (teamData.typeComboCount[typeCombo] >= 1 * limitFactor) continue;
+			if (teamData.typeComboCount[typeCombo] >= limitFactor) continue;
 
 			// Okay, the set passes, add it to our team
 			pokemon.push(set);

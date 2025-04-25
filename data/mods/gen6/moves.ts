@@ -5,11 +5,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	assist: {
 		inherit: true,
-		flags: {noassist: 1, failcopycat: 1, nosleeptalk: 1},
+		flags: { noassist: 1, failcopycat: 1, nosleeptalk: 1 },
 	},
 	copycat: {
 		inherit: true,
-		flags: {noassist: 1, failcopycat: 1, nosleeptalk: 1},
+		flags: { noassist: 1, failcopycat: 1, nosleeptalk: 1 },
 	},
 	darkvoid: {
 		inherit: true,
@@ -83,7 +83,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 30,
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (!target || target.fainted || target.hp <= 0) this.boost({atk: 2}, pokemon, pokemon, move);
+			if (!target || target.fainted || target.hp <= 0) this.boost({ atk: 2 }, pokemon, pokemon, move);
 		},
 	},
 	flyingpress: {
@@ -97,7 +97,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	mefirst: {
 		inherit: true,
-		flags: {protect: 1, bypasssub: 1, noassist: 1, failcopycat: 1, failmefirst: 1, nosleeptalk: 1},
+		flags: { protect: 1, bypasssub: 1, noassist: 1, failcopycat: 1, failmefirst: 1, nosleeptalk: 1 },
 	},
 	minimize: {
 		inherit: true,
@@ -124,11 +124,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	metronome: {
 		inherit: true,
-		flags: {noassist: 1, failcopycat: 1, nosleeptalk: 1},
+		flags: { noassist: 1, failcopycat: 1, nosleeptalk: 1 },
 	},
 	mistyterrain: {
 		inherit: true,
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -151,7 +152,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect, '[of] ' + source);
+					this.add('-fieldstart', 'move: Misty Terrain', `[from] ability: ${effect}`, `[of] ${source}`);
 				} else {
 					this.add('-fieldstart', 'move: Misty Terrain');
 				}
@@ -169,7 +170,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	naturepower: {
 		inherit: true,
-		flags: {nosleeptalk: 1, noassist: 1, failcopycat: 1},
+		flags: { nosleeptalk: 1, noassist: 1, failcopycat: 1 },
 	},
 	paraboliccharge: {
 		inherit: true,
@@ -178,7 +179,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	partingshot: {
 		inherit: true,
 		onHit(target, source) {
-			this.boost({atk: -1, spa: -1}, target, source);
+			this.boost({ atk: -1, spa: -1 }, target, source);
 		},
 	},
 	powder: {
@@ -201,7 +202,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	rockblast: {
 		inherit: true,
-		flags: {protect: 1, mirror: 1, metronome: 1},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
 	},
 	sheercold: {
 		inherit: true,
@@ -209,7 +210,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	sleeptalk: {
 		inherit: true,
-		flags: {nosleeptalk: 1, noassist: 1, failcopycat: 1},
+		flags: { nosleeptalk: 1, noassist: 1, failcopycat: 1 },
 	},
 	stockpile: {
 		inherit: true,
@@ -218,18 +219,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onStart(target) {
 				this.effectState.layers = 1;
 				this.add('-start', target, 'stockpile' + this.effectState.layers);
-				this.boost({def: 1, spd: 1}, target, target);
+				this.boost({ def: 1, spd: 1 }, target, target);
 			},
 			onRestart(target) {
 				if (this.effectState.layers >= 3) return false;
 				this.effectState.layers++;
 				this.add('-start', target, 'stockpile' + this.effectState.layers);
-				this.boost({def: 1, spd: 1}, target, target);
+				this.boost({ def: 1, spd: 1 }, target, target);
 			},
 			onEnd(target) {
 				const layers = this.effectState.layers * -1;
 				this.effectState.layers = 0;
-				this.boost({def: layers, spd: layers}, target, target);
+				this.boost({ def: layers, spd: layers }, target, target);
 				this.add('-end', target, 'Stockpile');
 			},
 		},

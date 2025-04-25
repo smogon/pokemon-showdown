@@ -5,7 +5,7 @@
  * https://github.com/Hidden50/Pokemon-Showdown-Node-Bot/blob/master/commands/base-auctions.js
  * @author Karthik
  */
-import {Net, Utils} from '../../lib';
+import { Net, Utils } from '../../lib';
 
 interface Player {
 	id: ID;
@@ -86,10 +86,10 @@ function parseCredits(amount: string) {
 
 export class Auction extends Rooms.SimpleRoomGame {
 	override readonly gameid = 'auction' as ID;
-	owners: Set<ID> = new Set();
-	teams: Map<string, Team> = new Map();
-	managers: Map<string, Manager> = new Map();
-	auctionPlayers: Map<string, Player> = new Map();
+	owners = new Set<ID>();
+	teams = new Map<string, Team>();
+	managers = new Map<string, Manager>();
+	auctionPlayers = new Map<string, Player>();
 
 	startingCredits: number;
 	minBid = 3000;
@@ -99,10 +99,10 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	lastQueue: Team[] | null = null;
 	queue: Team[] = [];
-	nomTimer: NodeJS.Timer = null!;
+	nomTimer: NodeJS.Timeout = null!;
 	nomTimeLimit = 0;
 	nomTimeRemaining = 0;
-	bidTimer: NodeJS.Timer = null!;
+	bidTimer: NodeJS.Timeout = null!;
 	bidTimeLimit = 10;
 	bidTimeRemaining = 10;
 	nominatingTeam: Team = null!;
@@ -110,7 +110,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 	highestBidder: Team = null!;
 	highestBid = 0;
 	/** Used for blind mode */
-	bidsPlaced: Map<Team, number> = new Map();
+	bidsPlaced = new Map<Team, number>();
 	state: 'setup' | 'nom' | 'bid' = 'setup';
 	constructor(room: Room, startingCredits = 100000) {
 		super(room);
@@ -261,7 +261,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	sendTimer(change = false, nom = false) {
 		let buf = `<div class="infobox message-error">`;
-		buf += `<i class="fa fa-hourglass-start"></i> ${Chat.toDurationString((nom ? this.nomTimeRemaining : this.bidTimeRemaining) * 1000, {hhmmss: true}).slice(1)}`;
+		buf += `<i class="fa fa-hourglass-start"></i> ${Chat.toDurationString((nom ? this.nomTimeRemaining : this.bidTimeRemaining) * 1000, { hhmmss: true }).slice(1)}`;
 		buf += `</div>`;
 		this.room.add(`|uhtml${change ? 'change' : ''}|timer|${buf}`).update();
 	}
@@ -465,7 +465,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		for (const id of users.map(toID)) {
 			const manager = this.managers.get(id);
 			if (!manager) {
-				this.managers.set(id, {id, team});
+				this.managers.set(id, { id, team });
 			} else {
 				manager.team = team;
 			}
@@ -617,7 +617,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	onChatMessage(message: string, user: User) {
+	override onChatMessage(message: string, user: User) {
 		if (this.state !== 'bid' || this.type !== 'blind') return;
 		if (message.startsWith('.')) message = message.slice(1);
 		if (Number(message.replace(',', '.'))) {
@@ -626,15 +626,15 @@ export class Auction extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	onLogMessage(message: string, user: User) {
+	override onLogMessage(message: string, user: User) {
 		if (this.state !== 'bid' || this.type === 'blind') return;
 		if (message.startsWith('.')) message = message.slice(1);
 		if (Number(message.replace(',', '.'))) {
 			this.room.update();
 			try {
 				this.bid(user, parseCredits(message));
-			} catch (e) {
-				if (e instanceof Chat.ErrorMessage) {
+			} catch (e: any) {
+				if (e.name?.endsWith('ErrorMessage')) {
 					user.sendTo(this.room, Utils.html`|raw|<span class="message-error">${e.message}</span>`);
 				} else {
 					user.sendTo(this.room, `|raw|<span class="message-error">An unexpected error occurred while placing your bid.</span>`);
@@ -740,7 +740,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.destroy();
 	}
 
-	destroy() {
+	override destroy() {
 		this.clearNomTimer();
 		this.clearBidTimer();
 		super.destroy();
@@ -752,14 +752,14 @@ export const commands: Chat.ChatCommands = {
 		create(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
-			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
-			if (room.settings.auctionDisabled) return this.errorReply('Auctions are currently disabled in this room.');
+			if (room.game) throw new Chat.ErrorMessage(`There is already a game of ${room.game.title} in progress in this room.`);
+			if (room.settings.auctionDisabled) throw new Chat.ErrorMessage('Auctions are currently disabled in this room.');
 
 			let startingCredits;
 			if (target) {
 				startingCredits = parseCredits(target);
 				if (startingCredits < 10000 || startingCredits > 10000000) {
-					return this.errorReply(`Starting credits must be between 10,000 and 10,000,000.`);
+					throw new Chat.ErrorMessage(`Starting credits must be between 10,000 and 10,000,000.`);
 				}
 			}
 			const auction = new Auction(room, startingCredits);
@@ -915,13 +915,13 @@ export const commands: Chat.ChatCommands = {
 
 			if (!target) return this.parse('/help auction importplayers');
 			if (!/^https?:\/\/pastebin\.com\/[a-zA-Z0-9]+$/.test(target)) {
-				return this.errorReply('Invalid pastebin URL.');
+				throw new Chat.ErrorMessage('Invalid pastebin URL.');
 			}
 			let data = '';
 			try {
 				data = await Net(`https://pastebin.com/raw/${target.split('/').pop()}`).get();
 			} catch {}
-			if (!data) return this.errorReply('Error fetching data from pastebin.');
+			if (!data) throw new Chat.ErrorMessage('Error fetching data from pastebin.');
 
 			auction.importPlayers(data);
 			this.addModAction(`${user.name} imported the player list from ${target}.`);
@@ -1091,7 +1091,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('gamemanagement', null, room);
 			if (room.settings.auctionDisabled) {
-				return this.errorReply('Auctions are already disabled.');
+				throw new Chat.ErrorMessage('Auctions are already disabled.');
 			}
 			room.settings.auctionDisabled = true;
 			room.saveSettings();
@@ -1101,7 +1101,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('gamemanagement', null, room);
 			if (!room.settings.auctionDisabled) {
-				return this.errorReply('Auctions are already enabled.');
+				throw new Chat.ErrorMessage('Auctions are already enabled.');
 			}
 			delete room.settings.auctionDisabled;
 			room.saveSettings();
@@ -1161,7 +1161,7 @@ export const commands: Chat.ChatCommands = {
 		this.parse(`/auction nominate ${target}`);
 	},
 	bid() {
-		this.errorReply(`/bid is no longer supported. Send the amount by itself in the chat to place your bid.`);
+		throw new Chat.ErrorMessage(`/bid is no longer supported. Send the amount by itself in the chat to place your bid.`);
 	},
 	overpay() {
 		this.requireGame(Auction);

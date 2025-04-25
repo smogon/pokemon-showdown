@@ -4,7 +4,7 @@
  *
  * @license MIT
  */
-import {Utils} from '../lib/utils';
+import { Utils } from '../lib/utils';
 
 /**
 * Converts anything to an ID. An ID must have only lowercase alphanumeric
@@ -22,7 +22,7 @@ import {Utils} from '../lib/utils';
 export function toID(text: any): ID {
 	if (typeof text !== 'string') {
 		if (text) text = text.id || text.userid || text.roomid || text;
-		if (typeof text === 'number') text = '' + text;
+		if (typeof text === 'number') text = `${text}`;
 		else if (typeof text !== 'string') return '';
 	}
 	return text.toLowerCase().replace(/[^a-z0-9]+/g, '') as ID;
@@ -132,7 +132,7 @@ export abstract class BasicEffect implements EffectData {
 }
 
 export class Nature extends BasicEffect implements Readonly<BasicEffect & NatureData> {
-	readonly effectType: 'Nature';
+	override readonly effectType: 'Nature';
 	readonly plus?: StatIDExceptHP;
 	readonly minus?: StatIDExceptHP;
 	constructor(data: AnyObject) {
@@ -146,7 +146,7 @@ export class Nature extends BasicEffect implements Readonly<BasicEffect & Nature
 	}
 }
 
-const EMPTY_NATURE = Utils.deepFreeze(new Nature({name: '', exists: false}));
+const EMPTY_NATURE = Utils.deepFreeze(new Nature({ name: '', exists: false }));
 
 export interface NatureData {
 	name: string;
@@ -154,10 +154,9 @@ export interface NatureData {
 	minus?: StatIDExceptHP;
 }
 
-export type ModdedNatureData = NatureData | Partial<Omit<NatureData, 'name'>> & {inherit: true};
+export type ModdedNatureData = NatureData | Partial<Omit<NatureData, 'name'>> & { inherit: true };
 
-export interface NatureDataTable {[natureid: IDEntry]: NatureData}
-
+export interface NatureDataTable { [natureid: IDEntry]: NatureData }
 
 export class DexNatures {
 	readonly dex: ModdedDex;
@@ -189,7 +188,7 @@ export class DexNatures {
 			nature = new Nature(natureData);
 			if (nature.gen > this.dex.gen) nature.isNonstandard = 'Future';
 		} else {
-			nature = new Nature({name: id, exists: false});
+			nature = new Nature({ name: id, exists: false });
 		}
 
 		if (nature.exists) this.natureCache.set(id, this.dex.deepFreeze(nature));
@@ -208,15 +207,15 @@ export class DexNatures {
 }
 
 export interface TypeData {
-	damageTaken: {[attackingTypeNameOrEffectid: string]: number};
+	damageTaken: { [attackingTypeNameOrEffectid: string]: number };
 	HPdvs?: SparseStatsTable;
 	HPivs?: SparseStatsTable;
 	isNonstandard?: Nonstandard | null;
 }
 
-export type ModdedTypeData = TypeData | Partial<Omit<TypeData, 'name'>> & {inherit: true};
-export interface TypeDataTable {[typeid: IDEntry]: TypeData}
-export interface ModdedTypeDataTable {[typeid: IDEntry]: ModdedTypeData}
+export type ModdedTypeData = TypeData | Partial<Omit<TypeData, 'name'>> & { inherit: true };
+export interface TypeDataTable { [typeid: IDEntry]: TypeData }
+export interface ModdedTypeDataTable { [typeid: IDEntry]: ModdedTypeData }
 
 type TypeInfoEffectType = 'Type' | 'EffectType';
 
@@ -251,7 +250,7 @@ export class TypeInfo implements Readonly<TypeData> {
 	 * Type chart, attackingTypeName:result, effectid:result
 	 * result is: 0 = normal, 1 = weakness, 2 = resistance, 3 = immunity
 	 */
-	readonly damageTaken: {[attackingTypeNameOrEffectid: string]: number};
+	readonly damageTaken: { [attackingTypeNameOrEffectid: string]: number };
 	/** The IVs to get this Type Hidden Power (in gen 3 and later) */
 	readonly HPivs: SparseStatsTable;
 	/** The DVs to get this Type Hidden Power (in gen 2). */
@@ -275,7 +274,7 @@ export class TypeInfo implements Readonly<TypeData> {
 	}
 }
 
-const EMPTY_TYPE_INFO = Utils.deepFreeze(new TypeInfo({name: '', id: '', exists: false, effectType: 'EffectType'}));
+const EMPTY_TYPE_INFO = Utils.deepFreeze(new TypeInfo({ name: '', id: '', exists: false, effectType: 'EffectType' }));
 
 export class DexTypes {
 	readonly dex: ModdedDex;
@@ -299,9 +298,9 @@ export class DexTypes {
 
 		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
 		if (typeName && this.dex.data.TypeChart.hasOwnProperty(id)) {
-			type = new TypeInfo({name: typeName, id, ...this.dex.data.TypeChart[id]});
+			type = new TypeInfo({ name: typeName, id, ...this.dex.data.TypeChart[id] });
 		} else {
-			type = new TypeInfo({name: typeName, id, exists: false, effectType: 'EffectType'});
+			type = new TypeInfo({ name: typeName, id, exists: false, effectType: 'EffectType' });
 		}
 
 		if (type.exists) this.typeCache.set(id, this.dex.deepFreeze(type));
@@ -334,7 +333,7 @@ export class DexTypes {
 }
 
 const idsCache: readonly StatID[] = ['hp', 'atk', 'def', 'spa', 'spd', 'spe'];
-const reverseCache: {readonly [k: IDEntry]: StatID} = {
+const reverseCache: { readonly [k: IDEntry]: StatID } = {
 	__proto: null as any,
 	"hitpoints": 'hp',
 	"attack": 'atk',
@@ -345,9 +344,9 @@ const reverseCache: {readonly [k: IDEntry]: StatID} = {
 	"speed": 'spe',
 };
 export class DexStats {
-	readonly shortNames: {readonly [k in StatID]: string};
-	readonly mediumNames: {readonly [k in StatID]: string};
-	readonly names: {readonly [k in StatID]: string};
+	readonly shortNames: { readonly [k in StatID]: string };
+	readonly mediumNames: { readonly [k in StatID]: string };
+	readonly names: { readonly [k in StatID]: string };
 	constructor(dex: ModdedDex) {
 		if (dex.gen !== 1) {
 			this.shortNames = {

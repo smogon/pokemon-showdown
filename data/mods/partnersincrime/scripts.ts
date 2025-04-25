@@ -1,3 +1,6 @@
+import { Pokemon, Side } from "../../../sim";
+import { Field } from "../../../sim/field";
+
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	inherit: 'gen9',
@@ -24,9 +27,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					const volatileState = ally.volatiles[ally.m.innate];
 					if (volatileState) {
 						const volatile = this.dex.conditions.getByID(ally.m.innate as ID);
-						// @ts-ignore - dynamic lookup
+						// @ts-expect-error dynamic lookup
 						let callback = volatile[callbackName];
-						// @ts-ignore - dynamic lookup
+						// @ts-expect-error dynamic lookup
 						if (this.gen >= 5 && !volatile.onSwitchIn && !volatile.onAnySwitchIn) {
 							callback = volatile.onStart;
 						}
@@ -54,12 +57,45 @@ export const Scripts: ModdedBattleScriptsData = {
 			handlers.shift();
 			const effect = handler.effect;
 			if ((handler.effectHolder as Pokemon).fainted || (handler.state?.pic as Pokemon)?.fainted) continue;
-			if (eventid === 'Residual' && handler.end && handler.state && handler.state.duration) {
+			if (eventid === 'Residual' && handler.end && handler.state?.duration) {
 				handler.state.duration--;
 				if (!handler.state.duration) {
 					const endCallArgs = handler.endCallArgs || [handler.effectHolder, effect.id];
 					handler.end.call(...endCallArgs as [any, ...any[]]);
 					if (this.ended) return;
+					continue;
+				}
+			}
+
+			// effect may have been removed by a prior handler, i.e. Toxic Spikes being absorbed during a double switch
+			if (handler.state?.target instanceof Pokemon) {
+				let expectedStateLocation;
+				if (effect.effectType === 'Ability' && !handler.state.id.startsWith('ability:')) {
+					expectedStateLocation = handler.state.target.abilityState;
+				} else if (effect.effectType === 'Item' && !handler.state.id.startsWith('item:')) {
+					expectedStateLocation = handler.state.target.itemState;
+				} else if (effect.effectType === 'Status') {
+					expectedStateLocation = handler.state.target.statusState;
+				} else {
+					expectedStateLocation = handler.state.target.volatiles[effect.id];
+				}
+				if (expectedStateLocation !== handler.state) {
+					continue;
+				}
+			} else if (handler.state?.target instanceof Side && !handler.state.isSlotCondition) {
+				if ((handler.state.target.sideConditions[effect.id] !== handler.state)) {
+					continue;
+				}
+			} else if (handler.state?.target instanceof Field) {
+				let expectedStateLocation;
+				if (effect.effectType === 'Weather') {
+					expectedStateLocation = handler.state.target.weatherState;
+				} else if (effect.effectType === 'Terrain') {
+					expectedStateLocation = handler.state.target.terrainState;
+				} else {
+					expectedStateLocation = handler.state.target.pseudoWeather[effect.id];
+				}
+				if (expectedStateLocation !== handler.state) {
 					continue;
 				}
 			}
@@ -88,7 +124,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const ally = side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
 				let allyMoves = ally ? this.dex.deepClone(ally.moveSlots) : [];
 				if (ally) {
-					// @ts-ignore
+					// @ts-expect-error modded
 					allyMoves = allyMoves.filter(move => !pokemon.moves.includes(move.id) && ally.m.curMoves.includes(move.id));
 					for (const aMove of allyMoves) {
 						aMove.pp = this.clampIntRange(aMove.maxpp - (pokemon.m.trackPP.get(aMove.id) || 0), 0);
@@ -151,6 +187,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 
 				pokemon.maybeDisabled = false;
+				pokemon.maybeLocked = false;
 				for (const moveSlot of pokemon.moveSlots) {
 					moveSlot.disabled = false;
 					moveSlot.disabledSource = '';
@@ -290,11 +327,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				delete ally.m.innate;
 			}
 			if (this.battle.effect && this.battle.effect.effectType === 'Move' && !isFromFormeChange) {
-				this.battle.add('-endability', this, this.battle.dex.abilities.get(oldAbility), '[from] move: ' +
-					this.battle.dex.moves.get(this.battle.effect.id));
+				this.battle.add('-endability', this, this.battle.dex.abilities.get(oldAbility),
+					`[from] move: ${this.battle.dex.moves.get(this.battle.effect.id)}`);
 			}
 			this.ability = ability.id;
-			this.abilityState = this.battle.initEffectState({id: ability.id, target: this});
+			this.abilityState = this.battle.initEffectState({ id: ability.id, target: this });
 			if (ability.id && this.battle.gen > 3) {
 				this.battle.singleEvent('Start', ability, this.abilityState, this, source);
 				if (ally && ally.ability !== this.ability) {
@@ -309,7 +346,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			// Entrainment
-			if (this.m.innate && this.m.innate.endsWith(ability.id)) {
+			if (this.m.innate?.endsWith(ability.id)) {
 				this.removeVolatile(this.m.innate);
 				delete this.m.innate;
 			}
@@ -323,18 +360,20 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (!Array.isArray(ability)) {
 				if (ownAbility === this.battle.toID(ability) || allyAbility === this.battle.toID(ability)) return true;
 			} else {
-				 if (ability.map(this.battle.toID).includes(ownAbility) || ability.map(this.battle.toID).includes(allyAbility)) {
-					 return true;
-				 }
+				if (ability.map(this.battle.toID).includes(ownAbility) || ability.map(this.battle.toID).includes(allyAbility)) {
+					return true;
+				}
 			}
 			return false;
 		},
 		transformInto(pokemon, effect) {
 			const species = pokemon.species;
-			if (pokemon.fainted || this.illusion || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
+			if (
+				pokemon.fainted || this.illusion || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 				(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
 				species.name === 'Eternatus-Eternamax' || (['Ogerpon', 'Terapagos'].includes(species.baseSpecies) &&
-				(this.terastallized || pokemon.terastallized))) {
+					(this.terastallized || pokemon.terastallized))
+			) {
 				return false;
 			}
 

@@ -5,17 +5,17 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`As One`, function () {
-	afterEach(function () {
+describe(`As One`, () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should work if the user is Transformed`, function () {
+	it(`should work if the user is Transformed`, () => {
 		battle = common.createBattle([[
-			{species: 'ditto', ability: 'imposter', moves: ['transform']},
+			{ species: 'ditto', ability: 'imposter', moves: ['transform'] },
 		], [
-			{species: 'calyrexshadow', ability: 'asonespectrier', item: 'cheriberry', moves: ['glare', 'sleeptalk', 'astralbarrage']},
-			{species: 'wynaut', moves: ['sleeptalk']},
+			{ species: 'calyrexshadow', ability: 'asonespectrier', item: 'cheriberry', moves: ['glare', 'sleeptalk', 'astralbarrage'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
 		]]);
 
 		const ditto = battle.p1.active[0];

@@ -49,19 +49,20 @@ class TestTools {
 		}
 
 		const gameType = Dex.toID(options.gameType || 'singles');
+		let basicFormat = this.currentMod === 'base' && gameType === 'singles' ? 'Anything Goes' : 'Custom Game';
+		if (options.pokemon) throw new Error(`The 'pokemon' option is no longer supported`);
 		const customRules = [
-			options.pokemon && '-Nonexistent',
-			options.legality && 'Obtainable',
-			!options.preview && '!Team Preview',
+			options.legality ? '^Obtainable' : '^!Obtainable',
+			options.preview ? '^Team Preview' : '^!Team Preview',
 			options.sleepClause && 'Sleep Clause Mod',
 			!options.cancel && '!Cancel Mod',
-			options.endlessBattleClause && 'Endless Battle Clause',
+			options.endlessBattleClause ? '^Endless Battle Clause' : '^!Endless Battle Clause',
 			options.inverseMod && 'Inverse Mod',
 			options.overflowStatMod && 'Overflow Stat Mod',
+			options.customRules,
 		].filter(Boolean);
 		const customRulesID = customRules.length ? `@@@${customRules.join(',')}` : ``;
 
-		let basicFormat = this.currentMod === 'base' && gameType === 'singles' ? 'Anything Goes' : 'Custom Game';
 		let modPrefix = this.modPrefix;
 		if (this.currentMod === 'gen1stadium') basicFormat = 'OU';
 		if (gameType === 'multi') {
@@ -76,7 +77,7 @@ class TestTools {
 		let format = formatsCache.get(formatName);
 		if (format) return format;
 
-		format = Dex.formats.get(formatName);
+		format = Dex.formats.get(formatName, true);
 		if (format.effectType !== 'Format') throw new Error(`Unidentified format: ${formatName}`);
 
 		formatsCache.set(formatName, format);
@@ -100,8 +101,8 @@ class TestTools {
 
 		const battleOptions = {
 			debug: true,
-			forceRandomChance: null || options.forceRandomChance,
-			format: format,
+			forceRandomChance: options.forceRandomChance,
+			format,
 			// If a seed for the pseudo-random number generator is not provided,
 			// a default seed (guaranteed to be the same across test executions)
 			// will be used.
@@ -114,7 +115,7 @@ class TestTools {
 		for (let i = 0; i < teams.length; i++) {
 			assert(Array.isArray(teams[i]), `Team provided is not an array`);
 			const playerSlot = `p${i + 1}`;
-			battleOptions[playerSlot] = {team: teams[i]};
+			battleOptions[playerSlot] = { team: teams[i] };
 		}
 
 		return new Sim.Battle(battleOptions);
@@ -132,7 +133,7 @@ class TestTools {
 		const battleLog = battle.getDebugLog();
 		if (!fileName) fileName = 'test-replay';
 		const filePath = path.resolve(__dirname, `./replays/${fileName}-${Date.now()}.html`);
-		const out = fs.createWriteStream(filePath, {flags: 'a'});
+		const out = fs.createWriteStream(filePath, { flags: 'a' });
 		out.on('open', () => {
 			out.write(
 				`<!DOCTYPE html>\n` +
