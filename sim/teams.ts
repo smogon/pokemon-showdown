@@ -111,7 +111,7 @@ export interface PokemonSet {
 	/**
 	 * Default gimmick mechanic
 	 */
-	gimmick?: "tera" | "dmax" | "mega" | "zpower" | null;
+	gimmick?: "Tera" | "D-Max" | "Mega" | "Z-Power" | null;
 }
 
 export const Teams = new class Teams {
@@ -207,11 +207,11 @@ export const Teams = new class Teams {
 
 			if (!set.gimmick){
 				if (set.item.indexOf("ium Z") > -1){
-					set.gimmick = "zpower";
+					set.gimmick = "Z-Power";
 				} else if (set.item.indexOf("ite") > -1 && set.item != "Eviolite"){
-					set.gimmick = "mega";
+					set.gimmick = "Mega";
 				} else {
-					set.gimmick = (set.gigantamax || (set.dynamaxLevel == 10)) ? "dmax" : "tera";
+					set.gimmick = (set.gigantamax || (set.dynamaxLevel == 10)) ? "D-Max" : "Tera";
 				}
 			}
 		}
@@ -520,7 +520,12 @@ export const Teams = new class Teams {
 			set.gigantamax = true;
 		} else if (line.startsWith('Gimmick: ')) {
 			line = line.slice(11);
-			set.gimmick = line; // check first if this works
+			set.gimmick = 
+				(line === "Tera") ||
+				(line === "D-Max") ||
+				(line === "Mega") ||
+				(line === "Z-Power")
+			? line : null; // check first if this works
 		} else if (line.startsWith('EVs: ')) {
 			line = line.slice(5);
 			const evLines = line.split('/');
