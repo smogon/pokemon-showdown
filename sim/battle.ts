@@ -1911,7 +1911,7 @@ export class Battle {
 
 		if (format.customRules) {
 			const plural = format.customRules.length === 1 ? '' : 's';
-			this.add(`raw|<div class="infobox"><details class="readmore"><summary><strong>${format.customRules.length } custom rule${plural}:</strong></summary> ${format.customRules.join(', ')}</details></div>`);
+			this.add(`raw|<div class="infobox"><details class="readmore"><summary><strong>${format.customRules.length} custom rule${plural}:</strong></summary> ${format.customRules.join(', ')}</details></div>`);
 		}
 
 		format.onTeamPreview?.call(this);
