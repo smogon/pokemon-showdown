@@ -46,6 +46,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['AG', 'Moody', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects'],
 	},
 	{
+		name: "[Gen 9] UU",
+		mod: 'gen9',
+		ruleset: ['Standard', 'Terastal Clause'],
+		banlist: ['OU', 'UUBL'],
+	},
+	{
 		name: "[Gen 9] LC",
 		mod: 'gen9',
 		ruleset: ['Little Cup', 'Evasion Abilities Clause', 'Standard', 'Terastal Clause'],
@@ -76,7 +82,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Open Team Sheets', 'Terastal Clause'],
-		banlist: ['Uber', 'AG', 'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects'],
 	},
 
 	// Other Metagames

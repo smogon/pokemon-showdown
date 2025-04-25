@@ -206,7 +206,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 43,
 		gen: 2,
-		isNonstandard: "Past",
 	},
 	bigroot: {
 		name: "Big Root",
@@ -686,7 +685,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		itemUser: ["Clamperl"],
 		num: 227,
 		gen: 3,
-		isNonstandard: "Past",
 	},
 	deepseatooth: {
 		name: "Deep Sea Tooth",
@@ -703,7 +701,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		itemUser: ["Clamperl"],
 		num: 226,
 		gen: 3,
-		isNonstandard: "Past",
 	},
 	destinyknot: {
 		name: "Destiny Knot",
@@ -814,6 +811,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 1119,
 		gen: 8,
+		isNonstandard: "Past",
 	},
 	electricgem: {
 		name: "Electric Gem",
@@ -850,6 +848,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 881,
 		gen: 7,
+		isNonstandard: "Past",
 	},
 	enigmaberry: {
 		name: "Enigma Berry",
@@ -1129,6 +1128,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 884,
 		gen: 7,
+		isNonstandard: "Past",
 	},
 	grepaberry: {
 		name: "Grepa Berry",
@@ -1447,7 +1447,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		itemUser: ["Farfetch\u2019d", "Farfetch\u2019d-Galar", "Sirfetch\u2019d"],
 		num: 259,
 		gen: 8,
-		isNonstandard: "Past",
 	},
 	leftovers: {
 		name: "Leftovers",
@@ -1895,6 +1894,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 883,
 		gen: 7,
+		isNonstandard: "Past",
 	},
 	muscleband: {
 		name: "Muscle Band",
@@ -2341,6 +2341,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		num: 882,
 		gen: 7,
+		isNonstandard: "Past",
 	},
 	punchingglove: {
 		name: "Punching Glove",
