@@ -1910,7 +1910,8 @@ export class Battle {
 		}
 
 		if (format.customRules) {
-			this.add(`raw|<div class="infobox">Custom rules: ${format.customRules.join(', ')}</div>`);
+			const plural = format.customRules.length === 1 ? '' : 's';
+			this.add(`raw|<div class="infobox"><details class="readmore"><summary><strong>${format.customRules.length } custom rule${plural}:</strong></summary> ${format.customRules.join(', ')}</details></div>`);
 		}
 
 		format.onTeamPreview?.call(this);
