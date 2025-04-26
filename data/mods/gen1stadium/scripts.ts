@@ -305,10 +305,14 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 
-			// Stadium fixes the 1/256 accuracy bug.
-			if (accuracy !== true && !this.battle.randomChance(accuracy + 1, 256)) {
+			// Stadium attempts to fix the 1/256 miss by rerolling if the first value
+			// would trigger the 1/256 miss.
+			let randomValue = this.battle.random(256);
+			if (randomValue === 256) randomValue = this.battle.random(256);
+			if (accuracy !== true && randomValue > accuracy) {
 				this.battle.attrLastMove('[miss]');
 				this.battle.add('-miss', pokemon);
+				if (accuracy === 255) this.battle.hint("In Pokemon Stadium, moves with 100% accuracy can still miss 1/65536 of the time.");
 				damage = false;
 				this.battle.lastDamage = 0;
 			}
