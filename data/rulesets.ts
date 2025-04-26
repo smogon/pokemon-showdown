@@ -2563,7 +2563,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (source || !target?.side) return;
 			const god = target.side.team.find(set => {
 				let godSpecies = this.dex.species.get(set.species);
-				if (this.toID(set.ability) === 'powerconstruct') {
+				if (this.toID(set.ability) === 'powerconstruct' && this.ruleTable.isRestricted('Power Construct')) {
 					return true;
 				}
 				if (set.item) {
