@@ -521,7 +521,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			this.theme = null;
 		}
 
-		if (Math.max(...roles.map(role => role.length)) > MAX_ROLE_LENGTH) return this.sendUser(user, `|error|Some role exceeds the maximum role length of ${MAX_ROLE_LENGTH}.`);
+		if (Math.max(...roles.map(role => role.length)) > MAX_ROLE_LENGTH)
+			return this.sendUser(user, `|error|Some role exceeds the maximum role length of ${MAX_ROLE_LENGTH}.`);
 
 		if (roles.length < this.playerCount) {
 			return this.sendUser(user, `|error|You have not provided enough roles for the players.`);
@@ -2769,7 +2770,8 @@ export const commands: Chat.ChatCommands = {
 					return this.parse('/help mafia revealas');
 				} else {
 					const roleName = args.pop()!.trim();
-					if (roleName.length > MAX_ROLE_LENGTH) return this.sendReply(`|error|Role exceeds the maximum role length of ${MAX_ROLE_LENGTH}.`);
+					if (roleName.length > MAX_ROLE_LENGTH)
+						return this.sendReply(`|error|Role exceeds the maximum role length of ${MAX_ROLE_LENGTH}.`);
 					revealedRole = Mafia.parseRole(roleName);
 					const color = MafiaData.alignments[revealedRole.role.alignment].color;
 					revealAs = `<span style="font-weight:bold;color:${color}">${revealedRole.role.safeName}</span>`;
