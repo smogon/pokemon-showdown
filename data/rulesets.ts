@@ -2544,6 +2544,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				) {
 					species = this.dex.species.get(`${species.baseSpecies}-Crowned`);
 				}
+				if (species.baseSpecies === 'Zygarde' && this.toID(set.ability) === 'powerconstruct') {
+					species = this.dex.species.get(`Zygarde-Complete`);
+				}
 				if (set.item && this.dex.items.get(set.item).megaStone) {
 					const item = this.dex.items.get(set.item);
 					if (item.megaEvolves === species.baseSpecies) {
@@ -2563,7 +2566,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (source || !target?.side) return;
 			const god = target.side.team.find(set => {
 				let godSpecies = this.dex.species.get(set.species);
-				if (this.toID(set.ability) === 'powerconstruct' && this.ruleTable.isRestricted('Power Construct')) {
+				if (this.toID(set.ability) === 'powerconstruct' && this.ruleTable.isRestrictedSpecies('Zygarde-Complete')) {
 					return true;
 				}
 				if (set.item) {
