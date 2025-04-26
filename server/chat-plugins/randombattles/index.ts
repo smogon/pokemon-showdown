@@ -493,8 +493,7 @@ export const commands: Chat.ChatCommands = {
 		const searchResults = dex.dataSearch(args[0], ['Pokedex']);
 
 		if (!searchResults?.length) {
-			this.errorReply(`No Pok\u00e9mon named '${args[0]}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
-			return;
+			throw new Chat.ErrorMessage(`No Pok\u00e9mon named '${args[0]}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
 		}
 
 		let inexactMsg = '';
@@ -515,7 +514,7 @@ export const commands: Chat.ChatCommands = {
 			const rbyMoves = getRBYMoves(species);
 			if (!rbyMoves) {
 				this.sendReply(inexactMsg);
-				return this.errorReply(`Error: ${species.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
+				throw new Chat.ErrorMessage(`Error: ${species.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
 			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${format.name}:</span>${rbyMoves}`);
 			setCount = 1;
@@ -523,7 +522,7 @@ export const commands: Chat.ChatCommands = {
 			const lgpeMoves = getLetsGoMoves(species);
 			if (!lgpeMoves) {
 				this.sendReply(inexactMsg);
-				return this.errorReply(`Error: ${species.name} has no Random Battle data in [Gen 7 Let's Go]`);
+				throw new Chat.ErrorMessage(`Error: ${species.name} has no Random Battle data in [Gen 7 Let's Go]`);
 			}
 			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${format.name}:</span><br />${lgpeMoves}`);
 			setCount = 1;
@@ -582,7 +581,7 @@ export const commands: Chat.ChatCommands = {
 
 		if (!movesets.length) {
 			this.sendReply(inexactMsg);
-			return this.errorReply(`Error: ${species.name} has no Random Battle data in ${format.name}`);
+			throw new Chat.ErrorMessage(`Error: ${species.name} has no Random Battle data in ${format.name}`);
 		}
 		let buf = movesets.join('<hr/>');
 		if (setCount <= 2) {
@@ -605,7 +604,7 @@ export const commands: Chat.ChatCommands = {
 			if (!args[0]) return this.parse(`/help battlefactory`);
 			const species = Dex.species.get(args[0]);
 			if (!species.exists) {
-				return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' not found.`);
+				throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${args[0].trim()}' not found.`);
 			}
 			let mod = 'gen9';
 			if (args[1] && toID(args[1]) in Dex.dexes && Dex.dexes[toID(args[1])].gen >= 7) mod = toID(args[1]);
@@ -617,7 +616,7 @@ export const commands: Chat.ChatCommands = {
 			if (!args[0]) return this.parse(`/help battlefactory`);
 			const species = Dex.species.get(args[0]);
 			if (!species.exists) {
-				return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' not found.`);
+				throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${args[0].trim()}' not found.`);
 			}
 			let tier = '';
 			if (args[1] && toID(args[1]) in TIERS) {
@@ -654,7 +653,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.parse(`/help cap1v1`);
 		const species = Dex.species.get(target);
-		if (!species.exists) return this.errorReply(`Error: Pok\u00e9mon '${target.trim()}' not found.`);
+		if (!species.exists) throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${target.trim()}' not found.`);
 		const cap1v1Set = CAP1v1Sets(species);
 		if (!cap1v1Set) return this.parse(`/help cap1v1`);
 		if (typeof cap1v1Set !== 'string') {

@@ -480,7 +480,7 @@ class FileReadStream extends ReadStream {
 		this.atEOF = false;
 	}
 
-	_read(size = 16384): Promise<void> {
+	override _read(size = 16384): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
 			if (this.atEOF) return void resolve();
 			this.ensureCapacity(size);
@@ -501,7 +501,7 @@ class FileReadStream extends ReadStream {
 		});
 	}
 
-	_destroy() {
+	override _destroy() {
 		return new Promise<void>(resolve => {
 			void this.fd.then(fd => {
 				fs.close(fd, () => resolve());

@@ -18659,7 +18659,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		num: -14,
 		name: "Kitsunoh",
 		types: ["Ghost", "Steel"],
-		baseStats: { hp: 80, atk: 117, def: 85, spa: 55, spd: 80, spe: 128 },
+		baseStats: { hp: 80, atk: 103, def: 85, spa: 55, spd: 80, spe: 120 },
 		abilities: { 0: "Frisk", 1: "Limber", H: "Trace" },
 		heightm: 1.1,
 		weightkg: 51,

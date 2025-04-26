@@ -31,6 +31,17 @@ describe('Burn', () => {
 		assert.bounded(damage, [37, 44]);
 	});
 
+	it(`should halve damage after fainting`, () => {
+		battle = common.gen(4).createBattle([[
+			{ species: 'Electrode', ability: 'noguard', moves: ['explosion'] },
+		], [
+			{ species: 'Wailord', ability: 'prankster', moves: ['willowisp'] },
+		]]);
+		battle.makeChoices();
+		const wailord = battle.p2.active[0];
+		assert.bounded(wailord.hp, [200, 300]);
+	});
+
 	it('should reduce atk to 50% of its original value in Stadium', () => {
 		// I know WoW doesn't exist in Stadium, but the engine supports future gen moves
 		// and this is easier than digging for a seed that makes Flamethrower burn
@@ -182,40 +193,44 @@ describe('Freeze', () => {
 	});
 
 	it('should cause an afflicted Shaymin-Sky to revert to its base forme', () => {
-		battle = common.createBattle([
+		battle = common.createBattle({
+			customRules: 'guaranteedsecondarymod',
+		}, [
 			[{ species: 'Chansey', ability: 'serenegrace', moves: ['icebeam'] }],
 			[{ species: 'Shaymin-Sky', ability: 'sturdy', moves: ['sleeptalk'] }],
 		]);
-		// I didn't feel like manually testing seed after seed. Sue me.
-		battle.onEvent('ModifyMove', battle.format, function (move) {
-			if (move.secondaries) {
-				this.debug('Freeze test: Guaranteeing secondary');
-				for (const secondary of move.secondaries) {
-					secondary.chance = 100;
-				}
-			}
-		});
 		battle.makeChoices('move icebeam', 'move sleeptalk');
 		assert.equal(battle.p2.active[0].status, 'frz');
 		assert.equal(battle.p2.active[0].species.name, 'Shaymin');
 	});
 
 	it('should not cause an afflicted Pokemon transformed into Shaymin-Sky to change to Shaymin', () => {
-		battle = common.createBattle([
+		battle = common.createBattle({
+			customRules: 'guaranteedsecondarymod',
+		}, [
 			[{ species: 'Ditto', ability: 'imposter', moves: ['transform'] }],
 			[{ species: 'Shaymin-Sky', ability: 'sturdy', moves: ['icebeam', 'sleeptalk'] }],
 		]);
-		battle.onEvent('ModifyMove', battle.format, function (move) {
-			if (move.secondaries) {
-				this.debug('Freeze test: Guaranteeing secondary');
-				for (const secondary of move.secondaries) {
-					secondary.chance = 100;
-				}
-			}
-		});
 		battle.makeChoices('move sleeptalk', 'move icebeam');
 		assert.equal(battle.p1.active[0].status, 'frz');
 		assert.equal(battle.p1.active[0].species.name, 'Shaymin-Sky');
+	});
+
+	it('should not linger after fainting from switch-out', () => {
+		battle = common.createBattle({
+			formatid: 'gen4customgame@@@freezeclausemod,guaranteedsecondarymod',
+		}, [[
+			{ species: 'weavile', moves: ['icebeam', 'pursuit'] },
+		], [
+			{ species: 'gastly', moves: ['splash'] },
+			{ species: 'seaking', moves: ['splash'] },
+		]]);
+		battle.makeChoices('move icebeam', 'auto');
+		battle.makeChoices('move pursuit', 'switch seaking');
+		// battle.makeChoices('', 'switch seaking'); // in modern gens
+		battle.makeChoices('move icebeam', 'auto');
+		assert.equal(battle.p2.active[0].status, 'frz');
+		assert.equal(battle.p2.active[0].species.name, 'Seaking');
 	});
 
 	it(`should not be possible to burn a frozen target when using a move that thaws that target`, () => {
