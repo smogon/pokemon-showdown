@@ -2550,7 +2550,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 						species = this.dex.species.get(item.megaStone);
 					}
 				}
-				if (this.ruleTable.isRestrictedSpecies(species) || this.ruleTable.isRestricted('ability:powerconstruct')) {
+				if (this.ruleTable.isRestrictedSpecies(species) ||
+					(this.ruleTable.isRestricted('ability:powerconstruct') && this.toID(set.ability) === 'powerconstruct')) {
 					gods.add(species.name);
 				}
 			}
