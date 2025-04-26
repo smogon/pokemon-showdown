@@ -15,6 +15,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				pokemon.addVolatile('protosynthesis');
 			} else {
 				if (!pokemon.volatiles['protosynthesis']?.fromBooster && this.field.weather !== 'sunnyday') {
+					// Protosynthesis will not deactivite if Sun is suppressed, hence the direct ID check (isWeather respects suppression)
 					pokemon.removeVolatile('protosynthesis');
 				}
 				if (!pokemon.volatiles['protosynthesis'] && pokemon.hasItem('boosterenergy')) {
