@@ -252,7 +252,7 @@ export const commands: Chat.ChatCommands = {
 		viewlist(target, room, user) {
 			Friends.checkCanUse(this);
 			target = toID(target);
-			if (!target) return this.errorReply(`Specify a user.`);
+			if (!target) throw new Chat.ErrorMessage(`Specify a user.`);
 			if (target === user.id) return this.parse(`/friends list`);
 			return this.parse(`/j view-friends-viewuser-${target}`);
 		},
@@ -261,7 +261,7 @@ export const commands: Chat.ChatCommands = {
 			Friends.checkCanUse(this);
 			target = toID(target);
 			if (target.length > 18) {
-				return this.errorReply(this.tr`That name is too long - choose a valid name.`);
+				throw new Chat.ErrorMessage(this.tr`That name is too long - choose a valid name.`);
 			}
 			if (!target) return this.parse('/help friends');
 			await Friends.request(user, target as ID);
@@ -292,7 +292,7 @@ export const commands: Chat.ChatCommands = {
 			Friends.checkCanUse(this);
 			target = toID(target);
 			if (user.settings.blockFriendRequests) {
-				return this.errorReply(this.tr`You are currently blocking friend requests, and so cannot accept your own.`);
+				throw new Chat.ErrorMessage(this.tr`You are currently blocking friend requests, and so cannot accept your own.`);
 			}
 			if (!target) return this.parse('/help friends');
 			await Friends.approveRequest(user.id, target as ID);
@@ -314,7 +314,7 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse('/help friends');
 			const res = await Friends.removeRequest(user.id, target as ID);
 			if (!res.changes) {
-				return this.errorReply(`You do not have a friend request pending from '${target}'.`);
+				throw new Chat.ErrorMessage(`You do not have a friend request pending from '${target}'.`);
 			}
 			this.refreshPage('friends-received');
 			return sendPM(`You denied a friend request from '${target}'.`, user.id);
@@ -324,11 +324,11 @@ export const commands: Chat.ChatCommands = {
 			const setting = user.settings.blockFriendRequests;
 			target = target.trim();
 			if (this.meansYes(target)) {
-				if (!setting) return this.errorReply(this.tr`You already are allowing friend requests.`);
+				if (!setting) throw new Chat.ErrorMessage(this.tr`You already are allowing friend requests.`);
 				user.settings.blockFriendRequests = false;
 				this.sendReply(this.tr`You are now allowing friend requests.`);
 			} else if (this.meansNo(target)) {
-				if (setting) return this.errorReply(this.tr`You already are blocking incoming friend requests.`);
+				if (setting) throw new Chat.ErrorMessage(this.tr`You already are blocking incoming friend requests.`);
 				user.settings.blockFriendRequests = true;
 				this.sendReply(this.tr`You are now blocking incoming friend requests.`);
 			} else {
@@ -355,11 +355,11 @@ export const commands: Chat.ChatCommands = {
 			const setting = user.settings.allowFriendNotifications;
 			target = target.trim();
 			if (!cmd.includes('hide') || target && this.meansYes(target)) {
-				if (setting) return this.errorReply(this.tr(`You are already allowing friend notifications.`));
+				if (setting) throw new Chat.ErrorMessage(this.tr(`You are already allowing friend notifications.`));
 				user.settings.allowFriendNotifications = true;
 				this.sendReply(this.tr(`You will now receive friend notifications.`));
 			} else if (cmd.includes('hide') || target && this.meansNo(target)) {
-				if (!setting) return this.errorReply(this.tr`You are already not receiving friend notifications.`);
+				if (!setting) throw new Chat.ErrorMessage(this.tr`You are already not receiving friend notifications.`);
 				user.settings.allowFriendNotifications = false;
 				this.sendReply(this.tr`You will not receive friend notifications.`);
 			} else {
@@ -377,17 +377,17 @@ export const commands: Chat.ChatCommands = {
 			Friends.checkCanUse(this);
 			const setting = user.settings.hideLogins;
 			if (cmd.includes('hide')) {
-				if (setting) return this.errorReply(this.tr`You are already hiding your logins from friends.`);
+				if (setting) throw new Chat.ErrorMessage(this.tr`You are already hiding your logins from friends.`);
 				user.settings.hideLogins = true;
 				await Chat.Friends.hideLoginData(user.id);
 				this.sendReply(`You are now hiding your login times from your friends.`);
 			} else if (cmd.includes('show')) {
-				if (!setting) return this.errorReply(this.tr`You are already allowing friends to see your login times.`);
+				if (!setting) throw new Chat.ErrorMessage(this.tr`You are already allowing friends to see your login times.`);
 				user.settings.hideLogins = false;
 				await Chat.Friends.allowLoginData(user.id);
 				this.sendReply(`You are now allowing your friends to see your login times.`);
 			} else {
-				return this.errorReply(`Invalid setting.`);
+				throw new Chat.ErrorMessage(`Invalid setting.`);
 			}
 			this.refreshPage('friends-settings');
 			user.update();
@@ -398,14 +398,14 @@ export const commands: Chat.ChatCommands = {
 			const { public_list: setting } = await Chat.Friends.getSettings(user.id);
 			if (this.meansYes(target)) {
 				if (setting) {
-					return this.errorReply(this.tr`You are already allowing other people to view your friends list.`);
+					throw new Chat.ErrorMessage(this.tr`You are already allowing other people to view your friends list.`);
 				}
 				await Chat.Friends.setHideList(user.id, true);
 				this.refreshPage('friends-settings');
 				return this.sendReply(this.tr`You are now allowing other people to view your friends list.`);
 			} else if (this.meansNo(target)) {
 				if (!setting) {
-					return this.errorReply(this.tr`You are already hiding your friends list.`);
+					throw new Chat.ErrorMessage(this.tr`You are already hiding your friends list.`);
 				}
 				await Chat.Friends.setHideList(user.id, false);
 				this.refreshPage('friends-settings');
@@ -429,19 +429,19 @@ export const commands: Chat.ChatCommands = {
 			target = toID(target);
 			if (this.meansYes(target)) {
 				if (user.settings.displayBattlesToFriends) {
-					return this.errorReply(this.tr`You are already sharing your battles with friends.`);
+					throw new Chat.ErrorMessage(this.tr`You are already sharing your battles with friends.`);
 				}
 				user.settings.displayBattlesToFriends = true;
 				this.sendReply(`You are now allowing your friends to see your ongoing battles.`);
 			} else if (this.meansNo(target)) {
 				if (!user.settings.displayBattlesToFriends) {
-					return this.errorReply(this.tr`You are already not sharing your battles with friends.`);
+					throw new Chat.ErrorMessage(this.tr`You are already not sharing your battles with friends.`);
 				}
 				user.settings.displayBattlesToFriends = false;
 				this.sendReply(`You are now hiding your ongoing battles from your friends.`);
 			} else {
 				if (!target) return this.parse('/help friends sharebattles');
-				return this.errorReply(`Invalid setting '${target}'. Provide 'on' or 'off'.`);
+				throw new Chat.ErrorMessage(`Invalid setting '${target}'. Provide 'on' or 'off'.`);
 			}
 			user.update();
 			this.refreshPage('friends-settings');
@@ -521,12 +521,12 @@ export const pages: Chat.PageTable = {
 			break;
 		case 'viewuser':
 			const target = toID(args.shift());
-			if (!target) return this.errorReply(`Specify a user.`);
+			if (!target) throw new Chat.ErrorMessage(`Specify a user.`);
 			if (target === user.id) {
-				return this.errorReply(`Use /friends list to view your own list.`);
+				throw new Chat.ErrorMessage(`Use /friends list to view your own list.`);
 			}
 			const { public_list: isAllowing } = await Chat.Friends.getSettings(target);
-			if (!isAllowing) return this.errorReply(`${target}'s friends list is not public or they do not have one.`);
+			if (!isAllowing) throw new Chat.ErrorMessage(`${target}'s friends list is not public or they do not have one.`);
 			this.title = `[Friends List] ${target}`;
 			buf += await Friends.visualizePublicList(target);
 			break;

@@ -95,7 +95,7 @@ class PunishmentMap extends Map<string, Punishment[]> {
 			}
 		}
 	}
-	get(k: string) {
+	override get(k: string) {
 		const punishments = super.get(k);
 		if (punishments) {
 			this.removeExpiring(punishments);
@@ -104,7 +104,7 @@ class PunishmentMap extends Map<string, Punishment[]> {
 		}
 		return undefined;
 	}
-	has(k: string) {
+	override has(k: string) {
 		return !!this.get(k);
 	}
 	getByType(k: string, type: string) {

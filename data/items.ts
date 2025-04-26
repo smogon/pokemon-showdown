@@ -1152,7 +1152,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onModifySecondaries(secondaries) {
 			this.debug('Covert Cloak prevent secondary');
-			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+			return secondaries.filter(effect => !!effect.self);
 		},
 		num: 1885,
 		gen: 9,

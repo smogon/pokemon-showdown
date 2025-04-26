@@ -195,7 +195,7 @@
         ]
     },
     "nidoking": {
-        "level": 80,
+        "level": 82,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -260,7 +260,7 @@
         ]
     },
     "parasect": {
-        "level": 96,
+        "level": 97,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -715,7 +715,7 @@
         ]
     },
     "rhydon": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -730,7 +730,7 @@
         ]
     },
     "tangela": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -771,7 +771,7 @@
         ]
     },
     "starmie": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -888,7 +888,7 @@
         ]
     },
     "lapras": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1221,7 +1221,7 @@
         ]
     },
     "crobat": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1288,7 +1288,7 @@
         ]
     },
     "bellossom": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1377,7 +1377,7 @@
         ]
     },
     "sunflora": {
-        "level": 100,
+        "level": 99,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1519,7 +1519,7 @@
         ]
     },
     "wobbuffet": {
-        "level": 81,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1615,7 +1615,7 @@
         ]
     },
     "qwilfish": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1743,7 +1743,7 @@
         ]
     },
     "corsola": {
-        "level": 97,
+        "level": 98,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1764,7 +1764,7 @@
         ]
     },
     "delibird": {
-        "level": 97,
+        "level": 98,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2097,7 +2097,7 @@
         ]
     },
     "mightyena": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2169,7 +2169,7 @@
         ]
     },
     "swellow": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2342,7 +2342,7 @@
         ]
     },
     "sableye": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2465,7 +2465,7 @@
         ]
     },
     "illumise": {
-        "level": 94,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2536,7 +2536,7 @@
         ]
     },
     "camerupt": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2546,7 +2546,7 @@
         ]
     },
     "torkoal": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2617,7 +2617,7 @@
         ]
     },
     "altaria": {
-        "level": 85,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2711,7 +2711,7 @@
             },
             {
                 "role": "Wallbreaker",
-                "movepool": ["brickbreak", "doubleedge", "hiddenpowerflying", "surf", "swordsdance"],
+                "movepool": ["brickbreak", "doubleedge", "hiddenpowerflying", "hiddenpowerghost", "surf", "swordsdance"],
                 "abilities": ["Hyper Cutter"],
                 "preferredTypes": ["Normal"]
             }
@@ -3049,7 +3049,7 @@
         ]
     },
     "rayquaza": {
-        "level": 70,
+        "level": 69,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -3104,7 +3104,7 @@
         ]
     },
     "deoxysdefense": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Bulky Support",
