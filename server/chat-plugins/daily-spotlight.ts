@@ -120,7 +120,17 @@ export const pages: Chat.PageTable = {
 					return key;
 				}
 			});
-			for (const [i] of keys.entries()) {
+			for (const key of sortedKeys) {
+				buf += `<table style="margin-bottom:30px;"><th colspan="2"><h3>${key}:</h3></th>`;
+				const keys = Utils.sortBy(spotlights[room.roomid][key].slice(), spotlight => {
+					switch (sortType) {
+					case 'time':
+						return -spotlight.time;
+					default:
+						return spotlight.description;
+					}
+				});
+				for (const [i] of keys.entries()) {
 					const html = await renderSpotlight(room.roomid, key, i);
 					buf += `<tr><td>${i ? i : 'Current'}</td><td>${html}</td>`;
 					if (user.can('announce', null, room)) {
