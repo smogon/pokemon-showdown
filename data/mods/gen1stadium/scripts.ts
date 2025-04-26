@@ -312,7 +312,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (accuracy !== true && randomValue > accuracy) {
 				this.battle.attrLastMove('[miss]');
 				this.battle.add('-miss', pokemon);
-				if (accuracy === 255) this.battle.hint("In Pokemon Stadium, moves with 100% accuracy can still miss 1/65536 of the time.");
+				if (accuracy === 255) {
+					this.battle.hint("In Pokemon Stadium, moves with 100% accuracy can still miss 1/65536 of the time.");
+				}
 				damage = false;
 				this.battle.lastDamage = 0;
 			}
