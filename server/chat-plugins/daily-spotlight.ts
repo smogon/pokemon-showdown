@@ -134,9 +134,11 @@ export const pages: Chat.PageTable = {
 					const html = await renderSpotlight(room.roomid, key, i);
 					buf += `<tr><td>${i ? i : 'Current'}</td><td>${html}</td>`;
 					if (user.can('announce', null, room)) {
-						const deleteCommand = i === 0
-						? `/msgroom ${room.roomid},/removedaily ${key}`
-						: `/msgroom ${room.roomid},/removedaily ${key}, ${i}`;
+						const deleteCommand = (
+							i === 0 ?
+								`/msgroom ${room.roomid},/removedaily ${key}` :
+								`/msgroom ${room.roomid},/removedaily ${key}, ${i}`
+						);
 						buf += `<td><button class="button" name="send" value="${deleteCommand}">Delete</button></td>`;
 					}
 					buf += `</tr>`;
