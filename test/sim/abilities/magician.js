@@ -83,6 +83,7 @@ describe('Magician', () => {
 		]]);
 		battle.makeChoices();
 		assert.false.holdsItem(battle.p1.active[0], 'Klefki should not have stolen an item.');
+	});
 
 	it(`should steal the item from the faster opponent hit`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
