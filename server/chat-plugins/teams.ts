@@ -305,9 +305,10 @@ export const TeamsHandler = new class {
 		}
 		buf += `<br /><a class="subtle" href="/${link}">`;
 		buf += team.map(set => `<psicon pokemon="${set.species}" />`).join(' ');
-		buf += `</a><br /><a href="/${link}">${!isFull ? 'View full team' : 'Shareable link to team'}</a>`;
-		buf += ` <small>(or copy/paste <code>https://psim.us/t/`;
-		buf += `${teamData.teamid}${teamData.private ? `-${teamData.private}` : ''}</code> to share!)</small>`;
+		buf += `</a><br /><a href="/${link}">${!isFull ? 'View full team' : 'Shareable link to team'}</a><br />`;
+		const url = `${teamData.teamid}${teamData.private ? `-${teamData.private}` : ''}`;
+		buf += ` <small>(you can also copy/paste <code>&lt;&lt;view-team-${url}&gt;&gt;</code> on-site `;
+		buf += `or share <code>https://psim.us/t/${url}</code> off-site!)</small>`;
 
 		if (user && (teamData.ownerid === user.id || user.can('rangeban'))) {
 			buf += `<br />`;
