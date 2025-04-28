@@ -6,8 +6,8 @@
  * @author dhelmise
  */
 
-import {FS, Net, Utils} from '../../lib';
-import {YouTube, VideoData} from './youtube';
+import { FS, Net, Utils } from '../../lib';
+import { YouTube, type VideoData } from './youtube';
 
 const LASTFM_DB = 'config/chat-plugins/lastfm.json';
 const RECOMMENDATIONS = 'config/chat-plugins/the-studio.json';
@@ -40,9 +40,11 @@ interface Recommendation {
 interface Recommendations {
 	suggested: Recommendation[];
 	saved: Recommendation[];
+	// Storing here so I don't need to rewrite the lastfm json
+	youtubeSearchDisabled?: boolean;
 }
 
-const lastfm: {[userid: string]: string} = JSON.parse(FS(LASTFM_DB).readIfExistsSync() || "{}");
+const lastfm: { [userid: string]: string } = JSON.parse(FS(LASTFM_DB).readIfExistsSync() || "{}");
 const recommendations: Recommendations = JSON.parse(FS(RECOMMENDATIONS).readIfExistsSync() || "{}");
 
 if (!recommendations.saved) recommendations.saved = [];
@@ -109,12 +111,18 @@ export class LastFMInterface {
 			try {
 				videoIDs = await YouTube.searchVideo(trackName, 1);
 			} catch (e: any) {
-				throw new Chat.ErrorMessage(`Error while fetching video data: ${e.message}`);
+				if (!recommendations.youtubeSearchDisabled) {
+					throw new Chat.ErrorMessage(`Error while fetching video data: ${e.message}`);
+				}
 			}
-			if (!videoIDs?.length) {
+			if (!videoIDs?.length && !recommendations.youtubeSearchDisabled) {
 				throw new Chat.ErrorMessage(`Something went wrong with the YouTube API.`);
 			}
-			buf += `<a href="https://youtu.be/${videoIDs[0]}">${Utils.escapeHTML(trackName)}</a>`;
+			if (recommendations.youtubeSearchDisabled) {
+				buf += Utils.escapeHTML(trackName);
+			} else {
+				buf += `<a href="https://youtu.be/${videoIDs![0]}">${Utils.escapeHTML(trackName)}</a>`;
+			}
 			buf += `</td></tr></table>${this.getScrobbleBadge()}`;
 		}
 		return buf;
@@ -151,13 +159,13 @@ export class LastFMInterface {
 
 	async tryGetTrackData(track: string, artist?: string) {
 		this.checkHasKey();
-		const query: {[k: string]: any} = {
+		const query: { [k: string]: any } = {
 			method: 'track.search', limit: 1, api_key: Config.lastfmkey, track, format: 'json',
 		};
 		if (artist) query.artist = artist;
 		let raw;
 		try {
-			raw = await Net(API_ROOT).get({query});
+			raw = await Net(API_ROOT).get({ query });
 		} catch {
 			throw new Chat.ErrorMessage(`No track data found.`);
 		}
@@ -183,9 +191,11 @@ export class LastFMInterface {
 			try {
 				videoIDs = await YouTube.searchVideo(searchName, 1);
 			} catch (e: any) {
-				throw new Chat.ErrorMessage(`Error while fetching video data: ${e.message}`);
+				if (!recommendations.youtubeSearchDisabled) {
+					throw new Chat.ErrorMessage(`Error while fetching video data: ${e.message}`);
+				}
 			}
-			if (!videoIDs?.length) {
+			if (!videoIDs?.length || recommendations.youtubeSearchDisabled) {
 				buf += searchName;
 			} else {
 				buf += `<a href="https://youtu.be/${videoIDs[0]}">YouTube link</a>`;
@@ -234,7 +244,9 @@ class RecommendationsInterface {
 		this.checkTags(tags);
 		// JUST in case
 		if (!recommendations.saved) recommendations.saved = [];
-		const rec: Recommendation = {artist, title, videoInfo, url, description, tags, userData: {name: username}, likes: 0};
+		const rec: Recommendation = {
+			artist, title, videoInfo, url, description, tags, userData: { name: username }, likes: 0,
+		};
 		if (!rec.tags.map(toID).includes(toID(username))) rec.tags.push(username);
 		if (!rec.tags.map(toID).includes(toID(artist))) rec.tags.push(artist);
 		if (avatar) rec.userData.avatar = avatar;
@@ -275,7 +287,9 @@ class RecommendationsInterface {
 		url = url.split('~')[0];
 		const videoInfo = await YouTube.getVideoData(url);
 		this.checkTags(tags);
-		const rec: Recommendation = {artist, title, videoInfo, url, description, tags, userData: {name: username}, likes: 0};
+		const rec: Recommendation = {
+			artist, title, videoInfo, url, description, tags, userData: { name: username }, likes: 0,
+		};
 		if (!rec.tags.map(toID).includes(toID(username))) rec.tags.push(username);
 		if (!rec.tags.map(toID).includes(toID(artist))) rec.tags.push(artist);
 		if (avatar) rec.userData.avatar = avatar;
@@ -311,8 +325,9 @@ class RecommendationsInterface {
 		let buf = ``;
 		buf += `<div style="color:#000;background:linear-gradient(rgba(210,210,210),rgba(225,225,225))">`;
 		buf += `<table style="margin:auto;background:rgba(255,255,255,0.25);padding:3px;"><tbody><tr>`;
-		if (rec.videoInfo === undefined) {
-			rec.videoInfo = await YouTube.getVideoData(rec.videoInfo);
+		if (!rec.videoInfo) {
+			// eslint-disable-next-line require-atomic-updates
+			rec.videoInfo = await YouTube.getVideoData(YouTube.getId(rec.url));
 			saveRecommendations();
 		}
 		if (rec.videoInfo) {
@@ -364,7 +379,7 @@ class RecommendationsInterface {
 			throw new Chat.ErrorMessage(`The song titled '${title}' by ${artist} isn't recommended.`);
 		}
 		if (!rec.liked) {
-			rec.liked = {ips: [], userids: []};
+			rec.liked = { ips: [], userids: [] };
 		}
 		if ((!Config.noipchecks && rec.liked.ips.includes(liker.latestIp)) || rec.liked.userids.includes(liker.id)) {
 			throw new Chat.ErrorMessage(`You've already liked this recommendation.`);
@@ -411,6 +426,33 @@ export const LastFM = new LastFMInterface();
 export const Recs = new RecommendationsInterface();
 
 export const commands: Chat.ChatCommands = {
+	lastfmyoutubesearch(target, room, user) {
+		this.checkCan('gdeclare');
+		target = toID(target);
+		if (!target || !['enable', 'disable'].includes(target)) {
+			return this.parse('/help lastfmyoutubesearch');
+		}
+		if (target === 'enable') {
+			if (!recommendations.youtubeSearchDisabled) {
+				throw new Chat.ErrorMessage(`The YouTube API is already enabled for Last.fm commands.`);
+			}
+			delete recommendations.youtubeSearchDisabled;
+			saveRecommendations();
+			this.sendReply(`YouTube API enabled for Last.fm commands.`);
+			this.globalModlog(`LASTFM YOUTUBE API`, null, 'enabled');
+		} else {
+			if (recommendations.youtubeSearchDisabled) {
+				throw new Chat.ErrorMessage(`The YouTube API is already disabled for Last.fm commands.`);
+			}
+			recommendations.youtubeSearchDisabled = true;
+			saveRecommendations();
+			this.sendReply(`YouTube API disabled for Last.fm commands.`);
+			this.globalModlog(`LASTFM YOUTUBE API`, null, 'disabled');
+		}
+	},
+	lastfmyoutubesearchhelp: [
+		'/lastfmyoutubesearch [enable|disable] - Enables/disables the YouTube API for Last.fm commands. Requires: ~',
+	],
 	registerlastfm(target, room, user) {
 		if (!target) return this.parse(`/help registerlastfm`);
 		this.checkChat(target);
@@ -428,7 +470,7 @@ export const commands: Chat.ChatCommands = {
 
 	async lastfm(target, room, user) {
 		this.checkChat();
-		if (!user.autoconfirmed) return this.errorReply(`You cannot use this command while not autoconfirmed.`);
+		if (!user.autoconfirmed) throw new Chat.ErrorMessage(`You cannot use this command while not autoconfirmed.`);
 		this.runBroadcast(true);
 		const targetUsername = this.splitUser(target).targetUsername || (user.named ? user.name : '');
 		const username = LastFM.getAccountName(targetUsername);
@@ -442,7 +484,7 @@ export const commands: Chat.ChatCommands = {
 	async track(target, room, user) {
 		if (!target) return this.parse('/help track');
 		this.checkChat();
-		if (!user.autoconfirmed) return this.errorReply(`You cannot use this command while not autoconfirmed.`);
+		if (!user.autoconfirmed) throw new Chat.ErrorMessage(`You cannot use this command while not autoconfirmed.`);
 		const [track, artist] = this.splitOne(target);
 		if (!track) return this.parse('/help track');
 		this.runBroadcast(true);
@@ -473,7 +515,8 @@ export const commands: Chat.ChatCommands = {
 
 	delrec: 'removerecommendation',
 	removerecommendation(target, room, user) {
-		room = this.requireRoom('thestudio' as RoomID);		const [artist, title] = target.split(`|`).map(x => x.trim());
+		room = this.requireRoom('thestudio' as RoomID);
+		const [artist, title] = target.split(`|`).map(x => x.trim());
 		if (!(artist && title)) return this.parse(`/help removerecommendation`);
 		const rec = Recs.get(artist, title);
 		if (!rec) throw new Chat.ErrorMessage(`Recommendation not found.`);
@@ -498,7 +541,7 @@ export const commands: Chat.ChatCommands = {
 			return this.parse('/help suggestrecommendation');
 		}
 		this.checkChat(target);
-		if (!user.autoconfirmed) return this.errorReply(`You cannot use this command while not autoconfirmed.`);
+		if (!user.autoconfirmed) throw new Chat.ErrorMessage(`You cannot use this command while not autoconfirmed.`);
 		const [artist, title, url, description, ...tags] = target.split('|').map(x => x.trim());
 		if (!(artist && title && url && description && tags?.length)) {
 			return this.parse(`/help suggestrecommendation`);
@@ -509,7 +552,7 @@ export const commands: Chat.ChatCommands = {
 		this.sendReply(`Your suggestion for '${title}' by ${artist} has been submitted.`);
 		const html = await Recs.render({
 			artist, title, url, description,
-			userData: {name: user.name, avatar: String(user.avatar)},
+			userData: { name: user.name, avatar: String(user.avatar) },
 			tags: cleansedTags, likes: 0, videoInfo: null,
 		}, true);
 		room.sendRankedUsers(`|html|${html}`, '%');

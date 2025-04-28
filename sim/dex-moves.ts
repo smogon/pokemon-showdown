@@ -1,6 +1,6 @@
-import {Utils} from '../lib';
-import type {ConditionData} from './dex-conditions';
-import {assignMissingFields, BasicEffect, toID} from './dex-data';
+import { Utils } from '../lib/utils';
+import type { ConditionData } from './dex-conditions';
+import { assignMissingFields, BasicEffect, toID } from './dex-data';
 
 /**
  * Describes the acceptable target(s) of a move.
@@ -88,11 +88,6 @@ export interface SecondaryEffect extends HitEffect {
 	/** Used to flag a secondary effect as added by Poison Touch */
 	ability?: Ability;
 	/**
-	 * Applies to Sparkling Aria's secondary effect: Affected by
-	 * Sheer Force but not Shield Dust.
-	 */
-	dustproof?: boolean;
-	/**
 	 * Gen 2 specific mechanics: Bypasses Substitute only on Twineedle,
 	 * and allows it to flinch sleeping/frozen targets
 	 */
@@ -134,14 +129,13 @@ export interface MoveEventMethods {
 	onMoveFail?: CommonHandlers['VoidMove'];
 	onModifyType?: (this: Battle, move: ActiveMove, pokemon: Pokemon, target: Pokemon) => void;
 	onModifyTarget?: (
-		this: Battle, relayVar: {target: Pokemon}, pokemon: Pokemon, target: Pokemon, move: ActiveMove
+		this: Battle, relayVar: { target: Pokemon }, pokemon: Pokemon, target: Pokemon, move: ActiveMove
 	) => void;
 	onPrepareHit?: CommonHandlers['ResultMove'];
 	onTry?: CommonHandlers['ResultSourceMove'];
 	onTryHit?: CommonHandlers['ExtResultSourceMove'];
 	onTryHitField?: CommonHandlers['ResultMove'];
-	onTryHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean |
-	 null | "" | void;
+	onTryHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void;
 	onTryImmunity?: CommonHandlers['ResultMove'];
 	onTryMove?: CommonHandlers['ResultSourceMove'];
 	onUseMoveMessage?: CommonHandlers['VoidSourceMove'];
@@ -198,7 +192,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	heal?: number[] | null;
 	forceSwitch?: boolean;
 	selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
-	selfBoost?: {boosts?: SparseBoostsTable};
+	selfBoost?: { boosts?: SparseBoostsTable };
 	selfdestruct?: 'always' | 'ifHit' | boolean;
 	breaksProtect?: boolean;
 	/**
@@ -245,7 +239,7 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	ignoreAccuracy?: boolean;
 	ignoreDefensive?: boolean;
 	ignoreEvasion?: boolean;
-	ignoreImmunity?: boolean | {[typeName: string]: boolean};
+	ignoreImmunity?: boolean | { [typeName: string]: boolean };
 	ignoreNegativeOffensive?: boolean;
 	ignoreOffensive?: boolean;
 	ignorePositiveDefensive?: boolean;
@@ -287,8 +281,8 @@ export type ModdedMoveData = MoveData | Partial<Omit<MoveData, 'name'>> & {
 	gen?: number,
 };
 
-export interface MoveDataTable {[moveid: IDEntry]: MoveData}
-export interface ModdedMoveDataTable {[moveid: IDEntry]: ModdedMoveData}
+export interface MoveDataTable { [moveid: IDEntry]: MoveData }
+export interface ModdedMoveDataTable { [moveid: IDEntry]: ModdedMoveData }
 
 export interface Move extends Readonly<BasicEffect & MoveData> {
 	readonly effectType: 'Move';
@@ -318,6 +312,7 @@ export interface ActiveMove extends MutableMove {
 	status?: ID;
 	hit: number;
 	moveHitData?: MoveHitData;
+	hitTargets?: Pokemon[];
 	ability?: Ability;
 	allies?: Pokemon[];
 	auraBooster?: Pokemon;
@@ -403,19 +398,19 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	/**
 	 * Pokemon for the attack stat. Ability and Item damage modifiers still come from the real attacker.
 	 */
-	 readonly overrideOffensivePokemon?: 'target' | 'source';
+	readonly overrideOffensivePokemon?: 'target' | 'source';
 	/**
 	 * Physical moves use attack stat modifiers, special moves use special attack stat modifiers.
 	 */
-	 readonly overrideOffensiveStat?: StatIDExceptHP;
+	readonly overrideOffensiveStat?: StatIDExceptHP;
 	/**
 	 * Pokemon for the defense stat. Ability and Item damage modifiers still come from the real defender.
 	 */
-	 readonly overrideDefensivePokemon?: 'target' | 'source';
+	readonly overrideDefensivePokemon?: 'target' | 'source';
 	/**
 	 * uses modifiers that match the new stat
 	 */
-	 readonly overrideDefensiveStat?: StatIDExceptHP;
+	readonly overrideDefensiveStat?: StatIDExceptHP;
 	/** Whether or not this move ignores negative attack boosts. */
 	readonly ignoreNegativeOffensive: boolean;
 	/** Whether or not this move ignores positive defense boosts. */
@@ -431,7 +426,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	 * If an Object, its keys represent the types whose immunities are
 	 * ignored, and its values should only be true.
 	 */
-	readonly ignoreImmunity: {[typeName: string]: boolean} | boolean;
+	readonly ignoreImmunity: { [typeName: string]: boolean } | boolean;
 	/** Base move PP. */
 	readonly pp: number;
 	/** Whether or not this move can receive PP boosts. */
@@ -505,7 +500,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.ignoreDefensive = !!data.ignoreDefensive;
 		this.ignoreImmunity = (data.ignoreImmunity !== undefined ? data.ignoreImmunity : this.category === 'Status');
 		this.pp = Number(data.pp);
-		this.noPPBoosts = !!data.noPPBoosts;
+		this.noPPBoosts = !!(data.noPPBoosts ?? data.isZ);
 		this.isZ = data.isZ || false;
 		this.isMax = data.isMax || false;
 		this.flags = data.flags || {};
@@ -519,7 +514,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.volatileStatus = typeof data.volatileStatus === 'string' ? (data.volatileStatus as ID) : undefined;
 
 		if (this.category !== 'Status' && !data.maxMove && this.id !== 'struggle') {
-			this.maxMove = {basePower: 1};
+			this.maxMove = { basePower: 1 };
 			if (this.isMax || this.isZ) {
 				// already initialized to 1
 			} else if (!this.basePower) {
@@ -613,7 +608,7 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	}
 }
 
-const EMPTY_MOVE = Utils.deepFreeze(new DataMove({name: '', exists: false}));
+const EMPTY_MOVE = Utils.deepFreeze(new DataMove({ name: '', exists: false }));
 
 export class DexMoves {
 	readonly dex: ModdedDex;
@@ -654,6 +649,19 @@ export class DexMoves {
 			});
 			if (move.gen > this.dex.gen) {
 				(move as any).isNonstandard = 'Future';
+			}
+			if (this.dex.parentMod) {
+				// If move is exactly identical to parentMod's move, reuse parentMod's copy
+				const parentMod = this.dex.mod(this.dex.parentMod);
+				if (moveData === parentMod.data.Moves[id]) {
+					const parentMove = parentMod.moves.getByID(id);
+					if (
+						move.isNonstandard === parentMove.isNonstandard &&
+						move.desc === parentMove.desc && move.shortDesc === parentMove.shortDesc
+					) {
+						move = parentMove;
+					}
+				}
 			}
 		} else {
 			move = new DataMove({

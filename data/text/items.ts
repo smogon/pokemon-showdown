@@ -1,7 +1,7 @@
-export const ItemsText: {[id: IDEntry]: ItemText} = {
+export const ItemsText: { [id: IDEntry]: ItemText } = {
 	abilityshield: {
 		name: "Ability Shield",
-		shortDesc: "Holder's Ability cannot be changed by any effect.",
+		shortDesc: "Holder's Ability cannot be changed, suppressed, or ignored by any effect.",
 
 		block: "  [POKEMON]'s Ability is protected by the effects of its Ability Shield!",
 	},
@@ -314,6 +314,7 @@ export const ItemsText: {[id: IDEntry]: ItemText} = {
 	},
 	covertcloak: {
 		name: "Covert Cloak",
+		desc: "The holder is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause the holder to flinch, cause the holder's stat stages to be lowered, as well as Anchor Shot, Eerie Spell, Fling, Psychic Noise, Salt Cure, Spirit Shackle, Syrup Bomb, and Throat Chop. The effect of Sparkling Aria is prevented if the holder is the only target. Secondary effects added by King's Rock, Razor Fang, and the Poison Touch, Stench, and Toxic Chain Abilities are also prevented against the holder.",
 		shortDesc: "Holder is not affected by the secondary effect of another Pokemon's attack.",
 	},
 	crackedpot: {
@@ -846,7 +847,10 @@ export const ItemsText: {[id: IDEntry]: ItemText} = {
 	},
 	icyrock: {
 		name: "Icy Rock",
-		shortDesc: "Holder's use of Hail lasts 8 turns instead of 5.",
+		shortDesc: "Holder's use of Snowscape lasts 8 turns instead of 5.",
+		gen8: {
+			shortDesc: "Holder's use of Hail lasts 8 turns instead of 5.",
+		},
 	},
 	inciniumz: {
 		name: "Incinium Z",
@@ -984,6 +988,7 @@ export const ItemsText: {[id: IDEntry]: ItemText} = {
 	},
 	loadeddice: {
 		name: "Loaded Dice",
+		desc: "The holder's moves that normally hit 2 to 5 times instead hit 4 or 5 times. If the first hit is successful, the holder's use of Triple Kick or Triple Axel hits 3 times, and Population Bomb hits 4 to 10 times, at random.",
 		shortDesc: "Holder's moves that hit 2-5 times hit 4-5 times; Population Bomb hits 4-10 times.",
 	},
 	lopunnite: {
@@ -1616,7 +1621,7 @@ export const ItemsText: {[id: IDEntry]: ItemText} = {
 	},
 	shedshell: {
 		name: "Shed Shell",
-		shortDesc: "Holder may switch out even when trapped by another Pokemon, or by Ingrain.",
+		shortDesc: "Holder cannot be prevented from choosing to switch out by any effect.",
 	},
 	shellbell: {
 		name: "Shell Bell",

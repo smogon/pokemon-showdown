@@ -49,7 +49,7 @@ games asynchronously.
     large performance benefits over the default sequential mode and may require
     additional memory.
 
-**TODO**: Add support for running battles in `--parallel` on muliple cores with
+**TODO**: Add support for running battles in `--parallel` on multiple cores with
 [`worker_threads`](https://nodejs.org/api/worker_threads.html).
 
 ## exhaustive
@@ -74,4 +74,4 @@ likely to catch fire.
 -   **`--forever`**: continue iterating through formats infinitely, exhausting
     each `--cycles` times.
 -   **`--seed`**: PRNG seed to use (eg. `'1234,5678,9012,3456'`).
--   **`--maxFailures`**: exit early if this many failures have occured.
+-   **`--maxFailures`**: exit early if this many failures have occurred.

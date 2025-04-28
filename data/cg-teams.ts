@@ -33,8 +33,9 @@
  *   - Tracking type coverage to make it more likely that a moveset can hit every type
  */
 
-import {Dex, PRNG, SQL} from '../sim';
-import {EventMethods} from '../sim/dex-conditions';
+import type { SQLDatabaseManager } from '../lib/sql';
+import { Dex, PRNG, SQL } from '../sim';
+import type { EventMethods } from '../sim/dex-conditions';
 import {
 	ABILITY_MOVE_BONUSES,
 	ABILITY_MOVE_TYPE_BONUSES,
@@ -45,16 +46,47 @@ import {
 } from './cg-team-data';
 
 interface TeamStats {
-	hazardSetters: {[moveid: string]: number};
-	typeWeaknesses: {[type: string]: number};
+	hazardSetters: { [moveid: string]: number };
+	typeWeaknesses: { [type: string]: number };
 	hazardRemovers: number;
+}
+interface MovesStats {
+	attackTypes: { [type: string]: number };
+	setup: { atk: number, def: number, spa: number, spd: number, spe: number };
+	noSleepTalk: number;
+	hazards: number;
+	stallingMoves: number;
+	nonStatusMoves: number;
+	healing: number;
 }
 
 // We put a limit on the number of Pokémon on a team that can be weak to a given type.
 const MAX_WEAK_TO_SAME_TYPE = 3;
+/** An estimate of the highest raw speed in the metagame */
+const TOP_SPEED = 300;
 
-const levelOverride: {[speciesID: string]: number} = {};
+const levelOverride: { [speciesID: string]: number } = {};
 export let levelUpdateInterval: NodeJS.Timeout | null = null;
+
+// can't import the function cg-teams-leveling.ts uses to this context for some reason
+const useBaseSpecies = [
+	'Pikachu',
+	'Gastrodon',
+	'Magearna',
+	'Dudunsparce',
+	'Maushold',
+	'Keldeo',
+	'Zarude',
+	'Polteageist',
+	'Sinistcha',
+	'Sawsbuck',
+	'Vivillon',
+	'Florges',
+	'Minior',
+	'Toxtricity',
+	'Tatsugiri',
+	'Alcremie',
+];
 
 async function updateLevels(database: SQL.DatabaseManager) {
 	const updateSpecies = await database.prepare(
@@ -63,8 +95,10 @@ async function updateLevels(database: SQL.DatabaseManager) {
 	const updateHistory = await database.prepare(
 		`INSERT INTO gen9_historical_levels (level, species_id, timestamp) VALUES (?, ?, ${Date.now()})`
 	);
-	const data = await database.all('SELECT species_id, wins, losses, level FROM gen9computergeneratedteams');
-	for (let {species_id, wins, losses, level} of data) {
+	const data: { species_id: ID, wins: number, losses: number, level: number }[] = await database.all(
+		'SELECT species_id, wins, losses, level FROM gen9computergeneratedteams'
+	);
+	for (let { species_id, wins, losses, level } of data) {
 		const total = wins + losses;
 
 		if (total > 10) {
@@ -79,12 +113,13 @@ async function updateLevels(database: SQL.DatabaseManager) {
 	}
 }
 
+export let cgtDatabase: SQLDatabaseManager;
 if (global.Config && Config.usesqlite && Config.usesqliteleveling) {
-	const database = SQL(module, {file: './databases/battlestats.db'});
+	cgtDatabase = SQL(module, { file: './databases/battlestats.db' });
 
 	// update every 2 hours
-	void updateLevels(database);
-	levelUpdateInterval = setInterval(() => void updateLevels(database), 1000 * 60 * 60 * 2);
+	void updateLevels(cgtDatabase);
+	levelUpdateInterval = setInterval(() => void updateLevels(cgtDatabase), 1000 * 60 * 60 * 2);
 }
 
 export default class TeamGenerator {
@@ -94,16 +129,13 @@ export default class TeamGenerator {
 	forceLevel?: number;
 	prng: PRNG;
 	itemPool: Item[];
-	specialItems: {[pokemon: string]: string};
-
-	/** An estimate of the highest raw speed in the metagame */
-	readonly TOP_SPEED = 300;
+	specialItems: { [pokemon: string]: string };
 
 	constructor(format: Format | string, seed: PRNG | PRNGSeed | null) {
 		this.dex = Dex.forFormat(format);
 		this.format = Dex.formats.get(format);
 		this.teamSize = this.format.ruleTable?.maxTeamSize || 6;
-		this.prng = seed instanceof PRNG ? seed : new PRNG(seed);
+		this.prng = PRNG.get(seed);
 		this.itemPool = this.dex.items.all().filter(i => i.exists && i.isNonstandard !== 'Past' && !i.isPokeball);
 		this.specialItems = {};
 		for (const i of this.itemPool) {
@@ -155,6 +187,15 @@ export default class TeamGenerator {
 		const level = this.forceLevel || TeamGenerator.getLevel(species);
 
 		const moves: Move[] = [];
+		let movesStats: MovesStats = {
+			setup: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+			attackTypes: {},
+			noSleepTalk: 0,
+			hazards: 0,
+			stallingMoves: 0,
+			healing: 0,
+			nonStatusMoves: 0,
+		};
 
 		let movePool: IDEntry[] = [...this.dex.species.getMovePool(species.id)];
 		if (!movePool.length) throw new Error(`No moves for ${species.id}`);
@@ -173,14 +214,15 @@ export default class TeamGenerator {
 		// this is just a second reference the array because movePool gets set to point to a new array before the old one
 		// gets mutated
 		const movePoolCopy = movePool;
-		let interimMovePool: {move: IDEntry, weight: number}[] = [];
+		let interimMovePool: { move: IDEntry, weight: number }[] = [];
 		while (moves.length < 4 && movePool.length) {
 			let weights;
 			if (!movePoolIsTrimmed) {
 				if (!isRound2) {
-					for (const move of movePool) {
-						const weight = this.getMoveWeight(this.dex.moves.get(move), teamStats, species, moves, ability, level);
-						interimMovePool.push({move, weight});
+					for (const moveID of movePool) {
+						const move = this.dex.moves.get(moveID);
+						const weight = this.getMoveWeight(move, teamStats, species, moves, movesStats, ability, level);
+						interimMovePool.push({ move: moveID, weight });
 					}
 
 					interimMovePool.sort((a, b) => b.weight - a.weight);
@@ -194,12 +236,21 @@ export default class TeamGenerator {
 					for (const moveID of movePoolCopy) {
 						const move = this.dex.moves.get(moveID);
 						if (moves.includes(move)) continue;
-						const weight = this.getMoveWeight(move, teamStats, species, moves, ability, level);
-						interimMovePool.push({move: moveID, weight});
+						const weight = this.getMoveWeight(move, teamStats, species, moves, movesStats, ability, level);
+						interimMovePool.push({ move: moveID, weight });
 					}
 
 					interimMovePool.sort((a, b) => b.weight - a.weight);
 					moves.splice(0);
+					movesStats = {
+						setup: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
+						attackTypes: {},
+						noSleepTalk: 0,
+						hazards: 0,
+						stallingMoves: 0,
+						healing: 0,
+						nonStatusMoves: 0,
+					};
 				}
 				movePool = [];
 				weights = [];
@@ -210,16 +261,47 @@ export default class TeamGenerator {
 				}
 				movePoolIsTrimmed = true;
 			} else {
-				weights = movePool.map(m => this.getMoveWeight(this.dex.moves.get(m), teamStats, species, moves, ability, level));
+				weights = movePool.map(
+					m => this.getMoveWeight(this.dex.moves.get(m), teamStats, species, moves, movesStats, ability, level)
+				);
 			}
 
-			const moveID = this.weightedRandomPick(movePool, weights, {remove: true});
+			const moveID = this.weightedRandomPick(movePool, weights, { remove: true });
 
-			moves.push(this.dex.moves.get(moveID));
+			const move = this.dex.moves.get(moveID);
+			moves.push(move);
 			if (TeamGenerator.moveIsHazard(moves[moves.length - 1])) {
 				teamStats.hazardSetters[moveID] = (teamStats.hazardSetters[moveID] || 0) + 1;
+				movesStats.hazards++;
 			}
 			if (['defog', 'courtchange', 'tidyup', 'rapidspin', 'mortalspin'].includes(moveID)) teamStats.hazardRemovers++;
+			const boosts = move.boosts || move.self?.boosts || move.selfBoost?.boosts ||
+				ability !== 'Sheer Force' && move.secondary?.self?.boosts;
+			if (move.category === 'Status') {
+				if (boosts) {
+					for (const stat in boosts) {
+						const chance = Math.min(100, move.secondary?.chance || 100 * (ability === 'Serene Grace' ? 2 : 1));
+						const boost = (boosts[stat as StatIDExceptHP] || 0) * chance / 100;
+						if (boost) {
+							if (movesStats.setup[stat as StatIDExceptHP] < 0 && boost > 0) {
+								movesStats.setup[stat as StatIDExceptHP] = boost;
+							} else {
+								movesStats.setup[stat as StatIDExceptHP] += boost;
+							}
+							if (boost > 1) movesStats.noSleepTalk++;
+						}
+					}
+				} else {
+					movesStats.noSleepTalk++;
+				}
+				if (move.heal) movesStats.healing++;
+				if (move.stallingMove) movesStats.stallingMoves++;
+			} else {
+				movesStats.nonStatusMoves++;
+				const bp = +move.basePower;
+				const moveType = TeamGenerator.moveType(move, species);
+				if ((movesStats.attackTypes[moveType] || 0) < bp) movesStats.attackTypes[moveType] = bp;
+			}
 
 			if (!isRound2 && moves.length === 3) {
 				isRound2 = true;
@@ -233,6 +315,7 @@ export default class TeamGenerator {
 			if (
 				moves.length < 4 &&
 				pairedMove &&
+				!(pairedMove === 'sleeptalk' && movesStats.noSleepTalk) &&
 				!alreadyHavePairedMove &&
 				// We don't check movePool because sometimes paired moves are bad.
 				this.dex.species.getLearnsetData(species.id).learnset?.[pairedMove]
@@ -244,7 +327,7 @@ export default class TeamGenerator {
 		}
 
 		let item = '';
-		const nonStatusMoves = moves.filter(move => this.dex.moves.get(move).category !== 'Status');
+		const nonStatusMoves = moves.filter(m => this.dex.moves.get(m).category !== 'Status');
 		if (species.requiredItem) {
 			item = species.requiredItem;
 		} else if (species.requiredItems) {
@@ -277,8 +360,10 @@ export default class TeamGenerator {
 			spe: 31,
 		};
 
-		// For Tera Type, we just pick a random type if it's got Tera Blast, Revelation Dance, or no attacking moves,
-		// and the type of one of its attacking moves otherwise (so it can take advantage of the boosts).
+		// For Tera Type, we just pick a random type if it's got Tera Blast, Revelation Dance, or no attacking moves
+		// In the latter case, we avoid picking a type the Pokemon already is, and in the other two we avoid picking a
+		// type that matches the Pokemon's other moves
+		// Otherwise, we pick the type of one of its attacking moves
 		// Pokemon with 3 or more attack types and Pokemon with both Tera Blast and Contrary can also get Stellar type
 		// but Pokemon with Adaptability never get Stellar because Tera Stellar makes Adaptability have no effect
 		// Ogerpon's formes are forced to the Tera type that matches their forme
@@ -286,6 +371,7 @@ export default class TeamGenerator {
 		// Pokemon with Black Sludge don't generally want to tera to a type other than Poison
 		const hasTeraBlast = moves.some(m => m.id === 'terablast');
 		const hasRevelationDance = moves.some(m => m.id === 'revelationdance');
+		let attackingTypes = nonStatusMoves.map(m => TeamGenerator.moveType(this.dex.moves.get(m), species));
 		let teraType;
 		if (species.forceTeraType) {
 			teraType = species.forceTeraType;
@@ -294,15 +380,15 @@ export default class TeamGenerator {
 		} else if (hasTeraBlast && ability === 'Contrary' && this.prng.randomChance(2, 3)) {
 			teraType = 'Stellar';
 		} else {
-			let types = nonStatusMoves.map(move => TeamGenerator.moveType(this.dex.moves.get(move), species));
-			const noStellar = ability === 'Adaptability' || new Set(types).size < 3;
-			if (hasTeraBlast || hasRevelationDance || !nonStatusMoves.length) {
-				types = [...this.dex.types.all().map(t => t.name)];
-				if (noStellar) types.splice(types.indexOf('Stellar'));
+			const noStellar = ability === 'Adaptability' || new Set(attackingTypes).size < 3;
+			const noAttacks = !nonStatusMoves.length;
+			if (hasTeraBlast || hasRevelationDance || noAttacks) {
+				attackingTypes = [...this.dex.types.names().filter(t => !(noAttacks ? species.types : attackingTypes).includes(t))];
+				if (noStellar) attackingTypes.splice(attackingTypes.indexOf('Stellar'));
 			} else {
-				if (!noStellar) types.push('Stellar');
+				if (!noStellar) attackingTypes.push('Stellar');
 			}
-			teraType = this.prng.sample(types);
+			teraType = this.prng.sample(attackingTypes);
 		}
 
 		return {
@@ -313,7 +399,7 @@ export default class TeamGenerator {
 			moves: moves.map(m => m.name),
 			nature: 'Quirky',
 			gender: species.gender,
-			evs: {hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84},
+			evs: { hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84 },
 			ivs,
 			level,
 			teraType,
@@ -327,23 +413,23 @@ export default class TeamGenerator {
 	 */
 	protected speciesIsGoodFit(species: Species, stats: TeamStats): boolean {
 		// type check
-		for (const type of this.dex.types.all()) {
-			const effectiveness = this.dex.getEffectiveness(type.name, species.types);
+		for (const typeName of this.dex.types.names()) {
+			const effectiveness = this.dex.getEffectiveness(typeName, species.types);
 			if (effectiveness === 1) { // WEAKNESS!
-				if (stats.typeWeaknesses[type.name] === undefined) {
-					stats.typeWeaknesses[type.name] = 0;
+				if (stats.typeWeaknesses[typeName] === undefined) {
+					stats.typeWeaknesses[typeName] = 0;
 				}
-				if (stats.typeWeaknesses[type.name] >= MAX_WEAK_TO_SAME_TYPE) {
+				if (stats.typeWeaknesses[typeName] >= MAX_WEAK_TO_SAME_TYPE) {
 					// too many weaknesses to this type
 					return false;
 				}
 			}
 		}
 		// species passes; increment counters
-		for (const type of this.dex.types.all()) {
-			const effectiveness = this.dex.getEffectiveness(type.name, species.types);
+		for (const typeName of this.dex.types.names()) {
+			const effectiveness = this.dex.getEffectiveness(typeName, species.types);
 			if (effectiveness === 1) {
-				stats.typeWeaknesses[type.name]++;
+				stats.typeWeaknesses[typeName]++;
 			}
 		}
 		return true;
@@ -357,7 +443,7 @@ export default class TeamGenerator {
 	}
 
 	protected static moveIsHazard(move: Move): boolean {
-		return !!(move.sideCondition && move.target === 'foeSide');
+		return !!(move.sideCondition && move.target === 'foeSide') || ['stoneaxe', 'ceaselessedge'].includes(move.id);
 	}
 
 	/**
@@ -368,6 +454,7 @@ export default class TeamGenerator {
 		teamStats: TeamStats,
 		species: Species,
 		movesSoFar: Move[],
+		movesStats: MovesStats,
 		ability: string,
 		level: number,
 	): number {
@@ -404,7 +491,7 @@ export default class TeamGenerator {
 				weight *= move.id === 'spikes' ? 12 : 16;
 
 				// if we are ALREADY setting hazards, setting MORE is really good
-				if (movesSoFar.some(m => TeamGenerator.moveIsHazard(m))) weight *= 2;
+				if (movesStats.hazards) weight *= 2;
 			}
 
 			// hazard removers: even more important than hazard setters, since they remove everything at once
@@ -413,7 +500,7 @@ export default class TeamGenerator {
 				weight *= 32;
 
 				// these moves can also lessen the effectiveness of the user's team's own hazards
-				weight *= Math.pow(0.8, Object.values(teamStats.hazardSetters).reduce((total, num) => total + num, 0));
+				weight *= 0.8 ** Object.values(teamStats.hazardSetters).reduce((total, num) => total + num, 0);
 			}
 
 			// boosts
@@ -429,13 +516,16 @@ export default class TeamGenerator {
 			}
 
 			// protection moves - useful for bulky/stally pokemon
-			if (!movesSoFar.some(m => m.stallingMove)) {
+			if (!movesStats.stallingMoves) {
 				if (adjustedStats.def >= 80 || adjustedStats.spd >= 80 || adjustedStats.hp >= 80) {
 					switch (move.volatileStatus) {
 					case 'endure':
+						weight *= 2;
+						break;
+					case 'protect':
 						weight *= 3;
 						break;
-					case 'protect': case 'kingsshield': case 'silktrap':
+					case 'kingsshield': case 'silktrap':
 						weight *= 4;
 						break;
 					case 'banefulbunker': case 'burningbulwark': case 'spikyshield':
@@ -450,15 +540,57 @@ export default class TeamGenerator {
 			// Hardcoded boosts
 			if (move.id in HARDCODED_MOVE_WEIGHTS) weight *= HARDCODED_MOVE_WEIGHTS[move.id];
 
+			// Rest and Sleep Talk are pretty bad on Pokemon that can't fall asleep
+			const sleepImmunities = [
+				'Comatose',
+				'Purifying Salt',
+				'Shields Down',
+				'Insomnia',
+				'Vital Spirit',
+				'Sweet Veil',
+				'Misty Surge',
+				'Electric Surge',
+				'Hadron Engine',
+			];
+			if (['sleeptalk', 'rest'].includes(move.id) && sleepImmunities.includes(ability)) return 0;
+
+			// Sleep Talk is bad with moves that can't be used repeatedly, a.k.a. most status moves
+			// the exceptions allowed here are moves which boost a stat by exactly 1 and moves that wake the user up
+			if (move.id === 'sleeptalk') {
+				if (movesStats.noSleepTalk) weight *= 0.1;
+			} else if (movesSoFar.some(m => m.id === 'sleeptalk')) {
+				let sleepTalkSpammable = ['takeheart', 'junglehealing', 'healbell'].includes(move.id);
+				if (move.boosts) {
+					for (const stat in move.boosts) {
+						if (move.boosts[stat as StatIDExceptHP] === 1) {
+							sleepTalkSpammable = true;
+							break;
+						}
+					}
+				}
+				if (!sleepTalkSpammable) weight *= 0.1;
+			}
+
 			// Pokémon with high Attack and Special Attack stats shouldn't have too many status moves,
 			// but on bulkier Pokémon it's more likely to be worth it.
 			const goodAttacker = adjustedStats.atk > 65 || adjustedStats.spa > 65;
-			if (goodAttacker && movesSoFar.filter(m => m.category !== 'Status').length < 2) {
+			if (goodAttacker && movesStats.nonStatusMoves < 2) {
 				weight *= 0.3;
 			}
 
+			if (movesSoFar.length === 3 && movesStats.nonStatusMoves === 0) {
+				// uh oh
+				weight *= 0.6;
+				for (const stat in movesStats.setup) {
+					if (movesStats.setup[stat as StatIDExceptHP] > 0) {
+						// having no attacks is bad; having setup but no attacks is REALLY bad
+						weight *= 0.6;
+					}
+				}
+			}
+
 			// don't need 2 healing moves
-			if (move.heal && movesSoFar.some(m => m.heal)) weight *= 0.5;
+			if (move.heal && movesStats.healing) weight *= 0.5;
 
 			return weight;
 		}
@@ -467,11 +599,11 @@ export default class TeamGenerator {
 		// For Grass Knot and friends, let's just assume they average out to around 60 base power.
 		// Same with Crush Grip and Hard Press
 		if (WEIGHT_BASED_MOVES.includes(move.id) || TARGET_HP_BASED_MOVES.includes(move.id)) basePower = 60;
-		// not how this calc works but it should be close enough
-		if (move.id === 'electroball') basePower = Math.min(150, adjustedStats.spe / 2);
 		/** A value from 0 to 1, where 0 is the fastest and 1 is the slowest */
-		const slownessRating = Math.max(0, this.TOP_SPEED - adjustedStats.spe) / this.TOP_SPEED;
-		if (move.id === 'gyroball') basePower = 150 * slownessRating;
+		const slownessRating = Math.max(0, TOP_SPEED - adjustedStats.spe) / TOP_SPEED;
+		// not how this calc works but it should be close enough
+		if (move.id === 'gyroball') basePower = 150 * slownessRating * slownessRating;
+		if (move.id === 'electroball') basePower = 150 * (1 - slownessRating) * (1 - slownessRating);
 
 		let baseStat = move.category === 'Physical' ? adjustedStats.atk : adjustedStats.spa;
 		if (move.id === 'foulplay') baseStat = adjustedStats.spe * level / 100;
@@ -506,24 +638,36 @@ export default class TeamGenerator {
 		}
 
 		// If it uses the attacking stat that we don't boost, it's less useful!
-		const hasSpecialSetup = movesSoFar.some(m => m.boosts?.spa || m.self?.boosts?.spa || m.selfBoost?.boosts?.spa);
-		const hasPhysicalSetup = movesSoFar.some(m => m.boosts?.atk || m.self?.boosts?.atk || m.selfBoost?.boosts?.atk);
-		if (move.category === 'Physical' && !['bodypress', 'foulplay'].includes(move.id) && hasSpecialSetup) {
-			powerEstimate *= 0.7;
+		const specialSetup = movesStats.setup.spa;
+		const physicalSetup = movesStats.setup.atk;
+		if (move.category === 'Physical' && !['bodypress', 'foulplay'].includes(move.id)) {
+			powerEstimate *= Math.max(0.5, 1 + physicalSetup) / Math.max(0.5, 1 + specialSetup);
 		}
-		if (move.category === 'Special' && hasPhysicalSetup) powerEstimate *= 0.7;
+		if (move.category === 'Special') powerEstimate *= Math.max(0.5, 1 + specialSetup) / Math.max(0.5, 1 + physicalSetup);
 
-		const abilityBonus = (
-			((ABILITY_MOVE_BONUSES[this.dex.toID(ability)] || {})[move.id] || 1) *
-			((ABILITY_MOVE_TYPE_BONUSES[this.dex.toID(ability)] || {})[moveType] || 1)
+		let abilityBonus = (
+			(ABILITY_MOVE_BONUSES[this.dex.toID(ability)]?.[move.id] || 1) *
+			(ABILITY_MOVE_TYPE_BONUSES[this.dex.toID(ability)]?.[moveType] || 1)
 		);
+
+		const missilePrimers = ['surf', 'dive'];
+		if (ability === 'Gulp Missile' && missilePrimers.includes(move.id)) {
+			// we want exactly one move that activates gulp missile
+			if (!movesSoFar.find(m => m.id === (missilePrimers.find(p => p !== move.id)))) {
+				abilityBonus = 3;
+			} else {
+				abilityBonus = 0.75;
+			}
+		}
 
 		let weight = powerEstimate * abilityBonus;
 		if (move.id in HARDCODED_MOVE_WEIGHTS) weight *= HARDCODED_MOVE_WEIGHTS[move.id];
 		// semi-hardcoded move weights that depend on having control over the item
 		if (!this.specialItems[species.name] && !species.requiredItem) {
 			if (move.id === 'acrobatics') weight *= 1.75;
-			if (move.id === 'facade') weight *= 1.5;
+			if (move.id === 'facade') {
+				if (!['Comatose', 'Purifying Salt', 'Shields Down', 'Natural Cure', 'Misty Surge'].includes(ability)) weight *= 1.5;
+			}
 		}
 
 		// priority is more useful when you're slower
@@ -537,10 +681,10 @@ export default class TeamGenerator {
 		if (move.flags.contact) {
 			if (ability === 'Tough Claws') weight *= 1.3;
 			if (ability === 'Unseen Fist') weight *= 1.1;
-			if (ability === 'Poison Touch') weight *= TeamGenerator.statusWeight('psn', 1 - Math.pow(0.7, numberOfHits));
+			if (ability === 'Poison Touch') weight *= TeamGenerator.statusWeight('psn', 1 - (0.7 ** numberOfHits));
 		}
 		if (move.flags.bite && ability === 'Strong Jaw') weight *= 1.5;
-		// 5% boost for ability to break subs
+		// 5% boost for ability to bypass subs
 		if (move.flags.bypasssub) weight *= 1.05;
 		if (move.flags.pulse && ability === 'Mega Launcher') weight *= 1.5;
 		if (move.flags.punch && ability === 'Iron Fist') weight *= 1.2;
@@ -570,7 +714,7 @@ export default class TeamGenerator {
 				}
 			}
 		}
-		if (ability === 'Toxic Chain') weight *= TeamGenerator.statusWeight('tox', 1 - Math.pow(0.7, numberOfHits));
+		if (ability === 'Toxic Chain') weight *= TeamGenerator.statusWeight('tox', 1 - (0.7 ** numberOfHits));
 
 		// Special effect if something special happened earlier in the turn
 		// More useful on slower Pokemon
@@ -582,7 +726,7 @@ export default class TeamGenerator {
 		if (move.self?.volatileStatus) weight *= 0.8;
 
 		// downweight moves if we already have an attacking move of the same type
-		if (movesSoFar.some(m => m.category !== 'Status' && m.type === moveType && m.basePower >= 60)) weight *= 0.3;
+		if ((movesStats.attackTypes[moveType] || 0) > 60) weight *= 0.5;
 
 		if (move.selfdestruct) weight *= 0.3;
 		if (move.recoil && ability !== 'Rock Head' && ability !== 'Magic Guard') {
@@ -607,9 +751,12 @@ export default class TeamGenerator {
 
 		// these two hazard removers don't clear hazards on the opponent's field, but can be blocked by type immunities
 		if (['rapidspin', 'mortalspin'].includes(move.id)) {
-			weight *= 1 + 20 * Math.pow(0.25, teamStats.hazardRemovers);
-			teamStats.hazardRemovers++;
+			weight *= 1 + 20 * (0.25 ** teamStats.hazardRemovers);
 		}
+
+		// these moves have a hard-coded 16x bonus
+		if (move.id === 'stoneaxe' && teamStats.hazardSetters.stealthrock) weight /= 4;
+		if (move.id === 'ceaselessedge' && teamStats.hazardSetters.spikes) weight /= 2;
 
 		if (move.drain) {
 			const drainedFraction = move.drain[0] / move.drain[1];
@@ -628,13 +775,35 @@ export default class TeamGenerator {
 	 */
 	protected static moveType(move: Move, species: Species) {
 		switch (move.id) {
+		case 'ivycudgel':
+		case 'ragingbull':
+			if (species.types.length > 1) return species.types[1];
+			// falls through for Ogerpon and Tauros's respective base formes
 		case 'judgment':
 		case 'revelationdance':
 			return species.types[0];
-		case 'ivycudgel':
-			if (species.types.length > 1) return species.types[1];
 		}
 		return move.type;
+	}
+
+	protected static moveIsPhysical(move: Move, species: Species) {
+		if (move.category === 'Physical') {
+			return !(move.damageCallback || move.damage);
+		} else if (['terablast', 'terastarstorm', 'photongeyser', 'shellsidearm'].includes(move.id)) {
+			return species.baseStats.atk > species.baseStats.spa;
+		} else {
+			return false;
+		}
+	}
+
+	protected static moveIsSpecial(move: Move, species: Species) {
+		if (move.category === 'Special') {
+			return !(move.damageCallback || move.damage);
+		} else if (['terablast', 'terastarstorm', 'photongeyser', 'shellsidearm'].includes(move.id)) {
+			return species.baseStats.atk <= species.baseStats.spa;
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -667,12 +836,14 @@ export default class TeamGenerator {
 	 */
 	protected boostWeight(move: Move, movesSoFar: Move[], species: Species, ability: string, level: number): number {
 		const physicalIsRelevant = (
-			move.category === 'Physical' ||
-			movesSoFar.some(m => m.category === 'Physical' && !m.overrideOffensiveStat && !m.overrideOffensivePokemon)
+			TeamGenerator.moveIsPhysical(move, species) ||
+			movesSoFar.some(
+				m => TeamGenerator.moveIsPhysical(m, species) && !m.overrideOffensiveStat && !m.overrideOffensivePokemon
+			)
 		);
 		const specialIsRelevant = (
-			move.category === 'Special' ||
-			movesSoFar.some(m => m.category === 'Special')
+			TeamGenerator.moveIsSpecial(move, species) ||
+			movesSoFar.some(m => TeamGenerator.moveIsSpecial(m, species))
 		);
 
 		const adjustedStats: StatsTable = {
@@ -691,10 +862,10 @@ export default class TeamGenerator {
 		const abilityMod = ability === 'Simple' ? 2 : ability === 'Contrary' ? -1 : 1;
 		const bodyPressMod = movesSoFar.some(m => m.id === 'bodyPress') ? 2 : 1;
 		const electroBallMod = movesSoFar.some(m => m.id === 'electroball') ? 2 : 1;
-		for (const {chance, boosts} of [
-			{chance: 1, boosts: move.boosts},
-			{chance: 1, boosts: move.self?.boosts},
-			{chance: 1, boosts: move.selfBoost?.boosts},
+		for (const { chance, boosts } of [
+			{ chance: 1, boosts: move.boosts },
+			{ chance: 1, boosts: move.self?.boosts },
+			{ chance: 1, boosts: move.selfBoost?.boosts },
 			{
 				chance: secondaryChance,
 				boosts: move.secondary?.self?.boosts,
@@ -729,8 +900,8 @@ export default class TeamGenerator {
 		if (!['allAdjacentFoes', 'allAdjacent', 'foeSide', 'normal'].includes(move.target)) return 1;
 
 		let averageNumberOfDebuffs = 0;
-		for (const {chance, boosts} of [
-			{chance: 1, boosts: move.boosts},
+		for (const { chance, boosts } of [
+			{ chance: 1, boosts: move.boosts },
 			{
 				chance: move.secondary ? ((move.secondary.chance || 100) / 100) : 0,
 				boosts: move.secondary?.boosts,
@@ -759,16 +930,17 @@ export default class TeamGenerator {
 			spd: species.baseStats.spd * level / 100,
 			spe: species.baseStats.spe * level / 100,
 		};
+		const statusImmunities = ['Comatose', 'Purifying Salt', 'Shields Down', 'Natural Cure', 'Misty Surge'];
 
 		let weight;
 		switch (item.id) {
 		// Choice Items
 		case 'choiceband':
-			return moves.every(x => x.category === 'Physical') ? 50 : 0;
+			return moves.every(x => TeamGenerator.moveIsPhysical(x, species) && x.priority < 3) ? 50 : 0;
 		case 'choicespecs':
-			return moves.every(x => x.category === 'Special') ? 50 : 0;
+			return moves.every(x => TeamGenerator.moveIsSpecial(x, species)) ? 50 : 0;
 		case 'choicescarf':
-			if (moves.some(x => x.category === 'Status' || x.secondary?.self?.boosts?.spe)) return 0;
+			if (moves.some(x => x.category === 'Status' || x.secondary?.self?.boosts?.spe || x.priority > 1)) return 0;
 			if (adjustedStats.spe > 50 && adjustedStats.spe < 120) return 50;
 			return 10;
 
@@ -782,6 +954,7 @@ export default class TeamGenerator {
 			return 10;
 		case 'heavydutyboots':
 			switch (this.dex.getEffectiveness('Rock', species)) {
+			case 2: return 50; // double super effective
 			case 1: return 30; // super effective
 			case 0: return 10; // neutral
 			}
@@ -807,14 +980,29 @@ export default class TeamGenerator {
 
 		// status
 		case 'flameorb':
-			weight = ability === 'Guts' && !species.types.includes('Fire') ? 30 : 0;
-			if (moves.some(m => m.id === 'facade')) weight *= 2;
+			if (species.types.includes('Fire')) return 0;
+			if (statusImmunities.includes(ability)) return 0;
+			if (['Thermal Exchange', 'Water Bubble', 'Water Veil'].includes(ability)) return 0;
+			weight = ['Guts', 'Flare Boost'].includes(ability) ? 30 : 0;
+			if (moves.some(m => m.id === 'facade')) {
+				if (!weight && !moves.some(m => TeamGenerator.moveIsPhysical(m, species) && m.id !== 'facade')) {
+					weight = 30;
+				} else {
+					weight *= 2;
+				}
+			}
 			return weight;
 		case 'toxicorb':
-			if (species.types.includes('Poison')) return 0;
+			if (species.types.includes('Poison') || species.types.includes('Steel')) return 0;
+			if (statusImmunities.includes(ability)) return 0;
+			if (ability === 'Immunity') return 0;
+			// If facade is our only physical attack, Flame Orb is preferred
+			if (!moves.some(m => TeamGenerator.moveIsPhysical(m, species) && m.id !== 'facade') &&
+				!species.types.includes('Fire') && ['Thermal Exchange', 'Water Bubble', 'Water Veil'].includes(ability)
+			) return 0;
 
 			weight = 0;
-			if (ability === 'Poison Heal') weight += 25;
+			if (['Poison Heal', 'Toxic Boost'].includes('ability')) weight += 25;
 			if (moves.some(m => m.id === 'facade')) weight += 25;
 
 			return weight;
@@ -845,9 +1033,21 @@ export default class TeamGenerator {
 	 * @returns The level a Pokémon should be.
 	 */
 	protected static getLevel(species: Species): number {
+		if (['Zacian', 'Zamazenta'].includes(species.name)) {
+			species = Dex.species.get(species.otherFormes![0]);
+		} else if (species.baseSpecies === 'Squawkabilly') {
+			if (['Yellow', 'White'].includes(species.forme)) {
+				species = Dex.species.get('Squawkabilly-Yellow');
+			} else {
+				species = Dex.species.get('Squawkabilly');
+			}
+		} else if (useBaseSpecies.includes(species.baseSpecies)) {
+			species = Dex.species.get(species.baseSpecies);
+		}
 		if (levelOverride[species.id]) return levelOverride[species.id];
 
 		switch (species.tier) {
+		case 'AG': return 60;
 		case 'Uber': return 70;
 		case 'OU': case 'Unreleased': return 80;
 		case 'UU': return 90;
@@ -864,7 +1064,7 @@ export default class TeamGenerator {
 	weightedRandomPick<T>(
 		choices: T[],
 		weights: number[],
-		options?: {remove?: boolean}
+		options?: { remove?: boolean }
 	) {
 		if (!choices.length) throw new Error(`Can't pick from an empty list`);
 		if (choices.length !== weights.length) throw new Error(`Choices and weights must be the same length`);
@@ -878,7 +1078,7 @@ export default class TeamGenerator {
 
 		const totalWeight = weights.reduce((a, b) => a + b, 0);
 
-		let randomWeight = this.prng.next(0, totalWeight);
+		let randomWeight = this.prng.random(0, totalWeight);
 		for (let i = 0; i < choices.length; i++) {
 			randomWeight -= weights[i];
 			if (randomWeight < 0) {
@@ -893,6 +1093,6 @@ export default class TeamGenerator {
 	}
 
 	setSeed(seed: PRNGSeed) {
-		this.prng.seed = seed;
+		this.prng.setSeed(seed);
 	}
 }

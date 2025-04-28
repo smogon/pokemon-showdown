@@ -41,7 +41,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				if (pokemon.removeVolatile('twoturnmove')) {
 					if (pokemon.volatiles['invulnerability']) {
 						this.hint(`In Gen 1, when a Dig/Fly user is fully paralyzed while semi-invulnerable, ` +
-						`it will remain semi-invulnerable until it switches out or fully executes Dig/Fly`, true);
+							`it will remain semi-invulnerable until it switches out or fully executes Dig/Fly`, true);
 					}
 				}
 				pokemon.removeVolatile('partialtrappinglock');
@@ -55,7 +55,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Move') {
-				this.add('-status', target, 'slp', '[from] move: ' + sourceEffect.name);
+				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
 				this.add('-status', target, 'slp');
 			}
@@ -155,7 +155,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 				pokemon.removeVolatile('lockedmove');
 				return false;
 			}
-			return;
 		},
 	},
 	flinch: {
@@ -186,31 +185,82 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	},
 	partiallytrapped: {
 		name: 'partiallytrapped',
+		// this is the duration of Wrap if it doesn't continue.
+		// (i.e. if the attacker switches out.)
+		// the full duration is tracked in partialtrappinglock
 		duration: 2,
-		onBeforeMovePriority: 9,
-		onBeforeMove(pokemon) {
-			this.add('cant', pokemon, 'partiallytrapped');
+		// defender still takes PSN damage, etc
+		// TODO: research exact mechanics
+		onBeforeMovePriority: 0,
+		onBeforeMove() {
 			return false;
+		},
+		onRestart() {
+			this.effectState.duration = 2;
+		},
+		onLockMove() {
+			// exact move doesn't matter, no move is ever actually used
+			return 'struggle';
+		},
+		onDisableMove(target) {
+			target.maybeLocked = true;
+		},
+	},
+	fakepartiallytrapped: {
+		name: 'fakepartiallytrapped',
+		// Wrap ended this turn, but you don't know that
+		// until you try to use an attack
+		duration: 2,
+		onDisableMove(target) {
+			target.maybeLocked = true;
 		},
 	},
 	partialtrappinglock: {
 		name: 'partialtrappinglock',
 		durationCallback() {
-			const duration = this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
-			return duration;
+			return this.sample([2, 2, 2, 3, 3, 3, 4, 5]);
 		},
 		onStart(target, source, effect) {
+			const foe = target.foes()[0];
+			if (!foe) return false;
+
 			this.effectState.move = effect.id;
+			this.effectState.totalDuration = this.effectState.duration!;
+			this.effectState.damage = target.lastDamage;
+			this.effectState.trapTarget = foe;
+			foe.addVolatile('partiallytrapped', target, effect);
+			this.add('cant', foe, 'partiallytrapped');
 		},
-		onDisableMove(pokemon) {
-			if (!pokemon.hasMove(this.effectState.move)) {
+		onOverrideAction(pokemon, target, move) {
+			return this.effectState.move;
+		},
+		// attacker still takes PSN damage, etc
+		onBeforeMovePriority: 0,
+		onBeforeMove(pokemon, target, move) {
+			const foe = pokemon.foes()[0];
+			if (!foe || foe !== this.effectState.trapTarget) {
+				pokemon.removeVolatile('partialtrappinglock');
 				return;
 			}
-			for (const moveSlot of pokemon.moveSlots) {
-				if (moveSlot.id !== this.effectState.move) {
-					pokemon.disableMove(moveSlot.id);
+
+			const moveName = this.dex.moves.get(this.effectState.move).name;
+			this.add('move', pokemon, moveName, foe, `[from] ${moveName}`);
+			this.damage(this.effectState.damage, foe, pokemon, move);
+			if (this.effectState.duration === 1) {
+				if (this.effectState.totalDuration !== 5) {
+					pokemon.addVolatile('fakepartiallytrapped');
+					foe.addVolatile('fakepartiallytrapped');
 				}
+			} else {
+				foe.addVolatile('partiallytrapped', pokemon, move);
 			}
+			return false;
+		},
+		onLockMove() {
+			return this.effectState.move;
+		},
+		onDisableMove(pokemon) {
+			pokemon.maybeLocked = true;
 		},
 	},
 	mustrecharge: {
@@ -234,7 +284,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			const move = this.dex.moves.get(this.effectState.move);
 			if (move.id) {
 				this.debug('Forcing into ' + move.id);
-				this.queue.changeAction(pokemon, {choice: 'move', moveid: move.id});
+				this.queue.changeAction(pokemon, { choice: 'move', moveid: move.id });
 			}
 		},
 	},
