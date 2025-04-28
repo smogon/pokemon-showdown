@@ -145,19 +145,20 @@ function mafiaSearch(
 	entries: [string, MafiaDataAlignment | MafiaDataRole | MafiaDataTheme | MafiaDataIDEA | MafiaDataTerm][],
 	searchTarget: string, searchType: keyof MafiaData
 ) {
-	if (typeof (entries) === 'undefined') return entries;
-	if (searchType === `aliases`) return entries;
+	if (typeof (entries) === 'undefined' || searchType === `aliases` || searchTarget.length === 0) return entries;
 
-	if (searchTarget.length === 0) return entries;
+	// Handle negation
 	const negation = searchTarget.startsWith('!');
-
 	if (negation) searchTarget = searchTarget.substring(1).trim();
+
 	const entriesCopy = entries.slice();
 
+	// Check if the search term is an alias of something
 	const alias = toID((toID(searchTarget) in MafiaData[`aliases`]) ?
 		MafiaData[`aliases`][toID(searchTarget)] : searchTarget);
 
 	if (searchType === `themes` && searchTarget.includes(`players`) && searchTarget.includes(`pl`)) {
+		// Search themes by playercount
 		const inequalities = ['<=', '>=', '=', '<', '>'];
 		const inequality = inequalities.find(x => searchTarget.includes(x));
 		if (!inequality) return entries; // this.errorReply(`Please provide a valid inequality for the players.`);
@@ -180,19 +181,24 @@ function mafiaSearch(
 			return entries;
 		}
 	} else if (searchType === `themes` && alias in MafiaData[`roles`]) {
+		// Search themes that contain a role
 		entries = entries.filter(([key, data]) => ([...Array(50).keys()])
 			.some(playerCount => playerCount in (MafiaData[`themes`][key]) &&
 				(MafiaData[`themes`][key])[playerCount].toString().toLowerCase().includes(alias)));
 	} else if (searchType === `IDEAs` && alias in MafiaData[`roles`]) {
+		// Search IDEAs that contain a role
 		entries = entries.filter(([key, data]) => MafiaData[`IDEAs`][key].roles.map(role =>
 			toID((toID(role) in MafiaData[`aliases`]) ? MafiaData[`aliases`][toID(role)] : role)).includes(alias));
 	} else if (searchType === `roles` && alias in MafiaData[`themes`]) {
+		// Search roles that appear in a theme
 		entries = entries.filter(([key, data]) => Object.keys(MafiaData[`themes`][alias])
 			.filter((newKey: any) => toID((MafiaData[`themes`][alias])[newKey].toString()).includes(key)).length > 0);
 	} else if (searchType === `roles` && alias in MafiaData[`IDEAs`]) {
+		// Search roles that appear in an IDEA
 		entries = entries.filter(([key, data]) => MafiaData[`IDEAs`][alias].roles.map(role =>
 			toID((toID(role) in MafiaData[`aliases`]) ? MafiaData[`aliases`][toID(role)] : role)).includes(toID(key)));
 	} else {
+		// Any other search type matches just on whether it is included in the text
 		entries = entries.filter(([key]) => Object.entries(MafiaData[searchType][key])
 			.some(([newKey, value]) => value.toString().toLowerCase().includes(searchTarget)));
 	}
@@ -4183,20 +4189,11 @@ export const commands: Chat.ChatCommands = {
 
 			const dataSource = MafiaData[searchType];
 
+			// determine whether the command should return a random subset of results
 			const random = (cmd.includes('rand') || targets.includes(`random`));
-
 			if (targets.includes(`random`)) targets.splice(targets.indexOf(`random`), 1);
 
-			const hidden = (targets.includes(`hidden`));
-			if (hidden) targets.splice(targets.indexOf(`hidden`), 1);
-
-			const shuffle = function (array: any[]) { // replace by utils thing
-				for (let i = array.length - 1; i > 0; i--) {
-					const j = Math.floor(Math.random() * (i + 1));
-					[array[j], array[i]] = [array[i], array[j]];
-				}
-				return array;
-			};
+			// TODO: hide certain roles from appearing (unless the command includes the 'hidden' parameter)
 
 			// Number of results
 			let number = random ? 1 : 0;
@@ -4221,7 +4218,8 @@ export const commands: Chat.ChatCommands = {
 				return `<tr><td style="text-align:left;width:30%" ><button class="button" name = "send" value = "/mafia role ${role.name}" > ${role.name} </button> </td><td style="text-align:left;width:70%">${role.memo.join(' ')} </td></tr >`;
 			};
 
-			if (searchType === `aliases`) { // Can I use dataSource > searchType
+			if (searchType === `aliases`) {
+				// Handle aliases separately for differing functionality
 				room = this.requireRoom();
 				this.checkCan('mute', null, room);
 				const aliases = Object.entries(MafiaData.aliases)
@@ -4229,6 +4227,7 @@ export const commands: Chat.ChatCommands = {
 					.join('<br/>');
 				return this.sendReplyBox(`Mafia aliases:<br/>${aliases}`);
 			} else {
+				// Create a table for a pleasant viewing experience
 				let table = `<div style="max-height:300px;overflow:auto;"><table border="1" style="border: 1px solid black;width: 100%">`;
 				let entries: [string, MafiaDataAlignment | MafiaDataRole | MafiaDataTheme | MafiaDataIDEA | MafiaDataTerm][] =
 					Object.entries(dataSource).sort();
@@ -4241,7 +4240,7 @@ export const commands: Chat.ChatCommands = {
 
 				if (typeof (entries) === 'undefined') return;
 
-				if (random) entries = shuffle(entries);
+				if (random) entries = Utils.shuffle(entries);
 				if (number > 0) entries = entries.slice(0, number);
 
 				if (entries.length === 0) {
