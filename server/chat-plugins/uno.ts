@@ -343,8 +343,8 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 			card[0].color !== (this.topCard.changedColor || this.topCard.color) &&
 			card[0].value !== this.topCard.value
 		) {
-			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|${player.name} has passed.`)
-			this.nextTurn()
+			this.sendToRoom(`|c:|${Math.floor(Date.now() / 1000)}|~|${player.name} has passed.`);
+			this.nextTurn();
 		}
 	}
 
