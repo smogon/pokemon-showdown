@@ -4214,58 +4214,59 @@ export const commands: Chat.ChatCommands = {
 					break;
 				}
 
-			// Convert to rows
-			const themeRow = function (theme: MafiaDataTheme, players = 0) {
-				return `<tr><td style="text-align:left;width:30%" ><button class="button" name = "send" value = "/mafia theme ${theme.name}" > ${theme.name} </button> </td><td style="text-align:left;width:70%">${players > 0 ? theme[players] : theme.desc} </td></tr >`;
-			};
-			const ideaRow = function (idea: MafiaDataIDEA) {
-				return `<tr><td style="text-align:left;width:100%" ><button class="button" name = "send" value = "/mafia dt ${idea.name}" > ${idea.name} </button> </td></tr >`;
-			};
-			const row = function (role: MafiaDataRole | MafiaDataTerm | MafiaDataAlignment) {
-				return `<tr><td style="text-align:left;width:30%" ><button class="button" name = "send" value = "/mafia role ${role.name}" > ${role.name} </button> </td><td style="text-align:left;width:70%">${role.memo.join(' ')} </td></tr >`;
-			};
+				// Convert to rows
+				const themeRow = function (theme: MafiaDataTheme, players = 0) {
+					return `<tr><td style="text-align:left;width:30%" ><button class="button" name = "send" value = "/mafia theme ${theme.name}" > ${theme.name} </button> </td><td style="text-align:left;width:70%">${players > 0 ? theme[players] : theme.desc} </td></tr >`;
+				};
+				const ideaRow = function (idea: MafiaDataIDEA) {
+					return `<tr><td style="text-align:left;width:100%" ><button class="button" name = "send" value = "/mafia dt ${idea.name}" > ${idea.name} </button> </td></tr >`;
+				};
+				const row = function (role: MafiaDataRole | MafiaDataTerm | MafiaDataAlignment) {
+					return `<tr><td style="text-align:left;width:30%" ><button class="button" name = "send" value = "/mafia role ${role.name}" > ${role.name} </button> </td><td style="text-align:left;width:70%">${role.memo.join(' ')} </td></tr >`;
+				};
 
-			if (searchType === `aliases`) {
-				// Handle aliases separately for differing functionality
-				room = this.requireRoom();
-				this.checkCan('mute', null, room);
-				const aliases = Object.entries(MafiaData.aliases)
-					.map(([from, to]) => `${from}: ${to}`)
-					.join('<br/>');
-				return this.sendReplyBox(`Mafia aliases:<br/>${aliases}`);
-			} else {
-				// Create a table for a pleasant viewing experience
-				let table = `<div style="max-height:300px;overflow:auto;"><table border="1" style="border: 1px solid black;width: 100%">`;
-				let entries: [string, MafiaDataAlignment | MafiaDataRole | MafiaDataTheme | MafiaDataIDEA | MafiaDataTerm][] =
-					Object.entries(dataSource).sort();
+				if (searchType === `aliases`) {
+					// Handle aliases separately for differing functionality
+					room = this.requireRoom();
+					this.checkCan('mute', null, room);
+					const aliases = Object.entries(MafiaData.aliases)
+						.map(([from, to]) => `${from}: ${to}`)
+						.join('<br/>');
+					return this.sendReplyBox(`Mafia aliases:<br/>${aliases}`);
+				} else {
+					// Create a table for a pleasant viewing experience
+					let table = `<div style="max-height:300px;overflow:auto;"><table border="1" style="border: 1px solid black;width: 100%">`;
+					let entries: [string, MafiaDataAlignment | MafiaDataRole | MafiaDataTheme | MafiaDataIDEA | MafiaDataTerm][] =
+						Object.entries(dataSource).sort();
 
-				for (const targetString of targets) {
-					entries = targetString.split('|').map(x => x.trim())
-						.map(searchTerm => mafiaSearch(entries.slice(), searchTerm, searchType))
-						.reduce((aggregate, result) => [...new Set([...aggregate, ...result])]);
+					for (const targetString of targets) {
+						entries = targetString.split('|').map(x => x.trim())
+							.map(searchTerm => mafiaSearch(entries.slice(), searchTerm, searchType))
+							.reduce((aggregate, result) => [...new Set([...aggregate, ...result])]);
+					}
+
+					if (typeof (entries) === 'undefined') return;
+
+					if (random) entries = Utils.shuffle(entries);
+					if (number > 0) entries = entries.slice(0, number);
+
+					if (entries.length === 0) {
+						return this.errorReply(`No ${searchType} found.`);
+					}
+
+					if (entries.length === 1) {
+						this.target = entries[0][0];
+						return this.run((Chat.commands.mafia as Chat.ChatCommands).data as Chat.AnnotatedChatHandler);
+					}
+
+					table += entries
+						.map(([key, data]) => searchType === `themes` ?
+							themeRow(MafiaData[searchType][key]) : searchType === `IDEAs` ?
+								ideaRow(MafiaData[searchType][key]) : row(MafiaData[searchType][key]))
+						.join('');
+					table += `</table></div>`;
+					return this.sendReplyBox(table);
 				}
-
-				if (typeof (entries) === 'undefined') return;
-
-				if (random) entries = Utils.shuffle(entries);
-				if (number > 0) entries = entries.slice(0, number);
-
-				if (entries.length === 0) {
-					return this.errorReply(`No ${searchType} found.`);
-				}
-
-				if (entries.length === 1) {
-					this.target = entries[0][0];
-					return this.run((Chat.commands.mafia as Chat.ChatCommands).data as Chat.AnnotatedChatHandler);
-				}
-
-				table += entries
-					.map(([key, data]) => searchType === `themes` ?
-						themeRow(MafiaData[searchType][key]) : searchType === `IDEAs` ?
-							ideaRow(MafiaData[searchType][key]) : row(MafiaData[searchType as "roles" | "alignments" | "terms"][key]))
-					.join('');
-				table += `</table></div>`;
-				return this.sendReplyBox(table);
 			}
 		},
 		listdatahelp: [
