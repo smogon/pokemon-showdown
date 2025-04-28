@@ -109,14 +109,18 @@ export const TeamsHandler = new class {
 		return this.database.query(statement, values) as Promise<T[]>;
 	}
 
-	isNicknameAllowed(nickname: string, user: User) {
-		return (
-			// allow nicknames named after other mons/types/abilities/items - to support those OMs
-			Dex.species.get(nickname).exists ||
-			Dex.items.get(nickname).exists ||
-			Dex.abilities.get(nickname).exists ||
-			Dex.types.get(nickname).exists
-		);
+	isOMNickname(nickname: string, user: User) {
+    // allow nicknames named after other mons/types/abilities/items - to support those OMs
+    if (Dex.species.get(nickname).exists) {
+      return Dex.species.get(nickname).name;
+    } else if (Dex.items.get(nickname).exists) {
+      return Dex.items.get(nickname).name;
+    } else if (Dex.abilities.get(nickname).exists) {
+      return Dex.abilities.get(nickname).name;
+    } else if (Dex.types.get(nickname).exists) {
+      return Dex.types.get(nickname).name;
+    }
+    return null;
 	}
 
 	async save(
@@ -164,9 +168,9 @@ export const TeamsHandler = new class {
 		// now, we purge invalid nicknames and make sure it's an actual team
 		// gotta use the validated team so that nicknames are removed
 		for (const set of team) {
-			if (!this.isNicknameAllowed(set.name, user)) {
-				set.name = set.species;
-			}
+
+			set.name = this.isOMNickname(set.name, user) || set.species;
+      
 			if (!Dex.species.get(set.species).exists) {
 				connection.popup(`Invalid Pokemon ${set.species} in team.`);
 				return null;
