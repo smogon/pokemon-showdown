@@ -4379,7 +4379,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen3adv200',
 		searchShow: false,
 		ruleset: ['Standard'],
-		banlist: ['Uber', 'Swagger']
+		banlist: ['Uber', 'Swagger'],
 	},
 	{
 		name: "[Gen 3] UU",
