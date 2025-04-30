@@ -237,7 +237,7 @@
                 "role": "Wallbreaker",
                 "movepool": ["Earthquake", "Stone Edge", "Sucker Punch", "Throat Chop"],
                 "abilities": ["Arena Trap"],
-                "teraTypes": ["Dark", "Fairy", "Flying", "Ghost", "Ground"]
+                "teraTypes": ["Dark", "Ground"]
             }
         ]
     },
