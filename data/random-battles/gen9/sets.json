@@ -3179,7 +3179,7 @@
         ]
     },
     "gallade": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -5826,7 +5826,7 @@
         ]
     },
     "polteageist": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Tera Blast user",
@@ -5894,7 +5894,7 @@
         ]
     },
     "alcremie": {
-        "level": 90,
+        "level": 89,
         "sets": [
             {
                 "role": "Tera Blast user",
@@ -7727,7 +7727,7 @@
         ]
     },
     "terapagos": {
-        "level": 76,
+        "level": 77,
         "sets": [
             {
                 "role": "Setup Sweeper",
