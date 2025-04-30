@@ -2948,7 +2948,7 @@
                 "abilities": ["Flower Gift"]
             },
             {
-                "role": "Staller",
+                "role": "Bulky Support",
                 "movepool": ["energyball", "hiddenpowerfire", "hiddenpowerice", "leechseed", "substitute"],
                 "abilities": ["Flower Gift"]
             }
