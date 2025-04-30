@@ -2455,9 +2455,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin',
 		],
 		unbanlist: [
-			'Kingdra', 'Crustle', 'Corsola-Base', 'Dipplin', 'Dusknoir', 'Drampa', 'Pincurchin', 'Type: Null', 'Camerupt-Base', 'Rotom-Base', 'Raticate-Base', 'Bombirdier',
-			'Cradily', 'Beedrill-Base', 'Gastrodon', 'Donphan', 'Chimecho', 'Coalossal', 'Dustox', 'Dedenne', 'Kecleon', 'Flareon', 'Cyclizar', 'Grumpig', 'Tentacruel', 'Miltank',
-			'Arcanine-Base', 'Shelgon', 'Spinda', 'Wormadam-Sandy', 'Exploud', 'Marowak-Base', 'Hypno', 'Furret', 'Bastiodon',
+			'Inteleon', 'Dragonair', 'Vivillon', 'Heatmor', 'Cinccino', 'Lopunny-Base', 'Politoed', 'Skarmory', 'Maushold', 'Nidoking', 'Jumpluff',
+			'Ribombee-Base', 'Mudsdale', 'Drednaw', 'Meganium', 'Kecleon', 'Barraskewda', 'Goodra-Base', 'Carbink', 'Raichu-Base', 'Honchkrow',
+			'Venusaur-Base', 'Cofagrigus', 'Lokix', 'Frosmoth', 'Pinsir-Base', 'Empoleon', 'Shiinotic', 'Hitmontop', 'Claydol', 'Tangrowth',
+			'Swoobat', 'Swellow', 'Mienshao', 'Ninetales-Base',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
