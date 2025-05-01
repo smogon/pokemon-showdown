@@ -156,7 +156,7 @@
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Encore", "Fire Blast", "Follow Me", "Heal Pulse", "Helping Hand", "Life Dew", "Moonblast"],
+                "movepool": ["Encore", "Fire Blast", "Follow Me", "Helping Hand", "Life Dew", "Moonblast", "Moonlight"],
                 "abilities": ["Unaware"],
                 "teraTypes": ["Fire", "Steel", "Water"]
             }
@@ -266,13 +266,7 @@
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
-                "movepool": ["Encore", "Grass Knot", "Hydro Pump", "Ice Beam", "Icy Wind", "Protect", "Psyshock"],
-                "abilities": ["Cloud Nine", "Swift Swim"],
-                "teraTypes": ["Grass", "Water"]
-            },
-            {
-                "role": "Offensive Protect",
-                "movepool": ["Grass Knot", "Hydro Pump", "Ice Beam", "Protect", "Psyshock"],
+                "movepool": ["Encore", "Grass Knot", "Hydro Pump", "Ice Beam", "Icy Wind", "Protect"],
                 "abilities": ["Cloud Nine", "Swift Swim"],
                 "teraTypes": ["Grass", "Water"]
             }
@@ -1317,7 +1311,7 @@
             },
             {
                 "role": "Choice Item user",
-                "movepool": ["Bug Bite", "Bullet Punch", "Close Combat", "Knock Off"],
+                "movepool": ["Bug Bite", "Bullet Punch", "Close Combat", "U-turn"],
                 "abilities": ["Technician"],
                 "teraTypes": ["Fighting", "Steel", "Water"]
             }
@@ -2378,7 +2372,13 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Aqua Jet", "Crunch", "Ice Spinner", "Protect", "Wave Crash"],
+                "movepool": ["Aqua Jet", "Flip Turn", "Ice Spinner", "Wave Crash"],
+                "abilities": ["Water Veil"],
+                "teraTypes": ["Water"]
+            },
+            {
+                "role": "Offensive Protect",
+                "movepool": ["Aqua Jet", "Ice Spinner", "Protect", "Wave Crash"],
                 "abilities": ["Water Veil"],
                 "teraTypes": ["Water"]
             }
@@ -4758,7 +4758,7 @@
             {
                 "role": "Doubles Support",
                 "movepool": ["Hyper Voice", "Instruct", "Psyshock", "Trick Room"],
-                "abilities": ["Telepathy"],
+                "abilities": ["Inner Focus"],
                 "teraTypes": ["Fairy"]
             }
         ]
