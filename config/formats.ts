@@ -4370,6 +4370,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Wobbuffet + Leftovers', 'Wynaut + Leftovers', 'Baton Pass'],
 	},
 	{
+		name: "[Gen 3] ADV 200",
+		mod: 'gen3rs',
+		searchShow: false,
+		ruleset: ['Standard'],
+		banlist: ['Uber', 'Swagger'],
+	},
+	{
 		name: "[Gen 3] UU",
 		mod: 'gen3',
 		searchShow: false,
