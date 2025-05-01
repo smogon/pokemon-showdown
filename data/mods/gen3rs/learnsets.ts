@@ -401,7 +401,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			stunspore: ["3L16", "3S0"],
 			sunnyday: ["3M"],
 			sweetscent: ["3L7"],
-			swordsdance: ["3E"],
 			synthesis: ["3E"],
 			toxic: ["3M"],
 		},
