@@ -510,135 +510,138 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 2,
 	},
 	{
-		name: "[Gen 9] Formemons",
-		desc: `Alternate formes of existing Pokemon can be used directly without required items/moves.`,
-		mod: 'gen9',
-		ruleset: [
-			'Standard AG', '!Obtainable Formes', '+Past', '+LGPE', 'Evasion Clause', 'Forme Clause', 'OHKO Clause', 'Overflow Stat Mod',
-			'Sleep Moves Clause', 'Species Reveal Clause', 'Hackmons Forme Legality', 'Mega Rayquaza Clause',
+		name: "[Gen 9] Trademarked",
+		desc: `Sacrifice your Pok&eacute;mon's ability for a status move that activates on switch-in.`,
+		mod: 'trademarked',
+		// searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Moves Clause'],
+		banlist: [
+			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon',
+			'Koraidon', 'Kyogre', 'Landorus-Incarnate', 'Magearna', 'Mewtwo', 'Miraidon', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Slaking', 'Spectrier',
+			'Urshifu-Single-Strike', 'Zacian', 'Zacian-Crowned', 'Arena Trap', 'Magnet Pull', 'Moody', 'Shadow Tag', 'Baton Pass', 'Last Respects',
+			'Revival Blessing',
 		],
-		banlist: ['Calyrex-Shadow', 'Gengar-Mega', 'Miraidon', 'Moody', 'King\'s Rock', 'Razor Fang', 'Baton Pass'],
-		onValidateSet(set, format, setHas, teamHas) {
-			const species = this.dex.species.get(set.species);
-			if (this.dex.species.get(species.baseSpecies).isNonstandard) return [`${species.name} does not exist in Gen 9.`];
+		restricted: [
+			'Baneful Bunker', 'Block', 'Chilly Reception', 'Copycat', 'Detect', 'Destiny Bond', 'Encore', 'Fairy Lock', 'Ingrain', 'Instruct',
+			'Mean Look', 'move:Metronome', 'Nasty Plot', 'Parting Shot', 'Protect', 'Roar', 'Silk Trap', 'Spiky Shield', 'Sleep Talk', 'Shed Tail',
+			'Shell Smash', 'Substitute', 'Swords Dance', 'Teleport', 'Thunder Wave', 'Trick Room', 'Will-O-Wisp', 'Whirlwind',
+		],
+		onValidateTeam(team, format, teamHas) {
+			const problems = [];
+			if (!teamHas.trademarks) return;
+			for (const trademark of teamHas.trademarks.keys()) {
+				if (teamHas.trademarks.get(trademark) > 1) {
+					problems.push(`You are limited to 1 of each Trademark.`, `(You have ${teamHas.trademarks.get(trademark)} Pok\u00e9mon with ${trademark} as a Trademark.)`);
+				}
+			}
+			return problems;
+		},
+		validateSet(set, teamHas) {
+			const dex = this.dex;
+			const ability = dex.moves.get(set.ability);
+			if (!ability.exists) { // Not even a real move
+				return this.validateSet(set, teamHas);
+			}
+			// Absolute trademark bans
+			if (ability.category !== 'Status') {
+				return [`${ability.name} is not a status move and cannot be used as a trademark.`];
+			}
+			// Contingent trademark bans
+			if (this.ruleTable.isRestricted(`move:${ability.id}`)) {
+				return [`${ability.name} is restricted from being used as a trademark.`];
+			}
+			if (set.moves.map(this.toID).includes(ability.id)) {
+				return [`${set.name} may not use ${ability.name} as both a trademark and one of its moves simultaneously.`];
+			}
+			const customRules = this.format.customRules || [];
+			if (!customRules.includes('!obtainableabilities')) customRules.push('!obtainableabilities');
+			if (!customRules.includes('+noability')) customRules.push('+noability');
+
+			const TeamValidator: typeof import('../sim/team-validator').TeamValidator =
+				require('../sim/team-validator').TeamValidator;
+
+			const validator = new TeamValidator(dex.formats.get(`${this.format.id}@@@${customRules.join(',')}`));
+			const moves = set.moves;
+			set.moves = [ability.id];
+			set.ability = 'No Ability';
+			let problems = validator.validateSet(set, {}) || [];
+			if (problems.length) return problems;
+			set.moves = moves;
+			set.ability = 'No Ability';
+			problems = problems.concat(validator.validateSet(set, teamHas) || []);
+			set.ability = ability.id;
+			if (!teamHas.trademarks) teamHas.trademarks = new this.dex.Multiset<string>();
+			teamHas.trademarks.add(ability.name);
+			return problems.length ? problems : null;
 		},
 	},
 	{
-		name: "[Gen 9] Relay Race",
-		desc: `The effects of the move Baton Pass are triggered upon manually withdrawing a Pok&eacute;mon from battle.`,
-		mod: 'gen9',
-		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Terastal Clause'],
+		name: "[Gen 9] Partners in Crime",
+		desc: `Doubles-based metagame where both active ally Pok&eacute;mon share abilities and moves.`,
+		mod: 'partnersincrime',
+		gameType: 'doubles',
+		// searchShow: false,
+		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
 		banlist: [
-			'Annihilape', 'Arceus', 'Archaludon', 'Baxcalibur', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chien-Pao', 'Chi-Yu', 'Deoxys-Attack', 'Deoxys-Normal', 'Dialga',
-			'Dialga-Origin', 'Enamorus-Incarnate', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Gouging Fire', 'Groudon', 'Ho-Oh', 'Iron Bundle',
-			'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Incarnate', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings',
-			'Necrozma-Dusk-Mane', 'Ogerpon-Hearthflame', 'Ogerpon-Wellspring', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Sneasler',
-			'Solgaleo', 'Skeledirge', 'Spectrier', 'Ursaluna-Bloodmoon', 'Urshifu', 'Urshifu-Rapid-Strike', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom',
-			'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'Speed Boost', 'Bright Powder', 'King\'s Rock', 'Razor Fang', 'Acupressure', 'Clangorous Soul',
-			'Last Respects', 'Mud-Slap', 'Muddy Water', 'Night Daze', 'No Retreat', 'Perish Song', 'Sand Attack', 'Shell Smash', 'Smokescreen', 'Quiver Dance', 'Victory Dance',
+			'Annihilape', 'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Cresselia', 'Darkrai', 'Deoxys-Attack', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Flutter Mane',
+			'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon',
+			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Reshiram', 'Smeargle', 'Solgaleo', 'Terapagos', 'Urshifu', 'Urshifu-Rapid-Strike',
+			'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Contrary', 'Dancer', 'Huge Power', 'Moody', 'Pure Power', 'Serene Grace', 'Shadow Tag',
+			'Stench', 'Bright Powder', 'King\'s Rock', 'Razor Fang', 'Ally Switch', 'Dragon Cheer', 'Last Respects', 'Revival Blessing', 'Swagger',
 		],
-		actions: {
-			switchIn(pokemon, pos, sourceEffect, isDrag) {
-				if (!pokemon || pokemon.isActive) {
-					this.battle.hint("A switch failed because the Pokémon trying to switch in is already in.");
-					return false;
+		onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				pokemon.m.trackPP = new Map<string, number>();
+			}
+		},
+		onBeforeSwitchIn(pokemon) {
+			pokemon.m.curMoves = this.dex.deepClone(pokemon.moves);
+			let ngas = false;
+			for (const poke of this.getAllActive()) {
+				if (this.toID(poke.ability) === ('neutralizinggas' as ID)) {
+					ngas = true;
+					break;
 				}
-
-				const side = pokemon.side;
-				if (pos >= side.active.length) {
-					throw new Error(`Invalid switch position ${pos} / ${side.active.length}`);
-				}
-				const oldActive = side.active[pos];
-				const unfaintedActive = oldActive?.hp ? oldActive : null;
-				if (unfaintedActive) {
-					oldActive.beingCalledBack = true;
-					let switchCopyFlag: 'copyvolatile' | 'shedtail' | boolean = false;
-					if (sourceEffect && typeof (sourceEffect as Move).selfSwitch) {
-						if (typeof (sourceEffect as Move).selfSwitch === 'string') {
-							switchCopyFlag = (sourceEffect as Move).selfSwitch!;
-						}
-					} else {
-						if (!isDrag && !sourceEffect) switchCopyFlag = 'copyvolatile';
+			}
+			const BAD_ABILITIES = ['trace', 'imposter', 'neutralizinggas', 'illusion', 'wanderingspirit'];
+			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
+			if (ally && ally.ability !== pokemon.ability) {
+				if (!pokemon.m.innate && !BAD_ABILITIES.includes(this.toID(ally.ability))) {
+					pokemon.m.innate = 'ability:' + ally.ability;
+					if (!ngas || ally.getAbility().flags['cantsuppress'] || pokemon.hasItem('Ability Shield')) {
+						pokemon.volatiles[pokemon.m.innate] = this.initEffectState({ id: pokemon.m.innate, target: pokemon, pic: ally });
 					}
-					if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
-						this.battle.runEvent('BeforeSwitchOut', oldActive);
-						if (this.battle.gen >= 5) {
-							this.battle.eachEvent('Update');
-						}
-					}
-					oldActive.skipBeforeSwitchOutEventFlag = false;
-					if (!this.battle.runEvent('SwitchOut', oldActive)) {
-						// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
-						// To trap a pokemon and prevent it from switching out, (e.g. Mean Look, Magnet Pull)
-						// use the 'trapped' flag instead.
-
-						// Note: Nothing in the real games can interrupt a switch-out (except Pursuit KOing,
-						// which is handled elsewhere); this is just for custom formats.
-						return false;
-					}
-					if (!oldActive.hp) {
-						// a pokemon fainted from Pursuit before it could switch
-						return 'pursuitfaint';
-					}
-
-					// will definitely switch out at this point
-
-					oldActive.illusion = null;
-					this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
-					this.battle.singleEvent('End', oldActive.getItem(), oldActive.itemState, oldActive);
-
-					// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
-					this.battle.queue.cancelAction(oldActive);
-
-					let newMove = null;
-					if (this.battle.gen === 4 && sourceEffect) {
-						newMove = oldActive.lastMove;
-					}
-					if (switchCopyFlag) {
-						pokemon.copyVolatileFrom(oldActive, switchCopyFlag);
-					}
-					if (newMove) pokemon.lastMove = newMove;
-					oldActive.clearVolatile();
 				}
-				if (oldActive) {
-					oldActive.isActive = false;
-					oldActive.isStarted = false;
-					oldActive.usedItemThisTurn = false;
-					oldActive.statsRaisedThisTurn = false;
-					oldActive.statsLoweredThisTurn = false;
-					oldActive.position = pokemon.position;
-					if (oldActive.fainted) oldActive.status = '';
-					pokemon.position = pos;
-					side.pokemon[pokemon.position] = pokemon;
-					side.pokemon[oldActive.position] = oldActive;
+				if (!ally.m.innate && !BAD_ABILITIES.includes(this.toID(pokemon.ability))) {
+					ally.m.innate = 'ability:' + pokemon.ability;
+					if (!ngas || pokemon.getAbility().flags['cantsuppress'] || ally.hasItem('Ability Shield')) {
+						ally.volatiles[ally.m.innate] = this.initEffectState({ id: ally.m.innate, target: ally, pic: pokemon });
+					}
 				}
-				pokemon.isActive = true;
-				side.active[pos] = pokemon;
-				pokemon.activeTurns = 0;
-				pokemon.activeMoveActions = 0;
-				for (const moveSlot of pokemon.moveSlots) {
-					moveSlot.used = false;
-				}
-				pokemon.abilityState.effectOrder = this.battle.effectOrder++;
-				pokemon.itemState.effectOrder = this.battle.effectOrder++;
-				this.battle.runEvent('BeforeSwitchIn', pokemon);
-				if (sourceEffect) {
-					this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, `[from] ${sourceEffect}`);
-				} else {
-					this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
-				}
-				if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
-				pokemon.previouslySwitchedIn++;
-
-				if (isDrag && this.battle.gen >= 5) {
-					// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
-					this.runSwitch(pokemon);
-				} else {
-					this.battle.queue.insertChoice({ choice: 'runSwitch', pokemon });
-				}
-
-				return true;
-			},
+			}
+		},
+		// Starting innate abilities in scripts
+		onSwitchOut(pokemon) {
+			if (pokemon.m.innate) {
+				pokemon.removeVolatile(pokemon.m.innate);
+				delete pokemon.m.innate;
+			}
+			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
+			if (ally?.m.innate) {
+				ally.removeVolatile(ally.m.innate);
+				delete ally.m.innate;
+			}
+		},
+		onFaint(pokemon) {
+			if (pokemon.m.innate) {
+				pokemon.removeVolatile(pokemon.m.innate);
+				delete pokemon.m.innate;
+			}
+			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
+			if (ally?.m.innate) {
+				ally.removeVolatile(ally.m.innate);
+				delete ally.m.innate;
+			}
 		},
 	},
 
@@ -1162,6 +1165,21 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Formemons",
+		desc: `Alternate formes of existing Pokemon can be used directly without required items/moves.`,
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: [
+			'Standard AG', '!Obtainable Formes', '+Past', '+LGPE', 'Evasion Clause', 'Forme Clause', 'OHKO Clause', 'Overflow Stat Mod',
+			'Sleep Moves Clause', 'Species Reveal Clause', 'Hackmons Forme Legality', 'Mega Rayquaza Clause',
+		],
+		banlist: ['Calyrex-Shadow', 'Gengar-Mega', 'Miraidon', 'Moody', 'King\'s Rock', 'Razor Fang', 'Baton Pass'],
+		onValidateSet(set, format, setHas, teamHas) {
+			const species = this.dex.species.get(set.species);
+			if (this.dex.species.get(species.baseSpecies).isNonstandard) return [`${species.name} does not exist in Gen 9.`];
+		},
+	},
+	{
 		name: "[Gen 9] Fortemons",
 		desc: `Put an attacking move in the item slot to have all of a Pok&eacute;mon's attacks inherit its properties.`,
 		mod: 'gen9',
@@ -1638,75 +1656,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "[Gen 9] Partners in Crime",
-		desc: `Doubles-based metagame where both active ally Pok&eacute;mon share abilities and moves.`,
-		mod: 'partnersincrime',
-		gameType: 'doubles',
-		searchShow: false,
-		ruleset: ['Standard Doubles', 'Evasion Abilities Clause'],
-		banlist: [
-			'Annihilape', 'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Cresselia', 'Darkrai', 'Deoxys-Attack', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Flutter Mane',
-			'Giratina', 'Giratina-Origin', 'Groudon', 'Ho-Oh', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon',
-			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Reshiram', 'Smeargle', 'Solgaleo', 'Terapagos', 'Urshifu', 'Urshifu-Rapid-Strike',
-			'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Contrary', 'Dancer', 'Huge Power', 'Moody', 'Pure Power', 'Serene Grace', 'Shadow Tag',
-			'Stench', 'Bright Powder', 'King\'s Rock', 'Razor Fang', 'Ally Switch', 'Dragon Cheer', 'Last Respects', 'Revival Blessing', 'Swagger',
-		],
-		onBegin() {
-			for (const pokemon of this.getAllPokemon()) {
-				pokemon.m.trackPP = new Map<string, number>();
-			}
-		},
-		onBeforeSwitchIn(pokemon) {
-			pokemon.m.curMoves = this.dex.deepClone(pokemon.moves);
-			let ngas = false;
-			for (const poke of this.getAllActive()) {
-				if (this.toID(poke.ability) === ('neutralizinggas' as ID)) {
-					ngas = true;
-					break;
-				}
-			}
-			const BAD_ABILITIES = ['trace', 'imposter', 'neutralizinggas', 'illusion', 'wanderingspirit'];
-			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
-			if (ally && ally.ability !== pokemon.ability) {
-				if (!pokemon.m.innate && !BAD_ABILITIES.includes(this.toID(ally.ability))) {
-					pokemon.m.innate = 'ability:' + ally.ability;
-					if (!ngas || ally.getAbility().flags['cantsuppress'] || pokemon.hasItem('Ability Shield')) {
-						pokemon.volatiles[pokemon.m.innate] = this.initEffectState({ id: pokemon.m.innate, target: pokemon, pic: ally });
-					}
-				}
-				if (!ally.m.innate && !BAD_ABILITIES.includes(this.toID(pokemon.ability))) {
-					ally.m.innate = 'ability:' + pokemon.ability;
-					if (!ngas || pokemon.getAbility().flags['cantsuppress'] || ally.hasItem('Ability Shield')) {
-						ally.volatiles[ally.m.innate] = this.initEffectState({ id: ally.m.innate, target: ally, pic: pokemon });
-					}
-				}
-			}
-		},
-		// Starting innate abilities in scripts
-		onSwitchOut(pokemon) {
-			if (pokemon.m.innate) {
-				pokemon.removeVolatile(pokemon.m.innate);
-				delete pokemon.m.innate;
-			}
-			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
-			if (ally?.m.innate) {
-				ally.removeVolatile(ally.m.innate);
-				delete ally.m.innate;
-			}
-		},
-		onFaint(pokemon) {
-			if (pokemon.m.innate) {
-				pokemon.removeVolatile(pokemon.m.innate);
-				delete pokemon.m.innate;
-			}
-			const ally = pokemon.side.active.find(mon => mon && mon !== pokemon && !mon.fainted);
-			if (ally?.m.innate) {
-				ally.removeVolatile(ally.m.innate);
-				delete ally.m.innate;
-			}
-		},
-	},
-	{
 		name: "[Gen 9] Passive Aggressive",
 		desc: `All forms of passive damage deal type-based damage based on the primary type of the Pok&eacute;mon that inflicted the passive damage against the target Pok&eacute;mon.`,
 		mod: 'passiveaggressive',
@@ -1926,6 +1875,125 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen9',
 		searchShow: false,
 		ruleset: ['Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Hackmons Forme Legality', 'Species Reveal Clause', 'Endless Battle Clause'],
+	},
+	{
+		name: "[Gen 9] Relay Race",
+		desc: `The effects of the move Baton Pass are triggered upon manually withdrawing a Pok&eacute;mon from battle.`,
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Terastal Clause'],
+		banlist: [
+			'Annihilape', 'Arceus', 'Archaludon', 'Baxcalibur', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chien-Pao', 'Chi-Yu', 'Deoxys-Attack', 'Deoxys-Normal', 'Dialga',
+			'Dialga-Origin', 'Enamorus-Incarnate', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Gouging Fire', 'Groudon', 'Ho-Oh', 'Iron Bundle',
+			'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Landorus-Incarnate', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon', 'Necrozma-Dawn-Wings',
+			'Necrozma-Dusk-Mane', 'Ogerpon-Hearthflame', 'Ogerpon-Wellspring', 'Palafin', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Sneasler',
+			'Solgaleo', 'Skeledirge', 'Spectrier', 'Ursaluna-Bloodmoon', 'Urshifu', 'Urshifu-Rapid-Strike', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom',
+			'Arena Trap', 'Moody', 'Sand Veil', 'Shadow Tag', 'Snow Cloak', 'Speed Boost', 'Bright Powder', 'King\'s Rock', 'Razor Fang', 'Acupressure', 'Clangorous Soul',
+			'Last Respects', 'Mud-Slap', 'Muddy Water', 'Night Daze', 'No Retreat', 'Perish Song', 'Sand Attack', 'Shell Smash', 'Smokescreen', 'Quiver Dance', 'Victory Dance',
+		],
+		actions: {
+			switchIn(pokemon, pos, sourceEffect, isDrag) {
+				if (!pokemon || pokemon.isActive) {
+					this.battle.hint("A switch failed because the Pokémon trying to switch in is already in.");
+					return false;
+				}
+
+				const side = pokemon.side;
+				if (pos >= side.active.length) {
+					throw new Error(`Invalid switch position ${pos} / ${side.active.length}`);
+				}
+				const oldActive = side.active[pos];
+				const unfaintedActive = oldActive?.hp ? oldActive : null;
+				if (unfaintedActive) {
+					oldActive.beingCalledBack = true;
+					let switchCopyFlag: 'copyvolatile' | 'shedtail' | boolean = false;
+					if (sourceEffect && typeof (sourceEffect as Move).selfSwitch) {
+						if (typeof (sourceEffect as Move).selfSwitch === 'string') {
+							switchCopyFlag = (sourceEffect as Move).selfSwitch!;
+						}
+					} else {
+						if (!isDrag && !sourceEffect) switchCopyFlag = 'copyvolatile';
+					}
+					if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
+						this.battle.runEvent('BeforeSwitchOut', oldActive);
+						if (this.battle.gen >= 5) {
+							this.battle.eachEvent('Update');
+						}
+					}
+					oldActive.skipBeforeSwitchOutEventFlag = false;
+					if (!this.battle.runEvent('SwitchOut', oldActive)) {
+						// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
+						// To trap a pokemon and prevent it from switching out, (e.g. Mean Look, Magnet Pull)
+						// use the 'trapped' flag instead.
+
+						// Note: Nothing in the real games can interrupt a switch-out (except Pursuit KOing,
+						// which is handled elsewhere); this is just for custom formats.
+						return false;
+					}
+					if (!oldActive.hp) {
+						// a pokemon fainted from Pursuit before it could switch
+						return 'pursuitfaint';
+					}
+
+					// will definitely switch out at this point
+
+					oldActive.illusion = null;
+					this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
+					this.battle.singleEvent('End', oldActive.getItem(), oldActive.itemState, oldActive);
+
+					// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
+					this.battle.queue.cancelAction(oldActive);
+
+					let newMove = null;
+					if (this.battle.gen === 4 && sourceEffect) {
+						newMove = oldActive.lastMove;
+					}
+					if (switchCopyFlag) {
+						pokemon.copyVolatileFrom(oldActive, switchCopyFlag);
+					}
+					if (newMove) pokemon.lastMove = newMove;
+					oldActive.clearVolatile();
+				}
+				if (oldActive) {
+					oldActive.isActive = false;
+					oldActive.isStarted = false;
+					oldActive.usedItemThisTurn = false;
+					oldActive.statsRaisedThisTurn = false;
+					oldActive.statsLoweredThisTurn = false;
+					oldActive.position = pokemon.position;
+					if (oldActive.fainted) oldActive.status = '';
+					pokemon.position = pos;
+					side.pokemon[pokemon.position] = pokemon;
+					side.pokemon[oldActive.position] = oldActive;
+				}
+				pokemon.isActive = true;
+				side.active[pos] = pokemon;
+				pokemon.activeTurns = 0;
+				pokemon.activeMoveActions = 0;
+				for (const moveSlot of pokemon.moveSlots) {
+					moveSlot.used = false;
+				}
+				pokemon.abilityState.effectOrder = this.battle.effectOrder++;
+				pokemon.itemState.effectOrder = this.battle.effectOrder++;
+				this.battle.runEvent('BeforeSwitchIn', pokemon);
+				if (sourceEffect) {
+					this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, `[from] ${sourceEffect}`);
+				} else {
+					this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
+				}
+				if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
+				pokemon.previouslySwitchedIn++;
+
+				if (isDrag && this.battle.gen >= 5) {
+					// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
+					this.runSwitch(pokemon);
+				} else {
+					this.battle.queue.insertChoice({ choice: 'runSwitch', pokemon });
+				}
+
+				return true;
+			},
+		},
 	},
 	{
 		name: "[Gen 9] Revelationmons",
@@ -2305,72 +2373,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "[Gen 9] Trademarked",
-		desc: `Sacrifice your Pok&eacute;mon's ability for a status move that activates on switch-in.`,
-		mod: 'trademarked',
-		searchShow: false,
-		ruleset: ['Standard OMs', 'Sleep Moves Clause'],
-		banlist: [
-			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Flutter Mane', 'Giratina', 'Giratina-Origin', 'Groudon',
-			'Koraidon', 'Kyogre', 'Landorus-Incarnate', 'Magearna', 'Mewtwo', 'Miraidon', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Slaking', 'Spectrier',
-			'Urshifu-Single-Strike', 'Zacian', 'Zacian-Crowned', 'Arena Trap', 'Magnet Pull', 'Moody', 'Shadow Tag', 'Baton Pass', 'Last Respects',
-			'Revival Blessing',
-		],
-		restricted: [
-			'Baneful Bunker', 'Block', 'Chilly Reception', 'Copycat', 'Detect', 'Destiny Bond', 'Encore', 'Fairy Lock', 'Ingrain', 'Instruct',
-			'Mean Look', 'move:Metronome', 'Nasty Plot', 'Parting Shot', 'Protect', 'Roar', 'Silk Trap', 'Spiky Shield', 'Sleep Talk', 'Shed Tail',
-			'Shell Smash', 'Substitute', 'Swords Dance', 'Teleport', 'Thunder Wave', 'Trick Room', 'Will-O-Wisp', 'Whirlwind',
-		],
-		onValidateTeam(team, format, teamHas) {
-			const problems = [];
-			if (!teamHas.trademarks) return;
-			for (const trademark of teamHas.trademarks.keys()) {
-				if (teamHas.trademarks.get(trademark) > 1) {
-					problems.push(`You are limited to 1 of each Trademark.`, `(You have ${teamHas.trademarks.get(trademark)} Pok\u00e9mon with ${trademark} as a Trademark.)`);
-				}
-			}
-			return problems;
-		},
-		validateSet(set, teamHas) {
-			const dex = this.dex;
-			const ability = dex.moves.get(set.ability);
-			if (!ability.exists) { // Not even a real move
-				return this.validateSet(set, teamHas);
-			}
-			// Absolute trademark bans
-			if (ability.category !== 'Status') {
-				return [`${ability.name} is not a status move and cannot be used as a trademark.`];
-			}
-			// Contingent trademark bans
-			if (this.ruleTable.isRestricted(`move:${ability.id}`)) {
-				return [`${ability.name} is restricted from being used as a trademark.`];
-			}
-			if (set.moves.map(this.toID).includes(ability.id)) {
-				return [`${set.name} may not use ${ability.name} as both a trademark and one of its moves simultaneously.`];
-			}
-			const customRules = this.format.customRules || [];
-			if (!customRules.includes('!obtainableabilities')) customRules.push('!obtainableabilities');
-			if (!customRules.includes('+noability')) customRules.push('+noability');
-
-			const TeamValidator: typeof import('../sim/team-validator').TeamValidator =
-				require('../sim/team-validator').TeamValidator;
-
-			const validator = new TeamValidator(dex.formats.get(`${this.format.id}@@@${customRules.join(',')}`));
-			const moves = set.moves;
-			set.moves = [ability.id];
-			set.ability = 'No Ability';
-			let problems = validator.validateSet(set, {}) || [];
-			if (problems.length) return problems;
-			set.moves = moves;
-			set.ability = 'No Ability';
-			problems = problems.concat(validator.validateSet(set, teamHas) || []);
-			set.ability = ability.id;
-			if (!teamHas.trademarks) teamHas.trademarks = new this.dex.Multiset<string>();
-			teamHas.trademarks.add(ability.name);
-			return problems.length ? problems : null;
-		},
-	},
-	{
 		name: "[Gen 9] Triples",
 		mod: 'gen9',
 		gameType: 'triples',
@@ -2449,7 +2451,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] National Dex 35 Pokes",
 		desc: `Only 35 Pok&eacute;mon are legal.`,
 		mod: 'gen9',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: [
 			'Standard NatDex',
 			'!Species Clause', 'Forme Clause', 'Terastal Clause', 'DryPass Clause', 'Z-Move Clause', 'Mega Rayquaza Clause',
@@ -2640,7 +2642,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] National Dex STABmons",
 		mod: 'gen9',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['Standard NatDex', 'STABmons Move Legality', '!Sleep Clause Mod', 'Sleep Moves Clause', 'Terastal Clause'],
 		banlist: [
 			'Araquanid', 'Arceus', 'Azumarill', 'Baxcalibur', 'Blastoise-Mega', 'Blaziken-Mega', 'Basculegion', 'Basculegion-F', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Chien-Pao',
@@ -3379,28 +3381,26 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 4,
 	},
 	{
-		name: "[Gen 1] UU",
-		mod: 'gen1',
-		// searchShow: false,
-		ruleset: ['[Gen 1] OU', 'APT Clause'],
-		banlist: ['OU', 'UUBL'],
-	},
-	{
-		name: "[Gen 5] VGC 2011",
-		mod: 'gen5bw1',
-		gameType: 'doubles',
-		// searchShow: false,
-		bestOfDefault: true,
-		ruleset: ['Flat Rules', 'Old Unova Pokedex'],
-		banlist: ['Sky Drop', 'Belue Berry', 'Durin Berry', 'Nomel Berry', 'Rabuta Berry', 'Spelon Berry', 'Watmel Berry'],
-	},
-	{
-		name: "[Gen 2] PU",
+		name: "[Gen 2] UU",
 		mod: 'gen2',
 		// searchShow: false,
-		ruleset: ['[Gen 2] NU'],
-		banlist: ['NU', 'PUBL', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web'],
-		unbanlist: ['Swagger'],
+		ruleset: ['[Gen 2] OU'],
+		banlist: ['OU', 'UUBL', 'Agility + Baton Pass'],
+		unbanlist: ['Mean Look + Baton Pass', 'Spider Web + Baton Pass'],
+	},
+	{
+		name: "[Gen 1] LC",
+		mod: 'gen1',
+		// searchShow: false,
+		ruleset: ['Little Cup'],
+		banlist: ['Dragon Rage', 'Fire Spin', 'Sonic Boom', 'Wrap'],
+	},
+	{
+		name: "[Gen 3] ADV 200",
+		mod: 'gen3rs',
+		// searchShow: false,
+		ruleset: ['Standard'],
+		banlist: ['Uber', 'Swagger'],
 	},
 
 	// Past Gens OU
@@ -4274,6 +4274,15 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Dark Void', 'Sky Drop'],
 	},
 	{
+		name: "[Gen 5] VGC 2011",
+		mod: 'gen5bw1',
+		gameType: 'doubles',
+		searchShow: false,
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', 'Old Unova Pokedex'],
+		banlist: ['Sky Drop', 'Belue Berry', 'Durin Berry', 'Nomel Berry', 'Rabuta Berry', 'Spelon Berry', 'Watmel Berry'],
+	},
+	{
 		name: "[Gen 5] Doubles Custom Game",
 		mod: 'gen5',
 		gameType: 'doubles',
@@ -4450,13 +4459,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Wobbuffet + Leftovers', 'Wynaut + Leftovers', 'Baton Pass'],
 	},
 	{
-		name: "[Gen 3] ADV 200",
-		mod: 'gen3rs',
-		searchShow: false,
-		ruleset: ['Standard'],
-		banlist: ['Uber', 'Swagger'],
-	},
-	{
 		name: "[Gen 3] UU",
 		mod: 'gen3',
 		searchShow: false,
@@ -4547,20 +4549,20 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard'],
 	},
 	{
-		name: "[Gen 2] UU",
-		mod: 'gen2',
-		searchShow: false,
-		ruleset: ['[Gen 2] OU'],
-		banlist: ['OU', 'UUBL', 'Agility + Baton Pass'],
-		unbanlist: ['Mean Look + Baton Pass', 'Spider Web + Baton Pass'],
-	},
-	{
 		name: "[Gen 2] NU",
 		mod: 'gen2',
 		searchShow: false,
 		ruleset: ['[Gen 2] UU'],
 		banlist: ['UU', 'NUBL', 'Swagger'],
 		unbanlist: ['Agility + Baton Pass'],
+	},
+	{
+		name: "[Gen 2] PU",
+		mod: 'gen2',
+		searchShow: false,
+		ruleset: ['[Gen 2] NU'],
+		banlist: ['NU', 'PUBL', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web'],
+		unbanlist: ['Swagger'],
 	},
 	{
 		name: "[Gen 2] 1v1",
@@ -4615,6 +4617,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen1',
 		searchShow: false,
 		ruleset: ['Standard'],
+	},
+	{
+		name: "[Gen 1] UU",
+		mod: 'gen1',
+		searchShow: false,
+		ruleset: ['[Gen 1] OU', 'APT Clause'],
+		banlist: ['OU', 'UUBL'],
 	},
 	{
 		name: "[Gen 1] NU",
