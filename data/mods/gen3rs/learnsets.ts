@@ -124,7 +124,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			furyswipes: ["3L37"],
 			hiddenpower: ["3M"],
 			irontail: ["3M"],
-			metalclaw: ["3E"],
 			poisonsting: ["3L17", "3S0"],
 			protect: ["3M"],
 			rapidspin: ["3E"],
