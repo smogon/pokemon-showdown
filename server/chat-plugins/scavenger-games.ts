@@ -475,23 +475,13 @@ const TWISTS: { [k: string]: Twist } = {
 
 			for (const [idx, data] of this.correct.entries()) {
 				// collect the data for each question
-				const collection = [];
+				const list = Object.entries<string[]>(data).map(([value, players]) => ({ players, count: players.length, value }));
+				const minValue = Math.min(...list.map(entry => entry.count));
 
-				for (const str in data) {
-					collection.push({ players: data[str], count: data[str].length, value: str });
-				}
-
-				const minValue = collection.reduce((prev, next) => prev.count > next.count ? next : prev).count;
-
-				const matches = collection.filter(entry => entry.count === minValue)
-					.map(entry => [entry.value]).reduce((prev, next) => prev.concat(next));
-				const matchedPlayers = collection.filter(entry => entry.count === minValue)
-					.map(entry => entry.players).reduce((prev, next) => prev.concat(next));
-
-				// display the data
-				const matchDisplay = matches.join(', ');
-				const playerDisplay = `- ${matchedPlayers.join(', ')}`;
-				buffer.push(`Q${idx + 1}: ${matchDisplay} ${playerDisplay}`);
+				const minEntries = list.filter(entry => entry.count === minValue);
+				const matchDisplay = minEntries.map(entry => entry.value).join(', ');
+				const playerDisplay = minEntries.flatMap(entry => entry.players).join(', ');
+				buffer.push(`Q${idx + 1}: ${matchDisplay} - ${playerDisplay}`);
 			}
 
 			this.announce(`<h3>Least frequent correct answers:</h3>${buffer.join('<br />')}`);
