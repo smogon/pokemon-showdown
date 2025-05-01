@@ -1219,6 +1219,27 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
+	batonpasstrapclause: {
+		effectType: 'ValidatorRule',
+		name: 'Baton Pass Trap Clause',
+		desc: "Stops teams from having a Pok&eacute;mon with Baton Pass that has any way to trap Pok&eacute;mon.",
+		onBegin() {
+			this.add('rule', 'Baton Pass Trap Clause: No Baton Passer may have a way to trap Pok\u00e9mon');
+		},
+		onValidateTeam(team, format, teamHas) {
+			const trappingMoves = ['block', 'fairylock', 'meanlook', 'octolock', 'spiderweb'];
+			let name = '';
+			const bpAndTrap = team.some(set => {
+				name = set.name || set.species;
+				return set.moves.includes('batonpass') && set.moves.some(move => trappingMoves.includes(move));
+			});
+			if (bpAndTrap) {
+				return [
+					`${name} has Baton Pass and a way to pass trapping, which is banned by Baton Pass Trap Clause.`,
+				];
+			}
+		},
+	},
 	batonpassstattrapclause: {
 		effectType: 'ValidatorRule',
 		name: 'Baton Pass Stat Trap Clause',
