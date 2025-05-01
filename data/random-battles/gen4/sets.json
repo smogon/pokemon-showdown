@@ -90,7 +90,7 @@
         ]
     },
     "fearow": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -116,7 +116,7 @@
         ]
     },
     "pikachu": {
-        "level": 92,
+        "level": 91,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -188,7 +188,7 @@
         ]
     },
     "ninetales": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -219,7 +219,7 @@
         ]
     },
     "vileplume": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -774,7 +774,7 @@
         ]
     },
     "jolteon": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -851,7 +851,7 @@
         ]
     },
     "snorlax": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2461,7 +2461,7 @@
         ]
     },
     "relicanth": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2627,7 +2627,7 @@
         ]
     },
     "rayquaza": {
-        "level": 73,
+        "level": 72,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3040,7 +3040,7 @@
         ]
     },
     "bronzong": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -3070,7 +3070,7 @@
         ]
     },
     "spiritomb": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Bulky Setup",
