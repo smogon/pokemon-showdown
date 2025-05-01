@@ -29,7 +29,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thundershock: ["3L1"],
 			thunderwave: ["3L8"],
 			toxic: ["3M"],
-			volttackle: ["3E"],
 		},
 	},
 	pikachu: {
