@@ -522,10 +522,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Baton Pass', 'Last Respects', 'Revival Blessing',
 		],
 		restricted: [
-			'Agility', 'Baneful Bunker', 'Belly Drum', 'Block', 'Chilly Reception', 'Copycat', 'Detect', 'Destiny Bond', 'Endure', 'Encore', 'Fairy Lock',
-			'Ingrain', 'Instruct', 'Mean Look', 'move:Metronome', 'Nasty Plot', 'Parting Shot', 'Protect', 'Roar', 'Silk Trap', 'Spiky Shield', 'Sleep Talk',
-			'Shed Tail', 'Shell Smash', 'Substitute', 'Swords Dance', 'Tail Glow', 'Tailwind', 'Taunt', 'Teleport', 'Thunder Wave', 'Trick Room', 'Will-O-Wisp',
-			'Whirlwind',
+			'Agility', 'Baneful Bunker', 'Belly Drum', 'Block', 'Burning Bulwark', 'Chilly Reception', 'Copycat', 'Detect', 'Destiny Bond', 'Endure', 'Encore',
+			'Fairy Lock', 'Ingrain', 'Instruct', 'Mean Look', 'move:Metronome', 'Nasty Plot', 'Parting Shot', 'Protect', 'Roar', 'Silk Trap', 'Spiky Shield',
+			'Sleep Talk', 'Shed Tail', 'Shell Smash', 'Substitute', 'Swords Dance', 'Tail Glow', 'Tailwind', 'Taunt', 'Teleport', 'Thunder Wave', 'Trick Room',
+			'Will-O-Wisp', 'Whirlwind',
 		],
 		onValidateTeam(team, format, teamHas) {
 			const problems = [];
