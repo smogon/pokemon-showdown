@@ -5464,7 +5464,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "fireblast", "shadowball", "substitute"],
+                "movepool": ["calmmind", "energyball", "fireblast", "shadowball", "substitute"],
                 "abilities": ["Flame Body", "Flash Fire"]
             }
         ]
@@ -6266,6 +6266,11 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["aurasphere", "darkpulse", "icebeam", "scald", "uturn", "waterpulse"],
+                "abilities": ["Mega Launcher"]
+            },
+            {
+                "role": "AV Pivot",
+                "movepool": ["aurasphere", "darkpulse", "icebeam", "scald", "uturn"],
                 "abilities": ["Mega Launcher"]
             }
         ]
