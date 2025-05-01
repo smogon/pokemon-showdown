@@ -2311,7 +2311,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: ['Standard OMs', 'Sleep Moves Clause'],
 		banlist: [
-			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Deoxys-Base', 'Deoxys-Attack','Dialga', 'Dialga-Origin', 'Eternatus', 'Flutter Mane', 'Giratina',
+			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Deoxys-Base', 'Deoxys-Attack', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Flutter Mane', 'Giratina',
 			'Giratina-Origin', 'Groudon', 'Ho-oh', 'Kyurem-Black', 'Kyurem-White', 'Koraidon', 'Kyogre', 'Lugia', 'Lunala', 'Magearna', 'Mewtwo', 'Miraidon',
 			'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regigigas', 'Reshiram', 'Slaking', 'Sneasler', 'Solgaleo',
 			'Spectrier', 'Urshifu-Base', 'Urshifu-Single-Strike', 'Zacian', 'Zacian-Crowned', 'Zekrom', 'Arena Trap', 'Magnet Pull', 'Moody', 'Shadow Tag',
@@ -2320,7 +2320,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		restricted: [
 			'Agility', 'Baneful Bunker', 'Belly Drum', 'Block', 'Chilly Reception', 'Copycat', 'Detect', 'Destiny Bond', 'Endure', 'Encore', 'Fairy Lock',
 			'Ingrain', 'Instruct', 'Mean Look', 'move:Metronome', 'Nasty Plot', 'Parting Shot', 'Protect', 'Roar', 'Silk Trap', 'Spiky Shield', 'Sleep Talk',
-			'Shed Tail', 'Shell Smash', 'Substitute', 'Swords Dance', 'Tail Glow' ,'Tailwind', 'Taunt', 'Teleport', 'Thunder Wave', 'Trick Room', 'Will-O-Wisp',
+			'Shed Tail', 'Shell Smash', 'Substitute', 'Swords Dance', 'Tail Glow', 'Tailwind', 'Taunt', 'Teleport', 'Thunder Wave', 'Trick Room', 'Will-O-Wisp',
 			'Whirlwind',
 		],
 		onValidateTeam(team, format, teamHas) {
