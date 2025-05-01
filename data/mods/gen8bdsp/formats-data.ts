@@ -103,7 +103,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	sandslash: {
-		tier: "NU",
+		tier: "PU",
 		doublesTier: "DUU",
 	},
 	nidoranf: {
@@ -1241,7 +1241,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DUU",
 	},
 	torkoal: {
-		tier: "NU",
+		tier: "PU",
 		doublesTier: "DOU",
 	},
 	spoink: {
