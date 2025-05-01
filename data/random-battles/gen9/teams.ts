@@ -1267,7 +1267,7 @@ export class RandomTeams {
 			['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Doubles Setup Sweeper', 'Offensive Protect'].some(m => role === m)
 		);
 		const doublesLeftoversHardcodes = (
-			moves.has('acidarmor') || moves.has('wish') || ['eternatus', 'garganacl', 'regigigas', 'toxapex'].includes(species.id))
+			moves.has('acidarmor') || moves.has('wish') || ['eternatus', 'garganacl', 'regigigas', 'toxapex'].includes(species.id)
 		);
 
 		if (species.id === 'ursalunabloodmoon' && moves.has('protect')) return 'Silk Scarf';
