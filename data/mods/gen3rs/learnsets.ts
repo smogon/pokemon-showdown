@@ -300,6 +300,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["3T"],
 			toxic: ["3M"],
 			waterpulse: ["3M"],
+			wish: ["3E"],
 		},
 	},
 	jigglypuff: {
