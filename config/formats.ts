@@ -2455,10 +2455,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin',
 		],
 		unbanlist: [
-			'Inteleon', 'Dragonair', 'Vivillon', 'Heatmor', 'Cinccino', 'Lopunny-Base', 'Politoed', 'Skarmory', 'Maushold', 'Nidoking', 'Jumpluff',
-			'Ribombee-Base', 'Mudsdale', 'Drednaw', 'Meganium', 'Kecleon', 'Barraskewda', 'Goodra-Base', 'Carbink', 'Raichu-Base', 'Honchkrow',
-			'Venusaur-Base', 'Cofagrigus', 'Lokix', 'Frosmoth', 'Pinsir-Base', 'Empoleon', 'Shiinotic', 'Hitmontop', 'Claydol', 'Tangrowth',
-			'Swoobat', 'Swellow', 'Mienshao', 'Ninetales-Base',
+			'Barraskewda', 'Carbink', 'Cinccino', 'Claydol', 'Cofagrigus', 'Dragonair', 'Drednaw', 'Empoleon', 'Frosmoth', 'Goodra-Base', 'Heatmor', 'Hitmontop',
+			'Honchkrow', 'Inteleon', 'Jumpluff', 'Kecleon', 'Lokix', 'Lopunny-Base', 'Maushold', 'Meganium', 'Mienshao', 'Mudsdale', 'Nidoking', 'Ninetales-Base',
+			'Pinsir-Base', 'Politoed', 'Raichu-Base', 'Ribombee-Base', 'Shiinotic', 'Skarmory', 'Swellow', 'Swoobat', 'Tangrowth', 'Venusaur-Base', 'Vivillon',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
