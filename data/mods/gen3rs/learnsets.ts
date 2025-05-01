@@ -30,7 +30,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thundershock: ["3L1"],
 			thunderwave: ["3L8"],
 			toxic: ["3M"],
-			wish: ["3S0"],
+			wish: ["3S1"],
 		},
 	},
 	pikachu: {
@@ -3665,7 +3665,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			torment: ["3M"],
 			toxic: ["3M"],
 			willowisp: ["3E"],
-			wish: ["3S0"],
+			wish: ["3S1"],
 		},
 	},
 	kirlia: {
@@ -6886,7 +6886,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			torment: ["3M"],
 			toxic: ["3M"],
 			waterpulse: ["3M"],
-			wish: ["3S0"],
+			wish: ["3S1"],
 		},
 	},
 	snorunt: {
@@ -7303,7 +7303,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thrash: ["3E"],
 			toxic: ["3M"],
 			twister: ["3E"],
-			spite: ["3S0"],
+			spite: ["3S1"],
 		},
 	},
 	shelgon: {
