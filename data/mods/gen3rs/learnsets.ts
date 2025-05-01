@@ -24,11 +24,13 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			shockwave: ["3M"],
 			sweetkiss: ["3L11"],
 			tailwhip: ["3L6"],
+			teeterdance: ["3S0"],
 			thunder: ["3M"],
 			thunderbolt: ["3M"],
 			thundershock: ["3L1"],
 			thunderwave: ["3L8"],
 			toxic: ["3M"],
+			wish: ["3S0"],
 		},
 	},
 	pikachu: {
@@ -3626,6 +3628,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 		learnset: {
 			attract: ["3M"],
 			calmmind: ["3M", "3L21"],
+			charm: ["3S0"],
 			confusion: ["3L6"],
 			destinybond: ["3E"],
 			disable: ["3E"],
@@ -3662,6 +3665,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			torment: ["3M"],
 			toxic: ["3M"],
 			willowisp: ["3E"],
+			wish: ["3S0"],
 		},
 	},
 	kirlia: {
@@ -6870,6 +6874,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			shockwave: ["3M"],
 			slash: ["3L36"],
 			snatch: ["3M"],
+			spite: ["3S0"],
 			strength: ["3M"],
 			substitute: ["3E"],
 			sunnyday: ["3M"],
@@ -6881,6 +6886,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			torment: ["3M"],
 			toxic: ["3M"],
 			waterpulse: ["3M"],
+			wish: ["3S0"],
 		},
 	},
 	snorunt: {
@@ -7280,6 +7286,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			headbutt: ["3L17"],
 			hiddenpower: ["3M"],
 			hydropump: ["3E"],
+			irondefense: ["3S0"],
 			leer: ["3L9"],
 			protect: ["3M"],
 			rage: ["3L1"],
@@ -7296,6 +7303,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thrash: ["3E"],
 			toxic: ["3M"],
 			twister: ["3E"],
+			spite: ["3S0"],
 		},
 	},
 	shelgon: {
