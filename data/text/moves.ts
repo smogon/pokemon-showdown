@@ -3584,6 +3584,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 		gen1: {
 			desc: "At the end of each of the target's turns, The Pokemon at the user's position steals 1/16 of the target's maximum HP, rounded down and multiplied by the target's current Toxic counter if it has one, even if the target currently has less than that amount of HP remaining. If the target switches out or any Pokemon uses Haze, this effect ends. Grass-type Pokemon are immune to this move.",
+			shortDesc: "1/16 of target's HP is restored to user every turn.",
 		},
 
 		start: "  [POKEMON] was seeded!",
