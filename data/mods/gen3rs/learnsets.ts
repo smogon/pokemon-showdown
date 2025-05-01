@@ -3526,7 +3526,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			hypnosis: ["3L47"],
 			imprison: ["3L33"],
 			lightscreen: ["3M"],
-			magicalleaf: ["3L1"],
 			protect: ["3M"],
 			psychic: ["3M", "3L26"],
 			raindance: ["3M"],
