@@ -3394,7 +3394,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 1] LC",
 		mod: 'gen1',
 		// searchShow: false,
-		ruleset: ['Little Cup', 'Standard'],
+		ruleset: ['Little Cup', 'Standard', '!Max Level', 'Adjust Level = 5'],
 		banlist: ['Dragon Rage', 'Fire Spin', 'Sonic Boom', 'Wrap'],
 	},
 	{
