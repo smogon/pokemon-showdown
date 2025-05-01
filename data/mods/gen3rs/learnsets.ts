@@ -33,7 +33,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["3L8"],
 			toxic: ["3M"],
 			volttackle: ["3E"],
-			wish: ["3E", "3S1"],
+			wish: ["3S1"],
 		},
 	},
 	pikachu: {
@@ -2186,7 +2186,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunder: ["3M"],
 			thunderbolt: ["3M"],
 			toxic: ["3M"],
-			wish: ["3E"],
 		},
 	},
 	heracross: {
@@ -4308,7 +4307,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["3M"],
 			uproar: ["3E"],
 			waterpulse: ["3M"],
-			wish: ["3E"],
 		},
 	},
 	delcatty: {
@@ -4772,7 +4770,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderwave: ["3L4", "3S0", "3S1"],
 			toxic: ["3M"],
 			watersport: ["3S0"],
-			wish: ["3E"],
 		},
 	},
 	minun: {
@@ -4807,7 +4804,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			thunderbolt: ["3M"],
 			thunderwave: ["3L4", "3S0", "3S1"],
 			toxic: ["3M"],
-			wish: ["3E"],
 		},
 	},
 	volbeat: {
@@ -5442,7 +5438,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			trick: ["3E"],
 			uproar: ["3L5", "3S0"],
 			waterpulse: ["3M"],
-			wish: ["3E"],
 		},
 	},
 	trapinch: {
