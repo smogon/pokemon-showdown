@@ -4410,11 +4410,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			zapcannon: ["3L43"],
 		},
 	},
-	probopass: {
-		inherit: true,
-		learnset: {
-		},
-	},
 	skitty: {
 		inherit: true,
 		learnset: {
@@ -4769,7 +4764,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			shadowball: ["3M"],
 			strength: ["3M"],
 			sunnyday: ["3M"],
-			swagger: ["3L20"],
 			thunderpunch: ["3E"],
 			toxic: ["3M"],
 		},
@@ -4812,7 +4806,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			shadowball: ["3M"],
 			strength: ["3M"],
 			sunnyday: ["3M"],
-			swagger: ["3L20"],
 			thunderpunch: ["3L1"],
 			toxic: ["3M"],
 		},
@@ -5039,13 +5032,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			wish: ["3L21"],
 		},
 	},
-	budew: {
-		inherit: true,
-		learnset: {
-		},
-	},
 	roselia: {
-		inherit: true,
 		learnset: {
 			absorb: ["3L1"],
 			aromatherapy: ["3L53"],
@@ -5083,11 +5070,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["3M", "3L45"],
 		},
 	},
-	roserade: {
-		inherit: true,
-		learnset: {
-		},
-	},
 	gulpin: {
 		inherit: true,
 		learnset: {
@@ -5103,7 +5085,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			gigadrain: ["3M"],
 			hiddenpower: ["3M"],
 			icebeam: ["3M"],
-			painsplit: ["3E"],
 			poisongas: ["3L9"],
 			pound: ["3L1"],
 			protect: ["3M"],
@@ -5698,7 +5679,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			cottonspore: ["3L41"],
 			counter: ["3E"],
 			cut: ["3M"],
-			destinybond: ["3L49"],
 			doubleteam: ["3M"],
 			dynamicpunch: ["3E"],
 			facade: ["3M"],
@@ -6669,7 +6649,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			meanlook: ["3L45"],
 			memento: ["3E"],
 			nightshade: ["3L1"],
-			painsplit: ["3E"],
 			protect: ["3M"],
 			psychic: ["3M"],
 			pursuit: ["3L27"],
@@ -6735,11 +6714,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			willowisp: ["3L41"],
 		},
 	},
-	dusknoir: {
-		inherit: true,
-		learnset: {
-		},
-	},
 	tropius: {
 		inherit: true,
 		learnset: {
@@ -6785,13 +6759,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			whirlwind: ["3L27"],
 		},
 	},
-	chingling: {
-		inherit: true,
-		learnset: {
-		},
-	},
 	chimecho: {
-		inherit: true,
 		learnset: {
 			astonish: ["3L9"],
 			attract: ["3M"],
@@ -6955,11 +6923,6 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			torment: ["3M"],
 			toxic: ["3M"],
 			waterpulse: ["3M"],
-		},
-	},
-	froslass: {
-		inherit: true,
-		learnset: {
 		},
 	},
 	spheal: {
