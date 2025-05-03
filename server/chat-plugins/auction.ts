@@ -171,22 +171,30 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 		for (const team of this.teams.values()) {
 			let table = `<table>`;
+			let smogonTable = `[TABLE]`;
 			for (const player of players.filter(p => p.team === team)) {
 				table += Utils.html`<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
+				smogonTable += `[TR][TD]${player.name}[/TD][TD]${player.price}[/TD][/TR]`;
 			}
 			table += `</table>`;
+			smogonTable += `[/TABLE]`;
+
 			buf += `<details><summary>${Utils.escapeHTML(team.name)}</summary>${table}</details><br/>`;
-			if (this.ended) smogonExport += `[SPOILER="${team.name}"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
+			if (this.ended) smogonExport += `[SPOILER="${team.name}"]${smogonTable}[/SPOILER]`;
 		}
 
 		let table = `<table>`;
+		let smogonTable = `[TABLE]`;
 		for (const player of players) {
 			table += Utils.html`<tr><td>${player.name}</td><td>${player.price}</td><td>${player.team!.name}</td></tr>`;
+			smogonTable += `[TR][TD]${player.name}[/TD][TD]${player.price}[/TD][TD]${player.team!.name}[/TD][/TR]`;
 		}
 		table += `</table>`;
+		smogonTable += `[/TABLE]`;
+
 		buf += `<details><summary>All</summary>${table}</details><br/>`;
 		if (this.ended) {
-			smogonExport += `[SPOILER="All"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
+			smogonExport += `[SPOILER="All"]${smogonTable}[/SPOILER]`;
 			buf += Utils.html`<copytext value="${smogonExport}">Copy Smogon Export</copytext>`;
 		}
 
@@ -372,7 +380,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.auctionPlayers = playerList;
 	}
 
-	addAuctionPlayer(name: string, tiersPlayed: string[], tiersNotPlayed: string[]) {
+	addAuctionPlayer(name: string, tiersPlayed: string[] = [], tiersNotPlayed: string[] = []) {
 		if (this.state === 'bid') throw new Chat.ErrorMessage(`Players cannot be added during a nomination.`);
 		if (name.length > 25) throw new Chat.ErrorMessage(`Player names must be 25 characters or less.`);
 		if (tiersPlayed.some(tier => tier.length > 30) || tiersNotPlayed.some(tier => tier.length > 30)) {
@@ -403,13 +411,12 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	assignPlayer(name: string, teamName?: string) {
 		if (this.state === 'bid') throw new Chat.ErrorMessage(`Players cannot be assigned during a nomination.`);
-		const player = this.auctionPlayers.get(toID(name));
-		if (!player) throw new Chat.ErrorMessage(`Player "${name}" not found.`);
+		const player = this.auctionPlayers.get(toID(name)) || this.addAuctionPlayer(name);
 		if (teamName) {
 			const team = this.teams.get(toID(teamName));
 			if (!team) throw new Chat.ErrorMessage(`Team "${teamName}" not found.`);
 			team.addPlayer(player);
-			if (!this.getUndraftedPlayers().length) {
+			if (this.state !== 'setup' && !this.getUndraftedPlayers().length) {
 				return this.end('The auction has ended because there are no players remaining in the draft pool.');
 			}
 		} else {
