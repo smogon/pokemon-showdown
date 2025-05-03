@@ -7167,6 +7167,7 @@ export const Learnsets: import('../../../sim/dex-species').ModdedLearnsetDataTab
 			toxic: ["3M"],
 			twister: ["3E"],
 			spite: ["3S1"],
+			wish: ["3S1"],
 		},
 	},
 	shelgon: {
