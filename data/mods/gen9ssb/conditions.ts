@@ -793,16 +793,16 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			return this.chainModify(0.5);
 		},
 	},
-	diananicole: {
+	archfaewild: {
 		noCopy: true,
 		onStart() {
-			this.add(`c:|${getName('DianaNicole')}|Ready for Initiative? Cause I'm gonna Clickity Clackity, Roll to Attackity!`);
+			this.add(`c:|${getName('Archfaewild')}|Ready for Initiative? Cause I'm gonna Clickity Clackity, Roll to Attackity!`);
 		},
 		onSwitchOut() {
-			this.add(`c:|${getName('DianaNicole')}|Dropping out of Initiative`);
+			this.add(`c:|${getName('Archfaewild')}|Dropping out of Initiative`);
 		},
 		onFaint() {
-			this.add(`c:|${getName('DianaNicole')}|Guess I didn't roll high enough`);
+			this.add(`c:|${getName('Archfaewild')}|Guess I didn't roll high enough`);
 		},
 	},
 	easyonthehills: {
