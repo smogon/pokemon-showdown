@@ -87,6 +87,16 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Saintly Bullet" },
 	},
 
+	// Archfaewild
+	abomasnow: {
+		inherit: true,
+		abilities: { 0: "Snow Warning" },
+	},
+	abomasnowmega: {
+		inherit: true,
+		abilities: { 0: "Flash Fire" },
+	},
+
 	// Arcueid
 	deoxysattack: {
 		inherit: true,
@@ -300,16 +310,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	dhelmise: {
 		inherit: true,
 		abilities: { 0: "Virus" },
-	},
-
-	// Archfaewild
-	abomasnow: {
-		inherit: true,
-		abilities: { 0: "Snow Warning" },
-	},
-	abomasnowmega: {
-		inherit: true,
-		abilities: { 0: "Flash Fire" },
 	},
 
 	// EasyOnTheHills
