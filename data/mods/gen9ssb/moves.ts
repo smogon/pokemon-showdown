@@ -1372,6 +1372,36 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		// bird type crashes during testing (runStatusImmunity for Bird at sim\pokemon.ts:2101:10). no-go.
 	},
 
+	// calmvibes
+	goodvibesonly: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "Raises the user's Speed by 1 stage.",
+		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
+		name: "Good Vibes Only",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, contact: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Aqua Step', target);
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spe: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// chaos
 	outage: {
 		accuracy: 95,
@@ -3572,36 +3602,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-	},
-
-	// marillvibes
-	goodvibesonly: {
-		accuracy: 100,
-		basePower: 90,
-		category: "Physical",
-		shortDesc: "Raises the user's Speed by 1 stage.",
-		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
-		name: "Good Vibes Only",
-		gen: 9,
-		pp: 10,
-		priority: 0,
-		flags: { protect: 1, mirror: 1, contact: 1 },
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Aqua Step', target);
-		},
-		secondary: {
-			chance: 100,
-			self: {
-				boosts: {
-					spe: 1,
-				},
-			},
-		},
-		target: "normal",
-		type: "Fairy",
 	},
 
 	// Mathy
