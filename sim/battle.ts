@@ -1006,6 +1006,23 @@ export class Battle {
 		return handler;
 	}
 
+	getCallback(target: Pokemon | Side | Field | Battle, effect: Effect, callbackName: string) {
+		let callback: Function | undefined = (effect as any)[callbackName];
+		// Abilities and items Start at different times during the SwitchIn event, so we run their onStart handlers
+		// during the SwitchIn event instead of running the Start event during switch-ins
+		// gens 4 and before still use the old system, though
+		if (
+			callback === undefined && target instanceof Pokemon && this.gen >= 5 && callbackName === 'onSwitchIn' &&
+			!(effect as any).onAnySwitchIn && (['Ability', 'Item'].includes(effect.effectType) || (
+				// Innate abilities/items
+				effect.effectType === 'Status' && ['ability', 'item'].includes(effect.id.split(':')[0])
+			))
+		) {
+			callback = (effect as any).onStart;
+		}
+		return callback;
+	}
+
 	findEventHandlers(target: Pokemon | Pokemon[] | Side | Battle, eventName: string, source?: Pokemon | null) {
 		let handlers: EventListener[] = [];
 		if (Array.isArray(target)) {
@@ -1055,32 +1072,11 @@ export class Battle {
 		return handlers;
 	}
 
-	getCallback(target: Pokemon | Side | Field | Battle, effect: Effect, callbackName: string, getKey?: 'duration') {
-		// @ts-expect-error dynamic lookup
-		let callback = effect[callbackName];
-		// Abilities and items Start at different times during the SwitchIn event, so we run their onStart handlers
-		// during the SwitchIn event instead of running the Start event during switch-ins
-		// gens 4 and before still use the old system, though
-		if (
-			callback === undefined && target instanceof Pokemon && !(getKey && target.statusState[getKey]) && this.gen >= 5 &&
-			// @ts-expect-error - dynamic lookup
-			callbackName === 'onSwitchIn' && !effect.onAnySwitchIn && (
-				['Ability', 'Item'].includes(effect.effectType) ||
-				// Innate abilities/items
-				(effect.effectType === 'Status' && ['ability', 'item'].includes(effect.id.split(':')[0]))
-			)
-		) {
-			// @ts-expect-error - dynamic lookup
-			callback = effect.onStart;
-		}
-		return callback;
-	}
-
 	findPokemonEventHandlers(pokemon: Pokemon, callbackName: string, getKey?: 'duration') {
 		const handlers: EventListener[] = [];
 
 		const status = pokemon.getStatus();
-		let callback = this.getCallback(pokemon, status, callbackName, getKey);
+		let callback = this.getCallback(pokemon, status, callbackName);
 		if (callback !== undefined || (getKey && pokemon.statusState[getKey])) {
 			handlers.push(this.resolvePriority({
 				effect: status, callback, state: pokemon.statusState, end: pokemon.clearStatus, effectHolder: pokemon,
@@ -1089,7 +1085,7 @@ export class Battle {
 		for (const id in pokemon.volatiles) {
 			const volatileState = pokemon.volatiles[id];
 			const volatile = this.dex.conditions.getByID(id as ID);
-			callback = this.getCallback(pokemon, volatile, callbackName, getKey);
+			callback = this.getCallback(pokemon, volatile, callbackName);
 			if (callback !== undefined || (getKey && volatileState[getKey])) {
 				handlers.push(this.resolvePriority({
 					effect: volatile, callback, state: volatileState, end: pokemon.removeVolatile, effectHolder: pokemon,
@@ -1097,21 +1093,21 @@ export class Battle {
 			}
 		}
 		const ability = pokemon.getAbility();
-		callback = this.getCallback(pokemon, ability, callbackName, getKey);
+		callback = this.getCallback(pokemon, ability, callbackName);
 		if (callback !== undefined || (getKey && pokemon.abilityState[getKey])) {
 			handlers.push(this.resolvePriority({
 				effect: ability, callback, state: pokemon.abilityState, end: pokemon.clearAbility, effectHolder: pokemon,
 			}, callbackName));
 		}
 		const item = pokemon.getItem();
-		callback = this.getCallback(pokemon, item, callbackName, getKey);
+		callback = this.getCallback(pokemon, item, callbackName);
 		if (callback !== undefined || (getKey && pokemon.itemState[getKey])) {
 			handlers.push(this.resolvePriority({
 				effect: item, callback, state: pokemon.itemState, end: pokemon.clearItem, effectHolder: pokemon,
 			}, callbackName));
 		}
 		const species = pokemon.baseSpecies;
-		callback = this.getCallback(pokemon, species, callbackName, getKey);
+		callback = this.getCallback(pokemon, species, callbackName);
 		if (callback !== undefined) {
 			handlers.push(this.resolvePriority({
 				effect: species, callback, state: pokemon.speciesState, end() {}, effectHolder: pokemon,
@@ -1121,7 +1117,7 @@ export class Battle {
 		for (const conditionid in side.slotConditions[pokemon.position]) {
 			const slotConditionState = side.slotConditions[pokemon.position][conditionid];
 			const slotCondition = this.dex.conditions.getByID(conditionid as ID);
-			callback = this.getCallback(pokemon, slotCondition, callbackName, getKey);
+			callback = this.getCallback(pokemon, slotCondition, callbackName);
 			if (callback !== undefined || (getKey && slotConditionState[getKey])) {
 				handlers.push(this.resolvePriority({
 					effect: slotCondition,
@@ -1142,7 +1138,7 @@ export class Battle {
 
 		let callback;
 		const format = this.format;
-		callback = this.getCallback(this, format, callbackName, getKey);
+		callback = this.getCallback(this, format, callbackName);
 		if (callback !== undefined || (getKey && this.formatData[getKey])) {
 			handlers.push(this.resolvePriority({
 				effect: format, callback, state: this.formatData, end: null, effectHolder: customHolder || this,
@@ -1167,7 +1163,7 @@ export class Battle {
 		for (const id in field.pseudoWeather) {
 			const pseudoWeatherState = field.pseudoWeather[id];
 			const pseudoWeather = this.dex.conditions.getByID(id as ID);
-			callback = this.getCallback(field, pseudoWeather, callbackName, getKey);
+			callback = this.getCallback(field, pseudoWeather, callbackName);
 			if (callback !== undefined || (getKey && pseudoWeatherState[getKey])) {
 				handlers.push(this.resolvePriority({
 					effect: pseudoWeather, callback, state: pseudoWeatherState,
@@ -1176,7 +1172,7 @@ export class Battle {
 			}
 		}
 		const weather = field.getWeather();
-		callback = this.getCallback(field, weather, callbackName, getKey);
+		callback = this.getCallback(field, weather, callbackName);
 		if (callback !== undefined || (getKey && this.field.weatherState[getKey])) {
 			handlers.push(this.resolvePriority({
 				effect: weather, callback, state: this.field.weatherState,
@@ -1184,7 +1180,7 @@ export class Battle {
 			}, callbackName));
 		}
 		const terrain = field.getTerrain();
-		callback = this.getCallback(field, terrain, callbackName, getKey);
+		callback = this.getCallback(field, terrain, callbackName);
 		if (callback !== undefined || (getKey && field.terrainState[getKey])) {
 			handlers.push(this.resolvePriority({
 				effect: terrain, callback, state: field.terrainState,
@@ -1201,7 +1197,7 @@ export class Battle {
 		for (const id in side.sideConditions) {
 			const sideConditionData = side.sideConditions[id];
 			const sideCondition = this.dex.conditions.getByID(id as ID);
-			const callback = this.getCallback(side, sideCondition, callbackName, getKey);
+			const callback = this.getCallback(side, sideCondition, callbackName);
 			if (callback !== undefined || (getKey && sideConditionData[getKey])) {
 				handlers.push(this.resolvePriority({
 					effect: sideCondition, callback, state: sideConditionData,
