@@ -258,6 +258,12 @@ export const ssbSets: SSBSets = {
 		// eslint-disable-next-line @stylistic/max-len
 		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Hardy', teraType: ['Ghost', 'Poison', 'Fairy'], shiny: 1024, level: 97,
 	},
+	'calmvibes ♫': {
+		species: 'Marill', ability: 'Huge Power', item: 'Life Orb', gender: 'M',
+		moves: ['Surging Strikes', 'Jet Punch', 'Close Combat'],
+		signatureMove: 'Good Vibes Only',
+		evs: { hp: 4, atk: 252, spe: 252 }, nature: 'Adamant', teraType: 'Water', shiny: true,
+	},
 	chaos: {
 		species: 'Iron Jugulis', ability: 'Transistor', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: [['Oblivion Wing', 'Hurricane'], ['Thunderclap', 'Volt Switch'], ['Defog', 'Roost']],
@@ -600,12 +606,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Shadow Ball', 'Flamethrower', 'Giga Drain'],
 		signatureMove: 'Body Count',
 		evs: { hp: 252, spa: 252, spd: 4 }, nature: 'Modest', teraType: 'Ghost',
-	},
-	'marillvibes ♫': {
-		species: 'Marill', ability: 'Huge Power', item: 'Life Orb', gender: 'M',
-		moves: ['Surging Strikes', 'Jet Punch', 'Close Combat'],
-		signatureMove: 'Good Vibes Only',
-		evs: { hp: 4, atk: 252, spe: 252 }, nature: 'Adamant', teraType: 'Water', shiny: true,
 	},
 	Mathy: {
 		species: 'Furret', ability: 'Dynamic Typing', item: 'Big Root', gender: 'M',
