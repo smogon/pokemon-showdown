@@ -98,17 +98,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	symbiosis: {
 		inherit: true,
 		onAllyAfterUseItem(item, pokemon) {
-			const source = this.effectState.target;
-			const myItem = source.takeItem();
-			if (!myItem) return;
-			if (
-				!this.singleEvent('TakeItem', myItem, source.itemState, pokemon, source, this.effect, myItem) ||
-				!pokemon.setItem(myItem)
-			) {
-				source.item = myItem.id;
-				return;
-			}
-			this.add('-activate', source, 'ability: Symbiosis', myItem, `[of] ${pokemon}`);
+			if (this.effectState.pokemon) return;
+			this.effectState.pokemon = pokemon;
+			// always trigger after the item is used
+			((this.effect as any).onAnyAfterMove as () => void).call(this);
 		},
 	},
 	weakarmor: {
