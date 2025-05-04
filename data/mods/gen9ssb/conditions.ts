@@ -256,6 +256,18 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			this.add(`c:|${getName('Archas')}|What would Grandfather... think of me now...`);
 		},
 	},
+	archfaewild: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Archfaewild')}|Ready for Initiative? Cause I'm gonna Clickity Clackity, Roll to Attackity!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Archfaewild')}|Dropping out of Initiative`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Archfaewild')}|Guess I didn't roll high enough`);
+		},
+	},
 	arcueid: {
 		noCopy: true,
 		onStart() {
@@ -791,18 +803,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			if (source.illusion) return;
 			if (!source.m.stealth) return this.chainModify(1.1);
 			return this.chainModify(0.5);
-		},
-	},
-	archfaewild: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Archfaewild')}|Ready for Initiative? Cause I'm gonna Clickity Clackity, Roll to Attackity!`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Archfaewild')}|Dropping out of Initiative`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Archfaewild')}|Guess I didn't roll high enough`);
 		},
 	},
 	easyonthehills: {

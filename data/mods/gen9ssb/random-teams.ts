@@ -114,6 +114,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Quiver Dance',
 		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid',
 	},
+	Archfaewild: {
+		species: 'Abomasnow', ability: 'Snow Warning', item: 'Abomasite', gender: 'F',
+		moves: ['Giga Drain', 'Earth Power', 'Blizzard'],
+		signatureMove: 'Breath of Tiamat',
+		evs: { hp: 252, def: 4, spa: 252 }, nature: 'Modest', shiny: true,
+	},
 	Arcueid: {
 		species: 'Deoxys-Defense', ability: 'Marble Phantasm', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: [['Lunar Blessing', 'Jungle Healing'], 'Body Press', ['Toxic', 'Will-O-Wisp', 'Topsy-Turvy']],
@@ -347,12 +353,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Spectral Thief', 'Horn Leech', 'Shadow Sneak'],
 		signatureMove: 'EMP',
 		evs: { hp: 252, atk: 4, spd: 252 }, nature: 'Careful', teraType: ['Ghost'],
-	},
-	Archfaewild: {
-		species: 'Abomasnow', ability: 'Snow Warning', item: 'Abomasite', gender: 'F',
-		moves: ['Giga Drain', 'Earth Power', 'Blizzard'],
-		signatureMove: 'Breath of Tiamat',
-		evs: { hp: 252, def: 4, spa: 252 }, nature: 'Modest', shiny: true,
 	},
 	EasyOnTheHills: {
 		species: 'Snorlax', ability: 'Immunity', item: 'Life Orb', gender: 'M',
