@@ -302,7 +302,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Virus" },
 	},
 
-	// DianaNicole
+	// Archfaewild
 	abomasnow: {
 		inherit: true,
 		abilities: { 0: "Snow Warning" },

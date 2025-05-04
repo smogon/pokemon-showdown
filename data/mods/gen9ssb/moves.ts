@@ -1866,7 +1866,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Ghost",
 	},
 
-	// DianaNicole
+	// Archfaewild
 	breathoftiamat: {
 		accuracy: 95,
 		basePower: 20,

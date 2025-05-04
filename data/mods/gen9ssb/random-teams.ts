@@ -348,7 +348,7 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'EMP',
 		evs: { hp: 252, atk: 4, spd: 252 }, nature: 'Careful', teraType: ['Ghost'],
 	},
-	DianaNicole: {
+	Archfaewild: {
 		species: 'Abomasnow', ability: 'Snow Warning', item: 'Abomasite', gender: 'F',
 		moves: ['Giga Drain', 'Earth Power', 'Blizzard'],
 		signatureMove: 'Breath of Tiamat',
