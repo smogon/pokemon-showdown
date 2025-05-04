@@ -1062,9 +1062,9 @@ export class Battle {
 		// during the SwitchIn event instead of running the Start event during switch-ins
 		// gens 4 and before still use the old system, though
 		if (
-			callback === undefined && !(getKey && target.statusState[getKey]) &&
+			callback === undefined && target instanceof Pokemon && !(getKey && target.statusState[getKey]) && this.gen >= 5 &&
 			// @ts-expect-error - dynamic lookup
-			target instanceof Pokemon && this.gen >= 5 && callbackName === 'onSwitchIn' && !effect.onAnySwitchIn && (
+			callbackName === 'onSwitchIn' && !effect.onAnySwitchIn && (
 				['Ability', 'Item'].includes(effect.effectType) ||
 				// Innate abilities/items
 				(effect.effectType === 'Status' && ['ability', 'item'].includes(effect.id.split(':')[0]))
