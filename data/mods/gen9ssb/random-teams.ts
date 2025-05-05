@@ -114,6 +114,12 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Quiver Dance',
 		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid',
 	},
+	Archfaewild: {
+		species: 'Abomasnow', ability: 'Snow Warning', item: 'Abomasite', gender: 'F',
+		moves: ['Giga Drain', 'Earth Power', 'Blizzard'],
+		signatureMove: 'Breath of Tiamat',
+		evs: { hp: 252, def: 4, spa: 252 }, nature: 'Modest', shiny: true,
+	},
 	Arcueid: {
 		species: 'Deoxys-Defense', ability: 'Marble Phantasm', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: [['Lunar Blessing', 'Jungle Healing'], 'Body Press', ['Toxic', 'Will-O-Wisp', 'Topsy-Turvy']],
@@ -252,6 +258,12 @@ export const ssbSets: SSBSets = {
 		// eslint-disable-next-line @stylistic/max-len
 		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Hardy', teraType: ['Ghost', 'Poison', 'Fairy'], shiny: 1024, level: 97,
 	},
+	'calmvibes ♫': {
+		species: 'Marill', ability: 'Huge Power', item: 'Life Orb', gender: 'M',
+		moves: ['Surging Strikes', 'Jet Punch', 'Close Combat'],
+		signatureMove: 'Good Vibes Only',
+		evs: { hp: 4, atk: 252, spe: 252 }, nature: 'Adamant', teraType: 'Water', shiny: true,
+	},
 	chaos: {
 		species: 'Iron Jugulis', ability: 'Transistor', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: [['Oblivion Wing', 'Hurricane'], ['Thunderclap', 'Volt Switch'], ['Defog', 'Roost']],
@@ -347,12 +359,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Spectral Thief', 'Horn Leech', 'Shadow Sneak'],
 		signatureMove: 'EMP',
 		evs: { hp: 252, atk: 4, spd: 252 }, nature: 'Careful', teraType: ['Ghost'],
-	},
-	DianaNicole: {
-		species: 'Abomasnow', ability: 'Snow Warning', item: 'Abomasite', gender: 'F',
-		moves: ['Giga Drain', 'Earth Power', 'Blizzard'],
-		signatureMove: 'Breath of Tiamat',
-		evs: { hp: 252, def: 4, spa: 252 }, nature: 'Modest', shiny: true,
 	},
 	EasyOnTheHills: {
 		species: 'Snorlax', ability: 'Immunity', item: 'Life Orb', gender: 'M',
@@ -600,12 +606,6 @@ export const ssbSets: SSBSets = {
 		moves: ['Shadow Ball', 'Flamethrower', 'Giga Drain'],
 		signatureMove: 'Body Count',
 		evs: { hp: 252, spa: 252, spd: 4 }, nature: 'Modest', teraType: 'Ghost',
-	},
-	'marillvibes ♫': {
-		species: 'Marill', ability: 'Huge Power', item: 'Life Orb', gender: 'M',
-		moves: ['Surging Strikes', 'Jet Punch', 'Close Combat'],
-		signatureMove: 'Good Vibes Only',
-		evs: { hp: 4, atk: 252, spe: 252 }, nature: 'Adamant', teraType: 'Water', shiny: true,
 	},
 	Mathy: {
 		species: 'Furret', ability: 'Dynamic Typing', item: 'Big Root', gender: 'M',
