@@ -107,6 +107,19 @@ describe('Symbiosis', () => {
 			assert.false.fullHP(venusaur);
 		});
 
+		it('should not consume a second Gem in the same turn', () => {
+			battle = common.gen(6).createBattle({ gameType: 'doubles' }, [[
+				{ species: 'Smeargle', ability: 'symbiosis', item: 'electricgem', moves: ['sleeptalk'] },
+				{ species: 'Venusaur', ability: 'overgrow', item: 'electricgem', moves: ['thunderbolt'] },
+			], [
+				{ species: 'Smeargle', moves: ['sleeptalk'] },
+				{ species: 'Smeargle', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices();
+			assert.equal(battle.p1.active[0].item, '');
+			assert.equal(battle.p1.active[1].item, 'electricgem');
+		});
+
 		it('should trigger on an ally losing their Eject Button', () => {
 			battle = common.gen(6).createBattle({ gameType: 'doubles' }, [[
 				{ species: 'oranguru', ability: 'symbiosis', item: 'leftovers', moves: ['sleeptalk'] },
