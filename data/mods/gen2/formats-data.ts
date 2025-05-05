@@ -21,7 +21,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	wartortle: {
-		tier: "ZU",
+		tier: "PU",
 	},
 	blastoise: {
 		tier: "UU",
@@ -195,7 +195,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	poliwhirl: {
-		tier: "ZUBL",
+		tier: "PU",
 	},
 	poliwrath: {
 		tier: "NUBL",
@@ -237,7 +237,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UUBL",
 	},
 	geodude: {
-		tier: "ZU",
+		tier: "PU",
 	},
 	graveler: {
 		tier: "NU",
@@ -246,7 +246,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	ponyta: {
-		tier: "PU",
+		tier: "ZU",
 	},
 	rapidash: {
 		tier: "NU",
@@ -321,7 +321,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NU",
 	},
 	voltorb: {
-		tier: "ZU",
+		tier: "PU",
 	},
 	electrode: {
 		tier: "UU",
@@ -513,7 +513,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	bayleef: {
-		tier: "ZU",
+		tier: "PU",
 	},
 	meganium: {
 		tier: "UUBL",
