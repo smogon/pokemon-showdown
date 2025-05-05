@@ -121,21 +121,18 @@ export const pages: Chat.PageTable = {
 				return key;
 			}
 		});
+		const canManage = user.can('announce', null, room);
 		for (const [key, queue] of sortedEntries) {
 			buf += `<table style="margin-bottom:30px;"><th colspan="2"><h3>${key}:</h3></th>`;
 			for (const i of queue.keys()) {
 				const html = renderSpotlight(room.roomid, key, i);
 				buf += `<tr><td>${i || 'Current'}</td><td>${html}</td>`;
-				if (user.can('announce', null, room)) {
-					const deleteCommand = (
-						i === 0 ?
-							`/msgroom ${room.roomid},/removedaily ${key}` :
-							`/msgroom ${room.roomid},/removedaily ${key}, ${i}`
-					);
+				if (canManage) {
+					const deleteCommand = `/msgroom ${room.roomid},/removedaily ${key}, ${i}`;
 					buf += `<td><button class="button" name="send" value="${deleteCommand}">Delete</button></td>`;
 				}
 				buf += `</tr>`;
-				if (!user.can('announce', null, room)) break;
+				if (!canManage) break;
 			}
 			buf += '</table>';
 		}
