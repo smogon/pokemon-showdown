@@ -98,7 +98,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	symbiosis: {
 		inherit: true,
 		onAllyAfterUseItem(item, pokemon) {
-			if (pokemon.switchFlag) return;
 			const source = this.effectState.target;
 			const myItem = source.takeItem();
 			if (!myItem) return;
