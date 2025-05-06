@@ -482,7 +482,7 @@ const TWISTS: { [k: string]: Twist } = {
 				const matchDisplay = minEntries.map(entry =>
 					this.questions[idx].answer.find(answer => toID(answer) === entry.value)).join(', ');
 				const playerDisplay = minEntries.flatMap(entry =>
-					entry.players.map(foundPlayer => this.players.find(player => player.id === foundPlayer)?.name)).join(', ');
+					entry.players.map(foundPlayer => this.players.find(player => player.id === foundPlayer)!.name)).join(', ');
 				buffer.push(`Q${idx + 1}: ${matchDisplay} - ${playerDisplay}`);
 			}
 
