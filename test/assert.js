@@ -47,8 +47,11 @@ assert.atMost = function (value, threshold, message) {
 	});
 };
 
-assert.legalTeam = function (team, format, message) {
-	const actual = require('../dist/sim/team-validator').TeamValidator.get(format).validateTeam(team);
+assert.legalTeam = function (team, formatName, message) {
+	require('../dist/sim/dex').Dex.formats.validate(formatName);
+	const format = require('../dist/sim/team-validator').TeamValidator.get(formatName);
+	// console.log(`${formatName}: ${[...format.ruleTable.keys()].join(', ')}`);
+	const actual = format.validateTeam(team);
 	if (actual === null) return;
 	throw new AssertionError({
 		message: message || "Expected team to be valid, but it was rejected because:\n" + actual.join("\n"),

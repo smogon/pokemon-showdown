@@ -180,7 +180,7 @@ export class ExhaustiveRunner {
 // validation). Coordinates with the CoordinatedPlayerAI below through Pools to ensure as
 // many different options as possible get exercised in battle.
 class TeamGenerator {
-	// By default, the TeamGenerator generates sets completely at random which unforunately means
+	// By default, the TeamGenerator generates sets completely at random which unfortunately means
 	// certain signature combinations (eg. Mega Stone/Z Moves which only work for specific Pokemon)
 	// are unlikely to be chosen. To combat this, we keep a mapping of these combinations and some
 	// fraction of the time when we are generating sets for these particular Pokemon we give them
@@ -409,11 +409,11 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 		this.pools = pools;
 	}
 
-	protected chooseTeamPreview(team: AnyObject[]): string {
+	protected override chooseTeamPreview(team: AnyObject[]): string {
 		return `team ${this.choosePokemon(team.map((p, i) => ({ slot: i + 1, pokemon: p }))) || 1}`;
 	}
 
-	protected chooseMove(active: AnyObject, moves: { choice: string, move: AnyObject }[]): string {
+	protected override chooseMove(active: AnyObject, moves: { choice: string, move: AnyObject }[]): string {
 		this.markUsedIfGmax(active);
 		// Prefer to use a move which hasn't been used yet.
 		for (const { choice, move } of moves) {
@@ -426,7 +426,9 @@ class CoordinatedPlayerAI extends RandomPlayerAI {
 		return super.chooseMove(active, moves);
 	}
 
-	protected chooseSwitch(active: AnyObject | undefined, switches: { slot: number, pokemon: AnyObject }[]): number {
+	protected override chooseSwitch(
+		active: AnyObject | undefined, switches: { slot: number, pokemon: AnyObject }[]
+	): number {
 		this.markUsedIfGmax(active);
 		return this.choosePokemon(switches) || super.chooseSwitch(active, switches);
 	}
