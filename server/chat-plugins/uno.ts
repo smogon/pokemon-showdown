@@ -343,7 +343,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 			card[0].color !== (this.topCard.changedColor || this.topCard.color) &&
 			card[0].value !== this.topCard.value
 		) {
-			player.sendRoom(`|c:|${Math.floor(Date.now() / 1000)}||You may not play a card, ${player.name}. You must pass.`);
+			player.sendRoom(`|c:|${Math.floor(Date.now() / 1000)}||You can't play a card, ${player.name}. You must pass.`);
 		}
 	}
 
