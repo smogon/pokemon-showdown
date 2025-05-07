@@ -3725,15 +3725,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onAllyFaint(target, source, effect) {
 			const pokemon: Pokemon = this.effectState.target;
 			if (!pokemon.hp) return;
-			const ability = target.getAbility();
+			let ability = target.getAbility();
 			if (ability.flags['noreceiver'] || ability.id === 'noability') return;
 			if (pokemon.setAbility(ability)) {
 				this.add('-ability', pokemon, ability, '[from] ability: Receiver', `[of] ${target}`);
+				ability = pokemon.getAbility();
 				const handlers: any[] = [];
 				for (const event of ['AllyFaint', 'AnyFaint']) {
 					const callbackName = 'on' + event;
-					// @ts-expect-error dynamic lookup
-					const callback = ability[callbackName];
+					const callback = this.getCallback(pokemon, ability, callbackName);
 					if (callback !== undefined) {
 						handlers.push(this.resolvePriority({
 							effect: ability, callback, state: pokemon.abilityState, end: pokemon.clearAbility, effectHolder: pokemon,
@@ -4378,6 +4378,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	soulheart: {
 		onAnyFaintPriority: 1,
 		onAnyFaint() {
+			this.debug('Soul-Heart: ' + this.effectState.target.name);
 			this.boost({ spa: 1 }, this.effectState.target);
 		},
 		flags: {},
