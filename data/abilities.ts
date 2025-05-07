@@ -4127,7 +4127,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	sheerforce: {
 		onModifyMove(move, pokemon) {
-			if (move.secondaries) {
+			if (move.secondaries && !move.ignoresSheerForceSuppression) {
 				delete move.secondaries;
 				// Technically not a secondary effect, but it is negated
 				delete move.self;
@@ -4138,7 +4138,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onBasePowerPriority: 21,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.hasSheerForce) return this.chainModify([5325, 4096]);
+			if (move.hasSheerForce || move.ignoresSheerForceSuppression) return this.chainModify([5325, 4096]);
 		},
 		flags: {},
 		name: "Sheer Force",
