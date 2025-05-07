@@ -157,8 +157,7 @@ export const Friends = new class {
 		const user = context.user;
 		if (!user.autoconfirmed) {
 			throw new Chat.ErrorMessage(
-				context.tr`To use the friends feature you must be autoconfirmed, which means being registered ` +
-				`for at least one week and winning one rated game.`
+				context.tr`To use the friends feature you must be autoconfirmed, which means being registered for at least one week and winning one rated game.`
 			);
 		}
 		if (user.locked || user.namelocked || user.semilocked || user.permalocked) {
