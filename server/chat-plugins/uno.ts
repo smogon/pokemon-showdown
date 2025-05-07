@@ -336,7 +336,7 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 		player.sendDisplay();
 		player.cardLock = card[0].name;
 
-		// Auto-pass if you can't play this card
+		// Warn if you can't play this card
 		if (
 			this.topCard &&
 			card[0].color !== 'Black' &&
