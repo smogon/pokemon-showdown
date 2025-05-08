@@ -193,19 +193,24 @@ export const TeamsHandler = new class {
 			if (toID(set.ability) === 'none') {
 				set.ability = 'No Ability';
 			}
-			if (set.ability && !Dex.abilities.get(set.ability).exists) {
+			// oms sometimes swap these around so just check them all
+			const strValid = (str: string) => [
+				Dex.abilities, Dex.moves, Dex.species, Dex.items, Dex.types, Dex.natures,
+			].some(x => x.get(str).exists);
+
+			if (set.ability && !strValid(set.ability)) {
 				connection.popup(`Invalid ability ${set.ability} on ${set.species}.`);
 				return null;
 			}
-			if (set.item && !Dex.items.get(set.item).exists) {
+			if (set.item && !strValid(set.item)) {
 				connection.popup(`Invalid item ${set.item} on ${set.species}.`);
 				return null;
 			}
-			if (set.nature && !Dex.natures.get(set.nature).exists) {
+			if (set.nature && !strValid(set.nature)) {
 				connection.popup(`Invalid nature ${set.nature} on ${set.species}.`);
 				return null;
 			}
-			if (set.teraType && !Dex.types.get(set.teraType).exists) {
+			if (set.teraType && !strValid(set.teraType)) {
 				connection.popup(`Invalid Tera Type ${set.nature} on ${set.species}.`);
 				return null;
 			}
