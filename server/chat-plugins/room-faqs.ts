@@ -170,15 +170,15 @@ export const commands: Chat.ChatCommands = {
 
 		if (!roomFaqs[room.roomid][topic]) {
 		// tries to find a FAQ of same topic if RFAQ topic fails
-		const faqCommand = Chat.commands['faq'] as Chat.ChatHandler;
-		if (typeof faqCommand === 'function') {
-			const normalized = toID(target);
-			const validTopics = [
-				'staff', 'autoconfirmed', 'ac', 'ladder', 'ladderhelp', 'decay',
-				'tiering', 'tiers', 'tier', 'badge', 'badges', 'badgeholders',
-				'rng', 'tournaments', 'tournament', 'tours', 'tour', 'vpn',
-				'proxy', 'ca', 'customavatar', 'customavatars', 'privacy',
-				'lostpassword', 'password', 'lostpass',];
+			const faqCommand = Chat.commands['faq'] as Chat.ChatHandler;
+			if (typeof faqCommand === 'function') {
+				const normalized = toID(target);
+				const validTopics = [
+					'staff', 'autoconfirmed', 'ac', 'ladder', 'ladderhelp', 'decay',
+					'tiering', 'tiers', 'tier', 'badge', 'badges', 'badgeholders',
+					'rng', 'tournaments', 'tournament', 'tours', 'tour', 'vpn',
+					'proxy', 'ca', 'customavatar', 'customavatars', 'privacy',
+					'lostpassword', 'password', 'lostpass'];
 		if (!validTopics.includes(normalized)) {
 			return this.errorReply(`'${target}' is an invalid topic.`);
 		}
