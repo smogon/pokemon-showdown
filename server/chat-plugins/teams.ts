@@ -411,12 +411,12 @@ export const commands: Chat.ChatCommands = {
 		update: 'save',
 		async save(target, room, user, connection, cmd) {
 			TeamsHandler.validateAccess(connection, true);
-			const targets = Utils.splitFirst(target, ',', 5);
 			const isEdit = cmd === 'update';
+			const targets = Utils.splitFirst(target, ',', isEdit ? 4 : 3);
 			const rawTeamID = isEdit ? targets.shift() : undefined;
 			let [teamName, formatid, rawPrivacy, rawTeam] = targets;
-			const teamID = Number(rawTeamID);
-			if (isEdit && (!rawTeamID?.length || isNaN(teamID))) {
+			const teamID = isEdit ? Number(rawTeamID) : undefined;
+			if (isEdit && (!rawTeamID?.length || isNaN(teamID!))) {
 				connection.popup("Invalid team ID provided.");
 				return null;
 			}
@@ -431,7 +431,7 @@ export const commands: Chat.ChatCommands = {
 			teamName = toID(teamName) ? teamName : null!;
 			const privacy = toID(rawPrivacy) === '1' ? TeamsHandler.generatePassword() : null;
 			const id = await TeamsHandler.save(
-				this, formatid, rawTeam, teamName, privacy, isEdit ? teamID : undefined
+				this, formatid, rawTeam, teamName, privacy, teamID
 			);
 
 			const page = isEdit ? 'edit' : 'upload';
