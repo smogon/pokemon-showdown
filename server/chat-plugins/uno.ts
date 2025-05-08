@@ -335,6 +335,16 @@ export class UNO extends Rooms.RoomGame<UNOPlayer> {
 		const card = this.onDrawCard(player, 1);
 		player.sendDisplay();
 		player.cardLock = card[0].name;
+
+		// Warn if you can't play this card
+		if (
+			this.topCard &&
+			card[0].color !== 'Black' &&
+			card[0].color !== (this.topCard.changedColor || this.topCard.color) &&
+			card[0].value !== this.topCard.value
+		) {
+			player.sendRoom(`|c:|${Math.floor(Date.now() / 1000)}||You can't play a card, ${player.name}. You must pass.`);
+		}
 	}
 
 	onPlay(player: UNOPlayer, cardName: string) {
