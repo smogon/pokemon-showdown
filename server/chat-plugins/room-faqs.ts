@@ -179,12 +179,12 @@ export const commands: Chat.ChatCommands = {
 					'rng', 'tournaments', 'tournament', 'tours', 'tour', 'vpn',
 					'proxy', 'ca', 'customavatar', 'customavatars', 'privacy',
 					'lostpassword', 'password', 'lostpass'];
-		if (!validTopics.includes(normalized)) {
-			return this.errorReply(`'${target}' is an invalid topic.`);
-		}
-		if (!this.runBroadcast()) return;
-			return faqCommand.call(this, target, room, user, connection, 'faq', '!');
-		}
+				if (!validTopics.includes(normalized)) {
+					return this.errorReply(`'${target}' is an invalid topic.`);
+				}
+				if (!this.runBroadcast()) return;
+				return faqCommand.call(this, target, room, user, connection, 'faq', '!');
+			}
 			return this.errorReply("Invalid topic.");
 		}
 
