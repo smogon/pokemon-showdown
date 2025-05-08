@@ -3400,7 +3400,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 3] ADV 200",
 		mod: 'gen3rs',
 		// searchShow: false,
-		ruleset: ['Standard'],
+		ruleset: ['Standard', 'One Boost Passer Clause'],
 		banlist: ['Uber', 'Swagger'],
 	},
 
