@@ -178,7 +178,8 @@ export const commands: Chat.ChatCommands = {
 					'tiering', 'tiers', 'tier', 'badge', 'badges', 'badgeholders',
 					'rng', 'tournaments', 'tournament', 'tours', 'tour', 'vpn',
 					'proxy', 'ca', 'customavatar', 'customavatars', 'privacy',
-					'lostpassword', 'password', 'lostpass'];
+					'lostpassword', 'password', 'lostpass',
+				];
 				if (!validTopics.includes(normalized)) {
 					return this.errorReply(`'${target}' is an invalid topic.`);
 				}
