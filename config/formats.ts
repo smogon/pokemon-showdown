@@ -374,7 +374,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'ccapm2024',
 		team: 'randomCPM',
 		searchShow: false,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Terastal Clause'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Terastal Clause', 'Data Mod'],
 		onBegin() {
 			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new Pokemon and their wacky abilities?<br />Then make sure to use the <a href="https://docs.google.com/spreadsheets/d/1nLcxshlfbqC2Vqu6oc-wJsRE2gMi29j6Htkm2IQe9CM/edit?usp=sharing" target="_blank">CCAPM Spreadsheet</a> or use /dt!</b></div>`);
 			this.add('-message', `Welcome to CCAPM 2024 Random Battle!`);

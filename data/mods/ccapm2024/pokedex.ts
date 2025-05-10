@@ -375,6 +375,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 83, atk: 95, def: 85, spa: 80, spd: 92, spe: 110 },
 		abilities: { 0: "Asymmetry" },
 		weightkg: 50,
+		prevo: "Grafaiai",
+		evoType: "levelFriendship",
 		eggGroups: ["Undiscovered"],
 	},
 	buffball: {
