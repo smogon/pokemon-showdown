@@ -995,6 +995,10 @@ export class Battle {
 		if (handler.effectHolder && (handler.effectHolder as Pokemon).getStat) {
 			const pokemon = handler.effectHolder as Pokemon;
 			handler.speed = pokemon.speed;
+			if (handler.effect.effectType === 'Ability' && handler.effect.name === 'Dancer' &&
+				callbackName === 'onAnyAfterMove') {
+				handler.speed = pokemon.getStat('spe', true, true);
+			}
 			if (callbackName.endsWith('SwitchIn')) {
 				// Pokemon speeds including ties are resolved before all onSwitchIn handlers and aren't re-sorted in-between
 				// so we subtract a fractional speed from each Pokemon's respective event handlers by using the index of their
@@ -2663,7 +2667,7 @@ export class Battle {
 			if (!action.pokemon.isActive) return false;
 			if (action.pokemon.fainted) return false;
 			this.actions.runMove(action.move, action.pokemon, action.targetLoc, {
-				sourceEffect: action.sourceEffect, zMove: action.zmove,
+				sourceEffect: action.sourceEffect, zMove: action.zmove, externalMove: action.externalMove,
 				maxMove: action.maxMove, originalTarget: action.originalTarget,
 			});
 			break;
