@@ -20,18 +20,18 @@ jobs:
   update_version:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 18
           cache: 'npm'
       - id: bump_version
         run: |
-          echo "old_version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+          echo "old_version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
           npm version ${{ github.event.inputs.version }} --no-git-tag-version
-          echo "new_version=$(jq -r .version package.json)" >> $GITHUB_OUTPUT
+          echo "new_version=$(jq -r .version package.json)" >> "$GITHUB_OUTPUT"
 
-      - uses: peter-evans/create-pull-request@v4
+      - uses: peter-evans/create-pull-request@v7
         with:
           title: Bump package.json version to v${{ steps.bump_version.outputs.new_version }}}
           body: |
@@ -39,4 +39,4 @@ jobs:
           commit-message: Bump package.json version to v${{ steps.bump_version.outputs.new_version }}
           branch: npm-version-bump
           base: master
-    
+
