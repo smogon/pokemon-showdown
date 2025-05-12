@@ -163,9 +163,9 @@ export const commands: Chat.ChatCommands = {
 			saveSpotlights();
 		} else {
 			const queueNumber = parseInt(rest);
-			if (isNaN(queueNumber) || queueNumber < 0) throw new Chat.ErrorMessage("Invalid queue number");
+			if (isNaN(queueNumber) || queueNumber < 1) throw new Chat.ErrorMessage("Invalid queue number");
 			if (queueNumber >= spotlights[room.roomid][key].length) {
-				throw new Chat.ErrorMessage(`Queue number must be between 0 and ${spotlights[room.roomid][key].length - 1}`);
+				throw new Chat.ErrorMessage(`Queue number must be between 1 and ${spotlights[room.roomid][key].length - 1}`);
 			}
 			spotlights[room.roomid][key].splice(queueNumber, 1);
 			saveSpotlights();
