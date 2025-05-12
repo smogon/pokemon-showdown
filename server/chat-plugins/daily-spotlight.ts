@@ -146,6 +146,7 @@ export const commands: Chat.ChatCommands = {
 		if (!room.persist) throw new Chat.ErrorMessage("This command is unavailable in temporary rooms.");
 		let [key, rest] = target.split(',');
 		key = toID(key);
+		rest = toID(rest);
 		if (!key) return this.parse('/help daily');
 		if (!spotlights[room.roomid][key]) throw new Chat.ErrorMessage(`Cannot find a daily spotlight with name '${key}'`);
 
@@ -165,7 +166,7 @@ export const commands: Chat.ChatCommands = {
 			const queueNumber = parseInt(rest);
 			if (isNaN(queueNumber) || queueNumber < 1) throw new Chat.ErrorMessage("Invalid queue number");
 			if (queueNumber >= spotlights[room.roomid][key].length) {
-				throw new Chat.ErrorMessage(`Queue number needs to be between 1 and ${spotlights[room.roomid][key].length - 1}`);
+				throw new Chat.ErrorMessage(`Queue number must be between 1 and ${spotlights[room.roomid][key].length - 1}`);
 			}
 			spotlights[room.roomid][key].splice(queueNumber, 1);
 			saveSpotlights();
