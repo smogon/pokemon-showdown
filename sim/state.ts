@@ -72,6 +72,8 @@ export const State = new class {
 		state.log = battle.log;
 		state.queue = this.serializeWithRefs(battle.queue.list, battle);
 		state.formatid = battle.format.id;
+		state.rules = battle.rules;
+		state.playerOptions = battle.playerOptions;
 		return state;
 	}
 
@@ -94,6 +96,8 @@ export const State = new class {
 			// doesn't attempt to start playing out until we're ready.
 			deserialized: true,
 			strictChoices: state.strictChoices,
+			rules: state.rules,
+			playerOptions: state.playerOptions
 		};
 		for (const side of state.sides) {
 			// When we instantiate the Battle again we need the pokemon to be in

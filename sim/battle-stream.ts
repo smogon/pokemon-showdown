@@ -47,6 +47,7 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 	replay: boolean | 'spectator';
 	keepAlive: boolean;
 	battle: Battle | null;
+	silent: boolean = false;
 
 	constructor(options: {
 		debug?: boolean, noCatch?: boolean, keepAlive?: boolean, replay?: boolean | 'spectator',
@@ -108,10 +109,22 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 		}
 		else {
 			switch (type) {
+				case 'mute': 
+					this.silent = true;
+					break;
+				case 'unmute': 
+					this.silent = false;
+					break;
 				case 'start':
 					const options = JSON.parse(message);
 					options.send = (t: string, data: any) => {
-						if (Array.isArray(data)) data = data.join("\n");
+						if (this.silent) {
+							if (Array.isArray(data)) data = data.join("|[silent]\n");
+							data += "|[silent]";
+						}
+						else {
+							if (Array.isArray(data)) data = data.join("\n");
+						}
 						this.pushMessage(t, data);
 						if (t === 'end' && !this.keepAlive) this.pushEnd();
 					};

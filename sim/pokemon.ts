@@ -134,7 +134,10 @@ export class Pokemon {
 	/** true = locked,  */
 	maybeLocked: boolean | null;
 
+	lastIllusion: Pokemon | null;
 	illusion: Pokemon | null;
+	illusionRevealed: boolean;
+	revealed: boolean;
 	transformed: boolean;
 
 	maxhp: number;
@@ -469,7 +472,10 @@ export class Pokemon {
 		this.maybeDisabled = false;
 		this.maybeLocked = false;
 
+		this.lastIllusion = null;
 		this.illusion = null;
+		this.illusionRevealed = false;
+		this.revealed = false;
 		this.transformed = false;
 
 		this.fainted = false;

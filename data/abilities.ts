@@ -2004,6 +2004,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					// Illusion will not disguise as anything
 					if (!pokemon.terastallized || possibleTarget.species.baseSpecies !== 'Ogerpon') {
 						pokemon.illusion = possibleTarget;
+						possibleTarget.revealed = true;
+						pokemon.lastIllusion = null;
 					}
 					break;
 				}
@@ -2016,6 +2018,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onEnd(pokemon) {
 			if (pokemon.illusion) {
+				pokemon.illusionRevealed = true;
 				this.debug('illusion cleared');
 				pokemon.illusion = null;
 				const details = pokemon.getUpdatedDetails();

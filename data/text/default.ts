@@ -391,6 +391,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	minimize: {
 		volatileName: "Minimize"
 	},
+	focusenergy: {
+		volatileName: "Focus Energy"
+	},
 
 	// weather
 	sandstorm: {

@@ -120,6 +120,7 @@ export class Battle {
 	readonly formatData: EffectState;
 	readonly gameType: GameType;
 	readonly rules: UrpgBattleRules;
+	readonly playerOptions: PlayerOptions[];
 	/**
 	 * The number of active pokemon per half-field.
 	 * See header comment in side.ts for details.
@@ -232,6 +233,7 @@ export class Battle {
 		this.reportExactHP = !!format.debug;
 		this.reportPercentages = false;
 		this.supportCancel = false;
+		this.playerOptions = options.playerOptions;
 
 		this.queue = new BattleQueue(this);
 		this.actions = new BattleActions(this);
@@ -281,8 +283,8 @@ export class Battle {
 
 		this.send = options.send || (() => {});
 
-		const inputOptions: { formatid: ID, seed: PRNGSeed, rated?: string | true } = {
-			formatid: options.formatid, seed: this.prngSeed,
+		const inputOptions: { formatid: ID, seed: PRNGSeed, rated?: string | true, rules?: UrpgBattleRules } = {
+			formatid: options.formatid, seed: this.prngSeed, rules:options.rules
 		};
 		if (this.rated) inputOptions.rated = this.rated;
 		if (typeof __version !== 'undefined') {
@@ -1954,7 +1956,7 @@ export class Battle {
 			const currentBoost: SparseBoostsTable = {
 				[boostName]: boost[boostName],
 			};
-			
+
 			if (boostName == "evasion" && boost[boostName]! > 0 && this.rules.evaClause) {
 				continue;
 			}

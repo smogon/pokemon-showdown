@@ -1969,7 +1969,7 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 		name: "Tera Shift",
 		shortDesc: "If this Pokemon is a Terapagos, it transforms into its Terastal Form on entry.",
 
-		transform: "[POKEMON] transformed!",
+		activate: "[POKEMON] transformed!",
 	},
 	teravolt: {
 		name: "Teravolt",
