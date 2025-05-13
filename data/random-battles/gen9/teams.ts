@@ -1410,7 +1410,9 @@ export class RandomTeams {
 		if (['Bulky Attacker', 'Bulky Support', 'Bulky Setup'].some(m => role === (m))) return 'Leftovers';
 		if (species.id === 'pawmot' && moves.has('nuzzle')) return 'Leppa Berry';
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
-			return (counter.get('Physical') + counter.get('Special') > counter.get('Status') && lifeOrbReqs) ? 'Life Orb' : 'Leftovers';
+			return (
+				counter.get('Physical') + counter.get('Special') > counter.get('Status') && lifeOrbReqs
+			) ? 'Life Orb' : 'Leftovers';
 		}
 		if (role === 'Tera Blast user' && DEFENSIVE_TERA_BLAST_USERS.includes(species.id)) return 'Leftovers';
 		if (
