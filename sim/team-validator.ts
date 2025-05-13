@@ -1493,7 +1493,8 @@ export class TeamValidator {
 		if (!this.dex.species.getLearnsetData(species.id).learnset) return false;
 
 		if (species.id === 'smeargle') return true;
-		const canBreedWithSmeargle = species.eggGroups.includes('Field') && this.dex.species.get('Smeargle').tier !== 'Unreleased';
+		const canBreedWithSmeargle = species.eggGroups.includes('Field') &&
+			this.dex.species.get('Smeargle').tier !== 'Unreleased';
 
 		const allEggSources = new PokemonSources();
 		allEggSources.sourcesBefore = eggGen;
