@@ -689,7 +689,7 @@ export class TeamValidator {
 			if (!type.exists || type.isNonstandard) {
 				problems.push(`${name}'s Terastal type (${set.teraType}) is invalid.`);
 			} else if (species.requiredTeraType && species.requiredTeraType !== type.name && ruleTable.has('obtainablemisc')) {
-				problems.push(`${species.name}'s Terastal type needs to be ${species.requiredTeraType}, please fix it.`);
+				problems.push(`${species.name}'s Terastal type needs to be ${species.requiredTeraType}.`);
 			}
 			set.teraType = type.name;
 		} else {
