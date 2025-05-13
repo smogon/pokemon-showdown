@@ -1195,7 +1195,7 @@ export class RandomTeams {
 		if (species.id === 'palkia' && counter.get('Status')) return 'Lustrous Orb';
 		if (
 			moves.has('courtchange') ||
-			!isDoubles && (species.id === 'luvdisc' || (species.id === 'terapagos' && moves.has('rapidspin')))
+			!isDoubles && (species.id === 'luvdisc' || (species.id === 'terapagos' && !moves.has('rest')))
 		) return 'Heavy-Duty Boots';
 		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
 		if (
