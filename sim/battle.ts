@@ -145,6 +145,7 @@ export class Battle {
 	readonly messageLog: string[];
 	sentLogPos: number;
 	sentEnd: boolean;
+	sentRequests = true;
 
 	requestState: RequestState;
 	turn: number;
@@ -1329,8 +1330,9 @@ export class Battle {
 
 		const requests = this.getRequests(type);
 		for (let i = 0; i < this.sides.length; i++) {
-			this.sides[i].emitRequest(requests[i]);
+			this.sides[i].activeRequest = requests[i];
 		}
+		this.sentRequests = false;
 
 		if (this.sides.every(side => side.isChoiceDone())) {
 			throw new Error(`Choices are done immediately after a request`);
@@ -3211,6 +3213,10 @@ export class Battle {
 	sendUpdates() {
 		if (this.sentLogPos >= this.log.length) return;
 		this.send('update', this.log.slice(this.sentLogPos));
+		if (!this.sentRequests) {
+			for (const side of this.sides) side.emitRequest();
+			this.sentRequests = true;
+		}
 		this.sentLogPos = this.log.length;
 
 		if (!this.sentEnd && this.ended) {
