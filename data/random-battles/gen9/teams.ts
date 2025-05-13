@@ -1281,15 +1281,15 @@ export class RandomTeams {
 			if (scarfReqs || moves.has('finalgambit') || species.id === 'ditto' || species.id === 'jirachi') return 'Choice Scarf';
 			return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
 		}
-		if (counter.get('Physical') >= this.maxMoveCount &&
+		if (counter.get('Physical') >= moves.size &&
 			['fakeout', 'feint', 'firstimpression', 'rapidspin', 'suckerpunch'].every(m => !moves.has(m)) &&
 			(moves.has('flipturn') || moves.has('uturn') || role === 'Doubles Wallbreaker')
 		) {
 			return (scarfReqs) ? 'Choice Scarf' : 'Choice Band';
 		}
 		if (
-			((counter.get('Special') >= this.maxMoveCount && (moves.has('voltswitch') || role === 'Doubles Wallbreaker')) || (
-				counter.get('Special') >= this.maxMoveCount - 1 && (moves.has('uturn') || moves.has('flipturn'))
+			((counter.get('Special') >= moves.size && (moves.has('voltswitch') || role === 'Doubles Wallbreaker')) || (
+				counter.get('Special') >= moves.size - 1 && (moves.has('uturn') || moves.has('flipturn'))
 			)) && !moves.has('electroweb')
 		) {
 			return (scarfReqs) ? 'Choice Scarf' : 'Choice Specs';
@@ -1341,7 +1341,7 @@ export class RandomTeams {
 		const lifeOrbReqs = ['flamecharge', 'nuzzle', 'rapidspin', 'trailblaze'].every(m => !moves.has(m));
 
 		if (
-			species.id !== 'jirachi' && (counter.get('Physical') >= this.maxMoveCount) &&
+			species.id !== 'jirachi' && (counter.get('Physical') >= moves.size) &&
 			['dragontail', 'fakeout', 'firstimpression', 'flamecharge', 'rapidspin'].every(m => !moves.has(m))
 		) {
 			const scarfReqs = (
@@ -1353,8 +1353,8 @@ export class RandomTeams {
 			return (scarfReqs && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
 		}
 		if (
-			(counter.get('Special') >= this.maxMoveCount) ||
-			(counter.get('Special') >= this.maxMoveCount - 1 && ['flipturn', 'uturn'].some(m => moves.has(m)))
+			(counter.get('Special') >= moves.size) ||
+			(counter.get('Special') >= moves.size - 1 && ['flipturn', 'uturn'].some(m => moves.has(m)))
 		) {
 			const scarfReqs = (
 				role !== 'Wallbreaker' &&
