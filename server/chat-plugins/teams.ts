@@ -514,6 +514,7 @@ export const commands: Chat.ChatCommands = {
 					this.refreshPage(pageid);
 				}
 			}
+			connection.send(`|queryresponse|teamupdate|` + JSON.stringify({ teamid: teamId, privacy }));
 			return this.popupReply(privacy ? `Team set to private. Password: ${privacy}` : `Team set to public.`);
 		},
 		search(target, room, user) {
