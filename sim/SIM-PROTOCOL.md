@@ -83,13 +83,13 @@ The beginning of a battle will look something like this:
 
 `|rule|RULE: DESCRIPTION`
 
-> Will appear multiple times, one for each 
+> Will appear multiple times, one for each rule.
 
-    |clearpoke
-    |poke|PLAYER|DETAILS|ITEM
-    |poke|PLAYER|DETAILS|ITEM
-    ...
-    |teampreview
+`|clearpoke`  
+`|poke|PLAYER|DETAILS|ITEM`  
+`|poke|PLAYER|DETAILS|ITEM`  
+...  
+`|teampreview`
 
 > These messages appear if you're playing a format that uses team previews.
 
