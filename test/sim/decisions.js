@@ -608,7 +608,7 @@ describe('Choices', () => {
 			assert(logText.includes(subString), `${logText} does not include ${subString}`);
 		});
 
-		it('should privately log the target of targetted chosen moves', () => {
+		it('should privately log the target of targeted chosen moves', () => {
 			battle = common.createBattle({ gameType: 'doubles' }, [[
 				{ species: "Bulbasaur", ability: 'overgrow', moves: ['tackle'] },
 				{ species: "Ivysaur", ability: 'overgrow', moves: ['tackle'] },
@@ -867,7 +867,7 @@ describe('Choice extensions', () => {
 			});
 
 			it(`should disallow to ${mode} switch decisions on move requests for unconfirmed trapping-immune Pokémon that would otherwise be trapped`, () => {
-				battle = common.createBattle({ cancel: true, pokemon: true, legality: true }, [
+				battle = common.createBattle({ cancel: true, legality: true }, [
 					[
 						{ species: 'Starmie', ability: 'naturalcure', moves: ['reflecttype', 'recover'] },
 						{ species: 'Mandibuzz', ability: 'overcoat', moves: ['knockoff'] },

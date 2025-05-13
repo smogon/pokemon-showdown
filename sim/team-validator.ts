@@ -559,7 +559,7 @@ export class TeamValidator {
 
 		let species = dex.species.get(set.species);
 		set.species = species.name;
-		// Backwards compatability with old Gmax format
+		// Backwards compatibility with old Gmax format
 		if (set.species.toLowerCase().endsWith('-gmax') && this.format.id !== 'gen8megamax') {
 			set.species = set.species.slice(0, -5);
 			species = dex.species.get(set.species);
@@ -586,10 +586,6 @@ export class TeamValidator {
 		let name = set.species;
 		if (set.species !== set.name && species.baseSpecies !== set.name) {
 			name = `${set.name} (${set.species})`;
-		}
-
-		if (!set.teraType && this.gen === 9) {
-			set.teraType = species.types[0];
 		}
 
 		if (!set.level) set.level = ruleTable.defaultLevel;
@@ -688,19 +684,16 @@ export class TeamValidator {
 				set.hpType = type.name;
 			}
 		}
-		if (species.forceTeraType) {
-			set.teraType = species.forceTeraType;
-		}
-		if (set.teraType) {
-			const type = dex.types.get(set.teraType);
+		if ((this.gen === 9 && !ruleTable.has('terastalclause')) || ruleTable.has('bonustypemod')) {
+			const type = dex.types.get(set.teraType || species.requiredTeraType || species.types[0]);
 			if (!type.exists || type.isNonstandard) {
 				problems.push(`${name}'s Terastal type (${set.teraType}) is invalid.`);
-			} else {
-				set.teraType = type.name;
+			} else if (species.requiredTeraType && species.requiredTeraType !== type.name && ruleTable.has('obtainablemisc')) {
+				problems.push(`${species.name}'s Terastal type needs to be ${species.requiredTeraType}.`);
 			}
-			if (dex.gen !== 9 || (ruleTable.has('terastalclause') && !ruleTable.has('bonustypemod'))) {
-				delete set.teraType;
-			}
+			set.teraType = type.name;
+		} else {
+			delete set.teraType;
 		}
 
 		let problem = this.checkSpecies(set, species, tierSpecies, setHas);
@@ -2311,7 +2304,7 @@ export class TeamValidator {
 		return problems;
 	}
 	/**
-	 * Returns a list of problems regarding a Pokemon's avilability in Pokemon GO (empty list if no problems)
+	 * Returns a list of problems regarding a Pokemon's availability in Pokemon GO (empty list if no problems)
 	 * If the Pokemon cannot be obtained from Pokemon GO, returns null
 	 */
 	validatePokemonGo(
@@ -2594,7 +2587,7 @@ export class TeamValidator {
 
 				const ability = dex.abilities.get(set.ability);
 				if (dex.gen < 6 && ability.gen > learnedGen && !checkingPrevo) {
-					// You can evolve a transfered mon to reroll for its new Ability.
+					// You can evolve a transferred mon to reroll for its new Ability.
 					cantLearnReason = `is learned in gen ${learnedGen}, but the Ability ${ability.name} did not exist then.`;
 					continue;
 				}

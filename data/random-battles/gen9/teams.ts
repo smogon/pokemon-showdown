@@ -101,7 +101,7 @@ const SPEED_CONTROL = [
 ];
 // Moves that shouldn't be the only STAB moves:
 const NO_STAB = [
-	'accelerock', 'aquajet', 'bounce', 'breakingswipe', 'bulletpunch', 'chatter', 'chloroblast', 'circlethrow', 'clearsmog', 'covet',
+	'accelerock', 'aquajet', 'bounce', 'breakingswipe', 'bulletpunch', 'chatter', 'chloroblast', 'clearsmog', 'covet',
 	'dragontail', 'doomdesire', 'electroweb', 'eruption', 'explosion', 'fakeout', 'feint', 'flamecharge', 'flipturn', 'futuresight',
 	'grassyglide', 'iceshard', 'icywind', 'incinerate', 'infestation', 'machpunch', 'meteorbeam', 'mortalspin', 'nuzzle', 'pluck', 'pursuit',
 	'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skydrop', 'snarl', 'strugglebug', 'suckerpunch', 'uturn',
@@ -539,14 +539,13 @@ export class RandomTeams {
 				[['fierydance', 'fireblast'], 'heatwave'],
 				['dazzlinggleam', ['fleurcannon', 'moonblast']],
 				['poisongas', ['toxicspikes', 'willowisp']],
-				[RECOVERY_MOVES, 'healpulse'],
-				['lifedew', 'healpulse'],
+				[RECOVERY_MOVES, ['healpulse', 'lifedew']],
+				['healpulse', 'lifedew'],
 				['haze', 'icywind'],
 				[['hydropump', 'muddywater'], ['muddywater', 'scald']],
 				['disable', 'encore'],
 				['freezedry', 'icebeam'],
 				['energyball', 'leafstorm'],
-				['wildcharge', 'thunderbolt'],
 				['earthpower', 'sandsearstorm'],
 				['coaching', ['helpinghand', 'howl']],
 			];
@@ -570,6 +569,7 @@ export class RandomTeams {
 			['curse', ['irondefense', 'rapidspin']],
 			['dragondance', 'dracometeor'],
 			['yawn', 'roar'],
+			['trick', 'uturn'],
 
 			// These attacks are redundant with each other
 			[['psychic', 'psychicnoise'], ['psyshock', 'psychicnoise']],
@@ -578,7 +578,7 @@ export class RandomTeams {
 			['aquajet', 'flipturn'],
 			['gigadrain', 'leafstorm'],
 			['powerwhip', 'hornleech'],
-			[['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']],
+			['airslash', 'hurricane'],
 			['knockoff', 'foulplay'],
 			['throatchop', ['crunch', 'lashout']],
 			['doubleedge', ['bodyslam', 'headbutt']],
@@ -589,7 +589,6 @@ export class RandomTeams {
 			['gunkshot', ['direclaw', 'poisonjab', 'sludgebomb']],
 			['aurasphere', 'focusblast'],
 			['closecombat', 'drainpunch'],
-			['bugbite', 'pounce'],
 			[['dragonpulse', 'spacialrend'], 'dracometeor'],
 			['heavyslam', 'flashcannon'],
 			['alluringvoice', 'dazzlinggleam'],
@@ -608,10 +607,8 @@ export class RandomTeams {
 			['toxic', 'clearsmog'],
 			// Chansey and Blissey
 			['healbell', 'stealthrock'],
-			// Azelf and Zoroarks
-			['trick', 'uturn'],
-			// Araquanid
-			['mirrorcoat', 'hydropump'],
+			// Araquanid and Magnezone
+			['mirrorcoat', ['hydropump', 'bodypress']],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -624,12 +621,18 @@ export class RandomTeams {
 
 		if (!abilities.includes('Prankster')) this.incompatibleMoves(moves, movePool, 'thunderwave', 'yawn');
 
-		// This space reserved for assorted hardcodes that otherwise make little sense out of context
+		// This space reserved for assorted hardcodes that otherwise make little sense out of context:
+		// To force Close Combat on Barraskewda without locking it to Tera Fighting
 		if (species.id === 'barraskewda') {
 			this.incompatibleMoves(moves, movePool, ['psychicfangs', 'throatchop'], ['poisonjab', 'throatchop']);
 		}
+		// To force Toxic on Quagsire
+		if (species.id === 'quagsire') this.incompatibleMoves(moves, movePool, 'spikes', 'icebeam');
+		// Taunt/Knock should be Cyclizar's flex moveslot
 		if (species.id === 'cyclizar') this.incompatibleMoves(moves, movePool, 'taunt', 'knockoff');
+		// To force Stealth Rock on Camerupt
 		if (species.id === 'camerupt') this.incompatibleMoves(moves, movePool, 'roar', 'willowisp');
+		// nothing else rolls these lol
 		if (species.id === 'coalossal') this.incompatibleMoves(moves, movePool, 'flamethrower', 'overheat');
 	}
 
@@ -1230,6 +1233,7 @@ export class RandomTeams {
 		if (moves.has('acrobatics') && ability !== 'Protosynthesis') return '';
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (ability === 'Gluttony') return `${this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'])} Berry`;
+		if (species.id === 'giratina' && !isDoubles && moves.has('rest') && !moves.has('sleeptalk')) return 'Leftovers';
 		if (
 			moves.has('rest') && !moves.has('sleeptalk') &&
 			ability !== 'Natural Cure' && ability !== 'Shed Skin'
@@ -1263,7 +1267,7 @@ export class RandomTeams {
 			['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Doubles Setup Sweeper', 'Offensive Protect'].some(m => role === m)
 		);
 		const doublesLeftoversHardcodes = (
-			moves.has('acidarmor') || species.id === 'eternatus' || species.id === 'regigigas' || moves.has('wish')
+			moves.has('acidarmor') || moves.has('wish') || ['eternatus', 'garganacl', 'regigigas', 'toxapex'].includes(species.id)
 		);
 
 		if (species.id === 'ursalunabloodmoon' && moves.has('protect')) return 'Silk Scarf';
@@ -1271,7 +1275,6 @@ export class RandomTeams {
 			moves.has('flipturn') && moves.has('protect') && (moves.has('aquajet') || (moves.has('jetpunch')))
 		) return 'Mystic Water';
 		if (counter.get('speedsetup') && role === 'Doubles Bulky Setup') return 'Weakness Policy';
-		if (species.id === 'toxapex') return 'Binding Band';
 		if (moves.has('blizzard') && ability !== 'Snow Warning' && !teamDetails.snow) return 'Blunder Policy';
 
 		if (role === 'Choice Item user') {
@@ -1293,6 +1296,9 @@ export class RandomTeams {
 		) {
 			return (scarfReqs) ? 'Choice Scarf' : 'Choice Specs';
 		}
+		if (
+			species.baseStats.spe <= 70 && (moves.has('ragepowder') || moves.has('followme'))
+		) return 'Rocky Helmet';
 		if (
 			(role === 'Bulky Protect' && counter.get('setup')) || moves.has('substitute') || moves.has('irondefense') ||
 			moves.has('coil') || doublesLeftoversHardcodes
@@ -1993,6 +1999,7 @@ export class RandomTeams {
 			};
 			if (this.gen === 9) {
 				// Tera type
+				if (species.requiredTeraType) set.teraType = species.requiredTeraType;
 				if (this.forceTeraType) {
 					set.teraType = this.forceTeraType;
 				} else {

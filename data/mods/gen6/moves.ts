@@ -126,6 +126,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	mistyterrain: {
 		inherit: true,
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {

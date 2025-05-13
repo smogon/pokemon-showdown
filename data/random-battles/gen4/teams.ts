@@ -42,7 +42,7 @@ const PRIORITY_POKEMON = [
 ];
 
 export class RandomGen4Teams extends RandomGen5Teams {
-	randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
+	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./sets.json');
 
 	constructor(format: string | Format, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -67,7 +67,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
 			Poison: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Poison') && (types.has('Grass') || species.id === 'gengar')
+				!counter.get('Poison') && (['Ghost', 'Grass', 'Ground'].some(type => types.has(type)))
 			),
 			Psychic: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Psychic') && (types.has('Fighting') || movePool.includes('calmmind'))
@@ -81,7 +81,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			.map(move => move.id);
 	}
 
-	cullMovePool(
+	override cullMovePool(
 		types: string[],
 		moves: Set<string>,
 		abilities: string[],
@@ -226,10 +226,14 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				if (moves.size + movePool.length <= this.maxMoveCount) return;
 			}
 		}
+		if (species.id === 'bastiodon') {
+			// Enforces Toxic too, for good measure.
+			this.incompatibleMoves(moves, movePool, ['metalburst', 'protect', 'roar'], ['metalburst', 'protect']);
+		}
 	}
 
 	// Generate random moveset for a given species, role, preferred type.
-	randomMoveset(
+	override randomMoveset(
 		types: string[],
 		abilities: string[],
 		teamDetails: RandomTeamsTypes.TeamDetails,
@@ -464,7 +468,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		return moves;
 	}
 
-	shouldCullAbility(
+	override shouldCullAbility(
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,
@@ -490,7 +494,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		return false;
 	}
 
-	getAbility(
+	override getAbility(
 		types: Set<string>,
 		moves: Set<string>,
 		abilities: string[],
@@ -530,7 +534,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		return this.sample(abilities);
 	}
 
-	getPriorityItem(
+	override getPriorityItem(
 		ability: string,
 		types: string[],
 		moves: Set<string>,
@@ -571,7 +575,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		if (role === 'Staller') return 'Leftovers';
 	}
 
-	getItem(
+	override getItem(
 		ability: string,
 		types: string[],
 		moves: Set<string>,
@@ -646,7 +650,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 		return 'Leftovers';
 	}
 
-	randomSet(
+	override randomSet(
 		species: string | Species,
 		teamDetails: RandomTeamsTypes.TeamDetails = {},
 		isLead = false

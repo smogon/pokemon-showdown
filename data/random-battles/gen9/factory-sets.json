@@ -2439,28 +2439,6 @@
 				"moves": [["First Impression", "Protect"], ["Knock Off"], ["Swords Dance"], ["Sucker Punch"]]
 			}]
 		},
-		"weavile": {
-			"weight": 8,
-			"sets": [{
-				"species": "Weavile",
-				"weight": 80,
-				"item": ["Heavy-Duty Boots"],
-				"ability": ["Pickpocket"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
-				"nature": ["Jolly"],
-				"teraType": ["Ghost", "Dark"],
-				"moves": [["Swords Dance"], ["Triple Axel", "Icicle Crash"], ["Knock Off"], ["Ice Shard", "Low Kick"]]
-			}, {
-				"species": "Weavile",
-				"weight": 20,
-				"item": ["Heavy-Duty Boots"],
-				"ability": ["Pickpocket"],
-				"evs": {"atk": 252, "def": 4, "spe": 252},
-				"nature": ["Jolly"],
-				"teraType": ["Ice"],
-				"moves": [["Swords Dance"], ["Triple Axel"], ["Knock Off"], ["Ice Shard"]]
-			}]
-		},
 		"greninja": {
 			"weight": 5,
 			"sets": [{
@@ -2879,28 +2857,6 @@
 				"nature": ["Impish"],
 				"teraType": ["Dragon", "Water"],
 				"moves": [["Body Press"], ["Roost"], ["Spikes"], ["Brave Bird"]]
-			}]
-		},
-		"tinkaton": {
-			"weight": 5,
-			"sets": [{
-				"species": "Tinkaton",
-				"weight": 50,
-				"item": ["Leftovers"],
-				"ability": ["Mold Breaker"],
-				"evs": {"hp": 252, "def": 232, "spe": 24},
-				"nature": ["Impish"],
-				"teraType": ["Flying", "Ghost", "Dark", "Dragon"],
-				"moves": [["Gigaton Hammer"], ["Encore"], ["Knock Off"], ["Stealth Rock", "Thunder Wave"]]
-			}, {
-				"species": "Tinkaton",
-				"weight": 50,
-				"item": ["Air Balloon"],
-				"ability": ["Pickpocket"],
-				"evs": {"hp": 252, "def": 232, "spe": 24},
-				"nature": ["Impish"],
-				"teraType": ["Ghost", "Dark", "Dragon"],
-				"moves": [["Gigaton Hammer"], ["Encore"], ["Knock Off"], ["Stealth Rock", "Thunder Wave"]]
 			}]
 		},
 		"enamorustherian": {
@@ -3993,67 +3949,6 @@
 				"nature": ["Bold"],
 				"teraType": ["Steel", "Ghost", "Water"],
 				"moves": [["Strange Steam"], ["Pain Split"], ["Will-O-Wisp"], ["Defog", "Flamethrower", "Taunt"]]
-			}]
-		},
-		"zoroarkhisui": {
-			"weight": 7,
-			"sets": [{
-				"species": "Zoroark-Hisui",
-				"weight": 20,
-				"item": ["Choice Specs"],
-				"ability": ["Illusion"],
-				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"ivs": {"atk": 0},
-				"nature": ["Timid"],
-				"teraType": ["Fairy"],
-				"moves": [["Shadow Ball"], ["Tera Blast"], ["Flamethrower"], ["Trick", "Grass Knot"]]
-			}, {
-				"species": "Zoroark-Hisui",
-				"weight": 10,
-				"item": ["Choice Specs"],
-				"ability": ["Illusion"],
-				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"nature": ["Timid"],
-				"teraType": ["Fairy"],
-				"moves": [["Shadow Ball"], ["Tera Blast"], ["Flamethrower"], ["U-turn"]]
-			}, {
-				"species": "Zoroark-Hisui",
-				"weight": 20,
-				"item": ["Choice Specs"],
-				"ability": ["Illusion"],
-				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"ivs": {"atk": 0},
-				"nature": ["Timid"],
-				"teraType": ["Ghost"],
-				"moves": [["Shadow Ball"], ["Hyper Voice"], ["Flamethrower"], ["Trick", "Grass Knot"]]
-			}, {
-				"species": "Zoroark-Hisui",
-				"weight": 10,
-				"item": ["Choice Specs"],
-				"ability": ["Illusion"],
-				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"nature": ["Timid"],
-				"teraType": ["Ghost"],
-				"moves": [["Shadow Ball"], ["Hyper Voice"], ["Flamethrower"], ["U-turn"]]
-			}, {
-				"species": "Zoroark-Hisui",
-				"weight": 20,
-				"item": ["Choice Scarf"],
-				"ability": ["Illusion"],
-				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"ivs": {"atk": 0},
-				"nature": ["Timid"],
-				"teraType": ["Ghost"],
-				"moves": [["Shadow Ball"], ["Hyper Voice"], ["Flamethrower"], ["Trick"]]
-			}, {
-				"species": "Zoroark-Hisui",
-				"weight": 20,
-				"item": ["Choice Scarf"],
-				"ability": ["Illusion"],
-				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"nature": ["Timid"],
-				"teraType": ["Ghost"],
-				"moves": [["Shadow Ball"], ["Hyper Voice"], ["U-turn"], ["Trick"]]
 			}]
 		},
 		"amoonguss": {
@@ -5283,28 +5178,6 @@
 				"moves": [["Tera Blast"], ["Tri Attack"], ["Shadow Ball"], ["Agility"]]
 			}]
 		},
-		"registeel": {
-			"weight": 5,
-			"sets": [{
-				"species": "Registeel",
-				"weight": 50,
-				"item": ["Leftovers"],
-				"ability": ["Clear Body"],
-				"evs": {"hp": 252, "def": 4, "spd": 252},
-				"nature": ["Careful"],
-				"teraType": ["Ghost", "Fairy", "Dragon", "Water"],
-				"moves": [["Heavy Slam"], ["Stealth Rock"], ["Earthquake"], ["Thunder Wave"]]
-			}, {
-				"species": "Registeel",
-				"weight": 50,
-				"item": ["Leftovers"],
-				"ability": ["Clear Body"],
-				"evs": {"hp": 252, "def": 4, "spd": 252},
-				"nature": ["Careful"],
-				"teraType": ["Ghost", "Fairy", "Dragon", "Water"],
-				"moves": [["Heavy Slam"], ["Stealth Rock"], ["Body Press"], ["Iron Defense", "Thunder Wave"]]
-			}]
-		},
 		"scyther": {
 			"weight": 4,
 			"sets": [{
@@ -6482,40 +6355,6 @@
 				"moves": [["Gunk Shot"], ["Knock Off"], ["Sucker Punch"], ["Taunt", "Toxic", "Toxic Spikes"]]
 			}]
 		},
-		"toxtricity": {
-			"weight": 7,
-			"sets": [{
-				"species": "Toxtricity",
-				"weight": 35,
-				"item": ["Throat Spray"],
-				"ability": ["Punk Rock"],
-				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"ivs": {"atk": 0},
-				"nature": ["Modest"],
-				"teraType": ["Normal"],
-				"moves": [["Overdrive"], ["Boomburst"], ["Shift Gear"], ["Sludge Bomb", "Snarl"]]
-			}, {
-				"species": "Toxtricity",
-				"weight": 35,
-				"item": ["Choice Specs"],
-				"ability": ["Punk Rock"],
-				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"ivs": {"atk": 0},
-				"nature": ["Modest"],
-				"teraType": ["Normal"],
-				"moves": [["Overdrive"], ["Boomburst"], ["Volt Switch"], ["Snarl"]]
-			}, {
-				"species": "Toxtricity",
-				"weight": 30,
-				"item": ["Choice Scarf"],
-				"ability": ["Punk Rock"],
-				"evs": {"spa": 252, "spd": 4, "spe": 252},
-				"ivs": {"atk": 0},
-				"nature": ["Timid"],
-				"teraType": ["Normal"],
-				"moves": [["Overdrive"], ["Boomburst"], ["Volt Switch"], ["Snarl", "Sludge Bomb"]]
-			}]
-		},
 		"bruxish": {
 			"weight": 4,
 			"sets": [{
@@ -6545,37 +6384,6 @@
 				"nature": ["Jolly"],
 				"teraType": ["Water"],
 				"moves": [["Psychic Fangs"], ["Swords Dance"], ["Wave Crash"], ["Aqua Jet"]]
-			}]
-		},
-		"copperajah": {
-			"weight": 5,
-			"sets": [{
-				"species": "Copperajah",
-				"weight": 25,
-				"item": ["Leftovers"],
-				"ability": ["Heavy Metal"],
-				"evs": {"hp": 252, "atk": 4, "spd": 252},
-				"nature": ["Careful"],
-				"teraType": ["Ghost", "Water"],
-				"moves": [["Heavy Slam"], ["Whirlwind"], ["Knock Off"], ["Stealth Rock", "Protect"]]
-			}, {
-				"species": "Copperajah",
-				"weight": 25,
-				"item": ["Leftovers"],
-				"ability": ["Heavy Metal"],
-				"evs": {"hp": 252, "atk": 4, "spd": 252},
-				"nature": ["Careful"],
-				"teraType": ["Ground", "Ghost", "Water"],
-				"moves": [["Heavy Slam"], ["Whirlwind", "Stealth Rock", "Protect"], ["Knock Off"], ["Earthquake"]]
-			}, {
-				"species": "Copperajah",
-				"weight": 50,
-				"item": ["Assault Vest"],
-				"ability": ["Sheer Force"],
-				"evs": {"atk": 192, "spd": 192, "spe": 124},
-				"nature": ["Adamant"],
-				"teraType": ["Fairy", "Ground"],
-				"moves": [["Iron Head"], ["Knock Off"], ["Earthquake"], ["Play Rough"]]
 			}]
 		},
 		"goodra": {
