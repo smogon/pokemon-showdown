@@ -11,7 +11,8 @@ import * as pg from 'pg';
 
 export type BasicSQLValue = string | number | null;
 export type SQLRow = { [k: string]: BasicSQLValue };
-export type SQLValue = BasicSQLValue | SQLStatement | PartialOrSQL<SQLRow> | BasicSQLValue[] | undefined;
+export type SQLValue =
+	BasicSQLValue | SQLStatement | SQLStatement[] | PartialOrSQL<SQLRow> | BasicSQLValue[] | undefined;
 
 export function isSQL(value: any): value is SQLStatement {
 	/**
@@ -53,7 +54,10 @@ export class SQLStatement {
 		} else if (value === undefined) {
 			this.sql[this.sql.length - 1] += nextString;
 		} else if (Array.isArray(value)) {
-			if ('"`'.includes(this.sql[this.sql.length - 1].slice(-1))) {
+			if (isSQL(value[0])) {
+				// array of SQL statements
+				for (const part of value) this.append(part);
+			} if ('"`'.includes(this.sql[this.sql.length - 1].slice(-1))) {
 				// "`a`, `b`" syntax
 				const quoteChar = this.sql[this.sql.length - 1].slice(-1);
 				for (const col of value) {
@@ -251,7 +255,7 @@ export class DatabaseTable<Row, DB extends Database> {
 		return (strings, ...rest) =>
 			this.queryExec()`UPDATE "${this.name}" SET ${partialRow as any} ${new SQLStatement(strings, rest)}`;
 	}
-	updateOne(partialRow: PartialOrSQL<Row>):
+	updateOne(partialRow: PartialOrSQL<Row> | SQLStatement):
 	(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<OkPacketOf<DB>> {
 		return (s, ...r) =>
 			this.queryExec()`UPDATE "${this.name}" SET ${partialRow as any} ${new SQLStatement(s, r)} LIMIT 1`;

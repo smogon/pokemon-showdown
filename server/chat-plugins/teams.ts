@@ -4,7 +4,8 @@
  * @author mia-pi-git
  */
 
-import { PostgresDatabase, FS, Utils } from '../../lib';
+import { SQL, PGDatabase } from '../../lib/database';
+import { FS, Utils } from '../../lib';
 import * as crypto from 'crypto';
 
 /** Maximum amount of teams a user can have stored at once. */
@@ -12,6 +13,11 @@ const MAX_TEAMS = 200;
 /** Max teams that can be viewed in a search */
 const MAX_SEARCH = 3000;
 const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz'.split('');
+
+export const teamsDB = Config.usepostgres ? new PGDatabase(Config.usepostgres) : null!;
+export const teamsTable = teamsDB?.getTable<
+	StoredTeam
+>('teams', 'teamid');
 
 export interface StoredTeam {
 	teamid: string;
@@ -42,41 +48,40 @@ function refresh(context: Chat.PageContext) {
 }
 
 export const TeamsHandler = new class {
-	database = new PostgresDatabase();
-	readyPromise: Promise<void> | null = Config.usepostgres ? (async () => {
+	readyPromise: Promise<void> | null = teamsDB ? (async () => {
 		try {
-			await this.database.query('SELECT * FROM teams LIMIT 1');
+			await teamsDB.query()`SELECT * FROM teams LIMIT 1`;
 		} catch {
-			await this.database.query(FS(`databases/schemas/teams.sql`).readSync());
+			await teamsDB.query(SQL(FS(`databases/schemas/teams.sql`).readSync()));
 		}
 	})() : null;
 	destroy() {
-		void this.database.destroy();
+		void teamsDB.close();
 	}
 
 	async search(search: TeamSearch, user: User, count = 10, includePrivate = false) {
-		const args = [];
 		const where = [];
 		if (count > 500) {
 			throw new Chat.ErrorMessage("Cannot search more than 500 teams.");
 		}
 		if (search.format) {
-			where.push(`format = $${args.length + 1}`);
-			args.push(toID(search.format));
+			where.push(where.length ? SQL` AND ` : SQL`WHERE `);
+			where.push(SQL`format = ${toID(search.format)}`);
 		}
 		if (search.owner) {
-			where.push(`ownerid = $${args.length + 1}`);
-			args.push(toID(search.owner));
+			where.push(where.length ? SQL` AND ` : SQL`WHERE `);
+			where.push(SQL`ownerid = ${toID(search.owner)}`);
 		}
 		if (search.gen) {
-			where.push(`format LIKE 'gen${search.gen}%'`);
+			where.push(where.length ? SQL` AND ` : SQL`WHERE `);
+			where.push(SQL`format LIKE ${`gen${search.gen}%`}`);
 		}
-		if (!includePrivate) where.push('private IS NULL');
+		if (!includePrivate) {
+			where.push(where.length ? SQL` AND ` : SQL`WHERE `);
+			where.push(SQL`private IS NULL`);
+		}
 
-		const result = await this.query<StoredTeam>(
-			`SELECT * FROM teams${where.length ? ` WHERE ${where.join(' AND ')}` : ''} ORDER BY date DESC LIMIT ${count}`,
-			args,
-		);
+		const result = await teamsTable.selectAll()`${where} ORDER BY date DESC LIMIT ${count}`;
 		return result.filter(row => {
 			const team = Teams.unpack(row.team)!;
 			if (row.private && row.ownerid !== user.id) {
@@ -102,11 +107,6 @@ export const TeamsHandler = new class {
 			}
 			return match;
 		});
-	}
-
-	async query<T = any>(statement: string, values: any[] = []) {
-		if (this.readyPromise) await this.readyPromise;
-		return this.database.query(statement, values) as Promise<T[]>;
 	}
 
 	isOMNickname(nickname: string, user: User) {
@@ -266,22 +266,21 @@ export const TeamsHandler = new class {
 				connection.popup("Your team was not saved as no changes were made.");
 				return null;
 			}
-			await this.query(
-				'UPDATE teams SET team = $1, title = $2, private = $3, format = $4 WHERE teamid = $5',
-				[team.packedTeam, team.name, team.privacy, format.id, isUpdate]
-			);
+			await teamsTable.updateOne(
+				{ team: team.packedTeam, title: team.name, private: team.privacy, format: format.id }
+			)`WHERE teamid = ${isUpdate}`;
 			return { teamid: isUpdate, teamName: team.name, privacy: team.privacy };
 		} else {
-			const exists = await this.query('SELECT * FROM teams WHERE ownerid = $1 AND team = $2', [user.id, team.packedTeam]);
-			if (exists.length) {
+			const exists = await teamsTable.selectOne()`WHERE ownerid = ${user.id} AND team = ${team.packedTeam}`;
+			if (exists) {
 				connection.popup("You've already uploaded that team.");
 				return null;
 			}
-			const loaded = await this.query(
-				`INSERT INTO teams (ownerid, team, date, format, views, title, private) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING teamid`,
-				[user.id, team.packedTeam, new Date(), format.id, 0, team.name, team.privacy]
-			);
-			return { teamid: loaded?.[0].teamid, teamName: team.name, privacy: team.privacy };
+			const loaded = await teamsTable.queryOne()`INSERT INTO teams (${{
+				ownerid: user.id, team: team.packedTeam, date: Math.round(Date.now() / 1000), format: format.id,
+				views: 0, title: team.name, private: team.privacy,
+			}}) RETURNING teamid`;
+			return { teamid: loaded?.teamid, teamName: team.name, privacy: team.privacy };
 		}
 	}
 	generatePassword(len = 20) {
@@ -290,17 +289,11 @@ export const TeamsHandler = new class {
 		return pw;
 	}
 	updateViews(teamid: string) {
-		return this.query(`UPDATE teams SET views = views + 1 WHERE teamid = $1`, [teamid]);
+		return teamsTable.updateOne(SQL`views = views + 1`)`WHERE teamid = ${teamid}`;
 	}
 	list(userid: ID, count: number, publicOnly = false) {
-		let query = `SELECT * FROM teams WHERE ownerid = $1 `;
-		if (publicOnly) {
-			query += `AND private IS NULL `;
-		}
-		query += `ORDER BY date DESC LIMIT $2`;
-		return this.query<StoredTeam>(
-			query, [userid, count]
-		);
+		const publicOnlyQuery = publicOnly ? SQL`AND private IS NULL ` : SQL``;
+		return teamsTable.selectAll()`WHERE ownerid = ${userid} ${publicOnlyQuery} ORDER BY date DESC LIMIT ${count}`;
 	}
 	preview(teamData: StoredTeam, user?: User | null, isFull = false) {
 		let buf = Utils.html`<strong>${teamData.title || `Untitled ${teamData.teamid}`}`;
@@ -387,28 +380,24 @@ export const TeamsHandler = new class {
 	}
 	async count(user: string | User) {
 		const id = toID(user);
-		const result = await this.query<{ count: number }>(`SELECT count(*) AS count FROM teams WHERE ownerid = $1`, [id]);
-		return result?.[0]?.count || 0;
+		const result = await teamsTable.queryOne<{ count: number }>(
+		)`SELECT count(*) AS count FROM teams WHERE ownerid = ${id}`;
+		return result?.count || 0;
 	}
 	async get(teamid: number | string): Promise<StoredTeam | null> {
 		teamid = Number(teamid);
 		if (isNaN(teamid)) {
 			throw new Chat.ErrorMessage(`Invalid team ID.`);
 		}
-		const rows = await this.query(
-			`SELECT * FROM teams WHERE teamid = $1`, [teamid],
-		);
-		if (!rows.length) return null;
-		return rows[0] as StoredTeam;
+		const team = await teamsTable.get(teamid);
+		return team || null;
 	}
 	async delete(id: string | number) {
 		id = Number(id);
 		if (isNaN(id)) {
 			throw new Chat.ErrorMessage("Invalid team ID");
 		}
-		await this.query(
-			`DELETE FROM teams WHERE teamid = $1`, [id],
-		);
+		await teamsTable.delete(id);
 	}
 };
 
@@ -511,7 +500,7 @@ export const commands: Chat.ChatCommands = {
 			if (team.ownerid !== user.id && !user.can('rangeban')) {
 				return this.popupReply(`You cannot change privacy for a team you don't own.`);
 			}
-			await TeamsHandler.query(`UPDATE teams SET private = $1 WHERE teamid = $2`, [privacy, teamId]);
+			await teamsTable.set(teamId, { private: privacy });
 			for (const pageid of this.connection.openPages || new Set()) {
 				if (pageid.startsWith('teams-')) {
 					this.refreshPage(pageid);
@@ -589,17 +578,13 @@ export const pages: Chat.PageTable = {
 			switch (type) {
 			case 'views':
 				this.title = `[Most Viewed Teams]`;
-				teams = await TeamsHandler.query(
-					`SELECT * FROM teams WHERE private IS NULL ORDER BY views DESC LIMIT $1`, [count]
-				);
+				teams = await teamsTable.selectAll()`WHERE private IS NULL ORDER BY views DESC LIMIT ${count}`;
 				title = `Most viewed teams:`;
 				delete buttons.views;
 				break;
 			default:
 				this.title = `[Latest Teams]`;
-				teams = await TeamsHandler.query(
-					`SELECT * FROM teams WHERE private IS NULL ORDER BY date DESC LIMIT $1`, [count]
-				);
+				teams = await teamsTable.selectAll()`WHERE private IS NULL ORDER BY date DESC LIMIT ${count}`;
 				title = `Recently uploaded teams:`;
 				delete buttons.latest;
 				break;
@@ -779,20 +764,19 @@ export const pages: Chat.PageTable = {
 			if (count > MAX_SEARCH) {
 				count = MAX_SEARCH;
 			}
-			let queryStr = 'SELECT * FROM teams WHERE private IS NULL';
 			let name = sorter;
+			let order;
 			switch (sorter) {
 			case 'views':
-				queryStr += ` ORDER BY views DESC `;
+				order = SQL` ORDER BY views DESC `;
 				name = 'most viewed';
 				break;
 			case 'latest':
-				queryStr += ` ORDER BY date DESC`;
+				order = SQL` ORDER BY date DESC`;
 				break;
 			default:
 				throw new Chat.ErrorMessage(`Invalid sort term '${sorter}'. Must be either 'views' or 'latest'.`);
 			}
-			queryStr += ` LIMIT ${count}`;
 			let buf = `<div class="pad"><h2>Browse ${name} teams</h2>`;
 			buf += refresh(this);
 			buf += `<br /><a class="button" href="/view-teams-searchpublic">Search</a>`;
@@ -800,7 +784,7 @@ export const pages: Chat.PageTable = {
 			buf += `<button class="button" name="send" value="/j view-teams-browse-${opposite}-${count}">Sort by ${opposite}</button>`;
 			buf += `<hr />`;
 
-			const results = await TeamsHandler.query<StoredTeam>(queryStr, []);
+			const results = await teamsTable.selectAll()`WHERE private IS NULL ${order} LIMIT ${count}`;
 			if (!results.length) {
 				buf += `<div class="message-error">None found.</div>`;
 				return buf;
