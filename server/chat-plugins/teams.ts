@@ -125,10 +125,12 @@ export const TeamsHandler = new class {
 
 	async save(
 		context: Chat.CommandContext,
-		formatName: string,
-		rawTeam: string,
-		teamName: string | null = null,
-		isPrivate?: string | null,
+		team: {
+			name?: string | null,
+			packedTeam: string,
+			format: string,
+			privacy?: boolean | string | null,
+		},
 		isUpdate?: number
 	) {
 		const connection = context.connection;
@@ -138,9 +140,9 @@ export const TeamsHandler = new class {
 			return null;
 		}
 		const user = connection.user;
-		const format = Dex.formats.get(toID(formatName));
+		const format = Dex.formats.get(toID(team.format));
 		if (format.effectType !== 'Format' || format.team) {
-			connection.popup("Invalid format:\n\n" + formatName);
+			connection.popup("Invalid format:\n\n" + team.format);
 			return null;
 		}
 		let existing = null;
@@ -156,19 +158,22 @@ export const TeamsHandler = new class {
 			}
 		}
 
-		const team = Teams.import(rawTeam, true);
-		if (!team) {
-			connection.popup('Invalid team:\n\n' + rawTeam);
+		const sets = Teams.import(team.packedTeam, true);
+		if (!sets) {
+			connection.popup('Invalid team:\n\n' + team.packedTeam);
 			return null;
 		}
-		if (team.length > 24) {
+		if (sets.length > 24) {
 			connection.popup("Your team has too many Pokemon.");
 		}
 		let unownWord = '';
-		// now, we purge invalid nicknames and make sure it's an actual team
-		// gotta use the validated team so that nicknames are removed
-		for (const set of team) {
-			set.name = this.isOMNickname(set.name, user) || set.species;
+		// make sure it's an actual team
+		for (const set of sets) {
+			if (!team.privacy) {
+				// if public, we purge invalid nicknames
+				// gotta use the validated team so that nicknames are removed
+				set.name = this.isOMNickname(set.name, user) || set.species;
+			}
 
 			if (!Dex.species.get(set.species).exists) {
 				connection.popup(`Invalid Pokemon ${set.species} in team.`);
@@ -225,13 +230,13 @@ export const TeamsHandler = new class {
 				return null;
 			}
 		}
-		if (teamName) {
-			if (teamName.length > 100) {
+		if (team.name) {
+			if (team.name.length > 100) {
 				connection.popup("Your team's name is too long.");
 				return null;
 			}
-			const filtered = context.filter(teamName);
-			if (!filtered || filtered?.trim() !== teamName.trim()) {
+			const filtered = context.filter(team.name);
+			if (!filtered || filtered?.trim() !== team.name.trim()) {
 				connection.popup(`Your team's name has a filtered word.`);
 				return null;
 			}
@@ -241,18 +246,21 @@ export const TeamsHandler = new class {
 			connection.popup(`You have too many teams stored. If you wish to upload this team, delete some first.`);
 			return null;
 		}
-		rawTeam = Teams.pack(team);
-		if (!rawTeam.trim()) { // extra sanity check
+		// eslint-disable-next-line require-atomic-updates
+		team.packedTeam = Teams.pack(sets);
+		if (!team.packedTeam.trim()) { // extra sanity check
 			connection.popup("Invalid team provided.");
 			return null;
 		}
+		team.privacy ||= null;
+		if (team.privacy === true) team.privacy = existing?.private || TeamsHandler.generatePassword();
 		// the && existing doesn't really matter because we've verified it above, this is just for TS
 		if (isUpdate && existing) {
 			const differenceExists = (
-				existing.team !== rawTeam ||
-				(teamName && teamName !== existing.title) ||
+				existing.team !== team.packedTeam ||
+				(team.name && team.name !== existing.title) ||
 				format.id !== existing.format ||
-				existing.private !== isPrivate
+				existing.private !== team.privacy
 			);
 			if (!differenceExists) {
 				connection.popup("Your team was not saved as no changes were made.");
@@ -260,20 +268,20 @@ export const TeamsHandler = new class {
 			}
 			await this.query(
 				'UPDATE teams SET team = $1, title = $2, private = $3, format = $4 WHERE teamid = $5',
-				[rawTeam, teamName, isPrivate, format.id, isUpdate]
+				[team.packedTeam, team.name, team.privacy, format.id, isUpdate]
 			);
-			return isUpdate;
+			return { teamid: isUpdate, teamName: team.name, privacy: team.privacy };
 		} else {
-			const exists = await this.query('SELECT * FROM teams WHERE ownerid = $1 AND team = $2', [user.id, rawTeam]);
+			const exists = await this.query('SELECT * FROM teams WHERE ownerid = $1 AND team = $2', [user.id, team.packedTeam]);
 			if (exists.length) {
 				connection.popup("You've already uploaded that team.");
 				return null;
 			}
 			const loaded = await this.query(
 				`INSERT INTO teams (ownerid, team, date, format, views, title, private) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING teamid`,
-				[user.id, rawTeam, new Date(), format.id, 0, teamName, isPrivate]
+				[user.id, team.packedTeam, new Date(), format.id, 0, team.name, team.privacy]
 			);
-			return loaded?.[0].teamid;
+			return { teamid: loaded?.[0].teamid, teamName: team.name, privacy: team.privacy };
 		}
 	}
 	generatePassword(len = 20) {
@@ -417,31 +425,26 @@ export const commands: Chat.ChatCommands = {
 			const isEdit = cmd === 'update';
 			const targets = Utils.splitFirst(target, ',', isEdit ? 4 : 3);
 			const rawTeamID = isEdit ? targets.shift() : undefined;
-			let [teamName, formatid, rawPrivacy, rawTeam] = targets;
+			const [teamName, formatid, isPrivate, rawTeam] = targets;
 			const teamID = isEdit ? Number(rawTeamID) : undefined;
 			if (isEdit && (!rawTeamID?.length || isNaN(teamID!))) {
 				connection.popup("Invalid team ID provided.");
 				return null;
 			}
-			if (rawTeam.includes('\n')) {
-				rawTeam = Teams.pack(Teams.import(rawTeam, true));
-			}
-			if (!rawTeam) {
-				connection.popup("Invalid team.");
-				return null;
-			}
-			formatid = toID(formatid);
-			teamName = toID(teamName) ? teamName : null!;
-			const privacy = toID(rawPrivacy) === '1' ? TeamsHandler.generatePassword() : null;
-			const id = await TeamsHandler.save(
-				this, formatid, rawTeam, teamName, privacy, teamID
+			const result = await TeamsHandler.save(
+				this, {
+					name: toID(teamName) ? teamName : null,
+					format: toID(formatid),
+					packedTeam: rawTeam,
+					privacy: toID(isPrivate) === '1' ? true : null,
+				}, teamID
 			);
 
 			const page = isEdit ? 'edit' : 'upload';
-			if (id) {
-				connection.send(`|queryresponse|teamupload|` + JSON.stringify({ teamid: id, teamName, privacy }));
+			if (result) {
+				connection.send(`|queryresponse|teamupload|` + JSON.stringify(result));
 				connection.send(`>view-teams-${page}\n|deinit`);
-				this.parse(`/join view-teams-view-${id}-${id}`);
+				this.parse(`/join view-teams-view-${result.teamid}`);
 			} else {
 				this.parse(`/join view-teams-${page}`);
 			}
