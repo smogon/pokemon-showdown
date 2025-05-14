@@ -36,64 +36,66 @@ export class SQLStatement {
 	constructor(strings: TemplateStringsArray | string[], values: SQLValue[]) {
 		this.sql = [strings[0]];
 		this.values = [];
-		for (let i = 0; i < strings.length; i++) {
-			this.append(values[i], strings[i + 1]);
+		for (let i = 0; i < strings.length - 1; i++) {
+			this.append(values[i]).appendRaw(strings[i + 1]);
 		}
 	}
-	append(value: SQLValue, nextString = ''): this {
+	appendRaw(str: string): this {
+		this.sql[this.sql.length - 1] += str;
+		return this;
+	}
+	append(value: SQLValue): this {
 		if (isSQL(value)) {
 			if (!value.sql.length) return this;
-			const oldLength = this.sql.length;
+			this.appendRaw(value.sql[0]);
 			this.sql = this.sql.concat(value.sql.slice(1));
-			this.sql[oldLength - 1] += value.sql[0];
 			this.values = this.values.concat(value.values);
-			if (nextString) this.sql[this.sql.length - 1] += nextString;
 		} else if (typeof value === 'string' || typeof value === 'number' || value === null) {
 			this.values.push(value);
-			this.sql.push(nextString);
+			this.sql.push('');
 		} else if (value === undefined) {
-			this.sql[this.sql.length - 1] += nextString;
+			// do nothing
 		} else if (Array.isArray(value)) {
-			if (isSQL(value[0])) {
+			if (!value.length || isSQL(value[0])) {
 				// array of SQL statements
 				for (const part of value) this.append(part);
-			} if ('"`'.includes(this.sql[this.sql.length - 1].slice(-1))) {
+			} else if ('"`'.includes(this.sql[this.sql.length - 1].slice(-1))) {
 				// "`a`, `b`" syntax
 				const quoteChar = this.sql[this.sql.length - 1].slice(-1);
 				for (const col of value) {
-					this.append(col, `${quoteChar}, ${quoteChar}`);
+					this.append(col).appendRaw(`${quoteChar}, ${quoteChar}`);
 				}
-				this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -4) + nextString;
+				this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -4);
 			} else {
 				// "1, 2" syntax
 				for (const val of value) {
-					this.append(val, `, `);
+					this.append(val).appendRaw(`, `);
 				}
-				this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -2) + nextString;
+				this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -2);
 			}
 		} else if (this.sql[this.sql.length - 1].endsWith('(')) {
 			// "(`a`, `b`) VALUES (1, 2)" syntax
-			this.sql[this.sql.length - 1] += `"`;
+			this.appendRaw(`"`);
 			for (const col in value) {
-				this.append(col, `", "`);
+				this.append(col).appendRaw(`", "`);
 			}
 			this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -4) + `") VALUES (`;
 			for (const col in value) {
-				this.append(value[col], `, `);
+				this.append(value[col]).appendRaw(`, `);
 			}
-			this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -2) + nextString;
+			this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -2);
 		} else if (this.sql[this.sql.length - 1].toUpperCase().endsWith(' SET ')) {
 			// "`a` = 1, `b` = 2" syntax
-			this.sql[this.sql.length - 1] += `"`;
+			this.appendRaw(`"`);
 			for (const col in value) {
-				this.append(col, `" = `);
-				this.append(value[col], `, "`);
+				this.append(col).appendRaw(`" = `);
+				this.append(value[col]).appendRaw(`, "`);
 			}
-			this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -3) + nextString;
+			this.sql[this.sql.length - 1] = this.sql[this.sql.length - 1].slice(0, -3);
 		} else {
 			throw new Error(
 				`Objects can only appear in (obj) or after SET; ` +
-				`unrecognized: ${this.sql[this.sql.length - 1]}[obj]${nextString}`
+				`unrecognized: ${this.sql[this.sql.length - 1]}[obj]`
 			);
 		}
 		return this;
@@ -379,7 +381,7 @@ export class MySQLDatabase extends Database<mysql.Pool, mysql.OkPacket> {
 export class PGDatabase extends Database<pg.Pool, { affectedRows: number | null }> {
 	override type = 'pg' as const;
 	constructor(config: pg.PoolConfig) {
-		super(new pg.Pool(config));
+		super(config ? new pg.Pool(config) : null!);
 	}
 	override _resolveSQL(query: SQLStatement): [query: string, values: BasicSQLValue[]] {
 		let sql = query.sql[0];
