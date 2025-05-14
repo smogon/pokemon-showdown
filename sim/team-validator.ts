@@ -1441,7 +1441,7 @@ export class TeamValidator {
 		if (eggGroups[0] === 'Undiscovered' || !eggGroups.length) {
 			throw new Error(`${species.name} has no egg groups for source ${source}`);
 		}
-		// no chainbreeding necessary if the father can be Smeargle and Smeargle is in the format
+		// no chainbreeding necessary if the father can be Smeargle
 		if (!getAll && eggGroups.includes('Field') && this.dex.species.get('Smeargle').tier !== 'Unreleased') return true;
 
 		// try to find a father to inherit the egg move combination from
