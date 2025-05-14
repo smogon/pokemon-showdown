@@ -21,7 +21,7 @@ describe("Postgres library", () => {
 			`SELECT 2+2`);
 
 		const constructed = SQL`SELECT `;
-		constructed.append(SQL`3`);
+		constructed.appendRaw(`3`);
 		constructed.append(SQL` + `);
 		constructed.append(3);
 		assertSQL(constructed, `SELECT 3 + $1`, [3]);
