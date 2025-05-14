@@ -39,11 +39,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		condition: {
 			duration: 3,
 			onStart(target) {
-				const moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
-				if (
-					!target.lastMove || target.lastMove.flags['failencore'] ||
-					!target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0
-				) {
+				const moveSlot = target.lastMove ? target.getMoveData(target.lastMove.id) : null;
+				if (!target.lastMove || target.lastMove.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
 					// it failed
 					return false;
 				}
@@ -58,8 +55,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onResidualOrder: 16,
 			onResidual(target) {
-				const lockedMoveIndex = target.moves.indexOf(this.effectState.move);
-				if (lockedMoveIndex >= 0 && target.moveSlots[lockedMoveIndex].pp <= 0) {
+				const lockedMoveSlot = target.getMoveData(this.effectState.move);
+				if (lockedMoveSlot && lockedMoveSlot.pp <= 0) {
 					// Encore ends early if you run out of PP
 					target.removeVolatile('encore');
 				}
