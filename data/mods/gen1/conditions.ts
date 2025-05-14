@@ -192,7 +192,8 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		// defender still takes PSN damage, etc
 		// TODO: research exact mechanics
 		onBeforeMovePriority: 0,
-		onBeforeMove() {
+		onBeforeMove(pokemon) {
+			this.add('cant', pokemon, 'partiallytrapped');
 			return false;
 		},
 		onRestart() {
@@ -229,7 +230,6 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			this.effectState.damage = target.lastDamage;
 			this.effectState.trapTarget = foe;
 			foe.addVolatile('partiallytrapped', target, effect);
-			this.add('cant', foe, 'partiallytrapped');
 		},
 		onOverrideAction(pokemon, target, move) {
 			return this.effectState.move;
