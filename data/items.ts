@@ -1607,8 +1607,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			pokemon.switchFlag = true;
 		},
 		onEnd() {
-			delete this.effectState.boosts;
-			delete this.effectState.ready;
+			delete this.effectState.eject;
 		},
 		num: 1119,
 		gen: 8,
