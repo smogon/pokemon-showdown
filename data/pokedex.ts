@@ -13753,6 +13753,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	silvally: {
 		num: 773,
 		name: "Silvally",
+		baseForme: "Normal",
 		types: ["Normal"],
 		gender: "N",
 		baseStats: { hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95 },
