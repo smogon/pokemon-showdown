@@ -20,7 +20,7 @@ jobs:
         node-version: [18.x]
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 100 # assumes PR/push to master is no larger than 100 commits. Other solutions are needlessly complex.
 

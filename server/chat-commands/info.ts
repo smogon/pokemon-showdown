@@ -1046,9 +1046,9 @@ export const commands: Chat.ChatCommands = {
 
 		const buffer = [];
 		buffer.push(`${species.exists ? `${target} (ignoring abilities):` : `${target}:`}`);
-		buffer.push(`<span class="message-effect-weak">Weaknesses</span>: ${weaknesses.join(', ') || '<font color=#999999>None</font>'}`);
-		buffer.push(`<span class="message-effect-resist">Resistances</span>: ${resistances.join(', ') || '<font color=#999999>None</font>'}`);
-		buffer.push(`<span class="message-effect-immune">Immunities</span>: ${immunities.join(', ') || '<font color=#999999>None</font>'}`);
+		buffer.push(`<span class="message-effect-weak">Weaknesses</span>: ${weaknesses.join(', ') || '<span class="gray">None</span>'}`);
+		buffer.push(`<span class="message-effect-resist">Resistances</span>: ${resistances.join(', ') || '<span class="gray">None</span>'}`);
+		buffer.push(`<span class="message-effect-immune">Immunities</span>: ${immunities.join(', ') || '<span class="gray">None</span>'}`);
 		this.sendReplyBox(buffer.join('<br />'));
 	},
 	weaknesshelp: [
@@ -1231,10 +1231,10 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 			buffer.push(`Coverage for ${sources.join(' + ')}:`);
-			buffer.push(`<b><font color=#559955>Super Effective</font></b>: ${superEff.join(', ') || '<font color=#999999>None</font>'}`);
-			buffer.push(`<span class="message-effect-resist">Neutral</span>: ${neutral.join(', ') || '<font color=#999999>None</font>'}`);
-			buffer.push(`<span class="message-effect-weak">Resists</span>: ${resists.join(', ') || '<font color=#999999>None</font>'}`);
-			buffer.push(`<span class="message-effect-immune">Immunities</span>: ${immune.join(', ') || '<font color=#999999>None</font>'}`);
+			buffer.push(`<b><font color=#559955>Super Effective</font></b>: ${superEff.join(', ') || '<span class="gray">None</span>'}`);
+			buffer.push(`<span class="message-effect-resist">Neutral</span>: ${neutral.join(', ') || '<span class="gray">None</span>'}`);
+			buffer.push(`<span class="message-effect-weak">Resists</span>: ${resists.join(', ') || '<span class="gray">None</span>'}`);
+			buffer.push(`<span class="message-effect-immune">Immunities</span>: ${immune.join(', ') || '<span class="gray">None</span>'}`);
 			return this.sendReplyBox(buffer.join('<br />'));
 		} else {
 			let buffer = '<div class="scrollable"><table cellpadding="1" width="100%"><tr><th></th>';
@@ -1928,7 +1928,7 @@ export const commands: Chat.ChatCommands = {
 					rules.push(`<b>Restricted</b> - ${Utils.escapeHTML(format.restricted.join(", "))}`);
 				}
 				if (rules.length > 0) {
-					rulesetHtml = `<details><summary>Banlist/Ruleset</summary>${rules.join("<br />")}</details>`;
+					rulesetHtml = `<details class="details"><summary>Banlist/Ruleset</summary>${rules.join("<br />")}</details>`;
 				} else {
 					rulesetHtml = `No ruleset found for ${format.name}`;
 				}
