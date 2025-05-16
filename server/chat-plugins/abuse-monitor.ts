@@ -836,15 +836,15 @@ export const commands: Chat.ChatCommands = {
 			for (let k in args) {
 				const vals = args[k];
 				if (vals.length > 1) {
-					return this.errorReply(`Too many values for ${k}`);
+					throw new Chat.ErrorMessage(`Too many values for ${k}`);
 				}
 				k = k.toUpperCase().replace(/\s/g, '_');
 				if (!(k in Artemis.RemoteClassifier.ATTRIBUTES)) {
-					return this.errorReply(`Invalid attribute: ${k}`);
+					throw new Chat.ErrorMessage(`Invalid attribute: ${k}`);
 				}
 				const val = parseFloat(vals[0]);
 				if (isNaN(val)) {
-					return this.errorReply(`Invalid value for ${k}: ${vals[0]}`);
+					throw new Chat.ErrorMessage(`Invalid value for ${k}: ${vals[0]}`);
 				}
 				scores[k] = val;
 			}
@@ -859,13 +859,13 @@ export const commands: Chat.ChatCommands = {
 		toggle(target) {
 			checkAccess(this);
 			if (this.meansYes(target)) {
-				if (!settings.disabled) return this.errorReply(`The abuse monitor is already enabled.`);
+				if (!settings.disabled) throw new Chat.ErrorMessage(`The abuse monitor is already enabled.`);
 				settings.disabled = false;
 			} else if (this.meansNo(target)) {
-				if (settings.disabled) return this.errorReply(`The abuse monitor is already disabled.`);
+				if (settings.disabled) throw new Chat.ErrorMessage(`The abuse monitor is already disabled.`);
 				settings.disabled = true;
 			} else {
-				return this.errorReply(`Invalid setting. Must be 'on' or 'off'.`);
+				throw new Chat.ErrorMessage(`Invalid setting. Must be 'on' or 'off'.`);
 			}
 			saveSettings();
 			this.refreshPage('abusemonitor-settings');
@@ -883,7 +883,7 @@ export const commands: Chat.ChatCommands = {
 				return this.parse(`/help abusemonitor`);
 			}
 			if (settings.threshold === num) {
-				return this.errorReply(`The abuse monitor threshold is already ${num}.`);
+				throw new Chat.ErrorMessage(`The abuse monitor threshold is already ${num}.`);
 			}
 			settings.threshold = num;
 			saveSettings();
@@ -939,14 +939,14 @@ export const commands: Chat.ChatCommands = {
 			}
 			const roomMutes = muted.get(room);
 			if (!roomMutes) {
-				return this.errorReply(`No users have Artemis mutes in this room.`);
+				throw new Chat.ErrorMessage(`No users have Artemis mutes in this room.`);
 			}
 			const targetUser = Users.get(target);
 			if (!targetUser) {
-				return this.errorReply(`User '${target}' not found.`);
+				throw new Chat.ErrorMessage(`User '${target}' not found.`);
 			}
 			if (!roomMutes.has(targetUser)) {
-				return this.errorReply(`That user does not have an Artemis mute in this room.`);
+				throw new Chat.ErrorMessage(`That user does not have an Artemis mute in this room.`);
 			}
 			roomMutes.delete(targetUser);
 			this.modlog(`ABUSEMONITOR UNMUTE`, targetUser);
@@ -959,7 +959,7 @@ export const commands: Chat.ChatCommands = {
 			if (!tarRoom) return this.popupReply(`The room "${roomid}" does not exist.`);
 			const cmd = NOJOIN_COMMAND_WHITELIST[toID(type)];
 			if (!cmd) {
-				return this.errorReply(
+				throw new Chat.ErrorMessage(
 					`Invalid punishment given. ` +
 					`Must be one of ${Object.keys(NOJOIN_COMMAND_WHITELIST).join(', ')}.`
 				);
@@ -1007,25 +1007,25 @@ export const commands: Chat.ChatCommands = {
 			const examples = target.split(',').filter(Boolean);
 			const type = examples.shift()?.toUpperCase().replace(/\s/g, '_') || "";
 			if (!(type in Artemis.RemoteClassifier.ATTRIBUTES)) {
-				return this.errorReply(`Invalid type: ${type}`);
+				throw new Chat.ErrorMessage(`Invalid type: ${type}`);
 			}
 			if (examples.length < 3) {
-				return this.errorReply(`At least 3 examples are needed.`);
+				throw new Chat.ErrorMessage(`At least 3 examples are needed.`);
 			}
 			const scales = [];
 			const oldScales = [];
 			for (const chunk of examples) {
 				const [message, rawNum] = chunk.split('|');
 				if (!(message && rawNum)) {
-					return this.errorReply(`Invalid example: "${chunk}". Must be in \`\`message|num\`\` format.`);
+					throw new Chat.ErrorMessage(`Invalid example: "${chunk}". Must be in \`\`message|num\`\` format.`);
 				}
 				const num = parseFloat(rawNum);
 				if (isNaN(num)) {
-					return this.errorReply(`Invalid number in example '${chunk}'.`);
+					throw new Chat.ErrorMessage(`Invalid number in example '${chunk}'.`);
 				}
 				const data = await classifier.classify(message);
 				if (!data) {
-					return this.errorReply(`No results found. Try again in a minute?`);
+					throw new Chat.ErrorMessage(`No results found. Try again in a minute?`);
 				}
 				oldScales.push(num);
 				scales.push(data[type]);
@@ -1070,16 +1070,15 @@ export const commands: Chat.ChatCommands = {
 			if (!targetId) return this.parse(`/help abusemonitor`);
 			if (user.lastCommand !== `am userclear ${targetId}`) {
 				user.lastCommand = `am userclear ${targetId}`;
-				this.errorReply(`Are you sure you want to clear abuse monitor database records for ${targetId}?`);
-				this.errorReply(`Retype the command if you're sure.`);
-				return;
+				throw new Chat.ErrorMessage([`Are you sure you want to clear abuse monitor database records for ${targetId}?`,
+					`Retype the command if you're sure.`]);
 			}
 			user.lastCommand = '';
 			const results = await Chat.database.run(
 				'DELETE FROM perspective_logs WHERE userid = ?', [targetId]
 			);
 			if (!results.changes) {
-				return this.errorReply(`No logs for ${targetUsername} found.`);
+				throw new Chat.ErrorMessage(`No logs for ${targetUsername} found.`);
 			}
 			this.sendReply(`${results.changes} log(s) cleared for ${targetId}.`);
 			this.privateGlobalModAction(`${user.name} cleared abuse monitor logs for ${targetUsername}${rest ? ` (${rest})` : ""}.`);
@@ -1091,13 +1090,13 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse(`/help abusemonitor`);
 			const num = parseInt(target);
 			if (isNaN(num)) {
-				return this.errorReply(`Invalid log number: ${target}`);
+				throw new Chat.ErrorMessage(`Invalid log number: ${target}`);
 			}
 			const row = await Chat.database.get(
 				'SELECT * FROM perspective_logs WHERE rowid = ?', [num]
 			);
 			if (!row) {
-				return this.errorReply(`No log with ID ${num} found.`);
+				throw new Chat.ErrorMessage(`No log with ID ${num} found.`);
 			}
 			await Chat.database.run( // my kingdom for RETURNING * in sqlite :(
 				'DELETE FROM perspective_logs WHERE rowid = ?', [num]
@@ -1119,27 +1118,27 @@ export const commands: Chat.ChatCommands = {
 			rawScore = toID(rawScore);
 			const types = { ...Artemis.RemoteClassifier.ATTRIBUTES, "ALL": {} };
 			if (!(type in types)) {
-				return this.errorReply(`Invalid type: ${type}. Valid types: ${Object.keys(types).join(', ')}.`);
+				throw new Chat.ErrorMessage(`Invalid type: ${type}. Valid types: ${Object.keys(types).join(', ')}.`);
 			}
 			const percent = parseFloat(rawPercent);
 			if (isNaN(percent) || percent > 1 || percent < 0) {
-				return this.errorReply(`Invalid percent: ${percent}. Must be between 0 and 1.`);
+				throw new Chat.ErrorMessage(`Invalid percent: ${percent}. Must be between 0 and 1.`);
 			}
 			const score = parseInt(rawScore) || toID(rawScore).toUpperCase() as 'MAXIMUM';
 			switch (typeof score) {
 			case 'string':
 				if (score !== 'MAXIMUM') {
-					return this.errorReply(`Invalid score. Must be a number or "MAXIMUM".`);
+					throw new Chat.ErrorMessage(`Invalid score. Must be a number or "MAXIMUM".`);
 				}
 				break;
 			case 'number':
 				if (isNaN(score) || score < 0) {
-					return this.errorReply(`Invalid score. Must be a number or "MAXIMUM".`);
+					throw new Chat.ErrorMessage(`Invalid score. Must be a number or "MAXIMUM".`);
 				}
 				break;
 			}
 			if (settings.specials[type]?.[percent] && !this.cmd.includes('f')) {
-				return this.errorReply(`That special case already exists. Use /am forceeditspecial to change it.`);
+				throw new Chat.ErrorMessage(`That special case already exists. Use /am forceeditspecial to change it.`);
 			}
 			if (!settings.specials[type]) settings.specials[type] = {};
 			// checked above to ensure it's a valid number or MAXIMUM
@@ -1157,14 +1156,14 @@ export const commands: Chat.ChatCommands = {
 			const type = rawType.toUpperCase().replace(/\s/g, '_');
 			const types = { ...Artemis.RemoteClassifier.ATTRIBUTES, "ALL": {} };
 			if (!(type in types)) {
-				return this.errorReply(`Invalid type: ${type}. Valid types: ${Object.keys(types).join(', ')}.`);
+				throw new Chat.ErrorMessage(`Invalid type: ${type}. Valid types: ${Object.keys(types).join(', ')}.`);
 			}
 			const percent = parseFloat(rawPercent);
 			if (isNaN(percent) || percent > 1 || percent < 0) {
-				return this.errorReply(`Invalid percent: ${percent}. Must be between 0 and 1.`);
+				throw new Chat.ErrorMessage(`Invalid percent: ${percent}. Must be between 0 and 1.`);
 			}
 			if (!settings.specials[type]?.[percent]) {
-				return this.errorReply(`That special case does not exist.`);
+				throw new Chat.ErrorMessage(`That special case does not exist.`);
 			}
 			delete settings.specials[type][percent];
 			if (!Object.keys(settings.specials[type]).length) {
@@ -1181,7 +1180,7 @@ export const commands: Chat.ChatCommands = {
 			checkAccess(this);
 			const num = parseFloat(target);
 			if (isNaN(num) || num < 0 || num > 1) {
-				return this.errorReply(`Invalid minimum score: ${num}. Must be a positive integer.`);
+				throw new Chat.ErrorMessage(`Invalid minimum score: ${num}. Must be a positive integer.`);
 			}
 			settings.minScore = num;
 			saveSettings();
@@ -1195,11 +1194,11 @@ export const commands: Chat.ChatCommands = {
 			checkAccess(this);
 			const num = parseInt(target) - 1;
 			if (isNaN(num)) {
-				return this.errorReply(`Invalid punishment number: ${num + 1}.`);
+				throw new Chat.ErrorMessage(`Invalid punishment number: ${num + 1}.`);
 			}
 			const punishment = settings.punishments[num];
 			if (!punishment) {
-				return this.errorReply(`Punishment ${num + 1} does not exist.`);
+				throw new Chat.ErrorMessage(`Punishment ${num + 1} does not exist.`);
 			}
 			this.sendReply(
 				`|html|Punishment ${num + 1}: <code>` +
@@ -1210,10 +1209,10 @@ export const commands: Chat.ChatCommands = {
 			checkAccess(this);
 			const [to, from] = target.split(',').map(f => toID(f));
 			if (!(to && from)) {
-				return this.errorReply(`Specify a type to change and a type to change to.`);
+				throw new Chat.ErrorMessage(`Specify a type to change and a type to change to.`);
 			}
 			if (![to, from].every(f => punishmentHandlers[f])) {
-				return this.errorReply(
+				throw new Chat.ErrorMessage(
 					`Invalid types given. Valid types: ${Object.keys(punishmentHandlers).join(', ')}.`
 				);
 			}
@@ -1225,7 +1224,7 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 			if (!changed.length) {
-				return this.errorReply(`No punishments of type '${to}' found.`);
+				throw new Chat.ErrorMessage(`No punishments of type '${to}' found.`);
 			}
 			this.sendReply(`Updated punishment(s) ${changed.join(', ')}`);
 			this.privateGlobalModAction(`${user.name} updated all abuse-monitor punishments of type ${to} to type ${from}`);
@@ -1268,31 +1267,31 @@ export const commands: Chat.ChatCommands = {
 				switch (key) {
 				case 'punishment': case 'p':
 					if (punishment.punishment) {
-						return this.errorReply(`Duplicate punishment values.`);
+						throw new Chat.ErrorMessage(`Duplicate punishment values.`);
 					}
 					value = toID(value).toUpperCase();
 					if (!PUNISHMENTS.includes(value)) {
-						return this.errorReply(`Invalid punishment: ${value}. Valid punishments: ${PUNISHMENTS.join(', ')}.`);
+						throw new Chat.ErrorMessage(`Invalid punishment: ${value}. Valid punishments: ${PUNISHMENTS.join(', ')}.`);
 					}
 					punishment.punishment = value;
 					break;
 				case 'count': case 'num': case 'c':
 					if (punishment.count) {
-						return this.errorReply(`Duplicate count values.`);
+						throw new Chat.ErrorMessage(`Duplicate count values.`);
 					}
 					const num = parseInt(value);
 					if (isNaN(num)) {
-						return this.errorReply(`Invalid count '${value}'. Must be a number.`);
+						throw new Chat.ErrorMessage(`Invalid count '${value}'. Must be a number.`);
 					}
 					punishment.count = num;
 					break;
 				case 'type': case 't':
 					if (punishment.type) {
-						return this.errorReply(`Duplicate type values.`);
+						throw new Chat.ErrorMessage(`Duplicate type values.`);
 					}
 					value = value.replace(/\s/g, '_').toUpperCase();
 					if (!Artemis.RemoteClassifier.ATTRIBUTES[value as keyof typeof Artemis.RemoteClassifier.ATTRIBUTES]) {
-						return this.errorReply(
+						throw new Chat.ErrorMessage(
 							`Invalid attribute: ${value}. ` +
 							`Valid attributes: ${Object.keys(Artemis.RemoteClassifier.ATTRIBUTES).join(', ')}.`
 						);
@@ -1301,11 +1300,11 @@ export const commands: Chat.ChatCommands = {
 					break;
 				case 'certainty': case 'ct':
 					if (punishment.certainty) {
-						return this.errorReply(`Duplicate certainty values.`);
+						throw new Chat.ErrorMessage(`Duplicate certainty values.`);
 					}
 					const certainty = parseFloat(value);
 					if (isNaN(certainty) || certainty > 1 || certainty < 0) {
-						return this.errorReply(`Invalid certainty '${value}'. Must be a number above 0 and below 1.`);
+						throw new Chat.ErrorMessage(`Invalid certainty '${value}'. Must be a number above 0 and below 1.`);
 					}
 					punishment.certainty = certainty;
 					break;
@@ -1315,41 +1314,41 @@ export const commands: Chat.ChatCommands = {
 						punishment.modlogActions = [];
 					}
 					if (punishment.modlogActions.includes(value)) {
-						return this.errorReply(`Duplicate modlog action values - '${value}'.`);
+						throw new Chat.ErrorMessage(`Duplicate modlog action values - '${value}'.`);
 					}
 					punishment.modlogActions.push(value);
 					break;
 				case 'mlc': case 'modlogcount':
 					if (punishment.modlogCount) {
-						return this.errorReply(`Duplicate modlog count values.`);
+						throw new Chat.ErrorMessage(`Duplicate modlog count values.`);
 					}
 					const count = parseInt(value);
 					if (isNaN(count)) {
-						return this.errorReply(`Invalid modlog count.`);
+						throw new Chat.ErrorMessage(`Invalid modlog count.`);
 					}
 					punishment.modlogCount = count;
 					break;
 				case 'st': case 's': case 'secondary':
 					let [sType, sValue] = Utils.splitFirst(value, '|').map(f => f.trim());
 					if (!sType || !sValue) {
-						return this.errorReply(`Invalid secondary type/certainty.`);
+						throw new Chat.ErrorMessage(`Invalid secondary type/certainty.`);
 					}
 					sType = sType.replace(/\s/g, '_').toUpperCase();
 					if (!Artemis.RemoteClassifier.ATTRIBUTES[sType as keyof typeof Artemis.RemoteClassifier.ATTRIBUTES]) {
-						return this.errorReply(
+						throw new Chat.ErrorMessage(
 							`Invalid secondary attribute: ${sType}. ` +
 							`Valid attributes: ${Object.keys(Artemis.RemoteClassifier.ATTRIBUTES).join(', ')}.`
 						);
 					}
 					const sCertainty = parseFloat(sValue);
 					if (isNaN(sCertainty) || sCertainty > 1 || sCertainty < 0) {
-						return this.errorReply(`Invalid secondary certainty '${sValue}'. Must be a number above 0 and below 1.`);
+						throw new Chat.ErrorMessage(`Invalid secondary certainty '${sValue}'. Must be a number above 0 and below 1.`);
 					}
 					if (!punishment.secondaryTypes) {
 						punishment.secondaryTypes = {};
 					}
 					if (punishment.secondaryTypes[sType]) {
-						return this.errorReply(`Duplicate secondary type.`);
+						throw new Chat.ErrorMessage(`Duplicate secondary type.`);
 					}
 					punishment.secondaryTypes[sType] = sCertainty;
 					break;
@@ -1362,7 +1361,7 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 			if (!punishment.punishment) {
-				return this.errorReply(`A punishment type must be specified.`);
+				throw new Chat.ErrorMessage(`A punishment type must be specified.`);
 			}
 			for (const [i, p] of settings.punishments.entries()) {
 				let matches = 0;
@@ -1372,7 +1371,7 @@ export const commands: Chat.ChatCommands = {
 					if (val && val === visualizePunishmentKey(p, key)) matches++;
 				}
 				if (matches === Object.keys(p).length) {
-					return this.errorReply(`This punishment is already stored at ${i + 1}.`);
+					throw new Chat.ErrorMessage(`This punishment is already stored at ${i + 1}.`);
 				}
 			}
 			settings.punishments.push(punishment as PunishmentSettings);
@@ -1387,10 +1386,10 @@ export const commands: Chat.ChatCommands = {
 		deletepunishment(target, room, user) {
 			checkAccess(this);
 			const idx = parseInt(target) - 1;
-			if (isNaN(idx)) return this.errorReply(`Invalid number.`);
+			if (isNaN(idx)) throw new Chat.ErrorMessage(`Invalid number.`);
 			const punishment = settings.punishments[idx];
 			if (!punishment) {
-				return this.errorReply(`No punishments exist at index ${idx + 1}.`);
+				throw new Chat.ErrorMessage(`No punishments exist at index ${idx + 1}.`);
 			}
 			settings.punishments.splice(idx, 1);
 			saveSettings();
@@ -1418,15 +1417,15 @@ export const commands: Chat.ChatCommands = {
 			const [rawTurns, rawIncrement, rawMin] = Utils.splitFirst(target, ',', 2).map(toID);
 			const turns = parseInt(rawTurns);
 			if (isNaN(turns) || turns < 0) {
-				return this.errorReply(`Turns must be a number above 0.`);
+				throw new Chat.ErrorMessage(`Turns must be a number above 0.`);
 			}
 			const increment = parseInt(rawIncrement);
 			if (isNaN(increment) || increment < 0) {
-				return this.errorReply(`The increment must be a number above 0.`);
+				throw new Chat.ErrorMessage(`The increment must be a number above 0.`);
 			}
 			const min = parseInt(rawMin);
 			if (rawMin && isNaN(min)) {
-				return this.errorReply(`Invalid minimum (must be a number).`);
+				throw new Chat.ErrorMessage(`Invalid minimum (must be a number).`);
 			}
 			settings.thresholdIncrement = { amount: increment, turns };
 			if (min) {
@@ -1445,7 +1444,7 @@ export const commands: Chat.ChatCommands = {
 		di: 'deleteincrement',
 		deleteincrement(target, room, user) {
 			checkAccess(this);
-			if (!settings.thresholdIncrement) return this.errorReply(`The threshold increment is already disabled.`);
+			if (!settings.thresholdIncrement) throw new Chat.ErrorMessage(`The threshold increment is already disabled.`);
 			settings.thresholdIncrement = null;
 			saveSettings();
 			this.refreshPage('abusemonitor-settings');
@@ -1459,7 +1458,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			const timeNum = new Date(target).getTime();
 			if (isNaN(timeNum)) {
-				return this.errorReply(`Invalid date.`);
+				throw new Chat.ErrorMessage(`Invalid date.`);
 			}
 			let logs = await Chat.database.all(
 				'SELECT * FROM perspective_stats WHERE result = 0 AND timestamp > ? AND timestamp < ?',
@@ -1469,7 +1468,7 @@ export const commands: Chat.ChatCommands = {
 				Chat.toTimestamp(new Date(log.timestamp)).split(' ')[0] === target
 			));
 			if (!logs.length) {
-				return this.errorReply(`No logs found for that date.`);
+				throw new Chat.ErrorMessage(`No logs found for that date.`);
 			}
 			this.sendReplyBox(
 				`<strong>${Chat.count(logs, 'logs')}</strong> found on the date ${target}:<hr />` +
@@ -1507,7 +1506,7 @@ export const commands: Chat.ChatCommands = {
 				path = `artemis/${target.toLowerCase().replace(/\//g, '-')}`;
 			}
 			const backup = await FS(`config/chat-plugins/${path}.json`).readIfExists();
-			if (!backup) return this.errorReply(`No backup settings saved.`);
+			if (!backup) throw new Chat.ErrorMessage(`No backup settings saved.`);
 			const backupSettings = JSON.parse(backup);
 			Object.assign(settings, backupSettings);
 			saveSettings();
@@ -1518,10 +1517,10 @@ export const commands: Chat.ChatCommands = {
 		async deletebackup(target, room, user) {
 			checkAccess(this);
 			target = target.toLowerCase().replace(/\//g, '-');
-			if (!target) return this.errorReply(`Specify a backup file.`);
+			if (!target) throw new Chat.ErrorMessage(`Specify a backup file.`);
 			const path = FS(`config/chat-plugins/artemis/${target}.json`);
 			if (!(await path.exists())) {
-				return this.errorReply(`Backup '${target}' not found.`);
+				throw new Chat.ErrorMessage(`Backup '${target}' not found.`);
 			}
 			await path.unlinkIfExists();
 			this.globalModlog(`ABUSEMONITOR DELETEBACKUP`, null, target);
@@ -1550,13 +1549,13 @@ export const commands: Chat.ChatCommands = {
 			let message;
 			if (this.meansYes(target)) {
 				if (!settings.recommendOnly) {
-					return this.errorReply(`Automatic punishments are already enabled.`);
+					throw new Chat.ErrorMessage(`Automatic punishments are already enabled.`);
 				}
 				settings.recommendOnly = false;
 				message = `${user.name} enabled automatic punishments for the Artemis battle monitor`;
 			} else if (this.meansNo(target)) {
 				if (settings.recommendOnly) {
-					return this.errorReply(`Automatic punishments are already disabled.`);
+					throw new Chat.ErrorMessage(`Automatic punishments are already disabled.`);
 				}
 				settings.recommendOnly = true;
 				message = `${user.name} disabled automatic punishments for the Artemis battle monitor`;
@@ -1609,18 +1608,18 @@ export const commands: Chat.ChatCommands = {
 				return this.parse(`/help abusemonitor resolvereview`);
 			}
 			if (!reviews[userid]) {
-				return this.errorReply(`No reviews found by that user.`);
+				throw new Chat.ErrorMessage(`No reviews found by that user.`);
 			}
 			const review = reviews[userid].find(f => getBattleLinks(f.room).includes(roomid));
 			if (!review) {
-				return this.errorReply(`No reviews found by that user for that room.`);
+				throw new Chat.ErrorMessage(`No reviews found by that user for that room.`);
 			}
 			const isAccurate = Number(accurate);
 			if (isNaN(isAccurate) || isAccurate < 0 || isAccurate > 1) {
 				return this.popupReply(`Invalid accuracy. Must be a number between 0 and 1.`);
 			}
 			if (review.resolved) {
-				return this.errorReply(`That review has already been resolved.`);
+				throw new Chat.ErrorMessage(`That review has already been resolved.`);
 			}
 			review.resolved = {
 				by: user.id,
@@ -1636,10 +1635,10 @@ export const commands: Chat.ChatCommands = {
 			checkAccess(this);
 			if (!target) return this.parse(`/help am`);
 			const [old, newWord] = target.split(',');
-			if (!old || !newWord) return this.errorReply(`Invalid arguments - must be [oldWord], [newWord].`);
-			if (toID(old) === toID(newWord)) return this.errorReply(`The old word and the new word are the same.`);
+			if (!old || !newWord) throw new Chat.ErrorMessage(`Invalid arguments - must be [oldWord], [newWord].`);
+			if (toID(old) === toID(newWord)) throw new Chat.ErrorMessage(`The old word and the new word are the same.`);
 			if (settings.replacements[old]) {
-				return this.errorReply(`The old word '${old}' is already in use (for '${settings.replacements[old]}').`);
+				throw new Chat.ErrorMessage(`The old word '${old}' is already in use (for '${settings.replacements[old]}').`);
 			}
 			Chat.validateRegex(target);
 			settings.replacements[old] = newWord;
@@ -1653,7 +1652,7 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse(`/help am`);
 			const replaceTo = settings.replacements[target];
 			if (!replaceTo) {
-				return this.errorReply(`${target} is not a currently set replacement.`);
+				throw new Chat.ErrorMessage(`${target} is not a currently set replacement.`);
 			}
 			delete settings.replacements[target];
 			saveSettings();
@@ -1684,7 +1683,7 @@ export const commands: Chat.ChatCommands = {
 				const num = Number(target);
 				if (isNaN(num)) {
 					if (!/[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(target)) {
-						return this.errorReply(`Invalid date provided. Must be in YYYY-MM-DD format.`);
+						throw new Chat.ErrorMessage(`Invalid date provided. Must be in YYYY-MM-DD format.`);
 					}
 					metadata.modlogIgnores[targetUser] = target;
 					target = 'before and including ' + target;
@@ -1694,7 +1693,7 @@ export const commands: Chat.ChatCommands = {
 						metadata.modlogIgnores[targetUser] = ignores = [];
 					}
 					if (ignores.includes(num)) {
-						return this.errorReply(`That modlog entry is already ignored.`);
+						throw new Chat.ErrorMessage(`That modlog entry is already ignored.`);
 					}
 					ignores.push(num);
 					target = `entry #${target}`;
@@ -1715,18 +1714,18 @@ export const commands: Chat.ChatCommands = {
 				}
 				const entry = metadata.modlogIgnores?.[targetUser];
 				if (!entry) {
-					return this.errorReply(`That user has no ignored modlog entries registered.`);
+					throw new Chat.ErrorMessage(`That user has no ignored modlog entries registered.`);
 				}
 				if (typeof entry === 'string') {
 					rawNum = entry;
 					delete metadata.modlogIgnores![targetUser];
 				} else {
 					if (isNaN(num)) {
-						return this.errorReply(`Invalid modlog entry number: ${num}`);
+						throw new Chat.ErrorMessage(`Invalid modlog entry number: ${num}`);
 					}
 					const idx = entry.indexOf(num);
 					if (idx === -1) {
-						return this.errorReply(`That modlog entry is not ignored for the user ${targetUser}.`);
+						throw new Chat.ErrorMessage(`That modlog entry is not ignored for the user ${targetUser}.`);
 					}
 					entry.splice(idx, 1);
 					if (!entry.length) {
@@ -1807,7 +1806,7 @@ export const pages: Chat.PageTable = {
 			checkAccess(this, 'lock');
 			const roomid = query.join('-') as RoomID;
 			if (!toID(roomid)) {
-				return this.errorReply(`You must specify a roomid to view abuse monitor data for.`);
+				throw new Chat.ErrorMessage(`You must specify a roomid to view abuse monitor data for.`);
 			}
 			let buf = `<div class="pad">`;
 			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
@@ -1985,7 +1984,7 @@ export const pages: Chat.PageTable = {
 			checkAccess(this);
 			const dateString = (query.join('-') || Chat.toTimestamp(new Date())).slice(0, 7);
 			if (!/^[0-9]{4}-[0-9]{2}$/.test(dateString)) {
-				return this.errorReply(`Invalid date: ${dateString}`);
+				throw new Chat.ErrorMessage(`Invalid date: ${dateString}`);
 			}
 			let buf = `<div class="pad">`;
 			buf += `<button style="float:right;" class="button" name="send" value="/join ${this.pageid}">`;
@@ -2298,7 +2297,7 @@ export const pages: Chat.PageTable = {
 			this.checkCan('lock');
 			const targetUser = toID(query[0]);
 			if (!targetUser) {
-				return this.errorReply(`Specify a user.`);
+				throw new Chat.ErrorMessage(`Specify a user.`);
 			}
 			this.title = `[Artemis History] ${targetUser}`;
 			let buf = `<div class="pad"><h2>Artemis modlog handling for ${targetUser}</h2><hr />`;
@@ -2339,13 +2338,13 @@ export const pages: Chat.PageTable = {
 		const [format, num, pw] = query.map(toID);
 		this.checkCan('lock');
 		if (!format || !num) {
-			return this.errorReply(`Invalid battle link provided.`);
+			throw new Chat.ErrorMessage(`Invalid battle link provided.`);
 		}
 		this.title = `[Battle Logs] ${format}-${num}`;
 		const full = `battle-${format}-${num}${pw ? `-${pw}` : ""}`;
 		const logData = await getBattleLog(full);
 		if (!logData) {
-			return this.errorReply(`No logs found for the battle <code>${full}</code>.`);
+			throw new Chat.ErrorMessage(`No logs found for the battle <code>${full}</code>.`);
 		}
 		let log = logData.log;
 		log = log.filter(l => l.startsWith('|c|'));

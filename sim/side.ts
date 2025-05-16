@@ -297,6 +297,8 @@ export class Side {
 				let details = ``;
 				if (action.targetLoc && this.active.length > 1) details += ` ${action.targetLoc > 0 ? '+' : ''}${action.targetLoc}`;
 				if (action.mega) details += (action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`);
+				if (action.megax) details += ` megax`;
+				if (action.megay) details += ` megay`;
 				if (action.zmove) details += ` zmove`;
 				if (action.maxMove) details += ` dynamax`;
 				if (action.terastallize) details += ` terastallize`;
@@ -481,7 +483,7 @@ export class Side {
 		this.battle.send('sideupdate', `${this.id}\n${sideUpdate}`);
 	}
 
-	emitRequest(update: ChoiceRequest) {
+	emitRequest(update: ChoiceRequest = this.activeRequest!) {
 		this.battle.send('sideupdate', `${this.id}\n|request|${JSON.stringify(update)}`);
 		this.activeRequest = update;
 	}
@@ -493,7 +495,7 @@ export class Side {
 		const updated = update ? this.updateRequestForPokemon(update.pokemon, update.update) : null;
 		const type = `[${updated ? 'Unavailable' : 'Invalid'} choice]`;
 		this.battle.send('sideupdate', `${this.id}\n|error|${type} ${message}`);
-		if (updated) this.emitRequest(this.activeRequest!);
+		if (updated) this.emitRequest();
 		if (this.battle.strictChoices) throw new Error(`${type} ${message}`);
 		return false;
 	}
@@ -617,7 +619,7 @@ export class Side {
 
 		if (maxMove) targetType = this.battle.dex.moves.get(maxMove).target;
 
-		// Validate targetting
+		// Validate targeting
 
 		if (autoChoose) {
 			targetLoc = 0;

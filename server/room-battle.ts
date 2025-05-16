@@ -441,16 +441,14 @@ export class RoomBattleTimer {
 		}
 		let didSomething = false;
 		for (const player of players) {
-			if (!player.id) continue; // already eliminated, relevant for FFA gamesif it
-			// https://play.pokemonshowdown.com/battle-gen9unratedrandombattle-2255606027-5a6bcd9zlb93e6id5pp7juvhcg5w41spw
-			// why is this line here?
+			if (player.eliminated) continue;
 			if (player.turnSecondsLeft > 0) continue;
 			if (this.settings.timeoutAutoChoose && player.secondsLeft > 0 && player.knownActive) {
 				void this.battle.stream.write(`>${player.slot} default`);
 				didSomething = true;
 			} else {
 				this.battle.forfeitPlayer(player, ' lost due to inactivity.');
-				return true;
+				didSomething = true;
 			}
 		}
 		return didSomething;
@@ -742,10 +740,17 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (!this.ended) {
 			this.room.add(`|bigerror|The simulator process crashed. We've been notified and will fix this ASAP.`);
 			if (!disconnected) Monitor.crashlog(new Error(`Sim stream interrupted`), `A sim stream`);
-			this.started = true;
 			this.setEnded();
-			this.checkActive();
 		}
+	}
+	override setEnded() {
+		this.started = true;
+		for (const player of this.players) {
+			player.request = { rqid: 0, request: '', isWait: 'cantUndo', choice: '' };
+		}
+		super.setEnded();
+		this.timer.end();
+		this.checkActive();
 	}
 	receive(lines: string[]) {
 		for (const player of this.players) player.wantsTie = false;
@@ -823,8 +828,6 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	end(winnerName: unknown) {
 		if (this.ended) return;
 		this.setEnded();
-		this.checkActive();
-		this.timer.end();
 		// Declare variables here in case we need them for non-rated battles logging.
 		let p1score = 0.5;
 		const winnerid = toID(winnerName);
@@ -931,7 +934,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (!player) return;
 		player.updateChannel(connection || user);
 		const request = player.request;
-		if (request) {
+		if (request.request) {
 			let data = `|request|${request.request}`;
 			if (request.choice) data += `\n|sentchoice|${request.choice}`;
 			(connection || user).sendTo(this.roomid, data);

@@ -67,7 +67,7 @@ export class RandomGen4Teams extends RandomGen5Teams {
 			Ground: (movePool, moves, abilities, types, counter) => !counter.get('Ground'),
 			Ice: (movePool, moves, abilities, types, counter) => !counter.get('Ice'),
 			Poison: (movePool, moves, abilities, types, counter, species) => (
-				!counter.get('Poison') && (types.has('Grass') || species.id === 'gengar')
+				!counter.get('Poison') && (['Ghost', 'Grass', 'Ground'].some(type => types.has(type)))
 			),
 			Psychic: (movePool, moves, abilities, types, counter) => (
 				!counter.get('Psychic') && (types.has('Fighting') || movePool.includes('calmmind'))
@@ -225,6 +225,10 @@ export class RandomGen4Teams extends RandomGen5Teams {
 				if (movePool.includes('suckerpunch')) this.fastPop(movePool, movePool.indexOf('suckerpunch'));
 				if (moves.size + movePool.length <= this.maxMoveCount) return;
 			}
+		}
+		if (species.id === 'bastiodon') {
+			// Enforces Toxic too, for good measure.
+			this.incompatibleMoves(moves, movePool, ['metalburst', 'protect', 'roar'], ['metalburst', 'protect']);
 		}
 	}
 

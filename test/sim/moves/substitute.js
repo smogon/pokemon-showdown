@@ -19,7 +19,7 @@ describe('Substitute', () => {
 		assert.equal(pokemon.maxhp - pokemon.hp, Math.floor(pokemon.maxhp / 4));
 	});
 
-	it('should not block the user\'s own moves from targetting itself', () => {
+	it('should not block the user\'s own moves from targeting itself', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['substitute', 'calmmind'] }] });
 		battle.setPlayer('p2', { team: [{ species: 'Mewtwo', ability: 'pressure', moves: ['recover'] }] });
@@ -107,7 +107,7 @@ describe('Substitute', () => {
 		assert.equal(battle.p2.active[0].hp - hp, Math.ceil(Math.floor(battle.p1.active[0].maxhp / 4) / 2));
 	});
 
-	it('should block most status moves targetting the user', () => {
+	it('should block most status moves targeting the user', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', { team: [{ species: 'Mewtwo', ability: 'noguard', moves: ['substitute'] }] });
 		battle.setPlayer('p2', { team: [{ species: 'Mewtwo', ability: 'pressure', item: 'laggingtail', moves: ['hypnosis', 'toxic', 'poisongas', 'thunderwave', 'willowisp'] }] });
