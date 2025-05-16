@@ -127,6 +127,8 @@ export class Pokemon {
 	trapped: boolean | "hidden";
 	maybeTrapped: boolean;
 	maybeDisabled: boolean;
+	/** true = locked,  */
+	maybeLocked: boolean | null;
 
 	illusion: Pokemon | null;
 	transformed: boolean;
@@ -418,6 +420,7 @@ export class Pokemon {
 		this.trapped = false;
 		this.maybeTrapped = false;
 		this.maybeDisabled = false;
+		this.maybeLocked = false;
 
 		this.illusion = null;
 		this.transformed = false;
@@ -1051,7 +1054,7 @@ export class Pokemon {
 	}
 
 	getMoveRequestData() {
-		let lockedMove = this.getLockedMove();
+		let lockedMove = this.maybeLocked ? null : this.getLockedMove();
 
 		// Information should be restricted for the last active Pokémon
 		const isLastActive = this.isLastActive();
@@ -1069,7 +1072,10 @@ export class Pokemon {
 
 		if (isLastActive) {
 			if (this.maybeDisabled) {
-				data.maybeDisabled = true;
+				data.maybeDisabled = this.maybeDisabled;
+			}
+			if (this.maybeLocked) {
+				data.maybeLocked = this.maybeLocked;
 			}
 			if (canSwitchIn) {
 				if (this.trapped === true) {
@@ -1199,7 +1205,7 @@ export class Pokemon {
 			if (switchCause === 'shedtail' && i !== 'substitute') continue;
 			if (this.battle.dex.conditions.getByID(i as ID).noCopy) continue;
 			// shallow clones
-			this.volatiles[i] = this.battle.initEffectState({ ...pokemon.volatiles[i] });
+			this.volatiles[i] = this.battle.initEffectState({ ...pokemon.volatiles[i], target: this });
 			if (this.volatiles[i].linkedPokemon) {
 				delete pokemon.volatiles[i].linkedPokemon;
 				delete pokemon.volatiles[i].linkedStatus;
@@ -1789,7 +1795,6 @@ export class Pokemon {
 	}
 
 	takeItem(source?: Pokemon) {
-		if (!this.isActive) return false;
 		if (!this.item || this.itemState.knockedOff) return false;
 		if (!source) source = this;
 		if (this.battle.gen === 4) {
@@ -1968,8 +1973,7 @@ export class Pokemon {
 		if (!this.hp) return false;
 		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.volatiles[status.id]) return false;
-		const linkedPokemon = this.volatiles[status.id].linkedPokemon;
-		const linkedStatus = this.volatiles[status.id].linkedStatus;
+		const { linkedPokemon, linkedStatus } = this.volatiles[status.id];
 		this.battle.singleEvent('End', status, this.volatiles[status.id], this);
 		delete this.volatiles[status.id];
 		if (linkedPokemon) {

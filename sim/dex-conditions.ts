@@ -106,7 +106,7 @@ export interface EventMethods {
 	) => boolean | null | void;
 	onTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
 	onTryHeal?: (
-		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void)
+		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | null | void)
 	);
 	onTryHit?: MoveEventMethods['onTryHit'];
 	onTryHitField?: MoveEventMethods['onTryHitField'];
@@ -622,7 +622,7 @@ export interface ModdedConditionDataTable { [id: IDEntry]: ModdedConditionData }
 
 export class Condition extends BasicEffect implements
 	Readonly<BasicEffect & SideConditionData & FieldConditionData & PokemonConditionData> {
-	declare readonly effectType: 'Condition' | 'Weather' | 'Status' | 'Terastal';
+	declare readonly effectType: 'Condition' | 'Weather' | 'Status' | 'Terrain';
 	declare readonly counterMax?: number;
 	declare effectOrder?: number;
 
@@ -638,7 +638,7 @@ export class Condition extends BasicEffect implements
 
 	constructor(data: AnyObject) {
 		super(data);
-		this.effectType = (['Weather', 'Status'].includes(data.effectType) ? data.effectType : 'Condition');
+		this.effectType = (['Weather', 'Status', 'Terrain'].includes(data.effectType) ? data.effectType : 'Condition');
 		assignMissingFields(this, data);
 	}
 }

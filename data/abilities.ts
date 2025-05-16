@@ -365,6 +365,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				source.abilityState.battleBondTriggered = true;
 			}
 		},
+		onModifyMovePriority: -1,
+		onModifyMove(move, attacker) {
+			if (move.id === 'watershuriken' && attacker.species.name === 'Greninja-Ash' &&
+				!attacker.transformed) {
+				move.multihit = 3;
+			}
+		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Battle Bond",
 		rating: 3.5,
@@ -1159,7 +1166,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	embodyaspectcornerstone: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.name === 'Ogerpon-Cornerstone-Tera' &&
+			if (pokemon.baseSpecies.name === 'Ogerpon-Cornerstone-Tera' && pokemon.terastallized &&
 				this.effectState.embodied !== pokemon.previouslySwitchedIn) {
 				this.effectState.embodied = pokemon.previouslySwitchedIn;
 				this.boost({ def: 1 }, pokemon);
@@ -1172,7 +1179,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	embodyaspecthearthflame: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.name === 'Ogerpon-Hearthflame-Tera' &&
+			if (pokemon.baseSpecies.name === 'Ogerpon-Hearthflame-Tera' && pokemon.terastallized &&
 				this.effectState.embodied !== pokemon.previouslySwitchedIn) {
 				this.effectState.embodied = pokemon.previouslySwitchedIn;
 				this.boost({ atk: 1 }, pokemon);
@@ -1185,7 +1192,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	embodyaspectteal: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.name === 'Ogerpon-Teal-Tera' &&
+			if (pokemon.baseSpecies.name === 'Ogerpon-Teal-Tera' && pokemon.terastallized &&
 				this.effectState.embodied !== pokemon.previouslySwitchedIn) {
 				this.effectState.embodied = pokemon.previouslySwitchedIn;
 				this.boost({ spe: 1 }, pokemon);
@@ -1198,7 +1205,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	embodyaspectwellspring: {
 		onStart(pokemon) {
-			if (pokemon.baseSpecies.name === 'Ogerpon-Wellspring-Tera' &&
+			if (pokemon.baseSpecies.name === 'Ogerpon-Wellspring-Tera' && pokemon.terastallized &&
 				this.effectState.embodied !== pokemon.previouslySwitchedIn) {
 				this.effectState.embodied = pokemon.previouslySwitchedIn;
 				this.boost({ spd: 1 }, pokemon);
@@ -2002,7 +2009,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (!possibleTarget.fainted) {
 					// If Ogerpon is in the last slot while the Illusion Pokemon is Terastallized
 					// Illusion will not disguise as anything
-					if (!pokemon.terastallized || possibleTarget.species.baseSpecies !== 'Ogerpon') {
+					if (!pokemon.terastallized || !['Ogerpon', 'Terapagos'].includes(possibleTarget.species.baseSpecies)) {
 						pokemon.illusion = possibleTarget;
 					}
 					break;
@@ -2421,16 +2428,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	magician: {
 		onAfterMoveSecondarySelf(source, target, move) {
-			if (!move || !target || source.switchFlag === true) return;
-			if (target !== source && move.category !== 'Status') {
-				if (source.item || source.volatiles['gem'] || move.id === 'fling') return;
-				const yourItem = target.takeItem(source);
-				if (!yourItem) return;
-				if (!source.setItem(yourItem)) {
-					target.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+			if (!move || source.switchFlag === true || !move.hitTargets || source.item || source.volatiles['gem'] ||
+				move.id === 'fling' || move.category === 'Status') return;
+			const hitTargets = move.hitTargets;
+			this.speedSort(hitTargets);
+			for (const pokemon of hitTargets) {
+				if (pokemon !== source) {
+					const yourItem = pokemon.takeItem(source);
+					if (!yourItem) continue;
+					if (!source.setItem(yourItem)) {
+						pokemon.item = yourItem.id; // bypass setItem so we don't break choicelock or anything
+						continue;
+					}
+					this.add('-item', source, yourItem, '[from] ability: Magician', `[of] ${pokemon}`);
 					return;
 				}
-				this.add('-item', source, yourItem, '[from] ability: Magician', `[of] ${target}`);
 			}
 		},
 		flags: {},
@@ -4143,7 +4155,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	shielddust: {
 		onModifySecondaries(secondaries) {
 			this.debug('Shield Dust prevent secondary');
-			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+			return secondaries.filter(effect => !!effect.self);
 		},
 		flags: { breakable: 1 },
 		name: "Shield Dust",
