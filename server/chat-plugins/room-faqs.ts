@@ -166,8 +166,28 @@ export const commands: Chat.ChatCommands = {
 		if (!topic) {
 			return this.parse(`/join view-roomfaqs-${room.roomid}`);
 		}
-		if (!roomFaqs[room.roomid][topic]) throw new Chat.ErrorMessage("Invalid topic.");
 		topic = getAlias(room.roomid, topic) || topic;
+
+		if (!roomFaqs[room.roomid][topic]) {
+		// tries to find a FAQ of same topic if RFAQ topic fails
+			const faqCommand = Chat.commands['faq'] as Chat.ChatHandler;
+			if (typeof faqCommand === 'function') {
+				const normalized = toID(target);
+				const validTopics = [
+					'staff', 'autoconfirmed', 'ac', 'ladder', 'ladderhelp', 'decay',
+					'tiering', 'tiers', 'tier', 'badge', 'badges', 'badgeholders',
+					'rng', 'tournaments', 'tournament', 'tours', 'tour', 'vpn',
+					'proxy', 'ca', 'customavatar', 'customavatars', 'privacy',
+					'lostpassword', 'password', 'lostpass',
+				];
+				if (!validTopics.includes(normalized)) {
+					return this.errorReply(`'${target}' is an invalid topic.`);
+				}
+				if (!this.runBroadcast()) return;
+				return faqCommand.call(this, target, room, user, connection, 'faq', '!');
+			}
+			return this.errorReply("Invalid topic.");
+		}
 
 		if (!this.runBroadcast()) return;
 		const rfaq = roomFaqs[room.roomid][topic];
