@@ -53,7 +53,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 	 * Passing a User will read `user.group`, which is relevant for unregistered
 	 * users with temporary global auth.
 	 */
-	get(user: ID | User) {
+	override get(user: ID | User) {
 		if (typeof user !== 'string') return user.tempGroup;
 		return super.get(user) || Auth.defaultSymbol();
 	}
@@ -252,7 +252,7 @@ export class RoomAuth extends Auth {
 		super();
 		this.room = room;
 	}
-	get(userOrID: ID | User): GroupSymbol {
+	override get(userOrID: ID | User): GroupSymbol {
 		const id = typeof userOrID === 'string' ? userOrID : userOrID.id;
 
 		const parentAuth: Auth | null = this.room.parent ? this.room.parent.auth :
@@ -280,7 +280,7 @@ export class RoomAuth extends Auth {
 
 		return parentGroup;
 	}
-	getEffectiveSymbol(user: User) {
+	override getEffectiveSymbol(user: User) {
 		const symbol = super.getEffectiveSymbol(user);
 		if (!this.room.persist && symbol === user.tempGroup) {
 			const replaceGroup = Auth.getGroup(symbol).globalGroupInPersonalRoom;
@@ -315,7 +315,7 @@ export class RoomAuth extends Auth {
 			super.set(userid as ID, this.room.settings.auth[userid]);
 		}
 	}
-	set(id: ID, symbol: GroupSymbol) {
+	override set(id: ID, symbol: GroupSymbol) {
 		if (symbol === 'whitelist' as GroupSymbol) {
 			symbol = Auth.defaultSymbol();
 		}
@@ -327,7 +327,7 @@ export class RoomAuth extends Auth {
 		if (user) this.room.onUpdateIdentity(user);
 		return this;
 	}
-	delete(id: ID) {
+	override delete(id: ID) {
 		if (!this.has(id)) return false;
 		super.delete(id);
 		delete this.room.settings.auth[id];
@@ -379,7 +379,7 @@ export class GlobalAuth extends Auth {
 			super.set(id, newSymbol);
 		}
 	}
-	set(id: ID, group: GroupSymbol, username?: string) {
+	override set(id: ID, group: GroupSymbol, username?: string) {
 		if (!username) username = id;
 		const user = Users.get(id, true);
 		if (user) {
@@ -393,7 +393,7 @@ export class GlobalAuth extends Auth {
 		void this.save();
 		return this;
 	}
-	delete(id: ID) {
+	override delete(id: ID) {
 		if (!super.has(id)) return false;
 		super.delete(id);
 		const user = Users.get(id);
