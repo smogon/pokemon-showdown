@@ -1194,9 +1194,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 0,
 		basePowerCallback(pokemon, target, move) {
-			const currentSpecies = move.allies!.shift()!.species;
-			const bp = 5 + Math.floor(currentSpecies.baseStats.atk / 10);
-			this.debug(`BP for ${currentSpecies.name} hit: ${bp}`);
+			const setSpecies = this.dex.species.get(move.allies!.shift()!.set.species);
+			const bp = 5 + Math.floor(setSpecies.baseStats.atk / 10);
+			this.debug(`BP for ${setSpecies.name} hit: ${bp}`);
 			return bp;
 		},
 		category: "Physical",
@@ -3585,12 +3585,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(target, source, move) {
 			let success = false;
 			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({ evasion: -1 });
-			const removeTarget = [
-				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
-			];
-			const removeAll = [
-				'spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge',
-			];
+			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', ...removeAll];
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
@@ -3627,6 +3623,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			return !pokemon.removeVolatile('destinybond');
 		},
 		condition: {
+			noCopy: true, // doesn't get copied by Baton Pass
 			onStart(pokemon) {
 				this.add('-singlemove', pokemon, 'Destiny Bond');
 			},
@@ -4921,8 +4918,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (!move || target.volatiles['dynamax']) return false;
 
 				if (move.isMax && move.baseMove) move = this.dex.moves.get(move.baseMove);
-				const moveIndex = target.moves.indexOf(move.id);
-				if (move.isZ || move.flags['failencore'] || !target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0) {
+				const moveSlot = target.getMoveData(move.id);
+				if (move.isZ || move.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
 					// it failed
 					return false;
 				}
@@ -4937,8 +4934,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onResidualOrder: 16,
 			onResidual(target) {
-				if (!target.moves.includes(this.effectState.move) ||
-					target.moveSlots[target.moves.indexOf(this.effectState.move)].pp <= 0) {
+				const moveSlot = target.getMoveData(this.effectState.move);
+				if (!moveSlot || moveSlot.pp <= 0) {
 					// early termination if you run out of PP
 					target.removeVolatile('encore');
 				}
@@ -7796,10 +7793,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		self: {
 			onHit(source) {
 				let success = false;
-				const removeTarget = [
-					'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
-				];
 				const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', ...removeAll];
 				for (const targetCondition of removeTarget) {
 					if (source.side.foe.removeSideCondition(targetCondition)) {
 						if (!removeAll.includes(targetCondition)) continue;
@@ -10017,12 +10012,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onHit(target, source) {
 			if (!target.lastMove || target.volatiles['dynamax']) return false;
 			const lastMove = target.lastMove;
-			const moveIndex = target.moves.indexOf(lastMove.id);
+			const moveSlot = target.getMoveData(lastMove.id);
 			if (
 				lastMove.flags['failinstruct'] || lastMove.isZ || lastMove.isMax ||
 				lastMove.flags['charge'] || lastMove.flags['recharge'] ||
 				target.volatiles['beakblast'] || target.volatiles['focuspunch'] || target.volatiles['shelltrap'] ||
-				(target.moveSlots[moveIndex] && target.moveSlots[moveIndex].pp <= 0)
+				(moveSlot && moveSlot.pp <= 0)
 			) {
 				return false;
 			}
@@ -18049,13 +18044,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
 		secondary: {
-			dustproof: true,
 			chance: 100,
 			volatileStatus: 'sparklingaria',
 		},
 		onAfterMove(source, target, move) {
-			for (const pokemon of this.getAllActive()) {
-				if (pokemon !== source && pokemon.removeVolatile('sparklingaria') && pokemon.status === 'brn' && !source.fainted) {
+			if (source.fainted || !move.hitTargets || move.hasSheerForce) {
+				// make sure the volatiles are cleared
+				for (const pokemon of this.getAllActive()) delete pokemon.volatiles['sparklingaria'];
+				return;
+			}
+			const numberTargets = move.hitTargets.length;
+			for (const pokemon of move.hitTargets) {
+				// bypasses Shield Dust when hitting multiple targets
+				if (pokemon !== source && pokemon.isActive && (pokemon.removeVolatile('sparklingaria') || numberTargets > 1) &&
+					pokemon.status === 'brn') {
 					pokemon.cureStatus();
 				}
 			}

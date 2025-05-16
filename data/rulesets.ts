@@ -19,7 +19,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	standard: {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
-		desc: "The standard ruleset for all offical Smogon singles tiers (Ubers, OU, etc.)",
+		desc: "The standard ruleset for all official Smogon singles tiers (Ubers, OU, etc.)",
 		ruleset: [
 			'Standard AG',
 			'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
@@ -1216,6 +1216,27 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 						`${set.name || set.species} has Baton Pass and a way to boost its stats, which is banned by Baton Pass Stat Clause.`,
 					];
 				}
+			}
+		},
+	},
+	batonpasstrapclause: {
+		effectType: 'ValidatorRule',
+		name: 'Baton Pass Trap Clause',
+		desc: "Stops teams from having a Pok&eacute;mon with Baton Pass that has any way to trap Pok&eacute;mon.",
+		onBegin() {
+			this.add('rule', 'Baton Pass Trap Clause: No Baton Passer may have a way to trap Pok\u00e9mon');
+		},
+		onValidateTeam(team, format, teamHas) {
+			const trappingMoves = ['block', 'fairylock', 'meanlook', 'octolock', 'spiderweb'];
+			let name = '';
+			const bpAndTrap = team.some(set => {
+				name = set.name || set.species;
+				return set.moves.includes('batonpass') && set.moves.some(move => trappingMoves.includes(move));
+			});
+			if (bpAndTrap) {
+				return [
+					`${name} has Baton Pass and a way to pass trapping, which is banned by Baton Pass Trap Clause.`,
+				];
 			}
 		},
 	},
@@ -2550,7 +2571,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 						species = this.dex.species.get(item.megaStone);
 					}
 				}
-				if (this.ruleTable.isRestrictedSpecies(species)) {
+				if (this.ruleTable.isRestrictedSpecies(species) ||
+					(this.ruleTable.isRestricted('ability:powerconstruct') && this.toID(set.ability) === 'powerconstruct')) {
 					gods.add(species.name);
 				}
 			}
@@ -2563,7 +2585,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (source || !target?.side) return;
 			const god = target.side.team.find(set => {
 				let godSpecies = this.dex.species.get(set.species);
-				if (this.toID(set.ability) === 'powerconstruct') {
+				if (this.toID(set.ability) === 'powerconstruct' && this.ruleTable.isRestricted('ability:powerconstruct')) {
 					return true;
 				}
 				if (set.item) {
@@ -2643,12 +2665,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: "Hackmons Forme Legality",
 		desc: `Enforces proper forme legality for hackmons-based metagames.`,
-		banlist: ['CAP', 'LGPE', 'Future'],
+		banlist: ['CAP', 'Future'],
 		onChangeSet(set, format, setHas, teamHas) {
 			let species = this.dex.species.get(set.species);
 			if (
 				(species.natDexTier === 'Illegal' || species.forme.includes('Totem')) &&
-				!['Floette-Eternal', 'Greninja-Ash', 'Xerneas-Neutral'].includes(species.name) &&
+				!['Eevee-Starter', 'Floette-Eternal', 'Greninja-Ash', 'Pikachu-Starter', 'Xerneas-Neutral'].includes(species.name) &&
 				!this.ruleTable.has(`+pokemon:${species.id}`)
 			) {
 				return [`${species.name} is illegal.`];

@@ -9,6 +9,7 @@
  */
 
 import { ProcessManager, Utils } from '../../lib';
+import type { FormatData } from '../../sim/dex-formats';
 import { TeamValidator } from '../../sim/team-validator';
 import { Chat } from '../chat';
 
@@ -24,7 +25,7 @@ interface DexOrGroup {
 	types: { [k: string]: boolean };
 	resists: { [k: string]: boolean };
 	weak: { [k: string]: boolean };
-	stats: { [k: string]: { [k in Direction]: number } };
+	stats: { [k: string]: { [k in Direction]: { [s: string]: number | boolean } } };
 	skip: boolean;
 }
 
@@ -52,20 +53,23 @@ type Direction = 'less' | 'greater' | 'equal';
 const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
 const MAX_RANDOM_RESULTS = 30;
-const dexesHelp = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
+const dexesHelpMods = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
+const supportedDexsearchRules: { [k: string]: string[] } = Object.assign(Object.create(null), {
+	movevalidation: ['stabmonsmovelegality', 'alphabetcupmovelegality'],
+	statmodification: ['350cupmod', 'flippedmod', 'scalemonsmod', 'badnboostedmod', 'reevolutionmod'],
+	banlist: [
+		'hoennpokedex', 'sinnohpokedex', 'oldunovapokedex', 'newunovapokedex', 'kalospokedex', 'oldalolapokedex',
+		'newalolapokedex', 'galarpokedex', 'isleofarmorpokedex', 'crowntundrapokedex', 'galarexpansionpokedex',
+		'paldeapokedex', 'kitakamipokedex', 'blueberrypokedex',
+	],
+});
+const dexsearchHelpRules = Object.values((supportedDexsearchRules)).flat().filter(x => x).join('</code>, <code>');
 
 function toListString(arr: string[]) {
 	if (!arr.length) return '';
 	if (arr.length === 1) return arr[0];
 	if (arr.length === 2) return `${arr[0]} and ${arr[1]}`;
 	return `${arr.slice(0, -1).join(", ")}, and ${arr.slice(-1)[0]}`;
-}
-
-function checkCanAll(room: Room | null) {
-	if (!room) return false; // no, no good reason for using `all` in pms
-	const { isPersonal, isHelp } = room.settings;
-	// allowed if it's a groupchat
-	return !room.battle && !!isPersonal && !isHelp;
 }
 
 export const commands: Chat.ChatCommands = {
@@ -83,7 +87,7 @@ export const commands: Chat.ChatCommands = {
 	async dexsearch(target, room, user, connection, cmd, message) {
 		this.checkBroadcast();
 		if (!target) return this.parse('/help dexsearch');
-		if (target.length > 300) return this.errorReply('Dexsearch queries may not be longer than 300 characters.');
+		if (target.length > 300) throw new Chat.ErrorMessage('Dexsearch queries may not be longer than 300 characters.');
 		const targetGen = parseInt(cmd[cmd.length - 1]);
 		if (targetGen) target += `, mod=gen${targetGen}`;
 		const split = target.split(',').map(term => term.trim());
@@ -107,7 +111,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'dexsearch',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast()) return;
@@ -138,7 +141,8 @@ export const commands: Chat.ChatCommands = {
 			`<code>Alola</code>, <code>Galar</code>, <code>Therian</code>, <code>Totem</code>, or <code>Primal</code> can be used as parameters to search for those formes.<br/>` +
 			`Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g., <code>trick | switcheroo</code> searches for all Pok\u00e9mon that learn either Trick or Switcheroo.<br/>` +
 			`You can search for info in a specific generation by appending the generation to ds or by using the <code>maxgen</code> keyword; e.g. <code>/ds1 normal</code> or <code>/ds normal, maxgen1</code> searches for all Pok\u00e9mon that were Normal type in Generation I.<br/>` +
-			`You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nds mod=ssb, protean</code>. All valid mod names are: <code>${dexesHelp}</code><br />` +
+			`You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nds mod=ssb, protean</code>. All valid mod names are: <code>${dexesHelpMods}</code><br/>` +
+			`You can search for info in a specific rule defined metagame by using <code>rule=[rule name]</code>; e.g. <code>/nds rule=alphabetcupmovelegality, v-create</code>. All supported rule names are: <code>${dexsearchHelpRules}</code><br/>` +
 			`By default, <code>/dexsearch</code> will search only Pok\u00e9mon obtainable in the current generation. Add the parameter <code>unreleased</code> to include unreleased Pok\u00e9mon. Add the parameter <code>natdex</code> (or use the command <code>/nds</code>) to include all past Pok\u00e9mon.<br/>` +
 			`Searching for a Pok\u00e9mon with both egg group and type parameters can be differentiated by adding the suffix <code>group</code> onto the egg group parameter; e.g., seaching for <code>grass, grass group</code> will show all Grass types in the Grass egg group.<br/>` +
 			`The parameter <code>monotype</code> will only show Pok\u00e9mon that are single-typed.<br/>` +
@@ -177,7 +181,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randmove',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -228,7 +231,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randpoke',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -274,7 +276,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randability',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		});
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -327,7 +328,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'movesearch',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast()) return;
@@ -363,7 +363,7 @@ export const commands: Chat.ChatCommands = {
 			`- Parameters separated with <code>|</code> will be searched as alternatives for each other; e.g. <code>fire | water</code> searches for all moves that are either Fire type or Water type.<br/>` +
 			`- If a Pok\u00e9mon is included as a parameter, only moves from its movepool will be included in the search.<br/>` +
 			`- You can search for info in a specific generation by appending the generation to ms; e.g. <code>/ms1 normal</code> searches for all moves that were Normal type in Generation I.<br/>` +
-			`- You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nms mod=ssb, dark, bp=100</code>. All valid mod names are: <code>${dexesHelp}</code><br />` +
+			`- You can search for info in a specific mod by using <code>mod=[mod name]</code>; e.g. <code>/nms mod=ssb, dark, bp=100</code>. All valid mod names are: <code>${dexesHelpMods}</code><br/>` +
 			`- <code>/ms</code> will search all non-dexited moves (clickable in that game); you can include dexited moves by using <code>/nms</code> or by adding <code>natdex</code> as a parameter.<br/>` +
 			`- The order of the parameters does not matter.` +
 			`</details>`
@@ -389,7 +389,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'itemsearch',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast()) return;
@@ -440,7 +439,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randitem',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		});
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -477,7 +475,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target,
 			cmd: 'abilitysearch',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		}, user);
 		if (!response.error && !this.runBroadcast()) return;
@@ -539,7 +536,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targets.join(','),
 			cmd: 'learn',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: formatid,
 		}, user);
 		if (!response.error && !this.runBroadcast()) return;
@@ -584,7 +580,6 @@ export const commands: Chat.ChatCommands = {
 		const response = await runSearch({
 			target: targetsBuffer.join(","),
 			cmd: 'randtype',
-			canAll: !this.broadcastMessage || checkCanAll(room),
 			message: (this.broadcastMessage ? "" : message),
 		});
 		if (!response.error && !this.runBroadcast(true)) return;
@@ -618,14 +613,61 @@ function getMod(target: string) {
 	return { splitTarget: arr, usedMod: modTerm ? toID(modTerm.split(/ ?= ?/)[1]) : undefined, count };
 }
 
-function runDexsearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
+function getRule(target: string) {
+	const arr = target.split(',').map(x => x.trim());
+	const ruleTerms: string[] = [];
+	for (const term of arr) {
+		const sanitizedStr = term.toLowerCase().replace(/[^a-z0-9=]+/g, '');
+		if (sanitizedStr.startsWith('rule=') && Dex.data.Rulesets[toID(sanitizedStr.split('=')[1])]) {
+			ruleTerms.push(term);
+		}
+	}
+	const count = arr.filter(x => {
+		const sanitizedStr = x.toLowerCase().replace(/[^a-z0-9=]+/g, '');
+		return sanitizedStr.startsWith('rule=');
+	}).length;
+	if (ruleTerms.length > 0) {
+		for (const rule of ruleTerms) {
+			arr.splice(arr.indexOf(rule), 1);
+		}
+	}
+	return { splitTarget: arr, usedRules: ruleTerms.map(
+		x => x.toLowerCase().replace(/[^a-z0-9=]+/g, '').split('rule=')[1]), count };
+}
+
+function prepareDexsearchValidator(usedMod: string | undefined, rules: FormatData[], nationalSearch: boolean | null) {
+	const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9ou';
+	const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
+	const additionalRules = [];
+	for (const rule of rules) {
+		if (!ruleTable.has(toID(rule.name))) additionalRules.push(toID(rule.name));
+	}
+	if (nationalSearch && !ruleTable.has('natdexmod')) additionalRules.push('natdexmod');
+	if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
+	return TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
+}
+
+function runDexsearch(target: string, cmd: string, message: string, isTest: boolean) {
 	const searches: DexOrGroup[] = [];
-	const { splitTarget, usedMod, count: c } = getMod(target);
-	if (c > 1) {
+	const { splitTarget: remainingTargets, usedMod, count: modCount } = getMod(target);
+	const { splitTarget, usedRules } = getRule(remainingTargets.join(','));
+	if (modCount > 1) {
 		return { error: `You can't run searches for multiple mods.` };
 	}
-
+	for (const str of splitTarget) {
+		const sanitizedStr = str.toLowerCase().replace(/[^a-z0-9=]+/g, '');
+		if (sanitizedStr.startsWith('mod=') || sanitizedStr.startsWith('rule=')) {
+			return { error: `${sanitizedStr.split('=')[1]} is an invalid mod or rule, see /dexsearchhelp.` };
+		}
+	}
 	const mod = Dex.mod(usedMod || 'base');
+	const rules: FormatData[] = [];
+	for (const rule of usedRules) {
+		if (!dexsearchHelpRules.includes(rule))
+			return { error: `${rule} is an unsupported rule, see /dexsearchhelp` };
+		rules.push(Dex.data.Rulesets[rule]);
+	}
+
 	const allTiers: { [k: string]: TierTypes.Singles | TierTypes.Other } = Object.assign(Object.create(null), {
 		anythinggoes: 'AG', ag: 'AG',
 		uber: 'Uber', ubers: 'Uber', ou: 'OU',
@@ -684,7 +726,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		water3: 'Water 3',
 	});
 	const allFormes = ['alola', 'galar', 'hisui', 'paldea', 'primal', 'therian', 'totem'];
-	const allStats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'bst', 'weight', 'height', 'gen'];
+	const allStats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'bst', 'weight', 'height', 'gen', 'num'];
 	const allStatAliases: { [k: string]: string } = {
 		attack: 'atk', defense: 'def', specialattack: 'spa', spc: 'spa', special: 'spa', spatk: 'spa',
 		specialdefense: 'spd', spdef: 'spd', speed: 'spe', wt: 'weight', ht: 'height', generation: 'gen',
@@ -709,6 +751,13 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			const g = group[cat as keyof DexOrGroup];
 			if (g === undefined) continue;
 			if (tierTraits.includes(cat) && tierInequalitySearch) continue;
+			if (cat === 'stats') {
+				const inequality = param.split(',');
+				const result = validStatInequality(group['stats'], inequality[0],
+					inequality[1] as Direction, inequality[2], +inequality[3], input);
+				if (!result) continue;
+				return result;
+			}
 			if (typeof g !== 'boolean' && g[param] === undefined) {
 				if (uniqueTraits.includes(cat)) {
 					for (const currentParam in g) {
@@ -721,6 +770,55 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				return `A search cannot both include and exclude '${input}'.`;
 			} else {
 				return `The search included '${(isNotSearch ? "!" : "") + input}' more than once.`;
+			}
+		}
+		return false;
+	};
+	const validStatInequality = (g: { [k: string]: { [k in Direction]: { [s: string]: number | boolean } } },
+		statKey: string, direction: Direction, compareTo: string, value: number, input: string) => {
+		const gValue = g[statKey]?.[direction]?.[compareTo]; // Duplicate value
+		const swapValue = g[compareTo]?.[direction]?.[statKey]; // Creates invalid ranges. non-numeric
+
+		if (direction === 'equal') {
+			const gEquality = gValue || swapValue;
+			const greater = g[statKey]?.['greater']?.[compareTo] || g[compareTo]?.['greater']?.[statKey];
+			const less = g[statKey]?.['less']?.[compareTo] || g[compareTo]?.['less']?.[statKey];
+			const inclusiveGreater = gEquality && gEquality === greater; // Group has a matching = and > or inverse
+			const inclusiveLess = gEquality && gEquality === less; // Group has a matching = and < or inverse
+			const gInclusiveIneq = ((greater && inclusiveGreater) || (less && inclusiveLess)); // Group has a = and matching > or <
+
+			// Skip over combined inequality operations because they present separately.
+			if (gEquality && !(input.search(/([><]{1}=)/) >= 0 || gInclusiveIneq)) {
+				return `The search already included '${input}' or another inequality which makes it redundant.`;
+			} else if (compareTo === 'numeric') {
+				if ((greater && ((inclusiveGreater && value < +greater) || (!inclusiveGreater && value <= +greater))) ||
+					(less && ((inclusiveLess && value > +less) || (!inclusiveLess && value >= +less)))) {
+					return `The search '${input}' creates an invalid range.`;
+				}
+			// Only string stat comparisons are left which are never valid without an = on both sides.
+			} else if (!gEquality && (greater || less)) {
+				return `The search '${input}' creates an invalid range.`;
+			}
+		} else {
+			const inverseDirection = direction === 'greater' ? 'less' : 'greater';
+			const inverseValue = g[statKey]?.[inverseDirection]?.[compareTo]; // Creates invalid ranges
+			const inverseSwapValue = g[compareTo]?.[inverseDirection]?.[statKey]; // Duplicate value, non-numeric
+			const gEquality = g[statKey]?.['equal']?.[compareTo] || g[compareTo]?.['equal']?.[statKey]; // Group has an = op
+			const checkEquality = input.includes('=') && gEquality;
+
+			if (gValue || inverseSwapValue) {
+				return `The search already included '${input}' or another inequality which makes it redundant.`;
+			} else if (compareTo === 'numeric' && (inverseValue || gEquality)) {
+				const result = value - Number(inverseValue || gEquality);
+				if ((direction === 'greater' && ((checkEquality && result > 0) || (!checkEquality && result >= 0))) ||
+					(direction === 'less' && ((checkEquality && result < 0) || (!checkEquality && result <= 0)))) {
+					return `The search '${input}' creates an invalid range.`;
+				}
+			// Only string stat comparisons are left which are never valid without an = on both sides.
+			// Second part catches searches like atk = spatk, spatk > atk but not def = spe, spatk > atk
+			} else if (compareTo !== 'numeric' && ((!checkEquality && (swapValue || inverseValue)) ||
+				(!input.includes('=') && gEquality))) {
+				return `The search '${input}' creates an invalid range.`;
 			}
 		}
 		return false;
@@ -776,8 +874,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				tierSearch = tierSearch || !isNotSearch;
 				if (isTierInequalityParam) {
 					const tierValue = singlesTiersValues[target];
-					const entires = Object.entries(singlesTiersValues);
-					for (const [key, value] of entires) {
+					const entries = Object.entries(singlesTiersValues);
+					for (const [key, value] of entries) {
 						const useTier = (value > tierValue && tierInequality[0]) || (value < tierValue && !tierInequality[0]);
 						if (useTier && (!key.startsWith('CAP') || capSearch)) {
 							orGroup.tiers[key] = true;
@@ -798,8 +896,8 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 				tierSearch = tierSearch || !isNotSearch;
 				if (isTierInequalityParam) {
 					const tierValue = doublesTiersValues[target];
-					const entires = Object.entries(doublesTiersValues);
-					for (const [key, value] of entires) {
+					const entries = Object.entries(doublesTiersValues);
+					for (const [key, value] of entries) {
 						if ((value > tierValue && tierInequality[0]) || (value < tierValue && !tierInequality[0])) {
 							orGroup.doublesTiers[key] = true;
 						} else if (tierValue === value && tierInequality[1]) {
@@ -914,7 +1012,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 
 			if (target === 'all') {
-				if (!canAll) return { error: "A search with the parameter 'all' cannot be broadcast." };
 				if (parameters.length > 1) return { error: "The parameter 'all' cannot have alternative parameters." };
 				showAll = true;
 				orGroup.skip = true;
@@ -1103,31 +1200,53 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 					inequalityString = target.charAt(inequality);
 				}
 				const targetParts = target.replace(/\s/g, '').split(inequalityString);
-				let num;
-				let stat;
+				if (targetParts[1].search(/>|<|=/) >= 0 || targetParts.length > 2) {
+					return { error: `'${target}' contained more than one inequality symbol.` };
+				}
+				let compareType: string;
+				let statKey: string;
+				let value: number | boolean;
 				const directions: Direction[] = [];
 				if (!isNaN(parseFloat(targetParts[0]))) {
 					// e.g. 100 < spe
-					num = parseFloat(targetParts[0]);
-					stat = targetParts[1];
+					value = parseFloat(targetParts[0]);
+					statKey = targetParts[1];
+					compareType = 'numeric';
 					if (inequalityString.startsWith('>')) directions.push('less');
 					if (inequalityString.startsWith('<')) directions.push('greater');
 				} else if (!isNaN(parseFloat(targetParts[1]))) {
 					// e.g. spe > 100
-					num = parseFloat(targetParts[1]);
-					stat = targetParts[0];
+					value = parseFloat(targetParts[1]);
+					statKey = targetParts[0];
+					compareType = 'numeric';
 					if (inequalityString.startsWith('<')) directions.push('less');
 					if (inequalityString.startsWith('>')) directions.push('greater');
 				} else {
-					return { error: `No value given to compare with '${target}'.` };
+					// e.g. atk = spatk
+					value = true;
+					statKey = targetParts[0];
+					compareType = targetParts[1];
+					if (inequalityString.startsWith('<')) directions.push('less');
+					if (inequalityString.startsWith('>')) directions.push('greater');
+					if (statKey in allStatAliases) statKey = allStatAliases[statKey];
+					if (compareType in allStatAliases) compareType = allStatAliases[compareType];
+					if (!allStats.slice(0, 6).includes(statKey) || !allStats.slice(0, 6).includes(compareType))
+						return { error: `'${target}' did not contain a valid stat to compare with another stat.` };
 				}
 				if (inequalityString.endsWith('=')) directions.push('equal');
-				if (stat in allStatAliases) stat = allStatAliases[stat];
-				if (!allStats.includes(stat)) return { error: `'${target}' did not contain a valid stat.` };
-				if (!orGroup.stats[stat]) orGroup.stats[stat] = Object.create(null);
+				if (statKey in allStatAliases) statKey = allStatAliases[statKey];
+				if (!allStats.includes(statKey)) return { error: `'${target}' contained an invalid stat.` };
+				if (typeof value === 'number' && value <= 0) return { error: `Specify a positive value for numeric comparison.` };
+				if (!orGroup.stats[statKey]) orGroup.stats[statKey] = Object.create(null);
+				// Prevents numeric searches from being overwritten and prevent duplicate searches of other types.
 				for (const direction of directions) {
-					if (orGroup.stats[stat][direction]) return { error: `Invalid stat range for ${stat}.` };
-					orGroup.stats[stat][direction] = num;
+					if (!orGroup.stats[statKey][direction])
+						orGroup.stats[statKey][direction] = Object.create(null);
+					else if (orGroup.stats[statKey][direction][compareType])
+						return { error: `Duplicate stat inequality and type for ${statKey}.` };
+					const invalid = validParameter('stats', [statKey, direction, compareType, value].join(','), isNotSearch, target);
+					if (invalid) return { error: invalid };
+					orGroup.stats[statKey][direction][compareType] = value;
 				}
 				continue;
 			}
@@ -1142,8 +1261,17 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		megaSearch === null && gmaxSearch === null && fullyEvolvedSearch === null && restrictedSearch === null && sort === null
 	) {
 		return {
-			error: "No search parameters other than 'all' were found. Try '/help dexsearch' for more information on this command.",
+			error: "No search parameters other than all were found. Try '/help dexsearch' for more information on this command.",
 		};
+	}
+
+	// Prepare move validator and pokemonSource outside the hot loop
+	// but don't prepare them at all if there are no moves to check...
+	// These only ever get accessed if there are moves or banlists to filter by.
+	let validator;
+	let pokemonSource;
+	if (Object.values(searches).some(search => !!Object.keys(search.moves).length)) {
+		validator = prepareDexsearchValidator(usedMod, rules, nationalSearch);
 	}
 
 	const dex: { [k: string]: Species } = {};
@@ -1153,6 +1281,22 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		const fullyEvolvedSearchResult = fullyEvolvedSearch === null || fullyEvolvedSearch !== species.nfe;
 		const restrictedSearchResult = restrictedSearch === null ||
 			restrictedSearch === species.tags.includes('Restricted Legendary');
+
+		/**
+		 * Not every ruleset with an onValidateSet function is specifically to exclude mons.
+		 * In the current list of supported rules only the Pokedex rules do such which is
+		 * why this step is ignored for other rules. Rules can be added for this functionality
+		 * in the supportedDexSearchTypes mapping at the top of the function.
+		 */
+		let ruleResult = true;
+		for (const rule of rules) {
+			if (!ruleResult) break;
+			if (!supportedDexsearchRules['banlist'].includes(toID(rule.name))) continue;
+			if (!validator) validator = prepareDexsearchValidator(usedMod, rules, nationalSearch);
+			ruleResult = !rule.onValidateSet?.call(validator,
+				{ name: species.name, species: species.id } as PokemonSet, validator.format, {}, {});
+		}
+
 		if (
 			species.gen <= mod.gen &&
 			(
@@ -1163,9 +1307,15 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			megaSearchResult &&
 			gmaxSearchResult &&
 			fullyEvolvedSearchResult &&
-			restrictedSearchResult
+			restrictedSearchResult &&
+			ruleResult
 		) {
-			dex[species.id] = species;
+			let newSpecies = species;
+			for (const rule of rules) {
+				newSpecies = rule?.onModifySpecies?.call({ dex: mod, clampIntRange: Utils.clampIntRange, toID } as Battle,
+					newSpecies) || newSpecies;
+			}
+			dex[newSpecies.id] = newSpecies;
 		}
 	}
 
@@ -1176,19 +1326,6 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		Object.values(search).reduce(accumulateKeyCount, 0)
 	));
 
-	// Prepare move validator and pokemonSource outside the hot loop
-	// but don't prepare them at all if there are no moves to check...
-	// These only ever get accessed if there are moves to filter by.
-	let validator;
-	let pokemonSource;
-	if (Object.values(searches).some(search => Object.keys(search.moves).length !== 0)) {
-		const format = Object.entries(Dex.data.Rulesets).find(([a, f]) => f.mod === usedMod)?.[1].name || 'gen9ou';
-		const ruleTable = Dex.formats.getRuleTable(Dex.formats.get(format));
-		const additionalRules = [];
-		if (nationalSearch && !ruleTable.has('natdexmod')) additionalRules.push('natdexmod');
-		if (nationalSearch && ruleTable.valueRules.has('minsourcegen')) additionalRules.push('!!minsourcegen=3');
-		validator = TeamValidator.get(`${format}${additionalRules.length ? `@@@${additionalRules.join(',')}` : ''}`);
-	}
 	for (const alts of searches) {
 		if (alts.skip) continue;
 		const altsMoves = Object.keys(alts.moves).map(x => mod.moves.get(x)).filter(move => move.gen <= mod.gen);
@@ -1318,47 +1455,68 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 			}
 			if (matched) continue;
 
-			for (const stat in alts.stats) {
+			function retrieveStat(species: Species, stat: string) {
 				let monStat = 0;
 				if (stat === 'bst') {
-					monStat = dex[mon].bst;
+					monStat = species.bst;
 				} else if (stat === 'weight') {
-					monStat = dex[mon].weighthg / 10;
+					monStat = species.weighthg / 10;
 				} else if (stat === 'height') {
-					monStat = dex[mon].heightm;
+					monStat = species.heightm;
 				} else if (stat === 'gen') {
-					monStat = dex[mon].gen;
+					monStat = species.gen;
+				} else if (stat === 'num') {
+					monStat = species.num;
 				} else {
-					monStat = dex[mon].baseStats[stat as StatID];
+					monStat = species.baseStats[stat as StatID];
 				}
-				if (typeof alts.stats[stat].less === 'number') {
-					if (monStat < alts.stats[stat].less) {
-						matched = true;
-						break;
+				return monStat;
+			}
+
+			for (const stat in alts.stats) {
+				const monStat = retrieveStat(dex[mon], stat);
+				for (const direction in alts.stats[stat]) {
+					for (const comparisonStat in alts.stats[stat][direction as Direction]) {
+						const checkStat = alts.stats[stat][direction as Direction][comparisonStat];
+						if (!checkStat) continue;
+						const compareTo = typeof checkStat === 'number' ?
+							checkStat : retrieveStat(dex[mon], comparisonStat);
+						if ((direction === 'less' && monStat < compareTo) ||
+							(direction === 'greater' && monStat > compareTo) ||
+							(direction === 'equal' && monStat === compareTo)) {
+							matched = true;
+							break;
+						}
 					}
+					if (matched) break;
 				}
-				if (typeof alts.stats[stat].greater === 'number') {
-					if (monStat > alts.stats[stat].greater) {
-						matched = true;
-						break;
-					}
-				}
-				if (typeof alts.stats[stat].equal === 'number') {
-					if (monStat === alts.stats[stat].equal) {
-						matched = true;
-						break;
-					}
-				}
+				if (matched) break;
 			}
 			if (matched) continue;
 
-			for (const move of altsMoves) {
-				pokemonSource = validator?.allSources();
-				if (validator && !validator.checkCanLearn(move, dex[mon], pokemonSource) === alts.moves[move.id]) {
-					matched = true;
-					break;
+			if (validator) {
+				for (const move of altsMoves) {
+					pokemonSource = validator.allSources();
+					const isNotSearch = !alts.moves[move.id];
+
+					let matchRule = false;
+					let numMoveValidationRules = 0;
+					for (const rule of rules) {
+						if (!supportedDexsearchRules['movevalidation'].includes(toID(rule.name))) continue;
+						else numMoveValidationRules++;
+						matchRule = !rule.checkCanLearn?.call(
+							validator, move, dex[mon], pokemonSource, {} as PokemonSet) === !isNotSearch;
+						if (matchRule === !isNotSearch) break;
+					}
+					const matchNormally = !validator.checkCanLearn(move, dex[mon], pokemonSource) === !isNotSearch;
+
+					if ((!isNotSearch && (matchNormally || (numMoveValidationRules > 0 && matchRule))) ||
+						(isNotSearch && matchNormally && (numMoveValidationRules === 0 || matchRule))) {
+						matched = true;
+						break;
+					}
+					if (pokemonSource && !pokemonSource.size()) break;
 				}
-				if (pokemonSource && !pokemonSource.size()) break;
 			}
 			if (matched) continue;
 
@@ -1368,42 +1526,43 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 
 	const stat = sort?.slice(0, -1);
 
-	function getSortValue(name: string) {
+	function getSortValue(species: Species) {
 		if (!stat) return 0;
-		const mon = mod.species.get(name);
-		if (stat === 'bst') {
-			return mon.bst;
-		} else if (stat === 'weight') {
-			return mon.weighthg;
-		} else if (stat === 'height') {
-			return mon.heightm;
-		} else if (stat === 'gen') {
-			return mon.gen;
-		} else {
-			return mon.baseStats[stat as StatID];
+		switch (stat) {
+		case 'bst':
+			return species.bst;
+		case 'weight':
+			return species.weighthg;
+		case 'height':
+			return species.heightm;
+		case 'gen':
+			return species.gen;
+		case 'num':
+			return species.num;
+		default:
+			return species.baseStats[stat as StatID];
 		}
 	}
 
-	let results: string[] = [];
-	for (const mon of Object.keys(dex).sort()) {
-		if (singleTypeSearch !== null && (dex[mon].types.length === 1) !== singleTypeSearch) continue;
-		const isRegionalForm = (["Alola", "Galar", "Hisui"].includes(dex[mon].forme) || dex[mon].forme.startsWith("Paldea")) &&
-			dex[mon].baseSpecies !== "Pikachu";
-		const maskForm = dex[mon].baseSpecies === "Ogerpon" && !dex[mon].forme.endsWith("Tera");
+	let results: Species[] = [];
+	for (const mon of Object.values(dex).sort()) {
+		if (singleTypeSearch !== null && (mon.types.length === 1) !== singleTypeSearch) continue;
+		const isRegionalForm = (["Alola", "Galar", "Hisui"].includes(mon.forme) || mon.forme.startsWith("Paldea")) &&
+			mon.baseSpecies !== "Pikachu";
+		const maskForm = mon.baseSpecies === "Ogerpon" && !mon.forme.endsWith("Tera");
 		const allowGmax = (gmaxSearch || tierSearch);
-		if (!isRegionalForm && !maskForm && dex[mon].baseSpecies && results.includes(dex[mon].baseSpecies) &&
-			getSortValue(mon) === getSortValue(dex[mon].baseSpecies)) continue;
-		const teraFormeChangesFrom = dex[mon].forme.endsWith("Tera") ? !Array.isArray(dex[mon].battleOnly) ?
-			dex[mon].battleOnly! : null : null;
-		if (teraFormeChangesFrom && results.includes(teraFormeChangesFrom) &&
-			getSortValue(mon) === getSortValue(teraFormeChangesFrom)) continue;
-		if (dex[mon].isNonstandard === 'Gigantamax' && !allowGmax) continue;
-		results.push(dex[mon].name);
+		if (!isRegionalForm && !maskForm && mon.baseSpecies && results.includes(mod.species.get(mon.baseSpecies)) &&
+			getSortValue(mon) === getSortValue(mod.species.get(mon.baseSpecies))) continue;
+		const teraFormeChangesFrom = mon.forme.endsWith("Tera") ? !Array.isArray(mon.battleOnly) ?
+			mon.battleOnly! : null : null;
+		if (teraFormeChangesFrom && results.includes(mod.species.get(teraFormeChangesFrom)) &&
+			getSortValue(mon) === getSortValue(mod.species.get(teraFormeChangesFrom))) continue;
+		if (mon.isNonstandard === 'Gigantamax' && !allowGmax) continue;
+		results.push(mon);
 	}
 
 	if (usedMod === 'gen7letsgo') {
-		results = results.filter(name => {
-			const species = mod.species.get(name);
+		results = results.filter(species => {
 			return (species.num <= 151 || ['Meltan', 'Melmetal'].includes(species.name)) &&
 				(!species.forme || (['Alola', 'Mega', 'Mega-X', 'Mega-Y', 'Starter'].includes(species.forme) &&
 					species.name !== 'Pikachu-Alola'));
@@ -1411,8 +1570,7 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 	}
 
 	if (usedMod === 'gen8bdsp') {
-		results = results.filter(name => {
-			const species = mod.species.get(name);
+		results = results.filter(species => {
 			if (species.id === 'pichuspikyeared') return false;
 			if (capSearch) return species.gen <= 4;
 			return species.gen <= 4 && species.num >= 1;
@@ -1423,34 +1581,45 @@ function runDexsearch(target: string, cmd: string, canAll: boolean, message: str
 		results = Utils.shuffle(results).slice(0, randomOutput);
 	}
 
-	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${Utils.escapeHTML(message)}:</span><br />`);
+	let resultsStr = (message === "" ? message :
+		`<span class="gray">${Utils.escapeHTML(message)}:</span><br/>`);
 	if (results.length > 1) {
 		results.sort();
 		if (sort) {
 			const direction = sort.slice(-1);
-			Utils.sortBy(results, name => getSortValue(name) * (direction === '+' ? 1 : -1));
+			Utils.sortBy(results, species => getSortValue(species) * (direction === '+' ? 1 : -1));
 		}
-		let notShown = 0;
-		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
-			notShown = results.length - RESULTS_MAX_LENGTH;
-			results = results.slice(0, RESULTS_MAX_LENGTH);
+
+		function mapPokemonResults(inputArr: Species[]) {
+			return inputArr.map(
+				result => `<a href="//${Config.routes.dex}/pokemon/${toID(result.name)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result.name}" style="vertical-align:-7px;margin:-2px" />${result.name}</a>`
+			).join(", ");
 		}
-		resultsStr += results.map(
-			result => `<a href="//${Config.routes.dex}/pokemon/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon pokemon="${result}" style="vertical-align:-7px;margin:-2px" />${result}</a>`
-		).join(", ");
-		if (notShown) {
-			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
+
+		if (results.length > MAX_RANDOM_RESULTS) {
+			resultsStr = formatCollapsible(message, showAll, results, mapPokemonResults);
+		} else {
+			resultsStr += mapPokemonResults(results);
 		}
 	} else if (results.length === 1) {
 		return { dt: `${results[0]}${usedMod ? `,${usedMod}` : ''}` };
 	} else {
 		resultsStr += "No Pok&eacute;mon found.";
 	}
-	if (isTest) return { results, reply: resultsStr };
+	if (isTest) return { results: results.map(species => species.name), reply: resultsStr };
 	return { reply: resultsStr };
 }
 
-function runMovesearch(target: string, cmd: string, canAll: boolean, message: string, isTest: boolean) {
+function formatCollapsible(message: string, showall: boolean, results: any[], mapfunc: (inputArr: any[]) => string) {
+	const expand = showall && message !== "" && !message.startsWith('!');
+	const header = message === '' ? `${results.length} results` : `${message} (${results.length} results)`;
+	const notShown = results.length - RESULTS_MAX_LENGTH;
+	const resultsSummary = `${mapfunc(results.slice(0, RESULTS_MAX_LENGTH))}, and ${notShown} more. <span class="ilink">Show all</span>`;
+	const resultsHidden = mapfunc(results);
+	return `<details class="details"${expand ? ' open' : ''}><summary><span class="gray">${Utils.escapeHTML(header)}</span><br/><span class="details-preview">${resultsSummary}</span></summary>${resultsHidden}</details>`;
+}
+
+function runMovesearch(target: string, cmd: string, message: string, isTest: boolean) {
 	const searches: MoveOrGroup[] = [];
 	const { splitTarget, usedMod, count } = getMod(target);
 	if (count > 1) {
@@ -1607,7 +1776,6 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 			}
 
 			if (target === 'all') {
-				if (!canAll) return { error: "A search with the parameter 'all' cannot be broadcast." };
 				if (parameters.length > 1) return { error: "The parameter 'all' cannot have alternative parameters." };
 				showAll = true;
 				orGroup.skip = true;
@@ -1865,7 +2033,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	}
 	if (showAll && !searches.length && !targetMons.length && !sort) {
 		return {
-			error: "No search parameters other than 'all' were found. Try '/help movesearch' for more information on this command.",
+			error: "No search parameters other than all were found. Try '/help movesearch' for more information on this command.",
 		};
 	}
 
@@ -2148,9 +2316,9 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 
 	let resultsStr = "";
 	if (targetMons.length) {
-		resultsStr += `<span style="color:#999999;">Matching moves found in learnset(s) for</span> ${targetMons.map(mon => `${mon.shouldBeExcluded ? "!" : ""}${mon.name}`).join(', ')}:<br />`;
+		resultsStr += `<span class="gray">Matching moves found in learnset(s) for</span> ${targetMons.map(mon => `${mon.shouldBeExcluded ? "!" : ""}${mon.name}`).join(', ')}:<br />`;
 	} else {
-		resultsStr += (message === "" ? message : `<span style="color:#999999;">${Utils.escapeHTML(message)}:</span><br />`);
+		resultsStr += (message === "" ? message : `<span class="gray">${Utils.escapeHTML(message)}:</span><br />`);
 	}
 	if (randomOutput && randomOutput < results.length) {
 		results = Utils.shuffle(results).slice(0, randomOutput);
@@ -2167,20 +2335,21 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 				return moveProp * (direction === '+' ? 1 : -1);
 			});
 		}
-		let notShown = 0;
-		if (!showAll && results.length > MAX_RANDOM_RESULTS) {
-			notShown = results.length - RESULTS_MAX_LENGTH;
-			results = results.slice(0, RESULTS_MAX_LENGTH);
+
+		function mapMoveResults(inputArray: string[]) {
+			return inputArray.map(
+				result => `<a href="//${Config.routes.dex}/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
+					(sort ?
+						// eslint-disable-next-line @typescript-eslint/no-base-to-string
+						` (${dex[toID(result)][sort.slice(0, -1) as keyof Move] === true ? '-' : dex[toID(result)][sort.slice(0, -1) as keyof Move]})` :
+						'')
+			).join(", ");
 		}
-		resultsStr += results.map(
-			result => `<a href="//${Config.routes.dex}/moves/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>` +
-				(sort ?
-					// eslint-disable-next-line @typescript-eslint/no-base-to-string
-					` (${dex[toID(result)][sort.slice(0, -1) as keyof Move] === true ? '-' : dex[toID(result)][sort.slice(0, -1) as keyof Move]})` :
-					'')
-		).join(", ");
-		if (notShown) {
-			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
+
+		if (results.length > MAX_RANDOM_RESULTS) {
+			resultsStr = formatCollapsible(message, showAll, results, mapMoveResults);
+		} else {
+			resultsStr += mapMoveResults(results);
 		}
 	} else if (results.length === 1) {
 		return { dt: `${results[0]}${usedMod ? `,${usedMod}` : ''}` };
@@ -2191,7 +2360,7 @@ function runMovesearch(target: string, cmd: string, canAll: boolean, message: st
 	return { reply: resultsStr };
 }
 
-function runItemsearch(target: string, cmd: string, canAll: boolean, message: string) {
+function runItemsearch(target: string, cmd: string, message: string) {
 	let showAll = false;
 	let maxGen = 0;
 	let gen = 0;
@@ -2199,7 +2368,6 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 
 	const targetSplit = target.split(',');
 	if (targetSplit[targetSplit.length - 1].trim() === 'all') {
-		if (!canAll) return { error: "A search ending in ', all' cannot be broadcast." };
 		showAll = true;
 		targetSplit.pop();
 	}
@@ -2431,7 +2599,13 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 		}
 	}
 
-	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${Utils.escapeHTML(message)}:</span><br />`);
+	function mapItemResults(inputArr: (string | Item)[]) {
+		return inputArr.map(
+			result => `<a href="//${Config.routes.dex}/items/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon item="${result}" style="vertical-align:-7px" />${result}</a>`
+		).join(", ");
+	}
+
+	let resultsStr = (message === "" ? message : `<span class="gray">${Utils.escapeHTML(message)}:</span><br />`);
 	if (randomOutput !== 0) {
 		const randomItems = [];
 		if (foundItems.length === 0) {
@@ -2446,24 +2620,16 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 				randomItems.push(foundItems[Math.floor(Math.random() * foundItems.length)]);
 			}
 		}
-		resultsStr += randomItems.map(
-			result => `<a href="//${Config.routes.dex}/items/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon item="${result}" style="vertical-align:-7px" />${result}</a>`
-		).join(", ");
+		resultsStr += mapItemResults(randomItems);
 		return { reply: resultsStr };
 	}
 
 	if (foundItems.length > 0) {
 		foundItems.sort();
-		let notShown = 0;
-		if (!showAll && foundItems.length > RESULTS_MAX_LENGTH + 5) {
-			notShown = foundItems.length - RESULTS_MAX_LENGTH;
-			foundItems = foundItems.slice(0, RESULTS_MAX_LENGTH);
-		}
-		resultsStr += foundItems.map(
-			result => `<a href="//${Config.routes.dex}/items/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap"><psicon item="${result}" style="vertical-align:-7px" />${result}</a>`
-		).join(", ");
-		if (notShown) {
-			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
+		if (foundItems.length > MAX_RANDOM_RESULTS) {
+			resultsStr = formatCollapsible(message, showAll, foundItems, mapItemResults);
+		} else {
+			resultsStr += mapItemResults(foundItems);
 		}
 	} else {
 		resultsStr += "No items found. Try a more general search";
@@ -2471,7 +2637,7 @@ function runItemsearch(target: string, cmd: string, canAll: boolean, message: st
 	return { reply: resultsStr };
 }
 
-function runAbilitysearch(target: string, cmd: string, canAll: boolean, message: string) {
+function runAbilitysearch(target: string, cmd: string, message: string) {
 	// based heavily on runItemsearch()
 	let showAll = false;
 	let maxGen = 0;
@@ -2480,7 +2646,6 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 
 	const targetSplit = target.split(',');
 	if (targetSplit[targetSplit.length - 1].trim() === 'all') {
-		if (!canAll) return { error: "A search ending in ', all' cannot be broadcast." };
 		showAll = true;
 		targetSplit.pop();
 	}
@@ -2613,8 +2778,14 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 		}
 	}
 
+	function mapAbilityResults(inputArr: (string | Ability)[]) {
+		return inputArr.map(
+			result => `<a href="//${Config.routes.dex}/abilities/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>`
+		).join(", ");
+	}
+
 	if (foundAbilities.length === 1) return { dt: foundAbilities[0] };
-	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${Utils.escapeHTML(message)}:</span><br />`);
+	let resultsStr = (message === "" ? message : `<span class="gray">${Utils.escapeHTML(message)}:</span><br />`);
 
 	if (randomOutput !== 0) {
 		const randomAbilities = [];
@@ -2634,24 +2805,16 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 				randomAbilities.push(foundAbilities[Math.floor(Math.random() * foundAbilities.length)]);
 			}
 		}
-		resultsStr += randomAbilities.map(
-			result => `<a href="//${Config.routes.dex}/abilities/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>`
-		).join(", ");
+		resultsStr += mapAbilityResults(randomAbilities);
 		return { reply: resultsStr };
 	}
 
 	if (foundAbilities.length > 0) {
 		foundAbilities.sort();
-		let notShown = 0;
-		if (!showAll && foundAbilities.length > RESULTS_MAX_LENGTH + 5) {
-			notShown = foundAbilities.length - RESULTS_MAX_LENGTH;
-			foundAbilities = foundAbilities.slice(0, RESULTS_MAX_LENGTH);
-		}
-		resultsStr += foundAbilities.map(
-			result => `<a href="//${Config.routes.dex}/abilities/${toID(result)}" target="_blank" class="subtle" style="white-space:nowrap">${result}</a>`
-		).join(", ");
-		if (notShown) {
-			resultsStr += `, and ${notShown} more. <span style="color:#999999;">Redo the search with ', all' at the end to show all results.</span>`;
+		if (foundAbilities.length > MAX_RANDOM_RESULTS) {
+			resultsStr = formatCollapsible(message, showAll, foundAbilities, mapAbilityResults);
+		} else {
+			resultsStr += mapAbilityResults(foundAbilities);
 		}
 	} else {
 		resultsStr += "No abilities found. Try a more general search.";
@@ -2659,7 +2822,7 @@ function runAbilitysearch(target: string, cmd: string, canAll: boolean, message:
 	return { reply: resultsStr };
 }
 
-function runLearn(target: string, cmd: string, canAll: boolean, formatid: string) {
+function runLearn(target: string, cmd: string, formatid: string) {
 	let format: Format = Dex.formats.get(formatid);
 	const targets = target.split(',');
 	let formatName = format.name;
@@ -2843,7 +3006,7 @@ function runLearn(target: string, cmd: string, canAll: boolean, formatid: string
 	return { reply: buffer };
 }
 
-function runSearch(query: { target: string, cmd: string, canAll: boolean, message: string }, user?: User) {
+function runSearch(query: { target: string, cmd: string, message: string }, user?: User) {
 	if (user) {
 		if (user.lastCommand.startsWith('/datasearch ')) {
 			throw new Chat.ErrorMessage(
@@ -2859,7 +3022,7 @@ function runSearch(query: { target: string, cmd: string, canAll: boolean, messag
 	});
 }
 
-function runRandtype(target: string, cmd: string, canAll: boolean, message: string) {
+function runRandtype(target: string, cmd: string, message: string) {
 	const icon: any = {};
 	for (const type of Dex.types.names()) {
 		icon[type] = `<img src="https://${Config.routes.client}/sprites/types/${type}.png" width="32" height="14">`;
@@ -2880,7 +3043,7 @@ function runRandtype(target: string, cmd: string, canAll: boolean, message: stri
 		// Add a random type to the output.
 		randTypes.push(Dex.types.names()[Math.floor(Math.random() * Dex.types.names().length)]);
 	}
-	let resultsStr = (message === "" ? message : `<span style="color:#999999;">${Utils.escapeHTML(message)}:</span><br />`);
+	let resultsStr = (message === "" ? message : `<span class="gray">${Utils.escapeHTML(message)}:</span><br />`);
 	resultsStr += randTypes.map(
 		type => icon[type]
 	).join(' ');
@@ -2899,20 +3062,20 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 		switch (query.cmd) {
 		case 'randpoke':
 		case 'dexsearch':
-			return runDexsearch(query.target, query.cmd, query.canAll, query.message, false);
+			return runDexsearch(query.target, query.cmd, query.message, false);
 		case 'randmove':
 		case 'movesearch':
-			return runMovesearch(query.target, query.cmd, query.canAll, query.message, false);
+			return runMovesearch(query.target, query.cmd, query.message, false);
 		case 'randitem':
 		case 'itemsearch':
-			return runItemsearch(query.target, query.cmd, query.canAll, query.message);
+			return runItemsearch(query.target, query.cmd, query.message);
 		case 'randability':
 		case 'abilitysearch':
-			return runAbilitysearch(query.target, query.cmd, query.canAll, query.message);
+			return runAbilitysearch(query.target, query.cmd, query.message);
 		case 'learn':
-			return runLearn(query.target, query.cmd, query.canAll, query.message);
+			return runLearn(query.target, query.cmd, query.message);
 		case 'randtype':
-			return runRandtype(query.target, query.cmd, query.canAll, query.message);
+			return runRandtype(query.target, query.cmd, query.message);
 		default:
 			throw new Error(`Unrecognized Dexsearch command "${query.cmd}"`);
 		}
@@ -2950,10 +3113,10 @@ if (!PM.isParentProcess) {
 }
 
 export const testables = {
-	runAbilitysearch: (target: string, cmd: string, canAll: boolean, message: string) =>
-		runAbilitysearch(target, cmd, canAll, message),
-	runDexsearch: (target: string, cmd: string, canAll: boolean, message: string) =>
-		runDexsearch(target, cmd, canAll, message, true),
-	runMovesearch: (target: string, cmd: string, canAll: boolean, message: string) =>
-		runMovesearch(target, cmd, canAll, message, true),
+	runAbilitysearch: (target: string, cmd: string, message: string) =>
+		runAbilitysearch(target, cmd, message),
+	runDexsearch: (target: string, cmd: string, message: string) =>
+		runDexsearch(target, cmd, message, true),
+	runMovesearch: (target: string, cmd: string, message: string) =>
+		runMovesearch(target, cmd, message, true),
 };

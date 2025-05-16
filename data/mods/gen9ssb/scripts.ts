@@ -531,13 +531,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			action.target.faint();
 			if (percent > 66) {
 				this.add('message', `Your courage will be greatly rewarded.`);
-				this.boost({ atk: 3, spa: 3, spe: 3 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
+				this.boost({ atk: 4, spa: 4, spe: 4 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
 			} else if (percent > 33) {
 				this.add('message', `Your offering was accepted.`);
-				this.boost({ atk: 2, spa: 2, spe: 2 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
+				this.boost({ atk: 3, spa: 3, spe: 3 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
 			} else {
 				this.add('message', `Coward.`);
-				this.boost({ atk: 1, spa: 1, spe: 1 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
+				this.boost({ atk: 2, spa: 2, spe: 2 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
 			}
 			this.add(`c:|${getName((action.pokemon.illusion || action.pokemon).name)}|Don't worry, if this plan fails we can just blame ${action.target.name}`);
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'scapegoat');
@@ -1845,6 +1845,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					let details = ``;
 					if (action.targetLoc && this.active.length > 1) details += ` ${action.targetLoc > 0 ? '+' : ''}${action.targetLoc}`;
 					if (action.mega) details += (action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`);
+					if (action.megax) details += ` megax`;
+					if (action.megay) details += ` megay`;
 					if (action.zmove) details += ` zmove`;
 					if (action.maxMove) details += ` dynamax`;
 					if (action.terastallize) details += ` terastallize`;

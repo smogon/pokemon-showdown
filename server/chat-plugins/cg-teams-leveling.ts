@@ -89,7 +89,7 @@ export const pages: Chat.PageTable = {
 	async cgtwinrates(query, user) {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		if (!cgtDatabase) {
-			return this.errorReply(`CGT win rates are not being tracked due to the server's SQL settings.`);
+			throw new Chat.ErrorMessage(`CGT win rates are not being tracked due to the server's SQL settings.`);
 		}
 		query = query.join('-').split('--');
 		const mode = query.shift();
@@ -97,7 +97,7 @@ export const pages: Chat.PageTable = {
 			let buf = `<div class="pad"><h2>Winrates for [Gen 9] Computer Generated Teams</h2>`;
 			const sorter = toID(query.shift() || 'alphabetical');
 			if (!['alphabetical', 'level'].includes(sorter)) {
-				return this.errorReply(`Invalid sorting method. Must be either 'alphabetical' or 'level'.`);
+				throw new Chat.ErrorMessage(`Invalid sorting method. Must be either 'alphabetical' or 'level'.`);
 			}
 			const otherSort = sorter === 'alphabetical' ? 'Level' : 'Alphabetical';
 			buf += `<a class="button" target="replace" href="/view-cgtwinrates-current--${toID(otherSort)}">`;

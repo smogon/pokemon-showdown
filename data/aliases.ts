@@ -90,8 +90,8 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 9] Cross Evolution",
 	mayhem: "[Gen 9] Random Battle Mayhem",
-	omotm: "[Gen 9] Frantic Fusions",
-	lcotm: "[Gen 9] Cross Evolution",
+	omotm: "[Gen 9] Trademarked",
+	lcotm: "[Gen 9] Partners in Crime",
 
 	// mega evos
 	fabio: "Ampharos-Mega",
