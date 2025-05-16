@@ -15789,7 +15789,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	alcremie: {
 		num: 869,
 		name: "Alcremie",
-		baseForme: "Vanilla Cream",
+		baseForme: "Vanilla-Cream",
 		types: ["Fairy"],
 		gender: "F",
 		baseStats: { hp: 65, atk: 60, def: 75, spa: 110, spd: 121, spe: 64 },
@@ -15942,7 +15942,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	morpeko: {
 		num: 877,
 		name: "Morpeko",
-		baseForme: "Full Belly",
+		baseForme: "Full-Belly",
 		types: ["Electric", "Dark"],
 		baseStats: { hp: 58, atk: 95, def: 58, spa: 70, spd: 58, spe: 97 },
 		abilities: { 0: "Hunger Switch" },
