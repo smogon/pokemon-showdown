@@ -145,6 +145,7 @@ export class Battle {
 	readonly messageLog: string[];
 	sentLogPos: number;
 	sentEnd: boolean;
+	sentRequests = true;
 
 	requestState: RequestState;
 	turn: number;
@@ -1345,8 +1346,9 @@ export class Battle {
 
 		const requests = this.getRequests(type);
 		for (let i = 0; i < this.sides.length; i++) {
-			this.sides[i].emitRequest(requests[i]);
+			this.sides[i].activeRequest = requests[i];
 		}
+		this.sentRequests = false;
 
 		if (this.sides.every(side => side.isChoiceDone())) {
 			throw new Error(`Choices are done immediately after a request`);
@@ -2632,10 +2634,10 @@ export class Battle {
 				const behemothMove: { [k: string]: string } = {
 					'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 				};
-				const ironHead = pokemon.baseMoves.indexOf('ironhead');
-				if (ironHead >= 0) {
+				const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
+				if (ironHeadIndex >= 0) {
 					const move = this.dex.moves.get(behemothMove[rawSpecies.name]);
-					pokemon.baseMoveSlots[ironHead] = {
+					pokemon.baseMoveSlots[ironHeadIndex] = {
 						move: move.name,
 						id: move.id,
 						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
@@ -3171,9 +3173,9 @@ export class Battle {
 					const crowned: { [k: string]: string } = {
 						'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 					};
-					const ironHead = set.moves.map(toID).indexOf('ironhead' as ID);
-					if (ironHead >= 0) {
-						newSet.moves[ironHead] = crowned[newSet.species];
+					const ironHeadIndex = set.moves.map(toID).indexOf('ironhead' as ID);
+					if (ironHeadIndex >= 0) {
+						newSet.moves[ironHeadIndex] = crowned[newSet.species];
 					}
 				}
 				return newSet;
@@ -3227,6 +3229,10 @@ export class Battle {
 	sendUpdates() {
 		if (this.sentLogPos >= this.log.length) return;
 		this.send('update', this.log.slice(this.sentLogPos));
+		if (!this.sentRequests) {
+			for (const side of this.sides) side.emitRequest();
+			this.sentRequests = true;
+		}
 		this.sentLogPos = this.log.length;
 
 		if (!this.sentEnd && this.ended) {

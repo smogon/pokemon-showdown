@@ -121,12 +121,18 @@ export const pages: Chat.PageTable = {
 				return key;
 			}
 		});
+		const canManage = user.can('announce', null, room);
 		for (const [key, queue] of sortedEntries) {
 			buf += `<table style="margin-bottom:30px;"><th colspan="2"><h3>${key}:</h3></th>`;
 			for (const i of queue.keys()) {
 				const html = renderSpotlight(room.roomid, key, i);
-				buf += `<tr><td>${i || 'Current'}</td><td>${html}</td></tr>`;
-				if (!user.can('announce', null, room)) break;
+				buf += `<tr><td>${i || 'Current'}</td><td>${html}</td>`;
+				if (canManage) {
+					const deleteCommand = `/msgroom ${room.roomid},/removedaily ${key}, ${i}`;
+					buf += `<td><button class="button" name="send" value="${deleteCommand}">Delete</button></td>`;
+				}
+				buf += `</tr>`;
+				if (!canManage) break;
 			}
 			buf += '</table>';
 		}
@@ -140,6 +146,7 @@ export const commands: Chat.ChatCommands = {
 		if (!room.persist) throw new Chat.ErrorMessage("This command is unavailable in temporary rooms.");
 		let [key, rest] = target.split(',');
 		key = toID(key);
+		rest = toID(rest);
 		if (!key) return this.parse('/help daily');
 		if (!spotlights[room.roomid][key]) throw new Chat.ErrorMessage(`Cannot find a daily spotlight with name '${key}'`);
 
@@ -159,7 +166,7 @@ export const commands: Chat.ChatCommands = {
 			const queueNumber = parseInt(rest);
 			if (isNaN(queueNumber) || queueNumber < 1) throw new Chat.ErrorMessage("Invalid queue number");
 			if (queueNumber >= spotlights[room.roomid][key].length) {
-				throw new Chat.ErrorMessage(`Queue number needs to be between 1 and ${spotlights[room.roomid][key].length - 1}`);
+				throw new Chat.ErrorMessage(`Queue number must be between 1 and ${spotlights[room.roomid][key].length - 1}`);
 			}
 			spotlights[room.roomid][key].splice(queueNumber, 1);
 			saveSpotlights();
