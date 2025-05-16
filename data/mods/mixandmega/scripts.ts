@@ -5,7 +5,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			const item = this.data.Items[i];
 			if (!item.megaStone && !item.onDrive && !(item.onPlate && !item.zMove) && !item.onMemory) continue;
 			this.modData('Items', i).onTakeItem = false;
-			if (item.isNonstandard) this.modData('Items', i).isNonstandard = null;
+			if (item.isNonstandard === "Past") this.modData('Items', i).isNonstandard = null;
 			if (item.megaStone) {
 				this.modData('FormatsData', this.toID(item.megaStone)).isNonstandard = null;
 			}
@@ -79,6 +79,12 @@ export const Scripts: ModdedBattleScriptsData = {
 
 		if (this.debugMode) {
 			this.checkEVBalance();
+		}
+
+		if (format.customRules) {
+			const plural = format.customRules.length === 1 ? '' : 's';
+			const open = format.customRules.length <= 5 ? ' open' : '';
+			this.add(`raw|<div class="infobox"><details class="readmore"${open}><summary><strong>${format.customRules.length} custom rule${plural}:</strong></summary> ${format.customRules.join(', ')}</details></div>`);
 		}
 
 		if (format.onTeamPreview) format.onTeamPreview.call(this);
@@ -426,7 +432,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let type = pokemon.teraType;
 			if (pokemon.species.baseSpecies !== 'Ogerpon' && pokemon.getItem().name.endsWith('Mask')) {
-				type = this.dex.species.get(pokemon.getItem().forcedForme).forceTeraType!;
+				type = this.dex.species.get(pokemon.getItem().forcedForme).requiredTeraType!;
 			}
 			this.battle.add('-terastallize', pokemon, type);
 			pokemon.terastallized = type;
