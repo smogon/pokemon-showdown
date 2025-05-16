@@ -142,7 +142,7 @@ export class Pokemon {
 	subFainted: boolean | null;
 
 	/** If this Pokemon should revert to its set species when it faints */
-	regressionForme: boolean;
+	formeRegression: boolean;
 
 	types: string[];
 	addedType: string;
@@ -430,7 +430,7 @@ export class Pokemon {
 		this.faintQueued = false;
 		this.subFainted = null;
 
-		this.regressionForme = false;
+		this.formeRegression = false;
 
 		this.types = this.baseSpecies.types;
 		this.baseTypes = this.types;
@@ -1399,7 +1399,7 @@ export class Pokemon {
 			if (!source) {
 				// Tera forme
 				// Ogerpon/Terapagos text goes here
-				this.regressionForme = true;
+				this.formeRegression = true;
 			} else if (source.effectType === 'Item') {
 				this.canTerastallize = null; // National Dex behavior
 				if (source.zMove) {
@@ -1416,7 +1416,7 @@ export class Pokemon {
 					this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
 					this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
 				}
-				this.regressionForme = true;
+				this.formeRegression = true;
 			} else if (source.effectType === 'Status') {
 				// Shaymin-Sky -> Shaymin
 				this.battle.add('-formechange', this, species.name, message);
