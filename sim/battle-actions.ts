@@ -124,6 +124,7 @@ export class BattleActions {
 			oldActive.statsRaisedThisTurn = false;
 			oldActive.statsLoweredThisTurn = false;
 			oldActive.position = pokemon.position;
+			if (oldActive.fainted) oldActive.status = '';
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
@@ -613,6 +614,7 @@ export class BattleActions {
 			}
 		}
 
+		move.hitTargets = targets;
 		const moveResult = !!targets.length;
 		if (!moveResult && !atLeastOneFailure) pokemon.moveThisTurnResult = null;
 		const hitSlot = targets.map(p => p.getSlot());
@@ -1229,16 +1231,17 @@ export class BattleActions {
 						continue;
 					}
 					const amount = target.baseMaxhp * moveData.heal[0] / moveData.heal[1];
-					const d = target.heal((this.battle.gen < 5 ? Math.floor : Math.round)(amount));
+					const d = this.battle.heal((this.battle.gen < 5 ? Math.floor : Math.round)(amount), target, source, move);
 					if (!d && d !== 0) {
-						this.battle.add('-fail', source);
-						this.battle.attrLastMove('[still]');
+						if (d !== null) {
+							this.battle.add('-fail', source);
+							this.battle.attrLastMove('[still]');
+						}
 						this.battle.debug('heal interrupted');
 						damage[i] = this.combineResults(damage[i], false);
 						didAnything = this.combineResults(didAnything, null);
 						continue;
 					}
-					this.battle.add('-heal', target, target.getHealth);
 					didSomething = true;
 				}
 				if (moveData.status) {
@@ -1927,6 +1930,12 @@ export class BattleActions {
 	}
 
 	terastallize(pokemon: Pokemon) {
+		if (pokemon.species.baseSpecies === 'Ogerpon' && !['Fire', 'Grass', 'Rock', 'Water'].includes(pokemon.teraType) &&
+			(!pokemon.illusion || pokemon.illusion.species.baseSpecies === 'Ogerpon')) {
+			this.battle.hint("If Ogerpon Terastallizes into a type other than Fire, Grass, Rock, or Water, the game softlocks.");
+			return;
+		}
+
 		if (pokemon.illusion && ['Ogerpon', 'Terapagos'].includes(pokemon.illusion.species.baseSpecies)) {
 			this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
 		}
@@ -1941,10 +1950,11 @@ export class BattleActions {
 		pokemon.knownType = true;
 		pokemon.apparentType = type;
 		if (pokemon.species.baseSpecies === 'Ogerpon') {
-			const tera = pokemon.species.id === 'ogerpon' ? 'tealtera' : 'tera';
-			pokemon.formeChange(pokemon.species.id + tera, null, true);
+			let ogerponSpecies = toID(pokemon.species.battleOnly || pokemon.species.id);
+			ogerponSpecies += ogerponSpecies === 'ogerpon' ? 'tealtera' : 'tera';
+			pokemon.formeChange(ogerponSpecies, null, true);
 		}
-		if (pokemon.species.name === 'Terapagos-Terastal' && type === 'Stellar') {
+		if (pokemon.species.name === 'Terapagos-Terastal') {
 			pokemon.formeChange('Terapagos-Stellar', null, true);
 			pokemon.baseMaxhp = Math.floor(Math.floor(
 				2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100

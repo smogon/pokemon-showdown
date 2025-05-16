@@ -4,14 +4,14 @@ import { type PRNG, type PRNGSeed } from '../../../sim/prng';
 import { type MoveCounter, RandomGen8Teams, type OldRandomBattleSpecies } from '../gen8/teams';
 
 export class RandomBDSPTeams extends RandomGen8Teams {
-	randomData: { [species: string]: OldRandomBattleSpecies } = require('./data.json');
+	override randomData: { [species: string]: OldRandomBattleSpecies } = require('./data.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 		this.noStab = [...this.noStab, 'gigaimpact'];
 	}
 
-	getHighPriorityItem(
+	override getHighPriorityItem(
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,
@@ -71,7 +71,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
 	}
 
-	getMediumPriorityItem(
+	override getMediumPriorityItem(
 		ability: string,
 		moves: Set<string>,
 		counter: MoveCounter,
@@ -129,7 +129,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		) return 'Leftovers';
 	}
 
-	getLowPriorityItem(
+	override getLowPriorityItem(
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,
@@ -177,7 +177,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		) return 'Lum Berry';
 	}
 
-	shouldCullMove(
+	override shouldCullMove(
 		move: Move,
 		types: Set<string>,
 		moves: Set<string>,
@@ -524,7 +524,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		return { cull: false };
 	}
 
-	shouldCullAbility(
+	override shouldCullAbility(
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,

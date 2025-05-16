@@ -135,7 +135,7 @@ describe('Mega Evolution', () => {
 			assert.throws(() => battle.choose('p1', 'move 1 mega'));
 		}
 
-		it('should be able to Mega Evolve iff it knows Dragon Ascent', () => {
+		it('should be able to Mega Evolve if it knows Dragon Ascent', () => {
 			assertCanMega('gen6anythinggoes');
 			// battle continues
 			assert.throws(() => battle.choose('p2', 'move 1 mega'));

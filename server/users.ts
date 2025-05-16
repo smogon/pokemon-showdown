@@ -337,7 +337,7 @@ export interface UserSettings {
 // User
 export class User extends Chat.MessageContext {
 	/** In addition to needing it to implement MessageContext, this is also nice for compatibility with Connection. */
-	readonly user: User;
+	override readonly user: User;
 	/**
 	 * Not a source of truth - should always be in sync with
 	 * `[...Rooms.rooms.values()].filter(room => this.id in room.users)`
@@ -358,7 +358,7 @@ export class User extends Chat.MessageContext {
 	id: ID;
 	tempGroup: GroupSymbol;
 	avatar: string | number;
-	language: ID | null;
+	override language: ID | null;
 
 	connected: boolean;
 	connections: Connection[];
@@ -787,6 +787,7 @@ export class User extends Chat.MessageContext {
 		}
 
 		this.handleRename(name, userid, newlyRegistered, userType);
+		void Punishments.checkIp(this, connection); // namelock enforcement and the like after merge
 	}
 
 	handleRename(name: string, userid: ID, newlyRegistered: boolean, userType: string) {
@@ -1556,7 +1557,7 @@ export class User extends Chat.MessageContext {
 			this.punishmentTimer = null;
 		}
 	}
-	toString() {
+	override toString() {
 		return this.id;
 	}
 }

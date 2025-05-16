@@ -285,12 +285,12 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 		if (genNum >= 9) {
 			buf += `Species rarity: ${setObj.weight} (higher is more common, max 10)<br />`;
 		}
-		buf += `<span style="color:#999999;">Sets for ${species.name} in${genNum === 8 ? `` : ` ${GEN_NAMES[gen]}`} ${TIERS[toID(tier)]}:</span><br />`;
+		buf += `<span class="gray">Sets for ${species.name} in${genNum === 8 ? `` : ` ${GEN_NAMES[gen]}`} ${TIERS[toID(tier)]}:</span><br />`;
 		for (const [i, set] of setObj.sets.entries()) {
 			if (genNum >= 9) {
-				buf += `<details><summary>Set ${i + 1} (${set.weight}%)</summary>`;
+				buf += `<details class="details"><summary>Set ${i + 1} (${set.weight}%)</summary>`;
 			} else {
-				buf += `<details><summary>Set ${i + 1}</summary>`;
+				buf += `<details class="details"><summary>Set ${i + 1}</summary>`;
 			}
 			buf += `<ul style="list-style-type:none;">`;
 			buf += `<li>${set.species}${set.gender ? ` (${set.gender})` : ``} @ ${Array.isArray(set.item) ? set.item.map(formatItem).join(" / ") : formatItem(set.item)}</li>`;
@@ -336,7 +336,7 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 			buf += `Species rarity: ${setObj.weight} (higher is more common, max 10)<br />`;
 			buf += `Sets for ${species.name} in ${format.name}:<br />`;
 			for (const [i, set] of setObj.sets.entries()) {
-				buf += `<details><summary>Set ${i + 1} (${set.weight}%)</summary>`;
+				buf += `<details class="details"><summary>Set ${i + 1} (${set.weight}%)</summary>`;
 				buf += `<ul style="list-style-type:none;padding-left:0;">`;
 				buf += `<li>${Dex.forFormat(format).species.get(set.species).name} @ ${set.item.map(formatItem).join(" / ")}</li>`;
 				buf += `<li>Ability: ${set.ability.map(formatAbility).join(" / ")}</li>`;
@@ -369,9 +369,9 @@ function battleFactorySets(species: string | Species, tier: string | null, gen =
 				buf += `</ul></details>`;
 			}
 		} else {
-			buf += `<span style="color:#999999;">Sets for ${species.name} in ${format.name}:</span><br />`;
+			buf += `<span class="gray">Sets for ${species.name} in ${format.name}:</span><br />`;
 			for (const [i, set] of setObj.sets.entries()) {
-				buf += `<details><summary>Set ${i + 1}</summary>`;
+				buf += `<details class="details"><summary>Set ${i + 1}</summary>`;
 				buf += `<ul style="list-style-type:none;padding-left:0;">`;
 				buf += `<li>${set.species}${set.gender ? ` (${set.gender})` : ``} @ ${Array.isArray(set.item) ? set.item.map(formatItem).join(" / ") : formatItem(set.item)}</li>`;
 				buf += `<li>Ability: ${Array.isArray(set.ability) ? set.ability.map(formatAbility).join(" / ") : formatAbility(set.ability)}</li>`;
@@ -426,9 +426,9 @@ function CAP1v1Sets(species: string | Species) {
 	if (species.isNonstandard === "CAP" && !(species.name in statsFile)) {
 		return { e: `${species.name} doesn't have any sets in [Gen 8] CAP 1v1.` };
 	}
-	let buf = `<span style="color:#999999;">Sets for ${species.name} in [Gen 8] CAP 1v1:</span><br />`;
+	let buf = `<span class="gray">Sets for ${species.name} in [Gen 8] CAP 1v1:</span><br />`;
 	for (const [i, set] of statsFile[species.name].entries()) {
-		buf += `<details><summary>Set ${i + 1}</summary>`;
+		buf += `<details class="details"><summary>Set ${i + 1}</summary>`;
 		buf += `<ul style="list-style-type:none;">`;
 		buf += `<li>${set.species || species.name}${set.gender ? ` (${set.gender})` : ``} @ ${Array.isArray(set.item) ? set.item.map(formatItem).join(" / ") : formatItem(set.item)}</li>`;
 		buf += `<li>Ability: ${Array.isArray(set.ability) ? set.ability.map(formatAbility).join(" / ") : formatAbility(set.ability)}</li>`;
@@ -493,8 +493,7 @@ export const commands: Chat.ChatCommands = {
 		const searchResults = dex.dataSearch(args[0], ['Pokedex']);
 
 		if (!searchResults?.length) {
-			this.errorReply(`No Pok\u00e9mon named '${args[0]}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
-			return;
+			throw new Chat.ErrorMessage(`No Pok\u00e9mon named '${args[0]}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
 		}
 
 		let inexactMsg = '';
@@ -515,17 +514,17 @@ export const commands: Chat.ChatCommands = {
 			const rbyMoves = getRBYMoves(species);
 			if (!rbyMoves) {
 				this.sendReply(inexactMsg);
-				return this.errorReply(`Error: ${species.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
+				throw new Chat.ErrorMessage(`Error: ${species.name} has no Random Battle data in ${GEN_NAMES[toID(args[1])]}`);
 			}
-			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${format.name}:</span>${rbyMoves}`);
+			movesets.push(`<span class="gray">Moves for ${species.name} in ${format.name}:</span>${rbyMoves}`);
 			setCount = 1;
 		} else if (isLetsGo) {
 			const lgpeMoves = getLetsGoMoves(species);
 			if (!lgpeMoves) {
 				this.sendReply(inexactMsg);
-				return this.errorReply(`Error: ${species.name} has no Random Battle data in [Gen 7 Let's Go]`);
+				throw new Chat.ErrorMessage(`Error: ${species.name} has no Random Battle data in [Gen 7 Let's Go]`);
 			}
-			movesets.push(`<span style="color:#999999;">Moves for ${species.name} in ${format.name}:</span><br />${lgpeMoves}`);
+			movesets.push(`<span class="gray">Moves for ${species.name} in ${format.name}:</span><br />${lgpeMoves}`);
 			setCount = 1;
 		} else {
 			const setsToCheck = [species];
@@ -537,10 +536,10 @@ export const commands: Chat.ChatCommands = {
 					if (!data) continue;
 					const sets = data.sets;
 					const level = data.level || getLevel(pokemon, format);
-					let buf = `<span style="color:#999999;">Moves for ${pokemon.name} in ${format.name}:</span><br/>`;
+					let buf = `<span class="gray">Moves for ${pokemon.name} in ${format.name}:</span><br/>`;
 					buf += `<b>Level</b>: ${level}`;
 					for (const set of sets) {
-						buf += `<details><summary>${set.role}</summary>`;
+						buf += `<details class="details"><summary>${set.role}</summary>`;
 						if (dex.gen === 9) {
 							buf += `<b>Tera Type${Chat.plural(set.teraTypes)}</b>: ${set.teraTypes.join(', ')}<br/>`;
 						} else if (([2, 3, 4, 5, 6, 7].includes(dex.gen)) && set.preferredTypes) {
@@ -570,8 +569,8 @@ export const commands: Chat.ChatCommands = {
 					if (isNoDMax && data.noDynamaxMoves) randomMoves = data.noDynamaxMoves;
 					const m = randomMoves.slice().sort().map(formatMove);
 					movesets.push(
-						`<details>` +
-						`<summary><span style="color:#999999;">Moves for ${pokemon.name} in ${format.name}:<span style="color:#999999;"></summary>` +
+						`<details class="details">` +
+						`<summary><span class="gray">Moves for ${pokemon.name} in ${format.name}:</span></summary>` +
 						(level ? `<b>Level</b>: ${level}<br>` : '') +
 						`${m.join(`, `)}</details>`
 					);
@@ -582,7 +581,7 @@ export const commands: Chat.ChatCommands = {
 
 		if (!movesets.length) {
 			this.sendReply(inexactMsg);
-			return this.errorReply(`Error: ${species.name} has no Random Battle data in ${format.name}`);
+			throw new Chat.ErrorMessage(`Error: ${species.name} has no Random Battle data in ${format.name}`);
 		}
 		let buf = movesets.join('<hr/>');
 		if (setCount <= 2) {
@@ -605,7 +604,7 @@ export const commands: Chat.ChatCommands = {
 			if (!args[0]) return this.parse(`/help battlefactory`);
 			const species = Dex.species.get(args[0]);
 			if (!species.exists) {
-				return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' not found.`);
+				throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${args[0].trim()}' not found.`);
 			}
 			let mod = 'gen9';
 			if (args[1] && toID(args[1]) in Dex.dexes && Dex.dexes[toID(args[1])].gen >= 7) mod = toID(args[1]);
@@ -617,7 +616,7 @@ export const commands: Chat.ChatCommands = {
 			if (!args[0]) return this.parse(`/help battlefactory`);
 			const species = Dex.species.get(args[0]);
 			if (!species.exists) {
-				return this.errorReply(`Error: Pok\u00e9mon '${args[0].trim()}' not found.`);
+				throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${args[0].trim()}' not found.`);
 			}
 			let tier = '';
 			if (args[1] && toID(args[1]) in TIERS) {
@@ -654,7 +653,7 @@ export const commands: Chat.ChatCommands = {
 		if (!this.runBroadcast()) return;
 		if (!target) return this.parse(`/help cap1v1`);
 		const species = Dex.species.get(target);
-		if (!species.exists) return this.errorReply(`Error: Pok\u00e9mon '${target.trim()}' not found.`);
+		if (!species.exists) throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${target.trim()}' not found.`);
 		const cap1v1Set = CAP1v1Sets(species);
 		if (!cap1v1Set) return this.parse(`/help cap1v1`);
 		if (typeof cap1v1Set !== 'string') {
@@ -869,7 +868,7 @@ export const commands: Chat.ChatCommands = {
 				// moves are sometimes given as IDs
 				set.moves = set.moves.map(m => dex.moves.get(m).name);
 				set.item = dex.items.get(set.item).name;
-				return `<details><summary>${set.name}</summary>${Utils.escapeHTML(Teams.exportSet(set))}<br /></details>`;
+				return `<details class="details"><summary>${set.name}</summary>${Utils.escapeHTML(Teams.exportSet(set))}<br /></details>`;
 			})
 			.join('');
 		return this.sendReplyBox(`<strong>Team for ${format.name}</strong>:` + teamHTML);
