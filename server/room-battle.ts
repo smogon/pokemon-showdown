@@ -206,7 +206,7 @@ export class RoomBattleTimer {
 
 		for (const player of this.battle.players) {
 			player.secondsLeft = this.settings.starting + this.settings.grace;
-			player.turnSecondsLeft = -1;
+			player.turnSecondsLeft = player.secondsLeft;
 			player.dcSecondsLeft = this.settings.dcTimerBank ? DISCONNECTION_BANK_TIME : DISCONNECTION_TIME;
 		}
 	}
