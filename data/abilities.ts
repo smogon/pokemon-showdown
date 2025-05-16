@@ -3306,7 +3306,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.species.id === 'zygardecomplete' || pokemon.hp > pokemon.maxhp / 2) return;
 			this.add('-activate', pokemon, 'ability: Power Construct');
 			pokemon.formeChange('Zygarde-Complete', this.effect, true);
-			pokemon.regressionForme = true;
+			pokemon.formeRegression = true;
 			pokemon.baseMaxhp = Math.floor(Math.floor(
 				2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
 			) * pokemon.level / 100 + 10);
