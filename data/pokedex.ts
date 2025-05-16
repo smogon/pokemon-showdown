@@ -15883,6 +15883,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	eiscue: {
 		num: 875,
 		name: "Eiscue",
+		baseForme: "Ice",
 		types: ["Ice"],
 		baseStats: { hp: 75, atk: 80, def: 110, spa: 65, spd: 90, spe: 50 },
 		abilities: { 0: "Ice Face" },
@@ -15941,6 +15942,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	morpeko: {
 		num: 877,
 		name: "Morpeko",
+		baseForme: "Full Belly",
 		types: ["Electric", "Dark"],
 		baseStats: { hp: 58, atk: 95, def: 58, spa: 70, spd: 58, spe: 97 },
 		abilities: { 0: "Hunger Switch" },
