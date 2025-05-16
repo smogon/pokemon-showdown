@@ -111,7 +111,7 @@ type ModdedEffectData = EffectData | Partial<EffectData> & { inherit: true };
 
 type EffectType =
 	'Condition' | 'Pokemon' | 'Move' | 'Item' | 'Ability' | 'Format' |
-	'Nature' | 'Ruleset' | 'Weather' | 'Status' | 'Terastal' | 'Rule' | 'ValidatorRule';
+	'Nature' | 'Ruleset' | 'Weather' | 'Status' | 'Terrain' | 'Rule' | 'ValidatorRule';
 
 interface BasicEffect extends EffectData {
 	id: ID;
@@ -160,7 +160,6 @@ interface ModdedBattleActions {
 	canTerastallize?: (this: BattleActions, pokemon: Pokemon) => string | null;
 	canUltraBurst?: (this: BattleActions, pokemon: Pokemon) => string | null;
 	canZMove?: (this: BattleActions, pokemon: Pokemon) => ZMoveOptions | void;
-	canDynamax?: (this: BattleActions, pokemon: Pokemon, skipChecks?: boolean) => import('./side').DynamaxOptions | void;
 	forceSwitch?: (
 		this: BattleActions, damage: SpreadMoveDamage, targets: SpreadMoveTargets, source: Pokemon,
 		move: ActiveMove, moveData: ActiveMove, isSecondary?: boolean, isSelf?: boolean

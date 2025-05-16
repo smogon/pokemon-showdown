@@ -2,7 +2,7 @@ import type { PRNG } from '../../../sim';
 import { type MoveCounter, RandomGen8Teams, type OldRandomBattleSpecies } from '../gen8/teams';
 
 export class RandomLetsGoTeams extends RandomGen8Teams {
-	randomData: { [species: string]: OldRandomBattleSpecies } = require('./data.json');
+	override randomData: { [species: string]: OldRandomBattleSpecies } = require('./data.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
@@ -20,7 +20,7 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 			Water: (movePool, moves, abilities, types, counter) => !counter.get('Water') || !counter.get('stab'),
 		};
 	}
-	shouldCullMove(
+	override shouldCullMove(
 		move: Move,
 		types: Set<string>,
 		moves: Set<string>,
@@ -116,7 +116,9 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 
 		return { cull: false };
 	}
-	randomSet(species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}): RandomTeamsTypes.RandomSet {
+	override randomSet(
+		species: string | Species, teamDetails: RandomTeamsTypes.TeamDetails = {}
+	): RandomTeamsTypes.RandomSet {
 		species = this.dex.species.get(species);
 		let forme = species.name;
 
@@ -217,7 +219,7 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 		};
 	}
 
-	randomTeam() {
+	override randomTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const pokemon: RandomTeamsTypes.RandomSet[] = [];

@@ -54,12 +54,12 @@ class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 			this.pushEnd();
 		});
 	}
-	_write(chunk: string) {
+	override _write(chunk: string) {
 		const [taskId, message] = Utils.splitFirst(chunk, '\n');
 		this.tasks.add(taskId);
 		this.process.stdin.write(`${taskId}|${message}\n`);
 	}
-	destroy() {
+	override destroy() {
 		try {
 			this.process.kill();
 		} catch {}

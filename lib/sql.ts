@@ -245,7 +245,7 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 			}
 		}
 	}
-	async query(input: DatabaseQuery) {
+	override async query(input: DatabaseQuery) {
 		const result = await super.query(input);
 		if (result?.queryError) {
 			const err = new Error(result.queryError.message);

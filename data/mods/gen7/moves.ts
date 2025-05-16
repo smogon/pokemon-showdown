@@ -127,10 +127,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, source, move) {
 			let success = false;
 			if (!target.volatiles['substitute'] || move.infiltrates) success = !!this.boost({ evasion: -1 });
-			const removeTarget = [
-				'reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', 'spikes', 'toxicspikes', 'stealthrock', 'stickyweb',
-			];
 			const removeAll = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb'];
+			const removeTarget = ['reflect', 'lightscreen', 'auroraveil', 'safeguard', 'mist', ...removeAll];
 			for (const targetCondition of removeTarget) {
 				if (target.side.removeSideCondition(targetCondition)) {
 					if (!removeAll.includes(targetCondition)) continue;
@@ -184,6 +182,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	electricterrain: {
 		inherit: true,
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -317,6 +316,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	grassyterrain: {
 		inherit: true,
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -369,7 +369,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			let success = false;
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
-				if (ally.hasAbility('soundproof')) {
+				if (ally.hasAbility('soundproof') && !this.suppressingAbility(ally)) {
 					this.add('-immune', ally, '[from] ability: Soundproof');
 					continue;
 				}
@@ -782,6 +782,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	psychicterrain: {
 		inherit: true,
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
