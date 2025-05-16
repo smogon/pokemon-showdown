@@ -109,14 +109,18 @@ export const TeamsHandler = new class {
 		return this.database.query(statement, values) as Promise<T[]>;
 	}
 
-	isNicknameAllowed(nickname: string, user: User) {
-		return (
-			// allow nicknames named after other mons/types/abilities/items - to support those OMs
-			Dex.species.get(nickname).exists ||
-			Dex.items.get(nickname).exists ||
-			Dex.abilities.get(nickname).exists ||
-			Dex.types.get(nickname).exists
-		);
+	isOMNickname(nickname: string, user: User) {
+		// allow nicknames named after other mons/types/abilities/items - to support those OMs
+		if (Dex.species.get(nickname).exists) {
+			return Dex.species.get(nickname).name;
+		} else if (Dex.items.get(nickname).exists) {
+			return Dex.items.get(nickname).name;
+		} else if (Dex.abilities.get(nickname).exists) {
+			return Dex.abilities.get(nickname).name;
+		} else if (Dex.types.get(nickname).exists) {
+			return Dex.types.get(nickname).name;
+		}
+		return null;
 	}
 
 	async save(
@@ -164,9 +168,8 @@ export const TeamsHandler = new class {
 		// now, we purge invalid nicknames and make sure it's an actual team
 		// gotta use the validated team so that nicknames are removed
 		for (const set of team) {
-			if (!this.isNicknameAllowed(set.name, user)) {
-				set.name = set.species;
-			}
+			set.name = this.isOMNickname(set.name, user) || set.species;
+
 			if (!Dex.species.get(set.species).exists) {
 				connection.popup(`Invalid Pokemon ${set.species} in team.`);
 				return null;
@@ -190,19 +193,24 @@ export const TeamsHandler = new class {
 			if (toID(set.ability) === 'none') {
 				set.ability = 'No Ability';
 			}
-			if (set.ability && !Dex.abilities.get(set.ability).exists) {
+			// oms sometimes swap these around so just check them all
+			const strValid = (str: string) => [
+				Dex.abilities, Dex.moves, Dex.species, Dex.items, Dex.types, Dex.natures,
+			].some(x => x.get(str).exists);
+
+			if (set.ability && !strValid(set.ability)) {
 				connection.popup(`Invalid ability ${set.ability} on ${set.species}.`);
 				return null;
 			}
-			if (set.item && !Dex.items.get(set.item).exists) {
+			if (set.item && !strValid(set.item)) {
 				connection.popup(`Invalid item ${set.item} on ${set.species}.`);
 				return null;
 			}
-			if (set.nature && !Dex.natures.get(set.nature).exists) {
+			if (set.nature && !strValid(set.nature)) {
 				connection.popup(`Invalid nature ${set.nature} on ${set.species}.`);
 				return null;
 			}
-			if (set.teraType && !Dex.types.get(set.teraType).exists) {
+			if (set.teraType && !strValid(set.teraType)) {
 				connection.popup(`Invalid Tera Type ${set.nature} on ${set.species}.`);
 				return null;
 			}
@@ -305,9 +313,10 @@ export const TeamsHandler = new class {
 		}
 		buf += `<br /><a class="subtle" href="/${link}">`;
 		buf += team.map(set => `<psicon pokemon="${set.species}" />`).join(' ');
-		buf += `</a><br /><a href="/${link}">${!isFull ? 'View full team' : 'Shareable link to team'}</a>`;
-		buf += ` <small>(or copy/paste <code>https://psim.us/t/`;
-		buf += `${teamData.teamid}${teamData.private ? `-${teamData.private}` : ''}</code> to share!)</small>`;
+		buf += `</a><br /><a href="/${link}">${!isFull ? 'View full team' : 'Shareable link to team'}</a><br />`;
+		const url = `${teamData.teamid}${teamData.private ? `-${teamData.private}` : ''}`;
+		buf += ` <small>(you can also copy/paste <code>&lt;&lt;view-team-${url}&gt;&gt;</code> on-site `;
+		buf += `or share <code>https://psim.us/t/${url}</code> off-site!)</small>`;
 
 		if (user && (teamData.ownerid === user.id || user.can('rangeban'))) {
 			buf += `<br />`;
@@ -363,7 +372,10 @@ export const TeamsHandler = new class {
 			err("You cannot currently use the teams database.");
 		}
 		if (user.locked || user.semilocked) err("You cannot use the teams database while locked.");
-		if (!user.autoconfirmed) err("You must be autoconfirmed to use the teams database.");
+		if (!user.autoconfirmed) err(
+			`To use the teams database, you must be autoconfirmed, which means being registered for at least ` +
+			`one week and winning one rated game.`
+		);
 	}
 	async count(user: string | User) {
 		const id = toID(user);
@@ -402,12 +414,12 @@ export const commands: Chat.ChatCommands = {
 		update: 'save',
 		async save(target, room, user, connection, cmd) {
 			TeamsHandler.validateAccess(connection, true);
-			const targets = Utils.splitFirst(target, ',', 5);
 			const isEdit = cmd === 'update';
+			const targets = Utils.splitFirst(target, ',', isEdit ? 4 : 3);
 			const rawTeamID = isEdit ? targets.shift() : undefined;
 			let [teamName, formatid, rawPrivacy, rawTeam] = targets;
-			const teamID = Number(rawTeamID);
-			if (isEdit && (!rawTeamID?.length || isNaN(teamID))) {
+			const teamID = isEdit ? Number(rawTeamID) : undefined;
+			if (isEdit && (!rawTeamID?.length || isNaN(teamID!))) {
 				connection.popup("Invalid team ID provided.");
 				return null;
 			}
@@ -422,12 +434,12 @@ export const commands: Chat.ChatCommands = {
 			teamName = toID(teamName) ? teamName : null!;
 			const privacy = toID(rawPrivacy) === '1' ? TeamsHandler.generatePassword() : null;
 			const id = await TeamsHandler.save(
-				this, formatid, rawTeam, teamName, privacy, isEdit ? teamID : undefined
+				this, formatid, rawTeam, teamName, privacy, teamID
 			);
 
 			const page = isEdit ? 'edit' : 'upload';
 			if (id) {
-				connection.send(`|queryresponse|teamupload|` + JSON.stringify({ teamid: id, teamName }));
+				connection.send(`|queryresponse|teamupload|` + JSON.stringify({ teamid: id, teamName, privacy }));
 				connection.send(`>view-teams-${page}\n|deinit`);
 				this.parse(`/join view-teams-view-${id}-${id}`);
 			} else {
@@ -502,6 +514,7 @@ export const commands: Chat.ChatCommands = {
 					this.refreshPage(pageid);
 				}
 			}
+			connection.send(`|queryresponse|teamupdate|` + JSON.stringify({ teamid: teamId, privacy }));
 			return this.popupReply(privacy ? `Team set to private. Password: ${privacy}` : `Team set to public.`);
 		},
 		search(target, room, user) {

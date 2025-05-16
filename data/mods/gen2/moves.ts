@@ -191,8 +191,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onStart(target) {
 				const lockedMove = target.lastMoveEncore?.id || '';
-				const moveIndex = lockedMove ? target.moves.indexOf(lockedMove) : -1;
-				if (moveIndex < 0 || target.lastMoveEncore?.flags['failencore'] || target.moveSlots[moveIndex].pp <= 0) {
+				const moveSlot = lockedMove ? target.getMoveData(lockedMove) : null;
+				if (!moveSlot || target.lastMoveEncore?.flags['failencore'] || moveSlot.pp <= 0) {
 					// it failed
 					return false;
 				}
@@ -204,8 +204,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onResidualOrder: 13,
 			onResidual(target) {
-				const lockedMoveIndex = target.moves.indexOf(this.effectState.move);
-				if (lockedMoveIndex >= 0 && target.moveSlots[lockedMoveIndex].pp <= 0) {
+				const lockedMoveSlot = target.getMoveData(this.effectState.move);
+				if (lockedMoveSlot && lockedMoveSlot.pp <= 0) {
 					// early termination if you run out of PP
 					target.removeVolatile('encore');
 				}

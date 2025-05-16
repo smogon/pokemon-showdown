@@ -191,6 +191,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				flags: {},
 				// Does not need activation message with this
 				fullname: 'ability: ' + move.name,
+				effectType: "Ability",
 				onStart(this: Battle, pokemon: Pokemon) {
 					if (pokemon.m.trademarkUsedThisTurn) {
 						// no.
