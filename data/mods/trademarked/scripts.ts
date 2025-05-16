@@ -65,6 +65,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 
 				pokemon.maybeDisabled = false;
+				pokemon.maybeLocked = false;
 				for (const moveSlot of pokemon.moveSlots) {
 					moveSlot.disabled = false;
 					moveSlot.disabledSource = '';
@@ -190,6 +191,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				flags: {},
 				// Does not need activation message with this
 				fullname: 'ability: ' + move.name,
+				effectType: "Ability",
 				onStart(this: Battle, pokemon: Pokemon) {
 					if (pokemon.m.trademarkUsedThisTurn) {
 						// no.

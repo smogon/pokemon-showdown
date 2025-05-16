@@ -369,8 +369,6 @@ Chat.registerMonitor('shorteners', {
  * Punishment: AUTOLOCK, WARN, FILTERTO, SHORTENER, MUTE, EVASION
  */
 
-/* The sucrase transformation of optional chaining is too expensive to be used in a hot function like this. */
-/* eslint-disable @typescript-eslint/prefer-optional-chain */
 export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	let lcMessage = message
 		.replace(/\u039d/g, 'N').toLowerCase()
@@ -384,15 +382,15 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 	lcMessage = lcMessage.replace(/__|\*\*|``|\[\[|\]\]/g, '');
 
 	const isStaffRoom = room && (
-		(room.persist && room.roomid.endsWith('staff')
-		) || room.roomid.startsWith('help-'));
-	const isStaff = isStaffRoom || user.isStaff || !!(this.pmTarget && this.pmTarget.isStaff);
+		(room.persist && room.roomid.endsWith('staff')) || room.roomid.startsWith('help-')
+	);
+	const isStaff = isStaffRoom || user.isStaff || !!this.pmTarget?.isStaff;
 
 	for (const list in Chat.monitors) {
 		const { location, condition, monitor } = Chat.monitors[list];
 		if (!monitor) continue;
 		// Ignore challenge games, which are unrated and not part of roomtours.
-		if (location === 'BATTLES' && !(room && room.battle && room.battle.challengeType !== 'challenge')) continue;
+		if (location === 'BATTLES' && !(room?.battle && room.battle.challengeType !== 'challenge')) continue;
 		if (location === 'PUBLIC' && room && room.settings.isPrivate === true) continue;
 
 		switch (condition) {
@@ -420,7 +418,6 @@ export const chatfilter: Chat.ChatFilter = function (message, user, room) {
 
 	return message;
 };
-/* eslint-enable @typescript-eslint/prefer-optional-chain */
 
 export const namefilter: Chat.NameFilter = (name, user) => {
 	const id = toID(name);
@@ -628,11 +625,11 @@ export const commands: Chat.ChatCommands = {
 			list = toID(list);
 
 			if (!list || !rest.length) {
-				return this.errorReply(`Syntax: /filter add list ${separator} word ${separator} reason [${separator} optional public reason]`);
+				throw new Chat.ErrorMessage(`Syntax: /filter add list ${separator} word ${separator} reason [${separator} optional public reason]`);
 			}
 
 			if (!(list in filterWords)) {
-				return this.errorReply(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
+				throw new Chat.ErrorMessage(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
 			}
 
 			const filterWord = { list, word: '' } as Partial<FilterWord> & { list: string, word: string };
@@ -641,7 +638,7 @@ export const commands: Chat.ChatCommands = {
 			if (Chat.monitors[list].punishment === 'FILTERTO') {
 				[filterWord.word, filterWord.replacement, filterWord.reason, filterWord.publicReason] = rest;
 				if (!filterWord.replacement) {
-					return this.errorReply(
+					throw new Chat.ErrorMessage(
 						`Syntax for word filters: /filter add ${list} ${separator} regex ${separator} reason [${separator} optional public reason]`
 					);
 				}
@@ -651,7 +648,7 @@ export const commands: Chat.ChatCommands = {
 
 			filterWord.word = filterWord.word.trim();
 			if (!filterWord.word) {
-				return this.errorReply(`Invalid word: '${filterWord.word}'.`);
+				throw new Chat.ErrorMessage(`Invalid word: '${filterWord.word}'.`);
 			}
 			Filters.add(filterWord);
 			const reason = filterWord.reason ? ` (${filterWord.reason})` : '';
@@ -670,15 +667,15 @@ export const commands: Chat.ChatCommands = {
 			let [list, ...words] = target.split(target.includes('\n') ? '\n' : ',').map(param => param.trim());
 			list = toID(list);
 
-			if (!list || !words.length) return this.errorReply("Syntax: /filter remove list, words");
+			if (!list || !words.length) throw new Chat.ErrorMessage("Syntax: /filter remove list, words");
 
 			if (!(list in filterWords)) {
-				return this.errorReply(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
+				throw new Chat.ErrorMessage(`Invalid list: ${list}. Possible options: ${Object.keys(filterWords).join(', ')}`);
 			}
 
 			const notFound = words.filter(val => !filterWords[list].filter(entry => entry.word === val).length);
 			if (notFound.length) {
-				return this.errorReply(`${notFound.join(', ')} ${Chat.plural(notFound, "are", "is")} not on the ${list} list.`);
+				throw new Chat.ErrorMessage(`${notFound.join(', ')} ${Chat.plural(notFound, "are", "is")} not on the ${list} list.`);
 			}
 			filterWords[list] = filterWords[list].filter(entry => !words.includes(entry.word));
 
@@ -754,9 +751,9 @@ export const commands: Chat.ChatCommands = {
 	allowname(target, room, user) {
 		this.checkCan('forcerename');
 		target = toID(target);
-		if (!target) return this.errorReply(`Syntax: /allowname username`);
+		if (!target) throw new Chat.ErrorMessage(`Syntax: /allowname username`);
 		if (Punishments.namefilterwhitelist.has(target)) {
-			return this.errorReply(`${target} is already allowed as a username.`);
+			throw new Chat.ErrorMessage(`${target} is already allowed as a username.`);
 		}
 
 		const msg = `${target} was allowed as a username by ${user.name}.`;
