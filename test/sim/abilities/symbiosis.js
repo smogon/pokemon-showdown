@@ -33,6 +33,19 @@ describe('Symbiosis', () => {
 		assert.equal(battle.p1.active[1].item, '');
 	});
 
+	it('should not consume two White Herbs in one boost', () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Smeargle', item: 'whiteherb', moves: ['sleeptalk'] },
+			{ species: 'Oranguru', ability: 'symbiosis', item: 'whiteherb', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Murkrow', moves: ['screech'] },
+			{ species: 'Smeargle', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].boosts.def, 0);
+	});
+
 	it('during switches, should trigger right after the item is consumed', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'Smeargle', ability: 'symbiosis', item: 'lifeorb', moves: ['sleeptalk'] },
