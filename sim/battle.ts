@@ -145,6 +145,7 @@ export class Battle {
 	readonly messageLog: string[];
 	sentLogPos: number;
 	sentEnd: boolean;
+	sentRequests = true;
 
 	requestState: RequestState;
 	turn: number;
@@ -517,6 +518,39 @@ export class Battle {
 					const endCallArgs = handler.endCallArgs || [handler.effectHolder, effect.id];
 					handler.end.call(...endCallArgs as [any, ...any[]]);
 					if (this.ended) return;
+					continue;
+				}
+			}
+
+			// effect may have been removed by a prior handler, i.e. Toxic Spikes being absorbed during a double switch
+			if (handler.state?.target instanceof Pokemon) {
+				let expectedStateLocation;
+				if (effect.effectType === 'Ability' && !handler.state.id.startsWith('ability:')) {
+					expectedStateLocation = handler.state.target.abilityState;
+				} else if (effect.effectType === 'Item' && !handler.state.id.startsWith('item:')) {
+					expectedStateLocation = handler.state.target.itemState;
+				} else if (effect.effectType === 'Status') {
+					expectedStateLocation = handler.state.target.statusState;
+				} else {
+					expectedStateLocation = handler.state.target.volatiles[effect.id];
+				}
+				if (expectedStateLocation !== handler.state) {
+					continue;
+				}
+			} else if (handler.state?.target instanceof Side && !handler.state.isSlotCondition) {
+				if ((handler.state.target.sideConditions[effect.id] !== handler.state)) {
+					continue;
+				}
+			} else if (handler.state?.target instanceof Field) {
+				let expectedStateLocation;
+				if (effect.effectType === 'Weather') {
+					expectedStateLocation = handler.state.target.weatherState;
+				} else if (effect.effectType === 'Terrain') {
+					expectedStateLocation = handler.state.target.terrainState;
+				} else {
+					expectedStateLocation = handler.state.target.pseudoWeather[effect.id];
+				}
+				if (expectedStateLocation !== handler.state) {
 					continue;
 				}
 			}
@@ -978,6 +1012,23 @@ export class Battle {
 		return handler;
 	}
 
+	getCallback(target: Pokemon | Side | Field | Battle, effect: Effect, callbackName: string) {
+		let callback: Function | undefined = (effect as any)[callbackName];
+		// Abilities and items Start at different times during the SwitchIn event, so we run their onStart handlers
+		// during the SwitchIn event instead of running the Start event during switch-ins
+		// gens 4 and before still use the old system, though
+		if (
+			callback === undefined && target instanceof Pokemon && this.gen >= 5 && callbackName === 'onSwitchIn' &&
+			!(effect as any).onAnySwitchIn && (['Ability', 'Item'].includes(effect.effectType) || (
+				// Innate abilities/items
+				effect.effectType === 'Status' && ['ability', 'item'].includes(effect.id.split(':')[0])
+			))
+		) {
+			callback = (effect as any).onStart;
+		}
+		return callback;
+	}
+
 	findEventHandlers(target: Pokemon | Pokemon[] | Side | Battle, eventName: string, source?: Pokemon | null) {
 		let handlers: EventListener[] = [];
 		if (Array.isArray(target)) {
@@ -1031,8 +1082,7 @@ export class Battle {
 		const handlers: EventListener[] = [];
 
 		const status = pokemon.getStatus();
-		// @ts-expect-error dynamic lookup
-		let callback = status[callbackName];
+		let callback = this.getCallback(pokemon, status, callbackName);
 		if (callback !== undefined || (getKey && pokemon.statusState[getKey])) {
 			handlers.push(this.resolvePriority({
 				effect: status, callback, state: pokemon.statusState, end: pokemon.clearStatus, effectHolder: pokemon,
@@ -1041,64 +1091,29 @@ export class Battle {
 		for (const id in pokemon.volatiles) {
 			const volatileState = pokemon.volatiles[id];
 			const volatile = this.dex.conditions.getByID(id as ID);
-			// @ts-expect-error dynamic lookup
-			callback = volatile[callbackName];
+			callback = this.getCallback(pokemon, volatile, callbackName);
 			if (callback !== undefined || (getKey && volatileState[getKey])) {
 				handlers.push(this.resolvePriority({
 					effect: volatile, callback, state: volatileState, end: pokemon.removeVolatile, effectHolder: pokemon,
 				}, callbackName));
-			} else if (['ability', 'item'].includes(volatile.id.split(':')[0])) {
-				// Innate abilities/items; see comment below
-				// @ts-expect-error dynamic lookup
-				if (this.gen >= 5 && callbackName === 'onSwitchIn' && !volatile.onAnySwitchIn) {
-					callback = volatile.onStart;
-					if (callback !== undefined || (getKey && volatileState[getKey])) {
-						handlers.push(this.resolvePriority({
-							effect: volatile, callback, state: volatileState, end: pokemon.removeVolatile, effectHolder: pokemon,
-						}, callbackName));
-					}
-				}
 			}
 		}
-		// Abilities and items Start at different times during the SwitchIn event, so we run their onStart handlers
-		// during the SwitchIn event instead of running the Start event during switch-ins
-		// gens 4 and before still use the old system, though
 		const ability = pokemon.getAbility();
-		// @ts-expect-error dynamic lookup
-		callback = ability[callbackName];
+		callback = this.getCallback(pokemon, ability, callbackName);
 		if (callback !== undefined || (getKey && pokemon.abilityState[getKey])) {
 			handlers.push(this.resolvePriority({
 				effect: ability, callback, state: pokemon.abilityState, end: pokemon.clearAbility, effectHolder: pokemon,
 			}, callbackName));
-			// @ts-expect-error dynamic lookup
-		} else if (this.gen >= 5 && callbackName === 'onSwitchIn' && !ability.onAnySwitchIn) {
-			// @ts-expect-error dynamic lookup
-			callback = ability.onStart;
-			if (callback !== undefined || (getKey && pokemon.abilityState[getKey])) {
-				handlers.push(this.resolvePriority({
-					effect: ability, callback, state: pokemon.abilityState, end: pokemon.clearAbility, effectHolder: pokemon,
-				}, callbackName));
-			}
 		}
 		const item = pokemon.getItem();
-		// @ts-expect-error dynamic lookup
-		callback = item[callbackName];
+		callback = this.getCallback(pokemon, item, callbackName);
 		if (callback !== undefined || (getKey && pokemon.itemState[getKey])) {
 			handlers.push(this.resolvePriority({
 				effect: item, callback, state: pokemon.itemState, end: pokemon.clearItem, effectHolder: pokemon,
 			}, callbackName));
-			// @ts-expect-error dynamic lookup
-		} else if (this.gen >= 5 && callbackName === 'onSwitchIn' && !item.onAnySwitchIn) {
-			callback = item.onStart;
-			if (callback !== undefined || (getKey && pokemon.itemState[getKey])) {
-				handlers.push(this.resolvePriority({
-					effect: item, callback, state: pokemon.itemState, end: pokemon.clearItem, effectHolder: pokemon,
-				}, callbackName));
-			}
 		}
 		const species = pokemon.baseSpecies;
-		// @ts-expect-error dynamic lookup
-		callback = species[callbackName];
+		callback = this.getCallback(pokemon, species, callbackName);
 		if (callback !== undefined) {
 			handlers.push(this.resolvePriority({
 				effect: species, callback, state: pokemon.speciesState, end() {}, effectHolder: pokemon,
@@ -1108,8 +1123,7 @@ export class Battle {
 		for (const conditionid in side.slotConditions[pokemon.position]) {
 			const slotConditionState = side.slotConditions[pokemon.position][conditionid];
 			const slotCondition = this.dex.conditions.getByID(conditionid as ID);
-			// @ts-expect-error dynamic lookup
-			callback = slotCondition[callbackName];
+			callback = this.getCallback(pokemon, slotCondition, callbackName);
 			if (callback !== undefined || (getKey && slotConditionState[getKey])) {
 				handlers.push(this.resolvePriority({
 					effect: slotCondition,
@@ -1130,8 +1144,7 @@ export class Battle {
 
 		let callback;
 		const format = this.format;
-		// @ts-expect-error dynamic lookup
-		callback = format[callbackName];
+		callback = this.getCallback(this, format, callbackName);
 		if (callback !== undefined || (getKey && this.formatData[getKey])) {
 			handlers.push(this.resolvePriority({
 				effect: format, callback, state: this.formatData, end: null, effectHolder: customHolder || this,
@@ -1156,8 +1169,7 @@ export class Battle {
 		for (const id in field.pseudoWeather) {
 			const pseudoWeatherState = field.pseudoWeather[id];
 			const pseudoWeather = this.dex.conditions.getByID(id as ID);
-			// @ts-expect-error dynamic lookup
-			callback = pseudoWeather[callbackName];
+			callback = this.getCallback(field, pseudoWeather, callbackName);
 			if (callback !== undefined || (getKey && pseudoWeatherState[getKey])) {
 				handlers.push(this.resolvePriority({
 					effect: pseudoWeather, callback, state: pseudoWeatherState,
@@ -1166,8 +1178,7 @@ export class Battle {
 			}
 		}
 		const weather = field.getWeather();
-		// @ts-expect-error dynamic lookup
-		callback = weather[callbackName];
+		callback = this.getCallback(field, weather, callbackName);
 		if (callback !== undefined || (getKey && this.field.weatherState[getKey])) {
 			handlers.push(this.resolvePriority({
 				effect: weather, callback, state: this.field.weatherState,
@@ -1175,8 +1186,7 @@ export class Battle {
 			}, callbackName));
 		}
 		const terrain = field.getTerrain();
-		// @ts-expect-error dynamic lookup
-		callback = terrain[callbackName];
+		callback = this.getCallback(field, terrain, callbackName);
 		if (callback !== undefined || (getKey && field.terrainState[getKey])) {
 			handlers.push(this.resolvePriority({
 				effect: terrain, callback, state: field.terrainState,
@@ -1193,8 +1203,7 @@ export class Battle {
 		for (const id in side.sideConditions) {
 			const sideConditionData = side.sideConditions[id];
 			const sideCondition = this.dex.conditions.getByID(id as ID);
-			// @ts-expect-error dynamic lookup
-			const callback = sideCondition[callbackName];
+			const callback = this.getCallback(side, sideCondition, callbackName);
 			if (callback !== undefined || (getKey && sideConditionData[getKey])) {
 				handlers.push(this.resolvePriority({
 					effect: sideCondition, callback, state: sideConditionData,
@@ -1326,8 +1335,9 @@ export class Battle {
 
 		const requests = this.getRequests(type);
 		for (let i = 0; i < this.sides.length; i++) {
-			this.sides[i].emitRequest(requests[i]);
+			this.sides[i].activeRequest = requests[i];
 		}
+		this.sentRequests = false;
 
 		if (this.sides.every(side => side.isChoiceDone())) {
 			throw new Error(`Choices are done immediately after a request`);
@@ -1604,6 +1614,7 @@ export class Battle {
 				}
 
 				pokemon.maybeDisabled = false;
+				pokemon.maybeLocked = false;
 				for (const moveSlot of pokemon.moveSlots) {
 					moveSlot.disabled = false;
 					moveSlot.disabledSource = '';
@@ -1878,6 +1889,12 @@ export class Battle {
 
 		if (this.debugMode) {
 			this.checkEVBalance();
+		}
+
+		if (format.customRules) {
+			const plural = format.customRules.length === 1 ? '' : 's';
+			const open = format.customRules.length <= 5 ? ' open' : '';
+			this.add(`raw|<div class="infobox"><details class="readmore"${open}><summary><strong>${format.customRules.length} custom rule${plural}:</strong></summary> ${format.customRules.join(', ')}</details></div>`);
 		}
 
 		format.onTeamPreview?.call(this);
@@ -2606,10 +2623,10 @@ export class Battle {
 				const behemothMove: { [k: string]: string } = {
 					'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 				};
-				const ironHead = pokemon.baseMoves.indexOf('ironhead');
-				if (ironHead >= 0) {
+				const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
+				if (ironHeadIndex >= 0) {
 					const move = this.dex.moves.get(behemothMove[rawSpecies.name]);
-					pokemon.baseMoveSlots[ironHead] = {
+					pokemon.baseMoveSlots[ironHeadIndex] = {
 						move: move.name,
 						id: move.id,
 						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
@@ -2761,7 +2778,7 @@ export class Battle {
 			this.updateSpeed();
 			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
 			this.fieldEvent('Residual');
-			this.add('upkeep');
+			if (!this.ended) this.add('upkeep');
 			break;
 		}
 
@@ -3145,9 +3162,9 @@ export class Battle {
 					const crowned: { [k: string]: string } = {
 						'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 					};
-					const ironHead = set.moves.map(toID).indexOf('ironhead' as ID);
-					if (ironHead >= 0) {
-						newSet.moves[ironHead] = crowned[newSet.species];
+					const ironHeadIndex = set.moves.map(toID).indexOf('ironhead' as ID);
+					if (ironHeadIndex >= 0) {
+						newSet.moves[ironHeadIndex] = crowned[newSet.species];
 					}
 				}
 				return newSet;
@@ -3201,6 +3218,10 @@ export class Battle {
 	sendUpdates() {
 		if (this.sentLogPos >= this.log.length) return;
 		this.send('update', this.log.slice(this.sentLogPos));
+		if (!this.sentRequests) {
+			for (const side of this.sides) side.emitRequest();
+			this.sentRequests = true;
+		}
 		this.sentLogPos = this.log.length;
 
 		if (!this.sentEnd && this.ended) {
