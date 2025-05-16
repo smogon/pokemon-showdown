@@ -2966,9 +2966,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			return newSpecies;
 		},
 	},
-	datamod: {
+	datapreview: {
 		effectType: 'Rule',
-		name: 'Data Mod',
+		name: 'Data Preview',
 		desc: 'When a new Pokémon switches in for the first time, information about its types, stats and Abilities is displayed to both players.',
 		onSwitchIn(pokemon) {
 			let species = this.dex.species.get(pokemon.species.name);
