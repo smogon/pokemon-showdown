@@ -4759,8 +4759,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 33,
 	},
 	symbiosis: {
-		onAllyAfterUseItem(item, pokemon, source) {
+		onAllyAfterUseItem(item, pokemon) {
 			if (pokemon.switchFlag) return;
+			const source = this.effectState.target;
 			const myItem = source.takeItem();
 			if (!myItem) return;
 			if (
