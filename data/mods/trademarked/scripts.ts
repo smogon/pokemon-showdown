@@ -206,7 +206,6 @@ export const Scripts: ModdedBattleScriptsData = {
 							this.debug('removing choicelock caused by trademark');
 							pokemon.removeVolatile('choicelock');
 						}
-						
 					}
 				},
 				toString() {
