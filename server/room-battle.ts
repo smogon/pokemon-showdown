@@ -164,7 +164,7 @@ export class RoomBattleTimer {
 	readonly timerRequesters = new Set<ID>();
 	timer: NodeJS.Timeout | null = null;
 	isFirstTurn = true;
-	turn = 0;
+	turn: number;
 	/**
 	 * Last tick, as milliseconds since UNIX epoch.
 	 * Represents the last time a tick happened.
@@ -181,8 +181,8 @@ export class RoomBattleTimer {
 		const format = Dex.formats.get(battle.format, true);
 		const hasLongTurns = format.gameType !== 'singles';
 		const isChallenge = (battle.challengeType === 'challenge');
-		const timerEntry = Dex.formats.getRuleTable(format).timer;
-		const timerSettings = timerEntry?.[0];
+		const ruleTable = Dex.formats.getRuleTable(format);
+		const timerSettings = ruleTable.timer?.[0];
 
 		// so that Object.assign doesn't overwrite anything with `undefined`
 		for (const k in timerSettings) {
@@ -190,6 +190,7 @@ export class RoomBattleTimer {
 			if (timerSettings[k] === undefined) delete timerSettings[k];
 		}
 
+		this.turn = ruleTable.has('teampreview') ? 0 : 1;
 		this.settings = {
 			dcTimer: !isChallenge,
 			dcTimerBank: isChallenge,
@@ -234,7 +235,7 @@ export class RoomBattleTimer {
 		this.timerRequesters.add(userid);
 		const requestedBy = requester ? ` (requested by ${requester.name})` : ``;
 		this.battle.room.add(`|inactive|Battle timer is ON: inactive players will automatically lose when time's up.${requestedBy}`).update();
-		this.turn = this.battle.turn;
+		if (this.turn < this.battle.turn) this.turn = this.battle.turn;
 
 		this.checkActivity();
 		for (const player of this.battle.players) this.nextRequest(player);
