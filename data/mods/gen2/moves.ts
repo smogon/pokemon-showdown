@@ -303,6 +303,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			return Math.floor(((255 - pokemon.happiness) * 10) / 25) || null;
 		},
 	},
+	haze: {
+		inherit: true,
+		onHitField() {
+			this.add('-clearallboost');
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
+			}
+		},
+	},
 	healbell: {
 		inherit: true,
 		onHit(target, source) {

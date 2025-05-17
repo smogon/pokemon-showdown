@@ -8467,6 +8467,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			this.add('-clearallboost');
 			for (const pokemon of this.getAllActive()) {
 				pokemon.clearBoosts();
+				pokemon.removeVolatile('focusenergy');
 			}
 		},
 		secondary: null,
