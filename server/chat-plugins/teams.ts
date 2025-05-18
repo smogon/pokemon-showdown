@@ -171,7 +171,7 @@ export const TeamsHandler = new class {
 			set.name = this.isOMNickname(set.name, user) || set.species;
 
 			// Trim empty moveslots
-			set.moves = set.moves.filter(m => !!m);
+			set.moves = set.moves.filter(Boolean);
 
 			if (!Dex.species.get(set.species).exists) {
 				connection.popup(`Invalid Pokemon ${set.species} in team.`);
