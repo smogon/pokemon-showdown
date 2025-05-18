@@ -1235,7 +1235,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	tarrows: "Thousand Arrows",
 	taxel: "Triple Axel",
 	tblast: "Tera Blast",
-	tclap: "Thunder Clap",
+	tclap: "Thunderclap",
 	tr: "Trick Room",
 	troom: "Trick Room",
 	tbolt: "Thunderbolt",
