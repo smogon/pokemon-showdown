@@ -146,6 +146,26 @@ describe('Dex data', () => {
 		}
 	});
 
+	it('should have valid Aliases entries', () => {
+		const Aliases = Dex.data.Aliases;
+		for (const aliasid in Aliases) {
+			const targetid = toID(Aliases[aliasid]);
+			if (targetid in Dex.data.Pokedex) {
+				assert.equal(Aliases[aliasid], Dex.data.Pokedex[targetid].name, `Alias ${aliasid} has incorrect Species name "${Aliases[aliasid]}"`);
+			} else if (targetid in Dex.data.Moves) {
+				assert.equal(Aliases[aliasid], Dex.data.Moves[targetid].name, `Alias ${aliasid} has incorrect Move name "${Aliases[aliasid]}"`);
+			} else if (targetid in Dex.data.Abilities) {
+				assert.equal(Aliases[aliasid], Dex.data.Abilities[targetid].name, `Alias ${aliasid} has incorrect Ability name "${Aliases[aliasid]}"`);
+			} else if (targetid in Dex.data.Items) {
+				assert.equal(Aliases[aliasid], Dex.data.Items[targetid].name, `Alias ${aliasid} has incorrect Item name "${Aliases[aliasid]}"`);
+			} else if (targetid in Dex.data.Rulesets) {
+				assert.equal(Aliases[aliasid], Dex.data.Rulesets[targetid].name, `Alias ${aliasid} has incorrect Ruleset name "${Aliases[aliasid]}"`);
+			} else {
+				assert(false, `Alias ${aliasid} -> "${Aliases[aliasid]}" must be a pokemon/move/ability/item/format`);
+			}
+		}
+	});
+
 	it('should have valid Rulesets entries', () => {
 		const Rulesets = Dex.data.Rulesets;
 		for (const formatid in Rulesets) {
