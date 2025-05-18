@@ -170,6 +170,9 @@ export const TeamsHandler = new class {
 		for (const set of team) {
 			set.name = this.isOMNickname(set.name, user) || set.species;
 
+			// Trim empty moveslots
+			set.moves = set.moves.filter(m => !!m);
+
 			if (!Dex.species.get(set.species).exists) {
 				connection.popup(`Invalid Pokemon ${set.species} in team.`);
 				return null;
@@ -211,7 +214,7 @@ export const TeamsHandler = new class {
 				return null;
 			}
 			if (set.teraType && !strValid(set.teraType)) {
-				connection.popup(`Invalid Tera Type ${set.nature} on ${set.species}.`);
+				connection.popup(`Invalid Tera Type ${set.teraType} on ${set.species}.`);
 				return null;
 			}
 		}
