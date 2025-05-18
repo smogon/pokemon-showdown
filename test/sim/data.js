@@ -166,6 +166,18 @@ describe('Dex data', () => {
 		}
 	});
 
+	it('should have valid CompoundWordNames entries', () => {
+		const CompoundWordNames = require('../../data/aliases').CompoundWordNames;
+		for (const name of CompoundWordNames) {
+			const targetid = toID(name);
+			if (targetid in Dex.data.Pokedex || targetid in Dex.data.Moves || targetid in Dex.data.Abilities || targetid in Dex.data.Items) {
+				// pass
+			} else {
+				assert(false, `CompoundWordNames entry "${name}" must be a pokemon/move/ability/item`);
+			}
+		}
+	});
+
 	it('should have valid Rulesets entries', () => {
 		const Rulesets = Dex.data.Rulesets;
 		for (const formatid in Rulesets) {
