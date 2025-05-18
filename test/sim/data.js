@@ -28,7 +28,7 @@ describe('Dex data', () => {
 				assert(!entry.baseSpecies, `Base species ${entry.name} should not have its own baseSpecies.`);
 				assert(!entry.changesFrom, `Base species ${entry.name} should not change from anything (its changesFrom forme should be base).`);
 				assert(!entry.battleOnly, `Base species ${entry.name} should not be battle-only (its out-of-battle forme should be base).`);
-				assert(!entry.baseForme || Dex.data.Aliases[pokemonid + toID(entry.baseForme)] === entry.name.replace(/\u0301/g, ""), `Base species ${entry.name}-${entry.baseForme} should be aliased to ${entry.name}`);
+				assert(!entry.baseForme || Dex.data.Aliases[pokemonid + toID(entry.baseForme)] === entry.name, `Base species ${entry.name}-${entry.baseForme} should be aliased to ${entry.name}`);
 			}
 
 			if (entry.prevo) {
@@ -58,7 +58,7 @@ describe('Dex data', () => {
 			}
 			if (entry.cosmeticFormes) {
 				for (const forme of entry.cosmeticFormes) {
-					assert.equal(Dex.data.Aliases[toID(forme)], entry.name.replace(/\u0301/g, ""), `Misspelled/nonexistent alias "${forme}" of ${entry.name}`);
+					assert.equal(Dex.data.Aliases[toID(forme)], entry.name, `Misspelled/nonexistent alias "${forme}" of ${entry.name}`);
 					assert.equal(Dex.data.FormatsData[toID(forme)], undefined, `Cosmetic forme "${forme}" should not have its own tier`);
 				}
 			}
@@ -143,6 +143,39 @@ describe('Dex data', () => {
 			assert.equal(toID(entry.name), abilityid, `Mismatched Ability key "${abilityid}" of "${entry.name}"`);
 			assert.equal(typeof entry.num, 'number', `Ability ${entry.name} should have a number`);
 			assert.equal(typeof entry.rating, 'number', `Ability ${entry.name} should have a rating`);
+		}
+	});
+
+	it('should have valid Aliases entries', () => {
+		const Aliases = Dex.data.Aliases;
+		for (const aliasid in Aliases) {
+			const targetid = toID(Aliases[aliasid]);
+			if (targetid in Dex.data.Pokedex) {
+				assert.equal(Aliases[aliasid], Dex.data.Pokedex[targetid].name, `Alias ${aliasid} has incorrect Species name "${Aliases[aliasid]}"`);
+			} else if (targetid in Dex.data.Moves) {
+				assert.equal(Aliases[aliasid], Dex.data.Moves[targetid].name, `Alias ${aliasid} has incorrect Move name "${Aliases[aliasid]}"`);
+			} else if (targetid in Dex.data.Abilities) {
+				assert.equal(Aliases[aliasid], Dex.data.Abilities[targetid].name, `Alias ${aliasid} has incorrect Ability name "${Aliases[aliasid]}"`);
+			} else if (targetid in Dex.data.Items) {
+				assert.equal(Aliases[aliasid], Dex.data.Items[targetid].name, `Alias ${aliasid} has incorrect Item name "${Aliases[aliasid]}"`);
+			} else if (targetid in Dex.data.Rulesets) {
+				assert.equal(Aliases[aliasid], Dex.data.Rulesets[targetid].name, `Alias ${aliasid} has incorrect Ruleset name "${Aliases[aliasid]}"`);
+			} else {
+				assert(false, `Alias ${aliasid} -> "${Aliases[aliasid]}" must be a pokemon/move/ability/item/format`);
+			}
+		}
+	});
+
+	it('should have valid CompoundWordNames entries', () => {
+		const CompoundWordNames = require('../../dist/data/aliases').CompoundWordNames;
+		for (const name of CompoundWordNames) {
+			const targetid = toID(name);
+			const actualName = Dex.data.Pokedex[targetid]?.name || Dex.data.Moves[targetid]?.name ||
+				Dex.data.Abilities[targetid]?.name || Dex.data.Items[targetid]?.name;
+			assert(actualName, `CompoundWordNames entry "${name}" must be a pokemon/move/ability/item`);
+			assert.equal(actualName.replace(/-/g, ''), name.replace(/-/g, ''), `CompoundWordNames entry "${name}" should be the same as its target name (ignoring hyphens)`);
+			assert(name.includes('-'), `CompoundWordNames entry "${name}" should have at least one hyphen (to mark a word boundary)`);
+			assert(name.split('-').length <= 3, `CompoundWordNames entry "${name}" should have at most two hyphens (more aren't supported)`);
 		}
 	});
 
