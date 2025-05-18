@@ -128,9 +128,9 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	mmaw: "Mawile-Mega",
 	mmx: "Mewtwo-Mega-X",
 	mmy: "Mewtwo-Mega-Y",
-	zard: "Charizard-Mega-X",
 	zardx: "Charizard-Mega-X",
 	zardy: "Charizard-Mega-Y",
+	xard: "Charizard-Mega-X",
 	yard: "Charizard-Mega-Y",
 
 	// Pokéstar Studios
@@ -1116,7 +1116,6 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	typh: "Typhlosion",
 	venu: "Venusaur",
 	viriz: "Virizion",
-	watershifu: "Urshifu-Rapid-Strike",
 	weav: "Weavile",
 	whimsi: "Whimsicott",
 	worm: "Orthworm",
