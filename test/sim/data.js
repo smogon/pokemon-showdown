@@ -167,14 +167,15 @@ describe('Dex data', () => {
 	});
 
 	it('should have valid CompoundWordNames entries', () => {
-		const CompoundWordNames = require('../../data/aliases').CompoundWordNames;
+		const CompoundWordNames = require('../../dist/data/aliases').CompoundWordNames;
 		for (const name of CompoundWordNames) {
 			const targetid = toID(name);
-			if (targetid in Dex.data.Pokedex || targetid in Dex.data.Moves || targetid in Dex.data.Abilities || targetid in Dex.data.Items) {
-				// pass
-			} else {
-				assert(false, `CompoundWordNames entry "${name}" must be a pokemon/move/ability/item`);
-			}
+			const actualName = Dex.data.Pokedex[targetid]?.name || Dex.data.Moves[targetid]?.name ||
+				Dex.data.Abilities[targetid]?.name || Dex.data.Items[targetid]?.name;
+			assert(actualName, `CompoundWordNames entry "${name}" must be a pokemon/move/ability/item`);
+			assert.equal(actualName.replace(/-/g, ''), name.replace(/-/g, ''), `CompoundWordNames entry "${name}" should be the same as its target name (ignoring hyphens)`);
+			assert(name.includes('-'), `CompoundWordNames entry "${name}" should have at least one hyphen (to mark a word boundary)`);
+			assert(name.split('-').length <= 3, `CompoundWordNames entry "${name}" should have at most two hyphens (more aren't supported)`);
 		}
 	});
 
