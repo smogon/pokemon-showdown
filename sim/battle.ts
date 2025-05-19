@@ -172,6 +172,8 @@ export class Battle {
 	lastDamage: number;
 	effectOrder: number;
 	quickClawRoll: boolean;
+	/** 0 = no boost, 1 = boost next instance, 2 = boost */
+	roundBoost: number;
 	speedOrder: number[];
 
 	teamGenerator: ReturnType<typeof Teams.getGenerator> | null;
@@ -260,6 +262,7 @@ export class Battle {
 		this.lastDamage = 0;
 		this.effectOrder = 0;
 		this.quickClawRoll = false;
+		this.roundBoost = 0;
 		this.speedOrder = [];
 		for (let i = 0; i < this.activePerHalf * 2; i++) {
 			this.speedOrder.push(i);
@@ -1555,6 +1558,7 @@ export class Battle {
 	endTurn() {
 		this.turn++;
 		this.lastSuccessfulMoveThisTurn = null;
+		this.roundBoost = 0;
 
 		const dynamaxEnding: Pokemon[] = [];
 		for (const pokemon of this.getAllActive()) {

@@ -19,6 +19,26 @@ describe('Round', () => {
 		assert.equal(battle.p2.active[0].item, '');
 	});
 
+	it('should boost Round used by Instruct or Encore', () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Aurorus", ability: 'refrigerate', moves: ['sleeptalk', 'round'], evs: { spe: 252 } },
+			{ species: "Aurorus", ability: 'refrigerate', moves: ['sleeptalk', 'round'] },
+		], [
+			{ species: "Carnivine", moves: ['sleeptalk', 'encore'], evs: { spe: 252 } },
+			{ species: "Carnivine", moves: ['sleeptalk'] },
+			{ species: "Carnivine", moves: ['instruct'] },
+			{ species: "Carnivine", moves: ['sleeptalk'], level: 1 },
+		]]);
+		battle.makeChoices('move sleeptalk, move round 2', 'move sleeptalk, move sleeptalk');
+		battle.makeChoices('move round 2, move sleeptalk', 'move encore 2, move sleeptalk');
+		assert.fainted(battle.p2.active[0]);
+		assert.fainted(battle.p2.active[1]);
+		battle.makeChoices();
+		battle.makeChoices('move sleeptalk, move round 2', 'move instruct 2, move sleeptalk');
+		assert.fainted(battle.p2.active[0]);
+		assert.fainted(battle.p2.active[1]);
+	});
+
 	it('should not take priority over abilities', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Charizard", moves: ['round'] },
