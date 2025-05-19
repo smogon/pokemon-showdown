@@ -2608,6 +2608,7 @@ export const CompoundWordNames = [
 	'10,000,000 Volt Thunder-bolt',
 	'Accele-rock',
 	'Acid Down-pour',
+	'Acu-pressure',
 	'Aero-blast',
 	'Aroma-therapy',
 	'Ava-lanche',
