@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('./../assert');
+const fs = require('fs');
 
 describe('Dex data', () => {
 	it('should have valid Pokedex entries', () => {
@@ -174,8 +175,7 @@ describe('Dex data', () => {
 				Dex.data.Abilities[targetid]?.name || Dex.data.Items[targetid]?.name;
 			assert(actualName, `CompoundWordNames entry "${name}" must be a pokemon/move/ability/item`);
 			assert.equal(actualName.replace(/-/g, ''), name.replace(/-/g, ''), `CompoundWordNames entry "${name}" should be the same as its target name (ignoring hyphens)`);
-			assert(name.includes('-'), `CompoundWordNames entry "${name}" should have at least one hyphen (to mark a word boundary)`);
-			assert(name.split('-').length <= 3, `CompoundWordNames entry "${name}" should have at most two hyphens (more aren't supported)`);
+			assert(name.split('-').length > actualName.split('-').length, `CompoundWordNames entry "${name}" should have at least one more hyphen than "${actualName}" (to mark a word boundary)`);
 		}
 	});
 
@@ -362,4 +362,31 @@ describe('Dex data', () => {
 			assert.equal(count.formes, formes[gen]);
 		});
 	}
+
+	it('should never import', () => {
+		const modNames = fs.readdirSync(`${__dirname}/../../dist/data/mods/`)
+			.filter(mod => mod === toID(mod))
+			// fine, SSB is allowed to; it's not an official format
+			.filter(mod => mod !== 'gen9ssb');
+		// console.log(modNames);
+		const mods = ['data/', ...modNames.map(mod => `data/mods/${mod}/`)];
+		const files = ['abilities.js', 'aliases.js', 'conditions.js', 'formats-data.js', 'items.js', 'learnsets.js', 'moves.js', 'natures.js', 'pokedex.js', 'pokemongo.js', 'rulesets.js', 'tags.js', 'typechart.js'];
+		for (const mod of mods) {
+			for (const file of files) {
+				let contents;
+				try {
+					contents = fs.readFileSync(`${__dirname}/../../dist/${mod}${file}`, 'utf8');
+					// console.log(`Checking ${mod}${file}`);
+				} catch {
+					// fine if the file doesn't exist
+				}
+				if (contents) {
+					assert.false(
+						/\brequire\(/.test(contents),
+						`File ${mod}${file} should not import anything but types`
+					);
+				}
+			}
+		}
+	});
 });

@@ -1,7 +1,6 @@
 // Note: These are the rules that formats use
 
 import type { Learnset } from "../sim/dex-species";
-import { Chat } from "../server/chat";
 
 // The list of formats is stored in config/formats.js
 export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
@@ -2964,31 +2963,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				newSpecies.bst += newSpecies.baseStats[stat];
 			}
 			return newSpecies;
-		},
-	},
-	datapreview: {
-		effectType: 'Rule',
-		name: 'Data Preview',
-		desc: 'When a new Pokémon switches in for the first time, information about its types, stats and Abilities is displayed to both players.',
-		onSwitchIn(pokemon) {
-			let species = this.dex.species.get(pokemon.species.name);
-			if (pokemon.illusion) {
-				species = this.dex.species.get(pokemon.illusion.species.name);
-				this.add('-start', pokemon, 'typechange', pokemon.illusion.getTypes(true).join('/'), '[silent]');
-				this.add(`raw|${Chat.getDataPokemonHTML(species, this.gen)}`);
-				pokemon.m.revealed = false;
-			} else {
-				this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[silent]');
-				this.add(`raw|${Chat.getDataPokemonHTML(species, this.gen)}`);
-			}
-		},
-		onDamagingHit(damage, target, source, move) {
-			if (target.hasAbility('illusion') && !target.m.revealed) {
-				this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[silent]');
-				const species = this.dex.species.get(target.species.name);
-				this.add(`raw|${Chat.getDataPokemonHTML(species, this.gen)}`);
-				target.m.revealed = true;
-			}
 		},
 	},
 };
