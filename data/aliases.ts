@@ -2452,7 +2452,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	volk: "Volkraken",
 };
 
-/** This is what lets you type "tb"/"tbold"/"bolt" to find "thunderbolt" in the
+/** This is what lets you type "tb"/"tbolt"/"bolt" to find "thunderbolt" in the
   * teambuilder (and PSdex) search. */
 export const CompoundWordNames = [
 	// species
@@ -2708,4 +2708,23 @@ export const CompoundWordNames = [
 	'Whirl-pool',
 	'Whirl-wind',
 	'Wild-bolt Storm',
+
+	// abilities
+	'Bullet-proof',
+	'Electro-morphosis',
+	'Fore-warn',
+	'Heat-proof',
+	'Multi-scale',
+	'Multi-type',
+	'Neuro-force',
+	'Pick-pocket',
+	'Proto-synthesis',
+	'Reck-less',
+	'Sound-proof',
+	'Steel-worker',
+	'Super-sweet Syrup',
+	'Tera-form Zero',
+	'Tera-volt',
+	'Turbo-blaze',
+	'Un-seen Fist',
 ];
