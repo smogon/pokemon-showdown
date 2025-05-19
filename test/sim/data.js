@@ -175,8 +175,7 @@ describe('Dex data', () => {
 				Dex.data.Abilities[targetid]?.name || Dex.data.Items[targetid]?.name;
 			assert(actualName, `CompoundWordNames entry "${name}" must be a pokemon/move/ability/item`);
 			assert.equal(actualName.replace(/-/g, ''), name.replace(/-/g, ''), `CompoundWordNames entry "${name}" should be the same as its target name (ignoring hyphens)`);
-			assert(name.includes('-'), `CompoundWordNames entry "${name}" should have at least one hyphen (to mark a word boundary)`);
-			assert(name.split('-').length <= 3, `CompoundWordNames entry "${name}" should have at most two hyphens (more aren't supported)`);
+			assert(name.split('-').length > actualName.split('-').length, `CompoundWordNames entry "${name}" should have at least one more hyphen than "${actualName}" (to mark a word boundary)`);
 		}
 	});
 
