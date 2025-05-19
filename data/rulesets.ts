@@ -3028,7 +3028,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (target.hasAbility('illusion') && !target.m.revealed) {
-				const species = this.dex.species.get(target.species.name);
+				const species = target.species;
 				const gen = this.gen;
 
 				// Recreation of Chat.getDataPokemonHTML
