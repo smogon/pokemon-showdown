@@ -2125,13 +2125,16 @@ export const commands: Chat.ChatCommands = {
 	faq(target, room, user) {
 		target = toID(target);
 		const showAll = target === 'all';
+		if (showAll && this.shouldBroadcast()) {
+			throw new Chat.ErrorMessage(this.tr`You cannot broadcast all FAQs at once.`);
+		}
 		const buffer = [];
 		if (showAll || target === 'staff') {
 			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/staff`}">${this.tr`Staff FAQ`}</a>`);
 		}
 		if (showAll || target === 'autoconfirmed' || target === 'ac') {
 			buffer.push(this.tr`A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.`);
-			if (!(this.message.startsWith('!') && showAll)) void this.parse(`/regtime`);
+			if (!this.shouldBroadcast()) void this.parse(`/regtime`);
 		}
 		if (showAll || target === 'ladder' || target === 'ladderhelp' || target === 'decay') {
 			buffer.push(`<a href="https://${Config.routes.root}/${this.tr`pages/ladderhelp`}">${this.tr`How the ladder works`}</a>`);
@@ -2166,9 +2169,6 @@ export const commands: Chat.ChatCommands = {
 		}
 		if (!target || showAll) {
 			buffer.unshift(`<a href="https://pokemonshowdown.com/${this.tr`pages/faq`}">${this.tr`Frequently Asked Questions`}</a>`);
-		}
-		if (showAll && this.broadcasting) {
-			throw new Chat.ErrorMessage(this.tr`You cannot broadcast all FAQs at once.`);
 		}
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(buffer.join(`<br />`));
