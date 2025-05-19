@@ -2167,8 +2167,8 @@ export const commands: Chat.ChatCommands = {
 		if (!target || showAll) {
 			buffer.unshift(`<a href="https://pokemonshowdown.com/${this.tr`pages/faq`}">${this.tr`Frequently Asked Questions`}</a>`);
 		}
-		if (showAll && this.message.startsWith('!')) {
-			return this.errorReply(this.tr`You cannot broadcast all FAQs at once.`);
+		if (showAll && this.broadcasting) {
+			throw new Chat.ErrorMessage(this.tr`You cannot broadcast all FAQs at once.`);
 		}
 		if (!this.runBroadcast()) return;
 		this.sendReplyBox(buffer.join(`<br />`));
