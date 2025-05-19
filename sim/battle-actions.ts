@@ -1925,7 +1925,7 @@ export class BattleActions {
 		if (pokemon.species.baseSpecies === 'Morpeko' && !pokemon.transformed &&
 			pokemon.baseSpecies.id !== pokemon.species.id
 		) {
-			pokemon.regressionForme = true;
+			pokemon.formeRegression = true;
 			pokemon.baseSpecies = pokemon.species;
 			pokemon.details = pokemon.getUpdatedDetails();
 		}
