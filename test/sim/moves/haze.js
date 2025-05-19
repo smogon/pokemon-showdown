@@ -197,6 +197,6 @@ describe('[Gen 4] Haze', () => {
 		assert(battle.p2.active[0].volatiles['focusenergy']);
 
 		battle.makeChoices('move splash', 'move haze');
-		assert.equal(typeof battle.p2.active[0].volatiles['focusenergy'], 'undefined');
+		assert.equal(battle.p2.active[0].volatiles['focusenergy'], undefined);
 	});
 });
