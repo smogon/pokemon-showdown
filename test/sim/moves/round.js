@@ -19,7 +19,7 @@ describe('Round', () => {
 		assert.equal(battle.p2.active[0].item, '');
 	});
 
-	it('should boost Round used by Instruct or Encore', () => {
+	it('is boosted if it was used prior in the turn and called by Instruct or Encore', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: "Aurorus", ability: 'refrigerate', moves: ['sleeptalk', 'round'], evs: { spe: 252 } },
 			{ species: "Aurorus", ability: 'refrigerate', moves: ['sleeptalk', 'round'] },
