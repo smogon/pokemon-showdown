@@ -1155,6 +1155,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	ubassembly: "Stakataka",
 	ubadhesive: "Poipole",
 	ubstinger: "Naganadel",
+	ubblack: "Necrozma",
 
 	// moves
 	ajet: "Aqua Jet",
@@ -2609,6 +2610,7 @@ export const CompoundWordNames = [
 	'Toxi-croak',
 	'Tyrani-tar',
 	'Ursa-luna',
+	'Ursa-luna Blood-moon',
 	'Veno-moth',
 	'Venu-saur',
 	'Vika-volt',

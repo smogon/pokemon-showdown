@@ -171,8 +171,12 @@ describe('Dex data', () => {
 		const CompoundWordNames = require('../../dist/data/aliases').CompoundWordNames;
 		for (const name of CompoundWordNames) {
 			const targetid = toID(name);
-			const actualName = Dex.data.Pokedex[targetid]?.name || Dex.data.Moves[targetid]?.name ||
+			let actualName = Dex.data.Pokedex[targetid]?.name || Dex.data.Moves[targetid]?.name ||
 				Dex.data.Abilities[targetid]?.name || Dex.data.Items[targetid]?.name;
+			if (Dex.data.Pokedex[targetid]?.name) {
+				const species = Dex.species.get(targetid);
+				if (species.forme) actualName = species.baseSpecies + ' ' + species.forme;
+			}
 			assert(actualName, `CompoundWordNames entry "${name}" must be a pokemon/move/ability/item`);
 			assert.equal(actualName.replace(/-/g, ''), name.replace(/-/g, ''), `CompoundWordNames entry "${name}" should be the same as its target name (ignoring hyphens)`);
 			assert(name.split('-').length > actualName.split('-').length, `CompoundWordNames entry "${name}" should have at least one more hyphen than "${actualName}" (to mark a word boundary)`);
