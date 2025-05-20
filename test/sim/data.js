@@ -169,8 +169,12 @@ describe('Dex data', () => {
 
 	it('should have valid CompoundWordNames entries', () => {
 		const CompoundWordNames = require('../../dist/data/aliases').CompoundWordNames;
+		const used = new Map();
 		for (const name of CompoundWordNames) {
 			const targetid = toID(name);
+			assert(!used.has(targetid), `CompoundWordNames entry "${name}" already exists as "${used.get(targetid)}"`);
+			used.set(targetid, name);
+
 			let actualName = Dex.data.Pokedex[targetid]?.name || Dex.data.Moves[targetid]?.name ||
 				Dex.data.Abilities[targetid]?.name || Dex.data.Items[targetid]?.name;
 			if (Dex.data.Pokedex[targetid]?.name) {

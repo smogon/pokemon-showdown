@@ -112,6 +112,8 @@ export const TeamsHandler = new class {
 	isOMNickname(nickname: string, user: User) {
 		// allow nicknames named after other mons/types/abilities/items - to support those OMs
 		if (Dex.species.get(nickname).exists) {
+			// I have a Forretress named Cathy and having it renamed to Trevenant (Forretress) is annoying
+			if (toID(nickname) === 'cathy') return null;
 			return Dex.species.get(nickname).name;
 		} else if (Dex.items.get(nickname).exists) {
 			return Dex.items.get(nickname).name;
