@@ -1133,15 +1133,28 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 
 	// ultra beast codenames
 	ub01: "Nihilego",
+	ub01symbiont: "Nihilego",
+	ubsymbiont: "Nihilego",
 	ub02a: "Buzzwole",
+	ub02absorption: "Buzzwole",
+	ubabsorption: "Buzzwole",
 	ub02b: "Pheromosa",
+	ub02beauty: "Pheromosa",
+	ubbeauty: "Pheromosa",
 	ub03: "Xurkitree",
+	ub03lightning: "Xurkitree",
+	ublightning: "Xurkitree",
 	ub04blade: "Kartana",
+	ubblade: "Kartana",
 	ub04blaster: "Celesteela",
+	ubblaster: "Celesteela",
 	ub05: "Guzzlord",
+	ub05glutton: "Guzzlord",
+	ubglutton: "Guzzlord",
 	ubburst: "Blacephalon",
 	ubassembly: "Stakataka",
 	ubadhesive: "Poipole",
+	ubstinger: "Naganadel",
 
 	// moves
 	ajet: "Aqua Jet",
