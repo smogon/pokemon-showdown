@@ -731,6 +731,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			spa: 1,
 		},
 	},
+	haze: {
+		inherit: true,
+		onHitField() {
+			this.add('-clearallboost');
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
+				pokemon.removeVolatile('focusenergy');
+			}
+		},
+	},
 	healbell: {
 		inherit: true,
 		onHit(target, source) {
