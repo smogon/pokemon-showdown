@@ -606,12 +606,12 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
 		}
 		if (newTargets.length > 2) {
-			throw new Chat.ErrorMessage(`Too many results for '${target}': ${newTargets.map(t => t.name).join(', ')}`);
+			throw new Chat.ErrorMessage(`'${target}' doesn't match anything exactly. Too many approximate matches: ${newTargets.map(t => t.name).join(', ')}`);
 		}
 
 		for (const [i, newTarget] of newTargets.entries()) {
 			if (newTarget.isInexact && !i) {
-				buffer = `No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
+				buffer = `'${target}' doesn't match anything exactly${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Approximate match${newTarget.length === 1 ? '' : 'es'}:\n`;
 			}
 			let details: { [k: string]: string } = {};
 			switch (newTarget.searchType) {
