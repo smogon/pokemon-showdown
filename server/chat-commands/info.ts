@@ -605,6 +605,9 @@ export const commands: Chat.ChatCommands = {
 		if (!newTargets?.length) {
 			throw new Chat.ErrorMessage(`No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
 		}
+		if (newTargets.length > 2) {
+			throw new Chat.ErrorMessage(`Too many results for '${target}': ${newTargets.map(t => t.name).join(', ')}`);
+		}
 
 		for (const [i, newTarget] of newTargets.entries()) {
 			if (newTarget.isInexact && !i) {
