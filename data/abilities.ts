@@ -301,7 +301,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	aurabreak: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Aura Break');
 		},
 		onAnyTryPrimaryHit(target, source, move) {
