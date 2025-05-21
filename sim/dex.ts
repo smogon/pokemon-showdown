@@ -525,10 +525,9 @@ export class ModdedDex {
 			if (!prev.includes(target)) prev.push(target);
 			fuzzyAliases.set(alias, prev);
 		};
-		const addFuzzyForme = (alias: ID, target: ID, forme: ID) => {
+		const addFuzzyForme = (alias: ID, target: ID, forme: ID, formeLetter: ID) => {
 			addFuzzy(`${alias}${forme}` as ID, target);
 			if (!forme) return;
-			const formeLetter = forme === 'fan' ? 's' : forme === 'bloodmoon' ? 'bm' : forme.charAt(0);
 			addFuzzy(`${alias}${formeLetter}` as ID, target);
 			addFuzzy(`${formeLetter}${alias}` as ID, target);
 			if (forme === 'alola') addFuzzy(`alolan${alias}` as ID, target);
@@ -551,6 +550,7 @@ export class ModdedDex {
 			for (const [id, entry] of Object.entries(data) as [ID, DexTableData[typeof table][string]][]) {
 				let name = compoundNames.get(id) || entry.name;
 				let forme = '' as ID;
+				let formeLetter = '' as ID;
 				if (table === 'Pokedex') {
 					// can't Dex.species.get; aliases isn't loaded
 					const species = entry as DexTableData['Pokedex'][string];
@@ -559,26 +559,32 @@ export class ModdedDex {
 						name = compoundNames.get(baseid) || baseid;
 					}
 					forme = toID(species.forme || species.baseForme);
+					if (forme === 'fan') {
+						formeLetter = 's' as ID;
+					} else if (forme === 'bloodmoon') {
+						formeLetter = 'bm' as ID;
+					} else {
+						// not doing baseForme as a hack to make aliases point to base forme
+						formeLetter = (species.forme || '').split(/ |-/).map(part => toID(part).charAt(0)).join('') as ID;
+					}
 				}
 
-				addFuzzyForme(toID(name), id, forme);
+				addFuzzyForme(toID(name), id, forme, formeLetter);
 				const fullSplit = name.split(/ |-/).map(toID);
 				if (fullSplit.length < 2) continue;
 				const fullAcronym = fullSplit.map(x => x.charAt(0)).join('');
-				addFuzzyForme(fullAcronym as ID, id, forme);
+				addFuzzyForme(fullAcronym as ID, id, forme, formeLetter);
 				const fullAcronymWord = fullAcronym + fullSplit[fullSplit.length - 1].slice(1);
-				addFuzzyForme(fullAcronymWord as ID, id, forme);
-				for (const wordPart of fullSplit) addFuzzyForme(wordPart, id, forme);
+				addFuzzyForme(fullAcronymWord as ID, id, forme, formeLetter);
+				for (const wordPart of fullSplit) addFuzzyForme(wordPart, id, forme, formeLetter);
 
 				const spaceSplit = name.split(' ').map(toID);
 				if (spaceSplit.length !== fullSplit.length) {
 					const spaceAcronym = spaceSplit.map(x => x.charAt(0)).join('');
-					addFuzzyForme(spaceAcronym as ID, id, forme);
+					addFuzzyForme(spaceAcronym as ID, id, forme, formeLetter);
 					const spaceAcronymWord = spaceAcronym + spaceSplit[spaceSplit.length - 1].slice(1);
-					if (fullAcronymWord !== spaceAcronymWord) {
-						addFuzzyForme(spaceAcronymWord as ID, id, forme);
-					}
-					for (const word of fullSplit) addFuzzyForme(word, id, forme);
+					addFuzzyForme(spaceAcronymWord as ID, id, forme, formeLetter);
+					for (const word of fullSplit) addFuzzyForme(word, id, forme, formeLetter);
 				}
 			}
 		}
