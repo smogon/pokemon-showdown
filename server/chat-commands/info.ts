@@ -603,7 +603,7 @@ export const commands: Chat.ChatCommands = {
 		const newTargets = dex.dataSearch(target);
 		const showDetails = (cmd.startsWith('dt') || cmd === 'details');
 		if (!newTargets?.length) {
-			throw new Chat.ErrorMessage(`No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
+			throw new Chat.ErrorMessage(`'${target}' doesn't match any Pok\u00e9mon, item, move, ability or nature${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
 		}
 		if (newTargets.length > 2) {
 			throw new Chat.ErrorMessage(`'${target}' has no exact match. Too many approximate matches: ${newTargets.map(t => t.name).join(', ')}`);
