@@ -538,6 +538,13 @@ export class ModdedDex {
 			else if (forme === 'megax') addFuzzy(`mega${alias}x` as ID, target);
 			else if (forme === 'megay') addFuzzy(`mega${alias}y` as ID, target);
 			else addFuzzy(`${forme}${alias}` as ID, target);
+
+			if (forme === 'megax' || forme === 'megay') {
+				addFuzzy(`mega${alias}` as ID, target);
+				addFuzzy(`${alias}mega` as ID, target);
+				addFuzzy(`m${alias}` as ID, target);
+				addFuzzy(`${alias}m` as ID, target);
+			}
 		};
 		for (const table of ['Items', 'Abilities', 'Moves', 'Pokedex'] as const) {
 			const data = this.data[table];
@@ -575,6 +582,8 @@ export class ModdedDex {
 				}
 			}
 		}
+		addFuzzy('asone' as ID, 'asonespectrier' as ID);
+		addFuzzy('asone' as ID, 'asoneglastrier' as ID);
 
 		(this as any).aliases = aliases satisfies this['aliases'];
 		(this as any).fuzzyAliases = fuzzyAliases satisfies this['fuzzyAliases'];
