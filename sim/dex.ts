@@ -590,6 +590,10 @@ export class ModdedDex {
 		}
 		addFuzzy('asone' as ID, 'asonespectrier' as ID);
 		addFuzzy('asone' as ID, 'asoneglastrier' as ID);
+		addFuzzy('embodyaspect' as ID, 'embodyaspectteal' as ID);
+		addFuzzy('embodyaspect' as ID, 'embodyaspectwellspring' as ID);
+		addFuzzy('embodyaspect' as ID, 'embodyaspecthearthflame' as ID);
+		addFuzzy('embodyaspect' as ID, 'embodyaspectcornerstone ' as ID);
 
 		(this as any).aliases = aliases satisfies this['aliases'];
 		(this as any).fuzzyAliases = fuzzyAliases satisfies this['fuzzyAliases'];
