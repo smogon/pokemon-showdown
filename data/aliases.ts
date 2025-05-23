@@ -2575,7 +2575,7 @@ export const CompoundWordNames = [
 	'Bulba-saur',
 	'Buzz-wole',
 	'Cac-nea',
-	'cac-turne',
+	'Cac-turne',
 	'Caly-rex',
 	'Capsa-kid',
 	'Car-bink',
