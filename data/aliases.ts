@@ -2546,6 +2546,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
   * teambuilder (and PSdex) search. */
 export const CompoundWordNames = [
 	// species
+	'Aboma-snow',
 	'Aegi-slash',
 	'Aero-dactyl',
 	'Alaka-zam',
