@@ -285,6 +285,7 @@ export class RoomBattleTimer {
 			}
 		}
 
+		this.battle.room.add(`||adding ${addPerTurn} for new turn`);
 		for (const player of this.battle.players) {
 			player.secondsLeft = Math.min(player.secondsLeft + addPerTurn, this.settings.starting);
 		}
@@ -302,18 +303,19 @@ export class RoomBattleTimer {
 		// if there's only 1 player left
 		if (this.battle.players.filter(p => p.secondsLeft > 0).length <= 1) return;
 
+		const room = this.battle.room;
 		if (!this.updateTurn()) {
 			if (this.battle.players.filter(p => !p.request.isWait).length <= 1) {
 				this.isFirstRequest = false;
 				// first request of a mid-turn request (U-turn or faint-switch)
 				const addPerMidTurnRequest = Math.min(this.settings.addPerTurn, TICK_TIME);
+				room.add(`||adding ${addPerMidTurnRequest} to each for mid turn request`);
 				for (const curPlayer of this.battle.players) {
 					curPlayer.secondsLeft += addPerMidTurnRequest;
 				}
 			}
 		}
 		const maxTurnTime = (this.isFirstRequest ? this.settings.maxFirstTurn : 0) || this.settings.maxPerTurn;
-		const room = this.battle.room;
 		player.turnSecondsLeft = Math.min(player.secondsLeft, maxTurnTime);
 
 		const secondsLeft = player.turnSecondsLeft;
