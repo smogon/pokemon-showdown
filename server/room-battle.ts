@@ -163,8 +163,8 @@ export class RoomBattleTimer {
 	readonly battle: RoomBattle;
 	readonly timerRequesters = new Set<ID>();
 	timer: NodeJS.Timeout | null = null;
-	isFirstTurn = true;
-	turn: number;
+	firstTurn: number | null = null;
+	turn: number | null = null;
 	/**
 	 * Last tick, as milliseconds since UNIX epoch.
 	 * Represents the last time a tick happened.
@@ -190,7 +190,6 @@ export class RoomBattleTimer {
 			if (timerSettings[k] === undefined) delete timerSettings[k];
 		}
 
-		this.turn = ruleTable.has('teampreview') ? 0 : 1;
 		this.settings = {
 			dcTimer: !isChallenge,
 			dcTimerBank: isChallenge,
@@ -218,7 +217,7 @@ export class RoomBattleTimer {
 			requester?.sendTo(this.battle.roomid, `|inactiveoff|The timer can't be enabled after a battle has ended.`);
 			return false;
 		}
-		if (this.timer) {
+		if (this.timerRequesters.size) {
 			this.battle.room.add(`|inactive|${requester ? requester.name : userid} also wants the timer to be on.`).update();
 			this.timerRequesters.add(userid);
 			return false;
@@ -235,7 +234,6 @@ export class RoomBattleTimer {
 		this.timerRequesters.add(userid);
 		const requestedBy = requester ? ` (requested by ${requester.name})` : ``;
 		this.battle.room.add(`|inactive|Battle timer is ON: inactive players will automatically lose when time's up.${requestedBy}`).update();
-		if (this.turn < this.battle.turn) this.turn = this.battle.turn;
 
 		this.checkActivity();
 		for (const player of this.battle.players) this.nextRequest(player);
@@ -268,9 +266,9 @@ export class RoomBattleTimer {
 		return true;
 	}
 	updateTurn() {
-		if (this.battle.turn <= this.turn) return false;
+		if (this.turn !== null && this.battle.turn <= this.turn) return false;
 		this.turn = this.battle.turn;
-		this.isFirstTurn = false;
+		this.firstTurn ??= this.turn;
 
 		let addPerTurn = this.settings.addPerTurn;
 		if (this.settings.accelerate && addPerTurn) {
@@ -310,7 +308,7 @@ export class RoomBattleTimer {
 				}
 			}
 		}
-		const maxTurnTime = (this.isFirstTurn ? this.settings.maxFirstTurn : 0) || this.settings.maxPerTurn;
+		const maxTurnTime = (this.firstTurn === this.turn ? this.settings.maxFirstTurn : 0) || this.settings.maxPerTurn;
 		const room = this.battle.room;
 		player.turnSecondsLeft = Math.min(player.secondsLeft, maxTurnTime);
 
