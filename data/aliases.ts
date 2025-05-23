@@ -157,7 +157,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	ufopsychic: "Pokestar UFO-2",
 	whitedoor: "Pokestar White Door",
 
-	//Cosmetic Pokestar Studios formes --- unordered
+	// Cosmetic Pokestar Studios formes --- unordered
 	pokestargiant2: "Pokestar Giant",
 	pokestarmonica2: "Pokestar Giant",
 	pokestarufopropu1: "Pokestar UFO",
@@ -2940,4 +2940,3 @@ export const CompoundWordNames = [
 	'Turbo-blaze',
 	'Un-seen Fist',
 ];
-
