@@ -2730,7 +2730,7 @@ export const CompoundWordNames = [
 	'Psy-duck',
 	'Pyuku-muku',
 	'Quag-sire',
-	'Quaq-quaval',
+	'Qua-quaval',
 	'Rai-kou',
 	'Reg-ice',
 	'Regi-drago',
