@@ -1283,7 +1283,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	ihead: "Iron Head",
 	knock: "Knock Off",
 	lr: "Last Respects",
-	maligchain: "Maligant Chain",
+	maligchain: "Malignant Chain",
 	mblast: "Moonblast",
 	mir: "Make It Rain",
 	moongeist: "Moongeist Beam",
