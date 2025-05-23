@@ -179,8 +179,8 @@ export class DexItems {
 		if (id === '') return EMPTY_ITEM;
 		let item = this.itemCache.get(id);
 		if (item) return item;
-		if (this.dex.data.Aliases.hasOwnProperty(id)) {
-			item = this.get(this.dex.data.Aliases[id]);
+		if (this.dex.getAlias(id)) {
+			item = this.get(this.dex.getAlias(id));
 			if (item.exists) {
 				this.itemCache.set(id, item);
 			}

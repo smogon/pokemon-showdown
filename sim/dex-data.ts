@@ -176,8 +176,9 @@ export class DexNatures {
 		let nature = this.natureCache.get(id);
 		if (nature) return nature;
 
-		if (this.dex.data.Aliases.hasOwnProperty(id)) {
-			nature = this.get(this.dex.data.Aliases[id]);
+		const alias = this.dex.getAlias(id);
+		if (alias) {
+			nature = this.get(alias);
 			if (nature.exists) {
 				this.natureCache.set(id, nature);
 			}

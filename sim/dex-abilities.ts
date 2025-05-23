@@ -89,8 +89,8 @@ export class DexAbilities {
 		let ability = this.abilityCache.get(id);
 		if (ability) return ability;
 
-		if (this.dex.data.Aliases.hasOwnProperty(id)) {
-			ability = this.get(this.dex.data.Aliases[id]);
+		if (this.dex.getAlias(id)) {
+			ability = this.get(this.dex.getAlias(id));
 		} else if (id && this.dex.data.Abilities.hasOwnProperty(id)) {
 			const abilityData = this.dex.data.Abilities[id] as any;
 			const abilityTextData = this.dex.getDescs('Abilities', id, abilityData);
