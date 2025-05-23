@@ -266,9 +266,12 @@ export class RoomBattleTimer {
 		return true;
 	}
 	updateTurn() {
-		if (this.turn !== null && this.battle.turn <= this.turn) return false;
-		this.turn = this.battle.turn;
-		this.firstTurn ??= this.turn;
+		if (this.turn === null) {
+			this.turn = this.battle.turn;
+			this.firstTurn = this.turn;
+			return true;
+		}
+		if (this.battle.turn <= this.turn) return false;
 
 		let addPerTurn = this.settings.addPerTurn;
 		if (this.settings.accelerate && addPerTurn) {
