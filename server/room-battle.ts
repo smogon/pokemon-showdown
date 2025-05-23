@@ -163,7 +163,7 @@ export class RoomBattleTimer {
 	readonly battle: RoomBattle;
 	readonly timerRequesters = new Set<ID>();
 	timer: NodeJS.Timeout | null = null;
-	firstTurn: number | null = null;
+	isFirstRequest = true;
 	turn: number | null = null;
 	/**
 	 * Last tick, as milliseconds since UNIX epoch.
@@ -268,10 +268,10 @@ export class RoomBattleTimer {
 	updateTurn() {
 		if (this.turn === null) {
 			this.turn = this.battle.turn;
-			this.firstTurn = this.turn;
 			return true;
 		}
 		if (this.battle.turn <= this.turn) return false;
+		this.isFirstRequest = false;
 
 		let addPerTurn = this.settings.addPerTurn;
 		if (this.settings.accelerate && addPerTurn) {
@@ -304,6 +304,7 @@ export class RoomBattleTimer {
 
 		if (!this.updateTurn()) {
 			if (this.battle.players.filter(p => !p.request.isWait).length <= 1) {
+				this.isFirstRequest = false;
 				// first request of a mid-turn request (U-turn or faint-switch)
 				const addPerMidTurnRequest = Math.min(this.settings.addPerTurn, TICK_TIME);
 				for (const curPlayer of this.battle.players) {
@@ -311,7 +312,7 @@ export class RoomBattleTimer {
 				}
 			}
 		}
-		const maxTurnTime = (this.firstTurn === this.turn ? this.settings.maxFirstTurn : 0) || this.settings.maxPerTurn;
+		const maxTurnTime = (this.isFirstRequest ? this.settings.maxFirstTurn : 0) || this.settings.maxPerTurn;
 		const room = this.battle.room;
 		player.turnSecondsLeft = Math.min(player.secondsLeft, maxTurnTime);
 
