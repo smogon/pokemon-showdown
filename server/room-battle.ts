@@ -271,6 +271,7 @@ export class RoomBattleTimer {
 			return true;
 		}
 		if (this.battle.turn <= this.turn) return false;
+		this.turn = this.battle.turn;
 		this.isFirstRequest = false;
 
 		let addPerTurn = this.settings.addPerTurn;
