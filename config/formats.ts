@@ -2704,9 +2704,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 8 DLC 1] National Dex AG",
-		mod: 'gen8',
+		mod: 'gen8dlc1',
 		searchShow: false,
-		ruleset: ['Standard AG', 'NatDex Mod'],
+		ruleset: ['Standard AG','NatDex Mod'],
+		unbanlist: [
+			'Absol', 'Aerodactyl', 'Aggron', 'Altaria', 'Amaura', 'Anorith', 'Archen', 'Archeops', 'Armaldo', 'Aron', 'Articuno', 'Audino', 'Aurorus', 'Azelf', 'Bagon', 'Beldum', 'Blacephalon', 'Blaziken', 'Buzzwole', 'Carbink',
+			'Carracosta', 'Celesteela', 'Combusken', 'Cradily', 'Cresselia', 'Crobat', 'Cryogonal', 'Dialga', 'Diancie', 'Dragonair', 'Dragonite', 'Dratini', 'Electabuzz', 'Electivire', 'Elekid', 'Entei', 'Gabite', 'Garchomp',
+			'Genesect', 'Gible', 'Giratina', 'Golbat', 'Groudon', 'Grovyle', 'Guzzlord', 'Heatran', 'Hooh', 'Jynx', 'Kabuto', 'Kabutops', 'Kartana', 'Kyogre', 'Lairon', 'Landorus', 'Landorus-Therian', 'Latias', 'Latios', 'Lileep',
+			'Lugia', 'Magby', 'Magmar', 'Magmortar', 'Marshtomp', 'Mesprit', 'Metagross', 'Metang', 'Moltres', 'Mudkip', 'Naganadel', 'Nidoking', 'Nidoqueen', 'Nidoran-F', 'Nidoran-M', 'Nidorina', 'Nidorino', 'Nihilego', 'Omanyte',
+			'Omastar', 'Palkia', 'Pheromosa', 'Poipole', 'Raikou', 'Rayquaza', 'Regice', 'Regigigas', 'Regirock', 'Registeel', 'Salamence', 'Sceptile', 'Sealeo', 'Shelgon', 'Smoochum', 'Spheal', 'Spiritomb', 'Stakataka', 'Suicune',
+			'Swablu', 'Swampert', 'Tapu Bulu', 'Tapu Fini', 'Tapu Koko', 'Tapu Lele', 'Thundurus', 'Thundurus-Therian', 'Tirtouga', 'Torchic', 'Tornadus', 'Tornadus-Therian', 'Treecko', 'Tyrantrum', 'Tyrunt', 'Uxie', 'Victini',
+			'Volcanion', 'Walrein', 'Xerneas', 'Xurkitree', 'Yveltal', 'Zapdos', 'Zubat', 'Zygarde', 'Zygarde-10%',
+		],
 	},
 
 	// Randomized Format Spotlight
