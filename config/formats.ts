@@ -2706,7 +2706,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 8 DLC 1] National Dex AG",
 		mod: 'gen8dlc1',
 		searchShow: false,
-		ruleset: ['Standard AG','NatDex Mod'],
+		ruleset: ['Standard AG', 'NatDex Mod'],
 		unbanlist: [
 			'Absol', 'Aerodactyl', 'Aggron', 'Altaria', 'Amaura', 'Anorith', 'Archen', 'Archeops', 'Armaldo', 'Aron', 'Articuno', 'Audino', 'Aurorus', 'Azelf', 'Bagon', 'Beldum', 'Blacephalon', 'Blaziken', 'Buzzwole', 'Carbink',
 			'Carracosta', 'Celesteela', 'Combusken', 'Cradily', 'Cresselia', 'Crobat', 'Cryogonal', 'Dialga', 'Diancie', 'Dragonair', 'Dragonite', 'Dratini', 'Electabuzz', 'Electivire', 'Elekid', 'Entei', 'Gabite', 'Garchomp',
