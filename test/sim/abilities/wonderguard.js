@@ -46,9 +46,9 @@ describe('Wonder Guard', () => {
 
 	it('should activate if the target is immune to the attack', () => {
 		battle = common.createBattle([[
-			{ species: 'Alakazam', moves: ['psychic'] }
+			{ species: 'Alakazam', moves: ['psychic'] },
 		], [
-			{ species: 'Muk-Alola', ability: 'wonderguard', moves: ['sleeptalk'] }
+			{ species: 'Muk-Alola', ability: 'wonderguard', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
 		assert(battle.log.some(line => line.includes('|-immune|p2a: Muk|[from] ability: Wonder Guard')));
