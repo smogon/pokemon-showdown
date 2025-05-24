@@ -407,7 +407,7 @@ export class RandomCPMTeams extends RandomTeams {
 		const debug: string[] = []; // Set this to a list of CPM sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const monotype = this.forceMonotype || (ruleTable.has('sametypeclause') ?
-			this.sample([...this.dex.types.names().filter(x => x !== 'Stellar')]) : false);
+			this.sample(this.dex.types.names().filter(x => x !== 'Stellar')) : false);
 
 		let pool = Object.keys(cpmSets);
 		if (debug.length) {
@@ -478,7 +478,8 @@ export class RandomCPMTeams extends RandomTeams {
 				moves.push(this.dex.moves.get(move).name);
 			}
 			moves.push(this.dex.moves.get(cpmSet.signatureMove).name);
-			const ivs = { ...{ hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 }, ...cpmSet.ivs };
+			const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...cpmSet.ivs };
+
 			if (!moves.map(x => this.dex.moves.get(x)).some(x => x.category === 'Physical')) {
 				ivs.atk = 0;
 			}
@@ -491,7 +492,8 @@ export class RandomCPMTeams extends RandomTeams {
 				moves,
 				nature: cpmSet.nature ? Array.isArray(cpmSet.nature) ? this.sampleNoReplace(cpmSet.nature) : cpmSet.nature : 'Serious',
 				gender: cpmSet.gender ? this.sampleIfArray(cpmSet.gender) : this.sample(['M', 'F', 'N']),
-				evs: cpmSet.evs ? { ...{ hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }, ...cpmSet.evs } :
+				evs: cpmSet.evs ? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...cpmSet.evs } :
+
 				{ hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84 },
 				ivs,
 				level: this.adjustLevel || cpmSet.level || 100,

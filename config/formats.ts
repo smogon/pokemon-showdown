@@ -1271,7 +1271,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 							(move.self as any)[i] = (forte.self as any)[i];
 						}
 					} else {
-						move.self = { ...(move.self || {}), ...forte.self };
+						move.self = { ...move.self, ...forte.self };
 					}
 				}
 				if (forte.selfBoost?.boosts) {

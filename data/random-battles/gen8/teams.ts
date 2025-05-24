@@ -2687,7 +2687,7 @@ export class RandomGen8Teams {
 				level: this.adjustLevel || 100,
 				evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.evs },
 				nature: setData.nature,
-				ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.ivs || {} },
+				ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.ivs },
 				moves: setData.moves.map((move: any) => this.sampleIfArray(move)),
 			};
 			if (this.adjustLevel) set.level = this.adjustLevel;
