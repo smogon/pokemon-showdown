@@ -5500,7 +5500,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
 			if (move.id === 'skydrop' && !source.volatiles['skydrop']) return;
 			this.debug('Wonder Guard immunity: ' + move.id);
-			if (target.runEffectiveness(move) <= 0) {
+			if (target.runEffectiveness(move) <= 0 || !target.runImmunity(move.type)) {
 				if (move.smartTarget) {
 					move.smartTarget = false;
 				} else {
