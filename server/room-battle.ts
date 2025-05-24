@@ -267,10 +267,26 @@ export class RoomBattleTimer {
 	}
 	updateTurn() {
 		if (this.turn === null) {
+			// first request since timer was turned on
 			this.turn = this.battle.turn;
-			return true;
+			return;
 		}
-		if (this.battle.turn <= this.turn) return false;
+		if (this.battle.turn <= this.turn) {
+			if (this.battle.players.filter(p => !p.request.isWait).length <= 1) {
+				// first request of a mid-turn request (U-turn or faint-switch)
+				this.isFirstRequest = false;
+				const addPerMidTurnRequest = Math.min(this.settings.addPerTurn, TICK_TIME);
+				this.battle.room.add(`||adding ${addPerMidTurnRequest} to each for mid turn request`);
+				for (const curPlayer of this.battle.players) {
+					curPlayer.secondsLeft += addPerMidTurnRequest;
+				}
+			} else {
+				// second player of a request we've already updated the timer for
+			}
+			return;
+		}
+
+		// new turn
 		this.turn = this.battle.turn;
 		this.isFirstRequest = false;
 
@@ -290,7 +306,6 @@ export class RoomBattleTimer {
 		for (const player of this.battle.players) {
 			player.secondsLeft = Math.min(player.secondsLeft + addPerTurn, this.settings.starting);
 		}
-		return true;
 	}
 	nextRequest(player: RoomBattlePlayer) {
 		if (player.secondsLeft <= 0) return;
@@ -305,17 +320,7 @@ export class RoomBattleTimer {
 		if (this.battle.players.filter(p => p.secondsLeft > 0).length <= 1) return;
 
 		const room = this.battle.room;
-		if (!this.updateTurn()) {
-			if (this.battle.players.filter(p => !p.request.isWait).length <= 1) {
-				this.isFirstRequest = false;
-				// first request of a mid-turn request (U-turn or faint-switch)
-				const addPerMidTurnRequest = Math.min(this.settings.addPerTurn, TICK_TIME);
-				room.add(`||adding ${addPerMidTurnRequest} to each for mid turn request`);
-				for (const curPlayer of this.battle.players) {
-					curPlayer.secondsLeft += addPerMidTurnRequest;
-				}
-			}
-		}
+		this.updateTurn();
 		const maxTurnTime = (this.isFirstRequest ? this.settings.maxFirstTurn : 0) || this.settings.maxPerTurn;
 		player.turnSecondsLeft = Math.min(player.secondsLeft, maxTurnTime);
 
