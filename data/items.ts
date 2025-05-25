@@ -1586,6 +1586,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (!this.effectState.eject) return;
 			(this.effectState.target as Pokemon).useItem();
 		},
+		onAnyAfterMega() {
+			if (!this.effectState.eject) return;
+			(this.effectState.target as Pokemon).useItem();
+		},
 		onAnyAfterMove() {
 			if (!this.effectState.eject) return;
 			(this.effectState.target as Pokemon).useItem();
@@ -3834,6 +3838,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onAnySwitchInPriority: -3,
 		onAnySwitchIn() {
+			if (!this.effectState.ready) return;
+			(this.effectState.target as Pokemon).useItem();
+		},
+		onAnyAfterMega() {
+			if (!this.effectState.ready) return;
+			(this.effectState.target as Pokemon).useItem();
+		},
+		onAnyAfterTerastallization() {
 			if (!this.effectState.ready) return;
 			(this.effectState.target as Pokemon).useItem();
 		},
@@ -7224,6 +7236,9 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onAnySwitchInPriority: -2,
 		onAnySwitchIn() {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
+		},
+		onAnyAfterMega() {
 			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onAnyAfterMove() {
