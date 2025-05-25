@@ -7209,37 +7209,28 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				}
 			},
 		},
-		onAfterBoost(boost, pokemon) {
-			delete this.effectState.ready;
+		onStart(pokemon) {
 			this.effectState.boosts = {} as SparseBoostsTable;
+			let ready = false;
 			let i: BoostID;
 			for (i in pokemon.boosts) {
 				if (pokemon.boosts[i] < 0) {
-					this.effectState.ready = true;
+					ready = true;
 					this.effectState.boosts[i] = 0;
 				}
 			}
-		},
-		onStart(pokemon) {
-			((this.effect as any).onAfterBoost as (b: SparseBoostsTable, p: Pokemon) => void).call(this, pokemon.boosts, pokemon);
-			if (!this.effectState.ready) return;
-			(this.effectState.target as Pokemon).useItem();
+			if (ready) (this.effectState.target as Pokemon).useItem();
 		},
 		onAnySwitchInPriority: -2,
 		onAnySwitchIn() {
-			const pokemon = this.effectState.target;
-			((this.effect as any).onAfterBoost as (b: SparseBoostsTable, p: Pokemon) => void).call(this, pokemon.boosts, pokemon);
-			if (!this.effectState.ready) return;
-			(this.effectState.target as Pokemon).useItem();
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onAnyAfterMove() {
-			if (!this.effectState.ready) return;
-			(this.effectState.target as Pokemon).useItem();
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onResidualOrder: 29,
 		onResidual(pokemon) {
-			if (!this.effectState.ready) return;
-			(this.effectState.target as Pokemon).useItem();
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
 		},
 		onUse(pokemon) {
 			pokemon.setBoost(this.effectState.boosts);
@@ -7247,7 +7238,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onEnd() {
 			delete this.effectState.boosts;
-			delete this.effectState.ready;
 		},
 		num: 214,
 		gen: 3,
