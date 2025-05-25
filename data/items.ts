@@ -7220,6 +7220,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				}
 			}
 			if (ready) (this.effectState.target as Pokemon).useItem();
+			delete this.effectState.boosts;
 		},
 		onAnySwitchInPriority: -2,
 		onAnySwitchIn() {
@@ -7235,9 +7236,6 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onUse(pokemon) {
 			pokemon.setBoost(this.effectState.boosts);
 			this.add('-clearnegativeboost', pokemon, '[silent]');
-		},
-		onEnd() {
-			delete this.effectState.boosts;
 		},
 		num: 214,
 		gen: 3,
