@@ -7227,6 +7227,8 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onAnySwitchInPriority: -2,
 		onAnySwitchIn() {
+			const pokemon = this.effectState.target;
+			((this.effect as any).onAfterBoost as (b: SparseBoostsTable, p: Pokemon) => void).call(this, pokemon.boosts, pokemon);
 			if (!this.effectState.ready) return;
 			(this.effectState.target as Pokemon).useItem();
 		},
