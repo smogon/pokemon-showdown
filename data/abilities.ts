@@ -4378,7 +4378,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	soulheart: {
 		onAnyFaintPriority: 1,
 		onAnyFaint() {
-			this.debug('Soul-Heart: ' + this.effectState.target.name);
 			this.boost({ spa: 1 }, this.effectState.target);
 		},
 		flags: {},
