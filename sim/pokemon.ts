@@ -2152,7 +2152,7 @@ export class Pokemon {
 		if (!source) return true;
 		const type: string = typeof source !== 'string' ? source.type : source;
 		if (typeof source !== 'string') {
-			if (source.ignoreImmunity && (source.ignoreImmunity === true || (source as any).ignoreImmunity[type])) {
+			if (source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[type])) {
 				return true;
 			}
 		}
