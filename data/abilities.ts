@@ -988,7 +988,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
 
-			if (!target.runImmunity(move.type)) return;
+			if (!target.runImmunity(move)) return;
 			return false;
 		},
 		onEffectiveness(typeMod, target, type, move) {
@@ -1000,7 +1000,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
 
-			if (!target.runImmunity(move.type)) return;
+			if (!target.runImmunity(move)) return;
 			return 0;
 		},
 		onUpdate(pokemon) {
@@ -1934,7 +1934,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (!target) return;
 			if (move.category !== 'Physical' || target.species.id !== 'eiscue') return;
 			if (target.volatiles['substitute'] && !(move.flags['bypasssub'] || move.infiltrates)) return;
-			if (!target.runImmunity(move.type)) return;
+			if (!target.runImmunity(move)) return;
 			return false;
 		},
 		onEffectiveness(typeMod, target, type, move) {
@@ -1944,7 +1944,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
 
-			if (!target.runImmunity(move.type)) return;
+			if (!target.runImmunity(move)) return;
 			return 0;
 		},
 		onUpdate(pokemon) {
