@@ -563,10 +563,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
 			this.debug('Wonder Guard immunity: ' + move.id);
-			if (target.runEffectiveness(move) <= 0 || (
-				(!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
-				!target.runImmunity(move.type)
-			)) {
+			if (target.runEffectiveness(move) <= 0 || !target.runImmunity(move)) {
 				this.add('-immune', target, '[from] ability: Wonder Guard');
 				return null;
 			}
