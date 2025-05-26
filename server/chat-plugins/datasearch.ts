@@ -127,7 +127,7 @@ export const commands: Chat.ChatCommands = {
 	dexsearchhelp() {
 		this.sendReplyBox(
 			`<details class="readmore"><summary><code>/dexsearch [parameter], [parameter], [parameter], ...</code>: searches for Pok\u00e9mon that fulfill the selected criteria.<br/>` +
-			`Search categories are: type, tier, color, moves, ability, gen, resists, weak, recovery, zrecovery, priority, stat, weight, height, egg group, pivot.<br/>` +
+			`Search categories are: type, tier, color, moves, ability, gen, resists, weak, recovery, zrecovery, priority, stat, weight, height, egg group, pivot and restricted.<br/>` +
 			`Valid colors are: green, red, blue, white, brown, yellow, purple, pink, gray and black.<br/>` +
 			`Valid tiers are: AG/Uber/OU/UUBL/UU/RUBL/RU/NUBL/NU/PUBL/PU/ZUBL/ZU/NFE/LC/CAP/CAP NFE/CAP LC.<br/>` +
 			`Valid doubles tiers are: DUber/DOU/DBL/DUU/DNU.</summary>` +
