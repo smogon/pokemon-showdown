@@ -194,6 +194,9 @@ describe('Dex data', () => {
 		for (const formatid in Rulesets) {
 			const entry = Rulesets[formatid];
 			assert.equal(toID(entry.name), formatid, `Mismatched Ruleset key "${formatid}" of "${entry.name}"`);
+			if (entry.mod) {
+				assert.equal(toID(entry.mod) || undefined, entry.mod, `Mod of "${formatid}" must be an ID"`);
+			}
 		}
 	});
 
