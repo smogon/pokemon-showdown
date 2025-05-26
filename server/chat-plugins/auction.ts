@@ -581,7 +581,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 				const curUser = Users.getExact(currManager.id);
 				curUser?.sendTo(this.room, notifyMsg);
 				curUser?.sendTo(this.room,
-					`|raw|Send a message with the amount you want to bid (e.g. <code>.5</code> or <code>5</code> will place a bid of <b>5000</b>)!`);
+					`|raw|Send a message with the amount you want to bid (e.g. <code>.5</code> or <code>5</code> will place a bid of 5000)!`);
 			}
 			this.sendBidInfo();
 			this.startBidTimer();
