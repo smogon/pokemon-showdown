@@ -67,7 +67,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		user: User,
 		word: string,
 		hint = '',
-		timer: 0,
+		timer: number,
 		gameOptions: HangmanOptions = {}
 	) {
 		super(room);
