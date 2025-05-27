@@ -165,7 +165,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (move.flags['dance'] && moveDidSomething && !move.isExternal) {
 				const dancers = this.battle.getAllActive().filter(
 					currentPoke => (currentPoke.hasAbility('choreography') && pokemon !== currentPoke &&
-					!currentPoke.abilityState.choreography && !currentPoke.fainted && !currentPoke.isSemiInvulnerable())
+						!currentPoke.abilityState.choreography && !currentPoke.fainted && !currentPoke.isSemiInvulnerable())
 				);
 				// Dancer activates in order of lowest speed stat to highest
 				// Note that the speed stat used is after any volatile replacements like Speed Swap,
@@ -189,11 +189,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
 			this.battle.faintMessages();
 			this.battle.checkWin();
-		},		
+		},
 		useMoveInner(moveOrMoveName, pokemon, target, sourceEffect, zMove, maxMove) {
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			if (sourceEffect && ['instruct', 'custapberry'].includes(sourceEffect.id)) sourceEffect = null;
-	
 			let move = this.dex.getActiveMove(moveOrMoveName);
 			pokemon.lastMoveUsed = move;
 			if (zMove || (move.category !== 'Status' && sourceEffect && (sourceEffect as ActiveMove).isZ)) {
@@ -314,7 +313,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (
 				!move.negateSecondary &&
-				!(move.hasSheerForce && pokemon.hasAbility(['sheerforce', 'forceofnature', 'sandwrath', 'overwhelming', 'powerbuns'])) &&
+				!(move.hasSheerForce &&
+				pokemon.hasAbility(['sheerforce', 'forceofnature', 'sandwrath', 'overwhelming', 'powerbuns'])) &&
 				!move.flags['futuremove']
 			) {
 				const originalHp = pokemon.hp;
@@ -323,7 +323,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (pokemon && pokemon !== target && move.category !== 'Status') {
 					const threshold = pokemon.maxhp * 0.5;
 					if (pokemon.hp <= threshold && originalHp > threshold)
-					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
+						this.battle.runEvent('EmergencyExit', pokemon, pokemon);
 				}
 			}
 			return true;
@@ -371,7 +371,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (pokemon.terastallized !== 'Stellar') {
 					stab = this.battle.runEvent('ModifySTAB', pokemon, target, move, 
 						(pokemon.terastallized === type && pokemon.getTypes(false, true).includes(type)) ? 2 : stab						 
-					);	
+					);
 				} else if (!pokemon.stellarBoostedTypes.includes(type)) {
 					stab = isSTAB ? 2 : [4915, 4096];
 					if (pokemon.species.name !== 'Terapagos-Stellar') {
@@ -394,7 +394,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (isCrit && !suppressMessages) this.battle.add('-crit', target);
 			if (pokemon.status === 'brn' && move.category === 'Physical' &&
-			!pokemon.hasAbility(['wellbakedflameorb', 'feistytempo', 'guts', 'adrenalinearoma']) && move.id !== 'facade') {
+				!pokemon.hasAbility(['wellbakedflameorb', 'feistytempo', 'guts', 'adrenalinearoma']) && move.id !== 'facade') {
 				baseDamage = this.battle.modify(baseDamage, 0.5);
 			}
 			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
@@ -408,7 +408,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return tr(baseDamage, 16);
 		},
 	},
-	pokemon: { 
+	pokemon: {
 		runImmunity(type: string, message?: string | boolean) {
 			if (!type || type === '???') return true;
 			if (!this.battle.dex.types.isName(type)) {
@@ -431,7 +431,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		isGrounded(negateImmunity = false) {
 			if ('gravity' in this.battle.field.pseudoWeather || 'ingrain' in this.volatiles ||
-			'smackdown' in this.volatiles) return true;
+				'smackdown' in this.volatiles) return true;
 			const item = (this.ignoringItem() ? '' : this.item);
 			if (item === 'ironball') return true;
 			// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
@@ -439,7 +439,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (
 				(this.hasAbility([
 					'levitate', 'holygrail', 'risingtension', 'freeflight', 'airbornearmor', 'hellkite', 'honeymoon',
-					'aircontrol', 'magnetize', 'unidentifiedflyingobject', 'anointed'
+					'aircontrol', 'magnetize', 'unidentifiedflyingobject', 'anointed',
 				])) &&
 				!this.battle.suppressingAbility(this)
 			) return null;

@@ -466,7 +466,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Berserk + Regenerator",
 		onDamage(damage, target, source, effect) {
 			this.effectState.checkedBerserk = !!(effect.effectType !== "Move" || effect.multihit || effect.negateSecondary ||
-			(effect.hasSheerForce && source.hasAbility(['overwhelming', 'sheerforce', 'forceofnature', 'sandwrath'])));
+				(effect.hasSheerForce && source.hasAbility(['overwhelming', 'sheerforce', 'forceofnature', 'sandwrath'])));
 		},
 		onTryEatItem(item) {
 			const healingItems = [
@@ -3725,7 +3725,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if ([
 				'Intimidate', 'Mad Cow', 'Forest Fury',
 				'Shock Factor', 'Daunting Storm', 'Toxic Attitude',
-				].includes(effect.name)) {
+			].includes(effect.name)) {
 				if (boost.atk) {
 					delete boost.atk;
 					this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Bad Apple', `[of] ${target}`);

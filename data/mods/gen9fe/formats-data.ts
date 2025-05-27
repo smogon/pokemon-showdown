@@ -360,7 +360,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	bouffalu: {
 		tier: "OU",
-		doublesTier: "DOU",	
+		doublesTier: "DOU",
 	},
 	okiferro: {
 		tier: "UU",
