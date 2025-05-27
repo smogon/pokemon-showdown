@@ -468,7 +468,6 @@ export const commands: Chat.ChatCommands = {
 				}
 				hints.push(hint);
 			}
-			
 			if (!hangmanData[room.roomid][phrase]) hangmanData[room.roomid][phrase] = { hints: [] };
 			hangmanData[room.roomid][phrase].hints.push(...hints);
 			Hangman.save();
