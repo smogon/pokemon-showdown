@@ -221,7 +221,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onSetStatus(status, target, source, effect) {
 				if (!target.isGrounded() || target.isSemiInvulnerable() ||
-					(['psn', 'tox'].includes(status.id) && source && source.hasAbility('miasma'))) return;
+					(['psn', 'tox'].includes(status.id) && source?.hasAbility('miasma'))) return;
 				if (effect && ((effect as Move).status || effect.id === 'yawn')) {
 					this.add('-activate', target, 'move: Misty Terrain');
 				}

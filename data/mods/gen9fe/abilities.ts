@@ -196,7 +196,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (move.hasBounced || source === target) return;
 			const user = this.effectState.target;
 			if (user.volatiles['lightdrive'] && !user.volatiles['lightdrive'].fromWeightDiff) return;
-			var yourweight;
+			let yourweight;
 			if (source === user) {
 				yourweight = target.getWeight();
 			} else if (target === user) {
@@ -221,7 +221,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		condition: {
 			noCopy: true,
 			onStart(pokemon, source, effect) {
-				if (effect?.name === 'Booster Energy') {
+				if (effect.name === 'Booster Energy') {
 					this.effectState.fromBooster = true;
 					this.add('-activate', pokemon, 'ability: Light Drive', '[fromitem]');
 				} else {
@@ -1389,7 +1389,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (move.hasBounced || source === target) return;
 			const user = this.effectState.target;
 			if (user.volatiles['weightoflife'] && !user.volatiles['weightoflife'].fromWeightDiff) return;
-			var yourweight;
+			let yourweight;
 			if (source === user) {
 				yourweight = target.getWeight();
 			} else if (target === user) {
@@ -1997,9 +1997,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.singleEvent('End', pillageAbil, pillageAbil.abilityState, pokemon);
 			this.singleEvent('End', ability, ability.abilityState, target);
 			pokemon.ability = ability.id;
-			pokemon.abilityState = { id: this.toID(pokemon.ability), target: pokemon };
+			pokemon.abilityState = { id: this.toID(pokemon.ability), effectOrder: 0, target: pokemon };
 			target.ability = pillageAbil.id;
-			target.abilityState = { id: this.toID(pillageAbil.id), target: target };
+			target.abilityState = { id: this.toID(pillageAbil.id), effectOrder: 0, target };
 			this.singleEvent('Start', ability, pokemon.abilityState, pokemon);
 			this.singleEvent('Start', pillageAbil, target.abilityState, target);
 		},
