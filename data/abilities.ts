@@ -2996,6 +2996,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.boost(this.effectState.boosts, this.effectState.target);
 			delete this.effectState.boosts;
 		},
+		onAnyAfterMega() {
+			if (!this.effectState.boosts) return;
+			this.boost(this.effectState.boosts, this.effectState.target);
+			delete this.effectState.boosts;
+		},
+		onAnyAfterTerastallization() {
+			if (!this.effectState.boosts) return;
+			this.boost(this.effectState.boosts, this.effectState.target);
+			delete this.effectState.boosts;
+		},
 		onAnyAfterMove() {
 			if (!this.effectState.boosts) return;
 			this.boost(this.effectState.boosts, this.effectState.target);
