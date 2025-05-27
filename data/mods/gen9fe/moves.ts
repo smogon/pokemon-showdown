@@ -45,7 +45,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			return null;
 		},
 	},
-	
 	aromatherapy: {
 		inherit: true,
 		onHit(target, source, move) {
@@ -54,7 +53,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
 				if ((ally === source || !(ally.hasAbility(['sapsipper', 'pondweed', 'lawnmowerofruin', 'firedrinker']) ||
-						(ally.volatiles['substitute'] && !move.infiltrates))) && ally.cureStatus() ) {
+					(ally.volatiles['substitute'] && !move.infiltrates))) && ally.cureStatus() ) {
 					success = true;
 				}
 			}
@@ -72,7 +71,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	partingshot: {
 		inherit: true,
 		onHit(target, source, move) {
-			const success = this.boost({atk: -1, spa: -1}, target, source);
+			const success = this.boost({ atk: -1, spa: -1 }, target, source);
 			if (!success && !target.hasAbility(['mirrorarmor', 'hourglass'])) {
 				delete move.selfSwitch;
 			}
@@ -98,10 +97,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					delete pokemon.volatiles['magnetrise'];
 				}
 				if (pokemon.volatiles['telekinesis']) {
-					//applies = true;
+					// applies = true;
 					delete pokemon.volatiles['telekinesis'];
-				}
-				else if (!applies) return false;
+				} else if (!applies) return false;
 				this.add('-start', pokemon, 'Smack Down');
 			},
 			onRestart(pokemon) {
@@ -135,7 +133,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return null;
 			}
 			if (source.hasAbility(['insomnia', 'vitalspirit', 'unvital', 'vitalmetalbody'])) {
-				this.add('-fail', source, '[from] ability: ' + source.getAbility().name, '[of] ' + source);
+				this.add('-fail', source, '[from] ability: ' + source.getAbility().name, `[of] ${source}`);
 				return null;
 			}
 		},
@@ -244,7 +242,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onFieldStart(field, source, effect) {
 				if (effect?.effectType === 'Ability') {
-					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect.name, '[of] ' + source);
+					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect.name, `[of] ${source}`);
 				} else {
 					this.add('-fieldstart', 'move: Misty Terrain');
 				}

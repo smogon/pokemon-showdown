@@ -1,5 +1,3 @@
-import type Dex from "../../../sim/dex";
-
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	actions: {
@@ -19,8 +17,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			pokemon.knownType = true;
 			pokemon.apparentType = type;
 			pokemon.side.addSideCondition('teraused', pokemon);
-			if (['Ogerpon','Hattepon'].includes(pokemon.species.baseSpecies)) {
-				const tera = ['ogerpon','hattepon'].includes(pokemon.species.id) ? 'tealtera' : 'tera';
+			if (['Ogerpon', 'Hattepon'].includes(pokemon.species.baseSpecies)) {
+				const tera = ['ogerpon', 'hattepon'].includes(pokemon.species.id) ? 'tealtera' : 'tera';
 				pokemon.formeChange(pokemon.species.id + tera, null, true);
 			}
 			this.battle.runEvent('AfterTerastallization', pokemon);

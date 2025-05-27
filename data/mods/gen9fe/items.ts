@@ -28,26 +28,28 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	boosterenergy: {
 		inherit: true,
 		onUpdate(pokemon) {
-			if (!this.effectState.started || pokemon.transformed/*) return;
-			if (*/|| this.queue.peek(true)?.choice === 'runSwitch') return;
-
+			if (!this.effectState.started || pokemon.transformed || this.queue.peek(true)?.choice === 'runSwitch') return;
 			if (!this.field.isWeather('sunnyday')) {
-				for (const proto of ['protosynthesis', 'onceuponatime', 'primitive', 'openingact', 'weightoflife',
-											'prehistorichunter', 'ancientmarble']) { 
+				for (const proto of [
+						'protosynthesis', 'onceuponatime', 'primitive', 'openingact',
+						'weightoflife', 'prehistorichunter', 'ancientmarble',
+					]) {
 					if (pokemon.hasAbility(proto)) {
 						if (!(pokemon.volatiles['protosynthesis'] || pokemon.volatiles[proto]) && pokemon.useItem()) {
-							pokemon.addVolatile(['openingact','weightoflife','prehistorichunter'].includes(proto) ? proto : 'protosynthesis');
+							pokemon.addVolatile(['openingact', 'weightoflife', 'prehistorichunter'].includes(proto) ? proto : 'protosynthesis');
 						}
 						return;
 					}
 				}
 			}
 			if (!this.field.isTerrain('electricterrain')) {
-				for (const quark of ['quarkdrive', 'lightdrive', 'quarksurge', 'nanorepairs', 'circuitbreaker', 'heatproofdrive',
-											'faultyphoton', 'firewall', 'innovate', 'baryonblade']) { 
+				for (const quark of [
+					'quarkdrive', 'lightdrive', 'quarksurge', 'nanorepairs', 'circuitbreaker',
+					'heatproofdrive', 'faultyphoton', 'firewall', 'innovate', 'baryonblade',
+				]) {
 					if (pokemon.hasAbility(quark)) {
 						if (!(pokemon.volatiles['quarkdrive'] || pokemon.volatiles[quark]) && pokemon.useItem()) {
-							pokemon.addVolatile(['lightdrive','baryonblade','circuitbreaker'].includes(quark) ? quark : 'quarkdrive');
+							pokemon.addVolatile(['lightdrive', 'baryonblade', 'circuitbreaker'].includes(quark) ? quark : 'quarkdrive');
 						}
 						return;
 					}
@@ -76,7 +78,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		megaEvolves: "Garpyuku",
 		itemUser: ["Garpyuku"],
 		onTakeItem(item, source) {
-			if ([item.megaEvolves,"Chomptry"].includes(source.baseSpecies.baseSpecies)) return false;
+			if ([item.megaEvolves, "Chomptry"].includes(source.baseSpecies.baseSpecies)) return false;
 			return true;
 		},
 		num: 683,
@@ -201,7 +203,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		megaEvolves: "Druddizor",
 		itemUser: ["Druddizor"],
 		onTakeItem(item, source) {
-			if ([item.megaEvolves,"Tentazor"].includes(source.baseSpecies.baseSpecies)) return false;
+			if ([item.megaEvolves, "Tentazor"].includes(source.baseSpecies.baseSpecies)) return false;
 			return true;
 		},
 		num: 670,
@@ -211,7 +213,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	jabocaberry: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
-			if (move.category === 'Physical' && source.hp && source.isActive && !source.hasAbility(['magicguard','overwhelming']) && target.eatItem()) {
+			if (move.category === 'Physical' &&
+				source.hp && source.isActive && !source.hasAbility(['magicguard', 'overwhelming']) && target.eatItem()) {
 				this.damage(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 8), source, target);
 			}
 		},
@@ -219,7 +222,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	quickclaw: {
 		inherit: true,
 		onFractionalPriority(priority, pokemon, target, move) {
-			if (move.category === "Status" && pokemon.hasAbility(["myceliummight","galvanicrelay"])) return;
+			if (move.category === "Status" && pokemon.hasAbility(["myceliummight", "galvanicrelay"])) return;
 			if (priority <= 0 && this.randomChance(1, 5)) {
 				this.add('-activate', pokemon, 'item: Quick Claw');
 				return 0.1;
@@ -229,7 +232,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	rowapberry: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
-			if (move.category === 'Special' && source.hp && source.isActive && !source.hasAbility(['magicguard','overwhelming']) && target.eatItem()) {
+			if (move.category === 'Special' && source.hp && source.isActive &&
+				!source.hasAbility(['magicguard', 'overwhelming']) && target.eatItem()) {
 				this.damage(source.baseMaxhp / (target.hasAbility('ripen') ? 4 : 8), source, target);
 			}
 		},
@@ -254,7 +258,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		megaEvolves: "Aero Wake",
 		itemUser: ["Aero Wake"],
 		onTakeItem(item, source) {
-			if ([item.megaEvolves,"Aerodirge"].includes(source.baseSpecies.baseSpecies)) return false;
+			if ([item.megaEvolves, "Aerodirge"].includes(source.baseSpecies.baseSpecies)) return false;
 			return true;
 		},
 		num: 672,

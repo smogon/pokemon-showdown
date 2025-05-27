@@ -22,7 +22,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			const stats = [];
 			let stat: StatID;
 			for (stat in species.baseStats) {
-				const statNames: {[k in StatID]: string} = { hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe" };
+				const statNames: { [k in StatID]: string } = { hp: "HP", atk: "Atk", def: "Def", spa: "SpA", spd: "SpD", spe: "Spe" };
 				stats.push(`<span class="col statcol"><em>${statNames[stat]}</em><br>${species.baseStats[stat]}</span>`);
 			}
 			buf += `<span style="float: left ; min-height: 26px">${stats.join(' ')}</span>`;
@@ -36,8 +36,8 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		desc: "Prevents Pok&eacute;mon without Terastal forms from Terastallizing",
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
-			  if (pokemon.species.baseSpecies !== 'Hattepon') {
-				  pokemon.canTerastallize = null;
+				if (pokemon.species.baseSpecies !== 'Hattepon') {
+					pokemon.canTerastallize = null;
 				}
 			}
 			this.add('rule', 'Terastal Clause: Only Pok\u00E9mon with Tera forms can Terastallize');
@@ -49,14 +49,13 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		desc: "Prevents Pok&eacute;mon without Terastal forms from Terastallizing",
 		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
-			  if (pokemon.species.baseSpecies !== 'Hattepon') {
-				  pokemon.canTerastallize = null;
+				if (pokemon.species.baseSpecies !== 'Hattepon') {
+					pokemon.canTerastallize = null;
 				}
 			}
 			this.add('rule', 'OU Terastal Clause: Only Pok\u00E9mon with Tera forms can Terastallize');
 		},
 	},
-	
 	evasionabilitiesclause: {
 		effectType: 'ValidatorRule',
 		name: 'Evasion Abilities Clause',
