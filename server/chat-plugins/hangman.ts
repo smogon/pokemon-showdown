@@ -203,14 +203,14 @@ export class Hangman extends Rooms.SimpleRoomGame {
 	}
 
 	clearTimer() {
-  	if (this.overridetimer) {
-		clearTimeout(this.overridetimer);
-    	this.overridetimer = undefined;
-  		}
-			}
+		if (this.overridetimer) {
+			clearTimeout(this.overridetimer);
+			this.overridetimer = undefined;
+		}
+	}
 
 	handleTimerExpiry() {
-  	this.clearTimer();
+		this.clearTimer();
 		this.incorrectGuesses = maxMistakes;
 		this.finish();
 		this.room.add(`|html|<b>Time's up! The game is over.</b>`);
