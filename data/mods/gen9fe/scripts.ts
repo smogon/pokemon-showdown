@@ -369,8 +369,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				// then the Stellar tera type applies a one-time 2x STAB boost for that type,
 				// and then goes back to using the regular 1.5x STAB boost for those types.
 				if (pokemon.terastallized !== 'Stellar') {
-					stab = this.battle.runEvent('ModifySTAB', pokemon, target, move, 
-						(pokemon.terastallized === type && pokemon.getTypes(false, true).includes(type)) ? 2 : stab						 
+					stab = this.battle.runEvent('ModifySTAB', pokemon, target, move,
+						(pokemon.terastallized === type && pokemon.getTypes(false, true).includes(type)) ? 2 : stab
 					);
 				} else if (!pokemon.stellarBoostedTypes.includes(type)) {
 					stab = isSTAB ? 2 : [4915, 4096];
