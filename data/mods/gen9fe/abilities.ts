@@ -292,7 +292,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryBoost(boost, target, source, effect) {
 			if (
 				['Intimidate', 'Mad Cow', 'Forest Fury',
-				'Shock Factor', 'Daunting Storm', 'Toxic Attitude'].includes(effect.name) && boost.atk) {
+					'Shock Factor', 'Daunting Storm', 'Toxic Attitude'].includes(effect.name) && boost.atk) {
 				delete boost.atk;
 				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Scrap Rock', `[of] ${target}`);
 			} else if (effect.name === 'Fishy Threat' && boost.spe) {
@@ -556,7 +556,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryBoost(boost, target, source, effect) {
 			if (
 				['Intimidate', 'Mad Cow', 'Forest Fury',
-				'Shock Factor', 'Daunting Storm', 'Toxic Attitude'].includes(effect.name) && boost.atk) {
+					'Shock Factor', 'Daunting Storm', 'Toxic Attitude'].includes(effect.name) && boost.atk) {
 				delete boost.atk;
 				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Primitive', `[of] ${target}`);
 			} else if (effect.name === 'Fishy Threat' && boost.spe) {
@@ -926,11 +926,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (!move.suppressedParadox) move.suppressedParadox = abilityHolder;
 			else if (move.suppressedParadox !== abilityHolder) return;
 			for (const paradox of ['faultyphoton', 'baryonblade', 'onceuponatime', 'primitive', 'quarksurge',
-									'lightdrive', 'openingact', 'protosynthesis', 'quarkdrive', 'nanorepairs', 'firewall', 
-									'weightoflife', 'circuitbreaker', 'ancientmarble', 'prehistorichunter', 'heatproofdrive']) {
+				'lightdrive', 'openingact', 'protosynthesis', 'quarkdrive', 'nanorepairs', 'firewall',
+				'weightoflife', 'circuitbreaker', 'ancientmarble', 'prehistorichunter', 'heatproofdrive']) {
 				if (attacker.hasAbility(paradox)) {
 					if ((attacker?.volatiles['quarkdrive'] || attacker?.volatiles['protosynthesis'] ||
-					attacker?.volatiles[paradox])?.bestStat !== 'atk') {
+						attacker?.volatiles[paradox])?.bestStat !== 'atk') {
 						return;
 					}
 					this.debug('Dyschronometria nullify');
@@ -945,11 +945,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (!move.suppressedParadox) move.suppressedParadox = abilityHolder;
 			else if (move.suppressedParadox !== abilityHolder) return;
 			for (const paradox of ['faultyphoton', 'baryonblade', 'onceuponatime', 'primitive', 'quarksurge',
-									'lightdrive', 'openingact', 'protosynthesis', 'quarkdrive', 'nanorepairs', 'firewall', 
-									'weightoflife', 'circuitbreaker', 'ancientmarble', 'prehistorichunter', 'heatproofdrive']) {
+				'lightdrive', 'openingact', 'protosynthesis', 'quarkdrive', 'nanorepairs', 'firewall',
+				'weightoflife', 'circuitbreaker', 'ancientmarble', 'prehistorichunter', 'heatproofdrive']) {
 				if (defender.hasAbility(paradox)) {
 					if ((defender?.volatiles['quarkdrive'] || defender?.volatiles['protosynthesis'] ||
-					defender?.volatiles[paradox])?.bestStat !== 'def') {
+						defender?.volatiles[paradox])?.bestStat !== 'def') {
 						return;
 					}
 					this.debug('Dyschronometria nullify');
@@ -964,11 +964,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (!move.suppressedParadox) move.suppressedParadox = abilityHolder;
 			else if (move.suppressedParadox !== abilityHolder) return;
 			for (const paradox of ['faultyphoton', 'baryonblade', 'onceuponatime', 'primitive', 'quarksurge',
-									'lightdrive', 'openingact', 'protosynthesis', 'quarkdrive', 'nanorepairs', 'firewall', 
-									'weightoflife', 'circuitbreaker', 'ancientmarble', 'prehistorichunter', 'heatproofdrive']) {
+				'lightdrive', 'openingact', 'protosynthesis', 'quarkdrive', 'nanorepairs', 'firewall',
+				'weightoflife', 'circuitbreaker', 'ancientmarble', 'prehistorichunter', 'heatproofdrive']) {
 				if (attacker.hasAbility(paradox)) {
 					if ((attacker?.volatiles['quarkdrive'] || attacker?.volatiles['protosynthesis'] ||
-					attacker?.volatiles[paradox])?.bestStat !== 'spa') {
+						attacker?.volatiles[paradox])?.bestStat !== 'spa') {
 						return;
 					}
 					this.debug('Dyschronometria nullify');
@@ -983,11 +983,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (!move.suppressedParadox) move.suppressedParadox = abilityHolder;
 			else if (move.suppressedParadox !== abilityHolder) return;
 			for (const paradox of ['faultyphoton', 'baryonblade', 'onceuponatime', 'primitive', 'quarksurge',
-									'lightdrive', 'openingact', 'protosynthesis', 'quarkdrive', 'nanorepairs', 'firewall', 
-									'weightoflife', 'circuitbreaker', 'ancientmarble', 'prehistorichunter', 'heatproofdrive']) {
+				'lightdrive', 'openingact', 'protosynthesis', 'quarkdrive', 'nanorepairs', 'firewall',
+				'weightoflife', 'circuitbreaker', 'ancientmarble', 'prehistorichunter', 'heatproofdrive']) {
 				if (defender.hasAbility(paradox)) {
 					if ((defender?.volatiles['quarkdrive'] || defender?.volatiles['protosynthesis'] ||
-					defender?.volatiles[paradox])?.bestStat !== 'spd') {
+						defender?.volatiles[paradox])?.bestStat !== 'spd') {
 						return;
 					}
 					this.debug('Dyschronometria nullify');
@@ -1116,8 +1116,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				const species = curPoke.species;
 				// pokemon can't get Natural Cure
 				if (!Object.values(species.abilities).includes('Natural Cure') &&
-				!Object.values(species.abilities).includes('Natural Pressures') &&
-				!Object.values(species.abilities).includes('Rejuvenate')) {
+					!Object.values(species.abilities).includes('Natural Pressures') &&
+					!Object.values(species.abilities).includes('Rejuvenate')) {
 					// this.add('-message', "" + curPoke + " skipped: no Rejuvenate");
 					continue;
 				}
@@ -1513,8 +1513,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				const species = curPoke.species;
 				// pokemon can't get Natural Pressures
 				if (!Object.values(species.abilities).includes('Natural Cure') &&
-				!Object.values(species.abilities).includes('Natural Pressures') &&
-				!Object.values(species.abilities).includes('Rejuvenate')) {
+					!Object.values(species.abilities).includes('Natural Pressures') &&
+					!Object.values(species.abilities).includes('Rejuvenate')) {
 					// this.add('-message', "" + curPoke + " skipped: no Natural Pressures");
 					continue;
 				}
@@ -1686,7 +1686,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (status.id === 'yawn' && target.hasType('Fire')) {
 				this.debug('Burning Petals blocking yawn');
 				const effectHolder = this.effectState.target;
-				if (!effectHolder.addVolatile('burningpetals')) { 
+				if (!effectHolder.addVolatile('burningpetals')) {
 					this.add('-block', target, 'ability: Burning Petals', `[of] ${effectHolder}`);
 				}
 				return null;
@@ -1785,7 +1785,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if ([
 				'Intimidate', 'Mad Cow', 'Forest Fury',
 				'Shock Factor', 'Daunting Storm', 'Toxic Attitude',
-				].includes(effect.name) && boost.atk) {
+			].includes(effect.name) && boost.atk) {
 				delete boost.atk;
 				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Own Luck', `[of] ${target}`);
 			} else if (effect.name === 'Fishy Threat' && boost.spe) {
@@ -2448,7 +2448,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if ([
 				'Intimidate', 'Mad Cow', 'Forest Fury',
 				'Shock Factor', 'Daunting Storm', 'Toxic Attitude',
-				].includes(effect.name) && boost.atk) {
+			].includes(effect.name) && boost.atk) {
 				delete boost.atk;
 				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Feisty Tempo', `[of] ${target}`);
 			} else if (effect.name === 'Fishy Threat' && boost.spe) {
@@ -2559,7 +2559,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	livelylocks: {
 		shortDesc: "Copies opponent's stat changes to Speed on switch-in",
 		onStart(pokemon) {
-			// Currently because Costar bypasses sub Lively Locks too will bypass sub 
+			// Currently because Costar bypasses sub Lively Locks too will bypass sub
 			for (const target of pokemon.adjacentFoes()) {
 				if (!target.boosts.spe) continue;
 				this.boost({ spe: target.boosts.spe }, pokemon);
@@ -3135,7 +3135,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if ([
 				'Intimidate', 'Mad Cow', 'Forest Fury',
 				'Shock Factor', 'Daunting Storm', 'Toxic Attitude',
-				].includes(effect.name)) {
+			].includes(effect.name)) {
 				if (boost.atk) {
 					delete boost.atk;
 					this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Innovate', `[of] ${target}`);
@@ -3678,7 +3678,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if ([
 				'Intimidate', 'Mad Cow', 'Forest Fury',
 				'Shock Factor', 'Daunting Storm', 'Toxic Attitude',
-				].includes(effect.name)) {
+			].includes(effect.name)) {
 				if (boost.atk) {
 					delete boost.atk;
 					this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Bullet Time', `[of] ${target}`);
@@ -3937,8 +3937,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryBoost(boost, target, source, effect) {
 			if ([
 				'Intimidate', 'Mad Cow', 'Forest Fury',
-				'Shock Factor', 'Daunting Storm', 'Toxic Attitude'
-				].includes(effect.name)) {
+				'Shock Factor', 'Daunting Storm', 'Toxic Attitude',
+			].includes(effect.name)) {
 				if (boost.atk) {
 					delete boost.atk;
 					this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Inner Focus', `[of] ${target}`);
@@ -4009,8 +4009,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				const species = curPoke.species;
 				// pokemon can't get Natural Cure
 				if (!Object.values(species.abilities).includes('Natural Cure') &&
-				!Object.values(species.abilities).includes('Natural Pressures') &&
-				!Object.values(species.abilities).includes('Rejuvenate')) {
+					!Object.values(species.abilities).includes('Natural Pressures') &&
+					!Object.values(species.abilities).includes('Rejuvenate')) {
 					// this.add('-message', "" + curPoke + " skipped: no Natural Cure");
 					continue;
 				}

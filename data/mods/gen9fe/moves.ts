@@ -53,7 +53,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			const allies = [...target.side.pokemon, ...target.side.allySide?.pokemon || []];
 			for (const ally of allies) {
 				if ((ally === source || !(ally.hasAbility(['sapsipper', 'pondweed', 'lawnmowerofruin', 'firedrinker']) ||
-					(ally.volatiles['substitute'] && !move.infiltrates))) && ally.cureStatus() ) {
+					(ally.volatiles['substitute'] && !move.infiltrates))) && ally.cureStatus()) {
 					success = true;
 				}
 			}

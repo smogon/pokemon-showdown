@@ -31,9 +31,9 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			if (!this.effectState.started || pokemon.transformed || this.queue.peek(true)?.choice === 'runSwitch') return;
 			if (!this.field.isWeather('sunnyday')) {
 				for (const proto of [
-						'protosynthesis', 'onceuponatime', 'primitive', 'openingact',
-						'weightoflife', 'prehistorichunter', 'ancientmarble',
-					]) {
+					'protosynthesis', 'onceuponatime', 'primitive', 'openingact',
+					'weightoflife', 'prehistorichunter', 'ancientmarble',
+				]) {
 					if (pokemon.hasAbility(proto)) {
 						if (!(pokemon.volatiles['protosynthesis'] || pokemon.volatiles[proto]) && pokemon.useItem()) {
 							pokemon.addVolatile(['openingact', 'weightoflife', 'prehistorichunter'].includes(proto) ? proto : 'protosynthesis');
@@ -209,7 +209,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		num: 670,
 		desc: "If held by a Tentazor, this item allows it to Mega Evolve in battle.",
 	},
-	
 	jabocaberry: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {

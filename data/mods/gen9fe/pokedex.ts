@@ -604,7 +604,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		name: "Corvizolt",
 		types: ["Electric", "Flying"],
 		baseStats: { hp: 95, atk: 95, def: 100, spa: 70, spd: 80, spe: 75 },
-		abilities: { 0: "Hourglass",H: "Piezoelectric" },
+		abilities: { 0: "Hourglass", H: "Piezoelectric" },
 		weightkg: 132.5,
 	},
 	taputitan: {
@@ -658,7 +658,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 135.5,
 		requiredItem: "Scizorite",
 		battleOnly: "Druddizor",
-	},	
+	},
 	greatkleav: {
 		num: 52,
 		name: "Great Kleav",
@@ -732,7 +732,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 42,
 		requiredItem: "Mawilite",
 		battleOnly: "Mawlakazam",
-	},	
+	},
 	mawlakazammegay: {
 		num: 55,
 		name: "Mawlakazam-Mega-Y",
@@ -744,7 +744,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		weightkg: 30,
 		requiredItem: "Alakazite",
 		battleOnly: "Mawlakazam",
-	},	
+	},
 	bouffalu: {
 		num: 56,
 		name: "Bouffa-Lu",
@@ -811,7 +811,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		name: "Conkelbun",
 		types: ["Fighting", "Fairy"],
 		baseStats: { hp: 81, atk: 110, def: 110, spa: 52, spd: 72, spe: 70 },
-		abilities: { 0: "Adrenaline Aroma",H: "Power Buns" },
+		abilities: { 0: "Adrenaline Aroma", H: "Power Buns" },
 		weightkg: 51,
 		// prevo: "Timdough",
 	},
@@ -1022,7 +1022,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		name: "Magnegiri",
 		types: ["Dragon", "Steel"],
 		baseStats: { hp: 85, atk: 60, def: 90, spa: 125, spd: 92, spe: 72 },
-		abilities: { 0: "Sushi Storm",H: "Commanding Pull" },
+		abilities: { 0: "Sushi Storm", H: "Commanding Pull" },
 		weightkg: 94,
 	},
 	celeblim: {
@@ -1093,7 +1093,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		name: "Aerodirge",
 		types: ["Flying", "Fire"],
 		baseStats: { hp: 100, atk: 90, def: 84, spa: 90, spd: 77, spe: 100 },
-		abilities: { 0: "Prehistoric Presence",H: "Hotheaded" },
+		abilities: { 0: "Prehistoric Presence", H: "Hotheaded" },
 		weightkg: 192.8,
 		otherFormes: ["Aerodirge-Mega"],
 		formeOrder: ["Aerodirge", "Aerodirge-Mega"],
@@ -1311,7 +1311,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		name: "Scoliraptor",
 		types: ["Poison", "Flying"],
 		baseStats: { hp: 75, atk: 120, def: 80, spa: 55, spd: 65, spe: 106 },
-		abilities: { 0: "Toxic Attitude",H: "Careless Bugs" },
+		abilities: { 0: "Toxic Attitude", H: "Careless Bugs" },
 		weightkg: 112.7,
 	},
 	worupt: {
@@ -1373,7 +1373,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		name: "Donphurott-Hisui",
 		types: ["Water", "Ground"],
 		baseStats: { hp: 100, atk: 115, def: 100, spa: 80, spd: 65, spe: 70 },
-		abilities: { 0: "Weathered Waves",H: "Sand Sword" },
+		abilities: { 0: "Weathered Waves", H: "Sand Sword" },
 		weightkg: 89.1,
 	},
 	regithorn: {
@@ -1405,7 +1405,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		name: "Appleking-Galar",
 		types: ["Grass", "Poison"],
 		baseStats: { hp: 105, atk: 75, def: 90, spa: 105, spd: 95, spe: 30 },
-		abilities: { 0: "Bad Apple",H: "Healthy Diet" },
+		abilities: { 0: "Bad Apple", H: "Healthy Diet" },
 		weightkg: 46.3,
 	},
 	orthaconda: {
@@ -1470,7 +1470,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "A Quack in Time" },
 		weightkg: 349,
 	},
-	
 	//  LCs and NFEs
 	varantis: {
 		num: 1001,
@@ -1663,7 +1662,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	dracoly: {
 		num: 1021,
 		name: "Dracoly",
-		types: ["Rock", "Dragon"], 
+		types: ["Rock", "Dragon"],
 		baseStats: { hp: 35, atk: 55, def: 50, spa: 55, spd: 50, spe: 40 },
 		abilities: { 0: "Marvel Steam" },
 		weightkg: 7.7,

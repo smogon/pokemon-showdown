@@ -280,7 +280,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 		doublesTier: "DOU",
 		requiredItem: "Steelixite",
-	},	
+	},
 	gooperthisui: {
 		tier: "UU",
 		doublesTier: "DOU",
@@ -360,7 +360,8 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	bouffalu: {
 		tier: "OU",
-		doublesTier: "DOU",	},
+		doublesTier: "DOU",	
+	},
 	okiferro: {
 		tier: "UU",
 		doublesTier: "DOU",
