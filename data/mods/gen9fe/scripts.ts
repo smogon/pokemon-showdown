@@ -6,7 +6,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (pokemon.illusion && ['Hattepon', 'Ogerpon', 'Terapagos'].includes(pokemon.illusion.species.baseSpecies)) {
 				this.battle.singleEvent('End', this.dex.abilities.get('Rough Image'), pokemon.abilityState, pokemon);
 			}
-	
 			const type = pokemon.teraType;
 			this.battle.add('-terastallize', pokemon, type);
 			pokemon.terastallized = type;
@@ -35,23 +34,22 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (item.megaStone === species.name) return null;
 			switch (species.name) {
-				case "Chomptry":
-					if (item.name === "Garchompite") {
-						return "Chomptry-Mega";
-					}
-					return null;
-				case "Tentazor":
-					if (item.name === "Scizorite") {
-						return "Tentazor-Mega";
-					}
-					return null;
-				case "Aerodirge":
-					if (item.name === "Aerodactylite") {
-						return "Aerodirge-Mega";
-					}
-					return null;
+			case "Chomptry":
+				if (item.name === "Garchompite") {
+					return "Chomptry-Mega";
+				}
+				return null;
+			case "Tentazor":
+				if (item.name === "Scizorite") {
+					return "Tentazor-Mega";
+				}
+				return null;
+			case "Aerodirge":
+				if (item.name === "Aerodactylite") {
+					return "Aerodirge-Mega";
+				}
+				return null;
 			}
-			
 			if (item.megaEvolves === species.baseSpecies) {
 				return item.megaStone;
 			}
@@ -69,10 +67,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (move.flags['powder'] && target !== pokemon && !this.dex.getImmunity('powder', target)) {
 					this.battle.debug('natural powder immunity');
 				} else if (this.battle.singleEvent('TryImmunity', move, {}, target, pokemon, move)) {
-					if (move.pranksterBoosted && !this.dex.getImmunity('prankster', target) && pokemon.hasAbility(['prankster','openingact','prankrock'])
-						 && !targets[i].isAlly(pokemon)) {
-						this.battle.debug('natural prankster immunity');
-						if (!target.illusion) this.battle.hint("Since gen 7, Dark is immune to Prankster moves.");
+					if (move.pranksterBoosted && !this.dex.getImmunity('prankster', target) &&
+						pokemon.hasAbility(['prankster', 'openingact', 'prankrock']) &&
+						!targets[i].isAlly(pokemon)) {
+							this.battle.debug('natural prankster immunity');
+							if (!target.illusion) this.battle.hint("Since gen 7, Dark is immune to Prankster moves.");
 					} else {
 						hitResults[i] = true;
 						continue;
@@ -83,7 +82,6 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return hitResults;
 		},
-
   		runMove(
 			moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null,
 			zMove?: string, externalMove?: boolean, maxMove?: string, originalTarget?: Pokemon

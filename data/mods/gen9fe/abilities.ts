@@ -196,7 +196,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (move.hasBounced || source === target) return;
 			const user = this.effectState.target;
 			if (user.volatiles['lightdrive'] && !user.volatiles['lightdrive'].fromWeightDiff) return;
-			const yourweight;
+			var yourweight;
 			if (source === user) {
 				yourweight = target.getWeight();
 			} else if (target === user) {
@@ -1389,7 +1389,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (move.hasBounced || source === target) return;
 			const user = this.effectState.target;
 			if (user.volatiles['weightoflife'] && !user.volatiles['weightoflife'].fromWeightDiff) return;
-			const yourweight;
+			var yourweight;
 			if (source === user) {
 				yourweight = target.getWeight();
 			} else if (target === user) {
