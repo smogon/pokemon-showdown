@@ -314,8 +314,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (
 				!move.negateSecondary &&
 				!(move.hasSheerForce &&
-				pokemon.hasAbility(['sheerforce', 'forceofnature', 'sandwrath', 'overwhelming', 'powerbuns'])) &&
-				!move.flags['futuremove']
+					pokemon.hasAbility(['sheerforce', 'forceofnature', 'sandwrath', 'overwhelming', 'powerbuns'])) &&
+					!move.flags['futuremove']
 			) {
 				const originalHp = pokemon.hp;
 				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
