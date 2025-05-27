@@ -347,7 +347,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 				throw new Chat.ErrorMessage(`Timer must be between 0 and ${MAX_TIMER_LENGTH} seconds.`);
 			}
 		}
-	return { phrase, hint, timer };
+		return { phrase, hint, timer };
 	}
 }
 
@@ -454,20 +454,20 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('mute', null, room);
 			if (!hangmanData[room.roomid]) hangmanData[room.roomid] = {};
 			if (!target) return this.parse('/help hangman');
-			  const parts = target.split(',').map(p => p.trim()).filter(Boolean);
-  		if (parts.length < 1) {
-    		return this.errorReply("This is invalid, format using /hangman addrandom word, hint, hint, ...");
+			const parts = target.split(',').map(p => p.trim()).filter(Boolean);
+			if (parts.length < 1) {
+				return this.errorReply("This is invalid, format using /hangman addrandom word, hint, hint, ...");
 			}
 			// validation
 			const { phrase } = Hangman.validateParams([parts[0]]);
 			const rawHints = parts.slice(1);
 			const hints = [];
-				for (const hint of rawHints) {
+			for (const hint of rawHints) {
 				if (hint.length > MAX_HINT_LENGTH) {
-				throw new Chat.ErrorMessage(`Hint "${hint}" is too long (max ${MAX_HINT_LENGTH} characters).`);
+					throw new Chat.ErrorMessage(`Hint "${hint}" is too long (max ${MAX_HINT_LENGTH} characters).`);
 				}
 				hints.push(hint);
-				}
+			}
 			
 			if (!hangmanData[room.roomid][phrase]) hangmanData[room.roomid][phrase] = { hints: [] };
 			hangmanData[room.roomid][phrase].hints.push(...hints);
