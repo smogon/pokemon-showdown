@@ -67,7 +67,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		user: User,
 		word: string,
 		hint = '',
-		timer: number = 0,
+		timer: 0,
 		gameOptions: HangmanOptions = {}
 	) {
 		super(room);
@@ -195,11 +195,11 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		return true;
 	}
 	overridestartTimer() {
-  	if (this.maxTime && this.maxTime > 0) {
-    	this.overridetimer = setTimeout(() => {
-    	this.handleTimerExpiry();
-    	}, this.maxTime * 1000);
-  	}
+		if (this.maxTime && this.maxTime > 0) {
+			this.overridetimer = setTimeout(() => {
+				this.handleTimerExpiry();
+			}, this.maxTime * 1000);
+		}
 	}
 
 
@@ -461,8 +461,7 @@ export const commands: Chat.ChatCommands = {
     		return this.errorReply("This is invalid, format using /hangman addrandom word, hint, hint, ...");
 			}
 			// validation
-			const phrase = parts[0];
-			const validated = Hangman.validateParams([phrase]);
+			const { phrase } = Hangman.validateParams([parts[0]]);
 			const rawHints = parts.slice(1);
 			const hints = [];
 				for (const hint of rawHints) {
