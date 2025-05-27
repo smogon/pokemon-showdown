@@ -202,17 +202,16 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		}
 	}
 
-
 	clearTimer() {
   	if (this.overridetimer) {
-    clearTimeout(this.overridetimer);
-    this.overridetimer = undefined;
-  	}
-	}
+		clearTimeout(this.overridetimer);
+    	this.overridetimer = undefined;
+  		}
+			}
 
 	handleTimerExpiry() {
   	this.clearTimer();
-  	this.incorrectGuesses = maxMistakes;
+		this.incorrectGuesses = maxMistakes;
 		this.finish();
 		this.room.add(`|html|<b>Time's up! The game is over.</b>`);
 		this.room.update();
@@ -376,7 +375,7 @@ export const commands: Chat.ChatCommands = {
 			game.display(user, true);
 
 			this.modlog('HANGMAN');
-			return this.addModAction(`A game of hangman was started by ${user.name} – use /guess to play!`);
+			return this.addModAction(`A game of hangman was started by ${user.name}${timer ? ` (Timer: ${timer} seconds)` : ''} – use /guess to play!`);
 		},
 		createhelp: ["/hangman create [word], [hint], [timer] - Makes a new hangman game. Requires: % @ # ~"],
 
