@@ -217,7 +217,6 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		this.room.update();
 	}
 
-
 	hangingMan() {
 		return `<img width="120" height="120" src="//${Config.routes.client}/fx/hangman${this.incorrectGuesses === -1 ? 7 : this.incorrectGuesses}.png" />`;
 	}
@@ -339,14 +338,14 @@ export class Hangman extends Rooms.SimpleRoomGame {
 			hint = params[1].trim();
 			if (hint.length > MAX_HINT_LENGTH) {
 				throw new Chat.ErrorMessage(`Hint must be less than ${MAX_HINT_LENGTH} characters long.`);
+			}
 		}
-	}
 		let timer = 0;
 		if (params.length > 2) {
-  		timer = Number(params[2].trim());
-  		if (isNaN(timer) || timer < 0 || timer > MAX_TIMER_LENGTH) {
-    		throw new Chat.ErrorMessage(`Timer must be between 0 and ${MAX_TIMER_LENGTH} seconds.`);
-  		}
+			timer = Number(params[2].trim());
+			if (isNaN(timer) || timer < 0 || timer > MAX_TIMER_LENGTH) {
+				throw new Chat.ErrorMessage(`Timer must be between 0 and ${MAX_TIMER_LENGTH} seconds.`);
+			}
 		}
 	return { phrase, hint, timer };
 	}
