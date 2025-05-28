@@ -199,7 +199,9 @@ export const Scripts: ModdedBattleScriptsData = {
 						targetOf1stDance :
 						pokemon;
 					const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-					this.runMove(move.id, dancer, dancersTargetLoc, { sourceEffect: this.dex.abilities.get('choreography'), externalMove: true });
+					this.runMove(
+						move.id, dancer, dancersTargetLoc, { sourceEffect: this.dex.abilities.get('choreography'), externalMove: true }
+					);
 				}
 			}
 			if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
@@ -439,7 +441,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (isCrit && !suppressMessages) this.battle.add('-crit', target);
 			if (pokemon.status === 'brn' && move.category === 'Physical' &&
-			!pokemon.hasAbility(['wellbakedflameorb', 'feistytempo', 'guts', 'adrenalinearoma'])) {
+				!pokemon.hasAbility(['wellbakedflameorb', 'feistytempo', 'guts', 'adrenalinearoma'])) {
 				if (this.battle.gen < 6 || move.id !== 'facade') {
 					baseDamage = this.battle.modify(baseDamage, 0.5);
 				}
