@@ -88,7 +88,7 @@ describe(`Eject Pack`, () => {
 			{ species: 'Zygarde', item: 'focussash', ability: 'powerconstruct', moves: ['octolock'] },
 		]]);
 		battle.makeChoices();
-		assert.species(battle.p2.active[0], 'Zygarde-Complete');
+		assert.species(battle.p2.active[0], 'Zygarde-Complete', 'Eject Pack should not activate before Power Construct');
 		const hasBoost = Object.values(battle.p1.active[0].boosts).some(stage => stage > 0);
 		assert(hasBoost, 'Boost from Moody should be applied before switch');
 	});
