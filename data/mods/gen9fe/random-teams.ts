@@ -885,7 +885,7 @@ export class RandomFERBTeams extends RandomTeams {
 		while (pool.length && team.length < this.maxTeamSize) {
 			if (depth >= 200) throw new Error(`Infinite loop in CPM team generation.`);
 			depth++;
-			const name = this.sampleNoReplace(pool);
+			let name = this.sampleNoReplace(pool);
 			const ferbSet: FERBSet = this.dex.deepClone(ferbSets[name]);
 			if (ferbSet.skip) continue;
 

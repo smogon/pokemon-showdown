@@ -357,15 +357,24 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 9] Bad 'n Boosted",
-		desc: `A Gen 9 Ubers solomod where all base stats of 70 and lower are doubled.`,
-		ruleset: ['Standard', 'Bad \'n Boosted Mod', 'Sleep Moves Clause', '!Sleep Clause Mod'],
-		banlist: ['AG', 'Araquanid', 'Cyclizar', 'Espathra', 'Espeon', 'Polteageist', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Eviolite', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects'],
+		name: "[Gen 9] Fusion Evolution Random Battle",
+		desc: "A random battle format featuring Fakemon created during the Community Create-A-Pet Mod event in the Pet Mods room in 2024.",
+		mod: 'gen9fe',
+		team: 'randomFERB',
+		searchShow: true,
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Terastal Clause', 'Data Preview'],
 		onBegin() {
-			this.add('-message', `Welcome to Bad 'n Boosted!`);
-			this.add('-message', `This is a Generation 9 Pet Mod where Pokemon's base stats of 70 or lower get doubled!`);
-			this.add('-message', `You can join our Discord now:`);
-			this.add('-message', `https://discord.gg/vYdSwRreNd`);
+			this.add(`raw|Welcome to Fusion Evolution Random Battle!`);
+			this.add(`raw|<a href="https://www.smogon.com/forums/threads/fusion-evolution-gen-9-final-winners-closure-randbats-sets-wokshop-open.3717085">Fusion Evolution</a> is a Pet Mod featuring Pokémon created by a fusion mechanic!`);
+			this.add(`raw|You are invited to come discuss the <a href="https://play.pokemonshowdown.com/petmods">Pet Mods</a> room to discuss the metagame.`);
+		},
+		onSwitchInPriority: 100,
+		onSwitchIn(pokemon) {
+			if ((pokemon.illusion || pokemon).getTypes(true, true).join('/') !==
+				this.dex.forGen(9).species.get((pokemon.illusion || pokemon).species.name).types.join('/') &&
+				!pokemon.terastallized) {
+				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
+			}
 		},
 	},
 	{
@@ -382,7 +391,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			this.add('-message', `These Pokemon were created during the Community Create-A-Pet Mod event in the Pet Mods room last year!`);
 			this.add('-message', `For more events like this, join the Pet Mods room on Showdown:`);
 			this.add('-message', `https://play.pokemonshowdown.com/petmods`);
-			this.add('-message', `This is a Generation 9 Pet Mod where Pokemon's base stats of 70 or lower get doubled!`);
 		},
 		onSwitchInPriority: 100,
 		onSwitchIn(pokemon) {
