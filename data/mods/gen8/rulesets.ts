@@ -35,7 +35,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		desc: `Pok&eacute;mon below OU get their stats, excluding HP, boosted. UU/RUBL get +10, RU/NUBL get +20, NU/PUBL get +30, and PU or lower get +40.`,
 		onModifySpecies(species, target, source, effect) {
 			if (!species.baseStats) return;
-			const boosts: {[tier: string]: number} = {
+			const boosts: { [tier: string]: number } = {
 				uu: 10,
 				rubl: 10,
 				ru: 20,
@@ -79,7 +79,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			const typesSet = new Set(species.types);
 			const bonusType = this.dex.types.get(target.set.name);
 			if (bonusType.exists) typesSet.add(bonusType.name);
-			return {...species, types: [...typesSet]};
+			return { ...species, types: [...typesSet] };
 		},
 	},
 	godlygiftmod: {
@@ -99,7 +99,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 					}
 				}
 				if (
-					['ag', 'uber'].includes(this.toID(this.ruleTable.has('standardnatdex') ? species.natDexTier : species.tier)) ||
+					['ag', 'uber'].includes(this.toID(this.ruleTable.has('natdexmod') ? species.natDexTier : species.tier)) ||
 					this.toID(set.ability) === 'powerconstruct'
 				) {
 					gods.add(species.name);
@@ -114,7 +114,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			if (source || !target?.side) return;
 			const god = target.side.team.find(set => {
 				let godSpecies = this.dex.species.get(set.species);
-				const isNatDex = this.format.ruleTable?.has('standardnatdex');
+				const isNatDex = this.format.ruleTable?.has('natdexmod');
 				const validator = this.dex.formats.getRuleTable(
 					this.dex.formats.get(`gen${this.gen}${isNatDex && this.gen >= 8 ? 'nationaldex' : 'ou'}`)
 				);

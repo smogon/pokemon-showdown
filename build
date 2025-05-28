@@ -2,10 +2,10 @@
 "use strict";
 
 try {
-	// technically this was introduced in Node 15, but we'll ask for the most recent LTS with it to be safe
-	Promise.any([null]);
+	// technically this was introduced in Node 17, but we'll ask for the most recent LTS with it to be safe
+	structuredClone({});
 } catch (e) {
-	console.log("We require Node.js version 16 or later; you're using " + process.version);
+	console.log("We require Node.js version 18 or later; you're using " + process.version);
 	process.exit(1);
 }
 

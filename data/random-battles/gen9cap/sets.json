@@ -106,13 +106,13 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Close Combat", "Defog", "Encore", "Meteor Mash", "Poltergeist", "Strength Sap", "Trick", "U-turn", "Will-O-Wisp"],
+                "movepool": ["Close Combat", "Defog", "Meteor Mash", "Poltergeist", "Strength Sap", "Trick", "U-turn", "Will-O-Wisp"],
                 "abilities": ["Trace"],
                 "teraTypes": ["Fighting"]
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Defog", "Encore", "Meteor Mash", "Poltergeist", "Strength Sap", "U-turn", "Will-O-Wisp"],
+                "movepool": ["Defog", "Meteor Mash", "Poltergeist", "Strength Sap", "U-turn", "Will-O-Wisp"],
                 "abilities": ["Trace"],
                 "teraTypes": ["Dark", "Water"]
             }
@@ -322,7 +322,7 @@
                 "role": "AV Pivot",
                 "movepool": ["Gunk Shot", "Knock Off", "Poison Jab", "Stone Edge", "U-turn", "Wood Hammer"],
                 "abilities": ["Regenerator"],
-                "teraTypes": ["Grass"]
+                "teraTypes": ["Dark", "Grass"]
             },
             {
                 "role": "Fast Support",
@@ -580,9 +580,32 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Clanging Scales", "Clangorous Soul", "Flamethrower", "Sludge Wave", "Surf"],
+                "movepool": ["Clanging Scales", "Clangorous Soul",  "Sludge Wave", "Surf"],
                 "abilities": ["Armor Tail"],
-                "teraTypes": ["Fire", "Water"]
+                "teraTypes": ["Water"]
+            }
+        ]
+    },
+    "shox": {
+        "level": 80,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Glare", "Ice Beam", "Milk Drink", "Thunderbolt"],
+                "abilities": ["Electromorphosis"],
+                "teraTypes": ["Fairy", "Ghost", "Grass"]
+            },
+            {
+                "role": "Fast Support",
+                "movepool": ["Glare", "Ice Beam", "Milk Drink", "Volt Switch"],
+                "abilities": ["Electromorphosis"],
+                "teraTypes": ["Flying", "Ghost"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Discharge", "Ice Beam", "Knock Off", "Milk Drink", "Thunderbolt"],
+                "abilities": ["Electromorphosis"],
+                "teraTypes": ["Fairy", "Ghost", "Grass"]
             }
         ]
     }

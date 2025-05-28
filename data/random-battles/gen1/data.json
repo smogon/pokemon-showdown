@@ -58,14 +58,14 @@
         "exclusiveMoves": ["agility", "agility", "megadrain"]
     },
     "pidgey": {
-        "level": 90,
+        "level": 93,
         "moves": ["agility", "agility", "quickattack", "quickattack", "skyattack"],
         "essentialMoves": ["doubleedge"],
         "exclusiveMoves": ["mirrormove", "sandattack", "substitute"],
         "comboMoves": ["agility", "doubleedge", "quickattack", "skyattack"]
     },
     "pidgeotto": {
-        "level": 82,
+        "level": 85,
         "moves": ["agility", "agility", "quickattack", "quickattack", "skyattack"],
         "essentialMoves": ["doubleedge"],
         "exclusiveMoves": ["mirrormove", "sandattack", "substitute"],
@@ -176,8 +176,8 @@
     },
     "jigglypuff": {
         "level": 89,
-        "moves": ["blizzard", "bodyslam", "seismictoss"],
-        "essentialMoves": ["thunderwave"],
+        "moves": ["blizzard", "bodyslam"],
+        "essentialMoves": ["thunderwave", "seismictoss"],
         "exclusiveMoves": ["counter", "sing", "thunderwave"]
     },
     "wigglytuff": {
@@ -281,13 +281,11 @@
     },
     "poliwag": {
         "level": 86,
-        "moves": ["amnesia", "blizzard", "surf"],
-        "exclusiveMoves": ["hypnosis", "hypnosis", "hypnosis", "psychic"]
+        "moves": ["amnesia", "blizzard", "hypnosis", "surf"]
     },
     "poliwhirl": {
         "level": 79,
-        "moves": ["amnesia", "blizzard", "surf"],
-        "exclusiveMoves": ["hypnosis", "hypnosis", "hypnosis", "psychic"]
+        "moves": ["amnesia", "blizzard", "hypnosis", "surf"]
     },
     "poliwrath": {
         "level": 74,
@@ -373,9 +371,8 @@
     },
     "slowpoke": {
         "level": 84,
-        "moves": ["blizzard", "psychic", "rest"],
-        "essentialMoves": ["surf", "thunderwave"],
-        "exclusiveMoves": ["amnesia", "earthquake", "earthquake"],
+        "moves": ["blizzard", "psychic", "surf"],
+        "essentialMoves": ["amnesia", "thunderwave"],
         "comboMoves": ["amnesia", "rest", "surf", "thunderwave"]
     },
     "slowbro": {

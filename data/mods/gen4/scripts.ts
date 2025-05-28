@@ -4,6 +4,32 @@ export const Scripts: ModdedBattleScriptsData = {
 
 	actions: {
 		inherit: true,
+		runSwitch(pokemon) {
+			this.battle.runEvent('EntryHazard', pokemon);
+
+			this.battle.runEvent('SwitchIn', pokemon);
+
+			if (this.battle.gen <= 2) {
+				// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
+				for (const poke of this.battle.getAllActive()) poke.lastMove = null;
+				if (!pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.battle.turn) {
+					this.battle.runEvent('AfterSwitchInSelf', pokemon);
+				}
+			}
+			if (!pokemon.hp) return false;
+			pokemon.isStarted = true;
+			if (!pokemon.fainted) {
+				this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
+				this.battle.singleEvent('Start', pokemon.getItem(), pokemon.itemState, pokemon);
+			}
+			if (this.battle.gen === 4) {
+				for (const foeActive of pokemon.foes()) {
+					foeActive.removeVolatile('substitutebroken');
+				}
+			}
+			pokemon.draggedIn = null;
+			return true;
+		},
 		modifyDamage(baseDamage, pokemon, target, move, suppressMessages = false) {
 			// DPP divides modifiers into several mathematically important stages
 			// The modifiers run earlier than other generations are called with ModifyDamagePhase1 and ModifyDamagePhase2
@@ -22,7 +48,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Double battle multi-hit
 			if (move.spreadHit) {
 				const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
-				this.battle.debug('Spread modifier: ' + spreadModifier);
+				this.battle.debug(`Spread modifier: ${spreadModifier}`);
 				baseDamage = this.battle.modify(baseDamage, spreadModifier);
 			}
 
@@ -121,7 +147,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					let boost!: number;
 					if (accuracy !== true) {
 						if (!move.ignoreAccuracy) {
-							boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, {...pokemon.boosts});
+							boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
 							boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
 							if (boost > 0) {
 								accuracy *= boostTable[boost];
@@ -130,7 +156,7 @@ export const Scripts: ModdedBattleScriptsData = {
 							}
 						}
 						if (!move.ignoreEvasion) {
-							boosts = this.battle.runEvent('ModifyBoost', target, null, null, {...target.boosts});
+							boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
 							boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
 							if (boost > 0) {
 								accuracy /= boostTable[boost];

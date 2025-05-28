@@ -6,7 +6,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSideStart(side, source) {
 				this.add('-sidestart', side, 'move: Stealth Rock');
 			},
-			onEntryHazard(pokemon) {
+			onSwitchIn(pokemon) {
 				const calc = calculate(this, this.effectState.source, pokemon, 'stealthrock');
 				if (pokemon.hasItem('heavydutyboots') || !calc) return;
 				this.damage(calc * pokemon.maxhp / 8);
@@ -20,7 +20,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSideStart(side, source) {
 				this.add('-sidestart', side, 'move: G-Max Steelsurge');
 			},
-			onEntryHazard(pokemon) {
+			onSwitchIn(pokemon) {
 				const calc = calculate(this, this.effectState.source, pokemon, 'stealthrock');
 				if (pokemon.hasItem('heavydutyboots') || !calc) return;
 				this.damage(calc * pokemon.maxhp / 8);
@@ -40,7 +40,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-sidestart', side, 'Spikes');
 				this.effectState.layers++;
 			},
-			onEntryHazard(pokemon) {
+			onSwitchIn(pokemon) {
 				const calc = calculate(this, this.effectState.source, pokemon, 'spikes');
 				if (!calc || !pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) return;
 				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
@@ -59,7 +59,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		condition: {
 			onStart(pokemon, source) {
-				this.add('-start', pokemon, 'Curse', '[of] ' + source);
+				this.add('-start', pokemon, 'Curse', `[of] ${source}`);
 			},
 			onResidualOrder: 12,
 			onResidual(pokemon) {
@@ -279,13 +279,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-sidestart', side, 'move: Toxic Spikes');
 				this.effectState.layers++;
 			},
-			onEntryHazard(pokemon) {
+			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasType('Poison')) {
-					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', `[of] ${pokemon}`);
 					pokemon.side.removeSideCondition('toxicspikes');
 				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots')) {
-					return;
+					// do nothing
 				} else if (this.effectState.layers >= 2) {
 					pokemon.trySetStatus('tox', this.effectState.source);
 				} else {
@@ -299,7 +299,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 function calculate(battle: Battle, source: Pokemon, pokemon: Pokemon, moveid = 'tackle') {
 	const move = battle.dex.getActiveMove(moveid);
 	move.type = source.getTypes()[0];
-	const typeMod = Math.pow(2, battle.clampIntRange(pokemon.runEffectiveness(move), -6, 6));
+	const typeMod = 2 ** battle.clampIntRange(pokemon.runEffectiveness(move), -6, 6);
 	if (!pokemon.runImmunity(move.type)) return 0;
 	return typeMod;
 }
