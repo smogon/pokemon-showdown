@@ -946,7 +946,7 @@ export class RandomFERBTeams extends RandomTeams {
 				item: this.sampleIfArray(ferbSet.item),
 				ability: this.sampleIfArray(ferbSet.ability),
 				moves,
-				nature: ferbSet.nature ? Array.isArray(ferbSet.nature) ? this.sampleNoReplace(ferbSet.nature) : ferbSet.nature : 'Serious',
+				nature: ferbSet.nature ? Array.isArray(ferbSet.nature) ? this.sampleNoReplace(ferbSet.nature) : ferbSet.nature : 'Lax',
 				gender: ferbSet.gender ? this.sampleIfArray(ferbSet.gender) : this.sample(['M', 'F', 'N']),
 				evs: ferbSet.evs ? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...ferbSet.evs } :
 
