@@ -1,3 +1,5 @@
+import type { EffectState } from "../../../sim/pokemon";
+
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	/* FEG9 abils */
 	unfiltered: {
@@ -330,7 +332,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (move.priority > 0) {
 				if (isItSunny || source.volatiles['openingact']) return;
 				source.addVolatile('openingact');
-				source.volatiles['openingact'].fromPriority = true;
+				console.log("Volatiles");
+				console.log(source.volatiles);
+				console.log(Object.getOwnPropertyNames(source.volatiles));
+				const vol: EffectState = source.volatiles['openingact'];
+				vol.fromPriority = true;
 			} else if (source.volatiles['openingact']?.fromPriority) {
 				if (isItSunny) {
 					source.volatiles['openingact'].fromPriority = false;
@@ -1995,8 +2001,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				!this.runEvent('SetAbility', pokemon, pokemon, this.effect, ability)) return;
 			this.add('-ability', pokemon, 'Pillage');
 			this.add('-activate', pokemon, 'move: Skill Swap', ability, pillageAbil, `[of] ${target}`);
-			this.singleEvent('End', pillageAbil, pillageAbil.abilityState, pokemon);
-			this.singleEvent('End', ability, ability.abilityState, target);
+			this.singleEvent('End', pillageAbil, pokemon.abilityState, pokemon);
+			this.singleEvent('End', ability, target.abilityState, target);
 			pokemon.ability = ability.id;
 			pokemon.abilityState = { id: this.toID(pokemon.ability), effectOrder: 0, target: pokemon };
 			target.ability = pillageAbil.id;
@@ -3518,7 +3524,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			for (const secondary of secondaries) {
 				secondary.self ||= {};
 				for (const i in secondary) {
-					if (!['self', 'chance'].includes(i)) secondary.self[i] = secondary[i];
+					if (!['self', 'chance'].includes(i)) {
+						const secClone = structuredClone(secondary);
+						secClone.self = undefined;
+						secondary.self = secClone;
+					}
 				}
 			}
 		},

@@ -380,7 +380,7 @@ export const ferbSets: FERBSets = {
 		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Ghost', level: 80,
 	},
 	'Weezaluna-Bloodmoon': {
-		species: 'Weezaluna-Bloodmoon', ability: 'Control', item: 'Black Sludge', gender: 'M',
+		species: 'Weezaluna-Bloodmoon', ability: 'Air Control', item: 'Black Sludge', gender: 'M',
 		moves: ['Moonlight', ['Calm Mind', 'Toxic Spikes'], ['Earth Power', 'Flamethrower']],
 		signatureMove: 'Sludge Bomb',
 		evs: { hp: 252, def: 252, spe: 4 }, nature: 'Bold', teraType: 'Ghost', level: 76,
