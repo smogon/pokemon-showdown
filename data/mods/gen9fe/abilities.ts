@@ -923,8 +923,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onAnyModifyAtk(atk, attacker, defender, move) {
 			const abilityHolder = this.effectState.target;
 			if (attacker.isAlly(abilityHolder) || attacker.ignoringAbility() || !this.effectState.unnerved) return;
-			if (!move.suppressedParadox) move.suppressedParadox = abilityHolder;
-			else if (move.suppressedParadox !== abilityHolder) return;
+			if (!this.effectState.suppressedParadox) this.effectState.suppressedParadox = abilityHolder;
+			else if (this.effectState.suppressedParadox !== abilityHolder) return;
 			for (const paradox of ['faultyphoton', 'baryonblade', 'onceuponatime', 'primitive', 'quarksurge',
 				'lightdrive', 'openingact', 'protosynthesis', 'quarkdrive', 'nanorepairs', 'firewall',
 				'weightoflife', 'circuitbreaker', 'ancientmarble', 'prehistorichunter', 'heatproofdrive']) {
@@ -942,8 +942,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onAnyModifyDef(def, attacker, defender, move) {
 			const abilityHolder = this.effectState.target;
 			if (defender.isAlly(abilityHolder) || defender.ignoringAbility() || !this.effectState.unnerved) return;
-			if (!move.suppressedParadox) move.suppressedParadox = abilityHolder;
-			else if (move.suppressedParadox !== abilityHolder) return;
+			if (!this.effectState.suppressedParadox) this.effectState.suppressedParadox = abilityHolder;
+			else if (this.effectState.suppressedParadox !== abilityHolder) return;
 			for (const paradox of ['faultyphoton', 'baryonblade', 'onceuponatime', 'primitive', 'quarksurge',
 				'lightdrive', 'openingact', 'protosynthesis', 'quarkdrive', 'nanorepairs', 'firewall',
 				'weightoflife', 'circuitbreaker', 'ancientmarble', 'prehistorichunter', 'heatproofdrive']) {
@@ -961,8 +961,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onAnyModifySpA(spa, attacker, defender, move) {
 			const abilityHolder = this.effectState.target;
 			if (attacker.isAlly(abilityHolder) || attacker.ignoringAbility() || !this.effectState.unnerved) return;
-			if (!move.suppressedParadox) move.suppressedParadox = abilityHolder;
-			else if (move.suppressedParadox !== abilityHolder) return;
+			if (!this.effectState.suppressedParadox) this.effectState.suppressedParadox = abilityHolder;
+			else if (this.effectState.suppressedParadox !== abilityHolder) return;
 			for (const paradox of ['faultyphoton', 'baryonblade', 'onceuponatime', 'primitive', 'quarksurge',
 				'lightdrive', 'openingact', 'protosynthesis', 'quarkdrive', 'nanorepairs', 'firewall',
 				'weightoflife', 'circuitbreaker', 'ancientmarble', 'prehistorichunter', 'heatproofdrive']) {
@@ -980,8 +980,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onAnyModifySpD(spd, attacker, defender, move) {
 			const abilityHolder = this.effectState.target;
 			if (defender.isAlly(abilityHolder) || defender.ignoringAbility() || !this.effectState.unnerved) return;
-			if (!move.suppressedParadox) move.suppressedParadox = abilityHolder;
-			else if (move.suppressedParadox !== abilityHolder) return;
+			if (!this.effectState.suppressedParadox) this.effectState.suppressedParadox = abilityHolder;
+			else if (this.effectState.suppressedParadox !== abilityHolder) return;
 			for (const paradox of ['faultyphoton', 'baryonblade', 'onceuponatime', 'primitive', 'quarksurge',
 				'lightdrive', 'openingact', 'protosynthesis', 'quarkdrive', 'nanorepairs', 'firewall',
 				'weightoflife', 'circuitbreaker', 'ancientmarble', 'prehistorichunter', 'heatproofdrive']) {
@@ -1190,7 +1190,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onUpdate(pokemon) {
 			if (pokemon.status === 'brn') {
 				this.add('-activate', pokemon, 'ability: Electromagnetic Veil');
-				this.heal(target.baseMaxhp / 4);
+				this.heal(pokemon.baseMaxhp / 4);
 				pokemon.cureStatus();
 			}
 		},
@@ -1201,8 +1201,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	risingtension: {
 		shortDesc: "Levitate + Cursed Body",
 		onDamagingHit(damage, target, source, move) {
-			if (!source.volatiles['disable'] && !move.isFutureMove && this.randomChance(3, 10)) {
-				source.addVolatile('disable', this.effectState.target);
+			if (source.volatiles['disable']) return;
+			if (!move.isMax && !move.flags['futuremove'] && move.id !== 'struggle') {
+				if (this.randomChance(3, 10)) {
+					source.addVolatile('disable', this.effectState.target);
+				}
 			}
 		},
 		flags: { breakable: 1 },
@@ -1594,7 +1597,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
 			let showMsg = false;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
 					delete boost[i];
@@ -1651,7 +1654,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onAllyTryBoost(boost, target, source, effect) {
 			if ((source && target === source) || !target.hasType('Fire')) return;
 			let showMsg = false;
-			let i: BoostName;
+			let i: BoostID;
 			for (i in boost) {
 				if (boost[i]! < 0) {
 					delete boost[i];
@@ -1951,7 +1954,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	freeflight: {
 		shortDesc: "Libero + Levitate",
 		onPrepareHit(source, target, move) {
-			if (this.effectState.libero || move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
+			if (this.effectState.libero) return;
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type && source.setType(type)) {
 				this.effectState.libero = true;
@@ -2918,7 +2922,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	sushistorm: {
 		shortDesc: "Sturdy + Storm Drain",
 		onTryHit(pokemon, target, move) {
-			if (target !== source && move.type === 'Water') {
+			if (target !== pokemon && move.type === 'Water') {
 				if (!this.boost({ spa: 1 })) {
 					this.add('-immune', target, '[from] ability: Sushi Storm');
 				}
@@ -3231,13 +3235,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Sword of Rejuvenation",
 	},
 	bestboost: {
-		shortDesc: "This Pokemon's highest stat can't be lowered.", // and raises 1 stage after KOing a foe.",
-		onStart(pokemon) {
+		shortDesc: "This Pokemon's highest stat can't be lowered.",
+		/* onStart(pokemon) {
 			this.effectState.bestStat = pokemon.getBestStat(true, true);
-		},
+		}, */
 		onTryBoost(boost, target, source, effect) {
 			if (source && target === source) return;
-			const bestStat = (this.effectState.bestStat ||= target.getBestStat(true, true));
+			// const bestStat = (this.effectState.bestStat ||= target.getBestStat(true, true));
+			const bestStat = target.getBestStat(true, true); // check if this works
 			if (boost[bestStat] && boost[bestStat]! < 0) {
 				delete boost[bestStat];
 				if (!(effect as ActiveMove).secondaries) {
