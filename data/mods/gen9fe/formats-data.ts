@@ -34,7 +34,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	ironmetamega: {
 		tier: "Uber",
 		doublesTier: "DOU",
-		requiredItem: "Metagrossite",
 	},
 	deciperiorhisui: {
 		tier: "OU",
@@ -59,7 +58,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	muktariaalolamega: {
 		tier: "OU",
 		doublesTier: "DOU",
-		requiredItem: "Altarianite",
 	},
 	ironpins: {
 		tier: "UU",
@@ -100,7 +98,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	solvaliantmega: {
 		tier: "Uber",
 		doublesTier: "DOU",
-		requiredItem: "Absolite",
 	},
 	golisorospaldeablaze: {
 		tier: "UU",
@@ -133,7 +130,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	aggrammega: {
 		tier: "UU",
 		doublesTier: "DOU",
-		requiredItem: "Aggronite",
 	},
 	garpyuku: {
 		tier: "OU",
@@ -142,7 +138,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	garpyukumega: {
 		tier: "OU",
 		doublesTier: "DOU",
-		requiredItem: "Garchompite",
 	},
 	yveltox: {
 		tier: "OU",
@@ -183,7 +178,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	crygargonalmega: {
 		tier: "Uber",
 		doublesTier: "DOU",
-		requiredItem: "Gengarite",
 	},
 	wopple: {
 		tier: "OU",
@@ -196,12 +190,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	amphamencemegax: {
 		tier: "Uber",
 		doublesTier: "DOU",
-		requiredItem: "Salamencite",
 	},
 	amphamencemegay: {
 		tier: "Uber",
 		doublesTier: "DOU",
-		requiredItem: "Ampharosite",
 	},
 	mareegon: {
 		tier: "LC",
@@ -274,12 +266,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	tyranixmegax: {
 		tier: "UU",
 		doublesTier: "DOU",
-		requiredItem: "Tyranitarite",
 	},
 	tyranixmegay: {
 		tier: "UU",
 		doublesTier: "DOU",
-		requiredItem: "Steelixite",
 	},
 	gooperthisui: {
 		tier: "UU",
@@ -288,7 +278,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	gooperthisuimega: {
 		tier: "OU",
 		doublesTier: "DOU",
-		requiredItem: "Swampertite",
 	},
 	baxgeistlarge: {
 		tier: "OU",
@@ -321,7 +310,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	necrotrikultra: {
 		tier: "OU",
 		doublesTier: "DOU",
-		requiredItem: "Depleted Ultranecrozium Z",
 	},
 	druddizor: {
 		tier: "OU",
@@ -330,7 +318,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	druddizormega: {
 		tier: "OU",
 		doublesTier: "DOU",
-		requiredItem: "Scizorite",
 	},
 	greatkleav: {
 		tier: "OU",
@@ -351,12 +338,10 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	mawlakazammegay: {
 		tier: "OU",
 		doublesTier: "DOU",
-		requiredItem: "Alakazite",
 	},
 	mawlakazammegax: {
 		tier: "OU",
 		doublesTier: "DOU",
-		requiredItem: "Mawilite",
 	},
 	bouffalu: {
 		tier: "OU",
@@ -404,7 +389,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	aerowakemega: {
 		tier: "OU",
-		requiredItem: "Aerodactylite",
 		doublesTier: "DOU",
 	},
 	anoraidon: {
@@ -425,7 +409,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	overgyaramega: {
 		tier: "UU",
-		requiredItem: "Gyaradosite",
 		doublesTier: "DOU",
 	},
 	chomptry: {
@@ -434,7 +417,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	chomptrymega: {
 		tier: "UU",
-		requiredItem: "Garchompite",
 		doublesTier: "DOU",
 	},
 	farinape: {
@@ -475,7 +457,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	tentazormega: {
 		tier: "UUBL",
-		requiredItem: "Scizorite",
 		doublesTier: "DOU",
 	},
 	golegonalola: {
@@ -500,17 +481,14 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	hatteponwellspring: {
 		tier: "UU",
-		requiredItem: "Wellspring Mask",
 		doublesTier: "DOU",
 	},
 	hatteponhearthflame: {
 		tier: "UU",
-		requiredItem: "Hearthflame Mask",
 		doublesTier: "DOU",
 	},
 	hatteponcornerstone: {
 		tier: "UU",
-		requiredItem: "Cornerstone Mask",
 		doublesTier: "DOU",
 	},
 	buzzscor: {
@@ -531,7 +509,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	aerodirgemega: {
 		tier: "UU",
-		requiredItem: "Aerodactylite",
 		doublesTier: "DOU",
 	},
 	kilommoototem: {
@@ -548,7 +525,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	zorosharkhisuimega: {
 		tier: "UUBL",
-		requiredItem: "Sharpedonite",
 		doublesTier: "DOU",
 	},
 	bombirdus: {
@@ -565,7 +541,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	woruptmega: {
 		tier: "UU",
-		requiredItem: "Cameruptite",
 		doublesTier: "DOU",
 	},
 	aromalge: {
@@ -614,7 +589,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	girachamoriginmega: {
 		tier: "Uber",
-		requiredItem: "Medichamite",
 		doublesTier: "DOU",
 	},
 	eldetini: {

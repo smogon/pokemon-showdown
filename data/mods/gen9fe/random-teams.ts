@@ -227,13 +227,13 @@ export const ferbSets: FERBSets = {
 		species: 'Iron Legion', ability: 'Circuit Breaker', item: 'Choice Specs', gender: 'N',
 		moves: ['Hydro Pump', 'Freeze-Dry', 'Flip Turn'],
 		signatureMove: 'Shadow Ball',
-		evs: { spa: 252, spd: 4, spd: 252 }, nature: 'Timid', teraType: 'Fairy', level: 81,
+		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Fairy', level: 81,
 	},
 	Celedos: {
 		species: 'Celedos', ability: 'Natural Pressures', item: 'Choice Specs', gender: 'N',
 		moves: [['Trick', 'Healing Wish'], 'Volt Switch', 'Thunderbolt'],
 		signatureMove: 'Leaf Storm',
-		evs: { spa: 252, spd: 4, spd: 252 }, nature: 'Timid', teraType: 'Fairy', level: 81,
+		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Fairy', level: 81,
 	},
 	Primeleo: {
 		species: 'Primeleo', ability: 'Vital Metal Body', item: 'Leftovers', gender: 'N',
