@@ -3243,7 +3243,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (source && target === source) return;
 			// const bestStat = (this.effectState.bestStat ||= target.getBestStat(true, true));
 			const bestStat = target.getBestStat(true, true); // check if this works
-			if (boost[bestStat] && boost[bestStat]! < 0) {
+			if (boost[bestStat]! < 0) {
 				delete boost[bestStat];
 				if (!(effect as ActiveMove).secondaries) {
 					this.add("-fail", target, "unboost", bestStat, "[from] ability: Best Boost", `[of] ${target}`);
