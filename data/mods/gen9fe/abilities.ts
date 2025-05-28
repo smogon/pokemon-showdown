@@ -1727,7 +1727,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	snowblind: {
 		shortDesc: "Snow Warning + Unseen Fist",
 		onStart(source) {
-			this.field.setWeather('snow');
+			this.field.setWeather('snowscape');
 		},
 		onModifyMove(move) {
 			if (move.flags['contact']) delete move.flags['protect'];
@@ -1840,7 +1840,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			move.ignoreAbility = true;
 		},
 		onModifySpe(spe, pokemon) {
-			if (['hail', 'snow'].includes(pokemon.effectiveWeather())) {
+			if (['hail', 'snowscape'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(2);
 			}
 		},
@@ -2608,7 +2608,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	winterstorm: {
 		shortDesc: "Under snow, heal 6.25% of own max HP and damage opponents for 12.5% of their max HP at end of turn.",
 		onWeather(target, source, effect) {
-			if (effect.id === 'snow' || effect.id === 'hail') {
+			if (effect.id === 'snowscape' || effect.id === 'hail') {
 				this.heal(target.baseMaxhp / 16);
 				for (const pokemon of target.foes()) {
 					this.damage(pokemon.baseMaxhp / 8, pokemon, target);
@@ -2828,7 +2828,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onWeatherChange(pokemon, source, sourceEffect) {
 			// snow/hail resuming because Cloud Nine/Air Lock ended does not trigger Ice Face
 			if ((sourceEffect as Ability)?.suppressWeather || !pokemon.hp) return;
-			if (this.field.isWeather(['hail', 'snow']) && pokemon.species.id === 'eisephalonnoface') {
+			if (this.field.isWeather(['hail', 'snowscape']) && pokemon.species.id === 'eisephalonnoface') {
 				this.add('-activate', pokemon, 'ability: Ultra Face');
 				pokemon.formeChange('Eisephalon', this.effect, true);
 			}

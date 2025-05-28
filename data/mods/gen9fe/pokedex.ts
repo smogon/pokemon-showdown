@@ -968,6 +968,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 60, atk: 115, def: 55, spa: 35, spd: 85, spe: 120 },
 		abilities: { 0: "Inner Focus" },
 		weightkg: 27.5,
+		evos: ["Weavile", 'Sneasler'],
 	},
 	brambleshao: {
 		num: 101,
