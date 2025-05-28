@@ -702,7 +702,7 @@ export const pages: Chat.PageTable = {
 				if (entry.timer) {
 					buf += `<br /><strong>Timer:</strong> ${entry.timer} seconds ` +
 						`<button class="button" name="send" value="/msgroom ${room.roomid}, /hangman removetimer ${t}" aria-label="Delete Timer">` +
-					`<i class="fa fa-trash"></i></button>`;
+						`<i class="fa fa-trash"></i></button>`;
 				}
 				buf += `<button style="float:right;" class="button" name="send" value="/msgroom ${room.roomid}, /hangman rr ${t}"><i class="fa fa-trash"></i> Delete all terms</button>`;
 				if (entry.tags) {
