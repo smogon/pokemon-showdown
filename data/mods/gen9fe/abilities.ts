@@ -703,7 +703,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	choreography: {
 		shortDesc: "Protean + Dancer; Dancer is once per switch-in instead of Protean.",
 		onPrepareHit(source, target, move) {
-			if (move.hasBounced || move.isFutureMove || move.sourceEffect === 'snatch') return;
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type && source.setType(type)) {
 				this.add('-start', source, 'typechange', type, '[from] ability: Choreography');
@@ -851,7 +851,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Shield Dust + Moves with secondary effects used by any Pokemon have 1.33x power.",
 		onModifySecondaries(secondaries) {
 			this.debug('Aura Shield prevent secondary');
-			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+			return secondaries.filter(effect => !!effect.self);
 		},
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Aura Shield');
@@ -882,13 +882,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onCriticalHit(target, source, move) {
 			if (!target || target.species.id !== 'ironmimic' || target.transformed || !target.runImmunity(move.type)) return;
-			const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates);
+			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates);
 			if (hitSub) return;
 			return false;
 		},
 		onEffectiveness(typeMod, target, type, move) {
 			if (!target || target.species.id !== 'ironmimic' || target.transformed || !target.runImmunity(move.type)) return;
-			const hitSub = target.volatiles['substitute'] && !move.flags['authentic'] && !(move.infiltrates);
+			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates);
 			if (hitSub) return;
 			return 0;
 		},
@@ -919,7 +919,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	dyschronometria: {
 		shortDesc: "While this Pokemon is active, all Paradox boosts are suppressed.",
-		onAnyModifyAtkPriority: 4,
+		// onAnyModifyAtkPriority: 4,
 		onAnyModifyAtk(atk, attacker, defender, move) {
 			const abilityHolder = this.effectState.target;
 			if (attacker.isAlly(abilityHolder) || attacker.ignoringAbility() || !this.effectState.unnerved) return;
@@ -938,7 +938,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 		},
-		onAnyModifyDefPriority: 5,
+		// onAnyModifyDefPriority: 5,
 		onAnyModifyDef(def, attacker, defender, move) {
 			const abilityHolder = this.effectState.target;
 			if (defender.isAlly(abilityHolder) || defender.ignoringAbility() || !this.effectState.unnerved) return;
@@ -957,7 +957,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 		},
-		onAnyModifySpAPriority: 4,
+		// onAnyModifySpAPriority: 4,
 		onAnyModifySpA(spa, attacker, defender, move) {
 			const abilityHolder = this.effectState.target;
 			if (attacker.isAlly(abilityHolder) || attacker.ignoringAbility() || !this.effectState.unnerved) return;
@@ -976,7 +976,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 		},
-		onAnyModifySpDPriority: 5,
+		// onAnyModifySpDPriority: 5,
 		onAnyModifySpD(spd, attacker, defender, move) {
 			const abilityHolder = this.effectState.target;
 			if (defender.isAlly(abilityHolder) || defender.ignoringAbility() || !this.effectState.unnerved) return;
@@ -996,10 +996,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		// Speed suppression in the other Paradox abilities
-		onPreStart(pokemon) {
-			this.add('-ability', pokemon, 'Dyschronometria');
-			this.effectState.unnerved = true;
-		},
+		onSwitchInPriority: 1,
 		onStart(pokemon) {
 			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'Dyschronometria');
