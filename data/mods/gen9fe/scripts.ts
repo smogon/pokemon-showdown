@@ -83,28 +83,36 @@ export const Scripts: ModdedBattleScriptsData = {
 			return hitResults;
 		},
 		runMove(
-			moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number, sourceEffect?: Effect | null,
-			zMove?: string, externalMove?: boolean, maxMove?: string, originalTarget?: Pokemon
+			moveOrMoveName: Move | string, pokemon: Pokemon, targetLoc: number,
+			options?: {
+				sourceEffect?: Effect | null, zMove?: string, externalMove?: boolean,
+				maxMove?: string, originalTarget?: Pokemon,
+			}
 		) {
 			pokemon.activeMoveActions++;
+			const zMove = options?.zMove;
+			const maxMove = options?.maxMove;
+			const externalMove = options?.externalMove;
+			const originalTarget = options?.originalTarget;
+			let sourceEffect = options?.sourceEffect;
 			let target = this.battle.getTarget(pokemon, maxMove || zMove || moveOrMoveName, targetLoc, originalTarget);
 			let baseMove = this.dex.getActiveMove(moveOrMoveName);
+			const priority = baseMove.priority;
+			const pranksterBoosted = baseMove.pranksterBoosted;
 			if (baseMove.id !== 'struggle' && !zMove && !maxMove && !externalMove) {
-				const pranksterBoosted = baseMove.pranksterBoosted;
 				const changedMove = this.battle.runEvent('OverrideAction', pokemon, target, baseMove);
 				if (changedMove && changedMove !== true) {
 					baseMove = this.dex.getActiveMove(changedMove);
+					baseMove.priority = priority;
 					if (pranksterBoosted) baseMove.pranksterBoosted = pranksterBoosted;
 					target = this.battle.getRandomTarget(pokemon, baseMove);
 				}
 			}
-			let move;
+			let move = baseMove;
 			if (zMove) {
 				move = this.getActiveZMove(baseMove, pokemon);
 			} else if (maxMove) {
 				move = this.getActiveMaxMove(baseMove, pokemon);
-			} else {
-				move = baseMove;
 			}
 			move.isExternal = externalMove;
 			this.battle.setActiveMove(move, pokemon, target);
@@ -122,23 +130,27 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (move.flags['cantusetwice'] && pokemon.lastMove?.id === move.id) {
 				pokemon.addVolatile(move.id);
 			}
-			if (move.beforeMoveCallback && move.beforeMoveCallback.call(this.battle, pokemon, target, move)) {
-				this.battle.clearActiveMove(true);
-				pokemon.moveThisTurnResult = false;
-				return;
+			if (move.beforeMoveCallback) {
+				if (move.beforeMoveCallback.call(this.battle, pokemon, target, move)) {
+					this.battle.clearActiveMove(true);
+					pokemon.moveThisTurnResult = false;
+					return;
+				}
 			}
 			pokemon.lastDamage = 0;
 			let lockedMove;
 			if (!externalMove) {
 				lockedMove = this.battle.runEvent('LockMove', pokemon);
 				if (lockedMove === true) lockedMove = false;
-				if (lockedMove) {
+				if (!lockedMove) {
+					if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
+						this.battle.add('cant', pokemon, 'nopp', move);
+						this.battle.clearActiveMove(true);
+						pokemon.moveThisTurnResult = false;
+						return;
+					}
+				} else {
 					sourceEffect = this.dex.conditions.get('lockedmove');
-				} else if (!pokemon.deductPP(baseMove, null, target) && (move.id !== 'struggle')) {
-					this.battle.add('cant', pokemon, 'nopp', move);
-					this.battle.clearActiveMove(true);
-					pokemon.moveThisTurnResult = false;
-					return;
 				}
 				pokemon.moveUsed(move, targetLoc);
 			}
@@ -152,8 +164,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.add('-zpower', pokemon);
 				pokemon.side.zMoveUsed = true;
 			}
-			// const oldActiveMove = move;
-			const moveDidSomething = this.useMove(baseMove, pokemon, target, sourceEffect, zMove, maxMove);
+			const oldActiveMove = move;
+			const moveDidSomething = this.useMove(baseMove, pokemon, { target, sourceEffect, zMove, maxMove });
 			this.battle.lastSuccessfulMoveThisTurn = moveDidSomething ? this.battle.activeMove && this.battle.activeMove.id : null;
 			if (this.battle.activeMove) move = this.battle.activeMove;
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
@@ -161,55 +173,72 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (move.flags['cantusetwice'] && pokemon.removeVolatile(move.id)) {
 				this.battle.add('-hint', `Some effects can force a Pokemon to use ${move.name} again in a row.`);
 			}
+			// TODO: Refactor to use BattleQueue#prioritizeAction in onAnyAfterMove handlers
 			// Dancer's activation order is completely different from any other event, so it's handled separately
 			if (move.flags['dance'] && moveDidSomething && !move.isExternal) {
-				const dancers = this.battle.getAllActive().filter(
-					currentPoke => (currentPoke.hasAbility('choreography') && pokemon !== currentPoke &&
-						!currentPoke.abilityState.choreography && !currentPoke.fainted && !currentPoke.isSemiInvulnerable())
-				);
+				const dancers = [];
+				for (const currentPoke of this.battle.getAllActive()) {
+					if (pokemon === currentPoke) continue;
+					if (currentPoke.hasAbility('choreography') && !currentPoke.isSemiInvulnerable()) {
+						dancers.push(currentPoke);
+					}
+				}
 				// Dancer activates in order of lowest speed stat to highest
 				// Note that the speed stat used is after any volatile replacements like Speed Swap,
 				// but before any multipliers like Agility or Choice Scarf
 				// Ties go to whichever Pokemon has had the ability for the least amount of time
 				dancers.sort(
-					(a, b) => (a.storedStats['spe'] - b.storedStats['spe']) || b.abilityOrder - a.abilityOrder
+					(a, b) => -(b.storedStats['spe'] - a.storedStats['spe']) || b.abilityState.effectOrder - a.abilityState.effectOrder
 				);
 				const targetOf1stDance = this.battle.activeTarget!;
 				for (const dancer of dancers) {
 					if (this.battle.faintMessages()) break;
+					if (dancer.fainted) continue;
 					this.battle.add('-activate', dancer, 'ability: Choreography');
 					const dancersTarget = !targetOf1stDance.isAlly(dancer) && pokemon.isAlly(dancer) ?
 						targetOf1stDance :
 						pokemon;
 					const dancersTargetLoc = dancer.getLocOf(dancersTarget);
-					this.runMove(move.id, dancer, dancersTargetLoc, this.dex.abilities.get('choreography'), undefined, true);
-					dancer.abilityState.choreography = true;
+					this.runMove(move.id, dancer, dancersTargetLoc, { sourceEffect: this.dex.abilities.get('choreography'), externalMove: true });
 				}
 			}
 			if (noLock && pokemon.volatiles['lockedmove']) delete pokemon.volatiles['lockedmove'];
 			this.battle.faintMessages();
 			this.battle.checkWin();
+			if (this.battle.gen <= 4) {
+				// In gen 4, the outermost move is considered the last move for Copycat
+				this.battle.activeMove = oldActiveMove;
+			}
 		},
-		useMoveInner(moveOrMoveName, pokemon, target, sourceEffect, zMove, maxMove) {
+		useMoveInner(
+			moveOrMoveName: Move | string, pokemon: Pokemon, options?: {
+				target?: Pokemon | null, sourceEffect?: Effect | null,
+				zMove?: string, maxMove?: string,
+			},
+		) {
+			let target = options?.target;
+			let sourceEffect = options?.sourceEffect;
+			const zMove = options?.zMove;
+			const maxMove = options?.maxMove;
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			if (sourceEffect && ['instruct', 'custapberry'].includes(sourceEffect.id)) sourceEffect = null;
 			let move = this.dex.getActiveMove(moveOrMoveName);
 			pokemon.lastMoveUsed = move;
+			if (move.id === 'weatherball' && zMove) {
+				// Z-Weather Ball only changes types if it's used directly,
+				// not if it's called by Z-Sleep Talk or something.
+				this.battle.singleEvent('ModifyType', move, null, pokemon, target, move, move);
+				if (move.type !== 'Normal') sourceEffect = move;
+			}
 			if (zMove || (move.category !== 'Status' && sourceEffect && (sourceEffect as ActiveMove).isZ)) {
-				if (move.id === 'weatherball' && zMove) {
-					// Z-Weather Ball only changes types if it's used directly,
-					// not if it's called by Z-Sleep Talk or something.
-					this.battle.singleEvent('ModifyType', move, null, pokemon, target, move, move);
-					if (move.type !== 'Normal') sourceEffect = move;
-				}
 				move = this.getActiveZMove(move, pokemon);
 			}
+			if (maxMove && move.category !== 'Status') {
+				// Max move outcome is dependent on the move type after type modifications from ability and the move itself
+				this.battle.singleEvent('ModifyType', move, null, pokemon, target, move, move);
+				this.battle.runEvent('ModifyType', pokemon, target, move, move);
+			}
 			if (maxMove || (move.category !== 'Status' && sourceEffect && (sourceEffect as ActiveMove).isMax)) {
-				if (maxMove && move.category !== 'Status') {
-					// Max move outcome is dependent on the move type after type modifications from ability and the move itself
-					this.battle.singleEvent('ModifyType', move, null, pokemon, target, move, move);
-					this.battle.runEvent('ModifyType', pokemon, target, move, move);
-				}
 				move = this.getActiveMaxMove(move, pokemon);
 			}
 			if (this.battle.activeMove) {
@@ -220,7 +249,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let targetRelayVar = { target };
 			targetRelayVar = this.battle.runEvent('ModifyTarget', pokemon, target, move, targetRelayVar, true);
 			if (targetRelayVar.target !== undefined) target = targetRelayVar.target;
-			else if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
+			if (target === undefined) target = this.battle.getRandomTarget(pokemon, move);
 			if (move.target === 'self' || move.target === 'allies') {
 				target = pokemon;
 			}
@@ -250,16 +279,16 @@ export const Scripts: ModdedBattleScriptsData = {
 			let attrs = '';
 			let movename = move.name;
 			if (move.id === 'hiddenpower') movename = 'Hidden Power';
-			if (sourceEffect) attrs += `|[from]${sourceEffect.fullname}`;
+			if (sourceEffect) attrs += `|[from] ${sourceEffect.fullname}`;
 			if (zMove && move.isZ === true) {
-				attrs = '|[anim]' + movename + attrs;
-				movename = 'Z-' + movename;
+				attrs = `|[anim]${movename}${attrs}`;
+				movename = `Z-${movename}`;
 			}
-			this.battle.addMove('move', pokemon, movename, target + attrs);
+			this.battle.addMove('move', pokemon, movename, `${target}${attrs}`);
 			if (zMove) this.runZPower(move, pokemon);
 			if (!target) {
 				this.battle.attrLastMove('[notarget]');
-				this.battle.add('-fail', pokemon);
+				this.battle.add(this.battle.gen >= 5 ? '-fail' : '-notarget', pokemon);
 				return false;
 			}
 			const { targets, pressureTargets } = pokemon.getMoveTargets(move, target);
@@ -288,20 +317,24 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (move.ignoreImmunity === undefined) {
 				move.ignoreImmunity = (move.category === 'Status');
 			}
-			if (move.selfdestruct === 'always') {
+			if (this.battle.gen !== 4 && move.selfdestruct === 'always') {
 				this.battle.faint(pokemon, pokemon, move);
 			}
 			let damage: number | false | undefined | '' = false;
-			if (['all', 'foeSide', 'allySide', 'allyTeam'].includes(move.target)) {
+			if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
 				damage = this.tryMoveHit(targets, pokemon, move);
 				if (damage === this.battle.NOT_FAIL) pokemon.moveThisTurnResult = null;
 				if (damage || damage === 0 || damage === undefined) moveResult = true;
-			} else if (targets.length) {
-				moveResult = this.trySpreadMoveHit(targets, pokemon, move);
 			} else {
-				this.battle.attrLastMove('[notarget]');
-				this.battle.add('-fail', pokemon);
-				return false;
+				if (!targets.length) {
+					this.battle.attrLastMove('[notarget]');
+					this.battle.add(this.battle.gen >= 5 ? '-fail' : '-notarget', pokemon);
+					return false;
+				}
+				if (this.battle.gen === 4 && move.selfdestruct === 'always') {
+					this.battle.faint(pokemon, pokemon, move);
+				}
+				moveResult = this.trySpreadMoveHit(targets, pokemon, move);
 			}
 			if (move.selfBoost && moveResult) this.moveHit(pokemon, pokemon, move, move.selfBoost, false, true);
 			if (!pokemon.hp) {
@@ -321,9 +354,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 				if (pokemon && pokemon !== target && move.category !== 'Status') {
-					const threshold = pokemon.maxhp * 0.5;
-					if (pokemon.hp <= threshold && originalHp > threshold)
+					if (pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
 						this.battle.runEvent('EmergencyExit', pokemon, pokemon);
+					}
 				}
 			}
 			return true;
@@ -332,7 +365,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			baseDamage: number, pokemon: Pokemon, target: Pokemon, move: ActiveMove, suppressMessages = false
 		) {
 			const tr = this.battle.trunc;
-			const type = (move.type ||= '???');
+			if (!move.type) move.type = '???';
+			const type = move.type;
 			baseDamage += 2;
 			if (move.spreadHit) {
 				// multi-target modifier (doubles only)
@@ -341,7 +375,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				baseDamage = this.battle.modify(baseDamage, spreadModifier);
 			} else if (move.multihitType === 'parentalbond' && move.hit > 1) {
 				// Parental Bond modifier
-				const bondModifier = 0.25; // this.battle.gen > 6 ? 0.25 : 0.5;
+				const bondModifier = this.battle.gen > 6 ? 0.25 : 0.5;
 				this.battle.debug(`Parental Bond modifier: ${bondModifier}`);
 				baseDamage = this.battle.modify(baseDamage, bondModifier);
 			}
@@ -350,7 +384,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// crit - not a modifier
 			const isCrit = target.getMoveHitData(move).crit;
 			if (isCrit) {
-				baseDamage = tr(baseDamage * (move.critModifier || 1.5));
+				baseDamage = tr(baseDamage * (move.critModifier || (this.battle.gen >= 6 ? 1.5 : 2)));
 			}
 			// random factor - also not a modifier
 			baseDamage = this.battle.randomizer(baseDamage);
@@ -360,33 +394,44 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Struggle in the same turn.
 			// (On second thought, it might be easier to get a MissingNo.)
 			if (type !== '???') {
+				let stab: number | [number, number] = 1;
 				const isSTAB = move.forceSTAB || pokemon.hasType(type) || pokemon.getTypes(false, true).includes(type);
-				let stab: number | [number, number] = isSTAB ? 1.5 : 1;
+				if (isSTAB) {
+					stab = 1.5;
+				}
 				// The Stellar tera type makes this incredibly confusing
 				// If the move's type does not match one of the user's base types,
 				// the Stellar tera type applies a one-time 1.2x damage boost for that type.
 				// If the move's type does match one of the user's base types,
 				// then the Stellar tera type applies a one-time 2x STAB boost for that type,
 				// and then goes back to using the regular 1.5x STAB boost for those types.
-				if (pokemon.terastallized !== 'Stellar') {
-					stab = this.battle.runEvent('ModifySTAB', pokemon, target, move,
-						(pokemon.terastallized === type && pokemon.getTypes(false, true).includes(type)) ? 2 : stab
-					);
-				} else if (!pokemon.stellarBoostedTypes.includes(type)) {
-					stab = isSTAB ? 2 : [4915, 4096];
-					if (pokemon.species.name !== 'Terapagos-Stellar') {
-						pokemon.stellarBoostedTypes.push(type);
+				if (pokemon.terastallized === 'Stellar') {
+					if (!pokemon.stellarBoostedTypes.includes(type) || move.stellarBoosted) {
+						stab = isSTAB ? 2 : [4915, 4096];
+						move.stellarBoosted = true;
+						if (pokemon.species.name !== 'Terapagos-Stellar') {
+							pokemon.stellarBoostedTypes.push(type);
+						}
 					}
+				} else {
+					if (pokemon.terastallized === type && pokemon.getTypes(false, true).includes(type)) {
+						stab = 2;
+					}
+					stab = this.battle.runEvent('ModifySTAB', pokemon, target, move, stab);
 				}
 				baseDamage = this.battle.modify(baseDamage, stab);
 			}
 			// types
-			const typeMod = this.battle.clampIntRange(target.runEffectiveness(move), -6, 6);
+			let typeMod = target.runEffectiveness(move);
+			typeMod = this.battle.clampIntRange(typeMod, -6, 6);
 			target.getMoveHitData(move).typeMod = typeMod;
 			if (typeMod > 0) {
 				if (!suppressMessages) this.battle.add('-supereffective', target);
-				baseDamage *= 2 ** typeMod;
-			} else if (typeMod < 0) {
+				for (let i = 0; i < typeMod; i++) {
+					baseDamage *= 2;
+				}
+			}
+			if (typeMod < 0) {
 				if (!suppressMessages) this.battle.add('-resisted', target);
 				for (let i = 0; i > typeMod; i--) {
 					baseDamage = tr(baseDamage / 2);
@@ -394,16 +439,21 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (isCrit && !suppressMessages) this.battle.add('-crit', target);
 			if (pokemon.status === 'brn' && move.category === 'Physical' &&
-				!pokemon.hasAbility(['wellbakedflameorb', 'feistytempo', 'guts', 'adrenalinearoma']) && move.id !== 'facade') {
-				baseDamage = this.battle.modify(baseDamage, 0.5);
+			!pokemon.hasAbility(['wellbakedflameorb', 'feistytempo', 'guts', 'adrenalinearoma'])) {
+				if (this.battle.gen < 6 || move.id !== 'facade') {
+					baseDamage = this.battle.modify(baseDamage, 0.5);
+				}
 			}
+			// Generation 5, but nothing later, sets damage to 1 before the final damage modifiers
+			if (this.battle.gen === 5 && !baseDamage) baseDamage = 1;
+			// Final modifier. Modifiers that modify damage after min damage check, such as Life Orb.
 			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);
 			if (move.isZOrMaxPowered && target.getMoveHitData(move).zBrokeProtect) {
 				baseDamage = this.battle.modify(baseDamage, 0.25);
 				this.battle.add('-zbroken', target);
 			}
 			// Generation 6-7 moves the check for minimum 1 damage after the final modifier...
-			if (!baseDamage) return 1;
+			if (this.battle.gen !== 5 && !baseDamage) return 1;
 			// ...but 16-bit truncation happens even later, and can truncate to 0
 			return tr(baseDamage, 16);
 		},
