@@ -199,7 +199,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		if (this.maxTime && this.maxTime > 0) {
 			this.overrideTimer = setTimeout(() => {
 				this.handleTimerExpiry();
-			},this.maxTime * 1000);
+			}, this.maxTime * 1000);
 		}
 	}
 
@@ -354,7 +354,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 				throw new Chat.ErrorMessage(`Hint must be less than ${MAX_HINT_LENGTH} characters long.`);
 			}
 		}
-	return { phrase, hint };
+		return { phrase, hint };
 	}
 }
 
@@ -378,7 +378,7 @@ export const commands: Chat.ChatCommands = {
 			if (!params) throw new Chat.ErrorMessage("No word entered.");
 			const { phrase, hint } = Hangman.validateParams(params);
 			if (isNaN(timer) || timer < 0 || timer > MAX_TIMER_LENGTH) {
-			throw new Chat.ErrorMessage(`Timer must be between 0 and ${MAX_TIMER_LENGTH} seconds.`);
+				throw new Chat.ErrorMessage(`Timer must be between 0 and ${MAX_TIMER_LENGTH} seconds.`);
 			}
 
 			const game = new Hangman(room, user, phrase, hint, timer);
@@ -455,7 +455,7 @@ export const commands: Chat.ChatCommands = {
 			}
 
 			target = toID(target);
-			const { question, hint, timer } = Hangman.getRandom(room.roomid, target); 
+			const { question, hint, timer } = Hangman.getRandom(room.roomid, target);
 			const game = new Hangman(room, user, question, hint, timer ?? 0, { allowCreator: true });
 			room.game = game;
 			this.addModAction(`${user.name} started a random game of hangman${timer ? ` (timer: ${timer} seconds)` : ''} – use /guess to play!`);
@@ -488,7 +488,7 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 			if (!hangmanData[room.roomid][phrase]) {
-			hangmanData[room.roomid][phrase] = { hints: [], timer };
+				hangmanData[room.roomid][phrase] = { hints: [], timer };
 			}
 			hangmanData[room.roomid][phrase].hints.push(...hints);
 			if (timer) hangmanData[room.roomid][phrase].timer = timer;
@@ -698,10 +698,10 @@ export const pages: Chat.PageTable = {
 				buf += `<strong>Hints:</strong> `;
 				buf += entry.hints.map(
 					hint => `${hint} <button class="button" name="send" value="/msgroom ${room.roomid}, /hangman rr ${t},${hint}" aria-label="Delete"><i class="fa fa-trash"></i></button>`
-				).join(', ');			
+				).join(', ');
 				if (entry.timer) {
 					buf += `<br /><strong>Timer:</strong> ${entry.timer} seconds ` +
-					`<button class="button" name="send" value="/msgroom ${room.roomid}, /hangman removetimer ${t}" aria-label="Delete Timer">` +
+						`<button class="button" name="send" value="/msgroom ${room.roomid}, /hangman removetimer ${t}" aria-label="Delete Timer">` +
 					`<i class="fa fa-trash"></i></button>`;
 				}
 				buf += `<button style="float:right;" class="button" name="send" value="/msgroom ${room.roomid}, /hangman rr ${t}"><i class="fa fa-trash"></i> Delete all terms</button>`;
