@@ -811,13 +811,14 @@ export function notifyStaff() {
 		} else if (ticketGame) {
 			buf += ticketGame.getButton();
 		}
+		buf += ` `;
 		count++;
 	}
 	if (hiddenTicketCount > 1) {
 		const notifying = hiddenTicketUnclaimedCount > 0 ? ` notifying` : ``;
 		if (hiddenTicketUnclaimedCount > 0) hasUnclaimed = true;
 		buf = buf.slice(0, fourthTicketIndex) +
-			`<button class="button${notifying}" name="send" value="/ht list">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</button>`;
+			`<button class="button${notifying}" name="send" value="/ht list">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</button> `;
 	}
 	for (const type of listOnlyTypes) {
 		const matches = sortedTickets.filter(
