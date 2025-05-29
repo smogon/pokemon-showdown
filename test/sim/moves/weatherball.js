@@ -36,35 +36,47 @@ describe('Weather Ball', () => {
 		assert(!battle.p2.active[0].fainted);
 	});
 
-	it('should not trigger counter when it is special during gen 3', () => {
-		battle = common.gen(3).createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Shuckle', ability: 'drizzle', moves: ['weatherball'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Shuckle', moves: ['counter'] }] });
-		battle.makeChoices();
-		assert.fullHP(battle.p1.active[0]);
+	it('should change max moves if it has an -ate ability', () => {
+		battle = common.gen(8).createBattle([[
+			{ species: 'Aurorus', ability: 'refrigerate', moves: ['weatherball'] },
+		], [
+			{ species: 'Cofagrigus', ability: 'shellarmor', moves: ['sleeptalk'] },
+		]]);
+		assert.hurts(battle.p2.active[0], () => battle.makeChoices('move weatherball dynamax', 'move sleeptalk'));
+		assert(battle.getDebugLog().includes('Max Hailstorm'));
 	});
 
-	it('should trigger mirror coat when it is special during gen 3', () => {
-		battle = common.gen(3).createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Shuckle', ability: 'drought', moves: ['weatherball'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Shuckle', moves: ['mirrorcoat'] }] });
-		battle.makeChoices();
-		assert.false.fullHP(battle.p1.active[0]);
-	});
+	describe('[Gen 3]', () => {
+		it('should not trigger counter when it is special', () => {
+			battle = common.gen(3).createBattle();
+			battle.setPlayer('p1', { team: [{ species: 'Shuckle', ability: 'drizzle', moves: ['weatherball'] }] });
+			battle.setPlayer('p2', { team: [{ species: 'Shuckle', moves: ['counter'] }] });
+			battle.makeChoices();
+			assert.fullHP(battle.p1.active[0]);
+		});
 
-	it('should not trigger mirror coat when it is physical during gen 3', () => {
-		battle = common.gen(3).createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Shuckle', moves: ['weatherball'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Shuckle', moves: ['mirrorcoat'] }] });
-		battle.makeChoices();
-		assert.fullHP(battle.p1.active[0]);
-	});
+		it('should trigger mirror coat when it is special', () => {
+			battle = common.gen(3).createBattle();
+			battle.setPlayer('p1', { team: [{ species: 'Shuckle', ability: 'drought', moves: ['weatherball'] }] });
+			battle.setPlayer('p2', { team: [{ species: 'Shuckle', moves: ['mirrorcoat'] }] });
+			battle.makeChoices();
+			assert.false.fullHP(battle.p1.active[0]);
+		});
 
-	it('should trigger counter when it is physical during gen 3', () => {
-		battle = common.gen(3).createBattle();
-		battle.setPlayer('p1', { team: [{ species: 'Shuckle', ability: 'sandstream', moves: ['weatherball'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Shuckle', moves: ['counter'] }] });
-		battle.makeChoices();
-		assert.false.fullHP(battle.p1.active[0]);
+		it('should not trigger mirror coat when it is physical', () => {
+			battle = common.gen(3).createBattle();
+			battle.setPlayer('p1', { team: [{ species: 'Shuckle', moves: ['weatherball'] }] });
+			battle.setPlayer('p2', { team: [{ species: 'Shuckle', moves: ['mirrorcoat'] }] });
+			battle.makeChoices();
+			assert.fullHP(battle.p1.active[0]);
+		});
+
+		it('should trigger counter when it is physical', () => {
+			battle = common.gen(3).createBattle();
+			battle.setPlayer('p1', { team: [{ species: 'Shuckle', ability: 'sandstream', moves: ['weatherball'] }] });
+			battle.setPlayer('p2', { team: [{ species: 'Shuckle', moves: ['counter'] }] });
+			battle.makeChoices();
+			assert.false.fullHP(battle.p1.active[0]);
+		});
 	});
 });
