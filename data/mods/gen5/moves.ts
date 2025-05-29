@@ -352,8 +352,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	healpulse: {
 		inherit: true,
-		heal: [1, 2],
-		onHit() {},
+		onHit(target, source) {
+			const success = !!this.heal(Math.ceil(target.baseMaxhp * 0.5));
+			if (success && !target.isAlly(source)) {
+				target.staleness = 'external';
+			}
+			return success;
+		},
 	},
 	heatwave: {
 		inherit: true,
