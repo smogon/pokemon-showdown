@@ -32,7 +32,7 @@ describe('Echoed Voice', () => {
 		assert.fainted(battle.p2.active[0]);
 	});
 
-	describe('E[Gen 5]', () => {
+	describe('[Gen 5]', () => {
 		it('should not pierce through substitutes', () => {
 			battle = common.gen(5).createBattle([
 				[{ species: "Deoxys-Attack", ability: 'victorystar', item: 'laggingtail', moves: ['splash', 'echoedvoice'] }],
