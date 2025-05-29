@@ -655,7 +655,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		natDexTier: "OU",
 	},
 	melmetal: {
-		gmaxUnreleased: "True",
+		gmaxUnreleased: true,
 		natDexTier: "OU",
 	},
 	melmetalgmax: {
