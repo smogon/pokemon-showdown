@@ -512,6 +512,8 @@ export class Battle {
 			if ((handler.effectHolder as Pokemon).fainted) {
 				if (!(handler.state?.isSlotCondition)) continue;
 			}
+			// FIXME: this shouldn't be necessary, emergency exiting Pokemon should be ignoring everything
+			if ((handler.effectHolder as Pokemon).abilityState?.emergencyExiting) continue;
 			if (eventid === 'Residual' && handler.end && handler.state?.duration) {
 				handler.state.duration--;
 				if (!handler.state.duration) {
@@ -559,7 +561,15 @@ export class Battle {
 			if ((handler.effectHolder as Side).sideConditions) handlerEventid = `Side${eventid}`;
 			if ((handler.effectHolder as Field).pseudoWeather) handlerEventid = `Field${eventid}`;
 			if (handler.callback) {
+				const originalHp = (handler.effectHolder as Pokemon).hp;
 				this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, undefined, handler.callback);
+				if (originalHp) {
+					const pokemon = handler.effectHolder as Pokemon;
+					const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
+					if (pokemon.hp && pokemon.getUndynamaxedHP() <= maxhp / 2 && originalHp > maxhp / 2) {
+						this.runEvent('EmergencyExit', pokemon);
+					}
+				}
 			}
 
 			this.faintMessages();
@@ -991,7 +1001,10 @@ export class Battle {
 				}
 			}
 		}
-		if (callbackName.endsWith('SwitchIn') || callbackName.endsWith('RedirectTarget')) {
+		if (callbackName.endsWith('SwitchIn') || callbackName.endsWith('RedirectTarget') ||
+			// FIXME: this is a quick fix because can't set effectOrder on Destiny Bond (and possibly other effects)
+			(callbackName.endsWith('Residual') && handler.effect.effectType === 'Condition' &&
+				(handler.state?.target instanceof Side || handler.state?.target instanceof Field))) {
 			// If multiple hazards are present on one side, their event handlers all perfectly tie in speed, priority,
 			// and subOrder. They should activate in the order they were created, which is where effectOrder comes in.
 			// This also applies to speed ties for which ability like Lightning Rod redirects moves.
@@ -2090,6 +2103,8 @@ export class Battle {
 					this.heal(amount, source, target, 'drain');
 				}
 			}
+			// for moves, it needs to run after the 'AfterHit' event
+			if (effect.effectType !== 'Move') this.runEvent('AfterDamage', target, source, effect, targetDamage);
 		}
 
 		if (instafaint) {
@@ -2182,6 +2197,7 @@ export class Battle {
 			this.add('-damage', target, target.getHealth);
 			break;
 		}
+		this.runEvent('AfterDamage', target, source, effect, damage);
 		if (target.fainted) this.faint(target);
 		return damage;
 	}
@@ -2594,8 +2610,6 @@ export class Battle {
 	}
 
 	runAction(action: Action) {
-		const pokemonOriginalHP = action.pokemon?.hp;
-		let residualPokemon: (readonly [Pokemon, number])[] = [];
 		// returns whether or not we ended in a callback
 		switch (action.choice) {
 		case 'start': {
@@ -2777,7 +2791,6 @@ export class Battle {
 			this.add('');
 			this.clearActiveMove(true);
 			this.updateSpeed();
-			residualPokemon = this.getAllActive().map(pokemon => [pokemon, pokemon.getUndynamaxedHP()] as const);
 			this.fieldEvent('Residual');
 			if (!this.ended) this.add('upkeep');
 			break;
@@ -2824,18 +2837,14 @@ export class Battle {
 
 		if (this.gen >= 5 && action.choice !== 'start') {
 			this.eachEvent('Update');
-			for (const [pokemon, originalHP] of residualPokemon) {
-				const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
-				if (pokemon.hp && pokemon.getUndynamaxedHP() <= maxhp / 2 && originalHP > maxhp / 2) {
-					this.runEvent('EmergencyExit', pokemon);
-				}
-			}
 		}
 
-		if (action.choice === 'runSwitch') {
-			const pokemon = action.pokemon;
-			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP! > pokemon.maxhp / 2) {
-				this.runEvent('EmergencyExit', pokemon);
+		if (this.getAllActive(true).some(pokemon => pokemon.abilityState.emergencyExiting)) {
+			// reject switch requests of other Pokemon
+			for (const pokemon of this.getAllActive(true)) {
+				if (!pokemon.abilityState.emergencyExiting) {
+					pokemon.switchFlag = false;
+				}
 			}
 		}
 
