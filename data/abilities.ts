@@ -301,7 +301,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	aurabreak: {
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Aura Break');
 		},
 		onAnyTryPrimaryHit(target, source, move) {
@@ -2993,6 +2992,16 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onAnySwitchInPriority: -3,
 		onAnySwitchIn() {
+			if (!this.effectState.boosts) return;
+			this.boost(this.effectState.boosts, this.effectState.target);
+			delete this.effectState.boosts;
+		},
+		onAnyAfterMega() {
+			if (!this.effectState.boosts) return;
+			this.boost(this.effectState.boosts, this.effectState.target);
+			delete this.effectState.boosts;
+		},
+		onAnyAfterTerastallization() {
 			if (!this.effectState.boosts) return;
 			this.boost(this.effectState.boosts, this.effectState.target);
 			delete this.effectState.boosts;

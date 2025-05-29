@@ -86,6 +86,19 @@ describe(`Pursuit`, () => {
 		assert.bounded(furret.maxhp - furret.hp, [60, 70]);
 	});
 
+	it(`should not double in power or activate before a switch triggered by Red Card`, () => {
+		battle = common.createBattle([[
+			{ species: 'Steelix', item: 'redcard', moves: ['pursuit'] },
+		], [
+			{ species: 'Darkrai', moves: ['tackle'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+		]]);
+		const darkrai = battle.p2.active[0];
+		battle.makeChoices('move pursuit', 'auto');
+		assert.fullHP(darkrai);
+		assert.false.fullHP(battle.p2.active[0]);
+	});
+
 	it(`should deal damage prior to attacker selecting a switch in after u-turn etc`, () => {
 		battle = common.createBattle([[
 			{ species: 'parasect', moves: ['pursuit'] },
@@ -118,5 +131,19 @@ describe(`Pursuit`, () => {
 		battle.makeChoices('move pursuit 2, auto', 'switch 4, auto');
 		assert.false(battle.log.includes('|-activate|p2a: Alakazam|move: Pursuit'));
 		assert.false.fullHP(battle.p2.active[1]);
+	});
+
+	it(`should not be redirected if activated by a switch`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Beedrill', moves: ['pursuit'] },
+			{ species: 'Clefable', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Gengar', moves: ['uturn'] },
+			{ species: 'Alakazam', moves: ['followme'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+		]]);
+		const gengar = battle.p2.active[0];
+		battle.makeChoices('move pursuit 1, move sleeptalk', 'auto');
+		assert.false.fullHP(gengar);
 	});
 });

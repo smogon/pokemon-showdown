@@ -676,9 +676,9 @@ export class DexFormats {
 			if (ruleset) return ruleset;
 		}
 
-		if (this.dex.data.Aliases.hasOwnProperty(id)) {
-			name = this.dex.data.Aliases[id];
-			id = toID(name);
+		if (this.dex.getAlias(id)) {
+			id = this.dex.getAlias(id)!;
+			name = id;
 		}
 		if (this.dex.data.Rulesets.hasOwnProperty(DEFAULT_MOD + id)) {
 			id = (DEFAULT_MOD + id) as ID;
@@ -1030,7 +1030,7 @@ export class DexFormats {
 			}
 		}
 		const ruleid = id;
-		if (this.dex.data.Aliases.hasOwnProperty(id)) id = toID(this.dex.data.Aliases[id]);
+		id = this.dex.getAlias(id) || id;
 		for (const matchType of matchTypes) {
 			if (matchType === 'item' && ruleid === 'noitem') return 'item:noitem';
 			let table;
