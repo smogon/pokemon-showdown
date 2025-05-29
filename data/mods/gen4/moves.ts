@@ -245,6 +245,29 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		accuracy: 85,
 	},
+	counter: {
+		inherit: true,
+		condition: {
+			duration: 1,
+			noCopy: true,
+			onStart(target, source, move) {
+				this.effectState.slot = null;
+				this.effectState.damage = 0;
+			},
+			onRedirectTargetPriority: -1,
+			onRedirectTarget(target, source, source2, move) {
+				if (move.id !== 'counter') return;
+				if (source !== this.effectState.target || !this.effectState.slot) return;
+				return this.getAtSlot(this.effectState.slot);
+			},
+			onDamagingHit(damage, target, source, move) {
+				if (!source.isAlly(target) && this.getCategory(move) === 'Physical') {
+					this.effectState.slot = source.getSlot();
+					this.effectState.damage = damage * (move.berryWeakened ? 4 : 2);
+				}
+			},
+		},
+	},
 	covet: {
 		inherit: true,
 		basePower: 40,
@@ -1054,6 +1077,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	metalburst: {
 		inherit: true,
+		damageCallback(pokemon) {
+			const lastDamagedBy = pokemon.getLastDamagedBy(true);
+			if (lastDamagedBy !== undefined) {
+				return (lastDamagedBy.damage * (lastDamagedBy.move?.berryWeakened ? 3 : 1.5)) || 1;
+			}
+			return 0;
+		},
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 	},
 	metronome: {
@@ -1114,6 +1144,29 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		flags: { protect: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 	},
+	mirrorcoat: {
+		inherit: true,
+		condition: {
+			duration: 1,
+			noCopy: true,
+			onStart(target, source, move) {
+				this.effectState.slot = null;
+				this.effectState.damage = 0;
+			},
+			onRedirectTargetPriority: -1,
+			onRedirectTarget(target, source, source2, move) {
+				if (move.id !== 'mirrorcoat') return;
+				if (source !== this.effectState.target || !this.effectState.slot) return;
+				return this.getAtSlot(this.effectState.slot);
+			},
+			onDamagingHit(damage, target, source, move) {
+				if (!source.isAlly(target) && this.getCategory(move) === 'Special') {
+					this.effectState.slot = source.getSlot();
+					this.effectState.damage = damage * (move.berryWeakened ? 4 : 2);
+				}
+			},
+		},
+	},
 	mirrormove: {
 		inherit: true,
 		onTryHit() {},
@@ -1125,10 +1178,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			const noMirror = [
 				'acupressure', 'aromatherapy', 'assist', 'chatter', 'copycat', 'counter', 'curse', 'doomdesire', 'feint', 'focuspunch', 'futuresight', 'gravity', 'hail', 'haze', 'healbell', 'helpinghand', 'lightscreen', 'luckychant', 'magiccoat', 'mefirst', 'metronome', 'mimic', 'mirrorcoat', 'mirrormove', 'mist', 'mudsport', 'naturepower', 'perishsong', 'psychup', 'raindance', 'reflect', 'roleplay', 'safeguard', 'sandstorm', 'sketch', 'sleeptalk', 'snatch', 'spikes', 'spitup', 'stealthrock', 'struggle', 'sunnyday', 'tailwind', 'toxicspikes', 'transform', 'watersport',
 			];
-			if (noMirror.includes(lastAttackedBy.move) || !lastAttackedBy.source.hasMove(lastAttackedBy.move)) {
+			if (noMirror.includes(lastAttackedBy.move.id) || !lastAttackedBy.source.hasMove(lastAttackedBy.move.id)) {
 				return false;
 			}
-			this.actions.useMove(lastAttackedBy.move, pokemon);
+			this.actions.useMove(lastAttackedBy.move.id, pokemon);
 		},
 		target: "self",
 	},

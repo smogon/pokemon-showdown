@@ -26,7 +26,7 @@ interface Attacker {
 	source: Pokemon;
 	damage: number;
 	thisTurn: boolean;
-	move?: ID;
+	move?: ActiveMove;
 	slot: PokemonSlot;
 	damageValue?: (number | boolean | undefined);
 }
@@ -893,13 +893,12 @@ export class Pokemon {
 		this.moveThisTurn = move.id;
 	}
 
-	gotAttacked(move: string | Move, damage: number | false | undefined, source: Pokemon) {
+	gotAttacked(move: ActiveMove, damage: number | false | undefined, source: Pokemon) {
 		const damageNumber = (typeof damage === 'number') ? damage : 0;
-		move = this.battle.dex.moves.get(move);
 		this.attackedBy.push({
 			source,
 			damage: damageNumber,
-			move: move.id,
+			move,
 			thisTurn: true,
 			slot: source.getSlot(),
 			damageValue: damage,
