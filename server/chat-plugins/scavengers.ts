@@ -1576,7 +1576,7 @@ const ScavengerCommands: Chat.ChatCommands = {
 			gameType: game.gameType,
 		};
 		for (const entry of game.questions) {
-			hunt.questions.push(...[entry.hint, entry.answer]);
+			hunt.questions.push(entry.hint, entry.answer);
 		}
 		if (!room.settings.scavQueue) room.settings.scavQueue = [];
 		room.settings.scavQueue.push(hunt);

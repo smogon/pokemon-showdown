@@ -1113,7 +1113,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		const meme = ruleTable.has('dynamaxclause') && !debug.length;
 		const afd = !ruleTable.has('dynamaxclause') && ruleTable.has('zmovesclause') && debug.length;
 		const monotype = this.forceMonotype || (ruleTable.has('sametypeclause') ?
-			this.sample([...this.dex.types.names().filter(x => x !== 'Stellar')]) : false);
+			this.sample(this.dex.types.names().filter(x => x !== 'Stellar')) : false);
 
 		let pool = meme ? Object.keys(afdSSBSets) : Object.keys(ssbSets);
 		if (debug.length) {
@@ -1184,7 +1184,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				moves.push(this.dex.moves.get(move).name);
 			}
 			moves.push(this.dex.moves.get(ssbSet.signatureMove).name);
-			const ivs = { ...{ hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31 }, ...ssbSet.ivs };
+			const ivs = { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...ssbSet.ivs };
 			if (!moves.map(x => this.dex.moves.get(x)).some(x => x.category === 'Physical')) {
 				ivs.atk = 0;
 			}
@@ -1197,7 +1197,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 				moves,
 				nature: ssbSet.nature ? Array.isArray(ssbSet.nature) ? this.sampleNoReplace(ssbSet.nature) : ssbSet.nature : 'Serious',
 				gender: ssbSet.gender ? this.sampleIfArray(ssbSet.gender) : this.sample(['M', 'F', 'N']),
-				evs: ssbSet.evs ? { ...{ hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 }, ...ssbSet.evs } :
+				evs: ssbSet.evs ? { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...ssbSet.evs } :
 				{ hp: 84, atk: 84, def: 84, spa: 84, spd: 84, spe: 84 },
 				ivs,
 				level: this.adjustLevel || ssbSet.level || 100,

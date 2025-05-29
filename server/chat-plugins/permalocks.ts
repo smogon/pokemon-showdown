@@ -126,7 +126,7 @@ export const Nominations = new class {
 			}
 		}
 		const ipTable = new Set<string>(ips);
-		const altTable = new Set<string>([...alts]);
+		const altTable = new Set<string>(alts);
 		for (const alt of [primaryID, ...alts]) {
 			const modlog = await this.fetchModlog(alt);
 			if (!modlog?.results.length) continue;
