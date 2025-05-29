@@ -88,12 +88,9 @@ describe(`Eject Pack`, () => {
 			{ species: 'Zygarde', item: 'focussash', ability: 'powerconstruct', moves: ['octolock'] },
 		]]);
 		battle.makeChoices();
-		const log = battle.getDebugLog();
-		const moodyIndex = log.lastIndexOf('|-ability|p1a: Glalie|Moody|boost');
-		const powerConstructIndex = log.lastIndexOf('|-activate|p2a: Zygarde|ability: Power Construct');
-		const ejectPackIndex = log.lastIndexOf('|-enditem|p1a: Glalie|Eject Pack');
-		assert(moodyIndex < ejectPackIndex, 'Eject Pack should not activate before Moody');
-		assert(powerConstructIndex < ejectPackIndex, 'Eject Pack should not activate before Power Construct');
+		assert.species(battle.p2.active[0], 'Zygarde-Complete', 'Eject Pack should not activate before Power Construct');
+		const hasBoost = Object.values(battle.p1.active[0].boosts).some(stage => stage > 0);
+		assert(hasBoost, 'Boost from Moody should be applied before switch');
 	});
 
 	it(`should not activate when another switching effect was triggered as part of the move`, () => {
@@ -107,6 +104,7 @@ describe(`Eject Pack`, () => {
 			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices();
+		assert.statStage(battle.p2.active[1], 'atk', -1, "Attack should be dropped before switching.");
 		battle.makeChoices();
 		assert.species(battle.p2.active[0], 'Zeraora', `Zeraora should not have switched out with its Eject Pack.`);
 		assert.species(battle.p2.active[1], 'Wynaut', `Mew should have switched out with its Eject Button.`);
@@ -153,8 +151,28 @@ describe(`Eject Pack`, () => {
 			{ species: 'Wynaut', moves: ['sleeptalk'] },
 		]]);
 		battle.makeChoices('switch 3, move sleeptalk', 'move sleeptalk, switch 3');
+		assert.species(battle.p2.active[1], 'Mew');
 		battle.makeChoices();
 		assert.species(battle.p2.active[0], 'Wynaut');
-		assert.species(battle.p2.active[0], 'Morelull');
+		assert.species(battle.p2.active[1], 'Morelull');
+	});
+
+	it(`Should be able to switch back in if ejected`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Typhlosion', moves: ['eruption'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Smeargle', ability: 'moody', moves: ['protect'], item: 'ejectpack' },
+			{ species: 'Shedinja', moves: ['sleeptalk'] },
+			{ species: 'Wynaut', moves: ['sleeptalk'] },
+		]]);
+		// Eruption
+		battle.makeChoices();
+		// Switch Smeargle -> Wynaut
+		battle.makeChoices();
+		// Switch Shedinja -> Smeargle
+		battle.makeChoices();
+		assert.species(battle.p2.active[0], 'Wynaut', 'Should be switched in by eject pack');
+		assert.species(battle.p2.active[1], 'Smeargle', 'Should be switched in by Shedinja fainting');
 	});
 });
