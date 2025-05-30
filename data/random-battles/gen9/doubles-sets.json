@@ -135,7 +135,7 @@
         ]
     },
     "clefairy": {
-        "level": 97,
+        "level": 98,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -793,7 +793,7 @@
         ]
     },
     "flareon": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -1738,7 +1738,7 @@
         ]
     },
     "sableye": {
-        "level": 94,
+        "level": 93,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -2005,7 +2005,7 @@
         ]
     },
     "glalie": {
-        "level": 95,
+        "level": 94,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -2207,7 +2207,7 @@
         ]
     },
     "deoxysattack": {
-        "level": 78,
+        "level": 79,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -2624,7 +2624,7 @@
         ]
     },
     "magmortar": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Choice Item user",
@@ -2793,7 +2793,7 @@
         ]
     },
     "rotom": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -3110,7 +3110,7 @@
         ]
     },
     "arceusdark": {
-        "level": 72,
+        "level": 73,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -3753,7 +3753,7 @@
         ]
     },
     "mienshao": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
@@ -4297,7 +4297,7 @@
         ]
     },
     "dedenne": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -4652,7 +4652,7 @@
         ]
     },
     "toxapex": {
-        "level": 94,
+        "level": 93,
         "sets": [
             {
                 "role": "Bulky Protect",
@@ -4899,7 +4899,7 @@
         ]
     },
     "necrozmaduskmane": {
-        "level": 71,
+        "level": 70,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -5579,7 +5579,7 @@
         ]
     },
     "calyrex": {
-        "level": 95,
+        "level": 94,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -5853,7 +5853,7 @@
         ]
     },
     "squawkabilly": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -5864,7 +5864,7 @@
         ]
     },
     "squawkabillywhite": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -5875,7 +5875,7 @@
         ]
     },
     "squawkabillyblue": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -5886,7 +5886,7 @@
         ]
     },
     "squawkabillyyellow": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -6677,7 +6677,7 @@
         ]
     },
     "dipplin": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
