@@ -741,7 +741,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 	let gmaxSearch = null;
 	let tierSearch = null;
 	let capSearch: boolean | null = null;
-	let nationalSearch = null;
+	let nationalSearch: boolean | null = null;
 	let unreleasedSearch = null;
 	let fullyEvolvedSearch = null;
 	let restrictedSearch = null;
@@ -1530,7 +1530,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 
 	const stat = sort?.slice(0, -1);
 
-	function getSortValue(species: Species, nationalSearch = false) {
+	function getSortValue(species: Species) {
 		if (!stat) return 0;
 		switch (stat) {
 		case 'bst':
@@ -1560,11 +1560,11 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 		const maskForm = mon.baseSpecies === "Ogerpon" && !mon.forme.endsWith("Tera");
 		const allowGmax = (gmaxSearch || tierSearch);
 		if (!isRegionalForm && !maskForm && mon.baseSpecies && results.includes(mod.species.get(mon.baseSpecies)) &&
-			getSortValue(mon, nationalSearch) === getSortValue(mod.species.get(mon.baseSpecies), nationalSearch)) continue;
+			getSortValue(mon) === getSortValue(mod.species.get(mon.baseSpecies))) continue;
 		const teraFormeChangesFrom = mon.forme.endsWith("Tera") ? !Array.isArray(mon.battleOnly) ?
 			mon.battleOnly! : null : null;
 		if (teraFormeChangesFrom && results.includes(mod.species.get(teraFormeChangesFrom)) &&
-			getSortValue(mon, nationalSearch) === getSortValue(mod.species.get(teraFormeChangesFrom), nationalSearch)) continue;
+			getSortValue(mon) === getSortValue(mod.species.get(teraFormeChangesFrom))) continue;
 		if (mon.isNonstandard === 'Gigantamax' && !allowGmax) continue;
 		results.push(mon);
 	}
@@ -1595,7 +1595,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 		results.sort();
 		if (sort) {
 			const direction = sort.slice(-1);
-			Utils.sortBy(results, species => getSortValue(species, nationalSearch) * (direction === '+' ? 1 : -1));
+			Utils.sortBy(results, species => getSortValue(species) * (direction === '+' ? 1 : -1));
 		}
 
 		function mapPokemonResults(inputArr: Species[]) {
