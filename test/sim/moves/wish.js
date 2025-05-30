@@ -95,7 +95,7 @@ describe('Wish', () => {
 
 		battle.makeChoices('move explosion, move explosion', 'move protect, move protect');
 
-		battle.makeChoices('pass, switch 3', 'auto');
+		battle.makeChoices('pass, switch 3');
 
 		assert.doesNotThrow(() => {
 			battle.makeChoices('move softboiled', 'auto');
