@@ -10054,7 +10054,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			},
 			onModifyTypePriority: -2,
 			onModifyType(move) {
-				if (move.type === 'Normal') {
+				if (move.type === 'Normal' && !move.typeChangerBoosted) {
 					move.type = 'Electric';
 					this.debug(move.name + "'s type changed to Electric");
 				}

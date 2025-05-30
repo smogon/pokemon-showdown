@@ -225,6 +225,22 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 		},
 	},
+	electrify: {
+		inherit: true,
+		condition: {
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'move: Electrify');
+			},
+			onModifyTypePriority: -2,
+			onModifyType(move) {
+				if (move.id !== 'struggle' && !move.typeChangerBoosted) {
+					this.debug('Electrify making move type electric');
+					move.type = 'Electric';
+				}
+			},
+		},
+	},
 	embargo: {
 		inherit: true,
 		isNonstandard: null,
