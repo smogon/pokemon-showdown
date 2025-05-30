@@ -842,7 +842,7 @@ export const ferbSets: FERBSets = {
 		evs: { hp: 252, def: 252, spd: 4 }, nature: 'Impish', teraType: 'Water', level: 88,
 	},
 	Varantis: {
-		species: 'Varantis', ability: 'Reachless', item: 'Choice Band', gender: '',
+		species: 'Varantis', ability: 'Quickstart', item: 'Choice Band', gender: '',
 		moves: ['Leaf Blade', 'Superpower', ['Iron Head', 'Gunk Shot']],
 		signatureMove: 'Parting Shot',
 		evs: { atk: 252, def: 4, spe: 252 }, nature: 'Jolly', teraType: 'Water', level: 84,

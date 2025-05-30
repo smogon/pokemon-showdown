@@ -3224,7 +3224,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart(pokemon) {
 			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Sword of Rejuvenation');
-			this.add('-message', `${pokemon.name}'s Apple of Ruin weakened the Defense of all surrounding Pokémon!`);
+			this.add('-message', `${pokemon.name}'s Sword of Ruin weakened the Defense of all surrounding Pokémon!`);
 		},
 		onAnyModifyDef(def, target, source, move) {
 			const abilityHolder = this.effectState.target;
