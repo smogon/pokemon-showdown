@@ -846,16 +846,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Note that the speed stat used is after any volatile replacements like Speed Swap,
 			// but before any multipliers like Agility or Choice Scarf
 			// Ties go to whichever Pokemon has had the ability for the least amount of time
-			this.queue.unshift(this.queue.resolveAction({
+			this.queue.prioritizeAction(this.queue.resolveAction({
 				choice: 'move',
-				order: 198,
 				effectOrder: dancer.abilityState.effectOrder,
 				pokemon: dancer,
 				moveid: move.id,
 				targetLoc: dancersTargetLoc,
-				sourceEffect: this.dex.abilities.get('dancer'),
+				sourceEffect: this.effect,
 				externalMove: true,
-			})[0]);
+			})[0] as MoveAction, this.effect);
 		},
 		onBeforeMovePriority: 200,
 		onBeforeMove(source, target, move) {
