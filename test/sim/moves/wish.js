@@ -82,23 +82,23 @@ describe('Wish', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [
 			[
 				{ species: 'Clefable', ability: 'unaware', moves: ['wish', 'explosion'] },
-				{ species: 'Blissey', ability: 'naturalcure', moves: ['softboiled', 'explosion'] },
+				{ species: 'Blissey', ability: 'naturalcure', moves: ['explosion'] },
 				{ species: 'Chansey', ability: 'naturalcure', moves: ['softboiled'] },
 			],
 			[
-				{ species: 'Machamp', ability: 'noguard', moves: ['earthquake'] },
-				{ species: 'Golem', ability: 'sturdy', moves: ['earthquake'] },
-				{ species: 'Rhydon', ability: 'rockhead', moves: ['earthquake'] },
-				{ species: 'Sandslash', ability: 'sandveil', moves: ['earthquake'] },
+				{ species: 'Machamp', ability: 'noguard', moves: ['protect'] },
+				{ species: 'Golem', ability: 'sturdy', moves: ['protect'] },
 			],
 		]);
 
-		battle.makeChoices('move wish, move softboiled', 'move earthquake, move earthquake');
-		battle.makeChoices('move explosion, move explosion', 'move earthquake, move earthquake');
-		battle.makeChoices('pass, switch 3', 'switch 3, switch 4');
+		battle.makeChoices('move wish, move explosion', 'move protect, move protect');
+
+		battle.makeChoices('move explosion, move explosion', 'move protect, move protect');
+
+		battle.makeChoices('pass, switch 3', 'auto');
 
 		assert.doesNotThrow(() => {
-			battle.makeChoices('pass, move softboiled', 'move earthquake, move earthquake');
+			battle.makeChoices('move softboiled', 'auto');
 		}, 'Wish resolution should not crash when this.active[target] is undefined');
 	});
 });
