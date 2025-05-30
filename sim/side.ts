@@ -470,7 +470,10 @@ export class Side {
 		if (target instanceof Pokemon) target = target.position;
 		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.slotConditions[target][status.id]) return false;
-		this.battle.singleEvent('End', status, this.slotConditions[target][status.id], this.active[target]);
+		const activePokemon = this.active[target];
+		if (activePokemon) {
+			this.battle.singleEvent('End', status, this.slotConditions[target][status.id], activePokemon);
+		}
 		delete this.slotConditions[target][status.id];
 		return true;
 	}

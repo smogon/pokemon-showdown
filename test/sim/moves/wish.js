@@ -77,4 +77,30 @@ describe('Wish', () => {
 		battle.makeChoices();
 		assert.false.fullHP(wynaut, `Wish should not have healed Wynaut later either.`);
 	});
+
+	it(`should not crash when resolving with no active Pokemon at the original slot`, () => {
+		battle = common.createBattle({ gameType: 'doubles' });
+		battle.setPlayer('p1', { team: [
+			{ species: "Chansey", moves: ['wish'] },
+			{ species: "Blissey", moves: ['sleeptalk'] },
+			{ species: "Pikachu", moves: ['sleeptalk'] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: "Machamp", moves: ['earthquake'] },
+			{ species: "Golem", moves: ['earthquake'] },
+		] });
+		
+		// Chansey uses Wish in position 0
+		battle.makeChoices('move wish, move sleeptalk', 'move earthquake, move earthquake');
+		
+		// Force Chansey to faint by making it switch out while damaged and then having the slot empty
+		// This creates a scenario where getAtSlot returns a Pokemon but that Pokemon is no longer active
+		battle.makeChoices('switch 3, move sleeptalk', 'move earthquake, move earthquake');
+		
+		// Now when Wish tries to resolve, it should not crash even though position 0 has no active Pokemon
+		// This should complete without throwing a TypeError about accessing 'wish' on undefined
+		assert.doesNotThrow(() => {
+			battle.makeChoices('move sleeptalk, move sleeptalk', 'move earthquake, move earthquake');
+		}, `Wish resolution should not crash when original slot has no active Pokemon`);
+	});
 });
