@@ -167,6 +167,14 @@ describe('Dex data', () => {
 				assert(false, `Alias ${aliasid} -> "${Aliases[aliasid]}" must be a pokemon/move/ability/item/format`);
 			}
 		}
+
+		// Dex.loadAliases();
+		// for (const aliasid in Aliases) {
+		// 	const targetid = toID(Aliases[aliasid]);
+		// 	if (Dex.fuzzyAliases.get(aliasid)?.join(',') === targetid) {
+		// 		console.log(`Redundant alias "${aliasid}"`);
+		// 	}
+		// }
 	});
 
 	it('should have valid CompoundWordNames entries', () => {
