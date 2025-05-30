@@ -322,6 +322,7 @@ export const commands: Chat.ChatCommands = {
 	},
 	replyhelp: [`/reply OR /r [message] - Send a message to the last user you got a message from, or sent a message to.`],
 
+	dm: 'msg',
 	pm: 'msg',
 	whisper: 'msg',
 	w: 'msg',
