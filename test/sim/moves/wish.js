@@ -89,14 +89,14 @@ describe('Wish', () => {
 			{ species: "Machamp", moves: ['earthquake'] },
 			{ species: "Golem", moves: ['earthquake'] },
 		] });
-		
+
 		// Chansey uses Wish in position 0
 		battle.makeChoices('move wish, move sleeptalk', 'move earthquake, move earthquake');
-		
+
 		// Force Chansey to faint by making it switch out while damaged and then having the slot empty
 		// This creates a scenario where getAtSlot returns a Pokemon but that Pokemon is no longer active
 		battle.makeChoices('switch 3, move sleeptalk', 'move earthquake, move earthquake');
-		
+
 		// Now when Wish tries to resolve, it should not crash even though position 0 has no active Pokemon
 		// This should complete without throwing a TypeError about accessing 'wish' on undefined
 		assert.doesNotThrow(() => {
