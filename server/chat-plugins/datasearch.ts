@@ -726,7 +726,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 		water3: 'Water 3',
 	});
 	const allFormes = ['alola', 'galar', 'hisui', 'paldea', 'primal', 'therian', 'totem'];
-	const allStats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'bst', 'weight', 'height', 'gen', 'num'];
+	const allStats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'bst', 'weight', 'height', 'gen', 'num', 'tier'];
 	const allStatAliases: { [k: string]: string } = {
 		attack: 'atk', defense: 'def', specialattack: 'spa', spc: 'spa', special: 'spa', spatk: 'spa',
 		specialdefense: 'spd', spdef: 'spd', speed: 'spe', wt: 'weight', ht: 'height', generation: 'gen',
@@ -837,6 +837,17 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 			if (target.startsWith('!')) {
 				isNotSearch = true;
 				target = target.substr(1);
+			}
+
+			if (target.endsWith(' asc') || target.endsWith(' desc')) {
+				if (parameters.length > 1) {
+					return { error: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters.` };
+				}
+				const stat = allStatAliases[toID(target.split(' ')[0])] || toID(target.split(' ')[0]);
+				if (!allStats.includes(stat)) return { error: `'${target}' did not contain a valid stat.` };
+				sort = `${stat}${target.endsWith(' asc') ? '+' : '-'}`;
+				orGroup.skip = true;
+				break;
 			}
 
 			let isTierInequalityParam = false;
@@ -998,17 +1009,6 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 				if (invalid) return { error: invalid };
 				orGroup.gens[targetInt] = !isNotSearch;
 				continue;
-			}
-
-			if (target.endsWith(' asc') || target.endsWith(' desc')) {
-				if (parameters.length > 1) {
-					return { error: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters.` };
-				}
-				const stat = allStatAliases[toID(target.split(' ')[0])] || toID(target.split(' ')[0]);
-				if (!allStats.includes(stat)) return { error: `'${target}' did not contain a valid stat.` };
-				sort = `${stat}${target.endsWith(' asc') ? '+' : '-'}`;
-				orGroup.skip = true;
-				break;
 			}
 
 			if (target === 'all') {
@@ -1539,6 +1539,8 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 			return species.gen;
 		case 'num':
 			return species.num;
+		case 'tier':
+			return singlesTiersValues[species.tier];
 		default:
 			return species.baseStats[stat as StatID];
 		}
