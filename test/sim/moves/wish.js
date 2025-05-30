@@ -88,12 +88,14 @@ describe('Wish', () => {
 			[
 				{ species: 'Machamp', ability: 'noguard', moves: ['earthquake'] },
 				{ species: 'Golem', ability: 'sturdy', moves: ['earthquake'] },
+				{ species: 'Rhydon', ability: 'rockhead', moves: ['earthquake'] },
+				{ species: 'Sandslash', ability: 'sandveil', moves: ['earthquake'] },
 			],
 		]);
 
 		battle.makeChoices('move wish, move softboiled', 'move earthquake, move earthquake');
 		battle.makeChoices('move explosion, move explosion', 'move earthquake, move earthquake');
-		battle.makeChoices('pass, switch 3', 'auto');
+		battle.makeChoices('pass, switch 3', 'switch 3, switch 4');
 
 		assert.doesNotThrow(() => {
 			battle.makeChoices('move softboiled, auto', 'auto');
