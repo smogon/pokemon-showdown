@@ -82,7 +82,7 @@ describe('Wish', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [
 			[
 				{ species: 'Clefable', ability: 'unaware', moves: ['wish', 'explosion'] },
-				{ species: 'Blissey', ability: 'naturalcure', moves: ['explosion'] },
+				{ species: 'Blissey', ability: 'naturalcure', moves: ['explosion', 'softboiled'] },
 				{ species: 'Chansey', ability: 'naturalcure', moves: ['softboiled'] },
 			],
 			[
@@ -91,7 +91,7 @@ describe('Wish', () => {
 			],
 		]);
 
-		battle.makeChoices('move wish, move explosion', 'move protect, move protect');
+		battle.makeChoices('move wish, move softboiled', 'move protect, move protect');
 
 		battle.makeChoices('move explosion, move explosion', 'move protect, move protect');
 
