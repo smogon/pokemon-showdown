@@ -98,7 +98,7 @@ describe('Wish', () => {
 		battle.makeChoices('pass, switch 3', 'switch 3, switch 4');
 
 		assert.doesNotThrow(() => {
-			battle.makeChoices('move softboiled', 'auto');
+			battle.makeChoices();
 		}, 'Wish resolution should not crash when this.active[target] is undefined');
 	});
 });
