@@ -390,7 +390,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	serenegrace: {
 		inherit: true,
 		onModifyMove(move) {
-			if (move.secondaries) {
+			if (move.secondaries && move.id !== 'chatter') {
 				this.debug('doubling secondary chance');
 				for (const secondary of move.secondaries) {
 					if (secondary.chance) secondary.chance *= 2;
