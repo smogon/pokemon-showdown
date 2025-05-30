@@ -388,7 +388,7 @@ describe('Dex data', () => {
 		const modNames = fs.readdirSync(`${__dirname}/../../dist/data/mods/`)
 			.filter(mod => mod === toID(mod))
 			// fine, SSB is allowed to; it's not an official format
-			.filter(mod => mod !== 'gen9ssb' && mod !== 'ssb');
+			.filter(mod => mod !== 'gen9ssb');
 		// console.log(modNames);
 		const mods = ['data/', ...modNames.map(mod => `data/mods/${mod}/`)];
 		const files = ['abilities.js', 'aliases.js', 'conditions.js', 'formats-data.js', 'items.js', 'learnsets.js', 'moves.js', 'natures.js', 'pokedex.js', 'pokemongo.js', 'rulesets.js', 'tags.js', 'typechart.js'];
