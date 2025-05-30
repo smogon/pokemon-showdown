@@ -105,7 +105,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 60,
 		onModifyMove(move, pokemon) {
-			if (pokemon.species.name !== 'Chatot') delete move.secondaries;
+			if (pokemon.species.name !== 'Chatot') {
+				const confusion = move.secondaries?.find(secondary => secondary.volatileStatus === 'confusion');
+				if (confusion) confusion.chance = 0; // boosted by Sheer Force
+			}
 		},
 		secondary: {
 			chance: 10,
