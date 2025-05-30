@@ -21,15 +21,17 @@ describe('Dex data', () => {
 				assert(baseEntry && !baseEntry.forme, `Forme ${entry.name} should have a valid baseSpecies`);
 				// Gmax formes are not actually formes, they are only included in pokedex.ts for convenience
 				if (!entry.name.includes('Gmax')) assert((baseEntry.otherFormes || []).includes(entry.name), `Base species ${entry.baseSpecies} should have ${entry.name} listed as an otherForme`);
-				assert(!entry.otherFormes, `Forme ${entry.baseSpecies} should not have a forme list (the list goes in baseSpecies).`);
-				assert(!entry.cosmeticFormes, `Forme ${entry.baseSpecies} should not have a cosmetic forme list (the list goes in baseSpecies).`);
-				assert(!entry.baseForme, `Forme ${entry.baseSpecies} should not have a baseForme (its forme name goes in forme) (did you mean baseSpecies?).`);
+				assert.false(entry.otherFormes, `Forme ${entry.baseSpecies} should not have a forme list (the list goes in baseSpecies).`);
+				assert.false(entry.cosmeticFormes, `Forme ${entry.baseSpecies} should not have a cosmetic forme list (the list goes in baseSpecies).`);
+				assert.false(entry.baseForme, `Forme ${entry.baseSpecies} should not have a baseForme (its forme name goes in forme) (did you mean baseSpecies?).`);
 			} else {
 				// entry should be a base species
-				assert(!entry.baseSpecies, `Base species ${entry.name} should not have its own baseSpecies.`);
-				assert(!entry.changesFrom, `Base species ${entry.name} should not change from anything (its changesFrom forme should be base).`);
-				assert(!entry.battleOnly, `Base species ${entry.name} should not be battle-only (its out-of-battle forme should be base).`);
-				assert(!entry.baseForme || Dex.data.Aliases[pokemonid + toID(entry.baseForme)] === entry.name, `Base species ${entry.name}-${entry.baseForme} should be aliased to ${entry.name}`);
+				assert.false(entry.baseSpecies, `Base species ${entry.name} should not have its own baseSpecies.`);
+				assert.false(entry.changesFrom, `Base species ${entry.name} should not change from anything (its changesFrom forme should be base).`);
+				assert.false(entry.battleOnly, `Base species ${entry.name} should not be battle-only (its out-of-battle forme should be base).`);
+				if (entry.baseForme) {
+					assert.equal(Dex.getAlias(pokemonid + toID(entry.baseForme)), pokemonid, `Base species ${entry.name}-${entry.baseForme} should be aliased to ${entry.name}`);
+				}
 			}
 
 			if (entry.prevo) {
@@ -59,7 +61,7 @@ describe('Dex data', () => {
 			}
 			if (entry.cosmeticFormes) {
 				for (const forme of entry.cosmeticFormes) {
-					assert.equal(Dex.data.Aliases[toID(forme)], entry.name, `Misspelled/nonexistent alias "${forme}" of ${entry.name}`);
+					assert.equal(Dex.getAlias(toID(forme)), pokemonid, `Misspelled/nonexistent alias "${forme}" of ${entry.name}`);
 					assert.equal(Dex.data.FormatsData[toID(forme)], undefined, `Cosmetic forme "${forme}" should not have its own tier`);
 				}
 			}
@@ -148,7 +150,7 @@ describe('Dex data', () => {
 	});
 
 	it('should have valid Aliases entries', () => {
-		const Aliases = Dex.data.Aliases;
+		const Aliases = require('../../dist/data/aliases').Aliases;
 		for (const aliasid in Aliases) {
 			const targetid = toID(Aliases[aliasid]);
 			if (targetid in Dex.data.Pokedex) {
@@ -192,6 +194,9 @@ describe('Dex data', () => {
 		for (const formatid in Rulesets) {
 			const entry = Rulesets[formatid];
 			assert.equal(toID(entry.name), formatid, `Mismatched Ruleset key "${formatid}" of "${entry.name}"`);
+			if (entry.mod) {
+				assert.equal(toID(entry.mod) || undefined, entry.mod, `Mod of "${formatid}" must be an ID"`);
+			}
 		}
 	});
 

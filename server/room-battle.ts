@@ -163,8 +163,8 @@ export class RoomBattleTimer {
 	readonly battle: RoomBattle;
 	readonly timerRequesters = new Set<ID>();
 	timer: NodeJS.Timeout | null = null;
-	isFirstTurn = true;
-	turn: number;
+	isFirstRequest = true;
+	turn: number | null = null;
 	/**
 	 * Last tick, as milliseconds since UNIX epoch.
 	 * Represents the last time a tick happened.
@@ -190,7 +190,6 @@ export class RoomBattleTimer {
 			if (timerSettings[k] === undefined) delete timerSettings[k];
 		}
 
-		this.turn = ruleTable.has('teampreview') ? 0 : 1;
 		this.settings = {
 			dcTimer: !isChallenge,
 			dcTimerBank: isChallenge,
@@ -218,7 +217,7 @@ export class RoomBattleTimer {
 			requester?.sendTo(this.battle.roomid, `|inactiveoff|The timer can't be enabled after a battle has ended.`);
 			return false;
 		}
-		if (this.timer) {
+		if (this.timerRequesters.size) {
 			this.battle.room.add(`|inactive|${requester ? requester.name : userid} also wants the timer to be on.`).update();
 			this.timerRequesters.add(userid);
 			return false;
@@ -235,7 +234,6 @@ export class RoomBattleTimer {
 		this.timerRequesters.add(userid);
 		const requestedBy = requester ? ` (requested by ${requester.name})` : ``;
 		this.battle.room.add(`|inactive|Battle timer is ON: inactive players will automatically lose when time's up.${requestedBy}`).update();
-		if (this.turn < this.battle.turn) this.turn = this.battle.turn;
 
 		this.checkActivity();
 		for (const player of this.battle.players) this.nextRequest(player);
@@ -268,9 +266,29 @@ export class RoomBattleTimer {
 		return true;
 	}
 	updateTurn() {
-		if (this.battle.turn <= this.turn) return;
+		if (this.turn === null) {
+			// first request since timer was turned on
+			this.turn = this.battle.turn;
+			return;
+		}
+		if (this.battle.turn <= this.turn) {
+			if (this.battle.players.filter(p => !p.request.isWait).length <= 1) {
+				// first request of a mid-turn request (U-turn or faint-switch)
+				this.isFirstRequest = false;
+				const addPerMidTurnRequest = Math.min(this.settings.addPerTurn, TICK_TIME);
+				this.battle.room.add(`||adding ${addPerMidTurnRequest} to each for mid turn request`);
+				for (const curPlayer of this.battle.players) {
+					curPlayer.secondsLeft += addPerMidTurnRequest;
+				}
+			} else {
+				// second player of a request we've already updated the timer for
+			}
+			return;
+		}
+
+		// new turn
 		this.turn = this.battle.turn;
-		this.isFirstTurn = false;
+		this.isFirstRequest = false;
 
 		let addPerTurn = this.settings.addPerTurn;
 		if (this.settings.accelerate && addPerTurn) {
@@ -284,6 +302,7 @@ export class RoomBattleTimer {
 			}
 		}
 
+		this.battle.room.add(`||adding ${addPerTurn} for new turn`);
 		for (const player of this.battle.players) {
 			player.secondsLeft = Math.min(player.secondsLeft + addPerTurn, this.settings.starting);
 		}
@@ -300,9 +319,9 @@ export class RoomBattleTimer {
 		// if there's only 1 player left
 		if (this.battle.players.filter(p => p.secondsLeft > 0).length <= 1) return;
 
-		this.updateTurn();
-		const maxTurnTime = (this.isFirstTurn ? this.settings.maxFirstTurn : 0) || this.settings.maxPerTurn;
 		const room = this.battle.room;
+		this.updateTurn();
+		const maxTurnTime = (this.isFirstRequest ? this.settings.maxFirstTurn : 0) || this.settings.maxPerTurn;
 		player.turnSecondsLeft = Math.min(player.secondsLeft, maxTurnTime);
 
 		const secondsLeft = player.turnSecondsLeft;
