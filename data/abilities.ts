@@ -60,8 +60,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && (!noModifyType.includes(move.id) ||
-				(['terrainpulse', 'weatherball'].includes(move.id) && this.activeMove?.isMax)) &&
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Flying';
 				move.typeChangerBoosted = this.effect;
@@ -1548,8 +1547,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && (!noModifyType.includes(move.id) ||
-				(['terrainpulse', 'weatherball'].includes(move.id) && this.activeMove?.isMax)) &&
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Electric';
 				move.typeChangerBoosted = this.effect;
@@ -2931,9 +2929,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const noModifyType = [
 				'hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (!(move.isZ && move.category !== 'Status') && !noModifyType.includes(move.id) &&
+			if (!(move.isZ && move.category !== 'Status') &&
 				// TODO: Figure out actual interaction
-				!(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				(!noModifyType.includes(move.id) || this.activeMove?.isMax) && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Normal';
 				move.typeChangerBoosted = this.effect;
 			}
@@ -3227,8 +3225,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && (!noModifyType.includes(move.id) ||
-				(['terrainpulse', 'weatherball'].includes(move.id) && this.activeMove?.isMax)) &&
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Fairy';
 				move.typeChangerBoosted = this.effect;
@@ -3754,8 +3751,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && (!noModifyType.includes(move.id) ||
-				(['terrainpulse', 'weatherball'].includes(move.id) && this.activeMove?.isMax)) &&
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Ice';
 				move.typeChangerBoosted = this.effect;
