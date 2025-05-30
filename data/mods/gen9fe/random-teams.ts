@@ -98,7 +98,7 @@ export const ferbSets: FERBSets = {
 		evs: { hp: 252, spa: 4, spe: 252 }, nature: 'Timid', teraType: 'Fighting', level: 79,
 	},
 	'Roaring Sal': {
-		species: 'Roaring Sal', ability: 'Primitive', item: 'Heavy-Duty Boots', gender: 'N',
+		species: 'Roaring Sal', ability: 'Primitive', item: 'Heavy-Duty Boots', gender: 'F',
 		moves: [['Flare Blitz', 'Fire Lash'], 'U-turn', ['Roost', 'Earthquake', 'Taunt']],
 		signatureMove: 'Knock Off',
 		evs: { atk: 252, def: 4, spe: 252 }, nature: 'Jolly', teraType: 'Water', level: 74,
@@ -475,7 +475,7 @@ export const ferbSets: FERBSets = {
 		signatureMove: 'Facade',
 		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Adamant', teraType: 'Ghost', level: 92,
 	},
-	'Chomptry': {
+	Chomptry: {
 		species: 'Chomptry', ability: 'Sand Rush', item: 'Loaded Dice', gender: '',
 		moves: ['Knock Off', ['Earthquake', 'Poison Jab'], 'Swords Dance'],
 		signatureMove: 'Scale Shot',
@@ -487,7 +487,7 @@ export const ferbSets: FERBSets = {
 		signatureMove: 'Dark Pulse',
 		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Water', level: 93, skip: 'Chomptry',
 	},
-	'Overgyara': {
+	Overgyara: {
 		species: 'Overgyara', ability: 'Intimidate', item: 'Black Sludge', gender: '',
 		moves: ['Scald', ['Toxic Spikes', 'Thunder Wave'], 'Spikes'],
 		signatureMove: 'Barb Barrage',
@@ -614,19 +614,19 @@ export const ferbSets: FERBSets = {
 		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Grass', level: 87,
 	},
 	'Hattepon-Hearthflame': {
-		species: 'Hattepon', ability: 'Mold Breaker', item: 'Hearthflame Mask', gender: 'F',
+		species: 'Hattepon-Hearthflame', ability: 'Mold Breaker', item: 'Hearthflame Mask', gender: 'F',
 		moves: ['Trick Room', 'Swords Dance', 'Play Rough'],
 		signatureMove: 'Ivy Cudgel',
 		evs: { hp: 252, atk: 252, spd: 4 }, ivs: { spe: 0 }, nature: 'Brave', teraType: 'Fire', level: 87, skip: 'Hattepon',
 	},
 	'Hattepon-Wellspring': {
-		species: 'Hattepon', ability: 'Water Absorb', item: 'Wellspring Mask', gender: 'F',
+		species: 'Hattepon-Wellspring', ability: 'Water Absorb', item: 'Wellspring Mask', gender: 'F',
 		moves: [['Play Rough', 'Knock Off'], 'U-turn', ['Synthesis', 'Nuzzle', 'Spikes']],
 		signatureMove: 'Ivy Cudgel',
 		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Water', level: 87, skip: 'Hattepon',
 	},
 	'Hattepon-Cornerstone': {
-		species: 'Hattepon', ability: 'Sturdy', item: 'Cornerstone Mask', gender: 'F',
+		species: 'Hattepon-Cornerstone', ability: 'Sturdy', item: 'Cornerstone Mask', gender: 'F',
 		moves: ['Trick Room', 'Stomping Tantrum', 'Play Rough'],
 		signatureMove: 'Ivy Cudgel',
 		evs: { hp: 252, atk: 252, spd: 4 }, ivs: { spe: 0 }, nature: 'Brave', teraType: 'Rock', level: 87, skip: 'Hattepon',

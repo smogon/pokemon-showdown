@@ -361,7 +361,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: "A random battle format featuring Fakemon created by fusing together the stats, types, and abilities of two Pokemon.",
 		mod: 'gen9fe',
 		team: 'randomFERB',
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Terastal Clause', 'Data Preview'],
+		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Terastal Clause', 'Data Preview', 'Fusion Sprite Viewer'],
 		onBegin() {
 			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new Pokemon and their wacky abilities? Or just want to look at cool sprites?<br />Then make sure to use the <a href="https://docs.google.com/spreadsheets/d/1ciOJ7J2qkF2pnv_khtRRIWQ4_Zra34Jaoc-R-No0c9I/edit?usp=sharing" target="_blank">Fusion Evolution Spreadsheet</a> or use /dt!</b></div>`);
 			this.add(`raw|Welcome to Fusion Evolution Random Battle!`);
