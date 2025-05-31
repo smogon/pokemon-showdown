@@ -1051,7 +1051,7 @@ export class Pokemon {
 			}
 		}
 		if (!atLeastOne) return;
-		if (this.canGigantamax) result.gigantamax = this.canGigantamax;
+		if (this.canGigantamax && this.gigantamax) result.gigantamax = this.canGigantamax;
 		return result;
 	}
 
