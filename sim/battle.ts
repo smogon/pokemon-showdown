@@ -3223,7 +3223,7 @@ export class Battle {
 		if (!this.sides[slotNum]) {
 			// create player
 			const team = this.getTeam(options);
-			side = new Side(options.name || `Player ${slotNum + 1}`, options.discordId, this, slotNum, team);
+			side = new Side(options.name || `Player ${slotNum + 1}`, options.userId, this, slotNum, team);
 			if (options.avatar) side.avatar = `${options.avatar}`;
 			this.sides[slotNum] = side;
 		} else {
@@ -3245,7 +3245,7 @@ export class Battle {
 		}
 		if (!didSomething) return;
 		this.inputLog.push(`>player ${slot} ` + JSON.stringify(options));
-		this.add('player', side.id, side.discordId, side.avatar, options.rating || '');
+		this.add('player', side.id, side.userId, side.avatar, options.rating || '');
 
 		// Start the battle if it's ready to start
 		if (this.sides.every(playerSide => !!playerSide) && !this.started) this.start();

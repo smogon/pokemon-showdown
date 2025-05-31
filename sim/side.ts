@@ -152,7 +152,7 @@ export type ChoiceRequest = SwitchRequest | TeamPreviewRequest | MoveRequest | W
 export class Side {
 	readonly battle: Battle;
 	readonly id: SideID;
-	readonly discordId: string;
+	readonly userId: string;
 	/** Index in `battle.sides`: `battle.sides[side.n] === side` */
 	readonly n: number;
 
@@ -197,7 +197,7 @@ export class Side {
 	 */
 	lastMove: Move | null;
 
-	constructor(name: string, discordId:string, battle: Battle, sideNum: number, team: PokemonSet[]) {
+	constructor(name: string, userId:string, battle: Battle, sideNum: number, team: PokemonSet[]) {
 		const sideScripts = battle.dex.data.Scripts.side;
 		if (sideScripts) Object.assign(this, sideScripts);
 
@@ -207,7 +207,7 @@ export class Side {
 		this.n = sideNum;
 
 		this.name = name;
-		this.discordId = discordId;
+		this.userId = userId;
 		this.avatar = '';
 
 		this.team = team;

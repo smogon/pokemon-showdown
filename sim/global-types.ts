@@ -376,7 +376,7 @@ type TypeInfo = import('./dex-data').TypeInfo;
 
 interface PlayerOptions {
 	name?: string;
-	discordId: string;
+	userId: string;
 	avatar?: string;
 	rating?: number;
 	team?: PokemonSet[] | string | null;
