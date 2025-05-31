@@ -939,6 +939,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 	{
+		name: "[Gen 9] Bad 'n Boosted",
+		desc: `All base stats of 70 and lower are doubled.`,
+		ruleset: ['Standard', 'Bad \'n Boosted Mod', 'Sleep Moves Clause', '!Sleep Clause Mod'],
+		banlist: ['AG', 'Araquanid', 'Cyclizar', 'Espathra', 'Espeon', 'Polteageist', 'Huge Power', 'Moody', 'Pure Power', 'Shadow Tag', 'Eviolite', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Last Respects'],
+	},
+	{
 		name: "[Gen 9] Camomons",
 		desc: `Pok&eacute;mon have their types set to match their first two moves.`,
 		mod: 'gen9',
