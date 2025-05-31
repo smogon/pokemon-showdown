@@ -92,7 +92,7 @@ describe('Magic Bounce', () => {
 		], [
 			{ species: 'Hattrem', ability: 'magicbounce', moves: ['sleeptalk'] },
 		]]);
-		battle.makeChoices('move trickroom');
+		battle.makeChoices('move trickroom', 'auto', 'auto', 'auto');
 		battle.makeChoices();
 		assert.deepEqual(battle.sides.map(side => !!side.sideConditions.stealthrock), [true, false, true, true]);
 	});
