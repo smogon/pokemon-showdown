@@ -332,7 +332,7 @@ export class Pokemon {
 		const genders: { [key: string]: GenderName } = { M: 'M', F: 'F', N: 'N' };
 		this.gender = '';
 		if (this.battle.gen < 6 || this.battle.ruleTable.has('obtainablemisc')) {
-			genders[set.gender] || this.species.gender || (this.battle.random(2) ? 'F' : 'M');
+			this.gender = genders[set.gender] || this.species.gender || (this.battle.random(2) ? 'F' : 'M');
 		}
 		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
 		this.pokeball = toID(this.set.pokeball) || 'pokeball' as ID;
