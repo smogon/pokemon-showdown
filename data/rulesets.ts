@@ -1056,12 +1056,154 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			this.add('rule', 'Swagger Clause: Swagger is banned');
 		},
 	},
+	limitstatpass: {
+		effectType: 'ValidatorRule',
+		name: 'Limit Stat Pass',
+		desc: 'Limits the number of Pok&eacute;mon with Baton Pass that has any way to boost stats, and their stat boost sources. Usage: Limit Stat Pass = [Passers] [Value] / [Sources] [Value], e.g. "Limit Stat Pass = Passers 2 / Sources 1"',
+		hasValue: true,
+		onValidateRule(input) {
+			if (!['singles', 'rotation', 'freeforall'].includes(this.format.gameType)) {
+				throw new Error('Baton Pass restrictions are only supported in singles battles currently');
+			}
+
+			input = input.replace(/\s/g, '').toLowerCase();
+			if (!input) throw new Error('To remove Stat Pass limitations, use "! Limit Stat Pass"');
+
+			const stage1 = input.split('/');
+			const stage2 = stage1.map(x => /^(passers|sources)(\d{1,3})$/.exec(x));
+
+			stage2.forEach((value, i) => {
+				if (!value) throw new Error(`Invalid input "${stage1[i]}" in Limit Stat Pass rule`);
+			});
+
+			return input;
+		},
+		onValidateTeam(team, format, teamHas) {
+			const input = this.ruleTable.valueRules.get('limitstatpass')!;
+			const maxPassers = Number(/passers(\d{1,3})/.exec(input)?.[1]);
+			const maxSources = Number(/sources(\d{1,3})/.exec(input)?.[1]);
+			// console.log(`Passers: ${maxPassers} / Sources: ${maxSources}`);
+
+			const problems: string[] = [];
+			const boostPassers: string[] = [];
+
+			// Exceptions can be specified by unbanning 'Baton Pass + exception'
+			const bprule = this.dex.formats.validateRule('+move:batonpass', format).slice(1) as string;
+			const checkUnban = (test: string) => {
+				// console.log(`checking ${test}`);
+				const rule = this.dex.formats.validateRule(test, format).slice(1) as string;
+				const unban = this.ruleTable.complexBans.some(x => x[2] > 0 && x[3].includes(rule) && x[3].includes(bprule));
+				// console.log(unban);
+				return unban;
+			};
+
+			const checkBoosts = (effect: Move | Item | Ability, set: PokemonSet) => {
+				// console.log(`checking ${effect.name}`);
+				const alias = effect.clauseData?.canStatBoost;
+				const boosts = typeof alias === 'function' ? alias.call(this, set) : alias;
+				// console.log(boosts);
+				return boosts;
+			};
+
+			for (const set of team) {
+				// These are user input and can be invalid, which crashes the validator, so always check exists first.
+				const moves = set.moves.map(x => this.dex.moves.get(x));
+				const item = this.dex.items.get(set.item);
+				const ability = this.dex.abilities.get(set.ability);
+
+				if (!moves.some(x => x.id === 'batonpass')) continue;
+				const boostSources: string[] = [];
+
+				// moves (including cfz and hacked max)
+				for (const move of moves) {
+					if (move.exists && !checkUnban(`+move:${move.id}`) && checkBoosts(move, set)) {
+						boostSources.push(move.name);
+					}
+				}
+
+				// item
+				if (item.exists && !checkUnban(`+item:${item.id}`) && checkBoosts(item, set)) {
+					boostSources.push(item.name);
+				}
+
+				// ability
+				if (ability.exists && !checkUnban(`+ability:${ability.id}`) && checkBoosts(ability, set)) {
+					boostSources.push(ability.name);
+				}
+
+				// ability of mega
+				if (item.exists && !checkUnban(`+item:${item.id}`) && item.megaStone && set.species === item.megaEvolves) {
+					const mega = this.dex.species.get(item.megaStone);
+					const megaAbilities = Object.values(mega.abilities).map(x => this.dex.abilities.get(x));
+					// If the set and its mega have the same ability, skip this check.
+					if (!megaAbilities.some(x => x.name === ability.name)) {
+						for (const megaAbility of megaAbilities) {
+							if (!checkUnban(`+ability:${megaAbility.id}`) && checkBoosts(megaAbility, set)) {
+								boostSources.push(`${megaAbility.name} after mega evolution`);
+							}
+						}
+					}
+				}
+
+				// z moves
+				if (item.exists && !checkUnban(`+item:${item.id}`) && item.zMove) {
+					if (item.zMoveType && moves.some(x => x.zMove?.boost && x.type === item.zMoveType)) {
+						// status
+						boostSources.push(item.name);
+					} else if (item.zMoveFrom && moves.some(x => x.name === item.zMoveFrom)) {
+						// signature
+						const zMove = this.dex.moves.get(this.toID(item.zMove));
+						if (checkBoosts(zMove, set)) boostSources.push(item.name);
+					}
+				}
+
+				// max moves
+				// FIXME: call checkUnban with something here so that an exception can be made for passing boosts after dynamax.
+				if (this.dex.gen === 8 && !this.ruleTable.has('dynamaxclause')) {
+					const boostingTypes = ['Fighting', 'Steel', 'Poison', 'Ground', 'Flying'];
+					if (moves.some(x => x.category !== 'Status' && boostingTypes.includes(x.type))) {
+						boostSources.push('Dynamax stat boosts');
+					}
+				}
+
+				// Ogerpon is hardcoded to transform and receive Embody Aspect upon tera.
+				if (this.dex.gen === 9 && !this.ruleTable.has('terastalclause')) {
+					if (set.species === 'Ogerpon' && !checkUnban('+ability:embodyaspectteal')) {
+						boostSources.push('Embody Aspect (Teal)');
+					} else if (set.species === 'Ogerpon-Wellspring' && !checkUnban('+ability:embodyaspectwellspring')) {
+						boostSources.push('Embody Aspect (Wellspring)');
+					} else if (set.species === 'Ogerpon-Hearthflame' && !checkUnban('+ability:embodyaspecthearthflame')) {
+						boostSources.push('Embody Aspect (Hearthflame)');
+					} else if (set.species === 'Ogerpon-Cornerstone' && !checkUnban('+ability:embodyaspectcornerstone')) {
+						boostSources.push('Embody Aspect (Cornerstone)');
+					}
+				}
+
+				if (boostSources.length) {
+					const pokemonName = set.name || set.species;
+					boostPassers.push(pokemonName);
+					if (boostSources.length > maxSources) {
+						problems.push(`${pokemonName} has Baton Pass and ${boostSources.join(', ')}; which is more sources of stat boosts than the limit of ${maxSources} set by Limit Stat Pass rule.`);
+					}
+				}
+			}
+
+			if (boostPassers.length > maxPassers) {
+				problems.push(`${boostPassers.join(', ')} have Baton Pass and a way to boost their stats; which is more Pokemon than the limit of ${maxPassers} set by Limit Stat Pass rule.`);
+			}
+
+			if (problems.length) return problems;
+		},
+	},
 	drypassclause: {
 		effectType: 'ValidatorRule',
 		name: 'DryPass Clause',
 		desc: "Stops teams from bringing Pok&eacute;mon with Baton Pass + any form of trapping, residual recovery, boosting, or Substitute.",
-		ruleset: ['Baton Pass Stat Clause', 'Baton Pass Stat Trap Clause'],
-		banlist: ['Baton Pass + Substitute', 'Baton Pass + Ingrain', 'Baton Pass + Aqua Ring', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Baton Pass + Jaw Lock'],
+		ruleset: ['Limit Stat Pass = Sources 0'],
+		banlist: ['Baton Pass + Substitute', 'Baton Pass + Ingrain', 'Baton Pass + Aqua Ring', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Baton Pass + Octolock', 'Baton Pass + Power Trick'],
+		onBegin() {
+			this.add('rule', 'DryPass Clause: No Baton Passer may have a way to gain beneficial passable properties');
+		},
 	},
 	batonpassclause: {
 		effectType: 'ValidatorRule',
@@ -1147,76 +1289,18 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'One Boost Passer Clause',
 		desc: "Stops teams from having a Pok&eacute;mon with Baton Pass that has multiple ways to boost its stats, and no more than one Baton Passer may be able to boost its stats",
+		ruleset: ['Limit Stat Pass = Passers 1 / Sources 1'],
 		onBegin() {
 			this.add('rule', 'One Boost Passer Clause: Limit one Baton Passer that has a way to boost its stats');
-		},
-		onValidateTeam(team) {
-			const boostingEffects = [
-				'acidarmor', 'agility', 'amnesia', 'apicotberry', 'barrier', 'bellydrum', 'bulkup', 'calmmind', 'cosmicpower', 'curse',
-				'defensecurl', 'dragondance', 'ganlonberry', 'growth', 'harden', 'howl', 'irondefense', 'liechiberry', 'meditate',
-				'petayaberry', 'salacberry', 'sharpen', 'speedboost', 'starfberry', 'swordsdance', 'tailglow', 'withdraw',
-			];
-			let passers = 0;
-			for (const set of team) {
-				if (!set.moves.includes('Baton Pass')) continue;
-				let passableBoosts = 0;
-				const item = this.toID(set.item);
-				const ability = this.toID(set.ability);
-				for (const move of set.moves) {
-					if (boostingEffects.includes(this.toID(move))) passableBoosts++;
-				}
-				if (boostingEffects.includes(item)) passableBoosts++;
-				if (boostingEffects.includes(ability)) passableBoosts++;
-				if (passableBoosts === 1) passers++;
-				if (passableBoosts > 1) {
-					return [
-						`${set.name || set.species} has Baton Pass and multiple ways to boost its stats, which is banned by One Boost Passer Clause.`,
-					];
-				}
-				if (passers > 1) {
-					return [
-						`Multiple Pokemon have Baton Pass and a way to boost their stats, which is banned by One Boost Passer Clause.`,
-					];
-				}
-			}
 		},
 	},
 	batonpassstatclause: {
 		effectType: 'ValidatorRule',
 		name: 'Baton Pass Stat Clause',
 		desc: "Stops teams from having a Pok&eacute;mon with Baton Pass that has any way to boost its stats",
+		ruleset: ['Limit Stat Pass = Sources 0'],
 		onBegin() {
 			this.add('rule', 'Baton Pass Stat Clause: No Baton Passer may have a way to boost its stats');
-		},
-		onValidateTeam(team) {
-			const boostingEffects = [
-				'absorbbulb', 'acidarmor', 'acupressure', 'agility', 'amnesia', 'ancientpower', 'angerpoint', 'apicotberry', 'autotomize',
-				'barrier', 'bellydrum', 'bulkup', 'calmmind', 'cellbattery', 'charge', 'chargebeam', 'coil', 'cosmicpower', 'cottonguard', 'curse',
-				'defensecurl', 'defendorder', 'defiant', 'download', 'dragondance', 'fierydance', 'flamecharge', 'focusenergy', 'ganlonberry', 'growth',
-				'harden', 'honeclaws', 'howl', 'irondefense', 'justified', 'lansatberry', 'liechiberry', 'lightningrod', 'meditate', 'metalclaw',
-				'meteormash', 'motordrive', 'moxie', 'nastyplot', 'ominouswind', 'petayaberry', 'quiverdance', 'rage', 'rattled',
-				'rockpolish', 'salacberry', 'sapsipper', 'sharpen', 'shellsmash', 'shiftgear', 'silverwind', 'skullbash', 'speedboost',
-				'starfberry', 'steadfast', 'steelwing', 'stockpile', 'stormdrain', 'swordsdance', 'tailglow', 'weakarmor', 'withdraw',
-				'workup',
-			];
-			for (const set of team) {
-				const moves = set.moves.map(this.toID);
-				if (!moves.includes('batonpass' as ID)) continue;
-				let passableBoosts = false;
-				const item = this.toID(set.item);
-				const ability = this.toID(set.ability);
-				if (
-					moves.some(m => boostingEffects.includes(m)) || boostingEffects.includes(item) ||
-					boostingEffects.includes(ability)
-				) {
-					passableBoosts = true;
-				}
-				if (passableBoosts) {
-					return [
-						`${set.name || set.species} has Baton Pass and a way to boost its stats, which is banned by Baton Pass Stat Clause.`,
-					];
-				}
-			}
 		},
 	},
 	batonpasstrapclause: {
@@ -1244,34 +1328,10 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Baton Pass Stat Trap Clause',
 		desc: "Stops teams from having a Pok&eacute;mon with Baton Pass that has any way to boost its stats or trap Pok&eacute;mon.",
+		ruleset: ['Limit Stat Pass = Sources 0'],
+		banlist: ['Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Baton Pass + Octolock', 'Baton Pass + Ingrain'],
 		onBegin() {
 			this.add('rule', 'Baton Pass Stat Trap Clause: No Baton Passer may have a way to boost stats or trap Pok\u00e9mon');
-		},
-		onValidateTeam(team) {
-			const statBoostOrTrapping = [
-				'Acid Armor', 'Acupressure', 'Agility', 'Amnesia', 'Ancient Power', 'Assist', 'Barrier', 'Belly Drum', 'Block', 'Bulk Up', 'Calm Mind', 'Charge',
-				'Charge Beam', 'Cosmic Power', 'Curse', 'Defend Order', 'Defense Curl', 'Dragon Dance', 'Growth', 'Guard Swap', 'Harden', 'Heart Swap', 'Howl',
-				'Iron Defense', 'Ingrain', 'Mean Look', 'Meteor Mash', 'Meditate', 'Metal Claw', 'Nasty Plot', 'Ominous Wind', 'Power Trick', 'Psych Up', 'Rage',
-				'Rock Polish', 'Sharpen', 'Silver Wind', 'Skull Bash', 'Spider Web', 'Steel Wing', 'Stockpile', 'Swords Dance', 'Tail Glow', 'Withdraw', 'Speed Boost',
-				'Apicot Berry', 'Ganlon Berry', 'Liechi Berry', 'Petaya Berry', 'Salac Berry', 'Starf Berry', 'Kee Berry', 'Maranga Berry', 'Weakness Policy',
-				'Blunder Policy', 'Luminiscent Moss', 'Snowball', 'Throat Spray', 'Mirror Herb', 'Adrenaline Orb',
-			].map(this.toID);
-			for (const set of team) {
-				if (!set.moves.map(this.toID).includes('batonpass' as ID)) continue;
-				let passableBoosts = false;
-				const item = this.toID(set.item);
-				const ability = this.toID(set.ability);
-				for (const move of set.moves) {
-					if (statBoostOrTrapping.includes(this.toID(move))) passableBoosts = true;
-				}
-				if (statBoostOrTrapping.includes(item)) passableBoosts = true;
-				if (statBoostOrTrapping.includes(ability)) passableBoosts = true;
-				if (passableBoosts) {
-					return [
-						`${set.name || set.species} has Baton Pass and a way to boost its stats or pass trapping, which is banned by Baton Pass Stat Trap Clause.`,
-					];
-				}
-			}
 		},
 	},
 	cfzclause: {

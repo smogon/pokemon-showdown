@@ -133,6 +133,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	charge: {
 		inherit: true,
+		clauseData: {},
 		boosts: null,
 	},
 	conversion: {
@@ -624,6 +625,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	stockpile: {
 		inherit: true,
+		clauseData: {},
 		pp: 10,
 		condition: {
 			noCopy: true,

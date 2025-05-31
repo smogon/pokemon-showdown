@@ -38,6 +38,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	moody: {
 		inherit: true,
+		clauseData: {
+			canStatBoost: {
+				accuracy: true,
+				atk: true,
+				def: true,
+				evasion: true,
+				spa: true,
+				spd: true,
+				spe: true,
+			},
+		},
 		onResidual(pokemon) {
 			let stats: BoostID[] = [];
 			const boost: SparseBoostsTable = {};
@@ -72,6 +83,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryBoost() {},
 	},
 	rattled: {
+		clauseData: {
+			canStatBoost: {
+				spe: true,
+			},
+		},
 		onDamagingHit(damage, target, source, move) {
 			if (['Dark', 'Bug', 'Ghost'].includes(move.type)) {
 				this.boost({ spe: 1 });
