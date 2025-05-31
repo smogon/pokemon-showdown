@@ -653,8 +653,7 @@ export class BattleActions {
 
 		const hitResults = [];
 		for (const i of targets.keys()) {
-			hitResults[i] = (move.ignoreImmunity && (move.ignoreImmunity === true || move.ignoreImmunity[move.type])) ||
-				targets[i].runImmunity(move.type, !move.smartTarget);
+			hitResults[i] = targets[i].runImmunity(move, !move.smartTarget);
 		}
 
 		return hitResults;
@@ -1598,10 +1597,8 @@ export class BattleActions {
 			move.hit = 0;
 		}
 
-		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
-			if (!target.runImmunity(move.type, !suppressMessages)) {
-				return false;
-			}
+		if (!target.runImmunity(move, !suppressMessages)) {
+			return false;
 		}
 
 		if (move.ohko) return target.maxhp;

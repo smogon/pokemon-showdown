@@ -43,4 +43,14 @@ describe('Wonder Guard', () => {
 		battle.setPlayer('p2', { team: [{ species: "Reshiram", ability: 'turboblaze', moves: ['fusionflare'] }] });
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices('move sleeptalk', 'move fusionflare'));
 	});
+
+	it('should activate if the target is immune to the attack', () => {
+		battle = common.createBattle([[
+			{ species: 'Alakazam', moves: ['psychic'] },
+		], [
+			{ species: 'Muk-Alola', ability: 'wonderguard', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert(battle.log.some(line => line.includes('|-immune|p2a: Muk|[from] ability: Wonder Guard')));
+	});
 });

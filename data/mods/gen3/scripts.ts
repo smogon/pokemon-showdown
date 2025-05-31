@@ -308,10 +308,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				move.ignoreImmunity = (move.category === 'Status');
 			}
 
-			if (
-				(!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
-				!target.runImmunity(move.type)
-			) {
+			if (!target.runImmunity(move)) {
 				naturalImmunity = true;
 			} else {
 				hitResult = this.battle.singleEvent('TryImmunity', move, {}, target, pokemon, move);
