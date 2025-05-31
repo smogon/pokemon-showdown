@@ -449,7 +449,7 @@
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["doubleedge", "earthquake", "explosion", "hiddenpowerbug", "rockslide", "toxic"],
+                "movepool": ["doubleedge", "earthquake", "explosion", "rockslide", "toxic"],
                 "abilities": ["Rock Head"]
             }
         ]
@@ -1313,9 +1313,14 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["brickbreak", "doubleedge", "earthquake", "explosion", "rockslide", "toxic"],
+                "movepool": ["doubleedge", "earthquake", "explosion", "rockslide", "toxic"],
                 "abilities": ["Rock Head"],
                 "preferredTypes": ["Ground"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["explosion", "focuspunch", "rockslide", "substitute", "toxic"],
+                "abilities": ["Rock Head"]
             }
         ]
     },
@@ -2383,7 +2388,7 @@
             },
             {
                 "role": "Generalist",
-                "movepool": ["doubleedge", "earthquake", "focuspunch", "irontail", "rockslide", "substitute"],
+                "movepool": ["focuspunch", "irontail", "rockslide", "substitute"],
                 "abilities": ["Rock Head"]
             }
         ]
