@@ -851,6 +851,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (species.name === 'Unown') return 'Choice Specs';
 		if (species.name === 'Wobbuffet') return 'Custap Berry';
 		if (species.name === 'Shuckle') return 'Mental Herb';
+		if (species.name === 'Honchkrow') return 'Life Orb';
 		if (
 			ability === 'Harvest' || ability === 'Cheek Pouch' || (ability === 'Emergency Exit' && !!counter.get('Status'))
 		) return 'Sitrus Berry';
