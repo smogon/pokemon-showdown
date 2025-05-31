@@ -2705,7 +2705,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 8 DLC 1] National Dex AG",
-		mod: 'gen8',
+		mod: 'gen8dlc1',
 		searchShow: false,
 		ruleset: ['Standard AG', 'NatDex Mod'],
 	},
