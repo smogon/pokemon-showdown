@@ -745,12 +745,6 @@
         "level": 97,
         "sets": [
             {
-                "role": "Choice Item user",
-                "movepool": ["Transform"],
-                "abilities": ["Imposter"],
-                "teraTypes": ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"]
-            },
-            {
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Transform"],
                 "abilities": ["Imposter"],
@@ -1879,6 +1873,12 @@
                 "movepool": ["Breaking Swipe", "Earth Power", "Protect", "Tailwind"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Steel"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Earth Power", "Protect", "Scale Shot", "Tailwind"],
+                "abilities": ["Levitate"],
+                "teraTypes": ["Steel"]
             }
         ]
     },
@@ -1915,7 +1915,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Facade", "Knock Off", "Protect", "Quick Attack"],
+                "movepool": ["Close Combat", "Facade", "Feint", "Knock Off", "Protect"],
                 "abilities": ["Toxic Boost"],
                 "teraTypes": ["Normal"]
             }
@@ -2048,7 +2048,7 @@
             },
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Agility", "Brick Break", "Heavy Slam", "Knock Off", "Protect", "Psychic Fangs"],
+                "movepool": ["Agility", "Heavy Slam", "Protect", "Psychic Fangs", "Stomping Tantrum"],
                 "abilities": ["Clear Body"],
                 "teraTypes": ["Dragon"]
             }
@@ -2993,13 +2993,13 @@
             {
                 "role": "Bulky Protect",
                 "movepool": ["Aura Sphere", "Calm Mind", "Protect", "Shadow Ball"],
-                "abilities": ["Telepathy"],
+                "abilities": ["Pressure"],
                 "teraTypes": ["Fairy", "Fighting"]
             },
             {
                 "role": "Doubles Support",
                 "movepool": ["Breaking Swipe", "Icy Wind", "Rest", "Shadow Ball", "Thunder Wave", "Will-O-Wisp"],
-                "abilities": ["Telepathy"],
+                "abilities": ["Pressure"],
                 "teraTypes": ["Fairy"]
             }
         ]
@@ -5002,7 +5002,7 @@
                 "role": "Offensive Protect",
                 "movepool": ["Court Change", "Gunk Shot", "High Jump Kick", "Protect", "Pyro Ball", "Sucker Punch", "U-turn"],
                 "abilities": ["Blaze"],
-                "teraTypes": ["Fighting", "Fire", "Poison"]
+                "teraTypes": ["Fighting"]
             }
         ]
     },
@@ -5061,7 +5061,7 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Fire Blast", "Heat Wave", "Incinerate", "Protect", "Rapid Spin", "Stealth Rock", "Stone Edge", "Will-O-Wisp"],
+                "movepool": ["Fire Blast", "Heat Wave", "Incinerate", "Protect", "Stealth Rock", "Stone Edge", "Will-O-Wisp"],
                 "abilities": ["Flame Body"],
                 "teraTypes": ["Water"]
             }
@@ -6492,7 +6492,7 @@
                 "role": "Doubles Setup Sweeper",
                 "movepool": ["Dragon Dance", "High Horsepower", "Ice Punch", "Protect", "Rock Slide", "Wild Charge"],
                 "abilities": ["Quark Drive"],
-                "teraTypes": ["Grass", "Rock"]
+                "teraTypes": ["Grass"]
             }
         ]
     },
@@ -6563,9 +6563,15 @@
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
-                "movepool": ["Body Press", "Protect", "Ruination", "Spikes", "Stealth Rock", "Stomping Tantrum", "Throat Chop"],
+                "movepool": ["Protect", "Ruination", "Stomping Tantrum", "Throat Chop"],
                 "abilities": ["Vessel of Ruin"],
-                "teraTypes": ["Fairy", "Water"]
+                "teraTypes": ["Poison"]
+            },
+            {
+                "role": "Doubles Support",
+                "movepool": ["Spikes", "Stealth Rock", "Stomping Tantrum", "Throat Chop", "Whirlwind"],
+                "abilities": ["Vessel of Ruin"],
+                "teraTypes": ["Poison"]
             }
         ]
     },
