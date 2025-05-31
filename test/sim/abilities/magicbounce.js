@@ -68,7 +68,7 @@ describe('Magic Bounce', () => {
 		assert(battle.p2.sideConditions['stealthrock']);
 	});
 
-	it(`should should only activate for the fastest Pokemon in a Free-for-all battle`, () => {
+	it(`should only activate for the fastest Pokemon in a Free-for-all battle`, () => {
 		battle = common.createBattle({ gameType: 'freeforall' }, [[
 			{ species: 'Deoxys-Speed', moves: ['stealthrock'] },
 		], [
@@ -84,7 +84,7 @@ describe('Magic Bounce', () => {
 
 	it(`should activate from fastest to slowest based on unmodified speed`, () => {
 		battle = common.createBattle({ gameType: 'freeforall' }, [[
-			{ species: 'Deoxys-Speed', moves: ['trickroom', 'stealthrock'] },
+			{ species: 'Deoxys-Speed', moves: ['stealthrock', 'trickroom'] },
 		], [
 			{ species: 'Espeon', ability: 'magicbounce', moves: ['sleeptalk'] },
 		], [
@@ -92,8 +92,8 @@ describe('Magic Bounce', () => {
 		], [
 			{ species: 'Hattrem', ability: 'magicbounce', moves: ['sleeptalk'] },
 		]]);
+		battle.makeChoices('move trickroom');
 		battle.makeChoices();
-		battle.makeChoices('move stealthrock', 'auto', 'auto', 'auto');
 		assert.deepEqual(battle.sides.map(side => !!side.sideConditions.stealthrock), [true, false, true, true]);
 	});
 
