@@ -3316,7 +3316,7 @@
         "level": 7,
         "sets": [
             {
-                "role": "Bulky Support",
+                "role": "Bulky Attacker",
                 "movepool": ["Curse", "Earthquake", "Gunk Shot", "Poison Jab", "Recover", "Spikes", "Stealth Rock", "Toxic Spikes"],
                 "abilities": ["Unaware", "Water Absorb"],
                 "teraTypes": ["Flying", "Steel"]

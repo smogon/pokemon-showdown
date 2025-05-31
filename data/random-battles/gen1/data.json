@@ -106,7 +106,7 @@
     "pikachu": {
         "level": 87,
         "moves": ["surf", "thunderbolt", "thunderwave"],
-        "exclusiveMoves": ["agility", "bodyslam", "seismictoss", "seismictoss", "thunder"]
+        "exclusiveMoves": ["agility", "bodyslam", "seismictoss", "seismictoss"]
     },
     "raichu": {
         "level": 74,
@@ -148,9 +148,8 @@
     },
     "nidoking": {
         "level": 74,
-        "moves": ["rockslide", "thunderbolt", "thunderbolt"],
-        "essentialMoves": ["blizzard", "earthquake"],
-        "exclusiveMoves": ["bodyslam", "bodyslam", "substitute"]
+        "moves": ["blizzard", "earthquake", "thunderbolt"],
+        "exclusiveMoves": ["bodyslam", "rockslide", "substitute"]
     },
     "clefairy": {
         "level": 88,
@@ -341,7 +340,7 @@
     "tentacool": {
         "level": 86,
         "moves": ["blizzard", "megadrain", "surf"],
-        "exclusiveMoves": ["barrier", "hydropump", "hydropump"]
+        "exclusiveMoves": ["hydropump", "hydropump", "substitute"]
     },
     "tentacruel": {
         "level": 73,
@@ -433,18 +432,18 @@
     },
     "gastly": {
         "level": 83,
-        "moves": ["explosion", "explosion", "megadrain", "nightshade", "psychic", "psychic"],
-        "essentialMoves": ["thunderbolt", "hypnosis"]
+        "moves": ["hypnosis", "psychic", "thunderbolt"],
+        "exclusiveMoves": ["explosion", "explosion", "megadrain", "nightshade"]
     },
     "haunter": {
         "level": 74,
-        "moves": ["explosion", "explosion", "megadrain", "nightshade", "psychic", "psychic"],
-        "essentialMoves": ["thunderbolt", "hypnosis"]
+        "moves": ["hypnosis", "psychic", "thunderbolt"],
+        "exclusiveMoves": ["explosion", "explosion", "megadrain", "nightshade"]
     },
     "gengar": {
         "level": 68,
-        "moves": ["explosion", "explosion", "megadrain", "nightshade", "psychic", "psychic"],
-        "essentialMoves": ["thunderbolt", "hypnosis"]
+        "moves": ["hypnosis", "psychic", "thunderbolt"],
+        "exclusiveMoves": ["explosion", "explosion", "megadrain", "nightshade"]
     },
     "onix": {
         "level": 80,
@@ -535,7 +534,7 @@
     "tangela": {
         "level": 74,
         "moves": ["bodyslam", "megadrain", "sleeppowder"],
-        "exclusiveMoves": ["growth", "stunspore", "stunspore", "stunspore", "swordsdance", "swordsdance"]
+        "exclusiveMoves": ["stunspore", "stunspore", "swordsdance"]
     },
     "kangaskhan": {
         "level": 73,
@@ -550,7 +549,7 @@
     "seadra": {
         "level": 77,
         "moves": ["agility", "blizzard", "surf"],
-        "exclusiveMoves": ["doubleedge", "hydropump", "hyperbeam", "smokescreen"]
+        "exclusiveMoves": ["doubleedge", "hydropump", "hyperbeam", "rest", "smokescreen"]
     },
     "goldeen": {
         "level": 88,
@@ -569,8 +568,8 @@
     },
     "starmie": {
         "level": 68,
-        "moves": ["blizzard", "psychic", "thunderbolt", "thunderwave", "thunderwave"],
-        "essentialMoves": ["recover"],
+        "moves": ["blizzard", "psychic", "thunderbolt"],
+        "essentialMoves": ["recover", "thunderwave"],
         "exclusiveMoves": ["hydropump", "psychic", "surf", "surf"]
     },
     "mrmime": {
