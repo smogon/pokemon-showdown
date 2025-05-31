@@ -330,10 +330,11 @@ export class Pokemon {
 		set.level = this.battle.clampIntRange(set.adjustLevel || set.level || 100, 1, 9999);
 		this.level = set.level;
 		const genders: { [key: string]: GenderName } = { M: 'M', F: 'F', N: 'N' };
-		this.gender = '';
-		if (this.battle.gen < 6 || this.battle.ruleTable.has('obtainablemisc')) {
-			genders[set.gender] || this.species.gender || (this.battle.random(2) ? 'F' : 'M');
+		this.gender = genders[set.gender] || this.species.gender;
+		if (!this.gender && (this.battle.gen < 6 || this.battle.ruleTable.has('obtainablemisc'))) {
+			this.gender = (this.battle.random(2) ? 'F' : 'M');
 		}
+		if (this.gender === 'N') this.gender = '';
 		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
 		this.pokeball = toID(this.set.pokeball) || 'pokeball' as ID;
 		this.dynamaxLevel = typeof set.dynamaxLevel === 'number' ? this.battle.clampIntRange(set.dynamaxLevel, 0, 10) : 10;
