@@ -504,7 +504,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.eachEvent('Weather');
 		},
 		onFieldEnd() {
-			this.add('-weather', 'none');
+			this.add('-weather', 'none', 'Rain Dance');
 		},
 	},
 	primordialsea: {
@@ -536,7 +536,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.eachEvent('Weather');
 		},
 		onFieldEnd() {
-			this.add('-weather', 'none');
+			this.add('-weather', 'none', 'PrimordialSea');
 		},
 	},
 	sunnyday: {
@@ -582,7 +582,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.eachEvent('Weather');
 		},
 		onFieldEnd() {
-			this.add('-weather', 'none');
+			this.add('-weather', 'none', 'SunnyDay');
 		},
 	},
 	desolateland: {
@@ -618,7 +618,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.eachEvent('Weather');
 		},
 		onFieldEnd() {
-			this.add('-weather', 'none');
+			this.add('-weather', 'none', 'DesolateLand');
 		},
 	},
 	sandstorm: {
@@ -656,7 +656,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.damage(target.baseMaxhp / 16);
 		},
 		onFieldEnd() {
-			this.add('-weather', 'none');
+			this.add('-weather', 'none', 'Sandstorm');
 		},
 	},
 	hail: {
@@ -686,7 +686,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.damage(target.baseMaxhp / 16);
 		},
 		onFieldEnd() {
-			this.add('-weather', 'none');
+			this.add('-weather', 'none', 'Hail');
 		},
 	},
 	snowscape: {
@@ -719,7 +719,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (this.field.isWeather('snowscape')) this.eachEvent('Weather');
 		},
 		onFieldEnd() {
-			this.add('-weather', 'none');
+			this.add('-weather', 'none', 'Snowscape');
 		},
 	},
 	deltastream: {
@@ -742,7 +742,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.eachEvent('Weather');
 		},
 		onFieldEnd() {
-			this.add('-weather', 'none');
+			this.add('-weather', 'none', 'DeltaStream');
 		},
 	},
 

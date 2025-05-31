@@ -1012,10 +1012,10 @@ export class Pokemon {
 			if (moveSlot.id === 'hiddenpower') {
 				moveName = `Hidden Power ${this.hpType}`;
 				if (this.battle.gen < 6) moveName += ` ${this.hpPower}`;
-			} else if (moveSlot.id === 'return' || moveSlot.id === 'frustration') {
+			} /*else if (moveSlot.id === 'return' || moveSlot.id === 'frustration') {
 				const basePowerCallback = this.battle.dex.moves.get(moveSlot.id).basePowerCallback as (pokemon: Pokemon) => number;
 				moveName += ` ${basePowerCallback(this)}`;
-			}
+			}*/
 			let target = moveSlot.target;
 			switch (moveSlot.id) {
 			case 'curse':
@@ -1173,10 +1173,10 @@ export class Pokemon {
 				if (move === 'hiddenpower') {
 					return `${move}${toID(this.hpType)}${this.battle.gen < 6 ? '' : this.hpPower}` as ID;
 				}
-				if (move === 'frustration' || move === 'return') {
+				/*if (move === 'frustration' || move === 'return') {
 					const basePowerCallback = this.battle.dex.moves.get(move).basePowerCallback as (pokemon: Pokemon) => number;
 					return `${move}${basePowerCallback(this)}` as ID;
-				}
+				}*/
 				return move as ID;
 			}),
 			baseAbility: this.baseAbility,

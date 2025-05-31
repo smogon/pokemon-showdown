@@ -2712,12 +2712,15 @@ export class Battle {
 			});
 			break;
 		case 'megaEvo':
+			action.pokemon.side.megaEvolutionUsed = true;
 			this.actions.runMegaEvo(action.pokemon);
 			break;
 		case 'megaEvoX':
+			action.pokemon.side.megaEvolutionUsed = true;
 			this.actions.runMegaEvoX?.(action.pokemon);
 			break;
 		case 'megaEvoY':
+			action.pokemon.side.megaEvolutionUsed = true;
 			this.actions.runMegaEvoY?.(action.pokemon);
 			break;
 		case 'runDynamax':
@@ -2726,6 +2729,7 @@ export class Battle {
 			if (action.pokemon.side.allySide) action.pokemon.side.allySide.dynamaxUsed = true;
 			break;
 		case 'terastallize':
+			action.pokemon.side.terastallizationUsed = true;
 			this.actions.terastallize(action.pokemon);
 			break;
 		case 'beforeTurnMove':

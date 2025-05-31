@@ -571,6 +571,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onSwitchInPriority: -1,
 		onSwitchIn(pokemon) {
 			if (pokemon.isActive && pokemon.baseSpecies.name === 'Kyogre' && !pokemon.transformed) {
+				pokemon.side.megaEvolutionUsed = true;
 				pokemon.formeChange('Kyogre-Primal', this.effect, true);
 			}
 		},
@@ -3643,6 +3644,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onSwitchInPriority: -1,
 		onSwitchIn(pokemon) {
 			if (pokemon.isActive && pokemon.baseSpecies.name === 'Rayquaza' && !pokemon.transformed) {
+				pokemon.side.megaEvolutionUsed = true;
 				pokemon.formeChange('Rayquaza-Mega', this.effect, true);
 			}
 		},
@@ -4787,6 +4789,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		onSwitchInPriority: -1,
 		onSwitchIn(pokemon) {
 			if (pokemon.isActive && pokemon.baseSpecies.name === 'Groudon' && !pokemon.transformed) {
+				pokemon.side.megaEvolutionUsed = true;
 				pokemon.formeChange('Groudon-Primal', this.effect, true);
 			}
 		},
