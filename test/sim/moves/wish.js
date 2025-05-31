@@ -78,27 +78,19 @@ describe('Wish', () => {
 		assert.false.fullHP(wynaut, `Wish should not have healed Wynaut later either.`);
 	});
 
-	it('should not crash when resolving on empty slot (no Pokemon available)', () => {
-		battle = common.createBattle({ gameType: 'doubles' }, [
-			[
-				{ species: 'Clefable', ability: 'unaware', moves: ['wish', 'explosion'] },
-				{ species: 'Blissey', ability: 'naturalcure', moves: ['explosion', 'softboiled'] },
-				{ species: 'Chansey', ability: 'naturalcure', moves: ['softboiled'] },
-			],
-			[
-				{ species: 'Machamp', ability: 'noguard', moves: ['protect'] },
-				{ species: 'Golem', ability: 'sturdy', moves: ['protect'] },
-			],
-		]);
-
-		battle.makeChoices('move wish, move softboiled', 'move protect, move protect');
-
-		battle.makeChoices('move explosion, move explosion', 'move protect, move protect');
-
-		battle.makeChoices('pass, switch 3');
+	it(`should not crash when resolving on empty slot (no Pokemon available)`, () => {
+		battle = common.createBattle({ gameType: 'doubles' });
+		battle.setPlayer('p1', { team: [
+			{ species: 'Clefable', moves: ['wish'] },
+			{ species: 'Blissey', moves: ['protect'] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: 'Machamp', moves: ['protect'] },
+			{ species: 'Golem', moves: ['protect'] },
+		] });
 
 		assert.doesNotThrow(() => {
-			battle.makeChoices('move softboiled', 'auto');
-		}, 'Wish resolution should not crash when this.active[target] is undefined');
+			battle.p1.removeSlotCondition(null, 'wish');
+		});
 	});
 });

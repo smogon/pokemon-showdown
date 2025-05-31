@@ -436,7 +436,7 @@ export class Side {
 		if (!source) throw new Error(`setting sidecond without a source`);
 
 		status = this.battle.dex.conditions.get(status);
-		if (this.slotConditions[target][status.id]) {
+		if (this.slotConditions[target]?.[status.id]) {
 			if (!status.onRestart) return false;
 			return this.battle.singleEvent('Restart', status, this.slotConditions[target][status.id], this, source, sourceEffect);
 		}
@@ -462,14 +462,14 @@ export class Side {
 	getSlotCondition(target: Pokemon | number, status: string | Effect) {
 		if (target instanceof Pokemon) target = target.position;
 		status = this.battle.dex.conditions.get(status) as Effect;
-		if (!this.slotConditions[target][status.id]) return null;
+		if (!this.slotConditions[target]?.[status.id]) return null;
 		return status;
 	}
 
 	removeSlotCondition(target: Pokemon | number, status: string | Effect) {
 		if (target instanceof Pokemon) target = target.position;
 		status = this.battle.dex.conditions.get(status) as Effect;
-		if (!this.slotConditions[target][status.id]) return false;
+		if (target == null || !this.slotConditions[target]?.[status.id]) return false;
 		const activePokemon = this.active[target];
 		if (activePokemon) {
 			this.battle.singleEvent('End', status, this.slotConditions[target][status.id], activePokemon);
