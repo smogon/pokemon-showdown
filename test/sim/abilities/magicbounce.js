@@ -82,7 +82,7 @@ describe('Magic Bounce', () => {
 		assert.deepEqual(battle.sides.map(side => !!side.sideConditions.stealthrock), [true, false, true, true]);
 	});
 
-	it(`should should only activate for the fastest (unmodified speed) Pokemon in a Free-for-all battle`, () => {
+	it(`should activate from fastest to slowest based on unmodified speed`, () => {
 		battle = common.createBattle({ gameType: 'freeforall' }, [[
 			{ species: 'Deoxys-Speed', moves: ['trickroom', 'stealthrock'] },
 		], [
