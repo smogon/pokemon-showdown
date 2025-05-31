@@ -88,13 +88,13 @@
         "sets": [
             {
                 "role": "Choice Item user",
-                "movepool": ["Alluring Voice", "Focus Blast", "Grass Knot", "Psychic", "Psyshock", "Thunderbolt", "Volt Switch"],
+                "movepool": ["Alluring Voice", "Focus Blast", "Grass Knot", "Psychic", "Thunderbolt", "Volt Switch"],
                 "abilities": ["Surge Surfer"],
                 "teraTypes": ["Electric", "Fairy", "Fighting", "Grass"]
             },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Nasty Plot", "Protect", "Psychic", "Psyshock", "Thunderbolt"],
+                "movepool": ["Nasty Plot", "Protect", "Psychic", "Thunderbolt"],
                 "abilities": ["Surge Surfer"],
                 "teraTypes": ["Dark", "Electric", "Flying"]
             }
@@ -383,13 +383,13 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Fire Blast", "Heal Pulse", "Helping Hand", "Psyshock", "Scald", "Trick Room"],
+                "movepool": ["Fire Blast", "Heal Pulse", "Helping Hand", "Psychic", "Scald", "Trick Room"],
                 "abilities": ["Regenerator"],
                 "teraTypes": ["Dark", "Grass"]
             },
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Fire Blast", "Hydro Pump", "Ice Beam", "Psyshock", "Scald", "Trick Room"],
+                "movepool": ["Fire Blast", "Hydro Pump", "Ice Beam", "Psychic", "Scald", "Trick Room"],
                 "abilities": ["Regenerator"],
                 "teraTypes": ["Dark", "Fire", "Water"]
             }
@@ -1204,13 +1204,13 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Fire Blast", "Heal Pulse", "Helping Hand", "Psyshock", "Scald", "Trick Room"],
+                "movepool": ["Fire Blast", "Heal Pulse", "Helping Hand", "Psychic", "Scald", "Trick Room"],
                 "abilities": ["Regenerator"],
                 "teraTypes": ["Dark", "Grass", "Steel"]
             },
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Fire Blast", "Hydro Pump", "Ice Beam", "Psyshock", "Scald", "Trick Room"],
+                "movepool": ["Fire Blast", "Hydro Pump", "Ice Beam", "Psychic", "Scald", "Trick Room"],
                 "abilities": ["Regenerator"],
                 "teraTypes": ["Fire", "Water"]
             }
@@ -1221,7 +1221,7 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Fire Blast", "Protect", "Psyshock", "Sludge Bomb", "Trick Room"],
+                "movepool": ["Fire Blast", "Protect", "Psychic", "Sludge Bomb", "Trick Room"],
                 "abilities": ["Regenerator"],
                 "teraTypes": ["Dark", "Poison"]
             }
@@ -1658,7 +1658,7 @@
         "sets": [
             {
                 "role": "Choice Item user",
-                "movepool": ["Dazzling Gleam", "Moonblast", "Mystical Fire", "Psychic", "Psyshock", "Trick"],
+                "movepool": ["Dazzling Gleam", "Moonblast", "Mystical Fire", "Psychic", "Trick"],
                 "abilities": ["Trace"],
                 "teraTypes": ["Fairy", "Fire", "Steel"]
             }
@@ -1859,7 +1859,7 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Dazzling Gleam", "Earth Power", "Nasty Plot", "Psychic", "Psyshock"],
+                "movepool": ["Dazzling Gleam", "Earth Power", "Nasty Plot", "Psychic"],
                 "abilities": ["Thick Fat"],
                 "teraTypes": ["Fairy", "Ground"]
             }
@@ -2891,13 +2891,13 @@
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
-                "movepool": ["Dazzling Gleam", "Energy Ball", "Fire Blast", "Nasty Plot", "Psychic", "Psyshock", "U-turn"],
+                "movepool": ["Dazzling Gleam", "Energy Ball", "Fire Blast", "Nasty Plot", "Psychic", "U-turn"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Fairy", "Fire"]
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Dazzling Gleam", "Fire Blast", "Nasty Plot", "Protect", "Psychic", "Psyshock", "Thunderbolt"],
+                "movepool": ["Dazzling Gleam", "Fire Blast", "Nasty Plot", "Protect", "Psychic", "Thunderbolt"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Electric", "Fairy", "Fire"]
             }
@@ -4123,7 +4123,7 @@
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Fire Blast", "Heat Wave", "Nasty Plot", "Protect", "Psyshock"],
+                "movepool": ["Fire Blast", "Heat Wave", "Nasty Plot", "Protect", "Psychic"],
                 "abilities": ["Blaze"],
                 "teraTypes": ["Fire"]
             }
@@ -4757,7 +4757,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Hyper Voice", "Instruct", "Psyshock", "Trick Room"],
+                "movepool": ["Hyper Voice", "Instruct", "Psychic", "Trick Room"],
                 "abilities": ["Inner Focus"],
                 "teraTypes": ["Fairy"]
             }
@@ -5605,7 +5605,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Astral Barrage", "Encore", "Nasty Plot", "Pollen Puff", "Protect", "Psyshock"],
+                "movepool": ["Astral Barrage", "Encore", "Nasty Plot", "Pollen Puff", "Protect", "Psychic"],
                 "abilities": ["As One (Spectrier)"],
                 "teraTypes": ["Dark", "Ghost"]
             }
@@ -5912,7 +5912,7 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Armor Cannon", "Aura Sphere", "Energy Ball", "Heat Wave", "Psyshock"],
+                "movepool": ["Armor Cannon", "Aura Sphere", "Energy Ball", "Heat Wave", "Psychic"],
                 "abilities": ["Flash Fire"],
                 "teraTypes": ["Fighting", "Fire", "Grass"]
             },
@@ -5924,7 +5924,7 @@
             },
             {
                 "role": "Doubles Setup Sweeper",
-                "movepool": ["Heat Wave", "Meteor Beam", "Protect", "Psychic", "Psyshock"],
+                "movepool": ["Heat Wave", "Meteor Beam", "Protect", "Psychic"],
                 "abilities": ["Weak Armor"],
                 "teraTypes": ["Dark", "Grass"]
             }
@@ -6288,7 +6288,7 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Hyper Voice", "Nasty Plot", "Protect", "Psychic", "Psyshock", "Trick Room"],
+                "movepool": ["Hyper Voice", "Nasty Plot", "Protect", "Psychic", "Trick Room"],
                 "abilities": ["Armor Tail"],
                 "teraTypes": ["Fairy"]
             }
@@ -6726,13 +6726,13 @@
         "sets": [
             {
                 "role": "Doubles Fast Attacker",
-                "movepool": ["Focus Blast", "Protect", "Psyshock", "Sludge Bomb", "U-turn"],
+                "movepool": ["Focus Blast", "Protect", "Psychic", "Sludge Bomb", "U-turn"],
                 "abilities": ["Toxic Chain"],
                 "teraTypes": ["Fighting", "Poison"]
             },
             {
                 "role": "Doubles Support",
-                "movepool": ["Fake Out", "Focus Blast", "Psyshock", "Sludge Bomb", "U-turn"],
+                "movepool": ["Fake Out", "Focus Blast", "Psychic", "Sludge Bomb", "U-turn"],
                 "abilities": ["Toxic Chain"],
                 "teraTypes": ["Fighting", "Poison"]
             }
@@ -6925,19 +6925,19 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Focus Blast", "Protect", "Psychic", "Psyshock", "Tachyon Cutter"],
+                "movepool": ["Focus Blast", "Protect", "Psychic", "Tachyon Cutter"],
                 "abilities": ["Quark Drive"],
                 "teraTypes": ["Fighting", "Water"]
             },
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Focus Blast", "Psychic", "Psyshock", "Tachyon Cutter", "Volt Switch"],
+                "movepool": ["Focus Blast", "Psychic", "Tachyon Cutter", "Volt Switch"],
                 "abilities": ["Quark Drive"],
                 "teraTypes": ["Fighting", "Water"]
             },
             {
                 "role": "Doubles Bulky Setup",
-                "movepool": ["Agility", "Focus Blast", "Protect", "Psychic", "Psyshock", "Tachyon Cutter"],
+                "movepool": ["Agility", "Focus Blast", "Protect", "Psychic", "Tachyon Cutter"],
                 "abilities": ["Quark Drive"],
                 "teraTypes": ["Fighting", "Psychic", "Steel"]
             }
