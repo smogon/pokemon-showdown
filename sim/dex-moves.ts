@@ -325,6 +325,8 @@ export interface ActiveMove extends MutableMove {
 	isExternal?: boolean;
 	lastHit?: boolean;
 	magnitude?: number;
+	/** Utilized in Gen 4 Counter and Mirror Coat */
+	berryWeakened?: boolean;
 	negateSecondary?: boolean;
 	pranksterBoosted?: boolean;
 	selfDropped?: boolean;

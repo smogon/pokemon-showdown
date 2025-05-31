@@ -513,10 +513,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (!lastAttackedBy?.source.lastMove || !lastAttackedBy.move) {
 				return false;
 			}
-			if (noMirror.includes(lastAttackedBy.move) || !lastAttackedBy.source.hasMove(lastAttackedBy.move)) {
+			if (noMirror.includes(lastAttackedBy.move.id) || !lastAttackedBy.source.hasMove(lastAttackedBy.move.id)) {
 				return false;
 			}
-			this.actions.useMove(lastAttackedBy.move, pokemon);
+			this.actions.useMove(lastAttackedBy.move.id, pokemon);
 		},
 		target: "self",
 	},
