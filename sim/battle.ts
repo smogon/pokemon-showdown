@@ -1001,8 +1001,10 @@ export class Battle {
 		if (handler.effectHolder && (handler.effectHolder as Pokemon).getStat) {
 			const pokemon = handler.effectHolder as Pokemon;
 			handler.speed = pokemon.speed;
-			if (handler.effect.effectType === 'Ability' && handler.effect.name === 'Dancer' &&
-				callbackName === 'onAnyAfterMove') {
+			if (handler.effect.effectType === 'Ability' && (
+        (handler.effect.name === 'Dancer' && callbackName === 'onAnyAfterMove') ||
+        (handler.effect.name === 'Magic Bounce' && callbackName === 'onAllyTryHitSide')
+      )) {
 				handler.speed = pokemon.getStat('spe', true, true);
 			}
 			if (callbackName.endsWith('SwitchIn')) {
@@ -2542,11 +2544,7 @@ export class Battle {
 	}
 
 	checkWin(faintData?: Battle['faintQueue'][0]) {
-		const team1PokemonLeft = this.sides[0].pokemonLeft + (this.sides[0].allySide?.pokemonLeft || 0);
-		const team2PokemonLeft = this.sides[1].pokemonLeft + (this.sides[1].allySide?.pokemonLeft || 0);
-		const team3PokemonLeft = this.gameType === 'freeforall' && this.sides[2]!.pokemonLeft;
-		const team4PokemonLeft = this.gameType === 'freeforall' && this.sides[3]!.pokemonLeft;
-		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
+		if (this.sides.every(side => !side.pokemonLeft)) {
 			this.win(faintData && this.gen > 4 ? faintData.target.side : null);
 			return true;
 		}
