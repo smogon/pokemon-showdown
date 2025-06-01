@@ -627,9 +627,7 @@ export const commands: Chat.ChatCommands = {
 			case 'pokemon':
 				let pokemon = dex.species.get(newTarget.name);
 				if (format?.onModifySpecies) {
-					pokemon = format.onModifySpecies.call({
-						dex, clampIntRange: Utils.clampIntRange, toID, ruleTable: dex.formats.getRuleTable(format),
-					} as Battle, pokemon) || pokemon;
+					pokemon = format.onModifySpecies.call({ dex, clampIntRange: Utils.clampIntRange, toID } as Battle, pokemon) || pokemon;
 				}
 				let tierDisplay = room?.settings.dataCommandTierDisplay;
 				if (!tierDisplay && room?.battle) {
