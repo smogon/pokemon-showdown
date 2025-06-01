@@ -525,6 +525,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Arceus', 'Calyrex-Shadow', 'Hoopa-Unbound', 'Koraidon', 'Kyogre', 'Medicham', 'Miraidon', 'Zacian-Crowned', 'Drizzle', 'Moody',
 			'Arena Trap', 'Shadow Tag', 'Baton Pass', 'Last Respects', 'Shed Tail', 'Heat Rock', 'King\'s Rock', 'Light Clay', 'Razor Fang',
 		],
+		unbanlist: ['Arceus-Bug', 'Arceus-Grass', 'Arceus-Ice'],
 	},
 	{
 		name: "[Gen 9] Pure Hackmons",
