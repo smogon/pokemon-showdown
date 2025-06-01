@@ -356,7 +356,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		section: "Pet Mods",
 	},
-	{
+	/* {
 		name: "[Gen 9] Fusion Evolution Random Battle",
 		desc: "A random battle format featuring Fakemon created by fusing together the stats, types, and abilities of two Pokemon.",
 		mod: 'gen9fe',
@@ -376,7 +376,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 			}
 		},
-	},
+	}, */
 	{
 		name: "[Gen 9] CCAPM 2024 Random Battle",
 		desc: "A random battle format featuring Fakemon created during the Community Create-A-Pet Mod event in the Pet Mods room in 2024.",
