@@ -1002,9 +1002,9 @@ export class Battle {
 			const pokemon = handler.effectHolder as Pokemon;
 			handler.speed = pokemon.speed;
 			if (handler.effect.effectType === 'Ability' && (
-        (handler.effect.name === 'Dancer' && callbackName === 'onAnyAfterMove') ||
-        (handler.effect.name === 'Magic Bounce' && callbackName === 'onAllyTryHitSide')
-      )) {
+				(handler.effect.name === 'Dancer' && callbackName === 'onAnyAfterMove') ||
+				(handler.effect.name === 'Magic Bounce' && callbackName === 'onAllyTryHitSide')
+			)) {
 				handler.speed = pokemon.getStat('spe', true, true);
 			}
 			if (callbackName.endsWith('SwitchIn')) {
