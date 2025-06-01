@@ -2257,7 +2257,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				nfe: 30,
 				lc: 30,
 			};
-      
 			const tiers = ['ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zubl', 'zu', 'nfe', 'lc'];
 			const isNatDex: boolean = this.ruleTable?.has('natdexmod') || false;
 			let tier: string = this.toID(isNatDex ? species.natDexTier : species.tier);
