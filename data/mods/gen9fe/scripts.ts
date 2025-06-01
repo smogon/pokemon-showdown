@@ -519,7 +519,9 @@ export const Scripts: ModdedBattleScriptsData = {
 		}, */
 	},
 	pokemon: {
-		runImmunity(type: string, message?: string | boolean) {
+		runImmunity(source: ActiveMove | string, message?: string | boolean) {
+			if (!source) return true;
+			const type: string = typeof source !== 'string' ? source.type : source;
 			if (!type || type === '???') return true;
 			if (!this.battle.dex.types.isName(type)) {
 				throw new Error("Use runStatusImmunity for " + type);
