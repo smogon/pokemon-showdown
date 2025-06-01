@@ -2257,14 +2257,17 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				nfe: 30,
 				lc: 30,
 			};
-			const isNatDex: boolean = this.ruleTable.has("standardnatdex");
+			const tiers = ['ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zubl', 'zu', 'nfe', 'lc'];
+			const isNatDex: boolean = this.ruleTable.has('natdexmod');
 			let tier: string = this.toID(isNatDex ? species.natDexTier : species.tier);
 			if (!(tier in boosts)) return;
 			// Non-Pokemon bans in lower tiers
-			if (target) {
-				if (this.toID(target.set.item) === 'lightclay') tier = 'rubl';
-				if (this.toID(target.set.item) === 'damprock') tier = 'publ';
-				if (this.toID(target.set.item) === 'heatrock') tier = 'publ';
+			if (target && !isNatDex) {
+				if (this.toID(target.set.item) === 'lightclay' && tiers.indexOf(tier) > tiers.indexOf('rubl')) tier = 'rubl';
+				if (this.toID(target.set.item) === 'quickclaw' && tiers.indexOf(tier) > tiers.indexOf('nubl')) tier = 'nubl';
+				if (this.toID(target.set.ability) === 'drought' && tiers.indexOf(tier) > tiers.indexOf('nubl')) tier = 'nubl';
+				if (this.toID(target.set.item) === 'damprock' && tiers.indexOf(tier) > tiers.indexOf('publ')) tier = 'publ';
+				if (this.toID(target.set.item) === 'unburden' && tiers.indexOf(tier) > tiers.indexOf('zubl')) tier = 'zubl';
 			}
 			const pokemon = this.dex.deepClone(species);
 			pokemon.bst = pokemon.baseStats['hp'];
