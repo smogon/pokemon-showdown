@@ -88,3 +88,44 @@ describe('Dex#getMove', () => {
 		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').isNonstandard, "Gigantamax");
 	});
 });
+
+describe('DexTypes#isName', () => {
+	it('should return true for valid type names', () => {
+		assert.equal(Dex.types.isName('Fire'), true);
+		assert.equal(Dex.types.isName('Water'), true);
+		assert.equal(Dex.types.isName('Psychic'), true);
+		assert.equal(Dex.types.isName('Fighting'), true);
+		assert.equal(Dex.types.isName('Normal'), true);
+	});
+
+	it('should return false for invalid type names', () => {
+		assert.equal(Dex.types.isName('fire'), false); // lowercase
+		assert.equal(Dex.types.isName('FIRE'), false); // uppercase
+		assert.equal(Dex.types.isName('Unknown'), false); // non-existent type
+		assert.equal(Dex.types.isName(''), false); // empty string
+	});
+
+	it('should handle non-string inputs without crashing', () => {
+		// This is the key test for our fix
+		assert.equal(Dex.types.isName(undefined), false);
+		assert.equal(Dex.types.isName(null), false);
+		assert.equal(Dex.types.isName(123), false);
+		assert.equal(Dex.types.isName({}), false);
+		assert.equal(Dex.types.isName([]), false);
+		assert.equal(Dex.types.isName(true), false);
+		assert.equal(Dex.types.isName(false), false);
+		assert.equal(Dex.types.isName(() => { }), false);
+	});
+
+	it('should work properly in the Card Game mod context', () => {
+		const cardGameDex = Dex.mod('thecardgame');
+		// Test valid types for the card game mod
+		assert.equal(cardGameDex.types.isName('Fire'), true);
+		assert.equal(cardGameDex.types.isName('Water'), true);
+
+		// Test non-string inputs in card game mod
+		assert.equal(cardGameDex.types.isName(undefined), false);
+		assert.equal(cardGameDex.types.isName(null), false);
+		assert.equal(cardGameDex.types.isName({}), false);
+	});
+});
