@@ -19,11 +19,11 @@ describe('Wish', () => {
 			{ species: "Guzzlord", item: 'focussash', moves: ['sleeptalk'] },
 		] });
 		battle.setPlayer('p2', { team: [
-			{ species: "Kyurem", moves: ['icebeam'] },
+			{ species: "Kyurem", moves: ['dragonpulse'] },
 			{ species: "Diancie", moves: ['moonblast'] },
 		] });
-		battle.makeChoices('move wish, move wish', 'move icebeam 1, move moonblast 2');
-		battle.makeChoices('switch 3, switch 4', 'move icebeam 1, move moonblast 2');
+		battle.makeChoices('move wish, move wish', 'move dragonpulse 1, move moonblast 2');
+		battle.makeChoices('switch 3, switch 4', 'move dragonpulse 1, move moonblast 2');
 		assert.fullHP(battle.p1.active[0]);
 		assert.equal(battle.p1.active[1].hp, 321);
 	});
