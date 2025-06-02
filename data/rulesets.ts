@@ -261,7 +261,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					const move = this.dex.moves.get(moveId);
 					const moveid = move.id;
 					if (hasMove[moveid]) return [`${species.baseSpecies} has multiple copies of ${move.name}.`];
-					hasMove[moveid] = true;
+					if (moveid) hasMove[moveid] = true;
 				}
 			}
 		},
