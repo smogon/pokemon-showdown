@@ -957,4 +957,34 @@ export const commands: Chat.ChatCommands = {
 	pokemovehelp: [
 		`/pokemove <Pok\u00e9mon> - Shows the Pokemove data for <Pok\u00e9mon>.`,
 	],
+
+	bnb: 'badnboosted',
+	badnboosted(target, room, user) {
+		const args = target.split(',');
+		if (!toID(args[0])) return this.parse('/help badnboostedhelp');
+		this.runBroadcast();
+		let dex = Dex;
+		if (args[1] && toID(args[1]) in Dex.dexes) {
+			dex = Dex.dexes[toID(args[1])];
+		} else if (room?.battle) {
+			const format = Dex.formats.get(room.battle.format);
+			dex = Dex.mod(format.mod);
+		}
+		const species = Utils.deepClone(dex.species.get(args[0]));
+		if (!species.exists || species.gen > dex.gen) {
+			const monName = species.gen > dex.gen ? species.name : args[0].trim();
+			const additionalReason = species.gen > dex.gen ? ` in Generation ${dex.gen}` : ``;
+			throw new Chat.ErrorMessage(`Error: Pok\u00e9mon '${monName}' not found${additionalReason}.`);
+		}
+		species.bst = 0;
+		for (const i in species.baseStats) {
+			if (dex.gen === 1 && i === 'spd') continue;
+			species.baseStats[i] *= (species.baseStats[i] <= 70 ? 2 : 1);
+			species.bst += species.baseStats[i];
+		}
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen, 'BnB')}`);
+	},
+	'badnboostedhelphelp': [
+		`/bnb OR /badnboosted <pokemon>[, gen] - Shows the base stats that a Pok\u00e9mon would have in Bad 'n Boosted.`,
+	],
 };
