@@ -982,7 +982,7 @@ export const commands: Chat.ChatCommands = {
 			species.baseStats[i] *= (species.baseStats[i] <= 70 ? 2 : 1);
 			species.bst += species.baseStats[i];
 		}
-		this.sendReply(`|html|${Chat.getDataPokemonHTML(species, dex.gen)}`);
+		this.sendReply(`|raw|${Chat.getDataPokemonHTML(species, dex.gen, 'BnB')}`);
 	},
 	'badnboostedhelphelp': [
 		`/bnb OR /badnboosted <pokemon>[, gen] - Shows the base stats that a Pok\u00e9mon would have in Bad 'n Boosted.`,
