@@ -519,7 +519,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		}, */
 	},
 	pokemon: {
-		runImmunity(source: ActiveMove | string, message?: string | boolean) {
+		runImmunity(source, message) {
 			if (!source) return true;
 			const type: string = typeof source !== 'string' ? source.type : source;
 			if (typeof source !== 'string') {
