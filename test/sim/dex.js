@@ -105,15 +105,18 @@ describe('DexTypes#isName', () => {
 		assert.equal(Dex.types.isName(''), false);
 	});
 
-	it('should handle non-string inputs without crashing', () => {
+	it('should return false for null and undefined', () => {
 		assert.equal(Dex.types.isName(undefined), false);
 		assert.equal(Dex.types.isName(null), false);
-		assert.equal(Dex.types.isName(123), false);
-		assert.equal(Dex.types.isName({}), false);
-		assert.equal(Dex.types.isName([]), false);
-		assert.equal(Dex.types.isName(true), false);
-		assert.equal(Dex.types.isName(false), false);
-		assert.equal(Dex.types.isName(() => {}), false);
+	});
+
+	it('should throw for non-string inputs (except null/undefined)', () => {
+		assert.throws(() => Dex.types.isName(123));
+		assert.throws(() => Dex.types.isName({}));
+		assert.throws(() => Dex.types.isName([]));
+		assert.throws(() => Dex.types.isName(true));
+		assert.throws(() => Dex.types.isName(false));
+		assert.throws(() => Dex.types.isName(() => {}));
 	});
 
 	it('should work properly in the Card Game mod context', () => {
@@ -123,6 +126,6 @@ describe('DexTypes#isName', () => {
 
 		assert.equal(cardGameDex.types.isName(undefined), false);
 		assert.equal(cardGameDex.types.isName(null), false);
-		assert.equal(cardGameDex.types.isName({}), false);
+		assert.throws(() => cardGameDex.types.isName({}));
 	});
 });
