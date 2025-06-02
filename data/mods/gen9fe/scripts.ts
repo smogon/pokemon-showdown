@@ -519,33 +519,39 @@ export const Scripts: ModdedBattleScriptsData = {
 		}, */
 	},
 	pokemon: {
-		runImmunity(type: string, message?: string | boolean) {
+		runImmunity(source: ActiveMove | string, message?: string | boolean) {
+			if (!source) return true;
+			const type: string = typeof source !== 'string' ? source.type : source;
+			if (typeof source !== 'string') {
+				if (source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[type])) {
+					return true;
+				}
+			}
 			if (!type || type === '???') return true;
 			if (!this.battle.dex.types.isName(type)) {
 				throw new Error("Use runStatusImmunity for " + type);
 			}
-			if (this.fainted) return false;
 			const negateImmunity = !this.battle.runEvent('NegateImmunity', this, type);
 			const notImmune = type === 'Ground' ?
 				this.isGrounded(negateImmunity) :
 				negateImmunity || this.battle.dex.getImmunity(type, this);
 			if (notImmune) return true;
-			if (message) {
-				if (notImmune === null) {
-					this.battle.add('-immune', this, '[from] ability: ' + this.getAbility().name);
-				} else {
-					this.battle.add('-immune', this);
-				}
+			if (!message) return false;
+			if (notImmune === null) {
+				this.battle.add('-immune', this, '[from] ability: ' + this.getAbility().name);
+			} else {
+				this.battle.add('-immune', this);
 			}
 			return false;
 		},
 		isGrounded(negateImmunity = false) {
-			if ('gravity' in this.battle.field.pseudoWeather || 'ingrain' in this.volatiles ||
-				'smackdown' in this.volatiles) return true;
+			if ('gravity' in this.battle.field.pseudoWeather) return true;
+			if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
+			if ('smackdown' in this.volatiles) return true;
 			const item = (this.ignoringItem() ? '' : this.item);
 			if (item === 'ironball') return true;
 			// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
-			if (!negateImmunity && this.hasType('Flying') && !('roost' in this.volatiles)) return false;
+			if (!negateImmunity && this.hasType('Flying') && !(this.hasType('???') && 'roost' in this.volatiles)) return false;
 			if (
 				(this.hasAbility([
 					'levitate', 'holygrail', 'risingtension', 'freeflight', 'airbornearmor', 'hellkite', 'honeymoon',
@@ -553,7 +559,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				])) &&
 				!this.battle.suppressingAbility(this)
 			) return null;
-			if ('magnetrise' in this.volatiles || 'telekinesis' in this.volatiles) return false;
+			if ('magnetrise' in this.volatiles) return false;
+			if ('telekinesis' in this.volatiles) return false;
 			return item !== 'airballoon';
 		},
 	},
