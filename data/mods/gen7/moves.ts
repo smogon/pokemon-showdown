@@ -876,6 +876,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		isNonstandard: null,
 	},
 	rapidspin: {
+		clauseData: {},
 		inherit: true,
 		basePower: 20,
 		secondary: null,
@@ -1213,6 +1214,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		isNonstandard: null,
 	},
 	zippyzap: {
+		clauseData: {},
 		inherit: true,
 		basePower: 50,
 		pp: 15,

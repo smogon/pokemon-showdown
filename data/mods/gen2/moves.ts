@@ -894,6 +894,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	thief: {
 		inherit: true,
+		clauseData: {},
 		onAfterHit() {},
 		secondary: {
 			chance: 100,

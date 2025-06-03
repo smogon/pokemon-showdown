@@ -255,6 +255,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	lightningrod: {
 		inherit: true,
+		clauseData: {},
 		onTryHit() {},
 		rating: 0,
 	},
@@ -457,6 +458,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	stormdrain: {
 		inherit: true,
+		clauseData: {},
 		onTryHit() {},
 		rating: 0,
 	},
