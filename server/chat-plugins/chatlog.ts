@@ -240,6 +240,11 @@ export const LogViewer = new class {
 			`<a roomid="view-chatlog-${roomid}--${month}">${month}</a> / ` +
 			`<strong>${day}</strong></p><small>${opts ? `Options in use: ${opts}` : ''}</small> <hr />`;
 
+		if (!Config.logchat) {
+			buf += `<p class="message-error">Chat logs are disabled</p></div>`;
+			return this.linkify(buf);
+		}
+
 		const roomLog = await LogReader.get(roomid);
 		if (!roomLog) {
 			buf += `<p class="message-error">Room "${roomid}" doesn't exist</p></div>`;
@@ -361,6 +366,10 @@ export const LogViewer = new class {
 			`<a roomid="view-chatlog">◂ All logs</a> / ` +
 			`<a roomid="view-chatlog-${roomid}">${roomid}</a> / ` +
 			`<strong>${month}</strong></p><hr />`;
+		if (!Config.logchat) {
+			buf += `<p class="message-error">Chat logs are disabled</p></div>`;
+			return this.linkify(buf);
+		}
 
 		const roomLog = await LogReader.get(roomid);
 		if (!roomLog) {
@@ -397,6 +406,11 @@ export const LogViewer = new class {
 		let buf = `<div class="pad"><p>` +
 			`<a roomid="view-chatlog">◂ All logs</a> / ` +
 			`<strong>${roomid}</strong></p><hr />`;
+
+		if (!Config.logchat) {
+			buf += `<p class="message-error">Chat logs are disabled</p></div>`;
+			return this.linkify(buf);
+		}
 
 		const roomLog = await LogReader.get(roomid);
 		if (!roomLog) {
