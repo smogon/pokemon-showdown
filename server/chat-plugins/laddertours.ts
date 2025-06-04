@@ -236,7 +236,6 @@ export class LadderTracker {
 					glickodev: Math.round(data.rprd),
 				};
 				this.leaderboard.lookup.set(data.userid, entry);
-				console.log(data, this.prefix);
 				if (!data.userid.startsWith(this.prefix)) continue;
 				entry.rank = leaderboard.length + 1;
 				leaderboard.push(entry);
@@ -639,7 +638,6 @@ export const commands: Chat.ChatCommands = {
 			` - /laddertrack stop - stops (pauses) the tracker`,
 			` - /laddertrack endtrack - ends the tracker entirely`,
 			` - /laddertrack showdiffs - shows or hides differences between the current leaderboard and the previous leaderboard`,
-			` - /laddertrack ladderhelp - displays this message`,
 		].join('<br />'));
 	},
 };
