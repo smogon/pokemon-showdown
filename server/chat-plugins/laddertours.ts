@@ -12,7 +12,7 @@ const FACTOR = 1.5;
 interface TrackerConfig {
 	format: string;
 	prefix: string;
-	rating?: number;
+	rating: number;
 	deadline?: string;
 	cutoff?: number;
 	users?: ID[];
@@ -34,7 +34,7 @@ interface LeaderboardEntry {
 	glickodev: number;
 }
 
-class LadderTracker {
+export class LadderTracker {
 	readonly config: TrackerConfig;
 
 	format: ID;
@@ -60,7 +60,7 @@ class LadderTracker {
 		this.room = room;
 
 		this.format = toID(config.format);
-		this.prefix = ''; // gets set on start() call
+		this.prefix = toID(config.prefix);
 		this.rating = config.rating || 0;
 		if (config.deadline) this.setDeadline(config.deadline);
 
@@ -236,6 +236,7 @@ class LadderTracker {
 					glickodev: Math.round(data.rprd),
 				};
 				this.leaderboard.lookup.set(data.userid, entry);
+				console.log(data, this.prefix);
 				if (!data.userid.startsWith(this.prefix)) continue;
 				entry.rank = leaderboard.length + 1;
 				leaderboard.push(entry);
@@ -369,24 +370,28 @@ class LadderTracker {
 		if (display) this.addHTML(messages.join(' '));
 	}
 
-	setPrefix(prefix: string) {
+	setPrefix(prefix: string, save = true) {
 		const oldPrefix = this.prefix;
 		this.prefix = toID(prefix);
 		if (oldPrefix !== prefix) {
-			LadderTracker.save();
-			if (this.room.settings.isPrivate === undefined) {
-				try {
-					prefixManager.removePrefix(oldPrefix, 'privacy');
-				} catch {} // suppress errorMessages in case it's the first start and it hasn't been made priv yet
-				prefixManager.addPrefix(this.prefix, 'privacy');
-			}
+			if (save) LadderTracker.save();
+			this.togglePrefix(oldPrefix);
+		}
+	}
+
+	togglePrefix(oldPrefix?: ID) {
+		if (this.room.settings.isPrivate === undefined) {
+			try {
+				if (oldPrefix) prefixManager.removePrefix(oldPrefix, 'privacy');
+			} catch {} // suppress errorMessages in case it's the first start and it hasn't been made priv yet
+			prefixManager.addPrefix(this.prefix, 'privacy');
 		}
 	}
 
 	start() {
 		if (this.started) return;
 
-		this.setPrefix(this.prefix);
+		this.togglePrefix();
 		// eslint-disable-next-line @typescript-eslint/no-misused-promises
 		this.started = setInterval(async () => {
 			// Leaderboard
@@ -596,13 +601,14 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('mute', null, tracker.room);
 			tracker.stop();
 		},
+		end: 'endtrack',
 		endtrack(target, room, user, nike, cmd) {
 			const tracker = LadderTracker.getTracker(this);
 			this.checkCan('mute', null, tracker.room);
 			tracker.stop();
 			delete trackers[tracker.room.roomid];
 			LadderTracker.save();
-			this.modlog(`LADDER ENTRACK`, null);
+			this.modlog(`LADDER ENDTRACK`, null);
 			this.addModAction(`${user.name} ended the active ladder tracker.`);
 		},
 		hidediffs: 'showdiffs',
