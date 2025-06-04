@@ -373,8 +373,8 @@ export default class TeamGenerator {
 		const hasRevelationDance = moves.some(m => m.id === 'revelationdance');
 		let attackingTypes = nonStatusMoves.map(m => TeamGenerator.moveType(this.dex.moves.get(m), species));
 		let teraType;
-		if (species.forceTeraType) {
-			teraType = species.forceTeraType;
+		if (species.requiredTeraType) {
+			teraType = species.requiredTeraType;
 		} else if (item === 'blacksludge' && this.prng.randomChance(2, 3)) {
 			teraType = 'Poison';
 		} else if (hasTeraBlast && ability === 'Contrary' && this.prng.randomChance(2, 3)) {
@@ -383,7 +383,7 @@ export default class TeamGenerator {
 			const noStellar = ability === 'Adaptability' || new Set(attackingTypes).size < 3;
 			const noAttacks = !nonStatusMoves.length;
 			if (hasTeraBlast || hasRevelationDance || noAttacks) {
-				attackingTypes = [...this.dex.types.names().filter(t => !(noAttacks ? species.types : attackingTypes).includes(t))];
+				attackingTypes = this.dex.types.names().filter(t => !(noAttacks ? species.types : attackingTypes).includes(t));
 				if (noStellar) attackingTypes.splice(attackingTypes.indexOf('Stellar'));
 			} else {
 				if (!noStellar) attackingTypes.push('Stellar');
@@ -765,7 +765,7 @@ export default class TeamGenerator {
 
 		// Oricorio should rarely get Tera Blast, as Revelation Dance is strictly better
 		// Tera Blast is also bad on species with forced Tera types, a.k.a. Ogerpon and Terapagos
-		if (move.id === 'terablast' && (species.baseSpecies === 'Oricorio' || species.forceTeraType)) weight *= 0.5;
+		if (move.id === 'terablast' && (species.baseSpecies === 'Oricorio' || species.requiredTeraType)) weight *= 0.5;
 
 		return weight;
 	}

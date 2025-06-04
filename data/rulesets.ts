@@ -19,7 +19,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	standard: {
 		effectType: 'ValidatorRule',
 		name: 'Standard',
-		desc: "The standard ruleset for all offical Smogon singles tiers (Ubers, OU, etc.)",
+		desc: "The standard ruleset for all official Smogon singles tiers (Ubers, OU, etc.)",
 		ruleset: [
 			'Standard AG',
 			'Sleep Clause Mod', 'Species Clause', 'Nickname Clause', 'OHKO Clause', 'Evasion Items Clause', 'Evasion Moves Clause',
@@ -261,7 +261,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					const move = this.dex.moves.get(moveId);
 					const moveid = move.id;
 					if (hasMove[moveid]) return [`${species.baseSpecies} has multiple copies of ${move.name}.`];
-					hasMove[moveid] = true;
+					if (moveid) hasMove[moveid] = true;
 				}
 			}
 		},
@@ -1216,6 +1216,27 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 						`${set.name || set.species} has Baton Pass and a way to boost its stats, which is banned by Baton Pass Stat Clause.`,
 					];
 				}
+			}
+		},
+	},
+	batonpasstrapclause: {
+		effectType: 'ValidatorRule',
+		name: 'Baton Pass Trap Clause',
+		desc: "Stops teams from having a Pok&eacute;mon with Baton Pass that has any way to trap Pok&eacute;mon.",
+		onBegin() {
+			this.add('rule', 'Baton Pass Trap Clause: No Baton Passer may have a way to trap Pok\u00e9mon');
+		},
+		onValidateTeam(team, format, teamHas) {
+			const trappingMoves = ['block', 'fairylock', 'meanlook', 'octolock', 'spiderweb'];
+			let name = '';
+			const bpAndTrap = team.some(set => {
+				name = set.name || set.species;
+				return set.moves.includes('batonpass') && set.moves.some(move => trappingMoves.includes(move));
+			});
+			if (bpAndTrap) {
+				return [
+					`${name} has Baton Pass and a way to pass trapping, which is banned by Baton Pass Trap Clause.`,
+				];
 			}
 		},
 	},
@@ -2236,14 +2257,17 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				nfe: 30,
 				lc: 30,
 			};
-			const isNatDex: boolean = this.ruleTable.has("standardnatdex");
+			const tiers = ['ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zubl', 'zu', 'nfe', 'lc'];
+			const isNatDex = !!this.ruleTable?.has('natdexmod');
 			let tier: string = this.toID(isNatDex ? species.natDexTier : species.tier);
 			if (!(tier in boosts)) return;
 			// Non-Pokemon bans in lower tiers
-			if (target) {
-				if (this.toID(target.set.item) === 'lightclay') tier = 'rubl';
-				if (this.toID(target.set.item) === 'damprock') tier = 'publ';
-				if (this.toID(target.set.item) === 'heatrock') tier = 'publ';
+			if (target && !isNatDex) {
+				if (this.toID(target.set.item) === 'lightclay' && tiers.indexOf(tier) > tiers.indexOf('rubl')) tier = 'rubl';
+				if (this.toID(target.set.item) === 'quickclaw' && tiers.indexOf(tier) > tiers.indexOf('nubl')) tier = 'nubl';
+				if (this.toID(target.set.ability) === 'drought' && tiers.indexOf(tier) > tiers.indexOf('nubl')) tier = 'nubl';
+				if (this.toID(target.set.item) === 'damprock' && tiers.indexOf(tier) > tiers.indexOf('publ')) tier = 'publ';
+				if (this.toID(target.set.item) === 'unburden' && tiers.indexOf(tier) > tiers.indexOf('zubl')) tier = 'zubl';
 			}
 			const pokemon = this.dex.deepClone(species);
 			pokemon.bst = pokemon.baseStats['hp'];
@@ -2550,7 +2574,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 						species = this.dex.species.get(item.megaStone);
 					}
 				}
-				if (this.ruleTable.isRestrictedSpecies(species)) {
+				if (this.ruleTable.isRestrictedSpecies(species) ||
+					(this.ruleTable.isRestricted('ability:powerconstruct') && this.toID(set.ability) === 'powerconstruct')) {
 					gods.add(species.name);
 				}
 			}
@@ -2563,7 +2588,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (source || !target?.side) return;
 			const god = target.side.team.find(set => {
 				let godSpecies = this.dex.species.get(set.species);
-				if (this.toID(set.ability) === 'powerconstruct') {
+				if (this.toID(set.ability) === 'powerconstruct' && this.ruleTable.isRestricted('ability:powerconstruct')) {
 					return true;
 				}
 				if (set.item) {
@@ -2643,12 +2668,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: "Hackmons Forme Legality",
 		desc: `Enforces proper forme legality for hackmons-based metagames.`,
-		banlist: ['CAP', 'LGPE', 'Future'],
+		banlist: ['CAP', 'Future'],
 		onChangeSet(set, format, setHas, teamHas) {
 			let species = this.dex.species.get(set.species);
 			if (
 				(species.natDexTier === 'Illegal' || species.forme.includes('Totem')) &&
-				!['Floette-Eternal', 'Greninja-Ash', 'Xerneas-Neutral'].includes(species.name) &&
+				!['Eevee-Starter', 'Floette-Eternal', 'Greninja-Ash', 'Pikachu-Starter', 'Xerneas-Neutral'].includes(species.name) &&
 				!this.ruleTable.has(`+pokemon:${species.id}`)
 			) {
 				return [`${species.name} is illegal.`];
@@ -2941,6 +2966,125 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				newSpecies.bst += newSpecies.baseStats[stat];
 			}
 			return newSpecies;
+		},
+	},
+	datapreview: {
+		effectType: 'Rule',
+		name: 'Data Preview',
+		desc: 'When a new Pokémon switches in for the first time, information about its types, stats and Abilities is displayed to both players.',
+		onSwitchIn(pokemon) {
+			const species = pokemon.illusion?.species || pokemon.species;
+			const gen = this.gen;
+
+			if (pokemon.illusion) {
+				pokemon.m.revealed = false;
+			}
+
+			// Recreation of Chat.getDataPokemonHTML
+			let buf = '<li class="result">';
+			buf += `<span class="col numcol">${species.tier}</span> `;
+			buf += `<span class="col iconcol"><psicon pokemon="${species.id}"/></span> `;
+			buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${species.id}" target="_blank">${species.name}</a></span> `;
+			buf += '<span class="col typecol">';
+			if (species.types) {
+				for (const type of species.types) {
+					buf += `<img src="https://${Config.routes.client}/sprites/types/${type}.png" alt="${type}" height="14" width="32">`;
+				}
+			}
+			buf += '</span> ';
+			if (gen >= 3) {
+				buf += '<span style="float:left;min-height:26px">';
+				if (species.abilities['1'] && (gen >= 4 || Dex.abilities.get(species.abilities['1']).gen === 3)) {
+					buf += `<span class="col twoabilitycol">${species.abilities['0']}<br />${species.abilities['1']}</span>`;
+				} else {
+					buf += `<span class="col abilitycol">${species.abilities['0']}</span>`;
+				}
+				if (species.abilities['H'] && species.abilities['S']) {
+					buf += `<span class="col twoabilitycol${species.unreleasedHidden ? ' unreleasedhacol' : ''}"><em>${species.abilities['H']}<br />(${species.abilities['S']})</em></span>`;
+				} else if (species.abilities['H']) {
+					buf += `<span class="col abilitycol${species.unreleasedHidden ? ' unreleasedhacol' : ''}"><em>${species.abilities['H']}</em></span>`;
+				} else if (species.abilities['S']) {
+					// special case for Zygarde
+					buf += `<span class="col abilitycol"><em>(${species.abilities['S']})</em></span>`;
+				} else {
+					buf += '<span class="col abilitycol"></span>';
+				}
+				buf += '</span>';
+			}
+			buf += '<span style="float:left;min-height:26px">';
+			buf += `<span class="col statcol"><em>HP</em><br />${species.baseStats.hp}</span> `;
+			buf += `<span class="col statcol"><em>Atk</em><br />${species.baseStats.atk}</span> `;
+			buf += `<span class="col statcol"><em>Def</em><br />${species.baseStats.def}</span> `;
+			if (gen <= 1) {
+				buf += `<span class="col statcol"><em>Spc</em><br />${species.baseStats.spa}</span> `;
+			} else {
+				buf += `<span class="col statcol"><em>SpA</em><br />${species.baseStats.spa}</span> `;
+				buf += `<span class="col statcol"><em>SpD</em><br />${species.baseStats.spd}</span> `;
+			}
+			buf += `<span class="col statcol"><em>Spe</em><br />${species.baseStats.spe}</span> `;
+			buf += `<span class="col bstcol"><em>BST<br />${species.bst}</em></span> `;
+			buf += '</span>';
+			buf += '</li>';
+			buf = `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
+			this.add('-start', pokemon, 'typechange', pokemon.getTypes(true).join('/'), '[silent]');
+			this.add(`raw|${buf}`);
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (target.hasAbility('illusion') && !target.m.revealed) {
+				const species = target.species;
+				const gen = this.gen;
+
+				// Recreation of Chat.getDataPokemonHTML
+				let buf = '<li class="result">';
+				buf += `<span class="col numcol">${species.tier}</span> `;
+				buf += `<span class="col iconcol"><psicon pokemon="${species.id}"/></span> `;
+				buf += `<span class="col pokemonnamecol" style="white-space:nowrap"><a href="https://${Config.routes.dex}/pokemon/${species.id}" target="_blank">${species.name}</a></span> `;
+				buf += '<span class="col typecol">';
+				if (species.types) {
+					for (const type of species.types) {
+						buf += `<img src="https://${Config.routes.client}/sprites/types/${type}.png" alt="${type}" height="14" width="32">`;
+					}
+				}
+				buf += '</span> ';
+				if (gen >= 3) {
+					buf += '<span style="float:left;min-height:26px">';
+					if (species.abilities['1'] && (gen >= 4 || Dex.abilities.get(species.abilities['1']).gen === 3)) {
+						buf += `<span class="col twoabilitycol">${species.abilities['0']}<br />${species.abilities['1']}</span>`;
+					} else {
+						buf += `<span class="col abilitycol">${species.abilities['0']}</span>`;
+					}
+					if (species.abilities['H'] && species.abilities['S']) {
+						buf += `<span class="col twoabilitycol${species.unreleasedHidden ? ' unreleasedhacol' : ''}"><em>${species.abilities['H']}<br />(${species.abilities['S']})</em></span>`;
+					} else if (species.abilities['H']) {
+						buf += `<span class="col abilitycol${species.unreleasedHidden ? ' unreleasedhacol' : ''}"><em>${species.abilities['H']}</em></span>`;
+					} else if (species.abilities['S']) {
+						// special case for Zygarde
+						buf += `<span class="col abilitycol"><em>(${species.abilities['S']})</em></span>`;
+					} else {
+						buf += '<span class="col abilitycol"></span>';
+					}
+					buf += '</span>';
+				}
+				buf += '<span style="float:left;min-height:26px">';
+				buf += `<span class="col statcol"><em>HP</em><br />${species.baseStats.hp}</span> `;
+				buf += `<span class="col statcol"><em>Atk</em><br />${species.baseStats.atk}</span> `;
+				buf += `<span class="col statcol"><em>Def</em><br />${species.baseStats.def}</span> `;
+				if (gen <= 1) {
+					buf += `<span class="col statcol"><em>Spc</em><br />${species.baseStats.spa}</span> `;
+				} else {
+					buf += `<span class="col statcol"><em>SpA</em><br />${species.baseStats.spa}</span> `;
+					buf += `<span class="col statcol"><em>SpD</em><br />${species.baseStats.spd}</span> `;
+				}
+				buf += `<span class="col statcol"><em>Spe</em><br />${species.baseStats.spe}</span> `;
+				buf += `<span class="col bstcol"><em>BST<br />${species.bst}</em></span> `;
+				buf += '</span>';
+				buf += '</li>';
+				buf = `<div class="message"><ul class="utilichart">${buf}<li style="clear:both"></li></ul></div>`;
+
+				this.add('-start', target, 'typechange', target.getTypes(true).join('/'), '[silent]');
+				this.add(`raw|${buf}`);
+				target.m.revealed = true;
+			}
 		},
 	},
 };

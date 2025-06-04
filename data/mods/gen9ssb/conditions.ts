@@ -256,6 +256,18 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			this.add(`c:|${getName('Archas')}|What would Grandfather... think of me now...`);
 		},
 	},
+	archfaewild: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Archfaewild')}|Ready for Initiative? Cause I'm gonna Clickity Clackity, Roll to Attackity!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Archfaewild')}|Dropping out of Initiative`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Archfaewild')}|Guess I didn't roll high enough`);
+		},
+	},
 	arcueid: {
 		noCopy: true,
 		onStart() {
@@ -567,6 +579,18 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			this.add(`c:|${getName('Cake')}|livid washed is a nerd`);
 		},
 	},
+	calmvibes: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('calmvibes ♫')}|Is that a __rat__?`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('calmvibes ♫')}|Here for a good time, not a long time!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('calmvibes ♫')}|The vibes are off... :(`);
+		},
+	},
 	chaos: {
 		noCopy: true,
 	},
@@ -773,7 +797,7 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			this.add(`c:|${getName('dhelmise')}|skibidi`);
 		},
 		innateName: "Stealth",
-		desc: "Until using EMP, targeted moves are 25% less accurate, this Pokemon's moves do half damage, and this Pokemon only takes 3/4 damage.",
+		shortDesc: "Until using EMP, targeted moves are 25% less accurate, this Pokemon's moves do half damage, and this Pokemon only takes 3/4 damage.",
 		onModifyAccuracyPriority: -1,
 		onModifyAccuracy(accuracy, target, source) {
 			if (typeof accuracy !== 'number') return;
@@ -791,18 +815,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			if (source.illusion) return;
 			if (!source.m.stealth) return this.chainModify(1.1);
 			return this.chainModify(0.5);
-		},
-	},
-	diananicole: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('DianaNicole')}|Ready for Initiative? Cause I'm gonna Clickity Clackity, Roll to Attackity!`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('DianaNicole')}|Dropping out of Initiative`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('DianaNicole')}|Guess I didn't roll high enough`);
 		},
 	},
 	easyonthehills: {
@@ -1498,18 +1510,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		onFaint() {
 			this.add(`c:|${getName('Maia')}|gn`);
-		},
-	},
-	marillvibes: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('marillvibes ♫')}|Is that a __rat__?`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('marillvibes ♫')}|Here for a good time, not a long time!`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('marillvibes ♫')}|The vibes are off... :(`);
 		},
 	},
 	mathy: {

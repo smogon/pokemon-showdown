@@ -81,6 +81,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.checkEVBalance();
 		}
 
+		if (format.customRules) {
+			const plural = format.customRules.length === 1 ? '' : 's';
+			const open = format.customRules.length <= 5 ? ' open' : '';
+			this.add(`raw|<div class="infobox"><details class="readmore"${open}><summary><strong>${format.customRules.length} custom rule${plural}:</strong></summary> ${format.customRules.join(', ')}</details></div>`);
+		}
+
 		if (format.onTeamPreview) format.onTeamPreview.call(this);
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
@@ -426,7 +432,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let type = pokemon.teraType;
 			if (pokemon.species.baseSpecies !== 'Ogerpon' && pokemon.getItem().name.endsWith('Mask')) {
-				type = this.dex.species.get(pokemon.getItem().forcedForme).forceTeraType!;
+				type = this.dex.species.get(pokemon.getItem().forcedForme).requiredTeraType!;
 			}
 			this.battle.add('-terastallize', pokemon, type);
 			pokemon.terastallized = type;

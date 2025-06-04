@@ -235,7 +235,8 @@ class PatternTester {
  * Outside of a command/page context, it would still cause a crash.
  */
 export class ErrorMessage extends Error {
-	constructor(message: string) {
+	constructor(message: string | string[]) {
+		if (Array.isArray(message)) message = message.join('\n');
 		super(message);
 		this.name = 'ErrorMessage';
 		Error.captureStackTrace(this, ErrorMessage);
@@ -471,7 +472,7 @@ export class PageContext extends MessageContext {
 			res = await handler.call(this, parts, this.user, this.connection);
 		} catch (err: any) {
 			if (err.name?.endsWith('ErrorMessage')) {
-				if (err.message) this.errorReply(err.message);
+				if (err.message) this.errorReply(err.message.replace(/\n/g, '<br />'));
 				return;
 			}
 			if (err.name.endsWith('Interruption')) {
@@ -492,6 +493,11 @@ export class PageContext extends MessageContext {
 		if (typeof res === 'string') {
 			this.setHTML(res);
 			res = undefined;
+		}
+		if (res === Rooms.RETRY_AFTER_LOGIN) {
+			this.setHTML(
+				`Please log in before accessing this page (don't worry, it will load automatically once you do so).`
+			);
 		}
 		return res;
 	}
@@ -693,7 +699,7 @@ export class CommandContext extends MessageContext {
 					!Users.globalAuth.atLeast(this.user, blockInvites as GroupSymbol)
 				) {
 					Chat.maybeNotifyBlocked(`invite`, this.pmTarget, this.user);
-					return this.errorReply(`${this.pmTarget.name} is blocking room invites.`);
+					throw new Chat.ErrorMessage(`${this.pmTarget.name} is blocking room invites.`);
 				}
 			}
 			Chat.PrivateMessages.send(message, this.user, this.pmTarget);
@@ -707,9 +713,8 @@ export class CommandContext extends MessageContext {
 	run(handler: string | AnnotatedChatHandler) {
 		if (typeof handler === 'string') handler = Chat.commands[handler] as AnnotatedChatHandler;
 		if (!handler.broadcastable && this.cmdToken === '!') {
-			this.errorReply(`The command "${this.fullCmd}" can't be broadcast.`);
-			this.errorReply(`Use /${this.fullCmd} instead.`);
-			return false;
+			throw new Chat.ErrorMessage([`The command "${this.fullCmd}" can't be broadcast.`,
+				`Use /${this.fullCmd} instead.`]);
 		}
 		let result: any = handler.call(this, this.target, this.room, this.user, this.connection, this.cmd, this.message);
 		if (result === undefined) result = false;
@@ -1024,9 +1029,7 @@ export class CommandContext extends MessageContext {
 	}
 	canUseConsole() {
 		if (!this.user.hasConsoleAccess(this.connection)) {
-			throw new Chat.ErrorMessage(
-				(this.cmdToken + this.fullCmd).trim() + " - Requires console access, please set up `Config.consoleips`."
-			);
+			throw new Chat.ErrorMessage(`${(this.cmdToken + this.fullCmd).trim()} - Requires console access, please set up \`Config.consoleips\`.`);
 		}
 		return true;
 	}
@@ -1039,20 +1042,20 @@ export class CommandContext extends MessageContext {
 		}
 
 		if (this.user.locked && !(this.room?.roomid.startsWith('help-') || this.pmTarget?.can('lock'))) {
-			this.errorReply(`You cannot broadcast this command's information while locked.`);
-			throw new Chat.ErrorMessage(`To see it for yourself, use: /${this.message.slice(1)}`);
+			throw new Chat.ErrorMessage([`You cannot broadcast this command's information while locked.`,
+				`To see it for yourself, use: /${this.message.slice(1)}`]);
 		}
 
 		if (this.room && !this.user.can('show', null, this.room, this.cmd, this.cmdToken)) {
 			const perm = this.room.settings.permissions?.[`!${this.cmd}`];
 			const atLeast = perm ? `at least rank ${perm}` : 'voiced';
-			this.errorReply(`You need to be ${atLeast} to broadcast this command's information.`);
-			throw new Chat.ErrorMessage(`To see it for yourself, use: /${this.message.slice(1)}`);
+			throw new Chat.ErrorMessage([`You need to be ${atLeast} to broadcast this command's information.`,
+				`To see it for yourself, use: /${this.message.slice(1)}`]);
 		}
 
 		if (!this.room && !this.pmTarget) {
-			this.errorReply(`Broadcasting a command with "!" in a PM or chatroom will show it that user or room.`);
-			throw new Chat.ErrorMessage(`To see it for yourself, use: /${this.message.slice(1)}`);
+			throw new Chat.ErrorMessage([`Broadcasting a command with "!" in a PM or chatroom will show it that user or room.`,
+				`To see it for yourself, use: /${this.message.slice(1)}`]);
 		}
 
 		// broadcast cooldown
@@ -1388,24 +1391,22 @@ export class CommandContext extends MessageContext {
 
 				if (tagName === 'img') {
 					if (!this.room || (this.room.settings.isPersonal && !this.user.can('lock'))) {
-						throw new Chat.ErrorMessage(
-							`This tag is not allowed: <${tagContent}>. Images are not allowed outside of chatrooms.`
-						);
+						throw new Chat.ErrorMessage(`This tag is not allowed: <${tagContent}>. Images are not allowed outside of chatrooms.`);
 					}
 					if (!/width ?= ?(?:[0-9]+|"[0-9]+")/i.test(tagContent) || !/height ?= ?(?:[0-9]+|"[0-9]+")/i.test(tagContent)) {
 						// Width and height are required because most browsers insert the
 						// <img> element before width and height are known, and when the
 						// image is loaded, this changes the height of the chat area, which
 						// messes up autoscrolling.
-						this.errorReply(`This image is missing a width/height attribute: <${tagContent}>`);
-						throw new Chat.ErrorMessage(`Images without predefined width/height cause problems with scrolling because loading them changes their height.`);
+						throw new Chat.ErrorMessage([`This image is missing a width/height attribute: <${tagContent}>`,
+							`Images without predefined width/height cause problems with scrolling because loading them changes their height.`]);
 					}
 					const srcMatch = / src ?= ?(?:"|')?([^ "']+)(?: ?(?:"|'))?/i.exec(tagContent);
 					if (srcMatch) {
 						this.checkEmbedURI(srcMatch[1]);
 					} else {
-						this.errorReply(`This image has a broken src attribute: <${tagContent}>`);
-						throw new Chat.ErrorMessage(`The src attribute must exist and have no spaces in the URL`);
+						throw new Chat.ErrorMessage([`This image has a broken src attribute: <${tagContent}>`,
+							`The src attribute must exist and have no spaces in the URL`]);
 					}
 				}
 				if (tagName === 'button') {
@@ -1418,16 +1419,18 @@ export class CommandContext extends MessageContext {
 							const [pmTarget] = buttonValue.replace(msgCommandRegex, '').split(',');
 							const auth = this.room ? this.room.auth : Users.globalAuth;
 							if (auth.get(toID(pmTarget)) !== '*' && toID(pmTarget) !== this.user.id) {
-								this.errorReply(`This button is not allowed: <${tagContent}>`);
-								throw new Chat.ErrorMessage(`Your scripted button can't send PMs to ${pmTarget}, because that user is not a Room Bot.`);
+								throw new Chat.ErrorMessage([`This button is not allowed: <${tagContent}>`,
+									`Your scripted button can't send PMs to ${pmTarget}, because that user is not a Room Bot.`]);
 							}
 						} else if (buttonName === 'send' && buttonValue && botmsgCommandRegex.test(buttonValue)) {
 							// no need to validate the bot being an actual bot; `/botmsg` will do it for us and is not abusable
 						} else if (buttonName) {
-							this.errorReply(`This button is not allowed: <${tagContent}>`);
-							this.errorReply(`You do not have permission to use most buttons. Here are the two types you're allowed to use:`);
-							this.errorReply(`1. Linking to a room: <a href="/roomid"><button>go to a place</button></a>`);
-							throw new Chat.ErrorMessage(`2. Sending a message to a Bot: <button name="send" value="/msgroom BOT_ROOMID, /botmsg BOT_USERNAME, MESSAGE">send the thing</button>`);
+							throw new Chat.ErrorMessage([
+								`This button is not allowed: <${tagContent}>`,
+								`You do not have permission to use most buttons. Here are the two types you're allowed to use:`,
+								`1. Linking to a room: <a href="/roomid"><button>go to a place</button></a>`,
+								`2. Sending a message to a Bot: <button name="send" value="/msgroom BOT_ROOMID, /botmsg BOT_USERNAME, MESSAGE">send the thing</button>`,
+							]);
 						}
 					}
 				}

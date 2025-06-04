@@ -539,14 +539,13 @@ export class RandomTeams {
 				[['fierydance', 'fireblast'], 'heatwave'],
 				['dazzlinggleam', ['fleurcannon', 'moonblast']],
 				['poisongas', ['toxicspikes', 'willowisp']],
-				[RECOVERY_MOVES, 'healpulse'],
-				['lifedew', 'healpulse'],
+				[RECOVERY_MOVES, ['healpulse', 'lifedew']],
+				['healpulse', 'lifedew'],
 				['haze', 'icywind'],
 				[['hydropump', 'muddywater'], ['muddywater', 'scald']],
 				['disable', 'encore'],
 				['freezedry', 'icebeam'],
 				['energyball', 'leafstorm'],
-				['wildcharge', 'thunderbolt'],
 				['earthpower', 'sandsearstorm'],
 				['coaching', ['helpinghand', 'howl']],
 			];
@@ -570,6 +569,7 @@ export class RandomTeams {
 			['curse', ['irondefense', 'rapidspin']],
 			['dragondance', 'dracometeor'],
 			['yawn', 'roar'],
+			['trick', 'uturn'],
 
 			// These attacks are redundant with each other
 			[['psychic', 'psychicnoise'], ['psyshock', 'psychicnoise']],
@@ -578,7 +578,7 @@ export class RandomTeams {
 			['aquajet', 'flipturn'],
 			['gigadrain', 'leafstorm'],
 			['powerwhip', 'hornleech'],
-			[['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']],
+			['airslash', 'hurricane'],
 			['knockoff', 'foulplay'],
 			['throatchop', ['crunch', 'lashout']],
 			['doubleedge', ['bodyslam', 'headbutt']],
@@ -589,7 +589,6 @@ export class RandomTeams {
 			['gunkshot', ['direclaw', 'poisonjab', 'sludgebomb']],
 			['aurasphere', 'focusblast'],
 			['closecombat', 'drainpunch'],
-			['bugbite', 'pounce'],
 			[['dragonpulse', 'spacialrend'], 'dracometeor'],
 			['heavyslam', 'flashcannon'],
 			['alluringvoice', 'dazzlinggleam'],
@@ -608,10 +607,8 @@ export class RandomTeams {
 			['toxic', 'clearsmog'],
 			// Chansey and Blissey
 			['healbell', 'stealthrock'],
-			// Azelf and Zoroarks
-			['trick', 'uturn'],
-			// Araquanid
-			['mirrorcoat', 'hydropump'],
+			// Araquanid and Magnezone
+			['mirrorcoat', ['hydropump', 'bodypress']],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -1195,12 +1192,11 @@ export class RandomTeams {
 			!isDoubles && (ability === 'Imposter' || (species.id === 'magnezone' && role === 'Fast Attacker'))
 		) return 'Choice Scarf';
 		if (species.id === 'rampardos' && (role === 'Fast Attacker' || isDoubles)) return 'Choice Scarf';
-		if (species.id === 'palkia' && counter.get('Special') < 4) return 'Lustrous Orb';
+		if (species.id === 'palkia' && counter.get('Status')) return 'Lustrous Orb';
 		if (
 			moves.has('courtchange') ||
 			!isDoubles && (species.id === 'luvdisc' || (species.id === 'terapagos' && !moves.has('rest')))
 		) return 'Heavy-Duty Boots';
-		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
 		if (
 			['Cheek Pouch', 'Cud Chew', 'Harvest', 'Ripen'].some(m => ability === m) ||
 			moves.has('bellydrum') || moves.has('filletaway')
@@ -1270,7 +1266,7 @@ export class RandomTeams {
 			['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Doubles Setup Sweeper', 'Offensive Protect'].some(m => role === m)
 		);
 		const doublesLeftoversHardcodes = (
-			moves.has('acidarmor') || species.id === 'eternatus' || species.id === 'regigigas' || moves.has('wish')
+			moves.has('acidarmor') || moves.has('wish') || ['eternatus', 'garganacl', 'regigigas', 'toxapex'].includes(species.id)
 		);
 
 		if (species.id === 'ursalunabloodmoon' && moves.has('protect')) return 'Silk Scarf';
@@ -1278,28 +1274,28 @@ export class RandomTeams {
 			moves.has('flipturn') && moves.has('protect') && (moves.has('aquajet') || (moves.has('jetpunch')))
 		) return 'Mystic Water';
 		if (counter.get('speedsetup') && role === 'Doubles Bulky Setup') return 'Weakness Policy';
-		if (species.id === 'toxapex') return 'Binding Band';
 		if (moves.has('blizzard') && ability !== 'Snow Warning' && !teamDetails.snow) return 'Blunder Policy';
 
 		if (role === 'Choice Item user') {
-			if (scarfReqs || (counter.get('Physical') < 4 && counter.get('Special') < 3 && !moves.has('memento'))) {
-				return 'Choice Scarf';
-			}
-			return (counter.get('Physical') >= 3) ? 'Choice Band' : 'Choice Specs';
+			if (scarfReqs || moves.has('finalgambit') || species.id === 'jirachi') return 'Choice Scarf';
+			return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
 		}
-		if (counter.get('Physical') >= 4 &&
+		if (counter.get('Physical') >= moves.size &&
 			['fakeout', 'feint', 'firstimpression', 'rapidspin', 'suckerpunch'].every(m => !moves.has(m)) &&
 			(moves.has('flipturn') || moves.has('uturn') || role === 'Doubles Wallbreaker')
 		) {
 			return (scarfReqs) ? 'Choice Scarf' : 'Choice Band';
 		}
 		if (
-			((counter.get('Special') >= 4 && (moves.has('voltswitch') || role === 'Doubles Wallbreaker')) || (
-				counter.get('Special') >= 3 && (moves.has('uturn') || moves.has('flipturn'))
+			((counter.get('Special') >= moves.size && (moves.has('voltswitch') || role === 'Doubles Wallbreaker')) || (
+				counter.get('Special') >= moves.size - 1 && (moves.has('uturn') || moves.has('flipturn'))
 			)) && !moves.has('electroweb')
 		) {
 			return (scarfReqs) ? 'Choice Scarf' : 'Choice Specs';
 		}
+		if (
+			species.baseStats.spe <= 70 && (moves.has('ragepowder') || moves.has('followme'))
+		) return 'Rocky Helmet';
 		if (
 			(role === 'Bulky Protect' && counter.get('setup')) || moves.has('substitute') || moves.has('irondefense') ||
 			moves.has('coil') || doublesLeftoversHardcodes
@@ -1308,7 +1304,7 @@ export class RandomTeams {
 		if (ability === 'Intimidate' && this.dex.getEffectiveness('Rock', species) >= 1) return 'Heavy-Duty Boots';
 		if (
 			(offensiveRole || (role === 'Tera Blast user' && (species.baseStats.spe >= 80 || moves.has('trickroom')))) &&
-			(!moves.has('fakeout') || species.id === 'ambipom') && !moves.has('incinerate') &&
+			!moves.has('fakeout') &&
 			(!moves.has('uturn') || types.includes('Bug') || ability === 'Libero') &&
 			((!moves.has('icywind') && !moves.has('electroweb')) || species.id === 'ironbundle')
 		) {
@@ -1322,8 +1318,7 @@ export class RandomTeams {
 				species.baseStats.hp + species.baseStats.def + species.baseStats.spd <= 230))
 		) return 'Focus Sash';
 		if (
-			['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Offensive Protect'].includes(role) &&
-			moves.has('fakeout') || moves.has('incinerate')
+			['Doubles Fast Attacker', 'Doubles Wallbreaker', 'Offensive Protect'].includes(role) && moves.has('fakeout')
 		) {
 			return (this.dex.getEffectiveness('Rock', species) >= 1) ? 'Heavy-Duty Boots' : 'Clear Amulet';
 		}
@@ -1342,8 +1337,10 @@ export class RandomTeams {
 		teraType: string,
 		role: RandomTeamsTypes.Role,
 	): string {
+		const lifeOrbReqs = ['flamecharge', 'nuzzle', 'rapidspin', 'trailblaze'].every(m => !moves.has(m));
+
 		if (
-			species.id !== 'jirachi' && (counter.get('Physical') >= 4) &&
+			species.id !== 'jirachi' && (counter.get('Physical') >= moves.size) &&
 			['dragontail', 'fakeout', 'firstimpression', 'flamecharge', 'rapidspin'].every(m => !moves.has(m))
 		) {
 			const scarfReqs = (
@@ -1355,8 +1352,8 @@ export class RandomTeams {
 			return (scarfReqs && this.randomChance(1, 2)) ? 'Choice Scarf' : 'Choice Band';
 		}
 		if (
-			(counter.get('Special') >= 4) ||
-			(counter.get('Special') >= 3 && ['flipturn', 'uturn'].some(m => moves.has(m)))
+			(counter.get('Special') >= moves.size) ||
+			(counter.get('Special') >= moves.size - 1 && ['flipturn', 'uturn'].some(m => moves.has(m)))
 		) {
 			const scarfReqs = (
 				role !== 'Wallbreaker' &&
@@ -1412,12 +1409,13 @@ export class RandomTeams {
 		if (['Bulky Attacker', 'Bulky Support', 'Bulky Setup'].some(m => role === (m))) return 'Leftovers';
 		if (species.id === 'pawmot' && moves.has('nuzzle')) return 'Leppa Berry';
 		if (role === 'Fast Support' || role === 'Fast Bulky Setup') {
-			return (counter.get('Physical') + counter.get('Special') >= 3 && !moves.has('nuzzle')) ? 'Life Orb' : 'Leftovers';
+			return (
+				counter.get('Physical') + counter.get('Special') > counter.get('Status') && lifeOrbReqs
+			) ? 'Life Orb' : 'Leftovers';
 		}
 		if (role === 'Tera Blast user' && DEFENSIVE_TERA_BLAST_USERS.includes(species.id)) return 'Leftovers';
 		if (
-			['flamecharge', 'rapidspin', 'trailblaze'].every(m => !moves.has(m)) &&
-			['Fast Attacker', 'Setup Sweeper', 'Tera Blast user', 'Wallbreaker'].some(m => role === (m))
+			lifeOrbReqs && ['Fast Attacker', 'Setup Sweeper', 'Tera Blast user', 'Wallbreaker'].some(m => role === (m))
 		) return 'Life Orb';
 		return 'Leftovers';
 	}
@@ -1539,7 +1537,7 @@ export class RandomTeams {
 		if (['axekick', 'highjumpkick', 'jumpkick', 'supercellslam'].some(m => moves.has(m))) srWeakness = 2;
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-			if ((moves.has('substitute') && ['Sitrus Berry', 'Salac Berry'].includes(item)) || species.id === 'minior') {
+			if ((moves.has('substitute') && ['Sitrus Berry'].includes(item)) || species.id === 'minior') {
 				// Two Substitutes should activate Sitrus Berry. Two switch-ins to Stealth Rock should activate Shields Down on Minior.
 				if (hp % 4 === 0) break;
 			} else if (
@@ -2000,7 +1998,7 @@ export class RandomTeams {
 			};
 			if (this.gen === 9) {
 				// Tera type
-				if (species.forceTeraType) set.teraType = species.forceTeraType;
+				if (species.requiredTeraType) set.teraType = species.requiredTeraType;
 				if (this.forceTeraType) {
 					set.teraType = this.forceTeraType;
 				} else {

@@ -180,7 +180,7 @@ export class ExhaustiveRunner {
 // validation). Coordinates with the CoordinatedPlayerAI below through Pools to ensure as
 // many different options as possible get exercised in battle.
 class TeamGenerator {
-	// By default, the TeamGenerator generates sets completely at random which unforunately means
+	// By default, the TeamGenerator generates sets completely at random which unfortunately means
 	// certain signature combinations (eg. Mega Stone/Z Moves which only work for specific Pokemon)
 	// are unlikely to be chosen. To combat this, we keep a mapping of these combinations and some
 	// fraction of the time when we are generating sets for these particular Pokemon we give them

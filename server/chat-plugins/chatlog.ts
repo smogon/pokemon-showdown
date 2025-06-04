@@ -240,6 +240,11 @@ export const LogViewer = new class {
 			`<a roomid="view-chatlog-${roomid}--${month}">${month}</a> / ` +
 			`<strong>${day}</strong></p><small>${opts ? `Options in use: ${opts}` : ''}</small> <hr />`;
 
+		if (!Config.logchat) {
+			buf += `<p class="message-error">Chat logs are disabled</p></div>`;
+			return this.linkify(buf);
+		}
+
 		const roomLog = await LogReader.get(roomid);
 		if (!roomLog) {
 			buf += `<p class="message-error">Room "${roomid}" doesn't exist</p></div>`;
@@ -361,6 +366,10 @@ export const LogViewer = new class {
 			`<a roomid="view-chatlog">◂ All logs</a> / ` +
 			`<a roomid="view-chatlog-${roomid}">${roomid}</a> / ` +
 			`<strong>${month}</strong></p><hr />`;
+		if (!Config.logchat) {
+			buf += `<p class="message-error">Chat logs are disabled</p></div>`;
+			return this.linkify(buf);
+		}
 
 		const roomLog = await LogReader.get(roomid);
 		if (!roomLog) {
@@ -397,6 +406,11 @@ export const LogViewer = new class {
 		let buf = `<div class="pad"><p>` +
 			`<a roomid="view-chatlog">◂ All logs</a> / ` +
 			`<strong>${roomid}</strong></p><hr />`;
+
+		if (!Config.logchat) {
+			buf += `<p class="message-error">Chat logs are disabled</p></div>`;
+			return this.linkify(buf);
+		}
 
 		const roomLog = await LogReader.get(roomid);
 		if (!roomLog) {
@@ -875,25 +889,25 @@ export const pages: Chat.PageTable = {
 			if (room) {
 				this.checkCan('declare', null, room);
 			} else {
-				return this.errorReply(`Access denied.`);
+				throw new Chat.ErrorMessage(`Access denied.`);
 			}
 		}
 
 		if (!user.can('rangeban')) {
 			// Some chatlogs can only be viewed by upper staff
 			if (roomid.startsWith('spl') && roomid !== 'splatoon') {
-				return this.errorReply("SPL team discussions are super secret.");
+				throw new Chat.ErrorMessage("SPL team discussions are super secret.");
 			}
 			if (roomid.startsWith('wcop')) {
-				return this.errorReply("WCOP team discussions are super secret.");
+				throw new Chat.ErrorMessage("WCOP team discussions are super secret.");
 			}
 			if (UPPER_STAFF_ROOMS.includes(roomid) && !user.inRooms.has(roomid)) {
-				return this.errorReply("Upper staff rooms are super secret.");
+				throw new Chat.ErrorMessage("Upper staff rooms are super secret.");
 			}
 		}
 		if (room) {
 			if (!user.can('lock') || room.settings.isPrivate === 'hidden' && !room.checkModjoin(user)) {
-				if (!room.persist) return this.errorReply(`Access denied.`);
+				if (!room.persist) throw new Chat.ErrorMessage(`Access denied.`);
 				this.checkCan('mute', null, room);
 			}
 		} else {
@@ -911,10 +925,10 @@ export const pages: Chat.PageTable = {
 
 		const parsedDate = new Date(date);
 		const validDateStrings = ['all', 'alltime'];
-		const validNonDateTerm = search ? validDateStrings.includes(date) : date === 'today';
+		const validNonDateTerm = date ? validDateStrings.includes(date) : date === 'today';
 		// this is apparently the best way to tell if a date is invalid
 		if (isNaN(parsedDate.getTime()) && !validNonDateTerm) {
-			return this.errorReply(`Invalid date.`);
+			throw new Chat.ErrorMessage(`Invalid date.`);
 		}
 
 		const isTime = opts?.startsWith('time-');
@@ -928,6 +942,8 @@ export const pages: Chat.PageTable = {
 			if (date === 'today') {
 				this.setHTML(await LogViewer.day(roomid, LogReader.today(), opts));
 				if (isTime) this.send(`|scroll|div[data-server="${opts}"]`);
+			} else if (date === 'all' || date === 'alltime') {
+				return LogSearcher.runSearch();
 			} else if (date.split('-').length === 3) {
 				this.setHTML(await LogViewer.day(roomid, parsedDate.toISOString().slice(0, 10), opts));
 				if (isTime) this.send(`|scroll|div[data-server="${opts}"]`);
@@ -943,15 +959,15 @@ export const pages: Chat.PageTable = {
 			this.checkCan('mute', null, room);
 		} else {
 			if (!user.can('bypassall')) {
-				return this.errorReply(`You cannot view logs for rooms that no longer exist.`);
+				throw new Chat.ErrorMessage(`You cannot view logs for rooms that no longer exist.`);
 			}
 		}
 		const [, date, target] = Utils.splitFirst(args.join('-'), '--', 3).map(item => item.trim());
 		if (isNaN(new Date(date).getTime())) {
-			return this.errorReply(`Invalid date.`);
+			throw new Chat.ErrorMessage(`Invalid date.`);
 		}
 		if (!LogReader.isMonth(date)) {
-			return this.errorReply(`You must specify an exact month - both a year and a month.`);
+			throw new Chat.ErrorMessage(`You must specify an exact month - both a year and a month.`);
 		}
 		this.title = `[Log Stats] ${date}`;
 		return LogSearcher.runLinecountSearch(this, room ? room.roomid : args[0] as RoomID, date, toID(target));
@@ -960,7 +976,7 @@ export const pages: Chat.PageTable = {
 		this.checkCan('rangeban');
 		const type = toID(query.shift());
 		if (type && !['chat', 'battle', 'all', 'battles'].includes(type)) {
-			return this.errorReply(`Invalid log type.`);
+			throw new Chat.ErrorMessage(`Invalid log type.`);
 		}
 		let title = '';
 		switch (type) {
@@ -997,7 +1013,7 @@ export const pages: Chat.PageTable = {
 		const args = Utils.splitFirst(query.join('-'), '--', 2);
 		const roomid = toID(args.shift()) as RoomID;
 		if (!roomid) {
-			return this.errorReply(`Specify a room.`);
+			throw new Chat.ErrorMessage(`Specify a room.`);
 		}
 		const date = args.shift() || LogReader.getMonth();
 		this.title = `[${roomid}] Activity Stats (${date})`;
@@ -1110,7 +1126,7 @@ export const commands: Chat.ChatCommands = {
 			case 'room': case 'roomid':
 				const tarRoom = Rooms.search(val);
 				if (!tarRoom && !user.can('bypassall')) {
-					return this.errorReply(`Room '${val}' not found.`);
+					throw new Chat.ErrorMessage(`Room '${val}' not found.`);
 				}
 				search.roomid = (
 					tarRoom?.roomid || val.toLowerCase().replace(/[^a-z0-9-]/g, '') as RoomID
@@ -1121,14 +1137,14 @@ export const commands: Chat.ChatCommands = {
 				break;
 			case 'date': case 'month': case 'time':
 				if (!LogReader.isMonth(val)) {
-					return this.errorReply(`Invalid date.`);
+					throw new Chat.ErrorMessage(`Invalid date.`);
 				}
 				search.date = val;
 			}
 		}
 		if (!search.roomid) {
 			if (!room) {
-				return this.errorReply(`If you're not specifying a room, you must use this command in a room.`);
+				throw new Chat.ErrorMessage(`If you're not specifying a room, you must use this command in a room.`);
 			}
 			search.roomid = room.roomid;
 		}
@@ -1155,7 +1171,7 @@ export const commands: Chat.ChatCommands = {
 	battlelog(target, room, user) {
 		this.checkCan('lock');
 		target = target.trim();
-		if (!target) return this.errorReply(`Specify a battle.`);
+		if (!target) throw new Chat.ErrorMessage(`Specify a battle.`);
 		if (target.startsWith('http://')) target = target.slice(7);
 		if (target.startsWith('https://')) target = target.slice(8);
 		if (target.startsWith(`${Config.routes.client}/`)) target = target.slice(Config.routes.client.length + 1);
@@ -1174,7 +1190,7 @@ export const commands: Chat.ChatCommands = {
 		let [roomName, userName] = Utils.splitFirst(target, ',').map(f => f.trim());
 		if (!roomName) {
 			if (!room) {
-				return this.errorReply(`If you are not specifying a room, use this command in a room.`);
+				throw new Chat.ErrorMessage(`If you are not specifying a room, use this command in a room.`);
 			}
 			roomName = room.roomid;
 		}
@@ -1194,8 +1210,8 @@ export const commands: Chat.ChatCommands = {
 		const roomid = roomName.toLowerCase().replace(/[^a-z0-9-]+/g, '') as RoomID;
 		if (!roomid) return this.parse('/help getbattlechat');
 		const userid = toID(userName);
-		if (userName && !userid) return this.errorReply(`Invalid username.`);
-		if (!roomid.startsWith('battle-')) return this.errorReply(`You must specify a battle.`);
+		if (userName && !userid) throw new Chat.ErrorMessage(`Invalid username.`);
+		if (!roomid.startsWith('battle-')) throw new Chat.ErrorMessage(`You must specify a battle.`);
 		const tarRoom = Rooms.get(roomid);
 
 		let log: string[];
@@ -1208,7 +1224,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			const replayData = await Rooms.Replays.get(battleId);
 			if (!replayData) {
-				return this.errorReply(`No room or replay found for that battle.`);
+				throw new Chat.ErrorMessage(`No room or replay found for that battle.`);
 			}
 			log = replayData.log.split('\n');
 		} else {
@@ -1217,7 +1233,7 @@ export const commands: Chat.ChatCommands = {
 				const data = JSON.parse(raw);
 				log = data.log ? data.log.split('\n') : [];
 			} catch {
-				return this.errorReply(`No room or replay found for that battle.`);
+				throw new Chat.ErrorMessage(`No room or replay found for that battle.`);
 			}
 		}
 		log = log.filter(l => l.startsWith('|c|'));
@@ -1266,7 +1282,7 @@ export const commands: Chat.ChatCommands = {
 		target = target.toLowerCase().replace(/[^a-z0-9-]+/g, '');
 		if (!target) return this.parse(`/help groupchatsearch`);
 		if (target.length < 3) {
-			return this.errorReply(`Too short of a search term.`);
+			throw new Chat.ErrorMessage(`Too short of a search term.`);
 		}
 		const files = await Monitor.logPath(`chat`).readdir();
 		const buffer = [];
@@ -1290,7 +1306,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('bypassall');
 		const [id, date] = target.split(',').map(i => i.trim());
 		if (id) room = Rooms.search(toID(id)) as Room | null;
-		if (!room) return this.errorReply(`Either use this command in the target room or specify a room.`);
+		if (!room) throw new Chat.ErrorMessage(`Either use this command in the target room or specify a room.`);
 		return this.parse(`/join view-roominfo-${room}${date ? `--${date}` : ''}`);
 	},
 	roomactivityhelp: [
