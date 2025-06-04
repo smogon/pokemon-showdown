@@ -62,7 +62,7 @@ export class LadderTracker {
 		this.format = toID(config.format);
 		this.prefix = toID(config.prefix);
 		this.rating = config.rating || 0;
-		if (config.deadline) this.setDeadline(config.deadline);
+		if (config.deadline) this.setDeadline(config.deadline, false);
 
 		this.users = new Set(config.users);
 		this.leaderboard = { lookup: new Map() };
@@ -81,7 +81,7 @@ export class LadderTracker {
 		this.room.add(`|html|${msg}`).update();
 	}
 
-	setDeadline(argument: string) {
+	setDeadline(argument: string, save = true) {
 		const date = new Date(argument);
 		if (!+date) throw new Chat.ErrorMessage(`Invalid date: ${argument}`);
 
@@ -95,7 +95,7 @@ export class LadderTracker {
 			this.captureFinalLeaderboard();
 		}, (+this.deadline - Date.now()) - 500);
 
-		LadderTracker.save();
+		if (save) LadderTracker.save();
 	}
 
 	async captureFinalLeaderboard() {
@@ -600,7 +600,7 @@ export const commands: Chat.ChatCommands = {
 			tracker.start();
 			LadderTracker.save();
 		},
-		stop(target, room, user, sf, cmd) {
+		pause(target, room, user, sf, cmd) {
 			const tracker = LadderTracker.getTracker(this);
 			this.checkCan('mute', null, tracker.room);
 			tracker.stop();
@@ -641,9 +641,10 @@ export const commands: Chat.ChatCommands = {
 			` - /laddertrack unwatch [list,of,users] - stops tracking the given user's battles (requires % to do so)`,
 			` - /laddertrack tracking - displays the current users being tracked`,
 			` - /laddertrack start - starts the tracker`,
-			` - /laddertrack stop - stops (pauses) the tracker`,
+			` - /laddertrack pause - temporarily pauses the tracker`,
 			` - /laddertrack endtrack - ends the tracker entirely`,
 			` - /laddertrack showdiffs - shows or hides differences between the current leaderboard and the previous leaderboard`,
+			`All commands require % to be used to edit settings, and can be used by anyone to view settings.`
 		].join('<br />'));
 	},
 };
