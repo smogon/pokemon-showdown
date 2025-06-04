@@ -10,16 +10,13 @@ const INTERVAL = MINUTE;
 const FACTOR = 1.5;
 
 interface TrackerConfig {
-	format?: string;
-	prefix?: string;
+	format: string;
+	prefix: string;
 	rating?: number;
 	deadline?: string;
 	cutoff?: number;
 	users?: ID[];
 	showdiffs?: boolean;
-	// todo? idk
-	cmdToken?: string;
-	isPrivate?: boolean;
 }
 
 interface Leaderboard {
