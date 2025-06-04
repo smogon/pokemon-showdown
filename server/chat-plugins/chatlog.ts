@@ -925,7 +925,7 @@ export const pages: Chat.PageTable = {
 
 		const parsedDate = new Date(date);
 		const validDateStrings = ['all', 'alltime'];
-		const validNonDateTerm = date ? validDateStrings.includes(date) : date === 'today';
+		const validNonDateTerm = search ? validDateStrings.includes(date) : date === 'today';
 		// this is apparently the best way to tell if a date is invalid
 		if (isNaN(parsedDate.getTime()) && !validNonDateTerm) {
 			throw new Chat.ErrorMessage(`Invalid date.`);
@@ -942,8 +942,6 @@ export const pages: Chat.PageTable = {
 			if (date === 'today') {
 				this.setHTML(await LogViewer.day(roomid, LogReader.today(), opts));
 				if (isTime) this.send(`|scroll|div[data-server="${opts}"]`);
-			} else if (date === 'all' || date === 'alltime') {
-				return LogSearcher.runSearch();
 			} else if (date.split('-').length === 3) {
 				this.setHTML(await LogViewer.day(roomid, parsedDate.toISOString().slice(0, 10), opts));
 				if (isTime) this.send(`|scroll|div[data-server="${opts}"]`);
