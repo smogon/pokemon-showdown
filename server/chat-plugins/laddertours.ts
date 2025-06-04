@@ -481,7 +481,7 @@ export const commands: Chat.ChatCommands = {
 			LadderTracker.save();
 
 			this.sendReply("Ladder tracking started.");
-			this.modlog('LADDERTRACK', user, Object.entries(config).map(([k, v]) => `${k}=${v}`).join(', '));
+			this.modlog('LADDERTRACK', null, Object.entries(config).map(([k, v]) => `${k}=${v}`).join(', '));
 		},
 		top: 'leaderboard',
 		async leaderboard(target, room, user, sf, cmd) {
