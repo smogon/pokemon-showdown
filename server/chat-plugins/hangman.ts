@@ -668,13 +668,13 @@ export const commands: Chat.ChatCommands = {
 		`/hangman [enable/disable] - Enables or disables hangman from being started in a room. Requires: # ~`,
 		`/hangman random [tag]- Runs a random hangman, if the room has any added. `,
 		`If a tag is given, randomizes from only terms with those tags. Requires: % @ # ~`,
-		`/hangman addrandom [word], [...hints] | [timer] - Adds an entry for [word] with the [hints] and [timer] provided to the room's hangman pool. Requires: % @ # ~`,
-		`/hangman removerandom [word][, hints] - Removes data from the hangman entry for [word]. If hints are given, removes only those hints.` +
+		`/hangman addrandom [word], [...tags] | [timer] - Adds an entry for [word] with the [tags] and [timer] provided to the room's hangman pool. Requires: % @ # ~`,
+		`/hangman removerandom [word], [...tags] - Removes data from the hangman entry for [word]. If tags are given, removes only those tags.` +
 		` Otherwise it removes the entire entry. Requires: % @ ~ #`,
 		`/hangman addtag [word], [...tags] - Adds tags to the hangman term matching [word]. Requires: % @ ~ #`,
-		`/hangman untag [term][, ...tags] - Removes tags from the hangman [term]. If tags are given, removes only those tags. Requires: % @ # * `,
-		`/hangman addtimer [word] | [timer] - Adds a timer to the hangman term matching [word]. Requires: % @ ~ #`,
-		`/hangman removetimer [word] - remove the timer to the hangman term matching [word]. Requires: % @ ~ #`,
+		`/hangman untag [word], [...tags] - Removes tags from the hangman [word]. If tags are given, removes only those tags. Requires: % @ # * `,
+		`/hangman addtimer [word] | [timer] - Adds a timer to the hangman [word]. Requires: % @ ~ #`,
+		`/hangman removetimer [word] - removes the timer from the hangman [word]. Requires: % @ ~ #`,
 		`/hangman terms - Displays all random hangman in a room. Requires: % @ # ~`,
 	],
 };
