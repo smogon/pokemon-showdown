@@ -265,6 +265,7 @@ export class LadderTracker {
 		FS('config/chat-plugins/laddertrackers.json').writeUpdate(() => {
 			const out: Record<string, TrackerConfig> = {};
 			for (const roomid in trackers) {
+				trackers[roomid].restoreConfig();
 				out[roomid] = trackers[roomid].config;
 			}
 			return JSON.stringify(out);
@@ -275,6 +276,7 @@ export class LadderTracker {
 		this.config.users = [...this.users];
 		this.config.showdiffs = this.showdiffs;
 		this.config.rating = this.rating;
+		this.config.prefix = this.prefix;
 		this.config.deadline = this.deadline?.toString();
 	}
 
@@ -493,6 +495,7 @@ export const commands: Chat.ChatCommands = {
 			if (target) {
 				this.checkCan('mute', null, tracker.room);
 				tracker.setPrefix(target);
+				LadderTracker.save();
 				this.modlog(`TRACKER PREFIX`, null, target);
 				this.addModAction(`${user.name} updated the ladder tracker prefix to ${target}`);
 			} else {
@@ -546,6 +549,7 @@ export const commands: Chat.ChatCommands = {
 				if (!rating) return this.errorReply("Invalid cutoff.");
 				this.checkCan('mute', null, tracker.room);
 				tracker.config.cutoff = rating;
+				LadderTracker.save();
 				this.modlog(`TRACKER CUTOFF`, null, `${rating}`);
 			}
 			this.sendReplyBox(`<b>Cutoff:</b> ${tracker.config.cutoff || 0}`);
@@ -594,11 +598,13 @@ export const commands: Chat.ChatCommands = {
 			const tracker = LadderTracker.getTracker(this);
 			this.checkCan('mute', null, tracker.room);
 			tracker.start();
+			LadderTracker.save();
 		},
 		stop(target, room, user, sf, cmd) {
 			const tracker = LadderTracker.getTracker(this);
 			this.checkCan('mute', null, tracker.room);
 			tracker.stop();
+			LadderTracker.save();
 		},
 		end: 'endtrack',
 		endtrack(target, room, user, nike, cmd) {
