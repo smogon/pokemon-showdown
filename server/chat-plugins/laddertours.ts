@@ -644,7 +644,7 @@ export const commands: Chat.ChatCommands = {
 			` - /laddertrack pause - temporarily pauses the tracker`,
 			` - /laddertrack endtrack - ends the tracker entirely`,
 			` - /laddertrack showdiffs - shows or hides differences between the current leaderboard and the previous leaderboard`,
-			`All commands require % to be used to edit settings, and can be used by anyone to view settings.`
+			`All commands require % to be used to edit settings, and can be used by anyone to view settings.`,
 		].join('<br />'));
 	},
 };
