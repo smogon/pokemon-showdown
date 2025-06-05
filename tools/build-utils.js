@@ -37,7 +37,7 @@ exports.transpile = (force, emitDecl) => {
 				sourceType: 'module',
 				typescript: {
 					rewriteImportExtensions: 'rewrite',
-					declaration: emitDecl ? { sourcemap: true } : false,
+					declaration: false,
 				},
 				target: 'es2020',
 				sourcemap: true,
