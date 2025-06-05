@@ -1,12 +1,11 @@
 "use strict";
 
-const fs = require('fs');
-const path = require('path');
-const oxc = require('oxc-transform');
-const fg = require('fast-glob');
-const {execSync} = require('child_process');
+const fs = require("fs");
+const path = require("path");
+const oxc = require("oxc-transform");
+const fg = require("fast-glob");
+const {execSync} = require("child_process");
 
-/* -------------------------------------------------- helpers */
 function copyJSON(dir = 'data') {
 	for (const src of fg.sync(`${dir}/**/*.json`)) {
 		const dst = path.join('dist', src);
@@ -25,24 +24,22 @@ function sourceFiles() {
 	]);
 }
 
-/* -------------------------------------------------- main build */
 exports.transpile = (force, emitDecl) => {
 	fs.mkdirSync('dist', {recursive: true});
 
 	for (const file of sourceFiles()) {
 		const src = fs.readFileSync(file, 'utf8');
 
-		/* --- JS/JSX/TSX → CJS ----------------------------------- */
 		const {code, map, errors} = oxc.transform(
 			file,
 			src,
-			{ /* leave declaration generation to tsc */}
+			{}
 		);
 
 		if (errors?.length) {
 			console.error(`❌  ${file}`);
 			errors.forEach(e => console.error('   ', e));
-			if (!force) continue;            // skip emitting JS unless --force set
+			if (!force) continue;
 		}
 
 		const rel = file.replace(/\.[cm]?[jt]sx?$/, '');
@@ -52,23 +49,19 @@ exports.transpile = (force, emitDecl) => {
 		if (map) fs.writeFileSync(`${outJS}.map`, JSON.stringify(map));
 	}
 
-	/* static assets */
 	fs.copyFileSync('config/config-example.js', 'dist/config/config-example.js');
 	copyJSON();
 
-	/* --- .d.ts passthrough via tsc ----------------------------- */
+	// NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
 	if (emitDecl) exports.buildDecls();
 };
 
-/* -------------------------------------------------- declaration step */
 exports.buildDecls = () => {
 	try {
 		execSync(
 			'npx tsc --emitDeclarationOnly --declaration --declarationMap --outDir dist',
 			{stdio: 'inherit'}
 		);
-	} catch {
-		console.error('Declaration emit failed (JS output is still available).');
-	}
+	} catch { }
 };
 
