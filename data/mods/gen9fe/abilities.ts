@@ -3542,7 +3542,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					}
 				}
 
-				if (Object.keys(selfEffect).length > 0) {
+				if (Object.keys(selfEffect).length) {
 					secondary.self = selfEffect;
 				}
 			}
