@@ -3535,7 +3535,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 			for (const secondary of secondaries) {
 				const selfEffect: AnyObject = {};
-				
+		
 				for (const prop of copyProps) {
 					if (secondary[prop] !== undefined) {
 						selfEffect[prop] = secondary[prop];
