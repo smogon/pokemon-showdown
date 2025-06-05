@@ -33,7 +33,15 @@ exports.transpile = (force, emitDecl) => {
 		const { code, map, errors } = oxc.transform(
 			file,
 			src,
-			{}
+			{
+			  sourceType: 'module',
+			  typescript: {
+			    rewriteImportExtensions: 'rewrite',
+			    declaration: emitDecl ? { sourcemap: true } : false,
+			  },
+			  target: 'es2020',
+			  sourcemap: true,
+			}
 		);
 
 		if (errors?.length) {
