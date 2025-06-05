@@ -75,7 +75,6 @@ describe('Fainting', () => {
 			{ species: 'Shedinja', moves: ['flareblitz'] },
 		]]);
 		battle.makeChoices();
-		console.log(battle.log);
 		assert.fainted(battle.p1.active[0]);
 		assert.fainted(battle.p2.active[0]);
 		assert.equal(battle.winner, '');
