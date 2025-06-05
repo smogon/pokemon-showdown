@@ -34,13 +34,13 @@ exports.transpile = (force, emitDecl) => {
 			file,
 			src,
 			{
-			  sourceType: 'module',
-			  typescript: {
-			    rewriteImportExtensions: 'rewrite',
-			    declaration: emitDecl ? { sourcemap: true } : false,
-			  },
-			  target: 'es2020',
-			  sourcemap: true,
+				sourceType: 'module',
+				typescript: {
+					rewriteImportExtensions: 'rewrite',
+					declaration: emitDecl ? { sourcemap: true } : false,
+				},
+				target: 'es2020',
+				sourcemap: true,
 			}
 		);
 
