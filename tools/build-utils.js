@@ -36,6 +36,7 @@ exports.transpile = (force, emitDecl) => {
 			{
 				sourceType: 'module',
 				typescript: {
+					isolatedDeclarations: false,
 					rewriteImportExtensions: 'rewrite',
 					declaration: false,
 				},
