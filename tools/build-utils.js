@@ -64,4 +64,3 @@ exports.buildDecls = () => {
 		);
 	} catch { }
 };
-
