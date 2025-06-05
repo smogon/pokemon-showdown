@@ -1,39 +1,61 @@
 #!/usr/bin/env node
 "use strict";
 
-/* -------------------------------------------------- 1 ▪ Node version */
-try {structuredClone({});}
-catch {
-	console.error(`We require Node 18+; you’re using ${process.version}`);
+// ---------------------------------------------------------------------------
+// 1. Node version check
+// structuredClone was introduced in Node 17, but we require the most recent
+// LTS with it to be safe (Node 18+).
+// ---------------------------------------------------------------------------
+try {
+	structuredClone({});
+} catch {
+	console.error(`We require Node.js version 18 or later; you're using ${process.version}`);
 	process.exit(1);
 }
 
-/* -------------------------------------------------- 2 ▪ CLI flags */
-const decl = ['--decl', 'decl'].includes(process.argv[2]);        // emit .d.ts
+// ---------------------------------------------------------------------------
+// 2. CLI flags
+//   --decl / decl      → emit .d.ts
+//   --force / --full   → full rebuild (implies --decl)
+// ---------------------------------------------------------------------------
+const decl  = ['--decl', 'decl'].includes(process.argv[2]);
 const force = decl || ['--force', 'force', '--full', 'full'].includes(process.argv[2]);
 
-/* -------------------------------------------------- 3 ▪ Bootstrap */
+// ---------------------------------------------------------------------------
+// 3. Bootstrap
+//    • ensure build-time deps are present
+//    • ensure config/config.js exists
+// ---------------------------------------------------------------------------
 const {execSync} = require('child_process');
 const fs = require('fs');
+
 process.chdir(__dirname);
 
-function shell(cmd) {execSync(cmd, {stdio: 'inherit'});}
-
-/* ensure build-time deps are installed on a fresh checkout */
-for (const pkg of ['oxc-transform', 'fast-glob', 'typescript']) {
-	try {require.resolve(pkg);}
-	catch {shell(`npm install ${pkg}`);}
+function shell(cmd) {
+	execSync(cmd, {stdio: 'inherit'});
 }
 
-/* ensure ./config/config.js exists */
-try {require.resolve('./config/config');}
-catch (err) {
-	if (err.code !== 'MODULE_NOT_FOUND') throw err;
+// Ensure build-time dependencies are installed on a fresh checkout
+for (const pkg of ['oxc-transform', 'fast-glob', 'typescript']) {
+	try { require.resolve(pkg); }
+	catch { shell(`npm install ${pkg}`); }
+}
+
+// Make sure config/config.js exists. If not, copy it over synchronously from
+// config-example.js, since it's needed before we can start the server
+try {
+	require.resolve('./config/config');
+} catch (err) {
+	if (err.code !== 'MODULE_NOT_FOUND') throw err;  // should never happen
 	fs.mkdirSync('config', {recursive: true});
 	fs.copyFileSync('config/config-example.js', 'config/config.js');
 }
 
-/* -------------------------------------------------- 4 ▪ Build */
+// ---------------------------------------------------------------------------
+// 4. Build
+// esbuild (and other deps) may not be requirable until a tick has passed:
+// https://stackoverflow.com/questions/53270058/node-cant-find-certain-modules-after-synchronous-install
+// ---------------------------------------------------------------------------
 setImmediate(() => {
 	require('./tools/build-utils').transpile(force, decl);
 });
