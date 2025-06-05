@@ -182,6 +182,34 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return hitResults;
 		},
+		spreadMoveHit(targets, pokemon, move, hitEffect, isSecondary, isSelf) {
+			const targetsEntries = Array.from(targets.slice(0).entries());
+			this.battle.speedSort(targetsEntries as [number, Pokemon][], (a, b) => this.battle.comparePriority(a[1], b[1]));
+			const originalSpreadHit = move.spreadHit;
+			const spreadMoveDamage: SpreadMoveDamage = [];
+			const spreadMoveTarget: SpreadMoveTargets = [];
+			for (const [_, target] of targetsEntries) {
+				move.spreadHit = originalSpreadHit && (
+					(move.target !== 'allAdjacent' && targets.filter(t => t && !t.fainted).length > 1) ||
+					(move.target === 'allAdjacent' && targets.concat(pokemon).filter(t => t && !t.fainted).length > 2)
+				);
+				const [d, t] = Object.getPrototypeOf(this).spreadMoveHit
+					.call(this, [target], pokemon, move, hitEffect, isSecondary, isSelf) as [SpreadMoveDamage, SpreadMoveTargets];
+				spreadMoveDamage.concat(d);
+				spreadMoveTarget.concat(t);
+				this.battle.faintMessages();
+			}
+			move.spreadHit = originalSpreadHit;
+			for (const [i, [j, _]] of targetsEntries.entries()) {
+				const auxDamage = spreadMoveDamage[i];
+				spreadMoveDamage[i] = spreadMoveDamage[j];
+				spreadMoveDamage[j] = auxDamage;
+				const auxTarget = spreadMoveTarget[i];
+				spreadMoveTarget[i] = spreadMoveTarget[j];
+				spreadMoveTarget[j] = auxTarget;
+			}
+			return [spreadMoveDamage, spreadMoveTarget];
+		},
 		calcRecoilDamage(damageDealt, move) {
 			return this.battle.clampIntRange(Math.floor(damageDealt * move.recoil![0] / move.recoil![1]), 1);
 		},
