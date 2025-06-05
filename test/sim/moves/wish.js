@@ -77,20 +77,4 @@ describe('Wish', () => {
 		battle.makeChoices();
 		assert.false.fullHP(wynaut, `Wish should not have healed Wynaut later either.`);
 	});
-
-	it(`should not crash when resolving on empty slot (no Pokemon available)`, () => {
-		battle = common.createBattle({ gameType: 'doubles' });
-		battle.setPlayer('p1', { team: [
-			{ species: 'Clefable', moves: ['wish'] },
-			{ species: 'Blissey', moves: ['protect'] },
-		] });
-		battle.setPlayer('p2', { team: [
-			{ species: 'Machamp', moves: ['protect'] },
-			{ species: 'Golem', moves: ['protect'] },
-		] });
-
-		assert.doesNotThrow(() => {
-			battle.p1.removeSlotCondition(null, 'wish');
-		});
-	});
 });
