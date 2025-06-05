@@ -3,13 +3,14 @@
 const fs = require("fs");
 const path = require("path");
 const oxc = require("oxc-transform");
+const sucrase = require("sucrase");
 const fg = require("fast-glob");
-const { execSync } = require("child_process");
+const {execSync} = require("child_process");
 
 function copyJSON(dir = 'data') {
 	for (const src of fg.sync(`${dir}/**/*.json`)) {
 		const dst = path.join('dist', src);
-		fs.mkdirSync(path.dirname(dst), { recursive: true });
+		fs.mkdirSync(path.dirname(dst), {recursive: true});
 		fs.copyFileSync(src, dst);
 	}
 }
@@ -25,23 +26,15 @@ function sourceFiles() {
 }
 
 exports.transpile = (force, emitDecl) => {
-	fs.mkdirSync('dist', { recursive: true });
+	fs.mkdirSync('dist', {recursive: true});
 
 	for (const file of sourceFiles()) {
 		const src = fs.readFileSync(file, 'utf8');
 
-		const { code, map, errors } = oxc.transform(
+		let {code, map, errors} = oxc.transform(
 			file,
 			src,
 			{
-				sourceType: 'module',
-				typescript: {
-					isolatedDeclarations: false,
-					rewriteImportExtensions: 'rewrite',
-					declaration: false,
-				},
-				target: 'es2020',
-				sourcemap: true,
 			}
 		);
 
@@ -51,9 +44,16 @@ exports.transpile = (force, emitDecl) => {
 			if (!force) continue;
 		}
 
+		// Use sucrase for ultra-fast ES modules to CommonJS conversion
+		const sucraseResult = sucrase.transform(code, {
+			transforms: ["imports"],  // Only transform imports/exports to CommonJS
+			filePath: file,
+		});
+		code = sucraseResult.code;
+
 		const rel = file.replace(/\.[cm]?[jt]sx?$/, '');
 		const outJS = path.join('dist', `${rel}.js`);
-		fs.mkdirSync(path.dirname(outJS), { recursive: true });
+		fs.mkdirSync(path.dirname(outJS), {recursive: true});
 		fs.writeFileSync(outJS, code);
 		if (map) fs.writeFileSync(`${outJS}.map`, JSON.stringify(map));
 	}
@@ -69,7 +69,7 @@ exports.buildDecls = () => {
 	try {
 		execSync(
 			'npx tsc --emitDeclarationOnly --declaration --declarationMap --outDir dist',
-			{ stdio: 'inherit' }
+			{stdio: 'inherit'}
 		);
-	} catch {}
+	} catch { }
 };
