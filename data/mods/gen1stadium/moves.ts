@@ -270,9 +270,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// Add here counter damage
 				const lastAttackedBy = target.getLastAttackedBy();
 				if (!lastAttackedBy) {
-					target.attackedBy.push({ source, move: move.id, damage, slot: source.getSlot(), thisTurn: true });
+					target.attackedBy.push({ source, move, damage, slot: source.getSlot(), thisTurn: true });
 				} else {
-					lastAttackedBy.move = move.id;
+					lastAttackedBy.move = move;
 					lastAttackedBy.damage = damage;
 				}
 				return 0;
