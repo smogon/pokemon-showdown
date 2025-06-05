@@ -1,54 +1,39 @@
 #!/usr/bin/env node
 "use strict";
 
-try {
-	// technically this was introduced in Node 17, but we'll ask for the most recent LTS with it to be safe
-	structuredClone({});
-} catch (e) {
-	console.log("We require Node.js version 18 or later; you're using " + process.version);
+/* -------------------------------------------------- 1 ▪ Node version */
+try {structuredClone({});}
+catch {
+	console.error(`We require Node 18+; you’re using ${process.version}`);
 	process.exit(1);
 }
 
-var child_process = require('child_process');
-var fs = require('fs');
-var decl = ['--decl', 'decl'].includes(process.argv[2]);
-var force = decl || ['--force', 'force', '--full', 'full'].includes(process.argv[2]);
+/* -------------------------------------------------- 2 ▪ CLI flags */
+const decl = ['--decl', 'decl'].includes(process.argv[2]);        // emit .d.ts
+const force = decl || ['--force', 'force', '--full', 'full'].includes(process.argv[2]);
 
+/* -------------------------------------------------- 3 ▪ Bootstrap */
+const {execSync} = require('child_process');
+const fs = require('fs');
 process.chdir(__dirname);
 
-function shell(cmd) {
-	child_process.execSync(cmd, {stdio: 'inherit'});
+function shell(cmd) {execSync(cmd, {stdio: 'inherit'});}
+
+/* ensure build-time deps are installed on a fresh checkout */
+for (const pkg of ['oxc-transform', 'fast-glob', 'typescript']) {
+	try {require.resolve(pkg);}
+	catch {shell(`npm install ${pkg}`);}
 }
 
-// Check to make sure the most recently added or updated dependency is installed at the correct version
-try {
-	var version = require('esbuild').version.split('.');
-	if (parseInt(version[1]) < 16) {
-		throw new Error("esbuild version too old");
-	}
-} catch (e) {
-	console.log('Installing dependencies...');
-	shell('npm install');
+/* ensure ./config/config.js exists */
+try {require.resolve('./config/config');}
+catch (err) {
+	if (err.code !== 'MODULE_NOT_FOUND') throw err;
+	fs.mkdirSync('config', {recursive: true});
+	fs.copyFileSync('config/config-example.js', 'config/config.js');
 }
 
-// Make sure config.js exists. If not, copy it over synchronously from
-// config-example.js, since it's needed before we can start the server
-try {
-	require.resolve('./config/config');
-} catch (err) {
-	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
-
-	console.log('config.js does not exist. Creating one with default settings...');
-	fs.writeFileSync(
-		'config/config.js',
-		fs.readFileSync('config/config-example.js')
-	);
-}
-
-// for some reason, esbuild won't be requirable until a tick has passed
-// see https://stackoverflow.com/questions/53270058/node-cant-find-certain-modules-after-synchronous-install
+/* -------------------------------------------------- 4 ▪ Build */
 setImmediate(() => {
-	// npm package, don't rebuild
-	if (process.argv[2] === 'postinstall' && fs.existsSync('dist')) return;
 	require('./tools/build-utils').transpile(force, decl);
 });
