@@ -196,8 +196,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				);
 				const [d, t] = Object.getPrototypeOf(this).spreadMoveHit
 					.call(this, [target], pokemon, move, hitEffect, isSecondary, isSelf) as [SpreadMoveDamage, SpreadMoveTargets];
-				spreadMoveDamage.concat(d);
-				spreadMoveTarget.concat(t);
+				spreadMoveDamage.push(d[0]);
+				spreadMoveTarget.push(t[0]);
 				this.battle.faintMessages(false, false, !pokemon.hp);
 				// There are no spread moves with recoil
 				if (move.recoil && d[0]) {
