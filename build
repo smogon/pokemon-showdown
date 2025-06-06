@@ -38,7 +38,6 @@ try {
 	if (err.code !== 'MODULE_NOT_FOUND') throw err; // should never happen
 
 	console.log('config.js does not exist. Creating one with default settings...');
-	fs.mkdirSync('config', {recursive: true});
 	fs.writeFileSync(
 		'config/config.js',
 		fs.readFileSync('config/config-example.js')
