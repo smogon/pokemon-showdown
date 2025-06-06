@@ -475,10 +475,6 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			return damage;
 		},
-		spreadMoveHit(targets, pokemon, move, hitEffect, isSecondary, isSelf) {
-			// Gen 4 overrides this method, so we need to revert it back
-			return Object.getPrototypeOf(this).spreadMoveHit.call(this, targets, pokemon, move, hitEffect, isSecondary, isSelf);
-		},
 
 		calcRecoilDamage(damageDealt, move) {
 			return this.battle.clampIntRange(Math.floor(damageDealt * move.recoil![0] / move.recoil![1]), 1);

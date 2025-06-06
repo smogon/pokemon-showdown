@@ -184,6 +184,9 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		spreadMoveHit(targets, pokemon, move, hitEffect, isSecondary, isSelf) {
 			// https://www.smogon.com/forums/threads/past-gens-research-thread.3506992/page-11#post-9880360
+			if (this.battle.gen < 4) {
+				return Object.getPrototypeOf(this).spreadMoveHit.call(this, targets, pokemon, move, hitEffect, isSecondary, isSelf);
+			}
 			const targetsEntries = Array.from(targets.slice(0).entries());
 			this.battle.speedSort(targetsEntries as [number, Pokemon][], (a, b) => this.battle.comparePriority(a[1], b[1]));
 			const originalSpreadHit = move.spreadHit;
