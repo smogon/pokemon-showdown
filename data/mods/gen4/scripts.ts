@@ -185,7 +185,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		spreadMoveHit(targets, pokemon, move, hitEffect, isSecondary, isSelf) {
 			// https://www.smogon.com/forums/threads/past-gens-research-thread.3506992/page-11#post-9880360
 			if (this.battle.gen < 4) {
-				return Object.getPrototypeOf(this).spreadMoveHit.call(this, targets, pokemon, move, hitEffect, isSecondary, isSelf);
+				return this.spreadMoveHitInner(targets, pokemon, move, hitEffect, isSecondary, isSelf);
 			}
 			const targetsEntries = Array.from(targets.slice(0).entries());
 			this.battle.speedSort(targetsEntries as [number, Pokemon][], (a, b) => this.battle.comparePriority(a[1], b[1]));
@@ -197,8 +197,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					(move.target !== 'allAdjacent' && targets.filter(t => t && !t.fainted).length > 1) ||
 					(move.target === 'allAdjacent' && targets.concat(pokemon).filter(t => t && !t.fainted).length > 2)
 				);
-				const [d, t] = Object.getPrototypeOf(this).spreadMoveHit
-					.call(this, [target], pokemon, move, hitEffect, isSecondary, isSelf) as [SpreadMoveDamage, SpreadMoveTargets];
+				const [d, t] = this.spreadMoveHitInner([target], pokemon, move, hitEffect, isSecondary, isSelf);
 				spreadMoveDamage.push(d[0]);
 				spreadMoveTarget.push(t[0]);
 				this.battle.faintMessages(false, false, !pokemon.hp);

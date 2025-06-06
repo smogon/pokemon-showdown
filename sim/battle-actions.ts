@@ -1044,6 +1044,13 @@ export class BattleActions {
 		targets: SpreadMoveTargets, pokemon: Pokemon, moveOrMoveName: ActiveMove,
 		hitEffect?: Dex.HitEffect, isSecondary?: boolean, isSelf?: boolean
 	): [SpreadMoveDamage, SpreadMoveTargets] {
+		// Buffer method used by gen4
+		return this.spreadMoveHitInner(targets, pokemon, moveOrMoveName, hitEffect, isSecondary, isSelf);
+	}
+	spreadMoveHitInner(
+		targets: SpreadMoveTargets, pokemon: Pokemon, moveOrMoveName: ActiveMove,
+		hitEffect?: Dex.HitEffect, isSecondary?: boolean, isSelf?: boolean
+	): [SpreadMoveDamage, SpreadMoveTargets] {
 		// Hardcoded for single-target purposes
 		// (no spread moves have any kind of onTryHit handler)
 		const target = targets[0];
