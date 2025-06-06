@@ -677,7 +677,7 @@ export const pages: Chat.PageTable = {
 };
 
 export const handlers: Chat.Handlers = {
-	onBattleEnd(battle, winner, players) {
+	onBattleCreate(battle, players) {
 		for (const tracker of Object.values(trackers)) {
 			tracker.handleBattleEnd(battle);
 		}
