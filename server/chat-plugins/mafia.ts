@@ -742,9 +742,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (roles.length) {
 			for (const p of this.players) {
 				const role = roles.shift();
-				if (!role) {
-					throw new Chat.ErrorMessage(`Failed to distribute roles: ran out of roles.`);
-				}
+				if (!role) throw new Error(`Ran out of roles.`);
 				p.role = role;
 				const u = Users.get(p.id);
 				p.revealed = '';
