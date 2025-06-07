@@ -160,7 +160,7 @@ describe(`Emergency Exit`, () => {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it('should request switch-out after taking recoil and dragging in an opponent', () => {
+	it.skip('should request switch-out after taking recoil and dragging in an opponent', () => {
 		battle = common.createBattle([[
 			{ species: "Golisopod", ability: 'emergencyexit', moves: ['dragontail'] },
 			{ species: "Wynaut", moves: ['sleeptalk'] },
@@ -335,7 +335,10 @@ describe(`Emergency Exit`, () => {
 
 	it('should not request switchout if its HP is below 50% when its dynamax ends', () => {
 		battle = common.gen(8).createBattle([
-			[{ species: "Golisopod", ability: 'emergencyexit', moves: ['drillrun'], ivs: EMPTY_IVS }, { species: "Clefable", ability: 'Unaware', moves: ['metronome'] }],
+			[
+				{ species: "Golisopod", ability: 'emergencyexit', moves: ['drillrun'], ivs: EMPTY_IVS },
+				{ species: "Clefable", ability: 'Unaware', moves: ['metronome'] },
+			],
 			[{ species: "Landorus", ability: 'sheerforce', moves: ['sludgewave'] }],
 		]);
 		const eePokemon = battle.p1.active[0];

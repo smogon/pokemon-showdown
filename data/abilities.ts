@@ -1214,27 +1214,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 302,
 	},
 	emergencyexit: {
-		onEmergencyExit(target) {
+		onEmergencyExit(originalHp, target) {
+    		if (target.hp > target.maxhp / 2 || originalHp <= target.maxhp / 2) return;
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 			for (const side of this.sides) {
 				for (const active of side.active) {
-					if (!active.abilityState.emergencyExiting) {
+					if (!active.volatiles['emergencyexiting']) {
 						active.switchFlag = false;
 					}
 				}
 			}
 			target.switchFlag = true;
-			this.effectState.emergencyExiting = true;
-		},
-		onBeforeSwitchOutPriority: 1,
-		onBeforeSwitchOut(pokemon) {
-			if (pokemon.switchFlag && this.effectState.emergencyExiting) {
-				// should activate after drags
-				this.add('-activate', pokemon, 'ability: Emergency Exit');
-			}
-		},
-		onEnd() {
-			delete this.effectState.emergencyExiting;
+			target.addVolatile('emergencyexiting');
+			this.add('-activate', target, 'ability: Emergency Exit');
 		},
 		flags: {},
 		name: "Emergency Exit",
@@ -5457,27 +5449,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 73,
 	},
 	wimpout: {
-		onEmergencyExit(target) {
+		onEmergencyExit(originalHp, target) {
+    		if (target.hp > target.maxhp / 2 || originalHp <= target.maxhp / 2) return;
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 			for (const side of this.sides) {
 				for (const active of side.active) {
-					if (!active.abilityState.emergencyExiting) {
+					if (!active.volatiles['emergencyexiting']) {
 						active.switchFlag = false;
 					}
 				}
 			}
 			target.switchFlag = true;
-			this.effectState.emergencyExiting = true;
-		},
-		onBeforeSwitchOutPriority: 1,
-		onBeforeSwitchOut(pokemon) {
-			if (pokemon.switchFlag && this.effectState.emergencyExiting) {
-				// should activate after drags
-				this.add('-activate', pokemon, 'ability: Wimp Out');
-			}
-		},
-		onEnd() {
-			delete this.effectState.emergencyExiting;
+			target.addVolatile('emergencyexiting');
+			this.add('-activate', target, 'ability: Wimp Out');
 		},
 		flags: {},
 		name: "Wimp Out",

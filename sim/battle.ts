@@ -512,9 +512,8 @@ export class Battle {
 			if ((handler.effectHolder as Pokemon).fainted) {
 				if (!(handler.state?.isSlotCondition)) continue;
 			}
-			// FIXME: this shouldn't be necessary, emergency exiting Pokemon should already be ignoring everything
 			if ((handler.effectHolder as Pokemon).switchFlag &&
-				(handler.effectHolder as Pokemon).abilityState?.emergencyExiting) continue;
+				(handler.effectHolder as Pokemon).volatiles['emergencyexiting']) continue;
 			if (eventid === 'Residual' && handler.end && handler.state?.duration) {
 				handler.state.duration--;
 				if (!handler.state.duration) {
@@ -565,11 +564,7 @@ export class Battle {
 				const originalHp = (handler.effectHolder as Pokemon).hp;
 				this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, undefined, handler.callback);
 				if (originalHp) {
-					const pokemon = handler.effectHolder as Pokemon;
-					const maxhp = pokemon.getUndynamaxedHP(pokemon.maxhp);
-					if (pokemon.hp && pokemon.getUndynamaxedHP() <= maxhp / 2 && originalHp > maxhp / 2) {
-						this.runEvent('EmergencyExit', pokemon);
-					}
+					this.runEvent('EmergencyExit', handler.effectHolder as Pokemon, undefined, undefined, originalHp);
 				}
 			}
 
@@ -1003,7 +998,7 @@ export class Battle {
 			}
 		}
 		if (callbackName.endsWith('SwitchIn') || callbackName.endsWith('RedirectTarget') ||
-			// FIXME: this is a quick fix because can't set effectOrder on Destiny Bond (and possibly other effects)
+			// Destiny Bond does not follow effectOrder
 			(callbackName.endsWith('Residual') && handler.effect.effectType === 'Condition' &&
 				(handler.state?.target instanceof Side || handler.state?.target instanceof Field))) {
 			// If multiple hazards are present on one side, their event handlers all perfectly tie in speed, priority,
@@ -2840,10 +2835,10 @@ export class Battle {
 			this.eachEvent('Update');
 		}
 
-		if (this.getAllActive(true).some(pokemon => pokemon.switchFlag && pokemon.abilityState.emergencyExiting)) {
+		if (this.getAllActive(true).some(pokemon => pokemon.switchFlag && pokemon.volatiles['emergencyexiting'])) {
 			// reject switch requests of other Pokemon
 			for (const pokemon of this.getAllActive(true)) {
-				if (!pokemon.abilityState.emergencyExiting) {
+				if (!pokemon.volatiles['emergencyexiting']) {
 					pokemon.switchFlag = false;
 				}
 			}

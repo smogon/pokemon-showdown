@@ -12,7 +12,7 @@ import type { SecondaryEffect, MoveEventMethods } from './dex-moves';
 
 export interface EventMethods {
 	onDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
-	onEmergencyExit?: (this: Battle, pokemon: Pokemon) => void;
+	onEmergencyExit?: (this: Battle, originalHp: number, pokemon: Pokemon) => void;
 	onAfterEachBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAfterHit?: MoveEventMethods['onAfterHit'];
 	onAfterMega?: (this: Battle, pokemon: Pokemon) => void;

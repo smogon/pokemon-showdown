@@ -533,9 +533,7 @@ export class BattleActions {
 			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 			if (pokemon && pokemon !== target && move.category !== 'Status') {
-				if (pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
-					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
-				}
+				this.battle.runEvent('EmergencyExit', pokemon, pokemon, undefined, originalHp);
 			}
 		}
 
@@ -962,9 +960,7 @@ export class BattleActions {
 				const hpBeforeRecoil = pokemon.hp;
 				this.battle.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get(move.id), true);
 				move.mindBlownRecoil = false;
-				if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
-				}
+				this.battle.runEvent('EmergencyExit', pokemon, pokemon, undefined, hpBeforeRecoil);
 			}
 			this.battle.eachEvent('Update');
 			if (!pokemon.hp && targets.length === 1) {
@@ -983,9 +979,7 @@ export class BattleActions {
 		if ((move.recoil || move.id === 'chloroblast') && move.totalDamage) {
 			const hpBeforeRecoil = pokemon.hp;
 			this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, pokemon, 'recoil');
-			if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-				this.battle.runEvent('EmergencyExit', pokemon, pokemon);
-			}
+			this.battle.runEvent('EmergencyExit', pokemon, pokemon, undefined, hpBeforeRecoil);
 		}
 
 		if (move.struggleRecoil) {
@@ -997,9 +991,7 @@ export class BattleActions {
 				recoilDamage = this.battle.clampIntRange(this.battle.trunc(pokemon.maxhp / 4), 1);
 			}
 			this.battle.directDamage(recoilDamage, pokemon, pokemon, { id: 'strugglerecoil' } as Condition);
-			if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-				this.battle.runEvent('EmergencyExit', pokemon, pokemon);
-			}
+			this.battle.runEvent('EmergencyExit', pokemon, pokemon, undefined, hpBeforeRecoil);
 		}
 
 		// smartTarget messes up targetsCopy, but smartTarget should in theory ensure that targets will never fail, anyway
@@ -1031,9 +1023,7 @@ export class BattleActions {
 				const curDamage = targets.length === 1 ? move.totalDamage : d;
 				if (typeof curDamage === 'number' && targets[i].hp) {
 					const targetHPBeforeDamage = (targets[i].hurtThisTurn || 0) + curDamage;
-					if (targets[i].hp <= targets[i].maxhp / 2 && targetHPBeforeDamage > targets[i].maxhp / 2) {
-						this.battle.runEvent('EmergencyExit', targets[i], pokemon);
-					}
+					this.battle.runEvent('EmergencyExit', targets[i], pokemon, undefined, targetHPBeforeDamage);
 				}
 			}
 		}
@@ -1144,9 +1134,7 @@ export class BattleActions {
 				}
 			}
 			this.battle.runEvent('AfterDamage', damagedTargets, pokemon, move, damagedDamage);
-			if (pokemon.hp && pokemon.hp <= pokemon.maxhp / 2 && pokemonOriginalHP > pokemon.maxhp / 2) {
-				this.battle.runEvent('EmergencyExit', pokemon);
-			}
+			this.battle.runEvent('EmergencyExit', pokemon, undefined, undefined, pokemonOriginalHP);
 		}
 
 		return [damage, targets];
