@@ -1547,7 +1547,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	mamoswine: {
 		tier: "RU",
 		doublesTier: "(DUU)",
-		natDexTier: "UU",
+		natDexTier: "RUBL",
 	},
 	corsola: {
 		isNonstandard: "Past",

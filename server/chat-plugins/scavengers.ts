@@ -456,7 +456,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 		const huntType = `${article} ${newHunt ? 'new ' : ''}${this.gameType}`;
 
 		return `|raw|<div class="broadcast-blue"><strong>${huntType} scavenger hunt by <em>${hosts}</em> has been started${staffHost}.</strong>` +
-			`<div style="border:1px solid #CCC;padding:4px 6px;margin:4px 1px; overflow:scroll; max-height: 50vh">` +
+			`<div style="border:1px solid #CCC;padding:4px 6px;margin:4px 1px; overflow:auto; max-height: 50vh">` +
 			`<strong><em>Hint #1:</em> ${this.formatOutput(this.questions[0].hint)}</strong>` +
 			`</div>` +
 			`(To answer, use <kbd>/scavenge <em>ANSWER</em></kbd>)</div>`;
@@ -723,7 +723,7 @@ export class ScavengerHunt extends Rooms.RoomGame<ScavengerHuntPlayer> {
 			`The ${this.gameType ? `${this.gameType} ` : ""}scavenger hunt by ${hosts} was ended ${(endedBy ? "by " + Utils.escapeHTML(endedBy.name) : "automatically")}.<br />` +
 			`${this.completed.slice(0, sliceIndex).map((p, i) => `${Utils.formatOrder(i + 1)} place: <em>${Utils.escapeHTML(p.name)}</em> <span style="color: lightgreen;">[${p.time}]</span>.<br />`).join("")}` +
 			`${this.completed.length > sliceIndex ? `Consolation Prize: ${this.completed.slice(sliceIndex).map(e => `<em>${Utils.escapeHTML(e.name)}</em> <span style="color: lightgreen;">[${e.time}]</span>`).join(', ')}<br />` : ''}<br />` +
-			`<details style="cursor: pointer; overflow:scroll; max-height: 50vh"><summary>Solution: </summary><br />` +
+			`<details style="cursor: pointer; overflow:auto; max-height: 50vh"><summary>Solution: </summary><br />` +
 			`${this.questions.map((q, i) => `${i + 1}) ${this.formatOutput(q.hint)} <span style="color: lightgreen">[<em>${Utils.escapeHTML(q.answer.join(' / '))}</em>]</span>`).join("<br />")}` +
 			`</details>`
 		);
@@ -1036,7 +1036,7 @@ export class ScavengerHuntPlayer extends Rooms.RoomGamePlayer<ScavengerHunt> {
 	onNotifyChange(num: number) {
 		this.game.runEvent('NotifyChange', this, num);
 		if (num === this.currentQuestion) {
-			this.sendRoom(`|raw|<div style="overflow:scroll; max-height: 50vh"><strong>The hint has been changed to:</strong> ${this.game.formatOutput(this.game.questions[num].hint)}</div>`);
+			this.sendRoom(`|raw|<div style="overflow:auto; max-height: 50vh"><strong>The hint has been changed to:</strong> ${this.game.formatOutput(this.game.questions[num].hint)}</div>`);
 		}
 	}
 
