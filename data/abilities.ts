@@ -1215,7 +1215,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	emergencyexit: {
 		onEmergencyExit(originalHp, target) {
-    		if (target.hp > target.maxhp / 2 || originalHp <= target.maxhp / 2) return;
+			if (target.hp > target.maxhp / 2 || originalHp <= target.maxhp / 2) return;
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 			for (const side of this.sides) {
 				for (const active of side.active) {
@@ -5450,7 +5450,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	wimpout: {
 		onEmergencyExit(originalHp, target) {
-    		if (target.hp > target.maxhp / 2 || originalHp <= target.maxhp / 2) return;
+			if (target.hp > target.maxhp / 2 || originalHp <= target.maxhp / 2) return;
 			if (!this.canSwitch(target.side) || target.forceSwitchFlag || target.switchFlag) return;
 			for (const side of this.sides) {
 				for (const active of side.active) {
