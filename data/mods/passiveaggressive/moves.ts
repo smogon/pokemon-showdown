@@ -145,7 +145,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const hpBeforeRecoil = pokemon.hp;
 				const calc = calculate(this, pokemon, pokemon, 'mindblown');
 				this.damage(Math.round(calc * pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get('Mind Blown'), true);
-				this.runEvent('EmergencyExit', pokemon, pokemon, undefined, hpBeforeRecoil);
+				this.singleEvent('EmergencyExit', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, undefined, hpBeforeRecoil);
 			}
 		},
 	},
@@ -251,7 +251,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const hpBeforeRecoil = pokemon.hp;
 				const calc = calculate(this, pokemon, pokemon, 'steelbeam');
 				this.damage(Math.round(calc * pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get('Steel Beam'), true);
-				this.runEvent('EmergencyExit', pokemon, pokemon, undefined, hpBeforeRecoil);
+				this.singleEvent('EmergencyExit', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, undefined, hpBeforeRecoil);
 			}
 		},
 	},

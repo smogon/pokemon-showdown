@@ -1392,7 +1392,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 				if (pokemon && pokemon !== target && move.category !== 'Status') {
-					this.battle.runEvent('EmergencyExit', pokemon, pokemon, undefined, originalHp);
+					this.battle.singleEvent('EmergencyExit', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, undefined, originalHp);
 				}
 			}
 
@@ -1511,7 +1511,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					const hpBeforeRecoil = pokemon.hp;
 					this.battle.damage(Math.round(pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get(move.id), true);
 					move.mindBlownRecoil = false;
-					this.battle.runEvent('EmergencyExit', pokemon, pokemon, undefined, hpBeforeRecoil);
+					this.battle.singleEvent('EmergencyExit', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, undefined, hpBeforeRecoil);
 				}
 				this.battle.eachEvent('Update');
 				if (!pokemon.hp && targets.length === 1) {
@@ -1530,7 +1530,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if ((move.recoil || move.id === 'chloroblast') && move.totalDamage) {
 				const hpBeforeRecoil = pokemon.hp;
 				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, pokemon, 'recoil');
-				this.battle.runEvent('EmergencyExit', pokemon, pokemon, undefined, hpBeforeRecoil);
+				this.battle.singleEvent('EmergencyExit', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, undefined, hpBeforeRecoil);
 			}
 
 			if (move.struggleRecoil) {
@@ -1542,7 +1542,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					recoilDamage = this.battle.clampIntRange(this.battle.trunc(pokemon.maxhp / 4), 1);
 				}
 				this.battle.directDamage(recoilDamage, pokemon, pokemon, { id: 'strugglerecoil' } as Condition);
-				this.battle.runEvent('EmergencyExit', pokemon, pokemon, undefined, hpBeforeRecoil);
+				this.battle.singleEvent('EmergencyExit', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, undefined, hpBeforeRecoil);
 			}
 
 			// smartTarget messes up targetsCopy, but smartTarget should in theory ensure that targets will never fail, anyway
@@ -1574,7 +1574,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					const curDamage = targets.length === 1 ? move.totalDamage : d;
 					if (typeof curDamage === 'number' && targets[i].hp) {
 						const targetHPBeforeDamage = (targets[i].hurtThisTurn || 0) + curDamage;
-						this.battle.runEvent('EmergencyExit', targets[i], pokemon, undefined, targetHPBeforeDamage);
+						this.battle.singleEvent('EmergencyExit', targets[i].getAbility(), targets[i].abilityState, targets[i], pokemon, undefined, targetHPBeforeDamage);
 					}
 				}
 			}
@@ -1707,7 +1707,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						this.battle.singleEvent('AfterHit', moveData, {}, t, pokemon, move);
 					}
 				}
-				this.battle.runEvent('EmergencyExit', pokemon, undefined, undefined, pokemonOriginalHP);
+				this.battle.singleEvent('EmergencyExit', pokemon.getAbility(), pokemon.abilityState, pokemon, undefined, undefined, pokemonOriginalHP);
 			}
 
 			return [damage, targets];

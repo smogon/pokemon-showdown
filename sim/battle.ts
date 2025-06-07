@@ -561,10 +561,10 @@ export class Battle {
 			if ((handler.effectHolder as Side).sideConditions) handlerEventid = `Side${eventid}`;
 			if ((handler.effectHolder as Field).pseudoWeather) handlerEventid = `Field${eventid}`;
 			if (handler.callback) {
-				const originalHp = (handler.effectHolder as Pokemon).hp;
+				const possibleTargets: [Pokemon, number][] = this.getAllActive().map(pokemon => [pokemon, pokemon.hp]);
 				this.singleEvent(handlerEventid, effect, handler.state, handler.effectHolder, null, null, undefined, handler.callback);
-				if (originalHp) {
-					this.runEvent('EmergencyExit', handler.effectHolder as Pokemon, undefined, undefined, originalHp);
+				for (const [pokemon, originalHp] of possibleTargets) {
+					this.singleEvent('EmergencyExit', pokemon.getAbility(), pokemon.abilityState, pokemon, undefined, undefined, originalHp);
 				}
 			}
 
