@@ -1,66 +1,74 @@
 "use strict";
 
 const fs = require("fs");
-const child_process = require("child_process");
-const esbuild = require('esbuild');
+const path = require("path");
+const oxc = require("oxc-transform");
+const sucrase = require("sucrase");
+const fg = require("fast-glob");
+const { execSync } = require("child_process");
 
-const copyOverDataJSON = (file = 'data') => {
-	const files = fs.readdirSync(file);
-	for (const f of files) {
-		if (fs.statSync(`${file}/${f}`).isDirectory()) {
-			copyOverDataJSON(`${file}/${f}`);
-		} else if (f.endsWith('.json')) {
-			fs.copyFileSync(`${file}/${f}`, require('path').resolve('dist', `${file}/${f}`));
-		}
+function copyJSON(dir = 'data') {
+	for (const src of fg.sync(`${dir}/**/*.json`)) {
+		const dst = path.join('dist', src);
+		fs.mkdirSync(path.dirname(dst), { recursive: true });
+		fs.copyFileSync(src, dst);
 	}
-};
+}
 
-const shouldBeCompiled = file => {
-	if (file.includes('node_modules/')) return false;
-	if (file.endsWith('.tsx')) return true;
-	if (file.endsWith('.ts')) return !(file.endsWith('.d.ts') || file.includes('global'));
-	return false;
-};
+function sourceFiles() {
+	return fg.sync([
+		'**/*.{ts,tsx,js,jsx}',
+		'!dist/**',
+		'!node_modules/**',
+		'!logs/**',
+		'!databases/**',
+	]);
+}
 
-const findFilesForPath = path => {
-	const out = [];
-	const files = fs.readdirSync(path);
-	for (const file of files) {
-		const cur = `${path}/${file}`;
-		// HACK: Logs and databases exclusions are a hack. Logs is too big to
-		// traverse, databases adds/removes files which can lead to a filesystem
-		// race between readdirSync and statSync. Please, at some point someone
-		// fix this function to be more robust.
-		if (cur.includes('node_modules') || cur.includes("/logs") || cur.includes("/databases")) continue;
-		if (fs.statSync(cur).isDirectory()) {
-			out.push(...findFilesForPath(cur));
-		} else if (shouldBeCompiled(cur)) {
-			out.push(cur);
+exports.transpile = (force, emitDecl) => {
+	fs.mkdirSync('dist', { recursive: true });
+
+	for (const file of sourceFiles()) {
+		const src = fs.readFileSync(file, 'utf8');
+
+		let { code, map, errors } = oxc.transform(
+			file,
+			src,
+			{}
+		);
+
+		if (errors?.length) {
+			console.error(`❌  ${file}`);
+			errors.forEach(e => console.error('   ', e));
+			if (!force) continue;
 		}
-	}
-	return out;
-};
 
-exports.transpile = decl => {
-	esbuild.buildSync({
-		entryPoints: findFilesForPath('./'),
-		outdir: './dist',
-		outbase: '.',
-		format: 'cjs',
-		tsconfig: './tsconfig.json',
-		sourcemap: true,
-	});
-	fs.copyFileSync('./config/config-example.js', './dist/config/config-example.js');
-	copyOverDataJSON();
+		// Use sucrase for ultra-fast ES modules to CommonJS conversion
+		const sucraseResult = sucrase.transform(code, {
+			transforms: ["imports"], // Only transform imports/exports to CommonJS
+			filePath: file,
+		});
+		code = sucraseResult.code;
+
+		const rel = file.replace(/\.[cm]?[jt]sx?$/, '');
+		const outJS = path.join('dist', `${rel}.js`);
+		fs.mkdirSync(path.dirname(outJS), { recursive: true });
+		fs.writeFileSync(outJS, code);
+		if (map) fs.writeFileSync(`${outJS}.map`, JSON.stringify(map));
+	}
+
+	fs.copyFileSync('config/config-example.js', 'dist/config/config-example.js');
+	copyJSON();
 
 	// NOTE: replace is asynchronous - add additional replacements for the same path in one call instead of making multiple calls.
-	if (decl) {
-		exports.buildDecls();
-	}
+	if (emitDecl) exports.buildDecls();
 };
 
 exports.buildDecls = () => {
 	try {
-		child_process.execSync(`node ./node_modules/typescript/bin/tsc -p sim`, { stdio: 'inherit' });
+		execSync(
+			'npx tsc --emitDeclarationOnly --declaration --declarationMap --outDir dist',
+			{ stdio: 'inherit' }
+		);
 	} catch {}
 };
