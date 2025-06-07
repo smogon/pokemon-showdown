@@ -512,8 +512,9 @@ export class Battle {
 			if ((handler.effectHolder as Pokemon).fainted) {
 				if (!(handler.state?.isSlotCondition)) continue;
 			}
-			// FIXME: this shouldn't be necessary, emergency exiting Pokemon should be ignoring everything
-			if ((handler.effectHolder as Pokemon).abilityState?.emergencyExiting) continue;
+			// FIXME: this shouldn't be necessary, emergency exiting Pokemon should already be ignoring everything
+			if ((handler.effectHolder as Pokemon).switchFlag &&
+				(handler.effectHolder as Pokemon).abilityState?.emergencyExiting) continue;
 			if (eventid === 'Residual' && handler.end && handler.state?.duration) {
 				handler.state.duration--;
 				if (!handler.state.duration) {
@@ -2839,7 +2840,7 @@ export class Battle {
 			this.eachEvent('Update');
 		}
 
-		if (this.getAllActive(true).some(pokemon => pokemon.abilityState.emergencyExiting)) {
+		if (this.getAllActive(true).some(pokemon => pokemon.switchFlag && pokemon.abilityState.emergencyExiting)) {
 			// reject switch requests of other Pokemon
 			for (const pokemon of this.getAllActive(true)) {
 				if (!pokemon.abilityState.emergencyExiting) {
