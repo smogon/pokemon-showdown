@@ -147,7 +147,8 @@ export class BattleActions {
 		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 		pokemon.previouslySwitchedIn++;
 
-		if (isDrag && this.battle.gen >= 5) {
+		// Technically, gen 2 also runs the runSwitch event immediately; see skipped test in misc/turn-order.js
+		if ((this.battle.turn > 0 && this.battle.gen === 3) || (isDrag && this.battle.gen >= 5)) {
 			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
 			this.runSwitch(pokemon);
 		} else {
