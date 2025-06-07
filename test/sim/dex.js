@@ -88,3 +88,25 @@ describe('Dex#getMove', () => {
 		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').isNonstandard, "Gigantamax");
 	});
 });
+
+describe('DexTypes#isName', () => {
+	it('should return true for valid type names', () => {
+		assert.equal(Dex.types.isName('Fire'), true);
+		assert.equal(Dex.types.isName('Water'), true);
+		assert.equal(Dex.types.isName('Psychic'), true);
+		assert.equal(Dex.types.isName('Fighting'), true);
+		assert.equal(Dex.types.isName('Normal'), true);
+	});
+
+	it('should return false for invalid type names', () => {
+		assert.equal(Dex.types.isName('fire'), false);
+		assert.equal(Dex.types.isName('FIRE'), false);
+		assert.equal(Dex.types.isName('Unknown'), false);
+		assert.equal(Dex.types.isName(''), false);
+	});
+
+	it('should return false for null and undefined', () => {
+		assert.equal(Dex.types.isName(undefined), false);
+		assert.equal(Dex.types.isName(null), false);
+	});
+});
