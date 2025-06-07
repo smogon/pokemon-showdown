@@ -19,7 +19,7 @@ import type { Battle } from './battle';
 export interface MoveAction {
 	/** action type */
 	choice: 'move' | 'beforeTurnMove' | 'priorityChargeMove';
-	order: 3 | 5 | 105 | 199 | 200 | 201;
+	order: 5 | 105 | 199 | 200 | 201;
 	/** priority of the action (lower first) */
 	priority: number;
 	/** fractional priority of the action (lower first) */
@@ -276,7 +276,7 @@ export class BattleQueue {
 			}
 		}
 		action.sourceEffect = sourceEffect;
-		action.order = 3;
+		action.order = action.choice === 'move' ? 199 : 3;
 		this.list.unshift(action);
 	}
 
