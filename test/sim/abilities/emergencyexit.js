@@ -160,7 +160,7 @@ describe(`Emergency Exit`, () => {
 		assert.equal(battle.requestState, 'switch');
 	});
 
-	it.skip('should request switch-out after taking recoil and dragging in an opponent', () => {
+	it('should request switch-out after taking recoil and dragging in an opponent', () => {
 		battle = common.createBattle([[
 			{ species: "Golisopod", ability: 'emergencyexit', moves: ['dragontail'] },
 			{ species: "Wynaut", moves: ['sleeptalk'] },
@@ -170,7 +170,7 @@ describe(`Emergency Exit`, () => {
 		]]);
 		battle.makeChoices();
 		const log = battle.getDebugLog();
-		const dragIndex = log.lastIndexOf('|drag|p2a: Stufful|Stufful, M|281/281');
+		const dragIndex = log.lastIndexOf('|drag|p2a: Stufful|Stufful|281/281');
 		const abilityIndex = log.lastIndexOf('|-activate|p1a: Golisopod|ability: Emergency Exit');
 		assert(dragIndex < abilityIndex, 'Stufful should be dragged in before Emergency Exit activates');
 		assert.equal(battle.requestState, 'switch');

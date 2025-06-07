@@ -1225,7 +1225,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			target.switchFlag = true;
 			this.effectState.emergencyExiting = true;
-			this.add('-activate', target, 'ability: Emergency Exit');
+		},
+		onBeforeSwitchOutPriority: 1,
+		onBeforeSwitchOut(pokemon) {
+			if (pokemon.switchFlag && this.effectState.emergencyExiting) {
+				// should activate after drags
+				this.add('-activate', pokemon, 'ability: Emergency Exit');
+			}
 		},
 		onEnd() {
 			delete this.effectState.emergencyExiting;
@@ -5462,7 +5468,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			target.switchFlag = true;
 			this.effectState.emergencyExiting = true;
-			this.add('-activate', target, 'ability: Wimp Out');
+		},
+		onBeforeSwitchOutPriority: 1,
+		onBeforeSwitchOut(pokemon) {
+			if (pokemon.switchFlag && this.effectState.emergencyExiting) {
+				// should activate after drags
+				this.add('-activate', pokemon, 'ability: Wimp Out');
+			}
 		},
 		onEnd() {
 			delete this.effectState.emergencyExiting;
