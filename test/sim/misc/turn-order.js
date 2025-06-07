@@ -188,6 +188,57 @@ describe('Switching in', () => {
 		assert.statStage(kyogre, 'spe', -1);
 		assert.equal(battle.field.weather, 'desolateland', 'Groudon should have reverted after Kyogre in spite of Sticky Web because it was slower before the SwitchIn event started');
 	});
+
+	describe('[Gen 3]', () => {
+		it(`should make an instant switch request if a Pokemon faints during switch-in`, () => {
+			battle = common.gen(3).createBattle([[
+				{ species: "geodude", item: 'focussash', moves: ['sleeptalk'] },
+				{ species: "alakazam", moves: ['sleeptalk'] },
+				{ species: "cloyster", moves: ['sleeptalk'] },
+			], [
+				{ species: "metagross", moves: ['stealthrock', 'meteormash', 'explosion'] },
+				{ species: "tyranitar", ability: 'sandstream', moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices();
+			battle.makeChoices('auto', 'move meteormash');
+			battle.makeChoices('switch 2', 'move explosion');
+			assert.equal(battle.p1.requestState, 'switch');
+			assert.equal(battle.p2.requestState, 'switch');
+			battle.makeChoices(); // Switch-in Geodude (faints) and Tyranitar (never happens)
+			assert.equal(battle.p1.requestState, 'switch');
+			assert.equal(battle.p2.requestState, '');
+			assert(battle.p2.activeRequest.wait);
+			assert.species(battle.p2.active[0], 'Metagross');
+			battle.makeChoices(); // Switch-in Cloyster and Tyranitar
+			assert.species(battle.p2.active[0], 'Tyranitar');
+		});
+	});
+
+	describe('[Gen 2]', () => {
+		it.skip(`effects should be applied when the Pokemon enters the field, but fainting should only happen after all Pokemon have switched in`, () => {
+			battle = common.gen(2).createBattle([[
+				{ species: "abra", item: 'focussash', moves: ['sleeptalk'] }, // I know Focus Sash doesn't exist in Gen 2, bite me
+				{ species: "alakazam", moves: ['sleeptalk'] },
+				{ species: "cloyster", moves: ['sleeptalk'] },
+			], [
+				{ species: "snorlax", moves: ['spikes', 'bodyslam', 'selfdestruct'] },
+				{ species: "tyranitar", moves: ['sleeptalk'] },
+			]]);
+			battle.makeChoices();
+			battle.makeChoices('auto', 'move bodyslam');
+			battle.makeChoices('switch 2', 'move selfdestruct');
+			battle.makeChoices();
+			const log = battle.getDebugLog();
+			const hpIndex = log.lastIndexOf('|-damage|p1a: Abra|0 fnt');
+			const tyranitarSwitchIndex = log.indexOf('|switch|p2a: Tyranitar');
+			const faintingIndex = log.lastIndexOf('|faint|p1a: Abra');
+			assert(hpIndex > 0);
+			assert(tyranitarSwitchIndex > 0);
+			assert(faintingIndex > 0);
+			assert(hpIndex < tyranitarSwitchIndex, 'Spikes damage should be applied before Tyranitar switches in');
+			assert(tyranitarSwitchIndex < faintingIndex, 'Tyranitar should switch in before Abra faints');
+		});
+	});
 });
 
 describe('Speed ties', () => {
