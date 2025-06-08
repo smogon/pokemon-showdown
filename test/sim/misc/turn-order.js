@@ -241,21 +241,20 @@ describe('Switching in', () => {
 	describe('[Gen 2]', () => {
 		it.skip(`effects should be applied when the Pokemon enters the field, but fainting should only happen after all Pokemon have switched in`, () => {
 			battle = common.gen(2).createBattle([[
-				{ species: "abra", item: 'focussash', moves: ['sleeptalk'] }, // I know Focus Sash doesn't exist in Gen 2, bite me
 				{ species: "alakazam", moves: ['sleeptalk'] },
+				{ species: "shedinja", moves: ['sleeptalk'] }, // I know Shedinja doesn't exist in Gen 2, bite me
 				{ species: "cloyster", moves: ['sleeptalk'] },
 			], [
-				{ species: "snorlax", moves: ['spikes', 'bodyslam', 'selfdestruct'] },
+				{ species: "snorlax", moves: ['spikes', 'selfdestruct'] },
 				{ species: "tyranitar", moves: ['sleeptalk'] },
 			]]);
 			battle.makeChoices();
-			battle.makeChoices('auto', 'move bodyslam');
-			battle.makeChoices('switch 2', 'move selfdestruct');
+			battle.makeChoices('auto', 'move selfdestruct');
 			battle.makeChoices();
 			const log = battle.getDebugLog();
-			const hpIndex = log.lastIndexOf('|-damage|p1a: Abra|0 fnt');
+			const hpIndex = log.lastIndexOf('|-damage|p1a: Shedinja|0 fnt');
 			const tyranitarSwitchIndex = log.indexOf('|switch|p2a: Tyranitar');
-			const faintingIndex = log.lastIndexOf('|faint|p1a: Abra');
+			const faintingIndex = log.lastIndexOf('|faint|p1a: Shedinja');
 			assert(hpIndex > 0);
 			assert(tyranitarSwitchIndex > 0);
 			assert(faintingIndex > 0);
