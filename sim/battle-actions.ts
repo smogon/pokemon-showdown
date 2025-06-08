@@ -157,11 +157,6 @@ export class BattleActions {
 					this.battle.runEvent('AfterSwitchInSelf', pokemon);
 				}
 			}
-			const weatherAbilities = ['drizzle', 'drought', 'sandstream', 'snowwarning', 'airlock', 'cloudnine', 'forecast'];
-			if(pokemon.hp && weatherAbilities.includes(pokemon.getAbility().id)) {
-				this.battle.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
-				pokemon.isStarted = true;
-			}
 		}
 
 		if (isDrag && this.battle.gen >= 5) {

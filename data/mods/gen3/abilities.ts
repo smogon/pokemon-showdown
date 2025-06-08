@@ -1,4 +1,18 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
+	airlock: {
+		inherit: true,
+		onSwitchIn(pokemon) {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
+			pokemon.isStarted = true;
+		},
+	},
+	cloudnine: {
+		inherit: true,
+		onSwitchIn(pokemon) {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
+			pokemon.isStarted = true;
+		},
+	},
 	cutecharm: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
@@ -7,6 +21,20 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					source.addVolatile('attract', target);
 				}
 			}
+		},
+	},
+	drizzle: {
+		inherit: true,
+		onSwitchIn(pokemon) {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
+			pokemon.isStarted = true;
+		},
+	},
+	drought: {
+		inherit: true,
+		onSwitchIn(pokemon) {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
+			pokemon.isStarted = true;
 		},
 	},
 	effectspore: {
@@ -53,6 +81,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	forecast: {
 		inherit: true,
+		onSwitchIn(pokemon) {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
+			pokemon.isStarted = true;
+		},
 		flags: {},
 	},
 	hustle: {
@@ -158,10 +190,24 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 	},
+	sandstream: {
+		inherit: true,
+		onSwitchIn(pokemon) {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
+			pokemon.isStarted = true;
+		},
+	},
 	shadowtag: {
 		inherit: true,
 		onFoeTrapPokemon(pokemon) {
 			pokemon.trapped = true;
+		},
+	},
+	snowwarning: {
+		inherit: true,
+		onSwitchIn(pokemon) {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
+			pokemon.isStarted = true;
 		},
 	},
 	static: {
