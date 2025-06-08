@@ -7,9 +7,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		runSwitch(pokemon) {
 			if (this.battle.gen === 4 || this.battle.turn === 0) {
 				this.battle.runEvent('EntryHazard', pokemon);
-
 				this.battle.runEvent('SwitchIn', pokemon);
-
 				if (this.battle.gen <= 2) {
 					// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
 					for (const poke of this.battle.getAllActive()) poke.lastMove = null;

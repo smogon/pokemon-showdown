@@ -191,7 +191,7 @@ describe('Switching in', () => {
 
 	describe('[Gen 3]', () => {
 		it(`should make an instant switch request if a Pokemon faints during switch-in`, () => {
-			battle = common.gen(3).createBattle({gameType: 'doubles'}, [[
+			battle = common.gen(3).createBattle({ gameType: 'doubles' }, [[
 				{ species: "alakazam", level: 99, moves: ['spikes'] },
 				{ species: "alakazam", level: 97, moves: ['sleeptalk'] },
 				{ species: "shedinja", moves: ['sleeptalk'] },
@@ -232,6 +232,7 @@ describe('Switching in', () => {
 
 			battle.makeChoices('switch 6'); // Switch-in Groudon
 			assert(battle.field.isWeather('sunnyday'));
+			assert.species(battle.p1.active[0], 'Castform-Sunny');
 			assert.equal(battle.p1.active[0].boosts.atk, -1);
 			assert.equal(battle.p1.active[1].boosts.atk, -1);
 		});
