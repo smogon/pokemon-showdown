@@ -9,20 +9,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 	},
-	drizzle: {
-		inherit: true,
-		onStart() {},
-		onSwitchIn() {
-			this.field.setWeather('raindance');
-		},
-	},
-	drought: {
-		inherit: true,
-		onStart() {},
-		onSwitchIn() {
-			this.field.setWeather('sunnyday');
-		},
-	},
 	effectspore: {
 		inherit: true,
 		onDamagingHit(damage, target, source, move) {
@@ -67,10 +53,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	forecast: {
 		inherit: true,
-		onStart() {},
-		onSwitchIn(pokemon) {
-			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
-		},
 		flags: {},
 	},
 	hustle: {
@@ -176,24 +158,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 	},
-	sandstream: {
-		inherit: true,
-		onStart() {},
-		onSwitchIn() {
-			this.field.setWeather('sandstorm');
-		},
-	},
 	shadowtag: {
 		inherit: true,
 		onFoeTrapPokemon(pokemon) {
 			pokemon.trapped = true;
-		},
-	},
-	snowwarning: {
-		inherit: true,
-		onStart() {},
-		onSwitchIn() {
-			this.field.setWeather('hail');
 		},
 	},
 	static: {
