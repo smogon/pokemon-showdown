@@ -1027,7 +1027,7 @@ export class Side {
 			actions: [],
 			forcedSwitchesLeft: forcedSwitches,
 			forcedPassesLeft: forcedPasses,
-			switchIns: new Set(),
+			switchIns: new Set(this.battle.queue.switches(this).map(action => action.target.position)),
 			zMove: false,
 			mega: false,
 			ultra: false,
