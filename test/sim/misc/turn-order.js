@@ -191,26 +191,49 @@ describe('Switching in', () => {
 
 	describe('[Gen 3]', () => {
 		it(`should make an instant switch request if a Pokemon faints during switch-in`, () => {
-			battle = common.gen(3).createBattle([[
-				{ species: "geodude", item: 'focussash', moves: ['sleeptalk'] },
-				{ species: "alakazam", moves: ['sleeptalk'] },
-				{ species: "cloyster", moves: ['sleeptalk'] },
+			battle = common.gen(3).createBattle({gameType: 'doubles'}, [[
+				{ species: "alakazam", level: 99, moves: ['spikes'] },
+				{ species: "alakazam", level: 97, moves: ['sleeptalk'] },
+				{ species: "shedinja", moves: ['sleeptalk'] },
+				{ species: "shedinja", moves: ['sleeptalk'] },
+				{ species: "castform", ability: 'forecast', moves: ['sleeptalk'] },
+				{ species: "groudon", ability: 'drought', moves: ['sleeptalk'] },
 			], [
-				{ species: "metagross", moves: ['stealthrock', 'meteormash', 'explosion'] },
-				{ species: "tyranitar", ability: 'sandstream', moves: ['sleeptalk'] },
+				{ species: "alakazam", level: 100, moves: ['spikes', 'explosion'] },
+				{ species: "alakazam", level: 98, moves: ['sleeptalk'] },
+				{ species: "kyogre", ability: 'drizzle', moves: ['sleeptalk'] },
+				{ species: "shedinja", moves: ['sleeptalk'] },
+				{ species: "gyarados", ability: 'intimidate', moves: ['sleeptalk'] },
 			]]);
 			battle.makeChoices();
-			battle.makeChoices('auto', 'move meteormash');
-			battle.makeChoices('switch 2', 'move explosion');
+			battle.makeChoices('auto', 'move explosion, move sleeptalk');
 			assert.equal(battle.p1.requestState, 'switch');
 			assert.equal(battle.p2.requestState, 'switch');
-			battle.makeChoices(); // Switch-in Geodude (faints) and Tyranitar (never happens)
+
+			battle.makeChoices('switch 3, switch 4', 'switch 3, switch 4'); // Switch-in Kyogre
 			assert.equal(battle.p1.requestState, 'switch');
 			assert.equal(battle.p2.requestState, '');
 			assert(battle.p2.activeRequest.wait);
-			assert.species(battle.p2.active[0], 'Metagross');
-			battle.makeChoices(); // Switch-in Cloyster and Tyranitar
-			assert.species(battle.p2.active[0], 'Tyranitar');
+			assert(battle.field.isWeather('raindance'));
+
+			// assert.throws(() => battle.choose('p1', 'switch 4'));
+			assert.throws(() => battle.choose('p1', 'switch 5, switch 6'));
+			assert.throws(() => battle.choose('p2', 'auto'));
+			battle.makeChoices('switch 5'); // Switch-in Castform
+			assert.equal(battle.p1.requestState, '');
+			assert(battle.p1.activeRequest.wait);
+			assert.equal(battle.p2.requestState, 'switch');
+			assert.species(battle.p1.active[0], 'Castform-Rainy');
+
+			battle.makeChoices('', 'switch 5'); // Switch-in Gyarados
+			assert.equal(battle.p1.requestState, 'switch');
+			assert.equal(battle.p2.requestState, '');
+			assert(battle.p2.activeRequest.wait);
+
+			battle.makeChoices('switch 6'); // Switch-in Groudon
+			assert(battle.field.isWeather('sunnyday'));
+			assert.equal(battle.p1.active[0].boosts.atk, -1);
+			assert.equal(battle.p1.active[1].boosts.atk, -1);
 		});
 	});
 

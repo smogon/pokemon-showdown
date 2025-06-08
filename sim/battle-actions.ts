@@ -147,9 +147,20 @@ export class BattleActions {
 		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 		pokemon.previouslySwitchedIn++;
 
-		if ((this.battle.turn > 0 && this.battle.gen === 3) || (isDrag && this.battle.gen >= 5)) {
+		if (this.battle.gen <= 3 && this.battle.turn > 0) {
+			this.battle.runEvent('EntryHazard', pokemon);
+			this.battle.runEvent('SwitchIn', pokemon);
+			if (this.battle.gen <= 2) {
+				// pokemon.lastMove is reset for all Pokemon on the field after a switch. This affects Mirror Move.
+				for (const poke of this.battle.getAllActive()) poke.lastMove = null;
+				if (!pokemon.side.faintedThisTurn && pokemon.draggedIn !== this.battle.turn) {
+					this.battle.runEvent('AfterSwitchInSelf', pokemon);
+				}
+			}
+		}
+
+		if (isDrag && this.battle.gen >= 5) {
 			// runSwitch happens immediately so that Mold Breaker can make hazards bypass Clear Body and Levitate
-			// FIXME: technically, gen 2 also runs the runSwitch event immediately; see skipped test in misc/turn-order.js
 			this.runSwitch(pokemon);
 		} else {
 			this.battle.queue.insertChoice({ choice: 'runSwitch', pokemon });
