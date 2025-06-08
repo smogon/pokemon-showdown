@@ -134,7 +134,7 @@ export const commands: Chat.ChatCommands = {
 			`Types can be searched for by either having the type precede <code>type</code> or just using the type itself as a parameter; e.g., both <code>fire type</code> and <code>fire</code> show all Fire types; however, using <code>psychic</code> as a parameter will show all Pok\u00e9mon that learn the move Psychic and not Psychic types.<br/>` +
 			`<code>resists</code> followed by a type or move will show Pok\u00e9mon that resist that typing or move (e.g. <code>resists normal</code>).<br/>` +
 			`<code>weak</code> followed by a type or move will show Pok\u00e9mon that are weak to that typing or move (e.g. <code>weak fire</code>).<br/>` +
-			`<code>asc</code> or <code>desc</code> following a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively (e.g. <code>speed asc</code>).<br/>` +
+			`<code>asc</code> or <code>desc</code> following a stat will show the Pok\u00e9mon in ascending or descending order of that stat respectively (e.g. <code>speed asc</code>). You can use <code>tier</code> and <code>dtier</code> to sort by singles and doubles tiers, respectively.<br/>` +
 			`Inequality ranges use the characters <code>>=</code> for <code>≥</code> and <code><=</code> for <code>≤</code>; e.g., <code>hp <= 95</code> searches all Pok\u00e9mon with HP less than or equal to 95; <code>tier <= uu</code> searches all Pok\u00e9mon in singles tiers lower than UU.<br/>` +
 			`Parameters can be excluded through the use of <code>!</code>; e.g., <code>!water type</code> excludes all Water types.<br/>` +
 			`The parameter <code>mega</code> can be added to search for Mega Evolutions only, the parameter <code>gmax</code> can be added to search for Pok\u00e9mon capable of Gigantamaxing only, and the parameter <code>Fully Evolved</code> (or <code>FE</code>) can be added to search for fully-evolved Pok\u00e9mon.<br/>` +
@@ -690,6 +690,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 		ZUBL: 3, ZU: 2,
 		NFE: 1, 'CAP NFE': 1,
 		LC: 0, 'CAP LC': 0,
+		Illegal: -1,
 	});
 	const allDoublesTiers: { [k: string]: TierTypes.Singles | TierTypes.Other } = Object.assign(Object.create(null), {
 		doublesubers: 'DUber', doublesuber: 'DUber', duber: 'DUber', dubers: 'DUber',
@@ -702,6 +703,9 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 		DUber: 4, DOU: 3,
 		DBL: 2, DUU: 1,
 		'(DUU)': 0,
+		NFE: -1,
+		LC: -2,
+		Illegal: -3,
 	});
 	const allTypes = Object.create(null);
 	for (const type of mod.types.all()) {
@@ -726,10 +730,10 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 		water3: 'Water 3',
 	});
 	const allFormes = ['alola', 'galar', 'hisui', 'paldea', 'primal', 'therian', 'totem'];
-	const allStats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'bst', 'weight', 'height', 'gen', 'num'];
+	const allStats = ['hp', 'atk', 'def', 'spa', 'spd', 'spe', 'bst', 'weight', 'height', 'gen', 'num', 'tier', 'dtier'];
 	const allStatAliases: { [k: string]: string } = {
 		attack: 'atk', defense: 'def', specialattack: 'spa', spc: 'spa', special: 'spa', spatk: 'spa',
-		specialdefense: 'spd', spdef: 'spd', speed: 'spe', wt: 'weight', ht: 'height', generation: 'gen',
+		specialdefense: 'spd', spdef: 'spd', speed: 'spe', wt: 'weight', ht: 'height', generation: 'gen', doublestier: 'dtier',
 	};
 	let showAll = false;
 	let sort = null;
@@ -737,7 +741,7 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 	let gmaxSearch = null;
 	let tierSearch = null;
 	let capSearch: boolean | null = null;
-	let nationalSearch = null;
+	let nationalSearch: boolean | null = null;
 	let unreleasedSearch = null;
 	let fullyEvolvedSearch = null;
 	let restrictedSearch = null;
@@ -837,6 +841,17 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 			if (target.startsWith('!')) {
 				isNotSearch = true;
 				target = target.substr(1);
+			}
+
+			if (target.endsWith(' asc') || target.endsWith(' desc')) {
+				if (parameters.length > 1) {
+					return { error: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters.` };
+				}
+				const stat = allStatAliases[toID(target.split(' ')[0])] || toID(target.split(' ')[0]);
+				if (!allStats.includes(stat)) return { error: `'${target}' did not contain a valid stat.` };
+				sort = `${stat}${target.endsWith(' asc') ? '+' : '-'}`;
+				orGroup.skip = true;
+				break;
 			}
 
 			let isTierInequalityParam = false;
@@ -998,17 +1013,6 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 				if (invalid) return { error: invalid };
 				orGroup.gens[targetInt] = !isNotSearch;
 				continue;
-			}
-
-			if (target.endsWith(' asc') || target.endsWith(' desc')) {
-				if (parameters.length > 1) {
-					return { error: `The parameter '${target.split(' ')[1]}' cannot have alternative parameters.` };
-				}
-				const stat = allStatAliases[toID(target.split(' ')[0])] || toID(target.split(' ')[0]);
-				if (!allStats.includes(stat)) return { error: `'${target}' did not contain a valid stat.` };
-				sort = `${stat}${target.endsWith(' asc') ? '+' : '-'}`;
-				orGroup.skip = true;
-				break;
 			}
 
 			if (target === 'all') {
@@ -1539,6 +1543,10 @@ function runDexsearch(target: string, cmd: string, message: string, isTest: bool
 			return species.gen;
 		case 'num':
 			return species.num;
+		case 'tier':
+			return singlesTiersValues[nationalSearch ? species.natDexTier : species.tier];
+		case 'dtier':
+			return doublesTiersValues[species.doublesTier];
 		default:
 			return species.baseStats[stat as StatID];
 		}
