@@ -3,7 +3,6 @@
 const fs = require("fs");
 const path = require("path");
 const oxc = require("oxc-transform");
-const sucrase = require("sucrase");
 const fg = require("fast-glob");
 const { execSync } = require("child_process");
 
@@ -25,6 +24,150 @@ function sourceFiles() {
 	]);
 }
 
+function transformImportsExports(code, filename = '') {
+	const exportedNames = new Set();
+	let hasDefaultExport = false;
+	let defaultExportName = '';
+
+	const codeWithoutBlockComments = code.replace(/\/\*[\s\S]*?\*\//g, '');
+
+	[...codeWithoutBlockComments.matchAll(/^export\s+default\s+(\w+);?$/gm)].forEach(match => {
+		hasDefaultExport = true;
+		defaultExportName = match[1];
+	});
+
+	[...codeWithoutBlockComments.matchAll(/^export\s+(const|let|var)\s+(\w+)/gm)].forEach(match => {
+		exportedNames.add(match[2]);
+	});
+	[...codeWithoutBlockComments.matchAll(/^export\s+(?:async\s+)?function\s+(\w+)/gm)].forEach(match => {
+		exportedNames.add(match[1]);
+	});
+	[...codeWithoutBlockComments.matchAll(/^export\s+class\s+(\w+)/gm)].forEach(match => {
+		exportedNames.add(match[1]);
+	});
+
+	const placeholderLines = Array.from(exportedNames)
+		.filter(n => n !== 'default')
+		.map(n => `exports.${n} = undefined;`).join('\n');
+	if (placeholderLines) {
+		if (code.startsWith('"use strict"')) {
+			code = code.replace(/(^"use strict";?\s*)/, `$1\n${placeholderLines}\n`);
+		} else {
+			code = `${placeholderLines}\n${code}`;
+		}
+	}
+
+	code = code
+		.replace(/^import\s+type\s+.*$/gm, '')
+		.replace(/^import\s+(\w+)\s+from\s+['"]([^'"]+)['"];?\s*$/gm,
+			"const $1 = require('$2').default || require('$2');")
+		.replace(/^import\s+\*\s+as\s+(\w+)\s+from\s+['"]([^'"]+)['"];?\s*$/gm,
+			"const $1 = require('$2');")
+		.replace(/^import\s+\{([^}]+)\}\s+from\s+['"]([^'"]+)['"];?\s*$/gm, (match, imports, module) => {
+			const cleanImports = imports.replace(/\s*type\s+\w+\s*,?\s*/g, '').replace(/,\s*$/, '').replace(/^\s*,/, '');
+			if (!cleanImports.trim()) return '';
+			const renamedImports = cleanImports.replace(/(\w+)\s+as\s+(\w+)/g, '$1: $2');
+			return `const {${renamedImports}} = require('${module}');`;
+		})
+		.replace(/^import\s+(\w+)\s*,\s*\{([^}]+)\}\s+from\s+['"]([^'"]+)['"];?\s*$/gm, (match, defaultImport, namedImports, module) => {
+			const cleanImports = namedImports.replace(/\s*type\s+\w+\s*,?\s*/g, '').replace(/,\s*$/, '').replace(/^\s*,/, '');
+			const renamedImports = cleanImports.replace(/(\w+)\s+as\s+(\w+)/g, '$1: $2');
+			let result = `const ${defaultImport} = require('${module}').default || require('${module}');`;
+			if (cleanImports.trim()) {
+				result += `\nconst {${renamedImports}} = require('${module}');`;
+			}
+			return result;
+		})
+		.replace(/^import\s+['"]([^'"]+)['"];?\s*$/gm,
+			"require('$1');");
+
+	code = code
+		.replace(/^export\s*\{\s*\}\s*;?\s*$/gm, '')
+		.replace(/^export\s+type\s+.*$/gm, '')
+		.replace(/^export\s+interface\s+.*?^}/gms, '')
+		.replace(/^interface\s+.*?^}/gms, '')
+		.replace(/^type\s+.*?=.*$/gm, '')
+		.replace(/^declare\s+.*$/gm, '')
+		.replace(/^export\s+declare\s+.*$/gm, '');
+
+	code = code.replace(/^export\s+(const|let|var)\s+(\w+)(\s*:\s*[^=;]+)?;/gm, (match, type, name) => {
+		exportedNames.delete(name);
+		return match.replace('export ', '') + `\nexports.${name} = ${name};`;
+	});
+
+	code = code.replace(/^export\s+(const|let|var)\s+(\w+)\s*=\s*(.+)$/gm, (match, type, name, value) => {
+		const trimmed = value.trim();
+
+		if (trimmed.match(/^(-?\d+|'[^']*'|"[^"]*"|true|false|null|undefined);?$/)) {
+			exportedNames.delete(name);
+			return `${type} ${name} = ${value}\nexports.${name} = ${name};`;
+		}
+
+		if ((trimmed.match(/^\[[^\]]*\];?$/) || trimmed.match(/^\{[^}]*\};?$/)) &&
+			!trimmed.includes('\n')) {
+			exportedNames.delete(name);
+			return `${type} ${name} = ${value}\nexports.${name} = ${name};`;
+		}
+
+		return `${type} ${name} = ${value}`;
+	});
+
+	code = code.replace(/^export\s+(async\s+)?function\s+(\w+)/gm, (match, async, name) => {
+		return `${async || ''}function ${name}`;
+	});
+
+	code = code.replace(/^export\s+class\s+(\w+)/gm, (match, name) => {
+		return `class ${name}`;
+	});
+
+	code = code
+		.replace(/^export\s+default\s+(async\s+)?function\s+(\w+)?/gm,
+			'$1function $2')
+		.replace(/^export\s+default\s+class\s+(\w+)?/gm,
+			'class $1')
+		.replace(/^export\s+default\s+(.+)$/gm, (match, expr) => {
+			if (hasDefaultExport && exportedNames.size > 0) {
+				return '';
+			}
+			return 'module.exports = ' + expr + ';';
+		})
+		.replace(/^export\s+\{([^}]+)\}\s*;?$/gm, (match, names) => {
+			const cleanNames = names.replace(/\s*type\s+\w+\s*,?\s*/g, '').replace(/,\s*$/, '').replace(/^\s*,/, '');
+			if (!cleanNames.trim()) return '';
+			const exports = cleanNames.split(',').map(name => {
+				const parts = name.trim().split(/\s+as\s+/);
+				const localName = parts[0].trim();
+				const exportedName = parts[1] ? parts[1].trim() : localName;
+				return `exports.${exportedName} = ${localName};`;
+			}).join('\n');
+			return exports;
+		})
+		.replace(/^export\s+\{([^}]+)\}\s+from\s+['"]([^'"]+)['"]\s*;?$/gm, (match, names, module) => {
+			const cleanNames = names.replace(/\s*type\s+\w+\s*,?\s*/g, '').replace(/,\s*$/, '').replace(/^\s*,/, '');
+			if (!cleanNames.trim()) return '';
+			const reExports = cleanNames.split(',').map(name => {
+				const parts = name.trim().split(/\s+as\s+/);
+				const importName = parts[0].trim();
+				const exportName = parts[1] ? parts[1].trim() : importName;
+				return `exports.${exportName} = require('${module}').${importName};`;
+			}).join('\n');
+			return reExports;
+		})
+		.replace(/^export\s+\*\s+as\s+(\w+)\s+from\s+['"]([^'"]+)['"]\s*;?$/gm,
+			"const $1 = require('$2');\nexports.$1 = $1;")
+		.replace(/^export\s+\*\s+from\s+['"]([^'"]+)['"]\s*;?$/gm,
+			"Object.assign(exports, require('$1'));");
+
+	code += '\n' + Array.from(exportedNames).map(name => `exports.${name} = ${name};`).join('\n');
+
+	if (hasDefaultExport && defaultExportName) {
+		code += `\nexports.default = ${defaultExportName};`;
+		code += `\nmodule.exports = exports;`;
+	}
+
+	return { code };
+}
+
 exports.transpile = (force, emitDecl) => {
 	fs.mkdirSync('dist', { recursive: true });
 
@@ -43,12 +186,8 @@ exports.transpile = (force, emitDecl) => {
 			if (!force) continue;
 		}
 
-		// Use sucrase for ultra-fast ES modules to CommonJS conversion
-		const sucraseResult = sucrase.transform(code, {
-			transforms: ["imports"], // Only transform imports/exports to CommonJS
-			filePath: file,
-		});
-		code = sucraseResult.code;
+		const transformResult = transformImportsExports(code, file);
+		code = transformResult.code;
 
 		const rel = file.replace(/\.[cm]?[jt]sx?$/, '');
 		const outJS = path.join('dist', `${rel}.js`);

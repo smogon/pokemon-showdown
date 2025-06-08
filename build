@@ -21,7 +21,7 @@ function shell(cmd) {
 }
 
 // Check to make sure the most recently added or updated dependency is installed at the correct version
-for (var pkg of ['oxc-transform', 'fast-glob', 'typescript', 'sucrase']) {
+for (var pkg of ['oxc-transform', 'fast-glob']) {
 	try {
 		require.resolve(pkg);
 	} catch (e) {
