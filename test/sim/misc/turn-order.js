@@ -216,7 +216,7 @@ describe('Switching in', () => {
 			assert(battle.p2.activeRequest.wait);
 			assert(battle.field.isWeather('raindance'));
 
-			// assert.throws(() => battle.choose('p1', 'switch 4'));
+			assert.throws(() => battle.choose('p1', 'switch 4'));
 			assert.throws(() => battle.choose('p1', 'switch 5, switch 6'));
 			assert.throws(() => battle.choose('p2', 'auto'));
 			battle.makeChoices('switch 5'); // Switch-in Castform
