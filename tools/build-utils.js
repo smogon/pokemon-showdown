@@ -7,8 +7,6 @@ const oxc = require("oxc-transform");
 const fg = require("fast-glob");
 const { execSync } = require("child_process");
 
-/* ────────────────────────────────────────────────────────── helpers ── */
-
 function copyJSON(dir = "data") {
 	for (const src of fg.sync(`${dir}/**/*.json`)) {
 		const dst = path.join("dist", src);
@@ -57,11 +55,9 @@ function transformImportsExports(code, filename = "") {
 			`${placeholders}\n${code}`;
 	}
 
-	/* handy helper for anonymous default exports */
 	const genName = () =>
 		"__default_export_" + Math.random().toString(36).slice(2);
 
-	/* ── IMPORTS ───────────────────────────────────────────────────── */
 	code = code
 		.replace(/^import\s+type\s+.*$/gm, "")
 		.replace(
@@ -241,8 +237,6 @@ function finalizeExports(code) {
 	}
 	return code;
 }
-
-/* ─────────────────────────────────────────────── public build API ── */
 
 exports.transpile = (force, emitDecl) => {
 	fs.mkdirSync("dist", { recursive: true });
