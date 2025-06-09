@@ -20,6 +20,14 @@ describe('Sitrus Berry', () => {
 		assert.equal(holder.hp, Math.floor(holder.maxhp / 4) + 1);
 	});
 
+	it('should be eaten in the middle of a multi-hit move', () => {
+		battle = common.createBattle();
+		battle.setPlayer('p1', { team: [{ species: 'Urshifu-Rapid-Strike', moves: ['surgingstrikes'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Heatran',  item: 'sitrusberry', moves: ['sleeptalk'], nature: 'Gentle' }] });
+		battle.makeChoices();
+		assert.false.fainted(battle.p2.active[0]);
+	});
+
 	it('should be eaten immediately if (re)gained on low hp', () => {
 		battle = common.createBattle([
 			[{ species: 'Magnemite', ability: 'sturdy', item: 'sitrusberry', moves: ['recycle'] }],

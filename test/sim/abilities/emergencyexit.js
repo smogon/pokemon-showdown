@@ -27,8 +27,11 @@ describe(`Emergency Exit`, () => {
 
 	it(`should request switch-out at the end of a multi-hit move`, () => {
 		battle = common.createBattle([
-			[{ species: "Cinccino", ability: 'skilllink', moves: ['bulletseed'] }],
-			[{ species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'] }, { species: "Clefable", ability: 'Unaware', moves: ['metronome'] }],
+			[{ species: "Cinccino", ability: 'skilllink', moves: ['bulletseed'], nature: 'Adamant' }],
+			[
+				{ species: "Golisopod", ability: 'emergencyexit', moves: ['sleeptalk'] },
+				{ species: "Clefable", ability: 'Unaware', moves: ['metronome'] },
+			],
 		]);
 		battle.makeChoices('move bulletseed', 'move sleeptalk');
 		battle.makeChoices('move bulletseed', 'move sleeptalk');
@@ -170,8 +173,10 @@ describe(`Emergency Exit`, () => {
 		]]);
 		battle.makeChoices();
 		const log = battle.getDebugLog();
-		const dragIndex = log.lastIndexOf('|drag|p2a: Stufful|Stufful|281/281');
+		const dragIndex = log.lastIndexOf('|drag|p2a: Stufful');
 		const abilityIndex = log.lastIndexOf('|-activate|p1a: Golisopod|ability: Emergency Exit');
+		assert(dragIndex > 0);
+		assert(abilityIndex > 0);
 		assert(dragIndex < abilityIndex, 'Stufful should be dragged in before Emergency Exit activates');
 		assert.equal(battle.requestState, 'switch');
 	});
