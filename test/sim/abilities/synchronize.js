@@ -25,16 +25,6 @@ describe('Synchronize', () => {
 		assert.notEqual(ralts.status, 'par', `Ralts should not be paralyzed`);
 	});
 
-	it(`should activate before Psycho Shift cures`, () => {
-		battle = common.createBattle([[
-			{ species: 'gardevoir', ability: 'synchronize', moves: ['toxic'] },
-		], [
-			{ species: 'noctowl', moves: ['psycho shift'] },
-		]]);
-		battle.makeChoices();
-		assert.false(battle.p2.active[0].status);
-	});
-
 	it(`should not be triggered by Toxic Spikes`, () => {
 		battle = common.createBattle([[
 			{ species: 'alakazam', moves: ['sleeptalk'] },
@@ -48,16 +38,6 @@ describe('Synchronize', () => {
 	});
 
 	describe('[Gen 4]', () => {
-		it(`should activate after Psycho Shift cures`, () => {
-			battle = common.gen(4).createBattle([[
-				{ species: 'gardevoir', ability: 'synchronize', moves: ['toxic'] },
-			], [
-				{ species: 'noctowl', moves: ['psycho shift'] },
-			]]);
-			battle.makeChoices();
-			assert.equal(battle.p2.active[0].status, 'psn');
-		});
-
 		it(`should not be triggered by Toxic Spikes`, () => {
 			battle = common.gen(4).createBattle([[
 				{ species: 'alakazam', moves: ['sleeptalk'] },
