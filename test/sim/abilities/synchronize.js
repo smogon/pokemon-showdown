@@ -57,7 +57,7 @@ describe('Synchronize', () => {
 			battle.makeChoices();
 			assert.equal(battle.p2.active[0].status, 'psn');
 		});
-	
+
 		it(`should not be triggered by Toxic Spikes`, () => {
 			battle = common.gen(4).createBattle([[
 				{ species: 'alakazam', moves: ['sleeptalk'] },
