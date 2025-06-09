@@ -1317,7 +1317,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					effect.id !== 'psychoshift') return;
 				source.cureStatus();
 			},
-		}
+		},
 	},
 	psychup: {
 		inherit: true,
