@@ -144,7 +144,7 @@ export class BattleActions {
 		} else {
 			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
 		}
-		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
+		if (isDrag) pokemon.draggedIn = this.battle.turn;
 		pokemon.previouslySwitchedIn++;
 
 		if (isDrag && this.battle.gen >= 5) {
