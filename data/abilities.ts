@@ -1226,7 +1226,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			target.switchFlag = true;
 			target.addVolatile('emergencyexiting');
-			this.add('-activate', target, 'ability: Emergency Exit');
+			this.effectState.announced = false;
+			if (!this.activeMove) {
+				// retrieve in the middle of switching in and residual effects
+				// FIXME: The timing of the announcement is actually the timing of switching out.
+				// This becomes important once we separate switching out from switching in.
+				this.effectState.announced = true;
+				this.add('-activate', target, 'ability: Emergency Exit');
+			}
+		},
+		onBeforeSwitchOut(pokemon) {
+			if (pokemon.volatiles['emergencyexiting'] && !this.effectState.announced) {
+				this.add('-activate', pokemon, 'ability: Emergency Exit');
+			}
 		},
 		flags: {},
 		name: "Emergency Exit",
@@ -5461,7 +5473,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 			target.switchFlag = true;
 			target.addVolatile('emergencyexiting');
-			this.add('-activate', target, 'ability: Wimp Out');
+			this.effectState.announced = false;
+			if (!this.activeMove) {
+				// retrieve in the middle of switching in and residual effects
+				// FIXME: The timing of the announcement is actually the timing of switching out.
+				// This becomes important once we separate switching out from switching in.
+				this.effectState.announced = true;
+				this.add('-activate', target, 'ability: Wimp Out');
+			}
+		},
+		onBeforeSwitchOut(pokemon) {
+			if (pokemon.volatiles['emergencyexiting'] && !this.effectState.announced) {
+				this.add('-activate', pokemon, 'ability: Wimp Out');
+			}
 		},
 		flags: {},
 		name: "Wimp Out",
