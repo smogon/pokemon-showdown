@@ -120,6 +120,7 @@ export class BattleActions {
 		if (oldActive) {
 			oldActive.isActive = false;
 			oldActive.isStarted = false;
+			oldActive.draggedIn = null;
 			oldActive.usedItemThisTurn = false;
 			oldActive.statsRaisedThisTurn = false;
 			oldActive.statsLoweredThisTurn = false;

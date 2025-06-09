@@ -1490,7 +1490,6 @@ export class Pokemon {
 			this.switchFlag = false;
 			this.forceSwitchFlag = false;
 		}
-		this.draggedIn = null;
 
 		this.lastMove = null;
 		if (this.battle.gen === 2) this.lastMoveEncore = null;
