@@ -127,6 +127,8 @@ const hostQueue: ID[] = [];
 
 const IDEA_TIMER = 60 * 1000;
 
+const MAX_ROLE_LENGTH = 1000;
+
 function readFile(path: string) {
 	try {
 		const json = FS(path).readIfExistsSync();
@@ -519,6 +521,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			this.theme = null;
 		}
 
+		if (Math.max(...roles.map(role => role.length)) > MAX_ROLE_LENGTH)
+			return this.sendUser(user, `|error|Some role exceeds the maximum role length of ${MAX_ROLE_LENGTH}.`);
+
 		if (roles.length < this.playerCount) {
 			return this.sendUser(user, `|error|You have not provided enough roles for the players.`);
 		} else if (roles.length > this.playerCount) {
@@ -641,8 +646,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			.split(' ')
 			.map(toID);
 
-		let iters = 0;
 		outer: while (roleWords.length) {
+			let iters = 0;
 			const currentWord = roleWords.slice();
 
 			while (currentWord.length) {
@@ -2768,7 +2773,10 @@ export const commands: Chat.ChatCommands = {
 				if (!args[0]) {
 					return this.parse('/help mafia revealas');
 				} else {
-					revealedRole = Mafia.parseRole(args.pop()!);
+					const roleName = args.pop()!.trim();
+					if (roleName.length > MAX_ROLE_LENGTH)
+						return this.sendReply(`|error|Role exceeds the maximum role length of ${MAX_ROLE_LENGTH}.`);
+					revealedRole = Mafia.parseRole(roleName);
 					const color = MafiaData.alignments[revealedRole.role.alignment].color;
 					revealAs = `<span style="font-weight:bold;color:${color}">${revealedRole.role.safeName}</span>`;
 				}
