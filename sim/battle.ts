@@ -1001,6 +1001,7 @@ export class Battle {
 		if (handler.effectHolder && (handler.effectHolder as Pokemon).getStat) {
 			const pokemon = handler.effectHolder as Pokemon;
 			handler.speed = pokemon.speed;
+			// TODO: Check which other events are sorted based on the unmodified speed
 			if (handler.effect.effectType === 'Ability' && (
 				(handler.effect.name === 'Dancer' && callbackName === 'onAnyAfterMove') ||
 				(handler.effect.name === 'Magic Bounce' && callbackName === 'onAllyTryHitSide')
