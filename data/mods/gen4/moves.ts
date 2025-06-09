@@ -1306,15 +1306,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onTryHit(target, source, move) {
 			if (!source.status) return false;
-		},
-		onHit(target, source, move) {
-			const status = source.getStatus();
-			if (status) {
-				source.cureStatus();
-				target.trySetStatus(status, source, move);
-			}
+			source.addVolatile('psychoshift');
+			move.status = source.status;
 		},
 		self: null,
+		condition: {
+			duration: 1,
+			onAnySetStatus(status, target, source, effect) {
+				if (source !== this.effectState.target || effect.effectType !== 'Move' ||
+					effect.id !== 'psychoshift') return;
+				source.cureStatus();
+			},
+		}
 	},
 	psychup: {
 		inherit: true,
