@@ -23,7 +23,7 @@ describe('Sitrus Berry', () => {
 	it('should be eaten in the middle of a multi-hit move', () => {
 		battle = common.createBattle();
 		battle.setPlayer('p1', { team: [{ species: 'Urshifu-Rapid-Strike', moves: ['surgingstrikes'] }] });
-		battle.setPlayer('p2', { team: [{ species: 'Heatran',  item: 'sitrusberry', moves: ['sleeptalk'], nature: 'Gentle' }] });
+		battle.setPlayer('p2', { team: [{ species: 'Heatran', item: 'sitrusberry', moves: ['sleeptalk'], nature: 'Gentle' }] });
 		battle.makeChoices();
 		assert.false.fainted(battle.p2.active[0]);
 	});
