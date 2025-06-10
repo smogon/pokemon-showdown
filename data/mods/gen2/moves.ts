@@ -836,10 +836,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (!damage) {
 					return null;
 				}
-				damage = this.runEvent('SubDamage', target, source, move, damage);
-				if (!damage) {
-					return damage;
-				}
 				if (damage > target.volatiles['substitute'].hp) {
 					damage = target.volatiles['substitute'].hp as number;
 				}

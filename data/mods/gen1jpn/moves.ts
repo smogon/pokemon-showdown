@@ -41,8 +41,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// Also, multi-hit moves must always deal the same damage as the first hit for any subsequent hits
 				let uncappedDamage = move.hit > 1 ? this.lastDamage : this.actions.getDamage(source, target, move);
 				if (!uncappedDamage && uncappedDamage !== 0) return null;
-				uncappedDamage = this.runEvent('SubDamage', target, source, move, uncappedDamage);
-				if (!uncappedDamage && uncappedDamage !== 0) return uncappedDamage;
 				this.lastDamage = uncappedDamage;
 				target.volatiles['substitute'].hp -= uncappedDamage > target.volatiles['substitute'].hp ?
 					target.volatiles['substitute'].hp : uncappedDamage;
