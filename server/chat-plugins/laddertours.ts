@@ -381,7 +381,7 @@ export class LadderTracker {
 	}
 
 	togglePrefix(oldPrefix?: ID) {
-		if (this.room.settings.isPrivate === undefined) {
+		if (!this.room.settings.isPrivate) {
 			try {
 				if (oldPrefix) prefixManager.removePrefix(oldPrefix, 'privacy');
 			} catch {} // suppress errorMessages in case it's the first start and it hasn't been made priv yet
