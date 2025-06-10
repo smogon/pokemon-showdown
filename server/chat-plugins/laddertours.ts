@@ -632,7 +632,7 @@ export const commands: Chat.ChatCommands = {
 	laddertrackhelp() {
 		this.runBroadcast();
 		this.sendReplyBox([
-			`- /laddertrack OR /ld displays a page to start a tracker (requires % in the room to do so).`,
+			`- /laddertrack OR /ld displays a page to start a tracker (requires # in the room to do so).`,
 			// ` (can also be used with key=value formatted args to start it directly - requires keys: rating, prefix, format, deadline, cutoff)`,
 			` - /laddertrack [leaderboard/top] - updates and displays the current leaderboard`,
 			` - /laddertrack deadline [optional date] - displays the current deadline, or sets the deadline to the given deadline if one is given (requires % to do so)`,
