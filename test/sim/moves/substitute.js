@@ -128,18 +128,18 @@ describe('Substitute', () => {
 
 	it(`[Gen 1] should track what the actual damage would have been without the Substitute`, () => {
 		battle = common.gen(1).createBattle([[
-			{ species: 'Ponyta', moves: ['substitute', 'growl'], evs: { hp: 252, spd: 252 } },
+			{ species: 'Rapidash', moves: ['substitute'], evs: { hp: 252, spd: 252 } },
 		], [
-			{ species: 'Cloyster', moves: ['clamp'], evs: { spa: 252 } },
+			{ species: 'Squirtle', moves: ['clamp'], evs: { spa: 252 } },
 		]]);
-
-		const ponyta = battle.p1.active[0];
-		battle.makeChoices('move substitute', 'move clamp');
-		assert.equal(ponyta.maxhp - ponyta.hp, Math.floor(ponyta.maxhp / 4));
-
-		const hp = ponyta.hp;
-		battle.makeChoices('move growl', 'move clamp');
-		assert.bounded(hp - ponyta.hp, [91, 108]);
+		const rapidash = battle.p1.active[0];
+		battle.makeChoices();
+		assert(rapidash.volatiles['substitute']);
+		const damage = battle.p2.active[0].volatiles['partialtrappinglock'].damage;
+		battle.makeChoices();
+		assert.false(rapidash.volatiles['substitute']);
+		// check the damage is uncapped
+		assert.equal(battle.lastDamage, damage);
 	});
 
 	it(`[Gen 1] Substitute should not block secondary effect confusion if it is unbroken`, () => {
