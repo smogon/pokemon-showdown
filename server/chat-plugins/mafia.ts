@@ -598,9 +598,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	resetGame(hostForError: User) {
-		if (this.playerCount > this.originalRoles.length) { 
-			this.sendUser(hostForError,`|error|Players have been added to the game since the rolelist was set.Please set at least as many roles as there are players to run this command.`)
-			//feels a bit spaghetti
+		if (this.playerCount > this.originalRoles.length) {
+			this.sendUser(hostForError, `|error|Please set at least as many roles as there are players to run this command.`);
+			// feels a bit spaghetti
 			throw new Error();
 		}
 		this.clearVotes();
@@ -608,9 +608,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.phase = 'night';
 		for (const hostid of [...this.cohostids, this.hostid]) {
 			const host = Users.get(hostid);
-			if (host?.connected){
+			if (host?.connected) {
 				if (this.playerCount < this.originalRoles.length) {
-					this.sendUser(host,`Players have been removed from the game since the rolelist was set.Not all roles in the rolelist were distributed.`)
+					this.sendUser(host, `More roles exist than players.Not all roles in the rolelist were distributed.`);
 				}
 				host.send(`>${this.room.roomid}\n|notify|It's night in your game of Mafia!`);
 			}
@@ -2492,8 +2492,9 @@ export const commands: Chat.ChatCommands = {
 			if (game.IDEA.data) return this.errorReply(`You cannot use this command in IDEA.`);
 			try {
 				game.resetGame(user);
-				game.logAction(user, 'reset the game state'); // try-catch block is only so this line can run.If at some point we dont care about logging the action,this can be refactored.
-			} catch (err) {} 
+				game.logAction(user, 'reset the game state');
+				// try-catch block is only gane.logAction can run.If at some point we dont care about logging the action,this can be refactored.
+			} catch (_err) {} 
 		},
 		resetgamehelp: [
 			`/mafia resetgame - Resets game data. Does not change settings from the host (besides deadlines) or add/remove any players. Requires host % @ # ~`,
