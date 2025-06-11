@@ -174,11 +174,13 @@ function mafiaSearch(
 			} else if (inequality === '<' || inequality === '<=') {
 				// Filter based on themes less than / at most a certain amount of players
 				// Creates an array of the potential playercounts, and then looks if any in the theme matches that
+				// +players ensures that it is read as a number, not a character
 				entries = entries.filter(([key]) => ([...Array(+players + (inequality === '<=' ? +1 : +0)).keys()])
 					.some(playerCount => playerCount in (MafiaData[`themes`][key])));
 			} else if (inequality === '>' || inequality === '>=') {
 				// Filter based on themes greater than / at least a certain amount of players
 				// Creates an array of the potential playercounts, and then looks if any in the theme matches that
+				// +players ensures that it is read as a number, not a character
 				entries = entries.filter(([key]) => ([...Array(50 - Number(players)).keys()]
 					.map(num => +num + +players + (inequality === '>=' ? +0 : +1)))
 					.some(playerCount => playerCount in (MafiaData[`themes`][key])));
@@ -4179,27 +4181,23 @@ export const commands: Chat.ChatCommands = {
 
 			// Determine search type
 			let searchType: keyof MafiaData = 'aliases';
-			if (cmd.includes('theme') || targets.includes(`themes`)) {
-				searchType = `themes`;
-				if (targets.includes(`themes`)) targets.splice(targets.indexOf(`themes`), 1);
-			} else if (cmd.includes('role') || targets.includes(`roles`)) {
-				searchType = `roles`;
-				if (targets.includes(`roles`)) targets.splice(targets.indexOf(`roles`), 1);
-			} else if (cmd.includes('alignment') || targets.includes(`alignments`)) {
-				searchType = `alignments`;
-				if (targets.includes(`alignments`)) targets.splice(targets.indexOf(`alignments`), 1);
-			} else if (cmd.includes('idea') || targets.includes(`ideas`)) {
-				searchType = `IDEAs`;
-				if (targets.includes(`ideas`)) targets.splice(targets.indexOf(`ideas`), 1);
-			} else if (cmd.includes('term') || targets.includes(`terms`)) {
-				searchType = `terms`;
-				if (targets.includes(`terms`)) targets.splice(targets.indexOf(`terms`), 1);
-			} else if (targets.includes(`aliases`)) {
-				searchType = `aliases`;
-			} else if (cmd === 'random' || cmd === 'randomdata' || cmd === 'randdata') {
+			let foundSearchType = false;
+			const searchTypes : (keyof MafiaData)[] =  ['themes', 'roles', 'alignments', 'IDEAs', 'terms', 'aliases'];
+			for (const type of searchTypes) {
+				const typeID = toID(type.substring(0, type.length - 1));
+				if (cmd.includes(typeID) || targets.includes(typeID)) {
+					searchType = type;
+					foundSearchType = true;
+					if (targets.includes(type)) targets.splice(targets.indexOf(type), 1);
+				}
+			}
+			if (cmd === 'random' || cmd === 'randomdata' || cmd === 'randdata') {
 				searchType =
 					([`themes`, `roles`, `alignments`, `IDEAs`, `terms`] as (keyof MafiaData)[])[Math.floor(Math.random() * 5)];
-			} else {
+				foundSearchType = true;
+			}
+
+			if (!foundSearchType) {
 				return this.errorReply(`Invalid source. Valid sources are ${Object.keys(MafiaData).filter(key => key !== `aliases`).join(', ')}.`);
 			}
 
