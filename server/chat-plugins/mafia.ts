@@ -610,7 +610,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			const host = Users.get(hostid);
 			if (host?.connected) {
 				if (this.playerCount < this.originalRoles.length) {
-					this.sendUser(host, `More roles exist than players.Not all roles in the rolelist were distributed.`);
+					this.sendUser(host, `More roles exist than players. Not all roles in the rolelist were distributed.`);
 				}
 				host.send(`>${this.room.roomid}\n|notify|It's night in your game of Mafia!`);
 			}
