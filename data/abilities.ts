@@ -4746,10 +4746,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	symbiosis: {
 		onAllyAfterUseItem(item, pokemon) {
 			if (!this.effectState.pokemon) this.effectState.pokemon = pokemon;
-			if (!this.activeMove) {
-				// during a move execution, only trigger during the AfterMove event
-				((this.effect as any).onAnyAfterMove as () => void).call(this);
-			}
+			// during a move execution, only trigger during the AfterMove event
+			if (this.activeMove) return;
+			((this.effect as any).onAnyAfterMove as () => void).call(this);
 		},
 		onAnyAfterMove() {
 			const pokemon = this.effectState.pokemon;
