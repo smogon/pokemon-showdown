@@ -2494,7 +2494,7 @@ export const commands: Chat.ChatCommands = {
 				game.resetGame(user);
 				game.logAction(user, 'reset the game state');
 				// try-catch block is only gane.logAction can run.If at some point we dont care about logging the action,this can be refactored.
-			} catch (_err) {} 
+			} catch {}
 		},
 		resetgamehelp: [
 			`/mafia resetgame - Resets game data. Does not change settings from the host (besides deadlines) or add/remove any players. Requires host % @ # ~`,
