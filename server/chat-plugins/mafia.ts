@@ -4182,7 +4182,7 @@ export const commands: Chat.ChatCommands = {
 			// Determine search type
 			let searchType: keyof MafiaData = 'aliases';
 			let foundSearchType = false;
-			const searchTypes : (keyof MafiaData)[] =  ['themes', 'roles', 'alignments', 'IDEAs', 'terms', 'aliases'];
+			const searchTypes: (keyof MafiaData)[] = ['themes', 'roles', 'alignments', 'IDEAs', 'terms', 'aliases'];
 			for (const type of searchTypes) {
 				const typeID = toID(type.substring(0, type.length - 1));
 				if (cmd.includes(typeID) || targets.includes(typeID)) {
