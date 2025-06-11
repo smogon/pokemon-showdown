@@ -589,13 +589,22 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (reset) this.distributeRoles();
 	}
 
-	resetGame() {
+	resetGame(host: User) {
+		if (this.playerCount > this.originalRoles.length) { 
+			this.sendUser(host,`|error|Players have been added to the game since the rolelist was set.Please set at least as many roles as there are players to run this command.`)
+			throw new Error();
+		}
 		this.clearVotes();
 		this.dayNum = 0;
 		this.phase = 'night';
 		for (const hostid of [...this.cohostids, this.hostid]) {
 			const host = Users.get(hostid);
-			if (host?.connected) host.send(`>${this.room.roomid}\n|notify|It's night in your game of Mafia!`);
+			if (host?.connected){
+				if (this.playerCount < this.originalRoles.length) {
+					this.sendUser(host,`Players have been removed from the game since the rolelist was set.Not all roles in the rolelist were distributed.`)
+				}
+				host.send(`>${this.room.roomid}\n|notify|It's night in your game of Mafia!`);
+			}
 		}
 		for (const player of this.players) {
 			const user = Users.get(player.id);
@@ -607,8 +616,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 
 		if (this.timer) this.setDeadline(0);
-		this.sendDeclare(`The game has been reset.`);
 		this.distributeRoles();
+		this.sendDeclare(`The game has been reset.`);
 		if (this.takeIdles) {
 			this.sendDeclare(`Night ${this.dayNum}. Submit whether you are using an action or idle. If you are using an action, DM your action to the host.`);
 		} else {
@@ -733,7 +742,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	distributeRoles() {
-		const roles = Utils.shuffle(this.roles.slice());
+		const roles = Utils.shuffle(this.originalRoles.slice());
 		if (roles.length) {
 			for (const p of this.players) {
 				const role = roles.shift()!;
@@ -1665,13 +1674,14 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			if (this.hostid === id) throw new Chat.ErrorMessage(`${targetString} the host.`);
 			if (this.cohostids.includes(id)) throw new Chat.ErrorMessage(`${targetString} a cohost.`);
 		}
-
-		for (const alt of user.getAltUsers(true)) {
-			if (!force && (this.getPlayer(alt.id) || this.played.includes(alt.id))) {
-				throw new Chat.ErrorMessage(`${self ? `You already have` : `${user.id} already has`} an alt in the game.`);
-			}
-			if (this.hostid === alt.id || this.cohostids.includes(alt.id)) {
-				throw new Chat.ErrorMessage(`${self ? `You have` : `${user.id} has`} an alt as a game host.`);
+		if (!force) {
+			for (const alt of user.getAltUsers(true)) {
+				if (this.getPlayer(alt.id) || this.played.includes(alt.id)) {
+					throw new Chat.ErrorMessage(`${self ? `You already have` : `${user.id} already has`} an alt in the game.`);
+				}
+				if (this.hostid === alt.id || this.cohostids.includes(alt.id)) {
+					throw new Chat.ErrorMessage(`${self ? `You have` : `${user.id} has`} an alt as a game host.`);
+				}
 			}
 		}
 	}
@@ -2286,7 +2296,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				if (hostQueue.includes(targetUserID)) return this.errorReply(`User ${targetUserID} is already on the host queue.`);
 				if (targetUser && Mafia.isHostBanned(room, targetUser)) {
-					 return this.errorReply(`User ${targetUserID} is banned from hosting mafia games.`);
+					return this.errorReply(`User ${targetUserID} is banned from hosting mafia games.`);
 				}
 				hostQueue.push(targetUserID);
 				room.add(`User ${targetUserID} has been added to the host queue by ${user.name}.`).update();
@@ -2469,8 +2479,10 @@ export const commands: Chat.ChatCommands = {
 			if (target) return this.parse('/help mafia resetgame');
 			if (game.phase !== 'day' && game.phase !== 'night') return this.errorReply(`The game has not started yet.`);
 			if (game.IDEA.data) return this.errorReply(`You cannot use this command in IDEA.`);
-			game.resetGame();
-			game.logAction(user, 'reset the game state');
+			try {
+				game.resetGame(user);
+				game.logAction(user, 'reset the game state'); // try-catch block is only so this line can run.If at some point we dont care about logging the action,this can be refactored.
+			} catch (err) {} 
 		},
 		resetgamehelp: [
 			`/mafia resetgame - Resets game data. Does not change settings from the host (besides deadlines) or add/remove any players. Requires host % @ # ~`,
