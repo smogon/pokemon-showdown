@@ -110,7 +110,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 			this.add('-activate', source, 'ability: Symbiosis', myItem, `[of] ${pokemon}`);
 		},
-		onAnyAfterMove() {}
+		onAnyAfterMove() {},
 	},
 	weakarmor: {
 		inherit: true,
