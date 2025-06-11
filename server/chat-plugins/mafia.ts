@@ -2493,7 +2493,7 @@ export const commands: Chat.ChatCommands = {
 			try {
 				game.resetGame(user);
 				game.logAction(user, 'reset the game state');
-				// try-catch block is only gane.logAction can run.If at some point we dont care about logging the action,this can be refactored.
+				// try-catch block is only game.logAction can run.If at some point we dont care about logging the action,this can be refactored.
 			} catch {}
 		},
 		resetgamehelp: [
