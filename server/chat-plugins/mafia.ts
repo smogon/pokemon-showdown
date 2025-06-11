@@ -167,15 +167,18 @@ function mafiaSearch(
 		if (!inequality) return entries; // this.errorReply(`Please provide a valid inequality for the players.`);
 
 		const players = searchTarget.split(inequality)[1].trim();
-		if (((players !== null) &&
-			(players !== '') &&
-			!isNaN(Number(players)))) {
+		if (!!players && !isNaN(Number(players))) {
 			if (inequality === '=') {
+				// Filter based on themes with the exact player count
 				entries = entries.filter(([key]) => players in MafiaData[`themes`][key]);
 			} else if (inequality === '<' || inequality === '<=') {
+				// Filter based on themes less than / at most a certain amount of players
+				// Creates an array of the potential playercounts, and then looks if any in the theme matches that
 				entries = entries.filter(([key]) => ([...Array(+players + (inequality === '<=' ? +1 : +0)).keys()])
 					.some(playerCount => playerCount in (MafiaData[`themes`][key])));
 			} else if (inequality === '>' || inequality === '>=') {
+				// Filter based on themes greater than / at least a certain amount of players
+				// Creates an array of the potential playercounts, and then looks if any in the theme matches that
 				entries = entries.filter(([key]) => ([...Array(50 - Number(players)).keys()]
 					.map(num => +num + +players + (inequality === '>=' ? +0 : +1)))
 					.some(playerCount => playerCount in (MafiaData[`themes`][key])));
@@ -185,6 +188,7 @@ function mafiaSearch(
 		}
 	} else if (searchType === `themes` && alias in MafiaData[`roles`]) {
 		// Search themes that contain a role
+		// Creates a list of all potential playercounts, then verifies if any of them contains the role that we seek
 		entries = entries.filter(([key, data]) => ([...Array(50).keys()])
 			.some(playerCount => playerCount in (MafiaData[`themes`][key]) &&
 				(MafiaData[`themes`][key])[playerCount].toString().toLowerCase().includes(alias)));
@@ -194,17 +198,21 @@ function mafiaSearch(
 			toID((toID(role) in MafiaData[`aliases`]) ? MafiaData[`aliases`][toID(role)] : role)).includes(alias));
 	} else if (searchType === `roles` && alias in MafiaData[`themes`]) {
 		// Search roles that appear in a theme
+		// Filters entries based on whether the list of roles in the given theme contains it (or an alias of it)
 		entries = entries.filter(([key, data]) => Object.keys(MafiaData[`themes`][alias])
 			.filter((newKey: any) => toID((MafiaData[`themes`][alias])[newKey].toString()).includes(key)).length > 0);
 	} else if (searchType === `roles` && alias in MafiaData[`IDEAs`]) {
 		// Search roles that appear in an IDEA
+		// Filters entries based on whether the list of roles in the given IDEA contains it (or an alias of it)
 		entries = entries.filter(([key, data]) => MafiaData[`IDEAs`][alias].roles.map(role =>
 			toID((toID(role) in MafiaData[`aliases`]) ? MafiaData[`aliases`][toID(role)] : role)).includes(toID(key)));
 	} else {
 		// Any other search type matches just on whether it is included in the text
+		// Filters entries based on whether it contains the given string anywhere
 		entries = entries.filter(([key]) => Object.entries(MafiaData[searchType][key])
 			.some(([newKey, value]) => value.toString().toLowerCase().includes(searchTarget)));
 	}
+	// Inverses the found results for negation
 	return negation ? entriesCopy.filter(element => !entries.includes(element)) : entries;
 }
 
@@ -4206,8 +4214,7 @@ export const commands: Chat.ChatCommands = {
 			// Number of results
 			let number = random ? 1 : 0;
 			for (let i = 0; i < targets.length; i++) {
-				if (((targets[i] !== null) &&
-					(targets[i] !== '') &&
+				if ((!!targets[i] &&
 					!isNaN(Number(targets[i].toString())))) {
 					number = Number(targets[i]);
 					targets.splice(i, 1);
