@@ -597,9 +597,10 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (reset) this.distributeRoles();
 	}
 
-	resetGame(host: User) {
+	resetGame(hostForError: User) {
 		if (this.playerCount > this.originalRoles.length) { 
-			this.sendUser(host,`|error|Players have been added to the game since the rolelist was set.Please set at least as many roles as there are players to run this command.`)
+			this.sendUser(hostForError,`|error|Players have been added to the game since the rolelist was set.Please set at least as many roles as there are players to run this command.`)
+			//feels a bit spaghetti
 			throw new Error();
 		}
 		this.clearVotes();
