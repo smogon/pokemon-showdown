@@ -104,19 +104,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	battlebond: {
 		inherit: true,
 		onSourceAfterFaint(length, target, source, effect) {
+			if (source.bondTriggered) return;
 			if (effect?.effectType !== 'Move') {
 				return;
 			}
 			if (source.species.id === 'greninjabond' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
 				this.add('-activate', source, 'ability: Battle Bond');
 				source.formeChange('Greninja-Ash', this.effect, true);
-			}
-		},
-		onModifyMovePriority: -1,
-		onModifyMove(move, attacker) {
-			if (move.id === 'watershuriken' && attacker.species.name === 'Greninja-Ash' &&
-				!attacker.transformed) {
-				move.multihit = 3;
+				source.formeRegression = true;
+				source.bondTriggered = true;
 			}
 		},
 		isNonstandard: null,
@@ -187,7 +183,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 			if (statsLowered) {
-				this.boost({spa: 2}, target, target, null, false, true);
+				this.boost({ spa: 2 }, target, target, null, false, true);
 			}
 		},
 		rating: 2.5,
@@ -235,7 +231,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	dauntlessshield: {
 		inherit: true,
 		onStart(pokemon) {
-			this.boost({def: 1}, pokemon);
+			this.boost({ def: 1 }, pokemon);
 		},
 		rating: 3.5,
 	},
@@ -264,7 +260,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 			if (statsLowered) {
-				this.boost({atk: 2}, target, target, null, false, true);
+				this.boost({ atk: 2 }, target, target, null, false, true);
 			}
 		},
 		rating: 2.5,
@@ -279,6 +275,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	disguise: {
 		inherit: true,
+		onUpdate(pokemon) {
+			if (['mimikyu', 'mimikyutotem'].includes(pokemon.species.id) && this.effectState.busted) {
+				const speciesid = pokemon.species.id === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
+				pokemon.formeChange(speciesid, this.effect, true);
+				pokemon.formeRegression = true;
+				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.species.get(speciesid));
+			}
+		},
+		onFaint(target) {
+			delete this.effectState.busted;
+		},
 		rating: 3.5,
 	},
 	download: {
@@ -407,7 +414,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	gulpmissile: {
 		inherit: true,
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1 },
 		rating: 2.5,
 	},
 	guts: {
@@ -517,7 +524,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	intrepidsword: {
 		inherit: true,
 		onStart(pokemon) {
-			this.boost({atk: 1}, pokemon);
+			this.boost({ atk: 1 }, pokemon);
 		},
 		rating: 4,
 	},
@@ -559,7 +566,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
 			}
 		},
-		onSwitchIn() {},
 		rating: 4.5,
 	},
 	lightmetal: {
@@ -780,7 +786,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
 			}
 		},
-		onSwitchIn() {},
 		rating: 4.5,
 	},
 	psychicsurge: {
@@ -1200,7 +1205,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	wonderguard: {
 		inherit: true,
-		flags: {failroleplay: 1, noreceiver: 1, failskillswap: 1, breakable: 1},
+		flags: { failroleplay: 1, noreceiver: 1, failskillswap: 1, breakable: 1 },
 		rating: 5,
 	},
 	wonderskin: {

@@ -10,8 +10,7 @@ import * as mysql from 'mysql2';
 import * as pg from 'pg';
 
 export type BasicSQLValue = string | number | null;
-// eslint-disable-next-line
-export type SQLRow = {[k: string]: BasicSQLValue};
+export type SQLRow = { [k: string]: BasicSQLValue };
 export type SQLValue = BasicSQLValue | SQLStatement | PartialOrSQL<SQLRow> | BasicSQLValue[] | undefined;
 
 export function isSQL(value: any): value is SQLStatement {
@@ -33,7 +32,7 @@ export function isSQL(value: any): value is SQLStatement {
 export class SQLStatement {
 	sql: string[];
 	values: BasicSQLValue[];
-	constructor(strings: TemplateStringsArray, values: SQLValue[]) {
+	constructor(strings: TemplateStringsArray | string[], values: SQLValue[]) {
 		this.sql = [strings[0]];
 		this.values = [];
 		for (let i = 0; i < strings.length; i++) {
@@ -124,12 +123,24 @@ export class SQLStatement {
  *
  * * `` SQL`INSERT INTO table ("${['a', 'b']}") VALUES (${[1, 2]})` ``
  *   * `` `INSERT INTO table ("a", "b") VALUES (1, 2)` ``
+ *
+ * SQL statements can be nested:
+ *
+ * * `` SQL`SELECT * FR${SQL`OM table`})` ``
+ *   * `` `SELECT * FROM table` ``
+ *
+ * Raw unescaped strings can be put inside SQL() but I can't actually think of a
+ * use case, so probably don't ever do this:
+ *
+ * * `` secondPart = SQL('OM table'); SQL`SELECT * FR${secondPart})` ``
+ *   * `` `SELECT * FROM table` ``
  */
-export function SQL(strings: TemplateStringsArray, ...values: SQLValue[]) {
+export function SQL(strings: TemplateStringsArray | string[] | string, ...values: SQLValue[]) {
+	if (typeof strings === 'string') strings = [strings];
 	return new SQLStatement(strings, values);
 }
 
-export interface ResultRow {[k: string]: BasicSQLValue}
+export interface ResultRow { [k: string]: BasicSQLValue }
 
 export const connectedDatabases: Database[] = [];
 
@@ -258,7 +269,7 @@ export class DatabaseTable<Row, DB extends Database> {
 	eval<T>():
 	(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<T | undefined> {
 		return (strings, ...rest) =>
-			this.queryOne<{result: T}>(
+			this.queryOne<{ result: T }>(
 			)`SELECT ${new SQLStatement(strings, rest)} AS result FROM "${this.name}" LIMIT 1`
 				.then(row => row?.result);
 	}
@@ -314,10 +325,10 @@ export class DatabaseTable<Row, DB extends Database> {
 
 export class MySQLDatabase extends Database<mysql.Pool, mysql.OkPacket> {
 	override type = 'mysql' as const;
-	constructor(config: mysql.PoolOptions & {prefix?: string}) {
+	constructor(config: mysql.PoolOptions & { prefix?: string }) {
 		const prefix = config.prefix || "";
 		if (config.prefix) {
-			config = {...config};
+			config = { ...config };
 			delete config.prefix;
 		}
 		super(mysql.createPool(config), prefix);
@@ -328,7 +339,7 @@ export class MySQLDatabase extends Database<mysql.Pool, mysql.OkPacket> {
 		for (let i = 0; i < query.values.length; i++) {
 			const value = query.values[i];
 			if (query.sql[i + 1].startsWith('`') || query.sql[i + 1].startsWith('"')) {
-				sql = sql.slice(0, -1) + this.escapeId('' + value) + query.sql[i + 1].slice(1);
+				sql = sql.slice(0, -1) + this.escapeId(`${value}`) + query.sql[i + 1].slice(1);
 			} else {
 				sql += '?' + query.sql[i + 1];
 				values.push(value);
@@ -361,7 +372,7 @@ export class MySQLDatabase extends Database<mysql.Pool, mysql.OkPacket> {
 	}
 }
 
-export class PGDatabase extends Database<pg.Pool, {affectedRows: number | null}> {
+export class PGDatabase extends Database<pg.Pool, { affectedRows: number | null }> {
 	override type = 'pg' as const;
 	constructor(config: pg.PoolConfig) {
 		super(new pg.Pool(config));
@@ -373,7 +384,7 @@ export class PGDatabase extends Database<pg.Pool, {affectedRows: number | null}>
 		for (let i = 0; i < query.values.length; i++) {
 			const value = query.values[i];
 			if (query.sql[i + 1].startsWith('`') || query.sql[i + 1].startsWith('"')) {
-				sql = sql.slice(0, -1) + this.escapeId('' + value) + query.sql[i + 1].slice(1);
+				sql = sql.slice(0, -1) + this.escapeId(`${value}`) + query.sql[i + 1].slice(1);
 			} else {
 				paramCount++;
 				sql += `$${paramCount}` + query.sql[i + 1];
@@ -386,7 +397,7 @@ export class PGDatabase extends Database<pg.Pool, {affectedRows: number | null}>
 		return this.connection.query(query, values).then(res => res.rows);
 	}
 	override _queryExec(query: string, values: BasicSQLValue[]) {
-		return this.connection.query<never>(query, values).then(res => ({affectedRows: res.rowCount}));
+		return this.connection.query<never>(query, values).then(res => ({ affectedRows: res.rowCount }));
 	}
 	override escapeId(id: string) {
 		// @ts-expect-error @types/pg really needs to be updated

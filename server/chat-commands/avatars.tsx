@@ -6,7 +6,7 @@
  * @author Zarel <guangcongluo@gmail.com>
  */
 
-import {FS, Net} from "../../lib";
+import { FS, Net } from "../../lib";
 
 const AVATARS_FILE = 'config/avatars.json';
 
@@ -38,7 +38,7 @@ interface AvatarEntry {
 	default?: AvatarID | null;
 }
 
-const customAvatars: {[userid: string]: AvatarEntry} = Object.create(null);
+const customAvatars: { [userid: string]: AvatarEntry } = Object.create(null);
 
 try {
 	const configAvatars = JSON.parse(FS(AVATARS_FILE).readSync());
@@ -46,13 +46,13 @@ try {
 } catch {
 	if (Config.customavatars) {
 		for (const userid in Config.customavatars) {
-			customAvatars[userid] = {allowed: [Config.customavatars[userid]]};
+			customAvatars[userid] = { allowed: [Config.customavatars[userid]] };
 		}
 	}
 	if (Config.allowedavatars) {
 		for (const avatar in Config.customavatars) {
 			for (const userid of Config.customavatars[avatar]) {
-				if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
+				if (!customAvatars[userid]) customAvatars[userid] = { allowed: [null] };
 				customAvatars[userid].allowed.push(avatar);
 			}
 		}
@@ -63,7 +63,7 @@ if ((Config.customavatars && Object.keys(Config.customavatars).length) || Config
 	Monitor.crashlog("Please remove 'customavatars' and 'allowedavatars' from Config (config/config.js). Your avatars have been migrated to the new '/addavatar' system.");
 }
 function saveCustomAvatars(instant?: boolean) {
-	FS(AVATARS_FILE).writeUpdate(() => JSON.stringify(customAvatars), {throttle: instant ? null : 60_000});
+	FS(AVATARS_FILE).writeUpdate(() => JSON.stringify(customAvatars), { throttle: instant ? null : 60_000 });
 }
 
 export const Avatars = new class {
@@ -109,7 +109,7 @@ export const Avatars = new class {
 		if (avatar.startsWith('#') && avatar.includes('.')) return avatar.slice(1);
 		return avatar;
 	}
-	async validate(avatar: string, options?: {rejectOfficial?: boolean}) {
+	async validate(avatar: string, options?: { rejectOfficial?: boolean }) {
 		avatar = this.convert(avatar);
 		if (!/^#?[a-z0-9-]+$/.test(avatar) && !/^[a-z0-9.-]+$/.test(avatar)) {
 			throw new Chat.ErrorMessage(`Avatar "${avatar}" is not in a valid format. ${AVATAR_FORMATS_MESSAGE}`);
@@ -126,7 +126,7 @@ export const Avatars = new class {
 		const src = Avatars.src(avatar);
 		if (!src) return <strong><code>{avatar}</code></strong>;
 		return <img
-			src={src} alt={noAlt ? '' : avatar} width="80" height="80" class="pixelated" style={{verticalAlign: 'middle'}}
+			src={src} alt={noAlt ? '' : avatar} width="80" height="80" class="pixelated" style={{ verticalAlign: 'middle' }}
 		/>;
 	}
 	getDefault(userid: ID) {
@@ -141,7 +141,7 @@ export const Avatars = new class {
 	/** does not include validation */
 	setDefault(userid: ID, avatar: AvatarID | null) {
 		if (avatar === this.getDefault(userid)) return;
-		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
+		if (!customAvatars[userid]) customAvatars[userid] = { allowed: [null] };
 		const entry = customAvatars[userid];
 
 		if (avatar === entry.allowed[0]) {
@@ -152,7 +152,7 @@ export const Avatars = new class {
 		saveCustomAvatars();
 	}
 	addAllowed(userid: ID, avatar: AvatarID | null) {
-		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
+		if (!customAvatars[userid]) customAvatars[userid] = { allowed: [null] };
 
 		if (customAvatars[userid].allowed.includes(avatar)) return false;
 
@@ -174,7 +174,7 @@ export const Avatars = new class {
 		return true;
 	}
 	addPersonal(userid: ID, avatar: AvatarID | null) {
-		if (!customAvatars[userid]) customAvatars[userid] = {allowed: [null]};
+		if (!customAvatars[userid]) customAvatars[userid] = { allowed: [null] };
 		const entry = customAvatars[userid];
 
 		if (entry.allowed.includes(avatar)) return false;
@@ -640,7 +640,8 @@ const OFFICIAL_AVATARS_KYLEDOVE = new Set([
 	'mrstone', 'nancy', 'nate-pokestar3', 'neroli', 'peony-league', 'phil', 'player-go', 'playerf-go', 'rhi', 'rita', 'river',
 	'rosa-pokestar3', 'sabrina-frlg', 'selene-masters', 'sierra', 'spark-casual', 'spark', 'spenser', 'toddsnap', 'toddsnap2',
 	'victor-masters', 'vince', 'wally-rse', 'willow-casual', 'willow', 'yancy', 'zinnia-masters',
-	'acerola-masters3', 'bianca-masters', 'cheren-masters', 'gardenia-masters',
+	'acerola-masters3', 'bianca-masters', 'cheren-masters', 'gardenia-masters', 'nemona-masters',
+	'baoba', 'bill', 'daisy', 'harmony', 'paxton', 'trace',
 ]);
 
 const OFFICIAL_AVATARS_HYOOPPA = new Set([
@@ -656,11 +657,23 @@ const OFFICIAL_AVATARS_FIFTY = new Set([
 ]);
 
 const OFFICIAL_AVATARS_HORO = new Set([
-	'florian-bb', 'juliana-bb', 'red-lgpe',
+	'florian-bb', 'juliana-bb', 'red-lgpe', 'liko', 'roy',
 ]);
 
 const OFFICIAL_AVATARS_SELENA = new Set([
 	'kris',
+]);
+
+const OFFICIAL_AVATARS_WISTERIAPURPLE = new Set([
+	'miku-fairy',
+]);
+
+const OFFICIAL_AVATARS_FLAMIBANE = new Set([
+	'miku-ghost',
+]);
+
+const OFFICIAL_AVATARS_RADU = new Set([
+	'miku-ice',
 ]);
 
 for (const avatar of OFFICIAL_AVATARS_BELIOT419) OFFICIAL_AVATARS.add(avatar);
@@ -673,6 +686,9 @@ for (const avatar of OFFICIAL_AVATARS_GRAPO) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_FIFTY) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_HORO) OFFICIAL_AVATARS.add(avatar);
 for (const avatar of OFFICIAL_AVATARS_SELENA) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_WISTERIAPURPLE) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_FLAMIBANE) OFFICIAL_AVATARS.add(avatar);
+for (const avatar of OFFICIAL_AVATARS_RADU) OFFICIAL_AVATARS.add(avatar);
 
 export const commands: Chat.ChatCommands = {
 	avatar(target, room, user) {
@@ -682,19 +698,21 @@ export const commands: Chat.ChatCommands = {
 
 		if (!avatar) {
 			if (silent) return false;
-			this.errorReply("Unrecognized avatar - make sure you're on the right account?");
-			return false;
+			throw new Chat.ErrorMessage("Unrecognized avatar - make sure you're on the right account?");
 		}
 
-		user.avatar = avatar;
-		if (user.id in customAvatars && !avatar.endsWith('xmas')) {
-			Avatars.setDefault(user.id, avatar);
+		this.runBroadcast();
+		if (!this.broadcasting) {
+			user.avatar = avatar;
+			if (user.id in customAvatars && !avatar.endsWith('xmas')) {
+				Avatars.setDefault(user.id, avatar);
+			}
 		}
-		if (!silent) {
-			this.sendReply(
-				`${this.tr`Avatar changed to:`}\n` +
-				Chat.html`|raw|${Avatars.img(avatar)}`
-			);
+		if (!silent || this.broadcasting) {
+			if (!this.broadcasting) {
+				this.sendReply(`${this.tr`Avatar changed to:`}`);
+			}
+			this.sendReply(Chat.html`|raw|${Avatars.img(avatar)}`);
 			if (OFFICIAL_AVATARS_BELIOT419.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.deviantart.com/beliot419">Beliot419</a>)`);
 			}
@@ -725,9 +743,21 @@ export const commands: Chat.ChatCommands = {
 			if (OFFICIAL_AVATARS_SELENA.has(avatar)) {
 				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://twitter.com/SelenaStar00">Selena</a>)`);
 			}
+			if (OFFICIAL_AVATARS_WISTERIAPURPLE.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.smogon.com/forums/members/664887/">wisteriapurple</a>)`);
+			}
+			if (OFFICIAL_AVATARS_FLAMIBANE.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.smogon.com/forums/members/706228/">Flamibane</a>)`);
+			}
+			if (OFFICIAL_AVATARS_RADU.has(avatar)) {
+				this.sendReply(`|raw|(${this.tr`Artist: `}<a href="https://www.smogon.com/forums/members/455774/">RADU</a>)`);
+			}
 		}
 	},
-	avatarhelp: [`/avatar [avatar name or number] - Change your trainer sprite.`],
+	avatarhelp: [
+		`/avatar [avatar name or number] - Change your trainer sprite.`,
+		`!avatar [avatar name or number] - Show the specified trainer sprite and credits. Requires: + % @ # ~`,
+	],
 
 	avatars(target, room, user) {
 		this.runBroadcast();
@@ -751,10 +781,11 @@ export const commands: Chat.ChatCommands = {
 						<p>Custom avatars from account <strong>{id}</strong>:</p>,
 						allowed.filter(Boolean).map(avatar => (
 							<p>
-								{hasButton ?
-									<button name="send" value={`/avatar ${avatar}`} class="button">{Avatars.img(avatar!)}</button> :
+								{hasButton ? (
+									<button name="send" value={`/avatar ${avatar}`} class="button">{Avatars.img(avatar!)}</button>
+								) : (
 									Avatars.img(avatar!)
-								} {}
+								)} {}
 								<code>/avatar {avatar!.replace('#', '')}</code>
 							</p>
 						))
@@ -811,7 +842,7 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`"${inputUsername}" is not a valid username.`);
 		}
 		const userid = toID(inputUsername);
-		const avatar = await Avatars.validate(inputAvatar, {rejectOfficial: true});
+		const avatar = await Avatars.validate(inputAvatar, { rejectOfficial: true });
 
 		if (!Avatars.addPersonal(userid, avatar)) {
 			throw new Chat.ErrorMessage(`User "${inputUsername}" can already use avatar "${avatar}".`);
@@ -834,7 +865,7 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage(`"${inputUsername}" is not a valid username.`);
 		}
 		const userid = toID(inputUsername);
-		const avatar = await Avatars.validate(inputAvatar, {rejectOfficial: true});
+		const avatar = await Avatars.validate(inputAvatar, { rejectOfficial: true });
 
 		if (!Avatars.addAllowed(userid, avatar)) {
 			throw new Chat.ErrorMessage(`User "${inputUsername}" can already use avatar "${avatar}".`);
@@ -922,10 +953,10 @@ export const commands: Chat.ChatCommands = {
 			return this.parse(`/help moveavatars`);
 		}
 		if (!customAvatars[from]?.allowed.length) {
-			return this.errorReply(`That user has no avatars.`);
+			throw new Chat.ErrorMessage(`That user has no avatars.`);
 		}
 		const existing = customAvatars[to]?.allowed.filter(Boolean);
-		customAvatars[to] = {...customAvatars[from]};
+		customAvatars[to] = { ...customAvatars[from] };
 		delete customAvatars[from];
 		if (existing) {
 			for (const avatar of existing) {

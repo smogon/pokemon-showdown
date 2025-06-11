@@ -1,5 +1,5 @@
-import {ssbSets} from "./random-teams";
-import {changeSet, getName, PSEUDO_WEATHERS} from "./scripts";
+import { ssbSets } from "./random-teams";
+import { changeSet, getName, PSEUDO_WEATHERS } from "./scripts";
 
 const STRONG_WEATHERS = ['desolateland', 'primordialsea', 'deltastream', 'deserteddunes', 'millenniumcastle'];
 
@@ -14,7 +14,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		// For more examples, see https://github.com/smogon/pokemon-showdown/blob/master/data/abilities.ts
 	},
 	*/
-	// Please keep abilites organized alphabetically based on staff member name!
+	// Please keep abilities organized alphabetically based on staff member name!
 	// Aelita
 	fortifiedmetal: {
 		shortDesc: "This Pokemon's weight is doubled and Attack is 1.5x when statused.",
@@ -29,7 +29,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(1.5);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		gen: 9,
 	},
 
@@ -71,7 +71,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify([powMod[this.effectState.fallen], 20]);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Akir
@@ -116,7 +116,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryBoost(boost, target, source, effect) {
 			if (effect.name === 'Intimidate' && boost.atk) {
 				delete boost.atk;
-				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Paw Prints', '[of] ' + target);
+				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Paw Prints', `[of] ${target}`);
 			}
 		},
 		onModifyMove(move) {
@@ -124,7 +124,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				move.ignoreAbility = true;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Alexander489
@@ -134,7 +134,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onBasePowerPriority: 30,
 		onBasePower(basePower, attacker, defender, move) {
 			const basePowerAfterMultiplier = this.modify(basePower, this.event.modifier);
-			this.debug('Base Power: ' + basePowerAfterMultiplier);
+			this.debug(`Base Power: ${basePowerAfterMultiplier}`);
 			if (basePowerAfterMultiplier <= 60) {
 				this.debug('Confirmed Town boost');
 				return this.chainModify(1.5);
@@ -184,13 +184,30 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Served Cold",
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Ice') {
-				if (!this.boost({def: 2})) {
+				if (!this.boost({ def: 2 })) {
 					this.add('-immune', target, '[from] ability: Served Cold');
 				}
 				return null;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
+	},
+
+	// April
+	twinfantasy: {
+		shortDesc: "Slicing moves hit 2 times at 65% power.",
+		name: "Twin Fantasy",
+		onModifyMove(move, pokemon, target) {
+			if (move.flags['slicing'] && !move.multihit) {
+				move.multihit = 2;
+			}
+		},
+		onBasePower(relayVar, source, target, move) {
+			if (move.flags['slicing'] && move.multihit === 2) {
+				return this.chainModify(0.65);
+			}
+		},
+		flags: {},
 	},
 
 	// aQrator
@@ -236,7 +253,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		desc: "Active Pokemon without this Ability have their Attack multiplied by 0.85x. This Pokemon ignores other Pokemon's stat stages when taking or doing damage.",
 		name: "Clod of Ruin",
 		onStart(pokemon) {
-			if (this.suppressingAbility(pokemon)) return;
 			this.add('-ability', pokemon, 'Clod of Ruin');
 		},
 		onAnyModifyAtk(atk, target, source, move) {
@@ -263,13 +279,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				boosts['accuracy'] = 0;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		gen: 9,
 	},
 
 	// Archas
 	saintlybullet: {
-		shortDesc: "Snipe Shot always has STAB and heals the user by 1/8 (or 1/6 on a crit) of its max HP.",
+		shortDesc: "Snipe Shot always has STAB and heals the user by 1/5 (or 1/4 on a crit) of its max HP.",
 		name: "Saintly Bullet",
 		onModifyMove(move) {
 			if (move.id === 'snipeshot') {
@@ -278,7 +294,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (move.id === 'snipeshot') {
-				const ratio = target.getMoveHitData(move).crit ? 6 : 8;
+				const ratio = target.getMoveHitData(move).crit ? 4 : 5;
 				this.heal(source.maxhp / ratio, source, source);
 			}
 		},
@@ -326,7 +342,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return null;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		gen: 9,
 	},
 
@@ -360,7 +376,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 			if (showMsg && !(effect as ActiveMove).secondaries && effect.id !== 'octolock') {
-				this.add("-fail", target, "unboost", "[from] ability: Supervised Learning", "[of] " + target);
+				this.add("-fail", target, "unboost", "[from] ability: Supervised Learning", `[of] ${target}`);
 			}
 		},
 		flags: {},
@@ -380,7 +396,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.5);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// ausma
@@ -398,7 +414,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.heal(pokemon.maxhp / 3);
 			if (this.field.pseudoWeather['trickroom']) {
 				this.field.removePseudoWeather('trickroom');
-				this.boost({spe: 2}, pokemon, pokemon, this.effect);
+				this.boost({ spe: 2 }, pokemon, pokemon, this.effect);
 			}
 		},
 		flags: {},
@@ -406,16 +422,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	// Bert122
 	pesteringassault: {
-		shortDesc: "Uses Knock Off, Taunt, Torment, Soak, and Confuse Ray with 40% accuracy at turn end.",
+		shortDesc: "Uses Knock Off, Taunt, Torment, Soak, and Confuse Ray with 33% accuracy at turn end.",
 		name: "Pestering Assault",
 		onResidual(pokemon, s, effect) {
 			const moves = ['knockoff', 'taunt', 'torment', 'soak', 'confuseray'];
 			for (const moveid of moves) {
 				const move = this.dex.getActiveMove(moveid);
-				move.accuracy = 40;
+				move.accuracy = 33;
 				const target = pokemon.foes()[0];
 				if (target && !target.fainted) {
-					this.actions.useMove(move, pokemon, {target, sourceEffect: effect});
+					this.actions.useMove(move, pokemon, { target, sourceEffect: effect });
 				}
 			}
 		},
@@ -424,7 +440,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	// blazeofvictory
 	prismaticlens: {
-		shortDesc: "Pixilate + Tinted Lens.",
+		shortDesc: "Gen 6 Pixilate + 10% buffed Tinted Lens.",
 		name: "Prismatic Lens",
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
@@ -439,12 +455,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onBasePowerPriority: 23,
 		onBasePower(basePower, pokemon, target, move) {
-			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([5325, 4096]);
 		},
 		onModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).typeMod < 0) {
 				this.debug('Tinted Lens boost');
-				return this.chainModify(2);
+				return this.chainModify(2.2);
 			}
 		},
 		flags: {},
@@ -464,7 +480,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.75);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Breadey
@@ -510,10 +526,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Drizzle + Static.",
 		name: "Astrothunder",
 		onStart(source) {
-			for (const action of this.queue) {
-				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'kyogre') return;
-				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
-			}
+			if (source.species.id === 'kyogre' && source.item === 'blueorb') return;
 			this.field.setWeather('raindance');
 		},
 		onDamagingHit(damage, target, source, move) {
@@ -559,15 +572,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		flags: {},
 	},
 
-	// Clementine
+	// Clem
 	meltingpoint: {
 		shortDesc: "+2 Speed. Fire moves change user to Water type. Fire immunity.",
 		name: "Melting Point",
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Fire') {
+				this.boost({ spe: 2 }, target, source, this.dex.abilities.get('meltingpoint'));
 				if (target.setType('Water')) {
 					this.add('-start', target, 'typechange', 'Water', '[from] ability: Melting Point');
-					this.boost({spe: 2}, target, source, this.dex.abilities.get('meltingpoint'));
 				} else {
 					this.add('-immune', target, '[from] ability: Melting Point');
 				}
@@ -600,7 +613,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
 
-			if (!target.runImmunity(move.type)) return;
+			if (!target.runImmunity(move)) return;
 			return false;
 		},
 		onEffectiveness(typeMod, target, type, move) {
@@ -612,7 +625,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 			if (hitSub) return;
 
-			if (!target.runImmunity(move.type)) return;
+			if (!target.runImmunity(move)) return;
 			return 0;
 		},
 		onUpdate(pokemon) {
@@ -620,11 +633,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				const speciesid = pokemon.species.id === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
 				pokemon.formeChange(speciesid, this.effect, true);
 				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.species.get(speciesid));
-				this.boost({atk: 1, spe: 1});
+				this.boost({ atk: 1, spe: 1 });
 				this.add(`c:|${getName('clerica')}|oop`);
 			}
 		},
-		flags: {breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
+		flags: { breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 	},
 
 	// Clouds
@@ -654,7 +667,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return false;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Coolcodename
@@ -669,7 +682,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return null;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Corthius
@@ -745,37 +758,39 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 
 	// dhelmise
-	coalescence: {
-		shortDesc: "Moves drain 37%. Allies heal 5% HP. <25% HP, moves drain 114%, allies get 10%.",
-		desc: "All moves heal 37% of damage dealt. Unfainted allies heal 5% HP at the end of each turn. If this Pokemon's HP is less than 25%, moves heal 114% of damage dealt, and allies restore 10% of their health.",
-		name: "Coalescence",
-		onModifyMove(move, source, target) {
-			if (move.category !== "Status") {
-				// move.flags['heal'] = 1; // For Heal Block
-				if (source.hp > source.maxhp / 4) {
-					move.drain = [37, 100];
+	virus: {
+		shortDesc: "Causes hacked enemies to catch a virus that deals 145 damage over 3 turns.",
+		name: "Virus",
+		onAfterMove(source, target, move) {
+			if (move.id === 'emp') target?.addVolatile('virus');
+		},
+		condition: {
+			duration: 4,
+			onStart(target, source, sourceEffect) {
+				this.add('-start', target, 'virus');
+			},
+			onEnd(target) {
+				this.add('-end', target, 'virus');
+			},
+			onResidual(target, source, effect) {
+				let damage: number;
+				if (this.effectState.duration === 1) {
+					damage = 70;
+				} else if (this.effectState.duration === 2) {
+					damage = 34;
 				} else {
-					move.drain = [114, 100];
+					damage = 35;
 				}
-			}
+				this.damage(damage, target);
+			},
 		},
-		onResidualOrder: 5,
-		onResidualSubOrder: 4,
-		onResidual(pokemon) {
-			for (const ally of pokemon.side.pokemon) {
-				if (!ally.hp || ally === pokemon) continue;
-				if (ally.heal(this.modify(ally.baseMaxhp, pokemon.hp > pokemon.maxhp / 4 ? 0.05 : 0.1))) {
-					this.add('-heal', ally, ally.getHealth, '[from] ability: Coalescence', '[of] ' + pokemon);
-				}
-			}
-		},
-		flags: {},
+		flags: { breakable: 1 },
 	},
 
 	// Elly
 	stormsurge: {
-		shortDesc: "On switch-in, summons rain that causes wind moves to have perfect accuracy and 1.2x Base Power.",
-		desc: "Summons the Storm Surge weather on switch-in. While Storm Surge is active, wind moves used by any Pokemon are perfectly accurate and become 20% stronger. Water moves are 50% stronger, Fire moves are 50% weaker.",
+		shortDesc: "On switch-in, summons rain that causes wind moves to have perfect accuracy and 1.1x Base Power.",
+		desc: "Summons the Storm Surge weather on switch-in. While Storm Surge is active, wind moves used by any Pokemon are perfectly accurate and become 10% stronger. Water moves are 30% stronger, Fire moves are 30% weaker.",
 		name: "Storm Surge",
 		onStart(source) {
 			this.field.setWeather('stormsurge');
@@ -797,7 +812,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamage(damage, target, source, effect) {
 			if (effect.id === 'recoil') {
 				let trueSource = source;
-				// For some reason, the source of the damage is the subsitute user when
+				// For some reason, the source of the damage is the substitute user when
 				// hitting a sub.
 				if (source !== target) trueSource = target;
 				if (!this.activeMove) throw new Error("Battle.activeMove is null");
@@ -830,18 +845,18 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	// Frozoid
 	snowballer: {
-		shortDesc: "This Pokemon's Attack is raised 1 stage if hit by an Ice move; Ice immunity.",
+		shortDesc: "This Pokemon's Attack is raised 2 stages if hit by an Ice move; Ice immunity.",
 		name: "Snowballer",
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Ice') {
-				if (!this.boost({atk: 1})) {
+				if (!this.boost({ atk: 2 })) {
 					this.add('-immune', target, '[from] ability: Snowballer');
 				}
 				return null;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Fame
@@ -876,14 +891,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onResidualOrder: 29,
 		onResidual(pokemon) {
 			if (!this.effectState.gamblingAddiction && pokemon.hp && pokemon.hp < pokemon.maxhp / 4) {
-				this.boost({spe: 1});
+				this.boost({ spe: 1 });
 				this.heal(pokemon.maxhp);
 				const move = this.dex.moves.get('finalgambit');
 				const finalGambit = {
 					move: move.name,
 					id: move.id,
-					pp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
-					maxpp: (move.noPPBoosts || move.isZ) ? move.pp : move.pp * 8 / 5,
+					pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
+					maxpp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
 					target: move.target,
 					disabled: false,
 					used: false,
@@ -962,7 +977,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.add(
 				'message',
 				`${name} hacked into PS and looked at ${name === 'Hecate' ? 'her' : 'their'} opponent's sets. ` +
-					`${warnTarget.name}'s move ${warnMoveName} drew ${name === 'Hecate' ? 'her' : 'their'} eye.`
+				`${warnTarget.name}'s move ${warnMoveName} drew ${name === 'Hecate' ? 'her' : 'their'} eye.`
 			);
 			this.add(`c:|${getName(name)}|Interesting. With that in mind, bring it!`);
 		},
@@ -999,7 +1014,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryHit(target, source, move) {
 			// Storm Drain
 			if (target !== source && move.type === 'Water') {
-				if (!this.boost({spa: 1})) {
+				if (!this.boost({ spa: 1 })) {
 					this.add('-immune', target, '[from] ability: Hydrostatic Positivity');
 				}
 				return null;
@@ -1007,7 +1022,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 			// Motor Drive
 			if (target !== source && move.type === 'Electric') {
-				if (!this.boost({spe: 1})) {
+				if (!this.boost({ spe: 1 })) {
 					this.add('-immune', target, '[from] ability: Hydrostatic Positivity');
 				}
 				return null;
@@ -1049,33 +1064,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 	},
 
-	// Imperial
-	frozenfortuity: {
-		shortDesc: "On switch-in, changes the Pokemon to Kyurem-Black if the target's Defense is lower, otherwise Kyurem-White.",
-		name: "Frozen Fortuity",
-		onStart(pokemon) {
-			if (pokemon.species.id !== 'kyurem' || pokemon.transformed || !pokemon.hp) return;
-			if (pokemon.beingCalledBack) return;
-			let totaldef = 0;
-			let totalspd = 0;
-			for (const target of pokemon.foes()) {
-				totaldef += target.getStat('def', false, true);
-				totalspd += target.getStat('spd', false, true);
-			}
-			this.add('-ability', pokemon, 'Frozen Fortuity');
-			if (totaldef < totalspd) {
-				changeSet(this, pokemon, ssbSets['Imperial-Black']);
-			} else {
-				changeSet(this, pokemon, ssbSets['Imperial-White']);
-			}
-		},
-		onSwitchOut(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Kyurem' || pokemon.transformed || !pokemon.hp) return;
-			changeSet(this, pokemon, ssbSets['Imperial']);
-		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
-	},
-
 	// in the hills
 	illiterit: {
 		shortDesc: "Immune to moves with 12 or more alphanumeric characters.",
@@ -1087,7 +1075,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return null;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Irpachuza
@@ -1114,12 +1102,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Fortifying Frost",
 		onModifySpAPriority: 5,
 		onModifySpA(spa, pokemon) {
-			if (['hail', 'snow'].includes(pokemon.effectiveWeather())) {
+			if (['hail', 'snowscape'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpD(spd, pokemon) {
-			if (['hail', 'snow'].includes(pokemon.effectiveWeather())) {
+			if (['hail', 'snowscape'].includes(pokemon.effectiveWeather())) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -1167,7 +1155,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				];
 				for (const sideCondition of remove) {
 					if (side.removeSideCondition(sideCondition)) {
-						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name, '[from] ability: Anfield', '[of] ' + target);
+						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name, '[from] ability: Anfield', `[of] ${target}`);
 					}
 				}
 			}
@@ -1216,18 +1204,28 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify([5120, 4096]);
 			}
 		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 	},
 
 	// kingbaruk
 	peerpressure: {
-		shortDesc: "All moves used while this Pokemon is on the field consume 4 PP.",
+		shortDesc: "All moves used while this Pokemon is on the field consume 4 PP. Sets Trump Card to 1 PP.",
 		name: "Peer Pressure",
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Peer Pressure');
+			const trumpCard = pokemon.moveSlots.find(moveSlot => moveSlot.id === 'trumpcard');
+			if (trumpCard) {
+				trumpCard.pp = 1;
+			}
 		},
 		onAnyDeductPP(target, source) {
 			return 3;
+		},
+		onResidual(source, target, effect) {
+			const trumpCard = source.moveSlots.find(moveSlot => moveSlot.id === 'trumpcard');
+			if (trumpCard) {
+				trumpCard.pp = 1;
+			}
 		},
 		flags: {},
 	},
@@ -1276,7 +1274,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.5);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Kry
@@ -1310,7 +1308,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.75);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Lasen
@@ -1324,12 +1322,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const displayText = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
 			for (const targetCondition of Object.keys(target.sideConditions)) {
 				if (target.removeSideCondition(targetCondition) && displayText.includes(targetCondition)) {
-					this.add('-sideend', target, this.dex.conditions.get(targetCondition).name, '[from] ability: Idealized World', '[of] ' + pokemon);
+					this.add('-sideend', target, this.dex.conditions.get(targetCondition).name, '[from] ability: Idealized World', `[of] ${pokemon}`);
 				}
 			}
 			for (const sideCondition of Object.keys(pokemon.side.sideConditions)) {
 				if (pokemon.side.removeSideCondition(sideCondition) && displayText.includes(sideCondition)) {
-					this.add('-sideend', pokemon.side, this.dex.conditions.get(sideCondition).name, '[from] ability: Idealized World', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, this.dex.conditions.get(sideCondition).name, '[from] ability: Idealized World', `[of] ${pokemon}`);
 				}
 			}
 			this.field.clearTerrain();
@@ -1380,7 +1378,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				pokemon.maybeTrapped = true;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Lyna
@@ -1401,7 +1399,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
-			this.actions.useMove(newMove, target, {target: source});
+			this.actions.useMove(newMove, target, { target: source });
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
@@ -1411,13 +1409,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
-			this.actions.useMove(newMove, this.effectState.target, {target: source});
+			this.actions.useMove(newMove, this.effectState.target, { target: source });
 			return null;
 		},
 		condition: {
 			duration: 1,
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Maia
@@ -1435,20 +1433,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				source.trySetStatus('brn', target);
 			}
 		},
-		flags: {breakable: 1},
-	},
-
-	// maroon
-	builtdifferent: {
-		shortDesc: "Stamina + Normal-type moves get +1 priority.",
-		name: "Built Different",
-		onDamagingHit(damage, target, source, effect) {
-			this.boost({def: 1});
-		},
-		onModifyPriority(priority, pokemon, target, move) {
-			if (move?.type === 'Normal') return priority + 1;
-		},
-		flags: {},
+		flags: { breakable: 1 },
 	},
 
 	// Mathy
@@ -1486,7 +1471,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				];
 				for (const sideCondition of remove) {
 					if (side.removeSideCondition(sideCondition)) {
-						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name, '[from] ability: End Round', '[of] ' + pokemon);
+						this.add('-sideend', side, this.dex.conditions.get(sideCondition).name, '[from] ability: End Round', `[of] ${pokemon}`);
 					}
 				}
 			}
@@ -1514,17 +1499,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 							mon.removeVolatile(volatile);
 						}
 						if (volatile === 'flipped') {
-							changeSet(this, mon, ssbSets['Clementine']);
-							this.add(`c:|${getName('Clementine')}|┬──┬◡ﾉ(° -°ﾉ)`);
+							changeSet(this, mon, ssbSets['Clem']);
+							this.add(`c:|${getName('Clem')}|┬──┬◡ﾉ(° -°ﾉ)`);
 						}
 						this.add('-activate', pokemon, 'ability: End Round');
 					}
 				}
 				mon.clearBoosts();
-				this.add('-clearboost', mon, '[from] ability: End Round', '[of] ' + pokemon);
+				this.add('-clearboost', mon, '[from] ability: End Round', `[of] ${pokemon}`);
 			}
 		},
-		flags: {cantsuppress: 1},
+		flags: { cantsuppress: 1 },
 	},
 
 	// Meteordash
@@ -1538,7 +1523,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifyDef(def) {
 			return this.chainModify(2);
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Mex
@@ -1565,7 +1550,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onSourceHit(target, source, move) {
 			if (move.flags['contact'] && move.category === 'Physical') {
 				this.add('-activate', source, 'ability: The Rolling Spheal');
-				this.boost({spe: 1}, source, source, move);
+				this.boost({ spe: 1 }, source, source, move);
 			}
 		},
 		condition: {
@@ -1609,7 +1594,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	// Monkey
 	harambehit: {
-		shortDesc: "Unseen Fist + Punch moves have 1.5x power.",
+		shortDesc: "Unseen Fist + Punch moves have 1.6x power.",
 		name: "Harambe Hit",
 		onModifyMove(move) {
 			if (move.flags['contact']) delete move.flags['protect'];
@@ -1618,7 +1603,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.flags['punch']) {
 				this.debug('Harambe Hit boost');
-				return this.chainModify([6144, 4096]);
+				return this.chainModify([6554, 4096]);
 			}
 		},
 		flags: {},
@@ -1657,7 +1642,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.5);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Ney
@@ -1713,23 +1698,23 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				const sourceAbility = source.setAbility('drifting', target);
 				if (!sourceAbility) return;
 				if (target.isAlly(source)) {
-					this.add('-activate', target, 'Skill Swap', '', '', '[of] ' + source);
+					this.add('-activate', target, 'Skill Swap', '', '', `[of] ${source}`);
 				} else {
-					this.add('-activate', target, 'ability: Drifting', this.dex.abilities.get(sourceAbility).name, 'Drifting', '[of] ' + source);
+					this.add('-activate', target, 'ability: Drifting', this.dex.abilities.get(sourceAbility).name, 'Drifting', `[of] ${source}`);
 				}
 				target.setAbility(sourceAbility);
 			}
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, attacker, defender) {
-			if (!defender.activeTurns) {
+			if (defender && !defender.activeTurns) {
 				this.debug('Stakeout boost');
 				return this.chainModify(2);
 			}
 		},
 		onModifySpAPriority: 5,
 		onModifySpA(atk, attacker, defender) {
-			if (!defender.activeTurns) {
+			if (defender && !defender.activeTurns) {
 				this.debug('Stakeout boost');
 				return this.chainModify(2);
 			}
@@ -1754,9 +1739,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					this.add(`c:|${getName('PartMan')}|That's it. Get ready to be rapid-fire hugged.`);
 					target.clearBoosts();
 					this.add('-clearboost', target);
-					this.boost({atk: 1, def: -1, spa: 1, spd: -1, spe: 1});
-					const details = target.species.name + (target.level === 100 ? '' : ', L' + target.level) +
-						(target.gender === '' ? '' : ', ' + target.gender) + (target.set.shiny ? ', shiny' : '');
+					this.boost({ atk: 1, def: -1, spa: 1, spd: -1, spe: 1 });
+					const details = target.getUpdatedDetails();
 					target.details = details;
 					this.add('replace', target, details);
 				}
@@ -1767,9 +1751,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onStart(pokemon) {
 			if (!pokemon.set.shiny) {
-				this.boost({atk: -1, def: 1, spa: -1, spd: 1});
+				this.boost({ atk: -1, def: 1, spa: -1, spd: 1 });
 			} else {
-				this.boost({atk: 1, def: -1, spa: 1, spd: -1, spe: 1});
+				this.boost({ atk: 1, def: -1, spa: 1, spd: -1, spe: 1 });
 			}
 		},
 	},
@@ -1884,7 +1868,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onModifySecondaries(secondaries) {
 			this.debug('Fancy Scarf prevent secondary');
-			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+			return secondaries.filter(effect => !!effect.self);
 		},
 		flags: {},
 	},
@@ -1895,7 +1879,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "High Performance Computing",
 		flags: {},
 		onResidual(source) {
-			const type = this.sample(this.dex.types.names().filter(i => i !== 'Stellar'));
+			const type = this.sample(this.dex.types.names().filter(i => i !== 'Stellar' && i !== source.getTypes()[0]));
 			if (source.setType(type)) {
 				this.add('-start', source, 'typechange', type, '[from] ability: High Performance Computing');
 			}
@@ -1907,24 +1891,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Boosts Sp. Atk by 2 and sets a 25% Wish upon switch-in.",
 		name: "Anti-Pelau",
 		onStart(target) {
-			this.boost({spa: 2}, target);
-			const wish = this.dex.getActiveMove('wish');
-			wish.condition = {
-				duration: 2,
-				onStart(pokemon, source) {
-					this.effectState.hp = source.maxhp / 4;
-				},
-				onResidualOrder: 4,
-				onEnd(pokemon) {
-					if (pokemon && !pokemon.fainted) {
-						const damage = this.heal(this.effectState.hp, pokemon, pokemon);
-						if (damage) {
-							this.add('-heal', pokemon, pokemon.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
-						}
-					}
-				},
-			};
-			this.actions.useMove(wish, target);
+			this.boost({ spa: 2 }, target);
+			this.actions.useMove(this.dex.getActiveMove('wish'), target,
+				{ target, sourceEffect: this.dex.abilities.get('antipelau') });
 		},
 		flags: {},
 	},
@@ -1935,10 +1904,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Rainy's Aura",
 		onStart(source) {
 			if (this.suppressingAbility(source)) return;
-			for (const action of this.queue) {
-				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'kyogre') return;
-				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
-			}
+			if (source.species.id === 'kyogre' && source.item === 'blueorb') return;
 			this.field.setWeather('raindance');
 		},
 		onAnyBasePowerPriority: 20,
@@ -2030,9 +1996,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				totalspd += target.getStat('spd', false, true);
 			}
 			if (totaldef && totaldef >= totalspd) {
-				this.boost({spa: 1});
+				this.boost({ spa: 1 });
 			} else if (totalspd) {
-				this.boost({atk: 1});
+				this.boost({ atk: 1 });
 			}
 
 			// n.b. only affects Hackmons
@@ -2057,10 +2023,23 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const target = this.sample(possibleTargets);
 			const ability = target.getAbility();
 			if (pokemon.setAbility(ability)) {
-				this.add('-ability', pokemon, ability, '[from] ability: Monke See Monke Do', '[of] ' + target);
+				this.add('-ability', pokemon, ability, '[from] ability: Monke See Monke Do', `[of] ${target}`);
 			}
 		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1 },
+	},
+
+	// Rio Vidal
+	builtdifferent: {
+		shortDesc: "Stamina + Normal-type moves get +1 priority.",
+		name: "Built Different",
+		onDamagingHit(damage, target, source, effect) {
+			this.boost({ def: 1 });
+		},
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move?.type === 'Normal') return priority + 1;
+		},
+		flags: {},
 	},
 
 	// Rissoux
@@ -2115,15 +2094,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		condition: {
 			duration: 1,
 			onBeforeSwitchOut(pokemon) {
-				const move = this.queue.willMove(pokemon.foes()[0]);
+				const foe = pokemon.foes()[0];
+				const move = foe ? this.queue.willMove(foe) : null;
 				const moveName = move && move.moveid ? move.moveid.toString() : "";
 				this.debug('Pursuit start');
 				let alreadyAdded = false;
 				pokemon.removeVolatile('destinybond');
 				for (const source of this.effectState.sources) {
 					if (!source.isAdjacent(pokemon) || !this.queue.cancelMove(source) || !source.hp) continue;
-					if (!alreadyAdded) {
-						this.add('-activate', pokemon.foes()[0], 'ability: Hot Pursuit');
+					if (!alreadyAdded && foe) {
+						this.add('-activate', foe, 'ability: Hot Pursuit');
 						alreadyAdded = true;
 					}
 					// Run through each action in queue to check if the Pursuit user is supposed to Mega Evolve this turn.
@@ -2224,7 +2204,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.5);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// skies
@@ -2257,7 +2237,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Every turn, raises a random stat by 1 stage if the foe has more raised stats.",
 		name: "Adaptive Engineering",
 		onResidual(source) {
-			if (source === undefined || source.foes() === undefined || source.foes()[0] === undefined) return;
+			if (source?.foes()?.[0] === undefined) return;
 			if (source.positiveBoosts() < source.foes()[0].positiveBoosts()) {
 				const stats: BoostID[] = [];
 				let stat: BoostID;
@@ -2269,7 +2249,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 				if (stats.length) {
 					const randomStat = this.sample(stats);
-					this.boost({[randomStat]: 1}, source, source);
+					this.boost({ [randomStat]: 1 }, source, source);
 				}
 			}
 		},
@@ -2278,19 +2258,16 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	// Solaros & Lunaris
 	ridethesun: {
-		shortDesc: "Drought + Spe 1.5x in sun.",
-		desc: "On switch-in, this Pokemon summons Sunny Day. If Sunny Day is active, this Pokemon's Speed is 1.5x.",
+		shortDesc: "Drought + 2x Spe in sun.",
+		desc: "On switch-in, this Pokemon summons Sunny Day. If Sunny Day is active, this Pokemon's Speed is 2x.",
 		name: "Ride the Sun!",
 		onStart(source) {
-			for (const action of this.queue) {
-				if (action.choice === 'runPrimal' && action.pokemon === source && source.species.id === 'groudon') return;
-				if (action.choice !== 'runSwitch' && action.choice !== 'runPrimal') break;
-			}
+			if (source.species.id === 'groudon' && source.item === 'redorb') return;
 			this.field.setWeather('sunnyday');
 		},
 		onModifySpe(spe, pokemon) {
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
-				return this.chainModify(1.5);
+				return this.chainModify(2);
 			}
 		},
 		flags: {},
@@ -2321,7 +2298,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onSourceAfterFaint(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				this.boost({atk: -length}, source);
+				this.boost({ atk: -length }, source);
 			}
 		},
 		flags: {},
@@ -2348,7 +2325,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (target.lastMove && target.lastMove.id !== 'struggle') {
 				if (move.id === target.lastMove.id) {
 					this.attrLastMove('[still]');
-					this.add('cant', target, 'ability: Overasked Clause', move, '[of] ' + source);
+					this.add('cant', target, 'ability: Overasked Clause', move, `[of] ${source}`);
 					return false;
 				}
 			}
@@ -2366,7 +2343,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		onDamagingHit(damage, target, source, effect) {
-			this.boost({def: 1});
+			this.boost({ def: 1 });
 		},
 	},
 
@@ -2416,7 +2393,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				const dazzlingHolder = this.effectState.target;
 				if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.priority > 0.1) {
 					this.attrLastMove('[still]');
-					this.add('cant', target, 'ability: Sand Sleuth', move, '[of] ' + source);
+					this.add('cant', target, 'ability: Sand Sleuth', move, `[of] ${source}`);
 					return false;
 				}
 			}
@@ -2437,7 +2414,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return false;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// TheJesucristoOsAma
@@ -2482,11 +2459,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 	// Two of Roses
 	aswesee: {
-		shortDesc: "1x per turn: Stat gets boosted -> 50% chance to copy, 15% to raise another.",
+		shortDesc: "1x per turn: Stat gets boosted -> 75% chance to copy, 40% to raise another.",
 		desc: "Once per turn, when any active Pokemon has a stat boosted, this Pokemon has a 50% chance of copying it and a 15% chance to raise another random stat.",
 		name: "As We See",
 		onFoeAfterBoost(boost, target, source, effect) { // Opportunist
-			if (this.randomChance(1, 2)) {
+			if (this.randomChance(3, 4)) {
 				if (effect && ['As We See', 'Mirror Herb', 'Opportunist'].includes(effect.name)) return;
 				const pokemon = this.effectState.target;
 				const positiveBoosts: Partial<BoostsTable> = {};
@@ -2502,7 +2479,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		onResidual(target, source, effect) {
-			if (this.randomChance(15, 100) && this.effectState.triggered) {
+			if (this.randomChance(4, 10) && this.effectState.triggered) {
 				const stats: BoostID[] = [];
 				const boost: SparseBoostsTable = {};
 				let statPlus: BoostID;
@@ -2539,7 +2516,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifyDef(def) {
 			return this.chainModify(2);
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// umuwo
@@ -2576,7 +2553,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onTryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
 			if (target.runEffectiveness(move) > 0) {
-				this.boost({def: 1, spd: 1}, target);
+				this.boost({ def: 1, spd: 1 }, target);
 			}
 		},
 		flags: {},
@@ -2620,7 +2597,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(1.3);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Vistar
@@ -2640,7 +2617,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.5);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// vmnunes
@@ -2698,7 +2675,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(0.75);
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// xy01
@@ -2715,7 +2692,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target);
 				} else {
-					this.boost({atk: -1, spa: -1}, target, pokemon, null, true);
+					this.boost({ atk: -1, spa: -1 }, target, pokemon, null, true);
 				}
 			}
 		},
@@ -2735,10 +2712,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					didSomething = !!this.heal(target.baseMaxhp / 4);
 					break;
 				case 1:
-					didSomething = !!this.boost({spa: 1}, target, target);
+					didSomething = !!this.boost({ spa: 1 }, target, target);
 					break;
 				case 2:
-					didSomething = !!this.boost({spe: 1}, target, target);
+					didSomething = !!this.boost({ spe: 1 }, target, target);
 					break;
 				case 3:
 					if (!target.volatiles['charge']) {
@@ -2757,13 +2734,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return null;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// yeet dab xd
 	treasurebag: {
 		shortDesc: "At the end of the turn and when top kek is used, use one Treasure Bag item in the cycle.",
-		desc: "At the end of each turn and when top kek is used, one of the following effects will occur, starting at the top and moving to the next item for each use of Treasure Bag: Deal 100 HP of damage to the foe, heal the user for 100 HP, paralyze the foe, set Aurora Veil for 5 turns, or grant the user a permanent Reviver Seed condition that causes it to revive to 50% upon reaching 0 HP once. If the Reviver Seed effect is set, all future cycles will replace that effect with a no-effect Reviser Seed item. The state of the cycle persists if the Pokemon switches out and back in.",
+		desc: "At the end of each turn and when top kek is used, one of the following effects will occur, starting at the top and moving to the next item for each use of Treasure Bag: Deal 50 HP of damage to the foe, heal the user for 100 HP, paralyze the foe, set Aurora Veil for 5 turns, or grant the user a permanent Reviver Seed condition that causes it to revive to 50% upon reaching 0 HP once. If the Reviver Seed effect is set, all future cycles will replace that effect with a no-effect Reviser Seed item. The state of the cycle persists if the Pokemon switches out and back in.",
 		name: "Treasure Bag",
 		onStart(target) {
 			this.add('-ability', target, 'Treasure Bag');
@@ -2782,104 +2759,58 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				if (!pokemon.m.bag) {
 					pokemon.m.bag = ['Blast Seed', 'Oran Berry', 'Petrify Orb', 'Luminous Orb', 'Reviver Seed'];
 				}
-				if (!pokemon.m.cycledTreasureBag) {
-					const currentItem = pokemon.m.bag.shift();
-					const foe = pokemon.foes()[0];
-					switch (currentItem) {
-					case 'Blast Seed':
-						this.add('-activate', pokemon, 'ability: Treasure Bag');
-						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a ${currentItem}!`);
-						if (foe) {
-							this.damage(100, foe, pokemon, this.effect);
-						} else {
-							this.add('-message', `But there was no target!`);
-						}
-						break;
-					case 'Oran Berry':
-						this.add('-activate', pokemon, 'ability: Treasure Bag');
-						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found an ${currentItem}!`);
-						this.heal(100, pokemon, pokemon, this.dex.items.get('Oran Berry'));
-						break;
-					case 'Petrify Orb':
-						this.add('-activate', pokemon, 'ability: Treasure Bag');
-						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a ${currentItem}!`);
-						if (foe?.trySetStatus('par', pokemon, this.effect)) {
-							this.add('-message', `${pokemon.name} petrified ${foe.name}`);
-						} else if (!foe) {
-							this.add('-message', `But there was no target!`);
-						} else {
-							this.add('-message', `But it failed!`);
-						}
-						break;
-					case 'Luminous Orb':
-						this.add('-activate', pokemon, 'ability: Treasure Bag');
-						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a ${currentItem}!`);
-						if (!pokemon.side.addSideCondition('auroraveil', pokemon, this.effect)) {
-							this.add('-message', `But it failed!`);
-						}
-						break;
-					// Handled separately
-					case 'Reviver Seed':
-						this.add('-activate', pokemon, 'ability: Treasure Bag');
-						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a Reviver Seed!`);
-						pokemon.m.seedActive = true;
-						break;
+				const currentItem = pokemon.m.bag.shift();
+				const foe = pokemon.foes()[0];
+				switch (currentItem) {
+				case 'Blast Seed':
+					this.add('-activate', pokemon, 'ability: Treasure Bag');
+					this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a ${currentItem}!`);
+					if (foe) {
+						this.damage(50, foe, pokemon, this.effect);
+					} else {
+						this.add('-message', `But there was no target!`);
 					}
-					pokemon.m.bag = [...pokemon.m.bag, currentItem];
+					break;
+				case 'Oran Berry':
+					this.add('-activate', pokemon, 'ability: Treasure Bag');
+					this.add('-message', `${pokemon.name} dug through its Treasure Bag and found an ${currentItem}!`);
+					this.heal(100, pokemon, pokemon, this.dex.items.get('Oran Berry'));
+					break;
+				case 'Petrify Orb':
+					this.add('-activate', pokemon, 'ability: Treasure Bag');
+					this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a ${currentItem}!`);
+					if (foe?.trySetStatus('par', pokemon, this.effect)) {
+						this.add('-message', `${pokemon.name} petrified ${foe.name}`);
+					} else if (!foe) {
+						this.add('-message', `But there was no target!`);
+					} else {
+						this.add('-message', `But it failed!`);
+					}
+					break;
+				case 'Luminous Orb':
+					this.add('-activate', pokemon, 'ability: Treasure Bag');
+					this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a ${currentItem}!`);
+					if (!pokemon.side.addSideCondition('auroraveil', pokemon, this.effect)) {
+						this.add('-message', `But it failed!`);
+					}
+					break;
+				// Handled separately
+				case 'Reviver Seed':
+					this.add('-activate', pokemon, 'ability: Treasure Bag');
+					this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a Reviver Seed!`);
+					pokemon.m.seedActive = true;
+					break;
 				}
-				delete pokemon.m.cycledTreasureBag;
+				pokemon.m.bag = [...pokemon.m.bag, currentItem];
 			},
 			onAfterMoveSecondarySelf(source, target, move) {
 				if (move.id !== 'topkek') return;
 				if (!source.m.bag) {
 					source.m.bag = ['Blast Seed', 'Oran Berry', 'Petrify Orb', 'Luminous Orb', 'Reviver Seed'];
 				}
-				if (!source.m.cycledTreasureBag) {
-					const currentItem = source.m.bag.shift();
-					const foe = source.foes()[0];
-					switch (currentItem) {
-					case 'Blast Seed':
-						this.add('-activate', source, 'ability: Treasure Bag');
-						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
-						if (foe) {
-							this.damage(100, foe, source, this.effect);
-						} else {
-							this.add('-message', `But there was no target!`);
-						}
-						break;
-					case 'Oran Berry':
-						this.add('-activate', source, 'ability: Treasure Bag');
-						this.add('-message', `${source.name} dug through its Treasure Bag and found an ${currentItem}!`);
-						this.heal(100, source, source, this.dex.items.get('Oran Berry'));
-						break;
-					case 'Petrify Orb':
-						this.add('-activate', source, 'ability: Treasure Bag');
-						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
-						if (foe?.trySetStatus('par', source, this.effect)) {
-							this.add('-message', `${source.name} petrified ${foe.name}`);
-						} else if (!foe) {
-							this.add('-message', `But there was no target!`);
-						} else {
-							this.add('-message', `But it failed!`);
-						}
-						break;
-					case 'Luminous Orb':
-						this.add('-activate', source, 'ability: Treasure Bag');
-						this.add('-message', `${source.name} dug through its Treasure Bag and found a ${currentItem}!`);
-						if (!source.side.addSideCondition('auroraveil', source, this.effect)) {
-							this.add('-message', `But it failed!`);
-						}
-						break;
-					// Handled separately
-					case 'Reviver Seed':
-						this.add('-activate', source, 'ability: Treasure Bag');
-						this.add('-message', `${source.name} dug through its Treasure Bag and found a Reviver Seed!`);
-						source.m.seedActive = true;
-						break;
-					}
-					source.m.bag = [...source.m.bag, currentItem];
-				}
-				delete source.m.cycledTreasureBag;
+				const currentItem = source.m.bag.shift();
+				this.add('-message', `${source.name} cycled its treasure bag!`);
+				source.m.bag = [...source.m.bag, currentItem];
 			},
 			onDamage(damage, pokemon, source, effect) {
 				if (damage >= pokemon.hp && pokemon.m.seedActive) {
@@ -2921,7 +2852,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			target.setAbility(this.sample(abilities), target);
 			this.add('-ability', target, target.getAbility().name);
 		},
-		flags: {notrace: 1},
+		flags: { notrace: 1 },
 	},
 
 	// YveltalNL
@@ -2939,7 +2870,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					this.add('-immune', target);
 				} else {
 					if (this.dex.species.get(pokemon.species).heightm > this.dex.species.get(target.species).heightm) {
-						this.boost({atk: -1, spa: -1}, target, pokemon, null, true);
+						this.boost({ atk: -1, spa: -1 }, target, pokemon, null, true);
 					}
 				}
 			}
@@ -2972,7 +2903,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				changeSet(this, pokemon, ssbSets['Zarel'], true);
 			}
 		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1 },
 	},
 
 	// zoro
@@ -3000,7 +2931,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		// Yes, this looks very patchwork-y. declaring new persistent global variables seems to be a no-go here
 		// so i repurposed one which should likely not affect anything else - have tested with clerica/zoro on both sides
 		// and their disguise/sturdy state is unaffected by modifying anything here. but let wg know if this breaks stuff.
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 	},
 
 	// Modified abilities
@@ -3054,7 +2985,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				if (pokemon.species.id !== 'castformrainy') forme = 'Castform-Rainy';
 				break;
 			case 'hail':
-			case 'snow':
+			case 'snowscape':
 				if (pokemon.species.id !== 'castformsnowy') forme = 'Castform-Snowy';
 				break;
 			default:
@@ -3078,7 +3009,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	neutralizinggas: {
 		inherit: true,
-		onPreStart(pokemon) {
+		onSwitchIn(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
 			for (const target of this.getAllActive()) {

@@ -6,7 +6,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	venusaur: {
-		tier: "NU",
+		tier: "PU",
 	},
 	charmander: {
 		tier: "LC",
@@ -21,7 +21,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	wartortle: {
-		tier: "ZU",
+		tier: "NFE",
 	},
 	blastoise: {
 		tier: "NU",
@@ -63,7 +63,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	fearow: {
-		tier: "PU",
+		tier: "NU",
 	},
 	ekans: {
 		tier: "LC",
@@ -99,7 +99,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	nidoking: {
-		tier: "NU",
+		tier: "PU",
 	},
 	clefairy: {
 		tier: "LC",
@@ -117,7 +117,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	wigglytuff: {
-		tier: "NU",
+		tier: "PU",
 	},
 	zubat: {
 		tier: "LC",
@@ -162,7 +162,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	golduck: {
-		tier: "NU",
+		tier: "PU",
 	},
 	mankey: {
 		tier: "LC",
@@ -174,7 +174,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	arcanine: {
-		tier: "PU",
+		tier: "NU",
 	},
 	poliwag: {
 		tier: "ZU",
@@ -228,7 +228,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	ponyta: {
-		tier: "ZU",
+		tier: "LC",
 	},
 	rapidash: {
 		tier: "PU",
@@ -243,7 +243,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	magneton: {
-		tier: "ZU",
+		tier: "NU",
 	},
 	farfetchd: {
 		tier: "ZU",
@@ -288,13 +288,13 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	hypno: {
-		tier: "UUBL",
+		tier: "UU",
 	},
 	krabby: {
 		tier: "LC",
 	},
 	kingler: {
-		tier: "NU",
+		tier: "PU",
 	},
 	voltorb: {
 		tier: "LC",
@@ -303,7 +303,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	exeggcute: {
-		tier: "NU",
+		tier: "PU",
 	},
 	exeggutor: {
 		tier: "OU",
@@ -390,7 +390,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	lapras: {
-		tier: "UUBL",
+		tier: "UU",
 	},
 	ditto: {
 		tier: "ZU",
@@ -429,7 +429,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 	},
 	articuno: {
-		tier: "UUBL",
+		tier: "UU",
 	},
 	zapdos: {
 		tier: "OU",

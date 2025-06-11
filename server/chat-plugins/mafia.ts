@@ -1,13 +1,13 @@
-import {Utils, FS} from '../../lib';
+import { Utils, FS } from '../../lib';
 
 interface MafiaData {
 	// keys for all of these are IDs
-	alignments: {[k: string]: MafiaDataAlignment};
-	roles: {[k: string]: MafiaDataRole};
-	themes: {[k: string]: MafiaDataTheme};
-	IDEAs: {[k: string]: MafiaDataIDEA};
-	terms: {[k: string]: MafiaDataTerm};
-	aliases: {[k: string]: ID};
+	alignments: { [k: string]: MafiaDataAlignment };
+	roles: { [k: string]: MafiaDataRole };
+	themes: { [k: string]: MafiaDataTheme };
+	IDEAs: { [k: string]: MafiaDataIDEA };
+	terms: { [k: string]: MafiaDataTerm };
+	aliases: { [k: string]: ID };
 }
 interface MafiaDataAlignment {
 	name: string;
@@ -25,12 +25,14 @@ interface MafiaDataRole {
 }
 interface MafiaDataTheme {
 	name: string;
+	memo?: undefined;
 	desc: string;
 	// roles
 	[players: number]: string;
 }
 interface MafiaDataIDEA {
 	name: string;
+	memo?: undefined;
 	roles: string[];
 	picks: string[];
 	choices: number;
@@ -41,10 +43,10 @@ interface MafiaDataTerm {
 }
 
 interface MafiaLogTable {
-	[date: string]: {[userid: string]: number};
+	[date: string]: { [userid: string]: number };
 }
 type MafiaLogSection = 'leaderboard' | 'mvps' | 'hosts' | 'plays' | 'leavers';
-type MafiaLog = {[section in MafiaLogSection]: MafiaLogTable};
+type MafiaLog = { [section in MafiaLogSection]: MafiaLogTable };
 
 interface MafiaRole {
 	name: string;
@@ -78,7 +80,7 @@ interface MafiaIDEAData {
 
 interface MafiaIDEAModule {
 	data: MafiaIDEAData | null;
-	timer: NodeJS.Timer | null;
+	timer: NodeJS.Timeout | null;
 	discardsHidden: boolean;
 	discardsHTML: string;
 	// users that haven't picked a role yet
@@ -88,17 +90,18 @@ interface MafiaIDEAModule {
 interface MafiaIDEAPlayerData {
 	choices: string[];
 	originalChoices: string[];
-	picks: {[choice: string]: string | null};
+	picks: { [choice: string]: string | null };
 }
 
 // The different possible ways for a player to be eliminated
-enum MafiaEliminateType {
-	ELIMINATE = "was eliminated", // standard (vote + faction kill + anything else)
-	KICK = "was kicked from the game", // staff kick
-	TREESTUMP = "was treestumped", // can still talk
-	SPIRIT = "became a restless spirit", // can still vote
-	SPIRITSTUMP = "became a restless treestump" // treestump + spirit
-}
+const MafiaEliminateType = {
+	ELIMINATE: "was eliminated", // standard (vote + faction kill + anything else)
+	KICK: "was kicked from the game", // staff kick
+	TREESTUMP: "was treestumped", // can still talk
+	SPIRIT: "became a restless spirit", // can still vote
+	SPIRITSTUMP: "became a restless treestump", // treestump + spirit
+} as const;
+type MafiaEliminateType = typeof MafiaEliminateType[keyof typeof MafiaEliminateType];
 
 const DATA_FILE = 'config/chat-plugins/mafia-data.json';
 const LOGS_FILE = 'config/chat-plugins/mafia-logs.json';
@@ -109,7 +112,7 @@ const VALID_IMAGES = [
 ];
 
 let MafiaData: MafiaData = Object.create(null);
-let logs: MafiaLog = {leaderboard: {}, mvps: {}, hosts: {}, plays: {}, leavers: {}};
+let logs: MafiaLog = { leaderboard: {}, mvps: {}, hosts: {}, plays: {}, leavers: {} };
 
 Punishments.addRoomPunishmentType({
 	type: 'MAFIAGAMEBAN',
@@ -123,6 +126,8 @@ Punishments.addRoomPunishmentType({
 const hostQueue: ID[] = [];
 
 const IDEA_TIMER = 60 * 1000;
+
+const MAX_ROLE_LENGTH = 1000;
 
 function readFile(path: string) {
 	try {
@@ -148,7 +153,7 @@ function writeFile(path: string, data: AnyObject) {
 // themes and IDEAs have no common keys (looked up together when setting themes)
 
 // Load data
-MafiaData = readFile(DATA_FILE) || {alignments: {}, roles: {}, themes: {}, IDEAs: {}, terms: {}, aliases: {}};
+MafiaData = readFile(DATA_FILE) || { alignments: {}, roles: {}, themes: {}, IDEAs: {}, terms: {}, aliases: {} };
 if (!MafiaData.alignments.town) {
 	MafiaData.alignments.town = {
 		name: 'town', plural: 'town', memo: [`This alignment is required for the script to function properly.`],
@@ -160,12 +165,12 @@ if (!MafiaData.alignments.solo) {
 	};
 }
 
-logs = readFile(LOGS_FILE) || {leaderboard: {}, mvps: {}, hosts: {}, plays: {}, leavers: {}};
+logs = readFile(LOGS_FILE) || { leaderboard: {}, mvps: {}, hosts: {}, plays: {}, leavers: {} };
 
 const tables: MafiaLogSection[] = ['leaderboard', 'mvps', 'hosts', 'plays', 'leavers'];
 for (const section of tables) {
 	// Check to see if we need to eliminate an old month's data.
-	const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
+	const month = new Date().toLocaleString("en-us", { month: "numeric", year: "numeric" });
 	if (!logs[section]) logs[section] = {};
 	if (!logs[section][month]) logs[section][month] = {};
 	if (Object.keys(logs[section]).length >= 3) {
@@ -249,7 +254,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 	// Only call updateHtmlRoom if the player is still involved in the game in some way
 	tryUpdateHtmlRoom() {
 		if ([null, MafiaEliminateType.SPIRIT, MafiaEliminateType.TREESTUMP,
-			MafiaEliminateType.SPIRITSTUMP].includes(this.eliminated)) {
+			MafiaEliminateType.SPIRITSTUMP].includes(this.eliminated as any)) {
 			this.updateHtmlRoom();
 		}
 	}
@@ -261,7 +266,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 	updateHtmlRoom() {
 		if (this.game.ended) return this.closeHtmlRoom();
 		const user = Users.get(this.id);
-		if (!user || !user.connected) return;
+		if (!user?.connected) return;
 		for (const conn of user.connections) {
 			void Chat.resolvePage(`view-mafia-${this.game.room.roomid}`, user, conn);
 		}
@@ -269,7 +274,7 @@ class MafiaPlayer extends Rooms.RoomGamePlayer<Mafia> {
 
 	closeHtmlRoom() {
 		const user = Users.get(this.id);
-		if (!user || !user.connected) return;
+		if (!user?.connected) return;
 		return user.send(`>view-mafia-${this.game.room.roomid}\n|deinit`);
 	}
 
@@ -297,9 +302,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	played: ID[];
 
 	hammerCount: number;
-	votes: {[userid: string]: MafiaVote};
-	voteModifiers: {[userid: string]: number};
-	hammerModifiers: {[userid: string]: number};
+	votes: { [userid: string]: MafiaVote };
+	voteModifiers: { [userid: string]: number };
+	hammerModifiers: { [userid: string]: number };
 	hasPlurality: ID | null;
 
 	enableNV: boolean;
@@ -319,7 +324,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	phase: 'signups' | 'locked' | 'IDEApicking' | 'IDEAlocked' | 'day' | 'night';
 	dayNum: number;
 
-	timer: NodeJS.Timer | null;
+	override timer: NodeJS.Timeout | null;
 	dlAt: number;
 
 	IDEA: MafiaIDEAModule;
@@ -402,7 +407,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			this.roles.push(player.role);
 			this.played.push(player.id);
 		} else {
-			// TODO improve reseting roles
+			// TODO improve resetting roles
 			this.originalRoles = [];
 			this.originalRoleString = '';
 			this.roles = [];
@@ -516,6 +521,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			this.theme = null;
 		}
 
+		if (Math.max(...roles.map(role => role.length)) > MAX_ROLE_LENGTH)
+			return this.sendUser(user, `|error|Some role exceeds the maximum role length of ${MAX_ROLE_LENGTH}.`);
+
 		if (roles.length < this.playerCount) {
 			return this.sendUser(user, `|error|You have not provided enough roles for the players.`);
 		} else if (roles.length > this.playerCount) {
@@ -548,11 +556,11 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		const newRoles: MafiaRole[] = [];
 		const problems: string[] = [];
 		const alignments: string[] = [];
-		const cache: {[k: string]: MafiaRole} = Object.create(null);
+		const cache: { [k: string]: MafiaRole } = Object.create(null);
 		for (const roleName of roles) {
 			const roleId = roleName.toLowerCase().replace(/[^\w\d\s]/g, '');
 			if (roleId in cache) {
-				newRoles.push({...cache[roleId]});
+				newRoles.push({ ...cache[roleId] });
 			} else {
 				const role = Mafia.parseRole(roleName);
 				if (role.problems.length) {
@@ -623,7 +631,6 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		} else {
 			this.sendDeclare(`Night ${this.dayNum}. PM the host your action, or idle.`);
 		}
-		return;
 	}
 
 	static parseRole(roleString: string) {
@@ -648,8 +655,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			.split(' ')
 			.map(toID);
 
-		let iters = 0;
 		outer: while (roleWords.length) {
+			let iters = 0;
 			const currentWord = roleWords.slice();
 
 			while (currentWord.length) {
@@ -704,7 +711,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			}
 		}
 
-		return {role, problems};
+		return { role, problems };
 	}
 
 	start(user: User, day = false) {
@@ -745,7 +752,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		const roles = Utils.shuffle(this.originalRoles.slice());
 		if (roles.length) {
 			for (const p of this.players) {
-				const role = roles.shift()!;
+				const role = roles.shift();
+				if (!role) throw new Error(`Ran out of roles.`);
 				p.role = role;
 				const u = Users.get(p.id);
 				p.revealed = '';
@@ -904,9 +912,9 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.hasPlurality = null;
 		if (this.getHammerValue(targetId) <= vote.trueCount) {
 			// HAMMER
-			this.sendDeclare(`Hammer! ${targetId === 'novote' ? 'Nobody' : Utils.escapeHTML(name as string)} was voted out!`);
+			this.sendDeclare(`Hammer! ${targetId === 'novote' ? 'Nobody' : Utils.escapeHTML(name!)} was voted out!`);
 			this.sendRoom(`|raw|<div class="infobox">${this.voteBox()}</div>`);
-			if (targetId !== 'novote') this.eliminate(target as MafiaPlayer, MafiaEliminateType.ELIMINATE);
+			if (targetId !== 'novote') this.eliminate(target!, MafiaEliminateType.ELIMINATE);
 			this.night(true);
 			return;
 		}
@@ -1213,10 +1221,10 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	revealRole(user: User, toReveal: MafiaPlayer, revealAs: string) {
 		if (!this.started) {
-		    return this.sendUser(user, `|error|You may only reveal roles once the game has started.`);
+			return this.sendUser(user, `|error|You may only reveal roles once the game has started.`);
 		}
 		if (!toReveal.role) {
-		    return this.sendUser(user, `|error|The user ${toReveal.id} is not assigned a role.`);
+			return this.sendUser(user, `|error|The user ${toReveal.id} is not assigned a role.`);
 		}
 		toReveal.revealed = revealAs;
 		this.sendDeclare(`${toReveal.safeName}'s role ${toReveal.isEliminated() ? `was` : `is`} ${revealAs}.`);
@@ -1343,7 +1351,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.updatePlayers();
 
 		if (this.room.roomid === 'mafia' && this.started) {
-			const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
+			const month = new Date().toLocaleString("en-us", { month: "numeric", year: "numeric" });
 			if (!logs.leavers[month]) logs.leavers[month] = {};
 			if (!logs.leavers[month][player.id]) logs.leavers[month][player.id] = 0;
 			logs.leavers[month][player.id]++;
@@ -1785,7 +1793,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 	}
 
-	onChatMessage(message: string, user: User) {
+	override onChatMessage(message: string, user: User) {
 		const subIndex = this.hostRequestedSub.indexOf(user.id);
 		if (subIndex !== -1) {
 			this.hostRequestedSub.splice(subIndex, 1);
@@ -1800,7 +1808,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 
 		const player = this.getPlayer(user.id);
-		const eliminated = player && player.isEliminated();
+		const eliminated = player?.isEliminated();
 		const staff = user.can('mute', null, this.room);
 
 		if (!player) {
@@ -1829,11 +1837,11 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 	}
 
-	onConnect(user: User) {
+	override onConnect(user: User) {
 		this.sendUser(user, `|uhtml|mafia|${this.roomWindow()}`);
 	}
 
-	onJoin(user: User) {
+	override onJoin(user: User) {
 		const player = this.getPlayer(user.id);
 		if (player) {
 			return player.updateHtmlRoom();
@@ -1841,7 +1849,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (user.id === this.hostid || this.cohostids.includes(user.id)) return this.updateHost(user.id);
 	}
 
-	removeBannedUser(user: User) {
+	override removeBannedUser(user: User) {
 		// Player was banned, attempt to sub now
 		// If we can't sub now, make subbing them out the top priority
 		if (!this.getPlayer(user.id)) return;
@@ -1849,7 +1857,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.nextSub();
 	}
 
-	forfeit(user: User) {
+	override forfeit(user: User) {
 		// Add the player to the sub list.
 		const player = this.getPlayer(user.id);
 		if (!player || player.isEliminated()) return;
@@ -1862,10 +1870,10 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		this.sendHTML(this.roomWindow());
 		this.updatePlayers();
 		if (this.room.roomid === 'mafia' && this.started) {
-			// Intead of using this.played, which shows players who have subbed out as well
+			// Instead of using this.played, which shows players who have subbed out as well
 			// We check who played through to the end when recording playlogs
 			const played = this.players.map(p => p.id);
-			const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
+			const month = new Date().toLocaleString("en-us", { month: "numeric", year: "numeric" });
 			if (!logs.plays[month]) logs.plays[month] = {};
 			for (const player of played) {
 				if (!logs.plays[month][player]) logs.plays[month][player] = 0;
@@ -2119,12 +2127,12 @@ export const pages: Chat.PageTable = {
 			}
 			buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">How to setup roles</summary>`;
 			buf += `<h3>Setting the roles</h3>`;
-			buf += `<p>To set the roles, use /mafia setroles [comma seperated list of roles] OR /mafia setroles [theme] in ${room.title}.</p>`;
+			buf += `<p>To set the roles, use /mafia setroles [comma separated list of roles] OR /mafia setroles [theme] in ${room.title}.</p>`;
 			buf += `<p>If you set the roles from a theme, the role parser will get all the correct roles for you. (Not all themes are supported).</p>`;
 			buf += `<p>The following key words determine a role's alignment (If none are found, the default alignment is town):</p>`;
 			buf += `<p style="font-weight:bold">${Object.values(MafiaData.alignments).map(a => `<span style="color:${a.color || '#FFF'}">${a.name}</span>`).join(', ')}</p>`;
 			buf += `<p>Please note that anything inside (parentheses) is ignored by the role parser.</p>`;
-			buf += `<p>If you have roles that have conflicting alignments or base roles, you can use /mafia forcesetroles [comma seperated list of roles] to forcibly set the roles.</p>`;
+			buf += `<p>If you have roles that have conflicting alignments or base roles, you can use /mafia forcesetroles [comma separated list of roles] to forcibly set the roles.</p>`;
 			buf += `<p>Please note that you will have to PM all the players their alignment, partners (if any), and other information about their role because the server will not provide it.</p>`;
 			buf += `<hr/></details></p>`;
 			buf += `<p style="font-weight:bold;">Players who will be subbed unless they talk: ${game.hostRequestedSub.join(', ')}</p>`;
@@ -2138,7 +2146,7 @@ export const pages: Chat.PageTable = {
 				} else {
 					buf += `<p><button class="button" name="send" value="/msgroom ${room.roomid},/mafia join">Join game</button></p>`;
 				}
-			} else if (!isPlayer || !isPlayer.isEliminated()) {
+			} else if (!isPlayer?.isEliminated()) {
 				if ((!isPlayer && game.subs.includes(user.id)) || (isPlayer && !game.requestedSub.includes(user.id))) {
 					buf += `<p><details><summary class="button" style="text-align:left; display:inline-block">${isPlayer ? 'Request to be subbed out' : 'Cancel sub request'}</summary>`;
 					buf += `<button class="button" name="send" value="/msgroom ${room.roomid},/mafia sub out">${isPlayer ? 'Confirm request to be subbed out' : 'Confirm cancelation of sub request'}</button></details></p>`;
@@ -2155,32 +2163,32 @@ export const pages: Chat.PageTable = {
 		if (!user.named) return Rooms.RETRY_AFTER_LOGIN;
 		const mafiaRoom = Rooms.get('mafia');
 		if (!query.length || !mafiaRoom) return this.close();
-		const headers: {[k: string]: {title: string, type: string, section: MafiaLogSection}} = {
-			leaderboard: {title: 'Leaderboard', type: 'Points', section: 'leaderboard'},
-			mvpladder: {title: 'MVP Ladder', type: 'MVPs', section: 'mvps'},
-			hostlogs: {title: 'Host Logs', type: 'Hosts', section: 'hosts'},
-			playlogs: {title: 'Play Logs', type: 'Plays', section: 'plays'},
-			leaverlogs: {title: 'Leaver Logs', type: 'Leavers', section: 'leavers'},
+		const headers: { [k: string]: { title: string, type: string, section: MafiaLogSection } } = {
+			leaderboard: { title: 'Leaderboard', type: 'Points', section: 'leaderboard' },
+			mvpladder: { title: 'MVP Ladder', type: 'MVPs', section: 'mvps' },
+			hostlogs: { title: 'Host Logs', type: 'Hosts', section: 'hosts' },
+			playlogs: { title: 'Play Logs', type: 'Plays', section: 'plays' },
+			leaverlogs: { title: 'Leaver Logs', type: 'Leavers', section: 'leavers' },
 		};
 		const date = new Date();
 		if (query[1] === 'prev') date.setMonth(date.getMonth() - 1);
-		const month = date.toLocaleString("en-us", {month: "numeric", year: "numeric"});
+		const month = date.toLocaleString("en-us", { month: "numeric", year: "numeric" });
 		const ladder = headers[query[0]];
 		if (!ladder) return this.close();
 		if (['hosts', 'plays', 'leavers'].includes(ladder.section)) this.checkCan('mute', null, mafiaRoom);
-		this.title = `Mafia ${ladder.title} (${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()})`;
+		this.title = `Mafia ${ladder.title} (${date.toLocaleString("en-us", { month: 'long' })} ${date.getFullYear()})`;
 		let buf = `<div class="pad ladder">`;
 		buf += `${query[1] === 'prev' ? '' : `<button class="button" name="send" value="/join view-mafialadder-${query[0]}" style="float:left"><i class="fa fa-refresh"></i> Refresh</button> <button class="button" name="send" value="/join view-mafialadder-${query[0]}-prev" style="float:left">View last month's ${ladder.title}</button>`}`;
 		buf += `<br /><br />`;
 		const section = ladder.section;
 		if (!logs[section][month] || !Object.keys(logs[section][month]).length) {
-			buf += `${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()} not found.</div>`;
+			buf += `${ladder.title} for ${date.toLocaleString("en-us", { month: 'long' })} ${date.getFullYear()} not found.</div>`;
 			return buf;
 		}
 		const entries = Utils.sortBy(Object.entries(logs[section][month]), ([key, value]) => (
 			-value
 		));
-		buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">Mafia ${ladder.title} for ${date.toLocaleString("en-us", {month: 'long'})} ${date.getFullYear()}</h1></th></tr>`;
+		buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="2"><h2 style="margin: 5px auto">Mafia ${ladder.title} for ${date.toLocaleString("en-us", { month: 'long' })} ${date.getFullYear()}</h1></th></tr>`;
 		buf += `<tr><th>User</th><th>${ladder.type}</th></tr>`;
 		for (const [key, value] of entries) {
 			buf += `<tr><td>${key}</td><td>${value}</td></tr>`;
@@ -2205,10 +2213,10 @@ export const commands: Chat.ChatCommands = {
 		nexthost: 'host',
 		host(target, room, user, connection, cmd) {
 			room = this.requireRoom();
-			if (room.settings.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (room.settings.mafiaDisabled) throw new Chat.ErrorMessage(`Mafia is disabled for this room.`);
 			this.checkChat();
-			if (room.type !== 'chat') return this.errorReply(`This command is only meant to be used in chat rooms.`);
-			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
+			if (room.type !== 'chat') throw new Chat.ErrorMessage(`This command is only meant to be used in chat rooms.`);
+			if (room.game) throw new Chat.ErrorMessage(`There is already a game of ${room.game.title} in progress in this room.`);
 
 			const nextHost = room.roomid === 'mafia' && cmd === 'nexthost';
 			if (nextHost || !room.auth.has(user.id)) this.checkCan('show', null, room);
@@ -2216,11 +2224,11 @@ export const commands: Chat.ChatCommands = {
 			let targetUser!: User | null;
 			let targetUsername!: string;
 			if (nextHost) {
-				if (!hostQueue.length) return this.errorReply(`Nobody is on the host queue.`);
+				if (!hostQueue.length) throw new Chat.ErrorMessage(`Nobody is on the host queue.`);
 				const skipped = [];
 				let hostid;
 				while ((hostid = hostQueue.shift())) {
-					({targetUser, targetUsername} = this.splitUser(hostid, {exactName: true}));
+					({ targetUser, targetUsername } = this.splitUser(hostid, { exactName: true }));
 					if (!targetUser?.connected ||
 						!room.users[targetUser.id] || Mafia.isHostBanned(room, targetUser)) {
 						skipped.push(hostid);
@@ -2233,27 +2241,27 @@ export const commands: Chat.ChatCommands = {
 				if (skipped.length) {
 					this.sendReply(`${skipped.join(', ')} ${Chat.plural(skipped.length, 'were', 'was')} not online, not in the room, or are host banned and were removed from the host queue.`);
 				}
-				if (!targetUser) return this.errorReply(`Nobody on the host queue could be hosted.`);
+				if (!targetUser) throw new Chat.ErrorMessage(`Nobody on the host queue could be hosted.`);
 			} else {
-				({targetUser, targetUsername} = this.splitUser(target, {exactName: true}));
+				({ targetUser, targetUsername } = this.splitUser(target, { exactName: true }));
 				if (room.roomid === 'mafia' && hostQueue.length && toID(targetUsername) !== hostQueue[0]) {
 					if (!cmd.includes('force')) {
-						return this.errorReply(`${targetUsername} isn't the next host on the queue. Use /mafia forcehost if you're sure.`);
+						throw new Chat.ErrorMessage(`${targetUsername} isn't the next host on the queue. Use /mafia forcehost if you're sure.`);
 					}
 				}
 			}
 
 			if (!targetUser?.connected) {
-				return this.errorReply(`The user "${targetUsername}" was not found.`);
+				throw new Chat.ErrorMessage(`The user "${targetUsername}" was not found.`);
 			}
 
 			if (!nextHost && targetUser.id !== user.id) this.checkCan('mute', null, room);
 
 			if (!room.users[targetUser.id]) {
-				return this.errorReply(`${targetUsername} is not in this room, and cannot be hosted.`);
+				throw new Chat.ErrorMessage(`${targetUsername} is not in this room, and cannot be hosted.`);
 			}
 			if (Mafia.isHostBanned(room, targetUser)) {
-				return this.errorReply(`${targetUsername} is banned from hosting mafia games.`);
+				throw new Chat.ErrorMessage(`${targetUsername} is banned from hosting mafia games.`);
 			}
 
 			room.game = new Mafia(room, targetUser);
@@ -2267,7 +2275,7 @@ export const commands: Chat.ChatCommands = {
 				if (queueIndex > -1) hostQueue.splice(queueIndex, 1);
 				room.add(`|c:|${(Math.floor(Date.now() / 1000))}|~|**Mafiasignup!**`).update();
 			}
-			this.modlog('MAFIAHOST', targetUser, null, {noalts: true, noip: true});
+			this.modlog('MAFIAHOST', targetUser, null, { noalts: true, noip: true });
 		},
 		hosthelp: [
 			`/mafia host [user] - Create a game of Mafia with [user] as the host. Requires whitelist + % @ # ~, drivers+ can host other people.`,
@@ -2276,7 +2284,7 @@ export const commands: Chat.ChatCommands = {
 		q: 'queue',
 		queue(target, room, user) {
 			room = this.requireRoom('mafia' as RoomID);
-			if (room.settings.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (room.settings.mafiaDisabled) throw new Chat.ErrorMessage(`Mafia is disabled for this room.`);
 			const [command, targetUserID] = target.split(',').map(toID);
 
 			switch (command) {
@@ -2292,11 +2300,11 @@ export const commands: Chat.ChatCommands = {
 				if (!targetUserID) return this.parse(`/help mafia queue`);
 				const targetUser = Users.get(targetUserID);
 				if ((!targetUser?.connected) && !command.includes('force')) {
-					return this.errorReply(`User ${targetUserID} not found. To forcefully add the user to the queue, use /mafia queue forceadd, ${targetUserID}`);
+					throw new Chat.ErrorMessage(`User ${targetUserID} not found. To forcefully add the user to the queue, use /mafia queue forceadd, ${targetUserID}`);
 				}
-				if (hostQueue.includes(targetUserID)) return this.errorReply(`User ${targetUserID} is already on the host queue.`);
+				if (hostQueue.includes(targetUserID)) throw new Chat.ErrorMessage(`User ${targetUserID} is already on the host queue.`);
 				if (targetUser && Mafia.isHostBanned(room, targetUser)) {
-					return this.errorReply(`User ${targetUserID} is banned from hosting mafia games.`);
+					throw new Chat.ErrorMessage(`User ${targetUserID} is banned from hosting mafia games.`);
 				}
 				hostQueue.push(targetUserID);
 				room.add(`User ${targetUserID} has been added to the host queue by ${user.name}.`).update();
@@ -2307,7 +2315,7 @@ export const commands: Chat.ChatCommands = {
 				// anyone can self remove
 				if (targetUserID !== user.id) this.checkCan('mute', null, room);
 				const index = hostQueue.indexOf(targetUserID);
-				if (index === -1) return this.errorReply(`User ${targetUserID} is not on the host queue.`);
+				if (index === -1) throw new Chat.ErrorMessage(`User ${targetUserID} is not on the host queue.`);
 				hostQueue.splice(index, 1);
 				room.add(`User ${targetUserID} has been removed from the host queue by ${user.name}.`).update();
 				break;
@@ -2360,13 +2368,13 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
-			if (game.phase !== 'signups') return this.errorReply(`Signups are already closed.`);
+			if (game.started) throw new Chat.ErrorMessage(`The game already started.`);
 			const num = parseInt(target);
 			if (isNaN(num) || num > 50 || num < 2) return this.parse('/help mafia playercap');
 			if (num < game.playerCount) {
-				return this.errorReply(`Player cap has to be equal or more than the amount of players in game.`);
+				throw new Chat.ErrorMessage(`Player cap has to be equal or more than the amount of players in game.`);
 			}
-			if (num === game.playerCap) return this.errorReply(`Player cap is already set at ${game.playerCap}.`);
+			if (num === game.playerCap) throw new Chat.ErrorMessage(`Player cap is already set at ${game.playerCap}.`);
 			game.playerCap = num;
 			game.sendDeclare(`Player cap has been set to ${game.playerCap}`);
 			game.logAction(user, `set playercap to ${num}`);
@@ -2379,8 +2387,8 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
-			if (game.phase !== 'signups') return this.errorReply(`Signups are already closed.`);
-			if (game.playerCount < 2) return this.errorReply(`You need at least 2 players to start.`);
+			if (game.phase !== 'signups') throw new Chat.ErrorMessage(`Signups are already closed.`);
+			if (game.playerCount < 2) throw new Chat.ErrorMessage(`You need at least 2 players to start.`);
 			game.phase = 'locked';
 			game.sendHTML(game.roomWindow());
 			game.updatePlayers();
@@ -2396,10 +2404,10 @@ export const commands: Chat.ChatCommands = {
 			const action = toID(target);
 			if (!['on', 'off'].includes(action)) return this.parse('/help mafia closedsetup');
 			if (game.started) {
-				return this.errorReply(`You can't ${action === 'on' ? 'enable' : 'disable'} closed setup because the game has already started.`);
+				throw new Chat.ErrorMessage(`You can't ${action === 'on' ? 'enable' : 'disable'} closed setup because the game has already started.`);
 			}
 			if ((action === 'on' && game.closedSetup) || (action === 'off' && !game.closedSetup)) {
-				return this.errorReply(`Closed setup is already ${game.closedSetup ? 'enabled' : 'disabled'}.`);
+				throw new Chat.ErrorMessage(`Closed setup is already ${game.closedSetup ? 'enabled' : 'disabled'}.`);
 			}
 			game.closedSetup = action === 'on';
 			game.sendDeclare(`The game is ${action === 'on' ? 'now' : 'no longer'} a closed setup.`);
@@ -2436,7 +2444,7 @@ export const commands: Chat.ChatCommands = {
 			const action = toID(target);
 			if (!['on', 'off'].includes(action)) return this.parse('/help mafia takeidles');
 			if ((action === 'off' && !game.takeIdles) || (action === 'on' && game.takeIdles)) {
-				return this.errorReply(`Actions and idles are already ${game.takeIdles ? '' : 'not '}being accepted.`);
+				throw new Chat.ErrorMessage(`Actions and idles are already ${game.takeIdles ? '' : 'not '}being accepted.`);
 			}
 			game.takeIdles = action === 'on';
 			game.sendDeclare(`Actions and idles are ${game.takeIdles ? 'now' : 'no longer'} being accepted.`);
@@ -2453,10 +2461,12 @@ export const commands: Chat.ChatCommands = {
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 			const reset = cmd.includes('reset');
 			if (reset) {
-				if (game.phase !== 'day' && game.phase !== 'night') return this.errorReply(`The game has not started yet.`);
+				if (game.phase !== 'day' && game.phase !== 'night') throw new Chat.ErrorMessage(`The game has not started yet.`);
 			} else {
 				if (game.phase !== 'locked' && game.phase !== 'IDEAlocked') {
-					return this.errorReply(game.phase === 'signups' ? `You need to close signups first.` : `The game has already started.`);
+					throw new Chat.ErrorMessage(
+						game.phase === 'signups' ? `You need to close signups first.` : `The game has already started.`
+					);
 				}
 			}
 			if (!target) return this.parse('/help mafia setroles');
@@ -2493,11 +2503,11 @@ export const commands: Chat.ChatCommands = {
 			const game = this.requireGame(Mafia);
 			this.checkCan('show', null, room);
 			if (!user.can('mute', null, room) && game.hostid !== user.id && !game.cohostids.includes(user.id)) {
-				return this.errorReply(`/mafia idea - Access denied.`);
+				throw new Chat.ErrorMessage(`/mafia idea - Access denied.`);
 			}
-			if (game.started) return this.errorReply(`You cannot start an IDEA after the game has started.`);
+			if (game.started) throw new Chat.ErrorMessage(`You cannot start an IDEA after the game has started.`);
 			if (game.phase !== 'locked' && game.phase !== 'IDEAlocked') {
-				return this.errorReply(`You need to close the signups first.`);
+				throw new Chat.ErrorMessage(`You need to close the signups first.`);
 			}
 			game.ideaInit(user, toID(target));
 			game.logAction(user, `started an IDEA`);
@@ -2513,17 +2523,17 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('mute', null, room);
 			const game = this.requireGame(Mafia);
-			if (game.started) return this.errorReply(`You cannot start an IDEA after the game has started.`);
+			if (game.started) throw new Chat.ErrorMessage(`You cannot start an IDEA after the game has started.`);
 			if (game.phase !== 'locked' && game.phase !== 'IDEAlocked') {
-				return this.errorReply(`You need to close the signups first.`);
+				throw new Chat.ErrorMessage(`You need to close the signups first.`);
 			}
 			const [options, roles] = Utils.splitFirst(target, '\n');
 			if (!options || !roles) return this.parse('/help mafia idea');
 			const [choicesStr, ...picks] = options.split(',').map(x => x.trim());
 			const choices = parseInt(choicesStr);
-			if (!choices || choices <= picks.length) return this.errorReply(`You need to have more choices than picks.`);
+			if (!choices || choices <= picks.length) throw new Chat.ErrorMessage(`You need to have more choices than picks.`);
 			if (picks.some((value, index, arr) => arr.indexOf(value, index + 1) > 0)) {
-				return this.errorReply(`Your picks must be unique.`);
+				throw new Chat.ErrorMessage(`Your picks must be unique.`);
 			}
 			game.customIdeaInit(user, choices, picks, roles);
 		},
@@ -2542,7 +2552,7 @@ export const commands: Chat.ChatCommands = {
 				return user.sendTo(room, '|error|You are not a player in the game.');
 			}
 			if (game.phase !== 'IDEApicking') {
-				return this.errorReply(`The game is not in the IDEA picking phase.`);
+				throw new Chat.ErrorMessage(`The game is not in the IDEA picking phase.`);
 			}
 			game.ideaPick(user, args); // TODO use player object
 		},
@@ -2560,14 +2570,14 @@ export const commands: Chat.ChatCommands = {
 		ideadiscards(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
-			if (!game.IDEA.data) return this.errorReply(`There is no IDEA module in the mafia game.`);
+			if (!game.IDEA.data) throw new Chat.ErrorMessage(`There is no IDEA module in the mafia game.`);
 			if (target) {
 				if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 				if (this.meansNo(target)) {
-					if (game.IDEA.discardsHidden) return this.errorReply(`IDEA discards are already hidden.`);
+					if (game.IDEA.discardsHidden) throw new Chat.ErrorMessage(`IDEA discards are already hidden.`);
 					game.IDEA.discardsHidden = true;
 				} else if (this.meansYes(target)) {
-					if (!game.IDEA.discardsHidden) return this.errorReply(`IDEA discards are already visible.`);
+					if (!game.IDEA.discardsHidden) throw new Chat.ErrorMessage(`IDEA discards are already visible.`);
 					game.IDEA.discardsHidden = false;
 				} else {
 					return this.parse('/help mafia ideadiscards');
@@ -2575,8 +2585,8 @@ export const commands: Chat.ChatCommands = {
 				game.logAction(user, `${game.IDEA.discardsHidden ? 'hid' : 'unhid'} IDEA discards`);
 				return this.sendReply(`IDEA discards are now ${game.IDEA.discardsHidden ? 'hidden' : 'visible'}.`);
 			}
-			if (game.IDEA.discardsHidden) return this.errorReply(`Discards are not visible.`);
-			if (!game.IDEA.discardsHTML) return this.errorReply(`The IDEA module does not have finalised discards yet.`);
+			if (game.IDEA.discardsHidden) throw new Chat.ErrorMessage(`Discards are not visible.`);
+			if (!game.IDEA.discardsHTML) throw new Chat.ErrorMessage(`The IDEA module does not have finalised discards yet.`);
 			if (!this.runBroadcast()) return;
 			this.sendReplyBox(`<details><summary>IDEA discards:</summary>${game.IDEA.discardsHTML}</details>`);
 		},
@@ -2659,7 +2669,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkChat(null, room);
 			const player = game.getPlayer(user.id);
 			if (!player || (player.isEliminated() && !player.isSpirit())) {
-				return this.errorReply(`You are not in the game of ${game.title}.`);
+				throw new Chat.ErrorMessage(`You are not in the game of ${game.title}.`);
 			}
 			game.vote(player, toID(target));
 		},
@@ -2674,7 +2684,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkChat(null, room);
 			const player = game.getPlayer(user.id);
 			if (!player || (player.isEliminated() && !player.isSpirit())) {
-				return this.errorReply(`You are not in the game of ${game.title}.`);
+				throw new Chat.ErrorMessage(`You are not in the game of ${game.title}.`);
 			}
 			game.unvote(player);
 		},
@@ -2716,12 +2726,12 @@ export const commands: Chat.ChatCommands = {
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 			if (game.phase === 'IDEApicking') {
-				return this.errorReply(`You cannot add or remove players while IDEA roles are being picked.`); // needs to be here since eliminate doesn't pass the user
+				throw new Chat.ErrorMessage(`You cannot add or remove players while IDEA roles are being picked.`); // needs to be here since eliminate doesn't pass the user
 			}
 			if (!target) return this.parse('/help mafia kill');
 			const player = game.getPlayer(toID(target));
 			if (!player) {
-				return this.errorReply(`${target.trim()} is not a player.`);
+				throw new Chat.ErrorMessage(`${target.trim()} is not a player.`);
 			}
 
 			let repeat, elimType;
@@ -2748,7 +2758,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			}
 
-			if (repeat) return this.errorReply(`${player.safeName} has already been ${cmd}ed.`);
+			if (repeat) throw new Chat.ErrorMessage(`${player.safeName} has already been ${cmd}ed.`);
 
 			game.eliminate(player, elimType);
 			game.logAction(user, `${cmd}ed ${player.safeName}`);
@@ -2772,7 +2782,10 @@ export const commands: Chat.ChatCommands = {
 				if (!args[0]) {
 					return this.parse('/help mafia revealas');
 				} else {
-					revealedRole = Mafia.parseRole(args.pop()!);
+					const roleName = args.pop()!.trim();
+					if (roleName.length > MAX_ROLE_LENGTH)
+						return this.sendReply(`|error|Role exceeds the maximum role length of ${MAX_ROLE_LENGTH}.`);
+					revealedRole = Mafia.parseRole(roleName);
 					const color = MafiaData.alignments[revealedRole.role.alignment].color;
 					revealAs = `<span style="font-weight:bold;color:${color}">${revealedRole.role.safeName}</span>`;
 				}
@@ -2781,10 +2794,10 @@ export const commands: Chat.ChatCommands = {
 			for (const targetUsername of args) {
 				const player = game.getPlayer(toID(targetUsername));
 				if (player) {
-					game.revealRole(user, player, `${cmd === 'revealas' ? revealAs : player.getStylizedRole()}`);
+					game.revealRole(user, player, `${revealAs || player.getStylizedRole()}`);
 					game.logAction(user, `revealed ${player.name}`);
-					if (cmd === 'revealas') {
-						game.secretLogAction(user, `fakerevealed ${player.name} as ${revealedRole!.role.name}`);
+					if (revealedRole) {
+						game.secretLogAction(user, `fakerevealed ${player.name} as ${revealedRole.role.name}`);
 					}
 				} else {
 					this.errorReply(`${targetUsername} is not a player.`);
@@ -2804,16 +2817,16 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			const player = game.getPlayer(user.id);
-			if (!player) return this.errorReply(`You are not in the game of ${game.title}.`);
+			if (!player) throw new Chat.ErrorMessage(`You are not in the game of ${game.title}.`);
 
 			if (player.isEliminated()) {
-				return this.errorReply(`You have been eliminated from the game and cannot take any actions.`);
+				throw new Chat.ErrorMessage(`You have been eliminated from the game and cannot take any actions.`);
 			}
 			if (game.phase !== 'night') {
-				return this.errorReply(`You can only submit an action or idle during the night phase.`);
+				throw new Chat.ErrorMessage(`You can only submit an action or idle during the night phase.`);
 			}
 			if (!game.takeIdles) {
-				return this.errorReply(`The host is not accepting idles through the script. Send your action or idle to the host.`);
+				throw new Chat.ErrorMessage(`The host is not accepting idles through the script. Send your action or idle to the host.`);
 			}
 
 			switch (cmd) {
@@ -2860,6 +2873,9 @@ export const commands: Chat.ChatCommands = {
 			const targetUser = Users.get(target);
 			if (!targetUser) {
 				throw new Chat.ErrorMessage(`The user "${target}" was not found.`);
+			}
+			if (game.playerCount >= game.playerCap) {
+				throw new Chat.ErrorMessage(`The game is full. Please change the playercap first.`);
 			}
 			game.join(targetUser, user, cmd === 'forceadd');
 		},
@@ -2910,7 +2926,7 @@ export const commands: Chat.ChatCommands = {
 						return this.parse(`/help mafia deadline`);
 					}
 				}
-				if (num < 1 || num > 20) return this.errorReply(`The deadline must be between 1 and 20 minutes.`);
+				if (num < 1 || num > 20) throw new Chat.ErrorMessage(`The deadline must be between 1 and 20 minutes.`);
 				game.setDeadline(num);
 			}
 			game.logAction(user, `changed deadline`);
@@ -2924,7 +2940,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
-			if (!game.started) return this.errorReply(`The game has not started yet.`);
+			if (!game.started) throw new Chat.ErrorMessage(`The game has not started yet.`);
 			const [playerId, mod] = target.split(',');
 			const player = game.getPlayer(toID(playerId));
 			if (!player) {
@@ -2944,7 +2960,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
-			if (!game.started) return this.errorReply(`The game has not started yet.`);
+			if (!game.started) throw new Chat.ErrorMessage(`The game has not started yet.`);
 			if (cmd === 'clearhammermodifiers') {
 				game.clearHammerModifiers(user);
 				game.secretLogAction(user, `cleared hammer modifiers`);
@@ -2999,14 +3015,14 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
-			if (!game.started) return this.errorReply(`The game has not started yet.`);
+			if (!game.started) throw new Chat.ErrorMessage(`The game has not started yet.`);
 
 			target = toID(target);
 			const targetPlayer = game.getPlayer(target as ID);
 			const silence = cmd === 'silence';
-			if (!targetPlayer) return this.errorReply(`${target} is not in the game of mafia.`);
+			if (!targetPlayer) throw new Chat.ErrorMessage(`${target} is not in the game of mafia.`);
 			if (silence === targetPlayer.silenced) {
-				return this.errorReply(`${targetPlayer.name} is already ${!silence ? 'not' : ''} silenced.`);
+				throw new Chat.ErrorMessage(`${targetPlayer.name} is already ${!silence ? 'not' : ''} silenced.`);
 			}
 			targetPlayer.silenced = silence;
 			this.sendReply(`${targetPlayer.name} has been ${!silence ? 'un' : ''}silenced.`);
@@ -3024,14 +3040,14 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
-			if (!game.started) return this.errorReply(`The game has not started yet.`);
+			if (!game.started) throw new Chat.ErrorMessage(`The game has not started yet.`);
 
 			target = toID(target);
 			const targetPlayer = game.getPlayer(target as ID);
 			const nighttalk = !cmd.startsWith('un');
-			if (!targetPlayer) return this.errorReply(`${target} is not in the game of mafia.`);
+			if (!targetPlayer) throw new Chat.ErrorMessage(`${target} is not in the game of mafia.`);
 			if (nighttalk === targetPlayer.nighttalk) {
-				return this.errorReply(`${targetPlayer.name} is already ${!nighttalk ? 'not' : ''} able to talk during the night.`);
+				throw new Chat.ErrorMessage(`${targetPlayer.name} is already ${!nighttalk ? 'not' : ''} able to talk during the night.`);
 			}
 			targetPlayer.nighttalk = nighttalk;
 			this.sendReply(`${targetPlayer.name} can ${!nighttalk ? 'no longer' : 'now'} talk during the night.`);
@@ -3048,27 +3064,27 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
-			if (!game.started) return this.errorReply(`The game has not started yet.`);
+			if (!game.started) throw new Chat.ErrorMessage(`The game has not started yet.`);
 
 			target = toID(target);
 			const targetPlayer = game.getPlayer(target as ID);
-			if (!targetPlayer) return this.errorReply(`${target} is not in the game of mafia.`);
+			if (!targetPlayer) throw new Chat.ErrorMessage(`${target} is not in the game of mafia.`);
 
 			const actor = cmd.endsWith('actor');
 			const remove = cmd.startsWith('un');
 			if (remove) {
 				if (targetPlayer.hammerRestriction === null) {
-					return this.errorReply(`${targetPlayer.name} already has no voting restrictions.`);
+					throw new Chat.ErrorMessage(`${targetPlayer.name} already has no voting restrictions.`);
 				}
 				if (actor !== targetPlayer.hammerRestriction) {
-					return this.errorReply(`${targetPlayer.name} is ${targetPlayer.hammerRestriction ? 'an actor' : 'a priest'}.`);
+					throw new Chat.ErrorMessage(`${targetPlayer.name} is ${targetPlayer.hammerRestriction ? 'an actor' : 'a priest'}.`);
 				}
 				targetPlayer.hammerRestriction = null;
 				return this.sendReply(`${targetPlayer}'s hammer restriction was removed.`);
 			}
 
 			if (actor === targetPlayer.hammerRestriction) {
-				return this.errorReply(`${targetPlayer.name} is already ${targetPlayer.hammerRestriction ? 'an actor' : 'a priest'}.`);
+				throw new Chat.ErrorMessage(`${targetPlayer.name} is already ${targetPlayer.hammerRestriction ? 'an actor' : 'a priest'}.`);
 			}
 			targetPlayer.hammerRestriction = actor;
 			this.sendReply(`${targetPlayer.name} is now ${targetPlayer.hammerRestriction ? "an actor (can only hammer)" : "a priest (can't hammer)"}.`);
@@ -3089,10 +3105,10 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
-			if (!game.started) return this.errorReply(`The game has not started yet.`);
+			if (!game.started) throw new Chat.ErrorMessage(`The game has not started yet.`);
 			const hammer = parseInt(target);
 			if (toID(cmd) !== `resethammer` && ((isNaN(hammer) && !this.meansNo(target)) || hammer < 1)) {
-				return this.errorReply(`${target} is not a valid hammer count.`);
+				throw new Chat.ErrorMessage(`${target} is not a valid hammer count.`);
 			}
 			switch (cmd.toLowerCase()) {
 			case 'shifthammer':
@@ -3176,12 +3192,12 @@ export const commands: Chat.ChatCommands = {
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 			target = toID(target);
 			if (this.meansYes(target)) {
-				if (game.forceVote) return this.errorReply(`Forcevoting is already enabled.`);
+				if (game.forceVote) throw new Chat.ErrorMessage(`Forcevoting is already enabled.`);
 				game.forceVote = true;
 				if (game.started) game.resetHammer();
 				game.sendDeclare(`Forcevoting has been enabled. Your vote will start on yourself, and you cannot unvote!`);
 			} else if (this.meansNo(target)) {
-				if (!game.forceVote) return this.errorReply(`Forcevoting is already disabled.`);
+				if (!game.forceVote) throw new Chat.ErrorMessage(`Forcevoting is already disabled.`);
 				game.forceVote = false;
 				game.sendDeclare(`Forcevoting has been disabled. You can vote normally now!`);
 			} else {
@@ -3196,7 +3212,7 @@ export const commands: Chat.ChatCommands = {
 		votes(target, room, user) {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
-			if (!game.started) return this.errorReply(`The game of mafia has not started yet.`);
+			if (!game.started) throw new Chat.ErrorMessage(`The game of mafia has not started yet.`);
 
 			// hack to let hosts broadcast
 			if (game.hostid === user.id || game.cohostids.includes(user.id)) {
@@ -3232,7 +3248,7 @@ export const commands: Chat.ChatCommands = {
 		rolelist(target, room, user, connection, cmd) {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
-			if (game.closedSetup) return this.errorReply(`You cannot show roles in a closed setup.`);
+			if (game.closedSetup) throw new Chat.ErrorMessage(`You cannot show roles in a closed setup.`);
 			if (!this.runBroadcast()) return false;
 			if (game.IDEA.data) {
 				const buf = `<details><summary>IDEA roles:</summary>${game.IDEA.data.roles.join(`<br />`)}</details>`;
@@ -3250,9 +3266,9 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) {
-				return this.errorReply(`Only the host can view roles.`);
+				throw new Chat.ErrorMessage(`Only the host can view roles.`);
 			}
-			if (!game.started) return this.errorReply(`The game has not started.`);
+			if (!game.started) throw new Chat.ErrorMessage(`The game has not started.`);
 			this.sendReplyBox(game.players.map(
 				p => `${p.safeName}: ${p.role ? (p.role.alignment === 'solo' ? 'Solo ' : '') + p.role.safeName : 'No role'}`
 			).join('<br/>'));
@@ -3288,15 +3304,15 @@ export const commands: Chat.ChatCommands = {
 				if (player) {
 					// Check if they have requested to be subbed out.
 					if (!game.requestedSub.includes(user.id)) {
-						return this.errorReply(`You have not requested to be subbed out.`);
+						throw new Chat.ErrorMessage(`You have not requested to be subbed out.`);
 					}
 					game.requestedSub.splice(game.requestedSub.indexOf(user.id), 1);
 					this.errorReply(`You have cancelled your request to sub out.`);
 					player.updateHtmlRoom();
 				} else {
 					this.checkChat(null, room);
-					if (game.subs.includes(user.id)) return this.errorReply(`You are already on the sub list.`);
-					if (game.played.includes(user.id)) return this.errorReply(`You cannot sub back into the game.`);
+					if (game.subs.includes(user.id)) throw new Chat.ErrorMessage(`You are already on the sub list.`);
+					if (game.played.includes(user.id)) throw new Chat.ErrorMessage(`You cannot sub back into the game.`);
 					// Change this to game.canJoin(user, true, true) if you're trying to test something sub related locally.
 					game.canJoin(user, true);
 					game.subs.push(user.id);
@@ -3308,19 +3324,19 @@ export const commands: Chat.ChatCommands = {
 			case 'out':
 				if (player) {
 					if (player.isEliminated()) {
-						return this.errorReply(`You cannot request to be subbed out once eliminated.`);
+						throw new Chat.ErrorMessage(`You cannot request to be subbed out once eliminated.`);
 					}
 					if (game.requestedSub.includes(user.id)) {
-						return this.errorReply(`You have already requested to be subbed out.`);
+						throw new Chat.ErrorMessage(`You have already requested to be subbed out.`);
 					}
 					game.requestedSub.push(user.id);
 					player.updateHtmlRoom();
 					game.nextSub();
 				} else {
 					if (game.hostid === user.id || game.cohostids.includes(user.id)) {
-						return this.errorReply(`The host cannot sub out of the game.`);
+						throw new Chat.ErrorMessage(`The host cannot sub out of the game.`);
 					}
-					if (!game.subs.includes(user.id)) return this.errorReply(`You are not on the sub list.`);
+					if (!game.subs.includes(user.id)) throw new Chat.ErrorMessage(`You are not on the sub list.`);
 					game.subs.splice(game.subs.indexOf(user.id), 1);
 					// Update spectator's view
 					this.parse(`/join view-mafia-${room.roomid}`);
@@ -3329,10 +3345,10 @@ export const commands: Chat.ChatCommands = {
 			case 'next':
 				if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 				const toSub = args.shift();
-				if (!game.getPlayer(toID(toSub))) return this.errorReply(`${toSub} is not in the game.`);
+				if (!game.getPlayer(toID(toSub))) throw new Chat.ErrorMessage(`${toSub} is not in the game.`);
 				if (!game.subs.length) {
 					if (game.hostRequestedSub.includes(toID(toSub))) {
-						return this.errorReply(`${toSub} is already on the list to be subbed out.`);
+						throw new Chat.ErrorMessage(`${toSub} is already on the list to be subbed out.`);
 					}
 					user.sendTo(
 						room,
@@ -3376,10 +3392,10 @@ export const commands: Chat.ChatCommands = {
 				if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 				const toSubOut = game.getPlayer(action);
 				const toSubIn = toID(args.shift());
-				if (!toSubOut) return this.errorReply(`${toSubOut} is not in the game.`);
+				if (!toSubOut) throw new Chat.ErrorMessage(`${toSubOut} is not in the game.`);
 
 				const targetUser = Users.get(toSubIn);
-				if (!targetUser) return this.errorReply(`The user "${toSubIn}" was not found.`);
+				if (!targetUser) throw new Chat.ErrorMessage(`The user "${toSubIn}" was not found.`);
 				game.canJoin(targetUser, false, cmd === 'forcesub');
 				if (game.subs.includes(targetUser.id)) {
 					game.subs.splice(game.subs.indexOf(targetUser.id), 1);
@@ -3409,12 +3425,12 @@ export const commands: Chat.ChatCommands = {
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 			if (this.meansYes(toID(target))) {
-				if (game.autoSub) return this.errorReply(`Automatic subbing of players is already enabled.`);
+				if (game.autoSub) throw new Chat.ErrorMessage(`Automatic subbing of players is already enabled.`);
 				game.autoSub = true;
 				user.sendTo(room, `Automatic subbing of players has been enabled.`);
 				game.nextSub();
 			} else if (this.meansNo(toID(target))) {
-				if (!game.autoSub) return this.errorReply(`Automatic subbing of players is already disabled.`);
+				if (!game.autoSub) throw new Chat.ErrorMessage(`Automatic subbing of players is already disabled.`);
 				game.autoSub = false;
 				user.sendTo(room, `Automatic subbing of players has been disabled.`);
 			} else {
@@ -3433,13 +3449,15 @@ export const commands: Chat.ChatCommands = {
 			this.checkChat();
 			if (!target) return this.parse(`/help mafia ${cmd}`);
 			this.checkCan('mute', null, room);
-			const {targetUser} = this.requireUser(target);
-			if (!room.users[targetUser.id]) return this.errorReply(`${targetUser.name} is not in this room, and cannot be hosted.`);
-			if (game.hostid === targetUser.id) return this.errorReply(`${targetUser.name} is already the host.`);
-			if (game.cohostids.includes(targetUser.id)) return this.errorReply(`${targetUser.name} is already a cohost.`);
+			const { targetUser } = this.requireUser(target);
+			if (!room.users[targetUser.id]) {
+				throw new Chat.ErrorMessage(`${targetUser.name} is not in this room, and cannot be hosted.`);
+			}
+			if (game.hostid === targetUser.id) throw new Chat.ErrorMessage(`${targetUser.name} is already the host.`);
+			if (game.cohostids.includes(targetUser.id)) throw new Chat.ErrorMessage(`${targetUser.name} is already a cohost.`);
 
 			if (game.getPlayer(targetUser.id)) {
-				return this.errorReply(`${targetUser.name} cannot become a host because they are playing.`);
+				throw new Chat.ErrorMessage(`${targetUser.name} cannot become a host because they are playing.`);
 			}
 
 			if (game.subs.includes(targetUser.id)) game.subs.splice(game.subs.indexOf(targetUser.id), 1);
@@ -3450,7 +3468,7 @@ export const commands: Chat.ChatCommands = {
 				for (const conn of targetUser.connections) {
 					void Chat.resolvePage(`view-mafia-${room.roomid}`, targetUser, conn);
 				}
-				this.modlog('MAFIACOHOST', targetUser, null, {noalts: true, noip: true});
+				this.modlog('MAFIACOHOST', targetUser, null, { noalts: true, noip: true });
 			} else {
 				const oldHostid = game.hostid;
 				const oldHost = Users.get(game.hostid);
@@ -3464,10 +3482,10 @@ export const commands: Chat.ChatCommands = {
 					void Chat.resolvePage(`view-mafia-${room.roomid}`, targetUser, conn);
 				}
 				game.sendDeclare(Utils.html`${targetUser.name} has been substituted as the new host, replacing ${oldHostid}.`);
-				this.modlog('MAFIASUBHOST', targetUser, `replacing ${oldHostid}`, {noalts: true, noip: true});
+				this.modlog('MAFIASUBHOST', targetUser, `replacing ${oldHostid}`, { noalts: true, noip: true });
 			}
 		},
-		subhosthelp: [`/mafia subhost [user] - Substitues the user as the new game host.`],
+		subhosthelp: [`/mafia subhost [user] - Substitutes the user as the new game host.`],
 		cohosthelp: [
 			`/mafia cohost [user] - Adds the user as a cohost. Cohosts can talk during the game, as well as perform host actions.`,
 		],
@@ -3484,13 +3502,13 @@ export const commands: Chat.ChatCommands = {
 			const cohostIndex = game.cohostids.indexOf(targetID);
 			if (cohostIndex < 0) {
 				if (game.hostid === targetID) {
-					return this.errorReply(`${target} is the host, not a cohost. Use /mafia subhost to replace them.`);
+					throw new Chat.ErrorMessage(`${target} is the host, not a cohost. Use /mafia subhost to replace them.`);
 				}
-				return this.errorReply(`${target} is not a cohost.`);
+				throw new Chat.ErrorMessage(`${target} is not a cohost.`);
 			}
 			game.cohostids.splice(cohostIndex, 1);
 			game.sendDeclare(Utils.html`${target} was removed as a cohost by ${user.name}`);
-			this.modlog('MAFIAUNCOHOST', target, null, {noalts: true, noip: true});
+			this.modlog('MAFIAUNCOHOST', target, null, { noalts: true, noip: true });
 		},
 
 		end(target, room, user) {
@@ -3508,18 +3526,18 @@ export const commands: Chat.ChatCommands = {
 		term: 'data',
 		dt: 'data',
 		data(target, room, user, connection, cmd) {
-			if (room?.settings.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (room?.settings.mafiaDisabled) throw new Chat.ErrorMessage(`Mafia is disabled for this room.`);
 			if (cmd === 'role' && !target && room) {
 				// Support /mafia role showing your current role if you're in a game
 				const game = room.getGame(Mafia);
 				if (!game) {
-					return this.errorReply(`There is no game of mafia running in this room. If you meant to display information about a role, use /mafia role [role name]`);
+					throw new Chat.ErrorMessage(`There is no game of mafia running in this room. If you meant to display information about a role, use /mafia role [role name]`);
 				}
 
 				const player = game.getPlayer(user.id);
-				if (!player) return this.errorReply(`You are not in the game of ${game.title}.`);
+				if (!player) throw new Chat.ErrorMessage(`You are not in the game of ${game.title}.`);
 				const role = player.role;
-				if (!role) return this.errorReply(`You do not have a role yet.`);
+				if (!role) throw new Chat.ErrorMessage(`You do not have a role yet.`);
 				return this.sendReplyBox(`Your role is: ${role.safeName}`);
 			}
 
@@ -3538,29 +3556,29 @@ export const commands: Chat.ChatCommands = {
 			let result: MafiaDataAlignment | MafiaDataRole | MafiaDataTheme | MafiaDataIDEA | MafiaDataTerm | null = null;
 			let dataType = cmd;
 
-			const cmdTypes: {[k: string]: keyof MafiaData} = {
+			const cmdTypes: { [k: string]: keyof MafiaData } = {
 				role: 'roles', alignment: 'alignments', theme: 'themes', term: 'terms', idea: 'IDEAs',
 			};
 
 			if (cmd in cmdTypes) {
 				const toSearch = MafiaData[cmdTypes[cmd]];
-				// @ts-ignore guaranteed not an alias
+				// @ts-expect-error guaranteed not an alias
 				result = toSearch[target];
 			} else {
 				// search everything
 				for (const [cmdType, dataKey] of Object.entries(cmdTypes)) {
 					if (target in MafiaData[dataKey]) {
-						// @ts-ignore guaranteed not an alias
+						// @ts-expect-error guaranteed not an alias
 						result = MafiaData[dataKey][target];
 						dataType = cmdType;
 						break;
 					}
 				}
 			}
-			if (!result) return this.errorReply(`"${target}" is not a valid mafia alignment, role, theme, or IDEA.`);
+			if (!result) throw new Chat.ErrorMessage(`"${target}" is not a valid mafia alignment, role, theme, or IDEA.`);
 
-			// @ts-ignore
-			let buf = `<h3${result.color ? ' style="color: ' + result.color + '"' : ``}>${result.name}</h3><b>Type</b>: ${dataType}<br/>`;
+			// @ts-expect-error property access
+			let buf = `<h3${result.color ? ` style="color: ${result.color}"` : ``}>${result.name}</h3><b>Type</b>: ${dataType}<br/>`;
 			if (dataType === 'theme') {
 				if ((result as MafiaDataTheme).desc) {
 					buf += `<b>Description</b>: ${(result as MafiaDataTheme).desc}<br/><details><summary class="button" style="font-weight: bold; display: inline-block">Setups:</summary>`;
@@ -3569,7 +3587,7 @@ export const commands: Chat.ChatCommands = {
 					const num = parseInt(i);
 					if (isNaN(num)) continue;
 					buf += `${i}: `;
-					const count: {[k: string]: number} = {};
+					const count: { [k: string]: number } = {};
 					const roles = [];
 					for (const role of (result as MafiaDataTheme)[num].split(',').map((x: string) => x.trim())) {
 						count[role] = count[role] ? count[role] + 1 : 1;
@@ -3589,7 +3607,6 @@ export const commands: Chat.ChatCommands = {
 					buf += `${idearole}<br/>`;
 				}
 			} else {
-				// @ts-ignore
 				if (result.memo) buf += `${result.memo.join('<br/>')}`;
 			}
 			return this.sendReplyBox(buf);
@@ -3604,7 +3621,7 @@ export const commands: Chat.ChatCommands = {
 		win(target, room, user, connection, cmd) {
 			const isUnwin = cmd.startsWith('unwin');
 			room = this.requireRoom('mafia' as RoomID);
-			if (!room || room.settings.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (!room || room.settings.mafiaDisabled) throw new Chat.ErrorMessage(`Mafia is disabled for this room.`);
 			this.checkCan('mute', null, room);
 			const args = target.split(',');
 			let points = parseInt(args[0]);
@@ -3618,13 +3635,13 @@ export const commands: Chat.ChatCommands = {
 				}
 			} else {
 				if (points > 100 || points < -100) {
-					return this.errorReply(`You cannot give or take more than 100 points at a time.`);
+					throw new Chat.ErrorMessage(`You cannot give or take more than 100 points at a time.`);
 				}
 				// shift out the point count
 				args.shift();
 			}
 			if (!args.length) return this.parse('/help mafia win');
-			const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
+			const month = new Date().toLocaleString("en-us", { month: "numeric", year: "numeric" });
 			if (!logs.leaderboard[month]) logs.leaderboard[month] = {};
 
 			let toGiveTo = [];
@@ -3669,11 +3686,11 @@ export const commands: Chat.ChatCommands = {
 		unmvp: 'mvp',
 		mvp(target, room, user, connection, cmd) {
 			room = this.requireRoom('mafia' as RoomID);
-			if (!room || room.settings.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (!room || room.settings.mafiaDisabled) throw new Chat.ErrorMessage(`Mafia is disabled for this room.`);
 			this.checkCan('mute', null, room);
 			const args = target.split(',');
 			if (!args.length) return this.parse('/help mafia mvp');
-			const month = new Date().toLocaleString("en-us", {month: "numeric", year: "numeric"});
+			const month = new Date().toLocaleString("en-us", { month: "numeric", year: "numeric" });
 			if (!logs.mvps[month]) logs.mvps[month] = {};
 			if (!logs.leaderboard[month]) logs.leaderboard[month] = {};
 			let gavePoints = false;
@@ -3710,7 +3727,7 @@ export const commands: Chat.ChatCommands = {
 		lb: 'leaderboard',
 		leaderboard(target, room, user, connection, cmd) {
 			room = this.requireRoom('mafia' as RoomID);
-			if (!room || room.settings.mafiaDisabled) return this.errorReply(`Mafia is disabled for this room.`);
+			if (!room || room.settings.mafiaDisabled) throw new Chat.ErrorMessage(`Mafia is disabled for this room.`);
 			if (['hostlogs', 'playlogs', 'leaverlogs'].includes(cmd)) {
 				this.checkCan('mute', null, room);
 			} else {
@@ -3734,7 +3751,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('warn', null, room);
 
-			const {targetUser, rest} = this.requireUser(target);
+			const { targetUser, rest } = this.requireUser(target);
 			const [string1, string2] = this.splitOne(rest);
 			let duration, reason;
 			if (parseInt(string1)) {
@@ -3748,14 +3765,14 @@ export const commands: Chat.ChatCommands = {
 			if (!duration) duration = 2;
 			if (!reason) reason = '';
 			if (reason.length > 300) {
-				return this.errorReply("The reason is too long. It cannot exceed 300 characters.");
+				throw new Chat.ErrorMessage("The reason is too long. It cannot exceed 300 characters.");
 			}
 
 			const userid = toID(targetUser);
 			if (Punishments.hasRoomPunishType(room, userid, `MAFIA${this.cmd.toUpperCase()}`)) {
-				return this.errorReply(`User '${targetUser.name}' is already ${this.cmd}ned in this room.`);
+				throw new Chat.ErrorMessage(`User '${targetUser.name}' is already ${this.cmd}ned in this room.`);
 			} else if (Punishments.hasRoomPunishType(room, userid, `MAFIAGAMEBAN`)) {
-				return this.errorReply(`User '${targetUser.name}' is already gamebanned in this room, which also means they can't host.`);
+				throw new Chat.ErrorMessage(`User '${targetUser.name}' is already gamebanned in this room, which also means they can't host.`);
 			} else if (Punishments.hasRoomPunishType(room, userid, `MAFIAHOSTBAN`)) {
 				user.sendTo(room, `User '${targetUser.name}' is already hostbanned in this room, but they will now be gamebanned.`);
 				this.parse(`/mafia unhostban ${targetUser.name}`);
@@ -3787,18 +3804,18 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('warn', null, room);
 
-			const {targetUser} = this.requireUser(target, {allowOffline: true});
+			const { targetUser } = this.requireUser(target, { allowOffline: true });
 			if (!Mafia.isGameBanned(room, targetUser) && cmd === 'ungameban') {
-				return this.errorReply(`User '${targetUser.name}' isn't banned from playing mafia games.`);
+				throw new Chat.ErrorMessage(`User '${targetUser.name}' isn't banned from playing mafia games.`);
 			} else if (!Mafia.isHostBanned(room, targetUser) && cmd === 'unhostban') {
-				return this.errorReply(`User '${targetUser.name}' isn't banned from hosting mafia games.`);
+				throw new Chat.ErrorMessage(`User '${targetUser.name}' isn't banned from hosting mafia games.`);
 			}
 
 			if (cmd === 'unhostban') Mafia.unhostBan(room, targetUser);
 			else Mafia.ungameBan(room, targetUser);
 
 			this.privateModAction(`${targetUser.name} was unbanned from ${cmd === 'unhostban' ? 'hosting' : 'playing'} mafia games by ${user.name}.`);
-			this.modlog(`MAFIA${cmd.toUpperCase()}`, targetUser, null, {noip: 1, noalts: 1});
+			this.modlog(`MAFIA${cmd.toUpperCase()}`, targetUser, null, { noip: 1, noalts: 1 });
 		},
 
 		overwriterole: 'addrole',
@@ -3812,24 +3829,26 @@ export const commands: Chat.ChatCommands = {
 
 			if (!id || !memo.length) return this.parse(`/help mafia addrole`);
 
-			if (alignment && !(alignment in MafiaData.alignments)) return this.errorReply(`${alignment} is not a valid alignment.`);
-			if (image && !VALID_IMAGES.includes(image)) return this.errorReply(`${image} is not a valid image.`);
+			if (alignment && !(alignment in MafiaData.alignments)) {
+				throw new Chat.ErrorMessage(`${alignment} is not a valid alignment.`);
+			}
+			if (image && !VALID_IMAGES.includes(image)) throw new Chat.ErrorMessage(`${image} is not a valid image.`);
 
 			if (!overwrite && id in MafiaData.roles) {
-				return this.errorReply(`${name} is already a role. Use /mafia overwriterole to overwrite.`);
+				throw new Chat.ErrorMessage(`${name} is already a role. Use /mafia overwriterole to overwrite.`);
 			}
-			if (id in MafiaData.alignments) return this.errorReply(`${name} is already an alignment.`);
+			if (id in MafiaData.alignments) throw new Chat.ErrorMessage(`${name} is already an alignment.`);
 			if (id in MafiaData.aliases) {
-				return this.errorReply(`${name} is already an alias (pointing to ${MafiaData.aliases[id]}).`);
+				throw new Chat.ErrorMessage(`${name} is already an alias (pointing to ${MafiaData.aliases[id]}).`);
 			}
 
-			const role: MafiaDataRole = {name, memo};
+			const role: MafiaDataRole = { name, memo };
 			if (alignment) role.alignment = alignment;
 			if (image) role.image = image;
 
 			MafiaData.roles[id] = role;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDROLE`, null, id, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDROLE`, null, id, { noalts: true, noip: true });
 			this.sendReply(`The role ${id} was added to the database.`);
 		},
 		addrolehelp: [
@@ -3847,24 +3866,24 @@ export const commands: Chat.ChatCommands = {
 
 			if (!id || !plural || !memo.length) return this.parse(`/help mafia addalignment`);
 
-			if (image && !VALID_IMAGES.includes(image)) return this.errorReply(`${image} is not a valid image.`);
+			if (image && !VALID_IMAGES.includes(image)) throw new Chat.ErrorMessage(`${image} is not a valid image.`);
 
 			if (!overwrite && id in MafiaData.alignments) {
-				return this.errorReply(`${name} is already an alignment. Use /mafia overwritealignment to overwrite.`);
+				throw new Chat.ErrorMessage(`${name} is already an alignment. Use /mafia overwritealignment to overwrite.`);
 			}
-			if (id in MafiaData.roles) return this.errorReply(`${name} is already a role.`);
+			if (id in MafiaData.roles) throw new Chat.ErrorMessage(`${name} is already a role.`);
 			if (id in MafiaData.aliases) {
-				return this.errorReply(`${name} is already an alias (pointing to ${MafiaData.aliases[id]})`);
+				throw new Chat.ErrorMessage(`${name} is already an alias (pointing to ${MafiaData.aliases[id]})`);
 			}
 
-			const alignment: MafiaDataAlignment = {name, plural, memo};
+			const alignment: MafiaDataAlignment = { name, plural, memo };
 			if (color) alignment.color = color;
 			if (buttonColor) alignment.buttonColor = buttonColor;
 			if (image) alignment.image = image;
 
 			MafiaData.alignments[id] = alignment;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDALIGNMENT`, null, id, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDALIGNMENT`, null, id, { noalts: true, noip: true });
 			this.sendReply(`The alignment ${id} was added to the database.`);
 		},
 		addalignmenthelp: [
@@ -3883,14 +3902,14 @@ export const commands: Chat.ChatCommands = {
 			if (!id || !desc || !rolelists.length) return this.parse(`/help mafia addtheme`);
 
 			if (!overwrite && id in MafiaData.themes) {
-				return this.errorReply(`${name} is already a theme. Use /mafia overwritetheme to overwrite.`);
+				throw new Chat.ErrorMessage(`${name} is already a theme. Use /mafia overwritetheme to overwrite.`);
 			}
-			if (id in MafiaData.IDEAs) return this.errorReply(`${name} is already an IDEA.`);
+			if (id in MafiaData.IDEAs) throw new Chat.ErrorMessage(`${name} is already an IDEA.`);
 			if (id in MafiaData.aliases) {
-				return this.errorReply(`${name} is already an alias (pointing to ${MafiaData.aliases[id]})`);
+				throw new Chat.ErrorMessage(`${name} is already an alias (pointing to ${MafiaData.aliases[id]})`);
 			}
 
-			const rolelistsMap: {[players: number]: string} = {};
+			const rolelistsMap: { [players: number]: string } = {};
 			const uniqueRoles = new Set<string>();
 
 			for (const rolelist of rolelists) {
@@ -3907,12 +3926,12 @@ export const commands: Chat.ChatCommands = {
 				const parsedRole = Mafia.parseRole(role);
 				if (parsedRole.problems.length) problems.push(...parsedRole.problems);
 			}
-			if (problems.length) return this.errorReply(`Problems found when parsing roles:\n${problems.join('\n')}`);
+			if (problems.length) throw new Chat.ErrorMessage(`Problems found when parsing roles:\n${problems.join('\n')}`);
 
-			const theme: MafiaDataTheme = {name, desc, ...rolelistsMap};
+			const theme: MafiaDataTheme = { name, desc, ...rolelistsMap };
 			MafiaData.themes[id] = theme;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDTHEME`, null, id, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDTHEME`, null, id, { noalts: true, noip: true });
 			this.sendReply(`The theme ${id} was added to the database.`);
 		},
 		addthemehelp: [
@@ -3933,14 +3952,14 @@ export const commands: Chat.ChatCommands = {
 			const choices = parseInt(choicesStr);
 
 			if (!id || !choices || !picks.length) return this.parse(`/help mafia addidea`);
-			if (choices <= picks.length) return this.errorReply(`You need to have more choices than picks.`);
+			if (choices <= picks.length) throw new Chat.ErrorMessage(`You need to have more choices than picks.`);
 
 			if (!overwrite && id in MafiaData.IDEAs) {
-				return this.errorReply(`${name} is already an IDEA. Use /mafia overwriteidea to overwrite.`);
+				throw new Chat.ErrorMessage(`${name} is already an IDEA. Use /mafia overwriteidea to overwrite.`);
 			}
-			if (id in MafiaData.themes) return this.errorReply(`${name} is already a theme.`);
+			if (id in MafiaData.themes) throw new Chat.ErrorMessage(`${name} is already a theme.`);
 			if (id in MafiaData.aliases) {
-				return this.errorReply(`${name} is already an alias (pointing to ${MafiaData.aliases[id]})`);
+				throw new Chat.ErrorMessage(`${name} is already an alias (pointing to ${MafiaData.aliases[id]})`);
 			}
 
 			const checkedRoles: string[] = [];
@@ -3951,12 +3970,12 @@ export const commands: Chat.ChatCommands = {
 				if (parsedRole.problems.length) problems.push(...parsedRole.problems);
 				checkedRoles.push(role);
 			}
-			if (problems.length) return this.errorReply(`Problems found when parsing roles:\n${problems.join('\n')}`);
+			if (problems.length) throw new Chat.ErrorMessage(`Problems found when parsing roles:\n${problems.join('\n')}`);
 
-			const IDEA: MafiaDataIDEA = {name, choices, picks, roles};
+			const IDEA: MafiaDataIDEA = { name, choices, picks, roles };
 			MafiaData.IDEAs[id] = IDEA;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDIDEA`, null, id, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDIDEA`, null, id, { noalts: true, noip: true });
 			this.sendReply(`The IDEA ${id} was added to the database.`);
 		},
 		addideahelp: [
@@ -3975,16 +3994,16 @@ export const commands: Chat.ChatCommands = {
 			if (!id || !memo.length) return this.parse(`/help mafia addterm`);
 
 			if (!overwrite && id in MafiaData.terms) {
-				return this.errorReply(`${name} is already a term. Use /mafia overwriteterm to overwrite.`);
+				throw new Chat.ErrorMessage(`${name} is already a term. Use /mafia overwriteterm to overwrite.`);
 			}
 			if (id in MafiaData.aliases) {
-				return this.errorReply(`${name} is already an alias (pointing to ${MafiaData.aliases[id]})`);
+				throw new Chat.ErrorMessage(`${name} is already an alias (pointing to ${MafiaData.aliases[id]})`);
 			}
 
-			const term: MafiaDataTerm = {name, memo};
+			const term: MafiaDataTerm = { name, memo };
 			MafiaData.terms[id] = term;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDTERM`, null, id, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDTERM`, null, id, { noalts: true, noip: true });
 			this.sendReply(`The term ${id} was added to the database.`);
 		},
 		addtermhelp: [`/mafia addterm name|memo1|memo2... - Adds a term to the database. Requires % @ # ~`],
@@ -3998,19 +4017,19 @@ export const commands: Chat.ChatCommands = {
 			if (!from || !to) return this.parse(`/help mafia addalias`);
 
 			if (from in MafiaData.aliases) {
-				return this.errorReply(`${from} is already an alias (pointing to ${MafiaData.aliases[from]})`);
+				throw new Chat.ErrorMessage(`${from} is already an alias (pointing to ${MafiaData.aliases[from]})`);
 			}
 			let foundTarget = false;
 			for (const entry of ['alignments', 'roles', 'themes', 'IDEAs', 'terms'] as (keyof MafiaData)[]) {
 				const dataEntry = MafiaData[entry];
-				if (from in dataEntry) return this.errorReply(`${from} is already a ${entry.slice(0, -1)}`);
+				if (from in dataEntry) throw new Chat.ErrorMessage(`${from} is already a ${entry.slice(0, -1)}`);
 				if (to in dataEntry) foundTarget = true;
 			}
-			if (!foundTarget) return this.errorReply(`No database entry exists with the key ${to}.`);
+			if (!foundTarget) throw new Chat.ErrorMessage(`No database entry exists with the key ${to}.`);
 
 			MafiaData.aliases[from] = to;
 			writeFile(DATA_FILE, MafiaData);
-			this.modlog(`MAFIAADDALIAS`, null, `${from}: ${to}`, {noalts: true, noip: true});
+			this.modlog(`MAFIAADDALIAS`, null, `${from}: ${to}`, { noalts: true, noip: true });
 			this.sendReply(`The alias ${from} was added, pointing to ${to}.`);
 		},
 		addaliashelp: [
@@ -4024,15 +4043,15 @@ export const commands: Chat.ChatCommands = {
 			let [source, entry] = target.split(',');
 			entry = toID(entry);
 			if (!(source in MafiaData)) {
-				return this.errorReply(`Invalid source. Valid sources are ${Object.keys(MafiaData).join(', ')}`);
+				throw new Chat.ErrorMessage(`Invalid source. Valid sources are ${Object.keys(MafiaData).join(', ')}`);
 			}
-			// @ts-ignore checked above
+			// @ts-expect-error checked above
 			const dataSource = MafiaData[source];
-			if (!(entry in dataSource)) return this.errorReply(`${entry} does not exist in ${source}.`);
+			if (!(entry in dataSource)) throw new Chat.ErrorMessage(`${entry} does not exist in ${source}.`);
 
 			let buf = '';
 			if (dataSource === MafiaData.alignments) {
-				if (entry === 'solo' || entry === 'town') return this.errorReply(`You cannot delete the solo or town alignments.`);
+				if (entry === 'solo' || entry === 'town') throw new Chat.ErrorMessage(`You cannot delete the solo or town alignments.`);
 
 				for (const key in MafiaData.roles) {
 					if (MafiaData.roles[key].alignment === entry) {
@@ -4055,13 +4074,13 @@ export const commands: Chat.ChatCommands = {
 
 			writeFile(DATA_FILE, MafiaData);
 			if (buf) this.sendReply(buf);
-			this.modlog(`MAFIADELETEDATA`, null, `${entry} from ${source}`, {noalts: true, noip: true});
+			this.modlog(`MAFIADELETEDATA`, null, `${entry} from ${source}`, { noalts: true, noip: true });
 			this.sendReply(`The entry ${entry} was deleted from the ${source} database.`);
 		},
 		deletedatahelp: [`/mafia deletedata source,entry - Removes an entry from the database. Requires % @ # ~`],
 		listdata(target, room, user) {
 			if (!(target in MafiaData)) {
-				return this.errorReply(`Invalid source. Valid sources are ${Object.keys(MafiaData).join(', ')}`);
+				throw new Chat.ErrorMessage(`Invalid source. Valid sources are ${Object.keys(MafiaData).join(', ')}`);
 			}
 			const dataSource = MafiaData[target as keyof MafiaData];
 			if (dataSource === MafiaData.aliases) {
@@ -4081,7 +4100,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('gamemanagement', null, room);
 			if (room.settings.mafiaDisabled) {
-				return this.errorReply("Mafia is already disabled.");
+				throw new Chat.ErrorMessage("Mafia is already disabled.");
 			}
 			room.settings.mafiaDisabled = true;
 			room.saveSettings();
@@ -4094,7 +4113,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('gamemanagement', null, room);
 			if (!room.settings.mafiaDisabled) {
-				return this.errorReply("Mafia is already enabled.");
+				throw new Chat.ErrorMessage("Mafia is already enabled.");
 			}
 			room.settings.mafiaDisabled = false;
 			room.saveSettings();
@@ -4118,7 +4137,7 @@ export const commands: Chat.ChatCommands = {
 			`/mafia players - Display the current list of players, will highlight players.`,
 			`/mafia [rl|orl] - Display the role list or the original role list for the current game.`,
 			`/mafia data [alignment|role|modifier|theme|term] - Get information on a mafia alignment, role, modifier, theme, or term.`,
-			`/mafia subhost [user] - Substitues the user as the new game host. Requires % @ # ~`,
+			`/mafia subhost [user] - Substitutes the user as the new game host. Requires % @ # ~`,
 			`/mafia (un)cohost [user] - Adds/removes the user as a cohost. Cohosts can talk during the game, as well as perform host actions. Requires % @ # ~`,
 			`/mafia [enable|disable] - Enables/disables mafia in this room. Requires # ~`,
 		].join('<br/>');
@@ -4148,8 +4167,8 @@ export const commands: Chat.ChatCommands = {
 			`/mafia votelock [on|off] - Allows or disallows players to change their vote. Requires host % @ # ~`,
 			`/mafia voting [on|off] - Allows or disallows voting. Requires host % @ # ~`,
 			`/mafia forcevote [yes/no] - Forces players' votes onto themselves, and prevents unvoting. Requires host % @ # ~`,
-			`/mafia setroles [comma seperated roles] - Set the roles for a game of mafia. You need to provide one role per player. Requires host % @ # ~`,
-			`/mafia forcesetroles [comma seperated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set. Requires host % @ # ~`,
+			`/mafia setroles [comma separated roles] - Set the roles for a game of mafia. You need to provide one role per player. Requires host % @ # ~`,
+			`/mafia forcesetroles [comma separated roles] - Forcibly set the roles for a game of mafia. No role PM information or alignment will be set. Requires host % @ # ~`,
 			`/mafia start - Start the game of mafia. Signups must be closed. Requires host % @ # ~`,
 			`/mafia [day|night] - Move to the next game day or night. Requires host % @ # ~`,
 			`/mafia extend (minutes) - Return to the previous game day. If (minutes) is provided, set the deadline for (minutes) minutes. Requires host % @ # ~`,
@@ -4167,7 +4186,7 @@ export const commands: Chat.ChatCommands = {
 			`/mafia (un)[priest|actor] [player] - Makes [player] a priest (can't hammer) or actor (can only hammer). Requires host % @ # ~`,
 			`/mafia deadline [minutes|off] - Sets or removes the deadline for the game. Cannot be more than 20 minutes.`,
 			`/mafia sub next, [player] - Forcibly sub [player] out of the game. Requires host % @ # ~`,
-			`/mafia sub remove, [user] - Forcibly remove [user] from the sublist. Requres host % @ # ~`,
+			`/mafia sub remove, [user] - Forcibly remove [user] from the sublist. Requires host % @ # ~`,
 			`/mafia sub unrequest, [player] - Remove's a player's request to sub out of the game. Requires host % @ # ~`,
 			`/mafia sub [player], [user] - Forcibly sub [player] for [user]. Requires host % @ # ~`,
 			`/mafia autosub [yes|no] - Sets if players will automatically sub out if a user is on the sublist. Defaults to yes. Requires host % @ # ~`,

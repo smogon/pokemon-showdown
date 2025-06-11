@@ -1,5 +1,3 @@
-import {Utils} from '../../../lib';
-
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	inherit: 'gen9',
@@ -67,6 +65,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 
 				pokemon.maybeDisabled = false;
+				pokemon.maybeLocked = false;
 				for (const moveSlot of pokemon.moveSlots) {
 					moveSlot.disabled = false;
 					moveSlot.disabledSource = '';
@@ -180,23 +179,6 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (this.gen === 2) this.quickClawRoll = this.randomChance(60, 256);
 		if (this.gen === 3) this.quickClawRoll = this.randomChance(1, 5);
 
-		// Crazyhouse Progress checker because sidebars has trouble keeping track of Pokemon.
-		// Please remove me once there is client support.
-		if (this.ruleTable.has('crazyhouserule')) {
-			for (const side of this.sides) {
-				let buf = `raw|${Utils.escapeHTML(side.name)}'s team:<br />`;
-				for (const pokemon of side.pokemon) {
-					if (!buf.endsWith('<br />')) buf += '/</span>&#8203;';
-					if (pokemon.fainted) {
-						buf += `<span style="white-space:nowrap;"><span style="opacity:.3"><psicon pokemon="${pokemon.species.id}" /></span>`;
-					} else {
-						buf += `<span style="white-space:nowrap"><psicon pokemon="${pokemon.species.id}" />`;
-					}
-				}
-				this.add(`${buf}</span>`);
-			}
-		}
-
 		this.makeRequest('move');
 	},
 	pokemon: {
@@ -209,6 +191,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				flags: {},
 				// Does not need activation message with this
 				fullname: 'ability: ' + move.name,
+				effectType: "Ability",
 				onStart(this: Battle, pokemon: Pokemon) {
 					if (pokemon.m.trademarkUsedThisTurn) {
 						// no.
@@ -219,6 +202,10 @@ export const Scripts: ModdedBattleScriptsData = {
 						const trademark = this.dex.getActiveMove(move.id);
 						trademark.accuracy = true;
 						this.actions.useMove(trademark, pokemon);
+						if (pokemon.volatiles['choicelock']?.move === trademark.id) {
+							this.debug('removing choicelock caused by trademark');
+							pokemon.removeVolatile('choicelock');
+						}
 					}
 				},
 				toString() {
@@ -228,10 +215,12 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		transformInto(pokemon, effect) {
 			const species = pokemon.species;
-			if (pokemon.fainted || this.illusion || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
+			if (
+				pokemon.fainted || this.illusion || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 				(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
 				species.name === 'Eternatus-Eternamax' || (['Ogerpon', 'Terapagos'].includes(species.baseSpecies) &&
-				(this.terastallized || pokemon.terastallized)) || this.terastallized === 'Stellar') {
+					(this.terastallized || pokemon.terastallized)) || this.terastallized === 'Stellar'
+			) {
 				return false;
 			}
 

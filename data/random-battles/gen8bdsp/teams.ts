@@ -1,17 +1,17 @@
 // BDSP team generation logic is currently largely shared with Swsh
 
-import {PRNG, PRNGSeed} from '../../../sim/prng';
-import {MoveCounter, RandomGen8Teams, OldRandomBattleSpecies} from '../gen8/teams';
+import { type PRNG, type PRNGSeed } from '../../../sim/prng';
+import { type MoveCounter, RandomGen8Teams, type OldRandomBattleSpecies } from '../gen8/teams';
 
 export class RandomBDSPTeams extends RandomGen8Teams {
-	randomData: {[species: string]: OldRandomBattleSpecies} = require('./data.json');
+	override randomData: { [species: string]: OldRandomBattleSpecies } = require('./data.json');
 
 	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
 		super(format, prng);
 		this.noStab = [...this.noStab, 'gigaimpact'];
 	}
 
-	getHighPriorityItem(
+	override getHighPriorityItem(
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,
@@ -71,7 +71,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		if (moves.has('bellydrum')) return 'Sitrus Berry';
 	}
 
-	getMediumPriorityItem(
+	override getMediumPriorityItem(
 		ability: string,
 		moves: Set<string>,
 		counter: MoveCounter,
@@ -129,7 +129,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		) return 'Leftovers';
 	}
 
-	getLowPriorityItem(
+	override getLowPriorityItem(
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,
@@ -177,7 +177,7 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		) return 'Lum Berry';
 	}
 
-	shouldCullMove(
+	override shouldCullMove(
 		move: Move,
 		types: Set<string>,
 		moves: Set<string>,
@@ -188,19 +188,19 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		species: Species,
 		isLead: boolean,
 		isDoubles: boolean,
-	): {cull: boolean, isSetup?: boolean} {
+	): { cull: boolean, isSetup?: boolean } {
 		if (isDoubles && species.baseStats.def >= 140 && movePool.includes('bodypress')) {
 			// In Doubles, Pokémon with Defense stats >= 140 should always have body press
-			return {cull: true};
+			return { cull: true };
 		}
 		if (species.id === 'entei' && movePool.includes('extremespeed')) {
-			return {cull: true};
+			return { cull: true };
 		}
 		// Spore is really, really good and should be forced onto all sets.
 		// zzzzzz
 		// Substitute is a hardcode for Breloom.
 		if (movePool.includes('spore') && move.id !== 'substitute') {
-			return {cull: true};
+			return { cull: true };
 		}
 
 		const hasRestTalk = moves.has('rest') && moves.has('sleeptalk');
@@ -208,81 +208,81 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		// Reject moves that need support
 		switch (move.id) {
 		case 'fly':
-			return {cull: !types.has(move.type) && !counter.setupType && !!counter.get('Status')};
+			return { cull: !types.has(move.type) && !counter.setupType && !!counter.get('Status') };
 		case 'healbell':
-			return {cull: movePool.includes('protect') || movePool.includes('wish')};
+			return { cull: movePool.includes('protect') || movePool.includes('wish') };
 		case 'fireblast':
 			// Special case for Togekiss, which always wants Aura Sphere
-			return {cull: abilities.includes('Serene Grace') && (!moves.has('trick') || counter.get('Status') > 1)};
+			return { cull: abilities.includes('Serene Grace') && (!moves.has('trick') || counter.get('Status') > 1) };
 		case 'firepunch':
 			// Special case for Darmanitan-Zen-Galar, which doesn't always want Fire Punch
-			return {cull: moves.has('earthquake') && movePool.includes('substitute')};
+			return { cull: moves.has('earthquake') && movePool.includes('substitute') };
 		case 'flamecharge':
-			return {cull: movePool.includes('swordsdance')};
+			return { cull: movePool.includes('swordsdance') };
 		case 'focuspunch':
-			return {cull: !moves.has('substitute')};
+			return { cull: !moves.has('substitute') };
 		case 'rest':
 			const bulkySetup = !moves.has('sleeptalk') && ['bulkup', 'calmmind', 'coil', 'curse'].some(m => movePool.includes(m));
 			// Registeel would otherwise get Curse sets without Rest, which are very bad generally
-			return {cull: species.id !== 'registeel' && (movePool.includes('sleeptalk') || bulkySetup)};
+			return { cull: species.id !== 'registeel' && (movePool.includes('sleeptalk') || bulkySetup) };
 		case 'sleeptalk':
 			// Milotic always wants RestTalk
-			if (species.id === 'milotic') return {cull: false};
-			if (moves.has('stealthrock') || !moves.has('rest')) return {cull: true};
+			if (species.id === 'milotic') return { cull: false };
+			if (moves.has('stealthrock') || !moves.has('rest')) return { cull: true };
 			if (movePool.length > 1 && !abilities.includes('Contrary')) {
 				const rest = movePool.indexOf('rest');
 				if (rest >= 0) this.fastPop(movePool, rest);
 			}
 			break;
 		case 'storedpower':
-			return {cull: !counter.setupType};
+			return { cull: !counter.setupType };
 		case 'switcheroo': case 'trick':
 			// We cull Switcheroo + Fake Out because Switcheroo is often used with a Choice item
-			return {cull: counter.get('Physical') + counter.get('Special') < 3 || moves.has('rapidspin') || moves.has('fakeout')};
+			return { cull: counter.get('Physical') + counter.get('Special') < 3 || moves.has('rapidspin') || moves.has('fakeout') };
 		case 'trickroom':
 			const webs = !!teamDetails.stickyWeb;
-			return {cull:
+			return { cull:
 				isLead || webs || !!counter.get('speedsetup') ||
 				counter.damagingMoves.size < 2 || movePool.includes('nastyplot'),
 			};
 
 		// Set up once and only if we have the moves for it
 		case 'bellydrum': case 'bulkup': case 'coil': case 'curse': case 'dragondance': case 'honeclaws': case 'swordsdance':
-			if (counter.setupType !== 'Physical') return {cull: true}; // if we're not setting up physically this is pointless
-			if (counter.get('Physical') + counter.get('physicalpool') < 2 && !hasRestTalk) return {cull: true};
-			if (move.id === 'swordsdance' && moves.has('dragondance')) return {cull: true}; // Dragon Dance is judged as better
+			if (counter.setupType !== 'Physical') return { cull: true }; // if we're not setting up physically this is pointless
+			if (counter.get('Physical') + counter.get('physicalpool') < 2 && !hasRestTalk) return { cull: true };
+			if (move.id === 'swordsdance' && moves.has('dragondance')) return { cull: true }; // Dragon Dance is judged as better
 
-			return {cull: false, isSetup: true};
+			return { cull: false, isSetup: true };
 		case 'calmmind': case 'nastyplot':
-			if (counter.setupType !== 'Special') return {cull: true};
+			if (counter.setupType !== 'Special') return { cull: true };
 			if (
 				(counter.get('Special') + counter.get('specialpool')) < 2 &&
 				!hasRestTalk &&
 				!(moves.has('wish') && moves.has('protect'))
-			) return {cull: true};
-			if (moves.has('healpulse') || move.id === 'calmmind' && moves.has('trickroom')) return {cull: true};
-			return {cull: false, isSetup: true};
+			) return { cull: true };
+			if (moves.has('healpulse') || move.id === 'calmmind' && moves.has('trickroom')) return { cull: true };
+			return { cull: false, isSetup: true };
 		case 'quiverdance':
-			return {cull: false, isSetup: true};
+			return { cull: false, isSetup: true };
 		case 'shellsmash': case 'workup':
-			if (counter.setupType !== 'Mixed') return {cull: true};
-			if (counter.damagingMoves.size + counter.get('physicalpool') + counter.get('specialpool') < 2) return {cull: true};
-			return {cull: false, isSetup: true};
+			if (counter.setupType !== 'Mixed') return { cull: true };
+			if (counter.damagingMoves.size + counter.get('physicalpool') + counter.get('specialpool') < 2) return { cull: true };
+			return { cull: false, isSetup: true };
 		case 'agility': case 'autotomize': case 'rockpolish':
-			if (counter.damagingMoves.size < 2 || moves.has('rest')) return {cull: true};
-			if (movePool.includes('calmmind') || movePool.includes('nastyplot')) return {cull: true};
-			return {cull: false, isSetup: !counter.setupType};
+			if (counter.damagingMoves.size < 2 || moves.has('rest')) return { cull: true };
+			if (movePool.includes('calmmind') || movePool.includes('nastyplot')) return { cull: true };
+			return { cull: false, isSetup: !counter.setupType };
 
 		// Bad after setup
 		case 'counter': case 'reversal':
 			// Counter: special case for Alakazam, which doesn't want Counter + Nasty Plot
-			return {cull: !!counter.setupType};
+			return { cull: !!counter.setupType };
 		case 'bulletpunch': case 'extremespeed': case 'rockblast':
-			return {cull: (
+			return { cull: (
 				!!counter.get('speedsetup') ||
 				(!isDoubles && moves.has('dragondance')) ||
 				counter.damagingMoves.size < 2
-			)};
+			) };
 		case 'closecombat': case 'flashcannon':
 			const substituteCullCondition = (
 				(moves.has('substitute') && !types.has('Fighting')) ||
@@ -293,77 +293,77 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 				!counter.setupType &&
 				(moves.has('highjumpkick') || movePool.includes('highjumpkick'))
 			);
-			return {cull: substituteCullCondition || preferHJKOverCCCullCondition};
+			return { cull: substituteCullCondition || preferHJKOverCCCullCondition };
 		case 'defog':
-			return {cull: (
+			return { cull: (
 				!!counter.setupType ||
 				['healbell', 'toxicspikes', 'stealthrock', 'spikes'].some(m => moves.has(m)) ||
 				!!teamDetails.defog
-			)};
+			) };
 		case 'fakeout':
-			return {cull: !!counter.setupType || ['protect', 'rapidspin', 'substitute', 'uturn'].some(m => moves.has(m))};
+			return { cull: !!counter.setupType || ['protect', 'rapidspin', 'substitute', 'uturn'].some(m => moves.has(m)) };
 		case 'glare': case 'icywind': case 'tailwind': case 'waterspout':
-			return {cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('rest')};
+			return { cull: !!counter.setupType || !!counter.get('speedsetup') || moves.has('rest') };
 		case 'healingwish': case 'memento':
-			return {cull: !!counter.setupType || !!counter.get('recovery') || moves.has('substitute') || moves.has('uturn')};
+			return { cull: !!counter.setupType || !!counter.get('recovery') || moves.has('substitute') || moves.has('uturn') };
 		case 'partingshot':
-			return {cull: !!counter.get('speedsetup') || moves.has('bulkup') || moves.has('uturn')};
+			return { cull: !!counter.get('speedsetup') || moves.has('bulkup') || moves.has('uturn') };
 		case 'protect':
-			if (!isDoubles && ((counter.setupType && !moves.has('wish')) || moves.has('rest'))) return {cull: true};
+			if (!isDoubles && ((counter.setupType && !moves.has('wish')) || moves.has('rest'))) return { cull: true };
 			if (
 				!isDoubles &&
 				counter.get('Status') < 2 &&
 				['Guts', 'Quick Feet', 'Speed Boost', 'Moody'].every(m => !abilities.includes(m))
-			) return {cull: true};
-			if (movePool.includes('leechseed') || (movePool.includes('toxic') && !moves.has('wish'))) return {cull: true};
+			) return { cull: true };
+			if (movePool.includes('leechseed') || (movePool.includes('toxic') && !moves.has('wish'))) return { cull: true };
 			if (isDoubles && (
 				['bellydrum', 'fakeout', 'shellsmash', 'spore'].some(m => movePool.includes(m)) ||
 				moves.has('tailwind') || moves.has('waterspout')
-			)) return {cull: true};
-			return {cull: false};
+			)) return { cull: true };
+			return { cull: false };
 		case 'rapidspin':
 			const setup = ['curse', 'nastyplot', 'shellsmash'].some(m => moves.has(m));
-			return {cull: !!teamDetails.rapidSpin || setup || (!!counter.setupType && counter.get('Fighting') >= 2)};
+			return { cull: !!teamDetails.rapidSpin || setup || (!!counter.setupType && counter.get('Fighting') >= 2) };
 		case 'roar':
 			// for Blastoise
-			return {cull: moves.has('shellsmash')};
+			return { cull: moves.has('shellsmash') };
 		case 'shadowsneak':
 			const sneakIncompatible = ['substitute', 'trickroom', 'toxic'].some(m => moves.has(m));
-			return {cull: hasRestTalk || sneakIncompatible || counter.setupType === 'Special'};
+			return { cull: hasRestTalk || sneakIncompatible || counter.setupType === 'Special' };
 		case 'spikes':
-			return {cull: !!counter.setupType || (!!teamDetails.spikes && teamDetails.spikes > 1)};
+			return { cull: !!counter.setupType || (!!teamDetails.spikes && teamDetails.spikes > 1) };
 		case 'stealthrock':
-			return {cull:
+			return { cull:
 				!!counter.setupType ||
 				!!counter.get('speedsetup') ||
 				!!teamDetails.stealthRock ||
 				['rest', 'substitute', 'trickroom', 'teleport'].some(m => moves.has(m)),
 			};
 		case 'stickyweb':
-			return {cull: !!teamDetails.stickyWeb};
+			return { cull: !!teamDetails.stickyWeb };
 		case 'taunt':
-			return {cull: moves.has('encore') || moves.has('nastyplot') || moves.has('swordsdance')};
+			return { cull: moves.has('encore') || moves.has('nastyplot') || moves.has('swordsdance') };
 		case 'thunderwave': case 'voltswitch':
 			const cullInDoubles = isDoubles && (moves.has('electroweb') || moves.has('nuzzle'));
-			return {cull: (
+			return { cull: (
 				!!counter.setupType ||
 				!!counter.get('speedsetup') ||
 				moves.has('shiftgear') ||
 				moves.has('raindance') ||
 				cullInDoubles
-			)};
+			) };
 		case 'toxic':
-			return {cull: !!counter.setupType || ['sludgewave', 'thunderwave', 'willowisp'].some(m => moves.has(m))};
+			return { cull: !!counter.setupType || ['sludgewave', 'thunderwave', 'willowisp'].some(m => moves.has(m)) };
 		case 'toxicspikes':
-			return {cull: !!counter.setupType || !!teamDetails.toxicSpikes};
+			return { cull: !!counter.setupType || !!teamDetails.toxicSpikes };
 		case 'uturn':
 			const bugSwordsDanceCase = types.has('Bug') && counter.get('recovery') && moves.has('swordsdance');
-			return {cull: (
+			return { cull: (
 				!!counter.get('speedsetup') ||
 				(counter.setupType && !bugSwordsDanceCase) ||
 				(abilities.includes('Speed Boost') && moves.has('protect')) ||
 				(isDoubles && moves.has('leechlife'))
-			)};
+			) };
 
 		/**
 		 * Ineffective to have both moves together
@@ -375,26 +375,26 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 		 */
 		case 'explosion':
 			const otherMoves = ['curse', 'stompingtantrum', 'painsplit', 'wish'].some(m => moves.has(m));
-			return {cull: !!counter.get('speedsetup') || !!counter.get('recovery') || otherMoves};
+			return { cull: !!counter.get('speedsetup') || !!counter.get('recovery') || otherMoves };
 		case 'quickattack':
-			return {cull: !!counter.get('speedsetup') || (types.has('Rock') && !!counter.get('Status'))};
+			return { cull: !!counter.get('speedsetup') || (types.has('Rock') && !!counter.get('Status')) };
 		case 'flamethrower': case 'lavaplume':
 			const otherFireMoves = ['heatwave', 'overheat'].some(m => moves.has(m));
-			return {cull: (moves.has('fireblast') && counter.setupType !== 'Physical') || otherFireMoves};
+			return { cull: (moves.has('fireblast') && counter.setupType !== 'Physical') || otherFireMoves };
 		case 'overheat':
-			return {cull: moves.has('flareblitz') || (isDoubles && moves.has('calmmind'))};
+			return { cull: moves.has('flareblitz') || (isDoubles && moves.has('calmmind')) };
 		case 'aquatail':
-			return {cull: moves.has('aquajet') || !!counter.get('Status')};
+			return { cull: moves.has('aquajet') || !!counter.get('Status') };
 		case 'hydropump':
-			return {cull: moves.has('scald') && (
+			return { cull: moves.has('scald') && (
 				(counter.get('Special') < 4 && !moves.has('uturn')) ||
 				(species.types.length > 1 && counter.get('stab') < 3)
-			)};
+			) };
 		case 'gigadrain':
-			return {cull: types.has('Poison') && !counter.get('Poison')};
+			return { cull: types.has('Poison') && !counter.get('Poison') };
 		case 'leafstorm':
 			const leafBladePossible = movePool.includes('leafblade') || moves.has('leafblade');
-			return {cull:
+			return { cull:
 				(counter.setupType === 'Physical' && leafBladePossible) ||
 				(moves.has('gigadrain') && !!counter.get('Status')) ||
 				(isDoubles && moves.has('energyball')),
@@ -405,21 +405,21 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 				(moves.has('icebeam') && counter.get('Special') < 4)
 			);
 			const preferThunderWave = movePool.includes('thunderwave') && types.has('Electric');
-			return {cull: betterIceMove || preferThunderWave || movePool.includes('bodyslam')};
+			return { cull: betterIceMove || preferThunderWave || movePool.includes('bodyslam') };
 		// Milotic always wants RestTalk
 		case 'icebeam':
-			return {cull: moves.has('dragontail')};
+			return { cull: moves.has('dragontail') };
 		case 'bodypress':
 			const pressIncompatible = ['shellsmash', 'mirrorcoat', 'whirlwind'].some(m => moves.has(m));
-			return {cull: pressIncompatible || counter.setupType === 'Special'};
+			return { cull: pressIncompatible || counter.setupType === 'Special' };
 		case 'drainpunch':
-			return {cull: moves.has('closecombat') || (!types.has('Fighting') && movePool.includes('swordsdance'))};
+			return { cull: moves.has('closecombat') || (!types.has('Fighting') && movePool.includes('swordsdance')) };
 		case 'facade':
 			// Prefer Dynamic Punch when it can be a guaranteed-hit STAB move (mostly for Machamp)
-			return {cull: moves.has('dynamicpunch') && species.types.includes('Fighting') && abilities.includes('No Guard')};
+			return { cull: moves.has('dynamicpunch') && species.types.includes('Fighting') && abilities.includes('No Guard') };
 		case 'focusblast':
 			// Special cases for Blastoise and Regice; Blastoise wants Shell Smash, and Regice wants Thunderbolt
-			return {cull: movePool.includes('shellsmash') || hasRestTalk};
+			return { cull: movePool.includes('shellsmash') || hasRestTalk };
 		case 'superpower':
 			return {
 				cull: moves.has('hydropump') ||
@@ -428,25 +428,25 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 				isSetup: abilities.includes('Contrary'),
 			};
 		case 'poisonjab':
-			return {cull: !types.has('Poison') && counter.get('Status') >= 2};
+			return { cull: !types.has('Poison') && counter.get('Status') >= 2 };
 		case 'earthquake':
 			const doublesCull = moves.has('earthpower') || moves.has('highhorsepower');
 			const subToxicPossible = moves.has('substitute') && movePool.includes('toxic');
-			return {cull: (isDoubles && doublesCull) || subToxicPossible || moves.has('bonemerang')};
+			return { cull: (isDoubles && doublesCull) || subToxicPossible || moves.has('bonemerang') };
 		case 'airslash':
-			return {cull: hasRestTalk || counter.setupType === 'Physical'};
+			return { cull: hasRestTalk || counter.setupType === 'Physical' };
 		case 'hurricane':
-			return {cull: counter.setupType === 'Physical'};
+			return { cull: counter.setupType === 'Physical' };
 		case 'futuresight':
-			return {cull: moves.has('psyshock') || moves.has('trick') || movePool.includes('teleport')};
+			return { cull: moves.has('psyshock') || moves.has('trick') || movePool.includes('teleport') };
 		case 'psychic':
-			return {cull: moves.has('psyshock') && (!!counter.setupType || isDoubles)};
+			return { cull: moves.has('psyshock') && (!!counter.setupType || isDoubles) };
 		case 'psyshock':
-			return {cull: moves.has('psychic')};
+			return { cull: moves.has('psychic') };
 		case 'bugbuzz':
-			return {cull: moves.has('uturn') && !counter.setupType && !abilities.includes('Tinted Lens')};
+			return { cull: moves.has('uturn') && !counter.setupType && !abilities.includes('Tinted Lens') };
 		case 'leechlife':
-			return {cull:
+			return { cull:
 				(isDoubles && moves.has('lunge')) ||
 				(moves.has('uturn') && !counter.setupType) ||
 				movePool.includes('spikes'),
@@ -456,53 +456,53 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 			const rockSlidePlusStatusPossible = counter.get('Status') && movePool.includes('rockslide');
 			const otherRockMove = moves.has('rockblast') || moves.has('rockslide');
 			const lucarioCull = species.id === 'lucario' && !!counter.setupType;
-			return {cull: machampCullCondition || (!isDoubles && rockSlidePlusStatusPossible) || otherRockMove || lucarioCull};
+			return { cull: machampCullCondition || (!isDoubles && rockSlidePlusStatusPossible) || otherRockMove || lucarioCull };
 		case 'shadowball':
-			return {cull:
+			return { cull:
 				(isDoubles && moves.has('phantomforce')) ||
 				(!types.has('Ghost') && movePool.includes('focusblast')),
 			};
 		case 'shadowclaw':
-			return {cull: types.has('Steel') && moves.has('shadowsneak') && counter.get('Physical') < 4};
+			return { cull: types.has('Steel') && moves.has('shadowsneak') && counter.get('Physical') < 4 };
 		case 'dragonpulse': case 'spacialrend':
-			return {cull: moves.has('dracometeor') && counter.get('Special') < 4};
+			return { cull: moves.has('dracometeor') && counter.get('Special') < 4 };
 		case 'darkpulse':
 			const pulseIncompatible = ['foulplay', 'knockoff'].some(m => moves.has(m)) || (
 				species.id === 'shiftry' && (moves.has('defog') || moves.has('suckerpunch'))
 			);
 			// Special clause to prevent bugged Shiftry sets with Sucker Punch + Nasty Plot
 			const shiftryCase = movePool.includes('nastyplot') && !moves.has('defog');
-			return {cull: pulseIncompatible && !shiftryCase && counter.setupType !== 'Special'};
+			return { cull: pulseIncompatible && !shiftryCase && counter.setupType !== 'Special' };
 		case 'suckerpunch':
-			return {cull:
+			return { cull:
 				moves.has('rest') ||
 				counter.damagingMoves.size < 2 ||
 				(counter.setupType === 'Special') ||
 				(counter.get('Dark') > 1 && !types.has('Dark')),
 			};
 		case 'dazzlinggleam':
-			return {cull: ['moonblast', 'petaldance'].some(m => moves.has(m))};
+			return { cull: ['moonblast', 'petaldance'].some(m => moves.has(m)) };
 
 		// Status:
 		case 'bodyslam': case 'clearsmog':
 			const toxicCullCondition = moves.has('toxic') && !types.has('Normal');
-			return {cull: moves.has('sludgebomb') || moves.has('trick') || movePool.includes('recover') || toxicCullCondition};
+			return { cull: moves.has('sludgebomb') || moves.has('trick') || movePool.includes('recover') || toxicCullCondition };
 		case 'willowisp': case 'yawn':
 			// Swords Dance is a special case for Rapidash
-			return {cull: moves.has('thunderwave') || moves.has('toxic') || moves.has('swordsdance')};
+			return { cull: moves.has('thunderwave') || moves.has('toxic') || moves.has('swordsdance') };
 		case 'painsplit': case 'recover': case 'synthesis':
-			return {cull: moves.has('rest') || moves.has('wish') || (move.id === 'synthesis' && moves.has('gigadrain'))};
+			return { cull: moves.has('rest') || moves.has('wish') || (move.id === 'synthesis' && moves.has('gigadrain')) };
 		case 'roost':
-			return {cull:
+			return { cull:
 				moves.has('throatchop') ||
 				// Special cases for Salamence, Dynaless Dragonite, and Scizor to help prevent sets with poor coverage or no setup.
 				(moves.has('dualwingbeat') && (moves.has('outrage') || species.id === 'scizor')),
 			};
 		case 'reflect': case 'lightscreen':
-			return {cull: !!teamDetails.screens};
+			return { cull: !!teamDetails.screens };
 		case 'slackoff':
 			// Special case to prevent Scaldless Slowking
-			return {cull: species.id === 'slowking' && !moves.has('scald')};
+			return { cull: species.id === 'slowking' && !moves.has('scald') };
 		case 'substitute':
 			const moveBasedCull = (
 				// Breloom is OK with Substitute + Swords Dance (for subpunch sets)
@@ -510,21 +510,21 @@ export class RandomBDSPTeams extends RandomGen8Teams {
 				['bulkup', 'nastyplot', 'painsplit', 'roost', 'swordsdance'].some(m => movePool.includes(m))
 			);
 			const shayminCase = abilities.includes('Serene Grace') && movePool.includes('airslash') && !moves.has('airslash');
-			return {cull: moves.has('rest') || moveBasedCull || shayminCase};
+			return { cull: moves.has('rest') || moveBasedCull || shayminCase };
 		case 'helpinghand':
 			// Special case for Shuckle in Doubles, which doesn't want sets with no method to harm foes
-			return {cull: moves.has('acupressure')};
+			return { cull: moves.has('acupressure') };
 		case 'wideguard':
-			return {cull: moves.has('protect')};
+			return { cull: moves.has('protect') };
 		case 'grassknot':
 			// Special case for Raichu
-			return {cull: moves.has('surf')};
+			return { cull: moves.has('surf') };
 		}
 
-		return {cull: false};
+		return { cull: false };
 	}
 
-	shouldCullAbility(
+	override shouldCullAbility(
 		ability: string,
 		types: Set<string>,
 		moves: Set<string>,

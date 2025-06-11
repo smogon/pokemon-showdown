@@ -106,13 +106,13 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Close Combat", "Defog", "Encore", "Meteor Mash", "Poltergeist", "Strength Sap", "Trick", "U-turn", "Will-O-Wisp"],
+                "movepool": ["Close Combat", "Defog", "Meteor Mash", "Poltergeist", "Strength Sap", "Trick", "U-turn", "Will-O-Wisp"],
                 "abilities": ["Trace"],
                 "teraTypes": ["Fighting"]
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Defog", "Encore", "Meteor Mash", "Poltergeist", "Strength Sap", "U-turn", "Will-O-Wisp"],
+                "movepool": ["Defog", "Meteor Mash", "Poltergeist", "Strength Sap", "U-turn", "Will-O-Wisp"],
                 "abilities": ["Trace"],
                 "teraTypes": ["Dark", "Water"]
             }

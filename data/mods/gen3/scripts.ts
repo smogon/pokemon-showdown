@@ -50,7 +50,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// and the user's ally, like Earthquake and Explosion, don't get affected by spread modifiers
 			if (move.spreadHit && move.target === 'allAdjacentFoes') {
 				const spreadModifier = move.spreadModifier || 0.5;
-				this.battle.debug('Spread modifier: ' + spreadModifier);
+				this.battle.debug(`Spread modifier: ${spreadModifier}`);
 				baseDamage = this.battle.modify(baseDamage, spreadModifier);
 			}
 
@@ -163,7 +163,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let movename = move.name;
 			if (move.id === 'hiddenpower') movename = 'Hidden Power';
 			if (sourceEffect) attrs += `|[from]${this.dex.conditions.get(sourceEffect)}`;
-			this.battle.addMove('move', pokemon, movename, target + attrs);
+			this.battle.addMove('move', pokemon, movename, `${target}${attrs}`);
 
 			if (!target) {
 				this.battle.attrLastMove('[notarget]');
@@ -171,7 +171,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			const {targets, pressureTargets} = pokemon.getMoveTargets(move, target);
+			const { targets, pressureTargets } = pokemon.getMoveTargets(move, target);
 
 			if (!sourceEffect || sourceEffect.id === 'pursuit') {
 				let extraPP = 0;
@@ -308,10 +308,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				move.ignoreImmunity = (move.category === 'Status');
 			}
 
-			if (
-				(!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
-				!target.runImmunity(move.type)
-			) {
+			if (!target.runImmunity(move)) {
 				naturalImmunity = true;
 			} else {
 				hitResult = this.battle.singleEvent('TryImmunity', move, {}, target, pokemon, move);
@@ -328,7 +325,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			let boost: number;
 			if (accuracy !== true) {
 				if (!move.ignoreAccuracy) {
-					boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, {...pokemon.boosts});
+					boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
 					boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
 					if (boost > 0) {
 						accuracy *= boostTable[boost];
@@ -337,7 +334,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 				if (!move.ignoreEvasion) {
-					boosts = this.battle.runEvent('ModifyBoost', target, null, null, {...target.boosts});
+					boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
 					boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
 					if (boost > 0) {
 						accuracy /= boostTable[boost];
@@ -417,7 +414,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						accuracy = move.accuracy;
 						if (accuracy !== true) {
 							if (!move.ignoreAccuracy) {
-								boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, {...pokemon.boosts});
+								boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
 								boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
 								if (boost > 0) {
 									accuracy *= boostTable[boost];
@@ -426,7 +423,7 @@ export const Scripts: ModdedBattleScriptsData = {
 								}
 							}
 							if (!move.ignoreEvasion) {
-								boosts = this.battle.runEvent('ModifyBoost', target, null, null, {...target.boosts});
+								boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
 								boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
 								if (boost > 0) {
 									accuracy /= boostTable[boost];
