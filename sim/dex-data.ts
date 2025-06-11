@@ -176,8 +176,9 @@ export class DexNatures {
 		let nature = this.natureCache.get(id);
 		if (nature) return nature;
 
-		if (this.dex.data.Aliases.hasOwnProperty(id)) {
-			nature = this.get(this.dex.data.Aliases[id]);
+		const alias = this.dex.getAlias(id);
+		if (alias) {
+			nature = this.get(alias);
 			if (nature.exists) {
 				this.natureCache.set(id, nature);
 			}
@@ -315,7 +316,8 @@ export class DexTypes {
 		return this.namesCache;
 	}
 
-	isName(name: string): boolean {
+	isName(name: string | null | undefined): boolean {
+		if (!name) return false;
 		const id = name.toLowerCase();
 		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
 		return name === typeName && this.dex.data.TypeChart.hasOwnProperty(id);

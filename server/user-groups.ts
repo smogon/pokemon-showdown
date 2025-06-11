@@ -97,7 +97,7 @@ export abstract class Auth extends Map<ID, GroupSymbol | ''> {
 
 		// unidentified groups are treated as voice
 		return {
-			...(Config.groups['+'] || {}),
+			...Config.groups['+'],
 			symbol,
 			id: 'voice',
 			name: symbol,

@@ -36,6 +36,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			pokemon.formeChange(speciesid, null, true);
 			this.battle.add('-mega', pokemon, this.dex.species.get(speciesid).baseSpecies);
+			pokemon.formeRegression = true;
 
 			// Limit one mega evolution
 			for (const ally of pokemon.side.pokemon) {

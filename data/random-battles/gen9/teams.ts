@@ -1197,7 +1197,6 @@ export class RandomTeams {
 			moves.has('courtchange') ||
 			!isDoubles && (species.id === 'luvdisc' || (species.id === 'terapagos' && !moves.has('rest')))
 		) return 'Heavy-Duty Boots';
-		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
 		if (
 			['Cheek Pouch', 'Cud Chew', 'Harvest', 'Ripen'].some(m => ability === m) ||
 			moves.has('bellydrum') || moves.has('filletaway')
@@ -1278,7 +1277,7 @@ export class RandomTeams {
 		if (moves.has('blizzard') && ability !== 'Snow Warning' && !teamDetails.snow) return 'Blunder Policy';
 
 		if (role === 'Choice Item user') {
-			if (scarfReqs || moves.has('finalgambit') || species.id === 'ditto' || species.id === 'jirachi') return 'Choice Scarf';
+			if (scarfReqs || moves.has('finalgambit') || species.id === 'jirachi') return 'Choice Scarf';
 			return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
 		}
 		if (counter.get('Physical') >= moves.size &&
@@ -1538,7 +1537,7 @@ export class RandomTeams {
 		if (['axekick', 'highjumpkick', 'jumpkick', 'supercellslam'].some(m => moves.has(m))) srWeakness = 2;
 		while (evs.hp > 1) {
 			const hp = Math.floor(Math.floor(2 * species.baseStats.hp + ivs.hp + Math.floor(evs.hp / 4) + 100) * level / 100 + 10);
-			if ((moves.has('substitute') && ['Sitrus Berry', 'Salac Berry'].includes(item)) || species.id === 'minior') {
+			if ((moves.has('substitute') && ['Sitrus Berry'].includes(item)) || species.id === 'minior') {
 				// Two Substitutes should activate Sitrus Berry. Two switch-ins to Stealth Rock should activate Shields Down on Minior.
 				if (hp % 4 === 0) break;
 			} else if (

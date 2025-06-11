@@ -11882,7 +11882,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evos: ["Floette"],
 		eggGroups: ["Fairy"],
 		cosmeticFormes: ["Flabe\u0301be\u0301-Blue", "Flabe\u0301be\u0301-Orange", "Flabe\u0301be\u0301-White", "Flabe\u0301be\u0301-Yellow"],
-		formeOrder: ["Flabe\u0301be\u0301", "Flabe\u0301be\u0301-Blue", "Flabe\u0301be\u0301-Orange", "Flabe\u0301be\u0301-White", "Flabe\u0301be\u0301-Yellow"],
+		formeOrder: ["Flabe\u0301be\u0301", "Flabe\u0301be\u0301-Yellow", "Flabe\u0301be\u0301-Orange", "Flabe\u0301be\u0301-Blue", "Flabe\u0301be\u0301-White"],
 	},
 	floette: {
 		num: 670,
@@ -11901,7 +11901,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Fairy"],
 		otherFormes: ["Floette-Eternal"],
 		cosmeticFormes: ["Floette-Blue", "Floette-Orange", "Floette-White", "Floette-Yellow"],
-		formeOrder: ["Floette", "Floette-Blue", "Floette-Orange", "Floette-White", "Floette-Yellow", "Floette-Eternal"],
+		formeOrder: ["Floette", "Floette-Yellow", "Floette-Orange", "Floette-Blue", "Floette-White", "Floette-Eternal"],
 	},
 	floetteeternal: {
 		num: 670,
@@ -11933,7 +11933,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoItem: "Shiny Stone",
 		eggGroups: ["Fairy"],
 		cosmeticFormes: ["Florges-Blue", "Florges-Orange", "Florges-White", "Florges-Yellow"],
-		formeOrder: ["Florges", "Florges-Blue", "Florges-Orange", "Florges-White", "Florges-Yellow"],
+		formeOrder: ["Florges", "Florges-Yellow", "Florges-Orange", "Florges-Blue", "Florges-White"],
 	},
 	skiddo: {
 		num: 672,
@@ -13753,6 +13753,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	silvally: {
 		num: 773,
 		name: "Silvally",
+		baseForme: "Normal",
 		types: ["Normal"],
 		gender: "N",
 		baseStats: { hp: 95, atk: 95, def: 95, spa: 95, spd: 95, spe: 95 },
@@ -15788,7 +15789,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	alcremie: {
 		num: 869,
 		name: "Alcremie",
-		baseForme: "Vanilla Cream",
+		baseForme: "Vanilla-Cream",
 		types: ["Fairy"],
 		gender: "F",
 		baseStats: { hp: 65, atk: 60, def: 75, spa: 110, spd: 121, spe: 64 },
@@ -15882,6 +15883,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	eiscue: {
 		num: 875,
 		name: "Eiscue",
+		baseForme: "Ice",
 		types: ["Ice"],
 		baseStats: { hp: 75, atk: 80, def: 110, spa: 65, spd: 90, spe: 50 },
 		abilities: { 0: "Ice Face" },
@@ -15940,6 +15942,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	morpeko: {
 		num: 877,
 		name: "Morpeko",
+		baseForme: "Full-Belly",
 		types: ["Electric", "Dark"],
 		baseStats: { hp: 58, atk: 95, def: 58, spa: 70, spd: 58, spe: 97 },
 		abilities: { 0: "Hunger Switch" },
