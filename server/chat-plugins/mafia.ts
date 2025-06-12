@@ -599,9 +599,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	resetGame(hostForError: User) {
 		if (this.playerCount > this.originalRoles.length) {
-			this.sendUser(hostForError, `|error|Please set at least as many roles as there are players to run this command.`);
-			// feels a bit spaghetti
-			throw new Error();
+			throw new Chat.ErrorMessage("Please set at least as many roles as there are players to run this command.")
 		}
 		this.clearVotes();
 		this.dayNum = 0;
@@ -2490,11 +2488,8 @@ export const commands: Chat.ChatCommands = {
 			if (target) return this.parse('/help mafia resetgame');
 			if (game.phase !== 'day' && game.phase !== 'night') return this.errorReply(`The game has not started yet.`);
 			if (game.IDEA.data) return this.errorReply(`You cannot use this command in IDEA.`);
-			try {
-				game.resetGame(user);
-				game.logAction(user, 'reset the game state');
-				// try-catch block is only so game.logAction can run.If this becomes a non issue at some point,this should be refactored.
-			} catch {}
+			game.resetGame(user);
+			game.logAction(user, 'reset the game state');
 		},
 		resetgamehelp: [
 			`/mafia resetgame - Resets game data. Does not change settings from the host (besides deadlines) or add/remove any players. Requires host % @ # ~`,
