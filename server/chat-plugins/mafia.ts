@@ -598,12 +598,20 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	resetGame() {
+		if (this.playerCount > this.originalRoles.length) {
+			throw new Chat.ErrorMessage("Please set at least as many roles as there are players to run this command.");
+		}
 		this.clearVotes();
 		this.dayNum = 0;
 		this.phase = 'night';
 		for (const hostid of [...this.cohostids, this.hostid]) {
 			const host = Users.get(hostid);
-			if (host?.connected) host.send(`>${this.room.roomid}\n|notify|It's night in your game of Mafia!`);
+			if (host?.connected) {
+				if (this.playerCount < this.originalRoles.length) {
+					this.sendUser(host, `More roles exist than players. Not all roles in the rolelist were distributed.`);
+				}
+				host.send(`>${this.room.roomid}\n|notify|It's night in your game of Mafia!`);
+			}
 		}
 		for (const player of this.players) {
 			const user = Users.get(player.id);
@@ -615,8 +623,8 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		}
 
 		if (this.timer) this.setDeadline(0);
-		this.sendDeclare(`The game has been reset.`);
 		this.distributeRoles();
+		this.sendDeclare(`The game has been reset.`);
 		if (this.takeIdles) {
 			this.sendDeclare(`Night ${this.dayNum}. Submit whether you are using an action or idle. If you are using an action, DM your action to the host.`);
 		} else {
@@ -740,10 +748,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 	}
 
 	distributeRoles() {
-		const roles = Utils.shuffle(this.roles.slice());
-		if (roles.length < this.players.length) {
-			throw new Chat.ErrorMessage(`Not enough roles for all players. Have ${roles.length} roles but ${this.players.length} players.`);
-		}
+		const roles = Utils.shuffle(this.originalRoles.slice());
 		if (roles.length) {
 			for (const p of this.players) {
 				const role = roles.shift();
@@ -1676,13 +1681,14 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 			if (this.hostid === id) throw new Chat.ErrorMessage(`${targetString} the host.`);
 			if (this.cohostids.includes(id)) throw new Chat.ErrorMessage(`${targetString} a cohost.`);
 		}
-
-		for (const alt of user.getAltUsers(true)) {
-			if (!force && (this.getPlayer(alt.id) || this.played.includes(alt.id))) {
-				throw new Chat.ErrorMessage(`${self ? `You already have` : `${user.id} already has`} an alt in the game.`);
-			}
-			if (this.hostid === alt.id || this.cohostids.includes(alt.id)) {
-				throw new Chat.ErrorMessage(`${self ? `You have` : `${user.id} has`} an alt as a game host.`);
+		if (!force) {
+			for (const alt of user.getAltUsers(true)) {
+				if (this.getPlayer(alt.id) || this.played.includes(alt.id)) {
+					throw new Chat.ErrorMessage(`${self ? `You already have` : `${user.id} already has`} an alt in the game.`);
+				}
+				if (this.hostid === alt.id || this.cohostids.includes(alt.id)) {
+					throw new Chat.ErrorMessage(`${self ? `You have` : `${user.id} has`} an alt as a game host.`);
+				}
 			}
 		}
 	}
