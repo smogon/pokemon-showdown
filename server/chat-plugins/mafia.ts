@@ -597,7 +597,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 		if (reset) this.distributeRoles();
 	}
 
-	resetGame(hostForError: User) {
+	resetGame() {
 		if (this.playerCount > this.originalRoles.length) {
 			throw new Chat.ErrorMessage("Please set at least as many roles as there are players to run this command.");
 		}
@@ -2486,9 +2486,9 @@ export const commands: Chat.ChatCommands = {
 			const game = this.requireGame(Mafia);
 			if (game.hostid !== user.id && !game.cohostids.includes(user.id)) this.checkCan('mute', null, room);
 			if (target) return this.parse('/help mafia resetgame');
-			if (game.phase !== 'day' && game.phase !== 'night') return this.errorReply(`The game has not started yet.`);
-			if (game.IDEA.data) return this.errorReply(`You cannot use this command in IDEA.`);
-			game.resetGame(user);
+			if (game.phase !== 'day' && game.phase !== 'night') throw new Chat.ErrorMessage(`The game has not started yet.`);
+			if (game.IDEA.data) throw new Chat.ErrorMessage(`You cannot use this command in IDEA.`);
+			game.resetGame();
 			game.logAction(user, 'reset the game state');
 		},
 		resetgamehelp: [
