@@ -164,7 +164,7 @@ function mafiaSearch(
 		// Search themes by playercount
 		const inequalities = ['<=', '>=', '=', '<', '>'];
 		const inequality = inequalities.find(x => searchTarget.includes(x));
-		if (!inequality) return entries; // this.errorReply(`Please provide a valid inequality for the players.`);
+		if (!inequality) return entries;
 
 		const players = searchTarget.split(inequality)[1].trim();
 		if (!!players && !isNaN(Number(players))) {
