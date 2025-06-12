@@ -599,7 +599,7 @@ class Mafia extends Rooms.RoomGame<MafiaPlayer> {
 
 	resetGame(hostForError: User) {
 		if (this.playerCount > this.originalRoles.length) {
-			throw new Chat.ErrorMessage("Please set at least as many roles as there are players to run this command.")
+			throw new Chat.ErrorMessage("Please set at least as many roles as there are players to run this command.");
 		}
 		this.clearVotes();
 		this.dayNum = 0;
