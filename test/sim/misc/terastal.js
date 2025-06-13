@@ -121,7 +121,7 @@ describe("Terastallization", () => {
 			battle.makeChoices('move bulletpunch terastallize', 'auto');
 			const mew = battle.p2.active[0];
 			const damageRange = [72, 86];
-			assert.bounded(mew.maxhp - mew.hp, damageRange, `Should be a 60 BP Bullet Punch`);
+			assert.bounded(mew.maxhp - mew.hp, damageRange, `Should be a 60 BP Water Gun`);
 		});
 
 		it(`should not boost priority moves with <60 BP`, () => {
@@ -134,7 +134,7 @@ describe("Terastallization", () => {
 			battle.makeChoices('move bulletpunch terastallize', 'auto');
 			const mew = battle.p2.active[0];
 			const damageRange = [58, 70];
-			assert.bounded(mew.maxhp - mew.hp, damageRange, `Should be a 60 BP Bullet Punch`);
+			assert.bounded(mew.maxhp - mew.hp, damageRange, `Should be a 40 BP Bullet Punch`);
 		});
 
 		it(`should not boost the base power of moves with variable base power under 60 BP`, () => {
