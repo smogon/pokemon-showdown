@@ -167,6 +167,7 @@ export class LadderTracker {
 
 	tracking(battle: Rooms.RoomBattle, rating: number) {
 		const minElo = Math.floor(Number(battle.rated) || 0);
+		if (battle.format !== this.config.format) return false;
 		if (!minElo || minElo < 1000) {
 			return false;
 		}
@@ -413,7 +414,7 @@ export class LadderTracker {
 	}
 }
 
-const trackers: Record<string, LadderTracker> = {};
+export const trackers: Record<string, LadderTracker> = {};
 try {
 	const data = JSON.parse(FS("config/chat-plugins/laddertrackers.json").readIfExistsSync() || "{}");
 	for (const roomid in data) {
