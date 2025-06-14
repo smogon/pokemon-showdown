@@ -3521,14 +3521,29 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	serenesync: {
 		shortDesc: "Secondaries against this Pokemon also proc against the attacker",
 		onModifySecondaries(secondaries) {
+			const copyProps = [
+				'onHit',
+				'boosts',
+				'status',
+				'volatileStatus',
+				'sideCondition',
+				'slotCondition',
+				'pseudoWeather',
+				'terrain',
+				'weather',
+			] as const;
+
 			for (const secondary of secondaries) {
-				secondary.self ||= {};
-				for (const i in secondary) {
-					if (!['self', 'chance'].includes(i)) {
-						const secClone = structuredClone(secondary);
-						secClone.self = undefined;
-						secondary.self = secClone;
+				const selfEffect: AnyObject = {};
+
+				for (const prop of copyProps) {
+					if (secondary[prop] !== undefined) {
+						selfEffect[prop] = secondary[prop];
 					}
+				}
+
+				if (Object.keys(selfEffect).length) {
+					secondary.self = selfEffect;
 				}
 			}
 		},

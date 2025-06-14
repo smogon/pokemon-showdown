@@ -1906,7 +1906,7 @@ export const commands: Chat.ChatCommands = {
 		if (targetId === 'all') targetId = '';
 		const { totalMatches, sections } = findFormats(targetId, isOMSearch);
 
-		if (!totalMatches) throw new Chat.ErrorMessage("No matched formats found.");
+		if (!totalMatches) return this.errorReply("No matched formats found.");
 
 		const format = totalMatches === 1 ? Dex.formats.get(Object.values(sections)[0].formats[0]) : null;
 
