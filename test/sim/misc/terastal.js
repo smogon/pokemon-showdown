@@ -133,7 +133,7 @@ describe("Terastallization", () => {
 
 			battle.makeChoices('move bulletpunch terastallize', 'auto');
 			const mew = battle.p2.active[0];
-			const damageRange = [58, 70];
+			const damageRange = [48, 58];
 			assert.bounded(mew.maxhp - mew.hp, damageRange, `Should be a 40 BP Bullet Punch`);
 		});
 
