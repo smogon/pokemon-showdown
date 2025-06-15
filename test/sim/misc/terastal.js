@@ -118,7 +118,7 @@ describe("Terastallization", () => {
 				{ species: 'mew', ability: 'shellarmor', moves: ['sleeptalk'] },
 			]]);
 
-			battle.makeChoices('move bulletpunch terastallize', 'auto');
+			battle.makeChoices('move watergun terastallize', 'auto');
 			const mew = battle.p2.active[0];
 			const damageRange = [72, 86];
 			assert.bounded(mew.maxhp - mew.hp, damageRange, `Should be a 60 BP Water Gun`);
@@ -133,7 +133,7 @@ describe("Terastallization", () => {
 
 			battle.makeChoices('move bulletpunch terastallize', 'auto');
 			const mew = battle.p2.active[0];
-			const damageRange = [58, 70];
+			const damageRange = [48, 58];
 			assert.bounded(mew.maxhp - mew.hp, damageRange, `Should be a 40 BP Bullet Punch`);
 		});
 
