@@ -638,7 +638,7 @@ export class TeamValidator {
 		const { outOfBattleSpecies, tierSpecies } = this.getValidationSpecies(set);
 		if (this.gen <= 5 || ruleTable.has('obtainablemisc')) {
 			set.gender = species.gender || set.gender;
-			if (set.gender !== 'M' && set.gender !== 'F') {
+			if (!['M', 'F'].includes(set.gender)) {
 				set.gender = '';
 			}
 		}

@@ -329,8 +329,9 @@ export class Pokemon {
 
 		set.level = this.battle.clampIntRange(set.adjustLevel || set.level || 100, 1, 9999);
 		this.level = set.level;
-		const genders: { [key: string]: GenderName } = { M: 'M', F: 'F', N: '' };
-		this.gender = genders[set.gender] || '';
+		const genders: { [key: string]: GenderName } = { M: 'M', F: 'F', N: 'N' };
+		this.gender = genders[set.gender] || this.species.gender || this.battle.sample(['M', 'F']);
+		if (this.gender === 'N') this.gender = '';
 		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
 		this.pokeball = toID(this.set.pokeball) || 'pokeball' as ID;
 		this.dynamaxLevel = typeof set.dynamaxLevel === 'number' ? this.battle.clampIntRange(set.dynamaxLevel, 0, 10) : 10;
