@@ -213,6 +213,12 @@ export class NetRequest {
 		const currentOpts: NetRequestOptions & { maxRedirects?: number } = { ...opts };
 
 		for (let redirectsRemaining = maxRedirects; redirectsRemaining >= 0; redirectsRemaining--) {
+			if (typeof Config !== 'undefined' && Array.isArray(Config.netHostWhitelist) && Config.netHostWhitelist.length) {
+				const host = new url.URL(currentURL).hostname;
+				if (!Config.netHostWhitelist.includes(host)) {
+					throw new HttpError(`Request to disallowed host: ${host}`, undefined, "");
+				}
+			}
 			const stream = new NetStream(currentURL, currentOpts);
 			const response = await stream.response;
 			if (response) this.response = response;
@@ -222,14 +228,18 @@ export class NetRequest {
 				const redirectCodes = [301, 302, 303, 307, 308];
 				if (redirectCodes.includes(statusCode)) {
 					if (!response.headers.location) {
-						throw new HttpError("Redirect with no location header", statusCode, await stream.readAll());
+						throw new HttpError(`Redirect with no location header from ${currentURL}`, statusCode, await stream.readAll());
 					}
 					if (redirectsRemaining === 0) {
-						throw new HttpError("Too many redirects", statusCode, await stream.readAll());
+						throw new HttpError(`Too many redirects while requesting ${currentURL}`, statusCode, await stream.readAll());
 					}
 					await stream.readAll();
 
-					currentURL = new url.URL(response.headers.location, currentURL).toString();
+					try {
+						currentURL = new url.URL(response.headers.location, currentURL).toString();
+					} catch {
+						throw new HttpError(`Invalid redirect location "${response.headers.location}" from ${currentURL}`, statusCode, await stream.readAll());
+					}
 
 					if (statusCode === 303) {
 						currentOpts.method = 'GET';

@@ -93,6 +93,16 @@ Main's SSL deploy script from Let's Encrypt looks like:
 exports.proxyip = false;
 
 /**
+ * netHostWhitelist - restricts the hosts that the internal Net library is
+ *   allowed to connect to (and follow redirects to). An empty array disables
+ *   the restriction. This is primarily a security hardening option to avoid
+ *   unexpected outbound requests.
+ *   Example: ['raw.githubusercontent.com', 'pokeapi.co']
+ * @type {string[]}
+ */
+exports.netHostWhitelist = [];
+
+/**
  * Various debug options
  *
  * ofe[something]
