@@ -28,7 +28,7 @@ describe('Quick Claw', () => {
 	});
 
 	it(`[Gen 3] causes Speed ties with every holder when activated`, () => {
-		battle = common.gen(3).createBattle({ seed: [162, 106, 112, 554] }, [[
+		battle = common.gen(3).createBattle({ seed: [172, 106, 112, 542] }, [[
 			{ species: 'snorlax', item: 'quickclaw', moves: ['spore'] },
 		], [
 			{ species: 'deoxys', item: 'quickclaw', moves: ['seismictoss'] },
@@ -40,7 +40,6 @@ describe('Quick Claw', () => {
 		battle.makeChoices();
 		assert.fullHP(snorlax); // Snorlax wins the tie
 		assert.equal(snorlax.speed, deoxys.speed);
-		battle.makeChoices();
 		battle.quickClawRoll = true;
 		battle.makeChoices();
 		assert.false.fullHP(snorlax); // Deoxys wakes up and wins the tie
