@@ -1,5 +1,4 @@
 'use strict';
-/* eslint-disable require-atomic-updates */
 
 const assert = require('assert').strict;
 const http = require('http');
