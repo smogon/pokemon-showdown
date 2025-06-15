@@ -225,8 +225,7 @@ export class LadderTracker {
 		const url = `https://pokemonshowdown.com/ladder/${this.format}.json?prefix=${this.prefix}`;
 		const leaderboard: LeaderboardEntry[] = [];
 		try {
-			const responseText = await Net(url).get({ timeout: 10000, maxRedirects: 5 });
-			const response = JSON.parse(responseText);
+			const response = await Net(url).get().then(JSON.parse);
 			this.leaderboard.lookup = new Map();
 			for (const data of response.toplist) {
 				// TODO: move the rounding until later
@@ -248,10 +247,11 @@ export class LadderTracker {
 				this.changed = false;
 				this.lines = { them: 0, total: 0 };
 			}
-		} catch (err) {
+		} catch (err: any) {
 			Monitor.crashlog(err, 'a ladder tracker request', this.config);
 			if (display) throw new Chat.ErrorMessage(`Unable to fetch the leaderboard for ${this.prefix}.`);
 		}
+
 		return leaderboard;
 	}
 
