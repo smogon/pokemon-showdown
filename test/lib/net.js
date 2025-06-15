@@ -23,6 +23,8 @@ describe('NetRequest (lib/net)', () => {
 				res.writeHead(301, { Location: '/redirectloop' });
 				res.end();
 				break;
+			case '/noresponse':
+				break;
 			default:
 				res.writeHead(404);
 				res.end();
@@ -59,5 +61,16 @@ describe('NetRequest (lib/net)', () => {
 			assert.equal(e.message, 'Too many redirects');
 		}
 		if (!threw) assert.fail('Expected HttpError for too many redirects');
+	});
+
+	it('throws on request timeout', async () => {
+		let threw = false;
+		try {
+			await Net(`${baseURL}/noresponse`).get({ timeout: 100 });
+		} catch (e) {
+			threw = true;
+			assert.equal(e.message, 'Request timeout');
+		}
+		if (!threw) assert.fail('Expected timeout error');
 	});
 });

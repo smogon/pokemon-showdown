@@ -209,11 +209,10 @@ export class NetRequest {
 	async get(opts: NetRequestOptions & { maxRedirects?: number } = {}): Promise<string> {
 		const maxRedirects = opts.maxRedirects ?? 5;
 		let currentURL: string = this.uri;
-		let redirectsRemaining = maxRedirects;
 
 		const currentOpts: NetRequestOptions & { maxRedirects?: number } = { ...opts };
 
-		while (true) {
+		for (let redirectsRemaining = maxRedirects; redirectsRemaining >= 0; redirectsRemaining--) {
 			const stream = new NetStream(currentURL, currentOpts);
 			const response = await stream.response;
 			if (response) this.response = response;
@@ -225,13 +224,13 @@ export class NetRequest {
 					if (!response.headers.location) {
 						throw new HttpError("Redirect with no location header", statusCode, await stream.readAll());
 					}
-					if (redirectsRemaining <= 0) {
+					if (redirectsRemaining === 0) {
 						throw new HttpError("Too many redirects", statusCode, await stream.readAll());
 					}
 					await stream.readAll();
 
 					currentURL = new url.URL(response.headers.location, currentURL).toString();
-					redirectsRemaining--;
+
 					if (statusCode === 303) {
 						currentOpts.method = 'GET';
 						delete currentOpts.body;
@@ -246,6 +245,7 @@ export class NetRequest {
 
 			return stream.readAll();
 		}
+		throw new HttpError("Too many redirects", undefined, "");
 	}
 
 	/**

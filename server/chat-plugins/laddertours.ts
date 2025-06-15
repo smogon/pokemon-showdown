@@ -224,40 +224,33 @@ export class LadderTracker {
 	async getLeaderboard(display?: boolean) {
 		const url = `https://pokemonshowdown.com/ladder/${this.format}.json?prefix=${this.prefix}`;
 		const leaderboard: LeaderboardEntry[] = [];
-		const attempts = 3;
-		for (let attempt = 1; attempt <= attempts; attempt++) {
-			try {
-				const responseText = await Net(url).get({ timeout: 10000, maxRedirects: 5 });
-				const response = JSON.parse(responseText);
-				this.leaderboard.lookup = new Map();
-				for (const data of response.toplist) {
-					// TODO: move the rounding until later
-					const entry: LeaderboardEntry = {
-						name: data.username,
-						elo: Math.round(data.elo),
-						gxe: data.gxe,
-						glicko: Math.round(data.rpr),
-						glickodev: Math.round(data.rprd),
-					};
-					this.leaderboard.lookup.set(data.userid, entry);
-					if (!data.userid.startsWith(this.prefix)) continue;
-					entry.rank = leaderboard.length + 1;
-					leaderboard.push(entry);
-				}
-				if (display) {
-					this.addHTML(this.styleLeaderboard(leaderboard), true);
-					this.leaderboard.last = leaderboard;
-					this.changed = false;
-					this.lines = { them: 0, total: 0 };
-				}
-				break;
-			} catch (err) {
-				if (attempt === attempts) {
-					Monitor.crashlog(err, 'a ladder tracker request', this.config);
-					if (display) throw new Chat.ErrorMessage(`Unable to fetch the leaderboard for ${this.prefix}.`);
-				}
-				await new Promise<void>(resolve => { setTimeout(resolve, attempt * 1000); });
+		try {
+			const responseText = await Net(url).get({ timeout: 10000, maxRedirects: 5 });
+			const response = JSON.parse(responseText);
+			this.leaderboard.lookup = new Map();
+			for (const data of response.toplist) {
+				// TODO: move the rounding until later
+				const entry: LeaderboardEntry = {
+					name: data.username,
+					elo: Math.round(data.elo),
+					gxe: data.gxe,
+					glicko: Math.round(data.rpr),
+					glickodev: Math.round(data.rprd),
+				};
+				this.leaderboard.lookup.set(data.userid, entry);
+				if (!data.userid.startsWith(this.prefix)) continue;
+				entry.rank = leaderboard.length + 1;
+				leaderboard.push(entry);
 			}
+			if (display) {
+				this.addHTML(this.styleLeaderboard(leaderboard), true);
+				this.leaderboard.last = leaderboard;
+				this.changed = false;
+				this.lines = { them: 0, total: 0 };
+			}
+		} catch (err) {
+			Monitor.crashlog(err, 'a ladder tracker request', this.config);
+			if (display) throw new Chat.ErrorMessage(`Unable to fetch the leaderboard for ${this.prefix}.`);
 		}
 		return leaderboard;
 	}
