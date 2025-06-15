@@ -18,6 +18,7 @@ export interface NetRequestOptions extends https.RequestOptions {
 	body?: string | PostData;
 	writable?: boolean;
 	query?: PostData;
+	maxRedirects?: number;
 }
 
 export class HttpError extends Error {
@@ -197,21 +198,54 @@ export class NetRequest {
 	}
 
 	/**
-	 * Makes a basic http/https request to the URI.
-	 * Returns the response data.
+	 * Makes a basic http/https request to the URI and returns the response data.
+	 * Automatically follows up to `opts.maxRedirects` (default 5) for HTTP 30x
+	 * redirects.
 	 *
-	 * Will throw if the response code isn't 200 OK.
+	 * Will throw if the final response code isn't 200 OK.
 	 *
-	 * @param opts request opts - headers, etc.
+	 * @param opts Request options - headers, body, timeout, etc.
 	 */
-	async get(opts: NetRequestOptions = {}): Promise<string> {
-		const stream = this.getStream(opts);
-		const response = await stream.response;
-		if (response) this.response = response;
-		if (response && response.statusCode !== 200) {
-			throw new HttpError(response.statusMessage || "Connection error", response.statusCode, await stream.readAll());
+	async get(opts: NetRequestOptions & { maxRedirects?: number } = {}): Promise<string> {
+		const maxRedirects = opts.maxRedirects ?? 5;
+		let currentURL: string = this.uri;
+		let redirectsRemaining = maxRedirects;
+
+		const currentOpts: NetRequestOptions & { maxRedirects?: number } = { ...opts };
+
+		while (true) {
+			const stream = new NetStream(currentURL, currentOpts);
+			const response = await stream.response;
+			if (response) this.response = response;
+
+			if (response) {
+				const statusCode = response.statusCode || 0;
+				const redirectCodes = [301, 302, 303, 307, 308];
+				if (redirectCodes.includes(statusCode)) {
+					if (!response.headers.location) {
+						throw new HttpError("Redirect with no location header", statusCode, await stream.readAll());
+					}
+					if (redirectsRemaining <= 0) {
+						throw new HttpError("Too many redirects", statusCode, await stream.readAll());
+					}
+					await stream.readAll();
+
+					currentURL = new url.URL(response.headers.location, currentURL).toString();
+					redirectsRemaining--;
+					if (statusCode === 303) {
+						currentOpts.method = 'GET';
+						delete currentOpts.body;
+					}
+					continue;
+				}
+
+				if (statusCode !== 200) {
+					throw new HttpError(response.statusMessage || "Connection error", statusCode, await stream.readAll());
+				}
+			}
+
+			return stream.readAll();
 		}
-		return stream.readAll();
 	}
 
 	/**
