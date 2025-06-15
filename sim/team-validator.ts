@@ -636,6 +636,12 @@ export class TeamValidator {
 		ability = dex.abilities.get(set.ability);
 
 		const { outOfBattleSpecies, tierSpecies } = this.getValidationSpecies(set);
+		if (this.gen <= 5 || ruleTable.has('obtainablemisc')) {
+			set.gender = species.gender || set.gender;
+			if (set.gender !== 'M' && set.gender !== 'F') {
+				set.gender = '';
+			}
+		}
 		if (ability.id === 'battlebond' && toID(species.baseSpecies) === 'greninja') {
 			if (ruleTable.has('obtainablemisc')) {
 				if (set.gender && set.gender !== 'M') {

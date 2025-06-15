@@ -19,16 +19,16 @@ describe('Quick Claw', () => {
 
 		const snorlax = battle.p1.active[0];
 		const mewtwo = battle.p2.active[0];
-		battle.makeChoices(); // Quick Claw activates
-		assert.equal(snorlax.speed, mewtwo.speed);
-		battle.makeChoices(); // Quick Claw activates
-		assert.equal(snorlax.speed, mewtwo.speed);
 		battle.makeChoices(); // Quick Claw does not activate
 		assert.notEqual(snorlax.speed, mewtwo.speed);
+		battle.makeChoices(); // Quick Claw activates
+		assert.equal(snorlax.speed, mewtwo.speed);
+		battle.makeChoices(); // Quick Claw activates
+		assert.equal(snorlax.speed, mewtwo.speed);
 	});
 
 	it(`[Gen 3] causes Speed ties with every holder when activated`, () => {
-		battle = common.gen(3).createBattle({ seed: [163, 106, 112, 542] }, [[
+		battle = common.gen(3).createBattle({ seed: [162, 106, 112, 554] }, [[
 			{ species: 'snorlax', item: 'quickclaw', moves: ['spore'] },
 		], [
 			{ species: 'deoxys', item: 'quickclaw', moves: ['seismictoss'] },
@@ -40,6 +40,7 @@ describe('Quick Claw', () => {
 		battle.makeChoices();
 		assert.fullHP(snorlax); // Snorlax wins the tie
 		assert.equal(snorlax.speed, deoxys.speed);
+		battle.makeChoices();
 		battle.quickClawRoll = true;
 		battle.makeChoices();
 		assert.false.fullHP(snorlax); // Deoxys wakes up and wins the tie
