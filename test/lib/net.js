@@ -78,7 +78,7 @@ describe('NetRequest (lib/net)', () => {
 		);
 	});
 
-	it('throws on redirect with missing Location header', async () => {
+	it('rejects on redirect with missing Location header', async () => {
 		await assert.rejects(
 			Net(`${baseURL}/redirectnoloc`).get({ maxRedirects: 1 }),
 			err => err instanceof HttpError && err.message.startsWith('Redirect with no location header'),
@@ -86,7 +86,7 @@ describe('NetRequest (lib/net)', () => {
 		);
 	});
 
-	it('throws on redirect with invalid Location header', async () => {
+	it('rejects on redirect with invalid Location header', async () => {
 		await assert.rejects(
 			Net(`${baseURL}/redirectbadloc`).get({ maxRedirects: 1 }),
 			err => err instanceof HttpError && err.message.startsWith('Invalid redirect location'),
@@ -107,7 +107,7 @@ describe('NetRequest (lib/net)', () => {
 		}
 	});
 
-	it('blocks request when host is not whitelisted', async () => {
+	it('rejects request when host is not whitelisted', async () => {
 		const configObj2 = global.Config || (global.Config = {});
 		const prev2 = configObj2.netHostWhitelist;
 		configObj2.netHostWhitelist = ['example.com'];
