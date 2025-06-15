@@ -1507,9 +1507,6 @@ export class Pokemon {
 
 		this.volatileStaleness = undefined;
 
-		delete this.abilityState.started;
-		delete this.itemState.started;
-
 		this.setSpecies(this.baseSpecies);
 	}
 
@@ -1772,7 +1769,7 @@ export class Pokemon {
 			// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
 			return false;
 		}
-		if (this.battle.runEvent('UseItem', this, null, null, item)) {
+		if (this.battle.runEvent('UseItem', this, source, sourceEffect, item)) {
 			switch (item.id) {
 			case 'redcard':
 				this.battle.add('-enditem', this, item, `[of] ${source}`);
