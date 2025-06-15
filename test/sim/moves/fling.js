@@ -58,7 +58,6 @@ describe('Fling', () => {
 	});
 
 	it(`should Fling, not consume Leppa Berry when using 1 PP Leppa Berry Fling`, () => {
-		// Currently depends on RNG when it should not
 		battle = common.createBattle([[
 			{ species: 'wynaut', moves: ['fling'] },
 		], [
