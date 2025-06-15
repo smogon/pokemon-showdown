@@ -65,4 +65,16 @@ describe('Flower Gift', () => {
 		battle.makeChoices('auto', 'move blastburn dynamax');
 		assert(battle.log.every(line => !line.startsWith('|-formechange')));
 	});
+
+	it(`should not trigger if dragged in by a Mold Breaker Pokemon`, () => {
+		battle = common.createBattle([[
+			{ species: 'Torkoal', ability: 'drought', moves: ['sleeptalk'] },
+			{ species: 'Cherrim', ability: 'flowergift', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Haxorus', ability: 'moldbreaker', moves: ['roar'] },
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.field.weather, 'sunnyday');
+		assert.species(battle.p1.active[0], 'Cherrim');
+	});
 });
