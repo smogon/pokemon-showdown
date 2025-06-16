@@ -2690,7 +2690,7 @@ const mastermindCommands: Chat.ChatCommands = {
 		];
 		return this.sendReplyBox(
 			`<strong>Mastermind</strong> is a game in which each player tries to score as many points as possible in a timed round where only they can answer, ` +
-			`and the top X players advance to the finals, which is a timed game of Trivia in which only the first player to answer a question recieves points.` +
+			`and the top X players advance to the finals, which is a timed game of Trivia in which only the first player to answer a question receives points.` +
 			`<details><summary><strong>Commands</strong></summary>${commandHelp.join('<br />')}</details>`
 		);
 	},
