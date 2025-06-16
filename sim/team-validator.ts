@@ -1093,9 +1093,6 @@ export class TeamValidator {
 		}
 
 		if (!problems.length) {
-			if (set.gender === '' && !species.gender) {
-				set.gender = ['M', 'F'][Math.floor(Math.random() * 2)];
-			}
 			if (adjustLevel) set.level = adjustLevel;
 			return null;
 		}
