@@ -512,7 +512,7 @@ export const pages: Chat.PageTable = {
 				throw new Chat.ErrorMessage(`No terms on ignore list.`);
 			}
 			for (const term of roomData.ignore) {
-				buf += `- ${term} <button class="button" name="send"value="/msgroom ${room.roomid},/ar unignore ${term}">Remove</button><br />`;
+				buf += `- ${Utils.escapeHTML(term)} <button class="button" name="send"value="/msgroom ${room.roomid},/ar unignore ${term}">Remove</button><br />`;
 			}
 			buf += `</div>`;
 			break;
