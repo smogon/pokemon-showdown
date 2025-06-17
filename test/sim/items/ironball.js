@@ -86,18 +86,16 @@ describe('Iron Ball', () => {
 				{ species: "Mew", moves: ['recover'] },
 			]]);
 			battle.makeChoices();
-			console.log(battle.log);
 			assert.false.fullHP(battle.p2.active[0]);
 		});
 
-		it.skip('should not ground Pokemon with Klutz that are airborne', () => {
+		it('should not ground Pokemon with Klutz that are airborne', () => {
 			battle = common.gen(4).createBattle([[
 				{ species: "Togekiss", item: 'ironball', ability: 'klutz', moves: ['sleeptalk'] },
 			], [
 				{ species: "Mamoswine", moves: ['earthquake'] },
 			]]);
 			battle.makeChoices();
-			console.log(battle.log);
 			assert.fullHP(battle.p1.active[0]);
 		});
 	});
