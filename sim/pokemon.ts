@@ -864,12 +864,13 @@ export class Pokemon {
 	}
 
 	ignoringItem() {
-		return !this.getItem().isPrimalOrb && !!(
-			this.itemState.knockedOff || // Gen 3-4
-			(this.battle.gen >= 5 && !this.isActive) ||
-			(!this.getItem().ignoreKlutz && this.hasAbility('klutz')) ||
-			this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']
-		);
+		if (this.getItem().isPrimalOrb) return false;
+		if (this.itemState.knockedOff) return true; // Gen 3-4
+		if (this.battle.gen >= 5 && !this.isActive) return true;
+		// in gen 4, items that ignore Klutz also ignore Embargo
+		if (this.battle.gen <= 4 && this.getItem().ignoreKlutz) return false;
+		if (this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']) return true;
+		return !this.getItem().ignoreKlutz && this.hasAbility('klutz');
 	}
 
 	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
