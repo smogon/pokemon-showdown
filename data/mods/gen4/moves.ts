@@ -182,6 +182,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		recoil: [1, 3],
 	},
+	bugbite: {
+		inherit: true,
+		consumeBerries: false,
+	},
 	bulletseed: {
 		inherit: true,
 		basePower: 10,
@@ -1269,6 +1273,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 90,
 		pp: 20,
 		onAfterMove() {},
+	},
+	pluck: {
+		inherit: true,
+		consumeBerries: false,
 	},
 	poisongas: {
 		inherit: true,
