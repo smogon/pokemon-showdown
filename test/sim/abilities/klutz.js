@@ -31,6 +31,18 @@ describe('Klutz', () => {
 		assert.equal(klutzMon.hp, 1);
 	});
 
+	it('should not prevent berries from being consumed by Bug Bite', () => {
+		battle = common.createBattle([[
+			{ species: "Lopunny", level: 1, ability: 'klutz', moves: ['endure', 'bugbite'] },
+		], [
+			{ species: "Deoxys", ability: 'noguard', item: 'sitrusberry', moves: ['psychic', 'sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('move bugbite', 'move sleeptalk');
+		assert(battle.p1.active[0].hp > 1);
+		assert.false(battle.p2.active[0].item);
+	});
+
 	it('should ignore the effects of items that disable moves', () => {
 		battle = common.createBattle([[
 			{ species: "Lopunny", ability: 'klutz', item: 'assaultvest', moves: ['protect'] },

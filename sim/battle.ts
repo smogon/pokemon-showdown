@@ -605,6 +605,7 @@ export class Battle {
 			return relayVar;
 		}
 		if (eventid !== 'Start' && eventid !== 'TakeItem' && effect.effectType === 'Item' &&
+			!(eventid === 'Eat' && this.dex.moves.get(toID(sourceEffect)).consumeBerries) &&
 			(target instanceof Pokemon) && target.ignoringItem()) {
 			this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 			return relayVar;
@@ -872,7 +873,9 @@ export class Battle {
 				}
 			}
 			if (eventid !== 'Start' && eventid !== 'SwitchIn' && eventid !== 'TakeItem' &&
-				effect.effectType === 'Item' && (effectHolder instanceof Pokemon) && effectHolder.ignoringItem()) {
+				effect.effectType === 'Item' &&
+				!(eventid === 'Eat' && this.dex.moves.get(toID(sourceEffect)).consumeBerries) &&
+				(effectHolder instanceof Pokemon) && effectHolder.ignoringItem()) {
 				if (eventid !== 'Update') {
 					this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 				}
