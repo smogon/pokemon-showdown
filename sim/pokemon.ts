@@ -868,7 +868,7 @@ export class Pokemon {
 		if (this.itemState.knockedOff) return true;
 		if (this.battle.gen >= 5 && !this.isActive) return true;
 		if (this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']) return true;
-		// fling check first to avoid infinite recursion
+		// check Fling first to avoid infinite recursion
 		if (isFling) return this.battle.gen >= 5 && this.hasAbility('klutz');
 		return !this.getItem().ignoreKlutz && this.hasAbility('klutz');
 	}
