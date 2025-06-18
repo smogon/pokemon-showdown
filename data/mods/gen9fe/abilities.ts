@@ -4097,7 +4097,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					continue;
 				}
 				if (target.illusion) {
-					this.singleEvent('End', this.dex.abilities.get('Rough Image'), target.abilityState, target, pokemon, 'neutralizinggas');
+					this.singleEvent('End', this.dex.abilities.get('Rough Image'), target.abilityState, target, pokemon, this.dex.abilities.get('Neutralizing Gas'));
 				}
 				if (target.volatiles['slowstart']) {
 					delete target.volatiles['slowstart'];
@@ -4107,7 +4107,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				if (['eczema', 'prehistoricpresence'].includes(targetAbilID)) {
 					target.removeVolatile('ability:unaware');
 				} else if (strongWeathers.includes(targetAbilID)) {
-					this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
+					this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, this.dex.abilities.get('Neutralizing Gas'));
 				}
 			}
 		},

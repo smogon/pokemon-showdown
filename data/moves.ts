@@ -6681,10 +6681,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		condition: {
 			// Ability suppression implemented in Pokemon.ignoringAbility() within sim/pokemon.ts
-			onStart(pokemon) {
+			onStart(pokemon, source, sourceEffect) {
 				if (pokemon.hasItem('Ability Shield')) return false;
 				this.add('-endability', pokemon);
-				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
+				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, sourceEffect);
 			},
 			onCopy(pokemon) {
 				if (pokemon.getAbility().flags['cantsuppress']) pokemon.removeVolatile('gastroacid');
