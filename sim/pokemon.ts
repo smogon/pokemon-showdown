@@ -864,7 +864,7 @@ export class Pokemon {
 	}
 
 	ignoringItem(forceKlutz = false) {
-		const ignoreKlutz = this.getItem().ignoreKlutz && !forceKlutz;
+		const ignoreKlutz = !forceKlutz && this.getItem().ignoreKlutz;
 		if (this.getItem().isPrimalOrb) return false;
 		if (this.itemState.knockedOff) return true; // Gen 3-4
 		if (this.battle.gen >= 5 && !this.isActive) return true;
