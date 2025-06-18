@@ -31,18 +31,6 @@ describe('Klutz', () => {
 		assert.equal(klutzMon.hp, 1);
 	});
 
-	it('should activate berries after consuming them with Bug Bite', () => {
-		battle = common.createBattle([[
-			{ species: "Lopunny", level: 1, ability: 'klutz', moves: ['endure', 'bugbite'] },
-		], [
-			{ species: "Deoxys", ability: 'noguard', item: 'sitrusberry', moves: ['psychic', 'sleeptalk'] },
-		]]);
-		battle.makeChoices();
-		battle.makeChoices('move bugbite', 'move sleeptalk');
-		assert.false(battle.p2.active[0].item);
-		assert(battle.p1.active[0].hp > 1);
-	});
-
 	it('should ignore the effects of items that disable moves', () => {
 		battle = common.createBattle([[
 			{ species: "Lopunny", ability: 'klutz', item: 'assaultvest', moves: ['protect'] },
@@ -95,6 +83,18 @@ describe('Klutz', () => {
 		assert.equal(battle.p1.active[0].status, 'tox');
 	});
 
+	it('should activate berries after consuming them with Bug Bite', () => {
+		battle = common.createBattle([[
+			{ species: "Lopunny", level: 1, ability: 'klutz', moves: ['endure', 'bugbite'] },
+		], [
+			{ species: "Deoxys", ability: 'noguard', item: 'sitrusberry', moves: ['psychic', 'sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		battle.makeChoices('move bugbite', 'move sleeptalk');
+		assert.false(battle.p2.active[0].item);
+		assert(battle.p1.active[0].hp > 1);
+	});
+
 	it('should not prevent Pokemon from Mega Evolving', () => {
 		battle = common.createBattle([[
 			{ species: "Lopunny", ability: 'klutz', item: 'lopunnite', moves: ['protect'] },
@@ -106,18 +106,6 @@ describe('Klutz', () => {
 	});
 
 	describe('[Gen 4]', () => {
-		it('should prevent berries from activating after consuming them with Bug Bite', () => {
-			battle = common.gen(4).createBattle([[
-				{ species: "Lopunny", level: 1, ability: 'klutz', moves: ['endure', 'bugbite'] },
-			], [
-				{ species: "Deoxys", ability: 'noguard', item: 'sitrusberry', moves: ['psychic', 'sleeptalk'] },
-			]]);
-			battle.makeChoices();
-			battle.makeChoices('move bugbite', 'move sleeptalk');
-			assert.false(battle.p2.active[0].item);
-			assert.equal(battle.p1.active[0].hp, 1);
-		});
-
 		it('should not consume berries received by Fling', () => {
 			battle = common.gen(4).createBattle([[
 				{ species: "Lopunny", ability: 'klutz', moves: ['sleeptalk'] },
@@ -138,6 +126,18 @@ describe('Klutz', () => {
 			battle.makeChoices();
 			assert.false(battle.p2.active[0].item);
 			assert.false(battle.p1.active[0].status);
+		});
+
+		it('should prevent berries from activating after consuming them with Bug Bite', () => {
+			battle = common.gen(4).createBattle([[
+				{ species: "Lopunny", level: 1, ability: 'klutz', moves: ['endure', 'bugbite'] },
+			], [
+				{ species: "Deoxys", ability: 'noguard', item: 'sitrusberry', moves: ['psychic', 'sleeptalk'] },
+			]]);
+			battle.makeChoices();
+			battle.makeChoices('move bugbite', 'move sleeptalk');
+			assert.false(battle.p2.active[0].item);
+			assert.equal(battle.p1.active[0].hp, 1);
 		});
 	});
 });
