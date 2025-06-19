@@ -6710,20 +6710,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { snatch: 1, bypasssub: 1, metronome: 1 },
-		onHitSide(side, source, move) {
-			const targets = side.allies().filter(target => (
-				target.hasAbility(['plus', 'minus']) &&
-				(!target.volatiles['maxguard'] || this.runEvent('TryHit', target, source, move))
-			));
-			if (!targets.length) return false;
-			let didSomething = false;
-			for (const target of targets) {
-				didSomething = this.boost({ atk: 1, spa: 1 }, target, source, move, false, true) || didSomething;
-			}
-			return didSomething;
+		onTryHit(target, source, move) {
+			if (!target.hasAbility(['plus', 'minus'])) return false;
+		},
+		boosts: {
+			atk: 1,
+			spa: 1,
 		},
 		secondary: null,
-		target: "allySide",
+		target: "allies",
 		type: "Steel",
 		zMove: { boost: { spa: 1 } },
 		contestType: "Clever",
@@ -11229,21 +11224,15 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { snatch: 1, distance: 1, bypasssub: 1, metronome: 1 },
-		onHitSide(side, source, move) {
-			const targets = side.allies().filter(ally => (
-				ally.hasAbility(['plus', 'minus']) &&
-				(!ally.volatiles['maxguard'] || this.runEvent('TryHit', ally, source, move))
-			));
-			if (!targets.length) return false;
-
-			let didSomething = false;
-			for (const target of targets) {
-				didSomething = this.boost({ def: 1, spd: 1 }, target, source, move, false, true) || didSomething;
-			}
-			return didSomething;
+		onTryHit(target, source, move) {
+			if (!target.hasAbility(['plus', 'minus'])) return false;
+		},
+		boosts: {
+			def: 1,
+			spd: 1,
 		},
 		secondary: null,
-		target: "allySide",
+		target: "allies",
 		type: "Electric",
 		zMove: { boost: { spd: 1 } },
 		contestType: "Clever",
