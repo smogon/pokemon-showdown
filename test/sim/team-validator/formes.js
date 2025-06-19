@@ -101,7 +101,7 @@ describe('Team Validator', () => {
 	});
 
 	// Zamazenta is unreleased currently
-	it.skip('should tier Zacian and Zamazenta formes seperately', () => {
+	it.skip('should tier Zacian and Zamazenta formes separately', () => {
 		team = [
 			{ species: 'zamazenta-crowned', ability: 'dauntlessshield', item: 'rustedshield', moves: ['howl'], evs: { hp: 1 } },
 		];

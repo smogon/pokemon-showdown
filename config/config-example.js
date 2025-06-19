@@ -500,7 +500,7 @@ exports.lastfmkey = '';
 exports.chatlogreader = 'fs';
 /**
  * permissions and groups:
- *   Each entry in `grouplist` is a seperate group. Some of the members are "special"
+ *   Each entry in `grouplist` is a separate group. Some of the members are "special"
  *     while the rest is just a normal permission.
  *   The order of the groups determines their ranking.
  *   The special members are as follows:

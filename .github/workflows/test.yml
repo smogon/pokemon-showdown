@@ -65,7 +65,7 @@ jobs:
           data/**
           sim/**
 
-    - name: Run selective lint & neccessary tests (if pull request)
+    - name: Run selective lint & necessary tests (if pull request)
       if: ${{ github.event_name == 'pull_request' }}
       run: npm run full-test-ci
       env:
