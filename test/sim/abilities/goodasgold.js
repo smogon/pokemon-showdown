@@ -19,7 +19,7 @@ describe('Good as Gold', () => {
 		assert.false(battle.p1.active[0].volatiles['perishsong']);
 		assert(battle.p2.active[0].volatiles['perishsong']);
 	});
-	
+
 	it('should not block Haze', () => {
 		battle = common.createBattle([
 			[{ species: "Gholdengo", ability: 'goodasgold', moves: ['nastyplot'] }],
