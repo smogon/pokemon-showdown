@@ -6071,9 +6071,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { distance: 1, metronome: 1 },
 		onHit(target, source, move) {
-			if (target.hasType('Grass')) {
-				return !!this.boost({ def: 1 }, target, source, move);
-			}
+			if (!target.hasType('Grass')) return false;
+			this.boost({ def: 1 }, target, source, move);
 		},
 		secondary: null,
 		target: "all",
@@ -13707,15 +13706,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { sound: 1, distance: 1, bypasssub: 1, metronome: 1 },
 		onHit(target, source, move) {
-			if (!target.volatiles['perishsong']) {
-				if (!move.message) {
-					move.message = true;
-					this.add('-fieldactivate', 'move: Perish Song');
-				}
-				target.addVolatile('perishsong');
-				this.add('-start', target, 'perish3', '[silent]');
-				return true;
+			if (target.volatiles['perishsong']) return false;
+			if (!move.message) {
+				move.message = true;
+				this.add('-fieldactivate', 'move: Perish Song');
 			}
+			target.addVolatile('perishsong');
+			this.add('-start', target, 'perish3', '[silent]');
 		},
 		condition: {
 			duration: 4,
@@ -16037,9 +16034,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { distance: 1, nonsky: 1, metronome: 1 },
 		onHit(target, source, move) {
-			if (target.hasType('Grass')) {
-				return !!this.boost({ atk: 1, spa: 1 }, target, source, move);
+			if (!target.runImmunity('Ground')) {
+				this.add('-immune', target);
+				return false;
 			}
+			if (!target.hasType('Grass')) return false;
+			this.boost({ atk: 1, spa: 1 }, target, source, move);
 		},
 		secondary: null,
 		target: "all",

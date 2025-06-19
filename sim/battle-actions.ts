@@ -1317,7 +1317,8 @@ export class BattleActions {
 
 		if (!didAnything && didAnything !== 0 && !moveData.self && !moveData.selfdestruct) {
 			if (!isSelf && !isSecondary) {
-				if (didAnything === false) {
+				// Tea Time should announce failture
+				if (didAnything === false || moveData.target === 'all') {
 					this.battle.add('-fail', source);
 					this.battle.attrLastMove('[still]');
 				}
