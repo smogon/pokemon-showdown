@@ -167,6 +167,14 @@ describe('Dex data', () => {
 				assert(false, `Alias ${aliasid} -> "${Aliases[aliasid]}" must be a pokemon/move/ability/item/format`);
 			}
 		}
+
+		// Dex.loadAliases();
+		// for (const aliasid in Aliases) {
+		// 	const targetid = toID(Aliases[aliasid]);
+		// 	if (Dex.fuzzyAliases.get(aliasid)?.join(',') === targetid) {
+		// 		console.log(`Redundant alias "${aliasid}"`);
+		// 	}
+		// }
 	});
 
 	it('should have valid CompoundWordNames entries', () => {
@@ -177,13 +185,13 @@ describe('Dex data', () => {
 			assert(!used.has(targetid), `CompoundWordNames entry "${name}" already exists as "${used.get(targetid)}"`);
 			used.set(targetid, name);
 
-			const actualName = Dex.data.Pokedex[targetid]?.name || Dex.data.Moves[targetid]?.name ||
+			let actualName = Dex.data.Pokedex[targetid]?.name || Dex.data.Moves[targetid]?.name ||
 				Dex.data.Abilities[targetid]?.name || Dex.data.Items[targetid]?.name;
-			assert(actualName, `CompoundWordNames entry "${name}" must be a pokemon/move/ability/item`);
-			if (Dex.data.Pokedex[targetid]?.name === actualName) {
-				// this is a pokemon
-				assert(!Dex.species.get(targetid).forme, `Formes (${name}) are not supported; tell Zarel if you want this for something.`);
+			if (Dex.data.Pokedex[targetid]?.name) {
+				const species = Dex.species.get(targetid);
+				if (species.forme) actualName = species.baseSpecies + ' ' + species.forme;
 			}
+			assert(actualName, `CompoundWordNames entry "${name}" must be a pokemon/move/ability/item`);
 			assert.equal(actualName.replace(/-/g, ''), name.replace(/-/g, ''), `CompoundWordNames entry "${name}" should be the same as its target name (ignoring hyphens)`);
 			assert(name.split('-').length > actualName.split('-').length, `CompoundWordNames entry "${name}" should have at least one more hyphen than "${actualName}" (to mark a word boundary)`);
 		}

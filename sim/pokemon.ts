@@ -330,7 +330,10 @@ export class Pokemon {
 		set.level = this.battle.clampIntRange(set.adjustLevel || set.level || 100, 1, 9999);
 		this.level = set.level;
 		const genders: { [key: string]: GenderName } = { M: 'M', F: 'F', N: 'N' };
-		this.gender = genders[set.gender] || this.species.gender || (this.battle.random(2) ? 'F' : 'M');
+		this.gender = genders[set.gender] || this.species.gender;
+		if (!this.gender && (this.battle.gen < 6 || this.battle.ruleTable.has('obtainablemisc'))) {
+			this.gender = (this.battle.random(2) ? 'F' : 'M');
+		}
 		if (this.gender === 'N') this.gender = '';
 		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
 		this.pokeball = toID(this.set.pokeball) || 'pokeball' as ID;
@@ -1051,7 +1054,7 @@ export class Pokemon {
 			}
 		}
 		if (!atLeastOne) return;
-		if (this.canGigantamax) result.gigantamax = this.canGigantamax;
+		if (this.canGigantamax && this.gigantamax) result.gigantamax = this.canGigantamax;
 		return result;
 	}
 
@@ -1432,7 +1435,8 @@ export class Pokemon {
 			}
 		}
 		if (isPermanent && (!source || !['disguise', 'iceface'].includes(source.id))) {
-			if (this.illusion) {
+			if (this.illusion && source) {
+				// Tera forme by Ogerpon or Terapagos breaks the Illusion
 				this.ability = ''; // Don't allow Illusion to wear off
 			}
 			const ability = species.abilities[abilitySlot] || species.abilities['0'];
@@ -2138,7 +2142,7 @@ export class Pokemon {
 		if (this.species.name === 'Terapagos-Terastal' && this.hasAbility('Tera Shell') &&
 			!this.battle.suppressingAbility(this)) {
 			if (this.abilityState.resisted) return -1; // all hits of multi-hit move should be not very effective
-			if (move.category === 'Status' || move.id === 'struggle' || !this.runImmunity(move.type) ||
+			if (move.category === 'Status' || move.id === 'struggle' || !this.runImmunity(move) ||
 				totalTypeMod < 0 || this.hp < this.maxhp) {
 				return totalTypeMod;
 			}
@@ -2151,12 +2155,18 @@ export class Pokemon {
 	}
 
 	/** false = immune, true = not immune */
-	runImmunity(type: string, message?: string | boolean) {
+	runImmunity(source: ActiveMove | string, message?: string | boolean) {
+		if (!source) return true;
+		const type: string = typeof source !== 'string' ? source.type : source;
+		if (typeof source !== 'string') {
+			if (source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[type])) {
+				return true;
+			}
+		}
 		if (!type || type === '???') return true;
 		if (!this.battle.dex.types.isName(type)) {
 			throw new Error("Use runStatusImmunity for " + type);
 		}
-		if (this.fainted) return false;
 
 		const negateImmunity = !this.battle.runEvent('NegateImmunity', this, type);
 		const notImmune = type === 'Ground' ?
