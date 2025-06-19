@@ -135,7 +135,7 @@ export interface MoveEventMethods {
 	) => void;
 	onPrepareHit?: CommonHandlers['ResultMove'];
 	onTry?: CommonHandlers['ResultSourceMove'];
-	onTryHit?: CommonHandlers['ExtResultSourceMove'];
+	onTryHit?: CommonHandlers['ExtResultMove'];
 	onTryHitField?: CommonHandlers['ResultMove'];
 	onTryHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void;
 	onTryImmunity?: CommonHandlers['ResultMove'];

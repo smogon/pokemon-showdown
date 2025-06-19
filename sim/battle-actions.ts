@@ -1049,7 +1049,7 @@ export class BattleActions {
 			damage[i] = true;
 		}
 		const move = this.dex.getActiveMove(moveOrMoveName);
-		let hitResult: boolean | number | null = true;
+		let hitResult: number | boolean | null | "" = true;
 		let moveData = hitEffect as ActiveMove;
 		if (!moveData) moveData = move;
 		if (!moveData.flags) moveData.flags = {};
@@ -1072,12 +1072,12 @@ export class BattleActions {
 			}
 			return [[false], targets]; // single-target only
 		}
-		if (targets.filter(val => !!val).length === 0) {
+		if (targets.every(val => !val)) {
 			if (targets.includes(false)) {
 				this.battle.add('-fail', pokemon);
 				this.battle.attrLastMove('[still]');
 			}
-			return [targets.map(() => false), targets];
+			return [new Array(targets.length).fill(false), targets];
 		}
 
 		// 0. check for substitute
