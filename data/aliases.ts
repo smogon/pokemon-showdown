@@ -470,7 +470,6 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	wormadamg: "Wormadam-Sandy",
 	wormadamground: "Wormadam-Sandy",
 	wormadamsandycloak: "Wormadam-Sandy",
-	wormadams: "Wormadam-Trash",
 	wormadamsteel: "Wormadam-Trash",
 	wormadamtrashcloak: "Wormadam-Trash",
 	zacianh: "Zacian",
