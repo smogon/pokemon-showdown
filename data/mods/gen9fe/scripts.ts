@@ -323,7 +323,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.faint(pokemon, pokemon, move);
 			}
 			let damage: number | false | undefined | '' = false;
-			if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
+			if (['allySide', 'allyTeam', 'field', 'foeSide'].includes(move.target)) {
 				damage = this.tryMoveHit(targets, pokemon, move);
 				if (damage === this.battle.NOT_FAIL) pokemon.moveThisTurnResult = null;
 				if (damage || damage === 0 || damage === undefined) moveResult = true;

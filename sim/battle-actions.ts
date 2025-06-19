@@ -499,7 +499,7 @@ export class BattleActions {
 		}
 
 		let damage: number | false | undefined | '' = false;
-		if (move.target === 'all' || move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') {
+		if (['allySide', 'allyTeam', 'field', 'foeSide'].includes(move.target)) {
 			damage = this.tryMoveHit(targets, pokemon, move);
 			if (damage === this.battle.NOT_FAIL) pokemon.moveThisTurnResult = null;
 			if (damage || damage === 0 || damage === undefined) moveResult = true;
@@ -830,7 +830,7 @@ export class BattleActions {
 		}
 
 		const isFFAHazard = move.target === 'foeSide' && this.battle.gameType === 'freeforall';
-		if (move.target === 'all') {
+		if (move.target === 'field') {
 			hitResult = this.battle.runEvent('TryHitField', target, pokemon, move);
 		} else if (isFFAHazard) {
 			const hitResults: any[] = this.battle.runEvent('TryHitSide', targets, pokemon, move);
@@ -1056,7 +1056,7 @@ export class BattleActions {
 		let moveData = hitEffect as ActiveMove;
 		if (!moveData) moveData = move;
 		if (!moveData.flags) moveData.flags = {};
-		if (move.target === 'all' && !isSelf) {
+		if (move.target === 'field' && !isSelf) {
 			hitResult = this.battle.singleEvent('TryHitField', moveData, {}, target || null, pokemon, move);
 		} else if ((move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') && !isSelf) {
 			hitResult = this.battle.singleEvent('TryHitSide', moveData, {}, target || null, pokemon, move);
@@ -1073,7 +1073,7 @@ export class BattleActions {
 
 		// 0. check for substitute
 		if (!isSecondary && !isSelf) {
-			if (move.target !== 'all' && move.target !== 'allyTeam' && move.target !== 'allySide' && move.target !== 'foeSide') {
+			if (!['allySide', 'allyTeam', 'field', 'foeSide'].includes(move.target)) {
 				damage = this.tryPrimaryHitEvent(damage, targets, pokemon, move, moveData, isSecondary);
 			}
 		}
@@ -1279,7 +1279,7 @@ export class BattleActions {
 				// Hit events
 				//   These are like the TryHit events, except we don't need a FieldHit event.
 				//   Scroll up for the TryHit event documentation, and just ignore the "Try" part. ;)
-				if (move.target === 'all' && !isSelf) {
+				if (move.target === 'field' && !isSelf) {
 					if (moveData.onHitField) {
 						hitResult = this.battle.singleEvent('HitField', moveData, {}, target, source, move);
 						didSomething = this.combineResults(didSomething, hitResult);
