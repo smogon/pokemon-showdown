@@ -1044,8 +1044,6 @@ export class BattleActions {
 		targets: SpreadMoveTargets, pokemon: Pokemon, moveOrMoveName: ActiveMove,
 		hitEffect?: Dex.HitEffect, isSecondary?: boolean, isSelf?: boolean
 	): [SpreadMoveDamage, SpreadMoveTargets] {
-		// Hardcoded for single-target purposes
-		// (no spread moves have any kind of onTryHit handler)
 		let damage: (number | boolean | undefined)[] = [];
 		for (const i of targets.keys()) {
 			damage[i] = true;
