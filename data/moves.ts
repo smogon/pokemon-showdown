@@ -13713,10 +13713,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return true;
 			}
 		},
-		onAfterMoveSecondarySelf() {
-			// Perish Song was successful
-			this.add('-fieldactivate', 'move: Perish Song');
-		},
 		condition: {
 			duration: 4,
 			onEnd(target) {
@@ -19763,7 +19759,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { bypasssub: 1, metronome: 1 },
 		onHit(target, source, move) {
-			this.add('-fieldactivate', 'move: Teatime');
 			return target.eatItem(true, source, move) || this.NOT_FAIL;
 		},
 		secondary: null,
