@@ -9863,7 +9863,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					if (moveSlot.id === 'struggle') continue;
 					pokemon.disableMove(moveSlot.id, 'hidden');
 				}
-				pokemon.maybeDisabled = this.gameType === 'singles';
+				pokemon.maybeDisabled = true;
 			},
 			onFoeBeforeMovePriority: 4,
 			onFoeBeforeMove(attacker, defender, move) {
