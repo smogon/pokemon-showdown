@@ -1046,7 +1046,6 @@ export class BattleActions {
 	): [SpreadMoveDamage, SpreadMoveTargets] {
 		// Hardcoded for single-target purposes
 		// (no spread moves have any kind of onTryHit handler)
-		const target = targets[0];
 		let damage: (number | boolean | undefined)[] = [];
 		for (const i of targets.keys()) {
 			damage[i] = true;
@@ -1057,11 +1056,16 @@ export class BattleActions {
 		if (!moveData) moveData = move;
 		if (!moveData.flags) moveData.flags = {};
 		if (move.target === 'field' && !isSelf) {
-			hitResult = this.battle.singleEvent('TryHitField', moveData, {}, target || null, pokemon, move);
+			hitResult = this.battle.singleEvent('TryHitField', moveData, {}, targets[0] || null, pokemon, move);
 		} else if ((move.target === 'foeSide' || move.target === 'allySide' || move.target === 'allyTeam') && !isSelf) {
-			hitResult = this.battle.singleEvent('TryHitSide', moveData, {}, target || null, pokemon, move);
-		} else if (target) {
-			hitResult = this.battle.singleEvent('TryHit', moveData, {}, target, pokemon, move);
+			hitResult = this.battle.singleEvent('TryHitSide', moveData, {}, targets[0] || null, pokemon, move);
+		} else {
+			for (const [i, target] of targets.entries()) {
+				if (!target) continue;
+				hitResult = this.battle.singleEvent('TryHit', moveData, {}, target, pokemon, move);
+				if (!hitResult) targets[i] = hitResult as false | null;
+			}
+			hitResult = true;
 		}
 		if (!hitResult) {
 			if (hitResult === false) {
@@ -1069,6 +1073,13 @@ export class BattleActions {
 				this.battle.attrLastMove('[still]');
 			}
 			return [[false], targets]; // single-target only
+		}
+		if (targets.filter(val => !!val).length === 0) {
+			if (targets.includes(false)) {
+				this.battle.add('-fail', pokemon);
+				this.battle.attrLastMove('[still]');
+			}
+			return [targets.map(() => false), targets];
 		}
 
 		// 0. check for substitute

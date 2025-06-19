@@ -1251,7 +1251,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	perishsong: {
 		inherit: true,
+		volatileStatus: undefined,
 		onHit() {},
+		onTryHit() {},
 		onHitField(target, source, move) {
 			let result = false;
 			let message = false;
