@@ -272,7 +272,7 @@ export const State = new class {
 	// be extended.
 	serializeActiveMove(move: ActiveMove, battle: Battle): /* ActiveMove */ AnyObject {
 		const base = battle.dex.moves.get(move.id);
-		const skip = new Set([...ACTIVE_MOVE]);
+		const skip = new Set(ACTIVE_MOVE);
 		for (const [key, value] of Object.entries(base)) {
 			// This should really be a deepEquals check to see if anything on ActiveMove was
 			// modified from the base Move, but that ends up being expensive and mostly unnecessary
