@@ -1231,7 +1231,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	outrage: {
 		inherit: true,
 		pp: 15,
-		onAfterMove() {},
 	},
 	payback: {
 		inherit: true,
@@ -1268,7 +1267,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 90,
 		pp: 20,
-		onAfterMove() {},
 	},
 	poisongas: {
 		inherit: true,
@@ -1630,10 +1628,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					this.attrLastMove('[still]');
 					return null;
 				}
-				damage = this.runEvent('SubDamage', target, source, move, damage);
-				if (!damage) {
-					return damage;
-				}
 				if (damage > target.volatiles['substitute'].hp) {
 					damage = target.volatiles['substitute'].hp as number;
 				}
@@ -1768,7 +1762,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 90,
 		pp: 20,
-		onAfterMove() {},
 	},
 	torment: {
 		inherit: true,
