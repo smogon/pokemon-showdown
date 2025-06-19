@@ -19809,4 +19809,75 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		gen: 5,
 	},
+
+	// b3nmod testing starts here
+
+	thornhog: {
+		num: -3001,
+		name: "Thornhog",
+		types: ["Grass", "Steel"],
+		baseStats: { hp: 100, atk: 100, def: 120, spa: 50, spd: 90, spe: 40 },
+		abilities: { 0: "Overgrow", 1: "Overcoat", H: "Iron Barbs" },
+		heightm: 1.0,
+		weightkg: 110,
+		color: "Green",
+		eggGroups: ["Undiscovered"],
+	},
+
+	lumilynx: {
+		num: -3002,
+		name: "Lumilynx",
+		types: ["Fire", "Fairy"],
+		baseStats: { hp: 60, atk: 90, def: 55, spa: 110, spd: 75, spe: 110 },
+		abilities: {0: "Blaze", 1: "Flash Fire", H: "Magic Guard"},
+		heightm: 0.7,
+		weightkg: 25,
+		color: "Red",
+		eggGroups: ["Undiscovered"],
+	},
+
+	jormundlotl: {
+		num: -3003,
+		name: "Jormundlotl",
+		types: ["Water", "Dragon"],
+		baseStats: { hp: 80, atk: 110, def: 80, spa: 75, spd: 80, spe: 75 },
+		abilities: {0: "Torrent", 1: "Rain Dish", H: "Multiscale"},
+		heightm: 7.2,
+		weightkg: 200,
+		color: "Blue",
+		eggGroups: ["Undiscovered"],
+	},
+
+	vulturegeist: {
+		num: -3004,
+		name: "Vulturegeist",
+		types: ["Flying", "Ghost"],
+		baseStats: { hp: 90, atk: 120, def: 70, spa: 100, spd: 90, spe: 40 },
+		abilities: {0: "Gale Wings", H: "Regenerator"},
+		heightm: 2.0,
+		weightkg: 1,
+		eggGroups: ["Undiscovered"],
+	},
+
+	bawkward: {
+		num: -3005,
+		name: "Bawkward",
+		types: ["Psychic"],
+		baseStats: { hp: 50, atk: 40, def: 100, spa: 130, spd: 120, spe: 60 },
+		abilities: {0: "Tangled Feet", H: "Trace"},
+		heightm: 0.5,
+		weightkg: 20,
+		eggGroups: ["Undiscovered"],
+	},
+
+	dobermeister: {
+		num: -3006,
+		name: "Dobermeister",
+		types: ["Normal"],
+		baseStats: { hp: 80, atk: 80, def: 80, spa: 80, spd: 80, spe: 100},
+		abilities: {0: "Intimidate", H: "Guard Dog"},
+		heightm: 0.5,
+		weightkg: 70,
+		eggGroups: ["Undiscovered"],
+	},
 };
