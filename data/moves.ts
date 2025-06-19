@@ -8395,8 +8395,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 30,
 		priority: 0,
 		flags: { metronome: 1 },
-		onTryHit(target, source) {
-			this.add('-activate', target, 'move: Happy Hour');
+		onTryHitSide(side, source) {
+			this.add('-activate', source, 'move: Happy Hour');
 		},
 		secondary: null,
 		target: "allySide",
