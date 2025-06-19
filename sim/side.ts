@@ -774,7 +774,7 @@ export class Side {
 			terastallize: terastallize ? pokemon.teraType : undefined,
 		});
 
-		if (pokemon.maybeDisabled) {
+		if (pokemon.maybeDisabled && this.battle.gameType === 'singles') {
 			this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
 		}
 
