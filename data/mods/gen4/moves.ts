@@ -1262,14 +1262,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				} else if (this.runEvent('TryHit', pokemon, source, move) === null) {
 					result = true;
 				} else if (!pokemon.volatiles['perishsong']) {
+					if (!message) {
+						this.add('-fieldactivate', 'move: Perish Song');
+						message = true;
+					}
 					pokemon.addVolatile('perishsong');
 					this.add('-start', pokemon, 'perish3', '[silent]');
 					result = true;
-					message = true;
 				}
 			}
-			if (!result) return false;
-			if (message) this.add('-fieldactivate', 'move: Perish Song');
+			return result;
 		},
 		condition: {
 			duration: 4,

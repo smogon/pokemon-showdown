@@ -327,6 +327,8 @@ export interface ActiveMove extends MutableMove {
 	isExternal?: boolean;
 	lastHit?: boolean;
 	magnitude?: number;
+	/** For Perish Song and Tea Time to track their message status */
+	message?: boolean;
 	negateSecondary?: boolean;
 	pranksterBoosted?: boolean;
 	selfDropped?: boolean;

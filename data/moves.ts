@@ -13706,8 +13706,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { sound: 1, distance: 1, bypasssub: 1, metronome: 1 },
-		onHit(target) {
+		onHit(target, source, move) {
 			if (!target.volatiles['perishsong']) {
+				if (!move.message) {
+					move.message = true;
+					this.add('-fieldactivate', 'move: Perish Song');
+				}
 				target.addVolatile('perishsong');
 				this.add('-start', target, 'perish3', '[silent]');
 				return true;
@@ -19759,6 +19763,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { bypasssub: 1, metronome: 1 },
 		onHit(target, source, move) {
+			if (!move.message) {
+				move.message = true;
+				this.add('-fieldactivate', 'move: Teatime');
+			}
 			return target.eatItem(true, source, move) || this.NOT_FAIL;
 		},
 		secondary: null,
