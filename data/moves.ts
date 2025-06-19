@@ -16033,11 +16033,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { distance: 1, nonsky: 1, metronome: 1 },
+		onTryImmunity(target) {
+			return target.runImmunity('Ground');
+		},
 		onHit(target, source, move) {
-			if (!target.runImmunity('Ground')) {
-				this.add('-immune', target);
-				return false;
-			}
 			if (!target.hasType('Grass')) return false;
 			this.boost({ atk: 1, spa: 1 }, target, source, move);
 		},
