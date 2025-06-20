@@ -2010,19 +2010,21 @@ export class Pokemon {
 			shared = secret;
 		} else if (this.battle.reportPercentages || this.battle.gen >= 8) {
 			// HP Percentage Mod mechanics
-			let percentage = Math.ceil(ratio * 100);
+			let percentage = Math.ceil(100 * this.hp / this.maxhp);
 			if ((percentage === 100) && (ratio < 1.0)) {
 				percentage = 99;
 			}
 			shared = `${percentage}/100`;
 		} else {
 			// In-game accurate pixel health mechanics
-			const pixels = Math.floor(ratio * 48) || 1;
+			const pixels = Math.floor(48 * this.hp / this.maxhp) || 1;
 			shared = `${pixels}/48`;
-			if ((pixels === 9) && (ratio > 0.2)) {
-				shared += 'y'; // force yellow HP bar
-			} else if ((pixels === 24) && (ratio > 0.5)) {
-				shared += 'g'; // force green HP bar
+			if (this.battle.gen >= 5) {
+				if (pixels === 9 && ratio > 0.2) {
+					shared += 'y'; // force yellow HP bar
+				} else if (pixels === 24 && ratio > 0.5) {
+					shared += 'g'; // force green HP bar
+				}
 			}
 		}
 		if (this.status) {
