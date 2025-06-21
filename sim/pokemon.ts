@@ -2007,7 +2007,7 @@ export class Pokemon {
 		let shared;
 		if (this.battle.reportExactHP) {
 			shared = secret;
-		} else if (this.battle.reportPercentages || this.battle.gen >= 8) {
+		} else if (this.battle.reportPercentages || this.battle.gen >= 7) {
 			// HP Percentage Mod mechanics
 			let percentage = Math.ceil(100 * this.hp / this.maxhp);
 			if (percentage === 100 && this.hp < this.maxhp) {
