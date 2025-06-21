@@ -1982,11 +1982,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		onHit(target, source) {
+		consumeBerries: true,
+		onHit(target, source, move) {
 			const item = target.getItem();
 			if (source.hp && item.isBerry && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Bug Bite', `[of] ${source}`);
-				if (this.singleEvent('Eat', item, null, source, null, null)) {
+				if (this.singleEvent('Eat', item, null, source, target, move)) {
 					this.runEvent('EatItem', source, null, null, item);
 					if (item.id === 'leppaberry') target.staleness = 'external';
 				}
@@ -5954,6 +5955,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, allyanim: 1, metronome: 1, noparentalbond: 1 },
+		consumeBerries: true,
 		onPrepareHit(target, source, move) {
 			if (source.ignoringItem()) return false;
 			const item = source.getItem();
@@ -5963,7 +5965,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			this.debug(`BP: ${move.basePower}`);
 			if (item.isBerry) {
 				move.onHit = function (foe) {
-					if (this.singleEvent('Eat', item, null, foe, null, null)) {
+					if (this.singleEvent('Eat', item, null, foe, source, move)) {
 						this.runEvent('EatItem', foe, null, null, item);
 						if (item.id === 'leppaberry') foe.staleness = 'external';
 					}
@@ -6679,10 +6681,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		condition: {
 			// Ability suppression implemented in Pokemon.ignoringAbility() within sim/pokemon.ts
-			onStart(pokemon) {
+			onStart(pokemon, source, sourceEffect) {
 				if (pokemon.hasItem('Ability Shield')) return false;
 				this.add('-endability', pokemon);
-				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, 'gastroacid');
+				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, sourceEffect);
 			},
 			onCopy(pokemon) {
 				if (pokemon.getAbility().flags['cantsuppress']) pokemon.removeVolatile('gastroacid');
@@ -13939,11 +13941,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, distance: 1, metronome: 1 },
-		onHit(target, source) {
+		consumeBerries: true,
+		onHit(target, source, move) {
 			const item = target.getItem();
 			if (source.hp && item.isBerry && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Pluck', `[of] ${source}`);
-				if (this.singleEvent('Eat', item, null, source, null, null)) {
+				if (this.singleEvent('Eat', item, null, source, target, move)) {
 					this.runEvent('EatItem', source, null, null, item);
 					if (item.id === 'leppaberry') target.staleness = 'external';
 				}

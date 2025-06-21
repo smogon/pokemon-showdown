@@ -571,7 +571,7 @@ export class Battle {
 	singleEvent(
 		eventid: string, effect: Effect, state: EffectState | Record<string, never> | null,
 		target: string | Pokemon | Side | Field | Battle | null, source?: string | Pokemon | Effect | false | null,
-		sourceEffect?: Effect | string | null, relayVar?: any, customCallback?: unknown
+		sourceEffect?: Effect | null, relayVar?: any, customCallback?: unknown
 	) {
 		if (this.eventDepth >= 8) {
 			// oh fuck
@@ -605,6 +605,7 @@ export class Battle {
 			return relayVar;
 		}
 		if (eventid !== 'Start' && eventid !== 'TakeItem' && effect.effectType === 'Item' &&
+			!(eventid === 'Eat' && (sourceEffect as ActiveMove)?.consumeBerries) &&
 			(target instanceof Pokemon) && target.ignoringItem()) {
 			this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 			return relayVar;
