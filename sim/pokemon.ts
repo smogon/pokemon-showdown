@@ -1076,6 +1076,7 @@ export class Pokemon {
 		};
 
 		if (isLastActive) {
+			this.maybeDisabled = this.maybeDisabled && (this.battle.gameType === 'singles' || !!lockedMove);
 			if (this.maybeDisabled) {
 				data.maybeDisabled = this.maybeDisabled;
 			}
