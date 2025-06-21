@@ -199,7 +199,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					(move.target !== 'allAdjacent' && targets.filter(t => t && !t.fainted).length <= 1) ||
 					(move.target === 'allAdjacent' && targets.concat(pokemon).filter(t => t && !t.fainted).length <= 2)
 				)) {
-					move.spreadModifier = this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
+					move.spreadModifier = 1;
 				}
 				const [d, t] = this.spreadMoveHitInner([target], pokemon, move, hitEffect, isSecondary, isSelf);
 				spreadMoveDamage.push(d[0]);
