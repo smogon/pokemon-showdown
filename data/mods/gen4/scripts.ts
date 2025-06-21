@@ -196,7 +196,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// spread moves hit for 100% of the damage if there is only one target left and all the other targets have fainted
 				// if the move hits all adjacent Pokemon, the threshold is 2 targets counting the user
 				if (move.spreadHit && (
-					(move.target !== 'allAdjacent' && targets.filter(t => t && !t.fainted).length <= 1) ||
+					(move.target === 'allAdjacentFoes' && targets.filter(t => t && !t.fainted).length <= 1) ||
 					(move.target === 'allAdjacent' && targets.concat(pokemon).filter(t => t && !t.fainted).length <= 2)
 				)) {
 					move.spreadModifier = 1;
