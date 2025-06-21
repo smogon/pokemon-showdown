@@ -261,7 +261,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					const move = this.dex.moves.get(moveId);
 					const moveid = move.id;
 					if (hasMove[moveid]) return [`${species.baseSpecies} has multiple copies of ${move.name}.`];
-					hasMove[moveid] = true;
+					if (moveid) hasMove[moveid] = true;
 				}
 			}
 		},
@@ -960,7 +960,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'ValidatorRule',
 		name: 'Evasion Moves Clause',
 		desc: "Bans moves that consistently raise the user's evasion when used",
-		banlist: ['Minimize', 'Double Team'],
+		banlist: ['Acupressure', 'Minimize', 'Double Team'],
 		onBegin() {
 			this.add('rule', 'Evasion Moves Clause: Evasion moves are banned');
 		},
@@ -2258,7 +2258,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				lc: 30,
 			};
 			const tiers = ['ou', 'uubl', 'uu', 'rubl', 'ru', 'nubl', 'nu', 'publ', 'pu', 'zubl', 'zu', 'nfe', 'lc'];
-			const isNatDex: boolean = this.ruleTable.has('natdexmod');
+			const isNatDex = !!this.ruleTable?.has('natdexmod');
 			let tier: string = this.toID(isNatDex ? species.natDexTier : species.tier);
 			if (!(tier in boosts)) return;
 			// Non-Pokemon bans in lower tiers

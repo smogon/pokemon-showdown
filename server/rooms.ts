@@ -1660,6 +1660,7 @@ export class GlobalRoomState {
 		for (const player of players) {
 			Chat.runHandlers('onBattleStart', player, room);
 		}
+		Chat.runHandlers('onBattleCreate', room.battle!, players.map(x => x.id));
 	}
 
 	deregisterChatRoom(id: string) {
