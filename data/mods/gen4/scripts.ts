@@ -189,17 +189,19 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			const targetsEntries = Array.from(targets.slice(0).entries());
 			this.battle.speedSort(targetsEntries as [number, Pokemon][], (a, b) => this.battle.comparePriority(a[1], b[1]));
-			const originalSpreadHit = move.spreadHit;
 			const spreadMoveDamage: SpreadMoveDamage = [];
 			const spreadMoveTarget: SpreadMoveTargets = [];
 			// moves hit and apply effects one target at a time in speed order
 			for (const [_, target] of targetsEntries) {
 				// spread moves hit for 100% of the damage if there is only one target left and all the other targets have fainted
 				// if the move hits all adjacent Pokemon, the threshold is 2 targets counting the user
-				move.spreadHit = originalSpreadHit && (
-					(move.target !== 'allAdjacent' && targets.filter(t => t && !t.fainted).length > 1) ||
-					(move.target === 'allAdjacent' && targets.concat(pokemon).filter(t => t && !t.fainted).length > 2)
-				);
+				if (move.spreadHit) {
+					if (move.target === 'allAdjacent') {
+						if (targets.concat(pokemon).filter(t => t && !t.fainted).length > 2) move.spreadModifier = 0.75;
+					} else {
+						if (targets.filter(t => t && !t.fainted).length > 1) move.spreadModifier = 0.75;
+					}
+				}
 				const [d, t] = this.spreadMoveHitInner([target], pokemon, move, hitEffect, isSecondary, isSelf);
 				spreadMoveDamage.push(d[0]);
 				spreadMoveTarget.push(t[0]);
@@ -210,7 +212,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				this.battle.faintMessages();
 			}
-			move.spreadHit = originalSpreadHit;
 			// Sort the targets back to the original order
 			for (const [i, [j, _]] of targetsEntries.entries()) {
 				const auxDamage = spreadMoveDamage[i];
