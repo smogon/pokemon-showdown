@@ -49,7 +49,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// In Generation 3, the spread move modifier is 0.5x instead of 0.75x. Moves that hit both foes
 			// and the user's ally, like Earthquake and Explosion, don't get affected by spread modifiers
 			if (move.spreadHit && move.target === 'allAdjacentFoes') {
-				const spreadModifier = move.spreadModifier || 0.5;
+				const spreadModifier = 0.5;
 				this.battle.debug(`Spread modifier: ${spreadModifier}`);
 				baseDamage = this.battle.modify(baseDamage, spreadModifier);
 			}
