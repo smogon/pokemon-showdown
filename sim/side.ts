@@ -1021,6 +1021,7 @@ export class Side {
 			forcedSwitches = Math.min(canSwitchOut, canSwitchIn);
 			forcedPasses = canSwitchOut - forcedSwitches;
 		}
+		// should only be relevant for Gen 3
 		const switchIns = this.battle.queue.getSwitches(this).map(action => action.target.position);
 		this.choice = {
 			cantUndo: false,
