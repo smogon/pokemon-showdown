@@ -2005,7 +2005,6 @@ export class Pokemon {
 		if (!this.hp) return { side: this.side.id, secret: '0 fnt', shared: '0 fnt' };
 		let secret = `${this.hp}/${this.maxhp}`;
 		let shared;
-		const ratio = this.hp / this.maxhp;
 		if (this.battle.reportExactHP) {
 			shared = secret;
 		} else if (this.battle.reportPercentages || this.battle.gen >= 8) {
@@ -2020,10 +2019,10 @@ export class Pokemon {
 			const pixels = Math.floor(48 * this.hp / this.maxhp) || 1;
 			shared = `${pixels}/48`;
 			if (this.battle.gen >= 5) {
-				if (pixels === 9 && ratio > 0.2) {
-					shared += 'y'; // force yellow HP bar
-				} else if (pixels === 24 && ratio > 0.5) {
-					shared += 'g'; // force green HP bar
+				if (pixels === 9) {
+					shared += this.hp * 5 > this.maxhp ? 'y' : 'r';
+				} else if (pixels === 24) {
+					shared += this.hp * 2 > this.maxhp ? 'g' : 'y';
 				}
 			}
 		}
