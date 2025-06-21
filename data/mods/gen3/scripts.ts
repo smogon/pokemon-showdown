@@ -256,7 +256,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+			if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 			}
@@ -468,7 +468,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.battle.eachEvent('Update');
 
-			if (target && !move.negateSecondary) {
+			if (target) {
 				this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
 				this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
 			}

@@ -347,7 +347,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 			if (
-				!move.negateSecondary &&
 				!(move.hasSheerForce &&
 					pokemon.hasAbility(['sheerforce', 'forceofnature', 'sandwrath', 'overwhelming', 'powerbuns'])) &&
 					!move.flags['futuremove']
