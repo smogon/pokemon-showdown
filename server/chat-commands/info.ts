@@ -752,7 +752,7 @@ export const commands: Chat.ChatCommands = {
 					const pastGensOnly = (move.isNonstandard === "Past" && dex.gen >= 8) ||
 						(move.isNonstandard === "Gigantamax" && dex.gen !== 8);
 					if (pastGensOnly) details["&#10007; Past Gens Only"] = "";
-					if (move.secondary || move.secondaries || move.ignoresSheerForceSuppression) {
+					if (move.secondary || move.secondaries || move.hasSheerForceBoost) {
 						details["&#10003; Boosted by Sheer Force"] = "";
 					}
 					if (move.flags['contact'] && dex.gen >= 3) details["&#10003; Contact"] = "";
