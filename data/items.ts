@@ -1577,6 +1577,10 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 			if (!this.effectState.eject) return;
 			(this.effectState.target as Pokemon).useItem();
 		},
+		onAnyAfterMega() {
+			if (!this.effectState.eject) return;
+			(this.effectState.target as Pokemon).useItem();
+		},
 		onAnyAfterMove() {
 			if (!this.effectState.eject) return;
 			(this.effectState.target as Pokemon).useItem();
@@ -3825,6 +3829,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		},
 		onAnySwitchInPriority: -3,
 		onAnySwitchIn() {
+			if (!this.effectState.ready) return;
+			(this.effectState.target as Pokemon).useItem();
+		},
+		onAnyAfterMega() {
+			if (!this.effectState.ready) return;
+			(this.effectState.target as Pokemon).useItem();
+		},
+		onAnyAfterTerastallization() {
 			if (!this.effectState.ready) return;
 			(this.effectState.target as Pokemon).useItem();
 		},
@@ -7200,43 +7212,36 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 				}
 			},
 		},
-		onAfterBoost(boost, pokemon) {
-			delete this.effectState.ready;
+		onStart(pokemon) {
 			this.effectState.boosts = {} as SparseBoostsTable;
+			let ready = false;
 			let i: BoostID;
 			for (i in pokemon.boosts) {
 				if (pokemon.boosts[i] < 0) {
-					this.effectState.ready = true;
+					ready = true;
 					this.effectState.boosts[i] = 0;
 				}
 			}
-		},
-		onStart(pokemon) {
-			((this.effect as any).onAfterBoost as (b: SparseBoostsTable, p: Pokemon) => void).call(this, pokemon.boosts, pokemon);
-			if (!this.effectState.ready) return;
-			(this.effectState.target as Pokemon).useItem();
+			if (ready) (this.effectState.target as Pokemon).useItem();
+			delete this.effectState.boosts;
 		},
 		onAnySwitchInPriority: -2,
 		onAnySwitchIn() {
-			if (!this.effectState.ready) return;
-			(this.effectState.target as Pokemon).useItem();
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
+		},
+		onAnyAfterMega() {
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onAnyAfterMove() {
-			if (!this.effectState.ready) return;
-			(this.effectState.target as Pokemon).useItem();
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onResidualOrder: 29,
 		onResidual(pokemon) {
-			if (!this.effectState.ready) return;
-			(this.effectState.target as Pokemon).useItem();
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, pokemon);
 		},
 		onUse(pokemon) {
 			pokemon.setBoost(this.effectState.boosts);
 			this.add('-clearnegativeboost', pokemon, '[silent]');
-		},
-		onEnd() {
-			delete this.effectState.boosts;
-			delete this.effectState.ready;
 		},
 		num: 214,
 		gen: 3,

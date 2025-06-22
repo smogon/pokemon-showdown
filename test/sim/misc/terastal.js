@@ -113,15 +113,28 @@ describe("Terastallization", () => {
 
 		it(`should only boost base power 60 BP after all other base power modifiers are applied`, () => {
 			battle = common.gen(9).createBattle([[
-				{ species: 'cufant', ability: 'technician', moves: ['bulletpunch'] },
+				{ species: 'phione', ability: 'technician', moves: ['watergun'] },
+			], [
+				{ species: 'mew', ability: 'shellarmor', moves: ['sleeptalk'] },
+			]]);
+
+			battle.makeChoices('move watergun terastallize', 'auto');
+			const mew = battle.p2.active[0];
+			const damageRange = [72, 86];
+			assert.bounded(mew.maxhp - mew.hp, damageRange, `Should be a 60 BP Water Gun`);
+		});
+
+		it(`should not boost priority moves with <60 BP`, () => {
+			battle = common.gen(9).createBattle([[
+				{ species: 'cufant', moves: ['bulletpunch'] },
 			], [
 				{ species: 'mew', ability: 'shellarmor', moves: ['sleeptalk'] },
 			]]);
 
 			battle.makeChoices('move bulletpunch terastallize', 'auto');
 			const mew = battle.p2.active[0];
-			const damageRange = [72, 86];
-			assert.bounded(mew.maxhp - mew.hp, damageRange, `Should be a 60 BP Bullet Punch`);
+			const damageRange = [48, 58];
+			assert.bounded(mew.maxhp - mew.hp, damageRange, `Should be a 40 BP Bullet Punch`);
 		});
 
 		it(`should not boost the base power of moves with variable base power under 60 BP`, () => {
