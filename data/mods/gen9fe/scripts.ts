@@ -347,7 +347,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 			if (
-				!move.negateSecondary &&
 				!(move.hasSheerForce &&
 					pokemon.hasAbility(['sheerforce', 'forceofnature', 'sandwrath', 'overwhelming', 'powerbuns'])) &&
 					!move.flags['futuremove']
@@ -372,7 +371,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			baseDamage += 2;
 			if (move.spreadHit) {
 				// multi-target modifier (doubles only)
-				const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
+				const spreadModifier = this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
 				this.battle.debug(`Spread modifier: ${spreadModifier}`);
 				baseDamage = this.battle.modify(baseDamage, spreadModifier);
 			} else if (move.multihitType === 'parentalbond' && move.hit > 1) {
