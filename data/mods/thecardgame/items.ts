@@ -17,6 +17,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
+					move.berryWeakened = true;
 					this.add('-enditem', target, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
@@ -32,6 +33,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
+					move.berryWeakened = true;
 					this.add('-enditem', target, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
@@ -148,6 +150,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
+					move.berryWeakened = true;
 					this.add('-enditem', target, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
@@ -163,6 +166,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
+					move.berryWeakened = true;
 					this.add('-enditem', target, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
@@ -228,6 +232,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
+					move.berryWeakened = true;
 					this.add('-enditem', target, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
@@ -251,6 +256,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
+					move.berryWeakened = true;
 					this.add('-enditem', target, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
@@ -322,6 +328,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
+					move.berryWeakened = true;
 					this.add('-enditem', target, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
@@ -345,6 +352,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 
 				if (target.eatItem()) {
 					this.debug('-50% reduction');
+					move.berryWeakened = true;
 					this.add('-enditem', target, this.effect, '[weaken]');
 					return this.chainModify(0.5);
 				}
