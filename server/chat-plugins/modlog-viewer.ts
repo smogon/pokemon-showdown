@@ -234,13 +234,18 @@ export const commands: Chat.ChatCommands = {
 		const possibleParam = cmd.slice(2);
 		const targets = target.split(',').map(f => f.trim()).filter(Boolean);
 		const search: ModlogSearch = { note: [], user: [], ip: [], action: [], actionTaker: [] };
+		let searchCmd = target.replace(/^\s?([^,=]*)(,\s?|$)/, '').replace(/,?\s*(room|lines)\s*=[^,]*,?/g, '');
 
 		switch (possibleParam) {
 		case 'id':
-			targets.unshift(`user='${targets.shift()}'`);
+			const id = targets.shift();
+			searchCmd = `user='${id}'${searchCmd.length ? `, ${searchCmd}` : ``}`
+			targets.unshift(`user='${id}'`);
 			break;
 		case 'ip':
-			targets.unshift(`ip=${targets.shift()}`);
+			const ip = targets.shift();
+			searchCmd = `user='${ip}'${searchCmd.length ? `, ${searchCmd}` : ``}`
+			targets.unshift(`ip=${ip}`);
 			break;
 		}
 
@@ -317,7 +322,7 @@ export const commands: Chat.ChatCommands = {
 			connection,
 			roomid,
 			search,
-			target.replace(/^\s?([^,=]*),\s?/, '').replace(/,?\s*(room|lines)\s*=[^,]*,?/g, ''),
+			searchCmd,
 			lines,
 			onlyPunishments,
 			cmd === 'timedmodlog',
