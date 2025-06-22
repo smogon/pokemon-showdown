@@ -1047,6 +1047,11 @@ export class Battle {
 			}
 			return handlers;
 		}
+		if (target instanceof Side) {
+			for (const active of target.allies()) {
+				handlers = handlers.concat(this.findPokemonEventHandlers(active, `on${eventName}`));
+			}
+		}
 		// events usually run through EachEvent should never have any handlers besides `on${eventName}` so don't check for them
 		const prefixedHandlers = !['BeforeTurn', 'Update', 'Weather', 'WeatherChange', 'TerrainChange'].includes(eventName);
 		if (target instanceof Pokemon && (target.isActive || source?.isActive)) {
