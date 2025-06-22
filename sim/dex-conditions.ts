@@ -530,6 +530,7 @@ export interface PokemonEventMethods extends EventMethods {
 	onAllyHit?: MoveEventMethods['onHit'];
 	onAllyImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void;
 	onAllyLockMove?: string | ((this: Battle, pokemon: Pokemon) => void | string);
+	onAllyMaybeTrapPokemon?: (this: Battle, pokemon: Pokemon) => void;
 	onAllyModifyAccuracy?: CommonHandlers['ModifierMove'];
 	onAllyModifyAtk?: CommonHandlers['ModifierSourceMove'];
 	onAllyModifyBoost?: (this: Battle, boosts: SparseBoostsTable, pokemon: Pokemon) => SparseBoostsTable | void;
@@ -568,6 +569,7 @@ export interface PokemonEventMethods extends EventMethods {
 		(this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void
 	) | boolean;
 	onAllyTerrain?: (this: Battle, pokemon: Pokemon) => void;
+	onAllyTrapPokemon?: (this: Battle, pokemon: Pokemon) => void;
 	onAllyTryAddVolatile?: (
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
