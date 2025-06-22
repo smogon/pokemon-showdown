@@ -471,7 +471,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	regainpatience: {
 		shortDesc: "Berserk + Regenerator",
 		onDamage(damage, target, source, effect) {
-			this.effectState.checkedBerserk = !!(effect.effectType !== "Move" || effect.multihit || effect.negateSecondary ||
+			this.effectState.checkedBerserk = !!(effect.effectType !== "Move" || effect.multihit ||
 				(effect.hasSheerForce && source.hasAbility(['overwhelming', 'sheerforce', 'forceofnature', 'sandwrath'])));
 		},
 		onTryEatItem(item) {
