@@ -239,12 +239,12 @@ export const commands: Chat.ChatCommands = {
 		switch (possibleParam) {
 		case 'id':
 			const id = targets.shift();
-			searchCmd = `user='${id}'${searchCmd.length ? `, ${searchCmd}` : ``}`
+			searchCmd = `user='${id}'${searchCmd.length ? `, ${searchCmd}` : ``}`;
 			targets.unshift(`user='${id}'`);
 			break;
 		case 'ip':
 			const ip = targets.shift();
-			searchCmd = `user='${ip}'${searchCmd.length ? `, ${searchCmd}` : ``}`
+			searchCmd = `user='${ip}'${searchCmd.length ? `, ${searchCmd}` : ``}`;
 			targets.unshift(`ip=${ip}`);
 			break;
 		}
