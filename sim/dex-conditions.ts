@@ -20,7 +20,7 @@ export interface EventMethods {
 	onAfterSubDamage?: MoveEventMethods['onAfterSubDamage'];
 	onAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void;
 	onAfterTerastallization?: (this: Battle, pokemon: Pokemon) => void;
-	onAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, sourceEffect: Effect) => void;
+	onAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onAfterTakeItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAfterFaint?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
@@ -127,7 +127,7 @@ export interface EventMethods {
 	onFoeAfterSetStatus?: (this: Battle, status: Condition, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onFoeAfterSubDamage?: MoveEventMethods['onAfterSubDamage'];
 	onFoeAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void;
-	onFoeAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, sourceEffect: Effect) => void;
+	onFoeAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onFoeAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onFoeAfterFaint?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onFoeAfterMoveSecondarySelf?: MoveEventMethods['onAfterMoveSecondarySelf'];
@@ -225,7 +225,7 @@ export interface EventMethods {
 	onSourceAfterSetStatus?: (this: Battle, status: Condition, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onSourceAfterSubDamage?: MoveEventMethods['onAfterSubDamage'];
 	onSourceAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void;
-	onSourceAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, sourceEffect: Effect) => void;
+	onSourceAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onSourceAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onSourceAfterFaint?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onSourceAfterMoveSecondarySelf?: MoveEventMethods['onAfterMoveSecondarySelf'];
@@ -325,7 +325,7 @@ export interface EventMethods {
 	onAnyAfterSetStatus?: (this: Battle, status: Condition, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAnyAfterSubDamage?: MoveEventMethods['onAfterSubDamage'];
 	onAnyAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void;
-	onAnyAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, sourceEffect: Effect) => void;
+	onAnyAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onAnyAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAnyAfterFaint?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAnyAfterMega?: (this: Battle, pokemon: Pokemon) => void;
@@ -498,7 +498,7 @@ export interface PokemonEventMethods extends EventMethods {
 	onAllyAfterSetStatus?: (this: Battle, status: Condition, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAllyAfterSubDamage?: MoveEventMethods['onAfterSubDamage'];
 	onAllyAfterSwitchInSelf?: (this: Battle, pokemon: Pokemon) => void;
-	onAllyAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, sourceEffect: Effect) => void;
+	onAllyAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onAllyAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAllyAfterFaint?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAllyAfterMoveSecondarySelf?: MoveEventMethods['onAfterMoveSecondarySelf'];
