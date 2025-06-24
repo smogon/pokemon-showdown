@@ -2015,7 +2015,12 @@ export class Pokemon {
 			}
 			shared = `${percentage}/100`;
 		} else {
-			// In-game accurate pixel health mechanics
+			/** 
+			 * In-game accurate pixel health mechanics
+			 * PS doesn't use pixels after Gen 6, but for reference:
+			 * - [Gen 7] SM uses 99 pixels
+			 * - [Gen 7] USUM uses 86 pixels
+			 * */
 			const pixels = Math.floor(48 * this.hp / this.maxhp) || 1;
 			shared = `${pixels}/48`;
 			if (this.battle.gen >= 5) {
