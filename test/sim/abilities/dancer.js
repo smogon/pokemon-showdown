@@ -53,6 +53,20 @@ describe('Dancer', () => {
 		assert.fainted(foeDancer);
 	});
 
+	it(`should copy a move that was called by Instruct`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'oricoriopau', ability: 'dancer', moves: ['instruct'] },
+			{ species: 'volcarona', moves: ['fierydance'] },
+		], [
+			{ species: 'shedinja', item: 'focussash', ability: 'wonderguard', moves: ['sleeptalk'] },
+			{ species: 'shedinja', item: 'focussash', ability: 'wonderguard', moves: ['sleeptalk'] },
+		]]);
+
+		battle.makeChoices('move instruct -2, move fierydance 1', 'auto');
+		assert.fainted(battle.p2.active[0]);
+		assert.fainted(battle.p2.active[1]);
+	});
+
 	it(`should not copy a move that was blocked by Protect`, () => {
 		battle = common.createBattle([[
 			{ species: 'Oricorio', ability: 'dancer', moves: ['protect'] },
