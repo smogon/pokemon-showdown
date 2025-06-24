@@ -2015,7 +2015,7 @@ export class Pokemon {
 			}
 			shared = `${percentage}/100`;
 		} else {
-			/** 
+			/**
 			 * In-game accurate pixel health mechanics
 			 * PS doesn't use pixels after Gen 6, but for reference:
 			 * - [Gen 7] SM uses 99 pixels
