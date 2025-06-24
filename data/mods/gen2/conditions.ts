@@ -177,6 +177,11 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		onStart(target, source, effect) {
 			this.effectState.move = effect.id;
 		},
+		onAfterMove(pokemon) {
+			if (this.effectState.duration === 1) {
+				pokemon.removeVolatile('lockedmove');
+			}
+		},
 		onEnd(target) {
 			// Confusion begins even if already confused
 			delete target.volatiles['confusion'];
