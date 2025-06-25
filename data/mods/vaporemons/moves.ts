@@ -136,7 +136,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Shelter",
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1 },
+		flags: { snatch: 1 },
 		onHit(pokemon) {
 			let success = false;
 			let hazardsCleared = 0;
@@ -235,7 +235,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Life Dew",
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1, heal: 1, bypasssub: 1 },
+		flags: { snatch: 1, heal: 1, bypasssub: 1 },
 		heal: [1, 3],
 		slotCondition: 'lifedew',
 	   condition: {
@@ -384,7 +384,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		viable: true,
 		pp: 25,
 		priority: 1,
-		flags: {sound: 1, protect: 1, mirror: 1, bypasssub: 1, slicing: 1 },
+		flags: { sound: 1, protect: 1, mirror: 1, bypasssub: 1, slicing: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Psycho Cut", target);
@@ -925,7 +925,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return;
 			}
 			this.add('-prepare', attacker, move.name);
-			this.boost({spa: 1 }, attacker, attacker, move);
+			this.boost({ spa: 1 }, attacker, attacker, move);
 			if (this.field.isWeather('sandstorm')) {
 				this.attrLastMove('[still]');
 				this.addMove('-anim', attacker, move.name, defender);
@@ -949,7 +949,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Rebuild",
 		pp: 10,
 		priority: 0,
-		flags: {snatch: 1, heal: 1 },
+		flags: { snatch: 1, heal: 1 },
 		onPrepareHit(target, source, move) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Iron Defense", target);
@@ -1133,7 +1133,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onHit(target, source, move) {
 				if (target !== source && move.category !== 'Status') {
-					this.boost({spa: 1 });
+					this.boost({ spa: 1 });
 				}
 			},
 		},
@@ -1323,7 +1323,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		onHit(target) {
 			if (target.hasType('Flying') && !target.hasItem('covertcloak') && !target.hasAbility('shielddust')) {
-				this.boost({spe: -1 }, target);
+				this.boost({ spe: -1 }, target);
 			}
 		},
 		secondary: {
@@ -1689,13 +1689,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasItem('dancingshoes') ||
 					 pokemon.hasAbility('overcoat') || pokemon.hasItem('mantisclaw')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
-				this.boost({spe: -1 }, pokemon, this.effectState.source, this.dex.getActiveMove('stickyweb'));
+				this.boost({ spe: -1 }, pokemon, this.effectState.source, this.dex.getActiveMove('stickyweb'));
 			},
 		},
 		secondary: null,
 		target: "foeSide",
 		type: "Bug",
-		zMove: { boost: {spe: 1 }},
+		zMove: { boost: { spe: 1 }},
 		contestType: "Tough",
 	},
 	defog: {
@@ -2042,7 +2042,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Psychic",
-		zMove: { boost: {spa: 2 }},
+		zMove: { boost: { spa: 2 }},
 		contestType: "Clever",
 	},
 	electricterrain: {
@@ -2124,7 +2124,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "all",
 		type: "Electric",
-		zMove: { boost: {spe: 1 }},
+		zMove: { boost: { spe: 1 }},
 		contestType: "Clever",
 	},
 	psychicterrain: {
@@ -2196,7 +2196,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "all",
 		type: "Psychic",
-		zMove: { boost: {spa: 1 }},
+		zMove: { boost: { spa: 1 }},
 		contestType: "Clever",
 	},
 	grassyterrain: {
@@ -2353,7 +2353,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "all",
 		type: "Fairy",
-		zMove: { boost: {spd: 1 }},
+		zMove: { boost: { spd: 1 }},
 		contestType: "Beautiful",
 	},
 	camouflage: {
@@ -2964,11 +2964,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	revivalblessing: {
 		inherit: true,
-		flags: {snatch: 1 },
+		flags: { snatch: 1 },
 	},
 	shedtail: {
 		inherit: true,
-		flags: {snatch: 1 },
+		flags: { snatch: 1 },
 	},
 	aromaticmist: {
 		inherit: true,
@@ -3064,7 +3064,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Roost",
 		pp: 5,
 		priority: 0,
-		flags: {snatch: 1, heal: 1 },
+		flags: { snatch: 1, heal: 1 },
 		heal: [1, 2],
 		self: {
 			volatileStatus: 'roost',

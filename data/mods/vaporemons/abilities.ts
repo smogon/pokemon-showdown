@@ -273,7 +273,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onAnyTerrainStart(target, source, terrain) {
 			const pokemon = this.effectState.target;
 			this.add('-ability', pokemon, 'Cloud Nine');
-			this.add('-message', `${ pokemon.name} suppresses the effects of the terrain!`);
+			this.add('-message', `${pokemon.name} suppresses the effects of the terrain!`);
 			if (this.field.terrain) {
 				for (const other of pokemon.foes()) {
 					if (!other.volatiles['cloudnine']) {
@@ -794,7 +794,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		onModifySecondaries(secondaries) {
-			if (this.field.isWeather('sandstorm')) { 
+			if (this.field.isWeather('sandstorm')) {
 				this.debug('Sand Veil prevent secondary');
 				return secondaries.filter(effect => !!(effect.self || effect.dustproof));
 			}
@@ -1256,10 +1256,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (['rapidspin', 'icespinner', 'spinout', 'blazingtorque', 'combattorque', 'noxioustorque',
-				  'wickedtorque', 'drillrun', 'gyroball', 'rollout', 'iceball', 'flipturn', 'uturn', 'electrodrift',
-				  'darkestlariat', 'flamewheel', 'aurawheel', 'shiftgear', 'mortalspin', 'geargrind', 'steelroller',
-				  'rototiller', 'steamroller', 'tripleaxel', 'triplekick', 'firespin', 'leaftornado', 'hurricane',
-				  'bleakwindstorm', 'sandsearstorm', 'wildboltstorm', 'springtimestorm', 'whirlpool'].includes(move.id)) {
+				'wickedtorque', 'drillrun', 'gyroball', 'rollout', 'iceball', 'flipturn', 'uturn', 'electrodrift',
+				'darkestlariat', 'flamewheel', 'aurawheel', 'shiftgear', 'mortalspin', 'geargrind', 'steelroller',
+				'rototiller', 'steamroller', 'tripleaxel', 'triplekick', 'firespin', 'leaftornado', 'hurricane',
+				'bleakwindstorm', 'sandsearstorm', 'wildboltstorm', 'springtimestorm', 'whirlpool'].includes(move.id)) {
 				this.heal(target.baseMaxhp / 8);
 			}
 		},
@@ -1747,7 +1747,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	adaptability: {
 		onModifyMove(move, pokemon) {
-			if (move.type === pokemon.teraType && 
+			if (move.type === pokemon.teraType &&
 				pokemon.hasItem('terashard') && pokemon.baseSpecies.types.includes(pokemon.teraType)) {
 				move.stab = 2.25;
 			} else {
