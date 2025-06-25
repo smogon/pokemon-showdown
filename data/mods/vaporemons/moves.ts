@@ -743,8 +743,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						!source.hasAbility('steadfast') || !source.hasItem('covertcloak') ||
 						!source.hasAbility('sandveil') && !this.field.isWeather('sandstorm') ||
 						!source.hasAbility('sunblock') && !this.field.isWeather('sunnyday') ||
-						!source.hasAbility('snowcloak') && !this.field.isWeather('snowscape'))
-					&& move.priority > 0.1) {
+						!source.hasAbility('snowcloak') && !this.field.isWeather('snowscape')) &&
+					move.priority > 0.1) {
 					this.attrLastMove('[still]');
 					this.add('cant', parryHolder, 'move: Parry', move, `[of] ${target}`);
 					return false;
@@ -1044,7 +1044,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-	   shortDesc: "Hits two turns after being used. Sets sands when it hits, even if the foe is immune.",
+		shortDesc: "Hits two turns after being used. Sets sands when it hits, even if the foe is immune.",
 		name: "Desert Storm",
 		pp: 15,
 		priority: 0,
@@ -1192,7 +1192,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-	   shortDesc: "Prevents pivoting moves from being used for the rest of the turn.",
+		shortDesc: "Prevents pivoting moves from being used for the rest of the turn.",
 		name: "Pivot Fail",
 		pp: 5,
 		priority: 0,
@@ -1226,7 +1226,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 65,
 		category: "Physical",
-	   shortDesc: "Removes the target's Ground immunity and causes pivoting moves to fail.",
+		shortDesc: "Removes the target's Ground immunity and causes pivoting moves to fail.",
 		name: "Smack Down",
 		pp: 15,
 		priority: 0,
@@ -1276,7 +1276,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-	   shortDesc: "100% chance to lower the target's Speed by 1 (2 if Flying-type).",
+		shortDesc: "100% chance to lower the target's Speed by 1 (2 if Flying-type).",
 		name: "Root Pull",
 		pp: 10,
 		priority: 0,
@@ -1357,7 +1357,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 75,
 		category: "Special",
-	   shortDesc: "Nullifies the target's Ability.",
+		shortDesc: "Nullifies the target's Ability.",
 		isNonstandard: null,
 		name: "Signal Beam",
 		pp: 10,
@@ -1381,18 +1381,19 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 95,
 		basePower: 100,
 		category: "Physical",
-	   shortDesc: "(Mostly functional) Either Fighting or Flying-type, whichever is more effective.",
+		shortDesc: "Either Fighting or Flying-type, whichever is more effective.",
 		name: "Flying Press",
 		pp: 10,
 		flags: { contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nonsky: 1 },
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			for (const target of pokemon.side.foe.active) {
-			const type1 = 'Fighting';
-			const type2 = 'Flying';
+				const type1 = 'Fighting';
+				const type2 = 'Flying';
 				if (this.dex.getEffectiveness(type1, target) < this.dex.getEffectiveness(type2, target)) {
 					move.type = 'Flying';
-				} else if (target.hasType('Ghost') && !pokemon.hasAbility('scrappy') && !pokemon.hasAbility('mindseye') && !target.hasItem('ringtarget')) {
+				} else if (target.hasType('Ghost') && !pokemon.hasAbility('scrappy') &&
+							!pokemon.hasAbility('mindseye') && !target.hasItem('ringtarget')) {
 					move.type = 'Flying';
 				} else if (this.dex.getEffectiveness(type1, target) === this.dex.getEffectiveness(type2, target)) {
 					if (pokemon.hasType('Flying') && !pokemon.hasType('Fighting')) {
@@ -1416,7 +1417,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 95,
 		basePower: 100,
 		category: "Special",
-	   shortDesc: "(Mostly functional) Either Bug or Electric-type, whichever is more effective.",
+		shortDesc: "Either Bug or Electric-type, whichever is more effective.",
 		name: "Software Crash",
 		pp: 10,
 		flags: { protect: 1, mirror: 1 },
@@ -1427,8 +1428,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			for (const target of pokemon.side.foe.active) {
-			const type1 = 'Bug';
-			const type2 = 'Electric';
+				const type1 = 'Bug';
+				const type2 = 'Electric';
 				if (this.dex.getEffectiveness(type1, target) < this.dex.getEffectiveness(type2, target)) {
 					if (!target.hasType('Ground') && !target.hasItem('ringtarget')) {
 						move.type = 'Electric';
@@ -1455,7 +1456,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 70,
 		category: "Physical",
-	   shortDesc: "2x power if the user has negative stat changes or a status.",
+		shortDesc: "2x power if the user has negative stat changes or a status.",
 		name: "Lash Out",
 		pp: 10,
 		priority: 0,
@@ -1485,7 +1486,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Physical",
-	   shortDesc: "Type and power based on user's berry.",
+		shortDesc: "Type and power based on user's berry.",
 		isNonstandard: null,
 		name: "Natural Gift",
 		pp: 15,
@@ -1502,7 +1503,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			const item = pokemon.getItem();
 			if (!item.naturalGift) return false;
 			move.basePower = item.naturalGift.basePower;
-			this.debug('BP: ' + move.basePower);
+			this.debug(`BP: ${move.basePower}`);
 		},
 		onBasePower(basePower, pokemon) {
 			if (pokemon.hasAbility('ripen') || pokemon.hasAbility('harvest')) {
@@ -1541,16 +1542,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					const fireHazard = this.dex.getActiveMove('Stealth Rock');
 					fireHazard.type = 'Fire';
 					const smeltMod = this.clampIntRange(pokemon.runEffectiveness(fireHazard), -6, 6);
-					this.damage(pokemon.maxhp * Math.pow(2, smeltMod) / 8);
+					this.damage(pokemon.maxhp * (2 ** smeltMod) / 8);
 				} else {
-					this.damage(pokemon.maxhp * Math.pow(2, typeMod) / 8);
+					this.damage(pokemon.maxhp * (2 ** typeMod) / 8);
 				}
 			},
 		},
 		secondary: null,
 		target: "foeSide",
 		type: "Rock",
-		zMove: { boost: { def: 1 }},
+		zMove: { boost: { def: 1 } },
 		contestType: "Cool",
 	},
 	spikes: {
@@ -1576,8 +1577,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded()) return;
-				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('overcoat') || 
-					 pokemon.hasItem('dancingshoes') || pokemon.hasItem('mantisclaw')) return;
+				if (pokemon.hasItem('heavydutyboots') || pokemon.hasAbility('overcoat') ||
+					pokemon.hasItem('dancingshoes') || pokemon.hasItem('mantisclaw')) return;
 				const damageAmounts = [0, 3, 4, 6]; // 1/8, 1/6, 1/4
 				this.damage(damageAmounts[this.effectState.layers] * pokemon.maxhp / 24);
 			},
@@ -1585,7 +1586,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "foeSide",
 		type: "Ground",
-		zMove: { boost: { def: 1 }},
+		zMove: { boost: { def: 1 } },
 		contestType: "Clever",
 	},
 	toxicspikes: {
@@ -1612,10 +1613,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded()) return;
 				if (pokemon.hasType('Poison')) {
-					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', '[of] ' + pokemon);
+					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', `[of] ${pokemon}`);
 					pokemon.side.removeSideCondition('toxicspikes');
-				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots') || pokemon.hasItem('dancingshoes') || 
-							  pokemon.hasAbility('overcoat') || pokemon.hasItem('mantisclaw')) {
+				} else if (pokemon.hasType('Steel') || pokemon.hasItem('heavydutyboots') || pokemon.hasItem('dancingshoes') ||
+					pokemon.hasAbility('overcoat') || pokemon.hasItem('mantisclaw')) {
 					return;
 				} else if (this.effectState.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
@@ -1627,7 +1628,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "foeSide",
 		type: "Poison",
-		zMove: { boost: { def: 1 }},
+		zMove: { boost: { def: 1 } },
 		contestType: "Clever",
 	},
 	stickyweb: {
@@ -1646,7 +1647,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onSwitchIn(pokemon) {
 				if (!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots') || pokemon.hasItem('dancingshoes') ||
-					 pokemon.hasAbility('overcoat') || pokemon.hasItem('mantisclaw')) return;
+					pokemon.hasAbility('overcoat') || pokemon.hasItem('mantisclaw')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				this.boost({ spe: -1 }, pokemon, this.effectState.source, this.dex.getActiveMove('stickyweb'));
 			},
@@ -1654,7 +1655,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "foeSide",
 		type: "Bug",
-		zMove: { boost: { spe: 1 }},
+		zMove: { boost: { spe: 1 } },
 		contestType: "Tough",
 	},
 	defog: {
@@ -1707,7 +1708,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "normal",
 		type: "Flying",
-		zMove: { boost: { accuracy: 1 }},
+		zMove: { boost: { accuracy: 1 } },
 		contestType: "Cool",
 	},
 	blazingtorque: {
@@ -1742,12 +1743,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onAfterHit(target, pokemon, move) {
 			if (!move.hasSheerForce) {
 				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
-					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
+					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', `[of] ${pokemon}`);
 				}
 				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'healingstones'];
 				for (const condition of sideConditions) {
 					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
+						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', `[of] ${pokemon}`);
 					}
 				}
 				if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
@@ -1758,12 +1759,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onAfterSubDamage(damage, target, pokemon, move) {
 			if (!move.hasSheerForce) {
 				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
-					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', '[of] ' + pokemon);
+					this.add('-end', pokemon, 'Leech Seed', '[from] move: Rapid Spin', `[of] ${pokemon}`);
 				}
 				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'healingstones'];
 				for (const condition of sideConditions) {
 					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', '[of] ' + pokemon);
+						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Rapid Spin', `[of] ${pokemon}`);
 					}
 				}
 				if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
@@ -1795,12 +1796,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onAfterHit(target, pokemon, move) {
 			if (!move.hasSheerForce) {
 				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
-					this.add('-end', pokemon, 'Leech Seed', '[from] move: Mortal Spin', '[of] ' + pokemon);
+					this.add('-end', pokemon, 'Leech Seed', '[from] move: Mortal Spin', `[of] ${pokemon}`);
 				}
 				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'healingstones'];
 				for (const condition of sideConditions) {
 					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Mortal Spin', '[of] ' + pokemon);
+						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Mortal Spin', `[of] ${pokemon}`);
 					}
 				}
 				if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
@@ -1811,12 +1812,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onAfterSubDamage(damage, target, pokemon, move) {
 			if (!move.hasSheerForce) {
 				if (pokemon.hp && pokemon.removeVolatile('leechseed')) {
-					this.add('-end', pokemon, 'Leech Seed', '[from] move: Mortal Spin', '[of] ' + pokemon);
+					this.add('-end', pokemon, 'Leech Seed', '[from] move: Mortal Spin', `[of] ${pokemon}`);
 				}
 				const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge', 'healingstones'];
 				for (const condition of sideConditions) {
 					if (pokemon.hp && pokemon.side.removeSideCondition(condition)) {
-						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Mortal Spin', '[of] ' + pokemon);
+						this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] move: Mortal Spin', `[of] ${pokemon}`);
 					}
 				}
 				if (pokemon.hp && pokemon.volatiles['partiallytrapped']) {
@@ -1883,7 +1884,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const offset = this.random(3) + 1;
 				// the list of all sides in counterclockwise order
 				const sides = [this.sides[0], this.sides[2]!, this.sides[1], this.sides[3]!];
-				const temp: {[k: number]: typeof source.side.sideConditions} = {0: {}, 1: {}, 2: {}, 3: {}};
+				const temp: { [k: number]: typeof source.side.sideConditions } = { 0: {}, 1: {}, 2: {}, 3: {} };
 				for (const side of sides) {
 					for (const id in side.sideConditions) {
 						if (!sideConditions.includes(id)) continue;
@@ -1899,6 +1900,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					const targetSide = sides[(i + offset) % 4]; // the next side in rotation
 					for (const id in sourceSideConditions) {
 						targetSide.sideConditions[id] = sourceSideConditions[id];
+						targetSide.sideConditions[id].target = targetSide;
 						const effectName = this.dex.conditions.get(id).name;
 						let layers = sourceSideConditions[id].layers || 1;
 						for (; layers > 0; layers--) this.add('-sidestart', targetSide, effectName, '[silent]');
@@ -1923,9 +1925,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				for (const id in sourceTemp) {
 					targetSideConditions[id] = sourceTemp[id];
+					targetSideConditions[id].target = source.side.foe;
 				}
 				for (const id in targetTemp) {
 					sourceSideConditions[id] = targetTemp[id];
+					sourceSideConditions[id].target = source.side;
 				}
 				this.add('-swapsideconditions');
 			}
@@ -2001,7 +2005,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "allAdjacentFoes",
 		type: "Psychic",
-		zMove: { boost: { spa: 2 }},
+		zMove: { boost: { spa: 2 } },
 		contestType: "Clever",
 	},
 	electricterrain: {
@@ -2083,7 +2087,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "all",
 		type: "Electric",
-		zMove: { boost: { spe: 1 }},
+		zMove: { boost: { spe: 1 } },
 		contestType: "Clever",
 	},
 	psychicterrain: {
@@ -2155,7 +2159,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "all",
 		type: "Psychic",
-		zMove: { boost: { spa: 1 }},
+		zMove: { boost: { spa: 1 } },
 		contestType: "Clever",
 	},
 	grassyterrain: {
@@ -2231,7 +2235,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "all",
 		type: "Grass",
-		zMove: { boost: { def: 1 }},
+		zMove: { boost: { def: 1 } },
 		contestType: "Beautiful",
 	},
 	mistyterrain: {
@@ -2312,7 +2316,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "all",
 		type: "Fairy",
-		zMove: { boost: { spd: 1 }},
+		zMove: { boost: { spd: 1 } },
 		contestType: "Beautiful",
 	},
 	camouflage: {
@@ -2953,7 +2957,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onModifyMove(move, pokemon) {
-			if ((pokemon.terastallized || pokemon.hasItem('terashard')) && pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
+			if ((pokemon.terastallized || pokemon.hasItem('terashard')) &&
+				pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
 				move.category = 'Physical';
 			}
 		},
