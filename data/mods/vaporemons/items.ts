@@ -1052,8 +1052,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		itemUser: ["Diancie"],
 		gen: 9,
 		desc: "Diancie: Ability becomes Magic Bounce, +1 Atk/SpA/Spe.",
-	},	
-	
+	},
 	// unchanged items
 	boosterenergy: {
 		name: "Booster Energy",
