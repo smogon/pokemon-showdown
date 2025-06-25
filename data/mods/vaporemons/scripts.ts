@@ -28,11 +28,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				totalTypeMod += this.battle.runEvent('Effectiveness', this, type, move, typeMod);
 			}
 			if (this.hasAbility('exoskeleton') && !this.hasType('Bug') && this.battle.dex.getEffectiveness(move, 'Bug') < 0) {
-				totalTypeMod--; 
+				totalTypeMod--;
 			}
 			if (this.volatiles['bluntforce'] && totalTypeMod > 0) return 0;
 			return totalTypeMod;
-		}
+		},
 	},
 	actions: {
 		hitStepAccuracy(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
@@ -76,7 +76,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 				if (move.alwaysHit || (move.id === 'toxic' && this.battle.gen >= 8 && pokemon.hasType('Poison')) ||
-						(move.target === 'self' && move.category === 'Status' && !target.isSemiInvulnerable())) {
+					(move.target === 'self' && move.category === 'Status' && !target.isSemiInvulnerable())) {
 					accuracy = true; // bypasses ohko accuracy modifiers
 				} else {
 					accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
@@ -89,7 +89,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						this.battle.add('-miss', pokemon, target);
 					}
 					if (!move.ohko && pokemon.hasItem('blunderpolicy') && pokemon.useItem()) {
-						this.battle.boost({spe: 2, accuracy: 2 }, pokemon);
+						this.battle.boost({ spe: 2, accuracy: 2 }, pokemon);
 					}
 					hitResults[i] = false;
 					continue;
@@ -189,14 +189,14 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData('Learnsets', 'klawf').learnset.stoneaxe = ['9L1'];
 		this.modData('Learnsets', 'avalugghisui').learnset.stoneaxe = ['9L1'];
 		this.modData('Learnsets', 'drednaw').learnset.stoneaxe = ['9L1'];
-    	delete this.modData('Learnsets', 'regieleki').learnset.electroweb;
-    	delete this.modData('Learnsets', 'meloetta').learnset.swordsdance;
-    	delete this.modData('Learnsets', 'magnemite').learnset.electroweb;
-    	delete this.modData('Learnsets', 'magnezone').learnset.electroweb;
-    	delete this.modData('Learnsets', 'magneton').learnset.electroweb;
-    	delete this.modData('Learnsets', 'foongus').learnset.rollout;
-    	delete this.modData('Learnsets', 'amoonguss').learnset.rollout;
-    	delete this.modData('Learnsets', 'gougingfire').learnset.ragingfury;
+		delete this.modData('Learnsets', 'regieleki').learnset.electroweb;
+		delete this.modData('Learnsets', 'meloetta').learnset.swordsdance;
+		delete this.modData('Learnsets', 'magnemite').learnset.electroweb;
+		delete this.modData('Learnsets', 'magnezone').learnset.electroweb;
+		delete this.modData('Learnsets', 'magneton').learnset.electroweb;
+		delete this.modData('Learnsets', 'foongus').learnset.rollout;
+		delete this.modData('Learnsets', 'amoonguss').learnset.rollout;
+		delete this.modData('Learnsets', 'gougingfire').learnset.ragingfury;
 		this.modData("Learnsets", "bellibolt").learnset.surf = ["9L1"];
 		this.modData("Learnsets", "bellibolt").learnset.hydropump = ["9L1"];
 		this.modData("Learnsets", "bellibolt").learnset.liquidation = ["9L1"];
@@ -1235,9 +1235,9 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "fezandipiti").learnset.willowisp = ["9L1"];
 		this.modData("Learnsets", "snorlax").learnset.rollout = ["9L1"];
 		this.modData("Learnsets", "snorlax").learnset.slackoff = ["9L1"];
-    	delete this.modData('Learnsets', 'sneasler').learnset.acrobatics;
-    	delete this.modData('Learnsets', 'darkrai').learnset.psychic;
-    	delete this.modData('Learnsets', 'mew').learnset.steelbeam;
+		delete this.modData('Learnsets', 'sneasler').learnset.acrobatics;
+		delete this.modData('Learnsets', 'darkrai').learnset.psychic;
+		delete this.modData('Learnsets', 'mew').learnset.steelbeam;
 		this.modData("Learnsets", "brambleghast").learnset.pinmissile = ["9L1"];
 		this.modData("Learnsets", "brambleghast").learnset.poisonjab = ["9L1"];
 		this.modData("Learnsets", "brambleghast").learnset.sandstorm = ["9L1"];
@@ -1524,7 +1524,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData('Learnsets', 'zarude').learnset.naturalgift = ['9L1'];
 		this.modData('Learnsets', 'zarudedada').learnset.naturalgift = ['9L1'];
 		this.modData('Learnsets', 'azurill').learnset.naturalgift = ['9L1'];
-		this.modData('Learnsets', 'sunkern').learnset.naturalgift = ['9L1'];	
+		this.modData('Learnsets', 'sunkern').learnset.naturalgift = ['9L1'];
 		this.modData("Learnsets", "krookodile").learnset.skullbash = ["9L1"];
 		this.modData("Learnsets", "krookodile").learnset.ceaselessedge = ["9L1"];
 		this.modData("Learnsets", "krookodile").learnset.falsesurrender = ["9L1"];
@@ -2475,5 +2475,5 @@ export const Scripts: ModdedBattleScriptsData = {
 		delete this.modData('Learnsets', 'electrode').learnset.electroweb;
 		delete this.modData('Learnsets', 'electrodehisui').learnset.electroweb;
 		delete this.modData('Learnsets', 'jolteon').learnset.electroweb;
-  },
+	},
 };

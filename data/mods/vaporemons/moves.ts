@@ -26,7 +26,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			}
 		},
-	   secondary: {},
+		secondary: {},
 		target: "normal",
 		type: "Poison",
 		contestType: "Clever",
@@ -55,7 +55,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			}
 		},
-	   secondary: {},
+		secondary: {},
 		target: "normal",
 		type: "Dark",
 	},
@@ -70,10 +70,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, slicing: 1 },
-	   secondary: {
+		secondary: {
 			chance: 100,
-		 	sideCondition: 'stealthrock',
-	   },
+			sideCondition: 'stealthrock',
+		},
 		target: "adjacentFoe",
 		type: "Rock",
 		contestType: "Tough",
@@ -89,10 +89,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1 },
-	   secondary: {
+		secondary: {
 			chance: 100,
-		 	sideCondition: 'stickyweb',
-	   },
+			sideCondition: 'stickyweb',
+		},
 		target: "allAdjacentFoes",
 		type: "Electric",
 		contestType: "Beautiful",
@@ -143,20 +143,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			const somesideConditions = ['spikes', 'stealthrock'];
 			const sides = [pokemon.side];
 			for (const side of sides) {
-				for (const sideCondition of somesideConditions) {
-					if (side.removeSideCondition('spikes')) {
-						this.add('-sideend', side, this.dex.conditions.get('spikes'));
-						hazardsCleared += 1;
-						this.boost({ def: 1 }, pokemon);
-					}
-					if (side.removeSideCondition('stealthrock')) {
-						this.add('-sideend', side, this.dex.conditions.get('stealthrock'));
-						hazardsCleared += 1;
-						this.boost({ def: 1 }, pokemon);
-					}
-					if (hazardsCleared > 0) {
-						success = true;
-					}
+				if (side.removeSideCondition('spikes')) {
+					this.add('-sideend', side, this.dex.conditions.get('spikes'));
+					hazardsCleared += 1;
+					this.boost({ def: 1 }, pokemon);
+				}
+				if (side.removeSideCondition('stealthrock')) {
+					this.add('-sideend', side, this.dex.conditions.get('stealthrock'));
+					hazardsCleared += 1;
+					this.boost({ def: 1 }, pokemon);
 				}
 			}
 		},
