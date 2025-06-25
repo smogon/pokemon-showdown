@@ -7,7 +7,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			return this.random(5, 7);
 		},
 		onStart(pokemon, source) {
-			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, '[of] ' + source);
+			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, `[of] ${source}`);
 			this.effectState.boundDivisor = source.hasItem('bindingband') ? 8 : 8;
 		},
 		onResidualOrder: 13,
@@ -35,7 +35,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		noCopy: true,
 		onStart(target) {
 			this.add('-start', target, 'Fire/Dragon');
-	      this.add('-message', `${target.name} is now Fire/Dragon!`);
+			this.add('-message', `${target.name} is now Fire/Dragon!`);
 		},
 	},
 };

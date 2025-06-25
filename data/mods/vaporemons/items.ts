@@ -41,7 +41,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		onBasePowerPriority: 30,
 		onBasePower(basePower, attacker, defender, move) {
 			if (move.id === 'terablast') {
-				return move.basepower = 100;
+				return 100;
 			}
 		},
 		onTryHit(pokemon, target, move) {
@@ -69,7 +69,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			return true;
 		},
 		onSwitchIn(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Revavroom') {			
+			if (pokemon.baseSpecies.baseSpecies === 'Revavroom') {
 				this.add('-item', pokemon, 'Segin Star Shard');
 				this.add('-anim', pokemon, "Cosmic Power", pokemon);
 				this.add('-message', `${pokemon.name}'s Segin Star Shard changed its type!`);
@@ -92,7 +92,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		num: -1001,
 		gen: 9,
 		desc: "Revavroom: Becomes Dark-type, Ability: Intimidate, 1.2x Dark/Poison/Steel power.",
-	},	
+	},
 	schedarstarshard: {
 		name: "Schedar Star Shard",
 		spritenum: 632,
@@ -107,7 +107,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			return true;
 		},
 		onSwitchIn(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Revavroom') {			
+			if (pokemon.baseSpecies.baseSpecies === 'Revavroom') {
 				this.add('-item', pokemon, 'Schedar Star Shard');
 				this.add('-anim', pokemon, "Cosmic Power", pokemon);
 				this.add('-message', `${pokemon.name}'s Schedar Star Shard changed its type!`);
@@ -130,7 +130,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		num: -1002,
 		gen: 9,
 		desc: "Revavroom: Becomes Fire-type, Ability: Speed Boost, 1.2x Fire/Poison/Steel power.",
-	},	
+	},
 	navistarshard: {
 		name: "Navi Star Shard",
 		spritenum: 638,
@@ -145,7 +145,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			return true;
 		},
 		onSwitchIn(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Revavroom') {			
+			if (pokemon.baseSpecies.baseSpecies === 'Revavroom') {
 				this.add('-item', pokemon, 'Navi Star Shard');
 				this.add('-anim', pokemon, "Cosmic Power", pokemon);
 				this.add('-message', `${pokemon.name}'s Navi Star Shard changed its type!`);
@@ -168,7 +168,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		num: -1003,
 		gen: 9,
 		desc: "Revavroom: Becomes Poison-type, Ability: Toxic Debris, 1.2x Poison/Steel power.",
-	},	
+	},
 	ruchbahstarshard: {
 		name: "Ruchbah Star Shard",
 		spritenum: 648,
@@ -183,7 +183,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			return true;
 		},
 		onSwitchIn(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Revavroom') {			
+			if (pokemon.baseSpecies.baseSpecies === 'Revavroom') {
 				this.add('-item', pokemon, 'Ruchbah Star Shard');
 				this.add('-anim', pokemon, "Cosmic Power", pokemon);
 				this.add('-message', `${pokemon.name}'s Ruchbah Star Shard changed its type!`);
@@ -206,7 +206,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		num: -1004,
 		gen: 9,
 		desc: "Revavroom: Becomes Fairy-type, Ability: Misty Surge, 1.2x Fairy/Poison/Steel power.",
-	},	
+	},
 	caphstarshard: {
 		name: "Caph Star Shard",
 		spritenum: 637,
@@ -221,7 +221,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			return true;
 		},
 		onSwitchIn(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Revavroom') {			
+			if (pokemon.baseSpecies.baseSpecies === 'Revavroom') {
 				this.add('-item', pokemon, 'Caph Star Shard');
 				this.add('-anim', pokemon, "Cosmic Power", pokemon);
 				this.add('-message', `${pokemon.name}'s Caph Star Shard changed its type!`);
@@ -244,7 +244,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		num: -1005,
 		gen: 9,
 		desc: "Revavroom: Becomes Fighting-type, Ability: Stamina, 1.2x Fighting/Poison/Steel power.",
-	},	
+	},
 	tuffytuff: {
 		name: "Tuffy-Tuff",
 		spritenum: 692,
@@ -252,18 +252,18 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			basePower: 10,
 		},
 		onTakeItem(item, source) {
-			if (source.baseSpecies.baseSpecies === 'Igglybuff' || source.baseSpecies.baseSpecies === 'Jigglypuff' || source.baseSpecies.baseSpecies === 'Wigglytuff') return false;
+			if (['Igglybuff', 'Jigglypuff', 'Wigglytuff'].includes(source.baseSpecies.baseSpecies)) return false;
 			return true;
 		},
 		onModifyDefPriority: 1,
 		onModifyDef(def, pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Igglybuff' || pokemon.baseSpecies.baseSpecies === 'Jigglypuff' || pokemon.baseSpecies.baseSpecies === 'Wigglytuff') {
+			if (['Igglybuff', 'Jigglypuff', 'Wigglytuff'].includes(pokemon.baseSpecies.baseSpecies)) {
 				return this.chainModify(2);
 			}
 		},
 		onModifySpDPriority: 1,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.baseSpecies.baseSpecies === 'Igglybuff' || pokemon.baseSpecies.baseSpecies === 'Jigglypuff' || pokemon.baseSpecies.baseSpecies === 'Wigglytuff') {
+			if (['Igglybuff', 'Jigglypuff', 'Wigglytuff'].includes(pokemon.baseSpecies.baseSpecies)) {
 				return this.chainModify(2);
 			}
 		},
@@ -280,7 +280,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		},
 		onUpdate(pokemon) {
 			if (pokemon.moveThisTurnResult === false) {
-				this.boost({spe: 2, accuracy: 2});
+				this.boost({ spe: 2, accuracy: 2 });
 				pokemon.useItem();
 			}
 		},
@@ -366,7 +366,6 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			if (move.flags['bullet']) {
 				const hitSub = target.volatiles['substitute'] && !move.flags['bypasssub'] && !(move.infiltrates && this.gen >= 6);
 				if (hitSub) return;
-				
 				if (target.useItem()) {
 					this.debug('-50% reduction');
 					this.add('-enditem', target, this.effect, '[weaken]');
@@ -379,7 +378,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		num: -1007,
 		gen: 9,
 		rating: 3,
-	}, 
+	},
 	walkietalkie: {
 		name: "Walkie-Talkie",
 		spritenum: 713,
@@ -392,18 +391,18 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			this.effectState.move = this.dex.moves.get(move.id);
 			attacker.deductPP(move.id, 1);
 			if (attacker.side.addSlotCondition(attacker, 'walkietalkie')) {
-			for (const side of this.sides) {
-				for (const active of side.active) {
-					active.switchFlag = false;
+				for (const side of this.sides) {
+					for (const active of side.active) {
+						active.switchFlag = false;
+					}
 				}
-			}
-			this.add('-activate', attacker, 'item: Walkie-Talkie');
-			this.add('-message', `${attacker.name} is calling in one of its allies!`);
-			attacker.switchFlag = true;
-			return null;
+				this.add('-activate', attacker, 'item: Walkie-Talkie');
+				this.add('-message', `${attacker.name} is calling in one of its allies!`);
+				attacker.switchFlag = true;
+				return null;
 			}
 		},
-		slotCondition: 'walkietalkie',
+		/* slotCondition: 'walkietalkie',
 		condition: {
 			duration: 1,
 			onFaint(target) {
@@ -416,8 +415,8 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				}
 				target.side.removeSlotCondition(target, 'walkietalkie');
 			},
-		},
-		desc: "(Mostly non-functional placeholder) Before using a sound move, holder switches. Switch-in uses move if it's holding a Walkei-Talkie.",
+		}, */
+		desc: "(Mostly non-functional placeholder) Before using a sound move, holder switches. Switch-in uses move if it's holding a Walkie-Talkie.",
 		num: -1008,
 		gen: 8,
 	},
@@ -451,7 +450,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		onTryHitPriority: 1,
 		onTryHit(target, source, move) {
 			if (target !== source && move.flags['sound']) {
-				if (!this.boost({atk: 1})) {
+				if (!this.boost({ atk: 1 })) {
 					this.add('-immune', target, '[from] item: Dancing Shoes');
 				}
 				return null;
@@ -460,7 +459,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		onAllyTryHitSide(target, source, move) {
 			if (target === this.effectState.target || target.side !== source.side) return;
 			if (move.flags['sound']) {
-				this.boost({atk: 1}, this.effectState.target);
+				this.boost({ atk: 1 }, this.effectState.target);
 			}
 		},
 		onTakeItem(item, source) {
@@ -489,7 +488,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				pokemon.addVolatile('firedragon');
 				pokemon.setAbility('toughclaws', pokemon, true);
 				this.add('-activate', pokemon, 'ability: Tough Claws');
-				this.boost({atk: 1});
+				this.boost({ atk: 1 });
 			}
 		},
 		onBasePowerPriority: 15,
@@ -518,7 +517,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		},
 		onSwitchIn(pokemon) {
 			const type = pokemon.hpType;
-			if (pokemon.baseSpecies.baseSpecies === 'Charizard') {			
+			if (pokemon.baseSpecies.baseSpecies === 'Charizard') {
 				this.add('-item', pokemon, 'Charizardite Shard Y');
 				this.add('-anim', pokemon, "Cosmic Power", pokemon);
 				if (type && type !== '???') {
@@ -527,7 +526,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				}
 				this.add('-message', `${pokemon.name}'s Charizardite Shard Y changed its type!`);
 				pokemon.setAbility('drought', pokemon, true);
-				this.boost({spa: 1});
+				this.boost({ spa: 1 });
 			}
 		},
 		onBasePowerPriority: 15,
@@ -546,7 +545,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		num: -1012,
 		gen: 9,
 		desc: "Charizard: Becomes Fire-type, Ability: Drought, +1 SpA, 1.2x Fire/Flying power.",
-	},	
+	},
 	oddkeystone: {
 		name: "Odd Keystone",
 		spritenum: 390,
@@ -630,16 +629,15 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		},
 		onBasePower(basePower, pokemon, target, move) {
 			if (!pokemon.hasType(move.type)) {
-				return this.chainModify(1.3);
-			}
-			else if (pokemon.hasType(move.type)) {
-				return this.chainModify(0.67);
+				return this.chainModify([5324, 4096]);
+			} else if (pokemon.hasType(move.type)) {
+				return this.chainModify([2731, 4096]);
 			}
 		},
 		num: -1031,
 		gen: 8,
 		desc: "Holder's non-STAB moves deal 30% more damage, but its STAB moves deal 0.67x damage.",
-		rating: 3,		
+		rating: 3,
 	},
 	herosbubble: {
 		name: "Hero's Bubble",
@@ -648,32 +646,32 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			basePower: 30,
 		},
 		onModifyAtk(atk, attacker, defender, move) {
-			if (move.type === 'Water' && 
-				 attacker.baseSpecies.baseSpecies === 'Palafin' && 
-				 attacker.species.forme !== 'Hero') {
+			if (move.type === 'Water' &&
+				attacker.baseSpecies.baseSpecies === 'Palafin' &&
+				attacker.species.forme !== 'Hero') {
 				return this.chainModify(2);
 			}
 		},
 		onModifySpA(atk, attacker, defender, move) {
-			if (move.type === 'Water' && 
-				 attacker.baseSpecies.baseSpecies === 'Palafin' && 
-				 attacker.species.forme !== 'Hero') {
+			if (move.type === 'Water' &&
+				attacker.baseSpecies.baseSpecies === 'Palafin' &&
+				attacker.species.forme !== 'Hero') {
 				return this.chainModify(2);
 			}
 		},
 		onSourceModifyAtkPriority: 5,
 		onSourceModifyAtk(atk, attacker, defender, move) {
-			if ((move.type === 'Dark' || move.type === 'Fighting') && 
-				 defender.baseSpecies.baseSpecies === 'Palafin' && 
-				 defender.species.forme === 'Hero') {
+			if ((move.type === 'Dark' || move.type === 'Fighting') &&
+				defender.baseSpecies.baseSpecies === 'Palafin' &&
+				defender.species.forme === 'Hero') {
 				return this.chainModify(0.5);
 			}
 		},
 		onSourceModifySpAPriority: 5,
 		onSourceModifySpA(atk, attacker, defender, move) {
-			if ((move.type === 'Dark' || move.type === 'Fighting') && 
-				 defender.baseSpecies.baseSpecies === 'Palafin' && 
-				 defender.species.forme === 'Hero') {
+			if ((move.type === 'Dark' || move.type === 'Fighting') &&
+				defender.baseSpecies.baseSpecies === 'Palafin' &&
+				defender.species.forme === 'Hero') {
 				return this.chainModify(0.5);
 			}
 		},
@@ -794,7 +792,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			}
 		},
 		onEat(pokemon) {
-			this.boost({def: 1});
+			this.boost({ def: 1 });
 		},
 		num: 687,
 		gen: 6,
@@ -823,7 +821,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			}
 		},
 		onEat(pokemon) {
-			this.boost({spd: 1});
+			this.boost({ spd: 1 });
 		},
 		num: 688,
 		gen: 6,
@@ -844,10 +842,10 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		},
 		onSourceModifyAccuracyPriority: -2,
 		onSourceModifyAccuracy(accuracy, target) {
-			if (typeof accuracy === 'number' && 
-				 (target.volatiles['trapped'] || 
-				  target.volatiles['partiallytrapped'] || 
-				  target.volatiles['sandspit'])) {
+			if (typeof accuracy === 'number' &&
+				(target.volatiles['trapped'] ||
+					target.volatiles['partiallytrapped'] ||
+					target.volatiles['sandspit'])) {
 				this.debug('Binding Band boosting accuracy');
 				return this.chainModify(1.5);
 			}
@@ -865,9 +863,9 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			basePower: 60,
 		},
 		onAfterMoveSecondary(target, source, move) {
-			if (source && source !== target && source.hp && target.hp && move && 
-				(move.id === 'uturn' || move.id === 'voltswitch' || move.id === 'flipturn' || 
-				move.id === 'round' || move.id === 'rollout' || move.id === 'partingshot')) {
+			if (source && source !== target && source.hp && target.hp && move &&
+				(move.id === 'uturn' || move.id === 'voltswitch' || move.id === 'flipturn' ||
+					move.id === 'round' || move.id === 'rollout' || move.id === 'partingshot')) {
 				if (!source.isActive || !this.canSwitch(source.side) || source.forceSwitchFlag || target.forceSwitchFlag) {
 					return;
 				}
@@ -881,7 +879,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		gen: 9,
 		num: -1100,
 		rating: 3,
-	},	
+	},
 	mantisclaw: {
 		name: "Mantis Claw",
 		spritenum: 382,
@@ -1048,7 +1046,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				this.add('-item', pokemon, 'Diancite Stone Fragment');
 				pokemon.setAbility('magicbounce', pokemon, true);
 				this.add('-activate', pokemon, 'ability: Magic Bounce');
-				this.boost({atk: 1, spa: 1, spe: 1});
+				this.boost({ atk: 1, spa: 1, spe: 1 });
 			}
 		},
 		itemUser: ["Diancie"],
@@ -1059,32 +1057,36 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	// unchanged items
 	boosterenergy: {
 		name: "Booster Energy",
-		spritenum: 0, // TODO
+		spritenum: 745,
+		onSwitchInPriority: -2,
+		onStart(pokemon) {
+			this.effectState.started = true;
+			((this.effect as any).onUpdate as (p: Pokemon) => void).call(this, pokemon);
+		},
 		onUpdate(pokemon) {
-			if (pokemon.transformed) return;
-			if (this.queue.peek(true)?.choice === 'runSwitch') return;
-			if (pokemon.hasAbility('protosynthesis') && !pokemon.volatiles['protosynthesis'] && !this.field.isWeather('sunnyday') && pokemon.useItem()) {
+			if (!this.effectState.started || pokemon.transformed) return;
+			if (pokemon.hasAbility('protosynthesis') && !this.field.isWeather('sunnyday') && pokemon.useItem()) {
 				pokemon.addVolatile('protosynthesis');
 			}
-			if (pokemon.hasAbility('protosmosis') && !pokemon.volatiles['protosmosis'] && !this.field.isWeather('raindance') && pokemon.useItem()) {
+			if (pokemon.hasAbility('protosmosis') && !this.field.isWeather('raindance') && pokemon.useItem()) {
 				pokemon.addVolatile('protosmosis');
 			}
-			if (pokemon.hasAbility('protocrysalis') && !pokemon.volatiles['protocrysalis'] && !this.field.isWeather('sandstorm') && pokemon.useItem()) {
+			if (pokemon.hasAbility('protocrysalis') && !this.field.isWeather('sandstorm') && pokemon.useItem()) {
 				pokemon.addVolatile('protocrysalis');
 			}
-			if (pokemon.hasAbility('protostasis') && !pokemon.volatiles['protostasis'] && !this.field.isWeather('snowscape') && pokemon.useItem()) {
+			if (pokemon.hasAbility('protostasis') && !this.field.isWeather('snowscape') && pokemon.useItem()) {
 				pokemon.addVolatile('protostasis');
 			}
-			if (pokemon.hasAbility('quarkdrive') && !pokemon.volatiles['quarkdrive'] && !this.field.isTerrain('electricterrain') && pokemon.useItem()) {
+			if (pokemon.hasAbility('quarkdrive') && !this.field.isTerrain('electricterrain') && pokemon.useItem()) {
 				pokemon.addVolatile('quarkdrive');
 			}
-			if (pokemon.hasAbility('photondrive') && !pokemon.volatiles['photondrive'] && !this.field.isTerrain('grassyterrain') && pokemon.useItem()) {
+			if (pokemon.hasAbility('photondrive') && !this.field.isTerrain('grassyterrain') && pokemon.useItem()) {
 				pokemon.addVolatile('photondrive');
 			}
-			if (pokemon.hasAbility('neurondrive') && !pokemon.volatiles['neurondrive'] && !this.field.isTerrain('psychicterrain') && pokemon.useItem()) {
+			if (pokemon.hasAbility('neurondrive') && !this.field.isTerrain('psychicterrain') && pokemon.useItem()) {
 				pokemon.addVolatile('neurondrive');
 			}
-			if (pokemon.hasAbility('runedrive') && !pokemon.volatiles['runedrive'] && !this.field.isTerrain('mistyterrain') && pokemon.useItem()) {
+			if (pokemon.hasAbility('runedrive') && !this.field.isTerrain('mistyterrain') && pokemon.useItem()) {
 				pokemon.addVolatile('runedrive');
 			}
 		},
