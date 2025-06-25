@@ -744,7 +744,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						!source.hasAbility('sandveil') && !this.field.isWeather('sandstorm') ||
 						!source.hasAbility('sunblock') && !this.field.isWeather('sunnyday') ||
 						!source.hasAbility('snowcloak') && !this.field.isWeather('snowscape')) &&
-					move.priority > 0.1) {
+						move.priority > 0.1) {
 					this.attrLastMove('[still]');
 					this.add('cant', parryHolder, 'move: Parry', move, `[of] ${target}`);
 					return false;
@@ -754,7 +754,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Fighting",
 		contestType: "Clever",
-		},
+	},
 	rollout: {
 		num: 205,
 		accuracy: 100,
@@ -1393,7 +1393,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (this.dex.getEffectiveness(type1, target) < this.dex.getEffectiveness(type2, target)) {
 					move.type = 'Flying';
 				} else if (target.hasType('Ghost') && !pokemon.hasAbility('scrappy') &&
-							!pokemon.hasAbility('mindseye') && !target.hasItem('ringtarget')) {
+					!pokemon.hasAbility('mindseye') && !target.hasItem('ringtarget')) {
 					move.type = 'Flying';
 				} else if (this.dex.getEffectiveness(type1, target) === this.dex.getEffectiveness(type2, target)) {
 					if (pokemon.hasType('Flying') && !pokemon.hasType('Fighting')) {
@@ -2266,7 +2266,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					}
 					this.add('-activate', target, 'move: Misty Terrain');
 				}
-			for (const active of this.getAllActive()) {
+				for (const active of this.getAllActive()) {
 					if (active.hasAbility('cloudnine')) {
 						this.add('-message', `${active.name} suppresses the effects of the terrain!`);
 						return;
@@ -3052,7 +3052,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "self",
 		type: "Flying",
-		zMove: { effect: 'clearnegativeboost'},
+		zMove: { effect: 'clearnegativeboost' },
 		contestType: "Clever",
 	},
 };
