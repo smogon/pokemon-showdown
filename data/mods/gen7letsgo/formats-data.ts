@@ -158,7 +158,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	nidoking: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	clefairy: {
@@ -276,7 +276,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	poliwrath: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	abra: {
@@ -401,7 +401,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	cloyster: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	gastly: {
@@ -626,7 +626,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "DOU",
 	},
 	snorlax: {
-		tier: "OU",
+		tier: "UU",
 		doublesTier: "DOU",
 	},
 	articuno: {
