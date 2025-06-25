@@ -132,26 +132,26 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		shortDesc: "Removes Spikes and Stealth Rock from the field. +1 Def for every type of hazard cleared.",
-		viable: true,
 		name: "Shelter",
 		pp: 10,
 		priority: 0,
-		flags: { snatch: 1 },
+		flags: { snatch: 1, metronome: 1 },
 		onHit(pokemon) {
-			let success = false;
-			let hazardsCleared = 0;
 			const somesideConditions = ['spikes', 'stealthrock'];
 			const sides = [pokemon.side];
 			for (const side of sides) {
-				if (side.removeSideCondition('spikes')) {
-					this.add('-sideend', side, this.dex.conditions.get('spikes'));
-					hazardsCleared += 1;
-					this.boost({ def: 1 }, pokemon);
-				}
-				if (side.removeSideCondition('stealthrock')) {
-					this.add('-sideend', side, this.dex.conditions.get('stealthrock'));
-					hazardsCleared += 1;
-					this.boost({ def: 1 }, pokemon);
+				for (const sideCondition of somesideConditions) {
+					if (sideCondition) {
+						this.add('-message', `This sides Stealth Rock and Spikes will be removed!`);
+					}
+					if (side.removeSideCondition('spikes')) {
+						this.add('-sideend', side, this.dex.conditions.get('spikes'));
+						this.boost({def: 1}, pokemon);
+					}
+					if (side.removeSideCondition('stealthrock')) {
+						this.add('-sideend', side, this.dex.conditions.get('stealthrock'));
+						this.boost({def: 1}, pokemon);
+					}
 				}
 			}
 		},
@@ -159,7 +159,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "self",
 		type: "Steel",
 	},
-
 	// slate 2
 	healingstones: {
 		num: -191,
