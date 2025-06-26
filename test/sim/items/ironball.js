@@ -79,7 +79,7 @@ describe('Iron Ball', () => {
 	});
 
 	describe('[Gen 4]', () => {
-		it('should still halve the speed of a Pokemon with Klutz', () => {
+		it('should halve the speed of a Pokemon with Klutz', () => {
 			battle = common.gen(4).createBattle([[
 				{ species: "Lopunny", item: 'ironball', ability: 'klutz', moves: ['tackle'] },
 			], [
