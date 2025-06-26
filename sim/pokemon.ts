@@ -995,16 +995,20 @@ export class Pokemon {
 				const canCauseStruggle = ['Encore', 'Disable', 'Taunt', 'Assault Vest', 'Belch', 'Stuff Cheeks'];
 				disabled = this.maxMoveDisabled(moveSlot.id) || disabled && canCauseStruggle.includes(moveSlot.disabledSource!);
 			} else if (
-				(moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || disabled &&
-				this.side.active.length >= 2 && this.battle.actions.targetTypeChoices(target!)
+				((moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || disabled) &&
+				(this.battle.gen >= 4 || this.battle.actions.targetTypeChoices(target!)) &&
+				this.battle.gameType !== 'singles'
 			) {
 				disabled = true;
 			}
 
 			if (!disabled) {
 				hasValidMove = true;
-			} else if (disabled === 'hidden' && restrictData) {
-				disabled = false;
+			} else if (disabled === 'hidden') {
+				hasValidMove = true;
+				if (restrictData) {
+					disabled = false;
+				}
 			}
 
 			moves.push({
