@@ -320,10 +320,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				return true;
 			}
 
-			if (!move.negateSecondary) {
-				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
-				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
-			}
+			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
+			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 			return true;
 		},
 		// This function attempts a move hit and returns the attempt result before the actual hit happens.
@@ -484,10 +482,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (move.ohko) this.battle.add('-ohko');
 
-			if (!move.negateSecondary) {
-				this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
-				this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
-			}
+			this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
+			this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
 
 			return damage;
 		},
