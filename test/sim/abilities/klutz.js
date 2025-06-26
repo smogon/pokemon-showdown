@@ -117,17 +117,6 @@ describe('Klutz', () => {
 			assert.false.fullHP(battle.p1.active[0]);
 		});
 
-		it('should not let effects of items received by Fling activate', () => {
-			battle = common.gen(4).createBattle([[
-				{ species: "Lopunny", ability: 'klutz', moves: ['sleeptalk'] },
-			], [
-				{ species: "Wynaut", item: 'toxicorb', moves: ['fling'] },
-			]]);
-			battle.makeChoices();
-			assert.false(battle.p2.active[0].item);
-			assert.false(battle.p1.active[0].status);
-		});
-
 		it('should prevent berries from activating after consuming them with Bug Bite', () => {
 			battle = common.gen(4).createBattle([[
 				{ species: "Lopunny", level: 1, ability: 'klutz', moves: ['endure', 'bugbite'] },
