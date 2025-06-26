@@ -996,9 +996,10 @@ export class Pokemon {
 				disabled = this.maxMoveDisabled(moveSlot.id) || disabled && canCauseStruggle.includes(moveSlot.disabledSource!);
 			} else if (
 				(moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || (
-				disabled && this.battle.gameType !== 'singles' &&
-				(this.battle.gen >= 4 || this.battle.actions.targetTypeChoices(target!))
-			)) {
+					disabled && this.battle.gameType !== 'singles' &&
+					(this.battle.gen >= 4 || this.battle.actions.targetTypeChoices(target!))
+				)
+			) {
 				disabled = true;
 			}
 
