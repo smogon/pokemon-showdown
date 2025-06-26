@@ -579,6 +579,8 @@ export class Side {
 			if (!targetType) {
 				if (moveid === 'testfight') {
 					targetType = 'normal';
+				} else if (moveid === 'struggle' && pokemon.maybeDisabled && pokemon.getMoves().every(m => m.disabled)) {
+					targetType = 'randomNormal';
 				} else {
 					return this.emitChoiceError(`Can't move: Your ${pokemon.name} doesn't have a move matching ${moveid}`);
 				}
