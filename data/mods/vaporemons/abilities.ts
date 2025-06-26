@@ -261,21 +261,31 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			// Cloud Nine does not activate when Skill Swapped or when Neutralizing Gas leaves the field
 			pokemon.abilityState.ending = false; // Clear the ending flag
 			this.eachEvent('WeatherChange', this.effect);
-			this.add('-message', `${pokemon.name} suppresses the effects of the terrain!`);
 			if (this.field.terrain) {
+				this.add('-message', `${pokemon.name} suppresses the effects of the terrain!`);
+				let activated = false;
 				for (const other of pokemon.foes()) {
+					if (!activated) {
+						this.add('-ability', pokemon, 'Cloud Nine');
+					}
+					activated = true;
 					if (!other.volatiles['cloudnine']) {
 						other.addVolatile('cloudnine');
 					}
 				}
 			}
 		},
-		onTerrainChange(pokemon) {
+		onTerrainChange() {
 			const pokemon = this.effectState.target;
 			this.add('-ability', pokemon, 'Cloud Nine');
 			this.add('-message', `${pokemon.name} suppresses the effects of the terrain!`);
 			if (this.field.terrain) {
+				let activated = false;
 				for (const other of pokemon.foes()) {
+					if (!activated) {
+						this.add('-ability', pokemon, 'Cloud Nine');
+					}
+					activated = true;
 					if (!other.volatiles['cloudnine']) {
 						other.addVolatile('cloudnine');
 					}
@@ -292,31 +302,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		onEnd(source) {
-			for (const target of this.getAllActive()) {
-				if (target.hasAbility('cloudnine') && target !== source) {
-					this.debug('Cloud Nine is still active');
-					return;
-				}
-			}
 			if (this.field.terrain) {
-				const sources = this.effectState.target;
-				for (const target of sources.foes()) {
+				const cnsource = this.effectState.target;
+				for (const target of cnsource.foes()) {
 					target.removeVolatile('cloudnine');
 				}
 			}
 			source.abilityState.ending = true;
-			this.eachEvent('WeatherChange', this.effect);
 			for (const pokemon of this.getAllActive()) {
-				if (pokemon.hasAbility('mimicry')) {
-					if (this.field.terrain) {
-						pokemon.addVolatile('mimicry');
-					} else {
-						const types = pokemon.baseSpecies.types;
-						if (pokemon.getTypes().join() === types.join() || !pokemon.setType(types)) continue;
-						this.add('-start', pokemon, 'typechange', types.join('/'), '[from] ability: Mimicry');
-						this.hint("Transform Mimicry changes you to your original un-transformed types.");
-					}
-				}
 				if (pokemon.ignoringItem()) continue;
 				if (
 					(pokemon.hasItem('psychicseed') && this.field.isTerrain('psychicterrain')) ||

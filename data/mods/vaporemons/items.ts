@@ -1095,7 +1095,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				pokemon.useItem();
 			}
 		},
-		onTerrainChange(pokemon) {
+		onTerrainChange() {
 			const pokemon = this.effectState.target;
 			if (this.field.isTerrain('electricterrain')) {
 				for (const target of this.getAllActive()) {
@@ -1131,7 +1131,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				pokemon.useItem();
 			}
 		},
-		onTerrainChange(pokemon) {
+		onTerrainChange() {
 			const pokemon = this.effectState.target;
 			if (this.field.isTerrain('psychicterrain')) {
 				for (const target of this.getAllActive()) {
@@ -1167,7 +1167,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				pokemon.useItem();
 			}
 		},
-		onTerrainChange(pokemon) {
+		onTerrainChange() {
 			const pokemon = this.effectState.target;
 			if (this.field.isTerrain('mistyterrain')) {
 				for (const target of this.getAllActive()) {
@@ -1203,7 +1203,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				pokemon.useItem();
 			}
 		},
-		onTerrainChange(pokemon) {
+		onTerrainChange() {
 			const pokemon = this.effectState.target;
 			if (this.field.isTerrain('grassyterrain')) {
 				for (const target of this.getAllActive()) {
