@@ -172,7 +172,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		spritenum: 648,
 		fling: {
 			basePower: 20,
-			volatilestatus: 'confusion',
+			volatileStatus: 'confusion',
 		},
 		onTakeItem(item, pokemon, source) {
 			if (source?.baseSpecies.num === 966 || pokemon.baseSpecies.num === 966) {

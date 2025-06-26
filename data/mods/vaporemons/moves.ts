@@ -193,7 +193,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "allySide",
 		type: "Fairy",
-		zMove: { def: 1 },
+		zMove: { boost: { def: 1 } },
 		contestType: "Clever",
 	},
 	junglehealing: {
@@ -1068,9 +1068,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					priority: 0,
 					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
 					ignoreImmunity: false,
-					onBeforeMovePriority: 13,
-					onBeforeMove(attacker, defender, move) {
-						this.field.setWeather('sandstorm');
+					self: {
+						onHit(source) {
+							this.field.setWeather('sandstorm');
+						},
 					},
 					effectType: 'Move',
 					type: 'Ground',
@@ -1362,11 +1363,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1 },
 		onHit(target) {
-			if (target.getAbility().isPermanent) return;
+			if (target.getAbility().flags['cantsuppress']) return;
 			target.addVolatile('gastroacid');
 		},
 		onAfterSubDamage(damage, target) {
-			if (target.getAbility().isPermanent) return;
+			if (target.getAbility().flags['cantsuppress']) return;
 			target.addVolatile('gastroacid');
 		},
 		secondary: null,
@@ -1954,7 +1955,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					this.add('-activate', source, 'ability: Persistent', '[move] Heal Block');
 					return 7;
 				}
-				if (effect.id === 'deathaura') {
+				if (effect && effect.id === 'deathaura') {
 					return 0;
 				}
 				return 5;
@@ -2412,7 +2413,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					move = 'triattack';
 				}
 			}
-			this.useMove(move, pokemon, target);
+			this.actions.useMove(move, pokemon, { target });
 			return null;
 		},
 	},
