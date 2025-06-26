@@ -270,7 +270,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 			}
 		},
-		onAnyTerrainStart(target, source, terrain) {
+		onTerrainChange(pokemon) {
 			const pokemon = this.effectState.target;
 			this.add('-ability', pokemon, 'Cloud Nine');
 			this.add('-message', `${pokemon.name} suppresses the effects of the terrain!`);
@@ -778,7 +778,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifySecondaries(secondaries) {
 			if (this.field.isWeather('sunnyday')) {
 				this.debug('Sunblock prevent secondary');
-				return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+				return secondaries.filter(effect => !!effect.self);
 			}
 		},
 		flags: { breakable: 1 },
@@ -796,7 +796,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifySecondaries(secondaries) {
 			if (this.field.isWeather('sandstorm')) {
 				this.debug('Sand Veil prevent secondary');
-				return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+				return secondaries.filter(effect => !!effect.self);
 			}
 		},
 		onImmunity(type, pokemon) {
@@ -818,7 +818,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onModifySecondaries(secondaries) {
 			if (this.field.isWeather(['hail', 'snowscape'])) {
 				this.debug('Snow Cloak prevent secondary');
-				return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+				return secondaries.filter(effect => !!effect.self);
 			}
 		},
 		onImmunity(type, pokemon) {
@@ -980,8 +980,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Mud Wash",
 		onStart(source) {
 			this.add('-ability', source, 'Mud Wash');
-			this.field.addPseudoWeather('mudsport', source, source.ability);
-			this.field.addPseudoWeather('watersport', source, source.ability);
+			this.field.addPseudoWeather('mudsport');
+			this.field.addPseudoWeather('watersport');
 			this.add('-message', `${source.name}'s splashed around in the mud!`);
 		},
 		onModifyMove(move, pokemon) {
@@ -1070,7 +1070,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	shielddust: {
 		onModifySecondaries(secondaries) {
 			this.debug('Shield Dust prevent secondary');
-			return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+			return secondaries.filter(effect => !!effect.self);
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (move.secondaries) {
@@ -1519,7 +1519,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.hint("Transform Mimicry changes you to your original un-transformed types.");
 			}
 		},
-		onAnyTerrainStart() {
+		onTerrainChange(pokemon) {
 			if (pokemon.volatiles['cloudnine']) {
 				this.debug('Cloud Nine prevents type change (check 1)');
 				return;
@@ -1746,12 +1746,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		num: 168,
 	},
 	adaptability: {
-		onModifyMove(move, pokemon) {
-			if (move.type === pokemon.teraType &&
-				pokemon.hasItem('terashard') && pokemon.baseSpecies.types.includes(pokemon.teraType)) {
-				move.stab = 2.25;
-			} else {
-				move.stab = 2;
+		onModifySTAB(stab, source, target, move) {
+			if (move.forceSTAB || source.hasType(move.type)) {
+				if (move.type === source.teraType && source.baseSpecies.types.includes(source.teraType) &&
+					source.hasItem('terashard')) {
+					return 2.25;
+				}
+				return 2;
 			}
 		},
 		name: "Adaptability",

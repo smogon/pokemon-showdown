@@ -365,9 +365,9 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				if (hitSub) return;
 				if (target.useItem()) {
 					this.debug('-50% reduction');
+					this.add('-message', `${target.name} tried to hit the ball back, but its Baseball Bat broke!`);
 					this.add('-enditem', target, this.effect, '[weaken]');
 					return this.chainModify(0.5);
-					this.add('-message', `${pokemon.name} tried to hit the ball back, but its Baseball Bat broke!`);
 				}
 			}
 		},
@@ -1095,7 +1095,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				pokemon.useItem();
 			}
 		},
-		onAnyTerrainStart() {
+		onTerrainChange(pokemon) {
 			const pokemon = this.effectState.target;
 			if (this.field.isTerrain('electricterrain')) {
 				for (const target of this.getAllActive()) {
@@ -1131,7 +1131,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				pokemon.useItem();
 			}
 		},
-		onAnyTerrainStart() {
+		onTerrainChange(pokemon) {
 			const pokemon = this.effectState.target;
 			if (this.field.isTerrain('psychicterrain')) {
 				for (const target of this.getAllActive()) {
@@ -1167,7 +1167,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				pokemon.useItem();
 			}
 		},
-		onAnyTerrainStart() {
+		onTerrainChange(pokemon) {
 			const pokemon = this.effectState.target;
 			if (this.field.isTerrain('mistyterrain')) {
 				for (const target of this.getAllActive()) {
@@ -1203,7 +1203,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				pokemon.useItem();
 			}
 		},
-		onAnyTerrainStart() {
+		onTerrainChange(pokemon) {
 			const pokemon = this.effectState.target;
 			if (this.field.isTerrain('grassyterrain')) {
 				for (const target of this.getAllActive()) {

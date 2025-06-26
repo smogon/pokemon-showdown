@@ -377,7 +377,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	meloettapirouette: {
 		inherit: true,
 		abilities: { 0: "No Guard", H: "Muscle Memory" },
-		requiredMove: null,
 		requiredItem: "Dancing Shoes",
 	},
 	landorus: {

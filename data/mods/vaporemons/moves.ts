@@ -193,7 +193,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "allySide",
 		type: "Fairy",
-		zMoveBoost: { def: 1 },
+		zMove: { def: 1 },
 		contestType: "Clever",
 	},
 	junglehealing: {
@@ -1068,7 +1068,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					priority: 0,
 					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
 					ignoreImmunity: false,
-					onPrepareHit(pokemon) {
+					onBeforeMovePriority: 13,
+					onBeforeMove(attacker, defender, move) {
 						this.field.setWeather('sandstorm');
 					},
 					effectType: 'Move',
@@ -1340,17 +1341,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	tailslap: {
 		inherit: true,
 		accuracy: 100,
-		viable: true,
 	},
 	pinmissile: {
 		inherit: true,
 		accuracy: 100,
-		viable: true,
 	},
 	rockblast: {
 		inherit: true,
 		accuracy: 100,
-		viable: true,
 	},
 	signalbeam: {
 		num: 324,
@@ -1385,7 +1383,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Flying Press",
 		pp: 10,
 		flags: { contact: 1, protect: 1, mirror: 1, gravity: 1, distance: 1, nonsky: 1 },
-		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			for (const target of pokemon.side.foe.active) {
 				const type1 = 'Fighting';
@@ -1425,7 +1422,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, "Hyper Beam", target);
 		},
-		onModifyTypePriority: -1,
 		onModifyType(move, pokemon) {
 			for (const target of pokemon.side.foe.active) {
 				const type1 = 'Bug';
@@ -2923,7 +2919,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	jetpunch: {
 		inherit: true,
-		viable: true,
 	},
 	revivalblessing: {
 		inherit: true,
