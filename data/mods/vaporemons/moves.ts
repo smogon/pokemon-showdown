@@ -1069,7 +1069,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
 					ignoreImmunity: false,
 					self: {
-						onHit(source) {
+						onHit() {
 							this.field.setWeather('sandstorm');
 						},
 					},
