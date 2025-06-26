@@ -351,7 +351,8 @@ export const vpnSets: VPNSets = {
 	},
 	Ditto: {
 		species: 'Ditto', ability: 'Imposter', item: 'Choice Scarf', gender: '',
-		moves: ['Transform'],
+		moves: [''],
+		signatureMove: 'Transform',
 		evs: { hp: 252, def: 252, spd: 4 }, nature: 'Relaxed', teraType: 'Rock', level: 87,
 	},
 	Vaporeon: {
