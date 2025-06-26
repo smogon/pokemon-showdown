@@ -553,7 +553,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (!item.fling) return false;
 			move.basePower = item.fling.basePower;
 			this.debug(`BP: ${move.basePower}`);
-			if (!target.hasAbility('klutz') && !target.volatiles['embargo'] && item.isBerry) {
+			if (item.isBerry) {
 				move.onHit = function (foe) {
 					if (this.singleEvent('Eat', item, null, foe, source, move)) {
 						this.runEvent('EatItem', foe, null, null, item);
