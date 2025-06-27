@@ -640,6 +640,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'Rule',
 		name: 'Team Preview',
 		desc: "Allows each player to see the Pok&eacute;mon on their opponent's team before they choose their lead Pok&eacute;mon",
+		mutuallyExclusiveWith: 'pickteam',
 		onBegin() {
 			if (this.ruleTable.has(`teratypepreview`)) {
 				this.add('rule', 'Tera Type Preview: Tera Types are shown at Team Preview');
@@ -684,12 +685,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'Rule',
 		name: 'Pick Team',
 		desc: "Allows each player to choose their lead Pok&eacute;mon without seeing their opponent's team",
+		mutuallyExclusiveWith: 'teampreview',
 		onTeamPreview() {
 			this.add('clearpoke');
 			for (const side of this.sides) {
 				for (const pokemon of side.pokemon) {
 					// Still need to hide these formes since they change on battle start
-					let details = pokemon.details.replace(', shiny', '')
+					const details = pokemon.details.replace(', shiny', '')
 						.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*')
 						.replace(/(Xerneas)(-[a-zA-Z?-]+)?/g, '$1-*');
 					this.addSplit(side.id, ['poke', pokemon.side.id, details, '']);
