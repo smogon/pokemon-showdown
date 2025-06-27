@@ -680,6 +680,24 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		},
 		// implemented in team preview
 	},
+	pickteam: {
+		effectType: 'Rule',
+		name: 'Pick Team',
+		desc: "Allows each player to choose their lead Pok&eacute;mon without seeing their opponent's team",
+		onTeamPreview() {
+			this.add('clearpoke');
+			for (const side of this.sides) {
+				for (const pokemon of side.pokemon) {
+					// Still need to hide these formes since they change on battle start
+					let details = pokemon.details.replace(', shiny', '')
+						.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*')
+						.replace(/(Xerneas)(-[a-zA-Z?-]+)?/g, '$1-*');
+					this.addSplit(side.id, ['poke', pokemon.side.id, details, '']);
+				}
+			}
+			this.makeRequest('teampreview');
+		},
+	},
 	onevsone: {
 		effectType: 'Rule',
 		name: 'One vs One',
@@ -1978,8 +1996,11 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		hasValue: 'positive-integer',
 		// hardcoded in sim/side
 		onValidateRule() {
-			if (!(this.ruleTable.has('teampreview') || this.ruleTable.has('teamtypepreview'))) {
-				throw new Error(`The "Picked Team Size" rule${this.ruleTable.blame('pickedteamsize')} requires Team Preview.`);
+			if (
+				!this.ruleTable.has('teampreview') && !this.ruleTable.has('teamtypepreview') &&
+				!this.ruleTable.has('pickteam')
+			) {
+				throw new Error(`The "Picked Team Size" rule${this.ruleTable.blame('pickedteamsize')} requires the "Team Preview" or "Pick Team" rules.`);
 			}
 		},
 	},
