@@ -1661,7 +1661,7 @@ export const vpnSets: VPNSets = {
 		species: 'Garganacl', ability: 'Purifying Salt', item: 'Tera Shard', gender: '',
 		moves: ['Earthquake', 'Protect', 'Recover'],
 		signatureMove: 'Salt Cure',
-		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Impish', teraType: ['Poison', 'Grass', 'Water'], level: 81,
+		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Impish', teraType: 'Water', level: 81,
 	},
 	'Iron Crown': {
 		species: 'Iron Crown', ability: 'Justified', item: ['Choice Specs', 'Assault Vest'], gender: '',
