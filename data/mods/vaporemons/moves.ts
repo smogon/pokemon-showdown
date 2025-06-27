@@ -227,6 +227,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		heal: [1, 3],
 		slotCondition: 'lifedew',
 		condition: {
+			onSwitchIn(target) {
+				this.singleEvent('Swap', this.effect, this.effectState, target);
+			},
 			onSwap(target) {
 				if (!target.fainted) {
 					const source = this.effectState.source;

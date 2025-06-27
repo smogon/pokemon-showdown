@@ -50,6 +50,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			pokemon.side.addSlotCondition(pokemon, 'healer');
 		},
 		condition: {
+			onSwitchIn(target) {
+				this.singleEvent('Swap', this.effect, this.effectState, target);
+			},
 			onSwap(target) {
 				if (!target.fainted) {
 					const source = this.effectState.source;
@@ -1010,7 +1013,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		// This should be applied directly to the stat as opposed to chaining with the others
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk) {
-			return this.modify(atk, 1.5);
+			return this.chainModify(1.5);
 		},
 		onBeforeMovePriority: 5,
 		onBeforeMove(attacker, defender, move) {
