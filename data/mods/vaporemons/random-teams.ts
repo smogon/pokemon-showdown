@@ -2467,12 +2467,6 @@ export const vpnSets: VPNSets = {
 		signatureMove: 'Draco Meteor',
 		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Timid', teraType: 'Stellar', level: 82,
 	},
-	Quagsire: {
-		species: 'Quagsire', ability: 'SheerForce', item: 'LifeOrb', gender: '',
-		moves: ['DragonDance', 'IcePunch', 'Liquidation'],
-		signatureMove: 'ThroatChop',
-		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Hardy', teraType: 'Stellar', level: 80,
-	},
 	Incineroar: {
 		species: 'Incineroar', ability: 'Intimidate', item: 'Heavy-Duty Boots', gender: '',
 		moves: ['Parting Shot', 'Knock Off', 'Flare Blitz'],
