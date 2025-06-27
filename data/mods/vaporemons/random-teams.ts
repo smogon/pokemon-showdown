@@ -1688,7 +1688,7 @@ export const vpnSets: VPNSets = {
 		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Timid', teraType: 'Stellar', level: 78,
 	},
 	'Roaring Moon': {
-		species: 'Roaring Moon', ability: 'Protostatis', item: 'Baseball Bat', gender: '',
+		species: 'Roaring Moon', ability: 'Protostasis', item: 'Baseball Bat', gender: '',
 		moves: ['Dragon Dance', ['Iron Head', 'Brick Break'], ['Outrage', 'Roost', 'Psychic Fangs']],
 		signatureMove: 'Knock Off',
 		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Adamant', teraType: 'Stellar', level: 73,
