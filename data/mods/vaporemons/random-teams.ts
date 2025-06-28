@@ -921,7 +921,7 @@ export const vpnSets: VPNSets = {
 	},
 	Whiscash: {
 		species: 'Whiscash', ability: 'Mud Wash', item: 'Life Orb', gender: '',
-		moves: ['DragonDance', 'Stone Edge', 'Liquidation'],
+		moves: ['DragonDance', 'Stone Edge', 'Earthquake'],
 		signatureMove: 'Muddy Water',
 		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Rash', teraType: 'Stellar', level: 88,
 	},
@@ -1277,7 +1277,7 @@ export const vpnSets: VPNSets = {
 		species: 'Glaceon', ability: 'Muscle Memory', item: 'Choice Scarf', gender: '',
 		moves: ['Frost Breath', 'Round', 'Earth Power'],
 		signatureMove: 'Freeze-Dry',
-		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Modest', teraType: 'Stellar', level: 94,
+		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Modest', teraType: 'Stellar', level: 87,
 	},
 	Gliscor: {
 		species: 'Gliscor', ability: 'Poison Heal', item: 'Toxic Orb', gender: '',
@@ -2750,7 +2750,7 @@ export const vpnSets: VPNSets = {
 		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Adamant', teraType: 'Stellar', level: 87,
 	},
 	Morpeko: {
-		species: 'Morpeko', ability: 'Hunger Switch', item: 'Baseball Bat', gender: '',
+		species: 'Morpeko', ability: 'Hunger Switch', item: 'Heavy-Duty Boots', gender: '',
 		moves: ['Rollout', 'Protect', 'Rapid Spin'],
 		signatureMove: 'Aura Wheel',
 		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Adamant', teraType: 'Stellar', level: 87,
