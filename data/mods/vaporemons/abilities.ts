@@ -5,7 +5,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (effect?.effectType !== 'Move') {
 				return;
 			}
-			if (source.species.id === 'palafinhero' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
+			if (source.species.id === 'palafin' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
 				this.add('-activate', source, 'ability: Zero to Hero');
 				source.formeChange('Palafin-Hero', this.effect, true);
 				source.formeRegression = true;
