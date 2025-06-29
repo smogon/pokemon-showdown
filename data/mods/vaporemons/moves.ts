@@ -1071,6 +1071,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					priority: 0,
 					flags: { allyanim: 1, metronome: 1, futuremove: 1 },
 					ignoreImmunity: false,
+					weather: 'sandstorm',
 					self: {
 						sideCondition: 'desertstorm',
 					},
@@ -1080,13 +1081,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			});
 			this.add('-start', source, 'move: Desert Storm');
 			return this.NOT_FAIL;
-		},
-		condition: {
-			duration: 1,
-			onStart(source) {
-				this.add('-message', `${source.name}'s summoned a great desert storm!`);
-				this.field.setWeather('sandstorm');
-			},
 		},
 		secondary: null,
 		target: "normal",

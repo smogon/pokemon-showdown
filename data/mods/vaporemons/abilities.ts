@@ -150,32 +150,24 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	deathaura: {
 		name: "Death Aura",
 		shortDesc: "While this Pokemon is active, no Pokemon can heal or use draining moves.",
-		onStart(source) {
+		onStart(pokemon) {
 			let activated = false;
-			for (const pokemon of source.foes()) {
+			for (const target of [... new Set ([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
 				if (!activated) {
-					this.add('-ability', source, 'Death Aura');
+					this.add('-ability', pokemon, 'Death Aura');
 					activated = true;
 				}
-				if (!pokemon.volatiles['healblock']) {
-					pokemon.addVolatile('healblock');
-				}
-				if (!source.volatiles['healblock']) {
-					source.addVolatile('healblock');
-				}
+				if (!target.volatiles['healblock']) target.addVolatile('healblock');
 			}
 		},
 		onAnySwitchIn(pokemon) {
-			const source = this.effectState.target;
-			if (pokemon === source) return;
-			for (const target of source.foes()) {
-				if (!target.volatiles['healblock']) {
-					target.addVolatile('healblock');
-				}
-			}
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onEnd(pokemon) {
-			for (const target of pokemon.foes()) {
+			for (const target of [... new Set ([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
+				if (target.ability === ('deathaura' as ID)) return;
+			}
+			for (const target of [... new Set ([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
 				target.removeVolatile('healblock');
 			}
 		},
@@ -1415,33 +1407,25 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	fairfight: {
 		name: "Fair Fight",
-		onStart(source) {
+		onStart(pokemon) {
 			let activated = false;
-			for (const pokemon of source.foes()) {
+			for (const target of [... new Set ([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
 				if (!activated) {
-					this.add('-ability', source, 'Fair Fight');
-					this.add('-message', `${source.name} wants to have a fair fight!`);
+					this.add('-ability', pokemon, 'Fair Fight');
+					this.add('-message', `${pokemon.name} wants to have a fair fight!`);
+					activated = true;
 				}
-				activated = true;
-				if (!pokemon.volatiles['fairfight']) {
-					pokemon.addVolatile('fairfight');
-				}
-				if (!source.volatiles['fairfight']) {
-					source.addVolatile('fairfight');
-				}
+				if (!target.volatiles['fairfight']) target.addVolatile('fairfight');
 			}
 		},
 		onAnySwitchIn(pokemon) {
-			const source = this.effectState.target;
-			if (pokemon === source) return;
-			for (const target of source.foes()) {
-				if (!target.volatiles['fairfight']) {
-					target.addVolatile('fairfight');
-				}
-			}
+			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onEnd(pokemon) {
-			for (const target of pokemon.foes()) {
+			for (const target of [... new Set ([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
+				if (target.ability === ('fairfight' as ID)) return;
+			}
+			for (const target of [... new Set ([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
 				target.removeVolatile('fairfight');
 			}
 		},
