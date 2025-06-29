@@ -33,7 +33,7 @@ describe('Imprison', () => {
 		assert(battle.log.some(line => line === '|-activate|p2a: Kadabra|move: Struggle'));
 
 		// Imprison is not passed by Baton Pass
-		battle.makeChoices('move batonpass', 'move struggle');
+		battle.makeChoices('move batonpass', 'auto');
 		assert.statStage(battle.p2.active[0], 'spa', 0);
 		battle.makeChoices('switch 2', '');
 		assert.statStage(battle.p2.active[0], 'spa', 0);

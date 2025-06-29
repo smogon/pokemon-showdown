@@ -577,11 +577,7 @@ export class Side {
 				}
 			}
 			if (!targetType) {
-				if (moveid === 'testfight') {
-					targetType = 'normal';
-				} else if (moveid === 'struggle' && pokemon.maybeDisabled && pokemon.getMoves().every(m => m.disabled)) {
-					targetType = 'randomNormal';
-				} else {
+				if (moveid !== 'testfight') {
 					return this.emitChoiceError(`Can't move: Your ${pokemon.name} doesn't have a move matching ${moveid}`);
 				}
 			}
@@ -623,7 +619,7 @@ export class Side {
 
 		// Validate targeting
 
-		if (autoChoose) {
+		if (autoChoose || moveid === 'testfight') {
 			targetLoc = 0;
 		} else if (this.battle.actions.targetTypeChoices(targetType)) {
 			if (!targetLoc && this.active.length >= 2) {
@@ -651,8 +647,14 @@ export class Side {
 				targetLoc: lockedMoveTargetLoc,
 				moveid: lockedMoveID,
 			});
-			if (moveid === 'testfight') this.choice.cantUndo = true;
+			if (pokemon.maybeLocked) this.choice.cantUndo = true;
 			return true;
+		} else if (!moves.length && !zMove) {
+			// Override action and use Struggle if there are no enabled moves with PP
+			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
+			if (this.battle.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
+			moveid = 'struggle';
+			if (pokemon.maybeLocked) this.choice.cantUndo = true;
 		} else if (moveid === 'testfight') {
 			// test fight button
 			if (!pokemon.maybeLocked) {
@@ -661,12 +663,16 @@ export class Side {
 			pokemon.maybeLocked = false;
 			return this.emitChoiceError(`${pokemon.name} is not locked`, { pokemon, update: req => {
 				delete req.maybeLocked;
+				if (pokemon.maybeDisabled && this.battle.gameType !== 'singles') {
+					for (const m of req.moves) {
+						const disabled = pokemon.getMoveData(m.id)?.disabled;
+						if (disabled && (this.battle.gen >= 4 || this.battle.actions.targetTypeChoices(m.target!))) {
+							m.disabled = true;
+						}
+					}
+				}
+				return true;
 			} });
-		} else if (!moves.length && !zMove) {
-			// Override action and use Struggle if there are no enabled moves with PP
-			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
-			if (this.battle.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
-			moveid = 'struggle';
 		} else if (maxMove) {
 			// Dynamaxed; only Taunt and Assault Vest disable Max Guard, but the base move must have PP remaining
 			if (pokemon.maxMoveDisabled(move)) {
@@ -776,8 +782,10 @@ export class Side {
 			terastallize: terastallize ? pokemon.teraType : undefined,
 		});
 
-		if (pokemon.maybeDisabled) {
-			this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
+		if (pokemon.maybeDisabled && (this.battle.gameType === 'singles' || (
+			this.battle.gen <= 3 && !this.battle.actions.targetTypeChoices(targetType)
+		))) {
+			this.choice.cantUndo = true;
 		}
 
 		if (mega || megax || megay) this.choice.mega = true;
