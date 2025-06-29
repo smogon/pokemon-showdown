@@ -5,7 +5,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 	},
 	flatrules: {
 		inherit: true,
-		ruleset: ['Obtainable', 'Pick Team', 'Species Clause', 'Nickname Clause', 'Item Clause = 1', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
+		ruleset: ['Obtainable', 'Species Clause', 'Nickname Clause', 'Item Clause = 1', 'Adjust Level Down = 50', 'Picked Team Size = Auto', 'Cancel Mod'],
 	},
 	teampreview: {
 		inherit: true,

@@ -1908,6 +1908,20 @@ export class Battle {
 			subFormat.onTeamPreview?.call(this);
 		}
 
+		if (this.requestState !== 'teampreview' && this.ruleTable.pickedTeamSize) {
+			this.add('clearpoke');
+			for (const side of this.sides) {
+				for (const pokemon of side.pokemon) {
+					// Still need to hide these formes since they change on battle start
+					const details = pokemon.details.replace(', shiny', '')
+						.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*')
+						.replace(/(Xerneas)(-[a-zA-Z?-]+)?/g, '$1-*');
+					this.addSplit(side.id, ['poke', pokemon.side.id, details, '']);
+				}
+			}
+			this.makeRequest('teampreview');
+		}
+
 		this.queue.addChoice({ choice: 'start' });
 		this.midTurn = true;
 		if (!this.requestState) this.turnLoop();
