@@ -909,7 +909,7 @@ export class Side {
 					return updated;
 				} });
 			} else if (pokemon.maybeTrapped) {
-				this.choice.cantUndo;
+				this.choice.cantUndo = true;
 			}
 		} else if (this.requestState === 'switch') {
 			if (!this.choice.forcedSwitchesLeft) {
