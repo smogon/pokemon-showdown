@@ -4121,7 +4121,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen6',
 		searchShow: false,
 		ruleset: ['[Gen 6] PU'],
-		banlist: ['PU', 'ZUBL'],
+		banlist: ['PU', 'ZUBL', 'Light Clay'],
 	},
 	{
 		name: "[Gen 6] CAP",
