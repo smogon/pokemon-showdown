@@ -660,10 +660,7 @@ export class Side {
 			if (!pokemon.maybeLocked) {
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s Fight button is known to be safe`);
 			}
-			pokemon.maybeLocked = false;
 			return this.emitChoiceError(`${pokemon.name} is not locked`, { pokemon, update: req => {
-				delete req.maybeLocked;
-				if (pokemon.maybeDisabled && this.battle.gameType !== 'singles') {
 					for (const m of req.moves) {
 						const disabled = pokemon.getMoveData(m.id)?.disabled;
 						if (disabled && (this.battle.gen >= 4 || this.battle.actions.targetTypeChoices(m.target!))) {

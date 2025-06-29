@@ -1075,7 +1075,6 @@ export class Pokemon {
 
 		if (isLastActive) {
 			this.maybeLocked = this.maybeLocked || this.maybeDisabled;
-			this.maybeDisabled = this.maybeDisabled;
 			if (this.maybeDisabled) {
 				data.maybeDisabled = this.maybeDisabled;
 			}
