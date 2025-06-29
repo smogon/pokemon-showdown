@@ -1095,6 +1095,7 @@ export class Pokemon {
 				// Discovered by selecting a valid Pokémon as a switch target and cancelling.
 				if (this.trapped) data.trapped = true;
 			}
+			this.maybeTrapped = false;
 		}
 
 		if (!lockedMove) {

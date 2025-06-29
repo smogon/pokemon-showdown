@@ -47,6 +47,7 @@ export interface ChosenAction {
 /** One single turn's choice for one single player. */
 export interface Choice {
 	cantUndo: boolean; // true if the choice can't be cancelled because of the maybeTrapped issue
+	updateOnUndo: boolean; // true if a request update should be sent on undo
 	error: string; // contains error text in the case of a choice error
 	actions: ChosenAction[]; // array of chosen actions
 	forcedSwitchesLeft: number; // number of switches left that need to be performed
@@ -239,6 +240,7 @@ export class Side {
 		this.activeRequest = null;
 		this.choice = {
 			cantUndo: false,
+			updateOnUndo: false,
 			error: ``,
 			actions: [],
 			forcedSwitchesLeft: 0,
@@ -704,6 +706,9 @@ export class Side {
 			}
 			// The chosen move is valid yay
 		}
+		if (this.updateDisabledRequest(pokemon, (this.activeRequest as MoveRequest).active[pokemon.position])) {
+			this.choice.updateOnUndo = true;
+		}
 
 		// Mega evolution
 
@@ -904,7 +909,7 @@ export class Side {
 					return updated;
 				} });
 			} else if (pokemon.maybeTrapped) {
-				this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
+				this.choice.cantUndo;
 			}
 		} else if (this.requestState === 'switch') {
 			if (!this.choice.forcedSwitchesLeft) {
@@ -1047,6 +1052,7 @@ export class Side {
 		}
 		this.choice = {
 			cantUndo: false,
+			updateOnUndo: false,
 			error: ``,
 			actions: [],
 			forcedSwitchesLeft: forcedSwitches,
@@ -1070,6 +1076,8 @@ export class Side {
 		if (this.choice.cantUndo) {
 			return this.emitChoiceError(`Can't undo: A trapping/disabling effect would cause undo to leak information`);
 		}
+
+		if (this.choice.updateOnUndo) this.emitRequest();
 
 		this.clearChoice();
 
