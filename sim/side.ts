@@ -661,14 +661,7 @@ export class Side {
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s Fight button is known to be safe`);
 			}
 			return this.emitChoiceError(`${pokemon.name} is not locked`, { pokemon, update: req => {
-					for (const m of req.moves) {
-						const disabled = pokemon.getMoveData(m.id)?.disabled;
-						if (disabled && (this.battle.gen >= 4 || this.battle.actions.targetTypeChoices(m.target!))) {
-							m.disabled = true;
-						}
-					}
-				}
-				return true;
+				return this.updateDisabledRequest(pokemon, req);
 			} });
 		} else if (maxMove) {
 			// Dynamaxed; only Taunt and Assault Vest disable Max Guard, but the base move must have PP remaining
@@ -692,7 +685,7 @@ export class Side {
 				// Request a different choice
 				if (autoChoose) throw new Error(`autoChoose chose a disabled move`);
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`, { pokemon, update: req => {
-					let updated = false;
+					let updated = this.updateDisabledRequest(pokemon, req);
 					for (const m of req.moves) {
 						if (m.id === moveid) {
 							if (!m.disabled) {
@@ -792,6 +785,30 @@ export class Side {
 		if (terastallize) this.choice.terastallize = true;
 
 		return true;
+	}
+
+	updateDisabledRequest(pokemon: Pokemon, req: PokemonMoveRequestData) {
+		let updated = false;
+		if (pokemon.maybeLocked) {
+			pokemon.maybeLocked = false;
+			delete req.maybeLocked;
+			updated = true;
+		}
+		if (pokemon.maybeDisabled && this.battle.gameType !== 'singles') {
+			if (this.battle.gen >= 4) {
+				pokemon.maybeDisabled = false;
+				delete req.maybeDisabled;
+				updated = true;
+			}
+			for (const m of req.moves) {
+				const disabled = pokemon.getMoveData(m.id)?.disabled;
+				if (disabled && (this.battle.gen >= 4 || this.battle.actions.targetTypeChoices(m.target!))) {
+					m.disabled = true;
+					updated = true;
+				}
+			}
+		}
+		return updated;
 	}
 
 	updateRequestForPokemon(pokemon: Pokemon, update: (req: PokemonMoveRequestData) => boolean | void) {
