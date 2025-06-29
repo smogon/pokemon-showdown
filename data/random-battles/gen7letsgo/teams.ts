@@ -208,7 +208,7 @@ export class RandomLetsGoTeams extends RandomGen8Teams {
 			name: species.baseSpecies,
 			species: forme,
 			level: this.adjustLevel || 100,
-			gender: species.gender,
+			gender: species.gender || (this.random(2) ? 'F' : 'M'),
 			happiness: 70,
 			shiny: this.randomChance(1, 1024),
 			item: (requiredItem || ''),
