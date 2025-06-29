@@ -640,7 +640,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		effectType: 'Rule',
 		name: 'Team Preview',
 		desc: "Allows each player to see the Pok&eacute;mon on their opponent's team before they choose their lead Pok&eacute;mon",
-		mutuallyExclusiveWith: 'pickteam',
 		onBegin() {
 			if (this.ruleTable.has(`teratypepreview`)) {
 				this.add('rule', 'Tera Type Preview: Tera Types are shown at Team Preview');
