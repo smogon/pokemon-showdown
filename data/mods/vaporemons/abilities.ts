@@ -152,7 +152,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "While this Pokemon is active, no Pokemon can heal or use draining moves.",
 		onStart(pokemon) {
 			let activated = false;
-			for (const target of [... new Set ([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
+			for (const target of [...new Set([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
 				if (!activated) {
 					this.add('-ability', pokemon, 'Death Aura');
 					activated = true;
@@ -164,10 +164,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onEnd(pokemon) {
-			for (const target of [... new Set ([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
+			for (const target of [...new Set([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
 				if (target.ability === ('deathaura' as ID)) return;
 			}
-			for (const target of [... new Set ([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
+			for (const target of [...new Set([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
 				target.removeVolatile('healblock');
 			}
 		},
@@ -1409,7 +1409,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Fair Fight",
 		onStart(pokemon) {
 			let activated = false;
-			for (const target of [... new Set ([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
+			for (const target of [...new Set([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
 				if (!activated) {
 					this.add('-ability', pokemon, 'Fair Fight');
 					this.add('-message', `${pokemon.name} wants to have a fair fight!`);
@@ -1422,10 +1422,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onEnd(pokemon) {
-			for (const target of [... new Set ([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
+			for (const target of [...new Set([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
 				if (target.ability === ('fairfight' as ID)) return;
 			}
-			for (const target of [... new Set ([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
+			for (const target of [...new Set([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
 				target.removeVolatile('fairfight');
 			}
 		},
