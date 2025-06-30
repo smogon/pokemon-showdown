@@ -1382,7 +1382,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onFaint(pokemon) {
 			pokemon.illusion = null;
 		},
-		flags: { breakable: 1 },
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, breakable: 1 },
 		name: "Illusion",
 		rating: 4.5,
 		num: 149,
