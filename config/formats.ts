@@ -364,7 +364,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		desc: "A random battle format featuring Pokemon with new/edited moves, items, abilities, and non-stat changes.",
 		mod: 'vaporemons',
 		team: 'randomVPN',
-		ruleset: ['Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Terastal Clause', 'Data Preview'],
+		ruleset: ['Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Terastal Clause', 'Illusion Level Mod', 'Data Preview'],
 		onBegin() {
 			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, items, abilities, and adjustments?<br />Then make sure to use the <a href="https://docs.google.com/spreadsheets/d/1_5AwZ24dPu3-5m5yOyIO4OTPmW9OwIWXXzZ5IJZkj4c/edit?usp=sharing" target="_blank">VaporeMons Spreadsheet</a> or use /dt!</b></div>`);
 			this.add(`raw|Welcome to Fusion Evolution Random Battle!`);
