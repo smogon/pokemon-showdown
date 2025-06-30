@@ -5,17 +5,17 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Magic Guard', function () {
-	afterEach(function () {
+describe('Magic Guard', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should prevent all non-attack damage`, function () {
+	it(`should prevent all non-attack damage`, () => {
 		battle = common.createBattle([[
-			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
-			{species: 'Clefable', ability: 'magicguard', item: 'lifeorb', moves: ['doubleedge', 'mindblown', 'highjumpkick']},
+			{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
+			{ species: 'Clefable', ability: 'magicguard', item: 'lifeorb', moves: ['doubleedge', 'mindblown', 'highjumpkick'] },
 		], [
-			{species: 'Crobat', ability: 'roughskin', moves: ['luckychant', 'spikes', 'toxic', 'protect']},
+			{ species: 'Crobat', ability: 'roughskin', moves: ['luckychant', 'spikes', 'toxic', 'protect'] },
 		]]);
 
 		battle.makeChoices('auto', 'move spikes');
@@ -26,26 +26,26 @@ describe('Magic Guard', function () {
 		assert.fullHP(battle.p1.active[0]);
 	});
 
-	it(`should prevent Leech Seed's healing effect`, function () {
+	it(`should prevent Leech Seed's healing effect`, () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [
-			{species: 'Clefable', ability: 'magicguard', moves: ['moonblast']},
-		]});
-		battle.setPlayer('p2', {team: [
-			{species: 'Ferrothorn', ability: 'noguard', moves: ['leechseed']},
-		]});
+		battle.setPlayer('p1', { team: [
+			{ species: 'Clefable', ability: 'magicguard', moves: ['moonblast'] },
+		] });
+		battle.setPlayer('p2', { team: [
+			{ species: 'Ferrothorn', ability: 'noguard', moves: ['leechseed'] },
+		] });
 		battle.makeChoices('move moonblast', 'move leechseed');
 		assert.fullHP(battle.p1.active[0]);
 		assert.false.fullHP(battle.p2.active[0]);
 	});
 
-	it('should not be suppressed by Mold Breaker', function () {
+	it('should not be suppressed by Mold Breaker', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [
-			{species: 'Magikarp', ability: 'swiftswim', moves: ['splash']},
-			{species: 'Clefable', ability: 'magicguard', moves: ['doubleedge']},
-		]});
-		battle.setPlayer('p2', {team: [{species: 'Haxorus', ability: 'moldbreaker', moves: ['stealthrock', 'roar']}]});
+		battle.setPlayer('p1', { team: [
+			{ species: 'Magikarp', ability: 'swiftswim', moves: ['splash'] },
+			{ species: 'Clefable', ability: 'magicguard', moves: ['doubleedge'] },
+		] });
+		battle.setPlayer('p2', { team: [{ species: 'Haxorus', ability: 'moldbreaker', moves: ['stealthrock', 'roar'] }] });
 		battle.makeChoices('move splash', 'move stealthrock');
 		battle.makeChoices('move splash', 'move roar');
 		assert.fullHP(battle.p1.active[0]);

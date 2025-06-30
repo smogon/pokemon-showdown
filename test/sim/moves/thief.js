@@ -5,31 +5,31 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Thief', function () {
-	afterEach(function () {
+describe('Thief', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should steal most items', function () {
+	it('should steal most items', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Mew", ability: 'synchronize', moves: ['thief']}]});
-		battle.setPlayer('p2', {team: [{species: "Blissey", ability: 'naturalcure', item: 'shedshell', moves: ['softboiled']}]});
+		battle.setPlayer('p1', { team: [{ species: "Mew", ability: 'synchronize', moves: ['thief'] }] });
+		battle.setPlayer('p2', { team: [{ species: "Blissey", ability: 'naturalcure', item: 'shedshell', moves: ['softboiled'] }] });
 		battle.makeChoices('move thief', 'move softboiled');
 		assert.equal(battle.p1.active[0].item, 'shedshell');
 	});
 
-	it('should not steal items if it is holding an item', function () {
+	it('should not steal items if it is holding an item', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Mew", ability: 'synchronize', item: 'focussash', moves: ['thief']}]});
-		battle.setPlayer('p2', {team: [{species: "Blissey", ability: 'naturalcure', item: 'shedshell', moves: ['softboiled']}]});
+		battle.setPlayer('p1', { team: [{ species: "Mew", ability: 'synchronize', item: 'focussash', moves: ['thief'] }] });
+		battle.setPlayer('p2', { team: [{ species: "Blissey", ability: 'naturalcure', item: 'shedshell', moves: ['softboiled'] }] });
 		battle.makeChoices('move thief', 'move softboiled');
 		assert.equal(battle.p2.active[0].item, 'shedshell');
 	});
 
-	it('should take Life Orb damage from a stolen Life Orb', function () {
+	it('should take Life Orb damage from a stolen Life Orb', () => {
 		battle = common.createBattle();
-		battle.setPlayer('p1', {team: [{species: "Mew", ability: 'synchronize', moves: ['thief']}]});
-		battle.setPlayer('p2', {team: [{species: "Blissey", ability: 'naturalcure', item: 'lifeorb', moves: ['softboiled']}]});
+		battle.setPlayer('p1', { team: [{ species: "Mew", ability: 'synchronize', moves: ['thief'] }] });
+		battle.setPlayer('p2', { team: [{ species: "Blissey", ability: 'naturalcure', item: 'lifeorb', moves: ['softboiled'] }] });
 		battle.makeChoices('move thief', 'move softboiled');
 		assert.equal(battle.p1.active[0].hp, Math.ceil(9 / 10 * battle.p1.active[0].maxhp));
 	});

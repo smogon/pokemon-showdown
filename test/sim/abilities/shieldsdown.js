@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Shields Down', function () {
-	afterEach(function () {
+describe('Shields Down', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should be immune to status until below 50%`, function () {
+	it(`should be immune to status until below 50%`, () => {
 		battle = common.createBattle([[
-			{species: 'Minior', ability: 'shieldsdown', moves: ['splash']},
+			{ species: 'Minior', ability: 'shieldsdown', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['glare', 'superfang']},
+			{ species: 'Mew', ability: 'noguard', moves: ['glare', 'superfang'] },
 		]]);
 		const minior = battle.p1.active[0];
 		battle.makeChoices();
@@ -27,11 +27,11 @@ describe('Shields Down', function () {
 		assert.equal(minior.status, 'par');
 	});
 
-	it(`should be immune to status until below 50% in all formes`, function () {
+	it(`should be immune to status until below 50% in all formes`, () => {
 		battle = common.createBattle([[
-			{species: 'Minior-Blue', ability: 'shieldsdown', moves: ['splash']},
+			{ species: 'Minior-Blue', ability: 'shieldsdown', moves: ['splash'] },
 		], [
-			{species: 'Mew', ability: 'noguard', moves: ['glare', 'superfang']},
+			{ species: 'Mew', ability: 'noguard', moves: ['glare', 'superfang'] },
 		]]);
 		const minior = battle.p1.active[0];
 		battle.makeChoices();

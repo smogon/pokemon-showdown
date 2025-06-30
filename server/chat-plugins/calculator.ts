@@ -1,4 +1,4 @@
-import {Utils} from '../../lib';
+import { Utils } from '../../lib';
 
 type Operator = '^' | 'negative' | '%' | '/' | '*' | '+' | '-' | '(';
 interface Operators {
@@ -6,7 +6,7 @@ interface Operators {
 	associativity: "Left" | "Right";
 }
 
-const OPERATORS: {[k in Operator]: Operators} = {
+const OPERATORS: { [k in Operator]: Operators } = {
 	"^": {
 		precedence: 5,
 		associativity: "Right",
@@ -41,7 +41,7 @@ const OPERATORS: {[k in Operator]: Operators} = {
 	},
 };
 
-const BASE_PREFIXES: {[base: number]: string} = {
+const BASE_PREFIXES: { [base: number]: string } = {
 	2: "0b",
 	8: "0o",
 	10: "",
@@ -119,7 +119,7 @@ function solveRPN(rpn: string[]): [number, number] {
 			if (token.startsWith('0o')) base = 8;
 			let num = Number(token);
 			if (isNaN(num) && token.toUpperCase() in Math) {
-				// @ts-ignore
+				// @ts-expect-error Math consts should be safe
 				num = Math[token.toUpperCase()];
 			}
 			if (isNaN(num) && token !== 'NaN') {
@@ -170,7 +170,7 @@ export const commands: Chat.ChatCommands = {
 			case 'octal': case 'oct': base = 8; break;
 			case 'binary': case 'bin': base = 2; break;
 			default:
-				return this.errorReply(`Unrecognized base "${baseMatchResult[1]}". Valid options are binary or bin, octal or oct, decimal or dec, and hexadecimal or hex.`);
+				throw new Chat.ErrorMessage(`Unrecognized base "${baseMatchResult[1]}". Valid options are binary or bin, octal or oct, decimal or dec, and hexadecimal or hex.`);
 			}
 		}
 		const expression = target.replace(/\b(in|to)\s+([a-zA-Z]+)\b/g, '').trim();
@@ -180,15 +180,20 @@ export const commands: Chat.ChatCommands = {
 			const [result, inferredBase] = solveRPN(parseMathematicalExpression(expression));
 			if (!base) base = inferredBase;
 			let baseResult = '';
-			if (result && base !== 10) {
+			if (Number.isFinite(result) && base !== 10) {
 				baseResult = `${BASE_PREFIXES[base]}${result.toString(base).toUpperCase()}`;
 				if (baseResult === expression) baseResult = '';
 			}
 			let resultStr = '';
+			const resultTruncated = parseFloat(result.toPrecision(15));
+			let resultDisplay = resultTruncated.toString();
+			if (resultTruncated > 10 ** 15) {
+				resultDisplay = resultTruncated.toExponential();
+			}
 			if (baseResult) {
-				resultStr = `<strong>${baseResult}</strong> = ${result}`;
+				resultStr = `<strong>${baseResult}</strong> = ${resultDisplay}`;
 			} else {
-				resultStr = `<strong>${result}</strong>`;
+				resultStr = `<strong>${resultDisplay}</strong>`;
 			}
 			this.sendReplyBox(`${expression}<br />= ${resultStr}`);
 		} catch (e: any) {

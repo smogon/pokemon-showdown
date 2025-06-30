@@ -32,7 +32,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				((this.volatiles['gastroacid'] ||
 					(neutralizinggas && (this.ability !== ('neutralizinggas' as ID) ||
 						this.m.innates?.some((k: string) => k === 'neutralizinggas'))
-					)) && !this.getAbility().isPermanent
+					)) && !this.getAbility().flags['cantsuppress']
 				)
 			);
 		},
@@ -92,13 +92,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.boosts[boostName] = pokemon.boosts[boostName];
 			}
 			if (this.battle.gen >= 6) {
-				const volatilesToCopy = ['focusenergy', 'gmaxchistrike', 'laserfocus'];
+				// we need to remove all crit volatiles before adding any crit volatiles
+				const volatilesToCopy = ['dragoncheer', 'focusenergy', 'gmaxchistrike', 'laserfocus'];
+				for (const volatile of volatilesToCopy) this.removeVolatile(volatile);
 				for (const volatile of volatilesToCopy) {
 					if (pokemon.volatiles[volatile]) {
 						this.addVolatile(volatile);
 						if (volatile === 'gmaxchistrike') this.volatiles[volatile].layers = pokemon.volatiles[volatile].layers;
-					} else {
-						this.removeVolatile(volatile);
+						if (volatile === 'dragoncheer') this.volatiles[volatile].hasDragonType = pokemon.volatiles[volatile].hasDragonType;
 					}
 				}
 			}
@@ -168,14 +169,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.illusion ? this.illusion.species.name : species.baseSpecies;
 			if (isPermanent) {
 				this.baseSpecies = rawSpecies;
-				this.details = species.name + (this.level === 100 ? '' : ', L' + this.level) +
-					(this.gender === '' ? '' : ', ' + this.gender) + (this.set.shiny ? ', shiny' : '');
+				this.details = this.getUpdatedDetails();
 				this.battle.add('detailschange', this, (this.illusion || this).details);
 				if (source.effectType === 'Item') {
+					this.canTerastallize = null; // National Dex behavior
 					if (source.zMove) {
 						this.battle.add('-burst', this, apparentSpecies, species.requiredItem);
 						this.moveThisTurnResult = true; // Ultra Burst counts as an action for Truant
-					} else if (source.onPrimal) {
+					} else if (source.isPrimalOrb) {
 						if (this.illusion) {
 							this.ability = '';
 							this.battle.add('-primal', this.illusion);

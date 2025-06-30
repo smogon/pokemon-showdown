@@ -2,49 +2,58 @@
 
 const assert = require('./../assert');
 
-describe('Mod loader', function () {
-	it('should work fine in any order', function () {
+describe('Mod loader', () => {
+	it('should always provide accurate gen information', () => {
 		{
 			const Dex = require('./../../dist/sim/dex').Dex;
-			assert.equal(Dex.mod('gen2').species.getLearnset('nidoking').bubblebeam.join(','), '1M');
+			assert.equal(Dex.mod('gen2').gen, 2);
+			assert.equal(Dex.forFormat('gen1randombattle').gen, 1);
+		}
+	});
+
+	it('should work fine in any order', () => {
+		{
+			const Dex = require('./../../dist/sim/dex').Dex;
+			assert.equal(Dex.mod('gen2').species.getLearnsetData('nidoking').learnset.bubblebeam.join(','), '1M');
 			assert.equal(Dex.mod('gen2').moves.get('crunch').secondaries[0].boosts.def, undefined);
 		}
 		{
 			const Dex = require('./../../dist/sim/dex').Dex;
-			Dex.mod('gen2').species.getLearnset('nidoking');
+			Dex.mod('gen2').species.getLearnsetData('nidoking');
 			Dex.mod('gen4').moves.get('crunch');
-			assert.equal(Dex.mod('gen2').species.getLearnset('nidoking').bubblebeam.join(','), '1M');
+			assert.equal(Dex.mod('gen2').species.getLearnsetData('nidoking').learnset.bubblebeam.join(','), '1M');
 			assert.equal(Dex.mod('gen2').moves.get('crunch').secondaries[0].boosts.def, undefined);
 		}
 	});
 });
 
-describe('Dex#getEffect', function () {
-	it('returns the same object for the same id', function () {
+describe('Dex#getEffect', () => {
+	it('returns the same object for the same id', () => {
 		assert.equal(Dex.conditions.get('Stealth Rock'), Dex.conditions.get('stealthrock'));
 		assert.notEqual(Dex.conditions.get('move: Stealth Rock'), Dex.conditions.get('stealthrock'));
 	});
 
-	it('does not return elements from the Object prototype', function () {
+	it('does not return elements from the Object prototype', () => {
 		assert.false(Dex.conditions.get('constructor').exists);
 	});
 });
 
-describe('Dex#getSpecies', function () {
-	it('should handle cosmetic Flabébé formes', function () {
+describe('Dex#getSpecies', () => {
+	it('should handle cosmetic Flabébé formes', () => {
 		assert.equal(Dex.species.get('Flabébé-yellow').name, 'Flabébé-Yellow');
 	});
 
-	it('should handle Minior-Meteor formes', function () {
-		assert(Dex.species.get('Minior-Meteor').isNonstandard);
+	it('should handle Minior-Meteor formes', () => {
+		assert(!Dex.species.get('Minior-Meteor').isNonstandard);
+		assert(Dex.forGen(8).species.get('Minior-Meteor').isNonstandard);
 		assert(!Dex.forGen(7).species.get('Minior-Meteor').isNonstandard);
 	});
 
-	it.skip('should handle Rockruff-Dusk', function () {
+	it('should handle Rockruff-Dusk', () => {
 		assert.equal(Dex.species.get('rockruffdusk').name, 'Rockruff-Dusk');
 	});
 
-	it('should handle Pikachu forme numbering', function () {
+	it('should handle Pikachu forme numbering', () => {
 		assert.deepEqual(
 			Dex.forGen(6).species.get('Pikachu').formeOrder.slice(0, 7),
 			["Pikachu", "Pikachu-Rock-Star", "Pikachu-Belle", "Pikachu-Pop-Star", "Pikachu-PhD", "Pikachu-Libre", "Pikachu-Cosplay"]
@@ -56,8 +65,8 @@ describe('Dex#getSpecies', function () {
 	});
 });
 
-describe('Dex#getItem', function () {
-	it(`should correctly mark Gem legality`, function () {
+describe('Dex#getItem', () => {
+	it(`should correctly mark Gem legality`, () => {
 		assert.false(Dex.forGen(5).items.get('Normal Gem').isNonstandard);
 		assert.false(Dex.forGen(5).items.get('Rock Gem').isNonstandard);
 
@@ -72,10 +81,32 @@ describe('Dex#getItem', function () {
 	});
 });
 
-describe('Dex#getMove', function () {
-	it(`should correctly handle G-Max moves`, function () {
+describe('Dex#getMove', () => {
+	it(`should correctly handle G-Max moves`, () => {
 		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').name, "G-Max Befuddle");
 		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').gen, 8);
 		assert.equal(Dex.forGen(8).moves.get('G-Max Befuddle').isNonstandard, "Gigantamax");
+	});
+});
+
+describe('DexTypes#isName', () => {
+	it('should return true for valid type names', () => {
+		assert.equal(Dex.types.isName('Fire'), true);
+		assert.equal(Dex.types.isName('Water'), true);
+		assert.equal(Dex.types.isName('Psychic'), true);
+		assert.equal(Dex.types.isName('Fighting'), true);
+		assert.equal(Dex.types.isName('Normal'), true);
+	});
+
+	it('should return false for invalid type names', () => {
+		assert.equal(Dex.types.isName('fire'), false);
+		assert.equal(Dex.types.isName('FIRE'), false);
+		assert.equal(Dex.types.isName('Unknown'), false);
+		assert.equal(Dex.types.isName(''), false);
+	});
+
+	it('should return false for null and undefined', () => {
+		assert.equal(Dex.types.isName(undefined), false);
+		assert.equal(Dex.types.isName(null), false);
 	});
 });

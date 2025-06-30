@@ -36,6 +36,9 @@ export const Scripts: ModdedBattleScriptsData = {
 						this.modifyStat!(statName, [100, 66, 50, 40, 33, 28, 25][-this.boosts[statName]] / 100);
 					}
 				}
+				if (this.modifiedStats![statName] > 999) {
+					this.modifiedStats![statName] = 999;
+				}
 			}
 		},
 		// Stadium's fixed boosting function.
@@ -69,7 +72,8 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		inherit: true,
-		runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
+		runMove(moveOrMoveName, pokemon, targetLoc, options) {
+			let sourceEffect = options?.sourceEffect;
 			const move = this.dex.getActiveMove(moveOrMoveName);
 			const target = this.battle.getTarget(pokemon, move, targetLoc);
 			if (target?.subFainted) target.subFainted = null;
@@ -77,7 +81,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.battle.setActiveMove(move, pokemon, target);
 
 			if (pokemon.moveThisTurn || !this.battle.runEvent('BeforeMove', pokemon, target, move)) {
-				this.battle.debug('' + pokemon.fullname + ' move interrupted; movedThisTurn: ' + pokemon.moveThisTurn);
+				this.battle.debug(`${pokemon.fullname} move interrupted; movedThisTurn: ${pokemon.moveThisTurn}`);
 				this.battle.clearActiveMove(true);
 				// This is only run for sleep
 				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
@@ -99,12 +103,14 @@ export const Scripts: ModdedBattleScriptsData = {
 			} else {
 				sourceEffect = move;
 			}
-			this.battle.actions.useMove(move, pokemon, target, sourceEffect);
+			this.battle.actions.useMove(move, pokemon, { target, sourceEffect });
 		},
 		// This function deals with AfterMoveSelf events.
 		// This leads with partial trapping moves shenanigans after the move has been used.
-		useMove(moveOrMoveName, pokemon, target, sourceEffect) {
-			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, target, sourceEffect);
+		useMove(moveOrMoveName, pokemon, options) {
+			let sourceEffect = options?.sourceEffect;
+			let target = options?.target;
+			const moveResult = this.useMoveInner(moveOrMoveName, pokemon, { target, sourceEffect });
 
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
@@ -161,7 +167,9 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		// This is the function that actually uses the move, running ModifyMove events.
 		// It uses the move and then deals with the effects after the move.
-		useMoveInner(moveOrMoveName, pokemon, target, sourceEffect) {
+		useMoveInner(moveOrMoveName, pokemon, options) {
+			let sourceEffect = options?.sourceEffect;
+			let target = options?.target;
 			if (!sourceEffect && this.battle.effect.id) sourceEffect = this.battle.effect;
 			const baseMove = this.battle.dex.moves.get(moveOrMoveName);
 			let move = this.battle.dex.getActiveMove(baseMove);
@@ -191,8 +199,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (sourceEffect) attrs += '|[from]' + this.battle.dex.conditions.get(sourceEffect);
-			this.battle.addMove('move', pokemon, move.name, target + attrs);
+			if (sourceEffect) attrs += `|[from]${this.battle.dex.conditions.get(sourceEffect)}`;
+			this.battle.addMove('move', pokemon, move.name, `${target}${attrs}`);
 
 			if (!this.battle.singleEvent('Try', move, null, pokemon, target, move)) {
 				return true;
@@ -223,10 +231,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				return true;
 			}
 
-			if (!move.negateSecondary) {
-				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
-				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
-			}
+			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
+			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 			return true;
 		},
 		tryMoveHit(target, pokemon, move) {
@@ -244,10 +250,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Then, check if the Pokemon is immune to this move.
-			if (
-				(!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
-				!target.runImmunity(move.type, true)
-			) {
+			if (!target.runImmunity(move, true)) {
 				if (move.selfdestruct) {
 					this.battle.faint(pokemon, pokemon, move);
 				}
@@ -297,10 +300,16 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 
-			// Stadium fixes the 1/256 accuracy bug.
-			if (accuracy !== true && !this.battle.randomChance(accuracy + 1, 256)) {
+			// Stadium attempts to fix the 1/256 miss by rerolling if the first value
+			// would trigger the 1/256 miss.
+			let randomValue = this.battle.random(256);
+			if (randomValue === 256) randomValue = this.battle.random(256);
+			if (accuracy !== true && randomValue > accuracy) {
 				this.battle.attrLastMove('[miss]');
 				this.battle.add('-miss', pokemon);
+				if (accuracy === 255) {
+					this.battle.hint("In Pokemon Stadium, moves with 100% accuracy can still miss 1/65536 of the time.");
+				}
 				damage = false;
 				this.battle.lastDamage = 0;
 			}
@@ -357,10 +366,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (move.ohko) this.battle.add('-ohko');
 
-			if (!move.negateSecondary) {
-				this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
-				this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
-			}
+			this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
+			this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
 
 			return damage;
 		},
@@ -383,7 +390,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const targetHadSub = !!target.volatiles['substitute'];
 				if (targetHadSub && moveData.volatileStatus && moveData.volatileStatus === 'partiallytrapped') {
 					target.addVolatile(moveData.volatileStatus, pokemon, move);
-					if (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].duration > 1) {
+					if (!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].duration! > 1) {
 						target.volatiles[moveData.volatileStatus].duration = 2;
 					}
 				}
@@ -541,10 +548,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Let's see if the target is immune to the move.
-			if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
-				if (!target.runImmunity(move.type, true)) {
-					return false;
-				}
+			if (!target.runImmunity(move, true)) {
+				return false;
 			}
 
 			// Is it an OHKO move?
@@ -601,26 +606,26 @@ export const Scripts: ModdedBattleScriptsData = {
 				let critChance = source.species.baseStats['spe'] + 76;
 
 				// Now we right logical shift it two places, essentially dividing by 4 and flooring it.
-				critChance = critChance >> 2;
+				critChance >>= 2;
 
 				// Now we check for focus energy volatile.
 				if (source.volatiles['focusenergy']) {
 					// If it exists, crit chance is multiplied by 4 and floored with a logical left shift.
-					critChance = critChance << 2;
+					critChance <<= 2;
 					// Then we add 160.
 					critChance += 160;
 				} else {
 					// If it is not active, we left shift it by 1.
-					critChance = critChance << 1;
+					critChance <<= 1;
 				}
 
 				// Now we check for the move's critical hit ratio.
 				if (move.critRatio === 2) {
 					// High crit ratio, we multiply the result so far by 4.
-					critChance = critChance << 2;
+					critChance <<= 2;
 				} else if (move.critRatio === 1) {
 					// Normal hit ratio, we divide the crit chance by 2 and floor the result again.
-					critChance = critChance >> 1;
+					critChance >>= 1;
 				}
 
 				// Now we make sure it's a number between 1 and 255.
@@ -688,7 +693,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// When either attack or defense are higher than 256, they are both divided by 4 and moded by 256.
-			// This is what cuases the roll over bugs.
+			// This is what causes the rollover bugs.
 			if (attack >= 256 || defense >= 256) {
 				attack = this.battle.clampIntRange(Math.floor(attack / 4) % 256, 1);
 				// Defense isn't checked on the cartridge, but we don't want those / 0 bugs on the sim.

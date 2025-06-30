@@ -1,4 +1,4 @@
-import type {Translations} from '../../server/chat';
+import type { Translations } from '../../server/chat';
 
 export const translations: Translations = {
 	strings: {
@@ -61,7 +61,7 @@ export const translations: Translations = {
 		"I'm locked because of a proxy or VPN": "Ik ben gelocked vanwege een proxy of VPN",
 		"Yes, I have an autoconfirmed account": "Ja, ik heb een autoconfirmed account",
 		"No, I don't have an autoconfirmed account": "Nee, ik heb geen autoconfirmed account",
-		"I want to appeal a mute/roomban/blacklist": "",
+		"I want to appeal a mute/roomban/blacklist": "Ik wil in bezwaar gaan tegen een mute/roomban/blacklist",
 		"Something else": "Iets anders",
 		"I lost my password": "Ik ben mijn wachtwoord vergeten",
 		"I need global staff to help watch a public room": "Ik heb een globaal personeelslid nodig om een publieke kamer in de gaten te houden",
@@ -82,7 +82,7 @@ export const translations: Translations = {
 		"Status": "Status",
 		"Creator": "Maker",
 		"Ticket Type": "Ticket Soort",
-		"Language": "",
+		"Language": "Taal",
 		"Claimed by": "Geclaimed door",
 		"Action": "Actie",
 		"And ${keys.length - count} more tickets.": "En ${keys.length - count} more tickets.",
@@ -98,7 +98,7 @@ export const translations: Translations = {
 		"Username": "Gebruikersnaam",
 		"Expires": "Verloopt",
 		"Logs": "Logs",
-		"And ${banKeys.length - count} more ticket bans.": "",
+		"And ${banKeys.length - count} more ticket bans.": "En ${banKeys.length - count} meer ticketverbanningen.",
 		"Ticket List": "Ticket Lijst",
 		"Banned": "Verbannen",
 		"Ticket Stats": "Ticket Statistieken",
@@ -121,7 +121,7 @@ export const translations: Translations = {
 		"Average Time Per Ticket": "Gemiddelde Tijd Per Ticket",
 		"This command cannot be broadcast in battles.": "Dit commando kan niet worden omgeroepen in gevechten.",
 		"Report someone": "Rapporteer iemand",
-		"Appeal a punishment": "",
+		"Appeal a punishment": "Ga in bezwaar tegen een bestraffing",
 		"Request help": "Vraag hulp",
 		"You need to choose a username before doing this. [TN: 'this' refers to opening a help ticket]": "Je moet een gebruikersnaam kiezen voordat je dit doet.",
 		"Global staff can't make tickets. They can only use the form for reference.": "Globale personeelsleden kunnen geen tickets maken. Ze kunnen enkel dit formulier als referentie gebruiken.",
@@ -153,14 +153,14 @@ export const translations: Translations = {
 		"${target} does not have a ticket.": "${target} heeft geen ticket",
 		"You deleted ${target}'s ticket.": "Je hebt ${target}'s ticket verwijderd.",
 
-		"Hi! All global staff members are busy right now and we apologize for the delay. ": "",
-		"Please make sure you have given us the permission to check the PMs between you and the user you reported. You can also provide any relevant context; for example, a replay of a battle with the person you're reporting.": "",
-		'Please save the replay of the battle and provide a link to it in this chat, so we can see the harassment even if the battle expires. You can save the replay by clicking on the "Upload and share replay" button once the battle has ended.': "",
-		"Make sure you have provided the correct username, and if its meaning or why it is offensive is not obvious, please explain why it should not be allowed.": "",
-		'Please save the replay of the battle and provide a link to it in this chat, so we can see the nicknames even if the battle expires. You can save the replay by clicking on the "Upload and share replay" button once the battle has ended.': "",
-		"Please clearly explain why you should be unlocked and we will review it as soon as possible.": "",
-		"Please give us all relevant information on how you are connecting to Pokémon Showdown (if it is through mobile data, at home, a school or work network, etc), and we will review your case as soon as possible.": "",
-		"Please tell us which room you need assistance with and a global staff member will join your room as soon as possible.": "",
-		"If your issue pertains to battle mechanics or is a question about Pokémon Showdown, you can ask in the <<help>> chatroom.": "",
+		"Hi! All global staff members are busy right now and we apologize for the delay. ": "Hallo! Alle globale personeelsleden zijn momenteel druk bezig en we verontschuldigen ons voor de vertraging.",
+		"Please make sure you have given us the permission to check the PMs between you and the user you reported. You can also provide any relevant context; for example, a replay of a battle with the person you're reporting.": "Zorg er alsjeblieft voor dat je ons toestemming hebt gegeven om de PM's tussen jou en de gebruiker die je hebt gerapporteerd te controleren. Je kunt ook relevante context verstrekken; bijvoorbeeld een replay van een gevecht met de persoon die je rapporteert.",
+		'Please save the replay of the battle and provide a link to it in this chat, so we can see the harassment even if the battle expires. You can save the replay by clicking on the "Upload and share replay" button once the battle has ended.': 'Bewaar alsjeblieft de replay van het gevecht en geef een link naar deze in deze chat, zodat we het lastig vallen kunnen zien, zelfs als het gevecht verloopt. Je kunt de replay opslaan door op de knop "Upload en deel replay" te klikken zodra het gevecht is afgelopen.',
+		"Make sure you have provided the correct username, and if its meaning or why it is offensive is not obvious, please explain why it should not be allowed.": "Zorg ervoor dat je de juiste gebruikersnaam hebt opgegeven, en als de betekenis ervan of waarom het ongepast is onduidelijk zou kunnen zijn, leg dan alsjeblieft uit waarom het niet toegestaan zou moeten zijn.",
+		'Please save the replay of the battle and provide a link to it in this chat, so we can see the nicknames even if the battle expires. You can save the replay by clicking on the "Upload and share replay" button once the battle has ended.': 'Bewaar alsjeblieft de replay van het gevecht en geef een link naar deze in deze chat, zodat we de bijnamen kunnen zien, zelfs als het gevecht verloopt. Je kunt de replay opslaan door op de knop "Upload en deel replay" te klikken zodra het gevecht is afgelopen.',
+		"Please clearly explain why you should be unlocked and we will review it as soon as possible.": "Leg alsjeblieft duidelijk uit waarom je unlocked zou moeten worden en we zullen het zo snel mogelijk beoordelen.",
+		"Please give us all relevant information on how you are connecting to Pokémon Showdown (if it is through mobile data, at home, a school or work network, etc), and we will review your case as soon as possible.": "Geef ons alsjeblieft alle relevante informatie over hoe je verbinding maakt met Pokémon Showdown (als het via mobiele data, thuis, een school- of werknetwerk, etc. is), en we zullen je zaak zo snel mogelijk beoordelen.",
+		"Please tell us which room you need assistance with and a global staff member will join your room as soon as possible.": "Vertel ons alsjeblieft met welke kamer je hulp nodig hebt en een globaal personeelslid zal zo snel mogelijk bij je kamer aansluiten.",
+		"If your issue pertains to battle mechanics or is a question about Pokémon Showdown, you can ask in the <<help>> chatroom.": "Als je probleem betrekking heeft op gevechtsmechanieken of een vraag is over Pokémon Showdown, kun je dit vragen in de <<help>> kamer.",
 	},
 };

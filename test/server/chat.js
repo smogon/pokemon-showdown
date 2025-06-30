@@ -2,8 +2,8 @@
 
 const assert = require('assert').strict;
 
-describe('Chat', function () {
-	it('should run formatText correctly', function () {
+describe('Chat', () => {
+	it('should run formatText correctly', () => {
 		assert.equal(
 			Chat.formatText(`hi **__bold italics__** ^^superscript^^ \\\\subscript\\\\ normal ~~strikethrough~~ bye`),
 			`hi <b><i>bold italics</i></b> <sup>superscript</sup> <sub>subscript</sub> normal <s>strikethrough</s> bye`
@@ -106,7 +106,7 @@ describe('Chat', function () {
 		);
 	});
 
-	it('should run toDurationString correctly', function () {
+	it('should run toDurationString correctly', () => {
 		assert(Chat.toDurationString(1e50));
 
 		assert(!Chat.toDurationString(10000000 * 24 * 60 * 60 * 1000).includes('  '));

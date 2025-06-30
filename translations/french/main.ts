@@ -1,4 +1,4 @@
-import type {Translations} from '../../server/chat';
+import type { Translations } from '../../server/chat';
 
 export const translations: Translations = {
 	name: "French",
@@ -13,18 +13,17 @@ export const translations: Translations = {
 
 		"<strong>Global ranks</strong>": "<strong>Rangs globaux</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>Global Voice</strong> - Ils peuvent utiliser les commandes commençant par ! telles que !groups",
-		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>Section Leader</strong> - Ils supervisent les rooms d'une section donnée",
 		"% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts": "% <strong>Global Driver</strong> - Comme ci-dessus, en plus de pouvoir lock certains utilisateurs et vérifier leurs éventuels autres comptes",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Comme ci-dessus, en plus de pouvoir bannir des utilisateurs du site",
-		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Mêmes pouvoirs que les Global Moderators, mais sont des bots",
-		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Ils peuvent tout faire, comme changer ce que ce message affiche",
+		"* <strong>Global Bot</strong> - An automated account that can use HTML anywhere": "* <strong>Global Bot</strong> - Un compte automatisé qui peut utiliser le HTML n'importe où",
+		"~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "~ <strong>Global Administrator</strong> - Ils peuvent tout faire, comme changer ce que ce message affiche",
 
 		"<strong>Room ranks</strong>": "<strong>Rangs des rooms</strong>",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Ils n'ont aucun pouvoir, seulement un symbole honorifique",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Ils peuvent utiliser les commandes commençant par ! telles que !groups",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - Comme ci-dessus, en plus de pouvoir mute et warn",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - Comme ci-dessus, en plus de pouvoir bannir un utilisateur de la room",
-		"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Bot</strong> - Comme les Moderators, mais sont des bots",
+		"* <strong>Bot</strong> - An automated account that can mute, warn, and use HTML": "* <strong>Bot</strong> - Un compte automatisé qui peut mute, warn et utiliser le HTML",
 		"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it": "# <strong>Room Owner</strong> - Ce sont les chefs de la room et ils peuvent la contrôler quasiment en totalité",
 
 		"/help OR /h OR /? - Gives you help.": "Te donne de l'aide.",
@@ -40,7 +39,7 @@ export const translations: Translations = {
 		"MODERATOR COMMANDS": "COMMANDES DES MODERATEURS",
 		"ADMIN COMMANDS": "COMMANDES DES ADMINISTRATEURS",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(Remplace / par ! pour afficher publiquement les commandes. Les afficher publiquement requiert : + % @ &)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)": "(Remplace / par ! pour afficher publiquement les commandes. Les afficher publiquement requiert : + % @ ~)",
 
 		"<strong>Room punishments</strong>:": "<strong>Punitions des rooms</strong>",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - Affiche une fen&ecirc;tre avec les r&egrave;gles.",

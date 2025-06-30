@@ -1,9 +1,9 @@
-import {FS, Utils, Net, ProcessManager} from '../../lib';
-import {getCommonBattles} from '../chat-commands/info';
-import {checkRipgrepAvailability} from '../config-loader';
-import type {Punishment} from '../punishments';
-import type {PartialModlogEntry, ModlogID} from '../modlog';
-import {runPunishments} from './helptickets-auto';
+import { FS, Utils, Net, ProcessManager } from '../../lib';
+import { getCommonBattles } from '../chat-commands/info';
+import { checkRipgrepAvailability } from '../config-loader';
+import type { Punishment } from '../punishments';
+import type { PartialModlogEntry, ModlogID } from '../modlog';
+import { runPunishments } from './helptickets-auto';
 
 const TICKET_FILE = 'config/tickets.json';
 const SETTINGS_FILE = 'config/chat-plugins/ticket-settings.json';
@@ -13,7 +13,7 @@ export const BATTLES_REGEX = /\bbattle-(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]{31}p
 export const REPLAY_REGEX = new RegExp(
 	`${Utils.escapeRegex(Config.routes.replays)}/(?:[a-z0-9]-)?(?:[a-z0-9]+)-(?:[0-9]+)(?:-[a-z0-9]{31}pw)?`, "g"
 );
-const REPORT_NAMECOLORS: {[k: string]: string} = {
+const REPORT_NAMECOLORS: { [k: string]: string } = {
 	p1: 'DodgerBlue',
 	p2: 'Crimson',
 	p3: '#FBa92C',
@@ -28,7 +28,7 @@ Punishments.addPunishmentType({
 
 interface TicketSettings {
 	// {[ticketType]: {[button title]: response}}
-	responses: {[ticketType: string]: {[title: string]: string}};
+	responses: { [ticketType: string]: { [title: string]: string } };
 }
 
 export interface TicketState {
@@ -47,11 +47,11 @@ export interface TicketState {
 	text?: [string, string];
 	resolved?: ResolvedTicketInfo;
 	meta?: string;
-	notes?: {[userid: string]: string};
+	notes?: { [userid: string]: string };
 	/** Extra info that they might need for displays or whatnot.
 	 * Use `TextTicketInfo#getState` to set it at creation (store properties of the user object, etc)
 	 */
-	state?: AnyObject & {claimTime?: number};
+	state?: AnyObject & { claimTime?: number };
 	/** Recommendations from the Artemis monitor, if it is set to only recommend. */
 	recommended?: string[];
 }
@@ -80,7 +80,7 @@ export interface TextTicketInfo {
 	/** Should this be displayed with all the other tickets of the type on a singular page? */
 	listOnly?: boolean;
 	getReviewDisplay: (
-		ticket: TicketState & {text: [string, string]}, staff: User, conn: Connection, state?: AnyObject
+		ticket: TicketState & { text: [string, string] }, staff: User, conn: Connection, state?: AnyObject
 	) => Promise<string | void> | string | void;
 	onSubmit?: (ticket: TicketState, text: [string, string], submitter: User, conn: Connection) => void | Promise<void>;
 	getState?: (ticket: TicketState, user: User) => AnyObject;
@@ -90,22 +90,22 @@ interface BattleInfo {
 	log: string[];
 	url: string;
 	title: string;
-	players: {p1: ID, p2: ID, p3?: ID, p4?: ID};
-	pokemon: Record<string, {species: string, name?: string}[]>;
+	players: { p1: ID, p2: ID, p3?: ID, p4?: ID };
+	pokemon: Record<string, { species: string, name?: string }[]>;
 }
 
 type TicketResult = 'approved' | 'valid' | 'assisted' | 'denied' | 'invalid' | 'unassisted' | 'ticketban' | 'deleted';
 
-const defaults: TicketSettings = {responses: {}};
+const defaults: TicketSettings = { responses: {} };
 
-export const tickets: {[k: string]: TicketState} = {};
+export const tickets: { [k: string]: TicketState } = {};
 export const settings: TicketSettings = (() => {
 	try {
 		// this ensures that if new settings are added to the defaults, they are added
 		// to the JSON as well
-		return {...defaults, ...JSON.parse(FS(SETTINGS_FILE).readSync())};
+		return { ...defaults, ...JSON.parse(FS(SETTINGS_FILE).readSync()) };
 	} catch {
-		return {...defaults};
+		return { ...defaults };
 	}
 })();
 
@@ -148,7 +148,7 @@ try {
 
 export function writeTickets() {
 	FS(TICKET_FILE).writeUpdate(
-		() => JSON.stringify(tickets), {throttle: 5000}
+		() => JSON.stringify(tickets), { throttle: 5000 }
 	);
 }
 
@@ -165,55 +165,48 @@ async function convertRoomPunishments() {
 }
 
 export function writeStats(line: string) {
-	// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,seperated,with,commas
+	// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,separated,with,commas
 	const date = new Date();
 	const month = Chat.toTimestamp(date).split(' ')[0].split('-', 2).join('-');
 	try {
-		FS(`logs/tickets/${month}.tsv`).appendSync(line + '\n');
+		Monitor.logPath(`tickets/${month}.tsv`).appendSync(line + '\n');
 	} catch (e: any) {
 		if (e.code !== 'ENOENT') throw e;
 	}
 }
 
 export class HelpTicket extends Rooms.SimpleRoomGame {
-	room: ChatRoom;
+	override readonly gameid = "helpticket" as ID;
+	override readonly allowRenames = true;
+	override room: ChatRoom;
 	ticket: TicketState;
 	claimQueue: string[];
-	involvedStaff: Set<ID>;
+	involvedStaff = new Set<ID>();
 	createTime: number;
 	activationTime: number;
-	emptyRoom: boolean;
-	firstClaimTime: number;
-	unclaimedTime: number;
+	emptyRoom = false;
+	firstClaimTime = 0;
+	unclaimedTime = 0;
 	lastUnclaimedStart: number;
-	closeTime: number;
-	resolution: 'unknown' | 'dead' | 'unresolved' | 'resolved';
-	result: TicketResult | null;
+	closeTime = 0;
+	resolution: 'unknown' | 'dead' | 'unresolved' | 'resolved' = 'unknown';
+	result: TicketResult | null = null;
 
 	constructor(room: ChatRoom, ticket: TicketState) {
 		super(room);
 		this.room = room;
 		this.room.settings.language = Users.get(ticket.creator)?.language || 'english' as ID;
 		this.title = `Help Ticket - ${ticket.type}`;
-		this.gameid = "helpticket" as ID;
-		this.allowRenames = true;
 		this.ticket = ticket;
 		this.claimQueue = [];
 
 		/* Stats */
-		this.involvedStaff = new Set();
 		this.createTime = Date.now();
 		this.activationTime = (ticket.active ? this.createTime : 0);
-		this.emptyRoom = false;
-		this.firstClaimTime = 0;
-		this.unclaimedTime = 0;
 		this.lastUnclaimedStart = (ticket.active ? this.createTime : 0);
-		this.closeTime = 0;
-		this.resolution = 'unknown';
-		this.result = null;
 	}
 
-	onJoin(user: User, connection: Connection) {
+	override onJoin(user: User, connection: Connection) {
 		if (!this.ticket.open) return false;
 		if (!user.isStaff || user.id === this.ticket.userid) {
 			if (this.emptyRoom) this.emptyRoom = false;
@@ -242,7 +235,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			}
 			tickets[this.ticket.userid] = this.ticket;
 			writeTickets();
-			this.room.modlog({action: 'TICKETCLAIM', isGlobal: false, loggedBy: user.id});
+			this.room.modlog({ action: 'TICKETCLAIM', isGlobal: false, loggedBy: user.id });
 			this.addText(`${user.name} claimed this ticket.`, user);
 			notifyStaff();
 		} else {
@@ -250,7 +243,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	onLeave(user: User, oldUserid: ID) {
+	override onLeave(user: User, oldUserid: ID) {
 		const player = this.playerTable[oldUserid || user.id];
 		if (player) {
 			this.removePlayer(player);
@@ -263,13 +256,13 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		if (toID(this.ticket.claimed) === user.id) {
 			if (this.claimQueue.length) {
 				this.ticket.claimed = this.claimQueue.shift() || null;
-				this.room.modlog({action: 'TICKETCLAIM', isGlobal: false, loggedBy: toID(this.ticket.claimed)});
+				this.room.modlog({ action: 'TICKETCLAIM', isGlobal: false, loggedBy: toID(this.ticket.claimed) });
 				this.addText(`This ticket is now claimed by ${this.ticket.claimed}.`, user);
 			} else {
 				const oldClaimed = this.ticket.claimed;
 				this.ticket.claimed = null;
 				this.lastUnclaimedStart = Date.now();
-				this.room.modlog({action: 'TICKETUNCLAIM', isGlobal: false, loggedBy: toID(oldClaimed)});
+				this.room.modlog({ action: 'TICKETUNCLAIM', isGlobal: false, loggedBy: toID(oldClaimed) });
 				this.addText(`This ticket is no longer claimed.`, user);
 				notifyStaff();
 			}
@@ -281,7 +274,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	onLogMessage(message: string, user: User) {
+	override onLogMessage(message: string, user: User) {
 		if (!this.ticket.open) return;
 		if (user.isStaff && this.ticket.userid !== user.id) this.involvedStaff.add(user.id);
 		if (this.ticket.active) return;
@@ -293,8 +286,8 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		if (
 			(!user.isStaff || this.ticket.userid === user.id) && (message.length < 3 || blockedMessages.includes(toID(message)))
 		) {
-			this.room.add(`|c|&Staff|${this.room.tr`Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`}`);
-			this.room.add(`|c|&Staff|${this.room.tr`Please post the information I requested above so a global staff member can come to help.`}`);
+			this.room.add(`|c|~Staff|${this.room.tr`Hello! The global staff team would be happy to help you, but you need to explain what's going on first.`}`);
+			this.room.add(`|c|~Staff|${this.room.tr`Please post the information I requested above so a global staff member can come to help.`}`);
 			this.room.update();
 			return false;
 		}
@@ -303,11 +296,11 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			this.activationTime = Date.now();
 			if (!this.ticket.claimed) this.lastUnclaimedStart = Date.now();
 			notifyStaff();
-			this.room.add(`|c|&Staff|${this.room.tr`Thank you for the information, global staff will be here shortly. Please stay in the room.`}`).update();
+			this.room.add(`|c|~Staff|${this.room.tr`Thank you for the information, global staff will be here shortly. Please stay in the room.`}`).update();
 			switch (this.ticket.type) {
 			case 'PM Harassment':
 				this.room.add(
-					`|c|&Staff|Global staff might take more than a few minutes to handle your report. ` +
+					`|c|~Staff|Global staff might take more than a few minutes to handle your report. ` +
 					`If you are being disturbed by another user, you can type \`\`/ignore [username]\`\` in any chat to ignore their messages immediately`
 				).update();
 				break;
@@ -316,11 +309,11 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		}
 	}
 
-	forfeit(user: User) {
+	override forfeit(user: User) {
 		if (!(user.id in this.playerTable)) return;
-		this.removePlayer(user);
+		this.removePlayer(this.playerTable[user.id]);
 		if (!this.ticket.open) return;
-		this.room.modlog({action: 'TICKETABANDON', isGlobal: false, loggedBy: user.id});
+		this.room.modlog({ action: 'TICKETABANDON', isGlobal: false, loggedBy: user.id });
 		this.addText(`${user.name} is no longer interested in this ticket.`, user);
 		if (this.playerCount - 1 > 0) return; // There are still users in the ticket room, dont close the ticket
 		this.close(!!(this.firstClaimTime), user);
@@ -337,7 +330,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 	}
 
 	getButton() {
-		const color = this.ticket.claimed ? `` : this.ticket.offline ? `notifying subtle` : `notifying`;
+		const color = this.ticket.claimed ? `` : this.ticket.offline ? `alt-notifying` : `notifying`;
 		const creator = (
 			this.ticket.claimed ? Utils.html`${this.ticket.creator}` : Utils.html`<strong>${this.ticket.creator}</strong>`
 		);
@@ -391,7 +384,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		this.ticket.open = false;
 		tickets[this.ticket.userid] = this.ticket;
 		writeTickets();
-		this.room.modlog({action: 'TICKETCLOSE', isGlobal: false, loggedBy: staff?.id || 'unknown' as ID});
+		this.room.modlog({ action: 'TICKETCLOSE', isGlobal: false, loggedBy: staff?.id || 'unknown' as ID });
 		this.addText(staff ? `${staff.name} closed this ticket.` : `This ticket was closed.`, staff);
 		notifyStaff();
 		this.room.pokeExpireTimer();
@@ -449,14 +442,14 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			involvedStaff = Array.from(this.involvedStaff.entries()).map(s => s[0]).join(',');
 		}
 		// Write to TSV
-		// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,seperated,with,commas
+		// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,separated,with,commas
 		const line = `${this.ticket.type}\t${(this.closeTime - this.createTime)}\t${firstClaimWait}\t${this.unclaimedTime}\t${this.resolution}\t${this.result}\t${involvedStaff}`;
 		writeStats(line);
 	}
 
 	deleteTicket(staff: User) {
 		this.close('deleted', staff);
-		this.room.modlog({action: 'TICKETDELETE', isGlobal: false, loggedBy: staff.id});
+		this.room.modlog({ action: 'TICKETDELETE', isGlobal: false, loggedBy: staff.id });
 		this.addText(`${staff.name} deleted this ticket.`, staff);
 		delete tickets[this.ticket.userid];
 		writeTickets();
@@ -465,7 +458,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 	}
 
 	// Modified version of RoomGame.destory
-	destroy() {
+	override destroy() {
 		if (tickets[this.ticket.userid] && this.ticket.open) {
 			// Ticket was not deleted - deleted tickets already have this done to them - and was not closed.
 			// Write stats and change flags as appropriate prior to deletion.
@@ -477,17 +470,13 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		}
 
 		this.room.game = null;
-		// @ts-ignore
-		this.room = null;
-		for (const player of this.players) {
-			player.destroy();
-		}
-		// @ts-ignore
-		this.players = null;
-		// @ts-ignore
-		this.playerTable = null;
+		(this.room as any) = null;
+		this.setEnded();
+		for (const player of this.players) player.destroy();
+		(this.players as any) = null;
+		(this.playerTable as any) = null;
 	}
-	onChatMessage(message: string, user: User) {
+	override onChatMessage(message: string, user: User) {
 		HelpTicket.uploadReplaysFrom(message, user, user.connections[0]);
 	}
 	// workaround to modlog for no room
@@ -504,7 +493,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		}
 		return Utils.sortBy(Object.values(tickets), sorter);
 	}
-	static logTextResult(ticket: TicketState & {text: [string, string], resolved: ResolvedTicketInfo}) {
+	static logTextResult(ticket: TicketState & { text: [string, string], resolved: ResolvedTicketInfo }) {
 		const entry = {
 			text: ticket.text,
 			resolved: ticket.resolved,
@@ -517,7 +506,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			recommended: ticket.recommended,
 		};
 		const date = Chat.toTimestamp(new Date()).split(' ')[0];
-		void FS(`logs/tickets/${date.slice(0, -3)}.jsonl`).append(JSON.stringify(entry) + '\n');
+		void Monitor.logPath(`tickets/${date.slice(0, -3)}.jsonl`).append(JSON.stringify(entry) + '\n');
 	}
 
 	/**
@@ -543,7 +532,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			let lines;
 			try {
 				lines = await ProcessManager.exec([
-					`rg`, FS(`logs/tickets/${date ? `${date}.jsonl` : ''}`).path, ...args,
+					`rg`, Monitor.logPath(`tickets/${date ? `${date}.jsonl` : ''}`).path, ...args,
 				]);
 			} catch (e: any) {
 				if (e.message.includes('No such file or directory')) {
@@ -555,7 +544,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 				if (e.stdout) {
 					lines = e;
 				} else {
-					lines = {stdout: ""};
+					lines = { stdout: "" };
 				}
 			}
 			for (const line of lines.stdout.split('\n')) {
@@ -563,7 +552,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 			}
 		} else {
 			if (!date) throw new Chat.ErrorMessage(`Specify a month.`);
-			const path = FS(`logs/tickets/${date}.jsonl`);
+			const path = Monitor.logPath(`tickets/${date}.jsonl`);
 			if (!path.existsSync()) {
 				throw new Chat.ErrorMessage(`There are no logs for the month "${date}".`);
 			}
@@ -649,7 +638,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		buf += `</div></details><br />`;
 		return buf;
 	}
-	static getTextButton(ticket: TicketState & {text: [string, string]}) {
+	static getTextButton(ticket: TicketState & { text: [string, string] }) {
 		let buf = '';
 		const titleBuf = [
 			...ticket.text[0].split('\n').map(Utils.escapeHTML),
@@ -702,7 +691,7 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 	}
 	static getBanMessage(userid: ID, punishment: Punishment) {
 		if (userid !== punishment.id) {
-			const {id: punished, reason} = punishment;
+			const { id: punished, reason } = punishment;
 			return (
 				`You are banned from creating help tickets` +
 				`${punished !== userid ? `, because you have the same IP as ${userid}` : ''}. ${reason ? `Reason: ${reason}` : ''}`
@@ -711,15 +700,15 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 		return `You are banned from creating help tickets.`;
 	}
 	static notifyResolved(user: User, ticket: TicketState, userid = user.id) {
-		const {result, time, by, seen, note} = ticket.resolved as ResolvedTicketInfo;
+		const { result, time, by, seen, note } = ticket.resolved!;
 		if (seen) return;
 		const timeString = (Date.now() - time) > 1000 ? `, ${Chat.toDurationString(Date.now() - time)} ago.` : '.';
-		user.send(`|pm|&Staff|${user.getIdentity()}|Hello! Your report was resolved by ${by}${timeString}`);
+		user.send(`|pm|~Staff|${user.getIdentity()}|Hello! Your report was resolved by ${by}${timeString}`);
 		if (result?.trim()) {
-			user.send(`|pm|&Staff|${user.getIdentity()}|The result was "${result}"`);
+			user.send(`|pm|~Staff|${user.getIdentity()}|The result was "${result}"`);
 		}
 		if (note?.trim()) {
-			user.send(`|pm|&Staff|${user.getIdentity()}|/raw <small>${note}</small>`);
+			user.send(`|pm|~Staff|${user.getIdentity()}|/raw <small>${note}</small>`);
 		}
 		tickets[userid].resolved!.seen = true;
 		writeTickets();
@@ -731,8 +720,8 @@ export class HelpTicket extends Rooms.SimpleRoomGame {
 
 const NOTIFY_ALL_TIMEOUT = 5 * 60 * 1000;
 const NOTIFY_ASSIST_TIMEOUT = 60 * 1000;
-const unclaimedTicketTimer: {[k: string]: NodeJS.Timer | null} = {upperstaff: null, staff: null};
-const timerEnds: {[k: string]: number} = {upperstaff: 0, staff: 0};
+const unclaimedTicketTimer: { [k: string]: NodeJS.Timeout | null } = { upperstaff: null, staff: null };
+const timerEnds: { [k: string]: number } = { upperstaff: 0, staff: 0 };
 function pokeUnclaimedTicketTimer(hasUnclaimed: boolean, hasAssistRequest: boolean) {
 	const room = Rooms.get('staff');
 	if (!room) return;
@@ -770,7 +759,7 @@ function notifyUnclaimedTicket(hasAssistRequest: boolean) {
 
 		if (ticket.needsDelayWarning && !ticket.claimed && delayWarnings[ticket.type]) {
 			ticketRoom.add(
-				`|c|&Staff|${ticketRoom.tr(delayWarningPreamble)}${ticketRoom.tr(delayWarnings[ticket.type])}`
+				`|c|~Staff|${ticketRoom.tr(delayWarningPreamble)}${ticketRoom.tr(delayWarnings[ticket.type])}`
 			).update();
 			ticket.needsDelayWarning = false;
 		}
@@ -818,17 +807,18 @@ export function notifyStaff() {
 			if (ticket.type === 'Public Room Assistance Request') hasAssistRequest = true;
 		}
 		if (ticket.text) {
-			buf += HelpTicket.getTextButton(ticket as TicketState & {text: [string, string]});
+			buf += HelpTicket.getTextButton(ticket as TicketState & { text: [string, string] });
 		} else if (ticketGame) {
 			buf += ticketGame.getButton();
 		}
+		buf += ` `;
 		count++;
 	}
 	if (hiddenTicketCount > 1) {
 		const notifying = hiddenTicketUnclaimedCount > 0 ? ` notifying` : ``;
 		if (hiddenTicketUnclaimedCount > 0) hasUnclaimed = true;
 		buf = buf.slice(0, fourthTicketIndex) +
-			`<button class="button${notifying}" name="send" value="/ht list">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</button>`;
+			`<button class="button${notifying}" name="send" value="/ht list">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</button> `;
 	}
 	for (const type of listOnlyTypes) {
 		const matches = sortedTickets.filter(
@@ -876,8 +866,6 @@ function checkIp(ip: string) {
 export function getBattleLinks(text: string) {
 	const rooms = new Set<string>();
 	const battles = text.match(BATTLES_REGEX);
-	// typescript-eslint is having trouble detecting REPLAY_REGEX as a global regex
-	// eslint-disable-next-line @typescript-eslint/prefer-regexp-exec
 	const replays = text.match(REPLAY_REGEX);
 	if (battles) {
 		for (const battle of battles) rooms.add(battle);
@@ -898,7 +886,7 @@ function getReportedUser(ticket: TicketState) {
 }
 
 export async function listOpponentsFrom(
-	ticket: TicketState & {text: [string, string]}
+	ticket: TicketState & { text: [string, string] }
 ) {
 	const opps = new Utils.Multiset<string>();
 	const links = getBattleLinks(ticket.text[0]).concat(getBattleLinks(ticket.text[1]));
@@ -920,13 +908,9 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 		}
 	}
 	if (!room) {
-		const replayUrl = Net(`https://${Config.routes.replays}/${link.slice(link.indexOf('-') + 1)}.json`);
-		try {
-			const body = await replayUrl.get();
-			const data = JSON.parse(body);
-			return data.p1id === submitter ? data.p2id : data.p1id;
-		} catch {
-			return null;
+		const battleData = await getBattleLog(link);
+		if (battleData) {
+			return battleData.players.p1 === submitter ? battleData.players.p2 : battleData.players.p1;
 		}
 	}
 	return null;
@@ -935,101 +919,70 @@ export async function getOpponent(link: string, submitter: ID): Promise<string |
 export async function getBattleLog(battle: string, noReplay = false): Promise<BattleInfo | null> {
 	const battleRoom = Rooms.get(battle);
 	const seenPokemon = new Set<string>();
-	if (battleRoom && battleRoom.type !== 'chat') {
-		const playerTable: Partial<BattleInfo['players']> = {};
-		const monTable: BattleInfo['pokemon'] = {};
-		// i kinda hate this, but this will always be accurate to the battle players.
-		// consulting room.battle.playerTable might be invalid (if battle is over), etc.
-		for (const line of battleRoom.log.log) {
-			// |switch|p2a: badnite|Dragonite, M|323/323
-			if (line.startsWith('|switch|')) { // name cannot have been seen until it switches in
+	let data: { log: string, players: string[] } | null = null;
+	// try battle room first
+	if (battleRoom && battleRoom.type !== 'chat' && battleRoom.battle) {
+		data = {
+			log: battleRoom.log.log.join('\n'),
+			players: battleRoom.battle.players.map(x => x.id),
+		};
+	} else { // fall back to replay
+		if (noReplay) return null;
+		battle = battle.replace(`battle-`, ''); // don't wanna strip passwords
+
+		if (Rooms.Replays.db) { // direct conn exists, use it
+			if (battle.endsWith('pw')) {
+				battle = battle.slice(0, battle.lastIndexOf("-", battle.length - 2));
+			}
+			data = await Rooms.Replays.get(battle);
+		} else {
+			// call out to API
+			try {
+				const raw = await Net(`https://${Config.routes.replays}/${battle}.json`).get();
+				data = JSON.parse(raw);
+			} catch {}
+		}
+	}
+
+	// parse
+	if (data?.log?.length) {
+		const log = data.log.split('\n');
+		const players: BattleInfo['players'] = {} as any;
+		for (const [i, id] of data.players.entries()) {
+			players[`p${i + 1}` as SideID] = toID(id);
+		}
+		const chat = [];
+		const mons: BattleInfo['pokemon'] = {};
+		for (const line of log) {
+			if (line.startsWith('|c|')) {
+				chat.push(line);
+			} else if (line.startsWith('|switch|')) {
 				const [, , playerWithNick, speciesWithGender] = line.split('|');
-				let [slot, name] = playerWithNick.split(':');
 				const species = speciesWithGender.split(',')[0].trim(); // should always exist
+				let [slot, name] = playerWithNick.split(':');
 				slot = slot.slice(0, -1); // p2a -> p2
-				if (!monTable[slot]) monTable[slot] = [];
-				const identifier = `${name || ""}-${species}`;
-				if (seenPokemon.has(identifier)) continue;
-				// technically, if several mons have the same name and species, this will ignore them.
-				// BUT if they have the same name and species we only need to see it once
-				// so it doesn't matter
-				seenPokemon.add(identifier);
+				// safe to not check here bc this should always exist in the players table.
+				// if it doesn't, there's a problem
+				const id = players[slot as SideID] as string;
+				if (!mons[id]) mons[id] = [];
 				name = name?.trim() || "";
-				monTable[slot].push({
-					species,
-					name: species === name ? undefined : name,
+				const setId = `${name || ""}-${species}`;
+				if (seenPokemon.has(setId)) continue;
+				seenPokemon.add(setId);
+				mons[id].push({
+					species, // don't want to see a name if it's the same as the species
+					name: name === species ? undefined : name,
 				});
-			}
-			if (line.startsWith('|player|')) {
-				// |player|p1|Mia|miapi.png|1000
-				const [, , playerSlot, name] = line.split('|');
-				playerTable[playerSlot as SideID] = toID(name);
-			}
-			for (const k in monTable) {
-				// SideID => userID, cannot do conversion at time of collection
-				// because the playerID => userid mapping might not be there.
-				// strictly, yes it will, but this is for maximum safety.
-				const userid = playerTable[k as SideID];
-				if (userid) {
-					monTable[userid] = monTable[k];
-					delete monTable[k];
-				}
 			}
 		}
 		return {
-			log: battleRoom.log.log.filter(k => k.startsWith('|c|')),
-			title: battleRoom.title,
-			url: `/${battle}`,
-			players: playerTable as BattleInfo['players'],
-			pokemon: monTable,
+			log: chat,
+			title: `${players.p1} vs ${players.p2}`,
+			url: `https://${Config.routes.replays}/${battle}`,
+			players,
+			pokemon: mons,
 		};
 	}
-	if (noReplay) return null;
-	battle = battle.replace(`battle-`, ''); // don't wanna strip passwords
-	try {
-		const raw = await Net(`https://${Config.routes.replays}/${battle}.json`).get();
-		const data = JSON.parse(raw);
-		if (data.log?.length) {
-			const log = data.log.split('\n');
-			const players = {
-				p1: toID(data.p1),
-				p2: toID(data.p2),
-				p3: toID(data.p3),
-				p4: toID(data.p4),
-			};
-			const chat = [];
-			const mons: BattleInfo['pokemon'] = {};
-			for (const line of log) {
-				if (line.startsWith('|c|')) {
-					chat.push(line);
-				} else if (line.startsWith('|switch|')) {
-					const [, , playerWithNick, speciesWithGender] = line.split('|');
-					const species = speciesWithGender.split(',')[0].trim(); // should always exist
-					let [slot, name] = playerWithNick.split(':');
-					slot = slot.slice(0, -1); // p2a -> p2
-					// safe to not check here bc this should always exist in the players table.
-					// if it doesn't, there's a problem
-					const id = players[slot as SideID];
-					if (!mons[id]) mons[id] = [];
-					name = name?.trim() || "";
-					const setId = `${name || ""}-${species}`;
-					if (seenPokemon.has(setId)) continue;
-					seenPokemon.add(setId);
-					mons[id].push({
-						species, // don't want to see a name if it's the same as the species
-						name: name === species ? undefined : name,
-					});
-				}
-			}
-			return {
-				log: chat,
-				title: `${data.p1} vs ${data.p2}`,
-				url: `https://${Config.routes.replays}/${battle}`,
-				players,
-				pokemon: mons,
-			};
-		}
-	} catch {}
 	return null;
 }
 
@@ -1044,7 +997,7 @@ for (const room of Rooms.rooms.values()) {
 void convertRoomPunishments();
 
 const delayWarningPreamble = `Hi! All global staff members are busy right now and we apologize for the delay. `;
-const delayWarnings: {[k: string]: string} = {
+const delayWarnings: { [k: string]: string } = {
 	'PM Harassment': `Please make sure you have given us the permission to check the PMs between you and the user you reported. You can also provide any relevant context; for example, a replay of a battle with the person you're reporting.`,
 	'Battle Harassment': `Please save the replay of the battle and provide a link to it in this chat, so we can see the harassment even if the battle expires. You can save the replay by clicking on the "Upload and share replay" button once the battle has ended.`,
 	'Inappropriate Username': `Make sure you have provided the correct username, and if its meaning or why it is offensive is not obvious, please explain why it should not be allowed.`,
@@ -1054,7 +1007,7 @@ const delayWarnings: {[k: string]: string} = {
 	'Public Room Assistance Request': `Please tell us which room you need assistance with and a global staff member will join your room as soon as possible.`,
 	other: `If your issue pertains to battle mechanics or is a question about Pokémon Showdown, you can ask in the <<help>> chatroom.`,
 };
-const ticketTitles: {[k: string]: string} = {
+const ticketTitles: { [k: string]: string } = {
 	pmharassment: `PM Harassment`,
 	battleharassment: `Battle Harassment`,
 	inapname: `Inappropriate Username`,
@@ -1064,7 +1017,7 @@ const ticketTitles: {[k: string]: string} = {
 	roomhelp: `Public Room Assistance Request`,
 	other: `Other`,
 };
-const ticketPages: {[k: string]: string} = {
+const ticketPages: { [k: string]: string } = {
 	report: `I want to report someone`,
 	pmharassment: `Someone is harassing me in PMs`,
 	battleharassment: `Someone is harassing me in a battle`,
@@ -1134,7 +1087,7 @@ const cheatingScenarios = [
 	],
 ];
 
-export const textTickets: {[k: string]: TextTicketInfo} = {
+export const textTickets: { [k: string]: TextTicketInfo } = {
 	pmharassment: {
 		title: "Who's harassing you in PMs?",
 		checker(input) {
@@ -1157,7 +1110,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				`Punish <strong>${ticket.userid}</strong> (reporter)`,
 				`<h2 style="color:red">You are about to punish the reporter. Are you sure you want to do this?</h2>`,
 			);
-			buf += `<strong>Reported user:</strong> ${reportUserid} </strong>`;
+			buf += `<strong>Reported user:</strong> <span class="username">${reportUserid}</span> </strong>`;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${reportUserid}'">Global Modlog</button><br />`;
 			buf += HelpTicket.displayPunishmentList(
 				reportUserid,
@@ -1205,7 +1158,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			];
 			const tar = toID(ticket.text[0]); // should always be the reported userid
 			const name = Utils.escapeHTML(Users.getExact(tar)?.name || tar);
-			buf += `<br /><strong>Reported user:</strong> ${name} `;
+			buf += `<br /><strong>Reported user:</strong> <a href="https://${Config.routes.root}/users/${tar}">${name}</a> `;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${tar}'">Global Modlog</button><br />`;
 			buf += `<details ${state?.list ? 'open' : ''} class="readmore">`;
 			buf += `<summary>Punish <strong>${name}</strong> (reported user)</summary>`;
@@ -1275,7 +1228,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			);
 			const opp = getReportedUser(ticket) || (await listOpponentsFrom(ticket))[0];
 			if (opp) {
-				buf += `<br /><strong>Reported user:</strong> ${opp} `;
+				buf += `<br /><strong>Reported user:</strong> <span class="username">${opp}</span> `;
 				buf += `<button class="button" name="send" value="/modlog room=global,user='${opp}'">Global Modlog</button><br />`;
 				buf += HelpTicket.displayPunishmentList(
 					opp,
@@ -1295,7 +1248,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 		title: "Enter the name of the room",
 		getReviewDisplay(ticket, staff) {
 			let buf = ``;
-			const room = Rooms.search(ticket.text[0]) as Room;
+			const room = Rooms.search(ticket.text[0])!;
 			if (!staff.inRooms.has(room.roomid)) {
 				buf += `<button class="button" name="send" value="/msgroom staff,/join ${room.roomid}">Join room</button>`;
 				buf += `<br />`;
@@ -1340,6 +1293,8 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				`<h2 style="color:red">You are about to punish the reporter. Are you sure you want to do this?</h2>`
 			);
 			if (opp) {
+				buf += `<strong>Reported user:</strong> <span class="username">${opp}</span> </strong>`;
+				buf += `<button class="button" name="send" value="/modlog room=global,user='${opp}'">Global Modlog</button><br />`;
 				buf += HelpTicket.displayPunishmentList(
 					opp,
 					proof,
@@ -1350,30 +1305,28 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			buf += `<p><strong>Battle links given:</strong><p>`;
 			links = links.filter((url, i) => links.indexOf(url) === i);
 			buf += links.map(uri => Chat.formatText(`<<${uri}>>`)).join(', ');
-			const battleRooms = links.map(r => Rooms.get(r)).filter(room => room?.battle) as GameRoom[];
-			if (battleRooms.length) {
-				buf += `<div class="infobox"><strong>Names in given battles:</strong><hr />`;
-				for (const room of battleRooms) {
-					const names = [];
-					for (const id in room.battle!.playerTable) {
-						const user = Users.get(id);
-						if (!user) continue;
-						const team = await room.battle!.getTeam(user);
-						if (team) {
-							const teamNames = team.map(p => (
-								p.name !== p.species ? Utils.html`${p.name} (${p.species})` : p.species
-							));
-							names.push(`<strong>${user.id}:</strong> ${teamNames.join(', ')}`);
-						}
-					}
-					if (names.length) {
-						buf += `<a href="/${room.roomid}">${room.title}</a><br />`;
-						buf += names.join('<br />');
-						buf += `<hr />`;
+			buf += `<div class="infobox"><strong>Names in given battles:</strong><hr />`;
+			for (const link of links) {
+				const names = [];
+				const roomData = await getBattleLog(link);
+				if (!roomData) continue;
+				for (const id of Object.values(roomData.players)) {
+					const user = Users.get(id)?.name || id;
+					const team = roomData.pokemon[id];
+					if (team) {
+						const teamNames = team.map(p => (
+							p.name !== p.species ? Utils.html`${p.name} (${p.species})` : p.species
+						));
+						names.push(`<strong>${user}:</strong> ${teamNames.join(', ')}`);
 					}
 				}
-				buf += `</div>`;
+				if (names.length) {
+					buf += `<a href="/${getBattleLinks(link)[0]}">${roomData.title}</a><br />`;
+					buf += names.join('<br />');
+					buf += `<hr />`;
+				}
 			}
+			buf += `</div>`;
 			return buf;
 		},
 		onSubmit(ticket, text, submitter, conn) {
@@ -1393,7 +1346,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 				info = [];
 				if (ips?.length) {
 					for (const ip of ips) {
-						info.push({...await IPTools.lookup(ip), ip});
+						info.push({ ...await IPTools.lookup(ip), ip });
 					}
 					if (!ticket.state) {
 						ticket.state = info;
@@ -1436,7 +1389,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			return buf;
 		},
 		getState(ticket, user) {
-			return {ips: user.ips};
+			return { ips: user.ips };
 		},
 		checker(text, context, pageId, user) {
 			if (!toID(text)) {
@@ -1444,6 +1397,12 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 			}
 			if (!(user.locked || user.namelocked || user.semilocked)) {
 				return ['You are not punished.'];
+			}
+			if (!user.registered) {
+				return [
+					"Because this account isn't registered (with a password), we cannot verify your identity.",
+					"Please come back with a different account you've registered in the past.",
+				];
 			}
 			const punishments = Punishments.search(user.id);
 			const userids = [user.id, ...user.previousIDs];
@@ -1467,7 +1426,7 @@ export const textTickets: {[k: string]: TextTicketInfo} = {
 		async onSubmit(ticket, text, user) {
 			const ips = [];
 			for (const ip of user.ips) {
-				ips.push({...await IPTools.lookup(ip), ip});
+				ips.push({ ...await IPTools.lookup(ip), ip });
 			}
 			ticket.state = ips;
 			writeTickets();
@@ -1726,11 +1685,8 @@ export const pages: Chat.PageTable = {
 					buf += `<p><Button>other</Button></p>`;
 					break;
 				case 'password':
-					buf += `<p>Password resets are currently closed to regular users due to policy revamp and administrative backlog.</p>`;
-					buf += `<p>Users with a public room auth (Voice or higher) and Smogon badgeholders can still get their passwords reset `;
-					buf += `(see <a href="https://www.smogon.com/forums/threads/names-passwords-rooms-and-servers-contacting-upper-staff.3538721/#post-6227626">this post</a> for more informations).</p>`;
-					buf += `<p>To those who do not belong to those groups, we apologize for the temporary inconvenience.</p>`;
-					buf += `<p>Thanks for your understanding!</p>`;
+					buf += `<p>If you need your Pokémon Showdown password reset, you can fill out a <a href="https://www.smogon.com/forums/password-reset-form/">Password Reset Form</a>.</p>`;
+					buf += `<p>You will need to make a Smogon account to be able to fill out a form.`;
 					break;
 				case 'roomhelp':
 					buf += `<p>${this.tr`If you are a room driver or up in a public room, and you need help watching the chat, one or more global staff members would be happy to assist you!`}</p>`;
@@ -1821,10 +1777,10 @@ export const pages: Chat.PageTable = {
 					count++;
 					buf += `<strong>Reporter:</strong> ${ticket.userid}`;
 					buf += await textTickets[typeId].getReviewDisplay(
-						ticket as TicketState & {text: [string, string]},
+						ticket as TicketState & { text: [string, string] },
 						user,
 						this.connection,
-						{list: true}
+						{ list: true }
 					);
 					buf += `<form data-submitsend="/helpticket resolve ${ticket.userid},{text} spoiler:{private}">`;
 					buf += `<br /><strong>Resolve:</strong><br />`;
@@ -1883,17 +1839,17 @@ export const pages: Chat.PageTable = {
 					logUrl = `/view-chatlog-help-${ticket.userid}--${Chat.toTimestamp(created).split(' ')[0]}`;
 				}
 				const room = Rooms.get(roomid);
-				if (room) {
-					const ticketGame = room.getGame(HelpTicket)!;
-					buf += `<a href="/${roomid}"><button class="button" ${ticketGame.getPreview()}>${this.tr(!ticket.claimed && ticket.open ? 'Claim' : 'View')}</button></a> `;
-				} else if (ticket.text) {
+				if (ticket.text) {
 					let title = Object.entries(ticket.notes || {})
 						.map(([userid, note]) => Utils.html`${note} (by ${userid})`)
 						.join('&#10;');
 					if (title) {
 						title = `title="Staff notes:&#10;${title}"`;
 					}
-					buf += `<a class="button" ${title} href="/view-help-text-${ticket.userid}">${ticket.claimed ? `Claim` : `View`}</a>`;
+					buf += `<a class="button" ${title} href="/view-help-text-${ticket.userid}">${!ticket.claimed && ticket.open ? `Claim` : `View`}</a>`;
+				} else if (room) {
+					const ticketGame = room.getGame(HelpTicket)!;
+					buf += `<a href="/${roomid}"><button class="button" ${ticketGame.getPreview()}>${this.tr(!ticket.claimed && ticket.open ? 'Claim' : 'View')}</button></a> `;
 				}
 				if (logUrl) {
 					buf += `<a href="${logUrl}"><button class="button">${this.tr`Log`}</button></a>`;
@@ -1914,7 +1870,7 @@ export const pages: Chat.PageTable = {
 				if (entry.userids) ids = ids.concat(entry.userids);
 				buf += `<tr><td>${ids.map(Utils.escapeHTML).join(', ')}</td>`;
 				buf += `<td>${entry.ips.join(', ')}</td>`;
-				buf += `<td>${Chat.toDurationString(entry.expireTime - Date.now(), {precision: 1})}</td>`;
+				buf += `<td>${Chat.toDurationString(entry.expireTime - Date.now(), { precision: 1 })}</td>`;
 				buf += `<td>${entry.reason || ''}</td></tr>`;
 			}
 			buf += `</tbody></table></div>`;
@@ -1926,14 +1882,14 @@ export const pages: Chat.PageTable = {
 			this.checkCan('lock');
 			const userid = query.shift();
 			if (!userid) {
-				return this.errorReply(`Specify a userid to view the ticket for.`);
+				throw new Chat.ErrorMessage(`Specify a userid to view the ticket for.`);
 			}
 			const ticket = tickets[toID(userid)];
 			if (!ticket) {
-				return this.errorReply(`Ticket not found.`);
+				throw new Chat.ErrorMessage(`Ticket not found.`);
 			}
 			if (!ticket.text) {
-				return this.errorReply(`That is either not a text ticket, or it has not yet been submitted.`);
+				throw new Chat.ErrorMessage(`That is either not a text ticket, or it has not yet been submitted.`);
 			}
 			const ticketInfo = textTickets[HelpTicket.getTypeId(ticket.type)];
 			this.title = `[Text Ticket] ${ticket.userid}`;
@@ -1954,7 +1910,7 @@ export const pages: Chat.PageTable = {
 			buf += `${ticket.userid}</a></strong>`;
 			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${ticket.userid}'">Global Modlog</button><br />`;
-			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & {text: [string, string]}, user, connection);
+			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & { text: [string, string] }, user, connection);
 			buf += `<br />`;
 			buf += `<div class="infobox">`;
 			const [text, context] = ticket.text;
@@ -1971,7 +1927,15 @@ export const pages: Chat.PageTable = {
 				for (const staff in ticket.notes) {
 					buf += Utils.html`<p>${ticket.notes[staff]} (by ${staff})</p>`;
 				}
+				buf += `<br /><form data-submitsend="/ht addnote ${ticket.userid},{note}&#10;/j view-help-text-${ticket.userid}">`;
+				buf += `Add note: <input name="note" /> <button type="submit" class="button">Submit</button>`;
+				buf += `</form>`;
 				buf += `</details></div>`;
+			} else {
+				buf += `<br /><div class="infobox">`;
+				buf += `<form data-submitsend="/ht note ${ticket.userid},{note}&#10;/j view-help-text-${ticket.userid}">`;
+				buf += `Add note: <input name="note" /> <button type="submit" class="button">Submit</button>`;
+				buf += `</form></div>`;
 			}
 
 			if (!ticket.resolved) {
@@ -2005,12 +1969,12 @@ export const pages: Chat.PageTable = {
 			this.checkCan('lock');
 			const args = query.join('-').split('--');
 			const userid = toID(args.shift());
-			if (!userid) return this.errorReply(`Specify a userid to view ticket logs for.`);
+			if (!userid) throw new Chat.ErrorMessage(`Specify a userid to view ticket logs for.`);
 			const date = args.shift();
 			if (date) {
 				const parsed = new Date(date);
 				if (!/[0-9]{4}-[0-9]{2}/.test(date) || isNaN(parsed.getTime())) {
-					return this.errorReply(`Invalid date.`);
+					throw new Chat.ErrorMessage(`Invalid date.`);
 				}
 			}
 			const logs = await HelpTicket.getTextLogs(['userid', userid], date);
@@ -2024,8 +1988,8 @@ export const pages: Chat.PageTable = {
 				return buf;
 			}
 			const stringifyDate = (num: number) => {
-				const dateStrings = Chat.toTimestamp(new Date(num), {human: true}).split(' ');
-				return {day: dateStrings[0], time: dateStrings[1]};
+				const dateStrings = Chat.toTimestamp(new Date(num), { human: true }).split(' ');
+				return { day: dateStrings[0], time: dateStrings[1] };
 			};
 
 			Utils.sortBy(logs, log => -log.resolved.time);
@@ -2044,7 +2008,7 @@ export const pages: Chat.PageTable = {
 					buf += `<br /><strong>Claimed:</strong> ${ticket.claimed}<br />`;
 				}
 				buf += await ticketInfo.getReviewDisplay(
-					ticket as TicketState & {text: [string, string]},
+					ticket as TicketState & { text: [string, string] },
 					user,
 					connection,
 					ticket.state
@@ -2092,7 +2056,7 @@ export const pages: Chat.PageTable = {
 			}
 			const dateUrl = Chat.toTimestamp(date).split(' ')[0].split('-', 2).join('-');
 
-			const rawTicketStats = FS(`logs/tickets/${dateUrl}.tsv`).readIfExistsSync();
+			const rawTicketStats = Monitor.logPath(`tickets/${dateUrl}.tsv`).readIfExistsSync();
 			if (!rawTicketStats) return `<div class="pad"><br />${this.tr`No ticket stats found.`}</div>`;
 
 			// Calculate next/previous month for stats and validate stats exist for the month
@@ -2118,20 +2082,20 @@ export const pages: Chat.PageTable = {
 			const nextString = Chat.toTimestamp(nextDate).split(' ')[0].split('-', 2).join('-');
 
 			let buttonBar = '';
-			if (FS(`logs/tickets/${prevString}.tsv`).readIfExistsSync()) {
+			if (Monitor.logPath(`tickets/${prevString}.tsv`).readIfExistsSync()) {
 				buttonBar += `<a class="button" href="/view-help-stats-${table}-${prevString}" target="replace" style="float: left">&lt; ${this.tr`Previous Month`}</a>`;
 			} else {
 				buttonBar += `<a class="button disabled" style="float: left">&lt; ${this.tr`Previous Month`}</a>`;
 			}
 			buttonBar += `<a class="button${table === 'tickets' ? ' disabled"' : `" href="/view-help-stats-tickets-${dateUrl}" target="replace"`}>${this.tr`Ticket Stats`}</a> <a class="button ${table === 'staff' ? ' disabled"' : `" href="/view-help-stats-staff-${dateUrl}" target="replace"`}>${this.tr`Staff Stats`}</a>`;
-			if (FS(`logs/tickets/${nextString}.tsv`).readIfExistsSync()) {
+			if (Monitor.logPath(`tickets/${nextString}.tsv`).readIfExistsSync()) {
 				buttonBar += `<a class="button" href="/view-help-stats-${table}-${nextString}" target="replace" style="float: right">${this.tr`Next Month`} &gt;</a>`;
 			} else {
 				buttonBar += `<a class="button disabled" style="float: right">${this.tr`Next Month`} &gt;</a>`;
 			}
 
 			let buf = `<div class="pad ladder"><div style="text-align: center">${buttonBar}</div><br />`;
-			buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="${table === 'tickets' ? 7 : 3}"><h2 style="margin: 5px auto">${this.tr`Help Ticket Stats`} - ${date.toLocaleString('en-us', {month: 'long', year: 'numeric'})}</h1></th></tr>`;
+			buf += `<table style="margin-left: auto; margin-right: auto"><tbody><tr><th colspan="${table === 'tickets' ? 7 : 3}"><h2 style="margin: 5px auto">${this.tr`Help Ticket Stats`} - ${date.toLocaleString('en-us', { month: 'long', year: 'numeric' })}</h1></th></tr>`;
 			if (table === 'tickets') {
 				if (!['type', 'totaltickets', 'total', 'initwait', 'wait', 'resolution', 'result'].includes(col)) col = 'type';
 				buf += `<tr><th><Button>type</Button></th><th><Button>totaltickets</Button></th><th><Button>total</Button></th><th><Button>initwait</Button></th><th><Button>wait</Button></th><th><Button>resolution</Button></th><th><Button>result</Button></th></tr>`;
@@ -2140,7 +2104,7 @@ export const pages: Chat.PageTable = {
 				buf += `<tr><th><Button>staff</Button></th><th><Button>num</Button></th><th><Button>time</Button></th></tr>`;
 			}
 
-			const ticketStats: {[k: string]: string}[] = rawTicketStats.split('\n').filter(
+			const ticketStats: { [k: string]: string }[] = rawTicketStats.split('\n').filter(
 				(line: string) => line
 			).map(
 				(line: string) => {
@@ -2157,7 +2121,7 @@ export const pages: Chat.PageTable = {
 				}
 			);
 			if (table === 'tickets') {
-				const typeStats: {[key: string]: {[key: string]: number}} = {};
+				const typeStats: { [key: string]: { [key: string]: number } } = {};
 				for (const stats of ticketStats) {
 					if (!typeStats[stats.type]) {
 						typeStats[stats.type] = {
@@ -2207,15 +2171,15 @@ export const pages: Chat.PageTable = {
 
 				for (const type of sortedStats) {
 					const resolution = `${this.tr`Resolved`}: ${typeStats[type].resolved}%<br/>${this.tr`Unresolved`}: ${typeStats[type].unresolved}%<br/>${this.tr`Dead`}: ${typeStats[type].dead}%`;
-					buf += `<tr><td>${type}</td><td>${typeStats[type].totaltickets}</td><td>${Chat.toDurationString(typeStats[type].total, {hhmmss: true})}</td><td>${Chat.toDurationString(typeStats[type].initwait, {hhmmss: true}) || '-'}</td><td>${Chat.toDurationString(typeStats[type].wait, {hhmmss: true}) || '-'}</td><td>${resolution}</td><td>${typeStats[type].result}%</td></tr>`;
+					buf += `<tr><td>${type}</td><td>${typeStats[type].totaltickets}</td><td>${Chat.toDurationString(typeStats[type].total, { hhmmss: true })}</td><td>${Chat.toDurationString(typeStats[type].initwait, { hhmmss: true }) || '-'}</td><td>${Chat.toDurationString(typeStats[type].wait, { hhmmss: true }) || '-'}</td><td>${resolution}</td><td>${typeStats[type].result}%</td></tr>`;
 				}
 			} else {
-				const staffStats: {[key: string]: {[key: string]: number}} = {};
+				const staffStats: { [key: string]: { [key: string]: number } } = {};
 				for (const stats of ticketStats) {
 					const staffArray = (typeof stats.staff === 'string' ? stats.staff.split(',') : []);
 					for (const staff of staffArray) {
 						if (!staff) continue;
-						if (!staffStats[staff]) staffStats[staff] = {num: 0, time: 0};
+						if (!staffStats[staff]) staffStats[staff] = { num: 0, time: 0 };
 						staffStats[staff].num++;
 						staffStats[staff].time += (parseInt(stats.total) - parseInt(stats.initwait));
 					}
@@ -2231,11 +2195,11 @@ export const pages: Chat.PageTable = {
 					return -staffStats[staff][col];
 				});
 				for (const staff of sortedStaff) {
-					buf += `<tr><td>${staff}</td><td>${staffStats[staff].num}</td><td>${Chat.toDurationString(staffStats[staff].time, {precision: 1})}</td></tr>`;
+					buf += `<tr><td>${staff}</td><td>${staffStats[staff].num}</td><td>${Chat.toDurationString(staffStats[staff].time, { precision: 1 })}</td></tr>`;
 				}
 			}
 			buf += `</tbody></table></div>`;
-			const headerTitles: {[id: string]: string} = {
+			const headerTitles: { [id: string]: string } = {
 				type: 'Type',
 				totaltickets: 'Total Tickets',
 				total: 'Average Total Time',
@@ -2291,7 +2255,7 @@ export const commands: Chat.ChatCommands = {
 			if (user.can('lock')) {
 				return this.parse('/join view-help-request'); // Globals automatically get the form for reference.
 			}
-			if (!user.named) return this.errorReply(this.tr`You need to choose a username before doing this.`);
+			if (!user.named) throw new Chat.ErrorMessage(this.tr`You need to choose a username before doing this.`);
 			return this.parse(`/join view-help-request${meta}`);
 		},
 		createhelp: [`/helpticket create - Creates a new ticket requesting help from global staff.`],
@@ -2331,7 +2295,7 @@ export const commands: Chat.ChatCommands = {
 			] = Utils.splitFirst(target, '|', 4).map(s => s.trim());
 			reportTarget = Utils.escapeHTML(reportTarget);
 			if (!Object.values(ticketTitles).includes(ticketType)) return this.parse('/helpticket');
-			const contexts: {[k: string]: string} = {
+			const contexts: { [k: string]: string } = {
 				'PM Harassment': `Hi! Who was harassing you in private messages?`,
 				'Battle Harassment': `Hi! Who was harassing you, and in which battle did it happen? Please post a link to the battle or a replay of the battle.`,
 				'Inappropriate Username': `Hi! Tell us the username that is inappropriate.`,
@@ -2340,9 +2304,9 @@ export const commands: Chat.ChatCommands = {
 				'IP-Appeal': `Hi! How are you connecting to Showdown right now? At home, at school, on a phone using mobile data, or some other way?`,
 				'Public Room Assistance Request': `Hi! Which room(s) do you need us to help you watch?`,
 				Other: `Hi! What seems to be the problem? Tell us about any people involved,` +
-				` and if this happened in a specific place on the site.`,
+					` and if this happened in a specific place on the site.`,
 			};
-			const staffContexts: {[k: string]: string} = {
+			const staffContexts: { [k: string]: string } = {
 				'IP-Appeal': `<p><strong>${user.name}'s IP Addresses</strong>: ${user.ips.map(ip => `<a href="https://whatismyipaddress.com/ip/${ip}" target="_blank">${ip}</a>`).join(', ')}</p>`,
 			};
 			ticket = {
@@ -2380,11 +2344,12 @@ export const commands: Chat.ChatCommands = {
 				const validation = await textTicket.checker?.(text, contextString || '', ticket.type, user, reportTarget);
 				if (Array.isArray(validation) && validation.length) {
 					this.parse(`/join view-${pageId}`);
-					return this.popupReply(`|html|` + validation.join('||'));
+					return this.popupReply(`|html|` + validation.join('<br />'));
 				}
 				ticket.text = [text, contextString];
 				ticket.active = true;
 				Chat.runHandlers('onTicketCreate', ticket, user);
+				// eslint-disable-next-line require-atomic-updates
 				tickets[user.id] = ticket;
 				await HelpTicket.modlog({
 					action: 'TEXTTICKET OPEN',
@@ -2394,7 +2359,7 @@ export const commands: Chat.ChatCommands = {
 				writeTickets();
 				notifyStaff();
 				void textTicket.onSubmit?.(ticket, [text, contextString], this.user, this.connection);
-				void runPunishments(ticket as TicketState & {text: [string, string]}, typeId);
+				void runPunishments(ticket as TicketState & { text: [string, string] }, typeId);
 				if (textTicket.getState) {
 					ticket.state = textTicket.getState(ticket, user);
 				}
@@ -2445,7 +2410,8 @@ export const commands: Chat.ChatCommands = {
 			const staffMessage = [
 				`<p>${closeButtons} <details><summary class="button">More Options</summary> ${staffIntroButtons}`,
 				`<button class="button" name="send" value="/modlog room=global, user='${ticket.userid}'"><small>Global Modlog for ${ticket.creator}</small></button>`,
-				`<button class="button" name="send" value="/helpticket ban ${user.id}"><small>Ticketban</small></button></details></p>`,
+				`<button class="button" name="send" value="/helpticket ban ${user.id}"><small>Ticketban</small></button>`,
+				`<button class="button" name="send" value="/am edithistory ${ticket.userid}"><small>Artemis History for ${ticket.creator}</small></button></p></details>`,
 			].join('<br />');
 			const staffHint = staffContexts[ticketType] || '';
 			let reportTargetInfo = '';
@@ -2468,7 +2434,9 @@ export const commands: Chat.ChatCommands = {
 						reportTargetInfo += Utils.html`There are no common battles between '${reportTarget}' and '${ticket.creator}'.`;
 					} else {
 						reportTargetInfo += Utils.html`Showing ${commonBattles.length} common battle(s) between '${reportTarget}' and '${ticket.creator}': `;
-						reportTargetInfo += commonBattles.map(roomid => Utils.html`<a href=/${roomid}>${roomid.replace(/^battle-/, '')}`);
+						reportTargetInfo += commonBattles.map(
+							roomid => Utils.html`<a href=/${roomid}>${roomid.replace(/^battle-/, '')}`
+						).join(', ');
 					}
 				}
 			}
@@ -2479,7 +2447,7 @@ export const commands: Chat.ChatCommands = {
 					isHelp: true,
 					isPrivate: 'hidden',
 					modjoin: '%',
-					auth: {[user.id]: '+'},
+					auth: { [user.id]: '+' },
 					introMessage: introMsg,
 					staffMessage: staffMessage + staffHint + reportTargetInfo,
 				});
@@ -2493,7 +2461,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			const ticketGame = helpRoom.getGame(HelpTicket)!;
 			Chat.runHandlers('onTicketCreate', ticket, user);
-			helpRoom.modlog({action: 'TICKETOPEN', isGlobal: false, loggedBy: user.id, note: ticket.type});
+			helpRoom.modlog({ action: 'TICKETOPEN', isGlobal: false, loggedBy: user.id, note: ticket.type });
 			ticketGame.addText(`${user.name} opened a new ticket. Issue: ${ticket.type}`, user);
 			void this.parse(`/join help-${user.id}`);
 			if (!(user.id in ticketGame.playerTable)) {
@@ -2509,7 +2477,7 @@ export const commands: Chat.ChatCommands = {
 				break;
 			}
 			if (context) {
-				helpRoom.add(`|c|&Staff|${this.tr(context)}`);
+				helpRoom.add(`|c|~Staff|${this.tr(context)}`);
 				helpRoom.update();
 			}
 			if (pmRequestButton) {
@@ -2542,7 +2510,7 @@ export const commands: Chat.ChatCommands = {
 			if (!ticket.text) {
 				return this.popupReply(`That ticket cannot be resolved with /helpticket resolve. Join it instead.`);
 			}
-			const {publicReason, privateReason} = this.parseSpoiler(result);
+			const { publicReason, privateReason } = this.parseSpoiler(result);
 			ticket.resolved = {
 				result: publicReason,
 				time: Date.now(),
@@ -2556,7 +2524,7 @@ export const commands: Chat.ChatCommands = {
 			if (tarUser) {
 				HelpTicket.notifyResolved(tarUser, ticket, ticketId);
 			}
-			// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,seperated,with,commas
+			// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,separated,with,commas
 			writeStats(`${ticket.type}\t${Date.now() - ticket.created}\t0\t0\tresolved\tvalid\t${user.id}`);
 			this.popupReply(`You resolved ${ticketId}'s ticket.`);
 			await HelpTicket.modlog({
@@ -2565,7 +2533,7 @@ export const commands: Chat.ChatCommands = {
 				note: privateReason,
 				userid: ticketId,
 			});
-			HelpTicket.logTextResult(ticket as TicketState & {text: [string, string], resolved: ResolvedTicketInfo});
+			HelpTicket.logTextResult(ticket as TicketState & { text: [string, string], resolved: ResolvedTicketInfo });
 			notifyStaff();
 			// force a refresh for everyone in it, otherwise we potentially get two punishments at once
 			// from different people clicking at the same time and reading it separately.
@@ -2578,7 +2546,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('lock');
 			return this.parse('/join view-help-tickets');
 		},
-		listhelp: [`/helpticket list - Lists all tickets. Requires: % @ &`],
+		listhelp: [`/helpticket list - Lists all tickets. Requires: % @ ~`],
 
 		inapnames: 'massview',
 		usernames: 'massview',
@@ -2597,7 +2565,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('lock');
 			return this.parse('/join view-help-stats');
 		},
-		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ &`],
+		statshelp: [`/helpticket stats - List the stats for help tickets. Requires: % @ ~`],
 
 		note: 'addnote',
 		addnote(target, room, user) {
@@ -2606,11 +2574,11 @@ export const commands: Chat.ChatCommands = {
 			if (!target) return this.parse(`/help helpticket addnote`);
 			const [ticketName, note] = Utils.splitFirst(target, ',').map(i => i.trim());
 			const ticketId = toID(ticketName);
-			if (!ticketId) return this.errorReply(`Specify the userid that created the ticket you want to mark.`);
+			if (!ticketId) throw new Chat.ErrorMessage(`Specify the userid that created the ticket you want to mark.`);
 			const ticket = tickets[ticketId];
-			if (!ticket) return this.errorReply(`${ticketId} does not have an active ticket.`);
-			if (ticket.resolved) return this.errorReply(`${ticketId}'s ticket has already been resolved.`);
-			if (!note) return this.errorReply(`You must specify a note to add.`);
+			if (!ticket) throw new Chat.ErrorMessage(`${ticketId} does not have an active ticket.`);
+			if (ticket.resolved) throw new Chat.ErrorMessage(`${ticketId}'s ticket has already been resolved.`);
+			if (!note) throw new Chat.ErrorMessage(`You must specify a note to add.`);
 			if (!ticket.notes) ticket.notes = {};
 			ticket.notes[user.id] = note;
 			writeTickets();
@@ -2621,24 +2589,24 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog(`HELPTICKET NOTE`, ticket.userid, note);
 		},
 		addnotehelp: [
-			`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text.`,
-			`Requires: % @ &`,
+			`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text. Requires: % @ ~`,
 		],
-
 		removenote(target, room, user) {
 			this.checkCan('lock');
 			target = target.trim();
 			if (!target) return this.parse(`/help helpticket removenote`);
 			let [ticketName, staff] = Utils.splitFirst(target, ',').map(i => i.trim());
 			const targetId = toID(ticketName);
-			if (!targetId) return this.errorReply(`Specify the userid that created the ticket you want to remove a note from.`);
+			if (!targetId) {
+				throw new Chat.ErrorMessage(`Specify the userid that created the ticket you want to remove a note from.`);
+			}
 			const ticket = tickets[targetId];
-			if (!ticket || ticket.resolved) return this.errorReply(`${targetId} does not have a pending ticket.`);
+			if (!ticket || ticket.resolved) throw new Chat.ErrorMessage(`${targetId} does not have a pending ticket.`);
 			staff = toID(staff) || user.id;
-			if (!ticket.notes) return this.errorReply(`${targetId}'s ticket does not have any notes.`);
+			if (!ticket.notes) throw new Chat.ErrorMessage(`${targetId}'s ticket does not have any notes.`);
 			const note = ticket.notes[staff];
 			if (!note) {
-				return this.errorReply(`${staff === user.id ? 'you do' : `'${staff}' does`} not have a note on that ticket.`);
+				throw new Chat.ErrorMessage(`${staff === user.id ? 'you do' : `'${staff}' does`} not have a note on that ticket.`);
 			}
 			if (!room || room.roomid !== 'staff') {
 				this.sendReply(`You removed the note '${note}' (by ${staff}) on ${ticket.userid}'s ticket.`);
@@ -2654,7 +2622,7 @@ export const commands: Chat.ChatCommands = {
 		removenotehelp: [
 			`/helpticket removenote [ticket userid], [staff] - Removes a note from the [ticket].`,
 			`If a [staff] userid is given, removes the note from that staff member (defaults to your userid).`,
-			`Requires: % @ &`,
+			`Requires: % @ ~`,
 		],
 
 		ar: 'addresponse',
@@ -2668,15 +2636,15 @@ export const commands: Chat.ChatCommands = {
 			}
 			const typeId = HelpTicket.getTypeId(type);
 			if (!(typeId in textTickets)) {
-				this.errorReply(`'${type}' is not a valid text ticket type.`);
-				return this.errorReply(`Valid types: ${Object.keys(textTickets).join(', ')}.`);
+				throw new Chat.ErrorMessage([`'${type}' is not a valid text ticket type.`,
+					`Valid types: ${Object.keys(textTickets).join(', ')}.`]);
 			}
 			if (!settings.responses[typeId]) {
 				settings.responses[typeId] = {};
 			}
 			if (settings.responses[typeId][name] && !this.cmd.includes('f')) {
-				this.errorReply(`That button already exists for that ticket type.`);
-				return this.errorReply(`Use /ht forceaddresponse to override it if you're sure.`);
+				throw new Chat.ErrorMessage([`That button already exists for that ticket type.`,
+					`Use /ht forceaddresponse to override it if you're sure.`]);
 			}
 			settings.responses[typeId][name] = response;
 			writeSettings();
@@ -2685,7 +2653,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		addresponsehelp: [
 			`/helpticket addresponse [type], [name], [response] - Adds a [response] button to the given ticket [type] with the given [name].`,
-			`Requires: % @ &`,
+			`Requires: % @ ~`,
 		],
 
 		rr: 'removeresponse',
@@ -2695,10 +2663,10 @@ export const commands: Chat.ChatCommands = {
 			if (!toID(type) || !toID(name)) return this.parse(`/help helpticket removeresponse`);
 			const typeId = HelpTicket.getTypeId(type);
 			if (!(type in textTickets)) {
-				return this.errorReply(`'${type}' is not a valid text ticket type.`);
+				throw new Chat.ErrorMessage(`'${type}' is not a valid text ticket type.`);
 			}
 			if (!settings.responses[typeId]?.[name]) {
-				return this.errorReply(`'${name}' is not a response for the ${typeId} ticket type .`);
+				throw new Chat.ErrorMessage(`'${name}' is not a response for the ${typeId} ticket type .`);
 			}
 			delete settings.responses[typeId][name];
 			if (!Object.keys(settings.responses[typeId]).length) {
@@ -2710,7 +2678,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		removeresponsehelp: [
 			`/helpticket removeresponse [type], [name] - Removes the response button with the given [name] from the given ticket [type].`,
-			`Requires: % @ &`,
+			`Requires: % @ ~`,
 		],
 
 		lr: 'listresponses',
@@ -2719,10 +2687,10 @@ export const commands: Chat.ChatCommands = {
 			let buf = `<strong>Help ticket response buttons `;
 			target = toID(target);
 			if (target && !(target in textTickets)) {
-				return this.errorReply(`Invalid ticket type: ${target}.`);
+				throw new Chat.ErrorMessage(`Invalid ticket type: ${target}.`);
 			}
 			buf += `${target ? `for the type ${target}:` : ""}</strong><hr />`;
-			const table = target ? {[target]: settings.responses[target]} : settings.responses;
+			const table = target ? { [target]: settings.responses[target] } : settings.responses;
 			if (!Object.keys(table).length) {
 				buf += `<p class="message-error">None</p>`;
 				return this.sendReplyBox(buf);
@@ -2736,7 +2704,7 @@ export const commands: Chat.ChatCommands = {
 		},
 		listresponseshelp: [
 			`/helpticket listresponses [optional type] - List current response buttons for text tickets. `,
-			`If a [type] is given, lists responses only for that type. Requires: % @ &`,
+			`If a [type] is given, lists responses only for that type. Requires: % @ ~`,
 		],
 
 		close(target, room, user) {
@@ -2751,7 +2719,7 @@ export const commands: Chat.ChatCommands = {
 			let result = rest !== 'false';
 			const ticket = tickets[toID(targetUsername)];
 			if (!ticket?.open || (ticket.userid !== user.id && !user.can('lock'))) {
-				return this.errorReply(this.tr`${targetUsername} does not have an open ticket.`);
+				throw new Chat.ErrorMessage(this.tr`${targetUsername} does not have an open ticket.`);
 			}
 			if (typeof ticket.text !== 'undefined') {
 				return this.parse(`/helpticket resolve ${target}`);
@@ -2771,21 +2739,21 @@ export const commands: Chat.ChatCommands = {
 			ticket.claimed = user.name;
 			this.sendReply(`You closed ${ticket.creator}'s ticket.`);
 		},
-		closehelp: [`/helpticket close [user] - Closes an open ticket. Requires: % @ &`],
+		closehelp: [`/helpticket close [user] - Closes an open ticket. Requires: % @ ~`],
 
 		tb: 'ban',
 		ticketban: 'ban',
 		async ban(target, room, user) {
 			if (!target) return this.parse('/help helpticket ban');
-			const {targetUser, targetUsername, rest: reason} = this.splitUser(target, {exactName: true});
+			const { targetUser, targetUsername, rest: reason } = this.splitUser(target, { exactName: true });
 			this.checkCan('lock', targetUser);
 
 			const punishment = Punishments.roomUserids.nestedGet('staff', toID(targetUsername));
 			if (!targetUser && !Punishments.search(toID(targetUsername)).length) {
-				return this.errorReply(this.tr`User '${targetUsername}' not found.`);
+				throw new Chat.ErrorMessage(this.tr`User '${targetUsername}' not found.`);
 			}
 			if (reason.length > 300) {
-				return this.errorReply(this.tr`The reason is too long. It cannot exceed 300 characters.`);
+				throw new Chat.ErrorMessage(this.tr`The reason is too long. It cannot exceed 300 characters.`);
 			}
 
 			let username;
@@ -2870,7 +2838,7 @@ export const commands: Chat.ChatCommands = {
 			notifyStaff();
 			return true;
 		},
-		banhelp: [`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ &`],
+		banhelp: [`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ ~`],
 
 		unticketban: 'unban',
 		unban(target, room, user) {
@@ -2881,7 +2849,7 @@ export const commands: Chat.ChatCommands = {
 			const targetID: ID = Users.get(target)?.id || target as ID;
 			const banned = Punishments.isTicketBanned(targetID);
 			if (!banned) {
-				return this.errorReply(this.tr`${target} is not ticket banned.`);
+				throw new Chat.ErrorMessage(this.tr`${target} is not ticket banned.`);
 			}
 
 			const affected = HelpTicket.unban(targetID);
@@ -2889,36 +2857,36 @@ export const commands: Chat.ChatCommands = {
 			this.globalModlog("UNTICKETBAN", toID(target));
 			Users.get(target)?.popup(`${user.name} has ticket unbanned you.`);
 		},
-		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ &`],
+		unbanhelp: [`/helpticket unban [user] - Ticket unbans a user. Requires: % @ ~`],
 
 		ignore(target, room, user) {
 			this.checkCan('lock');
 			if (user.settings.ignoreTickets) {
-				return this.errorReply(this.tr`You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.`);
+				throw new Chat.ErrorMessage(this.tr`You are already ignoring help ticket notifications. Use /helpticket unignore to receive notifications again.`);
 			}
 			user.settings.ignoreTickets = true;
 			user.update();
 			this.sendReply(this.tr`You are now ignoring help ticket notifications.`);
 		},
-		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ &`],
+		ignorehelp: [`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ ~`],
 
 		unignore(target, room, user) {
 			this.checkCan('lock');
 			if (!user.settings.ignoreTickets) {
-				return this.errorReply(this.tr`You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.`);
+				throw new Chat.ErrorMessage(this.tr`You are not ignoring help ticket notifications. Use /helpticket ignore to stop receiving notifications.`);
 			}
 			user.settings.ignoreTickets = false;
 			user.update();
 			this.sendReply(this.tr`You will now receive help ticket notifications.`);
 		},
-		unignorehelp: [`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ &`],
+		unignorehelp: [`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ ~`],
 
 		delete(target, room, user) {
 			// This is a utility only to be used if something goes wrong
 			this.checkCan('makeroom');
 			if (!target) return this.parse(`/help helpticket delete`);
 			const ticket = tickets[toID(target)];
-			if (!ticket) return this.errorReply(this.tr`${target} does not have a ticket.`);
+			if (!ticket) throw new Chat.ErrorMessage(this.tr`${target} does not have a ticket.`);
 			const targetRoom = Rooms.get(`help-${ticket.userid}`);
 			if (targetRoom) {
 				targetRoom.getGame(HelpTicket)!.deleteTicket(user);
@@ -2929,19 +2897,19 @@ export const commands: Chat.ChatCommands = {
 			}
 			this.sendReply(this.tr`You deleted ${target}'s ticket.`);
 		},
-		deletehelp: [`/helpticket delete [user] - Deletes a user's ticket. Requires: &`],
+		deletehelp: [`/helpticket delete [user] - Deletes a user's ticket. Requires: ~`],
 
 		logs(target, room, user) {
 			this.checkCan('lock');
 			const [targetString, dateString] = Utils.splitFirst(target, ',').map(i => i.trim());
 			const id = toID(targetString);
-			if (!id) return this.errorReply(`Specify a userid.`);
+			if (!id) throw new Chat.ErrorMessage(`Specify a userid.`);
 			return this.parse(`/j view-help-logs-${id}${dateString ? `--${dateString}` : ''}`);
 		},
 		logshelp: [
 			`/helpticket logs [userid][, month] - View logs of the [userid]'s text tickets. `,
 			`If a [month] is given, searches only that month.`,
-			`Requires: % @ &`,
+			`Requires: % @ ~`,
 		],
 
 		async private(target, room, user) {
@@ -2951,22 +2919,22 @@ export const commands: Chat.ChatCommands = {
 			const userid = toID(username);
 			if (!userid) return this.parse(`/help helpticket`);
 			if (!/[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(date)) {
-				return this.errorReply(`Invalid date (must be YYYY-MM-DD format).`);
+				throw new Chat.ErrorMessage(`Invalid date (must be YYYY-MM-DD format).`);
 			}
-			const logPath = FS(`logs/chat/help-${userid}/${date.slice(0, -3)}/${date}.txt`);
+			const logPath = Monitor.logPath(`chat/help-${userid}/${date.slice(0, -3)}/${date}.txt`);
 			if (!(await logPath.exists())) {
-				return this.errorReply(`There are no logs for tickets from '${userid}' on the date '${date}'.`);
+				throw new Chat.ErrorMessage(`There are no logs for tickets from '${userid}' on the date '${date}'.`);
 			}
-			if (!(await FS(`logs/private/${userid}`).exists())) {
-				await FS(`logs/private/${userid}`).mkdirp();
+			if (!(await Monitor.logPath(`private/${userid}`).exists())) {
+				await Monitor.logPath(`private/${userid}`).mkdirp();
 			}
-			await logPath.copyFile(`logs/private/${userid}/${date}.txt`);
+			await logPath.copyFile(Monitor.logPath(`private/${userid}/${date}.txt`).path);
 			await logPath.write(''); // empty out the logfile
 			this.globalModlog(`HELPTICKET PRIVATELOGS`, null, `${userid} (${date})`);
 			this.privateGlobalModAction(`${user.name} set the ticket logs for '${userid}' on '${date}' to be private.`);
 		},
 		privatehelp: [
-			`/helpticket private [user], [date] - Makes the ticket logs for a user on a date private to upperstaff. Requires: &`,
+			`/helpticket private [user], [date] - Makes the ticket logs for a user on a date private to upperstaff. Requires: ~`,
 		],
 		async public(target, room, user) {
 			this.checkCan('bypassall');
@@ -2975,23 +2943,23 @@ export const commands: Chat.ChatCommands = {
 			const userid = toID(username);
 			if (!userid) return this.parse(`/help helpticket`);
 			if (!/[0-9]{4}-[0-9]{2}-[0-9]{2}/.test(date)) {
-				return this.errorReply(`Invalid date (must be YYYY-MM-DD format).`);
+				throw new Chat.ErrorMessage(`Invalid date (must be YYYY-MM-DD format).`);
 			}
-			const logPath = FS(`logs/private/${userid}/${date}.txt`);
+			const logPath = Monitor.logPath(`private/${userid}/${date}.txt`);
 			if (!(await logPath.exists())) {
-				return this.errorReply(`There are no logs for tickets from '${userid}' on the date '${date}'.`);
+				throw new Chat.ErrorMessage(`There are no logs for tickets from '${userid}' on the date '${date}'.`);
 			}
-			const monthPath = FS(`logs/chat/help-${userid}/${date.slice(0, -3)}`);
+			const monthPath = Monitor.logPath(`chat/help-${userid}/${date.slice(0, -3)}`);
 			if (!(await monthPath.exists())) {
 				await monthPath.mkdirp();
 			}
-			await logPath.copyFile(`logs/chat/help-${userid}/${date.slice(0, -3)}/${date}.txt`);
+			await logPath.copyFile(Monitor.logPath(`chat/help-${userid}/${date.slice(0, -3)}/${date}.txt`).path);
 			await logPath.unlinkIfExists();
 			this.globalModlog(`HELPTICKET PUBLICLOGS`, null, `${userid} (${date})`);
 			this.privateGlobalModAction(`${user.name} set the ticket logs for '${userid}' on '${date}' to be public.`);
 		},
 		publichelp: [
-			`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: &`,
+			`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: ~`,
 		],
 	},
 
@@ -3003,18 +2971,17 @@ export const commands: Chat.ChatCommands = {
 
 	helptickethelp: [
 		`/helpticket create - Creates a new ticket, requesting help from global staff.`,
-		`/helpticket list - Lists all tickets. Requires: % @ &`,
-		`/helpticket close [user] - Closes an open ticket. Requires: % @ &`,
-		`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ &`,
-		`/helpticket unban [user] - Ticket unbans a user. Requires: % @ &`,
-		`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ &`,
-		`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ &`,
-		`/helpticket delete [user] - Deletes a user's ticket. Requires: &`,
-		`/helpticket logs [userid][, month] - View logs of the [userid]'s text tickets. Requires: % @ &`,
-		`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text. `,
-		`Requires: % @ &`,
-		`/helpticket private [user], [date] - Makes the ticket logs for a user on a date private to upperstaff. Requires: &`,
-		`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: &`,
+		`/helpticket list - Lists all tickets. Requires: % @ ~`,
+		`/helpticket close [user] - Closes an open ticket. Requires: % @ ~`,
+		`/helpticket ban [user], (reason) - Bans a user from creating tickets for 2 days. Requires: % @ ~`,
+		`/helpticket unban [user] - Ticket unbans a user. Requires: % @ ~`,
+		`/helpticket ignore - Ignore notifications for unclaimed help tickets. Requires: % @ ~`,
+		`/helpticket unignore - Stop ignoring notifications for help tickets. Requires: % @ ~`,
+		`/helpticket delete [user] - Deletes a user's ticket. Requires: ~`,
+		`/helpticket logs [userid][, month] - View logs of the [userid]'s text tickets. Requires: % @ ~`,
+		`/helpticket note [ticket userid], [note] - Adds a note to the [ticket], to be displayed in the hover text. Requires: % @ ~`,
+		`/helpticket private [user], [date] - Makes the ticket logs for a user on a date private to upperstaff. Requires: ~`,
+		`/helpticket public [user], [date] - Makes the ticket logs for the [user] on the [date] public to staff. Requires: ~`,
 	],
 };
 
@@ -3035,7 +3002,7 @@ export const punishmentfilter: Chat.PunishmentFilter = (user, punishment) => {
 	}
 };
 
-export const loginfilter: Chat.LoginFilter = (user) => {
+export const loginfilter: Chat.LoginFilter = user => {
 	const ticket = tickets[user.id];
 	if (ticket?.resolved) {
 		HelpTicket.notifyResolved(user, ticket);

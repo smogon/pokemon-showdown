@@ -1,4 +1,4 @@
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	unaware: {
 		inherit: true,
 		onAnyModifyBoost(boosts, pokemon) {

@@ -500,7 +500,7 @@ exports.lastfmkey = '';
 exports.chatlogreader = 'fs';
 /**
  * permissions and groups:
- *   Each entry in `grouplist` is a seperate group. Some of the members are "special"
+ *   Each entry in `grouplist` is a separate group. Some of the members are "special"
  *     while the rest is just a normal permission.
  *   The order of the groups determines their ranking.
  *   The special members are as follows:
@@ -555,7 +555,7 @@ exports.chatlogreader = 'fs';
  */
 exports.grouplist = [
 	{
-		symbol: '&',
+		symbol: '~',
 		id: "admin",
 		name: "Administrator",
 		inherit: '@',
@@ -565,7 +565,7 @@ exports.grouplist = [
 		console: true,
 		bypassall: true,
 		lockdown: true,
-		promote: '&u',
+		promote: '~u',
 		roomowner: true,
 		roombot: true,
 		roommod: true,
@@ -651,7 +651,7 @@ exports.grouplist = [
 		timer: true,
 		modlog: true,
 		alts: '%u',
-		bypassblocks: 'u%@&~',
+		bypassblocks: 'u%@~',
 		receiveauthmessages: true,
 		gamemoderation: true,
 		jeopardy: true,
@@ -659,13 +659,6 @@ exports.grouplist = [
 		minigame: true,
 		modchat: true,
 		hiderank: true,
-	},
-	{
-		symbol: '\u00a7',
-		id: "sectionleader",
-		name: "Section Leader",
-		inherit: '+',
-		jurisdiction: 'u',
 	},
 	{
 		// Bots are ranked below Driver/Mod so that Global Bots can be kept out

@@ -5,47 +5,47 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Camouflage', function () {
-	afterEach(function () {
+describe('Camouflage', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should change the user to Normal-type (except in Generation V, to Ground-type)', function () {
+	it('should change the user to Normal-type (except in Generation V, to Ground-type)', () => {
 		battle = common.gen(7).createBattle([[
-			{species: 'wynaut', moves: ['camouflage']},
+			{ species: 'wynaut', moves: ['camouflage'] },
 		], [
-			{species: 'ralts', moves: ['sleeptalk']},
+			{ species: 'ralts', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].types[0], 'Normal');
 
 		battle = common.gen(4).createBattle([[
-			{species: 'wynaut', moves: ['camouflage']},
+			{ species: 'wynaut', moves: ['camouflage'] },
 		], [
-			{species: 'ralts', moves: ['sleeptalk']},
+			{ species: 'ralts', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].types[0], 'Normal');
 
 		battle = common.gen(5).createBattle([[
-			{species: 'wynaut', moves: ['camouflage']},
+			{ species: 'wynaut', moves: ['camouflage'] },
 		], [
-			{species: 'ralts', moves: ['sleeptalk']},
+			{ species: 'ralts', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
 		assert.equal(battle.p1.active[0].types[0], 'Ground');
 	});
 
-	it('should fail on Multitype in Gen 4 and Arceus itself in Gen 5+', function () {
+	it('should fail on Multitype in Gen 4 and Arceus itself in Gen 5+', () => {
 		// Gen 4
 		battle = common.gen(4).createBattle([[
-			{species: 'arceus', ability: 'flashfire', moves: ['ember', 'conversion', 'camouflage']},
-			{species: 'goldeen', ability: 'multitype', moves: ['camouflage']},
+			{ species: 'arceus', ability: 'flashfire', moves: ['ember', 'conversion', 'camouflage'] },
+			{ species: 'goldeen', ability: 'multitype', moves: ['camouflage'] },
 		], [
-			{species: 'feebas', moves: ['sleeptalk']},
+			{ species: 'feebas', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move conversion', 'auto');
@@ -58,10 +58,10 @@ describe('Camouflage', function () {
 
 		// Gen 5
 		battle = common.gen(5).createBattle([[
-			{species: 'arceus', ability: 'flashfire', moves: ['camouflage']},
-			{species: 'goldeen', ability: 'multitype', moves: ['camouflage']},
+			{ species: 'arceus', ability: 'flashfire', moves: ['camouflage'] },
+			{ species: 'goldeen', ability: 'multitype', moves: ['camouflage'] },
 		], [
-			{species: 'ralts', moves: ['sleeptalk']},
+			{ species: 'ralts', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -72,12 +72,12 @@ describe('Camouflage', function () {
 		assert.equal(battle.p1.active[0].types[0], 'Ground');
 	});
 
-	it('should fail in Gen 3-4 if the user already has what Camouflage would change to as either of its types', function () {
+	it('should fail in Gen 3-4 if the user already has what Camouflage would change to as either of its types', () => {
 		// Gen 4
 		battle = common.gen(4).createBattle([[
-			{species: 'pidgey', moves: ['camouflage']},
+			{ species: 'pidgey', moves: ['camouflage'] },
 		], [
-			{species: 'ralts', moves: ['sleeptalk']},
+			{ species: 'ralts', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();
@@ -85,9 +85,9 @@ describe('Camouflage', function () {
 
 		// Gen 5
 		battle = common.gen(5).createBattle([[
-			{species: 'gligar', moves: ['camouflage']},
+			{ species: 'gligar', moves: ['camouflage'] },
 		], [
-			{species: 'ralts', moves: ['sleeptalk']},
+			{ species: 'ralts', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices();

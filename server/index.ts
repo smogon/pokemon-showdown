@@ -43,18 +43,18 @@
  *
  * @license MIT
  */
-
+require('source-map-support').install();
 // NOTE: This file intentionally doesn't use too many modern JavaScript
 // features, so that it doesn't crash old versions of Node.js, so we
-// can successfully print the "We require Node.js 16+" message.
+// can successfully print the "We require Node.js 18+" message.
 
 // Check for version
 const nodeVersion = parseInt(process.versions.node);
-if (isNaN(nodeVersion) || nodeVersion < 16) {
-	throw new Error("We require Node.js version 16 or later; you're using " + process.version);
+if (isNaN(nodeVersion) || nodeVersion < 18) {
+	throw new Error("We require Node.js version 18 or later; you're using " + process.version);
 }
 
-import {FS, Repl} from '../lib';
+import { FS, Repl } from '../lib';
 
 /*********************************************************
  * Set up most of our globals
@@ -65,12 +65,13 @@ function setupGlobals() {
 	const ConfigLoader = require('./config-loader');
 	global.Config = ConfigLoader.Config;
 
-	const {Monitor} = require('./monitor');
+	const { Monitor } = require('./monitor');
 	global.Monitor = Monitor;
-	global.__version = {head: ''};
+	global.__version = { head: '' };
 	void Monitor.version().then((hash: any) => {
 		global.__version.tree = hash;
 	});
+	Repl.cleanup();
 
 	if (Config.watchconfig) {
 		FS('config/config.js').onModify(() => {
@@ -86,29 +87,29 @@ function setupGlobals() {
 		});
 	}
 
-	const {Dex} = require('../sim/dex');
+	const { Dex } = require('../sim/dex');
 	global.Dex = Dex;
 	global.toID = Dex.toID;
 
-	const {Teams} = require('../sim/teams');
+	const { Teams } = require('../sim/teams');
 	global.Teams = Teams;
 
-	const {LoginServer} = require('./loginserver');
+	const { LoginServer } = require('./loginserver');
 	global.LoginServer = LoginServer;
 
-	const {Ladders} = require('./ladders');
+	const { Ladders } = require('./ladders');
 	global.Ladders = Ladders;
 
-	const {Chat} = require('./chat');
+	const { Chat } = require('./chat');
 	global.Chat = Chat;
 
-	const {Users} = require('./users');
+	const { Users } = require('./users');
 	global.Users = Users;
 
-	const {Punishments} = require('./punishments');
+	const { Punishments } = require('./punishments');
 	global.Punishments = Punishments;
 
-	const {Rooms} = require('./rooms');
+	const { Rooms } = require('./rooms');
 	global.Rooms = Rooms;
 	// We initialize the global room here because roomlogs.ts needs the Rooms global
 	Rooms.global = new Rooms.GlobalRoomState();
@@ -117,10 +118,10 @@ function setupGlobals() {
 	global.Verifier = Verifier;
 	Verifier.PM.spawn();
 
-	const {Tournaments} = require('./tournaments');
+	const { Tournaments } = require('./tournaments');
 	global.Tournaments = Tournaments;
 
-	const {IPTools} = require('./ip-tools');
+	const { IPTools } = require('./ip-tools');
 	global.IPTools = IPTools;
 	void IPTools.loadHostsAndRanges();
 }
@@ -141,7 +142,7 @@ if (Config.crashguard) {
  * Start networking processes to be connected to
  *********************************************************/
 
-import {Sockets} from './sockets';
+import { Sockets } from './sockets';
 global.Sockets = Sockets;
 
 export function listen(port: number, bindAddress: string, workerCount: number) {

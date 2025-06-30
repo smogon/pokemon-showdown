@@ -13,7 +13,7 @@
  * @license MIT
  */
 
-import type {Battle} from './battle';
+import type { Battle } from './battle';
 
 /** A move action */
 export interface MoveAction {
@@ -92,7 +92,7 @@ export interface FieldAction {
 /** A generic action done by a single pokemon */
 export interface PokemonAction {
 	/** action type */
-	choice: 'megaEvo' | 'shift' | 'runPrimal' | 'runSwitch' | 'event' | 'runUnnerve' | 'runDynamax' | 'terastallize';
+	choice: 'megaEvo' | 'megaEvoX' | 'megaEvoY' | 'shift' | 'runSwitch' | 'event' | 'runDynamax' | 'terastallize';
 	/** priority of the action (lower first) */
 	priority: number;
 	/** speed of pokemon doing action (higher first if priority tie) */
@@ -146,7 +146,6 @@ export class BattleQueue {
 	unshift(action: Action) {
 		return this.list.unshift(action);
 	}
-	// eslint-disable-next-line no-restricted-globals
 	[Symbol.iterator]() { return this.list[Symbol.iterator](); }
 	entries() {
 		return this.list.entries();
@@ -166,7 +165,7 @@ export class BattleQueue {
 		if (!action.side && action.pokemon) action.side = action.pokemon.side;
 		if (!action.move && action.moveid) action.move = this.battle.dex.getActiveMove(action.moveid);
 		if (!action.order) {
-			const orders: {[choice: string]: number} = {
+			const orders: { [choice: string]: number } = {
 				team: 1,
 				start: 2,
 				instaswitch: 3,
@@ -174,11 +173,11 @@ export class BattleQueue {
 				beforeTurnMove: 5,
 				revivalblessing: 6,
 
-				runUnnerve: 100,
 				runSwitch: 101,
-				runPrimal: 102,
 				switch: 103,
 				megaEvo: 104,
+				megaEvoX: 104,
+				megaEvoY: 104,
 				runDynamax: 105,
 				terastallize: 106,
 				priorityChargeMove: 107,
@@ -207,6 +206,18 @@ export class BattleQueue {
 				if (action.mega && !action.pokemon.isSkyDropped()) {
 					actions.unshift(...this.resolveAction({
 						choice: 'megaEvo',
+						pokemon: action.pokemon,
+					}));
+				}
+				if (action.megax && !action.pokemon.isSkyDropped()) {
+					actions.unshift(...this.resolveAction({
+						choice: 'megaEvoX',
+						pokemon: action.pokemon,
+					}));
+				}
+				if (action.megay && !action.pokemon.isSkyDropped()) {
+					actions.unshift(...this.resolveAction({
+						choice: 'megaEvoY',
 						pokemon: action.pokemon,
 					}));
 				}

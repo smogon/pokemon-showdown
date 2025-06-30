@@ -1,14 +1,14 @@
 'use strict';
 
-const {Hangman} = require('../../../dist/server/chat-plugins/hangman');
-const {makeUser, destroyUser} = require('../../users-utils');
+const { Hangman } = require('../../../dist/server/chat-plugins/hangman');
+const { makeUser, destroyUser } = require('../../users-utils');
 const assert = require('../../assert');
 
 function createHangman(creator, word, hint) {
 	return new Hangman(Rooms.lobby, creator, word, hint);
 }
 
-describe("Hangman", function () {
+describe("Hangman", () => {
 	before(function () {
 		this.creator = makeUser('dawoblefet');
 		this.guesser = makeUser('mathy');
@@ -22,7 +22,7 @@ describe("Hangman", function () {
 	it("should reject impossible guesses", function () {
 		const game = createHangman(this.creator, "Wynaut", "Why write unit tests?");
 		const errorRegex = /Your guess "[A-Za-z ]+" is invalid./;
-		const testInvalidGuess = (guess) => {
+		const testInvalidGuess = guess => {
 			assert.throws(() => {
 				game.choose(this.guesser, guess);
 			}, errorRegex, `Guess should have been invalid: "${guess}"`);

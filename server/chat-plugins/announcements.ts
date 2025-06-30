@@ -43,7 +43,7 @@ export class Announcement extends Rooms.MinorActivity {
 		}
 	}
 
-	onConnect(user: User, connection: Connection | null = null) {
+	override onConnect(user: User, connection: Connection | null = null) {
 		this.displayTo(user, connection);
 	}
 
@@ -76,10 +76,10 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			if (!target) return this.parse('/help announcement new');
 			target = target.trim();
-			if (room.battle) return this.errorReply(this.tr`Battles do not support announcements.`);
+			if (room.battle) throw new Chat.ErrorMessage(this.tr`Battles do not support announcements.`);
 
 			const text = this.filter(target);
-			if (target !== text) return this.errorReply(this.tr`You are not allowed to use filtered words in announcements.`);
+			if (target !== text) throw new Chat.ErrorMessage(this.tr`You are not allowed to use filtered words in announcements.`);
 
 			const supportHTML = cmd === 'htmlcreate';
 
@@ -87,18 +87,45 @@ export const commands: Chat.ChatCommands = {
 			if (supportHTML) this.checkCan('declare', null, room);
 			this.checkChat();
 			if (room.minorActivity) {
-				return this.errorReply(this.tr`There is already a poll or announcement in progress in this room.`);
+				throw new Chat.ErrorMessage(this.tr`There is already a poll or announcement in progress in this room.`);
 			}
 
 			const source = supportHTML ? this.checkHTML(Chat.collapseLineBreaksHTML(target)) : Chat.formatText(target, true);
 
-			room.setMinorActivity(new Announcement(room, {source}));
+			room.setMinorActivity(new Announcement(room, { source }));
 
 			this.roomlog(`${user.name} used ${message}`);
 			this.modlog('ANNOUNCEMENT');
 			return this.privateModAction(room.tr`An announcement was started by ${user.name}.`);
 		},
-		newhelp: [`/announcement create [announcement] - Creates an announcement. Requires: % @ # &`],
+		newhelp: [`/announcement create [announcement] - Creates an announcement. Requires: % @ # ~`],
+
+		htmledit: 'edit',
+		edit(target, room, user, connection, cmd, message) {
+			room = this.requireRoom();
+			const announcement = this.requireMinorActivity(Announcement);
+
+			if (!target) return this.parse('/help announcement edit');
+			target = target.trim();
+			const text = this.filter(target);
+			if (target !== text) throw new Chat.ErrorMessage(this.tr`You are not allowed to use filtered words in announcements.`);
+
+			const supportHTML = cmd === 'htmledit';
+
+			this.checkCan('minigame', null, room);
+			if (supportHTML) this.checkCan('declare', null, room);
+			this.checkChat();
+
+			const source = supportHTML ? this.checkHTML(Chat.collapseLineBreaksHTML(target)) : Chat.formatText(target, true);
+			announcement.source = source;
+			announcement.save();
+
+			this.roomlog(`${user.name} used ${message}`);
+			this.modlog('ANNOUNCEMENT EDIT');
+			this.privateModAction(room.tr`The announcement was edited by ${user.name}.`);
+			this.parse('/announcement display');
+		},
+		edithelp: [`/announcement edit [announcement] - Edits the announcement. Requires: % @ # ~`],
 
 		timer(target, room, user) {
 			room = this.requireRoom();
@@ -107,14 +134,14 @@ export const commands: Chat.ChatCommands = {
 			if (target) {
 				this.checkCan('minigame', null, room);
 				if (target === 'clear') {
-					if (!announcement.endTimer()) return this.errorReply(this.tr`There is no timer to clear.`);
+					if (!announcement.endTimer()) throw new Chat.ErrorMessage(this.tr`There is no timer to clear.`);
 					return this.add(this.tr`The announcement timer was turned off.`);
 				}
 				const timeoutMins = parseFloat(target);
 				if (isNaN(timeoutMins) || timeoutMins <= 0 || timeoutMins > 7 * 24 * 60) {
-					return this.errorReply(this.tr`Time should be a number of minutes less than one week.`);
+					throw new Chat.ErrorMessage(this.tr`Time should be a number of minutes less than one week.`);
 				}
-				announcement.setTimer({timeoutMins});
+				announcement.setTimer({ timeoutMins });
 				room.add(`The announcement timer was turned on: the announcement will end in ${timeoutMins} minute${Chat.plural(timeoutMins)}.`);
 				this.modlog('ANNOUNCEMENT TIMER', null, `${timeoutMins} minutes`);
 				return this.privateModAction(`The announcement timer was set to ${timeoutMins} minute${Chat.plural(timeoutMins)} by ${user.name}.`);
@@ -128,8 +155,8 @@ export const commands: Chat.ChatCommands = {
 			}
 		},
 		timerhelp: [
-			`/announcement timer [minutes] - Sets the announcement to automatically end after [minutes] minutes. Requires: % @ # &`,
-			`/announcement timer clear - Clears the announcement's timer. Requires: % @ # &`,
+			`/announcement timer [minutes] - Sets the announcement to automatically end after [minutes] minutes. Requires: % @ # ~`,
+			`/announcement timer clear - Clears the announcement's timer. Requires: % @ # ~`,
 		],
 
 		close: 'end',
@@ -143,7 +170,7 @@ export const commands: Chat.ChatCommands = {
 			this.modlog('ANNOUNCEMENT END');
 			this.privateModAction(room.tr`The announcement was ended by ${user.name}.`);
 		},
-		endhelp: [`/announcement end - Ends a announcement and displays the results. Requires: % @ # &`],
+		endhelp: [`/announcement end - Ends a announcement and displays the results. Requires: % @ # ~`],
 
 		show: '',
 		display: '',
@@ -164,16 +191,18 @@ export const commands: Chat.ChatCommands = {
 	announcementhelp: [
 		`/announcement allows rooms to run their own announcements. These announcements are limited to one announcement at a time per room.`,
 		`Accepts the following commands:`,
-		`/announcement create [announcement] - Creates a announcement. Requires: % @ # &`,
-		`/announcement htmlcreate [announcement] - Creates a announcement, with HTML allowed. Requires: # &`,
-		`/announcement timer [minutes] - Sets the announcement to automatically end after [minutes]. Requires: % @ # &`,
+		`/announcement create [announcement] - Creates a announcement. Requires: % @ # ~`,
+		`/announcement htmlcreate [announcement] - Creates a announcement, with HTML allowed. Requires: # ~`,
+		`/announcement edit [announcement] - Edits the announcement. Requires: % @ # ~`,
+		`/announcement htmledit [announcement] - Edits the announcement, with HTML allowed. Requires: # ~`,
+		`/announcement timer [minutes] - Sets the announcement to automatically end after [minutes]. Requires: % @ # ~`,
 		`/announcement display - Displays the announcement`,
-		`/announcement end - Ends a announcement. Requires: % @ # &`,
+		`/announcement end - Ends a announcement. Requires: % @ # ~`,
 	],
 };
 
 process.nextTick(() => {
-	Chat.multiLinePattern.register('/announcement (new|create|htmlcreate) ');
+	Chat.multiLinePattern.register('/announcement (new|create|htmlcreate|edit|htmledit) ');
 });
 
 // should handle restarts and also hotpatches

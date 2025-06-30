@@ -7,8 +7,8 @@
  * @license MIT
  */
 
-import {Dashycode, Utils} from '../../lib';
-import {ModlogID, ModlogSearch, ModlogEntry} from '../modlog';
+import { Dashycode, Utils } from '../../lib';
+import type { ModlogID, ModlogSearch, ModlogEntry } from '../modlog';
 
 const MAX_QUERY_LENGTH = 2500;
 const DEFAULT_RESULTS_LENGTH = 100;
@@ -17,7 +17,7 @@ const LINES_SEPARATOR = 'lines=';
 const MAX_RESULTS_LENGTH = MORE_BUTTON_INCREMENTS[MORE_BUTTON_INCREMENTS.length - 1];
 const IPS_REGEX = /[([]?([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})[)\]]?/g;
 
-const ALIASES: {[k: string]: string} = {
+const ALIASES: { [k: string]: string } = {
 	'helpticket': 'help-rooms',
 	'groupchat': 'groupchat-rooms',
 	'battle': 'battle-rooms',
@@ -95,7 +95,7 @@ function prettifyResults(
 	const resultString = resultArray.map(result => {
 		const date = new Date(result.time || Date.now());
 		const entryRoom = result.visualRoomID || result.roomID || 'global';
-		let [dateString, timestamp] = Chat.toTimestamp(date, {human: true}).split(' ');
+		let [dateString, timestamp] = Chat.toTimestamp(date, { human: true }).split(' ');
 		let line = `<small>[${timestamp}] (${entryRoom})</small> ${result.action}`;
 		if (result.userid) {
 			line += `: [${result.userid}]`;
@@ -129,7 +129,7 @@ function prettifyResults(
 		);
 		return `${dateString}<small>[${timestamp}] (${thisRoomID})</small>${line}`;
 	}).join(`<br />`);
-	const [dateString, timestamp] = Chat.toTimestamp(new Date(), {human: true}).split(' ');
+	const [dateString, timestamp] = Chat.toTimestamp(new Date(), { human: true }).split(' ');
 	let preamble;
 	const modlogid = roomid + (searchString ? '-' + Dashycode.encode(searchString) : '');
 	if (searchString) {
@@ -179,7 +179,7 @@ async function getModlog(
 	if (search.note?.length) {
 		for (const [i, noteSearch] of search.note.entries()) {
 			if (/^["'].+["']$/.test(noteSearch.search)) {
-				search.note[i] = {...noteSearch, search: noteSearch.search.substring(1, noteSearch.search.length - 1)};
+				search.note[i] = { ...noteSearch, search: noteSearch.search.substring(1, noteSearch.search.length - 1) };
 				search.note[i].isExact = true;
 			}
 		}
@@ -194,7 +194,7 @@ async function getModlog(
 
 		search.user[i] = userSearch;
 	}
-	if (onlyNotes) search.action.push({search: 'NOTE'});
+	if (onlyNotes) search.action.push({ search: 'NOTE' });
 
 	const response = await Rooms.Modlog.search(roomid, search, maxLines, onlyPunishments);
 	if (!response) return connection.popup(`The moderator log is currently disabled.`);
@@ -233,14 +233,19 @@ export const commands: Chat.ChatCommands = {
 		let lines;
 		const possibleParam = cmd.slice(2);
 		const targets = target.split(',').map(f => f.trim()).filter(Boolean);
-		const search: ModlogSearch = {note: [], user: [], ip: [], action: [], actionTaker: []};
+		const search: ModlogSearch = { note: [], user: [], ip: [], action: [], actionTaker: [] };
+		let searchCmd = target.replace(/^\s?([^,=]*)(,\s?|$)/, '').replace(/,?\s*(room|lines)\s*=[^,]*,?/g, '');
 
 		switch (possibleParam) {
 		case 'id':
-			targets.unshift(`user='${targets.shift()}'`);
+			const id = targets.shift();
+			searchCmd = `user='${id}'${searchCmd.length ? `, ${searchCmd}` : ``}`;
+			targets.unshift(`user='${id}'`);
 			break;
 		case 'ip':
-			targets.unshift(`ip=${targets.shift()}`);
+			const ip = targets.shift();
+			searchCmd = `user='${ip}'${searchCmd.length ? `, ${searchCmd}` : ``}`;
+			targets.unshift(`ip=${ip}`);
 			break;
 		}
 
@@ -267,30 +272,30 @@ export const commands: Chat.ChatCommands = {
 			switch (param) {
 			case 'note': case 'text':
 				if (!search.note) search.note = [];
-				search.note.push({search: value, isExclusion});
+				search.note.push({ search: value, isExclusion });
 				break;
 			case 'user': case 'name': case 'username': case 'userid':
-				search.user.push({search: value});
+				search.user.push({ search: value });
 				break;
 			case 'ip': case 'ipaddress': case 'ipaddr':
-				search.ip.push({search: value, isExclusion});
+				search.ip.push({ search: value, isExclusion });
 				break;
 			case 'action': case 'punishment':
-				search.action.push({search: value.toUpperCase(), isExclusion});
+				search.action.push({ search: value.toUpperCase(), isExclusion });
 				break;
 			case 'actiontaker': case 'moderator': case 'staff': case 'mod':
-				search.actionTaker.push({search: toID(value), isExclusion});
+				search.actionTaker.push({ search: toID(value), isExclusion });
 				break;
 			case 'room': case 'roomid':
 				roomid = value.toLowerCase().replace(/[^a-z0-9-]+/g, '') as ModlogID;
 				break;
 			case 'lines': case 'maxlines':
 				lines = parseInt(value);
-				if (isNaN(lines) || lines < 1) return this.errorReply(`Invalid linecount: '${value}'.`);
+				if (isNaN(lines) || lines < 1) throw new Chat.ErrorMessage(`Invalid linecount: '${value}'.`);
 				break;
 			default:
-				this.errorReply(`Invalid modlog parameter: '${param}'.`);
-				return this.errorReply(`Please specify 'room', 'note', 'user', 'ip', 'action', 'staff', or 'lines'.`);
+				throw new Chat.ErrorMessage([`Invalid modlog parameter: '${param}'.`,
+					`Please specify 'room', 'note', 'user', 'ip', 'action', 'staff', or 'lines'.`]);
 			}
 		}
 
@@ -303,7 +308,7 @@ export const commands: Chat.ChatCommands = {
 				// default to global modlog for staff convenience
 				roomid = 'global';
 			} else {
-				return this.errorReply(`Only global staff may view battle and groupchat modlogs.`);
+				throw new Chat.ErrorMessage(`Only global staff may view battle and groupchat modlogs.`);
 			}
 		}
 
@@ -317,7 +322,7 @@ export const commands: Chat.ChatCommands = {
 			connection,
 			roomid,
 			search,
-			target.replace(/^\s?([^,=]*),\s?/, '').replace(/,?\s*(room|lines)\s*=[^,]*,?/g, ''),
+			searchCmd,
 			lines,
 			onlyPunishments,
 			cmd === 'timedmodlog',
@@ -356,7 +361,7 @@ export const commands: Chat.ChatCommands = {
 		if (!target) return this.parse(`/help modlogstats`);
 		return this.parse(`/join view-modlogstats-${target}`);
 	},
-	modlogstatshelp: [`/modlogstats [userid] - Fetch all information on that [userid] from the modlog (IPs, alts, etc). Requires: @ &`],
+	modlogstatshelp: [`/modlogstats [userid] - Fetch all information on that [userid] from the modlog (IPs, alts, etc). Requires: % @ ~`],
 };
 
 export const pages: Chat.PageTable = {
@@ -364,7 +369,7 @@ export const pages: Chat.PageTable = {
 		this.checkCan('lock');
 		const target = toID(query.shift());
 		if (!target || target.length > 18) {
-			return this.errorReply(`Invalid userid - must be between 1 and 18 characters long.`);
+			throw new Chat.ErrorMessage(`Invalid userid - must be between 1 and 18 characters long.`);
 		}
 		this.title = `[Modlog Stats] ${target}`;
 		this.setHTML(`<div class="pad"><strong>Running modlog search...</strong></div>`);
@@ -375,7 +380,7 @@ export const pages: Chat.PageTable = {
 			}], note: [], ip: [], action: [], actionTaker: [],
 		}, 1000);
 		if (!entries?.results.length) {
-			return this.errorReply(`No data found.`);
+			throw new Chat.ErrorMessage(`No data found.`);
 		}
 		const punishmentTable = new Utils.Multiset<string>();
 		const punishmentsByIp = new Map<string, Utils.Multiset<string>>();
@@ -389,7 +394,7 @@ export const pages: Chat.PageTable = {
 				if (entry.ip) {
 					let ipTable = punishmentsByIp.get(entry.ip);
 					if (!ipTable) {
-						ipTable = new Utils.Multiset();
+						ipTable = new Utils.Multiset<string>();
 						punishmentsByIp.set(entry.ip, ipTable);
 					}
 					ipTable.add(entry.action);
@@ -448,7 +453,7 @@ export const pages: Chat.PageTable = {
 			for (const [ip, table] of punishmentsByIp) {
 				buf += `<tr><td><a href="https://whatismyipaddress.com/ip/${ip}">${ip}</a></td>`;
 				for (const key of keys) {
-					buf += `<td>${table.get(key) || 0}</td>`;
+					buf += `<td>${table.get(key)}</td>`;
 				}
 				buf += `</tr>`;
 			}

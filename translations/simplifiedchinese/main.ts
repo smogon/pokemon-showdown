@@ -1,4 +1,4 @@
-import type {Translations} from '../../server/chat';
+import type { Translations } from '../../server/chat';
 
 export const translations: Translations = {
 	name: "Simplified Chinese",
@@ -16,11 +16,10 @@ export const translations: Translations = {
 
 		"<strong>Global ranks</strong>": "<strong>全服权限</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>全服信任用户</strong> -可以使用!广播指令，比如!groups，并可以在限制发言期间发言",
-		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>分部头领</strong> - 负责掌管一个分部的房间",
 		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>全服见习管理</strong> - 同信任用户，并可以锁定用户或查看他们的小号",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>全服管理员</strong> - 同上，并可以将用户从服务器封禁",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>全服机器人</strong> - 跟全服管理员一样，只不过是机器",
-		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>全服总管</strong> - 可以在服务器做任何事，例如修改你现在看到的这条信息",
+		"~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "~ <strong>全服总管</strong> - 可以在服务器做任何事，例如修改你现在看到的这条信息",
 
 		"<strong>Room ranks</strong>": "<strong>房权限</strong>",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "",
@@ -43,7 +42,7 @@ export const translations: Translations = {
 		"MODERATOR COMMANDS": "管理员指令",
 		"ADMIN COMMANDS": "总管指令",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(把/换成!就可以广播指令。广播功能需要：+ % @ # &)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)": "(把/换成!就可以广播指令。广播功能需要：+ % @ # ~)",
 
 		"<strong>Room punishments</strong>:": "<strong>房间处罚</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - 显示规则与警告",
@@ -127,14 +126,14 @@ export const translations: Translations = {
 		"Your username contains a phrase banned by this room.": "用户名包含了禁止词汇",
 		"Your status message contains a phrase banned by this room.": "状态内容包含了禁止词汇",
 
-		"You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}": "",
-		"Get help with this": "",
-		"The user \"${targetUser.name}\" is locked and cannot be PMed.": "",
-		"On this server, you must be of rank ${groupName} or higher to PM users.": "",
-		"This user is blocking private messages right now.": "",
-		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "",
-		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "",
-		"You are blocking private messages right now.": "",
+		"You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}": "你处于${lockType}的状态，这表示你只能私聊发消息给全服管理。${lockExpiration}",
+		"Get help with this": "用这个请求帮助",
+		"The user \"${targetUser.name}\" is locked and cannot be PMed.": "\"${targetUser.name}\"被锁定了，因此不能私聊他。",
+		"On this server, you must be of rank ${groupName} or higher to PM users.": "你必须是${groupName}以上的玩家才能在这个服务器里私信别人。",
+		"This user is blocking private messages right now.": "这个人拒收私信。",
+		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "${Config.groups[targetUser.group].name}太忙了，另找个全服管理来处理吧。",
+		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "如果你需要帮助，试试创建一个<a href=\"view-help-request\" class=\"button\">帮助请求</a>",
+		"You are blocking private messages right now.": "你现在已拒收私信。",
 		"You are blocking challenges right now.": "",
 
 		"Your message contained banned words in this room.": "发言内容包含了房间内禁止词汇",

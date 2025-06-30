@@ -128,14 +128,14 @@ BAD:
 
 ```ts
 // if ten seconds have passed and the user is staff
-if (now > then + 10_000 && '&@%'.includes(user.tempGroup)) {
+if (now > then + 10_000 && '~@%'.includes(user.tempGroup)) {
 ```
 
 GOOD:
 
 ```ts
 const tenSecondsPassed = now > then + 10_000;
-const userIsStaff = '&@%'.includes(user.tempGroup);
+const userIsStaff = '~@%'.includes(user.tempGroup);
 if (tenSecondsPassed && userIsStaff) {
 ```
 
@@ -247,7 +247,7 @@ Our current quote convention is to use:
 - `'` as in `'fireblast'` for any string not meant to be displayed to the user; i.e. IDs
 - `"` as in `"Fire Blast"` for any string meant to be displayed verbatim to the user; i.e. names (i.e. usernames, move names, etc), most English text, and help entries of chat commands
 
-As far as I know, we don't use strings for anything else, but if you need to use strings in a way that doesn't conform to the above three, ask Zarel in the Development chatroom to decide (and default to `` ` `` in lieu of a decision).
+As far as I know, we don't use strings for anything else, but if you need to use strings in a way that doesn't conform to the above three, ask Zarel on Discord to decide (and default to `` ` `` in lieu of a decision).
 
 Unfortunately, since this is not a convention the linter can test for (and also because our older string standards predate PS), a lot of existing code is wrong on this, so you can't look at surrounding code to get an idea of what the convention should be. Refer to the above paragraph as the definitive rule.
 
@@ -279,13 +279,13 @@ If Water Absorb doesn't absorb Thunder Wave, Water Absorb's TryHit handler retur
 
 We prefer using `||` instead of `??` for fallback, for a few reasons:
 
-- `sucrase` (our TypeScript to JavaScript compiler) makes `??` rather more complicated than ideal.
-
 - We rarely treat `0` or `''` differently from `null` (the same reason we use `!foo` instead of `foo == null` for null checks)
 
 - TypeScript does not actually allow us to have "non-empty strings" or "positive integers" as a type, so we have to deal with those cases no matter what.
 
 If, at a future point, TypeScript does allow us to constrain types better, we might consider using `??` for clarity. But for now, I see no reason to use `??` except in very niche situations where the difference matters.
+
+It is, of course, completely fine to use `??` in the cases where we don't want `0` or `''` or `false` to fall back to something else.
 
 
 Modern JavaScript/TypeScript syntax convention
@@ -299,9 +299,9 @@ In general, we prefer modern ways of writing things as long as they're supported
 
 - `.reduce`: we usually prefer `for`...`of` for readability, but you can use it in code that you code-own if you really want to
 
-- Multiline template strings: A frequent source of bugs, so we prefer to explicitly use `\n` and concatenate over multiple lines.
+- Multiline template strings: A frequent source of bugs (and also weird for readability), so we prefer to explicitly use `\n` and concatenate over multiple lines.
 
-- `async`/`await`: We prefer it for readability, but in certain cases we use raw Promises or even callbacks for performance. Don't worry about it too much; we usually won't nitpick code that uses any async implementation (although we might insist on `async`/`await` if the reability difference is huge).
+- `async`/`await`: We prefer it for readability, but in certain cases we use raw Promises or even callbacks for performance. Don't worry about it too much; we usually won't nitpick code that uses any async implementation (although we might insist on `async`/`await` if the readability difference is huge).
 
 - getters/setters/`Proxy`: We are generally very anti-magic. There are certain places in the code we do use magic where it's massively DRYer (or for historical reasons), but we prefer to explicitly mark that setting a variable is actually running a function with many and varied side effects. Please have a better reason than "`.foo` is less visual clutter than `.getFoo()`".
 
@@ -317,7 +317,9 @@ We oppose the usual JavaScript culture of casually adding dependencies from NPM.
 
 There are, of course, a lot of libraries like SockJS doing valuable things that we shouldn't reimplement ourselves. However, most libraries on NPM have very different priorities than we do (not caring about performance or bugs in subdependencies).
 
-But in practice, for any dependency we could reimplement in around 30 lines of code, we'll write it ourselves and maintain it in `lib/`. Such maintenance is usually worth avoiding a `left-pad` situation, and also is generally better for performance, and also helps us easily craft the API to be most convenient for our own use-case.
+A common reason given for preferring dependencies is because someone else is more likely to have encountered and fixed bugs. But in practice many dependencies are worse-maintained than Showdown. And many bugs come from misusing a dependency.
+
+In practice, for any dependency we could reimplement in around 30 lines of code, we'll write it ourselves and maintain it in `lib/`. Such maintenance is usually worth avoiding a `left-pad` situation, and also is generally better for performance, and also helps us easily craft the API to be most convenient for our own use-case.
 
 To be clear, we're not _opposed_ to new dependencies and will accept them where they make sense. But we try to avoid them more most than other Node projects do.
 
@@ -325,18 +327,4 @@ To be clear, we're not _opposed_ to new dependencies and will accept them where 
 `package-lock.json`
 ------------------------------------------------------------------------
 
-We don't use `package-lock`. This is against NPM's (and most others') official advice that we should.
-
-: First, what's `package-lock` and why is it recommended? `package-lock.json` is basically a snapshot of the `node_modules/` directory. You can think of it like `node_modules.zip`, except more human-readable, and requires an internet connection to unzip.
-
-: The main advantage of adding it to Git is that it lets you know exactly the state of `node_modules/` at the time the programmer commits it. So if a dependency breaks, it's easier to trace exactly when it broke.
-
-: It also makes sure `node_modules/` is exactly the same between different development environments, so differences don't cause bugs to appear for some developers but not others.
-
-This comes with a number of disadvantages. The biggest one is that it causes package-lock changes to appear in random commits, which can outright lead to merge conflicts. It also makes diffs in general significantly less readable. It also [introduces security vulnerabilities](https://snyk.io/blog/why-npm-lockfiles-can-be-a-security-blindspot-for-injecting-malicious-modules/).
-
-The biggest supposed advantage (ensure everyone's on the same version) isn't even an advantage! We'd specify the versions as `4.15.4` instead of `^4.15.4` if we wanted everyone on the same version, rather than the latest version. Writing `^4.15.4` is an explicit choice to opt into automatic updating.
-
-We can still have everyone on the same version if we all re-run `npm install`, which we would STILL have to do if we were using a package-lock file. The package-lock file does not improve this situation.
-
-(The last time we polled our developers, most supported not having a `package-lock` file.)
+In the past, we didn't use `package-lock`. The reasons are historical. We do now. If you see a project without package-lock, feel free to add it.

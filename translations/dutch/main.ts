@@ -1,4 +1,4 @@
-import type {Translations} from '../../server/chat';
+import type { Translations } from '../../server/chat';
 
 export const translations: Translations = {
 	name: "Dutch",
@@ -19,10 +19,10 @@ export const translations: Translations = {
 		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>Global driver</strong> - Het bovenstaande en ze kunnen gebruikers locken en alts (nevenaccounts) inzien.",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global moderator</strong> - Het bovenstaande en ze kunnen gebruikers uit de gehele server verbannen.",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global bot</strong> - Hetzelfde als een moderator maar dit symbool maakt duidelijk dat deze gebruiker een bot is.",
-		"&amp; <strong>Global Administrator</strong> -  They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global administrator</strong> - Zij kunnen alles doen, zoals veranderen wat hier staat en gebruikers globaal promoveren.",
+		"~ <strong>Global Administrator</strong> -  They can do anything, like change what this message says and promote users globally": "~ <strong>Global administrator</strong> - Zij kunnen alles doen, zoals veranderen wat hier staat en gebruikers globaal promoveren.",
 
 		"<strong>Room ranks</strong>": "<strong>Roomrangen</strong>",
-		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "",
+		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prijswinnaar</strong> - Ze hebben geen extra bevoegdheden naast een symbool.",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "+ <strong>Voice</strong> - Ze kunnen ! commando's gebruiken en tijdens beperkte chat praten.",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "% <strong>Driver</strong> - Het bovenstaande en ze kunnen gebruikers muten en waarschuwen.",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "@ <strong>Moderator</strong> - Het bovenstaande en ze kunnen gebruikers uit de room verbannen.",
@@ -42,7 +42,7 @@ export const translations: Translations = {
 		"MODERATOR COMMANDS": "COMMANDO'S VOOR MODERATORS",
 		"ADMIN COMMANDS": "COMMANDO'S VOOR ADMINS",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(vervang / door ! om het commando uit te zenden. Uitzenden vereist: + % @ # &)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)": "(vervang / door ! om het commando uit te zenden. Uitzenden vereist: + % @ # ~)",
 
 		"<strong>Room punishments</strong>:": "<strong>Roomstraffen</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>waarschuwing</strong> - Laat een popup zien met de regels.",
@@ -135,7 +135,7 @@ export const translations: Translations = {
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "Deze ${Config.groups[targetUser.group].name} is momenteel te druk om privéberichten te beantwoorden. Neem contact op met een ander staflid.",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "Als je hulp nodig hebt, maak dan een <a href=\"view-help-request\" class=\"button\">hulpticket</a> aan.",
 		"You are blocking private messages right now.": "Je blokkeert momenteel privéberichten.",
-		"You are blocking challenges right now.": "",
+		"You are blocking challenges right now.": "Je blokkeert momenteel uitdagingen.",
 
 		"Your message contained banned words in this room.": "Je bericht bevat woorden die in deze room verboden zijn.",
 		"You can't send the same message again so soon.": "Je kunt hetzelfde bericht niet zo snel nogmaals versturen.",

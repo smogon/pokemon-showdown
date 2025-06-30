@@ -3,7 +3,7 @@
  * Some moves have had major changes, such as Bite's typing.
  */
 
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	acid: {
 		inherit: true,
 		secondary: {
@@ -53,7 +53,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						return false;
 					}
 					const target = this.getRandomTarget(pokemon, 'Pound');
-					this.actions.moveHit(target, pokemon, currentMove, {damage: this.effectState.damage * 2} as ActiveMove);
+					this.actions.moveHit(target, pokemon, currentMove, { damage: this.effectState.damage * 2 } as ActiveMove);
 					pokemon.removeVolatile('bide');
 					return false;
 				}
@@ -76,22 +76,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	bind: {
 		inherit: true,
 		ignoreImmunity: true,
-		volatileStatus: 'partiallytrapped',
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		// FIXME: onBeforeMove(pokemon, target) {target.removeVolatile('mustrecharge')}
-		onHit(target, source) {
-			/**
-			 * The duration of the partially trapped must be always renewed to 2
-			 * so target doesn't move on trapper switch out as happens in gen 1.
-			 * However, this won't happen if there's no switch and the trapper is
-			 * about to end its partial trapping.
-			 **/
-			if (target.volatiles['partiallytrapped']) {
-				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration > 1) {
-					target.volatiles['partiallytrapped'].duration = 2;
-				}
+		onTryMove(source, target) {
+			if (target.volatiles['mustrecharge']) {
+				target.removeVolatile('mustrecharge');
+				this.hint("In Gen 1, partial trapping moves negate the recharge turn of Hyper Beam, even if they miss.", true);
 			}
 		},
 	},
@@ -132,22 +123,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 75,
 		pp: 10,
-		volatileStatus: 'partiallytrapped',
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		// FIXME: onBeforeMove(pokemon, target) {target.removeVolatile('mustrecharge')}
-		onHit(target, source) {
-			/**
-			 * The duration of the partially trapped must be always renewed to 2
-			 * so target doesn't move on trapper switch out as happens in gen 1.
-			 * However, this won't happen if there's no switch and the trapper is
-			 * about to end its partial trapping.
-			 **/
-			if (target.volatiles['partiallytrapped']) {
-				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration > 1) {
-					target.volatiles['partiallytrapped'].duration = 2;
-				}
+		onTryMove(source, target) {
+			if (target.volatiles['mustrecharge']) {
+				target.removeVolatile('mustrecharge');
+				this.hint("In Gen 1, partial trapping moves negate the recharge turn of Hyper Beam, even if they miss.", true);
 			}
 		},
 	},
@@ -165,7 +147,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "normal",
 		onHit(target, source) {
 			source.setType(target.getTypes(true));
-			this.add('-start', source, 'typechange', source.types.join('/'), '[from] move: Conversion', '[of] ' + target);
+			this.add('-start', source, 'typechange', source.types.join('/'), '[from] move: Conversion', `[of] ${target}`);
 		},
 	},
 	counter: {
@@ -207,6 +189,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 
 			return 2 * this.lastDamage;
 		},
+		flags: { contact: 1, protect: 1, metronome: 1 },
 	},
 	crabhammer: {
 		inherit: true,
@@ -235,7 +218,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Disable",
 		pp: 20,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, bypasssub: 1},
+		flags: { protect: 1, mirror: 1, bypasssub: 1, metronome: 1 },
 		volatileStatus: 'disable',
 		onTryHit(target) {
 			// This function should not return if the checks are met. Adding && undefined ensures this happens.
@@ -309,22 +292,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 70,
 		basePower: 15,
-		volatileStatus: 'partiallytrapped',
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		// FIXME: onBeforeMove(pokemon, target) {target.removeVolatile('mustrecharge')}
-		onHit(target, source) {
-			/**
-			 * The duration of the partially trapped must be always renewed to 2
-			 * so target doesn't move on trapper switch out as happens in gen 1.
-			 * However, this won't happen if there's no switch and the trapper is
-			 * about to end its partial trapping.
-			 **/
-			if (target.volatiles['partiallytrapped']) {
-				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration > 1) {
-					target.volatiles['partiallytrapped'].duration = 2;
-				}
+		onTryMove(source, target) {
+			if (target.volatiles['mustrecharge']) {
+				target.removeVolatile('mustrecharge');
+				this.hint("In Gen 1, partial trapping moves negate the recharge turn of Hyper Beam, even if they miss.", true);
 			}
 		},
 	},
@@ -386,7 +360,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// in-game, so it is equivalent to just clear it.
 				const silentHack = '|[silent]';
 				const silentHackVolatiles = ['disable', 'confusion'];
-				const hazeVolatiles: {[key: string]: string} = {
+				const hazeVolatiles: { [key: string]: string } = {
 					'disable': '',
 					'confusion': '',
 					'mist': 'Mist',
@@ -469,7 +443,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Light Screen",
 		pp: 30,
 		priority: 0,
-		flags: {},
+		flags: { metronome: 1 },
 		volatileStatus: 'lightscreen',
 		onTryHit(pokemon) {
 			if (pokemon.volatiles['lightscreen']) {
@@ -484,12 +458,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		target: "self",
 		type: "Psychic",
 	},
-	metronome: {
-		inherit: true,
-		noMetronome: ["Metronome", "Struggle"],
-	},
 	mimic: {
 		inherit: true,
+		flags: { protect: 1, bypasssub: 1, metronome: 1 },
 		onHit(target, source) {
 			const moveslot = source.moves.indexOf('mimic');
 			if (moveslot < 0) return false;
@@ -598,7 +569,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onHit(target, source, move) {
 				// Disable and exploding moves boost Rage even if they miss/fail, so they are dealt with separately.
 				if (target.boosts.atk < 6 && (move.category !== 'Status' && !move.selfdestruct)) {
-					this.boost({atk: 1});
+					this.boost({ atk: 1 });
 				}
 			},
 		},
@@ -649,7 +620,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Reflect",
 		pp: 20,
 		priority: 0,
-		flags: {},
+		flags: { metronome: 1 },
 		volatileStatus: 'reflect',
 		onTryHit(pokemon) {
 			if (pokemon.volatiles['reflect']) {
@@ -802,6 +773,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		name: "Substitute",
 		pp: 10,
 		priority: 0,
+		flags: { metronome: 1 },
 		volatileStatus: 'substitute',
 		onTryHit(target) {
 			if (target.volatiles['substitute']) {
@@ -848,8 +820,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				let uncappedDamage = move.hit > 1 ? this.lastDamage : this.actions.getDamage(source, target, move);
 				if (move.id === 'bide') uncappedDamage = source.volatiles['bide'].damage * 2;
 				if (!uncappedDamage && uncappedDamage !== 0) return null;
-				uncappedDamage = this.runEvent('SubDamage', target, source, move, uncappedDamage);
-				if (!uncappedDamage && uncappedDamage !== 0) return uncappedDamage;
 				this.lastDamage = uncappedDamage;
 				target.volatiles['substitute'].hp -= uncappedDamage > target.volatiles['substitute'].hp ?
 					target.volatiles['substitute'].hp : uncappedDamage;
@@ -862,8 +832,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// Drain/recoil/secondary effect confusion do not happen if the substitute breaks
 				if (target.volatiles['substitute']) {
 					if (move.recoil) {
-						this.damage(this.clampIntRange(Math.floor(uncappedDamage * move.recoil[0] / move.recoil[1]), 1)
-							, source, target, 'recoil');
+						this.damage(this.clampIntRange(Math.floor(uncappedDamage * move.recoil[0] / move.recoil[1]), 1),
+							source, target, 'recoil');
 					}
 					if (move.drain) {
 						const amount = this.clampIntRange(Math.floor(uncappedDamage * move.drain[0] / move.drain[1]), 1);
@@ -885,7 +855,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// Add here counter damage
 				const lastAttackedBy = target.getLastAttackedBy();
 				if (!lastAttackedBy) {
-					target.attackedBy.push({source: source, move: move.id, damage: uncappedDamage, slot: source.getSlot(), thisTurn: true});
+					target.attackedBy.push({ source, move: move.id, damage: uncappedDamage, slot: source.getSlot(), thisTurn: true });
 				} else {
 					lastAttackedBy.move = move.id;
 					lastAttackedBy.damage = uncappedDamage;
@@ -899,7 +869,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		secondary: null,
 		target: "self",
 		type: "Normal",
-		flags: {},
 	},
 	superfang: {
 		inherit: true,
@@ -937,22 +906,13 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		accuracy: 85,
 		ignoreImmunity: true,
-		volatileStatus: 'partiallytrapped',
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
-		// FIXME: onBeforeMove(pokemon, target) {target.removeVolatile('mustrecharge')}
-		onHit(target, source) {
-			/**
-			 * The duration of the partially trapped must be always renewed to 2
-			 * so target doesn't move on trapper switch out as happens in gen 1.
-			 * However, this won't happen if there's no switch and the trapper is
-			 * about to end its partial trapping.
-			 **/
-			if (target.volatiles['partiallytrapped']) {
-				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration > 1) {
-					target.volatiles['partiallytrapped'].duration = 2;
-				}
+		onTryMove(source, target) {
+			if (target.volatiles['mustrecharge']) {
+				target.removeVolatile('mustrecharge');
+				this.hint("In Gen 1, partial trapping moves negate the recharge turn of Hyper Beam, even if they miss.", true);
 			}
 		},
 	},

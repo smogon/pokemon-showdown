@@ -8,7 +8,7 @@ export const Scripts: ModdedBattleScriptsData = {
 	pokemon: {
 		inherit: true,
 		getStat(statName, unboosted, unmodified, fastReturn) {
-			// @ts-ignore - type checking prevents 'hp' from being passed, but we're paranoid
+			// @ts-expect-error type checking prevents 'hp' from being passed, but we're paranoid
 			if (statName === 'hp') throw new Error("Please read `maxhp` directly");
 
 			// base stat
@@ -89,10 +89,10 @@ export const Scripts: ModdedBattleScriptsData = {
 	},
 	actions: {
 		inherit: true,
-		runMove(moveOrMoveName, pokemon, targetLoc, sourceEffect) {
+		runMove(moveOrMoveName, pokemon, targetLoc, options) {
 			let move = this.dex.getActiveMove(moveOrMoveName);
 			let target = this.battle.getTarget(pokemon, move, targetLoc);
-			if (!sourceEffect && move.id !== 'struggle') {
+			if (!options?.sourceEffect && move.id !== 'struggle') {
 				const changedMove = this.battle.runEvent('OverrideAction', pokemon, target, move);
 				if (changedMove && changedMove !== true) {
 					move = this.dex.getActiveMove(changedMove);
@@ -107,7 +107,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				// THIS IS PURELY A SANITY CHECK
 				// DO NOT TAKE ADVANTAGE OF THIS TO PREVENT A POKEMON FROM MOVING;
 				// USE this.battle.queue.cancelMove INSTEAD
-				this.battle.debug('' + pokemon.fullname + ' INCONSISTENT STATE, ALREADY MOVED: ' + pokemon.moveThisTurn);
+				this.battle.debug(`${pokemon.fullname} INCONSISTENT STATE, ALREADY MOVED: ${pokemon.moveThisTurn}`);
 				this.battle.clearActiveMove(true);
 				return;
 			}
@@ -135,7 +135,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 			pokemon.moveUsed(move);
-			this.battle.actions.useMove(move, pokemon, target, sourceEffect);
+			this.battle.actions.useMove(move, pokemon, { target, sourceEffect: options?.sourceEffect });
 			this.battle.singleEvent('AfterMove', move, null, pokemon, target, move);
 			if (!move.selfSwitch && pokemon.side.foe.active[0].hp) this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 		},
@@ -187,10 +187,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				move.ignoreImmunity = (move.category === 'Status');
 			}
 
-			if (
-				(!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
-				!target.runImmunity(move.type, true)
-			) {
+			if (!target.runImmunity(move, true)) {
 				return false;
 			}
 
@@ -206,6 +203,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
+			if (move.ohko && pokemon.level < target.level) {
+				this.battle.add('-immune', target, '[ohko]');
+				return false;
+			}
+
 			let accuracy = move.accuracy;
 			if (move.alwaysHit) {
 				accuracy = true;
@@ -216,13 +218,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (accuracy !== true) {
 				accuracy = Math.floor(accuracy * 255 / 100);
 				if (move.ohko) {
-					if (pokemon.level >= target.level) {
-						accuracy += (pokemon.level - target.level) * 2;
-						accuracy = Math.min(accuracy, 255);
-					} else {
-						this.battle.add('-immune', target, '[ohko]');
-						return false;
-					}
+					accuracy += (pokemon.level - target.level) * 2;
+					accuracy = Math.min(accuracy, 255);
 				}
 				if (!move.ignoreAccuracy) {
 					if (pokemon.boosts.accuracy > 0) {
@@ -296,13 +293,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (move.ohko) this.battle.add('-ohko');
 
-			if (!move.negateSecondary) {
-				this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
-				this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
-			}
+			this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
+			this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
 
 			if (move.recoil && move.totalDamage) {
-				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move), pokemon, target, 'recoil');
+				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, target, 'recoil');
 			}
 			return damage;
 		},
@@ -497,10 +492,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Let's test for immunities.
-			if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
-				if (!target.runImmunity(move.type, true)) {
-					return false;
-				}
+			if (!target.runImmunity(move, true)) {
+				return false;
 			}
 
 			// Is it an OHKO move?
@@ -545,11 +538,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			// Checking for the move's Critical Hit ratio
 			let critRatio = this.battle.runEvent('ModifyCritRatio', source, target, move, move.critRatio || 0);
 			critRatio = this.battle.clampIntRange(critRatio, 0, 5);
-			const critMult = [0, 16, 8, 4, 3, 2];
+			const critMult = [0, 17, 32, 64, 85, 128];
 			let isCrit = move.willCrit || false;
 			if (typeof move.willCrit === 'undefined') {
 				if (critRatio) {
-					isCrit = this.battle.randomChance(1, critMult[critRatio]);
+					isCrit = this.battle.random(256) < critMult[critRatio];
 				}
 			}
 
@@ -626,7 +619,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (move.id === 'present') {
-				const typeIndexes: {[k: string]: number} = {
+				const typeIndexes: { [k: string]: number } = {
 					Normal: 0, Fighting: 1, Flying: 2, Poison: 3, Ground: 4, Rock: 5, Bug: 7, Ghost: 8, Steel: 9,
 					Fire: 20, Water: 21, Grass: 22, Electric: 23, Psychic: 24, Ice: 25, Dragon: 26, Dark: 27,
 				};

@@ -12,20 +12,24 @@
         "strict": true,
         "allowJs": true,
         "checkJs": true,
+        "forceConsistentCasingInFileNames": true,
         "incremental": true,
         "allowUnreachableCode": false,
         "esModuleInterop": true,
+        "noImplicitOverride": true,
         "useDefineForClassFields": false
     },
     "types": ["node"],
     "exclude": [
-        "./.*-dist/**/*",
+        "/Applications/Visual Studio Code.app/Contents/Resources/app/extensions/node_modules/typescript/lib/lib.dom.d.ts",
+        "./dist/**/*",
         "./server/chat-plugins/private/*/*.d.ts"
     ],
     "include": [
         "./config/*.ts",
         "./data/*",
         "./data/text/*",
+        "./data/random-battles/**/*",
         "./data/mods/*/*",
         "./dev-tools/*.ts",
         "./lib/*.ts",

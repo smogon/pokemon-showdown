@@ -1,46 +1,52 @@
 {
   "name": "pokemon-showdown",
   "description": "The server for the Pokémon Showdown battle simulator",
-  "version": "0.11.9",
+  "version": "0.11.10",
   "main": "dist/sim/index.js",
+  "types": "dist/sim/index.d.ts",
   "dependencies": {
-    "esbuild": "^0.16.10",
+    "esbuild": "^0.25.0",
+    "mysql2": "^3.9.7",
     "preact": "^10.5.15",
-    "preact-render-to-string": "^5.1.19",
-    "probe-image-size": "^5.0.0",
-    "sockjs": "^0.3.21"
+    "preact-render-to-string": "^6.5.13",
+    "probe-image-size": "^7.2.3",
+    "sockjs": "^0.3.21",
+    "source-map-support": "^0.5.21",
+    "ts-chacha20": "^1.2.0"
   },
   "optionalDependencies": {
-    "better-sqlite3": "^7.6.2",
+    "better-sqlite3": "^11.8.1",
     "cloud-env": "^0.2.3",
     "githubhook": "^1.9.3",
     "node-static": "^0.7.11",
     "nodemailer": "^6.4.6",
     "permessage-deflate": "^0.1.7",
-    "pg": "^8.8.0",
+    "pg": "^8.11.3",
     "sql-template-strings": "^2.2.2",
-    "sqlite": "^3.0.6",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
     "sucrase": "^3.15.0"
   },
   "secretDependencies": {
     "node-oom-heapdump": "^1.2.0"
   },
   "engines": {
-    "node": ">=14.0.0"
+    "node": ">=16.0.0"
   },
   "scripts": {
     "start": "node pokemon-showdown start",
     "build": "node build",
+    "build-npm": "node build && npx tsc sim/global-types.ts sim/index.ts --declaration --emitDeclarationOnly --declarationDir dist/ --target es2020 --strict --moduleResolution node --types node --lib es2020",
+    "test-npm": "npx tsc sim/global-types.ts sim/index.ts --noEmit --target es2020 --strict --moduleResolution node --types node --lib es2020",
     "tsc": "tsc",
-    "fast-lint": "eslint . --config .eslintrc-no-types.json --cache --cache-location .eslintcache-no-types --ext .js,.ts,.tsx",
-    "lint": "eslint . --cache --ext .js,.ts,.tsx --max-warnings 0",
-    "fix": "eslint . --cache --ext .js,.ts,.tsx --fix",
+    "lint": "eslint --cache",
+    "fix": "eslint --cache --fix",
     "full-lint": "npm run lint",
     "pretest": "npm run lint",
     "test": "mocha",
     "posttest": "npm run tsc",
-    "full-test": "npm run lint && npm run tsc && mocha --timeout 8000 --forbid-only -g \".*\"",
-    "full-test-ci": "eslint ${FILES} --max-warnings 0 && npm run tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\")",
+    "full-test": "eslint --max-warnings 0 && npm run tsc && mocha --timeout 8000 --forbid-only -g \".*\" && npm run test-npm",
+    "full-test-ci": "eslint --max-warnings 0 && tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\") && npm run test-npm",
     "postinstall": "npm run build postinstall"
   },
   "bin": "./pokemon-showdown",
@@ -56,11 +62,6 @@
   },
   "contributors": [
     {
-      "name": "Cathy J. Fitzpatrick",
-      "email": "cathy@cathyjf.com",
-      "url": "https://cathyjf.com"
-    },
-    {
       "name": "Bill Meltsner",
       "email": "bill@meltsner.com",
       "url": "http://www.meltsner.com"
@@ -68,18 +69,20 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.2",
+    "@stylistic/eslint-plugin": "^4.0.1",
+    "@types/better-sqlite3": "7.6.3",
     "@types/cloud-env": "^0.2.2",
-    "@types/node": "^14.18.36",
+    "@types/node": "^14.18.63",
     "@types/node-static": "^0.7.7",
     "@types/nodemailer": "^6.4.4",
     "@types/pg": "^8.6.5",
     "@types/sockjs": "^0.3.33",
-    "@typescript-eslint/eslint-plugin": "^5.8.0",
-    "@typescript-eslint/parser": "^5.8.0",
-    "eslint": "^8.5.0",
-    "mocha": "^8.2.0",
-    "smogon": "^2.2.1",
-    "typescript": "^5.0.4"
+    "@types/sodium-native": "^2.3.9",
+    "eslint": "^9.21.0",
+    "globals": "^16.0.0",
+    "mocha": "^11.1.0",
+    "smogon": "^3.0.0",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.24.1"
   }
 }

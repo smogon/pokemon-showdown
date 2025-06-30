@@ -1,7 +1,7 @@
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	inherit: 'gen9',
-	nextTurn() {
+	endTurn() {
 		this.turn++;
 		this.lastSuccessfulMoveThisTurn = null;
 
@@ -65,13 +65,18 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 
 				pokemon.maybeDisabled = false;
+				pokemon.maybeLocked = false;
 				for (const moveSlot of pokemon.moveSlots) {
 					moveSlot.disabled = false;
 					moveSlot.disabledSource = '';
 				}
 				this.runEvent('DisableMove', pokemon);
 				for (const moveSlot of pokemon.moveSlots) {
-					this.singleEvent('DisableMove', this.dex.getActiveMove(moveSlot.id), null, pokemon);
+					const activeMove = this.dex.getActiveMove(moveSlot.id);
+					this.singleEvent('DisableMove', activeMove, null, pokemon);
+					if (activeMove.flags['cantusetwice'] && pokemon.lastMove?.id === moveSlot.id) {
+						pokemon.disableMove(pokemon.lastMove.id);
+					}
 				}
 
 				// If it was an illusion, it's not any more
@@ -174,23 +179,6 @@ export const Scripts: ModdedBattleScriptsData = {
 		if (this.gen === 2) this.quickClawRoll = this.randomChance(60, 256);
 		if (this.gen === 3) this.quickClawRoll = this.randomChance(1, 5);
 
-		// Crazyhouse Progress checker because sidebars has trouble keeping track of Pokemon.
-		// Please remove me once there is client support.
-		if (this.ruleTable.has('crazyhouserule')) {
-			for (const side of this.sides) {
-				let buf = `raw|${side.name}'s team:<br />`;
-				for (const pokemon of side.pokemon) {
-					if (!buf.endsWith('<br />')) buf += '/</span>&#8203;';
-					if (pokemon.fainted) {
-						buf += `<span style="white-space:nowrap;"><span style="opacity:.3"><psicon pokemon="${pokemon.species.id}" /></span>`;
-					} else {
-						buf += `<span style="white-space:nowrap"><psicon pokemon="${pokemon.species.id}" />`;
-					}
-				}
-				this.add(`${buf}</span>`);
-			}
-		}
-
 		this.makeRequest('move');
 	},
 	pokemon: {
@@ -200,8 +188,10 @@ export const Scripts: ModdedBattleScriptsData = {
 			return {
 				id: move.id,
 				name: move.name,
+				flags: {},
 				// Does not need activation message with this
 				fullname: 'ability: ' + move.name,
+				effectType: "Ability",
 				onStart(this: Battle, pokemon: Pokemon) {
 					if (pokemon.m.trademarkUsedThisTurn) {
 						// no.
@@ -212,6 +202,10 @@ export const Scripts: ModdedBattleScriptsData = {
 						const trademark = this.dex.getActiveMove(move.id);
 						trademark.accuracy = true;
 						this.actions.useMove(trademark, pokemon);
+						if (pokemon.volatiles['choicelock']?.move === trademark.id) {
+							this.debug('removing choicelock caused by trademark');
+							pokemon.removeVolatile('choicelock');
+						}
 					}
 				},
 				toString() {
@@ -221,9 +215,12 @@ export const Scripts: ModdedBattleScriptsData = {
 		},
 		transformInto(pokemon, effect) {
 			const species = pokemon.species;
-			if (pokemon.fainted || this.illusion || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
+			if (
+				pokemon.fainted || this.illusion || pokemon.illusion || (pokemon.volatiles['substitute'] && this.battle.gen >= 5) ||
 				(pokemon.transformed && this.battle.gen >= 2) || (this.transformed && this.battle.gen >= 5) ||
-				species.name === 'Eternatus-Eternamax') {
+				species.name === 'Eternatus-Eternamax' || (['Ogerpon', 'Terapagos'].includes(species.baseSpecies) &&
+					(this.terastallized || pokemon.terastallized)) || this.terastallized === 'Stellar'
+			) {
 				return false;
 			}
 
@@ -251,7 +248,6 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (this.modifiedStats) this.modifiedStats[statName] = pokemon.modifiedStats![statName]; // Gen 1: Copy modified stats.
 			}
 			this.moveSlots = [];
-			this.set.ivs = (this.battle.gen >= 5 ? this.set.ivs : pokemon.set.ivs);
 			this.hpType = (this.battle.gen >= 5 ? this.hpType : pokemon.hpType);
 			this.hpPower = (this.battle.gen >= 5 ? this.hpPower : pokemon.hpPower);
 			this.timesAttacked = pokemon.timesAttacked;
@@ -276,13 +272,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.boosts[boostName] = pokemon.boosts[boostName];
 			}
 			if (this.battle.gen >= 6) {
-				const volatilesToCopy = ['focusenergy', 'gmaxchistrike', 'laserfocus'];
+				const volatilesToCopy = ['dragoncheer', 'focusenergy', 'gmaxchistrike', 'laserfocus'];
+				// we need to remove all the crit volatiles before adding any crit volatile
+				for (const volatile of volatilesToCopy) this.removeVolatile(volatile);
 				for (const volatile of volatilesToCopy) {
 					if (pokemon.volatiles[volatile]) {
 						this.addVolatile(volatile);
 						if (volatile === 'gmaxchistrike') this.volatiles[volatile].layers = pokemon.volatiles[volatile].layers;
-					} else {
-						this.removeVolatile(volatile);
+						if (volatile === 'dragoncheer') this.volatiles[volatile].hasDragonType = pokemon.volatiles[volatile].hasDragonType;
 					}
 				}
 			}
@@ -318,6 +315,11 @@ export const Scripts: ModdedBattleScriptsData = {
 					}
 				}
 			}
+
+			// Pokemon transformed into Ogerpon cannot Terastallize
+			// restoring their ability to tera after they untransform is handled ELSEWHERE
+			if (this.species.baseSpecies === 'Ogerpon' && this.canTerastallize) this.canTerastallize = false;
+			if (this.species.baseSpecies === 'Terapagos' && this.canTerastallize) this.canTerastallize = false;
 
 			return true;
 		},

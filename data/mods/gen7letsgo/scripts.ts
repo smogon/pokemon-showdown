@@ -1,16 +1,69 @@
+function checkMegaForme(species: Species, forme: string, battle: Battle) {
+	const baseSpecies = battle.dex.species.get(species.baseSpecies);
+	const altForme = battle.dex.species.get(`${baseSpecies.name}-${forme}`);
+	if (
+		altForme.exists && !battle.ruleTable.isBannedSpecies(altForme) &&
+		!battle.ruleTable.isBanned('pokemontag:mega')
+	) {
+		return altForme.name;
+	}
+	return null;
+}
+
 export const Scripts: ModdedBattleScriptsData = {
 	inherit: 'gen7',
 	init() {
 		this.modData('Abilities', 'noability').isNonstandard = null;
 		for (const i in this.data.Pokedex) {
-			this.modData('Pokedex', i).abilities = {0: 'No Ability'};
+			this.modData('Pokedex', i).abilities = { 0: 'No Ability' };
+			delete this.modData('Pokedex', i).requiredItem;
 		}
+	},
+	actions: {
+		inherit: true,
+		canMegaEvo(pokemon) {
+			return checkMegaForme(pokemon.baseSpecies, 'Mega', this.battle);
+		},
+		canMegaEvoX(pokemon) {
+			return checkMegaForme(pokemon.baseSpecies, 'Mega-X', this.battle);
+		},
+		canMegaEvoY(pokemon) {
+			return checkMegaForme(pokemon.baseSpecies, 'Mega-Y', this.battle);
+		},
+		runMegaEvo(pokemon) {
+			const speciesid = pokemon.canMegaEvo || pokemon.canMegaEvoX || pokemon.canMegaEvoY;
+			if (!speciesid) return false;
+
+			pokemon.formeChange(speciesid, null, true);
+			this.battle.add('-mega', pokemon, this.dex.species.get(speciesid).baseSpecies);
+			pokemon.formeRegression = true;
+
+			// Limit one mega evolution
+			for (const ally of pokemon.side.pokemon) {
+				ally.canMegaEvo = null;
+				ally.canMegaEvoX = null;
+				ally.canMegaEvoY = null;
+			}
+
+			this.battle.runEvent('AfterMega', pokemon);
+			return true;
+		},
+		runMegaEvoX(pokemon) {
+			if (!pokemon.canMegaEvoX) return false;
+			pokemon.canMegaEvoY = null;
+			return this.runMegaEvo(pokemon);
+		},
+		runMegaEvoY(pokemon) {
+			if (!pokemon.canMegaEvoY) return false;
+			pokemon.canMegaEvoX = null;
+			return this.runMegaEvo(pokemon);
+		},
 	},
 	/**
 	 * Given a table of base stats and a pokemon set, return the actual stats.
 	 */
 	spreadModify(baseStats, set) {
-		const modStats: StatsTable = {hp: 10, atk: 10, def: 10, spa: 10, spd: 10, spe: 10};
+		const modStats: StatsTable = { hp: 10, atk: 10, def: 10, spa: 10, spd: 10, spe: 10 };
 		let statName: StatID;
 		for (statName in modStats) {
 			const stat = baseStats[statName];

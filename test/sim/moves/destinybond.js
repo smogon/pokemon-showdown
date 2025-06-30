@@ -5,13 +5,13 @@ const common = require('./../../common');
 
 let battle;
 
-describe(`Destiny Bond`, function () {
+describe(`Destiny Bond`, () => {
 	afterEach(() => battle.destroy());
 
-	it(`should fail if used consecutively`, function () {
+	it(`should fail if used consecutively`, () => {
 		battle = common.createBattle([
-			[{species: "Gastly", ability: 'levitate', moves: ['destinybond']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
-			[{species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
+			[{ species: "Gastly", ability: 'levitate', moves: ['destinybond'] }, { species: "Clefable", ability: 'unaware', moves: ['calmmind'] }],
+			[{ species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind'] }, { species: "Clefable", ability: 'unaware', moves: ['calmmind'] }],
 		]);
 		battle.makeChoices('move destinybond', 'move calmmind');
 		battle.makeChoices('move destinybond', 'move psychic');
@@ -20,8 +20,8 @@ describe(`Destiny Bond`, function () {
 
 		battle.destroy();
 		battle = common.createBattle([
-			[{species: "Gastly", ability: 'levitate', moves: ['destinybond']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
-			[{species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
+			[{ species: "Gastly", ability: 'levitate', moves: ['destinybond'] }, { species: "Clefable", ability: 'unaware', moves: ['calmmind'] }],
+			[{ species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind'] }, { species: "Clefable", ability: 'unaware', moves: ['calmmind'] }],
 		]);
 		battle.makeChoices('move destinybond', 'move calmmind');
 		battle.makeChoices('move destinybond', 'move psychic');
@@ -29,10 +29,10 @@ describe(`Destiny Bond`, function () {
 		assert.false.fainted(battle.p2.active[0]);
 	});
 
-	it(`should not fail after Protect usage`, function () {
+	it(`should not fail after Protect usage`, () => {
 		battle = common.createBattle([
-			[{species: "Gastly", ability: 'levitate', moves: ['destinybond', 'protect']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
-			[{species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
+			[{ species: "Gastly", ability: 'levitate', moves: ['destinybond', 'protect'] }, { species: "Clefable", ability: 'unaware', moves: ['calmmind'] }],
+			[{ species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind'] }, { species: "Clefable", ability: 'unaware', moves: ['calmmind'] }],
 		]);
 		battle.makeChoices('move protect', 'move calmmind');
 		battle.makeChoices('move destinybond', 'move psychic');
@@ -40,10 +40,10 @@ describe(`Destiny Bond`, function () {
 		assert.fainted(battle.p2.active[0]);
 	});
 
-	it(`should be removed the next turn if a fast user is asleep`, function () {
+	it(`should be removed the next turn if a fast user is asleep`, () => {
 		battle = common.createBattle([
-			[{species: "Gastly", ability: 'levitate', item: '', moves: ['destinybond', 'spite']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
-			[{species: "Hypno", ability: 'insomnia', item: 'laggingtail', moves: ['psychic', 'hypnosis']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
+			[{ species: "Gastly", ability: 'levitate', item: '', moves: ['destinybond', 'spite'] }, { species: "Clefable", ability: 'unaware', moves: ['calmmind'] }],
+			[{ species: "Hypno", ability: 'insomnia', item: 'laggingtail', moves: ['psychic', 'hypnosis'] }, { species: "Clefable", ability: 'unaware', moves: ['calmmind'] }],
 		]);
 		battle.makeChoices('move destinybond', 'move hypnosis');
 		battle.makeChoices('move destinybond', 'move psychic');
@@ -52,13 +52,13 @@ describe(`Destiny Bond`, function () {
 	});
 });
 
-describe(`Destiny Bond [Gen 6]`, function () {
+describe(`Destiny Bond [Gen 6]`, () => {
 	afterEach(() => battle.destroy());
 
-	it(`should not fail if used consecutively`, function () {
+	it(`should not fail if used consecutively`, () => {
 		battle = common.gen(6).createBattle([
-			[{species: "Gastly", ability: 'levitate', moves: ['destinybond']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
-			[{species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
+			[{ species: "Gastly", ability: 'levitate', moves: ['destinybond'] }, { species: "Clefable", ability: 'unaware', moves: ['calmmind'] }],
+			[{ species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind'] }, { species: "Clefable", ability: 'unaware', moves: ['calmmind'] }],
 		]);
 		battle.makeChoices('move destinybond', 'move calmmind');
 		battle.makeChoices('move destinybond', 'move psychic');
@@ -67,8 +67,8 @@ describe(`Destiny Bond [Gen 6]`, function () {
 
 		battle.destroy();
 		battle = common.gen(6).createBattle([
-			[{species: "Gastly", ability: 'levitate', moves: ['destinybond']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
-			[{species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind']}, {species: "Clefable", ability: 'unaware', moves: ['calmmind']}],
+			[{ species: "Gastly", ability: 'levitate', moves: ['destinybond'] }, { species: "Clefable", ability: 'unaware', moves: ['calmmind'] }],
+			[{ species: "Metagross", ability: 'clearbody', moves: ['psychic', 'calmmind'] }, { species: "Clefable", ability: 'unaware', moves: ['calmmind'] }],
 		]);
 		battle.makeChoices('move destinybond', 'move calmmind');
 		battle.makeChoices('move destinybond', 'move psychic');
@@ -76,10 +76,10 @@ describe(`Destiny Bond [Gen 6]`, function () {
 		assert.fainted(battle.p2.active[0]);
 	});
 
-	it(`should end the effect before the user switches out`, function () {
+	it(`should end the effect before the user switches out`, () => {
 		battle = common.gen(6).createBattle([
-			[{species: "Gastly", level: 50, moves: ['destinybond']}, {species: "Gengar", moves: ['sleeptalk']}],
-			[{species: "Snorlax", moves: ['sleeptalk', 'pursuit']}],
+			[{ species: "Gastly", level: 50, moves: ['destinybond'] }, { species: "Gengar", moves: ['sleeptalk'] }],
+			[{ species: "Snorlax", moves: ['sleeptalk', 'pursuit'] }],
 		]);
 		const gastly = battle.p1.pokemon[0];
 		const snorlax = battle.p2.pokemon[0];
@@ -90,13 +90,13 @@ describe(`Destiny Bond [Gen 6]`, function () {
 	});
 });
 
-describe(`Destiny Bond [Gen 4]`, function () {
+describe(`Destiny Bond [Gen 4]`, () => {
 	afterEach(() => battle.destroy());
 
-	it(`should not end the effect before the user switches out`, function () {
+	it(`should not end the effect before the user switches out`, () => {
 		battle = common.gen(4).createBattle([
-			[{species: "Gastly", level: 50, moves: ['destinybond']}, {species: "Gengar", moves: ['sleeptalk']}],
-			[{species: "Snorlax", moves: ['sleeptalk', 'pursuit']}],
+			[{ species: "Gastly", level: 50, moves: ['destinybond'] }, { species: "Gengar", moves: ['sleeptalk'] }],
+			[{ species: "Snorlax", moves: ['sleeptalk', 'pursuit'] }],
 		]);
 		const gastly = battle.p1.pokemon[0];
 		const snorlax = battle.p2.pokemon[0];
@@ -107,13 +107,13 @@ describe(`Destiny Bond [Gen 4]`, function () {
 	});
 });
 
-describe(`Destiny Bond [Gen 2]`, function () {
+describe(`Destiny Bond [Gen 2]`, () => {
 	afterEach(() => battle.destroy());
 
-	it(`should end the effect before the user switches out if it is faster than the Pursuit user`, function () {
+	it(`should end the effect before the user switches out if it is faster than the Pursuit user`, () => {
 		battle = common.gen(2).createBattle([
-			[{species: "Gastly", level: 50, moves: ['destinybond']}, {species: "Haunter", level: 30, moves: ['destinybond']}, {species: "Gengar", moves: ['sleeptalk']}],
-			[{species: "Snorlax", moves: ['sleeptalk', 'pursuit']}],
+			[{ species: "Gastly", level: 50, moves: ['destinybond'] }, { species: "Haunter", level: 30, moves: ['destinybond'] }, { species: "Gengar", moves: ['sleeptalk'] }],
+			[{ species: "Snorlax", moves: ['sleeptalk', 'pursuit'] }],
 		]);
 		const gastly = battle.p1.pokemon[0];
 		const haunter = battle.p1.pokemon[1];

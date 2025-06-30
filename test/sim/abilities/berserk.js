@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Berserk', function () {
-	afterEach(function () {
+describe('Berserk', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should activate prior to healing from Sitrus Berry`, function () {
+	it(`should activate prior to healing from Sitrus Berry`, () => {
 		battle = common.createBattle([[
-			{species: 'drampa', item: 'sitrusberry', ability: 'berserk', evs: {hp: 4}, moves: ['sleeptalk']},
+			{ species: 'drampa', item: 'sitrusberry', ability: 'berserk', evs: { hp: 4 }, moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', ability: 'compoundeyes', moves: ['superfang']},
+			{ species: 'wynaut', ability: 'compoundeyes', moves: ['superfang'] },
 		]]);
 
 		battle.makeChoices();
@@ -23,11 +23,11 @@ describe('Berserk', function () {
 		assert.equal(drampa.hp, Math.floor(drampa.maxhp / 2) + Math.floor(drampa.maxhp / 4));
 	});
 
-	it(`should not activate prior to healing from Sitrus Berry after a multi-hit move`, function () {
+	it(`should not activate prior to healing from Sitrus Berry after a multi-hit move`, () => {
 		battle = common.createBattle([[
-			{species: 'drampa', item: 'sitrusberry', ability: 'berserk', evs: {hp: 4}, moves: ['sleeptalk']},
+			{ species: 'drampa', item: 'sitrusberry', ability: 'berserk', evs: { hp: 4 }, moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', ability: 'parentalbond', moves: ['seismictoss']},
+			{ species: 'wynaut', ability: 'parentalbond', moves: ['seismictoss'] },
 		]]);
 
 		battle.makeChoices();
@@ -36,13 +36,13 @@ describe('Berserk', function () {
 		assert.equal(drampa.hp, drampa.maxhp - 200 + Math.floor(drampa.maxhp / 4));
 	});
 
-	it(`should not activate below 50% HP if it was damaged by Dragon Darts`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'drampa', ability: 'berserk', evs: {hp: 4}, moves: ['sleeptalk']},
-			{species: 'togedemaru', ability: 'compoundeyes', moves: ['superfang']},
+	it(`should not activate below 50% HP if it was damaged by Dragon Darts`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'drampa', ability: 'berserk', evs: { hp: 4 }, moves: ['sleeptalk'] },
+			{ species: 'togedemaru', ability: 'compoundeyes', moves: ['superfang'] },
 		], [
-			{species: 'wynaut', moves: ['dragondarts']},
-			{species: 'shuckle', moves: ['sleeptalk']},
+			{ species: 'wynaut', moves: ['dragondarts'] },
+			{ species: 'shuckle', moves: ['sleeptalk'] },
 		]]);
 
 		battle.makeChoices('move sleeptalk, move superfang -1', 'auto');

@@ -1,6 +1,6 @@
-import {PRNG} from '../../../sim/prng';
-import {Pokemon} from '../../../sim/pokemon';
-import {Teams} from '../../../sim/teams';
+import { PRNG } from '../../../sim/prng';
+import { Pokemon } from '../../../sim/pokemon';
+import { Teams } from '../../../sim/teams';
 
 export const Scripts: ModdedBattleScriptsData = {
 	start() {
@@ -107,6 +107,12 @@ export const Scripts: ModdedBattleScriptsData = {
 			this.checkEVBalance();
 		}
 
+		if (format.customRules) {
+			const plural = format.customRules.length === 1 ? '' : 's';
+			const open = format.customRules.length <= 5 ? ' open' : '';
+			this.add(`raw|<div class="infobox"><details class="readmore"${open}><summary><strong>${format.customRules.length} custom rule${plural}:</strong></summary> ${format.customRules.join(', ')}</details></div>`);
+		}
+
 		if (format.onTeamPreview) format.onTeamPreview.call(this);
 		for (const rule of this.ruleTable.keys()) {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
@@ -114,8 +120,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (subFormat.onTeamPreview) subFormat.onTeamPreview.call(this);
 		}
 
-		this.queue.addChoice({choice: 'start'});
+		this.queue.addChoice({ choice: 'start' });
 		this.midTurn = true;
-		if (!this.requestState) this.go();
+		if (!this.requestState) this.turnLoop();
 	},
 };

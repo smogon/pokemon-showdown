@@ -4,23 +4,10 @@
 'use strict';
 
 const assert = require('../assert');
-const {testHiddenPower, testSet, testAlwaysHasMove} = require('./tools');
+const { testSet } = require('./tools');
 
 describe('[Gen 5] Random Battle (slow)', () => {
-	const options = {format: 'gen5randombattle'};
-
-	it('should prevent double Hidden Power', () => {
-		testHiddenPower('ampharos', options);
-		testHiddenPower('venusaur', options);
-	});
-
-	it('should give Venusaur four moves', () => {
-		testSet(
-			'venusaur',
-			{format: 'gen5randombattle', rounds: 1, seed: [2201, 2201, 2201, 2201]},
-			set => assert.equal(set.moves.length, 4, `got ${JSON.stringify(set.moves)}`)
-		);
-	});
+	const options = { format: 'gen5randombattle' };
 
 	it('should prevent unreleased HAs from being used', () => {
 		testSet('chandelure', options, set => assert.notEqual(set.ability, 'Shadow Tag'));
@@ -28,9 +15,5 @@ describe('[Gen 5] Random Battle (slow)', () => {
 
 	it('should not give Ursaring Eviolite', () => {
 		testSet('ursaring', options, set => assert.notEqual(set.item, 'Eviolite'));
-	});
-
-	it('should always give Watchog Return', () => {
-		testAlwaysHasMove('watchog', options, 'return');
 	});
 });

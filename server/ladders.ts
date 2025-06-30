@@ -15,14 +15,14 @@ const LadderStore: typeof import('./ladders-remote').LadderStore = (
 const SECONDS = 1000;
 const PERIODIC_MATCH_INTERVAL = 60 * SECONDS;
 
-import type {ChallengeType} from './room-battle';
-import {BattleReady, BattleChallenge, GameChallenge, BattleInvite, challenges} from './ladders-challenges';
+import type { ChallengeType } from './room-battle';
+import { BattleReady, BattleChallenge, GameChallenge, BattleInvite, challenges } from './ladders-challenges';
 
 /**
  * Keys are formatids
  */
 const searches = new Map<string, {
-	numPlayers: number,
+	playerCount: number,
 	/** userid:BattleReady */
 	searches: Map<ID, BattleReady>,
 }>();
@@ -33,10 +33,6 @@ const searches = new Map<string, {
  * attempting to make a match with looser restrictions until one can be made.
  */
 class Ladder extends LadderStore {
-	constructor(formatid: string) {
-		super(formatid);
-	}
-
 	async prepBattle(connection: Connection, challengeType: ChallengeType, team: string | null = null, isRated = false) {
 		// all validation for a battle goes through here
 		const user = connection.user;
@@ -73,7 +69,6 @@ class Ladder extends LadderStore {
 		let rating = 0;
 		let valResult;
 		let removeNicknames = !!(user.locked || user.namelocked);
-
 
 		const regex = /(?:^|])([^|]*)\|([^|]*)\|/g;
 		let match = regex.exec(team);
@@ -112,7 +107,7 @@ class Ladder extends LadderStore {
 		if (isRated && !Ladders.disabled) {
 			const uid = user.id;
 			[valResult, rating] = await Promise.all([
-				TeamValidatorAsync.get(this.formatid).validateTeam(team, {removeNicknames}),
+				TeamValidatorAsync.get(this.formatid).validateTeam(team, { removeNicknames, user: uid }),
 				this.getRating(uid),
 			]);
 			if (uid !== user.id) {
@@ -126,7 +121,7 @@ class Ladder extends LadderStore {
 				rating = 1;
 			}
 			const validator = TeamValidatorAsync.get(this.formatid);
-			valResult = await validator.validateTeam(team, {removeNicknames});
+			valResult = await validator.validateTeam(team, { removeNicknames, user: user.id });
 		}
 
 		if (!valResult.startsWith('1')) {
@@ -137,7 +132,7 @@ class Ladder extends LadderStore {
 			return null;
 		}
 
-		const settings = {...user.battleSettings, team: valResult.slice(1)};
+		const settings = { ...user.battleSettings, team: valResult.slice(1) };
 		user.battleSettings.inviteOnly = false;
 		user.battleSettings.hidden = false;
 		return new BattleReady(userid, this.formatid, settings, rating, challengeType);
@@ -216,6 +211,7 @@ class Ladder extends LadderStore {
 		Ladders.challenges.add(new BattleChallenge(user.id, targetUser.id, ready));
 		Ladders.challenges.send(user.id, targetUser.id, `/log ${user.name} wants to battle!`);
 		user.lastChallenge = Date.now();
+		Chat.runHandlers('onChallenge', user, targetUser, ready.formatid);
 		return true;
 	}
 	static async acceptChallenge(connection: Connection, chall: BattleChallenge) {
@@ -225,7 +221,6 @@ class Ladder extends LadderStore {
 		if (Ladders.challenges.remove(chall)) {
 			return Ladders.match([chall.ready, ready]);
 		}
-		return;
 	}
 
 	cancelSearch(user: User) {
@@ -277,7 +272,7 @@ class Ladder extends LadderStore {
 		return userSearches;
 	}
 	static updateSearch(user: User, connection: Connection | null = null) {
-		let games: {[k: string]: string} | null = {};
+		let games: { [k: string]: string } | null = {};
 		let atLeastOne = false;
 		for (const roomid of user.games) {
 			const room = Rooms.get(roomid);
@@ -360,8 +355,7 @@ class Ladder extends LadderStore {
 		let searchRange = 100;
 		const times = matches.map(([search]) => search.time);
 		const elapsed = Date.now() - Math.min(...times);
-		if (formatid === 'gen8ou' || formatid === 'gen8oucurrent' ||
-				formatid === 'gen8oususpecttest' || formatid === 'gen8randombattle') {
+		if (formatid === `gen${Dex.gen}ou` || formatid === `gen${Dex.gen}randombattle`) {
 			searchRange = 50;
 		}
 
@@ -384,7 +378,7 @@ class Ladder extends LadderStore {
 		let formatTable = Ladders.searches.get(formatid);
 		if (!formatTable) {
 			formatTable = {
-				numPlayers: ['multi', 'freeforall'].includes(Dex.formats.get(formatid).gameType) ? 4 : 2,
+				playerCount: Dex.formats.get(formatid).playerCount,
 				searches: new Map(),
 			};
 			Ladders.searches.set(formatid, formatTable);
@@ -403,7 +397,7 @@ class Ladder extends LadderStore {
 			if (matched) {
 				matches.push(search);
 			}
-			if (matches.length >= formatTable.numPlayers) {
+			if (matches.length >= formatTable.playerCount) {
 				for (const matchedSearch of matches) formatTable.searches.delete(matchedSearch.userid);
 				Ladder.match(matches);
 				return;
@@ -422,7 +416,7 @@ class Ladder extends LadderStore {
 	static periodicMatch() {
 		// In order from longest waiting to shortest waiting
 		for (const [formatid, formatTable] of Ladders.searches) {
-			if (formatTable.numPlayers > 2) continue; // TODO: implement
+			if (formatTable.playerCount > 2) continue; // TODO: implement
 			const matchmaker = Ladders(formatid);
 			let longest: [BattleReady, User] | null = null;
 			for (const search of formatTable.searches.values()) {
@@ -475,14 +469,10 @@ class Ladder extends LadderStore {
 			return undefined;
 		}
 		const format = Dex.formats.get(formatid);
-		const delayedStart = (['multi', 'freeforall'].includes(format.gameType) && players.length === 2) ?
-			'multi' : false;
+		const delayedStart = format.playerCount > players.length ? 'multi' : false;
 		return Rooms.createBattle({
 			format: formatid,
-			p1: players[0],
-			p2: players[1],
-			p3: players[2],
-			p4: players[3],
+			players,
 			rated: minRating,
 			challengeType: readies[0].challengeType,
 			delayedStart,

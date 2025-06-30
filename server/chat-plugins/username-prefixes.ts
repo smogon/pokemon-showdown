@@ -3,7 +3,7 @@
  * @author Annika
  */
 
-import {FS} from '../../lib';
+import { FS } from '../../lib';
 
 const PREFIXES_FILE = 'config/chat-plugins/username-prefixes.json';
 const PREFIX_DURATION = 10 * 24 * 60 * 60 * 1000;
@@ -25,7 +25,7 @@ export class PrefixManager {
 			const convertedPrefixes = [];
 			for (const type in Config.forcedprefixes) {
 				for (const prefix of Config.forcedprefixes[type].map(toID)) {
-					convertedPrefixes.push({type, prefix, expireAt: Date.now() + PREFIX_DURATION});
+					convertedPrefixes.push({ type, prefix, expireAt: Date.now() + PREFIX_DURATION });
 				}
 			}
 			Config.forcedprefixes = convertedPrefixes;
@@ -58,7 +58,7 @@ export class PrefixManager {
 			throw new Chat.ErrorMessage(`Username prefix '${prefix}' is already configured to force ${type}.`);
 		}
 
-		Config.forcedprefixes.push({type, prefix, expireAt: Date.now() + PREFIX_DURATION});
+		Config.forcedprefixes.push({ type, prefix, expireAt: Date.now() + PREFIX_DURATION });
 		this.save();
 	}
 
@@ -137,7 +137,7 @@ export const commands: Chat.ChatCommands = {
 			`<code>/usernameprefix remove [prefix], [type]</code>: Removes a prefix configuration.<br />` +
 			`<code>/usernameprefix view [optional type]</code>: Displays the currently configured username prefixes.<br />` +
 			`Valid types are <code>privacy</code> (which forces battles to take place in public rooms) and <code>modchat</code> (which prevents players from setting moderated chat).<br />` +
-			`Requires: * &`
+			`Requires: * ~`
 		);
 	},
 };

@@ -1,8 +1,8 @@
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	pursuit: {
 		inherit: true,
 		beforeTurnCallback(pokemon, target) {
-			// @ts-ignore
+			// @ts-expect-error modded
 			const linkedMoves: [string, string] = pokemon.getLinkedMoves();
 			if (linkedMoves.length) {
 				if (linkedMoves[0] !== 'pursuit' && linkedMoves[1] === 'pursuit') return;
@@ -21,11 +21,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const action = this.queue.willMove(target);
 			if (action) {
 				// Mod-specific: Me First copies the first move in the link
-				// @ts-ignore
+				// @ts-expect-error modded
 				const move = this.dex.getActiveMove(action.linked?.[0] || action.move);
 				if (move.category !== 'Status' && !move.flags['failmefirst']) {
 					pokemon.addVolatile('mefirst');
-					this.actions.useMove(move, pokemon, target);
+					this.actions.useMove(move, pokemon, { target });
 					return null;
 				}
 			}
@@ -43,14 +43,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				this.add('-fail', source);
 				return null;
 			}
-			if (target.volatiles.mustrecharge && target.volatiles.mustrecharge.duration < 2) {
+			if (target.volatiles.mustrecharge && target.volatiles.mustrecharge.duration! < 2) {
 				// Duration may not be lower than 2 if Sucker Punch is used as a low-priority move
 				// i.e. if Sucker Punch is linked with a negative priority move
 				this.attrLastMove('[still]');
 				this.add('-fail', source);
 				return null;
 			}
-			// @ts-ignore
+			// @ts-expect-error modded
 			if (!action.linked) {
 				if (action.move.category === 'Status' && action.move.id !== 'mefirst') {
 					this.attrLastMove('[still]');
@@ -58,7 +58,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					return null;
 				}
 			} else {
-				// @ts-ignore
+				// @ts-expect-error modded
 				for (const linkedMove of action.linked) {
 					if (linkedMove.category !== 'Status' || linkedMove.id === 'mefirst') return;
 				}
@@ -132,7 +132,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			) {
 				return false;
 			}
-			this.add('-singleturn', target, 'move: Instruct', '[of] ' + source);
+			this.add('-singleturn', target, 'move: Instruct', `[of] ${source}`);
 			this.actions.runMove(lastMove.id, target, target.lastMoveTargetLoc!);
 		},
 	},
@@ -140,10 +140,10 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onTryHit(target, pokemon) {
 			const move: Move | ActiveMove | null = target.m.lastMoveAbsolute;
-			if (!move || !move.flags['mirror'] || move.isZ || move.isMax) {
+			if (!move?.flags['mirror'] || move.isZ || move.isMax) {
 				return false;
 			}
-			this.actions.useMove(move.id, pokemon, target);
+			this.actions.useMove(move.id, pokemon, { target });
 			return null;
 		},
 	},
@@ -160,7 +160,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.queue.willMove(pokemon) ||
 					(pokemon === this.activePokemon && this.activeMove && !this.activeMove.isExternal)
 				) {
-					this.effectState.duration--;
+					this.effectState.duration!--;
 				}
 				if (!lastMove) {
 					this.debug('pokemon hasn\'t moved yet');
@@ -173,7 +173,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 							return false;
 						} else {
 							if (effect.id === 'cursedbody') {
-								this.add('-start', pokemon, 'Disable', moveSlot.move, '[from] ability: Cursed Body', '[of] ' + source);
+								this.add('-start', pokemon, 'Disable', moveSlot.move, '[from] ability: Cursed Body', `[of] ${source}`);
 							} else {
 								this.add('-start', pokemon, 'Disable', moveSlot.move);
 							}
@@ -213,7 +213,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				let lastMove: Move | ActiveMove | null = target.m.lastMoveAbsolute;
 				if (!lastMove || target.volatiles['dynamax']) return false;
 				if ((lastMove as ActiveMove).isZOrMaxPowered) lastMove = this.dex.moves.get(lastMove.baseMove);
-				// @ts-ignore
+				// @ts-expect-error modded
 				const linkedMoves: [string, string] = target.getLinkedMoves(true);
 				const moveIndex = target.moves.indexOf(lastMove.id);
 				if (linkedMoves.includes(lastMove.id) && this.dex.moves.get((linkedMoves[0])).flags['failencore'] &&
@@ -235,7 +235,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					this.effectState.move = linkedMoves;
 				}
 				if (!this.queue.willMove(target)) {
-					this.effectState.duration++;
+					this.effectState.duration!++;
 				}
 			},
 			onOverrideAction(pokemon, target, move) {
@@ -273,7 +273,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				const index = target.moves.indexOf(lastMove.id);
 				if (index === -1) return; // no last move
 
-				// @ts-ignore
+				// @ts-expect-error modded
 				if (target.hasLinkedMove(lastMove.id)) {
 					// TODO: Check instead whether the last executed move was linked
 					if (target.moveSlots[0].pp <= 0 || target.moveSlots[1].pp <= 0) {
@@ -384,11 +384,11 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			if (!lastMove) return false;
 			const possibleTypes = [];
 			const attackType = lastMove.type;
-			for (const type in this.dex.data.TypeChart) {
-				if (source.hasType(type)) continue;
-				const typeCheck = this.dex.data.TypeChart[type].damageTaken[attackType];
+			for (const typeName of this.dex.types.names()) {
+				if (source.hasType(typeName)) continue;
+				const typeCheck = this.dex.types.get(typeName).damageTaken[attackType];
 				if (typeCheck === 2 || typeCheck === 3) {
-					possibleTypes.push(type);
+					possibleTypes.push(typeName);
 				}
 			}
 			if (!possibleTypes.length) {

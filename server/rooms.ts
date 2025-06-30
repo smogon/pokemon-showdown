@@ -28,20 +28,22 @@ const LAST_BATTLE_WRITE_THROTTLE = 10;
 
 const RETRY_AFTER_LOGIN = null;
 
-import {FS, Utils, Streams, PostgresDatabase} from '../lib';
-import {RoomSection, RoomSections} from './chat-commands/room-settings';
-import {QueuedHunt} from './chat-plugins/scavengers';
-import {ScavengerGameTemplate} from './chat-plugins/scavenger-games';
-import {RepeatedPhrase} from './chat-plugins/repeats';
+import { FS, Utils, Streams } from '../lib';
+import { type RoomSection, RoomSections } from './chat-commands/room-settings';
+import { type QueuedHunt } from './chat-plugins/scavengers';
+import { type ScavengerGameTemplate } from './chat-plugins/scavenger-games';
+import { type RepeatedPhrase } from './chat-plugins/repeats';
 import {
-	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, RoomBattleOptions, PlayerIndex,
+	PM as RoomBattlePM, RoomBattle, RoomBattlePlayer, RoomBattleTimer, type RoomBattleOptions,
 } from "./room-battle";
-import {RoomGame, SimpleRoomGame, RoomGamePlayer} from './room-game';
-import {MinorActivity, MinorActivityData} from './room-minor-activity';
-import {Roomlogs} from './roomlogs';
+import { BestOfGame } from './room-battle-bestof';
+import { RoomGame, SimpleRoomGame, RoomGamePlayer } from './room-game';
+import { MinorActivity, type MinorActivityData } from './room-minor-activity';
+import { Roomlogs, type Roomlog } from './roomlogs';
+import { RoomAuth } from './user-groups';
+import { type PartialModlogEntry, mainModlog } from './modlog';
+import { Replays } from './replays';
 import * as crypto from 'crypto';
-import {RoomAuth} from './user-groups';
-import {PartialModlogEntry, mainModlog} from './modlog';
 
 /*********************************************************
  * the Room object.
@@ -83,7 +85,7 @@ interface UserTable {
 
 export interface RoomSettings {
 	title: string;
-	auth: {[userid: string]: GroupSymbol};
+	auth: { [userid: string]: GroupSymbol };
 	creationTime: number;
 	section?: RoomSection;
 
@@ -96,7 +98,7 @@ export interface RoomSettings {
 	staffRoom?: boolean;
 	language?: ID | false;
 	slowchat?: number | false;
-	events?: {[k: string]: RoomEvent | RoomEventAlias | RoomEventCategory};
+	events?: { [k: string]: RoomEvent | RoomEventAlias | RoomEventCategory };
 	filterStretching?: boolean;
 	filterEmojis?: boolean;
 	filterCaps?: boolean;
@@ -104,8 +106,8 @@ export interface RoomSettings {
 	jeopardyDisabled?: boolean;
 	mafiaDisabled?: boolean;
 	unoDisabled?: boolean;
-	blackjackDisabled?: boolean;
 	hangmanDisabled?: boolean;
+	auctionDisabled?: boolean;
 	gameNumber?: number;
 	highTraffic?: boolean;
 	spotlight?: string;
@@ -116,10 +118,11 @@ export interface RoomSettings {
 	rulesLink?: string | null;
 	dataCommandTierDisplay?: 'tiers' | 'doubles tiers' | 'National Dex tiers' | 'numbers';
 	requestShowEnabled?: boolean | null;
-	permissions?: {[k: string]: GroupSymbol};
+	permissions?: { [k: string]: GroupSymbol };
 	minorActivity?: PollData | AnnouncementData;
 	minorActivityQueue?: MinorActivityData[];
 	repeats?: RepeatedPhrase[];
+	topics?: string[];
 	autoModchat?: {
 		rank: GroupSymbol,
 		time: number,
@@ -145,11 +148,11 @@ export type MessageHandler = (room: BasicRoom, message: string) => void;
 export type Room = GameRoom | ChatRoom;
 export type PrivacySetting = boolean | 'hidden' | 'voice' | 'unlisted';
 
-import type {AnnouncementData} from './chat-plugins/announcements';
-import type {PollData} from './chat-plugins/poll';
-import type {AutoResponder} from './chat-plugins/responder';
-import type {RoomEvent, RoomEventAlias, RoomEventCategory} from './chat-plugins/room-events';
-import type {Tournament, TournamentRoomSettings} from './tournaments/index';
+import type { AnnouncementData } from './chat-plugins/announcements';
+import type { PollData } from './chat-plugins/poll';
+import type { AutoResponder } from './chat-plugins/responder';
+import type { RoomEvent, RoomEventAlias, RoomEventCategory } from './chat-plugins/room-events';
+import type { Tournament, TournamentRoomSettings } from './tournaments/index';
 
 export abstract class BasicRoom {
 	/** to rename use room.rename */
@@ -178,6 +181,12 @@ export abstract class BasicRoom {
 	 */
 	battle: RoomBattle | null;
 	/**
+	 * The room's current best-of set. Best-of sets are a type of RoomGame, so in best-of set
+	 * rooms (which can only be `GameRoom`s), `this.bestof === this.game`.
+	 * In all other rooms, `this.bestof` is `null`.
+	 */
+	bestOf: BestOfGame | null;
+	/**
 	 * The game room's current tournament. If the room is a battle room whose
 	 * battle is part of a tournament, `this.tour === this.parent.game`.
 	 * In all other rooms, `this.tour` is `null`.
@@ -193,8 +202,8 @@ export abstract class BasicRoom {
 	readonly muteQueue: MuteEntry[];
 	userCount: number;
 	active: boolean;
-	muteTimer: NodeJS.Timer | null;
-	modchatTimer: NodeJS.Timer | null;
+	muteTimer: NodeJS.Timeout | null;
+	modchatTimer: NodeJS.Timeout | null;
 	lastUpdate: number;
 	lastBroadcast: string;
 	lastBroadcastTime: number;
@@ -210,13 +219,13 @@ export abstract class BasicRoom {
 
 	reportJoins: boolean;
 	batchJoins: number;
-	reportJoinsInterval: NodeJS.Timer | null;
+	reportJoinsInterval: NodeJS.Timeout | null;
 
 	minorActivity: MinorActivity | null;
 	minorActivityQueue: MinorActivityData[] | null;
 	banwordRegex: RegExp | true | null;
-	logUserStatsInterval: NodeJS.Timer | null;
-	expireTimer: NodeJS.Timer | null;
+	logUserStatsInterval: NodeJS.Timeout | null;
+	expireTimer: NodeJS.Timeout | null;
 	userList: string;
 	pendingApprovals: Map<string, ShowRequest> | null;
 
@@ -233,6 +242,7 @@ export abstract class BasicRoom {
 		this.muteQueue = [];
 
 		this.battle = null;
+		this.bestOf = null;
 		this.game = null;
 		this.subGame = null;
 		this.tour = null;
@@ -353,7 +363,7 @@ export abstract class BasicRoom {
 	/**
 	 * Send a room message to a single user.
 	 */
-	sendUser(user: User | Connection, message: string) {
+	sendUser(user: Connection | User, message: string) {
 		user.sendTo(this, message);
 	}
 	/**
@@ -408,7 +418,7 @@ export abstract class BasicRoom {
 	 * Like addByUser, but without logging
 	 */
 	sendByUser(user: User | null, text: string) {
-		this.send('|c|' + (user ? user.getIdentity(this) : '&') + '|/log ' + text);
+		this.send('|c|' + (user ? user.getIdentity(this) : '~') + '|/log ' + text);
 	}
 	/**
 	 * Like addByUser, but sends to mods only.
@@ -499,8 +509,6 @@ export abstract class BasicRoom {
 		}
 		if (this.parent) return this.parent.getMuteTime(user);
 	}
-	// I think putting the `new` before the signature is confusing the linter
-	// eslint-disable-next-line @typescript-eslint/type-annotation-spacing
 	getGame<T extends RoomGame>(constructor: new (...args: any[]) => T, subGame = false): T | null {
 		// TODO: switch to `static readonly gameid` when all game files are TypeScripted
 		if (subGame && this.subGame && this.subGame.constructor.name === constructor.name) return this.subGame as T;
@@ -640,7 +648,7 @@ export abstract class BasicRoom {
 	logUserStats() {
 		let total = 0;
 		let guests = 0;
-		const groups: {[k: string]: number} = {};
+		const groups: { [k: string]: number } = {};
 		for (const group of Config.groupsranking) {
 			groups[group] = 0;
 		}
@@ -652,9 +660,9 @@ export abstract class BasicRoom {
 			}
 			++groups[this.auth.get(user.id)];
 		}
-		let entry = '|userstats|total:' + total + '|guests:' + guests;
+		let entry = `|userstats|total:${total}|guests:${guests}`;
 		for (const i in groups) {
-			entry += '|' + i + ':' + groups[i];
+			entry += `|${i}:${groups[i]}`;
 		}
 		this.roomlog(entry);
 	}
@@ -742,14 +750,16 @@ export abstract class BasicRoom {
 				}
 				message += `<strong>Comment:</strong> ${entry.comment ? entry.comment : 'None.'}<br />`;
 				message += `<button class="button" name="send" value="/approveshow ${userid}">Approve</button>` +
-				`<button class="button" name="send" value="/denyshow ${userid}">Deny</button></div>`;
+					`<button class="button" name="send" value="/denyshow ${userid}">Deny</button></div>`;
 				message += `<hr />`;
 			}
 			message += `</details></div>`;
 			messages.push(message);
 		}
-		if (!this.settings.isPrivate && !this.settings.isPersonal &&
-				this.settings.modchat && this.settings.modchat !== 'autoconfirmed') {
+		if (
+			!this.settings.isPrivate && !this.settings.isPersonal &&
+			this.settings.modchat && this.settings.modchat !== 'autoconfirmed'
+		) {
 			messages.push(`|raw|<div class="broadcast-red">Modchat currently set to ${this.settings.modchat}</div>`);
 		}
 		return messages.join('\n');
@@ -778,9 +788,9 @@ export abstract class BasicRoom {
 		if (this.parent === room) return;
 
 		if (this.parent) {
-			(this as any).parent.subRooms.delete(this.roomid);
+			(this.parent.subRooms as any).delete(this.roomid);
 			if (!this.parent.subRooms!.size) {
-				(this as any).parent.subRooms = null;
+				(this.parent.subRooms as any) = null;
 			}
 		}
 		(this as any).parent = room;
@@ -823,14 +833,14 @@ export abstract class BasicRoom {
 			}
 		}
 
-		if (this.battle) {
+		if (this.battle || this.bestOf) {
 			if (privacy) {
 				if (this.roomid.endsWith('pw')) return true;
 
 				// This is the same password generation approach as genPassword in the client replays.lib.php
 				// but obviously will not match given mt_rand there uses a different RNG and seed.
 				let password = '';
-				for (let i = 0; i < 31; i++) password += ALPHABET[Math.floor(Math.random() * ALPHABET.length)];
+				for (let i = 0; i < 31; i++) password += ALPHABET[crypto.randomInt(0, ALPHABET.length - 1)];
 
 				this.rename(this.title, `${this.roomid}-${password}pw` as RoomID, true);
 			} else {
@@ -840,6 +850,13 @@ export abstract class BasicRoom {
 				if (lastDashIndex < 0) throw new Error(`invalid battle ID ${this.roomid}`);
 
 				this.rename(this.title, this.roomid.slice(0, lastDashIndex) as RoomID);
+			}
+		}
+		this.bestOf?.setPrivacyOfGames(privacy);
+
+		if (this.game) {
+			for (const player of this.game.players) {
+				player.getUser()?.updateSearch();
 			}
 		}
 	}
@@ -951,7 +968,7 @@ export abstract class BasicRoom {
 			user.send(`>${oldID}\n|noinit|rename|${newID}|${newTitle}`);
 		}
 
-		if (this.parent && this.parent.subRooms) {
+		if (this.parent?.subRooms) {
 			(this as any).parent.subRooms.delete(oldID);
 			(this as any).parent.subRooms.set(newID, this as ChatRoom);
 		}
@@ -994,7 +1011,6 @@ export abstract class BasicRoom {
 		this.userCount++;
 		this.checkAutoModchat(user);
 
-		this.minorActivity?.onConnect?.(user, connection);
 		this.game?.onJoin?.(user, connection);
 		Chat.runHandlers('onRoomJoin', this, user, connection);
 		return true;
@@ -1016,7 +1032,7 @@ export abstract class BasicRoom {
 			const staffIntro = this.getStaffIntroMessage(user);
 			if (staffIntro) this.sendUser(user, staffIntro);
 		} else if (!user.named) {
-			this.reportJoin('l', oldid, user);
+			this.reportJoin('l', ' ' + oldid, user);
 		} else {
 			this.reportJoin('n', user.getIdentityWithStatus(this) + '|' + oldid, user);
 		}
@@ -1049,7 +1065,7 @@ export abstract class BasicRoom {
 		if (user.named) {
 			this.reportJoin('l', user.getIdentity(this), user);
 		}
-		if (this.game && this.game.onLeave) this.game.onLeave(user);
+		this.game?.onLeave?.(user);
 		this.runAutoModchat();
 
 		return true;
@@ -1060,14 +1076,14 @@ export abstract class BasicRoom {
 		// they are staff and online
 		const staff = Object.values(this.users).filter(u => this.auth.atLeast(u, '%'));
 		if (!staff.length) {
-			const {time} = this.settings.autoModchat;
+			const { time } = this.settings.autoModchat;
 			if (!time || time < 5) {
 				throw new Error(`Invalid time setting for automodchat (${Utils.visualize(this.settings.autoModchat)})`);
 			}
-			if (this.modchatTimer) clearTimeout(this.modchatTimer);
+			if (this.modchatTimer) return;
 			this.modchatTimer = setTimeout(() => {
 				if (!this.settings.autoModchat) return;
-				const {rank} = this.settings.autoModchat;
+				const { rank } = this.settings.autoModchat;
 				const oldSetting = this.settings.modchat;
 				this.settings.modchat = rank;
 				this.add(
@@ -1081,6 +1097,7 @@ export abstract class BasicRoom {
 				// automodchat will always exist
 				this.settings.autoModchat.active = oldSetting || true;
 				this.saveSettings();
+				this.modchatTimer = null;
 			}, time * 60 * 1000);
 		}
 	}
@@ -1106,9 +1123,10 @@ export abstract class BasicRoom {
 	destroy(): void {
 		// deallocate ourself
 
-		if (this.battle && this.tour) {
-			// resolve state of the tournament;
-			if (!this.battle.ended) this.tour.onBattleWin(this as any as GameRoom, '');
+		if (this.game) {
+			this.game.destroy();
+			this.game = null;
+			this.battle = null;
 			this.tour = null;
 		}
 
@@ -1132,11 +1150,6 @@ export abstract class BasicRoom {
 			}
 		}
 
-		if (this.game) {
-			this.game.destroy();
-			this.game = null;
-			this.battle = null;
-		}
 		this.active = false;
 
 		// Ensure there aren't any pending messages that could restart the expire timer
@@ -1211,7 +1224,7 @@ export class GlobalRoomState {
 				auth: {},
 				creationTime: Date.now(),
 				isPrivate: 'hidden',
-				modjoin: Users.SECTIONLEADER_SYMBOL,
+				modjoin: '%',
 				autojoin: true,
 			}];
 		}
@@ -1259,11 +1272,11 @@ export class GlobalRoomState {
 
 		// init battle room logging
 		if (Config.logladderip) {
-			this.ladderIpLog = FS('logs/ladderip/ladderip.txt').createAppendStream();
+			this.ladderIpLog = Monitor.logPath('ladderip/ladderip.txt').createAppendStream();
 		} else {
 			// Prevent there from being two possible hidden classes an instance
 			// of GlobalRoom can have.
-			this.ladderIpLog = new Streams.WriteStream({write() { return undefined; }});
+			this.ladderIpLog = new Streams.WriteStream({ write() { return undefined; } });
 		}
 
 		this.reportUserStatsInterval = setInterval(
@@ -1283,141 +1296,118 @@ export class GlobalRoomState {
 
 		let lastBattle;
 		try {
-			lastBattle = FS('logs/lastbattle.txt').readSync('utf8');
+			lastBattle = Monitor.logPath('lastbattle.txt').readSync('utf8');
 		} catch {}
 		this.lastBattle = Number(lastBattle) || 0;
 		this.lastWrittenBattle = this.lastBattle;
 		void this.loadBattles();
 	}
 
+	async serializeBattleRoom(room: Room) {
+		if (!room.battle || room.battle.ended) return null;
+		room.battle.frozen = true;
+		const log = await room.battle.getLog();
+		const players = room.battle.players.map(p => p.id).filter(Boolean);
+		if (!players.length || !log?.length) return null; // shouldn't happen???
+		// players can be empty right after `/importinputlog`
+		return {
+			roomid: room.roomid,
+			inputLog: log.join('\n'),
+			players,
+			title: room.title,
+			rated: room.battle.rated,
+			timer: {
+				...room.battle.timer.settings,
+				active: !!room.battle.timer.timer || false,
+			},
+		};
+	}
+	deserializeBattleRoom(battle: NonNullable<Awaited<ReturnType<GlobalRoomState['serializeBattleRoom']>>>) {
+		const { inputLog, players, roomid, title, rated, timer } = battle;
+		const [, formatid] = roomid.split('-');
+		const room = Rooms.createBattle({
+			format: formatid,
+			inputLog,
+			roomid,
+			title,
+			rated: Number(rated),
+			players: [],
+			delayedTimer: timer.active,
+		});
+		if (!room?.battle) return false; // shouldn't happen???
+		if (timer) { // json blob of settings
+			Object.assign(room.battle.timer.settings, timer);
+		}
+		for (const [i, playerid] of players.entries()) {
+			room.auth.set(playerid, Users.PLAYER_SYMBOL);
+			const player = room.battle.players[i];
+			(player.id as string) = playerid;
+			room.battle.playerTable[playerid] = player;
+			player.hasTeam = true;
+			const user = Users.getExact(playerid);
+			player.name = user?.name || playerid; // in case user hasn't reconnected yet
+			user?.joinRoom(room);
+		}
+		return true;
+	}
+
 	async saveBattles() {
 		let count = 0;
-		if (!Config.usepostgres) return 0;
-		const logDatabase = new PostgresDatabase();
-		await logDatabase.ensureMigrated({
-			table: 'stored_battles',
-			migrationsFolder: 'databases/migrations/storedbattles',
-			baseSchemaFile: 'databases/schemas/stored-battles.sql',
-		});
+		const out = Monitor.logPath('battles.jsonl.progress').createAppendStream();
 		for (const room of Rooms.rooms.values()) {
 			if (!room.battle || room.battle.ended) continue;
 			room.battle.frozen = true;
-			const log = await room.battle.getLog();
-			const players: ID[] = room.battle.options.players || [];
-			if (!players.length) {
-				for (const num of ['p1', 'p2', 'p3', 'p4'] as const) {
-					if (room.battle[num]?.id) {
-						players.push(room.battle[num].id);
-					}
-				}
-			}
-			if (!players.length || !log?.length) continue; // shouldn't happen???
-			const timerData = {
-				...room.battle.timer.settings,
-				active: !!room.battle.timer.timer || false,
-			};
-			await logDatabase.query(
-				`INSERT INTO stored_battles (roomid, input_log, players, title, rated, timer) VALUES ($1, $2, $3, $4, $5, $6)` +
-				` ON CONFLICT (roomid) DO UPDATE ` +
-				`SET input_log = EXCLUDED.input_log, players = EXCLUDED.players, title = EXCLUDED.title, rated = EXCLUDED.rated`,
-				// for some reason Battle#rated is sometimes a float which Postgres can't handle
-				[room.roomid, log.join('\n'), players, room.title, Math.floor(room.battle.rated), timerData]
-			);
 			room.battle.timer.stop();
+			const b = await this.serializeBattleRoom(room);
+			if (!b) continue;
+			await out.writeLine(JSON.stringify(b));
 			count++;
 		}
+		await out.writeEnd();
+		await Monitor.logPath('battles.jsonl.progress').rename(Monitor.logPath('battles.jsonl').path);
 		return count;
 	}
 
-	battlesLoading?: boolean;
+	battlesLoading = false;
 	async loadBattles() {
-		if (!Config.usepostgres) return;
 		this.battlesLoading = true;
 		for (const u of Users.users.values()) {
 			u.send(
-				`|pm|&|${u.getIdentity()}|/uhtml restartmsg,` +
+				`|pm|~|${u.getIdentity()}|/uhtml restartmsg,` +
 				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
 			);
 		}
-		const logDatabase = new PostgresDatabase();
-		const query = `DELETE FROM stored_battles WHERE roomid IN (SELECT roomid FROM stored_battles LIMIT 1) RETURNING *`;
-		for await (const battle of logDatabase.stream(query)) {
-			const {input_log, players, roomid, title, rated, timer} = battle;
-			const [, formatid] = roomid.split('-');
-			const room = Rooms.createBattle({
-				format: formatid,
-				inputLog: input_log,
-				roomid,
-				title,
-				rated: Number(rated),
-				players,
-				delayedStart: true,
-				delayedTimer: timer.active,
-				restored: true,
-			});
-			if (!room || !room.battle) continue; // shouldn't happen???
-			room.battle.started = true; // so that timer works
-			room.battle.start();
-			if (timer) { // json blob of settings
-				Object.assign(room.battle.timer.settings, timer);
-			}
-			for (const [i, p] of players.entries()) {
-				room.auth.set(p, Users.PLAYER_SYMBOL);
-				const player = room.battle.players[i];
-				player.id = p;
-				player.name = p; // temp for if they get timed out before they connect
-				const u = Users.getExact(p);
-				if (u) {
-					this.rejoinBattle(room, u, i);
-				}
-			}
+		const startTime = Date.now();
+		let count = 0;
+		let input;
+		try {
+			const stream = Monitor.logPath('battles.jsonl').createReadStream();
+			await stream.fd;
+			input = stream.byLine();
+		} catch {
+			return;
+		}
+		for await (const line of input) {
+			if (!line) continue;
+			if (this.deserializeBattleRoom(JSON.parse(line))) count++;
 		}
 		for (const u of Users.users.values()) {
-			u.send(`|pm|&|${u.getIdentity()}|/uhtmlchange restartmsg,`);
+			u.send(`|pm|~|${u.getIdentity()}|/uhtmlchange restartmsg,`);
 		}
-		delete this.battlesLoading;
+		await Monitor.logPath('battles.jsonl').unlinkIfExists();
+		Monitor.notice(`Loaded ${count} battles in ${Date.now() - startTime}ms`);
+		this.battlesLoading = false;
 	}
 
-	rejoinBattle(room: GameRoom, user: User, idx: number) {
-		if (!room.battle) return;
-		// we reuse these player objects explicitly so if
-		// someone has already started the timer, their settings carry over (should reduce bugs)
-		// and it's safe to do this first because we know these users were already in the battle
-		let player = room.battle.players[idx];
-		if (!player) {
-			// this can happen sometimes
-			player = room.battle.players[idx] = new Rooms.RoomBattlePlayer(
-				user, room.battle, (idx + 1) as PlayerIndex
-			);
-		}
-		player.id = user.id;
-		player.name = user.name;
-		room.battle.playerTable[user.id] = player;
-		user.joinRoom(room.roomid);
-		// force update panel
-		room.battle.onConnect(user);
-		if (room.battle.options.delayedTimer && !room.battle.timer.timer) {
-			room.battle.timer.start();
-		}
-		user.send(`|pm|&|${user.getIdentity()}|/uhtmlchange restartmsg,`);
-	}
-
-	joinOldBattles(user: User) {
+	rejoinGames(user: User) {
 		for (const room of Rooms.rooms.values()) {
-			const battle = room.battle;
-			if (!battle) continue;
-			const idx = battle.options.players?.indexOf(user.id);
-			if (battle.ended) {
-				// TODO: Do we want to rejoin the battle room here?
-				// We might need to cache the join so it only happens once -
-				// just running joinRoom would mean they join the room every refresh until the battle expires
-
-				// user.joinRoom(room);
-				continue;
-			}
-			if (typeof idx === 'number' && idx > -1) {
-				this.rejoinBattle(room, user, idx);
-			}
+			const player = room.game && !room.game.ended && room.game.playerTable[user.id];
+			if (!player) continue;
+			// prevents players from being re-added to games like Scavengers after they've finished
+			if (player.completed) continue;
+			user.games.add(room.roomid);
+			player.name = user.name;
+			user.joinRoom(room.roomid);
 		}
 	}
 
@@ -1430,7 +1420,7 @@ export class GlobalRoomState {
 			JSON.stringify(this.settingsList)
 				.replace(/\{"title":/g, '\n{"title":')
 				.replace(/\]$/, '\n]')
-		), {throttle: 5000});
+		), { throttle: 5000 });
 	}
 
 	writeNumRooms() {
@@ -1444,7 +1434,7 @@ export class GlobalRoomState {
 			if (this.lastBattle < this.lastWrittenBattle) return;
 			this.lastWrittenBattle = this.lastBattle + LAST_BATTLE_WRITE_THROTTLE;
 		}
-		FS('logs/lastbattle.txt').writeUpdate(
+		Monitor.logPath('lastbattle.txt').writeUpdate(
 			() => `${this.lastWrittenBattle}`
 		);
 	}
@@ -1467,7 +1457,7 @@ export class GlobalRoomState {
 		if (this.formatList) {
 			return this.formatList;
 		}
-		this.formatList = '|formats' + (Ladders.formatsListPrefix || '');
+		this.formatList = `|formats${Ladders.formatsListPrefix || ''}`;
 		let section = '';
 		let prevSection = '';
 		let curColumn = 1;
@@ -1479,9 +1469,9 @@ export class GlobalRoomState {
 
 			if (section !== prevSection) {
 				prevSection = section;
-				this.formatList += '|,' + curColumn + '|' + section;
+				this.formatList += `|,${curColumn}|${section}`;
 			}
-			this.formatList += '|' + format.name;
+			this.formatList += `|${format.name}`;
 			let displayCode = 0;
 			if (format.team) displayCode |= 1;
 			if (format.searchShow) displayCode |= 2;
@@ -1490,6 +1480,9 @@ export class GlobalRoomState {
 			const ruleTable = Dex.formats.getRuleTable(format);
 			const level = ruleTable.adjustLevel || ruleTable.adjustLevelDown || ruleTable.maxLevel;
 			if (level === 50) displayCode |= 16;
+			// 32 was previously used for Multi Battles
+			if (format.bestOfDefault) displayCode |= 64;
+			if (format.teraPreviewDefault) displayCode |= 128;
 			this.formatList += ',' + displayCode.toString(16);
 		}
 		return this.formatList;
@@ -1507,14 +1500,13 @@ export class GlobalRoomState {
 			if (!Config.groups[rank] || !rank) continue;
 
 			const tarGroup = Config.groups[rank];
-			let groupType = tarGroup.id === 'bot' || (!tarGroup.mute && !tarGroup.root) ?
+			const groupType = tarGroup.id === 'bot' || (!tarGroup.mute && !tarGroup.root) ?
 				'normal' : (tarGroup.root || tarGroup.declare) ? 'leadership' : 'staff';
-			if (tarGroup.id === 'sectionleader') groupType = 'staff';
 
 			rankList.push({
 				symbol: rank,
 				name: (Config.groups[rank].name || null),
-				type: groupType}); // send the first character in the rank, incase they put a string several characters long
+				type: groupType }); // send the first character in the rank, incase they put a string several characters long
 		}
 
 		const typeOrder = ['punishment', 'normal', 'staff', 'leadership'];
@@ -1523,14 +1515,17 @@ export class GlobalRoomState {
 
 		// add the punishment types at the very end.
 		for (const rank in Config.punishgroups) {
-			rankList.push({symbol: Config.punishgroups[rank].symbol, name: Config.punishgroups[rank].name, type: 'punishment'});
+			rankList.push({ symbol: Config.punishgroups[rank].symbol, name: Config.punishgroups[rank].name, type: 'punishment' });
 		}
 
 		Config.rankList = '|customgroups|' + JSON.stringify(rankList) + '\n';
 		return Config.rankList;
 	}
 
-	getBattles(/** formatfilter, elofilter, usernamefilter */ filter: string) {
+	/**
+	 * @param filter formatfilter, elofilter, usernamefilter
+	 */
+	getBattles(filter: string) {
 		const rooms: GameRoom[] = [];
 		const [formatFilter, eloFilterString, usernameFilter] = filter.split(',');
 		const eloFilter = +eloFilterString;
@@ -1548,7 +1543,7 @@ export class GlobalRoomState {
 			rooms.push(room);
 		}
 
-		const roomTable: {[roomid: string]: BattleRoomTable} = {};
+		const roomTable: { [roomid: string]: BattleRoomTable } = {};
 		for (let i = rooms.length - 1; i >= rooms.length - 100 && i >= 0; i--) {
 			const room = rooms[i];
 			const roomData: BattleRoomTable = {};
@@ -1665,6 +1660,7 @@ export class GlobalRoomState {
 		for (const player of players) {
 			Chat.runHandlers('onBattleStart', player, room);
 		}
+		Chat.runHandlers('onBattleCreate', room.battle!, players.map(x => x.id));
 	}
 
 	deregisterChatRoom(id: string) {
@@ -1742,18 +1738,11 @@ export class GlobalRoomState {
 			this.maxUsers = Users.users.size;
 			this.maxUsersDate = Date.now();
 		}
-		if (this.battlesLoading) {
-			connection.send(
-				`|pm|&|${user.getIdentity()}|/uhtml restartmsg,` +
-				`<div class="broadcast-red"><b>Your battles are currently being restored.<br />Please be patient as they load.</div>`
-			);
-		}
 	}
 	startLockdown(err: Error | null = null, slow = false) {
 		if (this.lockdown && err) return;
 		const devRoom = Rooms.get('development');
-		// @ts-ignore
-		const stack = (err ? Utils.escapeHTML(err.stack).split(`\n`).slice(0, 2).join(`<br />`) : ``);
+		const stack = (err ? Utils.escapeHTML(err.stack!).split(`\n`).slice(0, 2).join(`<br />`) : ``);
 		for (const [id, curRoom] of Rooms.rooms) {
 			if (err) {
 				if (id === 'staff' || id === 'development' || (!devRoom && id === 'lobby')) {
@@ -1767,9 +1756,9 @@ export class GlobalRoomState {
 				curRoom.addRaw(`<div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`).update();
 			}
 			const game = curRoom.game;
-			// @ts-ignore TODO: revisit when game.timer is standardized
-			if (!slow && game && game.timer && typeof game.timer.start === 'function' && !game.ended) {
-				// @ts-ignore
+			// @ts-expect-error TODO: revisit when game.timer is standardized
+			if (!slow && game?.timer && typeof game.timer.start === 'function' && !game.ended) {
+				// @ts-expect-error see above
 				game.timer.start();
 				if (curRoom.settings.modchat !== '+') {
 					curRoom.settings.modchat = '+';
@@ -1778,7 +1767,7 @@ export class GlobalRoomState {
 			}
 		}
 		for (const user of Users.users.values()) {
-			user.send(`|pm|&|${user.tempGroup}${user.name}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`);
+			user.send(`|pm|~|${user.tempGroup}${user.name}|/raw <div class="broadcast-red"><b>The server is restarting soon.</b><br />Please finish your battles quickly. No new battles can be started until the server resets in a few minutes.</div>`);
 		}
 
 		this.lockdown = true;
@@ -1899,9 +1888,9 @@ export class GlobalRoomState {
 export class ChatRoom extends BasicRoom {
 	// This is not actually used, this is just a fake class to keep
 	// TypeScript happy
-	battle = null;
-	active: false = false as const;
-	type: 'chat' = 'chat' as const;
+	override battle = null;
+	override active = false as const;
+	override type = 'chat' as const;
 }
 
 export class GameRoom extends BasicRoom {
@@ -1917,6 +1906,7 @@ export class GameRoom extends BasicRoom {
 	 */
 	rated: number;
 	declare battle: RoomBattle | null;
+	declare bestOf: BestOfGame | null;
 	declare game: RoomGame;
 	modchatUser: string;
 	constructor(roomid: RoomID, title: string, options: Partial<RoomSettings & RoomBattleOptions>) {
@@ -1933,16 +1923,17 @@ export class GameRoom extends BasicRoom {
 		// console.log("NEW BATTLE");
 
 		this.tour = options.tour || null;
-		this.setParent((options as any).parent || (this.tour && this.tour.room) || null);
+		this.setParent((options as any).parent || this.tour?.room || null);
 
-		this.p1 = options.p1?.user || null;
-		this.p2 = options.p2?.user || null;
-		this.p3 = options.p3?.user || null;
-		this.p4 = options.p4?.user || null;
+		this.p1 = options.players?.[0]?.user || null;
+		this.p2 = options.players?.[1]?.user || null;
+		this.p3 = options.players?.[2]?.user || null;
+		this.p4 = options.players?.[3]?.user || null;
 
 		this.rated = options.rated === true ? 1 : options.rated || 0;
 
 		this.battle = null;
+		this.bestOf = null;
 		this.game = null!;
 
 		this.modchatUser = '';
@@ -1959,10 +1950,9 @@ export class GameRoom extends BasicRoom {
 	}
 	getLogForUser(user: User) {
 		if (!(user.id in this.game.playerTable)) return this.getLog();
-		// @ts-ignore
-		return this.getLog(this.game.playerTable[user.id].num);
+		return this.getLog(this.game.playerTable[user.id].num as 0);
 	}
-	update(excludeUser: User | null = null) {
+	override update(excludeUser: User | null = null) {
 		if (!this.log.broadcastBuffer.length) return;
 
 		if (this.userCount) {
@@ -1972,7 +1962,7 @@ export class GameRoom extends BasicRoom {
 
 		this.pokeExpireTimer();
 	}
-	pokeExpireTimer() {
+	override pokeExpireTimer() {
 		// empty rooms time out after ten minutes
 		if (!this.userCount) {
 			if (this.expireTimer) clearTimeout(this.expireTimer);
@@ -1982,31 +1972,20 @@ export class GameRoom extends BasicRoom {
 			this.expireTimer = setTimeout(() => this.expire(), TIMEOUT_INACTIVE_DEALLOCATE);
 		}
 	}
-	sendPlayer(num: 0 | 1, message: string) {
-		const player = this.getPlayer(num);
-		if (!player) return false;
-		player.sendRoom(message);
-	}
-	getPlayer(num: 0 | 1) {
-		// @ts-ignore
-		return this.game['p' + (num + 1)];
-	}
 	requestModchat(user: User | null) {
 		if (!user) {
 			this.modchatUser = '';
-			return;
 		} else if (!this.modchatUser || this.modchatUser === user.id || this.auth.get(user.id) !== Users.PLAYER_SYMBOL) {
 			this.modchatUser = user.id;
-			return;
 		} else {
 			return "Modchat can only be changed by the user who turned it on, or by staff";
 		}
 	}
-	onConnect(user: User, connection: Connection) {
+	override onConnect(user: User, connection: Connection) {
 		this.sendUser(connection, '|init|battle\n|title|' + this.title + '\n' + this.getLogForUser(user));
-		if (this.game && this.game.onConnect) this.game.onConnect(user, connection);
+		this.game?.onConnect?.(user, connection);
 	}
-	onJoin(user: User, connection: Connection) {
+	override onJoin(user: User, connection: Connection) {
 		if (!user) return false; // ???
 		if (this.users[user.id]) return false;
 
@@ -2014,23 +1993,6 @@ export class GameRoom extends BasicRoom {
 		if (user.named) {
 			this.reportJoin('j', user.getIdentityWithStatus(this), user);
 		}
-
-		// This is only here because of an issue with private logs not getting resent
-		// when a user reloads on a battle and autojoins. This should be removed when that gets fixed.
-		void (async () => {
-			if (this.battle) {
-				const player = this.battle.playerTable[user.id];
-				if (player && this.battle.players.every(curPlayer => curPlayer.wantsOpenTeamSheets)) {
-					let buf = '|uhtml|ots|';
-					for (const curPlayer of this.battle.players) {
-						const team = await this.battle.getTeam(curPlayer.id);
-						if (!team) continue;
-						buf += Utils.html`<div class="infobox" style="margin-top:5px"><details><summary>Open Team Sheet for ${curPlayer.name}</summary>${Teams.export(team, {hideStats: true})}</details></div>`;
-					}
-					player.sendRoom(buf);
-				}
-			}
-		})();
 
 		this.users[user.id] = user;
 		this.userCount++;
@@ -2052,7 +2014,7 @@ export class GameRoom extends BasicRoom {
 	 * That's why this function requires a connection. For details, see the top
 	 * comment inside this function.
 	 */
-	async uploadReplay(user: User, connection: Connection, options?: 'forpunishment' | 'silent') {
+	async uploadReplay(user?: User, connection?: Connection, options?: 'forpunishment' | 'silent' | 'auto') {
 		// The reason we don't upload directly to the loginserver, unlike every
 		// other interaction with the loginserver, is because it takes so much
 		// bandwidth that it can get identified as a DoS attack by PHP, Apache, or
@@ -2080,53 +2042,99 @@ export class GameRoom extends BasicRoom {
 		let hideDetails = !format.id.includes('customgame');
 		if (format.team && battle.ended) hideDetails = false;
 
-		const data = this.getLog(hideDetails ? 0 : -1);
-		const datahash = crypto.createHash('md5').update(data.replace(/[^(\x20-\x7F)]+/g, '')).digest('hex');
-		let rating = 0;
+		const log = this.getLog(hideDetails ? 0 : -1);
+		let rating: number | undefined;
 		if (battle.ended && this.rated) rating = this.rated;
-		const {id, password} = this.getReplayData();
+		let { id, password } = this.getReplayData();
+		const silent = options === 'forpunishment' || options === 'silent' || options === 'auto';
+		if (silent) connection = undefined;
+		const isPrivate = this.settings.isPrivate || this.hideReplay;
+		const hidden = options === 'auto' ? 10 :
+			options === 'forpunishment' || (this as any).unlistReplay ? 2 :
+			isPrivate ? 1 :
+			0;
+		if (isPrivate && hidden === 10) {
+			password = Replays.generatePassword();
+		}
+		if (battle.replaySaved !== true && hidden === 10) {
+			battle.replaySaved = 'auto';
+		} else {
+			battle.replaySaved = true;
+		}
 
-		// STEP 1: Directly tell the login server that a replay is coming
-		// (also include all the data, including a hash of the replay itself,
-		// so it can't be spoofed.)
+		// If we have a direct connetion to a Replays database, just upload the replay
+		// directly.
 
-		battle.replaySaved = true;
-		const [success] = await LoginServer.request('prepreplay', {
-			id: id,
-			loghash: datahash,
-			p1: battle.p1.name,
-			p2: battle.p2.name,
-			format: format.id,
-			rating,
-			hidden: options === 'forpunishment' || (this as any).unlistReplay ?
-				'2' : this.settings.isPrivate || this.hideReplay ? '1' : '',
-			inputlog: battle.inputLog?.join('\n') || null,
-		});
-		if (success?.errorip) {
-			connection.popup(`This server's request IP ${success.errorip} is not a registered server.`);
+		if (Replays.db) {
+			const idWithServer = Config.serverid === 'showdown' ? id : `${Config.serverid}-${id}`;
+			try {
+				const fullid = await Replays.add({
+					id: idWithServer,
+					log,
+					players: battle.players.map(p => p.name),
+					format: format.name,
+					rating: rating || null,
+					private: hidden,
+					password,
+					inputlog: battle.inputLog?.join('\n') || null,
+					uploadtime: Math.trunc(Date.now() / 1000),
+				});
+				const url = `https://${Config.routes.replays}/${fullid}`;
+				connection?.popup(
+					`|html|<p>Your replay has been uploaded! It's available at:</p><p> ` +
+					`<a class="no-panel-intercept" href="${url}" target="_blank">${url}</a> ` +
+					`<copytext value="${url}">Copy</copytext>`
+				);
+			} catch (e) {
+				connection?.popup(`Your replay could not be saved: ${e}`);
+				throw e;
+			}
 			return;
 		}
 
-		// STEP 2: Tell the user to upload the replay to the login server
+		// Otherwise, (we're probably a side server), upload the replay through LoginServer
 
-		connection.send('|queryresponse|savereplay|' + JSON.stringify({
-			log: data,
-			id: id,
-			password: password,
-			silent: options === 'forpunishment' || options === 'silent',
-		}));
+		const [result] = await LoginServer.request('addreplay', {
+			id,
+			log,
+			players: battle.players.map(p => p.name).join(','),
+			format: format.name,
+			rating, // will probably do nothing
+			hidden: hidden === 0 ? '' : hidden,
+			inputlog: battle.inputLog?.join('\n') || undefined,
+			password,
+		});
+		if (result?.errorip) {
+			connection?.popup(`This server's request IP ${result.errorip} is not a registered server.`);
+			return;
+		}
+
+		const fullid = result?.replayid;
+		const url = `https://${Config.routes.replays}/${fullid}`;
+		connection?.popup(
+			`|html|<p>Your replay has been uploaded! It's available at:</p><p> ` +
+			`<a class="no-panel-intercept" href="${url}" target="_blank">${url}</a> ` +
+			`<copytext value="${url}">Copy</copytext>`
+		);
 	}
 
 	getReplayData() {
-		if (!this.roomid.endsWith('pw')) return {id: this.roomid.slice(7)};
+		if (!this.roomid.endsWith('pw')) return { id: this.roomid.slice(7), password: null };
 		const end = this.roomid.length - 2;
 		const lastHyphen = this.roomid.lastIndexOf('-', end);
-		return {id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen + 1, end)};
+		return { id: this.roomid.slice(7, lastHyphen), password: this.roomid.slice(lastHyphen + 1, end) };
 	}
 }
 
 function getRoom(roomid?: string | BasicRoom) {
-	if (typeof roomid === 'string') return Rooms.rooms.get(roomid as RoomID);
+	if (typeof roomid === 'string') {
+		// Accounts for private battles that were made public
+		if ((roomid.startsWith('battle-') || roomid.startsWith('game-bestof')) && roomid.endsWith('pw')) {
+			const room = Rooms.rooms.get(roomid.slice(0, roomid.lastIndexOf('-')) as RoomID);
+			if (room) return room;
+		}
+		return Rooms.rooms.get(roomid as RoomID);
+	}
 	return roomid as Room;
 }
 
@@ -2158,14 +2166,15 @@ export const Rooms = {
 		Rooms.rooms.set(roomid, room);
 		return room;
 	},
+	/**
+	 * Can return null during lockdown, so make sure to handle that case.
+	 * No need for UI; this function sends popups to users.
+	 */
 	createBattle(options: RoomBattleOptions & Partial<RoomSettings>) {
-		const players: User[] = [options.p1, options.p2, options.p3, options.p4]
-			.filter(Boolean).map(player => player!.user);
-		const gameType = Dex.formats.get(options.format).gameType;
-		if (gameType !== 'multi' && gameType !== 'freeforall') {
-			if (players.length > 2) {
-				throw new Error(`Four players were provided, but the format is a two-player format.`);
-			}
+		const players = options.players.map(player => player.user);
+		const format = Dex.formats.get(options.format);
+		if (players.length > format.playerCount) {
+			throw new Error(`${players.length} players were provided, but the format is a ${format.playerCount}-player format.`);
 		}
 		if (new Set(players).size < players.length) {
 			throw new Error(`Players can't battle themselves`);
@@ -2175,11 +2184,21 @@ export const Rooms = {
 			Ladders.cancelSearches(user);
 		}
 
-		if (Rooms.global.lockdown === true) {
+		const isBestOf = Dex.formats.getRuleTable(format).valueRules.get('bestof');
+
+		if (Rooms.global.lockdown === 'pre' && isBestOf && !options.isBestOfSubBattle) {
+			for (const user of players) {
+				user.popup(`The server will be restarting soon. Best-of-${isBestOf} battles cannot be started at this time.`);
+			}
+			return null;
+		}
+
+		// gotta allow new bo3 child battles to start
+		if (Rooms.global.lockdown === true && !options.isBestOfSubBattle) {
 			for (const user of players) {
 				user.popup("The server is restarting. Battles will be available again in a few minutes.");
 			}
-			return;
+			return null;
 		}
 
 		const p1Special = players.length ? players[0].battleSettings.special : undefined;
@@ -2195,12 +2214,11 @@ export const Rooms = {
 			for (const user of players) {
 				user.popup(`Your special battle settings don't match: ${mismatch}`);
 			}
-			return;
+			return null;
 		} else if (p1Special) {
 			options.ratedMessage = p1Special;
 		}
 
-		const roomid = options.roomid || Rooms.global.prepBattleRoom(options.format);
 		// options.rated is a number representing the lowest player rating, for searching purposes
 		// options.rated < 0 or falsy means "unrated", and will be converted to 0 here
 		// options.rated === true is converted to 1 (used in tests sometimes)
@@ -2210,21 +2228,39 @@ export const Rooms = {
 		const p1name = p1 ? p1.name : "Player 1";
 		const p2name = p2 ? p2.name : "Player 2";
 		let roomTitle;
-		if (gameType === 'multi') {
+		let roomid = options.roomid;
+		if (format.gameType === 'multi') {
 			roomTitle = `Team ${p1name} vs. Team ${p2name}`;
-		} else if (gameType === 'freeforall') {
+		} else if (format.gameType === 'freeforall') {
 			// p1 vs. p2 vs. p3 vs. p4 is too long of a title
 			roomTitle = `${p1name} and friends`;
+		} else if (isBestOf && !options.isBestOfSubBattle) {
+			roomTitle = `${p1name} vs. ${p2name}`;
+			roomid ||= `game-bestof${isBestOf}-${format.id}-${++Rooms.global.lastBattle}` as RoomID;
 		} else if (options.title) {
 			roomTitle = options.title;
 		} else {
 			roomTitle = `${p1name} vs. ${p2name}`;
 		}
+		roomid ||= Rooms.global.prepBattleRoom(options.format);
 		options.isPersonal = true;
+		if (Rooms.rooms.has(roomid)) {
+			// can happen if restoring a Bo3 game
+			return Rooms.rooms.get(roomid) as GameRoom;
+		}
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
-		const battle = new Rooms.RoomBattle(room, options);
-		room.game = battle;
-		battle.checkPrivacySettings(options);
+		let game: RoomBattle | BestOfGame;
+		if (options.isBestOfSubBattle || !isBestOf) {
+			game = new RoomBattle(room, options);
+		} else {
+			game = new BestOfGame(room, options);
+		}
+		room.game = game;
+		if (options.isBestOfSubBattle && room.parent) {
+			room.setPrivate(room.parent.settings.isPrivate || false);
+		} else {
+			game.checkPrivacySettings(options);
+		}
 
 		for (const p of players) {
 			if (p) {
@@ -2255,7 +2291,10 @@ export const Rooms = {
 	Roomlogs,
 
 	RoomBattle,
+	BestOfGame,
 	RoomBattlePlayer,
 	RoomBattleTimer,
 	PM: RoomBattlePM,
+
+	Replays,
 };

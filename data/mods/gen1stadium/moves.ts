@@ -1,4 +1,4 @@
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	bide: {
 		inherit: true,
 		priority: 0,
@@ -33,14 +33,14 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onAfterSetStatus(status, pokemon) {
 				// Sleep, freeze, and partial trap will just pause duration.
 				if (pokemon.volatiles['flinch']) {
-					this.effectState.duration++;
+					this.effectState.duration!++;
 				} else if (pokemon.volatiles['partiallytrapped']) {
-					this.effectState.duration++;
+					this.effectState.duration!++;
 				} else {
 					switch (status.id) {
 					case 'slp':
 					case 'frz':
-						this.effectState.duration++;
+						this.effectState.duration!++;
 						break;
 					}
 				}
@@ -59,7 +59,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						pokemon.removeVolatile('bide');
 						return false;
 					}
-					this.actions.moveHit(target, pokemon, move, {damage: this.effectState.totalDamage * 2} as ActiveMove);
+					this.actions.moveHit(target, pokemon, move, { damage: this.effectState.totalDamage * 2 } as ActiveMove);
 					pokemon.removeVolatile('bide');
 					return false;
 				}
@@ -167,7 +167,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			onLockMove: 'rage',
 			onHit(target, source, move) {
 				if (target.boosts.atk < 6 && (move.category !== 'Status' || move.id === 'disable')) {
-					this.boost({atk: 1});
+					this.boost({ atk: 1 });
 				}
 			},
 		},
@@ -249,8 +249,6 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 					damage = target.volatiles['substitute'].hp;
 				}
 				if (!damage && damage !== 0) return null;
-				damage = this.runEvent('SubDamage', target, source, move, damage);
-				if (!damage && damage !== 0) return damage;
 				target.volatiles['substitute'].hp -= damage;
 				this.lastDamage = damage;
 				if (target.volatiles['substitute'].hp <= 0) {
@@ -270,7 +268,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				// Add here counter damage
 				const lastAttackedBy = target.getLastAttackedBy();
 				if (!lastAttackedBy) {
-					target.attackedBy.push({source: source, move: move.id, damage: damage, slot: source.getSlot(), thisTurn: true});
+					target.attackedBy.push({ source, move: move.id, damage, slot: source.getSlot(), thisTurn: true });
 				} else {
 					lastAttackedBy.move = move.id;
 					lastAttackedBy.damage = damage;
@@ -287,7 +285,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	},
 	struggle: {
 		inherit: true,
-		ignoreImmunity: {'Normal': true},
+		ignoreImmunity: { 'Normal': true },
 	},
 	wrap: {
 		inherit: true,

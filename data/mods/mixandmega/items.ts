@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	abomasite: {
 		inherit: true,
 		isNonstandard: null,
@@ -59,21 +59,18 @@ export const Items: {[k: string]: ModdedItemData} = {
 	blueorb: {
 		inherit: true,
 		onSwitchIn(pokemon) {
-			if (pokemon.isActive && !pokemon.species.isPrimal) {
-				this.queue.insertChoice({pokemon, choice: 'runPrimal'});
+			if (pokemon.isActive && !pokemon.species.isPrimal && !pokemon.transformed) {
+				// @ts-expect-error modded
+				const species: Species = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Kyogre-Primal', pokemon);
+				if (pokemon.m.originalSpecies === 'Kyogre') {
+					pokemon.formeChange(species, this.effect, true);
+				} else {
+					pokemon.formeChange(species, this.effect, true);
+					pokemon.baseSpecies = species;
+					this.add('-start', pokemon, 'Blue Orb', '[silent]');
+				}
+				pokemon.canTerastallize = null;
 			}
-		},
-		onPrimal(pokemon) {
-			// @ts-ignore
-			const species: Species = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Kyogre-Primal', pokemon);
-			if (pokemon.m.originalSpecies === 'Kyogre') {
-				pokemon.formeChange(species, this.effect, true);
-			} else {
-				pokemon.formeChange(species, this.effect, true);
-				pokemon.baseSpecies = species;
-				this.add('-start', pokemon, 'Blue Orb', '[silent]');
-			}
-			pokemon.canTerastallize = null;
 		},
 		onTakeItem: false,
 		isNonstandard: null,
@@ -89,6 +86,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 	charizarditey: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	cornerstonemask: {
+		inherit: true,
+		onBasePower(basePower, user, target, move) {
+			return this.chainModify([4915, 4096]);
+		},
+		onTakeItem: false,
 	},
 	diancite: {
 		inherit: true,
@@ -126,6 +130,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 	gyaradosite: {
 		inherit: true,
 		isNonstandard: null,
+	},
+	hearthflamemask: {
+		inherit: true,
+		onBasePower(basePower, user, target, move) {
+			return this.chainModify([4915, 4096]);
+		},
+		onTakeItem: false,
 	},
 	heracronite: {
 		inherit: true,
@@ -199,31 +210,28 @@ export const Items: {[k: string]: ModdedItemData} = {
 	redorb: {
 		inherit: true,
 		onSwitchIn(pokemon) {
-			if (pokemon.isActive && !pokemon.species.isPrimal) {
-				this.queue.insertChoice({pokemon, choice: 'runPrimal'});
-			}
-		},
-		onPrimal(pokemon) {
-			// @ts-ignore
-			const species: Species = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Groudon-Primal', pokemon);
-			if (pokemon.m.originalSpecies === 'Groudon') {
-				pokemon.formeChange(species, this.effect, true);
-			} else {
-				pokemon.formeChange(species, this.effect, true);
-				pokemon.baseSpecies = species;
-				this.add('-start', pokemon, 'Red Orb', '[silent]');
-				const apparentSpecies = pokemon.illusion ? pokemon.illusion.species.name : pokemon.m.originalSpecies;
-				const oSpecies = this.dex.species.get(apparentSpecies);
-				if (pokemon.illusion) {
-					const types = oSpecies.types;
-					if (types.length > 1 || types[types.length - 1] !== 'Fire') {
-						this.add('-start', pokemon, 'typechange', (types[0] !== 'Fire' ? types[0] + '/' : '') + 'Fire', '[silent]');
+			if (pokemon.isActive && !pokemon.species.isPrimal && !pokemon.transformed) {
+				// @ts-expect-error modded
+				const species: Species = this.actions.getMixedSpecies(pokemon.m.originalSpecies, 'Groudon-Primal', pokemon);
+				if (pokemon.m.originalSpecies === 'Groudon') {
+					pokemon.formeChange(species, this.effect, true);
+				} else {
+					pokemon.formeChange(species, this.effect, true);
+					pokemon.baseSpecies = species;
+					this.add('-start', pokemon, 'Red Orb', '[silent]');
+					const apparentSpecies = pokemon.illusion ? pokemon.illusion.species.name : pokemon.m.originalSpecies;
+					const oSpecies = this.dex.species.get(apparentSpecies);
+					if (pokemon.illusion) {
+						const types = oSpecies.types;
+						if (types.length > 1 || types[types.length - 1] !== 'Fire') {
+							this.add('-start', pokemon, 'typechange', (types[0] !== 'Fire' ? types[0] + '/' : '') + 'Fire', '[silent]');
+						}
+					} else if (oSpecies.types.length !== pokemon.species.types.length || oSpecies.types[1] !== pokemon.species.types[1]) {
+						this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
 					}
-				} else if (oSpecies.types.length !== pokemon.species.types.length || oSpecies.types[1] !== pokemon.species.types[1]) {
-					this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
 				}
+				pokemon.canTerastallize = null;
 			}
-			pokemon.canTerastallize = null;
 		},
 		onTakeItem: false,
 		isNonstandard: null,
@@ -282,6 +290,13 @@ export const Items: {[k: string]: ModdedItemData} = {
 			if (['Poison', 'Flying'].includes(move.type)) {
 				return this.chainModify([4915, 4096]);
 			}
+		},
+		onTakeItem: false,
+	},
+	wellspringmask: {
+		inherit: true,
+		onBasePower(basePower, user, target, move) {
+			return this.chainModify([4915, 4096]);
 		},
 		onTakeItem: false,
 	},

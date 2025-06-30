@@ -30,31 +30,30 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import * as Data from './dex-data';
-import {Condition, DexConditions} from './dex-conditions';
-import {DataMove, DexMoves} from './dex-moves';
-import {Item, DexItems} from './dex-items';
-import {Ability, DexAbilities} from './dex-abilities';
-import {Species, DexSpecies} from './dex-species';
-import {Format, DexFormats} from './dex-formats';
-import {Utils} from '../lib';
+import { Condition, DexConditions } from './dex-conditions';
+import { DataMove, DexMoves } from './dex-moves';
+import { Item, DexItems } from './dex-items';
+import { Ability, DexAbilities } from './dex-abilities';
+import { Species, DexSpecies } from './dex-species';
+import { Format, DexFormats } from './dex-formats';
+import { Utils } from '../lib/utils';
 
 const BASE_MOD = 'gen9' as ID;
 const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(DATA_DIR, './mods');
 
-const dexes: {[mod: string]: ModdedDex} = Object.create(null);
+const dexes: { [mod: string]: ModdedDex } = Object.create(null);
 
 type DataType =
 	'Abilities' | 'Rulesets' | 'FormatsData' | 'Items' | 'Learnsets' | 'Moves' |
-	'Natures' | 'Pokedex' | 'Scripts' | 'Conditions' | 'TypeChart';
-const DATA_TYPES: (DataType | 'Aliases')[] = [
+	'Natures' | 'Pokedex' | 'Scripts' | 'Conditions' | 'TypeChart' | 'PokemonGoData';
+const DATA_TYPES: DataType[] = [
 	'Abilities', 'Rulesets', 'FormatsData', 'Items', 'Learnsets', 'Moves',
-	'Natures', 'Pokedex', 'Scripts', 'Conditions', 'TypeChart',
+	'Natures', 'Pokedex', 'Scripts', 'Conditions', 'TypeChart', 'PokemonGoData',
 ];
 
 const DATA_FILES = {
 	Abilities: 'abilities',
-	Aliases: 'aliases',
 	Rulesets: 'rulesets',
 	FormatsData: 'formats-data',
 	Items: 'items',
@@ -62,28 +61,29 @@ const DATA_FILES = {
 	Moves: 'moves',
 	Natures: 'natures',
 	Pokedex: 'pokedex',
+	PokemonGoData: 'pokemongo',
 	Scripts: 'scripts',
 	Conditions: 'conditions',
 	TypeChart: 'typechart',
 };
 
-interface DexTable<T> {
-	[key: string]: T;
-}
+/** Unfortunately we do for..in too much to want to deal with the casts */
+export interface DexTable<T> { [id: string]: T }
+export interface AliasesTable { [id: IDEntry]: string }
 
 interface DexTableData {
-	Abilities: DexTable<AbilityData>;
-	Aliases: {[id: string]: string};
-	Rulesets: DexTable<FormatData>;
-	FormatsData: DexTable<import('./dex-species').ModdedSpeciesFormatsData>;
-	Items: DexTable<ItemData>;
-	Learnsets: DexTable<LearnsetData>;
-	Moves: DexTable<MoveData>;
-	Natures: DexTable<NatureData>;
-	Pokedex: DexTable<SpeciesData>;
+	Abilities: DexTable<import('./dex-abilities').AbilityData>;
+	Rulesets: DexTable<import('./dex-formats').FormatData>;
+	Items: DexTable<import('./dex-items').ItemData>;
+	Learnsets: DexTable<import('./dex-species').LearnsetData>;
+	Moves: DexTable<import('./dex-moves').MoveData>;
+	Natures: DexTable<import('./dex-data').NatureData>;
+	Pokedex: DexTable<import('./dex-species').SpeciesData>;
+	FormatsData: DexTable<import('./dex-species').SpeciesFormatsData>;
+	PokemonGoData: DexTable<import('./dex-species').PokemonGoData>;
 	Scripts: DexTable<AnyObject>;
-	Conditions: DexTable<EffectData>;
-	TypeChart: DexTable<TypeData>;
+	Conditions: DexTable<import('./dex-conditions').ConditionData>;
+	TypeChart: DexTable<import('./dex-data').TypeData>;
 }
 interface TextTableData {
 	Abilities: DexTable<AbilityText>;
@@ -120,6 +120,8 @@ export class ModdedDex {
 	textCache: TextTableData | null;
 
 	deepClone = Utils.deepClone;
+	deepFreeze = Utils.deepFreeze;
+	Multiset = Utils.Multiset;
 
 	readonly formats: DexFormats;
 	readonly abilities: DexAbilities;
@@ -130,6 +132,8 @@ export class ModdedDex {
 	readonly natures: Data.DexNatures;
 	readonly types: Data.DexTypes;
 	readonly stats: Data.DexStats;
+	readonly aliases: Map<ID, ID> | null = null;
+	readonly fuzzyAliases: Map<ID, ID[]> | null = null;
 
 	constructor(mod = 'base') {
 		this.isBase = (mod === 'base');
@@ -154,14 +158,14 @@ export class ModdedDex {
 		return this.loadData();
 	}
 
-	get dexes(): {[mod: string]: ModdedDex} {
+	get dexes(): { [mod: string]: ModdedDex } {
 		this.includeMods();
 		return dexes;
 	}
 
 	mod(mod: string | undefined): ModdedDex {
 		if (!dexes['base'].modsLoaded) dexes['base'].includeMods();
-		return dexes[mod || 'base'];
+		return dexes[mod || 'base'].includeData();
 	}
 
 	forGen(gen: number) {
@@ -208,7 +212,7 @@ export class ModdedDex {
 	 */
 	getName(name: any): string {
 		if (typeof name !== 'string' && typeof name !== 'number') return '';
-		name = ('' + name).replace(/[|\s[\],\u202e]+/g, ' ').trim();
+		name = `${name}`.replace(/[|\s[\],\u202e]+/g, ' ').trim();
 		if (name.length > 18) name = name.substr(0, 18).trim();
 
 		// remove zalgo
@@ -226,11 +230,11 @@ export class ModdedDex {
 	 * Also checks immunity to some statuses.
 	 */
 	getImmunity(
-		source: {type: string} | string,
-		target: {getTypes: () => string[]} | {types: string[]} | string[] | string
+		source: { type: string } | string,
+		target: { getTypes: () => string[] } | { types: string[] } | string[] | string
 	): boolean {
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
-		// @ts-ignore
+		// @ts-expect-error really wish TS would support this
 		const targetTyping: string[] | string = target.getTypes?.() || target.types || target;
 		if (Array.isArray(targetTyping)) {
 			for (const type of targetTyping) {
@@ -244,11 +248,11 @@ export class ModdedDex {
 	}
 
 	getEffectiveness(
-		source: {type: string} | string,
-		target: {getTypes: () => string[]} | {types: string[]} | string[] | string
+		source: { type: string } | string,
+		target: { getTypes: () => string[] } | { types: string[] } | string[] | string
 	): number {
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
-		// @ts-ignore
+		// @ts-expect-error really wish TS would support this
 		const targetTyping: string[] | string = target.getTypes?.() || target.types || target;
 		let totalTypeMod = 0;
 		if (Array.isArray(targetTyping)) {
@@ -313,13 +317,13 @@ export class ModdedDex {
 		return moveCopy;
 	}
 
-	getHiddenPower(ivs: AnyObject) {
+	getHiddenPower(ivs: StatsTable) {
 		const hpTypes = [
 			'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel',
 			'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark',
 		];
 		const tr = this.trunc;
-		const stats = {hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31};
+		const stats = { hp: 31, atk: 31, def: 31, spe: 31, spa: 31, spd: 31 };
 		if (this.gen <= 2) {
 			// Gen 2 specific Hidden Power check. IVs are still treated 0-31 so we get them 0-15
 			const atkDV = tr(ivs.atk / 2);
@@ -338,8 +342,8 @@ export class ModdedDex {
 			let hpPowerX = 0;
 			let i = 1;
 			for (const s in stats) {
-				hpTypeX += i * (ivs[s] % 2);
-				hpPowerX += i * (tr(ivs[s] / 2) % 2);
+				hpTypeX += i * (ivs[s as StatID] % 2);
+				hpPowerX += i * (tr(ivs[s as StatID] / 2) % 2);
 				i *= 2;
 			}
 			return {
@@ -354,27 +358,29 @@ export class ModdedDex {
 	 * Truncate a number into an unsigned 32-bit integer, for
 	 * compatibility with the cartridge games' math systems.
 	 */
-	trunc(num: number, bits = 0) {
+	trunc(this: void, num: number, bits = 0) {
 		if (bits) return (num >>> 0) % (2 ** bits);
 		return num >>> 0;
 	}
 
 	dataSearch(
-		target: string, searchIn?: ('Pokedex' | 'Moves' | 'Abilities' | 'Items' | 'Natures')[] | null, isInexact?: boolean
+		target: string,
+		searchIn?: ('Pokedex' | 'Moves' | 'Abilities' | 'Items' | 'Natures' | 'TypeChart')[] | null,
+		isInexact?: boolean
 	): AnyObject[] | null {
 		if (!target) return null;
 
 		searchIn = searchIn || ['Pokedex', 'Moves', 'Abilities', 'Items', 'Natures'];
 
 		const searchObjects = {
-			Pokedex: 'species', Moves: 'moves', Abilities: 'abilities', Items: 'items', Natures: 'natures',
+			Pokedex: 'species', Moves: 'moves', Abilities: 'abilities', Items: 'items', Natures: 'natures', TypeChart: 'types',
 		} as const;
 		const searchTypes = {
-			Pokedex: 'pokemon', Moves: 'move', Abilities: 'ability', Items: 'item', Natures: 'nature',
+			Pokedex: 'pokemon', Moves: 'move', Abilities: 'ability', Items: 'item', Natures: 'nature', TypeChart: 'type',
 		} as const;
 		let searchResults: AnyObject[] | null = [];
 		for (const table of searchIn) {
-			const res: AnyObject = this[searchObjects[table]].get(target);
+			const res = this[searchObjects[table]].get(target);
 			if (res.exists && res.gen <= this.gen) {
 				searchResults.push({
 					isInexact,
@@ -386,6 +392,24 @@ export class ModdedDex {
 		if (searchResults.length) return searchResults;
 		if (isInexact) return null; // prevent infinite loop
 
+		this.loadAliases();
+		const fuzzyAliases = Dex.fuzzyAliases!.get(toID(target));
+		if (fuzzyAliases) {
+			for (const table of searchIn) {
+				for (const alias of fuzzyAliases) {
+					const res = this[searchObjects[table]].get(alias);
+					if (res.exists && res.gen <= this.gen) {
+						searchResults.push({
+							isInexact: true,
+							searchType: searchTypes[table],
+							name: res.name,
+						});
+					}
+				}
+			}
+		}
+		if (searchResults.length) return searchResults;
+
 		const cmpTarget = toID(target);
 		let maxLd = 3;
 		if (cmpTarget.length <= 1) {
@@ -396,14 +420,14 @@ export class ModdedDex {
 			maxLd = 2;
 		}
 		searchResults = null;
-		for (const table of [...searchIn, 'Aliases'] as DataType[]) {
-			const searchObj = this.data[table];
+		for (const table of searchIn) {
+			const searchObj = this.data[table] as DexTable<any>;
 			if (!searchObj) continue;
 
 			for (const j in searchObj) {
 				const ld = Utils.levenshtein(cmpTarget, j, maxLd);
 				if (ld <= maxLd) {
-					const word = (searchObj[j] as DexTable<any>).name || (searchObj[j] as DexTable<any>).species || j;
+					const word = searchObj[j].name || j;
 					const results = this.dataSearch(word, searchIn, word);
 					if (results) {
 						searchResults = results;
@@ -416,7 +440,7 @@ export class ModdedDex {
 		return searchResults;
 	}
 
-	loadDataFile(basePath: string, dataType: DataType | 'Aliases'): AnyObject {
+	loadDataFile(basePath: string, dataType: DataType): AnyObject | void {
 		try {
 			const filePath = basePath + DATA_FILES[dataType];
 			const dataObject = require(filePath);
@@ -432,7 +456,6 @@ export class ModdedDex {
 				throw e;
 			}
 		}
-		return {};
 	}
 
 	loadTextFile(
@@ -477,14 +500,113 @@ export class ModdedDex {
 		return dexes['base'].textCache;
 	}
 
+	getAlias(id: ID): ID | undefined {
+		return this.loadAliases().get(id);
+	}
+
+	loadAliases(): NonNullable<ModdedDex['aliases']> {
+		if (!this.isBase) return Dex.loadAliases();
+		if (this.aliases) return this.aliases;
+		const exported = require(path.resolve(DATA_DIR, 'aliases'));
+		const aliases = new Map<ID, ID>();
+		for (const [alias, target] of Object.entries(exported.Aliases)) {
+			aliases.set(alias as ID, toID(target));
+		}
+		const compoundNames = new Map<ID, string>();
+		for (const name of exported.CompoundWordNames) {
+			compoundNames.set(toID(name), name);
+		}
+
+		const fuzzyAliases = new Map<ID, ID[]>();
+		const addFuzzy = (alias: ID, target: ID) => {
+			if (alias === target) return;
+			if (alias.length < 2) return;
+			const prev = fuzzyAliases.get(alias) || [];
+			if (!prev.includes(target)) prev.push(target);
+			fuzzyAliases.set(alias, prev);
+		};
+		const addFuzzyForme = (alias: ID, target: ID, forme: ID, formeLetter: ID) => {
+			addFuzzy(`${alias}${forme}` as ID, target);
+			if (!forme) return;
+			addFuzzy(`${alias}${formeLetter}` as ID, target);
+			addFuzzy(`${formeLetter}${alias}` as ID, target);
+			if (forme === 'alola') addFuzzy(`alolan${alias}` as ID, target);
+			else if (forme === 'galar') addFuzzy(`galarian${alias}` as ID, target);
+			else if (forme === 'hisui') addFuzzy(`hisuian${alias}` as ID, target);
+			else if (forme === 'paldea') addFuzzy(`paldean${alias}` as ID, target);
+			else if (forme === 'megax') addFuzzy(`mega${alias}x` as ID, target);
+			else if (forme === 'megay') addFuzzy(`mega${alias}y` as ID, target);
+			else addFuzzy(`${forme}${alias}` as ID, target);
+
+			if (forme === 'megax' || forme === 'megay') {
+				addFuzzy(`mega${alias}` as ID, target);
+				addFuzzy(`${alias}mega` as ID, target);
+				addFuzzy(`m${alias}` as ID, target);
+				addFuzzy(`${alias}m` as ID, target);
+			}
+		};
+		for (const table of ['Items', 'Abilities', 'Moves', 'Pokedex'] as const) {
+			const data = this.data[table];
+			for (const [id, entry] of Object.entries(data) as [ID, DexTableData[typeof table][string]][]) {
+				let name = compoundNames.get(id) || entry.name;
+				let forme = '' as ID;
+				let formeLetter = '' as ID;
+				if (name.includes('(')) {
+					addFuzzy(toID(name.split('(')[0]), id);
+				}
+				if (table === 'Pokedex') {
+					// can't Dex.species.get; aliases isn't loaded
+					const species = entry as DexTableData['Pokedex'][string];
+					const baseid = toID(species.baseSpecies);
+					if (baseid && baseid !== id) {
+						name = compoundNames.get(baseid) || baseid;
+					}
+					forme = toID(species.forme || species.baseForme);
+					if (forme === 'fan') {
+						formeLetter = 's' as ID;
+					} else if (forme === 'bloodmoon') {
+						formeLetter = 'bm' as ID;
+					} else {
+						// not doing baseForme as a hack to make aliases point to base forme
+						formeLetter = (species.forme || '').split(/ |-/).map(part => toID(part).charAt(0)).join('') as ID;
+					}
+					addFuzzy(forme, id);
+				}
+
+				addFuzzyForme(toID(name), id, forme, formeLetter);
+				const fullSplit = name.split(/ |-/).map(toID);
+				if (fullSplit.length < 2) continue;
+				const fullAcronym = fullSplit.map(x => x.charAt(0)).join('');
+				addFuzzyForme(fullAcronym as ID, id, forme, formeLetter);
+				const fullAcronymWord = fullAcronym + fullSplit[fullSplit.length - 1].slice(1);
+				addFuzzyForme(fullAcronymWord as ID, id, forme, formeLetter);
+				for (const wordPart of fullSplit) addFuzzyForme(wordPart, id, forme, formeLetter);
+
+				const spaceSplit = name.split(' ').map(toID);
+				if (spaceSplit.length !== fullSplit.length) {
+					const spaceAcronym = spaceSplit.map(x => x.charAt(0)).join('');
+					addFuzzyForme(spaceAcronym as ID, id, forme, formeLetter);
+					const spaceAcronymWord = spaceAcronym + spaceSplit[spaceSplit.length - 1].slice(1);
+					addFuzzyForme(spaceAcronymWord as ID, id, forme, formeLetter);
+					for (const word of fullSplit) addFuzzyForme(word, id, forme, formeLetter);
+				}
+			}
+		}
+
+		(this as any).aliases = aliases satisfies this['aliases'];
+		(this as any).fuzzyAliases = fuzzyAliases satisfies this['fuzzyAliases'];
+		return this.aliases!;
+	}
 	loadData(): DexTableData {
 		if (this.dataCache) return this.dataCache;
 		dexes['base'].includeMods();
-		const dataCache: {[k in keyof DexTableData]?: any} = {};
+		const dataCache: { [k in keyof DexTableData]?: any } = {};
 
 		const basePath = this.dataDir + '/';
 
-		const Scripts = this.loadDataFile(basePath, 'Scripts');
+		const Scripts = this.loadDataFile(basePath, 'Scripts') || {};
+		// We want to inherit most of Scripts but not this.
+		const init = Scripts.init;
 		this.parentMod = this.isBase ? '' : (Scripts.inherit || 'base');
 
 		let parentDex;
@@ -501,18 +623,21 @@ export class ModdedDex {
 			// Formats are inherited by mods and used by Rulesets
 			this.includeFormats();
 		}
-		for (const dataType of DATA_TYPES.concat('Aliases')) {
-			const BattleData = this.loadDataFile(basePath, dataType);
-			if (BattleData !== dataCache[dataType]) dataCache[dataType] = Object.assign(BattleData, dataCache[dataType]);
+		for (const dataType of DATA_TYPES) {
+			dataCache[dataType] = this.loadDataFile(basePath, dataType);
 			if (dataType === 'Rulesets' && !parentDex) {
 				for (const format of this.formats.all()) {
-					BattleData[format.id] = {...format, ruleTable: null};
+					dataCache.Rulesets[format.id] = { ...format, ruleTable: null };
 				}
 			}
 		}
 		if (parentDex) {
 			for (const dataType of DATA_TYPES) {
 				const parentTypedData: DexTable<any> = parentDex.data[dataType];
+				if (!dataCache[dataType] && !init) {
+					dataCache[dataType] = parentTypedData;
+					continue;
+				}
 				const childTypedData: DexTable<any> = dataCache[dataType] || (dataCache[dataType] = {});
 				for (const entryId in parentTypedData) {
 					if (childTypedData[entryId] === null) {
@@ -520,27 +645,17 @@ export class ModdedDex {
 						delete childTypedData[entryId];
 					} else if (!(entryId in childTypedData)) {
 						// If it doesn't exist it's inherited from the parent data
-						if (dataType === 'Pokedex') {
-							// Pokedex entries can be modified too many different ways
-							// e.g. inheriting different formats-data/learnsets
-							childTypedData[entryId] = this.deepClone(parentTypedData[entryId]);
-						} else {
-							childTypedData[entryId] = parentTypedData[entryId];
-						}
-					} else if (childTypedData[entryId] && childTypedData[entryId].inherit) {
+						childTypedData[entryId] = parentTypedData[entryId];
+					} else if (childTypedData[entryId]?.inherit) {
 						// {inherit: true} can be used to modify only parts of the parent data,
 						// instead of overwriting entirely
 						delete childTypedData[entryId].inherit;
 
-						// Merge parent into children entry, preserving existing childs' properties.
-						for (const key in parentTypedData[entryId]) {
-							if (key in childTypedData[entryId]) continue;
-							childTypedData[entryId][key] = parentTypedData[entryId][key];
-						}
+						// Merge parent and child's entry, with child overwriting parent.
+						childTypedData[entryId] = { ...parentTypedData[entryId], ...childTypedData[entryId] };
 					}
 				}
 			}
-			dataCache['Aliases'] = parentDex.data['Aliases'];
 		}
 
 		// Flag the generation. Required for team validator.
@@ -549,7 +664,7 @@ export class ModdedDex {
 		this.dataCache = dataCache as DexTableData;
 
 		// Execute initialization script.
-		if (Scripts.init) Scripts.init.call(this);
+		if (init) init.call(this);
 
 		return this.dataCache;
 	}
@@ -566,7 +681,7 @@ dexes['base'] = new ModdedDex();
 dexes[BASE_MOD] = dexes['base'];
 
 export const Dex = dexes['base'];
-export namespace Dex {
+export declare namespace Dex {
 	export type Species = import('./dex-species').Species;
 	export type Item = import('./dex-items').Item;
 	export type Move = import('./dex-moves').Move;
@@ -575,6 +690,16 @@ export namespace Dex {
 	export type HitEffect = import('./dex-moves').HitEffect;
 	export type SecondaryEffect = import('./dex-moves').SecondaryEffect;
 	export type RuleTable = import('./dex-formats').RuleTable;
+
+	export type GenderName = 'M' | 'F' | 'N' | '';
+	export type StatIDExceptHP = 'atk' | 'def' | 'spa' | 'spd' | 'spe';
+	export type StatID = 'hp' | StatIDExceptHP;
+	export type StatsExceptHPTable = { [stat in StatIDExceptHP]: number };
+	export type StatsTable = { [stat in StatID]: number };
+	export type SparseStatsTable = Partial<StatsTable>;
+	export type BoostID = StatIDExceptHP | 'accuracy' | 'evasion';
+	export type BoostsTable = { [boost in BoostID]: number };
+	export type SparseBoostsTable = Partial<BoostsTable>;
 }
 
 export default Dex;

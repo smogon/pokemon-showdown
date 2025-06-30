@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-shadow */
 
-type Config = typeof import('../config/config-example') & AnyObject;
-
 type GroupSymbol = import('./user-groups').GroupSymbol;
 type AuthLevel = import('./user-groups').AuthLevel;
 
@@ -9,11 +7,12 @@ type AuthLevel = import('./user-groups').AuthLevel;
 type PunishType = '#hostfilter' | '#dnsbl' | '#ipban';
 
 // Chat
-namespace Chat {
+declare namespace Chat {
 	export type CommandContext = import('./chat').CommandContext;
 	export type PageContext = import('./chat').PageContext;
 	export type SettingsHandler = import('./chat').SettingsHandler;
 	export type PageTable = import('./chat').PageTable;
+	export type PageHandler = import('./chat').PageHandler;
 	export type ChatCommands = import('./chat').ChatCommands;
 	export type ChatHandler = import('./chat').ChatHandler;
 	export type ChatFilter = import('./chat').ChatFilter;
@@ -37,10 +36,9 @@ type BasicRoom = Rooms.BasicRoom;
 type RoomGame = Rooms.RoomGame;
 type MinorActivity = Rooms.MinorActivity;
 type RoomBattle = Rooms.RoomBattle;
-type Roomlog = Rooms.Roomlog;
 type Room = Rooms.Room;
-type RoomID = "" | "lobby" | "staff" | "upperstaff" | "development" | string & {__isRoomID: true};
-namespace Rooms {
+type RoomID = "" | "lobby" | "staff" | "upperstaff" | "development" | Lowercase<string> & { __isRoomID: true };
+declare namespace Rooms {
 	export type GlobalRoomState = import('./rooms').GlobalRoomState;
 	export type ChatRoom = import('./rooms').ChatRoom;
 	export type GameRoom = import('./rooms').GameRoom;
@@ -51,34 +49,24 @@ namespace Rooms {
 	export type MinorActivity = import('./room-minor-activity').MinorActivity;
 	export type MinorActivityData = import('./room-minor-activity').MinorActivityData;
 	export type RoomBattle = import('./room-battle').RoomBattle;
+	export type BestOfGame = import('./room-battle-bestof').BestOfGame;
 	export type Roomlog = import('./roomlogs').Roomlog;
 	export type Room = import('./rooms').Room;
 }
 
-// Streams
-// (I don't understand why eslint only has a problem with this - it's used in room-battle)
-namespace Streams {
-	export type WriteStream = import('../lib/streams').WriteStream;
-	export type ReadStream = import('../lib/streams').ReadStream;
-	export type ReadWriteStream = import('../lib/streams').ReadWriteStream;
-	export type ObjectWriteStream<T> = import('../lib/streams').ObjectWriteStream<T>;
-	export type ObjectReadStream<T> = import('../lib/streams').ObjectReadStream<T>;
-	export type ObjectReadWriteStream<T> = import('../lib/streams').ObjectReadWriteStream<T>;
-}
-
-namespace JSX {
+declare namespace JSX {
 	export type IntrinsicElements = import('./chat-jsx').PSElements;
 }
 
 // Users
 type User = Users.User;
 type Connection = Users.Connection;
-namespace Users {
+declare namespace Users {
 	export type User = import('./users').User;
 	export type Connection = import('./users').Connection;
 }
 
-namespace Ladders {
+declare namespace Ladders {
 	export type Challenge = import('./ladders-challenges').Challenge;
 	export type BattleChallenge = import('./ladders-challenges').BattleChallenge;
 	export type GameChallenge = import('./ladders-challenges').GameChallenge;

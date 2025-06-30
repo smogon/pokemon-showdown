@@ -3,12 +3,12 @@
  */
 'use strict';
 
-const {testSet, testNotBothMoves, testHasSTAB, testAlwaysHasMove} = require('./tools');
+const { testSet, testNotBothMoves, testHasSTAB, testAlwaysHasMove } = require('./tools');
 const assert = require('../assert');
 
 describe('[Gen 8] Random Battle (slow)', () => {
-	const options = {format: 'gen8randombattle'};
-	const dataJSON = require(`../../dist/data/mods/gen8/random-data.json`);
+	const options = { format: 'gen8randombattle' };
+	const dataJSON = require(`../../dist/data/random-battles/gen8/data.json`);
 	const dex = Dex.forFormat(options.format);
 	const generator = Teams.getGenerator(options.format);
 
@@ -193,7 +193,6 @@ describe('[Gen 8] Random Battle (slow)', () => {
 	it('should always give Palossand Shore Up', () => testAlwaysHasMove('palossand', options, 'shoreup'));
 	it('should always give Azumarill Aqua Jet', () => testAlwaysHasMove('azumarill', options, 'aquajet'));
 
-
 	it('should forbid a certain Togekiss set', () => {
 		testSet('togekiss', options, set => {
 			assert.notDeepEqual(
@@ -206,7 +205,7 @@ describe('[Gen 8] Random Battle (slow)', () => {
 });
 
 describe('[Gen 8] Random Doubles Battle (slow)', () => {
-	const options = {format: 'gen8randomdoublesbattle'};
+	const options = { format: 'gen8randomdoublesbattle' };
 
 	it('should never generate Melmetal without Body Press', () => {
 		testSet('melmetal', options, set => {
@@ -247,7 +246,7 @@ describe('[Gen 8] Random Battle (No Dmax) (slow)', () => {
 });
 
 describe('[Gen 8] Free-for-All Random Battle (slow)', () => {
-	const options = {format: 'gen8freeforallrandombattle', isDoubles: true};
+	const options = { format: 'gen8freeforallrandombattle', isDoubles: true };
 
 	it('should enforce STAB on Pinsir, Pikachu, and Zygarde', () => {
 		for (const pkmn of ['pinsir', 'pikachu', 'zygarde']) {
@@ -257,8 +256,8 @@ describe('[Gen 8] Free-for-All Random Battle (slow)', () => {
 });
 
 describe('[Gen 8 BDSP] Random Battle (slow)', () => {
-	const options = {format: 'gen8bdsprandombattle'};
-	const dataJSON = require(`../../dist/data/mods/gen8bdsp/random-data.json`);
+	const options = { format: 'gen8bdsprandombattle' };
+	const dataJSON = require(`../../dist/data/random-battles/gen8bdsp/data.json`);
 	const dex = Dex.forFormat(options.format);
 
 	const okToHaveChoiceMoves = ['switcheroo', 'trick', 'healingwish'];
@@ -291,7 +290,7 @@ describe('[Gen 8 BDSP] Random Battle (slow)', () => {
 			// This test is marked as slow because although each individual test is fairly fast to run,
 			// ~500 tests are generated, so they can dramatically slow down the process of unit testing.
 			it(`should not generate Choice items on ${species.name} sets with status moves, unless an item-switching move or Healing Wish is generated`, () => {
-				testSet(species.id, {...options, rounds: 500}, set => {
+				testSet(species.id, { ...options, rounds: 500 }, set => {
 					if (set.item.startsWith('Choice') && !okToHaveChoiceMoves.some(okMove => set.moves.includes(okMove))) {
 						assert(set.moves.every(m => dex.moves.get(m).category !== 'Status'), `Choice item and status moves on set ${JSON.stringify(set)}`);
 					}

@@ -1,10 +1,6 @@
 {
   "editor.insertSpaces": false,
-  "editor.formatOnSave": false,
   "typescript.tsdk": "node_modules/typescript/lib",
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
-  "typescript.format.semicolons": "insert",
-  "eslint.options": {
-    "configFile": ".eslintrc.json"
-  }
+  "typescript.format.semicolons": "insert"
 }

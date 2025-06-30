@@ -1,4 +1,4 @@
-export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
+export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormatsDataTable = {
 	bulbasaur: {
 		tier: "LC",
 	},
@@ -222,7 +222,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "NU",
 	},
 	machamp: {
-		tier: "OU",
+		tier: "Uber",
 	},
 	bellsprout: {
 		tier: "LC",

@@ -63,7 +63,7 @@ The beginning of a battle will look something like this:
 
 `|gen|GENNUM`
 
-> Generation number, from 1 to 7. Stadium counts as its respective gens;
+> Generation number, from 1 to 9. Stadium counts as its respective gens;
 > Let's Go counts as 7, and modded formats count as whatever gen they were
 > based on.
 
@@ -83,13 +83,13 @@ The beginning of a battle will look something like this:
 
 `|rule|RULE: DESCRIPTION`
 
-> Will appear multiple times, one for each 
+> Will appear multiple times, one for each rule.
 
-    |clearpoke
-    |poke|PLAYER|DETAILS|ITEM
-    |poke|PLAYER|DETAILS|ITEM
-    ...
-    |teampreview
+`|clearpoke`  
+`|poke|PLAYER|DETAILS|ITEM`  
+`|poke|PLAYER|DETAILS|ITEM`  
+...  
+`|teampreview`
 
 > These messages appear if you're playing a format that uses team previews.
 
@@ -156,7 +156,7 @@ The beginning of a battle will look something like this:
 `|t:|TIMESTAMP`
 
 > The current UNIX timestamp (the number of seconds since 1970) - useful for determining
-> when events occured in real time.
+> when events occurred in real time.
 
 ### Identifying Pokémon
 
@@ -316,7 +316,7 @@ stat boosts are minor actions.
 
 `|-fail|POKEMON|ACTION`
 
-> The specified `ACTION` has failed against the `POKEMON` targetted. The
+> The specified `ACTION` has failed against the `POKEMON` targeted. The
 > `ACTION` in question should be a move that fails due to its own mechanics.
 > Moves (or effect activations) that fail because they're blocked by another
 > effect should use `-block` instead.
@@ -603,7 +603,7 @@ stat boosts are minor actions.
 `|-nothing`
 
 > **DEPRECATED**: A move did absolutely nothing. (For example: Splash). In the
-> future this will be of the form `|-activate||move:Splash`.
+> future this will be of the form `|-activate|POKEMON|move: Splash`.
 
 `|-hitcount|POKEMON|NUM`
 

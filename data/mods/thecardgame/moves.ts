@@ -1,4 +1,4 @@
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	camouflage: {
 		inherit: true,
 		onHit(target) {
@@ -19,6 +19,22 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 		inherit: true,
 		onEffectiveness(typeMod, target, type, move) {
 			return typeMod + this.dex.getEffectiveness('Normal', type);
+		},
+	},
+	ivycudgel: {
+		inherit: true,
+		onModifyType(move, pokemon) {
+			switch (pokemon.species.name) {
+			case 'Ogerpon-Wellspring': case 'Ogerpon-Wellspring-Tera':
+				move.type = 'Water';
+				break;
+			case 'Ogerpon-Hearthflame': case 'Ogerpon-Hearthflame-Tera':
+				move.type = 'Fire';
+				break;
+			case 'Ogerpon-Cornerstone': case 'Ogerpon-Cornerstone-Tera':
+				move.type = 'Fighting';
+				break;
+			}
 		},
 	},
 	roost: {
@@ -68,7 +84,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 				if (target.hasType('Normal')) return 0;
 			}
 		},
-		ignoreImmunity: {'Fighting': true},
+		ignoreImmunity: { 'Fighting': true },
 	},
 	trickortreat: {
 		inherit: true,
@@ -97,7 +113,7 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			case 'raindance':
 			case 'primordialsea':
 			case 'hail':
-			case 'snow':
+			case 'snowscape':
 				move.type = 'Water';
 				break;
 			case 'sandstorm':

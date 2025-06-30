@@ -7,8 +7,8 @@
 const YoutubeInterface = require('../../../dist/server/chat-plugins/youtube').YoutubeInterface;
 const assert = require('../../assert');
 
-describe(`Youtube features`, function () {
-	it.skip(`should correctly add channels to the database`, async function () {
+describe(`Youtube features`, () => {
+	it.skip(`should correctly add channels to the database`, async () => {
 		if (!Config.youtubeKey) return true;
 		const Youtube = new YoutubeInterface({});
 		const url = 'https://www.youtube.com/channel/UCuAXFkgsw1L7xaCfnd5JJOw';
@@ -16,7 +16,7 @@ describe(`Youtube features`, function () {
 		assert(Youtube.data['UCuAXFkgsw1L7xaCfnd5JJOw']);
 	});
 
-	it.skip(`should correctly handle PS names and channel names`, async function () {
+	it.skip(`should correctly handle PS names and channel names`, async () => {
 		if (!Config.youtubeKey) return true;
 		const Youtube = new YoutubeInterface({});
 		const url = 'https://www.youtube.com/channel/UCuAXFkgsw1L7xaCfnd5JJOw';
@@ -26,7 +26,7 @@ describe(`Youtube features`, function () {
 		assert.equal(channelId, Youtube.channelSearch('Official Rick Astley'));
 	});
 
-	it.skip(`should correctly parse channel links`, function () {
+	it.skip(`should correctly parse channel links`, () => {
 		if (!Config.youtubeKey) return true;
 		const videoUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
 		const channelUrl = 'https://www.youtube.com/channel/UCuAXFkgsw1L7xaCfnd5JJOw';

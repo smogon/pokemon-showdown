@@ -1,4 +1,4 @@
-import type {Translations} from '../../server/chat';
+import type { Translations } from '../../server/chat';
 
 export const translations: Translations = {
 	name: "German",
@@ -19,7 +19,7 @@ export const translations: Translations = {
 		"% <strong>Global Driver</strong> - The above, and they can also lock users and check for alts": "% <strong>Global Driver</strong> - Oben genanntes, und sie können Nutzer sperren sowie alternative Accounts einsehen.",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - Oben genanntes, und sie können Nutzer vom Server verbannen.",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Wie Moderatoren, nur wird verdeutlicht, dass der Nutzer ein Bot ist.",
-		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Sie können alles tun, zum Beispiel den Text dieser Nachricht ändern.",
+		"~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "~ <strong>Global Administrator</strong> - Sie können alles tun, zum Beispiel den Text dieser Nachricht ändern.",
 
 		"<strong>Room ranks</strong>": "<strong>Raum-Ränge</strong>",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Sie verfügen über keine besonderen Privilegien, außer das Zeichen vor dem Namen.",
@@ -42,7 +42,7 @@ export const translations: Translations = {
 		"MODERATOR COMMANDS": "BEFEHLE FÜR MODERATOREN",
 		"ADMIN COMMANDS": "BEFEHLE FÜR ADMINISTRATOREN",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(ersetze / mit ! , um einen Befehl für alle Nutzer im Chat sichtbar zu machen. Dies setzt + % @ # oder & voraus)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)": "(ersetze / mit ! , um einen Befehl für alle Nutzer im Chat sichtbar zu machen. Dies setzt + % @ # oder ~ voraus)",
 
 		"<strong>Room punishments</strong>:": "<strong>Raumstrafen</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - Öffnet ein Fenster mit den Regeln.",

@@ -1,4 +1,4 @@
-export const Conditions: {[k: string]: ModdedConditionData} = {
+export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDataTable = {
 	brn: {
 		inherit: true,
 		onResidualOrder: 10,
@@ -24,7 +24,7 @@ export const Conditions: {[k: string]: ModdedConditionData} = {
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Move') {
-				this.add('-status', target, 'slp', '[from] move: ' + sourceEffect.name);
+				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
 				this.add('-status', target, 'slp');
 			}

@@ -2,7 +2,8 @@
  * Integration for Smogon tournaments.
  * @author mia-pi-git
  */
-import {FS, Utils} from '../../lib';
+import { FS, Utils } from '../../lib';
+import type { Tournament } from '../tournaments';
 
 type Image = [string, number, number];
 interface TourEvent {
@@ -10,6 +11,8 @@ interface TourEvent {
 	url: string;
 	desc: string;
 	image?: Image;
+	/** If there's an image, there needs to be credit to wherever they got it */
+	artistCredit?: { url: string, name: string };
 	id: string;
 	shortDesc: string;
 	date: number;
@@ -40,7 +43,7 @@ export const tours: Record<string, TourTable> = {
 	},
 	ps: {
 		title: "Pokémon Showdown!",
-		icon: ['https://play.pokemonshowdown.com/pokemonshowdownbeta.png', 146, 44],
+		icon: ['https://play.pokemonshowdown.com/favicon-256.png', 196, 196],
 		tours: [],
 		desc: "Tournaments run by the rooms of Pokemon Showdown.",
 	},
@@ -106,17 +109,17 @@ export const commands: Chat.ChatCommands = {
 			const targets = target.split('|');
 			const isEdit = cmd === 'edit';
 			const tourID = isEdit ? toID(targets.shift()) : null;
-			// {title}|{category}|{url}|{end date}|{img}|{shortDesc}|{desc}
+			// {title}|{category}|{url}|{end date}|{img}|{credit}|{artist}{shortDesc}|{desc}
 			const [
-				title, rawSection, url, rawEnds, rawImg, rawShort, rawDesc,
-			] = Utils.splitFirst(targets.join('|'), '|', 6).map(f => f.trim());
+				title, rawSection, url, rawEnds, rawImg, rawCredit, rawArtistName, rawShort, rawDesc,
+			] = Utils.splitFirst(targets.join('|'), '|', 8).map(f => f.trim());
 			const sectionID = toID(rawSection);
 			if (!toID(title)) {
 				return this.popupReply(`Invalid title. Must have at least one alphanumeric character.`);
 			}
 			const section = tours[sectionID];
 			if (!section) {
-				return this.errorReply(`Invalid section ID: "${sectionID}"`);
+				return this.popupReply(`Invalid section ID: "${sectionID}"`);
 			}
 			if (!isEdit && section.tours.find(f => toID(title) === f.id)) {
 				return this.popupReply(`A tour with that ID already exists. Please choose another.`);
@@ -132,7 +135,7 @@ export const commands: Chat.ChatCommands = {
 			if (isNaN(ends)) {
 				return this.popupReply(`Invalid ending date: ${rawEnds}.`);
 			}
-			let image;
+			let image, artistCredit;
 			if (rawImg) {
 				if (!Chat.isLink(rawImg)) {
 					return this.popupReply(`Invalid image URL: ${rawImg}`);
@@ -140,9 +143,19 @@ export const commands: Chat.ChatCommands = {
 				try {
 					const dimensions = await Chat.fitImage(rawImg, 300, 300);
 					image = [rawImg, ...dimensions.slice(0, -1)] as Image;
-				} catch (e) {
+				} catch {
 					return this.popupReply(`Invalid image URL: ${rawImg}`);
 				}
+			}
+			if (image && !(toID(rawCredit) && toID(rawArtistName))) {
+				return this.popupReply(`All images must have the artist named and a link to the profile of the user who created them.`);
+			}
+			if (rawCredit || rawArtistName) { // if one exists, both should, as verified above
+				const artistUrl = (Chat.linkRegex.exec(rawCredit))?.[0];
+				if (!artistUrl) {
+					return this.popupReply(`Invalid artist credit URL.`);
+				}
+				artistCredit = { url: artistUrl, name: rawArtistName.trim() };
 			}
 			if (!rawShort?.length || !rawDesc?.length) {
 				return this.popupReply(`Must provide both a short description and a full description.`);
@@ -151,6 +164,7 @@ export const commands: Chat.ChatCommands = {
 				title: Utils.escapeHTML(title),
 				url,
 				image,
+				artistCredit,
 				shortDesc: rawShort.replace(/&#13;&#10;/g, '\n'),
 				desc: rawDesc.replace(/&#13;&#10;/g, '\n'),
 				id: tourID || toID(title),
@@ -192,10 +206,10 @@ export const commands: Chat.ChatCommands = {
 			}
 			const section = tours[sectionID];
 			if (!section) {
-				return this.errorReply(`Invalid section ID: "${sectionID}". Valid IDs: ${Object.keys(tours).join(', ')}`);
+				throw new Chat.ErrorMessage(`Invalid section ID: "${sectionID}". Valid IDs: ${Object.keys(tours).join(', ')}`);
 			}
 			if (section.whitelist?.includes(targetID)) {
-				return this.errorReply(`That user is already whitelisted on that section.`);
+				throw new Chat.ErrorMessage(`That user is already whitelisted on that section.`);
 			}
 			if (!section.whitelist) section.whitelist = [];
 			section.whitelist.push(targetID);
@@ -213,11 +227,11 @@ export const commands: Chat.ChatCommands = {
 			}
 			const section = tours[sectionID];
 			if (!section) {
-				return this.errorReply(`Invalid section ID: "${sectionID}". Valid IDs: ${Object.keys(tours).join(', ')}`);
+				throw new Chat.ErrorMessage(`Invalid section ID: "${sectionID}". Valid IDs: ${Object.keys(tours).join(', ')}`);
 			}
 			const idx = section.whitelist?.indexOf(targetID) ?? -1;
 			if (!section.whitelist || idx < 0) {
-				return this.errorReply(`${targetID} is not whitelisted in that section.`);
+				throw new Chat.ErrorMessage(`${targetID} is not whitelisted in that section.`);
 			}
 			section.whitelist.splice(idx, 1);
 			if (!section.whitelist.length) {
@@ -236,24 +250,23 @@ export const commands: Chat.ChatCommands = {
 	smogtourshelp: [
 		`/smogtours view - View a list of ongoing forum tournaments.`,
 		`/smogtours whitelist [section], [user] - Whitelists the given [user] to manage tournaments for the given [section].`,
-		`Requires: &`,
+		`Requires: ~`,
 		`/smogtours unwhitelist [section], [user] - Removes the given [user] from the [section]'s management whitelist.`,
-		`Requires: &`,
+		`Requires: ~`,
 	],
 };
 
 /** Modifies `inner` in-place to wrap it in the necessary HTML to show a tab on the sidebar. */
-function renderTab(inner: string, isTitle?: boolean, isCur?: boolean) {
-	isTitle = false;
+function renderTab(inner: string, isLink?: string, isCur?: boolean) {
 	let buf = '';
-	if (isCur) {
+	if (isLink && isCur) {
 		// the CSS breaks entirely without the folderhacks.
 		buf += `<div class="folder cur"><div class="folderhack3"><div class="folderhack1">`;
 		buf += `</div><div class="folderhack2"></div>`;
 		buf += `<div class="selectFolder">${inner}</div></div></div>`;
 	} else {
-		if (!isTitle) {
-			inner = `<div class="selectFolder">${inner}</div>`;
+		if (isLink) {
+			inner = `<a class="selectFolder" target="replace" href="${isLink}">${inner}</a>`;
 		}
 		buf += `<div class="folder">${inner}</div>`;
 	}
@@ -275,48 +288,55 @@ export function renderPageChooser(curPage: string, buffer: string, user?: User) 
 	buf += `<div class="folderlist">`;
 	buf += `<div class="folderlistbefore"></div>`;
 
+	buf += renderTab(
+		`<strong>Home</strong>`,
+		`view-tournaments-all`,
+		curPage === ''
+	);
+
 	const keys = Object.keys(tours);
 	buf += keys.map(cat => {
 		let innerBuf = '';
 		const tourData = tours[cat];
 		innerBuf += renderTab(
-			`<strong><a target="replace" href="/view-tournaments-section-${cat}">${tourData.title}</a></strong>`,
-			true,
+			`<strong>${tourData.title}</strong>`,
+			`view-tournaments-section-${cat}`,
 			curPage === cat
 		);
+		buf += `<div class="foldersep"></div>`;
 		if (tourData.tours.length) {
 			Utils.sortBy(tourData.tours, t => -t.date);
 			innerBuf += tourData.tours.map(t => (
 				renderTab(
-					`<i class="fa fa-trophy"></i><a target="replace" href="/view-tournaments-view-${cat}-${t.id}">${t.title}</a>`,
-					false,
+					`<i class="fa fa-trophy"></i> ${t.title}`,
+					`view-tournaments-view-${cat}-${t.id}`,
 					curPage === `${cat}-${t.id}`
 				)
 			)).join('');
 		} else {
-			innerBuf += renderTab(`None`, false);
+			innerBuf += renderTab(`<div class="text">None</div>`);
 		}
 		return innerBuf;
 	}).join('<div class="foldersep"></div>');
 	if (user && (checkWhitelisted('', user) || user?.can('rangeban'))) {
 		buf += `<div class="foldersep"></div>`;
 		buf += renderTab(
-			`<strong>Manage</strong>`, true, curPage === 'manage'
+			`<strong>Manage</strong>`, `view-tournaments-manage`, curPage === 'manage'
 		);
 		buf += renderTab(
-			`<i class="fa fa-pencil"></i><a target="replace" href="/view-tournaments-start">Start new</a>`,
-			false,
+			`<i class="fa fa-pencil"></i>Start new`,
+			`view-tournaments-start`,
 			curPage === 'start',
 		);
 		buf += renderTab(
-			`<i class="fa fa-pencil"></i><a target="replace" href="/view-tournaments-edit">Edit existing</a>`,
-			false,
+			`<i class="fa fa-pencil"></i>Edit existing`,
+			`view-tournaments-edit`,
 			curPage === 'edit',
 		);
 		if (user.can('rangeban')) {
 			buf += renderTab(
-				`<i class="fa fa-pencil"></i><a target="replace" href="/view-tournaments-whitelists">Whitelist</a>`,
-				false,
+				`<i class="fa fa-pencil"></i>Whitelist`,
+				`view-tournaments-whitelists`,
 				curPage === 'whitelist',
 			);
 		}
@@ -331,13 +351,55 @@ function error(page: string, message: string, user: User) {
 	return renderPageChooser(page, `<div class="message-error">${message}</div>`, user);
 }
 
+function instantTournaments() {
+	const roomTours = [];
+	for (const tourRoom of Rooms.rooms.values()) {
+		const tournament = tourRoom.game as Tournament;
+		if (!tournament || tournament?.constructor.name !== 'Tournament') continue;
+		if (tourRoom.settings.isPrivate || tourRoom.settings.isPersonal || tourRoom.settings.staffRoom) continue;
+		roomTours.push(tournament);
+	}
+	if (!roomTours.length) {
+		return `<p>No instant tournaments are currently running.</p>`;
+	}
+	const started = Utils.sortBy(roomTours.filter(tour => tour.isTournamentStarted), tour => tour.room.roomid);
+	const signups = Utils.sortBy(roomTours.filter(tour => !tour.isTournamentStarted), tour => tour.room.roomid);
+
+	function renderLink(tour: Tournament) {
+		const name = Dex.formats.get(tour.name).exists ? Dex.formats.get(tour.name).name : tour.name;
+		const icon = tour.generator.name === 'Round Robin' ? '<i class="fa fa-th"></i>' :
+			tour.generator.name === 'Single Elimination' ? '<i class="fa fa-share-alt"></i>' :
+			'<i class="fa fa-share-alt"></i><i class="fa fa-share-alt"></i>';
+		const plural = tour.players.length !== 1 ? 's' : '';
+		return `<li><a href="/${tour.room.roomid}" class="blocklink">&laquo;<strong>${tour.room.roomid}</strong>&raquo;<small style="float:right">(${tour.players.length} player${plural})</small><br />${icon} <small>${Utils.escapeHTML(name)} ${tour.generator.name}</small></a></li>`;
+	}
+
+	let buf = ``;
+	if (signups.length) {
+		buf += `<strong>Accepting Signups:</strong><ul class="roomlist">`;
+		for (const tour of signups) {
+			buf += renderLink(tour);
+		}
+		buf += `</ul>`;
+	}
+	if (started.length) {
+		if (signups.length) buf += `<br />`;
+		buf += `<strong>Started:</strong><ul class="roomlist">`;
+		for (const tour of started) {
+			buf += renderLink(tour);
+		}
+		buf += `</ul>`;
+	}
+	return buf;
+}
+
 export const pages: Chat.PageTable = {
 	tournaments: {
 		all(query, user) {
 			let buf = `${refresh(this.pageid)}<br /><center>`;
 			buf += `<h2><psicon pokemon="Meloetta-Pirouette" />Welcome!<psicon pokemon="Meloetta-Pirouette" /></h2>`;
 			const icon = tours.official.icon;
-			if (icon) buf += `<img src="${icon[0]}" width="${icon[1]}" height="${icon[2]}"></center>`;
+			if (icon) buf += `<img src="${icon[0]}" width="${icon[1] / 2}" height="${icon[2] / 2}"></center>`;
 			buf += `<hr />`;
 			this.title = '[Tournaments] All';
 			buf += `<p>Smogon runs official tournaments across their metagames where the strongest and most `;
@@ -347,12 +409,15 @@ export const pages: Chat.PageTable = {
 			buf += `Be sure to sign up if you are eager to participate or `;
 			buf += `check it out if you want to spectate the most hyped games out there.</p><p>`;
 			buf += `For information on tournament rules and etiquette, check out <a href="https://www.smogon.com/forums/threads/3642760/">this information thread</a>.`;
-			buf += `</p><center>`;
+			buf += `</p><ul class="roomlist">`;
 			buf += Object.keys(tours).map(catID => (
-				`<a class="button" target="replace" href="/view-tournaments-section-${catID}">` +
-				`<i class="fa fa-play"></i> ${tours[catID].title}</a>`
+				`<li><a class="blocklink" target="replace" href="/view-tournaments-section-${catID}">` +
+				`<i class="fa fa-play"></i> <strong>${tours[catID].title}</strong></a></li>`
 			)).join(' ');
-			buf += `</center>`;
+			buf += `</ul>`;
+			buf += `<hr />`;
+			buf += `<h2>Instant Tournaments</h2>`;
+			buf += `<div>` + instantTournaments() + `</div>`;
 			return renderPageChooser('', buf, user);
 		},
 		view(query, user) {
@@ -379,6 +444,10 @@ export const pages: Chat.PageTable = {
 			buf += `<center><h2><a href="${tour.url}">${tour.title}</a></h2>`;
 			if (tour.image) {
 				buf += `<img src="${tour.image[0]}" width="${tour.image[1]}" height="${tour.image[2]}" />`;
+				if (tour.artistCredit) {
+					buf += `<br /><small>The creator of this image, ${tour.artistCredit.name}, `;
+					buf += `<a href="${tour.artistCredit.url}">can be found here.</a></small>`;
+				}
 			}
 			buf += `</center>`;
 			if (tour.ends) {
@@ -437,7 +506,7 @@ export const pages: Chat.PageTable = {
 			let buf = `${refresh(this.pageid)}<br />`;
 			this.title = '[Tournaments] Add';
 			buf += `<center><h2>Add new tournament</h2></center><hr />`;
-			buf += `<form data-submitsend="/smogtours add {title}|{category}|{url}|{enddate}|{img}|{shortDesc}|{desc}">`;
+			buf += `<form data-submitsend="/smogtours add {title}|{category}|{url}|{enddate}|{img}|{credit}|{artist}|{shortDesc}|{desc}">`;
 			let possibleCategory = Object.keys(tours)[0];
 			for (const k in tours) {
 				if (tours[k].whitelist?.includes(user.id)) {
@@ -456,6 +525,9 @@ export const pages: Chat.PageTable = {
 			buf += `Info link: <input name="url" /><br />`;
 			buf += `End date: <input type="date" name="enddate" value="${Chat.toTimestamp(new Date()).split(' ')[0]}" /><br />`;
 			buf += `<abbr title="Max length and width: 300px">Image link</abbr> (optional): <input name="img" /><br />`;
+			buf += `Artist name (required if image provided): <input name="artist" /><br />`;
+			buf += `Image credit URL (required if image provided, must be a link to the creator's Smogon profile): `;
+			buf += `<input name="credit" /><br />`;
 			buf += `Short description: <br /><textarea name="shortDesc" rows="6" cols="50"></textarea><br />`;
 			buf += `Full description: <br /><textarea name="desc" rows="20" cols="50"></textarea><br />`;
 			buf += `<button type="submit" class="button notifying">Create!</button></form>`;
@@ -473,12 +545,15 @@ export const pages: Chat.PageTable = {
 			const tour = section.tours.find(t => t.id === tourID);
 			if (!tour) return error('edit', `Tour with ID "${tourID}" not found.`, user);
 			let buf = `${refresh(this.pageid)}<br /><center><h2>Edit tournament "${tour.title}"</h2></center><hr />`;
-			buf += `<form data-submitsend="/smogtours edit ${tour.id}|{title}|${sectionID}|{url}|{enddate}|{img}|{shortDesc}|{desc}">`;
+			buf += `<form data-submitsend="/smogtours edit ${tour.id}|{title}|${sectionID}|{url}|{enddate}|{img}|{credit}|{artist}|{shortDesc}|{desc}">`;
 			buf += `Title: <input name="title" value="${tour.title}"/><br />`;
 			buf += `Info link: <input name="url" value="${tour.url}" /><br />`;
 			const curEndDay = Chat.toTimestamp(new Date(tour.ends || Date.now())).split(' ')[0];
 			buf += `End date: <input type="date" name="enddate" value="${curEndDay}" /><br />`;
 			buf += `Image link (optional): <input name="img" value="${tour.image?.[0] || ""}" /><br />`;
+			buf += `Artist name (required if image provided): <input name="artist" value="${tour.artistCredit?.name}" /><br />`;
+			buf += `Image credit (required if image provided, must be a link to the creator's Smogon profile): `;
+			buf += `<input name="credit" value="${tour.artistCredit?.url || ""}"/><br />`;
 			buf += `Short description: <br />`;
 			buf += `<textarea name="shortDesc" rows="6" cols="50">${tour.shortDesc}</textarea><br />`;
 			const desc = Utils.escapeHTML(tour.desc).replace(/<br \/>/g, '&#10;');

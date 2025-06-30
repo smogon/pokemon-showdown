@@ -5,9 +5,9 @@
  */
 
 import * as child_process from 'child_process';
-import {ProcessManager, Streams, Utils, Repl, FS} from '../../lib';
-import {Config} from '../config-loader';
-import {toID} from '../../sim/dex-data';
+import { ProcessManager, Streams, Utils, Repl, FS } from '../../lib';
+import { Config } from '../config-loader';
+import { toID } from '../../sim/dex-data';
 
 class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 	tasks = new Set<string>();
@@ -22,7 +22,7 @@ class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 	listen() {
 		this.process.stdout.setEncoding('utf8');
 		this.process.stderr.setEncoding('utf8');
-		this.process.stdout.on('data', (data) => {
+		this.process.stdout.on('data', data => {
 			// so many bugs were created by \nready\n
 			data = data.trim();
 			const [taskId, dataStr] = data.split("|");
@@ -54,12 +54,12 @@ class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 			this.pushEnd();
 		});
 	}
-	_write(chunk: string) {
+	override _write(chunk: string) {
 		const [taskId, message] = Utils.splitFirst(chunk, '\n');
 		this.tasks.add(taskId);
 		this.process.stdin.write(`${taskId}|${message}\n`);
 	}
-	destroy() {
+	override destroy() {
 		try {
 			this.process.kill();
 		} catch {}

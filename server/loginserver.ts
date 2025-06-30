@@ -10,7 +10,7 @@
 const LOGIN_SERVER_TIMEOUT = 30000;
 const LOGIN_SERVER_BATCH_TIME = 1000;
 
-import {Net, FS} from '../lib';
+import { Net, FS } from '../lib';
 
 /**
  * A custom error type used when requests to the login server take too long.
@@ -20,7 +20,7 @@ TimeoutError.prototype.name = TimeoutError.name;
 
 function parseJSON(json: string) {
 	if (json.startsWith(']')) json = json.substr(1);
-	const data: {error: string | null, json: any[] | null} = {error: null, json: null};
+	const data: { error: string | null, json: any[] | null } = { error: null, json: null };
 	try {
 		data.json = JSON.parse(json);
 	} catch (err: any) {
@@ -34,11 +34,12 @@ type LoginServerResponse = [AnyObject, null] | [null, Error];
 class LoginServerInstance {
 	readonly uri: string;
 	requestQueue: [AnyObject, (val: LoginServerResponse) => void][];
-	requestTimer: NodeJS.Timer | null;
+	requestTimer: NodeJS.Timeout | null;
 	requestLog: string;
 	lastRequest: number;
 	openRequests: number;
 	disabled: false;
+	[key: `${string}Server`]: LoginServerInstance | undefined;
 
 	constructor() {
 		this.uri = Config.loginserver;
@@ -91,10 +92,8 @@ class LoginServerInstance {
 
 		// ladderupdate and mmr are the most common actions
 		// prepreplay is also common
-		// @ts-ignore
-		if (this[action + 'Server']) {
-			// @ts-ignore
-			return this[action + 'Server'].request(action, data);
+		if (this[`${action}Server`]) {
+			return this[`${action}Server`]!.request(action, data);
 		}
 
 		const actionData = data || {};
@@ -163,7 +162,7 @@ class LoginServerInstance {
 	}
 	requestStart(size: number) {
 		this.lastRequest = Date.now();
-		this.requestLog += ' | ' + size + ' rqs: ';
+		this.requestLog += ` | ${size} rqs: `;
 		this.openRequests++;
 	}
 	requestEnd(error?: Error) {
@@ -171,7 +170,7 @@ class LoginServerInstance {
 		if (error && error instanceof TimeoutError) {
 			this.requestLog += 'TIMEOUT';
 		} else {
-			this.requestLog += '' + ((Date.now() - this.lastRequest) / 1000) + 's';
+			this.requestLog += `${(Date.now() - this.lastRequest) / 1000}s`;
 		}
 		this.requestLog = this.requestLog.substr(-1000);
 		this.requestTimerPoke();

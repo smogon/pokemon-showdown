@@ -15,7 +15,8 @@ const CRASH_EMAIL_THROTTLE = 5 * 60 * 1000; // 5 minutes
 
 const logPath = path.resolve(
 	// not sure why this is necessary, but in Windows testing it was
-	__dirname, '../', __dirname.includes(`${path.sep}dist${path.sep}`) ? '..' : '', 'logs/errors.txt'
+	__dirname, '../', __dirname.includes(`${path.sep}dist${path.sep}`) ? '..' : '',
+	path.join((global as any).Config?.logsdir || 'logs', 'errors.txt')
 );
 let lastCrashLog = 0;
 let transport: any;
@@ -41,7 +42,7 @@ export function crashlogger(
 	}
 
 	console.error(`\nCRASH: ${stack}\n`);
-	const out = fs.createWriteStream(logPath, {flags: 'a'});
+	const out = fs.createWriteStream(logPath, { flags: 'a' });
 	out.on('open', () => {
 		out.write(`\n${stack}\n`);
 		out.end();
@@ -49,7 +50,7 @@ export function crashlogger(
 		console.error(`\nSUBCRASH: ${err.stack}\n`);
 	});
 
-	const emailOpts = emailConfig || global.Config?.crashguardemail;
+	const emailOpts = emailConfig || (global as any).Config?.crashguardemail;
 	if (emailOpts && ((datenow - lastCrashLog) > CRASH_EMAIL_THROTTLE)) {
 		lastCrashLog = datenow;
 

@@ -1,4 +1,4 @@
-export const Moves: {[k: string]: ModdedMoveData} = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	gastroacid: {
 		inherit: true,
 		condition: {
@@ -32,8 +32,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 						if (moveSlot.id === move.id) {
 							moveSlot.pp = 0;
 							if (!source.m.curMoves.includes(moveSlot.id) && source.m.trackPP.get(moveSlot.id)) {
-				        source.m.trackPP.set(moveSlot.id, moveSlot.maxpp - moveSlot.pp);
-				      }
+								source.m.trackPP.set(moveSlot.id, moveSlot.maxpp - moveSlot.pp);
+							}
 							this.add('-activate', source, 'move: Grudge', move.name);
 						}
 					}
@@ -49,6 +49,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 	lunardance: {
 		inherit: true,
 		condition: {
+			onSwitchIn(target) {
+				this.singleEvent('Swap', this.effect, this.effectState, target);
+			},
 			onSwap(target) {
 				if (
 					!target.fainted && (
@@ -131,9 +134,9 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			const ally = source.side.active.find(mon => mon && mon !== source && !mon.fainted);
 			const foeAlly = target.side.active.find(mon => mon && mon !== target && !mon.fainted);
 			if (target.isAlly(source)) {
-				this.add('-activate', source, 'move: Skill Swap', '', '', '[of] ' + target);
+				this.add('-activate', source, 'move: Skill Swap', '', '', `[of] ${target}`);
 			} else {
-				this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, '[of] ' + target);
+				this.add('-activate', source, 'move: Skill Swap', targetAbility, sourceAbility, `[of] ${target}`);
 			}
 			this.singleEvent('End', sourceAbility, source.abilityState, source);
 			if (ally?.m.innate) {
@@ -148,8 +151,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 
 			source.ability = targetAbility.id;
-			source.abilityState = {id: this.toID(source.ability), target: source};
-			if (source.m.innate && source.m.innate.endsWith(targetAbility.id)) {
+			source.abilityState = this.initEffectState({ id: this.toID(source.ability), target: source });
+			if (source.m.innate?.endsWith(targetAbility.id)) {
 				source.removeVolatile(source.m.innate);
 				delete source.m.innate;
 			}
@@ -163,8 +166,8 @@ export const Moves: {[k: string]: ModdedMoveData} = {
 			}
 
 			target.ability = sourceAbility.id;
-			target.abilityState = {id: this.toID(target.ability), target: target};
-			if (target.m.innate && target.m.innate.endsWith(sourceAbility.id)) {
+			target.abilityState = this.initEffectState({ id: this.toID(target.ability), target });
+			if (target.m.innate?.endsWith(sourceAbility.id)) {
 				target.removeVolatile(target.m.innate);
 				delete target.m.innate;
 			}

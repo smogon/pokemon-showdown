@@ -3,7 +3,7 @@ Streams
 
 Streams are variables used to interact with large amounts of data without needing to keep it all loaded in RAM.
 
-A stream is used where you would normally use a string, Buffer, or Array, but only part of it is kept in memory at once.
+You can think of a `ReadStream` as like a function that returns a string/Buffer, but only a little at a time, and a `WriteStream` as like a function that takes a string/Buffer as input, but only a little at a time. An `ObjectReadStream` is like a function that takes an array as input, but only a little at a time, and an `ObjectWriteStream` is like a function that returns an array, but only a little at a time.
 
 Node.js comes with built-in support for streams, and there is also a WHATWG Streams spec (which are incompatible, of course). Both APIs are hard to use and have unnecessary amounts of boilerplate; the Node version more so. This API can wrap Node's API, or it can be used independently, and is a lot easier to use.
 
@@ -13,11 +13,15 @@ An overview:
 - `ReadStream` is a string/Buffer read stream. Read inputs by line with `readStream.readLine()` or by chunk with `readStream.read()`, or pipe inputs to a `WriteStream` with `readStream.pipe(writeStream)`.
 - `ReadWriteStream` is a string/Buffer read/write stream.
 
+- `ObjectWriteStream` is a write stream for arbitrary objects. Write to it with `writeStream.write(data)`.
+- `ObjectReadStream` is a read stream for arbitrary objects. Read inputs by line with `readStream.readLine()` or by chunk with `readStream.read()`, or pipe inputs to a `WriteStream` with `readStream.pipe(writeStream)`.
+- `ObjectReadWriteStream` is a read/write stream for arbitrary objects.
+
 These streams are not API-compatible with Node streams, but can wrap them.
 
 
-Consuming streams
------------------
+Using streams
+-------------
 
 ### "override encoding"
 
@@ -28,20 +32,36 @@ However, if for some reason you need to change which encoding you use on a per-r
 
 ## Interface: WriteStream
 
-A `WriteStream` can be written to.
+A `WriteStream` can be written to. You can think of it like a function taking a string/Buffer as an argument, except you can give it the string/Buffer one chunk at a time, instead of all at once.
+
+So you can think of these as being the same thing:
+
+```js
+// option 1: do it normally
+await FS('file.txt').write("Here are some words.\n");
+
+// option 2: do it as a stream
+const stream = FS('file.txt').createWriteStream();
+await stream.write("Here a");
+await stream.write("re some ");
+await stream.write("words.\n"); // OR: await stream.writeLine("words.");
+await stream.writeEnd();
+```
+
+The stream version lets you do it a bit at a time instead of all at once, so you use less memory.
 
 ### writeStream.write(chunk, [encoding])
 
 * `chunk` {string|Buffer|null} data to write
-* `encoding` [override encoding][]
+* `encoding` [override encoding](#override-encoding)
 * Returns: {Promise<void>} for the next time it's safe to write to the `writeStream`.
 
-Writes to the stream. `writeStream.write(null)` is equivalent to `writeStream.end()`.
+Writes to the stream. `writeStream.write(null)` is equivalent to `writeStream.writeEnd()`.
 
 ### writeStream.writeLine(chunk, [encoding])
 
 * `chunk` {string} data
-* `encoding` [override encoding][]
+* `encoding` [override encoding](#override-encoding)
 * Returns: {Promise<void>} for the next time it's safe to write to the `writeStream`.
 
 Writes a line to the stream. Equivalent to `writeStream.write(chunk + '\n')`.
@@ -57,11 +77,38 @@ This tells the write stream that you're done writing to it. In the Buffer/string
 
 ## Interface: ReadStream
 
-A `ReadStream` can be read from.
+A `ReadStream` can be read from. You can think of it like a function that returns a string/Buffer, except you can read it out one chunk at a time, instead of all at once.
+
+So you can think of these as being the same thing:
+
+```js
+// option 1: do it normally
+const contents1 = await FS('file.txt').read();
+console.log(contents1);
+
+// option 3: do it as a stream
+const stream = FS('file.txt').createReadStream();
+let contents2 = '';
+let chunk;
+while ((chunk = await stream.read()) !== null) {
+    contents2 += chunk;
+}
+console.log(contents2);
+
+// option 2: do it as a stream, by line (this can add an ending \n where there wasn't one before)
+const stream = FS('file.txt').createReadStream();
+let contents3 = '';
+for await (const line of stream.byLine()) {
+    contents3 += line + '\n';
+}
+console.log(contents3);
+```
+
+The stream version lets you do it a bit at a time instead of all at once, so you use less memory (this example doesn't use less memory, since we're just building the full string ourselves, but you can imagine doing something else that doesn't just build the string back).
 
 ### readStream.read([encoding])
 
-* `encoding` [override encoding][]
+* `encoding` [override encoding](#override-encoding)
 * Returns: {Promise<string | null>} the data read.
 
 Reads data from the read stream as fast as possible.
@@ -75,7 +122,7 @@ There's rarely a need to use this function directly; you either know how many by
 ### readStream.read(byteCount, [encoding])
 
 * `byteCount` number of bytes to read
-* `encoding` [override encoding][]
+* `encoding` [override encoding](#override-encoding)
 * Returns: {Promise<string | null>} the data read.
 
 Reads `byteCount` bytes from the read stream.
@@ -88,7 +135,7 @@ You may also set `byteCount` to `null` to make this behave like `readStream.read
 
 ### readStream.readLine([encoding])
 
-* `encoding` [override encoding][]
+* `encoding` [override encoding](#override-encoding)
 * Returns: {Promise<string | null>} the data read.
 
 Reads a line (a string delimited by `\n` or `\r\n`) from the stream.
@@ -97,7 +144,7 @@ The equivalent of `readDelimitedBy('\n')`, but chopping off any trailing `\r` fr
 
 ### readStream.readDelimitedBy(delimiter, [encoding])
 
-* `encoding` [override encoding][]
+* `encoding` [override encoding](#override-encoding)
 * Returns: {Promise<string | null>} the data read.
 
 Reads a line delimited by `delimiter` from the stream.

@@ -1,4 +1,4 @@
-import type {Translations} from '../../server/chat';
+import type { Translations } from '../../server/chat';
 
 export const translations: Translations = {
 	name: "Portuguese",
@@ -16,11 +16,10 @@ export const translations: Translations = {
 
 		"<strong>Global ranks</strong>": "<strong>Cargos Globais</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "+ <strong>Global Voice</strong> - Eles podem usar comandos com !, tal como !groups",
-		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>Section Leader</strong> - Eles supervisionam salas de uma seção específica",
 		"% <strong>Global Driver</strong> - Like Voice, and they can lock users and check for alts": "% <strong>Global Driver</strong> - Como Voice, além de poderem dar locks e verificar contas alternativas",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "@ <strong>Global Moderator</strong> - O de cima, além de poderem banir usuários do servidor",
 		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "* <strong>Global Bot</strong> - Igual ao cargo de Moderator, mas deixa claro que o usuário é um bot",
-		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "&amp; <strong>Global Administrator</strong> - Eles podem fazer qualquer coisa, como mudar o que esta mensagem diz",
+		"~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "~ <strong>Global Administrator</strong> - Eles podem fazer qualquer coisa, como mudar o que esta mensagem diz",
 
 		"<strong>Room ranks</strong>": "<strong>Cargos da Sala</strong>",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "^ <strong>Prize Winner</strong> - Eles não têm poder algum além de um símbolo.",
@@ -43,7 +42,7 @@ export const translations: Translations = {
 		"MODERATOR COMMANDS": "COMANDOS DE MODERATOR",
 		"ADMIN COMMANDS": "COMANDOS DE ADMINISTRATOR",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(substitua / por ! para exibir um comando publicamente. Isso requer: + % @ # &)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)": "(substitua / por ! para exibir um comando publicamente. Isso requer: + % @ # ~)",
 
 		"<strong>Room punishments</strong>:": "<strong>Puni&ccedil;&otilde;es da sala</strong>",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - Faz uma mensagem com as regras aparecer.",
@@ -165,6 +164,8 @@ export const translations: Translations = {
 		"Common misconceptions about our RNG": "Concepções erradas e comuns sobre nosso RNG",
 		"To join a room tournament, click the <strong>Join!</strong> button or type the command <code>/tour join</code> in the room's chat. You can check if your team is legal for the tournament by clicking the <strong>Validate</strong> button once you've joined and selected a team. To battle your opponent in the tournament, click the <strong>Ready!</strong> button when it appears. There are two different types of room tournaments: elimination (if a user loses more than a certain number of times, they are eliminated) and round robin (all users play against each other, and the user with the most wins is the winner).": "Para entrar em um torneio de sala, clique no botão <strong>Join!</strong> ou digite o comando <code>/tour join</code> no chat da sala. Você pode checar se sua equipe é válida para o torneio clicando no botão <strong>Validate</strong> uma vez que você tenha entrado e selecionado um time. Para batalhar contra um oponente no torneio, clique no botão <strong>Ready!</strong> quando ele aparecer. Existem tipos diferentes de torneios de sala: eliminação (se um usuário perder mais do que um certo número de vezes estará eliminado) e round robin (todos jogam entre si, com o usuário com mais pontos sendo o vencedor).",
 		"Frequently Asked Questions": "Perguntas Frequentes",
+
+		"Invalid room.": "Sala inválida.",
 
 		"pages/faq": "pages/faq",
 		"pages/ladderhelp": "pages/ladderhelp",

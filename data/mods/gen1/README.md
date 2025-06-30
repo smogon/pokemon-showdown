@@ -10,7 +10,7 @@ There were only 151 Pokémon plus MissingNo, just a handful of moves, no abiliti
 EVd to the max and we had some kind of different IVs, which maxed at 15 and every point gave 2 to the stat, so in
 a similar fashion, Pokes used to have 30 IVs on each stat.
 
-The following sources have been used and extremly useful when developing this mod:
+The following sources have been used and extremely useful when developing this mod:
 https://raw.github.com/po-devs/pokemon-online/master/bin/database/rby-stuff.txt
 https://www.smogon.com/rb/articles/differences
 https://www.smogon.com/forums/threads/past-gens-research-thread.3506992/#post-5878612

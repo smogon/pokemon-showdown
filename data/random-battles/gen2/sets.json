@@ -1,0 +1,1686 @@
+{
+    "venusaur": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["growth", "hiddenpowerfire", "hiddenpowerice", "razorleaf", "sleeppowder", "synthesis"]
+            }
+        ]
+    },
+    "charizard": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["bellydrum", "earthquake", "fireblast", "rockslide", "swordsdance"]
+            }
+        ]
+    },
+    "blastoise": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["icebeam", "rest", "sleeptalk", "surf"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["icebeam", "rapidspin", "rest", "roar", "surf", "toxic"]
+            }
+        ]
+    },
+    "butterfree": {
+        "level": 85,
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["nightmare", "psychic", "sleeppowder", "substitute"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["psychic", "reflect", "sleeppowder", "stunspore"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["hiddenpowerbug", "psychic", "sleeppowder", "stunspore"]
+            }
+        ]
+    },
+    "beedrill": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["agility", "hiddenpowerground", "sludgebomb", "substitute", "swordsdance"]
+            }
+        ]
+    },
+    "pidgeot": {
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "doubleedge", "rest", "sleeptalk"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["doubleedge", "hiddenpowerground", "hiddenpowerwater", "rest", "sleeptalk"]
+            },
+            {
+                "role": "Thief user",
+                "movepool": ["hiddenpowerground", "hiddenpowerwater", "return", "thief", "toxic"]
+            }
+        ]
+    },
+    "raticate": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["doubleedge", "irontail", "rest", "return", "sleeptalk", "superfang"]
+            }
+        ]
+    },
+    "fearow": {
+        "level": 71,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["doubleedge", "drillpeck", "hiddenpowerground", "rest", "sleeptalk"]
+            }
+        ]
+    },
+    "arbok": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["curse", "earthquake", "rest", "sleeptalk", "sludgebomb"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["curse", "earthquake", "glare", "haze", "sludgebomb"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["curse", "earthquake", "glare", "rockslide", "sludgebomb"],
+                "preferredTypes": ["Ground"]
+            }
+        ]
+    },
+    "pikachu": {
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["encore", "hiddenpowerfire", "hiddenpowerice", "surf", "thunderbolt"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["hiddenpowerfire", "hiddenpowerice", "substitute", "surf", "thunderbolt"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["hiddenpowerice", "surf", "thunder", "thunderbolt"]
+            }
+        ]
+    },
+    "raichu": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["hiddenpowerice", "rest", "sleeptalk", "surf", "thunder"]
+            }
+        ]
+    },
+    "sandslash": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["earthquake", "hiddenpowerbug", "rockslide", "substitute", "swordsdance"],
+                "preferredTypes": ["Rock"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["earthquake", "rest", "rockslide", "sleeptalk"]
+            }
+        ]
+    },
+    "nidoqueen": {
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["earthquake", "fireblast", "icebeam", "moonlight", "thunder"],
+                "preferredTypes": ["Ice"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["earthquake", "icebeam", "lovelykiss", "thunder"]
+            }
+        ]
+    },
+    "nidoking": {
+        "level": 67,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["earthquake", "fireblast", "icebeam", "morningsun", "thunder"],
+                "preferredTypes": ["Ice"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["earthquake", "icebeam", "lovelykiss", "thunder"]
+            }
+        ]
+    },
+    "clefable": {
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["bellydrum", "bodyslam", "hiddenpowerground", "moonlight", "return", "thunderwave"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["bodyslam", "encore", "fireblast", "flamethrower", "moonlight"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["curse", "moonlight", "return", "thunderwave"]
+            }
+        ]
+    },
+    "ninetales": {
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["fireblast", "flamethrower", "hiddenpowergrass", "rest", "sleeptalk", "sunnyday"]
+            }
+        ]
+    },
+    "wigglytuff": {
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["curse", "doubleedge", "rest", "sleeptalk", "thunder"]
+            }
+        ]
+    },
+    "vileplume": {
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["moonlight", "razorleaf", "sleeppowder", "sludgebomb", "stunspore"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["hiddenpowerground", "moonlight", "sleeppowder", "sludgebomb", "swordsdance"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "moonlight", "sludgebomb", "stunspore"]
+            }
+        ]
+    },
+    "parasect": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["bodyslam", "hiddenpowerground", "return", "spore", "swordsdance"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["hiddenpowerbug", "spore", "swordsdance", "synthesis"]
+            }
+        ]
+    },
+    "venomoth": {
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["gigadrain", "hiddenpowerfire", "psychic", "sleeppowder", "sludgebomb", "stunspore"],
+                "preferredTypes": ["Fire", "Psychic"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["batonpass", "curse", "sleeppowder", "sludgebomb"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["batonpass", "curse", "sludgebomb", "stunspore"]
+            }
+        ]
+    },
+    "dugtrio": {
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["earthquake", "rockslide", "sludgebomb", "substitute", "thief"],
+                "preferredTypes": ["Rock"]
+            }
+        ]
+    },
+    "persian": {
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["doubleedge", "hypnosis", "irontail", "rest", "sleeptalk", "thief"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["doubleedge", "hypnosis", "rest", "sleeptalk", "thief", "thunder"],
+                "preferredTypes": ["Electric"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["curse", "doubleedge", "rest", "sleeptalk"]
+            }
+        ]
+    },
+    "golduck": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["crosschop", "hiddenpowerelectric", "hydropump", "hypnosis", "icebeam"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["crosschop", "hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "surf"]
+            }
+        ]
+    },
+    "primeape": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["crosschop", "hiddenpowerghost", "meditate", "rest", "rockslide", "substitute"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["crosschop", "doubleedge", "hiddenpowerghost", "meditate", "rockslide"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["meditate", "reversal", "rockslide", "substitute"]
+            }
+        ]
+    },
+    "arcanine": {
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["crunch", "doubleedge", "fireblast", "flamethrower", "hiddenpowergrass", "rest", "sleeptalk"]
+            }
+        ]
+    },
+    "poliwhirl": {
+        "level": 75,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["bellydrum", "earthquake", "lovelykiss", "return"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["bellydrum", "earthquake", "hiddenpowerrock", "lovelykiss"]
+            }
+        ]
+    },
+    "poliwrath": {
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["earthquake", "growth", "rest", "sleeptalk", "submission", "surf"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["bellydrum", "earthquake", "lovelykiss", "return"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["bellydrum", "earthquake", "hiddenpowerrock", "lovelykiss"]
+            }
+        ]
+    },
+    "alakazam": {
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["encore", "firepunch", "hiddenpowerdark", "psychic", "recover", "thunderwave"],
+                "preferredTypes": ["Fire"]
+            }
+        ]
+    },
+    "machamp": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["crosschop", "curse", "rest", "rockslide", "sleeptalk"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["crosschop", "curse", "earthquake", "hiddenpowerbug", "rockslide"],
+                "preferredTypes": ["Rock"]
+            }
+        ]
+    },
+    "victreebel": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["hiddenpowerground", "sleeppowder", "sludgebomb", "swordsdance", "synthesis"]
+            }
+        ]
+    },
+    "tentacruel": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["hydropump", "sludgebomb", "substitute", "swordsdance"]
+            }
+        ]
+    },
+    "golem": {
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["curse", "earthquake", "explosion", "rapidspin", "roar", "rockslide"]
+            }
+        ]
+    },
+    "rapidash": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["doubleedge", "fireblast", "hiddenpowergrass", "hypnosis", "sunnyday"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["doubleedge", "fireblast", "flamethrower", "rest", "sleeptalk", "sunnyday"]
+            }
+        ]
+    },
+    "slowbro": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["psychic", "rest", "sleeptalk", "surf"]
+            }
+        ]
+    },
+    "magneton": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["hiddenpowerice", "rest", "sleeptalk", "thunder"]
+            }
+        ]
+    },
+    "farfetchd": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["agility", "batonpass", "return", "swordsdance"]
+            }
+        ]
+    },
+    "dodrio": {
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["doubleedge", "drillpeck", "hiddenpowerground", "rest", "sleeptalk"]
+            }
+        ]
+    },
+    "dewgong": {
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["icebeam", "rest", "sleeptalk", "surf"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["encore", "icebeam", "protect", "toxic"]
+            }
+        ]
+    },
+    "muk": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["curse", "explosion", "hiddenpowerground", "sludgebomb"],
+                "preferredTypes": ["Ground"]
+            }
+        ]
+    },
+    "cloyster": {
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["explosion", "icebeam", "rapidspin", "spikes", "surf", "toxic"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["explosion", "rapidspin", "spikes", "surf", "toxic"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["explosion", "icebeam", "rapidspin", "spikes", "toxic"]
+            }
+        ]
+    },
+    "gengar": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["explosion", "firepunch", "hypnosis", "icepunch", "psychic", "thunderbolt"],
+                "preferredTypes": ["Electric", "Ice"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["destinybond", "firepunch", "hypnosis", "icepunch", "psychic", "thunderbolt"],
+                "preferredTypes": ["Electric", "Ice"]
+            }
+        ]
+    },
+    "hypno": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["psychic", "rest", "seismictoss", "sleeptalk", "thunderwave"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["curse", "doubleedge", "rest", "sleeptalk"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["bodyslam", "curse", "psychic", "rest", "return"]
+            }
+        ]
+    },
+    "kingler": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["hiddenpowerground", "protect", "rest", "return", "substitute", "swordsdance"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["hiddenpowerground", "protect", "return", "substitute", "surf", "swordsdance"],
+                "preferredTypes": ["Normal"]
+            }
+        ]
+    },
+    "electrode": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["explosion", "hiddenpowerice", "thunderbolt", "thunderwave"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["explosion", "hiddenpowerice", "lightscreen", "reflect", "thunder", "thunderbolt"]
+            }
+        ]
+    },
+    "exeggutor": {
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["explosion", "hiddenpowerfire", "hiddenpowergrass", "psychic", "sleeppowder", "stunspore", "thief"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["explosion", "gigadrain", "hiddenpowerfire", "psychic"]
+            }
+        ]
+    },
+    "marowak": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["earthquake", "hiddenpowerbug", "rockslide", "swordsdance"]
+            }
+        ]
+    },
+    "hitmonlee": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["hiddenpowerghost", "hiddenpowerrock", "highjumpkick", "meditate", "rest", "substitute"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["doubleedge", "hiddenpowerghost", "hiddenpowerrock", "highjumpkick", "meditate"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["bodyslam", "hiddenpowerrock", "highjumpkick", "rest", "sleeptalk"]
+            }
+        ]
+    },
+    "hitmonchan": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["curse", "hiddenpowerghost", "hiddenpowerrock", "highjumpkick", "machpunch"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "highjumpkick", "rest", "sleeptalk"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["bodyslam", "hiddenpowerrock", "highjumpkick", "rest", "sleeptalk"]
+            }
+        ]
+    },
+    "lickitung": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["bodyslam", "earthquake", "protect", "return", "swordsdance"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "doubleedge", "rest", "return", "sleeptalk", "swordsdance"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["doubleedge", "earthquake", "rest", "sleeptalk", "surf", "thunder"]
+            }
+        ]
+    },
+    "weezing": {
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["explosion", "fireblast", "sludgebomb", "thunder"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["explosion", "hiddenpowerwater", "sludgebomb", "thunder"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["fireblast", "haze", "hiddenpowerwater", "painsplit", "sludgebomb", "thunder"],
+                "preferredTypes": ["Electric"]
+            }
+        ]
+    },
+    "rhydon": {
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["curse", "earthquake", "rest", "roar", "rockslide", "sleeptalk"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "rest", "rockslide", "sleeptalk"]
+            }
+        ]
+    },
+    "tangela": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["gigadrain", "growth", "hiddenpowerfire", "hiddenpowerice", "sleeppowder", "synthesis"]
+            }
+        ]
+    },
+    "kangaskhan": {
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["doubleedge", "earthquake", "rest", "sleeptalk"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["bodyslam", "curse", "doubleedge", "rest", "return", "sleeptalk"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["bodyslam", "curse", "earthquake", "return", "roar"]
+            }
+        ]
+    },
+    "seaking": {
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["agility", "hydropump", "return", "substitute", "swordsdance"],
+                "preferredTypes": ["Normal"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["agility", "hiddenpowerground", "return", "substitute", "swordsdance"]
+            }
+        ]
+    },
+    "starmie": {
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["psychic", "rapidspin", "recover", "surf", "thunderbolt", "thunderwave"],
+                "preferredTypes": ["Psychic"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["icebeam", "psychic", "recover", "surf", "thunder"]
+            }
+        ]
+    },
+    "mrmime": {
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["encore", "firepunch", "hypnosis", "psychic", "thief", "thunder"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["firepunch", "psychic", "rest", "sleeptalk", "thunder"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["barrier", "batonpass", "psychic", "thunder"]
+            }
+        ]
+    },
+    "scyther": {
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["batonpass", "doubleedge", "hiddenpowerground", "swordsdance"]
+            }
+        ]
+    },
+    "jynx": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["icebeam", "lovelykiss", "nightmare", "psychic"]
+            },
+            {
+                "role": "Thief user",
+                "movepool": ["icebeam", "lovelykiss", "psychic", "thief"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["icebeam", "lovelykiss", "psychic", "substitute"]
+            }
+        ]
+    },
+    "electabuzz": {
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["crosschop", "icepunch", "pursuit", "thief", "thunder", "thunderbolt"],
+                "preferredTypes": ["Fighting", "Ice"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["icepunch", "rest", "sleeptalk", "thunder"]
+            }
+        ]
+    },
+    "magmar": {
+        "level": 71,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["crosschop", "fireblast", "hiddenpowerground", "sunnyday", "thunderpunch"],
+                "preferredTypes": ["Electric"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["crosschop", "fireblast", "hiddenpowerground", "thief", "thunderpunch"],
+                "preferredTypes": ["Electric"]
+            }
+        ]
+    },
+    "pinsir": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["hiddenpowerground", "protect", "rest", "return", "substitute", "swordsdance"]
+            }
+        ]
+    },
+    "tauros": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["curse", "doubleedge", "earthquake", "rest", "return", "sleeptalk"]
+            }
+        ]
+    },
+    "gyarados": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["doubleedge", "hiddenpowerflying", "hydropump", "roar", "thunder"],
+                "preferredTypes": ["Electric"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["doubleedge", "hiddenpowerflying", "hydropump", "rest", "sleeptalk", "surf"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "hiddenpowerflying", "rest", "sleeptalk"]
+            }
+        ]
+    },
+    "lapras": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["icebeam", "rest", "sleeptalk", "surf"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["rest", "sleeptalk", "surf", "thunder"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["icebeam", "rest", "sleeptalk", "thunder"]
+            }
+        ]
+    },
+    "ditto": {
+        "level": 90,
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["transform"]
+            }
+        ]
+    },
+    "vaporeon": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["growth", "rest", "sleeptalk", "surf"]
+            }
+        ]
+    },
+    "jolteon": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["batonpass", "growth", "hiddenpowerice", "substitute", "thunderbolt"]
+            }
+        ]
+    },
+    "flareon": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["batonpass", "fireblast", "growth", "hiddenpowergrass"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["doubleedge", "fireblast", "flamethrower", "rest", "sleeptalk"]
+            }
+        ]
+    },
+    "omastar": {
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["hiddenpowerelectric", "icebeam", "rest", "sandstorm", "sleeptalk", "surf"]
+            }
+        ]
+    },
+    "kabutops": {
+        "level": 71,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["hiddenpowerground", "hydropump", "return", "swordsdance"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["ancientpower", "hiddenpowerground", "protect", "rest", "substitute", "swordsdance"]
+            }
+        ]
+    },
+    "aerodactyl": {
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "earthquake", "hiddenpowerrock", "rest"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["ancientpower", "curse", "earthquake", "hiddenpowerflying"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["curse", "earthquake", "hiddenpowerrock", "whirlwind"]
+            }
+        ]
+    },
+    "snorlax": {
+        "level": 63,
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["curse", "doubleedge", "earthquake", "rest", "sleeptalk"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["bodyslam", "curse", "doubleedge", "earthquake", "rest", "return"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["bodyslam", "curse", "earthquake", "lovelykiss", "return", "selfdestruct"]
+            }
+        ]
+    },
+    "articuno": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "toxic"]
+            }
+        ]
+    },
+    "zapdos": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["hiddenpowerice", "rest", "sleeptalk", "thunder"]
+            }
+        ]
+    },
+    "moltres": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["fireblast", "flamethrower", "hiddenpowergrass", "rest", "sleeptalk", "sunnyday"]
+            }
+        ]
+    },
+    "dragonite": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["haze", "hiddenpowerflying", "rest", "surf", "thunder"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["icebeam", "rest", "sleeptalk", "thunder"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["dynamicpunch", "hiddenpowerflying", "icebeam", "thunder"]
+            }
+        ]
+    },
+    "mewtwo": {
+        "level": 59,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["flamethrower", "icebeam", "psychic", "recover", "thunder"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["barrier", "flamethrower", "psychic", "recover", "thunder"]
+            }
+        ]
+    },
+    "mew": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["earthquake", "explosion", "rockslide", "swordsdance"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["earthquake", "rockslide", "softboiled", "swordsdance"]
+            }
+        ]
+    },
+    "meganium": {
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["bodyslam", "earthquake", "swordsdance", "synthesis"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["earthquake", "hiddenpowerrock", "swordsdance", "synthesis"]
+            }
+        ]
+    },
+    "typhlosion": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["earthquake", "fireblast", "flamethrower", "rest", "sleeptalk", "thunderpunch"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["earthquake", "fireblast", "sunnyday", "thunderpunch"]
+            }
+        ]
+    },
+    "feraligatr": {
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["earthquake", "hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "surf"]
+            }
+        ]
+    },
+    "furret": {
+        "level": 73,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "doubleedge", "rest", "sleeptalk"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["doubleedge", "irontail", "rest", "sleeptalk", "surf"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["curse", "irontail", "quickattack", "return"]
+            }
+        ]
+    },
+    "noctowl": {
+        "sets": [
+            {
+                "role": "Thief user",
+                "movepool": ["hypnosis", "return", "thief", "toxic", "whirlwind"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["curse", "nightshade", "rest", "return", "sleeptalk"]
+            }
+        ]
+    },
+    "ledian": {
+        "level": 77,
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["agility", "barrier", "batonpass", "lightscreen"]
+            }
+        ]
+    },
+    "ariados": {
+        "level": 81,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["agility", "batonpass", "growth", "sludgebomb"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["agility", "batonpass", "curse", "sludgebomb"]
+            }
+        ]
+    },
+    "crobat": {
+        "level": 73,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["haze", "hiddenpowerground", "rest", "toxic", "wingattack"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["haze", "protect", "toxic", "wingattack"]
+            }
+        ]
+    },
+    "lanturn": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["rest", "sleeptalk", "surf", "thunder"]
+            }
+        ]
+    },
+    "togetic": {
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["curse", "doubleedge", "fireblast", "rest", "sleeptalk"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["encore", "fireblast", "solarbeam", "sunnyday", "zapcannon"],
+                "preferredTypes": ["Fire", "Grass"]
+            }
+        ]
+    },
+    "xatu": {
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["drillpeck", "psychic", "rest", "sleeptalk"]
+            },
+            {
+                "role": "Thief user",
+                "movepool": ["confuseray", "drillpeck", "hiddenpowerfire", "psychic", "thief"]
+            }
+        ]
+    },
+    "ampharos": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["firepunch", "hiddenpowerice", "rest", "sleeptalk", "thunder"]
+            }
+        ]
+    },
+    "bellossom": {
+        "level": 73,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["hiddenpowerfire", "hiddenpowerice", "leechseed", "moonlight", "razorleaf", "sleeppowder", "stunspore"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["hiddenpowerground", "moonlight", "return", "stunspore", "swordsdance"],
+                "preferredTypes": ["Normal"]
+            }
+        ]
+    },
+    "azumarill": {
+        "level": 77,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["perishsong", "rest", "surf", "whirlpool"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["icebeam", "lightscreen", "rest", "sleeptalk", "surf", "toxic"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "doubleedge", "rest", "sleeptalk"]
+            }
+        ]
+    },
+    "sudowoodo": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["curse", "earthquake", "rockslide", "selfdestruct"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "rest", "rockslide", "sleeptalk"]
+            },
+            {
+                "role": "Thief user",
+                "movepool": ["earthquake", "rockslide", "selfdestruct", "thief"]
+            }
+        ]
+    },
+    "politoed": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["growth", "rest", "sleeptalk", "surf"]
+            }
+        ]
+    },
+    "jumpluff": {
+        "level": 81,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["encore", "hiddenpowerflying", "stunspore", "synthesis"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["encore", "hiddenpowerflying", "leechseed", "stunspore"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["encore", "hiddenpowerflying", "sleeppowder", "stunspore"]
+            }
+        ]
+    },
+    "aipom": {
+        "level": 77,
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["agility", "batonpass", "curse", "return"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "rest", "return", "sleeptalk"]
+            }
+        ]
+    },
+    "sunflora": {
+        "level": 81,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["growth", "hiddenpowerfire", "hiddenpowerice", "razorleaf", "synthesis"]
+            }
+        ]
+    },
+    "yanma": {
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["gigadrain", "hiddenpowerflying", "return", "thief"]
+            },
+            {
+                "role": "Thief user",
+                "movepool": ["gigadrain", "hiddenpowerbug", "thief", "wingattack"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["endure", "hiddenpowerflying", "return", "reversal"]
+            }
+        ]
+    },
+    "quagsire": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["earthquake", "rest", "sleeptalk", "surf"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["earthquake", "icebeam", "rest", "sleeptalk", "sludgebomb"]
+            }
+        ]
+    },
+    "espeon": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["batonpass", "growth", "hiddenpowerfire", "psychic", "substitute"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["batonpass", "growth", "hiddenpowerfire", "morningsun", "psychic"]
+            }
+        ]
+    },
+    "umbreon": {
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["batonpass", "growth", "hiddenpowerdark", "moonlight"]
+            }
+        ]
+    },
+    "murkrow": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["drillpeck", "hiddenpowerdark", "pursuit", "toxic"]
+            },
+            {
+                "role": "Thief user",
+                "movepool": ["drillpeck", "haze", "hiddenpowerdark", "thief", "toxic"],
+                "preferredTypes": ["Dark"]
+            }
+        ]
+    },
+    "slowking": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["psychic", "rest", "sleeptalk", "surf"]
+            }
+        ]
+    },
+    "misdreavus": {
+        "level": 67,
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["meanlook", "painsplit", "perishsong", "protect", "thunder"]
+            },
+            {
+                "role": "Thief user",
+                "movepool": ["hypnosis", "psychic", "thief", "thunder"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["hypnosis", "painsplit", "psychic", "shadowball", "thief", "thunder"],
+                "preferredTypes": ["Electric"]
+            }
+        ]
+    },
+    "unown": {
+        "level": 100,
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["hiddenpowerpsychic"]
+            }
+        ]
+    },
+    "wobbuffet": {
+        "level": 95,
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["counter", "mimic", "mirrorcoat", "safeguard"]
+            }
+        ]
+    },
+    "girafarig": {
+        "level": 71,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["earthquake", "psychic", "rest", "return", "sleeptalk", "thunder"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["agility", "amnesia", "batonpass", "psychic"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["agility", "batonpass", "psychic", "thunder"]
+            }
+        ]
+    },
+    "forretress": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["explosion", "hiddenpowerbug", "hiddenpowersteel", "rapidspin", "reflect", "spikes", "toxic"]
+            }
+        ]
+    },
+    "dunsparce": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["curse", "glare", "hiddenpowerground", "return"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["curse", "rest", "return", "sleeptalk", "thunder"]
+            }
+        ]
+    },
+    "gligar": {
+        "level": 73,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["earthquake", "hiddenpowerflying", "rest", "sleeptalk"]
+            },
+            {
+                "role": "Thief user",
+                "movepool": ["counter", "earthquake", "hiddenpowerflying", "thief", "toxic"]
+            }
+        ]
+    },
+    "steelix": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["curse", "earthquake", "irontail", "rest", "roar", "sleeptalk"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["curse", "earthquake", "irontail", "rest"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "earthquake", "explosion", "irontail", "roar"]
+            }
+        ]
+    },
+    "granbull": {
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "rest", "return", "sleeptalk"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["healbell", "hiddenpowerground", "rest", "return", "sleeptalk"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["curse", "hiddenpowerground", "lovelykiss", "return"]
+            }
+        ]
+    },
+    "qwilfish": {
+        "level": 71,
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["haze", "hydropump", "rest", "sleeptalk", "sludgebomb", "spikes"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "hiddenpowerground", "hydropump", "sludgebomb", "spikes"]
+            }
+        ]
+    },
+    "scizor": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["agility", "batonpass", "hiddenpowerbug", "hiddenpowersteel", "swordsdance"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["agility", "hiddenpowerground", "return", "swordsdance"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "hiddenpowerbug", "hiddenpowersteel", "rest", "sleeptalk", "swordsdance"]
+            }
+        ]
+    },
+    "shuckle": {
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["defensecurl", "rest", "rollout", "toxic"]
+            }
+        ]
+    },
+    "heracross": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["curse", "earthquake", "megahorn", "rest", "sleeptalk"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["curse", "earthquake", "hiddenpowerrock", "megahorn"]
+            }
+        ]
+    },
+    "sneasel": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["hiddenpowerground", "moonlight", "return", "toxic"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["dynamicpunch", "icebeam", "moonlight", "return"]
+            },
+            {
+                "role": "Thief user",
+                "movepool": ["dynamicpunch", "moonlight", "return", "thief"]
+            }
+        ]
+    },
+    "ursaring": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["curse", "earthquake", "rest", "return", "sleeptalk"]
+            }
+        ]
+    },
+    "magcargo": {
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["earthquake", "fireblast", "flamethrower", "hiddenpowergrass", "rest", "rockslide", "sleeptalk"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "fireblast", "flamethrower", "rest", "rockslide"]
+            }
+        ]
+    },
+    "piloswine": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["earthquake", "icebeam", "rest", "sleeptalk"]
+            }
+        ]
+    },
+    "corsola": {
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["curse", "icebeam", "recover", "rockslide", "sandstorm", "surf", "toxic"]
+            }
+        ]
+    },
+    "octillery": {
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["flamethrower", "hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "surf"]
+            }
+        ]
+    },
+    "delibird": {
+        "level": 81,
+        "sets": [
+            {
+                "role": "Thief user",
+                "movepool": ["hiddenpowerflying", "icebeam", "rapidspin", "spikes", "thief", "toxic"]
+            }
+        ]
+    },
+    "mantine": {
+        "level": 77,
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["hiddenpowerelectric", "icebeam", "rest", "sleeptalk", "surf"]
+            }
+        ]
+    },
+    "skarmory": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["curse", "drillpeck", "rest", "sleeptalk"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "drillpeck", "rest", "toxic", "whirlwind"]
+            }
+        ]
+    },
+    "houndoom": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["crunch", "fireblast", "pursuit", "solarbeam", "sunnyday"],
+                "preferredTypes": ["Grass"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["crunch", "fireblast", "rest", "sleeptalk"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["counter", "crunch", "fireblast", "pursuit"]
+            }
+        ]
+    },
+    "kingdra": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["dragonbreath", "icebeam", "rest", "sleeptalk", "surf"]
+            }
+        ]
+    },
+    "donphan": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["curse", "earthquake", "hiddenpowerrock", "rest", "sleeptalk"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "earthquake", "hiddenpowerrock", "roar"]
+            }
+        ]
+    },
+    "porygon2": {
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "doubleedge", "icebeam", "recover", "thunder", "thunderwave"]
+            }
+        ]
+    },
+    "stantler": {
+        "level": 71,
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["curse", "earthquake", "rest", "return", "sleeptalk"]
+            }
+        ]
+    },
+    "smeargle": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["agility", "batonpass", "spikes", "spore", "swordsdance"]
+            }
+        ]
+    },
+    "hitmontop": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["curse", "hiddenpowerghost", "hiddenpowerrock", "highjumpkick", "machpunch"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "highjumpkick", "rest", "sleeptalk"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["hiddenpowerghost", "hiddenpowerrock", "highjumpkick", "rest", "sleeptalk"]
+            }
+        ]
+    },
+    "miltank": {
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["bodyslam", "curse", "earthquake", "healbell", "milkdrink"]
+            }
+        ]
+    },
+    "blissey": {
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["counter", "flamethrower", "healbell", "icebeam", "lightscreen", "present", "softboiled", "thunderwave", "toxic"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["healbell", "present", "softboiled", "thunder"]
+            }
+        ]
+    },
+    "raikou": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["crunch", "hiddenpowerice", "rest", "sleeptalk", "thunder"]
+            }
+        ]
+    },
+    "entei": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["fireblast", "hiddenpowerground", "hiddenpowerrock", "solarbeam", "sunnyday"]
+            },
+            {
+                "role": "Generalist",
+                "movepool": ["fireblast", "flamethrower", "hiddenpowergrass", "rest", "return", "sleeptalk"]
+            }
+        ]
+    },
+    "suicune": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["icebeam", "rest", "sleeptalk", "surf", "toxic"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["icebeam", "rest", "roar", "surf", "toxic"]
+            }
+        ]
+    },
+    "tyranitar": {
+        "sets": [
+            {
+                "role": "Generalist",
+                "movepool": ["crunch", "earthquake", "fireblast", "icebeam", "pursuit", "rockslide", "thunderbolt"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["curse", "earthquake", "rest", "rockslide", "sleeptalk"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "rest", "roar", "rockslide"]
+            }
+        ]
+    },
+    "lugia": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["aeroblast", "curse", "earthquake", "recover"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["curse", "hiddenpowerflying", "recover", "whirlwind"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["psychic", "recover", "thunder", "whirlwind"]
+            }
+        ]
+    },
+    "hooh": {
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["curse", "earthquake", "hiddenpowerflying", "recover"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["earthquake", "recover", "sacredfire", "thunder"]
+            }
+        ]
+    },
+    "celebi": {
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["healbell", "leechseed", "psychic", "recover", "toxic"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["healbell", "hiddenpowergrass", "psychic", "recover"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["batonpass", "curse", "recover", "return"]
+            }
+        ]
+    }
+}

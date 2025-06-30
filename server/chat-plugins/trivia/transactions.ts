@@ -2,12 +2,12 @@
  * SQL transactions for the Trivia plugin.
  */
 
-import type {TransactionEnvironment} from '../../../lib/sql';
-import type {TriviaHistory, TriviaQuestion} from './trivia';
+import type { TransactionEnvironment } from '../../../lib/sql';
+import type { TriviaHistory, TriviaQuestion } from './trivia';
 
 export const transactions = {
 	addHistory: (
-		args: {history: Iterable<TriviaHistory>, gameHistoryInsertion: string, scoreHistoryInsertion: string},
+		args: { history: Iterable<TriviaHistory>, gameHistoryInsertion: string, scoreHistoryInsertion: string },
 		env: TransactionEnvironment
 	) => {
 		const gameHistoryInsertion = env.statements.get(args.gameHistoryInsertion);
@@ -15,7 +15,7 @@ export const transactions = {
 		if (!gameHistoryInsertion || !scoreHistoryInsertion) throw new Error('Statements not found');
 
 		for (const game of args.history) {
-			const {lastInsertRowid} = gameHistoryInsertion.run(
+			const { lastInsertRowid } = gameHistoryInsertion.run(
 				game.mode, game.length, game.category, game.startTime, game.creator, Number(game.givesPoints)
 			);
 			for (const userid in game.scores) {
@@ -27,12 +27,12 @@ export const transactions = {
 	},
 
 	editQuestion(
-		args: {oldQuestionText: string, newQuestionText?: string, newAnswers?: string[]},
+		args: { oldQuestionText: string, newQuestionText?: string, newAnswers?: string[] },
 		env: TransactionEnvironment,
 	) {
 		// Question editing is likely to be infrequent, so I've optimized for readability and proper argument checking
 		// rather than performance (i.e. not passing in prepared statements).
-		const {oldQuestionText, newQuestionText, newAnswers} = args;
+		const { oldQuestionText, newQuestionText, newAnswers } = args;
 
 		if (newAnswers) {
 			const questionID = (env.db
@@ -68,7 +68,7 @@ export const transactions = {
 
 		const isSubmissionForSQLite = Number(args.isSubmission);
 		for (const question of args.questions) {
-			const {lastInsertRowid} = questionInsertion.run(
+			const { lastInsertRowid } = questionInsertion.run(
 				question.question, question.category, question.addedAt, question.user, isSubmissionForSQLite
 			);
 			for (const answer of question.answers) {

@@ -5,18 +5,18 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Teatime', function () {
-	afterEach(function () {
+describe('Teatime', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it('should force all Pokemon to eat their Berries immediately', function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: 'wynaut', item: 'sitrusberry', moves: ['sleeptalk']},
-			{species: 'wynaut', item: 'aguavberry', moves: ['sleeptalk']},
+	it('should force all Pokemon to eat their Berries immediately', () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'wynaut', item: 'sitrusberry', moves: ['sleeptalk'] },
+			{ species: 'wynaut', item: 'aguavberry', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', item: 'lumberry', moves: ['sleeptalk']},
-			{species: 'wynaut', item: 'sitrusberry', moves: ['teatime']},
+			{ species: 'wynaut', item: 'lumberry', moves: ['sleeptalk'] },
+			{ species: 'wynaut', item: 'sitrusberry', moves: ['teatime'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.pokemon[0].item, '');
@@ -25,61 +25,61 @@ describe('Teatime', function () {
 		assert.equal(battle.p2.pokemon[1].item, '');
 	});
 
-	it('should force Pokemon to eat Berries while affected by Unnerve', function () {
+	it('should force Pokemon to eat Berries while affected by Unnerve', () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'sitrusberry', moves: ['sleeptalk']},
+			{ species: 'wynaut', item: 'sitrusberry', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', ability: 'unnerve', moves: ['teatime']},
+			{ species: 'wynaut', ability: 'unnerve', moves: ['teatime'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.pokemon[0].item, '');
 	});
 
-	it('should force Pokemon to eat Berries while Magic Room is active', function () {
+	it('should force Pokemon to eat Berries while Magic Room is active', () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'sitrusberry', evs: {spe: 252}, moves: ['magicroom']},
+			{ species: 'wynaut', item: 'sitrusberry', evs: { spe: 252 }, moves: ['magicroom'] },
 		], [
-			{species: 'wynaut', moves: ['teatime']},
+			{ species: 'wynaut', moves: ['teatime'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.pokemon[0].item, '');
 	});
 
-	it('should force Pokemon with Klutz to eat Berries', function () {
+	it('should force Pokemon with Klutz to eat Berries', () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'sitrusberry', ability: 'klutz', moves: ['sleeptalk']},
+			{ species: 'wynaut', item: 'sitrusberry', ability: 'klutz', moves: ['sleeptalk'] },
 		], [
-			{species: 'wynaut', moves: ['teatime']},
+			{ species: 'wynaut', moves: ['teatime'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.pokemon[0].item, '');
 	});
 
-	it('should force Pokemon with Substitute to eat Berries', function () {
+	it('should force Pokemon with Substitute to eat Berries', () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'sitrusberry', evs: {spe: 252}, moves: ['substitute']},
+			{ species: 'wynaut', item: 'sitrusberry', evs: { spe: 252 }, moves: ['substitute'] },
 		], [
-			{species: 'wynaut', moves: ['teatime']},
+			{ species: 'wynaut', moves: ['teatime'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.pokemon[0].item, '');
 	});
 
-	it('should not cause Pokemon in the semi-invulernable state to eat their Berries', function () {
+	it('should not cause Pokemon in the semi-invulernable state to eat their Berries', () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'sitrusberry', evs: {spe: 252}, moves: ['fly']},
+			{ species: 'wynaut', item: 'sitrusberry', evs: { spe: 252 }, moves: ['fly'] },
 		], [
-			{species: 'wynaut', moves: ['teatime']},
+			{ species: 'wynaut', moves: ['teatime'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.pokemon[0].item, 'sitrusberry');
 	});
 
-	it('should not cause Recycle to fail to restore the Berry', function () {
+	it('should not cause Recycle to fail to restore the Berry', () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', item: 'sitrusberry', moves: ['recycle']},
+			{ species: 'wynaut', item: 'sitrusberry', moves: ['recycle'] },
 		], [
-			{species: 'wynaut', evs: {spe: 252}, moves: ['teatime']},
+			{ species: 'wynaut', evs: { spe: 252 }, moves: ['teatime'] },
 		]]);
 		battle.makeChoices();
 		assert.equal(battle.p1.pokemon[0].item, 'sitrusberry');

@@ -5,18 +5,18 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Flower Gift', function () {
-	afterEach(function () {
+describe('Flower Gift', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should boost allies' Attack and Special Defense stats`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: "Cherrim", ability: 'flowergift', moves: ['healbell']},
-			{species: "Snorlax", ability: 'immunity', moves: ['healbell']},
+	it(`should boost allies' Attack and Special Defense stats`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Cherrim", ability: 'flowergift', moves: ['healbell'] },
+			{ species: "Snorlax", ability: 'immunity', moves: ['healbell'] },
 		], [
-			{species: "Blissey", ability: 'serenegrace', moves: ['healbell']},
-			{species: "Blissey", ability: 'serenegrace', moves: ['healbell']},
+			{ species: "Blissey", ability: 'serenegrace', moves: ['healbell'] },
+			{ species: "Blissey", ability: 'serenegrace', moves: ['healbell'] },
 		]]);
 
 		const cherAtk = battle.p1.active[0].getStat('atk');
@@ -32,13 +32,13 @@ describe('Flower Gift', function () {
 		assert.equal(battle.p1.active[1].getStat('spd'), battle.modify(baseSpd, 1.5));
 	});
 
-	it(`should still work if Cherrim transforms into something with Flower Gift without originally having it`, function () {
-		battle = common.createBattle({gameType: 'doubles'}, [[
-			{species: "Cherrim", ability: 'serenegrace', moves: ['transform']},
-			{species: "Snorlax", ability: 'immunity', moves: ['healbell']},
+	it(`should still work if Cherrim transforms into something with Flower Gift without originally having it`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Cherrim", ability: 'serenegrace', moves: ['transform'] },
+			{ species: "Snorlax", ability: 'immunity', moves: ['healbell'] },
 		], [
-			{species: "Blissey", ability: 'flowergift', moves: ['healbell']},
-			{species: "Blissey", ability: 'flowergift', moves: ['healbell']},
+			{ species: "Blissey", ability: 'flowergift', moves: ['healbell'] },
+			{ species: "Blissey", ability: 'flowergift', moves: ['healbell'] },
 		]]);
 
 		battle.makeChoices('move transform 1, move healbell', 'move healbell, move healbell');
@@ -55,14 +55,26 @@ describe('Flower Gift', function () {
 		assert.equal(battle.p1.active[1].getStat('spd'), battle.modify(baseSpd, 1.5));
 	});
 
-	it(`should not trigger if the Pokemon was KOed`, function () {
+	it(`should not trigger if the Pokemon was KOed`, () => {
 		// TODO: Is this interaction possible in Gen 9?
 		battle = common.gen(8).createBattle([[
-			{species: 'Cherrim', ability: 'flowergift', moves: ['sleeptalk']},
+			{ species: 'Cherrim', ability: 'flowergift', moves: ['sleeptalk'] },
 		], [
-			{species: 'Heatran', moves: ['blastburn']},
+			{ species: 'Heatran', moves: ['blastburn'] },
 		]]);
 		battle.makeChoices('auto', 'move blastburn dynamax');
 		assert(battle.log.every(line => !line.startsWith('|-formechange')));
+	});
+
+	it(`should not trigger if dragged in by a Mold Breaker Pokemon`, () => {
+		battle = common.createBattle([[
+			{ species: 'Torkoal', ability: 'drought', moves: ['sleeptalk'] },
+			{ species: 'Cherrim', ability: 'flowergift', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Haxorus', ability: 'moldbreaker', moves: ['roar'] },
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.field.weather, 'sunnyday');
+		assert.species(battle.p1.active[0], 'Cherrim');
 	});
 });

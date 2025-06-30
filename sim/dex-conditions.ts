@@ -1,5 +1,14 @@
-import {BasicEffect, toID} from './dex-data';
-import type {SecondaryEffect, MoveEventMethods} from './dex-moves';
+import { Utils } from '../lib/utils';
+import { assignMissingFields, BasicEffect, toID } from './dex-data';
+import type { SecondaryEffect, MoveEventMethods } from './dex-moves';
+
+/**
+ * Event method prefixes:
+ * Ally: triggers for each ally (including the effect holder itself) that is a target of the event, i.e. Pastel Veil
+ * Foe: triggers for each foe that is a target of the event, i.e. Unnerve
+ * Source: triggers for the source of the event; events must have a source parameter to trigger these handlers
+ * Any: triggers for each target of the event regardless of the holder's relation to it
+ */
 
 export interface EventMethods {
 	onDamagingHit?: (this: Battle, damage: number, target: Pokemon, source: Pokemon, move: ActiveMove) => void;
@@ -65,6 +74,7 @@ export interface EventMethods {
 	onModifySpA?: CommonHandlers['ModifierSourceMove'];
 	onModifySpD?: CommonHandlers['ModifierMove'];
 	onModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void;
+	onModifySTAB?: CommonHandlers['ModifierSourceMove'];
 	onModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void;
 	onMoveAborted?: CommonHandlers['VoidMove'];
 	onNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean;
@@ -95,10 +105,8 @@ export interface EventMethods {
 		this: Battle, status: Condition, target: Pokemon, source: Pokemon, sourceEffect: Effect
 	) => boolean | null | void;
 	onTryEatItem?: boolean | ((this: Battle, item: Item, pokemon: Pokemon) => boolean | void);
-	/* FIXME: onTryHeal() is run with two different sets of arguments */
 	onTryHeal?: (
-		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | void) |
-		((this: Battle, pokemon: Pokemon) => boolean | void) | boolean
+		((this: Battle, relayVar: number, target: Pokemon, source: Pokemon, effect: Effect) => number | boolean | null | void)
 	);
 	onTryHit?: MoveEventMethods['onTryHit'];
 	onTryHitField?: MoveEventMethods['onTryHitField'];
@@ -166,6 +174,7 @@ export interface EventMethods {
 	onFoeModifySpA?: CommonHandlers['ModifierSourceMove'];
 	onFoeModifySpD?: CommonHandlers['ModifierMove'];
 	onFoeModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void;
+	onFoeModifySTAB?: CommonHandlers['ModifierSourceMove'];
 	onFoeModifyType?: MoveEventMethods['onModifyType'];
 	onFoeModifyTarget?: MoveEventMethods['onModifyTarget'];
 	onFoeModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void;
@@ -183,7 +192,6 @@ export interface EventMethods {
 	) => boolean | null | void;
 	onFoeSetWeather?: (this: Battle, target: Pokemon, source: Pokemon, weather: Condition) => boolean | void;
 	onFoeStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void;
-	onFoeSwitchIn?: (this: Battle, pokemon: Pokemon) => void;
 	onFoeSwitchOut?: (this: Battle, pokemon: Pokemon) => void;
 	onFoeTakeItem?: (
 		(this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void
@@ -264,6 +272,7 @@ export interface EventMethods {
 	onSourceModifySpA?: CommonHandlers['ModifierSourceMove'];
 	onSourceModifySpD?: CommonHandlers['ModifierMove'];
 	onSourceModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void;
+	onSourceModifySTAB?: CommonHandlers['ModifierSourceMove'];
 	onSourceModifyType?: MoveEventMethods['onModifyType'];
 	onSourceModifyTarget?: MoveEventMethods['onModifyTarget'];
 	onSourceModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void;
@@ -283,7 +292,6 @@ export interface EventMethods {
 	) => boolean | null | void;
 	onSourceSetWeather?: (this: Battle, target: Pokemon, source: Pokemon, weather: Condition) => boolean | void;
 	onSourceStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void;
-	onSourceSwitchIn?: (this: Battle, pokemon: Pokemon) => void;
 	onSourceSwitchOut?: (this: Battle, pokemon: Pokemon) => void;
 	onSourceTakeItem?: (
 		(this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void
@@ -320,10 +328,12 @@ export interface EventMethods {
 	onAnyAfterUseItem?: (this: Battle, item: Item, pokemon: Pokemon) => void;
 	onAnyAfterBoost?: (this: Battle, boost: SparseBoostsTable, target: Pokemon, source: Pokemon, effect: Effect) => void;
 	onAnyAfterFaint?: (this: Battle, length: number, target: Pokemon, source: Pokemon, effect: Effect) => void;
+	onAnyAfterMega?: (this: Battle, pokemon: Pokemon) => void;
 	onAnyAfterMoveSecondarySelf?: MoveEventMethods['onAfterMoveSecondarySelf'];
 	onAnyAfterMoveSecondary?: MoveEventMethods['onAfterMoveSecondary'];
 	onAnyAfterMove?: MoveEventMethods['onAfterMove'];
 	onAnyAfterMoveSelf?: CommonHandlers['VoidSourceMove'];
+	onAnyAfterTerastallization?: (this: Battle, pokemon: Pokemon) => void;
 	onAnyAttract?: (this: Battle, target: Pokemon, source: Pokemon) => void;
 	onAnyAccuracy?: (
 		this: Battle, accuracy: number, target: Pokemon, source: Pokemon, move: ActiveMove
@@ -349,7 +359,7 @@ export interface EventMethods {
 	onAnyHit?: MoveEventMethods['onHit'];
 	onAnyImmunity?: (this: Battle, type: string, pokemon: Pokemon) => void;
 	onAnyLockMove?: string | ((this: Battle, pokemon: Pokemon) => void | string);
-	onAnyMaybeTrapPokemon?: (this: Battle, pokemon: Pokemon) => void;
+	onAnyMaybeTrapPokemon?: (this: Battle, pokemon: Pokemon, source?: Pokemon) => void;
 	onAnyModifyAccuracy?: CommonHandlers['ModifierMove'];
 	onAnyModifyAtk?: CommonHandlers['ModifierSourceMove'];
 	onAnyModifyBoost?: (this: Battle, boosts: SparseBoostsTable, pokemon: Pokemon) => SparseBoostsTable | void;
@@ -364,6 +374,7 @@ export interface EventMethods {
 	onAnyModifySpA?: CommonHandlers['ModifierSourceMove'];
 	onAnyModifySpD?: CommonHandlers['ModifierMove'];
 	onAnyModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void;
+	onAnyModifySTAB?: CommonHandlers['ModifierSourceMove'];
 	onAnyModifyType?: MoveEventMethods['onModifyType'];
 	onAnyModifyTarget?: MoveEventMethods['onModifyTarget'];
 	onAnyModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void;
@@ -423,6 +434,8 @@ export interface EventMethods {
 	onAnyModifyAccuracyPriority?: number;
 	onAnyFaintPriority?: number;
 	onAnyPrepareHitPriority?: number;
+	onAnySwitchInPriority?: number;
+	onAnySwitchInSubOrder?: number;
 	onAllyBasePowerPriority?: number;
 	onAllyModifyAtkPriority?: number;
 	onAllyModifySpAPriority?: number;
@@ -453,6 +466,7 @@ export interface EventMethods {
 	onModifySpAPriority?: number;
 	onModifySpDPriority?: number;
 	onModifySpePriority?: number;
+	onModifySTABPriority?: number;
 	onModifyTypePriority?: number;
 	onModifyWeightPriority?: number;
 	onRedirectTargetPriority?: number;
@@ -466,7 +480,9 @@ export interface EventMethods {
 	onSourceModifyDamagePriority?: number;
 	onSourceModifySpAPriority?: number;
 	onSwitchInPriority?: number;
+	onSwitchInSubOrder?: number;
 	onTrapPokemonPriority?: number;
+	onTryBoostPriority?: number;
 	onTryEatItemPriority?: number;
 	onTryHealPriority?: number;
 	onTryHitPriority?: number;
@@ -529,6 +545,7 @@ export interface PokemonEventMethods extends EventMethods {
 	onAllyModifySpA?: CommonHandlers['ModifierSourceMove'];
 	onAllyModifySpD?: CommonHandlers['ModifierMove'];
 	onAllyModifySpe?: (this: Battle, spe: number, pokemon: Pokemon) => number | void;
+	onAllyModifySTAB?: CommonHandlers['ModifierSourceMove'];
 	onAllyModifyType?: MoveEventMethods['onModifyType'];
 	onAllyModifyTarget?: MoveEventMethods['onModifyTarget'];
 	onAllyModifyWeight?: (this: Battle, weighthg: number, pokemon: Pokemon) => number | void;
@@ -547,7 +564,6 @@ export interface PokemonEventMethods extends EventMethods {
 	onAllySetWeather?: (this: Battle, target: Pokemon, source: Pokemon, weather: Condition) => boolean | void;
 	onAllySideConditionStart?: (this: Battle, target: Pokemon, source: Pokemon, sideCondition: Condition) => void;
 	onAllyStallMove?: (this: Battle, pokemon: Pokemon) => boolean | void;
-	onAllySwitchIn?: (this: Battle, pokemon: Pokemon) => void;
 	onAllySwitchOut?: (this: Battle, pokemon: Pokemon) => void;
 	onAllyTakeItem?: (
 		(this: Battle, item: Item, pokemon: Pokemon, source: Pokemon, move?: ActiveMove) => boolean | void
@@ -602,12 +618,15 @@ export interface FieldConditionData extends
 
 export type ConditionData = PokemonConditionData | SideConditionData | FieldConditionData;
 
-export type ModdedConditionData = ConditionData & {inherit?: true};
+export type ModdedConditionData = ConditionData & { inherit?: true };
+export interface ConditionDataTable { [id: IDEntry]: ConditionData }
+export interface ModdedConditionDataTable { [id: IDEntry]: ModdedConditionData }
 
 export class Condition extends BasicEffect implements
 	Readonly<BasicEffect & SideConditionData & FieldConditionData & PokemonConditionData> {
-	declare readonly effectType: 'Condition' | 'Weather' | 'Status' | 'Terastal';
+	declare readonly effectType: 'Condition' | 'Weather' | 'Status' | 'Terrain';
 	declare readonly counterMax?: number;
+	declare effectOrder?: number;
 
 	declare readonly durationCallback?: (this: Battle, target: Pokemon, source: Pokemon, effect: Effect | null) => number;
 	declare readonly onCopy?: (this: Battle, pokemon: Pokemon) => void;
@@ -621,13 +640,12 @@ export class Condition extends BasicEffect implements
 
 	constructor(data: AnyObject) {
 		super(data);
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		data = this;
-		this.effectType = (['Weather', 'Status'].includes(data.effectType) ? data.effectType : 'Condition');
+		this.effectType = (['Weather', 'Status', 'Terrain'].includes(data.effectType) ? data.effectType : 'Condition');
+		assignMissingFields(this, data);
 	}
 }
 
-const EMPTY_CONDITION: Condition = new Condition({name: '', exists: false});
+const EMPTY_CONDITION: Condition = Utils.deepFreeze(new Condition({ name: '', exists: false }));
 
 export class DexConditions {
 	readonly dex: ModdedDex;
@@ -645,7 +663,7 @@ export class DexConditions {
 	}
 
 	getByID(id: ID): Condition {
-		if (!id) return EMPTY_CONDITION;
+		if (id === '') return EMPTY_CONDITION;
 
 		let condition = this.conditionCache.get(id);
 		if (condition) return condition;
@@ -653,29 +671,32 @@ export class DexConditions {
 		let found;
 		if (id.startsWith('item:')) {
 			const item = this.dex.items.getByID(id.slice(5) as ID);
-			condition = {...item, id: 'item:' + item.id as ID} as any as Condition;
+			condition = { ...item, id: 'item:' + item.id as ID } as any as Condition;
 		} else if (id.startsWith('ability:')) {
 			const ability = this.dex.abilities.getByID(id.slice(8) as ID);
-			condition = {...ability, id: 'ability:' + ability.id as ID} as any as Condition;
+			condition = { ...ability, id: 'ability:' + ability.id as ID } as any as Condition;
 		} else if (this.dex.data.Rulesets.hasOwnProperty(id)) {
 			condition = this.dex.formats.get(id) as any as Condition;
+			// formats can't be frozen if they don't have a ruleTable
+			this.conditionCache.set(id, condition);
+			return condition;
 		} else if (this.dex.data.Conditions.hasOwnProperty(id)) {
-			condition = new Condition({name: id, ...this.dex.data.Conditions[id]});
+			condition = new Condition({ name: id, ...this.dex.data.Conditions[id] });
 		} else if (
 			(this.dex.data.Moves.hasOwnProperty(id) && (found = this.dex.data.Moves[id]).condition) ||
 			(this.dex.data.Abilities.hasOwnProperty(id) && (found = this.dex.data.Abilities[id]).condition) ||
 			(this.dex.data.Items.hasOwnProperty(id) && (found = this.dex.data.Items[id]).condition)
 		) {
-			condition = new Condition({name: found.name || id, ...found.condition});
+			condition = new Condition({ name: found.name || id, ...found.condition });
 		} else if (id === 'recoil') {
-			condition = new Condition({name: 'Recoil', effectType: 'Recoil'});
+			condition = new Condition({ name: 'Recoil', effectType: 'Recoil' });
 		} else if (id === 'drain') {
-			condition = new Condition({name: 'Drain', effectType: 'Drain'});
+			condition = new Condition({ name: 'Drain', effectType: 'Drain' });
 		} else {
-			condition = new Condition({name: id, exists: false});
+			condition = new Condition({ name: id, exists: false });
 		}
 
-		this.conditionCache.set(id, condition);
+		this.conditionCache.set(id, this.dex.deepFreeze(condition));
 		return condition;
 	}
 }

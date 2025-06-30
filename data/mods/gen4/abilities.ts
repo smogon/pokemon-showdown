@@ -1,15 +1,17 @@
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	airlock: {
 		inherit: true,
 		onSwitchIn() {},
-		onStart() {},
+		onStart(pokemon) {
+			pokemon.abilityState.ending = false;
+		},
 	},
 	angerpoint: {
 		inherit: true,
 		onAfterSubDamage(damage, target, source, move) {
 			if (!target.hp) return;
 			if (move && move.effectType === 'Move' && target.getMoveHitData(move).crit) {
-				target.setBoost({atk: 6});
+				target.setBoost({ atk: 6 });
 				this.add('-setboost', target, 'atk', 12, '[from] ability: Anger Point');
 			}
 		},
@@ -35,7 +37,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	cloudnine: {
 		inherit: true,
 		onSwitchIn() {},
-		onStart() {},
+		onStart(pokemon) {
+			pokemon.abilityState.ending = false;
+		},
 	},
 	colorchange: {
 		inherit: true,
@@ -65,6 +69,23 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				if (this.randomChance(3, 10)) {
 					source.addVolatile('attract', this.effectState.target);
 				}
+			}
+		},
+	},
+	download: {
+		inherit: true,
+		onStart(pokemon) {
+			let totaldef = 0;
+			let totalspd = 0;
+			for (const target of pokemon.foes()) {
+				if (target.volatiles.substitute) continue;
+				totaldef += target.getStat('def', false, true);
+				totalspd += target.getStat('spd', false, true);
+			}
+			if (totaldef && totaldef >= totalspd) {
+				this.boost({ spa: 1 });
+			} else if (totalspd) {
+				this.boost({ atk: 1 });
 			}
 		},
 	},
@@ -134,6 +155,11 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(1.5);
 			}
 		},
+		flags: { breakable: 1 },
+	},
+	forecast: {
+		inherit: true,
+		flags: { notrace: 1 },
 	},
 	forewarn: {
 		inherit: true,
@@ -163,10 +189,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	frisk: {
 		inherit: true,
 		onStart(pokemon) {
-			for (const target of pokemon.foes()) {
-				if (target.item && !target.itemState.knockedOff) {
-					this.add('-item', target, target.getItem().name, '[from] ability: Frisk', '[of] ' + pokemon, '[identify]');
-				}
+			const target = pokemon.side.randomFoe();
+			if (target?.item && !target.itemState.knockedOff) {
+				this.add('-item', '', target.getItem().name, '[from] ability: Frisk', `[of] ${pokemon}`);
 			}
 		},
 	},
@@ -213,7 +238,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				} else if (target.volatiles['substitutebroken']?.move === 'uturn') {
 					this.hint("In Gen 4, if U-turn breaks Substitute the incoming Intimidate does nothing.");
 				} else {
-					this.boost({atk: -1}, target, pokemon, null, true);
+					this.boost({ atk: -1 }, target, pokemon, null, true);
 				}
 			}
 		},
@@ -222,7 +247,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onSetStatus(status, target, source, effect) {
 			if (effect && effect.id === 'rest') {
-				return;
+				// do nothing
 			} else if (this.field.isWeather('sunnyday')) {
 				return false;
 			}
@@ -236,7 +261,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	liquidooze: {
 		inherit: true,
 		onSourceTryHeal(damage, target, source, effect) {
-			this.debug("Heal is occurring: " + target + " <- " + source + " :: " + effect.id);
+			this.debug(`Heal is occurring: ${target} <- ${source} :: ${effect.id}`);
 			const canOoze = ['drain', 'leechseed'];
 			if (canOoze.includes(effect.id) && this.activeMove?.id !== 'dreameater') {
 				this.damage(damage, null, null, null, true);
@@ -365,7 +390,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	serenegrace: {
 		inherit: true,
 		onModifyMove(move) {
-			if (move.secondaries) {
+			if (move.secondaries && move.id !== 'chatter') {
 				this.debug('doubling secondary chance');
 				for (const secondary of move.secondaries) {
 					if (secondary.chance) secondary.chance *= 2;
@@ -385,7 +410,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				boosts[key]! *= 2;
 			}
 		},
-		isBreakable: true,
+		flags: { breakable: 1 },
 		name: "Simple",
 		rating: 4,
 		num: 86,
@@ -481,7 +506,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return this.chainModify(0.5);
 			}
 		},
-		isBreakable: true,
+		flags: { breakable: 1 },
 		name: "Thick Fat",
 		rating: 3.5,
 		num: 47,
@@ -501,7 +526,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	trace: {
 		inherit: true,
 		onUpdate(pokemon) {
-			if (!pokemon.isStarted) return;
+			if (!this.effectState.seek) return;
 			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;
 			const ability = target.getAbility();
@@ -510,9 +535,10 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				return;
 			}
 			if (pokemon.setAbility(ability)) {
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
 			}
 		},
+		flags: { notrace: 1 },
 	},
 	unburden: {
 		inherit: true,
@@ -532,12 +558,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		inherit: true,
 		onTryHit(target, source, move) {
 			if (move.id === 'firefang') {
-				this.hint("In Gen 4, Fire Fang is always able to hit through Wonder Guard.");
+				this.hint("In Gen 4, Fire Fang is always able to hit through Wonder Guard.", true, target.side);
 				return;
 			}
 			if (target === source || move.category === 'Status' || move.type === '???' || move.id === 'struggle') return;
 			this.debug('Wonder Guard immunity: ' + move.id);
-			if (target.runEffectiveness(move) <= 0) {
+			if (target.runEffectiveness(move) <= 0 || !target.runImmunity(move)) {
 				this.add('-immune', target, '[from] ability: Wonder Guard');
 				return null;
 			}

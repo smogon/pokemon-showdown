@@ -1,9 +1,10 @@
-import {FS, Utils} from '../../lib';
+import { FS, Utils } from '../../lib';
 
 export const ROOMFAQ_FILE = 'config/chat-plugins/faqs.json';
 const MAX_ROOMFAQ_LENGTH = 8192;
+const MAX_HTML_ROOMFAQ_LENGTH = 10000;
 
-export const roomFaqs: {[k: string]: {[k: string]: RoomFAQ}} = (() => {
+export const roomFaqs: { [k: string]: { [k: string]: RoomFAQ } } = (() => {
 	const data = JSON.parse(FS(ROOMFAQ_FILE).readIfExistsSync() || "{}");
 	let save = false;
 	for (const k in data) {
@@ -24,7 +25,7 @@ interface RoomFAQ {
 	html?: boolean;
 }
 
-function saveRoomFaqs(table?: {[k: string]: {[k: string]: RoomFAQ}}) {
+function saveRoomFaqs(table?: { [k: string]: { [k: string]: RoomFAQ } }) {
 	FS(ROOMFAQ_FILE).writeUpdate(() => JSON.stringify(table || roomFaqs));
 }
 
@@ -61,26 +62,26 @@ export const commands: Chat.ChatCommands = {
 		const useHTML = this.cmd.includes('html');
 		this.checkCan('ban', null, room);
 		if (useHTML && !user.can('addhtml', null, room, this.fullCmd)) {
-			return this.errorReply(`You are not allowed to use raw HTML in roomfaqs.`);
+			throw new Chat.ErrorMessage(`You are not allowed to use raw HTML in roomfaqs.`);
 		}
-		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) throw new Chat.ErrorMessage("This command is unavailable in temporary rooms.");
 		if (!target) return this.parse('/help roomfaq');
 
 		target = target.trim();
 		const input = this.filter(target);
-		if (target !== input) return this.errorReply("You are not allowed to use fitered words in roomfaq entries.");
+		if (target !== input) throw new Chat.ErrorMessage("You are not allowed to use fitered words in roomfaq entries.");
 		let [topic, ...rest] = input.split(',');
 
 		topic = toID(topic);
 		if (!(topic && rest.length)) return this.parse('/help roomfaq');
 		let text = rest.join(',').trim();
-		if (topic.length > 25) return this.errorReply("FAQ topics should not exceed 25 characters.");
+		if (topic.length > 25) throw new Chat.ErrorMessage("FAQ topics should not exceed 25 characters.");
 
 		const lengthWithoutFormatting = Chat.stripFormatting(text).length;
-		if (lengthWithoutFormatting > MAX_ROOMFAQ_LENGTH) {
-			return this.errorReply(`FAQ entries must not exceed ${MAX_ROOMFAQ_LENGTH} characters.`);
+		if (lengthWithoutFormatting > (useHTML ? MAX_HTML_ROOMFAQ_LENGTH : MAX_ROOMFAQ_LENGTH)) {
+			throw new Chat.ErrorMessage(`FAQ entries must not exceed ${(useHTML ? MAX_HTML_ROOMFAQ_LENGTH : MAX_ROOMFAQ_LENGTH)} characters.`);
 		} else if (lengthWithoutFormatting < 1) {
-			return this.errorReply(`FAQ entries must include at least one character.`);
+			throw new Chat.ErrorMessage(`FAQ entries must include at least one character.`);
 		}
 
 		if (!useHTML) {
@@ -108,18 +109,18 @@ export const commands: Chat.ChatCommands = {
 		const topic = toID(target);
 		if (!topic) return this.parse('/help roomfaq');
 
-		if (!(roomFaqs[room.roomid] && roomFaqs[room.roomid][topic])) return this.errorReply("Invalid topic.");
+		if (!roomFaqs[room.roomid]?.[topic]) throw new Chat.ErrorMessage("Invalid topic.");
 		if (
 			room.settings.repeats?.length &&
-			room.settings.repeats.filter(x => x.faq && x.id === (getAlias(room!.roomid, topic) || topic)).length
+			room.settings.repeats.filter(x => x.faq && x.id === topic).length
 		) {
-			this.parse(`/msgroom ${room.roomid},/removerepeat ${getAlias(room.roomid, topic) || topic}`);
+			this.parse(`/msgroom ${room.roomid},/removerepeat ${topic}`);
 		}
 		delete roomFaqs[room.roomid][topic];
 		Object.keys(roomFaqs[room.roomid]).filter(
-			val => getAlias(room!.roomid, val) === topic
+			val => getAlias(room.roomid, val) === topic
 		).map(
-			val => delete roomFaqs[room!.roomid][val]
+			val => delete roomFaqs[room.roomid][val]
 		);
 		if (!Object.keys(roomFaqs[room.roomid]).length) delete roomFaqs[room.roomid];
 		saveRoomFaqs();
@@ -131,17 +132,21 @@ export const commands: Chat.ChatCommands = {
 		room = this.requireRoom();
 		this.checkChat();
 		this.checkCan('ban', null, room);
-		if (!room.persist) return this.errorReply("This command is unavailable in temporary rooms.");
+		if (!room.persist) throw new Chat.ErrorMessage("This command is unavailable in temporary rooms.");
 		const [alias, topic] = target.split(',').map(val => toID(val));
 
 		if (!(alias && topic)) return this.parse('/help roomfaq');
-		if (alias.length > 25) return this.errorReply("FAQ topics should not exceed 25 characters.");
+		if (alias.length > 25) throw new Chat.ErrorMessage("FAQ topics should not exceed 25 characters.");
+		if (alias === topic) throw new Chat.ErrorMessage("You cannot make the alias have the same name as the topic.");
+		if (roomFaqs[room.roomid][alias] && !roomFaqs[room.roomid][alias].alias) {
+			throw new Chat.ErrorMessage("You cannot overwrite an existing topic with an alias; please delete the topic first.");
+		}
 
 		if (!(roomFaqs[room.roomid] && topic in roomFaqs[room.roomid])) {
-			return this.errorReply(`The topic ${topic} was not found in this room's faq list.`);
+			throw new Chat.ErrorMessage(`The topic ${topic} was not found in this room's faq list.`);
 		}
 		if (getAlias(room.roomid, topic)) {
-			return this.errorReply(`You cannot make an alias of an alias. Use /addalias ${alias}, ${getAlias(room.roomid, topic)} instead.`);
+			throw new Chat.ErrorMessage(`You cannot make an alias of an alias. Use /addalias ${alias}, ${getAlias(room.roomid, topic)} instead.`);
 		}
 		roomFaqs[room.roomid][alias] = {
 			alias: true,
@@ -155,14 +160,34 @@ export const commands: Chat.ChatCommands = {
 	rfaq: 'roomfaq',
 	roomfaq(target, room, user, connection, cmd) {
 		room = this.requireRoom();
-		if (!roomFaqs[room.roomid]) return this.errorReply("This room has no FAQ topics.");
+		if (!roomFaqs[room.roomid]) throw new Chat.ErrorMessage("This room has no FAQ topics.");
 		let topic: string = toID(target);
 		if (topic === 'constructor') return false;
 		if (!topic) {
 			return this.parse(`/join view-roomfaqs-${room.roomid}`);
 		}
-		if (!roomFaqs[room.roomid][topic]) return this.errorReply("Invalid topic.");
 		topic = getAlias(room.roomid, topic) || topic;
+
+		if (!roomFaqs[room.roomid][topic]) {
+		// tries to find a FAQ of same topic if RFAQ topic fails
+			const faqCommand = Chat.commands['faq'] as Chat.ChatHandler;
+			if (typeof faqCommand === 'function') {
+				const normalized = toID(target);
+				const validTopics = [
+					'staff', 'autoconfirmed', 'ac', 'ladder', 'ladderhelp', 'decay',
+					'tiering', 'tiers', 'tier', 'badge', 'badges', 'badgeholders',
+					'rng', 'tournaments', 'tournament', 'tours', 'tour', 'vpn',
+					'proxy', 'ca', 'customavatar', 'customavatars', 'privacy',
+					'lostpassword', 'password', 'lostpass',
+				];
+				if (!validTopics.includes(normalized)) {
+					return this.errorReply(`'${target}' is an invalid topic.`);
+				}
+				if (!this.runBroadcast()) return;
+				return faqCommand.call(this, target, room, user, connection, 'faq', '!');
+			}
+			return this.errorReply("Invalid topic.");
+		}
 
 		if (!this.runBroadcast()) return;
 		const rfaq = roomFaqs[room.roomid][topic];
@@ -176,10 +201,10 @@ export const commands: Chat.ChatCommands = {
 	roomfaqhelp: [
 		`/roomfaq - Shows the list of all available FAQ topics`,
 		`/roomfaq <topic> - Shows the FAQ for <topic>.`,
-		`/addfaq <topic>, <text> - Adds an entry for <topic> in this room or updates it. Requires: @ # &`,
-		`/addhtmlfaq <topic>, <text> - Adds or updates an entry for <topic> with HTML support. Requires: # &`,
-		`/addalias <alias>, <topic> - Adds <alias> as an alias for <topic>, displaying it when users use /roomfaq <alias>. Requires: @ # &`,
-		`/removefaq <topic> - Removes the entry for <topic> in this room. If used on an alias, removes the alias. Requires: @ # &`,
+		`/addfaq <topic>, <text> - Adds an entry for <topic> in this room or updates it. Requires: @ # ~`,
+		`/addhtmlfaq <topic>, <text> - Adds or updates an entry for <topic> with HTML support. Requires: # ~`,
+		`/addalias <alias>, <topic> - Adds <alias> as an alias for <topic>, displaying it when users use /roomfaq <alias>. Requires: @ # ~`,
+		`/removefaq <topic> - Removes the entry for <topic> in this room. If used on an alias, removes the alias. Requires: @ # ~`,
 	],
 };
 

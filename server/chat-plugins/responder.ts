@@ -7,14 +7,14 @@
  * @author mia-pi-git
  */
 
-import {FS, Utils} from '../../lib';
-import {LogViewer} from './chatlog';
-import {roomFaqs, visualizeFaq} from './room-faqs';
+import { FS, Utils } from '../../lib';
+import { LogViewer } from './chatlog';
+import { roomFaqs, visualizeFaq } from './room-faqs';
 
 const DATA_PATH = 'config/chat-plugins/responder.json';
-const LOG_PATH = 'logs/responder.jsonl';
+const LOG_PATH = Monitor.logPath('responder.jsonl').path;
 
-export let answererData: {[roomid: string]: PluginData} = {};
+export let answererData: { [roomid: string]: PluginData } = {};
 
 try {
 	answererData = JSON.parse(FS(DATA_PATH).readSync());
@@ -34,7 +34,7 @@ interface LoggedMessage {
 }
 interface PluginData {
 	/** Word pairs that have been marked as a match for a specific FAQ. */
-	pairs: {[k: string]: string[]};
+	pairs: { [k: string]: string[] };
 	/** Common terms to be ignored in question parsing. */
 	ignore?: string[];
 }
@@ -44,14 +44,14 @@ export class AutoResponder {
 	room: Room;
 	constructor(room: Room, data?: PluginData) {
 		this.room = room;
-		this.data = data || {pairs: {}, ignore: []};
+		this.data = data || { pairs: {}, ignore: [] };
 		AutoResponder.migrateStats(this.data, this);
 	}
 	static migrateStats(data: any, responder: AutoResponder) {
 		if (!data.stats) return data;
 		for (const date in data.stats) {
 			for (const entry of data.stats[date].matches) {
-				void this.logMessage(responder.room.roomid, {...entry, date});
+				void this.logMessage(responder.room.roomid, { ...entry, date });
 			}
 		}
 		delete data.stats;
@@ -190,7 +190,7 @@ export class AutoResponder {
 		const regexes = this.data.pairs[faq].map(item => new RegExp(item, "i"));
 		if (!regexes.length) return;
 		for (const regex of regexes) {
-			if (regex.test(question)) return {faq, regex: regex.toString()};
+			if (regex.test(question)) return { faq, regex: regex.toString() };
 		}
 		return null;
 	}
@@ -241,8 +241,7 @@ export class AutoResponder {
 	destroy() {
 		this.writeState();
 		this.room.responder = null;
-		// @ts-ignore deallocating
-		this.room = null;
+		this.room = null!;
 	}
 	ignore(terms: string[], context: Chat.CommandContext) {
 		const filtered = terms.map(t => context.filter(t)).filter(Boolean);
@@ -303,7 +302,7 @@ export const commands: Chat.ChatCommands = {
 	question(target, room, user) {
 		room = this.requireRoom();
 		const responder = room.responder;
-		if (!responder) return this.errorReply(`This room does not have an autoresponder configured.`);
+		if (!responder) throw new Chat.ErrorMessage(`This room does not have an autoresponder configured.`);
 		if (!target) return this.parse("/help question");
 		const reply = responder.visualize(target, true);
 		if (!reply) return this.sendReplyBox(`No answer found.`);
@@ -318,7 +317,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			const responder = room.responder;
 			if (!responder) {
-				return this.errorReply(`This room has not configured an autoresponder.`);
+				throw new Chat.ErrorMessage(`This room has not configured an autoresponder.`);
 			}
 			if (!target) {
 				return this.parse('/help autoresponder');
@@ -338,15 +337,15 @@ export const commands: Chat.ChatCommands = {
 			}
 			this.checkCan('ban', null, room);
 			if (room.settings.isPrivate === true) {
-				return this.errorReply(`Secret rooms cannot enable an autoresponder.`);
+				throw new Chat.ErrorMessage(`Secret rooms cannot enable an autoresponder.`);
 			}
 			if (this.meansYes(target)) {
-				if (room.responder) return this.errorReply(`The Autoresponder for this room is already enabled.`);
+				if (room.responder) throw new Chat.ErrorMessage(`The Autoresponder for this room is already enabled.`);
 				room.responder = new AutoResponder(room, answererData[room.roomid]);
 				room.responder.writeState();
 			}
 			if (this.meansNo(target)) {
-				if (!room.responder) return this.errorReply(`The Autoresponder for this room is already disabled.`);
+				if (!room.responder) throw new Chat.ErrorMessage(`The Autoresponder for this room is already disabled.`);
 				room.responder.destroy();
 			}
 			this.privateModAction(`${user.name} ${!room.responder ? 'disabled' : 'enabled'} the auto-response filter.`);
@@ -356,11 +355,11 @@ export const commands: Chat.ChatCommands = {
 		add(target, room, user, connection, cmd) {
 			room = this.requireRoom();
 			if (!room.responder) {
-				return this.errorReply(`This room has not configured an auto-response filter.`);
+				throw new Chat.ErrorMessage(`This room has not configured an auto-response filter.`);
 			}
 			const force = cmd === 'forceadd';
 			if (force && !AutoResponder.canOverride(user, room)) {
-				return this.errorReply(`You cannot use raw regex - use /autoresponder add instead.`);
+				throw new Chat.ErrorMessage(`You cannot use raw regex - use /autoresponder add instead.`);
 			}
 			this.checkCan('ban', null, room);
 			room.responder.tryAddRegex(target, force);
@@ -371,14 +370,14 @@ export const commands: Chat.ChatCommands = {
 			const [faq, index] = target.split(',');
 			room = this.requireRoom();
 			if (!room.responder) {
-				return this.errorReply(`${room.title} has not configured an auto-response filter.`);
+				throw new Chat.ErrorMessage(`${room.title} has not configured an auto-response filter.`);
 			}
 			this.checkCan('ban', null, room);
 			const num = parseInt(index);
-			if (isNaN(num)) return this.errorReply("Invalid index.");
+			if (isNaN(num)) throw new Chat.ErrorMessage("Invalid index.");
 			room.responder.tryRemoveRegex(faq, num - 1);
 			this.privateModAction(`${user.name} removed regex ${num} from the usable regexes for ${faq}.`);
-			this.modlog('AUTOFILTER REMOVE', null, index);
+			this.modlog('AUTOFILTER REMOVE', null, `removed regex ${index} for FAQ ${faq}`);
 			const pages = [`keys`, `pairs`];
 			for (const p of pages) {
 				this.refreshPage(`autofilter-${room.roomid}-${p}`);
@@ -387,7 +386,7 @@ export const commands: Chat.ChatCommands = {
 		ignore(target, room, user) {
 			room = this.requireRoom();
 			if (!room.responder) {
-				return this.errorReply(`This room has not configured an auto-response filter.`);
+				throw new Chat.ErrorMessage(`This room has not configured an auto-response filter.`);
 			}
 			this.checkCan('ban', null, room);
 			if (!toID(target)) {
@@ -403,7 +402,7 @@ export const commands: Chat.ChatCommands = {
 		unignore(target, room, user) {
 			room = this.requireRoom();
 			if (!room.responder) {
-				return this.errorReply(`${room.title} has not configured an auto-response filter.`);
+				throw new Chat.ErrorMessage(`${room.title} has not configured an auto-response filter.`);
 			}
 			this.checkCan('ban', null, room);
 			if (!toID(target)) {
@@ -421,11 +420,11 @@ export const commands: Chat.ChatCommands = {
 	autoresponderhelp() {
 		const help = [
 			`<code>/autoresponder view [page]</code> - Views the Autoresponder page [page]. (options: keys, stats)`,
-			`<code>/autoresponder toggle [on | off]</code> - Enables or disables the Autoresponder for the current room. Requires: @ # &`,
+			`<code>/autoresponder toggle [on | off]</code> - Enables or disables the Autoresponder for the current room. Requires: @ # ~`,
 			`<code>/autoresponder add [input] => [faq]</code> - Adds regex made from the input string to the current room's Autoresponder, to respond with [faq] to matches.`,
 			`<code>/autoresponder remove [faq], [regex index]</code> - removes the regex matching the [index] from the current room's responses for [faq].`,
 			`Indexes can be found in /autoresponder keys.`,
-			`Requires: @ # &`,
+			`Requires: @ # ~`,
 		];
 		return this.sendReplyBox(help.join('<br/ >'));
 	},
@@ -435,7 +434,7 @@ export const pages: Chat.PageTable = {
 	async autoresponder(args, user) {
 		const room = this.requireRoom();
 		if (!room.responder) {
-			return this.errorReply(`${room.title} does not have a configured autoresponder.`);
+			throw new Chat.ErrorMessage(`${room.title} does not have a configured autoresponder.`);
 		}
 		args.shift();
 		const roomData = answererData[room.roomid];
@@ -498,8 +497,9 @@ export const pages: Chat.PageTable = {
 				for (const regex of regexes) {
 					const index = regexes.indexOf(regex) + 1;
 					const button = `<button class="button" name="send"value="/msgroom ${room.roomid},/ar remove ${item}, ${index}">Remove</button>`;
-					buffer += `<tr><td>${index}</td><td><code>${regex}</code></td>`;
-					if (canChange) buffer += `<td>${button}</td></tr>`;
+					buffer += Utils.html`<tr><td>${index}</td><td><code>${regex}</code></td>`;
+					if (canChange) buffer += `<td>${button}</td>`;
+					buffer += `</tr>`;
 				}
 				buffer += `</details>`;
 				return buffer;
@@ -509,10 +509,10 @@ export const pages: Chat.PageTable = {
 			this.title = `[${room.title} Autoresponder ignore list]`;
 			buf = `<div class="pad"><h2>${room.title} responder terms to ignore:</h2>${back}${refresh('ignore')}<hr />`;
 			if (!roomData.ignore) {
-				return this.errorReply(`No terms on ignore list.`);
+				throw new Chat.ErrorMessage(`No terms on ignore list.`);
 			}
 			for (const term of roomData.ignore) {
-				buf += `- ${term} <button class="button" name="send"value="/msgroom ${room.roomid},/ar unignore ${term}">Remove</button><br />`;
+				buf += `- ${Utils.escapeHTML(term)} <button class="button" name="send"value="/msgroom ${room.roomid},/ar unignore ${term}">Remove</button><br />`;
 			}
 			buf += `</div>`;
 			break;
@@ -532,7 +532,7 @@ export const pages: Chat.PageTable = {
 export const handlers: Chat.Handlers = {
 	onRenameRoom(oldID, newID) {
 		if (answererData[oldID]) {
-			if (!answererData[newID]) answererData[newID] = {pairs: {}};
+			if (!answererData[newID]) answererData[newID] = { pairs: {} };
 			Object.assign(answererData[newID], answererData[oldID]);
 			delete answererData[oldID];
 			FS(DATA_PATH).writeUpdate(() => JSON.stringify(answererData));

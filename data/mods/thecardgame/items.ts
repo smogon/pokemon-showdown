@@ -1,4 +1,4 @@
-export const Items: {[k: string]: ModdedItemData} = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	buggem: {
 		inherit: true,
 		onSourceTryPrimaryHit(target, source, move) {
@@ -206,7 +206,7 @@ export const Items: {[k: string]: ModdedItemData} = {
 		inherit: true,
 		onSourceTryPrimaryHit(target, source, move) {
 			if (target === source || move.category === 'Status') return;
-			if (move.type === 'FIghting' && source.useItem()) {
+			if (move.type === 'Fighting' && source.useItem()) {
 				source.addVolatile('gem');
 			}
 		},

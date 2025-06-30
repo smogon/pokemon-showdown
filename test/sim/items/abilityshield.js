@@ -5,16 +5,16 @@ const common = require('../../common');
 
 let battle;
 
-describe('Ability Shield', function () {
-	afterEach(function () {
+describe('Ability Shield', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should protect the holder's ability against ability-changing moves`, function () {
+	it(`should protect the holder's ability against ability-changing moves`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['splash']},
+			{ species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['splash'] },
 		], [
-			{species: 'weezinggalar', ability: 'levitate', moves: ['worryseed']},
+			{ species: 'weezinggalar', ability: 'levitate', moves: ['worryseed'] },
 		]]);
 
 		battle.makeChoices();
@@ -22,11 +22,11 @@ describe('Ability Shield', function () {
 		assert.equal(battle.p1.active[0].ability, 'shadowtag', `Holder should retain ability`);
 	});
 
-	it(`should protect the holder's ability against ability-changing abilities`, function () {
+	it(`should protect the holder's ability against ability-changing abilities`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['tackle']},
+			{ species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['tackle'] },
 		], [
-			{species: 'weezinggalar', ability: 'mummy', moves: ['splash']},
+			{ species: 'weezinggalar', ability: 'mummy', moves: ['splash'] },
 		]]);
 
 		battle.makeChoices();
@@ -34,11 +34,11 @@ describe('Ability Shield', function () {
 		assert.equal(battle.p1.active[0].ability, 'shadowtag', `Holder should retain ability`);
 	});
 
-	it(`should only protect the holder`, function () {
+	it(`should only protect the holder`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'mummy', item: 'abilityshield', moves: ['splash']},
+			{ species: 'wynaut', ability: 'mummy', item: 'abilityshield', moves: ['splash'] },
 		], [
-			{species: 'weezinggalar', ability: 'levitate', moves: ['tackle']},
+			{ species: 'weezinggalar', ability: 'levitate', moves: ['tackle'] },
 		]]);
 
 		battle.makeChoices();
@@ -47,11 +47,11 @@ describe('Ability Shield', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9411146
-	it(`should protect the holder's ability against Neutralizing Gas`, function () {
+	it(`should protect the holder's ability against Neutralizing Gas`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'sturdy', item: 'abilityshield', moves: ['splash'], level: 5},
+			{ species: 'wynaut', ability: 'sturdy', item: 'abilityshield', moves: ['splash'], level: 5 },
 		], [
-			{species: 'weezinggalar', ability: 'neutralizinggas', moves: ['shadowball']},
+			{ species: 'weezinggalar', ability: 'neutralizinggas', moves: ['shadowball'] },
 		]]);
 
 		assert(battle.log.some(line => line.includes('Neutralizing Gas')), `Neutralizing Gas should trigger`);
@@ -62,12 +62,12 @@ describe('Ability Shield', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9412194
-	it(`should protect the holder's ability against Mold Breaker`, function () {
+	it(`should protect the holder's ability against Mold Breaker`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'sturdy', item: 'abilityshield', moves: ['splash'], level: 5},
-			{species: 'gastly', ability: 'levitate', item: 'abilityshield', moves: ['sleeptalk']},
+			{ species: 'wynaut', ability: 'sturdy', item: 'abilityshield', moves: ['splash'], level: 5 },
+			{ species: 'gastly', ability: 'levitate', item: 'abilityshield', moves: ['sleeptalk'] },
 		], [
-			{species: 'weezinggalar', ability: 'moldbreaker', moves: ['shadowball', 'earthpower']},
+			{ species: 'weezinggalar', ability: 'moldbreaker', moves: ['shadowball', 'earthpower'] },
 		]]);
 
 		assert(battle.log.every(line => !line.includes('Ability Shield')), `Ability Shield should not trigger a block message`);
@@ -79,11 +79,11 @@ describe('Ability Shield', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9403448
-	it(`should protect the holder's ability against Gastro Acid`, function () {
+	it(`should protect the holder's ability against Gastro Acid`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'sturdy', item: 'abilityshield', moves: ['splash'], level: 5},
+			{ species: 'wynaut', ability: 'sturdy', item: 'abilityshield', moves: ['splash'], level: 5 },
 		], [
-			{species: 'weezinggalar', ability: 'levitate', moves: ['gastroacid', 'shadowball']},
+			{ species: 'weezinggalar', ability: 'levitate', moves: ['gastroacid', 'shadowball'] },
 		]]);
 
 		battle.makeChoices('move splash', 'move gastroacid');
@@ -94,11 +94,11 @@ describe('Ability Shield', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9412999
-	it(`should not unsuppress the holder's ability if Ability Shield is acquired after Gastro Acid has been used`, function () {
+	it(`should not unsuppress the holder's ability if Ability Shield is acquired after Gastro Acid has been used`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'sturdy', moves: ['splash'], level: 5},
+			{ species: 'wynaut', ability: 'sturdy', moves: ['splash'], level: 5 },
 		], [
-			{species: 'weezinggalar', ability: 'levitate', item: 'abilityshield', moves: ['gastroacid', 'trick', 'shadowball']},
+			{ species: 'weezinggalar', ability: 'levitate', item: 'abilityshield', moves: ['gastroacid', 'trick', 'shadowball'] },
 		]]);
 
 		battle.makeChoices('move splash', 'move gastroacid');
@@ -108,11 +108,11 @@ describe('Ability Shield', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9412999
-	it(`should unsuppress the holder's ability if Ability Shield is acquired after Neutralizing Gas has come into effect`, function () {
+	it(`should unsuppress the holder's ability if Ability Shield is acquired after Neutralizing Gas has come into effect`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'sturdy', moves: ['splash'], level: 5},
+			{ species: 'wynaut', ability: 'sturdy', moves: ['splash'], level: 5 },
 		], [
-			{species: 'weezinggalar', ability: 'neutralizinggas', item: 'abilityshield', moves: ['trick', 'shadowball']},
+			{ species: 'weezinggalar', ability: 'neutralizinggas', item: 'abilityshield', moves: ['trick', 'shadowball'] },
 		]]);
 
 		battle.makeChoices('move splash', 'move trick');
@@ -122,11 +122,11 @@ describe('Ability Shield', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9412999
-	it(`should not be suppressed by Klutz`, function () {
+	it(`should not be suppressed by Klutz`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'klutz', item: 'abilityshield', moves: ['tackle']},
+			{ species: 'wynaut', ability: 'klutz', item: 'abilityshield', moves: ['tackle'] },
 		], [
-			{species: 'weezinggalar', ability: 'mummy', moves: ['splash']},
+			{ species: 'weezinggalar', ability: 'mummy', moves: ['splash'] },
 		]]);
 
 		battle.makeChoices();
@@ -134,11 +134,11 @@ describe('Ability Shield', function () {
 		assert.equal(battle.p1.active[0].ability, 'klutz', `Holder should retain ability`);
 	});
 
-	it(`should protect the holder's ability against Skill Swap`, function () {
+	it(`should protect the holder's ability against Skill Swap`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['splash']},
+			{ species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['splash'] },
 		], [
-			{species: 'weezinggalar', ability: 'levitate', moves: ['skillswap']},
+			{ species: 'weezinggalar', ability: 'levitate', moves: ['skillswap'] },
 		]]);
 
 		battle.makeChoices();
@@ -149,11 +149,11 @@ describe('Ability Shield', function () {
 		assert.equal(battle.p2.active[0].ability, 'levitate', `Opponent should retain ability`);
 	});
 
-	it(`should protect the holder's ability against Skill Swap, even if used by the holder`, function () {
+	it(`should protect the holder's ability against Skill Swap, even if used by the holder`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['skillswap']},
+			{ species: 'wynaut', ability: 'shadowtag', item: 'abilityshield', moves: ['skillswap'] },
 		], [
-			{species: 'weezinggalar', ability: 'levitate', moves: ['splash']},
+			{ species: 'weezinggalar', ability: 'levitate', moves: ['splash'] },
 		]]);
 
 		battle.makeChoices();
@@ -165,11 +165,11 @@ describe('Ability Shield', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9413916
-	it(`should not trigger holder's Intimidate if Ability Shield is acquired after entrance, while Neutralizing Gas is in effect`, function () {
+	it(`should not trigger holder's Intimidate if Ability Shield is acquired after entrance, while Neutralizing Gas is in effect`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'intimidate', moves: ['splash']},
+			{ species: 'wynaut', ability: 'intimidate', moves: ['splash'] },
 		], [
-			{species: 'weezinggalar', ability: 'neutralizinggas', item: 'abilityshield', moves: ['trick']},
+			{ species: 'weezinggalar', ability: 'neutralizinggas', item: 'abilityshield', moves: ['trick'] },
 		]]);
 
 		battle.makeChoices();
@@ -177,26 +177,49 @@ describe('Ability Shield', function () {
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9414273
-	it(`should not trigger holder's Trace`, function () {
+	it(`should not trigger holder's Trace`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'trace', item: 'abilityshield', moves: ['splash']},
+			{ species: 'wynaut', ability: 'trace', item: 'abilityshield', moves: ['splash'] },
 		], [
-			{species: 'weezinggalar', ability: 'levitate', moves: ['splash']},
+			{ species: 'weezinggalar', ability: 'levitate', moves: ['splash'] },
 		]]);
 
 		assert.notEqual(battle.p1.active[0].ability, 'levitate', `Holder should not trace ability`);
 	});
 
 	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9414273
-	it(`should not trigger holder's Trace even after losing the item`, function () {
+	it(`should not trigger holder's Trace even after losing the item`, () => {
 		battle = common.createBattle([[
-			{species: 'wynaut', ability: 'trace', item: 'abilityshield', moves: ['splash']},
+			{ species: 'wynaut', ability: 'trace', item: 'abilityshield', moves: ['splash'] },
 		], [
-			{species: 'weezinggalar', ability: 'levitate', moves: ['trick']},
+			{ species: 'weezinggalar', ability: 'levitate', moves: ['trick'] },
 		]]);
 
 		battle.makeChoices();
 		assert.notEqual(battle.p1.active[0].ability, 'levitate', `Holder should not trace ability`);
+	});
+
+	// https://www.smogon.com/forums/threads/scarlet-violet-battle-mechanics-research.3709545/post-9635572
+	it(`should not prevent Imposter from changing the holder's ability`, () => {
+		battle = common.createBattle([[
+			{ species: 'ditto', ability: 'imposter', item: 'abilityshield', moves: ['transform'] },
+		], [
+			{ species: 'scorbunny', ability: 'libero', moves: ['agility'] },
+		]]);
+
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].ability, 'libero', `Ditto should copy Libero`);
+	});
+
+	it(`should not prevent forme changes from changing the holder's ability`, () => {
+		battle = common.gen(9).createBattle([[
+			{ species: 'ogerpon', ability: 'defiant', item: 'abilityshield', moves: ['sleeptalk'] },
+		], [
+			{ species: 'scorbunny', ability: 'libero', moves: ['agility'] },
+		]]);
+
+		battle.makeChoices('move sleeptalk terastallize', 'auto');
+		assert.equal(battle.p1.active[0].ability, 'embodyaspectteal', `Ogerpon's ability should change to Embody Aspect`);
 	});
 
 	// TODO Add future tests for losing Ability Shield vs Neutralizing Gas/Mold Breaker/Gastro Acid?

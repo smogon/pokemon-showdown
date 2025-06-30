@@ -8,8 +8,8 @@
  * @license MIT
  */
 
-import {SQL, Utils, FS} from '../../lib';
-import {Config} from '../config-loader';
+import { SQL, Utils, FS } from '../../lib';
+import { Config } from '../config-loader';
 
 // If a modlog query takes longer than this, it will be logged.
 const LONG_QUERY_DURATION = 2000;
@@ -32,7 +32,7 @@ const PUNISHMENTS = [
 	'UNRANGEBAN', 'TRUSTUSER', 'UNTRUSTUSER', 'BLACKLIST', 'BATTLEBAN', 'UNBATTLEBAN',
 	'NAMEBLACKLIST', 'KICKBATTLE', 'UNTICKETBAN', 'HIDETEXT', 'HIDEALTSTEXT', 'REDIRECT',
 	'NOTE', 'MAFIAHOSTBAN', 'MAFIAUNHOSTBAN', 'MAFIAGAMEBAN', 'MAFIAUNGAMEBAN', 'GIVEAWAYBAN', 'GIVEAWAYUNBAN',
-	'TOUR BAN', 'TOUR UNBAN', 'UNNAMELOCK',
+	'TOUR BAN', 'TOUR UNBAN', 'UNNAMELOCK', 'PERMABLACKLIST',
 ];
 
 export type ModlogID = RoomID | 'global' | 'all';
@@ -41,7 +41,7 @@ interface SQLQuery {
 	args: (string | number)[];
 }
 interface ModlogResults {
-	results: (ModlogEntry & {entryID: number})[];
+	results: (ModlogEntry & { entryID: number })[];
 	duration: number;
 }
 
@@ -52,11 +52,11 @@ interface ModlogSQLQuery<T> {
 }
 
 export interface ModlogSearch {
-	note: {search: string, isExact?: boolean, isExclusion?: boolean}[];
-	user: {search: string, isExact?: boolean, isExclusion?: boolean}[];
-	ip: {search: string, isExclusion?: boolean}[];
-	action: {search: string, isExclusion?: boolean}[];
-	actionTaker: {search: string, isExclusion?: boolean}[];
+	note: { search: string, isExact?: boolean, isExclusion?: boolean }[];
+	user: { search: string, isExact?: boolean, isExclusion?: boolean }[];
+	ip: { search: string, isExclusion?: boolean }[];
+	action: { search: string, isExclusion?: boolean }[];
+	actionTaker: { search: string, isExclusion?: boolean }[];
 }
 
 export interface ModlogEntry {
@@ -80,7 +80,7 @@ export interface TransactionArguments extends Record<string, unknown> {
 	altsInsertionStatement: string;
 }
 
-export type PartialModlogEntry = Partial<ModlogEntry> & {action: string};
+export type PartialModlogEntry = Partial<ModlogEntry> & { action: string };
 
 export class Modlog {
 	readonly database: SQL.DatabaseManager;
@@ -147,7 +147,7 @@ export class Modlog {
 			await this.database.runFile(MODLOG_SCHEMA_PATH);
 		}
 
-		const {hasDBInfo} = await this.database.get(
+		const { hasDBInfo } = await this.database.get(
 			`SELECT count(*) AS hasDBInfo FROM sqlite_master WHERE type = 'table' AND name = 'db_info'`
 		);
 
@@ -186,13 +186,8 @@ export class Modlog {
 	 * Methods for writing to the modlog. *
 	 **************************************/
 
-	/**
-	 * @deprecated Modlogs use SQLite and no longer need initialization.
-	 */
-	initialize(roomid: ModlogID) {
-		return;
-	}
-
+	/** @deprecated Modlogs use SQLite and no longer need initialization. */
+	initialize(roomid: ModlogID) {}
 
 	/**
 	 * Writes to the modlog
@@ -291,7 +286,7 @@ export class Modlog {
 	 */
 	async search(
 		roomid: ModlogID = 'global',
-		search: ModlogSearch = {note: [], user: [], ip: [], action: [], actionTaker: []},
+		search: ModlogSearch = { note: [], user: [], ip: [], action: [], actionTaker: [] },
 		maxLines = 20,
 		onlyPunishments = false,
 	): Promise<ModlogResults | null> {
@@ -319,10 +314,10 @@ export class Modlog {
 		if (duration > LONG_QUERY_DURATION) {
 			Monitor.slow(`[slow SQL modlog search] ${duration}ms - ${JSON.stringify(query)}`);
 		}
-		return {results, duration};
+		return { results, duration };
 	}
 
-	dbRowToModlogEntry(row: any): ModlogEntry & {entryID: number} {
+	dbRowToModlogEntry(row: any): ModlogEntry & { entryID: number } {
 		return {
 			entryID: row.modlog_id,
 			action: row.action,
@@ -396,7 +391,7 @@ export class Modlog {
 		const select = `SELECT *, (SELECT group_concat(userid, ',') FROM alts WHERE alts.modlog_id = modlog.modlog_id) as alts FROM modlog`;
 		const ors = [];
 		const ands = [];
-		const sortAndLimit = {query: `ORDER BY timestamp DESC`, args: []} as SQLQuery;
+		const sortAndLimit = { query: `ORDER BY timestamp DESC`, args: [] } as SQLQuery;
 		if (maxLines) {
 			sortAndLimit.query += ` LIMIT ?`;
 			sortAndLimit.args.push(maxLines);
@@ -416,36 +411,36 @@ export class Modlog {
 					args.pop();
 				}
 			}
-			ands.push({query: roomChecker, args});
+			ands.push({ query: roomChecker, args });
 		}
 
 		for (const action of search.action) {
 			const args = [action.search + '%'];
 			if (action.isExclusion) {
-				ands.push({query: `action NOT LIKE ?`, args});
+				ands.push({ query: `action NOT LIKE ?`, args });
 			} else {
-				ands.push({query: `action LIKE ?`, args});
+				ands.push({ query: `action LIKE ?`, args });
 			}
 		}
 		if (onlyPunishments) {
 			const args: (string | number)[] = [];
-			ands.push({query: `action IN (${Utils.formatSQLArray(PUNISHMENTS, args)})`, args});
+			ands.push({ query: `action IN (${Utils.formatSQLArray(PUNISHMENTS, args)})`, args });
 		}
 
 		for (const ip of search.ip) {
 			const args = [ip.search + '%'];
 			if (ip.isExclusion) {
-				ands.push({query: `ip NOT LIKE ?`, args});
+				ands.push({ query: `ip NOT LIKE ?`, args });
 			} else {
-				ands.push({query: `ip LIKE ?`, args});
+				ands.push({ query: `ip LIKE ?`, args });
 			}
 		}
 		for (const actionTaker of search.actionTaker) {
 			const args = [actionTaker.search + '%'];
 			if (actionTaker.isExclusion) {
-				ands.push({query: `action_taker_userid NOT LIKE ?`, args});
+				ands.push({ query: `action_taker_userid NOT LIKE ?`, args });
 			} else {
-				ands.push({query: `action_taker_userid LIKE ?`, args});
+				ands.push({ query: `action_taker_userid LIKE ?`, args });
 			}
 		}
 
@@ -453,9 +448,9 @@ export class Modlog {
 			const tester = noteSearch.isExact ? `= ?` : `LIKE ?`;
 			const args = [noteSearch.isExact ? noteSearch.search : `%${noteSearch.search}%`];
 			if (noteSearch.isExclusion) {
-				ands.push({query: `note ${noteSearch.isExact ? '!' : 'NOT '}${tester}`, args});
+				ands.push({ query: `note ${noteSearch.isExact ? '!' : 'NOT '}${tester}`, args });
 			} else {
-				ands.push({query: `note ${tester}`, args});
+				ands.push({ query: `note ${tester}`, args });
 			}
 		}
 
@@ -470,7 +465,7 @@ export class Modlog {
 				param = user.search.toLowerCase() + '%';
 			}
 
-			ors.push({query: `(userid ${tester} OR autoconfirmed_userid ${tester})`, args: [param, param]});
+			ors.push({ query: `(userid ${tester} OR autoconfirmed_userid ${tester})`, args: [param, param] });
 			ors.push({
 				query: `EXISTS(SELECT * FROM alts WHERE alts.modlog_id = modlog.modlog_id AND alts.userid ${tester})`,
 				args: [param],
@@ -480,4 +475,4 @@ export class Modlog {
 	}
 }
 
-export const mainModlog = new Modlog(MODLOG_DB_PATH, {sqliteOptions: Config.modlogsqliteoptions});
+export const mainModlog = new Modlog(MODLOG_DB_PATH, { sqliteOptions: Config.modlogsqliteoptions });

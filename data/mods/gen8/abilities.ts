@@ -32,7 +32,7 @@ Ratings and how they work:
 
 */
 
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	noability: {
 		inherit: true,
 		rating: 0.1,
@@ -104,19 +104,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	battlebond: {
 		inherit: true,
 		onSourceAfterFaint(length, target, source, effect) {
+			if (source.bondTriggered) return;
 			if (effect?.effectType !== 'Move') {
 				return;
 			}
 			if (source.species.id === 'greninjabond' && source.hp && !source.transformed && source.side.foePokemonLeft()) {
 				this.add('-activate', source, 'ability: Battle Bond');
 				source.formeChange('Greninja-Ash', this.effect, true);
-			}
-		},
-		onModifyMovePriority: -1,
-		onModifyMove(move, attacker) {
-			if (move.id === 'watershuriken' && attacker.species.name === 'Greninja-Ash' &&
-				!attacker.transformed) {
-				move.multihit = 3;
+				source.formeRegression = true;
+				source.bondTriggered = true;
 			}
 		},
 		isNonstandard: null,
@@ -172,6 +168,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	competitive: {
 		inherit: true,
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source || target.isAlly(source)) {
+				if (effect.id === 'stickyweb') {
+					this.hint("In Gen 8, Court Change Sticky Web counts as lowering your own Speed, and Competitive only affects stats lowered by foes.", true, source.side);
+				}
+				return;
+			}
+			let statsLowered = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					statsLowered = true;
+				}
+			}
+			if (statsLowered) {
+				this.boost({ spa: 2 }, target, target, null, false, true);
+			}
+		},
 		rating: 2.5,
 	},
 	compoundeyes: {
@@ -217,7 +231,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	dauntlessshield: {
 		inherit: true,
 		onStart(pokemon) {
-			this.boost({def: 1}, pokemon);
+			this.boost({ def: 1 }, pokemon);
 		},
 		rating: 3.5,
 	},
@@ -231,6 +245,24 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	defiant: {
 		inherit: true,
+		onAfterEachBoost(boost, target, source, effect) {
+			if (!source || target.isAlly(source)) {
+				if (effect.id === 'stickyweb') {
+					this.hint("In Gen 8, Court Change Sticky Web counts as lowering your own Speed, and Defiant only affects stats lowered by foes.", true, source.side);
+				}
+				return;
+			}
+			let statsLowered = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					statsLowered = true;
+				}
+			}
+			if (statsLowered) {
+				this.boost({ atk: 2 }, target, target, null, false, true);
+			}
+		},
 		rating: 2.5,
 	},
 	deltastream: {
@@ -243,6 +275,17 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	disguise: {
 		inherit: true,
+		onUpdate(pokemon) {
+			if (['mimikyu', 'mimikyutotem'].includes(pokemon.species.id) && this.effectState.busted) {
+				const speciesid = pokemon.species.id === 'mimikyutotem' ? 'Mimikyu-Busted-Totem' : 'Mimikyu-Busted';
+				pokemon.formeChange(speciesid, this.effect, true);
+				pokemon.formeRegression = true;
+				this.damage(pokemon.baseMaxhp / 8, pokemon, pokemon, this.dex.species.get(speciesid));
+			}
+		},
+		onFaint(target) {
+			delete this.effectState.busted;
+		},
 		rating: 3.5,
 	},
 	download: {
@@ -371,6 +414,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	gulpmissile: {
 		inherit: true,
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1 },
 		rating: 2.5,
 	},
 	guts: {
@@ -387,6 +431,15 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	heatproof: {
 		inherit: true,
+		onSourceModifyAtk() {},
+		onSourceModifySpA() {},
+		onSourceBasePowerPriority: 18,
+		onSourceBasePower(basePower, attacker, defender, move) {
+			if (move.type === 'Fire') {
+				this.debug('Heatproof BP weaken');
+				return this.chainModify(0.5);
+			}
+		},
 		rating: 2,
 	},
 	heavymetal: {
@@ -431,6 +484,9 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	illuminate: {
 		inherit: true,
+		onTryBoost() {},
+		onModifyMove() {},
+		flags: {},
 		rating: 0,
 	},
 	illusion: {
@@ -468,7 +524,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	intrepidsword: {
 		inherit: true,
 		onStart(pokemon) {
-			this.boost({atk: 1}, pokemon);
+			this.boost({ atk: 1 }, pokemon);
 		},
 		rating: 4,
 	},
@@ -503,14 +559,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	libero: {
 		inherit: true,
 		onPrepareHit(source, target, move) {
-			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
 				this.add('-start', source, 'typechange', type, '[from] ability: Libero');
 			}
 		},
-		onSwitchIn() {},
 		rating: 4.5,
 	},
 	lightmetal: {
@@ -579,7 +634,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	mirrorarmor: {
 		inherit: true,
-		rating: 2,
+		rating: 2.5,
 	},
 	mistysurge: {
 		inherit: true,
@@ -724,14 +779,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	protean: {
 		inherit: true,
 		onPrepareHit(source, target, move) {
-			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch') return;
+			if (move.hasBounced || move.flags['futuremove'] || move.sourceEffect === 'snatch' || move.callsMove) return;
 			const type = move.type;
 			if (type && type !== '???' && source.getTypes().join() !== type) {
 				if (!source.setType(type)) return;
 				this.add('-start', source, 'typechange', type, '[from] ability: Protean');
 			}
 		},
-		onSwitchIn() {},
 		rating: 4.5,
 	},
 	psychicsurge: {
@@ -1059,7 +1113,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	trace: {
 		inherit: true,
-		rating: 2.5,
+		rating: 3,
 	},
 	transistor: {
 		inherit: true,
@@ -1151,6 +1205,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	},
 	wonderguard: {
 		inherit: true,
+		flags: { failroleplay: 1, noreceiver: 1, failskillswap: 1, breakable: 1 },
 		rating: 5,
 	},
 	wonderskin: {

@@ -5,11 +5,10 @@
  * @license MIT
  */
 
-import {PRNG, PRNGSeed} from '../prng';
-import {Runner, RunnerOptions} from './runner';
+import { PRNG, type PRNGSeed } from '../prng';
+import { Runner, type RunnerOptions } from './runner';
 
-// @ts-ignore
-export interface MultiRandomRunnerOptions extends RunnerOptions {
+export interface MultiRandomRunnerOptions extends Partial<RunnerOptions> {
 	totalGames: number;
 	prng?: PRNG | PRNGSeed | null;
 	format?: string;
@@ -21,7 +20,7 @@ export interface MultiRandomRunnerOptions extends RunnerOptions {
 export class MultiRandomRunner {
 	static readonly FORMATS = [
 		'gen8randombattle', 'gen8randomdoublesbattle', 'gen8battlefactory',
-		'gen7randombattle', 'gen7randomdoublesbattle', 'gen7battlefactory',
+		'gen7randombattle', 'gen7battlefactory',
 		'gen6randombattle', 'gen6battlefactory',
 		'gen5randombattle',
 		'gen4randombattle',
@@ -42,12 +41,11 @@ export class MultiRandomRunner {
 	private numGames: number;
 
 	constructor(options: MultiRandomRunnerOptions) {
-		this.options = {...options};
+		this.options = { ...options };
 
 		this.totalGames = options.totalGames;
 
-		this.prng = (options.prng && !Array.isArray(options.prng)) ?
-			options.prng : new PRNG(options.prng);
+		this.prng = PRNG.get(options.prng);
 		this.options.prng = this.prng;
 
 		this.format = options.format;
@@ -71,11 +69,11 @@ export class MultiRandomRunner {
 				games = [];
 			}
 
-			const seed = this.prng.seed;
-			const game = new Runner({format, ...this.options}).run().catch(err => {
+			const seed = this.prng.getSeed();
+			const game = new Runner({ format, ...this.options }).run().catch(err => {
 				failures++;
 				console.error(
-					`Run \`node tools/simulate multi 1 --format=${format} --seed=${seed.join()}\` ` +
+					`Run \`node tools/simulate multi 1 --format=${format} --seed=${seed}\` ` +
 					`to debug (optionally with \`--output\` and/or \`--input\` for more info):\n`,
 					err
 				);

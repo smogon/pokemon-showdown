@@ -4,11 +4,12 @@
  * @author mia-pi-git
  */
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore in case module doesn't exist
 import type * as PG from 'pg';
-import type {SQLStatement} from 'sql-template-strings';
+import type { SQLStatement } from 'sql-template-strings';
 import * as Streams from './streams';
-import {FS} from './fs';
+import { FS } from './fs';
 import * as Utils from './utils';
 
 interface MigrationOptions {
@@ -22,9 +23,12 @@ export class PostgresDatabase {
 	constructor(config = PostgresDatabase.getConfig()) {
 		try {
 			this.pool = new (require('pg').Pool)(config);
-		} catch (e: any) {
+		} catch {
 			this.pool = null!;
 		}
+	}
+	destroy() {
+		return this.pool.end();
 	}
 	async query(statement: string | SQLStatement, values?: any[]) {
 		if (!this.pool) {
@@ -44,7 +48,7 @@ export class PostgresDatabase {
 		try {
 			config = require(FS.ROOT_PATH + '/config/config').usepostgres;
 			if (!config) throw new Error('Missing config for pg database');
-		} catch (e: any) {}
+		} catch {}
 		return config;
 	}
 	async transaction(callback: (conn: PG.PoolClient) => any, depth = 0): Promise<any> {
@@ -52,7 +56,6 @@ export class PostgresDatabase {
 		await conn.query(`BEGIN`);
 		let result;
 		try {
-			// eslint-disable-next-line callback-return
 			result = await callback(conn);
 		} catch (e: any) {
 			await conn.query(`ROLLBACK`);
@@ -94,7 +97,7 @@ export class PostgresDatabase {
 			if (stored.length) {
 				value = stored[0].value || "0";
 			}
-		} catch (e) {
+		} catch {
 			await this.query(`CREATE TABLE db_info (name TEXT NOT NULL, key TEXT NOT NULL, value TEXT NOT NULL)`);
 		}
 		if (!value) { // means nothing inserted - create row

@@ -1,8 +1,8 @@
-export const Abilities: {[k: string]: ModdedAbilityData} = {
+export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	neutralizinggas: {
 		inherit: true,
 		// Ability suppression implemented in sim/pokemon.ts:Pokemon#ignoringAbility
-		onPreStart(pokemon) {
+		onSwitchIn(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
 			// Remove setter's innates before the ability starts
@@ -16,7 +16,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 				}
 				if (target.m.abils?.length) {
 					for (const key of target.m.abils) {
-						if (this.dex.abilities.get(key.slice(8)).isPermanent) continue;
+						if (this.dex.abilities.get(key.slice(8)).flags['cantsuppress']) continue;
 						target.removeVolatile(key);
 					}
 				}
@@ -53,16 +53,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	trace: {
 		inherit: true,
 		onUpdate(pokemon) {
-			if (!pokemon.isStarted || this.effectState.gaveUp) return;
+			if (!this.effectState.seek) return;
 			const isAbility = pokemon.ability === 'trace';
 
-			const additionalBannedAbilities = [
-				// Zen Mode included here for compatability with Gen 5-6
-				'noability', 'flowergift', 'forecast', 'hungerswitch', 'illusion', 'imposter', 'neutralizinggas', 'powerofalchemy', 'receiver', 'trace', 'zenmode',
-			];
-			const possibleTargets = pokemon.adjacentFoes().filter(target => (
-				!target.getAbility().isPermanent && !additionalBannedAbilities.includes(target.ability)
-			));
+			const possibleTargets = pokemon.adjacentFoes().filter(
+				target => !target.getAbility().flags['notrace'] && target.ability !== 'noability'
+			);
 			if (!possibleTargets.length) return;
 
 			const target = this.sample(possibleTargets);
@@ -70,12 +66,12 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 
 			if (isAbility) {
 				if (pokemon.setAbility(ability)) {
-					this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+					this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
 				}
 			} else {
 				pokemon.removeVolatile('ability:trace');
 				pokemon.addVolatile('ability:' + ability.id, pokemon);
-				this.add('-ability', pokemon, ability, '[from] ability: Trace', '[of] ' + target);
+				this.add('-ability', pokemon, ability, '[from] ability: Trace', `[of] ${target}`);
 			}
 		},
 	},

@@ -1,4 +1,4 @@
-import type {Translations} from '../../server/chat';
+import type { Translations } from '../../server/chat';
 
 export const translations: Translations = {
 	name: "Japanese",
@@ -12,22 +12,21 @@ export const translations: Translations = {
 		"Please follow the rules:": "ルールを守ってください:",
 		"[TN: Link to the PS rules for your language (path after pokemonshowdown.com]/rules": "/pages/rules-ja",
 		"Global Rules": "全部屋共通ルール",
-		"${room} room rules": "${room}部屋のルール",
+		"${room} room rules": "${room}のルール",
 
 		"<strong>Global ranks</strong>": "<strong>グローバルユーザーランク</strong>",
 		"+ <strong>Global Voice</strong> - They can use ! commands like !groups": "<strong>グローバルボイス</strong>(+): プレフィックスとして\"/\"の代わりに\"!\"を使ってコマンドの結果を部屋に表示することができる。",
-		"§ <strong>Section Leader</strong> - They oversee rooms in a particular section": "§ <strong>セクションリーダー</strong> - 各々に割り当てられた部屋を監視する。",
 		"% <strong>Global Driver</strong> - Like Voice, and they can also lock users and check for alts": "<strong>グローバルドライバー</strong>(%): ボイスに似ているが上記に加えてユーザーをロックしたり、他に使っているアカウントを確認することができる。",
 		"@ <strong>Global Moderator</strong> - The above, and they can globally ban users": "<strong>グローバルモデレータ</strong>(@): 上記に加えてユーザーをサイト全体からBANできる。",
-		"* <strong>Global Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "<strong>グローバルボット</strong>(*): 権限はモデレータと同じだが、ボットだと分かるためのランク。",
-		"&amp; <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "<strong>グローバルアドミニストレーター</strong>(&amp;): 何でもできる。この文章を編集したり、ユーザーをグローバルに昇格させたりできる。",
+		"* <strong>Global Bot</strong> - An automated account that can use HTML anywhere": "<strong>グローバルボット</strong>(*): どこでもmuteやBANをしたり、HTMLを扱うことができる自動化されたアカウント。",
+		"~ <strong>Global Administrator</strong> - They can do anything, like change what this message says and promote users globally": "<strong>グローバルアドミニストレーター</strong>(~): 何でもできる。この文章を編集したり、ユーザーをグローバルに昇格させたりできる。",
 
 		"<strong>Room ranks</strong>": "<strong>日本語部屋のユーザーランク</strong>",
 		"^ <strong>Prize Winner</strong> - They don't have any powers beyond a symbol.": "<strong>プライズウィナー</strong>(^): 部屋のシンボルや象徴であり、何も権限を持ちません。",
 		"+ <strong>Voice</strong> - They can use ! commands like !groups": "<strong>ボイス</strong>(+): プレフィックスとして/の代わりに!を使ってコマンドの結果を部屋に表示することができる。",
 		"% <strong>Driver</strong> - The above, and they can mute and warn": "<strong>ドライバー</strong>(%): 上記に加えて警告メッセージを出したりユーザーを短時間喋れなく(ミュート)することができる。",
 		"@ <strong>Moderator</strong> - The above, and they can room ban users": "<strong>モデレータ</strong>(@): 上記に加えてユーザーを部屋からBANすることができる。",
-		"* <strong>Bot</strong> - Like Moderator, but makes it clear that this user is a bot": "<strong>ボット</strong>(*): 権限はモデレータと同じだが、ボットだと分かるためのランク。",
+		"* <strong>Bot</strong> - An automated account that can mute, warn, and use HTML": "<strong>ボット</strong>(*): muteやBANをしたり、HTMLを扱うことができる自動化されたアカウント。",
 		"# <strong>Room Owner</strong> - They are leaders of the room and can almost totally control it": "<strong>ルームオーナー</strong>(#): この部屋のリーダーでほとんどのことができる。",
 
 		"/help OR /h OR /? - Gives you help.": "/help 又は /h または /? - ヘルプを表示する",
@@ -41,9 +40,9 @@ export const translations: Translations = {
 		"DATA COMMANDS": "ポケモンデータコマンド",
 		"DRIVER COMMANDS": "ドライバー(%)コマンド",
 		"MODERATOR COMMANDS": "モデレーター(@)コマンド",
-		"ADMIN COMMANDS": "アドミニストレーター(&)コマンド",
+		"ADMIN COMMANDS": "アドミニストレーター(~)コマンド",
 
-		"(replace / with ! to broadcast. Broadcasting requires: + % @ # &)": "(/の代わりに!を使うとコマンドの結果を全員に表示することができます。全員に表示するには、+ % @ # & の権限が必要です。)",
+		"(replace / with ! to broadcast. Broadcasting requires: + % @ # ~)": "(/の代わりに!を使うとコマンドの結果を全員に表示することができます。全員に表示するには、+ % @ # ~ の権限が必要です。)",
 
 		"<strong>Room punishments</strong>:": "<strong>チャット罰則一覧</strong>:",
 		"<strong>warn</strong> - Displays a popup with the rules.": "<strong>warn</strong> - ユーザーにチャットルールのポップアップが表示されます。",
@@ -66,7 +65,7 @@ export const translations: Translations = {
 		"<strong>permaban</strong> - Unappealable global ban typically issued for the most severe cases of offensive/inappropriate behavior.": "<strong>permaban</strong> - 最も深刻な違反行為に対して取られる処置であり、控訴することは不可能です。",
 
 		"<strong>Room drivers (%)</strong> can use:": "<strong>ドライバー（%）</strong> コマンド:",
-		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn 又は /k <em>ユーザー名</em>: ユーザーが警告され、当サイトのルールのウィンドウが表示されます。",
+		"- /warn OR /k <em>username</em>: warn a user and show the Pok&eacute;mon Showdown rules": "- /warn または /k <em>ユーザー名</em>: ユーザーが警告され、当サイトのルールのウィンドウが表示されます。",
 		"- /mute OR /m <em>username</em>: 7 minute mute": "- /mute 又は /m <em>ユーザー名</em>: 7分間ミュート状態にします。",
 		"- /hourmute OR /hm <em>username</em>: 60 minute mute": "- /hourmute 又は /hm <em>ユーザー名</em>: 1時間ミュート状態にします。",
 		"- /unmute <em>username</em>: unmute": "- /unmute <em>ユーザー名</em>: ユーザーのミュート状態を解除します。",
@@ -103,7 +102,7 @@ export const translations: Translations = {
 		"- /tour start: start the tournament in the current room": "- /tour start: 大会を開始します。",
 		"- /tour banlist [pokemon], [talent], [...]: ban moves, abilities, Pokémon or items from being used in a tournament (it must be created first)": "- /tour banlist [ポケモン], [特性], [...]: 開催中の大会に指定するポケモンや特性などを使用禁止にします。",
 
-		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6777489/\">tournaments guide</a>": "もっと詳しく知りたい場合、<a href=\"https://www.smogon.com/forums/posts/6777489/\">大会ガイド(英語)</a>をご参照ください。",
+		"More detailed help can be found in the <a href=\"https://www.smogon.com/forums/posts/6777489/\">tournaments guide</a>": "詳しくは、<a href=\"https://www.smogon.com/forums/posts/6777489/\">大会ガイド(英語)</a>をご参照ください。",
 
 		"Your status cannot be updated while you are locked or semilocked.": "ロック・セミロック状態のため、ステータスを変更することはできません。",
 		"Your status is too long; it must be under ${maxLength} characters.": "ステータスが長すぎます。 ${maxLength} 文字以内のステータスを設定してください。",
@@ -129,7 +128,7 @@ export const translations: Translations = {
 		"You are ${lockType} and can only private message members of the global moderation team. ${lockExpiration}": "${lockType}状態のためプライベートメッセージを送信できるのはグローバルスタッフのみに制限されています。${lockExpiration}",
 		"Get help with this": "ヘルプ",
 		"The user \"${targetUser.name}\" is locked and cannot be PMed.": "\"${targetUser.name}\"はロックされているためプライベートメッセージを送信することができません。",
-		"On this server, you must be of rank ${groupName} or higher to PM users.": "このサーバーでは、プライベートメッセージを送信するには${groupName}以上の権限を持っている必要があります。",
+		"On this server, you must be of rank ${groupName} or higher to PM users.": "このサーバーでは、プライベートメッセージを送信するには${groupName}以上である必要があります。",
 		"This user is blocking private messages right now.": "このユーザーは現在プライベートメッセージをブロックしています。",
 		"This ${Config.groups[targetUser.group].name} is too busy to answer private messages right now. Please contact a different staff member.": "${Config.groups[targetUser.group].name} は現在多忙のためプライベートメッセージに反応することができません。他のスタッフに話してみてください。",
 		"If you need help, try opening a <a href=\"view-help-request\" class=\"button\">help ticket</a>": "ヘルプを求めている場合は、<a href=\"view-help-request\" class=\"button\">help ticket</a>にてリクエストを送信してください。",
@@ -141,7 +140,7 @@ export const translations: Translations = {
 		"Due to this room being a high traffic room, your message must contain at least two letters.": "このチャット部屋のメッセージ頻度が高いため、2文字以内のメッセージを送ることはできません。",
 
 		"You are already blocking private messages! To unblock, use /unblockpms": "すでにプライベートメッセージをブロックしています。ブロックを解除するには /unblockpms を使ってください。",
-		"You are now blocking private messages, except from staff and ${rank}.": "プライベートメッセージをブロックしました。グローバルスタッフと ${rank} 権限を持つユーザーからはブロックされません。",
+		"You are now blocking private messages, except from staff and ${rank}.": "プライベートメッセージをブロックしました。グローバルスタッフと${rank}を持つユーザーからはブロックされません。",
 		"You are now blocking private messages, except from staff and ${status} users.": "プライベートメッセージをブロックしました。グローバルスタッフと ${status} 状態のユーザーからはブロックされません。",
 		"You are now blocking private messages, except from staff.": "プライベートメッセージをブロックしました。グローバルスタッフからはブロックされません。",
 		"You are not blocking private messages! To block, use /blockpms": "プライベートメッセージをブロックしていません。ブロックしたい場合は、/blockpms を使ってください。",
@@ -150,11 +149,11 @@ export const translations: Translations = {
 		"You are already blocking challenges!": "すでに対戦の申し込みをブロックしています。",
 		"You are already available for challenges!": "現在対戦の申し込みをブロックしていません。",
 		"You are available for challenges from now on.": "対戦の申し込みのブロックを解除しました。",
-		"You are now blocking challenges, except from staff and ${rank}.": "対戦の申し込みをブロックしました。グローバルスタッフと${rank}権限を持つユーザーからはブロックされません。",
+		"You are now blocking challenges, except from staff and ${rank}.": "対戦の申し込みをブロックしました。グローバルスタッフと${rank}を持つユーザーからはブロックされません。",
 		"You are now blocking challenges, except from staff and ${status} users.": "対戦の申し込みをブロックしました。グローバルスタッフと${status}状態のユーザーからはブロックされません。",
 		"Staff FAQ": "スタッフに関するよくある質問",
 		"You cannot broadcast all FAQs at once.": "1回でFAQを全て表示させることはできません。",
-		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.": "レートが有効なバトルで1回以上勝利し、アカウントを登録してから1週間が経過するアカウントが自動承認されます(autoconfirmed)。承認されていないユーザーはグローバルスタッフ(いかなる場所でも名前の前に %、 @、 & がついています)以外にPMを送信することができません。また、チャットルームでは荒らしを防止するためにmodchatで承認済みのユーザーのみが発言できるようにすることができます。もしあなたが承認されていない場合はルームスタッフ(名前の前に %、@、# がついているユーザーです)にPMを送信し、modchatを無効にするように依頼することができますが、スタッフは無効化する義務はありません。",
+		"A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.": "レートが有効なバトルで1回以上勝利し、アカウントを登録してから1週間が経過するアカウントが自動承認されます(autoconfirmed)。承認されていないユーザーはグローバルスタッフ(いかなる場所でも名前の前に %、 @、 ~ がついています)以外にPMを送信することができません。また、チャットルームでは荒らしを防止するためにmodchatで承認済みのユーザーのみが発言できるようにすることができます。もしあなたが承認されていない場合はルームスタッフ(名前の前に %、@、# がついているユーザーです)にPMを送信し、modchatを無効にするように依頼することができますが、スタッフは無効化する義務はありません。",
 		"How the ladder works": "Ladderの仕組み",
 		"Tiering FAQ": "",
 		"Badge FAQ": "",

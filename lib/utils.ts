@@ -15,10 +15,10 @@
  *   that if it's English-specific, it should be left out of here.
  */
 
-export type Comparable = number | string | boolean | Comparable[] | {reverse: Comparable};
+export type Comparable = number | string | boolean | Comparable[] | { reverse: Comparable };
 
 /**
- * Safely converts the passed variable into a string. Unlike '' + str,
+ * Safely converts the passed variable into a string. Unlike `${str}`,
  * String(str), or str.toString(), Utils.getString is guaranteed not to
  * crash.
  *
@@ -33,7 +33,7 @@ export type Comparable = number | string | boolean | Comparable[] | {reverse: Co
  */
 
 export function getString(str: any): string {
-	return (typeof str === 'string' || typeof str === 'number') ? '' + str : '';
+	return (typeof str === 'string' || typeof str === 'number') ? `${str}` : '';
 }
 
 export function escapeRegex(str: string) {
@@ -45,7 +45,7 @@ export function escapeRegex(str: string) {
 */
 export function escapeHTML(str: string | number) {
 	if (str === null || str === undefined) return '';
-	return ('' + str)
+	return `${str}`
 		.replace(/&/g, '&amp;')
 		.replace(/</g, '&lt;')
 		.replace(/>/g, '&gt;')
@@ -69,14 +69,14 @@ export function stripHTML(htmlContent: string) {
 export function formatOrder(place: number) {
 	// anything between 10 and 20 should always end with -th
 	let remainder = place % 100;
-	if (remainder >= 10 && remainder <= 20) return place + 'th';
+	if (remainder >= 10 && remainder <= 20) return `${place}th`;
 
 	// follow standard rules with -st, -nd, -rd, and -th
 	remainder = place % 10;
-	if (remainder === 1) return place + 'st';
-	if (remainder === 2) return place + 'nd';
-	if (remainder === 3) return place + 'rd';
-	return place + 'th';
+	if (remainder === 1) return `${place}st`;
+	if (remainder === 2) return `${place}nd`;
+	if (remainder === 3) return `${place}rd`;
+	return `${place}th`;
 }
 
 /**
@@ -103,7 +103,7 @@ export function visualize(value: any, depth = 0): string {
 		return `${value}`;
 	}
 	let constructor = '';
-	if (value.constructor && value.constructor.name && typeof value.constructor.name === 'string') {
+	if (typeof value.constructor?.name === 'string') {
 		constructor = value.constructor.name;
 		if (constructor === 'Object') constructor = '';
 	} else {
@@ -128,9 +128,11 @@ export function visualize(value: any, depth = 0): string {
 	if (value.toString) {
 		try {
 			const stringValue = value.toString();
-			if (typeof stringValue === 'string' &&
-					stringValue !== '[object Object]' &&
-					stringValue !== `[object ${constructor}]`) {
+			if (
+				typeof stringValue === 'string' &&
+				stringValue !== '[object Object]' &&
+				stringValue !== `[object ${constructor}]`
+			) {
 				return `${constructor}(${stringValue})`;
 			}
 		} catch {}
@@ -180,7 +182,7 @@ export function compare(a: Comparable, b: Comparable): number {
 		return 0;
 	}
 	if ('reverse' in a) {
-		return compare((b as {reverse: string}).reverse, a.reverse);
+		return compare((b as { reverse: string }).reverse, a.reverse);
 	}
 	throw new Error(`Passed value ${a} is not comparable`);
 }
@@ -205,10 +207,10 @@ export function sortBy<T>(array: T[], callback?: (a: T) => Comparable) {
 	return array.sort((a, b) => compare(callback(a), callback(b)));
 }
 
-export function splitFirst(str: string, delimiter: string): [string, string];
-export function splitFirst(str: string, delimiter: string, limit: 2): [string, string, string];
-export function splitFirst(str: string, delimiter: string, limit: 3): [string, string, string, string];
-export function splitFirst(str: string, delimiter: string, limit: number): string[];
+export function splitFirst(str: string, delimiter: string | RegExp): [string, string];
+export function splitFirst(str: string, delimiter: string | RegExp, limit: 2): [string, string, string];
+export function splitFirst(str: string, delimiter: string | RegExp, limit: 3): [string, string, string, string];
+export function splitFirst(str: string, delimiter: string | RegExp, limit: number): string[];
 /**
 * Like string.split(delimiter), but only recognizes the first `limit`
 * delimiters (default 1).
@@ -220,13 +222,22 @@ export function splitFirst(str: string, delimiter: string, limit: number): strin
 * Returns an array of length exactly limit + 1.
 *
 */
-export function splitFirst(str: string, delimiter: string, limit = 1) {
+export function splitFirst(str: string, delimiter: string | RegExp, limit = 1) {
 	const splitStr: string[] = [];
 	while (splitStr.length < limit) {
-		const delimiterIndex = str.indexOf(delimiter);
+		let delimiterIndex, delimiterLength;
+		if (typeof delimiter === 'string') {
+			delimiterIndex = str.indexOf(delimiter);
+			delimiterLength = delimiter.length;
+		} else {
+			delimiter.lastIndex = 0;
+			const match = delimiter.exec(str);
+			delimiterIndex = match ? match.index : -1;
+			delimiterLength = match ? match[0].length : 0;
+		}
 		if (delimiterIndex >= 0) {
 			splitStr.push(str.slice(0, delimiterIndex));
-			str = str.slice(delimiterIndex + delimiter.length);
+			str = str.slice(delimiterIndex + delimiterLength);
 		} else {
 			splitStr.push(str);
 			str = '';
@@ -301,21 +312,27 @@ export function clampIntRange(num: any, min?: number, max?: number): number {
 	return num;
 }
 
-export function clearRequireCache(options: {exclude?: string[]} = {}) {
+export function clearRequireCache(options: { exclude?: string[] } = {}) {
 	const excludes = options?.exclude || [];
 	excludes.push('/node_modules/');
 
 	for (const path in require.cache) {
-		let skip = false;
-		for (const exclude of excludes) {
-			if (path.includes(exclude)) {
-				skip = true;
-				break;
-			}
-		}
-
-		if (!skip) delete require.cache[path];
+		if (excludes.some(p => path.includes(p))) continue;
+		const mod = require.cache[path]; // have to ref to appease ts
+		if (!mod) continue;
+		uncacheModuleTree(mod, excludes);
+		delete require.cache[path];
 	}
+}
+
+export function uncacheModuleTree(mod: NodeJS.Module, excludes: string[]) {
+	if (!mod.children?.length || excludes.some(p => mod.filename.includes(p))) return;
+	for (const [i, child] of mod.children.entries()) {
+		if (excludes.some(p => child.filename.includes(p))) continue;
+		mod.children?.splice(i, 1);
+		uncacheModuleTree(child, excludes);
+	}
+	delete (mod as any).children;
 }
 
 export function deepClone(obj: any): any {
@@ -326,6 +343,20 @@ export function deepClone(obj: any): any {
 		clone[key] = deepClone(obj[key]);
 	}
 	return clone;
+}
+
+export function deepFreeze<T>(obj: T): T {
+	if (obj === null || typeof obj !== 'object') return obj;
+	// support objects with reference loops
+	if (Object.isFrozen(obj)) return obj;
+
+	Object.freeze(obj);
+	if (Array.isArray(obj)) {
+		for (const elem of obj) deepFreeze(elem);
+	} else {
+		for (const elem of Object.values(obj)) deepFreeze(elem);
+	}
+	return obj;
 }
 
 export function levenshtein(s: string, t: string, l: number): number {
@@ -393,13 +424,31 @@ export function formatSQLArray(arr: unknown[], args?: unknown[]) {
 	return [...'?'.repeat(arr.length)].join(', ');
 }
 
+export function bufFromHex(hex: string) {
+	const buf = new Uint8Array(Math.ceil(hex.length / 2));
+	bufWriteHex(buf, hex);
+	return buf;
+}
+export function bufWriteHex(buf: Uint8Array, hex: string, offset = 0) {
+	const size = Math.ceil(hex.length / 2);
+	for (let i = 0; i < size; i++) {
+		buf[offset + i] = parseInt(hex.slice(i * 2, i * 2 + 2).padEnd(2, '0'), 16);
+	}
+}
+export function bufReadHex(buf: Uint8Array, start = 0, end?: number) {
+	return [...buf.slice(start, end)].map(val => val.toString(16).padStart(2, '0')).join('');
+}
+
 export class Multiset<T> extends Map<T, number> {
+	override get(key: T) {
+		return super.get(key) ?? 0;
+	}
 	add(key: T) {
-		this.set(key, (this.get(key) ?? 0) + 1);
+		this.set(key, this.get(key) + 1);
 		return this;
 	}
 	remove(key: T) {
-		const newValue = (this.get(key) ?? 0) - 1;
+		const newValue = this.get(key) - 1;
 		if (newValue <= 0) return this.delete(key);
 		this.set(key, newValue);
 		return true;
@@ -410,8 +459,10 @@ export class Multiset<T> extends Map<T, number> {
 export const Utils = {
 	parseExactInt, waitUntil, html, escapeHTML,
 	compare, sortBy, levenshtein,
-	shuffle, deepClone, clearRequireCache,
+	shuffle, deepClone, deepFreeze, clampIntRange, clearRequireCache,
 	randomElement, forceWrap, splitFirst,
 	stripHTML, visualize, getString,
-	escapeRegex, formatSQLArray, Multiset,
+	escapeRegex, formatSQLArray,
+	bufFromHex, bufReadHex, bufWriteHex,
+	Multiset,
 };

@@ -5,16 +5,16 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Quick Claw', function () {
-	afterEach(function () {
+describe('Quick Claw', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`[Gen 2] shares its activation roll with every holder on any given turn`, function () {
-		battle = common.gen(2).createBattle({seed: [1, 2, 3, 27]}, [[
-			{species: 'snorlax', item: 'quickclaw', moves: ['sleeptalk']},
+	it(`[Gen 2] shares its activation roll with every holder on any given turn`, () => {
+		battle = common.gen(2).createBattle({ seed: [1, 2, 3, 27] }, [[
+			{ species: 'snorlax', item: 'quickclaw', moves: ['sleeptalk'] },
 		], [
-			{species: 'mewtwo', item: 'quickclaw', moves: ['sleeptalk']},
+			{ species: 'mewtwo', item: 'quickclaw', moves: ['sleeptalk'] },
 		]]);
 
 		const snorlax = battle.p1.active[0];
@@ -27,11 +27,11 @@ describe('Quick Claw', function () {
 		assert.notEqual(snorlax.speed, mewtwo.speed);
 	});
 
-	it(`[Gen 3] causes Speed ties with every holder when activated`, function () {
-		battle = common.gen(3).createBattle({seed: [163, 106, 112, 542]}, [[
-			{species: 'snorlax', item: 'quickclaw', moves: ['spore']},
+	it(`[Gen 3] causes Speed ties with every holder when activated`, () => {
+		battle = common.gen(3).createBattle({ seed: [163, 106, 112, 542] }, [[
+			{ species: 'snorlax', item: 'quickclaw', moves: ['spore'] },
 		], [
-			{species: 'deoxys', item: 'quickclaw', moves: ['seismictoss']},
+			{ species: 'deoxys', item: 'quickclaw', moves: ['seismictoss'] },
 		]]);
 
 		const snorlax = battle.p1.active[0];

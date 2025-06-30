@@ -11,7 +11,7 @@ Installing
 
     ./pokemon-showdown
 
-(Requires Node.js v14+)
+(Requires Node.js v16+)
 
 If your distro package manager has an old Node.js version, the simplest way to upgrade is `n` – usually no root necessary:
 
@@ -56,9 +56,11 @@ Replace `SERVER` with your server domain or IP. Replace `8000` with your port if
 
 Yes, you can test even if you are behind a NAT without port forwarding: `http://localhost:8000` will connect to your local machine. Some browser setups might prevent this sort of connection, however (NoScript, for instance). If you can't get connecting locally to work in Firefox, try Chrome.
 
-You will be redirected to `http://SERVER.psim.us`. The reason your server is visited through `psim.us` is to make it more difficult for servers to see a user's password in any form, by handling logins globally. You can embed this in an `iframe` in your website if the URL is a big deal with you.
+You will be redirected to `http://SERVER.insecure.psim.us`, with `SERVER` converted to a format that can be put in a URL (replacing `.` with `-`, `:` with `--`, and `-` with `---`).
 
-If you truly want to host the client yourself, there is [a repository for the Pokémon Showdown Client][7]. It's not recommended for beginners, though.
+The `psim.us` domain is used for shared account logins with PS Main. The `insecure.psim.us` subdomain is for servers missing a HTTPS certificate (which you won't have unless you have a domain and manually set that up).
+
+If the URL is a big deal for you, our `psim.us` site may be embedded in an `iframe` in your website. Alternatively, if you truly want to host the client yourself, there is [a repository for the Pokémon Showdown Client][7]. It's not recommended for beginners, though.
 
   [6]: https://nodejs.org/
   [7]: https://github.com/smogon/pokemon-showdown-client
@@ -67,13 +69,13 @@ If you truly want to host the client yourself, there is [a repository for the Po
 Setting up an Administrator account
 ------------------------------------------------------------------------
 
-Once your server is up, you probably want to make yourself an Administrator (&) on it.
+Once your server is up, you probably want to make yourself an Administrator (~) on it.
 
 ### config/usergroups.csv
 
 To become an Administrator, create a file named `config/usergroups.csv` containing
 
-    USER,&
+    USER,~
 
 Replace `USER` with the username that you would like to become an Administrator. Do not put a space between the comma and the ampersand.
 

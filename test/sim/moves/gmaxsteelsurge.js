@@ -5,23 +5,23 @@ const common = require('./../../common');
 
 let battle;
 
-describe('G-Max Steelsurge', function () {
-	afterEach(function () {
+describe('G-Max Steelsurge', () => {
+	afterEach(() => {
 		battle.destroy();
 	});
 
-	it(`should deal 2x damage to Eiscue and Mimikyu`, function () {
+	it(`should deal 2x damage to Eiscue and Mimikyu`, () => {
 		battle = common.gen(8).createBattle([[
-			{species: 'Pyukumuku', moves: ['uturn']},
-			{species: 'Eiscue', ability: 'iceface', moves: ['splash']},
-			{species: 'Mimikyu', ability: 'disguise', moves: ['splash']},
+			{ species: 'Pyukumuku', moves: ['uturn'] },
+			{ species: 'Eiscue', ability: 'iceface', moves: ['splash'] },
+			{ species: 'Mimikyu', ability: 'disguise', moves: ['splash'] },
 		], [
-			{species: 'Copperajah', moves: ['ironhead', 'sleeptalk'], gigantamax: true},
+			{ species: 'Copperajah', moves: ['ironhead', 'sleeptalk'], gigantamax: true },
 		]]);
 		battle.makeChoices('move uturn', 'move ironhead dynamax');
 		battle.makeChoices('switch 2');
 		const eiscue = battle.p1.active[0];
-		const expectedPercent = Math.pow(0.5, 2);
+		const expectedPercent = 0.5 ** 2;
 		let expectedDamage = Math.floor(eiscue.maxhp * expectedPercent);
 		assert.equal(eiscue.maxhp - eiscue.hp, expectedDamage, `Eiscue should take ${expectedPercent * 100}%`);
 

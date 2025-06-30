@@ -1,10 +1,10 @@
-export const Conditions: {[k: string]: ModdedConditionData} = {
+export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDataTable = {
 	slp: {
 		name: 'slp',
 		effectType: 'Status',
 		onStart(target, source, sourceEffect) {
 			if (sourceEffect && sourceEffect.effectType === 'Move') {
-				this.add('-status', target, 'slp', '[from] move: ' + sourceEffect.name);
+				this.add('-status', target, 'slp', `[from] move: ${sourceEffect.name}`);
 			} else {
 				this.add('-status', target, 'slp');
 			}

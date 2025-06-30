@@ -40,7 +40,7 @@ Messages from the user to the server are in the form:
 
 `ROOMID` can optionally be left blank if unneeded (commands like `/join lobby`
 can be sent anywhere). Responses will be sent to a PM box with no username
-(so `|/command` is equivalent to `|/pm &, /command`).
+(so `|/command` is equivalent to `|/pm ~, /command`).
 
 `TEXT` can contain newlines, in which case it'll be treated the same
 way as if each line were sent to the room separately.
@@ -144,7 +144,7 @@ represented by a space), and the rest of the string being their username.
 
 `|uhtml|NAME|HTML`
 
-> We recieved an HTML message (NAME) that can change what it's displaying,
+> We received an HTML message (NAME) that can change what it's displaying,
 > this is used in things like our Polls system, for example.
 
 `|uhtmlchange|NAME|HTML`
@@ -305,7 +305,7 @@ represented by a space), and the rest of the string being their username.
 `|tournament|update|JSON`
 
 > `JSON` is a JSON object representing the changes in the tournament
-> since the last update you recieved or the start of the tournament.
+> since the last update you received or the start of the tournament.
 > These include:
 >
     format: the tournament's custom name or the format being used
@@ -478,7 +478,9 @@ If the challenge is accepted, you will receive a room initialization message.
 `JSON.searching` will be an array of format IDs you're currently searching for
 games in.
 
-`JSON.games` will be a `{roomid: title}` table of games you're currently in.
+`JSON.games` will be a `{roomid: title}` table of games you're currently in,
+or `null` if you're in no games.
+
 Note that this includes ALL games, so `|updatesearch|` will be sent when you
 start/end challenge battles, and even non-Pokémon games like Mafia.
 
