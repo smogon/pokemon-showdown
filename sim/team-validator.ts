@@ -2211,7 +2211,7 @@ export class TeamValidator {
 		if (eventData.gender) set.gender = eventData.gender;
 	}
 
-	validateEventHiddenAbility(name: string, isHidden: boolean, eventData: EventInfo, etc: string) {
+	validateEventHiddenAbility(name: string, isHidden: boolean, eventData: EventInfo, etc?: string) {
 		if (!isHidden && eventData.isHidden) {
 			return `${name} must have its Hidden Ability${etc}.`;
 		}

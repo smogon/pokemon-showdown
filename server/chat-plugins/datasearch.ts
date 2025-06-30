@@ -2910,7 +2910,7 @@ function runLearn(target: string, cmd: string, formatid: string) {
 	for (const arg of targets) {
 		if (['ha', 'hidden', 'hiddenability'].includes(toID(arg))) {
 			if (gen < 5) {
-				return {error: "Hidden abilities exist only in generations 5 and later."};
+				return { error: "Hidden abilities exist only in generations 5 and later." };
 			}
 			setSources.isHidden = true;
 			continue;
@@ -2943,30 +2943,20 @@ function runLearn(target: string, cmd: string, formatid: string) {
 		const canUseAbilityPatch = dex.gen >= 8 && format.mod !== 'gen8dlc1';
 		if (!setSources.sourcesBefore && !canUseAbilityPatch) {
 			const learnset = dex.species.getLearnsetData(species.id);
-			for (const source of setSources.sources) {
+			setSources.sources = setSources.sources.filter(source => {
 				if (source.charAt(1) === 'S' && learnset.eventData) {
 					const eventData = learnset.eventData[parseInt(source.substr(2))];
-					const hiddenAbilityProblem = validator.validateEventHiddenAbility(
-						species.name, true, eventData, ` because it has a move only available from an event`
-					);
-					if (hiddenAbilityProblem) {
-						setSources.sources = setSources.sources.filter(invalidSource => source !== invalidSource);
-						if (!setSources.sources.length) {
-							problems.push(hiddenAbilityProblem);
-						}
-					}
+					const hiddenAbilityProblem = validator.validateEventHiddenAbility(species.name, true, eventData);
+					if (hiddenAbilityProblem) return false;
 				}
+				return true;
+			})
+			if (!setSources.sources.length) {
+				problems.push(`${species.name} must not have its Hidden Ability because it has a move only available from an event.`);
 			}
 		}
-		if (species.maleOnlyHidden && setSources.sourcesBefore < 5) {
-			for (const source of setSources.sources) {
-				if (source.charAt(1) === 'E') {
-					setSources.sources = setSources.sources.filter(invalidSource => source !== invalidSource);
-					if (!setSources.sources.length) {
-						problems.push(`${species.name} has an unbreedable Hidden Ability - it can't use egg moves.`);
-					}
-				}
-			}
+		if (species.maleOnlyHidden && setSources.sourcesBefore < 5 && setSources.sources.every(source => source.charAt(1) === 'E')) {
+			problems.push(`${species.name} has an unbreedable Hidden Ability - it can't use egg moves.`);
 		}
 		buffer += `${species.abilities['H'] || 'HA'} `;
 	}
