@@ -651,7 +651,7 @@ export const vpnSets: VPNSets = {
 	},
 	Skarmory: {
 		species: 'Skarmory', ability: 'Steely Spirit', item: 'Leftovers', gender: '',
-		moves: ['Iron Defense', 'Roost', ['Iron Head', 'Brave Bird']],
+		moves: ['Iron Defense', 'Roost', ['Sledgehammer Blow', 'Brave Bird']],
 		signatureMove: 'Body Press',
 		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Impish', teraType: 'Stellar', level: 80,
 	},
