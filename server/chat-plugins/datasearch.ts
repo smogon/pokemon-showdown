@@ -2950,12 +2950,13 @@ function runLearn(target: string, cmd: string, formatid: string) {
 					if (hiddenAbilityProblem) return false;
 				}
 				return true;
-			})
+			});
 			if (!setSources.sources.length) {
 				problems.push(`${species.name} must not have its Hidden Ability because it has a move only available from an event.`);
 			}
 		}
-		if (species.maleOnlyHidden && setSources.sourcesBefore < 5 && setSources.sources.every(source => source.charAt(1) === 'E')) {
+		if (species.maleOnlyHidden && setSources.sourcesBefore < 5 &&
+			setSources.sources.every(source => source.charAt(1) === 'E')) {
 			problems.push(`${species.name} has an unbreedable Hidden Ability - it can't use egg moves.`);
 		}
 		buffer += `${species.abilities['H'] || 'HA'} `;
