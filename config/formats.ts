@@ -381,31 +381,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "[Gen 9] VaporeMons",
-		desc: "A Gen 9 Pet Mod featuring Pokemon with new/edited moves, items, abilities, and non-stat changes.",
-		mod: 'vaporemons',
-		searchShow: false,
-		ruleset: ['Standard', 'Terastal Clause', 'Sleep Moves Clause', '!Sleep Clause Mod', 'Data Preview'],
-		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, items, abilities, and adjustments?<br />Then make sure to use the <a href="https://docs.google.com/spreadsheets/d/1_5AwZ24dPu3-5m5yOyIO4OTPmW9OwIWXXzZ5IJZkj4c/edit?usp=sharing" target="_blank">VaporeMons Spreadsheet</a> or use /dt!</b></div>`);
-			this.add(`raw|Welcome to Fusion Evolution Random Battle!`);
-			this.add(`raw|<a href="https://www.smogon.com/forums/threads/vaporemons-randbats-beta-now-live-vr-update-post-809.3722917/">VaporeMons</a> is a Pet Mod featuring new and edited moves, items, abilities, and non-stat adjustments!`);
-			this.add(`raw|You are invited to come the <a href="https://play.pokemonshowdown.com/petmods">Pet Mods</a> room to discuss the metagame.`);
-		},
-		banlist: [
-			'AG', 'Uber', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock',
-			'Baton Pass', 'Last Respects', 'Shed Tail', 'Light Clay', 'Fling + Segin Star Shard',
-		],
-		onSwitchInPriority: 100,
-		onSwitchIn(pokemon) {
-			if ((pokemon.illusion || pokemon).getTypes(true, true).join('/') !==
-				this.dex.forGen(9).species.get((pokemon.illusion || pokemon).species.name).types.join('/') &&
-				!pokemon.terastallized) {
-				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
-			}
-		},
-	},
-	{
 		name: "[Gen 9] CCAPM 2024 Random Battle",
 		desc: "A random battle format featuring Fakemon created during the Community Create-A-Pet Mod event in the Pet Mods room in 2024.",
 		mod: 'ccapm2024',
