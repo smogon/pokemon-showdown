@@ -2691,10 +2691,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	firedup: {
 		shortDesc: "Side protected from Fire and Priority moves; x1.5 power on priority.",
 		onFoeTryMove(target, source, move) {
-			const targetAllExceptions = ['perishsong', 'flowershield', 'rototiller'];
-			if (move.target === 'foeSide' || (move.target === 'all' && !targetAllExceptions.includes(move.id))) {
-				return;
-			}
+			if (move.target === 'foeSide' || move.target === 'field') return;
 			const armorTailHolder = this.effectState.target;
 			if ((source.isAlly(armorTailHolder) || move.target === 'all') && (move.priority > 0.1 || move.type === 'Fire')) {
 				this.attrLastMove('[still]');
