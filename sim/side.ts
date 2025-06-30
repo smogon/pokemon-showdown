@@ -47,6 +47,7 @@ export interface ChosenAction {
 /** One single turn's choice for one single player. */
 export interface Choice {
 	cantUndo: boolean; // true if the choice can't be cancelled because of the maybeTrapped issue
+	updateOnUndo: boolean; // true if a request update should be sent on undo
 	error: string; // contains error text in the case of a choice error
 	actions: ChosenAction[]; // array of chosen actions
 	forcedSwitchesLeft: number; // number of switches left that need to be performed
@@ -239,6 +240,7 @@ export class Side {
 		this.activeRequest = null;
 		this.choice = {
 			cantUndo: false,
+			updateOnUndo: false,
 			error: ``,
 			actions: [],
 			forcedSwitchesLeft: 0,
@@ -577,9 +579,7 @@ export class Side {
 				}
 			}
 			if (!targetType) {
-				if (moveid === 'testfight') {
-					targetType = 'normal';
-				} else {
+				if (moveid !== 'testfight') {
 					return this.emitChoiceError(`Can't move: Your ${pokemon.name} doesn't have a move matching ${moveid}`);
 				}
 			}
@@ -621,7 +621,7 @@ export class Side {
 
 		// Validate targeting
 
-		if (autoChoose) {
+		if (autoChoose || moveid === 'testfight') {
 			targetLoc = 0;
 		} else if (this.battle.actions.targetTypeChoices(targetType)) {
 			if (!targetLoc && this.active.length >= 2) {
@@ -649,22 +649,22 @@ export class Side {
 				targetLoc: lockedMoveTargetLoc,
 				moveid: lockedMoveID,
 			});
-			if (moveid === 'testfight') this.choice.cantUndo = true;
+			if (pokemon.maybeLocked) this.choice.cantUndo = true;
 			return true;
-		} else if (moveid === 'testfight') {
-			// test fight button
-			if (!pokemon.maybeLocked) {
-				return this.emitChoiceError(`Can't move: ${pokemon.name}'s Fight button is known to be safe`);
-			}
-			pokemon.maybeLocked = false;
-			return this.emitChoiceError(`${pokemon.name} is not locked`, { pokemon, update: req => {
-				delete req.maybeLocked;
-			} });
 		} else if (!moves.length && !zMove) {
 			// Override action and use Struggle if there are no enabled moves with PP
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
 			if (this.battle.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
 			moveid = 'struggle';
+			if (pokemon.maybeLocked) this.choice.cantUndo = true;
+		} else if (moveid === 'testfight') {
+			// test fight button
+			if (!pokemon.maybeLocked) {
+				return this.emitChoiceError(`Can't move: ${pokemon.name}'s Fight button is known to be safe`);
+			}
+			return this.emitChoiceError(`${pokemon.name} is not locked`, { pokemon, update: req => {
+				return this.updateDisabledRequest(pokemon, req);
+			} });
 		} else if (maxMove) {
 			// Dynamaxed; only Taunt and Assault Vest disable Max Guard, but the base move must have PP remaining
 			if (pokemon.maxMoveDisabled(move)) {
@@ -687,7 +687,7 @@ export class Side {
 				// Request a different choice
 				if (autoChoose) throw new Error(`autoChoose chose a disabled move`);
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s ${move.name} is disabled`, { pokemon, update: req => {
-					let updated = false;
+					let updated = this.updateDisabledRequest(pokemon, req);
 					for (const m of req.moves) {
 						if (m.id === moveid) {
 							if (!m.disabled) {
@@ -705,6 +705,9 @@ export class Side {
 				} });
 			}
 			// The chosen move is valid yay
+		}
+		if (this.updateDisabledRequest(pokemon, (this.activeRequest as MoveRequest).active[pokemon.position])) {
+			this.choice.updateOnUndo = true;
 		}
 
 		// Mega evolution
@@ -774,8 +777,10 @@ export class Side {
 			terastallize: terastallize ? pokemon.teraType : undefined,
 		});
 
-		if (pokemon.maybeDisabled) {
-			this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
+		if (pokemon.maybeDisabled && (this.battle.gameType === 'singles' || (
+			this.battle.gen <= 3 && !this.battle.actions.targetTypeChoices(targetType)
+		))) {
+			this.choice.cantUndo = true;
 		}
 
 		if (mega || megax || megay) this.choice.mega = true;
@@ -785,6 +790,30 @@ export class Side {
 		if (terastallize) this.choice.terastallize = true;
 
 		return true;
+	}
+
+	updateDisabledRequest(pokemon: Pokemon, req: PokemonMoveRequestData) {
+		let updated = false;
+		if (pokemon.maybeLocked) {
+			pokemon.maybeLocked = false;
+			delete req.maybeLocked;
+			updated = true;
+		}
+		if (pokemon.maybeDisabled && this.battle.gameType !== 'singles') {
+			if (this.battle.gen >= 4) {
+				pokemon.maybeDisabled = false;
+				delete req.maybeDisabled;
+				updated = true;
+			}
+			for (const m of req.moves) {
+				const disabled = pokemon.getMoveData(m.id)?.disabled;
+				if (disabled && (this.battle.gen >= 4 || this.battle.actions.targetTypeChoices(m.target!))) {
+					m.disabled = true;
+					updated = true;
+				}
+			}
+		}
+		return updated;
 	}
 
 	updateRequestForPokemon(pokemon: Pokemon, update: (req: PokemonMoveRequestData) => boolean | void) {
@@ -880,7 +909,7 @@ export class Side {
 					return updated;
 				} });
 			} else if (pokemon.maybeTrapped) {
-				this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
+				this.choice.cantUndo = true;
 			}
 		} else if (this.requestState === 'switch') {
 			if (!this.choice.forcedSwitchesLeft) {
@@ -1023,6 +1052,7 @@ export class Side {
 		}
 		this.choice = {
 			cantUndo: false,
+			updateOnUndo: false,
 			error: ``,
 			actions: [],
 			forcedSwitchesLeft: forcedSwitches,
@@ -1046,6 +1076,8 @@ export class Side {
 		if (this.choice.cantUndo) {
 			return this.emitChoiceError(`Can't undo: A trapping/disabling effect would cause undo to leak information`);
 		}
+
+		if (this.choice.updateOnUndo) this.emitRequest();
 
 		this.clearChoice();
 
