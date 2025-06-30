@@ -355,9 +355,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 				if (pokemon && pokemon !== target && move.category !== 'Status') {
-					if (pokemon.hp <= pokemon.maxhp / 2 && originalHp > pokemon.maxhp / 2) {
-						this.battle.runEvent('EmergencyExit', pokemon, pokemon);
-					}
+					this.battle.singleEvent('EmergencyExit', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, undefined, originalHp);
 				}
 			}
 			return true;
