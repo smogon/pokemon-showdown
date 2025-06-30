@@ -164,11 +164,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onEnd(pokemon) {
-			for (const target of [...new Set([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
-				if (target.ability === ('deathaura' as ID)) return;
-			}
-			for (const target of [...new Set([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
-				target.removeVolatile('healblock');
+			for (const target of pokemon.foes()) {
+				if (!target.hasAbility('deathaura')) {
+					target.removeVolatile('healblock');
+				}
 			}
 		},
 		flags: {},
@@ -1422,11 +1421,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			((this.effect as any).onStart as (p: Pokemon) => void).call(this, this.effectState.target);
 		},
 		onEnd(pokemon) {
-			for (const target of [...new Set([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
-				if (target.ability === ('fairfight' as ID)) return;
-			}
-			for (const target of [...new Set([...pokemon.alliesAndSelf(), ...pokemon.adjacentFoes()])]) {
-				target.removeVolatile('fairfight');
+			for (const target of pokemon.foes()) {
+				if (!target.hasAbility('fairfight')) {
+					target.removeVolatile('fairfight');
+				}
 			}
 		},
 		condition: {
