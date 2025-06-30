@@ -2005,24 +2005,30 @@ export class Pokemon {
 		if (!this.hp) return { side: this.side.id, secret: '0 fnt', shared: '0 fnt' };
 		let secret = `${this.hp}/${this.maxhp}`;
 		let shared;
-		const ratio = this.hp / this.maxhp;
 		if (this.battle.reportExactHP) {
 			shared = secret;
-		} else if (this.battle.reportPercentages || this.battle.gen >= 8) {
+		} else if (this.battle.reportPercentages || this.battle.gen >= 7) {
 			// HP Percentage Mod mechanics
-			let percentage = Math.ceil(ratio * 100);
-			if ((percentage === 100) && (ratio < 1.0)) {
+			let percentage = Math.ceil(100 * this.hp / this.maxhp);
+			if (percentage === 100 && this.hp < this.maxhp) {
 				percentage = 99;
 			}
 			shared = `${percentage}/100`;
 		} else {
-			// In-game accurate pixel health mechanics
-			const pixels = Math.floor(ratio * 48) || 1;
+			/**
+			 * In-game accurate pixel health mechanics
+			 * PS doesn't use pixels after Gen 6, but for reference:
+			 * - [Gen 7] SM uses 99 pixels
+			 * - [Gen 7] USUM uses 86 pixels
+			 * */
+			const pixels = Math.floor(48 * this.hp / this.maxhp) || 1;
 			shared = `${pixels}/48`;
-			if ((pixels === 9) && (ratio > 0.2)) {
-				shared += 'y'; // force yellow HP bar
-			} else if ((pixels === 24) && (ratio > 0.5)) {
-				shared += 'g'; // force green HP bar
+			if (this.battle.gen >= 5) {
+				if (pixels === 9) {
+					shared += this.hp * 5 > this.maxhp ? 'y' : 'r';
+				} else if (pixels === 24) {
+					shared += this.hp * 2 > this.maxhp ? 'g' : 'y';
+				}
 			}
 		}
 		if (this.status) {
