@@ -2406,6 +2406,11 @@
                 "role": "Berry Sweeper",
                 "movepool": ["bulkup", "reversal", "shadowball", "substitute"],
                 "abilities": ["Pure Power"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["brickbreak", "doubleedge", "rockslide", "shadowball"],
+                "abilities": ["Pure Power"]
             }
         ]
     },
