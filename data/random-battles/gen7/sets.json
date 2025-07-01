@@ -1629,8 +1629,13 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["gyroball", "rapidspin", "spikes", "stealthrock", "toxic", "voltswitch"],
+                "movepool": ["gyroball", "rapidspin", "spikes", "stealthrock", "toxic"],
                 "abilities": ["Sturdy"]
+            },
+            {
+                "role": "Bulky Support",
+                "movepool": ["gyroball", "rapidspin", "stealthrock", "toxicspikes", "voltswitch"],
+                "abilities": ["Sturdy"] 
             }
         ]
     },
@@ -5269,7 +5274,8 @@
             {
                 "role": "Fast Attacker",
                 "movepool": ["bulletseed", "knockoff", "rockblast", "tailslap", "uturn"],
-                "abilities": ["Skill Link"]
+                "abilities": ["Skill Link"],
+                "preferredTypes": ["Grass"]
             }
         ]
     },

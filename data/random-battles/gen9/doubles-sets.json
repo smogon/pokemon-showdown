@@ -167,7 +167,13 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Flamethrower", "Heat Wave", "Overheat", "Protect", "Scorching Sands", "Solar Beam"],
+                "movepool": ["Heat Wave", "Overheat", "Solar Beam", "Weather Ball"],
+                "abilities": ["Drought"],
+                "teraTypes": ["Fire", "Grass"]
+            },
+            {
+                "role": "Doubles Wallbreaker",
+                "movepool": ["Fire Blast", "Heat Wave", "Protect", "Solar Beam"],
                 "abilities": ["Drought"],
                 "teraTypes": ["Fire", "Grass"]
             }
@@ -824,7 +830,7 @@
         "level": 83,
         "sets": [
             {
-                "role": "Doubles Bulky Attacker",
+                "role": "Doubles Support",
                 "movepool": ["Brave Bird", "Freeze-Dry", "Ice Beam", "Icy Wind", "Protect", "Roost", "Tailwind"],
                 "abilities": ["Pressure"],
                 "teraTypes": ["Ground", "Steel"]
@@ -1126,8 +1132,14 @@
         "level": 93,
         "sets": [
             {
-                "role": "Bulky Protect",
-                "movepool": ["Acrobatics", "Encore", "Pollen Puff", "Rage Powder", "Sleep Powder", "Strength Sap", "Tailwind"],
+                "role": "Doubles Support",
+                "movepool": ["Acrobatics", "Rage Powder", "Strength Sap", "Tailwind"],
+                "abilities": ["Infiltrator"],
+                "teraTypes": ["Steel"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Acrobatics", "Encore", "Sleep Powder", "Tailwind"],
                 "abilities": ["Infiltrator"],
                 "teraTypes": ["Steel"]
             }
@@ -1183,7 +1195,7 @@
             {
                 "role": "Doubles Support",
                 "movepool": ["Foul Play", "Helping Hand", "Moonlight", "Snarl", "Thunder Wave"],
-                "abilities": ["Synchronize"],
+                "abilities": ["Inner Focus"],
                 "teraTypes": ["Poison"]
             }
         ]
@@ -1915,9 +1927,15 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "Facade", "Feint", "Knock Off", "Protect"],
+                "movepool": ["Facade", "Feint", "Knock Off", "Protect"],
                 "abilities": ["Toxic Boost"],
-                "teraTypes": ["Normal"]
+                "teraTypes": ["Ghost", "Normal"]
+            },
+            {
+                "role": "Doubles Fast Attacker",
+                "movepool": ["Close Combat", "Facade", "Knock Off", "Protect"],
+                "abilities": ["Toxic Boost"],
+                "teraTypes": ["Ghost", "Normal"]
             }
         ]
     },
@@ -3059,7 +3077,7 @@
         "sets": [
             {
                 "role": "Offensive Protect",
-                "movepool": ["Dark Pulse", "Focus Blast", "Protect", "Sludge Bomb"],
+                "movepool": ["Dark Pulse", "Focus Blast", "Protect", "Sludge Bomb", "Substitute"],
                 "abilities": ["Bad Dreams"],
                 "teraTypes": ["Poison"]
             }
@@ -3072,7 +3090,7 @@
                 "role": "Doubles Bulky Attacker",
                 "movepool": ["Earth Power", "Protect", "Seed Flare", "Synthesis", "Tailwind"],
                 "abilities": ["Natural Cure"],
-                "teraTypes": ["Grass", "Ground", "Steel"]
+                "teraTypes": ["Ground", "Steel"]
             }
         ]
     },
@@ -3745,8 +3763,8 @@
         "level": 88,
         "sets": [
             {
-                "role": "Doubles Bulky Attacker",
-                "movepool": ["Flash Cannon", "Freeze-Dry", "Haze", "Icy Wind", "Rapid Spin", "Recover"],
+                "role": "Doubles Support",
+                "movepool": ["Flash Cannon", "Freeze-Dry", "Icy Wind", "Recover"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Steel"]
             }
@@ -3822,6 +3840,12 @@
                 "movepool": ["Foul Play", "Knock Off", "Roost", "Snarl", "Tailwind", "Taunt", "Toxic", "U-turn"],
                 "abilities": ["Overcoat"],
                 "teraTypes": ["Steel"]
+            },
+            {
+                "role": "Doubles Bulky Attacker",
+                "movepool": ["Brave Bird", "Knock Off", "Roost", "Tailwind"],
+                "abilities": ["Overcoat"],
+                "teraTypes": ["Steel"]
             }
         ]
     },
@@ -3870,7 +3894,7 @@
             },
             {
                 "role": "Bulky Protect",
-                "movepool": ["Body Press", "Iron Defense", "Iron Head", "Protect"],
+                "movepool": ["Body Press", "Heavy Slam", "Iron Defense", "Protect"],
                 "abilities": ["Justified"],
                 "teraTypes": ["Flying", "Water"]
             }
@@ -3998,10 +4022,10 @@
         "level": 75,
         "sets": [
             {
-                "role": "Doubles Wallbreaker",
-                "movepool": ["Earth Power", "Nasty Plot", "Protect", "Psychic", "Rock Slide", "Sandsear Storm", "Sludge Bomb"],
+                "role": "Offensive Protect",
+                "movepool": ["Earth Power", "Nasty Plot", "Protect", "Rock Slide", "Sandsear Storm", "Sludge Bomb"],
                 "abilities": ["Sheer Force"],
-                "teraTypes": ["Ground", "Poison", "Psychic"]
+                "teraTypes": ["Ground", "Poison"]
             }
         ]
     },
@@ -5032,10 +5056,16 @@
         "level": 81,
         "sets": [
             {
-                "role": "Doubles Bulky Attacker",
-                "movepool": ["Brave Bird", "Iron Head", "Roost", "Tailwind", "U-turn"],
+                "role": "Doubles Support",
+                "movepool": ["Brave Bird", "Iron Head", "Roost", "Tailwind"],
                 "abilities": ["Mirror Armor"],
                 "teraTypes": ["Dragon"]
+            },
+            {
+                "role": "Doubles Bulky Setup",
+                "movepool": ["Body Press", "Brave Bird", "Iron Defense", "Roost", "Tailwind"],
+                "abilities": ["Mirror Armor"],
+                "teraTypes": ["Fighting"]
             }
         ]
     },
@@ -5117,7 +5147,7 @@
         "sets": [
             {
                 "role": "Bulky Protect",
-                "movepool": ["Brave Bird", "Protect", "Roost", "Surf", "Tailwind"],
+                "movepool": ["Brave Bird", "Protect", "Surf", "Tailwind"],
                 "abilities": ["Gulp Missile"],
                 "teraTypes": ["Ground"]
             }
