@@ -159,7 +159,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Standard Draft',
 		desc: "The custom Draft League ruleset",
 		ruleset: [
-			'Obtainable', '+Unreleased', '+CAP', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
+			'Obtainable', 'Nickname Clause', '+Unreleased', '+CAP', 'Sketch Post-Gen 7 Moves', 'Team Preview', 'Sleep Clause Mod', 'OHKO Clause', 'Evasion Clause', 'Endless Battle Clause', 'HP Percentage Mod', 'Cancel Mod',
 		],
 		// timer: {starting: 60 * 60, grace: 0, addPerTurn: 10, maxPerTurn: 100, timeoutAutoChoose: true},
 	},
@@ -241,17 +241,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		// Mostly hardcoded in team-validator.ts
 		onChangeSet(set) {
 			const species = this.dex.species.get(set.species);
-
-			if (species.gender) {
-				if (set.gender !== species.gender) {
-					set.gender = species.gender;
-				}
-			} else {
-				if (set.gender !== 'M' && set.gender !== 'F') {
-					set.gender = '';
-				}
-			}
-
 			// limit one of each move
 			// repealing this will not actually let you USE multiple moves, because of a cart bug:
 			// https://twitter.com/DaWoblefet/status/1396217830006132737
@@ -1976,12 +1965,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Picked Team Size',
 		desc: "Team size (number of pokemon) that can be brought out of Team Preview",
 		hasValue: 'positive-integer',
-		// hardcoded in sim/side
-		onValidateRule() {
-			if (!(this.ruleTable.has('teampreview') || this.ruleTable.has('teamtypepreview'))) {
-				throw new Error(`The "Picked Team Size" rule${this.ruleTable.blame('pickedteamsize')} requires Team Preview.`);
-			}
-		},
+		// hardcoded in sim/side and sim/battle
 	},
 	minteamsize: {
 		effectType: 'ValidatorRule',
