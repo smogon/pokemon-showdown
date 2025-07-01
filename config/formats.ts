@@ -2493,9 +2493,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin',
 		],
 		unbanlist: [
-			'Arbok', 'Archeops', 'Arctozolt', 'Bruxish', 'Calyrex-Base', 'Ditto', 'Drakloak', 'Dugtrio-Alola', 'Electrode-Base', 'Escavalier', 'Espeon', 'Furfrou',
-			'Glimmora', 'Grapploct', 'Honchkrow', 'Klawf', 'Lunatone', 'Luvdisc', 'Masquerain', 'Mienshao', 'Mimikyu-Base', 'Orbeetle', 'Primeape', 'Purugly',
-			'Quaquaval', 'Rabsca', 'Simipour', 'Simisage', 'Slowking-Base', 'Slowking-Galar', 'Smeargle', 'Tangrowth', 'Toedscruel', 'Tyranitar-Base', 'Uxie',
+			'Arctovish', 'Azumarill', 'Blastoise-Base', 'Boltund', 'Bouffalant', 'Brambleghast', 'Braviary-Base', 'Chimecho', 'Cofagrigus', 'Dachsbun',
+			'Darmanitan-Base', 'Delibird', 'Drakloak', 'Floatzel', 'Flygon', 'Gliscor', 'Grapploct', 'Incineroar', 'Kleavor', 'Lunatone', 'Mabosstiff',
+			'Marowak-Alola', 'Meowstic-F', 'Minun', 'Obstagoon', 'Persian-Alola', 'Primeape', 'Rapidash-Base', 'Raticate-Base', 'Reuniclus','Rillaboom',
+			'Rotom-Mow', 'Silvally-Ground', 'Simisage', 'Slowbro-Galar', 'Slowking-Base', 'Slowking-Galar', 'Starmie', 'Tentacruel', 'Toedscruel',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
