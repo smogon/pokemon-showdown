@@ -80,6 +80,7 @@ export interface EventMethods {
 	onNegateImmunity?: ((this: Battle, pokemon: Pokemon, type: string) => boolean | void) | boolean;
 	onOverrideAction?: (this: Battle, pokemon: Pokemon, target: Pokemon, move: ActiveMove) => string | void;
 	onPrepareHit?: CommonHandlers['ResultSourceMove'];
+	onPseudoWeatherChange?: (this: Battle, target: Pokemon, source: Pokemon, pseudoWeather: Condition) => void;
 	onRedirectTarget?: (
 		this: Battle, target: Pokemon, source: Pokemon, source2: Effect, move: ActiveMove
 	) => Pokemon | void;
