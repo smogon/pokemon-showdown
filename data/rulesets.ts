@@ -1976,12 +1976,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Picked Team Size',
 		desc: "Team size (number of pokemon) that can be brought out of Team Preview",
 		hasValue: 'positive-integer',
-		// hardcoded in sim/side
-		onValidateRule() {
-			if (!(this.ruleTable.has('teampreview') || this.ruleTable.has('teamtypepreview'))) {
-				throw new Error(`The "Picked Team Size" rule${this.ruleTable.blame('pickedteamsize')} requires Team Preview.`);
-			}
-		},
+		// hardcoded in sim/side and sim/battle
 	},
 	minteamsize: {
 		effectType: 'ValidatorRule',
