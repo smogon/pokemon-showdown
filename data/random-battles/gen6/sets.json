@@ -698,7 +698,7 @@
         ]
     },
     "rhydon": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1596,7 +1596,7 @@
         ]
     },
     "corsola": {
-        "level": 98,
+        "level": 99,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2162,7 +2162,7 @@
         ]
     },
     "shedinja": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2644,7 +2644,7 @@
         ]
     },
     "castform": {
-        "level": 98,
+        "level": 97,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2671,7 +2671,7 @@
         ]
     },
     "banette": {
-        "level": 89,
+        "level": 90,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2795,7 +2795,7 @@
         ]
     },
     "relicanth": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2981,7 +2981,7 @@
         ]
     },
     "kyogreprimal": {
-        "level": 72,
+        "level": 71,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -3617,7 +3617,7 @@
         ]
     },
     "carnivine": {
-        "level": 99,
+        "level": 100,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -4060,7 +4060,7 @@
         ]
     },
     "regigigas": {
-        "level": 83,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -4141,7 +4141,7 @@
         ]
     },
     "darkrai": {
-        "level": 73,
+        "level": 72,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -4622,7 +4622,7 @@
         ]
     },
     "audinomega": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Staller",
@@ -5424,7 +5424,7 @@
         ]
     },
     "landorustherian": {
-        "level": 77,
+        "level": 76,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -5670,7 +5670,7 @@
         ]
     },
     "pangoro": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -5747,7 +5747,7 @@
         ]
     },
     "aromatisse": {
-        "level": 90,
+        "level": 89,
         "sets": [
             {
                 "role": "Bulky Support",

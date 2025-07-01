@@ -480,7 +480,7 @@
         ]
     },
     "dodrio": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1890,7 +1890,7 @@
         ]
     },
     "mightyena": {
-        "level": 95,
+        "level": 96,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2994,7 +2994,7 @@
         ]
     },
     "abomasnow": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -4057,7 +4057,7 @@
         ]
     },
     "basculegion": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "AV Pivot",
@@ -5912,7 +5912,7 @@
         ]
     },
     "alcremie": {
-        "level": 89,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Setup",

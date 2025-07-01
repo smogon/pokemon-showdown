@@ -520,22 +520,170 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 2,
 	},
 	{
-		name: "[Gen 9] Tier Shift",
-		desc: `Pok&eacute;mon below OU get their stats, excluding HP, boosted. UU/RUBL get +15, RU/NUBL get +20, NU/PUBL get +25, and PU or lower get +30.`,
+		name: "[Gen 9] Battlefields",
+		desc: `Any field condition with a set duration becomes permanent once triggered unless directly replaced, removed, or reversed. Namely, this impacts screens, weathers, terrains, room effects, gravity, and side conditions like Tailwind and Safeguard.`,
 		mod: 'gen9',
-		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Terastal Clause', 'Evasion Clause', 'Tier Shift Mod'],
+		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Evasion Abilities Clause'],
 		banlist: [
-			'Arceus', 'Calyrex-Shadow', 'Koraidon', 'Kyogre', 'Medicham', 'Miraidon', 'Necrozma-Dusk-Mane', 'Zacian-Crowned', 'Drizzle', 'Moody', 'Arena Trap', 'Shadow Tag',
-			'Baton Pass', 'Last Respects', 'Shed Tail', 'Heat Rock', 'King\'s Rock', 'Light Clay', 'Razor Fang',
+			'Annihilape', 'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Deoxys-Attack', 'Deoxys-Normal', 'Dialga', 'Dialga-Origin', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Groudon',
+			'Ho-Oh', 'Koraidon', 'Kyogre', 'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Mewtwo', 'Magearna', 'Miraidon', 'Necrozma-Dawn-Wings', 'Necrozma-Dusk-Mane', 'Palkia', 'Palkia-Origin',
+			'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Sneasler', 'Spectrier', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang',
+			'Baton Pass', 'Fairy Lock', 'Last Respects', 'Shed Tail',
 		],
-		unbanlist: ['Arceus-Bug', 'Arceus-Grass', 'Arceus-Ice'],
+		side: {
+			addSideCondition(status, source = null, sourceEffect = null) {
+				if (!source && this.battle.event?.target) source = this.battle.event.target;
+				if (source === 'debug') source = this.active[0];
+				if (!source) throw new Error(`setting sidecond without a source`);
+				if (!source.getSlot) source = (source as any as Side).active[0];
+
+				status = this.battle.dex.conditions.get(status);
+				if (this.sideConditions[status.id]) {
+					if (!(status as any).onSideRestart) return false;
+					return this.battle.singleEvent('SideRestart', status, this.sideConditions[status.id], this, source, sourceEffect);
+				}
+				this.sideConditions[status.id] = this.battle.initEffectState({
+					id: status.id,
+					target: this,
+					source,
+					sourceSlot: source.getSlot(),
+					duration: status.duration,
+				});
+				if (status.durationCallback) {
+					this.sideConditions[status.id].duration =
+						status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
+				}
+				if (status.duration) {
+					this.sideConditions[status.id].duration = 0;
+				}
+				if (!this.battle.singleEvent('SideStart', status, this.sideConditions[status.id], this, source, sourceEffect)) {
+					delete this.sideConditions[status.id];
+					return false;
+				}
+				this.battle.runEvent('SideConditionStart', source, source, status);
+				return true;
+			},
+		},
+		field: {
+			addPseudoWeather(status, source = null, sourceEffect = null) {
+				if (!source && this.battle.event?.target) source = this.battle.event.target;
+				if (source === 'debug') source = this.battle.sides[0].active[0];
+				status = this.battle.dex.conditions.get(status);
+
+				let state = this.pseudoWeather[status.id];
+				if (state) {
+					if (!(status as any).onFieldRestart) return false;
+					return this.battle.singleEvent('FieldRestart', status, state, this, source, sourceEffect);
+				}
+				state = this.pseudoWeather[status.id] = this.battle.initEffectState({
+					id: status.id,
+					source,
+					sourceSlot: source?.getSlot(),
+					duration: status.duration,
+				});
+				if (status.durationCallback) {
+					if (!source) throw new Error(`setting fieldcond without a source`);
+					state.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+				}
+				if (state.duration && state.duration > 1 && state.id !== 'echoedvoice') {
+					state.duration = 0;
+				}
+				if (!this.battle.singleEvent('FieldStart', status, state, this, source, sourceEffect)) {
+					delete this.pseudoWeather[status.id];
+					return false;
+				}
+				this.battle.runEvent('PseudoWeatherChange', source, source, status);
+				return true;
+			},
+			setWeather(status, source = null, sourceEffect = null) {
+				status = this.battle.dex.conditions.get(status);
+				if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
+				if (!source && this.battle.event?.target) source = this.battle.event.target;
+				if (source === 'debug') source = this.battle.sides[0].active[0];
+
+				if (this.weather === status.id) {
+					if (sourceEffect && sourceEffect.effectType === 'Ability') {
+						if (this.battle.gen > 5 || this.weatherState.duration === 0) {
+							return false;
+						}
+					} else if (this.battle.gen > 2 || status.id === 'sandstorm') {
+						return false;
+					}
+				}
+				if (source) {
+					const result = this.battle.runEvent('SetWeather', source, source, status);
+					if (!result) {
+						if (result === false) {
+							if ((sourceEffect as Move)?.weather) {
+								this.battle.add('-fail', source, sourceEffect, '[from] ' + this.weather);
+							} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
+								this.battle.add('-ability', source, sourceEffect, '[from] ' + this.weather, '[fail]');
+							}
+						}
+						return null;
+					}
+				}
+				const prevWeather = this.weather;
+				const prevWeatherState = this.weatherState;
+				this.weather = status.id;
+				this.weatherState = this.battle.initEffectState({ id: status.id });
+				if (source) {
+					this.weatherState.source = source;
+					this.weatherState.sourceSlot = source.getSlot();
+				}
+				if (!this.battle.singleEvent('FieldStart', status, this.weatherState, this, source, sourceEffect)) {
+					this.weather = prevWeather;
+					this.weatherState = prevWeatherState;
+					return false;
+				}
+				this.battle.eachEvent('WeatherChange', sourceEffect);
+				return true;
+			},
+			setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+				status = this.battle.dex.conditions.get(status);
+				if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
+				if (!source && this.battle.event?.target) source = this.battle.event.target;
+				if (source === 'debug') source = this.battle.sides[0].active[0];
+				if (!source) throw new Error(`setting terrain without a source`);
+
+				if (this.terrain === status.id) return false;
+				const prevTerrain = this.terrain;
+				const prevTerrainState = this.terrainState;
+				this.terrain = status.id;
+				this.terrainState = this.battle.initEffectState({
+					id: status.id,
+					source,
+					sourceSlot: source.getSlot(),
+					duration: status.duration,
+				});
+				if (status.durationCallback) {
+					this.terrainState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+				}
+				this.terrainState.duration = 0;
+				if (!this.battle.singleEvent('FieldStart', status, this.terrainState, this, source, sourceEffect)) {
+					this.terrain = prevTerrain;
+					this.terrainState = prevTerrainState;
+					return false;
+				}
+				this.battle.eachEvent('TerrainChange', sourceEffect);
+				return true;
+			},
+		},
 	},
 	{
-		name: "[Gen 9] Pure Hackmons",
-		desc: `Anything directly hackable onto a set (EVs, IVs, forme, ability, item, and move) and is usable in local battles is allowed.`,
-		mod: 'gen9',
+		name: "[Gen 9] Full Potential",
+		desc: `Pok&eacute;mon's moves hit off of their highest stat, except HP.`,
+		mod: 'fullpotential',
 		// searchShow: false,
-		ruleset: ['Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Hackmons Forme Legality', 'Species Reveal Clause', 'Endless Battle Clause'],
+		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause', 'Terastal Clause'],
+		banlist: [
+			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga', 'Dialga-Origin', 'Dragapult',
+			'Electrode-Hisui', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Goodra-Hisui', 'Groudon', 'Ho-Oh', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Kyurem-Black',
+			'Kyurem-White', 'Lugia', 'Lunala', 'Mewtwo', 'Miraidon', 'Necrozma-Dusk-Mane', 'Necrozma-Dawn-Wings', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regieleki',
+			'Scream Tail', 'Shaymin-Sky', 'Spectrier', 'Solgaleo', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Chlorophyll',
+			'Drought', 'Moody', 'Sand Rush', 'Shadow Tag', 'Slush Rush', 'Speed Boost', 'Surge Surfer', 'Swift Swim', 'Unburden', 'Booster Energy', 'Choice Scarf',
+			'Heat Rock', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Shed Tail', 'Tailwind',
+		],
 	},
 
 	// Other Metagames
@@ -1282,21 +1430,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 	{
-		name: "[Gen 9] Full Potential",
-		desc: `Pok&eacute;mon's moves hit off of their highest stat, except HP.`,
-		mod: 'fullpotential',
-		searchShow: false,
-		ruleset: ['Standard OMs', 'Evasion Abilities Clause', 'Evasion Items Clause', 'Sleep Moves Clause', 'Terastal Clause'],
-		banlist: [
-			'Arceus', 'Calyrex-Ice', 'Calyrex-Shadow', 'Deoxys', 'Deoxys-Attack', 'Deoxys-Defense', 'Deoxys-Speed', 'Dialga', 'Dialga-Origin', 'Dragapult',
-			'Electrode-Hisui', 'Eternatus', 'Giratina', 'Giratina-Origin', 'Goodra-Hisui', 'Groudon', 'Ho-Oh', 'Iron Bundle', 'Koraidon', 'Kyogre', 'Kyurem-Black',
-			'Kyurem-White', 'Lugia', 'Lunala', 'Mewtwo', 'Miraidon', 'Necrozma-Dusk-Mane', 'Necrozma-Dawn-Wings', 'Palkia', 'Palkia-Origin', 'Rayquaza', 'Regieleki',
-			'Scream Tail', 'Shaymin-Sky', 'Spectrier', 'Solgaleo', 'Zacian', 'Zacian-Crowned', 'Zamazenta', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Chlorophyll',
-			'Drought', 'Moody', 'Sand Rush', 'Shadow Tag', 'Slush Rush', 'Speed Boost', 'Surge Surfer', 'Swift Swim', 'Unburden', 'Booster Energy', 'Choice Scarf',
-			'Heat Rock', 'King\'s Rock', 'Razor Fang', 'Baton Pass', 'Shed Tail', 'Tailwind',
-		],
-	},
-	{
 		name: "[Gen 9] Inheritance",
 		desc: `Pok&eacute;mon may use the ability and moves of another, as long as they forfeit their own learnset.`,
 		mod: 'gen9',
@@ -1839,6 +1972,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Pure Hackmons",
+		desc: `Anything directly hackable onto a set (EVs, IVs, forme, ability, item, and move) and is usable in local battles is allowed.`,
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Team Preview', 'HP Percentage Mod', 'Cancel Mod', 'Hackmons Forme Legality', 'Species Reveal Clause', 'Endless Battle Clause'],
+	},
+	{
 		name: "[Gen 9] Relay Race",
 		desc: `The effects of the move Baton Pass are triggered upon manually withdrawing a Pok&eacute;mon from battle.`,
 		mod: 'gen9',
@@ -2335,6 +2475,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
+		name: "[Gen 9] Tier Shift",
+		desc: `Pok&eacute;mon below OU get their stats, excluding HP, boosted. UU/RUBL get +15, RU/NUBL get +20, NU/PUBL get +25, and PU or lower get +30.`,
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Standard OMs', 'Sleep Moves Clause', 'Terastal Clause', 'Evasion Clause', 'Tier Shift Mod'],
+		banlist: [
+			'Arceus', 'Calyrex-Shadow', 'Koraidon', 'Kyogre', 'Medicham', 'Miraidon', 'Necrozma-Dusk-Mane', 'Zacian-Crowned', 'Drizzle', 'Moody', 'Arena Trap', 'Shadow Tag',
+			'Baton Pass', 'Last Respects', 'Shed Tail', 'Heat Rock', 'King\'s Rock', 'Light Clay', 'Razor Fang',
+		],
+		unbanlist: ['Arceus-Bug', 'Arceus-Grass', 'Arceus-Ice'],
+	},
+	{
 		name: "[Gen 9] Trademarked",
 		desc: `Sacrifice your Pok&eacute;mon's ability for a status move that activates on switch-in.`,
 		mod: 'trademarked',
@@ -2493,9 +2645,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin',
 		],
 		unbanlist: [
-			'Arbok', 'Archeops', 'Arctozolt', 'Bruxish', 'Calyrex-Base', 'Ditto', 'Drakloak', 'Dugtrio-Alola', 'Electrode-Base', 'Escavalier', 'Espeon', 'Furfrou',
-			'Glimmora', 'Grapploct', 'Honchkrow', 'Klawf', 'Lunatone', 'Luvdisc', 'Masquerain', 'Mienshao', 'Mimikyu-Base', 'Orbeetle', 'Primeape', 'Purugly',
-			'Quaquaval', 'Rabsca', 'Simipour', 'Simisage', 'Slowking-Base', 'Slowking-Galar', 'Smeargle', 'Tangrowth', 'Toedscruel', 'Tyranitar-Base', 'Uxie',
+			'Arctovish', 'Azumarill', 'Blastoise-Base', 'Boltund', 'Bouffalant', 'Brambleghast', 'Braviary-Base', 'Chimecho', 'Cofagrigus', 'Dachsbun',
+			'Darmanitan-Base', 'Delibird', 'Drakloak', 'Floatzel', 'Flygon', 'Gliscor', 'Grapploct', 'Incineroar', 'Kleavor', 'Lunatone', 'Mabosstiff',
+			'Marowak-Alola', 'Meowstic-F', 'Minun', 'Obstagoon', 'Persian-Alola', 'Primeape', 'Rapidash-Base', 'Raticate-Base', 'Reuniclus', 'Rillaboom',
+			'Rotom-Mow', 'Silvally-Ground', 'Simisage', 'Slowbro-Galar', 'Slowking-Base', 'Slowking-Galar', 'Starmie', 'Tentacruel', 'Toedscruel',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
@@ -2597,7 +2750,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] National Dex 1v1",
 		mod: 'gen9',
-		// searchShow: false,
+		searchShow: false,
 		ruleset: ['Standard AG', 'NatDex Mod', 'Nickname Clause', 'Evasion Moves Clause', 'OHKO Clause', 'Species Clause', 'Sleep Moves Clause', 'Terastal Clause', 'Accuracy Moves Clause', 'Picked Team Size = 1', 'Max Team Size = 3'],
 		banlist: [
 			'Arceus', 'Archaludon', 'Blastoise-Mega', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chi-Yu', 'Deoxys-Normal', 'Deoxys-Attack', 'Deoxys-Defense', 'Dialga', 'Dialga-Origin', 'Eternatus',
@@ -2617,7 +2770,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] National Dex AAA",
 		desc: `Pok&eacute;mon have access to almost any ability.`,
 		mod: 'gen9',
-		searchShow: false,
+		// searchShow: false,
 		ruleset: ['Standard NatDex', '!Obtainable Abilities', 'Ability Clause = 2', '!Sleep Clause Mod', 'Sleep Moves Clause', 'Terastal Clause'],
 		banlist: [
 			'Alakazam-Mega', 'Annihilape', 'Arceus', 'Archeops', 'Baxcalibur', 'Blacephalon', 'Blastoise-Mega', 'Blaziken-Mega', 'Calyrex-Ice', 'Calyrex-Shadow', 'Chien-Pao', 'Darkrai', 'Deoxys-Attack',
@@ -3484,30 +3637,39 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 4,
 	},
 	{
-		name: "[Gen 3] UU",
-		mod: 'gen3',
-		// searchShow: false,
-		ruleset: ['Standard'],
-		banlist: ['Uber', 'OU', 'UUBL', 'Smeargle + Ingrain', 'Arena Trap', 'Baton Pass', 'Swagger'],
-	},
-	{
-		name: "[Gen 6] RU",
-		mod: 'gen6',
-		// searchShow: false,
-		ruleset: ['[Gen 6] UU'],
-		banlist: ['UU', 'RUBL'],
-	},
-	{
-		name: "[Gen 4] PU",
+		name: "[Gen 4] UU",
 		mod: 'gen4',
 		// searchShow: false,
-		ruleset: ['[Gen 4] NU'],
+		ruleset: ['[Gen 4] OU', '!Baton Pass Stat Trap Clause', '!Freeze Clause Mod'],
+		banlist: ['OU', 'UUBL', 'Baton Pass'],
+		unbanlist: ['Arena Trap', 'Snow Cloak', 'Quick Claw', 'Swagger'],
+	},
+	{
+		name: "[Gen 7] VGC 2018",
+		mod: 'gen7',
+		gameType: 'doubles',
+		// searchShow: false,
+		bestOfDefault: true,
+		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 7', 'VGC Timer', '!! Timer Starting = 300'],
+		banlist: ['Oranguru + Symbiosis', 'Passimian + Defiant', 'Unown', 'Custap Berry', 'Enigma Berry', 'Jaboca Berry', 'Micle Berry', 'Rowap Berry', 'Battle Bond'],
+	},
+	{
+		name: "[Gen 5] ZU",
+		mod: 'gen5',
+		// searchShow: false,
+		ruleset: ['[Gen 5] PU'],
 		banlist: [
-			'Articuno', 'Cacturne', 'Charizard', 'Cradily', 'Dodrio', 'Drifblim', 'Dusclops', 'Electrode', 'Floatzel', 'Gardevoir', 'Gligar', 'Golem',
-			'Grumpig', 'Haunter', 'Hitmonchan', 'Hypno', 'Jumpluff', 'Jynx', 'Lickilicky', 'Linoone', 'Magmortar', 'Magneton', 'Manectric', 'Medicham',
-			'Meganium', 'Nidoqueen', 'Ninetales', 'Piloswine', 'Poliwrath', 'Porygon2', 'Regice', 'Regirock', 'Roselia', 'Sandslash', 'Sharpedo', 'Shiftry',
-			'Skuntank', 'Slowking', 'Tauros', 'Typhlosion', 'Venomoth', 'Vileplume',
+			// PU
+			'Audino', 'Banette', 'Beheeyem', 'Bronzor', 'Dodrio', 'Duosion', 'Dwebble', 'Fraxure', 'Gabite', 'Golduck',
+			'Huntail', 'Jumpluff', 'Klang', 'Krokorok', 'Mantine', 'Maractus', 'Mawile', 'Monferno', 'Murkrow', 'Natu',
+			'Purugly', 'Rampardos', 'Rapidash', 'Relicanth', 'Scraggy', 'Shiftry', 'Simisage', 'Sneasel', 'Stoutland',
+			'Stunfisk', 'Swanna', 'Swoobat', 'Tentacool', 'Torterra', 'Ursaring', 'Victreebel', 'Vileplume', 'Volbeat',
+			'Zebstrika', 'Zweilous',
+			// ZUBL
+			'Articuno', 'Dragonair', 'Glalie', 'Machoke', 'Marowak', 'Omanyte', 'Regigigas', 'Trubbish', 'Whirlipede',
+			'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Baton Pass',
 		],
+		unbanlist: ['Damp Rock'],
 	},
 
 	// Past Gens OU
@@ -3988,15 +4150,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Unown', 'Battle Bond'],
 	},
 	{
-		name: "[Gen 7] VGC 2018",
-		mod: 'gen7',
-		gameType: 'doubles',
-		searchShow: false,
-		bestOfDefault: true,
-		ruleset: ['Flat Rules', '!! Adjust Level = 50', 'Min Source Gen = 7', 'VGC Timer', '!! Timer Starting = 300'],
-		banlist: ['Oranguru + Symbiosis', 'Passimian + Defiant', 'Unown', 'Custap Berry', 'Enigma Berry', 'Jaboca Berry', 'Micle Berry', 'Rowap Berry', 'Battle Bond'],
-	},
-	{
 		name: "[Gen 7] VGC 2017",
 		mod: 'gen7sm',
 		gameType: 'doubles',
@@ -4055,6 +4208,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 6] OU'],
 		banlist: ['OU', 'UUBL', 'Drizzle', 'Drought'],
+	},
+	{
+		name: "[Gen 6] RU",
+		mod: 'gen6',
+		searchShow: false,
+		ruleset: ['[Gen 6] UU'],
+		banlist: ['UU', 'RUBL'],
 	},
 	{
 		name: "[Gen 6] NU",
@@ -4298,24 +4458,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 	{
-		name: "[Gen 5] ZU",
-		mod: 'gen5',
-		searchShow: false,
-		ruleset: ['[Gen 5] PU'],
-		banlist: [
-			// PU
-			'Audino', 'Banette', 'Beheeyem', 'Bronzor', 'Dodrio', 'Duosion', 'Dwebble', 'Fraxure', 'Gabite', 'Golduck',
-			'Huntail', 'Jumpluff', 'Klang', 'Krokorok', 'Mantine', 'Maractus', 'Mawile', 'Monferno', 'Murkrow', 'Natu',
-			'Purugly', 'Rampardos', 'Rapidash', 'Relicanth', 'Scraggy', 'Shiftry', 'Simisage', 'Sneasel', 'Stoutland',
-			'Stunfisk', 'Swanna', 'Swoobat', 'Tentacool', 'Torterra', 'Ursaring', 'Victreebel', 'Vileplume', 'Volbeat',
-			'Zebstrika', 'Zweilous',
-			// ZUBL
-			'Articuno', 'Dragonair', 'Glalie', 'Machoke', 'Marowak', 'Omanyte', 'Regigigas', 'Trubbish', 'Whirlipede',
-			'King\'s Rock', 'Quick Claw', 'Razor Fang', 'Baton Pass',
-		],
-		unbanlist: ['Damp Rock'],
-	},
-	{
 		name: "[Gen 5] CAP",
 		desc: "The Create-A-Pok&eacute;mon project is a community dedicated to exploring and understanding the competitive Pok&eacute;mon metagame by designing, creating, and playtesting new Pok&eacute;mon concepts.",
 		mod: 'gen5',
@@ -4418,14 +4560,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['AG'],
 	},
 	{
-		name: "[Gen 4] UU",
-		mod: 'gen4',
-		searchShow: false,
-		ruleset: ['[Gen 4] OU', '!Baton Pass Stat Trap Clause', '!Freeze Clause Mod'],
-		banlist: ['OU', 'UUBL', 'Baton Pass'],
-		unbanlist: ['Arena Trap', 'Snow Cloak', 'Quick Claw', 'Swagger'],
-	},
-	{
 		name: "[Gen 4] NU",
 		mod: 'gen4',
 		searchShow: false,
@@ -4471,6 +4605,18 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen4',
 		searchShow: false,
 		ruleset: ['[Gen 4] OU', '+CAP'],
+	},
+	{
+		name: "[Gen 4] PU",
+		mod: 'gen4',
+		searchShow: false,
+		ruleset: ['[Gen 4] NU'],
+		banlist: [
+			'Articuno', 'Cacturne', 'Charizard', 'Cradily', 'Dodrio', 'Drifblim', 'Dusclops', 'Electrode', 'Floatzel', 'Gardevoir', 'Gligar', 'Golem',
+			'Grumpig', 'Haunter', 'Hitmonchan', 'Hypno', 'Jumpluff', 'Jynx', 'Lickilicky', 'Linoone', 'Magmortar', 'Magneton', 'Manectric', 'Medicham',
+			'Meganium', 'Nidoqueen', 'Ninetales', 'Piloswine', 'Poliwrath', 'Porygon2', 'Regice', 'Regirock', 'Roselia', 'Sandslash', 'Sharpedo', 'Shiftry',
+			'Skuntank', 'Slowking', 'Tauros', 'Typhlosion', 'Venomoth', 'Vileplume',
+		],
 	},
 	{
 		name: "[Gen 4] ZU",
@@ -4550,6 +4696,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: ['Standard'],
 		banlist: ['Uber', 'OU', 'UUBL', 'UU', 'RUBL', 'Smeargle + Ingrain', 'Arena Trap', 'Baton Pass', 'Swagger'],
+	},
+	{
+		name: "[Gen 3] UU",
+		mod: 'gen3',
+		searchShow: false,
+		ruleset: ['Standard'],
+		banlist: ['Uber', 'OU', 'UUBL', 'Smeargle + Ingrain', 'Arena Trap', 'Baton Pass', 'Swagger'],
 	},
 	{
 		name: "[Gen 3] NU",
