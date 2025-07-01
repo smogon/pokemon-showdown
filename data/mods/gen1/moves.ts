@@ -820,8 +820,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				let uncappedDamage = move.hit > 1 ? this.lastDamage : this.actions.getDamage(source, target, move);
 				if (move.id === 'bide') uncappedDamage = source.volatiles['bide'].damage * 2;
 				if (!uncappedDamage && uncappedDamage !== 0) return null;
-				uncappedDamage = this.runEvent('SubDamage', target, source, move, uncappedDamage);
-				if (!uncappedDamage && uncappedDamage !== 0) return uncappedDamage;
 				this.lastDamage = uncappedDamage;
 				target.volatiles['substitute'].hp -= uncappedDamage > target.volatiles['substitute'].hp ?
 					target.volatiles['substitute'].hp : uncappedDamage;

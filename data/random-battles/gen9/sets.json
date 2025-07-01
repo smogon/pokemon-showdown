@@ -480,7 +480,7 @@
         ]
     },
     "dodrio": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1890,7 +1890,7 @@
         ]
     },
     "mightyena": {
-        "level": 95,
+        "level": 96,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2164,7 +2164,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Earthquake", "Lava Plume", "Rapid Spin", "Solar Beam", "Stealth Rock", "Yawn"],
+                "movepool": ["Earthquake", "Fire Blast", "Lava Plume", "Rapid Spin", "Solar Beam", "Stealth Rock", "Yawn"],
                 "abilities": ["Drought"],
                 "teraTypes": ["Grass"]
             },
@@ -2198,15 +2198,9 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Earthquake", "Outrage", "Stone Edge", "U-turn"],
+                "movepool": ["Dragon Dance", "Earthquake", "Outrage", "Stone Edge", "U-turn"],
                 "abilities": ["Levitate"],
                 "teraTypes": ["Ground", "Rock", "Steel"]
-            },
-            {
-                "role": "Setup Sweeper",
-                "movepool": ["Dragon Dance", "Earthquake", "Scale Shot", "Stone Edge"],
-                "abilities": ["Levitate"],
-                "teraTypes": ["Dragon", "Ground", "Rock", "Steel"]  
             }
         ]
     },
@@ -3000,7 +2994,7 @@
         ]
     },
     "abomasnow": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -4063,7 +4057,7 @@
         ]
     },
     "basculegion": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "AV Pivot",
@@ -4286,7 +4280,7 @@
         "sets": [
             {
                 "role": "Fast Bulky Setup",
-                "movepool": ["Calm Mind", "Energy Ball", "Fire Blast", "Pain Split", "Shadow Ball", "Substitute", "Will-O-Wisp"],
+                "movepool": ["Calm Mind", "Energy Ball", "Fire Blast", "Flame Charge", "Pain Split", "Shadow Ball", "Substitute", "Will-O-Wisp"],
                 "abilities": ["Flame Body", "Flash Fire"],
                 "teraTypes": ["Fire", "Ghost", "Grass"]
             },
@@ -5347,7 +5341,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Earthquake", "Heavy Slam", "Rest", "Roar", "Sleep Talk", "Stealth Rock", "Stone Edge"],
+                "movepool": ["Earthquake", "Heavy Slam", "Roar", "Stealth Rock", "Stone Edge"],
                 "abilities": ["Stamina"],
                 "teraTypes": ["Steel"]
             }
@@ -5918,7 +5912,7 @@
         ]
     },
     "alcremie": {
-        "level": 89,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -6673,10 +6667,10 @@
         "level": 83,
         "sets": [
             {
-                "role": "Fast Support",
-                "movepool": ["Hurricane", "Roost", "Thunder Wave", "Thunderbolt", "U-turn"],
+                "role": "Bulky Attacker",
+                "movepool": ["Discharge", "Hurricane", "Roost", "Thunderbolt", "U-turn"],
                 "abilities": ["Volt Absorb"],
-                "teraTypes": ["Electric", "Flying", "Steel", "Water"]
+                "teraTypes": ["Steel", "Water"]
             }
         ]
     },
@@ -7112,12 +7106,6 @@
                 "movepool": ["Crunch", "Seed Bomb", "Spore", "Sucker Punch"],
                 "abilities": ["Protosynthesis"],
                 "teraTypes": ["Dark", "Poison"]
-            },
-            {
-                "role": "Wallbreaker",
-                "movepool": ["Close Combat", "Crunch", "Seed Bomb", "Sucker Punch"],
-                "abilities": ["Protosynthesis"],
-                "teraTypes": ["Dark", "Fighting", "Poison"]
             }
         ]
     },
@@ -7601,7 +7589,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Horn Leech", "Ivy Cudgel", "Knock Off", "Power Whip", "Stomping Tantrum", "Swords Dance"],
+                "movepool": ["Horn Leech", "Ivy Cudgel", "Knock Off", "Power Whip", "Stomping Tantrum", "Swords Dance", "Trailblaze"],
                 "abilities": ["Mold Breaker"],
                 "teraTypes": ["Fire"]
             }

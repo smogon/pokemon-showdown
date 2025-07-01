@@ -145,7 +145,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (
 				effect.effectType === "Move" &&
 				!effect.multihit &&
-				(!effect.negateSecondary && !(effect.hasSheerForce && source.hasAbility('sheerforce')))
+				!(effect.hasSheerForce && source.hasAbility('sheerforce'))
 			) {
 				this.effectState.checkedAngerShell = false;
 			} else {
@@ -411,7 +411,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (
 				effect.effectType === "Move" &&
 				!effect.multihit &&
-				(!effect.negateSecondary && !(effect.hasSheerForce && source.hasAbility('sheerforce')))
+				!(effect.hasSheerForce && source.hasAbility('sheerforce'))
 			) {
 				this.effectState.checkedBerserk = false;
 			} else {
@@ -5469,7 +5469,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				target.addVolatile('charge');
 			}
 		},
-		onAllySideConditionStart(target, source, sideCondition) {
+		onSideConditionStart(side, source, sideCondition) {
 			const pokemon = this.effectState.target;
 			if (sideCondition.id === 'tailwind') {
 				pokemon.addVolatile('charge');
@@ -5494,7 +5494,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return null;
 			}
 		},
-		onAllySideConditionStart(target, source, sideCondition) {
+		onSideConditionStart(side, source, sideCondition) {
 			const pokemon = this.effectState.target;
 			if (sideCondition.id === 'tailwind') {
 				this.boost({ atk: 1 }, pokemon, pokemon);
