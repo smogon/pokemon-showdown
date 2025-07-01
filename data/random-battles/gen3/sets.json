@@ -705,7 +705,7 @@
         ]
     },
     "weezing": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1438,7 +1438,7 @@
         ]
     },
     "umbreon": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Staller",
@@ -1866,7 +1866,7 @@
         ]
     },
     "stantler": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1923,7 +1923,7 @@
         ]
     },
     "raikou": {
-        "level": 73,
+        "level": 74,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2946,7 +2946,7 @@
         ]
     },
     "metagross": {
-        "level": 73,
+        "level": 72,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2978,7 +2978,7 @@
         ]
     },
     "regice": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Attacker",
