@@ -244,7 +244,7 @@ export const commands: Chat.ChatCommands = {
 			break;
 		case 'ip':
 			const ip = targets.shift();
-			searchCmd = `user='${ip}'${searchCmd.length ? `, ${searchCmd}` : ``}`;
+			searchCmd = `ip=${ip}${searchCmd.length ? `, ${searchCmd}` : ``}`;
 			targets.unshift(`ip=${ip}`);
 			break;
 		}
