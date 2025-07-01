@@ -256,6 +256,9 @@ interface ModdedBattleActions {
 
 interface ModdedBattleSide {
 	inherit?: true;
+	addSideCondition?: (
+		this: Side, status: string | Condition, source: Pokemon | 'debug' | null, sourceEffect: Effect | null
+	) => boolean;
 	allies?: (this: Side, all?: boolean) => Pokemon[];
 	canDynamaxNow?: (this: Side) => boolean;
 	chooseSwitch?: (this: Side, slotText?: string) => any;
@@ -334,6 +337,15 @@ interface ModdedBattleQueue extends Partial<BattleQueue> {
 interface ModdedField extends Partial<Field> {
 	inherit?: true;
 	suppressingWeather?: (this: Field) => boolean;
+	addPseudoWeather?: (
+		this: Field, status: string | Condition, source: Pokemon | 'debug' | null, sourceEffect: Effect | null
+	) => boolean;
+	setWeather?: (
+		this: Field, status: string | Condition, source: Pokemon | 'debug' | null, sourceEffect: Effect | null
+	) => boolean | null;
+	setTerrain?: (
+		this: Field, status: string | Effect, source: Pokemon | 'debug' | null, sourceEffect: Effect | null
+	) => boolean;
 }
 
 interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
