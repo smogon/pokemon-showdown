@@ -484,7 +484,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	politoed: {
-		tier: "NU",
+		tier: "NUBL",
 		doublesTier: "DUU",
 		natDexTier: "RU",
 	},
