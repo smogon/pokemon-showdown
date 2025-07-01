@@ -51,4 +51,18 @@ describe('Magnet Pull', () => {
 		battle.makeChoices('move substitute', 'switch 2');
 		assert.species(battle.p2.active[0], 'Arcanine');
 	});
+
+	describe('[Gen 3]', () => {
+		it('should prevent Steel-type allies from switching out normally', () => {
+			battle = common.gen(3).createBattle({ gameType: 'doubles' }, [[
+				{ species: "Magnezone", ability: 'magnetpull', moves: ['sleeptalk'] },
+				{ species: "Heatran", moves: ['sleeptalk'] },
+				{ species: "Wynaut", moves: ['sleeptalk'] },
+			], [
+				{ species: "Gardevoir", moves: ['sleeptalk'] },
+				{ species: "Starmie", moves: ['sleeptalk'] },
+			]]);
+			assert.trapped(() => battle.makeChoices('move sleeptalk, switch 3', 'auto'), true);
+		});
+	});
 });
