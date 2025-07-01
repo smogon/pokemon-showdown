@@ -1087,8 +1087,12 @@ export class TeamValidator {
 		}
 
 		if (!problems.length) {
-			if (set.gender === '' && !species.gender) {
-				set.gender = ['M', 'F'][Math.floor(Math.random() * 2)];
+			if (!set.gender) {
+				if (this.gen <= 5 || ruleTable.has('obtainablemisc')) {
+					set.gender = species.gender || ['M', 'F'][Math.floor(Math.random() * 2)];
+				} else {
+					set.gender = 'N';
+				}
 			}
 			if (adjustLevel) set.level = adjustLevel;
 			return null;

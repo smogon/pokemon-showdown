@@ -241,17 +241,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		// Mostly hardcoded in team-validator.ts
 		onChangeSet(set) {
 			const species = this.dex.species.get(set.species);
-
-			if (species.gender) {
-				if (set.gender !== species.gender) {
-					set.gender = species.gender;
-				}
-			} else {
-				if (set.gender !== 'M' && set.gender !== 'F') {
-					set.gender = '';
-				}
-			}
-
 			// limit one of each move
 			// repealing this will not actually let you USE multiple moves, because of a cart bug:
 			// https://twitter.com/DaWoblefet/status/1396217830006132737
