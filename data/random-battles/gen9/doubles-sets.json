@@ -173,7 +173,7 @@
             },
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Heat Wave", "Fire Blast", "Solar Beam", "Protect"],
+                "movepool": ["Fire Blast", "Heat Wave", "Protect", "Solar Beam"],
                 "abilities": ["Drought"],
                 "teraTypes": ["Fire", "Grass"]
             }
