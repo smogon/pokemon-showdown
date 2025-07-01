@@ -530,144 +530,17 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Rayquaza', 'Reshiram', 'Shaymin-Sky', 'Sneasler', 'Spectrier', 'Zacian', 'Zacian-Crowned', 'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Moody', 'Shadow Tag', 'King\'s Rock', 'Razor Fang',
 			'Baton Pass', 'Fairy Lock', 'Last Respects', 'Shed Tail',
 		],
-		side: {
-			addSideCondition(status, source = null, sourceEffect = null) {
-				if (!source && this.battle.event?.target) source = this.battle.event.target;
-				if (source === 'debug') source = this.active[0];
-				if (!source) throw new Error(`setting sidecond without a source`);
-				if (!source.getSlot) source = (source as any as Side).active[0];
-
-				status = this.battle.dex.conditions.get(status);
-				if (this.sideConditions[status.id]) {
-					if (!(status as any).onSideRestart) return false;
-					return this.battle.singleEvent('SideRestart', status, this.sideConditions[status.id], this, source, sourceEffect);
-				}
-				this.sideConditions[status.id] = this.battle.initEffectState({
-					id: status.id,
-					target: this,
-					source,
-					sourceSlot: source.getSlot(),
-					duration: status.duration,
-				});
-				if (status.durationCallback) {
-					this.sideConditions[status.id].duration =
-						status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
-				}
-				if (status.duration) {
-					this.sideConditions[status.id].duration = 0;
-				}
-				if (!this.battle.singleEvent('SideStart', status, this.sideConditions[status.id], this, source, sourceEffect)) {
-					delete this.sideConditions[status.id];
-					return false;
-				}
-				this.battle.runEvent('SideConditionStart', source, source, status);
-				return true;
-			},
+		onWeatherChange() {
+			this.field.weatherState.duration = 0;
 		},
-		field: {
-			addPseudoWeather(status, source = null, sourceEffect = null) {
-				if (!source && this.battle.event?.target) source = this.battle.event.target;
-				if (source === 'debug') source = this.battle.sides[0].active[0];
-				status = this.battle.dex.conditions.get(status);
-
-				let state = this.pseudoWeather[status.id];
-				if (state) {
-					if (!(status as any).onFieldRestart) return false;
-					return this.battle.singleEvent('FieldRestart', status, state, this, source, sourceEffect);
-				}
-				state = this.pseudoWeather[status.id] = this.battle.initEffectState({
-					id: status.id,
-					source,
-					sourceSlot: source?.getSlot(),
-					duration: status.duration,
-				});
-				if (status.durationCallback) {
-					if (!source) throw new Error(`setting fieldcond without a source`);
-					state.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
-				}
-				if (state.duration && state.duration > 1 && state.id !== 'echoedvoice') {
-					state.duration = 0;
-				}
-				if (!this.battle.singleEvent('FieldStart', status, state, this, source, sourceEffect)) {
-					delete this.pseudoWeather[status.id];
-					return false;
-				}
-				this.battle.runEvent('PseudoWeatherChange', source, source, status);
-				return true;
-			},
-			setWeather(status, source = null, sourceEffect = null) {
-				status = this.battle.dex.conditions.get(status);
-				if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-				if (!source && this.battle.event?.target) source = this.battle.event.target;
-				if (source === 'debug') source = this.battle.sides[0].active[0];
-
-				if (this.weather === status.id) {
-					if (sourceEffect && sourceEffect.effectType === 'Ability') {
-						if (this.battle.gen > 5 || this.weatherState.duration === 0) {
-							return false;
-						}
-					} else if (this.battle.gen > 2 || status.id === 'sandstorm') {
-						return false;
-					}
-				}
-				if (source) {
-					const result = this.battle.runEvent('SetWeather', source, source, status);
-					if (!result) {
-						if (result === false) {
-							if ((sourceEffect as Move)?.weather) {
-								this.battle.add('-fail', source, sourceEffect, '[from] ' + this.weather);
-							} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
-								this.battle.add('-ability', source, sourceEffect, '[from] ' + this.weather, '[fail]');
-							}
-						}
-						return null;
-					}
-				}
-				const prevWeather = this.weather;
-				const prevWeatherState = this.weatherState;
-				this.weather = status.id;
-				this.weatherState = this.battle.initEffectState({ id: status.id });
-				if (source) {
-					this.weatherState.source = source;
-					this.weatherState.sourceSlot = source.getSlot();
-				}
-				if (!this.battle.singleEvent('FieldStart', status, this.weatherState, this, source, sourceEffect)) {
-					this.weather = prevWeather;
-					this.weatherState = prevWeatherState;
-					return false;
-				}
-				this.battle.eachEvent('WeatherChange', sourceEffect);
-				return true;
-			},
-			setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
-				status = this.battle.dex.conditions.get(status);
-				if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
-				if (!source && this.battle.event?.target) source = this.battle.event.target;
-				if (source === 'debug') source = this.battle.sides[0].active[0];
-				if (!source) throw new Error(`setting terrain without a source`);
-
-				if (this.terrain === status.id) return false;
-				const prevTerrain = this.terrain;
-				const prevTerrainState = this.terrainState;
-				this.terrain = status.id;
-				this.terrainState = this.battle.initEffectState({
-					id: status.id,
-					source,
-					sourceSlot: source.getSlot(),
-					duration: status.duration,
-				});
-				if (status.durationCallback) {
-					this.terrainState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
-				}
-				this.terrainState.duration = 0;
-				if (!this.battle.singleEvent('FieldStart', status, this.terrainState, this, source, sourceEffect)) {
-					this.terrain = prevTerrain;
-					this.terrainState = prevTerrainState;
-					return false;
-				}
-				this.battle.eachEvent('TerrainChange', sourceEffect);
-				return true;
-			},
+		onTerrainChange() {
+			this.field.terrainState.duration = 0;
+		},
+		onPseudoWeatherChange(target, source, pseudoWeather) {
+			this.field.pseudoWeather[pseudoWeather.id].duration = 0;
+		},
+		onSideConditionStart(side, source, sideCondition) {
+			side.sideConditions[sideCondition.id].duration = 0;
 		},
 	},
 	{
