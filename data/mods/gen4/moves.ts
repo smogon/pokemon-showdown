@@ -1312,10 +1312,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		self: null,
 		condition: {
 			duration: 1,
-			onAnySetStatus(status, target, source, effect) {
-				if (source !== this.effectState.target || effect.effectType !== 'Move' ||
-					effect.id !== 'psychoshift') return;
+			onSourceSetStatus(status, target, source, sourceEffect) {
+				if (sourceEffect.effectType !== 'Move' || sourceEffect.id !== 'psychoshift' ||
+					sourceEffect.id !== this.effectState.id) return;
 				source.cureStatus();
+				source.removeVolatile('psychoshift');
 			},
 		},
 	},
