@@ -645,7 +645,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 				this.add('poke', pokemon.side.id, details, '');
 			}
-			this.makeRequest('teampreview');
 			if (this.ruleTable.has(`teratypepreview`)) {
 				for (const side of this.sides) {
 					let buf = ``;
@@ -656,6 +655,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 					this.add(`${buf}`);
 				}
 			}
+			this.makeRequest('teampreview');
 		},
 	},
 	teratypepreview: {
