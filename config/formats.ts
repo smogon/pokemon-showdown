@@ -2787,7 +2787,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	},
 	{
 		name: "[Gen 9] Random Battle (Hyperblitz)",
-		desc: `[Gen 9] Random Battle Blitz, but even faster!`,
+		desc: `[Gen 9] Random Battle (Blitz), but even faster!`,
 		mod: 'gen9',
 		team: 'random',
 		bestOfDefault: true,
