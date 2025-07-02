@@ -947,7 +947,7 @@ export const vpnSets: VPNSets = {
 		species: 'Tropius', ability: ['Harvest', 'Gale Wings'], item: 'Sitrus Berry', gender: '',
 		moves: ['Leech Seed', 'Protect', 'Substitute'],
 		signatureMove: 'Air Slash',
-		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Bold', teraType: 'Stellar', level: 90,
+		evs: { hp: 80, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Bold', teraType: 'Stellar', level: 90,
 	},
 	Chimecho: {
 		species: 'Chimecho', ability: 'Fairy Ringer', item: 'Leftovers', gender: '',
@@ -2645,7 +2645,7 @@ export const vpnSets: VPNSets = {
 		species: 'Greedent', ability: 'Cheek Pouch', item: 'Sitrus Berry', gender: '',
 		moves: ['Swords Dance', 'Knock Off', 'Earthquake'],
 		signatureMove: 'Rage',
-		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Adamant', teraType: 'Stellar', level: 87,
+		evs: { hp: 80, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Adamant', teraType: 'Stellar', level: 87,
 	},
 	Drednaw: {
 		species: 'Drednaw', ability: 'Swift Swim', item: 'White Herb', gender: '',
