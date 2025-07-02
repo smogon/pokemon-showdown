@@ -1096,7 +1096,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "NFE",
 	},
 	porygon2: {
-		tier: "NFE",
+		tier: "ZU",
 		doublesTier: "DUU",
 		natDexTier: "NFE",
 	},
@@ -1502,7 +1502,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "NFE",
 	},
 	sneaselhisui: {
-		tier: "NFE",
+		tier: "ZU",
 	},
 	weavile: {
 		tier: "OU",
