@@ -602,7 +602,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	slowbromega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "RU",
+		natDexTier: "UU",
 	},
 	slowbrogalar: {
 		tier: "PU",
