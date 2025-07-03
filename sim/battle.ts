@@ -3027,8 +3027,6 @@ export class Battle {
 			return;
 		}
 
-		if (side.choice.updateOnUndo) side.emitRequest();
-
 		side.clearChoice();
 	}
 
