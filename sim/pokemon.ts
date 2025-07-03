@@ -329,11 +329,8 @@ export class Pokemon {
 
 		set.level = this.battle.clampIntRange(set.adjustLevel || set.level || 100, 1, 9999);
 		this.level = set.level;
-		const genders: { [key: string]: GenderName } = { M: 'M', F: 'F', N: 'N' };
-		this.gender = genders[set.gender] || this.species.gender;
-		if (!this.gender && (this.battle.gen < 6 || this.battle.ruleTable.has('obtainablemisc'))) {
-			this.gender = (this.battle.random(2) ? 'F' : 'M');
-		}
+		const genders: { [key: string]: GenderName | null } = { __proto__: null, M: 'M', F: 'F', N: 'N' };
+		this.gender = genders[set.gender] || this.species.gender || this.battle.sample(['M', 'F']);
 		if (this.gender === 'N') this.gender = '';
 		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
 		this.pokeball = toID(this.set.pokeball) || 'pokeball' as ID;
@@ -863,13 +860,14 @@ export class Pokemon {
 		return false;
 	}
 
-	ignoringItem() {
-		return !this.getItem().isPrimalOrb && !!(
-			this.itemState.knockedOff || // Gen 3-4
-			(this.battle.gen >= 5 && !this.isActive) ||
-			(!this.getItem().ignoreKlutz && this.hasAbility('klutz')) ||
-			this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']
-		);
+	ignoringItem(isFling = false) {
+		if (this.getItem().isPrimalOrb) return false;
+		if (this.itemState.knockedOff) return true; // Gen 3-4
+		if (this.battle.gen >= 5 && !this.isActive) return true;
+		if (this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']) return true;
+		// check Fling first to avoid infinite recursion
+		if (isFling) return this.battle.gen >= 5 && this.hasAbility('klutz');
+		return !this.getItem().ignoreKlutz && this.hasAbility('klutz');
 	}
 
 	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
