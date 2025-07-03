@@ -643,20 +643,25 @@ export class Side {
 			if (pokemon.volatiles[lockedMoveID]?.targetLoc) {
 				lockedMoveTargetLoc = pokemon.volatiles[lockedMoveID].targetLoc;
 			}
+			if (pokemon.maybeLocked) this.choice.cantUndo = true;
 			this.choice.actions.push({
 				choice: 'move',
 				pokemon,
 				targetLoc: lockedMoveTargetLoc,
 				moveid: lockedMoveID,
 			});
-			if (pokemon.maybeLocked) this.choice.cantUndo = true;
 			return true;
 		} else if (!moves.length && !zMove) {
 			// Override action and use Struggle if there are no enabled moves with PP
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
 			if (this.battle.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
-			moveid = 'struggle';
 			if (pokemon.maybeLocked) this.choice.cantUndo = true;
+			this.choice.actions.push({
+				choice: 'move',
+				pokemon,
+				moveid: 'struggle',
+			});
+			return true;
 		} else if (moveid === 'testfight') {
 			// test fight button
 			if (!pokemon.maybeLocked) {
@@ -700,6 +705,11 @@ export class Side {
 							}
 							break;
 						}
+					}
+					if (req.canDynamax && req.moves.every(m => m.disabled || m.id === 'struggle')) {
+						req.canDynamax = false;
+						delete req.maxMoves;
+						updated = true;
 					}
 					return updated;
 				} });
@@ -812,6 +822,11 @@ export class Side {
 					updated = true;
 				}
 			}
+		}
+		if (req.canDynamax && req.moves.every(m => m.disabled || m.id === 'struggle')) {
+			req.canDynamax = false;
+			delete req.maxMoves;
+			updated = true;
 		}
 		return updated;
 	}
