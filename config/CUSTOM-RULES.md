@@ -45,7 +45,7 @@ Bans are just a `-` followed by the thing you want to ban.
 
 `- Future` - ban things that only appears in a future generation (such as Arceus in Gen 1)
 
-`- Custom` - ban made-up things other than CAP (such as Magikarp's Revenge, or Staff Bros moves)
+`- Custom` - ban made-up things other than CAP (such as Magikarp's Revenge)
 
 `- Nonexistent` - catch-all to ban all nonexistent Pokémon, items, etc. Includes: `- CAP, - Past, - Future, - LGPE`
 
