@@ -649,7 +649,7 @@ export class Side {
 				moveid: lockedMoveID,
 			});
 			return true;
-		} else if (!moves.length && !zMove) {
+		} else if (!moves.length) {
 			// Override action and use Struggle if there are no enabled moves with PP
 			// Gen 4 and earlier announce a Pokemon has no moves left before the turn begins, and only to that player's side.
 			if (this.battle.gen <= 4) this.send('-activate', pokemon, 'move: Struggle');
