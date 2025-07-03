@@ -1322,8 +1322,14 @@ export const vpnSets: VPNSets = {
 		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Adamant', teraType: 'Stellar', level: 88,
 	},
 	Froslass: {
-		species: 'Froslass', ability: ['Death Aura', 'Sheer Heart'], item: 'Focus Sash', gender: '',
-		moves: ['Bitter Malice', 'Freeze-Dry', ['Spikes', 'Nasty Plot']],
+		species: 'Froslass', ability: 'Sheer Heart', item: 'Focus Sash', gender: '',
+		moves: ['Bitter Malice', 'Freeze-Dry', 'Spikes'],
+		signatureMove: 'Taunt',
+		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Modest', teraType: 'Stellar', level: 87,
+	},
+	'Froslass 2': {
+		species: 'Froslass', ability: 'Death Aura', item: 'Heavy-Duty Boots', gender: '',
+		moves: ['Bitter Malice', ['Freeze-Dry', 'Focus Blast'], 'Nasty Plot'],
 		signatureMove: 'Frost Breath',
 		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Modest', teraType: 'Stellar', level: 87,
 	},
