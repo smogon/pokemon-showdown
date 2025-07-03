@@ -2786,12 +2786,12 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 3,
 	},
 	{
-		name: "[Gen 9] Random Battle (Hyperblitz)",
-		desc: `[Gen 9] Random Battle (Blitz), but even faster!`,
+		name: "[Gen 9] Random Battle (Hyperblitz, Auto Choose)",
+		desc: `[Gen 9] Random Battle (Blitz), but even faster! If a player runs out of time on a turn, the first available option is automatically selected.`,
 		mod: 'gen9',
 		team: 'random',
 		bestOfDefault: true,
-		ruleset: ['[Gen 9] Random Battle (Blitz)', '!! Timer Starting = 10', '!! Timer Add Per Turn = 10', '!! Timer Max Per Turn = 10'],
+		ruleset: ['[Gen 9] Random Battle (Blitz)', '!! Timer Starting = 900', '!! Timer Add Per Turn = 10', '!! Timer Max Per Turn = 10', 'Timeout Auto Choose'],
 	},
 
 	// Randomized Metas
