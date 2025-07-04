@@ -219,10 +219,11 @@ describe('Team Validator', () => {
 		this.timeout(0);
 		const formatid = 'gen9nationaldex35pokes@@@!obtainable';
 		const allowed = Dex.formats.get(formatid).unbanlist
-			.map(x => Dex.formats.validateRule(`+${x}`))
+			?.map(x => Dex.formats.validateRule(`+${x}`))
 			.filter(x => x.startsWith('+pokemon:') || x.startsWith('+basepokemon:'))
 			.flatMap(x => x.startsWith('+pokemon:') ? x.slice(9) : Dex.species.get(x.slice(13)).formeOrder)
 			.map(toID);
+		if (!allowed) return;
 		for (const species of Dex.species.all()) {
 			// These are covered by Obtainable ruleset
 			if (species.name.endsWith('-Gmax') || species.isNonstandard === 'CAP') {
