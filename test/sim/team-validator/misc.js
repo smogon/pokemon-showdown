@@ -213,4 +213,27 @@ describe('Team Validator', () => {
 		];
 		assert.legalTeam(team, 'gen8ou');
 	});
+
+	// Sometimes a Pokemon gets marked as NDZU or some such nonexistent tier on accident, resulting in it not being covered by the banlist.
+	it('should reject all Pokemon in the 35 Pokes format that are not explicitly allowed', function () {
+		this.timeout(0);
+		const formatid = 'gen9nationaldex35pokes@@@!obtainable';
+		const allowed = Dex.formats.get(formatid).unbanlist
+			.map(x => Dex.formats.validateRule(`+${x}`))
+			.filter(x => x.startsWith('+pokemon:') || x.startsWith('+basepokemon:'))
+			.flatMap(x => x.startsWith('+pokemon:') ? x.slice(9) : Dex.species.get(x.slice(13)).formeOrder)
+			.map(toID);
+		for (const species of Dex.species.all()) {
+			// These are covered by Obtainable ruleset
+			if (species.name.endsWith('-Gmax') || species.isNonstandard === 'CAP') {
+				continue;
+			}
+			const team = [{ species: species.id, ability: 'blaze', moves: ['flamethrower'], evs: { hp: 1 } }];
+			if (allowed.includes(species.id)) {
+				assert.legalTeam(team, formatid, `${species.name} should have been accepted.`);
+			} else {
+				assert.false.legalTeam(team, formatid, `${species.name} should have been rejected.`);
+			}
+		}
+	});
 });
