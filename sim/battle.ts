@@ -24,6 +24,7 @@ import { State } from './state';
 import { BattleQueue, type Action } from './battle-queue';
 import { BattleActions } from './battle-actions';
 import { Utils } from '../lib/utils';
+import { Format } from './dex-formats';
 declare const __version: any;
 
 export type ChannelID = 0 | 1 | 2 | 3 | 4;
@@ -58,7 +59,7 @@ export function extractChannelMessages<T extends ChannelID | -1>(message: string
 	return channelMessages;
 }
 
-interface BattleOptions {
+export interface BattleOptions {
 	format?: Format;
 	formatid: ID;
 	/** Output callback */
@@ -192,8 +193,16 @@ export class Battle {
 		this.log = [];
 		this.add('t:', Math.floor(Date.now() / 1000));
 
-		const format = options.format || Dex.formats.get(options.formatid, true);
-		this.format = format;
+		// @pokebedrock - Enabled Custom Formats
+		if (!!options.format && options.format.debug === undefined) {
+			// This is a format that was given as a loose object, needs to be ratified to a proper object
+			this.format = new Format(options.format);
+			// ==================================
+		} else {
+			this.format = options.format || Dex.formats.get(options.formatid, true);
+		}
+		const format = this.format;
+
 		this.dex = Dex.forFormat(format);
 		this.gen = this.dex.gen;
 		this.ruleTable = this.dex.formats.getRuleTable(format);
@@ -2507,6 +2516,8 @@ export class Battle {
 				if (pokemon.side.pokemonLeft) pokemon.side.pokemonLeft--;
 				if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
+				// @pokebedrock - Add killed message
+				this.add('-killed', pokemon, faintData.source, faintData.effect);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
 				if (pokemon.formeRegression && !pokemon.transformed) {
@@ -2623,7 +2634,8 @@ export class Battle {
 		switch (action.choice) {
 		case 'start': {
 			for (const side of this.sides) {
-				if (side.pokemonLeft) side.pokemonLeft = side.pokemon.length;
+				// @pokebedrock - Exclude party mons that start fainted
+				if (side.pokemonLeft) side.pokemonLeft = side.pokemon.filter(pk => !pk.fainted).length;
 				this.add('teamsize', side.id, side.pokemon.length);
 			}
 

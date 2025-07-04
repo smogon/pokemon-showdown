@@ -65,6 +65,8 @@ export interface PokemonSwitchRequestData {
 	 * @see {Pokemon#fullname}
 	 */
 	ident: string;
+	// UUID sent from @pokebedrock
+	uuid: string;
 	/**
 	 * Details string.
 	 * @see {Pokemon#details}
@@ -89,9 +91,24 @@ export interface PokemonSwitchRequestData {
 	reviving?: boolean;
 	teraType?: string;
 	terastallized?: string;
+
+	// @pokebedrock
+	types: string[];
+	// @pokebedrock
+	boosts: { [stat: string]: number };
+	// @pokebedrock
+	status?: string;
 }
 export interface PokemonMoveRequestData {
-	moves: { move: string, id: ID, target?: string, disabled?: string | boolean, disabledSource?: string }[];
+	moves: {
+		move: string,
+		id: ID,
+		target?: string,
+		// @pokebedrock
+		pp?: number,
+		disabled?: string | boolean,
+		disabledSource?: string,
+	}[];
 	maybeDisabled?: boolean;
 	maybeLocked?: boolean;
 	trapped?: boolean;
@@ -114,6 +131,8 @@ export interface SideRequestData {
 	/** Side ID (`p1`, `p2`, `p3`, or `p4`), not the ID of the side's name. */
 	id: SideID;
 	pokemon: PokemonSwitchRequestData[];
+	// @pokebedrock
+	foePokemon: PokemonSwitchRequestData[];
 	noCancel?: boolean;
 }
 export interface SwitchRequest {
@@ -324,9 +343,16 @@ export class Side {
 			name: this.name,
 			id: this.id,
 			pokemon: [] as PokemonSwitchRequestData[],
+			// @pokebedrock
+			foePokemon: [] as PokemonSwitchRequestData[],
 		};
 		for (const pokemon of this.pokemon) {
 			data.pokemon.push(pokemon.getSwitchRequestData(forAlly));
+		}
+		// @pokebedrock
+		for (const pokemon of this.foe.active) {
+			if (!pokemon) continue;
+			data.foePokemon.push(pokemon.getSwitchRequestData(forAlly));
 		}
 		return data;
 	}

@@ -2176,7 +2176,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					}
 				}
 
-				if (isCrit && !suppressMessages) this.battle.add('-crit', target);
+				// @pokebedrock - Add source to crit message
+				if (isCrit && !suppressMessages) this.battle.add('-crit', target, pokemon);
 
 				if (pokemon.status === 'brn' && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
 					if (this.battle.gen < 6 || move.id !== 'facade') {

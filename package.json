@@ -1,10 +1,11 @@
 {
-  "name": "pokemon-showdown",
-  "description": "The server for the Pokémon Showdown battle simulator",
-  "version": "0.11.10",
+  "name": "pokebedrock-showdown",
+  "description": "A flushed version of the Pokémon Showdown server, designed for PokeBedrock.",
+  "version": "0.1.0",
   "main": "dist/sim/index.js",
   "types": "dist/sim/index.d.ts",
   "dependencies": {
+    "@minecraft/server": "^2.1.0-beta.1.21.90-stable",
     "esbuild": "^0.25.0",
     "mysql2": "^3.9.7",
     "preact": "^10.5.15",

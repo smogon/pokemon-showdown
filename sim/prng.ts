@@ -212,10 +212,16 @@ export class SodiumRNG implements RNG {
 		// TODO: Fix that @types/node >14 issue
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore Web Crypto isn't actually in Node 18
-		if (typeof crypto === 'undefined') globalThis.crypto = require('node:crypto');
-		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-		// @ts-ignore Web Crypto _is_ available in newer Node
-		crypto.getRandomValues(seed);
+		if (typeof crypto === 'undefined') {
+			// @pokebedrock - insecure fallback for platforms without crypto support, like minecraft
+			for (let i = 0; i < 4; i++) {
+				seed[i] = Math.trunc(Math.random() * 2 ** 32);
+			}
+		} else {
+			// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+			// @ts-ignore Web Crypto _is_ available in newer Node
+			crypto.getRandomValues(seed);
+		}
 		// 32 bits each, 128 bits total (16 bytes)
 		const strSeed = seed[0].toString(16).padStart(8, '0') +
 			seed[1].toString(16).padStart(8, '0') +

@@ -10,6 +10,21 @@
 import { Dex, toID } from './dex';
 import type { PRNG, PRNGSeed } from './prng';
 
+/**
+ * Represents additional move data
+ * @pokebedrock
+ */
+export interface AdditionalMoveInfo {
+	/**
+	 * The maximum amount of PP the move has.
+	 */
+	maxPp: number;
+	/**
+	 * The current amount of PP the move has.
+	 */
+	pp: number;
+}
+
 export interface PokemonSet {
 	/**
 	 * Nickname. Should be identical to its base species if not specified
@@ -21,6 +36,22 @@ export interface PokemonSet {
 	 * This should always be converted to an id before use.
 	 */
 	species: string;
+	/**
+   * The unique id of the pokemon from @pokebedrock
+   */
+	uuid?: string;
+	/**
+	 * The current health of the pokemon from @pokebedrock
+	 */
+	currentHealth?: number;
+	/**
+	 * The status of the pokemon from @pokebedrock
+	 */
+	status?: string;
+	/**
+	 * The duration of the status from @pokebedrock
+	 */
+	statusDuration?: number;
 	/**
 	 * This can be an id, e.g. "whiteherb" or a full name, e.g. "White Herb".
 	 * This should always be converted to an id before use.
@@ -38,6 +69,10 @@ export interface PokemonSet {
 	 * These should always be converted to ids before use.
 	 */
 	moves: string[];
+	/**
+	 * Passes in the maxPP and currentPP of the moves that the pokemon has in @pokebedrock
+	 */
+	movesInfo?: AdditionalMoveInfo[];
 	/**
 	 * This can be an id, e.g. "adamant" or a full name, e.g. "Adamant".
 	 * This should always be converted to an id before use.
@@ -238,6 +273,24 @@ export const Teams = new class Teams {
 			set.species = this.unpackName(buf.substring(i, j), Dex.species) || set.name;
 			i = j + 1;
 
+			// uuid - @pokebedrock
+			j = buf.indexOf('|', i);
+			if (j < 0) return null;
+			set.uuid = buf.substring(i, j);
+			i = j + 1;
+
+			// currentHealth - @pokebedrock
+			j = buf.indexOf('|', i);
+			if (j < 0) return null;
+			set.currentHealth = parseInt(buf.substring(i, j));
+			i = j + 1;
+
+			// status - @pokebedrock
+			j = buf.indexOf('|', i);
+			if (j < 0) return null;
+			set.status = buf.substring(i, j);
+			i = j + 1;
+
 			// item
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
@@ -258,6 +311,21 @@ export const Teams = new class Teams {
 			j = buf.indexOf('|', i);
 			if (j < 0) return null;
 			set.moves = buf.substring(i, j).split(',', 24).map(name => this.unpackName(name, Dex.moves));
+			i = j + 1;
+
+			// movesInfo - @pokebedrock
+			j = buf.indexOf('|', i);
+			if (j < 0) return null;
+			set.movesInfo = buf
+				.substring(i, j)
+				.split(',', 24)
+				.map(moveData => {
+					const moveInfo: AdditionalMoveInfo = {} as AdditionalMoveInfo;
+					const data = moveData.split('/');
+					moveInfo.pp = parseInt(data[0]);
+					moveInfo.maxPp = parseInt(data[1]);
+					return moveInfo;
+				});
 			i = j + 1;
 
 			// nature

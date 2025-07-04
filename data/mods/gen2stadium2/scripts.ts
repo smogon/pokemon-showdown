@@ -348,7 +348,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			let noburndrop = false;
 
 			if (isCrit) {
-				if (!suppressMessages) this.battle.add('-crit', target);
+				// @pokebedrock - Add source to crit message
+				if (!suppressMessages) this.battle.add('-crit', target, source);
 				// Stat level modifications are ignored if they are neutral to or favour the defender.
 				// Reflect and Light Screen defensive boosts are only ignored if stat level modifications were also ignored as a result of that.
 				if (attacker.boosts[atkType] <= defender.boosts[defType]) {

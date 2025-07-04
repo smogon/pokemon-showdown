@@ -851,7 +851,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				move.ignoreOffensive = true;
 				move.ignoreDefensive = true;
 				level *= 2;
-				if (!suppressMessages) this.battle.add('-crit', target);
+				// @pokebedrock - Add source to crit message
+				if (!suppressMessages) this.battle.add('-crit', target, source);
 			}
 
 			if (move.ignoreOffensive) {

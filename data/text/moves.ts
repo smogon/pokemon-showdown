@@ -1,4 +1,4 @@
-export const MovesText: { [id: IDEntry]: MoveText } = {
+export const MovesText = {
 	"10000000voltthunderbolt": {
 		name: "10,000,000 Volt Thunderbolt",
 		desc: "Has a very high chance for a critical hit.",
@@ -7603,4 +7603,4 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 			shortDesc: "Nearly always goes first. Always crits.",
 		},
 	},
-};
+} as const satisfies Record<IDEntry, MoveText>;

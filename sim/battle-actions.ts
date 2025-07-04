@@ -139,11 +139,18 @@ export class BattleActions {
 		pokemon.abilityState.effectOrder = this.battle.effectOrder++;
 		pokemon.itemState.effectOrder = this.battle.effectOrder++;
 		this.battle.runEvent('BeforeSwitchIn', pokemon);
-		if (sourceEffect) {
-			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, `[from] ${sourceEffect}`);
-		} else {
-			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
-		}
+		// @pokebedrock - Add illusion uuid to switch message
+		const optionals = [
+			sourceEffect ? `[from] ${sourceEffect}` : null,
+			pokemon.illusion ? `[is] ${pokemon.uuid}` : null,
+		];
+		// @pokebedrock - Reorganize optionals check.
+		this.battle.add(
+			isDrag ? 'drag' : 'switch',
+			pokemon,
+			pokemon.getFullDetails,
+			...optionals.filter(Boolean)
+		);
 		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 		pokemon.previouslySwitchedIn++;
 
@@ -1805,7 +1812,8 @@ export class BattleActions {
 			}
 		}
 
-		if (isCrit && !suppressMessages) this.battle.add('-crit', target);
+		// @pokebedrock - Add source to crit message
+		if (isCrit && !suppressMessages) this.battle.add('-crit', target, pokemon);
 
 		if (pokemon.status === 'brn' && move.category === 'Physical' && !pokemon.hasAbility('guts')) {
 			if (this.battle.gen < 6 || move.id !== 'facade') {

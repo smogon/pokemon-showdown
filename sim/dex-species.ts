@@ -1,6 +1,6 @@
 import { assignMissingFields, BasicEffect, toID } from './dex-data';
 import { Utils } from '../lib/utils';
-import { isDeepStrictEqual } from 'node:util';
+import { type MoonPhase } from '@minecraft/server';
 
 interface SpeciesAbility {
 	0: string;
@@ -164,17 +164,114 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly prevo: string;
 	/** Evolutions. Array because many Pokemon have multiple evolutions. */
 	readonly evos: string[];
-	readonly evoType?: 'trade' | 'useItem' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold' | 'other';
+	readonly evoType?: 'trade'
+		| 'useItem'
+		| 'levelMove'
+		| 'levelExtra'
+		| 'levelFriendship'
+		| 'levelHold'
+		// @pokebedrock
+		| 'levelShed'
+		// @pokebedrock
+		| 'steps'
+		| 'other';
+	/**
+	 * The evolving Pokémon species must know a move with this type during the evolution trigger event
+	 * in order to evolve into this Pokémon species.
+	 * @pokebedrock
+	 */
+	readonly evoKnownMoveType?: string;
+	/**
+	 * The minimum required level of affection the evolving Pokémon species to evolve into this Pokémon species.
+	 * @pokebedrock
+	 */
+	readonly evoMinAffection?: number;
+	/**
+	 * The Pokémon species that must be in the players party in order for the evolving Pokémon species
+	 * to evolve into this Pokémon species.
+	 * @pokebedrock
+	 */
+	readonly evoPartySpecies?: string;
+	/**
+	 * Pokémon species for which this one must be traded.
+	 * @pokebedrock
+	 */
+	readonly evoTradeSpecies?: string;
 	/** Evolution condition. falsy if doesn't evolve. */
 	declare readonly evoCondition?: string;
 	/** Evolution item. falsy if doesn't evolve. */
 	declare readonly evoItem?: string;
+	/**
+	 * Evolution item use times. Pokemon must have this amount of the item given to them
+	 * @pokebedrock
+	 */
+	declare readonly evoItemAmount?: number;
+	/**
+	 * Evolution gender.
+	 * @pokebedrock
+	 */
+	declare readonly evoGender?: 'M' | 'F';
 	/** Evolution move. falsy if doesn't evolve. */
 	readonly evoMove?: string;
+	/**
+	 * Evolution move use times. Pokemon Must use the moves this amount of times
+	 * @pokebedrock
+	 */
+	readonly evoMoveUseTimes?: number;
+	/**
+	 * Evolution critical hit count. Pokemon must score this many critical hits in 1 battle.
+	 * @pokebedrock
+	 */
+	readonly evoCriticalHitCount?: number;
 	/** Region required to be in for evolution. falsy if doesn't evolve. */
 	readonly evoRegion?: 'Alola' | 'Galar';
 	/** Evolution level. falsy if doesn't evolve. */
 	readonly evoLevel?: number;
+	/**
+	 * The player must have a Pokémon of this type in their party during the evolution trigger event
+	 * in order for the evolving Pokémon species to evolve into this Pokémon species.
+	 * @pokebedrock
+	 */
+	readonly evoPartyType?: string;
+	/**
+	 * The required relation between the Pokémon's Attack and Defense stats.
+	 * 1 means Attack > Defense. 0 means Attack = Defense. -1 means Attack < Defense
+	 * @pokebedrock
+	 */
+	readonly evoRelativePhysicalStats?: number;
+	/**
+	 * Time required for the evolution.
+	 * @pokebedrock
+	 */
+	readonly evoTime?: 'day' | 'night' | 'morning' | 'evening';
+	/**
+   * The priority of this Pokémon evolution
+   * @example
+   *  0 // Normal priority
+   *  1 // Higher priority, will be checked first
+	 * @pokebedrock
+   */
+	declare readonly evoPriority?: number;
+	/**
+	* Biome required for evolution.
+	* @pokebedrock
+	*/
+	declare readonly evoBiomes?: string[];
+	/**
+	* Status required for evolution.
+	* @pokebedrock
+	*/
+	declare readonly evoStatusEffect?: string;
+	/**
+	* Evolution steps. Pokemon must walk this many steps in the overworld to evolve.
+	* @pokebedrock
+	*/
+	declare readonly evoSteps?: number;
+	/**
+	* Moonphase Required for the evolution.
+	* @pokebedrock
+	*/
+	readonly evoMoonPhase?: keyof typeof MoonPhase;
 	/** Is NFE? True if this Pokemon can evolve (Mega evolution doesn't count). */
 	readonly nfe: boolean;
 	/** Egg groups. */
@@ -241,7 +338,11 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * either a Plate or a Z-Crystal.
 	 */
 	readonly requiredItems?: string[];
-
+	/**
+	 * The dimension required to change forms
+	 * @pokebedrock
+	 */
+	readonly requiredDimension?: string;
 	/**
 	 * Formes that can transform into this Pokemon, to inherit learnsets
 	 * from. (Like `prevo`, but for transformations that aren't
@@ -252,6 +353,11 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * for in-battle formes.
 	 */
 	readonly changesFrom?: string;
+	/**
+	 * The event that causes this pokemon to change forme
+	 * @pokebedrock
+	 */
+	readonly changeEvent?: 'setHeldItem' | 'learnMove';
 
 	/**
 	 * List of sources and other availability for a Pokemon transferred from
@@ -573,7 +679,7 @@ export class DexSpecies {
 					const parentSpecies = parentMod.species.getByID(id);
 					// checking tier cheaply filters out some non-matches.
 					// The construction logic is very complex so we ultimately need to do a deep equality check
-					if (species.tier === parentSpecies.tier && isDeepStrictEqual(species, parentSpecies)) {
+					if (species.tier === parentSpecies.tier && Utils.isDeepStrictEqual(species, parentSpecies)) {
 						species = parentSpecies;
 					}
 				}

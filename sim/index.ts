@@ -10,20 +10,38 @@
 
 // battle simulation
 
-export { Battle } from './battle';
-export { BattleStream, getPlayerStreams } from './battle-stream';
+export { Battle, BattleOptions } from './battle';
+export { BattleStream, BattlePlayer, getPlayerStreams } from './battle-stream';
 export { Pokemon } from './pokemon';
-export { PRNG } from './prng';
-export { Side } from './side';
+export { PRNG, PRNGSeed } from './prng';
+export { Side, ChoiceRequest, PokemonSwitchRequestData } from './side';
+export { RandomPlayerAI } from './tools/random-player-ai';
+export { StrongHeuristicsAI } from './tools/strategic-player-ai';
 
 // dex API
 
 export { Dex, toID } from './dex';
+export { MoveTarget, MoveData } from './dex-moves';
+export { Species, SpeciesData } from './dex-species';
+export { Format } from './dex-formats';
 
 // teams API
 
-export { Teams } from './teams';
+export { Teams, PokemonSet } from './teams';
 export { TeamValidator } from './team-validator';
+
+// misc data
+
+export { Moves } from '../data/moves';
+export { Pokedex } from '../data/pokedex';
+export { Learnsets } from '../data/learnsets';
+
+// misc texts
+
+export { MovesText } from '../data/text/moves';
+export { DefaultText } from '../data/text/default';
+export { AbilitiesText } from '../data/text/abilities';
+export { ItemsText } from '../data/text/items';
 
 // misc libraries
 

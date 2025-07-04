@@ -2,5 +2,20 @@
   "editor.insertSpaces": false,
   "typescript.tsdk": "node_modules/typescript/lib",
   "javascript.format.insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces": false,
-  "typescript.format.semicolons": "insert"
+  "typescript.format.semicolons": "insert",
+  "eslint.validate": [
+    "typescript",
+    "json",
+    { "language": "typescript", "autoFix": true }
+  ],
+  "eslint.autoFixOnSave": true,
+  "eslint.run": "onSave",
+  "files.autoSave": "off",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit"
+  },
+  "[typescript]": {
+    "editor.formatOnSave": false,
+    "editor.defaultFormatter": "vscode.typescript-language-features"
+  }
 }

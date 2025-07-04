@@ -26,9 +26,6 @@
  * @license MIT
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
-
 import * as Data from './dex-data';
 import { Condition, DexConditions } from './dex-conditions';
 import { DataMove, DexMoves } from './dex-moves';
@@ -37,10 +34,13 @@ import { Ability, DexAbilities } from './dex-abilities';
 import { Species, DexSpecies } from './dex-species';
 import { Format, DexFormats } from './dex-formats';
 import { Utils } from '../lib/utils';
+import { Aliases, CompoundWordNames } from '../data/aliases';
 
 const BASE_MOD = 'gen9' as ID;
-const DATA_DIR = path.resolve(__dirname, '../data');
-const MODS_DIR = path.resolve(DATA_DIR, './mods');
+
+// @pokebedrock - use relative path instead of path import b/c of minecraft
+const DATA_DIR = '../data';
+const MODS_DIR = '../data/mods';
 
 const dexes: { [mod: string]: ModdedDex } = Object.create(null);
 
@@ -176,7 +176,9 @@ export class ModdedDex {
 	forFormat(format: Format | string): ModdedDex {
 		if (!this.modsLoaded) this.includeMods();
 		const mod = this.formats.get(format).mod;
-		return dexes[mod || BASE_MOD].includeData();
+		const moddedDex = dexes[mod || BASE_MOD];
+		if (!moddedDex) throw new Error(`ModdedDex ${mod || BASE_MOD} not found`);
+		return moddedDex.includeData();
 	}
 
 	modData(dataType: DataType, id: string) {
@@ -441,10 +443,227 @@ export class ModdedDex {
 	}
 
 	loadDataFile(basePath: string, dataType: DataType): AnyObject | void {
+		const filePath = basePath + DATA_FILES[dataType];
+		let dataObject: { [key: string]: any } | void;
 		try {
-			const filePath = basePath + DATA_FILES[dataType];
-			const dataObject = require(filePath);
-			if (!dataObject || typeof dataObject !== 'object') {
+			// @pokebedrock - switch to static require
+			switch (filePath) {
+			// base
+			case '../data/abilities': dataObject = require('../data/abilities'); break;
+			case '../data/aliases': dataObject = require('../data/aliases'); break;
+			case '../data/conditions': dataObject = require('../data/conditions'); break;
+			case '../data/formats-data': dataObject = require('../data/formats-data'); break;
+			case '../data/items': dataObject = require('../data/items'); break;
+			case '../data/moves': dataObject = require('../data/moves'); break;
+			case '../data/natures': dataObject = require('../data/natures'); break;
+			case '../data/pokedex': dataObject = require('../data/pokedex'); break;
+			case '../data/rulesets': dataObject = require('../data/rulesets'); break;
+			case '../data/scripts': dataObject = require('../data/scripts'); break;
+			case '../data/typechart': dataObject = require('../data/typechart'); break;
+			case '../data/learnsets': dataObject = require('../data/learnsets'); break;
+
+			// mods
+			case '../data/mods/ccapm2024/abilities': dataObject = require('../data/mods/ccapm2024/abilities'); break;
+			case '../data/mods/ccapm2024/formats-data': dataObject = require('../data/mods/ccapm2024/formats-data'); break;
+			case '../data/mods/ccapm2024/items': dataObject = require('../data/mods/ccapm2024/items'); break;
+			case '../data/mods/ccapm2024/learnsets': dataObject = require('../data/mods/ccapm2024/learnsets'); break;
+			case '../data/mods/ccapm2024/moves': dataObject = require('../data/mods/ccapm2024/moves'); break;
+			case '../data/mods/ccapm2024/pokedex': dataObject = require('../data/mods/ccapm2024/pokedex'); break;
+			case '../data/mods/ccapm2024/scripts': dataObject = require('../data/mods/ccapm2024/scripts'); break;
+			case '../data/mods/fullpotential/abilities': dataObject = require('../data/mods/fullpotential/abilities'); break;
+			case '../data/mods/fullpotential/scripts': dataObject = require('../data/mods/fullpotential/scripts'); break;
+			case '../data/mods/gen1/conditions': dataObject = require('../data/mods/gen1/conditions'); break;
+			case '../data/mods/gen1/formats-data': dataObject = require('../data/mods/gen1/formats-data'); break;
+			case '../data/mods/gen1/moves': dataObject = require('../data/mods/gen1/moves'); break;
+			case '../data/mods/gen1/pokedex': dataObject = require('../data/mods/gen1/pokedex'); break;
+			case '../data/mods/gen1/scripts': dataObject = require('../data/mods/gen1/scripts'); break;
+			case '../data/mods/gen1/typechart': dataObject = require('../data/mods/gen1/typechart'); break;
+			case '../data/mods/gen1jpn/conditions': dataObject = require('../data/mods/gen1jpn/conditions'); break;
+			case '../data/mods/gen1jpn/moves': dataObject = require('../data/mods/gen1jpn/moves'); break;
+			case '../data/mods/gen1jpn/scripts': dataObject = require('../data/mods/gen1jpn/scripts'); break;
+			case '../data/mods/gen1stadium/conditions': dataObject = require('../data/mods/gen1stadium/conditions'); break;
+			case '../data/mods/gen1stadium/formats-data': dataObject = require('../data/mods/gen1stadium/formats-data'); break;
+			case '../data/mods/gen1stadium/moves': dataObject = require('../data/mods/gen1stadium/moves'); break;
+			case '../data/mods/gen1stadium/pokedex': dataObject = require('../data/mods/gen1stadium/pokedex'); break;
+			case '../data/mods/gen1stadium/scripts': dataObject = require('../data/mods/gen1stadium/scripts'); break;
+			case '../data/mods/gen2/conditions': dataObject = require('../data/mods/gen2/conditions'); break;
+			case '../data/mods/gen2/formats-data': dataObject = require('../data/mods/gen2/formats-data'); break;
+			case '../data/mods/gen2/items': dataObject = require('../data/mods/gen2/items'); break;
+			case '../data/mods/gen2/learnsets': dataObject = require('../data/mods/gen2/learnsets'); break;
+			case '../data/mods/gen2/moves': dataObject = require('../data/mods/gen2/moves'); break;
+			case '../data/mods/gen2/pokedex': dataObject = require('../data/mods/gen2/pokedex'); break;
+			case '../data/mods/gen2/scripts': dataObject = require('../data/mods/gen2/scripts'); break;
+			case '../data/mods/gen2/typechart': dataObject = require('../data/mods/gen2/typechart'); break;
+			case '../data/mods/gen2stadium2/conditions': dataObject = require('../data/mods/gen2stadium2/conditions'); break;
+			case '../data/mods/gen2stadium2/items': dataObject = require('../data/mods/gen2stadium2/items'); break;
+			case '../data/mods/gen2stadium2/moves': dataObject = require('../data/mods/gen2stadium2/moves'); break;
+			case '../data/mods/gen2stadium2/pokedex': dataObject = require('../data/mods/gen2stadium2/pokedex'); break;
+			case '../data/mods/gen2stadium2/scripts': dataObject = require('../data/mods/gen2stadium2/scripts'); break;
+			case '../data/mods/gen3/abilities': dataObject = require('../data/mods/gen3/abilities'); break;
+			case '../data/mods/gen3/conditions': dataObject = require('../data/mods/gen3/conditions'); break;
+			case '../data/mods/gen3/formats-data': dataObject = require('../data/mods/gen3/formats-data'); break;
+			case '../data/mods/gen3/items': dataObject = require('../data/mods/gen3/items'); break;
+			case '../data/mods/gen3/learnsets': dataObject = require('../data/mods/gen3/learnsets'); break;
+			case '../data/mods/gen3/moves': dataObject = require('../data/mods/gen3/moves'); break;
+			case '../data/mods/gen3/pokedex': dataObject = require('../data/mods/gen3/pokedex'); break;
+			case '../data/mods/gen3/scripts': dataObject = require('../data/mods/gen3/scripts'); break;
+			case '../data/mods/gen3/typechart': dataObject = require('../data/mods/gen3/typechart'); break;
+			case '../data/mods/gen3colosseum/moves': dataObject = require('../data/mods/gen3colosseum/moves'); break;
+			case '../data/mods/gen3colosseum/scripts': dataObject = require('../data/mods/gen3colosseum/scripts'); break;
+			case '../data/mods/gen3rs/formats-data': dataObject = require('../data/mods/gen3rs/formats-data'); break;
+			case '../data/mods/gen3rs/items': dataObject = require('../data/mods/gen3rs/items'); break;
+			case '../data/mods/gen3rs/learnsets': dataObject = require('../data/mods/gen3rs/learnsets'); break;
+			case '../data/mods/gen3rs/pokedex': dataObject = require('../data/mods/gen3rs/pokedex'); break;
+			case '../data/mods/gen4/abilities': dataObject = require('../data/mods/gen4/abilities'); break;
+			case '../data/mods/gen4/conditions': dataObject = require('../data/mods/gen4/conditions'); break;
+			case '../data/mods/gen4/formats-data': dataObject = require('../data/mods/gen4/formats-data'); break;
+			case '../data/mods/gen4/items': dataObject = require('../data/mods/gen4/items'); break;
+			case '../data/mods/gen4/learnsets': dataObject = require('../data/mods/gen4/learnsets'); break;
+			case '../data/mods/gen4/moves': dataObject = require('../data/mods/gen4/moves'); break;
+			case '../data/mods/gen4/pokedex': dataObject = require('../data/mods/gen4/pokedex'); break;
+			case '../data/mods/gen4/scripts': dataObject = require('../data/mods/gen4/scripts'); break;
+			case '../data/mods/gen4pt/formats-data': dataObject = require('../data/mods/gen4pt/formats-data'); break;
+			case '../data/mods/gen4pt/learnsets': dataObject = require('../data/mods/gen4pt/learnsets'); break;
+			case '../data/mods/gen4pt/scripts': dataObject = require('../data/mods/gen4pt/scripts'); break;
+			case '../data/mods/gen5/abilities': dataObject = require('../data/mods/gen5/abilities'); break;
+			case '../data/mods/gen5/conditions': dataObject = require('../data/mods/gen5/conditions'); break;
+			case '../data/mods/gen5/formats-data': dataObject = require('../data/mods/gen5/formats-data'); break;
+			case '../data/mods/gen5/items': dataObject = require('../data/mods/gen5/items'); break;
+			case '../data/mods/gen5/learnsets': dataObject = require('../data/mods/gen5/learnsets'); break;
+			case '../data/mods/gen5/moves': dataObject = require('../data/mods/gen5/moves'); break;
+			case '../data/mods/gen5/pokedex': dataObject = require('../data/mods/gen5/pokedex'); break;
+			case '../data/mods/gen5/scripts': dataObject = require('../data/mods/gen5/scripts'); break;
+			case '../data/mods/gen5bw1/formats-data': dataObject = require('../data/mods/gen5bw1/formats-data'); break;
+			case '../data/mods/gen5bw1/items': dataObject = require('../data/mods/gen5bw1/items'); break;
+			case '../data/mods/gen5bw1/learnsets': dataObject = require('../data/mods/gen5bw1/learnsets'); break;
+			case '../data/mods/gen5bw1/pokedex': dataObject = require('../data/mods/gen5bw1/pokedex'); break;
+			case '../data/mods/gen6/abilities': dataObject = require('../data/mods/gen6/abilities'); break;
+			case '../data/mods/gen6/conditions': dataObject = require('../data/mods/gen6/conditions'); break;
+			case '../data/mods/gen6/formats-data': dataObject = require('../data/mods/gen6/formats-data'); break;
+			case '../data/mods/gen6/items': dataObject = require('../data/mods/gen6/items'); break;
+			case '../data/mods/gen6/learnsets': dataObject = require('../data/mods/gen6/learnsets'); break;
+			case '../data/mods/gen6/moves': dataObject = require('../data/mods/gen6/moves'); break;
+			case '../data/mods/gen6/pokedex': dataObject = require('../data/mods/gen6/pokedex'); break;
+			case '../data/mods/gen6/scripts': dataObject = require('../data/mods/gen6/scripts'); break;
+			case '../data/mods/gen6xy/formats-data': dataObject = require('../data/mods/gen6xy/formats-data'); break;
+			case '../data/mods/gen6xy/items': dataObject = require('../data/mods/gen6xy/items'); break;
+			case '../data/mods/gen6xy/learnsets': dataObject = require('../data/mods/gen6xy/learnsets'); break;
+			case '../data/mods/gen6xy/pokedex': dataObject = require('../data/mods/gen6xy/pokedex'); break;
+			case '../data/mods/gen7/abilities': dataObject = require('../data/mods/gen7/abilities'); break;
+			case '../data/mods/gen7/formats-data': dataObject = require('../data/mods/gen7/formats-data'); break;
+			case '../data/mods/gen7/items': dataObject = require('../data/mods/gen7/items'); break;
+			case '../data/mods/gen7/learnsets': dataObject = require('../data/mods/gen7/learnsets'); break;
+			case '../data/mods/gen7/moves': dataObject = require('../data/mods/gen7/moves'); break;
+			case '../data/mods/gen7/pokedex': dataObject = require('../data/mods/gen7/pokedex'); break;
+			case '../data/mods/gen7/scripts': dataObject = require('../data/mods/gen7/scripts'); break;
+			case '../data/mods/gen7letsgo/formats-data': dataObject = require('../data/mods/gen7letsgo/formats-data'); break;
+			case '../data/mods/gen7letsgo/learnsets': dataObject = require('../data/mods/gen7letsgo/learnsets'); break;
+			case '../data/mods/gen7letsgo/moves': dataObject = require('../data/mods/gen7letsgo/moves'); break;
+			case '../data/mods/gen7letsgo/pokedex': dataObject = require('../data/mods/gen7letsgo/pokedex'); break;
+			case '../data/mods/gen7letsgo/scripts': dataObject = require('../data/mods/gen7letsgo/scripts'); break;
+			case '../data/mods/gen7pokebilities/abilities': dataObject = require('../data/mods/gen7pokebilities/abilities'); break;
+			case '../data/mods/gen7pokebilities/moves': dataObject = require('../data/mods/gen7pokebilities/moves'); break;
+			case '../data/mods/gen7pokebilities/scripts': dataObject = require('../data/mods/gen7pokebilities/scripts'); break;
+			case '../data/mods/gen7sm/formats-data': dataObject = require('../data/mods/gen7sm/formats-data'); break;
+			case '../data/mods/gen7sm/items': dataObject = require('../data/mods/gen7sm/items'); break;
+			case '../data/mods/gen7sm/learnsets': dataObject = require('../data/mods/gen7sm/learnsets'); break;
+			case '../data/mods/gen7sm/pokedex': dataObject = require('../data/mods/gen7sm/pokedex'); break;
+			case '../data/mods/gen8/abilities': dataObject = require('../data/mods/gen8/abilities'); break;
+			case '../data/mods/gen8/formats-data': dataObject = require('../data/mods/gen8/formats-data'); break;
+			case '../data/mods/gen8/items': dataObject = require('../data/mods/gen8/items'); break;
+			case '../data/mods/gen8/learnsets': dataObject = require('../data/mods/gen8/learnsets'); break;
+			case '../data/mods/gen8/moves': dataObject = require('../data/mods/gen8/moves'); break;
+			case '../data/mods/gen8/pokedex': dataObject = require('../data/mods/gen8/pokedex'); break;
+			case '../data/mods/gen8/scripts': dataObject = require('../data/mods/gen8/scripts'); break;
+			case '../data/mods/gen8bdsp/abilities': dataObject = require('../data/mods/gen8bdsp/abilities'); break;
+			case '../data/mods/gen8bdsp/formats-data': dataObject = require('../data/mods/gen8bdsp/formats-data'); break;
+			case '../data/mods/gen8bdsp/items': dataObject = require('../data/mods/gen8bdsp/items'); break;
+			case '../data/mods/gen8bdsp/learnsets': dataObject = require('../data/mods/gen8bdsp/learnsets'); break;
+			case '../data/mods/gen8bdsp/moves': dataObject = require('../data/mods/gen8bdsp/moves'); break;
+			case '../data/mods/gen8bdsp/pokedex': dataObject = require('../data/mods/gen8bdsp/pokedex'); break;
+			case '../data/mods/gen8bdsp/scripts': dataObject = require('../data/mods/gen8bdsp/scripts'); break;
+			case '../data/mods/gen8dlc1/abilities': dataObject = require('../data/mods/gen8dlc1/abilities'); break;
+			case '../data/mods/gen8dlc1/formats-data': dataObject = require('../data/mods/gen8dlc1/formats-data'); break;
+			case '../data/mods/gen8dlc1/items': dataObject = require('../data/mods/gen8dlc1/items'); break;
+			case '../data/mods/gen8dlc1/learnsets': dataObject = require('../data/mods/gen8dlc1/learnsets'); break;
+			case '../data/mods/gen8dlc1/moves': dataObject = require('../data/mods/gen8dlc1/moves'); break;
+			case '../data/mods/gen8dlc1/pokedex': dataObject = require('../data/mods/gen8dlc1/pokedex'); break;
+			case '../data/mods/gen8dlc1/scripts': dataObject = require('../data/mods/gen8dlc1/scripts'); break;
+			case '../data/mods/gen8linked/conditions': dataObject = require('../data/mods/gen8linked/conditions'); break;
+			case '../data/mods/gen8linked/items': dataObject = require('../data/mods/gen8linked/items'); break;
+			case '../data/mods/gen8linked/moves': dataObject = require('../data/mods/gen8linked/moves'); break;
+			case '../data/mods/gen8linked/scripts': dataObject = require('../data/mods/gen8linked/scripts'); break;
+			case '../data/mods/gen9dlc1/abilities': dataObject = require('../data/mods/gen9dlc1/abilities'); break;
+			case '../data/mods/gen9dlc1/formats-data': dataObject = require('../data/mods/gen9dlc1/formats-data'); break;
+			case '../data/mods/gen9dlc1/items': dataObject = require('../data/mods/gen9dlc1/items'); break;
+			case '../data/mods/gen9dlc1/learnsets': dataObject = require('../data/mods/gen9dlc1/learnsets'); break;
+			case '../data/mods/gen9dlc1/moves': dataObject = require('../data/mods/gen9dlc1/moves'); break;
+			case '../data/mods/gen9dlc1/pokedex': dataObject = require('../data/mods/gen9dlc1/pokedex'); break;
+			case '../data/mods/gen9dlc1/scripts': dataObject = require('../data/mods/gen9dlc1/scripts'); break;
+			case '../data/mods/gen9predlc/abilities': dataObject = require('../data/mods/gen9predlc/abilities'); break;
+			case '../data/mods/gen9predlc/formats-data': dataObject = require('../data/mods/gen9predlc/formats-data'); break;
+			case '../data/mods/gen9predlc/items': dataObject = require('../data/mods/gen9predlc/items'); break;
+			case '../data/mods/gen9predlc/learnsets': dataObject = require('../data/mods/gen9predlc/learnsets'); break;
+			case '../data/mods/gen9predlc/pokedex': dataObject = require('../data/mods/gen9predlc/pokedex'); break;
+			case '../data/mods/gen9ssb/abilities': dataObject = require('../data/mods/gen9ssb/abilities'); break;
+			case '../data/mods/gen9ssb/conditions': dataObject = require('../data/mods/gen9ssb/conditions'); break;
+			case '../data/mods/gen9ssb/items': dataObject = require('../data/mods/gen9ssb/items'); break;
+			case '../data/mods/gen9ssb/learnsets': dataObject = require('../data/mods/gen9ssb/learnsets'); break;
+			case '../data/mods/gen9ssb/moves': dataObject = require('../data/mods/gen9ssb/moves'); break;
+			case '../data/mods/gen9ssb/pokedex': dataObject = require('../data/mods/gen9ssb/pokedex'); break;
+			case '../data/mods/gen9ssb/scripts': dataObject = require('../data/mods/gen9ssb/scripts'); break;
+			case '../data/mods/mixandmega/items': dataObject = require('../data/mods/mixandmega/items'); break;
+			case '../data/mods/mixandmega/scripts': dataObject = require('../data/mods/mixandmega/scripts'); break;
+			case '../data/mods/monkeyspaw/abilities': dataObject = require('../data/mods/monkeyspaw/abilities'); break;
+			case '../data/mods/monkeyspaw/conditions': dataObject = require('../data/mods/monkeyspaw/conditions'); break;
+			case '../data/mods/monkeyspaw/scripts': dataObject = require('../data/mods/monkeyspaw/scripts'); break;
+			case '../data/mods/partnersincrime/abilities': dataObject = require('../data/mods/partnersincrime/abilities'); break;
+			case '../data/mods/partnersincrime/items': dataObject = require('../data/mods/partnersincrime/items'); break;
+			case '../data/mods/partnersincrime/moves': dataObject = require('../data/mods/partnersincrime/moves'); break;
+			case '../data/mods/partnersincrime/scripts': dataObject = require('../data/mods/partnersincrime/scripts'); break;
+			case '../data/mods/passiveaggressive/abilities':
+				dataObject = require('../data/mods/passiveaggressive/abilities');
+				break;
+			case '../data/mods/passiveaggressive/conditions':
+				dataObject = require('../data/mods/passiveaggressive/conditions');
+				break;
+			case '../data/mods/passiveaggressive/items': dataObject = require('../data/mods/passiveaggressive/items'); break;
+			case '../data/mods/passiveaggressive/scripts': dataObject = require('../data/mods/passiveaggressive/scripts'); break;
+			case '../data/mods/pokebedrock/scripts': dataObject = require('../data/mods/pokebedrock/scripts'); break;
+			case '../data/mods/pokebilities/abilities': dataObject = require('../data/mods/pokebilities/abilities'); break;
+			case '../data/mods/pokebilities/moves': dataObject = require('../data/mods/pokebilities/moves'); break;
+			case '../data/mods/pokebilities/scripts': dataObject = require('../data/mods/pokebilities/scripts'); break;
+			case '../data/mods/pokemoves/abilities': dataObject = require('../data/mods/pokemoves/abilities'); break;
+			case '../data/mods/pokemoves/moves': dataObject = require('../data/mods/pokemoves/moves'); break;
+			case '../data/mods/pokemoves/scripts': dataObject = require('../data/mods/pokemoves/scripts'); break;
+			case '../data/mods/randomroulette/scripts': dataObject = require('../data/mods/randomroulette/scripts'); break;
+			case '../data/mods/sharedpower/abilities': dataObject = require('../data/mods/sharedpower/abilities'); break;
+			case '../data/mods/sharedpower/moves': dataObject = require('../data/mods/sharedpower/moves'); break;
+			case '../data/mods/sharedpower/scripts': dataObject = require('../data/mods/sharedpower/scripts'); break;
+			case '../data/mods/sharingiscaring/conditions': dataObject = require('../data/mods/sharingiscaring/conditions'); break;
+			case '../data/mods/sharingiscaring/items': dataObject = require('../data/mods/sharingiscaring/items'); break;
+			case '../data/mods/sharingiscaring/moves': dataObject = require('../data/mods/sharingiscaring/moves'); break;
+			case '../data/mods/sharingiscaring/scripts': dataObject = require('../data/mods/sharingiscaring/scripts'); break;
+			case '../data/mods/thecardgame/abilities': dataObject = require('../data/mods/thecardgame/abilities'); break;
+			case '../data/mods/thecardgame/conditions': dataObject = require('../data/mods/thecardgame/conditions'); break;
+			case '../data/mods/thecardgame/items': dataObject = require('../data/mods/thecardgame/items'); break;
+			case '../data/mods/thecardgame/moves': dataObject = require('../data/mods/thecardgame/moves'); break;
+			case '../data/mods/thecardgame/pokedex': dataObject = require('../data/mods/thecardgame/pokedex'); break;
+			case '../data/mods/thecardgame/scripts': dataObject = require('../data/mods/thecardgame/scripts'); break;
+			case '../data/mods/trademarked/scripts': dataObject = require('../data/mods/trademarked/scripts'); break;
+			case '../data/mods/vaporemons/abilities': dataObject = require('../data/mods/vaporemons/abilities'); break;
+			case '../data/mods/vaporemons/conditions': dataObject = require('../data/mods/vaporemons/conditions'); break;
+			case '../data/mods/vaporemons/formats-data': dataObject = require('../data/mods/vaporemons/formats-data'); break;
+			case '../data/mods/vaporemons/items': dataObject = require('../data/mods/vaporemons/items'); break;
+			case '../data/mods/vaporemons/learnsets': dataObject = require('../data/mods/vaporemons/learnsets'); break;
+			case '../data/mods/vaporemons/moves': dataObject = require('../data/mods/vaporemons/moves'); break;
+			case '../data/mods/vaporemons/pokedex': dataObject = require('../data/mods/vaporemons/pokedex'); break;
+			case '../data/mods/vaporemons/scripts': dataObject = require('../data/mods/vaporemons/scripts'); break;
+			case '../data/mods/vaporemons/typechart': dataObject = require('../data/mods/vaporemons/typechart'); break;
+			default:
+				return;
+			}
+			if (typeof dataObject !== 'object') {
 				throw new TypeError(`${filePath}, if it exists, must export a non-null object`);
 			}
 			if (dataObject[dataType]?.constructor?.name !== 'Object') {
@@ -461,14 +680,44 @@ export class ModdedDex {
 	loadTextFile(
 		name: string, exportName: string
 	): DexTable<MoveText | ItemText | AbilityText | PokedexText | DefaultText> {
-		return require(`${DATA_DIR}/text/${name}`)[exportName];
+		let data;
+		// @pokebedrock - switch to static require
+		switch (name) {
+		case 'abilities':
+			data = require('../data/text/abilities');
+			break;
+		case 'default':
+			data = require('../data/text/default');
+			break;
+		case 'items':
+			data = require('../data/text/items');
+			break;
+		case 'moves':
+			data = require('../data/text/moves');
+			break;
+		case 'pokedex':
+			data = require('../data/text/pokedex');
+			break;
+		default:
+			throw new Error(`Unknown text file ${name}`);
+		}
+		return data[exportName];
 	}
 
 	includeMods(): this {
 		if (!this.isBase) throw new Error(`This must be called on the base Dex`);
 		if (this.modsLoaded) return this;
 
-		for (const mod of fs.readdirSync(MODS_DIR)) {
+		// @pokebedrock - Write each mod here, as we cannot use fs in minecraft
+		// NOTE: This needs to be updated when new mods are added
+		const mods = [
+			'ccapm2024', 'fullpotential', 'gen1', 'gen1jpn', 'gen1stadium', 'gen2', 'gen2stadium2', 'gen3',
+			'gen3colosseum', 'gen3rs', 'gen4', 'gen4pt', 'gen5', 'gen5bw1', 'gen6', 'gen6xy', 'gen7', 'gen7letsgo',
+			'gen7pokebilities', 'gen7sm', 'gen8', 'gen8bdsp', 'gen8dlc1', 'gen8linked', 'gen9dlc1', 'gen9predlc',
+			'gen9ssb', 'mixandmega', 'monkeyspaw', 'partnersincrime', 'passiveaggressive', 'pokebedrock', 'pokebilities',
+			'pokemoves', 'randomroulette', 'sharedpower', 'sharingiscaring', 'thecardgame', 'trademarked', 'vaporemons',
+		];
+		for (const mod of mods) {
 			dexes[mod] = new ModdedDex(mod);
 		}
 		this.modsLoaded = true;
@@ -507,13 +756,14 @@ export class ModdedDex {
 	loadAliases(): NonNullable<ModdedDex['aliases']> {
 		if (!this.isBase) return Dex.loadAliases();
 		if (this.aliases) return this.aliases;
-		const exported = require(path.resolve(DATA_DIR, 'aliases'));
 		const aliases = new Map<ID, ID>();
-		for (const [alias, target] of Object.entries(exported.Aliases)) {
+		// @pokebedrock - Straight import of aliases, no need to load from file
+		for (const [alias, target] of Object.entries(Aliases)) {
 			aliases.set(alias as ID, toID(target));
 		}
 		const compoundNames = new Map<ID, string>();
-		for (const name of exported.CompoundWordNames) {
+		// @pokebedrock - Straight import of compound word names, no need to load from file
+		for (const name of CompoundWordNames) {
 			compoundNames.set(toID(name), name);
 		}
 

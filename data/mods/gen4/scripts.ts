@@ -104,7 +104,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			if (isCrit && !suppressMessages) this.battle.add('-crit', target);
+			// @pokebedrock - Add source to crit message
+			if (isCrit && !suppressMessages) this.battle.add('-crit', target, pokemon);
 
 			// Final modifier.
 			baseDamage = this.battle.runEvent('ModifyDamage', pokemon, target, move, baseDamage);

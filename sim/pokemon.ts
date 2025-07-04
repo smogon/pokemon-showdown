@@ -82,6 +82,11 @@ export class Pokemon {
 	 */
 	details: string;
 
+	/**
+	 * UUID of the pokemon from @pokebedrock
+	 */
+	uuid?: string;
+
 	baseSpecies: Species;
 	species: Species;
 	speciesState: EffectState;
@@ -342,7 +347,8 @@ export class Pokemon {
 		if (!this.set.moves?.length) {
 			throw new Error(`Set ${this.name} has no moves`);
 		}
-		for (const moveid of this.set.moves) {
+		// @pokebedrock - Add (i) to moveSet loop
+		for (const [i, moveid] of this.set.moves.entries()) {
 			let move = this.battle.dex.moves.get(moveid);
 			if (!move.id) continue;
 			if (move.id === 'hiddenpower' && move.type !== 'Normal') {
@@ -354,8 +360,10 @@ export class Pokemon {
 			this.baseMoveSlots.push({
 				move: move.name,
 				id: move.id,
-				pp: basepp,
-				maxpp: basepp,
+				// Apply PP from @pokebedrock
+				pp: set.movesInfo[i].pp,
+				// Apply maxpp from @pokebedrock
+				maxpp: set.movesInfo[i].maxpp,
 				target: move.target,
 				disabled: false,
 				disabledSource: '',
@@ -364,6 +372,8 @@ export class Pokemon {
 		}
 
 		this.position = 0;
+		// @pokebedrock - Add uuid to pokemon
+		this.uuid = this.set.uuid || '';
 		this.details = this.getUpdatedDetails();
 
 		this.status = '';
@@ -491,7 +501,31 @@ export class Pokemon {
 		this.baseMaxhp = 0;
 		this.hp = 0;
 		this.clearVolatile();
-		this.hp = this.maxhp;
+
+		// @pokebedrock - Apply currentHealth to hp
+		if (this.set.currentHealth === 0 || this.set.currentHealth) {
+			this.hp = this.set.currentHealth;
+		} else {
+			this.hp = this.maxhp;
+		}
+
+		// @pokebedrock - Apply status to status
+		if (this.set.status) {
+			const status = this.battle.dex.conditions.get(this.set.status);
+			this.status = status.id;
+			this.setStatus(status);
+			if (this.set.statusDuration !== -1) {
+				this.statusState.duration = this.set.statusDuration;
+				this.statusState.startTime = this.set.statusDuration;
+				this.statusState.time = this.set.statusDuration;
+			}
+		}
+
+		// @pokebedrock - Apply faint status
+		if (this.hp === 0) {
+			this.status = 'fnt' as ID;
+			this.fainted = true;
+		}
 	}
 
 	toJSON(): AnyObject {
@@ -521,8 +555,11 @@ export class Pokemon {
 		let name = this.species.name;
 		if (['Greninja-Bond', 'Rockruff-Dusk'].includes(name)) name = this.species.baseSpecies;
 		if (!level) level = this.level;
-		return name + (level === 100 ? '' : `, L${level}`) +
-			(this.gender === '' ? '' : `, ${this.gender}`) + (this.set.shiny ? ', shiny' : '');
+		return name + ', ' +
+			(this.set.uuid || '') +
+			(level === 100 ? '' : `, L${level}`) +
+			(this.gender === '' ? '' : `, ${this.gender}`) +
+			(this.set.shiny ? ', shiny' : '');
 	}
 
 	getFullDetails = () => {
@@ -1111,6 +1148,8 @@ export class Pokemon {
 	getSwitchRequestData(forAlly?: boolean): PokemonSwitchRequestData {
 		const entry: PokemonSwitchRequestData = {
 			ident: this.fullname,
+			// @pokebedrock
+			uuid: this.uuid || '',
 			details: this.details,
 			condition: this.getHealth().secret,
 			active: (this.position < this.side.active.length),
@@ -1134,6 +1173,12 @@ export class Pokemon {
 			baseAbility: this.baseAbility,
 			item: this.item,
 			pokeball: this.pokeball,
+			// @pokebedrock
+			types: this.types,
+			// @pokebedrock
+			boosts: this.boosts,
+			// @pokebedrock
+			status: this.status,
 		};
 		if (this.battle.gen > 6) entry.ability = this.ability;
 		if (this.battle.gen >= 9) {
@@ -1399,7 +1444,6 @@ export class Pokemon {
 			this.details = this.getUpdatedDetails();
 			let details = (this.illusion || this).details;
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
-			this.battle.add('detailschange', this, details);
 			if (!source) {
 				// Tera forme
 				// Ogerpon/Terapagos text goes here
@@ -1425,6 +1469,8 @@ export class Pokemon {
 				// Shaymin-Sky -> Shaymin
 				this.battle.add('-formechange', this, species.name, message);
 			}
+			// @pokebedrock - Send Details changed after, so mega effect can look good.
+			this.battle.add('detailschange', this, details);
 		} else {
 			if (source?.effectType === 'Ability') {
 				this.battle.add('-formechange', this, species.name, message, `[from] ability: ${source.name}`);
