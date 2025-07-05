@@ -162,10 +162,9 @@ const MAX_PLUGIN_LOADING_DEPTH = 3;
 
 import { formatText, linkRegex, stripFormatting } from './chat-formatter';
 
-let probe: (url: string) => Promise<{ width: number, height: number }> | null = null;
+let probe: null | ((url: string) => Promise<{ width: number, height: number }>) = null;
 
 try {
-	// @ts-expect-error no typedef available
 	probe = require('probe-image-size');
 } catch {}
 
