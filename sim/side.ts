@@ -665,9 +665,10 @@ export class Side {
 			if (!pokemon.maybeLocked) {
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s Fight button is known to be safe`);
 			}
-			return this.emitChoiceError(`${pokemon.name} is not locked`, { pokemon, update: req => {
-				return this.updateDisabledRequest(pokemon, req);
-			} });
+			this.updateRequestForPokemon(pokemon, req => this.updateDisabledRequest(pokemon, req));
+			this.emitRequest();
+			this.choice.error = 'Hack to avoid sending error messages to the client :D';
+			return false;
 		} else if (maxMove) {
 			// Dynamaxed; only Taunt and Assault Vest disable Max Guard, but the base move must have PP remaining
 			if (pokemon.maxMoveDisabled(move)) {
@@ -818,10 +819,36 @@ export class Side {
 				}
 			}
 		}
-		if (req.canDynamax && req.moves.every(m => m.disabled || m.id === 'struggle')) {
-			req.canDynamax = false;
-			delete req.maxMoves;
-			updated = true;
+		if (req.moves.every(m => m.disabled || m.id === 'struggle')) {
+			if (req.canMegaEvo) {
+				req.canMegaEvo = false;
+				updated = true;
+			}
+			if (req.canMegaEvoX) {
+				req.canMegaEvoX = false;
+				updated = true;
+			}
+			if (req.canMegaEvoY) {
+				req.canMegaEvoY = false;
+				updated = true;
+			}
+			if (req.canUltraBurst) {
+				req.canUltraBurst = false;
+				updated = true;
+			}
+			if (req.canZMove) {
+				req.canZMove = undefined;
+				updated = true;
+			}
+			if (req.canDynamax) {
+				req.canDynamax = false;
+				delete req.maxMoves;
+				updated = true;
+			}
+			if (req.canTerastallize) {
+				req.canTerastallize = undefined;
+				updated = true;
+			}
 		}
 		return updated;
 	}

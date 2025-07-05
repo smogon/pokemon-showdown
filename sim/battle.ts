@@ -3028,6 +3028,16 @@ export class Battle {
 		}
 
 		side.clearChoice();
+
+		if (side.requestState === 'move') {
+			let update = false;
+			for (const pokemon of side.active) {
+				if (side.updateRequestForPokemon(pokemon, req => side.updateDisabledRequest(pokemon, req))) {
+					update = true;
+				}
+			}
+			if (update) side.emitRequest();
+		}
 	}
 
 	/**

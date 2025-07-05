@@ -1072,7 +1072,8 @@ export class Pokemon {
 		};
 
 		if (isLastActive) {
-			this.maybeLocked = this.maybeLocked || (this.maybeDisabled && !lockedMove);
+			this.maybeDisabled = this.maybeDisabled && !lockedMove;
+			this.maybeLocked = this.maybeLocked || this.maybeDisabled;
 			if (this.maybeDisabled) {
 				data.maybeDisabled = this.maybeDisabled;
 			}
