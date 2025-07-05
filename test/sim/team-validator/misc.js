@@ -215,26 +215,33 @@ describe('Team Validator', () => {
 	});
 
 	// Sometimes a Pokemon gets marked as NDZU or some such nonexistent tier on accident, resulting in it not being covered by the banlist.
-	it('should reject all Pokemon in the 35 Pokes format that are not explicitly allowed', function () {
-		this.timeout(0);
-		const formatid = 'gen9nationaldex35pokes@@@!obtainable';
-		const allowed = Dex.formats.get(formatid).unbanlist
+	// "allowed" vs "disallowed" - intention; "accepted" vs "rejected" - outcome.
+	it('should reject all Pokemon in the 35 Pokes format that are not explicitly allowed', () => {
+		const formatid = 'gen9nationaldex35pokes';
+
+		const problemAccepts = [];
+		const problemRejects = [];
+		const format = Dex.formats.get(formatid);
+		const ruleTable = Dex.formats.getRuleTable(format);
+
+		// The format's unbanlist is where allowed Pokemon are specified currently.
+		const allowed = format.unbanlist
 			?.map(x => Dex.formats.validateRule(`+${x}`))
 			.filter(x => x.startsWith('+pokemon:') || x.startsWith('+basepokemon:'))
 			.flatMap(x => x.startsWith('+pokemon:') ? x.slice(9) : Dex.species.get(x.slice(13)).formeOrder)
 			.map(toID);
-		if (!allowed) return;
+		if (!allowed || !allowed.length) return;
+
 		for (const species of Dex.species.all()) {
-			// These are covered by Obtainable ruleset
-			if (species.name.endsWith('-Gmax') || species.isNonstandard === 'CAP') {
-				continue;
-			}
-			const team = [{ species: species.id, ability: 'blaze', moves: ['flamethrower'], evs: { hp: 1 } }];
-			if (allowed.includes(species.id)) {
-				assert.legalTeam(team, formatid, `${species.name} should have been accepted.`);
-			} else {
-				assert.false.legalTeam(team, formatid, `${species.name} should have been rejected.`);
-			}
+			// These are either converted during validation, or rejected, but not in a way that isBannedSpecies can tell.
+			if (species.natDexTier === 'Illegal' || species.isNonstandard === 'CAP') continue;
+			const isAllowed = allowed.includes(species.id);
+			const isRejected = ruleTable.isBannedSpecies(species);
+			if (isAllowed && isRejected) problemRejects.push(species.name);
+			if (!isAllowed && !isRejected) problemAccepts.push(species.name);
 		}
+
+		assert.atMost(problemAccepts.length, 0, `Pokemon should not have been accepted: ${problemAccepts.join(', ')}.`);
+		assert.atMost(problemRejects.length, 0, `Pokemon should not have been rejected: ${problemRejects.join(', ')}.`);
 	});
 });
