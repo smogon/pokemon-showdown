@@ -705,11 +705,6 @@ export class Side {
 							break;
 						}
 					}
-					if (req.canDynamax && req.moves.every(m => m.disabled || m.id === 'struggle')) {
-						req.canDynamax = false;
-						delete req.maxMoves;
-						updated = true;
-					}
 					return updated;
 				} });
 			}
