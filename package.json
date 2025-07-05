@@ -10,7 +10,6 @@
     "preact": "^10.5.15",
     "preact-render-to-string": "^6.5.13",
     "sockjs": "^0.3.21",
-    "source-map-support": "^0.5.21",
     "ts-chacha20": "^1.2.0"
   },
   "optionalDependencies": {
@@ -22,6 +21,7 @@
     "permessage-deflate": "^0.1.7",
     "pg": "^8.11.3",
     "probe-image-size": "^7.2.3",
+    "source-map-support": "^0.5.21",
     "sql-template-strings": "^2.2.2",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7",
