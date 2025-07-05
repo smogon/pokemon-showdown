@@ -43,7 +43,11 @@
  *
  * @license MIT
  */
-require('source-map-support').install();
+try {
+	require('source-map-support').install();
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+} catch (e) {
+}
 // NOTE: This file intentionally doesn't use too many modern JavaScript
 // features, so that it doesn't crash old versions of Node.js, so we
 // can successfully print the "We require Node.js 18+" message.
