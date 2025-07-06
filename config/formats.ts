@@ -460,7 +460,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['Dragon Rage', 'Sonic Boom'],
 	},
 	{
-		name: "[Gen 8] Galar Dex Draft",
+		name: "[Gen 8] Draft",
 		mod: 'gen8',
 		searchShow: false,
 		ruleset: ['Standard Draft', 'Dynamax Clause'],
