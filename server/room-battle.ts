@@ -804,7 +804,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 				};
 				this.requestCount++;
 				player?.sendRoom(`|request|${requestJSON}`);
-				if (isPrevRequest) this.timer.nextRequest(player);
+				if (!isPrevRequest) this.timer.nextRequest(player);
 				break;
 			}
 			player?.sendRoom(lines[2]);
