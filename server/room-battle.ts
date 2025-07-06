@@ -790,9 +790,10 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 				const request = this[slot].request;
 				request.isWait = undoFailed ? 'cantUndo' : false;
 				request.choice = '';
-			} else if (lines[2].startsWith(`|request|`)) {
+			} else if (lines[2].startsWith(`|request|`) || lines[2].startsWith(`|prevrequest|`)) {
 				this.rqid++;
-				const request = JSON.parse(lines[2].slice(9));
+				const isPrevRequest = lines[2].startsWith(`|prevrequest|`);
+				const request = JSON.parse(lines[2].slice(isPrevRequest ? 13 : 9));
 				request.rqid = this.rqid;
 				const requestJSON = JSON.stringify(request);
 				this[slot].request = {
@@ -803,7 +804,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 				};
 				this.requestCount++;
 				player?.sendRoom(`|request|${requestJSON}`);
-				this.timer.nextRequest(player);
+				if (isPrevRequest) this.timer.nextRequest(player);
 				break;
 			}
 			player?.sendRoom(lines[2]);
