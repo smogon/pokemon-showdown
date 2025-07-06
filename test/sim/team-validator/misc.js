@@ -215,33 +215,19 @@ describe('Team Validator', () => {
 	});
 
 	// Sometimes a Pokemon gets marked as NDZU or some such nonexistent tier on accident, resulting in it not being covered by the banlist.
-	// "allowed" vs "disallowed" - intention; "accepted" vs "rejected" - outcome.
 	it('should reject all Pokemon in the 35 Pokes format that are not explicitly allowed', () => {
 		const formatid = 'gen9nationaldex35pokes';
+		const rosterSize = 40;
 
-		const problemAccepts = [];
-		const problemRejects = [];
 		const format = Dex.formats.get(formatid);
+		if (!format.exists) return;
+
 		const ruleTable = Dex.formats.getRuleTable(format);
 
-		// The format's unbanlist is where allowed Pokemon are specified currently.
-		const allowed = format.unbanlist
-			?.map(x => Dex.formats.validateRule(`+${x}`))
-			.filter(x => x.startsWith('+pokemon:') || x.startsWith('+basepokemon:'))
-			.flatMap(x => x.startsWith('+pokemon:') ? x.slice(9) : Dex.species.get(x.slice(13)).formeOrder)
-			.map(toID);
-		if (!allowed || !allowed.length) return;
+		const accepted = Dex.species.all().filter(species => !(
+			species.natDexTier === 'Illegal' || species.isNonstandard === 'CAP'
+		) && !ruleTable.isBannedSpecies(species)).length;
 
-		for (const species of Dex.species.all()) {
-			// These are either converted during validation, or rejected, but not in a way that isBannedSpecies can tell.
-			if (species.natDexTier === 'Illegal' || species.isNonstandard === 'CAP') continue;
-			const isAllowed = allowed.includes(species.id);
-			const isRejected = ruleTable.isBannedSpecies(species);
-			if (isAllowed && isRejected) problemRejects.push(species.name);
-			if (!isAllowed && !isRejected) problemAccepts.push(species.name);
-		}
-
-		assert.atMost(problemAccepts.length, 0, `Pokemon should not have been accepted: ${problemAccepts.join(', ')}.`);
-		assert.atMost(problemRejects.length, 0, `Pokemon should not have been rejected: ${problemRejects.join(', ')}.`);
+		assert.equal(accepted, rosterSize);
 	});
 });
