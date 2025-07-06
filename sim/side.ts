@@ -483,8 +483,8 @@ export class Side {
 		this.battle.send('sideupdate', `${this.id}\n${sideUpdate}`);
 	}
 
-	emitRequest(update: ChoiceRequest = this.activeRequest!, previousRequest = false) {
-		const request = previousRequest ? '|prevrequest|' : '|request|';
+	emitRequest(update: ChoiceRequest = this.activeRequest!, updatedRequest = false) {
+		const request = updatedRequest ? '|updatedRequest|' : '|request|';
 		this.battle.send('sideupdate', `${this.id}\n${request}${JSON.stringify(update)}`);
 		this.activeRequest = update;
 	}
