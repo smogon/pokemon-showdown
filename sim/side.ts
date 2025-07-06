@@ -122,6 +122,7 @@ export interface SwitchRequest {
 	forceSwitch: boolean[];
 	side: SideRequestData;
 	noCancel?: boolean;
+	update?: boolean;
 }
 export interface TeamPreviewRequest {
 	wait?: undefined;
@@ -139,6 +140,7 @@ export interface MoveRequest {
 	side: SideRequestData;
 	ally?: SideRequestData;
 	noCancel?: boolean;
+	update?: boolean;
 }
 export interface WaitRequest {
 	wait: true;
@@ -484,8 +486,8 @@ export class Side {
 	}
 
 	emitRequest(update: ChoiceRequest = this.activeRequest!, updatedRequest = false) {
-		const request = updatedRequest ? '|updatedRequest|' : '|request|';
-		this.battle.send('sideupdate', `${this.id}\n${request}${JSON.stringify(update)}`);
+		if (updatedRequest) (this.activeRequest as MoveRequest | SwitchRequest).update = true;
+		this.battle.send('sideupdate', `${this.id}\n|request|${JSON.stringify(update)}`);
 		this.activeRequest = update;
 	}
 
