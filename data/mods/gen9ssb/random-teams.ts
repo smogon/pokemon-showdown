@@ -1111,7 +1111,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const meme = ruleTable.has('dynamaxclause') && !debug.length;
-		const afd = !ruleTable.has('dynamaxclause') && ruleTable.has('zmovesclause') && debug.length;
+		const afd = !ruleTable.has('dynamaxclause') && ruleTable.has('zmoveclause') && debug.length;
 		const monotype = this.forceMonotype || (ruleTable.has('sametypeclause') ?
 			this.sample(this.dex.types.names().filter(x => x !== 'Stellar')) : false);
 
