@@ -307,7 +307,10 @@ export class RoomBattleTimer {
 	}
 	nextRequest(player: RoomBattlePlayer) {
 		if (player.secondsLeft <= 0) return;
-		if (player.request.isWait) return;
+		if (player.request.isWait) {
+			player.turnSecondsLeft = this.settings.maxPerTurn;
+			return;
+		}
 
 		if (this.timer) {
 			clearTimeout(this.timer);
