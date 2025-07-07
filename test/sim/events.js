@@ -5,7 +5,7 @@ const common = require('./../common');
 
 let battle;
 
-describe('Battle#on', () => {
+describe('Battle#onEvent', () => {
 	afterEach(() => {
 		battle.destroy();
 	});

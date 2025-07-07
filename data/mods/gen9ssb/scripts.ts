@@ -369,6 +369,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		case 'start': {
 			for (const side of this.sides) {
 				if (side.pokemonLeft) side.pokemonLeft = side.pokemon.length;
+				this.add('teamsize', side.id, side.pokemon.length);
 			}
 
 			this.add('start');
@@ -409,11 +410,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 			}
 
-			if (this.format.onBattleStart) this.format.onBattleStart.call(this);
+			this.format.onBattleStart?.call(this);
 			for (const rule of this.ruleTable.keys()) {
 				if ('+*-!'.includes(rule.charAt(0))) continue;
 				const subFormat = this.dex.formats.get(rule);
-				if (subFormat.onBattleStart) subFormat.onBattleStart.call(this);
+				subFormat.onBattleStart?.call(this);
 			}
 
 			for (const side of this.sides) {
@@ -531,13 +532,13 @@ export const Scripts: ModdedBattleScriptsData = {
 			action.target.faint();
 			if (percent > 66) {
 				this.add('message', `Your courage will be greatly rewarded.`);
-				this.boost({ atk: 3, spa: 3, spe: 3 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
+				this.boost({ atk: 4, spa: 4, spe: 4 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
 			} else if (percent > 33) {
 				this.add('message', `Your offering was accepted.`);
-				this.boost({ atk: 2, spa: 2, spe: 2 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
+				this.boost({ atk: 3, spa: 3, spe: 3 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
 			} else {
 				this.add('message', `Coward.`);
-				this.boost({ atk: 1, spa: 1, spe: 1 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
+				this.boost({ atk: 2, spa: 2, spe: 2 }, action.pokemon, action.pokemon, this.dex.moves.get('scapegoat') as any);
 			}
 			this.add(`c:|${getName((action.pokemon.illusion || action.pokemon).name)}|Don't worry, if this plan fails we can just blame ${action.target.name}`);
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'scapegoat');
@@ -717,7 +718,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (move.spreadHit) {
 				// multi-target modifier (doubles only)
-				const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
+				const spreadModifier = this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
 				this.battle.debug(`Spread modifier: ${spreadModifier}`);
 				baseDamage = this.battle.modify(baseDamage, spreadModifier);
 			} else if (move.multihitType === 'parentalbond' && move.hit > 1) {
@@ -1390,11 +1391,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			if (
-				!move.negateSecondary &&
-				!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) &&
-				!move.flags['futuremove']
-			) {
+			if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) && !move.flags['futuremove']) {
 				const originalHp = pokemon.hp;
 				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
@@ -1582,7 +1579,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
 
-			if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+			if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 				for (const [i, d] of damage.entries()) {
 					// There are no multihit spread moves, so it's safe to use move.totalDamage for multihit moves
 					// The previous check was for `move.multihit`, but that fails for Dragon Darts
@@ -1845,6 +1842,8 @@ export const Scripts: ModdedBattleScriptsData = {
 					let details = ``;
 					if (action.targetLoc && this.active.length > 1) details += ` ${action.targetLoc > 0 ? '+' : ''}${action.targetLoc}`;
 					if (action.mega) details += (action.pokemon!.item === 'ultranecroziumz' ? ` ultra` : ` mega`);
+					if (action.megax) details += ` megax`;
+					if (action.megay) details += ` megay`;
 					if (action.zmove) details += ` zmove`;
 					if (action.maxMove) details += ` dynamax`;
 					if (action.terastallize) details += ` terastallize`;
@@ -1947,7 +1946,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (this.requestState === 'move') {
 				if (pokemon.trapped) {
-					const includeRequest = this.updateRequestForPokemon(pokemon, req => {
+					return this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, { pokemon, update: req => {
 						let updated = false;
 						if (req.maybeTrapped) {
 							delete req.maybeTrapped;
@@ -1958,10 +1957,7 @@ export const Scripts: ModdedBattleScriptsData = {
 							updated = true;
 						}
 						return updated;
-					});
-					const status = this.emitChoiceError(`Can't switch: The active Pokémon is trapped`, includeRequest);
-					if (includeRequest) this.emitRequest(this.activeRequest!);
-					return status;
+					} });
 				} else if (pokemon.maybeTrapped) {
 					this.choice.cantUndo = this.choice.cantUndo || pokemon.isLastActive();
 				}

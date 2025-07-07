@@ -146,7 +146,10 @@ export class RandomBabyTeams extends RandomTeams {
 				['alluringvoice', 'dazzlinggleam', 'drainingkiss', 'moonblast'],
 				['alluringvoice', 'dazzlinggleam', 'drainingkiss', 'moonblast'],
 			],
-			[['bulletseed', 'gigadrain', 'leafstorm', 'seedbomb'], ['bulletseed', 'gigadrain', 'leafstorm', 'seedbomb']],
+			[
+				['bulletseed', 'gigadrain', 'leafstorm', 'powerwhip', 'seedbomb'],
+				['bulletseed', 'gigadrain', 'leafstorm', 'seedbomb'],
+			],
 			[['hypnosis', 'thunderwave', 'toxic', 'willowisp', 'yawn'], ['hypnosis', 'thunderwave', 'toxic', 'willowisp', 'yawn']],
 			['roar', 'yawn'],
 			['dragonclaw', 'outrage'],
@@ -156,6 +159,7 @@ export class RandomBabyTeams extends RandomTeams {
 			['bodyslam', 'doubleedge'],
 			['gunkshot', 'poisonjab'],
 			[['hydropump', 'liquidation'], 'surf'],
+			['psychic', 'psyshock'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);

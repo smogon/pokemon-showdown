@@ -309,7 +309,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Recycles berry, +1 to 2 random stats (-acc/eva).",
+		shortDesc: "Recycles berry, +1 to 3 random stats (-acc/eva).",
 		desc: "The user regains the item it last used, and then boosts two random stats by 1 stage each, except Accuracy and Evasion. If the user is currently holding an item or has had their item forcibly removed, the stat boosts occur without the Recycle effect.",
 		name: "Extra Course",
 		gen: 9,
@@ -329,30 +329,50 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-item', pokemon, this.dex.items.get(item), '[from] move: Extra Course');
 				pokemon.setItem(item);
 			}
-			let stats: BoostID[] = [];
 			const boost: SparseBoostsTable = {};
-			let statPlus: BoostID;
-			for (statPlus in pokemon.boosts) {
-				if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
-				if (pokemon.boosts[statPlus] < 6) {
-					stats.push(statPlus);
+			const boostedStats: BoostID[] = [];
+			for (let i = 0; i < 3; i++) {
+				const stats: BoostID[] = [];
+				let statPlus: BoostID;
+				for (statPlus in pokemon.boosts) {
+					if (statPlus === 'accuracy' || statPlus === 'evasion' || boostedStats.includes(statPlus)) continue;
+					if (pokemon.boosts[statPlus] < 6) {
+						stats.push(statPlus);
+					}
+				}
+				const randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
+				if (randomStat) {
+					boost[randomStat] = 1;
+					boostedStats.push(randomStat);
 				}
 			}
-			let randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
-			if (randomStat) boost[randomStat] = 1;
-			stats = [];
-			for (statPlus in pokemon.boosts) {
-				if (statPlus === 'accuracy' || statPlus === 'evasion') continue;
-				if (pokemon.boosts[statPlus] < 6 && statPlus !== randomStat) {
-					stats.push(statPlus);
-				}
-			}
-			randomStat = stats.length ? this.sample(stats) : undefined;
-			if (randomStat) boost[randomStat] = 1;
 			this.boost(boost, pokemon, pokemon);
 		},
 		target: "self",
 		type: "Normal",
+	},
+
+	// April
+	herbaldagger: {
+		accuracy: 95,
+		basePower: 95,
+		category: "Physical",
+		shortDesc: "No additional effect.",
+		name: "Herbal Dagger",
+		gen: 9,
+		pp: 20,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1, slicing: 1, contact: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Flower Trick', target);
+			this.add('-anim', source, 'Flower Trick', target);
+		},
+		secondary: null,
+		target: "normal",
+		type: "Grass",
 	},
 
 	// aQrator
@@ -464,7 +484,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Cures team status, all but user heal 50% max HP.",
+		shortDesc: "Cures team status, all heal 75% max HP.",
 		desc: "Z-Move that requires Lilligantium Z. Every Pokemon in the user's party is cured of its non-volatile status condition. With the exception of the user, every Pokemon in the user's party heals for 1/2 of their maximum HP. This effect cannot revive fainted Pokemon.",
 		name: "Aura Rain",
 		pp: 1,
@@ -483,8 +503,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			let success = false;
 			const allies = [...pokemon.side.pokemon, ...pokemon.side.allySide?.pokemon || []];
 			for (const ally of allies) {
-				if (ally === pokemon) continue;
-				if (ally.heal(this.modify(ally.maxhp, 0.5))) {
+				if (ally.heal(this.modify(ally.maxhp, 0.75))) {
 					this.add('-heal', ally, ally.getHealth);
 					success = true;
 				}
@@ -496,6 +515,57 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "self",
 		type: "Grass",
+	},
+
+	// Archfaewild
+	breathoftiamat: {
+		accuracy: 95,
+		basePower: 20,
+		category: "Special",
+		shortDesc: "5 hits: Fire, Ice, Poison, Elec, Poison. Is STAB.",
+		desc: "This move hits 5 times. The first hit is Fire-type, the second is Ice-type, the third is Poison-type, the fourth is Electric-type, and the fifth is Poison-type. Each move checks accuracy individually, and if one hit misses, the attack stops. If the target is immune to one or more of the hits, the rest will still execute as normal. This move will always have Same-Type Attack Bonus.",
+		name: "Breath of Tiamat",
+		pp: 20,
+		priority: 0,
+		flags: { protect: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			if (target.runImmunity('Fire')) {
+				this.add('-anim', source, 'Flamethrower', target);
+			}
+		},
+		onHit(target, source, move) {
+			const moveTypes = ['Fire', 'Ice', 'Poison', 'Electric', 'Poison'];
+			const hitTypes = moveTypes.filter(x => target.runImmunity(x));
+			if (move.hit >= hitTypes.length) {
+				move.basePower = 0;
+				move.category = 'Status';
+				/* Problem here - we can't retroactively change the multihit parameter.
+				With this specific code, the move functions as intended, but will display the incorrect
+				number of hits if a target is immune to any of them. Even if you try to return false, null, etc
+				during this step, it will not interrupt the move. Nor will a this.add(-fail) do so either.
+				This seems to be the only way to get it to work and is a decent enough compromise for now. */
+			} else {
+				move.type = hitTypes[move.hit];
+				const moveAnims = ['Flamethrower', 'Ice Beam', 'Gunk Shot', 'Charge Beam', 'Sludge Bomb'];
+				const hitAnims = [];
+				for (const [i, anim] of moveAnims.entries()) {
+					const index2 = Math.min(i, hitTypes.length - 1);
+					if (moveTypes[i] === hitTypes[index2]) {
+						hitAnims.push(anim);
+					}
+				}
+				this.add('-anim', source, hitAnims[move.hit], target);
+			}
+		},
+		multihit: 5,
+		multiaccuracy: true,
+		forceSTAB: true,
+		secondary: null,
+		target: 'normal',
+		type: "Fire",
 	},
 
 	// Arcueid
@@ -552,7 +622,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	// Arsenal
 	megidolaon: {
 		accuracy: 100,
-		basePower: 255,
+		basePower: 210,
 		category: "Special",
 		shortDesc: "Flinches if resulting in a critical hit.",
 		name: "Megidolaon",
@@ -676,7 +746,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Cure status, +1 Def/SpA/SpD.",
+		shortDesc: "Cure status, +1 Def/SpD, +2 SpA.",
 		name: "Thinking In Progress",
 		gen: 9,
 		pp: 20,
@@ -693,7 +763,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		boosts: {
 			def: 1,
-			spa: 1,
+			spa: 2,
 			spd: 1,
 		},
 		secondary: null,
@@ -857,14 +927,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Raises the user's Sp. Atk by 2 and Speed by 1.",
-		desc: "The user's Special Attack is boosted by 2 stages and its Speed is boosted by 1 stage.",
+		shortDesc: "+2 SpA, +1 Def/SpD/Spe.",
+		desc: "The user's Special Attack is boosted by 2 stages, and its Defense, Special Defense, and Speed are boosted by 1 stage.",
 		name: "Prep Time",
 		pp: 5,
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
 		boosts: {
+			def: 1,
 			spa: 2,
+			spd: 1,
 			spe: 1,
 		},
 		onTryMove() {
@@ -880,10 +952,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	// avarice
 	yugiohreference: {
 		accuracy: 90,
-		basePower: 105,
+		basePower: 110,
 		category: "Special",
-		shortDesc: "40% chance to force the foe out.",
-		desc: "Nearly always moves last. If this attack is successful, there is a 40% chance that the target is forced to switch out and be replaced with a random unfainted ally.",
+		shortDesc: "50% chance to force the foe out.",
+		desc: "Nearly always moves last. If this attack is successful, there is a 50% chance that the target is forced to switch out and be replaced with a random unfainted ally.",
 		name: "yu-gi-oh reference",
 		pp: 5,
 		priority: -6,
@@ -895,7 +967,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, 'Never-Ending Nightmare', target);
 		},
 		secondary: {
-			chance: 40,
+			chance: 50,
 			onHit(target, source, move) {
 				move.forceSwitch = true;
 			},
@@ -909,8 +981,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 50,
 		category: "Physical",
-		shortDesc: "+3 prio if foe uses custom move. +3 Atk on KO.",
-		desc: "This move will nearly always move first (+3 priority) if the target would use a custom move from Super Staff Bros Ultimate this turn. Raises the user's Attack by 3 stages if this move knocks out the target.",
+		shortDesc: "+3 prio if foe uses custom move. +2 Atk on KO.",
+		desc: "This move will nearly always move first (+3 priority) if the target would use a custom move from Super Staff Bros Ultimate this turn. Raises the user's Attack by 2 stages if this move knocks out the target.",
 		name: "Buzzer Stinger Counter",
 		gen: 9,
 		pp: 10,
@@ -925,7 +997,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (!target || target.fainted || target.hp <= 0) this.boost({ atk: 3 }, pokemon, pokemon, move);
+			if (!target || target.fainted || target.hp <= 0) this.boost({ atk: 2 }, pokemon, pokemon, move);
 		},
 		secondary: null,
 		target: "normal",
@@ -968,8 +1040,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Protect, hit=-2 Atk/SpA/or Spe, user swap.",
-		desc: "Nearly always moves first. This move can only be used by Mega Sableye. The user is protected from most attacks made by other Pokemon during this turn. If a targeted move is blocked during this effect, the attacker's stats are lowered depending on the move used. If the attacker used a physical attack, their Attack is lowered by 2 stages. If the attacker used a special attack, their Special Attack is lowered by 2 stages. If the attacker used a status move, their Speed is lowered by 2 stages. If this move successfully decreases a Pokemon's stat stages, this Pokemon's Mega Evolution is removed, and it immediately switches out and is replaced by a selected party member. This move fails if the user moves last, and has an increasing chance to fail when used consecutively.",
+		shortDesc: "Protect, hit=-1 Atk/SpA/or Spe, user swap.",
+		desc: "Nearly always moves first. This move can only be used by Mega Sableye. The user is protected from most attacks made by other Pokemon during this turn. If a targeted move is blocked during this effect, the attacker's stats are lowered depending on the move used. If the attacker used a physical attack, their Attack is lowered by 1 stage. If the attacker used a special attack, their Special Attack is lowered by 1 stage. If the attacker used a status move, their Speed is lowered by 1 stage. If this move successfully decreases a Pokemon's stat stages, this Pokemon's Mega Evolution is removed, and it immediately switches out and is replaced by a selected party member. This move fails if the user moves last, and has an increasing chance to fail when used consecutively.",
 		name: "Shatter and Scatter",
 		pp: 10,
 		priority: 4,
@@ -1023,7 +1095,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				let statDebuff = 'spe';
 				if (move.category === 'Special') statDebuff = 'spa';
 				if (move.category === 'Physical') statDebuff = 'atk';
-				const success = this.boost({ [statDebuff]: -2 }, source, target, this.dex.getActiveMove("Shatter and Scatter"));
+				const success = this.boost({ [statDebuff]: -1 }, source, target, this.dex.getActiveMove("Shatter and Scatter"));
 				if (success) {
 					target.formeChange('Sableye', this.dex.getActiveMove('Shatter and Scatter'), true);
 					target.canMegaEvo = 'Sableye-Mega';
@@ -1300,6 +1372,36 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		// bird type crashes during testing (runStatusImmunity for Bird at sim\pokemon.ts:2101:10). no-go.
 	},
 
+	// calmvibes
+	goodvibesonly: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "Raises the user's Speed by 1 stage.",
+		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
+		name: "Good Vibes Only",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, contact: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Aqua Step', target);
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spe: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// chaos
 	outage: {
 		accuracy: 95,
@@ -1409,7 +1511,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePowerCallback(pokemon, target, move) {
 			if (move.hit === 1) return 60;
 			if (move.hit === 2) return 0;
-			return 20;
+			return 22;
 		},
 		category: "Physical",
 		shortDesc: "60 BP Bite->Toxic->2-5 multihit w/ 20 BP each.",
@@ -1417,7 +1519,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Summon Monster VIII: Fiendish monstrous Piplupede, Colossal",
 		gen: 9,
 		pp: 15,
-		priority: 0,
+		priority: 1,
 		flags: { protect: 1, contact: 1, mirror: 1 },
 		multihit: [3, 7],
 		self: {
@@ -1471,7 +1573,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Giveaway!",
 		gen: 9,
 		pp: 10,
-		priority: 0,
+		priority: 1,
 		flags: { metronome: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -1489,10 +1591,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Normal",
 	},
 
-	// Clementine
+	// Clem
 	o: {
 		accuracy: 100,
-		basePower: 100,
+		basePower: 120,
 		category: "Special",
 		shortDesc: "Phys if Atk > SpA. Flips user.",
 		desc: "This move becomes a physical attack if the user's Attack is greater than its Special Attack, including stat stage changes. This move's type depends on the user's primary type. If this move is successful and the user is an Avalugg, it either gains or loses the Flipped condition, changing its moveset and base stats. When under the Flipped condition, Avalugg's Base Stats are 95/46/44/184/116/95 and its moveset changes to Earth Power, Volt Switch, and Heal Pulse. This move is super effective against Kennedy.",
@@ -1523,10 +1625,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (source.illusion || source.baseSpecies.baseSpecies !== 'Avalugg') return;
 			if (source.volatiles['flipped']) {
 				source.removeVolatile('flipped');
-				changeSet(this, source, ssbSets['Clementine']);
+				changeSet(this, source, ssbSets['Clem']);
 			} else {
 				source.addVolatile('flipped', source, move);
-				changeSet(this, source, ssbSets['Clementine-Flipped']);
+				changeSet(this, source, ssbSets['Clem-Flipped']);
 			}
 		},
 		target: "normal",
@@ -1805,93 +1907,44 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 
 	// dhelmise
-	bioticorb: {
+	emp: {
 		accuracy: true,
 		basePower: 0,
-		category: "Status",
-		shortDesc: ">50% HP:Set orb that damages foes.<50% heals you.",
-		desc: "If the user's HP is at or above 50% of its maximum HP, a damaging orb is set on the opponent's side of the field, dealing 50 points of damage at the end of each turn for 4 turns. If the user's HP is below 50% of its maximum HP, a healing orb is set on the user's side of the field, healing the active Pokemon for 65 HP at the end of each turn until it has healed a total of 300 HP. If the appropriate side already has its orb, this move will try to place the other orb down. This move fails if an orb is already in place on the side an orb would be set.",
-		name: "Biotic Orb",
+		damageCallback(pokemon, target) {
+			return this.clampIntRange(Math.floor(target.getUndynamaxedHP() / 3), 1);
+		},
+		category: "Special",
+		shortDesc: "Hacks target, trapping + disabling a move.",
+		desc: "Inflicts the target with the Hacked volatile status. When a Pokemon is inflicted with Hacked, they become trapped for 3 turns and have 1 of their moves disabled at random.",
+		name: "EMP",
 		gen: 9,
-		pp: 10,
+		pp: 5,
 		priority: 0,
-		flags: { reflectable: 1, mustpressure: 1 },
+		ignoreImmunity: true,
+		flags: {},
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			if (source.hp < source.maxhp / 2) {
-				this.add('-anim', source, 'Wish', source);
-			} else {
-				this.add('-anim', source, 'Shadow Ball', target);
+			this.add('-anim', source, 'Boomburst', target);
+		},
+		onTryHit(target, source, move) {
+			if (target?.volatiles['hacked']) {
+				this.attrLastMove('[still]');
+				this.add('-fail', source);
+				return this.NOT_FAIL;
 			}
 		},
-		// Volatiles implemented in conditions.ts
 		onHit(target, source, move) {
-			if (source.hp < source.maxhp / 2) {
-				if (!source.side.addSideCondition('bioticorbself', source, move)) {
-					if (!source.side.foe.addSideCondition('bioticorbfoe', source, move)) return null;
-				}
-			} else {
-				if (!source.side.foe.addSideCondition('bioticorbfoe', source, move)) {
-					if (!source.side.addSideCondition('bioticorbself', source, move)) return null;
-				}
+			if (source.m.stealth) {
+				source.m.stealth = false;
+				this.add('-end', source, 'stealth');
 			}
+			target.addVolatile('hacked');
 		},
 		secondary: null,
 		target: "normal",
-		type: "Poison",
-	},
-
-	// DianaNicole
-	breathoftiamat: {
-		accuracy: 95,
-		basePower: 20,
-		category: "Special",
-		shortDesc: "5 hits: Fire, Ice, Poison, Elec, Poison. Is STAB.",
-		desc: "This move hits 5 times. The first hit is Fire-type, the second is Ice-type, the third is Poison-type, the fourth is Electric-type, and the fifth is Poison-type. Each move checks accuracy individually, and if one hit misses, the attack stops. If the target is immune to one or more of the hits, the rest will still execute as normal. This move will always have Same-Type Attack Bonus.",
-		name: "Breath of Tiamat",
-		pp: 20,
-		priority: 0,
-		flags: { protect: 1 },
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source, move) {
-			if (target.runImmunity('Fire')) {
-				this.add('-anim', source, 'Flamethrower', target);
-			}
-		},
-		onHit(target, source, move) {
-			const moveTypes = ['Fire', 'Ice', 'Poison', 'Electric', 'Poison'];
-			const hitTypes = moveTypes.filter(x => target.runImmunity(x));
-			if (move.hit >= hitTypes.length) {
-				move.basePower = 0;
-				move.category = 'Status';
-				/* Problem here - we can't retroactively change the multihit parameter.
-				With this specific code, the move functions as intended, but will display the incorrect
-				number of hits if a target is immune to any of them. Even if you try to return false, null, etc
-				during this step, it will not interrupt the move. Nor will a this.add(-fail) do so either.
-				This seems to be the only way to get it to work and is a decent enough compromise for now. */
-			} else {
-				move.type = hitTypes[move.hit];
-				const moveAnims = ['Flamethrower', 'Ice Beam', 'Gunk Shot', 'Charge Beam', 'Sludge Bomb'];
-				const hitAnims = [];
-				for (const [i, anim] of moveAnims.entries()) {
-					const index2 = Math.min(i, hitTypes.length - 1);
-					if (moveTypes[i] === hitTypes[index2]) {
-						hitAnims.push(anim);
-					}
-				}
-				this.add('-anim', source, hitAnims[move.hit], target);
-			}
-		},
-		multihit: 5,
-		multiaccuracy: true,
-		forceSTAB: true,
-		secondary: null,
-		target: 'normal',
-		type: "Fire",
+		type: "Ghost",
 	},
 
 	// EasyOnTheHills
@@ -1899,8 +1952,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Charges.Turn 2: +2 Atk/Def, heal 25% for 3 turns.",
-		desc: "Boosts the user's Attack and Defense by 2 stages, and heals the user for 1/4 of its maximum HP at the end of each turn for 3 turns. This attack charges on the first turn and executes on the second. This move will fail if it is already in effect.",
+		shortDesc: "Charges.Turn 2: +2 Atk/Def, heal 33% for 3 turns.",
+		desc: "Boosts the user's Attack and Defense by 2 stages, and heals the user for 1/3 of its maximum HP at the end of each turn for 3 turns. This attack charges on the first turn and executes on the second. This move will fail if it is already in effect.",
 		name: "Snack Time",
 		pp: 10,
 		priority: 0,
@@ -2055,7 +2108,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		shortDesc: "Creates a Substitute and sets Leech Seed.",
-		desc: "The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. The Pokemon at the user's position steals 1/8 of the target's maximum HP, rounded down, at the end of each turn. If either of the affected Pokemon uses Baton Pass, its respective effect will remain for its replacement.",
+		desc: "The user takes 1/6 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. The Pokemon at the user's position steals 1/8 of the target's maximum HP, rounded down, at the end of each turn. If either of the affected Pokemon uses Baton Pass, its respective effect will remain for its replacement.",
 		name: "Solidarity",
 		pp: 15,
 		priority: 0,
@@ -2074,11 +2127,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		self: {
 			onHit(target, source) {
 				if (source.volatiles['substitute']) return;
-				if (source.hp <= source.maxhp / 4 || source.maxhp === 1) { // Shedinja clause
+				if (source.hp <= source.maxhp / 6 || source.maxhp === 1) { // Shedinja clause
 					this.add('-fail', source, 'move: Substitute', '[weak]');
 				} else {
 					source.addVolatile('substitute');
-					this.directDamage(source.maxhp / 4);
+					this.directDamage(source.maxhp / 6);
 				}
 			},
 		},
@@ -2199,7 +2252,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	// Frozoid
 	flatoutfalling: {
 		accuracy: 100,
-		basePower: 75,
+		basePower: 80,
 		category: "Physical",
 		shortDesc: "Sets Gravity.",
 		desc: "Sets Gravity for 5 turns, multiplying the evasiveness of all active Pokemon by 0.6 and grounding them.",
@@ -2227,7 +2280,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	// Ganjafin
 	wigglingstrike: {
 		accuracy: 95,
-		basePower: 10,
+		basePower: 40,
 		category: "Physical",
 		shortDesc: "Applies Salt Cure and sets a layer of spikes.",
 		desc: "Causes damage to the target equal to 1/8 of its maximum HP (1/4 if the target is Steel or Water type), rounded down, at the end of each turn during effect. This effect ends when the target is no longer active. Sets a layer of Spikes on the target's side of the field, damaging grounded foes when they switch in.",
@@ -2409,7 +2462,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		shortDesc: "KO a teammate; gain more Atk/SpA/Spe if healthy.",
-		desc: "A party member is selected and faints, raising the user's Attack, Special Attack, and Speed by 1 stage if the party member's HP is below 33%, by 2 stages if the party member's HP is between 33% and 66%, and by 3 stages if the party member's HP is above 66%. Fails if there are no non-fainted Pokemon on the user's side.",
+		desc: "A party member is selected and faints, raising the user's Attack, Special Attack, and Speed by 2 stages if the party member's HP is below 33%, by 3 stages if the party member's HP is between 33% and 66%, and by 4 stages if the party member's HP is above 66%. Fails if there are no non-fainted Pokemon on the user's side.",
 		name: "Scapegoat",
 		gen: 9,
 		pp: 5,
@@ -2582,41 +2635,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Electric",
 	},
 
-	// Imperial
-	stormshroud: {
-		accuracy: 100,
-		basePower: 95,
-		category: "Special",
-		name: "Storm Shroud",
-		shortDesc: "Physical + contact if stronger.",
-		desc: "This move becomes a physical attack that makes contact if the value of ((((2 * the user's level / 5 + 2) * 90 * X) / Y) / 50), where X is the user's Attack stat and Y is the target's Defense stat, is greater than the same value where X is the user's Special Attack stat and Y is the target's Special Defense stat. No stat modifiers other than stat stage changes are considered for this purpose. If the two values are equal, this move chooses a damage category at random.",
-		pp: 10,
-		priority: 0,
-		flags: { protect: 1, mirror: 1 },
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Clangorous Soulblaze', target);
-		},
-		onModifyMove(move, pokemon, target) {
-			if (!target) return;
-			const atk = pokemon.getStat('atk', false, true);
-			const spa = pokemon.getStat('spa', false, true);
-			const def = target.getStat('def', false, true);
-			const spd = target.getStat('spd', false, true);
-			const physical = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * atk) / def) / 50);
-			const special = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * spa) / spd) / 50);
-			if (physical > special || (physical === special && this.randomChance(1, 2))) {
-				move.category = 'Physical';
-				move.flags.contact = 1;
-			}
-		},
-		secondary: null,
-		target: "normal",
-		type: "Dragon",
-	},
-
 	// in the hills
 	"102040": {
 		accuracy: 100,
@@ -2768,7 +2786,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Sets Snow, +1 Sp. Atk, +2 Speed.",
 		desc: "Raises the user's Special Attack by 1 stage and Speed by 2 stages, and changes the weather to Snow, boosting the defense of Ice-types by 1.5x for 5 turns. Snow will not be set if the weather cannot be changed or if the weather is already Snow.",
 		pp: 15,
-		priority: 0,
+		priority: 1,
 		flags: { snatch: 1, metronome: 1 },
 		boosts: {
 			spe: 2,
@@ -2844,7 +2862,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		shortDesc: "Does something random.",
-		desc: "This move performs exactly one of the following at random, ignoring options that would do nothing: 10% chance to burn the target; 10% chance to paralyze the target; 10% chance to poison the target; 3% chance to put the target to sleep; 2% chance to freeze the target; 5% chance each to confuse, infatuate, Taunt, Encore, Torment, or Heal Block the target; 5% chance each to set Stealth Rock, Spikes, Toxic Spikes, or Sticky Web; 5% chance to remove entry hazards from the user's side of the field; 5% chance to lower the foe's highest stat by 1 stage; and a 5% chance to switch out.",
+		desc: "This move performs exactly one of the following at random, ignoring options that would do nothing: 10% chance to burn the target; 10% chance to paralyze the target; 10% chance to poison the target; 3% chance to put the target to sleep; 2% chance to freeze the target; 5% chance each to confuse, infatuate, Taunt, Encore, Torment, or Heal Block the target; 5% chance each to set Stealth Rock, Spikes, Toxic Spikes, or Sticky Web; 5% chance to remove entry hazards from the user's side of the field; 5% chance to lower the foe's highest stat by 2 stages; and a 5% chance to switch out.",
 		name: ", (ac)",
 		pp: 15,
 		priority: 0,
@@ -2937,7 +2955,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						}
 					} else if (effect < 95) {
 						const bestStat = target.getBestStat(true, true);
-						this.boost({ [bestStat]: -1 }, target);
+						this.boost({ [bestStat]: -2 }, target);
 						success = true;
 					} else {
 						if (this.canSwitch(source.side)) {
@@ -3130,10 +3148,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: true,
 		basePower: 70,
 		category: "Special",
-		shortDesc: "Heals 50% HP, restores 1 PP for all other moves.",
-		desc: "Heals the user for 1/2 of their maximum HP, and restores 1 PP to all moves on the user's set other than Platinum Record.",
+		shortDesc: "Heals 50% HP, restores 1-3 PP for all other moves.",
+		desc: "Heals the user for 1/2 of their maximum HP, and restores 1 to 3 PP to all moves on the user's set other than Platinum Record.",
 		name: "Platinum Record",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: { sound: 1, heal: 1, protect: 1, mirror: 1 },
 		onTryMove() {
@@ -3147,7 +3165,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.heal(source.maxhp / 2, source, source, move);
 			for (const moveSlot of source.moveSlots) {
 				if (moveSlot.id === move.id) continue;
-				if (moveSlot.pp < moveSlot.maxpp) moveSlot.pp += 1;
+				if (moveSlot.pp < moveSlot.maxpp) moveSlot.pp += this.sample([1, 2, 3]);
 			}
 		},
 		target: "normal",
@@ -3586,40 +3604,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Ghost",
 	},
 
-	// marillvibes
-	goodvibesonly: {
-		accuracy: 100,
-		basePower: 90,
-		category: "Physical",
-		shortDesc: "Raises the user's Speed by 1 stage.",
-		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
-		name: "Good Vibes Only",
-		gen: 9,
-		pp: 10,
-		priority: 0,
-		flags: { protect: 1, mirror: 1, contact: 1 },
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Aqua Step', target);
-		},
-		secondary: {
-			chance: 100,
-			self: {
-				boosts: {
-					spe: 1,
-				},
-			},
-		},
-		target: "normal",
-		type: "Fairy",
-	},
-
 	// Mathy
 	breakingchange: {
 		accuracy: 100,
-		basePower: 70,
+		basePower: 100,
 		category: "Physical",
 		shortDesc: "Ignores target's Ability; disables it on hit.",
 		desc: "This move and its effects ignore the Abilities of other Pokemon. When this move hits the target, the target's Ability is suppressed until it switches out. Innate Abilities are unaffected.",
@@ -3799,8 +3787,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "2 random stats +1; Lock-On/Laser Focus/Charge.",
-		desc: "Boosts 2 random stats of the user by 1 stage each, except Accuracy and Evasion. These stats can be the same. Applies one of Lock-On, Laser Focus, or Charge to the user at random.",
+		shortDesc: "2 random stats +2; Lock-On/Laser Focus/Charge.",
+		desc: "Boosts 2 random stats of the user by 2 stage each, except Accuracy and Evasion. These stats can be the same. Applies one of Lock-On, Laser Focus, or Charge to the user at random.",
 		name: "Banana Breakfast",
 		gen: 9,
 		pp: 10,
@@ -3825,9 +3813,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 			const randomStat: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
 			const randomStat2: BoostID | undefined = stats.length ? this.sample(stats) : undefined;
-			if (randomStat) boost[randomStat] = 1;
-			if (randomStat2 && randomStat === randomStat2) boost[randomStat] = 2;
-			else if (randomStat2) boost[randomStat2] = 1;
+			if (randomStat) boost[randomStat] = 2;
+			if (randomStat2 && randomStat === randomStat2) boost[randomStat] = 4;
+			else if (randomStat2) boost[randomStat2] = 2;
 			this.boost(boost, source);
 			const result = this.random(3);
 			if (result === 0) {
@@ -3849,8 +3837,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 45,
 		category: "Special",
-		shortDesc: "Hits twice. 20% -1 Sp. Atk, 20% -1 Sp. Def.",
-		desc: "Hits 2 times. Each hit has a 20% chance to lower Special Attack by 1 stage, and a 20% chance to lower Special Defense by 1 stage.",
+		shortDesc: "Hits twice. 40% -1 Sp. Atk, 40% -1 Sp. Def.",
+		desc: "Hits 2 times. Each hit has a 40% chance to lower Special Attack by 1 stage, and a 40% chance to lower Special Defense by 1 stage.",
 		name: "Eon Assault",
 		gen: 9,
 		pp: 15,
@@ -3866,12 +3854,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		secondaries: [
 			{
-				chance: 20,
+				chance: 40,
 				boosts: {
 					spa: -1,
 				},
 			}, {
-				chance: 20,
+				chance: 40,
 				boosts: {
 					spd: -1,
 				},
@@ -4014,12 +4002,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 70,
 		category: "Special",
-		shortDesc: "Moves first. 40% infatuates. 10% backfire chance.",
-		desc: "Usually moves first. This move has a 40% chance to infatuate the target, regardless of gender, but this move has a 10% chance to be used by the target at the user instead.",
+		shortDesc: "40% infatuates. 10% backfire chance.",
+		desc: "This move has a 40% chance to infatuate the target, regardless of gender, but this move has a 10% chance to be used by the target at the user instead.",
 		name: ":3",
 		gen: 9,
 		pp: 5,
-		priority: 1,
+		priority: 0,
 		flags: { protect: 1 },
 		onTry(pokemon, target, move) {
 			if (move.sourceEffect !== '3' && this.randomChance(1, 10)) {
@@ -4180,8 +4168,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "1000 Gears",
-		shortDesc: "Heals 100% HP,cures status,+1 Def/SpD,+5 levels.",
-		desc: "Z-Move requiring Pearyum Z. Heals the user for 100% of its maximum HP, cures its non-volatile status effects, boosts its Defense and Special Defense by 1 stage, and raises its level by 5.",
+		shortDesc: "Heals 100% HP,cures status,+1 Def/SpD/Spe,+10 levels.",
+		desc: "Z-Move requiring Pearyum Z. Heals the user for 100% of its maximum HP, cures its non-volatile status effects, boosts its Defense and Special Defense by 1 stage, and raises its level by 10.",
 		pp: 1,
 		priority: 0,
 		flags: {},
@@ -4195,12 +4183,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, pokemon, move) {
 			this.heal(pokemon.maxhp, pokemon, pokemon, move);
 			pokemon.cureStatus();
-			this.boost({ def: 1, spd: 1 });
-			(pokemon as any).level += 5;
+			this.boost({ def: 1, spd: 1, spe: 1 });
+			(pokemon as any).level += 10;
 			pokemon.details = pokemon.getUpdatedDetails();
 			this.add('-anim', pokemon, 'Geomancy', pokemon);
 			this.add('replace', pokemon, pokemon.details);
-			this.add('-message', `${pokemon.name} gained 5 levels!`);
+			this.add('-message', `${pokemon.name} gained 10 levels!`);
 		},
 		isZ: "pearyumz",
 		secondary: null,
@@ -4275,7 +4263,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Roulette",
-		shortDesc: "Use a random move, and get a random moveset.",
+		shortDesc: "Use 2 random moves, and get a random moveset.",
 		desc: "A random move is selected for use, and then the user's other three moves are replaced with random moves. Aura Wheel, Dark Void, Explosion, Final Gambit, Healing Wish, Hyperspace Fury, Lunar Dance, Memento, Misty Explosion, Revival Blessing, and Self-Destruct cannot be selected.",
 		pp: 5,
 		priority: 0,
@@ -4297,6 +4285,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				!source.moves.includes(move.id) &&
 				(!move.isNonstandard || move.isNonstandard === 'Unobtainable')
 			));
+			this.actions.useMove(this.sample(moves.filter(x => !bannedList.includes(x.id))), target);
 			this.actions.useMove(this.sample(moves.filter(x => !bannedList.includes(x.id))), target);
 			for (const i of target.moveSlots.keys()) {
 				if (i > 2) break;
@@ -4348,8 +4337,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		name: "Pleek...",
-		shortDesc: "+4 Attack + inflict Perish Song on the user.",
-		desc: "Raises the user's Attack by 4 stages. Inflicts the Perish Song effect on the user, causing it to faint in three turns at the end of the turn.",
+		shortDesc: "+8 Attack + inflict Perish Song on the user.",
+		desc: "Raises the user's Attack by 8 stages. Inflicts the Perish Song effect on the user, causing it to faint in three turns at the end of the turn.",
 		pp: 10,
 		priority: 0,
 		flags: { sound: 1, bypasssub: 1 },
@@ -4365,7 +4354,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		onHit(target, source, move) {
 			this.add(`c:|${getName((source.illusion || source).name)}|Pleek...`);
-			this.boost({ atk: 4 }, source, source, move);
+			this.boost({ atk: 8 }, source, source, move);
 			source.addVolatile('perishsong');
 			this.add('-start', source, 'perish3', '[silent]');
 			source.m.usedPleek = true;
@@ -4469,8 +4458,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 60,
 		category: "Physical",
 		name: "Meat Grinder",
-		shortDesc: "User:+1/8 HP/turn;Foe:-1/8 HP/turn,Nrm/Fairy 1/4.",
-		desc: "Causes damage to the target equal to 1/8 of its maximum HP (1/4 if the target is Normal or Fairy type), rounded down, and heals the user equal to 1/8 of its maximum HP, both at the end of each turn during effect. This effect ends when the target is no longer active.",
+		shortDesc: "User:+1/8 HP/turn;Foe:-1/10 HP/turn,Nrm/Fairy 1/5.",
+		desc: "Causes damage to the target equal to 1/10 of its maximum HP (1/5 if the target is Normal or Fairy type), rounded down, and heals the user equal to 1/8 of its maximum HP, both at the end of each turn during effect. This effect ends when the target is no longer active.",
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1 },
@@ -4484,7 +4473,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			},
 			onResidualOrder: 13,
 			onResidual(pokemon, source) {
-				this.damage(pokemon.baseMaxhp / (pokemon.hasType(['Normal', 'Fairy']) ? 4 : 8));
+				this.damage(pokemon.baseMaxhp / (pokemon.hasType(['Normal', 'Fairy']) ? 5 : 10));
 
 				const target = this.getAtSlot(pokemon.volatiles['meatgrinder'].sourceSlot);
 				if (!pokemon || pokemon.fainted || pokemon.hp <= 0) {
@@ -4514,7 +4503,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 90,
 		category: "Special",
 		name: "*Worried Noises*",
-		shortDesc: "+1 SpA. Type varies based on user's primary type.",
+		shortDesc: "+2 SpA. Type varies based on user's primary type.",
 		desc: "Has a 100% chance to raise the user's Special Attack by 1 stage. This move's type depends on the user's primary type. If the user's primary type is typeless, this move's type is the user's secondary type if it has one, otherwise the added type from effects that add extra typings. This move is typeless if the user's type is typeless alone.",
 		pp: 10,
 		priority: 0,
@@ -4812,8 +4801,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 85,
 		category: "Special",
 		name: "Midnight Bird",
-		shortDesc: "100% chance to raise the user's Sp. Atk by 1.",
-		desc: "Has a 100% chance to raise the user's Special Attack by 1 stage.",
+		shortDesc: "100% chance to raise the user's Sp. Atk by 2.",
+		desc: "Has a 100% chance to raise the user's Special Attack by 2 stages.",
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1 },
@@ -4828,7 +4817,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			chance: 100,
 			self: {
 				boosts: {
-					spa: 1,
+					spa: 2,
 				},
 			},
 		},
@@ -5461,11 +5450,22 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			return pokemon.addVolatile('risingsword') || success;
 		},
 		condition: {
-			onStart(pokemon, source) {
-				this.add('-start', pokemon, 'move: Rising Sword');
+			noCopy: true,
+			onStart(target, source, effect) {
+				this.effectState.layers = 1;
+				if (!['costar', 'imposter', 'psychup', 'transform'].includes(effect?.id)) {
+					this.add('-start', target, 'move: Rising Sword');
+				}
 			},
-			onModifyCritRatio(critRatio, source) {
-				return critRatio + 1;
+			onRestart(target, source, effect) {
+				if (this.effectState.layers >= 3) return false;
+				this.effectState.layers++;
+				if (!['costar', 'imposter', 'psychup', 'transform'].includes(effect?.id)) {
+					this.add('-start', target, 'move: Rising Sword');
+				}
+			},
+			onModifyCritRatio(critRatio) {
+				return critRatio + this.effectState.layers;
 			},
 		},
 		flags: {},
@@ -5707,14 +5707,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	// Two of Roses
 	dillydally: {
 		accuracy: 90,
-		basePower: 40,
+		basePower: 30,
 		category: "Physical",
-		shortDesc: "2 hits, +1 random stat/hit. Type=User 2nd type.",
-		desc: "This move hits 2 times. For each successful hit, the user boosts a random stat, except Accuracy and Evasion, by 1 stage. The typing of this move is equal to the user's secondary type; it will instead use the user's primary type if the user lacks a secondary type.",
+		shortDesc: "3 hits, 50% +1 stat/hit. Type=User 2nd type.",
+		desc: "This move hits 3 times. For each successful hit, the user boosts a random stat, except Accuracy and Evasion, by 1 stage. The typing of this move is equal to the user's secondary type; it will instead use the user's primary type if the user lacks a secondary type.",
 		name: "Dilly Dally",
 		pp: 20,
 		priority: 0,
-		multihit: 2,
+		multihit: 3,
 		flags: { protect: 1, contact: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -5730,7 +5730,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			move.type = type;
 		},
 		secondary: {
-			chance: 100,
+			chance: 50,
 			onHit(target, source, move) {
 				const stats: BoostID[] = [];
 				const boost: SparseBoostsTable = {};
@@ -6088,9 +6088,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onTryMove() {
 			this.attrLastMove('[anim] Endure');
 		},
-		onDisableMove(pokemon) {
-			if (pokemon.lastMove?.id === 'perfectmimic') pokemon.disableMove('perfectmimic');
-		},
 		condition: {
 			duration: 1,
 			onStart(target) {
@@ -6132,8 +6129,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 80,
 		category: "Special",
-		desc: "Damage is doubled if this move is not very effective against the target.",
-		shortDesc: "Deals 2x damage with resisted hits.",
+		desc: "Damage is increased by 75% if this move is not very effective against the target.",
+		shortDesc: "Deals 1.75x damage with resisted hits.",
 		name: "Scorching Truth",
 		gen: 9,
 		pp: 15,
@@ -6149,7 +6146,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onBasePower(basePower, source, target, move) {
 			if (target.runEffectiveness(move) < 0) {
 				this.debug(`Scorching truth resisted buff`);
-				return this.chainModify(2);
+				return this.chainModify(1.75);
 			}
 		},
 		secondary: null,
@@ -6218,7 +6215,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Sets up Snow. Target's ability becomes Normalize.",
 		desc: "If this move is successful, the current weather becomes snow, boosting the Defense of Ice-types by 1.5x for 5 turns, and the target's ability is replaced with Normalize.",
 		name: "Whiteout",
-		pp: 5,
+		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, bullet: 1 },
 		onTryMove() {
@@ -6415,8 +6412,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		accuracy: 100,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Sets up Sunny Day and creates a Substitute.",
-		desc: "Sets sun, powering up Fire-type moves and weakening Water-type moves for 5 turns. The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. If one part of this move is already in effect, the other part will still be attempted.",
+		shortDesc: "Sunny Day, Substitute, +1 Sp. Def.",
+		desc: "Raises the user's Special Defense by 1 stage. Sets sun, powering up Fire-type moves and weakening Water-type moves for 5 turns. The user takes 1/4 of its maximum HP, rounded down, and puts it into a substitute to take its place in battle. If one part of this move is already in effect, the other part will still be attempted.",
 		name: "Solar Summon",
 		gen: 9,
 		pp: 5,
@@ -6438,6 +6435,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			}
 			return success;
+		},
+		self: {
+			boosts: {
+				spd: 1,
+			},
 		},
 		secondary: null,
 		target: "self",
@@ -6599,6 +6601,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	mistyterrain: {
 		inherit: true,
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {
@@ -6721,6 +6724,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	psychicterrain: {
 		inherit: true,
 		condition: {
+			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
 				if (source?.hasItem('terrainextender')) {

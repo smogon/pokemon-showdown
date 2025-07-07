@@ -170,7 +170,7 @@ export const commands: Chat.ChatCommands = {
 			case 'octal': case 'oct': base = 8; break;
 			case 'binary': case 'bin': base = 2; break;
 			default:
-				return this.errorReply(`Unrecognized base "${baseMatchResult[1]}". Valid options are binary or bin, octal or oct, decimal or dec, and hexadecimal or hex.`);
+				throw new Chat.ErrorMessage(`Unrecognized base "${baseMatchResult[1]}". Valid options are binary or bin, octal or oct, decimal or dec, and hexadecimal or hex.`);
 			}
 		}
 		const expression = target.replace(/\b(in|to)\s+([a-zA-Z]+)\b/g, '').trim();

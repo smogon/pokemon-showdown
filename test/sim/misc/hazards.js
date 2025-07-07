@@ -22,7 +22,7 @@ describe('Hazards', () => {
 		assert.false(battle.field.isTerrain('electricterrain'));
 	});
 
-	it(`should damage multiple Pokemon switching in simulatenously by Speed order`, () => {
+	it(`should damage multiple Pokemon switching in simultaneously by Speed order`, () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', moves: ['stealthrock', 'sleeptalk'] },
 			{ species: 'kyogre', ability: 'drizzle', item: 'choicescarf', moves: ['sleeptalk'] },

@@ -513,7 +513,7 @@ export class RandomGen8Teams {
 			const set: RandomTeamsTypes.RandomSet = {
 				name: species.baseSpecies,
 				species: species.name,
-				gender: species.gender,
+				gender: species.gender || (this.random(2) ? 'F' : 'M'),
 				item,
 				ability,
 				moves,
@@ -880,7 +880,7 @@ export class RandomGen8Teams {
 			const set: PokemonSet = {
 				name: species.baseSpecies,
 				species: species.name,
-				gender: species.gender,
+				gender: species.gender || (this.random(2) ? 'F' : 'M'),
 				item,
 				ability,
 				moves: m,
@@ -2428,7 +2428,7 @@ export class RandomGen8Teams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
-			gender: species.gender,
+			gender: species.gender || (this.random(2) ? 'F' : 'M'),
 			shiny: this.randomChance(1, 1024),
 			gigantamax: gmax,
 			level,
@@ -2680,14 +2680,14 @@ export class RandomGen8Teams {
 			const set = {
 				name: species.baseSpecies,
 				species: species.name,
-				gender: species.gender,
+				gender: species.gender || (this.random(2) ? 'F' : 'M'),
 				item: this.sampleIfArray(setData.item) || '',
 				ability: (this.sampleIfArray(setData.ability)),
 				shiny: this.randomChance(1, 1024),
 				level: this.adjustLevel || 100,
 				evs: { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0, ...setData.evs },
 				nature: setData.nature,
-				ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.ivs || {} },
+				ivs: { hp: 31, atk: 31, def: 31, spa: 31, spd: 31, spe: 31, ...setData.ivs },
 				moves: setData.moves.map((move: any) => this.sampleIfArray(move)),
 			};
 			if (this.adjustLevel) set.level = this.adjustLevel;

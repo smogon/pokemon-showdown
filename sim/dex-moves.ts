@@ -88,11 +88,6 @@ export interface SecondaryEffect extends HitEffect {
 	/** Used to flag a secondary effect as added by Poison Touch */
 	ability?: Ability;
 	/**
-	 * Applies to Sparkling Aria's secondary effect: Affected by
-	 * Sheer Force but not Shield Dust.
-	 */
-	dustproof?: boolean;
-	/**
 	 * Gen 2 specific mechanics: Bypasses Substitute only on Twineedle,
 	 * and allows it to flinch sleeping/frozen targets
 	 */
@@ -254,7 +249,6 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	multihitType?: 'parentalbond';
 	noDamageVariance?: boolean;
 	nonGhostTarget?: MoveTarget;
-	pressureTarget?: MoveTarget;
 	spreadModifier?: number;
 	sleepUsable?: boolean;
 	/**
@@ -317,6 +311,7 @@ export interface ActiveMove extends MutableMove {
 	status?: ID;
 	hit: number;
 	moveHitData?: MoveHitData;
+	hitTargets?: Pokemon[];
 	ability?: Ability;
 	allies?: Pokemon[];
 	auraBooster?: Pokemon;
@@ -329,7 +324,6 @@ export interface ActiveMove extends MutableMove {
 	isExternal?: boolean;
 	lastHit?: boolean;
 	magnitude?: number;
-	negateSecondary?: boolean;
 	pranksterBoosted?: boolean;
 	selfDropped?: boolean;
 	selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
@@ -454,8 +448,6 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 	readonly flags: MoveFlags;
 	/** Whether or not the user must switch after using this move. */
 	readonly selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
-	/** Move target only used by Pressure. */
-	readonly pressureTarget: MoveTarget;
 	/** Move target used if the user is not a Ghost type (for Curse). */
 	readonly nonGhostTarget: MoveTarget;
 	/** Whether or not the move ignores abilities. */
@@ -509,7 +501,6 @@ export class DataMove extends BasicEffect implements Readonly<BasicEffect & Move
 		this.isMax = data.isMax || false;
 		this.flags = data.flags || {};
 		this.selfSwitch = (typeof data.selfSwitch === 'string' ? (data.selfSwitch as ID) : data.selfSwitch) || undefined;
-		this.pressureTarget = data.pressureTarget || '';
 		this.nonGhostTarget = data.nonGhostTarget || '';
 		this.ignoreAbility = data.ignoreAbility || false;
 		this.damage = data.damage!;
@@ -633,8 +624,8 @@ export class DexMoves {
 		if (id === '') return EMPTY_MOVE;
 		let move = this.moveCache.get(id);
 		if (move) return move;
-		if (this.dex.data.Aliases.hasOwnProperty(id)) {
-			move = this.get(this.dex.data.Aliases[id]);
+		if (this.dex.getAlias(id)) {
+			move = this.get(this.dex.getAlias(id));
 			if (move.exists) {
 				this.moveCache.set(id, move);
 			}

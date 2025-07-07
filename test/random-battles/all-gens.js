@@ -403,7 +403,7 @@ describe('[Gen 9] BSS Factory data should be valid (slow)', () => {
 		const genNum = 9;
 
 		for (const speciesid in setsJSON) {
-			const vType = 'bssregh';
+			const vType = 'bssregi';
 			let totalWeight = 0;
 			for (const set of setsJSON[speciesid].sets) {
 				totalWeight += set.weight;

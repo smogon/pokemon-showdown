@@ -154,7 +154,7 @@ export const State = new class {
 		return battle;
 	}
 
-	// Direct comparsions of serialized state will be flakey as the timestamp
+	// Direct comparisons of serialized state will be flakey as the timestamp
 	// protocol message |t:| can diverge between two different runs over the same state.
 	// State must first be normalized before it is comparable.
 	normalize(state: AnyObject) {
@@ -256,7 +256,7 @@ export const State = new class {
 
 	// Simply looking for a 'hit' field to determine if an object is an ActiveMove or not seems
 	// pretty fragile, but its no different than what the simulator is doing. We go further and
-	// also check if the object has an 'id', as that's what we will intrepret as the Move.
+	// also check if the object has an 'id', as that's what we will interpret as the Move.
 	isActiveMove(obj: AnyObject): obj is ActiveMove {
 		return obj.hasOwnProperty('hit') && (obj.hasOwnProperty('id') || obj.hasOwnProperty('move'));
 	}
@@ -272,7 +272,7 @@ export const State = new class {
 	// be extended.
 	serializeActiveMove(move: ActiveMove, battle: Battle): /* ActiveMove */ AnyObject {
 		const base = battle.dex.moves.get(move.id);
-		const skip = new Set([...ACTIVE_MOVE]);
+		const skip = new Set(ACTIVE_MOVE);
 		for (const [key, value] of Object.entries(base)) {
 			// This should really be a deepEquals check to see if anything on ActiveMove was
 			// modified from the base Move, but that ends up being expensive and mostly unnecessary

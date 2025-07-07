@@ -18,7 +18,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		inherit: true,
 		onBeforeMovePriority: 2,
 		onBeforeMove(pokemon) {
-			if (this.randomChance(1, 4)) {
+			if (this.randomChance(63, 256)) {
 				this.add('cant', pokemon, 'par');
 				return false;
 			}

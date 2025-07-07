@@ -285,7 +285,7 @@ export const pages: Chat.PageTable = {
 		const format = toID(query.shift());
 		const season = toID(query.shift()) || `${data.current.season}`;
 		if (!data.badgeholders[season]) {
-			return this.errorReply(`Season ${season} not found.`);
+			throw new Chat.ErrorMessage(`Season ${season} not found.`);
 		}
 		this.title = `[Seasons]`;
 		let buf = '<div class="pad">';

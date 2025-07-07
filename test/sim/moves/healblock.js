@@ -216,7 +216,7 @@ describe('Heal Block [Gen 4]', () => {
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 
-	it('should fail indepedently on each target', () => {
+	it('should fail independently on each target', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'porygon2', moves: ['sleeptalk'] },
 			{ species: 'marshadow', moves: ['sleeptalk'] },

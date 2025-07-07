@@ -226,7 +226,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	/** True if a Pokemon species is incapable of dynamaxing */
 	readonly cannotDynamax?: boolean;
 	/** The Tera Type this Pokemon is forced to use */
-	readonly forceTeraType?: string;
+	readonly requiredTeraType?: string;
 	/** What it transforms from, if a pokemon is a forme that is only accessible in battle. */
 	readonly battleOnly?: string | string[];
 	/** Required item. Do not use this directly; see requiredItems. */
@@ -419,18 +419,18 @@ export class DexSpecies {
 		let species: Mutable<Species> | undefined = this.speciesCache.get(id);
 		if (species) return species;
 
-		if (this.dex.data.Aliases.hasOwnProperty(id)) {
+		const alias = this.dex.getAlias(id);
+		if (alias) {
 			if (this.dex.data.FormatsData.hasOwnProperty(id)) {
 				// special event ID
-				const baseId = toID(this.dex.data.Aliases[id]);
 				species = new Species({
-					...this.dex.data.Pokedex[baseId],
+					...this.dex.data.Pokedex[alias],
 					...this.dex.data.FormatsData[id],
 					name: id,
 				});
 				species.abilities = { 0: species.abilities['S']! };
 			} else {
-				species = this.get(this.dex.data.Aliases[id]);
+				species = this.get(alias);
 				if (species.cosmeticFormes) {
 					for (const forme of species.cosmeticFormes) {
 						if (toID(forme) === id) {
@@ -471,7 +471,7 @@ export class DexSpecies {
 						pokeName = id.slice(0, -i.length);
 					}
 				}
-				if (this.dex.data.Aliases.hasOwnProperty(pokeName)) pokeName = toID(this.dex.data.Aliases[pokeName]);
+				pokeName = this.dex.getAlias(pokeName as ID) || pokeName;
 				if (this.dex.data.Pokedex[pokeName + forme]) {
 					aliasTo = pokeName + forme;
 					break;

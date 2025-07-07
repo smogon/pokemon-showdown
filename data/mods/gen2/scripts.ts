@@ -187,10 +187,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				move.ignoreImmunity = (move.category === 'Status');
 			}
 
-			if (
-				(!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
-				!target.runImmunity(move.type, true)
-			) {
+			if (!target.runImmunity(move, true)) {
 				return false;
 			}
 
@@ -206,6 +203,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
+			if (move.ohko && pokemon.level < target.level) {
+				this.battle.add('-immune', target, '[ohko]');
+				return false;
+			}
+
 			let accuracy = move.accuracy;
 			if (move.alwaysHit) {
 				accuracy = true;
@@ -216,13 +218,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (accuracy !== true) {
 				accuracy = Math.floor(accuracy * 255 / 100);
 				if (move.ohko) {
-					if (pokemon.level >= target.level) {
-						accuracy += (pokemon.level - target.level) * 2;
-						accuracy = Math.min(accuracy, 255);
-					} else {
-						this.battle.add('-immune', target, '[ohko]');
-						return false;
-					}
+					accuracy += (pokemon.level - target.level) * 2;
+					accuracy = Math.min(accuracy, 255);
 				}
 				if (!move.ignoreAccuracy) {
 					if (pokemon.boosts.accuracy > 0) {
@@ -296,10 +293,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (move.ohko) this.battle.add('-ohko');
 
-			if (!move.negateSecondary) {
-				this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
-				this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
-			}
+			this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
+			this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
 
 			if (move.recoil && move.totalDamage) {
 				this.battle.damage(this.calcRecoilDamage(move.totalDamage, move, pokemon), pokemon, target, 'recoil');
@@ -497,10 +492,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Let's test for immunities.
-			if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
-				if (!target.runImmunity(move.type, true)) {
-					return false;
-				}
+			if (!target.runImmunity(move, true)) {
+				return false;
 			}
 
 			// Is it an OHKO move?

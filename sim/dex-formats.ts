@@ -221,7 +221,7 @@ export class RuleTable extends Map<string, string> {
 		this.pickedTeamSize = Number(this.valueRules.get('pickedteamsize')) || null;
 		this.maxTotalLevel = Number(this.valueRules.get('maxtotallevel')) || null;
 		this.maxMoveCount = Number(this.valueRules.get('maxmovecount')) || 4;
-		this.minSourceGen = Number(this.valueRules.get('minsourcegen')) || 1;
+		this.minSourceGen = Number(this.valueRules.get('minsourcegen'));
 		this.minLevel = Number(this.valueRules.get('minlevel')) || 1;
 		this.maxLevel = Number(this.valueRules.get('maxlevel')) || 100;
 		this.defaultLevel = Number(this.valueRules.get('defaultlevel')) || 0;
@@ -229,6 +229,13 @@ export class RuleTable extends Map<string, string> {
 		this.adjustLevelDown = Number(this.valueRules.get('adjustleveldown')) || null;
 		this.evLimit = Number(this.valueRules.get('evlimit'));
 		if (isNaN(this.evLimit)) this.evLimit = null;
+		if (!this.minSourceGen) {
+			if (dex.gen >= 9 && this.has('obtainable') && !this.has('natdexmod')) {
+				this.minSourceGen = dex.gen;
+			} else {
+				this.minSourceGen = 1;
+			}
+		}
 
 		const timer: Partial<GameTimerSettings> = {};
 		if (this.valueRules.has('timerstarting')) {
@@ -669,9 +676,9 @@ export class DexFormats {
 			if (ruleset) return ruleset;
 		}
 
-		if (this.dex.data.Aliases.hasOwnProperty(id)) {
-			name = this.dex.data.Aliases[id];
-			id = toID(name);
+		if (this.dex.getAlias(id)) {
+			id = this.dex.getAlias(id)!;
+			name = id;
 		}
 		if (this.dex.data.Rulesets.hasOwnProperty(DEFAULT_MOD + id)) {
 			id = (DEFAULT_MOD + id) as ID;
@@ -1023,7 +1030,7 @@ export class DexFormats {
 			}
 		}
 		const ruleid = id;
-		if (this.dex.data.Aliases.hasOwnProperty(id)) id = toID(this.dex.data.Aliases[id]);
+		id = this.dex.getAlias(id) || id;
 		for (const matchType of matchTypes) {
 			if (matchType === 'item' && ruleid === 'noitem') return 'item:noitem';
 			let table;

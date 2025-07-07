@@ -34,7 +34,7 @@ describe('Follow Me', () => {
 		assert.equal(hitCount, 2);
 	});
 
-	it('should not redirect self-targetting moves', () => {
+	it('should not redirect self-targeting moves', () => {
 		battle = common.createBattle({ gameType: 'doubles' });
 		battle.setPlayer('p1', { team: [
 			{ species: 'Clefable', ability: 'unaware', moves: ['followme'] },

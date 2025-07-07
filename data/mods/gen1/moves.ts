@@ -76,7 +76,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	bind: {
 		inherit: true,
 		ignoreImmunity: true,
-		volatileStatus: 'partiallytrapped',
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
@@ -84,19 +83,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (target.volatiles['mustrecharge']) {
 				target.removeVolatile('mustrecharge');
 				this.hint("In Gen 1, partial trapping moves negate the recharge turn of Hyper Beam, even if they miss.", true);
-			}
-		},
-		onHit(target, source) {
-			/**
-			 * The duration of the partially trapped must be always renewed to 2
-			 * so target doesn't move on trapper switch out as happens in gen 1.
-			 * However, this won't happen if there's no switch and the trapper is
-			 * about to end its partial trapping.
-			 **/
-			if (target.volatiles['partiallytrapped']) {
-				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration! > 1) {
-					target.volatiles['partiallytrapped'].duration = 2;
-				}
 			}
 		},
 	},
@@ -137,7 +123,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		accuracy: 75,
 		pp: 10,
-		volatileStatus: 'partiallytrapped',
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
@@ -145,19 +130,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (target.volatiles['mustrecharge']) {
 				target.removeVolatile('mustrecharge');
 				this.hint("In Gen 1, partial trapping moves negate the recharge turn of Hyper Beam, even if they miss.", true);
-			}
-		},
-		onHit(target, source) {
-			/**
-			 * The duration of the partially trapped must be always renewed to 2
-			 * so target doesn't move on trapper switch out as happens in gen 1.
-			 * However, this won't happen if there's no switch and the trapper is
-			 * about to end its partial trapping.
-			 **/
-			if (target.volatiles['partiallytrapped']) {
-				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration! > 1) {
-					target.volatiles['partiallytrapped'].duration = 2;
-				}
 			}
 		},
 	},
@@ -320,7 +292,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		accuracy: 70,
 		basePower: 15,
-		volatileStatus: 'partiallytrapped',
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
@@ -328,19 +299,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (target.volatiles['mustrecharge']) {
 				target.removeVolatile('mustrecharge');
 				this.hint("In Gen 1, partial trapping moves negate the recharge turn of Hyper Beam, even if they miss.", true);
-			}
-		},
-		onHit(target, source) {
-			/**
-			 * The duration of the partially trapped must be always renewed to 2
-			 * so target doesn't move on trapper switch out as happens in gen 1.
-			 * However, this won't happen if there's no switch and the trapper is
-			 * about to end its partial trapping.
-			 **/
-			if (target.volatiles['partiallytrapped']) {
-				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration! > 1) {
-					target.volatiles['partiallytrapped'].duration = 2;
-				}
 			}
 		},
 	},
@@ -862,8 +820,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				let uncappedDamage = move.hit > 1 ? this.lastDamage : this.actions.getDamage(source, target, move);
 				if (move.id === 'bide') uncappedDamage = source.volatiles['bide'].damage * 2;
 				if (!uncappedDamage && uncappedDamage !== 0) return null;
-				uncappedDamage = this.runEvent('SubDamage', target, source, move, uncappedDamage);
-				if (!uncappedDamage && uncappedDamage !== 0) return uncappedDamage;
 				this.lastDamage = uncappedDamage;
 				target.volatiles['substitute'].hp -= uncappedDamage > target.volatiles['substitute'].hp ?
 					target.volatiles['substitute'].hp : uncappedDamage;
@@ -950,7 +906,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		accuracy: 85,
 		ignoreImmunity: true,
-		volatileStatus: 'partiallytrapped',
 		self: {
 			volatileStatus: 'partialtrappinglock',
 		},
@@ -958,19 +913,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (target.volatiles['mustrecharge']) {
 				target.removeVolatile('mustrecharge');
 				this.hint("In Gen 1, partial trapping moves negate the recharge turn of Hyper Beam, even if they miss.", true);
-			}
-		},
-		onHit(target, source) {
-			/**
-			 * The duration of the partially trapped must be always renewed to 2
-			 * so target doesn't move on trapper switch out as happens in gen 1.
-			 * However, this won't happen if there's no switch and the trapper is
-			 * about to end its partial trapping.
-			 **/
-			if (target.volatiles['partiallytrapped']) {
-				if (source.volatiles['partialtrappinglock'] && source.volatiles['partialtrappinglock'].duration! > 1) {
-					target.volatiles['partiallytrapped'].duration = 2;
-				}
 			}
 		},
 	},

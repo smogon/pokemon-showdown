@@ -121,28 +121,28 @@ describe(`PRNG`, () => {
 		});
 		it(`should return items with equal probability for a five-item array`, () => {
 			const items = ['a', 'b', 'c', 'd', 'e'];
-			const occurences = { a: 0, b: 0, c: 0, d: 0, e: 0 };
+			const occurrences = { a: 0, b: 0, c: 0, d: 0, e: 0 };
 			const prng = new PRNG(testSeed);
 			for (let i = 0; i < 1000; ++i) {
 				const sample = prng.sample(items);
-				occurences[sample] += 1;
+				occurrences[sample] += 1;
 			}
-			assert.bounded(occurences.a, [170, 230]);
-			assert.bounded(occurences.b, [170, 230]);
-			assert.bounded(occurences.c, [170, 230]);
-			assert.bounded(occurences.d, [170, 230]);
-			assert.bounded(occurences.e, [170, 230]);
+			assert.bounded(occurrences.a, [170, 230]);
+			assert.bounded(occurrences.b, [170, 230]);
+			assert.bounded(occurrences.c, [170, 230]);
+			assert.bounded(occurrences.d, [170, 230]);
+			assert.bounded(occurrences.e, [170, 230]);
 		});
 		it(`should return items with weighted probability for a three-item array with duplicates`, () => {
 			const items = ['x', 'x', 'y'];
-			const occurences = { x: 0, y: 0 };
+			const occurrences = { x: 0, y: 0 };
 			const prng = new PRNG(testSeed);
 			for (let i = 0; i < 100; ++i) {
 				const sample = prng.sample(items);
-				occurences[sample] += 1;
+				occurrences[sample] += 1;
 			}
-			assert.bounded(occurences.x, [63, 71]);
-			assert.bounded(occurences.y, [29, 37]);
+			assert.bounded(occurrences.x, [63, 71]);
+			assert.bounded(occurrences.y, [29, 37]);
 		});
 		it(`should be identical to array[random(array.length)]`, () => {
 			// This invariant is important for battle logs.

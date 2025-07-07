@@ -132,13 +132,10 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			// If a faster partial trapping move misses against a user of Hyper Beam during a recharge turn,
 			// the user of Hyper Beam will automatically use Hyper Beam during that turn.
-			const autoHyperBeam = (
-				move.id === 'recharge' && !pokemon.volatiles['mustrecharge'] && !pokemon.volatiles['partiallytrapped']
-			);
-			if (autoHyperBeam) {
+			if (move.id === 'recharge' && !pokemon.volatiles['mustrecharge'] && !pokemon.volatiles['partiallytrapped']) {
 				move = this.battle.dex.getActiveMove('hyperbeam');
-				this.battle.hint(`In Gen 1, If a faster partial trapping move misses against a user of Hyper Beam during a recharge turn, ` +
-					`the user of Hyper Beam will automatically use Hyper Beam during that turn.`, true);
+				this.battle.hint(`In Gen 1, partial trapping moves like Wrap remove Hyper Beam recharges. ` +
+					`If the target would have recharged, it will automatically use Hyper Beam instead.`, true);
 			}
 
 			if (target?.subFainted) target.subFainted = null;
@@ -151,41 +148,32 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 				return;
 			}
-			if (move.beforeMoveCallback) {
-				if (move.beforeMoveCallback.call(this.battle, pokemon, target, move)) {
-					this.battle.clearActiveMove(true);
-					return;
-				}
+			if (move.beforeMoveCallback?.call(this.battle, pokemon, target, move)) {
+				this.battle.clearActiveMove(true);
+				return;
 			}
-			let lockedMove = this.battle.runEvent('LockMove', pokemon);
-			if (lockedMove === true) lockedMove = false;
-			if (
-				!lockedMove &&
-				(!pokemon.volatiles['partialtrappinglock'] || pokemon.volatiles['partialtrappinglock'].locked !== target)
-			) {
-				pokemon.deductPP(move, null, target);
-			} else {
+
+			let ppMove: ID = pokemon.volatiles['twoturnmove']?.ppMove || '';
+			if (pokemon.getLockedMove()) {
+				// locked moves don't deduct PP
 				sourceEffect = move;
-				if (pokemon.volatiles['twoturnmove']) {
-					// Two-turn moves like Sky Attack deduct PP on their second turn.
-					pokemon.deductPP(pokemon.volatiles['twoturnmove'].originalMove, null, target);
-				}
+			} else {
+				ppMove ||= move.id;
 			}
-			if (
-				(pokemon.volatiles['partialtrappinglock'] && target !== pokemon.volatiles['partialtrappinglock'].locked) ||
-				autoHyperBeam
-			) {
-				const moveSlot = pokemon.moveSlots.find(ms => ms.id === move.id);
-				if (moveSlot && moveSlot.pp < 0) {
-					moveSlot.pp = 63;
-					this.battle.hint("In Gen 1, if a player is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
-				}
-			}
+
 			this.useMove(move, pokemon, { target, sourceEffect });
-			// Restore PP if the move is the first turn of a charging move. Save the move from which PP should be deducted if the move succeeds.
+
 			if (pokemon.volatiles['twoturnmove']) {
-				pokemon.deductPP(move, -1, target);
-				pokemon.volatiles['twoturnmove'].originalMove = move.id;
+				// Deduct PP on the second turn, not first
+				// If called from e.g. Metronome, remember to deduct Metronome PP
+				pokemon.volatiles['twoturnmove'].ppMove = move.id;
+			} else if (ppMove) {
+				pokemon.deductPP(ppMove, null, target);
+				const moveSlot = pokemon.getMoveData(ppMove);
+				if (moveSlot && moveSlot.pp < 0) {
+					moveSlot.pp += 64;
+					this.battle.hint("In Gen 1, if a pokemon is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
+				}
 			}
 		},
 		// This function deals with AfterMoveSelf events.
@@ -332,10 +320,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				return true;
 			}
 
-			if (!move.negateSecondary) {
-				this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
-				this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
-			}
+			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
+			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
 			return true;
 		},
 		// This function attempts a move hit and returns the attempt result before the actual hit happens.
@@ -370,10 +356,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Then, check if the Pokémon is immune to this move.
-			if (
-				(!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) &&
-				!target.runImmunity(move.type, true)
-			) {
+			if (!target.runImmunity(move, true)) {
 				if (move.selfdestruct) {
 					this.battle.faint(pokemon, pokemon, move);
 				}
@@ -499,10 +482,8 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			if (move.ohko) this.battle.add('-ohko');
 
-			if (!move.negateSecondary) {
-				this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
-				this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
-			}
+			this.battle.singleEvent('AfterMoveSecondary', move, null, target, pokemon, move);
+			this.battle.runEvent('AfterMoveSecondary', target, pokemon, move);
 
 			return damage;
 		},
@@ -751,10 +732,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			// Let's see if the target is immune to the move.
-			if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
-				if (!target.runImmunity(move.type, true)) {
-					return false;
-				}
+			if (!target.runImmunity(move, true)) {
+				return false;
 			}
 
 			// Is it an OHKO move?

@@ -171,22 +171,30 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 		for (const team of this.teams.values()) {
 			let table = `<table>`;
+			let smogonTable = `[TABLE]`;
 			for (const player of players.filter(p => p.team === team)) {
 				table += Utils.html`<tr><td>${player.name}</td><td>${player.price}</td></tr>`;
+				smogonTable += `[TR][TD]${player.name}[/TD][TD]${player.price}[/TD][/TR]`;
 			}
 			table += `</table>`;
+			smogonTable += `[/TABLE]`;
+
 			buf += `<details><summary>${Utils.escapeHTML(team.name)}</summary>${table}</details><br/>`;
-			if (this.ended) smogonExport += `[SPOILER="${team.name}"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
+			if (this.ended) smogonExport += `[SPOILER="${team.name}"]${smogonTable}[/SPOILER]`;
 		}
 
 		let table = `<table>`;
+		let smogonTable = `[TABLE]`;
 		for (const player of players) {
 			table += Utils.html`<tr><td>${player.name}</td><td>${player.price}</td><td>${player.team!.name}</td></tr>`;
+			smogonTable += `[TR][TD]${player.name}[/TD][TD]${player.price}[/TD][TD]${player.team!.name}[/TD][/TR]`;
 		}
 		table += `</table>`;
+		smogonTable += `[/TABLE]`;
+
 		buf += `<details><summary>All</summary>${table}</details><br/>`;
 		if (this.ended) {
-			smogonExport += `[SPOILER="All"]${table.replace(/<(.*?)>/g, '[$1]')}[/SPOILER]`;
+			smogonExport += `[SPOILER="All"]${smogonTable}[/SPOILER]`;
 			buf += Utils.html`<copytext value="${smogonExport}">Copy Smogon Export</copytext>`;
 		}
 
@@ -195,13 +203,14 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	generateAuctionTable() {
 		const queue = this.queue.filter(team => !team.isSuspended());
+		const lastIndexOfNomTeam = queue.lastIndexOf(queue[0]) + 1;
 		let buf = `<div class="ladder pad"><table style="width: 100%"><tr>${!this.ended ? `<th colspan=2>Order</th>` : ''}<th>Team</th>${this.type !== 'snake' ? `<th>Credits</th>` : ''}<th style="width: 100%">Players</th></tr>`;
 		for (const team of this.teams.values()) {
 			buf += `<tr>`;
 			if (!this.ended) {
 				let i1 = queue.indexOf(team) + 1;
 				let i2 = queue.lastIndexOf(team) + 1;
-				if (i1 > queue.length / 2) {
+				if (i1 > lastIndexOfNomTeam) {
 					[i1, i2] = [i2, i1];
 				}
 				buf += `<td align="center" style="width: 15px">${i1 || '-'}</td><td align="center" style="width: 15px">${i2 || '-'}</td>`;
@@ -248,11 +257,10 @@ export class Auction extends Rooms.SimpleRoomGame {
 	}
 
 	sendBidInfo() {
-		if (this.type === 'blind') return;
 		let buf = `<div class="infobox">`;
 		buf += Utils.html`Player: <username>${this.nominatedPlayer.name}</username> `;
-		buf += `Top bid: <b>${this.highestBid}</b> `;
-		buf += Utils.html`Top bidder: <b>${this.highestBidder.name}</b><br/>`;
+		if (this.type === 'auction') buf += `Top bid: <b>${this.highestBid}</b> `;
+		if (this.type === 'auction') buf += Utils.html`Top bidder: <b>${this.highestBidder.name}</b><br/>`;
 		buf += Utils.html`Tiers Played: <b>${this.nominatedPlayer.tiersPlayed.length ? `${this.nominatedPlayer.tiersPlayed.join(', ')}` : 'N/A'}</b><br/>`;
 		buf += Utils.html`Tiers Not Played: <b>${this.nominatedPlayer.tiersNotPlayed.length ? `${this.nominatedPlayer.tiersNotPlayed.join(', ')}` : 'N/A'}</b>`;
 		buf += `</div>`;
@@ -372,7 +380,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 		this.auctionPlayers = playerList;
 	}
 
-	addAuctionPlayer(name: string, tiersPlayed: string[], tiersNotPlayed: string[]) {
+	addAuctionPlayer(name: string, tiersPlayed: string[] = [], tiersNotPlayed: string[] = []) {
 		if (this.state === 'bid') throw new Chat.ErrorMessage(`Players cannot be added during a nomination.`);
 		if (name.length > 25) throw new Chat.ErrorMessage(`Player names must be 25 characters or less.`);
 		if (tiersPlayed.some(tier => tier.length > 30) || tiersNotPlayed.some(tier => tier.length > 30)) {
@@ -403,13 +411,12 @@ export class Auction extends Rooms.SimpleRoomGame {
 
 	assignPlayer(name: string, teamName?: string) {
 		if (this.state === 'bid') throw new Chat.ErrorMessage(`Players cannot be assigned during a nomination.`);
-		const player = this.auctionPlayers.get(toID(name));
-		if (!player) throw new Chat.ErrorMessage(`Player "${name}" not found.`);
+		const player = this.auctionPlayers.get(toID(name)) || this.addAuctionPlayer(name);
 		if (teamName) {
 			const team = this.teams.get(toID(teamName));
 			if (!team) throw new Chat.ErrorMessage(`Team "${teamName}" not found.`);
 			team.addPlayer(player);
-			if (!this.getUndraftedPlayers().length) {
+			if (this.state !== 'setup' && !this.getUndraftedPlayers().length) {
 				return this.end('The auction has ended because there are no players remaining in the draft pool.');
 			}
 		} else {
@@ -574,7 +581,7 @@ export class Auction extends Rooms.SimpleRoomGame {
 				const curUser = Users.getExact(currManager.id);
 				curUser?.sendTo(this.room, notifyMsg);
 				curUser?.sendTo(this.room,
-					`|raw|Send a message with the amount you want to bid (e.g. <code>.5</code> or <code>5</code> will place a bid of <b>5000</b>)!`);
+					`|raw|Send a message with the amount you want to bid (e.g. <code>.5</code> or <code>5</code> will place a bid of 5000)!`);
 			}
 			this.sendBidInfo();
 			this.startBidTimer();
@@ -611,7 +618,6 @@ export class Auction extends Rooms.SimpleRoomGame {
 			if (bid <= this.highestBid) throw new Chat.ErrorMessage(`Your bid must be higher than the current bid.`);
 			this.highestBid = bid;
 			this.highestBidder = team;
-			// this.sendMessage(Utils.html`/html <username class="username">${user.name}</username>[${team.name}]: <b>${bid}</b>`);
 			this.sendBidInfo();
 			this.startBidTimer();
 		}
@@ -633,8 +639,8 @@ export class Auction extends Rooms.SimpleRoomGame {
 			this.room.update();
 			try {
 				this.bid(user, parseCredits(message));
-			} catch (e) {
-				if (e instanceof Chat.ErrorMessage) {
+			} catch (e: any) {
+				if (e.name?.endsWith('ErrorMessage')) {
 					user.sendTo(this.room, Utils.html`|raw|<span class="message-error">${e.message}</span>`);
 				} else {
 					user.sendTo(this.room, `|raw|<span class="message-error">An unexpected error occurred while placing your bid.</span>`);
@@ -752,14 +758,14 @@ export const commands: Chat.ChatCommands = {
 		create(target, room, user) {
 			room = this.requireRoom();
 			this.checkCan('minigame', null, room);
-			if (room.game) return this.errorReply(`There is already a game of ${room.game.title} in progress in this room.`);
-			if (room.settings.auctionDisabled) return this.errorReply('Auctions are currently disabled in this room.');
+			if (room.game) throw new Chat.ErrorMessage(`There is already a game of ${room.game.title} in progress in this room.`);
+			if (room.settings.auctionDisabled) throw new Chat.ErrorMessage('Auctions are currently disabled in this room.');
 
 			let startingCredits;
 			if (target) {
 				startingCredits = parseCredits(target);
 				if (startingCredits < 10000 || startingCredits > 10000000) {
-					return this.errorReply(`Starting credits must be between 10,000 and 10,000,000.`);
+					throw new Chat.ErrorMessage(`Starting credits must be between 10,000 and 10,000,000.`);
 				}
 			}
 			const auction = new Auction(room, startingCredits);
@@ -915,13 +921,13 @@ export const commands: Chat.ChatCommands = {
 
 			if (!target) return this.parse('/help auction importplayers');
 			if (!/^https?:\/\/pastebin\.com\/[a-zA-Z0-9]+$/.test(target)) {
-				return this.errorReply('Invalid pastebin URL.');
+				throw new Chat.ErrorMessage('Invalid pastebin URL.');
 			}
 			let data = '';
 			try {
 				data = await Net(`https://pastebin.com/raw/${target.split('/').pop()}`).get();
 			} catch {}
-			if (!data) return this.errorReply('Error fetching data from pastebin.');
+			if (!data) throw new Chat.ErrorMessage('Error fetching data from pastebin.');
 
 			auction.importPlayers(data);
 			this.addModAction(`${user.name} imported the player list from ${target}.`);
@@ -1091,7 +1097,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('gamemanagement', null, room);
 			if (room.settings.auctionDisabled) {
-				return this.errorReply('Auctions are already disabled.');
+				throw new Chat.ErrorMessage('Auctions are already disabled.');
 			}
 			room.settings.auctionDisabled = true;
 			room.saveSettings();
@@ -1101,7 +1107,7 @@ export const commands: Chat.ChatCommands = {
 			room = this.requireRoom();
 			this.checkCan('gamemanagement', null, room);
 			if (!room.settings.auctionDisabled) {
-				return this.errorReply('Auctions are already enabled.');
+				throw new Chat.ErrorMessage('Auctions are already enabled.');
 			}
 			delete room.settings.auctionDisabled;
 			room.saveSettings();
@@ -1161,7 +1167,7 @@ export const commands: Chat.ChatCommands = {
 		this.parse(`/auction nominate ${target}`);
 	},
 	bid() {
-		this.errorReply(`/bid is no longer supported. Send the amount by itself in the chat to place your bid.`);
+		throw new Chat.ErrorMessage(`/bid is no longer supported. Send the amount by itself in the chat to place your bid.`);
 	},
 	overpay() {
 		this.requireGame(Auction);

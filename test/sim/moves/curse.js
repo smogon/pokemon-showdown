@@ -131,7 +131,7 @@ describe('Curse', () => {
 	});
 });
 
-describe('XY/ORAS Curse targetting when becoming Ghost the same turn', () => {
+describe('XY/ORAS Curse targeting when becoming Ghost the same turn', () => {
 	afterEach(() => {
 		battle.destroy();
 	});

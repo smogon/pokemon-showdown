@@ -127,6 +127,8 @@ export class Pokemon {
 	trapped: boolean | "hidden";
 	maybeTrapped: boolean;
 	maybeDisabled: boolean;
+	/** true = locked,  */
+	maybeLocked: boolean | null;
 
 	illusion: Pokemon | null;
 	transformed: boolean;
@@ -140,7 +142,7 @@ export class Pokemon {
 	subFainted: boolean | null;
 
 	/** If this Pokemon should revert to its set species when it faints */
-	regressionForme: boolean;
+	formeRegression: boolean;
 
 	types: string[];
 	addedType: string;
@@ -249,6 +251,7 @@ export class Pokemon {
 	activeMoveActions: number;
 	previouslySwitchedIn: number;
 	truantTurn: boolean;
+	bondTriggered: boolean;
 	// Gen 9 only
 	swordBoost: boolean;
 	shieldBoost: boolean;
@@ -326,8 +329,8 @@ export class Pokemon {
 
 		set.level = this.battle.clampIntRange(set.adjustLevel || set.level || 100, 1, 9999);
 		this.level = set.level;
-		const genders: { [key: string]: GenderName } = { M: 'M', F: 'F', N: 'N' };
-		this.gender = genders[set.gender] || this.species.gender || (this.battle.random(2) ? 'F' : 'M');
+		const genders: { [key: string]: GenderName | null } = { __proto__: null, M: 'M', F: 'F', N: 'N' };
+		this.gender = genders[set.gender] || this.species.gender || this.battle.sample(['M', 'F']);
 		if (this.gender === 'N') this.gender = '';
 		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
 		this.pokeball = toID(this.set.pokeball) || 'pokeball' as ID;
@@ -418,6 +421,7 @@ export class Pokemon {
 		this.trapped = false;
 		this.maybeTrapped = false;
 		this.maybeDisabled = false;
+		this.maybeLocked = false;
 
 		this.illusion = null;
 		this.transformed = false;
@@ -426,7 +430,7 @@ export class Pokemon {
 		this.faintQueued = false;
 		this.subFainted = null;
 
-		this.regressionForme = false;
+		this.formeRegression = false;
 
 		this.types = this.baseSpecies.types;
 		this.baseTypes = this.types;
@@ -461,6 +465,7 @@ export class Pokemon {
 		this.activeMoveActions = 0;
 		this.previouslySwitchedIn = 0;
 		this.truantTurn = false;
+		this.bondTriggered = false;
 		this.swordBoost = false;
 		this.shieldBoost = false;
 		this.syrupTriggered = false;
@@ -592,7 +597,10 @@ export class Pokemon {
 
 		// stat boosts
 		if (!unboosted) {
-			const boosts = this.battle.runEvent('ModifyBoost', this, null, null, { ...this.boosts });
+			let boosts = this.boosts;
+			if (!unmodified) {
+				boosts = this.battle.runEvent('ModifyBoost', this, null, null, { ...boosts });
+			}
 			let boost = boosts[statName];
 			const boostTable = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 			if (boost > 6) boost = 6;
@@ -801,7 +809,7 @@ export class Pokemon {
 					!(move.id.startsWith('solarb') && ['sunnyday', 'desolateland'].includes(this.effectiveWeather())) &&
 					!(move.id === 'electroshot' && ['raindance', 'primordialsea'].includes(this.effectiveWeather())) &&
 					!(this.hasItem('powerherb') && move.id !== 'skydrop');
-				if (!isCharging) {
+				if (!isCharging && !(move.id === 'pursuit' && (target.beingCalledBack || target.switchFlag))) {
 					target = this.battle.priorityEvent('RedirectTarget', this, this, move, target);
 				}
 			}
@@ -852,13 +860,14 @@ export class Pokemon {
 		return false;
 	}
 
-	ignoringItem() {
-		return !this.getItem().isPrimalOrb && !!(
-			this.itemState.knockedOff || // Gen 3-4
-			(this.battle.gen >= 5 && !this.isActive) ||
-			(!this.getItem().ignoreKlutz && this.hasAbility('klutz')) ||
-			this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']
-		);
+	ignoringItem(isFling = false) {
+		if (this.getItem().isPrimalOrb) return false;
+		if (this.itemState.knockedOff) return true; // Gen 3-4
+		if (this.battle.gen >= 5 && !this.isActive) return true;
+		if (this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']) return true;
+		// check Fling first to avoid infinite recursion
+		if (isFling) return this.battle.gen >= 5 && this.hasAbility('klutz');
+		return !this.getItem().ignoreKlutz && this.hasAbility('klutz');
 	}
 
 	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
@@ -1043,12 +1052,12 @@ export class Pokemon {
 			}
 		}
 		if (!atLeastOne) return;
-		if (this.canGigantamax) result.gigantamax = this.canGigantamax;
+		if (this.canGigantamax && this.gigantamax) result.gigantamax = this.canGigantamax;
 		return result;
 	}
 
 	getMoveRequestData() {
-		let lockedMove = this.getLockedMove();
+		let lockedMove = this.maybeLocked ? null : this.getLockedMove();
 
 		// Information should be restricted for the last active Pokémon
 		const isLastActive = this.isLastActive();
@@ -1066,7 +1075,10 @@ export class Pokemon {
 
 		if (isLastActive) {
 			if (this.maybeDisabled) {
-				data.maybeDisabled = true;
+				data.maybeDisabled = this.maybeDisabled;
+			}
+			if (this.maybeLocked) {
+				data.maybeLocked = this.maybeLocked;
 			}
 			if (canSwitchIn) {
 				if (this.trapped === true) {
@@ -1196,7 +1208,7 @@ export class Pokemon {
 			if (switchCause === 'shedtail' && i !== 'substitute') continue;
 			if (this.battle.dex.conditions.getByID(i as ID).noCopy) continue;
 			// shallow clones
-			this.volatiles[i] = this.battle.initEffectState({ ...pokemon.volatiles[i] });
+			this.volatiles[i] = this.battle.initEffectState({ ...pokemon.volatiles[i], target: this });
 			if (this.volatiles[i].linkedPokemon) {
 				delete pokemon.volatiles[i].linkedPokemon;
 				delete pokemon.volatiles[i].linkedStatus;
@@ -1383,7 +1395,6 @@ export class Pokemon {
 		const apparentSpecies =
 			this.illusion ? this.illusion.species.name : species.baseSpecies;
 		if (isPermanent) {
-			if (!this.transformed) this.regressionForme = true;
 			this.baseSpecies = rawSpecies;
 			this.details = this.getUpdatedDetails();
 			let details = (this.illusion || this).details;
@@ -1392,6 +1403,7 @@ export class Pokemon {
 			if (!source) {
 				// Tera forme
 				// Ogerpon/Terapagos text goes here
+				this.formeRegression = true;
 			} else if (source.effectType === 'Item') {
 				this.canTerastallize = null; // National Dex behavior
 				if (source.zMove) {
@@ -1408,6 +1420,7 @@ export class Pokemon {
 					this.battle.add('-mega', this, apparentSpecies, species.requiredItem);
 					this.moveThisTurnResult = true; // Mega Evolution counts as an action for Truant
 				}
+				this.formeRegression = true;
 			} else if (source.effectType === 'Status') {
 				// Shaymin-Sky -> Shaymin
 				this.battle.add('-formechange', this, species.name, message);
@@ -1420,7 +1433,8 @@ export class Pokemon {
 			}
 		}
 		if (isPermanent && (!source || !['disguise', 'iceface'].includes(source.id))) {
-			if (this.illusion) {
+			if (this.illusion && source) {
+				// Tera forme by Ogerpon or Terapagos breaks the Illusion
 				this.ability = ''; // Don't allow Illusion to wear off
 			}
 			const ability = species.abilities[abilitySlot] || species.abilities['0'];
@@ -1786,7 +1800,6 @@ export class Pokemon {
 	}
 
 	takeItem(source?: Pokemon) {
-		if (!this.isActive) return false;
 		if (!this.item || this.itemState.knockedOff) return false;
 		if (!source) source = this;
 		if (this.battle.gen === 4) {
@@ -1965,8 +1978,7 @@ export class Pokemon {
 		if (!this.hp) return false;
 		status = this.battle.dex.conditions.get(status) as Effect;
 		if (!this.volatiles[status.id]) return false;
-		const linkedPokemon = this.volatiles[status.id].linkedPokemon;
-		const linkedStatus = this.volatiles[status.id].linkedStatus;
+		const { linkedPokemon, linkedStatus } = this.volatiles[status.id];
 		this.battle.singleEvent('End', status, this.volatiles[status.id], this);
 		delete this.volatiles[status.id];
 		if (linkedPokemon) {
@@ -1991,24 +2003,30 @@ export class Pokemon {
 		if (!this.hp) return { side: this.side.id, secret: '0 fnt', shared: '0 fnt' };
 		let secret = `${this.hp}/${this.maxhp}`;
 		let shared;
-		const ratio = this.hp / this.maxhp;
 		if (this.battle.reportExactHP) {
 			shared = secret;
-		} else if (this.battle.reportPercentages || this.battle.gen >= 8) {
+		} else if (this.battle.reportPercentages || this.battle.gen >= 7) {
 			// HP Percentage Mod mechanics
-			let percentage = Math.ceil(ratio * 100);
-			if ((percentage === 100) && (ratio < 1.0)) {
+			let percentage = Math.ceil(100 * this.hp / this.maxhp);
+			if (percentage === 100 && this.hp < this.maxhp) {
 				percentage = 99;
 			}
 			shared = `${percentage}/100`;
 		} else {
-			// In-game accurate pixel health mechanics
-			const pixels = Math.floor(ratio * 48) || 1;
+			/**
+			 * In-game accurate pixel health mechanics
+			 * PS doesn't use pixels after Gen 6, but for reference:
+			 * - [Gen 7] SM uses 99 pixels
+			 * - [Gen 7] USUM uses 86 pixels
+			 * */
+			const pixels = Math.floor(48 * this.hp / this.maxhp) || 1;
 			shared = `${pixels}/48`;
-			if ((pixels === 9) && (ratio > 0.2)) {
-				shared += 'y'; // force yellow HP bar
-			} else if ((pixels === 24) && (ratio > 0.5)) {
-				shared += 'g'; // force green HP bar
+			if (this.battle.gen >= 5) {
+				if (pixels === 9) {
+					shared += this.hp * 5 > this.maxhp ? 'y' : 'r';
+				} else if (pixels === 24) {
+					shared += this.hp * 2 > this.maxhp ? 'g' : 'y';
+				}
 			}
 		}
 		if (this.status) {
@@ -2128,7 +2146,7 @@ export class Pokemon {
 		if (this.species.name === 'Terapagos-Terastal' && this.hasAbility('Tera Shell') &&
 			!this.battle.suppressingAbility(this)) {
 			if (this.abilityState.resisted) return -1; // all hits of multi-hit move should be not very effective
-			if (move.category === 'Status' || move.id === 'struggle' || !this.runImmunity(move.type) ||
+			if (move.category === 'Status' || move.id === 'struggle' || !this.runImmunity(move) ||
 				totalTypeMod < 0 || this.hp < this.maxhp) {
 				return totalTypeMod;
 			}
@@ -2141,12 +2159,18 @@ export class Pokemon {
 	}
 
 	/** false = immune, true = not immune */
-	runImmunity(type: string, message?: string | boolean) {
+	runImmunity(source: ActiveMove | string, message?: string | boolean) {
+		if (!source) return true;
+		const type: string = typeof source !== 'string' ? source.type : source;
+		if (typeof source !== 'string') {
+			if (source.ignoreImmunity && (source.ignoreImmunity === true || source.ignoreImmunity[type])) {
+				return true;
+			}
+		}
 		if (!type || type === '???') return true;
 		if (!this.battle.dex.types.isName(type)) {
 			throw new Error("Use runStatusImmunity for " + type);
 		}
-		if (this.fainted) return false;
 
 		const negateImmunity = !this.battle.runEvent('NegateImmunity', this, type);
 		const notImmune = type === 'Ground' ?

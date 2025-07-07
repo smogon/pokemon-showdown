@@ -99,7 +99,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 					}
 				}
 				if (
-					['ag', 'uber'].includes(this.toID(this.ruleTable.has('standardnatdex') ? species.natDexTier : species.tier)) ||
+					['ag', 'uber'].includes(this.toID(this.ruleTable.has('natdexmod') ? species.natDexTier : species.tier)) ||
 					this.toID(set.ability) === 'powerconstruct'
 				) {
 					gods.add(species.name);
@@ -114,7 +114,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			if (source || !target?.side) return;
 			const god = target.side.team.find(set => {
 				let godSpecies = this.dex.species.get(set.species);
-				const isNatDex = this.format.ruleTable?.has('standardnatdex');
+				const isNatDex = this.format.ruleTable?.has('natdexmod');
 				const validator = this.dex.formats.getRuleTable(
 					this.dex.formats.get(`gen${this.gen}${isNatDex && this.gen >= 8 ? 'nationaldex' : 'ou'}`)
 				);

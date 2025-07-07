@@ -56,6 +56,12 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Served Cold" },
 	},
 
+	// April
+	leafeon: {
+		inherit: true,
+		abilities: { 0: "Twin Fantasy" },
+	},
+
 	// aQrator
 	totodile: {
 		inherit: true,
@@ -79,6 +85,16 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	lilligant: {
 		inherit: true,
 		abilities: { 0: "Saintly Bullet" },
+	},
+
+	// Archfaewild
+	abomasnow: {
+		inherit: true,
+		abilities: { 0: "Snow Warning" },
+	},
+	abomasnowmega: {
+		inherit: true,
+		abilities: { 0: "Flash Fire" },
 	},
 
 	// Arcueid
@@ -197,6 +213,13 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Scrappy" },
 	},
 
+	// calmvibes
+	marill: {
+		inherit: true,
+		baseStats: { hp: 100, atk: 50, def: 80, spa: 60, spd: 80, spe: 50 },
+		abilities: { 0: "Huge Power" },
+	},
+
 	// chaos
 	ironjugulis: {
 		inherit: true,
@@ -227,7 +250,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "That's Hacked" },
 	},
 
-	// Clementine
+	// Clem
 	avalugg: {
 		inherit: true,
 		abilities: { 0: "Melting Point" },
@@ -291,19 +314,9 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 
 	// dhelmise
-	slowkinggalar: {
+	dhelmise: {
 		inherit: true,
-		abilities: { 0: "Coalescence" },
-	},
-
-	// DianaNicole
-	abomasnow: {
-		inherit: true,
-		abilities: { 0: "Snow Warning" },
-	},
-	abomasnowmega: {
-		inherit: true,
-		abilities: { 0: "Flash Fire" },
+		abilities: { 0: "Virus" },
 	},
 
 	// EasyOnTheHills
@@ -365,13 +378,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	// Ganjafin
 	wiglett: {
 		inherit: true,
-		baseStats: { hp: 80, atk: 60, def: 80, spa: 60, spd: 80, spe: 100 },
+		baseStats: { hp: 100, atk: 80, def: 100, spa: 80, spd: 100, spe: 120 },
 		abilities: { 0: "Gambling Addiction" },
 	},
 
 	// Haste Inky
 	falinks: {
 		inherit: true,
+		baseStats: { hp: 80, atk: 100, def: 100, spa: 45, spd: 70, spe: 75 },
 		abilities: { 0: "Simple" },
 	},
 
@@ -416,20 +430,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		baseStats: { hp: 35, atk: 55, def: 40, spa: 50, spd: 50, spe: 90 },
 		abilities: { 0: 'Hydrostatic Positivity' },
 		types: ["Electric", "Water"],
-	},
-
-	// Imperial
-	kyurem: {
-		inherit: true,
-		abilities: { 0: "Frozen Fortuity" },
-	},
-	kyuremblack: {
-		inherit: true,
-		abilities: { 0: "Frozen Fortuity" },
-	},
-	kyuremwhite: {
-		inherit: true,
-		abilities: { 0: "Frozen Fortuity" },
 	},
 
 	// in the hills
@@ -485,7 +485,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	// kenn
 	larvitar: {
 		inherit: true,
-		baseStats: { hp: 100, atk: 84, def: 70, spa: 65, spd: 70, spe: 61 },
+		baseStats: { hp: 100, atk: 84, def: 70, spa: 65, spd: 70, spe: 51 },
 		abilities: { 0: "Deserted Dunes" },
 	},
 
@@ -517,12 +517,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	// kingbaruk
 	wigglytuff: {
 		inherit: true,
+		baseStats: { hp: 140, atk: 70, def: 80, spa: 85, spd: 80, spe: 45 },
 		abilities: { 0: "Peer Pressure" },
 	},
 
 	// Kiwi
 	minccino: {
 		inherit: true,
+		baseStats: { hp: 75, atk: 70, def: 60, spa: 60, spd: 60, spe: 75 },
 		abilities: { 0: "Sure Hit Sorcery" },
 	},
 
@@ -595,17 +597,10 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Power Abuse" },
 	},
 
-	// marillvibes
-	marill: {
-		inherit: true,
-		baseStats: { hp: 100, atk: 50, def: 80, spa: 60, spd: 80, spe: 50 },
-		abilities: { 0: "Huge Power" },
-	},
-
 	// Mathy
 	furret: {
 		inherit: true,
-		baseStats: { hp: 105, atk: 96, def: 84, spa: 45, spd: 75, spe: 110 },
+		baseStats: { hp: 85, atk: 76, def: 128, spa: 90, spd: 110, spe: 110 },
 		abilities: { 0: "Dynamic Typing" },
 	},
 
@@ -677,7 +672,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	delcatty: {
 		inherit: true,
 		types: ["Fairy"],
-		baseStats: { hp: 80, atk: 65, def: 80, spa: 70, spd: 80, spe: 90 },
+		baseStats: { hp: 70, atk: 95, def: 95, spa: 85, spd: 85, spe: 120 },
 		abilities: { 0: "Adorable Grace" },
 	},
 

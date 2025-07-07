@@ -619,17 +619,23 @@ export const Teams = new class Teams {
 	getGenerator(format: Format | string, seed: PRNG | PRNGSeed | null = null) {
 		let TeamGenerator;
 		format = Dex.formats.get(format);
+		let mod = format.mod;
+		if (format.mod === 'monkeyspaw') mod = 'gen9';
 		const formatID = toID(format);
 		if (formatID.includes('gen9computergeneratedteams')) {
 			TeamGenerator = require(Dex.forFormat(format).dataDir + '/cg-teams').default;
-		} else if (formatID.includes('gen9superstaffbrosultimate')) {
+		} else if (mod === 'gen9ssb') {
 			TeamGenerator = require(`../data/mods/gen9ssb/random-teams`).default;
+		} else if (mod === 'ccapm2024') {
+			TeamGenerator = require(`../data/mods/ccapm2024/random-teams`).default;
+		} else if (mod === 'vaporemons') {
+			TeamGenerator = require(`../data/mods/vaporemons/random-teams`).default;
 		} else if (formatID.includes('gen9babyrandombattle')) {
 			TeamGenerator = require(`../data/random-battles/gen9baby/teams`).default;
 		} else if (formatID.includes('gen9randombattle') && format.ruleTable?.has('+pokemontag:cap')) {
 			TeamGenerator = require(`../data/random-battles/gen9cap/teams`).default;
 		} else {
-			TeamGenerator = require(`../data/random-battles/${format.mod}/teams`).default;
+			TeamGenerator = require(`../data/random-battles/${mod}/teams`).default;
 		}
 
 		return new TeamGenerator(format, seed);

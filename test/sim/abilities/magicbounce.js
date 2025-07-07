@@ -68,6 +68,35 @@ describe('Magic Bounce', () => {
 		assert(battle.p2.sideConditions['stealthrock']);
 	});
 
+	it(`should only activate for the fastest Pokemon in a Free-for-all battle`, () => {
+		battle = common.createBattle({ gameType: 'freeforall' }, [[
+			{ species: 'Deoxys-Speed', moves: ['stealthrock'] },
+		], [
+			{ species: 'Espeon', ability: 'magicbounce', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Hatterene', ability: 'magicbounce', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Hattrem', ability: 'magicbounce', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.deepEqual(battle.sides.map(side => !!side.sideConditions.stealthrock), [true, false, true, true]);
+	});
+
+	it(`should activate from fastest to slowest based on unmodified speed`, () => {
+		battle = common.createBattle({ gameType: 'freeforall' }, [[
+			{ species: 'Deoxys-Speed', moves: ['stealthrock', 'trickroom'] },
+		], [
+			{ species: 'Espeon', ability: 'magicbounce', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Hatterene', ability: 'magicbounce', moves: ['sleeptalk'] },
+		], [
+			{ species: 'Hattrem', ability: 'magicbounce', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move trickroom', 'auto', 'auto', 'auto');
+		battle.makeChoices();
+		assert.deepEqual(battle.sides.map(side => !!side.sideConditions.stealthrock), [true, false, true, true]);
+	});
+
 	it(`[Gen 5] should bounce moves that target the foe's side while semi-invulnerable`, () => {
 		battle = common.gen(5).createBattle({ gameType: 'doubles' });
 		battle.setPlayer('p1', { team: [

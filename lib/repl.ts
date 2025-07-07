@@ -97,7 +97,7 @@ export const Repl = new class {
 
 	/**
 	 * Starts a REPL server, using a UNIX socket for IPC. The eval function
-	 * parametre is passed in because there is no other way to access a file's
+	 * parameter is passed in because there is no other way to access a file's
 	 * non-global context.
 	 */
 	start(filename: string, evalFunction: (input: string) => any) {

@@ -126,7 +126,7 @@ export const Nominations = new class {
 			}
 		}
 		const ipTable = new Set<string>(ips);
-		const altTable = new Set<string>([...alts]);
+		const altTable = new Set<string>(alts);
 		for (const alt of [primaryID, ...alts]) {
 			const modlog = await this.fetchModlog(alt);
 			if (!modlog?.results.length) continue;
@@ -151,7 +151,7 @@ export const Nominations = new class {
 		Utils.sortBy(this.noms, nom => -nom.date);
 		this.save();
 		this.notifyStaff();
-		Rooms.get('staff')?.addByUser(user, `${user.name} submitted a perma nomination for ${primaryID}`);
+		Rooms.get('staff')?.addByUser(user, `${user.name} submitted a perma nomination for ${primaryID}`).update();
 	}
 	find(id: string) {
 		return this.noms.find(f => f.primaryID === id);
@@ -513,7 +513,7 @@ export const commands: Chat.ChatCommands = {
 			if (!targetId) targetId = user.id;
 			const mon = Dex.species.get(monName);
 			if (!mon.exists) {
-				return this.errorReply(`Species ${monName} does not exist.`);
+				throw new Chat.ErrorMessage(`Species ${monName} does not exist.`);
 			}
 			Nominations.icons[targetId] = mon.name.toLowerCase();
 			Nominations.save();
@@ -526,7 +526,7 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('rangeban');
 			const targetID = toID(target);
 			if (!Nominations.icons[targetID]) {
-				return this.errorReply(`${targetID} does not have an icon set.`);
+				throw new Chat.ErrorMessage(`${targetID} does not have an icon set.`);
 			}
 			delete Nominations.icons[targetID];
 			Nominations.save();
@@ -550,9 +550,9 @@ export const pages: Chat.PageTable = {
 		view(query, user) {
 			this.checkCan('rangeban');
 			const id = toID(query.shift());
-			if (!id) return this.errorReply(`Invalid userid.`);
+			if (!id) throw new Chat.ErrorMessage(`Invalid userid.`);
 			const nom = Nominations.find(id);
-			if (!nom) return this.errorReply(`No nomination found for '${id}'.`);
+			if (!nom) throw new Chat.ErrorMessage(`No nomination found for '${id}'.`);
 			this.title = `[Perma Nom] ${nom.primaryID}`;
 			return Nominations.displayActionPage(nom);
 		},

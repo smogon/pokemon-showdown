@@ -560,7 +560,7 @@ export const commands: Chat.ChatCommands = {
 					const types = list.map(f => f.toLowerCase().replace(/\s/g, '_'));
 					for (const type of types) {
 						if (!Artemis.LocalClassifier.ATTRIBUTES[type]) {
-							return this.errorReply(
+							throw new Chat.ErrorMessage(
 								`Invalid classifier type '${type}'. Valid types are ` +
 								Object.keys(Artemis.LocalClassifier.ATTRIBUTES).join(', ')
 							);
@@ -574,7 +574,7 @@ export const commands: Chat.ChatCommands = {
 				case 'certainty': case 'c':
 					const num = parseFloat(val);
 					if (isNaN(num) || num < 0 || num > 1) {
-						return this.errorReply(`Certainty must be a number below 1 and above 0.`);
+						throw new Chat.ErrorMessage(`Certainty must be a number below 1 and above 0.`);
 					}
 					if (!punishment.severity) {
 						punishment.severity = { certainty: 0, type: [] };
@@ -584,14 +584,14 @@ export const commands: Chat.ChatCommands = {
 				case 'modlog': case 'm':
 					const count = parseInt(val);
 					if (isNaN(count) || count < 0) {
-						return this.errorReply(`Modlog count must be a number above 0.`);
+						throw new Chat.ErrorMessage(`Modlog count must be a number above 0.`);
 					}
 					punishment.modlogCount = count;
 					break;
 				case 'ticket': case 'tt': case 'tickettype':
 					const type = toID(val);
 					if (!(type in checkers)) {
-						return this.errorReply(
+						throw new Chat.ErrorMessage(
 							`The ticket type '${type}' does not exist or is not supported. ` +
 							`Supported types are ${Object.keys(checkers).join(', ')}.`
 						);
@@ -601,7 +601,7 @@ export const commands: Chat.ChatCommands = {
 				case 'p': case 'punishment':
 					const name = toID(val).toUpperCase();
 					if (!ORDERED_PUNISHMENTS.includes(name)) {
-						return this.errorReply(
+						throw new Chat.ErrorMessage(
 							`Punishment '${name}' not supported. ` +
 							`Supported punishments: ${ORDERED_PUNISHMENTS.join(', ')}`
 						);
@@ -610,7 +610,7 @@ export const commands: Chat.ChatCommands = {
 					break;
 				case 'single': case 's':
 					if (!this.meansYes(toID(val))) {
-						return this.errorReply(
+						throw new Chat.ErrorMessage(
 							`The 'single' value must always be 'on'. ` +
 							`If you don't want it enabled, just do not use this argument type.`
 						);
@@ -620,13 +620,13 @@ export const commands: Chat.ChatCommands = {
 				}
 			}
 			if (!punishment.ticketType) {
-				return this.errorReply(`Must specify a ticket type to handle.`);
+				throw new Chat.ErrorMessage(`Must specify a ticket type to handle.`);
 			}
 			if (!punishment.punishment) {
-				return this.errorReply(`Must specify a punishment to apply.`);
+				throw new Chat.ErrorMessage(`Must specify a punishment to apply.`);
 			}
 			if (!(punishment.severity?.certainty && punishment.severity?.type.length)) {
-				return this.errorReply(`A severity to monitor for must be specified (certainty).`);
+				throw new Chat.ErrorMessage(`A severity to monitor for must be specified (certainty).`);
 			}
 			for (const curP of settings.punishments) {
 				let matches = 0;
@@ -636,7 +636,7 @@ export const commands: Chat.ChatCommands = {
 					}
 				}
 				if (matches === Object.keys(punishment).length) {
-					return this.errorReply(`That punishment is already added.`);
+					throw new Chat.ErrorMessage(`That punishment is already added.`);
 				}
 			}
 			settings.punishments.push(punishment as AutoPunishment);
@@ -653,7 +653,7 @@ export const commands: Chat.ChatCommands = {
 			const num = parseInt(target) - 1;
 			if (isNaN(num)) return this.parse(`/h autohelpticket`);
 			const punishment = settings.punishments[num];
-			if (!punishment) return this.errorReply(`There is no punishment at index ${num + 1}.`);
+			if (!punishment) throw new Chat.ErrorMessage(`There is no punishment at index ${num + 1}.`);
 			settings.punishments.splice(num, 1);
 			this.privateGlobalModAction(
 				`${user.name} removed the Artemis helpticket ${punishment.punishment} punishment indexed at ${num + 1}`
@@ -679,18 +679,18 @@ export const commands: Chat.ChatCommands = {
 			let message;
 			if (this.meansYes(target)) {
 				if (settings.applyPunishments) {
-					return this.errorReply(`Automatic punishments are already enabled.`);
+					throw new Chat.ErrorMessage(`Automatic punishments are already enabled.`);
 				}
 				settings.applyPunishments = true;
 				message = `${user.name} enabled automatic punishments for the Artemis ticket handler`;
 			} else if (this.meansNo(target)) {
 				if (!settings.applyPunishments) {
-					return this.errorReply(`Automatic punishments are already disabled.`);
+					throw new Chat.ErrorMessage(`Automatic punishments are already disabled.`);
 				}
 				settings.applyPunishments = false;
 				message = `${user.name} disabled automatic punishments for the Artemis ticket handler`;
 			} else {
-				return this.errorReply(`Invalid setting. Must be 'on' or 'off'.`);
+				throw new Chat.ErrorMessage(`Invalid setting. Must be 'on' or 'off'.`);
 			}
 			this.privateGlobalModAction(message);
 			this.globalModlog(`AUTOHELPTICKET TOGGLE`, null, settings.applyPunishments ? 'on' : 'off');
@@ -739,7 +739,7 @@ export const pages: Chat.PageTable = {
 				month = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
 			}
 			if (!month) {
-				return this.errorReply(`Invalid month. Must be in YYYY-MM format.`);
+				throw new Chat.ErrorMessage(`Invalid month. Must be in YYYY-MM format.`);
 			}
 
 			this.title = `[Artemis Ticket Stats] ${month}`;
@@ -821,7 +821,7 @@ export const pages: Chat.PageTable = {
 				month = Chat.toTimestamp(new Date()).split(' ')[0].slice(0, -3);
 			}
 			if (!month) {
-				return this.errorReply(`Invalid month. Must be in YYYY-MM format.`);
+				throw new Chat.ErrorMessage(`Invalid month. Must be in YYYY-MM format.`);
 			}
 			this.title = `[Artemis Ticket Logs]`;
 			let buf = `<div class="pad"><h3>Artemis ticket logs</h3><hr />`;

@@ -83,13 +83,13 @@ The beginning of a battle will look something like this:
 
 `|rule|RULE: DESCRIPTION`
 
-> Will appear multiple times, one for each 
+> Will appear multiple times, one for each rule.
 
-    |clearpoke
-    |poke|PLAYER|DETAILS|ITEM
-    |poke|PLAYER|DETAILS|ITEM
-    ...
-    |teampreview
+`|clearpoke`  
+`|poke|PLAYER|DETAILS|ITEM`  
+`|poke|PLAYER|DETAILS|ITEM`  
+...  
+`|teampreview`
 
 > These messages appear if you're playing a format that uses team previews.
 
@@ -156,7 +156,7 @@ The beginning of a battle will look something like this:
 `|t:|TIMESTAMP`
 
 > The current UNIX timestamp (the number of seconds since 1970) - useful for determining
-> when events occured in real time.
+> when events occurred in real time.
 
 ### Identifying Pokémon
 
@@ -316,7 +316,7 @@ stat boosts are minor actions.
 
 `|-fail|POKEMON|ACTION`
 
-> The specified `ACTION` has failed against the `POKEMON` targetted. The
+> The specified `ACTION` has failed against the `POKEMON` targeted. The
 > `ACTION` in question should be a move that fails due to its own mechanics.
 > Moves (or effect activations) that fail because they're blocked by another
 > effect should use `-block` instead.
