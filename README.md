@@ -18,6 +18,7 @@ most of Pokemon Showdown. Because of this all reference to `Pokemon.set` has bee
   - Halloween forms (Sandshrew, Sandslash, Gastly, Haunter, Gengar, Celebi, Darkrai, Trubbish, Garbodor, Golett, Golurk, Gible, Gabite, Garchomp, Zoroark)
   - Christmas forms (Mew, Gardevoir, Gallade, Comfey, Snorlax)
   - Seasonal forms (Torterra-StPatrick, Spheal-Watermelon)
+  - Independence forms (Cubone, Dugtrio, Houndoom, Wailord)
   - Spinda pattern variants
   - Vivillon Valentine pattern
 

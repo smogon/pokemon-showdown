@@ -1272,6 +1272,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Field"],
 		otherFormes: ["Dugtrio-Alola"],
 		formeOrder: ["Dugtrio", "Dugtrio-Alola"],
+		cosmeticFormes: ['Dugtrio-Independence'],
 	},
 	dugtrioalola: {
 		num: 51,
@@ -2391,6 +2392,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Brown",
 		evos: ["Marowak", "Marowak-Alola"],
 		eggGroups: ["Monster"],
+		cosmeticFormes: ['Cubone-Independence'],
 	},
 	marowak: {
 		num: 105,
@@ -4570,6 +4572,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Field"],
 		otherFormes: ["Houndoom-Mega"],
 		formeOrder: ["Houndoom", "Houndoom-Mega"],
+		cosmeticFormes: ['Houndoom-Independence'],
 	},
 	houndoommega: {
 		num: 229,
@@ -6003,6 +6006,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Wailmer",
 		evoLevel: 40,
 		eggGroups: ["Field", "Water 2"],
+		cosmeticFormes: ['Wailord-Independence'],
 	},
 	numel: {
 		num: 322,
