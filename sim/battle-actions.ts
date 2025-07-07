@@ -1955,7 +1955,8 @@ export class BattleActions {
 			const newMaxHP = pokemon.baseMaxhp;
 			pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
 			pokemon.maxhp = newMaxHP;
-			this.battle.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+			// @pokebedrock - Add details to the heal message
+			this.battle.add('-heal', pokemon, pokemon.details, pokemon.getHealth, '[silent]');
 		}
 		if (pokemon.species.baseSpecies === 'Morpeko' && !pokemon.transformed &&
 			pokemon.baseSpecies.id !== pokemon.species.id

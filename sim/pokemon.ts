@@ -9,13 +9,17 @@ import { State } from './state';
 import { toID } from './dex';
 import type { DynamaxOptions, PokemonMoveRequestData, PokemonSwitchRequestData } from './side';
 
+// @pokebedrock - Add bag items
+import { bagItems } from '../data/bag-items';
+
 /** A Pokemon's move slot. */
 interface MoveSlot {
 	id: ID;
 	move: string;
 	pp: number;
 	maxpp: number;
-	target?: string;
+	// @pokebedrock - Specify type as MoveTarget
+	target?: MoveTarget;
 	disabled: boolean | string;
 	disabledSource?: string;
 	used: boolean;
@@ -361,9 +365,9 @@ export class Pokemon {
 				move: move.name,
 				id: move.id,
 				// Apply PP from @pokebedrock
-				pp: set.movesInfo[i].pp,
+				pp: this.set.movesInfo?.[i]?.pp || basepp,
 				// Apply maxpp from @pokebedrock
-				maxpp: set.movesInfo[i].maxpp,
+				maxpp: this.set.movesInfo?.[i]?.maxPp || basepp,
 				target: move.target,
 				disabled: false,
 				disabledSource: '',
@@ -970,7 +974,9 @@ export class Pokemon {
 
 	getMoves(lockedMove?: ID | null, restrictData?: boolean): {
 		move: string, id: ID, disabled?: string | boolean, disabledSource?: string,
-		target?: string, pp?: number, maxpp?: number,
+		// @pokebedrock - Specify type as MoveTarget
+		target?: MoveTarget,
+		pp?: number, maxpp?: number,
 	}[] {
 		if (lockedMove) {
 			lockedMove = toID(lockedMove);
@@ -1647,6 +1653,36 @@ export class Pokemon {
 			this.hp = this.maxhp;
 		}
 		return d;
+	}
+
+	/**
+	* @pokebedrock - Add revive function
+	*
+   * Revives a pokemon from a fainted state.
+   * @param newHealth
+   */
+	revive(newHealth = this.maxhp) {
+		this.side.pokemonLeft++;
+		this.fainted = false;
+		this.faintQueued = false;
+		this.subFainted = false;
+		this.status = '';
+		this.hp = 1; // Needed so hp functions works
+		this.sethp(newHealth);
+	}
+
+	/**
+	 * @pokebedrock - Add useBagItem function
+	 *
+	 * Uses a bag item on the pokemon.
+	 * @param itemId
+	 * @param moveName
+	 */
+	useBagItem(itemId: string, moveName?: string) {
+		const bagItem = bagItems.get(itemId);
+		if (bagItem === undefined)
+			throw new Error(`No item registered for item id ${itemId}`);
+		bagItem(this.battle, this, moveName);
 	}
 
 	/** Sets HP, returns delta */

@@ -2241,24 +2241,30 @@ export class Battle {
 		switch (effect?.id) {
 		case 'leechseed':
 		case 'rest':
-			this.add('-heal', target, target.getHealth, '[silent]');
+			// @pokebedrock - Add details to the heal message
+			this.add('-heal', target, target.details, target.getHealth, '[silent]');
 			break;
 		case 'drain':
-			this.add('-heal', target, target.getHealth, '[from] drain', `[of] ${source}`);
+			// @pokebedrock - Add details to the heal message
+			this.add('-heal', target, target.details, target.getHealth, '[from] drain', `[of] ${source}`);
 			break;
 		case 'wish':
 			break;
 		case 'zpower':
-			this.add('-heal', target, target.getHealth, '[zeffect]');
+			// @pokebedrock - Add details to the heal message
+			this.add('-heal', target, target.details, target.getHealth, '[zeffect]');
 			break;
 		default:
 			if (!effect) break;
 			if (effect.effectType === 'Move') {
-				this.add('-heal', target, target.getHealth);
+				// @pokebedrock - Add details to the heal message
+				this.add('-heal', target, target.details, target.getHealth);
 			} else if (source && source !== target) {
-				this.add('-heal', target, target.getHealth, `[from] ${effect.fullname}`, `[of] ${source}`);
+				// @pokebedrock - Add details to the heal message
+				this.add('-heal', target, target.details, target.getHealth, `[from] ${effect.fullname}`, `[of] ${source}`);
 			} else {
-				this.add('-heal', target, target.getHealth, `[from] ${effect.fullname}`);
+				// @pokebedrock - Add details to the heal message
+				this.add('-heal', target, target.details, target.getHealth, `[from] ${effect.fullname}`);
 			}
 			break;
 		}
@@ -2794,7 +2800,8 @@ export class Battle {
 			action.target.status = '';
 			action.target.hp = 1; // Needed so hp functions works
 			action.target.sethp(action.target.maxhp / 2);
-			this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
+			// @pokebedrock - Add details to the heal message
+			this.add('-heal', action.target, action.target.details, action.target.getHealth, '[from] move: Revival Blessing');
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
 			break;
 		case 'runSwitch':
@@ -3028,6 +3035,35 @@ export class Battle {
 
 		// workaround for tests
 		if (this.log.length - this.sentLogPos > 500) this.sendUpdates();
+	}
+
+	/**
+	 * @pokebedrock - Add useBagItem function
+	 *
+	 * Uses a bag item on the pokemon.
+	 * @param pokemon
+	 * @param itemId
+	 * @param moveName
+	 */
+	useBagItem(pokemon: Pokemon, itemId: string, moveName?: string) {
+		if (this.ended) return;
+		// if (pokemon.fainted) throw new Error("Pokemon is already fainted");
+		const oldHealth = pokemon.getHealth();
+		pokemon.useBagItem(itemId, moveName);
+		if (oldHealth.secret !== pokemon.getHealth().secret)
+			this.add(
+				'-heal',
+				pokemon,
+				pokemon.details,
+				pokemon.getHealth,
+				'[from] item:' + itemId
+			);
+		this.singleEvent(
+			'End',
+			pokemon.getAbility(),
+			pokemon.abilityState,
+			pokemon
+		);
 	}
 
 	undoChoice(sideid: SideID) {

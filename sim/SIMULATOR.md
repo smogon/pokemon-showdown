@@ -112,6 +112,21 @@ Sets player information:
 
 Makes a choice for a player. [Possible choices are documented in `SIM-PROTOCOL.md`][possible-choices].
 
+```
+>forceforme POSITION|SPECIES|DETAILS|HPSTATUS|SOURCE
+```
+> @pokebedrock - Add forceforme instruction
+
+Forces a Pokémon to change its forme or evolve with precise control:
+
+- `POSITION` is the position of the Pokémon (e.g. p1a, p2b)
+- `SPECIES` is the name of the target species or forme
+- `DETAILS` contains the formatted details string for the Pokémon
+- `HPSTATUS` shows the health in the format `current/max`
+- `SOURCE` indicates what triggered the evolution (e.g. "crit" for critical hit evolution)
+
+This command is used when you need to force a Pokémon to change its forme or evolve while maintaining precise control over its details, health, and the source of the change.
+
   [teams]: ./TEAMS.md
   [possible-choices]: ./SIM-PROTOCOL.md#possible-choices
 

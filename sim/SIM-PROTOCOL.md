@@ -306,6 +306,17 @@ message).
 
 > The Pokémon `POKEMON` has fainted.
 
+`|bag-item|PLAYER|ITEM|TARGET|MOVE`
+> @pokebedrock - Add bag-item instructions
+
+> The player `PLAYER` has used the bag item `ITEM` on the target `TARGET` and move `MOVE`. The `TARGET` can be a Pokémon position like p1a or p2b, or 'none' if the item affects the field. The `MOVE` parameter is optional and is included when the item affects a specific move of the target Pokémon.
+
+`|used-ball|PLAYER|BALL|TARGET`
+
+> @pokebedrock - Add used-ball instructions
+
+> The player `PLAYER` has used the ball `BALL` on the target `TARGET`. The `TARGET` can be a Pokémon position like p1a or p2b, or 'none' if the ball affects the field. 
+
 ### Minor actions
 
 Minor actions are less important than major actions. In the official client,
@@ -347,7 +358,8 @@ stat boosts are minor actions.
 > If `HP` is 0, `STATUS` should be ignored. The current behavior is for
 > `STATUS` to be `fnt`, but this may change and should not be relied upon.
 
-`|-heal|POKEMON|HP STATUS`
+> @pokebedrock - Add details to heal messages
+`|-heal|POKEMON|DETAILS|HP STATUS`
 
 > Same as `-damage`, but the Pokémon has healed damage instead.
 

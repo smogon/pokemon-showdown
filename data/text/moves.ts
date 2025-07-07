@@ -1,3 +1,4 @@
+// @pokebedrock - Modify Type to be more const
 export const MovesText = {
 	"10000000voltthunderbolt": {
 		name: "10,000,000 Volt Thunderbolt",

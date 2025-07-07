@@ -1,4 +1,5 @@
-export const Items: import('../sim/dex-items').ItemDataTable = {
+// @pokebedrock - Modify Type to be more const
+export const Items = {
 	abilityshield: {
 		name: "Ability Shield",
 		spritenum: 746,
@@ -7692,4 +7693,4 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 8,
 		isNonstandard: "CAP",
 	},
-};
+} as const satisfies Record<IDEntry, import('../sim/dex-items').ItemData>;

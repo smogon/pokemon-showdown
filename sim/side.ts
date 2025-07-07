@@ -103,9 +103,12 @@ export interface PokemonMoveRequestData {
 	moves: {
 		move: string,
 		id: ID,
-		target?: string,
+		// @pokebedrock - Specify type as MoveTarget
+		target?: MoveTarget,
 		// @pokebedrock
 		pp?: number,
+		// @pokebedrock
+		maxpp?: number,
 		disabled?: string | boolean,
 		disabledSource?: string,
 	}[];
@@ -537,6 +540,58 @@ export class Side {
 		// current request is move/switch
 		this.getChoiceIndex(); // auto-pass
 		return this.choice.actions.length >= this.active.length;
+	}
+
+	/**
+	* @pokebedrock - Add processBagItem function
+	*
+   * Processes Bag Item instructions
+   * @param message Item ID with optional move name or target position
+   * @param targetLoc Optional target location parsed from command
+   * @returns
+   */
+	processBagItem(itemId: string, targetLoc?: number) {
+		// First, check if this is a PP restoration item with a move name
+		// Format could be: "leppa_berry Earthquake", "leppa_berry 1", or "leppa_berry"
+		const parts = itemId.split(' ');
+		const itemName = parts[0];
+		let moveName: string | undefined = undefined;
+
+		// Check if there's a second part to the command
+		if (parts.length > 1) {
+			const secondPart = parts[1];
+
+			// Check if the second part is a number (target location)
+			if (/^\d+$/.test(secondPart)) {
+				// If it's a number and no targetLoc is provided, use it as targetLoc
+				if (targetLoc === undefined) {
+					targetLoc = parseInt(secondPart);
+				}
+			} else {
+				// If it's not a number, it's a move name
+				moveName = secondPart;
+			}
+		}
+
+		// Get the target Pokemon
+		const index = targetLoc ? targetLoc : -(this.getChoiceIndex() + 1);
+		// if (index >= this.active.length) {
+		//   return this.emitChoiceError(
+		//     `Can't move: You sent more choices than unfainted Pokémon.`
+		//   );
+		// }
+		const pokemon = this.pokemon[-index - 1];
+		if (!pokemon)
+			throw new Error(
+				`Could not find pokemon at targetLoc: ${targetLoc}, ${index}: ${
+					-index - 1
+				}, ${JSON.stringify(
+					Object.values(this.pokemon).map((v, i) => `${i}: ${v.species.name}`)
+				)}`
+			);
+
+		// Use the bag item with the optional move name parameter
+		this.battle.useBagItem(pokemon, itemName, moveName);
 	}
 
 	chooseMove(
@@ -1166,6 +1221,28 @@ export class Side {
 			case 'skip':
 				if (data) return this.emitChoiceError(`Unrecognized data after "pass": ${data}`);
 				if (!this.choosePass()) return false;
+				break;
+			// @pokebedrock - Add bag-item choice
+			case 'bag-item':
+				let bagTargetLoc: number | undefined = undefined;
+				const bagError = () =>
+					this.emitChoiceError(`Data does not match regrex "data": ${data}`);
+				if (/\s(?:-|\+)?[1-6]$/.test(data) && toID(data) !== 'conversion2') {
+					if (bagTargetLoc !== undefined) return bagError();
+					bagTargetLoc = parseInt(data.slice(-2));
+					data = data.slice(0, -2).trim();
+				}
+				this.processBagItem(data, bagTargetLoc);
+				this.choice.actions.push({
+					choice: 'pass',
+				} as ChosenAction);
+				break;
+			// @pokebedrock - Add used-ball choice
+			case 'used-ball':
+				// Player used a ball, but it failed. We cant use 'pass' as it would fail.
+				this.choice.actions.push({
+					choice: 'pass',
+				} as ChosenAction);
 				break;
 			case 'auto':
 			case 'default':

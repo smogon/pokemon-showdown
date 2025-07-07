@@ -138,6 +138,67 @@ export class BattleStream extends Streams.ObjectReadWriteStream<string> {
 				this.battle!.choose(type, message);
 			}
 			break;
+		// @pokebedrock - Add forceforme instruction
+		case 'forceforme':
+			// Handle forced forme change (evolution)
+			// Format: position|species|details|hp/maxhp|source
+			const [position, species, details, hpString, source] = message.split('|');
+			const pokemonPosition = position.trim();
+			const speciesName = species.trim();
+			const evolutionSource = source ? source.trim() : 'unknown';
+
+			// Get the Pokémon by position
+			let battlePokemon = null;
+			// Position format: p1a, p2b, etc.
+			if (pokemonPosition.length >= 3) {
+				const playerNum = parseInt(pokemonPosition.charAt(1));
+				const posLetter = pokemonPosition.charAt(2);
+				const posIndex = posLetter.charCodeAt(0) - 'a'.charCodeAt(0);
+
+				if (
+					!isNaN(playerNum) &&
+					playerNum >= 1 &&
+					playerNum <= 4 &&
+					posIndex >= 0
+				) {
+					const side = this.battle!.sides[playerNum - 1];
+					if (side?.active[posIndex]) battlePokemon = side.active[posIndex];
+				}
+			}
+
+			if (battlePokemon) {
+				// Parse HP values
+				let hp = 0;
+				let maxhp = 0;
+				if (hpString) {
+					const hpValues = hpString.split('/');
+					hp = parseInt(hpValues[0]);
+					maxhp = parseInt(hpValues[1]);
+
+					if (!isNaN(hp) && !isNaN(maxhp)) {
+						battlePokemon.hp = hp;
+						battlePokemon.maxhp = maxhp;
+					}
+				}
+
+				// Find species and change forme
+				try {
+					// Create a proper effect object for the evolution source
+					const sourceEffect = this.battle ?
+						this.battle.dex.conditions.get(evolutionSource) || {
+							id: evolutionSource,
+							name: evolutionSource,
+							effectType: 'Effect',
+						} :
+						null;
+
+					battlePokemon.formeChange(speciesName, sourceEffect, true);
+					this.battle!.sendUpdates();
+				} catch (err: any) {
+					console.warn('Error in forceforme: ' + err.message);
+				}
+			}
+			break;
 		case 'forcewin':
 		case 'forcetie':
 			this.battle!.win(type === 'forcewin' ? message as SideID : null);
