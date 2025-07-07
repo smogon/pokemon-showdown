@@ -168,28 +168,28 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 	april: {
 		noCopy: true,
 		onStart(pokemon) {
-			if (this.ruleTable.has('zmovesclause')) {
+			if (this.ruleTable.has('zmoveclause')) {
 				this.add(`c:|${getName('April')}|Fool's Day`);
 			} else {
 				this.add(`c:|${getName('April')}|I said, "Do you have something against dogs?"`);
 			}
 		},
 		onSwitchOut() {
-			if (this.ruleTable.has('zmovesclause')) {
+			if (this.ruleTable.has('zmoveclause')) {
 				this.add(`c:|${getName('April')}|Fool's Day`);
 			} else {
 				this.add(`c:|${getName('April')}|(Is it the chorus yet?)`);
 			}
 		},
 		onFaint() {
-			if (this.ruleTable.has('zmovesclause')) {
+			if (this.ruleTable.has('zmoveclause')) {
 				this.add(`c:|${getName('April')}|Fool's Day`);
 			} else {
 				this.add(`c:|${getName('April')}|Don't get too impressed, you might lose your breath...`);
 			}
 		},
 		onTryHit() {
-			if (this.ruleTable.has('zmovesclause')) {
+			if (this.ruleTable.has('zmoveclause')) {
 				this.add(`c:|${getName('April')}|Fool's Day`);
 			}
 		},

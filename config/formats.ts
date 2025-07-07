@@ -2872,7 +2872,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				this.add('message', 'No items');
 				this.add('message', 'Final Destination');
 				return;
-			} else if (this.ruleTable.has('zmovesclause')) {
+			} else if (this.ruleTable.has('zmoveclause')) {
 				// Old joke format we're bringing back
 				this.add('message', 'April Fool\'s Day');
 				return;
