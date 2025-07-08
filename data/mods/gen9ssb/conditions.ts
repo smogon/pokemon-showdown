@@ -356,9 +356,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			case 'rumia':
 				this.add(`c:|${getName('ausma')}|oh no... it's poomia....`);
 				break;
-			case 'lily':
-				this.add(`c:|${getName('ausma')}|togedemaru`);
-				break;
 			case 'lumari':
 				this.add(`c:|${getName('ausma')}|we should watch the next ladybug ep after this tbh`);
 				break;
@@ -1359,18 +1356,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		onFaint() {
 			this.add(`c:|${getName('Lets go shuckles')}|He who lives by the Shuckle shall die by the Shuckle.`);
-		},
-	},
-	lily: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Lily')}|buying gf`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Lily')}|accidentally burnt the shrimps`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Lily')}|oh dear, i am dead`);
 		},
 	},
 	loethalion: {
