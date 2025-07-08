@@ -215,19 +215,30 @@ describe('Team Validator', () => {
 	});
 
 	// Sometimes a Pokemon gets marked as NDZU or some such nonexistent tier on accident, resulting in it not being covered by the banlist.
-	it('should reject all Pokemon in the 35 Pokes format that are not explicitly allowed', () => {
+	it('should should validate exactly as many species as are in the unbanlist for 35 Pokes', () => {
 		const formatid = 'gen9nationaldex35pokes';
-		const rosterSize = 40;
 
 		const format = Dex.formats.get(formatid);
 		if (!format.exists) return;
 
 		const ruleTable = Dex.formats.getRuleTable(format);
 
-		const accepted = Dex.species.all().filter(species => !(
-			species.natDexTier === 'Illegal' || species.isNonstandard === 'CAP'
-		) && !ruleTable.isBannedSpecies(species)).length;
+		// not using Dex.formats.isPokemonRule here because that includes '+pokemontag:unobtainable' and '+pokemontag:past'
+		const allowed = Array.from(ruleTable)
+			.map(([rule, source]) => (
+				// For basepokemon unbans, count all non-cosmetic formes including base forme
+				rule.startsWith('+basepokemon:') ? 1 + (Dex.species.get(rule.slice(13)).otherFormes?.length ?? 0) :
+				// For pokemon unbans, count only if not already unbanned via a basepokemon unban
+				(rule.startsWith('+pokemon:') && !ruleTable.has(`+basepokemon:${toID(Dex.species.get(rule.slice(9)).baseSpecies)}`)) ? 1 : 0
+			))
+			.reduce((x, y) => x + y);
 
-		assert.equal(accepted, rosterSize);
+		// Dex.species.all skips over cosmetic formes
+		const accepted = Dex.species.all().filter(species => !(
+			// ruleTable.isBannedSpecies blind spots
+			species.natDexTier === 'Illegal' || species.isNonstandard === 'CAP'
+		) && !ruleTable.isBannedSpecies(species));
+
+		assert.equal(accepted.length, allowed);
 	});
 });
