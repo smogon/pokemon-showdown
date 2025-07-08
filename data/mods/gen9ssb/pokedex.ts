@@ -559,12 +559,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Persistent" },
 	},
 
-	// Lily
-	togedemaru: {
-		inherit: true,
-		abilities: { 0: "Unaware" },
-	},
-
 	// Loethalion
 	ralts: {
 		inherit: true,
