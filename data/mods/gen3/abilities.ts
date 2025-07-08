@@ -155,6 +155,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart(pokemon) {
 			this.addSplit(pokemon.side.id, ['-ability', pokemon, 'Pressure', '[silent]']);
 		},
+		onDeductPP(target, source) {
+			if (target === source) return;
+			if (this.activeMove && this.activeMove.target === 'foeSide') {
+				return 1;
+			}
+			return 1;
+		},
 	},
 	raindish: {
 		inherit: true,
