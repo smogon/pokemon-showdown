@@ -237,8 +237,8 @@ describe('Team Validator', () => {
 		const accepted = Dex.species.all().filter(species => !(
 			// ruleTable.isBannedSpecies blind spots
 			species.natDexTier === 'Illegal' || species.isNonstandard === 'CAP'
-		) && !ruleTable.isBannedSpecies(species));
+		) && !ruleTable.isBannedSpecies(species)).length;
 
-		assert.equal(accepted.length, allowed);
+		assert.equal(accepted, allowed);
 	});
 });
