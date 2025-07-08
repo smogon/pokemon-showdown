@@ -5615,7 +5615,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: { breakable: 1 },
 		name: "Mountaineer",
 		rating: 3,
-		num: -2,
+		num: -1,
 	},
 	rebound: {
 		isNonstandard: "CAP",
@@ -5648,7 +5648,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: { breakable: 1 },
 		name: "Rebound",
 		rating: 3,
-		num: -3,
+		num: -2,
 	},
 	persistent: {
 		isNonstandard: "CAP",
@@ -5656,6 +5656,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Persistent",
 		rating: 3,
-		num: -4,
+		num: -3,
 	},
 };
