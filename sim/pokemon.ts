@@ -1459,14 +1459,7 @@ export class Pokemon {
 		this.baseMaxhp = newBaseMaxHp;
 		const newMaxHP = this.volatiles['dynamax'] ? (2 * this.baseMaxhp) : this.baseMaxhp;
 		this.hp = newMaxHP - (this.maxhp - this.hp);
-		if (this.hp < 0) {
-			if (!this.fainted) {
-				// should never happen
-				this.hp = 1;
-			} else {
-				this.hp = 0;
-			}
-		}
+		if (this.hp < 0) this.hp = this.fainted ? 0 : 1; // latest, should never happen
 		this.maxhp = newMaxHP;
 		if (this.hp) this.battle.add('-heal', this, this.getHealth, '[silent]');
 	}
