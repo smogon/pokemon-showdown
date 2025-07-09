@@ -1425,7 +1425,7 @@ export class Pokemon {
 				// Shaymin-Sky -> Shaymin
 				this.battle.add('-formechange', this, species.name, message);
 			}
-			this.updateHp();
+			this.updateMaxHp();
 		} else {
 			if (source?.effectType === 'Ability') {
 				this.battle.add('-formechange', this, species.name, message, `[from] ability: ${source.name}`);
@@ -1451,7 +1451,7 @@ export class Pokemon {
 		return true;
 	}
 
-	updateHp() {
+	updateMaxHp() {
 		const newMaxHP = Math.floor(Math.floor(
 			2 * this.species.baseStats['hp'] + this.set.ivs['hp'] + Math.floor(this.set.evs['hp'] / 4) + 100
 		) * this.level / 100 + 10);
