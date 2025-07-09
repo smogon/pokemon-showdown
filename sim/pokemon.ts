@@ -1463,8 +1463,9 @@ export class Pokemon {
 			if (!this.fainted) {
 				// should never happen
 				this.hp = 1;
+			} else {
+				this.hp = 0;
 			}
-			this.hp = 0;
 		}
 		this.maxhp = newMaxHP;
 		if (this.hp) this.battle.add('-heal', this, this.getHealth, '[silent]');
