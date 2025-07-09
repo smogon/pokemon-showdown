@@ -1452,11 +1452,12 @@ export class Pokemon {
 	}
 
 	updateMaxHp() {
-		this.baseMaxhp = Math.floor(Math.floor(
+		const newBaseMaxHp = Math.floor(Math.floor(
 			2 * this.species.baseStats['hp'] + this.set.ivs['hp'] + Math.floor(this.set.evs['hp'] / 4) + 100
 		) * this.level / 100 + 10);
+		if (newBaseMaxHp === this.baseMaxhp) return;
+		this.baseMaxhp = newBaseMaxHp;
 		const newMaxHP = this.volatiles['dynamax'] ? (2 * this.baseMaxhp) : this.baseMaxhp;
-		if (newMaxHP === this.maxhp) return;
 		this.hp = newMaxHP - (this.maxhp - this.hp);
 		if (this.hp < 0) {
 			if (!this.fainted) {
