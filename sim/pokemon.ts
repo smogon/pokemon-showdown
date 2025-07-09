@@ -1425,6 +1425,7 @@ export class Pokemon {
 				// Shaymin-Sky -> Shaymin
 				this.battle.add('-formechange', this, species.name, message);
 			}
+			this.updateHp();
 		} else {
 			if (source?.effectType === 'Ability') {
 				this.battle.add('-formechange', this, species.name, message, `[from] ability: ${source.name}`);
@@ -1448,6 +1449,17 @@ export class Pokemon {
 			this.apparentType = this.terastallized;
 		}
 		return true;
+	}
+
+	updateHp() {
+		const newMaxHP = Math.floor(Math.floor(
+			2 * this.species.baseStats['hp'] + this.set.ivs['hp'] + Math.floor(this.set.evs['hp'] / 4) + 100
+		) * this.level / 100 + 10);
+		if (this.baseMaxhp === newMaxHP) return;
+		this.baseMaxhp = newMaxHP;
+		this.hp = newMaxHP - (this.maxhp - this.hp);
+		this.maxhp = newMaxHP;
+		this.battle.add('-heal', this, this.getHealth, '[silent]');
 	}
 
 	clearVolatile(includeSwitchFlags = true) {

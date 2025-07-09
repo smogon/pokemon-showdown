@@ -2524,6 +2524,7 @@ export class Battle {
 					// after clearing volatiles
 					pokemon.details = pokemon.getUpdatedDetails();
 					this.add('detailschange', pokemon, pokemon.details, '[silent]');
+					pokemon.updateHp();
 					pokemon.formeRegression = false;
 				}
 				pokemon.side.faintedThisTurn = pokemon;
