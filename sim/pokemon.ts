@@ -1466,7 +1466,7 @@ export class Pokemon {
 			this.hp = 0;
 		}
 		this.maxhp = newMaxHP;
-		if (this.hp) this.battle.add('-heal', this, this.getHealth, '[silent]');
+		if (this.hp && !this.illusion) this.battle.add('-heal', this, this.getHealth, '[silent]');
 	}
 
 	clearVolatile(includeSwitchFlags = true) {
