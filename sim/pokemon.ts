@@ -1458,8 +1458,15 @@ export class Pokemon {
 		if (this.baseMaxhp === newMaxHP) return;
 		this.baseMaxhp = newMaxHP;
 		this.hp = newMaxHP - (this.maxhp - this.hp);
+		if (this.hp < 0) {
+			if (!this.fainted) {
+				// should never happen
+				throw new Error(`${this.name} is not fainted and suffering a max HP decrease from ${this.baseMaxhp} to ${newMaxHP}`);
+			}
+			this.hp = 0;
+		}
 		this.maxhp = newMaxHP;
-		this.battle.add('-heal', this, this.getHealth, '[silent]');
+		if (this.hp) this.battle.add('-heal', this, this.getHealth, '[silent]');
 	}
 
 	clearVolatile(includeSwitchFlags = true) {
