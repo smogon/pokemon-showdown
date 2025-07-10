@@ -1546,7 +1546,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
 		onAccuracy() {
-			if (this.field.isWeather(['hail', 'snowscape'])) return true;	
+			if (this.field.isWeather(['hail', 'snowscape'])) return true;
 		},
 		secondary: {
 			chance: 10,
