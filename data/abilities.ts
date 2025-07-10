@@ -1288,7 +1288,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	flashfire: {
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Fire') {
-				move.accuracy = true;
 				if (!target.addVolatile('flashfire')) {
 					this.add('-immune', target, '[from] ability: Flash Fire');
 				}

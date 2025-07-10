@@ -298,6 +298,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 				accuracy = Math.min(accuracy, 255);
 			}
+			accuracy = this.battle.singleEvent('Accuracy', move, null, target, pokemon, move, accuracy);
 			accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 
 			// Stadium attempts to fix the 1/256 miss by rerolling if the first value

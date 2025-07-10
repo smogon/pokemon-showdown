@@ -1524,10 +1524,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
-		onModifyMove(move, pokemon, target) {
-			if (target && ['raindance', 'primordialsea'].includes(target.effectiveWeather())) {
-				move.accuracy = true;
-			}
+		onAccuracy(accuracy, target) {
+			if (['raindance', 'primordialsea'].includes(target.effectiveWeather())) return true;
 		},
 		secondary: {
 			chance: 30,
@@ -1547,8 +1545,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
-		onModifyMove(move) {
-			if (this.field.isWeather(['hail', 'snowscape'])) move.accuracy = true;
+		onAccuracy() {
+			if (this.field.isWeather(['hail', 'snowscape'])) return true;	
 		},
 		secondary: {
 			chance: 10,
@@ -9372,17 +9370,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, distance: 1, metronome: 1, wind: 1 },
-		onModifyMove(move, pokemon, target) {
-			switch (target?.effectiveWeather()) {
-			case 'raindance':
-			case 'primordialsea':
-				move.accuracy = true;
-				break;
-			case 'sunnyday':
-			case 'desolateland':
-				move.accuracy = 50;
-				break;
-			}
+		onAccuracy(accuracy, target) {
+			if (['raindance', 'primordialsea'].includes(target.effectiveWeather())) return true;
+		},
+		onModifyAccuracy(accuracy, target) {
+			if (['sunnyday', 'desolateland'].includes(target.effectiveWeather())) return 50;
 		},
 		secondary: {
 			chance: 30,
@@ -14915,8 +14907,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				data.sources.push(pokemon);
 			}
 		},
-		onModifyMove(move, source, target) {
-			if (target?.beingCalledBack || target?.switchFlag) move.accuracy = true;
+		onAccuracy(accuracy, target, source, move) {
+			if (target.beingCalledBack || target.switchFlag) return true;
 		},
 		onTryHit(target, pokemon) {
 			target.side.removeSideCondition('pursuit');
@@ -16262,10 +16254,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
-		onModifyMove(move, pokemon, target) {
-			if (target && ['raindance', 'primordialsea'].includes(target.effectiveWeather())) {
-				move.accuracy = true;
-			}
+		onAccuracy(accuracy, target) {
+			if (['raindance', 'primordialsea'].includes(target.effectiveWeather())) return true;
 		},
 		secondary: {
 			chance: 20,
@@ -20196,17 +20186,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
-		onModifyMove(move, pokemon, target) {
-			switch (target?.effectiveWeather()) {
-			case 'raindance':
-			case 'primordialsea':
-				move.accuracy = true;
-				break;
-			case 'sunnyday':
-			case 'desolateland':
-				move.accuracy = 50;
-				break;
-			}
+		onAccuracy(accuracy, target) {
+			if (['raindance', 'primordialsea'].includes(target.effectiveWeather())) return true;
+		},
+		onModifyAccuracy(accuracy, target) {
+			if (['sunnyday', 'desolateland'].includes(target.effectiveWeather())) return 50;
 		},
 		secondary: {
 			chance: 30,
@@ -21667,10 +21651,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1, wind: 1 },
-		onModifyMove(move, pokemon, target) {
-			if (target && ['raindance', 'primordialsea'].includes(target.effectiveWeather())) {
-				move.accuracy = true;
-			}
+		onAccuracy(accuracy, target) {
+			if (['raindance', 'primordialsea'].includes(target.effectiveWeather())) return true;
 		},
 		secondary: {
 			chance: 20,
