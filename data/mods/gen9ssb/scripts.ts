@@ -1055,6 +1055,7 @@ export const Scripts: ModdedBattleScriptsData = {
 						}
 					}
 				} else {
+					accuracy = this.battle.singleEvent('ModifyAccuracy', move, null, target, pokemon, move, accuracy);
 					accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 					if (accuracy !== true) {
 						let boost = 0;
@@ -1077,6 +1078,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					(move.target === 'self' && move.category === 'Status' && !target.isSemiInvulnerable())) {
 					accuracy = true; // bypasses ohko accuracy modifiers
 				} else {
+					accuracy = this.battle.singleEvent('Accuracy', move, null, target, pokemon, move, accuracy);
 					accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 				}
 				if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) {
@@ -1481,8 +1483,10 @@ export const Scripts: ModdedBattleScriptsData = {
 							}
 						}
 					}
+					accuracy = this.battle.singleEvent('ModifyAccuracy', move, null, target, pokemon, move, accuracy);
 					accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 					if (!move.alwaysHit) {
+						accuracy = this.battle.singleEvent('Accuracy', move, null, target, pokemon, move, accuracy);
 						accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 						if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) break;
 					}
