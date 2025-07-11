@@ -947,7 +947,7 @@ export const vpnSets: VPNSets = {
 		species: 'Tropius', ability: ['Harvest', 'Gale Wings'], item: 'Sitrus Berry', gender: '',
 		moves: ['Leech Seed', 'Protect', 'Substitute'],
 		signatureMove: 'Air Slash',
-		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Bold', teraType: 'Stellar', level: 90,
+		evs: { hp: 80, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Bold', teraType: 'Stellar', level: 90,
 	},
 	Chimecho: {
 		species: 'Chimecho', ability: 'Fairy Ringer', item: 'Leftovers', gender: '',
@@ -1322,8 +1322,14 @@ export const vpnSets: VPNSets = {
 		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Adamant', teraType: 'Stellar', level: 88,
 	},
 	Froslass: {
-		species: 'Froslass', ability: ['Death Aura', 'Sheer Heart'], item: 'Focus Sash', gender: '',
-		moves: ['Bitter Malice', 'Freeze-Dry', ['Spikes', 'Nasty Plot']],
+		species: 'Froslass', ability: 'Sheer Heart', item: 'Focus Sash', gender: '',
+		moves: ['Bitter Malice', 'Freeze-Dry', 'Spikes'],
+		signatureMove: 'Taunt',
+		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Modest', teraType: 'Stellar', level: 87,
+	},
+	'Froslass 2': {
+		species: 'Froslass', ability: 'Death Aura', item: 'Heavy-Duty Boots', gender: '',
+		moves: ['Bitter Malice', ['Freeze-Dry', 'Focus Blast'], 'Nasty Plot'],
 		signatureMove: 'Frost Breath',
 		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Modest', teraType: 'Stellar', level: 87,
 	},
@@ -2645,7 +2651,7 @@ export const vpnSets: VPNSets = {
 		species: 'Greedent', ability: 'Cheek Pouch', item: 'Sitrus Berry', gender: '',
 		moves: ['Swords Dance', 'Knock Off', 'Earthquake'],
 		signatureMove: 'Rage',
-		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Adamant', teraType: 'Stellar', level: 87,
+		evs: { hp: 80, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Adamant', teraType: 'Stellar', level: 87,
 	},
 	Drednaw: {
 		species: 'Drednaw', ability: 'Swift Swim', item: 'White Herb', gender: '',
