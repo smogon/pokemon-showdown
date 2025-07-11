@@ -1424,6 +1424,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		onModifyType(move, pokemon) {
 			for (const target of pokemon.side.foe.active) {
+				if (target.hasType('Ground') && !target.hasItem('ringtarget')) return;
 				const type1 = 'Bug';
 				const type2 = 'Electric';
 				if (this.dex.getEffectiveness(type1, target) < this.dex.getEffectiveness(type2, target)) {
