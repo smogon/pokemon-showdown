@@ -2520,7 +2520,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 		unbanlist: [
 			'Arctovish', 'Azumarill', 'Blastoise-Base', 'Boltund', 'Bouffalant', 'Brambleghast', 'Braviary-Base', 'Chimecho', 'Cofagrigus', 'Dachsbun',
-			'Darmanitan-Base', 'Delibird', 'Drakloak', 'Floatzel', 'Flygon', 'Gliscor', 'Grapploct', 'Incineroar', 'Kleavor', 'Lunatone', 'Mabosstiff',
+			'Darmanitan-Base', 'Delibird', 'Drakloak', 'Feraligatr', 'Floatzel', 'Flygon', 'Grapploct', 'Incineroar', 'Kleavor', 'Lunatone', 'Mabosstiff',
 			'Marowak-Alola', 'Meowstic-F', 'Minun', 'Obstagoon', 'Persian-Alola', 'Primeape', 'Rapidash-Base', 'Raticate-Base', 'Reuniclus', 'Rillaboom',
 			'Rotom-Mow', 'Silvally-Ground', 'Simisage', 'Slowbro-Galar', 'Slowking-Base', 'Slowking-Galar', 'Starmie', 'Tentacruel', 'Toedscruel',
 		],
