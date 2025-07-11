@@ -2904,13 +2904,6 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				(oldPokemon.abilities as any)[x] === pokemon.set.ability
 			)) || "0";
 			pokemon.formeChange(impersonation.name, this.effect, true, abilitySlot);
-			pokemon.baseMaxhp = Math.floor(Math.floor(
-				2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
-			) * pokemon.level / 100 + 10);
-			const newMaxHP = pokemon.volatiles['dynamax'] ? (2 * pokemon.baseMaxhp) : pokemon.baseMaxhp;
-			pokemon.hp = this.clampIntRange(newMaxHP - (pokemon.maxhp - pokemon.hp), 1, newMaxHP);
-			pokemon.maxhp = newMaxHP;
-			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 	},
 	twisteddimensionmod: {
