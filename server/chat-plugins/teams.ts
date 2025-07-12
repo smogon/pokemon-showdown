@@ -373,14 +373,14 @@ export const TeamsHandler = new class {
 		if (!Config.usepostgres || !Config.usepostgresteams) {
 			err(`The teams database is currently disabled.`);
 		}
-		if (!Users.globalAuth.atLeast(user, Config.usepostgresteams)) {
-			err("You cannot currently use the teams database.");
-		}
 		if (user.locked || user.semilocked) err("You cannot use the teams database while locked.");
 		if (!user.autoconfirmed) err(
 			`To use the teams database, you must be autoconfirmed, which means being registered for at least ` +
 			`one week and winning one rated game.`
 		);
+		if (!Users.globalAuth.atLeast(user, Config.usepostgresteams)) {
+			err("You cannot currently use the teams database.");
+		}
 	}
 	async count(user: string | User) {
 		const id = toID(user);

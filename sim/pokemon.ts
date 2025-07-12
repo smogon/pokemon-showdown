@@ -329,11 +329,8 @@ export class Pokemon {
 
 		set.level = this.battle.clampIntRange(set.adjustLevel || set.level || 100, 1, 9999);
 		this.level = set.level;
-		const genders: { [key: string]: GenderName } = { M: 'M', F: 'F', N: 'N' };
-		this.gender = genders[set.gender] || this.species.gender;
-		if (!this.gender && (this.battle.gen < 6 || this.battle.ruleTable.has('obtainablemisc'))) {
-			this.gender = (this.battle.random(2) ? 'F' : 'M');
-		}
+		const genders: { [key: string]: GenderName | null } = { __proto__: null, M: 'M', F: 'F', N: 'N' };
+		this.gender = genders[set.gender] || this.species.gender || this.battle.sample(['M', 'F']);
 		if (this.gender === 'N') this.gender = '';
 		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
 		this.pokeball = toID(this.set.pokeball) || 'pokeball' as ID;
@@ -864,13 +861,14 @@ export class Pokemon {
 		return false;
 	}
 
-	ignoringItem() {
-		return !this.getItem().isPrimalOrb && !!(
-			this.itemState.knockedOff || // Gen 3-4
-			(this.battle.gen >= 5 && !this.isActive) ||
-			(!this.getItem().ignoreKlutz && this.hasAbility('klutz')) ||
-			this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']
-		);
+	ignoringItem(isFling = false) {
+		if (this.getItem().isPrimalOrb) return false;
+		if (this.itemState.knockedOff) return true; // Gen 3-4
+		if (this.battle.gen >= 5 && !this.isActive) return true;
+		if (this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']) return true;
+		// check Fling first to avoid infinite recursion
+		if (isFling) return this.battle.gen >= 5 && this.hasAbility('klutz');
+		return !this.getItem().ignoreKlutz && this.hasAbility('klutz');
 	}
 
 	deductPP(move: string | Move, amount?: number | null, target?: Pokemon | null | false) {
@@ -1403,6 +1401,7 @@ export class Pokemon {
 			let details = (this.illusion || this).details;
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
 			this.battle.add('detailschange', this, details);
+			this.updateMaxHp();
 			if (!source) {
 				// Tera forme
 				// Ogerpon/Terapagos text goes here
@@ -1451,6 +1450,19 @@ export class Pokemon {
 			this.apparentType = this.terastallized;
 		}
 		return true;
+	}
+
+	updateMaxHp() {
+		const newBaseMaxHp = Math.floor(Math.floor(
+			2 * this.species.baseStats['hp'] + this.set.ivs['hp'] + Math.floor(this.set.evs['hp'] / 4) + 100
+		) * this.level / 100 + 10);
+		if (newBaseMaxHp === this.baseMaxhp) return;
+		this.baseMaxhp = newBaseMaxHp;
+		const newMaxHP = this.volatiles['dynamax'] ? (2 * this.baseMaxhp) : this.baseMaxhp;
+		this.hp = newMaxHP - (this.maxhp - this.hp);
+		if (this.hp < 0) this.hp = this.fainted ? 0 : 1; // latest should never happen
+		this.maxhp = newMaxHP;
+		if (this.hp) this.battle.add('-heal', this, this.getHealth, '[silent]');
 	}
 
 	clearVolatile(includeSwitchFlags = true) {
@@ -2006,24 +2018,30 @@ export class Pokemon {
 		if (!this.hp) return { side: this.side.id, secret: '0 fnt', shared: '0 fnt' };
 		let secret = `${this.hp}/${this.maxhp}`;
 		let shared;
-		const ratio = this.hp / this.maxhp;
 		if (this.battle.reportExactHP) {
 			shared = secret;
-		} else if (this.battle.reportPercentages || this.battle.gen >= 8) {
+		} else if (this.battle.reportPercentages || this.battle.gen >= 7) {
 			// HP Percentage Mod mechanics
-			let percentage = Math.ceil(ratio * 100);
-			if ((percentage === 100) && (ratio < 1.0)) {
+			let percentage = Math.ceil(100 * this.hp / this.maxhp);
+			if (percentage === 100 && this.hp < this.maxhp) {
 				percentage = 99;
 			}
 			shared = `${percentage}/100`;
 		} else {
-			// In-game accurate pixel health mechanics
-			const pixels = Math.floor(ratio * 48) || 1;
+			/**
+			 * In-game accurate pixel health mechanics
+			 * PS doesn't use pixels after Gen 6, but for reference:
+			 * - [Gen 7] SM uses 99 pixels
+			 * - [Gen 7] USUM uses 86 pixels
+			 * */
+			const pixels = Math.floor(48 * this.hp / this.maxhp) || 1;
 			shared = `${pixels}/48`;
-			if ((pixels === 9) && (ratio > 0.2)) {
-				shared += 'y'; // force yellow HP bar
-			} else if ((pixels === 24) && (ratio > 0.5)) {
-				shared += 'g'; // force green HP bar
+			if (this.battle.gen >= 5) {
+				if (pixels === 9) {
+					shared += this.hp * 5 > this.maxhp ? 'y' : 'r';
+				} else if (pixels === 24) {
+					shared += this.hp * 2 > this.maxhp ? 'g' : 'y';
+				}
 			}
 		}
 		if (this.status) {

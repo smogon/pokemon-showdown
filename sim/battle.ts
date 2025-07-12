@@ -1047,6 +1047,8 @@ export class Battle {
 			}
 			return handlers;
 		}
+		// events that target a Pokemon normally bubble up to the Side
+		const shouldBubbleDown = target instanceof Side;
 		// events usually run through EachEvent should never have any handlers besides `on${eventName}` so don't check for them
 		const prefixedHandlers = !['BeforeTurn', 'Update', 'Weather', 'WeatherChange', 'TerrainChange'].includes(eventName);
 		if (target instanceof Pokemon && (target.isActive || source?.isActive)) {
@@ -1068,13 +1070,24 @@ export class Battle {
 		}
 		if (target instanceof Side) {
 			for (const side of this.sides) {
-				if (side.n >= 2 && side.allySide) break;
-				if (side === target || side === target.allySide) {
-					handlers.push(...this.findSideEventHandlers(side, `on${eventName}`));
-				} else if (prefixedHandlers) {
-					handlers.push(...this.findSideEventHandlers(side, `onFoe${eventName}`));
+				if (shouldBubbleDown) {
+					for (const active of side.active) {
+						if (side === target || side === target.allySide) {
+							handlers = handlers.concat(this.findPokemonEventHandlers(active, `on${eventName}`));
+						} else if (prefixedHandlers) {
+							handlers = handlers.concat(this.findPokemonEventHandlers(active, `onFoe${eventName}`));
+						}
+						if (prefixedHandlers) handlers = handlers.concat(this.findPokemonEventHandlers(active, `onAny${eventName}`));
+					}
 				}
-				if (prefixedHandlers) handlers.push(...this.findSideEventHandlers(side, `onAny${eventName}`));
+				if (side.n < 2 || !side.allySide) {
+					if (side === target || side === target.allySide) {
+						handlers.push(...this.findSideEventHandlers(side, `on${eventName}`));
+					} else if (prefixedHandlers) {
+						handlers.push(...this.findSideEventHandlers(side, `onFoe${eventName}`));
+					}
+					if (prefixedHandlers) handlers.push(...this.findSideEventHandlers(side, `onAny${eventName}`));
+				}
 			}
 		}
 		handlers.push(...this.findFieldEventHandlers(this.field, `on${eventName}`));
@@ -1868,10 +1881,6 @@ export class Battle {
 			}
 		}
 
-		for (const side of this.sides) {
-			this.add('teamsize', side.id, side.pokemon.length);
-		}
-
 		this.add('gen', this.gen);
 
 		this.add('tier', format.name);
@@ -1906,6 +1915,20 @@ export class Battle {
 			if ('+*-!'.includes(rule.charAt(0))) continue;
 			const subFormat = this.dex.formats.get(rule);
 			subFormat.onTeamPreview?.call(this);
+		}
+
+		if (this.requestState !== 'teampreview' && this.ruleTable.pickedTeamSize) {
+			this.add('clearpoke');
+			for (const side of this.sides) {
+				for (const pokemon of side.pokemon) {
+					// Still need to hide these formes since they change on battle start
+					const details = pokemon.details.replace(', shiny', '')
+						.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*')
+						.replace(/(Xerneas)(-[a-zA-Z?-]+)?/g, '$1-*');
+					this.addSplit(side.id, ['poke', pokemon.side.id, details, '']);
+				}
+			}
+			this.makeRequest('teampreview');
 		}
 
 		this.queue.addChoice({ choice: 'start' });
@@ -2501,6 +2524,7 @@ export class Battle {
 					// after clearing volatiles
 					pokemon.details = pokemon.getUpdatedDetails();
 					this.add('detailschange', pokemon, pokemon.details, '[silent]');
+					pokemon.updateMaxHp();
 					pokemon.formeRegression = false;
 				}
 				pokemon.side.faintedThisTurn = pokemon;
@@ -2601,6 +2625,7 @@ export class Battle {
 		case 'start': {
 			for (const side of this.sides) {
 				if (side.pokemonLeft) side.pokemonLeft = side.pokemon.length;
+				this.add('teamsize', side.id, side.pokemon.length);
 			}
 
 			this.add('start');
@@ -2641,11 +2666,11 @@ export class Battle {
 				}
 			}
 
-			if (this.format.onBattleStart) this.format.onBattleStart.call(this);
+			this.format.onBattleStart?.call(this);
 			for (const rule of this.ruleTable.keys()) {
 				if ('+*-!'.includes(rule.charAt(0))) continue;
 				const subFormat = this.dex.formats.get(rule);
-				if (subFormat.onBattleStart) subFormat.onBattleStart.call(this);
+				subFormat.onBattleStart?.call(this);
 			}
 
 			for (const side of this.sides) {
