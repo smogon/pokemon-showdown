@@ -170,6 +170,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (isPermanent) {
 				this.baseSpecies = rawSpecies;
 				this.details = this.getUpdatedDetails();
+				this.battle.add('detailschange', this, (this.illusion || this).details);
 				if (source.effectType === 'Item') {
 					this.canTerastallize = null; // National Dex behavior
 					if (source.zMove) {
