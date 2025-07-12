@@ -140,10 +140,11 @@ export class BattleActions {
 		pokemon.abilityState.effectOrder = this.battle.effectOrder++;
 		pokemon.itemState.effectOrder = this.battle.effectOrder++;
 		this.battle.runEvent('BeforeSwitchIn', pokemon);
+		const oldActiveDetails = oldActive ? `[out] ${oldActive.getFullDetails().shared}` : '';
 		if (sourceEffect) {
-			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, `[from] ${sourceEffect}`);
+			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, `[from] ${sourceEffect}`, oldActiveDetails);
 		} else {
-			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails);
+			this.battle.add(isDrag ? 'drag' : 'switch', pokemon, pokemon.getFullDetails, oldActiveDetails);
 		}
 		if (isDrag && this.battle.gen === 2) pokemon.draggedIn = this.battle.turn;
 		pokemon.previouslySwitchedIn++;

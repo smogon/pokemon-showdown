@@ -2081,8 +2081,8 @@ export class Pokemon {
 			shared = secret;
 		} else if (this.battle.reportPercentages || this.battle.gen >= 8) {
 			// HP Percentage Mod mechanics
-			let percentage = Math.ceil(ratio * 100);
-			if ((percentage === 100) && (ratio < 1.0)) {
+			let percentage = (Number) ((ratio * 100).toFixed(2));
+			if ((percentage == 100) && (ratio < 1.0)) {
 				percentage = 99;
 			}
 			shared = `${percentage}/100`;

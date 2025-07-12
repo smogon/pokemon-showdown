@@ -2331,6 +2331,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			nastyplot: ["9M", "9L16", "8M", "8L16", "7L13", "6L13", "5L18", "4L18"],
 			naturalgift: ["4M"],
 			nuzzle: ["9L12", "8L12"],
+			painsplit: ["4S0"],
 			playnice: ["9L4", "8L4"],
 			playrough: ["9M", "8M"],
 			present: ["9E", "8E", "7E", "7V", "6E", "5E", "4E", "3E"],
@@ -2382,7 +2383,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			{generation: 9, level: 30, shiny: true, gender: "M", nature: "Jolly", moves: ["charge", "volttackle", "endure", "helpinghand"], pokeball: "cherishball"},
 		],
 	},
-	pichuspikyeared: {
+	/*pichuspikyeared: {
 		learnset: {
 			attract: ["4M"],
 			captivate: ["4M"],
@@ -2432,7 +2433,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			{generation: 4, level: 30, gender: "F", nature: "Naughty", moves: ["helpinghand", "volttackle", "swagger", "painsplit"], pokeball: "pokeball"},
 		],
 		eventOnly: true,
-	},
+	},*/
 	pikachu: {
 		learnset: {
 			agility: ["9M", "9L24", "8M", "8L24", "8V", "7L45", "7V", "6L37", "6S41", "5L37", "4L34", "3L33", "3S0", "3S8"],

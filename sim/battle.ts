@@ -230,8 +230,8 @@ export class Battle {
 		this.prng = options.prng || new PRNG(options.seed || undefined);
 		this.prngSeed = this.prng.startingSeed;
 		this.rated = options.rated || !!options.rated;
-		this.reportExactHP = !!format.debug;
-		this.reportPercentages = false;
+		this.reportExactHP = false; //!!format.debug;
+		this.reportPercentages = true;
 		this.supportCancel = false;
 		this.playerOptions = options.playerOptions;
 
