@@ -3324,12 +3324,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 211,
 	},
 	powerofalchemy: {
-		onAllyFaint(target) {
-			if (!this.effectState.target.hp) return;
+		onAllyFaint(target, source, effect) {
+			const pokemon: Pokemon = this.effectState.target;
+			if (!pokemon.hp) return;
 			const ability = target.getAbility();
 			if (ability.flags['noreceiver'] || ability.id === 'noability') return;
-			if (this.effectState.target.setAbility(ability)) {
-				this.add('-ability', this.effectState.target, ability, '[from] ability: Power of Alchemy', `[of] ${target}`);
+			if (pokemon.setAbility(ability)) {
+				this.add('-ability', pokemon, ability, '[from] ability: Power of Alchemy', `[of] ${target}`);
+				const handlers: any[] = [];
+				for (const event of ['AllyFaint', 'AnyFaint']) {
+					const callbackName = 'on' + event;
+					// @ts-expect-error dynamic lookup
+					const callback = ability[callbackName];
+					if (callback !== undefined) {
+						handlers.push(this.resolvePriority({
+							effect: ability, callback, state: pokemon.abilityState, end: pokemon.clearAbility, effectHolder: pokemon,
+						}, callbackName));
+					}
+				}
+				this.runHandlers(handlers, 'Faint', target, source, effect);
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1 },
@@ -3713,12 +3726,25 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 155,
 	},
 	receiver: {
-		onAllyFaint(target) {
-			if (!this.effectState.target.hp) return;
-			const ability = target.getAbility();
+		onAllyFaint(target, source, effect) {
+			const pokemon: Pokemon = this.effectState.target;
+			if (!pokemon.hp) return;
+			let ability = target.getAbility();
 			if (ability.flags['noreceiver'] || ability.id === 'noability') return;
-			if (this.effectState.target.setAbility(ability)) {
-				this.add('-ability', this.effectState.target, ability, '[from] ability: Receiver', `[of] ${target}`);
+			if (pokemon.setAbility(ability)) {
+				this.add('-ability', pokemon, ability, '[from] ability: Receiver', `[of] ${target}`);
+				ability = pokemon.getAbility();
+				const handlers: any[] = [];
+				for (const event of ['AllyFaint', 'AnyFaint']) {
+					const callbackName = 'on' + event;
+					const callback = this.getCallback(pokemon, ability, callbackName);
+					if (callback !== undefined) {
+						handlers.push(this.resolvePriority({
+							effect: ability, callback, state: pokemon.abilityState, end: pokemon.clearAbility, effectHolder: pokemon,
+						}, callbackName));
+					}
+				}
+				this.runHandlers(handlers, 'Faint', target, source, effect);
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1 },
