@@ -669,7 +669,7 @@ export class Side {
 				return this.emitChoiceError(`Can't move: ${pokemon.name}'s Fight button is known to be safe`);
 			}
 			this.updateRequestForPokemon(pokemon, req => this.updateDisabledRequest(pokemon, req));
-			this.emitRequest();
+			this.emitRequest(this.activeRequest!, true);
 			this.choice.error = 'Hack to avoid sending error messages to the client :D';
 			return false;
 		} else if (maxMove) {

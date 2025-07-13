@@ -3046,7 +3046,7 @@ export class Battle {
 					update = true;
 				}
 			}
-			if (update) side.emitRequest();
+			if (update) side.emitRequest(side.activeRequest!, true);
 		}
 	}
 
