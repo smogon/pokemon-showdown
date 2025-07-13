@@ -397,6 +397,9 @@ export const DefaultText: { [id: IDEntry]: DefaultText } = {
 	defensecurl: { 
 		volatileName: "Defense Curl"
 	},
+	substitute: {
+		volatileName: "Sub"
+	},
 
 	// weather
 	sandstorm: {
