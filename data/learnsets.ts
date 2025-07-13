@@ -99046,7 +99046,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			revenge: ["8M"],
 			round: ["8M"],
 			safeguard: ["8M"],
-			scald: ["8M", "9M"],
+			scald: ["9M", "8M"],
 			scaryface: ["9M", "8M"],
 			shadowball: ["9M", "8M"],
 			sleeptalk: ["9M", "8M"],
