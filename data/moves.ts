@@ -22132,7 +22132,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		name: "Polar Flare",
 		pp: 10,
 		priority: 0,
-		flags: {protect: 1, mirror: 1, nosketch: 1 },
+		flags: { protect: 1, mirror: 1, nosketch: 1 },
 		secondary: {
 			chance: 10,
 			status: 'frz',
