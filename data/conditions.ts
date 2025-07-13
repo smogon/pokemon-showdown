@@ -115,7 +115,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			}
 		},
 		onDamagingHit(damage, target, source, move) {
-			if (move.type === 'Fire' && move.category !== 'Status' && move.id !== 'polarflare') {
+			if (move.type === 'Fire' && move.category !== 'Status' && !target.volatiles['polarflare']) {
 				target.cureStatus();
 			}
 		},
