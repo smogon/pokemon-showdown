@@ -19577,7 +19577,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	ramnarok: {
 		num: -78,
 		name: "Ramnarok",
-		baseForme: "Base",
+		baseForme: "Dormant",
 		types: ["Fire", "Steel"],
 		gender: "N",
 		baseStats: { hp: 110, atk: 63, def: 104, spa: 104, spd: 134, spe: 85 },
@@ -19589,6 +19589,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		tags: ["Mythical"],
 		otherFormes: ["Ramnarok-Radiant"],
 		formeOrder: ["Ramnarok", "Ramnarok-Radiant"],
+		gen: 9,
 	},
 	ramnarokradiant: {
 		num: -78,
@@ -19605,6 +19606,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		requiredMove: "Polar Flare",
 		battleOnly: "Ramnarok",
+		gen: 9,
 	},
 	// NOTE: PokeStar "formes" are not actually formes and thus do not have a formeOrder
 	pokestarsmeargle: {
