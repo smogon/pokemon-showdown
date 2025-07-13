@@ -2227,16 +2227,18 @@ export class Pokemon {
 
 	/** false = immune, true = not immune */
 	runImmunity(type: string, message?: string | boolean) {
+		const id = type.toLowerCase();
+		const typeName = id.charAt(0).toUpperCase() + id.substr(1);
 		if (!type || type === '???') return true;
-		if (!this.battle.dex.types.isName(type)) {
-			throw new Error("Use runStatusImmunity for " + type);
+		if (!this.battle.dex.types.isName(typeName)) {
+			throw new Error("Use runStatusImmunity for " + typeName);
 		}
 		if (this.fainted) return false;
 
-		const negateImmunity = !this.battle.runEvent('NegateImmunity', this, type);
-		const notImmune = type === 'Ground' ?
+		const negateImmunity = !this.battle.runEvent('NegateImmunity', this, typeName);
+		const notImmune = typeName === 'Ground' ?
 			this.isGrounded(negateImmunity) :
-			negateImmunity || this.battle.dex.getImmunity(type, this);
+			negateImmunity || this.battle.dex.getImmunity(typeName, this);
 		if (notImmune) return true;
 		if (!message) return false;
 		if (notImmune === null) {
