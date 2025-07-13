@@ -22124,7 +22124,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Clever",
 	},
 	polarflare: {
-		num: 0,
+		num: -3,
 		accuracy: 100,
 		basePower: 75,
 		category: "Special",
