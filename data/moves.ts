@@ -22134,13 +22134,13 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: 0,
 		flags: { protect: 1, mirror: 1, defrost: 1, nosketch: 1 },
 		secondary: {
-            chance: 10,
-            onHit(target, source, move) {
+			chance: 10,
+			onHit(target, source, move) {
 				if (!target.status && !move.hasSheerForce && target.trySetStatus('frz', source)) {
 					target.addVolatile('polarflare');
 				}
 			},
-        },
+		},
 		onHit(target, pokemon, move) {
 			if (pokemon.baseSpecies.baseSpecies === 'Ramnarok' && !pokemon.transformed) {
 				move.willChangeForme = true;
@@ -22154,7 +22154,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onAfterMove(source, target, move) {
 			delete target.volatiles['polarflare'];
-        },
+		},
 		target: "allAdjacentFoes",
 		type: "Fire",
 		contestType: "Beautiful",
