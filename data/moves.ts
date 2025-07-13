@@ -22136,7 +22136,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		secondary: {
 			chance: 10,
 			onHit(target, source, move) {
-				if (!target.status && !move.hasSheerForce && target.trySetStatus('frz', source)) {
+				if (target.trySetStatus('frz', source)) {
 					target.addVolatile('polarflare');
 				}
 			},
