@@ -99805,7 +99805,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			terablast: ["9M"],
 			thunder: ["9M"],
 			willowisp: ["9M"],
-
 		},
 	},
 	pokestarsmeargle: {
