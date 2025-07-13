@@ -2138,7 +2138,7 @@ export const vpnSets: VPNSets = {
 		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Modest', teraType: 'Stellar', level: 88,
 	},
 	'Scream Tail': {
-		species: 'Scream Tail', ability: 'Protosmosis', item: 'Booster Energy', gender: '',
+		species: 'Scream Tail', ability: 'Cute Charm', item: 'Leftovers', gender: '',
 		moves: ['Moonblast', 'Flamethrower', 'Psychic Noise'],
 		signatureMove: 'Tail Glow',
 		evs: { hp: 85, atk: 85, def: 85, spa: 85, spd: 85, spe: 85 }, nature: 'Modest', teraType: 'Stellar', level: 84,
