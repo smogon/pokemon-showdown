@@ -3412,35 +3412,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Psychic",
 	},
 
-	// Lily
-	powerup: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Power Up",
-		shortDesc: "Heals 50% HP. Heals 3% more per fainted ally.",
-		desc: "Heals the user for 50% of their maximum HP. Heals an additional 3% of the user's maximum HP for each team member on the user's side that has fainted.",
-		pp: 5,
-		priority: 0,
-		flags: { heal: 1 },
-		onModifyMove(move, source, target) {
-			const fntAllies = source.side.pokemon.filter(ally => ally !== source && ally.fainted);
-			if (move.heal) move.heal[0] = 50 + (3 * fntAllies.length);
-		},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(pokemon) {
-			this.add('-anim', pokemon, 'Shore Up', pokemon);
-			this.add('-anim', pokemon, 'Charge', pokemon);
-			this.add('-anim', pokemon, 'Moonlight', pokemon);
-		},
-		heal: [50, 100],
-		secondary: null,
-		target: "self",
-		type: "Electric",
-	},
-
 	// Loethalion
 	darkmooncackle: {
 		accuracy: 100,

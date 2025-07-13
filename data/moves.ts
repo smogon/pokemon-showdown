@@ -22084,7 +22084,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 	// CAP moves
 
 	paleowave: {
-		num: 0,
+		num: -1,
 		accuracy: 100,
 		basePower: 85,
 		category: "Special",
@@ -22104,7 +22104,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		contestType: "Beautiful",
 	},
 	shadowstrike: {
-		num: 0,
+		num: -2,
 		accuracy: 95,
 		basePower: 80,
 		category: "Physical",
@@ -22122,5 +22122,34 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		target: "normal",
 		type: "Ghost",
 		contestType: "Clever",
+	},
+	polarflare: {
+		num: -3,
+		accuracy: 100,
+		basePower: 75,
+		category: "Special",
+		isNonstandard: "CAP",
+		name: "Polar Flare",
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, defrost: 1, nosketch: 1 },
+		secondary: {
+			chance: 10,
+			status: 'frz',
+		},
+		onHit(target, pokemon, move) {
+			if (pokemon.baseSpecies.baseSpecies === 'Ramnarok' && !pokemon.transformed) {
+				move.willChangeForme = true;
+			}
+		},
+		onAfterMoveSecondarySelf(pokemon, target, move) {
+			if (move.willChangeForme) {
+				const forme = pokemon.species.id === 'ramnarokradiant' ? '' : '-Radiant';
+				pokemon.formeChange('Ramnarok' + forme, this.effect, false, '0', '[msg]');
+			}
+		},
+		target: "allAdjacentFoes",
+		type: "Fire",
+		contestType: "Beautiful",
 	},
 };

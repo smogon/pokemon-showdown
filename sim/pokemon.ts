@@ -1405,6 +1405,7 @@ export class Pokemon {
 			let details = (this.illusion || this).details;
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
 			this.battle.add('detailschange', this, details);
+			this.updateMaxHp();
 			if (!source) {
 				// Tera forme
 				// Ogerpon/Terapagos text goes here
@@ -1453,6 +1454,19 @@ export class Pokemon {
 			this.apparentType = this.terastallized;
 		}
 		return true;
+	}
+
+	updateMaxHp() {
+		const newBaseMaxHp = Math.floor(Math.floor(
+			2 * this.species.baseStats['hp'] + this.set.ivs['hp'] + Math.floor(this.set.evs['hp'] / 4) + 100
+		) * this.level / 100 + 10);
+		if (newBaseMaxHp === this.baseMaxhp) return;
+		this.baseMaxhp = newBaseMaxHp;
+		const newMaxHP = this.volatiles['dynamax'] ? (2 * this.baseMaxhp) : this.baseMaxhp;
+		this.hp = newMaxHP - (this.maxhp - this.hp);
+		if (this.hp < 0) this.hp = this.fainted ? 0 : 1; // latest should never happen
+		this.maxhp = newMaxHP;
+		if (this.hp) this.battle.add('-heal', this, this.getHealth, '[silent]');
 	}
 
 	clearVolatile(includeSwitchFlags = true) {
