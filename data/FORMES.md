@@ -127,6 +127,7 @@ List of all in-battle forme changes:
 - Darmanitan (Zen Mode)
 - Meloetta (Relic Song)
 - Shaymin-Sky (Frozen status)
+- Ramnarok (Polar Flare)
 - Mega evolutions
 - Primal reversions
 - Ultra Burst
