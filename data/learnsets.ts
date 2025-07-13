@@ -99774,8 +99774,8 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			zenheadbutt: ["9M"],
 		},
 	},
-	ramnarok: {
-		learnset: {
+	ramnarok: { 
+		learnset: { 
 			avalanche: ["9M"],
 			blizzard: ["9M"],
 			endure: ["9M"],
@@ -99805,7 +99805,6 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			terablast: ["9M"],
 			thunder: ["9M"],
 			willowisp: ["9M"],
-
 		},
 	},
 	pokestarsmeargle: {
