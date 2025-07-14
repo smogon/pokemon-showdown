@@ -48,7 +48,5 @@ try {
 // for some reason, esbuild won't be requirable until a tick has passed
 // see https://stackoverflow.com/questions/53270058/node-cant-find-certain-modules-after-synchronous-install
 setImmediate(() => {
-	// npm package, don't rebuild
-	if (process.argv[2] === 'postinstall' && fs.existsSync('dist')) return;
 	require('./tools/build-utils').transpile(force, decl);
 });
