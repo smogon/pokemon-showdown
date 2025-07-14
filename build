@@ -2,9 +2,9 @@
 "use strict";
 
 try {
-	// structuredClone was introduced in Node 17, but we'll ask for the most recent "Active LTS" with it to be safe
-	// // https://nodejs.org/en/about/previous-releases
-	structuredClone({});
+	// fetch was introduced in Node 18, but we'll ask for the most recent "Active LTS" with it to be safe
+	// https://nodejs.org/en/about/previous-releases
+	fetch;
 } catch (e) {
 	console.error("We require Node.js version 22 or later; you're using " + process.version);
 	process.exit(1);

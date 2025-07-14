@@ -50,16 +50,13 @@ require('source-map-support').install();
 
 // Check for version
 const nodeVersion = parseInt(process.versions.node);
-if (isNaN(nodeVersion) || nodeVersion < 22) {
-	try {
-		// structuredClone was introduced in Node 17, but we'll ask for the most recent "Active LTS" with it to be safe
-		// https://nodejs.org/en/about/previous-releases
-		structuredClone({});
-
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
-	} catch (e) {
-		throw new Error("We require Node.js version 22 or later; you're using " + process.version);
-	}
+// I've gotten enough reports by people who don't use the launch
+// script that this is worth repeating here
+try {
+	fetch;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+} catch (e) {
+	throw new Error("We require Node.js version 22 or later; you're using " + process.version);
 }
 
 import { FS, Repl } from '../lib';
