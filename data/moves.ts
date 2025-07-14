@@ -22152,7 +22152,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				pokemon.formeChange('Ramnarok' + forme, this.effect, false, '0', '[msg]');
 			}
 		},
-		onAfterMove(source, target, move) {
+		onAfterHit(source, target, move) {
 			delete target.volatiles['polarflare'];
 		},
 		target: "allAdjacentFoes",
