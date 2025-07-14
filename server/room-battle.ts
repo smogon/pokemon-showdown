@@ -1362,7 +1362,9 @@ export const PM = new ProcessManager.StreamProcessManager(module, () => new Room
 
 if (!PM.isParentProcess) {
 	// This is a child process!
-	require('source-map-support').install();
+	try {
+		require('source-map-support').install();
+	} catch {}
 	global.Config = require('./config-loader').Config;
 	global.Dex = require('../sim/dex').Dex;
 	global.Monitor = {
