@@ -2,7 +2,8 @@
 "use strict";
 
 try {
-	// fetch was introduced in Node 18, but we'll ask for the most recent "Active LTS" with it to be safe
+	// fetch was introduced in Node 18, which is EOL,
+	// so we'll ask for the most recent "Active LTS" with it to be safe
 	// https://nodejs.org/en/about/previous-releases
 	fetch;
 } catch (e) {
