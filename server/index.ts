@@ -58,6 +58,13 @@ try {
 	throw new Error("We require Node.js version 22 or later; you're using " + process.version);
 }
 
+try {
+	require.resolve('ts-chacha20');
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+} catch (e) {
+	throw new Error("Dependencies are unmet; run node pokemon-showdown before launching Pokemon Showdown again.");
+}
+
 import { FS, Repl } from '../lib';
 
 /*********************************************************

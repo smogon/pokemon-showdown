@@ -24,13 +24,10 @@ function shell(cmd) {
 
 // Check to make sure the most recently added or updated dependency is installed at the correct version
 try {
-	var version = require('esbuild').version.split('.');
-	if (parseInt(version[1]) < 16) {
-		throw new Error("esbuild version too old");
-	}
+	require.resolve('ts-chacha20');
 } catch (e) {
 	console.log('Installing dependencies...');
-	shell('npm install');
+	shell('npm ci');
 }
 
 // Make sure config.js exists. If not, copy it over synchronously from
