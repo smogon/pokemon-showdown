@@ -2691,18 +2691,42 @@ export class Battle {
 				subFormat.onBattleStart?.call(this);
 			}
 
+			// @pokebedrock - Sort the active pokemon by currentHealth
 			for (const side of this.sides) {
-				for (let i = 0; i < side.active.length; i++) {
-					if (!side.pokemonLeft) {
-						// forfeited before starting
-						side.active[i] = side.pokemon[i];
-						side.active[i].fainted = true;
-						side.active[i].hp = 0;
-					} else {
-						this.actions.switchIn(side.pokemon[i], i);
+				const availablePokemon = side.pokemon;
+				let slotIndex = 0;
+
+				// Loop through active slots
+				while (slotIndex < side.active.length) {
+					// Find the next non-fainted Pokémon that isn't already active
+					const nextValidIndex = availablePokemon.findIndex(
+						(p, idx) => idx >= slotIndex && !p.fainted && !p.isActive
+					);
+
+					if (nextValidIndex === -1) break; // No more valid Pokémon.
+
+					const pokemon = availablePokemon[nextValidIndex];
+
+					// Ensure the Pokémon is in the correct position
+					pokemon.position = slotIndex;
+
+					if (nextValidIndex !== slotIndex) {
+						// Swap Pokémon in side.pokemon to ensure positions match
+						const temp = side.pokemon[slotIndex];
+						side.pokemon[slotIndex] = pokemon;
+						side.pokemon[nextValidIndex] = temp;
+
+						// Update positions
+						temp.position = nextValidIndex;
 					}
+
+					// Switch in the Pokémon to the active slot
+					this.actions.switchIn(pokemon, slotIndex);
+
+					slotIndex++;
 				}
 			}
+
 			for (const pokemon of this.getAllPokemon()) {
 				this.singleEvent('Start', this.dex.conditions.getByID(pokemon.species.id), pokemon.speciesState, pokemon);
 			}
