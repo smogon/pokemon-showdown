@@ -48,11 +48,10 @@ require('source-map-support').install();
 // features, so that it doesn't crash old versions of Node.js, so we
 // can successfully print the "We require Node.js 22+" message.
 
-// Check for version
-const nodeVersion = parseInt(process.versions.node);
 // I've gotten enough reports by people who don't use the launch
 // script that this is worth repeating here
 try {
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
 	fetch;
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 } catch (e) {
