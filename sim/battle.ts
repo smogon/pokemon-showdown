@@ -2642,6 +2642,7 @@ export class Battle {
 			for (const side of this.sides) {
 				// @pokebedrock - Exclude party mons that start fainted
 				side.pokemonLeft = side.pokemon.filter(pk => !pk.fainted).length;
+
 				// @pokebedrock use side.pokemonLeft instead of side.pokemon.length
 				this.add('teamsize', side.id, side.pokemonLeft);
 			}
