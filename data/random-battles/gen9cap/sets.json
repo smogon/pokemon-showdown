@@ -608,5 +608,16 @@
                 "teraTypes": ["Fairy", "Ghost", "Grass"]
             }
         ]
+    },
+    "ramnarok": {
+        "level": 72,
+        "sets": [
+            {
+                "role": "AV Pivot",
+                "movepool": ["Blizzard", "Inferno", "Polar Flare", "Thunder"],
+                "abilities": ["No Guard"],
+                "teraTypes": ["Electric", "Flying", "Water"]
+            }
+        ]
     }
 }
