@@ -62,7 +62,7 @@ try {
 	require.resolve('ts-chacha20');
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 } catch (e) {
-	throw new Error("Dependencies are unmet; run node pokemon-showdown before launching Pokemon Showdown again.");
+	throw new Error("Dependencies are unmet; run `npm ci` before launching Pokemon Showdown again.");
 }
 
 import { FS, Repl } from '../lib';
