@@ -4704,7 +4704,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 1] UU",
 		mod: 'gen1',
 		searchShow: false,
-		ruleset: ['[Gen 1] OU',],
+		ruleset: ['[Gen 1] OU'],
 		banlist: ['OU', 'UUBL', 'Bind', 'Clamp', 'Fire Spin', 'Wrap'],
 	},
 	{
