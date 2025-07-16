@@ -22135,11 +22135,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { protect: 1, mirror: 1, defrost: 1, nosketch: 1 },
 		secondary: {
 			chance: 10,
-			onHit(target, source, move) {
-				if (target.trySetStatus('frz', source)) {
-					target.addVolatile('polarflare');
-				}
-			},
+			status: 'frz',
 		},
 		onHit(target, pokemon, move) {
 			if (pokemon.baseSpecies.baseSpecies === 'Ramnarok' && !pokemon.transformed) {
@@ -22151,9 +22147,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				const forme = pokemon.species.id === 'ramnarokradiant' ? '' : '-Radiant';
 				pokemon.formeChange('Ramnarok' + forme, this.effect, false, '0', '[msg]');
 			}
-		},
-		onAfterHit(source, target, move) {
-			delete target.volatiles['polarflare'];
 		},
 		target: "allAdjacentFoes",
 		type: "Fire",
