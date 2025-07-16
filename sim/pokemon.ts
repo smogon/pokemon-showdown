@@ -297,6 +297,7 @@ export class Pokemon {
 	modifyStat?: (this: Pokemon, statName: StatIDExceptHP, modifier: number) => void;
 	// Stadium only
 	recalculateStats?: (this: Pokemon) => void;
+	usedPrimalReversion:boolean = false;
 
 	/**
 	 * An object for storing untyped data, for mods to use.

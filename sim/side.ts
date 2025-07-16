@@ -1184,6 +1184,10 @@ export class Side {
 		return index;
 	}
 
+	worldCoronationTechniqueUsed(): boolean {
+		return this.zMoveUsed || this.megaEvolutionUsed || this.terastallizationUsed || this.dynamaxUsed;
+	}
+
 	choosePass(): boolean | Side {
 		const index = this.getChoiceIndex(true);
 		if (index >= this.active.length) return false;
