@@ -570,8 +570,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 41,
 		onSwitchInPriority: -1,
 		onSwitchIn(pokemon) {
-			if (pokemon.isActive && pokemon.baseSpecies.name === 'Kyogre' && !pokemon.transformed) {
+			if (pokemon.isActive && pokemon.baseSpecies.name === 'Kyogre' && !pokemon.transformed
+				&& this.rules.megasAllowed
+				&& ((this.rules.worldCoronationClause && !pokemon.side.worldCoronationTechniqueUsed())
+					|| (!this.rules.worldCoronationClause && !pokemon.side.megaEvolutionUsed)
+					|| pokemon.usedPrimalReversion)
+			) {
 				pokemon.side.megaEvolutionUsed = true;
+				pokemon.usedPrimalReversion = true;
 				pokemon.formeChange('Kyogre-Primal', this.effect, true);
 			}
 		},
@@ -4788,8 +4794,14 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		spritenum: 390,
 		onSwitchInPriority: -1,
 		onSwitchIn(pokemon) {
-			if (pokemon.isActive && pokemon.baseSpecies.name === 'Groudon' && !pokemon.transformed) {
+			if (pokemon.isActive && pokemon.baseSpecies.name === 'Groudon' && !pokemon.transformed
+				&& this.rules.megasAllowed
+				&& ((this.rules.worldCoronationClause && !pokemon.side.worldCoronationTechniqueUsed())
+					|| (!this.rules.worldCoronationClause && !pokemon.side.megaEvolutionUsed)
+					|| pokemon.usedPrimalReversion)
+			) {
 				pokemon.side.megaEvolutionUsed = true;
+				pokemon.usedPrimalReversion = true;
 				pokemon.formeChange('Groudon-Primal', this.effect, true);
 			}
 		},
