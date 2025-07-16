@@ -21,14 +21,13 @@ function shell(cmd) {
 }
 
 // Check to make sure the most recently added or updated dependency is installed at the correct version
-try {
-	var version = require('esbuild').version.split('.');
-	if (parseInt(version[1]) < 16) {
-		throw new Error("esbuild version too old");
+for (var pkg of ['oxc-transform', 'fast-glob']) {
+	try {
+		require.resolve(pkg);
+	} catch (e) {
+		console.log('Installing dependencies...');
+		shell('npm install ' + pkg);
 	}
-} catch (e) {
-	console.log('Installing dependencies...');
-	shell('npm install');
 }
 
 // Make sure config.js exists. If not, copy it over synchronously from
@@ -45,8 +44,6 @@ try {
 	);
 }
 
-// for some reason, esbuild won't be requirable until a tick has passed
-// see https://stackoverflow.com/questions/53270058/node-cant-find-certain-modules-after-synchronous-install
 setImmediate(() => {
 	require('./tools/build-utils').transpile(force, decl);
 });
