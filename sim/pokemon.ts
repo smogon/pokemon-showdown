@@ -1901,8 +1901,8 @@ export class Pokemon {
 		}
 		this.ability = ability.id;
 		this.abilityState = this.battle.initEffectState({ id: ability.id, target: this });
-		if (sourceEffect?.effectType === 'Ability' && source) {
-			this.battle.add('-ability', this, ability.name, `[from] ability: ${sourceEffect.name}`, `[of] ${source}`);
+		if (sourceEffect && source) {
+			this.battle.add('-ability', this, ability.name, `[from] ${sourceEffect.fullname}`, `[of] ${source}`);
 		} else if (sourceEffect) {
 			this.battle.add('-ability', this, ability.name, `[from] ${sourceEffect.fullname}`);
 		}

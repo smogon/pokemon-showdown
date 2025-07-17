@@ -3967,7 +3967,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (!target.getAbility().flags['failroleplay']) {
 				for (const pokemon of source.alliesAndSelf()) {
 					if (pokemon.ability === target.ability || pokemon.getAbility().flags['cantsuppress']) continue;
-					const oldAbility = pokemon.setAbility(target.ability, target, move);
+					const oldAbility = pokemon.setAbility(target.ability, null, move);
 					if (oldAbility) {
 						success = true;
 					} else if (!success && oldAbility === null) {
@@ -5056,7 +5056,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onHit(target, source) {
-			const oldAbility = target.setAbility(source.ability, source, this.effect);
+			const oldAbility = target.setAbility(source.ability, null, this.effect);
 			if (oldAbility) {
 				if (!target.isAlly(source)) target.volatileStaleness = 'external';
 				return;
@@ -17099,7 +17099,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onHit(target, source) {
-			const oldAbility = target.setAbility('simple', source, this.effect);
+			const oldAbility = target.setAbility('simple', null, this.effect);
 			if (oldAbility) {
 				return;
 			}
@@ -21882,7 +21882,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onHit(target, source) {
-			const oldAbility = target.setAbility('insomnia', source, this.effect);
+			const oldAbility = target.setAbility('insomnia', null, this.effect);
 			if (oldAbility) {
 				if (target.status === 'slp') {
 					target.cureStatus();
