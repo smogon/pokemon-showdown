@@ -437,7 +437,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			if (pokemon.isActive && pokemon.baseSpecies.name === 'Meloetta') {
 				pokemon.formeChange('Meloetta-Pirouette');
 				if (pokemon.hasAbility('trace')) {
-					pokemon.setAbility('noguard', pokemon, true);
+					pokemon.setAbility('noguard', pokemon, null, true);
 					this.add('-activate', pokemon, 'ability: No Guard');
 				}
 			}
@@ -481,7 +481,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 				pokemon.setType(pokemon.getTypes(true).map(type => type === targetType ? "Dragon" : type));
 				this.add('-message', `${pokemon.name}'s Charizardite Shard X changed its type!`);
 				pokemon.addVolatile('firedragon');
-				pokemon.setAbility('toughclaws', pokemon, true);
+				pokemon.setAbility('toughclaws', pokemon, null, true);
 				this.add('-activate', pokemon, 'ability: Tough Claws');
 				this.boost({ atk: 1 });
 			}
@@ -520,7 +520,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 					this.add('-start', pokemon, 'typechange', 'Fire', '[from] item: Charizardite Shard Y');
 				}
 				this.add('-message', `${pokemon.name}'s Charizardite Shard Y changed its type!`);
-				pokemon.setAbility('drought', pokemon, true);
+				pokemon.setAbility('drought', pokemon, null, true);
 				this.boost({ spa: 1 });
 			}
 		},
@@ -973,7 +973,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		},
 		onSwitchIn(pokemon) {
 			this.add('-message', `${pokemon.name}'s flower blooms in the sandstorm!`);
-			pokemon.setAbility('sandveil', pokemon, true);
+			pokemon.setAbility('sandveil', pokemon, null, true);
 			this.add('-activate', pokemon, 'ability: Sand Veil');
 		},
 		onResidualOrder: 5,
@@ -1025,7 +1025,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		onSwitchIn(pokemon) {
 			if (pokemon.baseSpecies.name === 'Diancie') {
 				this.add('-item', pokemon, 'Diancite Stone Fragment');
-				pokemon.setAbility('magicbounce', pokemon, true);
+				pokemon.setAbility('magicbounce', pokemon, null, true);
 				this.add('-activate', pokemon, 'ability: Magic Bounce');
 				this.boost({ atk: 1, spa: 1, spe: 1 });
 			}
