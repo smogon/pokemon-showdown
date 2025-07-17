@@ -1311,7 +1311,7 @@ export class Pokemon {
 			this.knownType = true;
 			this.apparentType = this.terastallized;
 		}
-		if (this.battle.gen > 2) this.setAbility(pokemon.ability, this, true, true);
+		if (this.battle.gen > 2) this.setAbility(pokemon.ability, this, null, true, true);
 
 		// Change formes based on held items (for Transform)
 		// Only ever relevant in Generation 4 since Generation 3 didn't have item-based forme changes
@@ -1446,7 +1446,7 @@ export class Pokemon {
 			}
 			const ability = species.abilities[abilitySlot] || species.abilities['0'];
 			// Ogerpon's forme change doesn't override permanent abilities
-			if (source || !this.getAbility().flags['cantsuppress']) this.setAbility(ability, null, true);
+			if (source || !this.getAbility().flags['cantsuppress']) this.setAbility(ability, null, null, true);
 			// However, its ability does reset upon switching out
 			this.baseAbility = toID(ability);
 		}
@@ -1878,7 +1878,10 @@ export class Pokemon {
 		return this.setItem('');
 	}
 
-	setAbility(ability: string | Ability, source?: Pokemon | null, isFromFormeChange = false, isTransform = false) {
+	setAbility(
+		ability: string | Ability, source?: Pokemon | null, sourceEffect?: Effect | null,
+		isFromFormeChange = false, isTransform = false,
+	) {
 		if (!this.hp) return false;
 		if (typeof ability === 'string') ability = this.battle.dex.abilities.get(ability);
 		const oldAbility = this.ability;
@@ -1898,6 +1901,11 @@ export class Pokemon {
 		}
 		this.ability = ability.id;
 		this.abilityState = this.battle.initEffectState({ id: ability.id, target: this });
+		if (sourceEffect?.effectType === 'Ability' && source) {
+			this.battle.add('-ability', this, ability.name, `[from] ability: ${sourceEffect.name}`, `[of] ${source}`);
+		} else if (sourceEffect) {
+			this.battle.add('-ability', this, ability.name, `[from] ${sourceEffect.fullname}`);
+		}
 		if (ability.id && this.battle.gen > 3 &&
 			(!isTransform || oldAbility !== ability.id || this.battle.gen <= 4)) {
 			this.battle.singleEvent('Start', ability, this.abilityState, this, source);
