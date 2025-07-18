@@ -866,7 +866,9 @@ export class DatabaseLogSearcher extends Searcher {
 		if (!Rooms.Roomlogs.table) {
 			throw new Error(`Database table missing but searchlogs called`);
 		}
-		search = search.replace(/\+/g, ' ');
+		search = search
+			.replace(/\+/g, ' ')
+			.replace(/:/g, '=');
 
 		const results = await Rooms.Roomlogs.table.selectAll()`
 			WHERE ${user ? SQL`userid = ${user} AND ` : SQL``}
@@ -879,7 +881,13 @@ export class DatabaseLogSearcher extends Searcher {
 
 		let buf = Utils.html`<div class ="pad"><strong>Results on ${roomid} for "${search}" during the month ${month}:</strong>`;
 		buf += limit ? ` ${results.length} (capped at ${limit})` : '';
-		buf += `<hr /></div><blockquote>`;
+		buf += `<hr />`;
+		const searchStr = Dashycode.encode(search) + `--limit-${limit}`;
+		const pref = `/join view-chatlog-${roomid}--`;
+		buf += `<button class="button" name="send" value="${pref}${LogReader.prevMonth(month)}--${searchStr}">Previous month</button> `;
+		buf += `<button class="button" name="send" value="${pref}${LogReader.nextMonth(month)}--${searchStr}">Next month</button>`;
+		buf += `<br />`;
+		buf += `<blockquote>`;
 		buf += Utils.sortBy(results, line => -line.time.getTime()).map(resultRow => {
 			let [lineDate, lineTime] = Chat.toTimestamp(resultRow.time).split(' ');
 			let line = LogViewer.renderLine(`${lineTime} ${resultRow.log}`, '', {
@@ -1005,7 +1013,7 @@ export const pages: Chat.PageTable = {
 			opts = '';
 		}
 
-		const parsedDate = new Date(date);
+		const parsedDate = new Date(Chat.toTimestamp(new Date(date)).split(' ')[0]);
 		const validDateStrings = ['all', 'alltime'];
 		const validNonDateTerm = search ? validDateStrings.includes(date) : date === 'today';
 		// this is apparently the best way to tell if a date is invalid
@@ -1170,7 +1178,7 @@ export const commands: Chat.ChatCommands = {
 			`If you provide a user argument in the form <code>user=username</code>, it will search for messages (that match the other arguments) only from that user.<br />` +
 			`All other arguments will be considered part of the search ` +
 			`(if more than one argument is specified, it searches for lines containing all terms).<br />` +
-			"Requires: ~</div>";
+			"Requires: % @ # ~</div>";
 		return this.sendReplyBox(buffer);
 	},
 	topusers: 'linecount',
