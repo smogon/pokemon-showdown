@@ -386,7 +386,9 @@ export class LadderTracker {
 			try {
 				if (oldPrefix) prefixManager.removePrefix(oldPrefix, 'privacy');
 			} catch {} // suppress errorMessages in case it's the first start and it hasn't been made priv yet
-			prefixManager.addPrefix(this.prefix, 'privacy');
+			try {
+				prefixManager.addPrefix(this.prefix, 'privacy');
+			} catch {} // same as above
 		}
 	}
 
