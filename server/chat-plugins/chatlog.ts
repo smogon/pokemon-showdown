@@ -879,15 +879,15 @@ export class DatabaseLogSearcher extends Searcher {
 
 		let curDate = '';
 
-		let buf = Utils.html`<div class ="pad"><strong>Results on ${roomid} for "${search}" during the month ${month}:</strong>`;
+		let buf = Utils.html`<div class="pad"><strong>Results on ${roomid} for "${search}" during the month ${month}:</strong>`;
 		buf += limit ? ` ${results.length} (capped at ${limit})` : '';
 		buf += `<hr />`;
-		const searchStr = Dashycode.encode(search) + `--limit-${limit}`;
+		const searchStr = `search-${Dashycode.encode(search)}--limit-${limit}`;
 		const pref = `/join view-chatlog-${roomid}--`;
 		buf += `<button class="button" name="send" value="${pref}${LogReader.prevMonth(month)}--${searchStr}">Previous month</button> `;
 		buf += `<button class="button" name="send" value="${pref}${LogReader.nextMonth(month)}--${searchStr}">Next month</button>`;
 		buf += `<br />`;
-		buf += `<blockquote>`;
+		buf += `<div class="pad"><blockquote>`;
 		buf += Utils.sortBy(results, line => -line.time.getTime()).map(resultRow => {
 			let [lineDate, lineTime] = Chat.toTimestamp(resultRow.time).split(' ');
 			let line = LogViewer.renderLine(`${lineTime} ${resultRow.log}`, '', {
@@ -904,7 +904,7 @@ export class DatabaseLogSearcher extends Searcher {
 			return `${lineDate} ${line}`;
 		}).filter(Boolean).join('<hr />');
 		if (limit && limit < 5000) {
-			buf += `</details></blockquote><div class="pad"><hr /><strong>Capped at ${limit}.</strong><br />`;
+			buf += `</details></blockquote><hr /><strong>Capped at ${limit}.</strong><br />`;
 			buf += `<button class="button" name="send" value="/sl ${originalSearch},room=${roomid},limit=${limit + 200}">`;
 			buf += `View 200 more<br />&#x25bc;</button>`;
 			buf += `<button class="button" name="send" value="/sl ${originalSearch},room=${roomid},limit=3000">`;
@@ -1013,7 +1013,8 @@ export const pages: Chat.PageTable = {
 			opts = '';
 		}
 
-		const parsedDate = new Date(Chat.toTimestamp(new Date(date)).split(' ')[0]);
+		date = Chat.toTimestamp(new Date(date)).split(' ')[0];
+		const parsedDate = new Date(date);
 		const validDateStrings = ['all', 'alltime'];
 		const validNonDateTerm = search ? validDateStrings.includes(date) : date === 'today';
 		// this is apparently the best way to tell if a date is invalid
