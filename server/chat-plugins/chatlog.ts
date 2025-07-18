@@ -1132,7 +1132,7 @@ export const commands: Chat.ChatCommands = {
 		target = target.trim();
 		const args = target.split(',').map(item => item.trim());
 		if (!target) return this.parse('/help searchlogs');
-		let date = 'all';
+		let date = LogReader.getMonth(LogReader.today());
 		const searches: string[] = [];
 		let limit = '500';
 		let targetRoom: RoomID | undefined = room?.roomid;
