@@ -871,7 +871,8 @@ export class DatabaseLogSearcher extends Searcher {
 		const results = await Rooms.Roomlogs.table.selectAll()`
 			WHERE ${user ? SQL`userid = ${user} AND ` : SQL``}
 			time BETWEEN ${monthStart}::int::timestamp AND ${monthEnd}::int::timestamp AND
-			type = ${'c'} AND roomid = ${roomid} AND content @@ plainto_tsquery(${search}) LIMIT ${limit}
+			type = ${'c'} AND roomid = ${roomid}
+			${toID(search).length ? SQL` AND content @@ plainto_tsquery(${search})` : SQL``} LIMIT ${limit}
 		`;
 
 		let curDate = '';
