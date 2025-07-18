@@ -1013,7 +1013,6 @@ export const pages: Chat.PageTable = {
 			opts = '';
 		}
 
-		date = Chat.toTimestamp(new Date(date)).split(' ')[1];
 		const parsedDate = new Date(date);
 		const validDateStrings = ['all', 'alltime'];
 		const validNonDateTerm = search ? validDateStrings.includes(date) : date === 'today';
@@ -1026,6 +1025,9 @@ export const pages: Chat.PageTable = {
 		if (isTime && opts) opts = toID(opts.slice(5));
 
 		if (search) {
+			if (!/^\d{4}-\d{2}$/.test(date)) {
+				throw new Chat.ErrorMessage(`Date must be a month in the YYYY-MM format.`);
+			}
 			Searcher.checkEnabled(user);
 			if (validDateStrings.includes(date)) throw new Chat.ErrorMessage(`Months must be specified for searching.`);
 			return LogSearcher.runSearch(this, search, roomid, date, limit);
