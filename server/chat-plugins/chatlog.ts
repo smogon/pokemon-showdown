@@ -866,12 +866,18 @@ export class DatabaseLogSearcher extends Searcher {
 		if (!Rooms.Roomlogs.table) {
 			throw new Error(`Database table missing but searchlogs called`);
 		}
-		const results = await Rooms.Roomlogs.table.selectAll()`
-			WHERE ${user ? SQL`userid = ${user} AND ` : SQL``}
+		const query = SQL`
+			SELECT * FROM roomlogs WHERE ${user ? SQL`userid = ${user} AND ` : SQL``}
 			time BETWEEN ${monthStart}::int::timestamp AND ${monthEnd}::int::timestamp AND
-			type = ${'c'} AND content @@ to_tsquery(${search}) AND roomid = ${roomid}
-			LIMIT ${limit}
-		`;
+			type = ${'c'} AND roomid = ${roomid} `;
+
+		for (const [i, curSearch] of search.split('+').filter(x => Boolean(toID(x))).entries()) {
+			query.append(SQL`AND content @@ to_tsquery(${curSearch}) `);
+			if (i > 10) throw new Chat.ErrorMessage(`Number of search terms capped at 10.`);
+		}
+		query.append(SQL` LIMIT ${limit}`);
+
+		const results = await Rooms.Roomlogs.table.query(query);
 
 		let curDate = '';
 
@@ -879,9 +885,11 @@ export class DatabaseLogSearcher extends Searcher {
 		buf += limit ? ` ${results.length} (capped at ${limit})` : '';
 		buf += `<hr /></div><blockquote>`;
 		buf += Utils.sortBy(results, line => -line.time.getTime()).map(resultRow => {
-			let line = LogViewer.renderLine(resultRow.log, 'all');
+			let [lineDate, lineTime] = Chat.toTimestamp(resultRow.time).split(' ');
+			let line = LogViewer.renderLine(`${lineTime} ${resultRow.log}`, '', {
+				roomid, date: lineDate,
+			});
 			if (!line) return null;
-			let lineDate = Chat.toTimestamp(resultRow.time).split(' ')[0];
 			line = `<div class="chat chatmessage highlighted">${line}</div>`;
 			if (curDate !== lineDate) {
 				curDate = lineDate;
