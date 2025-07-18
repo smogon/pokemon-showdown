@@ -479,9 +479,12 @@ export const LogViewer = new class {
 };
 
 export abstract class Searcher {
-	static checkEnabled() {
+	static checkEnabled(user?: User) {
 		if (global.Config.disableripgrep) {
 			throw new Chat.ErrorMessage("Log searching functionality is currently disabled.");
+		}
+		if (user && Config.searchlogrank && !Users.globalAuth.atLeast(user, Config.searchlogrank)) {
+			throw new Chat.ErrorMessage("Access denied.");
 		}
 	}
 	roomstatsCache = new Map<string, RoomStats>();
@@ -553,9 +556,22 @@ export abstract class Searcher {
 		);
 		context.setHTML(await LogSearcher.searchLinecounts(roomid, month, user));
 	}
-	runSearch() {
-		throw new Chat.ErrorMessage(`This functionality is currently disabled.`);
+	async runSearch(
+		context: Chat.PageContext, search: string, roomid: RoomID, date: string, limit: number | null
+	) {
+		context.title = `[Search] [${roomid}] ${search}`;
+		if (!Rooms.Roomlogs.table) {
+			throw new Error(`Database logging must be enabled to use this feature.`);
+		}
+		context.setHTML(
+			`<div class="pad"><h2>Running a chatlog search for "${search}" on room ${roomid}` +
+			(date ? date !== 'all' ? `, on the date "${date}"` : ', on all dates' : '') +
+			`.</h2></div>`
+		);
+		const response = await this.searchLogs(roomid, search, limit, date);
+		return context.setHTML(response);
 	}
+	abstract searchLogs(roomid: RoomID, search: string, limit: number | null, date: string): Promise<string>;
 	// this would normally be abstract, but it's very difficult with ripgrep
 	// so it's easier to just do it the same way for both.
 	async roomStats(room: RoomID, month: string) {
@@ -615,6 +631,9 @@ export class FSLogSearcher extends Searcher {
 	constructor() {
 		super();
 		this.results = 0;
+	}
+	searchLogs(): Promise<string> {
+		throw new Chat.ErrorMessage(`Searching logs is not supported right now. Use database text logging to enable it.`);
 	}
 	async searchLinecounts(roomid: RoomID, month: string, user?: ID) {
 		const directory = Monitor.logPath(`chat/${roomid}/${month}`);
@@ -836,6 +855,51 @@ export class RipgrepLogSearcher extends FSLogSearcher {
 }
 
 export class DatabaseLogSearcher extends Searcher {
+	async searchLogs(roomid: RoomID, search: string, limit: number | null, month: string) {
+		const userRegex = /user-(.[a-zA-Z0-9]*)/gi;
+		if (!limit) limit = 500;
+		if (limit > 5000) limit = 5000;
+		const originalSearch = search;
+		const user = userRegex.exec(search)?.[0]?.slice(5);
+		if (user) search = search.replace(userRegex, '');
+		const [monthStart, monthEnd] = LogReader.monthToRange(month);
+		if (!Rooms.Roomlogs.table) {
+			throw new Error(`Database table missing but searchlogs called`);
+		}
+		const results = await Rooms.Roomlogs.table.selectAll()`
+			WHERE ${user ? SQL`userid = ${user} AND ` : SQL``}
+			time BETWEEN ${monthStart}::int::timestamp AND ${monthEnd}::int::timestamp AND
+			type = ${'c'} AND content @@ to_tsquery(${search}) AND roomid = ${roomid}
+			LIMIT ${limit}
+		`;
+
+		let curDate = '';
+
+		let buf = Utils.html`<div class ="pad"><strong>Results on ${roomid} for ${search}:</strong>`;
+		buf += limit ? ` ${results.length} (capped at ${limit})` : '';
+		buf += `<hr /></div><blockquote>`;
+		buf += Utils.sortBy(results, line => -line.time.getTime()).map(resultRow => {
+			let line = LogViewer.renderLine(resultRow.log, 'all');
+			if (!line) return null;
+			let lineDate = Chat.toTimestamp(resultRow.time).split(' ')[0];
+			line = `<div class="chat chatmessage highlighted">${line}</div>`;
+			if (curDate !== lineDate) {
+				curDate = lineDate;
+				lineDate = `</div></details><details open><summary>[<a href="view-chatlog-${roomid}--${lineDate}">${lineDate}</a>]</summary>`;
+			} else {
+				lineDate = '';
+			}
+			return `${lineDate} ${line}`;
+		}).filter(Boolean).join('<hr />');
+		if (limit && limit < 5000) {
+			buf += `</details></blockquote><div class="pad"><hr /><strong>Capped at ${limit}.</strong><br />`;
+			buf += `<button class="button" name="send" value="/sl ${originalSearch},room=${roomid},limit=${limit + 200}">`;
+			buf += `View 200 more<br />&#x25bc;</button>`;
+			buf += `<button class="button" name="send" value="/sl ${originalSearch},room=${roomid},limit=3000">`;
+			buf += `View all<br />&#x25bc;</button></div>`;
+		}
+		return buf;
+	}
 	async searchLinecounts(roomid: RoomID, month: string, user?: ID) {
 		user = toID(user);
 		if (!Rooms.Roomlogs.table) throw new Error(`Database search made while database is disabled.`);
@@ -922,6 +986,20 @@ export const pages: Chat.PageTable = {
 
 		date = date.trim();
 		let search;
+		let limit = null;
+
+		if (opts?.startsWith('search-')) {
+			let [input, limitString] = opts.split('--limit-');
+			input = input.slice(7);
+			search = Dashycode.decode(input);
+			if (search.length < 3) return this.errorReply(`That's too short of a search query.`);
+			if (limitString) {
+				limit = parseInt(limitString) || null;
+			} else {
+				limit = 500;
+			}
+			opts = '';
+		}
 
 		const parsedDate = new Date(date);
 		const validDateStrings = ['all', 'alltime'];
@@ -935,9 +1013,9 @@ export const pages: Chat.PageTable = {
 		if (isTime && opts) opts = toID(opts.slice(5));
 
 		if (search) {
-			Searcher.checkEnabled();
-			this.checkCan('bypassall');
-			return LogSearcher.runSearch();
+			Searcher.checkEnabled(user);
+			if (validDateStrings.includes(date)) throw new Chat.ErrorMessage(`Months must be specified for searching.`);
+			return LogSearcher.runSearch(this, search, roomid, date, limit);
 		} else {
 			if (date === 'today') {
 				this.setHTML(await LogViewer.day(roomid, LogReader.today(), opts));
