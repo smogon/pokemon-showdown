@@ -876,7 +876,7 @@ export class DatabaseLogSearcher extends Searcher {
 
 		let curDate = '';
 
-		let buf = Utils.html`<div class ="pad"><strong>Results on ${roomid} for ${search}:</strong>`;
+		let buf = Utils.html`<div class ="pad"><strong>Results on ${roomid} for "${search}" during the month ${month}:</strong>`;
 		buf += limit ? ` ${results.length} (capped at ${limit})` : '';
 		buf += `<hr /></div><blockquote>`;
 		buf += Utils.sortBy(results, line => -line.time.getTime()).map(resultRow => {
