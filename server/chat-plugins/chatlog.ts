@@ -1013,7 +1013,7 @@ export const pages: Chat.PageTable = {
 			opts = '';
 		}
 
-		date = Chat.toTimestamp(new Date(date)).split(' ')[0];
+		date = Chat.toTimestamp(new Date(date)).split(' ')[1];
 		const parsedDate = new Date(date);
 		const validDateStrings = ['all', 'alltime'];
 		const validNonDateTerm = search ? validDateStrings.includes(date) : date === 'today';
