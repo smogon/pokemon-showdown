@@ -897,7 +897,7 @@ export class DatabaseLogSearcher extends Searcher {
 			line = `<div class="chat chatmessage highlighted">${line}</div>`;
 			if (curDate !== lineDate) {
 				curDate = lineDate;
-				lineDate = `</div></details><details open><summary>[<a href="view-chatlog-${roomid}--${lineDate}">${lineDate}</a>]</summary>`;
+				lineDate = `</details><details open><summary>[<a href="view-chatlog-${roomid}--${lineDate}">${lineDate}</a>]</summary>`;
 			} else {
 				lineDate = '';
 			}
