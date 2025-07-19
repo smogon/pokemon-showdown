@@ -875,7 +875,7 @@ export class DatabaseLogSearcher extends Searcher {
 				search.user = [toID(part.slice(5)), negated];
 			} else {
 				// strip out special characters
-				part = part.replace(/[:=!|&?*<->]+/g, ' ');
+				part = part.replace(/[/\\:=!|&?*<->]+/g, ' ');
 				if (toID(part).length) parsedSearch.push(part);
 			}
 		}
@@ -891,9 +891,10 @@ export class DatabaseLogSearcher extends Searcher {
 		let curDate = '';
 
 		let parsedSearchStr = `"${parsedSearch.join(', ')}" `;
-		parsedSearchStr += `(arguments: ${Object.entries(search).map(([key, val]) => `${key} ${val[1] ? '!=' : '='} ${val[0]}`)})`;
+		const argStr = Object.entries(search).map(([key, val]) => `${key}${val[1] ? '!=' : '='}${val[0]}`);
+		if (argStr.length) parsedSearchStr += `<small> (arguments: ${argStr})</small>`;
 
-		let buf = Utils.html`<div class="pad"><strong>Results on ${roomid} for "${parsedSearch}" during the month ${month}:</strong>`;
+		let buf = Utils.html`<div class="pad"><strong>Results on ${roomid} for ${parsedSearchStr} during the month ${month}:</strong>`;
 		buf += limit ? ` ${results.length} (capped at ${limit})` : '';
 		buf += `<hr />`;
 		const searchStr = `search-${Dashycode.encode(rawSearch)}--limit-${limit}`;
@@ -1183,7 +1184,7 @@ export const commands: Chat.ChatCommands = {
 		}
 		return this.parse(
 			`/join view-chatlog-${targetRoom}--${date}--search-` +
-			`${Dashycode.encode(searches.join('+'))}--limit-${limit}`
+			`${Dashycode.encode(searches.join(','))}--limit-${limit}`
 		);
 	},
 	searchlogshelp() {
