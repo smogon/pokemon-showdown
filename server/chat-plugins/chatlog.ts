@@ -890,7 +890,10 @@ export class DatabaseLogSearcher extends Searcher {
 
 		let curDate = '';
 
-		let buf = Utils.html`<div class="pad"><strong>Results on ${roomid} for "${search}" during the month ${month}:</strong>`;
+		let parsedSearchStr = `"${parsedSearch.join(', ')}" `;
+		parsedSearchStr += `(arguments: ${Object.entries(search).map(([key, val]) => `${key} ${val[1] ? '!=' : '='} ${val[0]}`)})`;
+
+		let buf = Utils.html`<div class="pad"><strong>Results on ${roomid} for "${parsedSearch}" during the month ${month}:</strong>`;
 		buf += limit ? ` ${results.length} (capped at ${limit})` : '';
 		buf += `<hr />`;
 		const searchStr = `search-${Dashycode.encode(rawSearch)}--limit-${limit}`;
