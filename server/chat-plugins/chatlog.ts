@@ -855,26 +855,37 @@ export class RipgrepLogSearcher extends FSLogSearcher {
 }
 
 export class DatabaseLogSearcher extends Searcher {
-	async searchLogs(roomid: RoomID, search: string, limit: number | null, month: string) {
-		const userRegex = /user-(.[a-zA-Z0-9]*)/gi;
+	async searchLogs(roomid: RoomID, rawSearch: string, limit: number | null, month: string) {
 		if (!limit) limit = 500;
 		if (limit > 5000) limit = 5000;
-		const originalSearch = search;
-		const user = userRegex.exec(search)?.[0]?.slice(5);
-		if (user) search = search.replace(userRegex, '');
+		const search = {} as Record<string, [string, boolean]>;
 		const [monthStart, monthEnd] = LogReader.monthToRange(month);
 		if (!Rooms.Roomlogs.table) {
 			throw new Error(`Database table missing but searchlogs called`);
 		}
-		search = search
-			.replace(/\+/g, ' ')
-			.replace(/:/g, '=');
+		const parsedSearch = [];
+		for (let part of rawSearch.split(',').map(x => x.trim())) {
+			let negated = false;
+			if (part.includes('!=')) {
+				negated = true;
+				part = part.replace('!=', '=');
+			}
+			// account for some common instances of user search
+			if (['user=', 'user:', 'user-'].some(x => part.toLowerCase().startsWith(x))) {
+				search.user = [toID(part.slice(5)), negated];
+			} else {
+				// strip out special characters
+				part = part.replace(/[:=!|&?*<->]+/g, ' ');
+				if (toID(part).length) parsedSearch.push(part);
+			}
+		}
 
 		const results = await Rooms.Roomlogs.table.selectAll()`
-			WHERE ${user ? SQL`userid = ${user} AND ` : SQL``}
-			time BETWEEN ${monthStart}::int::timestamp AND ${monthEnd}::int::timestamp AND
+			WHERE ${
+				search.user ? SQL`userid ${search.user[1] ? SQL`!=` : SQL`=`} ${search.user[0]} AND ` : SQL``
+			} time BETWEEN ${monthStart}::int::timestamp AND ${monthEnd}::int::timestamp AND
 			type = ${'c'} AND roomid = ${roomid}
-			${toID(search).length ? SQL` AND content @@ plainto_tsquery(${search})` : SQL``} LIMIT ${limit}
+			${parsedSearch.length ? SQL` AND content @@ plainto_tsquery(${parsedSearch.join(',')})` : SQL``} LIMIT ${limit}
 		`;
 
 		let curDate = '';
@@ -1179,7 +1190,8 @@ export const commands: Chat.ChatCommands = {
 			`A limit can be specified using the argument <code>limit=[number less than or equal to 3000]</code>. Defaults to 500.<br />` +
 			`A date can be specified in ISO (YYYY-MM-DD) format using the argument <code>date=[month]</code> (for example, <code>date: 2020-05</code>). Defaults to searching all logs.<br />` +
 			`If you provide a user argument in the form <code>user=username</code>, it will search for messages (that match the other arguments) only from that user.<br />` +
-			`All other arguments will be considered part of the search ` +
+			`Likewise, <code>user!=username</code> will only result in messages not from that user.<br />` +
+			`<strong>All other arguments will be considered part of the search string</strong>` +
 			`(if more than one argument is specified, it searches for lines containing all terms).<br />` +
 			"Requires: % @ # ~</div>";
 		return this.sendReplyBox(buffer);
