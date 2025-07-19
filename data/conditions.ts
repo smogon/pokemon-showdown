@@ -246,8 +246,14 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]');
 		},
 		onTrapPokemon(pokemon) {
+			const source = this.effectState.source;
 			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectState.sourceEffect.id);
-			if (this.effectState.source?.isActive || gmaxEffect) pokemon.tryTrap();
+			if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns) && !gmaxEffect) {
+				delete pokemon.volatiles['partiallytrapped'];
+				this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]', '[silent]');
+				return;
+			}
+			pokemon.tryTrap();
 		},
 	},
 	lockedmove: {

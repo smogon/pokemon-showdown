@@ -1671,7 +1671,8 @@ export class Battle {
 					}
 				}
 
-				pokemon.trapped = pokemon.maybeTrapped = false;
+				pokemon.trapped = false;
+				pokemon.maybeTrapped = false;
 				this.runEvent('TrapPokemon', pokemon);
 				if (!pokemon.knownType || this.dex.getImmunity('trapped', pokemon)) {
 					this.runEvent('MaybeTrapPokemon', pokemon);
