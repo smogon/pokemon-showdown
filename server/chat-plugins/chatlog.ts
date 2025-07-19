@@ -893,7 +893,7 @@ export class DatabaseLogSearcher extends Searcher {
 		let buf = Utils.html`<div class="pad"><strong>Results on ${roomid} for "${search}" during the month ${month}:</strong>`;
 		buf += limit ? ` ${results.length} (capped at ${limit})` : '';
 		buf += `<hr />`;
-		const searchStr = `search-${Dashycode.encode(search)}--limit-${limit}`;
+		const searchStr = `search-${Dashycode.encode(rawSearch)}--limit-${limit}`;
 		const pref = `/join view-chatlog-${roomid}--`;
 		buf += `<button class="button" name="send" value="${pref}${LogReader.prevMonth(month)}--${searchStr}">Previous month</button> `;
 		buf += `<button class="button" name="send" value="${pref}${LogReader.nextMonth(month)}--${searchStr}">Next month</button>`;
@@ -916,9 +916,9 @@ export class DatabaseLogSearcher extends Searcher {
 		}).filter(Boolean).join('<hr />');
 		if (limit && limit < 5000) {
 			buf += `</details></blockquote><hr /><strong>Capped at ${limit}.</strong><br />`;
-			buf += `<button class="button" name="send" value="/sl ${originalSearch},room=${roomid},limit=${limit + 200}">`;
+			buf += `<button class="button" name="send" value="/sl ${rawSearch},room=${roomid},limit=${limit + 200}">`;
 			buf += `View 200 more<br />&#x25bc;</button>`;
-			buf += `<button class="button" name="send" value="/sl ${originalSearch},room=${roomid},limit=3000">`;
+			buf += `<button class="button" name="send" value="/sl ${rawSearch},room=${roomid},limit=3000">`;
 			buf += `View all<br />&#x25bc;</button></div>`;
 		}
 		return buf;
