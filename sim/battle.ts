@@ -3037,17 +3037,20 @@ export class Battle {
 			return;
 		}
 
-		side.clearChoice();
-
+		let updated = false;
 		if (side.requestState === 'move') {
-			let update = false;
-			for (const pokemon of side.active) {
+			for (const action of side.choice.actions) {
+				const pokemon = action.pokemon;
+				if (action.choice !== 'move' || !pokemon) continue;
 				if (side.updateRequestForPokemon(pokemon, req => side.updateDisabledRequest(pokemon, req))) {
-					update = true;
+					updated = true;
 				}
 			}
-			if (update) side.emitRequest(side.activeRequest!, true);
 		}
+
+		side.clearChoice();
+
+		if (updated) side.emitRequest(side.activeRequest!, true);
 	}
 
 	/**
