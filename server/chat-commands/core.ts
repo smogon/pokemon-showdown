@@ -202,7 +202,11 @@ export const commands: Chat.ChatCommands = {
 
 		this.sendReplyBox(output);
 	},
-	userlisthelp: [`/userlist - Displays a list of users who are currently in the room.`],
+	userlisthelp: [
+		`/userlist - Displays a list of users who are currently in the room, and their groups.`,
+		`You can also see the users to the left of the chat window, or use /roomauth to see the staff of any room.'
+	
+	],
 
 	mee: 'me',
 	me(target, room, user) {
@@ -225,47 +229,42 @@ export const commands: Chat.ChatCommands = {
 
 		return target;
 	},
-	mehelp: [`/me [action] - Adds the given [action] into chat, attributed to the user.`],
+	mehelp: [
+ `/me [action] - Adds the user and attributes the optional [action] to them.`,
+ `/mee [message] - Like /me, but does not insert a space between the user and the message, and cannot start with a letter or number.`
+ ],
 
 	shrug(target) {
 		target = target ? ' ' + target + ' ' : '';
 		if (target.startsWith(' /me')) target = target.slice(1);
 		return this.checkChat(target + '¯\\_(ツ)_/¯');
 	},
-	shrughelp: ['/shrug [message] - Sends the given message, if any, appended with ¯\\_(ツ)_/¯'],
+	shrughelp: ['/shrug [message] - Sends ¯\\_(ツ)_/¯ appended to the optional message.'],
 
 	tableflip(target) {
 		target = target ? ' ' + target + ' ' : '';
 		if (target.startsWith(' /me')) target = target.slice(1);
 		return this.checkChat(target + '(╯°□°）╯︵ ┻━┻');
 	},
-	tablefliphelp: ['/tableflip [message] - Sends the given message, if any, appended with (╯°□°）╯︵ ┻━┻'],
+	tablefliphelp: ['/tableflip [message] - Sends (╯°□°）╯︵ ┻━┻ appended to the optional message.'],
 
 	tableunflip(target) {
 		target = target ? ' ' + target + ' ' : '';
 		if (target.startsWith(' /me')) target = target.slice(1);
 		return this.checkChat(target + '┬──┬◡ﾉ(° -°ﾉ)');
 	},
-	tableunfliphelp: ['/tableunflip [message] - Sends the given message, if any, appended with ┬──┬◡ﾉ(° -°ﾉ)'],
-
-	'battle!': 'battle',
-	battle(target, room, user, connection, cmd) {
-		if (cmd === 'battle') {
-			return this.sendReply(this.tr`What?! How are you not more excited to battle?! Try /battle! to show me you're ready.`);
-		}
-		if (!target) target = "randombattle";
-		return this.parse(`/search ${target}`);
-	},
-	battlehelp: [
-		`/battle! [format] - Starts a battle in the given [format].`,
-		`If none is given, defaults to current generation random battle.`,
-	],
+	tableunfliphelp: ['/tableunflip [message] - Sends ┬──┬◡ﾉ(° -°ﾉ) appended to the optional message'],
 
 	signout: 'logout',
 	logout(target, room, user) {
 		user.resetName();
 	},
-	logouthelp: [`/logout - Logs you out and ends your session.`],
+	logouthelp: [
+ `/logout - Logs you out and ends your session.`,
+ `You can also click the Log out button in the top-right Options gear.`,
+ `To leave PS without having to log in again, just close the tab or browsing window.`,
+ `If you wanted to change your name while staying connected, use '/nick'.`
+ ],
 
 	noreply(target, room, user) {
 		if (!target.startsWith('/')) return this.parse('/help noreply');
@@ -320,7 +319,11 @@ export const commands: Chat.ChatCommands = {
 		}
 		return this.parse(`/msg ${user.lastPM || ''}, ${target}`);
 	},
-	replyhelp: [`/reply OR /r [message] - Send a message to the last user you got a message from, or sent a message to.`],
+	replyhelp: [
+		`/reply OR /r [message] - Send a message to the last user you got a private message from, or sent a message to.`,
+		`You can also just chat within the private message window.`,
+		`To send a private message to any user, use /msg.`
+	],
 
 	dm: 'msg',
 	pm: 'msg',
@@ -374,12 +377,17 @@ export const commands: Chat.ChatCommands = {
 
 		return this.parse(message);
 	},
-	msghelp: [`/msg OR /whisper OR /w [username], [message] - Send a private message.`],
+	msghelp: [
+		`/msg OR /whisper [username], [message] - Send a private message.`,
+		`You can also use /whisper, /w, /dm, or /pm. You can also click a username and press Chat.`,
+		`If the other user is offline, use /offlinemsg.`
+				],
 
 	offlinepm: 'offlinemsg',
 	opm: 'offlinemsg',
+	odm: 'offlinemsg',
 	offlinewhisper: 'offlinemsg',
-	ofw: 'offlinemsg',
+	offw: 'offlinemsg',
 	async offlinemsg(target, room, user) {
 		target = target.trim();
 		if (!target) return this.parse('/help offlinemsg');
@@ -413,6 +421,8 @@ export const commands: Chat.ChatCommands = {
 	},
 	offlinemsghelp: [
 		`/offlinemsg [username], [message] - Sends a message to the offline [username], to be received when they log in.`,
+		`You can also use /offlinewhisper, /offw, /odm, or /opm.`,
+		`If the username is online, this command is equivalent to /msg.`
 	],
 
 	receivedpms: 'offlinepms',
@@ -420,7 +430,7 @@ export const commands: Chat.ChatCommands = {
 		return this.parse(`/j view-receivedpms`);
 	},
 	offlinepmshelp: [
-		`/offlinepms - View your recently received offline PMs.`,
+		`/offlinepms OR /receivedpms - View your offline PMs received in the past 7 days.`,
 	],
 
 	inv: 'invite',
@@ -472,9 +482,10 @@ export const commands: Chat.ChatCommands = {
 	},
 	invitehelp: [
 		`/invite [username] - Invites the player [username] to join the room you sent the command to.`,
-		`/invite [comma-separated usernames] - Invites multiple users to join the room you sent the command to. Requires trusted`,
+		`/invite [comma-separated usernames] - Invites multiple users to join the room you sent the command to. Requires: trusted`,
 		`/invite [username], [roomname] - Invites the player [username] to join the room [roomname].`,
 		`(in a PM) /invite [roomname] - Invites the player you're PMing to join the room [roomname].`,
+		`An invite is needed to join a room made secret with /secretroom. An invite or room name is needed to join a room hidden with /hideroom.`
 	],
 
 	blockpm: 'blockpms',
@@ -1450,7 +1461,13 @@ export const commands: Chat.ChatCommands = {
 	 * Challenging and searching commands
 	 *********************************************************/
 
+	'search': 'battle',
+	battle!: 'search',
 	async search(target, room, user, connection) {
+		if (cmd === 'battle') {
+			return this.sendReply(this.tr`What?! How are you not more excited to battle?! Try /battle! to show me you're ready.`);
+		}
+		if (!target) target = "randombattle";
 		if (target) {
 			if (Config.laddermodchat && !Users.globalAuth.atLeast(user, Config.laddermodchat)) {
 				const groupName = Config.groups[Config.laddermodchat].name || Config.laddermodchat;
@@ -1470,9 +1487,14 @@ export const commands: Chat.ChatCommands = {
 		return Ladders.cancelSearches(user);
 	},
 	searchhelp: [
-		`/search [format] - Searches for a battle in the specified format.`,
+		`/search OR /battle! [format] - Searches for a ladder battle in the specified format.`,
+		`If none is given, defaults to current generation random battle.`,
+		`You can also use the Battle! window on the left.`,
+		`This command is not intended for direct use on the official client. If you are searching for a teambuilding format, use the Battle! window instead.`
+		`For formats not on the ladder, try /challenge.`,
+		
 	],
-
+		
 	cancelsearch(target, room, user) {
 		if (target) {
 			Ladders(toID(target)).cancelSearch(user);
@@ -1481,7 +1503,7 @@ export const commands: Chat.ChatCommands = {
 		}
 	},
 	cancelsearchhelp: [
-		`/cancelsearch [format] - Cancels a search for a battle in the specified format.`,
+		`/cancelsearch [format] - Cancels a /search search for a battle in the specified format.`,
 		`If no format is given, cancels searches for all formats.`,
 	],
 
