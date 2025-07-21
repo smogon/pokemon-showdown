@@ -605,7 +605,7 @@ export class CommandContext extends MessageContext {
 		}
 
 		if (this.user.statusType === 'idle' &&
-			this.message !== '/cmd rooms' &&
+			this.cmd !== 'cmd' &&
 			!['unaway', 'unafk', 'back'].includes(this.cmd)) {
 			this.user.setStatusType('online');
 		}
