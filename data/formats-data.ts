@@ -5639,7 +5639,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	ironcrown: {
 		tier: "OU",
 		doublesTier: "DUU",
-		natDexTier: "UU",
+		natDexTier: "UUBL",
 	},
 	terapagos: {
 		tier: "Uber",
