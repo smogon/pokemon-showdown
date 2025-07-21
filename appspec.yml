@@ -2,7 +2,13 @@ version: 0.0
 os: linux
 files:
   - source: /
-    destination: /home/ec2-user/urpg-battle-bot-calc
+    destination: /etc/battlebot/urpg-battle-bot-calc
+permissions:
+  - object: /etc/battlebot/urpg-battle-bot-calc
+    pattern: "*"
+    owner: battlebot
+    group: battlebot
+    mode: 744
 hooks:
   AfterInstall:
     - location: scripts/post-install.sh
