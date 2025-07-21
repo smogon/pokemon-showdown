@@ -17,7 +17,7 @@ interface SuspectsFile {
 
 export let suspectTests: SuspectsFile = JSON.parse(FS(SUSPECTS_FILE).readIfExistsSync() || "{}");
 
-function saveSuspectTests() {
+export function saveSuspectTests() {
 	FS(SUSPECTS_FILE).writeUpdate(() => JSON.stringify(suspectTests));
 }
 
@@ -36,6 +36,20 @@ function checkPermissions(context: Chat.CommandContext) {
 	const user = context.user;
 	if (suspectTests.whitelist?.includes(user.id)) return true;
 	context.checkCan('gdeclare');
+}
+
+function validateDate(date: string) {
+	const [month, day] = date.trim().split(date.includes('-') ? '-' : '/');
+	const isValidMonth = /(0[1-9]|1[0-2])/.test(month);
+	if (!isValidMonth) {
+		throw new Chat.ErrorMessage(`${month} is not a valid month; valid options are: 01, 02, 03, 04, 05, 06, 07, 08, 09, 10, 11, 12`);
+	}
+	const dayRegex = new RegExp(
+		`(0[1-9]|[12][0-9]${month !== '02' ? `|3${/(01|0[3578]|1[02])/.test(month) ? '[01]' : '0'})` : ``}`
+	);
+	const isValidDate = isValidMonth && dayRegex.test(day);
+	if (!isValidDate) throw new Chat.ErrorMessage("Dates must be in the format MM/DD.");
+	return `${month}/${day}`;
 }
 
 export const commands: Chat.ChatCommands = {
@@ -57,7 +71,6 @@ export const commands: Chat.ChatCommands = {
 			return this.sendReplyBox(buffer);
 		},
 
-		edit: 'add',
 		async add(target, room, user) {
 			checkPermissions(this);
 
@@ -68,13 +81,12 @@ export const commands: Chat.ChatCommands = {
 
 			const format = Dex.formats.get(tier);
 			if (format.effectType !== 'Format') throw new Chat.ErrorMessage(`"${tier}" is not a valid tier.`);
+			if (format.id in suspectTests.suspects) {
+				return this.parse(`/help suspects`);
+			}
 
 			const suspectString = suspect.trim();
-
-			const [month, day] = date.trim().split(date.includes('-') ? '-' : '/');
-			const isValidDate = /[0-1]?[0-9]/.test(month) && /[0-3]?[0-9]/.test(day);
-			if (!isValidDate) throw new Chat.ErrorMessage("Dates must be in the format MM/DD.");
-			const dateActual = `${month}/${day}`;
+			const dateActual = validateDate(date);
 
 			const reqData: Record<string, number> = {};
 			if (!reqs.length) {
@@ -110,18 +122,75 @@ export const commands: Chat.ChatCommands = {
 				throw new Chat.ErrorMessage("Error adding suspect test: " + (out?.actionerror || error?.message));
 			}
 
-			this.privateGlobalModAction(`${user.name} ${suspectTests.suspects[format.id] ? "edited the" : "added a"} ${format.name} suspect test.`);
-			this.globalModlog('SUSPECTTEST', null, `${suspectTests.suspects[format.id] ? "edited" : "added"} ${format.name}`);
-
-			suspectTests.suspects[format.id] = {
-				tier: format.name,
-				suspect: suspectString,
-				date: dateActual,
-				url: out.url,
-			};
+			// Safeguard to prevent potential race conditions
+			if (!suspectTests.suspects[format.id]) {
+				suspectTests.suspects[format.id] = {
+					tier: format.name,
+					suspect: suspectString,
+					date: dateActual,
+					url: out.url,
+				};
+			}
 			saveSuspectTests();
+
+			this.privateGlobalModAction(`${user.name} added a ${format.name} suspect test.`);
+			this.globalModlog('SUSPECTTEST', null, `added ${format.name}`);
+
 			this.sendReply(`Added a suspect test notice for ${suspectString} in ${format.name}.`);
-			if (reqData.coil) this.sendReply('Remember to add a B value for your test\'s COIL setting with /suspects setbvalue.');
+			if (reqData.coil && !reqData.b) {
+				this.sendReply('Remember to add a B value for your test\'s COIL setting with /suspects setbvalue.');
+			}
+		},
+
+		edit(target, room, user) {
+			checkPermissions(this);
+			// Not dealing with b value/elo/gxe/coil right now
+			const [tier, ...targets] = target.split(',').map(x => x.trim());
+			if (!(tier && targets.length)) return this.parse(`/help suspects`);
+
+			const format = Dex.formats.get(tier);
+			if (format.effectType !== 'Format') throw new Chat.ErrorMessage(`"${tier}" is not a valid tier.`);
+			if (!suspectTests.suspects[format.id]) throw new Chat.ErrorMessage(`"${tier}" does not have a suspect test running.`);
+
+			const { date, url, suspect } = suspectTests.suspects[format.id];
+
+			const newInfo: SuspectTest = { date, url, suspect, tier };
+			for (const req of target.split(',')) {
+				let [k, v] = req.trim().split('=');
+				k = toID(k);
+				if (k === 'date') {
+					const newDate = validateDate(v);
+					newInfo.date = newDate;
+					continue;
+				}
+				if (k === 'suspect') {
+					const suspectString = v.trim();
+					newInfo.suspect = suspectString;
+					continue;
+				}
+				if (k === 'url') {
+					const urlString = v.trim();
+					if (!/https:\/\/tools\/suspects\/view\/\d+/.test(urlString)) {
+						this.errorReply(`"${urlString}" is not a valid error message.`);
+						continue;
+					}
+					newInfo.url = urlString;
+					continue;
+				}
+			}
+
+			let key: keyof SuspectTest;
+			const changedKeys: (keyof SuspectTest)[] = [];
+			for (key in newInfo) {
+				if (suspectTests.suspects[format.id][key] !== newInfo[key]) {
+					suspectTests.suspects[format.id][key] = newInfo[key];
+					changedKeys.push(key);
+				}
+			}
+			saveSuspectTests();
+
+			this.privateGlobalModAction(`${user.name} edited the ${format.name} suspect test.`);
+			this.globalModlog('SUSPECTTEST', null, `edited ${format.id}: ${changedKeys.map(x => `${x}=${newInfo[x]}`).join(', ')}`);
 		},
 
 		end: 'remove',
@@ -275,13 +344,14 @@ export const commands: Chat.ChatCommands = {
 			`Commands to manage suspect tests:<br />` +
 			`<code>/suspects</code>: displays currently running suspect tests.<br />` +
 			`<code>/suspects add [tier], [suspect], [date], [...reqs]</code>: adds a suspect test. Date in the format MM/DD. ` +
-			`Reqs in the format [key]=[value], where valid keys are 'coil', 'elo', and 'gxe', delimited by commas. At least one is required. <br />` +
-			`(note that if you are using COIL, you must set a B value independently with <code>/suspects setcoil</code>). Requires: ~<br />` +
-			`<code>/suspects remove [tier]</code>: deletes a suspect test. Requires: ~<br />` +
+			`Reqs in the format [key]=[value], where valid keys are 'coil', 'elo', and 'gxe', delimited by commas. At least one is required.<br />` +
+			`(note that if you are using COIL, you must set a B value independently with <code>/suspects setcoil</code>).<br />` +
+			`<code>/suspects edit [tier], [key]=[value]</code>: edits an ongoing suspect test. Currently accepted keys are date, url, and suspect.<br />` +
+			`<code>/suspects remove [tier]</code>: deletes a suspect test.<br />` +
 			`<code>/suspects whitelist [username]</code>: allows [username] to add suspect tests. Requires: ~<br />` +
 			`<code>/suspects unwhitelist [username]</code>: disallows [username] from adding suspect tests. Requires: ~<br />` +
-			`<code>/suspects setbvalue OR /suspects sbv [formatid], [B value]</code>: Activate COIL ranking for the given [formatid] with the given [B value].` +
-			`Requires: suspect whitelist ~`
+			`<code>/suspects setbvalue OR /suspects sbv [formatid], [B value]</code>: Activate COIL ranking for the given [formatid] with the given [B value].<br />` +
+			`Requires: suspect whitelist unless stated otherwise`
 		);
 	},
 };
