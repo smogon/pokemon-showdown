@@ -261,8 +261,8 @@ export const commands: Chat.ChatCommands = {
 	},
 	logouthelp: [
  `/logout - Logs you out and ends your session.`,
- `You can also click the Log out button in the top-right Options gear.`,
- `To leave PS without having to log in again, just close the tab or browsing window.`,
+ `This is equivalent to clicking the Log out button in the top-right Options gear.`,
+ `Note that just closing the tab or browser window will let you (or anyone else sharing the same machine) use PS without having to log in the next time.`,
  `If you wanted to change your name while staying connected, use '/nick'.`
  ],
 
@@ -1461,7 +1461,7 @@ export const commands: Chat.ChatCommands = {
 	 * Challenging and searching commands
 	 *********************************************************/
 
-	'search': 'battle',
+	battle: 'search',
 	battle!: 'search',
 	async search(target, room, user, connection) {
 		if (cmd === 'battle') {
@@ -1503,7 +1503,7 @@ export const commands: Chat.ChatCommands = {
 		}
 	},
 	cancelsearchhelp: [
-		`/cancelsearch [format] - Cancels a /search search for a battle in the specified format.`,
+		`/cancelsearch [format] - Cancels a search for a battle in the specified format.`,
 		`If no format is given, cancels searches for all formats.`,
 	],
 
