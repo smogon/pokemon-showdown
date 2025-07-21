@@ -1494,7 +1494,6 @@ export const commands: Chat.ChatCommands = {
 		`For formats not on the ladder, try /challenge.`,
 		
 	],
-		
 	cancelsearch(target, room, user) {
 		if (target) {
 			Ladders(toID(target)).cancelSearch(user);
