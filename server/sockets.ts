@@ -18,6 +18,7 @@ import * as path from 'path';
 import { crashlogger, ProcessManager, Streams, Repl } from '../lib';
 import { IPTools } from './ip-tools';
 import { type ChannelID, extractChannelMessages } from '../sim/battle';
+import { handleStaticRequest } from './static-handler';
 
 type StreamWorker = ProcessManager.StreamWorker;
 
@@ -333,49 +334,20 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		}
 
 		// Static server
-		try {
-			if (config.disablenodestatic) throw new Error("disablenodestatic");
-			const StaticServer: typeof import('node-static').Server = require('node-static').Server;
-			const roomidRegex = /^\/(?:[A-Za-z0-9][A-Za-z0-9-]*)\/?$/;
-			const cssServer = new StaticServer('./config');
-			const avatarServer = new StaticServer('./config/avatars');
-			const staticServer = new StaticServer('./server/static');
+		if (!config.disablenodestatic) {
+			console.log('Static file serving enabled');
 			const staticRequestHandler = (req: http.IncomingMessage, res: http.ServerResponse) => {
 				// console.log(`static rq: ${req.socket.remoteAddress}:${req.socket.remotePort} -> ${req.socket.localAddress}:${req.socket.localPort} - ${req.method} ${req.url} ${req.httpVersion} - ${req.rawHeaders.join('|')}`);
 				req.resume();
 				req.addListener('end', () => {
-					if (config.customhttpresponse?.(req, res)) {
-						return;
-					}
-
-					let server = staticServer;
-					if (req.url) {
-						if (req.url === '/custom.css') {
-							server = cssServer;
-						} else if (req.url.startsWith('/avatars/')) {
-							req.url = req.url.substr(8);
-							server = avatarServer;
-						} else if (roomidRegex.test(req.url)) {
-							req.url = '/';
-						}
-					}
-
-					server.serve(req, res, e => {
-						if (e && (e as any).status === 404) {
-							staticServer.serveFile('404.html', 404, {}, req, res);
-						}
-					});
+					handleStaticRequest(req, res, config.customhttpresponse);
 				});
 			};
 
 			this.server.on('request', staticRequestHandler);
 			if (this.serverSsl) this.serverSsl.on('request', staticRequestHandler);
-		} catch (e: any) {
-			if (e.message === 'disablenodestatic') {
-				console.log('node-static is disabled');
-			} else {
-				console.log('Could not start node-static - try `npm install` if you want to use it');
-			}
+		} else {
+			console.log('Static file serving is disabled');
 		}
 
 		// SockJS server
@@ -562,3 +534,4 @@ if (!PM.isParentProcess) {
 	// eslint-disable-next-line no-eval
 	Repl.start(`sockets-${PM.workerid}-${process.pid}`, cmd => eval(cmd));
 }
+
