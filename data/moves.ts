@@ -9861,7 +9861,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onFoeDisableMove(pokemon) {
 				for (const moveSlot of this.effectState.source.moveSlots) {
 					if (moveSlot.id === 'struggle') continue;
-					pokemon.disableMove(moveSlot.id, 'hidden');
+					pokemon.disableMove(moveSlot.id, true);
 				}
 				pokemon.maybeDisabled = true;
 			},
