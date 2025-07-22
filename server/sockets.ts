@@ -534,4 +534,3 @@ if (!PM.isParentProcess) {
 	// eslint-disable-next-line no-eval
 	Repl.start(`sockets-${PM.workerid}-${process.pid}`, cmd => eval(cmd));
 }
-
