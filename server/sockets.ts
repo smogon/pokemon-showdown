@@ -18,7 +18,7 @@ import * as path from 'path';
 import { crashlogger, ProcessManager, Streams, Repl } from '../lib';
 import { IPTools } from './ip-tools';
 import { type ChannelID, extractChannelMessages } from '../sim/battle';
-import { handleStaticRequest } from './static-handler';
+import { handleStaticRequest } from '../lib/static-server';
 
 type StreamWorker = ProcessManager.StreamWorker;
 
