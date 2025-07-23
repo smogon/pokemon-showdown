@@ -348,7 +348,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 
 					let server = staticServer;
 					if (req.url) {
-						if (req.url === '/custom.css') {
+						if (req.url === '/custom.css' || req.url.startsWith('/custom.css?')) {
 							server = cssServer;
 						} else if (req.url.startsWith('/avatars/')) {
 							req.url = req.url.slice(8);
