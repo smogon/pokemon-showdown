@@ -1,6 +1,19 @@
-// Vendored and TypeScripted from
-// https://github.com/cloudhead/node-static/blob/e49fbd728e93294c225f52103962e56aab86cb1a/lib/node-static.js
-// NOT a drop-in replacement for node-static; the callback on `serve` works differently
+/**
+ * Static server
+ *
+ * API resembles node-static, but with some differences:
+ *
+ * - `serve`'s callback needs to return `true` to suppress the default error page
+ * - everything is Promises
+ * - no customizing cache time by filename
+ * - no index.json directory streaming (it was undocumented; you weren't using it)
+ *
+ * Forked from node-static @
+ * https://github.com/cloudhead/node-static/blob/e49fbd728e93294c225f52103962e56aab86cb1a/lib/node-static.js
+ *
+ * @author Guangcong Luo <guangcongluo@gmail.com>, Alexis Sellier, Brett Zamir
+ * @license MIT
+ */
 
 import fs from 'node:fs';
 import fsP from 'node:fs/promises';
@@ -79,7 +92,7 @@ export class StaticServer {
 	root: string;
 	options: Options;
 	cacheTime: number | null | undefined = 3600;
-	defaultHeaders: Headers;
+	defaultHeaders: Headers = {};
 	defaultExtension = '';
 	constructor(root: string, options?: Options);
 	constructor(options?: Options);
@@ -93,10 +106,9 @@ export class StaticServer {
 		this.root = path.normalize(path.resolve(root || '.'));
 		this.options = options || {};
 
-		this.defaultHeaders = {};
-		this.options.headers = this.options.headers || {};
+		this.options.headers ||= {};
 
-		this.options.indexFile = this.options.indexFile || 'index.html';
+		this.options.indexFile ||= 'index.html';
 
 		if ('cacheTime' in this.options) {
 			this.cacheTime = this.options.cacheTime;
@@ -156,8 +168,7 @@ export class StaticServer {
 	}
 
 	finish(
-		result: Result, req: http.IncomingMessage, res: http.ServerResponse,
-		errorCallback?: ErrorCallback
+		result: Result, req: http.IncomingMessage, res: http.ServerResponse, errorCallback?: ErrorCallback
 	): Result {
 		if (this.options.serverInfo !== null) {
 			result.headers['server'] ||= SERVER_INFO;
@@ -175,8 +186,7 @@ export class StaticServer {
 	}
 
 	async servePath(
-		pathname: string, status: number, headers: Headers,
-		req: http.IncomingMessage, res: http.ServerResponse
+		pathname: string, status: number, headers: Headers, req: http.IncomingMessage, res: http.ServerResponse
 	): Promise<Result> {
 		pathname = this.resolve(pathname);
 
@@ -236,13 +246,8 @@ export class StaticServer {
 	  * file content type and client's Accept-Encoding header value. */
 	gzipOk(req: http.IncomingMessage, contentType: string) {
 		const enable = this.options.gzip;
-		if (
-			enable &&
-			(typeof enable === 'boolean' ||
-				(contentType && (enable instanceof RegExp) && enable.test(contentType)))
-		) {
-			const acceptEncoding = req.headers['accept-encoding'];
-			return acceptEncoding?.includes('gzip');
+		if (enable === true || ((enable instanceof RegExp) && enable.test(contentType))) {
+			return req.headers['accept-encoding']?.includes('gzip');
 		}
 		return false;
 	}
@@ -253,22 +258,21 @@ export class StaticServer {
 		status: number, contentType: string, _headers: Headers, file: string, stat: fs.Stats,
 		req: http.IncomingMessage, res: http.ServerResponse
 	): Promise<Result> {
-		if (this.gzipOk(req, contentType)) {
-			const gzFile = `${file}.gz`;
-			return fsP.stat(gzFile).catch(() => null).then(gzStat => {
-				if (gzStat?.isFile()) {
-					const vary = _headers['Vary'];
-					_headers['Vary'] = (vary && vary !== 'Accept-Encoding' ? `${vary}, ` : '') + 'Accept-Encoding';
-					_headers['Content-Encoding'] = 'gzip';
-					stat.size = gzStat.size;
-					file = gzFile;
-				}
-				return this.respondNoGzip(status, contentType, _headers, file, stat, req, res);
-			});
-		} else {
-			// Client doesn't want gzip or we're sending multiple files
+		if (!this.gzipOk(req, contentType)) {
+			// Client doesn't want gzip
 			return this.respondNoGzip(status, contentType, _headers, file, stat, req, res);
 		}
+		const gzFile = `${file}.gz`;
+		return fsP.stat(gzFile).catch(() => null).then(gzStat => {
+			if (gzStat?.isFile()) {
+				const vary = _headers['Vary'];
+				_headers['Vary'] = (vary && vary !== 'Accept-Encoding' ? `${vary}, ` : '') + 'Accept-Encoding';
+				_headers['Content-Encoding'] = 'gzip';
+				stat.size = gzStat.size;
+				file = gzFile;
+			}
+			return this.respondNoGzip(status, contentType, _headers, file, stat, req, res);
+		});
 	}
 
 	parseByteRange(req: http.IncomingMessage, stat: fs.Stats) {
