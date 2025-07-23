@@ -270,6 +270,19 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 		assert(!battle.p2.active[0].volatiles['partiallytrapped']);
 	});
 
+	it('Wrap should still cause the target to fail on the same turn the wrapper switches out', () => {
+		battle = common.gen(1).createBattle();
+		battle.setPlayer('p1', { team: [
+			{ species: "Arbok", moves: ['wrap'] },
+			{ species: "Exeggutor", moves: ['splash'] },
+		] });
+		battle.setPlayer('p2', { team: [{ species: "Snorlax", moves: ['selfdestruct'] }] });
+		battle.makeChoices('move wrap', 'move selfdestruct');
+		assert.fullHP(battle.p1.active[0]);
+		battle.makeChoices('switch 2', 'move selfdestruct');
+		assert.fullHP(battle.p1.active[0]);
+	});
+
 	it('Wrap should damage the target\'s substitute', () => {
 		battle = common.gen(1).createBattle();
 		battle.setPlayer('p1', { team: [{ species: "charizard", moves: ['wrap'] }] });
