@@ -55,17 +55,17 @@ const mimeTypes: { [key: string]: string } = {
 	'.webm': 'video/webm',
 };
 
-function mstat (dir: string, files: string[], callback: (err: Error | null, stats?: Stats) => void) {
-	(function mstat(files: string[], stats: Stats[]) {
-		const file = files.shift();
+function mstat(dir: string, files: string[], callback: (err: Error | null, stats?: Stats) => void) {
+	(function mstatInner(filesCopy: string[], stats: Stats[]) {
+		const file = filesCopy.shift();
 
 		if (file) {
 			try {
-				fs.stat(path.join(dir, file), function (e, stat) {
+				fs.stat(path.join(dir, file), (e, stat) => {
 					if (e) {
 						callback(e);
 					} else {
-						mstat(files, stats.concat([stat]));
+						mstatInner(filesCopy, stats.concat([stat]));
 					}
 				});
 			} catch (e) {
@@ -96,10 +96,10 @@ class StaticServer {
 	options: Options;
 	cacheTime = 3600;
 	defaultHeaders: Headers;
-	defaultExtension: string | null;
+	defaultExtension = '';
 	constructor(root: string, options?: Options);
 	constructor(options?: Options);
-	constructor (root?: Options | string | null, options?: Options) {
+	constructor(root?: Options | string | null, options?: Options) {
 		if (root && typeof root === 'object') {
 			options = root;
 			root = null;
@@ -109,7 +109,7 @@ class StaticServer {
 		this.root = path.normalize(path.resolve(root || '.'));
 		this.options = options || {};
 
-		this.defaultHeaders  = {};
+		this.defaultHeaders = {};
 		this.options.headers = this.options.headers || {};
 
 		this.options.indexFile = this.options.indexFile || 'index.html';
@@ -119,9 +119,7 @@ class StaticServer {
 		}
 
 		if ('defaultExtension' in this.options) {
-			this.defaultExtension =  '.' + this.options.defaultExtension;
-		} else {
-			this.defaultExtension = null;
+			this.defaultExtension = `.${this.options.defaultExtension}`;
 		}
 
 		if (this.options.serverInfo !== null) {
@@ -133,12 +131,12 @@ class StaticServer {
 		}
 	}
 
-	serveDir (pathname: string, req: http.IncomingMessage, res: http.ServerResponse, finish: FinishCallback) {
+	serveDir(pathname: string, req: http.IncomingMessage, res: http.ServerResponse, finish: FinishCallback) {
 		const htmlIndex = path.join(pathname, this.options.indexFile);
 
 		const streamFiles = (files: string[]) => {
 			mstat(pathname, files, (e, stat) => {
-				if (e) { return finish(404, {}) }
+				if (e) { return finish(404, {}); }
 				this.respond(pathname, 200, {}, files, stat!, req, res, finish);
 			});
 		};
@@ -148,15 +146,15 @@ class StaticServer {
 				const status = 200;
 				const headers = {};
 				const originalPathname = decodeURIComponent(new URL(req.url!, 'http://localhost').pathname);
-				if (originalPathname.length && originalPathname.charAt(originalPathname.length - 1) !== '/') {
+				if (originalPathname.length && !originalPathname.endsWith('/')) {
 					return finish(301, { 'Location': originalPathname + '/' });
 				} else {
 					this.respond(null, status, headers, [htmlIndex], stat!, req, res, finish);
 				}
 			} else {
 				// Stream a directory of files as a single file.
-				fs.readFile(path.join(pathname, 'index.json'), (e, contents) => {
-					if (e) { return finish(404, {}) }
+				fs.readFile(path.join(pathname, 'index.json'), (e2, contents) => {
+					if (e2) { return finish(404, {}); }
 					const index = JSON.parse(`${contents}`);
 					streamFiles(index.files);
 				});
@@ -164,7 +162,7 @@ class StaticServer {
 		});
 	}
 
-	serveFile (pathname: string, status: number, headers: Headers, req: http.IncomingMessage, res: http.ServerResponse) {
+	serveFile(pathname: string, status: number, headers: Headers, req: http.IncomingMessage, res: http.ServerResponse) {
 		const promise = new events.EventEmitter();
 
 		pathname = this.resolve(pathname);
@@ -173,18 +171,21 @@ class StaticServer {
 			if (e) {
 				return promise.emit('error', e);
 			}
-			this.respond(null, status, headers, [pathname], stat!, req, res, (status, headers) => {
-				this.finish(status, headers, req, res, promise);
+			this.respond(null, status, headers, [pathname], stat!, req, res, (finishStatus, finishHeaders) => {
+				this.finish(finishStatus, finishHeaders, req, res, promise);
 			});
 		});
 		return promise;
 	}
 
-	finish (status: number, headers: Record<string, string>, req: http.IncomingMessage, res: http.ServerResponse, promise: events.EventEmitter, callback?: (err: Result | null, result?: Result) => void) {
+	finish(
+		status: number, headers: Record<string, string>, req: http.IncomingMessage, res: http.ServerResponse,
+		promise: events.EventEmitter, callback?: (err: Result | null, result?: Result) => void
+	) {
 		const result: Result = {
 			status,
 			headers,
-			message: http.STATUS_CODES[status]
+			message: http.STATUS_CODES[status],
 		};
 
 		if (this.options.serverInfo !== null) {
@@ -197,8 +198,7 @@ class StaticServer {
 			} else {
 				if (promise.listeners('error').length > 0) {
 					promise.emit('error', result);
-				}
-				else {
+				} else {
 					res.writeHead(status, headers);
 					res.end();
 				}
@@ -210,30 +210,32 @@ class StaticServer {
 				res.writeHead(status, headers);
 				res.end();
 			}
-			callback && callback(null, result);
+			callback?.(null, result);
 			promise.emit('success', result);
 		}
 	}
 
-	servePath (pathname: string, status: number, headers: Headers, req: http.IncomingMessage, res: http.ServerResponse, finish: FinishCallback) {
-		const that = this,
-			promise = new(events.EventEmitter);
+	servePath(
+		pathname: string, status: number, headers: Headers,
+		req: http.IncomingMessage, res: http.ServerResponse, finish: FinishCallback
+	) {
+		const promise = new (events.EventEmitter);
 
 		pathname = this.resolve(pathname);
 
 		// Make sure we're not trying to access a
 		// file outside of the root.
-		if (pathname.startsWith(that.root)) {
-			tryStat(pathname, function (e, stat) {
+		if (pathname.startsWith(this.root)) {
+			tryStat(pathname, (e, stat) => {
 				if (e) {
 					// possibly not found, check default extension
-					if (that.defaultExtension) {
-						tryStat(pathname + that.defaultExtension, function(e2, stat2) {
+					if (this.defaultExtension) {
+						tryStat(pathname + this.defaultExtension, (e2, stat2) => {
 							if (e2) {
 								// really not found
 								finish(404, {});
 							} else if (stat2!.isFile()) {
-								that.respond(null, status, headers, [pathname+that.defaultExtension], stat2!, req, res, finish);
+								this.respond(null, status, headers, [pathname + this.defaultExtension], stat2!, req, res, finish);
 							} else {
 								finish(400, {});
 							}
@@ -241,10 +243,10 @@ class StaticServer {
 					} else {
 						finish(404, {});
 					}
-				} else if (stat!.isFile()) {      // Stream a single file.
-					that.respond(null, status, headers, [pathname], stat!, req, res, finish);
+				} else if (stat!.isFile()) { // Stream a single file.
+					this.respond(null, status, headers, [pathname], stat!, req, res, finish);
 				} else if (stat!.isDirectory()) { // Stream a directory of files.
-					that.serveDir(pathname, req, res, finish);
+					this.serveDir(pathname, req, res, finish);
 				} else {
 					finish(400, {});
 				}
@@ -256,12 +258,12 @@ class StaticServer {
 		return promise;
 	}
 
-	resolve (pathname: string) {
+	resolve(pathname: string) {
 		return path.resolve(path.join(this.root, pathname));
 	}
 
-	serve (req: http.IncomingMessage, res: http.ServerResponse, callback?: (err: Result | null, result?: Result) => void) {
-		const promise = new(events.EventEmitter);
+	serve(req: http.IncomingMessage, res: http.ServerResponse, callback?: (err: Result | null, result?: Result) => void) {
+		const promise = new (events.EventEmitter);
 		let pathname;
 
 		const finish = (status: number, headers: Headers) => {
@@ -270,17 +272,16 @@ class StaticServer {
 
 		try {
 			pathname = decodeURIComponent(new URL(req.url!, 'http://localhost').pathname);
-		}
-		catch {
+		} catch {
 			return process.nextTick(() => {
 				finish(400, {});
 			});
 		}
 
 		process.nextTick(() => {
-			this.servePath(pathname, 200, {}, req, res, finish).on('success', (result) => {
+			this.servePath(pathname, 200, {}, req, res, finish).on('success', result => {
 				promise.emit('success', result);
-			}).on('error', (err) => {
+			}).on('error', err => {
 				promise.emit('error');
 			});
 		});
@@ -300,7 +301,7 @@ class StaticServer {
 				(contentType && (enable instanceof RegExp) && enable.test(contentType)))
 		) {
 			const acceptEncoding = req.headers['accept-encoding'];
-			return acceptEncoding && acceptEncoding.includes('gzip');
+			return acceptEncoding?.includes('gzip');
 		}
 		return false;
 	}
@@ -308,13 +309,16 @@ class StaticServer {
 	/* Send a gzipped version of the file if the options and the client indicate gzip is enabled and
 	 * we find a .gz file matching the static resource requested.
 	 */
-	respondGzip(pathname: string | null, status: number, contentType: string, _headers: Headers, files: string[], stat: Stats, req: http.IncomingMessage, res: http.ServerResponse, finish: FinishCallback) {
-		if (files.length == 1 && this.gzipOk(req, contentType)) {
+	respondGzip(
+		pathname: string | null, status: number, contentType: string, _headers: Headers, files: string[], stat: Stats,
+		req: http.IncomingMessage, res: http.ServerResponse, finish: FinishCallback
+	) {
+		if (files.length === 1 && this.gzipOk(req, contentType)) {
 			const gzFile = files[0] + '.gz';
 			tryStat(gzFile, (e, gzStat) => {
 				if (!e && gzStat!.isFile()) {
 					const vary = _headers['Vary'];
-					_headers['Vary'] = (vary && vary != 'Accept-Encoding' ? vary + ', ' : '') + 'Accept-Encoding';
+					_headers['Vary'] = (vary && vary !== 'Accept-Encoding' ? `${vary}, ` : '') + 'Accept-Encoding';
 					_headers['Content-Encoding'] = 'gzip';
 					stat.size = gzStat!.size;
 					files = [gzFile];
@@ -327,14 +331,14 @@ class StaticServer {
 		}
 	}
 
-	parseByteRange (req: http.IncomingMessage, stat: Stats) {
+	parseByteRange(req: http.IncomingMessage, stat: Stats) {
 		const byteRange = {
 			from: 0,
 			to: 0,
-			valid: false
+			valid: false,
 		};
 
-		let rangeHeader = req.headers['range'];
+		const rangeHeader = req.headers['range'];
 		const flavor = 'bytes=';
 
 		if (rangeHeader) {
@@ -365,28 +369,29 @@ class StaticServer {
 		return byteRange;
 	}
 
-	respondNoGzip (pathname: string | null, status: number, contentType: string, _headers: Headers, files: string[], stat: Stats, req: http.IncomingMessage, res: http.ServerResponse, finish: FinishCallback) {
-		const mtime           = Date.parse(stat.mtime as any);
-		const key             = pathname || files[0];
+	respondNoGzip(
+		pathname: string | null, status: number, contentType: string, _headers: Headers, files: string[], stat: Stats,
+		req: http.IncomingMessage, res: http.ServerResponse, finish: FinishCallback
+	) {
+		const mtime = Date.parse(stat.mtime as any);
+		const key = pathname || files[0];
 		const headers: Headers = {};
-		const clientETag      = req.headers['if-none-match'];
-		const clientMTime     = Date.parse(req.headers['if-modified-since']!);
-		const byteRange       = this.parseByteRange(req, stat);
-		let startByte       = 0,
-			length          = stat.size;
+		const clientETag = req.headers['if-none-match'];
+		const clientMTime = Date.parse(req.headers['if-modified-since']!);
+		const byteRange = this.parseByteRange(req, stat);
+		let startByte = 0,
+			length = stat.size;
 
 		/* Handle byte ranges */
-		if (files.length == 1 && byteRange.valid) {
+		if (files.length === 1 && byteRange.valid) {
 			if (byteRange.to < length) {
-
 				// Note: HTTP Range param is inclusive
 				startByte = byteRange.from;
 				length = byteRange.to - byteRange.from + 1;
 				status = 206;
 
 				// Set Content-Range response header (we advertise initial resource size on server here (stat.size))
-				headers['Content-Range'] = 'bytes ' + byteRange.from + '-' + byteRange.to + '/' + stat.size;
-
+				headers['Content-Range'] = `bytes ${byteRange.from}-${byteRange.to}/${stat.size}`;
 			} else {
 				byteRange.valid = false;
 				console.warn('Range request exceeds file boundaries, goes until byte no', byteRange.to, 'against file size of', length, 'bytes');
@@ -399,12 +404,12 @@ class StaticServer {
 		}
 
 		// Copy default headers
-		for (const k in this.options.headers) {  headers[k] = this.options.headers[k]; }
+		for (const k in this.options.headers) { headers[k] = this.options.headers[k]; }
 
-		headers['Etag']          = JSON.stringify([stat.ino, stat.size, mtime].join('-'));
-		headers['Date']          = new Date().toUTCString();
+		headers['Etag'] = JSON.stringify([stat.ino, stat.size, mtime].join('-'));
+		headers['Date'] = new Date().toUTCString();
 		headers['Last-Modified'] = new Date(stat.mtime).toUTCString();
-		headers['Content-Type']   = contentType;
+		headers['Content-Type'] = contentType;
 		headers['Content-Length'] = length as any;
 
 		// Copy custom headers
@@ -413,8 +418,8 @@ class StaticServer {
 		// Conditional GET
 		// If the "If-Modified-Since" or "If-None-Match" headers
 		// match the conditions, send a 304 Not Modified.
-		if ((clientMTime  || clientETag) &&
-			(!clientETag  || clientETag === headers['Etag']) &&
+		if ((clientMTime || clientETag) &&
+			(!clientETag || clientETag === headers['Etag']) &&
 			(!clientMTime || clientMTime >= mtime)) {
 			// 304 response should not contain entity headers
 			['Content-Encoding',
@@ -425,56 +430,61 @@ class StaticServer {
 				'Content-Range',
 				'Content-Type',
 				'Expires',
-				'Last-Modified'].forEach(function (entityHeader) {
+				'Last-Modified'].forEach(entityHeader => {
 				delete headers[entityHeader];
 			});
 			finish(304, headers);
 		} else {
 			res.writeHead(status, headers);
 
-			this.stream(key, files, length, startByte, res, function (e) {
-				if (e) { return finish(500, {}) }
+			this.stream(key, files, length, startByte, res, e => {
+				if (e) { return finish(500, {}); }
 				finish(status, headers);
 			});
 		}
 	}
 
-	respond (pathname: string | null, status: number, _headers: Headers, files: string[], stat: Stats, req: http.IncomingMessage, res: http.ServerResponse, finish: FinishCallback) {
+	respond(
+		pathname: string | null, status: number, _headers: Headers, files: string[], stat: Stats,
+		req: http.IncomingMessage, res: http.ServerResponse, finish: FinishCallback
+	) {
 		const contentType = _headers['Content-Type'] ||
 			mimeTypes[path.extname(files[0])] ||
 			'application/octet-stream';
 		_headers = this.setCacheHeaders(_headers, req);
 
-		if(this.options.gzip) {
+		if (this.options.gzip) {
 			this.respondGzip(pathname, status, contentType, _headers, files, stat, req, res, finish);
 		} else {
 			this.respondNoGzip(pathname, status, contentType, _headers, files, stat, req, res, finish);
 		}
 	}
 
-	stream (pathname: string, files: string[], length: number, startByte: number, res: http.ServerResponse, callback: (err: Error | null, offset?: number) => void) {
-
-		(function streamFile(files, offset) {
-			let file = files.shift();
+	stream(
+		pathname: string, files: string[], length: number, startByte: number, res: http.ServerResponse,
+		callback: (err: Error | null, offset?: number) => void
+	) {
+		(function streamFile(filesCopy, offset) {
+			let file = filesCopy.shift();
 
 			if (file) {
-				file = path.resolve(file) === path.normalize(file)  ? file : path.join(pathname || '.', file);
+				file = path.resolve(file) === path.normalize(file) ? file : path.join(pathname || '.', file);
 
 				// Stream the file to the client
 				fs.createReadStream(file, {
 					flags: 'r',
 					mode: 0o666,
 					start: startByte,
-					end: startByte + (length ? length - 1 : 0)
-				}).on('data', (chunk) => {
+					end: startByte + (length ? length - 1 : 0),
+				}).on('data', chunk => {
 					// Bounds check the incoming chunk and offset, as copying
 					// a buffer from an invalid offset will throw an error and crash
 					if (chunk.length && offset < length && offset >= 0) {
 						offset += chunk.length;
 					}
 				}).on('close', () => {
-					streamFile(files, offset);
-				}).on('error', (err) => {
+					streamFile(filesCopy, offset);
+				}).on('error', err => {
 					callback(err);
 					console.error(err);
 				}).pipe(res, { end: false });
@@ -485,7 +495,7 @@ class StaticServer {
 		})(files.slice(0), 0);
 	}
 
-	setCacheHeaders (_headers: Headers, req: http.IncomingMessage): Headers {
+	setCacheHeaders(_headers: Headers, req: http.IncomingMessage): Headers {
 		if (typeof this.cacheTime === 'number') {
 			_headers['cache-control'] = `max-age=${this.cacheTime}`;
 		}
