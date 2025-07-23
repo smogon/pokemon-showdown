@@ -272,7 +272,6 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		wsdeflate?: typeof Config.wsdeflate,
 		proxyip?: typeof Config.proxyip,
 		customhttpresponse?: typeof Config.customhttpresponse,
-		disablenodestatic?: boolean,
 	}) {
 		super();
 		if (!config.bindaddress) config.bindaddress = '0.0.0.0';
@@ -334,21 +333,16 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		}
 
 		// Static server
-		if (!config.disablenodestatic) {
-			console.log('Static file serving enabled');
-			const staticRequestHandler = (req: http.IncomingMessage, res: http.ServerResponse) => {
-				// console.log(`static rq: ${req.socket.remoteAddress}:${req.socket.remotePort} -> ${req.socket.localAddress}:${req.socket.localPort} - ${req.method} ${req.url} ${req.httpVersion} - ${req.rawHeaders.join('|')}`);
-				req.resume();
-				req.addListener('end', () => {
-					handleStaticRequest(req, res, config.customhttpresponse);
-				});
-			};
+		const staticRequestHandler = (req: http.IncomingMessage, res: http.ServerResponse) => {
+			// console.log(`static rq: ${req.socket.remoteAddress}:${req.socket.remotePort} -> ${req.socket.localAddress}:${req.socket.localPort} - ${req.method} ${req.url} ${req.httpVersion} - ${req.rawHeaders.join('|')}`);
+			req.resume();
+			req.addListener('end', () => {
+				handleStaticRequest(req, res, config.customhttpresponse);
+			});
+		};
 
-			this.server.on('request', staticRequestHandler);
-			if (this.serverSsl) this.serverSsl.on('request', staticRequestHandler);
-		} else {
-			console.log('Static file serving is disabled');
-		}
+		this.server.on('request', staticRequestHandler);
+		if (this.serverSsl) this.serverSsl.on('request', staticRequestHandler);
 
 		// SockJS server
 
