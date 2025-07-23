@@ -276,6 +276,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 				this.effectState.duration = 2;
 			}
 		},
+		onAfterMove(pokemon) {
+			if (this.effectState.duration === 1) {
+				pokemon.removeVolatile('lockedmove');
+			}
+		},
 		onEnd(target) {
 			if (this.effectState.trueDuration > 1) return;
 			target.addVolatile('confusion');
