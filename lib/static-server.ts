@@ -131,13 +131,11 @@ export function handleStaticRequest(
 		return;
 	}
 
-	// Check for null bytes in URL (security)
 	if (req.url.includes('\0')) {
 		sendError(res, 400);
 		return;
 	}
 
-	// Check HTTP method
 	const allowedMethods = ['GET', 'HEAD', 'OPTIONS'];
 	if (!allowedMethods.includes(req.method || '')) {
 		res.writeHead(405, { 'Allow': allowedMethods.join(', ') });
@@ -155,7 +153,6 @@ export function handleStaticRequest(
 	const pathname = parsedUrl.pathname || '/';
 	const isHeadRequest = req.method === 'HEAD';
 
-	// Check for Windows reserved device names
 	if (process.platform === 'win32') {
 		const pathParts = pathname.split('/');
 		for (const part of pathParts) {
@@ -182,14 +179,12 @@ export function handleStaticRequest(
 		const avatarsDir = path.resolve(__dirname, '../../config/avatars');
 		if (isPathSafe(avatarPath, avatarsDir)) {
 			const fullAvatarPath = path.resolve(avatarsDir, avatarPath);
-			// Add cache control for avatars
 			res.setHeader('Cache-Control', 'public, no-transform, stale-if-error, max-age=7776000');
 			serveFile(res, fullAvatarPath, 200, isHeadRequest);
 		} else {
 			sendError(res, 403);
 		}
 	} else {
-		// Check additional static folders
 		const staticFolderKeys = Array.from(additionalStaticFolders.keys());
 		for (const prefix of staticFolderKeys) {
 			if (pathname.startsWith(prefix)) {
