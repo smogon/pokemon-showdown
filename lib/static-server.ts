@@ -367,12 +367,16 @@ export class StaticServer {
 		} else {
 			res.writeHead(status, headers);
 
+			if (req.method === 'HEAD') {
+				return this.getResult(status, headers, true);
+			}
 			try {
 				await this.stream(key, file, length, startByte, res);
 				return this.getResult(status, headers, true);
 			} catch {
 				return this.getResult(500, {}, true);
 			}
+
 		}
 	}
 
