@@ -60,7 +60,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Flying';
 				move.typeChangerBoosted = this.effect;
@@ -145,7 +145,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (
 				effect.effectType === "Move" &&
 				!effect.multihit &&
-				(!effect.negateSecondary && !(effect.hasSheerForce && source.hasAbility('sheerforce')))
+				!(effect.hasSheerForce && source.hasAbility('sheerforce'))
 			) {
 				this.effectState.checkedAngerShell = false;
 			} else {
@@ -411,7 +411,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (
 				effect.effectType === "Move" &&
 				!effect.multihit &&
-				(!effect.negateSecondary && !(effect.hasSheerForce && source.hasAbility('sheerforce')))
+				!(effect.hasSheerForce && source.hasAbility('sheerforce'))
 			) {
 				this.effectState.checkedBerserk = false;
 			} else {
@@ -1547,7 +1547,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Electric';
 				move.typeChangerBoosted = this.effect;
@@ -2406,9 +2406,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			move.hasBounced = true; // only bounce once in free-for-all battles
 			return null;
 		},
-		condition: {
-			duration: 1,
-		},
 		flags: { breakable: 1 },
 		name: "Magic Bounce",
 		rating: 4,
@@ -2930,9 +2927,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const noModifyType = [
 				'hiddenpower', 'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'struggle', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (!(move.isZ && move.category !== 'Status') && !noModifyType.includes(move.id) &&
+			if (!(move.isZ && move.category !== 'Status') &&
 				// TODO: Figure out actual interaction
-				!(move.name === 'Tera Blast' && pokemon.terastallized)) {
+				(!noModifyType.includes(move.id) || this.activeMove?.isMax) && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Normal';
 				move.typeChangerBoosted = this.effect;
 			}
@@ -3226,7 +3223,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Fairy';
 				move.typeChangerBoosted = this.effect;
@@ -3317,13 +3314,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.add('-activate', pokemon, 'ability: Power Construct');
 			pokemon.formeChange('Zygarde-Complete', this.effect, true);
 			pokemon.formeRegression = true;
-			pokemon.baseMaxhp = Math.floor(Math.floor(
-				2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
-			) * pokemon.level / 100 + 10);
-			const newMaxHP = pokemon.volatiles['dynamax'] ? (2 * pokemon.baseMaxhp) : pokemon.baseMaxhp;
-			pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
-			pokemon.maxhp = newMaxHP;
-			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Power Construct",
@@ -3752,7 +3742,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const noModifyType = [
 				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
 			];
-			if (move.type === 'Normal' && !noModifyType.includes(move.id) &&
+			if (move.type === 'Normal' && (!noModifyType.includes(move.id) || this.activeMove?.isMax) &&
 				!(move.isZ && move.category !== 'Status') && !(move.name === 'Tera Blast' && pokemon.terastallized)) {
 				move.type = 'Ice';
 				move.typeChangerBoosted = this.effect;
@@ -4902,13 +4892,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.species.forme !== 'Terastal') {
 				this.add('-activate', pokemon, 'ability: Tera Shift');
 				pokemon.formeChange('Terapagos-Terastal', this.effect, true);
-				pokemon.baseMaxhp = Math.floor(Math.floor(
-					2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
-				) * pokemon.level / 100 + 10);
-				const newMaxHP = pokemon.baseMaxhp;
-				pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
-				pokemon.maxhp = newMaxHP;
-				this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1 },
@@ -5469,7 +5452,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				target.addVolatile('charge');
 			}
 		},
-		onAllySideConditionStart(target, source, sideCondition) {
+		onSideConditionStart(side, source, sideCondition) {
 			const pokemon = this.effectState.target;
 			if (sideCondition.id === 'tailwind') {
 				pokemon.addVolatile('charge');
@@ -5494,7 +5477,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				return null;
 			}
 		},
-		onAllySideConditionStart(target, source, sideCondition) {
+		onSideConditionStart(side, source, sideCondition) {
 			const pokemon = this.effectState.target;
 			if (sideCondition.id === 'tailwind') {
 				this.boost({ atk: 1 }, pokemon, pokemon);
@@ -5615,7 +5598,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: { breakable: 1 },
 		name: "Mountaineer",
 		rating: 3,
-		num: -2,
+		num: -1,
 	},
 	rebound: {
 		isNonstandard: "CAP",
@@ -5623,32 +5606,32 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTryHit(target, source, move) {
 			if (this.effectState.target.activeTurns) return;
 
-			if (target === source || move.hasBounced || !move.flags['reflectable']) {
+			if (target === source || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) {
 				return;
 			}
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
 			this.actions.useMove(newMove, target, { target: source });
 			return null;
 		},
 		onAllyTryHitSide(target, source, move) {
 			if (this.effectState.target.activeTurns) return;
 
-			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable'] || target.isSemiInvulnerable()) {
 				return;
 			}
 			const newMove = this.dex.getActiveMove(move.id);
 			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
 			this.actions.useMove(newMove, this.effectState.target, { target: source });
+			move.hasBounced = true; // only bounce once in free-for-all battles
 			return null;
-		},
-		condition: {
-			duration: 1,
 		},
 		flags: { breakable: 1 },
 		name: "Rebound",
 		rating: 3,
-		num: -3,
+		num: -2,
 	},
 	persistent: {
 		isNonstandard: "CAP",
@@ -5656,6 +5639,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		flags: {},
 		name: "Persistent",
 		rating: 3,
-		num: -4,
+		num: -3,
 	},
 };

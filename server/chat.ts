@@ -162,9 +162,11 @@ const MAX_PLUGIN_LOADING_DEPTH = 3;
 
 import { formatText, linkRegex, stripFormatting } from './chat-formatter';
 
-// @ts-expect-error no typedef available
-import ProbeModule = require('probe-image-size');
-const probe: (url: string) => Promise<{ width: number, height: number }> = ProbeModule;
+let probe: null | ((url: string) => Promise<{ width: number, height: number }>) = null;
+
+try {
+	probe = require('probe-image-size');
+} catch {}
 
 const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
 
@@ -1948,12 +1950,12 @@ export const Chat = new class {
 
 	loadPluginFile(file: string) {
 		if (!file.endsWith('.js')) return;
-		this.loadPlugin(require(file), this.getPluginName(file));
+		this.loadPlugin(require(FS(file).path), this.getPluginName(file));
 	}
 
 	loadPluginDirectory(dir: string, depth = 0) {
 		for (const file of FS(dir).readdirSync()) {
-			const path = pathModule.resolve(dir, file);
+			const path = pathModule.join(dir, file);
 			if (FS(path).isDirectorySync()) {
 				depth++;
 				if (depth > MAX_PLUGIN_LOADING_DEPTH) continue;
@@ -1968,11 +1970,11 @@ export const Chat = new class {
 			}
 		}
 	}
-	annotateCommands(commandTable: AnyObject, namespace = ''): AnnotatedChatCommands {
+	annotateCommands(commandTable: AnyObject, namespace = '', pluginName?: string): AnnotatedChatCommands {
 		for (const cmd in commandTable) {
 			const entry = commandTable[cmd];
 			if (typeof entry === 'object') {
-				this.annotateCommands(entry, `${namespace}${cmd} `);
+				this.annotateCommands(entry, `${namespace}${cmd} `, pluginName);
 			}
 			if (typeof entry === 'string') {
 				const base = commandTable[entry];
@@ -1989,6 +1991,7 @@ export const Chat = new class {
 			entry.broadcastable = cmd.endsWith('help') || /\bthis\.(?:(check|can|run|should)Broadcast)\(/.test(handlerCode);
 			entry.isPrivate = /\bthis\.(?:privately(Check)?Can|commandDoesNotExist)\(/.test(handlerCode);
 			entry.requiredPermission = /this\.(?:checkCan|privately(?:Check)?Can)\(['`"]([a-zA-Z0-9]+)['"`](\)|, )/.exec(handlerCode)?.[1];
+			entry.plugin = pluginName;
 			if (!entry.aliases) entry.aliases = [];
 
 			// assign properties from the base command if the current command uses CommandContext.run.
@@ -2015,7 +2018,7 @@ export const Chat = new class {
 		// in the plugin.roomSettings = [plugin.roomSettings] action. So, we have to make them not getters
 		plugin = { ...plugin };
 		if (plugin.commands) {
-			Object.assign(Chat.commands, this.annotateCommands(plugin.commands));
+			Object.assign(Chat.commands, this.annotateCommands(plugin.commands, '', name));
 		}
 		if (plugin.pages) {
 			Object.assign(Chat.pages, plugin.pages);
@@ -2512,6 +2515,12 @@ export const Chat = new class {
 	 * Gets the dimension of the image at url. Returns 0x0 if the image isn't found, as well as the relevant error.
 	 */
 	getImageDimensions(url: string): Promise<{ height: number, width: number }> {
+		if (Config.noNetRequests) {
+			return Promise.reject(new Error(`Net requests are disabled.`));
+		}
+		if (!probe) {
+			return Promise.reject(new Error(`Images not supported.`));
+		}
 		return probe(url);
 	}
 

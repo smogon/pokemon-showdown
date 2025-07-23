@@ -553,6 +553,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				newMove.hasBounced = true;
 				newMove.pranksterBoosted = false;
 				this.actions.useMove(newMove, this.effectState.target, { target: source });
+				move.hasBounced = true; // only bounce once in free-for-all battles
 				return null;
 			},
 		},
@@ -908,10 +909,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					this.add('-fail', source);
 					this.attrLastMove('[still]');
 					return null;
-				}
-				damage = this.runEvent('SubDamage', target, source, move, damage);
-				if (!damage) {
-					return damage;
 				}
 				if (damage > target.volatiles['substitute'].hp) {
 					damage = target.volatiles['substitute'].hp as number;

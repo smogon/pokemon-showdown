@@ -167,6 +167,7 @@ export class LadderTracker {
 
 	tracking(battle: Rooms.RoomBattle, rating: number) {
 		const minElo = Math.floor(Number(battle.rated) || 0);
+		if (battle.format !== this.config.format) return false;
 		if (!minElo || minElo < 1000) {
 			return false;
 		}
@@ -381,11 +382,13 @@ export class LadderTracker {
 	}
 
 	togglePrefix(oldPrefix?: ID) {
-		if (this.room.settings.isPrivate === undefined) {
+		if (!this.room.settings.isPrivate) {
 			try {
 				if (oldPrefix) prefixManager.removePrefix(oldPrefix, 'privacy');
 			} catch {} // suppress errorMessages in case it's the first start and it hasn't been made priv yet
-			prefixManager.addPrefix(this.prefix, 'privacy');
+			try {
+				prefixManager.addPrefix(this.prefix, 'privacy');
+			} catch {} // same as above
 		}
 	}
 
@@ -413,7 +416,7 @@ export class LadderTracker {
 	}
 }
 
-const trackers: Record<string, LadderTracker> = {};
+export const trackers: Record<string, LadderTracker> = {};
 try {
 	const data = JSON.parse(FS("config/chat-plugins/laddertrackers.json").readIfExistsSync() || "{}");
 	for (const roomid in data) {
@@ -632,7 +635,7 @@ export const commands: Chat.ChatCommands = {
 	laddertrackhelp() {
 		this.runBroadcast();
 		this.sendReplyBox([
-			`- /laddertrack OR /ld displays a page to start a tracker (requires % in the room to do so).`,
+			`- /laddertrack OR /ld displays a page to start a tracker (requires # in the room to do so).`,
 			// ` (can also be used with key=value formatted args to start it directly - requires keys: rating, prefix, format, deadline, cutoff)`,
 			` - /laddertrack [leaderboard/top] - updates and displays the current leaderboard`,
 			` - /laddertrack deadline [optional date] - displays the current deadline, or sets the deadline to the given deadline if one is given (requires % to do so)`,

@@ -1906,7 +1906,7 @@ export const commands: Chat.ChatCommands = {
 		if (targetId === 'all') targetId = '';
 		const { totalMatches, sections } = findFormats(targetId, isOMSearch);
 
-		if (!totalMatches) throw new Chat.ErrorMessage("No matched formats found.");
+		if (!totalMatches) return this.errorReply("No matched formats found.");
 
 		const format = totalMatches === 1 ? Dex.formats.get(Object.values(sections)[0].formats[0]) : null;
 
@@ -2727,7 +2727,7 @@ export const commands: Chat.ChatCommands = {
 			const channelId = Twitch.linkRegex.exec(link)?.[2]?.trim();
 			if (!channelId) throw new Chat.ErrorMessage(`Specify a Twitch channel.`);
 			buf = Utils.html`Watching <b><a class="subtle" href="https://twitch.tv/${toID(channelId)}">${channelId}</a></b>...<br />`;
-			buf += `<twitch src="${link}" />`;
+			buf += Utils.html`<twitch src="${link}" />`;
 		} else {
 			if (Chat.linkRegex.test(link)) {
 				if (/^https?:\/\/(.*)\.(mp4|mov)\b(\?|$)/i.test(link)) { // video

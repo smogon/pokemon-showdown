@@ -43,15 +43,30 @@
  *
  * @license MIT
  */
-require('source-map-support').install();
+try {
+	require('source-map-support').install();
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+} catch (e) {
+}
 // NOTE: This file intentionally doesn't use too many modern JavaScript
 // features, so that it doesn't crash old versions of Node.js, so we
-// can successfully print the "We require Node.js 18+" message.
+// can successfully print the "We require Node.js 22+" message.
 
-// Check for version
-const nodeVersion = parseInt(process.versions.node);
-if (isNaN(nodeVersion) || nodeVersion < 18) {
-	throw new Error("We require Node.js version 18 or later; you're using " + process.version);
+// I've gotten enough reports by people who don't use the launch
+// script that this is worth repeating here
+try {
+// eslint-disable-next-line @typescript-eslint/no-unused-expressions
+	fetch;
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+} catch (e) {
+	throw new Error("We require Node.js version 22 or later; you're using " + process.version);
+}
+
+try {
+	require.resolve('ts-chacha20');
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+} catch (e) {
+	throw new Error("Dependencies are unmet; run `npm ci` before launching Pokemon Showdown again.");
 }
 
 import { FS, Repl } from '../lib';
