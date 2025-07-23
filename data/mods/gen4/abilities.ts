@@ -569,4 +569,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 	},
+	rebound: {
+		inherit: true,
+		onTryHitSide() {},
+	},
 };
