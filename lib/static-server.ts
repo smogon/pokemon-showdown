@@ -13,6 +13,8 @@ type Result = {
 	status: number,
 	headers: Record<string, string>,
 	message: string | undefined,
+	/** Have we already responded? */
+	alreadySent: boolean,
 };
 type Stats = {
 	size: number,
@@ -113,7 +115,7 @@ class StaticServer {
 
 	async serveDir(
 		pathname: string, req: http.IncomingMessage, res: http.ServerResponse
-	): Promise<[status: number, Headers]> {
+	): Promise<Result> {
 		const htmlIndex = path.join(pathname, this.options.indexFile);
 
 		try {
@@ -122,7 +124,7 @@ class StaticServer {
 			const headers = {};
 			const originalPathname = decodeURIComponent(new URL(req.url!, 'http://localhost').pathname);
 			if (originalPathname.length && !originalPathname.endsWith('/')) {
-				return [301, { 'Location': originalPathname + '/' }];
+				return this.getResult(301, { 'Location': originalPathname + '/' });
 			} else {
 				return this.respond(null, status, headers, [htmlIndex], stat, req, res);
 			}
@@ -135,7 +137,7 @@ class StaticServer {
 				const stat = await mstat(pathname, index.files);
 				return this.respond(pathname, 200, {}, index.files, stat, req, res);
 			} catch {
-				return [404, {}];
+				return this.getResult(404);
 			}
 		}
 	}
@@ -147,52 +149,49 @@ class StaticServer {
 		pathname = this.resolve(pathname);
 
 		const stat = await fsP.stat(pathname);
-		const [finishStatus, finishHeaders] = await this.respond(null, status, headers, [pathname], stat, req, res);
-		return this.finish(finishStatus, finishHeaders, req, res, errorCallback);
+		const result = await this.respond(null, status, headers, [pathname], stat, req, res);
+		return this.finish(result, req, res, errorCallback);
 	}
 
-	finish(
-		status: number, headers: Record<string, string>, req: http.IncomingMessage, res: http.ServerResponse,
-		errorCallback?: ErrorCallback
-	): Result {
-		const result: Result = {
+	getResult(status: number, headers: Headers = {}, alreadySent = false): Result {
+		return {
 			status,
 			headers,
 			message: http.STATUS_CODES[status],
+			alreadySent,
 		};
+	}
 
+	finish(
+		result: Result, req: http.IncomingMessage, res: http.ServerResponse,
+		errorCallback?: ErrorCallback
+	): Result {
 		if (this.options.serverInfo !== null) {
-			headers['server'] ||= SERVER_INFO;
+			result.headers['server'] ||= SERVER_INFO;
 		}
 
-		if (!status || status >= 400) {
-			if (!errorCallback?.(result)) {
-				res.writeHead(status, headers);
-				res.end();
+		// If `alreadySent`, it's been taken care of in `this.stream`.
+		if (!result.alreadySent && !errorCallback?.(result)) {
+			res.writeHead(result.status, result.headers);
+			if (result.status >= 400) {
+				res.write(`${result.status} ${result.message}`);
 			}
-			return result;
-		} else {
-			// Don't end the request here, if we're streaming;
-			// it's taken care of in `this.stream`.
-			if (status !== 200 || req.method !== 'GET') {
-				res.writeHead(status, headers);
-				res.end();
-			}
-			return result;
+			res.end();
 		}
+		return result;
 	}
 
 	async servePath(
 		pathname: string, status: number, headers: Headers,
 		req: http.IncomingMessage, res: http.ServerResponse
-	): Promise<[status: number, Headers]> {
+	): Promise<Result> {
 		pathname = this.resolve(pathname);
 
 		// Make sure we're not trying to access a
 		// file outside of the root.
 		if (!pathname.startsWith(this.root)) {
 			// Forbidden
-			return [403, {}];
+			return this.getResult(403);
 		}
 
 		try {
@@ -202,7 +201,7 @@ class StaticServer {
 			} else if (stat.isDirectory()) { // Stream a directory of files.
 				return this.serveDir(pathname, req, res);
 			} else {
-				return [400, {}];
+				return this.getResult(400);
 			}
 		} catch {
 			// possibly not found, check default extension
@@ -212,14 +211,14 @@ class StaticServer {
 					if (stat.isFile()) {
 						return this.respond(null, status, headers, [pathname + this.defaultExtension], stat, req, res);
 					} else {
-						return [400, {}];
+						return this.getResult(400);
 					}
 				} catch {
 					// really not found
-					return [404, {}];
+					return this.getResult(404);
 				}
 			} else {
-				return [404, {}];
+				return this.getResult(404);
 			}
 		}
 	}
@@ -233,11 +232,11 @@ class StaticServer {
 		try {
 			pathname = decodeURIComponent(new URL(req.url!, 'http://localhost').pathname);
 		} catch {
-			return this.finish(400, {}, req, res, errorCallback);
+			return this.finish(this.getResult(400), req, res, errorCallback);
 		}
 
-		const [status, headers] = await this.servePath(pathname, 200, {}, req, res);
-		return this.finish(status, headers, req, res, errorCallback);
+		const result = await this.servePath(pathname, 200, {}, req, res);
+		return this.finish(result, req, res, errorCallback);
 	}
 
 	/** Check if we should consider sending a gzip version of the file based on the
@@ -260,7 +259,7 @@ class StaticServer {
 	respondGzip(
 		pathname: string | null, status: number, contentType: string, _headers: Headers, files: string[], stat: Stats,
 		req: http.IncomingMessage, res: http.ServerResponse
-	): Promise<[status: number, Headers]> {
+	): Promise<Result> {
 		if (files.length === 1 && this.gzipOk(req, contentType)) {
 			const gzFile = `${files[0]}.gz`;
 			return fsP.stat(gzFile).catch(() => null).then(gzStat => {
@@ -320,15 +319,15 @@ class StaticServer {
 	async respondNoGzip(
 		pathname: string | null, status: number, contentType: string, _headers: Headers, files: string[], stat: Stats,
 		req: http.IncomingMessage, res: http.ServerResponse
-	): Promise<[status: number, Headers]> {
+	): Promise<Result> {
 		const mtime = Date.parse(stat.mtime as any);
 		const key = pathname || files[0];
 		const headers: Headers = {};
 		const clientETag = req.headers['if-none-match'];
 		const clientMTime = Date.parse(req.headers['if-modified-since']!);
 		const byteRange = this.parseByteRange(req, stat);
-		let startByte = 0,
-			length = stat.size;
+		let startByte = 0;
+		let length = stat.size;
 
 		/* Handle byte ranges */
 		if (files.length === 1 && byteRange.valid) {
@@ -381,15 +380,15 @@ class StaticServer {
 				'Last-Modified'].forEach(entityHeader => {
 				delete headers[entityHeader];
 			});
-			return [304, headers];
+			return this.getResult(304, headers);
 		} else {
 			res.writeHead(status, headers);
 
 			try {
 				await this.stream(key, files, length, startByte, res);
-				return [status, headers];
+				return this.getResult(status, headers, true);
 			} catch {
-				return [500, {}];
+				return this.getResult(500, {}, true);
 			}
 		}
 	}
@@ -397,7 +396,7 @@ class StaticServer {
 	respond(
 		pathname: string | null, status: number, _headers: Headers, files: string[], stat: Stats,
 		req: http.IncomingMessage, res: http.ServerResponse
-	): Promise<[status: number, Headers]> {
+	): Promise<Result> {
 		const contentType = _headers['Content-Type'] ||
 			mimeTypes[path.extname(files[0])] ||
 			'application/octet-stream';
