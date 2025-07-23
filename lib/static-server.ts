@@ -162,7 +162,7 @@ export class StaticServer {
 		// If `alreadySent`, it's been taken care of in `this.stream`.
 		if (!result.alreadySent && !errorCallback?.(result)) {
 			res.writeHead(result.status, result.headers);
-			if (result.status >= 400) {
+			if (result.status >= 400 || req.method === 'HEAD') {
 				res.write(`${result.status} ${result.message}`);
 			}
 			res.end();
