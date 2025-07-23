@@ -124,7 +124,7 @@ export class StaticServer {
 			if (originalPathname.length && !originalPathname.endsWith('/')) {
 				return this.getResult(301, { 'Location': originalPathname + '/' });
 			} else {
-				return this.respond(null, status, headers, htmlIndex, stat, req, res);
+				return this.respond(status, headers, htmlIndex, stat, req, res);
 			}
 		} catch {
 			return this.getResult(404);
@@ -138,7 +138,7 @@ export class StaticServer {
 		pathname = this.resolve(pathname);
 
 		const stat = await fsP.stat(pathname);
-		const result = await this.respond(null, status, headers, pathname, stat, req, res);
+		const result = await this.respond(status, headers, pathname, stat, req, res);
 		return this.finish(result, req, res, errorCallback);
 	}
 
@@ -186,7 +186,7 @@ export class StaticServer {
 		try {
 			const stat = await fsP.stat(pathname);
 			if (stat.isFile()) { // Stream a single file.
-				return this.respond(null, status, headers, pathname, stat, req, res);
+				return this.respond(status, headers, pathname, stat, req, res);
 			} else if (stat.isDirectory()) { // Stream a directory of files.
 				return this.serveDir(pathname, req, res);
 			} else {
@@ -198,7 +198,7 @@ export class StaticServer {
 				try {
 					const stat = await fsP.stat(pathname + this.defaultExtension);
 					if (stat.isFile()) {
-						return this.respond(null, status, headers, pathname + this.defaultExtension, stat, req, res);
+						return this.respond(status, headers, pathname + this.defaultExtension, stat, req, res);
 					} else {
 						return this.getResult(400);
 					}
@@ -246,7 +246,7 @@ export class StaticServer {
 	/** Send a gzipped version of the file if the options and the client indicate gzip is enabled and
 	  * we find a .gz file matching the static resource requested. */
 	respondGzip(
-		pathname: string | null, status: number, contentType: string, _headers: Headers, file: string, stat: fs.Stats,
+		status: number, contentType: string, _headers: Headers, file: string, stat: fs.Stats,
 		req: http.IncomingMessage, res: http.ServerResponse
 	): Promise<Result> {
 		if (this.gzipOk(req, contentType)) {
@@ -259,11 +259,11 @@ export class StaticServer {
 					stat.size = gzStat.size;
 					file = gzFile;
 				}
-				return this.respondNoGzip(pathname, status, contentType, _headers, file, stat, req, res);
+				return this.respondNoGzip(status, contentType, _headers, file, stat, req, res);
 			});
 		} else {
 			// Client doesn't want gzip or we're sending multiple files
-			return this.respondNoGzip(pathname, status, contentType, _headers, file, stat, req, res);
+			return this.respondNoGzip(status, contentType, _headers, file, stat, req, res);
 		}
 	}
 
@@ -306,11 +306,10 @@ export class StaticServer {
 	}
 
 	async respondNoGzip(
-		pathname: string | null, status: number, contentType: string, _headers: Headers, file: string, stat: fs.Stats,
+		status: number, contentType: string, _headers: Headers, file: string, stat: fs.Stats,
 		req: http.IncomingMessage, res: http.ServerResponse
 	): Promise<Result> {
 		const mtime = Date.parse(stat.mtime as any);
-		const key = pathname || file;
 		const headers: Headers = {};
 		const clientETag = req.headers['if-none-match'];
 		const clientMTime = Date.parse(req.headers['if-modified-since']!);
@@ -371,17 +370,16 @@ export class StaticServer {
 				return this.getResult(status, headers, true);
 			}
 			try {
-				await this.stream(key, file, length, startByte, res);
+				await this.stream(file, length, startByte, res);
 				return this.getResult(status, headers, true);
 			} catch {
 				return this.getResult(500, {}, true);
 			}
-
 		}
 	}
 
 	respond(
-		pathname: string | null, status: number, _headers: Headers, file: string, stat: fs.Stats,
+		status: number, _headers: Headers, file: string, stat: fs.Stats,
 		req: http.IncomingMessage, res: http.ServerResponse
 	): Promise<Result> {
 		const contentType = _headers['Content-Type'] ||
@@ -390,21 +388,18 @@ export class StaticServer {
 		_headers = this.setCacheHeaders(_headers);
 
 		if (this.options.gzip) {
-			return this.respondGzip(pathname, status, contentType, _headers, file, stat, req, res);
+			return this.respondGzip(status, contentType, _headers, file, stat, req, res);
 		} else {
-			return this.respondNoGzip(pathname, status, contentType, _headers, file, stat, req, res);
+			return this.respondNoGzip(status, contentType, _headers, file, stat, req, res);
 		}
 	}
 
-	stream(
-		pathname: string, file: string, length: number, startByte: number, res: http.ServerResponse
-	): Promise<number> {
+	stream(file: string, length: number, startByte: number, res: http.ServerResponse): Promise<number> {
 		return new Promise<number>((resolve, reject) => {
 			let offset = 0;
-			const filePath = path.resolve(file) === path.normalize(file) ? file : path.join(pathname || '.', file);
 
 			// Stream the file to the client
-			fs.createReadStream(filePath, {
+			fs.createReadStream(file, {
 				flags: 'r',
 				mode: 0o666,
 				start: startByte,
