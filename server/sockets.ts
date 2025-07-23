@@ -18,6 +18,7 @@ import * as path from 'path';
 import { crashlogger, ProcessManager, Streams, Repl } from '../lib';
 import { IPTools } from './ip-tools';
 import { type ChannelID, extractChannelMessages } from '../sim/battle';
+import { StaticServer } from '../lib/static-server';
 
 type StreamWorker = ProcessManager.StreamWorker;
 
@@ -271,7 +272,6 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 		wsdeflate?: typeof Config.wsdeflate,
 		proxyip?: typeof Config.proxyip,
 		customhttpresponse?: typeof Config.customhttpresponse,
-		disablenodestatic?: boolean,
 	}) {
 		super();
 		if (!config.bindaddress) config.bindaddress = '0.0.0.0';
@@ -334,8 +334,6 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 
 		// Static server
 		try {
-			if (config.disablenodestatic) throw new Error("disablenodestatic");
-			const StaticServer: typeof import('node-static').Server = require('node-static').Server;
 			const roomidRegex = /^\/(?:[A-Za-z0-9][A-Za-z0-9-]*)\/?$/;
 			const cssServer = new StaticServer('./config');
 			const avatarServer = new StaticServer('./config/avatars');
@@ -353,7 +351,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 						if (req.url === '/custom.css') {
 							server = cssServer;
 						} else if (req.url.startsWith('/avatars/')) {
-							req.url = req.url.substr(8);
+							req.url = req.url.slice(8);
 							server = avatarServer;
 						} else if (roomidRegex.test(req.url)) {
 							req.url = '/';
@@ -370,12 +368,8 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 
 			this.server.on('request', staticRequestHandler);
 			if (this.serverSsl) this.serverSsl.on('request', staticRequestHandler);
-		} catch (e: any) {
-			if (e.message === 'disablenodestatic') {
-				console.log('node-static is disabled');
-			} else {
-				console.log('Could not start node-static - try `npm install` if you want to use it');
-			}
+		} catch {
+			console.log('Could not start static server');
 		}
 
 		// SockJS server
