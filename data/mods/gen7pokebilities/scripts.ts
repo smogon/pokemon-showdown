@@ -113,7 +113,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				this.apparentType = this.terastallized;
 			}
 			if (this.battle.gen > 2) {
-				this.setAbility(pokemon.ability, this, true);
+				this.setAbility(pokemon.ability, this, null, true);
 				if (this.m.innates) {
 					for (const innate of this.m.innates) {
 						this.removeVolatile('ability:' + innate);
@@ -202,7 +202,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (this.illusion) {
 					this.ability = ''; // Don't allow Illusion to wear off
 				}
-				this.setAbility(species.abilities['0'], null, true);
+				this.setAbility(species.abilities['0'], null, null, true);
 				this.baseAbility = this.ability;
 			}
 			if (this.terastallized && this.terastallized !== this.apparentType) {
