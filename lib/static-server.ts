@@ -99,12 +99,7 @@ function serveFile(
 export function handleStaticRequest(
 	req: http.IncomingMessage,
 	res: http.ServerResponse,
-	customHttpResponse?: (req: http.IncomingMessage, res: http.ServerResponse) => boolean
 ): void {
-	if (customHttpResponse?.(req, res)) {
-		return;
-	}
-
 	if (!req.url) {
 		res.writeHead(400, { 'Content-Type': 'text/plain' });
 		res.end('Bad Request');

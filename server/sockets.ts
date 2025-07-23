@@ -337,7 +337,11 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
 			// console.log(`static rq: ${req.socket.remoteAddress}:${req.socket.remotePort} -> ${req.socket.localAddress}:${req.socket.localPort} - ${req.method} ${req.url} ${req.httpVersion} - ${req.rawHeaders.join('|')}`);
 			req.resume();
 			req.addListener('end', () => {
-				handleStaticRequest(req, res, config.customhttpresponse);
+				if (config.customhttpresponse?.(req, res)) {
+					return;
+				}
+
+				handleStaticRequest(req, res);
 			});
 		};
 
