@@ -211,7 +211,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 		onAnySwitchOut(pokemon) {
 			if (pokemon !== this.effectState.source) return;
-			this.effectState.target.volatiles['partiallytrapped'];
+			delete this.effectState.target.volatiles['partiallytrapped'];
 		},
 	},
 	fakepartiallytrapped: {
@@ -227,7 +227,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 		onAnySwitchOut(pokemon) {
 			if (pokemon !== this.effectState.counterpart) return;
-			this.effectState.target.volatiles['fakepartiallytrapped'];
+			delete this.effectState.target.volatiles['fakepartiallytrapped'];
 		},
 	},
 	partialtrappinglock: {
@@ -279,7 +279,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 		onAnySwitchOut(pokemon) {
 			if (pokemon !== this.effectState.locked) return;
-			this.effectState.target.volatiles['partialtrappinglock'];
+			delete this.effectState.target.volatiles['partialtrappinglock'];
 		},
 	},
 	mustrecharge: {

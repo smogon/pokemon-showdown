@@ -26,15 +26,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 	partiallytrapped: {
 		inherit: true,
 		onResidual(pokemon) {
-			const source = this.effectState.source;
-			// G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
-			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectState.sourceEffect.id);
-			if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns) && !gmaxEffect) {
-				delete pokemon.volatiles['partiallytrapped'];
-				this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]', '[silent]');
-				return;
-			}
-			const calc = calculate(this, source, pokemon);
+			const calc = calculate(this, this.effectState.source, pokemon);
 			this.damage(calc * pokemon.baseMaxhp / this.effectState.boundDivisor);
 		},
 	},
