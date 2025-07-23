@@ -20,6 +20,14 @@ describe('Sitrus Berry', () => {
 		assert.equal(holder.hp, Math.floor(holder.maxhp / 4) + 1);
 	});
 
+	it('should be eaten in the middle of a multi-hit move', () => {
+		battle = common.createBattle();
+		battle.setPlayer('p1', { team: [{ species: 'Urshifu-Rapid-Strike', moves: ['surgingstrikes'] }] });
+		battle.setPlayer('p2', { team: [{ species: 'Heatran', item: 'sitrusberry', moves: ['sleeptalk'], nature: 'Gentle' }] });
+		battle.makeChoices();
+		assert.false.fainted(battle.p2.active[0]);
+	});
+
 	it('should be eaten immediately if (re)gained on low hp', () => {
 		battle = common.createBattle([
 			[{ species: 'Magnemite', ability: 'sturdy', item: 'sitrusberry', moves: ['recycle'] }],
@@ -41,7 +49,7 @@ describe('Sitrus Berry', () => {
 		assert.equal(battle.p1.active[0].hp, 1);
 	});
 
-	it.skip(`should not heal 25% HP if a confusion self-hit would bring the user into Berry trigger range`, () => {
+	it(`should not heal 25% HP if a confusion self-hit would bring the user into Berry trigger range`, () => {
 		battle = common.createBattle([[
 			{ species: 'Deoxys-Attack', item: 'sitrusberry', moves: ['sleeptalk'] },
 		], [
@@ -53,7 +61,7 @@ describe('Sitrus Berry', () => {
 		assert.false.fullHP(holder);
 	});
 
-	it.skip(`should heal 25% HP immediately after any end-of-turn effect`, () => {
+	it(`should heal 25% HP immediately after any end-of-turn effect`, () => {
 		battle = common.createBattle([[
 			{ species: 'mimikyu', moves: ['curse'] },
 		], [
