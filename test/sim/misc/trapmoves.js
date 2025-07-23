@@ -193,7 +193,7 @@ describe('Partial Trapping Moves', () => {
 			battle.p1.active[0].hp = 1;
 			battle.p2.active[0].hp = 1;
 			battle.makeChoices('move sleeptalk', 'move sleeptalk');
-			battle.makeChoices('switch 2', 'auto');
+			battle.makeChoices('switch 2', '');
 			battle.makeChoices('move sleeptalk', 'switch 2');
 		});
 
