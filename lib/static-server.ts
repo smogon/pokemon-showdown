@@ -7,24 +7,34 @@ import fsP from 'node:fs/promises';
 import http from 'node:http';
 import path from 'node:path';
 
-type Headers = Record<string, string>;
-type Options = Record<string, any>;
-type Result = {
+export type Headers = Record<string, string>;
+export type Options = {
+	/** Root directory to serve files from. */
+	root?: string,
+	/** Index file when serving a directory. */
+	indexFile?: string,
+	/** Default extension to append to files if not found. */
+	defaultExtension?: string,
+	/** Cache time in seconds. */
+	cacheTime?: number,
+	/** Serve `.gz` files if available. */
+	gzip?: boolean | RegExp,
+	/** Custom headers for success responses (not sent on errors). */
+	headers?: Headers,
+	/** Server header. `null` to disable. */
+	serverInfo?: string | null,
+};
+export type Result = {
 	status: number,
 	headers: Record<string, string>,
 	message: string | undefined,
 	/** Have we already responded? */
 	alreadySent: boolean,
 };
-type Stats = {
-	size: number,
-	mtime: Date,
-	ino: number,
-};
 /** Return true to suppress default error page */
-type ErrorCallback = (result: Result) => boolean | void;
+export type ErrorCallback = (result: Result) => boolean | void;
 
-const mimeTypes: { [key: string]: string } = {
+export const mimeTypes: { [key: string]: string } = {
 	'.html': 'text/html',
 	'.htm': 'text/html',
 	'.css': 'text/css',
@@ -59,12 +69,12 @@ const mimeTypes: { [key: string]: string } = {
 	'.webm': 'video/webm',
 };
 
-const SERVER_INFO = 'node-static-vendored/1.0';
+export const SERVER_INFO = 'node-static-vendored/1.0';
 
-class StaticServer {
+export class StaticServer {
 	root: string;
 	options: Options;
-	cacheTime = 3600;
+	cacheTime: number | null | undefined = 3600;
 	defaultHeaders: Headers;
 	defaultExtension = '';
 	constructor(root: string, options?: Options);
@@ -104,7 +114,7 @@ class StaticServer {
 	async serveDir(
 		pathname: string, req: http.IncomingMessage, res: http.ServerResponse
 	): Promise<Result> {
-		const htmlIndex = path.join(pathname, this.options.indexFile);
+		const htmlIndex = path.join(pathname, this.options.indexFile!);
 
 		try {
 			const stat = await fsP.stat(htmlIndex);
@@ -236,7 +246,7 @@ class StaticServer {
 	/** Send a gzipped version of the file if the options and the client indicate gzip is enabled and
 	  * we find a .gz file matching the static resource requested. */
 	respondGzip(
-		pathname: string | null, status: number, contentType: string, _headers: Headers, file: string, stat: Stats,
+		pathname: string | null, status: number, contentType: string, _headers: Headers, file: string, stat: fs.Stats,
 		req: http.IncomingMessage, res: http.ServerResponse
 	): Promise<Result> {
 		if (this.gzipOk(req, contentType)) {
@@ -257,7 +267,7 @@ class StaticServer {
 		}
 	}
 
-	parseByteRange(req: http.IncomingMessage, stat: Stats) {
+	parseByteRange(req: http.IncomingMessage, stat: fs.Stats) {
 		const byteRange = {
 			from: 0,
 			to: 0,
@@ -296,7 +306,7 @@ class StaticServer {
 	}
 
 	async respondNoGzip(
-		pathname: string | null, status: number, contentType: string, _headers: Headers, file: string, stat: Stats,
+		pathname: string | null, status: number, contentType: string, _headers: Headers, file: string, stat: fs.Stats,
 		req: http.IncomingMessage, res: http.ServerResponse
 	): Promise<Result> {
 		const mtime = Date.parse(stat.mtime as any);
@@ -348,17 +358,11 @@ class StaticServer {
 			(!clientETag || clientETag === headers['Etag']) &&
 			(!clientMTime || clientMTime >= mtime)) {
 			// 304 response should not contain entity headers
-			['Content-Encoding',
-				'Content-Language',
-				'Content-Length',
-				'Content-Location',
-				'Content-MD5',
-				'Content-Range',
-				'Content-Type',
-				'Expires',
-				'Last-Modified'].forEach(entityHeader => {
+			for (const entityHeader of [
+				'Content-Encoding', 'Content-Language', 'Content-Length', 'Content-Location', 'Content-MD5', 'Content-Range', 'Content-Type', 'Expires', 'Last-Modified',
+			]) {
 				delete headers[entityHeader];
-			});
+			}
 			return this.getResult(304, headers);
 		} else {
 			res.writeHead(status, headers);
@@ -373,7 +377,7 @@ class StaticServer {
 	}
 
 	respond(
-		pathname: string | null, status: number, _headers: Headers, file: string, stat: Stats,
+		pathname: string | null, status: number, _headers: Headers, file: string, stat: fs.Stats,
 		req: http.IncomingMessage, res: http.ServerResponse
 	): Promise<Result> {
 		const contentType = _headers['Content-Type'] ||
@@ -424,5 +428,3 @@ class StaticServer {
 		return _headers;
 	}
 }
-
-export { StaticServer };
