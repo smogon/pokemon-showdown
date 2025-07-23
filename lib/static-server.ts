@@ -59,18 +59,6 @@ const mimeTypes: { [key: string]: string } = {
 	'.webm': 'video/webm',
 };
 
-async function mstat(dir: string, files: string[]): Promise<Stats> {
-	const stats: Stats[] = [];
-	for (const file of files) {
-		stats.push(await fsP.stat(path.join(dir, file)));
-	}
-	return {
-		size: stats.reduce((total, stat) => total + stat.size, 0),
-		mtime: stats.reduce((latest, stat) => latest > stat.mtime ? latest : stat.mtime, new Date(0)),
-		ino: stats.reduce((total, stat) => total + stat.ino, 0),
-	};
-}
-
 const SERVER_INFO = 'node-static-vendored/1.0';
 
 class StaticServer {
@@ -126,19 +114,10 @@ class StaticServer {
 			if (originalPathname.length && !originalPathname.endsWith('/')) {
 				return this.getResult(301, { 'Location': originalPathname + '/' });
 			} else {
-				return this.respond(null, status, headers, [htmlIndex], stat, req, res);
+				return this.respond(null, status, headers, htmlIndex, stat, req, res);
 			}
 		} catch {
-			// Stream a directory of files as a single file.
-			try {
-				const contents = await fsP.readFile(path.join(pathname, 'index.json'));
-				const index = JSON.parse(`${contents}`);
-				// stream files
-				const stat = await mstat(pathname, index.files);
-				return this.respond(pathname, 200, {}, index.files, stat, req, res);
-			} catch {
-				return this.getResult(404);
-			}
+			return this.getResult(404);
 		}
 	}
 
@@ -149,7 +128,7 @@ class StaticServer {
 		pathname = this.resolve(pathname);
 
 		const stat = await fsP.stat(pathname);
-		const result = await this.respond(null, status, headers, [pathname], stat, req, res);
+		const result = await this.respond(null, status, headers, pathname, stat, req, res);
 		return this.finish(result, req, res, errorCallback);
 	}
 
@@ -197,7 +176,7 @@ class StaticServer {
 		try {
 			const stat = await fsP.stat(pathname);
 			if (stat.isFile()) { // Stream a single file.
-				return this.respond(null, status, headers, [pathname], stat, req, res);
+				return this.respond(null, status, headers, pathname, stat, req, res);
 			} else if (stat.isDirectory()) { // Stream a directory of files.
 				return this.serveDir(pathname, req, res);
 			} else {
@@ -209,7 +188,7 @@ class StaticServer {
 				try {
 					const stat = await fsP.stat(pathname + this.defaultExtension);
 					if (stat.isFile()) {
-						return this.respond(null, status, headers, [pathname + this.defaultExtension], stat, req, res);
+						return this.respond(null, status, headers, pathname + this.defaultExtension, stat, req, res);
 					} else {
 						return this.getResult(400);
 					}
@@ -257,24 +236,24 @@ class StaticServer {
 	/** Send a gzipped version of the file if the options and the client indicate gzip is enabled and
 	  * we find a .gz file matching the static resource requested. */
 	respondGzip(
-		pathname: string | null, status: number, contentType: string, _headers: Headers, files: string[], stat: Stats,
+		pathname: string | null, status: number, contentType: string, _headers: Headers, file: string, stat: Stats,
 		req: http.IncomingMessage, res: http.ServerResponse
 	): Promise<Result> {
-		if (files.length === 1 && this.gzipOk(req, contentType)) {
-			const gzFile = `${files[0]}.gz`;
+		if (this.gzipOk(req, contentType)) {
+			const gzFile = `${file}.gz`;
 			return fsP.stat(gzFile).catch(() => null).then(gzStat => {
 				if (gzStat?.isFile()) {
 					const vary = _headers['Vary'];
 					_headers['Vary'] = (vary && vary !== 'Accept-Encoding' ? `${vary}, ` : '') + 'Accept-Encoding';
 					_headers['Content-Encoding'] = 'gzip';
 					stat.size = gzStat.size;
-					files = [gzFile];
+					file = gzFile;
 				}
-				return this.respondNoGzip(pathname, status, contentType, _headers, files, stat, req, res);
+				return this.respondNoGzip(pathname, status, contentType, _headers, file, stat, req, res);
 			});
 		} else {
 			// Client doesn't want gzip or we're sending multiple files
-			return this.respondNoGzip(pathname, status, contentType, _headers, files, stat, req, res);
+			return this.respondNoGzip(pathname, status, contentType, _headers, file, stat, req, res);
 		}
 	}
 
@@ -317,11 +296,11 @@ class StaticServer {
 	}
 
 	async respondNoGzip(
-		pathname: string | null, status: number, contentType: string, _headers: Headers, files: string[], stat: Stats,
+		pathname: string | null, status: number, contentType: string, _headers: Headers, file: string, stat: Stats,
 		req: http.IncomingMessage, res: http.ServerResponse
 	): Promise<Result> {
 		const mtime = Date.parse(stat.mtime as any);
-		const key = pathname || files[0];
+		const key = pathname || file;
 		const headers: Headers = {};
 		const clientETag = req.headers['if-none-match'];
 		const clientMTime = Date.parse(req.headers['if-modified-since']!);
@@ -330,7 +309,7 @@ class StaticServer {
 		let length = stat.size;
 
 		/* Handle byte ranges */
-		if (files.length === 1 && byteRange.valid) {
+		if (byteRange.valid) {
 			if (byteRange.to < length) {
 				// Note: HTTP Range param is inclusive
 				startByte = byteRange.from;
@@ -385,7 +364,7 @@ class StaticServer {
 			res.writeHead(status, headers);
 
 			try {
-				await this.stream(key, files, length, startByte, res);
+				await this.stream(key, file, length, startByte, res);
 				return this.getResult(status, headers, true);
 			} catch {
 				return this.getResult(500, {}, true);
@@ -394,54 +373,51 @@ class StaticServer {
 	}
 
 	respond(
-		pathname: string | null, status: number, _headers: Headers, files: string[], stat: Stats,
+		pathname: string | null, status: number, _headers: Headers, file: string, stat: Stats,
 		req: http.IncomingMessage, res: http.ServerResponse
 	): Promise<Result> {
 		const contentType = _headers['Content-Type'] ||
-			mimeTypes[path.extname(files[0])] ||
+			mimeTypes[path.extname(file)] ||
 			'application/octet-stream';
-		_headers = this.setCacheHeaders(_headers, req);
+		_headers = this.setCacheHeaders(_headers);
 
 		if (this.options.gzip) {
-			return this.respondGzip(pathname, status, contentType, _headers, files, stat, req, res);
+			return this.respondGzip(pathname, status, contentType, _headers, file, stat, req, res);
 		} else {
-			return this.respondNoGzip(pathname, status, contentType, _headers, files, stat, req, res);
+			return this.respondNoGzip(pathname, status, contentType, _headers, file, stat, req, res);
 		}
 	}
 
-	async stream(
-		pathname: string, files: string[], length: number, startByte: number, res: http.ServerResponse
+	stream(
+		pathname: string, file: string, length: number, startByte: number, res: http.ServerResponse
 	): Promise<number> {
-		let offset = 0;
-		for (const file of files) {
+		return new Promise<number>((resolve, reject) => {
+			let offset = 0;
 			const filePath = path.resolve(file) === path.normalize(file) ? file : path.join(pathname || '.', file);
 
-			await new Promise<void>((resolve, reject) => {
-				// Stream the file to the client
-				fs.createReadStream(filePath, {
-					flags: 'r',
-					mode: 0o666,
-					start: startByte,
-					end: startByte + (length ? length - 1 : 0),
-				}).on('data', chunk => {
-					// Bounds check the incoming chunk and offset, as copying
-					// a buffer from an invalid offset will throw an error and crash
-					if (chunk.length && offset < length && offset >= 0) {
-						offset += chunk.length;
-					}
-				}).on('close', () => {
-					resolve();
-				}).on('error', err => {
-					reject(err);
-					console.error(err);
-				}).pipe(res, { end: false });
-			});
-		}
-		res.end();
-		return offset;
+			// Stream the file to the client
+			fs.createReadStream(filePath, {
+				flags: 'r',
+				mode: 0o666,
+				start: startByte,
+				end: startByte + (length ? length - 1 : 0),
+			}).on('data', chunk => {
+				// Bounds check the incoming chunk and offset, as copying
+				// a buffer from an invalid offset will throw an error and crash
+				if (chunk.length && offset < length && offset >= 0) {
+					offset += chunk.length;
+				}
+			}).on('close', () => {
+				res.end();
+				resolve(offset);
+			}).on('error', err => {
+				reject(err);
+				console.error(err);
+			}).pipe(res, { end: false });
+		});
 	}
 
-	setCacheHeaders(_headers: Headers, req: http.IncomingMessage): Headers {
+	setCacheHeaders(_headers: Headers): Headers {
 		if (typeof this.cacheTime === 'number') {
 			_headers['cache-control'] = `max-age=${this.cacheTime}`;
 		}
