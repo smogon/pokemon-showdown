@@ -179,6 +179,24 @@ describe('Partial Trapping Moves', () => {
 			assert.equal(battle.p2.active[0].species.id, 'starmie');
 		});
 
+		it('should stop trapping the Pokemon if the user faints to a faster trapping move', () => {
+			battle = common.createBattle();
+			battle.setPlayer('p1', { team: [
+				{ species: "Smeargle", moves: [toID(move), 'sleeptalk'] },
+				{ species: "Kyurem", moves: ['sleeptalk'] },
+			] });
+			battle.setPlayer('p2', { team: [
+				{ species: "Tangrowth", moves: [toID(move), 'sleeptalk'] },
+				{ species: "Starmie", moves: ['sleeptalk'] },
+			] });
+			battle.makeChoices('move ' + toID(move), 'move ' + toID(move));
+			battle.p1.active[0].hp = 1;
+			battle.p2.active[0].hp = 1;
+			battle.makeChoices('move sleeptalk', 'move sleeptalk');
+			battle.makeChoices();
+			battle.makeChoices('move sleeptalk', 'switch 2');
+		});
+
 		it('should stop trapping the Pokemon if the target uses Rapid Spin', () => {
 			battle = common.createBattle();
 			battle.setPlayer('p1', { team: [
