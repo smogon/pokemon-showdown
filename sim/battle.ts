@@ -2490,13 +2490,13 @@ export class Battle {
 		return pokemon.side.randomFoe() || pokemon.side.foe.active[0];
 	}
 
-	checkFainted() {
-		for (const side of this.sides) {
-			for (const pokemon of side.active) {
-				if (pokemon.fainted) {
-					pokemon.status = 'fnt' as ID;
-					pokemon.switchFlag = true;
-				}
+	checkFainted(pokemon?: Pokemon | Pokemon[]) {
+		if (!pokemon) pokemon = this.getAllActive(true);
+		if (!Array.isArray(pokemon)) pokemon = [pokemon];
+		for (const poke of pokemon) {
+			if (poke.fainted) {
+				poke.status = 'fnt' as ID;
+				poke.switchFlag = true;
 			}
 		}
 	}
@@ -2842,10 +2842,13 @@ export class Battle {
 
 		// switching (fainted pokemon, U-turn, Baton Pass, etc)
 
-		if (!this.queue.peek() || (this.gen <= 3 && ['move', 'residual'].includes(this.queue.peek()!.choice))) {
+		if (!this.queue.peek() || (this.gen <= 3 && action.choice === 'move')) {
 			// in gen 3 or earlier, switching in fainted pokemon is done after
 			// every move, rather than only at the end of the turn.
 			this.checkFainted();
+		} else if (this.gen === 3 && action.choice === 'instaswitch' && action.target.fainted) {
+			// in gen 3, switching in fainted pokemon is done after every switch
+			this.checkFainted(action.target);
 		} else if (['megaEvo', 'megaEvoX', 'megaEvoY'].includes(action.choice) && this.gen === 7) {
 			this.eachEvent('Update');
 			// In Gen 7, the action order is recalculated for a Pokémon that mega evolves.
