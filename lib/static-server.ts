@@ -1,14 +1,14 @@
 // Vendored and TypeScripted from
 // https://github.com/cloudhead/node-static/blob/e49fbd728e93294c225f52103962e56aab86cb1a/lib/node-static.js
+// NOT a drop-in replacement for node-static; the callback on `serve` works differently
 
 import fs from 'node:fs';
-import events from 'node:events';
+import fsP from 'node:fs/promises';
 import http from 'node:http';
 import path from 'node:path';
 
 type Headers = Record<string, string>;
 type Options = Record<string, any>;
-type FinishCallback = (status: number, headers: Headers) => void;
 type Result = {
 	status: number,
 	headers: Record<string, string>,
@@ -19,6 +19,8 @@ type Stats = {
 	mtime: Date,
 	ino: number,
 };
+/** Return true to suppress default error page */
+type ErrorCallback = (result: Result) => boolean | void;
 
 const mimeTypes: { [key: string]: string } = {
 	'.html': 'text/html',
@@ -55,41 +57,19 @@ const mimeTypes: { [key: string]: string } = {
 	'.webm': 'video/webm',
 };
 
-function mstat(dir: string, files: string[], callback: (err: Error | null, stats?: Stats) => void) {
-	(function mstatInner(filesCopy: string[], stats: Stats[]) {
-		const file = filesCopy.shift();
-
-		if (file) {
-			try {
-				fs.stat(path.join(dir, file), (e, stat) => {
-					if (e) {
-						callback(e);
-					} else {
-						mstatInner(filesCopy, stats.concat([stat]));
-					}
-				});
-			} catch (e) {
-				callback(e as Error);
-			}
-		} else {
-			callback(null, {
-				size: stats.reduce((total, stat) => total + stat.size, 0),
-				mtime: stats.reduce((latest, stat) => latest > stat.mtime ? latest : stat.mtime, new Date(0)),
-				ino: stats.reduce((total, stat) => total + stat.ino, 0),
-			});
-		}
-	})(files.slice(0), []);
+async function mstat(dir: string, files: string[]): Promise<Stats> {
+	const stats: Stats[] = [];
+	for (const file of files) {
+		stats.push(await fsP.stat(path.join(dir, file)));
+	}
+	return {
+		size: stats.reduce((total, stat) => total + stat.size, 0),
+		mtime: stats.reduce((latest, stat) => latest > stat.mtime ? latest : stat.mtime, new Date(0)),
+		ino: stats.reduce((total, stat) => total + stat.ino, 0),
+	};
 }
 
 const SERVER_INFO = 'node-static-vendored/1.0';
-
-function tryStat(p: string, callback: (err: Error | null, stats?: fs.Stats) => void) {
-	try {
-		fs.stat(p, callback);
-	} catch (e) {
-		callback(e as Error);
-	}
-}
 
 class StaticServer {
 	root: string;
@@ -131,57 +111,50 @@ class StaticServer {
 		}
 	}
 
-	serveDir(pathname: string, req: http.IncomingMessage, res: http.ServerResponse, finish: FinishCallback) {
+	async serveDir(
+		pathname: string, req: http.IncomingMessage, res: http.ServerResponse
+	): Promise<[status: number, Headers]> {
 		const htmlIndex = path.join(pathname, this.options.indexFile);
 
-		const streamFiles = (files: string[]) => {
-			mstat(pathname, files, (e, stat) => {
-				if (e) { return finish(404, {}); }
-				this.respond(pathname, 200, {}, files, stat!, req, res, finish);
-			});
-		};
-
-		tryStat(htmlIndex, (e, stat) => {
-			if (!e) {
-				const status = 200;
-				const headers = {};
-				const originalPathname = decodeURIComponent(new URL(req.url!, 'http://localhost').pathname);
-				if (originalPathname.length && !originalPathname.endsWith('/')) {
-					return finish(301, { 'Location': originalPathname + '/' });
-				} else {
-					this.respond(null, status, headers, [htmlIndex], stat!, req, res, finish);
-				}
+		try {
+			const stat = await fsP.stat(htmlIndex);
+			const status = 200;
+			const headers = {};
+			const originalPathname = decodeURIComponent(new URL(req.url!, 'http://localhost').pathname);
+			if (originalPathname.length && !originalPathname.endsWith('/')) {
+				return [301, { 'Location': originalPathname + '/' }];
 			} else {
-				// Stream a directory of files as a single file.
-				fs.readFile(path.join(pathname, 'index.json'), (e2, contents) => {
-					if (e2) { return finish(404, {}); }
-					const index = JSON.parse(`${contents}`);
-					streamFiles(index.files);
-				});
+				return this.respond(null, status, headers, [htmlIndex], stat, req, res);
 			}
-		});
+		} catch {
+			// Stream a directory of files as a single file.
+			try {
+				const contents = await fsP.readFile(path.join(pathname, 'index.json'));
+				const index = JSON.parse(`${contents}`);
+				// stream files
+				const stat = await mstat(pathname, index.files);
+				return this.respond(pathname, 200, {}, index.files, stat, req, res);
+			} catch {
+				return [404, {}];
+			}
+		}
 	}
 
-	serveFile(pathname: string, status: number, headers: Headers, req: http.IncomingMessage, res: http.ServerResponse) {
-		const promise = new events.EventEmitter();
-
+	async serveFile(
+		pathname: string, status: number, headers: Headers, req: http.IncomingMessage, res: http.ServerResponse,
+		errorCallback?: ErrorCallback
+	): Promise<Result> {
 		pathname = this.resolve(pathname);
 
-		tryStat(pathname, (e, stat) => {
-			if (e) {
-				return promise.emit('error', e);
-			}
-			this.respond(null, status, headers, [pathname], stat!, req, res, (finishStatus, finishHeaders) => {
-				this.finish(finishStatus, finishHeaders, req, res, promise);
-			});
-		});
-		return promise;
+		const stat = await fsP.stat(pathname);
+		const [finishStatus, finishHeaders] = await this.respond(null, status, headers, [pathname], stat, req, res);
+		return this.finish(finishStatus, finishHeaders, req, res, errorCallback);
 	}
 
 	finish(
 		status: number, headers: Record<string, string>, req: http.IncomingMessage, res: http.ServerResponse,
-		promise: events.EventEmitter, callback?: (err: Result | null, result?: Result) => void
-	) {
+		errorCallback?: ErrorCallback
+	): Result {
 		const result: Result = {
 			status,
 			headers,
@@ -193,106 +166,82 @@ class StaticServer {
 		}
 
 		if (!status || status >= 400) {
-			if (callback) {
-				callback(result);
-			} else {
-				if (promise.listeners('error').length > 0) {
-					promise.emit('error', result);
-				} else {
-					res.writeHead(status, headers);
-					res.end();
-				}
+			if (!errorCallback?.(result)) {
+				res.writeHead(status, headers);
+				res.end();
 			}
+			return result;
 		} else {
 			// Don't end the request here, if we're streaming;
-			// it's taken care of in `prototype.stream`.
+			// it's taken care of in `this.stream`.
 			if (status !== 200 || req.method !== 'GET') {
 				res.writeHead(status, headers);
 				res.end();
 			}
-			callback?.(null, result);
-			promise.emit('success', result);
+			return result;
 		}
 	}
 
-	servePath(
+	async servePath(
 		pathname: string, status: number, headers: Headers,
-		req: http.IncomingMessage, res: http.ServerResponse, finish: FinishCallback
-	) {
-		const promise = new (events.EventEmitter);
-
+		req: http.IncomingMessage, res: http.ServerResponse
+	): Promise<[status: number, Headers]> {
 		pathname = this.resolve(pathname);
 
 		// Make sure we're not trying to access a
 		// file outside of the root.
-		if (pathname.startsWith(this.root)) {
-			tryStat(pathname, (e, stat) => {
-				if (e) {
-					// possibly not found, check default extension
-					if (this.defaultExtension) {
-						tryStat(pathname + this.defaultExtension, (e2, stat2) => {
-							if (e2) {
-								// really not found
-								finish(404, {});
-							} else if (stat2!.isFile()) {
-								this.respond(null, status, headers, [pathname + this.defaultExtension], stat2!, req, res, finish);
-							} else {
-								finish(400, {});
-							}
-						});
-					} else {
-						finish(404, {});
-					}
-				} else if (stat!.isFile()) { // Stream a single file.
-					this.respond(null, status, headers, [pathname], stat!, req, res, finish);
-				} else if (stat!.isDirectory()) { // Stream a directory of files.
-					this.serveDir(pathname, req, res, finish);
-				} else {
-					finish(400, {});
-				}
-			});
-		} else {
+		if (!pathname.startsWith(this.root)) {
 			// Forbidden
-			finish(403, {});
+			return [403, {}];
 		}
-		return promise;
+
+		try {
+			const stat = await fsP.stat(pathname);
+			if (stat.isFile()) { // Stream a single file.
+				return this.respond(null, status, headers, [pathname], stat, req, res);
+			} else if (stat.isDirectory()) { // Stream a directory of files.
+				return this.serveDir(pathname, req, res);
+			} else {
+				return [400, {}];
+			}
+		} catch {
+			// possibly not found, check default extension
+			if (this.defaultExtension) {
+				try {
+					const stat = await fsP.stat(pathname + this.defaultExtension);
+					if (stat.isFile()) {
+						return this.respond(null, status, headers, [pathname + this.defaultExtension], stat, req, res);
+					} else {
+						return [400, {}];
+					}
+				} catch {
+					// really not found
+					return [404, {}];
+				}
+			} else {
+				return [404, {}];
+			}
+		}
 	}
 
 	resolve(pathname: string) {
 		return path.resolve(path.join(this.root, pathname));
 	}
 
-	serve(req: http.IncomingMessage, res: http.ServerResponse, callback?: (err: Result | null, result?: Result) => void) {
-		const promise = new (events.EventEmitter);
+	async serve(req: http.IncomingMessage, res: http.ServerResponse, errorCallback?: ErrorCallback): Promise<Result> {
 		let pathname;
-
-		const finish = (status: number, headers: Headers) => {
-			this.finish(status, headers, req, res, promise, callback);
-		};
-
 		try {
 			pathname = decodeURIComponent(new URL(req.url!, 'http://localhost').pathname);
 		} catch {
-			return process.nextTick(() => {
-				finish(400, {});
-			});
+			return this.finish(400, {}, req, res, errorCallback);
 		}
 
-		process.nextTick(() => {
-			this.servePath(pathname, 200, {}, req, res, finish).on('success', result => {
-				promise.emit('success', result);
-			}).on('error', err => {
-				promise.emit('error');
-			});
-		});
-		if (!callback) {
-			return promise;
-		}
+		const [status, headers] = await this.servePath(pathname, 200, {}, req, res);
+		return this.finish(status, headers, req, res, errorCallback);
 	}
 
-	/* Check if we should consider sending a gzip version of the file based on the
-	 * file content type and client's Accept-Encoding header value.
-	 */
+	/** Check if we should consider sending a gzip version of the file based on the
+	  * file content type and client's Accept-Encoding header value. */
 	gzipOk(req: http.IncomingMessage, contentType: string) {
 		const enable = this.options.gzip;
 		if (
@@ -306,28 +255,27 @@ class StaticServer {
 		return false;
 	}
 
-	/* Send a gzipped version of the file if the options and the client indicate gzip is enabled and
-	 * we find a .gz file matching the static resource requested.
-	 */
+	/** Send a gzipped version of the file if the options and the client indicate gzip is enabled and
+	  * we find a .gz file matching the static resource requested. */
 	respondGzip(
 		pathname: string | null, status: number, contentType: string, _headers: Headers, files: string[], stat: Stats,
-		req: http.IncomingMessage, res: http.ServerResponse, finish: FinishCallback
-	) {
+		req: http.IncomingMessage, res: http.ServerResponse
+	): Promise<[status: number, Headers]> {
 		if (files.length === 1 && this.gzipOk(req, contentType)) {
-			const gzFile = files[0] + '.gz';
-			tryStat(gzFile, (e, gzStat) => {
-				if (!e && gzStat!.isFile()) {
+			const gzFile = `${files[0]}.gz`;
+			return fsP.stat(gzFile).catch(() => null).then(gzStat => {
+				if (gzStat?.isFile()) {
 					const vary = _headers['Vary'];
 					_headers['Vary'] = (vary && vary !== 'Accept-Encoding' ? `${vary}, ` : '') + 'Accept-Encoding';
 					_headers['Content-Encoding'] = 'gzip';
-					stat.size = gzStat!.size;
+					stat.size = gzStat.size;
 					files = [gzFile];
 				}
-				this.respondNoGzip(pathname, status, contentType, _headers, files, stat, req, res, finish);
+				return this.respondNoGzip(pathname, status, contentType, _headers, files, stat, req, res);
 			});
 		} else {
 			// Client doesn't want gzip or we're sending multiple files
-			this.respondNoGzip(pathname, status, contentType, _headers, files, stat, req, res, finish);
+			return this.respondNoGzip(pathname, status, contentType, _headers, files, stat, req, res);
 		}
 	}
 
@@ -369,10 +317,10 @@ class StaticServer {
 		return byteRange;
 	}
 
-	respondNoGzip(
+	async respondNoGzip(
 		pathname: string | null, status: number, contentType: string, _headers: Headers, files: string[], stat: Stats,
-		req: http.IncomingMessage, res: http.ServerResponse, finish: FinishCallback
-	) {
+		req: http.IncomingMessage, res: http.ServerResponse
+	): Promise<[status: number, Headers]> {
 		const mtime = Date.parse(stat.mtime as any);
 		const key = pathname || files[0];
 		const headers: Headers = {};
@@ -433,45 +381,45 @@ class StaticServer {
 				'Last-Modified'].forEach(entityHeader => {
 				delete headers[entityHeader];
 			});
-			finish(304, headers);
+			return [304, headers];
 		} else {
 			res.writeHead(status, headers);
 
-			this.stream(key, files, length, startByte, res, e => {
-				if (e) { return finish(500, {}); }
-				finish(status, headers);
-			});
+			try {
+				await this.stream(key, files, length, startByte, res);
+				return [status, headers];
+			} catch {
+				return [500, {}];
+			}
 		}
 	}
 
 	respond(
 		pathname: string | null, status: number, _headers: Headers, files: string[], stat: Stats,
-		req: http.IncomingMessage, res: http.ServerResponse, finish: FinishCallback
-	) {
+		req: http.IncomingMessage, res: http.ServerResponse
+	): Promise<[status: number, Headers]> {
 		const contentType = _headers['Content-Type'] ||
 			mimeTypes[path.extname(files[0])] ||
 			'application/octet-stream';
 		_headers = this.setCacheHeaders(_headers, req);
 
 		if (this.options.gzip) {
-			this.respondGzip(pathname, status, contentType, _headers, files, stat, req, res, finish);
+			return this.respondGzip(pathname, status, contentType, _headers, files, stat, req, res);
 		} else {
-			this.respondNoGzip(pathname, status, contentType, _headers, files, stat, req, res, finish);
+			return this.respondNoGzip(pathname, status, contentType, _headers, files, stat, req, res);
 		}
 	}
 
-	stream(
-		pathname: string, files: string[], length: number, startByte: number, res: http.ServerResponse,
-		callback: (err: Error | null, offset?: number) => void
-	) {
-		(function streamFile(filesCopy, offset) {
-			let file = filesCopy.shift();
+	async stream(
+		pathname: string, files: string[], length: number, startByte: number, res: http.ServerResponse
+	): Promise<number> {
+		let offset = 0;
+		for (const file of files) {
+			const filePath = path.resolve(file) === path.normalize(file) ? file : path.join(pathname || '.', file);
 
-			if (file) {
-				file = path.resolve(file) === path.normalize(file) ? file : path.join(pathname || '.', file);
-
+			await new Promise<void>((resolve, reject) => {
 				// Stream the file to the client
-				fs.createReadStream(file, {
+				fs.createReadStream(filePath, {
 					flags: 'r',
 					mode: 0o666,
 					start: startByte,
@@ -483,16 +431,15 @@ class StaticServer {
 						offset += chunk.length;
 					}
 				}).on('close', () => {
-					streamFile(filesCopy, offset);
+					resolve();
 				}).on('error', err => {
-					callback(err);
+					reject(err);
 					console.error(err);
 				}).pipe(res, { end: false });
-			} else {
-				res.end();
-				callback(null, offset);
-			}
-		})(files.slice(0), 0);
+			});
+		}
+		res.end();
+		return offset;
 	}
 
 	setCacheHeaders(_headers: Headers, req: http.IncomingMessage): Headers {
