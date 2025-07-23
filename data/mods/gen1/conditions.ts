@@ -204,14 +204,12 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			return 'struggle';
 		},
 		onDisableMove(target) {
+			const source = this.effectState.source;
+			if (source.hp <= 0 || !source.volatiles['partialtrappinglock']) {
+				delete target.volatiles['partiallytrapped'];
+				return;
+			}
 			target.maybeLocked = true;
-		},
-		onAnyFaint(pokemon) {
-			((this.effect as any).onAnySwitchOut as (p: Pokemon) => void).call(this, pokemon);
-		},
-		onAnySwitchOut(pokemon) {
-			if (pokemon !== this.effectState.source) return;
-			delete this.effectState.target.volatiles['partiallytrapped'];
 		},
 	},
 	fakepartiallytrapped: {
@@ -220,14 +218,12 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		// until you try to use an attack
 		duration: 2,
 		onDisableMove(target) {
+			const counterpart = this.effectState.counterpart;
+			if (counterpart.hp <= 0 || !counterpart.volatiles['fakepartiallytrapped']) {
+				delete target.volatiles['fakepartiallytrapped'];
+				return;
+			}
 			target.maybeLocked = true;
-		},
-		onAnyFaint(pokemon) {
-			((this.effect as any).onAnySwitchOut as (p: Pokemon) => void).call(this, pokemon);
-		},
-		onAnySwitchOut(pokemon) {
-			if (pokemon !== this.effectState.counterpart) return;
-			delete this.effectState.target.volatiles['fakepartiallytrapped'];
 		},
 	},
 	partialtrappinglock: {
@@ -272,14 +268,12 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			return this.effectState.move;
 		},
 		onDisableMove(pokemon) {
+			const locked = this.effectState.locked;
+			if (locked.hp <= 0 || !locked.volatiles['partiallytrapped']) {
+				delete pokemon.volatiles['partialtrappinglock'];
+				return;
+			}
 			pokemon.maybeLocked = true;
-		},
-		onAnyFaint(pokemon) {
-			((this.effect as any).onAnySwitchOut as (p: Pokemon) => void).call(this, pokemon);
-		},
-		onAnySwitchOut(pokemon) {
-			if (pokemon !== this.effectState.locked) return;
-			delete this.effectState.target.volatiles['partialtrappinglock'];
 		},
 	},
 	mustrecharge: {
