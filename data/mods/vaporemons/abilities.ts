@@ -1,6 +1,6 @@
 export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTable = {
 	zerotohero: {
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceFaintCount(length, target, source, effect) {
 			if (this.effectState.heroTriggered) return;
 			if (effect?.effectType !== 'Move') {
 				return;

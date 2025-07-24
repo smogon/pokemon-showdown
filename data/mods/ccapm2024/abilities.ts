@@ -400,7 +400,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	drawfour: {
 		shortDesc: "After knocking out target, if user knows less than 12 moves, it learns target's moves.",
-		onSourceAfterFaint(length, source, target, effect) {
+		onSourceFaintCount(length, source, target, effect) {
 			if (effect && effect.effectType === 'Move') {
 				for (const moveSlot of source.moveSlots) {
 					if (moveSlot === null) return;

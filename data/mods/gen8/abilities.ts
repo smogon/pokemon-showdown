@@ -103,7 +103,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	battlebond: {
 		inherit: true,
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceFaintCount(length, target, source, effect) {
 			if (source.bondTriggered) return;
 			if (effect?.effectType !== 'Move') {
 				return;
