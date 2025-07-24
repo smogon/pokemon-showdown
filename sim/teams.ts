@@ -10,6 +10,11 @@
 import { Dex, toID } from './dex';
 import type { PRNG, PRNGSeed } from './prng';
 
+interface ExportOptions {
+	hideStats?: boolean;
+	removeNicknames?: boolean | ((nickname: string) => string | null);
+}
+
 export interface PokemonSet {
 	/**
 	 * Nickname. Should be identical to its base species if not specified
@@ -358,7 +363,7 @@ export const Teams = new class Teams {
 	/**
 	 * Exports a team in human-readable PS export format
 	 */
-	export(team: PokemonSet[], options?: { hideStats?: boolean }) {
+	export(team: PokemonSet[], options?: ExportOptions) {
 		let output = '';
 		for (const set of team) {
 			output += this.exportSet(set, options) + `\n`;
@@ -366,11 +371,14 @@ export const Teams = new class Teams {
 		return output;
 	}
 
-	exportSet(set: PokemonSet, { hideStats }: { hideStats?: boolean } = {}) {
+	exportSet(set: PokemonSet, { hideStats, removeNicknames }: ExportOptions = {}) {
 		let out = ``;
 
 		// core
-		if (set.name && set.name !== set.species) {
+		if (typeof removeNicknames === 'function' && set.name && set.name !== set.species) {
+			set.name = removeNicknames(set.name) || set.species;
+		}
+		if (set.name && set.name !== set.species && removeNicknames !== true) {
 			out += `${set.name} (${set.species})`;
 		} else {
 			out += set.species;
