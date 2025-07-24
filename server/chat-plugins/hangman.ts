@@ -337,6 +337,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 	static validateParams(params: string[]) {
 		// NFD splits diacritics apart from letters, allowing the letters to be guessed
 		// underscore is used to signal "letter hasn't been guessed yet", so replace it with Japanese underscore as a workaround
+		if (!params[0]) throw new Chat.ErrorMessage("Enter a valid word");
 		const phrase = params[0].normalize('NFD').trim().replace(/_/g, '\uFF3F');
 
 		if (!phrase.length) throw new Chat.ErrorMessage("Enter a valid word");
