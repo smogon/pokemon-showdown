@@ -4606,6 +4606,21 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
+		name: "[Gen 3] Journey Across America",
+		mod: 'gen3colosseum',
+		searchShow: false,
+		gameType: 'doubles',
+		ruleset: [
+			'Obtainable', 'Team Preview', 'Species Clause', 'Stadium Sleep Clause', 'Freeze Clause Mod', 'Max Team Size = 6', 'VGC Timer',
+			'Nickname Clause', 'Endless Battle Clause', 'Cancel Mod', 'Picked Team Size = 4', 'Exact HP Mod', 'Item Clause = 1', 'Open Team Sheets',
+		],
+		banlist: ['Enigma Berry', 'Soul Dew', 'Mythical', 'Wobbuffet + Leftovers'],
+		bestOfDefault: true,
+		onBegin() {
+			this.add('rule', 'Self-KO Clause: If your last Pok\u00e9mon faints to a self-KO move or effect, you will lose the battle');
+		},
+	},
+	{
 		name: "[Gen 3] Custom Game",
 		mod: 'gen3',
 		searchShow: false,
