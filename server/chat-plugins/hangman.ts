@@ -195,7 +195,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		}
 		return true;
 	}
-	overridestartTimer() {
+	startOverrideTimer() {
 		if (this.maxTime && this.maxTime > 0) {
 			this.overrideTimer = setTimeout(() => {
 				this.handleTimerExpiry();
