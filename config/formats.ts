@@ -560,7 +560,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Kyurem-Black', 'Kyurem-White', 'Lugia', 'Lunala', 'Mewtwo', 'Miraidon', 'Necrozma-Dusk-Mane', 'Necrozma-Dawn-Wings', 'Palkia', 'Palkia-Origin', 'Rayquaza',
 			'Regieleki', 'Scream Tail', 'Shaymin-Sky', 'Spectrier', 'Solgaleo', 'Talonflame', 'Terapagos', 'Toxapex', 'Tyranitar', 'Zacian', 'Zacian-Crowned', 'Zamazenta',
 			'Zamazenta-Crowned', 'Zekrom', 'Arena Trap', 'Chlorophyll', 'Drought', 'Moody', 'Sand Rush', 'Shadow Tag', 'Slush Rush', 'Speed Boost', 'Surge Surfer',
-			'Swift Swim', 'Unburden', 'Booster Energy', 'Choice Scarf', 'Heat Rock', 'King\'s Rock', 'Light Clay', 'Razor Fang', 'Agility', 'Baton Pass', 'Lst Respects',
+			'Swift Swim', 'Unburden', 'Booster Energy', 'Choice Scarf', 'Heat Rock', 'King\'s Rock', 'Light Clay', 'Razor Fang', 'Agility', 'Baton Pass', 'Last Respects',
 			'Shed Tail', 'Tailwind',
 		],
 	},
