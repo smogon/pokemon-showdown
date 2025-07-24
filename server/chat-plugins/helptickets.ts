@@ -1685,7 +1685,7 @@ export const pages: Chat.PageTable = {
 					buf += `<p><Button>other</Button></p>`;
 					break;
 				case 'password':
-					buf += `<p>Until an email server for Pokemon Showdown is set up, password resets are no longer possible.</p>`;
+					buf += `<p>The password reset process is no longer open to the public.</p>`;
 					break;
 				case 'roomhelp':
 					buf += `<p>${this.tr`If you are a room driver or up in a public room, and you need help watching the chat, one or more global staff members would be happy to assist you!`}</p>`;
