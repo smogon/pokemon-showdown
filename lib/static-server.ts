@@ -28,8 +28,8 @@ export type Options = {
 	indexFile?: string,
 	/** Default extension to append to files if not found. */
 	defaultExtension?: string,
-	/** Cache time in seconds. */
-	cacheTime?: number,
+	/** Cache time in seconds. null = no cache header. undefined = default (3600). 0 = no cache. */
+	cacheTime?: number | null,
 	/** Serve `.gz` files if available. */
 	gzip?: boolean | RegExp,
 	/** Custom headers for success responses (not sent on errors). */
@@ -91,8 +91,9 @@ export const SERVER_INFO = 'node-static-vendored/1.0';
 export class StaticServer {
 	root: string;
 	options: Options;
-	cacheTime: number | null | undefined = 3600;
+	cacheTime: number | null = 3600;
 	defaultHeaders: Headers = {};
+	/** Contains the `.`, unlike options.defaultExtension */
 	defaultExtension = '';
 	constructor(root: string, options?: Options);
 	constructor(options?: Options);
@@ -106,24 +107,22 @@ export class StaticServer {
 		this.root = path.normalize(path.resolve(root || '.'));
 		this.options = options || {};
 
-		this.options.headers ||= {};
-
 		this.options.indexFile ||= 'index.html';
 
-		if ('cacheTime' in this.options) {
+		if (this.options.cacheTime !== undefined) {
 			this.cacheTime = this.options.cacheTime;
 		}
 
-		if ('defaultExtension' in this.options) {
+		if (this.options.defaultExtension) {
 			this.defaultExtension = `.${this.options.defaultExtension}`;
 		}
 
 		if (this.options.serverInfo !== null) {
-			this.defaultHeaders['server'] = SERVER_INFO;
+			this.defaultHeaders['server'] = this.options.serverInfo || SERVER_INFO;
 		}
 
-		for (const k in this.defaultHeaders) {
-			this.options.headers[k] ||= this.defaultHeaders[k];
+		for (const k in this.options.headers) {
+			this.defaultHeaders[k] = this.options.headers[k];
 		}
 	}
 
@@ -159,6 +158,10 @@ export class StaticServer {
 	}
 
 	getResult(status: number, headers: Headers = {}, alreadySent = false): Result {
+		if (this.defaultHeaders['server']) {
+			headers['server'] ||= this.defaultHeaders['server'];
+		}
+
 		return {
 			status,
 			headers,
@@ -170,14 +173,10 @@ export class StaticServer {
 	finish(
 		result: Result, req: http.IncomingMessage, res: http.ServerResponse, errorCallback?: ErrorCallback
 	): Result {
-		if (this.options.serverInfo !== null) {
-			result.headers['server'] ||= SERVER_INFO;
-		}
-
 		// If `alreadySent`, it's been taken care of in `this.stream`.
 		if (!result.alreadySent && !errorCallback?.(result)) {
 			res.writeHead(result.status, result.headers);
-			if (result.status >= 400 || req.method === 'HEAD') {
+			if (result.status >= 400 && req.method !== 'HEAD') {
 				res.write(`${result.status} ${result.message}`);
 			}
 			res.end();
@@ -347,7 +346,7 @@ export class StaticServer {
 		}
 
 		// Copy default headers
-		for (const k in this.options.headers) { headers[k] = this.options.headers[k]; }
+		for (const k in this.defaultHeaders) headers[k] = this.defaultHeaders[k];
 
 		headers['Etag'] = JSON.stringify([stat.ino, stat.size, mtime].join('-'));
 		headers['Date'] = new Date().toUTCString();
@@ -374,13 +373,11 @@ export class StaticServer {
 		} else {
 			res.writeHead(status, headers);
 
-			if (req.method === 'HEAD') {
-				return this.getResult(status, headers, true);
-			}
 			try {
-				await this.stream(file, length, startByte, res);
+				if (req.method !== 'HEAD') await this.stream(file, length, startByte, res);
 				return this.getResult(status, headers, true);
 			} catch {
+				// too late to actually send the 500 header
 				return this.getResult(500, {}, true);
 			}
 		}
