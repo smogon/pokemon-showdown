@@ -370,11 +370,13 @@ export class StaticServer {
 				delete headers[entityHeader];
 			}
 			return this.getResult(304, headers);
+		} else if (req.method === 'HEAD') {
+			return this.getResult(status, headers);
 		} else {
 			res.writeHead(status, headers);
 
 			try {
-				if (req.method !== 'HEAD') await this.stream(file, length, startByte, res);
+				await this.stream(file, length, startByte, res);
 				return this.getResult(status, headers, true);
 			} catch {
 				// too late to actually send the 500 header
