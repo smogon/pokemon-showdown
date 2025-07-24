@@ -87,7 +87,7 @@ export class Hangman extends Rooms.SimpleRoomGame {
 		this.letterGuesses = [];
 		this.lastGuesser = '';
 		this.wordSoFar = [];
-		this.overridestartTimer();
+		this.startOverrideTimer();
 
 		for (const letter of word) {
 			if (/[a-zA-Z]/.test(letter)) {
