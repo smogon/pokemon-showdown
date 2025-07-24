@@ -526,7 +526,9 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (pokemon.side.totalFainted < 100) pokemon.side.totalFainted++;
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
+				this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
 				pokemon.clearVolatile(false);
+				this.runEvent('AfterFaint', pokemon, faintData.source, faintData.effect);
 				pokemon.fainted = true;
 				pokemon.isActive = false;
 				pokemon.isStarted = false;
@@ -579,7 +581,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			return true;
 		}
 		if (faintData) {
-			this.runEvent('AfterFaint', faintData.target, faintData.source, faintData.effect, length);
+			this.runEvent('FaintCount', faintData.target, faintData.source, faintData.effect, length);
 		}
 		return false;
 	},
