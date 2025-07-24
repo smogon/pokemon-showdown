@@ -163,8 +163,8 @@ export const TeamsHandler = new class {
 			connection.popup('Invalid team:\n\n' + rawTeam);
 			return null;
 		}
-		if (team.length > 24) {
-			connection.popup("Your team has too many Pokemon.");
+		if (team.length > 50) {
+			connection.popup("Your team has too many Pokemon (max 50).");
 		}
 		let unownWord = '';
 		for (const set of team) {
