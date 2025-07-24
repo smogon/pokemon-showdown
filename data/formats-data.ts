@@ -2549,6 +2549,12 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "Illegal",
 		natDexTier: "LC",
 	},
+	burmysandy: {
+		isNonstandard: "Past",
+	},
+	burmytrash: {
+		isNonstandard: "Past",
+	},
 	wormadam: {
 		isNonstandard: "Past",
 		tier: "Illegal",
@@ -2568,6 +2574,12 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "RU",
+	},
+	mothimsandy: {
+		isNonstandard: "Past",
+	},
+	mothimtrash: {
+		isNonstandard: "Past",
 	},
 	combee: {
 		tier: "LC",
