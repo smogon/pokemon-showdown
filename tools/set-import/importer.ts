@@ -11,9 +11,7 @@ import { TeamValidator } from '../../sim/team-validator';
 Dex.includeModData();
 
 type DeepPartial<T> = {
-	[P in keyof T]?: T[P] extends (infer I)[]
-		? (DeepPartial<I>)[]
-		: DeepPartial<T[P]>;
+	[P in keyof T]?: T[P] extends (infer I)[] ? (DeepPartial<I>)[] : DeepPartial<T[P]>;
 };
 
 interface PokemonSets {

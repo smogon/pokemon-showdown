@@ -301,13 +301,13 @@ In general, we prefer modern ways of writing things as long as they're supported
 
 - Multiline template strings: A frequent source of bugs (and also weird for readability), so we prefer to explicitly use `\n` and concatenate over multiple lines.
 
-- `async`/`await`: We prefer it for readability, but in certain cases we use raw Promises or even callbacks for performance. Don't worry about it too much; we usually won't nitpick code that uses any async implementation (although we might insist on `async`/`await` if the readability difference is huge).
+- `async`/`await`: We prefer it for readability, but in certain cases we use raw Promises or even callbacks for performance. Don't worry about it too much; we usually won't nitpick code that uses either async implementation (although we might insist on `async`/`await` if the readability difference is huge).
 
 - getters/setters/`Proxy`: We are generally very anti-magic. There are certain places in the code we do use magic where it's massively DRYer (or for historical reasons), but we prefer to explicitly mark that setting a variable is actually running a function with many and varied side effects. Please have a better reason than "`.foo` is less visual clutter than `.getFoo()`".
 
 - Constant Enums: Don't use; we prefer constant union types, like `type Category = 'Physical' | 'Special' | 'Status'`
 
-- Default Properties: Mediocre performance when compiled with `sucrase`. This is fine for objects that are rarely created, but prefer setting properties directly in a constructor, for objects created in inner loops.
+- Default Properties: Use.
 
 
 Dependencies
