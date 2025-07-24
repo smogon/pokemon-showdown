@@ -603,12 +603,15 @@ export const commands: Chat.ChatCommands = {
 		const newTargets = dex.dataSearch(target);
 		const showDetails = (cmd.startsWith('dt') || cmd === 'details');
 		if (!newTargets?.length) {
-			throw new Chat.ErrorMessage(`No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
+			throw new Chat.ErrorMessage(`'${target}' doesn't match any Pok\u00e9mon, item, move, ability or nature${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. (Check your spelling?)`);
+		}
+		if (newTargets.length > 2) {
+			throw new Chat.ErrorMessage(`'${target}' has no exact match. Too many approximate matches: ${newTargets.map(t => t.name).join(', ')}`);
 		}
 
 		for (const [i, newTarget] of newTargets.entries()) {
 			if (newTarget.isInexact && !i) {
-				buffer = `No Pok\u00e9mon, item, move, ability or nature named '${target}' was found${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Showing the data of '${newTargets[0].name}' instead.\n`;
+				buffer = `'${target}' has no exact match${Dex.gen > dex.gen ? ` in Gen ${dex.gen}` : ""}. Approximate match${newTargets.length === 1 ? '' : 'es'}:\n`;
 			}
 			let details: { [k: string]: string } = {};
 			switch (newTarget.searchType) {
@@ -1903,7 +1906,7 @@ export const commands: Chat.ChatCommands = {
 		if (targetId === 'all') targetId = '';
 		const { totalMatches, sections } = findFormats(targetId, isOMSearch);
 
-		if (!totalMatches) throw new Chat.ErrorMessage("No matched formats found.");
+		if (!totalMatches) return this.errorReply("No matched formats found.");
 
 		const format = totalMatches === 1 ? Dex.formats.get(Object.values(sections)[0].formats[0]) : null;
 
@@ -2123,20 +2126,18 @@ export const commands: Chat.ChatCommands = {
 	],
 
 	faq(target, room, user) {
-		if (!this.runBroadcast()) return;
 		target = toID(target);
 		const showAll = target === 'all';
-		if (showAll && this.broadcasting) {
-			return this.sendReplyBox(this.tr`You cannot broadcast all FAQs at once.`);
+		if (showAll && this.shouldBroadcast()) {
+			throw new Chat.ErrorMessage(this.tr`You cannot broadcast all FAQs at once.`);
 		}
-
 		const buffer = [];
 		if (showAll || target === 'staff') {
 			buffer.push(`<a href="https://pokemonshowdown.com/${this.tr`pages/staff`}">${this.tr`Staff FAQ`}</a>`);
 		}
 		if (showAll || target === 'autoconfirmed' || target === 'ac') {
 			buffer.push(this.tr`A user is autoconfirmed when they have won at least one rated battle and have been registered for one week or longer. In order to prevent spamming and trolling, most chatrooms only allow autoconfirmed users to chat. If you are not autoconfirmed, you can politely PM a staff member (staff have %, @, or # in front of their username) in the room you would like to chat and ask them to disable modchat. However, staff are not obligated to disable modchat.`);
-			if (!this.broadcasting) void this.parse(`/regtime`);
+			if (!this.shouldBroadcast()) void this.parse(`/regtime`);
 		}
 		if (showAll || target === 'ladder' || target === 'ladderhelp' || target === 'decay') {
 			buffer.push(`<a href="https://${Config.routes.root}/${this.tr`pages/ladderhelp`}">${this.tr`How the ladder works`}</a>`);
@@ -2172,11 +2173,12 @@ export const commands: Chat.ChatCommands = {
 		if (!target || showAll) {
 			buffer.unshift(`<a href="https://pokemonshowdown.com/${this.tr`pages/faq`}">${this.tr`Frequently Asked Questions`}</a>`);
 		}
+		if (!this.runBroadcast()) return;
 		this.sendReplyBox(buffer.join(`<br />`));
 	},
 	faqhelp: [
-		`/faq [theme] - Provides a link to the FAQ. Add autoconfirmed, badges, proxy, ladder, staff, or tiers for a link to these questions. Add all for all of them.`,
-		`!faq [theme] - Shows everyone a link to the FAQ. Add autoconfirmed, badges, proxy, ladder, staff, or tiers for a link to these questions. Add all for all of them. Requires: + % @ # ~`,
+		`/faq [topic] - Provides a link that answers the FAQ topic. List of FAQ topics: autoconfirmed, badges, customavatar, decay, ladder, lostpassword, privacy, proxy, rng, staff, tiers, tournaments.`,
+		`!faq [topic] - Shows to other users a link that answers the FAQ topic. List of FAQ topics: autoconfirmed, badges, customavatar, decay, ladder, lostpassword, privacy, proxy, rng, staff, tiers, tournaments. Requires: + % @ # ~`,
 	],
 
 	analysis: 'smogdex',
@@ -2725,7 +2727,7 @@ export const commands: Chat.ChatCommands = {
 			const channelId = Twitch.linkRegex.exec(link)?.[2]?.trim();
 			if (!channelId) throw new Chat.ErrorMessage(`Specify a Twitch channel.`);
 			buf = Utils.html`Watching <b><a class="subtle" href="https://twitch.tv/${toID(channelId)}">${channelId}</a></b>...<br />`;
-			buf += `<twitch src="${link}" />`;
+			buf += Utils.html`<twitch src="${link}" />`;
 		} else {
 			if (Chat.linkRegex.test(link)) {
 				if (/^https?:\/\/(.*)\.(mp4|mov)\b(\?|$)/i.test(link)) { // video

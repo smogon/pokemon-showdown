@@ -1087,8 +1087,12 @@ export class TeamValidator {
 		}
 
 		if (!problems.length) {
-			if (set.gender === '' && !species.gender) {
-				set.gender = ['M', 'F'][Math.floor(Math.random() * 2)];
+			if (!set.gender) {
+				if (this.gen <= 5 || ruleTable.has('obtainablemisc')) {
+					set.gender = species.gender || ['M', 'F'][Math.floor(Math.random() * 2)];
+				} else {
+					set.gender = 'N';
+				}
 			}
 			if (adjustLevel) set.level = adjustLevel;
 			return null;
@@ -1435,7 +1439,7 @@ export class TeamValidator {
 			throw new Error(`${species.name} has no egg groups for source ${source}`);
 		}
 		// no chainbreeding necessary if the father can be Smeargle
-		if (!getAll && eggGroups.includes('Field') && this.dex.species.get('Smeargle').tier !== 'Unreleased') return true;
+		if (!getAll && eggGroups.includes('Field') && !this.dex.species.get('Smeargle').isNonstandard) return true;
 
 		// try to find a father to inherit the egg move combination from
 		for (const father of dex.species.all()) {
@@ -1487,7 +1491,7 @@ export class TeamValidator {
 
 		if (species.id === 'smeargle') return true;
 		const canBreedWithSmeargle = species.eggGroups.includes('Field') &&
-			this.dex.species.get('Smeargle').tier !== 'Unreleased';
+			!this.dex.species.get('Smeargle').isNonstandard;
 
 		const allEggSources = new PokemonSources();
 		allEggSources.sourcesBefore = eggGen;

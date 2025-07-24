@@ -202,6 +202,10 @@ export const Scripts: ModdedBattleScriptsData = {
 						const trademark = this.dex.getActiveMove(move.id);
 						trademark.accuracy = true;
 						this.actions.useMove(trademark, pokemon);
+						if (pokemon.volatiles['choicelock']?.move === trademark.id) {
+							this.debug('removing choicelock caused by trademark');
+							pokemon.removeVolatile('choicelock');
+						}
 					}
 				},
 				toString() {

@@ -43,6 +43,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			newMove.hasBounced = true;
 			newMove.pranksterBoosted = false;
 			this.actions.useMove(newMove, this.effectState.target, { target: source });
+			move.hasBounced = true; // only bounce once in free-for-all battles
 			return null;
 		},
 	},
@@ -86,5 +87,21 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	soundproof: {
 		inherit: true,
 		onAllyTryHitSide() {},
+	},
+	rebound: {
+		inherit: true,
+		onAllyTryHitSide(target, source, move) {
+			if (this.effectState.target.activeTurns) return;
+
+			if (target.isAlly(source) || move.hasBounced || !move.flags['reflectable']) {
+				return;
+			}
+			const newMove = this.dex.getActiveMove(move.id);
+			newMove.hasBounced = true;
+			newMove.pranksterBoosted = false;
+			this.actions.useMove(newMove, this.effectState.target, { target: source });
+			move.hasBounced = true; // only bounce once in free-for-all battles
+			return null;
+		},
 	},
 };

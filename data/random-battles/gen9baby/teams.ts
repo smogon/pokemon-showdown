@@ -146,7 +146,10 @@ export class RandomBabyTeams extends RandomTeams {
 				['alluringvoice', 'dazzlinggleam', 'drainingkiss', 'moonblast'],
 				['alluringvoice', 'dazzlinggleam', 'drainingkiss', 'moonblast'],
 			],
-			[['bulletseed', 'gigadrain', 'leafstorm', 'seedbomb'], ['bulletseed', 'gigadrain', 'leafstorm', 'seedbomb']],
+			[
+				['bulletseed', 'gigadrain', 'leafstorm', 'powerwhip', 'seedbomb'],
+				['bulletseed', 'gigadrain', 'leafstorm', 'seedbomb'],
+			],
 			[['hypnosis', 'thunderwave', 'toxic', 'willowisp', 'yawn'], ['hypnosis', 'thunderwave', 'toxic', 'willowisp', 'yawn']],
 			['roar', 'yawn'],
 			['dragonclaw', 'outrage'],

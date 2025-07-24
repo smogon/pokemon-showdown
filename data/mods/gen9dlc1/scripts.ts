@@ -35,18 +35,11 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			if (pokemon.species.name === 'Terapagos-Terastal') {
 				pokemon.formeChange('Terapagos-Stellar', null, true);
-				pokemon.baseMaxhp = Math.floor(Math.floor(
-					2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
-				) * pokemon.level / 100 + 10);
-				const newMaxHP = pokemon.baseMaxhp;
-				pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
-				pokemon.maxhp = newMaxHP;
-				this.battle.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 			}
 			if (pokemon.species.baseSpecies === 'Morpeko' && !pokemon.transformed &&
 				pokemon.baseSpecies.id !== pokemon.species.id
 			) {
-				pokemon.regressionForme = true;
+				pokemon.formeRegression = true;
 				pokemon.baseSpecies = pokemon.species;
 				pokemon.details = pokemon.getUpdatedDetails();
 			}

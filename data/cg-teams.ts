@@ -383,7 +383,7 @@ export default class TeamGenerator {
 			const noStellar = ability === 'Adaptability' || new Set(attackingTypes).size < 3;
 			const noAttacks = !nonStatusMoves.length;
 			if (hasTeraBlast || hasRevelationDance || noAttacks) {
-				attackingTypes = [...this.dex.types.names().filter(t => !(noAttacks ? species.types : attackingTypes).includes(t))];
+				attackingTypes = this.dex.types.names().filter(t => !(noAttacks ? species.types : attackingTypes).includes(t));
 				if (noStellar) attackingTypes.splice(attackingTypes.indexOf('Stellar'));
 			} else {
 				if (!noStellar) attackingTypes.push('Stellar');

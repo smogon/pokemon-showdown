@@ -1660,6 +1660,7 @@ export class GlobalRoomState {
 		for (const player of players) {
 			Chat.runHandlers('onBattleStart', player, room);
 		}
+		Chat.runHandlers('onBattleCreate', room.battle!, players.map(x => x.id));
 	}
 
 	deregisterChatRoom(id: string) {
@@ -2243,6 +2244,10 @@ export const Rooms = {
 		}
 		roomid ||= Rooms.global.prepBattleRoom(options.format);
 		options.isPersonal = true;
+		if (Rooms.rooms.has(roomid)) {
+			// can happen if restoring a Bo3 game
+			return Rooms.rooms.get(roomid) as GameRoom;
+		}
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
 		let game: RoomBattle | BestOfGame;
 		if (options.isBestOfSubBattle || !isBestOf) {

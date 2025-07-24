@@ -145,6 +145,7 @@ export class Battle {
 	readonly messageLog: string[];
 	sentLogPos: number;
 	sentEnd: boolean;
+	sentRequests = true;
 
 	requestState: RequestState;
 	turn: number;
@@ -598,6 +599,11 @@ export class Battle {
 			// it's changed; call it off
 			return relayVar;
 		}
+		if (eventid === 'SwitchIn' && effect.effectType === 'Ability' && effect.flags['breakable'] &&
+			this.suppressingAbility(target as Pokemon)) {
+			this.debug(eventid + ' handler suppressed by Mold Breaker');
+			return relayVar;
+		}
 		if (eventid !== 'Start' && eventid !== 'TakeItem' && effect.effectType === 'Item' &&
 			(target instanceof Pokemon) && target.ignoringItem()) {
 			this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
@@ -995,6 +1001,10 @@ export class Battle {
 		if (handler.effectHolder && (handler.effectHolder as Pokemon).getStat) {
 			const pokemon = handler.effectHolder as Pokemon;
 			handler.speed = pokemon.speed;
+			if (handler.effect.effectType === 'Ability' && handler.effect.name === 'Magic Bounce' &&
+				callbackName === 'onAllyTryHitSide') {
+				handler.speed = pokemon.getStat('spe', true, true);
+			}
 			if (callbackName.endsWith('SwitchIn')) {
 				// Pokemon speeds including ties are resolved before all onSwitchIn handlers and aren't re-sorted in-between
 				// so we subtract a fractional speed from each Pokemon's respective event handlers by using the index of their
@@ -1037,6 +1047,8 @@ export class Battle {
 			}
 			return handlers;
 		}
+		// events that target a Pokemon normally bubble up to the Side
+		const shouldBubbleDown = target instanceof Side;
 		// events usually run through EachEvent should never have any handlers besides `on${eventName}` so don't check for them
 		const prefixedHandlers = !['BeforeTurn', 'Update', 'Weather', 'WeatherChange', 'TerrainChange'].includes(eventName);
 		if (target instanceof Pokemon && (target.isActive || source?.isActive)) {
@@ -1058,13 +1070,24 @@ export class Battle {
 		}
 		if (target instanceof Side) {
 			for (const side of this.sides) {
-				if (side.n >= 2 && side.allySide) break;
-				if (side === target || side === target.allySide) {
-					handlers.push(...this.findSideEventHandlers(side, `on${eventName}`));
-				} else if (prefixedHandlers) {
-					handlers.push(...this.findSideEventHandlers(side, `onFoe${eventName}`));
+				if (shouldBubbleDown) {
+					for (const active of side.active) {
+						if (side === target || side === target.allySide) {
+							handlers = handlers.concat(this.findPokemonEventHandlers(active, `on${eventName}`));
+						} else if (prefixedHandlers) {
+							handlers = handlers.concat(this.findPokemonEventHandlers(active, `onFoe${eventName}`));
+						}
+						if (prefixedHandlers) handlers = handlers.concat(this.findPokemonEventHandlers(active, `onAny${eventName}`));
+					}
 				}
-				if (prefixedHandlers) handlers.push(...this.findSideEventHandlers(side, `onAny${eventName}`));
+				if (side.n < 2 || !side.allySide) {
+					if (side === target || side === target.allySide) {
+						handlers.push(...this.findSideEventHandlers(side, `on${eventName}`));
+					} else if (prefixedHandlers) {
+						handlers.push(...this.findSideEventHandlers(side, `onFoe${eventName}`));
+					}
+					if (prefixedHandlers) handlers.push(...this.findSideEventHandlers(side, `onAny${eventName}`));
+				}
 			}
 		}
 		handlers.push(...this.findFieldEventHandlers(this.field, `on${eventName}`));
@@ -1329,8 +1352,9 @@ export class Battle {
 
 		const requests = this.getRequests(type);
 		for (let i = 0; i < this.sides.length; i++) {
-			this.sides[i].emitRequest(requests[i]);
+			this.sides[i].activeRequest = requests[i];
 		}
+		this.sentRequests = false;
 
 		if (this.sides.every(side => side.isChoiceDone())) {
 			throw new Error(`Choices are done immediately after a request`);
@@ -1581,6 +1605,12 @@ export class Battle {
 					const source = pokemon.volatiles['partiallytrapped'].source;
 					if (source.hp <= 0 || !source.volatiles['partialtrappinglock']) {
 						delete pokemon.volatiles['partiallytrapped'];
+					}
+				}
+				if (pokemon.volatiles['fakepartiallytrapped']) {
+					const counterpart = pokemon.volatiles['fakepartiallytrapped'].counterpart;
+					if (counterpart.hp <= 0 || !counterpart.volatiles['fakepartiallytrapped']) {
+						delete pokemon.volatiles['fakepartiallytrapped'];
 					}
 				}
 			}
@@ -1857,10 +1887,6 @@ export class Battle {
 			}
 		}
 
-		for (const side of this.sides) {
-			this.add('teamsize', side.id, side.pokemon.length);
-		}
-
 		this.add('gen', this.gen);
 
 		this.add('tier', format.name);
@@ -1890,13 +1916,7 @@ export class Battle {
 			this.add(`raw|<div class="infobox"><details class="readmore"${open}><summary><strong>${format.customRules.length} custom rule${plural}:</strong></summary> ${format.customRules.join(', ')}</details></div>`);
 		}
 
-		format.onTeamPreview?.call(this);
-		for (const rule of this.ruleTable.keys()) {
-			if ('+*-!'.includes(rule.charAt(0))) continue;
-			const subFormat = this.dex.formats.get(rule);
-			subFormat.onTeamPreview?.call(this);
-		}
-
+		this.runPickTeam();
 		this.queue.addChoice({ choice: 'start' });
 		this.midTurn = true;
 		if (!this.requestState) this.turnLoop();
@@ -1906,6 +1926,35 @@ export class Battle {
 		if (!this.deserialized) throw new Error('Attempt to restart a battle which has not been deserialized');
 
 		(this as any).send = send;
+	}
+
+	runPickTeam() {
+		// onTeamPreview handlers are expected to show full teams to all active sides,
+		// and send a 'teampreview' request for players to pick their leads / team order.
+		this.format.onTeamPreview?.call(this);
+		for (const rule of this.ruleTable.keys()) {
+			if ('+*-!'.includes(rule.charAt(0))) continue;
+			const subFormat = this.dex.formats.get(rule);
+			subFormat.onTeamPreview?.call(this);
+		}
+
+		if (this.requestState === 'teampreview') {
+			return;
+		}
+
+		if (this.ruleTable.pickedTeamSize) {
+			// There was no onTeamPreview handler (e.g. Team Preview rule missing).
+			// Players must still pick their own Pokémon, so we show them privately.
+			this.add('clearpoke');
+			for (const pokemon of this.getAllPokemon()) {
+				// Still need to hide these formes since they change on battle start
+				const details = pokemon.details.replace(', shiny', '')
+					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*')
+					.replace(/(Xerneas)(-[a-zA-Z?-]+)?/g, '$1-*');
+				this.addSplit(pokemon.side.id, ['poke', pokemon.side.id, details, '']);
+			}
+			this.makeRequest('teampreview');
+		}
 	}
 
 	checkEVBalance() {
@@ -2475,7 +2524,7 @@ export class Battle {
 				this.runEvent('Faint', pokemon, faintData.source, faintData.effect);
 				this.singleEvent('End', pokemon.getAbility(), pokemon.abilityState, pokemon);
 				this.singleEvent('End', pokemon.getItem(), pokemon.itemState, pokemon);
-				if (pokemon.regressionForme) {
+				if (pokemon.formeRegression && !pokemon.transformed) {
 					// before clearing volatiles
 					pokemon.baseSpecies = this.dex.species.get(pokemon.set.species || pokemon.set.name);
 					pokemon.baseAbility = toID(pokemon.set.ability);
@@ -2486,10 +2535,12 @@ export class Battle {
 				pokemon.isActive = false;
 				pokemon.isStarted = false;
 				delete pokemon.terastallized;
-				if (pokemon.regressionForme) {
+				if (pokemon.formeRegression) {
 					// after clearing volatiles
 					pokemon.details = pokemon.getUpdatedDetails();
-					pokemon.regressionForme = false;
+					this.add('detailschange', pokemon, pokemon.details, '[silent]');
+					pokemon.updateMaxHp();
+					pokemon.formeRegression = false;
 				}
 				pokemon.side.faintedThisTurn = pokemon;
 				if (this.faintQueue.length >= faintQueueLeft) checkWin = true;
@@ -2530,11 +2581,7 @@ export class Battle {
 	}
 
 	checkWin(faintData?: Battle['faintQueue'][0]) {
-		const team1PokemonLeft = this.sides[0].pokemonLeft + (this.sides[0].allySide?.pokemonLeft || 0);
-		const team2PokemonLeft = this.sides[1].pokemonLeft + (this.sides[1].allySide?.pokemonLeft || 0);
-		const team3PokemonLeft = this.gameType === 'freeforall' && this.sides[2]!.pokemonLeft;
-		const team4PokemonLeft = this.gameType === 'freeforall' && this.sides[3]!.pokemonLeft;
-		if (!team1PokemonLeft && !team2PokemonLeft && !team3PokemonLeft && !team4PokemonLeft) {
+		if (this.sides.every(side => !side.pokemonLeft)) {
 			this.win(faintData && this.gen > 4 ? faintData.target.side : null);
 			return true;
 		}
@@ -2593,6 +2640,7 @@ export class Battle {
 		case 'start': {
 			for (const side of this.sides) {
 				if (side.pokemonLeft) side.pokemonLeft = side.pokemon.length;
+				this.add('teamsize', side.id, side.pokemon.length);
 			}
 
 			this.add('start');
@@ -2616,10 +2664,10 @@ export class Battle {
 				const behemothMove: { [k: string]: string } = {
 					'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 				};
-				const ironHead = pokemon.baseMoves.indexOf('ironhead');
-				if (ironHead >= 0) {
+				const ironHeadIndex = pokemon.baseMoves.indexOf('ironhead');
+				if (ironHeadIndex >= 0) {
 					const move = this.dex.moves.get(behemothMove[rawSpecies.name]);
-					pokemon.baseMoveSlots[ironHead] = {
+					pokemon.baseMoveSlots[ironHeadIndex] = {
 						move: move.name,
 						id: move.id,
 						pp: move.noPPBoosts ? move.pp : move.pp * 8 / 5,
@@ -2633,11 +2681,11 @@ export class Battle {
 				}
 			}
 
-			if (this.format.onBattleStart) this.format.onBattleStart.call(this);
+			this.format.onBattleStart?.call(this);
 			for (const rule of this.ruleTable.keys()) {
 				if ('+*-!'.includes(rule.charAt(0))) continue;
 				const subFormat = this.dex.formats.get(rule);
-				if (subFormat.onBattleStart) subFormat.onBattleStart.call(this);
+				subFormat.onBattleStart?.call(this);
 			}
 
 			for (const side of this.sides) {
@@ -2995,7 +3043,20 @@ export class Battle {
 			return;
 		}
 
+		let updated = false;
+		if (side.requestState === 'move') {
+			for (const action of side.choice.actions) {
+				const pokemon = action.pokemon;
+				if (action.choice !== 'move' || !pokemon) continue;
+				if (side.updateRequestForPokemon(pokemon, req => side.updateDisabledRequest(pokemon, req))) {
+					updated = true;
+				}
+			}
+		}
+
 		side.clearChoice();
+
+		if (updated) side.emitRequest(side.activeRequest!, true);
 	}
 
 	/**
@@ -3155,9 +3216,9 @@ export class Battle {
 					const crowned: { [k: string]: string } = {
 						'Zacian-Crowned': 'behemothblade', 'Zamazenta-Crowned': 'behemothbash',
 					};
-					const ironHead = set.moves.map(toID).indexOf('ironhead' as ID);
-					if (ironHead >= 0) {
-						newSet.moves[ironHead] = crowned[newSet.species];
+					const ironHeadIndex = set.moves.map(toID).indexOf('ironhead' as ID);
+					if (ironHeadIndex >= 0) {
+						newSet.moves[ironHeadIndex] = crowned[newSet.species];
 					}
 				}
 				return newSet;
@@ -3211,6 +3272,10 @@ export class Battle {
 	sendUpdates() {
 		if (this.sentLogPos >= this.log.length) return;
 		this.send('update', this.log.slice(this.sentLogPos));
+		if (!this.sentRequests) {
+			for (const side of this.sides) side.emitRequest();
+			this.sentRequests = true;
+		}
 		this.sentLogPos = this.log.length;
 
 		if (!this.sentEnd && this.ended) {

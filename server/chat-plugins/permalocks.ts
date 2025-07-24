@@ -126,7 +126,7 @@ export const Nominations = new class {
 			}
 		}
 		const ipTable = new Set<string>(ips);
-		const altTable = new Set<string>([...alts]);
+		const altTable = new Set<string>(alts);
 		for (const alt of [primaryID, ...alts]) {
 			const modlog = await this.fetchModlog(alt);
 			if (!modlog?.results.length) continue;
@@ -151,7 +151,7 @@ export const Nominations = new class {
 		Utils.sortBy(this.noms, nom => -nom.date);
 		this.save();
 		this.notifyStaff();
-		Rooms.get('staff')?.addByUser(user, `${user.name} submitted a perma nomination for ${primaryID}`);
+		Rooms.get('staff')?.addByUser(user, `${user.name} submitted a perma nomination for ${primaryID}`).update();
 	}
 	find(id: string) {
 		return this.noms.find(f => f.primaryID === id);

@@ -109,9 +109,11 @@ export const TeamsHandler = new class {
 		});
 	}
 
-	isOMNickname(nickname: string, user: User) {
+	isOMNickname(nickname: string) {
 		// allow nicknames named after other mons/types/abilities/items - to support those OMs
 		if (Dex.species.get(nickname).exists) {
+			// I have a Forretress named Cathy and having it renamed to Trevenant (Forretress) is annoying
+			if (toID(nickname) === 'cathy') return 'cathy';
 			return Dex.species.get(nickname).name;
 		} else if (Dex.items.get(nickname).exists) {
 			return Dex.items.get(nickname).name;
@@ -167,13 +169,13 @@ export const TeamsHandler = new class {
 			connection.popup("Your team has too many Pokemon.");
 		}
 		let unownWord = '';
-		// make sure it's an actual team
 		for (const set of sets) {
-			if (!team.privacy) {
-				// if public, we purge invalid nicknames
-				// gotta use the validated team so that nicknames are removed
-				set.name = this.isOMNickname(set.name, user) || set.species;
+			if ((await (context as any).filter(set.name)) !== set.name) {
+				connection.popup(`Filtered words are not allowed in nicknames.`);
+				return null;
 			}
+			// Trim empty moveslots
+			set.moves = set.moves.filter(Boolean);
 
 			if (!Dex.species.get(set.species).exists) {
 				connection.popup(`Invalid Pokemon ${set.species} in team.`);
@@ -216,7 +218,7 @@ export const TeamsHandler = new class {
 				return null;
 			}
 			if (set.teraType && !strValid(set.teraType)) {
-				connection.popup(`Invalid Tera Type ${set.nature} on ${set.species}.`);
+				connection.popup(`Invalid Tera Type ${set.teraType} on ${set.species}.`);
 				return null;
 			}
 		}
@@ -317,7 +319,8 @@ export const TeamsHandler = new class {
 		buf += `</a><br /><a href="/${link}">${!isFull ? 'View full team' : 'Shareable link to team'}</a><br />`;
 		const url = `${teamData.teamid}${teamData.private ? `-${teamData.private}` : ''}`;
 		buf += ` <small>(you can also copy/paste <code>&lt;&lt;view-team-${url}&gt;&gt;</code> on-site `;
-		buf += `or share <code>https://psim.us/t/${url}</code> off-site!)</small>`;
+		const fullUrl = `https://psim.us/t/${url}`;
+		buf += `or share <code><a href="${fullUrl}">${fullUrl}</a></code> off-site!)</small>`;
 
 		if (user && (teamData.ownerid === user.id || user.can('rangeban'))) {
 			buf += `<br />`;
@@ -340,7 +343,9 @@ export const TeamsHandler = new class {
 			throw new Chat.ErrorMessage("An error occurred with retrieving the team. Please try again later.");
 		}
 		buf += team.map(set => {
-			let teamBuf = Teams.exportSet(set).replace(/\n/g, '<br />');
+			let teamBuf = Teams.exportSet(set, {
+				removeNicknames: name => this.isOMNickname(name),
+			}).replace(/\n/g, '<br />');
 			if (set.name && set.name !== set.species) {
 				teamBuf = teamBuf.replace(set.name, Utils.html`<psicon pokemon="${set.species}" /> <br />${set.name}`);
 			} else {
@@ -369,14 +374,14 @@ export const TeamsHandler = new class {
 		if (!Config.usepostgres || !Config.usepostgresteams) {
 			err(`The teams database is currently disabled.`);
 		}
-		if (!Users.globalAuth.atLeast(user, Config.usepostgresteams)) {
-			err("You cannot currently use the teams database.");
-		}
 		if (user.locked || user.semilocked) err("You cannot use the teams database while locked.");
 		if (!user.autoconfirmed) err(
 			`To use the teams database, you must be autoconfirmed, which means being registered for at least ` +
 			`one week and winning one rated game.`
 		);
+		if (!Users.globalAuth.atLeast(user, Config.usepostgresteams)) {
+			err("You cannot currently use the teams database.");
+		}
 	}
 	async count(user: string | User) {
 		const id = toID(user);
@@ -678,7 +683,9 @@ export const pages: Chat.PageTable = {
 			buf += `</select><br />`;
 
 			buf += `<strong>Team:</strong><br />`;
-			const teamStr = Teams.export(Teams.import(data.team)!).replace(/\n/g, '&#13;');
+			const teamStr = Teams.export(Teams.import(data.team)!, {
+				removeNicknames: name => TeamsHandler.isOMNickname(name),
+			}).replace(/\n/g, '&#13;');
 			buf += `<textarea style="width: 100%; height: 400px" name="team">${teamStr}</textarea><br />`;
 
 			buf += `<button class="button notifying" type="submit">Upload team</button>`;
