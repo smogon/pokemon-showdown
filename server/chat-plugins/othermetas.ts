@@ -74,8 +74,11 @@ export const commands: Chat.ChatCommands = {
 		return this.run('formathelp');
 	},
 	othermetashelp: [
-		`/om - Provides links to information on the Other Metagames.`,
-		`!om - Show everyone that information. Requires: + % @ # ~`,
+		`/om - Provides a link to the Other Metagames Smogon forum.`,
+		`!om - Shows to other users a link to the Other Metagames Smogon forum. Requires: + % @ # ~`,
+		`/om all - Provides links to information on all ladderable Other Metagames.`,
+		`/om month - Provides links to information on Other Metagames of the month.`,
+		`!om month - Shows to other users links to information on Other Metagames of the month. Requires: + % @ # ~`,
 	],
 
 	mnm: 'mixandmega',
