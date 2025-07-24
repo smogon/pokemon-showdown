@@ -321,7 +321,8 @@ export const TeamsHandler = new class {
 		buf += `</a><br /><a href="/${link}">${!isFull ? 'View full team' : 'Shareable link to team'}</a><br />`;
 		const url = `${teamData.teamid}${teamData.private ? `-${teamData.private}` : ''}`;
 		buf += ` <small>(you can also copy/paste <code>&lt;&lt;view-team-${url}&gt;&gt;</code> on-site `;
-		buf += `or share <code>https://psim.us/t/${url}</code> off-site!)</small>`;
+		const fullUrl = `https://psim.us/t/${url}`;
+		buf += `or share <code><a href="${fullUrl}">${fullUrl}</a></code> off-site!)</small>`;
 
 		if (user && (teamData.ownerid === user.id || user.can('rangeban'))) {
 			buf += `<br />`;
