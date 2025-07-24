@@ -20,6 +20,9 @@ import fsP from 'node:fs/promises';
 import http from 'node:http';
 import path from 'node:path';
 
+const DEBUG = false;
+export const SERVER_INFO = 'node-static-vendored/1.0';
+
 export type Headers = Record<string, string>;
 export type Options = {
 	/** Root directory to serve files from. */
@@ -85,8 +88,6 @@ export const mimeTypes: { [key: string]: string } = {
 	'.mp4': 'video/mp4',
 	'.webm': 'video/webm',
 };
-
-export const SERVER_INFO = 'node-static-vendored/1.0';
 
 export class StaticServer {
 	root: string;
@@ -303,10 +304,10 @@ export class StaticServer {
 				if (!isNaN(byteRange.from) && !isNaN(byteRange.to) && 0 <= byteRange.from && byteRange.from <= byteRange.to) {
 					byteRange.valid = true;
 				} else {
-					console.warn('Request contains invalid range header: ', splitRangeHeader);
+					if (DEBUG) console.warn('Request contains invalid range header: ', splitRangeHeader);
 				}
 			} else {
-				console.warn('Request contains unsupported range header: ', rangeHeader);
+				if (DEBUG) console.warn('Request contains unsupported range header: ', rangeHeader);
 			}
 		}
 		return byteRange;
@@ -336,13 +337,15 @@ export class StaticServer {
 				headers['Content-Range'] = `bytes ${byteRange.from}-${byteRange.to}/${stat.size}`;
 			} else {
 				byteRange.valid = false;
-				console.warn('Range request exceeds file boundaries, goes until byte no', byteRange.to, 'against file size of', length, 'bytes');
+				if (DEBUG) {
+					console.warn('Range request exceeds file boundaries, goes until byte no', byteRange.to, 'against file size of', length, 'bytes');
+				}
 			}
 		}
 
 		/* In any case, check for unhandled byte range headers */
 		if (!byteRange.valid && req.headers['range']) {
-			console.error(new Error('Range request present but invalid, might serve whole file instead'));
+			if (DEBUG) console.error(new Error('Range request present but invalid, might serve whole file instead'));
 		}
 
 		// Copy default headers
