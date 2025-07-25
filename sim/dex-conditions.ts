@@ -438,7 +438,6 @@ export interface EventMethods {
 	onAnyBasePowerPriority?: number;
 	onAnyInvulnerabilityPriority?: number;
 	onAnyModifyAccuracyPriority?: number;
-	onAnyFaintPriority?: number;
 	onAnyPrepareHitPriority?: number;
 	onAnySwitchInPriority?: number;
 	onAnySwitchInSubOrder?: number;
