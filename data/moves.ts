@@ -16084,7 +16084,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 15,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1 },
-		onTry(source, target, move) {
+		onTryMove(source, target, move) {
 			this.roundCount++;
 			for (const action of this.queue.list as MoveAction[]) {
 				if (!action.pokemon || !action.move || action.maxMove || action.zmove) continue;
