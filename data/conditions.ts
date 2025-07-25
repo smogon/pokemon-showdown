@@ -230,24 +230,25 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			this.add('-activate', pokemon, 'move: ' + this.effectState.sourceEffect, `[of] ${source}`);
 			this.effectState.boundDivisor = source.hasItem('bindingband') ? 6 : 8;
 		},
+		onAnyFaint(pokemon) {
+			((this.effect as any).onAnySwitchOut as (p: Pokemon) => void).call(this, pokemon);
+		},
+		onAnySwitchOut(pokemon) {
+			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectState.sourceEffect.id);
+			if (pokemon !== this.effectState.source || gmaxEffect) return;
+			const target = this.effectState.target;
+			delete target.volatiles['partiallytrapped'];
+			this.add('-end', target, this.effectState.sourceEffect, '[partiallytrapped]', '[silent]');
+		},
 		onResidualOrder: 13,
 		onResidual(pokemon) {
-			const source = this.effectState.source;
-			// G-Max Centiferno and G-Max Sandblast continue even after the user leaves the field
-			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectState.sourceEffect.id);
-			if (source && (!source.isActive || source.hp <= 0 || !source.activeTurns) && !gmaxEffect) {
-				delete pokemon.volatiles['partiallytrapped'];
-				this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]', '[silent]');
-				return;
-			}
 			this.damage(pokemon.baseMaxhp / this.effectState.boundDivisor);
 		},
 		onEnd(pokemon) {
 			this.add('-end', pokemon, this.effectState.sourceEffect, '[partiallytrapped]');
 		},
 		onTrapPokemon(pokemon) {
-			const gmaxEffect = ['gmaxcentiferno', 'gmaxsandblast'].includes(this.effectState.sourceEffect.id);
-			if (this.effectState.source?.isActive || gmaxEffect) pokemon.tryTrap();
+			pokemon.tryTrap();
 		},
 	},
 	lockedmove: {

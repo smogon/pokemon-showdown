@@ -204,6 +204,11 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			return 'struggle';
 		},
 		onDisableMove(target) {
+			const source = this.effectState.source;
+			if (source.hp <= 0 || !source.volatiles['partialtrappinglock']) {
+				delete target.volatiles['partiallytrapped'];
+				return;
+			}
 			target.maybeLocked = true;
 		},
 	},
@@ -213,6 +218,11 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		// until you try to use an attack
 		duration: 2,
 		onDisableMove(target) {
+			const counterpart = this.effectState.counterpart;
+			if (counterpart.hp <= 0 || !counterpart.volatiles['fakepartiallytrapped']) {
+				delete target.volatiles['fakepartiallytrapped'];
+				return;
+			}
 			target.maybeLocked = true;
 		},
 	},
@@ -258,6 +268,11 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			return this.effectState.move;
 		},
 		onDisableMove(pokemon) {
+			const locked = this.effectState.locked;
+			if (locked.hp <= 0 || !locked.volatiles['partiallytrapped']) {
+				delete pokemon.volatiles['partialtrappinglock'];
+				return;
+			}
 			pokemon.maybeLocked = true;
 		},
 	},
