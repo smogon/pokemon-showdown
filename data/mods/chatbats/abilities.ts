@@ -689,5 +689,26 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 		rating: 5,
 		num: -112,
 		shortDesc: "This Pokemon receives 8 completely random moves at the start of the game.",
-	}
+	},
+	orichalcumpulse: {
+		onStart(pokemon) {
+			pokemon.updateMaxHP();
+			if (this.field.setWeather('sunnyday')) {
+				this.add('-activate', pokemon, 'Orichalcum Pulse', '[source]');
+			} else if (this.field.isWeather('sunnyday')) {
+				this.add('-activate', pokemon, 'ability: Orichalcum Pulse');
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
+				this.debug('Orichalcum boost');
+				return this.chainModify([5461, 4096]);
+			}
+		},
+		flags: {},
+		name: "Orichalcum Pulse",
+		rating: 4.5,
+		num: 288,
+	},
 };
