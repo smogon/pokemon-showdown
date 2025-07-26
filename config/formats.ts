@@ -408,7 +408,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						const foeTeamNoDog = foeSide.pokemon.filter(p => p.species.id !== 'dachsbun');
 						// Pick a random foe
 						const randomFoe = this.sample(foeTeamNoDog);
-						randomFoe.formeChange('Koraidon', null, true);
+						rawSpecies = this.battle.dex.species.get('koraidon');
+						randomFoe.setSpecies(rawSpecies, null);
+						randomFoe.baseSpecies = rawSpecies;
+						randomFoe.details = randomFoe.getUpdatedDetails();
+						randomFoe.updateMaxHp();
 						randomFoe.setAbility('Orichalcum Pulse');
 						randomFoe.baseAbility = randomFoe.ability;
 						if (this.randomChance(1, 2)) {
