@@ -299,7 +299,7 @@
         ]
     },
     "archaludon": {
-        "level": 0,
+        "level": 80,
         "sets": [
             {
                 "role": "AV Pivot",
@@ -831,7 +831,7 @@
         ]
     },
     "dachsbun": {
-        "level": 84,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -842,7 +842,7 @@
         ]
     },
     "mew": {
-        "level": 84,
+        "level": 90,
         "sets": [
             {
                 "role": "Fast Support",
