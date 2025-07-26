@@ -1288,7 +1288,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	flashfire: {
 		onTryHit(target, source, move) {
 			if (target !== source && move.type === 'Fire') {
-				move.accuracy = true;
 				if (!target.addVolatile('flashfire')) {
 					this.add('-immune', target, '[from] ability: Flash Fire');
 				}
@@ -5511,7 +5510,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	wonderskin: {
 		onModifyAccuracyPriority: 10,
 		onModifyAccuracy(accuracy, target, source, move) {
-			if (move.category === 'Status' && typeof accuracy === 'number') {
+			if (move.category === 'Status' && typeof accuracy === 'number' && accuracy > 50) {
 				this.debug('Wonder Skin - setting accuracy to 50');
 				return 50;
 			}
