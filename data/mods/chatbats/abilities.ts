@@ -692,7 +692,7 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 	},
 	orichalcumpulse: {
 		onStart(pokemon) {
-			this.updateMaxHP();
+			this.updateMaxHp();
 			if (this.field.setWeather('sunnyday')) {
 				this.add('-activate', pokemon, 'Orichalcum Pulse', '[source]');
 			} else if (this.field.isWeather('sunnyday')) {
