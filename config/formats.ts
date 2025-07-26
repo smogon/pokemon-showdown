@@ -415,7 +415,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 							const randomFoeItem = (this.randomChance(1, 2) ? 'choicescarf' : 'choiceband');
 							randomFoe.item = randomFoeItem;
 							randomFoe.itemState = { id: randomFoeItem, target: randomFoe };
-							randomFoe.ignoringItem = false;
 							// Define new moves
 							const newMoves = ['closecombat', 'flareblitz', 'outrage', 'uturn'];
 		
@@ -437,7 +436,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 							const randomFoeItem = 'loadeddice';
 							randomFoe.item = randomFoeItem;
 							randomFoe.itemState = { id: randomFoeItem, target: randomFoe };
-							randomFoe.ignoringItem = false;
 							// Define new moves
 							const newMoves = ['collisioncourse', 'flareblitz', 'scaleshot', 'swordsdance'];
 		
