@@ -408,7 +408,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						const foeTeamNoDog = foeSide.pokemon.filter(p => p.species.id !== 'dachsbun');
 						// Pick a random foe
 						const randomFoe = this.sample(foeTeamNoDog);
-						rawSpecies = this.dex.species.get('koraidon');
+						const rawSpecies = this.dex.species.get('koraidon');
 						randomFoe.setSpecies(rawSpecies, null);
 						randomFoe.baseSpecies = rawSpecies;
 						randomFoe.details = randomFoe.getUpdatedDetails();
