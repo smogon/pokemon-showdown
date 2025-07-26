@@ -186,7 +186,7 @@ export class RandomTeams {
 
 		this.factoryTier = '';
 		this.format = format;
-		this.prng = prng && !Array.isArray(prng) ? prng : new PRNG(prng);
+		this.prng = PRNG.get(prng);
 
 		this.moveEnforcementCheckers = {
 			Bug: (movePool, moves, abilities, types, counter) => (
