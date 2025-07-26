@@ -2296,7 +2296,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(1.5);
 			}
 		},
-		onSourceAfterFaint(length, target, source, effect) {
+		onSourceFaintCount(length, target, source, effect) {
 			if (effect && effect.effectType === 'Move') {
 				this.boost({ atk: -length }, source);
 			}
