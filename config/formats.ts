@@ -395,10 +395,10 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		// Dachsbun causes Koraidon to generate on enemy team. Implemented here.
 		onBegin() {
 			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and adjustments?<br />Then make sure to use the <a href="https://www.smogon.com/forums/threads/chatbats.3760234/" target="_blank">ChatBats thread</a> or use /dt!</b></div>`);
-			this.add('-message', `Welcome to ChatBats!`);
-			this.add('-message', `ChatBats is a Random Battles format created by the Pet Mods room here on Showdown!`);
-			this.add('-message', `If you want to help create new sets, we will host events periodically in the Pet Mods room!`);
-			this.add('-message', `Anyone who is there can help create a new set for a random mon, changing moves, abilities, stats, and even custom formes.`);
+			this.add(`raw|Welcome to ChatBats!`);
+			this.add(`raw|ChatBats is a Random Battles format created by the Pet Mods room here on Showdown!`);
+			this.add(`raw|If you want to help create new sets, we will host events periodically in the Pet Mods room!`);
+			this.add(`raw|Anyone who is there can help create a new set for a random mon, changing moves, abilities, stats, and even custom formes.`);
 			for (const side of this.sides) {
 				for (const pokemon of side.pokemon) {
 					if (pokemon.species.id === 'dachsbun') {
