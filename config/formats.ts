@@ -384,28 +384,84 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "[Gen 9] CCAPM 2024 Random Battle",
-		desc: "A random battle format featuring Fakemon created during the Community Create-A-Pet Mod event in the Pet Mods room in 2024.",
-		mod: 'ccapm2024',
-		team: 'randomCPM',
-		searchShow: false,
-		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Terastal Clause', 'Data Preview'],
-		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new Pokemon and their wacky abilities?<br />Then make sure to use the <a href="https://docs.google.com/spreadsheets/d/1nLcxshlfbqC2Vqu6oc-wJsRE2gMi29j6Htkm2IQe9CM/edit?usp=sharing" target="_blank">CCAPM Spreadsheet</a> or use /dt!</b></div>`);
-			this.add('-message', `Welcome to CCAPM 2024 Random Battle!`);
-			this.add('-message', `This is a Pet Mod featuring Pokemon created by Showdown users like you!`);
-			this.add('-message', `These Pokemon were created during the Community Create-A-Pet Mod event in the Pet Mods room last year!`);
-			this.add('-message', `For more events like this, join the Pet Mods room on Showdown:`);
-			this.add('-message', `https://play.pokemonshowdown.com/petmods`);
-		},
-		onSwitchInPriority: 100,
+		name: "[Gen 9] ChatBats",
+		desc: `A Random Battles Solomod made by the Pet Mods chatroom on Showdown.`,
+		mod: 'chatbats',
+		team: 'random',
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onSwitchIn(pokemon) {
-			if ((pokemon.illusion || pokemon).getTypes(true, true).join('/') !==
-				this.dex.forGen(9).species.get((pokemon.illusion || pokemon).species.name).types.join('/') &&
-				!pokemon.terastallized) {
-				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
-			}
+      	this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
 		},
+		// Dachsbun causes Koraidon to generate on enemy team. Implemented here.
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and adjustments?<br />Then make sure to use the <a href="https://www.smogon.com/forums/threads/chatbats.3760234/" target="_blank">ChatBats thread</a> or use /dt!</b></div>`);
+			this.add('-message', `Welcome to ChatBats!`);
+			this.add('-message', `ChatBats is a Random Battles format created by the Pet Mods room here on Showdown!`);
+			this.add('-message', `If you want to help create new sets, we will host events periodically in the Pet Mods room!`);
+			this.add('-message', `Anyone who is there can help create a new set for a random mon, changing moves, abilities, stats, and even custom formes.`);
+			for (const side of this.sides) {
+				for (const pokemon of side.pokemon) {
+					if (pokemon.species.id === 'dachsbun') {
+						// Get the opposing side
+						const foeSide = side.foe;
+						// Filter out Dachsbun from opponent's team
+						const foeTeamNoDog = foeSide.pokemon.filter(p => p.species.id !== 'dachsbun');
+						// Pick a random foe
+						const randomFoe = this.sample(foeTeamNoDog);
+						randomFoe.formeChange('Koraidon', pokemon, true);
+						randomFoe.setAbility('Orichalcum Pulse');
+						randomFoe.baseAbility = randomFoe.ability;
+						if (this.randomChance(1, 2)) {
+							const randomFoeItem = (this.randomChance(1, 2) ? 'choicescarf' : 'choiceband');
+							randomFoe.item = randomFoeItem;
+							randomFoe.itemState = { id: randomFoeItem, target: randomFoe };
+							randomFoe.ignoringItem = false;
+							// Define new moves
+							const newMoves = ['closecombat', 'flareblitz', 'outrage', 'uturn'];
+		
+							// Update move slots
+							randomFoe.moveSlots = newMoves.map(move => {
+								const moveData = this.dex.moves.get(move);
+								return {
+									move: moveData.name,
+									id: moveData.id,
+									pp: moveData.pp,
+									maxpp: moveData.pp,
+									target: moveData.target,
+									disabled: false,
+									used: false,
+								};
+							});
+						}
+						else {
+							const randomFoeItem = 'loadeddice';
+							randomFoe.item = randomFoeItem;
+							randomFoe.itemState = { id: randomFoeItem, target: randomFoe };
+							randomFoe.ignoringItem = false;
+							// Define new moves
+							const newMoves = ['collisioncourse', 'flareblitz', 'scaleshot', 'swordsdance'];
+		
+							// Update move slots
+							randomFoe.moveSlots = newMoves.map(move => {
+								const moveData = this.dex.moves.get(move);
+								return {
+									move: moveData.name,
+									id: moveData.id,
+									pp: moveData.pp,
+									maxpp: moveData.pp,
+									target: moveData.target,
+									disabled: false,
+									used: false,
+								};
+							});
+						}
+						// this forces the UI to update move slots visually
+						randomFoe.baseMoveSlots = randomFoe.moveSlots.slice();
+						randomFoe.teraType = 'fire'
+					}
+				}
+			}
+		}
 	},
 
 	// Draft League
