@@ -889,5 +889,22 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		contestType: "Cool",
 		desc: "Removes hazards, side conditions, and terrain. Lowers Evasion by 1.",
 		shortDesc: "-1 evasion; ends user and target hazards/terrain.",
+	},
+	magnetbomb: {
+		num: 443,
+		accuracy: true,
+		basePower: 90,
+		category: "Special",
+		name: "Magnet Bomb",
+		pp: 20,
+		priority: 0,
+		onHit(target, source, move) {
+			this.add('-start', target, 'typechange', 'Steel');
+		},
+		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
+		secondary: null,
+		target: "normal",
+		type: "Steel",
+		contestType: "Cool",
 	}
 };
