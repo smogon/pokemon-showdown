@@ -699,7 +699,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "PU",
 	},
 	mantine: {
-		tier: "ZU",
+		tier: "ZUBL",
 	},
 	skarmory: {
 		tier: "OU",
