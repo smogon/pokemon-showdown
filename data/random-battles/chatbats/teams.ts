@@ -1284,6 +1284,7 @@ export class RandomTeams {
 		if (species.id === 'ogerponhearthflame') return 'Hearthflame Mask';
 		if (species.id === 'dachsbun') return 'Rocky Helmet';
 		if (species.id === 'mew') return 'Starf Berry';
+		if (species.id === 'magneton') return this.sample(['Air Balloon', 'Chople Berry']);
 
 		if (
 			species.id === 'froslass' || moves.has('populationbomb') ||
