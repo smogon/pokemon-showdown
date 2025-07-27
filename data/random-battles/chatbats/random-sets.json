@@ -851,5 +851,16 @@
                 "teraTypes": ["Stellar"]
             }
         ]
+    },
+    "magneton": {
+        "level": 88,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Magnet Rise", "Thunderbolt", "Magnet Bomb", "Volt Switch", "Thunder Wave" ],
+                "abilities": ["Magnet Pull"],
+                "teraTypes": ["Ghost", "Water"]
+            }
+        ]
     }
 }
