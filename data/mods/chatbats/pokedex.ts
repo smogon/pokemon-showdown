@@ -356,5 +356,8 @@ export const Pokedex: { [k: string]: ModdedSpeciesData } = {
 	mew: {
 		inherit: true,
 		abilities: {0: "Biogenesis"},
+	},
+	magneton: {
+		inherit: true,
 	}
 };
