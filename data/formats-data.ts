@@ -1096,7 +1096,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "NFE",
 	},
 	porygon2: {
-		tier: "ZU",
+		tier: "ZUBL",
 		doublesTier: "DUU",
 		natDexTier: "NFE",
 	},
