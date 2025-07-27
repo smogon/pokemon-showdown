@@ -219,5 +219,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData('Learnsets', 'dachsbun').learnset.nuzzle = ['9L1'];
 		this.modData('Learnsets', 'dachsbun').learnset.spiritbreak = ['9L1'];
 		this.modData('Learnsets', 'dachsbun').learnset.morningsun = ['9L1'];
+
+		this.modData('Learnsets', 'magneton').learnset.magnetbomb = ['9L1'];
 	},
 };
