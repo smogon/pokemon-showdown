@@ -670,6 +670,7 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 		},
 		onSwitchIn(pokemon) {
 			this.add('-ability', pokemon, 'Biogenesis');
+			this.add('-anim', pokemon, 'Minimize', pokemon);
 			this.add('-message', `Mew evolves into a new form with its Biogenesis!`);
 			if (!pokemon) return; // Chat command
 			const attackingMoves = pokemon.baseMoveSlots
