@@ -676,7 +676,7 @@ export class BattleActions {
 						if (pokemon.hasAbility('Prankster')) {
 							this.battle.hint(
 								"Since gen 7, Dark is immune to Prankster moves. It's possible that the target Pokémon is disguised by Illusion or is immune to the move for a different reason.",
-								false, pokemon.side
+								false, pokemon.side,
 							);
 						}
 					} else if (Object.values((pokemon.illusion || pokemon).species.abilities).includes('Prankster')) {
