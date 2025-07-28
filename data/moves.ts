@@ -2173,6 +2173,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, defrost: 1, metronome: 1 },
+		onModifyMove(move, pokemon) {
+			if (!pokemon.hasType('Fire')) delete move.flags['defrost'];
+		},
 		onTryMove(pokemon, target, move) {
 			if (pokemon.hasType('Fire')) return;
 			this.add('-fail', pokemon, 'move: Burn Up');
