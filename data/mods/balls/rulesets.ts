@@ -198,7 +198,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 			case 'Virus':
 				if (this.effectState.virus) return;
 				this.add('-message', `${pokemon.name}'s Sprite:`);
-				this.add(`raw|<img src="https://i.imgur.com/ErksjfH.png" height="96" width="96">`);
+				this.add(`raw|<img src="https://i.imgur.com/BtZ0VCl.jpeg" height="96" width="96">`);
 				this.effectState.virus = true;
 				break;
 			case 'Watergun':
