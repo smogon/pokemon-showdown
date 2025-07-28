@@ -195,12 +195,12 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 				this.add(`raw|<img src="https://raw.githubusercontent.com/scoopapa/DH2/refs/heads/main/data/mods/balls/sprites/front/toygun.png" height="96" width="96">`);
 				this.effectState.toygun = true;
 				break;
-			/* case 'Virus':
+			case 'Virus':
 				if (this.effectState.virus) return;
 				this.add('-message', `${pokemon.name}'s Sprite:`);
-				this.add(`raw|<img src="https://raw.githubusercontent.com/scoopapa/DH2/refs/heads/main/data/mods/balls/sprites/front/virus.png" height="96" width="96">`);
+				this.add(`raw|<img src="https://i.imgur.com/ErksjfH.png" height="96" width="96">`);
 				this.effectState.virus = true;
-				break; */
+				break;
 			case 'Watergun':
 				if (this.effectState.watergun) return;
 				this.add('-message', `${pokemon.name}'s Sprite:`);

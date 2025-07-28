@@ -403,7 +403,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			this.add(`raw|<div class='broadcast-green'><b>Yes, this is in fact a real metagame!</b></div>`);
 			this.add(`raw|Welcome to Balls!`);
 			this.add(`raw|Yes this is, in fact, a real metagame!`);
-			this.add(`raw|<a href="https://www.smogon.com/forums/threads/vaporemons-randbats-beta-now-live-vr-update-post-809.3722917/">Balls</a> is a Solomod featuring powerful Fakemon based on balls (and guns (don't ask)) from the real world and other media!`);
+			this.add(`raw|<a href="https://www.smogon.com/forums/threads/solomods-megathread.3711007/page-4#post-9716880">Balls</a> is a Solomod featuring powerful Fakemon based on balls (and guns (don't ask)) from the real world and other media!`);
 			this.add(`raw|You are invited to come the <a href="https://play.pokemonshowdown.com/petmods">Pet Mods</a> room to discuss the metagame.`);
 		},
 		onSwitchInPriority: 100,
