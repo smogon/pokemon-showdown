@@ -95,7 +95,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon, target, move) {
-			if (move.flags['defrost']) return;
+			if (move.flags['defrost'] && !(move.id === 'burnup' && !pokemon.hasType('Fire'))) return;
 			if (this.randomChance(1, 5)) {
 				pokemon.cureStatus();
 				return;
