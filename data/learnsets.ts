@@ -69330,6 +69330,9 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			wish: ["9L20", "7L20", "6L20"],
 			worryseed: ["7T", "6T"],
 		},
+		eventData: [
+			{generation: 9, level: 5, abilities: ["flowerveil"], moves: ["vinewhip", "fairywind", "wish", "celebrate"], pokeball: "cherishball"},
+		],
 	},
 	floette: {
 		learnset: {
