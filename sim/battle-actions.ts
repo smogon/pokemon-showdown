@@ -657,18 +657,24 @@ export class BattleActions {
 	hitStepTryImmunity(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
 		const hitResults = [];
 		for (const [i, target] of targets.entries()) {
+			let immune = false;
 			if (this.battle.gen >= 6 && move.flags['powder'] && target !== pokemon && !this.dex.getImmunity('powder', target)) {
 				this.battle.debug('natural powder immunity');
-				this.battle.add('-immune', target);
-				hitResults[i] = false;
+				immune = true;
 			} else if (!this.battle.singleEvent('TryImmunity', move, {}, target, pokemon, move)) {
-				this.battle.add('-immune', target);
-				hitResults[i] = false;
+				immune = true;
 			} else if (this.battle.gen >= 7 && move.pranksterBoosted && pokemon.hasAbility('prankster') &&
 				!targets[i].isAlly(pokemon) && !this.dex.getImmunity('prankster', target)) {
 				this.battle.debug('natural prankster immunity');
-				if (target.illusion || !(move.status && !this.dex.getImmunity(move.status, target))) {
-					this.battle.hint("Since gen 7, Dark is immune to Prankster moves.");
+				immune = true;
+			}
+			if (immune) {
+				// The things we do to support hints...
+				const possiblePrankster = this.battle.gen >= 7 && move.category === 'Status' && !target.isAlly(pokemon) &&
+				Object.values((pokemon.illusion || pokemon).species.abilities).includes('Prankster');
+				const apparentDarkType = !this.dex.getImmunity('prankster', target.illusion || target);
+				if (possiblePrankster && apparentDarkType) {
+					this.battle.hint("Since gen 7, Dark is immune to Prankster moves. The attacking Pokémon may have the Prankster ability. It's also possible that the target Pokémon is disguised by Illusion and is immune to the move for a different reason.");
 				}
 				this.battle.add('-immune', target);
 				hitResults[i] = false;
