@@ -69269,6 +69269,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			calmmind: ["9M", "7M", "6M"],
 			camouflage: ["7E", "6E"],
 			captivate: ["7E", "6E"],
+			celebrate: ["9S0"],
 			charm: ["9M"],
 			chillingwater: ["9M"],
 			confide: ["7M", "6M"],
@@ -69283,7 +69284,7 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			endure: ["9M"],
 			energyball: ["9M", "7M", "6M"],
 			facade: ["9M", "7M", "6M"],
-			fairywind: ["9L6", "7L6", "6L6"],
+			fairywind: ["9L6", "9S0", "7L6", "6L6"],
 			flash: ["6M"],
 			frustration: ["7M", "6M"],
 			gigadrain: ["9M", "7T", "6T"],
@@ -69326,10 +69327,13 @@ export const Learnsets: import('../sim/dex-species').LearnsetDataTable = {
 			terablast: ["9M"],
 			toxic: ["7M", "6M"],
 			trailblaze: ["9M"],
-			vinewhip: ["9L1", "7L1", "6L1"],
-			wish: ["9L20", "7L20", "6L20"],
+			vinewhip: ["9L1", "9S0", "7L1", "6L1"],
+			wish: ["9L20", "9S0", "7L20", "6L20"],
 			worryseed: ["7T", "6T"],
 		},
+		eventData: [
+			{generation: 9, level: 5, abilities: ["flowerveil"], moves: ["vinewhip", "fairywind", "wish", "celebrate"], pokeball: "cherishball"},
+		],
 	},
 	floette: {
 		learnset: {
