@@ -672,7 +672,7 @@ export class BattleActions {
 				// The things we do to support hints...
 				if (this.battle.gen >= 7 && move.category === 'Status' && !target.isAlly(pokemon) &&
 					Object.values((pokemon.illusion || pokemon).species.abilities).includes('Prankster')) {
-					this.battle.hint("Since gen 7, Dark is immune to Prankster moves. The attacking Pokémon may have the Prankster ability. It's also possible that the target Pokémon is disguised by Illusion and is immune to the move for a different reason.");
+					this.battle.hint("Since gen 7, Dark is immune to Prankster moves. The attacking Pokémon may have the Prankster ability. It's also possible that the target Pokémon is disguised by Illusion or is immune to the move for a different reason.");
 				}
 				this.battle.add('-immune', target);
 				hitResults[i] = false;
