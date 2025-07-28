@@ -369,8 +369,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'randomBLL',
 		ruleset: ['Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod', 'Data Preview', 'Sprite Viewer'],
 		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Yes, this is in fact a real metagame!</b></div>`);
 			this.add(`raw|Welcome to Balls Random Battle!`);
-			this.add(`raw|Yes this is, in fact, a real metagame!`);
 			this.add(`raw|<a href="https://www.smogon.com/forums/threads/solomods-megathread.3711007/page-4#post-9716880">Balls</a> is a Solomod featuring powerful Fakemon based on balls (and guns (don't ask)) from the real world and other media!`);
 			this.add(`raw|You are invited to come the <a href="https://play.pokemonshowdown.com/petmods">Pet Mods</a> room to discuss the metagame.`);
 		},
@@ -400,6 +400,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Handgun', 'Blowgun', 'Lasergun', '5.7 Rock', 'Nailgun', 'pokemon:Watergun',
 		],
 		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Yes, this is in fact a real metagame!</b></div>`);
 			this.add(`raw|Welcome to Balls!`);
 			this.add(`raw|Yes this is, in fact, a real metagame!`);
 			this.add(`raw|<a href="https://www.smogon.com/forums/threads/vaporemons-randbats-beta-now-live-vr-update-post-809.3722917/">Balls</a> is a Solomod featuring powerful Fakemon based on balls (and guns (don't ask)) from the real world and other media!`);
