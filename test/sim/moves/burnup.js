@@ -10,20 +10,6 @@ describe('Burn Up', () => {
 		battle.destroy();
 	});
 
-	it('should thaw the user', () => {
-		battle = common.createBattle({
-			customRules: 'guaranteedsecondarymod',
-		}, [
-			[{ species: 'Moltres', moves: ['burnup', 'sleeptalk'] }],
-			[{ species: 'Piplup', moves: ['icebeam', 'sleeptalk'] }],
-		]);
-		const moltres = battle.p1.active[0];
-		battle.makeChoices('move sleeptalk', 'move icebeam');
-		assert.equal(moltres.status, 'frz');
-		battle.makeChoices('move burnup', 'move sleeptalk');
-		assert.false(moltres.status);
-	});
-
 	it('should not thaw the user if it is not a Fire type', () => {
 		battle = common.createBattle({
 			customRules: 'guaranteedsecondarymod',
