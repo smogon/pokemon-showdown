@@ -36,13 +36,13 @@ export const bllSets: BLLSets = {
 		species: 'Baseball', ability: ['Magic Guard', 'Shadow Tag'], item: ['Life Orb', 'Leftovers'], gender: '',
 		moves: ['Boomburst', 'Shadow Ball', 'Nasty Plot'],
 		signatureMove: 'Substitute',
-		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Normal', level: 100, skip: 'Baseball',
+		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Normal', level: 100, // skip: 'Baseball',
 	},
 	'Baseball 3': {
 		species: 'Baseball', ability: ['Magic Guard', 'Shadow Tag'], item: ['Life Orb', 'Silk Scarf'], gender: 'N',
 		moves: ['Boomburst', 'Shadow Ball', 'No Retreat'],
 		signatureMove: 'Extreme Speed',
-		evs: { atk: 4, spa: 252, spe: 252 }, nature: 'Naive', teraType: 'Normal', level: 100, skip: 'Baseball',
+		evs: { atk: 4, spa: 252, spe: 252 }, nature: 'Naive', teraType: 'Normal', level: 100, // skip: 'Baseball',
 	},
 	Basketball: {
 		species: 'Basketball', ability: 'Magic Bounce', item: 'Heavy-Duty Boots', gender: 'N',
@@ -54,19 +54,19 @@ export const bllSets: BLLSets = {
 		species: 'Basketball', ability: 'Magic Bounce', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: ['Earth Power', 'Rapid Spin', 'Energy Ball'],
 		signatureMove: 'Flamethrower',
-		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Water', level: 100, skip: 'Basketball',
+		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Water', level: 100, // skip: 'Basketball',
 	},
 	'Basketball 3': {
 		species: 'Basketball', ability: 'Drought', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: ['Earth Power', 'Rapid Spin', 'Nasty Plot'],
 		signatureMove: 'Flamethrower',
-		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Fire', level: 100, skip: 'Basketball',
+		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Fire', level: 100, // skip: 'Basketball',
 	},
 	'Basketball 4': {
 		species: 'Basketball', ability: 'Drought', item: 'Choice Specs', gender: 'N',
 		moves: ['Earth Power', 'Overheat', 'Solar Beam'],
 		signatureMove: 'Eruption',
-		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Modest', teraType: 'Fire', level: 100, skip: 'Basketball',
+		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Modest', teraType: 'Fire', level: 100, // skip: 'Basketball',
 	},
 	Cabbage: {
 		species: 'Cabbage', ability: 'Grassy Surge', item: 'Leftovers', gender: 'N',
@@ -78,7 +78,7 @@ export const bllSets: BLLSets = {
 		species: 'Cabbage', ability: 'Grassy Surge', item: 'Leftovers', gender: 'N',
 		moves: ['Ice Beam', 'Calm Mind', 'Strength Sap'],
 		signatureMove: 'Giga Drain',
-		evs: { hp: 252, def: 252, spd: 4 }, nature: 'Bold', teraType: 'Steel', level: 100, skip: 'Cabbage',
+		evs: { hp: 252, def: 252, spd: 4 }, nature: 'Bold', teraType: 'Steel', level: 100, // skip: 'Cabbage',
 	},
 	Cricketball: {
 		species: 'Cricketball', ability: 'Sheer Force', item: 'Focus Sash', gender: 'N',
@@ -90,7 +90,7 @@ export const bllSets: BLLSets = {
 		species: 'Cricketball', ability: 'Sheer Force', item: 'Life Orb', gender: 'N',
 		moves: ['Thunderbolt', 'Energy Ball', 'Quiver Dance'],
 		signatureMove: 'Bug Buzz',
-		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Modest', teraType: 'Electric', level: 100, skip: 'Cricketball',
+		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Modest', teraType: 'Electric', level: 100, // skip: 'Cricketball',
 	},
 	Crystalball: {
 		species: 'Crystalball', ability: 'Psychic Surge', item: 'Choice Specs', gender: 'N',
@@ -102,13 +102,13 @@ export const bllSets: BLLSets = {
 		species: 'Crystalball', ability: 'Psychic Surge', item: 'Life Orb', gender: 'N',
 		moves: ['Aura Sphere', 'Nasty Plot', 'Recover'],
 		signatureMove: 'Psystrike',
-		evs: { hp: 252, spa: 252, spd: 4 }, nature: 'Modest', teraType: 'Fighting', level: 100, skip: 'Crystalball',
+		evs: { hp: 252, spa: 252, spd: 4 }, nature: 'Modest', teraType: 'Fighting', level: 100, // skip: 'Crystalball',
 	},
 	'Crystalball 3': {
 		species: 'Crystalball', ability: 'Psychic Surge', item: 'Terrain Extender', gender: 'N',
 		moves: ['Trick Room', ['Wish', 'Recover'], 'Teleport'],
 		signatureMove: 'Psystrike',
-		evs: { hp: 252, def: 4, spd: 252 }, nature: 'Sassy', teraType: 'Fighting', level: 100, skip: 'Crystalball',
+		evs: { hp: 252, def: 4, spd: 252 }, nature: 'Sassy', teraType: 'Fighting', level: 100, // skip: 'Crystalball',
 	},
 	Discoball: {
 		species: 'Discoball', ability: 'Levitate', item: 'Leftovers', gender: 'N',
@@ -120,7 +120,7 @@ export const bllSets: BLLSets = {
 		species: 'Discoball', ability: 'Levitate', item: 'Leftovers', gender: 'N',
 		moves: ['Volt Switch', 'Wish', 'Protect'],
 		signatureMove: 'Heal Bell',
-		evs: { hp: 252, def: 4, spd: 252 }, nature: 'Calm', teraType: 'Ghost', level: 100, skip: 'Discoball',
+		evs: { hp: 252, def: 4, spd: 252 }, nature: 'Calm', teraType: 'Ghost', level: 100, // skip: 'Discoball',
 	},
 	Dragonball: {
 		species: 'Dragonball', ability: 'Vessel of Ruin', item: 'Leftovers', gender: 'N',
@@ -132,13 +132,13 @@ export const bllSets: BLLSets = {
 		species: 'Dragonball', ability: 'Vessel of Ruin', item: 'Choice Specs', gender: 'N',
 		moves: ['Dragon Energy', 'Earth Power', 'Fire Blast'],
 		signatureMove: 'Draco Meteor',
-		evs: { hp: 248, spa: 252, spd: 8 }, nature: 'Modest', teraType: 'Dragon', level: 100, skip: 'Dragonball',
+		evs: { hp: 248, spa: 252, spd: 8 }, nature: 'Modest', teraType: 'Dragon', level: 100, // skip: 'Dragonball',
 	},
 	'Dragonball 3': {
 		species: 'Dragonball', ability: 'Vessel of Ruin', item: 'Life Orb', gender: 'N',
 		moves: ['Earth Power', 'Nasty Plot', 'Recover'],
 		signatureMove: 'Draco Meteor',
-		evs: { hp: 248, spa: 252, spd: 8 }, nature: 'Modest', teraType: 'Steel', level: 100, skip: 'Dragonball',
+		evs: { hp: 248, spa: 252, spd: 8 }, nature: 'Modest', teraType: 'Steel', level: 100, // skip: 'Dragonball',
 	},
 	Football: {
 		species: 'Football', ability: 'Stamina', item: 'Leftovers', gender: 'N',
@@ -150,19 +150,19 @@ export const bllSets: BLLSets = {
 		species: 'Football', ability: 'Stamina', item: 'Leftovers', gender: 'N',
 		moves: ['Body Press', ['Spikes', 'Stealth Rock'], 'Rapid Spin'],
 		signatureMove: 'Earthquake',
-		evs: { hp: 252, atk: 4, def: 252 }, nature: 'Impish', teraType: 'Steel', level: 100, skip: 'Football',
+		evs: { hp: 252, atk: 4, def: 252 }, nature: 'Impish', teraType: 'Steel', level: 100, // skip: 'Football',
 	},
 	'Football 3': {
 		species: 'Football', ability: 'Rock Head', item: 'Life Orb', gender: 'N',
 		moves: ['Close Combat', 'Head Smash', 'Swords Dance'],
 		signatureMove: 'Headlong Rush',
-		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: ['Ground', 'Rock'], level: 100, skip: 'Football',
+		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: ['Ground', 'Rock'], level: 100, // skip: 'Football',
 	},
 	'Football 4': {
 		species: 'Football', ability: 'Hustle', item: 'Life Orb', gender: 'N',
 		moves: ['Close Combat', 'Wild Charge', 'Swords Dance'],
 		signatureMove: 'Headlong Rush',
-		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Ground', level: 100, skip: 'Football',
+		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Ground', level: 100, // skip: 'Football',
 	},
 	Gumball: {
 		species: 'Gumball', ability: 'Misty Surge', item: 'Choice Specs', gender: 'N',
@@ -174,19 +174,19 @@ export const bllSets: BLLSets = {
 		species: 'Gumball', ability: 'Misty Surge', item: 'Life Orb', gender: 'N',
 		moves: ['Flamethrower', ['Thunderbolt', 'Psychic'], 'Calm Mind'],
 		signatureMove: 'Moonblast',
-		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Fire', level: 100, skip: 'Gumball',
+		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Fire', level: 100, // skip: 'Gumball',
 	},
 	'Gumball 3': {
 		species: 'Gumball', ability: 'Prankster', item: ['Focus Sash', 'Leftovers'], gender: 'N',
 		moves: ['Spikes', 'Healing Wish', 'Thunder Wave'],
 		signatureMove: 'Moonblast',
-		evs: { hp: 248, def: 252, spa: 8 }, nature: 'Bold', teraType: 'Steel', level: 100, skip: 'Gumball',
+		evs: { hp: 248, def: 252, spa: 8 }, nature: 'Bold', teraType: 'Steel', level: 100, // skip: 'Gumball',
 	},
 	'Gumball 4': {
 		species: 'Gumball', ability: 'Prankster', item: 'Light Clay', gender: 'N',
 		moves: ['Reflect', 'Light Screen', 'Healing Wish'],
 		signatureMove: 'Moonblast',
-		evs: { hp: 248, def: 252, spa: 8 }, nature: 'Bold', teraType: 'Steel', level: 100, skip: 'Gumball',
+		evs: { hp: 248, def: 252, spa: 8 }, nature: 'Bold', teraType: 'Steel', level: 100, // skip: 'Gumball',
 	},
 	Plasmaball: {
 		species: 'Plasmaball', ability: 'Electric Surge', item: 'Life Orb', gender: 'N',
@@ -198,7 +198,7 @@ export const bllSets: BLLSets = {
 		species: 'Plasmaball', ability: 'Electric Surge', item: 'Choice Specs', gender: 'N',
 		moves: ['Fire Blast', 'Energy Ball', 'Volt Switch'],
 		signatureMove: 'Thunderbolt',
-		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Electric', level: 100, skip: 'Plasmaball',
+		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Electric', level: 100, // skip: 'Plasmaball',
 	},
 	Rock: {
 		species: 'Rock', ability: ['Sand Stream', 'Solid Rock'], item: 'Leftovers', gender: 'N',
@@ -210,7 +210,7 @@ export const bllSets: BLLSets = {
 		species: 'Rock', ability: ['Moxie', 'Sand Stream', 'Solid Rock'], item: 'White Herb', gender: 'N',
 		moves: ['Body Press', 'Shell Smash', 'Earthquake'],
 		signatureMove: 'Diamond Storm',
-		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Adamant', teraType: 'Ground', level: 100, skip: 'Rock',
+		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Adamant', teraType: 'Ground', level: 100, // skip: 'Rock',
 	},
 	Snowball: {
 		species: 'Snowball', ability: 'Refrigerate', item: 'Choice Band', gender: 'N',
@@ -228,13 +228,13 @@ export const bllSets: BLLSets = {
 		species: 'Soccerball', ability: 'Stakeout', item: 'Life Orb', gender: 'N',
 		moves: ['Headlong Rush', 'Rock Slide', 'Court Change'],
 		signatureMove: 'Close Combat',
-		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Steel', level: 100, skip: 'Soccerball',
+		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Steel', level: 100, // skip: 'Soccerball',
 	},
 	'Soccerball 3': {
 		species: 'Soccerball', ability: 'Speed Boost', item: 'Life Orb', gender: 'N',
 		moves: ['Headlong Rush', 'Rock Slide', 'Swords Dance'],
 		signatureMove: 'Close Combat',
-		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Adamant', teraType: 'Steel', level: 100, skip: 'Soccerball',
+		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Adamant', teraType: 'Steel', level: 100, // skip: 'Soccerball',
 	},
 	Tennisball: {
 		species: 'Tennisball', ability: 'Adaptability', item: 'Choice Specs', gender: 'N',
@@ -252,7 +252,7 @@ export const bllSets: BLLSets = {
 		species: 'The Moon', ability: 'Rocky Payload', item: 'Leftovers', gender: 'N',
 		moves: ['Rock Blast', ['Moonlight', 'Stealth Rock'], 'Will-O-Wisp'],
 		signatureMove: 'Poltergeist',
-		evs: { hp: 252, atk: 4, def: 252 }, nature: 'Impish', teraType: 'Fairy', level: 100, skip: 'The Moon',
+		evs: { hp: 252, atk: 4, def: 252 }, nature: 'Impish', teraType: 'Fairy', level: 100, // skip: 'The Moon',
 	},
 	Virus: {
 		species: 'Virus', ability: 'Regenerator', item: 'Leftovers', gender: 'N',
@@ -270,7 +270,7 @@ export const bllSets: BLLSets = {
 		species: 'Watermelon', ability: 'Drizzle', item: 'Damp Rock', gender: 'N',
 		moves: [['Hydro Pump', 'Scald'], 'Energy Ball', 'Recover'],
 		signatureMove: 'Ice Beam',
-		evs: { hp: 252, spa: 252, spd: 4 }, nature: 'Modest', teraType: 'Water', level: 100, skip: 'Watermelon',
+		evs: { hp: 252, spa: 252, spd: 4 }, nature: 'Modest', teraType: 'Water', level: 100, // skip: 'Watermelon',
 	},
 	// Guns
 	'5.7 Rock': {
@@ -283,7 +283,7 @@ export const bllSets: BLLSets = {
 		species: '5.7 Rock', ability: 'Rock Head', item: 'Choice Band', gender: 'N',
 		moves: ['Headlong Rush', 'Close Combat', 'Accelerock'],
 		signatureMove: 'Head Smash',
-		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Rock', level: 100, skip: '5.7 Rock',
+		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Rock', level: 100, // skip: '5.7 Rock',
 	},
 	Airgun: {
 		species: 'Airgun', ability: 'Neutralizing Gas', item: 'Life Orb', gender: 'N',
@@ -295,7 +295,7 @@ export const bllSets: BLLSets = {
 		species: 'Airgun', ability: 'Neutralizing Gas', item: 'Leftovers', gender: 'N',
 		moves: ['Roost', 'Brick break', 'Defog'],
 		signatureMove: 'Beak Blast',
-		evs: { hp: 252, def: 252, spd: 4 }, nature: 'Impish', teraType: 'Steel', level: 100, skip: 'Airgun',
+		evs: { hp: 252, def: 252, spd: 4 }, nature: 'Impish', teraType: 'Steel', level: 100, // skip: 'Airgun',
 	},
 	Blowgun: {
 		species: 'Blowgun', ability: 'Toxic Chain', item: 'Leftovers', gender: 'N',
@@ -307,7 +307,7 @@ export const bllSets: BLLSets = {
 		species: 'Blowgun', ability: 'Merciless', item: 'Leftovers', gender: 'N',
 		moves: ['Earthquake', 'Mortal Spin', ['Strength Sap', 'Toxic Spikes']],
 		signatureMove: 'Barb Barrage',
-		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Dark', level: 100, skip: 'Blowgun',
+		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Dark', level: 100, // skip: 'Blowgun',
 	},
 	Crossbow: {
 		species: 'Crossbow', ability: 'Analytic', item: 'Leftovers', gender: 'N',
@@ -319,7 +319,7 @@ export const bllSets: BLLSets = {
 		species: 'Crossbow', ability: 'Unburden', item: ['Sitrus Berry', 'Air Balloon'], gender: 'N',
 		moves: ['Thousand Arrows', 'Triple Arrows', 'Swords Dance'],
 		signatureMove: 'Power Whip',
-		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Adamant', teraType: 'Water', level: 100, skip: 'Crossbow',
+		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Adamant', teraType: 'Water', level: 100, // skip: 'Crossbow',
 	},
 	Dracogun: {
 		species: 'Dracogun', ability: 'Dragon\'s Maw', item: 'Choice Specs', gender: 'N',
@@ -331,7 +331,7 @@ export const bllSets: BLLSets = {
 		species: 'Dracogun', ability: 'Beast Boost', item: 'Life Orb', gender: 'N',
 		moves: ['Nasty Plot', 'Fire Blast', 'Sludge Wave'],
 		signatureMove: 'Dragon Pulse',
-		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Fire', level: 100, skip: 'Dracogun',
+		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Fire', level: 100, // skip: 'Dracogun',
 	},
 	Flamethrower: {
 		species: 'Flamethrower', ability: 'Prankster', item: 'Heavy-Duty Boots', gender: 'N',
@@ -343,7 +343,7 @@ export const bllSets: BLLSets = {
 		species: 'Flamethrower', ability: 'Prankster', item: 'Heavy-Duty Boots', gender: 'N',
 		moves: [['Searing Shot', 'Torch Song'], 'Morning Sun', ['Focus Blast', 'Nasty Plot']],
 		signatureMove: 'Energy Ball',
-		evs: { hp: 248, spa: 252, spd: 8 }, nature: 'Modest', teraType: 'Grass', level: 100, skip: 'Flamethrower',
+		evs: { hp: 248, spa: 252, spd: 8 }, nature: 'Modest', teraType: 'Grass', level: 100, // skip: 'Flamethrower',
 	},
 	Freezegun: {
 		species: 'Freezegun', ability: 'Regenerator', item: 'Life Orb', gender: 'N',
@@ -361,7 +361,7 @@ export const bllSets: BLLSets = {
 		species: 'Grenade Launcher', ability: 'Mold Breaker', item: 'Choice Band', gender: 'N',
 		moves: ['Close Combat', 'Stone Edge', 'Flare Blitz'],
 		signatureMove: 'Headlong Rush',
-		evs: { hp: 52, atk: 252, spe: 204 }, nature: 'Adamant', teraType: 'Ground', level: 100, skip: 'Grenade Launcher',
+		evs: { hp: 52, atk: 252, spe: 204 }, nature: 'Adamant', teraType: 'Ground', level: 100, // skip: 'Grenade Launcher',
 	},
 	Handgun: {
 		species: 'Handgun', ability: 'Scrappy', item: 'Life Orb', gender: 'N',
@@ -373,25 +373,25 @@ export const bllSets: BLLSets = {
 		species: 'Handgun', ability: 'Scrappy', item: 'Leftovers', gender: 'N',
 		moves: ['Knock Off', 'Recover', 'Rapid Spin'],
 		signatureMove: 'Drain Punch',
-		evs: { hp: 248, def: 144, spd: 116 }, nature: 'Careful', teraType: 'Fighting', level: 100, skip: 'Handgun',
+		evs: { hp: 248, def: 144, spd: 116 }, nature: 'Careful', teraType: 'Fighting', level: 100, // skip: 'Handgun',
 	},
 	'Handgun 3': {
 		species: 'Handgun', ability: 'Adaptability', item: 'Life Orb', gender: 'N',
 		moves: ['Close Combat', 'No Retreat', 'Boomburst'],
 		signatureMove: 'Extreme Speed',
-		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Hasty', teraType: 'Normal', level: 100, skip: 'Handgun',
+		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Hasty', teraType: 'Normal', level: 100, // skip: 'Handgun',
 	},
 	'Handgun 4': {
 		species: 'Handgun', ability: 'Protean', item: 'Choice Band', gender: 'N',
 		moves: ['Close Combat', 'Rock Slide', 'Knock Off'],
 		signatureMove: 'Extreme Speed',
-		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Fighting', level: 100, skip: 'Handgun',
+		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Fighting', level: 100, // skip: 'Handgun',
 	},
 	'Handgun 5': {
 		species: 'Handgun', ability: 'Protean', item: 'Life Orb', gender: 'N',
 		moves: ['Fire Blast', 'Focus Blast', 'Energy Ball'],
 		signatureMove: 'Boomburst',
-		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Normal', level: 100, skip: 'Handgun',
+		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Normal', level: 100, // skip: 'Handgun',
 	},
 	Lasergun: {
 		species: 'Lasergun', ability: 'Magic Guard', item: 'Life Orb', gender: 'N',
@@ -403,13 +403,13 @@ export const bllSets: BLLSets = {
 		species: 'Lasergun', ability: 'Magic Guard', item: 'Leftovers', gender: 'N',
 		moves: ['Focus Blast', 'Shadow Ball', 'Nasty Plot'],
 		signatureMove: 'Psystrike',
-		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Fighting', level: 100, skip: 'Lasergun',
+		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Fighting', level: 100, // skip: 'Lasergun',
 	},
 	'Lasergun 3': {
 		species: 'Lasergun', ability: 'Neuroforce', item: 'Power Herb', gender: 'N',
 		moves: ['Focus Blast', 'Shadow Ball', 'Meteor Beam'],
 		signatureMove: 'Psystrike',
-		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Fighting', level: 100, skip: 'Lasergun',
+		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Fighting', level: 100, // skip: 'Lasergun',
 	},
 	Nailgun: {
 		species: 'Nailgun', ability: 'Steelworker', item: 'Leftovers', gender: 'N',
@@ -421,7 +421,7 @@ export const bllSets: BLLSets = {
 		species: 'Nailgun', ability: 'Steelworker', item: 'Life Orb', gender: 'N',
 		moves: ['Bullet Punch', 'Autotomize', 'Earthquake'],
 		signatureMove: 'Sunsteel Strike',
-		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Adamant', teraType: 'Steel', level: 100, skip: 'Nailgun',
+		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Adamant', teraType: 'Steel', level: 100, // skip: 'Nailgun',
 	},
 	'Proton Pack': {
 		species: 'Proton Pack', ability: 'Lightning Rod', item: 'Leftovers', gender: 'N',
@@ -433,7 +433,7 @@ export const bllSets: BLLSets = {
 		species: 'Proton Pack', ability: 'Lightning Rod', item: 'Leftovers', gender: 'N',
 		moves: ['Fire Blast', 'Nasty Plot', 'Volt Switch'],
 		signatureMove: 'Moongeist Beam',
-		evs: { hp: 252, spa: 252, spd: 4 }, nature: 'Modest', teraType: 'Dark', level: 100, skip: 'Proton Pack',
+		evs: { hp: 252, spa: 252, spd: 4 }, nature: 'Modest', teraType: 'Dark', level: 100, // skip: 'Proton Pack',
 	},
 	Railgun: {
 		species: 'Railgun', ability: 'Good as Gold', item: 'Leftovers', gender: 'N',
@@ -445,7 +445,7 @@ export const bllSets: BLLSets = {
 		species: 'Railgun', ability: 'Good as Gold', item: 'Life Orb', gender: 'N',
 		moves: ['Energy Ball', 'Nasty Plot', 'Thunderclap'],
 		signatureMove: 'Thunder Cage',
-		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Flying', level: 100, skip: 'Railgun',
+		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Flying', level: 100, // skip: 'Railgun',
 	},
 	Scorpiongun: {
 		species: 'Scorpiongun', ability: 'Tinted Lens', item: 'Choice Band', gender: 'N',
@@ -457,13 +457,13 @@ export const bllSets: BLLSets = {
 		species: 'Scorpiongun', ability: 'Tinted Lens', item: 'Leftovers', gender: 'N',
 		moves: ['Taunt', 'Spikes', 'U-turn'],
 		signatureMove: 'Earthquake',
-		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Ground', level: 100, skip: 'Scorpiongun',
+		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Ground', level: 100, // skip: 'Scorpiongun',
 	},
 	'Scorpiongun 3': {
 		species: 'Scorpiongun', ability: 'Tinted Lens', item: 'Life Orb', gender: 'N',
 		moves: ['Megahorn', 'Close Combat', 'Swords Dance'],
 		signatureMove: 'Earthquake',
-		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Fighting', level: 100, skip: 'Scorpiongun',
+		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Fighting', level: 100, // skip: 'Scorpiongun',
 	},
 	Shotgun: {
 		species: 'Shotgun', ability: 'Sheer Force', item: 'Life Orb', gender: 'N',
@@ -475,7 +475,7 @@ export const bllSets: BLLSets = {
 		species: 'Shotgun', ability: 'No Guard', item: 'Life Orb', gender: 'N',
 		moves: ['Earthquake', 'Stone Edge', 'Knock Off'],
 		signatureMove: 'Dynamic Punch',
-		evs: { hp: 248, atk: 252, spd: 8 }, nature: 'Adamant', teraType: 'Fighting', level: 100, skip: 'Shotgun',
+		evs: { hp: 248, atk: 252, spd: 8 }, nature: 'Adamant', teraType: 'Fighting', level: 100, // skip: 'Shotgun',
 	},
 	Tommygun: {
 		species: 'Tommygun', ability: 'Intimidate', item: 'Leftovers', gender: 'N',
@@ -487,7 +487,7 @@ export const bllSets: BLLSets = {
 		species: 'Tommygun', ability: 'Intimidate', item: 'Life Orb', gender: 'N',
 		moves: [['Knock Off', 'Taunt'], 'Stealth Rock', 'Parting Shot'],
 		signatureMove: 'Ceaseless Edge',
-		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Fairy', level: 100, skip: 'Tommygun',
+		evs: { atk: 252, spd: 4, spe: 252 }, nature: 'Jolly', teraType: 'Fairy', level: 100, // skip: 'Tommygun',
 	},
 	Toygun: {
 		species: 'Toygun', ability: 'Pixilate', item: 'Fairy Feather', gender: 'N',
@@ -499,7 +499,7 @@ export const bllSets: BLLSets = {
 		species: 'Toygun', ability: 'Pixilate', item: 'Leftovers', gender: 'N',
 		moves: ['Calm Mind', 'Boomburst', 'Rapid Spin'],
 		signatureMove: 'Psychic',
-		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Fairy', level: 100, skip: 'Toygun',
+		evs: { spa: 252, spd: 4, spe: 252 }, nature: 'Timid', teraType: 'Fairy', level: 100, // skip: 'Toygun',
 	},
 	Watergun: {
 		species: 'Watergun', ability: 'Mega Launcher', item: 'Choice Specs', gender: 'N',
@@ -555,7 +555,7 @@ export class RandomBLLTeams extends RandomTeams {
 				let rejected = false;
 				for (const type of weaknesses) {
 					if (typePool[type] === undefined) typePool[type] = 0;
-					if (typePool[type] >= 3) {
+					if (typePool[type] >= 2) {
 						// Reject
 						rejected = true;
 						break;
