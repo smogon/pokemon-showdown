@@ -391,13 +391,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		banlist: ['All Pokemon'],
 		unbanlist: [
 			// Balls
-	 		'Baseball', 'Basketball', 'Football', 'Soccerball', 'Tennisball', 'Cricketball',
-	 		'Watermelon', 'Cabbage', 'Plasmaball', 'pokemon:Snowball', 'Crystalball', '8ball',
-	 		'Gumball', 'Discoball', 'The Moon', 'pokemon:Rock', 'Virus', 'Dragonball',
+			'Baseball', 'Basketball', 'Football', 'Soccerball', 'Tennisball', 'Cricketball',
+			'Watermelon', 'Cabbage', 'Plasmaball', 'pokemon:Snowball', 'Crystalball', '8ball',
+			'Gumball', 'Discoball', 'The Moon', 'pokemon:Rock', 'Virus', 'Dragonball',
 			// Guns
-	 		'Scorpiongun', 'Tommygun', 'Dracogun', 'Railgun', 'Toygun', 'Shotgun',
-	 		'pokemon:Flamethrower', 'Airgun', 'Proton Pack', 'Crossbow', 'Grenade Launcher', 'Freezegun',
-	 		'Handgun', 'Blowgun', 'Lasergun', '5.7 Rock', 'Nailgun', 'pokemon:Watergun',
+			'Scorpiongun', 'Tommygun', 'Dracogun', 'Railgun', 'Toygun', 'Shotgun',
+			'pokemon:Flamethrower', 'Airgun', 'Proton Pack', 'Crossbow', 'Grenade Launcher', 'Freezegun',
+			'Handgun', 'Blowgun', 'Lasergun', '5.7 Rock', 'Nailgun', 'pokemon:Watergun',
 		],
 		onBegin() {
 			this.add(`raw|Welcome to Balls!`);
