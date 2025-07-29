@@ -62,7 +62,7 @@ describe('Two Turn Moves [Gen 1]', () => {
 		battle.setPlayer('p2', { team: [{ species: 'golem', moves: ['defensecurl'] }] });
 		const blastoise = battle.p1.active[0];
 		battle.makeChoices();
-		assert(battle.log.some(line => line.includes('|move|p1a: Blastoise|Skull Bash||[from]Metronome|[still]')));
+		assert(battle.log.some(line => line.includes('|move|p1a: Blastoise|Skull Bash||[from] Metronome|[still]')));
 		assert.equal(blastoise.moveSlots[0].pp, 16);
 		battle.makeChoices();
 		assert.equal(blastoise.moveSlots[0].pp, 15);
