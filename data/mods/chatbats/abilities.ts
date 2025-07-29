@@ -669,10 +669,11 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 			pokemon.didRandomMoves = "yes";
 		},
 		onSwitchIn(pokemon) {
-			if (pokemon.hasTypeChanged === "yes") return;
-			this.add('-ability', pokemon, 'Biogenesis');
-			this.add('-anim', pokemon, 'Growth', pokemon);
-			this.add('-message', `Mew evolves into a new form with its Biogenesis!`);
+			if (pokemon.hasTypeChanged !== "yes") {
+				this.add('-ability', pokemon, 'Biogenesis');
+				this.add('-anim', pokemon, 'Growth', pokemon);
+				this.add('-message', `Mew evolves into a new form with its Biogenesis!`);
+			}
 			if (!pokemon) return; // Chat command
 			const attackingMoves = pokemon.baseMoveSlots
   				.map(slot => this.dex.moves.get(slot.id))
@@ -687,7 +688,7 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 			pokemon.hasTypeChanged = "yes";
 			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1,
+		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1,
 			breakable: 1, notransform: 1},
 		name: "Biogenesis",
 		rating: 5,
