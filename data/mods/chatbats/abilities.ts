@@ -682,6 +682,7 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
   				? [...new Set(attackingMoves.slice(0, 2).map(move => move.type))]
   				: pokemon.types;
 			pokemon.setType(types);
+			pokemon.baseTypes = types;
 			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1,
