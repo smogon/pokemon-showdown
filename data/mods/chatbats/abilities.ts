@@ -201,7 +201,6 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 				for (const stat in source.boosts) {
 					if (source.boosts[stat] > 0) {
 						// checks for boosts on source of move, inverts boosts and adds them to invertedBoosts table
-						this.add('-message', `Boost detected`);
 						invertedBoosts[stat] = -2 * source.boosts[stat]; 
 					}
 				}
