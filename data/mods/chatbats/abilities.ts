@@ -669,8 +669,9 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 			pokemon.didRandomMoves = "yes";
 		},
 		onSwitchIn(pokemon) {
+			if (pokemon.hasTypeChanged === "yes") return;
 			this.add('-ability', pokemon, 'Biogenesis');
-			this.add('-anim', pokemon, 'Minimize', pokemon);
+			this.add('-anim', pokemon, 'Growth', pokemon);
 			this.add('-message', `Mew evolves into a new form with its Biogenesis!`);
 			if (!pokemon) return; // Chat command
 			const attackingMoves = pokemon.baseMoveSlots
@@ -682,7 +683,8 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
   				? [...new Set(attackingMoves.slice(0, 2).map(move => move.type))]
   				: pokemon.types;
 			pokemon.setType(types);
-			pokemon.baseTypes = types;
+			pokemon.baseTypes = pokemon.types;
+			pokemon.hasTypeChanged = "yes";
 			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 		},
 		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1,
