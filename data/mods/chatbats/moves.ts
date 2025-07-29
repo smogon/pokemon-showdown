@@ -596,6 +596,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		// when order up hits, first checks for volatile ordered to ensure that Order Up has not already been used, then starts orderup side condition and switches Dondozo out
 		onHit(target, source, move) {
 			if (source.volatiles['ordered']) return;
+			if (source.id === 'mew') return;
 			source.side.addSideCondition('orderup');
 			// stores stat changes and volatiles to reapply after switch
 			source.storedBoosts = { ...source.boosts };
@@ -899,6 +900,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		pp: 20,
 		priority: 0,
 		onHit(target, source, move) {
+			target.setType('Steel');
 			this.add('-start', target, 'typechange', 'Steel');
 		},
 		flags: { protect: 1, mirror: 1, metronome: 1, bullet: 1 },
