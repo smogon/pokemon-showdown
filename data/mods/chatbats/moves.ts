@@ -908,5 +908,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		target: "normal",
 		type: "Steel",
 		contestType: "Cool",
+		desc: "Changes the target's type to Steel.",
+		shortDesc: "Changes the target's type to Steel.",
 	}
 };
