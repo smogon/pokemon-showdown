@@ -3074,7 +3074,7 @@ export class Battle {
 	}
 
 	hint(hint: string, once?: boolean, side?: Side) {
-		if (this.hints.has(hint)) return;
+		if (this.hints.has(side ? `${side.id}|${hint}` : hint)) return;
 
 		if (side) {
 			this.addSplit(side.id, ['-hint', hint]);
@@ -3082,7 +3082,7 @@ export class Battle {
 			this.add('-hint', hint);
 		}
 
-		if (once) this.hints.add(hint);
+		if (once) this.hints.add(side ? `${side.id}|${hint}` : hint);
 	}
 
 	addSplit(side: SideID, secret: Part[], shared?: Part[]) {
