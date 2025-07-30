@@ -42,7 +42,7 @@ const BASE_MOD = 'gen9' as ID;
 const DATA_DIR = path.resolve(__dirname, '../data');
 const MODS_DIR = path.resolve(DATA_DIR, './mods');
 
-const dexes: { [mod: string]: ModdedDex } = Object.create(null);
+const dexes: { [mod: string]: ModdedDex; } = Object.create(null);
 
 type DataType =
 	'Abilities' | 'Rulesets' | 'FormatsData' | 'Items' | 'Learnsets' | 'Moves' |
@@ -68,8 +68,8 @@ const DATA_FILES = {
 };
 
 /** Unfortunately we do for..in too much to want to deal with the casts */
-export interface DexTable<T> { [id: string]: T }
-export interface AliasesTable { [id: IDEntry]: string }
+export interface DexTable<T> { [id: string]: T; }
+export interface AliasesTable { [id: IDEntry]: string; }
 
 interface DexTableData {
 	Abilities: DexTable<import('./dex-abilities').AbilityData>;
@@ -158,7 +158,7 @@ export class ModdedDex {
 		return this.loadData();
 	}
 
-	get dexes(): { [mod: string]: ModdedDex } {
+	get dexes(): { [mod: string]: ModdedDex; } {
 		this.includeMods();
 		return dexes;
 	}
@@ -230,8 +230,8 @@ export class ModdedDex {
 	 * Also checks immunity to some statuses.
 	 */
 	getImmunity(
-		source: { type: string } | string,
-		target: { getTypes: () => string[] } | { types: string[] } | string[] | string
+		source: { type: string; } | string,
+		target: { getTypes: () => string[]; } | { types: string[]; } | string[] | string
 	): boolean {
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
 		// @ts-expect-error really wish TS would support this
@@ -248,8 +248,8 @@ export class ModdedDex {
 	}
 
 	getEffectiveness(
-		source: { type: string } | string,
-		target: { getTypes: () => string[] } | { types: string[] } | string[] | string
+		source: { type: string; } | string,
+		target: { getTypes: () => string[]; } | { types: string[]; } | string[] | string
 	): number {
 		const sourceType: string = typeof source !== 'string' ? source.type : source;
 		// @ts-expect-error really wish TS would support this
@@ -264,10 +264,10 @@ export class ModdedDex {
 		const typeData = this.types.get(targetTyping);
 		if (!typeData) return 0;
 		switch (typeData.damageTaken[sourceType]) {
-		case 1: return 1; // super-effective
-		case 2: return -1; // resist
-		// in case of weird situations like Gravity, immunity is handled elsewhere
-		default: return 0;
+			case 1: return 1; // super-effective
+			case 2: return -1; // resist
+			// in case of weird situations like Gravity, immunity is handled elsewhere
+			default: return 0;
 		}
 	}
 

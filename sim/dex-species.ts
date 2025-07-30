@@ -750,7 +750,7 @@ export class DexSpecies {
 	}
 
 	getPokemonGoData(id: ID): PokemonGoData {
-		return this.dex.data.PokemonGoData[id];
+		return this.dex.data.PokemonGoData?.[id];
 	}
 
 	all(): readonly Species[] {

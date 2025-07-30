@@ -10,10 +10,10 @@ export interface FormatData extends Partial<Format>, EventMethods {
 	name: string;
 }
 
-export type FormatList = (FormatData | { section: string, column?: number })[];
-export type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & { inherit: true };
-export interface FormatDataTable { [id: IDEntry]: FormatData }
-export interface ModdedFormatDataTable { [id: IDEntry]: ModdedFormatData }
+export type FormatList = (FormatData | { section: string, column?: number; })[];
+export type ModdedFormatData = FormatData | Omit<FormatData, 'name'> & { inherit: true; };
+export interface FormatDataTable { [id: IDEntry]: FormatData; }
+export interface ModdedFormatDataTable { [id: IDEntry]: ModdedFormatData; }
 
 type FormatEffectType = 'Format' | 'Ruleset' | 'Rule' | 'ValidatorRule';
 
@@ -149,7 +149,7 @@ export class RuleTable extends Map<string, string> {
 	 * - '': whitelisted
 	 * - null: neither whitelisted nor banned
 	 */
-	check(thing: string, setHas: { [id: string]: true } | null = null) {
+	check(thing: string, setHas: { [id: string]: true; } | null = null) {
 		if (this.has(`+${thing}`)) return '';
 		if (setHas) setHas[thing] = true;
 		return this.getReason(`-${thing}`);
@@ -205,7 +205,7 @@ export class RuleTable extends Map<string, string> {
 	resolveNumbers(format: Format, dex: ModdedDex) {
 		const gameTypeMinTeamSize = ['triples', 'rotation'].includes(format.gameType as 'triples') ? 3 :
 			format.gameType === 'doubles' ? 2 :
-			1;
+				1;
 
 		// NOTE: These numbers are pre-calculated here because they're hardcoded
 		// into the team validator and battle engine, and can affect validation
@@ -270,8 +270,8 @@ export class RuleTable extends Map<string, string> {
 		if (this.valueRules.get('pickedteamsize') === 'Auto') {
 			this.pickedTeamSize = (
 				['doubles', 'rotation'].includes(format.gameType) ? 4 :
-				format.gameType === 'triples' ? 6 :
-				3
+					format.gameType === 'triples' ? 6 :
+						3
 			);
 		}
 		if (this.valueRules.get('evlimit') === 'Auto') {
@@ -438,7 +438,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	 */
 	declare readonly hasValue?: boolean | 'integer' | 'positive-integer';
 	declare readonly onValidateRule?: (
-		this: { format: Format, ruleTable: RuleTable, dex: ModdedDex }, value: string
+		this: { format: Format, ruleTable: RuleTable, dex: ModdedDex; }, value: string
 	) => string | void;
 	/** ID of rule that can't be combined with this rule */
 	declare readonly mutuallyExclusiveWith?: string;
@@ -479,7 +479,7 @@ export class Format extends BasicEffect implements Readonly<BasicEffect> {
 	declare readonly validateSet?: (this: TeamValidator, set: PokemonSet, teamHas: AnyObject) => string[] | null;
 	declare readonly validateTeam?: (this: TeamValidator, team: PokemonSet[], options?: {
 		removeNicknames?: boolean,
-		skipSets?: { [name: string]: { [key: string]: boolean } },
+		skipSets?: { [name: string]: { [key: string]: boolean; }; },
 	}) => string[] | void;
 	declare readonly section?: string;
 	declare readonly column?: number;
@@ -593,9 +593,11 @@ export class DexFormats {
 		}
 		let Formats: AnyObject[] = require(`${__dirname}/../config/formats`).Formats;
 		if (!Array.isArray(Formats)) {
-			throw new TypeError(`Exported property 'Formats' from "./config/formats.ts" must be an array`);
+			throw new TypeError(`Exported property 'Formats' from "../config/formats.ts" must be an array`);
 		}
 		if (customFormats) Formats = mergeFormatLists(Formats as any, customFormats);
+
+		if (customFormats) mergeFormatLists(Formats as any, customFormats);
 
 		let section = '';
 		let column = 1;
@@ -689,7 +691,7 @@ export class DexFormats {
 				try {
 					name = this.validate(name);
 					isTrusted = true;
-				} catch {}
+				} catch { }
 			}
 			const [newName, customRulesString] = name.split('@@@', 2);
 			name = newName.trim();
@@ -968,45 +970,45 @@ export class DexFormats {
 	validateRule(rule: string, format: Format | null = null) {
 		if (rule !== rule.trim()) throw new Error(`Rule "${rule}" should be trimmed`);
 		switch (rule.charAt(0)) {
-		case '-':
-		case '*':
-		case '+':
-			if (rule.slice(1).includes('>') || rule.slice(1).includes('+')) {
-				let buf = rule.slice(1);
-				const gtIndex = buf.lastIndexOf('>');
-				let limit = rule.startsWith('+') ? Infinity : 0;
-				if (gtIndex >= 0 && /^[0-9]+$/.test(buf.slice(gtIndex + 1).trim())) {
-					if (limit === 0) limit = parseInt(buf.slice(gtIndex + 1));
-					buf = buf.slice(0, gtIndex);
-				}
-				let checkTeam = buf.includes('++');
-				const banNames = buf.split(checkTeam ? '++' : '+').map(v => v.trim());
-				if (banNames.length === 1 && limit > 0) checkTeam = true;
-				const innerRule = banNames.join(checkTeam ? ' ++ ' : ' + ');
-				const bans = banNames.map(v => this.validateBanRule(v));
+			case '-':
+			case '*':
+			case '+':
+				if (rule.slice(1).includes('>') || rule.slice(1).includes('+')) {
+					let buf = rule.slice(1);
+					const gtIndex = buf.lastIndexOf('>');
+					let limit = rule.startsWith('+') ? Infinity : 0;
+					if (gtIndex >= 0 && /^[0-9]+$/.test(buf.slice(gtIndex + 1).trim())) {
+						if (limit === 0) limit = parseInt(buf.slice(gtIndex + 1));
+						buf = buf.slice(0, gtIndex);
+					}
+					let checkTeam = buf.includes('++');
+					const banNames = buf.split(checkTeam ? '++' : '+').map(v => v.trim());
+					if (banNames.length === 1 && limit > 0) checkTeam = true;
+					const innerRule = banNames.join(checkTeam ? ' ++ ' : ' + ');
+					const bans = banNames.map(v => this.validateBanRule(v));
 
-				if (checkTeam) {
-					return ['complexTeamBan', innerRule, '', limit, bans];
+					if (checkTeam) {
+						return ['complexTeamBan', innerRule, '', limit, bans];
+					}
+					if (bans.length > 1 || limit > 0) {
+						return ['complexBan', innerRule, '', limit, bans];
+					}
+					throw new Error(`Confusing rule ${rule}`);
 				}
-				if (bans.length > 1 || limit > 0) {
-					return ['complexBan', innerRule, '', limit, bans];
+				return rule.charAt(0) + this.validateBanRule(rule.slice(1));
+			default:
+				const [ruleName, value] = rule.split('=');
+				let id: string = toID(ruleName);
+				const ruleset = this.dex.formats.get(id);
+				if (!ruleset.exists) {
+					throw new Error(`Unrecognized rule "${rule}"`);
 				}
-				throw new Error(`Confusing rule ${rule}`);
-			}
-			return rule.charAt(0) + this.validateBanRule(rule.slice(1));
-		default:
-			const [ruleName, value] = rule.split('=');
-			let id: string = toID(ruleName);
-			const ruleset = this.dex.formats.get(id);
-			if (!ruleset.exists) {
-				throw new Error(`Unrecognized rule "${rule}"`);
-			}
-			if (typeof value === 'string') id = `${id}=${value.trim()}`;
-			if (rule.startsWith('^!')) return `^!${id}`;
-			if (rule.startsWith('^')) return `^${id}`;
-			if (rule.startsWith('!!')) return `!!${id}`;
-			if (rule.startsWith('!')) return `!${id}`;
-			return id;
+				if (typeof value === 'string') id = `${id}=${value.trim()}`;
+				if (rule.startsWith('^!')) return `^!${id}`;
+				if (rule.startsWith('^')) return `^${id}`;
+				if (rule.startsWith('!!')) return `!!${id}`;
+				if (rule.startsWith('!')) return `!${id}`;
+				return id;
 		}
 	}
 
@@ -1035,23 +1037,23 @@ export class DexFormats {
 			if (matchType === 'item' && ruleid === 'noitem') return 'item:noitem';
 			let table;
 			switch (matchType) {
-			case 'pokemon': table = this.dex.data.Pokedex; break;
-			case 'move': table = this.dex.data.Moves; break;
-			case 'item': table = this.dex.data.Items; break;
-			case 'ability': table = this.dex.data.Abilities; break;
-			case 'nature': table = this.dex.data.Natures; break;
-			case 'pokemontag':
-				// valid pokemontags
-				const validTags = [
-					// all
-					'allpokemon', 'allitems', 'allmoves', 'allabilities', 'allnatures',
-				];
-				if (validTags.includes(ruleid) || this.validPokemonTag(ruleid)) {
-					matches.push('pokemontag:' + ruleid);
-				}
-				continue;
-			default:
-				throw new Error(`Unrecognized match type.`);
+				case 'pokemon': table = this.dex.data.Pokedex; break;
+				case 'move': table = this.dex.data.Moves; break;
+				case 'item': table = this.dex.data.Items; break;
+				case 'ability': table = this.dex.data.Abilities; break;
+				case 'nature': table = this.dex.data.Natures; break;
+				case 'pokemontag':
+					// valid pokemontags
+					const validTags = [
+						// all
+						'allpokemon', 'allitems', 'allmoves', 'allabilities', 'allnatures',
+					];
+					if (validTags.includes(ruleid) || this.validPokemonTag(ruleid)) {
+						matches.push('pokemontag:' + ruleid);
+					}
+					continue;
+				default:
+					throw new Error(`Unrecognized match type.`);
 			}
 			if (table.hasOwnProperty(id)) {
 				if (matchType === 'pokemon') {
