@@ -444,6 +444,9 @@ export const commands: Chat.ChatCommands = {
 			const id = await TeamsHandler.save(
 				this, formatid, rawTeam, teamName, privacy, teamID
 			);
+			if (!id) {
+				return; // error messages were thrown to the user
+			}
 
 			const page = isEdit ? 'edit' : 'upload';
 			if (id) {
