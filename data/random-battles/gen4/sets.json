@@ -947,7 +947,7 @@
             },
             {
                 "role": "Bulky Setup",
-                "movepool": ["batonpass", "earthquake", "explosion", "suckerpunch", "superpower", "swordsdance", "zenheadbutt"],
+                "movepool": ["batonpass", "earthquake", "explosion", "swordsdance", "zenheadbutt"],
                 "abilities": ["Synchronize"],
                 "preferredTypes": ["Ground"]
             }
@@ -2358,7 +2358,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["hiddenpowerfighting", "shadowclaw", "shadowsneak", "thunderwave", "willowisp"],
-                "abilities": ["Frisk"]
+                "abilities": ["Frisk", "Insomnia"]
             }
         ]
     },
@@ -2441,12 +2441,6 @@
                 "movepool": ["doubleedge", "hiddenpowergrass", "hydropump", "icebeam", "raindance", "surf"],
                 "abilities": ["Swift Swim"],
                 "preferredTypes": ["Ice"]
-            },
-            {
-                "role": "Fast Attacker",
-                "movepool": ["doubleedge", "hiddenpowergrass", "hydropump", "icebeam", "suckerpunch", "surf"],
-                "abilities": ["Swift Swim"],
-                "preferredTypes": ["Ice"]
             }
         ]
     },
@@ -2502,7 +2496,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["agility", "earthquake", "explosion", "icepunch", "meteormash", "thunderpunch", "zenheadbutt"],
+                "movepool": ["agility", "earthquake", "explosion", "meteormash", "zenheadbutt"],
                 "abilities": ["Clear Body"],
                 "preferredTypes": ["Ground"]
             },

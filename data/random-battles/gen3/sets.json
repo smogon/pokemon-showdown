@@ -996,9 +996,10 @@
         "level": 72,
         "sets": [
             {
-                "role": "Wallbreaker",
-                "movepool": ["bodyslam", "earthquake", "return", "selfdestruct", "shadowball"],
-                "abilities": ["Immunity"]
+                "role": "Setup Sweeper",
+                "movepool": ["bodyslam", "curse", "earthquake", "selfdestruct", "shadowball"],
+                "abilities": ["Immunity"],
+                "preferredTypes": ["Ground"]
             },
             {
                 "role": "Bulky Support",
@@ -1105,7 +1106,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["brickbreak", "earthquake", "explosion", "rockslide", "softboiled", "swordsdance"],
+                "movepool": ["earthquake", "explosion", "rockslide", "softboiled", "swordsdance"],
                 "abilities": ["Synchronize"],
                 "preferredTypes": ["Ground", "Rock"]
             }
