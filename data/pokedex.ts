@@ -16048,6 +16048,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "White",
 		prevo: "Snom",
 		evoType: "levelFriendship",
+		evoTime: "night",
 		evoCondition: "at night",
 		eggGroups: ["Bug"],
 	},
