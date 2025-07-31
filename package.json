@@ -25,9 +25,6 @@
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7"
   },
-  "secretDependencies": {
-    "node-oom-heapdump": "^1.2.0"
-  },
   "engines": {
     "node": ">=16.0.0"
   },
