@@ -1,10 +1,5 @@
 #!/usr/bin/env node
 'use strict';
-// no-var is disabled since this is supposed to support old versions of node
-// block scoped var is just because idk what the fuck is going on there since it wasn't
-// failing before
-/* eslint-disable block-scoped-var, no-var, no-redeclare*/
-
 // Before running, ensure that the Typescript files have been compiled.
 //
 // Simply doing `require('../build')` here doesn't work because the `replace`
@@ -21,13 +16,12 @@
 // of interfacing with the simulator from non-JS languages. Otherwise we error
 // on the side of caution and run `node build` to ensure we're always running
 // with the latest code.
-var fs = require('fs');
-var util = require('util');
-var cli = null;
+const fs = require('fs');
+const util = require('util');
 
 function build() {
 	if (cli.values['skip-build']) return;
-	require('child_process').execSync('node build', {stdio: 'inherit', cwd: __dirname});
+	require('child_process').execSync('node build', { stdio: 'inherit', cwd: __dirname });
 }
 
 function readTeam(stream) {
@@ -84,8 +78,9 @@ function showHelp() {
 }
 
 try {
+	// eslint-disable-next-line no-unused-expressions
 	fetch;
-} catch (e) {
+} catch {
 	// fetch was introduced in Node 18, which is EOL,
 	// so we'll ask for the most recent "Active LTS" with it to be safe
 	// https://nodejs.org/en/about/previous-releases
@@ -93,41 +88,41 @@ try {
 	process.exit(1);
 }
 
-var cliOpts = {
+const cliOpts = {
 	help: {
 		type: 'boolean',
 		short: 'h',
-		default: false
+		default: false,
 	},
 	'skip-build': {
 		type: 'boolean',
-		default: false
+		default: false,
 	},
 	debug: {
 		type: 'boolean',
 		short: 'D',
-		default: false
+		default: false,
 	},
 	replay: {
 		type: 'boolean',
 		short: 'R',
-		default: false
+		default: false,
 	},
 	spectate: {
 		type: 'boolean',
 		short: 'S',
-		default: false
-	}
+		default: false,
+	},
 };
 
-var parserOpts = {
+const parserOpts = {
 	options: cliOpts,
 	strict: false,
 	allowPositionals: true,
-	allowNegative: false
+	allowNegative: false,
 };
 
-cli = util.parseArgs(parserOpts);
+const cli = util.parseArgs(parserOpts);
 
 if (cli.values['help']) {
 	showHelp();
@@ -160,25 +155,25 @@ if (!cli.positionals.length || /^[0-9]+$/.test(cli.positionals[0])) {
 	case 'generate-team':
 		{
 			ensureBuilt();
-			var Teams = require('./dist/sim/teams.js').Teams;
-			var seed = cli.positionals[2] || undefined;
-			console.log(Teams.pack(Teams.generate(cli.positionals[1], {seed})));
+			const Teams = require('./dist/sim/teams.js').Teams;
+			const seed = cli.positionals[2] || undefined;
+			console.log(Teams.pack(Teams.generate(cli.positionals[1], { seed })));
 		}
 		break;
 	case 'validate-team':
 		{
 			ensureBuilt();
 			require('source-map-support/register');
-			var Teams = require('./dist/sim/teams.js').Teams;
-			var TeamValidator = require('./dist/sim/team-validator.js').TeamValidator;
-			var validator = TeamValidator.get(cli.positionals[1]);
-			var Streams = require('./dist/lib/streams.js');
-			var stdin = Streams.stdin();
+			const Teams = require('./dist/sim/teams.js').Teams;
+			const TeamValidator = require('./dist/sim/team-validator.js').TeamValidator;
+			const validator = TeamValidator.get(cli.positionals[1]);
+			const Streams = require('./dist/lib/streams.js');
+			const stdin = Streams.stdin();
 
-			readTeam(stdin).then(function (textTeam) {
+			readTeam(stdin).then(textTeam => {
 				try {
-					var team = Teams.import(textTeam);
-					var result = validator.validateTeam(team);
+					const team = Teams.import(textTeam);
+					const result = validator.validateTeam(team);
 					if (result) {
 						console.error(result.join('\n'));
 						process.exit(1);
@@ -194,15 +189,15 @@ if (!cli.positionals.length || /^[0-9]+$/.test(cli.positionals[0])) {
 	case 'simulate-battle':
 		{
 			build();
-			var BattleTextStream = require('./dist/sim/battle-stream.js').BattleTextStream;
-			var Streams = require('./dist/lib/streams');
-			var stdin = Streams.stdin();
-			var stdout = Streams.stdout();
+			const BattleTextStream = require('./dist/sim/battle-stream.js').BattleTextStream;
+			const Streams = require('./dist/lib/streams');
+			const stdin = Streams.stdin();
+			const stdout = Streams.stdout();
 
-			var battleStream = new BattleTextStream({
+			const battleStream = new BattleTextStream({
 				noCatch: true,
 				debug: cli.values['debug'],
-				replay: cli.values['spectate'] ? 'spectator' : cli.values['replay']
+				replay: cli.values['spectate'] ? 'spectator' : cli.values['replay'],
 			});
 			stdin.pipeTo(battleStream);
 			battleStream.pipeTo(stdout);
@@ -212,13 +207,13 @@ if (!cli.positionals.length || /^[0-9]+$/.test(cli.positionals[0])) {
 	case 'json-team':
 		{
 			build();
-			var Teams = require('./dist/sim/teams').Teams;
-			var Streams = require('./dist/lib/streams');
-			var stdin = Streams.stdin();
+			const Teams = require('./dist/sim/teams').Teams;
+			const Streams = require('./dist/lib/streams');
+			const stdin = Streams.stdin();
 
-			readTeam(stdin).then(function (team) {
+			readTeam(stdin).then(team => {
 				try {
-					var unpackedTeam = Teams.unpack(Teams.import(team));
+					const unpackedTeam = Teams.unpack(Teams.import(team));
 					console.log(JSON.stringify(unpackedTeam));
 					process.exit(0);
 				} catch (e) {
@@ -231,13 +226,13 @@ if (!cli.positionals.length || /^[0-9]+$/.test(cli.positionals[0])) {
 	case 'pack-team':
 		{
 			build();
-			var Teams = require('./dist/sim/teams').Teams;
-			var Streams = require('./dist/lib/streams');
-			var stdin = Streams.stdin();
+			const Teams = require('./dist/sim/teams').Teams;
+			const Streams = require('./dist/lib/streams');
+			const stdin = Streams.stdin();
 
-			readTeam(stdin).then(function (team) {
+			readTeam(stdin).then(team => {
 				try {
-					var packedTeam = Teams.pack(Teams.import(team));
+					const packedTeam = Teams.pack(Teams.import(team));
 					console.log(packedTeam);
 					process.exit(0);
 				} catch (e) {
@@ -250,13 +245,13 @@ if (!cli.positionals.length || /^[0-9]+$/.test(cli.positionals[0])) {
 	case 'export-team':
 		{
 			build();
-			var Teams = require('./dist/sim/teams').Teams;
-			var Streams = require('./dist/lib/streams');
-			var stdin = Streams.stdin();
+			const Teams = require('./dist/sim/teams').Teams;
+			const Streams = require('./dist/lib/streams');
+			const stdin = Streams.stdin();
 
-			readTeam(stdin).then(function (team) {
+			readTeam(stdin).then(team => {
 				try {
-					var exportedTeam = Teams.export(Teams.import(team));
+					const exportedTeam = Teams.export(Teams.import(team));
 					console.log(exportedTeam);
 					process.exit(0);
 				} catch (e) {

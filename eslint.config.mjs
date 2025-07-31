@@ -20,6 +20,7 @@ export default configure([
 		files: [
 			'*.mjs', // look mom I'm linting myself!
 			'**/*.js',
+			'pokemon-showdown',
 		],
 		extends: [configs.js],
 		languageOptions: {
