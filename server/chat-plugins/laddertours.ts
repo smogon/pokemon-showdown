@@ -229,7 +229,6 @@ export class LadderTracker {
 			response = await Net(url).get().then(JSON.parse);
 		} catch (e: any) {
 			if (e.name === 'SyntaxError') { // sometimes the page 404s, meaning invalid json. skip!
-				leaderboard = this.leaderboard.current || [];
 				response = { toplist: [] };
 			} else {
 				Monitor.crashlog('A ladder tracker request', e, this.config);
