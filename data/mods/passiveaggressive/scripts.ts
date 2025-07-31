@@ -115,9 +115,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					const calc = calculate(this.battle, pokemon, pokemon, move.id);
 					this.battle.damage(Math.round(calc * pokemon.maxhp / 2), pokemon, pokemon, this.dex.conditions.get(move.id), true);
 					move.mindBlownRecoil = false;
-					if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-						this.battle.runEvent('EmergencyExit', pokemon, pokemon);
-					}
+					this.battle.singleEvent('EmergencyExit', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, undefined, hpBeforeRecoil);
 				}
 				this.battle.eachEvent('Update');
 				if (!pokemon.hp && targets.length === 1) {
@@ -137,9 +135,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				const hpBeforeRecoil = pokemon.hp;
 				const recoilDamage = this.calcRecoilDamage(move.totalDamage, move, pokemon);
 				if (recoilDamage !== 1.1) this.battle.damage(recoilDamage, pokemon, pokemon, 'recoil');
-				if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
-				}
+				this.battle.singleEvent('EmergencyExit', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, undefined, hpBeforeRecoil);
 			}
 
 			if (move.struggleRecoil) {
@@ -151,9 +147,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					recoilDamage = this.battle.clampIntRange(this.battle.trunc(pokemon.maxhp / 4), 1);
 				}
 				this.battle.directDamage(recoilDamage, pokemon, pokemon, { id: 'strugglerecoil' } as Condition);
-				if (pokemon.hp <= pokemon.maxhp / 2 && hpBeforeRecoil > pokemon.maxhp / 2) {
-					this.battle.runEvent('EmergencyExit', pokemon, pokemon);
-				}
+				this.battle.singleEvent('EmergencyExit', pokemon.getAbility(), pokemon.abilityState, pokemon, pokemon, undefined, hpBeforeRecoil);
 			}
 
 			// smartTarget messes up targetsCopy, but smartTarget should in theory ensure that targets will never fail, anyway
@@ -185,9 +179,7 @@ export const Scripts: ModdedBattleScriptsData = {
 					const curDamage = targets.length === 1 ? move.totalDamage : d;
 					if (typeof curDamage === 'number' && targets[i].hp) {
 						const targetHPBeforeDamage = (targets[i].hurtThisTurn || 0) + curDamage;
-						if (targets[i].hp <= targets[i].maxhp / 2 && targetHPBeforeDamage > targets[i].maxhp / 2) {
-							this.battle.runEvent('EmergencyExit', targets[i], pokemon);
-						}
+						this.battle.singleEvent('EmergencyExit', targets[i].getAbility(), targets[i].abilityState, targets[i], pokemon, undefined, targetHPBeforeDamage);
 					}
 				}
 			}
