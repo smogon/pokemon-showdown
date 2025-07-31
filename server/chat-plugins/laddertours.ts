@@ -223,7 +223,7 @@ export class LadderTracker {
 
 	async getLeaderboard(display?: boolean) {
 		const url = `https://pokemonshowdown.com/ladder/${this.format}.json?prefix=${this.prefix}`;
-		let leaderboard: LeaderboardEntry[] = [];
+		const leaderboard: LeaderboardEntry[] = [];
 		let response;
 		try {
 			response = await Net(url).get().then(JSON.parse);
