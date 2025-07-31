@@ -2502,7 +2502,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["bulletpunch", "earthquake", "explosion", "icepunch", "meteormash", "stealthrock", "thunderpunch", "zenheadbutt"],
+                "movepool": ["bulletpunch", "earthquake", "explosion", "meteormash", "stealthrock", "zenheadbutt"],
                 "abilities": ["Clear Body"],
                 "preferredTypes": ["Ground"]
             }
