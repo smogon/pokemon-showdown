@@ -163,23 +163,15 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 				}
 			}
 			// changes form to match most effective type
-			if (bestType === 'Water') {
-				source.formeChange('Tauros-Paldea-Aqua');
-				source.setAbility('Adaptability');
-				this.add('-ability', source, 'Adaptability');
-			} else if (bestType === 'Fighting') {
-				source.formeChange('Tauros-Paldea-Combat');
-				source.setAbility('Adaptability');
-				this.add('-ability', source, 'Adaptability');
-			} else if (bestType === 'Fire') {
-				source.formeChange('Tauros-Paldea-Blaze');
-				source.setAbility('Adaptability');
-				this.add('-ability', source, 'Adaptability');
-			} else {
-				source.formeChange('Tauros');
-				source.setAbility('Adaptability');
-				this.add('-ability', source, 'Adaptability');
-			}
+			let forme = '';
+			switch (bestType):
+			case 'Water': forme = '-Paldea-Aqua'; break;
+			case 'Fighting': forme = '-Paldea-Combat'; break;
+			case 'Fire': forme= '-Paldea-Blaze'; break;
+			
+			source.formeChange('Tauros' + forme);
+			source.setAbility('Adaptability');
+			this.add('-ability', source, 'Adaptability');
 
 			source.m.ragingBullMoveType = bestType;
 		},
