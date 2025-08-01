@@ -246,7 +246,6 @@ export class RandomTeams {
 		const generatorName = (
 			typeof this.format.team === 'string' && this.format.team.startsWith('random')
 		) ? this.format.team + 'Team' : '';
-		// @ts-ignore
 		return this[generatorName || 'randomTeam'](options);
 	}
 
@@ -1843,7 +1842,7 @@ export class RandomTeams {
 					}
 					if (this.dex.getEffectiveness(typeName, species) > 1) {
 						if (!typeDoubleWeaknesses[typeName]) typeDoubleWeaknesses[typeName] = 0;
-						if (typeDoubleWeaknesses[typeName] >= 1 /* 6 */ * limitFactor) {
+						if (typeDoubleWeaknesses[typeName] >= 1 /* 6 */ * Number(limitFactor)) {
 							skip = true;
 							break;
 						}

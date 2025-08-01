@@ -22,7 +22,6 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 		onDamage(damage, target, source, effect) {
 			if (damage >= target.hp && effect) {
 				// Keep the Pokémon at 1 HP instead of fainting immediately
-				const finalHp = target.hp - 1;
 				this.damage(target.hp - 1, target, source || target, effect);
 
 				this.add('-activate', target, 'ability: Call Illumise');
@@ -79,7 +78,6 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 		onDamage(damage, target, source, effect) {
 			if (damage >= target.hp && effect) {
 				// Keep the Pokémon at 1 HP instead of fainting immediately
-				const finalHp = target.hp - 1;
 				this.damage(target.hp - 1, target, source || target, effect);
 
 				this.add('-activate', target, 'ability: Call Volbeat');
@@ -135,7 +133,6 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 				this.add('-ability', target, 'Short Fuse');
 
 				// Keep the Pokémon at 1 HP instead of fainting immediately
-				const finalHp = target.hp - 1;
 				this.damage(target.hp - 1, target, source, effect);
 
 				// Force the Pokémon to use Explosion
@@ -166,7 +163,7 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 	},
 	frozenarmor: {
 		onTryHit(target, source, move) {
-			if (move.category != 'Status') {
+			if (move.category !== 'Status') {
 				this.add('-ability', target, 'Frozen Armor');
 				// reduces base power of incoming moves by 20 (math.max prevents base power from reducing below 0)
 				move.basePower = Math.max(move.basePower - 20, 0);
@@ -648,7 +645,8 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 			}
 			if (!randomMove8) return false;
 			// Define new moves
-			const newMoves = [randomMove1, randomMove2, randomMove3, randomMove4, randomMove5, randomMove6, randomMove7, randomMove8];
+			const newMoves = [randomMove1, randomMove2, randomMove3, randomMove4, 
+									randomMove5, randomMove6, randomMove7, randomMove8];
 			// Update move slots
 			pokemon.moveSlots = newMoves.map(move => {
 				const moveData = this.dex.moves.get(move);
