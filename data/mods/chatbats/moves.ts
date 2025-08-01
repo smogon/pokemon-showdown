@@ -449,7 +449,8 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 			},
 			onSwitchIn(pokemon) {
 				// hardcode to prevent hazard damage during Order Up switches + enforce hazard damage while King of the Hill is active
-				if ((pokemon.hasItem('heavydutyboots') && !pokemon.side.getSideCondition('kingofthehill')) || pokemon.side.getSideCondition('orderup')) return;
+				if ((pokemon.hasItem('heavydutyboots') && !pokemon.side.getSideCondition('kingofthehill')) ||
+					pokemon.side.getSideCondition('orderup')) return;
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.dex.getActiveMove('stealthrock')), -6, 6);
 				this.damage(pokemon.maxhp * (2 ** typeMod) / 8);
 			},
