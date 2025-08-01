@@ -16,10 +16,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		// Now always hits in Sand in addition to Rain
 		inherit: true,
 		onModifyMove(move, pokemon, target) {
-			if (target && ['sandstorm'].includes(target.effectiveWeather())) {
-				move.accuracy = true;
-			}
-			if (target && ['raindance'].includes(target.effectiveWeather())) {
+			if (target && ['raindance', 'sandstorm'].includes(target.effectiveWeather())) {
 				move.accuracy = true;
 			}
 		},
