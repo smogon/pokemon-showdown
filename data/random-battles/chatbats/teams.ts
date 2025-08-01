@@ -3,7 +3,6 @@ import { Utils } from '../../../lib';
 import { PRNG, type PRNGSeed } from '../../../sim/prng';
 import { type RuleTable } from '../../../sim/dex-formats';
 import { Tags } from './../../tags';
-import { Teams } from '../../../sim/teams';
 
 export interface TeamData {
 	typeCount: { [k: string]: number };
