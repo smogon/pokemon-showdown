@@ -393,15 +393,47 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 9] VaporeMons Random Battle",
-		desc: "A random battle format featuring Pokemon with new/edited moves, items, abilities, and non-stat changes.",
-		mod: 'vaporemons',
-		team: 'randomVPN',
-		ruleset: ['Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Terastal Clause', 'Illusion Level Mod', 'Data Preview'],
+		name: "[Gen 9] Balls Random Battle",
+		desc: "A random battle format featuring Fakemon based on balls (and guns (don't ask)) from the real world and other media.",
+		mod: 'balls',
+		team: 'randomBLL',
+		ruleset: ['Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod', 'Data Preview', 'Sprite Viewer'],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, items, abilities, and adjustments?<br />Then make sure to use the <a href="https://docs.google.com/spreadsheets/d/1_5AwZ24dPu3-5m5yOyIO4OTPmW9OwIWXXzZ5IJZkj4c/edit?usp=sharing" target="_blank">VaporeMons Spreadsheet</a> or use /dt!</b></div>`);
-			this.add(`raw|Welcome to Fusion Evolution Random Battle!`);
-			this.add(`raw|<a href="https://www.smogon.com/forums/threads/vaporemons-randbats-beta-now-live-vr-update-post-809.3722917/">VaporeMons</a> is a Pet Mod featuring new and edited moves, items, abilities, and non-stat adjustments!`);
+			this.add(`raw|<div class='broadcast-green'><b>Yes, this is in fact a real metagame!</b></div>`);
+			this.add(`raw|Welcome to Balls Random Battle!`);
+			this.add(`raw|<a href="https://www.smogon.com/forums/threads/solomods-megathread.3711007/page-4#post-9716880">Balls</a> is a Solomod featuring powerful Fakemon based on balls (and guns (don't ask)) from the real world and other media!`);
+			this.add(`raw|You are invited to come the <a href="https://play.pokemonshowdown.com/petmods">Pet Mods</a> room to discuss the metagame.`);
+		},
+		onSwitchInPriority: 100,
+		onSwitchIn(pokemon) {
+			if ((pokemon.illusion || pokemon).getTypes(true, true).join('/') !==
+				this.dex.forGen(9).species.get((pokemon.illusion || pokemon).species.name).types.join('/') &&
+				!pokemon.terastallized) {
+				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
+			}
+		},
+	},
+	{
+		name: "[Gen 9] Balls", // for roomtours
+		mod: 'balls',
+		searchShow: false,
+		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod', 'Data Preview', 'Sprite Viewer'],
+		banlist: ['All Pokemon'],
+		unbanlist: [
+			// Balls
+			'Baseball', 'Basketball', 'Football', 'Soccerball', 'Tennisball', 'Cricketball',
+			'Watermelon', 'Cabbage', 'Plasmaball', 'pokemon:Snowball', 'Crystalball', '8ball',
+			'Gumball', 'Discoball', 'The Moon', 'pokemon:Rock', 'Virus', 'Dragonball',
+			// Guns
+			'Scorpiongun', 'Tommygun', 'Dracogun', 'Railgun', 'Toygun', 'Shotgun',
+			'pokemon:Flamethrower', 'Airgun', 'Proton Pack', 'Crossbow', 'Grenade Launcher', 'Freezegun',
+			'Handgun', 'Blowgun', 'Lasergun', '5.7 Rock', 'Nailgun', 'pokemon:Watergun',
+		],
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Yes, this is in fact a real metagame!</b></div>`);
+			this.add(`raw|Welcome to Balls!`);
+			this.add(`raw|Yes this is, in fact, a real metagame!`);
+			this.add(`raw|<a href="https://www.smogon.com/forums/threads/solomods-megathread.3711007/page-4#post-9716880">Balls</a> is a Solomod featuring powerful Fakemon based on balls (and guns (don't ask)) from the real world and other media!`);
 			this.add(`raw|You are invited to come the <a href="https://play.pokemonshowdown.com/petmods">Pet Mods</a> room to discuss the metagame.`);
 		},
 		onSwitchInPriority: 100,
