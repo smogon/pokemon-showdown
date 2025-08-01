@@ -174,7 +174,7 @@ async function collectStats(battle: RoomBattle, winner: ID, players: ID[]) {
 	let eloFloor = stats.elo;
 	const format = Dex.formats.get(battle.format);
 	if (format.mod === 'gen2') {
-		// ladders are inactive, so use a lower threshold
+		// ladder is inactive, so use a lower threshold
 		eloFloor = 1150;
 	} else if (format.team === 'randomBaby') {
 		// ladder is even more inactive, so an even lower threshold
