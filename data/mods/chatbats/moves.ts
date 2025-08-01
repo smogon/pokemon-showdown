@@ -5,7 +5,8 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		secondary: null,
 		// Ancient Power is physical and boosts on-kill
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (!target || target.fainted || target.hp <= 0) this.boost({ atk: 1, def: 1, spa: 1, spd: 1, spe: 1 }, pokemon, pokemon, move);
+			if (!target || target.fainted || target.hp <= 0) 
+				this.boost({ atk: 1, def: 1, spa: 1, spd: 1, spe: 1 }, pokemon, pokemon, move);
 		},
 		desc: "If this move causes the opponent to faint, raises the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
 		shortDesc: "Raise all stats by 1 if this move KOs the target.",
@@ -407,9 +408,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 				if (target.boosts.def !== -6) {
 					this.boost({ def: -1 }, target, source, move);
 				}
-			}
-			// if not def drop, does thunder kick
-			else {
+			} else {
 				this.add('-message', `${source.name} follows up with a Thunder Kick!`);
 				// defines Thunder Kick
 				const thunderKick = {
@@ -527,7 +526,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 			onSwitchInPriority: -1,
 			onSwitchIn(pokemon) {
 				// when Dondozo switches back in after eating, it gains boost
-				if (pokemon.baseSpecies.baseSpecies == 'Dondozo') {
+				if (pokemon.baseSpecies.baseSpecies === 'Dondozo') {
 					// reapplies volatiles and stat boosts
 					if (pokemon.storedVolatiles) {
 						for (const volatile in pokemon.storedVolatiles) {
@@ -555,9 +554,8 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 					pokemon.addVolatile('ordered');
 					// removes the side condition
 					pokemon.side.removeSideCondition('orderup');
-				}
-				// after Dondozo switches out, this happens to the next pokemon that is switched in
-				else {
+				} else {
+					// after Dondozo switches out, this happens to the next pokemon that is switched in
 					const meal = pokemon;
 					// faints the eaten mon
 					pokemon.faint();
