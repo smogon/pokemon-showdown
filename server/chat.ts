@@ -1851,7 +1851,7 @@ export const Chat = new class {
 			if (!migrationVersion) continue;
 			if (migrationVersion > curVersion) {
 				migrationsToRun.push({ version: migrationVersion, file: migrationFile });
-				Monitor.adminlog(`Pushing to migrationsToRun: ${migrationVersion} at ${migrationFile} - mainModule ${process.mainModule === module} !process.send ${!process.send}`);
+				Monitor.adminlog(`Pushing to migrationsToRun: ${migrationVersion} at ${migrationFile} - require.main ${require.main === module} !process.send ${!process.send}`);
 			}
 		}
 		Utils.sortBy(migrationsToRun, ({ version }) => version);
@@ -2712,7 +2712,7 @@ if (!process.send) {
 	Chat.databaseReadyPromise = Chat.prepareDatabase();
 	// we need to make sure it is explicitly JUST the child of the original parent db process
 	// no other child processes
-} else if (process.mainModule === module) {
+} else if (require.main === module) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A chat child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
