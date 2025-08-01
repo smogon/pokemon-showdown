@@ -18,7 +18,7 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 		shortDesc: "Fire-/Ice-type moves against this Pokemon deal 1/2 damage. Burn immune.",
 	},
 	callillumise: {
-		onDamagePriority: -30, 
+		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
 			if (damage >= target.hp && effect) {
 				// Keep the Pokémon at 1 HP instead of fainting immediately
@@ -75,10 +75,9 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 		onTryHit(target, source, move) {
 			target.clearBoosts();
 		},
-		onDamagePriority: -30, 
+		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
 			if (damage >= target.hp && effect) {
-		
 				// Keep the Pokémon at 1 HP instead of fainting immediately
 				const finalHp = target.hp - 1;
 				this.damage(target.hp - 1, target, source || target, effect);
@@ -130,31 +129,31 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 		shortDesc: "When Volbeat gets low on HP, it calls Illumise for aid.",
 	},
 	shortfuse: {
-		onDamagePriority: -30, 
+		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
 			if (damage >= target.hp && effect) {
 				this.add('-ability', target, 'Short Fuse');
-		
+
 				// Keep the Pokémon at 1 HP instead of fainting immediately
 				const finalHp = target.hp - 1;
 				this.damage(target.hp - 1, target, source, effect);
-		
+
 				// Force the Pokémon to use Explosion
 				const explosion = this.dex.getActiveMove('explosion');
 				this.actions.useMove(explosion, target);
-					
+
 				// Ensure the Pokémon properly faints afterward
 				target.faint();
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		name: "Short Fuse",
 		rating: 5,
 		num: -102,
 		shortDesc: "When this Pokemon would be KOed, it instead uses Explosion.",
 	},
 	hydroelectricdam: {
-		//Copied from the code for Sand Spit
+		// Copied from the code for Sand Spit
 		onDamagingHit(damage, target, source, move) {
 			this.field.setWeather('raindance');
 			this.add('-message', `Archaludon releases a deluge!`);
@@ -167,7 +166,7 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 	},
 	frozenarmor: {
 		onTryHit(target, source, move) {
-			if(move.category != 'Status') {
+			if (move.category != 'Status') {
 				this.add('-ability', target, 'Frozen Armor');
 				// reduces base power of incoming moves by 20 (math.max prevents base power from reducing below 0)
 				move.basePower = Math.max(move.basePower - 20, 0);
@@ -181,13 +180,13 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 				if (pokemon.species !== 'Calyrex-Ice' && pokemon.ability === 'frozenarmor') {
 					pokemon.formeChange('Calyrex-Ice', pokemon, true);
 					this.add('-message', `Glastrier's Frozen Armor has shattered!`);
-					//pokemon.setAbility('As One (Glastrier)');
+					// pokemon.setAbility('As One (Glastrier)');
 					pokemon.baseAbility = pokemon.ability;
-					//this.add('-ability', pokemon, 'As One');
+					// this.add('-ability', pokemon, 'As One');
 				}
 			}
 		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1 },
 		name: "Frozen Armor",
 		rating: 5,
 		num: -105,
@@ -197,11 +196,11 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 		onDamagingHitOrder: 1,
 		onTryHit(target, source, move) {
 			if (move.flags['contact']) {
-				let invertedBoosts: SparseBoostsTable = {};
+				const invertedBoosts: SparseBoostsTable = {};
 				for (const stat in source.boosts) {
 					if (source.boosts[stat] > 0) {
 						// checks for boosts on source of move, inverts boosts and adds them to invertedBoosts table
-						invertedBoosts[stat] = -2 * source.boosts[stat]; 
+						invertedBoosts[stat] = -2 * source.boosts[stat];
 					}
 				}
 				// applies boosts
@@ -286,14 +285,14 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 				return null;
 			}
 		},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		name: "Still Water",
 		rating: 5,
 		num: -107,
 		shortDesc: "Unaware + Water Absorb",
 	},
 	kingofthehill: {
-		//sharpness + mountaineer + prevents hazard immunity
+		// sharpness + mountaineer + prevents hazard immunity
 		onDamage(damage, target, source, effect) {
 			if (effect && effect.id === 'stealthrock') {
 				return false;
@@ -317,7 +316,7 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'King of the Hill');
 			for (const side of pokemon.side.foeSidesWithConditions()) {
-					side.addSideCondition('kingofthehill');
+				side.addSideCondition('kingofthehill');
 			}
 		},
 		onEnd(pokemon) {
@@ -328,7 +327,7 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 			}
 		},
 		condition: {},
-		flags: {breakable: 1},
+		flags: { breakable: 1 },
 		name: "King of the Hill",
 		rating: 5,
 		num: -108,
@@ -401,11 +400,11 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 		onDamage(damage, target, source, effect) {
 			// prevents magic guard from blocking hazard damage while King of the Hill is active
 			if (target.side.getSideCondition('kingofthehill')) {
-            const hazards = ['stealthrock', 'spikes', 'toxicspikes', 'stickyweb'];
-            if (effect && hazards.includes(effect.id)) {
-                return;
-           	}
-        	}
+				const hazards = ['stealthrock', 'spikes', 'toxicspikes', 'stickyweb'];
+				if (effect && hazards.includes(effect.id)) {
+					return;
+				}
+			}
 			if (effect.effectType !== 'Move') {
 				if (effect.effectType === 'Ability') this.add('-activate', source, 'ability: ' + effect.name);
 				return false;
@@ -593,7 +592,7 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (pokemon.getVolatile('mustrecharge')) {
-				pokemon.removeVolatile('mustrecharge')
+				pokemon.removeVolatile('mustrecharge');
 				this.add('-end', pokemon, 'mustrecharge');
 			}
 		},
@@ -605,7 +604,7 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 	},
 	biogenesis: {
 		onSwitchInPriority: -1,
-		onBeforeSwitchIn(pokemon) {	
+		onBeforeSwitchIn(pokemon) {
 			if (pokemon.didRandomMoves === "yes") return;
 			const moves = this.dex.moves.all();
 			let randomMove1 = '';
@@ -675,20 +674,20 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 			}
 			if (!pokemon) return; // Chat command
 			const attackingMoves = pokemon.baseMoveSlots
-  				.map(slot => this.dex.moves.get(slot.id))
-  				.filter(move => move.category === 'Physical' || move.category === 'Special');
+				.map(slot => this.dex.moves.get(slot.id))
+				.filter(move => move.category === 'Physical' || move.category === 'Special');
 
 			// pick types of first 2 attacking moves (failsafe if there are none)
-			const types = attackingMoves.length
-  				? [...new Set(attackingMoves.slice(0, 2).map(move => move.type))]
-  				: pokemon.types;
+			const types = attackingMoves.length ?
+				[...new Set(attackingMoves.slice(0, 2).map(move => move.type))] :
+				pokemon.types;
 			pokemon.setType(types);
 			pokemon.baseTypes = pokemon.types;
 			pokemon.hasTypeChanged = "yes";
 			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 		},
-		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1,
-			breakable: 1, notransform: 1},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1,
+			breakable: 1, notransform: 1 },
 		name: "Biogenesis",
 		rating: 5,
 		num: -112,

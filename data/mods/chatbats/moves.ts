@@ -5,13 +5,13 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		secondary: null,
 		// Ancient Power is physical and boosts on-kill
 		onAfterMoveSecondarySelf(pokemon, target, move) {
-			if (!target || target.fainted || target.hp <= 0) this.boost({atk: 1, def: 1, spa: 1, spd: 1, spe: 1,}, pokemon, pokemon, move);
+			if (!target || target.fainted || target.hp <= 0) this.boost({ atk: 1, def: 1, spa: 1, spd: 1, spe: 1 }, pokemon, pokemon, move);
 		},
 		desc: "If this move causes the opponent to faint, raises the user's Attack, Defense, Special Attack, Special Defense, and Speed by 1 stage.",
 		shortDesc: "Raise all stats by 1 if this move KOs the target.",
 	},
 	sandsearstorm: {
-		//Now always hits in Sand in addition to Rain
+		// Now always hits in Sand in addition to Rain
 		inherit: true,
 		onModifyMove(move, pokemon, target) {
 			if (target && ['sandstorm'].includes(target.effectiveWeather())) {
@@ -20,10 +20,10 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 			if (target && ['raindance'].includes(target.effectiveWeather())) {
 				move.accuracy = true;
 			}
-		}
+		},
 	},
 	mountainmaw: {
-		//Copied from Psychic Fangs, just changed to be Rock type
+		// Copied from Psychic Fangs, just changed to be Rock type
 		num: -101,
 		accuracy: 100,
 		basePower: 85,
@@ -31,7 +31,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		name: "Mountain Maw",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1, bite: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -72,7 +72,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		name: "Scavenge",
 		pp: 10,
 		priority: 0,
-		flags: {contact: 1, protect: 1, mirror: 1, metronome: 1},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		secondary: null,
 		target: "normal",
 		type: "Poison",
@@ -89,14 +89,13 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 				source.lastItem = '';
 				source.setItem(item);
 				this.add('-item', source, this.dex.items.get(item), '[from] move: Scavenge');
-		  	}
-			else {
+			} else {
 				return null;
 			}
 		},
 		shortDesc: "User regains their last used item, similar to Recycle.",
-		desc: "If the user has consumed their item, it will be restored."
-	},	  
+		desc: "If the user has consumed their item, it will be restored.",
+	},
 	aquaring: {
 		inherit: true,
 		condition: {
@@ -148,55 +147,55 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		shortDesc: "Changes type to the most effective against the target (Water, Fighting, Fire, or Normal).",
 		desc: "Changes the move's and user's forme to the most effective against the target (Water, Fighting, Fire, or Normal).",
 		beforeMoveCallback(source, target, move) {
-		  	const typeEffectiveness = {
+			const typeEffectiveness = {
 				Normal: this.dex.getEffectiveness('Normal', target),
 				Water: this.dex.getEffectiveness('Water', target),
 				Fighting: this.dex.getEffectiveness('Fighting', target),
 				Fire: this.dex.getEffectiveness('Fire', target),
 			};
-		  
-		  	let bestType = 'Normal';
-		  	let maxEffectiveness = -Infinity;
-		  	// gets most effective type against target (defaults to normal)
-		  	for (const type in typeEffectiveness) {
+
+			let bestType = 'Normal';
+			let maxEffectiveness = -Infinity;
+			// gets most effective type against target (defaults to normal)
+			for (const type in typeEffectiveness) {
 				if (typeEffectiveness[type] > maxEffectiveness) {
-			  		maxEffectiveness = typeEffectiveness[type];
-			  		bestType = type;
+					maxEffectiveness = typeEffectiveness[type];
+					bestType = type;
 				}
-		  	}
-	  		// changes form to match most effective type
-		  	if (bestType === 'Water') {
+			}
+			// changes form to match most effective type
+			if (bestType === 'Water') {
 				source.formeChange('Tauros-Paldea-Aqua');
 				source.setAbility('Adaptability');
 				this.add('-ability', source, 'Adaptability');
-		  	} else if (bestType === 'Fighting') {
+			} else if (bestType === 'Fighting') {
 				source.formeChange('Tauros-Paldea-Combat');
 				source.setAbility('Adaptability');
 				this.add('-ability', source, 'Adaptability');
-		  	} else if (bestType === 'Fire') {
+			} else if (bestType === 'Fire') {
 				source.formeChange('Tauros-Paldea-Blaze');
 				source.setAbility('Adaptability');
 				this.add('-ability', source, 'Adaptability');
-		  	} else {
+			} else {
 				source.formeChange('Tauros');
 				source.setAbility('Adaptability');
 				this.add('-ability', source, 'Adaptability');
-		  	}
-	  
-		  	source.m.ragingBullMoveType = bestType;
+			}
+
+			source.m.ragingBullMoveType = bestType;
 		},
-	  	// animation was remnant of Techno Blast code being copied, decided to keep because funny
+		// animation was remnant of Techno Blast code being copied, decided to keep because funny
 		onPrepareHit(target, source, move) {
-		  	this.add('-anim', source, 'Techno Blast', target);
+			this.add('-anim', source, 'Techno Blast', target);
 		},
-	  	// sets type properly (failsafe)
+		// sets type properly (failsafe)
 		onModifyType(move, pokemon, target) {
-		  	if (pokemon.m.ragingBullMoveType) {
+			if (pokemon.m.ragingBullMoveType) {
 				move.type = pokemon.m.ragingBullMoveType;
-		  	}
+			}
 		},
 		target: "normal",
-	}, 
+	},
 	iciclestorm: {
 		num: -1044,
 		accuracy: 95,
@@ -217,7 +216,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		self: {
 			onHit(source) {
 				this.field.setWeather('snowscape');
-			}
+			},
 		},
 		secondary: null,
 		target: "normal",
@@ -227,13 +226,13 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		shortDesc: "Sets Snow.",
 	},
 	springtidestorm: {
-		//Now always hits in Sand in addition to Rain
+		// Now always hits in Sand in addition to Rain
 		inherit: true,
 		onModifyMove(move, pokemon, target) {
 			if (target && ['raindance'].includes(target.effectiveWeather())) {
 				move.accuracy = true;
 			}
-		}
+		},
 	},
 	// Poison type now
 	spitup: {
@@ -324,23 +323,22 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		// checks for water move usage from opponent
 		onModifyPriority(priority, source) {
 			// gets current foe in singles
-    		const foe = source.side.foe.active[0];
-    		if (!foe || foe.fainted) {
+			const foe = source.side.foe.active[0];
+			if (!foe || foe.fainted) {
 				return priority;
 			}
 			// gets attack of foe this turn
-    		const action = this.queue.willMove(foe);
-    		if (!action || action.choice !== 'move') {
+			const action = this.queue.willMove(foe);
+			if (!action || action.choice !== 'move') {
 				return priority;
 			}
-    		const move = action.move;
-    		if (move?.type === 'Water') {
-        		return priority + 1;
-    		}
-			else {
+			const move = action.move;
+			if (move?.type === 'Water') {
+				return priority + 1;
+			} else {
 				return priority;
 			}
-    		return priority;
+			return priority;
 		},
 		// modifies base power
 		onBasePower(basePower, source, target) {
@@ -356,8 +354,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 			if (move?.type === 'Water') {
 				this.add('-message', `Sudowoodo draws power from the water!`);
 				return basePower + 70;
-			}
-			else {
+			} else {
 				return basePower;
 			}
 			return basePower;
@@ -377,7 +374,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		desc: "If the target is using a Water type move, this move will always move first and gains double power.",
 	},
 	ironstrike: {
-		//implemented via changes to Stealth Rocks and Spikes
+		// implemented via changes to Stealth Rocks and Spikes
 		num: -107,
 		accuracy: 100,
 		basePower: 50,
@@ -404,24 +401,24 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		secondary: null,
 		onHit(target, source, move) {
 			// random # 0 or 1
-		   const randomNum = Math.round(Math.random());
+			const randomNum = Math.round(Math.random());
 			// 50% chance to drop def
-		   if (randomNum === 0) {
-		      if (target.boosts.def !== -6) {
-		         this.boost({def: -1}, target, source, move);
-		   	}
-		   }
+			if (randomNum === 0) {
+				if (target.boosts.def !== -6) {
+					this.boost({ def: -1 }, target, source, move);
+				}
+			}
 			// if not def drop, does thunder kick
 			else {
-		      this.add('-message', `${source.name} follows up with a Thunder Kick!`);
+				this.add('-message', `${source.name} follows up with a Thunder Kick!`);
 				// defines Thunder Kick
-		      const thunderKick = {
-		         name: "Thunder Kick",
-		         type: "Electric",
-		         basePower: 50,
-				  	accuracy: 100,
-	            category: "Physical",
-	            priority: 0,
+				const thunderKick = {
+					name: "Thunder Kick",
+					type: "Electric",
+					basePower: 50,
+					accuracy: 100,
+					category: "Physical",
+					priority: 0,
 					onTryMove() {
 						this.attrLastMove('[still]');
 					},
@@ -429,11 +426,11 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 						this.add('-anim', source, 'High Jump Kick', target);
 						this.add('-anim', source, 'Thunder', target);
 					},
-		         flags: {contact: true, protect: true},
-		      };
+					flags: { contact: true, protect: true },
+				};
 				// uses Thunder Kick
-		      this.actions.useMove(thunderKick, source, target);
-		   }
+				this.actions.useMove(thunderKick, source, target);
+			}
 		},
 		desc: "50% chance to reduce Defense by 1, 50% chance to inflict an additional 50 BP Electric type damage.",
 		shortDesc: "50% -1 Defense, 50% extra 50 BP Electric damage.",
@@ -516,7 +513,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		zMove: { boost: { def: 1 } },
 		contestType: "Clever",
 	},
-		orderup: {
+	orderup: {
 		num: 856,
 		accuracy: 100,
 		basePower: 80,
@@ -533,28 +530,26 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 				if (pokemon.baseSpecies.baseSpecies == 'Dondozo') {
 					// reapplies volatiles and stat boosts
 					if (pokemon.storedVolatiles) {
-  						for (const volatile in pokemon.storedVolatiles) {
-    						pokemon.addVolatile(volatile);
+						for (const volatile in pokemon.storedVolatiles) {
+							pokemon.addVolatile(volatile);
 						}
 					}
 					if (pokemon.storedBoosts) {
-  						for (const stat in pokemon.storedBoosts) {
-    						const change = pokemon.storedBoosts[stat];
-    						if (change !== 0) {
-      						this.boost({[stat]: change}, pokemon);
-    						}
- 						}
+						for (const stat in pokemon.storedBoosts) {
+							const change = pokemon.storedBoosts[stat];
+							if (change !== 0) {
+								this.boost({ [stat]: change }, pokemon);
+							}
+						}
 					}
 					this.add('-message', `Dondozo enjoyed its meal!`);
 					// applies boost based on eaten mon stats
 					if (this.effectState.eatenBoost === 'atk' || this.effectState.eatenBoost === 'spa') {
 						this.boost({ atk: 3 }, pokemon);
-					}
-					else if (this.effectState.eatenBoost === 'def' || this.effectState.eatenBoost === 'spd') {
-						this.boost({ def: 2, spd: 2}, pokemon);
-					}
-					else {
-						this.boost({ spe: 3}, pokemon);
+					} else if (this.effectState.eatenBoost === 'def' || this.effectState.eatenBoost === 'spd') {
+						this.boost({ def: 2, spd: 2 }, pokemon);
+					} else {
+						this.boost({ spe: 3 }, pokemon);
 					}
 					// adds volatile ordered, which prevents the order up effect from occuring again until Dondozo switches out
 					pokemon.addVolatile('ordered');
@@ -568,15 +563,15 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 					pokemon.faint();
 					// finds highest stat of eaten mon, stored in effectState eatenBoost
 					const stats = ['atk', 'def', 'spa', 'spd', 'spe'];
-    				let highestStat = stats[0];
-    				let maxStatValue = meal.storedStats[highestStat];
+					let highestStat = stats[0];
+					let maxStatValue = meal.storedStats[highestStat];
 
-    				for (const stat of stats) {
-        				if (meal.storedStats[stat] > maxStatValue) {
-            			highestStat = stat;
-      					maxStatValue = meal.storedStats[stat];
-      				}
-    				}
+					for (const stat of stats) {
+						if (meal.storedStats[stat] > maxStatValue) {
+							highestStat = stat;
+							maxStatValue = meal.storedStats[stat];
+						}
+					}
 					this.effectState.eatenBoost = highestStat;
 				}
 			},
@@ -586,12 +581,12 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 				if (!dondozo) return;
 				// forces Dondozo in after the eaten mon faints
 				this.queue.insertChoice({
-      			choice: 'switch',
-      			pokemon: pokemon,
+					choice: 'switch',
+					pokemon,
 					target: dondozo,
-    			});
+				});
 				this.checkFainted();
-			}
+			},
 		},
 		// when order up hits, first checks for volatile ordered to ensure that Order Up has not already been used, then starts orderup side condition and switches Dondozo out
 		onHit(target, source, move) {
@@ -602,7 +597,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 			source.storedBoosts = { ...source.boosts };
 			source.storedVolatiles = {};
 			for (const volatile in source.volatiles) {
-  				source.storedVolatiles[volatile] = source.volatiles[volatile];
+				source.storedVolatiles[volatile] = source.volatiles[volatile];
 			}
 			if (source.side.getSideCondition('orderup')) {
 				this.add('-ability', source, 'Order Up');
@@ -702,10 +697,9 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		},
 		onAfterMoveSecondarySelf(pokemon, target, move) {
 			if (!target || target.fainted || target.hp <= 0) {
-				this.boost({ atk: 1, }, pokemon, pokemon, move);
-			}
-			else {
-				this.boost({ atk: -1, }, pokemon, pokemon, move);
+				this.boost({ atk: 1 }, pokemon, pokemon, move);
+			} else {
+				this.boost({ atk: -1 }, pokemon, pokemon, move);
 			}
 		},
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
@@ -727,22 +721,22 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		beforeMoveCallback(source, target, move) {
 			this.effectState.surgingStrikesAlreadyUsed = 0;
 			this.add('-anim', source, 'Techno Blast', target);
-		  	const typeEffectiveness = {
+			const typeEffectiveness = {
 				Water: this.dex.getEffectiveness('Water', target),
 				Dark: this.dex.getEffectiveness('Dark', target),
 			};
-		  
-		  	let bestType = 'Water';
-		  	let maxEffectiveness = -Infinity;
-		  	// gets most effective type against target (defaults to the current type)
-		  	for (const type in typeEffectiveness) {
+
+			let bestType = 'Water';
+			let maxEffectiveness = -Infinity;
+			// gets most effective type against target (defaults to the current type)
+			for (const type in typeEffectiveness) {
 				if (typeEffectiveness[type] > maxEffectiveness) {
-			  		maxEffectiveness = typeEffectiveness[type];
-			  		bestType = type;
+					maxEffectiveness = typeEffectiveness[type];
+					bestType = type;
 				}
-		  	}
-	  		// changes form to match most effective type
-		  	if (bestType === 'Dark') {
+			}
+			// changes form to match most effective type
+			if (bestType === 'Dark') {
 				this.add('-message', `Urshifu takes pity on its foe and transforms into a weaker type!`);
 				source.formeChange('Urshifu-Rapid-Strike', source, true);
 				source.setAbility('Sniper');
@@ -768,8 +762,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 				source.baseMoveSlots = source.moveSlots.slice();
 				this.actions.useMove('surgingstrikes', source, target);
 				this.effectState.surgingStrikesAlreadyUsed = 1;
-		  	}
-	  		
+			}
 		},
 		onTry(source, target, move) {
 			if (this.effectState.surgingStrikesAlreadyUsed === 1) {
@@ -795,22 +788,22 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		beforeMoveCallback(source, target, move) {
 			this.effectState.wickedBlowAlreadyUsed = 0;
 			this.add('-anim', source, 'Techno Blast', target);
-		  	const typeEffectiveness = {
+			const typeEffectiveness = {
 				Dark: this.dex.getEffectiveness('Dark', target),
 				Water: this.dex.getEffectiveness('Water', target),
 			};
-		  
-		  	let bestType = 'Dark';
-		  	let maxEffectiveness = -Infinity;
-		  	// gets most effective type against target (defaults to the current type)
-		  	for (const type in typeEffectiveness) {
+
+			let bestType = 'Dark';
+			let maxEffectiveness = -Infinity;
+			// gets most effective type against target (defaults to the current type)
+			for (const type in typeEffectiveness) {
 				if (typeEffectiveness[type] > maxEffectiveness) {
-			  		maxEffectiveness = typeEffectiveness[type];
-			  		bestType = type;
+					maxEffectiveness = typeEffectiveness[type];
+					bestType = type;
 				}
-		  	}
-	  		// changes form to match most effective type
-		  	if (bestType === 'Water') {
+			}
+			// changes form to match most effective type
+			if (bestType === 'Water') {
 				this.add('-message', `Urshifu takes pity on its foe and transforms into a weaker type!`);
 				source.formeChange('Urshifu', source, true);
 				source.setAbility('Sniper');
@@ -836,8 +829,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 				source.baseMoveSlots = source.moveSlots.slice();
 				this.actions.useMove('wickedblow', source, target);
 				this.effectState.wickedBlowAlreadyUsed = 1;
-		  	}
-	  		
+			}
 		},
 		onTry(source, target, move) {
 			if (this.effectState.wickedBlowAlreadyUsed === 1) {
@@ -910,5 +902,5 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		contestType: "Cool",
 		desc: "Changes the target's type to Steel.",
 		shortDesc: "Changes the target's type to Steel.",
-	}
+	},
 };

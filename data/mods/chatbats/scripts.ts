@@ -62,7 +62,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData('Learnsets', 'mesprit').learnset.cosmicpower = ['9L1'];
 		this.modData('Learnsets', 'mesprit').learnset.aquaring = ['9L1'];
 		this.modData('Learnsets', 'mesprit').learnset.freezedry = ['9L1'];
-		
+
 		this.modData('Learnsets', 'electrode').learnset.encore = ['9L1'];
 		this.modData('Learnsets', 'electrode').learnset.rapidspin = ['9L1'];
 
@@ -165,7 +165,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData('Learnsets', 'araquanid').learnset.firstimpression = ['9L1'];
 
 		this.modData('Learnsets', 'avalugghisui').learnset.mountainmaw = ['9L1'];
-		
+
 		this.modData('Learnsets', 'swalot').learnset.earthpower = ['9L1'];
 
 		this.modData('Learnsets', 'zapdosgalar').learnset.wildcharge = ['9L1'];
@@ -187,7 +187,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData('Learnsets', 'golurk').learnset.headlongrush = ['9L1'];
 
 		this.modData('Learnsets', 'meowscarada').learnset.encore = ['9L1'];
-		this.modData('Learnsets', 'meowscarada').learnset.spectralthief  = ['9L1'];
+		this.modData('Learnsets', 'meowscarada').learnset.spectralthief = ['9L1'];
 
 		this.modData('Learnsets', 'infernape').learnset.alloutassault = ['9L1'];
 		this.modData('Learnsets', 'infernape').learnset.mindblown = ['9L1'];

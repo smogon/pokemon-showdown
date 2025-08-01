@@ -390,7 +390,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Cancel Mod'],
 		onSwitchIn(pokemon) {
-      	this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
+			this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
 		},
 		// Dachsbun causes Koraidon to generate on enemy team. Implemented here.
 		onBegin() {
@@ -420,7 +420,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 							randomFoe.itemState = { id: randomFoeItem, target: randomFoe };
 							// Define new moves
 							const newMoves = ['closecombat', 'flareblitz', 'outrage', 'uturn'];
-		
+
 							// Update move slots
 							randomFoe.moveSlots = newMoves.map(move => {
 								const moveData = this.dex.moves.get(move);
@@ -434,14 +434,13 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 									used: false,
 								};
 							});
-						}
-						else {
+						} else {
 							const randomFoeItem = 'loadeddice';
 							randomFoe.item = randomFoeItem;
 							randomFoe.itemState = { id: randomFoeItem, target: randomFoe };
 							// Define new moves
 							const newMoves = ['collisioncourse', 'flareblitz', 'scaleshot', 'swordsdance'];
-		
+
 							// Update move slots
 							randomFoe.moveSlots = newMoves.map(move => {
 								const moveData = this.dex.moves.get(move);
@@ -458,11 +457,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						}
 						// this forces the UI to update move slots visually
 						randomFoe.baseMoveSlots = randomFoe.moveSlots.slice();
-						randomFoe.teraType = 'fire'
+						randomFoe.teraType = 'fire';
 					}
 				}
 			}
-		}
+		},
 	},
 
 	// Draft League
