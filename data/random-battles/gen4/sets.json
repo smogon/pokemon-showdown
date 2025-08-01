@@ -851,7 +851,7 @@
         ]
     },
     "snorlax": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -897,7 +897,7 @@
         ]
     },
     "moltres": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1260,7 +1260,7 @@
         ]
     },
     "dunsparce": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1446,7 +1446,7 @@
         ]
     },
     "kingdra": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1893,7 +1893,7 @@
         ]
     },
     "shedinja": {
-        "level": 98,
+        "level": 99,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2215,7 +2215,7 @@
         ]
     },
     "zangoose": {
-        "level": 84,
+        "level": 85,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2918,7 +2918,7 @@
         ]
     },
     "floatzel": {
-        "level": 83,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3019,7 +3019,7 @@
         ]
     },
     "purugly": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -3561,7 +3561,7 @@
         ]
     },
     "dialga": {
-        "level": 71,
+        "level": 70,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3705,7 +3705,7 @@
         ]
     },
     "shayminsky": {
-        "level": 69,
+        "level": 70,
         "sets": [
             {
                 "role": "Fast Attacker",

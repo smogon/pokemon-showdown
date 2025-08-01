@@ -749,7 +749,7 @@
         ]
     },
     "seaking": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -833,7 +833,7 @@
         ]
     },
     "pinsirmega": {
-        "level": 74,
+        "level": 73,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -1317,7 +1317,7 @@
         ]
     },
     "quagsire": {
-        "level": 88,
+        "level": 87,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1419,7 +1419,7 @@
             {
                 "role": "Bulky Support",
                 "movepool": ["gyroball", "rapidspin", "stealthrock", "toxicspikes", "voltswitch"],
-                "abilities": ["Sturdy"] 
+                "abilities": ["Sturdy"]
             }
         ]
     },
@@ -1545,7 +1545,7 @@
         ]
     },
     "heracross": {
-        "level": 78,
+        "level": 79,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2132,7 +2132,7 @@
         ]
     },
     "vigoroth": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -2353,7 +2353,7 @@
         ]
     },
     "illumise": {
-        "level": 90,
+        "level": 91,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2399,7 +2399,7 @@
         ]
     },
     "wailord": {
-        "level": 92,
+        "level": 93,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2444,7 +2444,7 @@
         ]
     },
     "grumpig": {
-        "level": 93,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2716,7 +2716,7 @@
         ]
     },
     "absol": {
-        "level": 83,
+        "level": 84,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2858,7 +2858,7 @@
         ]
     },
     "metagrossmega": {
-        "level": 75,
+        "level": 74,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3982,7 +3982,7 @@
         ]
     },
     "uxie": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -5269,7 +5269,7 @@
         ]
     },
     "hydreigon": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -5300,7 +5300,7 @@
         ]
     },
     "cobalion": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Bulky Attacker",
