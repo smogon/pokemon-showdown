@@ -314,7 +314,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		// checks for water move usage from opponent
 		onModifyPriority(priority, source) {
 			// gets current foe in singles
-			const foe = source.side.foe.active[0];
+			const foe = source.foes()[0];
 			if (!foe || foe.fainted) {
 				return priority;
 			}
