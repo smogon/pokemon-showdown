@@ -1335,7 +1335,8 @@ export class RandomTeams {
 		if (moves.has('meteorbeam') || (moves.has('electroshot') && !teamDetails.rain)) return 'Power Herb';
 		if (ability === 'Sniper') return 'Scope Lens';
 		if (moves.has('acrobatics') && ability !== 'Protosynthesis') return '';
-		if (moves.has('auroraveil') || moves.has('dustveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
+		if (moves.has('auroraveil') || moves.has('dustveil') ||
+			(moves.has('lightscreen') && moves.has('reflect'))) return 'Light Clay';
 		if (ability === 'Gluttony') return `${this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'])} Berry`;
 		if (
 			moves.has('rest') && !moves.has('sleeptalk') &&
