@@ -1513,7 +1513,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 	{
-   	name: "[Gen 9] Full Potential",
+		name: "[Gen 9] Full Potential",
 		desc: `Pok&eacute;mon's moves hit off of their highest stat, except HP.`,
 		mod: 'fullpotential',
 		// searchShow: false,
