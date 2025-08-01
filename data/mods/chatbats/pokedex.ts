@@ -1,5 +1,3 @@
-import { inherits } from "util";
-
 export const Pokedex: { [k: string]: ModdedSpeciesData } = {
 	volcarona: {
 		inherit: true,
