@@ -401,29 +401,32 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 				}
 			} else {
 				this.add('-message', `${source.name} follows up with a Thunder Kick!`);
-				// defines Thunder Kick
-				const thunderKick = {
-					name: "Thunder Kick",
-					type: "Electric",
-					basePower: 50,
-					accuracy: 100,
-					category: "Physical",
-					priority: 0,
-					onTryMove() {
-						this.attrLastMove('[still]');
-					},
-					onPrepareHit(t, s, m) {
-						this.add('-anim', s, 'High Jump Kick', t);
-						this.add('-anim', s, 'Thunder', t);
-					},
-					flags: { contact: true, protect: true },
-				};
 				// uses Thunder Kick
-				this.actions.useMove(thunderKick, source, target);
+				this.actions.useMove(thunderkick, source, target);
 			}
 		},
 		desc: "50% chance to reduce Defense by 1, 50% chance to inflict an additional 50 BP Electric type damage.",
 		shortDesc: "50% -1 Defense, 50% extra 50 BP Electric damage.",
+	},
+	thunderkick: {
+		num: -1192,
+		name: "Thunder Kick",
+		type: "Electric",
+		basePower: 50,
+		accuracy: 100,
+		category: "Physical",
+		priority: 0,
+		pp: 5,
+		target: "normal",
+		contestType: "Beautiful",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(t, s, m) {
+			this.add('-anim', s, 'High Jump Kick', t);
+			this.add('-anim', s, 'Thunder', t);
+		},
+		flags: { contact: true, protect: true },
 	},
 	stealthrock: {
 		num: 446,
