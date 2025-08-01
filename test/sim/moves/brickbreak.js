@@ -24,6 +24,20 @@ describe('Brick Break', () => {
 		assert.false(battle.p2.sideConditions['reflect']);
 	});
 
+	it('should not break Reflect when enemy uses Protect', () => {
+		battle = common.gen(4).createBattle([[
+			{ species: "mew", moves: ['brickbreak', 'splash'] },
+		], [
+			{ species: "ninjask", moves: ['reflect', 'splash', 'protect'] },
+		]]);
+
+		battle.makeChoices('move splash', 'move reflect');
+		assert(battle.p2.sideConditions['reflect']);
+
+		battle.makeChoices('move brickbreak', 'move protect');
+		assert(battle.p2.sideConditions['reflect']);
+	});
+
 	it('should not break Reflect when used against a Ghost-type', () => {
 		battle = common.createBattle([[
 			{ species: "mew", moves: ['brickbreak', 'splash'] },
@@ -38,7 +52,7 @@ describe('Brick Break', () => {
 		assert(battle.p2.sideConditions['reflect']);
 	});
 
-	it.skip('should break Reflect when used against a Ghost-type in Gen 4 or earlier', () => {
+	it('should break Reflect when used against a Ghost-type in Gen 4 or earlier', () => {
 		battle = common.gen(4).createBattle([[
 			{ species: "mew", moves: ['brickbreak', 'splash'] },
 		], [
