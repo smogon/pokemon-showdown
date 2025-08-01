@@ -411,7 +411,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 					onTryMove() {
 						this.attrLastMove('[still]');
 					},
-					onPrepareHit(target, source, move) {
+					onPrepareHit(t, s, m) {
 						this.add('-anim', source, 'High Jump Kick', target);
 						this.add('-anim', source, 'Thunder', target);
 					},
