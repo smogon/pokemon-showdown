@@ -647,7 +647,8 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 			},
 			onSwitchIn(pokemon) {
 				// king of the hill
-				if ((!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) && !pokemon.side.getSideCondition('kingofthehill')) return;
+				if ((!pokemon.isGrounded() || pokemon.hasItem('heavydutyboots')) &&
+					!pokemon.side.getSideCondition('kingofthehill')) return;
 				this.add('-activate', pokemon, 'move: Sticky Web');
 				this.boost({ spe: -1 }, pokemon, pokemon.side.foe.active[0], this.dex.getActiveMove('stickyweb'));
 			},
