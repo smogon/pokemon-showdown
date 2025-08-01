@@ -333,7 +333,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		},
 		// modifies base power
 		onBasePower(basePower, source, target) {
-			const foe = source.side.foe.active[0];
+			const foe = source.foes()[0];
 			if (!foe || foe.fainted) {
 				return basePower;
 			}
