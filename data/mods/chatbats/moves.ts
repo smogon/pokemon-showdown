@@ -631,7 +631,11 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 					this.add('-sideend', pokemon.side, 'move: Toxic Spikes', `[of] ${pokemon}`);
 					pokemon.side.removeSideCondition('toxicspikes');
 					// hardcode for King of the Hill and Order Up
-				} else if (pokemon.hasType('Steel') || (pokemon.hasItem('heavydutyboots') && !pokemon.side.getSideCondition('kingofthehill')) || pokemon.side.getSideCondition('orderup')) {
+				} else if (
+					pokemon.hasType('Steel') ||
+					(pokemon.hasItem('heavydutyboots') && !pokemon.side.getSideCondition('kingofthehill')) ||
+					pokemon.side.getSideCondition('orderup')
+				) {
 					// do nothing
 				} else if (this.effectState.layers >= 2) {
 					pokemon.trySetStatus('tox', pokemon.side.foe.active[0]);
