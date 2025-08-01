@@ -152,7 +152,7 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 				Fighting: this.dex.getEffectiveness('Fighting', target),
 				Fire: this.dex.getEffectiveness('Fire', target),
 			};
-
+		
 			let bestType = 'Normal';
 			let maxEffectiveness = -Infinity;
 			// gets most effective type against target (defaults to normal)
@@ -164,15 +164,16 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 			}
 			// changes form to match most effective type
 			let forme = '';
-			switch (bestType):
+
+			switch (bestType) {
 			case 'Water': forme = '-Paldea-Aqua'; break;
 			case 'Fighting': forme = '-Paldea-Combat'; break;
 			case 'Fire': forme= '-Paldea-Blaze'; break;
-			
+			}
 			source.formeChange('Tauros' + forme);
 			source.setAbility('Adaptability');
 			this.add('-ability', source, 'Adaptability');
-
+			
 			source.m.ragingBullMoveType = bestType;
 		},
 		// animation was remnant of Techno Blast code being copied, decided to keep because funny
