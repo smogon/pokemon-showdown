@@ -3829,7 +3829,7 @@
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["calmmind", "earthpower", "judgment", "recover", "refresh"],
+                "movepool": ["calmmind", "earthpower", "judgment", "recover"],
                 "abilities": ["Multitype"]
             }
         ]

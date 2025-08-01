@@ -666,7 +666,7 @@
         "level": 82,
         "sets": [
             {
-                "role": "Bulky Protect",
+                "role": "Doubles Bulky Attacker",
                 "movepool": ["Bulk Up", "Protect", "Raging Bull", "Stone Edge"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Steel"]
@@ -683,7 +683,7 @@
         "level": 79,
         "sets": [
             {
-                "role": "Bulky Protect",
+                "role": "Doubles Bulky Attacker",
                 "movepool": ["Bulk Up", "Close Combat", "Protect", "Raging Bull", "Will-O-Wisp"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Fighting", "Fire", "Water"]
@@ -700,7 +700,7 @@
         "level": 80,
         "sets": [
             {
-                "role": "Bulky Protect",
+                "role": "Doubles Bulky Attacker",
                 "movepool": ["Aqua Jet", "Bulk Up", "Close Combat", "Liquidation", "Protect"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Fire", "Steel", "Water"]
@@ -4491,7 +4491,7 @@
         "level": 89,
         "sets": [
             {
-                "role": "Doubles Bulky Attacker",
+                "role": "Doubles Support",
                 "movepool": ["Knock Off", "Leaf Storm", "Protect", "Spirit Shackle", "Tailwind"],
                 "abilities": ["Overgrow"],
                 "teraTypes": ["Dark", "Ghost", "Water"]
@@ -4502,7 +4502,7 @@
         "level": 85,
         "sets": [
             {
-                "role": "Doubles Bulky Attacker",
+                "role": "Doubles Support",
                 "movepool": ["Knock Off", "Leaf Blade", "Protect", "Tailwind", "Triple Arrows"],
                 "abilities": ["Scrappy"],
                 "teraTypes": ["Dark", "Fighting", "Steel"]
@@ -5205,7 +5205,7 @@
                 "role": "Tera Blast user",
                 "movepool": ["Protect", "Shadow Ball", "Shell Smash", "Tera Blast"],
                 "abilities": ["Cursed Body"],
-                "teraTypes": ["Fighting"]
+                "teraTypes": ["Fairy", "Fighting"]
             },
             {
                 "role": "Doubles Setup Sweeper",
@@ -5595,16 +5595,10 @@
                 "teraTypes": ["Fairy"]
             },
             {
-                "role": "Doubles Setup Sweeper",
-                "movepool": ["Dark Pulse", "Nasty Plot", "Protect", "Shadow Ball"],
-                "abilities": ["Grim Neigh"],
-                "teraTypes": ["Dark"]
-            },
-            {
                 "role": "Tera Blast user",
                 "movepool": ["Nasty Plot", "Protect", "Shadow Ball", "Tera Blast"],
                 "abilities": ["Grim Neigh"],
-                "teraTypes": ["Fighting"]
+                "teraTypes": ["Fairy", "Fighting"]
             }
         ]
     },
@@ -5674,7 +5668,7 @@
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
-                "movepool": ["Crunch", "Earthquake", "Facade", "Headlong Rush", "Protect"],
+                "movepool": ["Earthquake", "Facade", "Headlong Rush", "Protect"],
                 "abilities": ["Guts"],
                 "teraTypes": ["Normal"]
             }
