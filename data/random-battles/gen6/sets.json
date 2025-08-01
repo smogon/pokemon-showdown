@@ -577,7 +577,7 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["focusblast", "painsplit", "shadowball", "sludgewave", "substitute", "trick", "willowisp"],
+                "movepool": ["focusblast", "shadowball", "sludgewave", "substitute", "trick", "willowisp"],
                 "abilities": ["Levitate"]
             }
         ]
@@ -2676,7 +2676,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["gunkshot", "knockoff", "shadowclaw", "shadowsneak", "thunderwave", "willowisp"],
-                "abilities": ["Cursed Body", "Frisk"]
+                "abilities": ["Cursed Body", "Frisk", "Insomnia"]
             }
         ]
     },
