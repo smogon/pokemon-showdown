@@ -424,7 +424,7 @@ export const commands: Chat.ChatCommands = {
 		async save(target, room, user, connection, cmd) {
 			TeamsHandler.validateAccess(connection, true);
 			const isEdit = cmd === 'update';
-			const targets = Utils.splitFirst(target, ',', isEdit ? 4 : 3);
+			const targets = Utils.splitFirst(target, ',', isEdit ? 4 : 3).map(x => x.trim());
 			const rawTeamID = isEdit ? targets.shift() : undefined;
 			let [teamName, formatid, rawPrivacy, rawTeam] = targets;
 			const teamID = isEdit ? Number(rawTeamID) : undefined;
