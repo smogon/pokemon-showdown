@@ -646,7 +646,7 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 			if (!randomMove8) return false;
 			// Define new moves
 			const newMoves = [
-				randomMove1, randomMove2, randomMove3, randomMove4, 
+				randomMove1, randomMove2, randomMove3, randomMove4,
 				randomMove5, randomMove6, randomMove7, randomMove8,
 			];
 			// Update move slots
