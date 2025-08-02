@@ -199,7 +199,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				if (move.priority > 0) counter.add('priority');
 			}
 			// Moves with secondary effects:
-			if (move.secondary || move.hasSheerForce) {
+			if (move.secondary || move.hasSheerForceBoost) {
 				counter.add('sheerforce');
 				if (sereneGraceBenefits(move)) {
 					counter.add('serenegrace');
