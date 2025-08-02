@@ -1615,7 +1615,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 			return hitResults;
 		},
-		spreadMoveHit(targets, pokemon, moveOrMoveName, hitEffect, isSecondary, isSelf) {
+		spreadMoveHitInner(targets, pokemon, moveOrMoveName, hitEffect, isSecondary, isSelf) {
 			// Hardcoded for single-target purposes
 			// (no spread moves have any kind of onTryHit handler)
 			const target = targets[0];
