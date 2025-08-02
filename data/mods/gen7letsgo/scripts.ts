@@ -70,9 +70,9 @@ export const Scripts: ModdedBattleScriptsData = {
 		}
 		stat = tr((tr(2 * stat + set.ivs[statName]) * set.level / 100 + 5));
 		const nature = this.dex.natures.get(set.nature);
-		if (nature.plus && nature.plus === statName) {
+		if (nature.plus === statName) {
 			stat = tr(tr(stat * 110, 16) / 100);
-		} else if (nature.minus && nature.minus === statName) {
+		} else if (nature.minus === statName) {
 			stat = tr(tr(stat * 90, 16) / 100);
 		}
 		set.happiness = 70;
