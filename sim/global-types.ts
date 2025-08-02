@@ -365,10 +365,9 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	maybeTriggerEndlessBattleClause?: (
 		this: Battle, trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
 	) => boolean | undefined;
-	natureModify?: (this: Battle, stats: StatsTable, set: PokemonSet) => StatsTable;
 	endTurn?: (this: Battle) => void;
 	runAction?: (this: Battle, action: Action) => void;
-	spreadModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet) => StatsTable;
+	statModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet, statName: StatID) => number;
 	start?: (this: Battle) => void;
 	runPickTeam?: () => void;
 	suppressingWeather?: (this: Battle) => boolean;
