@@ -224,34 +224,40 @@ export class LadderTracker {
 	async getLeaderboard(display?: boolean) {
 		const url = `https://pokemonshowdown.com/ladder/${this.format}.json?prefix=${this.prefix}`;
 		const leaderboard: LeaderboardEntry[] = [];
+		let response;
 		try {
-			const response = await Net(url).get().then(JSON.parse);
-			this.leaderboard.lookup = new Map();
-			for (const data of response.toplist) {
-				// TODO: move the rounding until later
-				const entry: LeaderboardEntry = {
-					name: data.username,
-					elo: Math.round(data.elo),
-					gxe: data.gxe,
-					glicko: Math.round(data.rpr),
-					glickodev: Math.round(data.rprd),
-				};
-				this.leaderboard.lookup.set(data.userid, entry);
-				if (!data.userid.startsWith(this.prefix)) continue;
-				entry.rank = leaderboard.length + 1;
-				leaderboard.push(entry);
+			response = await Net(url).get().then(JSON.parse);
+		} catch (e: any) {
+			if (e.name === 'SyntaxError') { // sometimes the page 404s, meaning invalid json. skip!
+				response = { toplist: [] };
+			} else {
+				Monitor.crashlog('A ladder tracker request', e, this.config);
+				if (display) throw new Chat.ErrorMessage('Failed to fetch leaderboard. Try again later.');
+				return leaderboard;
 			}
-			if (display) {
-				this.addHTML(this.styleLeaderboard(leaderboard), true);
-				this.leaderboard.last = leaderboard;
-				this.changed = false;
-				this.lines = { them: 0, total: 0 };
-			}
-		} catch (err: any) {
-			Monitor.crashlog(err, 'a ladder tracker request', this.config);
-			if (display) throw new Chat.ErrorMessage(`Unable to fetch the leaderboard for ${this.prefix}.`);
 		}
 
+		this.leaderboard.lookup = new Map();
+		for (const data of response.toplist) {
+			// TODO: move the rounding until later
+			const entry: LeaderboardEntry = {
+				name: data.username,
+				elo: Math.round(data.elo),
+				gxe: data.gxe,
+				glicko: Math.round(data.rpr),
+				glickodev: Math.round(data.rprd),
+			};
+			this.leaderboard.lookup.set(data.userid, entry);
+			if (!data.userid.startsWith(this.prefix)) continue;
+			entry.rank = leaderboard.length + 1;
+			leaderboard.push(entry);
+		}
+		if (display) {
+			this.addHTML(this.styleLeaderboard(leaderboard), true);
+			this.leaderboard.last = leaderboard;
+			this.changed = false;
+			this.lines = { them: 0, total: 0 };
+		}
 		return leaderboard;
 	}
 

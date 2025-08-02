@@ -299,4 +299,18 @@ describe('Partial Trapping Moves [Gen 1]', () => {
 		assert.equal(alakazam.hp, 188);
 		assert.false(alakazam.volatiles['substitute']);
 	});
+
+	it(`Wrap should never miss if the target is already trapped`, () => {
+		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 2] }, [ // 3 turns of Wrap
+			[{ species: 'Dragonite', moves: ['wrap'] }],
+			[{ species: 'Cloyster', moves: ['surf'] }],
+		]);
+		const cloyster = battle.p2.active[0];
+		assert.hurts(cloyster, () => battle.makeChoices());
+		assert(cloyster.volatiles['partiallytrapped']);
+
+		battle.forceRandomChance = false;
+		assert.hurts(cloyster, () => battle.makeChoices());
+		assert(cloyster.volatiles['partiallytrapped']);
+	});
 });
