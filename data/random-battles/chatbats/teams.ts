@@ -1775,8 +1775,8 @@ export class RandomTeams {
 			// Check if the base species has a mega forme available
 			// let canMega = false;
 			// for (const poke of pokemonPool[baseSpecies]) {
-				// const species = this.dex.species.get(poke);
-				// if (!hasMega && species.isMega) canMega = true;
+			// const species = this.dex.species.get(poke);
+			// if (!hasMega && species.isMega) canMega = true;
 			// }
 			for (const poke of pokemonPool[baseSpecies]) {
 				const species = this.dex.species.get(poke);
