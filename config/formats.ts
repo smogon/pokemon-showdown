@@ -1596,14 +1596,15 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			statModify(baseStats, set, statName) {
 				const tr = this.trunc;
 				const nature = this.dex.natures.get(set.nature);
+				let baseStatName = statName;
 				if (nature.plus) {
 					if (statName === nature.minus) {
-						statName = nature.plus;
+						baseStatName = nature.plus;
 					} else if (statName === nature.plus) {
-						statName = nature.minus!;
+						baseStatName = nature.minus!;
 					}
 				}
-				let stat = baseStats[statName];
+				let stat = baseStats[baseStatName];
 				if (statName === 'hp') {
 					return tr(tr(2 * stat + set.ivs[statName] + tr(set.evs[statName] / 4) + 100) * set.level / 100 + 10);
 				}
