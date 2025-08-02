@@ -168,8 +168,9 @@ export const TeamsHandler = new class {
 		}
 		let unownWord = '';
 		for (const set of team) {
-			if ((await (context as any).filter(set.name)) !== set.name) {
-				connection.popup(`Filtered words are not allowed in nicknames.`);
+			const filtered = context.filter(set.name);
+			if (filtered !== set.name) {
+				connection.popup(`Filtered words (${set.name}) are not allowed in nicknames.`);
 				return null;
 			}
 			// Trim empty moveslots
