@@ -78,8 +78,10 @@ export const Scripts: ModdedBattleScriptsData = {
 							}
 						}
 					}
+					accuracy = this.battle.singleEvent('ModifyAccuracy', move, null, target, pokemon, move, accuracy);
 					accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 					if (!move.alwaysHit) {
+						accuracy = this.battle.singleEvent('Accuracy', move, null, target, pokemon, move, accuracy);
 						accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 						if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) break;
 					}

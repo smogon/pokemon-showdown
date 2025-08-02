@@ -212,6 +212,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			if (move.alwaysHit) {
 				accuracy = true;
 			} else {
+				accuracy = this.battle.singleEvent('Accuracy', move, null, target, pokemon, move, accuracy);
 				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 			}
 			// Now, let's calculate the accuracy.
@@ -238,13 +239,16 @@ export const Scripts: ModdedBattleScriptsData = {
 				accuracy = Math.min(Math.floor(accuracy), 255);
 				accuracy = Math.max(accuracy, 1);
 			} else {
+				accuracy = this.battle.singleEvent('Accuracy', move, null, target, pokemon, move, accuracy);
 				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 			}
+			accuracy = this.battle.singleEvent('ModifyAccuracy', move, null, target, pokemon, move, accuracy);
 			accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 			if (accuracy !== true) accuracy = Math.max(accuracy, 0);
 			if (move.alwaysHit) {
 				accuracy = true;
 			} else {
+				accuracy = this.battle.singleEvent('Accuracy', move, null, target, pokemon, move, accuracy);
 				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 			}
 			if (accuracy !== true && accuracy !== 255 && !this.battle.randomChance(accuracy, 256)) {
