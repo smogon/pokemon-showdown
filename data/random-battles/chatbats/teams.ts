@@ -1666,7 +1666,8 @@ export class RandomTeams {
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
 		// prevents Illumise (who can turn into Volbeat with Physical moves) from having 0 Atk EVs
-		if (noAttackStatMoves && !moves.has('transform') && this.format.mod !== 'partnersincrime' && species.id !== 'illumise') {
+		if (noAttackStatMoves && !moves.has('transform') && this.format.mod !== 'partnersincrime' && species.id !== 'illumise') 
+		{
 			evs.atk = 0;
 			ivs.atk = 0;
 		}
@@ -1750,8 +1751,8 @@ export class RandomTeams {
 		const type = this.forceMonotype || this.sample(typePool);
 
 		// PotD stuff
-		const usePotD = global.Config && Config.potd && ruleTable.has('potd');
-		const potd = usePotD ? this.dex.species.get(Config.potd) : null;
+		// const usePotD = global.Config && Config.potd && ruleTable.has('potd');
+		// const potd = usePotD ? this.dex.species.get(Config.potd) : null;
 
 		const baseFormes: { [k: string]: number } = {};
 		let hasMega = false;
@@ -1775,7 +1776,7 @@ export class RandomTeams {
 			let canMega = false;
 			for (const poke of pokemonPool[baseSpecies]) {
 				const species = this.dex.species.get(poke);
-				if (!hasMega && species.isMega) canMega = true;
+				// if (!hasMega && species.isMega) canMega = true;
 			}
 			for (const poke of pokemonPool[baseSpecies]) {
 				const species = this.dex.species.get(poke);
