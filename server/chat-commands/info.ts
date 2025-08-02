@@ -2862,12 +2862,15 @@ export const commands: Chat.ChatCommands = {
 		const args = Chat.parseArguments(target, ' | ', {
 			allowEmpty: true, useIDs: false,
 		});
+		if (!args.format?.[0]) {
+			return this.popupReply(`No format specified.`);
+		}
 		const format = Dex.formats.get(toID(args.format[0]));
 		if (format.effectType !== 'Format') {
 			return this.popupReply(`The format '${format}' does not exist.`);
 		}
 		delete args.format;
-		const targetUserID = toID(args.user[0]);
+		const targetUserID = toID(args.user?.[0] || '');
 		if (targetUserID) {
 			this.checkChat();
 			if (!Users.get(targetUserID)) {

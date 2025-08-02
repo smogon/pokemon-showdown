@@ -95,7 +95,7 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		},
 		onBeforeMovePriority: 10,
 		onBeforeMove(pokemon, target, move) {
-			if (move.flags['defrost']) return;
+			if (move.flags['defrost'] && !(move.id === 'burnup' && !pokemon.hasType('Fire'))) return;
 			if (this.randomChance(1, 5)) {
 				pokemon.cureStatus();
 				return;
@@ -268,6 +268,11 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onRestart() {
 			if (this.effectState.trueDuration >= 2) {
 				this.effectState.duration = 2;
+			}
+		},
+		onAfterMove(pokemon) {
+			if (this.effectState.duration === 1) {
+				pokemon.removeVolatile('lockedmove');
 			}
 		},
 		onEnd(target) {

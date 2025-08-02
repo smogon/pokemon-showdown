@@ -1417,6 +1417,20 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
+	nofreezemod: {
+		effectType: 'Rule',
+		name: 'No Freeze Mod',
+		desc: "Prevents moves from freezing Pok&eacute;mon",
+		onBegin() {
+			this.add('rule', 'No Freeze Mod: Moves can\'t freeze Pok\u00e9mon');
+		},
+		onSetStatus(status, target, source) {
+			if (status.id === 'frz') {
+				this.add('-message', 'No Freeze Mod activated.');
+				return false;
+			}
+		},
+	},
 	sametypeclause: {
 		effectType: 'ValidatorRule',
 		name: 'Same Type Clause',

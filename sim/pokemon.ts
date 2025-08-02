@@ -16,7 +16,7 @@ interface MoveSlot {
 	pp: number;
 	maxpp: number;
 	target?: string;
-	disabled: boolean | string;
+	disabled: boolean | 'hidden';
 	disabledSource?: string;
 	used: boolean;
 	virtual?: boolean;
@@ -992,17 +992,15 @@ export class Pokemon {
 				// if each of a Pokemon's base moves are disabled by one of these effects, it will Struggle
 				const canCauseStruggle = ['Encore', 'Disable', 'Taunt', 'Assault Vest', 'Belch', 'Stuff Cheeks'];
 				disabled = this.maxMoveDisabled(moveSlot.id) || disabled && canCauseStruggle.includes(moveSlot.disabledSource!);
-			} else if (
-				(moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || disabled &&
-				this.side.active.length >= 2 && this.battle.actions.targetTypeChoices(target!)
-			) {
+			} else if (moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) {
 				disabled = true;
 			}
 
+			if (disabled === 'hidden') {
+				disabled = !restrictData;
+			}
 			if (!disabled) {
 				hasValidMove = true;
-			} else if (disabled === 'hidden' && restrictData) {
-				disabled = false;
 			}
 
 			moves.push({
@@ -1074,6 +1072,8 @@ export class Pokemon {
 		};
 
 		if (isLastActive) {
+			this.maybeDisabled = this.maybeDisabled && !lockedMove;
+			this.maybeLocked = this.maybeLocked || this.maybeDisabled;
 			if (this.maybeDisabled) {
 				data.maybeDisabled = this.maybeDisabled;
 			}
@@ -1087,9 +1087,14 @@ export class Pokemon {
 					data.maybeTrapped = true;
 				}
 			}
-		} else if (canSwitchIn) {
-			// Discovered by selecting a valid Pokémon as a switch target and cancelling.
-			if (this.trapped) data.trapped = true;
+		} else {
+			this.maybeDisabled = false;
+			this.maybeLocked = false;
+			if (canSwitchIn) {
+				// Discovered by selecting a valid Pokémon as a switch target and cancelling.
+				if (this.trapped) data.trapped = true;
+			}
+			this.maybeTrapped = false;
 		}
 
 		if (!lockedMove) {
@@ -1588,7 +1593,7 @@ export class Pokemon {
 		return false;
 	}
 
-	disableMove(moveid: string, isHidden?: boolean | string, sourceEffect?: Effect) {
+	disableMove(moveid: string, isHidden?: boolean, sourceEffect?: Effect) {
 		if (!sourceEffect && this.battle.event) {
 			sourceEffect = this.battle.effect;
 		}
@@ -1596,7 +1601,7 @@ export class Pokemon {
 
 		for (const moveSlot of this.moveSlots) {
 			if (moveSlot.id === moveid && moveSlot.disabled !== true) {
-				moveSlot.disabled = (isHidden || true);
+				moveSlot.disabled = isHidden ? 'hidden' : true;
 				moveSlot.disabledSource = (sourceEffect?.name || moveSlot.move);
 			}
 		}

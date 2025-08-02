@@ -1306,7 +1306,7 @@ export const Scripts: ModdedBattleScriptsData = {
 
 			let movename = move.name;
 			if (move.id === 'hiddenpower') movename = 'Hidden Power';
-			if (sourceEffect) attrs += `|[from]${sourceEffect.fullname}`;
+			if (sourceEffect) attrs += `|[from] ${sourceEffect.fullname}`;
 			if (zMove && move.isZ === true) {
 				attrs = '|[anim]' + movename + attrs;
 				movename = 'Z-' + movename;

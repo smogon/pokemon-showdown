@@ -109,11 +109,11 @@ export const TeamsHandler = new class {
 		return this.database.query(statement, values) as Promise<T[]>;
 	}
 
-	isOMNickname(nickname: string, user: User) {
+	isOMNickname(nickname: string) {
 		// allow nicknames named after other mons/types/abilities/items - to support those OMs
 		if (Dex.species.get(nickname).exists) {
 			// I have a Forretress named Cathy and having it renamed to Trevenant (Forretress) is annoying
-			if (toID(nickname) === 'cathy') return null;
+			if (toID(nickname) === 'cathy') return 'cathy';
 			return Dex.species.get(nickname).name;
 		} else if (Dex.items.get(nickname).exists) {
 			return Dex.items.get(nickname).name;
@@ -163,15 +163,16 @@ export const TeamsHandler = new class {
 			connection.popup('Invalid team:\n\n' + rawTeam);
 			return null;
 		}
-		if (team.length > 24) {
-			connection.popup("Your team has too many Pokemon.");
+		if (team.length > 50) {
+			connection.popup("Your team has too many Pokemon (max 50).");
 		}
 		let unownWord = '';
-		// now, we purge invalid nicknames and make sure it's an actual team
-		// gotta use the validated team so that nicknames are removed
 		for (const set of team) {
-			set.name = this.isOMNickname(set.name, user) || set.species;
-
+			const filtered = context.filter(set.name);
+			if (filtered !== set.name) {
+				connection.popup(`Filtered words (${set.name}) are not allowed in nicknames.`);
+				return null;
+			}
 			// Trim empty moveslots
 			set.moves = set.moves.filter(Boolean);
 
@@ -321,7 +322,8 @@ export const TeamsHandler = new class {
 		buf += `</a><br /><a href="/${link}">${!isFull ? 'View full team' : 'Shareable link to team'}</a><br />`;
 		const url = `${teamData.teamid}${teamData.private ? `-${teamData.private}` : ''}`;
 		buf += ` <small>(you can also copy/paste <code>&lt;&lt;view-team-${url}&gt;&gt;</code> on-site `;
-		buf += `or share <code>https://psim.us/t/${url}</code> off-site!)</small>`;
+		const fullUrl = `https://psim.us/t/${url}`;
+		buf += `or share <code><a href="${fullUrl}">${fullUrl}</a></code> off-site!)</small>`;
 
 		if (user && (teamData.ownerid === user.id || user.can('rangeban'))) {
 			buf += `<br />`;
@@ -344,7 +346,9 @@ export const TeamsHandler = new class {
 			throw new Chat.ErrorMessage("An error occurred with retrieving the team. Please try again later.");
 		}
 		buf += team.map(set => {
-			let teamBuf = Teams.exportSet(set).replace(/\n/g, '<br />');
+			let teamBuf = Teams.exportSet(set, {
+				removeNicknames: name => this.isOMNickname(name),
+			}).replace(/\n/g, '<br />');
 			if (set.name && set.name !== set.species) {
 				teamBuf = teamBuf.replace(set.name, Utils.html`<psicon pokemon="${set.species}" /> <br />${set.name}`);
 			} else {
@@ -420,7 +424,7 @@ export const commands: Chat.ChatCommands = {
 		async save(target, room, user, connection, cmd) {
 			TeamsHandler.validateAccess(connection, true);
 			const isEdit = cmd === 'update';
-			const targets = Utils.splitFirst(target, ',', isEdit ? 4 : 3);
+			const targets = Utils.splitFirst(target, ',', isEdit ? 4 : 3).map(x => x.trim());
 			const rawTeamID = isEdit ? targets.shift() : undefined;
 			let [teamName, formatid, rawPrivacy, rawTeam] = targets;
 			const teamID = isEdit ? Number(rawTeamID) : undefined;
@@ -441,6 +445,9 @@ export const commands: Chat.ChatCommands = {
 			const id = await TeamsHandler.save(
 				this, formatid, rawTeam, teamName, privacy, teamID
 			);
+			if (!id) {
+				return; // error messages were thrown to the user
+			}
 
 			const page = isEdit ? 'edit' : 'upload';
 			if (id) {
@@ -695,7 +702,9 @@ export const pages: Chat.PageTable = {
 			buf += `</select><br />`;
 
 			buf += `<strong>Team:</strong><br />`;
-			const teamStr = Teams.export(Teams.import(data.team)!).replace(/\n/g, '&#13;');
+			const teamStr = Teams.export(Teams.import(data.team)!, {
+				removeNicknames: name => TeamsHandler.isOMNickname(name),
+			}).replace(/\n/g, '&#13;');
 			buf += `<textarea style="width: 100%; height: 400px" name="team">${teamStr}</textarea><br />`;
 
 			buf += `<button class="button notifying" type="submit">Upload team</button>`;

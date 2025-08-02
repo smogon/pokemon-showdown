@@ -996,9 +996,10 @@
         "level": 72,
         "sets": [
             {
-                "role": "Wallbreaker",
-                "movepool": ["bodyslam", "earthquake", "return", "selfdestruct", "shadowball"],
-                "abilities": ["Immunity"]
+                "role": "Setup Sweeper",
+                "movepool": ["bodyslam", "curse", "earthquake", "selfdestruct", "shadowball"],
+                "abilities": ["Immunity"],
+                "preferredTypes": ["Ground"]
             },
             {
                 "role": "Bulky Support",
@@ -1105,7 +1106,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["brickbreak", "earthquake", "explosion", "rockslide", "softboiled", "swordsdance"],
+                "movepool": ["earthquake", "explosion", "rockslide", "softboiled", "swordsdance"],
                 "abilities": ["Synchronize"],
                 "preferredTypes": ["Ground", "Rock"]
             }
@@ -1221,7 +1222,7 @@
         ]
     },
     "crobat": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1257,7 +1258,7 @@
         ]
     },
     "xatu": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1769,7 +1770,7 @@
         ]
     },
     "delibird": {
-        "level": 98,
+        "level": 99,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1820,7 +1821,7 @@
         ]
     },
     "houndoom": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Berry Sweeper",
@@ -2062,7 +2063,7 @@
         ]
     },
     "blaziken": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2260,7 +2261,7 @@
         ]
     },
     "ninjask": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2612,7 +2613,7 @@
         ]
     },
     "cacturne": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Staller",
@@ -3023,7 +3024,7 @@
         ]
     },
     "latios": {
-        "level": 66,
+        "level": 67,
         "sets": [
             {
                 "role": "Bulky Setup",
