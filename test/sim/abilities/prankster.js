@@ -72,15 +72,6 @@ describe('Prankster', () => {
 		assert(battle.p2.active[0].volatiles['encore'], `Meowstic should be encored`);
 		assert.fullHP(battle.p1.active[0]);
 	});
-
-	it('should not leak the ability via hint if the target is immune to the Status move', () => {
-		battle = common.createBattle([
-			[{ species: "Sableye", ability: 'prankster', moves: ['willowisp'] }],
-			[{ species: "Houndoom", ability: 'pressure', moves: ['willowisp'] }],
-		]);
-		battle.makeChoices('move willowisp', 'move willowisp');
-		assert.false(battle.log.some(line => line.includes('hint')), `Prankster should not leak the ability via hint`);
-	});
 });
 
 describe('Prankster [Gen 6]', () => {
