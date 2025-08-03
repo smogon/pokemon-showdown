@@ -675,10 +675,6 @@ export class TeamValidator {
 		}
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
 			problems.push(`${name} has an invalid happiness value.`);
-		} else if (dex.currentMod === 'gen7letsgo' && !ruleTable.has('allowavs')) {
-			set.happiness = 70;
-		} else {
-			set.happiness = typeof set.happiness === 'number' ? Utils.clampIntRange(set.happiness, 0, 255) : 255;
 		}
 		if (set.hpType) {
 			const type = dex.types.get(set.hpType);
@@ -1109,7 +1105,6 @@ export class TeamValidator {
 		const ruleTable = this.ruleTable;
 		const dex = this.dex;
 
-		const allowAVs = ruleTable.has('allowavs');
 		const evLimit = ruleTable.evLimit;
 		const canBottleCap = dex.gen >= 7 && (set.level >= (dex.gen < 9 ? 100 : 50) || !ruleTable.has('obtainablemisc'));
 
@@ -1250,16 +1245,13 @@ export class TeamValidator {
 
 		for (const stat in set.evs) {
 			if (set.evs[stat as 'hp'] < 0) {
-				problems.push(`${name} has less than 0 ${allowAVs ? 'Awakening Values' : 'EVs'} in ${Dex.stats.names[stat as 'hp']}.`);
+				problems.push(`${name} has less than 0 ${dex.currentMod === 'gen7letsgo' ? 'Awakening Values' : 'EVs'} in ${Dex.stats.names[stat as 'hp']}.`);
 			}
 		}
 
 		if (dex.currentMod === 'gen7letsgo') { // AVs
 			for (const stat in set.evs) {
-				if (set.evs[stat as 'hp'] > 0 && !allowAVs) {
-					problems.push(`${name} has Awakening Values but this format doesn't allow them.`);
-					break;
-				} else if (set.evs[stat as 'hp'] > 200) {
+				if (set.evs[stat as 'hp'] > 200) {
 					problems.push(`${name} has more than 200 Awakening Values in ${Dex.stats.names[stat as 'hp']}.`);
 				}
 			}

@@ -1722,11 +1722,15 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Allows Gen 1 pokemon to have moves from their Gen 2 learnsets",
 		// Implemented in team-validator.js
 	},
-	allowavs: {
+	letsgonormalrules: {
 		effectType: 'ValidatorRule',
-		name: 'Allow AVs',
-		desc: "Tells formats with the 'gen7letsgo' mod to take Awakening Values and Happiness into consideration when calculating stats",
-		// implemented in TeamValidator#validateStats
+		name: 'Let\'s Go Normal Rules',
+		desc: "Tells formats with the 'gen7letsgo' mod to set the level to 50, happiness to 70 and all Awakening Values to 0",
+		ruleset: ['Adjust Level = 50'],
+		onChangeSet(set) {
+			set.happiness = 70;
+			set.evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+		},
 	},
 	nfeclause: {
 		effectType: 'ValidatorRule',
