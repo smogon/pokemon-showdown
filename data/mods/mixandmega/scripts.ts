@@ -269,7 +269,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			action.target.status = '';
 			action.target.hp = 1; // Needed so hp functions works
 			action.target.sethp(action.target.maxhp / 2);
-			this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
+			// @pokebedrock - Add details to the heal message
+			this.add('-heal', action.target, action.target.details, action.target.getHealth, '[from] move: Revival Blessing');
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
 			break;
 		case 'runSwitch':

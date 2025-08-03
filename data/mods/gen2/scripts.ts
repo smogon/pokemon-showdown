@@ -373,7 +373,8 @@ export const Scripts: ModdedBattleScriptsData = {
 						this.battle.debug('heal interrupted');
 						return false;
 					}
-					this.battle.add('-heal', target, target.getHealth);
+					// @pokebedrock - Add details to the heal message
+					this.battle.add('-heal', target, target.details, target.getHealth);
 					didSomething = true;
 				}
 				if (moveData.status) {

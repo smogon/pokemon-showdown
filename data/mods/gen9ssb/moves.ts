@@ -183,7 +183,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onSwitchIn(target) {
 				if (!target.fainted && (target.hp < target.maxhp)) {
 					target.heal(target.maxhp / 3);
-					this.add('-heal', target, target.getHealth, '[from] move: Free Switch Button');
+					// @pokebedrock - Add details to the heal message
+					this.add('-heal', target, target.details, target.getHealth, '[from] move: Free Switch Button');
 					target.side.removeSlotCondition(target, 'freeswitchbutton');
 				}
 			},
@@ -504,7 +505,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			const allies = [...pokemon.side.pokemon, ...pokemon.side.allySide?.pokemon || []];
 			for (const ally of allies) {
 				if (ally.heal(this.modify(ally.maxhp, 0.75))) {
-					this.add('-heal', ally, ally.getHealth);
+					// @pokebedrock - Add details to the heal message
+					this.add('-heal', ally, ally.details, ally.getHealth);
 					success = true;
 				}
 				if (ally.cureStatus()) success = true;

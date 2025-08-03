@@ -100,7 +100,8 @@ export function changeSet(context: Battle, pokemon: Pokemon, newSet: SSBSet, cha
 	const newMaxHP = pokemon.baseMaxhp;
 	pokemon.hp = Math.round(newMaxHP * percent);
 	pokemon.maxhp = newMaxHP;
-	context.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+	// @pokebedrock - Add details to the heal message
+	context.add('-heal', pokemon, pokemon.details, pokemon.getHealth, '[silent]');
 	if (pokemon.item) {
 		let item = newSet.item;
 		if (typeof item !== 'string') item = item[context.random(item.length)];
@@ -521,7 +522,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			action.target.status = '';
 			action.target.hp = 1; // Needed so hp functions works
 			action.target.sethp(action.target.maxhp / 2);
-			this.add('-heal', action.target, action.target.getHealth, '[from] move: Revival Blessing');
+			// @pokebedrock - Add details to the heal message
+			this.add('-heal', action.target, action.target.details, action.target.getHealth, '[from] move: Revival Blessing');
 			action.pokemon.side.removeSlotCondition(action.pokemon, 'revivalblessing');
 			break;
 		// @ts-expect-error I'm sorry but it takes a lot
@@ -702,7 +704,8 @@ export const Scripts: ModdedBattleScriptsData = {
 				const newMaxHP = pokemon.baseMaxhp;
 				pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
 				pokemon.maxhp = newMaxHP;
-				this.battle.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+				// @pokebedrock - Add details to the heal message
+				this.battle.add('-heal', pokemon, pokemon.details, pokemon.getHealth, '[silent]');
 			}
 			if (!pokemon.illusion && pokemon.name === 'Neko') {
 				this.battle.add(`c:|${getName('Neko')}|Possible thermal failure if operation continues (Meow on fire ?)`);

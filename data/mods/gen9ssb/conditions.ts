@@ -1228,7 +1228,8 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				const newMaxHP = source.volatiles['dynamax'] ? (2 * source.baseMaxhp) : source.baseMaxhp;
 				source.hp = newMaxHP - (source.maxhp - source.hp);
 				source.maxhp = newMaxHP;
-				this.add('-heal', source, source.getHealth, '[silent]');
+				// @pokebedrock - Add details to the heal message
+				this.add('-heal', source, source.details, source.getHealth, '[silent]');
 			}
 		},
 		onUpdate(pokemon) {
@@ -3298,7 +3299,8 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			if (target && !target.fainted) {
 				const damage = this.heal(this.effectState.hp, target, target);
 				if (damage) {
-					this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
+					// @pokebedrock - Add details to the heal message
+					this.add('-heal', target, target.details, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
 				}
 			}
 		},

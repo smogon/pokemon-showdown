@@ -57,7 +57,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				if (!target.fainted) {
 					const source = this.effectState.source;
 					const damage = this.heal(target.baseMaxhp / 2, target, target);
-					if (damage) this.add('-heal', target, target.getHealth, '[from] ability: Healer', `[of] ${source}`);
+					// @pokebedrock - Add details to the heal message
+					if (damage) this.add('-heal', target, target.details, target.getHealth, '[from] ability: Healer', `[of] ${source}`);
 					target.side.removeSlotCondition(target, 'healer');
 				}
 			},

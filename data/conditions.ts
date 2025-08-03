@@ -426,7 +426,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		onSwitchIn(target) {
 			if (!target.fainted) {
 				target.heal(target.maxhp);
-				this.add('-heal', target, target.getHealth, '[from] move: ' + this.effectState.sourceEffect, '[zeffect]');
+				// @pokebedrock - Add details to the heal message
+				this.add('-heal', target, target.details, target.getHealth, '[from] move: ' + this.effectState.sourceEffect, '[zeffect]');
 				target.side.removeSlotCondition(target, 'healreplacement');
 			}
 		},
@@ -767,7 +768,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 
 			pokemon.maxhp = Math.floor(pokemon.maxhp * ratio);
 			pokemon.hp = Math.floor(pokemon.hp * ratio);
-			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+			// @pokebedrock - Add details to the heal message
+			this.add('-heal', pokemon, pokemon.details, pokemon.getHealth, '[silent]');
 		},
 		onTryAddVolatile(status, pokemon) {
 			if (status.id === 'flinch') return null;
@@ -795,7 +797,8 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (pokemon.baseSpecies.name === 'Shedinja') return;
 			pokemon.hp = pokemon.getUndynamaxedHP();
 			pokemon.maxhp = pokemon.baseMaxhp;
-			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+			// @pokebedrock - Add details to the heal message
+			this.add('-heal', pokemon, pokemon.details, pokemon.getHealth, '[silent]');
 		},
 	},
 

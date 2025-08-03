@@ -2910,7 +2910,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			const newMaxHP = pokemon.volatiles['dynamax'] ? (2 * pokemon.baseMaxhp) : pokemon.baseMaxhp;
 			pokemon.hp = this.clampIntRange(newMaxHP - (pokemon.maxhp - pokemon.hp), 1, newMaxHP);
 			pokemon.maxhp = newMaxHP;
-			this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+			// @pokebedrock - Add details to the heal message
+			this.add('-heal', pokemon, pokemon.details, pokemon.getHealth, '[silent]');
 		},
 	},
 	twisteddimensionmod: {

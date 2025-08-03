@@ -68,7 +68,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					for (const key of target.m.trackPP.keys()) {
 						target.m.trackPP.set(key, 0);
 					}
-					this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
+					// @pokebedrock - Add details to the heal message
+					this.add('-heal', target, target.details, target.getHealth, '[from] move: Lunar Dance');
 					target.side.removeSlotCondition(target, 'lunardance');
 				}
 			},

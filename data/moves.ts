@@ -8677,7 +8677,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (!target.fainted && (target.hp < target.maxhp || target.status)) {
 					target.heal(target.maxhp);
 					target.clearStatus();
-					this.add('-heal', target, target.getHealth, '[from] move: Healing Wish');
+					// @pokebedrock - Add details to the heal message
+					this.add('-heal', target, target.details, target.getHealth, '[from] move: Healing Wish');
 					target.side.removeSlotCondition(target, 'healingwish');
 				}
 			},
@@ -10997,7 +10998,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					for (const moveSlot of target.moveSlots) {
 						moveSlot.pp = moveSlot.maxpp;
 					}
-					this.add('-heal', target, target.getHealth, '[from] move: Lunar Dance');
+					// @pokebedrock - Add details to the heal message
+					this.add('-heal', target, target.details, target.getHealth, '[from] move: Lunar Dance');
 					target.side.removeSlotCondition(target, 'lunardance');
 				}
 			},
@@ -21770,7 +21772,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (target && !target.fainted) {
 					const damage = this.heal(this.effectState.hp, target, target);
 					if (damage) {
-						this.add('-heal', target, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
+						// @pokebedrock - Add details to the heal message
+						this.add('-heal', target, target.details, target.getHealth, '[from] move: Wish', '[wisher] ' + this.effectState.source.name);
 					}
 				}
 			},

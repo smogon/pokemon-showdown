@@ -234,7 +234,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (!target.fainted) {
 					const source = this.effectState.source;
 					const damage = this.heal(target.baseMaxhp / 4, target, target);
-					if (damage) this.add('-heal', target, target.getHealth, '[from] move: Life Dew', `[of] ${source}`);
+					// @pokebedrock - Add details to the heal message
+					if (damage) this.add('-heal', target, target.details, target.getHealth, '[from] move: Life Dew', `[of] ${source}`);
 					target.side.removeSlotCondition(target, 'lifedew');
 				}
 			},

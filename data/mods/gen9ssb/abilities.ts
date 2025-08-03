@@ -2822,7 +2822,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 						this.add('-message', `${pokemon.name} dug through its Treasure Bag and found a Reviver Seed!`);
 						pokemon.m.reviverSeedTriggered = true;
 						pokemon.hp = Math.floor(pokemon.maxhp / 2);
-						this.add('-heal', pokemon, pokemon.getHealth, '[silent]');
+						// @pokebedrock - Add details to the heal message
+						this.add('-heal', pokemon, pokemon.details, pokemon.getHealth, '[silent]');
 						this.add('-message', `${pokemon.name} was revived!`);
 						return 0;
 					} else {
