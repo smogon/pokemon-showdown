@@ -1725,11 +1725,14 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	letsgonormalrules: {
 		effectType: 'ValidatorRule',
 		name: 'Let\'s Go Normal Rules',
-		desc: "Tells formats with the 'gen7letsgo' mod to set the level to 50, happiness to 70 and all Awakening Values to 0",
+		desc: "Tells formats with the 'gen7letsgo' mod to set the level to 50 and all Awakening Values to 0",
 		ruleset: ['Adjust Level = 50'],
-		onChangeSet(set) {
-			set.happiness = 70;
-			set.evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
+		onValidateSet(set) {
+			for (const stat in set.evs) {
+				if (set.evs[stat as 'hp'] > 0) {
+					return [`${set.species} has Awakening Values but this format doesn't allow them.`];
+				}
+			}
 		},
 	},
 	nfeclause: {
