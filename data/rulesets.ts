@@ -1722,9 +1722,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Allows Gen 1 pokemon to have moves from their Gen 2 learnsets",
 		// Implemented in team-validator.js
 	},
-	letsgonormalrules: {
+	lgpenormalrules: {
 		effectType: 'ValidatorRule',
-		name: 'Let\'s Go Normal Rules',
+		name: 'LGPE Normal Rules',
 		desc: "Tells formats with the 'gen7letsgo' mod to set the level to 50 and all Awakening Values to 0",
 		ruleset: ['Adjust Level = 50'],
 	},

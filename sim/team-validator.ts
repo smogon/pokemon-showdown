@@ -1105,7 +1105,7 @@ export class TeamValidator {
 		const ruleTable = this.ruleTable;
 		const dex = this.dex;
 
-		const allowAVs = !ruleTable.has('letsgonormalrules');
+		const allowAVs = !ruleTable.has('lgpenormalrules');
 		const evLimit = ruleTable.evLimit;
 		const canBottleCap = dex.gen >= 7 && (set.level >= (dex.gen < 9 ? 100 : 50) || !ruleTable.has('obtainablemisc'));
 
