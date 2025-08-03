@@ -276,7 +276,9 @@ export class RuleTable extends Map<string, string> {
 		}
 		if (this.valueRules.get('evlimit') === 'Auto') {
 			this.evLimit = dex.gen > 2 ? 510 : null;
-			if (format.mod === 'gen7letsgo') this.evLimit = null;
+			if (format.mod === 'gen7letsgo') {
+				this.evLimit = this.has('letsgonormalrules') ? 0 : null;
+			}
 			// Gen 6 hackmons also has a limit, which is currently implemented
 			// at the appropriate format.
 		}
