@@ -1727,6 +1727,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'LGPE Normal Rules',
 		desc: "Tells formats with the 'gen7letsgo' mod to set the level to 50 and all Awakening Values to 0",
 		ruleset: ['Adjust Level = 50'],
+		// AVs implemented in TeamValidator#validateStats
 	},
 	nfeclause: {
 		effectType: 'ValidatorRule',
