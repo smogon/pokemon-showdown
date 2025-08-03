@@ -1727,8 +1727,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		name: 'Let\'s Go Normal Rules',
 		desc: "Tells formats with the 'gen7letsgo' mod to set the level to 50, happiness to 70 and all Awakening Values to 0",
 		ruleset: ['Adjust Level = 50'],
-		onChangeSet(set, format) {
-			if (format.mod !== 'gen7letsgo') return;
+		onChangeSet(set) {
 			set.happiness = 70;
 			set.evs = { hp: 0, atk: 0, def: 0, spa: 0, spd: 0, spe: 0 };
 		},
