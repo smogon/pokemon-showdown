@@ -85,7 +85,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		const nature = this.dex.natures.get(set.nature);
 		if (nature.plus) stats[nature.plus] = Math.floor(stats[nature.plus] * 1.1);
 		if (nature.minus) stats[nature.minus] = Math.floor(stats[nature.minus] * 0.9);
-		set.happiness = 70;
+		set.happiness = !this.ruleTable.has('allowavs') ? 70 : (set.happiness || 255);
 		const friendshipValue = Math.floor((set.happiness / 255 / 10 + 1) * 100);
 		let stat: StatID;
 		for (stat in stats) {

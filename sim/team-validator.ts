@@ -675,6 +675,8 @@ export class TeamValidator {
 		}
 		if (set.happiness !== undefined && isNaN(set.happiness)) {
 			problems.push(`${name} has an invalid happiness value.`);
+		} else if (dex.currentMod === 'gen7letsgo') {
+			set.happiness = !ruleTable.has('allowavs') ? 70 : (set.happiness || 255);
 		}
 		if (set.hpType) {
 			const type = dex.types.get(set.hpType);
