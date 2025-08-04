@@ -1,4 +1,4 @@
-export const Items: { [itemid: string]: ModdedItemData } = {
+export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	bigroot: {
 		inherit: true,
 		onTryHealPriority: 1,
