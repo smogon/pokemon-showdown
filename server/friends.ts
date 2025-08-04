@@ -454,5 +454,5 @@ if (require.main === module) {
 		Repl.start(`friends-${process.pid}`, cmd => eval(cmd));
 	}
 } else if (!process.send) {
-	PM.spawn(Config.friendsprocesses || 1);
+	PM.spawn(global.Config?.friendsprocesses ?? 1);
 }

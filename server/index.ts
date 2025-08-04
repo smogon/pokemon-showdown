@@ -131,7 +131,6 @@ function setupGlobals() {
 
 	const Verifier = require('./verifier');
 	global.Verifier = Verifier;
-	Verifier.PM.spawn();
 
 	const { Tournaments } = require('./tournaments');
 	global.Tournaments = Tournaments;
@@ -184,7 +183,6 @@ if (require.main === module) {
 
 import * as TeamValidatorAsync from './team-validator-async';
 global.TeamValidatorAsync = TeamValidatorAsync;
-TeamValidatorAsync.PM.spawn();
 
 /*********************************************************
  * Start up the REPL server

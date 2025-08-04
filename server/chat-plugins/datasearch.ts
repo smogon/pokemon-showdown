@@ -50,7 +50,6 @@ interface MoveOrGroup {
 
 type Direction = 'less' | 'greater' | 'equal';
 
-const MAX_PROCESSES = 1;
 const RESULTS_MAX_LENGTH = 10;
 const MAX_RANDOM_RESULTS = 30;
 const dexesHelpMods = Object.keys((global.Dex?.dexes || {})).filter(x => x !== 'sourceMaps').join('</code>, <code>');
@@ -3119,7 +3118,7 @@ if (!PM.isParentProcess) {
 	// eslint-disable-next-line no-eval
 	require('../../lib/repl').Repl.start('dexsearch', (cmd: string) => eval(cmd));
 } else {
-	PM.spawn(MAX_PROCESSES);
+	PM.spawn(global.Config?.datasearchprocesses ?? 1);
 }
 
 export const testables = {

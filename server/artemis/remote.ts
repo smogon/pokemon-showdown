@@ -123,7 +123,7 @@ if (require.main === module) {
 	// eslint-disable-next-line no-eval
 	Repl.start(`abusemonitor-remote-${process.pid}`, cmd => eval(cmd));
 } else if (!process.send) {
-	PM.spawn(Config.remoteartemisprocesses || 1);
+	PM.spawn(global.Config?.remoteartemisprocesses ?? 1);
 }
 
 export class RemoteClassifier {
