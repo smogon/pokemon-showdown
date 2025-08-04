@@ -25,6 +25,11 @@ export interface AdditionalMoveInfo {
 	pp: number;
 }
 
+interface ExportOptions {
+	hideStats?: boolean;
+	removeNicknames?: boolean | ((nickname: string) => string | null);
+}
+
 export interface PokemonSet {
 	/**
 	 * Nickname. Should be identical to its base species if not specified
@@ -426,7 +431,7 @@ export const Teams = new class Teams {
 	/**
 	 * Exports a team in human-readable PS export format
 	 */
-	export(team: PokemonSet[], options?: { hideStats?: boolean }) {
+	export(team: PokemonSet[], options?: ExportOptions) {
 		let output = '';
 		for (const set of team) {
 			output += this.exportSet(set, options) + `\n`;
@@ -434,11 +439,14 @@ export const Teams = new class Teams {
 		return output;
 	}
 
-	exportSet(set: PokemonSet, { hideStats }: { hideStats?: boolean } = {}) {
+	exportSet(set: PokemonSet, { hideStats, removeNicknames }: ExportOptions = {}) {
 		let out = ``;
 
 		// core
-		if (set.name && set.name !== set.species) {
+		if (typeof removeNicknames === 'function' && set.name && set.name !== set.species) {
+			set.name = removeNicknames(set.name) || set.species;
+		}
+		if (set.name && set.name !== set.species && removeNicknames !== true) {
 			out += `${set.name} (${set.species})`;
 		} else {
 			out += set.species;
@@ -696,8 +704,8 @@ export const Teams = new class Teams {
 			TeamGenerator = require(`../data/mods/gen9ssb/random-teams`).default;
 		} else if (mod === 'ccapm2024') {
 			TeamGenerator = require(`../data/mods/ccapm2024/random-teams`).default;
-		} else if (mod === 'vaporemons') {
-			TeamGenerator = require(`../data/mods/vaporemons/random-teams`).default;
+		} else if (mod === 'balls') {
+			TeamGenerator = require(`../data/mods/balls/random-teams`).default;
 		} else if (formatID.includes('gen9babyrandombattle')) {
 			TeamGenerator = require(`../data/random-battles/gen9baby/teams`).default;
 		} else if (formatID.includes('gen9randombattle') && format.ruleTable?.has('+pokemontag:cap')) {

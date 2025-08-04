@@ -1616,6 +1616,12 @@ export class Battle {
 						delete pokemon.volatiles['partiallytrapped'];
 					}
 				}
+				if (pokemon.volatiles['fakepartiallytrapped']) {
+					const counterpart = pokemon.volatiles['fakepartiallytrapped'].counterpart;
+					if (counterpart.hp <= 0 || !counterpart.volatiles['fakepartiallytrapped']) {
+						delete pokemon.volatiles['fakepartiallytrapped'];
+					}
+				}
 			}
 		}
 
@@ -1919,27 +1925,7 @@ export class Battle {
 			this.add(`raw|<div class="infobox"><details class="readmore"${open}><summary><strong>${format.customRules.length} custom rule${plural}:</strong></summary> ${format.customRules.join(', ')}</details></div>`);
 		}
 
-		format.onTeamPreview?.call(this);
-		for (const rule of this.ruleTable.keys()) {
-			if ('+*-!'.includes(rule.charAt(0))) continue;
-			const subFormat = this.dex.formats.get(rule);
-			subFormat.onTeamPreview?.call(this);
-		}
-
-		if (this.requestState !== 'teampreview' && this.ruleTable.pickedTeamSize) {
-			this.add('clearpoke');
-			for (const side of this.sides) {
-				for (const pokemon of side.pokemon) {
-					// Still need to hide these formes since they change on battle start
-					const details = pokemon.details.replace(', shiny', '')
-						.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*')
-						.replace(/(Xerneas)(-[a-zA-Z?-]+)?/g, '$1-*');
-					this.addSplit(side.id, ['poke', pokemon.side.id, details, '']);
-				}
-			}
-			this.makeRequest('teampreview');
-		}
-
+		this.runPickTeam();
 		this.queue.addChoice({ choice: 'start' });
 		this.midTurn = true;
 		if (!this.requestState) this.turnLoop();
@@ -1949,6 +1935,35 @@ export class Battle {
 		if (!this.deserialized) throw new Error('Attempt to restart a battle which has not been deserialized');
 
 		(this as any).send = send;
+	}
+
+	runPickTeam() {
+		// onTeamPreview handlers are expected to show full teams to all active sides,
+		// and send a 'teampreview' request for players to pick their leads / team order.
+		this.format.onTeamPreview?.call(this);
+		for (const rule of this.ruleTable.keys()) {
+			if ('+*-!'.includes(rule.charAt(0))) continue;
+			const subFormat = this.dex.formats.get(rule);
+			subFormat.onTeamPreview?.call(this);
+		}
+
+		if (this.requestState === 'teampreview') {
+			return;
+		}
+
+		if (this.ruleTable.pickedTeamSize) {
+			// There was no onTeamPreview handler (e.g. Team Preview rule missing).
+			// Players must still pick their own Pokémon, so we show them privately.
+			this.add('clearpoke');
+			for (const pokemon of this.getAllPokemon()) {
+				// Still need to hide these formes since they change on battle start
+				const details = pokemon.details.replace(', shiny', '')
+					.replace(/(Zacian|Zamazenta)(?!-Crowned)/g, '$1-*')
+					.replace(/(Xerneas)(-[a-zA-Z?-]+)?/g, '$1-*');
+				this.addSplit(pokemon.side.id, ['poke', pokemon.side.id, details, '']);
+			}
+			this.makeRequest('teampreview');
+		}
 	}
 
 	checkEVBalance() {
@@ -2541,6 +2556,7 @@ export class Battle {
 					// after clearing volatiles
 					pokemon.details = pokemon.getUpdatedDetails();
 					this.add('detailschange', pokemon, pokemon.details, '[silent]');
+					pokemon.updateMaxHp();
 					pokemon.formeRegression = false;
 				}
 				pokemon.side.faintedThisTurn = pokemon;
@@ -3101,7 +3117,20 @@ export class Battle {
 			return;
 		}
 
+		let updated = false;
+		if (side.requestState === 'move') {
+			for (const action of side.choice.actions) {
+				const pokemon = action.pokemon;
+				if (action.choice !== 'move' || !pokemon) continue;
+				if (side.updateRequestForPokemon(pokemon, req => side.updateDisabledRequest(pokemon, req))) {
+					updated = true;
+				}
+			}
+		}
+
 		side.clearChoice();
+
+		if (updated) side.emitRequest(side.activeRequest!, true);
 	}
 
 	/**

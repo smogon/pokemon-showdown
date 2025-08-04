@@ -1096,7 +1096,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "NFE",
 	},
 	porygon2: {
-		tier: "ZU",
+		tier: "ZUBL",
 		doublesTier: "DUU",
 		natDexTier: "NFE",
 	},
@@ -1664,7 +1664,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	tyranitarmega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "UU",
+		natDexTier: "UUBL",
 	},
 	lugia: {
 		tier: "Uber",
@@ -5002,7 +5002,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	duraludon: {
-		tier: "PUBL",
+		tier: "PU",
 		doublesTier: "NFE",
 		natDexTier: "RU",
 	},
@@ -5639,7 +5639,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	ironcrown: {
 		tier: "OU",
 		doublesTier: "DUU",
-		natDexTier: "UU",
+		natDexTier: "UUBL",
 	},
 	terapagos: {
 		tier: "Uber",
@@ -5971,6 +5971,14 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	shox: {
 		isNonstandard: "CAP",
 		tier: "CAP",
+	},
+	ramnarok: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	ramnarokradiant: {
+		isNonstandard: "CAP",
+		tier: "Illegal",
 	},
 	pokestarsmeargle: {
 		isNonstandard: "Custom",

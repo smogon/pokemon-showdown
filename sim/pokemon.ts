@@ -20,7 +20,7 @@ interface MoveSlot {
 	maxpp: number;
 	// @pokebedrock - Specify type as MoveTarget
 	target?: MoveTarget;
-	disabled: boolean | string;
+	disabled: boolean | 'hidden';
 	disabledSource?: string;
 	used: boolean;
 	virtual?: boolean;
@@ -1035,17 +1035,15 @@ export class Pokemon {
 				// if each of a Pokemon's base moves are disabled by one of these effects, it will Struggle
 				const canCauseStruggle = ['Encore', 'Disable', 'Taunt', 'Assault Vest', 'Belch', 'Stuff Cheeks'];
 				disabled = this.maxMoveDisabled(moveSlot.id) || disabled && canCauseStruggle.includes(moveSlot.disabledSource!);
-			} else if (
-				(moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || disabled &&
-				this.side.active.length >= 2 && this.battle.actions.targetTypeChoices(target!)
-			) {
+			} else if (moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) {
 				disabled = true;
 			}
 
+			if (disabled === 'hidden') {
+				disabled = !restrictData;
+			}
 			if (!disabled) {
 				hasValidMove = true;
-			} else if (disabled === 'hidden' && restrictData) {
-				disabled = false;
 			}
 
 			moves.push({
@@ -1117,6 +1115,8 @@ export class Pokemon {
 		};
 
 		if (isLastActive) {
+			this.maybeDisabled = this.maybeDisabled && !lockedMove;
+			this.maybeLocked = this.maybeLocked || this.maybeDisabled;
 			if (this.maybeDisabled) {
 				data.maybeDisabled = this.maybeDisabled;
 			}
@@ -1130,9 +1130,14 @@ export class Pokemon {
 					data.maybeTrapped = true;
 				}
 			}
-		} else if (canSwitchIn) {
-			// Discovered by selecting a valid Pokémon as a switch target and cancelling.
-			if (this.trapped) data.trapped = true;
+		} else {
+			this.maybeDisabled = false;
+			this.maybeLocked = false;
+			if (canSwitchIn) {
+				// Discovered by selecting a valid Pokémon as a switch target and cancelling.
+				if (this.trapped) data.trapped = true;
+			}
+			this.maybeTrapped = false;
 		}
 
 		if (!lockedMove) {
@@ -1450,6 +1455,8 @@ export class Pokemon {
 			this.details = this.getUpdatedDetails();
 			let details = (this.illusion || this).details;
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
+			this.battle.add('detailschange', this, details);
+			this.updateMaxHp();
 			if (!source) {
 				// Tera forme
 				// Ogerpon/Terapagos text goes here
@@ -1500,6 +1507,19 @@ export class Pokemon {
 			this.apparentType = this.terastallized;
 		}
 		return true;
+	}
+
+	updateMaxHp() {
+		const newBaseMaxHp = Math.floor(Math.floor(
+			2 * this.species.baseStats['hp'] + this.set.ivs['hp'] + Math.floor(this.set.evs['hp'] / 4) + 100
+		) * this.level / 100 + 10);
+		if (newBaseMaxHp === this.baseMaxhp) return;
+		this.baseMaxhp = newBaseMaxHp;
+		const newMaxHP = this.volatiles['dynamax'] ? (2 * this.baseMaxhp) : this.baseMaxhp;
+		this.hp = newMaxHP - (this.maxhp - this.hp);
+		if (this.hp < 0) this.hp = this.fainted ? 0 : 1; // latest should never happen
+		this.maxhp = newMaxHP;
+		if (this.hp) this.battle.add('-heal', this, this.getHealth, '[silent]');
 	}
 
 	clearVolatile(includeSwitchFlags = true) {
@@ -1626,7 +1646,7 @@ export class Pokemon {
 		return false;
 	}
 
-	disableMove(moveid: string, isHidden?: boolean | string, sourceEffect?: Effect) {
+	disableMove(moveid: string, isHidden?: boolean, sourceEffect?: Effect) {
 		if (!sourceEffect && this.battle.event) {
 			sourceEffect = this.battle.effect;
 		}
@@ -1634,7 +1654,7 @@ export class Pokemon {
 
 		for (const moveSlot of this.moveSlots) {
 			if (moveSlot.id === moveid && moveSlot.disabled !== true) {
-				moveSlot.disabled = (isHidden || true);
+				moveSlot.disabled = isHidden ? 'hidden' : true;
 				moveSlot.disabledSource = (sourceEffect?.name || moveSlot.move);
 			}
 		}

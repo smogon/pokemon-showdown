@@ -168,28 +168,28 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 	april: {
 		noCopy: true,
 		onStart(pokemon) {
-			if (this.ruleTable.has('zmovesclause')) {
+			if (this.ruleTable.has('zmoveclause')) {
 				this.add(`c:|${getName('April')}|Fool's Day`);
 			} else {
 				this.add(`c:|${getName('April')}|I said, "Do you have something against dogs?"`);
 			}
 		},
 		onSwitchOut() {
-			if (this.ruleTable.has('zmovesclause')) {
+			if (this.ruleTable.has('zmoveclause')) {
 				this.add(`c:|${getName('April')}|Fool's Day`);
 			} else {
 				this.add(`c:|${getName('April')}|(Is it the chorus yet?)`);
 			}
 		},
 		onFaint() {
-			if (this.ruleTable.has('zmovesclause')) {
+			if (this.ruleTable.has('zmoveclause')) {
 				this.add(`c:|${getName('April')}|Fool's Day`);
 			} else {
 				this.add(`c:|${getName('April')}|Don't get too impressed, you might lose your breath...`);
 			}
 		},
 		onTryHit() {
-			if (this.ruleTable.has('zmovesclause')) {
+			if (this.ruleTable.has('zmoveclause')) {
 				this.add(`c:|${getName('April')}|Fool's Day`);
 			}
 		},
@@ -355,9 +355,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				break;
 			case 'rumia':
 				this.add(`c:|${getName('ausma')}|oh no... it's poomia....`);
-				break;
-			case 'lily':
-				this.add(`c:|${getName('ausma')}|togedemaru`);
 				break;
 			case 'lumari':
 				this.add(`c:|${getName('ausma')}|we should watch the next ladybug ep after this tbh`);
@@ -1360,18 +1357,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		onFaint() {
 			this.add(`c:|${getName('Lets go shuckles')}|He who lives by the Shuckle shall die by the Shuckle.`);
-		},
-	},
-	lily: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Lily')}|buying gf`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Lily')}|accidentally burnt the shrimps`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Lily')}|oh dear, i am dead`);
 		},
 	},
 	loethalion: {
