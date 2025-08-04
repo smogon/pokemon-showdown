@@ -14,7 +14,7 @@
  */
 
 /* eslint no-else-return: "error" */
-import { Utils } from '../../lib';
+import { Utils, ProcessManager } from '../../lib';
 import type { UserSettings } from '../users';
 import type { GlobalPermission, RoomPermission } from '../user-groups';
 
@@ -178,10 +178,14 @@ export const crqHandlers: { [k: string]: Chat.CRQHandler } = {
 };
 
 export const commands: Chat.ChatCommands = {
-	version(target, room, user) {
+	async version(target, room, user) {
 		if (!this.runBroadcast()) return;
 		const version = Chat.packageData.version;
-		this.sendReplyBox(this.tr`Server version: <b>${version}</b>`);
+		let gitVersion;
+		try {
+			gitVersion = (await ProcessManager.exec(['git', 'rev-parse', '--short', 'HEAD'])).stdout.trim();
+		} catch {}
+		this.sendReplyBox(this.tr`Server version: <b>${version}${gitVersion ? ` (commit ${gitVersion})` : ''}</b>`);
 	},
 	versionhelp: [
 		`/version - Get the current server version.`,
