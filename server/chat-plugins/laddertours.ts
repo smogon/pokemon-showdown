@@ -231,7 +231,6 @@ export class LadderTracker {
 			if (e.name === 'SyntaxError') { // sometimes the page 404s, meaning invalid json. skip!
 				response = { toplist: [] };
 			} else {
-				Monitor.crashlog('A ladder tracker request', e, this.config);
 				if (display) throw new Chat.ErrorMessage('Failed to fetch leaderboard. Try again later.');
 				return leaderboard;
 			}
