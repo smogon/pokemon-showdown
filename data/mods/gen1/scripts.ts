@@ -159,27 +159,26 @@ export const Scripts: ModdedBattleScriptsData = {
 				return;
 			}
 
-			let ppMove: ID = pokemon.volatiles['twoturnmove']?.ppMove || '';
-			if (pokemon.getLockedMove()) {
-				// locked moves don't deduct PP
-				sourceEffect = move;
-			} else {
-				ppMove ||= move.id;
-			}
+			const lockedMove = pokemon.getLockedMove();
+			if (lockedMove) sourceEffect = move;
 
-			this.useMove(move, pokemon, { target, sourceEffect });
-
-			if (pokemon.volatiles['twoturnmove']) {
-				// Deduct PP on the second turn, not first
-				// If called from e.g. Metronome, remember to deduct Metronome PP
-				pokemon.volatiles['twoturnmove'].ppMove = move.id;
-			} else if (ppMove) {
+			// Locked moves don't deduct PP
+			// Two-turn moves like Sky Attack deduct PP on their second turn.
+			if (!lockedMove || pokemon.volatiles['twoturnmove']) {
+				const ppMove = pokemon.volatiles['twoturnmove']?.ppMove || move.id;
 				pokemon.deductPP(ppMove, null, target);
 				const moveSlot = pokemon.getMoveData(ppMove);
 				if (moveSlot && moveSlot.pp < 0) {
 					moveSlot.pp += 64;
 					this.battle.hint("In Gen 1, if a pokemon is forced to use a move with 0 PP, the move will underflow to have 63 PP.");
 				}
+			}
+
+			this.useMove(move, pokemon, { target, sourceEffect });
+
+			if (pokemon.volatiles['twoturnmove']) {
+				pokemon.deductPP(move, -1, target);
+				pokemon.volatiles['twoturnmove'].ppMove = move.id;
 			}
 		},
 		// This function deals with AfterMoveSelf events.
@@ -217,17 +216,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					// The move is our 'final' move (a failed Mirror Move, or any move that isn't Metronome or Mirror Move).
 					pokemon.side.lastMove = move;
 
-					// If target fainted
-					if (target && target.hp <= 0) {
-						// We remove recharge
-						if (pokemon.volatiles['mustrecharge']) pokemon.removeVolatile('mustrecharge');
-						delete pokemon.volatiles['partialtrappinglock'];
-					} else {
-						if (pokemon.volatiles['mustrecharge']) this.battle.add('-mustrecharge', pokemon);
-						if (pokemon.hp) {
-							this.battle.runEvent('AfterMove', pokemon, target, move);
-							this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
-						}
+					this.battle.runEvent('AfterMove', pokemon, target, move);
+					if (!target || target.hp > 0) {
+						this.battle.runEvent('AfterMoveSelf', pokemon, target, move);
 					}
 				}
 			}
