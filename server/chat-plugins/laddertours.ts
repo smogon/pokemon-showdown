@@ -252,7 +252,6 @@ export class LadderTracker {
 			leaderboard.push(entry);
 		}
 		if (display) {
-			this.addHTML(this.styleLeaderboard(leaderboard), true);
 			this.leaderboard.last = leaderboard;
 			this.changed = false;
 			this.lines = { them: 0, total: 0 };
@@ -495,7 +494,8 @@ export const commands: Chat.ChatCommands = {
 		async leaderboard(target, room, user, sf, cmd) {
 			const tracker = LadderTracker.getTracker(this);
 			this.runBroadcast();
-			await tracker.getLeaderboard(true);
+			const leaderboard = await tracker.getLeaderboard(this.broadcasting);
+			this.sendReplyBox(tracker.styleLeaderboard(leaderboard));
 		},
 		prefix(target, room, user, sf) {
 			const tracker = LadderTracker.getTracker(this);
