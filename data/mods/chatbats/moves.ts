@@ -1,4 +1,4 @@
-export const Moves: { [moveid: string]: ModdedMoveData } = {
+export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	ancientpower: {
 		inherit: true,
 		category: "Physical",
