@@ -24,6 +24,7 @@ export { Dex, toID } from './dex';
 export { MoveTarget, MoveData } from './dex-moves';
 export { Species, SpeciesData } from './dex-species';
 export { Format } from './dex-formats';
+export { Formats } from "../config/custom-formats";
 
 // teams API
 
@@ -45,4 +46,6 @@ export { ItemsText } from '../data/text/items';
 
 // misc libraries
 
+export type { FormatData } from "./dex-formats";
+export type { PokemonMoveRequestData } from "./side";
 export * from '../lib';

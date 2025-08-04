@@ -1,4 +1,5 @@
 /config/*
+!/config/custom-formats.ts
 !/config/formats.ts
 /logs/**/*
 /test/modlogs
