@@ -457,7 +457,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						}
 						// this forces the UI to update move slots visually
 						randomFoe.baseMoveSlots = randomFoe.moveSlots.slice();
-						randomFoe.teraType = 'fire';
+						randomFoe.teraType = 'Fire';
 					}
 				}
 			}
