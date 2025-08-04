@@ -19,8 +19,14 @@ describe(`Hyper Beam`, () => {
 		battle.makeChoices();
 		assert.cantMove(() => battle.choose('p1', 'move tackle'));
 	});
+});
 
-	it(`[Gen 1] should not force a recharge turn after KOing a Pokemon`, () => {
+describe(`Hyper Beam [Gen 1]`, () => {
+	afterEach(() => {
+		battle.destroy();
+	});
+
+	it(`should not force a recharge turn after KOing a Pokemon`, () => {
 		battle = common.gen(1).createBattle([[
 			{ species: 'snorlax', moves: ['hyperbeam', 'tackle'] },
 		], [
@@ -32,7 +38,7 @@ describe(`Hyper Beam`, () => {
 		assert.false.cantMove(() => battle.choose('p1', 'move tackle'));
 	});
 
-	it(`[Gen 1] should not force a recharge turn after breaking a Substitute`, () => {
+	it(`should not force a recharge turn after breaking a Substitute`, () => {
 		battle = common.gen(1).createBattle([[
 			{ species: 'snorlax', moves: ['hyperbeam', 'tackle'] },
 		], [
@@ -42,7 +48,7 @@ describe(`Hyper Beam`, () => {
 		assert.false.cantMove(() => battle.choose('p1', 'move tackle'));
 	});
 
-	it(`[Gen 1] should force a recharge turn after damaging, but not breaking a Substitute`, () => {
+	it(`should force a recharge turn after damaging, but not breaking a Substitute`, () => {
 		battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
 			{ species: 'slowpoke', moves: ['hyperbeam', 'tackle'] },
 		], [
@@ -52,7 +58,7 @@ describe(`Hyper Beam`, () => {
 		assert.cantMove(() => battle.choose('p1', 'move tackle'));
 	});
 
-	it(`[Gen 1] Partial trapping moves negate recharge turns (recharging Pokemon is slower))`, () => {
+	it(`Partial trapping moves negate recharge turns (recharging Pokemon is slower))`, () => {
 		battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
 			{ species: 'cloyster', moves: ['surf', 'clamp'] },
 		], [
@@ -66,7 +72,7 @@ describe(`Hyper Beam`, () => {
 		assert(battle.p2.active[0].volatiles['partiallytrapped']);
 	});
 
-	it(`[Gen 1] Partial trapping moves negate recharge turns (recharging Pokemon is faster)`, () => {
+	it(`Partial trapping moves negate recharge turns (recharging Pokemon is faster)`, () => {
 		battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
 			{ species: 'cloyster', moves: ['clamp'] },
 		], [
@@ -79,7 +85,25 @@ describe(`Hyper Beam`, () => {
 		assert(battle.p2.active[0].volatiles['partiallytrapped']);
 	});
 
-	it(`[Gen 1] Hyper Beam automatic selection glitch`, () => {
+	it(`Hyper Beam Wrap underflow glitch`, () => {
+		battle = common.gen(1).createBattle({ seed: [0, 0, 0, 4] }, [[
+			{ species: 'dragonite', moves: ['agility', 'wrap'] },
+		], [
+			{ species: 'alakazam', moves: ['hyperbeam'] },
+		]]);
+		battle.p2.active[0].moveSlots[0].pp = 1;
+		// All moves hit in the first turn
+		battle.makeChoices();
+		assert(battle.p2.active[0].volatiles['mustrecharge']);
+		// Wrap misses, the forced Hyper Beam hits, Wrap PP underflows to 63
+		battle.makeChoices('move wrap', 'auto');
+		assert.false(battle.p2.active[0].volatiles['partiallytrapped']);
+		assert(battle.p2.active[0].volatiles['mustrecharge']);
+		assert(battle.log.includes("|-hint|In Gen 1, if a pokemon is forced to use a move with 0 PP, the move will underflow to have 63 PP."));
+		assert.equal(battle.p2.active[0].moveSlots[0].pp, 63);
+	});
+
+	it(`Hyper Beam automatic selection glitch`, () => {
 		battle = common.gen(1).createBattle({ seed: [0, 0, 1, 0] }, [[
 			{ species: 'cloyster', moves: ['surf', 'clamp'] },
 		], [
