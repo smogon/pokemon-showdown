@@ -358,4 +358,9 @@ export const Pokedex: { [k: string]: ModdedSpeciesData } = {
 	magneton: {
 		inherit: true,
 	},
+	delibird: {
+		inherit: true,
+		abilities: { 0: "Hail Mary" },
+		baseStats: { hp: 45, atk: 90, def: 45, spa: 65, spd: 45, spe: 136 },
+	},
 };
