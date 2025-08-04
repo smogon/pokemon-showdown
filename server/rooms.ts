@@ -2054,7 +2054,7 @@ export class GameRoom extends BasicRoom {
 			isPrivate ? 1 :
 			0;
 		if (isPrivate && hidden === 10) {
-			password = Replays.generatePassword();
+			password = battle.password ||= Replays.generatePassword();
 		}
 		if (battle.replaySaved !== true && hidden === 10) {
 			battle.replaySaved = 'auto';
