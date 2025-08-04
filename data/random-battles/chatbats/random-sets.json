@@ -857,9 +857,20 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Magnet Rise", "Thunderbolt", "Magnet Bomb", "Volt Switch", "Thunder Wave" ],
+                "movepool": ["Magnet Rise", "Thunderbolt", "Magnet Bomb", "Volt Switch", "Thunder Wave"],
                 "abilities": ["Magnet Pull"],
                 "teraTypes": ["Ghost", "Water"]
+            }
+        ]
+    },
+    "delibird": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Icicle Storm", "Brave Bird", "Aerial Ace", "Drill Run"],
+                "abilities": ["Hail Mary"],
+                "teraTypes": ["Ice", "Ground"]
             }
         ]
     }

@@ -714,4 +714,30 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData } = {
 		rating: 4.5,
 		num: 288,
 	},
+	hailmary: {
+		onModifySpe(spe, pokemon) {
+			if (this.field.isWeather(['hail', 'snowscape'])) {
+				return this.chainModify(2);
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk) {
+			if (this.field.isWeather(['hail', 'snowscape'])) {
+				return this.modify(atk, 1.5);
+			}
+		},
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy, target, source, move) {
+			if (this.field.isWeather(['hail', 'snowscape'])) {
+				if (move.category === 'Physical' && typeof accuracy === 'number') {
+					return this.chainModify([3277, 4096]);
+				}
+			}
+		},
+		flags: {},
+		name: "Hail Mary",
+		rating: 5,
+		num: -113,
+		shortDesc: "In Snowscape: 2x Speed, 1.5x Attack, 0.8x accuracy.",
+	},
 };

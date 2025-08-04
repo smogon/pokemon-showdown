@@ -1280,6 +1280,7 @@ export class RandomTeams {
 		if (species.id === 'dachsbun') return 'Rocky Helmet';
 		if (species.id === 'mew') return 'Starf Berry';
 		if (species.id === 'magneton') return this.sample(['Air Balloon', 'Chople Berry']);
+		if (species.id === 'delibird') return this.sample(['Heavy-Duty Boots', 'Life Orb']);
 
 		if (
 			species.id === 'froslass' || moves.has('populationbomb') ||
@@ -1788,7 +1789,7 @@ export class RandomTeams {
 				currentSpeciesPool.push(species);
 			}
 			// change const to let when enforcing certain mons for testing
-			const species = this.sample(currentSpeciesPool);
+			let species = this.sample(currentSpeciesPool);
 
 			// let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
 
@@ -1881,7 +1882,7 @@ export class RandomTeams {
 			// if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			// Code to enforce a mon on teams for testing
-			// if (pokemon.length === 1 || this.maxTeamSize === 1) species = 'Salamence-Mega';
+			if (pokemon.length === 1 || this.maxTeamSize === 1) species = 'Delibird';
 
 			let set: RandomTeamsTypes.RandomSet;
 
