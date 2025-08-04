@@ -74,4 +74,5 @@ export const FormatsData: { [k: string]: ModdedSpeciesFormatsData } = {
 	koraidon: { tier: "ChatBats" },
 	mew: { tier: "ChatBats" },
 	magneton: { tier: "ChatBats" },
+	delibird: { tier: "ChatBats" },
 };
