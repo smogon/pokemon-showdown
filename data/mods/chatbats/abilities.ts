@@ -43,7 +43,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					};
 				});
 				// this forces the UI to update move slots visually
-				target.baseMoveSlots = target.moveSlots.slice();
+				(target as any).baseMoveSlots = target.moveSlots.slice();
 				// removes status/boosts
 				target.cureStatus();
 				target.clearBoosts();
@@ -54,7 +54,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 				target.clearVolatile(true);
 				// form change + heal
-				target.formeChange('Illumise', target, true);
+				target.formeChange('Illumise', null, true);
 				this.heal(this.modify(target.maxhp, 1));
 				// sets new ability
 				target.setAbility('Tinted Lens');
@@ -99,7 +99,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					};
 				});
 				// this forces the UI to update move slots visually
-				target.baseMoveSlots = target.moveSlots.slice();
+				(target as any).baseMoveSlots = target.moveSlots.slice();
 				// removes status/boosts
 				target.clearStatus();
 				target.clearBoosts();
@@ -110,7 +110,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				}
 				target.clearVolatile(false);
 				// form change + heal
-				target.formeChange('Volbeat', target, true);
+				target.formeChange('Volbeat', null, true);
 				this.heal(this.modify(target.maxhp, 1));
 				// sets new ability
 				target.setAbility('Swarm');
@@ -174,8 +174,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			// checks if Glastrier is below 50% HP, if so transforms into Caly-Ice and sets ability to As One
 			if (pokemon.species.id !== 'glastrier' || !pokemon.hp) return;
 			if (pokemon.hp < pokemon.maxhp / 2) {
-				if (pokemon.species !== 'Calyrex-Ice' && pokemon.ability === 'frozenarmor') {
-					pokemon.formeChange('Calyrex-Ice', pokemon, true);
+				if (pokemon.species.id !== 'calyrexice' && pokemon.ability === 'frozenarmor') {
+					pokemon.formeChange('Calyrex-Ice', null, true);
 					this.add('-message', `Glastrier's Frozen Armor has shattered!`);
 					// pokemon.setAbility('As One (Glastrier)');
 					pokemon.baseAbility = pokemon.ability;
@@ -195,9 +195,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (move.flags['contact']) {
 				const invertedBoosts: SparseBoostsTable = {};
 				for (const stat in source.boosts) {
-					if (source.boosts[stat] > 0) {
+					if (source.boosts[stat as BoostID] > 0) {
 						// checks for boosts on source of move, inverts boosts and adds them to invertedBoosts table
-						invertedBoosts[stat] = -2 * source.boosts[stat];
+						invertedBoosts[stat as BoostID] = -2 * source.boosts[stat as BoostID];
 					}
 				}
 				// applies boosts
@@ -505,13 +505,13 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	berserk: {
 		onUpdate(pokemon) {
-			if (!pokemon.berserk) {
-				pokemon.berserk = false;
+			if (!(pokemon as any).berserk) {
+				(pokemon as any).berserk = false;
 			}
 			if (pokemon.species.id !== 'infernape' || !pokemon.hp) return;
-			if (pokemon.hp < pokemon.maxhp / 2 && pokemon.berserk === false) {
+			if (pokemon.hp < pokemon.maxhp / 2 && (pokemon as any).berserk === false) {
 				this.boost({ spa: 1 }, pokemon, pokemon);
-				pokemon.berserk = true;
+				(pokemon as any).berserk = true;
 			}
 		},
 		flags: {},
@@ -602,7 +602,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	biogenesis: {
 		onSwitchInPriority: -1,
 		onBeforeSwitchIn(pokemon) {
-			if (pokemon.didRandomMoves === "yes") return;
+			if ((pokemon as any).didRandomMoves === "yes") return;
 			const moves = this.dex.moves.all();
 			let randomMove1 = '';
 			if (moves.length) {
@@ -663,11 +663,11 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				};
 			});
 			// this forces the UI to update move slots visually
-			pokemon.baseMoveSlots = pokemon.moveSlots.slice();
-			pokemon.didRandomMoves = "yes";
+			(pokemon as any).baseMoveSlots = pokemon.moveSlots.slice();
+			(pokemon as any).didRandomMoves = "yes";
 		},
 		onSwitchIn(pokemon) {
-			if (pokemon.hasTypeChanged !== "yes") {
+			if ((pokemon as any).hasTypeChanged !== "yes") {
 				this.add('-ability', pokemon, 'Biogenesis');
 				this.add('-anim', pokemon, 'Growth', pokemon);
 				this.add('-message', `Mew evolves into a new form with its Biogenesis!`);
@@ -683,7 +683,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				pokemon.types;
 			pokemon.setType(types);
 			pokemon.baseTypes = pokemon.types;
-			pokemon.hasTypeChanged = "yes";
+			(pokemon as any).hasTypeChanged = "yes";
 			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1,
