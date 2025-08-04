@@ -252,7 +252,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			const special = Math.floor(Math.floor(Math.floor(Math.floor(2 * pokemon.level / 5 + 2) * 90 * spa) / spd) / 50);
 			if (physical < special || (physical === special && this.randomChance(1, 2))) {
 				move.category = 'Special';
-				move.flags.contact = 0;
+				move.flags.contact = undefined;
 			}
 		},
 		onPrepareHit(target, source) {
@@ -328,7 +328,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			} else {
 				return priority;
 			}
-			return priority;
 		},
 		// modifies base power
 		onBasePower(basePower, source, target) {
@@ -347,7 +346,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			} else {
 				return basePower;
 			}
-			return basePower;
 		},
 		onTryMove() {
 			this.attrLastMove('[still]');
@@ -386,6 +384,26 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Inflicts damage from hazards on target's side.",
 		desc: "Target takes damage from all entry hazards on their side of the field, unless they are immune.",
 	},
+	thunderkick: {
+		num: -1192,
+		name: "Thunder Kick",
+		type: "Electric",
+		basePower: 50,
+		accuracy: 100,
+		category: "Physical",
+		priority: 0,
+		pp: 5,
+		target: "normal",
+		contestType: "Beautiful",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(t, s, m) {
+			this.add('-anim', s, 'High Jump Kick', t);
+			this.add('-anim', s, 'Thunder', t);
+		},
+		flags: { contact: 1, protect: 1 },
+	},
 	thunderouskick: {
 		inherit: true,
 		secondary: null,
@@ -405,26 +423,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		desc: "50% chance to reduce Defense by 1, 50% chance to inflict an additional 50 BP Electric type damage.",
 		shortDesc: "50% -1 Defense, 50% extra 50 BP Electric damage.",
-	},
-	thunderkick: {
-		num: -1192,
-		name: "Thunder Kick",
-		type: "Electric",
-		basePower: 50,
-		accuracy: 100,
-		category: "Physical",
-		priority: 0,
-		pp: 5,
-		target: "normal",
-		contestType: "Beautiful",
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(t, s, m) {
-			this.add('-anim', s, 'High Jump Kick', t);
-			this.add('-anim', s, 'Thunder', t);
-		},
-		flags: { contact: true, protect: true },
 	},
 	stealthrock: {
 		num: 446,
@@ -522,14 +520,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// when Dondozo switches back in after eating, it gains boost
 				if (pokemon.baseSpecies.baseSpecies === 'Dondozo') {
 					// reapplies volatiles and stat boosts
-					if (pokemon.storedVolatiles) {
-						for (const volatile in pokemon.storedVolatiles) {
+					if ((pokemon as any).storedVolatiles) {
+						for (const volatile in (pokemon as any).storedVolatiles) {
 							pokemon.addVolatile(volatile);
 						}
 					}
-					if (pokemon.storedBoosts) {
-						for (const stat in pokemon.storedBoosts) {
-							const change = pokemon.storedBoosts[stat];
+					if ((pokemon as any).storedBoosts) {
+						for (const stat in (pokemon as any).storedBoosts) {
+							const change = (pokemon as any).storedBoosts[stat as BoostID];
 							if (change !== 0) {
 								this.boost({ [stat]: change }, pokemon);
 							}
@@ -556,12 +554,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					// finds highest stat of eaten mon, stored in effectState eatenBoost
 					const stats = ['atk', 'def', 'spa', 'spd', 'spe'];
 					let highestStat = stats[0];
-					let maxStatValue = meal.storedStats[highestStat];
+					let maxStatValue = meal.storedStats[highestStat as StatIDExceptHP];
 
 					for (const stat of stats) {
-						if (meal.storedStats[stat] > maxStatValue) {
+						if (meal.storedStats[stat as StatIDExceptHP] > maxStatValue) {
 							highestStat = stat;
-							maxStatValue = meal.storedStats[stat];
+							maxStatValue = meal.storedStats[stat as StatIDExceptHP];
 						}
 					}
 					this.effectState.eatenBoost = highestStat;
@@ -586,10 +584,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (source.id === 'mew') return;
 			source.side.addSideCondition('orderup');
 			// stores stat changes and volatiles to reapply after switch
-			source.storedBoosts = { ...source.boosts };
-			source.storedVolatiles = {};
+			(source as any).storedBoosts = { ...source.boosts };
+			(source as any).storedVolatiles = {};
 			for (const volatile in source.volatiles) {
-				source.storedVolatiles[volatile] = source.volatiles[volatile];
+				(source as any).storedVolatiles[volatile] = source.volatiles[volatile];
 			}
 			if (source.side.getSideCondition('orderup')) {
 				this.add('-ability', source, 'Order Up');
@@ -735,7 +733,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			// changes form to match most effective type
 			if (bestType === 'Dark') {
 				this.add('-message', `Urshifu takes pity on its foe and transforms into a weaker type!`);
-				source.formeChange('Urshifu-Rapid-Strike', source, true);
+				source.formeChange('Urshifu-Rapid-Strike', null, true);
 				source.setAbility('Sniper');
 				this.add('-ability', source, 'Sniper');
 				const oldMove = 'wickedblow';
@@ -756,7 +754,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						break;
 					}
 				}
-				source.baseMoveSlots = source.moveSlots.slice();
+				(source as any).baseMoveSlots = source.moveSlots.slice();
 				this.actions.useMove('surgingstrikes', source, target);
 				this.effectState.surgingStrikesAlreadyUsed = 1;
 			}
@@ -802,7 +800,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			// changes form to match most effective type
 			if (bestType === 'Water') {
 				this.add('-message', `Urshifu takes pity on its foe and transforms into a weaker type!`);
-				source.formeChange('Urshifu', source, true);
+				source.formeChange('Urshifu', null, true);
 				source.setAbility('Sniper');
 				this.add('-ability', source, 'Sniper');
 				const oldMove = 'surgingstrikes';
@@ -823,7 +821,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						break;
 					}
 				}
-				source.baseMoveSlots = source.moveSlots.slice();
+				(source as any).baseMoveSlots = source.moveSlots.slice();
 				this.actions.useMove('wickedblow', source, target);
 				this.effectState.wickedBlowAlreadyUsed = 1;
 			}
