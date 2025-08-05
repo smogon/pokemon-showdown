@@ -61,9 +61,7 @@ const NO_LEAD_POKEMON = [
 const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Iron Bundle', 'Roaring Moon', 'Zacian', 'Zamazenta',
 ];
-
 export class RandomChatBatsTeams extends RandomTeams {
-
 	override cullMovePool(
 		types: string[],
 		moves: Set<string>,
