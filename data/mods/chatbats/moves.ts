@@ -146,33 +146,37 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Changes type to the most effective against the target (Water, Fighting, Fire, or Normal).",
 		desc: "Changes the move's and user's forme to the most effective against the target (Water, Fighting, Fire, or Normal).",
 		beforeMoveCallback(source, target, move) {
-			const typeEffectiveness = {
-				Normal: this.dex.getEffectiveness('Normal', target),
-				Water: this.dex.getEffectiveness('Water', target),
-				Fighting: this.dex.getEffectiveness('Fighting', target),
-				Fire: this.dex.getEffectiveness('Fire', target),
-			};
-			let bestType = 'Normal';
-			let maxEffectiveness = -Infinity;
-			// gets most effective type against target (defaults to normal)
-			for (const type in typeEffectiveness) {
-				if (typeEffectiveness[type] > maxEffectiveness) {
-					maxEffectiveness = typeEffectiveness[type];
-					bestType = type;
+			if (target) {
+				const typeEffectiveness = {
+					Normal: this.dex.getEffectiveness('Normal', target),
+					Water: this.dex.getEffectiveness('Water', target),
+					Fighting: this.dex.getEffectiveness('Fighting', target),
+					Fire: this.dex.getEffectiveness('Fire', target),
+				};
+				let bestType = 'Normal';
+				type ValidTypes = 'Normal' | 'Water' | 'Fighting' | 'Fire';
+				let type: ValidTypes;
+				let maxEffectiveness = -Infinity;
+				// gets most effective type against target (defaults to normal)
+				for (const type in typeEffectiveness) {
+					if (typeEffectiveness[type] > maxEffectiveness) {
+						maxEffectiveness = typeEffectiveness[type];
+						bestType = type;
+					}
 				}
+				// changes form to match most effective type
+				let forme = '';
+	
+				switch (bestType) {
+				case 'Water': forme = '-Paldea-Aqua'; break;
+				case 'Fighting': forme = '-Paldea-Combat'; break;
+				case 'Fire': forme = '-Paldea-Blaze'; break;
+				}
+				source.formeChange('Tauros' + forme);
+				source.setAbility('Adaptability');
+				this.add('-ability', source, 'Adaptability');
+				source.m.ragingBullMoveType = bestType;
 			}
-			// changes form to match most effective type
-			let forme = '';
-
-			switch (bestType) {
-			case 'Water': forme = '-Paldea-Aqua'; break;
-			case 'Fighting': forme = '-Paldea-Combat'; break;
-			case 'Fire': forme = '-Paldea-Blaze'; break;
-			}
-			source.formeChange('Tauros' + forme);
-			source.setAbility('Adaptability');
-			this.add('-ability', source, 'Adaptability');
-			source.m.ragingBullMoveType = bestType;
 		},
 		// animation was remnant of Techno Blast code being copied, decided to keep because funny
 		onPrepareHit(target, source, move) {
@@ -418,7 +422,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			} else {
 				this.add('-message', `${source.name} follows up with a Thunder Kick!`);
 				// uses Thunder Kick
-				this.actions.useMove('thunderkick', source, target);
+				this.actions.useMove('thunderkick', source, { target: target });
 			}
 		},
 		desc: "50% chance to reduce Defense by 1, 50% chance to inflict an additional 50 BP Electric type damage.",
@@ -581,7 +585,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		// when order up hits, first checks for volatile ordered to ensure that Order Up has not already been used, then starts orderup side condition and switches Dondozo out
 		onHit(target, source, move) {
 			if (source.volatiles['ordered']) return;
-			if (source.id === 'mew') return;
+			if (source.species.id === 'mew') return;
 			source.side.addSideCondition('orderup');
 			// stores stat changes and volatiles to reapply after switch
 			(source as any).storedBoosts = { ...source.boosts };
@@ -714,49 +718,52 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 5,
 		priority: 0,
 		beforeMoveCallback(source, target, move) {
-			this.effectState.surgingStrikesAlreadyUsed = 0;
-			this.add('-anim', source, 'Techno Blast', target);
-			const typeEffectiveness = {
-				Water: this.dex.getEffectiveness('Water', target),
-				Dark: this.dex.getEffectiveness('Dark', target),
-			};
-
-			let bestType = 'Water';
-			let maxEffectiveness = -Infinity;
-			// gets most effective type against target (defaults to the current type)
-			for (const type in typeEffectiveness) {
-				if (typeEffectiveness[type] > maxEffectiveness) {
-					maxEffectiveness = typeEffectiveness[type];
-					bestType = type;
-				}
-			}
-			// changes form to match most effective type
-			if (bestType === 'Dark') {
-				this.add('-message', `Urshifu takes pity on its foe and transforms into a weaker type!`);
-				source.formeChange('Urshifu-Rapid-Strike', null, true);
-				source.setAbility('Sniper');
-				this.add('-ability', source, 'Sniper');
-				const oldMove = 'wickedblow';
-				const newMove = 'surgingstrikes';
-
-				const oldMoveId = this.toID(oldMove);
-				const newMoveData = this.dex.moves.get(newMove);
-
-				for (const slot of source.moveSlots) {
-					if (slot.id === oldMoveId) {
-						slot.move = newMoveData.name;
-						slot.id = newMoveData.id;
-						slot.pp = newMoveData.pp;
-						slot.maxpp = newMoveData.pp;
-						slot.target = newMoveData.target;
-						slot.disabled = false;
-						slot.used = false;
-						break;
+			if (target) {
+				this.effectState.surgingStrikesAlreadyUsed = 0;
+				this.add('-anim', source, 'Techno Blast', target);
+				const typeEffectiveness = {
+					Water: this.dex.getEffectiveness('Water', target),
+					Dark: this.dex.getEffectiveness('Dark', target),
+				};
+				type ValidTypes = 'Water' | 'Dark';
+				let type: ValidTypes;
+				let bestType = 'Water';
+				let maxEffectiveness = -Infinity;
+				// gets most effective type against target (defaults to the current type)
+				for (const type in typeEffectiveness) {
+					if (typeEffectiveness[type] > maxEffectiveness) {
+						maxEffectiveness = typeEffectiveness[type];
+						bestType = type;
 					}
 				}
-				(source as any).baseMoveSlots = source.moveSlots.slice();
-				this.actions.useMove('surgingstrikes', source, target);
-				this.effectState.surgingStrikesAlreadyUsed = 1;
+				// changes form to match most effective type
+				if (bestType === 'Dark') {
+					this.add('-message', `Urshifu takes pity on its foe and transforms into a weaker type!`);
+					source.formeChange('Urshifu-Rapid-Strike', null, true);
+					source.setAbility('Sniper');
+					this.add('-ability', source, 'Sniper');
+					const oldMove = 'wickedblow';
+					const newMove = 'surgingstrikes';
+	
+					const oldMoveId = this.toID(oldMove);
+					const newMoveData = this.dex.moves.get(newMove);
+	
+					for (const slot of source.moveSlots) {
+						if (slot.id === oldMoveId) {
+							slot.move = newMoveData.name;
+							slot.id = newMoveData.id;
+							slot.pp = newMoveData.pp;
+							slot.maxpp = newMoveData.pp;
+							slot.target = newMoveData.target;
+							slot.disabled = false;
+							slot.used = false;
+							break;
+						}
+					}
+					(source as any).baseMoveSlots = source.moveSlots.slice();
+					this.actions.useMove('surgingstrikes', source, { target: target });
+					this.effectState.surgingStrikesAlreadyUsed = 1;
+				}
 			}
 		},
 		onTry(source, target, move) {
@@ -781,49 +788,52 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 5,
 		priority: 0,
 		beforeMoveCallback(source, target, move) {
-			this.effectState.wickedBlowAlreadyUsed = 0;
-			this.add('-anim', source, 'Techno Blast', target);
-			const typeEffectiveness = {
-				Dark: this.dex.getEffectiveness('Dark', target),
-				Water: this.dex.getEffectiveness('Water', target),
-			};
-
-			let bestType = 'Dark';
-			let maxEffectiveness = -Infinity;
-			// gets most effective type against target (defaults to the current type)
-			for (const type in typeEffectiveness) {
-				if (typeEffectiveness[type] > maxEffectiveness) {
-					maxEffectiveness = typeEffectiveness[type];
-					bestType = type;
-				}
-			}
-			// changes form to match most effective type
-			if (bestType === 'Water') {
-				this.add('-message', `Urshifu takes pity on its foe and transforms into a weaker type!`);
-				source.formeChange('Urshifu', null, true);
-				source.setAbility('Sniper');
-				this.add('-ability', source, 'Sniper');
-				const oldMove = 'surgingstrikes';
-				const newMove = 'wickedblow';
-
-				const oldMoveId = this.toID(oldMove);
-				const newMoveData = this.dex.moves.get(newMove);
-
-				for (const slot of source.moveSlots) {
-					if (slot.id === oldMoveId) {
-						slot.move = newMoveData.name;
-						slot.id = newMoveData.id;
-						slot.pp = newMoveData.pp;
-						slot.maxpp = newMoveData.pp;
-						slot.target = newMoveData.target;
-						slot.disabled = false;
-						slot.used = false;
-						break;
+			if (target) {
+				this.effectState.wickedBlowAlreadyUsed = 0;
+				this.add('-anim', source, 'Techno Blast', target);
+				const typeEffectiveness = {
+					Dark: this.dex.getEffectiveness('Dark', target),
+					Water: this.dex.getEffectiveness('Water', target),
+				};
+				type ValidTypes = 'Water' | 'Dark';
+				let type: ValidTypes;
+				let bestType = 'Dark';
+				let maxEffectiveness = -Infinity;
+				// gets most effective type against target (defaults to the current type)
+				for (const type in typeEffectiveness) {
+					if (typeEffectiveness[type] > maxEffectiveness) {
+						maxEffectiveness = typeEffectiveness[type];
+						bestType = type;
 					}
 				}
-				(source as any).baseMoveSlots = source.moveSlots.slice();
-				this.actions.useMove('wickedblow', source, target);
-				this.effectState.wickedBlowAlreadyUsed = 1;
+				// changes form to match most effective type
+				if (bestType === 'Water') {
+					this.add('-message', `Urshifu takes pity on its foe and transforms into a weaker type!`);
+					source.formeChange('Urshifu', null, true);
+					source.setAbility('Sniper');
+					this.add('-ability', source, 'Sniper');
+					const oldMove = 'surgingstrikes';
+					const newMove = 'wickedblow';
+	
+					const oldMoveId = this.toID(oldMove);
+					const newMoveData = this.dex.moves.get(newMove);
+	
+					for (const slot of source.moveSlots) {
+						if (slot.id === oldMoveId) {
+							slot.move = newMoveData.name;
+							slot.id = newMoveData.id;
+							slot.pp = newMoveData.pp;
+							slot.maxpp = newMoveData.pp;
+							slot.target = newMoveData.target;
+							slot.disabled = false;
+							slot.used = false;
+							break;
+						}
+					}
+					(source as any).baseMoveSlots = source.moveSlots.slice();
+					this.actions.useMove('wickedblow', source, { target: target });
+					this.effectState.wickedBlowAlreadyUsed = 1;
+				}
 			}
 		},
 		onTry(source, target, move) {
