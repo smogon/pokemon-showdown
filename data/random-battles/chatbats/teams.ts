@@ -2500,7 +2500,7 @@ export class RandomTeams {
 		return team;
 	}
 
-	randomBSSFactorySets: AnyObject = undefined;
+	randomBSSFactorySets: undefined;
 
 	randomBSSFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails
