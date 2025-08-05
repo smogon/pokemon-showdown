@@ -5614,7 +5614,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	archaludon: {
 		tier: "Uber",
 		doublesTier: "DUber",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	hydrapple: {
 		tier: "UU",
