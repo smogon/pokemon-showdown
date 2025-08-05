@@ -1,9 +1,5 @@
 export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
-	teambuilderConfig: {
-		excludeStandardTiers: true,
-		customTiers: ["ChatBats"],
-	},
 
 	init() {
 		this.modData('Learnsets', 'lurantis').learnset.icehammer = ['9L1'];
