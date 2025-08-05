@@ -300,19 +300,23 @@ export class DatabaseTable<Row, DB extends Database> {
 	}
 	upsert(partialRow: PartialOrSQL<Row>, partialUpdate = partialRow, where?: SQLStatement) {
 		if (this.db.type === 'pg') {
-			return this.queryExec(
-			)`INSERT INTO "${this.name}" (${partialRow as any}) ON CONFLICT (${this.primaryKeyName
-			}) DO UPDATE ${partialUpdate as any} ${where}`;
+			return this.queryExec()`
+				INSERT INTO "${this.name}" (${partialRow as any})
+				ON CONFLICT (${this.primaryKeyName}) DO UPDATE
+				SET ${partialUpdate as any} ${where}
+			`;
 		}
 		return this.queryExec(
 		)`INSERT INTO "${this.name}" (${partialRow as any}) ON DUPLICATE KEY UPDATE ${partialUpdate as any} ${where}`;
 	}
-	set(primaryKey: BasicSQLValue, partialRow: PartialOrSQL<Row>, where?: SQLStatement) {
-		if (!this.primaryKeyName) throw new Error(`Cannot set() without a single-column primary key`);
-		partialRow[this.primaryKeyName] = primaryKey as any;
-		return this.replace(partialRow, where);
-	}
 	replace(partialRow: PartialOrSQL<Row>, where?: SQLStatement) {
+		if (this.db.type === 'pg') {
+			if (!this.primaryKeyName) throw new Error(`Cannot replace() without a single-column primary key`);
+			return this.queryExec()`
+				INSERT INTO "${this.name}" (${partialRow as any})
+				ON CONFLICT ("${this.primaryKeyName}") DO UPDATE SET ${partialRow as any} ${where}
+			`;
+		}
 		return this.queryExec()`REPLACE INTO "${this.name}" (${partialRow as SQLValue}) ${where}`;
 	}
 	get(primaryKey: BasicSQLValue, entries?: (keyof Row & string)[] | SQLStatement) {
