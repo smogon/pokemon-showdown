@@ -158,7 +158,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				let type: ValidTypes;
 				let maxEffectiveness = -Infinity;
 				// gets most effective type against target (defaults to normal)
-				for (const type in typeEffectiveness) {
+				for (type in typeEffectiveness) {
 					if (typeEffectiveness[type] > maxEffectiveness) {
 						maxEffectiveness = typeEffectiveness[type];
 						bestType = type;
@@ -166,7 +166,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				// changes form to match most effective type
 				let forme = '';
-	
 				switch (bestType) {
 				case 'Water': forme = '-Paldea-Aqua'; break;
 				case 'Fighting': forme = '-Paldea-Combat'; break;
@@ -422,7 +421,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			} else {
 				this.add('-message', `${source.name} follows up with a Thunder Kick!`);
 				// uses Thunder Kick
-				this.actions.useMove('thunderkick', source, { target: target });
+				this.actions.useMove('thunderkick', source, { target });
 			}
 		},
 		desc: "50% chance to reduce Defense by 1, 50% chance to inflict an additional 50 BP Electric type damage.",
@@ -730,7 +729,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				let bestType = 'Water';
 				let maxEffectiveness = -Infinity;
 				// gets most effective type against target (defaults to the current type)
-				for (const type in typeEffectiveness) {
+				for (type in typeEffectiveness) {
 					if (typeEffectiveness[type] > maxEffectiveness) {
 						maxEffectiveness = typeEffectiveness[type];
 						bestType = type;
@@ -744,10 +743,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					this.add('-ability', source, 'Sniper');
 					const oldMove = 'wickedblow';
 					const newMove = 'surgingstrikes';
-	
 					const oldMoveId = this.toID(oldMove);
 					const newMoveData = this.dex.moves.get(newMove);
-	
 					for (const slot of source.moveSlots) {
 						if (slot.id === oldMoveId) {
 							slot.move = newMoveData.name;
@@ -761,7 +758,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						}
 					}
 					(source as any).baseMoveSlots = source.moveSlots.slice();
-					this.actions.useMove('surgingstrikes', source, { target: target });
+					this.actions.useMove('surgingstrikes', source, { target });
 					this.effectState.surgingStrikesAlreadyUsed = 1;
 				}
 			}
@@ -800,7 +797,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				let bestType = 'Dark';
 				let maxEffectiveness = -Infinity;
 				// gets most effective type against target (defaults to the current type)
-				for (const type in typeEffectiveness) {
+				for (type in typeEffectiveness) {
 					if (typeEffectiveness[type] > maxEffectiveness) {
 						maxEffectiveness = typeEffectiveness[type];
 						bestType = type;
@@ -814,10 +811,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					this.add('-ability', source, 'Sniper');
 					const oldMove = 'surgingstrikes';
 					const newMove = 'wickedblow';
-	
 					const oldMoveId = this.toID(oldMove);
 					const newMoveData = this.dex.moves.get(newMove);
-	
 					for (const slot of source.moveSlots) {
 						if (slot.id === oldMoveId) {
 							slot.move = newMoveData.name;
@@ -831,7 +826,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 						}
 					}
 					(source as any).baseMoveSlots = source.moveSlots.slice();
-					this.actions.useMove('wickedblow', source, { target: target });
+					this.actions.useMove('wickedblow', source, { target });
 					this.effectState.wickedBlowAlreadyUsed = 1;
 				}
 			}
