@@ -10,3 +10,8 @@ export function destroy() {
 	void LocalClassifier.destroy();
 	void RemoteClassifier.PM.destroy();
 }
+
+export function start() {
+	LocalClassifier.start();
+	RemoteClassifier.start();
+}

@@ -33,12 +33,14 @@ export function verify(data: string, signature: string): Promise<boolean> {
 }
 
 if (!PM.isParentProcess) {
-	// This is a child process!
 	global.Config = require('./config-loader').Config;
 
 	const Repl = require('../lib/repl').Repl;
 	// eslint-disable-next-line no-eval
 	Repl.start('verifier', (cmd: string) => eval(cmd));
-} else {
+}
+
+
+export function start() {
 	PM.spawn(global.Config?.subprocessescache?.verifier ?? 1);
 }

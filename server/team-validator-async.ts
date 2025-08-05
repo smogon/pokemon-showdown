@@ -28,6 +28,10 @@ export class TeamValidatorAsync {
 	static get(this: void, format: string) {
 		return new TeamValidatorAsync(format);
 	}
+
+	static start() {
+		start();
+	}
 }
 
 export const get = TeamValidatorAsync.get;
@@ -72,7 +76,6 @@ export const PM = new QueryProcessManager<{
 }, 2 * 60 * 1000);
 
 if (!PM.isParentProcess) {
-	// This is a child process!
 	global.Config = require('./config-loader').Config;
 
 	global.Monitor = {
@@ -96,6 +99,8 @@ if (!PM.isParentProcess) {
 
 	// eslint-disable-next-line no-eval
 	require('../lib/repl').Repl.start(`team-validator-${process.pid}`, (cmd: string) => eval(cmd));
-} else {
+}
+
+function start() {
 	PM.spawn(global.Config?.subprocessescache?.validator ?? 1);
 }

@@ -69,17 +69,34 @@ try {
 	throw new Error("Dependencies are unmet; run `npm ci` before launching Pokemon Showdown again.");
 }
 
+if (!Promise.withResolvers) {
+	Promise.withResolvers = function defer<T = void>(): Deferred<T> {
+		let resolve!: (value: T | PromiseLike<T>) => void;
+		let reject!: (reason: unknown) => void;
+		const promise = new Promise<T>((_resolve, _reject) => {
+			resolve = _resolve;
+			reject = _reject;
+		});
+		return { resolve, reject, promise };
+	};
+}
+
 import { FS, Repl } from '../lib';
 
-/*********************************************************
- * Set up most of our globals
- * This is in a function because swc runs `import` before any code,
- * and many of our imports require the `Config` global to be set up.
- *********************************************************/
-function setupGlobals() {
+function cleanupStale() {
+	return Repl.cleanup();
+}
+
+function setupConfig() {
+	/*********************************************************
+	 * Load the config
+	 * Note that `import` declarations are run before any other code,
+	 * and many of our imports require the `Config` global to be set up.
+	 *********************************************************/
 	const ConfigLoader = require('./config-loader');
 	global.Config = ConfigLoader.Config;
 
+	// Config loader reports errors using Monitor
 	const { Monitor } = require('./monitor');
 	global.Monitor = Monitor;
 	global.__version = { head: '' };
@@ -87,6 +104,17 @@ function setupGlobals() {
 		global.__version.tree = hash;
 	});
 	Repl.cleanup();
+
+	// Dex is needed just to grab toID
+	const { Dex } = require('../sim/dex');
+	global.Dex = Dex;
+	global.toID = Dex.toID;
+
+	// Monitor reports errors on Rooms
+	const { Rooms } = require('./rooms');
+	global.Rooms = Rooms;
+	// We initialize the global room here because roomlogs.ts needs the Rooms global
+	Rooms.global = new Rooms.GlobalRoomState();
 
 	if (Config.watchconfig) {
 		FS('config/config.js').onModify(() => {
@@ -102,10 +130,7 @@ function setupGlobals() {
 		});
 	}
 
-	const { Dex } = require('../sim/dex');
-	global.Dex = Dex;
-	global.toID = Dex.toID;
-
+function setupGlobals() {
 	const { Teams } = require('../sim/teams');
 	global.Teams = Teams;
 
@@ -124,11 +149,6 @@ function setupGlobals() {
 	const { Punishments } = require('./punishments');
 	global.Punishments = Punishments;
 
-	const { Rooms } = require('./rooms');
-	global.Rooms = Rooms;
-	// We initialize the global room here because roomlogs.ts needs the Rooms global
-	Rooms.global = new Rooms.GlobalRoomState();
-
 	const Verifier = require('./verifier');
 	global.Verifier = Verifier;
 
@@ -138,69 +158,57 @@ function setupGlobals() {
 	const { IPTools } = require('./ip-tools');
 	global.IPTools = IPTools;
 	void IPTools.loadHostsAndRanges();
-}
-setupGlobals();
 
-if (Config.crashguard) {
-	// graceful crash - allow current battles to finish before restarting
-	process.on('uncaughtException', (err: Error) => {
-		Monitor.crashlog(err, 'The main process');
-	});
+	const { Sockets } = require('./sockets');
+	global.Sockets = Sockets;
 
-	process.on('unhandledRejection', err => {
-		Monitor.crashlog(err as any, 'A main process Promise');
-	});
+	const TeamValidatorAsync = require('./team-validator-async');
+	global.TeamValidatorAsync = TeamValidatorAsync;
 }
 
-/*********************************************************
- * Start networking processes to be connected to
- *********************************************************/
+setupConfig();
 
-const { Sockets } = require('./sockets');
-global.Sockets = Sockets;
+void cleanupStale().then(() => {
+	setupGlobals();
 
-export function listen(port: number, bindAddress: string, workerCount: number) {
-	Sockets.listen(port, bindAddress, workerCount);
-}
+	if (Config.crashguard) {
+		// graceful crash - allow current battles to finish before restarting
+		process.on('uncaughtException', (err: Error) => {
+			Monitor.crashlog(err, 'The main process');
+		});
 
-if (require.main === module) {
-	// Launch the server directly when app.js is the main module. Otherwise,
-	// in the case of app.js being imported as a module (e.g. unit tests),
-	// postpone launching until app.listen() is called.
-	let port;
-	for (const arg of process.argv) {
-		if (/^[0-9]+$/.test(arg)) {
-			port = parseInt(arg);
-			break;
-		}
+		process.on('unhandledRejection', err => {
+			Monitor.crashlog(err as any, 'A main process Promise');
+		});
 	}
-	Sockets.listen(port);
-}
+}).then(() => {
+	Rooms.global.start();
+	Sockets.start();
+	Verifier.start();
+	TeamValidatorAsync.start();
+	Chat.start();
 
-/*********************************************************
- * Set up our last global
- *********************************************************/
+	require('./artemis').start();
+	require('./modlog').start();
 
-const TeamValidatorAsync = require('./team-validator-async');
-global.TeamValidatorAsync = TeamValidatorAsync;
+	/*********************************************************
+	 * Start up the REPL server
+	 *********************************************************/
 
-/*********************************************************
- * Start up the REPL server
- *********************************************************/
+	Repl.startGlobal('app');
 
-Repl.startGlobal('app');
+	/*********************************************************
+	 * Fully initialized, run startup hook
+	 *********************************************************/
 
-/*********************************************************
- * Fully initialized, run startup hook
- *********************************************************/
+	if (Config.startuphook) {
+		process.nextTick(Config.startuphook);
+	}
 
-if (Config.startuphook) {
-	process.nextTick(Config.startuphook);
-}
-
-if (Config.ofemain) {
-	// Create a heapdump if the process runs out of memory.
-	global.nodeOomHeapdump = (require as any)('node-oom-heapdump')({
-		addTimestamp: true,
-	});
-}
+	if (Config.ofemain) {
+		// Create a heapdump if the process runs out of memory.
+		global.nodeOomHeapdump = (require as any)('node-oom-heapdump')({
+			addTimestamp: true,
+		});
+	}
+});

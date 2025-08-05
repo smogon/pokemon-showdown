@@ -35,6 +35,12 @@ const PUNISHMENTS = [
 	'TOUR BAN', 'TOUR UNBAN', 'UNNAMELOCK', 'PERMABLACKLIST',
 ];
 
+const PM = SQL(module, {
+	file: databasePath,
+	extension: 'server/modlog/transactions.js',
+	...options,
+});
+
 export type ModlogID = RoomID | 'global' | 'all';
 interface SQLQuery {
 	query: string;
@@ -84,7 +90,9 @@ export type PartialModlogEntry = Partial<ModlogEntry> & { action: string };
 
 export class Modlog {
 	readonly database: SQL.DatabaseManager;
-	readyPromise: Promise<void> | null;
+	readyPromise: null | Promise<void>;
+	readyPromiseResolve: null | (value: T | PromiseLike<T>) => void;
+	readyPromiseReject: null | (reason: unknown) => void;
 	private databaseReady: boolean;
 	/** entries to be written once the DB is ready */
 	queuedEntries: ModlogEntry[];
@@ -105,35 +113,11 @@ export class Modlog {
 				});
 			};
 		}
-		this.database = SQL(module, {
-			file: databasePath,
-			extension: 'server/modlog/transactions.js',
-			...options,
-		});
-
-		if (Config.usesqlite) {
-			if (this.database.isParentProcess) {
-				this.database.spawn(global.Config?.subprocessescache?.modlog ?? 1);
-			} else {
-				global.Monitor = {
-					crashlog(error: Error, source = 'A modlog child process', details: AnyObject | null = null) {
-						const repr = JSON.stringify([error.name, error.message, source, details]);
-						process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-					},
-				};
-				process.on('uncaughtException', err => {
-					Monitor.crashlog(err, 'A modlog database process');
-				});
-				process.on('unhandledRejection', err => {
-					Monitor.crashlog(err as Error, 'A modlog database process');
-				});
-			}
-		}
-
-		this.readyPromise = this.setupDatabase().then(result => {
-			this.databaseReady = result;
-			this.readyPromise = null;
-		});
+		this.database = PM;
+		const {promise, resolve, reject} = Promise.withResolvers();
+		this.readyPromise = promise;
+		this.readyPromiseResolve = resolve;
+		this.readyPromiseReject = reject;
 	}
 
 	async setupDatabase() {
@@ -476,3 +460,30 @@ export class Modlog {
 }
 
 export const mainModlog = new Modlog(MODLOG_DB_PATH, { sqliteOptions: Config.modlogsqliteoptions });
+
+if (!PM.isParentProcess) {
+	global.Monitor = {
+		crashlog(error: Error, source = 'A modlog child process', details: AnyObject | null = null) {
+			const repr = JSON.stringify([error.name, error.message, source, details]);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+	};
+	process.on('uncaughtException', err => {
+		Monitor.crashlog(err, 'A modlog database process');
+	});
+	process.on('unhandledRejection', err => {
+		Monitor.crashlog(err as Error, 'A modlog database process');
+	});
+}
+
+export function start() {
+	if (!Config.usesqlite) return;
+	PM.spawn(global.Config?.subprocessescache?.modlog ?? 1);
+	mainModlog.readyPromiseResolve(mainModlog.setupDatabase());
+	mainModlog.readyPromise.then(result => {
+		mainModlog.databaseReady = result;
+		mainModlog.readyPromise = null;
+		mainModlog.readyPromiseResolve = null;
+		mainModlog.readyPromiseReject = null;
+	});
+}

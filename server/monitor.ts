@@ -126,7 +126,9 @@ export const Monitor = new class {
 	}
 
 	error(text: string) {
-		(Rooms.get('development') || Rooms.get('staff') || Rooms.get('lobby'))?.add(`|error|${text}`).update();
+		const room = (Rooms.get('development') || Rooms.get('staff') || Rooms.get('lobby'));
+		if (!room) throw new Error(`No room found`);
+		room.add(`|error|${text}`).update();
 		if (Config.loglevel <= 3) console.error(text);
 	}
 

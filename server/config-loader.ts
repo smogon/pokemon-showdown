@@ -239,4 +239,8 @@ function reportError(msg: string) {
 	// errors should always be the same across processes, so this is a neat way to avoid unnecessary logging.
 	setImmediate(() => global.Monitor?.error?.(`[CONFIG] ${msg}`));
 }
-export const Config = load();
+
+// Do NOT export
+const Config = load();
+
+global.Config = Config;

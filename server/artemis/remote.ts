@@ -3,7 +3,7 @@
  * @author mia-pi-git
  */
 import { ProcessManager, Net, Repl } from '../../lib';
-import { Config } from '../config-loader';
+import * as ConfigLoader from '../config-loader';
 import { toID } from '../../sim/dex-data';
 
 // 20m. this is mostly here so we can use Monitor.slow()
@@ -100,32 +100,6 @@ export const PM = new ProcessManager.QueryProcessManager<string, Record<string, 
 	}
 }, PM_TIMEOUT);
 
-// main module check necessary since this gets required in other non-parent processes sometimes
-// when that happens we do not want to take over or set up or anything
-if (require.main === module) {
-	// This is a child process!
-	global.Config = Config;
-	global.Monitor = {
-		crashlog(error: Error, source = 'A remote Artemis child process', details: AnyObject | null = null) {
-			const repr = JSON.stringify([error.name, error.message, source, details]);
-			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-		},
-		slow(text: string) {
-			process.send!(`CALLBACK\nSLOW\n${text}`);
-		},
-	} as any;
-	global.toID = toID;
-	process.on('uncaughtException', err => {
-		if (Config.crashguard) {
-			Monitor.crashlog(err, 'A remote Artemis child process');
-		}
-	});
-	// eslint-disable-next-line no-eval
-	Repl.start(`abusemonitor-remote-${process.pid}`, cmd => eval(cmd));
-} else if (!process.send) {
-	PM.spawn(global.Config?.subprocessescache?.remoteartemis ?? 1);
-}
-
 export class RemoteClassifier {
 	static readonly PM = PM;
 	static readonly ATTRIBUTES = ATTRIBUTES;
@@ -170,4 +144,33 @@ export class RemoteClassifier {
 	getActiveProcesses() {
 		return PM.processes.length;
 	}
+	static start() {
+		start();
+	}
+}
+
+if (!PM.isParentProcess) {
+	// This is a child process!
+	global.Config = Config;
+	global.Monitor = {
+		crashlog(error: Error, source = 'A remote Artemis child process', details: AnyObject | null = null) {
+			const repr = JSON.stringify([error.name, error.message, source, details]);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+		slow(text: string) {
+			process.send!(`CALLBACK\nSLOW\n${text}`);
+		},
+	} as any;
+	global.toID = toID;
+	process.on('uncaughtException', err => {
+		if (Config.crashguard) {
+			Monitor.crashlog(err, 'A remote Artemis child process');
+		}
+	});
+	// eslint-disable-next-line no-eval
+	Repl.start(`abusemonitor-remote-${process.pid}`, cmd => eval(cmd));
+}
+
+function start() {
+	PM.spawn(global.Config?.subprocessescache?.remoteartemis ?? 1);
 }
