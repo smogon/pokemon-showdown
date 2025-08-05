@@ -64,7 +64,7 @@ export const Repl = new class {
 	 * Does everything synchronously, so that the directory is guaranteed
 	 * clean and ready for new REPL sockets by the time this function returns.
 	 */
-	cleanup() {
+	async cleanup() {
 		const config = typeof Config !== 'undefined' ? Config : {};
 		if (!config.repl) return;
 
@@ -72,26 +72,20 @@ export const Repl = new class {
 		const directory = path.dirname(
 			path.resolve(FS.ROOT_PATH, config.replsocketprefix || 'logs/repl', 'app')
 		);
-		let files;
-		try {
-			files = fs.readdirSync(directory);
-		} catch {}
-		if (files) {
-			for (const file of files) {
-				const pathname = path.resolve(directory, file);
-				const stat = fs.statSync(pathname);
-				if (!stat.isSocket()) continue;
-
+		const files = await fs.promises.readdir(directory);
+		for (const file of files) {
+			const pathname = path.resolve(directory, file);
+			const stat = await fs.promises.stat(pathname);
+			if (!stat.isSocket()) continue;
+			await new Promise((resolve, reject) => {
 				const socket = net.connect(pathname, () => {
 					socket.end();
 					socket.destroy();
+					resolve(null);
 				}).on('error', () => {
-					try {
-						// race condition?
-						fs.unlinkSync(pathname);
-					} catch {}
+					resolve(fs.promises.unlink(pathname).catch(err => null));
 				});
-			}
+			});
 		}
 	}
 
