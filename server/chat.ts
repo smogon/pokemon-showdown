@@ -604,7 +604,9 @@ export class CommandContext extends MessageContext {
 			return this.popupReply(`You tried to send "${message}" to the room "${this.room.roomid}" but it failed because you were not in that room.`);
 		}
 
-		if (this.user.statusType === 'idle' && !['unaway', 'unafk', 'back'].includes(this.cmd)) {
+		if (this.user.statusType === 'idle' &&
+			this.message !== '/cmd rooms' &&
+			!['unaway', 'unafk', 'back'].includes(this.cmd)) {
 			this.user.setStatusType('online');
 		}
 

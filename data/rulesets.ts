@@ -1417,6 +1417,20 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
+	nofreezemod: {
+		effectType: 'Rule',
+		name: 'No Freeze Mod',
+		desc: "Prevents moves from freezing Pok&eacute;mon",
+		onBegin() {
+			this.add('rule', 'No Freeze Mod: Moves can\'t freeze Pok\u00e9mon');
+		},
+		onSetStatus(status, target, source) {
+			if (status.id === 'frz') {
+				this.add('-message', 'No Freeze Mod activated.');
+				return false;
+			}
+		},
+	},
 	sametypeclause: {
 		effectType: 'ValidatorRule',
 		name: 'Same Type Clause',
@@ -1708,11 +1722,12 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Allows Gen 1 pokemon to have moves from their Gen 2 learnsets",
 		// Implemented in team-validator.js
 	},
-	allowavs: {
+	lgpenormalrules: {
 		effectType: 'ValidatorRule',
-		name: 'Allow AVs',
-		desc: "Tells formats with the 'gen7letsgo' mod to take Awakening Values into consideration when calculating stats",
-		// implemented in TeamValidator#validateStats
+		name: 'LGPE Normal Rules',
+		desc: "Tells formats with the 'gen7letsgo' mod to set the level to 50 and all Awakening Values to 0",
+		ruleset: ['Adjust Level = 50'],
+		// AVs implemented in TeamValidator#validateStats
 	},
 	nfeclause: {
 		effectType: 'ValidatorRule',

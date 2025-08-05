@@ -165,13 +165,14 @@ export const TeamsHandler = new class {
 			connection.popup('Invalid team:\n\n' + team.packedTeam);
 			return null;
 		}
-		if (sets.length > 24) {
-			connection.popup("Your team has too many Pokemon.");
+		if (team.length > 50) {
+			connection.popup("Your team has too many Pokemon (max 50).");
 		}
 		let unownWord = '';
-		for (const set of sets) {
-			if ((await (context as any).filter(set.name)) !== set.name) {
-				connection.popup(`Filtered words are not allowed in nicknames.`);
+		for (const set of team) {
+			const filtered = context.filter(set.name);
+			if (filtered !== set.name) {
+				connection.popup(`Filtered words (${set.name}) are not allowed in nicknames.`);
 				return null;
 			}
 			// Trim empty moveslots
@@ -417,7 +418,7 @@ export const commands: Chat.ChatCommands = {
 		async save(target, room, user, connection, cmd) {
 			TeamsHandler.validateAccess(connection, true);
 			const isEdit = cmd === 'update';
-			const targets = Utils.splitFirst(target, ',', isEdit ? 4 : 3);
+			const targets = Utils.splitFirst(target, ',', isEdit ? 4 : 3).map(x => x.trim());
 			const rawTeamID = isEdit ? targets.shift() : undefined;
 			const [teamName, formatid, isPrivate, rawTeam] = targets;
 			const teamID = isEdit ? Number(rawTeamID) : undefined;
@@ -433,6 +434,9 @@ export const commands: Chat.ChatCommands = {
 					privacy: toID(isPrivate) === '1' ? true : null,
 				}, teamID
 			);
+			if (!id) {
+				return; // error messages were thrown to the user
+			}
 
 			const page = isEdit ? 'edit' : 'upload';
 			if (result) {

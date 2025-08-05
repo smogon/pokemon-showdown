@@ -919,7 +919,7 @@
         "level": 90,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Setup Sweeper",
                 "movepool": ["Facade", "Flare Blitz", "Quick Attack", "Trailblaze", "Will-O-Wisp"],
                 "abilities": ["Guts"],
                 "teraTypes": ["Normal"]
@@ -2183,7 +2183,13 @@
                 "role": "Bulky Setup",
                 "movepool": ["Dazzling Gleam", "Earth Power", "Nasty Plot", "Psychic", "Psyshock", "Shadow Ball"],
                 "abilities": ["Thick Fat"],
-                "teraTypes": ["Fairy", "Ghost", "Ground", "Psychic"]
+                "teraTypes": ["Fairy", "Ground"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Focus Blast", "Nasty Plot", "Psychic", "Psyshock", "Shadow Ball"],
+                "abilities": ["Thick Fat"],
+                "teraTypes": ["Fighting"]
             },
             {
                 "role": "Bulky Attacker",
@@ -2317,7 +2323,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["Gunk Shot", "Poltergeist", "Shadow Sneak", "Swords Dance", "Thunder Wave"],
-                "abilities": ["Cursed Body", "Frisk"],
+                "abilities": ["Cursed Body", "Insomnia"],
                 "teraTypes": ["Ghost", "Poison"]
             }
         ]
@@ -4011,7 +4017,7 @@
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Encore", "Hurricane", "Leech Seed", "Moonblast", "Substitute"],
+                "movepool": ["Encore", "Leech Seed", "Moonblast", "Substitute"],
                 "abilities": ["Prankster"],
                 "teraTypes": ["Steel"]
             }
@@ -4888,7 +4894,7 @@
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Aura Sphere", "Dark Pulse", "Dragon Pulse", "U-turn", "Water Pulse"],
+                "movepool": ["Aura Sphere", "Dark Pulse", "Dragon Pulse", "Ice Beam", "U-turn", "Water Pulse"],
                 "abilities": ["Mega Launcher"],
                 "teraTypes": ["Dark", "Dragon", "Fighting"]
             },
@@ -6513,7 +6519,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["Close Combat", "Double Shock", "Ice Punch", "Revival Blessing"],
-                "abilities": ["Iron Fist"],
+                "abilities": ["Iron Fist", "Volt Absorb"],
                 "teraTypes": ["Electric"]
             }
         ]
@@ -7165,9 +7171,9 @@
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["Close Combat", "Earthquake", "First Impression", "Flare Blitz", "U-turn", "Wild Charge"],
+                "movepool": ["Close Combat", "Earthquake", "First Impression", "U-turn", "Wild Charge"],
                 "abilities": ["Protosynthesis"],
-                "teraTypes": ["Bug", "Electric", "Fighting", "Fire"]
+                "teraTypes": ["Bug", "Electric", "Fighting"]
             },
             {
                 "role": "Fast Support",
