@@ -509,7 +509,7 @@ export const commands: Chat.ChatCommands = {
 			if (team.ownerid !== user.id && !user.can('rangeban')) {
 				return this.popupReply(`You cannot change privacy for a team you don't own.`);
 			}
-			await teamsTable.set(teamId, { private: privacy });
+			await teamsTable.update(teamId, { private: privacy });
 			for (const pageid of this.connection.openPages || new Set()) {
 				if (pageid.startsWith('teams-')) {
 					this.refreshPage(pageid);
