@@ -1,3 +1,4 @@
+import { PRNG, PRNGSeed } from "../../../sim/prng";
 import { RandomTeams, type MoveCounter } from "../gen9/teams";
 
 // Moves that restore HP:
@@ -21,7 +22,7 @@ const SPEED_SETUP = [
 const SETUP = [
 	'acidarmor', 'agility', 'autotomize', 'bellydrum', 'bulkup', 'calmmind', 'clangoroussoul', 'coil', 'cosmicpower', 'curse', 'dragondance',
 	'filletaway', 'flamecharge', 'growth', 'honeclaws', 'howl', 'irondefense', 'meditate', 'nastyplot', 'noretreat', 'poweruppunch', 'quiverdance',
-	'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'takeheart', 'tidyup', 'trailblaze', 'trick room', 'workup', 'victorydance',
+	'rockpolish', 'shellsmash', 'shiftgear', 'swordsdance', 'tailglow', 'takeheart', 'tidyup', 'trailblaze', 'trickroom', 'workup', 'victorydance',
 ];
 const SPEED_CONTROL = [
 	'electroweb', 'glare', 'icywind', 'lowsweep', 'quash', 'stringshot', 'tailwind', 'thunderwave', 'trickroom',
@@ -62,6 +63,10 @@ const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Iron Bundle', 'Roaring Moon', 'Zacian', 'Zamazenta',
 ];
 export class RandomChatBatsTeams extends RandomTeams {
+	constructor(format: Format | string, prng: PRNG | PRNGSeed | null) {
+		super(format, prng);
+	}
+
 	override cullMovePool(
 		types: string[],
 		moves: Set<string>,
@@ -101,9 +106,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		}
 
 		// Develop additional move lists
-		const statusMoves = this.dex.moves.all()
-			.filter(move => move.category === 'Status')
-			.map(move => move.id);
+		const statusMoves = this.cachedStatusMoves;
 
 		// Team-based move culls
 		if (teamDetails.screens && movePool.length >= this.maxMoveCount + 2) {
@@ -181,7 +184,6 @@ export class RandomChatBatsTeams extends RandomTeams {
 			['dragondance', 'dracometeor'],
 
 			// These attacks are redundant with each other
-			// [['psychic', 'psychicnoise'], ['psyshock', 'psychicnoise']],
 			['surf', 'hydropump'],
 			['liquidation', 'wavecrash'],
 			['aquajet', 'flipturn'],
@@ -207,7 +209,6 @@ export class RandomChatBatsTeams extends RandomTeams {
 			['taunt', 'disable'],
 			[['thunderwave', 'toxic'], ['thunderwave', 'willowisp']],
 			[['thunderwave', 'toxic', 'willowisp'], 'toxicspikes'],
-
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -290,34 +291,21 @@ export class RandomChatBatsTeams extends RandomTeams {
 			}
 		}
 		// 33% chance to force Dragon Dance on Mega Altaria, since it otherwise never gets it due to teambuilder shenanigans
-		if (species.id === 'altariamega') {
-			if (movePool.includes('dragondance')) {
-				if (this.randomChance(1, 3)) {
-					counter = this.addMove('dragondance', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-						movePool, teraType, role);
-				}
-			}
+		if (species.id === 'altariamega' && movePool.includes('dragondance') && this.randomChance(1, 3)) {
+			counter = this.addMove('dragondance', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
 		}
 		// enforces a sound move on Mesprit with Throat Spray
-		if (species.id === 'mesprit') {
-			if (movePool.includes('psychicnoise')) {
-				if (this.randomChance(1, 2)) {
-					counter = this.addMove('psychicnoise', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-						movePool, teraType, role);
-				} else {
-					counter = this.addMove('torchsong', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-						movePool, teraType, role);
-				}
-			}
+		if (species.id === 'mesprit' && movePool.includes('psychicnoise')) {
+			counter = this.addMove(this.randomChance(1, 2) ? 'psychicnoise' : 'torchsong', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
 		}
 		// enforces both primary stabs on Infernape
-		if (species.id === 'infernape') {
-			if (movePool.includes('mindblown')) {
-				counter = this.addMove('mindblown', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, teraType, role);
-				counter = this.addMove('alloutassault', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, teraType, role);
-			}
+		if (species.id === 'infernape' && movePool.includes('mindblown')) {
+			counter = this.addMove('mindblown', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
+			counter = this.addMove('alloutassault', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
 		}
 
 		// Enforce Facade if Guts is a possible ability
@@ -361,11 +349,10 @@ export class RandomChatBatsTeams extends RandomTeams {
 		}
 
 		// Enforce Flip Turn on pure Water-type Wallbreakers
-		if (types.length === 1 && types.includes('Water') && role === 'Wallbreaker') {
-			if (movePool.includes('flipturn')) {
-				counter = this.addMove('flipturn', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, teraType, role);
-			}
+		if (types.length === 1 && types.includes('Water') &&
+			role === 'Wallbreaker' && movePool.includes('flipturn')) {
+			counter = this.addMove('flipturn', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+				movePool, teraType, role);
 		}
 
 		// Enforce Spore on Smeargle
@@ -427,7 +414,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 
 		// Enforce a single STAB for Moltres
 		if (species.id === 'moltres') {
-			const typeToEnforce = (this.randomChance(1, 2)) ? 'Fire' : 'Flying';
+			const typeToEnforce = this.randomChance(1, 2) ? 'Fire' : 'Flying';
 
 			const stabMoves = [];
 			for (const moveid of movePool) {
@@ -469,11 +456,10 @@ export class RandomChatBatsTeams extends RandomTeams {
 		}
 
 		// Enforce Tera STAB
-		if (!counter.get('stabtera') && !['Bulky Support', 'Doubles Support'].includes(role)) {
+		// prevents Meowscarada from being enforced stab moves (since it has Protean and doesn't care)
+		if (!counter.get('stabtera') && !['Bulky Support', 'Doubles Support'].includes(role) && !abilities.includes('Protean')) {
 			const stabMoves = [];
 			for (const moveid of movePool) {
-				// prevents Meowscarada from being enforced stab moves (since it has Protean and doesn't care)
-				if (species.id === 'meowscarada') break;
 				const move = this.dex.moves.get(moveid);
 				const moveType = this.getMoveType(move, species, abilities, teraType);
 				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && teraType === moveType) {
@@ -488,11 +474,10 @@ export class RandomChatBatsTeams extends RandomTeams {
 		}
 
 		// If no STAB move was added, add a STAB move
-		if (!counter.get('stab')) {
+		// prevents Meowscarada from being enforced stab moves (since it has Protean and doesn't care)
+		if (!counter.get('stab') && !abilities.includes('Protean')) {
 			const stabMoves = [];
 			for (const moveid of movePool) {
-				// prevents Meowscarada from being enforced stab moves (since it has Protean and doesn't care)
-				if (species.id === 'meowscarada') break;
 				const move = this.dex.moves.get(moveid);
 				const moveType = this.getMoveType(move, species, abilities, teraType);
 				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && types.includes(moveType)) {
@@ -737,7 +722,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 	): RandomTeamsTypes.RandomSet {
 		const species = this.dex.species.get(s);
 		const forme = this.getForme(species);
-		const sets = this[`randomSets`][species.id]["sets"];
+		const sets = this.randomSets[species.id]["sets"];
 		const possibleSets: RandomTeamsTypes.RandomSetData[] = [];
 
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
@@ -832,8 +817,8 @@ export class RandomChatBatsTeams extends RandomTeams {
 			return move.category !== 'Physical' || move.id === 'bodypress' || move.id === 'foulplay';
 		});
 		// prevents Illumise (who can turn into Volbeat with Physical moves) from having 0 Atk EVs
-		if (noAttackStatMoves && !moves.has('transform') && this.format.mod !==
-			'partnersincrime' && species.id !== 'illumise') {
+		if (noAttackStatMoves && !moves.has('transform') && this.format.mod !== 'partnersincrime' &&
+			species.id !== 'illumise') {
 			evs.atk = 0;
 			ivs.atk = 0;
 		}
@@ -852,7 +837,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
-			gender: species.baseSpecies === 'Greninja' ? 'M' : species.gender,
+			gender: species.baseSpecies === 'Greninja' ? 'M' : (species.gender || (this.random(2) ? 'F' : 'M')),
 			shiny: this.randomChance(1, 1024),
 			level,
 			moves: shuffledMoves,
@@ -866,7 +851,6 @@ export class RandomChatBatsTeams extends RandomTeams {
 	}
 
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./random-sets.json');
-	// randomDoublesSets: {[species: string]: RandomTeamsTypes.RandomSpeciesData} = require('./random-doubles-sets.json');
 
 	randomChatBatsTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
