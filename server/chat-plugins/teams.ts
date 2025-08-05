@@ -165,11 +165,11 @@ export const TeamsHandler = new class {
 			connection.popup('Invalid team:\n\n' + team.packedTeam);
 			return null;
 		}
-		if (team.length > 50) {
+		if (sets.length > 50) {
 			connection.popup("Your team has too many Pokemon (max 50).");
 		}
 		let unownWord = '';
-		for (const set of team) {
+		for (const set of sets) {
 			const filtered = context.filter(set.name);
 			if (filtered !== set.name) {
 				connection.popup(`Filtered words (${set.name}) are not allowed in nicknames.`);
@@ -434,7 +434,7 @@ export const commands: Chat.ChatCommands = {
 					privacy: toID(isPrivate) === '1' ? true : null,
 				}, teamID
 			);
-			if (!id) {
+			if (!result) {
 				return; // error messages were thrown to the user
 			}
 
