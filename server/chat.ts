@@ -172,6 +172,10 @@ const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
 
 const TRANSLATION_DIRECTORY = pathModule.resolve(__dirname, '..', 'translations');
 
+const PM = SQL(module, {
+	file: global.Config?.nofswriting ? ':memory:' : PLUGIN_DATABASE_PATH,
+});
+
 class PatternTester {
 	// This class sounds like a RegExp
 	// In fact, one could in theory implement it as a RegExp subclass
@@ -1819,10 +1823,7 @@ export const Chat = new class {
 	 * All chat plugins share one database.
 	 * Chat.databaseReadyPromise will be truthy if the database is not yet ready.
 	 */
-	database = SQL(module, {
-		file: global.Config?.nofswriting ? ':memory:' : PLUGIN_DATABASE_PATH,
-		processes: global.Config?.subprocessescache?.chatdb ?? 1,
-	});
+	database = PM;
 	databaseReadyPromise: Promise<void> | null = null;
 
 	async prepareDatabase() {
@@ -2648,6 +2649,10 @@ export const Chat = new class {
 	resolvePage(pageid: string, user: User, connection: Connection) {
 		return (new PageContext({ pageid, user, connection, language: user.language! })).resolve();
 	}
+
+	start() {
+		start();
+	}
 };
 
 // backwards compatibility; don't actually use these
@@ -2706,13 +2711,7 @@ export interface Monitor {
 	monitor?: MonitorHandler;
 }
 
-// explicitly check this so it doesn't happen in other child processes
-if (!process.send) {
-	Chat.database.spawn(global.Config?.subprocessescache?.chatdb ?? 1);
-	Chat.databaseReadyPromise = Chat.prepareDatabase();
-	// we need to make sure it is explicitly JUST the child of the original parent db process
-	// no other child processes
-} else if (process.mainModule === module) {
+if (!PM.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A chat child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
@@ -2728,4 +2727,11 @@ if (!process.send) {
 	global.Config = require('./config-loader').Config;
 	// eslint-disable-next-line no-eval
 	Repl.start('chat-db', cmd => eval(cmd));
+}
+
+function start() {
+	PM.spawn(global.Config?.subprocessescache?.chatdb ?? 1);
+	Chat.databaseReadyPromise = Chat.prepareDatabase();
+	Chat.PrivateMessages.start();
+	FriendsDatabase.start();
 }

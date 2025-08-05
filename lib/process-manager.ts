@@ -424,10 +424,10 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 	crashTime = 0;
 	crashRespawnCount = 0;
 
-	constructor(module: NodeJS.Module) {
-		this.filename = module.filename;
-		this.basename = path.basename(module.filename);
-		this.isParentProcess = (process.mainModule !== module || !process.send);
+	constructor(ctx: NodeJS.Module) {
+		this.filename = ctx.filename;
+		this.basename = path.basename(ctx.filename);
+		this.isParentProcess = (require.main !== ctx || !process.send);
 
 		this.listen();
 	}
@@ -500,6 +500,7 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 	spawn(count = 1, force?: boolean) {
 		if (!this.isParentProcess) return;
 		if (ProcessManager.disabled && !force) return;
+		if (process.send) throw new Error(`Child process spawning further child processes (count=${count})!!`);
 		const spawnCount = count - this.processes.length;
 		for (let i = 0; i < spawnCount; i++) {
 			this.spawnOne(force);
@@ -538,10 +539,10 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 	 * @param timeout The number of milliseconds to wait before terminating a query. Defaults to 900000 ms (15 minutes).
 	 */
 	constructor(
-		module: NodeJS.Module, query: (input: T) => U | Promise<U>,
+		ctx: NodeJS.Module, query: (input: T) => U | Promise<U>,
 		timeout = 15 * 60 * 1000, debugCallback?: (message: string) => any
 	) {
-		super(module);
+		super(ctx);
 		this._query = query;
 		this.timeout = timeout;
 		this.messageCallback = debugCallback;
@@ -606,11 +607,11 @@ export class StreamProcessManager extends ProcessManager<StreamProcessWrapper> {
 	messageCallback?: (message: string) => any;
 
 	constructor(
-		module: NodeJS.Module,
+		ctx: NodeJS.Module,
 		createStream: () => Streams.ObjectReadWriteStream<string>,
 		messageCallback?: (message: string) => any
 	) {
-		super(module);
+		super(ctx);
 		this.activeStreams = new Map();
 		this._createStream = createStream;
 		this.messageCallback = messageCallback;

@@ -6,7 +6,7 @@
 
 import * as child_process from 'child_process';
 import { ProcessManager, Streams, Utils, Repl, FS } from '../../lib';
-import { Config } from '../config-loader';
+import * as ConfigLoader from '../config-loader';
 import { toID } from '../../sim/dex-data';
 
 class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
@@ -148,13 +148,12 @@ export class LocalClassifier {
 		}
 		return data as Record<string, number>;
 	}
+	static start() {
+		start();
+	}
 }
 
-// main module check necessary since this gets required in other non-parent processes sometimes
-// when that happens we do not want to take over or set up or anything
-if (require.main === module) {
-	// This is a child process!
-	global.Config = Config;
+if (!PM.isParentProcess) {
 	global.Monitor = {
 		crashlog(error: Error, source = 'A local Artemis child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
@@ -172,6 +171,8 @@ if (require.main === module) {
 	});
 	// eslint-disable-next-line no-eval
 	Repl.start(`abusemonitor-local-${process.pid}`, cmd => eval(cmd));
-} else if (!process.send) {
+}
+
+function start() {
 	PM.spawn(global.Config?.subprocessescache?.localartemis ?? 1);
 }

@@ -1361,6 +1361,10 @@ export const PM = new ProcessManager.StreamProcessManager(module, () => new Room
 	}
 });
 
+export function start() {
+	PM.spawn(global.Config?.subprocessescache?.simulator ?? 1);
+}
+
 if (!PM.isParentProcess) {
 	// This is a child process!
 	try {
@@ -1402,6 +1406,4 @@ if (!PM.isParentProcess) {
 
 	// eslint-disable-next-line no-eval
 	Repl.start(`sim-${process.pid}`, cmd => eval(cmd));
-} else {
-	PM.spawn(global.Config?.subprocessescache?.simulator ?? 1);
 }

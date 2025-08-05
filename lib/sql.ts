@@ -431,14 +431,10 @@ export class DatabaseTable<T> {
 }
 
 function getSQL(
-	module: NodeJS.Module, input: SQLOptions & { processes?: number }
+	module: NodeJS.Module, input: SQLOptions
 ) {
-	const { processes } = input;
-	const PM = new SQLDatabaseManager(module, input);
-	if (PM.isParentProcess) {
-		if (processes) PM.spawn(processes);
-	}
-	return PM;
+	if ('processes' in input) throw new Error(`Passing process count to SQL factory is no longer supported.`);
+	return new SQLDatabaseManager(module, input);
 }
 
 export const SQL = Object.assign(getSQL, {
