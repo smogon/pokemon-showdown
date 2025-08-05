@@ -40,5 +40,5 @@ if (!PM.isParentProcess) {
 	// eslint-disable-next-line no-eval
 	Repl.start('verifier', (cmd: string) => eval(cmd));
 } else {
-	PM.spawn(global.Config?.verifierprocesses ?? 1);
+	PM.spawn(global.Config?.subprocesses?.verifier ?? 1);
 }

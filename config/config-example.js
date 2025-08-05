@@ -16,23 +16,6 @@ exports.port = 8000;
 exports.bindaddress = '0.0.0.0';
 
 /**
- * workers - the number of networking child processes to spawn
- *   This should be no greater than the number of threads available on your
- *   server's CPU. If you're not sure how many you have, you can check from a
- *   terminal by running:
- *
- *   $ node -e "console.log(require('os').cpus().length)"
- *
- *   Using more workers than there are available threads will cause performance
- *   issues. Keeping a couple threads available for use for OS-related work and
- *   other PS processes will likely give you the best performance, if your
- *   server's CPU is capable of multithreading. If you don't know what any of
- *   this means or you are unfamiliar with PS' networking code, leave this set
- *   to 1.
- */
-exports.workers = 1;
-
-/**
  * wsdeflate - compresses WebSocket messages
  *  Toggles use of the Sec-WebSocket-Extension permessage-deflate extension.
  *  This compresses messages sent and received over a WebSocket connection
@@ -91,6 +74,53 @@ Main's SSL deploy script from Let's Encrypt looks like:
  * @type {false | string[]}.
  */
 exports.proxyip = false;
+
+// subprocesses - the number of child processes to use for various tasks
+//   It can be globally set to 0 for minimum hardware specs.
+exports.subprocesses = {
+	/**
+	 * network - the number of networking child processes to spawn
+	 *   This should be no greater than the number of threads available on your
+	 *   server's CPU. If you're not sure how many you have, you can check from a
+	 *   terminal by running:
+	 *
+	 *   $ node -e "console.log(require('os').cpus().length)"
+	 *
+	 *   Using more workers than there are available threads will cause performance
+	 *   issues. Keeping a couple threads available for use for OS-related work and
+	 *   other PS processes will likely give you the best performance, if your
+	 *   server's CPU is capable of multithreading. If you don't know what any of
+	 *   this means or you are unfamiliar with PS' networking code, leave this set
+	 *   to 1.
+	 */
+
+	network: 1,
+
+	/**
+	 * validator - for validating teams
+	 * simulator - for handling battles
+	 * verifier - for user authentication
+	 * You should leave both of these at 1 unless your server has a very large
+	 * amount of traffic (i.e. hundreds of concurrent battles).
+	 */
+
+	validator: 1,
+	simulator: 1,
+	verifier: 1,
+	localartemis: 1,
+	remoteartemis: 1,
+	friends: 1,
+	chatdb: 1,
+	modlog: 1,
+	pm: 1,
+
+	/**
+	 * battlesearch - for the battlesearch chat plugin
+	 * datasearch - for the datasearch chat plugin
+	 */
+	battlesearch: 1,
+	datasearch: 1,
+};
 
 /**
  * Various debug options

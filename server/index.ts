@@ -156,7 +156,7 @@ if (Config.crashguard) {
  * Start networking processes to be connected to
  *********************************************************/
 
-import { Sockets } from './sockets';
+const { Sockets } = require('./sockets');
 global.Sockets = Sockets;
 
 export function listen(port: number, bindAddress: string, workerCount: number) {
@@ -181,7 +181,7 @@ if (require.main === module) {
  * Set up our last global
  *********************************************************/
 
-import * as TeamValidatorAsync from './team-validator-async';
+const { TeamValidatorAsync } = require('./team-validator-async');
 global.TeamValidatorAsync = TeamValidatorAsync;
 
 /*********************************************************
@@ -200,16 +200,6 @@ if (Config.startuphook) {
 }
 
 if (Config.ofemain) {
-	try {
-		require.resolve('node-oom-heapdump');
-	} catch (e: any) {
-		if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
-		throw new Error(
-			'node-oom-heapdump is not installed, but it is a required dependency if Config.ofe is set to true! ' +
-			'Run npm install node-oom-heapdump and restart the server.'
-		);
-	}
-
 	// Create a heapdump if the process runs out of memory.
 	global.nodeOomHeapdump = (require as any)('node-oom-heapdump')({
 		addTimestamp: true,

@@ -3118,7 +3118,7 @@ if (!PM.isParentProcess) {
 	// eslint-disable-next-line no-eval
 	require('../../lib/repl').Repl.start('dexsearch', (cmd: string) => eval(cmd));
 } else {
-	PM.spawn(global.Config?.datasearchprocesses ?? 1);
+	PM.spawn(global.Config?.subprocesses?.datasearch ?? 1);
 }
 
 export const testables = {

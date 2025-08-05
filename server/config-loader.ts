@@ -9,16 +9,29 @@ import * as defaults from '../config/config-example';
 import type { GroupInfo, EffectiveGroupSymbol } from './user-groups';
 import { ProcessManager, FS } from '../lib';
 
+type ProcessType = (
+	'localartemis' | 'remoteartemis' | 'battlesearch' | 'datasearch' | 'friends' |
+	'chatdb' | 'pm' | 'modlog' | 'network' | 'simulator' | 'validator' | 'verifier'
+);
+
+type SubProcessesConfig = Partial<Record<ProcessType, number>>;
+
 export type ConfigType = typeof defaults & {
 	groups: { [symbol: string]: GroupInfo },
 	groupsranking: EffectiveGroupSymbol[],
 	greatergroupscache: { [combo: string]: GroupSymbol },
+	subprocesses: false | SubProcessesConfig,
 	[k: string]: any,
 };
 /** Map<process flag, config settings for it to turn on> */
 const FLAG_PRESETS = new Map([
 	['--no-security', ['nothrottle', 'noguestsecurity', 'noipchecks']],
 ]);
+
+const processTypes: ProcessType[] = [
+	'localartemis', 'remoteartemis', 'battlesearch', 'datasearch', 'friends',
+	'chatdb', 'pm', 'modlog', 'network', 'simulator', 'validator', 'verifier',
+];
 
 const CONFIG_PATH = FS('./config/config.js').path;
 
@@ -28,18 +41,57 @@ export function load(invalidate = false) {
 	// config.routes is nested - we need to ensure values are set for its keys as well.
 	config.routes = { ...defaults.routes, ...config.routes };
 
-	// Automatically stop startup if better-sqlite3 isn't installed and SQLite is enabled
-	if (config.usesqlite) {
-		try {
-			require('better-sqlite3');
-		} catch {
-			throw new Error(`better-sqlite3 is not installed or could not be loaded, but Config.usesqlite is enabled.`);
+	if (!process.send) {
+		// Automatically stop startup if optional dependencies are enabled yet missing
+		if (config.usesqlite) {
+			try {
+				require.resolve('better-sqlite3');
+			} catch {
+				throw new Error(`better-sqlite3 is not installed or could not be loaded, but Config.usesqlite is enabled.`);
+			}
+		}
+
+		if (config.ofemain) {
+			try {
+				require.resolve('node-oom-heapdump');
+			} catch {
+				throw new Error(
+					`node-oom-heapdump is not installed, but it is a required dependency if Config.ofemain is set to true! ` +
+					`Run npm install node-oom-heapdump and restart the server.`
+				);
+			}
 		}
 	}
 
 	for (const [preset, values] of FLAG_PRESETS) {
 		if (process.argv.includes(preset)) {
 			for (const value of values) config[value] = true;
+		}
+	}
+
+	if (('subprocesses' in config) && !config.subprocesses) {
+		config.subprocesses = Object.fromEntries(processTypes.map(k => [k, 0])) as Record<ProcessType, number>;
+	}
+	if (!config.subprocesses) {
+		let anyDeprecated = false;
+		if ('workers' in config) {
+			anyDeprecated = true;
+			(config.subprocesses as SubProcessesConfig) ??= {};
+			(config.subprocesses as SubProcessesConfig).network = config.workers;
+		}
+		for (const processType of processTypes) {
+			if ((`${processType}processes` in config)) {
+				anyDeprecated = true;
+				(config.subprocesses as SubProcessesConfig) ??= {};
+				(config.subprocesses as SubProcessesConfig)[processType] = config[`${processType}processes`];
+			}
+		}
+		if (anyDeprecated) {
+			reportError(
+				`You are using a deprecated version of subprocesses specification in config.\n` +
+				`Support for this will be removed soon.\n` +
+				`Please ensure that you update your config.js to the new format (see config-example.js, line 80).\n`
+			);
 		}
 	}
 
@@ -54,7 +106,7 @@ export function cacheGroupData(config: ConfigType) {
 		reportError(
 			`You are using a deprecated version of user group specification in config.\n` +
 			`Support for this will be removed soon.\n` +
-			`Please ensure that you update your config.js to the new format (see config-example.js, line 457).\n`
+			`Please ensure that you update your config.js to the new format (see config-example.js, line 521).\n`
 		);
 	} else {
 		config.punishgroups = Object.create(null);
