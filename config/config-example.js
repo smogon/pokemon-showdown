@@ -93,19 +93,17 @@ exports.subprocesses = {
 	 *   this means or you are unfamiliar with PS' networking code, leave this set
 	 *   to 1.
 	 */
-
 	network: 1,
-
 	/**
-	 * validator - for validating teams
-	 * simulator - for handling battles
-	 * verifier - for user authentication
-	 * You should leave both of these at 1 unless your server has a very large
-	 * amount of traffic (i.e. hundreds of concurrent battles).
+	 * for simulating battles
 	 */
-
-	validator: 1,
 	simulator: 1,
+
+	// beyond this point, it'd be very weird if you needed more than one of these
+
+	/** for validating teams */
+	validator: 1,
+	/** for user authentication */
 	verifier: 1,
 	localartemis: 1,
 	remoteartemis: 1,
@@ -113,12 +111,9 @@ exports.subprocesses = {
 	chatdb: 1,
 	modlog: 1,
 	pm: 1,
-
-	/**
-	 * battlesearch - for the battlesearch chat plugin
-	 * datasearch - for the datasearch chat plugin
-	 */
+	/** for the battlesearch chat plugin */
 	battlesearch: 1,
+	/** datasearch - for the datasearch chat plugin */
 	datasearch: 1,
 };
 
