@@ -2668,7 +2668,7 @@ export class RandomTeams {
 		for (const speciesName of pokemonPool) {
 			const sortObject = {
 				speciesName,
-				score: this.prng.random() ** (1 / this.randomFactorySets[this.factoryTier][speciesName].weight),
+				score: this.prng.random() ** (1 / this.randomBSSFactorySets[this.factoryTier][speciesName].weight),
 			};
 			shuffledSpecies.push(sortObject);
 		}
