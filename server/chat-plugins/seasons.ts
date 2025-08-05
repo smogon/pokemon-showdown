@@ -148,7 +148,6 @@ export async function getLadderTop(format: string) {
 		const reply = JSON.parse(results);
 		return reply.toplist;
 	} catch (e) {
-		Monitor.crashlog(e, "A season ladder request");
 		return null;
 	}
 }
