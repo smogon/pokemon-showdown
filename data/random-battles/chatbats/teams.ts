@@ -777,6 +777,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'mew') return 'Starf Berry';
 		if (species.id === 'magneton') return this.sample(['Air Balloon', 'Chople Berry']);
 		if (species.id === 'delibird') return this.sample(['Heavy-Duty Boots', 'Life Orb']);
+	}
 
 	override randomSet(
 		s: string | Species,
