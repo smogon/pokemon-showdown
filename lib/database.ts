@@ -275,7 +275,7 @@ export class DatabaseTable<Row, DB extends Database> {
 	eval<T>():
 	(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<T | undefined> {
 		return (strings, ...rest) =>
-			this.queryOne<{ result: T; }>(
+			this.queryOne<{ result: T }>(
 			)`SELECT ${new SQLStatement(strings, rest)} AS result FROM "${this.name}" LIMIT 1`
 				.then(row => row?.result);
 	}
