@@ -260,7 +260,7 @@ export class DatabaseTable<Row, DB extends Database> {
 	updateOne(partialRow: PartialOrSQL<Row> | SQLStatement):
 	(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<OkPacketOf<DB>> {
 		return (s, ...r) =>
-			this.queryExec()`UPDATE "${this.name}" SET ${partialRow as any} ${new SQLStatement(s, r)} LIMIT 1`;
+			this.queryExec()`UPDATE "${this.name}" SET ${partialRow as any} ${new SQLStatement(s, r)}`;
 	}
 	deleteAll():
 	(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<OkPacketOf<DB>> {
