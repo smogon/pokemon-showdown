@@ -432,15 +432,6 @@ exports.logchallenges = false;
 exports.loguserstats = 1000 * 60 * 10; // 10 minutes
 
 /**
- * validatorprocesses - the number of processes to use for validating teams
- * simulatorprocesses - the number of processes to use for handling battles
- * You should leave both of these at 1 unless your server has a very large
- * amount of traffic (i.e. hundreds of concurrent battles).
- */
-exports.validatorprocesses = 1;
-exports.simulatorprocesses = 1;
-
-/**
  * inactiveuserthreshold - how long a user must be inactive before being pruned
  * from the `users` array. The default is 1 hour.
  */
