@@ -1766,7 +1766,7 @@ export class RandomTeams {
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 		let numMaxLevelPokemon = 0;
 
-		const pokemonList = isDoubles ? Object.keys(this.randomDoublesSets) : Object.keys(this.randomSets);
+		const pokemonList = Object.keys(this.randomSets);
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
 
 		let leadsRemaining = this.format.gameType === 'doubles' ? 2 : 1;
@@ -2668,7 +2668,7 @@ export class RandomTeams {
 		for (const speciesName of pokemonPool) {
 			const sortObject = {
 				speciesName,
-				score: this.prng.next() ** (1 / this.randomBSSFactorySets[speciesName].weight),
+				score: this.prng.random() ** (1 / this.randomFactorySets[this.factoryTier][speciesName].weight),
 			};
 			shuffledSpecies.push(sortObject);
 		}
