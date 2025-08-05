@@ -75,8 +75,8 @@ Main's SSL deploy script from Let's Encrypt looks like:
  */
 exports.proxyip = false;
 
-// subprocesses - the number of child processes to use for various tasks
-//   It can be globally set to 0 for minimum hardware specs.
+// subprocesses - the number of child processes to use for various tasks.
+//   Can be set to `0` instead of `{...}` to stop using subprocesses, if you're running out of RAM.
 exports.subprocesses = {
 	/**
 	 * network - the number of networking child processes to spawn
