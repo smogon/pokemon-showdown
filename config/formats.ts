@@ -409,7 +409,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						// Pick a random foe
 						const randomFoe = this.sample(foeTeamNoDog);
 						const rawSpecies = this.dex.species.get('koraidon');
-						randomFoe.setSpecies(rawSpecies, pokemon);
+						randomFoe.setSpecies(rawSpecies, null);
 						randomFoe.baseSpecies = rawSpecies;
 						randomFoe.details = randomFoe.getUpdatedDetails();
 						randomFoe.setAbility('Orichalcum Pulse', null, true);
@@ -417,7 +417,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						if (this.randomChance(1, 2)) {
 							const randomFoeItem = (this.randomChance(1, 2) ? 'choicescarf' : 'choiceband');
 							randomFoe.item = randomFoeItem as ID;
-							randomFoe.itemState = { id: randomFoeItem, target: randomFoe };
+							randomFoe.itemState = { id: randomFoeItem, target: randomFoe, effectOrder: 0};
 							// Define new moves
 							const newMoves = ['closecombat', 'flareblitz', 'outrage', 'uturn'];
 
@@ -437,7 +437,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						} else {
 							const randomFoeItem = 'loadeddice';
 							randomFoe.item = randomFoeItem as ID;
-							randomFoe.itemState = { id: randomFoeItem, target: randomFoe };
+							randomFoe.itemState = { id: randomFoeItem, target: randomFoe, effectOrder: 0};
 							// Define new moves
 							const newMoves = ['collisioncourse', 'flareblitz', 'scaleshot', 'swordsdance'];
 
@@ -456,7 +456,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 							});
 						}
 						// this forces the UI to update move slots visually
-						randomFoe.baseMoveSlots = randomFoe.moveSlots.slice();
+						(randomFoe as any).baseMoveSlots = randomFoe.moveSlots.slice();
 						randomFoe.teraType = 'Fire';
 					}
 				}
