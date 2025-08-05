@@ -314,14 +314,14 @@ export class DatabaseTable<Row, DB extends Database> {
 	}
 	replace(partialRow: PartialOrSQL<Row>, where?: SQLStatement) {
 		if (this.db.type === 'pg') {
-		  if (!this.primaryKeyName) throw new Error(`Cannot replace() without a single-column primary key`);
-		  return this.queryExec(`
-		    INSERT INTO "${this.name}" (${partialRow as SQLValue})
-		    ON CONFLICT ("${this.primaryKeyName}")
-		    DO UPDATE
-		    SET ${partialRow as SQLValue}
-		    ${where}
-		  `);
+			if (!this.primaryKeyName) throw new Error(`Cannot replace() without a single-column primary key`);
+			return this.queryExec()`
+			  INSERT INTO "${this.name}" (${partialRow as any})
+			  ON CONFLICT ("${this.primaryKeyName}")
+			  DO UPDATE
+			  SET ${partialRow as any}
+			  ${where}
+			`;
 		}
 		return this.queryExec()`REPLACE INTO "${this.name}" (${partialRow as SQLValue}) ${where}`;
 	}
