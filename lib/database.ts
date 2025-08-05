@@ -10,7 +10,7 @@ import * as mysql from 'mysql2';
 import * as pg from 'pg';
 
 export type BasicSQLValue = string | number | null;
-export type SQLRow = { [k: string]: BasicSQLValue; };
+export type SQLRow = { [k: string]: BasicSQLValue };
 export type SQLValue =
 	BasicSQLValue | SQLStatement | SQLStatement[] | PartialOrSQL<SQLRow> | BasicSQLValue[] | undefined;
 
@@ -146,7 +146,7 @@ export function SQL(strings: TemplateStringsArray | string[] | string, ...values
 	return new SQLStatement(strings, values);
 }
 
-export interface ResultRow { [k: string]: BasicSQLValue; }
+export interface ResultRow { [k: string]: BasicSQLValue }
 
 export const connectedDatabases: Database[] = [];
 
@@ -239,41 +239,41 @@ export class DatabaseTable<Row, DB extends Database> {
 	// low-level
 
 	selectAll<T = Row>(entries?: (keyof Row & string)[] | SQLStatement):
-		(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<T[]> {
+	(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<T[]> {
 		if (!entries) entries = SQL`*`;
 		if (Array.isArray(entries)) entries = SQL`"${entries}"`;
 		return (strings, ...rest) =>
 			this.query<T>()`SELECT ${entries} FROM "${this.name}" ${new SQLStatement(strings, rest)}`;
 	}
 	selectOne<T = Row>(entries?: (keyof Row & string)[] | SQLStatement):
-		(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<T | undefined> {
+	(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<T | undefined> {
 		if (!entries) entries = SQL`*`;
 		if (Array.isArray(entries)) entries = SQL`"${entries}"`;
 		return (strings, ...rest) =>
 			this.queryOne<T>()`SELECT ${entries} FROM "${this.name}" ${new SQLStatement(strings, rest)} LIMIT 1`;
 	}
 	updateAll(partialRow: PartialOrSQL<Row>):
-		(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<OkPacketOf<DB>> {
+	(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<OkPacketOf<DB>> {
 		return (strings, ...rest) =>
 			this.queryExec()`UPDATE "${this.name}" SET ${partialRow as any} ${new SQLStatement(strings, rest)}`;
 	}
 	updateOne(partialRow: PartialOrSQL<Row> | SQLStatement):
-		(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<OkPacketOf<DB>> {
+	(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<OkPacketOf<DB>> {
 		return (s, ...r) =>
 			this.queryExec()`UPDATE "${this.name}" SET ${partialRow as any} ${new SQLStatement(s, r)}`;
 	}
 	deleteAll():
-		(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<OkPacketOf<DB>> {
+	(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<OkPacketOf<DB>> {
 		return (strings, ...rest) =>
 			this.queryExec()`DELETE FROM "${this.name}" ${new SQLStatement(strings, rest)}`;
 	}
 	deleteOne():
-		(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<OkPacketOf<DB>> {
+	(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<OkPacketOf<DB>> {
 		return (strings, ...rest) =>
 			this.queryExec()`DELETE FROM "${this.name}" ${new SQLStatement(strings, rest)} LIMIT 1`;
 	}
 	eval<T>():
-		(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<T | undefined> {
+	(strings: TemplateStringsArray, ...rest: SQLValue[]) => Promise<T | undefined> {
 		return (strings, ...rest) =>
 			this.queryOne<{ result: T; }>(
 			)`SELECT ${new SQLStatement(strings, rest)} AS result FROM "${this.name}" LIMIT 1`
@@ -335,7 +335,7 @@ export class DatabaseTable<Row, DB extends Database> {
 
 export class MySQLDatabase extends Database<mysql.Pool, mysql.OkPacket> {
 	override type = 'mysql' as const;
-	constructor(config: mysql.PoolOptions & { prefix?: string; }) {
+	constructor(config: mysql.PoolOptions & { prefix?: string }) {
 		const prefix = config.prefix || "";
 		if (config.prefix) {
 			config = { ...config };
@@ -381,7 +381,7 @@ export class MySQLDatabase extends Database<mysql.Pool, mysql.OkPacket> {
 	}
 }
 
-export class PGDatabase extends Database<pg.Pool, { affectedRows: number | null; }> {
+export class PGDatabase extends Database<pg.Pool, { affectedRows: number | null }> {
 	override type = 'pg' as const;
 	constructor(config: pg.PoolConfig) {
 		super(config ? new pg.Pool(config) : null!);
