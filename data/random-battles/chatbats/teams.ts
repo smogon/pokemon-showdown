@@ -2500,7 +2500,7 @@ export class RandomTeams {
 		return team;
 	}
 
-	randomBSSFactorySets: AnyObject = require("./bss-factory-sets.json");
+	randomBSSFactorySets: AnyObject = undefined;
 
 	randomBSSFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails
