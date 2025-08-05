@@ -321,11 +321,11 @@ export class DatabaseTable<Row, DB extends Database> {
 	}
 	delete(primaryKey: BasicSQLValue) {
 		if (!this.primaryKeyName) throw new Error(`Cannot delete() without a single-column primary key`);
-		return this.deleteAll()`WHERE "${this.primaryKeyName}" = ${primaryKey} LIMIT 1`;
+		return this.deleteAll()`WHERE "${this.primaryKeyName}" = ${primaryKey}`;
 	}
 	update(primaryKey: BasicSQLValue, data: PartialOrSQL<Row>) {
 		if (!this.primaryKeyName) throw new Error(`Cannot update() without a single-column primary key`);
-		return this.updateAll(data)`WHERE "${this.primaryKeyName}" = ${primaryKey} LIMIT 1`;
+		return this.updateAll(data)`WHERE "${this.primaryKeyName}" = ${primaryKey}`;
 	}
 }
 
@@ -335,7 +335,6 @@ export class MySQLDatabase extends Database<mysql.Pool, mysql.OkPacket> {
 		const prefix = config.prefix || "";
 		if (config.prefix) {
 			config = { ...config };
-			delete config.prefix;
 		}
 		super(mysql.createPool(config), prefix);
 	}
