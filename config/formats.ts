@@ -2860,6 +2860,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		bestOfDefault: true,
 		ruleset: ['[Gen 9] Random Battle (Blitz)', '!! Timer Starting = 900', '!! Timer Add Per Turn = 10', '!! Timer Max Per Turn = 10', 'Timeout Auto Choose'],
+		onBegin() {
+			this.add(`raw|<div class="broadcast-blue">Spotlight ladders are now the focus of the Ladder Achievements Project, in which you can beat multiple challenges to win some prizes in the random battles room! Check <a href="https://www.smogon.com/forums/threads/ladder-achievements-project-1-hyperblitz-autochoose.3767546">this link</a> to see what the project is all about!</div>`);
+		},
 	},
 
 	// Randomized Metas
