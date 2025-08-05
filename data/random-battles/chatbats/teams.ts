@@ -32,19 +32,6 @@ interface BattleFactorySet {
 	evs?: Partial<StatsTable>;
 	ivs?: Partial<StatsTable>;
 }
-interface BSSFactorySet {
-	species: string;
-	weight: number;
-	item: string[];
-	ability: string;
-	nature: string;
-	moves: string[][];
-	teraType: string[];
-	gender?: string;
-	wantsTera?: boolean;
-	evs: number[];
-	ivs?: number[];
-}
 export class MoveCounter extends Utils.Multiset<string> {
 	damagingMoves: Set<Move>;
 
