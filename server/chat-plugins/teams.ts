@@ -280,7 +280,7 @@ export const TeamsHandler = new class {
 				return null;
 			}
 			const loaded = await teamsTable.queryOne()`INSERT INTO teams (${{
-				ownerid: user.id, team: team.packedTeam, date: Math.round(Date.now() / 1000), format: format.id,
+				ownerid: user.id, team: team.packedTeam, date: new Date().toISOString(), format: format.id,
 				views: 0, title: team.name, private: team.privacy,
 			}}) RETURNING teamid`;
 			return { teamid: loaded?.teamid, teamName: team.name, privacy: team.privacy };
