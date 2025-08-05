@@ -245,6 +245,7 @@ export class RandomTeams {
 		const generatorName = (
 			typeof this.format.team === 'string' && this.format.team.startsWith('random')
 		) ? this.format.team + 'Team' : '';
+		// @ts-expect-error property access
 		return this[generatorName || 'randomTeam'](options);
 	}
 
@@ -1028,7 +1029,7 @@ export class RandomTeams {
 		if (!['AV Pivot', 'Fast Support', 'Bulky Support', 'Bulky Protect', 'Doubles Support'].includes(role)) {
 			if (counter.damagingMoves.size === 1) {
 				// Find the type of the current attacking move
-				const currentAttackType = counter.damagingMoves.values().next().value.type;
+				const currentAttackType = counter.damagingMoves.values().next().value!.type;
 				// Choose an attacking move that is of different type to the current single attack
 				const coverageMoves = [];
 				for (const moveid of movePool) {
@@ -1525,7 +1526,7 @@ export class RandomTeams {
 	): number {
 		if (this.adjustLevel) return this.adjustLevel;
 		// doubles levelling
-		if (isDoubles && this.randomDoublesSets[species.id]["level"]) return this.randomDoublesSets[species.id]["level"]!;
+		//if (isDoubles && this.randomDoublesSets[species.id]["level"]) return this.randomDoublesSets[species.id]["level"]!;
 		if (!isDoubles && this.randomSets[species.id]["level"]) return this.randomSets[species.id]["level"]!;
 		// Default to tier-based levelling
 		const tier = species.tier;
@@ -1572,7 +1573,7 @@ export class RandomTeams {
 	): RandomTeamsTypes.RandomSet {
 		const species = this.dex.species.get(s);
 		const forme = this.getForme(species);
-		const sets = this[`random${isDoubles ? 'Doubles' : ''}Sets`][species.id]["sets"];
+		const sets = this[`randomSets`][species.id]["sets"];
 		const possibleSets: RandomTeamsTypes.RandomSetData[] = [];
 
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
@@ -2499,7 +2500,7 @@ export class RandomTeams {
 		return team;
 	}
 
-	// randomBSSFactorySets: AnyObject = require("./bss-factory-sets.json");
+	randomBSSFactorySets: AnyObject = require("./bss-factory-sets.json");
 
 	randomBSSFactorySet(
 		species: Species, teamData: RandomTeamsTypes.FactoryTeamDetails
