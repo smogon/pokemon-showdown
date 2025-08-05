@@ -1,4 +1,3 @@
-import type { PRNG, PRNGSeed } from "../../../sim/prng";
 import { RandomTeams, type MoveCounter } from "../gen9/teams";
 
 // Moves that restore HP:
@@ -64,24 +63,6 @@ const DOUBLES_NO_LEAD_POKEMON = [
 ];
 
 export class RandomChatBatsTeams extends RandomTeams {
-	dex: ModdedDex;
-	gen: number;
-	factoryTier: string;
-	format: Format;
-	prng: PRNG;
-	noStab: string[];
-	readonly maxTeamSize: number;
-	readonly adjustLevel: number | null;
-	readonly maxMoveCount: number;
-	readonly forceMonotype: string | undefined;
-	readonly forceTeraType: string | undefined;
-
-	/**
-	 * Checkers for move enforcement based on types or other factors
-	 *
-	 * returns true to try to force the move type, false otherwise.
-	 */
-	moveEnforcementCheckers: { [k: string]: MoveEnforcementChecker };
 
 	override cullMovePool(
 		types: string[],
