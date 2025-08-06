@@ -72,7 +72,9 @@ export function load(invalidate = false) {
 	if ('subprocesses' in config) {
 		// Leniently accept all falsy values, including `null`.
 		if (!config.subprocesses || config.subprocesses === 1) {
-			config.subprocesses = Object.fromEntries(processTypes.map(k => [k, ~~Boolean(config.subprocesses)])) as SubProcessesConfig;
+			config.subprocesses = Object.fromEntries(
+				processTypes.map(k => [k, ~~Boolean(config.subprocesses)])
+			) as SubProcessesConfig;
 		} else if (typeof config.subprocesses !== 'object') {
 			reportError(`Invalid \`subprocesses\` specification. Use any of 0, 1, or a plain old object.`);
 		}
@@ -87,7 +89,7 @@ export function load(invalidate = false) {
 		for (const processType of processTypes) {
 			const compatKey = `${processType}processes`;
 			if (compatKey in config) {
-				deprecatedKeys.push(compatKey);;
+				deprecatedKeys.push(compatKey);
 				(config.subprocesses as SubProcessesConfig) ??= {};
 				(config.subprocesses as SubProcessesConfig)[processType] = config[compatKey];
 			}
