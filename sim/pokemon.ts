@@ -16,7 +16,7 @@ interface MoveSlot {
 	pp: number;
 	maxpp: number;
 	target?: string;
-	disabled: boolean | string;
+	disabled: boolean | 'hidden';
 	disabledSource?: string;
 	used: boolean;
 	virtual?: boolean;
@@ -340,6 +340,7 @@ export class Pokemon {
 		this.gender = genders[set.gender] || this.species.gender || this.battle.sample(['M', 'F']);
 		if (this.gender === 'N') this.gender = '';
 		this.happiness = typeof set.happiness === 'number' ? this.battle.clampIntRange(set.happiness, 0, 255) : 255;
+		if (this.battle.format.mod === 'gen7letsgo') this.happiness = 70;
 		this.pokeball = toID(this.set.pokeball) || 'pokeball' as ID;
 		this.dynamaxLevel = typeof set.dynamaxLevel === 'number' ? this.battle.clampIntRange(set.dynamaxLevel, 0, 10) : 10;
 		this.gigantamax = this.set.gigantamax || false;
@@ -1000,17 +1001,15 @@ export class Pokemon {
 				// if each of a Pokemon's base moves are disabled by one of these effects, it will Struggle
 				const canCauseStruggle = ['Encore', 'Disable', 'Taunt', 'Assault Vest', 'Belch', 'Stuff Cheeks'];
 				disabled = this.maxMoveDisabled(moveSlot.id) || disabled && canCauseStruggle.includes(moveSlot.disabledSource!);
-			} else if (
-				(moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) || disabled &&
-				this.side.active.length >= 2 && this.battle.actions.targetTypeChoices(target!)
-			) {
+			} else if (moveSlot.pp <= 0 && !this.volatiles['partialtrappinglock']) {
 				disabled = true;
 			}
 
+			if (disabled === 'hidden') {
+				disabled = !restrictData;
+			}
 			if (!disabled) {
 				hasValidMove = true;
-			} else if (disabled === 'hidden' && restrictData) {
-				disabled = false;
 			}
 
 			moves.push({
@@ -1082,6 +1081,8 @@ export class Pokemon {
 		};
 
 		if (isLastActive) {
+			this.maybeDisabled = this.maybeDisabled && !lockedMove;
+			this.maybeLocked = this.maybeLocked || this.maybeDisabled;
 			if (this.maybeDisabled) {
 				data.maybeDisabled = this.maybeDisabled;
 			}
@@ -1095,9 +1096,14 @@ export class Pokemon {
 					data.maybeTrapped = true;
 				}
 			}
-		} else if (canSwitchIn) {
-			// Discovered by selecting a valid Pokémon as a switch target and cancelling.
-			if (this.trapped) data.trapped = true;
+		} else {
+			this.maybeDisabled = false;
+			this.maybeLocked = false;
+			if (canSwitchIn) {
+				// Discovered by selecting a valid Pokémon as a switch target and cancelling.
+				if (this.trapped) data.trapped = true;
+			}
+			this.maybeTrapped = false;
 		}
 
 		if (!lockedMove) {
@@ -1408,6 +1414,7 @@ export class Pokemon {
 			let details = (this.illusion || this).details;
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
 			this.battle.add('detailschange', this, details);
+			this.updateMaxHp();
 			if (!source) {
 				// Tera forme
 				// Ogerpon/Terapagos text goes here
@@ -1456,6 +1463,16 @@ export class Pokemon {
 			this.apparentType = this.terastallized;
 		}
 		return true;
+	}
+
+	updateMaxHp() {
+		const newBaseMaxHp = this.battle.statModify(this.species.baseStats, this.set, 'hp');
+		if (newBaseMaxHp === this.baseMaxhp) return;
+		this.baseMaxhp = newBaseMaxHp;
+		const newMaxHP = this.volatiles['dynamax'] ? (2 * this.baseMaxhp) : this.baseMaxhp;
+		this.hp = this.hp <= 0 ? 0 : Math.max(1, newMaxHP - (this.maxhp - this.hp));
+		this.maxhp = newMaxHP;
+		if (this.hp) this.battle.add('-heal', this, this.getHealth, '[silent]');
 	}
 
 	clearVolatile(includeSwitchFlags = true) {
@@ -1583,7 +1600,7 @@ export class Pokemon {
 		return false;
 	}
 
-	disableMove(moveid: string, isHidden?: boolean | string, sourceEffect?: Effect) {
+	disableMove(moveid: string, isHidden?: boolean, sourceEffect?: Effect) {
 		if (!sourceEffect && this.battle.event) {
 			sourceEffect = this.battle.effect;
 		}
@@ -1591,7 +1608,7 @@ export class Pokemon {
 
 		for (const moveSlot of this.moveSlots) {
 			if (moveSlot.id === moveid && moveSlot.disabled !== true) {
-				moveSlot.disabled = (isHidden || true);
+				moveSlot.disabled = isHidden ? 'hidden' : true;
 				moveSlot.disabledSource = (sourceEffect?.name || moveSlot.move);
 			}
 		}

@@ -602,7 +602,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	slowbromega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "RU",
+		natDexTier: "UU",
 	},
 	slowbrogalar: {
 		tier: "PU",
@@ -1096,7 +1096,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "NFE",
 	},
 	porygon2: {
-		tier: "NFE",
+		tier: "ZUBL",
 		doublesTier: "DUU",
 		natDexTier: "NFE",
 	},
@@ -1502,7 +1502,9 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "NFE",
 	},
 	sneaselhisui: {
-		tier: "NFE",
+		tier: "ZU",
+		doublesTier: "NFE",
+		natDexTier: "NFE",
 	},
 	weavile: {
 		tier: "OU",
@@ -1662,7 +1664,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	tyranitarmega: {
 		isNonstandard: "Past",
 		tier: "Illegal",
-		natDexTier: "UU",
+		natDexTier: "UUBL",
 	},
 	lugia: {
 		tier: "Uber",
@@ -2882,7 +2884,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "NFE",
 	},
 	serperior: {
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "UU",
 	},
@@ -5000,7 +5002,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	duraludon: {
-		tier: "PUBL",
+		tier: "PU",
 		doublesTier: "NFE",
 		natDexTier: "RU",
 	},
@@ -5612,7 +5614,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	archaludon: {
 		tier: "Uber",
 		doublesTier: "DUber",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	hydrapple: {
 		tier: "UU",
@@ -5637,7 +5639,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	ironcrown: {
 		tier: "OU",
 		doublesTier: "DUU",
-		natDexTier: "UU",
+		natDexTier: "UUBL",
 	},
 	terapagos: {
 		tier: "Uber",
@@ -5969,6 +5971,14 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	shox: {
 		isNonstandard: "CAP",
 		tier: "CAP",
+	},
+	ramnarok: {
+		isNonstandard: "CAP",
+		tier: "CAP",
+	},
+	ramnarokradiant: {
+		isNonstandard: "CAP",
+		tier: "Illegal",
 	},
 	pokestarsmeargle: {
 		isNonstandard: "Custom",

@@ -664,6 +664,7 @@ export const commands: Chat.ChatCommands = {
 					details["Weight"] = `${pokemon.weighthg / 10} kg <em>(${weighthit} BP)</em>`;
 					const gmaxMove = pokemon.canGigantamax || dex.species.get(pokemon.changesFrom).canGigantamax;
 					if (gmaxMove && dex.gen === 8) details["G-Max Move"] = gmaxMove;
+					if (dex.gen === 1) details["Crit Rate"] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
 					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					const evos: string[] = [];
@@ -2862,12 +2863,15 @@ export const commands: Chat.ChatCommands = {
 		const args = Chat.parseArguments(target, ' | ', {
 			allowEmpty: true, useIDs: false,
 		});
+		if (!args.format?.[0]) {
+			return this.popupReply(`No format specified.`);
+		}
 		const format = Dex.formats.get(toID(args.format[0]));
 		if (format.effectType !== 'Format') {
 			return this.popupReply(`The format '${format}' does not exist.`);
 		}
 		delete args.format;
-		const targetUserID = toID(args.user[0]);
+		const targetUserID = toID(args.user?.[0] || '');
 		if (targetUserID) {
 			this.checkChat();
 			if (!Users.get(targetUserID)) {
