@@ -271,6 +271,9 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	};
 	/** * The weather condition required for this evolution */
 	readonly evoWeather?: 'rain' | 'clear';
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 	/** Is NFE? True if this Pokemon can evolve (Mega evolution doesn't count). */
 	readonly nfe: boolean;
