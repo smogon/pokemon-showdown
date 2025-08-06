@@ -10027,7 +10027,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				pokemon: target,
 				moveid: target.lastMove.id,
 				targetLoc: target.lastMoveTargetLoc!,
-			})[0] as MoveAction);
+			})[0] as MoveAction, move);
 		},
 		secondary: null,
 		target: "normal",

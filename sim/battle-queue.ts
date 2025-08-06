@@ -276,7 +276,7 @@ export class BattleQueue {
 		action.order = desprioritize ? 201 : 199;
 
 		for (const [i, curAction] of this.list.entries()) {
-			if(curAction.order >= action.order) {
+			if (curAction.order >= action.order) {
 				this.list.splice(i, 0, action);
 				return;
 			}

@@ -313,7 +313,7 @@ export class BattleActions {
 			this.battle.add('-hint', `Some effects can force a Pokemon to use ${move.name} again in a row.`);
 		}
 
-		// TODO: Refactor to use BattleQueue#prioritizeMove in onAnyAfterMove handlers
+		// TODO: Refactor to use BattleQueue#prioritizeAction in onAnyAfterMove handlers
 		// Dancer's activation order is completely different from any other event, so it's handled separately
 		if (move.flags['dance'] && moveDidSomething && !move.isExternal) {
 			const dancers = [];
