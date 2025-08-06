@@ -80,7 +80,7 @@ export function load(invalidate = false) {
 		}
 	}
 	if (!config.subprocesses) {
-		let deprecatedKeys = [];
+		const deprecatedKeys = [];
 		if ('workers' in config) {
 			deprecatedKeys.push('workers');
 			(config.subprocesses as SubProcessesConfig) ??= {};
