@@ -19,7 +19,7 @@ import type { Battle } from './battle';
 export interface MoveAction {
 	/** action type */
 	choice: 'move' | 'beforeTurnMove' | 'priorityChargeMove';
-	order: 3 | 5 | 200 | 201 | 199 | 106;
+	order: 5 | 105 | 199 | 200 | 201;
 	/** priority of the action (lower first) */
 	priority: number;
 	/** fractional priority of the action (lower first) */
@@ -50,7 +50,7 @@ export interface MoveAction {
 export interface SwitchAction {
 	/** action type */
 	choice: 'switch' | 'instaswitch' | 'revivalblessing';
-	order: 3 | 6 | 103;
+	order: 3 | 6 | 101;
 	/** priority of the action (lower first) */
 	priority: number;
 	/** speed of pokemon switching (higher first if priority tie) */
@@ -127,6 +127,26 @@ export interface ActionChoice {
 export class BattleQueue {
 	battle: Battle;
 	list: Action[];
+	static readonly orders: { [choice: string]: number } = {
+		team: 1,
+		start: 2,
+		instaswitch: 3,
+		beforeTurn: 4,
+		beforeTurnMove: 5,
+		revivalblessing: 6,
+
+		runSwitch: 100,
+		switch: 101,
+		megaEvo: 102, megaEvoX: 102, megaEvoY: 102,
+		runDynamax: 103,
+		terastallize: 104,
+		priorityChargeMove: 105,
+
+		shift: 200,
+		move: 200,
+
+		residual: 300,
+	};
 	constructor(battle: Battle) {
 		this.battle = battle;
 		this.list = [];
@@ -165,35 +185,9 @@ export class BattleQueue {
 		if (!action.side && action.pokemon) action.side = action.pokemon.side;
 		if (!action.move && action.moveid) action.move = this.battle.dex.getActiveMove(action.moveid);
 		if (!action.order) {
-			const orders: { [choice: string]: number } = {
-				team: 1,
-				start: 2,
-				instaswitch: 3,
-				beforeTurn: 4,
-				beforeTurnMove: 5,
-				revivalblessing: 6,
-
-				runSwitch: 101,
-				switch: 103,
-				megaEvo: 104,
-				megaEvoX: 104,
-				megaEvoY: 104,
-				runDynamax: 105,
-				terastallize: 106,
-				priorityChargeMove: 107,
-
-				shift: 200,
-				// default is 200 (for moves)
-
-				residual: 300,
-			};
-			if (action.choice in orders) {
-				action.order = orders[action.choice];
-			} else {
-				action.order = 200;
-				if (!['move', 'event'].includes(action.choice)) {
-					throw new Error(`Unexpected orderless action ${action.choice}`);
-				}
+			action.order = BattleQueue.orders[action.choice];
+			if (!action.order) {
+				throw new Error(`Unexpected orderless action ${action.choice}`);
 			}
 		}
 		if (!midTurn) {
@@ -268,7 +262,7 @@ export class BattleQueue {
 	/**
 	 * Makes the passed action happen next (skipping speed order).
 	 */
-	prioritizeAction(action: MoveAction | SwitchAction, sourceEffect?: Effect) {
+	prioritizeMove(action: MoveAction, sourceEffect?: Effect, desprioritize = false) {
 		for (const [i, curAction] of this.list.entries()) {
 			if (curAction === action) {
 				this.list.splice(i, 1);
@@ -276,8 +270,8 @@ export class BattleQueue {
 			}
 		}
 		action.sourceEffect = sourceEffect;
-		action.order = 3;
-		this.list.unshift(action);
+		action.order = desprioritize ? 201 : 199;
+		this.insertChoice(action);
 	}
 
 	/**
