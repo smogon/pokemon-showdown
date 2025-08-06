@@ -96,6 +96,8 @@ exports.subprocesses = {
 	network: 1,
 	/**
 	 * for simulating battles
+	 *   You should leave this at 1 unless your server has a very large
+	 *   amount of traffic (i.e. hundreds of concurrent battles).
 	 */
 	simulator: 1,
 
