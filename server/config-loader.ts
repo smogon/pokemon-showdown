@@ -69,7 +69,7 @@ export function load(invalidate = false) {
 		}
 	}
 
-	if ('subprocesses' in config) {
+	if (config.subprocesses !== undefined) {
 		// Leniently accept all falsy values, including `null`.
 		if (!config.subprocesses || config.subprocesses === 1) {
 			config.subprocesses = Object.fromEntries(
