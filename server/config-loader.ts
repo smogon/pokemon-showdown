@@ -9,6 +9,8 @@ import * as defaults from '../config/config-example';
 import type { GroupInfo, EffectiveGroupSymbol } from './user-groups';
 import { ProcessManager, FS } from '../lib';
 
+type DefaultConfig = typeof defaults;
+
 type ProcessType = (
 	'localartemis' | 'remoteartemis' | 'battlesearch' | 'datasearch' | 'friends' |
 	'chatdb' | 'pm' | 'modlog' | 'network' | 'simulator' | 'validator' | 'verifier'
@@ -16,7 +18,7 @@ type ProcessType = (
 
 type SubProcessesConfig = Partial<Record<ProcessType, number>>;
 
-export type ConfigType = typeof defaults & {
+export type ConfigType = Omit<DefaultConfig, 'subprocesses'> & {
 	groups: { [symbol: string]: GroupInfo },
 	groupsranking: EffectiveGroupSymbol[],
 	greatergroupscache: { [combo: string]: GroupSymbol },
@@ -69,43 +71,48 @@ export function load(invalidate = false) {
 		}
 	}
 
+	cacheSubProcesses(config);
+	cacheGroupData(config);
+	return config;
+}
+
+function cacheSubProcesses(config: ConfigType) {
 	if (config.subprocesses !== undefined) {
-		// Leniently accept all falsy values, including `null`.
-		config.subprocesses ||= 0;
+		// Leniently accept all other falsy values, including `null`.
+		config.subprocesses ||= 0 as const;
 		if (config.subprocesses === 0 || config.subprocesses === 1) {
-			config.subprocesses = Object.fromEntries(
+			// https://github.com/microsoft/TypeScript/issues/35745
+			config.subprocesses = (Object.fromEntries(
 				processTypes.map(k => [k, config.subprocesses])
-			) as Record<ProcessType, number>;
+			) as Record<ProcessType, number>);
 		} else if (typeof config.subprocesses !== 'object') {
 			reportError(`Invalid \`subprocesses\` specification. Use any of 0, 1, or a plain old object.`);
 		}
 	}
-	{
-		const deprecatedKeys = [];
-		if ('workers' in config) {
-			deprecatedKeys.push('workers');
-			(config.subprocesses as SubProcessesConfig) ??= {};
-			(config.subprocesses as SubProcessesConfig).network = config.workers;
-		}
-		for (const processType of processTypes) {
-			const compatKey = `${processType}processes`;
-			if (compatKey in config) {
-				deprecatedKeys.push(compatKey);
-				(config.subprocesses as SubProcessesConfig) ??= {};
-				(config.subprocesses as SubProcessesConfig)[processType] = config[compatKey];
-			}
-		}
-		for (const compatKey of deprecatedKeys) {
-			reportError(
-				`You are using \`${compatKey}\`, which is deprecated\n` +
-				`Support for this may be removed.\n` +
-				`Please ensure that you update your config.js to use \`subprocesses\` (see config-example.js, line 80).\n`
-			);
+	const deprecatedKeys = [];
+	if ('workers' in config) {
+		deprecatedKeys.push('workers');
+		config.subprocesses ??= {};
+		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+		(config.subprocesses as SubProcessesConfig).network = config.workers;
+	}
+	for (const processType of processTypes) {
+		if (processType === 'network') continue;
+		const compatKey = `${processType}processes`;
+		if (compatKey in config) {
+			deprecatedKeys.push(compatKey);
+			config.subprocesses ??= {};
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
+			(config.subprocesses as SubProcessesConfig)[processType] = config[compatKey];
 		}
 	}
-
-	cacheGroupData(config);
-	return config;
+	for (const compatKey of deprecatedKeys) {
+		reportError(
+			`You are using \`${compatKey}\`, which is deprecated\n` +
+			`Support for this may be removed.\n` +
+			`Please ensure that you update your config.js to use \`subprocesses\` (see config-example.js, line 80).\n`
+		);
+	}
 }
 
 export function cacheGroupData(config: ConfigType) {
