@@ -80,7 +80,7 @@ export function load(invalidate = false) {
 			reportError(`Invalid \`subprocesses\` specification. Use any of 0, 1, or a plain old object.`);
 		}
 	}
-	if (!config.subprocesses) {
+	{
 		const deprecatedKeys = [];
 		if ('workers' in config) {
 			deprecatedKeys.push('workers');
