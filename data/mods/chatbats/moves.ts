@@ -147,7 +147,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "Changes the move's and user's forme to the most effective against the target (Water, Fighting, Fire, or Normal).",
 		beforeMoveCallback(source, target, move) {
 			if (target) {
-				const typeEffectiveness: {[k: string]: number} = {
+				const typeEffectiveness: { [k: string]: number } = {
 					Normal: this.dex.getEffectiveness('Normal', target),
 					Water: this.dex.getEffectiveness('Water', target),
 					Fighting: this.dex.getEffectiveness('Fighting', target),
@@ -713,7 +713,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (target) {
 				this.effectState.surgingStrikesAlreadyUsed = 0;
 				this.add('-anim', source, 'Techno Blast', target);
-				const typeEffectiveness: {[k: string]: number} = {
+				const typeEffectiveness: { [k: string]: number } = {
 					Water: this.dex.getEffectiveness('Water', target),
 					Dark: this.dex.getEffectiveness('Dark', target),
 				};
@@ -768,7 +768,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (target) {
 				this.effectState.wickedBlowAlreadyUsed = 0;
 				this.add('-anim', source, 'Techno Blast', target);
-				const typeEffectiveness: {[k: string]: number} = {
+				const typeEffectiveness: { [k: string]: number } = {
 					Dark: this.dex.getEffectiveness('Dark', target),
 					Water: this.dex.getEffectiveness('Water', target),
 				};
