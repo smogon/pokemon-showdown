@@ -11,6 +11,10 @@ import { ProcessManager, FS } from '../lib';
 
 type DefaultConfig = typeof defaults;
 
+type InputConfig = Omit<DefaultConfig, 'subprocesses'> & {
+	subprocesses: null | 0 | 1 | SubProcessesConfig,
+};
+
 type ProcessType = (
 	'localartemis' | 'remoteartemis' | 'battlesearch' | 'datasearch' | 'friends' |
 	'chatdb' | 'pm' | 'modlog' | 'network' | 'simulator' | 'validator' | 'verifier'
@@ -18,7 +22,7 @@ type ProcessType = (
 
 type SubProcessesConfig = Partial<Record<ProcessType, number>>;
 
-export type ConfigType = DefaultConfig & {
+export type ConfigType = InputConfig & {
 	groups: { [symbol: string]: GroupInfo },
 	groupsranking: EffectiveGroupSymbol[],
 	greatergroupscache: { [combo: string]: GroupSymbol },
