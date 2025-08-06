@@ -154,7 +154,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					Fire: this.dex.getEffectiveness('Fire', target),
 				};
 				let bestType = 'Normal';
-				let type: typeof keyof typeEffectiveness;
+				let type: keyof typeof typeEffectiveness;
 				let maxEffectiveness = -Infinity;
 				// gets most effective type against target (defaults to normal)
 				for (type in typeEffectiveness) {
@@ -717,7 +717,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					Water: this.dex.getEffectiveness('Water', target),
 					Dark: this.dex.getEffectiveness('Dark', target),
 				};
-				let type: typeof keyof typeEffectiveness;
+				let type: keyof typeof typeEffectiveness;
 				let bestType = 'Water';
 				let maxEffectiveness = -Infinity;
 				// gets most effective type against target (defaults to the current type)
@@ -772,7 +772,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					Dark: this.dex.getEffectiveness('Dark', target),
 					Water: this.dex.getEffectiveness('Water', target),
 				};
-				let type: typeof keyof typeEffectiveness;
+				let type: keyof typeof typeEffectiveness;
 				let bestType = 'Dark';
 				let maxEffectiveness = -Infinity;
 				// gets most effective type against target (defaults to the current type)
