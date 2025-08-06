@@ -1,4 +1,3 @@
-import { PRNG, PRNGSeed } from "../../../sim/prng";
 import { RandomTeams, type MoveCounter } from "../gen9/teams";
 
 // Moves that restore HP:
