@@ -2132,6 +2132,8 @@ export class Battle {
 					this.heal(amount, source, target, 'drain');
 				}
 			}
+			// for moves, it needs to run after the 'AfterHit' event
+			if (effect.effectType !== 'Move') this.runEvent('AfterDamage', target, source, effect, targetDamage);
 		}
 
 		if (instafaint) {
@@ -2224,6 +2226,7 @@ export class Battle {
 			this.add('-damage', target, target.getHealth);
 			break;
 		}
+		this.runEvent('AfterDamage', target, source, effect, damage);
 		if (target.fainted) this.faint(target);
 		return damage;
 	}
