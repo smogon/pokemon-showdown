@@ -293,8 +293,8 @@ export class RandomChatBatsTeams extends RandomTeams {
 		}
 		// enforces a sound move on Mesprit with Throat Spray
 		if (species.id === 'mesprit' && movePool.includes('psychicnoise')) {
-			counter = this.addMove(this.randomChance(1, 2) ? 'psychicnoise' : 'torchsong', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
+			counter = this.addMove(this.randomChance(1, 2) ? 'psychicnoise' : 'torchsong', moves,
+				types, abilities, teamDetails, species, isLead, isDoubles, movePool, teraType, role);
 		}
 		// enforces both primary stabs on Infernape
 		if (species.id === 'infernape' && movePool.includes('mindblown')) {
