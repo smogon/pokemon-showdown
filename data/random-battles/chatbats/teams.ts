@@ -457,7 +457,8 @@ export class RandomChatBatsTeams extends RandomTeams {
 
 		// Enforce Tera STAB
 		// prevents Meowscarada from being enforced stab moves (since it has Protean and doesn't care)
-		if (!counter.get('stabtera') && !['Bulky Support', 'Doubles Support'].includes(role) && !abilities.includes('Protean')) {
+		if (!counter.get('stabtera') && !['Bulky Support', 'Doubles Support'].includes(role) &&
+			!abilities.includes('Protean')) {
 			const stabMoves = [];
 			for (const moveid of movePool) {
 				const move = this.dex.moves.get(moveid);
