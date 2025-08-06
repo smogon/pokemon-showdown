@@ -1,32 +1,25 @@
-# A PokeBedrock Fork of Pokémon Showdown
+Pokémon Showdown
+========================================================================
 
-This library has been gutted, and changed a bit. The main things that are changed have to do with usability
-with Minecraft Bedrocks Script API. For example use of `set` as a property name does not work in ESM format, breaking
-most of Pokemon Showdown. Because of this all reference to `Pokemon.set` has been changed to `Pokemon.pokemonSet`.
+Navigation: [Website][1] | **Server repository** | [Client repository][2] | [Dex repository][3]
 
-## Current Changes:
+  [1]: http://pokemonshowdown.com/
+  [2]: https://github.com/smogon/pokemon-showdown-client
+  [3]: https://github.com/Zarel/Pokemon-Showdown-Dex
 
-### Core System Changes:
-- **Reworked Config**: Modified to not use reading/writing to files as script api doesn't support that.
-- **Better Type Safety**: Added more specific type definitions throughout the codebase.
-- **ESM Compatibility**: Fixed compatibility issues with Minecraft Bedrock's Script API.
+[![Build Status](https://github.com/smogon/pokemon-showdown/workflows/Node.js%20CI/badge.svg)](https://github.com/smogon/pokemon-showdown/actions?query=workflow%3A%22Node.js+CI%22)
+[![Dependency Status](https://img.shields.io/librariesio/github/smogon/pokemon-showdown)](https://libraries.io/github/smogon/pokemon-showdown)
 
-### Pokemon Data & Features:
-- **UUID System**: Added a whole UUID system which allows pokemon to be searched easily by interpreter.
-- **Cosmetic Forms**: Added extensive cosmetic forme support for many Pokemon including:
-  - Pikachu variants (Witch, Captain, Santa, Detective, Doll)
-  - Halloween forms (Sandshrew, Sandslash, Gastly, Haunter, Gengar, Celebi, Darkrai, Trubbish, Garbodor, Golett, Golurk, Gible, Gabite, Garchomp, Zoroark)
-  - Christmas forms (Mew, Gardevoir, Gallade, Comfey, Snorlax)
-  - Seasonal forms (Torterra-StPatrick, Spheal-Watermelon)
-  - Independence forms (Cubone, Dugtrio, Houndoom, Wailord)
-  - Spinda pattern variants
-  - Vivillon Valentine pattern
 
+<<<<<<< Updated upstream
+Introduction
+------------------------------------------------------------------------
+=======
 ### Evolution System Enhancements:
 - **Enhanced Evolution Properties**: Added better properties to describe evolutions in pokedex:
   - `evoTime`: Specifies time of day for evolution (day/night/evening)
   - `evoGender`: Required gender for evolution
-  - `evoPartySpecies`: Required species in party for evolution
+  - `partySpecies`: Required species in party for evolution (supports single or multiple species)
   - `evoTradeSpecies`: Required trade partner species
   - `evoPartyType`: Required type in party for evolution
   - `evoKnownMoveType`: Required move type for evolution
@@ -36,33 +29,93 @@ most of Pokemon Showdown. Because of this all reference to `Pokemon.set` has bee
   - `evoBiomes`: Required biomes for evolution
   - `evoPriority`: Evolution priority system
   - `evoType`: Enhanced evolution type system
+  - `evoNickName`: Required nickname 
+  - `minDamage`: The minimum amount of damage required for this evolution(in a battle, wihtout fainting)
+  - `partySlotRequirement`: Slot-specific party requirements for evolution
+  - `evoWeather`: Required weather condition for evolution (rain/thunder/clear)
   - `changeEvent`: Event that triggers forme changes
+>>>>>>> Stashed changes
 
-### Battle System:
-- **Bag Item System**: Added comprehensive bag items with actions for:
-  - Healing items (Potion, Super Potion, Hyper Potion, Max Potion, Full Restore)
-  - Revival items (Revive, Max Revive)
-  - Status cure items (Pecha Berry, Cheri Berry, etc.)
-  - PP restoration (Leppa Berry with move-specific targeting)
-  - Stat-boosting berries (Sitrus Berry, Oran Berry, etc.)
-- **Revive System**: Added `revive()` function for Pokemon to handle revival mechanics.
-- **Enhanced Heal Messages**: Added `DETAILS` to `-heal` instruction so we can read the pokemon being healed.
-- **Critical Hit Enhancement**: Added source parameter to `-crit` messages for better tracking.
+Pokémon Showdown is many things:
 
-### Protocol & Communication:
-- **New Instructions**: Added simulator protocol instructions:
-  - `bag-item`: For using bag items on Pokemon
-  - `used-ball`: For tracking ball usage
-  - `forceforme`: For forcing Pokemon forme changes/evolutions
-- **Enhanced Details**: Send `detailschange` after mega evolution so it will look good.
-- **Kill Tracking**: Added `-killed` instruction to send messages when a pokemon is killed.
+- A **web site** you can use for Pokémon battling
 
-### Move & Battle Mechanics:
-- **PP System**: Enhanced PP tracking with current/max PP support from movesInfo.
-- **Move Targeting**: Better type safety for move targets.
-- **Status Effects**: Enhanced status effect handling for bag items and berries.
+  - http://pokemonshowdown.com/
 
-### Technical Improvements:
-- **Type Definitions**: Improved TypeScript definitions throughout the codebase.
-- **Const Assertions**: Added `as const` to data tables for better type inference.
-- **Error Handling**: Enhanced error handling for bag items and forme changes.
+- A **JavaScript library** for simulating Pokémon battles and getting Pokédex data
+
+  - [sim/README.md](./sim/README.md)
+
+- Some **command-line tools** for simulating Pokémon battles (which can be used in non-JavaScript programs)
+
+  - [COMMANDLINE.md](./COMMANDLINE.md)
+
+- A **web API** for the web site for Pokémon battling
+
+  - [pokemon-showdown-client: WEB-API.md](https://github.com/smogon/pokemon-showdown-client/blob/master/WEB-API.md)
+
+- A **game server** for hosting your own Pokémon Showdown community and game modes
+
+  - [server/README.md](./server/README.md)
+
+Pokémon Showdown simulates singles, doubles and triples battles in all the games out so far (Generations 1 through 9).
+
+
+Documentation quick links
+------------------------------------------------------------------------
+
+* [PROTOCOL.md][4] - How the client and server communicate with each other.
+* [sim/SIM-PROTOCOL.md][5] - The part of the protocol used for battles and battle messages.
+* [CONTRIBUTING.md][6] - Useful code standards to understand if you want to send pull requests to PS (not necessary if you're just using the code and not planning to contribute back).
+* [ARCHITECTURE.md][7] - A high-level overview of how the code works.
+* [Bot FAQ][8] - An FAQ compiled by Kaiepi regarding making Pokemon Showdown bots - mainly chatbots and battle bots.
+
+  [4]: ./PROTOCOL.md
+  [5]: ./sim/SIM-PROTOCOL.md
+  [6]: ./CONTRIBUTING.md
+  [7]: ./ARCHITECTURE.md
+  [8]: https://gist.github.com/Kaiepi/becc5d0ecd576f5e7733b57b4e3fa97e
+
+
+Community
+------------------------------------------------------------------------
+
+PS has a built-in chat service. Join our main server to talk to us!
+
+You can also visit the [Pokémon Showdown forums][9] for discussion and help.
+
+  [9]: https://www.smogon.com/forums/forums/pok%C3%A9mon-showdown.209/
+
+If you'd like to contribute to programming and don't know where to start, feel free to check out [Ideas for New Developers][10].
+
+  [10]: https://github.com/smogon/pokemon-showdown/issues/2444
+
+
+License
+------------------------------------------------------------------------
+
+Pokémon Showdown's server is distributed under the terms of the [MIT License][11].
+
+  [11]: ./LICENSE
+
+
+Credits
+------------------------------------------------------------------------
+
+Owner
+
+- Guangcong Luo [Zarel] - Development, Design, Sysadmin
+
+Staff
+
+- Andrew Werner [HoeenHero] - Development
+- Annika L. [Annika] - Development
+- Chris Monsanto [chaos] - Development, Sysadmin
+- Kris Johnson [dhelmise] - Development
+- Leonard Craft III [DaWoblefet] - Research (game mechanics)
+- Mathieu Dias-Martins [Marty-D] - Research (game mechanics), Development
+- Mia A [Mia] - Development
+
+Contributors
+
+- See http://pokemonshowdown.com/credits
