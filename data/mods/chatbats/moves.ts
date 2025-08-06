@@ -147,15 +147,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "Changes the move's and user's forme to the most effective against the target (Water, Fighting, Fire, or Normal).",
 		beforeMoveCallback(source, target, move) {
 			if (target) {
-				const typeEffectiveness = {
+				const typeEffectiveness: {[k: string]: number} = {
 					Normal: this.dex.getEffectiveness('Normal', target),
 					Water: this.dex.getEffectiveness('Water', target),
 					Fighting: this.dex.getEffectiveness('Fighting', target),
 					Fire: this.dex.getEffectiveness('Fire', target),
 				};
 				let bestType = 'Normal';
-				type ValidTypes = 'Normal' | 'Water' | 'Fighting' | 'Fire';
-				let type: ValidTypes;
+				let type: typeof keyof typeEffectiveness;
 				let maxEffectiveness = -Infinity;
 				// gets most effective type against target (defaults to normal)
 				for (type in typeEffectiveness) {
@@ -412,7 +411,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		onHit(target, source, move) {
 			// random # 0 or 1
-			const randomNum = Math.round(Math.random());
+			const randomNum = this.random(2);
 			// 50% chance to drop def
 			if (randomNum === 0) {
 				if (target.boosts.def !== -6) {
@@ -709,23 +708,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "On KO: +1 Atk. Otherwise -1 Atk.",
 	},
 	wickedblow: {
-		num: 817,
-		accuracy: 100,
-		basePower: 75,
-		category: "Physical",
-		name: "Wicked Blow",
-		pp: 5,
-		priority: 0,
+		inherit: true,
 		beforeMoveCallback(source, target, move) {
 			if (target) {
 				this.effectState.surgingStrikesAlreadyUsed = 0;
 				this.add('-anim', source, 'Techno Blast', target);
-				const typeEffectiveness = {
+				const typeEffectiveness: {[k: string]: number} = {
 					Water: this.dex.getEffectiveness('Water', target),
 					Dark: this.dex.getEffectiveness('Dark', target),
 				};
-				type ValidTypes = 'Water' | 'Dark';
-				let type: ValidTypes;
+				let type: typeof keyof typeEffectiveness;
 				let bestType = 'Water';
 				let maxEffectiveness = -Infinity;
 				// gets most effective type against target (defaults to the current type)
@@ -745,19 +737,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					const newMove = 'surgingstrikes';
 					const oldMoveId = this.toID(oldMove);
 					const newMoveData = this.dex.moves.get(newMove);
-					for (const slot of source.moveSlots) {
-						if (slot.id === oldMoveId) {
-							slot.move = newMoveData.name;
-							slot.id = newMoveData.id;
-							slot.pp = newMoveData.pp;
-							slot.maxpp = newMoveData.pp;
-							slot.target = newMoveData.target;
-							slot.disabled = false;
-							slot.used = false;
-							break;
-						}
+					const oldMoveIdx = source.moveSlots.findIndex(x => x.id === oldMoveId);
+					if (oldMoveIdx >= 0) {
+						source.moveSlots[oldMoveIdx] = source.baseMoveSlots[oldMoveIdx] = {
+							move: newMoveData.name,
+							id: newMoveData.id,
+							pp: newMoveData.pp,
+							maxpp: newMoveData.pp,
+							target: newMoveData.target,
+							disabled: false,
+							used: false,
+						};
 					}
-					(source as any).baseMoveSlots = source.moveSlots.slice();
 					this.actions.useMove('surgingstrikes', source, { target });
 					this.effectState.surgingStrikesAlreadyUsed = 1;
 				}
@@ -768,32 +759,20 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return null;
 			}
 		},
-		flags: { contact: 1, protect: 1, mirror: 1, punch: 1 },
-		willCrit: true,
-		secondary: null,
-		target: "normal",
-		type: "Dark",
 		desc: "This move will transform into Rapid Strike Urshifu/Surging Strikes if it would be less effective against the target.",
 		shortDesc: "Becomes Surging Strikes if it would be less effective.",
 	},
 	surgingstrikes: {
-		num: 818,
-		accuracy: 100,
-		basePower: 25,
-		category: "Physical",
-		name: "Surging Strikes",
-		pp: 5,
-		priority: 0,
+		inherit: true,
 		beforeMoveCallback(source, target, move) {
 			if (target) {
 				this.effectState.wickedBlowAlreadyUsed = 0;
 				this.add('-anim', source, 'Techno Blast', target);
-				const typeEffectiveness = {
+				const typeEffectiveness: {[k: string]: number} = {
 					Dark: this.dex.getEffectiveness('Dark', target),
 					Water: this.dex.getEffectiveness('Water', target),
 				};
-				type ValidTypes = 'Water' | 'Dark';
-				let type: ValidTypes;
+				let type: typeof keyof typeEffectiveness;
 				let bestType = 'Dark';
 				let maxEffectiveness = -Infinity;
 				// gets most effective type against target (defaults to the current type)
@@ -809,23 +788,21 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					source.formeChange('Urshifu', null, true);
 					source.setAbility('Sniper');
 					this.add('-ability', source, 'Sniper');
-					const oldMove = 'surgingstrikes';
 					const newMove = 'wickedblow';
-					const oldMoveId = this.toID(oldMove);
+					const oldMoveId: ID = 'surgingstrikes' as ID;
 					const newMoveData = this.dex.moves.get(newMove);
-					for (const slot of source.moveSlots) {
-						if (slot.id === oldMoveId) {
-							slot.move = newMoveData.name;
-							slot.id = newMoveData.id;
-							slot.pp = newMoveData.pp;
-							slot.maxpp = newMoveData.pp;
-							slot.target = newMoveData.target;
-							slot.disabled = false;
-							slot.used = false;
-							break;
-						}
+					const oldMoveIdx = source.moveSlots.findIndex(x => x.id === oldMoveId);
+					if (oldMoveIdx >= 0) {
+						source.moveSlots[oldMoveIdx] = source.baseMoveSlots[oldMoveIdx] = {
+							move: newMoveData.name,
+							id: newMoveData.id,
+							pp: newMoveData.pp,
+							maxpp: newMoveData.pp,
+							target: newMoveData.target,
+							disabled: false,
+							used: false,
+						};
 					}
-					(source as any).baseMoveSlots = source.moveSlots.slice();
 					this.actions.useMove('wickedblow', source, { target });
 					this.effectState.wickedBlowAlreadyUsed = 1;
 				}
@@ -836,14 +813,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return null;
 			}
 		},
-		flags: { contact: 1, protect: 1, mirror: 1, punch: 1 },
-		willCrit: true,
-		multihit: 3,
-		secondary: null,
-		target: "normal",
-		type: "Water",
-		zMove: { basePower: 140 },
-		maxMove: { basePower: 130 },
 		desc: "This move will transform into Single Strike Urshifu/Wicked Blow if it would be less effective against the target.",
 		shortDesc: "Becomes Wicked Blow if it would be less effective.",
 	},
