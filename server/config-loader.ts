@@ -74,7 +74,7 @@ export function load(invalidate = false) {
 		if (!config.subprocesses || config.subprocesses === 1) {
 			config.subprocesses = Object.fromEntries(
 				processTypes.map(k => [k, ~~Boolean(config.subprocesses)])
-			) as SubProcessesConfig;
+			) as Record<ProcessType, number>;
 		} else if (typeof config.subprocesses !== 'object') {
 			reportError(`Invalid \`subprocesses\` specification. Use any of 0, 1, or a plain old object.`);
 		}
