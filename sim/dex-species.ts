@@ -1,10 +1,12 @@
 import { assignMissingFields, BasicEffect, toID } from './dex-data';
 import { Utils } from '../lib/utils';
 import { isDeepStrictEqual } from 'node:util';
-import { MoonPhase } from '@minecraft/server';
+import type { MoonPhase } from '@minecraft/server';
 
 interface SpeciesAbility {
-	0: string;
+	0: st	readonly evoMoonPhase?: keyof typeof MoonPhase;
+	/** Nickname given to the Pokemon when it evolves. */
+	readonly evoNickName?: string;g;
 	1?: string;
 	H?: string;
 	S?: string;
@@ -246,13 +248,13 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	*/
 	readonly evoMoonPhase?: keyof typeof MoonPhase;
 	/** Nickname given to the Pokemon when it evolves. */
-	readonly evoNickName?: string; 
+	readonly evoNickName?: string;
 	/** The minimum amount of damage required for this evolution(in a battle, wihtout fainting) */
 	readonly minDamage?: number;
 	/** * Slot-specific party requirements for evolution */
 	readonly partySlotRequirement?: {
-		slot: number; // Range 1-6
-		species: string;
+		slot: number, // Range 1-6
+		species: string,
 	};
 	/** * The weather condition required for this evolution */
 	readonly evoWeather?: 'rain' | 'clear';
