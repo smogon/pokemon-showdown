@@ -67,6 +67,7 @@ export interface SwitchAction {
 export interface TeamAction {
 	/** action type */
 	choice: 'team';
+	order: 1;
 	/** priority of the action (lower first) */
 	priority: number;
 	/** unused for this action type */
@@ -81,6 +82,7 @@ export interface TeamAction {
 export interface FieldAction {
 	/** action type */
 	choice: 'start' | 'residual' | 'pass' | 'beforeTurn';
+	order: 2 | 4 | 300;
 	/** priority of the action (lower first) */
 	priority: number;
 	/** unused for this action type */
@@ -93,6 +95,7 @@ export interface FieldAction {
 export interface PokemonAction {
 	/** action type */
 	choice: 'megaEvo' | 'megaEvoX' | 'megaEvoY' | 'shift' | 'runSwitch' | 'event' | 'runDynamax' | 'terastallize';
+	order: 100 | 102 | 103 | 104 | 200 | number;
 	/** priority of the action (lower first) */
 	priority: number;
 	/** speed of pokemon doing action (higher first if priority tie) */
@@ -262,7 +265,7 @@ export class BattleQueue {
 	/**
 	 * Makes the passed action happen next (skipping speed order).
 	 */
-	prioritizeMove(action: MoveAction, sourceEffect?: Effect, desprioritize = false) {
+	prioritizeAction(action: MoveAction, sourceEffect?: Effect, desprioritize = false) {
 		for (const [i, curAction] of this.list.entries()) {
 			if (curAction === action) {
 				this.list.splice(i, 1);
@@ -271,7 +274,14 @@ export class BattleQueue {
 		}
 		action.sourceEffect = sourceEffect;
 		action.order = desprioritize ? 201 : 199;
-		this.insertChoice(action);
+
+		for (const [i, curAction] of this.list.entries()) {
+			if(curAction.order >= action.order) {
+				this.list.splice(i, 0, action);
+				return;
+			}
+		}
+		this.list.push(action);
 	}
 
 	/**

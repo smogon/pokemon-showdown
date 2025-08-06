@@ -214,7 +214,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (this.activePerHalf === 1) return false; // fails in singles
 			const action = this.queue.willMove(target);
 			if (action) {
-				this.queue.prioritizeMove(action);
+				this.queue.prioritizeAction(action);
 				this.add('-activate', target, 'move: After You');
 			} else {
 				return false;
@@ -5606,7 +5606,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					continue;
 				}
 				if (action.pokemon.isAlly(source) && ['grasspledge', 'waterpledge'].includes(action.move.id)) {
-					this.queue.prioritizeMove(action, move);
+					this.queue.prioritizeAction(action, move);
 					this.add('-waiting', source, action.pokemon);
 					return null;
 				}
@@ -7884,7 +7884,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					continue;
 				}
 				if (action.pokemon.isAlly(source) && ['waterpledge', 'firepledge'].includes(action.move.id)) {
-					this.queue.prioritizeMove(action, move);
+					this.queue.prioritizeAction(action, move);
 					this.add('-waiting', source, action.pokemon);
 					return null;
 				}
@@ -10022,12 +10022,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return false;
 			}
 			this.add('-singleturn', target, 'move: Instruct', `[of] ${source}`);
-			this.queue.prioritizeMove({
+			this.queue.prioritizeAction(this.queue.resolveAction({
 				choice: 'move',
 				pokemon: target,
 				moveid: target.lastMove.id,
 				targetLoc: target.lastMoveTargetLoc!,
-			} as MoveAction);
+			})[0] as MoveAction);
 		},
 		secondary: null,
 		target: "normal",
@@ -14990,7 +14990,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			const action = this.queue.willMove(target);
 			if (!action) return false;
 
-			this.queue.prioritizeMove(action, undefined, true);
+			this.queue.prioritizeAction(action, undefined, true);
 			this.add('-activate', target, 'move: Quash');
 		},
 		secondary: null,
@@ -16088,7 +16088,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			for (const action of this.queue.list as MoveAction[]) {
 				if (!action.pokemon || !action.move || action.maxMove || action.zmove) continue;
 				if (action.move.id === 'round') {
-					this.queue.prioritizeMove(action, move);
+					this.queue.prioritizeAction(action, move);
 					return;
 				}
 			}
@@ -16903,7 +16903,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.effectState.gotHit = true;
 					const action = this.queue.willMove(pokemon);
 					if (action) {
-						this.queue.prioritizeMove(action);
+						this.queue.prioritizeAction(action);
 					}
 				}
 			},
@@ -21338,7 +21338,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					continue;
 				}
 				if (otherMoveUser.isAlly(source) && ['firepledge', 'grasspledge'].includes(otherMove.id)) {
-					this.queue.prioritizeMove(action, move);
+					this.queue.prioritizeAction(action, move);
 					this.add('-waiting', source, otherMoveUser);
 					return null;
 				}
