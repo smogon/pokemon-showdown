@@ -4,9 +4,7 @@ import { isDeepStrictEqual } from 'node:util';
 import type { MoonPhase } from '@minecraft/server';
 
 interface SpeciesAbility {
-	0: st	readonly evoMoonPhase?: keyof typeof MoonPhase;
-	/** Nickname given to the Pokemon when it evolves. */
-	readonly evoNickName?: string;g;
+	0: string;
 	1?: string;
 	H?: string;
 	S?: string;
