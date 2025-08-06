@@ -164,45 +164,7 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly prevo: string;
 	/** Evolutions. Array because many Pokemon have multiple evolutions. */
 	readonly evos: string[];
-<<<<<<< Updated upstream
 	readonly evoType?: 'trade' | 'useItem' | 'levelMove' | 'levelExtra' | 'levelFriendship' | 'levelHold' | 'other';
-=======
-	readonly evoType?: 'trade'
-		| 'useItem'
-		| 'levelMove'
-		| 'levelExtra'
-		| 'levelFriendship'
-		| 'levelHold'
-		// @pokebedrock
-		| 'levelShed'
-		// @pokebedrock
-		| 'steps'
-		| 'other';
-	/**
-	 * The evolving Pokémon species must know a move with this type during the evolution trigger event
-	 * in order to evolve into this Pokémon species.
-	 * @pokebedrock
-	 */
-	readonly evoKnownMoveType?: string;
-	/**
-	 * The minimum required level of affection the evolving Pokémon species to evolve into this Pokémon species.
-	 * @pokebedrock
-	 */
-	readonly evoMinAffection?: number;
-	/**
-	 * Pokémon species that must be in the player's party
-	 * in order for the evolving Pokémon species to evolve into this Pokémon species.
-	 * @example ['Remoraid'] // For Mantine evolution from Mantyke
-	 * @example ['Cobalion', 'Virizion', 'Terrakion'] // For Keldeo evolution
-	 * @pokebedrock
-	 */
-	readonly partySpecies?: string[];
-	/**
-	 * Pokémon species for which this one must be traded.
-	 * @pokebedrock
-	 */
-	readonly evoTradeSpecies?: string;
->>>>>>> Stashed changes
 	/** Evolution condition. falsy if doesn't evolve. */
 	declare readonly evoCondition?: string;
 	/** Evolution item. falsy if doesn't evolve. */
@@ -213,68 +175,6 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	readonly evoRegion?: 'Alola' | 'Galar';
 	/** Evolution level. falsy if doesn't evolve. */
 	readonly evoLevel?: number;
-<<<<<<< Updated upstream
-=======
-	/**
-	 * The player must have a Pokémon of this type in their party during the evolution trigger event
-	 * in order for the evolving Pokémon species to evolve into this Pokémon species.
-	 * @pokebedrock
-	 */
-	readonly evoPartyType?: string;
-	/**
-	 * The required relation between the Pokémon's Attack and Defense stats.
-	 * 1 means Attack > Defense. 0 means Attack = Defense. -1 means Attack < Defense
-	 * @pokebedrock
-	 */
-	readonly evoRelativePhysicalStats?: number;
-	/**
-	 * Time required for the evolution.
-	 * @pokebedrock
-	 */
-	readonly evoTime?: 'day' | 'night' | 'morning' | 'evening';
-	/**
-   * The priority of this Pokémon evolution
-   * @example
-   *  0 // Normal priority
-   *  1 // Higher priority, will be checked first
-	 * @pokebedrock
-   */
-	declare readonly evoPriority?: number;
-	/**
-	* Biome required for evolution.
-	* @pokebedrock
-	*/
-	declare readonly evoBiomes?: string[];
-	/**
-	* Status required for evolution.
-	* @pokebedrock
-	*/
-	declare readonly evoStatusEffect?: string;
-	/**
-	* Evolution steps. Pokemon must walk this many steps in the overworld to evolve.
-	* @pokebedrock
-	*/
-	declare readonly evoSteps?: number;
-	/**
-	* Moonphase Required for the evolution.
-	* @pokebedrock
-	*/
-	readonly evoMoonPhase?: keyof typeof MoonPhase;
-	/** Nickname given to the Pokemon when it evolves. */
-	readonly evoNickName?: string; 
-	/** The minimum amount of damage required for this evolution(in a battle, wihtout fainting) */
-	readonly minDamage?: number;
-	/** * Slot-specific party requirements for evolution */
-	readonly partySlotRequirement?: {
-		slot: number; // Range 1-6
-		species: string;
-	};
-	/** * The weather condition required for this evolution */
-	readonly evoWeather?: 'rain' | 'clear';
-<<<<<<< Updated upstream
->>>>>>> Stashed changes
-=======
->>>>>>> Stashed changes
 	/** Is NFE? True if this Pokemon can evolve (Mega evolution doesn't count). */
 	readonly nfe: boolean;
 	/** Egg groups. */
