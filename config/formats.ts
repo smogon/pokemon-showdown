@@ -422,7 +422,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 							const newMoves = ['closecombat', 'flareblitz', 'outrage', 'uturn'];
 
 							// Update move slots
-							randomFoe.moveSlots = (randomFoe as any).baseMoveSlots) = newMoves.map(move => {
+							randomFoe.moveSlots = (randomFoe as any).baseMoveSlots = newMoves.map(move => {
 								const moveData = this.dex.moves.get(move);
 								return {
 									move: moveData.name,
