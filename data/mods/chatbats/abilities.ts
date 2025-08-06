@@ -505,13 +505,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	berserk: {
 		onUpdate(pokemon) {
-			if (!(pokemon as any).berserk) {
-				(pokemon as any).berserk = false;
-			}
-			if (pokemon.species.id !== 'infernape' || !pokemon.hp) return;
-			if (pokemon.hp < pokemon.maxhp / 2 && (pokemon as any).berserk === false) {
+			if (pokemon.species.id !== 'infernape' || !pokemon.hp || pokemon.m.triggeredBerserk) return;
+			if (pokemon.hp < pokemon.maxhp / 2) {
 				this.boost({ spa: 1 }, pokemon, pokemon);
-				(pokemon as any).berserk = true;
+				pokemon.m.triggeredBerserk = true;
 			}
 		},
 		flags: {},
@@ -532,7 +529,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		// ends move lock properly
 		onAfterMove(pokemon) {
-			if (pokemon.volatiles['bloodsoakedcrescent'] && pokemon.volatiles['bloodsoakedcrescent'].duration === 1) {
+			if (pokemon.volatiles['bloodsoakedcrescent']?.duration === 1) {
 				pokemon.removeVolatile('bloodsoakedcrescent');
 				this.add('-end', pokemon, 'Blood-Soaked Rage');
 			}
@@ -602,53 +599,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	biogenesis: {
 		onSwitchInPriority: -1,
 		onBeforeSwitchIn(pokemon) {
-			if ((pokemon as any).didRandomMoves === "yes") return;
+			if (pokemon.m.didRandomMoves) return;
 			const moves = this.dex.moves.all();
-			let randomMove1 = '';
-			if (moves.length) {
-				randomMove1 = this.sample(moves).id;
+			const newMoves = [];
+			while (newMoves.length < 8) {
+				const newMove = this.sample(moves);
+				if (newMoves.map(x => x.id).includes(newMove.id)) continue;
+				newMoves.push(newMove);
 			}
-			if (!randomMove1) return false;
-			let randomMove2 = '';
-			if (moves.length) {
-				randomMove2 = this.sample(moves).id;
-			}
-			if (!randomMove2) return false;
-			let randomMove3 = '';
-			if (moves.length) {
-				randomMove3 = this.sample(moves).id;
-			}
-			if (!randomMove3) return false;
-			let randomMove4 = '';
-			if (moves.length) {
-				randomMove4 = this.sample(moves).id;
-			}
-			if (!randomMove4) return false;
-			let randomMove5 = '';
-			if (moves.length) {
-				randomMove5 = this.sample(moves).id;
-			}
-			if (!randomMove5) return false;
-			let randomMove6 = '';
-			if (moves.length) {
-				randomMove6 = this.sample(moves).id;
-			}
-			if (!randomMove6) return false;
-			let randomMove7 = '';
-			if (moves.length) {
-				randomMove7 = this.sample(moves).id;
-			}
-			if (!randomMove7) return false;
-			let randomMove8 = '';
-			if (moves.length) {
-				randomMove8 = this.sample(moves).id;
-			}
-			if (!randomMove8) return false;
-			// Define new moves
-			const newMoves = [
-				randomMove1, randomMove2, randomMove3, randomMove4,
-				randomMove5, randomMove6, randomMove7, randomMove8,
-			];
 			// Update move slots
 			pokemon.moveSlots = newMoves.map(move => {
 				const moveData = this.dex.moves.get(move);
@@ -664,18 +622,18 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			});
 			// this forces the UI to update move slots visually
 			(pokemon as any).baseMoveSlots = pokemon.moveSlots.slice();
-			(pokemon as any).didRandomMoves = "yes";
+			pokemon.m.didRandomMoves = true;
 		},
 		onSwitchIn(pokemon) {
-			if ((pokemon as any).hasTypeChanged !== "yes") {
+			if (!pokemon) return; // Chat command
+			if (!pokemon.m.hasTypeChanged) {
 				this.add('-ability', pokemon, 'Biogenesis');
 				this.add('-anim', pokemon, 'Growth', pokemon);
 				this.add('-message', `Mew evolves into a new form with its Biogenesis!`);
 			}
-			if (!pokemon) return; // Chat command
 			const attackingMoves = pokemon.baseMoveSlots
 				.map(slot => this.dex.moves.get(slot.id))
-				.filter(move => move.category === 'Physical' || move.category === 'Special');
+				.filter(move => move.category !== "Status");
 
 			// pick types of first 2 attacking moves (failsafe if there are none)
 			const types = attackingMoves.length ?
@@ -683,7 +641,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				pokemon.types;
 			pokemon.setType(types);
 			pokemon.baseTypes = pokemon.types;
-			(pokemon as any).hasTypeChanged = "yes";
+			pokemon.m.hasTypeChanged = true;
 			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1,
