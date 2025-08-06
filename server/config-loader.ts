@@ -20,7 +20,7 @@ export type ConfigType = typeof defaults & {
 	groups: { [symbol: string]: GroupInfo },
 	groupsranking: EffectiveGroupSymbol[],
 	greatergroupscache: { [combo: string]: GroupSymbol },
-	subprocesses: false | SubProcessesConfig,
+	subprocesses: 0 | 1 | SubProcessesConfig,
 	[k: string]: any,
 };
 /** Map<process flag, config settings for it to turn on> */
@@ -69,28 +69,34 @@ export function load(invalidate = false) {
 		}
 	}
 
-	if (('subprocesses' in config) && !config.subprocesses) {
-		config.subprocesses = Object.fromEntries(processTypes.map(k => [k, 0])) as Record<ProcessType, number>;
+	if ('subprocesses' in config) {
+		// Leniently accept all falsy values, including `null`.
+		if (!config.subprocesses || config.subprocesses === 1) {
+			config.subprocesses = Object.fromEntries(processTypes.map(k => [k, ~~Boolean(config.subprocesses)])) as SubProcessesConfig;
+		} else if (typeof config.subprocesses !== 'object') {
+			reportError(`Invalid \`subprocesses\` specification. Use any of 0, 1, or a plain old object.`);
+		}
 	}
 	if (!config.subprocesses) {
-		let anyDeprecated = false;
+		let deprecatedKeys = [];
 		if ('workers' in config) {
-			anyDeprecated = true;
+			deprecatedKeys.push('workers');
 			(config.subprocesses as SubProcessesConfig) ??= {};
 			(config.subprocesses as SubProcessesConfig).network = config.workers;
 		}
 		for (const processType of processTypes) {
-			if ((`${processType}processes` in config)) {
-				anyDeprecated = true;
+			const compatKey = `${processType}processes`;
+			if (compatKey in config) {
+				deprecatedKeys.push(compatKey);;
 				(config.subprocesses as SubProcessesConfig) ??= {};
-				(config.subprocesses as SubProcessesConfig)[processType] = config[`${processType}processes`];
+				(config.subprocesses as SubProcessesConfig)[processType] = config[compatKey];
 			}
 		}
-		if (anyDeprecated) {
+		for (const compatKey of deprecatedKeys) {
 			reportError(
-				`You are using a deprecated version of subprocesses specification in config.\n` +
-				`Support for this will be removed soon.\n` +
-				`Please ensure that you update your config.js to the new format (see config-example.js, line 80).\n`
+				`You are using \`${compatKey}\`, which is deprecated\n` +
+				`Support for this may be removed.\n` +
+				`Please ensure that you update your config.js to use \`subprocesses\` (see config-example.js, line 80).\n`
 			);
 		}
 	}
@@ -105,7 +111,7 @@ export function cacheGroupData(config: ConfigType) {
 		// Should be removed soon.
 		reportError(
 			`You are using a deprecated version of user group specification in config.\n` +
-			`Support for this will be removed soon.\n` +
+			`Support for this may be removed.\n` +
 			`Please ensure that you update your config.js to the new format (see config-example.js, line 521).\n`
 		);
 	} else {
@@ -214,6 +220,6 @@ function reportError(msg: string) {
 	// This module generally loads before Monitor, so we put this in a setImmediate to wait for it to load.
 	// Most child processes don't have Monitor.error, but the main process should always have them, and Config
 	// errors should always be the same across processes, so this is a neat way to avoid unnecessary logging.
-	setImmediate(() => global.Monitor?.error?.(msg));
+	setImmediate(() => global.Monitor?.error?.(`[CONFIG] ${msg}`));
 }
 export const Config = load();
