@@ -571,12 +571,6 @@ export const ssbSets: SSBSets = {
 		signatureMove: 'Shuckle Power',
 		evs: { hp: 252, def: 252, spd: 4 }, ivs: { spe: 0 }, nature: 'Relaxed', teraType: 'Ground', shiny: 213,
 	},
-	Lily: {
-		species: 'Togedemaru', ability: 'Unaware', item: 'Leftovers', gender: 'F',
-		moves: ['Victory Dance', 'Plasma Fists', 'Meteor Mash'],
-		signatureMove: 'Power Up',
-		evs: { hp: 252, def: 4, spd: 252 }, nature: 'Careful', teraType: 'Fairy', shiny: 1734,
-	},
 	Loethalion: {
 		species: 'Ralts', ability: 'Psychic Surge', item: 'Gardevoirite', gender: '',
 		moves: ['Esper Wing', 'Calm Mind', 'Lunar Blessing'],
@@ -1111,7 +1105,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 		const debug: string[] = []; // Set this to a list of SSB sets to override the normal pool for debugging.
 		const ruleTable = this.dex.formats.getRuleTable(this.format);
 		const meme = ruleTable.has('dynamaxclause') && !debug.length;
-		const afd = !ruleTable.has('dynamaxclause') && ruleTable.has('zmovesclause') && debug.length;
+		const afd = !ruleTable.has('dynamaxclause') && ruleTable.has('zmoveclause') && !debug.length;
 		const monotype = this.forceMonotype || (ruleTable.has('sametypeclause') ?
 			this.sample(this.dex.types.names().filter(x => x !== 'Stellar')) : false);
 
@@ -1124,7 +1118,7 @@ export class RandomStaffBrosTeams extends RandomTeams {
 			}
 			pool = debug;
 		}
-		if (monotype && !debug.length) {
+		if (monotype && !debug.length && !afd && !meme) {
 			pool = pool.filter(x => this.dex.species.get(ssbSets[x].species).types.includes(monotype));
 		}
 		if (global.Config?.disabledssbsets?.length) {

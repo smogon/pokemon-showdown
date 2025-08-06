@@ -705,7 +705,7 @@
         ]
     },
     "weezing": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -996,9 +996,10 @@
         "level": 72,
         "sets": [
             {
-                "role": "Wallbreaker",
-                "movepool": ["bodyslam", "earthquake", "return", "selfdestruct", "shadowball"],
-                "abilities": ["Immunity"]
+                "role": "Setup Sweeper",
+                "movepool": ["bodyslam", "curse", "earthquake", "selfdestruct", "shadowball"],
+                "abilities": ["Immunity"],
+                "preferredTypes": ["Ground"]
             },
             {
                 "role": "Bulky Support",
@@ -1105,7 +1106,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["brickbreak", "earthquake", "explosion", "rockslide", "softboiled", "swordsdance"],
+                "movepool": ["earthquake", "explosion", "rockslide", "softboiled", "swordsdance"],
                 "abilities": ["Synchronize"],
                 "preferredTypes": ["Ground", "Rock"]
             }
@@ -1221,7 +1222,7 @@
         ]
     },
     "crobat": {
-        "level": 78,
+        "level": 77,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -1257,7 +1258,7 @@
         ]
     },
     "xatu": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1438,7 +1439,7 @@
         ]
     },
     "umbreon": {
-        "level": 86,
+        "level": 87,
         "sets": [
             {
                 "role": "Staller",
@@ -1769,7 +1770,7 @@
         ]
     },
     "delibird": {
-        "level": 98,
+        "level": 99,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1820,7 +1821,7 @@
         ]
     },
     "houndoom": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Berry Sweeper",
@@ -1866,7 +1867,7 @@
         ]
     },
     "stantler": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -1923,7 +1924,7 @@
         ]
     },
     "raikou": {
-        "level": 73,
+        "level": 74,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2062,7 +2063,7 @@
         ]
     },
     "blaziken": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -2260,7 +2261,7 @@
         ]
     },
     "ninjask": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -2405,6 +2406,11 @@
             {
                 "role": "Berry Sweeper",
                 "movepool": ["bulkup", "reversal", "shadowball", "substitute"],
+                "abilities": ["Pure Power"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["brickbreak", "doubleedge", "rockslide", "shadowball"],
                 "abilities": ["Pure Power"]
             }
         ]
@@ -2607,7 +2613,7 @@
         ]
     },
     "cacturne": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Staller",
@@ -2946,7 +2952,7 @@
         ]
     },
     "metagross": {
-        "level": 73,
+        "level": 72,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -2978,7 +2984,7 @@
         ]
     },
     "regice": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -3018,7 +3024,7 @@
         ]
     },
     "latios": {
-        "level": 66,
+        "level": 67,
         "sets": [
             {
                 "role": "Bulky Setup",
