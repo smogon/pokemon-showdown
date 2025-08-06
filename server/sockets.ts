@@ -84,7 +84,7 @@ export const Sockets = new class {
 		if (port !== undefined) {
 			Config.port = port;
 		}
-		workerCount ??= (Config.subprocesses?.network ?? 1);
+		workerCount ??= (Config.subprocessescache?.network ?? 1);
 
 		PM.env = { PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '0.0.0.0', PSNOSSL: Config.ssl ? 0 : 1 };
 		PM.subscribeSpawn(worker => void this.onSpawn(worker));

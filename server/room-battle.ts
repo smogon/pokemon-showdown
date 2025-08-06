@@ -1402,5 +1402,5 @@ if (!PM.isParentProcess) {
 	// eslint-disable-next-line no-eval
 	Repl.start(`sim-${process.pid}`, cmd => eval(cmd));
 } else {
-	PM.spawn(global.Config?.subprocesses?.simulator ?? 1);
+	PM.spawn(global.Config?.subprocessescache?.simulator ?? 1);
 }

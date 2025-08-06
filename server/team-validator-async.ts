@@ -97,5 +97,5 @@ if (!PM.isParentProcess) {
 	// eslint-disable-next-line no-eval
 	require('../lib/repl').Repl.start(`team-validator-${process.pid}`, (cmd: string) => eval(cmd));
 } else {
-	PM.spawn(global.Config?.subprocesses?.validator ?? 1);
+	PM.spawn(global.Config?.subprocessescache?.validator ?? 1);
 }

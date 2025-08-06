@@ -18,11 +18,11 @@ type ProcessType = (
 
 type SubProcessesConfig = Partial<Record<ProcessType, number>>;
 
-export type ConfigType = Omit<DefaultConfig, 'subprocesses'> & {
+export type ConfigType = DefaultConfig & {
 	groups: { [symbol: string]: GroupInfo },
 	groupsranking: EffectiveGroupSymbol[],
 	greatergroupscache: { [combo: string]: GroupSymbol },
-	subprocesses: 0 | 1 | SubProcessesConfig,
+	subprocessescache: SubProcessesConfig,
 	[k: string]: any,
 };
 /** Map<process flag, config settings for it to turn on> */
@@ -79,31 +79,30 @@ export function load(invalidate = false) {
 function cacheSubProcesses(config: ConfigType) {
 	if (config.subprocesses !== undefined) {
 		// Leniently accept all other falsy values, including `null`.
-		config.subprocesses ||= 0 as const;
-		if (config.subprocesses === 0 || config.subprocesses === 1) {
+		const value = config.subprocesses || 0;
+		if (value === 0 || value === 1) {
 			// https://github.com/microsoft/TypeScript/issues/35745
-			config.subprocesses = (Object.fromEntries(
-				processTypes.map(k => [k, config.subprocesses])
+			config.subprocessescache = (Object.fromEntries(
+				processTypes.map(k => [k, value])
 			) as Record<ProcessType, number>);
-		} else if (typeof config.subprocesses !== 'object') {
+		} else if (typeof value === 'object') {
+			config.subprocessescache = value;
+		} else {
 			reportError(`Invalid \`subprocesses\` specification. Use any of 0, 1, or a plain old object.`);
 		}
 	}
+	config.subprocessescache ??= {};
 	const deprecatedKeys = [];
 	if ('workers' in config) {
 		deprecatedKeys.push('workers');
-		config.subprocesses ??= {};
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-		(config.subprocesses as SubProcessesConfig).network = config.workers;
+		config.subprocessescache.network = config.workers;
 	}
 	for (const processType of processTypes) {
 		if (processType === 'network') continue;
 		const compatKey = `${processType}processes`;
 		if (compatKey in config) {
 			deprecatedKeys.push(compatKey);
-			config.subprocesses ??= {};
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-			(config.subprocesses as SubProcessesConfig)[processType] = config[compatKey];
+			config.subprocessescache[processType] = config[compatKey];
 		}
 	}
 	for (const compatKey of deprecatedKeys) {

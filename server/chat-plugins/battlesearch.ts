@@ -498,5 +498,5 @@ if (!PM.isParentProcess) {
 	// eslint-disable-next-line no-eval
 	Repl.start('battlesearch', cmd => eval(cmd));
 } else {
-	PM.spawn(global.Config?.subprocesses?.battlesearch ?? 1);
+	PM.spawn(global.Config?.subprocessescache?.battlesearch ?? 1);
 }
