@@ -706,6 +706,7 @@ export const commands: Chat.ChatCommands = {
 					} else {
 						details["Evolution"] = evos.join(", ");
 					}
+					if (dex.gen === 1) details["Crit Rate"] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
 				}
 				break;
 			case 'item':
