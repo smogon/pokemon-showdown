@@ -742,7 +742,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				// Do I even need to add special cases for Pagos and pokemon with fixed minimum IVs?
 				const min20IVs = ["Iron Boulder", "Gouging Fire", "Iron Crown", "Raging Bolt"];
 				if (min20IVs.includes(donorSpecies.name)) {
-					let iv: statID;
+					let iv: StatID;
 					for (iv in set.ivs) {
 						if (set.ivs[iv] < 20) set.ivs[iv] = 20;
 					}
