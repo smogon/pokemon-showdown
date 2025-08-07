@@ -2046,6 +2046,7 @@ export class GameRoom extends BasicRoom {
 		let rating: number | undefined;
 		if (battle.ended && this.rated) rating = this.rated;
 		let { id, password } = this.getReplayData();
+		if (password) password = (battle.password || = password);
 		const silent = options === 'forpunishment' || options === 'silent' || options === 'auto';
 		if (silent) connection = undefined;
 		const isPrivate = this.settings.isPrivate || this.hideReplay;
