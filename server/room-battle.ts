@@ -92,7 +92,7 @@ export class RoomBattlePlayer extends RoomGamePlayer<RoomBattle> {
 	 *
 	 * Mostly exists so impatient players don't have to wait the full
 	 * 150 seconds against a disconnected opponent.
- 	*/
+	  */
 	dcSecondsLeft: number;
 	/**
 	 * Is the user actually in the room?
@@ -512,13 +512,13 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	/**
 	 * userid that requested extraction -> playerids that accepted the extraction
 	 */
-	readonly allowExtraction: { [k: string]: Set<ID> } = {};
+	readonly allowExtraction: { [k: string]: Set<ID>; } = {};
 	readonly stream: Streams.ObjectReadWriteStream<string>;
 	override readonly timer: RoomBattleTimer;
 	started = false;
 	active = false;
 	replaySaved: boolean | 'auto' = false;
-	forcedSettings: { modchat?: string | null, privacy?: string | null } = {};
+	forcedSettings: { modchat?: string | null, privacy?: string | null; } = {};
 	p1: RoomBattlePlayer = null!;
 	p2: RoomBattlePlayer = null!;
 	p3: RoomBattlePlayer = null!;
@@ -539,6 +539,10 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	dataResolvers?: [((args: string[]) => void), ((error: Error) => void)][];
 	constructor(room: GameRoom, options: RoomBattleOptions) {
 		super(room);
+		// Workaround for oxc-transform not handling override properties correctly
+		if (!this.room) {
+			(this as any).room = room;
+		}
 		const format = Dex.formats.get(options.format, true);
 		this.title = format.name;
 		this.options = options;
@@ -652,7 +656,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 
 		void this.stream.write(`>${player.slot} undo`);
 	}
-	override joinGame(user: User, slot?: SideID, playerOpts?: { team?: string }) {
+	override joinGame(user: User, slot?: SideID, playerOpts?: { team?: string; }) {
 		if (user.id in this.playerTable) {
 			user.popup(`You have already joined this battle.`);
 			return false;
@@ -757,73 +761,73 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		for (const player of this.players) player.wantsTie = false;
 
 		switch (lines[0]) {
-		case 'requesteddata':
-			lines = lines.slice(1);
-			const [resolver] = this.dataResolvers!.shift()!;
-			resolver(lines);
-			break;
+			case 'requesteddata':
+				lines = lines.slice(1);
+				const [resolver] = this.dataResolvers!.shift()!;
+				resolver(lines);
+				break;
 
-		case 'update':
-			for (const line of lines.slice(1)) {
-				if (line.startsWith('|turn|')) {
-					this.turn = parseInt(line.slice(6));
+			case 'update':
+				for (const line of lines.slice(1)) {
+					if (line.startsWith('|turn|')) {
+						this.turn = parseInt(line.slice(6));
+					}
+					this.room.add(line);
+					if (line.startsWith(`|bigerror|You will auto-tie if `) && Config.allowrequestingties && !this.room.tour) {
+						this.room.add(`|-hint|If you want to tie earlier, consider using \`/offertie\`.`);
+					}
 				}
-				this.room.add(line);
-				if (line.startsWith(`|bigerror|You will auto-tie if `) && Config.allowrequestingties && !this.room.tour) {
-					this.room.add(`|-hint|If you want to tie earlier, consider using \`/offertie\`.`);
-				}
-			}
-			this.room.update();
-			this.checkActive();
-			break;
+				this.room.update();
+				this.checkActive();
+				break;
 
-		case 'sideupdate': {
-			const slot = lines[1] as SideID;
-			const player = this[slot];
-			if (lines[2].startsWith(`|error|[Invalid choice] Can't do anything`)) {
-				// ... should not happen
-			} else if (lines[2].startsWith(`|error|[Invalid choice]`)) {
-				const undoFailed = lines[2].includes(`Can't undo`);
-				const request = this[slot].request;
-				request.isWait = undoFailed ? 'cantUndo' : false;
-				request.choice = '';
-			} else if (lines[2].startsWith(`|request|`)) {
-				this.rqid++;
-				const request = JSON.parse(lines[2].slice(9));
-				request.rqid = this.rqid;
-				const requestJSON = JSON.stringify(request);
-				this[slot].request = {
-					rqid: this.rqid,
-					request: requestJSON,
-					isWait: request.wait ? 'cantUndo' : false,
-					choice: '',
-				};
-				this.requestCount++;
-				player?.sendRoom(`|request|${requestJSON}`);
-				this.timer.nextRequest(player);
+			case 'sideupdate': {
+				const slot = lines[1] as SideID;
+				const player = this[slot];
+				if (lines[2].startsWith(`|error|[Invalid choice] Can't do anything`)) {
+					// ... should not happen
+				} else if (lines[2].startsWith(`|error|[Invalid choice]`)) {
+					const undoFailed = lines[2].includes(`Can't undo`);
+					const request = this[slot].request;
+					request.isWait = undoFailed ? 'cantUndo' : false;
+					request.choice = '';
+				} else if (lines[2].startsWith(`|request|`)) {
+					this.rqid++;
+					const request = JSON.parse(lines[2].slice(9));
+					request.rqid = this.rqid;
+					const requestJSON = JSON.stringify(request);
+					this[slot].request = {
+						rqid: this.rqid,
+						request: requestJSON,
+						isWait: request.wait ? 'cantUndo' : false,
+						choice: '',
+					};
+					this.requestCount++;
+					player?.sendRoom(`|request|${requestJSON}`);
+					this.timer.nextRequest(player);
+					break;
+				}
+				player?.sendRoom(lines[2]);
 				break;
 			}
-			player?.sendRoom(lines[2]);
-			break;
-		}
 
-		case 'error': {
-			if (process.uptime() * 1000 < LOCKDOWN_PERIOD) {
-				const error = new Error();
-				error.stack = lines.slice(1).join('\n');
-				// lock down the server
-				Rooms.global.startLockdown(error);
+			case 'error': {
+				if (process.uptime() * 1000 < LOCKDOWN_PERIOD) {
+					const error = new Error();
+					error.stack = lines.slice(1).join('\n');
+					// lock down the server
+					Rooms.global.startLockdown(error);
+				}
+				break;
 			}
-			break;
-		}
 
-		case 'end':
-			this.logData = JSON.parse(lines[1]);
-			this.score = this.logData!.score;
-			this.inputLog = this.logData!.inputLog;
-			this.started = true;
-			void this.end(this.logData!.winner);
-			break;
+			case 'end':
+				this.logData = JSON.parse(lines[1]);
+				this.score = this.logData!.score;
+				this.inputLog = this.logData!.inputLog;
+				this.started = true;
+				void this.end(this.logData!.winner);
+				break;
 		}
 	}
 	end(winnerName: unknown) {
@@ -1136,7 +1140,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		return new RoomBattlePlayer(user, this, num);
 	}
 
-	override setPlayerUser(player: RoomBattlePlayer, user: User | null, playerOpts?: { team?: string }) {
+	override setPlayerUser(player: RoomBattlePlayer, user: User | null, playerOpts?: { team?: string; }) {
 		if (user === null && this.room.auth.get(player.id) === Users.PLAYER_SYMBOL) {
 			this.room.auth.set(player.id, '+');
 		}
@@ -1382,7 +1386,7 @@ if (!PM.isParentProcess) {
 		global.__version.head = `${head}`.trim();
 		const origin = `${merge}`.trim();
 		if (origin !== global.__version.head) global.__version.origin = origin;
-	} catch {}
+	} catch { }
 
 	if (Config.crashguard) {
 		// graceful crash - allow current battles to finish before restarting

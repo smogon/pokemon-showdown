@@ -221,7 +221,7 @@ function transformImportsExports(code, filename = "") {
 		code += `\nmodule.exports = exports;`;
 	}
 
-	return { code };
+	return {code};
 }
 
 function finalizeExports(code) {
@@ -244,7 +244,11 @@ exports.transpile = (force, emitDecl) => {
 	for (const file of sourceFiles()) {
 		const src = fs.readFileSync(file, "utf8");
 
-		let { code, map, errors } = oxc.transform(file, src, {});
+		let { code, map, errors } = oxc.transform(file, src, {
+			typescript: {
+				jsx: 'transform',
+			},
+		});
 		if (errors?.length) {
 			console.error(`❌  ${file}`);
 			for (const e of errors) console.error("   ", e);
@@ -272,7 +276,7 @@ exports.buildDecls = () => {
 			"npx tsc --emitDeclarationOnly --declaration --declarationMap --outDir dist",
 			{ stdio: "inherit" }
 		);
-	} catch {}
+	} catch { }
 };
 
 module.exports = exports;

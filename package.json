@@ -81,7 +81,7 @@
     "fast-glob": "^3.3.3",
     "globals": "^16.0.0",
     "mocha": "^11.1.0",
-    "oxc-transform": "^0.72.2",
+    "oxc-transform": "^0.81.0",
     "smogon": "^3.0.0",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.24.1"
