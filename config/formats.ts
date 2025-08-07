@@ -738,9 +738,14 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 
 				set.species = donorSpecies.name;
 				set.name = donorSpecies.baseSpecies;
-				const annoyingPokemon = ["Iron Leaves", "Walking Wake", "Iron Boulder", "Gouging Fire", "Iron Crown", "Raging Bolt"];
-				if (annoyingPokemon.includes(donorSpecies.name) || annoyingPokemon.includes(species.name)) {
-					set.hpType = "Dark";
+				// TODO: Make this less hardcoded. Is it even possible?
+				// Do I even need to add special cases for Pagos and pokemon with fixed minimum IVs?
+				const min20IVs = ["Iron Boulder", "Gouging Fire", "Iron Crown", "Raging Bolt"];
+				if (min20IVs.includes(donorSpecies.name)) {
+					let iv: StatID;
+					for (iv in set.ivs) {
+						if (set.ivs[iv] < 20) set.ivs[iv] = 20;
+					}
 				}
 				const problems = this.validateSet(set, teamHas);
 				if (!problems?.length) {
