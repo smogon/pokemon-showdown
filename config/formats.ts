@@ -743,7 +743,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 				const min20IVs = ["Iron Boulder", "Gouging Fire", "Iron Crown", "Raging Bolt"];
 				if (min20IVs.includes(donorSpecies.name)) {
 					for (const iv of Object.keys(set.ivs)) {
-						if (set.ivs[iv as StatID] === 0) set.ivs[iv as StatID] = 20;
+						if (set.ivs[iv as StatID] < 20) set.ivs[iv as StatID] = 20;
 					}
 				}
 				const problems = this.validateSet(set, teamHas);
