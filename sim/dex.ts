@@ -463,6 +463,13 @@ export class ModdedDex {
 			case '../data/learnsets': dataObject = require('../data/learnsets'); break;
 
 			// mods
+			case '../data/mods/balls/formats-data': dataObject = require('../data/mods/balls/formats-data'); break;
+			case '../data/mods/balls/learnsets': dataObject = require('../data/mods/balls/learnsets'); break;
+			case '../data/mods/balls/moves': dataObject = require('../data/mods/balls/moves'); break;
+			case '../data/mods/balls/pokedex': dataObject = require('../data/mods/balls/pokedex'); break;
+			case '../data/mods/balls/random-teams': dataObject = require('../data/mods/balls/random-teams'); break;
+			case '../data/mods/balls/rulesets': dataObject = require('../data/mods/balls/rulesets'); break;
+			case '../data/mods/balls/scripts': dataObject = require('../data/mods/balls/scripts'); break;
 			case '../data/mods/ccapm2024/abilities': dataObject = require('../data/mods/ccapm2024/abilities'); break;
 			case '../data/mods/ccapm2024/formats-data': dataObject = require('../data/mods/ccapm2024/formats-data'); break;
 			case '../data/mods/ccapm2024/items': dataObject = require('../data/mods/ccapm2024/items'); break;
@@ -711,7 +718,7 @@ export class ModdedDex {
 		// @pokebedrock - Write each mod here, as we cannot use fs in minecraft
 		// NOTE: This needs to be updated when new mods are added
 		const mods = [
-			'ccapm2024', 'fullpotential', 'gen1', 'gen1jpn', 'gen1stadium', 'gen2', 'gen2stadium2', 'gen3',
+			'balls', 'ccapm2024', 'fullpotential', 'gen1', 'gen1jpn', 'gen1stadium', 'gen2', 'gen2stadium2', 'gen3',
 			'gen3colosseum', 'gen3rs', 'gen4', 'gen4pt', 'gen5', 'gen5bw1', 'gen6', 'gen6xy', 'gen7', 'gen7letsgo',
 			'gen7pokebilities', 'gen7sm', 'gen8', 'gen8bdsp', 'gen8dlc1', 'gen8linked', 'gen9dlc1', 'gen9predlc',
 			'gen9ssb', 'mixandmega', 'monkeyspaw', 'partnersincrime', 'passiveaggressive', 'pokebedrock', 'pokebilities',
