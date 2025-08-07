@@ -1821,7 +1821,7 @@ export const Chat = new class {
 	 */
 	database = SQL(module, {
 		file: global.Config?.nofswriting ? ':memory:' : PLUGIN_DATABASE_PATH,
-		processes: global.Config?.chatdbprocesses,
+		processes: global.Config?.subprocessescache?.chatdb ?? 1,
 	});
 	databaseReadyPromise: Promise<void> | null = null;
 
@@ -2708,7 +2708,7 @@ export interface Monitor {
 
 // explicitly check this so it doesn't happen in other child processes
 if (!process.send) {
-	Chat.database.spawn(Config.chatdbprocesses || 1);
+	Chat.database.spawn(global.Config?.subprocessescache?.chatdb ?? 1);
 	Chat.databaseReadyPromise = Chat.prepareDatabase();
 	// we need to make sure it is explicitly JUST the child of the original parent db process
 	// no other child processes

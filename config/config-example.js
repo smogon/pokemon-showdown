@@ -16,23 +16,6 @@ exports.port = 8000;
 exports.bindaddress = '0.0.0.0';
 
 /**
- * workers - the number of networking child processes to spawn
- *   This should be no greater than the number of threads available on your
- *   server's CPU. If you're not sure how many you have, you can check from a
- *   terminal by running:
- *
- *   $ node -e "console.log(require('os').cpus().length)"
- *
- *   Using more workers than there are available threads will cause performance
- *   issues. Keeping a couple threads available for use for OS-related work and
- *   other PS processes will likely give you the best performance, if your
- *   server's CPU is capable of multithreading. If you don't know what any of
- *   this means or you are unfamiliar with PS' networking code, leave this set
- *   to 1.
- */
-exports.workers = 1;
-
-/**
  * wsdeflate - compresses WebSocket messages
  *  Toggles use of the Sec-WebSocket-Extension permessage-deflate extension.
  *  This compresses messages sent and received over a WebSocket connection
@@ -91,6 +74,50 @@ Main's SSL deploy script from Let's Encrypt looks like:
  * @type {false | string[]}.
  */
 exports.proxyip = false;
+
+// subprocesses - the number of child processes to use for various tasks.
+//   Can be set to `0` instead of `{...}` to stop using subprocesses, if you're running out of RAM.
+exports.subprocesses = {
+	/**
+	 * network - the number of networking child processes to spawn
+	 *   This should be no greater than the number of threads available on your
+	 *   server's CPU. If you're not sure how many you have, you can check from a
+	 *   terminal by running:
+	 *
+	 *   $ node -e "console.log(require('os').cpus().length)"
+	 *
+	 *   Using more workers than there are available threads will cause performance
+	 *   issues. Keeping a couple threads available for use for OS-related work and
+	 *   other PS processes will likely give you the best performance, if your
+	 *   server's CPU is capable of multithreading. If you don't know what any of
+	 *   this means or you are unfamiliar with PS' networking code, leave this set
+	 *   to 1.
+	 */
+	network: 1,
+	/**
+	 * for simulating battles
+	 *   You should leave this at 1 unless your server has a very large
+	 *   amount of traffic (i.e. hundreds of concurrent battles).
+	 */
+	simulator: 1,
+
+	// beyond this point, it'd be very weird if you needed more than one of each of these
+
+	/** for validating teams */
+	validator: 1,
+	/** for user authentication */
+	verifier: 1,
+	localartemis: 1,
+	remoteartemis: 1,
+	friends: 1,
+	chatdb: 1,
+	modlog: 1,
+	pm: 1,
+	/** for the battlesearch chat plugin */
+	battlesearch: 1,
+	/** datasearch - for the datasearch chat plugin */
+	datasearch: 1,
+};
 
 /**
  * Various debug options
@@ -400,15 +427,6 @@ exports.logchallenges = false;
  * lobby log. This has no effect if `logchat` is disabled.
  */
 exports.loguserstats = 1000 * 60 * 10; // 10 minutes
-
-/**
- * validatorprocesses - the number of processes to use for validating teams
- * simulatorprocesses - the number of processes to use for handling battles
- * You should leave both of these at 1 unless your server has a very large
- * amount of traffic (i.e. hundreds of concurrent battles).
- */
-exports.validatorprocesses = 1;
-exports.simulatorprocesses = 1;
 
 /**
  * inactiveuserthreshold - how long a user must be inactive before being pruned

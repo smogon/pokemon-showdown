@@ -113,7 +113,7 @@ export class Modlog {
 
 		if (Config.usesqlite) {
 			if (this.database.isParentProcess) {
-				this.database.spawn(Config.modlogprocesses || 1);
+				this.database.spawn(global.Config?.subprocessescache?.modlog ?? 1);
 			} else {
 				global.Monitor = {
 					crashlog(error: Error, source = 'A modlog child process', details: AnyObject | null = null) {
