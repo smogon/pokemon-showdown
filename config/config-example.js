@@ -101,7 +101,7 @@ exports.subprocesses = {
 	 */
 	simulator: 1,
 
-	// beyond this point, it'd be very weird if you needed more than one of these
+	// beyond this point, it'd be very weird if you needed more than one of each of these
 
 	/** for validating teams */
 	validator: 1,
