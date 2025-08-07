@@ -520,6 +520,7 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 	override readonly timer: RoomBattleTimer;
 	started = false;
 	active = false;
+	password = "";
 	replaySaved: boolean | 'auto' = false;
 	forcedSettings: { modchat?: string | null, privacy?: string | null } = {};
 	p1: RoomBattlePlayer = null!;
