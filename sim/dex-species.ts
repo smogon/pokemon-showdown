@@ -153,6 +153,31 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	 * Sprite ID. Basically the same as ID, but with a dash between
 	 * species and forme.
 	 */
+
+  /**
+   * The nickname of the pokemon that this evolution is required to have
+   * @example "Dinnerbone"
+   */
+  nickName?: string;
+  /**
+   * The minimum amount of damage required for this evolution without fainting
+   * @example 49
+   */
+  minDamage?: number;
+  /**
+   * The minimum amount of recoil damage required for this evolution without fainting
+   * @example 294
+   */
+  minRecoilDamage?: number;
+  /**
+   * Slot-specific party requirements for evolution
+   * @example { slot: 1, species: "Vulpix-Alola" }
+   */
+  partySlotRequirement?: {
+    slot: number;
+    species: string;
+  };
+
 	readonly spriteid: string;
 	/** Abilities. */
 	readonly abilities: SpeciesAbility;
