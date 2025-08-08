@@ -1,6 +1,6 @@
 {
   "name": "pokebedrock-showdown",
-  "description": "A flushed version of the Pokémon Showdown server, designed for PokeBedrock.",
+  "description": "A modified version of the Pokémon Showdown server, designed for PokeBedrock.",
   "version": "0.1.0",
   "main": "dist/sim/index.js",
   "types": "dist/sim/index.d.ts",
@@ -48,10 +48,10 @@
     "full-test-ci": "eslint --max-warnings 0 && tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\") && npm run test-npm"
   },
   "bin": "./pokemon-showdown",
-  "homepage": "http://pokemonshowdown.com",
+  "homepage": "https://pokebedrock.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/smogon/pokemon-showdown.git"
+    "url": "https://github.com/smell-of-curry/pokebedrock-showdown.git"
   },
   "author": {
     "name": "Guangcong Luo",
@@ -63,6 +63,11 @@
       "name": "Bill Meltsner",
       "email": "bill@meltsner.com",
       "url": "http://www.meltsner.com"
+    },
+    {
+      "name": "smell-of-curry",
+      "email": "smell.of.curry223@gmail.com",
+      "url": "https://github.com/smell-of-curry"
     }
   ],
   "license": "MIT",
