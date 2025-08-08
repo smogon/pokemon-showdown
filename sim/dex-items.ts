@@ -16,6 +16,7 @@ export interface ItemData extends Partial<Item>, PokemonEventMethods {
 export type ModdedItemData = ItemData | Partial<Omit<ItemData, 'name'>> & {
 	inherit: true,
 	onCustap?: (this: Battle, pokemon: Pokemon) => void,
+	onBerry?: (this: Battle, pokemon: Pokemon) => void,
 };
 
 export interface ItemDataTable { [itemid: IDEntry]: ItemData }
