@@ -27,7 +27,7 @@ describe('Leppa Berry', () => {
 
 	describe('[Gen 4]', () => {
 		it('should restore PP to the first move with any PP missing when eaten forcibly', () => {
-			battle = common.gen(4).createBattle({ forceRandomChance: true }, [[
+			battle = common.gen(4).createBattle([[
 				{ species: 'Deoxys', item: 'leppaberry', moves: ['tackle'] },
 			], [
 				{ species: 'Nidoqueen', moves: ['sleeptalk'] },
@@ -39,7 +39,7 @@ describe('Leppa Berry', () => {
 		});
 
 		it('should not activate before an insta switch', () => {
-			battle = common.gen(4).createBattle({ forceRandomChance: true }, [[
+			battle = common.gen(4).createBattle([[
 				{ species: 'Deoxys', item: 'leppaberry', moves: ['u-turn'] },
 				{ species: 'Togekiss', moves: ['sleeptalk'] },
 			], [
