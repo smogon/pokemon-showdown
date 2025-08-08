@@ -2742,6 +2742,19 @@ export class Battle {
 			if (!action.move.priorityChargeCallback) throw new Error(`priorityChargeMove has no priorityChargeCallback`);
 			action.move.priorityChargeCallback.call(this, action.pokemon);
 			break;
+		case 'berry': // should only be relevant for Gen 4
+			const item = action.pokemon.getItem();
+			if (!item.isBerry) return false;
+			let handled = false;
+			for (const handler of ['Start', 'Update', 'Berry']) {
+				if ((item as any)[`on${handler}`]) {
+					this.singleEvent(handler, item, action.pokemon.itemState, action.pokemon);
+					handled = true;
+					break;
+				}
+			}
+			if (!handled) return false;
+			break;
 
 		case 'event':
 			this.runEvent(action.event!, action.pokemon);

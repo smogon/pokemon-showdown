@@ -65,6 +65,37 @@ describe('Sitrus Berry', () => {
 		assert.species(darm, 'Darmanitan', `Sitrus Berry should heal Darmanitan outside of Zen Mode range.`);
 	});
 
+	describe('[Gen 4]', () => {
+		it('should heal hp when consumed', () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'Scyther', item: 'sitrusberry', moves: ['tackle'] },
+			], [
+				{ species: 'Aerodactyl', item: 'rockyhelmet', moves: ['superfang', 'sleeptalk'] },
+			]]);
+			const scyther = battle.p1.active[0];
+			battle.makeChoices();
+			assert.false(scyther.item);
+			assert(scyther.hp > scyther.maxhp * 0.5);
+		});
+
+		it('should not activate before an insta switch', () => {
+			battle = common.gen(4).createBattle([[
+				{ species: 'Scyther', item: 'sitrusberry', moves: ['u-turn'] },
+				{ species: 'Togekiss', moves: ['sleeptalk'] },
+			], [
+				{ species: 'Aerodactyl', item: 'rockyhelmet', moves: ['superfang', 'sleeptalk'] },
+			]]);
+			const scyther = battle.p1.active[0];
+			battle.makeChoices();
+			battle.makeChoices();
+			assert(scyther.item);
+			assert(scyther.hp < scyther.maxhp * 0.5);
+			battle.makeChoices('switch 2', 'move sleeptalk');
+			assert.false(scyther.item);
+			assert(scyther.hp > scyther.maxhp * 0.5);
+		});
+	});
+
 	describe('[Gen 3]', () => {
 		it('should not activate in the same turn that was put below 50% HP by a status condition', () => {
 			battle = common.gen(3).createBattle([[
