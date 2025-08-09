@@ -657,6 +657,7 @@ export const commands: Chat.ChatCommands = {
 				void Chat.FriendsPM.destroy();
 
 				global.Chat = require('../chat').Chat;
+				Chat.start();
 				global.Tournaments = require('../tournaments').Tournaments;
 
 				this.sendReply("Reloading chat plugins...");
