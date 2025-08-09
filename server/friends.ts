@@ -395,7 +395,7 @@ const setup = () => {
 /** Process manager for main process use. */
 export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, DatabaseResult>(module, query => {
 	const { type, statement, data } = query;
-	const start = Date.now();
+	const startTime = Date.now();
 	const result: DatabaseResult = {};
 	try {
 		switch (type) {
@@ -421,7 +421,7 @@ export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, Databa
 		}
 		return result;
 	}
-	const delta = Date.now() - start;
+	const delta = Date.now() - startTime;
 	if (delta > 1000) {
 		Monitor.slow(`[Slow friends list query] ${JSON.stringify(query)}`);
 	}

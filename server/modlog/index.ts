@@ -97,9 +97,9 @@ export type PartialModlogEntry = Partial<ModlogEntry> & { action: string };
 export class Modlog {
 	readonly database: SQL.DatabaseManager;
 	readyPromise: null | Promise<void>;
-	readyPromiseResolve: null | (value: T | PromiseLike<T>) => void;
-	readyPromiseReject: null | (reason: unknown) => void;
-	private databaseReady: boolean;
+	readyPromiseResolve: null | ((followPromise: Promise<boolean>) => void);
+	readyPromiseReject: null | ((reason: unknown) => void);
+	databaseReady: boolean;
 	/** entries to be written once the DB is ready */
 	queuedEntries: ModlogEntry[];
 
@@ -112,10 +112,12 @@ export class Modlog {
 		this.queuedEntries = [];
 		this.databaseReady = false;
 		this.database = PM;
-		const {promise, resolve, reject} = Promise.withResolvers();
-		this.readyPromise = promise;
-		this.readyPromiseResolve = resolve;
-		this.readyPromiseReject = reject;
+		this.readyPromiseResolve = null;
+		this.readyPromiseReject = null;
+		this.readyPromise = new Promise((resolve, reject) => {
+			this.readyPromiseResolve = resolve as any;
+			this.readyPromiseReject = reject;
+		});
 	}
 
 	async setupDatabase() {
@@ -477,15 +479,15 @@ if (!PM.isParentProcess) {
 
 export function start() {
 	if (!Config.usesqlite) {
-		if (mainModlog.readyPromise) {
-			mainModlog.readyPromiseReject(new Error("Modlog disabled", {cause: new Error("SQLite is disabled.")}));
+		if (mainModlog.readyPromiseReject) {
+			mainModlog.readyPromiseReject(new Error("Modlog disabled because SQLite is disabled"));
 		}
 		return;
 	}
 	PM.spawn(global.Config?.subprocessescache?.modlog ?? 1);
-	mainModlog.readyPromiseResolve(mainModlog.setupDatabase());
-	mainModlog.readyPromise.then(result => {
-		mainModlog.databaseReady = result;
+	mainModlog.readyPromiseResolve!(mainModlog.setupDatabase());
+	void mainModlog.readyPromise!.then(result => {
+		mainModlog.databaseReady = true;
 		mainModlog.readyPromise = null;
 		mainModlog.readyPromiseResolve = null;
 		mainModlog.readyPromiseReject = null;
