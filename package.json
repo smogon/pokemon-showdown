@@ -1,7 +1,7 @@
 {
   "name": "pokebedrock-showdown",
   "description": "A modified version of the Pokémon Showdown server, designed for PokeBedrock.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "main": "dist/sim/index.js",
   "types": "dist/sim/index.d.ts",
   "dependencies": {
@@ -47,11 +47,13 @@
     "full-test": "eslint --max-warnings 0 && npm run tsc && mocha --timeout 8000 --forbid-only -g \".*\" && npm run test-npm",
     "full-test-ci": "eslint --max-warnings 0 && tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\") && npm run test-npm"
   },
-  "bin": "./pokemon-showdown",
+  "bin": {
+    "pokebedrock-showdown": "pokemon-showdown"
+  },
   "homepage": "https://pokebedrock.com",
   "repository": {
     "type": "git",
-    "url": "https://github.com/smell-of-curry/pokebedrock-showdown.git"
+    "url": "git+https://github.com/smell-of-curry/pokebedrock-showdown.git"
   },
   "author": {
     "name": "Guangcong Luo",

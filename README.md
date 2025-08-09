@@ -1,8 +1,19 @@
 # A PokeBedrock Fork of Pokémon Showdown
 
 This library has been gutted, and changed a bit. The main things that are changed have to do with usability
-with Minecraft Bedrocks Script API. For example use of `set` as a property name does not work in ESM format, breaking
-most of Pokemon Showdown. Because of this all reference to `Pokemon.set` has been changed to `Pokemon.pokemonSet`.
+with Minecraft Bedrocks Script API.
+
+## Goal
+
+Try to keep this fork with the least amount of changes to the original codebase. However since we NEED to make changes to make it work in minecraft we need to keep all changes small and prefix them all with `// @pokebedrock` ensuring when merge conflicts come (when syncing with the original codebase) we can easily see what changes are needed to be made.
+
+## Releasing a new NPM Version
+
+If your `smell-of-curry` and you want to release a new version, you can do the following:
+
+1. Update the version in `package.json`
+2. Run `npm run build-npm`
+3. Run `npm publish`
 
 ## Current Changes:
 
@@ -10,6 +21,7 @@ most of Pokemon Showdown. Because of this all reference to `Pokemon.set` has bee
 - **Reworked Config**: Modified to not use reading/writing to files as script api doesn't support that.
 - **Better Type Safety**: Added more specific type definitions throughout the codebase.
 - **ESM Compatibility**: Fixed compatibility issues with Minecraft Bedrock's Script API.
+- **Removed Dynamic Requires**: `sim/dex` now uses a static import map to avoid dynamic requires (which is not supported in Minecraft Bedrock's Script API).
 
 ### Pokemon Data & Features:
 - **UUID System**: Added a whole UUID system which allows pokemon to be searched easily by interpreter.
