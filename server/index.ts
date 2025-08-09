@@ -130,7 +130,7 @@ function setupGlobals() {
 	Sockets.start();
 }
 
-void cleanupStale().then(() => {
+export const readyPromise = cleanupStale().then(() => {
 	setupGlobals();
 }).then(() => {
 	if (Config.usesqlite) {
