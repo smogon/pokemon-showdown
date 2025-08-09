@@ -83,6 +83,7 @@ if (!Promise.withResolvers) {
 
 import { FS, Repl } from '../lib';
 import * as ConfigLoader from './config-loader';
+import { Sockets } from './sockets';
 
 function cleanupStale() {
 	return Repl.cleanup();
@@ -133,11 +134,11 @@ function setupGlobals() {
 	global.IPTools = IPTools;
 	void IPTools.loadHostsAndRanges();
 
-	const { Sockets } = require('./sockets');
-	global.Sockets = Sockets;
-
 	const TeamValidatorAsync = require('./team-validator-async');
 	global.TeamValidatorAsync = TeamValidatorAsync;
+
+	global.Sockets = Sockets;
+	Sockets.start();
 }
 
 void cleanupStale().then(() => {
@@ -148,7 +149,6 @@ void cleanupStale().then(() => {
 	}
 
 	Rooms.global.start();
-	Sockets.start();
 	Verifier.start();
 	TeamValidatorAsync.start();
 	Chat.start();
