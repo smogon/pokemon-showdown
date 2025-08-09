@@ -530,7 +530,7 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	if (Config.sockets) {
+	if (Config.ofesockets) {
 		try {
 			require.resolve('node-oom-heapdump');
 		} catch (e: any) {
