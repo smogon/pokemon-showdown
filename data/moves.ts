@@ -1982,12 +1982,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		consumeBerries: true,
 		onHit(target, source, move) {
 			const item = target.getItem();
 			if (source.hp && item.isBerry && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Bug Bite', `[of] ${source}`);
-				if (this.singleEvent('Eat', item, null, source, target, move)) {
+				if (this.singleEvent('Eat', item, null, source, source, move)) {
 					this.runEvent('EatItem', source, null, null, item);
 					if (item.id === 'leppaberry') target.staleness = 'external';
 				}
@@ -5955,9 +5954,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, allyanim: 1, metronome: 1, noparentalbond: 1 },
-		consumeBerries: true,
 		onPrepareHit(target, source, move) {
-			if (source.ignoringItem(true)) return false;
+			if (source.ignoringItem(source, move)) return false;
 			const item = source.getItem();
 			if (!this.singleEvent('TakeItem', item, source.itemState, source, source, move, item)) return false;
 			if (!item.fling) return false;
@@ -13941,12 +13939,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, distance: 1, metronome: 1 },
-		consumeBerries: true,
 		onHit(target, source, move) {
 			const item = target.getItem();
 			if (source.hp && item.isBerry && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Pluck', `[of] ${source}`);
-				if (this.singleEvent('Eat', item, null, source, target, move)) {
+				if (this.singleEvent('Eat', item, null, source, source, move)) {
 					this.runEvent('EatItem', source, null, null, item);
 					if (item.id === 'leppaberry') target.staleness = 'external';
 				}

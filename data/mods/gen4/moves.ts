@@ -182,10 +182,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		recoil: [1, 3],
 	},
-	bugbite: {
-		inherit: true,
-		consumeBerries: false,
-	},
 	bulletseed: {
 		inherit: true,
 		basePower: 10,
@@ -544,9 +540,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	fling: {
 		inherit: true,
-		consumeBerries: false,
 		onPrepareHit(target, source, move) {
-			if (source.ignoringItem(true)) return false;
+			if (source.ignoringItem(source, move)) return false;
 			if (source.hasAbility('multitype')) return false;
 			const item = source.getItem();
 			if (!this.singleEvent('TakeItem', item, source.itemState, source, source, move, item)) return false;
@@ -1276,10 +1271,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 90,
 		pp: 20,
 		onAfterMove() {},
-	},
-	pluck: {
-		inherit: true,
-		consumeBerries: false,
 	},
 	poisongas: {
 		inherit: true,

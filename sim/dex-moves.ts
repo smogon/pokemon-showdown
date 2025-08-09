@@ -267,7 +267,6 @@ export interface MoveData extends EffectData, MoveEventMethods, HitEffect {
 	// ---------------
 	hasCrashDamage?: boolean;
 	isConfusionSelfHit?: boolean;
-	consumeBerries?: boolean;
 	stallingMove?: boolean;
 	baseMove?: ID;
 }

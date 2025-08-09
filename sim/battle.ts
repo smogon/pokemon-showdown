@@ -605,8 +605,7 @@ export class Battle {
 			return relayVar;
 		}
 		if (eventid !== 'Start' && eventid !== 'TakeItem' && effect.effectType === 'Item' &&
-			!(eventid === 'Eat' && (sourceEffect as ActiveMove)?.consumeBerries) &&
-			(target instanceof Pokemon) && target.ignoringItem()) {
+			(target instanceof Pokemon) && target.ignoringItem(source instanceof Pokemon ? source : null, sourceEffect)) {
 			this.debug(eventid + ' handler suppressed by Embargo, Klutz or Magic Room');
 			return relayVar;
 		}
