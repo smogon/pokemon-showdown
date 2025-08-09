@@ -271,4 +271,4 @@ export function watch() {
 
 load();
 
-// Note: Do NOT export Config name binding
+// Note: Do NOT export Config name binding, so that importing it doesn't shadow global.Config
