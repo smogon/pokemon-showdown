@@ -384,6 +384,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (pokemon.volatiles['lockedmove']) pokemon.volatiles['lockedmove'].accuracy = accuracy;
 				if (pokemon.volatiles['rage']) pokemon.volatiles['rage'].accuracy = accuracy;
 			}
+			accuracy = this.battle.singleEvent('Accuracy', move, null, target, pokemon, move, accuracy);
 			accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
 			// Moves that target the user do not suffer from the 1/256 miss chance.
 			if (move.target === 'self' && accuracy !== true) accuracy++;
