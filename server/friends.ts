@@ -6,7 +6,7 @@
 // @ts-ignore in case it isn't installed
 import type * as Database from 'better-sqlite3';
 import { Utils, FS, ProcessManager, Repl } from '../lib';
-import { Config } from './config-loader';
+import * as ConfigLoader from './config-loader';
 import * as path from 'path';
 
 /** Max friends per user */
@@ -433,7 +433,7 @@ export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, Databa
 });
 
 if (!PM.isParentProcess) {
-	global.Config = (require as any)('./config-loader').Config;
+	ConfigLoader.ensureLoaded();
 	if (Config.usesqlite) {
 		FriendsDatabase.setupDatabase();
 	}

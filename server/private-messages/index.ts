@@ -4,7 +4,7 @@
  * @author mia-pi-git
  */
 import { SQL, Utils } from '../../lib';
-import { Config } from '../config-loader';
+import * as ConfigLoader from '../config-loader';
 import { Auth } from '../user-groups';
 import { statements } from './database';
 /** The time until a PM sent offline expires. Presently, 60 days. */
@@ -214,6 +214,7 @@ export const PrivateMessages = new class {
 };
 
 if (!PM.isParentProcess) {
+	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A private message child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);

@@ -82,55 +82,29 @@ if (!Promise.withResolvers) {
 }
 
 import { FS, Repl } from '../lib';
+import * as ConfigLoader from './config-loader';
 
 function cleanupStale() {
 	return Repl.cleanup();
 }
 
-function setupConfig() {
-	/*********************************************************
-	 * Load the config
-	 * Note that `import` declarations are run before any other code,
-	 * and many of our imports require the `Config` global to be set up.
-	 *********************************************************/
-	const ConfigLoader = require('./config-loader');
-	global.Config = ConfigLoader.Config;
-
-	// Config loader reports errors using Monitor
+function setupGlobals() {
 	const { Monitor } = require('./monitor');
 	global.Monitor = Monitor;
 	global.__version = { head: '' };
 	void Monitor.version().then((hash: any) => {
 		global.__version.tree = hash;
 	});
-	Repl.cleanup();
 
-	// Dex is needed just to grab toID
 	const { Dex } = require('../sim/dex');
 	global.Dex = Dex;
 	global.toID = Dex.toID;
 
-	// Monitor reports errors on Rooms
 	const { Rooms } = require('./rooms');
 	global.Rooms = Rooms;
 	// We initialize the global room here because roomlogs.ts needs the Rooms global
 	Rooms.global = new Rooms.GlobalRoomState();
 
-	if (Config.watchconfig) {
-		FS('config/config.js').onModify(() => {
-			try {
-				global.Config = ConfigLoader.load(true);
-				// ensure that battle prefixes configured via the chat plugin are not overwritten
-				// by battle prefixes manually specified in config.js
-				Chat.plugins['username-prefixes']?.prefixManager.refreshConfig(true);
-				Monitor.notice('Reloaded ../config/config.js');
-			} catch (e: any) {
-				Monitor.adminlog("Error reloading ../config/config.js: " + e.stack);
-			}
-		});
-	}
-
-function setupGlobals() {
 	const { Teams } = require('../sim/teams');
 	global.Teams = Teams;
 
@@ -166,10 +140,31 @@ function setupGlobals() {
 	global.TeamValidatorAsync = TeamValidatorAsync;
 }
 
-setupConfig();
-
 void cleanupStale().then(() => {
 	setupGlobals();
+}).then(() => {
+	Rooms.global.start();
+	Sockets.start();
+	Verifier.start();
+	TeamValidatorAsync.start();
+	Chat.start();
+
+	require('./artemis').start();
+	require('./modlog').start();
+
+	/*********************************************************
+	 * Monitor config file and display diagnostics
+	 *********************************************************/
+
+	if (Config.watchconfig) {
+		ConfigLoader.watch();
+	}
+
+	ConfigLoader.flushLog();
+
+	/*********************************************************
+	 * On error continue - enabled by default
+	 *********************************************************/
 
 	if (Config.crashguard) {
 		// graceful crash - allow current battles to finish before restarting
@@ -181,15 +176,6 @@ void cleanupStale().then(() => {
 			Monitor.crashlog(err as any, 'A main process Promise');
 		});
 	}
-}).then(() => {
-	Rooms.global.start();
-	Sockets.start();
-	Verifier.start();
-	TeamValidatorAsync.start();
-	Chat.start();
-
-	require('./artemis').start();
-	require('./modlog').start();
 
 	/*********************************************************
 	 * Start up the REPL server

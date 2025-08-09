@@ -9,7 +9,7 @@
  */
 import * as Artemis from '../artemis';
 import { FS, Utils } from '../../lib';
-import { Config } from '../config-loader';
+import * as ConfigLoader from '../config-loader';
 import { toID } from '../../sim/dex-data';
 import { getBattleLog, getBattleLinks, HelpTicket } from './helptickets';
 import type { GlobalPermission } from '../user-groups';
