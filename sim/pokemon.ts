@@ -861,13 +861,13 @@ export class Pokemon {
 		return false;
 	}
 
-	ignoringItem(isFling = false) {
+	ignoringItem(effect?: Effect) {
 		if (this.getItem().isPrimalOrb) return false;
 		if (this.itemState.knockedOff) return true; // Gen 3-4
 		if (this.battle.gen >= 5 && !this.isActive) return true;
 		if (this.volatiles['embargo'] || this.battle.field.pseudoWeather['magicroom']) return true;
 		// check Fling first to avoid infinite recursion
-		if (isFling) return this.battle.gen >= 5 && this.hasAbility('klutz');
+		if (effect?.id === 'fling') return this.battle.gen >= 5 && this.hasAbility('klutz');
 		return !this.getItem().ignoreKlutz && this.hasAbility('klutz');
 	}
 
@@ -1838,7 +1838,8 @@ export class Pokemon {
 
 	setItem(item: string | Item, source?: Pokemon, effect?: Effect) {
 		if (!this.hp || !this.isActive) return false;
-		if (this.itemState.knockedOff) return false;
+		if (this.itemState.knockedOff && !(effect?.id === 'recycle')) return false;
+		delete this.itemState.knockedOff;
 		if (typeof item === 'string') item = this.battle.dex.items.get(item);
 
 		const effectid = this.battle.effect ? this.battle.effect.id : '';

@@ -541,7 +541,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	fling: {
 		inherit: true,
 		onPrepareHit(target, source, move) {
-			if (source.ignoringItem(true)) return false;
+			if (source.ignoringItem(move)) return false;
 			if (source.hasAbility('multitype')) return false;
 			const item = source.getItem();
 			if (!this.singleEvent('TakeItem', item, source.itemState, source, source, move, item)) return false;
