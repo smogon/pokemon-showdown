@@ -6,9 +6,12 @@
 
 const assert = require('../../assert').strict;
 
-const datasearch = require('../../../dist/server/chat-plugins/datasearch');
-
 describe("Datasearch Plugin", () => {
+	let datasearch = null;
+	before(() => {
+		datasearch = require('../../../dist/server/chat-plugins/datasearch');
+	});
+
 	it('should return pokemon with pivot moves', async () => {
 		const cmd = 'ds';
 		const target = 'pivot|batonpass, mod=gen8';
