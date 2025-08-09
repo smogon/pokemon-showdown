@@ -273,6 +273,7 @@ export class BattleActions {
 			}
 		}
 		pokemon.lastDamage = 0;
+		pokemon.hurtThisMove = null;
 		let lockedMove;
 		if (!externalMove) {
 			lockedMove = this.battle.runEvent('LockMove', pokemon);
@@ -1026,7 +1027,7 @@ export class BattleActions {
 				// The previous check was for `move.multihit`, but that fails for Dragon Darts
 				const curDamage = targets.length === 1 ? move.totalDamage : d;
 				if (typeof curDamage === 'number' && targets[i].hp) {
-					const targetHPBeforeDamage = (targets[i].hurtThisTurn || 0) + curDamage;
+					const targetHPBeforeDamage = (targets[i].hurtThisMove || 0) + curDamage;
 					if (targets[i].hp <= targets[i].maxhp / 2 && targetHPBeforeDamage > targets[i].maxhp / 2) {
 						this.battle.runEvent('EmergencyExit', targets[i], pokemon);
 					}
