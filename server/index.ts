@@ -142,8 +142,6 @@ export const readyPromise = cleanupStale().then(() => {
 	TeamValidatorAsync.start();
 	Chat.start();
 
-	require('./artemis').start();
-
 	/*********************************************************
 	 * Monitor config file and display diagnostics
 	 *********************************************************/
