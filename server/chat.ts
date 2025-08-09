@@ -27,7 +27,7 @@ import type { RoomPermission, GlobalPermission } from './user-groups';
 import type { Punishment } from './punishments';
 import type { PartialModlogEntry } from './modlog';
 import * as ConfigLoader from './config-loader';
-import { FriendsDatabase, PM } from './friends';
+import { FriendsDatabase, PM as FriendsPM } from './friends';
 import { SQL, Repl, FS, Utils } from '../lib';
 import * as Artemis from './artemis';
 import { Dex } from '../sim';
@@ -1552,7 +1552,7 @@ export const Chat = new class {
 	 */
 	readonly MAX_TIMEOUT_DURATION = 2147483647;
 	readonly Friends = new FriendsDatabase();
-	readonly PM = PM;
+	readonly FriendsPM = FriendsPM;
 	readonly PrivateMessages = PrivateMessages;
 
 	readonly multiLinePattern = new PatternTester();
@@ -1911,14 +1911,14 @@ export const Chat = new class {
 
 		const initialRoomlogLength = room?.log.getLineCount();
 		const context = new CommandContext({ message, room, user, connection });
-		const start = Date.now();
+		const startTime = Date.now();
 		const result = context.parse();
 		if (typeof result?.then === 'function') {
 			void result.then(() => {
-				this.logSlowMessage(start, context);
+				this.logSlowMessage(startTime, context);
 			});
 		} else {
-			this.logSlowMessage(start, context);
+			this.logSlowMessage(startTime, context);
 		}
 		if (room && room.log.getLineCount() !== initialRoomlogLength) {
 			room.messagesSent++;
@@ -1929,8 +1929,8 @@ export const Chat = new class {
 
 		return result;
 	}
-	logSlowMessage(start: number, context: CommandContext) {
-		const timeUsed = Date.now() - start;
+	logSlowMessage(startTime: number, context: CommandContext) {
+		const timeUsed = Date.now() - startTime;
 		if (timeUsed < 1000) return;
 		if (context.cmd === 'search' || context.cmd === 'savereplay') return;
 

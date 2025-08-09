@@ -654,7 +654,7 @@ export const commands: Chat.ChatCommands = {
 						void manager.destroy();
 					}
 				}
-				void Chat.PM.destroy();
+				void Chat.FriendsPM.destroy();
 
 				global.Chat = require('../chat').Chat;
 				global.Tournaments = require('../tournaments').Tournaments;

@@ -69,20 +69,8 @@ try {
 	throw new Error("Dependencies are unmet; run `npm ci` before launching Pokemon Showdown again.");
 }
 
-if (!Promise.withResolvers) {
-	Promise.withResolvers = function defer<T = void>(): Deferred<T> {
-		let resolve!: (value: T | PromiseLike<T>) => void;
-		let reject!: (reason: unknown) => void;
-		const promise = new Promise<T>((_resolve, _reject) => {
-			resolve = _resolve;
-			reject = _reject;
-		});
-		return { resolve, reject, promise };
-	};
-}
-
 // Note that `import` declarations are run before any other code
-import { FS, Repl } from '../lib';
+import { Repl } from '../lib';
 import * as ConfigLoader from './config-loader';
 import { Sockets } from './sockets';
 
