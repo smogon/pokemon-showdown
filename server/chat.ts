@@ -1,3 +1,4 @@
+
 /**
  * Chat
  * Pokemon Showdown - http://pokemonshowdown.com/

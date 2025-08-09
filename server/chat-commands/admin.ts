@@ -605,7 +605,6 @@ export const commands: Chat.ChatCommands = {
 			throw new Chat.ErrorMessage("Wait for /updateserver to finish before hotpatching.");
 		}
 
-		await this.parse(`/rebuild`);
 		const lock = Monitor.hotpatchLock;
 		const hotpatches = [
 			'chat', 'formats', 'loginserver', 'punishments', 'dnsbl', 'modlog',

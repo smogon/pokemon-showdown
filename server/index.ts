@@ -143,6 +143,10 @@ function setupGlobals() {
 void cleanupStale().then(() => {
 	setupGlobals();
 }).then(() => {
+	if (Config.usesqlite) {
+		require('./modlog').start();
+	}
+
 	Rooms.global.start();
 	Sockets.start();
 	Verifier.start();
@@ -150,7 +154,6 @@ void cleanupStale().then(() => {
 	Chat.start();
 
 	require('./artemis').start();
-	require('./modlog').start();
 
 	/*********************************************************
 	 * Monitor config file and display diagnostics
@@ -173,6 +176,8 @@ void cleanupStale().then(() => {
 		});
 
 		process.on('unhandledRejection', err => {
+			// TODO: rejections are not crashes,
+			// and unhandled rejections are not (always) bugs
 			Monitor.crashlog(err as any, 'A main process Promise');
 		});
 	}

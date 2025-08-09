@@ -42,7 +42,7 @@ import { RoomGame, SimpleRoomGame, RoomGamePlayer } from './room-game';
 import { MinorActivity, type MinorActivityData } from './room-minor-activity';
 import { Roomlogs, type Roomlog } from './roomlogs';
 import { RoomAuth } from './user-groups';
-import { type PartialModlogEntry, mainModlog, start as startModlog } from './modlog';
+import { type PartialModlogEntry, mainModlog } from './modlog';
 import { Replays } from './replays';
 import * as crypto from 'crypto';
 
@@ -1312,7 +1312,6 @@ export class GlobalRoomState {
 	start() {
 		void this.loadBattles();
 		startBattleProcesses();
-		startModlog();
 	}
 
 	async serializeBattleRoom(room: Room) {

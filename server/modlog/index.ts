@@ -98,6 +98,7 @@ export class Modlog {
 	readonly database: SQL.DatabaseManager;
 	readyPromise: null | Promise<void>;
 	readyPromiseResolve: null | (value: T | PromiseLike<T>) => void;
+	readyPromiseReject: null | (reason: unknown) => void;
 	private databaseReady: boolean;
 	/** entries to be written once the DB is ready */
 	queuedEntries: ModlogEntry[];
@@ -111,9 +112,10 @@ export class Modlog {
 		this.queuedEntries = [];
 		this.databaseReady = false;
 		this.database = PM;
-		const {promise, resolve} = Promise.withResolvers();
+		const {promise, resolve, reject} = Promise.withResolvers();
 		this.readyPromise = promise;
 		this.readyPromiseResolve = resolve;
+		this.readyPromiseReject = reject;
 	}
 
 	async setupDatabase() {
@@ -474,12 +476,18 @@ if (!PM.isParentProcess) {
 }
 
 export function start() {
-	if (!Config.usesqlite) return;
+	if (!Config.usesqlite) {
+		if (mainModlog.readyPromise) {
+			mainModlog.readyPromiseReject(new Error("Modlog disabled", {cause: new Error("SQLite is disabled.")}));
+		}
+		return;
+	}
 	PM.spawn(global.Config?.subprocessescache?.modlog ?? 1);
 	mainModlog.readyPromiseResolve(mainModlog.setupDatabase());
 	mainModlog.readyPromise.then(result => {
 		mainModlog.databaseReady = result;
 		mainModlog.readyPromise = null;
 		mainModlog.readyPromiseResolve = null;
+		mainModlog.readyPromiseReject = null;
 	});
 }

@@ -55,6 +55,7 @@ export const TeamsHandler = new class {
 			await teamsDB.query(SQL(FS(`databases/schemas/teams.sql`).readSync()));
 		}
 	})() : null;
+
 	destroy() {
 		void teamsDB?.close();
 	}
