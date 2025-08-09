@@ -500,7 +500,6 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 	spawn(count = 1, force?: boolean) {
 		if (!this.isParentProcess) return;
 		if (ProcessManager.disabled && !force) return;
-		if (process.send) throw new Error(`Child process spawning further child processes (count=${count})!!`);
 		const spawnCount = count - this.processes.length;
 		for (let i = 0; i < spawnCount; i++) {
 			this.spawnOne(force);
