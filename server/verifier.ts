@@ -40,7 +40,6 @@ if (!PM.isParentProcess) {
 	Repl.start('verifier', (cmd: string) => eval(cmd));
 }
 
-
 export function start() {
 	PM.spawn(global.Config?.subprocessescache?.verifier ?? 1);
 }

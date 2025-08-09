@@ -150,14 +150,14 @@ export const Monitor = new class {
 
 	logWithLevel(level: LogLevel, text: string) {
 		switch (level) {
-			case 'debug':
-				return this.debug(text);
-			case 'notice':
-				return this.notice(text);
-			case 'warning':
-				return this.warn(text);
-			case 'error':
-				return this.error(text);
+		case 'debug':
+			return this.debug(text);
+		case 'notice':
+			return this.notice(text);
+		case 'warning':
+			return this.warn(text);
+		case 'error':
+			return this.error(text);
 		}
 	}
 
