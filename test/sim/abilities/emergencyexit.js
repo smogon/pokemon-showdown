@@ -184,7 +184,6 @@ describe(`Emergency Exit`, () => {
 		]]);
 		const eePokemon = battle.p1.active[0];
 		battle.makeChoices('move substitute', 'move seismictoss');
-		console.log(battle.log);
 		assert.atMost(eePokemon.hp, eePokemon.maxhp / 2);
 		assert.equal(battle.requestState, 'move');
 	});
