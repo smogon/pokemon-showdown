@@ -3,7 +3,7 @@
  */
 import { FS, Utils, ProcessManager, Repl } from '../../lib';
 
-import { checkRipgrepAvailability, Config } from '../config-loader';
+import * as ConfigLoader from '../config-loader';
 
 import * as path from 'path';
 import * as child_process from 'child_process';
@@ -27,7 +27,7 @@ interface BattleSearchResults {
 }
 
 export async function runBattleSearch(userids: ID[], month: string, tierid: ID, turnLimit?: number) {
-	const useRipgrep = await checkRipgrepAvailability();
+	const useRipgrep = await ConfigLoader.checkRipgrepAvailability();
 	const pathString = `${month}/${tierid}/`;
 	const results: { [k: string]: BattleSearchResults } = {};
 	let files = [];
@@ -477,8 +477,7 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 });
 
 if (!PM.isParentProcess) {
-	// This is a child process!
-	global.Config = require('../config-loader').Config;
+	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A battle search process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);

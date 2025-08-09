@@ -9,7 +9,7 @@
  */
 
 import { SQL, Utils, FS } from '../../lib';
-import { Config } from '../config-loader';
+import * as ConfigLoader from '../config-loader';
 
 // If a modlog query takes longer than this, it will be logged.
 const LONG_QUERY_DURATION = 2000;
@@ -34,6 +34,18 @@ const PUNISHMENTS = [
 	'NOTE', 'MAFIAHOSTBAN', 'MAFIAUNHOSTBAN', 'MAFIAGAMEBAN', 'MAFIAUNGAMEBAN', 'GIVEAWAYBAN', 'GIVEAWAYUNBAN',
 	'TOUR BAN', 'TOUR UNBAN', 'UNNAMELOCK', 'PERMABLACKLIST',
 ];
+
+const PM = SQL(module, {
+	file: MODLOG_DB_PATH,
+	extension: 'server/modlog/transactions.js',
+	sqliteOptions: Config.modlogsqliteoptions,
+	onError: (error, data, isParent) => {
+		if (!isParent) return;
+		Monitor.crashlog(error, 'A modlog SQLite query', {
+			query: JSON.stringify(data),
+		});
+	},
+});
 
 export type ModlogID = RoomID | 'global' | 'all';
 interface SQLQuery {
@@ -84,8 +96,10 @@ export type PartialModlogEntry = Partial<ModlogEntry> & { action: string };
 
 export class Modlog {
 	readonly database: SQL.DatabaseManager;
-	readyPromise: Promise<void> | null;
-	private databaseReady: boolean;
+	readyPromise: null | Promise<void>;
+	readyPromiseResolve: null | ((followPromise: Promise<boolean>) => void);
+	readyPromiseReject: null | ((reason: unknown) => void);
+	databaseReady: boolean;
 	/** entries to be written once the DB is ready */
 	queuedEntries: ModlogEntry[];
 
@@ -94,45 +108,15 @@ export class Modlog {
 	renameQuery: SQL.Statement | null = null;
 	globalPunishmentsSearchQuery: SQL.Statement | null = null;
 
-	constructor(databasePath: string, options: Partial<SQL.Options>) {
+	constructor() {
 		this.queuedEntries = [];
 		this.databaseReady = false;
-		if (!options.onError) {
-			options.onError = (error, data, isParent) => {
-				if (!isParent) return;
-				Monitor.crashlog(error, 'A modlog SQLite query', {
-					query: JSON.stringify(data),
-				});
-			};
-		}
-		this.database = SQL(module, {
-			file: databasePath,
-			extension: 'server/modlog/transactions.js',
-			...options,
-		});
-
-		if (Config.usesqlite) {
-			if (this.database.isParentProcess) {
-				this.database.spawn(global.Config?.subprocessescache?.modlog ?? 1);
-			} else {
-				global.Monitor = {
-					crashlog(error: Error, source = 'A modlog child process', details: AnyObject | null = null) {
-						const repr = JSON.stringify([error.name, error.message, source, details]);
-						process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-					},
-				};
-				process.on('uncaughtException', err => {
-					Monitor.crashlog(err, 'A modlog database process');
-				});
-				process.on('unhandledRejection', err => {
-					Monitor.crashlog(err as Error, 'A modlog database process');
-				});
-			}
-		}
-
-		this.readyPromise = this.setupDatabase().then(result => {
-			this.databaseReady = result;
-			this.readyPromise = null;
+		this.database = PM;
+		this.readyPromiseResolve = null;
+		this.readyPromiseReject = null;
+		this.readyPromise = new Promise((resolve, reject) => {
+			this.readyPromiseResolve = resolve as any;
+			this.readyPromiseReject = reject;
 		});
 	}
 
@@ -475,4 +459,37 @@ export class Modlog {
 	}
 }
 
-export const mainModlog = new Modlog(MODLOG_DB_PATH, { sqliteOptions: Config.modlogsqliteoptions });
+export const mainModlog = new Modlog();
+
+if (!PM.isParentProcess) {
+	ConfigLoader.ensureLoaded();
+	global.Monitor = {
+		crashlog(error: Error, source = 'A modlog child process', details: AnyObject | null = null) {
+			const repr = JSON.stringify([error.name, error.message, source, details]);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+	};
+	process.on('uncaughtException', err => {
+		Monitor.crashlog(err, 'A modlog database process');
+	});
+	process.on('unhandledRejection', err => {
+		Monitor.crashlog(err as Error, 'A modlog database process');
+	});
+}
+
+export function start() {
+	if (!Config.usesqlite) {
+		if (mainModlog.readyPromiseReject) {
+			mainModlog.readyPromiseReject(new Error("Modlog disabled because SQLite is disabled"));
+		}
+		return;
+	}
+	PM.spawn(global.Config?.subprocessescache?.modlog ?? 1);
+	mainModlog.readyPromiseResolve!(mainModlog.setupDatabase());
+	void mainModlog.readyPromise!.then(result => {
+		mainModlog.databaseReady = true;
+		mainModlog.readyPromise = null;
+		mainModlog.readyPromiseResolve = null;
+		mainModlog.readyPromiseReject = null;
+	});
+}
