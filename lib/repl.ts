@@ -83,7 +83,7 @@ export const Repl = new class {
 					socket.destroy();
 					resolve(null);
 				}).on('error', () => {
-					resolve(fs.promises.unlink(pathname));
+					resolve(fs.promises.unlink(pathname).catch(err => null));
 				});
 			});
 		}
