@@ -59,7 +59,42 @@ export class BattleActions {
 	// #region SWITCH
 	// ==================================================================
 
-	switchIn(pokemon: Pokemon, pos: number, sourceEffect: Effect | null = null, isDrag?: boolean) {
+	switchOut(oldActive: Pokemon, isDrag = false) {
+		oldActive.beingCalledBack = true;
+		if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
+			this.battle.runEvent('BeforeSwitchOut', oldActive);
+			if (this.battle.gen >= 5) {
+				this.battle.eachEvent('Update');
+			}
+		}
+		oldActive.skipBeforeSwitchOutEventFlag = false;
+		if (!this.battle.runEvent('SwitchOut', oldActive)) {
+			// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
+			// To trap a pokemon and prevent it from switching out, (e.g. Mean Look, Magnet Pull)
+			// use the 'trapped' flag instead.
+
+			// Note: Nothing in the real games can interrupt a switch-out (except Pursuit KOing,
+			// which is handled elsewhere); this is just for custom formats.
+			return false;
+		}
+		if (!oldActive.hp) {
+			// a pokemon fainted from Pursuit before it could switch
+			return 'pursuitfaint';
+		}
+
+		// will definitely switch out at this point
+
+		oldActive.illusion = null;
+		this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
+		this.battle.singleEvent('End', oldActive.getItem(), oldActive.itemState, oldActive);
+
+		// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
+		this.battle.queue.cancelAction(oldActive);
+
+		return true;
+	}
+
+	switchIn(pokemon: Pokemon, pos: number, sourceEffect: Effect | null = null, isDrag = false) {
 		if (!pokemon || pokemon.isActive) {
 			this.battle.hint("A switch failed because the Pokémon trying to switch in is already in.");
 			return false;
@@ -70,42 +105,16 @@ export class BattleActions {
 			throw new Error(`Invalid switch position ${pos} / ${side.active.length}`);
 		}
 		const oldActive = side.active[pos];
-		const unfaintedActive = oldActive?.hp ? oldActive : null;
-		if (unfaintedActive) {
-			oldActive.beingCalledBack = true;
+		if (oldActive?.hp) {
 			let switchCopyFlag: 'copyvolatile' | 'shedtail' | boolean = false;
 			if (sourceEffect && typeof (sourceEffect as Move).selfSwitch === 'string') {
 				switchCopyFlag = (sourceEffect as Move).selfSwitch!;
 			}
-			if (!oldActive.skipBeforeSwitchOutEventFlag && !isDrag) {
-				this.battle.runEvent('BeforeSwitchOut', oldActive);
-				if (this.battle.gen >= 5) {
-					this.battle.eachEvent('Update');
-				}
+
+			if (!switchCopyFlag) {
+				const switchOutReturn = this.switchOut(oldActive, isDrag);
+				if (switchOutReturn !== true) return switchOutReturn;
 			}
-			oldActive.skipBeforeSwitchOutEventFlag = false;
-			if (!this.battle.runEvent('SwitchOut', oldActive)) {
-				// Warning: DO NOT interrupt a switch-out if you just want to trap a pokemon.
-				// To trap a pokemon and prevent it from switching out, (e.g. Mean Look, Magnet Pull)
-				// use the 'trapped' flag instead.
-
-				// Note: Nothing in the real games can interrupt a switch-out (except Pursuit KOing,
-				// which is handled elsewhere); this is just for custom formats.
-				return false;
-			}
-			if (!oldActive.hp) {
-				// a pokemon fainted from Pursuit before it could switch
-				return 'pursuitfaint';
-			}
-
-			// will definitely switch out at this point
-
-			oldActive.illusion = null;
-			this.battle.singleEvent('End', oldActive.getAbility(), oldActive.abilityState, oldActive);
-			this.battle.singleEvent('End', oldActive.getItem(), oldActive.itemState, oldActive);
-
-			// if a pokemon is forced out by Whirlwind/etc or Eject Button/Pack, it can't use its chosen move
-			this.battle.queue.cancelAction(oldActive);
 
 			let newMove = null;
 			if (this.battle.gen === 4 && sourceEffect) {
