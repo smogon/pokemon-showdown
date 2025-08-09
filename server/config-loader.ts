@@ -42,7 +42,11 @@ const processTypes: ProcessType[] = [
 const CONFIG_PATH = FS('./config/config.js').path;
 
 export function load(invalidate = false) {
-	if (invalidate) delete require.cache[CONFIG_PATH];
+	if (global.Config) {
+		if (!invalidate) return global.Config;
+		delete require.cache[CONFIG_PATH];
+	}
+	
 	const config = ({ ...defaults, ...require(CONFIG_PATH) }) as ConfigType;
 	// config.routes is nested - we need to ensure values are set for its keys as well.
 	config.routes = { ...defaults.routes, ...config.routes };
