@@ -505,24 +505,24 @@ export class DexSpecies {
 			if (!species.tier && !species.doublesTier && !species.natDexTier && species.baseSpecies !== species.name) {
 				if (species.baseSpecies === 'Mimikyu') {
 					species.tier = this.dex.data.FormatsData[toID(species.baseSpecies)].tier || 'Illegal';
-					species.doublesTier = this.dex.data.FormatsData[toID(species.baseSpecies)].doublesTier || 'Illegal';
-					species.natDexTier = this.dex.data.FormatsData[toID(species.baseSpecies)].natDexTier || 'Illegal';
+					species.doublesTier = this.dex.data.FormatsData[toID(species.baseSpecies)].doublesTier || species.tier as any;
+					species.natDexTier = this.dex.data.FormatsData[toID(species.baseSpecies)].natDexTier || species.tier;
 				} else if (species.id.endsWith('totem')) {
 					species.tier = this.dex.data.FormatsData[species.id.slice(0, -5)].tier || 'Illegal';
-					species.doublesTier = this.dex.data.FormatsData[species.id.slice(0, -5)].doublesTier || 'Illegal';
-					species.natDexTier = this.dex.data.FormatsData[species.id.slice(0, -5)].natDexTier || 'Illegal';
+					species.doublesTier = this.dex.data.FormatsData[species.id.slice(0, -5)].doublesTier || species.tier as any;
+					species.natDexTier = this.dex.data.FormatsData[species.id.slice(0, -5)].natDexTier || species.tier;
 				} else if (species.battleOnly) {
 					species.tier = this.dex.data.FormatsData[toID(species.battleOnly)].tier || 'Illegal';
-					species.doublesTier = this.dex.data.FormatsData[toID(species.battleOnly)].doublesTier || 'Illegal';
-					species.natDexTier = this.dex.data.FormatsData[toID(species.battleOnly)].natDexTier || 'Illegal';
+					species.doublesTier = this.dex.data.FormatsData[toID(species.battleOnly)].doublesTier || species.tier as any;
+					species.natDexTier = this.dex.data.FormatsData[toID(species.battleOnly)].natDexTier || species.tier;
 				} else {
 					const baseFormatsData = this.dex.data.FormatsData[toID(species.baseSpecies)];
 					if (!baseFormatsData) {
 						throw new Error(`${species.baseSpecies} has no formats-data entry`);
 					}
 					species.tier = baseFormatsData.tier || 'Illegal';
-					species.doublesTier = baseFormatsData.doublesTier || 'Illegal';
-					species.natDexTier = baseFormatsData.natDexTier || 'Illegal';
+					species.doublesTier = baseFormatsData.doublesTier || species.tier as any;
+					species.natDexTier = baseFormatsData.natDexTier || species.tier;
 				}
 			}
 			if (!species.tier) species.tier = 'Illegal';
