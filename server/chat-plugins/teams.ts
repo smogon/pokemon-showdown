@@ -55,8 +55,9 @@ export const TeamsHandler = new class {
 			await teamsDB.query(SQL(FS(`databases/schemas/teams.sql`).readSync()));
 		}
 	})() : null;
+
 	destroy() {
-		void teamsDB.close();
+		void teamsDB?.close();
 	}
 
 	async search(search: TeamSearch, user: User, count = 10, includePrivate = false) {

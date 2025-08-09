@@ -8,35 +8,7 @@
  */
 
 import { TeamValidator } from '../sim/team-validator';
-
-export class TeamValidatorAsync {
-	format: Format;
-
-	constructor(format: string) {
-		this.format = Dex.formats.get(format);
-	}
-
-	validateTeam(team: string, options?: { removeNicknames?: boolean, user?: ID }) {
-		let formatid = this.format.id;
-		if (this.format.customRules) formatid += '@@@' + this.format.customRules.join(',');
-		if (team.length > (25 * 1024 - 6)) { // don't even let it go to the child process
-			return Promise.resolve('0Your team is over 25KB. Please use a smaller team.');
-		}
-		return PM.query({ formatid, options, team });
-	}
-
-	static get(this: void, format: string) {
-		return new TeamValidatorAsync(format);
-	}
-}
-
-export const get = TeamValidatorAsync.get;
-
-/*********************************************************
- * Process manager
- *********************************************************/
-
-import { QueryProcessManager } from '../lib/process-manager';
+import * as ConfigLoader from './config-loader';
 
 export const PM = new QueryProcessManager<{
 	formatid: string, options?: { removeNicknames?: boolean }, team: string,
@@ -71,10 +43,43 @@ export const PM = new QueryProcessManager<{
 	return '1' + packedTeam;
 }, 2 * 60 * 1000);
 
-if (!PM.isParentProcess) {
-	// This is a child process!
-	global.Config = require('./config-loader').Config;
+export class TeamValidatorAsync {
+	static PM = PM;
 
+	format: Format;
+
+	constructor(format: string) {
+		this.format = Dex.formats.get(format);
+	}
+
+	validateTeam(team: string, options?: { removeNicknames?: boolean, user?: ID }) {
+		let formatid = this.format.id;
+		if (this.format.customRules) formatid += '@@@' + this.format.customRules.join(',');
+		if (team.length > (25 * 1024 - 6)) { // don't even let it go to the child process
+			return Promise.resolve('0Your team is over 25KB. Please use a smaller team.');
+		}
+		return PM.query({ formatid, options, team });
+	}
+
+	static get(this: void, format: string) {
+		return new TeamValidatorAsync(format);
+	}
+
+	static start() {
+		start();
+	}
+}
+
+export const get = TeamValidatorAsync.get;
+
+/*********************************************************
+ * Process manager
+ *********************************************************/
+
+import { QueryProcessManager } from '../lib/process-manager';
+
+if (!PM.isParentProcess) {
+	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A team validator process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
@@ -96,6 +101,8 @@ if (!PM.isParentProcess) {
 
 	// eslint-disable-next-line no-eval
 	require('../lib/repl').Repl.start(`team-validator-${process.pid}`, (cmd: string) => eval(cmd));
-} else {
+}
+
+export function start() {
 	PM.spawn(global.Config?.subprocessescache?.validator ?? 1);
 }
