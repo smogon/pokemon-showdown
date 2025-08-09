@@ -1634,6 +1634,7 @@ export class Battle {
 					// It shouldn't be possible in a normal battle for a Pokemon to be damaged before turn 1's move selection
 					// However, this could be potentially relevant in certain OMs
 					pokemon.hurtThisTurn = null;
+					pokemon.hurtThisMove = null;
 				}
 
 				pokemon.maybeDisabled = false;
@@ -2089,7 +2090,7 @@ export class Battle {
 			}
 
 			retVals[i] = targetDamage = target.damage(targetDamage, source, effect);
-			if (targetDamage !== 0) target.hurtThisTurn = target.hp;
+			if (targetDamage !== 0) target.hurtThisTurn = target.hurtThisMove = target.hp;
 			if (source && effect.effectType === 'Move') source.lastDamage = targetDamage;
 
 			const name = effect.fullname === 'tox' ? 'psn' : effect.fullname;
