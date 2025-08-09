@@ -177,12 +177,11 @@ describe(`Emergency Exit`, () => {
 
 	it(`should not request switch-out on usage of Substitute`, () => {
 		battle = common.createBattle([[
-				{ species: "Golisopod", ability: 'emergencyexit', moves: ['substitute'] },
-				{ species: "Clefable", ability: 'Unaware', moves: ['sleeptalk'] },
-			], [
-				{ species: "Deoxys-Attack", ability: 'pressure', moves: ['seismictoss'] },
-			],
-		]);
+			{ species: "Golisopod", ability: 'emergencyexit', moves: ['substitute'] },
+			{ species: "Clefable", ability: 'Unaware', moves: ['sleeptalk'] },
+		], [
+			{ species: "Deoxys-Attack", ability: 'pressure', moves: ['seismictoss'] },
+		]]);
 		const eePokemon = battle.p1.active[0];
 		battle.makeChoices('move substitute', 'move seismictoss');
 		console.log(battle.log);
