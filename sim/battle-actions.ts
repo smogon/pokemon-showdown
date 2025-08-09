@@ -669,20 +669,6 @@ export class BattleActions {
 				immune = true;
 			}
 			if (immune) {
-				// The things we do to support hints...
-				if (this.battle.gen >= 7 && move.category === 'Status' && !target.isAlly(pokemon)) {
-					const ruleTable = this.battle.ruleTable;
-					if (ruleTable.has('+hackmons') || !ruleTable.has('obtainableabilities')) {
-						if (pokemon.hasAbility('Prankster')) {
-							this.battle.hint(
-								"Since gen 7, Dark is immune to Prankster moves. It's possible that the target Pokémon is disguised by Illusion or is immune to the move for a different reason.",
-								false, pokemon.side,
-							);
-						}
-					} else if (Object.values((pokemon.illusion || pokemon).species.abilities).includes('Prankster')) {
-						this.battle.hint("Since gen 7, Dark is immune to Prankster moves. The attacking Pokémon may have the Prankster ability. It's also possible that the target Pokémon is disguised by Illusion or is immune to the move for a different reason.");
-					}
-				}
 				this.battle.add('-immune', target);
 				hitResults[i] = false;
 			} else {
