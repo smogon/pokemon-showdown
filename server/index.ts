@@ -81,6 +81,7 @@ if (!Promise.withResolvers) {
 	};
 }
 
+// Note that `import` declarations are run before any other code
 import { FS, Repl } from '../lib';
 import * as ConfigLoader from './config-loader';
 import { Sockets } from './sockets';
