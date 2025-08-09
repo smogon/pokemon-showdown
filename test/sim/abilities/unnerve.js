@@ -22,7 +22,7 @@ describe(`Unnerve`, () => {
 		assert.equal(battle.p2.active[0].status, '');
 	});
 
-	it(`should allow Berry activation between switches of Unnerve before an instaswitch request`, () => {
+	it(`should allow Berry activation before instaswitch requests`, () => {
 		battle = common.createBattle([[
 			{ species: 'toxapex', ability: 'unnerve', moves: ['toxic', 'uturn'] },
 			{ species: 'corviknight', ability: 'unnerve', moves: ['sleeptalk'] },
