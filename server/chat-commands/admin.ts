@@ -828,7 +828,8 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply("Hotpatching modlog...");
 
 				void Rooms.Modlog.database.destroy();
-				const { mainModlog } = require('../modlog');
+				const { mainModlog, start: startModlog } = require('../modlog');
+				startModlog();
 				if (mainModlog.readyPromise) {
 					this.sendReply("Waiting for the new SQLite database to be ready...");
 					await mainModlog.readyPromise;
