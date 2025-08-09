@@ -103,6 +103,6 @@ if (!PM.isParentProcess) {
 	require('../lib/repl').Repl.start(`team-validator-${process.pid}`, (cmd: string) => eval(cmd));
 }
 
-function start() {
+export function start() {
 	PM.spawn(global.Config?.subprocessescache?.validator ?? 1);
 }
