@@ -3637,7 +3637,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 3] OU",
 		mod: 'gen3',
 		ruleset: ['Standard', 'One Boost Passer Clause', 'Freeze Clause Mod'],
-		banlist: ['Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger'],
+		banlist: ['Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web', 'Swagger', 'Arena Trap + Sand Attack', 'Mean Look + Sand Attack', 'Block + Sand Attack', 'Spider Web + Sand Attack'],
 	},
 	{
 		name: "[Gen 2] OU",
