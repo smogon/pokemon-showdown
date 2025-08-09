@@ -248,6 +248,7 @@ export function flushLog() {
 	for (const entry of errors) {
 		Monitor.logWithLevel(entry[0], entry[1]);
 	}
+	errors.length = 0;
 }
 
 export function ensureLoaded() {
