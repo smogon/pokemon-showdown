@@ -13,6 +13,10 @@ import * as pathModule from 'path';
 
 const MONITOR_CLEAN_TIMEOUT = 2 * 60 * 60 * 1000;
 
+export type LogLevel = 'debug' | 'notice' | 'warning' | 'error';
+
+export type LogEntry = [LogLevel, string];
+
 /**
  * This counts the number of times an action has been committed, and tracks the
  * delta of time since the last time it was committed. Actions include
@@ -142,6 +146,19 @@ export const Monitor = new class {
 
 	notice(text: string) {
 		if (Config.loglevel <= 2) console.log(text);
+	}
+
+	logWithLevel(level: LogLevel, text: string) {
+		switch (level) {
+			case 'debug':
+				return this.debug(text);
+			case 'notice':
+				return this.notice(text);
+			case 'warning':
+				return this.warn(text);
+			case 'error':
+				return this.error(text);
+		}
 	}
 
 	slow(text: string) {

@@ -150,8 +150,7 @@ export class RemoteClassifier {
 }
 
 if (!PM.isParentProcess) {
-	// This is a child process!
-	global.Config = Config;
+	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A remote Artemis child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
