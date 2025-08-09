@@ -1935,7 +1935,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (target.getMoveHitData(move).typeMod > 0) {
 				this.effectState.superHit = true;
 				target.removeVolatile('ultramystik');
-				target.setAbility('Healer', null, true);
+				target.setAbility('Healer', null, null, true);
 				target.baseAbility = target.ability;
 			}
 		},
