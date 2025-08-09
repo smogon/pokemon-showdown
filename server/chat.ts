@@ -2733,8 +2733,8 @@ if (!PM.isParentProcess) {
 function start() {
 	if (Config.usesqlite) {
 		PM.spawn(global.Config?.subprocessescache?.chatdb ?? 1);
+		Chat.databaseReadyPromise = Chat.prepareDatabase();
 	}
-	Chat.databaseReadyPromise = Chat.prepareDatabase();
 	Chat.PrivateMessages.start();
 	FriendsDatabase.start();
 	Artemis.start();
