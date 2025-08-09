@@ -72,6 +72,40 @@ describe('Prankster', () => {
 		assert(battle.p2.active[0].volatiles['encore'], `Meowstic should be encored`);
 		assert.fullHP(battle.p1.active[0]);
 	});
+
+	it('should not leak the ability via hint if the target is immune to the Status move', () => {
+		/**
+		 * The simulator used to have hints for Prankster immunity. These were discontinued because
+		 * they leaked information when combined with Illusion and other types of immunities.
+		 * These tests exist to ensure that accidental hints are not added that might leak information.
+		 * If you change these tests, make sure they do not leak any information.
+		 */
+		battle = common.createBattle([[
+			{ species: "Sableye", ability: 'prankster', moves: ['willowisp'] },
+		], [
+			{ species: "Houndoom", moves: ['willowisp'] },
+		]]);
+		battle.makeChoices('move willowisp', 'move willowisp');
+		assert.false(battle.log.some(line => line.includes('hint')), `Prankster should not be leaked via hint (Fire immunity)`);
+
+		battle = common.createBattle([[
+			{ species: "Sableye", ability: 'prankster', moves: ['willowisp'] },
+		], [
+			{ species: "Spiritomb", ability: 'illusion', moves: ['sleeptalk'] },
+			{ species: "Gholdengo", ability: 'goodasgold', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move willowisp', 'move sleeptalk');
+		assert.false(battle.log.some(line => line.includes('hint')), `Prankster should not leak that the opponent doesn't have Good as Gold`);
+
+		battle = common.createBattle([[
+			{ species: "Sableye", ability: 'prankster', moves: ['willowisp'] },
+		], [
+			{ species: "Typhlosion", ability: 'illusion', moves: ['sleeptalk'] },
+			{ species: "Yveltal", moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move willowisp', 'move sleeptalk');
+		assert.false(battle.log.some(line => line.includes('hint')), `Prankster should not leak that the opponent is not a Dark-type`);
+	});
 });
 
 describe('Prankster [Gen 6]', () => {
