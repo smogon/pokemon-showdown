@@ -9,7 +9,7 @@
  */
 
 import { SQL, Utils, FS } from '../../lib';
-import { Config } from '../config-loader';
+import * as ConfigLoader from '../config-loader';
 
 // If a modlog query takes longer than this, it will be logged.
 const LONG_QUERY_DURATION = 2000;
@@ -36,9 +36,15 @@ const PUNISHMENTS = [
 ];
 
 const PM = SQL(module, {
-	file: databasePath,
+	file: MODLOG_DB_PATH,
 	extension: 'server/modlog/transactions.js',
-	...options,
+	sqliteOptions: Config.modlogsqliteoptions,
+	onError: (error, data, isParent) => {
+		if (!isParent) return;
+		Monitor.crashlog(error, 'A modlog SQLite query', {
+			query: JSON.stringify(data),
+		});
+	},
 });
 
 export type ModlogID = RoomID | 'global' | 'all';
@@ -92,7 +98,6 @@ export class Modlog {
 	readonly database: SQL.DatabaseManager;
 	readyPromise: null | Promise<void>;
 	readyPromiseResolve: null | (value: T | PromiseLike<T>) => void;
-	readyPromiseReject: null | (reason: unknown) => void;
 	private databaseReady: boolean;
 	/** entries to be written once the DB is ready */
 	queuedEntries: ModlogEntry[];
@@ -102,22 +107,13 @@ export class Modlog {
 	renameQuery: SQL.Statement | null = null;
 	globalPunishmentsSearchQuery: SQL.Statement | null = null;
 
-	constructor(databasePath: string, options: Partial<SQL.Options>) {
+	constructor() {
 		this.queuedEntries = [];
 		this.databaseReady = false;
-		if (!options.onError) {
-			options.onError = (error, data, isParent) => {
-				if (!isParent) return;
-				Monitor.crashlog(error, 'A modlog SQLite query', {
-					query: JSON.stringify(data),
-				});
-			};
-		}
 		this.database = PM;
-		const {promise, resolve, reject} = Promise.withResolvers();
+		const {promise, resolve} = Promise.withResolvers();
 		this.readyPromise = promise;
 		this.readyPromiseResolve = resolve;
-		this.readyPromiseReject = reject;
 	}
 
 	async setupDatabase() {
@@ -459,9 +455,10 @@ export class Modlog {
 	}
 }
 
-export const mainModlog = new Modlog(MODLOG_DB_PATH, { sqliteOptions: Config.modlogsqliteoptions });
+export const mainModlog = new Modlog();
 
 if (!PM.isParentProcess) {
+	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A modlog child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
@@ -484,6 +481,5 @@ export function start() {
 		mainModlog.databaseReady = result;
 		mainModlog.readyPromise = null;
 		mainModlog.readyPromiseResolve = null;
-		mainModlog.readyPromiseReject = null;
 	});
 }

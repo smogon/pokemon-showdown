@@ -154,6 +154,7 @@ export class LocalClassifier {
 }
 
 if (!PM.isParentProcess) {
+	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A local Artemis child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);

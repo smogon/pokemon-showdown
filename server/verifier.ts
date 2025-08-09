@@ -14,6 +14,7 @@
 import * as crypto from 'crypto';
 
 import { QueryProcessManager } from '../lib/process-manager';
+import * as ConfigLoader from './config-loader';
 
 export const PM = new QueryProcessManager<{ data: string, signature: string }, boolean>(
 	module, ({ data, signature }) => {
@@ -33,8 +34,7 @@ export function verify(data: string, signature: string): Promise<boolean> {
 }
 
 if (!PM.isParentProcess) {
-	global.Config = require('./config-loader').Config;
-
+	ConfigLoader.ensureLoaded();
 	const Repl = require('../lib/repl').Repl;
 	// eslint-disable-next-line no-eval
 	Repl.start('verifier', (cmd: string) => eval(cmd));

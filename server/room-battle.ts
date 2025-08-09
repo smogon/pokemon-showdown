@@ -15,6 +15,7 @@ import { execSync } from "child_process";
 import { Repl, ProcessManager, type Streams } from '../lib';
 import { BattleStream } from "../sim/battle-stream";
 import { RoomGamePlayer, RoomGame } from "./room-game";
+import * as ConfigLoader from './config-loader';
 import type { Tournament } from './tournaments/index';
 import type { RoomSettings } from './rooms';
 import type { BestOfGame } from './room-battle-bestof';
@@ -1368,11 +1369,10 @@ export function start() {
 }
 
 if (!PM.isParentProcess) {
-	// This is a child process!
+	ConfigLoader.ensureLoaded();
 	try {
 		require('source-map-support').install();
 	} catch {}
-	global.Config = require('./config-loader').Config;
 	global.Dex = require('../sim/dex').Dex;
 	global.Monitor = {
 		crashlog(error: Error, source = 'A simulator process', details: AnyObject | null = null) {

@@ -8,6 +8,7 @@
  */
 
 import { TeamValidator } from '../sim/team-validator';
+import * as ConfigLoader from './config-loader';
 
 export class TeamValidatorAsync {
 	format: Format;
@@ -76,8 +77,7 @@ export const PM = new QueryProcessManager<{
 }, 2 * 60 * 1000);
 
 if (!PM.isParentProcess) {
-	global.Config = require('./config-loader').Config;
-
+	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A team validator process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);

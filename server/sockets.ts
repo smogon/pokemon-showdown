@@ -15,6 +15,7 @@ import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
 import * as path from 'path';
+import * as ConfigLoader from './config-loader';
 import { crashlogger, ProcessManager, Streams, Repl } from '../lib';
 import { IPTools } from './ip-tools';
 import { type ChannelID, extractChannelMessages } from '../sim/battle';
@@ -520,53 +521,51 @@ export const PM = new ProcessManager.RawProcessManager({
 	isCluster: true,
 });
 
-function start() {
-	if (!PM.isParentProcess) {
-		// This is a child process!
-		global.Config = (require as any)('./config-loader').Config;
-
-		if (Config.crashguard) {
-			// graceful crash - allow current battles to finish before restarting
-			process.on('uncaughtException', err => {
-				crashlogger(err, `Socket process ${PM.workerid} (${process.pid})`);
-			});
-			process.on('unhandledRejection', err => {
-				crashlogger(err as any || {}, `Socket process ${PM.workerid} (${process.pid}) Promise`);
-			});
-		}
-
-		if (Config.ofesockets) {
-			try {
-				require.resolve('node-oom-heapdump');
-			} catch (e: any) {
-				if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
-				throw new Error(
-					'node-oom-heapdump is not installed, but it is a required dependency if Config.ofesockets is set to true! ' +
-					'Run npm install node-oom-heapdump and restart the server.'
-				);
-			}
-
-			// Create a heapdump if the process runs out of memory.
-			(global as any).nodeOomHeapdump = (require as any)('node-oom-heapdump')({
-				addTimestamp: true,
-			});
-		}
-
-		// setup worker
-		if (process.env.PSPORT) Config.port = +process.env.PSPORT;
-		if (process.env.PSBINDADDR) Config.bindaddress = process.env.PSBINDADDR;
-		if (process.env.PSNOSSL && parseInt(process.env.PSNOSSL)) Config.ssl = null;
-
-		// eslint-disable-next-line no-eval
-		Repl.start(`sockets-${PM.workerid}-${process.pid}`, cmd => eval(cmd));
-	} else {
-		let port;
-		for (const arg of process.argv) {
-			if (/^[0-9]+$/.test(arg)) {
-				port = parseInt(arg);
-				break;
-			}
-		}
-		Sockets.listen(port);
+if (!PM.isParentProcess) {
+	ConfigLoader.ensureLoaded();
+	if (Config.crashguard) {
+		// graceful crash - allow current battles to finish before restarting
+		process.on('uncaughtException', err => {
+			crashlogger(err, `Socket process ${PM.workerid} (${process.pid})`);
+		});
+		process.on('unhandledRejection', err => {
+			crashlogger(err as any || {}, `Socket process ${PM.workerid} (${process.pid}) Promise`);
+		});
 	}
+
+	if (Config.ofesockets) {
+		try {
+			require.resolve('node-oom-heapdump');
+		} catch (e: any) {
+			if (e.code !== 'MODULE_NOT_FOUND') throw e; // should never happen
+			throw new Error(
+				'node-oom-heapdump is not installed, but it is a required dependency if Config.ofesockets is set to true! ' +
+				'Run npm install node-oom-heapdump and restart the server.'
+			);
+		}
+
+		// Create a heapdump if the process runs out of memory.
+		(global as any).nodeOomHeapdump = (require as any)('node-oom-heapdump')({
+			addTimestamp: true,
+		});
+	}
+
+	// setup worker
+	if (process.env.PSPORT) Config.port = +process.env.PSPORT;
+	if (process.env.PSBINDADDR) Config.bindaddress = process.env.PSBINDADDR;
+	if (process.env.PSNOSSL && parseInt(process.env.PSNOSSL)) Config.ssl = null;
+
+	// eslint-disable-next-line no-eval
+	Repl.start(`sockets-${PM.workerid}-${process.pid}`, cmd => eval(cmd));
+}
+
+function start() {
+	let port;
+	for (const arg of process.argv) {
+		if (/^[0-9]+$/.test(arg)) {
+			port = parseInt(arg);
+			break;
+		}
+	}
+	Sockets.listen(port);
 }

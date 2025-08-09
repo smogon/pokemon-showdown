@@ -26,6 +26,7 @@ To reload chat commands:
 import type { RoomPermission, GlobalPermission } from './user-groups';
 import type { Punishment } from './punishments';
 import type { PartialModlogEntry } from './modlog';
+import * as ConfigLoader from './config-loader';
 import { FriendsDatabase, PM } from './friends';
 import { SQL, Repl, FS, Utils } from '../lib';
 import * as Artemis from './artemis';
@@ -2712,6 +2713,7 @@ export interface Monitor {
 }
 
 if (!PM.isParentProcess) {
+	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A chat child process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
@@ -2724,7 +2726,6 @@ if (!PM.isParentProcess) {
 	process.on('unhandledRejection', err => {
 		Monitor.crashlog(err as Error, 'A chat database process');
 	});
-	global.Config = require('./config-loader').Config;
 	// eslint-disable-next-line no-eval
 	Repl.start('chat-db', cmd => eval(cmd));
 }

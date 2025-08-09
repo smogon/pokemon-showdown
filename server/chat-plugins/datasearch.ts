@@ -8,6 +8,7 @@
  * @license MIT
  */
 
+import * as ConfigLoader from '../config-loader';
 import { ProcessManager, Utils } from '../../lib';
 import type { FormatData } from '../../sim/dex-formats';
 import { TeamValidator } from '../../sim/team-validator';
@@ -3097,8 +3098,7 @@ export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(m
 });
 
 if (!PM.isParentProcess) {
-	// This is a child process!
-	global.Config = require('../config-loader').Config;
+	ConfigLoader.ensureLoaded();
 	global.Monitor = {
 		crashlog(error: Error, source = 'A datasearch process', details: AnyObject | null = null) {
 			const repr = JSON.stringify([error.name, error.message, source, details]);
