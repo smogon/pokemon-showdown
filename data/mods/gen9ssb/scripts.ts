@@ -1,20 +1,13 @@
 import type { SSBSet } from "./random-teams";
 import type { ChosenAction } from '../../../sim/side';
-import { FS } from '../../../lib';
+// @pokebedrock - remove unsupported FS import
 import { toID } from '../../../sim/dex-data';
 import { type SwitchAction } from "../../../sim/battle-queue";
 
 // Similar to User.usergroups. Cannot import here due to users.ts requiring Chat
 // This also acts as a cache, meaning ranks will only update when a hotpatch/restart occurs
 const usergroups: { [userid: string]: string } = {};
-const usergroupData = FS('config/usergroups.csv').readIfExistsSync().split('\n');
-for (const row of usergroupData) {
-	if (!toID(row)) continue;
-
-	const cells = row.split(',');
-	if (cells.length > 3) throw new Error(`Invalid entry when parsing usergroups.csv`);
-	usergroups[toID(cells[0])] = cells[1].trim() || ' ';
-}
+// @pokebedrock - remove unneeded user-groups
 
 const roomauth: { [roomid: string]: { [userid: string]: string } } = {};
 /**
@@ -25,7 +18,8 @@ export function getRoomauth(name: string, room: string) {
 	const userid = toID(name);
 	const roomid = toID(room);
 	if (roomauth[roomid]) return roomauth[roomid][userid] || null;
-	const roomsList: any[] = JSON.parse(FS('config/chatrooms.json').readIfExistsSync() || '[]');
+	// @pokebedrock - remove unneeded custom chatrooms
+	const roomsList: any[] = [];
 	const roomData = roomsList.find(r => toID(r.title) === roomid);
 	if (!roomData) return null;
 	roomauth[roomid] = roomData.auth;
