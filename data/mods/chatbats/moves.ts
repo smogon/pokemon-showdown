@@ -908,7 +908,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, source, move) {
 			if (source.species.id === 'jolteon' || source.species.id === 'vaporeon') {
 				this.add('-message', `Eevee uses its Fire Stone!`);
+				const currentHP = source.hp / source.maxhp;
 				source.formeChange('Flareon', null, true);
+				source.hp = Math.round(source.maxhp * currentHP);
 				// target.setAbility('Eeveelution');
 				// target.baseAbility = target.ability;
 				const newMoves = ['flipturn', 'voltswitch', 'sizzlyslide', 'bbqbeatdown'];
@@ -943,7 +945,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, source, move) {
 			if (source.species.id === 'flareon' || source.species.id === 'vaporeon') {
 				this.add('-message', `Eevee uses its Thunder Stone!`);
+				const currentHP = source.hp / source.maxhp;
 				source.formeChange('Jolteon', null, true);
+				source.hp = Math.round(source.maxhp * currentHP);
 				// target.setAbility('Eeveelution');
 				// target.baseAbility = target.ability;
 				const newMoves = ['flipturn', 'burnout', 'zippyzap', 'freezyfrost'];
@@ -970,7 +974,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, source, move) {
 			if (source.species.id === 'jolteon' || source.species.id === 'flareon') {
 				this.add('-message', `Eevee uses its Water Stone!`);
+				const currentHP = source.hp / source.maxhp;
 				source.formeChange('Vaporeon', null, true);
+				source.hp = Math.round(source.maxhp * currentHP);
 				// target.setAbility('Eeveelution');
 				// target.baseAbility = target.ability;
 				const newMoves = ['voltswitch', 'burnout', 'wish', 'bouncybubble'];
