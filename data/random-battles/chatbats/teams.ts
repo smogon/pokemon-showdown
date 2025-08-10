@@ -904,7 +904,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 				currentSpeciesPool.push(species);
 			}
 			// change const to let when enforcing certain mons for testing
-			let species = this.sample(currentSpeciesPool);
+			const species = this.sample(currentSpeciesPool);
 			// Code to enforce a mon on teams for testing
 			if (pokemon.length === 1 || this.maxTeamSize === 1) species = 'hitmontop';
 			if (pokemon.length === 2 || this.maxTeamSize === 1) species = 'articunogalar';
