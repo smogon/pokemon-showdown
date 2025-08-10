@@ -922,6 +922,33 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Burn Out",
 		pp: 20,
 		priority: 0,
+		onHit(target, source, move) {
+			if (source.species.id === 'jolteon' || source.species.id === 'vaporeon') {
+				this.add('-message', `Eevee uses its Fire Stone!`);
+				source.formeChange('Flareon', null, true);
+				// target.setAbility('Eeveelution');
+				// target.baseAbility = target.ability;
+				const replacementMoves = ['sizzlyslide', 'bbqbeatdown'];
+				const allowedMoves = ['voltswitch', 'flipturn', 'burnout'];
+				source.moveSlots = source.moveSlots.map(slot => {
+					if (!allowedMoves.includes(slot.id)) {
+						const newMove = replacementMoves.shift();
+						if (!newMove) return slot;
+					   const moveData = this.dex.moves.get(newMove);
+						return {
+						   move: moveData.name,
+							id: moveData.id,
+						   pp: moveData.pp,
+						   maxpp: moveData.pp,
+					      target: moveData.target,
+					      disabled: false,
+					      used: false,
+					   };
+					}
+					return slot;
+				});
+			}
+		},
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		selfSwitch: true,
 		secondary: null,
