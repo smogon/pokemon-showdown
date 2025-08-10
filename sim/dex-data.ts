@@ -104,6 +104,7 @@ export abstract class BasicEffect implements EffectData {
 	status?: ID;
 	/** Moves only: what weather does it set? */
 	weather?: ID;
+	tags?: TableTag[];
 	/** ??? */
 	sourceEffect: string;
 
