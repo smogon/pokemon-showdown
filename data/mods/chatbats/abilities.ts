@@ -711,7 +711,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				target.baseAbility = target.ability;
 				const replacementMoves = ['sizzlyslide', 'bbqbeatdown'];
 				const allowedMoves = ['voltswitch', 'flipturn', 'burnout'];
-				tsource.moveSlots = source.moveSlots.map(slot => {
+				source.moveSlots = source.moveSlots.map(slot => {
 				  if (!allowedMoves.includes(slot.id)) {
 				    const newMove = replacementMoves.shift();
 				    if (!newMove) return slot;
