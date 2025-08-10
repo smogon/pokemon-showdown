@@ -928,6 +928,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// target.baseAbility = target.ability;
 				const newMoves = ['flipturn', 'voltswitch', 'sizzlyslide', 'bbqbeatdown'];
 				// Update move slots
+				// eslint-disable-next-line @typescript-eslint/no-shadow
 				source.moveSlots = newMoves.map(move => {
 					const moveData = this.dex.moves.get(move);
 					return {
@@ -966,6 +967,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// target.baseAbility = target.ability;
 				const newMoves = ['flipturn', 'burnout', 'zippyzap', 'freezyfrost'];
 				// Update move slots
+				// eslint-disable-next-line @typescript-eslint/no-shadow
 				source.moveSlots = newMoves.map(move => {
 					const moveData = this.dex.moves.get(move);
 					return {
@@ -996,6 +998,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// target.baseAbility = target.ability;
 				const newMoves = ['voltswitch', 'burnout', 'wish', 'bouncybubble'];
 				// Update move slots
+				// eslint-disable-next-line @typescript-eslint/no-shadow
 				source.moveSlots = newMoves.map(move => {
 					const moveData = this.dex.moves.get(move);
 					return {
