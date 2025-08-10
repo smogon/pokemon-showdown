@@ -1597,7 +1597,7 @@ export class BattleActions {
 			return false;
 		}
 
-		if (move.ohko) return target.maxhp;
+		if (move.ohko) return this.battle.gen === 3 ? target.hp : target.maxhp;
 		if (move.damageCallback) return move.damageCallback.call(this.battle, source, target);
 		if (move.damage === 'level') {
 			return source.level;
