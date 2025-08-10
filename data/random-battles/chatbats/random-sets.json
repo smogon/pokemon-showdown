@@ -1,6 +1,6 @@
 {
     "volcarona": {
-        "level": 80,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -33,7 +33,7 @@
         ]
     },
     "ironcrown": {
-        "level": 80,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -89,7 +89,7 @@
         ]
     }, 
     "moltres": {
-        "level": 82,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -100,7 +100,7 @@
         ]
     },
     "kommoo": {
-        "level": 70,
+        "level": 72,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -165,14 +165,14 @@
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["Sucker Punch", "Mighty Cleave", "Earthquake", "Tera Blast", "Stealth Rock"],
+                "movepool": ["Sucker Punch", "Mighty Cleave", "Earthquake", "Tera Blast"],
                 "abilities": ["Arena Trap"],
                 "teraTypes": ["Flying", "Ground"]
             }
         ]
     },
     "altaria": {
-        "level": 86,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -255,7 +255,7 @@
         ]
     },
     "taurospaldeacombat": {
-        "level": 80,
+        "level": 78,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -292,14 +292,14 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Brave Bird", "Jump Kick", "U-turn", "Head Smash", "Wave Crash", "Flare Blitz", "Tailwind"],
+                "movepool": ["Brave Bird", "Jump Kick", "U-turn", "Head Smash", "Wave Crash", "Flare Blitz"],
                 "abilities": ["Reckless"],
                 "teraTypes": ["Fighting"]
             }
         ]
     },
     "archaludon": {
-        "level": 80,
+        "level": 78,
         "sets": [
             {
                 "role": "AV Pivot",
@@ -316,7 +316,7 @@
         ]
     },
     "malamar": {
-        "level": 92,
+        "level": 94,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -327,7 +327,7 @@
         ]
     },
     "empoleon": {
-        "level": 84,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -338,7 +338,7 @@
         ]
     },
     "glastrier": {
-        "level": 84,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -366,7 +366,7 @@
         ]
     },
     "lycanrocmidnight": {
-        "level": 90,
+        "level": 92,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -377,7 +377,7 @@
         ]
     },
     "lycanroc": {
-        "level": 88,
+        "level": 92,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -388,7 +388,7 @@
         ]
     },
     "lycanrocdusk": {
-        "level": 82,
+        "level": 84,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -487,7 +487,7 @@
         ]
     },
     "milotic": {
-        "level": 82,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -498,7 +498,7 @@
         ]
     },
     "gogoat": {
-        "level": 86,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -542,7 +542,7 @@
         ]
     },
     "kyuremblack": {
-        "level": 76,
+        "level": 78,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -553,7 +553,7 @@
         ]
     },
     "ironthorns": {
-        "level": 88,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -564,7 +564,7 @@
         ]
     },
     "dudunsparce": {
-        "level": 84,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -575,7 +575,7 @@
         ]
     },
     "chienpao": {
-        "level": 78,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -675,7 +675,7 @@
         ]
     },
     "sudowoodo": {
-        "level": 88,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -720,7 +720,7 @@
         ]
     },
     "meowscarada": {
-        "level": 84,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Support",
@@ -753,7 +753,7 @@
         ]
     },
     "salamencemega": {
-        "level": 78,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -764,7 +764,7 @@
         ]
     },
     "urshifu": {
-        "level": 84,
+        "level": 80,
         "sets": [
             {
                 "role": "AV Pivot",
@@ -781,7 +781,7 @@
         ]
     },
     "urshifurapidstrike": {
-        "level": 84,
+        "level": 80,
         "sets": [
             {
                 "role": "AV Pivot",
@@ -809,7 +809,7 @@
         ]
     },
     "veluza": {
-        "level": 84,
+        "level": 80,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -820,7 +820,7 @@
         ]
     },
     "ogerponhearthflame": {
-        "level": 84,
+        "level": 82,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -831,7 +831,7 @@
         ]
     },
     "dachsbun": {
-        "level": 86,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -853,7 +853,7 @@
         ]
     },
     "magneton": {
-        "level": 88,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Attacker",
