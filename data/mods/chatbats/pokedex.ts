@@ -363,4 +363,21 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Hail Mary" },
 		baseStats: { hp: 45, atk: 90, def: 45, spa: 65, spd: 45, spe: 136 },
 	},
+	hitmontop: {
+		inherit: true,
+	},
+	articunogalar: {
+		inherit: true,
+		abilities: { 0: "Brain Freeze" },
+	},
+	vaporeon: {
+		inherit: true,
+		abilities: { 0: "Poison Heal" },
+	},
+	jolteon: {
+		inherit: true,
+	},
+	flareon: {
+		inherit: true,
+	},
 };
