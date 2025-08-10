@@ -881,27 +881,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	freezingglare: {
 		inherit: true,
 		onHit(target, source, move) {
-			if (this.randomChance(3, 10) && !target.getTypes().join() === 'Ice') {
+			if (this.randomChance(10, 10) && !target.getTypes().join() === 'Ice') {
 				this.add('-message', `hi`);
 				target.setStatus('frostbite', source, move);
 			}
-				
-		},
-		condition: {
-			name: 'frostbite',
-			effectType: 'Status',
-			onStart(target, source, sourceEffect) {
-				this.add('-message', `hi`);
-				this.add('-status', target, 'frostbite');
-			},
-			onResidualOrder: 10,
-			onResidual(pokemon) {
-				this.add('-message', `hi`);
-				this.damage(pokemon.baseMaxhp / 16);
-			},
-			onBasePower(basePower, source, target) {
-				return basePower/2;
-			},
 		},
 		secondary: null,
 		desc: "30% chance to inflict Frostbite.",
