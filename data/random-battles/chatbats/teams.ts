@@ -62,19 +62,19 @@ const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Iron Bundle', 'Roaring Moon', 'Zacian', 'Zamazenta',
 ];
 export class RandomChatBatsTeams extends RandomTeams {
-    override randomTeam() {
-        try {
-            return super.randomTeam();
-        } catch (err) {
-            for (let attempts = 0; attempts < 2; attempts++) {
-                try {
-                    this.setSeed();
-                    return super.randomTeam();
-                } catch {}
-            }
-            throw err;
-        }
-    }
+	override randomTeam() {
+		try {
+			return super.randomTeam();
+		} catch (err) {
+			for (let attempts = 0; attempts < 2; attempts++) {
+				try {
+					this.setSeed();
+					return super.randomTeam();
+				} catch {}
+			}
+			throw err;
+		}
+	}
 	override cullMovePool(
 		types: string[],
 		moves: Set<string>,
