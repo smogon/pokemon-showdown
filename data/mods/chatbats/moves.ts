@@ -910,7 +910,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-message', `Eevee uses its Fire Stone!`);
 				const currentHP = source.hp / source.maxhp;
 				source.formeChange('Flareon', null, true);
-				source.hp = Math.round(source.maxhp * currentHP);
+				source.sethp(source.maxhp * currentHP);
+				this.add('-sethp', source, source.getHealth, '[from] move: Flip Turn', '[silent]');
 				// target.setAbility('Eeveelution');
 				// target.baseAbility = target.ability;
 				const newMoves = ['flipturn', 'voltswitch', 'sizzlyslide', 'bbqbeatdown'];
@@ -947,7 +948,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-message', `Eevee uses its Thunder Stone!`);
 				const currentHP = source.hp / source.maxhp;
 				source.formeChange('Jolteon', null, true);
-				source.hp = Math.round(source.maxhp * currentHP);
+				source.sethp(source.maxhp * currentHP);
+				this.add('-sethp', source, source.getHealth, '[from] move: Flip Turn', '[silent]');
 				// target.setAbility('Eeveelution');
 				// target.baseAbility = target.ability;
 				const newMoves = ['flipturn', 'burnout', 'zippyzap', 'freezyfrost'];
@@ -976,7 +978,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-message', `Eevee uses its Water Stone!`);
 				const currentHP = source.hp / source.maxhp;
 				source.formeChange('Vaporeon', null, true);
-				source.hp = Math.round(source.maxhp * currentHP);
+				source.sethp(source.maxhp * currentHP);
+				this.add('-sethp', source, source.getHealth, '[from] move: Flip Turn', '[silent]');
 				// target.setAbility('Eeveelution');
 				// target.baseAbility = target.ability;
 				const newMoves = ['voltswitch', 'burnout', 'wish', 'bouncybubble'];
