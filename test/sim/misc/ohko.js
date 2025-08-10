@@ -50,7 +50,7 @@ describe("OHKO moves", () => {
 		});
 	});
 
-	describe('[Gen 2]', () =>{
+	describe('[Gen 2]', () => {
 		it(`should faint the target's substitute`, () => {
 			battle = common.gen(2).createBattle({ forceRandomChance: true }, [[
 				{ species: 'Rhydon', moves: ['horndrill'] },
@@ -76,7 +76,7 @@ describe("OHKO moves", () => {
 		});
 	});
 
-	describe('[Gen 1]', () =>{
+	describe('[Gen 1]', () => {
 		it(`should faint the target's substitute`, () => {
 			battle = common.gen(1).createBattle({ forceRandomChance: true }, [[
 				{ species: 'Tauros', moves: ['horndrill', 'sleeptalk'] },
