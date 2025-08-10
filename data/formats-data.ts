@@ -5002,7 +5002,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	duraludon: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "NFE",
 		natDexTier: "RU",
 	},
