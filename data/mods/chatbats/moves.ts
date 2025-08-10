@@ -881,7 +881,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	freezingglare: {
 		inherit: true,
 		onHit(target, source, move) {
-			if (this.randomChance(10, 10) && !target.hasType('Ice')) {
+			if (this.randomChance(3, 10) && !target.hasType('Ice')) {
 				target.setStatus('frostbite', source, move);
 			}
 		},
