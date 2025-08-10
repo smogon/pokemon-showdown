@@ -219,5 +219,15 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData('Learnsets', 'magneton').learnset.magnetbomb = ['9L1'];
 
 		this.modData('Learnsets', 'delibird').learnset.iciclestorm = ['9L1'];
+
+		this.modData('Learnsets', 'hitmontop').learnset.bulletseed = ['9L1'];
+
+		this.modData('Learnsets', 'articunogalar').learnset.aeroblast = ['9L1'];
+		this.modData('Learnsets', 'articunogalar').learnset.oblivionwing = ['9L1'];
+		this.modData('Learnsets', 'articunogalar').learnset.aurasphere = ['9L1'];
+
+		this.modData('Learnsets', 'vaporeon').learnset.voltswitch = ['9L1'];
+		this.modData('Learnsets', 'vaporeon').learnset.burnout = ['9L1'];
+		this.modData('Learnsets', 'vaporeon').learnset.bouncybubble = ['9L1'];
 	},
 };
