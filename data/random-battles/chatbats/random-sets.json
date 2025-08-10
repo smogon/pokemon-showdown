@@ -908,7 +908,7 @@
             {
                 "role": "Fast Support",
                 "movepool": ["Volt Switch", "Burn Out", "Wish", "Bouncy Bubble"],
-                "abilities": ["Eeveelution"],
+                "abilities": ["Poison Heal"],
                 "teraTypes": ["Stellar"]
             }
         ]
