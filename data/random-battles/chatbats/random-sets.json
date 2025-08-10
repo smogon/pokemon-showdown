@@ -167,7 +167,7 @@
                 "role": "Fast Attacker",
                 "movepool": ["Sucker Punch", "Mighty Cleave", "Earthquake", "Tera Blast"],
                 "abilities": ["Arena Trap"],
-                "teraTypes": ["Flying", "Ground"]
+                "teraTypes": ["Flying"]
             }
         ]
     },
