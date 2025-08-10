@@ -1372,7 +1372,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	switchpriorityclausemod: {
 		effectType: 'Rule',
 		name: 'Switch Priority Clause Mod',
-		desc: "Makes a faster Pokémon switch first when double-switching, unlike in Emerald link battles, where player 1's Pokémon would switch first",
+		desc: "Makes a faster Pokémon switch first when double-switching, unlike in link battles, where player 1's Pokémon would switch first",
 		onBegin() {
 			this.add('rule', 'Switch Priority Clause Mod: Faster Pokémon switch first');
 		},
