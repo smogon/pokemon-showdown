@@ -706,10 +706,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onAfterMoveSecondarySelf(source, target, move) {
 			if (move.id === 'burnout') {
 				this.add('-message', `Eevee uses its Fire Stone!`);
-				target.formeChange('Flareon', null, true);
+				source.formeChange('Flareon', null, true);
 				const replacementMoves = ['sizzlyslide', 'bbqbeatdown'];
 				const allowedMoves = ['voltswitch', 'flipturn', 'burnout'];
-				target.moveSlots = target.moveSlots.map(slot => {
+				tsource.moveSlots = source.moveSlots.map(slot => {
 				  if (!allowedMoves.includes(slot.id)) {
 				    const newMove = replacementMoves.shift();
 				    if (!newMove) return slot;
@@ -729,10 +729,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 			if (move.id === 'flipturn') {
 				this.add('-message', `Eevee uses its Water Stone!`);
-				target.formeChange('Vaporeon', null, true);
+				source.formeChange('Vaporeon', null, true);
 				const replacementMoves = ['wish', 'bouncybubble'];
 				const allowedMoves = ['voltswitch', 'flipturn', 'burnout'];
-				target.moveSlots = target.moveSlots.map(slot => {
+				source.moveSlots = source.moveSlots.map(slot => {
 				  if (!allowedMoves.includes(slot.id)) {
 				    const newMove = replacementMoves.shift();
 				    if (!newMove) return slot;
@@ -752,10 +752,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 			if (move.id === 'voltswitch') {
 				this.add('-message', `Eevee uses its Thunder Stone!`);
-				target.formeChange('Jolteon', null, true);
+				source.formeChange('Jolteon', null, true);
 				const replacementMoves = ['zippyzap', 'freezyfrost'];
 				const allowedMoves = ['voltswitch', 'flipturn', 'burnout'];
-				target.moveSlots = target.moveSlots.map(slot => {
+				source.moveSlots = source.moveSlots.map(slot => {
 				  if (!allowedMoves.includes(slot.id)) {
 				    const newMove = replacementMoves.shift();
 				    if (!newMove) return slot;
