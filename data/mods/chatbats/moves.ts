@@ -919,6 +919,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Burn Out",
 		pp: 20,
 		priority: 0,
+		onPrepareHit(target, source, move) {
+			this.add(`c:|${getName((source.illusion || source).name)}|sorry i left my stove on i have to go`);
+		},
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		selfSwitch: true,
 		secondary: null,
