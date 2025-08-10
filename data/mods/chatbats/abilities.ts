@@ -65,7 +65,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Call Illumise",
 		rating: 5,
 		num: -100,
-		shortDesc: "When Illumise gets low on HP, it calls Volbeat for aid.",
+		shortDesc: "When Volbeat gets low on HP, it calls Illumise for aid.",
 	},
 	callvolbeat: {
 		onTryHit(target, source, move) {
@@ -118,7 +118,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Call Volbeat",
 		rating: 5,
 		num: -101,
-		shortDesc: "When Volbeat gets low on HP, it calls Illumise for aid.",
+		shortDesc: "When Illumise gets low on HP, it calls Volbeat for aid.",
 	},
 	shortfuse: {
 		onDamagePriority: -30,
