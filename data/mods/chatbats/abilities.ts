@@ -147,9 +147,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		// Copied from the code for Sand Spit
 		onDamagingHit(damage, target, source, move) {
 			this.field.setWeather('raindance');
-			if (!this.field.getWeather().id === 'raindance') {
-				this.add('-message', `Archaludon releases a deluge!`);
-			}
 		},
 		flags: {},
 		name: "Hydroelectric Dam",
@@ -202,7 +199,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					}
 				}
 				// applies boosts
-				this.boost(invertedBoosts, source);
+				this.boost(invertedBoosts, source, target);
 			}
 		},
 		flags: {},
