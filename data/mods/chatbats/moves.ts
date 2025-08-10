@@ -881,8 +881,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	freezingglare: {
 		inherit: true,
 		onHit(target, source, move) {
-			if (this.randomChance(10, 10)) {
-				this.add('-message', `hi`);
+			if (this.randomChance(10, 10) && !target.hasType('Ice')) {
 				target.setStatus('frostbite', source, move);
 			}
 		},
@@ -893,6 +892,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	zippyzap: {
 		inherit: true,
 		category: "Special",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Extreme Speed', target);
+			this.add('-anim', source, 'Thunder', target);
+		},
 		secondary: null,
 		desc: "",
 		shortDesc: "",
@@ -905,6 +911,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Burn Out",
 		pp: 20,
 		priority: 0,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'U-turn', target);
+		},
 		onHit(target, source, move) {
 			if (source.species.id === 'jolteon' || source.species.id === 'vaporeon') {
 				this.add('-message', `Eevee uses its Fire Stone!`);
@@ -1011,6 +1023,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return move.basePower * 2;
 			}
 			return move.basePower;
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Burn Up', target);
+			this.add('-anim', source, 'Close Combat', target);
 		},
 		category: "Physical",
 		name: "BBQ Beatdown",
