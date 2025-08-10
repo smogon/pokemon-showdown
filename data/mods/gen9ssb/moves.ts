@@ -3510,7 +3510,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			return null;
 		},
 		secondary: null,
-		hasSheerForce: true,
+		hasSheerForceBoost: true,
 		onPrepareHit(target, source) {
 			this.attrLastMove('[still]');
 			this.add('-anim', source, 'Lunar Dance', target);
