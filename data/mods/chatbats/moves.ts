@@ -872,4 +872,67 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "Changes the target's type to Steel.",
 		shortDesc: "Changes the target's type to Steel.",
 	},
+	triplekick: {
+		inherit: true,
+		basePowerCallback(pokemon, target, move) {
+			return 20 * move.hit;
+		},
+	},
+	freezingglare: {
+		inherit: true,
+		secondary: {
+			chance: 30,
+			status: 'frostbite',
+		},
+		desc: "30% chance to inflict Frostbite.",
+		shortDesc: "30% chance to inflict Frostbite.",
+	},
+	zippyzap: {
+		inherit: true,
+		category: "Special",
+		secondary: null,
+		desc: "",
+		shortDesc: "",
+	},
+	burnout: {
+		num: -1004,
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		name: "Burn Out",
+		pp: 20,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+		contestType: "Cute",
+		desc: "User switches out after damaging the target.",
+		shortDesc: "User switches out after damaging the target.",
+	},
+	bbqbeatdown: {
+		num: 506,
+		accuracy: 100,
+		basePower: 65,
+		basePowerCallback(pokemon, target, move) {
+			if (target.status === "brn") {
+				this.debug('BP doubled from status condition');
+				return move.basePower * 2;
+			}
+			return move.basePower;
+		},
+		category: "Physical",
+		name: "BBQ Beatdown",
+		pp: 10,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: null,
+		target: "normal",
+		type: "Fighting",
+		zMove: { basePower: 160 },
+		contestType: "Clever",
+		desc: "Power doubles if the target is Burned.",
+		shortDesc: "Power doubles if the target is Burned.",
+	},
 };
