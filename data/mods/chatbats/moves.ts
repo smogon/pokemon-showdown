@@ -882,6 +882,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		onHit(target, source, move) {
 			if (this.randomChance(3, 10) && !target.getTypes().join() === 'Ice') {
+				this.add('-message', `hi`);
 				target.setStatus('frostbite', source, move);
 			}
 				
@@ -890,10 +891,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			name: 'frostbite',
 			effectType: 'Status',
 			onStart(target, source, sourceEffect) {
+				this.add('-message', `hi`);
 				this.add('-status', target, 'frostbite');
 			},
 			onResidualOrder: 10,
 			onResidual(pokemon) {
+				this.add('-message', `hi`);
 				this.damage(pokemon.baseMaxhp / 16);
 			},
 			onBasePower(basePower, source, target) {
