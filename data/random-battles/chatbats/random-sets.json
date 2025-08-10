@@ -873,5 +873,44 @@
                 "teraTypes": ["Ice", "Ground"]
             }
         ]
+    },
+    "hitmontop": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Triple Axel", "Triple Kick", "Bulk Up", "Rapid Spin", "Bullet Seed"],
+                "abilities": ["Technician"],
+                "teraTypes": ["Ice"]
+            }
+        ]
+    },
+    "articunogalar": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Freezing Glare", "Aeroblast", "Roost", "Calm Mind"],
+                "abilities": ["Brain Freeze"],
+                "teraTypes": ["Steel"]
+            },
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Freezing Glare", "Oblivion Wing", "Aura Sphere", "U-turn"],
+                "abilities": ["Brain Freeze"],
+                "teraTypes": ["Fighting", "Psychic"]
+            }
+        ]
+    },
+    "vaporeon": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Support",
+                "movepool": ["Volt Switch", "Burn Out", "Wish", "Bouncy Bubble"],
+                "abilities": ["Eeveelution"],
+                "teraTypes": ["Stellar"]
+            }
+        ]
     }
 }
