@@ -707,6 +707,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (move.id === 'burnout') {
 				this.add('-message', `Eevee uses its Fire Stone!`);
 				source.formeChange('Flareon', null, true);
+				target.setAbility('Eeveelution');
+				target.baseAbility = target.ability;
 				const replacementMoves = ['sizzlyslide', 'bbqbeatdown'];
 				const allowedMoves = ['voltswitch', 'flipturn', 'burnout'];
 				tsource.moveSlots = source.moveSlots.map(slot => {
@@ -730,6 +732,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (move.id === 'flipturn') {
 				this.add('-message', `Eevee uses its Water Stone!`);
 				source.formeChange('Vaporeon', null, true);
+				target.setAbility('Eeveelution');
+				target.baseAbility = target.ability;
 				const replacementMoves = ['wish', 'bouncybubble'];
 				const allowedMoves = ['voltswitch', 'flipturn', 'burnout'];
 				source.moveSlots = source.moveSlots.map(slot => {
@@ -753,6 +757,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (move.id === 'voltswitch') {
 				this.add('-message', `Eevee uses its Thunder Stone!`);
 				source.formeChange('Jolteon', null, true);
+				target.setAbility('Eeveelution');
+				target.baseAbility = target.ability;
 				const replacementMoves = ['zippyzap', 'freezyfrost'];
 				const allowedMoves = ['voltswitch', 'flipturn', 'burnout'];
 				source.moveSlots = source.moveSlots.map(slot => {
@@ -776,7 +782,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onDamagePriority: 1,
 		onDamage(damage, target, source, effect) {
-			if (pokemon.species.id === 'vaporeon' && (effect.id === 'psn' || effect.id === 'tox')) {
+			if (target.species.id === 'vaporeon' && (effect.id === 'psn' || effect.id === 'tox')) {
 				this.heal(target.baseMaxhp / 8);
 				return false;
 			}
