@@ -774,17 +774,32 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				});
 			}
 		},
+		onDamagePriority: 1,
+		onDamage(damage, target, source, effect) {
+			if (pokemon.species.id === 'vaporeon' && (effect.id === 'psn' || effect.id === 'tox')) {
+				this.heal(target.baseMaxhp / 8);
+				return false;
+			}
+		},
+		onModifySpe(spe, pokemon) {
+			if (pokemon.status && pokemon.species.id === 'jolteon') {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (pokemon.status && pokemon.species.id === 'flareon') {
+				return this.chainModify(1.5);
+			}
+		},
 		onStart(pokemon) {
 			if (pokemon.species.id === 'vaporeon') {
-				pokemon.setAbility('Poison Heal');
 				this.add('-activate', pokemon, 'ability: Poison Heal');
 			}
 			if (pokemon.species.id === 'jolteon') {
-				pokemon.setAbility('Quick Feet');
 				this.add('-activate', pokemon, 'ability: Quick Feet');
 			}
 			if (pokemon.species.id === 'flareon') {
-				pokemon.setAbility('Guts');
 				this.add('-activate', pokemon, 'ability: Guts');
 			}
 		},
