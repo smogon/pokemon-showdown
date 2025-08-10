@@ -883,6 +883,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, source, move) {
 			if (this.randomChance(3, 10) && !target.getTypes().join() === 'Ice') {
 				target.setStatus('frostbite', source, move);
+			}
 				
 		},
 		condition: {
