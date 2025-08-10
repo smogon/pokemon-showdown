@@ -929,7 +929,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// target.setAbility('Eeveelution');
 				// target.baseAbility = target.ability;
 				const replacementMoves = ['sizzlyslide', 'bbqbeatdown'];
-				const allowedMoves = ['voltswitch', 'flipturn', 'burnout'];
+				const allowedMoves = ['voltswitch', 'flipturn'];
 				source.moveSlots = source.moveSlots.map(slot => {
 					if (!allowedMoves.includes(slot.id)) {
 						const newMove = replacementMoves.shift();
@@ -957,6 +957,66 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		contestType: "Cute",
 		desc: "User switches out after damaging the target.",
 		shortDesc: "User switches out after damaging the target.",
+	},
+	voltswitch: {
+		inherit: true,
+		onHit(target, source, move) {
+			if (source.species.id === 'flareon' || source.species.id === 'vaporeon') {
+				this.add('-message', `Eevee uses its Thunder Stone!`);
+				source.formeChange('Jolteon', null, true);
+				// target.setAbility('Eeveelution');
+				// target.baseAbility = target.ability;
+				const replacementMoves = ['zippyzap', 'freezyfrost'];
+				const allowedMoves = ['flipturn', 'burnout'];
+				source.moveSlots = source.moveSlots.map(slot => {
+					if (!allowedMoves.includes(slot.id)) {
+						const newMove = replacementMoves.shift();
+						if (!newMove) return slot;
+					   const moveData = this.dex.moves.get(newMove);
+						return {
+						   move: moveData.name,
+							id: moveData.id,
+						   pp: moveData.pp,
+						   maxpp: moveData.pp,
+					      target: moveData.target,
+					      disabled: false,
+					      used: false,
+					   };
+					}
+					return slot;
+				});
+			}
+		},
+	},
+	flipturn: {
+		inherit: true,
+		onHit(target, source, move) {
+			if (source.species.id === 'jolteon' || source.species.id === 'flareon') {
+				this.add('-message', `Eevee uses its Water Stone!`);
+				source.formeChange('Vaporeon', null, true);
+				// target.setAbility('Eeveelution');
+				// target.baseAbility = target.ability;
+				const replacementMoves = ['wish', 'bouncybubble'];
+				const allowedMoves = ['voltswitch', 'burnout'];
+				source.moveSlots = source.moveSlots.map(slot => {
+					if (!allowedMoves.includes(slot.id)) {
+						const newMove = replacementMoves.shift();
+						if (!newMove) return slot;
+					   const moveData = this.dex.moves.get(newMove);
+						return {
+						   move: moveData.name,
+							id: moveData.id,
+						   pp: moveData.pp,
+						   maxpp: moveData.pp,
+					      target: moveData.target,
+					      disabled: false,
+					      used: false,
+					   };
+					}
+					return slot;
+				});
+			}
+		},
 	},
 	bbqbeatdown: {
 		num: 506,
