@@ -928,25 +928,22 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				source.formeChange('Flareon', null, true);
 				// target.setAbility('Eeveelution');
 				// target.baseAbility = target.ability;
-				const replacementMoves = ['sizzlyslide', 'bbqbeatdown'];
-				const allowedMoves = ['voltswitch', 'flipturn'];
-				source.moveSlots = source.moveSlots.map(slot => {
-					if (!allowedMoves.includes(slot.id)) {
-						const newMove = replacementMoves.shift();
-						if (!newMove) return slot;
-					   const moveData = this.dex.moves.get(newMove);
-						return {
-						   move: moveData.name,
-							id: moveData.id,
-						   pp: moveData.pp,
-						   maxpp: moveData.pp,
-					      target: moveData.target,
-					      disabled: false,
-					      used: false,
-					   };
-					}
-					return slot;
+				const newMoves = ['flipturn', 'voltswitch', 'sizzlyslide', 'bbqbeatdown'];
+				// Update move slots
+				source.moveSlots = newMoves.map(move => {
+					const moveData = this.dex.moves.get(move);
+					return {
+						move: moveData.name,
+						id: moveData.id,
+						pp: moveData.pp,
+						maxpp: moveData.pp,
+						target: moveData.target,
+						disabled: false,
+						used: false,
+					};
 				});
+				// this forces the UI to update move slots visually
+				(source as any).baseMoveSlots = source.moveSlots.slice();
 			}
 		},
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
@@ -966,25 +963,22 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				source.formeChange('Jolteon', null, true);
 				// target.setAbility('Eeveelution');
 				// target.baseAbility = target.ability;
-				const replacementMoves = ['zippyzap', 'freezyfrost'];
-				const allowedMoves = ['flipturn', 'burnout'];
-				source.moveSlots = source.moveSlots.map(slot => {
-					if (!allowedMoves.includes(slot.id)) {
-						const newMove = replacementMoves.shift();
-						if (!newMove) return slot;
-					   const moveData = this.dex.moves.get(newMove);
-						return {
-						   move: moveData.name,
-							id: moveData.id,
-						   pp: moveData.pp,
-						   maxpp: moveData.pp,
-					      target: moveData.target,
-					      disabled: false,
-					      used: false,
-					   };
-					}
-					return slot;
+				const newMoves = ['flipturn', 'burnout', 'zippyzap', 'freezyfrost'];
+				// Update move slots
+				source.moveSlots = newMoves.map(move => {
+					const moveData = this.dex.moves.get(move);
+					return {
+						move: moveData.name,
+						id: moveData.id,
+						pp: moveData.pp,
+						maxpp: moveData.pp,
+						target: moveData.target,
+						disabled: false,
+						used: false,
+					};
 				});
+				// this forces the UI to update move slots visually
+				(source as any).baseMoveSlots = source.moveSlots.slice();
 			}
 		},
 	},
@@ -996,25 +990,22 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				source.formeChange('Vaporeon', null, true);
 				// target.setAbility('Eeveelution');
 				// target.baseAbility = target.ability;
-				const replacementMoves = ['wish', 'bouncybubble'];
-				const allowedMoves = ['voltswitch', 'burnout'];
-				source.moveSlots = source.moveSlots.map(slot => {
-					if (!allowedMoves.includes(slot.id)) {
-						const newMove = replacementMoves.shift();
-						if (!newMove) return slot;
-					   const moveData = this.dex.moves.get(newMove);
-						return {
-						   move: moveData.name,
-							id: moveData.id,
-						   pp: moveData.pp,
-						   maxpp: moveData.pp,
-					      target: moveData.target,
-					      disabled: false,
-					      used: false,
-					   };
-					}
-					return slot;
+				const newMoves = ['voltswitch', 'burnout', 'wish', 'bouncybubble'];
+				// Update move slots
+				source.moveSlots = newMoves.map(move => {
+					const moveData = this.dex.moves.get(move);
+					return {
+						move: moveData.name,
+						id: moveData.id,
+						pp: moveData.pp,
+						maxpp: moveData.pp,
+						target: moveData.target,
+						disabled: false,
+						used: false,
+					};
 				});
+				// this forces the UI to update move slots visually
+				(source as any).baseMoveSlots = source.moveSlots.slice();
 			}
 		},
 	},
