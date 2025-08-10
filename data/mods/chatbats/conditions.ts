@@ -1,6 +1,6 @@
 export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDataTable = {
 	frostbite: {
-	    name: 'frostbite',
+	   name: 'frostbite',
 		effectType: 'Status',
 		onStart(target) {
 		    this.add('-message', `hi`);
