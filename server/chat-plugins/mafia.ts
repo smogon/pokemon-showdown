@@ -166,23 +166,21 @@ function mafiaSearch(
 		const inequality = inequalities.find(x => searchTarget.includes(x));
 		if (!inequality) return entries;
 
-		const players = searchTarget.split(inequality)[1].trim();
-		if (!!players && !isNaN(Number(players))) {
+		const players = Number(searchTarget.split(inequality)[1].trim());
+		if (!!players && !isNaN(players)) {
 			if (inequality === '=') {
 				// Filter based on themes with the exact player count
 				entries = entries.filter(([key]) => players in MafiaData[`themes`][key]);
 			} else if (inequality === '<' || inequality === '<=') {
 				// Filter based on themes less than / at most a certain amount of players
 				// Creates an array of the potential playercounts, and then looks if any in the theme matches that
-				// +players ensures that it is read as a number, not a character
-				entries = entries.filter(([key]) => ([...Array(+players + (inequality === '<=' ? +1 : +0)).keys()])
+				entries = entries.filter(([key]) => ([...Array(players + (inequality === '<=' ? 1 : 0)).keys()])
 					.some(playerCount => playerCount in (MafiaData[`themes`][key])));
 			} else if (inequality === '>' || inequality === '>=') {
 				// Filter based on themes greater than / at least a certain amount of players
 				// Creates an array of the potential playercounts, and then looks if any in the theme matches that
-				// +players ensures that it is read as a number, not a character
 				entries = entries.filter(([key]) => ([...Array(50 - Number(players)).keys()]
-					.map(num => +num + +players + (inequality === '>=' ? +0 : +1)))
+					.map(num => num + players + (inequality === '>=' ? 0 : 1)))
 					.some(playerCount => playerCount in (MafiaData[`themes`][key])));
 			}
 		} else {
