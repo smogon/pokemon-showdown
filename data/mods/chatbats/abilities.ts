@@ -147,7 +147,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		// Copied from the code for Sand Spit
 		onDamagingHit(damage, target, source, move) {
 			this.field.setWeather('raindance');
-			this.add('-message', `Archaludon releases a deluge!`);
+			if (!this.field.getWeather().id === 'raindance') {
+				this.add('-message', `Archaludon releases a deluge!`);
+			}
 		},
 		flags: {},
 		name: "Hydroelectric Dam",
@@ -187,16 +189,20 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamagingHitOrder: 1,
 		onTryHit(target, source, move) {
 			if (move.flags['contact']) {
+				let flipFlopBoosts = 0;
 				const invertedBoosts: SparseBoostsTable = {};
 				for (const stat in source.boosts) {
 					if (source.boosts[stat as BoostID] > 0) {
 						// checks for boosts on source of move, inverts boosts and adds them to invertedBoosts table
 						invertedBoosts[stat as BoostID] = -2 * source.boosts[stat as BoostID];
+						if (flipFlopBoosts === 0) {
+							this.add('-ability', target, 'Flip Flop');
+							flipFlopBoosts = 1;
+						}
 					}
 				}
 				// applies boosts
 				this.boost(invertedBoosts, source);
-				this.add('-ability', target, 'Flip Flop');
 			}
 		},
 		flags: {},
@@ -669,6 +675,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	hailmary: {
 		onModifySpe(spe, pokemon) {
 			if (this.field.isWeather(['hail', 'snowscape'])) {
+				this.add('-ability', pokemon, 'Hail Mary');
 				return this.chainModify(2);
 			}
 		},
