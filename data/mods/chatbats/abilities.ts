@@ -23,12 +23,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (damage >= target.hp && effect) {
 				// Keep the Pokémon at 1 HP instead of fainting immediately
 				this.damage(target.hp - 1, target, source || target, effect);
-
-				this.add('-activate', target, 'ability: Call Illumise');
 				this.add('-message', `Volbeat calls upon Illumise for aid!`);
 				// Define new moves
 				const newMoves = ['bugbuzz', 'icebeam', 'thunderbolt', 'calmmind'];
-
 				// Update move slots
 				target.moveSlots = newMoves.map(move => {
 					const moveData = this.dex.moves.get(move);
@@ -79,12 +76,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			if (damage >= target.hp && effect) {
 				// Keep the Pokémon at 1 HP instead of fainting immediately
 				this.damage(target.hp - 1, target, source || target, effect);
-
-				this.add('-activate', target, 'ability: Call Volbeat');
 				this.add('-message', `Illumise calls upon Volbeat for aid!`);
 				// Define new moves
 				const newMoves = ['dragondance', 'lunge', 'dragonhammer', 'earthquake'];
-
 				// Update move slots
 				target.moveSlots = newMoves.map(move => {
 					const moveData = this.dex.moves.get(move);
@@ -698,4 +692,107 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		num: -113,
 		shortDesc: "In Snowscape: 2x Speed, 1.5x Attack, 0.8x accuracy.",
 	},
+	brainfreeze: {
+		onModifyCritRatio(critRatio, source, target) {
+			if (target && (['frostbite'].includes(target.status) || this.field.isWeather(['snowscape']))) return 5;
+		},
+		flags: {},
+		name: "Brain Freeze",
+		rating: 5,
+		num: -114,
+		shortDesc: "This Pokemon's attacks are critical hits if the target is frostbitted or Snow is active.",
+	},
+	eeveelution: {
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (move.id === 'burnout') {
+				this.add('-message', `Eevee uses its Fire Stone!`);
+				target.formeChange('Flareon', null, true);
+				const replacementMoves = ['sizzlyslide', 'bbqbeatdown'];
+				const allowedMoves = ['voltswitch', 'flipturn', 'burnout'];
+				target.moveSlots = target.moveSlots.map(slot => {
+				  if (!allowedMoves.includes(slot.id)) {
+				    const newMove = replacementMoves.shift();
+				    if (!newMove) return slot;
+				    const moveData = this.dex.moves.get(newMove);
+				    return {
+				      move: moveData.name,
+				      id: moveData.id,
+				      pp: moveData.pp,
+				      maxpp: moveData.pp,
+				      target: moveData.target,
+				      disabled: false,
+				      used: false,
+				    };
+				  }
+				  return slot;
+				});
+			}
+			if (move.id === 'flipturn') {
+				this.add('-message', `Eevee uses its Water Stone!`);
+				target.formeChange('Vaporeon', null, true);
+				const replacementMoves = ['wish', 'bouncybubble'];
+				const allowedMoves = ['voltswitch', 'flipturn', 'burnout'];
+				target.moveSlots = target.moveSlots.map(slot => {
+				  if (!allowedMoves.includes(slot.id)) {
+				    const newMove = replacementMoves.shift();
+				    if (!newMove) return slot;
+				    const moveData = this.dex.moves.get(newMove);
+				    return {
+				      move: moveData.name,
+				      id: moveData.id,
+				      pp: moveData.pp,
+				      maxpp: moveData.pp,
+				      target: moveData.target,
+				      disabled: false,
+				      used: false,
+				    };
+				  }
+				  return slot;
+				});
+			}
+			if (move.id === 'voltswitch') {
+				this.add('-message', `Eevee uses its Thunder Stone!`);
+				target.formeChange('Jolteon', null, true);
+				const replacementMoves = ['zippyzap', 'freezyfrost'];
+				const allowedMoves = ['voltswitch', 'flipturn', 'burnout'];
+				target.moveSlots = target.moveSlots.map(slot => {
+				  if (!allowedMoves.includes(slot.id)) {
+				    const newMove = replacementMoves.shift();
+				    if (!newMove) return slot;
+				    const moveData = this.dex.moves.get(newMove);
+				    return {
+				      move: moveData.name,
+				      id: moveData.id,
+				      pp: moveData.pp,
+				      maxpp: moveData.pp,
+				      target: moveData.target,
+				      disabled: false,
+				      used: false,
+				    };
+				  }
+				  return slot;
+				});
+			}
+		},
+		onStart(pokemon) {
+			if (pokemon.species.id === 'vaporeon') {
+				pokemon.setAbility('Poison Heal');
+				this.add('-activate', pokemon, 'ability: Poison Heal');
+			}
+			if (pokemon.species.id === 'jolteon') {
+				pokemon.setAbility('Quick Feet');
+				this.add('-activate', pokemon, 'ability: Quick Feet');
+			}
+			if (pokemon.species.id === 'flareon') {
+				pokemon.setAbility('Guts');
+				this.add('-activate', pokemon, 'ability: Guts');
+			}
+		},
+		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1,
+			breakable: 1, notransform: 1 },
+		name: "Eeveelution",
+		rating: 5,
+		num: -115,
+		shortDesc: "Changes form when using pivot moves.",
+	}
 };
