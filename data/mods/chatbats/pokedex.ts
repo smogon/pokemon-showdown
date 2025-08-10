@@ -372,12 +372,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	vaporeon: {
 		inherit: true,
-		abilities: { 0: "Eeveelution" },
+		abilities: { 0: "Poison Heal" },
 	},
 	jolteon: {
 		inherit: true,
+		abilities: { 0: "Quick Feet" },
 	},
 	flareon: {
 		inherit: true,
+		abilities: { 0: "Guts" },
 	},
 };
