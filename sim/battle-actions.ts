@@ -125,6 +125,10 @@ export class BattleActions {
 			oldActive.statsLoweredThisTurn = false;
 			oldActive.position = pokemon.position;
 			if (oldActive.fainted) oldActive.status = '';
+			if (this.battle.gen <= 4) {
+				pokemon.lastItem = oldActive.lastItem;
+				oldActive.lastItem = '';
+			}
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
