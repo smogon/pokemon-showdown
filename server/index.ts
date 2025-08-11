@@ -181,7 +181,7 @@ if (require.main === module) {
  * Set up our last global
  *********************************************************/
 
-const { TeamValidatorAsync } = require('./team-validator-async');
+const TeamValidatorAsync = require('./team-validator-async');
 global.TeamValidatorAsync = TeamValidatorAsync;
 
 /*********************************************************
