@@ -2533,6 +2533,7 @@ export class TeamValidator {
 				}
 			}
 
+			let canUseHomeRelearner = false;
 			for (let learned of sources) {
 				// Every `learned` represents a single way a pokemon might
 				// learn a move. This can be handled one of several ways:
@@ -2560,7 +2561,7 @@ export class TeamValidator {
 					}
 					continue;
 				}
-				if (learnedGen < this.minSourceGen) {
+				if (learnedGen < this.minSourceGen && !canUseHomeRelearner) {
 					if (!cantLearnReason) {
 						cantLearnReason = `can't be transferred from Gen ${learnedGen} to ${this.minSourceGen}.`;
 					}
@@ -2572,6 +2573,8 @@ export class TeamValidator {
 					}
 					continue;
 				}
+
+				if (learnedGen === 9 && learned.charAt(1) !== 'S') canUseHomeRelearner = true;
 
 				if (
 					baseSpecies.evoRegion === 'Alola' && checkingPrevo && learnedGen >= 8 &&
