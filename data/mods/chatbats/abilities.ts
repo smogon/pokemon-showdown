@@ -186,7 +186,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamagingHitOrder: 1,
 		onTryHit(target, source, move) {
 			if (move.flags['contact']) {
-				let flipFlopBoosts = 0;
+				let flipFlopBoosts = false;
 				const invertedBoosts: SparseBoostsTable = {};
 				for (const stat in source.boosts) {
 					if (source.boosts[stat as BoostID] > 0) {
