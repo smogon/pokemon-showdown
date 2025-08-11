@@ -1637,10 +1637,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					target.removeVolatile('substitute');
 					target.addVolatile('substitutebroken');
 					if (target.volatiles['substitutebroken']) target.volatiles['substitutebroken'].move = move.id;
-					if (move.ohko) this.add('-ohko');
 				} else {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
+				if (move.ohko) this.add('-ohko');
 				if (move.recoil && damage) {
 					this.damage(this.actions.calcRecoilDamage(damage, move, source), source, target, 'recoil');
 				}
