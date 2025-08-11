@@ -638,8 +638,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		// PMCM hardcodes
 		if (species.id === 'volcarona') return 'Heavy-Duty Boots';
 		if (species.id === 'golemalola') return 'Life Orb';
-		if (species.id === 'ironcrown' && moves.has("rest")) return 'Chesto Berry';
-		if (species.id === 'ironcrown') return 'Leftovers';
+		if (species.id === 'ironcrown') return moves.has('rest') ? 'Chesto Berry' : 'Leftovers';
 		if (species.id === 'lurantis') return this.sample(['Life Orb', 'Leftovers']);
 		if (species.id === 'carbink') return 'Leftovers';
 		if (species.id === 'moltres') return 'Life Orb';

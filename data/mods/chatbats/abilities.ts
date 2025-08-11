@@ -192,9 +192,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 					if (source.boosts[stat as BoostID] > 0) {
 						// checks for boosts on source of move, inverts boosts and adds them to invertedBoosts table
 						invertedBoosts[stat as BoostID] = -2 * source.boosts[stat as BoostID];
-						if (flipFlopBoosts === 0) {
+						if (!flipFlopBoosts) {
 							this.add('-ability', target, 'Flip Flop');
-							flipFlopBoosts = 1;
+							flipFlopBoosts = true;
 						}
 					}
 				}
@@ -698,12 +698,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	brainfreeze: {
 		onModifyCritRatio(critRatio, source, target) {
-			if (target && (['frostbite'].includes(target.status) || this.field.isWeather(['snowscape']))) return 5;
+			if (target && (target.status === 'frostbite' || this.field.isWeather('snowscape'))) return 5;
 		},
 		flags: {},
 		name: "Brain Freeze",
 		rating: 5,
 		num: -114,
-		shortDesc: "This Pokemon's attacks are critical hits if the target is frostbitted or Snow is active.",
+		shortDesc: "This Pokemon's attacks are critical hits if the target is frostbitten or Snow is active.",
 	},
 };

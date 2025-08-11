@@ -874,18 +874,21 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	triplekick: {
 		inherit: true,
+		basePower: 20,
 		basePowerCallback(pokemon, target, move) {
 			return 20 * move.hit;
 		},
 	},
 	freezingglare: {
 		inherit: true,
-		onHit(target, source, move) {
-			if (this.randomChance(3, 10) && !target.hasType('Ice')) {
-				target.setStatus('frostbite', source, move);
-			}
+		secondary: {
+			chance: 30,
+			onHit(target, source, move) {
+				if (!target.hasType('Ice')) {
+					target.trySetStatus('frostbite', source, move);
+				}
+			},
 		},
-		secondary: null,
 		desc: "30% chance to inflict Frostbite.",
 		shortDesc: "30% chance to inflict Frostbite.",
 	},
@@ -900,8 +903,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, 'Thunder', target);
 		},
 		secondary: null,
-		desc: "",
-		shortDesc: "",
+		desc: "Nearly always goes first.",
+		shortDesc: "Nearly always goes first.",
 	},
 	burnout: {
 		num: -1004,
