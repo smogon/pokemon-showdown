@@ -232,6 +232,8 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'golurk') this.incompatibleMoves(moves, movePool, 'icepunch', 'dynamicpunch');
 		if (species.id === 'veluza') this.incompatibleMoves(moves, movePool, 'waterfall', 'hydropump');
 		if (species.id === 'ogerponhearthflame') this.incompatibleMoves(moves, movePool, 'crabhammer', 'stoneedge');
+		if (species.id === 'hitmontop') this.incompatibleMoves(moves, movePool, 'bulkup', 'rapidspin');
+		if (species.id === 'araquanid') this.incompatibleMoves(moves, movePool, 'firstimpression', 'stickyweb');
 	}
 
 	override randomMoveset(
@@ -636,7 +638,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		// PMCM hardcodes
 		if (species.id === 'volcarona') return 'Heavy-Duty Boots';
 		if (species.id === 'golemalola') return 'Life Orb';
-		if (species.id === 'ironcrown') return this.sample(['Chesto Berry', 'Leftovers']);
+		if (species.id === 'ironcrown') return moves.has('rest') ? 'Chesto Berry' : 'Leftovers';
 		if (species.id === 'lurantis') return this.sample(['Life Orb', 'Leftovers']);
 		if (species.id === 'carbink') return 'Leftovers';
 		if (species.id === 'moltres') return 'Life Orb';
@@ -708,6 +710,10 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'mew') return 'Starf Berry';
 		if (species.id === 'magneton') return this.sample(['Air Balloon', 'Chople Berry']);
 		if (species.id === 'delibird') return this.sample(['Heavy-Duty Boots', 'Life Orb']);
+		if (species.id === 'hitmontop') return this.sample(['Protective Pads', 'Wide Lens']);
+		if (species.id === 'articunogalar' && moves.has('roost')) return 'Heavy-Duty Boots';
+		if (species.id === 'articunogalar' && moves.has('aurasphere')) return 'Choice Specs';
+		if (species.id === 'vaporeon') return 'Toxic Orb';
 	}
 
 	override randomSet(
@@ -990,9 +996,6 @@ export class RandomChatBatsTeams extends RandomTeams {
 
 			// The Pokemon of the Day
 			// if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
-
-			// Code to enforce a mon on teams for testing
-			// if (pokemon.length === 1 || this.maxTeamSize === 1) species = 'delibird';
 
 			let set: RandomTeamsTypes.RandomSet;
 

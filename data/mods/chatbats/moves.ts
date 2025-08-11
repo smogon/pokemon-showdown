@@ -196,7 +196,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Icicle Storm",
 		pp: 15,
 		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		flags: { protect: 1, mirror: 1, metronome: 1 },
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -871,5 +871,210 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		contestType: "Cool",
 		desc: "Changes the target's type to Steel.",
 		shortDesc: "Changes the target's type to Steel.",
+	},
+	triplekick: {
+		inherit: true,
+		basePower: 20,
+		basePowerCallback(pokemon, target, move) {
+			return 20 * move.hit;
+		},
+	},
+	freezingglare: {
+		inherit: true,
+		secondary: {
+			chance: 30,
+			onHit(target, source, move) {
+				if (!target.hasType('Ice')) {
+					target.trySetStatus('frostbite', source, move);
+				}
+			},
+		},
+		desc: "30% chance to inflict Frostbite.",
+		shortDesc: "30% chance to inflict Frostbite.",
+	},
+	zippyzap: {
+		inherit: true,
+		category: "Special",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Extreme Speed', target);
+			this.add('-anim', source, 'Thunder', target);
+		},
+		secondary: null,
+		desc: "Nearly always goes first.",
+		shortDesc: "Nearly always goes first.",
+	},
+	burnout: {
+		num: -1004,
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		name: "Burn Out",
+		pp: 20,
+		priority: 0,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'U-turn', target);
+		},
+		onHit(target, source, move) {
+			if (source.species.id === 'jolteon' || source.species.id === 'vaporeon') {
+				this.add('-message', `Eevee uses its Fire Stone!`);
+				const currentHP = source.hp / source.maxhp;
+				source.formeChange('Flareon', null, true);
+				source.sethp(source.maxhp * currentHP);
+				this.add('-sethp', source, source.getHealth, '[from] move: Flip Turn', '[silent]');
+				// target.setAbility('Eeveelution');
+				// target.baseAbility = target.ability;
+				const newMoves = ['flipturn', 'voltswitch', 'sizzlyslide', 'bbqbeatdown'];
+				// Update move slots
+				// eslint-disable-next-line @typescript-eslint/no-shadow
+				source.moveSlots = newMoves.map(move => {
+					const moveData = this.dex.moves.get(move);
+					return {
+						move: moveData.name,
+						id: moveData.id,
+						pp: moveData.pp,
+						maxpp: moveData.pp,
+						target: moveData.target,
+						disabled: false,
+						used: false,
+					};
+				});
+				// this forces the UI to update move slots visually
+				(source as any).baseMoveSlots = source.moveSlots.slice();
+			}
+		},
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		selfSwitch: true,
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+		contestType: "Cute",
+		desc: "User switches out after damaging the target.",
+		shortDesc: "User switches out after damaging the target.",
+	},
+	voltswitch: {
+		inherit: true,
+		onHit(target, source, move) {
+			if (source.species.id === 'flareon' || source.species.id === 'vaporeon') {
+				this.add('-message', `Eevee uses its Thunder Stone!`);
+				const currentHP = source.hp / source.maxhp;
+				source.formeChange('Jolteon', null, true);
+				source.sethp(source.maxhp * currentHP);
+				this.add('-sethp', source, source.getHealth, '[from] move: Flip Turn', '[silent]');
+				// target.setAbility('Eeveelution');
+				// target.baseAbility = target.ability;
+				const newMoves = ['flipturn', 'burnout', 'zippyzap', 'freezyfrost'];
+				// Update move slots
+				// eslint-disable-next-line @typescript-eslint/no-shadow
+				source.moveSlots = newMoves.map(move => {
+					const moveData = this.dex.moves.get(move);
+					return {
+						move: moveData.name,
+						id: moveData.id,
+						pp: moveData.pp,
+						maxpp: moveData.pp,
+						target: moveData.target,
+						disabled: false,
+						used: false,
+					};
+				});
+				// this forces the UI to update move slots visually
+				(source as any).baseMoveSlots = source.moveSlots.slice();
+			}
+		},
+	},
+	flipturn: {
+		inherit: true,
+		onHit(target, source, move) {
+			if (source.species.id === 'jolteon' || source.species.id === 'flareon') {
+				this.add('-message', `Eevee uses its Water Stone!`);
+				const currentHP = source.hp / source.maxhp;
+				source.formeChange('Vaporeon', null, true);
+				source.sethp(source.maxhp * currentHP);
+				this.add('-sethp', source, source.getHealth, '[from] move: Flip Turn', '[silent]');
+				// target.setAbility('Eeveelution');
+				// target.baseAbility = target.ability;
+				const newMoves = ['voltswitch', 'burnout', 'wish', 'bouncybubble'];
+				// Update move slots
+				// eslint-disable-next-line @typescript-eslint/no-shadow
+				source.moveSlots = newMoves.map(move => {
+					const moveData = this.dex.moves.get(move);
+					return {
+						move: moveData.name,
+						id: moveData.id,
+						pp: moveData.pp,
+						maxpp: moveData.pp,
+						target: moveData.target,
+						disabled: false,
+						used: false,
+					};
+				});
+				// this forces the UI to update move slots visually
+				(source as any).baseMoveSlots = source.moveSlots.slice();
+			}
+		},
+	},
+	bbqbeatdown: {
+		num: 506,
+		accuracy: 100,
+		basePower: 65,
+		basePowerCallback(pokemon, target, move) {
+			if (target.status === "brn") {
+				this.debug('BP doubled from status condition');
+				return move.basePower * 2;
+			}
+			return move.basePower;
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Burn Up', target);
+			this.add('-anim', source, 'Close Combat', target);
+		},
+		category: "Physical",
+		name: "BBQ Beatdown",
+		pp: 10,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: null,
+		target: "normal",
+		type: "Fighting",
+		zMove: { basePower: 160 },
+		contestType: "Clever",
+		desc: "Power doubles if the target is Burned.",
+		shortDesc: "Power doubles if the target is Burned.",
+	},
+	sizzlyslide: {
+		inherit: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Flame Charge', target);
+		},
+	},
+	freezyfrost: {
+		inherit: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Blizzard', target);
+		},
+	},
+	bouncybubble: {
+		inherit: true,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Bubble Beam', target);
+		},
 	},
 };
