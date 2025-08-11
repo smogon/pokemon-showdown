@@ -58,7 +58,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.add('-activate', target, 'ability: Tinted Lens');
 				target.baseAbility = target.ability;
 				// prevents damage from reapplying after form change
-				return damage - damage;
+				return null;
 			}
 		},
 		flags: {},
@@ -111,7 +111,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				target.baseAbility = target.ability;
 				this.add('-activate', target, 'ability: Swarm');
 				// prevents damage from reapplying after form change
-				return damage - damage;
+				return null;
 			}
 		},
 		flags: {},
