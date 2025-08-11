@@ -75,7 +75,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamage(damage, target, source, effect) {
 			if (damage >= target.hp && effect) {
 				// Keep the Pokémon at 1 HP instead of fainting immediately
-				this.damage(target.hp - 1, target, source || target, effect);
+				this.damage(target.hp - 1, target, source, effect);
 				this.add('-message', `Illumise calls upon Volbeat for aid!`);
 				// Define new moves
 				const newMoves = ['dragondance', 'lunge', 'dragonhammer', 'earthquake'];
