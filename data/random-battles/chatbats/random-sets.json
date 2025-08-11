@@ -227,7 +227,7 @@
         ]
     },
     "mesprit": {
-        "level": 80,
+        "level": 82,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -399,7 +399,7 @@
         ]
     },
     "dodrio": {
-        "level": 84,
+        "level": 86,
         "sets": [
             {
                 "role": "Wallbreaker",
