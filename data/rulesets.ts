@@ -973,14 +973,16 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			const trapping = [
 				'arenatrap', 'magnetpull', 'shadowtag', 'block', 'meanlook', 'spiderweb', 'anchorshot', 'jawlock', 'octolock', 'spiritshackle', 'thousandwaves',
 			];
-			const accuracy  = this.dex.moves.all().filter(move => {
+			const accuracy = this.dex.moves.all().filter(move => {
 				if (move.boosts?.accuracy) return move.boosts.accuracy < 0;
 				return move.secondaries?.some(x => x.chance === 100 && x.boosts?.accuracy && x.boosts.accuracy < 0);
 			}).map(x => x.id);
 			if (set.moves.map(this.toID).some(x => accuracy.includes(x)) && (
 				trapping.includes(this.toID(set.ability)) || set.moves.map(this.toID).some(x => trapping.includes(x))
 			)) {
-				return [`${set.species} has the combination of a trapping move/ability and a guaranteed accuracy-lowering move, which is banned.`];
+				return [
+					`${set.species} has the combination of a trapping move/ability and a guaranteed accuracy-lowering move, which is banned.`,
+				];
 			}
 		},
 	},
