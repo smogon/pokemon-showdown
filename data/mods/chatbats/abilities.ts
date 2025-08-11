@@ -22,13 +22,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamage(damage, target, source, effect) {
 			if (damage >= target.hp && effect) {
 				// Keep the Pokémon at 1 HP instead of fainting immediately
-				this.damage(target.hp - 1, target, source || target, effect);
-
-				this.add('-activate', target, 'ability: Call Illumise');
+				this.damage(target.hp - 1, target, source, effect);
 				this.add('-message', `Volbeat calls upon Illumise for aid!`);
 				// Define new moves
 				const newMoves = ['bugbuzz', 'icebeam', 'thunderbolt', 'calmmind'];
-
 				// Update move slots
 				target.moveSlots = newMoves.map(move => {
 					const moveData = this.dex.moves.get(move);
@@ -61,14 +58,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.add('-activate', target, 'ability: Tinted Lens');
 				target.baseAbility = target.ability;
 				// prevents damage from reapplying after form change
-				return damage - damage;
+				return null;
 			}
 		},
 		flags: {},
 		name: "Call Illumise",
 		rating: 5,
 		num: -100,
-		shortDesc: "When Illumise gets low on HP, it calls Volbeat for aid.",
+		shortDesc: "When Volbeat gets low on HP, it calls Illumise for aid.",
 	},
 	callvolbeat: {
 		onTryHit(target, source, move) {
@@ -78,13 +75,10 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamage(damage, target, source, effect) {
 			if (damage >= target.hp && effect) {
 				// Keep the Pokémon at 1 HP instead of fainting immediately
-				this.damage(target.hp - 1, target, source || target, effect);
-
-				this.add('-activate', target, 'ability: Call Volbeat');
+				this.damage(target.hp - 1, target, source, effect);
 				this.add('-message', `Illumise calls upon Volbeat for aid!`);
 				// Define new moves
 				const newMoves = ['dragondance', 'lunge', 'dragonhammer', 'earthquake'];
-
 				// Update move slots
 				target.moveSlots = newMoves.map(move => {
 					const moveData = this.dex.moves.get(move);
@@ -117,14 +111,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				target.baseAbility = target.ability;
 				this.add('-activate', target, 'ability: Swarm');
 				// prevents damage from reapplying after form change
-				return damage - damage;
+				return null;
 			}
 		},
 		flags: {},
 		name: "Call Volbeat",
 		rating: 5,
 		num: -101,
-		shortDesc: "When Volbeat gets low on HP, it calls Illumise for aid.",
+		shortDesc: "When Illumise gets low on HP, it calls Volbeat for aid.",
 	},
 	shortfuse: {
 		onDamagePriority: -30,
@@ -153,7 +147,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		// Copied from the code for Sand Spit
 		onDamagingHit(damage, target, source, move) {
 			this.field.setWeather('raindance');
-			this.add('-message', `Archaludon releases a deluge!`);
 		},
 		flags: {},
 		name: "Hydroelectric Dam",
@@ -193,16 +186,20 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onDamagingHitOrder: 1,
 		onTryHit(target, source, move) {
 			if (move.flags['contact']) {
+				let flipFlopBoosts = false;
 				const invertedBoosts: SparseBoostsTable = {};
 				for (const stat in source.boosts) {
 					if (source.boosts[stat as BoostID] > 0) {
 						// checks for boosts on source of move, inverts boosts and adds them to invertedBoosts table
 						invertedBoosts[stat as BoostID] = -2 * source.boosts[stat as BoostID];
+						if (!flipFlopBoosts) {
+							this.add('-ability', target, 'Flip Flop');
+							flipFlopBoosts = true;
+						}
 					}
 				}
 				// applies boosts
-				this.boost(invertedBoosts, source);
-				this.add('-ability', target, 'Flip Flop');
+				this.boost(invertedBoosts, source, target);
 			}
 		},
 		flags: {},
@@ -675,6 +672,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	hailmary: {
 		onModifySpe(spe, pokemon) {
 			if (this.field.isWeather(['hail', 'snowscape'])) {
+				this.add('-ability', pokemon, 'Hail Mary');
 				return this.chainModify(2);
 			}
 		},
@@ -697,5 +695,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		rating: 5,
 		num: -113,
 		shortDesc: "In Snowscape: 2x Speed, 1.5x Attack, 0.8x accuracy.",
+	},
+	brainfreeze: {
+		onModifyCritRatio(critRatio, source, target) {
+			if (target && (target.status === 'frostbite' || this.field.isWeather('snowscape'))) return 5;
+		},
+		flags: {},
+		name: "Brain Freeze",
+		rating: 5,
+		num: -114,
+		shortDesc: "This Pokemon's attacks are critical hits if the target is frostbitten or Snow is active.",
 	},
 };
