@@ -56,7 +56,7 @@ export const TeamsHandler = new class {
 		}
 	})() : null;
 	destroy() {
-		void teamsDB.close();
+		void teamsDB?.close();
 	}
 
 	async search(search: TeamSearch, user: User, count = 10, includePrivate = false) {
