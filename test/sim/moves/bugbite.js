@@ -20,7 +20,7 @@ describe('Bug Bite', () => {
 	});
 	it('should not steal and eat Enigma Berry', () => {
 		battle = common.createBattle([
-			[{ species: "combee", moves: ['bugbite'] }],
+			[{ species: "combee", level: 1, moves: ['bugbite'] }],
 			[{ species: "umbreon", item: 'enigmaberry', moves: ['sleeptalk'] }],
 		]);
 		battle.makeChoices('move bugbite', 'move sleeptalk');
