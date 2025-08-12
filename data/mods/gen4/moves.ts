@@ -1296,6 +1296,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				if (item.onEat) source.ateBerry = true;
 			}
 		},
+		onAfterHit() {},
 	},
 	poisongas: {
 		inherit: true,
