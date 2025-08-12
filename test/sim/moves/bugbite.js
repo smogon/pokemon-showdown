@@ -18,6 +18,7 @@ describe('Bug Bite', () => {
 		battle.makeChoices('move bugbite', 'move sleeptalk');
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
+
 	it('should not steal and eat Enigma Berry', () => {
 		battle = common.createBattle([
 			[{ species: "combee", level: 1, moves: ['bugbite'] }],
@@ -41,6 +42,7 @@ describe('Bug Bite [Gen 4]', () => {
 		battle.makeChoices('move bugbite', 'move sleeptalk');
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
+
 	it('should steal and eat Enigma Berry', () => {
 		battle = common.gen(4).createBattle([
 			[{ species: "combee", level: 1, moves: ['bugbite'] }],
