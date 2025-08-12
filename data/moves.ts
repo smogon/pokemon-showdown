@@ -1984,7 +1984,6 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
 		onAfterHit(target, source) {
 			const item = target.getItem();
-			if (item.id === "jabocaberry") return;
 			if (source.hp && item.isBerry && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Bug Bite', `[of] ${source}`);
 				if (this.singleEvent('Eat', item, null, source, null, null)) {
