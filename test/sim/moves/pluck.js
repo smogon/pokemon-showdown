@@ -10,7 +10,7 @@ describe('Pluck', () => {
 		battle.destroy();
 	});
 
-	it('should not steal and eat Jaboca Berry in Gen 9', () => {
+	it('should not steal and eat Jaboca Berry', () => {
 		battle = common.createBattle([
 			[{ species: "doduo", moves: ['pluck'] }],
 			[{ species: "Forretress", item: 'jabocaberry', moves: ['sleeptalk'] }],
