@@ -5,32 +5,32 @@ const common = require('./../../common');
 
 let battle;
 
-describe('Bug Bite', () => {
+describe('Pluck', () => {
 	afterEach(() => {
 		battle.destroy();
 	});
 
 	it('should not steal and eat Jaboca Berry', () => {
 		battle = common.createBattle([
-			[{ species: "Scyther", moves: ['bugbite'] }],
+			[{ species: "doduo", moves: ['pluck'] }],
 			[{ species: "Forretress", item: 'jabocaberry', moves: ['sleeptalk'] }],
 		]);
-		battle.makeChoices('move bugbite', 'move sleeptalk');
+		battle.makeChoices('move pluck', 'move sleeptalk');
 		assert.notEqual(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 });
 
-describe('Bug Bite [Gen 4]', () => {
+describe('Pluck [Gen 4]', () => {
 	afterEach(() => {
 		battle.destroy();
 	});
 
 	it('should steal and eat Jaboca Berry', () => {
 		battle = common.gen(4).createBattle([
-			[{ species: "Scyther", moves: ['bugbite'] }],
+			[{ species: "doduo", moves: ['pluck'] }],
 			[{ species: "Forretress", item: 'jabocaberry', moves: ['sleeptalk'] }],
 		]);
-		battle.makeChoices('move bugbite', 'move sleeptalk');
+		battle.makeChoices('move pluck', 'move sleeptalk');
 		assert.equal(battle.p1.active[0].hp, battle.p1.active[0].maxhp);
 	});
 });
