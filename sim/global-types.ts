@@ -311,8 +311,9 @@ interface ModdedBattlePokemon {
 	runEffectiveness?: (this: Pokemon, move: ActiveMove) => number;
 	runImmunity?: (this: Pokemon, source: ActiveMove | string, message?: string | boolean) => boolean;
 	setAbility?: (
-		this: Pokemon, ability: string | Ability, source: Pokemon | null, isFromFormeChange: boolean
-	) => string | false;
+		this: Pokemon, ability: string | Ability, source?: Pokemon | null, sourceEffect?: Effect | null,
+		isFromFormeChange?: boolean, isTransform?: boolean
+	) => ID | false | null;
 	setItem?: (this: Pokemon, item: string | Item, source?: Pokemon, effect?: Effect) => boolean;
 	setStatus?: (
 		this: Pokemon, status: string | Condition, source: Pokemon | null,
