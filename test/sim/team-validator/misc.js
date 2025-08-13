@@ -241,4 +241,12 @@ describe('Team Validator', () => {
 
 		assert.equal(accepted, allowed);
 	});
+
+	it('should allow moves learned via HOME relearner', () => {
+		const team = [
+			{ species: 'bronzor', level: 1, ability: 'levitate', moves: ['hypnosis'] },
+			{ species: 'porygon', level: 25, ability: 'trace', moves: ['triattack'], evs: { hp: 1 } },
+		];
+		assert.legalTeam(team, 'gen9ubers');
+	});
 });
