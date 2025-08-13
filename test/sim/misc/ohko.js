@@ -58,7 +58,6 @@ describe("OHKO moves", () => {
 				{ species: 'Vaporeon', moves: ['substitute'] },
 			]]);
 			battle.makeChoices();
-			console.log(battle.log);
 			const vaporeon = battle.p2.active[0];
 			assert.false(vaporeon.volatiles['substitute']);
 			assert.equal(vaporeon.hp, vaporeon.maxhp - Math.floor(vaporeon.maxhp / 4));
