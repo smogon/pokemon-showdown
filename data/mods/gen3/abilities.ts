@@ -198,7 +198,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const target = pokemon.side.randomFoe();
 			if (!target || target.fainted) return;
 			const ability = target.getAbility();
-			pokemon.setAbility(ability, target, this.effect);
+			pokemon.setAbility(ability, target);
 		},
 		flags: {},
 	},

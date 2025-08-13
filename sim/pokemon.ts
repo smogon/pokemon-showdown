@@ -1884,33 +1884,30 @@ export class Pokemon {
 	) {
 		if (!this.hp) return false;
 		if (typeof ability === 'string') ability = this.battle.dex.abilities.get(ability);
-		const oldAbility = this.ability;
+		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
+		const oldAbility = this.battle.dex.abilities.get(this.ability);
 		if (!isFromFormeChange) {
 			if (ability.flags['cantsuppress'] || this.getAbility().flags['cantsuppress']) return false;
 		}
 		if (!isFromFormeChange && !isTransform) {
-			const setAbilityEvent: boolean | null = this.battle.runEvent('SetAbility', this, source, this.battle.effect, ability);
+			const setAbilityEvent: boolean | null = this.battle.runEvent('SetAbility', this, source, sourceEffect, ability);
 			if (!setAbilityEvent) return setAbilityEvent;
 		}
-		this.battle.singleEvent('End', this.battle.dex.abilities.get(oldAbility), this.abilityState, this, source);
-		if (this.battle.effect && this.battle.effect.effectType === 'Move' && !isFromFormeChange) {
-			this.battle.add(
-				'-endability', this, this.battle.dex.abilities.get(oldAbility),
-				`[from] move: ${this.battle.dex.moves.get(this.battle.effect.id)}`
-			);
-		}
+		this.battle.singleEvent('End', oldAbility, this.abilityState, this, source);
 		this.ability = ability.id;
 		this.abilityState = this.battle.initEffectState({ id: ability.id, target: this });
-		if (sourceEffect && source) {
-			this.battle.add('-ability', this, ability.name, `[from] ${sourceEffect.fullname}`, `[of] ${source}`);
-		} else if (sourceEffect) {
-			this.battle.add('-ability', this, ability.name, `[from] ${sourceEffect.fullname}`);
+		if (sourceEffect && !isFromFormeChange && !isTransform) {
+			if (source) {
+				this.battle.add('-ability', this, ability.name, oldAbility.name, `[from] ${sourceEffect.fullname}`, `[of] ${source}`);
+			} else {
+				this.battle.add('-ability', this, ability.name, oldAbility.name, `[from] ${sourceEffect.fullname}`);
+			}
 		}
 		if (ability.id && this.battle.gen > 3 &&
-			(!isTransform || oldAbility !== ability.id || this.battle.gen <= 4)) {
+			(!isTransform || oldAbility.id !== ability.id || this.battle.gen <= 4)) {
 			this.battle.singleEvent('Start', ability, this.abilityState, this, source);
 		}
-		return oldAbility;
+		return oldAbility.id;
 	}
 
 	getAbility() {

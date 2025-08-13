@@ -5056,12 +5056,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onHit(target, source) {
-			const oldAbility = target.setAbility(source.ability, null, this.effect);
-			if (oldAbility) {
-				if (!target.isAlly(source)) target.volatileStaleness = 'external';
-				return;
-			}
-			return oldAbility as false | null;
+			const oldAbility = target.setAbility(source.ability);
+			if (!oldAbility) return oldAbility as false | null;
+			if (!target.isAlly(source)) target.volatileStaleness = 'external';
 		},
 		secondary: null,
 		target: "normal",
@@ -15897,11 +15894,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (target.getAbility().flags['failroleplay'] || source.getAbility().flags['cantsuppress']) return false;
 		},
 		onHit(target, source) {
-			const oldAbility = source.setAbility(target.ability, target, this.effect);
-			if (oldAbility) {
-				return;
-			}
-			return oldAbility as false | null;
+			const oldAbility = source.setAbility(target.ability, target);
+			if (!oldAbility) return oldAbility as false | null;
 		},
 		secondary: null,
 		target: "normal",
@@ -17099,11 +17093,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onHit(target, source) {
-			const oldAbility = target.setAbility('simple', null, this.effect);
-			if (oldAbility) {
-				return;
-			}
-			return oldAbility as false | null;
+			const oldAbility = target.setAbility('simple');
+			if (!oldAbility) return oldAbility as false | null;
 		},
 		secondary: null,
 		target: "normal",
@@ -21882,14 +21873,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onHit(target, source) {
-			const oldAbility = target.setAbility('insomnia', null, this.effect);
-			if (oldAbility) {
-				if (target.status === 'slp') {
-					target.cureStatus();
-				}
-				return;
-			}
-			return oldAbility as false | null;
+			const oldAbility = target.setAbility('insomnia');
+			if (!oldAbility) return oldAbility as false | null;
+			if (target.status === 'slp') target.cureStatus();
 		},
 		secondary: null,
 		target: "normal",

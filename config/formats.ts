@@ -474,7 +474,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						randomFoe.setSpecies(rawSpecies, null);
 						randomFoe.baseSpecies = rawSpecies;
 						randomFoe.details = randomFoe.getUpdatedDetails();
-						randomFoe.setAbility('Orichalcum Pulse', null, true);
+						randomFoe.setAbility('Orichalcum Pulse', null, null, true);
 						randomFoe.baseAbility = randomFoe.ability;
 						if (this.randomChance(1, 2)) {
 							const randomFoeItem = (this.randomChance(1, 2) ? 'choicescarf' : 'choiceband');
