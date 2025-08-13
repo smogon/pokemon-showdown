@@ -124,9 +124,9 @@ export interface MoveEventMethods {
 	onHit?: CommonHandlers['ResultMove'];
 	onHitField?: CommonHandlers['ResultMove'];
 	onHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void;
-	onAccuracy?: (
-		this: Battle, accuracy: number | true, target: Pokemon, source: Pokemon, move: ActiveMove
-	) => number | true | void;
+	onCheckAccuracy?: (
+		this: Battle, target: Pokemon, source: Pokemon, move: ActiveMove
+	) => boolean | void;
 	onModifyAccuracy?: (
 		this: Battle, accuracy: number | true, target: Pokemon, source: Pokemon, move: ActiveMove
 	) => number | true | void;

@@ -70,11 +70,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				return 0;
 			},
-			onAccuracy(accuracy, target, source, move) {
+			onCheckAccuracy(target, source, move) {
 				if (move.id === 'swift') {
-					return true;
+					return false;
 				}
-				return accuracy;
 			},
 			onEnd(target) {
 				this.add('-end', target, 'Substitute');

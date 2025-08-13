@@ -1026,80 +1026,58 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 		},
 
-		hitStepAccuracy(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
+		hitStepAccuracy(targets, pokemon, move) {
 			const hitResults = [];
 			for (const [i, target] of targets.entries()) {
 				this.battle.activeTarget = target;
-				// calculate true accuracy
-				let accuracy = move.accuracy;
 				if (move.ohko) { // bypasses accuracy modifiers
 					if (!target.isSemiInvulnerable()) {
-						accuracy = 30;
-						if (move.ohko === 'Ice' && this.battle.gen >= 7 && !pokemon.hasType('Ice')) {
-							accuracy = 20;
-						}
-						if (!target.volatiles['dynamax'] && pokemon.level >= target.level &&
-							(move.ohko === true || !target.hasType(move.ohko))) {
-							accuracy += (pokemon.level - target.level);
-						} else {
+						if (
+							target.volatiles['dynamax'] || pokemon.level < target.level ||
+							(move.ohko !== true && target.hasType(move.ohko))
+						) {
 							this.battle.add('-immune', target, '[ohko]');
 							hitResults[i] = false;
 							continue;
 						}
-					}
-				} else {
-					accuracy = this.battle.singleEvent('ModifyAccuracy', move, null, target, pokemon, move, accuracy);
-					accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
-					if (accuracy !== true) {
-						let boost = 0;
-						if (!move.ignoreAccuracy) {
-							const boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
-							boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
-						}
-						if (!move.ignoreEvasion) {
-							const boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
-							boost = this.battle.clampIntRange(boost - boosts['evasion'], -6, 6);
-						}
-						if (boost > 0) {
-							accuracy = this.battle.trunc(accuracy * (3 + boost) / 3);
-						} else if (boost < 0) {
-							accuracy = this.battle.trunc(accuracy * 3 / (3 - boost));
+						if (!this.checkAlwaysHit(pokemon, target)) {
+							let accuracy = 30;
+							if (this.battle.gen >= 7 && move.ohko !== true && !pokemon.hasType(move.ohko)) accuracy = 20;
+							accuracy += pokemon.level - target.level;
+							if (!this.battle.randomChance(accuracy, 100)) {
+								this.battle.attrLastMove('[miss]');
+								this.battle.add('-miss', pokemon, target);
+								hitResults[i] = false;
+								continue;
+							}
 						}
 					}
-				}
-				if (move.alwaysHit || (move.id === 'toxic' && this.battle.gen >= 8 && pokemon.hasType('Poison')) ||
-					(move.target === 'self' && move.category === 'Status' && !target.isSemiInvulnerable())) {
-					accuracy = true; // bypasses ohko accuracy modifiers
 				} else {
-					accuracy = this.battle.singleEvent('Accuracy', move, null, target, pokemon, move, accuracy);
-					accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
-				}
-				if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) {
-					if (move.smartTarget) {
-						move.smartTarget = false;
-					} else {
-						if (pokemon.hasAbility('misspelled')) {
-							// Custom miss for HoeenHero
-							// Typo the move
-							const typoedMove = move.name.charAt(0) + move.name.charAt(2) + move.name.charAt(1) + move.name.slice(3);
-
-							// Modify the used move to be typoed.
-							const logEntries = this.battle.log[this.battle.lastMoveLine].split('|');
-							logEntries[3] = typoedMove;
-							this.battle.log[this.battle.lastMoveLine] = logEntries.join('|');
-
-							this.battle.attrLastMove('[still]');
-							this.battle.add('-message', `But it was misspelled!`);
+					if (!this.accuracyCheck(pokemon, target, move)) {
+						if (move.smartTarget) {
+							move.smartTarget = false;
 						} else {
-							if (!move.spreadHit) this.battle.attrLastMove('[miss]');
-							this.battle.add('-miss', pokemon, target);
+							if (pokemon.hasAbility('misspelled')) {
+								// Custom miss for HoeenHero
+								// Typo the move
+								const typoedMove = move.name.charAt(0) + move.name.charAt(2) + move.name.charAt(1) + move.name.slice(3);
+
+								// Modify the used move to be typoed.
+								const logEntries = this.battle.log[this.battle.lastMoveLine].split('|');
+								logEntries[3] = typoedMove;
+								this.battle.log[this.battle.lastMoveLine] = logEntries.join('|');
+
+								this.battle.attrLastMove('[still]');
+								this.battle.add('-message', `But it was misspelled!`);
+							} else {
+								if (!move.spreadHit) this.battle.attrLastMove('[miss]');
+								this.battle.add('-miss', pokemon, target);
+							}
 						}
+						this.battle.runEvent('MoveMiss', target, pokemon, move);
+						hitResults[i] = false;
+						continue;
 					}
-					if (!move.ohko && pokemon.hasItem('blunderpolicy') && pokemon.useItem()) {
-						this.battle.boost({ spe: 2 }, pokemon);
-					}
-					hitResults[i] = false;
-					continue;
 				}
 				hitResults[i] = true;
 			}
@@ -1453,37 +1431,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 
 				// like this (Triple Kick)
-				if (target && move.multiaccuracy && hit > 1) {
-					let accuracy = move.accuracy;
-					const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
-					if (accuracy !== true) {
-						if (!move.ignoreAccuracy) {
-							const boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
-							const boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
-							if (boost > 0) {
-								accuracy *= boostTable[boost];
-							} else {
-								accuracy /= boostTable[-boost];
-							}
-						}
-						if (!move.ignoreEvasion) {
-							const boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
-							const boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
-							if (boost > 0) {
-								accuracy /= boostTable[boost];
-							} else if (boost < 0) {
-								accuracy *= boostTable[-boost];
-							}
-						}
-					}
-					accuracy = this.battle.singleEvent('ModifyAccuracy', move, null, target, pokemon, move, accuracy);
-					accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
-					if (!move.alwaysHit) {
-						accuracy = this.battle.singleEvent('Accuracy', move, null, target, pokemon, move, accuracy);
-						accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
-						if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) break;
-					}
-				}
+				if (target && move.multiaccuracy && hit > 1 && !this.accuracyCheck(pokemon, target, move)) break;
 
 				const moveData = move;
 				if (!moveData.flags) moveData.flags = {};

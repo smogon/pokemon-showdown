@@ -345,6 +345,14 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
+			// OHKO moves only have a chance to hit if the user is at least as fast as the target
+			if (move.ohko) {
+				if (target.getStat('spe') > pokemon.getStat('spe')) {
+					this.battle.add('-immune', target, '[ohko]');
+					return false;
+				}
+			}
+
 			// Now, let's calculate the accuracy.
 			let accuracy = move.accuracy;
 
@@ -353,12 +361,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				accuracy = true;
 			}
 
-			// OHKO moves only have a chance to hit if the user is at least as fast as the target
-			if (move.ohko) {
-				if (target.getStat('spe') > pokemon.getStat('spe')) {
-					this.battle.add('-immune', target, '[ohko]');
-					return false;
-				}
+			if (
+				!this.battle.singleEvent('CheckAccuracy', move, null, target, pokemon, move, accuracy) ||
+				!this.battle.runEvent('CheckAccuracy', target, pokemon, move, accuracy)
+			) {
+				accuracy = true;
 			}
 
 			// Calculate true accuracy for gen 1, which uses 0-255.
@@ -384,14 +391,15 @@ export const Scripts: ModdedBattleScriptsData = {
 				if (pokemon.volatiles['lockedmove']) pokemon.volatiles['lockedmove'].accuracy = accuracy;
 				if (pokemon.volatiles['rage']) pokemon.volatiles['rage'].accuracy = accuracy;
 			}
-			accuracy = this.battle.singleEvent('Accuracy', move, null, target, pokemon, move, accuracy);
-			accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
+			accuracy = this.battle.singleEvent('ModifyAccuracy', move, null, target, pokemon, move, accuracy);
+			accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
 			// Moves that target the user do not suffer from the 1/256 miss chance.
 			if (move.target === 'self' && accuracy !== true) accuracy++;
 			// 1/256 chance of missing always, no matter what. Besides the aforementioned exceptions.
 			if (accuracy !== true && !this.battle.randomChance(accuracy, 256)) {
 				this.battle.attrLastMove('[miss]');
 				this.battle.add('-miss', pokemon);
+				this.battle.runEvent('MoveMiss', target, pokemon, move);
 				if (accuracy === 255) this.battle.hint("In Gen 1, moves with 100% accuracy can still miss 1/256 of the time.");
 				damage = false;
 				this.battle.lastDamage = 0;

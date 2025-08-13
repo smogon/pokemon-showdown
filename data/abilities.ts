@@ -2905,16 +2905,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 256,
 	},
 	noguard: {
-		onAnyInvulnerabilityPriority: 1,
-		onAnyInvulnerability(target, source, move) {
-			if (move && (source === this.effectState.target || target === this.effectState.target)) return 0;
-		},
-		onAnyAccuracy(accuracy, target, source, move) {
-			if (move && (source === this.effectState.target || target === this.effectState.target)) {
-				return true;
-			}
-			return accuracy;
-		},
+		// Implemented in Battle#checkAlwaysHit
 		flags: {},
 		name: "No Guard",
 		rating: 4,

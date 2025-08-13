@@ -110,8 +110,8 @@ describe('Dancer', () => {
 		]]);
 
 		// Modding accuracy so Revelation Dance always misses if Oricorio uses it (Wynaut should in fact never use it though)
-		battle.onEvent('Accuracy', battle.format, (accuracy, target, pokemon, move) => {
-			return pokemon.id === 'wynaut';
+		battle.onEvent('ModifyAccuracy', battle.format, -1000, (accuracy, target, pokemon, move) => {
+			if (pokemon.name === 'Oricorio') return 0;
 		});
 
 		battle.makeChoices(); // miss on initial use

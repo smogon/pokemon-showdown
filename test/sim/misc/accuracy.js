@@ -16,8 +16,10 @@ describe("Accuracy", () => {
 			[{ species: 'Beldum', moves: ['poltergeist'] }],
 		]);
 
-		battle.onEvent('Accuracy', battle.format, accuracy => {
-			assert.equal(accuracy, 98, 'CompoundEyes Sleep Powder should be 98% accurate');
+		battle.onEvent('ModifyAccuracy', battle.format, -1000, accuracy => {
+			const finalAccuracy = battle.finalModify(accuracy);
+			assert.equal(finalAccuracy, 98, 'CompoundEyes Sleep Powder should be 98% accurate');
+			return finalAccuracy;
 		});
 
 		battle.makeChoices();
@@ -27,8 +29,10 @@ describe("Accuracy", () => {
 			[{ species: 'Regirock', moves: ['sleeptalk'] }],
 		]);
 
-		battle.onEvent('Accuracy', battle.format, accuracy => {
-			assert.equal(accuracy, 94, 'Victory Star Fire Blast should be 94% accurate');
+		battle.onEvent('ModifyAccuracy', battle.format, -1000, accuracy => {
+			const finalAccuracy = battle.finalModify(accuracy);
+			assert.equal(finalAccuracy, 94, 'Victory Star Fire Blast should be 94% accurate');
+			return finalAccuracy;
 		});
 
 		battle.makeChoices();
@@ -38,8 +42,10 @@ describe("Accuracy", () => {
 			[{ species: 'Regirock', moves: ['sleeptalk'] }],
 		]);
 
-		battle.onEvent('Accuracy', battle.format, accuracy => {
-			assert.equal(accuracy, 93, 'Wide Lens Fire Blast should be 93% accurate');
+		battle.onEvent('ModifyAccuracy', battle.format, -1000, accuracy => {
+			const finalAccuracy = battle.finalModify(accuracy);
+			assert.equal(finalAccuracy, 93, 'Wide Lens Fire Blast should be 93% accurate');
+			return finalAccuracy;
 		});
 
 		battle.makeChoices();
@@ -56,10 +62,11 @@ describe("Accuracy", () => {
 
 		battle.makeChoices('move sandattack -2, move sleeptalk', 'move doubleteam, move sandattack 2');
 		battle.makeChoices('auto', 'move sleeptalk, move confuseray -1');
-
-		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
+		battle.onEvent('ModifyAccuracy', battle.format, -1000, (accuracy, target, source, move) => {
 			if (move.id !== 'fireblast') return;
-			assert.equal(accuracy, 51);
+			const finalAccuracy = battle.finalModify(accuracy);
+			assert.equal(finalAccuracy, 102);
+			return finalAccuracy;
 		});
 
 		battle.makeChoices('move gravity, move fire blast 1', 'move sleeptalk, move sleeptalk');
@@ -76,9 +83,11 @@ describe("Accuracy", () => {
 		battle.makeChoices('move sandattack -2, move sleeptalk', 'move doubleteam, move sandattack 2');
 		battle.makeChoices('auto', 'move sleeptalk, move confuseray -1');
 
-		battle.onEvent('Accuracy', battle.format, (accuracy, target, source, move) => {
+		battle.onEvent('ModifyAccuracy', battle.format, -1000, (accuracy, target, source, move) => {
 			if (move.id !== 'fireblast') return;
-			assert.equal(accuracy, 50);
+			const finalAccuracy = battle.finalModify(accuracy);
+			assert.equal(finalAccuracy, 101);
+			return finalAccuracy;
 		});
 
 		battle.makeChoices('move gravity, move fire blast 1', 'move sleeptalk, move sleeptalk');

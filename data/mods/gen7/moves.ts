@@ -1134,20 +1134,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	toxic: {
 		inherit: true,
-		onPrepareHit(target, source, move) {
-			if (source.hasType('Poison')) source.addVolatile('toxic');
-		},
-		condition: {
-			noCopy: true,
-			duration: 1,
-			onSourceInvulnerabilityPriority: 1,
-			onSourceInvulnerability(target, source, move) {
-				if (move && source === this.effectState.target) return 0;
-			},
-			onSourceAccuracy(accuracy, target, source, move) {
-				if (move && source === this.effectState.target) return true;
-			},
-		},
+		onAfterMove() {},
 	},
 	toxicthread: {
 		inherit: true,

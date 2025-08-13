@@ -2981,9 +2981,8 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				return this.chainModify(0.7);
 			}
 		},
-		onAccuracy(accuracy, attacker, defender, move) {
-			if (move?.flags['wind'] && !attacker.hasItem('utilityumbrella')) return true;
-			return accuracy;
+		onCheckAccuracy(target, source, move) {
+			if (move.flags['wind'] && !source.hasItem('utilityumbrella')) return false;
 		},
 		onFieldStart(battle, source, effect) {
 			if (effect?.effectType === 'Ability') {

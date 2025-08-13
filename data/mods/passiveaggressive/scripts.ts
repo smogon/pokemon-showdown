@@ -55,37 +55,7 @@ export const Scripts: ModdedBattleScriptsData = {
 				}
 
 				// like this (Triple Kick)
-				if (target && move.multiaccuracy && hit > 1) {
-					let accuracy = move.accuracy;
-					const boostTable = [1, 4 / 3, 5 / 3, 2, 7 / 3, 8 / 3, 3];
-					if (accuracy !== true) {
-						if (!move.ignoreAccuracy) {
-							const boosts = this.battle.runEvent('ModifyBoost', pokemon, null, null, { ...pokemon.boosts });
-							const boost = this.battle.clampIntRange(boosts['accuracy'], -6, 6);
-							if (boost > 0) {
-								accuracy *= boostTable[boost];
-							} else {
-								accuracy /= boostTable[-boost];
-							}
-						}
-						if (!move.ignoreEvasion) {
-							const boosts = this.battle.runEvent('ModifyBoost', target, null, null, { ...target.boosts });
-							const boost = this.battle.clampIntRange(boosts['evasion'], -6, 6);
-							if (boost > 0) {
-								accuracy /= boostTable[boost];
-							} else if (boost < 0) {
-								accuracy *= boostTable[-boost];
-							}
-						}
-					}
-					accuracy = this.battle.singleEvent('ModifyAccuracy', move, null, target, pokemon, move, accuracy);
-					accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
-					if (!move.alwaysHit) {
-						accuracy = this.battle.singleEvent('Accuracy', move, null, target, pokemon, move, accuracy);
-						accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
-						if (accuracy !== true && !this.battle.randomChance(accuracy, 100)) break;
-					}
-				}
+				if (target && move.multiaccuracy && hit > 1 && !this.accuracyCheck(pokemon, target, move)) break;
 
 				const moveData = move;
 				if (!moveData.flags) moveData.flags = {};
