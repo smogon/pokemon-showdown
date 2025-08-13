@@ -66,8 +66,6 @@ export const Scripts: ModdedBattleScriptsData = {
 	actions: {
 		inherit: true,
 		tryMoveHit(target, pokemon, move) {
-			const positiveBoostTable = [1, 1.33, 1.66, 2, 2.33, 2.66, 3];
-			const negativeBoostTable = [1, 0.75, 0.6, 0.5, 0.43, 0.36, 0.33];
 			const doSelfDestruct = true;
 			let damage: number | false | undefined = 0;
 
