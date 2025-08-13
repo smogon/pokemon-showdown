@@ -285,8 +285,8 @@ export const Scripts: ModdedBattleScriptsData = {
 			}
 
 			if (
-				!this.battle.singleEvent('CheckAccuracy', move, null, target, pokemon, move, accuracy) ||
-				!this.battle.runEvent('CheckAccuracy', target, pokemon, move, accuracy)
+				!this.battle.singleEvent('CheckAccuracy', move, null, target, pokemon, move) ||
+				!this.battle.runEvent('CheckAccuracy', target, pokemon, move)
 			) {
 				accuracy = true;
 			}
