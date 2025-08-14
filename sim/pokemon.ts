@@ -1455,7 +1455,6 @@ export class Pokemon {
 			this.details = this.getUpdatedDetails();
 			let details = (this.illusion || this).details;
 			if (this.terastallized) details += `, tera:${this.terastallized}`;
-			this.battle.add('detailschange', this, details);
 			this.updateMaxHp();
 			if (!source) {
 				// Tera forme
