@@ -3093,6 +3093,7 @@ export class Battle {
 		const oldHealth = pokemon.getHealth();
 		pokemon.useBagItem(itemId, moveName);
 		if (oldHealth.secret !== pokemon.getHealth().secret)
+			// @pokebedrock - Add details to the heal message
 			this.add(
 				'-heal',
 				pokemon,

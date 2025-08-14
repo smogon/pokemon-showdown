@@ -1518,7 +1518,8 @@ export class Pokemon {
 		this.hp = newMaxHP - (this.maxhp - this.hp);
 		if (this.hp < 0) this.hp = this.fainted ? 0 : 1; // latest should never happen
 		this.maxhp = newMaxHP;
-		if (this.hp) this.battle.add('-heal', this, this.getHealth, '[silent]');
+		// @pokebedrock - Add details to the heal message
+		if (this.hp) this.battle.add('-heal', this, this.details, this.getHealth, '[silent]');
 	}
 
 	clearVolatile(includeSwitchFlags = true) {
