@@ -20,101 +20,108 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	callillumise: {
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
-			if (damage >= target.hp && effect) {
-				// Keep the Pokémon at 1 HP instead of fainting immediately
-				this.damage(target.hp - 1, target, source, effect);
-				this.add('-message', `Volbeat calls upon Illumise for aid!`);
-				// Define new moves
-				const newMoves = ['bugbuzz', 'icebeam', 'thunderbolt', 'calmmind'];
-				// Update move slots
-				target.moveSlots = newMoves.map(move => {
-					const moveData = this.dex.moves.get(move);
-					return {
-						move: moveData.name,
-						id: moveData.id,
-						pp: moveData.pp,
-						maxpp: moveData.pp,
-						target: moveData.target,
-						disabled: false,
-						used: false,
-					};
-				});
-				// this forces the UI to update move slots visually
-				(target as any).baseMoveSlots = target.moveSlots.slice();
-				// removes status/boosts
-				target.cureStatus();
-				target.clearBoosts();
-				// forces the UI to update part II
-				this.add('-clearboost', target, '[from] ability: Call Illumise', '[silent]');
-				for (const volatile in target.volatiles) {
-					this.add('-end', target, volatile);
-				}
-				target.clearVolatile(true);
-				// form change + heal
-				target.formeChange('Illumise', null, true);
-				this.heal(this.modify(target.maxhp, 1));
-				// sets new ability
-				target.setAbility('Tinted Lens');
-				this.add('-activate', target, 'ability: Tinted Lens');
-				target.baseAbility = target.ability;
-				// prevents damage from reapplying after form change
-				return null;
+			if (damage >= target.hp) {
+				this.add('-ability', target, 'Call Illumise');
+				this.effectState.callillumise = true;
+				return target.hp - 1;
 			}
 		},
-		flags: {},
+		onUpdate(pokemon) {
+			if (!this.effectState.callillumise) return;
+
+			this.add('-message', `Volbeat calls upon Illumise for aid!`);
+			// Define new moves
+			const newMoves = ['bugbuzz', 'icebeam', 'thunderbolt', 'calmmind'];
+			// Update move slots
+			pokemon.moveSlots = newMoves.map(move => {
+				const moveData = this.dex.moves.get(move);
+				return {
+					move: moveData.name,
+					id: moveData.id,
+					pp: moveData.pp,
+					maxpp: moveData.pp,
+					target: moveData.target,
+					disabled: false,
+					used: false,
+				};
+			});
+			// this forces the UI to update move slots visually
+			(pokemon as any).baseMoveSlots = pokemon.moveSlots.slice();
+			// removes status/boosts
+			pokemon.cureStatus();
+			pokemon.clearBoosts();
+			// forces the UI to update part II
+			this.add('-clearboost', pokemon, '[from] ability: Call Illumise', '[silent]');
+			for (const volatile in pokemon.volatiles) {
+				this.add('-end', pokemon, volatile);
+			}
+			pokemon.clearVolatile(true);
+			// form change + heal
+			pokemon.formeChange('Illumise', null, true);
+			this.heal(pokemon.maxhp);
+			// sets new ability
+			pokemon.setAbility('Tinted Lens', null, null, true);
+			pokemon.baseAbility = pokemon.ability;
+			this.add('-ability', pokemon, 'Tinted Lens');
+		},
+		flags: {
+			breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1,
+		},
 		name: "Call Illumise",
 		rating: 5,
 		num: -100,
 		shortDesc: "When Volbeat gets low on HP, it calls Illumise for aid.",
 	},
 	callvolbeat: {
-		onTryHit(target, source, move) {
-			target.clearBoosts();
-		},
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
-			if (damage >= target.hp && effect) {
-				// Keep the Pokémon at 1 HP instead of fainting immediately
-				this.damage(target.hp - 1, target, source, effect);
-				this.add('-message', `Illumise calls upon Volbeat for aid!`);
-				// Define new moves
-				const newMoves = ['dragondance', 'lunge', 'dragonhammer', 'earthquake'];
-				// Update move slots
-				target.moveSlots = newMoves.map(move => {
-					const moveData = this.dex.moves.get(move);
-					return {
-						move: moveData.name,
-						id: moveData.id,
-						pp: moveData.pp,
-						maxpp: moveData.pp,
-						target: moveData.target,
-						disabled: false,
-						used: false,
-					};
-				});
-				// this forces the UI to update move slots visually
-				(target as any).baseMoveSlots = target.moveSlots.slice();
-				// removes status/boosts
-				target.clearStatus();
-				target.clearBoosts();
-				// forces the UI to update part II
-				this.add('-clearboost', target, '[from] ability: Call Volbeat', `[silent]`);
-				for (const volatile in target.volatiles) {
-					this.add('-end', target, volatile);
-				}
-				target.clearVolatile(false);
-				// form change + heal
-				target.formeChange('Volbeat', null, true);
-				this.heal(this.modify(target.maxhp, 1));
-				// sets new ability
-				target.setAbility('Swarm');
-				target.baseAbility = target.ability;
-				this.add('-activate', target, 'ability: Swarm');
-				// prevents damage from reapplying after form change
-				return null;
+			if (damage >= target.hp) {
+				this.add('-ability', target, 'Call Volbeat');
+				this.effectState.callvolbeat = true;
+				return target.hp - 1;
 			}
 		},
-		flags: {},
+		onUpdate(pokemon) {
+			if (!this.effectState.callvolbeat) return;
+
+			this.add('-message', `Illumise calls upon Volbeat for aid!`);
+			// Define new moves
+			const newMoves = ['dragondance', 'lunge', 'dragonhammer', 'earthquake'];
+			// Update move slots
+			pokemon.moveSlots = newMoves.map(move => {
+				const moveData = this.dex.moves.get(move);
+				return {
+					move: moveData.name,
+					id: moveData.id,
+					pp: moveData.pp,
+					maxpp: moveData.pp,
+					target: moveData.target,
+					disabled: false,
+					used: false,
+				};
+			});
+			// this forces the UI to update move slots visually
+			(pokemon as any).baseMoveSlots = pokemon.moveSlots.slice();
+			// removes status/boosts
+			pokemon.cureStatus();
+			pokemon.clearBoosts();
+			// forces the UI to update part II
+			this.add('-clearboost', pokemon, '[from] ability: Call Volbeat', '[silent]');
+			for (const volatile in pokemon.volatiles) {
+				this.add('-end', pokemon, volatile);
+			}
+			pokemon.clearVolatile(true);
+			// form change + heal
+			pokemon.formeChange('Volbeat', null, true);
+			this.heal(pokemon.maxhp);
+			// sets new ability
+			pokemon.setAbility('Swarm', null, null, true);
+			pokemon.baseAbility = pokemon.ability;
+			this.add('-ability', pokemon, 'Swarm');
+		},
+		flags: {
+			breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1,
+		},
 		name: "Call Volbeat",
 		rating: 5,
 		num: -101,
@@ -123,21 +130,21 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	shortfuse: {
 		onDamagePriority: -30,
 		onDamage(damage, target, source, effect) {
-			if (damage >= target.hp && effect) {
+			if (damage >= target.hp) {
 				this.add('-ability', target, 'Short Fuse');
-
-				// Keep the Pokémon at 1 HP instead of fainting immediately
-				this.damage(target.hp - 1, target, source, effect);
-
-				// Force the Pokémon to use Explosion
-				const explosion = this.dex.getActiveMove('explosion');
-				this.actions.useMove(explosion, target);
-
-				// Ensure the Pokémon properly faints afterward
-				target.faint();
+				this.effectState.shortfuse = true;
+				return target.hp - 1;
 			}
 		},
-		flags: { breakable: 1 },
+		onUpdate(pokemon) {
+			if (this.effectState.shortfuse) {
+				delete this.effectState.shortfuse;
+				this.actions.useMove('explosion', pokemon);
+			}
+		},
+		flags: {
+			breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1,
+		},
 		name: "Short Fuse",
 		rating: 5,
 		num: -102,
