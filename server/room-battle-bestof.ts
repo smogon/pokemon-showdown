@@ -364,17 +364,15 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 				return this.forfeit(loserPlayer.name, ` lost the series due to inactivity.`);
 			}
 			this.room.add(Utils.html`|html|${winner.name} won game ${this.games.length}!`).update();
-			if (winner.wins >= this.winThreshold) {
-				return this.end(winner.id);
-			}
 		} else {
 			this.ties++;
 			this.winThreshold = Math.floor((this.bestOf - this.ties) / 2) + 1;
 			this.room.add(`|html|Game ${this.games.length} was a tie.`).update();
 		}
-		if (this.games.length >= this.bestOf) {
-			return this.end(''); // overall tie
-		}
+
+		const overallWinner = this.players.find(p => p.wins >= this.winThreshold);
+		if (overallWinner) return this.end(overallWinner.id);
+		if (this.games.length >= this.bestOf) return this.end(''); // overall tie
 
 		// no one has won, skip onwards
 		this.promptNextGame(room);
