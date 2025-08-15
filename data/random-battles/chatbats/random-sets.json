@@ -171,23 +171,18 @@
             }
         ]
     },
-    "altaria": {
-        "level": 88,
-        "sets": [
-            {
-                "role": "Bulky Support",
-                "movepool": ["Beak Blast", "Roost", "Heal Bell", "Defog", "Earthquake"],
-                "abilities": ["Fluffy"],
-                "teraTypes": ["Steel"]
-            }
-        ]
-    },
     "altariamega": {
         "level": 84,
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Beak Blast", "Roost", "Return", "Dragon Dance", "Earthquake", "Draco Meteor", "Explosion"],
+                "movepool": ["Return", "Dragon Dance", "Earthquake", "Draco Meteor", "Explosion"],
+                "abilities": ["Fluffy"],
+                "teraTypes": ["Normal"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Beak Blast", "Roost", "Return", "Earthquake", "Draco Meteor"],
                 "abilities": ["Fluffy"],
                 "teraTypes": ["Normal"]
             }
@@ -327,13 +322,19 @@
         ]
     },
     "empoleon": {
-        "level": 86,
+        "level": 84,
         "sets": [
             {
-                "role": "Bulky Setup",
-                "movepool": ["Roost", "Aqua Cutter", "Steel Wing", "Swords Dance"],
-                "abilities": ["Rough Skin"],
-                "teraTypes": ["Flying"]
+                "role": "Setup Sweeper",
+                "movepool": ["Nasty Plot", "Tachyon Cutter", "Air Slash", "Secret Sword", "Roost"],
+                "abilities": ["Sharpness"],
+                "teraTypes": ["Steel", "Ground"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Nasty Plot", "Tachyon Cutter", "Air Slash", "Water Shuriken"],
+                "abilities": ["Sharpness"],
+                "teraTypes": ["Steel", "Ground"]
             }
         ]
     },
@@ -399,11 +400,17 @@
         ]
     },
     "dodrio": {
-        "level": 86,
+        "level": 84,
         "sets": [
             {
                 "role": "Wallbreaker",
-                "movepool": ["Triple Arrows", "Triple Dive", "Hyper Drill", "Obstruct"],
+                "movepool": ["Triple Arrows", "Brave Bird", "Knock Off", "Obstruct"],
+                "abilities": ["Speed Boost"],
+                "teraTypes": ["Fighting"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Triple Arrows", "Drill Peck", "Knock Off", "Obstruct"],
                 "abilities": ["Speed Boost"],
                 "teraTypes": ["Fighting"]
             }
@@ -620,11 +627,11 @@
         ]
     },
     "araquanid": {
-        "level": 86,
+        "level": 84,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["Jet Punch", "Surging Strikes", "Flip Turn", "First Impression", "Sticky Web"],
+                "role": "Bulky Support",
+                "movepool": ["Silk Trap", "Surging Strikes", "Flip Turn", "First Impression"],
                 "abilities": ["Water Bubble"],
                 "teraTypes": ["Water"]
             }
@@ -809,13 +816,13 @@
         ]
     },
     "veluza": {
-        "level": 80,
+        "level": 84,
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Waterfall", "Rage Fist", "Fillet Away", "Stored Power", "Magical Torque", "Hydro Pump"],
+                "movepool": ["Waterfall", "Rage Fist", "Fillet Away", "Stored Power"],
                 "abilities": ["Mold Breaker"],
-                "teraTypes": ["Water", "Ghost", "Fairy", "Psychic", "Dark"]
+                "teraTypes": ["Water", "Ghost", "Psychic", "Dark"]
             }
         ]
     },
@@ -910,6 +917,28 @@
                 "movepool": ["Volt Switch", "Burn Out", "Wish", "Bouncy Bubble"],
                 "abilities": ["Poison Heal"],
                 "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "garganacl": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Support",
+                "movepool": ["Thunder Wave", "Salt Curse", "Purify", "Earthquake"],
+                "abilities": ["Purifying Salt"],
+                "teraTypes": ["Ghost"]
+            }
+        ]
+    },
+    "swanna": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Steam Eruption", "Bleakwind Storm", "Roost", "Defog", "Fly-by"],
+                "abilities": ["Serene Grace"],
+                "teraTypes": ["Ground"]
             }
         ]
     }
