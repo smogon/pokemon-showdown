@@ -39,6 +39,7 @@ export interface TicketState {
 	type: string;
 	created: number;
 	claimed: string | null;
+	claimTime?: number;
 	ip: string;
 	needsDelayWarning?: boolean;
 	offline?: boolean;
@@ -2523,8 +2524,9 @@ export const commands: Chat.ChatCommands = {
 			if (tarUser) {
 				HelpTicket.notifyResolved(tarUser, ticket, ticketId);
 			}
+			const duration = Date.now() - (ticket.state?.claimTime || ticket.created);
 			// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,separated,with,commas
-			writeStats(`${ticket.type}\t${Date.now() - ticket.created}\t0\t0\tresolved\tvalid\t${user.id}`);
+			writeStats(`${ticket.type}\t${duration}\t0\t0\tresolved\tvalid\t${user.id}`);
 			this.popupReply(`You resolved ${ticketId}'s ticket.`);
 			await HelpTicket.modlog({
 				action: 'TEXTTICKET CLOSE',
