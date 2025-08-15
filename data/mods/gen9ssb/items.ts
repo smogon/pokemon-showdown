@@ -56,7 +56,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		onTakeItem: false,
 		zMove: "Hatsune Miku's Lucky Orb",
 		zMoveFrom: "Sparkling Aria",
-		itemUser: ["Xerneas"],
+		itemUser: ["Xerneas", "Xerneas-Active"],
 		desc: "If held by a Xerneas with Sparkling Aria, it can use Hatsune Miku's Lucky Orb.",
 	},
 
