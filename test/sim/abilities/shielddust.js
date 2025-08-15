@@ -13,9 +13,10 @@ describe('Shield Dust', () => {
 	it('should block secondary effects against the user', () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [
 			[{ species: 'Latios', ability: 'noguard', moves: ['snarl'] }, { species: 'Latias', ability: 'levitate', moves: ['roost'] }],
-			[{ species: 'Xerneas', ability: 'shielddust', moves: ['roost'] }, { species: 'Yveltal', ability: 'pressure', moves: ['roost'] }],
+			[{ species: 'Yveltal', ability: 'shielddust', moves: ['roost'] }, { species: 'Yveltal', ability: 'pressure', moves: ['roost'] }],
 		]);
 		battle.makeChoices('move snarl, move roost', 'move roost, move roost');
+		console.log(battle.log);
 		assert.statStage(battle.p2.active[0], 'spa', 0);
 		assert.statStage(battle.p2.active[1], 'spa', -1);
 	});
