@@ -365,9 +365,9 @@ export class Pokemon {
 				move: move.name,
 				id: move.id,
 				// Apply PP from @pokebedrock
-				pp: this.set.movesInfo?.[i]?.pp || basepp,
+				pp: this.set.movesInfo?.[i]?.pp ?? basepp,
 				// Apply maxpp from @pokebedrock
-				maxpp: this.set.movesInfo?.[i]?.maxPp || basepp,
+				maxpp: this.set.movesInfo?.[i]?.maxPp ?? basepp,
 				target: move.target,
 				disabled: false,
 				disabledSource: '',
