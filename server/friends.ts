@@ -435,7 +435,7 @@ if (require.main === module) {
 		FriendsDatabase.setupDatabase();
 	}
 	// since we require this in child processes
-	if (process.mainModule === module) {
+	if (require.main === module) {
 		global.Monitor = {
 			crashlog(error: Error, source = 'A friends database process', details: AnyObject | null = null) {
 				const repr = JSON.stringify([error.name, error.message, source, details]);
