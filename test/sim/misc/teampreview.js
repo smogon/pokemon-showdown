@@ -43,10 +43,12 @@ describe('Team Preview', () => {
 	});
 
 	it('should not hide formes of hacked Xerneas/Zacian/Zamazenta formes', () => {
-		battle = common.createBattle([[
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'Zacian-Crowned', moves: ['sleeptalk'] },
 			{ species: 'Xerneas-Active', moves: ['sleeptalk'] },
 		], [
-			{ species: 'Zacian-Crowned', moves: ['sleeptalk'] },
+			{ species: 'Zamazenta-Crowned', moves: ['sleeptalk'] },
+			{ species: 'Xerneas-Active', moves: ['sleeptalk'] },
 		]]);
 		for (const line of battle.log) {
 			if (line.startsWith('|poke|')) {

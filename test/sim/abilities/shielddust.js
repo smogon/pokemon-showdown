@@ -16,7 +16,6 @@ describe('Shield Dust', () => {
 			[{ species: 'Yveltal', ability: 'shielddust', moves: ['roost'] }, { species: 'Yveltal', ability: 'pressure', moves: ['roost'] }],
 		]);
 		battle.makeChoices('move snarl, move roost', 'move roost, move roost');
-		console.log(battle.log);
 		assert.statStage(battle.p2.active[0], 'spa', 0);
 		assert.statStage(battle.p2.active[1], 'spa', -1);
 	});
