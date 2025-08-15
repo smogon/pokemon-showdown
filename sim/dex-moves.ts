@@ -7,13 +7,14 @@ import { assignMissingFields, BasicEffect, toID } from './dex-data';
  * adjacentAlly - Only relevant to Doubles or Triples, the move only targets an ally of the user.
  * adjacentAllyOrSelf - The move can target the user or its ally.
  * adjacentFoe - The move can target a foe, but not (in Triples) a distant foe.
- * all - The move targets the field or all Pokémon at once.
+ * all - The move targets all Pokémon at once.
  * allAdjacent - The move is a spread move that also hits the user's ally.
  * allAdjacentFoes - The move is a spread move.
  * allies - The move affects all active Pokémon on the user's team.
  * allySide - The move adds a side condition on the user's side.
  * allyTeam - The move affects all unfainted Pokémon on the user's team.
  * any - The move can hit any other active Pokémon, not just those adjacent.
+ * field - The move targets the field.
  * foeSide - The move adds a side condition on the foe's side.
  * normal - The move can hit one adjacent Pokémon of your choice.
  * randomNormal - The move targets an adjacent foe at random.
@@ -22,7 +23,8 @@ import { assignMissingFields, BasicEffect, toID } from './dex-data';
  */
 export type MoveTarget =
 	'adjacentAlly' | 'adjacentAllyOrSelf' | 'adjacentFoe' | 'all' | 'allAdjacent' | 'allAdjacentFoes' |
-	'allies' | 'allySide' | 'allyTeam' | 'any' | 'foeSide' | 'normal' | 'randomNormal' | 'scripted' | 'self';
+	'allies' | 'allySide' | 'allyTeam' | 'any' | 'field' | 'foeSide' | 'normal' | 'randomNormal' | 'scripted' |
+	'self';
 
 /** Possible move flags. */
 interface MoveFlags {
@@ -133,7 +135,7 @@ export interface MoveEventMethods {
 	) => void;
 	onPrepareHit?: CommonHandlers['ResultMove'];
 	onTry?: CommonHandlers['ResultSourceMove'];
-	onTryHit?: CommonHandlers['ExtResultSourceMove'];
+	onTryHit?: CommonHandlers['ExtResultMove'];
 	onTryHitField?: CommonHandlers['ResultMove'];
 	onTryHitSide?: (this: Battle, side: Side, source: Pokemon, move: ActiveMove) => boolean | null | "" | void;
 	onTryImmunity?: CommonHandlers['ResultMove'];
@@ -324,6 +326,8 @@ export interface ActiveMove extends MutableMove {
 	isExternal?: boolean;
 	lastHit?: boolean;
 	magnitude?: number;
+	/** For Perish Song and Tea Time to track their message status */
+	message?: boolean;
 	pranksterBoosted?: boolean;
 	selfDropped?: boolean;
 	selfSwitch?: 'copyvolatile' | 'shedtail' | boolean;
