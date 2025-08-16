@@ -51,18 +51,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Breaks Screens.",
 		desc: "Breaks Screens.",
 	},
-	steelwing: {
-		// Buffed secondary chance to 50%
-		inherit: true,
-		secondary: {
-			chance: 50,
-			self: {
-				boosts: {
-					def: 1,
-				},
-			},
-		},
-	},
 	scavenge: {
 		num: -102,
 		accuracy: 100,
@@ -1020,7 +1008,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 	},
 	bbqbeatdown: {
-		num: 506,
+		num: -1005,
 		accuracy: 100,
 		basePower: 65,
 		basePowerCallback(pokemon, target, move) {
@@ -1077,4 +1065,135 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, 'Bubble Beam', target);
 		},
 	},
+	purify: {
+		num: 685,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		isNonstandard: "Past",
+		name: "Purify",
+		pp: 20,
+		priority: 0,
+		flags: { reflectable: 1, heal: 1, metronome: 1 },
+		onHit(pokemon, target) {
+			if (target.status) {
+				this.heal(this.modify(pokemon.maxhp, 0.5));
+			}
+			else {
+				this.heal(this.modify(pokemon.maxhp, 0.25));
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Poison",
+		zMove: { boost: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1 } },
+		contestType: "Beautiful",
+	},
+	saltcurse: {
+		num: -1006,
+		accuracy: 100,
+		basePower: 70,
+		basePowerCallback(pokemon, target, move) {
+			if (target.status === 'par') {
+				this.debug('BP doubled on paralyzed target');
+				return move.basePower * 2;
+			}
+			return move.basePower;
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Water' && type === 'Steel') return 2;
+			if (type === 'Water') return 1;
+			if (type === 'Steel') return 1;
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Salt Cure', target);
+			this.add('-anim', source, 'Curse', target);
+		},
+		category: "Physical",
+		name: "Salt Curse",
+		pp: 10,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: null,
+		target: "normal",
+		type: "Rock",
+		contestType: "Tough",
+	},
+	flyby: {
+		num: -1006,
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		name: "Fly-by",
+		pp: 20,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		selfSwitch: true,
+		secondary: {
+			chance: 50,
+			boosts: {
+				atk: -1,
+			},
+		},
+		target: "normal",
+		type: "Flying",
+		contestType: "Cute",
+	},
+	silktrap: {
+		num: 852,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Silk Trap",
+		pp: 10,
+		priority: 4,
+		flags: {},
+		stallingMove: true,
+		volatileStatus: 'silktrap',
+		onPrepareHit(pokemon) {
+			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
+		},
+		onHit(pokemon) {
+			pokemon.addVolatile('stall');
+		},
+		condition: {
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit(target, source, move) {
+				if (!move.flags['protect'] || move.category === 'Status') {
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
+				}
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					this.add('-activate', target, 'move: Protect');
+				}
+				const lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				if (this.checkMoveMakesContact(move, source, target)) {
+					target.side.addSideCondition('stickyweb');
+				}
+				return this.NOT_FAIL;
+			},
+			onHit(target, source, move) {
+				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
+					target.side.addSideCondition('stickyweb');
+				}
+			},
+		},
+		target: "self",
+		type: "Bug",
+	}
 };
