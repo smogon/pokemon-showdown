@@ -34,7 +34,7 @@ describe(`Sword of Ruin`, () => {
 		assert.bounded(damage, [90, 107]);
 	});
 
-	it(`should lose its effect if its ability is changed`, () => {
+	it(`effect should end if its ability is changed`, () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', ability: 'shellarmor', moves: ['worryseed'] },
 		], [
@@ -51,7 +51,7 @@ describe(`Sword of Ruin`, () => {
 		assert.bounded(damage, [90, 107]);
 	});
 
-	it(`should not lose its effect if its ability is changed by a Mold Breaker move`, () => {
+	it(`effect should not end if its ability is changed by a Mold Breaker move`, () => {
 		battle = common.createBattle([[
 			{ species: 'wynaut', ability: 'moldbreaker', moves: ['worryseed'] },
 		], [
