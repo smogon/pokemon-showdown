@@ -1078,8 +1078,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(pokemon, target) {
 			if (target.status) {
 				this.heal(this.modify(pokemon.maxhp, 0.5));
-			}
-			else {
+			} else {
 				this.heal(this.modify(pokemon.maxhp, 0.25));
 			}
 		},
@@ -1195,5 +1194,5 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		target: "self",
 		type: "Bug",
-	}
+	},
 };
