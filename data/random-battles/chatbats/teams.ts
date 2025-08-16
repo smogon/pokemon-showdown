@@ -287,11 +287,6 @@ export class RandomChatBatsTeams extends RandomTeams {
 					movePool, teraType, role);
 			}
 		}
-		// 33% chance to force Dragon Dance on Mega Altaria, since it otherwise never gets it due to teambuilder shenanigans
-		if (species.id === 'altariamega' && movePool.includes('dragondance') && this.randomChance(1, 3)) {
-			counter = this.addMove('dragondance', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
-		}
 		// enforces a sound move on Mesprit with Throat Spray
 		if (species.id === 'mesprit' && movePool.includes('psychicnoise')) {
 			counter = this.addMove(this.randomChance(1, 2) ? 'psychicnoise' : 'torchsong', moves,
@@ -648,7 +643,6 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'abomasnow') return 'Light Clay';
 		if (species.id === 'dugtrio' && moves.has("swordsdance")) return 'Focus Sash';
 		if (species.id === 'dugtrio') return 'Choice Band';
-		if (species.id === 'altaria') return 'Heavy-Duty Boots';
 		if (species.id === 'tyranitar') return 'Choice Scarf';
 		if (species.id === 'mimikyu') return 'Red Card';
 		if (species.id === 'mesprit' && moves.has("aquaring")) return 'Leftovers';
@@ -662,13 +656,15 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'archaludon' && ability === 'Hydroelectric Dam') return 'Assault Vest';
 		if (species.id === 'archaludon' && ability === 'Stamina') return 'Leftovers';
 		if (species.id === 'malamar') return this.sample(['Mirror Herb', 'Leftovers']);
-		if (species.id === 'empoleon') return 'Rocky Helmet';
+		if (species.id === 'empoleon' && moves.has('watershuriken')) return 'Loaded Dice';
+		if (species.id === 'empoleon') return 'Leftovers';
 		if (species.id === 'glastrier' && moves.has('swordsdance')) return 'Heavy-Duty Boots';
 		if (species.id === 'glastrier') return 'Assault Vest';
 		if (species.id === 'lycanrocmidnight') return 'Loaded Dice';
 		if (species.id === 'lycanroc') return this.sample(['Leftovers', 'Heavy-Duty Boots']);
 		if (species.id === 'lycanrocdusk') return 'Expert Belt';
-		if (species.id === 'dodrio') return 'Life Orb';
+		if (species.id === 'dodrio' && moves.has('drillpeck')) return 'Life Orb';
+		if (species.id === 'dodrio' && moves.has('bravebird')) return 'Heavy-Duty Boots';
 		if (species.id === 'whiscash') return 'Rocky Helmet';
 		if (species.id === 'hippowdon') return this.sample(['Leftovers', 'Rocky Helmet']);
 		if (species.id === 'cramorant') return 'Heavy-Duty Boots';
@@ -714,6 +710,8 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'articunogalar' && moves.has('roost')) return 'Heavy-Duty Boots';
 		if (species.id === 'articunogalar' && moves.has('aurasphere')) return 'Choice Specs';
 		if (species.id === 'vaporeon') return 'Toxic Orb';
+		if (species.id === 'garganacl') return 'Poisonium Z';
+		if (species.id === 'swanna') return 'Heavy-Duty Boots';
 	}
 
 	override randomSet(
