@@ -176,13 +176,13 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Return", "Dragon Dance", "Earthquake", "Draco Meteor", "Explosion"],
+                "movepool": ["Return", "Dragon Dance", "Earthquake", "Draco Meteor"],
                 "abilities": ["Fluffy"],
                 "teraTypes": ["Normal"]
             },
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Beak Blast", "Roost", "Return", "Earthquake", "Draco Meteor"],
+                "movepool": ["Beak Blast", "Roost", "Return", "Draco Meteor", "Explosion"],
                 "abilities": ["Fluffy"],
                 "teraTypes": ["Normal"]
             }
