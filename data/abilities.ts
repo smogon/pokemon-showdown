@@ -1333,7 +1333,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onWeatherChange(pokemon) {
 			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Cherrim' ||
-				 pokemon.transformed) return;
+				pokemon.transformed) return;
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				if (pokemon.species.id !== 'cherrimsunshine') {
 					pokemon.formeChange('Cherrim-Sunshine', this.effect, false, '0', '[msg]');
@@ -1346,7 +1346,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onEnd(pokemon) {
 			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Cherrim' ||
-				 pokemon.transformed) return;
+				pokemon.transformed) return;
 			if (pokemon.species.id !== 'cherrim') {
 				pokemon.formeChange('Cherrim', this.effect, false, '0', '[msg]');
 			}
@@ -1428,7 +1428,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onWeatherChange(pokemon) {
 			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Castform' ||
-				 pokemon.transformed) return;
+				pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveWeather()) {
 			case 'sunnyday':
@@ -1453,7 +1453,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onEnd(pokemon) {
 			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Castform' ||
-				 pokemon.transformed) return;
+				pokemon.transformed) return;
 			if (pokemon.species.id !== 'castform') {
 				pokemon.formeChange('Castform', this.effect, false, '0', '[msg]');
 			}
