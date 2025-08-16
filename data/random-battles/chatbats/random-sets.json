@@ -176,7 +176,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Return", "Dragon Dance", "Earthquake", "Draco Meteor"],
+                "movepool": ["Return", "Dragon Dance", "Earthquake", "Roost"],
                 "abilities": ["Fluffy"],
                 "teraTypes": ["Normal"]
             },
