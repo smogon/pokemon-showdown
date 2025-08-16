@@ -1346,7 +1346,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onEnd(pokemon) {
 			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Cherrim' ||
-				pokemon.transformed) return;
+				pokemon.transformed || pokemon.beingCalledBack) return;
 			if (pokemon.species.id !== 'cherrim') {
 				pokemon.formeChange('Cherrim', this.effect, false, '0', '[msg]');
 			}
@@ -1453,7 +1453,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		onEnd(pokemon) {
 			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Castform' ||
-				pokemon.transformed) return;
+				pokemon.transformed || pokemon.beingCalledBack) return;
 			if (pokemon.species.id !== 'castform') {
 				pokemon.formeChange('Castform', this.effect, false, '0', '[msg]');
 			}
