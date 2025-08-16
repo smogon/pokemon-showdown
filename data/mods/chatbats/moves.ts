@@ -1075,11 +1075,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { reflectable: 1, heal: 1, metronome: 1 },
-		onHit(pokemon, target) {
+		onHit(source, target) {
 			if (target.status) {
-				this.heal(this.modify(pokemon.maxhp, 0.5));
+				this.heal(Math.ceil(source.maxhp * 0.5), source);
 			} else {
-				this.heal(this.modify(pokemon.maxhp, 0.25));
+				this.heal(Math.ceil(source.maxhp * 0.25), source);
 			}
 		},
 		secondary: null,
@@ -1087,6 +1087,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Poison",
 		zMove: { boost: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1 } },
 		contestType: "Beautiful",
+		desc: "Heals for 25% HP, or 50% if foe is statused.",
+		shortDesc: "Heals for 20% HP, or 50% if foe is statused.",
 	},
 	saltcurse: {
 		num: -1006,
@@ -1108,8 +1110,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Salt Cure', target);
-			this.add('-anim', source, 'Curse', target);
+			this.add('-anim', source, 'Glare', target);
+			this.add('-anim', source, 'Ivy Cudgel', target);
 		},
 		category: "Physical",
 		name: "Salt Curse",
@@ -1120,6 +1122,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Rock",
 		contestType: "Tough",
+		desc: "Double power if target is Paralyzed. Super-effective against Water and Steel.",
+		shortDesc: "Double power if target is Paralyzed. Super-effective against Water and Steel.",
 	},
 	flyby: {
 		num: -1006,
@@ -1129,6 +1133,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Fly-by",
 		pp: 20,
 		priority: 0,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dual Wingbeat', target);
+		},
 		flags: { protect: 1, mirror: 1, metronome: 1 },
 		selfSwitch: true,
 		secondary: {
@@ -1140,6 +1150,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Flying",
 		contestType: "Cute",
+		desc: "User switches out. Target: -1 Attack.",
+		shortDesc: "User switches out. Target: -1 Attack.",
 	},
 	silktrap: {
 		num: 852,
@@ -1182,17 +1194,19 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					}
 				}
 				if (this.checkMoveMakesContact(move, source, target)) {
-					target.side.addSideCondition('stickyweb');
+					source.side.addSideCondition('stickyweb');
 				}
 				return this.NOT_FAIL;
 			},
 			onHit(target, source, move) {
 				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
-					target.side.addSideCondition('stickyweb');
+					source.side.addSideCondition('stickyweb');
 				}
 			},
 		},
 		target: "self",
 		type: "Bug",
+		desc: "Protect. If contact: set Sticky Web.",
+		shortDesc: "Protect. If contact: set Sticky Web.",
 	},
 };
