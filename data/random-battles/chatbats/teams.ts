@@ -903,7 +903,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 				currentSpeciesPool.push(species);
 			}
 			// change const to let when enforcing certain mons for testing
-			const species = this.sample(currentSpeciesPool);
+			let species = this.sample(currentSpeciesPool);
 
 			// let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
 
@@ -994,6 +994,14 @@ export class RandomChatBatsTeams extends RandomTeams {
 
 			// The Pokemon of the Day
 			// if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
+
+			// testing code
+			if (pokemon.length === 0 || this.maxTeamSize === 1) species = 'araquanid';
+			if (pokemon.length === 1 || this.maxTeamSize === 1) species = 'garganacl';
+			if (pokemon.length === 2 || this.maxTeamSize === 1) species = 'swanna';
+			if (pokemon.length === 3 || this.maxTeamSize === 1) species = 'empoleon';
+			if (pokemon.length === 4 || this.maxTeamSize === 1) species = 'dodrio';
+			if (pokemon.length === 5 || this.maxTeamSize === 1) species = 'altaria';
 
 			let set: RandomTeamsTypes.RandomSet;
 
