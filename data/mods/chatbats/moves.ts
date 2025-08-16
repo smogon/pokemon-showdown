@@ -753,6 +753,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	surgingstrikes: {
 		inherit: true,
 		beforeMoveCallback(source, target, move) {
+			if (source.species.id === 'araquanid') return;
 			if (target) {
 				this.effectState.wickedBlowAlreadyUsed = 0;
 				this.add('-anim', source, 'Techno Blast', target);
@@ -801,7 +802,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return null;
 			}
 		},
-		desc: "This move will transform into Single Strike Urshifu/Wicked Blow if it would be less effective against the target.",
+		desc: "This move will transform into Single Strike Urshifu/Wicked Blow if it would be less effective against the target. Does not work with Araquanid.",
 		shortDesc: "Becomes Wicked Blow if it would be less effective.",
 	},
 	twister: {
@@ -1075,7 +1076,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { reflectable: 1, heal: 1, metronome: 1 },
-		onHit(source, target) {
+		onHit(target, source) {
 			if (target.status) {
 				this.heal(Math.ceil(source.maxhp * 0.5), source);
 			} else {
