@@ -1332,8 +1332,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 		},
 		onWeatherChange(pokemon) {
-			if (!pokemon.isActive || pokemon.baseSpecies.baseSpecies !== 'Cherrim' || pokemon.transformed) return;
-			if (!pokemon.hp) return;
+			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Cherrim' ||
+				 pokemon.transformed) return;
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				if (pokemon.species.id !== 'cherrimsunshine') {
 					pokemon.formeChange('Cherrim-Sunshine', this.effect, false, '0', '[msg]');
@@ -1345,8 +1345,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onEnd(pokemon) {
-			if (!pokemon.isActive || pokemon.baseSpecies.baseSpecies !== 'Cherrim' || pokemon.transformed) return;
-			if (!pokemon.hp) return;
+			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Cherrim' ||
+				 pokemon.transformed) return;
 			if (pokemon.species.id !== 'cherrim') {
 				pokemon.formeChange('Cherrim', this.effect, false, '0', '[msg]');
 			}
@@ -1427,7 +1427,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 		},
 		onWeatherChange(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
+			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Castform' ||
+				 pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveWeather()) {
 			case 'sunnyday':
@@ -1446,13 +1447,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (pokemon.species.id !== 'castform') forme = 'Castform';
 				break;
 			}
-			if (pokemon.isActive && forme) {
+			if (forme) {
 				pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
 			}
 		},
 		onEnd(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
-			if (pokemon.baseSpecies.id !== 'castform') {
+			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Castform' ||
+				 pokemon.transformed) return;
+			if (pokemon.species.id !== 'castform') {
 				pokemon.formeChange('Castform', this.effect, false, '0', '[msg]');
 			}
 		},
