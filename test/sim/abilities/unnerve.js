@@ -22,6 +22,21 @@ describe(`Unnerve`, () => {
 		assert.equal(battle.p2.active[0].status, '');
 	});
 
+	it(`should allow Berry activation during Skill Swap`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'toxapex', ability: 'unnerve', moves: ['skillswap'] },
+			{ species: 'glimmora', ability: 'unnerve', moves: ['mortalspin'] },
+		], [
+			{ species: 'wynaut', item: 'lumberry', moves: ['sleeptalk'] },
+			{ species: 'magikarp', item: 'lumberry', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices('move 1 -2, move 1', 'auto');
+		for (const pokemon of battle.p2.active) {
+			assert.equal(pokemon.item, '');
+			assert.equal(pokemon.status, '');
+		}
+	});
+
 	it(`should allow Berry activation before instaswitch requests`, () => {
 		battle = common.createBattle([[
 			{ species: 'toxapex', ability: 'unnerve', moves: ['toxic', 'uturn'] },
