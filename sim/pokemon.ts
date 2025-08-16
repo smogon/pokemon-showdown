@@ -1311,7 +1311,7 @@ export class Pokemon {
 			this.knownType = true;
 			this.apparentType = this.terastallized;
 		}
-		if (this.battle.gen > 2) this.setAbility(pokemon.ability, this, true, true);
+		if (this.battle.gen > 2) this.setAbility(pokemon.ability, this, null, true, true);
 
 		// Change formes based on held items (for Transform)
 		// Only ever relevant in Generation 4 since Generation 3 didn't have item-based forme changes
@@ -1446,7 +1446,7 @@ export class Pokemon {
 			}
 			const ability = species.abilities[abilitySlot] || species.abilities['0'];
 			// Ogerpon's forme change doesn't override permanent abilities
-			if (source || !this.getAbility().flags['cantsuppress']) this.setAbility(ability, null, true);
+			if (source || !this.getAbility().flags['cantsuppress']) this.setAbility(ability, null, null, true);
 			// However, its ability does reset upon switching out
 			this.baseAbility = toID(ability);
 		}
@@ -1838,7 +1838,8 @@ export class Pokemon {
 
 	setItem(item: string | Item, source?: Pokemon, effect?: Effect) {
 		if (!this.hp || !this.isActive) return false;
-		if (this.itemState.knockedOff) return false;
+		if (this.itemState.knockedOff && !(effect?.id === 'recycle')) return false;
+		delete this.itemState.knockedOff;
 		if (typeof item === 'string') item = this.battle.dex.items.get(item);
 
 		const effectid = this.battle.effect ? this.battle.effect.id : '';
@@ -1877,31 +1878,36 @@ export class Pokemon {
 		return this.setItem('');
 	}
 
-	setAbility(ability: string | Ability, source?: Pokemon | null, isFromFormeChange = false, isTransform = false) {
+	setAbility(
+		ability: string | Ability, source?: Pokemon | null, sourceEffect?: Effect | null,
+		isFromFormeChange = false, isTransform = false,
+	) {
 		if (!this.hp) return false;
 		if (typeof ability === 'string') ability = this.battle.dex.abilities.get(ability);
-		const oldAbility = this.ability;
+		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
+		const oldAbility = this.battle.dex.abilities.get(this.ability);
 		if (!isFromFormeChange) {
 			if (ability.flags['cantsuppress'] || this.getAbility().flags['cantsuppress']) return false;
 		}
 		if (!isFromFormeChange && !isTransform) {
-			const setAbilityEvent: boolean | null = this.battle.runEvent('SetAbility', this, source, this.battle.effect, ability);
+			const setAbilityEvent: boolean | null = this.battle.runEvent('SetAbility', this, source, sourceEffect, ability);
 			if (!setAbilityEvent) return setAbilityEvent;
 		}
-		this.battle.singleEvent('End', this.battle.dex.abilities.get(oldAbility), this.abilityState, this, source);
-		if (this.battle.effect && this.battle.effect.effectType === 'Move' && !isFromFormeChange) {
-			this.battle.add(
-				'-endability', this, this.battle.dex.abilities.get(oldAbility),
-				`[from] move: ${this.battle.dex.moves.get(this.battle.effect.id)}`
-			);
-		}
+		this.battle.singleEvent('End', oldAbility, this.abilityState, this, source);
 		this.ability = ability.id;
 		this.abilityState = this.battle.initEffectState({ id: ability.id, target: this });
+		if (sourceEffect && !isFromFormeChange && !isTransform) {
+			if (source) {
+				this.battle.add('-ability', this, ability.name, oldAbility.name, `[from] ${sourceEffect.fullname}`, `[of] ${source}`);
+			} else {
+				this.battle.add('-ability', this, ability.name, oldAbility.name, `[from] ${sourceEffect.fullname}`);
+			}
+		}
 		if (ability.id && this.battle.gen > 3 &&
-			(!isTransform || oldAbility !== ability.id || this.battle.gen <= 4)) {
+			(!isTransform || oldAbility.id !== ability.id || this.battle.gen <= 4)) {
 			this.battle.singleEvent('Start', ability, this.abilityState, this, source);
 		}
-		return oldAbility;
+		return oldAbility.id;
 	}
 
 	getAbility() {

@@ -3967,9 +3967,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (!target.getAbility().flags['failroleplay']) {
 				for (const pokemon of source.alliesAndSelf()) {
 					if (pokemon.ability === target.ability || pokemon.getAbility().flags['cantsuppress']) continue;
-					const oldAbility = pokemon.setAbility(target.ability);
+					const oldAbility = pokemon.setAbility(target.ability, null, move);
 					if (oldAbility) {
-						this.add('-ability', pokemon, target.getAbility().name, '[from] move: Doodle');
 						success = true;
 					} else if (!success && oldAbility === null) {
 						success = null;
@@ -5058,12 +5057,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		},
 		onHit(target, source) {
 			const oldAbility = target.setAbility(source.ability);
-			if (oldAbility) {
-				this.add('-ability', target, target.getAbility().name, '[from] move: Entrainment');
-				if (!target.isAlly(source)) target.volatileStaleness = 'external';
-				return;
-			}
-			return oldAbility as false | null;
+			if (!oldAbility) return oldAbility as false | null;
+			if (!target.isAlly(source)) target.volatileStaleness = 'external';
 		},
 		secondary: null,
 		target: "normal",
@@ -15369,12 +15364,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 10,
 		priority: 0,
 		flags: { snatch: 1, metronome: 1 },
-		onHit(pokemon) {
+		onHit(pokemon, source, move) {
 			if (pokemon.item || !pokemon.lastItem) return false;
 			const item = pokemon.lastItem;
 			pokemon.lastItem = '';
 			this.add('-item', pokemon, this.dex.items.get(item), '[from] move: Recycle');
-			pokemon.setItem(item);
+			pokemon.setItem(item, source, move);
 		},
 		secondary: null,
 		target: "self",
@@ -15899,12 +15894,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (target.getAbility().flags['failroleplay'] || source.getAbility().flags['cantsuppress']) return false;
 		},
 		onHit(target, source) {
-			const oldAbility = source.setAbility(target.ability);
-			if (oldAbility) {
-				this.add('-ability', source, source.getAbility().name, '[from] move: Role Play', `[of] ${target}`);
-				return;
-			}
-			return oldAbility as false | null;
+			const oldAbility = source.setAbility(target.ability, target);
+			if (!oldAbility) return oldAbility as false | null;
 		},
 		secondary: null,
 		target: "normal",
@@ -17101,13 +17092,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return false;
 			}
 		},
-		onHit(pokemon) {
-			const oldAbility = pokemon.setAbility('simple');
-			if (oldAbility) {
-				this.add('-ability', pokemon, 'Simple', '[from] move: Simple Beam');
-				return;
-			}
-			return oldAbility as false | null;
+		onHit(target, source) {
+			const oldAbility = target.setAbility('simple');
+			if (!oldAbility) return oldAbility as false | null;
 		},
 		secondary: null,
 		target: "normal",
@@ -21885,16 +21872,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				return false;
 			}
 		},
-		onHit(pokemon) {
-			const oldAbility = pokemon.setAbility('insomnia');
-			if (oldAbility) {
-				this.add('-ability', pokemon, 'Insomnia', '[from] move: Worry Seed');
-				if (pokemon.status === 'slp') {
-					pokemon.cureStatus();
-				}
-				return;
-			}
-			return oldAbility as false | null;
+		onHit(target, source) {
+			const oldAbility = target.setAbility('insomnia');
+			if (!oldAbility) return oldAbility as false | null;
+			if (target.status === 'slp') target.cureStatus();
 		},
 		secondary: null,
 		target: "normal",
