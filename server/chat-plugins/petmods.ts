@@ -5,18 +5,34 @@
  */
 
 import { FS } from '../../lib';
+import { toID } from "../../sim/dex-data";
 
 function formatMove(move: Move | string) {
 	move = Dex.moves.get(move);
-	return `<a href="https://${Config.routes.dex}/moves/${move.id}" target="_blank" class="subtle" style="white-space:nowrap">${move.name}</a>`;
+	const id = toID(move.name);
+	const dex = Dex.forFormat('gen9chatbats');
+	const parentDex = Dex.forFormat(dex.parentMod);
+	const custom = (dex.data.Moves[id] as any) !== (parentDex.data.Moves[id] as any);
+	return custom ? `<button name="send" value="/dt ${move.name}, chatbats" style="display: inline; padding: 0; border: 0; font: inherit; font-style: italic; cursor: pointer; background: transparent; color: currentColor; -webkit-appearance: none;">${move.name}</i></button>` :
+		`<a href="https://${Config.routes.dex}/moves/${move.id}" target="_blank" class="subtle" style="white-space:nowrap">${move.name}</a>`;
 }
 
-function getSets(species: string | Species, format: string | Format = 'gen9randombattle'): {
+function formatAbility(ability: Ability | string) {
+	ability = Dex.abilities.get(ability);
+	const id = toID(ability.name);
+	const dex = Dex.forFormat('gen9chatbats');
+	const parentDex = Dex.forFormat(dex.parentMod);
+	const custom = (dex.data.Abilities[id] as any) !== (parentDex.data.Abilities[id] as any);
+	return custom ? `<button name="send" value="/dt ${ability.name}, chatbats" style="display: inline; padding: 0; border: 0; font: inherit; font-style: italic; cursor: pointer; background: transparent; color: currentColor; -webkit-appearance: none;">${ability.name}</i></button>` :
+		`<a href="https://${Config.routes.dex}/moves/${ability.id}" target="_blank" class="subtle" style="white-space:nowrap">${ability.name}</a>`;
+}
+
+function getSets(species: string | Species): {
 	level: number,
 	sets: any[],
 } | null {
-	const dex = Dex.forFormat(format);
-	format = Dex.formats.get(format);
+	const dex = Dex.forFormat('gen9chatbats');
+	let format = Dex.formats.get('gen9chatbats');
 	species = dex.species.get(species);
 	const folderName = format.mod;
 	const setsFile = JSON.parse(
@@ -36,7 +52,7 @@ export const commands: Chat.ChatCommands = {
 		const args = target.split(',');
 		if (!args[0]) return this.parse(`/help chatbats`);
 
-		const { dex } = this.splitFormat(target, true);
+		const dex = Dex.forFormat('gen9chatbats');
 
 		const searchResults = dex.dataSearch(args[0], ['Pokedex']);
 
@@ -57,7 +73,7 @@ export const commands: Chat.ChatCommands = {
 		const setsToCheck = [species];
 		if (species.otherFormes) setsToCheck.push(...species.otherFormes.map(pkmn => dex.species.get(pkmn)));
 		for (const pokemon of setsToCheck) {
-			const data = getSets(pokemon, format.id);
+			const data = getSets(pokemon);
 			if (!data) continue;
 			const sets = data.sets;
 			const level = data.level;
@@ -72,7 +88,7 @@ export const commands: Chat.ChatCommands = {
 				}
 				buf += `<b>Moves</b>: ${set.movepool.sort().map(formatMove).join(', ')}<br/>`;
 				if (set.abilities) {
-					buf += `<b>Abilit${Chat.plural(set.abilities, 'ies', 'y')}</b>: ${set.abilities.sort().join(', ')}`;
+					buf += `<b>Abilit${Chat.plural(set.abilities, 'ies', 'y')}</b>: ${set.abilities.sort().map((abil: any) => formatAbility(abil)).join(', ')}`;
 				}
 				buf += '</details>';
 				setCount++;
