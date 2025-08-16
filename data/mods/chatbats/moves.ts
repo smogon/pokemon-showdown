@@ -1112,7 +1112,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Glare', target);
-			this.add('-anim', source, 'Ivy Cudgel', target);
+			this.add('-anim', source, 'Ivy Cudgel Rock', target);
 		},
 		category: "Physical",
 		name: "Salt Curse",
