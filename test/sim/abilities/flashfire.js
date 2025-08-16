@@ -56,7 +56,7 @@ describe('Flash Fire', () => {
 		assert.bounded(damage, [54, 65]);
 	});
 
-	it('should lose the Flash Fire boost if its ability is changed by a Mold Breaker Pokemon', () => {
+	it('should not lose the Flash Fire boost if its ability is changed by a Mold Breaker move', () => {
 		battle = common.createBattle([[
 			{ species: 'Heatran', ability: 'flashfire', moves: ['incinerate'] },
 		], [
