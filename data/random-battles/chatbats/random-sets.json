@@ -226,7 +226,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Agility", "Psychic Noise", "Psychic", "Stored Power", "Freeze-Dry", "Torch Song"],
+                "movepool": ["Agility", "Psychic", "Stored Power", "Freeze-Dry", "Torch Song"],
                 "abilities": ["Liquid Voice"],
                 "teraTypes": ["Poison", "Water"]
             },
