@@ -608,6 +608,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const newMoves = [];
 			while (newMoves.length < 8) {
 				const newMove = this.sample(moves);
+				if (newMove.basePower === 1) continue;
+				if (newMove.isMax === true) continue;
 				if (newMoves.map(x => x.id).includes(newMove.id)) continue;
 				newMoves.push(newMove);
 			}
