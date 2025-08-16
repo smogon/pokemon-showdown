@@ -996,12 +996,12 @@ export class RandomChatBatsTeams extends RandomTeams {
 			// if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			// testing code
-			if (pokemon.length === 0 || this.maxTeamSize === 1) species = 'araquanid';
-			if (pokemon.length === 1 || this.maxTeamSize === 1) species = 'garganacl';
-			if (pokemon.length === 2 || this.maxTeamSize === 1) species = 'swanna';
-			if (pokemon.length === 3 || this.maxTeamSize === 1) species = 'empoleon';
-			if (pokemon.length === 4 || this.maxTeamSize === 1) species = 'dodrio';
-			if (pokemon.length === 5 || this.maxTeamSize === 1) species = 'altaria';
+			if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Araquanid');
+			if (pokemon.length === 1 || this.maxTeamSize === 1) species = this.dex.species.get('Garganacl');
+			if (pokemon.length === 2 || this.maxTeamSize === 1) species = this.dex.species.get('Swanna');
+			if (pokemon.length === 3 || this.maxTeamSize === 1) species = this.dex.species.get('Empoleon');
+			if (pokemon.length === 4 || this.maxTeamSize === 1) species = this.dex.species.get('Dodrio');
+			if (pokemon.length === 5 || this.maxTeamSize === 1) species = this.dex.species.get('Altaria-Mega');
 
 			let set: RandomTeamsTypes.RandomSet;
 
