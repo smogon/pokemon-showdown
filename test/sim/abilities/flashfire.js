@@ -43,7 +43,20 @@ describe('Flash Fire', () => {
 		assert.hurts(battle.p1.active[0], () => battle.makeChoices('move incinerate', 'move firepunch'));
 	});
 
-	it('activation should not go away if Skill Swapped by a Mold Breaker Pokemon', () => {
+	it(`should lose the Flash Fire boost if its ability is changed`, () => {
+		battle = common.createBattle([[
+			{ species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk', 'incinerate'] },
+		], [
+			{ species: 'Talonflame', ability: 'shellarmor', moves: ['flamethrower', 'worryseed'] },
+		]]);
+		battle.makeChoices('move sleeptalk', 'move flamethrower');
+		battle.makeChoices('move incinerate', 'move worryseed');
+		const talonflame = battle.p2.active[0];
+		const damage = talonflame.maxhp - talonflame.hp;
+		assert.bounded(damage, [54, 65]);
+	});
+
+	it('should lose the Flash Fire boost if its ability is changed by a Mold Breaker Pokemon', () => {
 		battle = common.createBattle([[
 			{ species: 'Heatran', ability: 'flashfire', moves: ['incinerate'] },
 		], [
@@ -76,19 +89,6 @@ describe('Flash Fire', () => {
 		battle.makeChoices('move incinerate', 'move skillswap');
 		hp = haxorus.hp;
 		assert.bounded(maxhp - hp, [81, 96]);
-	});
-
-	it(`should lose the Flash Fire boost if its ability is changed`, () => {
-		battle = common.createBattle([[
-			{ species: 'Heatran', ability: 'flashfire', moves: ['sleeptalk', 'incinerate'] },
-		], [
-			{ species: 'Talonflame', ability: 'shellarmor', moves: ['flamethrower', 'worryseed'] },
-		]]);
-		battle.makeChoices('move sleeptalk', 'move flamethrower');
-		battle.makeChoices('move incinerate', 'move worryseed');
-		const talonflame = battle.p2.active[0];
-		const damage = talonflame.maxhp - talonflame.hp;
-		assert.bounded(damage, [54, 65]);
 	});
 });
 
