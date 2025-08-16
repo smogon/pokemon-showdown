@@ -233,7 +233,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'veluza') this.incompatibleMoves(moves, movePool, 'waterfall', 'hydropump');
 		if (species.id === 'ogerponhearthflame') this.incompatibleMoves(moves, movePool, 'crabhammer', 'stoneedge');
 		if (species.id === 'hitmontop') this.incompatibleMoves(moves, movePool, 'bulkup', 'rapidspin');
-		if (species.id === 'araquanid') this.incompatibleMoves(moves, movePool, 'firstimpression', 'stickyweb');
+		if (species.id === 'mesprit') this.incompatibleMoves(moves, movePool, 'psychic', 'storedpower');
 	}
 
 	override randomMoveset(
@@ -286,11 +286,6 @@ export class RandomChatBatsTeams extends RandomTeams {
 				counter = this.addMove('splash', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			}
-		}
-		// enforces a sound move on Mesprit with Throat Spray
-		if (species.id === 'mesprit' && movePool.includes('psychicnoise')) {
-			counter = this.addMove(this.randomChance(1, 2) ? 'psychicnoise' : 'torchsong', moves,
-				types, abilities, teamDetails, species, isLead, isDoubles, movePool, teraType, role);
 		}
 		// enforces both primary stabs on Infernape
 		if (species.id === 'infernape' && movePool.includes('mindblown')) {
