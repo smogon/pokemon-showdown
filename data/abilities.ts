@@ -254,6 +254,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	asoneglastrier: {
 		onSwitchInPriority: 1,
 		onStart(pokemon) {
+			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'As One');
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
@@ -284,6 +285,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	asonespectrier: {
 		onSwitchInPriority: 1,
 		onStart(pokemon) {
+			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'As One');
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
@@ -5190,6 +5192,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	unnerve: {
 		onSwitchInPriority: 1,
 		onStart(pokemon) {
+			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
 		},
