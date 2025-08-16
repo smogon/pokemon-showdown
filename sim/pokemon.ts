@@ -1735,13 +1735,20 @@ export class Pokemon {
 
 	eatItem(force?: boolean, source?: Pokemon, sourceEffect?: Effect) {
 		if (!this.item || this.itemState.knockedOff) return false;
-		if ((!this.hp && this.item !== 'jabocaberry' && this.item !== 'rowapberry') || !this.isActive) return false;
+		if ((!this.hp && !['jabocaberry', 'rowapberry'].includes(this.item)) || !this.isActive) return false;
 
 		if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
 		if (!source && this.battle.event?.target) source = this.battle.event.target;
 		const item = this.getItem();
 		if (sourceEffect?.effectType === 'Item' && this.item !== sourceEffect.id && source === this) {
 			// if an item is telling us to eat it but we aren't holding it, we probably shouldn't eat what we are holding
+			return false;
+		}
+		// In gen 4, berries activate after the whole move routine and insta switches
+		if (item.isBerry && this.battle.activeMove && this.battle.gen === 4 &&
+			!['jabocaberry', 'rowapberry'].includes(item.id) && !(item as any).onSourceModifyDamage
+		) {
+			this.battle.queue.insertChoice({ choice: 'berry', pokemon: this });
 			return false;
 		}
 		if (

@@ -92,7 +92,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 			this.debug(`custap action: ${action?.moveid}`);
 			if (action && pokemon.eatItem()) {
 				this.queue.cancelAction(pokemon);
-				this.add('-message', "Custap Berry activated.");
+				this.add('-activate', pokemon, 'item: Custap Berry', '[consumed]');
 				this.runAction(action);
 			}
 		},
@@ -124,6 +124,14 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	earthplate: {
 		inherit: true,
 		onTakeItem: true,
+	},
+	enigmaberry: {
+		inherit: true,
+		onBerry(pokemon) {
+			if (pokemon.eatItem()) {
+				this.heal(pokemon.baseMaxhp / 4);
+			}
+		},
 	},
 	fastball: {
 		inherit: true,
