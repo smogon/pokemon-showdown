@@ -1050,31 +1050,4 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "Power doubles if the target is Burned.",
 		shortDesc: "Power doubles if the target is Burned.",
 	},
-	sizzlyslide: {
-		inherit: true,
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Flame Charge', target);
-		},
-	},
-	freezyfrost: {
-		inherit: true,
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Blizzard', target);
-		},
-	},
-	bouncybubble: {
-		inherit: true,
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Bubble Beam', target);
-		},
-	},
 };
