@@ -13,12 +13,10 @@ function formatMove(move: Move | string) {
 	const dex = Dex.forFormat('gen9chatbats');
 	const parentDex = Dex.forFormat(dex.parentMod);
 	const custom = (dex.data.Moves[id] as any) !== (parentDex.data.Moves[id] as any);
-	return custom ? `<button name="send" value="/dt ${move.name}, chatbats"
-	style="display: inline; padding: 0; border: 0; font: inherit;
-		font-style: italic; cursor: pointer; background: transparent;
-		color: currentColor; -webkit-appearance: none;">${move.name}</i></button>` :
-		`<a href="https://${Config.routes.dex}/moves/${move.id}" target="_blank"
-		class="subtle" style="white-space:nowrap">${move.name}</a>`;
+	return custom ? `<button name="send" value="/dt ${move.name}, chatbats"\
+		style="display: inline; padding: 0; border: 0; font: inherit; font-style: italic; cursor: pointer;\
+		background: transparent; color: currentColor; -webkit-appearance: none;">${move.name}</i></button>` :
+		`<a href="https://${Config.routes.dex}/moves/${move.id}" target="_blank" class="subtle" style="white-space:nowrap">${move.name}</a>`;
 }
 
 function formatAbility(ability: Ability | string) {
@@ -27,12 +25,11 @@ function formatAbility(ability: Ability | string) {
 	const dex = Dex.forFormat('gen9chatbats');
 	const parentDex = Dex.forFormat(dex.parentMod);
 	const custom = (dex.data.Abilities[id] as any) !== (parentDex.data.Abilities[id] as any);
-	return custom ? `<button name="send" value="/dt ${ability.name},
-		chatbats" style="display: inline; padding: 0; border: 0; font: inherit;
-		font-style: italic; cursor: pointer; background: transparent;
+	return custom ? `<button name="send" value="/dt ${ability.name}, chatbats"\
+		style="display: inline; padding: 0; border: 0; font: inherit;\
+		font-style: italic; cursor: pointer; background: transparent;\
 		color: currentColor; -webkit-appearance: none;">${ability.name}</i></button>` :
-		`<a href="https://${Config.routes.dex}/moves/${ability.id}" target="_blank"
-		class="subtle" style="white-space:nowrap">${ability.name}</a>`;
+		`<a href="https://${Config.routes.dex}/moves/${ability.id}" target="_blank" class="subtle" style="white-space:nowrap">${ability.name}</a>`;
 }
 
 function getSets(species: string | Species): {
