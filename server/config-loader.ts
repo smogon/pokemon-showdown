@@ -240,6 +240,7 @@ export function checkRipgrepAvailability() {
 }
 
 function pushError(logLevel: LogLevel, msg: string) {
+	if (process.send) return;
 	errors.push([logLevel, `[CONFIG] ${msg}`]);
 }
 
