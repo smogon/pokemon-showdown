@@ -751,17 +751,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		condition: {
 			noCopy: true,
 			onStart() {
-				this.effectState.time = 2;
+				// We have to use the turn because the effect may be set during residuals and the counter will not advance
+				this.effectState.turn = this.turn;
 			},
 			onRestart() {
-				this.effectState.time = 2;
+				this.effectState.turn = this.turn;
 			},
 			onResidualOrder: 28,
 			onResidualSubOrder: 2,
 			onResidual(pokemon) {
-				if (pokemon.ignoringAbility()) return;
-				this.effectState.time--;
-				if (this.effectState.time > 0) return;
+				if (pokemon.ignoringAbility()) {
+					this.effectState.turn += 1;
+					return;
+				}
+				if (this.effectState.turn === this.turn) return;
 				if (pokemon.hp) {
 					const item = this.effectState.berry;
 					this.add('-activate', pokemon, 'ability: Cud Chew');
