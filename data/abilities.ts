@@ -750,13 +750,18 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		condition: {
 			noCopy: true,
-			duration: 2,
+			onStart() {
+				this.effectState.time = 2;
+			},
 			onRestart() {
-				this.effectState.duration = 2;
+				this.effectState.time = 2;
 			},
 			onResidualOrder: 28,
 			onResidualSubOrder: 2,
-			onEnd(pokemon) {
+			onResidual(pokemon) {
+				if (pokemon.ignoringAbility()) return;
+				this.effectState.time--;
+				if (this.effectState.time > 0) return;
 				if (pokemon.hp) {
 					const item = this.effectState.berry;
 					this.add('-activate', pokemon, 'ability: Cud Chew');
@@ -766,6 +771,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					}
 					if (item.onEat) pokemon.ateBerry = true;
 				}
+				delete pokemon.volatiles['cudchew'];
 			},
 		},
 		flags: {},
