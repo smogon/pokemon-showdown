@@ -57,4 +57,16 @@ describe('Cud Chew', () => {
 		battle.makeChoices('auto', 'move toxic 1, switch 3');
 		assert.equal(tauros.status, '');
 	});
+
+	it(`should activate in the following turn if the berry was consumed during residuals`, () => {
+		battle = common.createBattle([[
+			{ species: 'tauros', ability: 'cudchew', item: 'sitrusberry', moves: ['bellydrum'] },
+		], [
+			{ species: 'mewtwo', moves: ['toxic'] },
+		]]);
+		const tauros = battle.p1.active[0];
+		battle.makeChoices();
+		battle.makeChoices();
+		assert(tauros.hp > tauros.maxhp * 3 / 4, 'Tauros should have eaten its berry twice');
+	});
 });
