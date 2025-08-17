@@ -2723,6 +2723,7 @@ export class TeamValidator {
 			}
 			if (canUseHomeRelearner) {
 				const learnsetData = this.getExternalLearnsetData(species.id, 'gen8bdsp');
+				console.log(learnsetData);
 				if (learnsetData?.learnset?.[move.id]) {
 					for (const source of learnsetData.learnset[move.id]) {
 						// Non-event sources from BDSP should always be legal through HOME relearner,
@@ -2873,7 +2874,9 @@ export class TeamValidator {
 	}
 
 	getExternalLearnsetData(species: ID, mod: string) {
-		return this.dex.mod(mod).species.getLearnsetData(species);
+		const moddedDex = this.dex.mod(mod);
+		if (moddedDex.species.get(species).isNonstandard) return null;
+		return moddedDex.species.getLearnsetData(species);
 	}
 
 	static fillStats(stats: SparseStatsTable | null, fillNum = 0): StatsTable {
