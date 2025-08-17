@@ -279,7 +279,7 @@ describe('Neutralizing Gas', () => {
 			{ species: 'tauros', ability: 'cudchew', item: 'lumberry', moves: ['sleeptalk'] },
 			{ species: 'wynaut', moves: ['sleeptalk'] },
 		], [
-			{ species: 'kommoo', moves: ['toxic'] },
+			{ species: 'toxicroak', moves: ['toxic'] },
 			{ species: 'magikarp', moves: ['sleeptalk'] },
 			{ species: 'weezing', ability: 'neutralizinggas', moves: ['sleeptalk'] },
 		]]);
@@ -295,7 +295,7 @@ describe('Neutralizing Gas', () => {
 			{ species: 'tauros', ability: 'cudchew', item: 'lumberry', moves: ['sleeptalk'] },
 			{ species: 'wynaut', moves: ['sleeptalk'] },
 		], [
-			{ species: 'kommoo', moves: ['toxic'] },
+			{ species: 'toxicroak', moves: ['toxic'] },
 			{ species: 'magikarp', moves: ['sleeptalk', 'uturn'] },
 			{ species: 'weezing', ability: 'neutralizinggas', moves: ['sleeptalk'] },
 		]]);
