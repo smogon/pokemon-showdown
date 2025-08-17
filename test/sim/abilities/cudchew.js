@@ -25,21 +25,40 @@ describe('Cud Chew', () => {
 		assert.equal(tauros.status, 'tox');
 	});
 
-	it(`should re-activate a berry, flung in the previous turn`, () => {
-		battle = common.createBattle([[
-			{ species: 'tauros', ability: 'cudchew', moves: ['sleeptalk'] },
+	it(`should re-activate a berry flung in the previous turn, for both the attacker and the target`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'tauros', ability: 'cudchew', item: 'lumberry', moves: ['fling', 'sleeptalk'] },
+			{ species: 'wynaut', moves: ['toxic', 'sleeptalk'] },
 		], [
-			{ species: 'kommoo', item: 'lumberry', moves: ['toxic', 'fling'] },
+			{ species: 'farigiraf', ability: 'cudchew', moves: ['sleeptalk'] },
+			{ species: 'magikarp', moves: ['toxic', 'sleeptalk'] },
 		]]);
 		const tauros = battle.p1.active[0];
-		battle.makeChoices();
+		const farigiraf = battle.p2.active[0];
+		battle.makeChoices('move fling 1, move toxic 1', 'move sleeptalk, move toxic 1');
 		assert.equal(tauros.status, 'tox');
-		battle.makeChoices('auto', 'move fling');
+		assert.equal(farigiraf.status, 'tox');
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move sleeptalk, move sleeptalk');
 		assert.equal(tauros.status, '');
-		battle.makeChoices();
-		assert.equal(tauros.status, '');
-		battle.makeChoices();
+		assert.equal(farigiraf.status, '');
+	});
+
+	it(`should not re-activate a berry eaten by Bug Bite, for either the attacker or the target`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'tauros', ability: 'cudchew', moves: ['bugbite', 'sleeptalk'] },
+			{ species: 'wynaut', moves: ['toxic', 'sleeptalk'] },
+		], [
+			{ species: 'farigiraf', ability: 'cudchew', item: 'lumberry', moves: ['sleeptalk'] },
+			{ species: 'magikarp', moves: ['toxic', 'sleeptalk'] },
+		]]);
+		const tauros = battle.p1.active[0];
+		const farigiraf = battle.p2.active[0];
+		battle.makeChoices('move bugbite 1, move toxic 1', 'move sleeptalk, move toxic 1');
 		assert.equal(tauros.status, 'tox');
+		assert.equal(farigiraf.status, 'tox');
+		battle.makeChoices('move sleeptalk, move sleeptalk', 'move sleeptalk, move sleeptalk');
+		assert.equal(tauros.status, 'tox');
+		assert.equal(farigiraf.status, 'tox');
 	});
 
 	it(`should not be prevented by Unnerve`, () => {

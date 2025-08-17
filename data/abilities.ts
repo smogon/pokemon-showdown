@@ -740,8 +740,9 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 238,
 	},
 	cudchew: {
-		onEatItem(item, pokemon) {
-			if (item.isBerry && pokemon.addVolatile('cudchew')) {
+		onEatItem(item, pokemon, source, effect) {
+			if (item.isBerry && (!effect || !['bugbite', 'pluck'].includes(effect.id)) &&
+				pokemon.addVolatile('cudchew')) {
 				pokemon.volatiles['cudchew'].berry = item;
 			}
 		},
