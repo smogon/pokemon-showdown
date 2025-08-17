@@ -102,8 +102,8 @@ export class SQLDatabaseManager extends QueryProcessManager<DatabaseQuery, any> 
 		statements: Map<string, sqlite.Statement>,
 	};
 	private dbReady = false;
-	constructor(module: NodeJS.Module, options: SQLOptions) {
-		super(module, query => {
+	constructor(id: string, module: NodeJS.Module, options: SQLOptions) {
+		super(id, module, query => {
 			if (!this.dbReady) {
 				this.setupDatabase();
 			}
@@ -431,10 +431,10 @@ export class DatabaseTable<T> {
 }
 
 function getSQL(
-	module: NodeJS.Module, input: SQLOptions
+	id: string, module: NodeJS.Module, input: SQLOptions
 ) {
 	if ('processes' in input) throw new Error(`Passing process count to SQL factory is no longer supported.`);
-	return new SQLDatabaseManager(module, input);
+	return new SQLDatabaseManager(id, module, input);
 }
 
 export const SQL = Object.assign(getSQL, {

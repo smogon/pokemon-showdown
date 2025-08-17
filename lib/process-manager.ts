@@ -14,6 +14,7 @@ import * as cluster from 'cluster';
 import * as path from 'path';
 import * as Streams from './streams';
 import { FS } from './fs';
+import { Repl, type EvalType } from './repl';
 
 type ChildProcess = child_process.ChildProcess;
 type Worker = cluster.Worker;
@@ -424,7 +425,8 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 	crashTime = 0;
 	crashRespawnCount = 0;
 
-	constructor(ctx: NodeJS.Module) {
+	constructor(id: string, ctx: NodeJS.Module) {
+		this.id = id;
 		this.filename = ctx.filename;
 		this.basename = path.basename(ctx.filename);
 		this.isParentProcess = (require.main !== ctx || !process.send);
@@ -519,6 +521,11 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 		this.spawn(count);
 		return unspawned;
 	}
+	startRepl(options: EvalType | {filename?: string, eval: EvalType}) {
+		const filename = typeof options === 'function' || !options.filename ? `${this.id}-${process.pid}` : options.filename;
+		const evalFn = typeof options === 'function' ? options : options.eval;
+		Repl.start(filename, evalFn);
+	}
 	abstract listen(): void;
 	abstract createProcess(...args: any): T;
 	destroyProcess(process: T) {}
@@ -538,10 +545,13 @@ export class QueryProcessManager<T = string, U = string> extends ProcessManager<
 	 * @param timeout The number of milliseconds to wait before terminating a query. Defaults to 900000 ms (15 minutes).
 	 */
 	constructor(
-		ctx: NodeJS.Module, query: (input: T) => U | Promise<U>,
-		timeout = 15 * 60 * 1000, debugCallback?: (message: string) => any
+		id: string,
+		ctx: NodeJS.Module,
+		query: (input: T) => U | Promise<U>,
+		timeout = 15 * 60 * 1000,
+		debugCallback?: (message: string) => any
 	) {
-		super(ctx);
+		super(id, ctx);
 		this._query = query;
 		this.timeout = timeout;
 		this.messageCallback = debugCallback;
@@ -606,11 +616,12 @@ export class StreamProcessManager extends ProcessManager<StreamProcessWrapper> {
 	messageCallback?: (message: string) => any;
 
 	constructor(
+		id: string,
 		ctx: NodeJS.Module,
 		createStream: () => Streams.ObjectReadWriteStream<string>,
 		messageCallback?: (message: string) => any
 	) {
-		super(ctx);
+		super(id, ctx);
 		this.activeStreams = new Map();
 		this._createStream = createStream;
 		this.messageCallback = messageCallback;
@@ -705,12 +716,13 @@ export class RawProcessManager extends ProcessManager<RawProcessWrapper> {
 	env: AnyObject | undefined;
 
 	constructor(options: {
+		id: string,
 		module: NodeJS.Module,
 		setupChild: () => Streams.ObjectReadWriteStream<string>,
 		isCluster?: boolean,
 		env?: AnyObject,
 	}) {
-		super(options.module);
+		super(options.id, options.module);
 		this.isCluster = !!options.isCluster;
 		this._setupChild = options.setupChild;
 		this.env = options.env;
