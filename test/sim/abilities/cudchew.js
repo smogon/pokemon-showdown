@@ -58,7 +58,7 @@ describe('Cud Chew', () => {
 		assert.equal(tauros.status, '');
 	});
 
-	it(`should activate in the following turn if the berry was consumed during residuals`, () => {
+	it(`should still activate in the following turn if the berry was consumed during residuals`, () => {
 		battle = common.createBattle([[
 			{ species: 'tauros', ability: 'cudchew', item: 'sitrusberry', moves: ['bellydrum'] },
 		], [
