@@ -433,7 +433,8 @@ export class DatabaseTable<T> {
 function getSQL(
 	id: string, module: NodeJS.Module, input: SQLOptions
 ) {
-	if ('processes' in input) throw new Error(`Passing process count to SQL factory is no longer supported.`);
+	if (typeof input === 'undefined') throw new Error(`SQLDatabaseManager factory requires 3 arguments.`);
+	if ('processes' in input) throw new Error(`Passing process count to SQLDatabaseManager factory no longer supported.`);
 	return new SQLDatabaseManager(id, module, input);
 }
 
