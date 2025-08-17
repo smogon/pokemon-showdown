@@ -56,4 +56,18 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 		num: 207,
 		gen: 3,
 	},
+	typhlosionite: {
+		name: "Typhlosionite",
+		spritenum: 1,
+		megaStone: "Typhlosion-Mega",
+		megaEvolves: "Typhlosion",
+		itemUser: ["Typhlosion"],
+		onTakeItem(item, source) {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) return false;
+			return true;
+		},
+		num: -2,
+		gen: 9,
+		desc: "If held by a Typhlosion, this item allows it to Mega Evolve in battle.",
+	},
 };
