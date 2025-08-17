@@ -2721,7 +2721,7 @@ export class TeamValidator {
 				if (!canLearnSpecies.includes(toID(species.baseSpecies))) canLearnSpecies.push(toID(species.baseSpecies));
 				minLearnGen = Math.min(minLearnGen, learnedGen);
 			}
-			/*if (canUseHomeRelearner) {
+			if (canUseHomeRelearner) {
 				const learnsetData = this.getExternalLearnsetData('gen8bdsp', species.id);
 				if (learnsetData?.learnset?.[move.id]) {
 					for (const source of learnsetData.learnset[move.id]) {
@@ -2732,7 +2732,7 @@ export class TeamValidator {
 						return null;
 					}
 				}
-			}*/
+			}
 			if (ruleTable.has('mimicglitch') && species.gen < 5) {
 				// include the Mimic Glitch when checking this mon's learnset
 				const glitchMoves = ['metronome', 'copycat', 'transform', 'mimic', 'assist'];
