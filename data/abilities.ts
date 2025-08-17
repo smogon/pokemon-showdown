@@ -254,13 +254,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	asoneglastrier: {
 		onSwitchInPriority: 1,
 		onStart(pokemon) {
-			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'As One');
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
 		},
 		onEnd() {
-			this.effectState.unnerved = false;
+			if (this.effectState.unnerved) this.effectState.unnerved = false;
 		},
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
@@ -278,13 +277,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	asonespectrier: {
 		onSwitchInPriority: 1,
 		onStart(pokemon) {
-			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'As One');
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
 		},
 		onEnd() {
-			this.effectState.unnerved = false;
+			if (this.effectState.unnerved) this.effectState.unnerved = false;
 		},
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
@@ -2861,22 +2859,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchIn(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
-			const endingAbilities = [
-				'desolateland', 'primordialsea', 'deltastream',
-				'illusion', 'slowstart', 'flowergift', 'forecast',
-			];
 			for (const target of this.getAllActive()) {
 				if (target.hasItem('Ability Shield')) {
 					this.add('-block', target, 'item: Ability Shield');
 					continue;
 				}
 				// Can't suppress a Tatsugiri inside of Dondozo already
-				if (target.volatiles['commanding']) {
-					continue;
-				}
-				if (endingAbilities.includes(target.getAbility().id)) {
-					this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
-				}
+				if (target.volatiles['commanding']) continue;
+				const ability = target.getAbility();
+				if (ability.id === 'neutralizinggas') continue;
+				if (ability.flags['cantsuppress']) continue;
+				// Flash Fire, Protosynthesis, Quark Drive, Unburden should not clear their condition
+				if (target.volatiles[ability.id]) continue;
+				this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
 			}
 		},
 		onEnd(source) {
@@ -2900,12 +2895,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.speedSort(sortedActive);
 			for (const pokemon of sortedActive) {
 				if (pokemon !== source) {
-					if (pokemon.getAbility().flags['cantsuppress']) continue; // does not interact with e.g Ice Face, Zen Mode
 					if (pokemon.hasItem('abilityshield')) continue; // don't restart abilities that weren't suppressed
+					if (pokemon.getAbility().flags['cantsuppress']) continue; // does not interact with e.g Ice Face, Zen Mode
 
+					if (pokemon.ability === 'unnerve' && pokemon.abilityState.unnerved === false) {
+						// restart Unnerve, but don't run the activation message
+						pokemon.abilityState.unnerved = true;
+						continue;
+					}
 					// Will be suppressed by Pokemon#ignoringAbility if needed
 					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
-					if (pokemon.ability === "gluttony") {
+					if (pokemon.ability === 'gluttony') {
 						pokemon.abilityState.gluttony = false;
 					}
 				}
@@ -4243,37 +4243,27 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 92,
 	},
 	slowstart: {
-		onStart(pokemon) {
-			pokemon.addVolatile('slowstart');
+		onStart(target) {
+			this.add('-start', target, 'ability: Slow Start');
+			this.effectState.duration = 5;
 		},
-		onEnd(pokemon) {
-			if (pokemon.volatiles['slowstart']) {
-				delete pokemon.volatiles['slowstart'];
-				this.add('-end', pokemon, 'Slow Start', '[silent]');
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (!pokemon.activeTurns) {
+				this.effectState.duration! += 1;
 			}
 		},
-		condition: {
-			duration: 5,
-			onResidualOrder: 28,
-			onResidualSubOrder: 2,
-			onStart(target) {
-				this.add('-start', target, 'ability: Slow Start');
-			},
-			onResidual(pokemon) {
-				if (!pokemon.activeTurns) {
-					this.effectState.duration! += 1;
-				}
-			},
-			onModifyAtkPriority: 5,
-			onModifyAtk(atk, pokemon) {
-				return this.chainModify(0.5);
-			},
-			onModifySpe(spe, pokemon) {
-				return this.chainModify(0.5);
-			},
-			onEnd(target) {
-				this.add('-end', target, 'Slow Start');
-			},
+		onModifyAtkPriority: 5,
+		onModifyAtk() {
+			if (this.effectState.duration) return this.chainModify(0.5);
+		},
+		onModifySpe() {
+			if (this.effectState.duration) return this.chainModify(0.5);
+		},
+		onEnd(target) {
+			this.effectState.duration = 0;
+			this.add('-end', target, 'Slow Start');
 		},
 		flags: {},
 		name: "Slow Start",
@@ -5191,12 +5181,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	unnerve: {
 		onSwitchInPriority: 1,
 		onStart(pokemon) {
-			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
 		},
 		onEnd() {
-			this.effectState.unnerved = false;
+			if (this.effectState.unnerved) this.effectState.unnerved = false;
 		},
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
