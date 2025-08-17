@@ -5,7 +5,7 @@
  */
 
 import * as child_process from 'child_process';
-import { ProcessManager, Streams, Utils, Repl, FS } from '../../lib';
+import { ProcessManager, Streams, Utils, FS } from '../../lib';
 import * as ConfigLoader from '../config-loader';
 import { toID } from '../../sim/dex-data';
 
@@ -67,7 +67,7 @@ class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 	}
 }
 
-export const PM = new ProcessManager.StreamProcessManager(module, () => new ArtemisStream(), message => {
+export const PM = new ProcessManager.StreamProcessManager('abusemonitor-local', module, () => new ArtemisStream(), message => {
 	if (message.startsWith('SLOW\n')) {
 		Monitor.slow(message.slice(5));
 	}
@@ -148,8 +148,8 @@ export class LocalClassifier {
 		}
 		return data as Record<string, number>;
 	}
-	static start() {
-		start();
+	static start(processCount: ConfigLoader.SubProcessesConfig) {
+		start(processCount);
 	}
 }
 
@@ -171,9 +171,9 @@ if (!PM.isParentProcess) {
 		}
 	});
 	// eslint-disable-next-line no-eval
-	Repl.start(`abusemonitor-local-${process.pid}`, cmd => eval(cmd));
+	PM.startRepl(cmd => eval(cmd));
 }
 
-function start() {
-	PM.spawn(global.Config?.subprocessescache?.localartemis ?? 1);
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	PM.spawn(processCount['localartemis'] ?? 1);
 }

@@ -152,6 +152,10 @@ export class TriviaSQLiteDatabase implements TriviaDatabase {
 		this.deleteQuestionQuery = null;
 		this.leaderboardDeletionQuery = null;
 
+		this.readyPromise = null;
+	}
+
+	start() {
 		this.readyPromise = this.prepareStatements().then(() => {
 			void this.convertLegacyJSON();
 			this.readyPromise = null;

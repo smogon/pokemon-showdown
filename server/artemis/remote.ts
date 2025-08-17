@@ -2,7 +2,7 @@
  * Code for using Google's Perspective API for filters.
  * @author mia-pi-git
  */
-import { ProcessManager, Net, Repl } from '../../lib';
+import { ProcessManager, Net } from '../../lib';
 import * as ConfigLoader from '../config-loader';
 import { toID } from '../../sim/dex-data';
 
@@ -54,7 +54,7 @@ function isCommon(message: string) {
 
 let throttleTime: number | null = null;
 export const limiter = new Limiter(800);
-export const PM = new ProcessManager.QueryProcessManager<string, Record<string, number> | null>(module, async text => {
+export const PM = new ProcessManager.QueryProcessManager<string, Record<string, number> | null>('abusemonitor-remote', module, async text => {
 	if (isCommon(text) || !limiter.shouldRequest()) return null;
 	if (throttleTime && ((Date.now() - throttleTime) < 10000)) {
 		return null;
@@ -144,8 +144,8 @@ export class RemoteClassifier {
 	getActiveProcesses() {
 		return PM.processes.length;
 	}
-	static start() {
-		start();
+	static start(processCount: ConfigLoader.SubProcessesConfig) {
+		start(processCount);
 	}
 }
 
@@ -167,9 +167,9 @@ if (!PM.isParentProcess) {
 		}
 	});
 	// eslint-disable-next-line no-eval
-	Repl.start(`abusemonitor-remote-${process.pid}`, cmd => eval(cmd));
+	PM.startRepl(cmd => eval(cmd));
 }
 
-function start() {
-	PM.spawn(global.Config?.subprocessescache?.remoteartemis ?? 1);
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	PM.spawn(processCount['remoteartemis'] ?? 1);
 }

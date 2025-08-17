@@ -45,6 +45,7 @@ import { RoomAuth } from './user-groups';
 import { type PartialModlogEntry, mainModlog } from './modlog';
 import { Replays } from './replays';
 import * as crypto from 'crypto';
+import * as ConfigLoader from 'config-loader';
 
 /*********************************************************
  * the Room object.
@@ -1309,9 +1310,9 @@ export class GlobalRoomState {
 		this.lastWrittenBattle = this.lastBattle;
 	}
 
-	start() {
+	start(processCount: ConfigLoader.SubProcessesConfig) {
 		void this.loadBattles();
-		startBattleProcesses();
+		startBattleProcesses(processCount);
 	}
 
 	async serializeBattleRoom(room: Room) {

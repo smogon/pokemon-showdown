@@ -16,7 +16,7 @@ import * as http from 'http';
 import * as https from 'https';
 import * as path from 'path';
 import * as ConfigLoader from './config-loader';
-import { crashlogger, ProcessManager, Streams, Repl } from '../lib';
+import { crashlogger, ProcessManager, Streams } from '../lib';
 import { IPTools } from './ip-tools';
 import { type ChannelID, extractChannelMessages } from '../sim/battle';
 import { StaticServer } from '../lib/static-server';
@@ -65,7 +65,7 @@ export const Sockets = new class {
 		Users.socketDisconnectAll(worker, worker.workerid);
 	}
 
-	listen(port?: number, bindAddress?: string, workerCount?: number) {
+	listen(port?: number, bindAddress?: string, processesCount?: ConfigLoader.SubProcessesConfig) {
 		if (port !== undefined && !isNaN(port)) {
 			Config.port = port;
 			Config.ssl = null;
@@ -85,7 +85,7 @@ export const Sockets = new class {
 		if (port !== undefined) {
 			Config.port = port;
 		}
-		workerCount ??= (Config.subprocessescache?.network ?? 1);
+		const workerCount = processesCount?.['network'] ?? 1;
 
 		PM.env = { PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '0.0.0.0', PSNOSSL: Config.ssl ? 0 : 1 };
 		PM.subscribeSpawn(worker => void this.onSpawn(worker));
@@ -516,6 +516,7 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
  *********************************************************/
 
 export const PM = new ProcessManager.RawProcessManager({
+	id: 'sockets',
 	module,
 	setupChild: () => new ServerStream(Config),
 	isCluster: true,
@@ -556,10 +557,10 @@ if (!PM.isParentProcess) {
 	if (process.env.PSNOSSL && parseInt(process.env.PSNOSSL)) Config.ssl = null;
 
 	// eslint-disable-next-line no-eval
-	Repl.start(`sockets-${PM.workerid}-${process.pid}`, cmd => eval(cmd));
+	PM.startRepl({filename: `sockets-${PM.workerid}-${process.pid}`, eval: cmd => eval(cmd)});
 }
 
-function start() {
+function start(processCount: ConfigLoader.SubProcessesConfig) {
 	let port;
 	for (const arg of process.argv) {
 		if (/^[0-9]+$/.test(arg)) {
@@ -567,5 +568,5 @@ function start() {
 			break;
 		}
 	}
-	Sockets.listen(port);
+	Sockets.listen(port, undefined, processCount);
 }

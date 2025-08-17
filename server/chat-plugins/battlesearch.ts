@@ -1,7 +1,7 @@
 /**
  * Battle search - handles searching battle logs.
  */
-import { FS, Utils, ProcessManager, Repl } from '../../lib';
+import { FS, Utils, ProcessManager } from '../../lib';
 
 import * as ConfigLoader from '../config-loader';
 
@@ -451,7 +451,7 @@ export const commands: Chat.ChatCommands = {
  * Process manager
  *********************************************************/
 
-export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(module, async data => {
+export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>('battlesearch', module, async data => {
 	const { userids, turnLimit, month, tierid } = data;
 	const start = Date.now();
 	try {
@@ -495,7 +495,13 @@ if (!PM.isParentProcess) {
 	global.Dex = require('../../sim/dex').Dex;
 	global.toID = Dex.toID;
 	// eslint-disable-next-line no-eval
-	Repl.start('battlesearch', cmd => eval(cmd));
-} else {
-	PM.spawn(global.Config?.subprocessescache?.battlesearch ?? 1);
+	PM.startRepl(cmd => eval(cmd));
+}
+
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	PM.spawn(processCount['battlesearch'] ?? 1);
+}
+
+export function destroy() {
+	PM.destroy();
 }

@@ -13,6 +13,10 @@ export let incrementWins: SQL.Statement | null = null;
 export let incrementLosses: SQL.Statement | null = null;
 export let dbSetupPromise: Promise<void> | null = null;
 
+const database = SQL('cg-teams', module, {
+	file: './databases/battlestats.db',
+});
+
 async function setupDatabase(database: SQL.DatabaseManager) {
 	await database.runFile('./databases/schemas/battlestats.sql');
 	addPokemon = await database.prepare(
@@ -24,13 +28,6 @@ async function setupDatabase(database: SQL.DatabaseManager) {
 	incrementLosses = await database.prepare(
 		'UPDATE gen9computergeneratedteams SET losses = losses + 1 WHERE species_id = ?'
 	);
-}
-
-if (Config.usesqlite && Config.usesqliteleveling) {
-	const database = SQL(module, {
-		file: './databases/battlestats.db',
-	});
-	dbSetupPromise = setupDatabase(database);
 }
 
 function getLevelSpeciesID(set: PokemonSet, format?: Format) {
@@ -161,3 +158,10 @@ export const pages: Chat.PageTable = {
 		}
 	},
 };
+
+export function start() {
+	if (!Config.usesqlite || !Config.usesqliteleveling) {
+		return;
+	}
+	dbSetupPromise = setupDatabase(database);
+}

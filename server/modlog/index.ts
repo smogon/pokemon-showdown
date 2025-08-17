@@ -35,7 +35,7 @@ const PUNISHMENTS = [
 	'TOUR BAN', 'TOUR UNBAN', 'UNNAMELOCK', 'PERMABLACKLIST',
 ];
 
-const PM = SQL(module, {
+const PM = SQL('modlog', module, {
 	file: MODLOG_DB_PATH,
 	extension: 'server/modlog/transactions.js',
 	sqliteOptions: Config.modlogsqliteoptions,
@@ -477,14 +477,14 @@ if (!PM.isParentProcess) {
 	});
 }
 
-export function start() {
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
 	if (!Config.usesqlite) {
 		if (mainModlog.readyPromiseReject) {
 			mainModlog.readyPromiseReject(new Error("Modlog disabled because SQLite is disabled"));
 		}
 		return;
 	}
-	PM.spawn(global.Config?.subprocessescache?.modlog ?? 1);
+	PM.spawn(processCount['modlog'] ?? 1);
 	mainModlog.readyPromiseResolve!(mainModlog.setupDatabase());
 	void mainModlog.readyPromise!.then(result => {
 		mainModlog.databaseReady = true;

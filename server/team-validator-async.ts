@@ -12,7 +12,7 @@ import * as ConfigLoader from './config-loader';
 
 export const PM = new QueryProcessManager<{
 	formatid: string, options?: { removeNicknames?: boolean }, team: string,
-}>(module, message => {
+}>('team-validator', module, message => {
 	const { formatid, options, team } = message;
 	const parsedTeam = Teams.unpack(team);
 
@@ -65,8 +65,8 @@ export class TeamValidatorAsync {
 		return new TeamValidatorAsync(format);
 	}
 
-	static start() {
-		start();
+	static start(processCount: ConfigLoader.SubProcessesConfig) {
+		start(processCount);
 	}
 }
 
@@ -100,9 +100,9 @@ if (!PM.isParentProcess) {
 	global.Teams = require('../sim/teams').Teams;
 
 	// eslint-disable-next-line no-eval
-	require('../lib/repl').Repl.start(`team-validator-${process.pid}`, (cmd: string) => eval(cmd));
+	PM.startRepl((cmd: string) => eval(cmd));
 }
 
-export function start() {
-	PM.spawn(global.Config?.subprocessescache?.validator ?? 1);
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	PM.spawn(processCount['validator'] ?? 1);
 }
