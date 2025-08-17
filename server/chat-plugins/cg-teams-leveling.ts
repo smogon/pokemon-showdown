@@ -4,7 +4,7 @@
  * Handles updating the level database for [Gen 9] Computer-Generated Teams.
  */
 
-import { SQL, Utils } from "../../lib";
+import { type SQL, Utils } from "../../lib";
 import { cgtDatabase, start as cgtStart, destroy as cgtDestroy } from "../../data/cg-teams";
 import { getSpeciesIdCGT as getLevelSpeciesID } from "./randombattles/util";
 
@@ -12,7 +12,6 @@ export let addPokemon: SQL.Statement | null = null;
 export let incrementWins: SQL.Statement | null = null;
 export let incrementLosses: SQL.Statement | null = null;
 export let dbSetupPromise: Promise<void> | null = null;
-
 
 async function setupDatabase(db: SQL.DatabaseManager) {
 	await db.runFile('./databases/schemas/battlestats.sql');

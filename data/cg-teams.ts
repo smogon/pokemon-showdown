@@ -1007,7 +1007,10 @@ export default class TeamGenerator {
 	 * @returns The level a Pokémon should be.
 	 */
 	protected static getLevel(species: Species): number {
-		const speciesID = getLevelSpeciesID({species: species.name, moves: [], item: ''} as PokemonSet, Dex.formats.get('gen9computergeneratedteams'));
+		const speciesID = getLevelSpeciesID(
+			{ species: species.name, moves: [], item: '' } as unknown as PokemonSet,
+			Dex.formats.get('gen9computergeneratedteams')
+		);
 		if (levelOverride[speciesID]) {
 			return levelOverride[speciesID];
 		}

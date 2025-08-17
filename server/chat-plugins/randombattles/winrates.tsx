@@ -5,7 +5,7 @@
 
 import { FS, Utils } from '../../../lib';
 
-import { getMonth, getSpeciesName, getZScore, type Stats, type MonEntry, type FormatData } from './util';
+import { getMonth, getSpeciesName, getZScore, type Stats, type MonEntry } from './util';
 
 const STATS_PATH = Monitor.logPath('randbats/{{MONTH}}-winrates.json').path;
 export const stats = getDefaultStats();
