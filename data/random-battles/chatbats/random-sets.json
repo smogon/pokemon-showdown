@@ -941,5 +941,22 @@
                 "teraTypes": ["Ground"]
             }
         ]
+    },
+    "typhlosionmega": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Eruption", "Steam Eruption", "Matcha Gotcha", "Morning Sun"],
+                "abilities": ["Magic Guard"],
+                "teraTypes": ["Normal"]
+            },
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Heat Sink", "Steam Eruption", "Calm Mind", "Morning Sun"],
+                "abilities": ["Magic Guard"],
+                "teraTypes": ["Normal"]
+            }
+        ]
     }
 }
