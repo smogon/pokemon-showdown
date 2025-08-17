@@ -5,17 +5,14 @@
  */
 
 import { SQL, Utils } from "../../lib";
-import { getSpeciesName } from "./randombattles/winrates";
 import { cgtDatabase, start as cgtStart, destroy as cgtDestroy } from "../../data/cg-teams";
+import { getSpeciesIdCGT as getLevelSpeciesID } from "./randombattles/util";
 
 export let addPokemon: SQL.Statement | null = null;
 export let incrementWins: SQL.Statement | null = null;
 export let incrementLosses: SQL.Statement | null = null;
 export let dbSetupPromise: Promise<void> | null = null;
 
-const database = SQL('cg-teams-leveling', module, {
-	file: './databases/battlestats.db',
-});
 
 async function setupDatabase(db: SQL.DatabaseManager) {
 	await db.runFile('./databases/schemas/battlestats.sql');
@@ -28,11 +25,6 @@ async function setupDatabase(db: SQL.DatabaseManager) {
 	incrementLosses = await db.prepare(
 		'UPDATE gen9computergeneratedteams SET losses = losses + 1 WHERE species_id = ?'
 	);
-}
-
-function getLevelSpeciesID(set: PokemonSet, format?: Format) {
-	if (['Basculin', 'Greninja'].includes(set.name)) return toID(set.species);
-	return toID(getSpeciesName(set, format || Dex.formats.get('gen9computergeneratedteams')));
 }
 
 async function updateStats(battle: RoomBattle, winner: ID) {
@@ -144,7 +136,7 @@ export const pages: Chat.PageTable = {
 			);
 			this.title = `[History] [Gen 9] Computer Generated Teams`;
 
-			const MAX_LINES = 100;
+			const MAX_LINES = Math.min(history.length, 100);
 			buf += `<div class="ladder pad"><table><tr><th>Pokemon</th><th>Level</th><th>Timestamp</th>`;
 			for (let i = history.length - 1; history.length - i <= MAX_LINES; i--) {
 				const entry = history[i];
@@ -163,11 +155,10 @@ export function start() {
 	if (!Config.usesqlite || !Config.usesqliteleveling) {
 		return;
 	}
-	dbSetupPromise = setupDatabase(database);
+	dbSetupPromise = setupDatabase(cgtDatabase);
 	cgtStart();
 }
 
 export function destroy() {
 	cgtDestroy();
-	void database.destroy();
 }

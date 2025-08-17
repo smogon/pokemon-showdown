@@ -36,6 +36,7 @@
 import type { SQLDatabaseManager } from '../lib/sql';
 import { Dex, PRNG, SQL } from '../sim';
 import type { EventMethods } from '../sim/dex-conditions';
+import { getSpeciesIdCGT as getLevelSpeciesID } from "./../server/chat-plugins/randombattles/util";
 import {
 	ABILITY_MOVE_BONUSES,
 	ABILITY_MOVE_TYPE_BONUSES,
@@ -68,26 +69,6 @@ const TOP_SPEED = 300;
 const levelOverride: { [speciesID: string]: number } = {};
 export let levelUpdateInterval: NodeJS.Timeout | null = null;
 
-// can't import the function cg-teams-leveling.ts uses to this context for some reason
-const useBaseSpecies = [
-	'Pikachu',
-	'Gastrodon',
-	'Magearna',
-	'Dudunsparce',
-	'Maushold',
-	'Keldeo',
-	'Zarude',
-	'Polteageist',
-	'Sinistcha',
-	'Sawsbuck',
-	'Vivillon',
-	'Florges',
-	'Minior',
-	'Toxtricity',
-	'Tatsugiri',
-	'Alcremie',
-];
-
 async function updateLevels(database: SQL.DatabaseManager) {
 	const updateSpecies = await database.prepare(
 		'UPDATE gen9computergeneratedteams SET wins = 0, losses = 0, level = ? WHERE species_id = ?'
@@ -113,7 +94,7 @@ async function updateLevels(database: SQL.DatabaseManager) {
 	}
 }
 
-export let cgtDatabase: SQLDatabaseManager;
+export const cgtDatabase: SQLDatabaseManager = SQL('cg-teams', module, { file: './databases/battlestats.db' });
 
 export default class TeamGenerator {
 	dex: ModdedDex;
@@ -1026,20 +1007,12 @@ export default class TeamGenerator {
 	 * @returns The level a Pokémon should be.
 	 */
 	protected static getLevel(species: Species): number {
-		if (['Zacian', 'Zamazenta'].includes(species.name)) {
-			species = Dex.species.get(species.otherFormes![0]);
-		} else if (species.baseSpecies === 'Squawkabilly') {
-			if (['Yellow', 'White'].includes(species.forme)) {
-				species = Dex.species.get('Squawkabilly-Yellow');
-			} else {
-				species = Dex.species.get('Squawkabilly');
-			}
-		} else if (useBaseSpecies.includes(species.baseSpecies)) {
-			species = Dex.species.get(species.baseSpecies);
+		const speciesID = getLevelSpeciesID({species: species.name, moves: [], item: ''} as PokemonSet, Dex.formats.get('gen9computergeneratedteams'));
+		if (levelOverride[speciesID]) {
+			return levelOverride[speciesID];
 		}
-		if (levelOverride[species.id]) return levelOverride[species.id];
 
-		switch (species.tier) {
+		switch (Dex.species.get(speciesID).tier) {
 		case 'AG': return 60;
 		case 'Uber': return 70;
 		case 'OU': case 'Unreleased': return 80;
@@ -1094,7 +1067,6 @@ export function start() {
 	if (!Config.usesqlite || !Config.usesqliteleveling) {
 		return;
 	}
-	cgtDatabase = SQL('cg-teams', module, { file: './databases/battlestats.db' });
 
 	// update every 2 hours
 	void updateLevels(cgtDatabase);
@@ -1102,7 +1074,9 @@ export function start() {
 }
 
 export function destroy() {
-	if (!levelUpdateInterval) return;
-	clearInterval(levelUpdateInterval);
-	levelUpdateInterval = null;
+	if (levelUpdateInterval) {
+		clearInterval(levelUpdateInterval);
+		levelUpdateInterval = null;
+	}
+	void cgtDatabase.destroy();
 }
