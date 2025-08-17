@@ -2722,7 +2722,7 @@ export class TeamValidator {
 				minLearnGen = Math.min(minLearnGen, learnedGen);
 			}
 			if (canUseHomeRelearner) {
-				const learnsetData = this.getExternalLearnsetData('gen8bdsp', species.id);
+				const learnsetData = this.getExternalLearnsetData(species.id, 'gen8bdsp');
 				if (learnsetData?.learnset?.[move.id]) {
 					for (const source of learnsetData.learnset[move.id]) {
 						// Non-event sources from BDSP should always be legal through HOME relearner,
@@ -2872,7 +2872,7 @@ export class TeamValidator {
 		return null;
 	}
 
-	getExternalLearnsetData(mod: string, species: ID) {
+	getExternalLearnsetData(species: ID, mod: string) {
 		return this.dex.mod(mod).species.getLearnsetData(species);
 	}
 
