@@ -8,14 +8,9 @@ const assert = require('../assert');
 
 describe('[Gen 8] Random Battle (slow)', () => {
 	const options = { format: 'gen8randombattle' };
-	let dataJSON;
-	let dex;
-	let generator;
-	before(() => {
-		dataJSON = require(`../../dist/data/random-battles/gen8/data.json`);
-		dex = Dex.forFormat(options.format);
-		generator = Teams.getGenerator(options.format);
-	});
+	const dataJSON = require(`../../dist/data/random-battles/gen8/data.json`);
+	const dex = Dex.forFormat(options.format);
+	const generator = Teams.getGenerator(options.format);
 
 	it('All moves on all sets should be obtainable', () => {
 		const rounds = 500;
@@ -263,13 +258,8 @@ describe('[Gen 8] Free-for-All Random Battle (slow)', () => {
 describe('[Gen 8 BDSP] Random Battle (slow)', () => {
 	const options = { format: 'gen8bdsprandombattle' };
 	const okToHaveChoiceMoves = ['switcheroo', 'trick', 'healingwish'];
-	let dataJSON;
-	let dex;
-
-	before(() => {
-		dataJSON = require(`../../dist/data/random-battles/gen8bdsp/data.json`);
-		dex = Dex.forFormat(options.format);
-	});
+	const dataJSON = require(`../../dist/data/random-battles/gen8bdsp/data.json`);
+	const dex = Dex.forFormat(options.format);
 
 	for (const pokemon of Object.keys(dataJSON)) {
 		const species = dex.species.get(pokemon);

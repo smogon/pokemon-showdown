@@ -50,6 +50,11 @@ require('../dist/lib/repl').Repl.start = noop;
 // Start the server.
 const server = require('../dist/server');
 
+// Preload so that sim tests have access to Dex ASAP
+const { Dex } = require('../dist/sim/dex');
+global.Dex = Dex;
+global.toID = Dex.toID;
+
 before('initialization', async function () {
 	this.timeout(0); // Remove timeout limitation
 	await server.readyPromise;
