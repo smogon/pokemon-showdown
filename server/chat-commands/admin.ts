@@ -648,16 +648,8 @@ export const commands: Chat.ChatCommands = {
 				const oldPlugins = Chat.plugins;
 				Chat.destroy();
 
-				const processManagers = ProcessManager.processManagers;
-				for (const manager of processManagers.slice()) {
-					if (manager.filename.startsWith(FS(__dirname + '/../chat-plugins/').path)) {
-						void manager.destroy();
-					}
-				}
-				void Chat.FriendsPM.destroy();
-
 				global.Chat = require('../chat').Chat;
-				Chat.start();
+				Chat.start(Config.subprocessescache);
 				global.Tournaments = require('../tournaments').Tournaments;
 
 				this.sendReply("Reloading chat plugins...");
@@ -1549,7 +1541,7 @@ export const commands: Chat.ChatCommands = {
 			`<td>${Chat.getReadmoreCodeBlock(query)}</td></tr><table>`
 		);
 		logRoom?.roomlog(`SQLite> ${target}`);
-		const database = SQL(module, {
+		const database = SQL('evalsql', module, {
 			file: `./databases/${db}.db`,
 			onError(err) {
 				return { err: err.message, stack: err.stack };

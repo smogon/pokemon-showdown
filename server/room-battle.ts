@@ -12,7 +12,7 @@
  */
 
 import { execSync } from "child_process";
-import { Repl, ProcessManager, type Streams } from '../lib';
+import { ProcessManager, type Streams } from '../lib';
 import { BattleStream } from "../sim/battle-stream";
 import { RoomGamePlayer, RoomGame } from "./room-game";
 import * as ConfigLoader from './config-loader';
@@ -1358,14 +1358,14 @@ export class RoomBattleStream extends BattleStream {
  * Process manager
  *********************************************************/
 
-export const PM = new ProcessManager.StreamProcessManager(module, () => new RoomBattleStream(), message => {
+export const PM = new ProcessManager.StreamProcessManager('sim', module, () => new RoomBattleStream(), message => {
 	if (message.startsWith(`SLOW\n`)) {
 		Monitor.slow(message.slice(5));
 	}
 });
 
-export function start() {
-	PM.spawn(global.Config?.subprocessescache?.simulator ?? 1);
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	PM.spawn(processCount['simulator'] ?? 1);
 }
 
 if (!PM.isParentProcess) {
@@ -1407,5 +1407,5 @@ if (!PM.isParentProcess) {
 	}
 
 	// eslint-disable-next-line no-eval
-	Repl.start(`sim-${process.pid}`, cmd => eval(cmd));
+	PM.startRepl(cmd => eval(cmd));
 }

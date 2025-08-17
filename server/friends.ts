@@ -5,7 +5,7 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore in case it isn't installed
 import type * as Database from 'better-sqlite3';
-import { Utils, FS, ProcessManager, Repl } from '../lib';
+import { Utils, FS, ProcessManager } from '../lib';
 import * as ConfigLoader from './config-loader';
 import * as path from 'path';
 
@@ -127,9 +127,6 @@ export class FriendsDatabase {
 
 		statements.expire.run();
 		return { database, statements };
-	}
-	static start() {
-		start();
 	}
 	async getFriends(userid: ID): Promise<Friend[]> {
 		return (await this.all('get', [userid, MAX_FRIENDS])) || [];
@@ -393,7 +390,7 @@ const setup = () => {
 };
 
 /** Process manager for main process use. */
-export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, DatabaseResult>(module, query => {
+export const PM = new ProcessManager.QueryProcessManager<DatabaseRequest, DatabaseResult>('friends', module, query => {
 	const { type, statement, data } = query;
 	const startTime = Date.now();
 	const result: DatabaseResult = {};
@@ -452,9 +449,13 @@ if (!PM.isParentProcess) {
 		}
 	});
 	// eslint-disable-next-line no-eval
-	Repl.start(`friends-${process.pid}`, cmd => eval(cmd));
+	PM.startRepl(cmd => eval(cmd));
 }
 
-function start() {
-	PM.spawn(global.Config?.subprocessescache?.friends ?? 1);
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	PM.spawn(processCount['friends'] ?? 1);
+}
+
+export function destroy() {
+	PM.destroy();
 }

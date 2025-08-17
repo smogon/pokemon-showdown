@@ -127,20 +127,20 @@ function setupGlobals() {
 	global.TeamValidatorAsync = TeamValidatorAsync;
 
 	global.Sockets = Sockets;
-	Sockets.start();
+	Sockets.start(Config.subprocessescache);
 }
 
 export const readyPromise = cleanupStale().then(() => {
 	setupGlobals();
 }).then(() => {
 	if (Config.usesqlite) {
-		require('./modlog').start();
+		require('./modlog').start(Config.subprocessescache);
 	}
 
-	Rooms.global.start();
-	Verifier.start();
-	TeamValidatorAsync.start();
-	Chat.start();
+	Rooms.global.start(Config.subprocessescache);
+	Verifier.start(Config.subprocessescache);
+	TeamValidatorAsync.start(Config.subprocessescache);
+	Chat.start(Config.subprocessescache);
 
 	/*********************************************************
 	 * Monitor config file and display diagnostics

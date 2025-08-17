@@ -17,7 +17,7 @@ import { QueryProcessManager } from '../lib/process-manager';
 import * as ConfigLoader from './config-loader';
 
 export const PM = new QueryProcessManager<{ data: string, signature: string }, boolean>(
-	module, ({ data, signature }) => {
+	'verifier', module, ({ data, signature }) => {
 		const verifier = crypto.createVerify(Config.loginserverkeyalgo);
 		verifier.update(data);
 		let success = false;
@@ -35,11 +35,10 @@ export function verify(data: string, signature: string): Promise<boolean> {
 
 if (!PM.isParentProcess) {
 	ConfigLoader.ensureLoaded();
-	const Repl = require('../lib/repl').Repl;
 	// eslint-disable-next-line no-eval
-	Repl.start('verifier', (cmd: string) => eval(cmd));
+	PM.startRepl((cmd: string) => eval(cmd));
 }
 
-export function start() {
-	PM.spawn(global.Config?.subprocessescache?.verifier ?? 1);
+export function start(processCount: ConfigLoader.SubProcessesConfig) {
+	PM.spawn(processCount['verifier'] ?? 1);
 }

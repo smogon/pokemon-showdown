@@ -27,8 +27,8 @@ import type { RoomPermission, GlobalPermission } from './user-groups';
 import type { Punishment } from './punishments';
 import type { PartialModlogEntry } from './modlog';
 import * as ConfigLoader from './config-loader';
-import { FriendsDatabase, PM as FriendsPM } from './friends';
-import { SQL, Repl, FS, Utils } from '../lib';
+import * as Friends from './friends';
+import { SQL, FS, Utils } from '../lib';
 import * as Artemis from './artemis';
 import { Dex } from '../sim';
 import { PrivateMessages } from './private-messages';
@@ -173,7 +173,7 @@ const EMOJI_REGEX = /[\p{Emoji_Modifier_Base}\p{Emoji_Presentation}\uFE0F]/u;
 
 const TRANSLATION_DIRECTORY = pathModule.resolve(__dirname, '..', 'translations');
 
-const PM = SQL(module, {
+const PM = SQL('chat-db', module, {
 	file: global.Config?.nofswriting ? ':memory:' : PLUGIN_DATABASE_PATH,
 });
 
@@ -1551,8 +1551,8 @@ export const Chat = new class {
 	 * which tends to cause unexpected behavior.
 	 */
 	readonly MAX_TIMEOUT_DURATION = 2147483647;
-	readonly Friends = new FriendsDatabase();
-	readonly FriendsPM = FriendsPM;
+	readonly Friends = new Friends.FriendsDatabase();
+	readonly FriendsPM = Friends.PM;
 	readonly PrivateMessages = PrivateMessages;
 
 	readonly multiLinePattern = new PatternTester();
@@ -1564,7 +1564,7 @@ export const Chat = new class {
 	commands!: AnnotatedChatCommands;
 	basePages!: PageTable;
 	pages!: PageTable;
-	readonly destroyHandlers: (() => void)[] = [Artemis.destroy];
+	readonly destroyHandlers: (() => void)[] = [Artemis.destroy, Friends.destroy];
 	readonly crqHandlers: { [k: string]: CRQHandler } = {};
 	readonly handlers: { [k: string]: ((...args: any) => any)[] } = Object.create(null);
 	/** The key is the name of the plugin. */
@@ -2058,6 +2058,9 @@ export const Chat = new class {
 				if (!Chat.handlers[handlerName]) Chat.handlers[handlerName] = [];
 				Chat.handlers[handlerName].push(plugin.handlers[handlerName]);
 			}
+		}
+		if (plugin.start) {
+			plugin.start(Config.subprocessescache);
 		}
 		Chat.plugins[name] = plugin;
 	}
@@ -2651,8 +2654,8 @@ export const Chat = new class {
 		return (new PageContext({ pageid, user, connection, language: user.language! })).resolve();
 	}
 
-	start() {
-		start();
+	start(processCount: ConfigLoader.SubProcessesConfig) {
+		start(processCount);
 	}
 };
 
@@ -2727,15 +2730,15 @@ if (!PM.isParentProcess) {
 		Monitor.crashlog(err as Error, 'A chat database process');
 	});
 	// eslint-disable-next-line no-eval
-	Repl.start('chat-db', cmd => eval(cmd));
+	PM.startRepl(cmd => eval(cmd));
 }
 
-function start() {
+function start(processCount: ConfigLoader.SubProcessesConfig) {
 	if (Config.usesqlite) {
-		PM.spawn(global.Config?.subprocessescache?.chatdb ?? 1);
+		PM.spawn(processCount['chatdb'] ?? 1);
 		Chat.databaseReadyPromise = Chat.prepareDatabase();
 	}
-	Chat.PrivateMessages.start();
-	FriendsDatabase.start();
-	Artemis.start();
+	Chat.PrivateMessages.start(processCount);
+	Friends.start(processCount);
+	Artemis.start(processCount);
 }

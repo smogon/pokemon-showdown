@@ -17,7 +17,7 @@ export const MAX_PENDING = 20;
 // this would be in database.ts, but for some weird reason, if the extension and the pm are the same
 // it doesn't work. all the keys in the require() result are there, but they're also set to undefined.
 // no idea why.
-export const PM = SQL(module, {
+export const PM = SQL('private-messages', module, {
 	file: 'databases/offline-pms.db',
 	extension: 'server/private-messages/database.js',
 });
@@ -208,8 +208,8 @@ export const PrivateMessages = new class {
 	destroy() {
 		void PM.destroy();
 	}
-	start() {
-		start();
+	start(processCount: ConfigLoader.SubProcessesConfig) {
+		start(processCount);
 	}
 };
 
@@ -229,11 +229,11 @@ if (!PM.isParentProcess) {
 	});
 }
 
-function start() {
+function start(processCount: ConfigLoader.SubProcessesConfig) {
 	if (!Config.usesqlite) {
 		return;
 	}
-	PM.spawn(global.Config?.subprocessescache?.pm ?? 1);
+	PM.spawn(processCount['pm'] ?? 1);
 	// clear super old pms on startup
 	void PM.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
 }

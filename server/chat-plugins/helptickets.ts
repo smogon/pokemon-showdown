@@ -3026,10 +3026,10 @@ export const handlers: Chat.Handlers = {
 	},
 };
 
-process.nextTick(() => {
+export function start() {
 	Chat.multiLinePattern.register(
 		'/ht resolve ', '/helpticket resolve ',
 		'/requesthelp resolve ', '/helprequest resolve ',
 		'/ht submit ', '/helpticket submit ',
 	);
-});
+}

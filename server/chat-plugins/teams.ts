@@ -14,10 +14,8 @@ const MAX_TEAMS = 200;
 const MAX_SEARCH = 3000;
 const ALPHABET = '0123456789abcdefghijklmnopqrstuvwxyz'.split('');
 
-export const teamsDB = Config.usepostgres ? new PGDatabase(Config.usepostgres) : null!;
-export const teamsTable = teamsDB?.getTable<
-	StoredTeam
->('teams', 'teamid');
+let teamsDB: null | PGDatabase = null;
+let teamsTable: undefined | DatabaseTable<StoredTeam, PGDatabase>;
 
 export interface StoredTeam {
 	teamid: string;
@@ -813,6 +811,10 @@ export const pages: Chat.PageTable = {
 	},
 };
 
-process.nextTick(() => {
+export function start() {
+	if (Config.usepostgres) {
+		teamsDB = new PGDatabase(Config.usepostgres);
+		teamsTable = teamsDB.getTable<StoredTeam>('teams', 'teamid');
+	}
 	Chat.multiLinePattern.register('/teams save ', '/teams update ');
-});
+}
