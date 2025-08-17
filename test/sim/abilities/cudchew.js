@@ -18,7 +18,7 @@ describe('Cud Chew', () => {
 		]]);
 		const tauros = battle.p1.active[0];
 		battle.makeChoices();
-		assert.equal(tauros.status, '')
+		assert.equal(tauros.status, '');
 		battle.makeChoices();
 		assert.equal(tauros.status, '');
 		battle.makeChoices();
@@ -35,7 +35,7 @@ describe('Cud Chew', () => {
 		battle.makeChoices();
 		assert.equal(tauros.status, 'tox');
 		battle.makeChoices('auto', 'move fling');
-		assert.equal(tauros.status, '')
+		assert.equal(tauros.status, '');
 		battle.makeChoices();
 		assert.equal(tauros.status, '');
 		battle.makeChoices();
@@ -53,7 +53,7 @@ describe('Cud Chew', () => {
 		]]);
 		const tauros = battle.p1.active[0];
 		battle.makeChoices();
-		assert.equal(tauros.status, '')
+		assert.equal(tauros.status, '');
 		battle.makeChoices('auto', 'move toxic 1, switch 3');
 		assert.equal(tauros.status, '');
 	});
