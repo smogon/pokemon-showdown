@@ -2870,7 +2870,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (ability.id === 'neutralizinggas') continue;
 				if (ability.flags['cantsuppress']) continue;
 				// Flash Fire, Protosynthesis, Quark Drive, Unburden should not clear their condition
-				if (target.volatiles[ability.id]) continue;
+				// Slow Start should clear its condition
+				if (target.volatiles[ability.id] && !target.volatiles[ability.id].duration) continue;
 				this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
 			}
 		},
@@ -4243,27 +4244,37 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 92,
 	},
 	slowstart: {
-		onStart(target) {
-			this.add('-start', target, 'ability: Slow Start');
-			this.effectState.duration = 5;
+		onStart(pokemon) {
+			pokemon.addVolatile('slowstart');
 		},
-		onResidualOrder: 28,
-		onResidualSubOrder: 2,
-		onResidual(pokemon) {
-			if (!pokemon.activeTurns) {
-				this.effectState.duration! += 1;
+		onEnd(pokemon) {
+			if (pokemon.volatiles['slowstart']) {
+				delete pokemon.volatiles['slowstart'];
+				this.add('-end', pokemon, 'Slow Start', '[silent]');
 			}
 		},
-		onModifyAtkPriority: 5,
-		onModifyAtk() {
-			if (this.effectState.duration) return this.chainModify(0.5);
-		},
-		onModifySpe() {
-			if (this.effectState.duration) return this.chainModify(0.5);
-		},
-		onEnd(target) {
-			this.effectState.duration = 0;
-			this.add('-end', target, 'Slow Start');
+		condition: {
+			duration: 5,
+			onResidualOrder: 28,
+			onResidualSubOrder: 2,
+			onStart(target) {
+				this.add('-start', target, 'ability: Slow Start');
+			},
+			onResidual(pokemon) {
+				if (!pokemon.activeTurns) {
+					this.effectState.duration! += 1;
+				}
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, pokemon) {
+				return this.chainModify(0.5);
+			},
+			onModifySpe(spe, pokemon) {
+				return this.chainModify(0.5);
+			},
+			onEnd(target) {
+				this.add('-end', target, 'Slow Start');
+			},
 		},
 		flags: {},
 		name: "Slow Start",
