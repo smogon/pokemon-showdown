@@ -761,7 +761,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			onResidualOrder: 28,
 			onResidualSubOrder: 2,
 			onResidual(pokemon) {
-				if (pokemon.ignoringAbility()) {
+				if (pokemon.hasAbility('cudchew')) {
 					this.effectState.turn += 1;
 					return;
 				}
