@@ -14,7 +14,7 @@ describe('Cud Chew', () => {
 		battle = common.createBattle([[
 			{ species: 'tauros', ability: 'cudchew', item: 'lumberry', moves: ['sleeptalk'] },
 		], [
-			{ species: 'kommoo', moves: ['toxic'] },
+			{ species: 'toxicroak', moves: ['toxic'] },
 		]]);
 		const tauros = battle.p1.active[0];
 		battle.makeChoices();
@@ -28,10 +28,10 @@ describe('Cud Chew', () => {
 	it(`should re-activate a berry flung in the previous turn, for both the attacker and the target`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'tauros', ability: 'cudchew', item: 'lumberry', moves: ['fling', 'sleeptalk'] },
-			{ species: 'wynaut', moves: ['toxic', 'sleeptalk'] },
+			{ species: 'foongus', moves: ['toxic', 'sleeptalk'] },
 		], [
 			{ species: 'farigiraf', ability: 'cudchew', moves: ['sleeptalk'] },
-			{ species: 'magikarp', moves: ['toxic', 'sleeptalk'] },
+			{ species: 'grimer', moves: ['toxic', 'sleeptalk'] },
 		]]);
 		const tauros = battle.p1.active[0];
 		const farigiraf = battle.p2.active[0];
@@ -46,10 +46,10 @@ describe('Cud Chew', () => {
 	it(`should not re-activate a berry eaten by Bug Bite, for either the attacker or the target`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'tauros', ability: 'cudchew', moves: ['bugbite', 'sleeptalk'] },
-			{ species: 'wynaut', moves: ['toxic', 'sleeptalk'] },
+			{ species: 'foongus', moves: ['toxic', 'sleeptalk'] },
 		], [
 			{ species: 'farigiraf', ability: 'cudchew', item: 'lumberry', moves: ['sleeptalk'] },
-			{ species: 'magikarp', moves: ['toxic', 'sleeptalk'] },
+			{ species: 'grimer', moves: ['toxic', 'sleeptalk'] },
 		]]);
 		const tauros = battle.p1.active[0];
 		const farigiraf = battle.p2.active[0];
@@ -66,7 +66,7 @@ describe('Cud Chew', () => {
 			{ species: 'tauros', ability: 'cudchew', item: 'lumberry', moves: ['sleeptalk'] },
 			{ species: 'wynaut', moves: ['sleeptalk'] },
 		], [
-			{ species: 'kommoo', moves: ['toxic'] },
+			{ species: 'toxicroak', moves: ['toxic'] },
 			{ species: 'magikarp', moves: ['sleeptalk'] },
 			{ species: 'mewtwo', ability: 'unnerve', moves: ['sleeptalk'] },
 		]]);
@@ -81,7 +81,7 @@ describe('Cud Chew', () => {
 		battle = common.createBattle([[
 			{ species: 'tauros', ability: 'cudchew', item: 'sitrusberry', moves: ['bellydrum'] },
 		], [
-			{ species: 'mewtwo', moves: ['toxic'] },
+			{ species: 'toxicroak', moves: ['toxic'] },
 		]]);
 		const tauros = battle.p1.active[0];
 		battle.makeChoices();
