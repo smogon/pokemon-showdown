@@ -309,7 +309,6 @@ describe('Neutralizing Gas', () => {
 		assert.equal(tauros.status, 'tox'); // 1 turn has passed
 		battle.makeChoices();
 		assert.equal(tauros.status, '');
-		console.log(battle.log);
 	});
 
 	it(`should not work if it was obtained via Transform`, () => {
