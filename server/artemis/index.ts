@@ -3,7 +3,7 @@
  */
 import { LocalClassifier } from './local';
 import { RemoteClassifier } from './remote';
-import * as ConfigLoader from './../config-loader';
+import type { SubProcessesConfig } from './../config-loader';
 
 export { LocalClassifier, RemoteClassifier };
 
@@ -12,7 +12,7 @@ export function destroy() {
 	void RemoteClassifier.PM.destroy();
 }
 
-export function start(processCount: ConfigLoader.SubProcessesConfig) {
+export function start(processCount: SubProcessesConfig) {
 	LocalClassifier.start(processCount);
 	RemoteClassifier.start(processCount);
 }

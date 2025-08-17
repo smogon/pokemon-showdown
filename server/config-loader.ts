@@ -21,7 +21,7 @@ type ProcessType = (
 	'chatdb' | 'pm' | 'modlog' | 'network' | 'simulator' | 'validator' | 'verifier'
 );
 
-type SubProcessesConfig = Partial<Record<ProcessType, number>>;
+export type SubProcessesConfig = Partial<Record<ProcessType, number>>;
 
 export type ConfigType = InputConfig & {
 	groups: { [symbol: string]: GroupInfo },

@@ -67,11 +67,14 @@ class ArtemisStream extends Streams.ObjectReadWriteStream<string> {
 	}
 }
 
-export const PM = new ProcessManager.StreamProcessManager('abusemonitor-local', module, () => new ArtemisStream(), message => {
-	if (message.startsWith('SLOW\n')) {
-		Monitor.slow(message.slice(5));
+export const PM = new ProcessManager.StreamProcessManager(
+	'abusemonitor-local', module,
+	() => new ArtemisStream(), message => {
+		if (message.startsWith('SLOW\n')) {
+			Monitor.slow(message.slice(5));
+		}
 	}
-});
+);
 
 export class LocalClassifier {
 	static readonly PM = PM;

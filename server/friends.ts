@@ -457,5 +457,5 @@ export function start(processCount: ConfigLoader.SubProcessesConfig) {
 }
 
 export function destroy() {
-	PM.destroy();
+	void PM.destroy();
 }

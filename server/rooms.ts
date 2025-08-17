@@ -45,7 +45,7 @@ import { RoomAuth } from './user-groups';
 import { type PartialModlogEntry, mainModlog } from './modlog';
 import { Replays } from './replays';
 import * as crypto from 'crypto';
-import * as ConfigLoader from 'config-loader';
+import type { SubProcessesConfig } from './config-loader';
 
 /*********************************************************
  * the Room object.
@@ -1310,7 +1310,7 @@ export class GlobalRoomState {
 		this.lastWrittenBattle = this.lastBattle;
 	}
 
-	start(processCount: ConfigLoader.SubProcessesConfig) {
+	start(processCount: SubProcessesConfig) {
 		void this.loadBattles();
 		startBattleProcesses(processCount);
 	}

@@ -70,6 +70,7 @@ export interface TriviaDatabase {
 	deleteQuestion(questionText: string): Promise<void> | void;
 	deleteLeaderboardEntry(userid: ID, leaderboard: Leaderboard): Promise<void> | void;
 	deleteSubmissions(submissions: string[]): Promise<void> | void;
+	start(): void;
 }
 
 export class TriviaSQLiteDatabase implements TriviaDatabase {
