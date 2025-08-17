@@ -2861,7 +2861,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchIn(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
-			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
+			const endingAbilities = [
+				'desolateland', 'primordialsea', 'deltastream',
+				'illusion', 'slowstart', 'flowergift', 'forecast',
+			];
 			for (const target of this.getAllActive()) {
 				if (target.hasItem('Ability Shield')) {
 					this.add('-block', target, 'item: Ability Shield');
@@ -2871,14 +2874,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (target.volatiles['commanding']) {
 					continue;
 				}
-				if (target.illusion) {
-					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
-				}
-				if (target.volatiles['slowstart']) {
-					delete target.volatiles['slowstart'];
-					this.add('-end', target, 'Slow Start', '[silent]');
-				}
-				if (strongWeathers.includes(target.getAbility().id)) {
+				if (endingAbilities.includes(target.getAbility().id)) {
 					this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
 				}
 			}
@@ -4251,8 +4247,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			pokemon.addVolatile('slowstart');
 		},
 		onEnd(pokemon) {
-			delete pokemon.volatiles['slowstart'];
-			this.add('-end', pokemon, 'Slow Start', '[silent]');
+			if (pokemon.volatiles['slowstart']) {
+				delete pokemon.volatiles['slowstart'];
+				this.add('-end', pokemon, 'Slow Start', '[silent]');
+			}
 		},
 		condition: {
 			duration: 5,
