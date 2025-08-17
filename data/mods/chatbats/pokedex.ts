@@ -384,4 +384,23 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Serene Grace" },
 		baseStats: { hp: 75, atk: 117, def: 93, spa: 117, spd: 93, spe: 128 },
 	},
+	typhlosion: {
+		inherit: true,
+		abilities: { 0: "Magic Guard" },
+	},
+	typhlosionmega: {
+		num: -998,
+		name: "Typhlosion-Mega",
+		baseSpecies: "Typhlosion",
+		forme: "Mega",
+		types: ["Fire", "Water"],
+		genderRatio: { M: 0.5, F: 0.5 },
+		baseStats: { hp: 78, atk: 103, def: 98, spa: 140, spd: 115, spe: 100 },
+		abilities: { 0: "Neutralizing Gas" },
+		heightm: 1.7,
+		weightkg: 84.5,
+		color: "Blue",
+		eggGroups: ["Field"],
+		requiredItem: "Typhlosionite",
+	},
 };
