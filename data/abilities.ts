@@ -747,7 +747,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onEnd(pokemon) {
-			delete pokemon.volatiles['cudchew'];
+			pokemon.removeVolatile('cudchew');
 		},
 		condition: {
 			noCopy: true,
@@ -775,7 +775,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					}
 					if (item.onEat) pokemon.ateBerry = true;
 				}
-				delete pokemon.volatiles['cudchew'];
+				pokemon.removeVolatile('cudchew');
 			},
 		},
 		flags: {},
