@@ -419,6 +419,7 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 	processes: T[] = [];
 	releasingProcesses: T[] = [];
 	crashedProcesses: T[] = [];
+	readonly id: string;
 	readonly filename: string;
 	readonly basename: string;
 	readonly isParentProcess: boolean;
@@ -521,7 +522,7 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 		this.spawn(count);
 		return unspawned;
 	}
-	startRepl(options: EvalType | {filename?: string, eval: EvalType}) {
+	startRepl(options: EvalType | { filename?: string, eval: EvalType }) {
 		const filename = typeof options === 'function' || !options.filename ? `${this.id}-${process.pid}` : options.filename;
 		const evalFn = typeof options === 'function' ? options : options.eval;
 		Repl.start(filename, evalFn);

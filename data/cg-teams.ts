@@ -114,13 +114,6 @@ async function updateLevels(database: SQL.DatabaseManager) {
 }
 
 export let cgtDatabase: SQLDatabaseManager;
-if (global.Config && Config.usesqlite && Config.usesqliteleveling) {
-	cgtDatabase = SQL(module, { file: './databases/battlestats.db' });
-
-	// update every 2 hours
-	void updateLevels(cgtDatabase);
-	levelUpdateInterval = setInterval(() => void updateLevels(cgtDatabase), 1000 * 60 * 60 * 2);
-}
 
 export default class TeamGenerator {
 	dex: ModdedDex;
@@ -1095,4 +1088,21 @@ export default class TeamGenerator {
 	setSeed(seed: PRNGSeed) {
 		this.prng.setSeed(seed);
 	}
+}
+
+export function start() {
+	if (!Config.usesqlite || !Config.usesqliteleveling) {
+		return;
+	}
+	cgtDatabase = SQL('cg-teams', module, { file: './databases/battlestats.db' });
+
+	// update every 2 hours
+	void updateLevels(cgtDatabase);
+	levelUpdateInterval = setInterval(() => void updateLevels(cgtDatabase), 1000 * 60 * 60 * 2);
+}
+
+export function destroy() {
+	if (!levelUpdateInterval) return;
+	clearInterval(levelUpdateInterval);
+	levelUpdateInterval = null;
 }

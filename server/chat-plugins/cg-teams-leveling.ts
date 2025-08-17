@@ -6,26 +6,26 @@
 
 import { SQL, Utils } from "../../lib";
 import { getSpeciesName } from "./randombattles/winrates";
-import { cgtDatabase } from "../../data/cg-teams";
+import { cgtDatabase, start as cgtStart, destroy as cgtDestroy } from "../../data/cg-teams";
 
 export let addPokemon: SQL.Statement | null = null;
 export let incrementWins: SQL.Statement | null = null;
 export let incrementLosses: SQL.Statement | null = null;
 export let dbSetupPromise: Promise<void> | null = null;
 
-const database = SQL('cg-teams', module, {
+const database = SQL('cg-teams-leveling', module, {
 	file: './databases/battlestats.db',
 });
 
-async function setupDatabase(database: SQL.DatabaseManager) {
-	await database.runFile('./databases/schemas/battlestats.sql');
-	addPokemon = await database.prepare(
+async function setupDatabase(db: SQL.DatabaseManager) {
+	await db.runFile('./databases/schemas/battlestats.sql');
+	addPokemon = await db.prepare(
 		'INSERT OR IGNORE INTO gen9computergeneratedteams (species_id, wins, losses, level) VALUES (?, 0, 0, ?)'
 	);
-	incrementWins = await database.prepare(
+	incrementWins = await db.prepare(
 		'UPDATE gen9computergeneratedteams SET wins = wins + 1 WHERE species_id = ?'
 	);
-	incrementLosses = await database.prepare(
+	incrementLosses = await db.prepare(
 		'UPDATE gen9computergeneratedteams SET losses = losses + 1 WHERE species_id = ?'
 	);
 }
@@ -164,4 +164,10 @@ export function start() {
 		return;
 	}
 	dbSetupPromise = setupDatabase(database);
+	cgtStart();
+}
+
+export function destroy() {
+	cgtDestroy();
+	void database.destroy();
 }

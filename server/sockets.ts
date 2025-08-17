@@ -130,8 +130,8 @@ export const Sockets = new class {
 		void worker.stream.write(`$${query}`);
 	}
 
-	start() {
-		start();
+	start(processCount: ConfigLoader.SubProcessesConfig) {
+		start(processCount);
 	}
 };
 
@@ -557,7 +557,7 @@ if (!PM.isParentProcess) {
 	if (process.env.PSNOSSL && parseInt(process.env.PSNOSSL)) Config.ssl = null;
 
 	// eslint-disable-next-line no-eval
-	PM.startRepl({filename: `sockets-${PM.workerid}-${process.pid}`, eval: cmd => eval(cmd)});
+	PM.startRepl({ filename: `sockets-${PM.workerid}-${process.pid}`, eval: cmd => eval(cmd) });
 }
 
 function start(processCount: ConfigLoader.SubProcessesConfig) {

@@ -451,30 +451,35 @@ export const commands: Chat.ChatCommands = {
  * Process manager
  *********************************************************/
 
-export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>('battlesearch', module, async data => {
-	const { userids, turnLimit, month, tierid } = data;
-	const start = Date.now();
-	try {
-		const result = await runBattleSearch(userids, month, tierid, turnLimit);
-		const elapsedTime = Date.now() - start;
-		if (elapsedTime > 10 * 60 * 1000) {
-			Monitor.slow(`[Slow battlesearch query] ${elapsedTime}ms: ${JSON.stringify(data)}`);
+export const PM = new ProcessManager.QueryProcessManager<AnyObject, AnyObject>(
+	'battlesearch', module,
+	async data => {
+		const { userids, turnLimit, month, tierid } = data;
+		const startTime = Date.now();
+		try {
+			const result = await runBattleSearch(userids, month, tierid, turnLimit);
+			const elapsedTime = Date.now() - startTime;
+			if (elapsedTime > 10 * 60 * 1000) {
+				Monitor.slow(`[Slow battlesearch query] ${elapsedTime}ms: ${JSON.stringify(data)}`);
+			}
+			return result;
+		} catch (err) {
+			Monitor.crashlog(err, 'A battle search query', {
+				userids,
+				turnLimit,
+				month,
+				tierid,
+			});
 		}
-		return result;
-	} catch (err) {
-		Monitor.crashlog(err, 'A battle search query', {
-			userids,
-			turnLimit,
-			month,
-			tierid,
-		});
+		return null;
+	},
+	BATTLESEARCH_PROCESS_TIMEOUT,
+	message => {
+		if (message.startsWith('SLOW\n')) {
+			Monitor.slow(message.slice(5));
+		}
 	}
-	return null;
-}, BATTLESEARCH_PROCESS_TIMEOUT, message => {
-	if (message.startsWith('SLOW\n')) {
-		Monitor.slow(message.slice(5));
-	}
-});
+);
 
 if (!PM.isParentProcess) {
 	ConfigLoader.ensureLoaded();
@@ -503,5 +508,5 @@ export function start(processCount: ConfigLoader.SubProcessesConfig) {
 }
 
 export function destroy() {
-	PM.destroy();
+	void PM.destroy();
 }
