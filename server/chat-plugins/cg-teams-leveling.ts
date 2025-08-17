@@ -27,10 +27,7 @@ async function setupDatabase(database: SQL.DatabaseManager) {
 }
 
 if (Config.usesqlite && Config.usesqliteleveling) {
-	const database = SQL(module, {
-		file: './databases/battlestats.db',
-	});
-	dbSetupPromise = setupDatabase(database);
+	dbSetupPromise = setupDatabase(cgtDatabase);
 }
 
 function getLevelSpeciesID(set: PokemonSet, format?: Format) {
