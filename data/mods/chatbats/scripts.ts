@@ -236,5 +236,11 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData('Learnsets', 'swanna').learnset.bleakwindstorm = ['9L1'];
 		this.modData('Learnsets', 'swanna').learnset.steameruption = ['9L1'];
 		this.modData('Learnsets', 'swanna').learnset.flyby = ['9L1'];
+
+		this.modData('Learnsets', 'typhlosion').learnset.heatsink = ['9L1'];
+		this.modData('Learnsets', 'typhlosion').learnset.steameruption = ['9L1'];
+		this.modData('Learnsets', 'typhlosion').learnset.matchagotcha = ['9L1'];
+		this.modData('Learnsets', 'typhlosion').learnset.calmmind = ['9L1'];
+		this.modData('Learnsets', 'typhlosion').learnset.morningsun = ['9L1'];
 	},
 };
