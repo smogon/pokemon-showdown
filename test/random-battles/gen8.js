@@ -10,7 +10,11 @@ describe('[Gen 8] Random Battle (slow)', () => {
 	const options = { format: 'gen8randombattle' };
 	const dataJSON = require(`../../dist/data/random-battles/gen8/data.json`);
 	const dex = Dex.forFormat(options.format);
-	const generator = Teams.getGenerator(options.format);
+	let generator;
+
+	before(() => {
+		generator = Teams.getGenerator(options.format);
+	});
 
 	it('All moves on all sets should be obtainable', () => {
 		const rounds = 500;
