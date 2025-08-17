@@ -878,11 +878,13 @@ export class RoomBattle extends RoomGame<RoomBattlePlayer> {
 		if (winner && !winner.registered) {
 			this.room.sendUser(winner, '|askreg|' + winner.id);
 		}
+		const p1 = this.p1.name;
+		const p2 = this.p2.name;
 		const [score, p1rating, p2rating] = await Ladders(this.ladder).updateRating(
-			this.p1.name, this.p2.name, p1score, this.room
+			p1, p2, p1score, this.room
 		);
 		void this.logBattle(score, p1rating, p2rating);
-		Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [this.p1.id, this.p2.id]);
+		Chat.runHandlers('onBattleRanked', this, winnerid, [p1rating, p2rating], [p1, p2].map(toID));
 	}
 	async logBattle(
 		p1score: number, p1rating: AnyObject | null = null, p2rating: AnyObject | null = null,
