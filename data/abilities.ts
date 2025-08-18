@@ -2869,8 +2869,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				const ability = target.getAbility();
 				if (ability.id === 'neutralizinggas') continue;
 				if (ability.flags['cantsuppress']) continue;
-				// Cud Chew, Flash Fire, Protosynthesis, Quark Drive, Unburden should not clear their condition
-				if (target.volatiles[ability.id] && ability.id !== 'slowstart') continue;
+				// Flash Fire, Protosynthesis, Quark Drive, Unburden should not clear their condition
+				if (target.volatiles[ability.id]) continue;
 				this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
 			}
 		},
@@ -3475,30 +3475,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
-				if (this.effectState.bestStat !== 'atk' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'atk' || !pokemon.hasAbility('protosynthesis')) return;
 				this.debug('Protosynthesis atk boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifyDefPriority: 6,
 			onModifyDef(def, pokemon) {
-				if (this.effectState.bestStat !== 'def' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'def' || !pokemon.hasAbility('protosynthesis')) return;
 				this.debug('Protosynthesis def boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(spa, pokemon) {
-				if (this.effectState.bestStat !== 'spa' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spa' || !pokemon.hasAbility('protosynthesis')) return;
 				this.debug('Protosynthesis spa boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpDPriority: 6,
 			onModifySpD(spd, pokemon) {
-				if (this.effectState.bestStat !== 'spd' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spd' || !pokemon.hasAbility('protosynthesis')) return;
 				this.debug('Protosynthesis spd boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpe(spe, pokemon) {
-				if (this.effectState.bestStat !== 'spe' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spe' || !pokemon.hasAbility('protosynthesis')) return;
 				this.debug('Protosynthesis spe boost');
 				return this.chainModify(1.5);
 			},
@@ -3611,30 +3611,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
-				if (this.effectState.bestStat !== 'atk' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'atk' || !pokemon.hasAbility('quarkdrive')) return;
 				this.debug('Quark Drive atk boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifyDefPriority: 6,
 			onModifyDef(def, pokemon) {
-				if (this.effectState.bestStat !== 'def' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'def' || !pokemon.hasAbility('quarkdrive')) return;
 				this.debug('Quark Drive def boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(spa, pokemon) {
-				if (this.effectState.bestStat !== 'spa' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spa' || !pokemon.hasAbility('quarkdrive')) return;
 				this.debug('Quark Drive spa boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpDPriority: 6,
 			onModifySpD(spd, pokemon) {
-				if (this.effectState.bestStat !== 'spd' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spd' || !pokemon.hasAbility('quarkdrive')) return;
 				this.debug('Quark Drive spd boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpe(spe, pokemon) {
-				if (this.effectState.bestStat !== 'spe' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spe' || !pokemon.hasAbility('quarkdrive')) return;
 				this.debug('Quark Drive spe boost');
 				return this.chainModify(1.5);
 			},
@@ -5178,7 +5178,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		condition: {
 			onModifySpe(spe, pokemon) {
-				if (!pokemon.item && !pokemon.ignoringAbility()) {
+				if (!pokemon.item && pokemon.hasAbility('unburden')) {
 					return this.chainModify(2);
 				}
 			},
