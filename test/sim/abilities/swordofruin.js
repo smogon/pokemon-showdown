@@ -67,7 +67,7 @@ describe(`Sword of Ruin`, () => {
 		battle.makeChoices();
 		damage = hp - wynaut.hp;
 		assert.bounded(damage, [120, 142]);
-	
+
 		battle.makeChoices('move recover', 'switch weavile');
 
 		hp = wynaut.hp;
