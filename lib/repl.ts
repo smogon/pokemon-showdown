@@ -123,9 +123,13 @@ export const Repl = new class {
 	 * parameter is passed in because there is no other way to access a file's
 	 * non-global context.
 	 */
-	start(filename: string, evalFunction: (input: string) => any) {
+	start(filename: string, evalFunction: EvalType) {
 		const config = typeof Config !== 'undefined' ? Config : {};
 		if (!config.repl) return;
+		// eslint-disable-next-line no-eval
+		if (evalFunction === eval) {
+			throw new TypeError(`Expected 'evalFunction' to be a wrapper around direct eval.`);
+		}
 
 		// TODO: Windows does support the REPL when using named pipes. For now,
 		// this only supports UNIX sockets.
