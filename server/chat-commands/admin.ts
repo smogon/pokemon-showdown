@@ -829,6 +829,7 @@ export const commands: Chat.ChatCommands = {
 				this.sendReply("Hotpatching modlog...");
 
 				void Rooms.Modlog.restart();
+				// eslint-disable-next-line @typescript-eslint/await-thenable
 				await Rooms.Modlog.readyPromise;
 				this.sendReply("DONE");
 			} else if (target.startsWith('disable')) {
