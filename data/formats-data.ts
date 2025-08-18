@@ -1698,7 +1698,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	torchic: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	combusken: {
 		tier: "NFE",
