@@ -188,8 +188,7 @@ global.TeamValidatorAsync = TeamValidatorAsync;
  * Start up the REPL server
  *********************************************************/
 
-// eslint-disable-next-line no-eval
-Repl.start('app', cmd => eval(cmd));
+Repl.startGlobal('app');
 
 /*********************************************************
  * Fully initialized, run startup hook
