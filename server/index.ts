@@ -133,10 +133,7 @@ function setupGlobals() {
 export const readyPromise = cleanupStale().then(() => {
 	setupGlobals();
 }).then(() => {
-	if (Config.usesqlite) {
-		require('./modlog').start(Config.subprocessescache);
-	}
-
+	require('./modlog').start(Config.subprocessescache);
 	Rooms.global.start(Config.subprocessescache);
 	Verifier.start(Config.subprocessescache);
 	TeamValidatorAsync.start(Config.subprocessescache);
@@ -174,8 +171,7 @@ export const readyPromise = cleanupStale().then(() => {
 	 * Start up the REPL server
 	 *********************************************************/
 
-	// eslint-disable-next-line no-eval
-	Repl.start('app', cmd => eval(cmd));
+	Repl.startGlobal('app');
 
 	/*********************************************************
 	 * Fully initialized, run startup hook
