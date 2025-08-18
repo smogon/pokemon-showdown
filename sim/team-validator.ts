@@ -2723,7 +2723,6 @@ export class TeamValidator {
 			}
 			if (canUseHomeRelearner) {
 				const learnsetData = this.getExternalLearnsetData(species.id, 'gen8bdsp');
-				console.log(learnsetData);
 				if (learnsetData?.learnset?.[move.id]) {
 					for (const source of learnsetData.learnset[move.id]) {
 						// Non-event sources from BDSP should always be legal through HOME relearner,
