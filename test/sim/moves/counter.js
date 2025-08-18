@@ -85,6 +85,20 @@ describe('Counter', () => {
 		battle.makeChoices('auto', 'move sleeptalk, move dragonclaw 1');
 		assert.equal(wynaut.maxhp, wynaut.hp);
 	});
+
+	it(`should redirect if the damaging Pokemon fainted`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Drifblim", moves: ['explosion'] },
+			{ species: "Weedle", item: 'focussash', moves: ['sleeptalk'] },
+		], [
+			{ species: "Eiscue", moves: ['protect'] },
+			{ species: "Snorlax", moves: ['counter'] },
+		]]);
+
+		battle.makeChoices();
+		console.log(battle.log);
+		assert.fainted(battle.p1.active[1]);
+	});
 });
 
 describe('Mirror Coat', () => {
@@ -166,6 +180,18 @@ describe('Mirror Coat', () => {
 		const wynaut = battle.p2.active[0];
 		battle.makeChoices('auto', 'move sleeptalk, move dragonpulse 1');
 		assert.equal(wynaut.maxhp, wynaut.hp);
+	});
+
+	it(`should redirect if the damaging Pokemon fainted`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: "Shedinja", moves: ['flamethrower'] },
+			{ species: "Bastiodon", moves: ['sleeptalk'] },
+		], [
+			{ species: "Slowking", moves: ['flamethrower'] },
+			{ species: "Snorlax", moves: ['mirrorcoat'] },
+		]]);
+
+		assert.hurts(battle.p1.active[1], () => battle.makeChoices('move 1 2, move 1', 'move 1 1, move 1'));
 	});
 });
 

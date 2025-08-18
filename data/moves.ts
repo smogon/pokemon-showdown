@@ -3121,7 +3121,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onRedirectTarget(target, source, source2, move) {
 				if (move.id !== 'counter') return;
 				if (source !== this.effectState.target || !this.effectState.slot) return;
-				return this.getAtSlot(this.effectState.slot);
+				const possibleTarget = this.getAtSlot(this.effectState.slot);
+				if (!possibleTarget.fainted) return possibleTarget;
 			},
 			onDamagingHit(damage, target, source, move) {
 				if (!source.isAlly(target) && this.getCategory(move) === 'Physical') {
@@ -12459,7 +12460,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			onRedirectTarget(target, source, source2, move) {
 				if (move.id !== 'mirrorcoat') return;
 				if (source !== this.effectState.target || !this.effectState.slot) return;
-				return this.getAtSlot(this.effectState.slot);
+				const possibleTarget = this.getAtSlot(this.effectState.slot);
+				if (!possibleTarget.fainted) return possibleTarget;
 			},
 			onDamagingHit(damage, target, source, move) {
 				if (!source.isAlly(target) && this.getCategory(move) === 'Special') {
