@@ -741,42 +741,27 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	cudchew: {
 		onEatItem(item, pokemon, source, effect) {
-			if (item.isBerry && (!effect || !['bugbite', 'pluck'].includes(effect.id)) &&
-				pokemon.addVolatile('cudchew')) {
-				pokemon.volatiles['cudchew'].berry = item;
+			if (item.isBerry && (!effect || !['bugbite', 'pluck'].includes(effect.id))) {
+				this.effectState.counter = 2;
+				this.effectState.berry = item;
 			}
 		},
-		onEnd(pokemon) {
-			pokemon.removeVolatile('cudchew');
-		},
-		condition: {
-			noCopy: true,
-			onStart() {
-				// We have to use the turn because the effect may be set during residuals and the counter will not advance
-				this.effectState.turn = this.turn;
-			},
-			onRestart() {
-				this.effectState.turn = this.turn;
-			},
-			onResidualOrder: 28,
-			onResidualSubOrder: 2,
-			onResidual(pokemon) {
-				if (!pokemon.hasAbility('cudchew')) {
-					this.effectState.turn += 1;
-					return;
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (typeof this.effectState.counter !== 'number') return;
+
+			this.effectState.counter--;
+			if (!this.effectState.counter && pokemon.hp) {
+				const item = this.effectState.berry;
+				this.add('-activate', pokemon, 'ability: Cud Chew');
+				this.add('-enditem', pokemon, item.name, '[eat]');
+				if (this.singleEvent('Eat', item, null, pokemon, null, null)) {
+					this.runEvent('EatItem', pokemon, null, null, item);
 				}
-				if (this.effectState.turn === this.turn) return;
-				if (pokemon.hp) {
-					const item = this.effectState.berry;
-					this.add('-activate', pokemon, 'ability: Cud Chew');
-					this.add('-enditem', pokemon, item.name, '[eat]');
-					if (this.singleEvent('Eat', item, null, pokemon, null, null)) {
-						this.runEvent('EatItem', pokemon, null, null, item);
-					}
-					if (item.onEat) pokemon.ateBerry = true;
-				}
-				pokemon.removeVolatile('cudchew');
-			},
+				if (item.onEat) pokemon.ateBerry = true;
+				delete this.effectState.counter;
+			}
 		},
 		flags: {},
 		name: "Cud Chew",
