@@ -824,7 +824,7 @@ export const pages: Chat.PageTable = {
 };
 
 export function start() {
-	if (Config.usepostgres) {
+	if (Config.usepostgres && Config.usepostgresteams) {
 		teamsDB = new PGDatabase(Config.usepostgres);
 		teamsTable = teamsDB.getTable<StoredTeam>('teams', 'teamid');
 	}
