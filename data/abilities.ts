@@ -744,11 +744,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (item.isBerry && (!effect || !['bugbite', 'pluck'].includes(effect.id))) {
 				this.effectState.berry = item;
 				this.effectState.counter = 2;
-				/**
-				 * This is needed in case the berry was eaten during residuals, preventing the timer
-				 * from decreasing this turn.
-				 * Ideally, this should be fixed by adding it to the residuals list that is being processed.
-				 */
+				// This is needed in case the berry was eaten during residuals, preventing the timer from decreasing this turn
 				if (!this.queue.peek()) this.effectState.counter--;
 			}
 		},
