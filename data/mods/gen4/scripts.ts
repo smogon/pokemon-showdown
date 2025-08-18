@@ -119,7 +119,9 @@ export const Scripts: ModdedBattleScriptsData = {
 			const hitResults = this.battle.runEvent('Invulnerability', targets, pokemon, move);
 			for (const [i, target] of targets.entries()) {
 				if (hitResults[i] === false) {
-					if (!move.spreadHit) this.battle.attrLastMove('[miss]');
+					if (!move.spreadHit && !move.flags['futuremove']) {
+						this.battle.attrLastMove('[miss]');
+					}
 					this.battle.add('-miss', pokemon, target);
 				}
 			}
