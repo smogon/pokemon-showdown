@@ -163,8 +163,9 @@ export const readyPromise = cleanupStale().then(() => {
 		});
 
 		process.on('unhandledRejection', err => {
-			// TODO: rejections are not crashes,
-			// and unhandled rejections are not (always) bugs
+			// TODO:
+			// - Compability with https://nodejs.org/api/cli.html#cli_unhandled_rejections_mode
+			// - Crashlogger API for reporting rejections vs exceptions
 			Monitor.crashlog(err as any, 'A main process Promise');
 		});
 	}
