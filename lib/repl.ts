@@ -101,6 +101,8 @@ export const Repl = new class {
 		if (!config.repl) return;
 		// eslint-disable-next-line no-eval
 		if (evalFunction === eval) {
+			// Direct eval is most useful for debugging,  but
+			// nothing prevents consumers from wrapping indirect eval if required (see startGlobal).
 			throw new TypeError(`Expected 'evalFunction' to be a wrapper around direct eval.`);
 		}
 
@@ -154,5 +156,13 @@ export const Repl = new class {
 		} catch (err) {
 			console.error(`Could not start REPL server "${filename}": ${err}`);
 		}
+	}
+
+	startGlobal(filename: string) {
+		/* eslint-disable no-eval */
+		/* eslint-disable no-sequences */
+		return this.start(filename, (script: string) => ((0, eval)(script)));
+		/* eslint-enable no-sequences */
+		/* eslint-enable no-eval */
 	}
 };
