@@ -160,9 +160,7 @@ export const Repl = new class {
 
 	startGlobal(filename: string) {
 		/* eslint-disable no-eval */
-		/* eslint-disable no-sequences */
 		return this.start(filename, (script: string) => ((0, eval)(script)));
-		/* eslint-enable no-sequences */
 		/* eslint-enable no-eval */
 	}
 };
