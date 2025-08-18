@@ -106,3 +106,9 @@ if (!PM.isParentProcess) {
 export function start(processCount: ConfigLoader.SubProcessesConfig) {
 	PM.spawn(processCount['validator'] ?? 1);
 }
+
+export function destroy() {
+	// No need to destroy the PM under normal circumstances, since
+	// hotpatching uses PM.respawn()
+	void PM.destroy();
+}
