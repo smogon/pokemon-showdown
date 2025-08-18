@@ -742,15 +742,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	cudchew: {
 		onEatItem(item, pokemon, source, effect) {
 			if (item.isBerry && (!effect || !['bugbite', 'pluck'].includes(effect.id))) {
-				this.effectState.counter = 2;
 				this.effectState.berry = item;
+				this.effectState.counter = 2;
+				/**
+				 * This is needed in case the berry was eaten during residuals, preventing the timer
+				 * from decreasing this turn.
+				 * Ideally, this should be fixed by adding it to the residuals list that is being processed.
+				 */
+				if (!this.queue.peek()) this.effectState.counter--;
 			}
 		},
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (typeof this.effectState.counter !== 'number') return;
-
+			if (!this.effectState.berry) return;
 			this.effectState.counter--;
 			if (!this.effectState.counter && pokemon.hp) {
 				const item = this.effectState.berry;
@@ -760,6 +765,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 					this.runEvent('EatItem', pokemon, null, null, item);
 				}
 				if (item.onEat) pokemon.ateBerry = true;
+				delete this.effectState.berry;
 				delete this.effectState.counter;
 			}
 		},
@@ -4228,34 +4234,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	slowstart: {
 		onStart(pokemon) {
-			pokemon.addVolatile('slowstart');
+			this.add('-start', pokemon, 'ability: Slow Start');
+			this.effectState.counter = 5;
 		},
-		onEnd(pokemon) {
-			delete pokemon.volatiles['slowstart'];
-			this.add('-end', pokemon, 'Slow Start', '[silent]');
-		},
-		condition: {
-			duration: 5,
-			onResidualOrder: 28,
-			onResidualSubOrder: 2,
-			onStart(target) {
-				this.add('-start', target, 'ability: Slow Start');
-			},
-			onResidual(pokemon) {
-				if (!pokemon.activeTurns) {
-					this.effectState.duration! += 1;
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns && this.effectState.counter) {
+				this.effectState.counter--;
+				if (!this.effectState.counter) {
+					this.add('-end', pokemon, 'Slow Start');
+					delete this.effectState.counter;
 				}
-			},
-			onModifyAtkPriority: 5,
-			onModifyAtk(atk, pokemon) {
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (this.effectState.counter) {
 				return this.chainModify(0.5);
-			},
-			onModifySpe(spe, pokemon) {
+			}
+		},
+		onModifySpe(spe, pokemon) {
+			if (this.effectState.counter) {
 				return this.chainModify(0.5);
-			},
-			onEnd(target) {
-				this.add('-end', target, 'Slow Start');
-			},
+			}
 		},
 		flags: {},
 		name: "Slow Start",

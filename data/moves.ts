@@ -5958,7 +5958,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			this.debug(`BP: ${move.basePower}`);
 			if (item.isBerry) {
 				if (source.hasAbility('cudchew')) {
-					((source.getAbility() as any).onEatItem as (i: Item, p: Pokemon) => void).call(this, item, source);
+					this.singleEvent('EatItem', source.getAbility(), source.abilityState, source, source, move, item);
 				}
 				move.onHit = function (foe) {
 					if (this.singleEvent('Eat', item, source.itemState, foe, source, move)) {
