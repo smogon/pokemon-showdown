@@ -814,23 +814,23 @@ export const commands: Chat.ChatCommands = {
 				void IPTools.loadHostsAndRanges();
 				this.sendReply("DONE");
 			} else if (target === 'modlog') {
+				if (!Config.usesqlite) {
+					throw new Chat.ErrorMessage(`The moderator log is not available because SQLite is disabled.`);
+				}
+				if (!Config.usesqlitemodlog) {
+					throw new Chat.ErrorMessage(`The moderator log is not available because of the server configuration.`);
+				}
 				if (lock['modlog']) {
 					throw new Chat.ErrorMessage(`Hot-patching modlogs has been disabled by ${lock['modlog'].by} (${lock['modlog'].reason})`);
 				}
+				if (Rooms.Modlog.readyPromise) {
+					throw new Chat.ErrorMessage(`There is already a hotpatch in progress.`);
+				}
 				this.sendReply("Hotpatching modlog...");
 
-				void Rooms.Modlog.database.destroy();
-				const { mainModlog, start: startModlog } = require('../modlog');
-				startModlog();
-				if (mainModlog.readyPromise) {
-					this.sendReply("Waiting for the new SQLite database to be ready...");
-					await mainModlog.readyPromise;
-				} else {
-					this.sendReply("The new SQLite database is ready!");
-				}
-				Rooms.Modlog.destroyAllSQLite();
-
-				Rooms.Modlog = mainModlog;
+				void Rooms.Modlog.restart();
+				// eslint-disable-next-line @typescript-eslint/await-thenable
+				await Rooms.Modlog.readyPromise;
 				this.sendReply("DONE");
 			} else if (target.startsWith('disable')) {
 				this.sendReply("Disabling hot-patch has been moved to its own command:");
