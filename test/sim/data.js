@@ -283,7 +283,6 @@ describe('Dex data', () => {
 
 				if (entry.eventData) {
 					for (const [i, eventEntry] of entry.eventData.entries()) {
-						// if (eventEntry.generation > mod.gen) continue;
 						if (eventEntry.moves) {
 							const learned = `${eventEntry.generation}S${i}`;
 							for (const eventMove of eventEntry.moves) {
