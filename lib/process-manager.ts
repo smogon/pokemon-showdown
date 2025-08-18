@@ -518,6 +518,7 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 	}
 	respawn(count: number | null = null) {
 		if (count === null) count = this.processes.length;
+		if (count === 0) throw new Error(`${this.id} is not using multiple processes.`);
 		const unspawned = this.unspawn();
 		this.spawn(count);
 		return unspawned;
