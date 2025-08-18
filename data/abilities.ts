@@ -379,23 +379,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	beadsofruin: {
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Beads of Ruin');
-			this.field.addPseudoWeather('beadsofruin', pokemon, this.effect);
+			this.field.addSourcedPseudoWeather('beadsofruin', pokemon, this.effect);
 		},
 		onEnd(pokemon) {
-			if (this.field.pseudoWeather['beadsofruin']?.source !== pokemon) return;
-			for (const target of this.getAllActive()) {
-				if (target === pokemon) continue;
-				if (target.hasAbility('beadsofruin')) {
-					this.field.weatherState.source = target;
-					return;
-				}
-			}
-			this.field.removePseudoWeather('beadsofruin');
+			this.field.removePseudoWeatherSource('beadsofruin', pokemon);
 		},
-		onModifySpD(spd, target, source, move) {
-			if (target.hasAbility('Beads of Ruin')) return;
-			this.debug('Beads of Ruin SpD drop');
-			return this.chainModify(0.75);
+		condition: {
+			onModifySpD(spd, target, source, move) {
+				if (this.field.pseudoWeather['beadsofruin'].activeSources.includes(target)) return;
+				this.debug('Beads of Ruin SpD drop');
+				return this.chainModify(0.75);
+			},
 		},
 		flags: { breakable: 1 },
 		name: "Beads of Ruin",
@@ -4775,22 +4769,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	swordofruin: {
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Sword of Ruin');
-			this.field.addPseudoWeather('swordofruin', pokemon, this.effect);
+			this.field.addSourcedPseudoWeather('swordofruin', pokemon, this.effect);
 		},
 		onEnd(pokemon) {
-			if (this.field.pseudoWeather['swordofruin']?.source !== pokemon) return;
-			for (const target of this.getAllActive()) {
-				if (target === pokemon) continue;
-				if (target.hasAbility('swordofruin')) {
-					this.field.weatherState.source = target;
-					return;
-				}
-			}
-			this.field.removePseudoWeather('swordofruin');
+			this.field.removePseudoWeatherSource('swordofruin', pokemon);
 		},
 		condition: {
-			onModifyDef(relayVar, target, source, move) {
-				if (target.hasAbility('Sword of Ruin')) return;
+			onModifyDef(def, target, source, move) {
+				if (this.field.pseudoWeather['swordofruin'].activeSources.includes(target)) return;
 				this.debug('Sword of Ruin Def drop');
 				return this.chainModify(0.75);
 			},
@@ -4803,22 +4789,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	tabletsofruin: {
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Tablets of Ruin');
-			this.field.addPseudoWeather('tabletsofruin', pokemon, this.effect);
+			this.field.addSourcedPseudoWeather('tabletsofruin', pokemon, this.effect);
 		},
 		onEnd(pokemon) {
-			if (this.field.pseudoWeather['tabletsofruin']?.source !== pokemon) return;
-			for (const target of this.getAllActive()) {
-				if (target === pokemon) continue;
-				if (target.hasAbility('tabletsofruin')) {
-					this.field.weatherState.source = target;
-					return;
-				}
-			}
-			this.field.removePseudoWeather('tabletsofruin');
+			this.field.removePseudoWeatherSource('tabletsofruin', pokemon);
 		},
 		condition: {
-			onModifyAtk(atk, source, target, move) {
-				if (source.hasAbility('Tablets of Ruin')) return;
+			onModifyAtk(atk, target, source, move) {
+				if (this.field.pseudoWeather['tabletsofruin'].activeSources.includes(target)) return;
 				this.debug('Tablets of Ruin Atk drop');
 				return this.chainModify(0.75);
 			},
@@ -5233,22 +5211,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	vesselofruin: {
 		onStart(pokemon) {
 			this.add('-ability', pokemon, 'Vessel of Ruin');
-			this.field.addPseudoWeather('vesselofruin', pokemon, this.effect);
+			this.field.addSourcedPseudoWeather('vesselofruin', pokemon, this.effect);
 		},
 		onEnd(pokemon) {
-			if (this.field.pseudoWeather['vesselofruin']?.source !== pokemon) return;
-			for (const target of this.getAllActive()) {
-				if (target === pokemon) continue;
-				if (target.hasAbility('vesselofruin')) {
-					this.field.weatherState.source = target;
-					return;
-				}
-			}
-			this.field.removePseudoWeather('vesselofruin');
+			this.field.removePseudoWeatherSource('vesselofruin', pokemon);
 		},
 		condition: {
-			onModifySpA(spa, source, target, move) {
-				if (source.hasAbility('Vessel of Ruin')) return;
+			onModifySpA(spa, target, source, move) {
+				if (this.field.pseudoWeather['vesselofruin'].activeSources.includes(target)) return;
 				this.debug('Vessel of Ruin SpA drop');
 				return this.chainModify(0.75);
 			},

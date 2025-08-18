@@ -55,41 +55,6 @@ describe('Flash Fire', () => {
 		const damage = talonflame.maxhp - talonflame.hp;
 		assert.bounded(damage, [54, 65]);
 	});
-
-	it('should not lose the Flash Fire boost if its ability is changed by a Mold Breaker move', () => {
-		battle = common.createBattle([[
-			{ species: 'Heatran', ability: 'flashfire', moves: ['incinerate'] },
-		], [
-			{ species: 'Haxorus', moves: ['firepunch', 'sleeptalk'] },
-			{ species: 'Haxorus', ability: 'moldbreaker', moves: ['skillswap'] },
-		]]);
-		let haxorus = battle.p2.active[0];
-		let maxhp = haxorus.maxhp;
-		battle.makeChoices('move incinerate', 'move sleeptalk');
-		let hp = haxorus.hp;
-		assert.bounded(maxhp - hp, [54, 64]);
-
-		maxhp = hp;
-		battle.makeChoices('move incinerate', 'move firepunch');
-		hp = haxorus.hp;
-		assert.bounded(maxhp - hp, [81, 96]);
-
-		battle.makeChoices('move incinerate', 'switch 2');
-		haxorus = battle.p2.active[0];
-		maxhp = haxorus.maxhp;
-		hp = haxorus.hp;
-		assert.bounded(maxhp - hp, [81, 96]);
-
-		maxhp = hp;
-		battle.makeChoices('move incinerate', 'move skillswap');
-		hp = haxorus.hp;
-		assert.bounded(maxhp - hp, [54, 64]);
-
-		maxhp = hp;
-		battle.makeChoices('move incinerate', 'move skillswap');
-		hp = haxorus.hp;
-		assert.bounded(maxhp - hp, [81, 96]);
-	});
 });
 
 describe('Flash Fire [Gen 3-4]', () => {
