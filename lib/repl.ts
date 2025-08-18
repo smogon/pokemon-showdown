@@ -16,6 +16,8 @@ import { crashlogger } from './crashlogger';
 import { FS } from './fs';
 declare const Config: any;
 
+export type EvalType = (script: string) => unknown;
+
 export const Repl = new class {
 	/**
 	 * Contains the pathnames of all active REPL sockets.
