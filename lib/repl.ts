@@ -47,6 +47,8 @@ async function runParallelWithLimit(items: string[], max: number, fn: (item: str
 	return Promise.all(results);
 }
 
+export type EvalType = (script: string) => unknown;
+
 export const Repl = new class {
 	/**
 	 * Contains the pathnames of all active REPL sockets.
