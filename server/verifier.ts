@@ -42,3 +42,9 @@ if (!PM.isParentProcess) {
 export function start(processCount: ConfigLoader.SubProcessesConfig) {
 	PM.spawn(processCount['verifier'] ?? 1);
 }
+
+export function destroy() {
+	// No need to destroy the PM under normal circumstances.
+	// A potential exception is graceful shutdown.
+	void PM.destroy();
+}
