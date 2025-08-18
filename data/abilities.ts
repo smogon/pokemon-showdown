@@ -2870,7 +2870,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (ability.id === 'neutralizinggas') continue;
 				if (ability.flags['cantsuppress']) continue;
 				// Cud Chew, Flash Fire, Protosynthesis, Quark Drive, Unburden should not clear their condition
-				if (target.volatiles[ability.id] && !target.volatiles[ability.id].duration) continue;
+				if (target.volatiles[ability.id] && ability.id !== 'slowstart') continue;
 				this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
 			}
 		},
