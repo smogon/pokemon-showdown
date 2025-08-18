@@ -1210,4 +1210,36 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "Protect. If contact: set Sticky Web.",
 		shortDesc: "Protect. If contact: set Sticky Web.",
 	},
+	heatsink: {
+		num: -1007,
+		accuracy: 100,
+		basePower: 80,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Fire Spin', target);
+			this.add('-anim', source, 'Bitter Blade', target);
+		},
+		onHit(target, source, move) {
+			let damage = this.actions.getDamage(source, target, move);
+			if (target.status === "brn") {
+				this.heal(Math.ceil(damage * 0.75), source, target, 'drain');
+			} else {
+				this.heal(Math.ceil(damage * 0.5), source, target, 'drain');
+			}
+		},
+		category: "Special",
+		name: "Heat Sink",
+		pp: 20,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+		zMove: { basePower: 160 },
+		contestType: "Clever",
+		desc: "50% drain. 75% drain instead if target is Burned.",
+		shortDesc: "Power doubles if the target is Burned.",
+	},
 };
