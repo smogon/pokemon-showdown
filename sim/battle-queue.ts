@@ -92,7 +92,7 @@ export interface FieldAction {
 /** A generic action done by a single pokemon */
 export interface PokemonAction {
 	/** action type */
-	choice: 'megaEvo' | 'megaEvoX' | 'megaEvoY' | 'shift' | 'runSwitch' | 'event' | 'runDynamax' | 'terastallize';
+	choice: 'megaEvo' | 'megaEvoX' | 'megaEvoY' | 'shift' | 'runSwitch' | 'event' | 'runDynamax' | 'terastallize' | 'berry';
 	/** priority of the action (lower first) */
 	priority: number;
 	/** speed of pokemon doing action (higher first if priority tie) */
@@ -174,6 +174,7 @@ export class BattleQueue {
 				revivalblessing: 6,
 
 				runSwitch: 101,
+				berry: 102, // Gen 4 Berries
 				switch: 103,
 				megaEvo: 104,
 				megaEvoX: 104,

@@ -45,4 +45,18 @@ describe('Jaboca Berry', () => {
 		assert.fullHP(battle.p1.active[0]);
 		assert.holdsItem(battle.p2.active[0]);
 	});
+
+	describe(`[Gen 4]`, () => {
+		it(`should activate after a physical move before an insta switch`, () => {
+			// the behavior is the same in Gen 4, this is just to ensure it works correctly
+			battle = common.gen(4).createBattle([[
+				{ species: "Charizard", evs: { hp: 252 }, moves: ['u-turn'] },
+				{ species: 'Togekiss', moves: ['sleeptalk'] },
+			], [
+				{ species: "Cramorant", item: 'jabocaberry', moves: ['sleeptalk'] },
+			]]);
+			const charizard = battle.p1.active[0];
+			assert.hurtsBy(charizard, charizard.maxhp / 8, () => battle.makeChoices());
+		});
+	});
 });

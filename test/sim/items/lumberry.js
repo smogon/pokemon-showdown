@@ -38,4 +38,32 @@ describe('Lum Berry', () => {
 		assert.equal(attacker.status, '');
 		assert(attacker.volatiles['confusion']);
 	});
+
+	describe('[Gen 4]', () => {
+		it('should heal a non-volatile status condition', () => {
+			battle = common.gen(4).createBattle({ forceRandomChance: true }, [[
+				{ species: 'Deoxys', item: 'lumberry', moves: ['tackle'] },
+			], [
+				{ species: 'Nidoqueen', ability: 'poisonpoint', moves: ['sleeptalk'] },
+			]]);
+			const deoxys = battle.p1.active[0];
+			battle.makeChoices();
+			assert.equal(deoxys.status, '');
+		});
+
+		it('should not activate before an insta switch', () => {
+			battle = common.gen(4).createBattle({ forceRandomChance: true }, [[
+				{ species: 'Deoxys', item: 'lumberry', moves: ['u-turn'] },
+				{ species: 'Togekiss', moves: ['sleeptalk'] },
+			], [
+				{ species: 'Nidoqueen', ability: 'poisonpoint', moves: ['sleeptalk'] },
+			]]);
+			const deoxys = battle.p1.active[0];
+			battle.makeChoices();
+			battle.makeChoices();
+			assert.equal(deoxys.status, 'psn');
+			battle.makeChoices('switch 2', 'move sleeptalk');
+			assert.equal(deoxys.status, '');
+		});
+	});
 });
