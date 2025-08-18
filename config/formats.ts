@@ -522,6 +522,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						(randomFoe as any).baseMoveSlots = randomFoe.moveSlots.slice();
 						randomFoe.teraType = 'Fire';
 						(randomFoe as any).level = 80;
+						randomFoe.details = randomFoe.getUpdatedDetails();
 					}
 				}
 			}
