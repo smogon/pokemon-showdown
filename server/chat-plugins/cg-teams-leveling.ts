@@ -6,7 +6,7 @@
 
 import { type SQL, Utils } from "../../lib";
 import { cgtDatabase, start as cgtStart, destroy as cgtDestroy } from "../../data/cg-teams";
-import { getSpeciesIdCGT as getLevelSpeciesID } from "./randombattles/util";
+import { getSpeciesIdCGT as getLevelSpeciesID } from "../../sim/random-battles";
 
 export let addPokemon: SQL.Statement | null = null;
 export let incrementWins: SQL.Statement | null = null;

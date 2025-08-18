@@ -36,7 +36,7 @@
 import type { SQLDatabaseManager } from '../lib/sql';
 import { Dex, PRNG, SQL } from '../sim';
 import type { EventMethods } from '../sim/dex-conditions';
-import { getSpeciesIdCGT as getLevelSpeciesID } from "./../server/chat-plugins/randombattles/util";
+import { getSpeciesIdCGT as getLevelSpeciesID } from "./../sim/random-battles";
 import {
 	ABILITY_MOVE_BONUSES,
 	ABILITY_MOVE_TYPE_BONUSES,
