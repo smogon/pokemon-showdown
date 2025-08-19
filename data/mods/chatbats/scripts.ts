@@ -242,5 +242,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData('Learnsets', 'typhlosion').learnset.matchagotcha = ['9L1'];
 		this.modData('Learnsets', 'typhlosion').learnset.calmmind = ['9L1'];
 		this.modData('Learnsets', 'typhlosion').learnset.morningsun = ['9L1'];
+
+		this.modData('Learnsets', 'terapagos').learnset.nastyplot = ['9L1'];
 	},
 };
