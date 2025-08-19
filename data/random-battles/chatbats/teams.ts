@@ -880,7 +880,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		let leadsRemaining = this.format.gameType === 'doubles' ? 2 : 1;
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
-
+			if (hasMega && (baseSpecies === "Typhlosion" || baseSpecies === "Altaria")) continue;
 			const currentSpeciesPool: Species[] = [];
 			// Check if the base species has a mega forme available
 			// let canMega = false;
