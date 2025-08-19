@@ -96,7 +96,6 @@ describe('Counter', () => {
 		]]);
 
 		battle.makeChoices();
-		console.log(battle.log);
 		assert.fainted(battle.p1.active[1]);
 	});
 });
