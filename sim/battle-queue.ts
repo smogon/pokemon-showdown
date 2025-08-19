@@ -15,6 +15,12 @@
 
 import type { Battle } from './battle';
 
+/** Actions are sorted based on order (lower first)
+ * followed by priority (higher first)
+ * followed by speed (higher first)
+ * Ties are broken with Fischer-Yates.
+ */
+
 /** A move action */
 export interface MoveAction {
 	/** action type */
