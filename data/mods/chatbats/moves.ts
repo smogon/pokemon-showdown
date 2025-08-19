@@ -159,7 +159,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				case 'Fire': forme = '-Paldea-Blaze'; break;
 				}
 				source.formeChange('Tauros' + forme);
-				source.setAbility('Adaptability');
 				this.add('-ability', source, 'Adaptability');
 				source.m.ragingBullMoveType = bestType;
 			}
@@ -1240,5 +1239,38 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		contestType: "Clever",
 		desc: "50% drain. 75% drain instead if target is Burned.",
 		shortDesc: "50% drain. 75% drain instead if target is Burned.",
+	},
+	terastarstorm: {
+		num: 906,
+		accuracy: 100,
+		basePower: 120,
+		category: "Special",
+		name: "Tera Starstorm",
+		pp: 5,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, noassist: 1, failcopycat: 1, failmimic: 1, nosketch: 1 },
+		onModifyType(move, pokemon) {
+			const types = pokemon.getTypes();
+			let type = types[0];
+			if (type === 'Bird') type = '???';
+			if (type === '???' && types[1]) type = types[1];
+			move.type = type;
+			if (pokemon.species.name === 'Terapagos-Stellar') {
+				move.type = 'Stellar';
+				if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
+					move.category = 'Physical';
+				}
+			}
+		},
+		onModifyMove(move, pokemon) {
+			if (pokemon.species.name === 'Terapagos-Stellar') {
+				move.target = 'allAdjacentFoes';
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		desc: "Type varies based on the user's primary type.",
+		shortDesc: "Type varies based on the user's primary type.",
 	},
 };
