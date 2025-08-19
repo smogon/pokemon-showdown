@@ -139,7 +139,6 @@ describe(`Photon Geyser`, () => {
 		], [
 			{ species: 'Regieleki', moves: ['reflect'] },
 		]]);
-		console.log(battle.p1.active[0].storedStats);
 
 		const regieleki = battle.p2.active[0];		
 		battle.makeChoices();

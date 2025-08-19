@@ -915,10 +915,17 @@ export class Pokemon {
 		return this.attackedBy[this.attackedBy.length - 1];
 	}
 
-	getLastDamagedBy(filterOutSameSide: boolean) {
+	/**
+	 * In Gens 2 and 3, Hidden Power counts as Physical for Counter/Mirror Coat
+	 */
+	getLastDamagedBy(filterOutSameSide: boolean, thisTurn = false, category?: 'Physical' | 'Special') {
 		const damagedBy: Attacker[] = this.attackedBy.filter(attacker => (
 			typeof attacker.damageValue === 'number' &&
-			(filterOutSameSide === undefined || !this.isAlly(attacker.source))
+			(!filterOutSameSide || !this.isAlly(attacker.source)) &&
+			(!thisTurn || attacker.thisTurn) &&
+			(!category || category === (
+				(this.battle.gen <= 3 && attacker.move === 'hiddenpower') ? 'Physical' : attacker.category
+			))
 		));
 		if (damagedBy.length === 0) return undefined;
 		return damagedBy[damagedBy.length - 1];

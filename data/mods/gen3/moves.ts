@@ -154,34 +154,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-start', target, 'typechange', type);
 		},
 	},
-	counter: {
-		inherit: true,
-		damageCallback(pokemon) {
-			const damagedBy = pokemon.attackedBy.filter(p =>
-				typeof p.damageValue === 'number' && !pokemon.isAlly(p.source) &&
-				p.thisTurn && p.move && (p.category === 'Physical' || p.move === 'hiddenpower')
-			);
-			if (!damagedBy.length) return false;
-			const lastDamagedBy = damagedBy[damagedBy.length - 1];
-			return (lastDamagedBy.damage * 2) || 1;
-		},
-		onTry(source) {
-			const damagedBy = source.attackedBy.filter(p =>
-				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
-				p.thisTurn && p.move && (p.category === 'Physical' || p.move === 'hiddenpower')
-			);
-			if (!damagedBy.length) return false;
-		},
-		onModifyTarget(targetRelayVar, source, target, move) {
-			const damagedBy = source.attackedBy.filter(p =>
-				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
-				p.thisTurn && p.move && (p.category === 'Physical' || p.move === 'hiddenpower')
-			);
-			if (!damagedBy.length) return;
-			const lastDamagedBy = damagedBy[damagedBy.length - 1];
-			targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
-		},
-	},
 	covet: {
 		inherit: true,
 		flags: { protect: 1, mirror: 1, noassist: 1 },
@@ -476,34 +448,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	mimic: {
 		inherit: true,
 		flags: { protect: 1, bypasssub: 1, allyanim: 1, failencore: 1, noassist: 1, failmimic: 1 },
-	},
-	mirrorcoat: {
-		inherit: true,
-		damageCallback(pokemon) {
-			const damagedBy = pokemon.attackedBy.filter(p =>
-				typeof p.damageValue === 'number' && !pokemon.isAlly(p.source) &&
-				p.thisTurn && p.move && p.category === 'Special' && p.move !== 'hiddenpower'
-			);
-			if (!damagedBy.length) return false;
-			const lastDamagedBy = damagedBy[damagedBy.length - 1];
-			return (lastDamagedBy.damage * 2) || 1;
-		},
-		onTry(source) {
-			const damagedBy = source.attackedBy.filter(p =>
-				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
-				p.thisTurn && p.move && p.category === 'Special' && p.move !== 'hiddenpower'
-			);
-			if (!damagedBy.length) return false;
-		},
-		onModifyTarget(targetRelayVar, source, target, move) {
-			const damagedBy = source.attackedBy.filter(p =>
-				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
-				p.thisTurn && p.move && p.category === 'Special' && p.move !== 'hiddenpower'
-			);
-			if (!damagedBy.length) return;
-			const lastDamagedBy = damagedBy[damagedBy.length - 1];
-			targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
-		},
 	},
 	mirrormove: {
 		inherit: true,

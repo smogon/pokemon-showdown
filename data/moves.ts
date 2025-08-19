@@ -3095,12 +3095,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback(pokemon) {
-			const damagedBy = pokemon.attackedBy.filter(p =>
-				typeof p.damageValue === 'number' && !pokemon.isAlly(p.source) &&
-				p.thisTurn && p.move && p.category === 'Physical'
-			);
-			if (!damagedBy.length) return false;
-			const lastDamagedBy = damagedBy[damagedBy.length - 1];
+			const lastDamagedBy = pokemon.getLastDamagedBy(true, true, 'Physical');
+			if (!lastDamagedBy) return false;
 			return (lastDamagedBy.damage * 2) || 1;
 		},
 		category: "Physical",
@@ -3109,19 +3105,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: -5,
 		flags: { contact: 1, protect: 1, failmefirst: 1, noassist: 1, failcopycat: 1 },
 		onTry(source) {
-			const damagedBy = source.attackedBy.filter(p =>
-				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
-				p.thisTurn && p.move && p.category === 'Physical'
-			);
-			if (!damagedBy.length) return false;
+			const lastDamagedBy = source.getLastDamagedBy(true, true, 'Physical');
+			if (!lastDamagedBy) return false;
 		},
 		onModifyTarget(targetRelayVar, source, target, move) {
-			const damagedBy = source.attackedBy.filter(p =>
-				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
-				p.thisTurn && p.move && p.category === 'Physical'
-			);
-			if (!damagedBy.length) return;
-			const lastDamagedBy = damagedBy[damagedBy.length - 1];
+			const lastDamagedBy = source.getLastDamagedBy(true, true, 'Physical');
+			if (!lastDamagedBy) return;
 			targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
 		},
 		secondary: null,
@@ -12427,12 +12416,8 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback(pokemon) {
-			const damagedBy = pokemon.attackedBy.filter(p =>
-				typeof p.damageValue === 'number' && !pokemon.isAlly(p.source) &&
-				p.thisTurn && p.move && p.category === 'Special'
-			);
-			if (!damagedBy.length) return false;
-			const lastDamagedBy = damagedBy[damagedBy.length - 1];
+			const lastDamagedBy = pokemon.getLastDamagedBy(true, true, 'Special');
+			if (!lastDamagedBy) return false;
 			return (lastDamagedBy.damage * 2) || 1;
 		},
 		category: "Special",
@@ -12441,19 +12426,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: -5,
 		flags: { protect: 1, failmefirst: 1, noassist: 1 },
 		onTry(source) {
-			const damagedBy = source.attackedBy.filter(p =>
-				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
-				p.thisTurn && p.move && p.category === 'Special'
-			);
-			if (!damagedBy.length) return false;
+			const lastDamagedBy = source.getLastDamagedBy(true, true, 'Special');
+			if (!lastDamagedBy) return false;
 		},
 		onModifyTarget(targetRelayVar, source, target, move) {
-			const damagedBy = source.attackedBy.filter(p =>
-				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
-				p.thisTurn && p.move && p.category === 'Special'
-			);
-			if (!damagedBy.length) return;
-			const lastDamagedBy = damagedBy[damagedBy.length - 1];
+			const lastDamagedBy = source.getLastDamagedBy(true, true, 'Special');
+			if (!lastDamagedBy) return;
 			targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
 		},
 		secondary: null,
