@@ -256,6 +256,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(2);
 			}
 		},
+		// this ability is supposed to just add Aqua Ring (the volatile) to the Pokemon on switch in
+		flags: { cantsuppress: 1 },
 		name: "Aqua Veil",
 		rating: 5,
 		num: -106,
@@ -389,7 +391,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		flags: {
-			failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1,
+			failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1,
 			breakable: 1, notransform: 1,
 		},
 		name: "Pseudowoodo",
@@ -651,7 +653,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1,
-			breakable: 1, notransform: 1 },
+			breakable: 1, notransform: 1, cantsuppress: 1 },
 		name: "Biogenesis",
 		rating: 5,
 		num: -112,
@@ -718,5 +720,12 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		rating: 5,
 		num: -114,
 		shortDesc: "This Pokemon's attacks are critical hits if the target is frostbitten or Snow is active.",
+	},
+	neutralizinggas: {
+		inherit: true,
+		onStart(pokemon) {
+			// this makes Neutralizing Gas properly show as activated in the client when Typhlosion Mega evolves
+			this.add('-ability', pokemon, 'Neutralizing Gas');
+		},
 	},
 };
