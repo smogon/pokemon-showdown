@@ -1103,7 +1103,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			return move.basePower;
 		},
 		onEffectiveness(typeMod, target, type) {
-			if (type === 'Water' && type === 'Steel') return 2;
 			if (type === 'Water') return 1;
 			if (type === 'Steel') return 1;
 		},
@@ -1224,9 +1223,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onHit(target, source, move) {
 			const damage = this.actions.getDamage(source, target, move);
 			if (target.status === "brn") {
-				this.heal(Math.ceil(damage * 0.75), source, target, 'drain');
+				this.heal(Math.ceil((damage as number) * 0.75), source, target, 'drain');
 			} else {
-				this.heal(Math.ceil(damage * 0.5), source, target, 'drain');
+				this.heal(Math.ceil((damage as number) * 0.5), source, target, 'drain');
 			}
 		},
 		category: "Special",
@@ -1240,6 +1239,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		zMove: { basePower: 160 },
 		contestType: "Clever",
 		desc: "50% drain. 75% drain instead if target is Burned.",
-		shortDesc: "Power doubles if the target is Burned.",
+		shortDesc: "50% drain. 75% drain instead if target is Burned.",
 	},
 };
