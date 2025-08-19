@@ -899,7 +899,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 				currentSpeciesPool.push(species);
 			}
 			// change const to let when enforcing certain mons for testing
-			let species = this.sample(currentSpeciesPool);
+			const species = this.sample(currentSpeciesPool);
 
 			// let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
 
@@ -992,9 +992,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 			// if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			// testing code
-			if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Terapagos');
-			if (pokemon.length === 1 || this.maxTeamSize === 1) species = this.dex.species.get('Tauros-Paldea-Combat');
-			if (pokemon.length === 2 || this.maxTeamSize === 1) species = this.dex.species.get('Illumise');
+			// if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Terapagos');
 
 			let set: RandomTeamsTypes.RandomSet;
 
