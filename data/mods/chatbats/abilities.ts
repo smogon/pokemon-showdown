@@ -31,7 +31,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 			this.add('-message', `Volbeat calls upon Illumise for aid!`);
 			// Define new moves
-			const newMoves = ['bugbuzz', 'icebeam', 'thunderbolt', 'calmmind'];
+			const newMoves = ['bugbuzz', 'icebeam', 'thunderbolt', 'quiverdance'];
 			// Update move slots
 			pokemon.moveSlots = newMoves.map(move => {
 				const moveData = this.dex.moves.get(move);
@@ -86,7 +86,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 			this.add('-message', `Illumise calls upon Volbeat for aid!`);
 			// Define new moves
-			const newMoves = ['dragondance', 'lunge', 'dragonhammer', 'earthquake'];
+			const newMoves = ['victorydance', 'lunge', 'mightycleave', 'earthquake'];
 			// Update move slots
 			pokemon.moveSlots = newMoves.map(move => {
 				const moveData = this.dex.moves.get(move);
