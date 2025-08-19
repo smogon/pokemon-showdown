@@ -3109,14 +3109,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: -5,
 		flags: { contact: 1, protect: 1, failmefirst: 1, noassist: 1, failcopycat: 1 },
 		onTry(source) {
-			const lastDamagedBy = source.getLastDamagedBy(true);
-			if (!lastDamagedBy?.thisTurn) return false;
+			const damagedBy = source.attackedBy.filter(p =>
+				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
+				p.thisTurn && p.move && this.getCategory(p.move) === 'Physical'
+			);
+			if (!damagedBy) return false;
 		},
 		onModifyTarget(targetRelayVar, source, target, move) {
-			const lastDamagedBy = source.getLastDamagedBy(true);
-			if (lastDamagedBy) {
-				targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
-			}
+			const damagedBy = source.attackedBy.filter(p =>
+				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
+				p.thisTurn && p.move && this.getCategory(p.move) === 'Physical'
+			);
+			if (!damagedBy) return;
+			const lastDamagedBy = damagedBy[damagedBy.length - 1];
+			targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
 		},
 		secondary: null,
 		target: "scripted",
@@ -12435,14 +12441,20 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		priority: -5,
 		flags: { protect: 1, failmefirst: 1, noassist: 1 },
 		onTry(source) {
-			const lastDamagedBy = source.getLastDamagedBy(true);
-			if (!lastDamagedBy?.thisTurn) return false;
+			const damagedBy = source.attackedBy.filter(p =>
+				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
+				p.thisTurn && p.move && this.getCategory(p.move) === 'Special'
+			);
+			if (!damagedBy) return false;
 		},
 		onModifyTarget(targetRelayVar, source, target, move) {
-			const lastDamagedBy = source.getLastDamagedBy(true);
-			if (lastDamagedBy) {
-				targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
-			}
+			const damagedBy = source.attackedBy.filter(p =>
+				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
+				p.thisTurn && p.move && this.getCategory(p.move) === 'Special'
+			);
+			if (!damagedBy) return;
+			const lastDamagedBy = damagedBy[damagedBy.length - 1];
+			targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
 		},
 		secondary: null,
 		target: "scripted",
