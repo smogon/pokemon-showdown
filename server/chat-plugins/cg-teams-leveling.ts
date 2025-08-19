@@ -5,6 +5,7 @@
  */
 
 import { type SQL, Utils } from "../../lib";
+import { cgtDatabase, getLevelSpeciesID } from "../../data/cg-teams";
 
 export let addPokemon: SQL.Statement | null = null;
 export let incrementWins: SQL.Statement | null = null;
@@ -28,11 +29,6 @@ if (Config.usesqlite && Config.usesqliteleveling) {
 	dbSetupPromise = setupDatabase(cgtDatabase);
 }
 
-function getLevelSpeciesID(set: PokemonSet, format?: Format) {
-	if (['Basculin', 'Greninja'].includes(set.name)) return toID(set.species);
-	return toID(getSpeciesName(set, format || Dex.formats.get('gen9computergeneratedteams')));
-}
-
 async function updateStats(battle: RoomBattle, winner: ID) {
 	if (!incrementWins || !incrementLosses) await dbSetupPromise;
 	if (toID(battle.format) !== 'gen9computergeneratedteams') return;
@@ -51,7 +47,7 @@ async function updateStats(battle: RoomBattle, winner: ID) {
 		const increment = (player.id === winner ? incrementWins : incrementLosses);
 
 		for (const set of team) {
-			const statsSpecies = getLevelSpeciesID(set, Dex.formats.get(battle.format));
+			const statsSpecies = getLevelSpeciesID(toID(set.species), Dex.formats.get(battle.format));
 			await addPokemon?.run([statsSpecies, set.level || 100]);
 			await increment?.run([statsSpecies]);
 		}
@@ -121,10 +117,10 @@ export const pages: Chat.PageTable = {
 			// Restricted because this is a potentially very slow command
 			this.checkCan('modlog', null, Rooms.get('development')!); // stinky non-null assertion
 
-			let speciesID = query.shift();
+			let speciesID = toID(query.shift());
 			let buf;
 			if (speciesID) {
-				speciesID = getLevelSpeciesID({ species: speciesID || '' } as PokemonSet);
+				speciesID = getLevelSpeciesID(speciesID);
 				const species = Dex.species.get(speciesID);
 				if (!species.exists ||
 					species.isNonstandard || species.isNonstandard === 'Unobtainable' ||

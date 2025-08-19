@@ -35,6 +35,7 @@
 
 import type { SQLDatabaseManager } from '../lib/sql';
 import { Dex, PRNG, SQL } from '../sim';
+import { getSpeciesName } from '../server/chat-plugins/randombattles/winrates';
 import type { EventMethods } from '../sim/dex-conditions';
 import {
 	ABILITY_MOVE_BONUSES,
@@ -68,25 +69,13 @@ const TOP_SPEED = 300;
 const levelOverride: { [speciesID: string]: number } = {};
 export let levelUpdateInterval: NodeJS.Timeout | null = null;
 
-// can't import the function cg-teams-leveling.ts uses to this context for some reason
-const useBaseSpecies = [
-	'Pikachu',
-	'Gastrodon',
-	'Magearna',
-	'Dudunsparce',
-	'Maushold',
-	'Keldeo',
-	'Zarude',
-	'Polteageist',
-	'Sinistcha',
-	'Sawsbuck',
-	'Vivillon',
-	'Florges',
-	'Minior',
-	'Toxtricity',
-	'Tatsugiri',
-	'Alcremie',
-];
+export function getLevelSpeciesID(speciesID: ID, format?: Format) {
+	if (speciesID.startsWith('basculin') || speciesID.startsWith('greninja')) return speciesID;
+	return toID(getSpeciesName(
+		{ species: speciesID || '' } as PokemonSet,
+		format || Dex.formats.get('gen9computergeneratedteams')
+	));
+}
 
 async function updateLevels(database: SQL.DatabaseManager) {
 	const updateSpecies = await database.prepare(
@@ -1033,17 +1022,7 @@ export default class TeamGenerator {
 	 * @returns The level a Pokémon should be.
 	 */
 	protected static getLevel(species: Species): number {
-		if (['Zacian', 'Zamazenta'].includes(species.name)) {
-			species = Dex.species.get(species.otherFormes![0]);
-		} else if (species.baseSpecies === 'Squawkabilly') {
-			if (['Yellow', 'White'].includes(species.forme)) {
-				species = Dex.species.get('Squawkabilly-Yellow');
-			} else {
-				species = Dex.species.get('Squawkabilly');
-			}
-		} else if (useBaseSpecies.includes(species.baseSpecies)) {
-			species = Dex.species.get(species.baseSpecies);
-		}
+		species = Dex.species.get(getLevelSpeciesID(species.id));
 		if (levelOverride[species.id]) return levelOverride[species.id];
 
 		switch (species.tier) {
