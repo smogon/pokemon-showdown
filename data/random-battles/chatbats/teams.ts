@@ -707,6 +707,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'vaporeon') return 'Toxic Orb';
 		if (species.id === 'garganacl') return 'Poisonium Z';
 		if (species.id === 'swanna') return 'Heavy-Duty Boots';
+		if (species.id === 'terapagos') return 'Leftovers';
 	}
 
 	override randomSet(
@@ -991,7 +992,9 @@ export class RandomChatBatsTeams extends RandomTeams {
 			// if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			// testing code
-			// if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Typhlosion-Mega');
+			if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Terapagos');
+			if (pokemon.length === 1 || this.maxTeamSize === 1) species = this.dex.species.get('Tauros-Paldea-Combat');
+			if (pokemon.length === 2 || this.maxTeamSize === 1) species = this.dex.species.get('Illumise');
 
 			let set: RandomTeamsTypes.RandomSet;
 
