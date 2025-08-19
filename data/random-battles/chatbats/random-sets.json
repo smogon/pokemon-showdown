@@ -111,24 +111,24 @@
         ]
     },
     "illumise": {
-        "level": 92,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Setup",
-                "movepool": ["Bug Buzz", "Calm Mind", "Ice Beam", "Thunderbolt"],
+                "movepool": ["Bug Buzz", "Quiver Dance", "Ice Beam", "Thunderbolt"],
                 "abilities": ["Call Volbeat"],
                 "teraTypes": ["Electric"]
             }
         ]
     },
     "volbeat": {
-        "level": 92,
+        "level": 90,
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Dragon Dance", "Lunge", "Dragon Hammer", "Earthquake"],
+                "movepool": ["Victory Dance", "Lunge", "Mighty Cleave", "Earthquake"],
                 "abilities": ["Call Illumise"],
-                "teraTypes": ["Dragon"]
+                "teraTypes": ["Rock"]
             }
         ]
     },
@@ -950,6 +950,23 @@
                 "movepool": ["Heat Sink", "Steam Eruption", "Calm Mind", "Morning Sun"],
                 "abilities": ["Magic Guard"],
                 "teraTypes": ["Normal"]
+            }
+        ]
+    },
+    "terapagos": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Setup",
+                "movepool": ["Rest", "Sleep Talk", "Calm Mind", "Tera Starstorm"],
+                "abilities": ["Tera Shift"],
+                "teraTypes": ["Stellar"]
+            },
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Rapid Spin", "Nasty Plot", "Earth Power", "Dark Pulse", "Tera Starstorm"],
+                "abilities": ["Tera Shift"],
+                "teraTypes": ["Stellar"]
             }
         ]
     }
