@@ -3095,40 +3095,28 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback(pokemon) {
-			if (!pokemon.volatiles['counter']) return 0;
-			return pokemon.volatiles['counter'].damage || 1;
+			const damagedBy = pokemon.attackedBy.filter(p =>
+				typeof p.damageValue === 'number' && !pokemon.isAlly(p.source) &&
+				p.thisTurn && p.move && this.getCategory(p.move) === 'Physical'
+			);
+			if (!damagedBy) return false;
+			const lastDamagedBy = damagedBy[damagedBy.length - 1];
+			return (lastDamagedBy.damage * 2) || 1;
 		},
 		category: "Physical",
 		name: "Counter",
 		pp: 20,
 		priority: -5,
 		flags: { contact: 1, protect: 1, failmefirst: 1, noassist: 1, failcopycat: 1 },
-		beforeTurnCallback(pokemon) {
-			pokemon.addVolatile('counter');
-		},
 		onTry(source) {
-			if (!source.volatiles['counter']) return false;
-			if (source.volatiles['counter'].slot === null) return false;
+			const lastDamagedBy = source.getLastDamagedBy(true);
+			if (!lastDamagedBy?.thisTurn) return false;
 		},
-		condition: {
-			duration: 1,
-			noCopy: true,
-			onStart(target, source, move) {
-				this.effectState.slot = null;
-				this.effectState.damage = 0;
-			},
-			onRedirectTargetPriority: -1,
-			onRedirectTarget(target, source, source2, move) {
-				if (move.id !== 'counter') return;
-				if (source !== this.effectState.target || !this.effectState.slot) return;
-				return this.getAtSlot(this.effectState.slot);
-			},
-			onDamagingHit(damage, target, source, move) {
-				if (!source.isAlly(target) && this.getCategory(move) === 'Physical') {
-					this.effectState.slot = source.getSlot();
-					this.effectState.damage = 2 * damage;
-				}
-			},
+		onModifyTarget(targetRelayVar, source, target, move) {
+			const lastDamagedBy = source.getLastDamagedBy(true);
+			if (lastDamagedBy) {
+				targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
+			}
 		},
 		secondary: null,
 		target: "scripted",
@@ -12433,40 +12421,28 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		accuracy: 100,
 		basePower: 0,
 		damageCallback(pokemon) {
-			if (!pokemon.volatiles['mirrorcoat']) return 0;
-			return pokemon.volatiles['mirrorcoat'].damage || 1;
+			const damagedBy = pokemon.attackedBy.filter(p =>
+				typeof p.damageValue === 'number' && !pokemon.isAlly(p.source) &&
+				p.thisTurn && p.move && this.getCategory(p.move) === 'Special'
+			);
+			if (!damagedBy) return false;
+			const lastDamagedBy = damagedBy[damagedBy.length - 1];
+			return (lastDamagedBy.damage * 2) || 1;
 		},
 		category: "Special",
 		name: "Mirror Coat",
 		pp: 20,
 		priority: -5,
 		flags: { protect: 1, failmefirst: 1, noassist: 1 },
-		beforeTurnCallback(pokemon) {
-			pokemon.addVolatile('mirrorcoat');
-		},
 		onTry(source) {
-			if (!source.volatiles['mirrorcoat']) return false;
-			if (source.volatiles['mirrorcoat'].slot === null) return false;
+			const lastDamagedBy = source.getLastDamagedBy(true);
+			if (!lastDamagedBy?.thisTurn) return false;
 		},
-		condition: {
-			duration: 1,
-			noCopy: true,
-			onStart(target, source, move) {
-				this.effectState.slot = null;
-				this.effectState.damage = 0;
-			},
-			onRedirectTargetPriority: -1,
-			onRedirectTarget(target, source, source2, move) {
-				if (move.id !== 'mirrorcoat') return;
-				if (source !== this.effectState.target || !this.effectState.slot) return;
-				return this.getAtSlot(this.effectState.slot);
-			},
-			onDamagingHit(damage, target, source, move) {
-				if (!source.isAlly(target) && this.getCategory(move) === 'Special') {
-					this.effectState.slot = source.getSlot();
-					this.effectState.damage = 2 * damage;
-				}
-			},
+		onModifyTarget(targetRelayVar, source, target, move) {
+			const lastDamagedBy = source.getLastDamagedBy(true);
+			if (lastDamagedBy) {
+				targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
+			}
 		},
 		secondary: null,
 		target: "scripted",

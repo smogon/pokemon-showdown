@@ -156,28 +156,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	counter: {
 		inherit: true,
-		condition: {
-			duration: 1,
-			noCopy: true,
-			onStart(target, source, move) {
-				this.effectState.slot = null;
-				this.effectState.damage = 0;
-			},
-			onRedirectTargetPriority: -1,
-			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectState.target || !this.effectState.slot) return;
-				return this.getAtSlot(this.effectState.slot);
-			},
-			onDamagePriority: -101,
-			onDamage(damage, target, source, effect) {
-				if (
-					effect.effectType === 'Move' && !source.isAlly(target) &&
-					(effect.category === 'Physical' || effect.id === 'hiddenpower')
-				) {
-					this.effectState.slot = source.getSlot();
-					this.effectState.damage = 2 * damage;
-				}
-			},
+		damageCallback(pokemon) {
+			const damagedBy = pokemon.attackedBy.filter(p =>
+				typeof p.damageValue === 'number' && !pokemon.isAlly(p.source) &&
+				p.thisTurn && p.move && (this.getCategory(p.move) === 'Physical' || p.move === 'hiddenpower')
+			);
+			if (!damagedBy) return false;
+			const lastDamagedBy = damagedBy[damagedBy.length - 1];
+			return (lastDamagedBy.damage * 2) || 1;
 		},
 	},
 	covet: {
@@ -477,28 +463,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	mirrorcoat: {
 		inherit: true,
-		condition: {
-			duration: 1,
-			noCopy: true,
-			onStart(target, source, move) {
-				this.effectState.slot = null;
-				this.effectState.damage = 0;
-			},
-			onRedirectTargetPriority: -1,
-			onRedirectTarget(target, source, source2) {
-				if (source !== this.effectState.target || !this.effectState.slot) return;
-				return this.getAtSlot(this.effectState.slot);
-			},
-			onDamagePriority: -101,
-			onDamage(damage, target, source, effect) {
-				if (
-					effect.effectType === 'Move' && !source.isAlly(target) &&
-					effect.category === 'Special' && effect.id !== 'hiddenpower'
-				) {
-					this.effectState.slot = source.getSlot();
-					this.effectState.damage = 2 * damage;
-				}
-			},
+		damageCallback(pokemon) {
+			const damagedBy = pokemon.attackedBy.filter(p =>
+				typeof p.damageValue === 'number' && !pokemon.isAlly(p.source) &&
+				p.thisTurn && p.move && (this.getCategory(p.move) === 'Special' || p.move === 'hiddenpower')
+			);
+			if (!damagedBy) return false;
+			const lastDamagedBy = damagedBy[damagedBy.length - 1];
+			return (lastDamagedBy.damage * 2) || 1;
 		},
 	},
 	mirrormove: {

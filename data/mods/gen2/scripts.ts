@@ -99,6 +99,9 @@ export const Scripts: ModdedBattleScriptsData = {
 					target = this.battle.getRandomTarget(pokemon, move);
 				}
 			}
+			let targetRelayVar = { target };
+			targetRelayVar = this.battle.runEvent('ModifyTarget', pokemon, target, move, targetRelayVar, true);
+			if (targetRelayVar.target !== undefined) target = targetRelayVar.target;
 			if (!target && target !== false) target = this.battle.getRandomTarget(pokemon, move);
 
 			this.battle.setActiveMove(move, pokemon, target);
