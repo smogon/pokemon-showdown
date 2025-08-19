@@ -1882,6 +1882,7 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	rateiasu: "Latias",
 	rateiosu: "Latios",
 	kaiooga: "Kyogre",
+	pdon: "Groudon",
 	guraadon: "Groudon",
 	rekkuuza: "Rayquaza",
 	jiraachi: "Jirachi",
