@@ -96,4 +96,53 @@ describe(`Photon Geyser`, () => {
 		battle.makeChoices();
 		assert.fainted(battle.p2.active[0]);
 	});
+
+	it(`damage should be reduced by Light Screen if special`, () => {
+		battle = common.createBattle([[
+			{ species: 'Necrozma', moves: ['photongeyser'] },
+		], [
+			{ species: 'Regieleki', moves: ['lightscreen'] },
+		]]);
+
+		const regieleki = battle.p2.active[0];		
+		battle.makeChoices();
+		assert.bounded(regieleki.maxhp - regieleki.hp, [114, 136]);
+	});
+
+	it(`damage should not be reduced by Reflect if special`, () => {
+		battle = common.createBattle([[
+			{ species: 'Necrozma', moves: ['photongeyser'] },
+		], [
+			{ species: 'Regieleki', moves: ['reflect'] },
+		]]);
+
+		const regieleki = battle.p2.active[0];		
+		battle.makeChoices();
+		assert.bounded(regieleki.maxhp - regieleki.hp, [229, 271]);
+	});
+
+	it(`damage should not be reduced by Light Screen if physical`, () => {
+		battle = common.createBattle([[
+			{ species: 'Necrozma', moves: ['photongeyser'], nature: 'Adamant', evs: { atk: 56 }  },
+		], [
+			{ species: 'Regieleki', moves: ['lightscreen'] },
+		]]);
+
+		const regieleki = battle.p2.active[0];		
+		battle.makeChoices();
+		assert.bounded(regieleki.maxhp - regieleki.hp, [229, 271]);
+	});
+
+	it(`damage should be reduced by Reflect if physical`, () => {
+		battle = common.createBattle([[
+			{ species: 'Necrozma', moves: ['photongeyser'], nature: 'Adamant', evs: { atk: 56 } },
+		], [
+			{ species: 'Regieleki', moves: ['reflect'] },
+		]]);
+		console.log(battle.p1.active[0].storedStats);
+
+		const regieleki = battle.p2.active[0];		
+		battle.makeChoices();
+		assert.bounded(regieleki.maxhp - regieleki.hp, [114, 136]);
+	});
 });
