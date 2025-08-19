@@ -159,25 +159,25 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		damageCallback(pokemon) {
 			const damagedBy = pokemon.attackedBy.filter(p =>
 				typeof p.damageValue === 'number' && !pokemon.isAlly(p.source) &&
-				p.thisTurn && p.move && (this.getCategory(p.move) === 'Physical' || p.move === 'hiddenpower')
+				p.thisTurn && p.move && (p.category === 'Physical' || p.move === 'hiddenpower')
 			);
-			if (!damagedBy) return false;
+			if (!damagedBy.length) return false;
 			const lastDamagedBy = damagedBy[damagedBy.length - 1];
 			return (lastDamagedBy.damage * 2) || 1;
 		},
 		onTry(source) {
 			const damagedBy = source.attackedBy.filter(p =>
 				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
-				p.thisTurn && p.move && (this.getCategory(p.move) === 'Physical' || p.move === 'hiddenpower')
+				p.thisTurn && p.move && (p.category === 'Physical' || p.move === 'hiddenpower')
 			);
-			if (!damagedBy) return false;
+			if (!damagedBy.length) return false;
 		},
 		onModifyTarget(targetRelayVar, source, target, move) {
 			const damagedBy = source.attackedBy.filter(p =>
 				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
-				p.thisTurn && p.move && (this.getCategory(p.move) === 'Physical' || p.move === 'hiddenpower')
+				p.thisTurn && p.move && (p.category === 'Physical' || p.move === 'hiddenpower')
 			);
-			if (!damagedBy) return;
+			if (!damagedBy.length) return;
 			const lastDamagedBy = damagedBy[damagedBy.length - 1];
 			targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
 		},
@@ -482,25 +482,25 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		damageCallback(pokemon) {
 			const damagedBy = pokemon.attackedBy.filter(p =>
 				typeof p.damageValue === 'number' && !pokemon.isAlly(p.source) &&
-				p.thisTurn && p.move && this.getCategory(p.move) === 'Special' && p.move === 'hiddenpower'
+				p.thisTurn && p.move && p.category === 'Special' && p.move !== 'hiddenpower'
 			);
-			if (!damagedBy) return false;
+			if (!damagedBy.length) return false;
 			const lastDamagedBy = damagedBy[damagedBy.length - 1];
 			return (lastDamagedBy.damage * 2) || 1;
 		},
 		onTry(source) {
 			const damagedBy = source.attackedBy.filter(p =>
 				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
-				p.thisTurn && p.move && this.getCategory(p.move) === 'Special' && p.move === 'hiddenpower'
+				p.thisTurn && p.move && p.category === 'Special' && p.move !== 'hiddenpower'
 			);
-			if (!damagedBy) return false;
+			if (!damagedBy.length) return false;
 		},
 		onModifyTarget(targetRelayVar, source, target, move) {
 			const damagedBy = source.attackedBy.filter(p =>
 				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
-				p.thisTurn && p.move && this.getCategory(p.move) === 'Special' && p.move === 'hiddenpower'
+				p.thisTurn && p.move && p.category === 'Special' && p.move !== 'hiddenpower'
 			);
-			if (!damagedBy) return;
+			if (!damagedBy.length) return;
 			const lastDamagedBy = damagedBy[damagedBy.length - 1];
 			targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
 		},

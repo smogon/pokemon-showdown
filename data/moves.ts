@@ -3097,9 +3097,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		damageCallback(pokemon) {
 			const damagedBy = pokemon.attackedBy.filter(p =>
 				typeof p.damageValue === 'number' && !pokemon.isAlly(p.source) &&
-				p.thisTurn && p.move && this.getCategory(p.move) === 'Physical'
+				p.thisTurn && p.move && p.category === 'Physical'
 			);
-			if (!damagedBy) return false;
+			if (!damagedBy.length) return false;
 			const lastDamagedBy = damagedBy[damagedBy.length - 1];
 			return (lastDamagedBy.damage * 2) || 1;
 		},
@@ -3111,16 +3111,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onTry(source) {
 			const damagedBy = source.attackedBy.filter(p =>
 				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
-				p.thisTurn && p.move && this.getCategory(p.move) === 'Physical'
+				p.thisTurn && p.move && p.category === 'Physical'
 			);
-			if (!damagedBy) return false;
+			if (!damagedBy.length) return false;
 		},
 		onModifyTarget(targetRelayVar, source, target, move) {
 			const damagedBy = source.attackedBy.filter(p =>
 				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
-				p.thisTurn && p.move && this.getCategory(p.move) === 'Physical'
+				p.thisTurn && p.move && p.category === 'Physical'
 			);
-			if (!damagedBy) return;
+			if (!damagedBy.length) return;
 			const lastDamagedBy = damagedBy[damagedBy.length - 1];
 			targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
 		},
@@ -12429,9 +12429,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		damageCallback(pokemon) {
 			const damagedBy = pokemon.attackedBy.filter(p =>
 				typeof p.damageValue === 'number' && !pokemon.isAlly(p.source) &&
-				p.thisTurn && p.move && this.getCategory(p.move) === 'Special'
+				p.thisTurn && p.move && p.category === 'Special'
 			);
-			if (!damagedBy) return false;
+			if (!damagedBy.length) return false;
 			const lastDamagedBy = damagedBy[damagedBy.length - 1];
 			return (lastDamagedBy.damage * 2) || 1;
 		},
@@ -12443,16 +12443,16 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		onTry(source) {
 			const damagedBy = source.attackedBy.filter(p =>
 				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
-				p.thisTurn && p.move && this.getCategory(p.move) === 'Special'
+				p.thisTurn && p.move && p.category === 'Special'
 			);
-			if (!damagedBy) return false;
+			if (!damagedBy.length) return false;
 		},
 		onModifyTarget(targetRelayVar, source, target, move) {
 			const damagedBy = source.attackedBy.filter(p =>
 				typeof p.damageValue === 'number' && !source.isAlly(p.source) &&
-				p.thisTurn && p.move && this.getCategory(p.move) === 'Special'
+				p.thisTurn && p.move && p.category === 'Special'
 			);
-			if (!damagedBy) return;
+			if (!damagedBy.length) return;
 			const lastDamagedBy = damagedBy[damagedBy.length - 1];
 			targetRelayVar.target = this.getAtSlot(lastDamagedBy.slot);
 		},

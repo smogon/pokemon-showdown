@@ -118,7 +118,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (!lastAttackedBy?.move || !lastAttackedBy.thisTurn) return false;
 
 			// Hidden Power counts as physical
-			if (this.getCategory(lastAttackedBy.move) === 'Physical' && target.lastMove?.id !== 'sleeptalk') {
+			if (lastAttackedBy.category === 'Physical' && target.lastMove?.id !== 'sleeptalk') {
 				return 2 * lastAttackedBy.damage;
 			}
 			return false;
@@ -421,7 +421,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (!lastAttackedBy?.move || !lastAttackedBy.thisTurn) return false;
 
 			// Hidden Power counts as physical
-			if (this.getCategory(lastAttackedBy.move) === 'Special' && target.lastMove?.id !== 'sleeptalk') {
+			if (lastAttackedBy.category === 'Special' && target.lastMove?.id !== 'sleeptalk') {
 				return 2 * lastAttackedBy.damage;
 			}
 			return false;

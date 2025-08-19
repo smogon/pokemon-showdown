@@ -29,6 +29,7 @@ interface Attacker {
 	move?: ID;
 	slot: PokemonSlot;
 	damageValue?: (number | boolean | undefined);
+	category?: 'Physical' | 'Special' | 'Status';
 }
 
 export interface EffectState {
@@ -905,6 +906,7 @@ export class Pokemon {
 			thisTurn: true,
 			slot: source.getSlot(),
 			damageValue: damage,
+			category: move.category,
 		});
 	}
 
