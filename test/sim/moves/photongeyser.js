@@ -104,7 +104,7 @@ describe(`Photon Geyser`, () => {
 			{ species: 'Regieleki', moves: ['lightscreen'] },
 		]]);
 
-		const regieleki = battle.p2.active[0];		
+		const regieleki = battle.p2.active[0];
 		battle.makeChoices();
 		assert.bounded(regieleki.maxhp - regieleki.hp, [114, 136]);
 	});
@@ -116,19 +116,19 @@ describe(`Photon Geyser`, () => {
 			{ species: 'Regieleki', moves: ['reflect'] },
 		]]);
 
-		const regieleki = battle.p2.active[0];		
+		const regieleki = battle.p2.active[0];
 		battle.makeChoices();
 		assert.bounded(regieleki.maxhp - regieleki.hp, [229, 271]);
 	});
 
 	it(`damage should not be reduced by Light Screen if physical`, () => {
 		battle = common.createBattle([[
-			{ species: 'Necrozma', moves: ['photongeyser'], nature: 'Adamant', evs: { atk: 56 }  },
+			{ species: 'Necrozma', moves: ['photongeyser'], nature: 'Adamant', evs: { atk: 56 } },
 		], [
 			{ species: 'Regieleki', moves: ['lightscreen'] },
 		]]);
 
-		const regieleki = battle.p2.active[0];		
+		const regieleki = battle.p2.active[0];
 		battle.makeChoices();
 		assert.bounded(regieleki.maxhp - regieleki.hp, [229, 271]);
 	});
@@ -140,7 +140,7 @@ describe(`Photon Geyser`, () => {
 			{ species: 'Regieleki', moves: ['reflect'] },
 		]]);
 
-		const regieleki = battle.p2.active[0];		
+		const regieleki = battle.p2.active[0];
 		battle.makeChoices();
 		assert.bounded(regieleki.maxhp - regieleki.hp, [114, 136]);
 	});
