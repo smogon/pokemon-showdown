@@ -1222,7 +1222,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, 'Bitter Blade', target);
 		},
 		onHit(target, source, move) {
-			let damage = this.actions.getDamage(source, target, move);
+			const damage = this.actions.getDamage(source, target, move);
 			if (target.status === "brn") {
 				this.heal(Math.ceil(damage * 0.75), source, target, 'drain');
 			} else {
