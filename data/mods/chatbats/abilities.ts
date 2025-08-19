@@ -115,9 +115,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			pokemon.formeChange('Volbeat', null, true);
 			this.heal(pokemon.maxhp);
 			// sets new ability
-			pokemon.setAbility('Swarm', null, null, true);
+			pokemon.setAbility('Dancer', null, null, true);
 			pokemon.baseAbility = pokemon.ability;
-			this.add('-ability', pokemon, 'Swarm');
+			this.add('-ability', pokemon, 'Dancer');
 		},
 		flags: {
 			breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1,
@@ -728,5 +728,21 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			// this makes Neutralizing Gas properly show as activated in the client when Typhlosion Mega evolves
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 		},
+	},
+	terawheel: {
+		// copied from SSB High Performance Computing
+		onResidualOrder: 6,
+		onResidual(source) {
+			this.add('-message', `Terapagos rolls its Tera Wheel!`);
+			const type = this.sample(this.dex.types.names().filter(i => i !== source.getTypes()[0]));
+			if (source.setType(type)) {
+				this.add('-start', source, 'typechange', type, '[from] ability: Tera Wheel');
+			}
+		},
+		flags: {},
+		name: "Tera Wheel",
+		rating: 5,
+		num: -115,
+		shortDesc: "At the end of each turn, this Pokemon switches to a random type (including Stellar).",
 	},
 };
