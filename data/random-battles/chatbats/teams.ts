@@ -684,8 +684,8 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'swalot') return 'Leftovers';
 		if (species.id === 'zapdosgalar') return this.sample(['Choice Scarf', 'Expert Belt']);
 		if (species.id === 'phione') return 'Leftovers';
-		if (species.id === 'sudowoodo' && moves.has('synthesis')) return this.sample(['Red Card', 'Leftovers']);
-		if (species.id === 'sudowoodo' && moves.has('curse')) return this.sample(['Red Card', 'Leftovers']);
+		// if (species.id === 'sudowoodo' && moves.has('synthesis')) return this.sample(['Red Card', 'Leftovers']);
+		// if (species.id === 'sudowoodo' && moves.has('curse')) return this.sample(['Red Card', 'Leftovers']);
 		if (species.id === 'sudowoodo') return 'Choice Band';
 		if (species.id === 'dondozo') return 'Leftovers';
 		if (species.id === 'golurk') return this.sample(['Life Orb', 'Punching Glove', 'Colbur Berry']);
@@ -898,7 +898,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 				currentSpeciesPool.push(species);
 			}
 			// change const to let when enforcing certain mons for testing
-			let species = this.sample(currentSpeciesPool);
+			const species = this.sample(currentSpeciesPool);
 
 			// let species = this.dex.species.get(this.sample(pokemonPool[baseSpecies]));
 
@@ -991,11 +991,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 			// if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
 
 			// testing code
-			if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Typhlosion-Mega');
-			if (pokemon.length === 1 || this.maxTeamSize === 1) species = this.dex.species.get('Dachsbun');
-			if (pokemon.length === 2 || this.maxTeamSize === 1) species = this.dex.species.get('Swanna');
-			if (pokemon.length === 3 || this.maxTeamSize === 1) species = this.dex.species.get('Empoleon');
-			if (pokemon.length === 4 || this.maxTeamSize === 1) species = this.dex.species.get('Mew');
+			// if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Typhlosion-Mega');
 
 			let set: RandomTeamsTypes.RandomSet;
 
