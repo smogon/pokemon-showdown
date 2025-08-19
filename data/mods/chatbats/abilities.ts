@@ -733,7 +733,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		// copied from SSB High Performance Computing
 		onResidualOrder: 6,
 		onResidual(source) {
-			this.add('-message', `Terapagos rolls its Tera Wheel!`);
 			const type = this.sample(this.dex.types.names().filter(i => i !== source.getTypes()[0]));
 			if (source.setType(type)) {
 				this.add('-start', source, 'typechange', type, '[from] ability: Tera Wheel');
