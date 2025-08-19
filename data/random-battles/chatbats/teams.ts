@@ -992,6 +992,9 @@ export class RandomChatBatsTeams extends RandomTeams {
 
 			// testing code
 			if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Typhlosion-Mega');
+			if (pokemon.length === 1 || this.maxTeamSize === 1) species = this.dex.species.get('Mew');
+			if (pokemon.length === 2 || this.maxTeamSize === 1) species = this.dex.species.get('Sudowoodo');
+			if (pokemon.length === 3 || this.maxTeamSize === 1) species = this.dex.species.get('Mimikyu');
 
 			let set: RandomTeamsTypes.RandomSet;
 
