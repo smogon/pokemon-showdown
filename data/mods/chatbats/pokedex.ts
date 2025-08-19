@@ -403,4 +403,15 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		eggGroups: ["Field"],
 		requiredItem: "Typhlosionite",
 	},
+	terapagos: {
+		inherit: true,
+	},
+	terapagosterastal: {
+		inherit: true,
+		abilities: { 0: "Tera Wheel" },
+	},
+	terapagosstellar: {
+		inherit: true,
+		types: ["Stellar"],
+	},
 };
