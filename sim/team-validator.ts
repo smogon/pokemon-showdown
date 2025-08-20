@@ -2721,7 +2721,7 @@ export class TeamValidator {
 				if (!canLearnSpecies.includes(toID(species.baseSpecies))) canLearnSpecies.push(toID(species.baseSpecies));
 				minLearnGen = Math.min(minLearnGen, learnedGen);
 			}
-			if (canUseHomeRelearner) {
+			if (canUseHomeRelearner && !['nincada', 'spinda'].includes(species.id)) {
 				const learnsetData = this.getExternalLearnsetData(species.id, 'gen8bdsp');
 				if (learnsetData?.learnset?.[move.id]) {
 					for (const source of learnsetData.learnset[move.id]) {
