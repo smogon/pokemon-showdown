@@ -12170,6 +12170,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Blue",
 		prevo: "Espurr",
 		evoLevel: 25,
+		evoGender: "M",
 		eggGroups: ["Field"],
 		otherFormes: ["Meowstic-F"],
 		formeOrder: ["Meowstic", "Meowstic-F"],
@@ -12188,6 +12189,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "White",
 		prevo: "Espurr",
 		evoLevel: 25,
+		evoGender: "F",
 		eggGroups: ["Field"],
 	},
 	honedge: {
