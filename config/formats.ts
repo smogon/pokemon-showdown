@@ -1286,7 +1286,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			return problems;
 		},
 		onModifySpecies(species, target, source, effect) {
-			if (!target) return; // chat
+			if (!target?.set) return; // chat
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			if (target.set.name === target.set.species) return;
 			const crossSpecies = this.dex.species.get(target.set.name);
@@ -3645,7 +3645,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['HP Percentage Mod', 'Cancel Mod', 'Desync Clause Mod', 'Sleep Clause Mod', 'Freeze Clause Mod', 'Team Type Preview'],
 		banlist: ['Nonexistent'],
 		onModifySpecies(species, target, source, effect) {
-			if (!target) return;
+			if (!target?.set) return;
 			return { ...species, ...(target.set as any).hc };
 		},
 		onSwitchIn(pokemon) {

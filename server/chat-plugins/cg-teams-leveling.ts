@@ -40,6 +40,7 @@ function getLevelSpeciesID(set: PokemonSet, format?: Format) {
 
 async function updateStats(battle: RoomBattle, winner: ID) {
 	if (!incrementWins || !incrementLosses) await dbSetupPromise;
+	// if there are custom rules, this id will include them, so the game won't be counted
 	if (toID(battle.format) !== 'gen9computergeneratedteams') return;
 	// if the game is rated or part of a tournament hosted by a public room, it counts
 	if (battle.rated <= 1 && battle.room.parent?.game) {

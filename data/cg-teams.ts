@@ -141,7 +141,7 @@ export default class TeamGenerator {
 		for (const i of this.itemPool) {
 			if (i.itemUser && !i.isNonstandard) {
 				for (const user of i.itemUser) {
-					if (Dex.species.get(user).requiredItems?.[0] !== i.name) this.specialItems[user] = i.id;
+					if (this.dex.species.get(user).requiredItems?.[0] !== i.name) this.specialItems[user] = i.id;
 				}
 			}
 		}
@@ -150,7 +150,7 @@ export default class TeamGenerator {
 		if (rules.adjustLevel) this.forceLevel = rules.adjustLevel;
 	}
 
-	getTeam(): PokemonSet[] {
+	getTeam(options: PlayerOptions, battle?: Battle): PokemonSet[] {
 		let speciesPool = this.dex.species.all().filter(s => {
 			if (!s.exists) return false;
 			if (s.isNonstandard || s.isNonstandard === 'Unobtainable') return false;
@@ -167,24 +167,33 @@ export default class TeamGenerator {
 
 		const team: PokemonSet[] = [];
 		while (team.length < this.teamSize && speciesPool.length) {
-			const species = this.prng.sample(speciesPool);
+			let species = this.prng.sample(speciesPool);
+			let modSpecies;
+			if (battle) {
+				modSpecies = battle.runEvent('ModifySpecies', null, null, null, species);
+			}
 
 			const haveRoomToReject = speciesPool.length >= (this.teamSize - team.length);
 			const isGoodFit = this.speciesIsGoodFit(species, teamStats);
 			if (haveRoomToReject && !isGoodFit) continue;
 
+			let level = this.forceLevel || TeamGenerator.getLevel(species);
+			if (modSpecies) {
+				if (!this.forceLevel) level = TeamGenerator.adjustLevel(species, level, modSpecies);
+				species = modSpecies;
+			}
+
 			speciesPool = speciesPool.filter(s => s.baseSpecies !== species.baseSpecies);
-			team.push(this.makeSet(species, teamStats));
+			team.push(this.makeSet(species, level, teamStats));
 		}
 
 		return team;
 	}
 
-	protected makeSet(species: Species, teamStats: TeamStats): PokemonSet {
+	protected makeSet(species: Species, level: number, teamStats: TeamStats): PokemonSet {
 		const abilityPool: string[] = Object.values(species.abilities);
 		const abilityWeights = abilityPool.map(a => this.getAbilityWeight(this.dex.abilities.get(a)));
 		const ability = this.weightedRandomPick(abilityPool, abilityWeights);
-		const level = this.forceLevel || TeamGenerator.getLevel(species);
 
 		const moves: Move[] = [];
 		let movesStats: MovesStats = {
@@ -221,7 +230,7 @@ export default class TeamGenerator {
 				if (!isRound2) {
 					for (const moveID of movePool) {
 						const move = this.dex.moves.get(moveID);
-						const weight = this.getMoveWeight(move, teamStats, species, moves, movesStats, ability, level);
+						const weight = this.getMoveWeight(move, teamStats, species, moves, movesStats, ability, level, isRound2);
 						interimMovePool.push({ move: moveID, weight });
 					}
 
@@ -236,11 +245,12 @@ export default class TeamGenerator {
 					for (const moveID of movePoolCopy) {
 						const move = this.dex.moves.get(moveID);
 						if (moves.includes(move)) continue;
-						const weight = this.getMoveWeight(move, teamStats, species, moves, movesStats, ability, level);
+						const weight = this.getMoveWeight(move, teamStats, species, moves, movesStats, ability, level, isRound2);
 						interimMovePool.push({ move: moveID, weight });
 					}
 
 					interimMovePool.sort((a, b) => b.weight - a.weight);
+					// empty moveset and start again with new move pool
 					moves.splice(0);
 					movesStats = {
 						setup: { atk: 0, def: 0, spa: 0, spd: 0, spe: 0 },
@@ -262,7 +272,7 @@ export default class TeamGenerator {
 				movePoolIsTrimmed = true;
 			} else {
 				weights = movePool.map(
-					m => this.getMoveWeight(this.dex.moves.get(m), teamStats, species, moves, movesStats, ability, level)
+					m => this.getMoveWeight(this.dex.moves.get(m), teamStats, species, moves, movesStats, ability, level, isRound2)
 				);
 			}
 
@@ -299,7 +309,7 @@ export default class TeamGenerator {
 			} else {
 				movesStats.nonStatusMoves++;
 				const bp = +move.basePower;
-				const moveType = TeamGenerator.moveType(move, species);
+				const moveType = this.moveType(move, species, moves);
 				if ((movesStats.attackTypes[moveType] || 0) < bp) movesStats.attackTypes[moveType] = bp;
 			}
 
@@ -363,28 +373,32 @@ export default class TeamGenerator {
 		// For Tera Type, we just pick a random type if it's got Tera Blast, Revelation Dance, or no attacking moves
 		// In the latter case, we avoid picking a type the Pokemon already is, and in the other two we avoid picking a
 		// type that matches the Pokemon's other moves
+		// We also avoid picking a type the Pokemon already is when the Bonus Type rule is present
 		// Otherwise, we pick the type of one of its attacking moves
 		// Pokemon with 3 or more attack types and Pokemon with both Tera Blast and Contrary can also get Stellar type
 		// but Pokemon with Adaptability never get Stellar because Tera Stellar makes Adaptability have no effect
 		// Ogerpon's formes are forced to the Tera type that matches their forme
 		// Terapagos is forced to Stellar type
-		// Pokemon with Black Sludge don't generally want to tera to a type other than Poison
+		// Pokemon with Black Sludge don't generally want to tera to a type other than Poison or Stellar
 		const hasTeraBlast = moves.some(m => m.id === 'terablast');
 		const hasRevelationDance = moves.some(m => m.id === 'revelationdance');
-		let attackingTypes = nonStatusMoves.map(m => TeamGenerator.moveType(this.dex.moves.get(m), species));
+		const bonusType = this.format.ruleTable?.has('bonustypemod');
+		let attackingTypes = nonStatusMoves.map(m => this.moveType(this.dex.moves.get(m), species, moves));
 		let teraType;
+		const noStellar = ability === 'Adaptability' || new Set(attackingTypes).size < 3 || bonusType;
 		if (species.requiredTeraType) {
 			teraType = species.requiredTeraType;
 		} else if (item === 'blacksludge' && this.prng.randomChance(2, 3)) {
-			teraType = 'Poison';
+			teraType = noStellar && !bonusType ? 'Poison' : 'Stellar';
 		} else if (hasTeraBlast && ability === 'Contrary' && this.prng.randomChance(2, 3)) {
 			teraType = 'Stellar';
 		} else {
-			const noStellar = ability === 'Adaptability' || new Set(attackingTypes).size < 3;
-			const noAttacks = !nonStatusMoves.length;
+			if (bonusType) attackingTypes = attackingTypes.filter(t => !species.types.includes(t));
+			const noAttacks = !attackingTypes.length;
 			if (hasTeraBlast || hasRevelationDance || noAttacks) {
-				attackingTypes = this.dex.types.names().filter(t => !(noAttacks ? species.types : attackingTypes).includes(t));
-				if (noStellar) attackingTypes.splice(attackingTypes.indexOf('Stellar'));
+				attackingTypes = this.dex.types.names().filter(
+					t => !(noAttacks || bonusType ? species.types : attackingTypes).includes(t));
+				if (noStellar || hasTeraBlast) attackingTypes.splice(attackingTypes.indexOf('Stellar'));
 			} else {
 				if (!noStellar) attackingTypes.push('Stellar');
 			}
@@ -412,10 +426,13 @@ export default class TeamGenerator {
 	 * @returns true if the Pokémon is a good fit for the team so far, and no otherwise
 	 */
 	protected speciesIsGoodFit(species: Species, stats: TeamStats): boolean {
+		const inverse = this.format.ruleTable?.has('inversemod');
 		// type check
 		for (const typeName of this.dex.types.names()) {
-			const effectiveness = this.dex.getEffectiveness(typeName, species.types);
-			if (effectiveness === 1) { // WEAKNESS!
+			if (!this.dex.getImmunity(typeName, species.types) && !inverse) continue;
+			let effectiveness = this.dex.getEffectiveness(typeName, species.types);
+			if (inverse) effectiveness *= -1;
+			if (effectiveness >= 1) { // WEAKNESS!
 				if (stats.typeWeaknesses[typeName] === undefined) {
 					stats.typeWeaknesses[typeName] = 0;
 				}
@@ -427,8 +444,9 @@ export default class TeamGenerator {
 		}
 		// species passes; increment counters
 		for (const typeName of this.dex.types.names()) {
-			const effectiveness = this.dex.getEffectiveness(typeName, species.types);
-			if (effectiveness === 1) {
+			let effectiveness = this.dex.getEffectiveness(typeName, species.types);
+			if (inverse) effectiveness *= -1;
+			if (effectiveness >= 1) {
 				stats.typeWeaknesses[typeName]++;
 			}
 		}
@@ -439,11 +457,67 @@ export default class TeamGenerator {
 	 * @returns A weighting for the Pokémon's ability.
 	 */
 	protected getAbilityWeight(ability: Ability): number {
-		return ability.rating + 1; // Some ability ratings are -1
+		return Math.max((ability.rating + 1) ** 2 - 1, 0); // Some ability ratings are -1
 	}
 
 	protected static moveIsHazard(move: Move): boolean {
-		return !!(move.sideCondition && move.target === 'foeSide') || ['stoneaxe', 'ceaselessedge'].includes(move.id);
+		return !!move.sideCondition && move.target === 'foeSide' || ['stoneaxe', 'ceaselessedge'].includes(move.id);
+	}
+
+	protected static getAdjustedStats(species: Species, ability: string, level: number): StatsTable {
+		const adjustedStats: StatsTable = {
+			hp: species.baseStats.hp * level / 100 + level,
+			atk: species.baseStats.atk * level * level / 10000,
+			def: species.baseStats.def * level / 100,
+			spa: species.baseStats.spa * level * level / 10000,
+			spd: species.baseStats.spd * level / 100,
+			spe: species.baseStats.spe * level / 100,
+		};
+
+		if (species.baseSpecies === 'Pikachu') {
+			// light ball is guaranteed on Pikachu
+			adjustedStats.atk *= 2;
+			adjustedStats.spa *= 2;
+		} else if (species.name.startsWith('Ogerpon-')) {
+			// mask boost is treated like a stat boost since it boosts all moves
+			adjustedStats.atk *= 1.2;
+			adjustedStats.spa *= 1.2;
+		}
+
+		if (!ability) return adjustedStats;
+
+		// Abilities that effectively modify stats
+		if (ability === 'Guts' || ability === 'Hustle' || ability === 'Intrepid Sword') {
+			adjustedStats.atk *= 1.5;
+		} else if (ability === 'Huge Power' || ability === 'Pure Power') {
+			adjustedStats.atk *= 2;
+		} else if (ability === 'Orichalcum Pulse') {
+			adjustedStats.atk *= 1.3333;
+		} else if (ability === 'Sword of Ruin') {
+			adjustedStats.atk /= 0.75;
+		}
+
+		if (ability === 'Tablets of Ruin') {
+			adjustedStats.def /= 0.75;
+		} else if (ability === 'Fur Coat') {
+			adjustedStats.def *= 2;
+		} else if (ability === 'Dauntless Shield' || ability === 'Intimidate') {
+			adjustedStats.def *= 1.5;
+		}
+
+		if (ability === 'Hadron Engine') {
+			adjustedStats.spa *= 1.3333;
+		} else if (ability === 'Beads of Ruin') {
+			adjustedStats.spa /= 0.75;
+		}
+
+		if (ability === 'Vessel of Ruin') {
+			adjustedStats.spd /= 0.75;
+		} else if (ability === 'Ice Scales') {
+			adjustedStats.spd *= 2;
+		}
+
+		return adjustedStats;
 	}
 
 	/**
@@ -457,6 +531,7 @@ export default class TeamGenerator {
 		movesStats: MovesStats,
 		ability: string,
 		level: number,
+		isRound2: boolean,
 	): number {
 		if (!move.exists) return 0;
 		// this is NOT doubles, so there will be no adjacent ally
@@ -468,14 +543,17 @@ export default class TeamGenerator {
 
 		// Attack and Special Attack are scaled by level^2 because in addition to stats themselves being scaled by level,
 		// damage dealt by attacks is also scaled by the user's level
-		const adjustedStats: StatsTable = {
-			hp: species.baseStats.hp * level / 100 + level,
-			atk: species.baseStats.atk * level * level / 10000,
-			def: species.baseStats.def * level / 100,
-			spa: species.baseStats.spa * level * level / 10000,
-			spd: species.baseStats.spd * level / 100,
-			spe: species.baseStats.spe * level / 100,
-		};
+		const adjustedStats = TeamGenerator.getAdjustedStats(species, ability, level);
+
+		let types = species.types;
+		if (this.format.ruleTable?.has('camomonsmod')) {
+			if (isRound2) {
+				types = movesSoFar.slice(0, 2).map(m => m.type);
+				if (types.length < 2) types.push(move.type);
+			} else {
+				types = ['???'];
+			}
+		}
 
 		if (move.category === 'Status') {
 			// The initial value of this weight determines how valuable status moves are vs. attacking moves.
@@ -614,15 +692,25 @@ export default class TeamGenerator {
 			if (ability === 'Compound Eyes') accuracy = Math.min(100, Math.round(accuracy * 1.3));
 			if (ability === 'Victory Star') accuracy = Math.min(100, Math.round(accuracy * 1.1));
 		}
+		if (accuracy <= 100 && ability === 'Hustle' &&
+			(move.category === 'Physical' || TeamGenerator.moveIsPhysical(move, species))) {
+			accuracy = Math.round(accuracy * 0.8);
+		}
 		accuracy /= 100;
 
-		const moveType = TeamGenerator.moveType(move, species);
+		const moveType = this.moveType(move, species, [...movesSoFar, move]);
 
 		let powerEstimate = basePower * baseStat * accuracy;
 		// STAB
-		if (species.types.includes(moveType)) powerEstimate *= ability === 'Adaptability' ? 2 : 1.5;
+		if (types.includes(moveType)) powerEstimate *= ability === 'Adaptability' ? 2 : 1.5;
+		// Misc. abilities
 		if (ability === 'Technician' && move.basePower <= 60) powerEstimate *= 1.5;
 		if (ability === 'Sheer Force' && (move.secondary || move.secondaries)) powerEstimate *= 1.3;
+		if (ability === 'Rocky Payload' && moveType === 'Rock') powerEstimate *= 1.5;
+		if (['Steely Spirit', 'Steelworker'].includes(ability) && moveType === 'Steel') powerEstimate *= 1.5;
+		if (ability === "Dragon's Maw" && moveType === 'Dragon') powerEstimate *= 1.5;
+		if (ability === 'Transistor' && moveType === 'Electric') powerEstimate *= 1.3;
+		if (ability === 'Water Bubble' && moveType === 'Water') powerEstimate *= 2;
 		const numberOfHits = Array.isArray(move.multihit) ?
 			(ability === 'Skill Link' ? move.multihit[1] : (move.multihit[0] + move.multihit[1]) / 2) :
 			move.multihit || 1;
@@ -630,7 +718,8 @@ export default class TeamGenerator {
 
 		if (species.requiredItems) {
 			const item: Item & EventMethods = this.dex.items.get(this.specialItems[species.name]);
-			if (item.onBasePower && (species.types.includes(moveType) || item.name.endsWith('Mask'))) powerEstimate *= 1.2;
+			// mask boost is already accounted for in getAdjustedStats
+			if (item.onBasePower && (species.types.includes(moveType) || !item.name.endsWith('Mask'))) powerEstimate *= 1.2;
 		} else if (this.specialItems[species.name]) {
 			const item: Item & EventMethods = this.dex.items.get(this.specialItems[species.name]);
 			if (item.onBasePower && species.types.includes(moveType)) powerEstimate *= 1.2;
@@ -651,7 +740,7 @@ export default class TeamGenerator {
 		);
 
 		const missilePrimers = ['surf', 'dive'];
-		if (ability === 'Gulp Missile' && missilePrimers.includes(move.id)) {
+		if (species.baseSpecies === 'Cramorant' && ability === 'Gulp Missile' && missilePrimers.includes(move.id)) {
 			// we want exactly one move that activates gulp missile
 			if (!movesSoFar.find(m => m.id === (missilePrimers.find(p => p !== move.id)))) {
 				abilityBonus = 3;
@@ -773,7 +862,7 @@ export default class TeamGenerator {
 	/**
 	 * @returns The effective type of moves with variable types such as Judgment
 	 */
-	protected static moveType(move: Move, species: Species) {
+	protected moveType(move: Move, species: Species, moves: Move[]) {
 		switch (move.id) {
 		case 'ivycudgel':
 		case 'ragingbull':
@@ -782,6 +871,10 @@ export default class TeamGenerator {
 		case 'judgment':
 		case 'revelationdance':
 			return species.types[0];
+		}
+		if (this.format.ruleTable?.has('revelationmonsmod')) {
+			const index = moves.findIndex(m => m.id === move.id);
+			if (index >= 0 && index < species.types.length) return species.types[index];
 		}
 		return move.type;
 	}
@@ -835,6 +928,7 @@ export default class TeamGenerator {
 	 * @returns A multiplier to a move weighting based on the boosts it produces for the user.
 	 */
 	protected boostWeight(move: Move, movesSoFar: Move[], species: Species, ability: string, level: number): number {
+		if (move.boosts && move.target !== 'self') return 1; // swagger, etc.
 		const physicalIsRelevant = (
 			TeamGenerator.moveIsPhysical(move, species) ||
 			movesSoFar.some(
@@ -846,21 +940,14 @@ export default class TeamGenerator {
 			movesSoFar.some(m => TeamGenerator.moveIsSpecial(m, species))
 		);
 
-		const adjustedStats: StatsTable = {
-			hp: species.baseStats.hp * level / 100 + level,
-			atk: species.baseStats.atk * level * level / 10000,
-			def: species.baseStats.def * level / 100,
-			spa: species.baseStats.spa * level * level / 10000,
-			spd: species.baseStats.spd * level / 100,
-			spe: species.baseStats.spe * level / 100,
-		};
+		const adjustedStats = TeamGenerator.getAdjustedStats(species, ability, level);
 
 		let weight = 0;
 		const accuracy = move.accuracy === true ? 100 : move.accuracy / 100;
 		const secondaryChance = move.secondary && ability !== 'Sheer Force' ?
 			Math.min(((move.secondary.chance || 100) * (ability === 'Serene Grace' ? 2 : 1) / 100), 100) * accuracy : 0;
 		const abilityMod = ability === 'Simple' ? 2 : ability === 'Contrary' ? -1 : 1;
-		const bodyPressMod = movesSoFar.some(m => m.id === 'bodyPress') ? 2 : 1;
+		const bodyPressMod = movesSoFar.some(m => m.id === 'bodypress') ? 2 : 1;
 		const electroBallMod = movesSoFar.some(m => m.id === 'electroball') ? 2 : 1;
 		for (const { chance, boosts } of [
 			{ chance: 1, boosts: move.boosts },
@@ -950,11 +1037,11 @@ export default class TeamGenerator {
 		case 'focussash':
 			if (ability === 'Sturdy') return 0;
 			// frail
-			if (adjustedStats.hp < 65 && adjustedStats.def < 65 && adjustedStats.spd < 65) return 35;
+			if (adjustedStats.hp < 65 && (adjustedStats.def < 65 || adjustedStats.spd < 65)) return 35;
 			return 10;
 		case 'heavydutyboots':
 			switch (this.dex.getEffectiveness('Rock', species)) {
-			case 2: return 50; // double super effective
+			case 2: return 60; // double super effective
 			case 1: return 30; // super effective
 			case 0: return 10; // neutral
 			}
@@ -983,7 +1070,7 @@ export default class TeamGenerator {
 			if (species.types.includes('Fire')) return 0;
 			if (statusImmunities.includes(ability)) return 0;
 			if (['Thermal Exchange', 'Water Bubble', 'Water Veil'].includes(ability)) return 0;
-			weight = ['Guts', 'Flare Boost'].includes(ability) ? 30 : 0;
+			weight = ['Guts', 'Flare Boost'].includes(ability) ? 50 : 0;
 			if (moves.some(m => m.id === 'facade')) {
 				if (!weight && !moves.some(m => TeamGenerator.moveIsPhysical(m, species) && m.id !== 'facade')) {
 					weight = 30;
@@ -998,11 +1085,11 @@ export default class TeamGenerator {
 			if (ability === 'Immunity') return 0;
 			// If facade is our only physical attack, Flame Orb is preferred
 			if (!moves.some(m => TeamGenerator.moveIsPhysical(m, species) && m.id !== 'facade') &&
-				!species.types.includes('Fire') && ['Thermal Exchange', 'Water Bubble', 'Water Veil'].includes(ability)
+				!species.types.includes('Fire') && !['Thermal Exchange', 'Water Bubble', 'Water Veil'].includes(ability)
 			) return 0;
 
 			weight = 0;
-			if (['Poison Heal', 'Toxic Boost'].includes('ability')) weight += 25;
+			if (['Poison Heal', 'Toxic Boost', 'Guts'].includes('ability')) weight += 50;
 			if (moves.some(m => m.id === 'facade')) weight += 25;
 
 			return weight;
@@ -1017,11 +1104,14 @@ export default class TeamGenerator {
 
 		// berries
 		case 'sitrusberry': case 'magoberry':
-			return 20;
+			return ability === 'Harvest' || ability === 'Cud Chew' ? 40 : 20;
 
+		// specialty items
 		case 'throatspray':
 			if (moves.some(m => m.flags.sound) && moves.some(m => m.category === 'Special')) return 30;
 			return 0;
+		case 'lightclay':
+			return moves.filter(m => ['reflect', 'lightscreen', 'auroraveil'].includes(m.id)).length * 20;
 
 		default:
 			// probably not a very good item
@@ -1058,6 +1148,52 @@ export default class TeamGenerator {
 	}
 
 	/**
+	 * Dynamically adjusts level balance when an OM rule is modifying base stats
+	 */
+	protected static adjustLevel(oldSpecies: Species, oldLevel: number, newSpecies: Species): number {
+		// calculate the adjusted stats of the new species at its old level
+		// could use the actual stat calcs, but let's just use the same approximation we use everywhere else
+		let newStats: StatsTable = TeamGenerator.getAdjustedStats(newSpecies, '', oldLevel);
+		// calculate the old stats to compare against
+		const oldStats = TeamGenerator.getAdjustedStats(oldSpecies, '', oldLevel);
+		if (JSON.stringify(newStats) === JSON.stringify(oldStats)) return oldLevel;
+		const statRatios = { power: 0, bulk: 0, speed: 0 };
+		let statRatioTotal = 0;
+		// calculate the ratio of the expected average damaging power of the new stats to that of the old
+		statRatioTotal += statRatios.power = Math.log((oldStats.atk + oldStats.spa) / (newStats.atk + newStats.spa));
+		// calculate the ratio of the expected average damage-tanking ability of the new stats to that of the old
+		statRatioTotal += statRatios.bulk = (
+			Math.log(oldStats.hp * oldStats.def * oldStats.spd / (oldStats.def + oldStats.spd)) -
+			Math.log(newStats.hp * newStats.def * newStats.spd / (newStats.def + newStats.spd))
+		);
+		// calculate the ratio of the new speed to the old stats' speed at half weight
+		statRatioTotal += statRatios.speed = Math.log(oldStats.spe / newStats.spe) / 2;
+		// make a naive guess as to what level the pokemon should be without considering that level affects damage output
+		let newLevel = Math.min(Math.floor(Math.E ** (statRatioTotal / 5) * oldLevel), 100);
+		const overestimate = newLevel > oldLevel;
+		// start accounting for level's affect on damage output and increment the guess by 1 until it looks right
+		while (newLevel !== oldLevel) {
+			// the getAdjustedStats function takes level's affect on damage into account automatically
+			newStats = TeamGenerator.getAdjustedStats(newSpecies, '', newLevel);
+			statRatioTotal = 0;
+			statRatioTotal += statRatios.power = Math.log((oldStats.atk + oldStats.spa) / (newStats.atk + newStats.spa));
+			statRatioTotal += statRatios.bulk = (
+				Math.log(oldStats.hp * oldStats.def * oldStats.spd / (oldStats.def + oldStats.spd)) -
+				Math.log(newStats.hp * newStats.def * newStats.spd / (newStats.def + newStats.spd))
+			);
+			statRatioTotal += statRatios.speed = Math.log(oldStats.spe / newStats.spe) / 2;
+			if (overestimate && statRatioTotal >= 0 || !overestimate && statRatioTotal <= 0) break;
+			// initial estimate will always be further from the old level than it should be
+			if (overestimate) {
+				newLevel--;
+			} else {
+				newLevel++;
+			}
+		}
+		return newLevel;
+	}
+
+	/**
 	 * Picks a choice from `choices` based on the weights in `weights`.
 	 * `weights` must be the same length as `choices`.
 	 */
@@ -1074,7 +1210,7 @@ export default class TeamGenerator {
 				 ...acc,
 				 [element as string]: weights[index],
 			};
-	  }, {})) */
+		}, {})) */
 
 		const totalWeight = weights.reduce((a, b) => a + b, 0);
 

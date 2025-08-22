@@ -62,7 +62,7 @@ export const HARDCODED_MOVE_WEIGHTS: { [moveID: IDEntry]: number } = {
 	// healing moves
 	// TODO: should healing moves be more common on bulkier pokemon?
 	// 25%
-	junglehealing: 3, lifedew: 3,
+	junglehealing: 3, lifedew: 2, lunarblessing: 3,
 	// 50%
 	milkdrink: 5, moonlight: 5, morningsun: 5, recover: 5, roost: 5,
 	shoreup: 5, slackoff: 5, softboiled: 5, synthesis: 5,
