@@ -215,7 +215,7 @@ if (Config.usesqlite) {
 		PM.spawn(global.Config?.subprocessescache?.pm ?? 1);
 		// clear super old pms on startup
 		void PM.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
-	} else if (process.send && process.mainModule === module) {
+	} else if (process.send && require.main === module) {
 		global.Monitor = {
 			crashlog(error: Error, source = 'A private message child process', details: AnyObject | null = null) {
 				const repr = JSON.stringify([error.name, error.message, source, details]);

@@ -427,7 +427,7 @@ export abstract class ProcessManager<T extends ProcessWrapper = ProcessWrapper> 
 	constructor(module: NodeJS.Module) {
 		this.filename = module.filename;
 		this.basename = path.basename(module.filename);
-		this.isParentProcess = (process.mainModule !== module || !process.send);
+		this.isParentProcess = (require.main !== module || !process.send);
 
 		this.listen();
 	}
