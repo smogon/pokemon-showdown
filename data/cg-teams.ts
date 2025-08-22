@@ -442,6 +442,7 @@ export default class TeamGenerator {
 		}
 		// species passes; increment counters
 		for (const typeName of this.dex.types.names()) {
+			if (!this.dex.getImmunity(typeName, species.types) && !inverse) continue;
 			let effectiveness = this.dex.getEffectiveness(typeName, species.types);
 			if (inverse) effectiveness *= -1;
 			if (effectiveness >= 1) {
