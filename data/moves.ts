@@ -5056,7 +5056,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			}
 		},
 		onHit(target, source) {
-			const oldAbility = target.setAbility(source.ability);
+			const oldAbility = target.setAbility(source.ability, source);
 			if (!oldAbility) return oldAbility as false | null;
 			if (!target.isAlly(source)) target.volatileStaleness = 'external';
 		},
