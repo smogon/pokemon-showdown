@@ -885,7 +885,7 @@ export class DatabaseLogSearcher extends Searcher {
 				search.user ? SQL`userid ${search.user[1] ? SQL`!=` : SQL`=`} ${search.user[0]} AND ` : SQL``
 			} time BETWEEN ${monthStart}::int::timestamp AND ${monthEnd}::int::timestamp AND
 			type = ${'c'} AND roomid = ${roomid}
-			${parsedSearch.length ? SQL` AND content @@ plainto_tsquery(${parsedSearch.join(',')})` : SQL``} LIMIT ${limit}
+			${parsedSearch.length ? SQL` AND content @@ plainto_tsquery(${parsedSearch.join(' ')})` : SQL``} LIMIT ${limit}
 		`;
 
 		let curDate = '';
