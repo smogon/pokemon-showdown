@@ -47,6 +47,7 @@ If your `smell-of-curry` and you want to release a new version, you can do the f
   - `evoStatusEffect`: Required status condition for evolution
   - `evoBiomes`: Required biomes for evolution
   - `evoPriority`: Evolution priority system
+  - `evoCosmeticForme`: Required cosmetic forme for evolution
   - `evoType`: Enhanced evolution type system
   - `changeEvent`: Event that triggers forme changes
 
