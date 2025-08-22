@@ -272,6 +272,11 @@ export class Species extends BasicEffect implements Readonly<BasicEffect & Speci
 	* @pokebedrock
 	*/
 	readonly evoMoonPhase?: keyof typeof MoonPhase;
+	/**
+	* Cosmetic Forme Required for the evolution.
+	* @pokebedrock
+	*/
+	readonly evoCosmeticForme?: string;
 	/** Is NFE? True if this Pokemon can evolve (Mega evolution doesn't count). */
 	readonly nfe: boolean;
 	/** Egg groups. */
