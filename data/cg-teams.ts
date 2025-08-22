@@ -167,33 +167,31 @@ export default class TeamGenerator {
 
 		const team: PokemonSet[] = [];
 		while (team.length < this.teamSize && speciesPool.length) {
-			let species = this.prng.sample(speciesPool);
-			let modSpecies;
-			if (battle) {
-				modSpecies = battle.runEvent('ModifySpecies', null, null, null, species);
-			}
+			const species = this.prng.sample(speciesPool);
 
 			const haveRoomToReject = speciesPool.length >= (this.teamSize - team.length);
 			const isGoodFit = this.speciesIsGoodFit(species, teamStats);
 			if (haveRoomToReject && !isGoodFit) continue;
 
-			let level = this.forceLevel || TeamGenerator.getLevel(species);
-			if (modSpecies) {
-				if (!this.forceLevel) level = TeamGenerator.adjustLevel(species, level, modSpecies);
-				species = modSpecies;
-			}
-
 			speciesPool = speciesPool.filter(s => s.baseSpecies !== species.baseSpecies);
-			team.push(this.makeSet(species, level, teamStats));
+			team.push(this.makeSet(species, teamStats, battle));
 		}
 
 		return team;
 	}
 
-	protected makeSet(species: Species, level: number, teamStats: TeamStats): PokemonSet {
+	protected makeSet(species: Species, teamStats: TeamStats, battle?: Battle): PokemonSet {
 		const abilityPool: string[] = Object.values(species.abilities);
 		const abilityWeights = abilityPool.map(a => this.getAbilityWeight(this.dex.abilities.get(a)));
 		const ability = this.weightedRandomPick(abilityPool, abilityWeights);
+		let level = this.forceLevel || TeamGenerator.getLevel(species);
+		if (battle) {
+			// the target for this event is supposed to be a `Pokemon` object, but we don't have one of those
+			// and runEvent defaults to using `this` as a `target` if one isn't provided anyway
+			const modSpecies = battle.runEvent('ModifySpecies', battle, null, null, species);
+			if (!this.forceLevel) level = TeamGenerator.adjustLevel(species, level, modSpecies);
+			species = modSpecies;
+		}
 
 		const moves: Move[] = [];
 		let movesStats: MovesStats = {
