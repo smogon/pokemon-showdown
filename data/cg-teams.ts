@@ -464,6 +464,8 @@ export default class TeamGenerator {
 	}
 
 	protected static getAdjustedStats(species: Species, ability: string, level: number): StatsTable {
+		// Attack and Special Attack are scaled by level^2 because in addition to stats themselves being scaled by level,
+		// damage dealt by attacks is also scaled by the user's level
 		const adjustedStats: StatsTable = {
 			hp: species.baseStats.hp * level / 100 + level,
 			atk: species.baseStats.atk * level * level / 10000,
@@ -540,8 +542,6 @@ export default class TeamGenerator {
 		// but the important thing is to not use Terapagos-Base's stats since it never battles in that forme
 		if (ability === 'Tera Shift') species = this.dex.species.get('Terapagos-Terastal');
 
-		// Attack and Special Attack are scaled by level^2 because in addition to stats themselves being scaled by level,
-		// damage dealt by attacks is also scaled by the user's level
 		const adjustedStats = TeamGenerator.getAdjustedStats(species, ability, level);
 
 		let types = species.types;
