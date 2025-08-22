@@ -7522,6 +7522,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Brown",
 		prevo: "Burmy",
 		evoLevel: 20,
+		evoGender: "F",
+		evoCosmeticForme: "Sandy",
+		evoPriority: 1,
 		eggGroups: ["Bug"],
 	},
 	wormadamtrash: {
@@ -7538,6 +7541,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Red",
 		prevo: "Burmy",
 		evoLevel: 20,
+		evoGender: "F",
+		evoCosmeticForme: "Trash",
+		evoPriority: 1,
 		eggGroups: ["Bug"],
 	},
 	mothim: {
