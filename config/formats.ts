@@ -2632,11 +2632,11 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		searchShow: false,
 		ruleset: ['[Gen 9] Almost Any Ability'],
 		banlist: [
-			'Brambleghast', 'Chien-Pao', 'Cinderace', 'Cobalion', 'Corviknight', 'Deoxys-Speed', 'Empoleon', 'Excadrill', 'Garchomp', 'Gholdengo', 'Gliscor', 'Goodra-Hisui',
-			'Great Tusk', 'Heatran', 'Iron Boulder', 'Iron Crown', 'Iron Hands', 'Iron Moth', 'Iron Treads', 'Kingambit', 'Landorus-Incarnate', 'Landorus-Therian', 'Latios',
-			'Manaphy', 'Meowscarada', 'Moltres-Base', 'Ogerpon-Cornerstone', 'Ogerpon-Hearthflame', 'Ogerpon-Wellspring', 'Pecharunt', 'Primarina', 'Roaring Moon', 'Sandy Shocks',
-			'Scream Tail', 'Sinistcha', 'Skarmory', 'Swampert', 'Thundurus-Incarnate', 'Thundurus-Therian', 'Ting-Lu', 'Tinkaton', 'Ursaluna-Bloodmoon', 'Zamazenta-Hero', 'Zapdos-Base',
-			'Zapdos-Galar', 'Zarude', 'Light Clay',
+			'Archaludon', 'Brambleghast', 'Chien-Pao', 'Cinderace', 'Cobalion', 'Corviknight', 'Deoxys-Speed', 'Empoleon', 'Excadrill', 'Garchomp', 'Gholdengo', 'Gliscor',
+			'Goodra-Hisui', 'Great Tusk', 'Heatran', 'Iron Boulder', 'Iron Crown', 'Iron Hands', 'Iron Moth', 'Iron Treads', 'Kingambit', 'Landorus-Incarnate', 'Landorus-Therian',
+			'Latios', 'Mamoswine', 'Manaphy', 'Meowscarada', 'Moltres-Base', 'Ogerpon-Cornerstone', 'Ogerpon-Hearthflame', 'Ogerpon-Wellspring', 'Pecharunt', 'Primarina',
+			'Roaring Moon', 'Sandy Shocks', 'Scream Tail', 'Sinistcha', 'Skarmory', 'Swampert', 'Thundurus-Incarnate', 'Thundurus-Therian', 'Ting-Lu', 'Tinkaton', 'Ursaluna-Bloodmoon',
+			'Zamazenta-Hero', 'Zapdos-Base', 'Zapdos-Galar', 'Zarude', 'Light Clay',
 		],
 	},
 	{
