@@ -229,6 +229,10 @@ export class Field {
 		return true;
 	}
 
+	/**
+	 * Start a field effect if it is not already active and maintain a list of sources.
+	 * The field effect is only removed when all sources deactivate it.
+	 */
 	addSourcedPseudoWeather(
 		status: string | Condition,
 		source: Pokemon,
@@ -244,6 +248,9 @@ export class Field {
 		return returnValue;
 	}
 
+	/**
+	 * Remove a source from a field effect. If no sources remain, the effect is removed.
+	 */
 	removePseudoWeatherSource(status: string | Effect, source: Pokemon) {
 		status = this.battle.dex.conditions.get(status);
 		const state = this.pseudoWeather[status.id];
@@ -256,6 +263,9 @@ export class Field {
 		return true;
 	}
 
+	/**
+	 * Remove a source from all active field effects. Used when a Pokemon leaves the field.
+	 */
 	removeSourceFromPseudoWeather(source: Pokemon) {
 		for (const id in this.pseudoWeather) {
 			if (this.pseudoWeather[id].activeSources) {
