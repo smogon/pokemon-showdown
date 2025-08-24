@@ -344,8 +344,8 @@ describe('Dex data', () => {
 	formes[5] = formes[4] + 1 + 1 + 3 + 1 + 2 + 1 + 4 - 1;
 	// Arceus (1) + Vivillon (2) + Meowstic (1) + Primal (2) +
 	// Aegislash (1) + Pumpkaboo (3) + Gourgeist (3) + Hoopa (1) +
-	// Pikachu (6) + Mega (48) [Floette (1)]
-	formes[6] = formes[5] + 1 + 2 + 1 + 2 + 1 + 3 + 3 + 1 + 6 + 48;
+	// Pikachu (6) + Xerneas (1) + Mega (48) [Floette (1)]
+	formes[6] = formes[5] + 1 + 2 + 1 + 2 + 1 + 3 + 3 + 1 + 6 + 1 + 48;
 	// Alola (18) + Totem (12) + Pikachu (7) - Pikachu (6) + Greninja (2) + Zygarde (2) +
 	// Oricorio (3) + Rockruff (1) + Lycanroc (2) + Wishiwashi (1) + Silvally (17) + Minior (1)
 	// Mimikyu (1) + Necrozma (3) [Magearna (1) + LGPE Starters/Meltan/Melmetal (4)]
@@ -357,12 +357,12 @@ describe('Dex data', () => {
 	// Keldeo (1) + Kyruem (2) + Darmanitan (2) + Cherrim (1)
 	// {DLC1} Alola (4) + Galar (1) + Magearna (1) + Urshifu (1) +
 	// Rockruff (1) + Lycanroc (2) + [Pikachu (1) + Zarude (1)]
-	// {DLC2} Giratina (1) + *-Therian (3) + Genesect (4) + Zygarde (2) +
+	// {DLC2} Giratina (1) + *-Therian (3) + Genesect (4) + Xerneas (1) + Zygarde (2) +
 	// Birds (3) + Slowking (1) + Calyrex (2)
 	// {GMax} 26 + 7
 	formes[8] = 17 + 5 + 1 + 1 + 1 + 3 + 3 + 7 + 14 + 8 +
 		1 + 1 + 1 + 2 + 1 + 2 + 2 + 2 + 1 + 1 + 2 + 2 + 1 +
-		(4 + 1 + 1 + 1 + 1 + 2 + (1 + 1)) + (1 + 3 + 4 + 2 + 3 + 1 + 2);
+		(4 + 1 + 1 + 1 + 1 + 2 + (1 + 1)) + (1 + 3 + 4 + 1 + 2 + 3 + 1 + 2);
 	// Pikachu (8) + Origin (3) + Therian (4) + Alola (16) + Galar (7) + Paldea (4) + Hisui (16) +
 	// Deoxys (3) + Rotom (5) + Shaymin (1) + Arceus (17) + Basculin (2) + Kyurem (2) + Keldeo (1) +
 	// Meloetta (1) + Greninja (1) + Vivillon (2) + Meowstic (1) + Hoopa (1) + Oricorio (3) + Rockruff (1) +

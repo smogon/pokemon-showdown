@@ -130,13 +130,6 @@ describe('Team Validator', () => {
 			assert.false.legalTeam(team, 'gen9purehackmons');
 		});
 
-		it(`should not allow Xerneas with a hacked Ability in Gen 9 Hackmons`, () => {
-			const team = [
-				{ species: 'xerneasneutral', ability: 'steadfast', moves: ['watergun'], evs: { hp: 1 } },
-			];
-			assert.false.legalTeam(team, 'gen9purehackmons');
-		});
-
 		it(`should allow various other hacked formes in Gen 9 Hackmons`, () => {
 			const team = [
 				{ species: 'giratinaorigin', ability: 'steadfast', moves: ['watergun'], evs: { hp: 1 } },
