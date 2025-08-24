@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('./../assert');
+const fs = require('fs');
 
 describe('Dex data', () => {
 	it('should have valid Pokedex entries', () => {
@@ -20,15 +21,17 @@ describe('Dex data', () => {
 				assert(baseEntry && !baseEntry.forme, `Forme ${entry.name} should have a valid baseSpecies`);
 				// Gmax formes are not actually formes, they are only included in pokedex.ts for convenience
 				if (!entry.name.includes('Gmax')) assert((baseEntry.otherFormes || []).includes(entry.name), `Base species ${entry.baseSpecies} should have ${entry.name} listed as an otherForme`);
-				assert(!entry.otherFormes, `Forme ${entry.baseSpecies} should not have a forme list (the list goes in baseSpecies).`);
-				assert(!entry.cosmeticFormes, `Forme ${entry.baseSpecies} should not have a cosmetic forme list (the list goes in baseSpecies).`);
-				assert(!entry.baseForme, `Forme ${entry.baseSpecies} should not have a baseForme (its forme name goes in forme) (did you mean baseSpecies?).`);
+				assert.false(entry.otherFormes, `Forme ${entry.baseSpecies} should not have a forme list (the list goes in baseSpecies).`);
+				assert.false(entry.cosmeticFormes, `Forme ${entry.baseSpecies} should not have a cosmetic forme list (the list goes in baseSpecies).`);
+				assert.false(entry.baseForme, `Forme ${entry.baseSpecies} should not have a baseForme (its forme name goes in forme) (did you mean baseSpecies?).`);
 			} else {
 				// entry should be a base species
-				assert(!entry.baseSpecies, `Base species ${entry.name} should not have its own baseSpecies.`);
-				assert(!entry.changesFrom, `Base species ${entry.name} should not change from anything (its changesFrom forme should be base).`);
-				assert(!entry.battleOnly, `Base species ${entry.name} should not be battle-only (its out-of-battle forme should be base).`);
-				assert(!entry.baseForme || Dex.data.Aliases[pokemonid + toID(entry.baseForme)] === entry.name.replace(/\u0301/g, ""), `Base species ${entry.name}-${entry.baseForme} should be aliased to ${entry.name}`);
+				assert.false(entry.baseSpecies, `Base species ${entry.name} should not have its own baseSpecies.`);
+				assert.false(entry.changesFrom, `Base species ${entry.name} should not change from anything (its changesFrom forme should be base).`);
+				assert.false(entry.battleOnly, `Base species ${entry.name} should not be battle-only (its out-of-battle forme should be base).`);
+				if (entry.baseForme) {
+					assert.equal(Dex.getAlias(pokemonid + toID(entry.baseForme)), pokemonid, `Base species ${entry.name}-${entry.baseForme} should be aliased to ${entry.name}`);
+				}
 			}
 
 			if (entry.prevo) {
@@ -58,7 +61,7 @@ describe('Dex data', () => {
 			}
 			if (entry.cosmeticFormes) {
 				for (const forme of entry.cosmeticFormes) {
-					assert.equal(Dex.data.Aliases[toID(forme)], entry.name.replace(/\u0301/g, ""), `Misspelled/nonexistent alias "${forme}" of ${entry.name}`);
+					assert.equal(Dex.getAlias(toID(forme)), pokemonid, `Misspelled/nonexistent alias "${forme}" of ${entry.name}`);
 					assert.equal(Dex.data.FormatsData[toID(forme)], undefined, `Cosmetic forme "${forme}" should not have its own tier`);
 				}
 			}
@@ -146,11 +149,62 @@ describe('Dex data', () => {
 		}
 	});
 
+	it('should have valid Aliases entries', () => {
+		const Aliases = require('../../dist/data/aliases').Aliases;
+		for (const aliasid in Aliases) {
+			const targetid = toID(Aliases[aliasid]);
+			if (targetid in Dex.data.Pokedex) {
+				assert.equal(Aliases[aliasid], Dex.data.Pokedex[targetid].name, `Alias ${aliasid} has incorrect Species name "${Aliases[aliasid]}"`);
+			} else if (targetid in Dex.data.Moves) {
+				assert.equal(Aliases[aliasid], Dex.data.Moves[targetid].name, `Alias ${aliasid} has incorrect Move name "${Aliases[aliasid]}"`);
+			} else if (targetid in Dex.data.Abilities) {
+				assert.equal(Aliases[aliasid], Dex.data.Abilities[targetid].name, `Alias ${aliasid} has incorrect Ability name "${Aliases[aliasid]}"`);
+			} else if (targetid in Dex.data.Items) {
+				assert.equal(Aliases[aliasid], Dex.data.Items[targetid].name, `Alias ${aliasid} has incorrect Item name "${Aliases[aliasid]}"`);
+			} else if (targetid in Dex.data.Rulesets) {
+				assert.equal(Aliases[aliasid], Dex.data.Rulesets[targetid].name, `Alias ${aliasid} has incorrect Ruleset name "${Aliases[aliasid]}"`);
+			} else {
+				assert(false, `Alias ${aliasid} -> "${Aliases[aliasid]}" must be a pokemon/move/ability/item/format`);
+			}
+		}
+
+		// Dex.loadAliases();
+		// for (const aliasid in Aliases) {
+		// 	const targetid = toID(Aliases[aliasid]);
+		// 	if (Dex.fuzzyAliases.get(aliasid)?.join(',') === targetid) {
+		// 		console.log(`Redundant alias "${aliasid}"`);
+		// 	}
+		// }
+	});
+
+	it('should have valid CompoundWordNames entries', () => {
+		const CompoundWordNames = require('../../dist/data/aliases').CompoundWordNames;
+		const used = new Map();
+		for (const name of CompoundWordNames) {
+			const targetid = toID(name);
+			assert(!used.has(targetid), `CompoundWordNames entry "${name}" already exists as "${used.get(targetid)}"`);
+			used.set(targetid, name);
+
+			let actualName = Dex.data.Pokedex[targetid]?.name || Dex.data.Moves[targetid]?.name ||
+				Dex.data.Abilities[targetid]?.name || Dex.data.Items[targetid]?.name;
+			if (Dex.data.Pokedex[targetid]?.name) {
+				const species = Dex.species.get(targetid);
+				if (species.forme) actualName = species.baseSpecies + ' ' + species.forme;
+			}
+			assert(actualName, `CompoundWordNames entry "${name}" must be a pokemon/move/ability/item`);
+			assert.equal(actualName.replace(/-/g, ''), name.replace(/-/g, ''), `CompoundWordNames entry "${name}" should be the same as its target name (ignoring hyphens)`);
+			assert(name.split('-').length > actualName.split('-').length, `CompoundWordNames entry "${name}" should have at least one more hyphen than "${actualName}" (to mark a word boundary)`);
+		}
+	});
+
 	it('should have valid Rulesets entries', () => {
 		const Rulesets = Dex.data.Rulesets;
 		for (const formatid in Rulesets) {
 			const entry = Rulesets[formatid];
 			assert.equal(toID(entry.name), formatid, `Mismatched Ruleset key "${formatid}" of "${entry.name}"`);
+			if (entry.mod) {
+				assert.equal(toID(entry.mod) || undefined, entry.mod, `Mod of "${formatid}" must be an ID"`);
+			}
 		}
 	});
 
@@ -329,4 +383,31 @@ describe('Dex data', () => {
 			assert.equal(count.formes, formes[gen]);
 		});
 	}
+
+	it('should never import', () => {
+		const modNames = fs.readdirSync(`${__dirname}/../../dist/data/mods/`)
+			.filter(mod => mod === toID(mod))
+			// fine, SSB is allowed to; it's not an official format
+			.filter(mod => mod !== 'gen9ssb');
+		// console.log(modNames);
+		const mods = ['data/', ...modNames.map(mod => `data/mods/${mod}/`)];
+		const files = ['abilities.js', 'aliases.js', 'conditions.js', 'formats-data.js', 'items.js', 'learnsets.js', 'moves.js', 'natures.js', 'pokedex.js', 'pokemongo.js', 'rulesets.js', 'tags.js', 'typechart.js'];
+		for (const mod of mods) {
+			for (const file of files) {
+				let contents;
+				try {
+					contents = fs.readFileSync(`${__dirname}/../../dist/${mod}${file}`, 'utf8');
+					// console.log(`Checking ${mod}${file}`);
+				} catch {
+					// fine if the file doesn't exist
+				}
+				if (contents) {
+					assert.false(
+						/\brequire\(/.test(contents),
+						`File ${mod}${file} should not import anything but types`
+					);
+				}
+			}
+		}
+	});
 });

@@ -248,7 +248,7 @@ export const commands: Chat.ChatCommands = {
 			} else if (nextSymbol === '#') {
 				this.addModAction(`${name} was promoted to ${nextGroupName} by ${user.name}.`);
 				const logRoom = Rooms.get(room.settings.isPrivate === true ? 'upperstaff' : 'staff');
-				logRoom?.addByUser(user, `<<${room.roomid}>> ${name} was appointed Room Owner by ${user.name}`);
+				logRoom?.addByUser(user, `<<${room.roomid}>> ${name} was appointed Room Owner by ${user.name}.`);
 				this.modlog('ROOM OWNER', userid);
 				shouldPopup?.popup(`You were promoted to ${nextGroupName} by ${user.name} in ${room.roomid}.`);
 			} else {
@@ -514,6 +514,11 @@ export const commands: Chat.ChatCommands = {
 			if (target.startsWith('view-')) {
 				connection.openPages?.delete(target.slice(5));
 				if (!connection.openPages?.size) connection.openPages = null;
+				if (target.startsWith('view-bot-')) {
+					const [botId, pageId] = target.slice('view-bot-'.length).split('-');
+					const bot = Users.get(botId);
+					if (bot) bot.sendTo(null, `|pm|${user.getIdentity()}|${botId}||closepage|${user.name}|${pageId}`);
+				}
 				Chat.handleRoomClose(target as RoomID, user, connection);
 				return;
 			}
@@ -786,14 +791,17 @@ export const commands: Chat.ChatCommands = {
 		if (targetUser.id in room.users || user.can('lock')) {
 			targetUser.popup(
 				`|modal||html|<p>${Utils.escapeHTML(user.name)} has banned you from the room ${room.roomid} ` +
-				`${(room.subRooms ? ` and its subrooms` : ``)}${week ? ' for a week' : ''}.` +
+				`${(room.subRooms ? ` and its subrooms` : ``)}${week ? ' for 1 week' : ' for 2 days'}.` +
 				`</p>${(publicReason ? `<p>Reason: ${Utils.escapeHTML(publicReason)}</p>` : ``)}` +
 				`<p>To appeal the ban, PM the staff member that banned you${room.persist ? ` or a room owner. ` +
 				`</p><p><button name="send" value="/roomauth ${room.roomid}">List Room Staff</button></p>` : `.</p>`}`
 			);
 		}
 
-		this.addModAction(`${name} was banned${week ? ' for a week' : ''} from ${room.title} by ${user.name}.${publicReason ? ` (${publicReason})` : ``}`);
+		this.addModAction(
+			`${name} was banned${week ? ' for 1 week' : ' for 2 days'} from ${room.title}` +
+			` by ${user.name}.${publicReason ? ` (${publicReason})` : ``}`
+		);
 
 		const time = week ? Date.now() + 7 * 24 * 60 * 60 * 1000 : null;
 		const affected = Punishments.roomBan(room, targetUser, time, null, privateReason);

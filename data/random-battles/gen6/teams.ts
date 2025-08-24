@@ -636,6 +636,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		if (species.name === 'Unown') return 'Choice Specs';
 		if (species.name === 'Wobbuffet') return 'Custap Berry';
 		if (species.name === 'Shuckle') return 'Mental Herb';
+		if (species.name === 'Honchkrow') return 'Life Orb';
 		if (ability === 'Harvest' || ability === 'Cheek Pouch') return 'Sitrus Berry';
 		if (species.name === 'Ditto') return 'Choice Scarf';
 		if (ability === 'Poison Heal') return 'Toxic Orb';
@@ -883,7 +884,7 @@ export class RandomGen6Teams extends RandomGen7Teams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
-			gender: species.gender,
+			gender: species.gender || (this.random(2) ? 'F' : 'M'),
 			shiny: this.randomChance(1, 1024),
 			level,
 			moves: shuffledMoves,

@@ -95,12 +95,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				// https://www.smogon.com/forums/posts/8992145/
 				// this.add('-activate', pokemon, 'move: Beat Up', '[of] ' + move.allies![0].name);
 				this.event.modifier = 1;
-				return move.allies!.shift()!.species.baseStats.atk;
+				return this.dex.species.get(move.allies!.shift()!.set.species).baseStats.atk;
 			},
 			onFoeModifyDefPriority: -101,
 			onFoeModifyDef(def, pokemon) {
 				this.event.modifier = 1;
-				return pokemon.species.baseStats.def;
+				return this.dex.species.get(pokemon.set.species).baseStats.def;
 			},
 		},
 	},
@@ -445,11 +445,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return this.random(4, 9);
 			},
 			onStart(target, source) {
-				const moveIndex = target.lastMove ? target.moves.indexOf(target.lastMove.id) : -1;
-				if (
-					!target.lastMove || target.lastMove.flags['failencore'] ||
-					!target.moveSlots[moveIndex] || target.moveSlots[moveIndex].pp <= 0
-				) {
+				const moveSlot = target.lastMove ? target.getMoveData(target.lastMove.id) : null;
+				if (!target.lastMove || target.lastMove.flags['failencore'] || !moveSlot || moveSlot.pp <= 0) {
 					// it failed
 					return false;
 				}
@@ -462,10 +459,8 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onResidualOrder: 10,
 			onResidualSubOrder: 14,
 			onResidual(target) {
-				if (
-					target.moves.includes(this.effectState.move) &&
-					target.moveSlots[target.moves.indexOf(this.effectState.move)].pp <= 0
-				) {
+				const moveSlot = target.getMoveData(this.effectState.move);
+				if (moveSlot && moveSlot.pp <= 0) {
 					// early termination if you run out of PP
 					target.removeVolatile('encore');
 				}
@@ -546,7 +541,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	fling: {
 		inherit: true,
 		onPrepareHit(target, source, move) {
-			if (source.ignoringItem()) return false;
+			if (source.ignoringItem(true)) return false;
 			if (source.hasAbility('multitype')) return false;
 			const item = source.getItem();
 			if (!this.singleEvent('TakeItem', item, source.itemState, source, source, move, item)) return false;
@@ -734,6 +729,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onModifyMove() {},
 		boosts: {
 			spa: 1,
+		},
+	},
+	haze: {
+		inherit: true,
+		onHitField() {
+			this.add('-clearallboost');
+			for (const pokemon of this.getAllActive()) {
+				pokemon.clearBoosts();
+				pokemon.removeVolatile('focusenergy');
+			}
 		},
 	},
 	healbell: {
@@ -1226,7 +1231,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	outrage: {
 		inherit: true,
 		pp: 15,
-		onAfterMove() {},
 	},
 	payback: {
 		inherit: true,
@@ -1263,7 +1267,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 90,
 		pp: 20,
-		onAfterMove() {},
 	},
 	poisongas: {
 		inherit: true,
@@ -1545,7 +1548,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 				snatchUser.removeVolatile('snatch');
 				this.add('-activate', snatchUser, 'move: Snatch', `[of] ${source}`);
-				this.actions.useMove(move.id, snatchUser);
+				if (this.actions.useMove(move.id, snatchUser)) {
+					snatchUser.deductPP('snatch');
+				}
 				return null;
 			},
 		},
@@ -1623,10 +1628,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					this.attrLastMove('[still]');
 					return null;
 				}
-				damage = this.runEvent('SubDamage', target, source, move, damage);
-				if (!damage) {
-					return damage;
-				}
 				if (damage > target.volatiles['substitute'].hp) {
 					damage = target.volatiles['substitute'].hp as number;
 				}
@@ -1636,10 +1637,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 					target.removeVolatile('substitute');
 					target.addVolatile('substitutebroken');
 					if (target.volatiles['substitutebroken']) target.volatiles['substitutebroken'].move = move.id;
-					if (move.ohko) this.add('-ohko');
 				} else {
 					this.add('-activate', target, 'Substitute', '[damage]');
 				}
+				if (move.ohko) this.add('-ohko');
 				if (move.recoil && damage) {
 					this.damage(this.actions.calcRecoilDamage(damage, move, source), source, target, 'recoil');
 				}
@@ -1761,7 +1762,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		basePower: 90,
 		pp: 20,
-		onAfterMove() {},
 	},
 	torment: {
 		inherit: true,

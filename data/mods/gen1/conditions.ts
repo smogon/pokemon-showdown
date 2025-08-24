@@ -192,11 +192,15 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		// defender still takes PSN damage, etc
 		// TODO: research exact mechanics
 		onBeforeMovePriority: 0,
-		onBeforeMove() {
+		onBeforeMove(pokemon) {
+			this.add('cant', pokemon, 'partiallytrapped');
 			return false;
 		},
 		onRestart() {
 			this.effectState.duration = 2;
+		},
+		onAccuracy(accuracy, target, source, move) {
+			if (source === this.effectState.source) return true;
 		},
 		onLockMove() {
 			// exact move doesn't matter, no move is ever actually used
@@ -226,35 +230,33 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 
 			this.effectState.move = effect.id;
 			this.effectState.totalDuration = this.effectState.duration!;
-			this.effectState.damage = target.lastDamage;
-			this.effectState.trapTarget = foe;
+			this.effectState.damage = this.lastDamage;
+			this.effectState.locked = foe;
 			foe.addVolatile('partiallytrapped', target, effect);
-			this.add('cant', foe, 'partiallytrapped');
 		},
 		onOverrideAction(pokemon, target, move) {
 			return this.effectState.move;
 		},
-		// attacker still takes PSN damage, etc
-		onBeforeMovePriority: 0,
 		onBeforeMove(pokemon, target, move) {
-			const foe = pokemon.foes()[0];
-			if (!foe || foe !== this.effectState.trapTarget) {
+			if (target !== this.effectState.locked) {
 				pokemon.removeVolatile('partialtrappinglock');
+			}
+		},
+		onAfterMove(pokemon, target, move) {
+			if (target && target.hp <= 0) {
+				delete pokemon.volatiles['partialtrappinglock'];
 				return;
 			}
-
-			const moveName = this.dex.moves.get(this.effectState.move).name;
-			this.add('move', pokemon, moveName, foe, `[from] ${moveName}`);
-			this.damage(this.effectState.damage, foe, pokemon, move);
 			if (this.effectState.duration === 1) {
 				if (this.effectState.totalDuration !== 5) {
 					pokemon.addVolatile('fakepartiallytrapped');
-					foe.addVolatile('fakepartiallytrapped');
+					pokemon.volatiles['fakepartiallytrapped'].counterpart = target;
+					target.addVolatile('fakepartiallytrapped');
+					target.volatiles['fakepartiallytrapped'].counterpart = pokemon;
 				}
 			} else {
-				foe.addVolatile('partiallytrapped', pokemon, move);
+				target.addVolatile('partiallytrapped', pokemon, move);
 			}
-			return false;
 		},
 		onLockMove() {
 			return this.effectState.move;
@@ -268,6 +270,13 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		duration: 0,
 		onBeforeMovePriority: 7,
 		onStart() {},
+		onAfterMove(pokemon, target, move) {
+			if (target && target.hp <= 0) {
+				delete pokemon.volatiles['mustrecharge'];
+				return;
+			}
+			this.add('-mustrecharge', pokemon);
+		},
 	},
 	lockedmove: {
 		// Thrash and Petal Dance.
@@ -285,6 +294,11 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 			if (move.id) {
 				this.debug('Forcing into ' + move.id);
 				this.queue.changeAction(pokemon, { choice: 'move', moveid: move.id });
+			}
+		},
+		onAfterMove(pokemon) {
+			if (pokemon.volatiles['lockedmove'].time <= 0) {
+				pokemon.removeVolatile('lockedmove');
 			}
 		},
 	},

@@ -148,23 +148,23 @@ describe("Datasearch Plugin", () => {
 		let cmd = 'ds';
 		let target = 'mod=gen8, water, all';
 		let search = datasearch.testables.runDexsearch(target, cmd, `!${cmd} ${target}`);
-		assert(search.reply.includes('[+]'));
+		assert.false(search.reply.includes('<details class="details" open>'));
 
 		cmd = 'ms';
 		target = 'mod=gen8, water, all';
 		search = datasearch.testables.runDexsearch(target, cmd, `!${cmd} ${target}`);
-		assert(search.reply.includes('[+]'));
+		assert.false(search.reply.includes('<details class="details" open>'));
 	});
 
 	it('should expand results by default when not broadcasting a large datasearch with all as a parameter', () => {
 		let cmd = 'ds';
 		let target = 'mod=gen8, water, all';
 		let search = datasearch.testables.runDexsearch(target, cmd, `/${cmd} ${target}`);
-		assert(search.reply.includes('[-]'));
+		assert(search.reply.includes('<details class="details" open>'));
 
 		cmd = 'ms';
 		target = 'mod=gen8, water, all';
 		search = datasearch.testables.runDexsearch(target, cmd, `/${cmd} ${target}`);
-		assert(search.reply.includes('[-]'));
+		assert(search.reply.includes('<details class="details" open>'));
 	});
 });

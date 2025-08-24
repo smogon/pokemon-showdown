@@ -87,6 +87,16 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Saintly Bullet" },
 	},
 
+	// Archfaewild
+	abomasnow: {
+		inherit: true,
+		abilities: { 0: "Snow Warning" },
+	},
+	abomasnowmega: {
+		inherit: true,
+		abilities: { 0: "Flash Fire" },
+	},
+
 	// Arcueid
 	deoxysattack: {
 		inherit: true,
@@ -203,6 +213,13 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Scrappy" },
 	},
 
+	// calmvibes
+	marill: {
+		inherit: true,
+		baseStats: { hp: 100, atk: 50, def: 80, spa: 60, spd: 80, spe: 50 },
+		abilities: { 0: "Huge Power" },
+	},
+
 	// chaos
 	ironjugulis: {
 		inherit: true,
@@ -300,16 +317,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	dhelmise: {
 		inherit: true,
 		abilities: { 0: "Virus" },
-	},
-
-	// DianaNicole
-	abomasnow: {
-		inherit: true,
-		abilities: { 0: "Snow Warning" },
-	},
-	abomasnowmega: {
-		inherit: true,
-		abilities: { 0: "Flash Fire" },
 	},
 
 	// EasyOnTheHills
@@ -552,12 +559,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: { 0: "Persistent" },
 	},
 
-	// Lily
-	togedemaru: {
-		inherit: true,
-		abilities: { 0: "Unaware" },
-	},
-
 	// Loethalion
 	ralts: {
 		inherit: true,
@@ -588,13 +589,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	litwick: {
 		inherit: true,
 		abilities: { 0: "Power Abuse" },
-	},
-
-	// marillvibes
-	marill: {
-		inherit: true,
-		baseStats: { hp: 100, atk: 50, def: 80, spa: 60, spd: 80, spe: 50 },
-		abilities: { 0: "Huge Power" },
 	},
 
 	// Mathy

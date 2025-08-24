@@ -314,6 +314,7 @@ export const ItemsText: { [id: IDEntry]: ItemText } = {
 	},
 	covertcloak: {
 		name: "Covert Cloak",
+		desc: "The holder is not affected by the secondary effect of another Pokemon's attack. Attacks with secondary effects that are prevented include those with a chance (even 100%) to paralyze, sleep, freeze, burn, poison, confuse, cause the holder to flinch, cause the holder's stat stages to be lowered, as well as Anchor Shot, Eerie Spell, Fling, Psychic Noise, Salt Cure, Spirit Shackle, Syrup Bomb, and Throat Chop. The effect of Sparkling Aria is prevented if the holder is the only target. Secondary effects added by King's Rock, Razor Fang, and the Poison Touch, Stench, and Toxic Chain Abilities are also prevented against the holder.",
 		shortDesc: "Holder is not affected by the secondary effect of another Pokemon's attack.",
 	},
 	crackedpot: {

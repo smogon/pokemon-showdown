@@ -995,14 +995,17 @@ export class User extends Chat.MessageContext {
 
 		if (!oldUser.semilocked) this.semilocked = null;
 
-		// If either user is unlocked and neither is locked by name, remove the lock.
+		// If either user is unlocked and neither is locked by name/range, remove the lock.
 		// Otherwise, keep any locks that were by name.
 		if (
 			(!oldUser.locked || !this.locked) &&
 			oldUser.locked !== oldUser.id &&
 			this.locked !== this.id &&
-			// Only unlock if no previous names are locked
-			!oldUser.previousIDs.some(id => !!Punishments.hasPunishType(id, 'LOCK'))
+			// Only unlock if no previous names are locked and the lock isn't a rangelock
+			!(
+				oldUser.ips.some(x => Punishments.ips.get(x)?.some(n => n.id.startsWith('#'))) &&
+				oldUser.previousIDs.some(id => !!Punishments.hasPunishType(id, 'LOCK'))
+			)
 		) {
 			this.locked = null;
 			this.destroyPunishmentTimer();

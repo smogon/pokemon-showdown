@@ -11,23 +11,21 @@
     "nef-fs": "^1.0.0",
     "preact": "^10.5.15",
     "preact-render-to-string": "^6.5.13",
-    "probe-image-size": "^7.2.3",
     "sockjs": "^0.3.21",
-    "source-map-support": "^0.5.21",
     "ts-chacha20": "^1.2.0"
   },
   "optionalDependencies": {
-    "better-sqlite3": "^11.8.1",
+    "better-sqlite3": "^11.10.0",
     "cloud-env": "^0.2.3",
     "githubhook": "^1.9.3",
-    "node-static": "^0.7.11",
-    "nodemailer": "^6.4.6",
+    "nodemailer": "^7.0.5",
     "permessage-deflate": "^0.1.7",
-    "pg": "^8.11.3",
+    "pg": "^8.16.3",
+    "probe-image-size": "^7.2.3",
+    "source-map-support": "^0.5.21",
     "sql-template-strings": "^2.2.2",
     "sqlite": "^5.1.1",
-    "sqlite3": "^5.1.7",
-    "sucrase": "^3.15.0"
+    "sqlite3": "^5.1.7"
   },
   "secretDependencies": {
     "node-oom-heapdump": "^1.2.0"
@@ -48,8 +46,7 @@
     "test": "mocha",
     "posttest": "npm run tsc",
     "full-test": "eslint --max-warnings 0 && npm run tsc && mocha --timeout 8000 --forbid-only -g \".*\" && npm run test-npm",
-    "full-test-ci": "eslint --max-warnings 0 && tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\") && npm run test-npm",
-    "postinstall": "npm run build postinstall"
+    "full-test-ci": "eslint --max-warnings 0 && tsc && (([ \"$SKIPSIMTESTS\" = true ] && mocha --timeout 8000 --forbid-only -g \".*\" --exclude \"test/{sim,random-battles}/**\") || mocha --timeout 8000 --forbid-only -g \".*\") && npm run test-npm"
   },
   "bin": "./pokemon-showdown",
   "homepage": "http://pokemonshowdown.com",
@@ -71,20 +68,19 @@
   ],
   "license": "MIT",
   "devDependencies": {
-    "@stylistic/eslint-plugin": "^4.0.1",
+    "@stylistic/eslint-plugin": "^5.2.2",
     "@types/better-sqlite3": "7.6.3",
     "@types/cloud-env": "^0.2.2",
     "@types/node": "^14.18.63",
-    "@types/node-static": "^0.7.7",
     "@types/nodemailer": "^6.4.4",
     "@types/pg": "^8.6.5",
     "@types/sockjs": "^0.3.33",
     "@types/sodium-native": "^2.3.9",
-    "eslint": "^9.21.0",
+    "eslint": "^9.31.0",
     "globals": "^16.0.0",
-    "mocha": "^11.1.0",
+    "mocha": "^11.7.1",
     "smogon": "^3.0.0",
-    "typescript": "^5.7.3",
-    "typescript-eslint": "^8.24.1"
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.38.0"
   }
 }

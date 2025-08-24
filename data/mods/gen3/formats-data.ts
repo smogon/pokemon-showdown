@@ -924,7 +924,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "ZU",
 	},
 	medicham: {
-		tier: "UUBL",
+		tier: "OU",
 	},
 	electrike: {
 		tier: "LC",

@@ -3584,6 +3584,7 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		},
 		gen1: {
 			desc: "At the end of each of the target's turns, The Pokemon at the user's position steals 1/16 of the target's maximum HP, rounded down and multiplied by the target's current Toxic counter if it has one, even if the target currently has less than that amount of HP remaining. If the target switches out or any Pokemon uses Haze, this effect ends. Grass-type Pokemon are immune to this move.",
+			shortDesc: "1/16 of target's HP is restored to user every turn.",
 		},
 
 		start: "  [POKEMON] was seeded!",
@@ -4757,6 +4758,11 @@ export const MovesText: { [id: IDEntry]: MoveText } = {
 		name: "Poison Tail",
 		desc: "Has a 10% chance to poison the target and a higher chance for a critical hit.",
 		shortDesc: "High critical hit ratio. 10% chance to poison.",
+	},
+	polarflare: {
+		name: "Polar Flare",
+		desc: "Has a 10% chance to freeze the target. This move cannot thaw a frozen target. If this move is successful on at least one target and the user is a Ramnarok, it changes to Radiant Forme if it is currently in Dormant Forme, or changes to Dormant Forme if it is currently in Radiant Forme. This forme change does not happen if the Ramnarok has the Sheer Force Ability. The Radiant Forme reverts to Dormant Forme when Ramnarok is not active.",
+		shortDesc: "10% chance to frz foe(s). Ramnarok transforms.",
 	},
 	pollenpuff: {
 		name: "Pollen Puff",

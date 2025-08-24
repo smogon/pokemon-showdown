@@ -588,10 +588,6 @@ export class TeamValidator {
 			name = `${set.name} (${set.species})`;
 		}
 
-		if (!set.teraType && this.gen === 9) {
-			set.teraType = species.types[0];
-		}
-
 		if (!set.level) set.level = ruleTable.defaultLevel;
 
 		let adjustLevel = ruleTable.adjustLevel;
@@ -688,19 +684,16 @@ export class TeamValidator {
 				set.hpType = type.name;
 			}
 		}
-		if (species.forceTeraType) {
-			set.teraType = species.forceTeraType;
-		}
-		if (set.teraType) {
-			const type = dex.types.get(set.teraType);
+		if ((this.gen === 9 && !ruleTable.has('terastalclause')) || ruleTable.has('bonustypemod')) {
+			const type = dex.types.get(set.teraType || species.requiredTeraType || species.types[0]);
 			if (!type.exists || type.isNonstandard) {
 				problems.push(`${name}'s Terastal type (${set.teraType}) is invalid.`);
-			} else {
-				set.teraType = type.name;
+			} else if (species.requiredTeraType && species.requiredTeraType !== type.name && ruleTable.has('obtainablemisc')) {
+				problems.push(`${species.name}'s Terastal type needs to be ${species.requiredTeraType}.`);
 			}
-			if (dex.gen !== 9 || (ruleTable.has('terastalclause') && !ruleTable.has('bonustypemod'))) {
-				delete set.teraType;
-			}
+			set.teraType = type.name;
+		} else {
+			delete set.teraType;
 		}
 
 		let problem = this.checkSpecies(set, species, tierSpecies, setHas);
@@ -1094,8 +1087,12 @@ export class TeamValidator {
 		}
 
 		if (!problems.length) {
-			if (set.gender === '' && !species.gender) {
-				set.gender = ['M', 'F'][Math.floor(Math.random() * 2)];
+			if (!set.gender) {
+				if (this.gen <= 5 || ruleTable.has('obtainablemisc')) {
+					set.gender = species.gender || ['M', 'F'][Math.floor(Math.random() * 2)];
+				} else {
+					set.gender = 'N';
+				}
 			}
 			if (adjustLevel) set.level = adjustLevel;
 			return null;
@@ -1108,7 +1105,7 @@ export class TeamValidator {
 		const ruleTable = this.ruleTable;
 		const dex = this.dex;
 
-		const allowAVs = ruleTable.has('allowavs');
+		const allowAVs = !ruleTable.has('lgpenormalrules');
 		const evLimit = ruleTable.evLimit;
 		const canBottleCap = dex.gen >= 7 && (set.level >= (dex.gen < 9 ? 100 : 50) || !ruleTable.has('obtainablemisc'));
 
@@ -1442,7 +1439,7 @@ export class TeamValidator {
 			throw new Error(`${species.name} has no egg groups for source ${source}`);
 		}
 		// no chainbreeding necessary if the father can be Smeargle
-		if (!getAll && eggGroups.includes('Field')) return true;
+		if (!getAll && eggGroups.includes('Field') && !this.dex.species.get('Smeargle').isNonstandard) return true;
 
 		// try to find a father to inherit the egg move combination from
 		for (const father of dex.species.all()) {
@@ -1493,7 +1490,8 @@ export class TeamValidator {
 		if (!this.dex.species.getLearnsetData(species.id).learnset) return false;
 
 		if (species.id === 'smeargle') return true;
-		const canBreedWithSmeargle = species.eggGroups.includes('Field');
+		const canBreedWithSmeargle = species.eggGroups.includes('Field') &&
+			!this.dex.species.get('Smeargle').isNonstandard;
 
 		const allEggSources = new PokemonSources();
 		allEggSources.sourcesBefore = eggGen;
@@ -1614,13 +1612,10 @@ export class TeamValidator {
 			}
 			if (species.requiredItems && !species.requiredItems.includes(item.name)) {
 				if (dex.gen >= 8 && (species.baseSpecies === 'Arceus' || species.baseSpecies === 'Silvally')) {
-					// Arceus/Silvally formes in gen 8 only require the item with Multitype/RKS System
-					if (set.ability === species.abilities[0]) {
-						problems.push(
-							`${name} needs to hold ${species.requiredItems.join(' or ')}.`,
-							`(It will revert to its Normal forme if you remove the item or give it a different item.)`
-						);
-					}
+					problems.push(
+						`${name} needs to hold ${species.requiredItems.join(' or ')}.`,
+						`(It will revert to its Normal forme if you remove the item or give it a different item.)`
+					);
 				} else {
 					// Memory/Drive/Griseous Orb/Plate/Z-Crystal - Forme mismatch
 					const baseSpecies = this.dex.species.get(species.changesFrom);
@@ -2535,6 +2530,7 @@ export class TeamValidator {
 				}
 			}
 
+			let canUseHomeRelearner = false;
 			for (let learned of sources) {
 				// Every `learned` represents a single way a pokemon might
 				// learn a move. This can be handled one of several ways:
@@ -2562,7 +2558,7 @@ export class TeamValidator {
 					}
 					continue;
 				}
-				if (learnedGen < this.minSourceGen) {
+				if (learnedGen < this.minSourceGen && !canUseHomeRelearner) {
 					if (!cantLearnReason) {
 						cantLearnReason = `can't be transferred from Gen ${learnedGen} to ${this.minSourceGen}.`;
 					}
@@ -2574,6 +2570,8 @@ export class TeamValidator {
 					}
 					continue;
 				}
+
+				if (learnedGen === 9 && learned.charAt(1) !== 'S') canUseHomeRelearner = true;
 
 				if (
 					baseSpecies.evoRegion === 'Alola' && checkingPrevo && learnedGen >= 8 &&

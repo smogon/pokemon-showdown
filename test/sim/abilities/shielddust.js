@@ -72,27 +72,19 @@ describe('Shield Dust', () => {
 		assert.statStage(battle.p2.active[0], 'spa', -1);
 	});
 
-	it.skip(`should only prevent Sparkling Aria from curing burn if there is only one target`, () => {
-		battle = common.createBattle([[
-			{ species: 'wynaut', ability: 'noguard', moves: ['willowisp', 'sparklingaria'] },
-		], [
-			{ species: 'dustox', ability: 'shielddust', moves: ['sleeptalk'] },
-		]]);
-		battle.makeChoices('move willowisp', 'auto');
-		battle.makeChoices('move sparklingaria', 'auto');
-
-		assert.equal(battle.p2.active[0].status, 'brn', `Shield Dust should prevent cured burn if it's the only target`);
-
+	it(`should only prevent Sparkling Aria from curing burn if there is only one target`, () => {
 		battle = common.createBattle({ gameType: 'doubles' }, [[
 			{ species: 'wynaut', ability: 'noguard', moves: ['willowisp', 'sparklingaria'] },
-			{ species: 'diglett', moves: ['sleeptalk'] },
+			{ species: 'diglett', moves: ['sleeptalk', 'protect'] },
 		], [
 			{ species: 'dustox', ability: 'shielddust', moves: ['sleeptalk'] },
-			{ species: 'magikarp', moves: ['sleeptalk'] },
+			{ species: 'magikarp', moves: ['sleeptalk', 'protect'] },
 		]]);
 		battle.makeChoices('move willowisp 1, move sleeptalk', 'auto');
-		battle.makeChoices('move sparklingaria, move sleeptalk', 'auto');
+		battle.makeChoices('move sparklingaria, move protect', 'move sleeptalk, move protect');
+		assert.equal(battle.p2.active[0].status, 'brn', `Shield Dust should prevent cured burn if it's the only target`);
 
+		battle.makeChoices('move sparklingaria, move sleeptalk', 'auto');
 		assert.equal(battle.p2.active[0].status, '', `Shield Dust should not prevent cured burn if it's one of many targets`);
 	});
 });

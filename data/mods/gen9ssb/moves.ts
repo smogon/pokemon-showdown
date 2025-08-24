@@ -517,6 +517,57 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Grass",
 	},
 
+	// Archfaewild
+	breathoftiamat: {
+		accuracy: 95,
+		basePower: 20,
+		category: "Special",
+		shortDesc: "5 hits: Fire, Ice, Poison, Elec, Poison. Is STAB.",
+		desc: "This move hits 5 times. The first hit is Fire-type, the second is Ice-type, the third is Poison-type, the fourth is Electric-type, and the fifth is Poison-type. Each move checks accuracy individually, and if one hit misses, the attack stops. If the target is immune to one or more of the hits, the rest will still execute as normal. This move will always have Same-Type Attack Bonus.",
+		name: "Breath of Tiamat",
+		pp: 20,
+		priority: 0,
+		flags: { protect: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source, move) {
+			if (target.runImmunity('Fire')) {
+				this.add('-anim', source, 'Flamethrower', target);
+			}
+		},
+		onHit(target, source, move) {
+			const moveTypes = ['Fire', 'Ice', 'Poison', 'Electric', 'Poison'];
+			const hitTypes = moveTypes.filter(x => target.runImmunity(x));
+			if (move.hit >= hitTypes.length) {
+				move.basePower = 0;
+				move.category = 'Status';
+				/* Problem here - we can't retroactively change the multihit parameter.
+				With this specific code, the move functions as intended, but will display the incorrect
+				number of hits if a target is immune to any of them. Even if you try to return false, null, etc
+				during this step, it will not interrupt the move. Nor will a this.add(-fail) do so either.
+				This seems to be the only way to get it to work and is a decent enough compromise for now. */
+			} else {
+				move.type = hitTypes[move.hit];
+				const moveAnims = ['Flamethrower', 'Ice Beam', 'Gunk Shot', 'Charge Beam', 'Sludge Bomb'];
+				const hitAnims = [];
+				for (const [i, anim] of moveAnims.entries()) {
+					const index2 = Math.min(i, hitTypes.length - 1);
+					if (moveTypes[i] === hitTypes[index2]) {
+						hitAnims.push(anim);
+					}
+				}
+				this.add('-anim', source, hitAnims[move.hit], target);
+			}
+		},
+		multihit: 5,
+		multiaccuracy: true,
+		forceSTAB: true,
+		secondary: null,
+		target: 'normal',
+		type: "Fire",
+	},
+
 	// Arcueid
 	funnyvamp: {
 		accuracy: true,
@@ -1321,6 +1372,36 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		// bird type crashes during testing (runStatusImmunity for Bird at sim\pokemon.ts:2101:10). no-go.
 	},
 
+	// calmvibes
+	goodvibesonly: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "Raises the user's Speed by 1 stage.",
+		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
+		name: "Good Vibes Only",
+		gen: 9,
+		pp: 10,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, contact: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Aqua Step', target);
+		},
+		secondary: {
+			chance: 100,
+			self: {
+				boosts: {
+					spe: 1,
+				},
+			},
+		},
+		target: "normal",
+		type: "Fairy",
+	},
+
 	// chaos
 	outage: {
 		accuracy: 95,
@@ -1864,57 +1945,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-	},
-
-	// DianaNicole
-	breathoftiamat: {
-		accuracy: 95,
-		basePower: 20,
-		category: "Special",
-		shortDesc: "5 hits: Fire, Ice, Poison, Elec, Poison. Is STAB.",
-		desc: "This move hits 5 times. The first hit is Fire-type, the second is Ice-type, the third is Poison-type, the fourth is Electric-type, and the fifth is Poison-type. Each move checks accuracy individually, and if one hit misses, the attack stops. If the target is immune to one or more of the hits, the rest will still execute as normal. This move will always have Same-Type Attack Bonus.",
-		name: "Breath of Tiamat",
-		pp: 20,
-		priority: 0,
-		flags: { protect: 1 },
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source, move) {
-			if (target.runImmunity('Fire')) {
-				this.add('-anim', source, 'Flamethrower', target);
-			}
-		},
-		onHit(target, source, move) {
-			const moveTypes = ['Fire', 'Ice', 'Poison', 'Electric', 'Poison'];
-			const hitTypes = moveTypes.filter(x => target.runImmunity(x));
-			if (move.hit >= hitTypes.length) {
-				move.basePower = 0;
-				move.category = 'Status';
-				/* Problem here - we can't retroactively change the multihit parameter.
-				With this specific code, the move functions as intended, but will display the incorrect
-				number of hits if a target is immune to any of them. Even if you try to return false, null, etc
-				during this step, it will not interrupt the move. Nor will a this.add(-fail) do so either.
-				This seems to be the only way to get it to work and is a decent enough compromise for now. */
-			} else {
-				move.type = hitTypes[move.hit];
-				const moveAnims = ['Flamethrower', 'Ice Beam', 'Gunk Shot', 'Charge Beam', 'Sludge Bomb'];
-				const hitAnims = [];
-				for (const [i, anim] of moveAnims.entries()) {
-					const index2 = Math.min(i, hitTypes.length - 1);
-					if (moveTypes[i] === hitTypes[index2]) {
-						hitAnims.push(anim);
-					}
-				}
-				this.add('-anim', source, hitAnims[move.hit], target);
-			}
-		},
-		multihit: 5,
-		multiaccuracy: true,
-		forceSTAB: true,
-		secondary: null,
-		target: 'normal',
-		type: "Fire",
 	},
 
 	// EasyOnTheHills
@@ -3382,35 +3412,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Psychic",
 	},
 
-	// Lily
-	powerup: {
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Power Up",
-		shortDesc: "Heals 50% HP. Heals 3% more per fainted ally.",
-		desc: "Heals the user for 50% of their maximum HP. Heals an additional 3% of the user's maximum HP for each team member on the user's side that has fainted.",
-		pp: 5,
-		priority: 0,
-		flags: { heal: 1 },
-		onModifyMove(move, source, target) {
-			const fntAllies = source.side.pokemon.filter(ally => ally !== source && ally.fainted);
-			if (move.heal) move.heal[0] = 50 + (3 * fntAllies.length);
-		},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(pokemon) {
-			this.add('-anim', pokemon, 'Shore Up', pokemon);
-			this.add('-anim', pokemon, 'Charge', pokemon);
-			this.add('-anim', pokemon, 'Moonlight', pokemon);
-		},
-		heal: [50, 100],
-		secondary: null,
-		target: "self",
-		type: "Electric",
-	},
-
 	// Loethalion
 	darkmooncackle: {
 		accuracy: 100,
@@ -3572,36 +3573,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		secondary: null,
 		target: "normal",
 		type: "Ghost",
-	},
-
-	// marillvibes
-	goodvibesonly: {
-		accuracy: 100,
-		basePower: 90,
-		category: "Physical",
-		shortDesc: "Raises the user's Speed by 1 stage.",
-		desc: "Has a 100% chance to raise the user's Speed by 1 stage.",
-		name: "Good Vibes Only",
-		gen: 9,
-		pp: 10,
-		priority: 0,
-		flags: { protect: 1, mirror: 1, contact: 1 },
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Aqua Step', target);
-		},
-		secondary: {
-			chance: 100,
-			self: {
-				boosts: {
-					spe: 1,
-				},
-			},
-		},
-		target: "normal",
-		type: "Fairy",
 	},
 
 	// Mathy

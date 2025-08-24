@@ -168,28 +168,28 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 	april: {
 		noCopy: true,
 		onStart(pokemon) {
-			if (this.ruleTable.has('zmovesclause')) {
+			if (this.ruleTable.has('zmoveclause')) {
 				this.add(`c:|${getName('April')}|Fool's Day`);
 			} else {
 				this.add(`c:|${getName('April')}|I said, "Do you have something against dogs?"`);
 			}
 		},
 		onSwitchOut() {
-			if (this.ruleTable.has('zmovesclause')) {
+			if (this.ruleTable.has('zmoveclause')) {
 				this.add(`c:|${getName('April')}|Fool's Day`);
 			} else {
 				this.add(`c:|${getName('April')}|(Is it the chorus yet?)`);
 			}
 		},
 		onFaint() {
-			if (this.ruleTable.has('zmovesclause')) {
+			if (this.ruleTable.has('zmoveclause')) {
 				this.add(`c:|${getName('April')}|Fool's Day`);
 			} else {
 				this.add(`c:|${getName('April')}|Don't get too impressed, you might lose your breath...`);
 			}
 		},
 		onTryHit() {
-			if (this.ruleTable.has('zmovesclause')) {
+			if (this.ruleTable.has('zmoveclause')) {
 				this.add(`c:|${getName('April')}|Fool's Day`);
 			}
 		},
@@ -254,6 +254,18 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		onFaint() {
 			this.add(`c:|${getName('Archas')}|What would Grandfather... think of me now...`);
+		},
+	},
+	archfaewild: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Archfaewild')}|Ready for Initiative? Cause I'm gonna Clickity Clackity, Roll to Attackity!`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Archfaewild')}|Dropping out of Initiative`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Archfaewild')}|Guess I didn't roll high enough`);
 		},
 	},
 	arcueid: {
@@ -343,9 +355,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 				break;
 			case 'rumia':
 				this.add(`c:|${getName('ausma')}|oh no... it's poomia....`);
-				break;
-			case 'lily':
-				this.add(`c:|${getName('ausma')}|togedemaru`);
 				break;
 			case 'lumari':
 				this.add(`c:|${getName('ausma')}|we should watch the next ladybug ep after this tbh`);
@@ -565,6 +574,18 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		onFaint() {
 			this.add(`c:|${getName('Cake')}|livid washed is a nerd`);
+		},
+	},
+	calmvibes: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('calmvibes ♫')}|Is that a __rat__?`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('calmvibes ♫')}|Here for a good time, not a long time!`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('calmvibes ♫')}|The vibes are off... :(`);
 		},
 	},
 	chaos: {
@@ -791,18 +812,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			if (source.illusion) return;
 			if (!source.m.stealth) return this.chainModify(1.1);
 			return this.chainModify(0.5);
-		},
-	},
-	diananicole: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('DianaNicole')}|Ready for Initiative? Cause I'm gonna Clickity Clackity, Roll to Attackity!`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('DianaNicole')}|Dropping out of Initiative`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('DianaNicole')}|Guess I didn't roll high enough`);
 		},
 	},
 	easyonthehills: {
@@ -1349,18 +1358,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			this.add(`c:|${getName('Lets go shuckles')}|He who lives by the Shuckle shall die by the Shuckle.`);
 		},
 	},
-	lily: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Lily')}|buying gf`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Lily')}|accidentally burnt the shrimps`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Lily')}|oh dear, i am dead`);
-		},
-	},
 	loethalion: {
 		noCopy: true,
 		onStart(pokemon) {
@@ -1498,18 +1495,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		onFaint() {
 			this.add(`c:|${getName('Maia')}|gn`);
-		},
-	},
-	marillvibes: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('marillvibes ♫')}|Is that a __rat__?`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('marillvibes ♫')}|Here for a good time, not a long time!`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('marillvibes ♫')}|The vibes are off... :(`);
 		},
 	},
 	mathy: {

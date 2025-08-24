@@ -39,6 +39,7 @@ export interface TicketState {
 	type: string;
 	created: number;
 	claimed: string | null;
+	claimTime?: number;
 	ip: string;
 	needsDelayWarning?: boolean;
 	offline?: boolean;
@@ -811,13 +812,14 @@ export function notifyStaff() {
 		} else if (ticketGame) {
 			buf += ticketGame.getButton();
 		}
+		buf += ` `;
 		count++;
 	}
 	if (hiddenTicketCount > 1) {
 		const notifying = hiddenTicketUnclaimedCount > 0 ? ` notifying` : ``;
 		if (hiddenTicketUnclaimedCount > 0) hasUnclaimed = true;
 		buf = buf.slice(0, fourthTicketIndex) +
-			`<button class="button${notifying}" name="send" value="/ht list">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</button>`;
+			`<button class="button${notifying}" name="send" value="/ht list">and ${hiddenTicketCount} more Help ticket${Chat.plural(hiddenTicketCount)} (${hiddenTicketUnclaimedCount} unclaimed)</button> `;
 	}
 	for (const type of listOnlyTypes) {
 		const matches = sortedTickets.filter(
@@ -1684,8 +1686,7 @@ export const pages: Chat.PageTable = {
 					buf += `<p><Button>other</Button></p>`;
 					break;
 				case 'password':
-					buf += `<p>If you need your Pokémon Showdown password reset, you can fill out a <a href="https://www.smogon.com/forums/password-reset-form/">Password Reset Form</a>.</p>`;
-					buf += `<p>You will need to make a Smogon account to be able to fill out a form.`;
+					buf += `<p>The password reset process is no longer open to the public.</p>`;
 					break;
 				case 'roomhelp':
 					buf += `<p>${this.tr`If you are a room driver or up in a public room, and you need help watching the chat, one or more global staff members would be happy to assist you!`}</p>`;
@@ -1845,7 +1846,7 @@ export const pages: Chat.PageTable = {
 					if (title) {
 						title = `title="Staff notes:&#10;${title}"`;
 					}
-					buf += `<a class="button" ${title} href="/view-help-text-${ticket.userid}">${ticket.claimed ? `Claim` : `View`}</a>`;
+					buf += `<a class="button" ${title} href="/view-help-text-${ticket.userid}">${!ticket.claimed && ticket.open ? `Claim` : `View`}</a>`;
 				} else if (room) {
 					const ticketGame = room.getGame(HelpTicket)!;
 					buf += `<a href="/${roomid}"><button class="button" ${ticketGame.getPreview()}>${this.tr(!ticket.claimed && ticket.open ? 'Claim' : 'View')}</button></a> `;
@@ -1905,8 +1906,7 @@ export const pages: Chat.PageTable = {
 			} else if (ticket.claimed) {
 				buf += `<strong>Claimed:</strong> ${ticket.claimed}<br /><br />`;
 			}
-			buf += `<strong>From: <a href="https://${Config.routes.root}/users/${ticket.userid}">`;
-			buf += `${ticket.userid}</a></strong>`;
+			buf += `<strong>From: <span class="username">${ticket.creator}</span></strong>`;
 			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${ticket.userid}'">Global Modlog</button><br />`;
 			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & { text: [string, string] }, user, connection);
@@ -2000,7 +2000,7 @@ export const pages: Chat.PageTable = {
 				const ticketInfo = textTickets[HelpTicket.getTypeId(ticket.type)];
 				this.title = `[Text Ticket] ${ticket.userid}`;
 				buf += `<h2>Issue: ${ticket.type}</h2>`;
-				buf += `<strong>From: ${ticket.userid}</strong>`;
+				buf += `<strong>From: <span class="username">${ticket.userid}</span></strong>`;
 				buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
 				buf += `<button class="button" name="send" value="/modlog room=global,user='${ticket.userid}'">Global Modlog</button><br />`;
 				if (ticket.claimed) {
@@ -2523,8 +2523,9 @@ export const commands: Chat.ChatCommands = {
 			if (tarUser) {
 				HelpTicket.notifyResolved(tarUser, ticket, ticketId);
 			}
+			const duration = Date.now() - (ticket.state?.claimTime || ticket.created);
 			// ticketType\ttotalTime\ttimeToFirstClaim\tinactiveTime\tresolution\tresult\tstaff,userids,separated,with,commas
-			writeStats(`${ticket.type}\t${Date.now() - ticket.created}\t0\t0\tresolved\tvalid\t${user.id}`);
+			writeStats(`${ticket.type}\t${duration}\t0\t0\tresolved\tvalid\t${user.id}`);
 			this.popupReply(`You resolved ${ticketId}'s ticket.`);
 			await HelpTicket.modlog({
 				action: 'TEXTTICKET CLOSE',

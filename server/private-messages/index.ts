@@ -102,7 +102,7 @@ export const PrivateMessages = new class {
 		}
 		if (!(options.isLogin ? user.registered : user.autoconfirmed)) {
 			if (options.forceBool) return false;
-			throw new Chat.ErrorMessage("You must be autoconfirmed to use offline messaging.");
+			throw new Chat.ErrorMessage("To use offline messaging you must be autoconfirmed, which means being registered for at least one week and winning one rated game.");
 		}
 		if (!Users.globalAuth.atLeast(user, Config.usesqlitepms)) {
 			if (options.forceBool) return false;
@@ -212,7 +212,7 @@ export const PrivateMessages = new class {
 
 if (Config.usesqlite) {
 	if (!process.send) {
-		PM.spawn(Config.pmprocesses || 1);
+		PM.spawn(global.Config?.subprocessescache?.pm ?? 1);
 		// clear super old pms on startup
 		void PM.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
 	} else if (process.send && process.mainModule === module) {

@@ -113,7 +113,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 				!counter.get('Bug') && (abilities.includes('Tinted Lens') || abilities.includes('Adaptability'))
 			),
 			Dark: (movePool, moves, abilities, types, counter) => !counter.get('Dark'),
-			Dragon: (movePool, moves, abilities, types, counter) => !counter.get('Dragon') && !abilities.includes('Aerilate'),
+			Dragon: (movePool, moves, abilities, types, counter) => !counter.get('Dragon'),
 			Electric: (movePool, moves, abilities, types, counter) => !counter.get('Electric'),
 			Fairy: (movePool, moves, abilities, types, counter) => !counter.get('Fairy'),
 			Fighting: (movePool, moves, abilities, types, counter) => !counter.get('Fighting'),
@@ -851,6 +851,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		if (species.name === 'Unown') return 'Choice Specs';
 		if (species.name === 'Wobbuffet') return 'Custap Berry';
 		if (species.name === 'Shuckle') return 'Mental Herb';
+		if (species.name === 'Honchkrow') return 'Life Orb';
 		if (
 			ability === 'Harvest' || ability === 'Cheek Pouch' || (ability === 'Emergency Exit' && !!counter.get('Status'))
 		) return 'Sitrus Berry';
@@ -1172,7 +1173,7 @@ export class RandomGen7Teams extends RandomGen8Teams {
 		return {
 			name: species.baseSpecies,
 			species: forme,
-			gender: species.baseSpecies === 'Greninja' ? 'M' : species.gender,
+			gender: species.baseSpecies === 'Greninja' ? 'M' : (species.gender || (this.random(2) ? 'F' : 'M')),
 			shiny: this.randomChance(1, 1024),
 			level,
 			moves: shuffledMoves,

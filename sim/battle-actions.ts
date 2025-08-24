@@ -125,6 +125,10 @@ export class BattleActions {
 			oldActive.statsLoweredThisTurn = false;
 			oldActive.position = pokemon.position;
 			if (oldActive.fainted) oldActive.status = '';
+			if (this.battle.gen <= 4) {
+				pokemon.lastItem = oldActive.lastItem;
+				oldActive.lastItem = '';
+			}
 			pokemon.position = pos;
 			side.pokemon[pokemon.position] = pokemon;
 			side.pokemon[oldActive.position] = oldActive;
@@ -524,11 +528,7 @@ export class BattleActions {
 			return false;
 		}
 
-		if (
-			!move.negateSecondary &&
-			!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) &&
-			!move.flags['futuremove']
-		) {
+		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce')) && !move.flags['futuremove']) {
 			const originalHp = pokemon.hp;
 			this.battle.singleEvent('AfterMoveSecondarySelf', move, null, pokemon, target, move);
 			this.battle.runEvent('AfterMoveSecondarySelf', pokemon, target, move);
@@ -606,6 +606,7 @@ export class BattleActions {
 			}
 		}
 
+		move.hitTargets = targets;
 		const moveResult = !!targets.length;
 		if (!moveResult && !atLeastOneFailure) pokemon.moveThisTurnResult = null;
 		const hitSlot = targets.map(p => p.getSlot());
@@ -652,8 +653,7 @@ export class BattleActions {
 
 		const hitResults = [];
 		for (const i of targets.keys()) {
-			hitResults[i] = (move.ignoreImmunity && (move.ignoreImmunity === true || move.ignoreImmunity[move.type])) ||
-				targets[i].runImmunity(move.type, !move.smartTarget);
+			hitResults[i] = targets[i].runImmunity(move, !move.smartTarget);
 		}
 
 		return hitResults;
@@ -805,7 +805,7 @@ export class BattleActions {
 	}
 	afterMoveSecondaryEvent(targets: Pokemon[], pokemon: Pokemon, move: ActiveMove) {
 		// console.log(`${targets}, ${pokemon}, ${move}`)
-		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 			this.battle.singleEvent('AfterMoveSecondary', move, null, targets[0], pokemon, move);
 			this.battle.runEvent('AfterMoveSecondary', targets, pokemon, move);
 		}
@@ -1024,7 +1024,7 @@ export class BattleActions {
 
 		this.afterMoveSecondaryEvent(targetsCopy.filter(val => !!val), pokemon, move);
 
-		if (!move.negateSecondary && !(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
+		if (!(move.hasSheerForce && pokemon.hasAbility('sheerforce'))) {
 			for (const [i, d] of damage.entries()) {
 				// There are no multihit spread moves, so it's safe to use move.totalDamage for multihit moves
 				// The previous check was for `move.multihit`, but that fails for Dragon Darts
@@ -1597,13 +1597,11 @@ export class BattleActions {
 			move.hit = 0;
 		}
 
-		if (!move.ignoreImmunity || (move.ignoreImmunity !== true && !move.ignoreImmunity[move.type])) {
-			if (!target.runImmunity(move.type, !suppressMessages)) {
-				return false;
-			}
+		if (!target.runImmunity(move, !suppressMessages)) {
+			return false;
 		}
 
-		if (move.ohko) return target.maxhp;
+		if (move.ohko) return this.battle.gen === 3 ? target.hp : target.maxhp;
 		if (move.damageCallback) return move.damageCallback.call(this.battle, source, target);
 		if (move.damage === 'level') {
 			return source.level;
@@ -1732,7 +1730,7 @@ export class BattleActions {
 
 		if (move.spreadHit) {
 			// multi-target modifier (doubles only)
-			const spreadModifier = move.spreadModifier || (this.battle.gameType === 'freeforall' ? 0.5 : 0.75);
+			const spreadModifier = this.battle.gameType === 'freeforall' ? 0.5 : 0.75;
 			this.battle.debug(`Spread modifier: ${spreadModifier}`);
 			baseDamage = this.battle.modify(baseDamage, spreadModifier);
 		} else if (move.multihitType === 'parentalbond' && move.hit > 1) {
@@ -1921,6 +1919,12 @@ export class BattleActions {
 	}
 
 	terastallize(pokemon: Pokemon) {
+		if (pokemon.species.baseSpecies === 'Ogerpon' && !['Fire', 'Grass', 'Rock', 'Water'].includes(pokemon.teraType) &&
+			(!pokemon.illusion || pokemon.illusion.species.baseSpecies === 'Ogerpon')) {
+			this.battle.hint("If Ogerpon Terastallizes into a type other than Fire, Grass, Rock, or Water, the game softlocks.");
+			return;
+		}
+
 		if (pokemon.illusion && ['Ogerpon', 'Terapagos'].includes(pokemon.illusion.species.baseSpecies)) {
 			this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
 		}
@@ -1935,23 +1939,17 @@ export class BattleActions {
 		pokemon.knownType = true;
 		pokemon.apparentType = type;
 		if (pokemon.species.baseSpecies === 'Ogerpon') {
-			const tera = pokemon.species.id === 'ogerpon' ? 'tealtera' : 'tera';
-			pokemon.formeChange(pokemon.species.id + tera, null, true);
+			let ogerponSpecies = toID(pokemon.species.battleOnly || pokemon.species.id);
+			ogerponSpecies += ogerponSpecies === 'ogerpon' ? 'tealtera' : 'tera';
+			pokemon.formeChange(ogerponSpecies, null, true);
 		}
-		if (pokemon.species.name === 'Terapagos-Terastal' && type === 'Stellar') {
+		if (pokemon.species.name === 'Terapagos-Terastal') {
 			pokemon.formeChange('Terapagos-Stellar', null, true);
-			pokemon.baseMaxhp = Math.floor(Math.floor(
-				2 * pokemon.species.baseStats['hp'] + pokemon.set.ivs['hp'] + Math.floor(pokemon.set.evs['hp'] / 4) + 100
-			) * pokemon.level / 100 + 10);
-			const newMaxHP = pokemon.baseMaxhp;
-			pokemon.hp = newMaxHP - (pokemon.maxhp - pokemon.hp);
-			pokemon.maxhp = newMaxHP;
-			this.battle.add('-heal', pokemon, pokemon.getHealth, '[silent]');
 		}
 		if (pokemon.species.baseSpecies === 'Morpeko' && !pokemon.transformed &&
 			pokemon.baseSpecies.id !== pokemon.species.id
 		) {
-			pokemon.regressionForme = true;
+			pokemon.formeRegression = true;
 			pokemon.baseSpecies = pokemon.species;
 			pokemon.details = pokemon.getUpdatedDetails();
 		}

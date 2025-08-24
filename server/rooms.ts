@@ -676,6 +676,12 @@ export abstract class BasicRoom {
 		}
 	}
 	expire() {
+		const game = this.getGame(BestOfGame);
+		// do not expire parent room until children expire
+		if (game?.games.length) {
+			this.pokeExpireTimer();
+			return;
+		}
 		this.send('|expire|');
 		this.destroy();
 	}
@@ -1660,6 +1666,7 @@ export class GlobalRoomState {
 		for (const player of players) {
 			Chat.runHandlers('onBattleStart', player, room);
 		}
+		Chat.runHandlers('onBattleCreate', room.battle!, players.map(x => x.id));
 	}
 
 	deregisterChatRoom(id: string) {
@@ -2045,6 +2052,7 @@ export class GameRoom extends BasicRoom {
 		let rating: number | undefined;
 		if (battle.ended && this.rated) rating = this.rated;
 		let { id, password } = this.getReplayData();
+		if (password) password = (battle.password ||= password);
 		const silent = options === 'forpunishment' || options === 'silent' || options === 'auto';
 		if (silent) connection = undefined;
 		const isPrivate = this.settings.isPrivate || this.hideReplay;
@@ -2053,7 +2061,7 @@ export class GameRoom extends BasicRoom {
 			isPrivate ? 1 :
 			0;
 		if (isPrivate && hidden === 10) {
-			password = Replays.generatePassword();
+			password = (battle.password ||= Replays.generatePassword());
 		}
 		if (battle.replaySaved !== true && hidden === 10) {
 			battle.replaySaved = 'auto';
@@ -2243,6 +2251,10 @@ export const Rooms = {
 		}
 		roomid ||= Rooms.global.prepBattleRoom(options.format);
 		options.isPersonal = true;
+		if (Rooms.rooms.has(roomid)) {
+			// can happen if restoring a Bo3 game
+			return Rooms.rooms.get(roomid) as GameRoom;
+		}
 		const room = Rooms.createGameRoom(roomid, roomTitle, options);
 		let game: RoomBattle | BestOfGame;
 		if (options.isBestOfSubBattle || !isBestOf) {

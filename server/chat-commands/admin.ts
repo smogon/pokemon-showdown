@@ -175,7 +175,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('addhtml', null, room);
 		target = Chat.collapseLineBreaksHTML(target);
 		if (user.tempGroup !== '*') {
-			target += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
+			target += Utils.html`<div class="gray" style="float:right;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
 		return `/raw <div class="infobox">${target}</div>`;
@@ -193,7 +193,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('addhtml', null, room);
 		html = Chat.collapseLineBreaksHTML(html);
 		if (user.tempGroup !== '*') {
-			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
+			html += Utils.html`<div class="gray" style="float:right;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
 		room.sendRankedUsers(`|html|<div class="infobox">${html}</div>`, rank as GroupSymbol);
@@ -213,7 +213,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('addhtml', null, room);
 		html = Chat.collapseLineBreaksHTML(html);
 		if (user.tempGroup !== '*') {
-			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
+			html += Utils.html`<div class="gray" style="float:right;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
 		if (cmd === 'changeuhtml') {
@@ -242,7 +242,7 @@ export const commands: Chat.ChatCommands = {
 		this.checkCan('addhtml', null, room);
 		html = Chat.collapseLineBreaksHTML(html);
 		if (user.tempGroup !== '*') {
-			html += Utils.html`<div style="float:right;color:#888;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
+			html += Utils.html`<div class="gray" style="float:right;font-size:8pt">[${user.name}]</div><div style="clear:both"></div>`;
 		}
 
 		html = `|uhtml${(cmd === 'changerankuhtml' ? 'change' : '')}|${name}|${html}`;
@@ -516,7 +516,7 @@ export const commands: Chat.ChatCommands = {
 
 		html = this.checkHTML(html);
 		if (!html) return this.parse('/help sendprivatehtmlbox');
-		html = `${Utils.html`<div style="color:#888;font-size:8pt">[Private from ${user.name}]</div>`}${Chat.collapseLineBreaksHTML(html)}`;
+		html = `${Utils.html`<div class="gray" style="font-size:8pt">[Private from ${user.name}]</div>`}${Chat.collapseLineBreaksHTML(html)}`;
 		if (plainHtml) html = `<div class="infobox">${html}</div>`;
 
 		const successes: string[] = [], errors: string[] = [];
