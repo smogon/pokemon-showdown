@@ -86,7 +86,6 @@ describe(`Sword of Ruin`, () => {
 		battle.makeChoices();
 		battle.makeChoices('auto', 'switch 2');
 		battle.makeChoices();
-		console.log(battle.log);
 		const wynaut = battle.p1.active[0];
 		const damage = wynaut.maxhp - wynaut.hp;
 		assert.bounded(damage, [90, 107]);
