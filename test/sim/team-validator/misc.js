@@ -246,6 +246,8 @@ describe('Team Validator', () => {
 		const team = [
 			{ species: 'bronzor', level: 1, ability: 'levitate', moves: ['hypnosis'] },
 			{ species: 'porygon', level: 25, ability: 'trace', moves: ['triattack'], evs: { hp: 1 } },
+			// Darkrai from Pokemon GO with Dream Eater learned via BDSP TM
+			{ species: 'darkrai', level: 15, ability: 'baddreams', moves: ['dreameater'], evs: { hp: 1 } },
 		];
 		assert.legalTeam(team, 'gen9ubers');
 	});
