@@ -651,8 +651,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'archaludon' && ability === 'Hydroelectric Dam') return 'Assault Vest';
 		if (species.id === 'archaludon' && ability === 'Stamina') return 'Leftovers';
 		if (species.id === 'malamar') return this.sample(['Mirror Herb', 'Leftovers']);
-		if (species.id === 'empoleon' && moves.has('watershuriken')) return 'Loaded Dice';
-		if (species.id === 'empoleon') return 'Leftovers';
+		if (species.id === 'empoleon') return moves.has('watershuriken') ? 'Loaded Dice' : 'Leftovers';
 		if (species.id === 'glastrier' && moves.has('swordsdance')) return 'Heavy-Duty Boots';
 		if (species.id === 'glastrier') return 'Assault Vest';
 		if (species.id === 'lycanrocmidnight') return 'Loaded Dice';

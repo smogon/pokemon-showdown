@@ -1066,27 +1066,17 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 	},
 	purify: {
-		num: 685,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		isNonstandard: "Past",
-		name: "Purify",
-		pp: 20,
-		priority: 0,
+		inherit: true,
 		flags: { reflectable: 1, heal: 1, metronome: 1 },
 		onHit(target, source) {
-			if (target.status) {
+			const foe = source.side.foe.active[0];
+			if (foe && !foe.fainted && foe.status) {
 				this.heal(Math.ceil(source.maxhp * 0.5), source);
 			} else {
 				this.heal(Math.ceil(source.maxhp * 0.25), source);
 			}
 		},
-		secondary: null,
-		target: "normal",
-		type: "Poison",
-		zMove: { boost: { atk: 1, def: 1, spa: 1, spd: 1, spe: 1 } },
-		contestType: "Beautiful",
+		target: "self",
 		desc: "Heals for 25% HP, or 50% if foe is statused.",
 		shortDesc: "Heals for 20% HP, or 50% if foe is statused.",
 	},
@@ -1153,22 +1143,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "User switches out. Target: -1 Attack.",
 	},
 	silktrap: {
-		num: 852,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Silk Trap",
-		pp: 10,
-		priority: 4,
-		flags: {},
-		stallingMove: true,
-		volatileStatus: 'silktrap',
-		onPrepareHit(pokemon) {
-			return !!this.queue.willAct() && this.runEvent('StallMove', pokemon);
-		},
-		onHit(pokemon) {
-			pokemon.addVolatile('stall');
-		},
+		inherit: true,
 		condition: {
 			duration: 1,
 			onStart(target) {
@@ -1203,8 +1178,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			},
 		},
-		target: "self",
-		type: "Bug",
 		desc: "Protect. If contact: set Sticky Web.",
 		shortDesc: "Protect. If contact: set Sticky Web.",
 	},
@@ -1219,12 +1192,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.add('-anim', source, 'Fire Spin', target);
 			this.add('-anim', source, 'Bitter Blade', target);
 		},
-		onHit(target, source, move) {
-			const damage = this.actions.getDamage(source, target, move);
-			if (target.status === "brn") {
-				this.heal(Math.ceil((damage as number) * 0.75), source, target, 'drain');
-			} else {
-				this.heal(Math.ceil((damage as number) * 0.5), source, target, 'drain');
+		onModifyMove(move, source, target) {
+			if (target?.status === 'brn') {
+				move.drain = [3, 4];
 			}
 		},
 		category: "Special",
@@ -1232,6 +1202,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { protect: 1, mirror: 1, metronome: 1 },
+		drain: [1, 2],
 		secondary: null,
 		target: "normal",
 		type: "Fire",
@@ -1241,14 +1212,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "50% drain. 75% drain instead if target is Burned.",
 	},
 	terastarstorm: {
-		num: 906,
-		accuracy: 100,
-		basePower: 120,
-		category: "Special",
-		name: "Tera Starstorm",
-		pp: 5,
-		priority: 0,
-		flags: { protect: 1, mirror: 1, noassist: 1, failcopycat: 1, failmimic: 1, nosketch: 1 },
+		inherit: true,
 		onModifyType(move, pokemon) {
 			const types = pokemon.getTypes();
 			let type = types[0];
@@ -1262,14 +1226,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			}
 		},
-		onModifyMove(move, pokemon) {
-			if (pokemon.species.name === 'Terapagos-Stellar') {
-				move.target = 'allAdjacentFoes';
-			}
-		},
-		secondary: null,
-		target: "normal",
-		type: "Normal",
 		desc: "Type varies based on the user's primary type.",
 		shortDesc: "Type varies based on the user's primary type.",
 	},

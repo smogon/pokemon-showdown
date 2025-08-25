@@ -468,7 +468,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						const foeSide = side.foe;
 						// Filter out Dachsbun from opponent's team
 						const foeTeamNoDog = foeSide.pokemon.filter(p => p.species.id !== 'dachsbun' &&
-							!p.item?.endsWith('ite'));
+							!p.getItem().id.endsWith('ite'));
 						// Pick a random foe
 						const randomFoe = this.sample(foeTeamNoDog);
 						const rawSpecies = this.dex.species.get('koraidon');

@@ -687,14 +687,14 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 		onModifySpe(spe, pokemon) {
 			if (this.field.isWeather(['hail', 'snowscape'])) {
-				this.debug('Boost');
+				this.debug('hail mary spe boost');
 				return this.chainModify(2);
 			}
 		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
 			if (this.field.isWeather(['hail', 'snowscape'])) {
-				this.debug('Boost');
+				this.debug('hail mary atk boost');
 				return this.chainModify(1.5);
 			}
 		},
