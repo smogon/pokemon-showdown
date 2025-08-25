@@ -31,7 +31,7 @@ type ModlogFormat = 'txt' | 'sqlite';
 
 /** The number of modlog entries to write to the database on each transaction */
 const ENTRIES_TO_BUFFER = 7500;
-const ALTS_REGEX = /\(.*?'s (lock|mut|bann|blacklist)ed alts: (.*)\)/;
+const ALTS_REGEX = /\(.*?'s (lock|mut|ban|blacklist)ed alts: (.*)\)/;
 const AUTOCONFIRMED_REGEX = /\(.*?'s ac account: (.*)\)/;
 
 const IP_ONLY_ACTIONS = new Set([
@@ -439,7 +439,7 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 		log.action = action;
 		if (log.action === 'OLD MODLOG') {
 			log.loggedBy = 'unknown' as ID;
-			log.note = line.slice(line.indexOf('by unknown: ') + 'by unknown :'.length).trim();
+			log.note = line.slice(line.indexOf('by unknown: ') + 'by unknown: '.length).trim();
 			return log;
 		}
 		line = line.slice(actionColonIndex + 2);
