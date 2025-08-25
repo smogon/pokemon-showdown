@@ -233,7 +233,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'veluza') this.incompatibleMoves(moves, movePool, 'waterfall', 'hydropump');
 		if (species.id === 'ogerponhearthflame') this.incompatibleMoves(moves, movePool, 'crabhammer', 'stoneedge');
 		if (species.id === 'hitmontop') this.incompatibleMoves(moves, movePool, 'bulkup', 'rapidspin');
-		if (species.id === 'araquanid') this.incompatibleMoves(moves, movePool, 'firstimpression', 'stickyweb');
+		if (species.id === 'mesprit') this.incompatibleMoves(moves, movePool, 'psychic', 'storedpower');
 	}
 
 	override randomMoveset(
@@ -286,16 +286,6 @@ export class RandomChatBatsTeams extends RandomTeams {
 				counter = this.addMove('splash', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			}
-		}
-		// 33% chance to force Dragon Dance on Mega Altaria, since it otherwise never gets it due to teambuilder shenanigans
-		if (species.id === 'altariamega' && movePool.includes('dragondance') && this.randomChance(1, 3)) {
-			counter = this.addMove('dragondance', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-				movePool, teraType, role);
-		}
-		// enforces a sound move on Mesprit with Throat Spray
-		if (species.id === 'mesprit' && movePool.includes('psychicnoise')) {
-			counter = this.addMove(this.randomChance(1, 2) ? 'psychicnoise' : 'torchsong', moves,
-				types, abilities, teamDetails, species, isLead, isDoubles, movePool, teraType, role);
 		}
 		// enforces both primary stabs on Infernape
 		if (species.id === 'infernape' && movePool.includes('mindblown')) {
@@ -648,7 +638,6 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'abomasnow') return 'Light Clay';
 		if (species.id === 'dugtrio' && moves.has("swordsdance")) return 'Focus Sash';
 		if (species.id === 'dugtrio') return 'Choice Band';
-		if (species.id === 'altaria') return 'Heavy-Duty Boots';
 		if (species.id === 'tyranitar') return 'Choice Scarf';
 		if (species.id === 'mimikyu') return 'Red Card';
 		if (species.id === 'mesprit' && moves.has("aquaring")) return 'Leftovers';
@@ -662,13 +651,14 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'archaludon' && ability === 'Hydroelectric Dam') return 'Assault Vest';
 		if (species.id === 'archaludon' && ability === 'Stamina') return 'Leftovers';
 		if (species.id === 'malamar') return this.sample(['Mirror Herb', 'Leftovers']);
-		if (species.id === 'empoleon') return 'Rocky Helmet';
+		if (species.id === 'empoleon') return moves.has('watershuriken') ? 'Loaded Dice' : 'Leftovers';
 		if (species.id === 'glastrier' && moves.has('swordsdance')) return 'Heavy-Duty Boots';
 		if (species.id === 'glastrier') return 'Assault Vest';
 		if (species.id === 'lycanrocmidnight') return 'Loaded Dice';
 		if (species.id === 'lycanroc') return this.sample(['Leftovers', 'Heavy-Duty Boots']);
 		if (species.id === 'lycanrocdusk') return 'Expert Belt';
-		if (species.id === 'dodrio') return 'Life Orb';
+		if (species.id === 'dodrio' && moves.has('drillpeck')) return 'Life Orb';
+		if (species.id === 'dodrio' && moves.has('bravebird')) return 'Heavy-Duty Boots';
 		if (species.id === 'whiscash') return 'Rocky Helmet';
 		if (species.id === 'hippowdon') return this.sample(['Leftovers', 'Rocky Helmet']);
 		if (species.id === 'cramorant') return 'Heavy-Duty Boots';
@@ -693,8 +683,8 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'swalot') return 'Leftovers';
 		if (species.id === 'zapdosgalar') return this.sample(['Choice Scarf', 'Expert Belt']);
 		if (species.id === 'phione') return 'Leftovers';
-		if (species.id === 'sudowoodo' && moves.has('synthesis')) return this.sample(['Red Card', 'Leftovers']);
-		if (species.id === 'sudowoodo' && moves.has('curse')) return this.sample(['Red Card', 'Leftovers']);
+		// if (species.id === 'sudowoodo' && moves.has('synthesis')) return this.sample(['Red Card', 'Leftovers']);
+		// if (species.id === 'sudowoodo' && moves.has('curse')) return this.sample(['Red Card', 'Leftovers']);
 		if (species.id === 'sudowoodo') return 'Choice Band';
 		if (species.id === 'dondozo') return 'Leftovers';
 		if (species.id === 'golurk') return this.sample(['Life Orb', 'Punching Glove', 'Colbur Berry']);
@@ -714,6 +704,9 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'articunogalar' && moves.has('roost')) return 'Heavy-Duty Boots';
 		if (species.id === 'articunogalar' && moves.has('aurasphere')) return 'Choice Specs';
 		if (species.id === 'vaporeon') return 'Toxic Orb';
+		if (species.id === 'garganacl') return 'Poisonium Z';
+		if (species.id === 'swanna') return 'Heavy-Duty Boots';
+		if (species.id === 'terapagos') return 'Leftovers';
 	}
 
 	override randomSet(
@@ -887,7 +880,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		let leadsRemaining = this.format.gameType === 'doubles' ? 2 : 1;
 		while (baseSpeciesPool.length && pokemon.length < this.maxTeamSize) {
 			const baseSpecies = this.sampleNoReplace(baseSpeciesPool);
-
+			if (hasMega && (baseSpecies === "Typhlosion" || baseSpecies === "Altaria")) continue;
 			const currentSpeciesPool: Species[] = [];
 			// Check if the base species has a mega forme available
 			// let canMega = false;
@@ -996,6 +989,9 @@ export class RandomChatBatsTeams extends RandomTeams {
 
 			// The Pokemon of the Day
 			// if (potd?.exists && (pokemon.length === 1 || this.maxTeamSize === 1)) species = potd;
+
+			// testing code
+			// if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Terapagos');
 
 			let set: RandomTeamsTypes.RandomSet;
 

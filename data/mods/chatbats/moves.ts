@@ -51,18 +51,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		shortDesc: "Breaks Screens.",
 		desc: "Breaks Screens.",
 	},
-	steelwing: {
-		// Buffed secondary chance to 50%
-		inherit: true,
-		secondary: {
-			chance: 50,
-			self: {
-				boosts: {
-					def: 1,
-				},
-			},
-		},
-	},
 	scavenge: {
 		num: -102,
 		accuracy: 100,
@@ -171,7 +159,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				case 'Fire': forme = '-Paldea-Blaze'; break;
 				}
 				source.formeChange('Tauros' + forme);
-				source.setAbility('Adaptability');
 				this.add('-ability', source, 'Adaptability');
 				source.m.ragingBullMoveType = bestType;
 			}
@@ -765,6 +752,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	surgingstrikes: {
 		inherit: true,
 		beforeMoveCallback(source, target, move) {
+			if (source.species.id === 'araquanid') return;
 			if (target) {
 				this.effectState.wickedBlowAlreadyUsed = 0;
 				this.add('-anim', source, 'Techno Blast', target);
@@ -813,7 +801,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return null;
 			}
 		},
-		desc: "This move will transform into Single Strike Urshifu/Wicked Blow if it would be less effective against the target.",
+		desc: "This move will transform into Single Strike Urshifu/Wicked Blow if it would be less effective against the target. Does not work with Araquanid.",
 		shortDesc: "Becomes Wicked Blow if it would be less effective.",
 	},
 	twister: {
@@ -1020,7 +1008,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 	},
 	bbqbeatdown: {
-		num: 506,
+		num: -1005,
 		accuracy: 100,
 		basePower: 65,
 		basePowerCallback(pokemon, target, move) {
@@ -1076,5 +1064,169 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		onPrepareHit(target, source) {
 			this.add('-anim', source, 'Bubble Beam', target);
 		},
+	},
+	purify: {
+		inherit: true,
+		flags: { reflectable: 1, heal: 1, metronome: 1 },
+		onHit(target, source) {
+			const foe = source.side.foe.active[0];
+			if (foe && !foe.fainted && foe.status) {
+				this.heal(Math.ceil(source.maxhp * 0.5), source);
+			} else {
+				this.heal(Math.ceil(source.maxhp * 0.25), source);
+			}
+		},
+		target: "self",
+		desc: "Heals for 25% HP, or 50% if foe is statused.",
+		shortDesc: "Heals for 20% HP, or 50% if foe is statused.",
+	},
+	saltcurse: {
+		num: -1006,
+		accuracy: 100,
+		basePower: 70,
+		basePowerCallback(pokemon, target, move) {
+			if (target.status === 'par') {
+				this.debug('BP doubled on paralyzed target');
+				return move.basePower * 2;
+			}
+			return move.basePower;
+		},
+		onEffectiveness(typeMod, target, type) {
+			if (type === 'Water') return 1;
+			if (type === 'Steel') return 1;
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Glare', target);
+			this.add('-anim', source, 'Ivy Cudgel Rock', target);
+		},
+		category: "Physical",
+		name: "Salt Curse",
+		pp: 10,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: null,
+		target: "normal",
+		type: "Rock",
+		contestType: "Tough",
+		desc: "Double power if target is Paralyzed. Super-effective against Water and Steel.",
+		shortDesc: "Double power if target is Paralyzed. Super-effective against Water and Steel.",
+	},
+	flyby: {
+		num: -1006,
+		accuracy: 100,
+		basePower: 70,
+		category: "Special",
+		name: "Fly-by",
+		pp: 20,
+		priority: 0,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Dual Wingbeat', target);
+		},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		selfSwitch: true,
+		secondary: {
+			chance: 50,
+			boosts: {
+				atk: -1,
+			},
+		},
+		target: "normal",
+		type: "Flying",
+		contestType: "Cute",
+		desc: "User switches out. Target: -1 Attack.",
+		shortDesc: "User switches out. Target: -1 Attack.",
+	},
+	silktrap: {
+		inherit: true,
+		condition: {
+			duration: 1,
+			onStart(target) {
+				this.add('-singleturn', target, 'Protect');
+			},
+			onTryHitPriority: 3,
+			onTryHit(target, source, move) {
+				if (!move.flags['protect'] || move.category === 'Status') {
+					if (move.isZ || move.isMax) target.getMoveHitData(move).zBrokeProtect = true;
+					return;
+				}
+				if (move.smartTarget) {
+					move.smartTarget = false;
+				} else {
+					this.add('-activate', target, 'move: Protect');
+				}
+				const lockedmove = source.getVolatile('lockedmove');
+				if (lockedmove) {
+					// Outrage counter is reset
+					if (source.volatiles['lockedmove'].duration === 2) {
+						delete source.volatiles['lockedmove'];
+					}
+				}
+				if (this.checkMoveMakesContact(move, source, target)) {
+					source.side.addSideCondition('stickyweb');
+				}
+				return this.NOT_FAIL;
+			},
+			onHit(target, source, move) {
+				if (move.isZOrMaxPowered && this.checkMoveMakesContact(move, source, target)) {
+					source.side.addSideCondition('stickyweb');
+				}
+			},
+		},
+		desc: "Protect. If contact: set Sticky Web.",
+		shortDesc: "Protect. If contact: set Sticky Web.",
+	},
+	heatsink: {
+		num: -1007,
+		accuracy: 100,
+		basePower: 80,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Fire Spin', target);
+			this.add('-anim', source, 'Bitter Blade', target);
+		},
+		onModifyMove(move, source, target) {
+			if (target?.status === 'brn') {
+				move.drain = [3, 4];
+			}
+		},
+		category: "Special",
+		name: "Heat Sink",
+		pp: 20,
+		priority: 0,
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		drain: [1, 2],
+		secondary: null,
+		target: "normal",
+		type: "Fire",
+		zMove: { basePower: 160 },
+		contestType: "Clever",
+		desc: "50% drain. 75% drain instead if target is Burned.",
+		shortDesc: "50% drain. 75% drain instead if target is Burned.",
+	},
+	terastarstorm: {
+		inherit: true,
+		onModifyType(move, pokemon) {
+			const types = pokemon.getTypes();
+			let type = types[0];
+			if (type === 'Bird') type = '???';
+			if (type === '???' && types[1]) type = types[1];
+			move.type = type;
+			if (pokemon.species.name === 'Terapagos-Stellar') {
+				move.type = 'Stellar';
+				if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) {
+					move.category = 'Physical';
+				}
+			}
+		},
+		desc: "Type varies based on the user's primary type.",
+		shortDesc: "Type varies based on the user's primary type.",
 	},
 };
