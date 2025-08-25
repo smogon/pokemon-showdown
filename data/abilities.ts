@@ -5276,7 +5276,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			// Skill Swap implementation
 			const targetAbility = target.getAbility();
 			const sourceAbility = source.getAbility();
-			if (sourceAbility.flags['failskillswap'] || target.volatiles['dynamax'] || !this.checkMoveMakesContact(move, source, target)) return;
+			if (sourceAbility.flags['failskillswap'] || target.volatiles['dynamax'] ||
+				!this.checkMoveMakesContact(move, source, target)) return;
 			const sourceCanBeSet = this.runEvent('SetAbility', source, source, this.effect, targetAbility);
 			if (!sourceCanBeSet) return sourceCanBeSet;
 			const targetCanBeSet = this.runEvent('SetAbility', target, source, this.effect, sourceAbility);
