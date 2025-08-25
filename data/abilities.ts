@@ -5273,20 +5273,28 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	wanderingspirit: {
 		onDamagingHit(damage, target, source, move) {
-			if (source.getAbility().flags['failskillswap'] || target.volatiles['dynamax']) return;
+			// Skill Swap implementation
+			const targetAbility = target.getAbility();
+			const sourceAbility = source.getAbility();
+			if (sourceAbility.flags['failskillswap'] || target.volatiles['dynamax'] || !this.checkMoveMakesContact(move, source, target)) return;
+			const sourceCanBeSet = this.runEvent('SetAbility', source, source, this.effect, targetAbility);
+			if (!sourceCanBeSet) return sourceCanBeSet;
+			const targetCanBeSet = this.runEvent('SetAbility', target, source, this.effect, sourceAbility);
+			if (!targetCanBeSet) return targetCanBeSet;
 
-			if (this.checkMoveMakesContact(move, source, target)) {
-				const targetCanBeSet = this.runEvent('SetAbility', target, source, this.effect, source.ability);
-				if (!targetCanBeSet) return targetCanBeSet;
-				const sourceAbility = source.setAbility('wanderingspirit', target);
-				if (!sourceAbility) return;
-				if (target.isAlly(source)) {
-					this.add('-activate', target, 'Skill Swap', '', '', `[of] ${source}`);
-				} else {
-					this.add('-activate', target, 'ability: Wandering Spirit', this.dex.abilities.get(sourceAbility).name, 'Wandering Spirit', `[of] ${source}`);
-				}
-				target.setAbility(sourceAbility);
+			if (target.isAlly(source)) {
+				this.add('-activate', target, 'Skill Swap', '', '', `[of] ${source}`);
+			} else {
+				this.add('-activate', target, 'ability: Wandering Spirit', sourceAbility, targetAbility, `[of] ${source}`);
 			}
+			this.singleEvent('End', sourceAbility, source.abilityState, source);
+			source.ability = targetAbility.id;
+			target.ability = sourceAbility.id;
+			source.abilityState = this.initEffectState({ id: this.toID(source.ability), target: source });
+			target.abilityState = this.initEffectState({ id: this.toID(target.ability), target });
+			source.volatileStaleness = undefined;
+			if (!target.isAlly(source)) target.volatileStaleness = 'external';
+			this.singleEvent('Start', sourceAbility, target.abilityState, target);
 		},
 		flags: {},
 		name: "Wandering Spirit",
