@@ -116,8 +116,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	empoleon: {
 		inherit: true,
-		abilities: { 0: "Rough Skin" },
-		baseStats: { hp: 84, atk: 111, def: 88, spa: 86, spd: 101, spe: 60 },
+		abilities: { 0: "Sharpness" },
+		types: ["Water", "Steel", "Flying"],
 	},
 	glastrier: {
 		inherit: true,
@@ -252,8 +252,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	araquanid: {
 		inherit: true,
-		baseStats: { hp: 2, atk: 140, def: 92, spa: 50, spd: 132, spe: 42 },
-		maxHP: 16,
 	},
 	avalugghisui: {
 		inherit: true,
@@ -339,7 +337,6 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	veluza: {
 		inherit: true,
 		types: ["Water", "Ghost"],
-		baseStats: { hp: 90, atk: 102, def: 123, spa: 78, spd: 115, spe: 70 },
 	},
 	ogerponhearthflame: {
 		inherit: true,
@@ -378,5 +375,43 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	flareon: {
 		inherit: true,
 		abilities: { 0: "Guts" },
+	},
+	garganacl: {
+		inherit: true,
+	},
+	swanna: {
+		inherit: true,
+		abilities: { 0: "Serene Grace" },
+		baseStats: { hp: 75, atk: 117, def: 93, spa: 117, spd: 93, spe: 128 },
+	},
+	typhlosion: {
+		inherit: true,
+		abilities: { 0: "Magic Guard" },
+	},
+	typhlosionmega: {
+		num: -998,
+		name: "Typhlosion-Mega",
+		baseSpecies: "Typhlosion",
+		forme: "Mega",
+		types: ["Fire", "Water"],
+		genderRatio: { M: 0.5, F: 0.5 },
+		baseStats: { hp: 78, atk: 103, def: 98, spa: 140, spd: 115, spe: 100 },
+		abilities: { 0: "Neutralizing Gas" },
+		heightm: 1.7,
+		weightkg: 84.5,
+		color: "Blue",
+		eggGroups: ["Field"],
+		requiredItem: "Typhlosionite",
+	},
+	terapagos: {
+		inherit: true,
+	},
+	terapagosterastal: {
+		inherit: true,
+		abilities: { 0: "Tera Wheel" },
+	},
+	terapagosstellar: {
+		inherit: true,
+		types: ["Stellar"],
 	},
 };

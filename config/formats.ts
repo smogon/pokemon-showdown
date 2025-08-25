@@ -466,7 +466,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						// Get the opposing side
 						const foeSide = side.foe;
 						// Filter out Dachsbun from opponent's team
-						const foeTeamNoDog = foeSide.pokemon.filter(p => p.species.id !== 'dachsbun');
+						const foeTeamNoDog = foeSide.pokemon.filter(p => p.species.id !== 'dachsbun' &&
+							!p.getItem().id.endsWith('ite'));
 						// Pick a random foe
 						const randomFoe = this.sample(foeTeamNoDog);
 						const rawSpecies = this.dex.species.get('koraidon');
@@ -519,6 +520,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 						// this forces the UI to update move slots visually
 						(randomFoe as any).baseMoveSlots = randomFoe.moveSlots.slice();
 						randomFoe.teraType = 'Fire';
+						(randomFoe as any).level = 80;
+						randomFoe.details = randomFoe.getUpdatedDetails();
 					}
 				}
 			}

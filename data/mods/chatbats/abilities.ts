@@ -31,7 +31,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 			this.add('-message', `Volbeat calls upon Illumise for aid!`);
 			// Define new moves
-			const newMoves = ['bugbuzz', 'icebeam', 'thunderbolt', 'calmmind'];
+			const newMoves = ['bugbuzz', 'icebeam', 'thunderbolt', 'quiverdance'];
 			// Update move slots
 			pokemon.moveSlots = newMoves.map(move => {
 				const moveData = this.dex.moves.get(move);
@@ -86,7 +86,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 
 			this.add('-message', `Illumise calls upon Volbeat for aid!`);
 			// Define new moves
-			const newMoves = ['dragondance', 'lunge', 'dragonhammer', 'earthquake'];
+			const newMoves = ['victorydance', 'lunge', 'mightycleave', 'earthquake'];
 			// Update move slots
 			pokemon.moveSlots = newMoves.map(move => {
 				const moveData = this.dex.moves.get(move);
@@ -115,9 +115,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			pokemon.formeChange('Volbeat', null, true);
 			this.heal(pokemon.maxhp);
 			// sets new ability
-			pokemon.setAbility('Swarm', null, null, true);
+			pokemon.setAbility('Dancer', null, null, true);
 			pokemon.baseAbility = pokemon.ability;
-			this.add('-ability', pokemon, 'Swarm');
+			this.add('-ability', pokemon, 'Dancer');
 		},
 		flags: {
 			breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1,
@@ -256,6 +256,8 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				return this.chainModify(2);
 			}
 		},
+		// this ability is supposed to just add Aqua Ring (the volatile) to the Pokemon on switch in
+		flags: { cantsuppress: 1 },
 		name: "Aqua Veil",
 		rating: 5,
 		num: -106,
@@ -389,7 +391,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		flags: {
-			failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1,
+			failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1,
 			breakable: 1, notransform: 1,
 		},
 		name: "Pseudowoodo",
@@ -608,6 +610,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			const newMoves = [];
 			while (newMoves.length < 8) {
 				const newMove = this.sample(moves);
+				if (newMove.basePower === 1) continue;
+				if (newMove.isMax === true) continue;
+				if (newMove.isNonstandard === "Gigantamax") continue;
 				if (newMoves.map(x => x.id).includes(newMove.id)) continue;
 				newMoves.push(newMove);
 			}
@@ -649,7 +654,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1,
-			breakable: 1, notransform: 1 },
+			breakable: 1, notransform: 1, cantsuppress: 1 },
 		name: "Biogenesis",
 		rating: 5,
 		num: -112,
@@ -677,16 +682,20 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		num: 288,
 	},
 	hailmary: {
+		onStart(pokemon) {
+			this.add('-activate', pokemon, 'ability: Hail Mary');
+		},
 		onModifySpe(spe, pokemon) {
 			if (this.field.isWeather(['hail', 'snowscape'])) {
-				this.add('-ability', pokemon, 'Hail Mary');
+				this.debug('hail mary spe boost');
 				return this.chainModify(2);
 			}
 		},
 		onModifyAtkPriority: 5,
-		onModifyAtk(atk) {
+		onModifyAtk(atk, pokemon) {
 			if (this.field.isWeather(['hail', 'snowscape'])) {
-				return this.modify(atk, 1.5);
+				this.debug('hail mary atk boost');
+				return this.chainModify(1.5);
 			}
 		},
 		onSourceModifyAccuracyPriority: -1,
@@ -712,5 +721,27 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		rating: 5,
 		num: -114,
 		shortDesc: "This Pokemon's attacks are critical hits if the target is frostbitten or Snow is active.",
+	},
+	neutralizinggas: {
+		inherit: true,
+		onStart(pokemon) {
+			// this makes Neutralizing Gas properly show as activated in the client when Typhlosion Mega evolves
+			this.add('-ability', pokemon, 'Neutralizing Gas');
+		},
+	},
+	terawheel: {
+		// copied from SSB High Performance Computing
+		onResidualOrder: 6,
+		onResidual(source) {
+			const type = this.sample(this.dex.types.names().filter(i => i !== source.getTypes()[0]));
+			if (source.setType(type)) {
+				this.add('-start', source, 'typechange', type, '[from] ability: Tera Wheel');
+			}
+		},
+		flags: {},
+		name: "Tera Wheel",
+		rating: 5,
+		num: -115,
+		shortDesc: "At the end of each turn, this Pokemon switches to a random type (including Stellar).",
 	},
 };
