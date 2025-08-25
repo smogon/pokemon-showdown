@@ -43,21 +43,23 @@ games asynchronously.
 
 -   **`--async`**: runs each game concurrently instead of waiting for the
     previous game to complete before starting the next. Note that since battles
-    run through the harness should not be blocking to begin with (battles
-    naturally wait for players to make their decisions, but the AI's should be
-    making decisions pretty much immediately), this mode is not expected to have
+    run through the harness are non-blocking by design (battles naturally wait
+    for players to make their decisions, but the AI's should be making
+    decisions pretty much immediately), this mode is not expected to have
     large performance benefits over the default sequential mode and may require
     additional memory.
 
 **TODO**: Add support for running battles in `--parallel` on multiple cores with
 [`worker_threads`](https://nodejs.org/api/worker_threads.html).
 
+---
+
 ## exhaustive
 
 The `exhaustive` subcommand cycles through all generations and game types,
 attempting to use as many different effects as possible in the battles it
 randomly simulates. This can be useful as a form of
-['smoke testing'](https://en.wikipedia.org/wiki/Smoke_testing_\(software\)), a
+['smoke testing'](<https://en.wikipedia.org/wiki/Smoke_testing_(software)>), a
 form of sanity testing/build verification which can be used to expose obvious
 critical issues with the application. Making it through a successful cycle of
 smoke tests does *not* mean the application is without bugs, or even that it is
