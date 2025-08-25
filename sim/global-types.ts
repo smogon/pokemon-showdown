@@ -241,6 +241,8 @@ interface ModdedBattleActions {
 			zMove?: string, maxMove?: string,
 		}
 	) => boolean;
+	checkAlwaysHit?: (this: BattleActions, attacker: Pokemon, defender: Pokemon) => boolean;
+	accuracyCheck?: (this: BattleActions, attacker: Pokemon, defender: Pokemon, move: ActiveMove) => boolean;
 	getDamage?: (
 		this: BattleActions, pokemon: Pokemon, target: Pokemon, move: string | number | ActiveMove, suppressMessages: boolean
 	) => number | undefined | null | false;
