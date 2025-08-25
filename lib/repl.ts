@@ -16,6 +16,8 @@ import { crashlogger } from './crashlogger';
 import { FS } from './fs';
 declare const Config: any;
 
+export type EvalType = (script: string) => unknown;
+
 export const Repl = new class {
 	/**
 	 * Contains the pathnames of all active REPL sockets.
@@ -64,7 +66,7 @@ export const Repl = new class {
 	 * Does everything synchronously, so that the directory is guaranteed
 	 * clean and ready for new REPL sockets by the time this function returns.
 	 */
-	cleanup() {
+	async cleanup() {
 		const config = typeof Config !== 'undefined' ? Config : {};
 		if (!config.repl) return;
 
@@ -72,26 +74,20 @@ export const Repl = new class {
 		const directory = path.dirname(
 			path.resolve(FS.ROOT_PATH, config.replsocketprefix || 'logs/repl', 'app')
 		);
-		let files;
-		try {
-			files = fs.readdirSync(directory);
-		} catch {}
-		if (files) {
-			for (const file of files) {
-				const pathname = path.resolve(directory, file);
-				const stat = fs.statSync(pathname);
-				if (!stat.isSocket()) continue;
-
+		const files = await fs.promises.readdir(directory);
+		for (const file of files) {
+			const pathname = path.resolve(directory, file);
+			const stat = await fs.promises.stat(pathname);
+			if (!stat.isSocket()) continue;
+			await new Promise((resolve, reject) => {
 				const socket = net.connect(pathname, () => {
 					socket.end();
 					socket.destroy();
+					resolve(null);
 				}).on('error', () => {
-					try {
-						// race condition?
-						fs.unlinkSync(pathname);
-					} catch {}
+					resolve(fs.promises.unlink(pathname).catch(err => null));
 				});
-			}
+			});
 		}
 	}
 
@@ -100,9 +96,15 @@ export const Repl = new class {
 	 * parameter is passed in because there is no other way to access a file's
 	 * non-global context.
 	 */
-	start(filename: string, evalFunction: (input: string) => any) {
+	start(filename: string, evalFunction: EvalType) {
 		const config = typeof Config !== 'undefined' ? Config : {};
 		if (!config.repl) return;
+		// eslint-disable-next-line no-eval
+		if (evalFunction === eval) {
+			// Direct eval is most useful for debugging,  but
+			// nothing prevents consumers from wrapping indirect eval if required (see startGlobal).
+			throw new TypeError(`Expected 'evalFunction' to be a wrapper around direct eval.`);
+		}
 
 		// TODO: Windows does support the REPL when using named pipes. For now,
 		// this only supports UNIX sockets.
@@ -154,5 +156,11 @@ export const Repl = new class {
 		} catch (err) {
 			console.error(`Could not start REPL server "${filename}": ${err}`);
 		}
+	}
+
+	startGlobal(filename: string) {
+		/* eslint-disable no-eval */
+		return this.start(filename, (script: string) => ((0, eval)(script)));
+		/* eslint-enable no-eval */
 	}
 };

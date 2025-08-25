@@ -6,12 +6,13 @@
 'use strict';
 
 const assert = require('assert').strict;
-const moderation = require('../../../dist/server/chat-commands/moderation');
 
 const { makeUser } = require('../../users-utils');
 
 describe('room promotions', function () {
+	let moderation = null;
 	before(() => {
+		moderation = require('../../../dist/server/chat-commands/moderation');
 		Rooms.global.addChatRoom('Promotion Testing');
 		this.room = Rooms.get('promotiontesting');
 

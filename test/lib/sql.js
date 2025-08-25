@@ -3,7 +3,8 @@ const { SQL } = require('../../dist/lib/sql');
 const assert = require('../assert').strict;
 const common = require('../common');
 
-const database = SQL(module, { file: `:memory:`, processes: 1 });
+const database = SQL('test', module, { file: `:memory:` });
+database.spawn(1);
 
 (common.hasModule('better-sqlite3') ? describe : describe.skip)(`SQLite worker wrapper`, () => {
 	// prepare statements and set up table

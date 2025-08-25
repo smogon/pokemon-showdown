@@ -4,38 +4,26 @@
  * Handles updating the level database for [Gen 9] Computer-Generated Teams.
  */
 
-import { SQL, Utils } from "../../lib";
-import { getSpeciesName } from "./randombattles/winrates";
-import { cgtDatabase } from "../../data/cg-teams";
+import { type SQL, Utils } from "../../lib";
+import { cgtDatabase, start as cgtStart, destroy as cgtDestroy } from "../../data/cg-teams";
+import { getSpeciesIdCGT as getLevelSpeciesID } from "../../sim/random-battles";
 
 export let addPokemon: SQL.Statement | null = null;
 export let incrementWins: SQL.Statement | null = null;
 export let incrementLosses: SQL.Statement | null = null;
 export let dbSetupPromise: Promise<void> | null = null;
 
-async function setupDatabase(database: SQL.DatabaseManager) {
-	await database.runFile('./databases/schemas/battlestats.sql');
-	addPokemon = await database.prepare(
+async function setupDatabase(db: SQL.DatabaseManager) {
+	await db.runFile('./databases/schemas/battlestats.sql');
+	addPokemon = await db.prepare(
 		'INSERT OR IGNORE INTO gen9computergeneratedteams (species_id, wins, losses, level) VALUES (?, 0, 0, ?)'
 	);
-	incrementWins = await database.prepare(
+	incrementWins = await db.prepare(
 		'UPDATE gen9computergeneratedteams SET wins = wins + 1 WHERE species_id = ?'
 	);
-	incrementLosses = await database.prepare(
+	incrementLosses = await db.prepare(
 		'UPDATE gen9computergeneratedteams SET losses = losses + 1 WHERE species_id = ?'
 	);
-}
-
-if (Config.usesqlite && Config.usesqliteleveling) {
-	const database = SQL(module, {
-		file: './databases/battlestats.db',
-	});
-	dbSetupPromise = setupDatabase(database);
-}
-
-function getLevelSpeciesID(set: PokemonSet, format?: Format) {
-	if (['Basculin', 'Greninja'].includes(set.name)) return toID(set.species);
-	return toID(getSpeciesName(set, format || Dex.formats.get('gen9computergeneratedteams')));
 }
 
 async function updateStats(battle: RoomBattle, winner: ID) {
@@ -147,7 +135,7 @@ export const pages: Chat.PageTable = {
 			);
 			this.title = `[History] [Gen 9] Computer Generated Teams`;
 
-			const MAX_LINES = 100;
+			const MAX_LINES = Math.min(history.length, 100);
 			buf += `<div class="ladder pad"><table><tr><th>Pokemon</th><th>Level</th><th>Timestamp</th>`;
 			for (let i = history.length - 1; history.length - i <= MAX_LINES; i--) {
 				const entry = history[i];
@@ -161,3 +149,15 @@ export const pages: Chat.PageTable = {
 		}
 	},
 };
+
+export function start() {
+	if (!Config.usesqlite || !Config.usesqliteleveling) {
+		return;
+	}
+	dbSetupPromise = setupDatabase(cgtDatabase);
+	cgtStart();
+}
+
+export function destroy() {
+	cgtDestroy();
+}
