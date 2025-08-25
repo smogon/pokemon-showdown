@@ -1725,7 +1725,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		},
 		onModifySpeciesPriority: 2,
 		onModifySpecies(species, target, source, effect) {
-			if (!target) return; // Chat command
+			if (!target?.baseMoveSlots) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			const types = [...new Set(target.baseMoveSlots.slice(0, 2).map(move => this.dex.moves.get(move.id).type))];
 			return { ...species, types };
@@ -2222,7 +2222,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		},
 		onModifySpeciesPriority: 1,
 		onModifySpecies(species, target, source, effect) {
-			if (!target) return; // Chat command
+			if (!target?.teraType) return; // Chat command
 			if (effect && ['imposter', 'transform'].includes(effect.id)) return;
 			const typesSet = new Set(species.types);
 			const bonusType = this.dex.types.get(target.teraType);
@@ -2275,7 +2275,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			let tier: string = this.toID(isNatDex ? species.natDexTier : species.tier);
 			if (!(tier in boosts)) return;
 			// Non-Pokemon bans in lower tiers
-			if (target && !isNatDex) {
+			if (target?.set && !isNatDex) {
 				if (this.toID(target.set.item) === 'lightclay' && tiers.indexOf(tier) > tiers.indexOf('rubl')) tier = 'rubl';
 				if (this.toID(target.set.item) === 'quickclaw' && tiers.indexOf(tier) > tiers.indexOf('nubl')) tier = 'nubl';
 				if (this.toID(target.set.ability) === 'drought' && tiers.indexOf(tier) > tiers.indexOf('nubl')) tier = 'nubl';
@@ -2333,7 +2333,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		onBegin() {
 			this.add('rule', 'Re-Evolution Mod: Pok\u00e9mon gain the boosts they would gain from evolving again');
 		},
-		onModifySpecies(species, target) {
+		onModifySpecies(species) {
 			const newSpecies = this.dex.deepClone(species);
 			const baseSpecies = this.dex.species.get(
 				(Array.isArray(species.battleOnly) ? species.battleOnly[0] : species.battleOnly) || species.changesFrom || species.name
@@ -2783,7 +2783,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 		onModifySpecies(species, target, source, effect) {
-			if (!target) return;
+			if (!target?.set) return;
 			const newSpecies = this.dex.deepClone(species);
 			const fusionName = target.set.name;
 			if (!fusionName || fusionName === newSpecies.name) return;

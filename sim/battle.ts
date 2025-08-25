@@ -3176,7 +3176,7 @@ export class Battle {
 			this.teamGenerator.setSeed(options.seed);
 		}
 
-		team = this.teamGenerator.getTeam(options);
+		team = this.teamGenerator.getTeam(options, this);
 		return team as PokemonSet[];
 	}
 
