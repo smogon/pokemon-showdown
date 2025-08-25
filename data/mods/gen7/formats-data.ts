@@ -1854,6 +1854,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	burmy: {
 		tier: "LC",
 	},
+	burmysandy: {
+		tier: "LC",
+	},
+	burmytrash: {
+		tier: "LC",
+	},
 	wormadam: {
 		tier: "ZU",
 		doublesTier: "(DUU)",
@@ -1867,6 +1873,14 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "(DUU)",
 	},
 	mothim: {
+		tier: "ZU",
+		doublesTier: "(DUU)",
+	},
+	mothimsandy: {
+		tier: "ZU",
+		doublesTier: "(DUU)",
+	},
+	mothimtrash: {
 		tier: "ZU",
 		doublesTier: "(DUU)",
 	},
@@ -2467,7 +2481,28 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	deerling: {
 		tier: "LC",
 	},
+	deerlingsummer: {
+		tier: "LC",
+	},
+	deerlingautumn: {
+		tier: "LC",
+	},
+	deerlingwinter: {
+		tier: "LC",
+	},
 	sawsbuck: {
+		tier: "ZU",
+		doublesTier: "(DUU)",
+	},
+	sawsbucksummer: {
+		tier: "ZU",
+		doublesTier: "(DUU)",
+	},
+	sawsbuckautumn: {
+		tier: "ZU",
+		doublesTier: "(DUU)",
+	},
+	sawsbuckwinter: {
 		tier: "ZU",
 		doublesTier: "(DUU)",
 	},
@@ -2809,11 +2844,79 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
+	vivillonarchipelago: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	vivilloncontinental: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	vivillonelegant: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
 	vivillonfancy: {
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
+	vivillongarden: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	vivillonhighplains: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	vivillonicysnow: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	vivillonjungle: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	vivillonmarine: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	vivillonmodern: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	vivillonmonsoon: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	vivillonocean: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
 	vivillonpokeball: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	vivillonpolar: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	vivillonriver: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	vivillonsandstorm: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	vivillonsavannah: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	vivillonsun: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	vivillontundra: {
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
@@ -3364,6 +3467,30 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		doublesTier: "(DUU)",
 	},
 	minior: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	miniororange: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	minioryellow: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	miniorgreen: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	miniorblue: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	miniorindigo: {
+		tier: "NU",
+		doublesTier: "(DUU)",
+	},
+	miniorviolet: {
 		tier: "NU",
 		doublesTier: "(DUU)",
 	},
