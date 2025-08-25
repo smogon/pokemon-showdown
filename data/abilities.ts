@@ -5278,6 +5278,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			const sourceAbility = source.getAbility();
 			if (sourceAbility.flags['failskillswap'] || target.volatiles['dynamax'] ||
 				!this.checkMoveMakesContact(move, source, target)) return;
+			// In Gen 10, check which Ability Shield is revealed
 			const sourceCanBeSet = this.runEvent('SetAbility', source, source, this.effect, targetAbility);
 			if (!sourceCanBeSet) return sourceCanBeSet;
 			const targetCanBeSet = this.runEvent('SetAbility', target, source, this.effect, sourceAbility);
