@@ -9,6 +9,7 @@
 
 import { Dex, toID } from './dex';
 import type { PRNG, PRNGSeed } from './prng';
+import { RandomBattlesModuleMap } from './random-battles-module-map';
 
 /**
  * Represents additional move data
@@ -711,7 +712,8 @@ export const Teams = new class Teams {
 		} else if (formatID.includes('gen9randombattle') && format.ruleTable?.has('+pokemontag:cap')) {
 			TeamGenerator = require(`../data/random-battles/gen9cap/teams`).default;
 		} else {
-			TeamGenerator = require(`../data/random-battles/${mod}/teams`).default;
+			// @pokebedrock - use generated static module map to avoid dynamic requires
+			TeamGenerator = RandomBattlesModuleMap[mod];
 		}
 
 		return new TeamGenerator(format, seed);

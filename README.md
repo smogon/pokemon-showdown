@@ -21,7 +21,7 @@ If your `smell-of-curry` and you want to release a new version, you can do the f
 - **Reworked Config**: Modified to not use reading/writing to files as script api doesn't support that.
 - **Better Type Safety**: Added more specific type definitions throughout the codebase.
 - **ESM Compatibility**: Fixed compatibility issues with Minecraft Bedrock's Script API.
-- **Removed Dynamic Requires**: `sim/dex` now uses a static import map to avoid dynamic requires (which is not supported in Minecraft Bedrock's Script API).
+- **Removed Dynamic Requires**: `sim/dex` & `sim/teams` now uses a static import map to avoid dynamic requires (which is not supported in Minecraft Bedrock's Script API).
 
 ### Pokemon Data & Features:
 - **UUID System**: Added a whole UUID system which allows pokemon to be searched easily by interpreter.
