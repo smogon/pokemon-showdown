@@ -3786,7 +3786,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen4',
 		gameType: 'doubles',
 		searchShow: false,
-		ruleset: ['Standard', 'Evasion Abilities Clause'],
+		ruleset: ['Standard', 'Evasion Abilities Clause', 'Swagger Clause'],
 		banlist: ['AG', 'Uber', 'Soul Dew', 'Dark Void', 'Thunder Wave'],
 		unbanlist: ['Machamp', 'Manaphy', 'Mew', 'Salamence', 'Wobbuffet', 'Wynaut'],
 	},
