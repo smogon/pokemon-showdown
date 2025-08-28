@@ -400,7 +400,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onBegin() {
 			this.add(`raw|Welcome to Do Not Use Random Battle!`);
 			this.add(`raw|<a href="https://www.smogon.com/forums/threads/3734326/">Do Not Use</a> is a Solomod where ONLY Pok&eacute;mon with 280 BST or less are allowed!`);
-			this.add(`raw|<a href="(with some exceptions, like Luvdisc and Capsakid).`);			
+			this.add(`raw|<a href="(with some exceptions, like Luvdisc and Capsakid).`);
 			this.add(`raw|You are invited to come the <a href="https://play.pokemonshowdown.com/petmods">Pet Mods</a> room to discuss the metagame.`);
 		},
 		onSwitchInPriority: 100,
@@ -427,7 +427,8 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 		onValidateSet(set) {
 			const species = this.dex.species.get(set.species);
-			if (species.bst > 280 && !['Luvdisc', 'Unown', 'Capsakid', 'Snorunt', 'Swablu', 'Beldum'].includes(species.baseSpecies)) {
+			if (species.bst > 280) {
+				if (['Luvdisc', 'Unown', 'Capsakid', 'Snorunt', 'Swablu', 'Beldum'].includes(species.baseSpecies)) return;
 				return [`Only Pok\u00e9mon with a BST of 280 or lower are allowed.`, `(${species.name}'s BST is ${species.bst}.)`];
 			}
 		},
