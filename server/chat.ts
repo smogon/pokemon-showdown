@@ -604,7 +604,9 @@ export class CommandContext extends MessageContext {
 			return this.popupReply(`You tried to send "${message}" to the room "${this.room.roomid}" but it failed because you were not in that room.`);
 		}
 
-		if (this.user.statusType === 'idle' && !['unaway', 'unafk', 'back'].includes(this.cmd)) {
+		if (this.user.statusType === 'idle' &&
+			this.message !== '/cmd rooms' &&
+			!['unaway', 'unafk', 'back'].includes(this.cmd)) {
 			this.user.setStatusType('online');
 		}
 
@@ -1819,7 +1821,7 @@ export const Chat = new class {
 	 */
 	database = SQL(module, {
 		file: global.Config?.nofswriting ? ':memory:' : PLUGIN_DATABASE_PATH,
-		processes: global.Config?.chatdbprocesses,
+		processes: global.Config?.subprocessescache?.chatdb ?? 1,
 	});
 	databaseReadyPromise: Promise<void> | null = null;
 
@@ -2706,7 +2708,7 @@ export interface Monitor {
 
 // explicitly check this so it doesn't happen in other child processes
 if (!process.send) {
-	Chat.database.spawn(Config.chatdbprocesses || 1);
+	Chat.database.spawn(global.Config?.subprocessescache?.chatdb ?? 1);
 	Chat.databaseReadyPromise = Chat.prepareDatabase();
 	// we need to make sure it is explicitly JUST the child of the original parent db process
 	// no other child processes

@@ -65,6 +65,7 @@ interface EventInfo {
 	japan?: boolean;
 	/** For Emerald event eggs to allow Pomeg glitched moves */
 	emeraldEventEgg?: boolean;
+	source?: string;
 }
 
 type Effect = Ability | Item | ActiveMove | Species | Condition | Format;
@@ -311,8 +312,9 @@ interface ModdedBattlePokemon {
 	runEffectiveness?: (this: Pokemon, move: ActiveMove) => number;
 	runImmunity?: (this: Pokemon, source: ActiveMove | string, message?: string | boolean) => boolean;
 	setAbility?: (
-		this: Pokemon, ability: string | Ability, source: Pokemon | null, isFromFormeChange: boolean
-	) => string | false;
+		this: Pokemon, ability: string | Ability, source?: Pokemon | null, sourceEffect?: Effect | null,
+		isFromFormeChange?: boolean, isTransform?: boolean
+	) => ID | false | null;
 	setItem?: (this: Pokemon, item: string | Item, source?: Pokemon, effect?: Effect) => boolean;
 	setStatus?: (
 		this: Pokemon, status: string | Condition, source: Pokemon | null,
@@ -365,10 +367,9 @@ interface ModdedBattleScriptsData extends Partial<BattleScriptsData> {
 	maybeTriggerEndlessBattleClause?: (
 		this: Battle, trappedBySide: boolean[], stalenessBySide: ('internal' | 'external' | undefined)[]
 	) => boolean | undefined;
-	natureModify?: (this: Battle, stats: StatsTable, set: PokemonSet) => StatsTable;
 	endTurn?: (this: Battle) => void;
 	runAction?: (this: Battle, action: Action) => void;
-	spreadModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet) => StatsTable;
+	statModify?: (this: Battle, baseStats: StatsTable, set: PokemonSet, statName: StatID) => number;
 	start?: (this: Battle) => void;
 	runPickTeam?: () => void;
 	suppressingWeather?: (this: Battle) => boolean;
