@@ -935,8 +935,6 @@ export class RandomDNUTeams extends RandomTeams {
 				pokemon.push(set);
 			}
 
-			const item = this.dex.items.get(set.item);
-
 			// Don't bother tracking details for the last Pokemon
 			if (pokemon.length === this.maxTeamSize) break;
 
