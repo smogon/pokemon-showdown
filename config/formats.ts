@@ -392,15 +392,15 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		section: "Pet Mods",
 	},
 	{
-		name: "[Gen 9] Balls Random Battle",
-		desc: "A random battle format featuring Fakemon based on balls (and guns (don't ask)) from the real world and other media.",
-		mod: 'balls',
-		team: 'randomBLL',
-		ruleset: ['Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod', 'Data Preview', 'Sprite Viewer'],
+		name: "[Gen 9] Do Not Use Random Battle",
+		desc: `A National Dex random battle format where only Pok&eacute;mon with 280 BST or less (with some exceptions) are allowed.`,
+		mod: 'gen9',
+		team: 'randomDNU',
+		ruleset: ['Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod', 'Terastal Clause'],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Yes, this is in fact a real metagame!</b></div>`);
-			this.add(`raw|Welcome to Balls Random Battle!`);
-			this.add(`raw|<a href="https://www.smogon.com/forums/threads/solomods-megathread.3711007/page-4#post-9716880">Balls</a> is a Solomod featuring powerful Fakemon based on balls (and guns (don't ask)) from the real world and other media!`);
+			this.add(`raw|Welcome to Do Not Use Random Battle!`);
+			this.add(`raw|<a href="https://www.smogon.com/forums/threads/3734326/">Do Not Use</a> is a Solomod where ONLY Pok&eacute;mon with 280 BST or less are allowed!`);
+			this.add(`raw|<a href="(with some exceptions, like Luvdisc and Capsakid).`);			
 			this.add(`raw|You are invited to come the <a href="https://play.pokemonshowdown.com/petmods">Pet Mods</a> room to discuss the metagame.`);
 		},
 		onSwitchInPriority: 100,
@@ -413,34 +413,22 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 	},
 	{
-		name: "[Gen 9] Balls", // for roomtours
-		mod: 'balls',
+		name: "[Gen 9] National Dex Do Not Use", // roomtours
+		desc: `A National Dex solomod where only Pok&eacute;mon with 280 BST or less are allowed.`,
+		mod: 'gen9',
 		searchShow: false,
-		ruleset: ['Standard', 'Evasion Abilities Clause', 'Sleep Moves Clause', '!Sleep Clause Mod', 'Data Preview', 'Sprite Viewer'],
-		banlist: ['All Pokemon'],
-		unbanlist: [
-			// Balls
-			'Baseball', 'Basketball', 'Football', 'Soccerball', 'Tennisball', 'Cricketball',
-			'Watermelon', 'Cabbage', 'Plasmaball', 'pokemon:Snowball', 'Crystalball', '8ball',
-			'Gumball', 'Discoball', 'The Moon', 'pokemon:Rock', 'Virus', 'Dragonball',
-			// Guns
-			'Scorpiongun', 'Tommygun', 'Dracogun', 'Railgun', 'Toygun', 'Shotgun',
-			'pokemon:Flamethrower', 'Airgun', 'Proton Pack', 'Crossbow', 'Grenade Launcher', 'Freezegun',
-			'Handgun', 'Blowgun', 'Lasergun', '5.7 Rock', 'Nailgun', 'pokemon:Watergun',
-		],
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause'],
+		banlist: ['Dewpider', 'Diglett-Alola', 'Flittle', 'Shedinja', 'Smeargle', 'Wattrel', 'Wingull', 'Wishiwashi', 'Zigzagoon-Base', 'Arena Trap', 'Cute Charm', 'Huge Power', 'Hustle', 'Moody', 'Pure Power', 'Shadow Tag', 'Baton Pass'],
 		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Yes, this is in fact a real metagame!</b></div>`);
-			this.add(`raw|Welcome to Balls!`);
-			this.add(`raw|Yes this is, in fact, a real metagame!`);
-			this.add(`raw|<a href="https://www.smogon.com/forums/threads/solomods-megathread.3711007/page-4#post-9716880">Balls</a> is a Solomod featuring powerful Fakemon based on balls (and guns (don't ask)) from the real world and other media!`);
-			this.add(`raw|You are invited to come the <a href="https://play.pokemonshowdown.com/petmods">Pet Mods</a> room to discuss the metagame.`);
+			this.add('-message', `Welcome to Do Not Use!`);
+			this.add('-message', `This is a National Dex metagame where only Pokemon with less than 280 BST are allowed, plus a select few others!`);
+			this.add('-message', `You can find our thread and metagame resources here:`);
+			this.add('-message', `https://www.smogon.com/forums/threads/3734326/`);
 		},
-		onSwitchInPriority: 100,
-		onSwitchIn(pokemon) {
-			if ((pokemon.illusion || pokemon).getTypes(true, true).join('/') !==
-				this.dex.forGen(9).species.get((pokemon.illusion || pokemon).species.name).types.join('/') &&
-				!pokemon.terastallized) {
-				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			if (species.bst > 280 && !['Luvdisc', 'Unown', 'Capsakid', 'Snorunt', 'Swablu', 'Beldum'].includes(species.baseSpecies)) {
+				return [`Only Pok\u00e9mon with a BST of 280 or lower are allowed.`, `(${species.name}'s BST is ${species.bst}.)`];
 			}
 		},
 	},
