@@ -54,7 +54,6 @@ function toID(text: any): ID {
 }
 
 export function modernizeLog(line: string, nextLine?: string): string | undefined {
-const altsMatch=nextLine?.match(/(.*?'s (lock|mut|ban|blacklist)ed alts: (.*))/);  if(altsMatch&&altsMatch[2]){  const altsString=` alts: [${altsMatch[2].split(',').map(s=>s.trim().toLowerCase().replace(/[^a-z0-9]+/g,'')).join('], [')}]`;  if(line.includes(' by '))line=line.replace(' by ',altsString+' by ');  }
 	// first we save and remove the timestamp and the roomname
 	const prefix = (/\[.+?\] \(.+?\) /i.exec(line))?.[0];
 	if (!prefix) return;
