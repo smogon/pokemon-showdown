@@ -1096,19 +1096,6 @@ export class RandomTeams {
 		teraType: string,
 		role: RandomTeamsTypes.Role,
 	): string {
-		// ffa abilities that differ from doubles
-		if (this.format.gameType === 'freeforall') {
-			if (species.id === 'bellossom') return 'Chlorophyll';
-			if (species.id === 'sinistcha') return 'Heatproof';
-			if (abilities.length === 1 && abilities[0] === 'Telepathy') {
-				return species.id === 'oranguru' ? 'Inner Focus' : 'Pressure';
-			}
-			if (species.id === 'duraludon') return 'Light Metal';
-			if (species.id === 'clefairy') return 'Magic Guard';
-			if (species.id === 'blissey') return 'Natural Cure';
-			if (species.id === 'barraskewda') return 'Swift Swim';
-		}
-
 		if (abilities.length <= 1) return abilities[0];
 
 		// Hard-code abilities here

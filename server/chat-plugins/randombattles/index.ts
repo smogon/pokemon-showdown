@@ -471,6 +471,9 @@ export const commands: Chat.ChatCommands = {
 	randdubs: 'randombattles',
 	babyrandombattle: 'randombattles',
 	babyrands: 'randombattles',
+	freeforallrandombattle: 'randombattles',
+	ffarands: 'randombattles',
+	randffats: 'randombattles',
 	// randombattlenodmax: 'randombattles',
 	// randsnodmax: 'randombattles',
 	randombattles(target, room, user, connection, cmd) {
@@ -478,11 +481,13 @@ export const commands: Chat.ChatCommands = {
 		const battle = room?.battle;
 		let isDoubles = cmd === 'randomdoublesbattle' || cmd === 'randdubs';
 		let isBaby = cmd === 'babyrandombattle' || cmd === 'babyrands';
+		let isFFA = cmd === 'freeforallrandombattle' || cmd === 'ffarands' || cmd === 'randffats';
 		let isNoDMax = cmd.includes('nodmax');
 		if (battle) {
 			if (battle.format.includes('nodmax')) isNoDMax = true;
 			if (battle.format.includes('doubles') || battle.gameType === 'freeforall') isDoubles = true;
 			if (battle.format.includes('baby')) isBaby = true;
+			if (battle.format.includes('freeforall')) isFFA = true;
 		}
 
 		const args = target.split(',');
@@ -504,9 +509,10 @@ export const commands: Chat.ChatCommands = {
 		const species = dex.species.get(searchResults[0].name);
 		const extraFormatModifier = isLetsGo ? 'letsgo' : (dex.currentMod === 'gen8bdsp' ? 'bdsp' : '');
 		const babyModifier = isBaby ? 'baby' : '';
-		const doublesModifier = isDoubles ? 'doubles' : '';
+		const doublesModifier = (isDoubles || isFFA && dex.gen !== 9) ? 'doubles' : '';
+		const freeForAllModifier = (isFFA && dex.gen === 9) ? 'freeforall' : '';
 		const noDMaxModifier = isNoDMax ? 'nodmax' : '';
-		const formatName = `gen${dex.gen}${extraFormatModifier}${babyModifier}random${doublesModifier}battle${noDMaxModifier}`;
+		const formatName = `gen${dex.gen}${extraFormatModifier}${freeForAllModifier}${babyModifier}random${doublesModifier}battle${noDMaxModifier}`;
 		const format = dex.formats.get(formatName);
 
 		const movesets = [];

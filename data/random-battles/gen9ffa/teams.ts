@@ -9,7 +9,7 @@ const NO_STAB = [
 	'accelerock', 'aquajet', 'bounce', 'breakingswipe', 'bulldoze', 'bulletpunch', 'chatter', 'chloroblast', 'clearsmog', 'covet',
 	'dragontail', 'doomdesire', 'electroweb', 'eruption', 'explosion', 'fakeout', 'feint', 'flamecharge', 'flipturn', 'futuresight',
 	'grassyglide', 'iceshard', 'icywind', 'incinerate', 'infestation', 'machpunch', 'meteorbeam', 'mortalspin', 'nuzzle', 'pluck', 'pursuit',
-	'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skydrop', 'snarl', 'strugglebug', 'suckerpunch', 'trailblaze',
+	'quickattack', 'rapidspin', 'reversal', 'selfdestruct', 'shadowsneak', 'skydrop', 'snarl', 'strugglebug', 'suckerpunch', 'thunderclap', 'trailblaze',
 	'uturn', 'vacuumwave', 'voltswitch', 'watershuriken', 'waterspout',
 ];
 
@@ -190,7 +190,7 @@ export class RandomFFATeams extends RandomTeams {
 
 			// These attacks are redundant with each other
 			[['psychic', 'psychicnoise'], ['psyshock', 'psychicnoise']],
-			['liquidation', ['wavecrash', 'hyrdopump']],
+			[['liquidation', 'scald'], ['wavecrash', 'hyrdopump']],
 			[['gigadrain', 'leafstorm'], ['leafstorm', 'energyball']],
 			['powerwhip', 'hornleech'],
 			['airslash', 'hurricane'],
@@ -377,10 +377,10 @@ export class RandomFFATeams extends RandomTeams {
 				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && type === moveType) {
 					stabMoves.push(moveid);
 				}
-				// Don't enforce spread STAB if non-spread STAB is available
-				const nonSpreadSTAB = stabMoves.filter(s => !SPREAD.includes(s));
-				if (nonSpreadSTAB.length) stabMoves = nonSpreadSTAB;
 			}
+			// Don't enforce spread STAB if non-spread STAB is available
+			const nonSpreadSTAB = stabMoves.filter(s => !SPREAD.includes(s));
+			if (nonSpreadSTAB.length) stabMoves = nonSpreadSTAB;
 			while (runEnforcementChecker(type)) {
 				if (!stabMoves.length) break;
 				const moveid = this.sampleNoReplace(stabMoves);
@@ -398,10 +398,10 @@ export class RandomFFATeams extends RandomTeams {
 				if (!this.noStab.includes(moveid) && (move.basePower || move.basePowerCallback) && teraType === moveType) {
 					stabMoves.push(moveid);
 				}
-				// Don't enforce spread STAB if non-spread STAB is available
-				const nonSpreadSTAB = stabMoves.filter(s => !SPREAD.includes(s));
-				if (nonSpreadSTAB.length) stabMoves = nonSpreadSTAB;
 			}
+			// Don't enforce spread STAB if non-spread STAB is available
+			const nonSpreadSTAB = stabMoves.filter(s => !SPREAD.includes(s));
+			if (nonSpreadSTAB.length) stabMoves = nonSpreadSTAB;
 			if (stabMoves.length) {
 				const moveid = this.sample(stabMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
@@ -540,7 +540,7 @@ export class RandomFFATeams extends RandomTeams {
 		case 'Hydration': case 'Swift Swim':
 			return !teamDetails.rain;
 		case 'Iron Fist': case 'Skill Link':
-			return !counter.get(toID(ability));
+			return !counter.get(this.dex.toID(ability));
 		case 'Overgrow':
 			return !counter.get('Grass');
 		case 'Prankster':
@@ -626,7 +626,7 @@ export class RandomFFATeams extends RandomTeams {
 			return (role === 'Fast Attacker') ? 'Silver Powder' : 'Life Orb';
 		}
 		if (species.id === 'pawmot') return 'Leppa Berry';
-		if (species.id === 'slaking') return 'Silk Scarf';
+		if (species.id === 'slaking' || (species.id === 'persian' && !!counter.get('Status'))) return 'Silk Scarf';
 		if (species.id === 'luvdisc') return 'Binding Band';
 		if ((species.name === 'Latias' || species.name === 'Latios')) return 'Soul Dew';
 		if (
@@ -719,8 +719,8 @@ export class RandomFFATeams extends RandomTeams {
 			return (counter.get('Physical') > counter.get('Special')) ? 'Choice Band' : 'Choice Specs';
 		}
 		if (['blizzard', 'originpulse', 'precipiceblades'].some(m => moves.has(m))) return 'Blunder Policy';
-		if (counter.damagingMoves.size >= moves.size) {
-			return (role === 'Wallbreaker') ? 'Life Orb' : 'Assault Vest';
+		if (!counter.get('Status') && role !== 'Wallbreaker') {
+			return 'Assault Vest';
 		}
 		if (this.dex.getEffectiveness('Rock', species) >= 1 || (
 			(moves.has('defog') || moves.has('rapidspin')) &&
@@ -737,7 +737,7 @@ export class RandomFFATeams extends RandomTeams {
 			return 'Booster Energy';
 		}
 		const damagingTypes = [...counter.damagingMoves].map(m => m.type);
-		if ((new Set(damagingTypes)).size === 1) {
+		if ((new Set(damagingTypes)).size === 1 && counter.get('Status') < 3) {
 			if (damagingTypes[0] === 'Normal') return 'Silk Scarf';
 			return this.dex.species.get('arceus' + damagingTypes[0]).requiredItems![0];
 		}
@@ -749,6 +749,7 @@ export class RandomFFATeams extends RandomTeams {
 	override getLevel(
 		species: Species,
 	): number {
+		console.log(species.id);
 		if (this.adjustLevel) return this.adjustLevel;
 		// This should frankly always work, but 10 is the default level in case something bad happens
 		return this.randomSets[species.id].level!;
@@ -761,7 +762,7 @@ export class RandomFFATeams extends RandomTeams {
 		isDoubles = false
 	): RandomTeamsTypes.RandomSet {
 		const species = this.dex.species.get(s);
-		const forme = this.getForme(species);
+		const forme = species.baseSpecies === 'Basculin' ? species.name : this.getForme(species);
 		const sets = this.randomSets[species.id]["sets"];
 		const possibleSets = [];
 
@@ -909,7 +910,7 @@ export class RandomFFATeams extends RandomTeams {
 		const teamDetails: RandomTeamsTypes.TeamDetails = {};
 		let numMaxLevelPokemon = 0;
 
-		const pokemonList = isDoubles ? Object.keys(this.randomDoublesSets) : Object.keys(this.randomSets);
+		const pokemonList = Object.keys(this.randomSets);
 		const [pokemonPool, baseSpeciesPool] = this.getPokemonPool(type, pokemon, isMonotype, pokemonList);
 
 		let leadsRemaining = 1;
