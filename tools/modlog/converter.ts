@@ -439,7 +439,7 @@ export function parseModlog(raw: string, nextLine?: string, isGlobal = false): M
 		log.action = action;
 		if (log.action === 'OLD MODLOG') {
 			log.loggedBy = 'unknown' as ID;
-			log.note = line.slice(line.indexOf('by unknown: ') + 'by unknown :'.length).trim();
+			log.note = line.slice(line.indexOf('by unknown: ') + 'by unknown: '.length).trim();
 			return log;
 		}
 		line = line.slice(actionColonIndex + 2);
