@@ -161,6 +161,7 @@ function getSets(species: string | Species, format: string | Format = 'gen9rando
 	let folderName = format.mod;
 	if (format.team === 'randomBaby') folderName += 'baby';
 	if (species.isNonstandard === 'CAP') folderName += 'cap';
+	if (format.team === 'randomFFA') folderName += 'ffa';
 	const setsFile = JSON.parse(
 		FS(`data/random-battles/${folderName}/${isDoubles ? 'doubles-' : ''}sets.json`)
 			.readIfExistsSync() || '{}'
