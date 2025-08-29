@@ -511,7 +511,7 @@ export const commands: Chat.ChatCommands = {
 		const extraFormatModifier = isLetsGo ? 'letsgo' : (dex.currentMod === 'gen8bdsp' ? 'bdsp' : '');
 		const babyModifier = isBaby ? 'baby' : '';
 		const doublesModifier = isDoubles ? 'doubles' : '';
-		const freeForAllModifier = isFFA ? (dex.gen < 9 ? 'doubles' : 'freeforall') : '';
+		const freeForAllModifier = isFFA ? (dex.gen !== 9 ? 'doubles' : 'freeforall') : '';
 		const noDMaxModifier = isNoDMax ? 'nodmax' : '';
 		const formatName = `gen${dex.gen}${extraFormatModifier}${freeForAllModifier}${babyModifier}random${doublesModifier}battle${noDMaxModifier}`;
 		const format = dex.formats.get(formatName);
