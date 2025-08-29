@@ -53,10 +53,12 @@ interface BSSFactorySet {
 }
 export class MoveCounter extends Utils.Multiset<string> {
 	damagingMoves: Set<Move>;
+	basePowerMoves: Set<Move>;
 
 	constructor() {
 		super();
 		this.damagingMoves = new Set();
+		this.basePowerMoves = new Set();
 	}
 }
 
@@ -413,6 +415,7 @@ export class RandomTeams {
 			if (move.drain) counter.add('drain');
 			// Moves which have a base power:
 			if (move.basePower || move.basePowerCallback) {
+				counter.basePowerMoves.add(move);
 				if (!this.noStab.includes(moveid) || PRIORITY_POKEMON.includes(species.id) && move.priority > 0) {
 					counter.add(moveType);
 					if (types.includes(moveType)) counter.add('stab');
