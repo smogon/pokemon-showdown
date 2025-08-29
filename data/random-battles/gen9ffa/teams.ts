@@ -728,6 +728,13 @@ export class RandomFFATeams extends RandomTeams {
 		)) {
 			return 'Heavy-Duty Boots';
 		}
+		if (!role.includes('Bulky') || species.id === 'golduck' && this.prng.randomChance(1, 2)) {
+			const damagingTypes = [...counter.basePowerMoves].map(m => m.type);
+			if (counter.basePowerMoves.size >= 2 && (new Set(damagingTypes)).size === 1) {
+				if (damagingTypes[0] === 'Normal') return 'Silk Scarf';
+				return this.dex.species.get('arceus' + damagingTypes[0]).requiredItems![0];
+			}
+		}
 		if (['Bulky Attacker', 'Bulky Setup', 'Bulky Support'].includes(role) || moves.has('substitute')) return 'Leftovers';
 		if (
 			(ability === 'Protosynthesis' || ability === 'Quark Drive') && !isLead && !counter.get('hazards') &&
@@ -735,11 +742,6 @@ export class RandomFFATeams extends RandomTeams {
 			['flipturn', 'uturn', 'voltswitch'].every(m => !moves.has(m))
 		) {
 			return 'Booster Energy';
-		}
-		const damagingTypes = [...counter.damagingMoves].map(m => m.type);
-		if ((new Set(damagingTypes)).size === 1 && counter.get('Status') < 3) {
-			if (damagingTypes[0] === 'Normal') return 'Silk Scarf';
-			return this.dex.species.get('arceus' + damagingTypes[0]).requiredItems![0];
 		}
 		if (role === 'Imprisoner') return 'Leftovers';
 		if (role === 'Wallbreaker') return 'Life Orb';
@@ -749,9 +751,7 @@ export class RandomFFATeams extends RandomTeams {
 	override getLevel(
 		species: Species,
 	): number {
-		console.log(species.id);
 		if (this.adjustLevel) return this.adjustLevel;
-		// This should frankly always work, but 10 is the default level in case something bad happens
 		return this.randomSets[species.id].level!;
 	}
 
