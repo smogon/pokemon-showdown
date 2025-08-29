@@ -4503,7 +4503,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		fling: {
 			basePower: 20,
 		},
-		num: 2345,
+		num: 571,
 		gen: 5,
 	},
 	primariumz: {
