@@ -4497,6 +4497,15 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 		gen: 3,
 		isPokeball: true,
 	},
+	prettyfeather: {
+		name: "Pretty Feather",
+		spritenum: 754, // placeholder
+		fling: {
+			basePower: 20,
+		},
+		num: 2345,
+		gen: 5,
+	},
 	primariumz: {
 		name: "Primarium Z",
 		spritenum: 652,
