@@ -2,7 +2,7 @@
  * Chat parser
  * Pokemon Showdown - http://pokemonshowdown.com/
  *
- * Parses formate.
+ * Parses formats.
  *
  * @license MIT
  */

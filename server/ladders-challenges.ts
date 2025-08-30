@@ -2,7 +2,7 @@ import type { ChallengeType } from './room-battle';
 
 /**
  * A bundle of:
- - a ID
+ - an ID
  * - a battle format
  * - a valid team for that format
  * - misc other preferences for the battle
