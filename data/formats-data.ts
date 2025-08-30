@@ -5302,7 +5302,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	tatsugiri: {
 		tier: "PU",
-		doublesTier: "DUber",
+		doublesTier: "DOU",
 		natDexTier: "RU",
 	},
 	cyclizar: {
