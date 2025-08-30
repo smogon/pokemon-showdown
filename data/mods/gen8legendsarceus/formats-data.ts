@@ -965,9 +965,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	arceuswater: {
 		isNonstandard: null,
 	},
-	arceuslegend: {
-		isNonstandard: null,
-	},
 	victini: {
 		isNonstandard: "Past",
 	},
@@ -1573,7 +1570,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	},
 	zygardecomplete: {
 		isNonstandard: "Past",
-		tier: "Illegal",
 	},
 	diancie: {
 		isNonstandard: "Past",
