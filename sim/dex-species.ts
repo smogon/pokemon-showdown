@@ -512,7 +512,7 @@ export class DexSpecies {
 					species.doublesTier = this.dex.data.FormatsData[species.id.slice(0, -5)].doublesTier || species.tier as any;
 					species.natDexTier = this.dex.data.FormatsData[species.id.slice(0, -5)].natDexTier || species.tier;
 				} else if (species.battleOnly) {
-					species.tier = this.dex.data.FormatsData[toID(species.battleOnly)].tier || 'Illegal';
+					species.tier = this.dex.data.FormatsData[toID(species.battleOnly)]?.tier || 'Illegal';
 					species.doublesTier = this.dex.data.FormatsData[toID(species.battleOnly)].doublesTier || species.tier as any;
 					species.natDexTier = this.dex.data.FormatsData[toID(species.battleOnly)].natDexTier || species.tier;
 				} else {
