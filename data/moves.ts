@@ -17198,10 +17198,10 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (sourceAbility.flags['failskillswap'] || targetAbility.flags['failskillswap'] || target.volatiles['dynamax']) {
 				return false;
 			}
-			const sourceCanBeSet = this.runEvent('SetAbility', source, source, this.effect, targetAbility);
-			if (!sourceCanBeSet) return sourceCanBeSet;
 			const targetCanBeSet = this.runEvent('SetAbility', target, source, this.effect, sourceAbility);
 			if (!targetCanBeSet) return targetCanBeSet;
+			const sourceCanBeSet = this.runEvent('SetAbility', source, source, this.effect, targetAbility);
+			if (!sourceCanBeSet) return sourceCanBeSet;
 		},
 		onHit(target, source, move) {
 			const targetAbility = target.getAbility();
