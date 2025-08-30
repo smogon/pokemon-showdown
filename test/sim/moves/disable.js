@@ -102,7 +102,7 @@ describe('Disable', () => {
 				{ species: 'Abra', moves: ['rage'] },
 			]]);
 			// Modding accuracy so Disable always hits
-			battle.onEvent('Accuracy', battle.format, true);
+			battle.onEvent('ModifyAccuracy', battle.format, true);
 			battle.makeChoices();
 			assert(battle.log.some(line => line.startsWith('|-boost|')));
 
@@ -112,8 +112,8 @@ describe('Disable', () => {
 				{ species: 'Abra', moves: ['rage'] },
 			]]);
 			// Modding accuracy so Disable always misses
-			battle.onEvent('Accuracy', battle.format, (accuracy, target, pokemon, move) => {
-				return move.id === 'rage';
+			battle.onEvent('ModifyAccuracy', battle.format, (accuracy, target, pokemon, move) => {
+				return move.id === 'rage' ? accuracy : 0;
 			});
 			battle.makeChoices();
 			assert(battle.log.some(line => line.startsWith('|-boost|')));
