@@ -15,7 +15,8 @@ import * as fs from 'fs';
 import * as http from 'http';
 import * as https from 'https';
 import * as path from 'path';
-import { crashlogger, ProcessManager, Streams, Repl } from '../lib';
+import * as ConfigLoader from './config-loader';
+import { crashlogger, ProcessManager, Streams } from '../lib';
 import { IPTools } from './ip-tools';
 import { type ChannelID, extractChannelMessages } from '../sim/battle';
 import { StaticServer } from '../lib/static-server';
@@ -64,7 +65,7 @@ export const Sockets = new class {
 		Users.socketDisconnectAll(worker, worker.workerid);
 	}
 
-	listen(port?: number, bindAddress?: string, workerCount?: number) {
+	listen(port?: number, bindAddress?: string, processesCount?: ConfigLoader.SubProcessesConfig) {
 		if (port !== undefined && !isNaN(port)) {
 			Config.port = port;
 			Config.ssl = null;
@@ -84,7 +85,7 @@ export const Sockets = new class {
 		if (port !== undefined) {
 			Config.port = port;
 		}
-		workerCount ??= (Config.subprocessescache?.network ?? 1);
+		const workerCount = processesCount?.['network'] ?? 1;
 
 		PM.env = { PSPORT: Config.port, PSBINDADDR: Config.bindaddress || '0.0.0.0', PSNOSSL: Config.ssl ? 0 : 1 };
 		PM.subscribeSpawn(worker => void this.onSpawn(worker));
@@ -127,6 +128,10 @@ export const Sockets = new class {
 
 	eval(worker: StreamWorker, query: string) {
 		void worker.stream.write(`$${query}`);
+	}
+
+	start(processCount: ConfigLoader.SubProcessesConfig) {
+		start(processCount);
 	}
 };
 
@@ -511,15 +516,14 @@ export class ServerStream extends Streams.ObjectReadWriteStream<string> {
  *********************************************************/
 
 export const PM = new ProcessManager.RawProcessManager({
+	id: 'sockets',
 	module,
 	setupChild: () => new ServerStream(Config),
 	isCluster: true,
 });
 
 if (!PM.isParentProcess) {
-	// This is a child process!
-	global.Config = (require as any)('./config-loader').Config;
-
+	ConfigLoader.ensureLoaded();
 	if (Config.crashguard) {
 		// graceful crash - allow current battles to finish before restarting
 		process.on('uncaughtException', err => {
@@ -530,7 +534,7 @@ if (!PM.isParentProcess) {
 		});
 	}
 
-	if (Config.sockets) {
+	if (Config.ofesockets) {
 		try {
 			require.resolve('node-oom-heapdump');
 		} catch (e: any) {
@@ -553,5 +557,16 @@ if (!PM.isParentProcess) {
 	if (process.env.PSNOSSL && parseInt(process.env.PSNOSSL)) Config.ssl = null;
 
 	// eslint-disable-next-line no-eval
-	Repl.start(`sockets-${PM.workerid}-${process.pid}`, cmd => eval(cmd));
+	PM.startRepl({ filename: `sockets-${PM.workerid}-${process.pid}`, eval: cmd => eval(cmd) });
+}
+
+function start(processCount: ConfigLoader.SubProcessesConfig) {
+	let port;
+	for (const arg of process.argv) {
+		if (/^[0-9]+$/.test(arg)) {
+			port = parseInt(arg);
+			break;
+		}
+	}
+	Sockets.listen(port, undefined, processCount);
 }
