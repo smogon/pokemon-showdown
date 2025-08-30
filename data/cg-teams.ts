@@ -125,16 +125,17 @@ if (global.Config && Config.usesqlite && Config.usesqliteleveling) {
 export default class TeamGenerator {
 	dex: ModdedDex;
 	format: Format;
-	teamSize: number;
-	forceLevel?: number;
 	prng: PRNG;
 	itemPool: Item[];
 	specialItems: { [pokemon: string]: string };
+	teamSize: number;
+	forceLevel?: number;
+	maxLevel: number;
+	maxMoveCount: number;
 
 	constructor(format: Format | string, seed: PRNG | PRNGSeed | null) {
 		this.dex = Dex.forFormat(format);
 		this.format = Dex.formats.get(format);
-		this.teamSize = this.format.ruleTable?.maxTeamSize || 6;
 		this.prng = PRNG.get(seed);
 		this.itemPool = this.dex.items.all().filter(i => i.exists && i.isNonstandard !== 'Past' && !i.isPokeball);
 		this.specialItems = {};
@@ -147,13 +148,16 @@ export default class TeamGenerator {
 		}
 
 		const rules = Dex.formats.getRuleTable(this.format);
+		this.teamSize = rules.maxTeamSize || 6;
+		this.maxLevel = rules.maxLevel || 100;
+		this.maxMoveCount = rules.maxMoveCount || 4;
 		if (rules.adjustLevel) this.forceLevel = rules.adjustLevel;
 	}
 
 	getTeam(options: PlayerOptions, battle?: Battle): PokemonSet[] {
 		let speciesPool = this.dex.species.all().filter(s => {
 			if (!s.exists) return false;
-			if (s.isNonstandard || s.isNonstandard === 'Unobtainable') return false;
+			if (s.isNonstandard) return false;
 			if (s.nfe) return false;
 			if (s.battleOnly && (!s.requiredItems?.length || s.name.endsWith('-Tera'))) return false;
 
@@ -189,7 +193,9 @@ export default class TeamGenerator {
 			// the target for this event is supposed to be a `Pokemon` object, but we don't have one of those
 			// and runEvent defaults to using `this` as a `target` if one isn't provided anyway
 			const modSpecies = battle.runEvent('ModifySpecies', battle, null, null, species);
-			if (!this.forceLevel) level = TeamGenerator.adjustLevel(species, level, modSpecies);
+			if (!this.forceLevel) {
+				level = TeamGenerator.rebalanceLevel(species, level, modSpecies, this.maxLevel);
+			}
 			species = modSpecies;
 		}
 
@@ -222,7 +228,7 @@ export default class TeamGenerator {
 		// gets mutated
 		const movePoolCopy = movePool;
 		let interimMovePool: { move: IDEntry, weight: number }[] = [];
-		while (moves.length < 4 && movePool.length) {
+		while (moves.length < this.maxMoveCount && movePool.length) {
 			let weights;
 			if (!movePoolIsTrimmed) {
 				if (!isRound2) {
@@ -311,7 +317,9 @@ export default class TeamGenerator {
 				if ((movesStats.attackTypes[moveType] || 0) < bp) movesStats.attackTypes[moveType] = bp;
 			}
 
-			if (!isRound2 && moves.length === 3) {
+			// in the interest of not making set generation take forever with high max move counts,
+			// round 1 is always capped at 3 moves
+			if (!isRound2 && (moves.length === 3 || moves.length === this.maxMoveCount - 1)) {
 				isRound2 = true;
 				movePoolIsTrimmed = false;
 				continue;
@@ -321,7 +329,7 @@ export default class TeamGenerator {
 			const pairedMove = MOVE_PAIRINGS[moveID];
 			const alreadyHavePairedMove = moves.some(m => m.id === pairedMove);
 			if (
-				moves.length < 4 &&
+				moves.length < this.maxMoveCount &&
 				pairedMove &&
 				!(pairedMove === 'sleeptalk' && movesStats.noSleepTalk) &&
 				!alreadyHavePairedMove &&
@@ -521,6 +529,10 @@ export default class TeamGenerator {
 		return adjustedStats;
 	}
 
+	protected limit(lim: number) {
+		return lim ? Math.max(Math.round(lim * this.teamSize / 6), 1) : 0;
+	}
+
 	/**
 	 * @returns A weight for a given move on a given Pokémon.
 	 */
@@ -564,7 +576,7 @@ export default class TeamGenerator {
 			if (move.status) weight *= TeamGenerator.statusWeight(move.status) * 2;
 
 			// hazard setters: very important, but we don't need 2 pokemon to set the same hazard on a team
-			if (TeamGenerator.moveIsHazard(move) && (teamStats.hazardSetters[move.id] || 0) < 1) {
+			if (TeamGenerator.moveIsHazard(move) && (teamStats.hazardSetters[move.id] || 0) < this.limit(1)) {
 				weight *= move.id === 'spikes' ? 12 : 16;
 
 				// if we are ALREADY setting hazards, setting MORE is really good
@@ -573,7 +585,7 @@ export default class TeamGenerator {
 
 			// hazard removers: even more important than hazard setters, since they remove everything at once
 			// we still don't need too many on one team, though
-			if (['defog', 'courtchange', 'tidyup'].includes(move.id) && !teamStats.hazardRemovers) {
+			if (['defog', 'courtchange', 'tidyup'].includes(move.id) && teamStats.hazardRemovers < this.limit(1)) {
 				weight *= 32;
 
 				// these moves can also lessen the effectiveness of the user's team's own hazards
@@ -839,12 +851,12 @@ export default class TeamGenerator {
 
 		// these two hazard removers don't clear hazards on the opponent's field, but can be blocked by type immunities
 		if (['rapidspin', 'mortalspin'].includes(move.id)) {
-			weight *= 1 + 20 * (0.25 ** teamStats.hazardRemovers);
+			weight *= 1 + 20 * (0.25 ** teamStats.hazardRemovers) * this.limit(1);
 		}
 
 		// these moves have a hard-coded 16x bonus
-		if (move.id === 'stoneaxe' && teamStats.hazardSetters.stealthrock) weight /= 4;
-		if (move.id === 'ceaselessedge' && teamStats.hazardSetters.spikes) weight /= 2;
+		if (move.id === 'stoneaxe' && teamStats.hazardSetters.stealthrock < this.limit(1)) weight /= 4;
+		if (move.id === 'ceaselessedge' && teamStats.hazardSetters.spikes < this.limit(1)) weight /= 2;
 
 		if (move.drain) {
 			const drainedFraction = move.drain[0] / move.drain[1];
@@ -1149,7 +1161,7 @@ export default class TeamGenerator {
 	/**
 	 * Dynamically adjusts level balance when an OM rule is modifying base stats
 	 */
-	protected static adjustLevel(oldSpecies: Species, oldLevel: number, newSpecies: Species): number {
+	protected static rebalanceLevel(oldSpecies: Species, oldLevel: number, newSpecies: Species, maxLevel = 100): number {
 		// calculate the adjusted stats of the new species at its old level
 		// could use the actual stat calcs, but let's just use the same approximation we use everywhere else
 		let newStats: StatsTable = TeamGenerator.getAdjustedStats(newSpecies, '', oldLevel);
@@ -1168,7 +1180,7 @@ export default class TeamGenerator {
 		// calculate the ratio of the new speed to the old stats' speed at half weight
 		statRatioTotal += statRatios.speed = Math.log(oldStats.spe / newStats.spe) / 2;
 		// make a naive guess as to what level the pokemon should be without considering that level affects damage output
-		let newLevel = Math.min(Math.floor(Math.E ** (statRatioTotal / 5) * oldLevel), 100);
+		let newLevel = Math.min(Math.floor(Math.E ** (statRatioTotal / 5) * oldLevel), maxLevel);
 		const overestimate = newLevel > oldLevel;
 		// start accounting for level's affect on damage output and increment the guess by 1 until it looks right
 		while (newLevel !== oldLevel) {
