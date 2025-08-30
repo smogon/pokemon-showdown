@@ -303,7 +303,7 @@
         ]
     },
     "arcanine": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1406,7 +1406,7 @@
         ]
     },
     "mantine": {
-        "level": 90,
+        "level": 89,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1595,7 +1595,7 @@
         ]
     },
     "tyranitar": {
-        "level": 76,
+        "level": 75,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -2419,7 +2419,7 @@
         ]
     },
     "walrein": {
-        "level": 87,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2642,7 +2642,7 @@
         ]
     },
     "jirachi": {
-        "level": 74,
+        "level": 75,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2658,7 +2658,7 @@
         ]
     },
     "deoxys": {
-        "level": 74,
+        "level": 73,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3227,7 +3227,7 @@
         ]
     },
     "rhyperior": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Attacker",
