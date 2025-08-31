@@ -81,8 +81,6 @@ export class RandomDNUTeams extends RandomTeams {
 			const unpairedMoves = [...movePool];
 			for (const pair of MOVE_PAIRS) {
 				if (movePool.includes(pair[0]) && movePool.includes(pair[1])) {
-					console.log(species);
-					console.log(movePool);
 					this.fastPop(unpairedMoves, unpairedMoves.indexOf(pair[0]));
 					this.fastPop(unpairedMoves, unpairedMoves.indexOf(pair[1]));
 				}
