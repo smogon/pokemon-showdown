@@ -65,7 +65,7 @@ export interface SwitchAction {
 	pokemon: Pokemon;
 	/** pokemon to switch to */
 	target: Pokemon;
-	/** effect that called the switch (eg U */
+   /** effect that called the switch (eg U-turn) */
 	sourceEffect: Effect | null;
 }
 
