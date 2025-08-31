@@ -385,138 +385,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		],
 	},
 
-	// Pet Mods
-	///////////////////////////////////////////////////////////////////
-
-	{
-		section: "Pet Mods",
-	},
-	{
-		name: "[Gen 9] Do Not Use Random Battle",
-		desc: `A National Dex random battle format where only Pok&eacute;mon with 280 BST or less (with some exceptions) are allowed.`,
-		mod: 'gen9',
-		team: 'randomDNU',
-		ruleset: ['Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod', 'Terastal Clause'],
-		onBegin() {
-			this.add(`raw|Welcome to Do Not Use Random Battle!`);
-			this.add(`raw|<a href="https://www.smogon.com/forums/threads/3734326/">Do Not Use</a> is a Solomod where ONLY Pok&eacute;mon with 280 BST or less are allowed!`);
-			this.add(`raw|<a href="(with some exceptions, like Luvdisc and Capsakid).`);
-			this.add(`raw|You are invited to come the <a href="https://play.pokemonshowdown.com/petmods">Pet Mods</a> room to discuss the metagame.`);
-		},
-		onSwitchInPriority: 100,
-		onSwitchIn(pokemon) {
-			if ((pokemon.illusion || pokemon).getTypes(true, true).join('/') !==
-				this.dex.forGen(9).species.get((pokemon.illusion || pokemon).species.name).types.join('/') &&
-				!pokemon.terastallized) {
-				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
-			}
-		},
-	},
-	{
-		name: "[Gen 9] National Dex Do Not Use", // roomtours
-		desc: `A National Dex solomod where only Pok&eacute;mon with 280 BST or less are allowed.`,
-		mod: 'gen9',
-		searchShow: false,
-		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause'],
-		banlist: ['Dewpider', 'Diglett-Alola', 'Flittle', 'Shedinja', 'Smeargle', 'Wattrel', 'Wingull', 'Wishiwashi', 'Zigzagoon-Base', 'Arena Trap', 'Cute Charm', 'Huge Power', 'Hustle', 'Moody', 'Pure Power', 'Shadow Tag', 'Baton Pass'],
-		onBegin() {
-			this.add('-message', `Welcome to Do Not Use!`);
-			this.add('-message', `This is a National Dex metagame where only Pokemon with less than 280 BST are allowed, plus a select few others!`);
-			this.add('-message', `You can find our thread and metagame resources here:`);
-			this.add('-message', `https://www.smogon.com/forums/threads/3734326/`);
-		},
-		onValidateSet(set) {
-			const species = this.dex.species.get(set.species);
-			if (species.bst > 280) {
-				if (['Luvdisc', 'Unown', 'Capsakid', 'Snorunt', 'Swablu', 'Beldum'].includes(species.baseSpecies)) return;
-				return [`Only Pok\u00e9mon with a BST of 280 or lower are allowed.`, `(${species.name}'s BST is ${species.bst}.)`];
-			}
-		},
-	},
-	{
-		name: "[Gen 9] ChatBats",
-		desc: `A Random Battles Solomod made by the Pet Mods chatroom on Showdown.`,
-		mod: 'chatbats',
-		team: 'randomChatBats',
-		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Data Preview', 'Cancel Mod'],
-		onSwitchIn(pokemon) {
-			this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
-		},
-		// Dachsbun causes Koraidon to generate on enemy team. Implemented here.
-		onBegin() {
-			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky sets?<br />Then make sure to check out the <a href="https://www.smogon.com/forums/threads/chatbats.3760234/post-10645803" target="_blank">ChatBats Compendium</a> or use /dt!</b></div>`);
-			this.add(`raw|Welcome to ChatBats!`);
-			this.add(`raw|ChatBats is a Random Battles format created by the Pet Mods room here on Showdown!`);
-			this.add(`raw|If you want to help create new sets, we will host events periodically in the Pet Mods room!`);
-			this.add(`raw|Anyone who is there can help create a new set for a random mon, changing moves, abilities, stats, and even custom formes.`);
-			for (const side of this.sides) {
-				for (const pokemon of side.pokemon) {
-					if (pokemon.species.id === 'dachsbun') {
-						// Get the opposing side
-						const foeSide = side.foe;
-						// Filter out Dachsbun from opponent's team
-						const foeTeamNoDog = foeSide.pokemon.filter(p => p.species.id !== 'dachsbun' &&
-							!p.getItem().id.endsWith('ite'));
-						// Pick a random foe
-						const randomFoe = this.sample(foeTeamNoDog);
-						const rawSpecies = this.dex.species.get('koraidon');
-						randomFoe.setSpecies(rawSpecies, null);
-						randomFoe.baseSpecies = rawSpecies;
-						randomFoe.details = randomFoe.getUpdatedDetails();
-						randomFoe.setAbility('Orichalcum Pulse', null, null, true);
-						randomFoe.baseAbility = randomFoe.ability;
-						if (this.randomChance(1, 2)) {
-							const randomFoeItem = (this.randomChance(1, 2) ? 'choicescarf' : 'choiceband');
-							randomFoe.item = randomFoeItem as ID;
-							randomFoe.itemState = this.initEffectState({ id: randomFoeItem, target: randomFoe });
-							// Define new moves
-							const newMoves = ['closecombat', 'flareblitz', 'outrage', 'uturn'];
-
-							// Update move slots
-							randomFoe.moveSlots = newMoves.map(move => {
-								const moveData = this.dex.moves.get(move);
-								return {
-									move: moveData.name,
-									id: moveData.id,
-									pp: moveData.pp,
-									maxpp: moveData.pp,
-									target: moveData.target,
-									disabled: false,
-									used: false,
-								};
-							});
-						} else {
-							const randomFoeItem = 'loadeddice';
-							randomFoe.item = randomFoeItem as ID;
-							randomFoe.itemState = this.initEffectState({ id: randomFoeItem, target: randomFoe });
-							// Define new moves
-							const newMoves = ['collisioncourse', 'flareblitz', 'scaleshot', 'swordsdance'];
-
-							// Update move slots
-							randomFoe.moveSlots = newMoves.map(move => {
-								const moveData = this.dex.moves.get(move);
-								return {
-									move: moveData.name,
-									id: moveData.id,
-									pp: moveData.pp,
-									maxpp: moveData.pp,
-									target: moveData.target,
-									disabled: false,
-									used: false,
-								};
-							});
-						}
-						// this forces the UI to update move slots visually
-						(randomFoe as any).baseMoveSlots = randomFoe.moveSlots.slice();
-						randomFoe.teraType = 'Fire';
-						(randomFoe as any).level = 80;
-						randomFoe.details = randomFoe.getUpdatedDetails();
-					}
-				}
-			}
-		},
-	},
-
 	// Draft League
 	///////////////////////////////////////////////////////////////////
 
@@ -2974,6 +2842,138 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		mod: 'gen8dlc1',
 		searchShow: false,
 		ruleset: ['Standard AG', 'NatDex Mod'],
+	},
+
+	// Pet Mods
+	///////////////////////////////////////////////////////////////////
+
+	{
+		section: "Pet Mods",
+	},
+	{
+		name: "[Gen 9] Do Not Use Random Battle",
+		desc: `A National Dex random battle format where only Pok&eacute;mon with 280 BST or less (with some exceptions) are allowed.`,
+		mod: 'gen9',
+		team: 'randomDNU',
+		ruleset: ['Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod', 'Terastal Clause'],
+		onBegin() {
+			this.add(`raw|Welcome to Do Not Use Random Battle!`);
+			this.add(`raw|<a href="https://www.smogon.com/forums/threads/3734326/">Do Not Use</a> is a Solomod where ONLY Pok&eacute;mon with 280 BST or less are allowed!`);
+			this.add(`raw|<a href="(with some exceptions, like Luvdisc and Capsakid).`);
+			this.add(`raw|You are invited to come the <a href="https://play.pokemonshowdown.com/petmods">Pet Mods</a> room to discuss the metagame.`);
+		},
+		onSwitchInPriority: 100,
+		onSwitchIn(pokemon) {
+			if ((pokemon.illusion || pokemon).getTypes(true, true).join('/') !==
+				this.dex.forGen(9).species.get((pokemon.illusion || pokemon).species.name).types.join('/') &&
+				!pokemon.terastallized) {
+				this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
+			}
+		},
+	},
+	{
+		name: "[Gen 9] National Dex Do Not Use", // roomtours
+		desc: `A National Dex solomod where only Pok&eacute;mon with 280 BST or less are allowed.`,
+		mod: 'gen9',
+		searchShow: false,
+		ruleset: ['Standard NatDex', 'Terastal Clause', 'Z-Move Clause'],
+		banlist: ['Dewpider', 'Diglett-Alola', 'Flittle', 'Shedinja', 'Smeargle', 'Wattrel', 'Wingull', 'Wishiwashi', 'Zigzagoon-Base', 'Arena Trap', 'Cute Charm', 'Huge Power', 'Hustle', 'Moody', 'Pure Power', 'Shadow Tag', 'Baton Pass'],
+		onBegin() {
+			this.add('-message', `Welcome to Do Not Use!`);
+			this.add('-message', `This is a National Dex metagame where only Pokemon with less than 280 BST are allowed, plus a select few others!`);
+			this.add('-message', `You can find our thread and metagame resources here:`);
+			this.add('-message', `https://www.smogon.com/forums/threads/3734326/`);
+		},
+		onValidateSet(set) {
+			const species = this.dex.species.get(set.species);
+			if (species.bst > 280) {
+				if (['Luvdisc', 'Unown', 'Capsakid', 'Snorunt', 'Swablu', 'Beldum'].includes(species.baseSpecies)) return;
+				return [`Only Pok\u00e9mon with a BST of 280 or lower are allowed.`, `(${species.name}'s BST is ${species.bst}.)`];
+			}
+		},
+	},
+	{
+		name: "[Gen 9] ChatBats",
+		desc: `A Random Battles Solomod made by the Pet Mods chatroom on Showdown.`,
+		mod: 'chatbats',
+		team: 'randomChatBats',
+		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Sleep Clause Mod', 'Data Preview', 'Cancel Mod'],
+		onSwitchIn(pokemon) {
+			this.add('-start', pokemon, 'typechange', pokemon.species.types.join('/'), '[silent]');
+		},
+		// Dachsbun causes Koraidon to generate on enemy team. Implemented here.
+		onBegin() {
+			this.add(`raw|<div class='broadcast-green'><b>Need help with all of the new moves, abilities, and wacky sets?<br />Then make sure to check out the <a href="https://www.smogon.com/forums/threads/chatbats.3760234/post-10645803" target="_blank">ChatBats Compendium</a> or use /dt!</b></div>`);
+			this.add(`raw|Welcome to ChatBats!`);
+			this.add(`raw|ChatBats is a Random Battles format created by the Pet Mods room here on Showdown!`);
+			this.add(`raw|If you want to help create new sets, we will host events periodically in the Pet Mods room!`);
+			this.add(`raw|Anyone who is there can help create a new set for a random mon, changing moves, abilities, stats, and even custom formes.`);
+			for (const side of this.sides) {
+				for (const pokemon of side.pokemon) {
+					if (pokemon.species.id === 'dachsbun') {
+						// Get the opposing side
+						const foeSide = side.foe;
+						// Filter out Dachsbun from opponent's team
+						const foeTeamNoDog = foeSide.pokemon.filter(p => p.species.id !== 'dachsbun' &&
+							!p.getItem().id.endsWith('ite'));
+						// Pick a random foe
+						const randomFoe = this.sample(foeTeamNoDog);
+						const rawSpecies = this.dex.species.get('koraidon');
+						randomFoe.setSpecies(rawSpecies, null);
+						randomFoe.baseSpecies = rawSpecies;
+						randomFoe.details = randomFoe.getUpdatedDetails();
+						randomFoe.setAbility('Orichalcum Pulse', null, null, true);
+						randomFoe.baseAbility = randomFoe.ability;
+						if (this.randomChance(1, 2)) {
+							const randomFoeItem = (this.randomChance(1, 2) ? 'choicescarf' : 'choiceband');
+							randomFoe.item = randomFoeItem as ID;
+							randomFoe.itemState = this.initEffectState({ id: randomFoeItem, target: randomFoe });
+							// Define new moves
+							const newMoves = ['closecombat', 'flareblitz', 'outrage', 'uturn'];
+
+							// Update move slots
+							randomFoe.moveSlots = newMoves.map(move => {
+								const moveData = this.dex.moves.get(move);
+								return {
+									move: moveData.name,
+									id: moveData.id,
+									pp: moveData.pp,
+									maxpp: moveData.pp,
+									target: moveData.target,
+									disabled: false,
+									used: false,
+								};
+							});
+						} else {
+							const randomFoeItem = 'loadeddice';
+							randomFoe.item = randomFoeItem as ID;
+							randomFoe.itemState = this.initEffectState({ id: randomFoeItem, target: randomFoe });
+							// Define new moves
+							const newMoves = ['collisioncourse', 'flareblitz', 'scaleshot', 'swordsdance'];
+
+							// Update move slots
+							randomFoe.moveSlots = newMoves.map(move => {
+								const moveData = this.dex.moves.get(move);
+								return {
+									move: moveData.name,
+									id: moveData.id,
+									pp: moveData.pp,
+									maxpp: moveData.pp,
+									target: moveData.target,
+									disabled: false,
+									used: false,
+								};
+							});
+						}
+						// this forces the UI to update move slots visually
+						(randomFoe as any).baseMoveSlots = randomFoe.moveSlots.slice();
+						randomFoe.teraType = 'Fire';
+						(randomFoe as any).level = 80;
+						randomFoe.details = randomFoe.getUpdatedDetails();
+					}
+				}
+			}
+		},
 	},
 
 	// Randomized Format Spotlight
