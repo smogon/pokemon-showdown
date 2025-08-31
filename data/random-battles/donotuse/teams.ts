@@ -81,6 +81,8 @@ export class RandomDNUTeams extends RandomTeams {
 			const unpairedMoves = [...movePool];
 			for (const pair of MOVE_PAIRS) {
 				if (movePool.includes(pair[0]) && movePool.includes(pair[1])) {
+					console.log(species);
+					console.log(movePool);
 					this.fastPop(unpairedMoves, unpairedMoves.indexOf(pair[0]));
 					this.fastPop(unpairedMoves, unpairedMoves.indexOf(pair[1]));
 				}
@@ -104,10 +106,12 @@ export class RandomDNUTeams extends RandomTeams {
 		const statusMoves = this.cachedStatusMoves;
 
 		// Team-based move culls
-		if (teamDetails.screens && movePool.length >= this.maxMoveCount + 2) {
-			if (movePool.includes('reflect')) this.fastPop(movePool, movePool.indexOf('reflect'));
-			if (movePool.includes('lightscreen')) this.fastPop(movePool, movePool.indexOf('lightscreen'));
-			if (moves.size + movePool.length <= this.maxMoveCount) return;
+		if (teamDetails.screens) {
+			if (movePool.includes('auroraveil')) this.fastPop(movePool, movePool.indexOf('auroraveil'));
+			if (movePool.length >= this.maxMoveCount + 2) {
+				if (movePool.includes('reflect')) this.fastPop(movePool, movePool.indexOf('reflect'));
+				if (movePool.includes('lightscreen')) this.fastPop(movePool, movePool.indexOf('lightscreen'));
+			}
 		}
 		if (teamDetails.stickyWeb) {
 			if (movePool.includes('stickyweb')) this.fastPop(movePool, movePool.indexOf('stickyweb'));
@@ -140,21 +144,19 @@ export class RandomDNUTeams extends RandomTeams {
 				// In order of decreasing generalizability
 				[SPEED_CONTROL, SPEED_CONTROL],
 				[HAZARDS, HAZARDS],
-				[PROTECT_MOVES, PROTECT_MOVES],
 				['rockslide', 'stoneedge'],
 				[SETUP, ['fakeout', 'helpinghand']],
 				[PROTECT_MOVES, 'wideguard'],
 				[['fierydance', 'fireblast'], 'heatwave'],
 				['dazzlinggleam', ['fleurcannon', 'moonblast']],
 				['poisongas', ['toxicspikes', 'willowisp']],
-				[RECOVERY_MOVES, 'healpulse'],
-				['lifedew', 'healpulse'],
+				[RECOVERY_MOVES, ['healpulse', 'lifedew']],
+				['healpulse', 'lifedew'],
 				['haze', 'icywind'],
 				[['hydropump', 'muddywater'], ['muddywater', 'scald']],
 				['disable', 'encore'],
 				['freezedry', 'icebeam'],
 				['energyball', 'leafstorm'],
-				['wildcharge', 'thunderbolt'],
 				['earthpower', 'sandsearstorm'],
 				['coaching', ['helpinghand', 'howl']],
 			];
@@ -177,25 +179,26 @@ export class RandomDNUTeams extends RandomTeams {
 			[SPEED_SETUP, ['aquajet', 'rest', 'trickroom']],
 			['curse', ['irondefense', 'rapidspin']],
 			['dragondance', 'dracometeor'],
+			['yawn', 'roar'],
+			['trick', 'uturn'],
 
 			// These attacks are redundant with each other
-			['surf', 'hydropump'],
+			[['psychic', 'psychicnoise'], ['psyshock', 'psychicnoise']],
+			['surf', ['hydropump', 'scald']],
 			['liquidation', 'wavecrash'],
 			['aquajet', 'flipturn'],
 			['gigadrain', 'leafstorm'],
 			['powerwhip', 'hornleech'],
-			[['airslash', 'bravebird', 'hurricane'], ['airslash', 'bravebird', 'hurricane']],
+			['airslash', 'hurricane'],
 			['knockoff', 'foulplay'],
 			['throatchop', ['crunch', 'lashout']],
 			['doubleedge', ['bodyslam', 'headbutt']],
-			['fireblast', ['fierydance', 'flamethrower']],
-			['lavaplume', 'magmastorm'],
+			[['fireblast', 'magmastorm'], ['fierydance', 'flamethrower', 'lavaplume']],
 			['thunderpunch', 'wildcharge'],
-			[['thunderbolt', 'discharge', 'thunder'], ['thunderbolt', 'discharge', 'thunder']],
+			['thunderbolt', 'discharge'],
 			['gunkshot', ['direclaw', 'poisonjab', 'sludgebomb']],
 			['aurasphere', 'focusblast'],
 			['closecombat', 'drainpunch'],
-			['bugbite', 'pounce'],
 			[['dragonpulse', 'spacialrend'], 'dracometeor'],
 			['heavyslam', 'flashcannon'],
 			['alluringvoice', 'dazzlinggleam'],
@@ -204,36 +207,53 @@ export class RandomDNUTeams extends RandomTeams {
 			['taunt', 'disable'],
 			[['thunderwave', 'toxic'], ['thunderwave', 'willowisp']],
 			[['thunderwave', 'toxic', 'willowisp'], 'toxicspikes'],
+
+			// This space reserved for assorted hardcodes that otherwise make little sense out of context
+			// Landorus and Thundurus
+			['nastyplot', ['rockslide', 'knockoff']],
+			// Persian
+			['switcheroo', 'fakeout'],
+			// Amoonguss, though this can work well as a general rule later
+			['toxic', 'clearsmog'],
+			// Chansey and Blissey
+			['healbell', 'stealthrock'],
+			// Araquanid and Magnezone
+			['mirrorcoat', ['hydropump', 'bodypress']],
+			// Marill
+			['seismictoss', 'liquidation'],
+			// Hatenna
+			['calmmind', 'mysticalfire'],
+			// Jigglypuff
+			[['toxic', 'thunderwave'], 'encore'],
+			// Impidimp
+			['dazzlinggleam', 'thunderwave'],
+			// Combee
+			['lunge', 'bugbuzz'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
 
 		if (!types.includes('Ice')) this.incompatibleMoves(moves, movePool, 'icebeam', 'icywind');
 
-		if (!isDoubles) this.incompatibleMoves(moves, movePool, ['taunt', 'strengthsap'], 'encore');
+		if (!isDoubles) this.incompatibleMoves(moves, movePool, 'taunt', 'encore');
 
 		if (!types.includes('Dark') && teraType !== 'Dark') this.incompatibleMoves(moves, movePool, 'knockoff', 'suckerpunch');
 
 		if (!abilities.includes('Prankster')) this.incompatibleMoves(moves, movePool, 'thunderwave', 'yawn');
 
-		// This space reserved for assorted hardcodes that otherwise make little sense out of context
-		if (species.id === 'lurantis') this.incompatibleMoves(moves, movePool, 'leafstorm', 'powerwhip');
-		if (species.id === 'ironcrown') this.incompatibleMoves(moves, movePool, 'kingsshield', 'stealthrock');
-		if (species.id === 'ironcrown') this.incompatibleMoves(moves, movePool, 'kingsshield', 'rest');
-		if (species.id === 'ironcrown') this.incompatibleMoves(moves, movePool, 'rest', 'stealthrock');
-		if (species.id === 'carbink') this.incompatibleMoves(moves, movePool, 'spikes', 'stealthrock');
-		if (species.id === 'moltres') this.incompatibleMoves(moves, movePool, 'bravebird', 'woodhammer');
-		if (species.id === 'moltres') this.incompatibleMoves(moves, movePool, 'flareblitz', 'wavecrash');
-		if (species.id === 'kommoo') this.incompatibleMoves(moves, movePool, 'aurasphere', 'closecombat');
-		if (species.id === 'archaludon') this.incompatibleMoves(moves, movePool, 'scald', 'hydropump');
-		if (species.id === 'abomasnowmega') this.incompatibleMoves(moves, movePool, 'iceshard', 'snowscape');
-		if (species.id === 'regieleki') this.incompatibleMoves(moves, movePool, 'blazingtorque', 'soak');
-		if (species.id === 'tatsugiri') this.incompatibleMoves(moves, movePool, 'nastyplot', 'rapidspin');
-		if (species.id === 'golurk') this.incompatibleMoves(moves, movePool, 'icepunch', 'dynamicpunch');
-		if (species.id === 'veluza') this.incompatibleMoves(moves, movePool, 'waterfall', 'hydropump');
-		if (species.id === 'ogerponhearthflame') this.incompatibleMoves(moves, movePool, 'crabhammer', 'stoneedge');
-		if (species.id === 'hitmontop') this.incompatibleMoves(moves, movePool, 'bulkup', 'rapidspin');
-		if (species.id === 'mesprit') this.incompatibleMoves(moves, movePool, 'psychic', 'storedpower');
+		// This space reserved for assorted hardcodes that otherwise make little sense out of context:
+		// To force Close Combat on Barraskewda without locking it to Tera Fighting
+		if (species.id === 'barraskewda') {
+			this.incompatibleMoves(moves, movePool, ['psychicfangs', 'throatchop'], ['poisonjab', 'throatchop']);
+		}
+		// To force Toxic on Quagsire
+		if (species.id === 'quagsire') this.incompatibleMoves(moves, movePool, 'spikes', 'icebeam');
+		// Taunt/Knock should be Cyclizar's flex moveslot
+		if (species.id === 'cyclizar') this.incompatibleMoves(moves, movePool, 'taunt', 'knockoff');
+		// To force Stealth Rock on Camerupt
+		if (species.id === 'camerupt') this.incompatibleMoves(moves, movePool, 'roar', 'willowisp');
+		// nothing else rolls these lol
+		if (species.id === 'coalossal') this.incompatibleMoves(moves, movePool, 'flamethrower', 'overheat');
 	}
 
 	override randomMoveset(
@@ -610,6 +630,10 @@ export class RandomDNUTeams extends RandomTeams {
 		if (species.id === 'smeargle') return 'Focus Sash';
 		if (species.id === 'nickit') return 'Throat Spray';
 		if (species.id === 'spearow') return 'Razor Claw';
+		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
+			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
+		}
+		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
 		if (moves.has('raindance') || moves.has('sunnyday')) return 'Life Orb';
 		if (['healingwish', 'switcheroo', 'trick'].some(m => moves.has(m))) {
 			if (
@@ -632,10 +656,6 @@ export class RandomDNUTeams extends RandomTeams {
 			return 'Choice Specs';
 		}
 		if (ability === 'Poison Heal' || ability === 'Quick Feet') return 'Toxic Orb';
-		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
-			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
-		}
-		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
 		if (moves.has('acrobatics') && ability !== 'Protosynthesis') return '';
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (ability === 'Gluttony') return `${this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'])} Berry`;

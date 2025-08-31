@@ -138,8 +138,14 @@
 				"teraTypes": ["Grass", "Psychic"]
 			},
 			{
+				"role": "Fast Support",
+				"movepool": ["Leech Seed", "Substitute", "Protect", "Stomping Tantrum"],
+				"abilities": ["Insomnia"],
+				"teraTypes": ["Grass"]
+			},
+			{
 				"role": "Bulky Support",
-				"movepool": ["Leech Seed", "Substitute", "Protect", "Crunch", "Stomping Tantrum"],
+				"movepool": ["Leech Seed", "Substitute", "Protect", "Crunch"],
 				"abilities": ["Insomnia"],
 				"teraTypes": ["Grass"]
 			}
@@ -451,8 +457,20 @@
 		"level": 88,
 		"sets": [
 			{
+				"role": "Bulky Support",
+				"movepool": ["U-turn", "Reflect", "Light Screen", "Roost"],
+				"abilities": ["Swarm"],
+				"teraTypes": ["Dark"]
+			},
+			{
 				"role": "Fast Support",
-				"movepool": ["U-turn", "Reflect", "Light Screen", "Roost", "Toxic", "Knock Off"],
+				"movepool": ["U-turn", "Reflect", "Light Screen", "Toxic"],
+				"abilities": ["Swarm"],
+				"teraTypes": ["Dark"]
+			},
+			{
+				"role": "Fast Bulky Setup",
+				"movepool": ["U-turn", "Reflect", "Light Screen", "Knock Off"],
 				"abilities": ["Swarm"],
 				"teraTypes": ["Dark"]
 			}
@@ -670,7 +688,13 @@
 		"sets": [
 			{
 				"role": "Fast Support",
-				"movepool": ["Nuzzle", "Wish", "Protect", "Volt Switch", "Fake Out", "Thunderbolt"],
+				"movepool": ["Nuzzle", "Wish", "Protect", "Volt Switch", "Thunderbolt"],
+				"abilities": ["Static", "Natural Cure"],
+				"teraTypes": ["Flying"]
+			},
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Nuzzle", "Volt Switch", "Fake Out", "Thunderbolt"],
 				"abilities": ["Static", "Natural Cure"],
 				"teraTypes": ["Flying"]
 			}
@@ -941,7 +965,13 @@
 		"sets": [
 			{
 				"role": "Bulky Attacker",
-				"movepool": ["Bug Buzz", "Icy Wind", "Mirror Coat", "Rest", "Sleep Talk"],
+				"movepool": ["Bug Buzz", "Icy Wind", "Rest", "Sleep Talk"],
+				"abilities": ["Ice Scales"],
+				"teraTypes": ["Water"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["Bug Buzz", "Mirror Coat", "Rest", "Sleep Talk"],
 				"abilities": ["Ice Scales"],
 				"teraTypes": ["Water"]
 			}
@@ -1063,7 +1093,7 @@
 		"sets": [
 			{
 				"role": "Bulky Support",
-				"movepool": ["Wish", "Protect", "Heal Bell", "Seismic Toss", "Thunder Wave"],
+				"movepool": ["Wish", "Protect", "Heal Bell", "Seismic Toss"],
 				"abilities": ["Serene Grace"],
 				"teraTypes": ["Water"]
 			}
@@ -1157,7 +1187,13 @@
 		"sets": [
 			{
 				"role": "Bulky Support",
-				"movepool": ["Facade", "Counter", "Rest", "Sleep Talk", "Thunder Wave"],
+				"movepool": ["Facade", "Rest", "Sleep Talk", "Thunder Wave"],
+				"abilities": ["Fluffy"],
+				"teraTypes": ["Ghost"]
+			},
+			{
+				"role": "Bulky Attacker",
+				"movepool": ["Double-Edge", "Counter", "Rest", "Sleep Talk"],
 				"abilities": ["Fluffy"],
 				"teraTypes": ["Ghost"]
 			}
