@@ -3088,4 +3088,85 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 	},
+	rebalancelevels: {
+		effectType: 'Rule',
+		name: 'Rebalance Levels',
+		desc: "Automatically rebalances each Pokemon's level if an added rule modifies its base stats in a way that only depends on its species",
+		onBegin() {
+			const rebalanceLevel = (oldSpecies: Species, set: PokemonSet, newSpecies: Species): number => {
+				const oldLevel = set.level;
+				// calculate the adjusted stats of the new species at its old level
+				// could use the actual stat calcs, but let's just use the same approximation we use everywhere else
+				let newStats: StatsTable = this.spreadModify(newSpecies.baseStats, set);
+				// calculate the old stats to compare against
+				const oldStats = this.spreadModify(oldSpecies.baseStats, set);
+				if (JSON.stringify(newStats) === JSON.stringify(oldStats)) return oldLevel;
+				const statRatios = { power: 0, bulk: 0, speed: 0 };
+				let statRatioTotal = 0;
+				// calculate the ratio of the expected average damaging power of the new stats to that of the old
+				statRatioTotal += statRatios.power = Math.log((oldStats.atk + oldStats.spa) / (newStats.atk + newStats.spa));
+				// calculate the ratio of the expected average damage-tanking ability of the new stats to that of the old
+				statRatioTotal += statRatios.bulk = (
+					Math.log(oldStats.hp * oldStats.def * oldStats.spd / (oldStats.def + oldStats.spd)) -
+					Math.log(newStats.hp * newStats.def * newStats.spd / (newStats.def + newStats.spd))
+				);
+				// calculate the ratio of the new speed to the old stats' speed at half weight
+				statRatioTotal += statRatios.speed = Math.log(oldStats.spe / newStats.spe) / 2;
+				// make a naive guess as to what level the pokemon should be without considering that level affects damage output
+				let newLevel = Math.min(Math.floor(Math.E ** (statRatioTotal / 5) * oldLevel), this.ruleTable.maxLevel);
+				const overestimate = newLevel > oldLevel;
+				// start accounting for level's affect on damage output and increment the guess by 1 until it looks right
+				while (newLevel !== oldLevel) {
+					// the getAdjustedStats function takes level's affect on damage into account automatically
+					newStats = this.spreadModify(newSpecies.baseStats, set);
+					statRatioTotal = 0;
+					statRatioTotal += statRatios.power = Math.log((oldStats.atk + oldStats.spa) / (newStats.atk + newStats.spa));
+					statRatioTotal += statRatios.bulk = (
+						Math.log(oldStats.hp * oldStats.def * oldStats.spd / (oldStats.def + oldStats.spd)) -
+						Math.log(newStats.hp * newStats.def * newStats.spd / (newStats.def + newStats.spd))
+					);
+					statRatioTotal += statRatios.speed = Math.log(oldStats.spe / newStats.spe) / 2;
+					if (overestimate && statRatioTotal >= 0 || !overestimate && statRatioTotal <= 0) break;
+					// initial estimate will never be closer to the old level than it should be
+					if (overestimate) {
+						newLevel--;
+					} else {
+						newLevel++;
+					}
+				}
+				return newLevel;
+			};
+
+			for (const poke of this.getAllPokemon()) {
+				const oldSpecies = this.dex.species.get(poke.set.species);
+				const newSpecies = poke.species;
+				poke.set.level = (poke as any).level = rebalanceLevel(oldSpecies, poke.set, newSpecies);
+
+				// recalculate stats to match new level
+				// can't use setSpecies because that will re-run the 'ModifySpecies' event
+				const stats = this.spreadModify(poke.species.baseStats, poke.set);
+				if (poke.species.maxHP) stats.hp = poke.species.maxHP;
+
+				poke.baseMaxhp = stats.hp;
+				poke.maxhp = stats.hp;
+				poke.hp = stats.hp;
+
+				poke.baseStoredStats = stats;
+				let statName: StatIDExceptHP;
+				for (statName in poke.storedStats) {
+					poke.storedStats[statName] = stats[statName];
+				}
+				poke.speed = poke.storedStats.spe;
+				poke.details = poke.getUpdatedDetails();
+			}
+		},
+		onValidateRule() {
+			if (!this.format.team) throw new Error('The Rebalance Levels rule is only intended to work with randomized teams.');
+			if (this.ruleTable.adjustLevel) {
+				throw new Error(`This format's rules force Pokemon to be level ${this.ruleTable.adjustLevel}, so they can't be rebalanced.`);
+			}
+			const speciesMods = [...this.ruleTable.keys()].map(r => this.dex.data.Rulesets[r]).filter(r => r?.onModifySpecies);
+			if (!speciesMods.length) throw new Error('This format has no rules that modify base stats.');
+		},
+	},
 };
