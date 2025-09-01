@@ -2696,7 +2696,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePower: 0,
 		category: "Status",
 		shortDesc: "Changes target to a Randbats set.",
-		desc: "Z-Move requiring Irpatuzinium Z. Nearly always moves first. Permanently transforms the target into a randomized Pokemon that would be generated in one of the following formats: Gen 9 Random Battle, Gen 9 Hackmons Cup, Gen 9 Challenge Cup, or Computer-Generated Teams. In the vast majority of circumstances, this also prevents the target from acting this turn.",
+		desc: "Z-Move requiring Irpatuzinium Z. Nearly always moves first. Permanently transforms the target into a randomized Pokemon that would be generated in one of the following formats: Gen 9 Random Battle, Gen 9 Hackmons Cup, or Gen 9 Challenge Cup. In the vast majority of circumstances, this also prevents the target from acting this turn.",
 		name: "Bibbidi-Bobbidi-Rands",
 		gen: 9,
 		pp: 1,
@@ -2706,7 +2706,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.attrLastMove('[anim] Doom Desire');
 		},
 		onHit(target, source) {
-			const formats = ['gen9randombattle', 'gen9hackmonscup', 'gen9challengecup1v1', 'gen9computergeneratedteams'];
+			const formats = ['gen9randombattle', 'gen9hackmonscup', 'gen9challengecup1v1'];
 			const randFormat = this.sample(formats);
 			let msg;
 			switch (randFormat) {
@@ -2718,9 +2718,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				break;
 			case 'gen9challengecup1v1':
 				msg = "The only difference between a Challenge Cup Pokémon and my in-game one is that the former actually surpassed lvl. 60, enjoy n.n";
-				break;
-			case 'gen9computergeneratedteams':
-				msg = "We asked an AI to make a randbats set. YOU WON'T BELIEVE WHAT IT CAME UP WITH N.N";
 				break;
 			}
 			let team = [] as PokemonSet[];
