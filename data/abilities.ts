@@ -726,8 +726,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: -1055,
 		rating: 3.5,
 	},
-	earthpower: {
-		name: 'Earth Power',
+	earthspower: {
+		name: 'Earth\s Power',
 		onModifyAtk(_, _attacker, _defender, move) {
 			if (move.type !== 'Ground') return;
 			this.debug('Earth Power boost');
