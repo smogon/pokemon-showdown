@@ -481,6 +481,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 			if (source?.hasItem('damprock')) {
 				return 8;
 			}
+			if (source.hasAbility('monsoonsurge')) {
+				return 10;
+			}
 			return 5;
 		},
 		onWeatherModifyDamage(damage, attacker, defender, move) {
@@ -670,6 +673,9 @@ export const Conditions: import('../sim/dex-conditions').ConditionDataTable = {
 		durationCallback(source, effect) {
 			if (source?.hasItem('icyrock')) {
 				return 8;
+			}
+			if (source.hasAbility('blizzardveil')) {
+				return 10;
 			}
 			return 5;
 		},

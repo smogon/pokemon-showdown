@@ -1,4 +1,11183 @@
 export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
+	// Custom Pokemon
+  "serperiormega": {
+    "name": "Serperior-Mega",
+    "types": [
+      "Grass",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 95,
+      "def": 115,
+      "spa": 95,
+      "spd": 115,
+      "spe": 133
+    },
+    "abilities": {
+      "0": "Queenly Majesty"
+    },
+    "heightm": 2.5,
+    "weightkg": 160,
+    "evoType": "trade",
+    "requiredItem": "Serperiorite",
+    "baseSpecies": "Serperior",
+    "forme": "Mega",
+    "num": -1001,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "emboarmega": {
+    "name": "Emboar-Mega",
+    "types": [
+      "Fire",
+      "Electric"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 110,
+      "atk": 163,
+      "def": 85,
+      "spa": 140,
+      "spd": 85,
+      "spe": 45
+    },
+    "abilities": {
+      "0": "Rock Head"
+    },
+    "heightm": 2,
+    "weightkg": 400,
+    "evoType": "trade",
+    "requiredItem": "Emboarite",
+    "baseSpecies": "Emboar",
+    "forme": "Mega",
+    "num": -1002,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "samurottmega": {
+    "name": "Samurott-Mega",
+    "types": [
+      "Water",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 95,
+      "atk": 145,
+      "def": 95,
+      "spa": 118,
+      "spd": 75,
+      "spe": 100
+    },
+    "abilities": {
+      "0": "Sharpness"
+    },
+    "heightm": 2.3,
+    "weightkg": 320,
+    "evoType": "trade",
+    "requiredItem": "Samurottite",
+    "baseSpecies": "Samurott",
+    "forme": "Mega",
+    "num": -1003,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "comfeymega": {
+    "name": "Comfey-Mega",
+    "types": [
+      "Fairy",
+      "Grass"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 51,
+      "atk": 52,
+      "def": 115,
+      "spa": 112,
+      "spd": 135,
+      "spe": 120
+    },
+    "abilities": {
+      "0": "Triage"
+    },
+    "heightm": 0.3,
+    "weightkg": 1,
+    "evoType": "trade",
+    "requiredItem": "Comfeyite",
+    "baseSpecies": "Comfey",
+    "forme": "Mega",
+    "num": -1005,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "corviknightmega": {
+    "name": "Corviknight-Mega",
+    "types": [
+      "Flying",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 98,
+      "atk": 47,
+      "def": 115,
+      "spa": 103,
+      "spd": 135,
+      "spe": 97
+    },
+    "abilities": {
+      "0": "Good as Gold"
+    },
+    "heightm": 2.5,
+    "weightkg": 250,
+    "evoType": "trade",
+    "requiredItem": "Corviknightite",
+    "baseSpecies": "Corviknight",
+    "forme": "Mega",
+    "num": -1006,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironclaw": {
+    "name": "Iron Claw",
+    "types": [
+      "Grass",
+      "Electric"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 148,
+      "def": 50,
+      "spa": 104,
+      "spd": 120,
+      "spe": 98
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 1.5,
+    "weightkg": 200,
+    "evoType": "trade",
+    "num": -1009,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "dragapultmega": {
+    "name": "Dragapult-Mega",
+    "types": [
+      "Dragon",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 88,
+      "atk": 133,
+      "def": 101,
+      "spa": 127,
+      "spd": 101,
+      "spe": 150
+    },
+    "abilities": {
+      "0": "Aerilate"
+    },
+    "heightm": 8,
+    "weightkg": 250,
+    "evoType": "trade",
+    "requiredItem": "Dragapultite",
+    "baseSpecies": "Dragapult",
+    "forme": "Mega",
+    "num": -1010,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironpod": {
+    "name": "Iron Pod",
+    "types": [
+      "Water",
+      "Electric"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 88,
+      "def": 86,
+      "spa": 122,
+      "spd": 100,
+      "spe": 74
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 0.2,
+    "weightkg": 25,
+    "evoType": "trade",
+    "num": -1012,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "shatterjaw": {
+    "name": "Shatter Jaw",
+    "types": [
+      "Rock",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 97,
+      "atk": 129,
+      "def": 101,
+      "spa": 65,
+      "spd": 79,
+      "spe": 99
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 0.2,
+    "weightkg": 30,
+    "evoType": "trade",
+    "num": -1012,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "clashingteeth": {
+    "name": "Clashing Teeth",
+    "types": [
+      "Ground",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 123,
+      "atk": 131,
+      "def": 71,
+      "spa": 57,
+      "spd": 75,
+      "spe": 113
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 2.3,
+    "weightkg": 103,
+    "evoType": "trade",
+    "num": -1012,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "galvantulamega": {
+    "name": "Galvantula-Mega",
+    "types": [
+      "Bug",
+      "Electric"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 37,
+      "def": 135,
+      "spa": 137,
+      "spd": 135,
+      "spe": 38
+    },
+    "abilities": {
+      "0": "Beads of Ruin"
+    },
+    "heightm": 1.3,
+    "weightkg": 130,
+    "evoType": "trade",
+    "requiredItem": "Galvantulite",
+    "baseSpecies": "Galvantula",
+    "forme": "Mega",
+    "num": -1013,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "bronzongmega": {
+    "name": "Bronzong-Mega",
+    "types": [
+      "Steel",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 67,
+      "atk": 89,
+      "def": 126,
+      "spa": 139,
+      "spd": 86,
+      "spe": 103
+    },
+    "abilities": {
+      "0": "Vessel of Ruin"
+    },
+    "heightm": 1.8,
+    "weightkg": 600,
+    "evoType": "trade",
+    "requiredItem": "Bronzongite",
+    "baseSpecies": "Bronzong",
+    "forme": "Mega",
+    "num": -1015,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "runerigusmega": {
+    "name": "Runerigus-Mega",
+    "types": [
+      "Ground",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 58,
+      "atk": 135,
+      "def": 185,
+      "spa": 50,
+      "spd": 105,
+      "spe": 50
+    },
+    "abilities": {
+      "0": "Tablets of Ruin"
+    },
+    "heightm": 2,
+    "weightkg": 300,
+    "evoType": "trade",
+    "requiredItem": "Runerigusite",
+    "baseSpecies": "Runerigus",
+    "forme": "Mega",
+    "num": -1016,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "butterfreemega": {
+    "name": "Butterfree-Mega",
+    "types": [
+      "Bug",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 45,
+      "def": 50,
+      "spa": 140,
+      "spd": 87,
+      "spe": 113
+    },
+    "abilities": {
+      "0": "Magic Guard"
+    },
+    "heightm": 3,
+    "weightkg": 110,
+    "evoType": "trade",
+    "requiredItem": "Butterfrite",
+    "baseSpecies": "Butterfree",
+    "forme": "Mega",
+    "num": -1017,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "florgesmegalove": {
+    "name": "Florges-Mega-Love",
+    "types": [
+      "Fairy",
+      "Grass"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 78,
+      "atk": 65,
+      "def": 98,
+      "spa": 142,
+      "spd": 174,
+      "spe": 95
+    },
+    "abilities": {
+      "0": "Fairy Aura"
+    },
+    "heightm": 1.3,
+    "weightkg": 30,
+    "evoType": "trade",
+    "requiredItem": "Florgesite Love",
+    "baseSpecies": "Florges",
+    "forme": "Mega",
+    "num": -1019,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "noivernmega": {
+    "name": "Noivern-Mega",
+    "types": [
+      "Electric",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 131,
+      "def": 105,
+      "spa": 107,
+      "spd": 105,
+      "spe": 102
+    },
+    "abilities": {
+      "0": "Tough Claws"
+    },
+    "heightm": 2,
+    "weightkg": 350,
+    "evoType": "trade",
+    "requiredItem": "Noivernite",
+    "baseSpecies": "Noivern",
+    "forme": "Mega",
+    "num": -1020,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "serperiormegaivy": {
+    "name": "Serperior-Mega-Ivy",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 135,
+      "def": 105,
+      "spa": 55,
+      "spd": 105,
+      "spe": 153
+    },
+    "abilities": {
+      "0": "Toxify"
+    },
+    "heightm": 3,
+    "weightkg": 170,
+    "evoType": "trade",
+    "requiredItem": "SerperioriteIvy",
+    "baseSpecies": "Serperior",
+    "forme": "Mega",
+    "num": -1021,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "starmiemega": {
+    "name": "Starmie-Mega",
+    "types": [
+      "Water",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 95,
+      "def": 95,
+      "spa": 140,
+      "spd": 95,
+      "spe": 135
+    },
+    "abilities": {
+      "0": "Regenerator"
+    },
+    "heightm": 1.5,
+    "weightkg": 250,
+    "evoType": "trade",
+    "requiredItem": "Starmite",
+    "baseSpecies": "Starmie",
+    "forme": "Mega",
+    "num": -1022,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tropiusmega": {
+    "name": "Tropius-Mega",
+    "types": [
+      "Grass",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 99,
+      "atk": 108,
+      "def": 123,
+      "spa": 42,
+      "spd": 127,
+      "spe": 61
+    },
+    "abilities": {
+      "0": "Wind Rider"
+    },
+    "heightm": 2.4,
+    "weightkg": 300,
+    "evoType": "trade",
+    "requiredItem": "Tropiusite",
+    "baseSpecies": "Tropius",
+    "forme": "Mega",
+    "num": -1023,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "sirfetchdmega": {
+    "name": "Sirfetch’d-Mega",
+    "types": [
+      "Fighting",
+      "Grass"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 62,
+      "atk": 165,
+      "def": 120,
+      "spa": 68,
+      "spd": 102,
+      "spe": 90
+    },
+    "abilities": {
+      "0": "Sword of Ruin"
+    },
+    "heightm": 1.3,
+    "weightkg": 350,
+    "evoType": "trade",
+    "requiredItem": "Sirfetchdite",
+    "baseSpecies": "Sirfetch’d",
+    "forme": "Mega",
+    "num": -1024,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "toxtricitymega": {
+    "name": "Toxtricity-Mega",
+    "types": [
+      "Poison",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 128,
+      "def": 100,
+      "spa": 144,
+      "spd": 100,
+      "spe": 55
+    },
+    "abilities": {
+      "0": "Boots of Ruin"
+    },
+    "heightm": 1.2,
+    "weightkg": 130,
+    "evoType": "trade",
+    "requiredItem": "Toxtricite",
+    "baseSpecies": "Toxtricity",
+    "forme": "Mega",
+    "num": -1024,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "dusknoirmega": {
+    "name": "Dusknoir-Mega",
+    "types": [
+      "Ghost",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 45,
+      "atk": 150,
+      "def": 145,
+      "spa": 65,
+      "spd": 135,
+      "spe": 85
+    },
+    "abilities": {
+      "0": "Soul Harvest"
+    },
+    "heightm": 2.5,
+    "weightkg": 275,
+    "evoType": "trade",
+    "requiredItem": "Dusknoirite",
+    "baseSpecies": "Dusknoir",
+    "forme": "Mega",
+    "num": -1024,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "aurorusmega": {
+    "name": "Aurorus-Mega",
+    "types": [
+      "Ice",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 123,
+      "atk": 87,
+      "def": 112,
+      "spa": 129,
+      "spd": 122,
+      "spe": 48
+    },
+    "abilities": {
+      "0": "Prismatic Aura"
+    },
+    "heightm": 3,
+    "weightkg": 700,
+    "evoType": "trade",
+    "requiredItem": "Aurorusite",
+    "baseSpecies": "Aurorus",
+    "forme": "Mega",
+    "num": -1025,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tyrantrummega": {
+    "name": "Tyrantrum-Mega",
+    "types": [
+      "Rock",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 82,
+      "atk": 156,
+      "def": 134,
+      "spa": 54,
+      "spd": 89,
+      "spe": 106
+    },
+    "abilities": {
+      "0": "Sheer Force"
+    },
+    "heightm": 3,
+    "weightkg": 750,
+    "evoType": "trade",
+    "requiredItem": "Tyrantrumite",
+    "baseSpecies": "Tyrantrum",
+    "forme": "Mega",
+    "num": -1026,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "drapionmega": {
+    "name": "Drapion-Mega",
+    "types": [
+      "Bug",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 120,
+      "def": 140,
+      "spa": 50,
+      "spd": 95,
+      "spe": 125
+    },
+    "abilities": {
+      "0": "Terrify"
+    },
+    "heightm": 2,
+    "weightkg": 180,
+    "evoType": "trade",
+    "requiredItem": "Drapionite",
+    "baseSpecies": "Drapion",
+    "forme": "Mega",
+    "num": -1027,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "charizardmegaa": {
+    "name": "Charizard-Mega-A",
+    "types": [
+      "Fire",
+      "Ice"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 78,
+      "atk": 134,
+      "def": 66,
+      "spa": 179,
+      "spd": 75,
+      "spe": 102
+    },
+    "abilities": {
+      "0": "Slush Rush"
+    },
+    "heightm": 1.7,
+    "weightkg": 250,
+    "evoType": "trade",
+    "requiredItem": "Charizardite A",
+    "baseSpecies": "Charizard",
+    "forme": "Mega",
+    "num": -1029,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "clodsiremega": {
+    "name": "Clodsire-Mega",
+    "types": [
+      "Poison",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 130,
+      "atk": 145,
+      "def": 55,
+      "spa": 85,
+      "spd": 95,
+      "spe": 20
+    },
+    "abilities": {
+      "0": "Unaware"
+    },
+    "heightm": 2.3,
+    "weightkg": 650,
+    "evoType": "trade",
+    "requiredItem": "Clodsirite",
+    "baseSpecies": "Clodsire",
+    "forme": "Mega",
+    "num": -1030,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "frostywaifu": {
+    "name": "Frosty Waifu",
+    "types": [
+      "Ghost",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 117,
+      "atk": 101,
+      "def": 111,
+      "spa": 109,
+      "spd": 101,
+      "spe": 51
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 2,
+    "weightkg": 250,
+    "evoType": "trade",
+    "num": -1030,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "chesnaughtmega": {
+    "name": "Chesnaught-Mega",
+    "types": [
+      "Grass",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 88,
+      "atk": 137,
+      "def": 152,
+      "spa": 84,
+      "spd": 95,
+      "spe": 74
+    },
+    "abilities": {
+      "0": "Warrior's Will"
+    },
+    "heightm": 1.8,
+    "weightkg": 230,
+    "evoType": "trade",
+    "requiredItem": "Chesnaughtite",
+    "baseSpecies": "Chesnaught",
+    "forme": "Mega",
+    "num": -1031,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "delphoxmega": {
+    "name": "Delphox-Mega",
+    "types": [
+      "Fire",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 79,
+      "def": 87,
+      "spa": 144,
+      "spd": 135,
+      "spe": 114
+    },
+    "abilities": {
+      "0": "Mindforce"
+    },
+    "heightm": 1.2,
+    "weightkg": 100,
+    "evoType": "trade",
+    "requiredItem": "Delphoxite",
+    "baseSpecies": "Delphox",
+    "forme": "Mega",
+    "num": -1032,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "greninjamega": {
+    "name": "Greninja-Mega",
+    "types": [
+      "Water",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 72,
+      "atk": 125,
+      "def": 72,
+      "spa": 133,
+      "spd": 81,
+      "spe": 147
+    },
+    "abilities": {
+      "0": "Shadowborn"
+    },
+    "heightm": 1.7,
+    "weightkg": 105,
+    "evoType": "trade",
+    "requiredItem": "Greninjite",
+    "baseSpecies": "Greninja",
+    "forme": "Mega",
+    "num": -1033,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "irondetector": {
+    "name": "Iron Detector",
+    "types": [
+      "Dark",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 78,
+      "atk": 118,
+      "def": 64,
+      "spa": 132,
+      "spd": 56,
+      "spe": 122
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 0.5,
+    "weightkg": 40,
+    "evoType": "trade",
+    "num": -1033,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "dragonitemegaa": {
+    "name": "Dragonite-Mega-A",
+    "types": [
+      "Dragon",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 91,
+      "atk": 154,
+      "def": 125,
+      "spa": 120,
+      "spd": 110,
+      "spe": 100
+    },
+    "abilities": {
+      "0": "Mold Breaker"
+    },
+    "heightm": 2.5,
+    "weightkg": 520,
+    "evoType": "trade",
+    "requiredItem": "Dragoniteite A",
+    "baseSpecies": "Dragonite",
+    "forme": "Mega",
+    "num": -1034,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "emboarmegay": {
+    "name": "Emboar-Mega-Y",
+    "types": [
+      "Fire",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 110,
+      "atk": 153,
+      "def": 125,
+      "spa": 70,
+      "spd": 85,
+      "spe": 85
+    },
+    "abilities": {
+      "0": "Mental Fortitude"
+    },
+    "heightm": 2,
+    "weightkg": 450,
+    "evoType": "trade",
+    "requiredItem": "Emboarite Y",
+    "baseSpecies": "Emboar",
+    "forme": "Mega-Y",
+    "num": -1035,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "empoleonmega": {
+    "name": "Empoleon-Mega",
+    "types": [
+      "Water",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 84,
+      "atk": 106,
+      "def": 103,
+      "spa": 131,
+      "spd": 126,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Tidal Surge"
+    },
+    "heightm": 2,
+    "weightkg": 250,
+    "evoType": "trade",
+    "requiredItem": "Empoleonite",
+    "baseSpecies": "Empoleon",
+    "forme": "Mega",
+    "num": -1036,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "samurottmegay": {
+    "name": "Samurott-Mega-Y",
+    "types": [
+      "Water",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 95,
+      "atk": 140,
+      "def": 115,
+      "spa": 83,
+      "spd": 90,
+      "spe": 105
+    },
+    "abilities": {
+      "0": "Technician"
+    },
+    "heightm": 2,
+    "weightkg": 280,
+    "evoType": "trade",
+    "requiredItem": "Samurottite Y",
+    "baseSpecies": "Samurott",
+    "forme": "Mega-Y",
+    "num": -1037,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "infernapemega": {
+    "name": "Infernape-Mega",
+    "types": [
+      "Fire",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 76,
+      "atk": 154,
+      "def": 61,
+      "spa": 154,
+      "spd": 61,
+      "spe": 128
+    },
+    "abilities": {
+      "0": "Unseen Fist"
+    },
+    "heightm": 1.8,
+    "weightkg": 180,
+    "evoType": "trade",
+    "requiredItem": "Infernapite",
+    "baseSpecies": "Infernape",
+    "forme": "Mega",
+    "num": -1038,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "torterramega": {
+    "name": "Torterra-Mega",
+    "types": [
+      "Grass",
+      "Rock"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 95,
+      "atk": 169,
+      "def": 155,
+      "spa": 75,
+      "spd": 95,
+      "spe": 36
+    },
+    "abilities": {
+      "0": "Skill Link"
+    },
+    "heightm": 2.8,
+    "weightkg": 850,
+    "evoType": "trade",
+    "requiredItem": "Torterrite",
+    "baseSpecies": "Torterra",
+    "forme": "Mega",
+    "num": -1039,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "chienpaounleashed": {
+    "name": "Chien-Pao-Unleashed",
+    "types": [
+      "Ice",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 112,
+      "atk": 158,
+      "def": 110,
+      "spa": 117,
+      "spd": 95,
+      "spe": 155
+    },
+    "abilities": {
+      "0": "Sword of Ruin",
+      "1": "Intimidate"
+    },
+    "heightm": 5,
+    "weightkg": 500,
+    "evoType": "trade",
+    "num": -1040,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "chiyuunleashed": {
+    "name": "Chi-Yu-Unleashed",
+    "types": [
+      "Fire",
+      "Rock"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 83,
+      "atk": 100,
+      "def": 107,
+      "spa": 180,
+      "spd": 163,
+      "spe": 108
+    },
+    "abilities": {
+      "0": "Beads of Ruin",
+      "1": "Sand Stream"
+    },
+    "heightm": 10,
+    "weightkg": 800,
+    "evoType": "trade",
+    "num": -1041,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tingluunleashed": {
+    "name": "Ting-Lu-Unleashed",
+    "types": [
+      "Water",
+      "Ground"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 178,
+      "atk": 133,
+      "def": 151,
+      "spa": 72,
+      "spd": 124,
+      "spe": 59
+    },
+    "abilities": {
+      "0": "Vessel of Ruin",
+      "1": "Water Bubble"
+    },
+    "heightm": 7,
+    "weightkg": 400,
+    "evoType": "trade",
+    "num": -1042,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wochienunleashed": {
+    "name": "Wo-Chien-Unleashed",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 113,
+      "atk": 120,
+      "def": 122,
+      "spa": 124,
+      "spd": 157,
+      "spe": 98
+    },
+    "abilities": {
+      "0": "Tablets of Ruin",
+      "1": "Poison Touch"
+    },
+    "heightm": 7,
+    "weightkg": 400,
+    "evoType": "trade",
+    "num": -1043,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "sylveonmega": {
+    "name": "Sylveon-Mega",
+    "types": [
+      "Fairy",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 95,
+      "atk": 85,
+      "def": 95,
+      "spa": 140,
+      "spd": 160,
+      "spe": 50
+    },
+    "abilities": {
+      "0": "Draconize"
+    },
+    "heightm": 1.2,
+    "weightkg": 80,
+    "evoType": "trade",
+    "requiredItem": "Sylveonite",
+    "baseSpecies": "Sylveon",
+    "forme": "Mega",
+    "num": -1044,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "espeonmega": {
+    "name": "Espeon-Mega",
+    "types": [
+      "Psychic",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 110,
+      "def": 80,
+      "spa": 150,
+      "spd": 95,
+      "spe": 125
+    },
+    "abilities": {
+      "0": "Umbral Force"
+    },
+    "heightm": 1.2,
+    "weightkg": 80,
+    "evoType": "trade",
+    "requiredItem": "Espeonite",
+    "baseSpecies": "Espeon",
+    "forme": "Mega",
+    "num": -1045,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "umbreonmega": {
+    "name": "Umbreon-Mega",
+    "types": [
+      "Dark",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 95,
+      "atk": 65,
+      "def": 125,
+      "spa": 80,
+      "spd": 150,
+      "spe": 110
+    },
+    "abilities": {
+      "0": "Mind Leap"
+    },
+    "heightm": 1.2,
+    "weightkg": 80,
+    "evoType": "trade",
+    "requiredItem": "Umbreonite",
+    "baseSpecies": "Umbreon",
+    "forme": "Mega",
+    "num": -1046,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "jolteonmega": {
+    "name": "Jolteon-Mega",
+    "types": [
+      "Electric",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 75,
+      "def": 70,
+      "spa": 150,
+      "spd": 105,
+      "spe": 160
+    },
+    "abilities": {
+      "0": "Ferronize"
+    },
+    "heightm": 1.2,
+    "weightkg": 80,
+    "evoType": "trade",
+    "requiredItem": "Jolteonite",
+    "baseSpecies": "Jolteon",
+    "forme": "Mega",
+    "num": -1047,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "vaporeonmega": {
+    "name": "Vaporeon-Mega",
+    "types": [
+      "Water",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 130,
+      "atk": 65,
+      "def": 80,
+      "spa": 140,
+      "spd": 135,
+      "spe": 75
+    },
+    "abilities": {
+      "0": "Corrosion"
+    },
+    "heightm": 1.2,
+    "weightkg": 82,
+    "evoType": "trade",
+    "requiredItem": "Vaporeonite",
+    "baseSpecies": "Vaporeon",
+    "forme": "Mega",
+    "num": -1048,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "flareonmega": {
+    "name": "Flareon-Mega",
+    "types": [
+      "Fire",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 140,
+      "def": 70,
+      "spa": 135,
+      "spd": 120,
+      "spe": 95
+    },
+    "abilities": {
+      "0": "Adaptability"
+    },
+    "heightm": 1.1,
+    "weightkg": 79,
+    "evoType": "trade",
+    "requiredItem": "Flareonite",
+    "baseSpecies": "Flareon",
+    "forme": "Mega",
+    "num": -1049,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "glaceonmega": {
+    "name": "Glaceon-Mega",
+    "types": [
+      "Ice",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 60,
+      "def": 130,
+      "spa": 150,
+      "spd": 115,
+      "spe": 105
+    },
+    "abilities": {
+      "0": "Magic Guard"
+    },
+    "heightm": 1.2,
+    "weightkg": 80,
+    "evoType": "trade",
+    "requiredItem": "Glaceonite",
+    "baseSpecies": "Glaceon",
+    "forme": "Mega",
+    "num": -1050,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "leafeonmega": {
+    "name": "Leafeon-Mega",
+    "types": [
+      "Grass",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 130,
+      "def": 150,
+      "spa": 60,
+      "spd": 105,
+      "spe": 115
+    },
+    "abilities": {
+      "0": "Fluffy"
+    },
+    "heightm": 1.2,
+    "weightkg": 70,
+    "evoType": "trade",
+    "requiredItem": "Leafeonite",
+    "baseSpecies": "Leafeon",
+    "forme": "Mega",
+    "num": -1051,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "shimmeringbloom": {
+    "name": "Shimmering Bloom",
+    "types": [
+      "Ice",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 87,
+      "atk": 87,
+      "def": 65,
+      "spa": 125,
+      "spd": 103,
+      "spe": 103
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 3,
+    "weightkg": 75,
+    "evoType": "trade",
+    "num": -1052,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironvwoom": {
+    "name": "Iron Vwoom",
+    "types": [
+      "Electric",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 96,
+      "atk": 116,
+      "def": 98,
+      "spa": 74,
+      "spd": 90,
+      "spe": 96
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 2,
+    "weightkg": 200,
+    "evoType": "trade",
+    "num": -1053,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "slicingsegment": {
+    "name": "Slicing Segment",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 111,
+      "atk": 133,
+      "def": 79,
+      "spa": 71,
+      "spd": 79,
+      "spe": 97
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 8,
+    "weightkg": 350,
+    "evoType": "trade",
+    "num": -1054,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironmissile": {
+    "name": "Iron Missile",
+    "types": [
+      "Electric",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 106,
+      "def": 84,
+      "spa": 54,
+      "spd": 84,
+      "spe": 142
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 4,
+    "weightkg": 600,
+    "evoType": "trade",
+    "num": -1055,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "armarougemega": {
+    "name": "Armarouge-Mega",
+    "types": [
+      "Fire",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 64,
+      "def": 120,
+      "spa": 155,
+      "spd": 100,
+      "spe": 101
+    },
+    "abilities": {
+      "0": "Competitive"
+    },
+    "heightm": 1.7,
+    "weightkg": 120,
+    "evoType": "trade",
+    "requiredItem": "Armarougite",
+    "baseSpecies": "Armarouge",
+    "forme": "Mega",
+    "num": -1056,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ceruledgemega": {
+    "name": "Ceruledge-Mega",
+    "types": [
+      "Fire",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 155,
+      "def": 100,
+      "spa": 64,
+      "spd": 120,
+      "spe": 111
+    },
+    "abilities": {
+      "0": "Defiant"
+    },
+    "heightm": 1.8,
+    "weightkg": 160,
+    "evoType": "trade",
+    "requiredItem": "Ceruledgite",
+    "baseSpecies": "Ceruledge",
+    "forme": "Mega",
+    "num": -1057,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "gyaradosmegay": {
+    "name": "Gyarados-Mega-Y",
+    "types": [
+      "Water",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 95,
+      "atk": 95,
+      "def": 139,
+      "spa": 125,
+      "spd": 115,
+      "spe": 71
+    },
+    "abilities": {
+      "0": "No Guard"
+    },
+    "heightm": 9,
+    "weightkg": 400,
+    "evoType": "trade",
+    "requiredItem": "Gyaradosite Y",
+    "baseSpecies": "Gyarados",
+    "forme": "Mega-Y",
+    "num": -1058,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "emolgamega": {
+    "name": "Emolga-Mega",
+    "types": [
+      "Electric",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 55,
+      "atk": 65,
+      "def": 75,
+      "spa": 115,
+      "spd": 75,
+      "spe": 143
+    },
+    "abilities": {
+      "0": "Emergency Exit"
+    },
+    "heightm": 0.6,
+    "weightkg": 15,
+    "evoType": "trade",
+    "requiredItem": "Emolgite",
+    "baseSpecies": "Emolga",
+    "forme": "Mega",
+    "num": -1059,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "articunomega": {
+    "name": "Articuno-Mega",
+    "types": [
+      "Ice",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 85,
+      "def": 115,
+      "spa": 125,
+      "spd": 150,
+      "spe": 115
+    },
+    "abilities": {
+      "0": "Storm Drain"
+    },
+    "heightm": 6,
+    "weightkg": 75,
+    "evoType": "trade",
+    "requiredItem": "Articunite",
+    "baseSpecies": "Articuno",
+    "forme": "Mega",
+    "num": -1060,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "zapdosmega": {
+    "name": "Zapdos-Mega",
+    "types": [
+      "Electric",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 90,
+      "def": 110,
+      "spa": 155,
+      "spd": 120,
+      "spe": 115
+    },
+    "abilities": {
+      "0": "Motor Drive"
+    },
+    "heightm": 6,
+    "weightkg": 75,
+    "evoType": "trade",
+    "requiredItem": "Zapdosite",
+    "baseSpecies": "Zapdos",
+    "forme": "Mega",
+    "num": -1061,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "moltresmega": {
+    "name": "Moltres-Mega",
+    "types": [
+      "Fire",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 100,
+      "def": 120,
+      "spa": 155,
+      "spd": 100,
+      "spe": 115
+    },
+    "abilities": {
+      "0": "Flash Fire"
+    },
+    "heightm": 6,
+    "weightkg": 75,
+    "evoType": "trade",
+    "requiredItem": "Moltresite",
+    "baseSpecies": "Moltres",
+    "forme": "Mega",
+    "num": -1062,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "chandeluremega": {
+    "name": "Chandelure-Mega",
+    "types": [
+      "Ghost",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 75,
+      "def": 110,
+      "spa": 175,
+      "spd": 110,
+      "spe": 90
+    },
+    "abilities": {
+      "0": "Levitate"
+    },
+    "heightm": 2,
+    "weightkg": 55,
+    "evoType": "trade",
+    "requiredItem": "Chandelurite",
+    "baseSpecies": "Chandelure",
+    "forme": "Mega",
+    "num": -1063,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "suicunemega": {
+    "name": "Suicune-Mega",
+    "types": [
+      "Water",
+      "Ice"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 105,
+      "def": 115,
+      "spa": 90,
+      "spd": 165,
+      "spe": 105
+    },
+    "abilities": {
+      "0": "Serene Grace"
+    },
+    "heightm": 2.5,
+    "weightkg": 250,
+    "evoType": "trade",
+    "requiredItem": "Suicunite",
+    "baseSpecies": "Suicune",
+    "forme": "Mega",
+    "num": -1064,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "raikoumega": {
+    "name": "Raikou-Mega",
+    "types": [
+      "Electric",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 105,
+      "def": 105,
+      "spa": 165,
+      "spd": 100,
+      "spe": 115
+    },
+    "abilities": {
+      "0": "Electromorphosis"
+    },
+    "heightm": 2.5,
+    "weightkg": 450,
+    "evoType": "trade",
+    "requiredItem": "Raikite",
+    "baseSpecies": "Raikou",
+    "forme": "Mega",
+    "num": -1065,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "enteimega": {
+    "name": "Entei-Mega",
+    "types": [
+      "Fire",
+      "Rock"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 115,
+      "atk": 165,
+      "def": 105,
+      "spa": 90,
+      "spd": 105,
+      "spe": 100
+    },
+    "abilities": {
+      "0": "Mold Breaker"
+    },
+    "heightm": 2.7,
+    "weightkg": 520,
+    "evoType": "trade",
+    "requiredItem": "Enteite",
+    "baseSpecies": "Entei",
+    "forme": "Mega",
+    "num": -1066,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "feraligatrmega": {
+    "name": "Feraligatr-Mega",
+    "types": [
+      "Water",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 140,
+      "def": 155,
+      "spa": 59,
+      "spd": 93,
+      "spe": 98
+    },
+    "abilities": {
+      "0": "Rough Skin"
+    },
+    "heightm": 2.8,
+    "weightkg": 120,
+    "evoType": "trade",
+    "requiredItem": "Feraligatrite",
+    "baseSpecies": "Feraligatr",
+    "forme": "Mega",
+    "num": -1067,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "meganiummega": {
+    "name": "Meganium-Mega",
+    "types": [
+      "Grass",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 82,
+      "def": 160,
+      "spa": 103,
+      "spd": 160,
+      "spe": 40
+    },
+    "abilities": {
+      "0": "Natural Cure"
+    },
+    "heightm": 3.5,
+    "weightkg": 200,
+    "evoType": "trade",
+    "requiredItem": "Meganiumite",
+    "baseSpecies": "Meganium",
+    "forme": "Mega",
+    "num": -1068,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "typhlosionmega": {
+    "name": "Typhlosion-Mega",
+    "types": [
+      "Fire",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 78,
+      "atk": 109,
+      "def": 83,
+      "spa": 149,
+      "spd": 95,
+      "spe": 120
+    },
+    "abilities": {
+      "0": "Intimidate"
+    },
+    "heightm": 2,
+    "weightkg": 90,
+    "evoType": "trade",
+    "requiredItem": "Typhlosionite",
+    "baseSpecies": "Typhlosion",
+    "forme": "Mega",
+    "num": -1069,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "flygonmegaa": {
+    "name": "Flygon-Mega-A",
+    "types": [
+      "Dragon",
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 150,
+      "def": 95,
+      "spa": 80,
+      "spd": 95,
+      "spe": 120
+    },
+    "abilities": {
+      "0": "Speed Boost"
+    },
+    "heightm": 3,
+    "weightkg": 90,
+    "evoType": "trade",
+    "requiredItem": "Flygonite A",
+    "baseSpecies": "Flygon",
+    "forme": "Mega",
+    "num": -1071,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "froslassmega": {
+    "name": "Froslass-Mega",
+    "types": [
+      "Ice",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 100,
+      "def": 85,
+      "spa": 110,
+      "spd": 85,
+      "spe": 130
+    },
+    "abilities": {
+      "0": "Prankster"
+    },
+    "heightm": 1.5,
+    "weightkg": 70,
+    "evoType": "trade",
+    "requiredItem": "Froslassite",
+    "baseSpecies": "Froslass",
+    "forme": "Mega",
+    "num": -1073,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "frosmothmega": {
+    "name": "Frosmoth-Mega",
+    "types": [
+      "Ice",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 70,
+      "def": 80,
+      "spa": 155,
+      "spd": 115,
+      "spe": 85
+    },
+    "abilities": {
+      "0": "Ice Scales"
+    },
+    "heightm": 1.6,
+    "weightkg": 40,
+    "evoType": "trade",
+    "requiredItem": "Frosmothite",
+    "baseSpecies": "Frosmoth",
+    "forme": "Mega",
+    "num": -1074,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "helioliskmega": {
+    "name": "Heliolisk-Mega",
+    "types": [
+      "Electric",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 62,
+      "atk": 65,
+      "def": 72,
+      "spa": 134,
+      "spd": 114,
+      "spe": 134
+    },
+    "abilities": {
+      "0": "Toxic Chain"
+    },
+    "heightm": 1.5,
+    "weightkg": 30,
+    "evoType": "trade",
+    "requiredItem": "Helioliskite",
+    "baseSpecies": "Heliolisk",
+    "forme": "Mega",
+    "num": -1075,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "jirachimega": {
+    "name": "Jirachi-Mega",
+    "types": [
+      "Steel",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 120,
+      "def": 120,
+      "spa": 120,
+      "spd": 120,
+      "spe": 120
+    },
+    "abilities": {
+      "0": "Clear Body"
+    },
+    "heightm": 0.6,
+    "weightkg": 2,
+    "evoType": "trade",
+    "requiredItem": "Jirachite",
+    "baseSpecies": "Jirachi",
+    "forme": "Mega",
+    "num": -1076,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "jynxmega": {
+    "name": "Jynx-Mega",
+    "types": [
+      "Ice",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 60,
+      "def": 65,
+      "spa": 135,
+      "spd": 115,
+      "spe": 115
+    },
+    "abilities": {
+      "0": "Magic Bounce"
+    },
+    "heightm": 1.7,
+    "weightkg": 60,
+    "evoType": "trade",
+    "requiredItem": "Jynxite",
+    "baseSpecies": "Jynx",
+    "forme": "Mega",
+    "num": -1077,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "laprasmega": {
+    "name": "Lapras-Mega",
+    "types": [
+      "Dragon",
+      "Ice"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 130,
+      "atk": 95,
+      "def": 110,
+      "spa": 105,
+      "spd": 135,
+      "spe": 60
+    },
+    "abilities": {
+      "0": "Liquid Voice"
+    },
+    "heightm": 4,
+    "weightkg": 350,
+    "evoType": "trade",
+    "requiredItem": "Laprasite",
+    "baseSpecies": "Lapras",
+    "forme": "Mega",
+    "num": -1078,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ludicolomega": {
+    "name": "Ludicolo-Mega",
+    "types": [
+      "Water",
+      "Grass"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 70,
+      "def": 80,
+      "spa": 130,
+      "spd": 120,
+      "spe": 100
+    },
+    "abilities": {
+      "0": "Dancer"
+    },
+    "heightm": 1.5,
+    "weightkg": 65,
+    "evoType": "trade",
+    "requiredItem": "Ludicolite",
+    "baseSpecies": "Ludicolo",
+    "forme": "Mega",
+    "num": -1079,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "mewtwomegaa": {
+    "name": "Mewtwo-Mega-A",
+    "types": [
+      "Psychic",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 106,
+      "atk": 110,
+      "def": 110,
+      "spa": 184,
+      "spd": 110,
+      "spe": 160
+    },
+    "abilities": {
+      "0": "Toxify"
+    },
+    "heightm": 2.5,
+    "weightkg": 150,
+    "evoType": "trade",
+    "requiredItem": "Mewtwonite A",
+    "baseSpecies": "Mewtwo",
+    "forme": "Mega",
+    "num": -1080,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "miloticmega": {
+    "name": "Milotic-Mega",
+    "types": [
+      "Water",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 95,
+      "atk": 70,
+      "def": 99,
+      "spa": 130,
+      "spd": 155,
+      "spe": 91
+    },
+    "abilities": {
+      "0": "Multiscale"
+    },
+    "heightm": 8,
+    "weightkg": 200,
+    "evoType": "trade",
+    "requiredItem": "Miloticite",
+    "baseSpecies": "Milotic",
+    "forme": "Mega",
+    "num": -1082,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "noctowlmega": {
+    "name": "Noctowl-Mega",
+    "types": [
+      "Ghost",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 65,
+      "def": 60,
+      "spa": 116,
+      "spd": 116,
+      "spe": 95
+    },
+    "abilities": {
+      "0": "Shadow Tag"
+    },
+    "heightm": 1.8,
+    "weightkg": 55,
+    "evoType": "trade",
+    "requiredItem": "Noctowlite",
+    "baseSpecies": "Noctowl",
+    "forme": "Mega",
+    "num": -1083,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "shiftrymega": {
+    "name": "Shiftry-Mega",
+    "types": [
+      "Grass",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 140,
+      "def": 70,
+      "spa": 95,
+      "spd": 70,
+      "spe": 115
+    },
+    "abilities": {
+      "0": "Wind Rider"
+    },
+    "heightm": 1.5,
+    "weightkg": 65,
+    "evoType": "trade",
+    "requiredItem": "Shiftrite",
+    "baseSpecies": "Shiftry",
+    "forme": "Mega",
+    "num": -1084,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "sudowoodomega": {
+    "name": "Sudowoodo-Mega",
+    "types": [
+      "Rock",
+      "Ice"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 170,
+      "def": 135,
+      "spa": 30,
+      "spd": 75,
+      "spe": 30
+    },
+    "abilities": {
+      "0": "Refrigerate"
+    },
+    "heightm": 1.5,
+    "weightkg": 45,
+    "evoType": "trade",
+    "requiredItem": "Sudowoodite",
+    "baseSpecies": "Sudowoodo",
+    "forme": "Mega",
+    "num": -1086,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tinkatonmega": {
+    "name": "Tinkaton-Mega",
+    "types": [
+      "Fairy",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 115,
+      "def": 97,
+      "spa": 70,
+      "spd": 135,
+      "spe": 104
+    },
+    "abilities": {
+      "0": "Steelworker"
+    },
+    "heightm": 1,
+    "weightkg": 130,
+    "evoType": "trade",
+    "requiredItem": "Tinkatonite",
+    "baseSpecies": "Tinkaton",
+    "forme": "Mega",
+    "num": -1087,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "victreebelmega": {
+    "name": "Victreebel-Mega",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 135,
+      "def": 75,
+      "spa": 125,
+      "spd": 75,
+      "spe": 100
+    },
+    "abilities": {
+      "0": "Stench"
+    },
+    "heightm": 2,
+    "weightkg": 40,
+    "evoType": "trade",
+    "requiredItem": "Victreebelite",
+    "baseSpecies": "Victreebel",
+    "forme": "Mega",
+    "num": -1088,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "dashinghammer": {
+    "name": "Dashing Hammer",
+    "types": [
+      "Rock",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 97,
+      "atk": 137,
+      "def": 95,
+      "spa": 77,
+      "spd": 77,
+      "spe": 107
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 3,
+    "weightkg": 450,
+    "evoType": "trade",
+    "num": -1089,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "razorspine": {
+    "name": "Razor Spine",
+    "types": [
+      "Steel",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 93,
+      "atk": 125,
+      "def": 101,
+      "spa": 73,
+      "spd": 73,
+      "spe": 125
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 2.3,
+    "weightkg": 320,
+    "evoType": "trade",
+    "num": -1090,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "howlingflare": {
+    "name": "Howling Flare",
+    "types": [
+      "Grass",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 109,
+      "atk": 111,
+      "def": 73,
+      "spa": 81,
+      "spd": 83,
+      "spe": 133
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 1.3,
+    "weightkg": 100,
+    "evoType": "trade",
+    "num": -1091,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "risinghorn": {
+    "name": "Rising Horn",
+    "types": [
+      "Water",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 121,
+      "atk": 81,
+      "def": 91,
+      "spa": 129,
+      "spd": 97,
+      "spe": 71
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 2.5,
+    "weightkg": 345,
+    "evoType": "trade",
+    "num": -1092,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironblaze": {
+    "name": "Iron Blaze",
+    "types": [
+      "Fire",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 120,
+      "atk": 120,
+      "def": 104,
+      "spa": 84,
+      "spd": 60,
+      "spe": 102
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 3.2,
+    "weightkg": 400,
+    "evoType": "trade",
+    "num": -1093,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironmirage": {
+    "name": "Iron Mirage",
+    "types": [
+      "Electric",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 144,
+      "atk": 72,
+      "def": 60,
+      "spa": 126,
+      "spd": 130,
+      "spe": 58
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 4,
+    "weightkg": 270,
+    "evoType": "trade",
+    "num": -1094,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironphantom": {
+    "name": "Iron Phantom",
+    "types": [
+      "Water",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 94,
+      "atk": 92,
+      "def": 58,
+      "spa": 114,
+      "spd": 96,
+      "spe": 136
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 1.7,
+    "weightkg": 120,
+    "evoType": "trade",
+    "num": -1095,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "irondrill": {
+    "name": "Iron Drill",
+    "types": [
+      "Grass",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 62,
+      "atk": 144,
+      "def": 122,
+      "spa": 78,
+      "spd": 78,
+      "spe": 106
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 1.3,
+    "weightkg": 180,
+    "evoType": "trade",
+    "num": -1096,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "irongear": {
+    "name": "Iron Gear",
+    "types": [
+      "Psychic",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 64,
+      "atk": 96,
+      "def": 108,
+      "spa": 128,
+      "spd": 84,
+      "spe": 110
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 1,
+    "weightkg": 100,
+    "evoType": "trade",
+    "num": -1097,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironsaw": {
+    "name": "Iron Saw",
+    "types": [
+      "Electric",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 82,
+      "atk": 112,
+      "def": 74,
+      "spa": 106,
+      "spd": 78,
+      "spe": 138
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 1,
+    "weightkg": 90,
+    "evoType": "trade",
+    "num": -1098,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironspike": {
+    "name": "Iron Spike",
+    "types": [
+      "Water",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 90,
+      "def": 100,
+      "spa": 102,
+      "spd": 112,
+      "spe": 86
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 1.2,
+    "weightkg": 130,
+    "evoType": "trade",
+    "num": -1099,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironmask": {
+    "name": "Iron Mask",
+    "types": [
+      "Flying",
+      "Electric"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 110,
+      "atk": 130,
+      "def": 80,
+      "spa": 170,
+      "spd": 70,
+      "spe": 110
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 12,
+    "weightkg": 1000,
+    "evoType": "trade",
+    "num": -1100,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "soaringhalo": {
+    "name": "Soaring Halo",
+    "types": [
+      "Dragon",
+      "Rock"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 95,
+      "atk": 175,
+      "def": 71,
+      "spa": 127,
+      "spd": 95,
+      "spe": 107
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 12,
+    "weightkg": 1150,
+    "evoType": "trade",
+    "num": -1101,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironobliviontype1": {
+    "name": "Iron Oblivion-Type-1",
+    "types": [
+      "Water",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 110,
+      "atk": 140,
+      "def": 60,
+      "spa": 140,
+      "spd": 60,
+      "spe": 140
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 4,
+    "weightkg": 750,
+    "evoType": "trade",
+    "num": -1102,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironobliviontype2": {
+    "name": "Iron Oblivion-Type-2",
+    "types": [
+      "Fire",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 160,
+      "atk": 160,
+      "def": 66,
+      "spa": 90,
+      "spd": 60,
+      "spe": 114
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 6,
+    "weightkg": 800,
+    "evoType": "trade",
+    "num": -1103,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironobliviontype3": {
+    "name": "Iron Oblivion-Type-3",
+    "types": [
+      "Electric",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 200,
+      "atk": 98,
+      "def": 72,
+      "spa": 128,
+      "spd": 82,
+      "spe": 70
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 8,
+    "weightkg": 1200,
+    "evoType": "trade",
+    "num": -1104,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironyfriends": {
+    "name": "Irony Friends",
+    "types": [
+      "Psychic",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 122,
+      "atk": 82,
+      "def": 116,
+      "spa": 110,
+      "spd": 116,
+      "spe": 44
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 1,
+    "weightkg": 70,
+    "evoType": "trade",
+    "num": -1105,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "jaggedmaw": {
+    "name": "Jagged Maw",
+    "types": [
+      "Grass",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 101,
+      "atk": 127,
+      "def": 91,
+      "spa": 87,
+      "spd": 91,
+      "spe": 73
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 2,
+    "weightkg": 200,
+    "evoType": "trade",
+    "num": -1106,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "mightyspine": {
+    "name": "Mighty Spine",
+    "types": [
+      "Fighting",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 109,
+      "atk": 103,
+      "def": 95,
+      "spa": 77,
+      "spd": 95,
+      "spe": 91
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 2.3,
+    "weightkg": 210,
+    "evoType": "trade",
+    "num": -1107,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "slicingsear": {
+    "name": "Slicing Sear",
+    "types": [
+      "Normal",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 113,
+      "atk": 113,
+      "def": 77,
+      "spa": 77,
+      "spd": 77,
+      "spe": 113
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 2,
+    "weightkg": 100,
+    "evoType": "trade",
+    "num": -1108,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "sneakfist": {
+    "name": "Sneak Fist",
+    "types": [
+      "Grass",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 135,
+      "atk": 135,
+      "def": 135,
+      "spa": 55,
+      "spd": 55,
+      "spe": 55
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 5,
+    "weightkg": 300,
+    "evoType": "trade",
+    "num": -1109,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "titanbeak": {
+    "name": "Titan Beak",
+    "types": [
+      "Ice",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 177,
+      "atk": 133,
+      "def": 61,
+      "spa": 91,
+      "spd": 55,
+      "spe": 53
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 4,
+    "weightkg": 500,
+    "evoType": "trade",
+    "num": -1110,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "toxingland": {
+    "name": "Toxin Gland",
+    "types": [
+      "Water",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 99,
+      "atk": 111,
+      "def": 65,
+      "spa": 129,
+      "spd": 47,
+      "spe": 119
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 6,
+    "weightkg": 110,
+    "evoType": "trade",
+    "num": -1111,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "venommatrix": {
+    "name": "Venom Matrix",
+    "types": [
+      "Steel",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 61,
+      "atk": 111,
+      "def": 98,
+      "spa": 91,
+      "spd": 100,
+      "spe": 109
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 1.2,
+    "weightkg": 210,
+    "evoType": "trade",
+    "num": -1112,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "voidarm": {
+    "name": "Void Arm",
+    "types": [
+      "Dragon",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 77,
+      "atk": 129,
+      "def": 129,
+      "spa": 65,
+      "spd": 63,
+      "spe": 107
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 3,
+    "weightkg": 500,
+    "evoType": "trade",
+    "num": -1113,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wavingtongue": {
+    "name": "Waving Tongue",
+    "types": [
+      "Ghost",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 133,
+      "atk": 65,
+      "def": 99,
+      "spa": 81,
+      "spd": 99,
+      "spe": 93
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 1,
+    "weightkg": 85,
+    "evoType": "trade",
+    "num": -1114,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "annihilapechained": {
+    "name": "Annihilape-Chained",
+    "types": [
+      "Poison",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 115,
+      "atk": 125,
+      "def": 80,
+      "spa": 50,
+      "spd": 90,
+      "spe": 95
+    },
+    "abilities": {
+      "0": "Toxic Chain",
+      "H": "Defiant"
+    },
+    "heightm": 1.2,
+    "weightkg": 56,
+    "evoType": "trade",
+    "num": -1115,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "blazikenchained": {
+    "name": "Blaziken-Chained",
+    "types": [
+      "Poison",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 125,
+      "def": 70,
+      "spa": 115,
+      "spd": 70,
+      "spe": 90
+    },
+    "abilities": {
+      "0": "Toxic Chain",
+      "H": "Speed Boost"
+    },
+    "heightm": 2,
+    "weightkg": 54,
+    "evoType": "trade",
+    "num": -1116,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "lucariochained": {
+    "name": "Lucario-Chained",
+    "types": [
+      "Poison",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 115,
+      "def": 70,
+      "spa": 115,
+      "spd": 70,
+      "spe": 100
+    },
+    "abilities": {
+      "0": "Toxic Chain",
+      "H": "Justified"
+    },
+    "heightm": 1.2,
+    "weightkg": 54,
+    "evoType": "trade",
+    "num": -1117,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "queendra": {
+    "name": "Queendra",
+    "types": [
+      "Ice",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 95,
+      "def": 95,
+      "spa": 95,
+      "spd": 95,
+      "spe": 95
+    },
+    "abilities": {
+      "0": "Slush Rush",
+      "1": "Sniper",
+      "H": "Clear Body"
+    },
+    "heightm": 1.8,
+    "weightkg": 152,
+    "prevo": "Seadra",
+    "evoType": "trade",
+    "num": -1118,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "queendramega": {
+    "name": "Queendra-Mega",
+    "types": [
+      "Ice",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 125,
+      "def": 100,
+      "spa": 125,
+      "spd": 100,
+      "spe": 125
+    },
+    "abilities": {
+      "0": "Infiltrator"
+    },
+    "heightm": 2.6,
+    "weightkg": 200,
+    "evoType": "trade",
+    "requiredItem": "Queendrite",
+    "baseSpecies": "Queendra",
+    "forme": "Mega",
+    "num": -1119,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "queendradark": {
+    "name": "Queendra-Dark",
+    "types": [
+      "Ice",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 95,
+      "def": 95,
+      "spa": 95,
+      "spd": 95,
+      "spe": 90
+    },
+    "abilities": {
+      "0": "Slush Rush",
+      "1": "Sniper",
+      "H": "Poison Touch"
+    },
+    "heightm": 1.8,
+    "weightkg": 152,
+    "prevo": "Seadra",
+    "evoType": "trade",
+    "num": -1120,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "queendradarkmega": {
+    "name": "Queendra-Dark-Mega",
+    "types": [
+      "Ice",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 130,
+      "def": 100,
+      "spa": 130,
+      "spd": 100,
+      "spe": 110
+    },
+    "abilities": {
+      "0": "Steadfast"
+    },
+    "heightm": 2.3,
+    "weightkg": 180,
+    "evoType": "trade",
+    "requiredItem": "Queendrite Dark",
+    "baseSpecies": "Queendra-Dark",
+    "forme": "Mega",
+    "num": -1121,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "eelektrosshell": {
+    "name": "Eelektross-Hell",
+    "types": [
+      "Dark",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 115,
+      "def": 80,
+      "spa": 105,
+      "spd": 80,
+      "spe": 50
+    },
+    "abilities": {
+      "0": "Levitate"
+    },
+    "heightm": 2.1,
+    "weightkg": 80,
+    "evoType": "trade",
+    "num": -1122,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "eelektrossmegahell": {
+    "name": "Eelektross-Mega-Hell",
+    "types": [
+      "Dragon",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 135,
+      "def": 105,
+      "spa": 125,
+      "spd": 105,
+      "spe": 60
+    },
+    "abilities": {
+      "0": "Regenerator"
+    },
+    "heightm": 4,
+    "weightkg": 120,
+    "evoType": "trade",
+    "requiredItem": "Eelektrossite HELL",
+    "baseSpecies": "Eelektross-Hell",
+    "forme": "Mega",
+    "num": -1123,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "abyluxneon": {
+    "name": "Abyluxneon",
+    "types": [
+      "Water",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 83,
+      "atk": 73,
+      "def": 76,
+      "spa": 89,
+      "spd": 98,
+      "spe": 101
+    },
+    "abilities": {
+      "0": "Swift Swim",
+      "1": "Storm Drain",
+      "H": "Water Veil"
+    },
+    "heightm": 2.2,
+    "weightkg": 40,
+    "prevo": "Lumineon",
+    "evoType": "trade",
+    "num": -1124,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "dittofreakyfusion": {
+    "name": "Ditto-Freaky-Fusion",
+    "types": [
+      "Normal",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 48,
+      "atk": 48,
+      "def": 48,
+      "spa": 48,
+      "spd": 48,
+      "spe": 48
+    },
+    "abilities": {
+      "0": "Limber",
+      "H": "Imposter"
+    },
+    "heightm": 0.3,
+    "weightkg": 4,
+    "evoType": "trade",
+    "num": -1125,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "aggronfreakyfusion": {
+    "name": "Aggron-Freaky-Fusion",
+    "types": [
+      "Steel",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 98,
+      "def": 135,
+      "spa": 80,
+      "spd": 93,
+      "spe": 70
+    },
+    "abilities": {
+      "0": "Sturdy",
+      "1": "Rock Head",
+      "H": "Berserk"
+    },
+    "heightm": 2.2,
+    "weightkg": 395,
+    "evoType": "trade",
+    "num": -1126,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "cinderacefreakyfusion": {
+    "name": "Cinderace-Freaky-Fusion",
+    "types": [
+      "Fire",
+      "Grass"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 73,
+      "atk": 113,
+      "def": 103,
+      "spa": 63,
+      "spd": 71,
+      "spe": 108
+    },
+    "abilities": {
+      "0": "Blaze",
+      "1": "Libero",
+      "H": "Chlorophyll"
+    },
+    "heightm": 1.4,
+    "weightkg": 33,
+    "evoType": "trade",
+    "num": -1127,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "salazzlefreakyfusion": {
+    "name": "Salazzle-Freaky-Fusion",
+    "types": [
+      "Poison",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 82,
+      "atk": 65,
+      "def": 63,
+      "spa": 111,
+      "spd": 95,
+      "spe": 89
+    },
+    "abilities": {
+      "0": "Corrosion",
+      "1": "Cute Charm",
+      "H": "Pixilate"
+    },
+    "heightm": 1.2,
+    "weightkg": 48.9,
+    "evoType": "trade",
+    "num": -1128,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tangrowthfreakyfusion": {
+    "name": "Tangrowth-Freaky-Fusion",
+    "types": [
+      "Normal",
+      "Grass"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 87,
+      "atk": 108,
+      "def": 93,
+      "spa": 85,
+      "spd": 55,
+      "spe": 70
+    },
+    "abilities": {
+      "0": "Regenerator",
+      "1": "Immunity",
+      "H": "Toxic Boost"
+    },
+    "heightm": 2,
+    "weightkg": 128.6,
+    "evoType": "trade",
+    "num": -1129,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "altariadollplush": {
+    "name": "Altaria-Doll-Plush",
+    "types": [
+      "Ghost",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 70,
+      "def": 90,
+      "spa": 70,
+      "spd": 105,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Natural Cure",
+      "1": "Fluffy",
+      "H": "Cloud Nine"
+    },
+    "heightm": 1.1,
+    "weightkg": 10,
+    "evoType": "trade",
+    "num": -1130,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "gengardollplush": {
+    "name": "Gengar-Doll-Plush",
+    "types": [
+      "Normal",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 65,
+      "def": 60,
+      "spa": 130,
+      "spd": 75,
+      "spe": 110
+    },
+    "abilities": {
+      "0": "Cursed Body",
+      "1": "Fluffy"
+    },
+    "heightm": 1.5,
+    "weightkg": 20.2,
+    "evoType": "trade",
+    "num": -1131,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "kangaskhandollplush": {
+    "name": "Kangaskhan-Doll-Plush",
+    "types": [
+      "Ghost",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 105,
+      "atk": 95,
+      "def": 80,
+      "spa": 40,
+      "spd": 80,
+      "spe": 90
+    },
+    "abilities": {
+      "0": "Scrappy",
+      "1": "Fluffy",
+      "H": "Inner Focus"
+    },
+    "heightm": 2.2,
+    "weightkg": 40,
+    "evoType": "trade",
+    "num": -1132,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "miloticdollplush": {
+    "name": "Milotic-Doll-Plush",
+    "types": [
+      "Ghost",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 95,
+      "atk": 60,
+      "def": 79,
+      "spa": 100,
+      "spd": 125,
+      "spe": 81
+    },
+    "abilities": {
+      "0": "Marvel Scale",
+      "1": "Fluffy",
+      "H": "Competitive"
+    },
+    "heightm": 6.2,
+    "weightkg": 81,
+    "evoType": "trade",
+    "num": -1133,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "dittodollplush": {
+    "name": "Ditto-Doll-Plush",
+    "types": [
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 48,
+      "atk": 48,
+      "def": 48,
+      "spa": 48,
+      "spd": 48,
+      "spe": 48
+    },
+    "abilities": {
+      "0": "Fluffy",
+      "H": "Imposter"
+    },
+    "heightm": 0.3,
+    "weightkg": 2,
+    "evoType": "trade",
+    "num": -1134,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "spritzeehisui": {
+    "name": "Spritzee-Hisui",
+    "types": [
+      "Poison",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 78,
+      "atk": 52,
+      "def": 60,
+      "spa": 63,
+      "spd": 63,
+      "spe": 23
+    },
+    "abilities": {
+      "0": "Healer",
+      "H": "Neutralizing Gas"
+    },
+    "heightm": 0.2,
+    "weightkg": 0.5,
+    "evoType": "trade",
+    "num": -1135,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "aromatissehisui": {
+    "name": "Aromatisse-Hisui",
+    "types": [
+      "Poison",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 101,
+      "atk": 72,
+      "def": 72,
+      "spa": 99,
+      "spd": 89,
+      "spe": 29
+    },
+    "abilities": {
+      "0": "Healer",
+      "H": "Neutralizing Gas"
+    },
+    "heightm": 0.8,
+    "weightkg": 15.5,
+    "prevo": "Spritzee-Hisui",
+    "evoType": "trade",
+    "num": -1136,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "bergmitesinnoh": {
+    "name": "Bergmite-Sinnoh",
+    "types": [
+      "Ice",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 55,
+      "atk": 69,
+      "def": 35,
+      "spa": 32,
+      "spd": 85,
+      "spe": 28
+    },
+    "abilities": {
+      "0": "Own Tempo",
+      "1": "Flame Body",
+      "H": "Sturdy"
+    },
+    "heightm": 1,
+    "weightkg": 75,
+    "evoType": "trade",
+    "num": -1137,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "avalurd": {
+    "name": "Avalurd",
+    "types": [
+      "Ice",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 95,
+      "atk": 184,
+      "def": 46,
+      "spa": 44,
+      "spd": 117,
+      "spe": 28
+    },
+    "abilities": {
+      "0": "Own Tempo",
+      "1": "Flame Body",
+      "H": "Sturdy"
+    },
+    "heightm": 3,
+    "weightkg": 400,
+    "prevo": "Bergmite-Sinnoh",
+    "evoType": "trade",
+    "num": -1138,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "bihantink": {
+    "name": "Bihantink",
+    "types": [
+      "Steel",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 64,
+      "def": 45,
+      "spa": 36,
+      "spd": 45,
+      "spe": 58
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.4,
+    "weightkg": 8,
+    "evoType": "trade",
+    "num": -1139,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "bihantuff": {
+    "name": "Bihantuff",
+    "types": [
+      "Steel",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 85,
+      "def": 55,
+      "spa": 45,
+      "spd": 55,
+      "spe": 78
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.7,
+    "weightkg": 59.1,
+    "prevo": "Bihantink",
+    "evoType": "trade",
+    "num": -1140,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "bihanton": {
+    "name": "Bihanton",
+    "types": [
+      "Steel",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 105,
+      "def": 77,
+      "spa": 70,
+      "spd": 75,
+      "spe": 94
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.7,
+    "weightkg": 112.8,
+    "prevo": "Bihantuff",
+    "evoType": "trade",
+    "num": -1141,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tinkatinkflight": {
+    "name": "Tinkatink-Flight",
+    "types": [
+      "Steel",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 45,
+      "def": 45,
+      "spa": 35,
+      "spd": 64,
+      "spe": 58
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.4,
+    "weightkg": 8.9,
+    "evoType": "trade",
+    "num": -1142,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tinkatuffflight": {
+    "name": "Tinkatuff-Flight",
+    "types": [
+      "Steel",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 55,
+      "def": 55,
+      "spa": 45,
+      "spd": 85,
+      "spe": 78
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.7,
+    "weightkg": 59.1,
+    "prevo": "Tinkatink-Flight",
+    "evoType": "trade",
+    "num": -1143,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tinkatonflight": {
+    "name": "Tinkaton-Flight",
+    "types": [
+      "Steel",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 75,
+      "def": 77,
+      "spa": 70,
+      "spd": 105,
+      "spe": 94
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.7,
+    "weightkg": 112.8,
+    "prevo": "Tinkatuff-Flight",
+    "evoType": "trade",
+    "num": -1144,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tinkatinkscissor": {
+    "name": "Tinkatink-Scissor",
+    "types": [
+      "Steel",
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 45,
+      "def": 45,
+      "spa": 35,
+      "spd": 64,
+      "spe": 58
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.4,
+    "weightkg": 8.9,
+    "evoType": "trade",
+    "num": -1145,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tinkatuffscissor": {
+    "name": "Tinkatuff-Scissor",
+    "types": [
+      "Steel",
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 55,
+      "def": 55,
+      "spa": 45,
+      "spd": 85,
+      "spe": 78
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.7,
+    "weightkg": 59.1,
+    "prevo": "Tinkatink-Scissor",
+    "evoType": "trade",
+    "num": -1146,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tinkatonscissor": {
+    "name": "Tinkaton-Scissor",
+    "types": [
+      "Steel",
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 75,
+      "def": 77,
+      "spa": 70,
+      "spd": 105,
+      "spe": 94
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.7,
+    "weightkg": 112.8,
+    "prevo": "Tinkatuff-Scissor",
+    "evoType": "trade",
+    "num": -1147,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tinkatinkscythe": {
+    "name": "Tinkatink-Scythe",
+    "types": [
+      "Steel",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 45,
+      "def": 45,
+      "spa": 35,
+      "spd": 64,
+      "spe": 58
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.4,
+    "weightkg": 8.9,
+    "evoType": "trade",
+    "num": -1148,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tinkatuffscythe": {
+    "name": "Tinkatuff-Scythe",
+    "types": [
+      "Steel",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 55,
+      "def": 55,
+      "spa": 45,
+      "spd": 85,
+      "spe": 78
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.7,
+    "weightkg": 59.1,
+    "prevo": "Tinkatink-Scythe",
+    "evoType": "trade",
+    "num": -1149,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tinkatonscythe": {
+    "name": "Tinkaton-Scythe",
+    "types": [
+      "Steel",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 75,
+      "def": 77,
+      "spa": 70,
+      "spd": 105,
+      "spe": 94
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.7,
+    "weightkg": 112.8,
+    "prevo": "Tinkatuff-Scythe",
+    "evoType": "trade",
+    "num": -1150,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tinkatinkseamaiden": {
+    "name": "Tinkatink-Sea-Maiden",
+    "types": [
+      "Steel",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 45,
+      "def": 45,
+      "spa": 35,
+      "spd": 64,
+      "spe": 58
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.4,
+    "weightkg": 8.9,
+    "evoType": "trade",
+    "num": -1151,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tinkatuffseamaiden": {
+    "name": "Tinkatuff-Sea-Maiden",
+    "types": [
+      "Steel",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 55,
+      "def": 55,
+      "spa": 45,
+      "spd": 85,
+      "spe": 78
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.7,
+    "weightkg": 59.1,
+    "prevo": "Tinkatink-Sea-Maiden",
+    "evoType": "trade",
+    "num": -1152,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tinkatonseamaiden": {
+    "name": "Tinkaton-Sea-Maiden",
+    "types": [
+      "Steel",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 75,
+      "def": 77,
+      "spa": 70,
+      "spd": 105,
+      "spe": 94
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.7,
+    "weightkg": 112.8,
+    "prevo": "Tinkatuff-Sea-Maiden",
+    "evoType": "trade",
+    "num": -1153,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tinkatinkspectre": {
+    "name": "Tinkatink-Spectre",
+    "types": [
+      "Steel",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 45,
+      "def": 45,
+      "spa": 35,
+      "spd": 64,
+      "spe": 58
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.4,
+    "weightkg": 8.9,
+    "evoType": "trade",
+    "num": -1154,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tinkatuffspectre": {
+    "name": "Tinkatuff-Spectre",
+    "types": [
+      "Steel",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 55,
+      "def": 55,
+      "spa": 45,
+      "spd": 85,
+      "spe": 78
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.7,
+    "weightkg": 59.1,
+    "prevo": "Tinkatink-Spectre",
+    "evoType": "trade",
+    "num": -1155,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tinkatonspectre": {
+    "name": "Tinkaton-Spectre",
+    "types": [
+      "Steel",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 75,
+      "def": 77,
+      "spa": 70,
+      "spd": 105,
+      "spe": 94
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Own Tempo",
+      "H": "Pickpocket"
+    },
+    "heightm": 0.7,
+    "weightkg": 112.8,
+    "prevo": "Tinkatuff-Spectre",
+    "evoType": "trade",
+    "num": -1157,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "blazikenkalos": {
+    "name": "Blaziken-Kalos",
+    "types": [
+      "Fire",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 120,
+      "def": 70,
+      "spa": 100,
+      "spd": 70,
+      "spe": 90
+    },
+    "abilities": {
+      "0": "Blaze",
+      "H": "Unburden"
+    },
+    "heightm": 1.9,
+    "weightkg": 52,
+    "prevo": "Combusken",
+    "evoType": "trade",
+    "num": -1157,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "empoleonkalos": {
+    "name": "Empoleon-Kalos",
+    "types": [
+      "Water",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 84,
+      "atk": 111,
+      "def": 88,
+      "spa": 86,
+      "spd": 91,
+      "spe": 70
+    },
+    "abilities": {
+      "0": "Torrent",
+      "H": "Defiant"
+    },
+    "heightm": 1.7,
+    "weightkg": 84.5,
+    "prevo": "Prinplup",
+    "evoType": "trade",
+    "num": -1158,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "serperiorkalos": {
+    "name": "Serperior-Kalos",
+    "types": [
+      "Grass",
+      "Ice"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 75,
+      "def": 90,
+      "spa": 75,
+      "spd": 90,
+      "spe": 123
+    },
+    "abilities": {
+      "0": "Overgrow",
+      "H": "Filter"
+    },
+    "heightm": 3.3,
+    "weightkg": 63,
+    "prevo": "Servine",
+    "evoType": "trade",
+    "num": -1159,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "bobwefest": {
+    "name": "Bobwefest",
+    "types": [
+      "Psychic",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 220,
+      "atk": 43,
+      "def": 73,
+      "spa": 43,
+      "spd": 73,
+      "spe": 43
+    },
+    "abilities": {
+      "0": "Shadow Tag",
+      "H": "Telepathy"
+    },
+    "heightm": 2,
+    "weightkg": 50,
+    "prevo": "Wobbuffet",
+    "evoType": "trade",
+    "num": -1160,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "bronzolord": {
+    "name": "Bronzolord",
+    "types": [
+      "Steel",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 77,
+      "atk": 119,
+      "def": 138,
+      "spa": 89,
+      "spd": 138,
+      "spe": 39
+    },
+    "abilities": {
+      "0": "Levitate",
+      "1": "Heatproof",
+      "H": "Heavy Metal"
+    },
+    "heightm": 2,
+    "weightkg": 240,
+    "prevo": "Bronzong",
+    "evoType": "trade",
+    "num": -1161,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "bunearyunova": {
+    "name": "Buneary-Unova",
+    "types": [
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 55,
+      "atk": 66,
+      "def": 44,
+      "spa": 44,
+      "spd": 56,
+      "spe": 85
+    },
+    "abilities": {
+      "0": "Run Away",
+      "1": "Klutz",
+      "H": "Limber"
+    },
+    "heightm": 0.4,
+    "weightkg": 5.5,
+    "evoType": "trade",
+    "num": -1162,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "lopunnyunova": {
+    "name": "Lopunny-Unova",
+    "types": [
+      "Dark",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 76,
+      "def": 84,
+      "spa": 54,
+      "spd": 96,
+      "spe": 105
+    },
+    "abilities": {
+      "0": "Cute Charm",
+      "1": "Prankster",
+      "H": "Limber"
+    },
+    "heightm": 1.2,
+    "weightkg": 33.3,
+    "prevo": "Buneary-Unova",
+    "evoType": "trade",
+    "num": -1163,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "burmycoal": {
+    "name": "Burmy-Coal",
+    "types": [
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 40,
+      "atk": 29,
+      "def": 45,
+      "spa": 29,
+      "spd": 45,
+      "spe": 36
+    },
+    "abilities": {
+      "0": "Shed Skin",
+      "H": "Overcoat"
+    },
+    "heightm": 0.2,
+    "weightkg": 3.4,
+    "evoType": "trade",
+    "num": -1164,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormadamcoal": {
+    "name": "Wormadam-Coal",
+    "types": [
+      "Bug",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 105,
+      "def": 79,
+      "spa": 85,
+      "spd": 59,
+      "spe": 36
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 0.5,
+    "weightkg": 6.5,
+    "prevo": "Burmy-Coal",
+    "evoType": "trade",
+    "num": -1165,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormatroncoal": {
+    "name": "Wormatron-Coal",
+    "types": [
+      "Bug",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 125,
+      "def": 89,
+      "spa": 105,
+      "spd": 69,
+      "spe": 46
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 1.3,
+    "weightkg": 15,
+    "prevo": "Wormadam-Coal",
+    "evoType": "trade",
+    "num": -1166,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "burmycopper": {
+    "name": "Burmy-Copper",
+    "types": [
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 40,
+      "atk": 29,
+      "def": 45,
+      "spa": 29,
+      "spd": 45,
+      "spe": 36
+    },
+    "abilities": {
+      "0": "Shed Skin",
+      "H": "Overcoat"
+    },
+    "heightm": 0.2,
+    "weightkg": 3.4,
+    "evoType": "trade",
+    "num": -1167,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormadamcopper": {
+    "name": "Wormadam-Copper",
+    "types": [
+      "Bug",
+      "Electric"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 79,
+      "def": 59,
+      "spa": 105,
+      "spd": 85,
+      "spe": 36
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 0.5,
+    "weightkg": 6.5,
+    "prevo": "Burmy-Copper",
+    "evoType": "trade",
+    "num": -1168,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormatroncopper": {
+    "name": "Wormatron-Copper",
+    "types": [
+      "Bug",
+      "Electric"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 89,
+      "def": 69,
+      "spa": 125,
+      "spd": 105,
+      "spe": 46
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 1.3,
+    "weightkg": 15,
+    "prevo": "Wormadam-Copper",
+    "evoType": "trade",
+    "num": -1169,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "burmygossamer": {
+    "name": "Burmy-Gossamer",
+    "types": [
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 40,
+      "atk": 29,
+      "def": 45,
+      "spa": 29,
+      "spd": 45,
+      "spe": 36
+    },
+    "abilities": {
+      "0": "Shed Skin",
+      "H": "Overcoat"
+    },
+    "heightm": 0.2,
+    "weightkg": 3.4,
+    "evoType": "trade",
+    "num": -1170,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormadamgossamer": {
+    "name": "Wormadam-Gossamer",
+    "types": [
+      "Bug",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 79,
+      "def": 59,
+      "spa": 85,
+      "spd": 105,
+      "spe": 36
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 0.5,
+    "weightkg": 6.5,
+    "prevo": "Burmy-Gossamer",
+    "evoType": "trade",
+    "num": -1171,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormatrongossamer": {
+    "name": "Wormatron-Gossamer",
+    "types": [
+      "Bug",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 89,
+      "def": 69,
+      "spa": 105,
+      "spd": 125,
+      "spe": 46
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 1.3,
+    "weightkg": 15,
+    "prevo": "Wormadam-Gossamer",
+    "evoType": "trade",
+    "num": -1172,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "burmynocoat": {
+    "name": "Burmy-No-Coat",
+    "types": [
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 40,
+      "atk": 29,
+      "def": 35,
+      "spa": 29,
+      "spd": 35,
+      "spe": 56
+    },
+    "abilities": {
+      "0": "Shed Skin",
+      "H": "Overcoat"
+    },
+    "heightm": 0.2,
+    "weightkg": 3.4,
+    "evoType": "trade",
+    "num": -1173,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormadamnocloak": {
+    "name": "Wormadam-No-Cloak",
+    "types": [
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 79,
+      "def": 39,
+      "spa": 105,
+      "spd": 65,
+      "spe": 76
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 0.5,
+    "weightkg": 6.5,
+    "prevo": "Burmy-No-Coat",
+    "evoType": "trade",
+    "num": -1174,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormatronnocloak": {
+    "name": "Wormatron-No-Cloak",
+    "types": [
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 89,
+      "def": 49,
+      "spa": 125,
+      "spd": 85,
+      "spe": 86
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 1.3,
+    "weightkg": 15,
+    "prevo": "Wormadam-No-Cloak",
+    "evoType": "trade",
+    "num": -1175,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "burmypixiedust": {
+    "name": "Burmy-Pixie-Dust",
+    "types": [
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 40,
+      "atk": 29,
+      "def": 45,
+      "spa": 29,
+      "spd": 45,
+      "spe": 36
+    },
+    "abilities": {
+      "0": "Shed Skin",
+      "H": "Overcoat"
+    },
+    "heightm": 0.2,
+    "weightkg": 3.4,
+    "evoType": "trade",
+    "num": -1176,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormadampixiedust": {
+    "name": "Wormadam-Pixie-Dust",
+    "types": [
+      "Bug",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 59,
+      "def": 105,
+      "spa": 85,
+      "spd": 79,
+      "spe": 36
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 0.5,
+    "weightkg": 6.5,
+    "prevo": "Burmy-Pixie-Dust",
+    "evoType": "trade",
+    "num": -1177,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormatronpixiedust": {
+    "name": "Wormatron-Pixie-Dust",
+    "types": [
+      "Bug",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 69,
+      "def": 125,
+      "spa": 105,
+      "spd": 89,
+      "spe": 46
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 1.3,
+    "weightkg": 15,
+    "prevo": "Wormadam-Pixie-Dust",
+    "evoType": "trade",
+    "num": -1178,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "burmyseaweed": {
+    "name": "Burmy-Seaweed",
+    "types": [
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 40,
+      "atk": 29,
+      "def": 45,
+      "spa": 29,
+      "spd": 45,
+      "spe": 36
+    },
+    "abilities": {
+      "0": "Shed Skin",
+      "H": "Overcoat"
+    },
+    "heightm": 0.2,
+    "weightkg": 3.4,
+    "evoType": "trade",
+    "num": -1179,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormadamseaweed": {
+    "name": "Wormadam-Seaweed",
+    "types": [
+      "Bug",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 79,
+      "def": 85,
+      "spa": 105,
+      "spd": 59,
+      "spe": 36
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 0.5,
+    "weightkg": 6.5,
+    "prevo": "Burmy-Seaweed",
+    "evoType": "trade",
+    "num": -1180,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormatronseaweed": {
+    "name": "Wormatron-Seaweed",
+    "types": [
+      "Bug",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 89,
+      "def": 105,
+      "spa": 125,
+      "spd": 69,
+      "spe": 46
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 1.3,
+    "weightkg": 15,
+    "prevo": "Wormadam-Seaweed",
+    "evoType": "trade",
+    "num": -1181,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "burmysnow": {
+    "name": "Burmy-Snow",
+    "types": [
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 40,
+      "atk": 29,
+      "def": 45,
+      "spa": 29,
+      "spd": 45,
+      "spe": 36
+    },
+    "abilities": {
+      "0": "Shed Skin",
+      "H": "Overcoat"
+    },
+    "heightm": 0.2,
+    "weightkg": 3.4,
+    "evoType": "trade",
+    "num": -1182,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormadamsnow": {
+    "name": "Wormadam-Snow",
+    "types": [
+      "Bug",
+      "Ice"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 79,
+      "def": 59,
+      "spa": 105,
+      "spd": 85,
+      "spe": 36
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 0.5,
+    "weightkg": 6.5,
+    "prevo": "Burmy-Snow",
+    "evoType": "trade",
+    "num": -1183,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormatronsnow": {
+    "name": "Wormatron-Snow",
+    "types": [
+      "Bug",
+      "Ice"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 89,
+      "def": 69,
+      "spa": 125,
+      "spd": 105,
+      "spe": 46
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 1.3,
+    "weightkg": 15,
+    "prevo": "Wormadam-Snow",
+    "evoType": "trade",
+    "num": -1184,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormatronplant": {
+    "name": "Wormatron-Plant",
+    "types": [
+      "Bug",
+      "Grass"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 69,
+      "def": 105,
+      "spa": 89,
+      "spd": 125,
+      "spe": 46
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 1.3,
+    "weightkg": 15,
+    "prevo": "Wormadam",
+    "evoType": "trade",
+    "num": -1185,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormatronsandy": {
+    "name": "Wormatron-Sandy",
+    "types": [
+      "Bug",
+      "Ground"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 89,
+      "def": 125,
+      "spa": 69,
+      "spd": 105,
+      "spe": 46
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 1.3,
+    "weightkg": 15,
+    "prevo": "Wormadam-Sandy",
+    "evoType": "trade",
+    "num": -1186,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wormatrontrash": {
+    "name": "Wormatron-Trash",
+    "types": [
+      "Bug",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 89,
+      "def": 105,
+      "spa": 89,
+      "spd": 105,
+      "spe": 46
+    },
+    "abilities": {
+      "0": "Anticipation",
+      "H": "Overcoat"
+    },
+    "heightm": 1.3,
+    "weightkg": 15,
+    "prevo": "Wormadam-Trash",
+    "evoType": "trade",
+    "num": -1187,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "snorlaxhell": {
+    "name": "Snorlax-Hell",
+    "types": [
+      "Ice",
+      "Ground"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 160,
+      "atk": 110,
+      "def": 65,
+      "spa": 65,
+      "spd": 110,
+      "spe": 30
+    },
+    "abilities": {
+      "0": "Thick Fat",
+      "1": "Cursed Body",
+      "H": "Refrigerate"
+    },
+    "heightm": 2.1,
+    "weightkg": 460,
+    "evoType": "trade",
+    "num": -1188,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "snorlaxhellmega": {
+    "name": "Snorlax-Hell-Mega",
+    "types": [
+      "Ice",
+      "Ground"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 160,
+      "atk": 147,
+      "def": 80,
+      "spa": 90,
+      "spd": 123,
+      "spe": 40
+    },
+    "abilities": {
+      "0": "Sheer Force"
+    },
+    "heightm": 3,
+    "weightkg": 930,
+    "evoType": "trade",
+    "requiredItem": "Snorlaxite HELL",
+    "baseSpecies": "Snorlax-HELL",
+    "forme": "Mega",
+    "num": -1189,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "carbinksea": {
+    "name": "Carbink-Sea",
+    "types": [
+      "Water",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 50,
+      "def": 150,
+      "spa": 50,
+      "spd": 150,
+      "spe": 50
+    },
+    "abilities": {
+      "0": "Clear Body",
+      "H": "Sturdy"
+    },
+    "heightm": 0.3,
+    "weightkg": 5.7,
+    "evoType": "trade",
+    "num": -1190,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "centiskorchcreativeink": {
+    "name": "Centiskorch-Creative-Ink",
+    "types": [
+      "Steel",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 115,
+      "def": 65,
+      "spa": 90,
+      "spd": 90,
+      "spe": 65
+    },
+    "abilities": {
+      "0": "Flash Fire",
+      "1": "Color Change",
+      "H": "Flame Body"
+    },
+    "heightm": 3,
+    "weightkg": 120,
+    "evoType": "trade",
+    "num": -1191,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "greninjacreativeink": {
+    "name": "Greninja-Creative-Ink",
+    "types": [
+      "Steel",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 72,
+      "atk": 95,
+      "def": 67,
+      "spa": 103,
+      "spd": 71,
+      "spe": 122
+    },
+    "abilities": {
+      "0": "Color Change",
+      "1": "Protean",
+      "H": "Battle Bond"
+    },
+    "heightm": 1.5,
+    "weightkg": 40,
+    "evoType": "trade",
+    "num": -1192,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "luxraycreativeink": {
+    "name": "Luxray-Creative-Ink",
+    "types": [
+      "Steel",
+      "Electric"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 120,
+      "def": 79,
+      "spa": 95,
+      "spd": 79,
+      "spe": 70
+    },
+    "abilities": {
+      "0": "Color Change",
+      "1": "Intimidate",
+      "H": "Guts"
+    },
+    "heightm": 1.4,
+    "weightkg": 42,
+    "evoType": "trade",
+    "num": -1193,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "staraptorcreativeink": {
+    "name": "Staraptor-Creative-Ink",
+    "types": [
+      "Steel",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 120,
+      "def": 70,
+      "spa": 50,
+      "spd": 60,
+      "spe": 100
+    },
+    "abilities": {
+      "0": "Intimidate",
+      "1": "Color Change",
+      "H": "Reckless"
+    },
+    "heightm": 1.2,
+    "weightkg": 24.9,
+    "evoType": "trade",
+    "num": -1194,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "dittocreativeink": {
+    "name": "Ditto-Creative-Ink",
+    "types": [
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 48,
+      "atk": 48,
+      "def": 48,
+      "spa": 48,
+      "spd": 48,
+      "spe": 48
+    },
+    "abilities": {
+      "0": "Color Change",
+      "H": "Imposter"
+    },
+    "heightm": 0.3,
+    "weightkg": 4,
+    "evoType": "trade",
+    "num": -1195,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "chesnaughtchained": {
+    "name": "Chesnaught-Chained",
+    "types": [
+      "Poison",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 93,
+      "atk": 112,
+      "def": 132,
+      "spa": 74,
+      "spd": 80,
+      "spe": 64
+    },
+    "abilities": {
+      "0": "Toxic Chain",
+      "H": "Bulletproof"
+    },
+    "heightm": 1.6,
+    "weightkg": 90,
+    "evoType": "trade",
+    "num": -1196,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "serperiorchained": {
+    "name": "Serperior-Chained",
+    "types": [
+      "Poison",
+      "Grass"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 80,
+      "def": 100,
+      "spa": 80,
+      "spd": 100,
+      "spe": 120
+    },
+    "abilities": {
+      "0": "Toxic Chain",
+      "H": "Contrary"
+    },
+    "heightm": 3.3,
+    "weightkg": 63,
+    "evoType": "trade",
+    "num": -1197,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "torterrachained": {
+    "name": "Torterra-Chained",
+    "types": [
+      "Poison",
+      "Ground"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 119,
+      "def": 115,
+      "spa": 75,
+      "spd": 90,
+      "spe": 56
+    },
+    "abilities": {
+      "0": "Toxic Chain",
+      "H": "Shell Armor"
+    },
+    "heightm": 2.2,
+    "weightkg": 310,
+    "evoType": "trade",
+    "num": -1198,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "chromehorse": {
+    "name": "Chrome Horse",
+    "types": [
+      "Fire",
+      "Electric"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 132,
+      "def": 68,
+      "spa": 88,
+      "spd": 68,
+      "spe": 134
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 2.5,
+    "weightkg": 175,
+    "evoType": "trade",
+    "num": -1199,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "chromeprince": {
+    "name": "Chrome Prince",
+    "types": [
+      "Psychic",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 140,
+      "atk": 90,
+      "def": 90,
+      "spa": 90,
+      "spd": 90,
+      "spe": 90
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 3,
+    "weightkg": 98,
+    "evoType": "trade",
+    "num": -1200,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "chromerider": {
+    "name": "Chrome Rider",
+    "types": [
+      "Psychic",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 152,
+      "def": 90,
+      "spa": 64,
+      "spd": 90,
+      "spe": 154
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 4.5,
+    "weightkg": 273,
+    "evoType": "trade",
+    "num": -1201,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "chromeranger": {
+    "name": "Chrome Ranger",
+    "types": [
+      "Steel",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 96,
+      "atk": 108,
+      "def": 108,
+      "spa": 60,
+      "spd": 80,
+      "spe": 118
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 1,
+    "weightkg": 92,
+    "evoType": "trade",
+    "num": -1202,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "chrometurbo": {
+    "name": "Chrome Turbo",
+    "types": [
+      "Fairy",
+      "Electric"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 78,
+      "atk": 122,
+      "def": 82,
+      "spa": 70,
+      "spd": 110,
+      "spe": 108
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 1,
+    "weightkg": 134,
+    "evoType": "trade",
+    "num": -1203,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "cleffaluma": {
+    "name": "Cleffa-Luma",
+    "types": [
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 25,
+      "def": 28,
+      "spa": 45,
+      "spd": 55,
+      "spe": 15
+    },
+    "abilities": {
+      "0": "Cute Charm",
+      "1": "Magic Guard",
+      "H": "Friend Guard"
+    },
+    "heightm": 0.3,
+    "weightkg": 3,
+    "evoType": "trade",
+    "num": -1204,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "throhmario": {
+    "name": "Throh-Mario",
+    "types": [
+      "Normal",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 120,
+      "atk": 100,
+      "def": 85,
+      "spa": 30,
+      "spd": 85,
+      "spe": 45
+    },
+    "abilities": {
+      "0": "Guts",
+      "1": "Inner Focus",
+      "H": "Mold Breaker"
+    },
+    "heightm": 1.3,
+    "weightkg": 55.5,
+    "evoType": "trade",
+    "num": -1205,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "sawkluigi": {
+    "name": "Sawk-Luigi",
+    "types": [
+      "Normal",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 125,
+      "def": 75,
+      "spa": 30,
+      "spd": 75,
+      "spe": 85
+    },
+    "abilities": {
+      "0": "Sturdy",
+      "1": "Inner Focus",
+      "H": "Mold Breaker"
+    },
+    "heightm": 1.4,
+    "weightkg": 51,
+    "evoType": "trade",
+    "num": -1206,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tyruntyoshi": {
+    "name": "Tyrunt-Yoshi",
+    "types": [
+      "Dragon",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 58,
+      "atk": 89,
+      "def": 77,
+      "spa": 45,
+      "spd": 45,
+      "spe": 48
+    },
+    "abilities": {
+      "0": "Strong Jaw",
+      "H": "Sturdy"
+    },
+    "heightm": 0.8,
+    "weightkg": 26,
+    "evoType": "trade",
+    "num": -1207,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "oddishgoomba": {
+    "name": "Oddish-Goomba",
+    "types": [
+      "Grass",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 45,
+      "atk": 50,
+      "def": 55,
+      "spa": 75,
+      "spd": 65,
+      "spe": 30
+    },
+    "abilities": {
+      "0": "Chlorophyll",
+      "H": "Run Away"
+    },
+    "heightm": 0.5,
+    "weightkg": 5.4,
+    "evoType": "trade",
+    "num": -1208,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "gengarkingboo": {
+    "name": "Gengar-King-Boo",
+    "types": [
+      "Ghost",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 65,
+      "def": 60,
+      "spa": 130,
+      "spd": 75,
+      "spe": 110
+    },
+    "abilities": {
+      "0": "Levitate"
+    },
+    "heightm": 1.5,
+    "weightkg": 40.5,
+    "evoType": "trade",
+    "num": -1209,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "magikarpcheepcheep": {
+    "name": "Magikarp-Cheep-Cheep",
+    "types": [
+      "Water",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 20,
+      "atk": 10,
+      "def": 55,
+      "spa": 15,
+      "spd": 20,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Swift Swim",
+      "H": "Rattled"
+    },
+    "heightm": 0.9,
+    "weightkg": 10,
+    "evoType": "trade",
+    "num": -1210,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "slakingdk": {
+    "name": "Slaking-Dk",
+    "types": [
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 150,
+      "atk": 160,
+      "def": 100,
+      "spa": 95,
+      "spd": 65,
+      "spe": 100
+    },
+    "abilities": {
+      "0": "Truant"
+    },
+    "heightm": 2,
+    "weightkg": 130.5,
+    "evoType": "trade",
+    "num": -1211,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "sharpedobulletbill": {
+    "name": "Sharpedo-Bullet-Bill",
+    "types": [
+      "Steel",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 120,
+      "def": 40,
+      "spa": 95,
+      "spd": 40,
+      "spe": 95
+    },
+    "abilities": {
+      "0": "Clear Body",
+      "H": "Speed Boost"
+    },
+    "heightm": 1.8,
+    "weightkg": 130,
+    "evoType": "trade",
+    "num": -1212,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "turtwigkoopa": {
+    "name": "Turtwig-Koopa",
+    "types": [
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 55,
+      "atk": 68,
+      "def": 64,
+      "spa": 45,
+      "spd": 55,
+      "spe": 31
+    },
+    "abilities": {
+      "0": "Levitate",
+      "H": "Shell Armor"
+    },
+    "heightm": 0.4,
+    "weightkg": 10.2,
+    "evoType": "trade",
+    "num": -1213,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "gardevoirsuper": {
+    "name": "Gardevoir-Super",
+    "types": [
+      "Fairy",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 68,
+      "atk": 65,
+      "def": 65,
+      "spa": 125,
+      "spd": 115,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Synchronize",
+      "1": "Trace",
+      "H": "Telepathy"
+    },
+    "heightm": 1.6,
+    "weightkg": 48.4,
+    "evoType": "trade",
+    "num": -1214,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "gardevoirmegasuper": {
+    "name": "Gardevoir-Mega-Super",
+    "types": [
+      "Fairy",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 68,
+      "atk": 85,
+      "def": 65,
+      "spa": 165,
+      "spd": 135,
+      "spe": 100
+    },
+    "abilities": {
+      "0": "Charisma"
+    },
+    "heightm": 1.6,
+    "weightkg": 48.4,
+    "evoType": "trade",
+    "requiredItem": "Gardevoirite Super",
+    "baseSpecies": "Gardevoir-Super",
+    "forme": "Mega",
+    "num": -1215,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "combeehisuiswarm": {
+    "name": "Combee-Hisui-Swarm",
+    "types": [
+      "Bug",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 120,
+      "atk": 120,
+      "def": 158,
+      "spa": 120,
+      "spd": 158,
+      "spe": 70
+    },
+    "abilities": {
+      "0": "Intimidate"
+    },
+    "heightm": 3,
+    "weightkg": 100,
+    "evoType": "trade",
+    "num": -1216,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "crescentrunner": {
+    "name": "Crescent Runner",
+    "types": [
+      "Psychic",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 115,
+      "atk": 75,
+      "def": 95,
+      "spa": 75,
+      "spd": 95,
+      "spe": 115
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 2.4,
+    "weightkg": 130,
+    "evoType": "trade",
+    "num": -1217,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "shadowhunter": {
+    "name": "Shadow Hunter",
+    "types": [
+      "Dark",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 101,
+      "atk": 135,
+      "def": 83,
+      "spa": 77,
+      "spd": 83,
+      "spe": 91
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 2,
+    "weightkg": 110,
+    "evoType": "trade",
+    "num": -1218,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "crossblue": {
+    "name": "Crossblue",
+    "types": [
+      "Bug",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 135,
+      "def": 80,
+      "spa": 40,
+      "spd": 100,
+      "spe": 100
+    },
+    "abilities": {
+      "0": "Swarm",
+      "1": "Guts",
+      "H": "Moxie"
+    },
+    "heightm": 2,
+    "weightkg": 75,
+    "prevo": "Heracross",
+    "evoType": "trade",
+    "num": -1219,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "diamoneye": {
+    "name": "Diamoneye",
+    "types": [
+      "Ghost",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 105,
+      "def": 83,
+      "spa": 70,
+      "spd": 74,
+      "spe": 102
+    },
+    "abilities": {
+      "0": "Pickpocket",
+      "1": "Stall",
+      "H": "Prankster"
+    },
+    "heightm": 1,
+    "weightkg": 201,
+    "prevo": "Sableye",
+    "evoType": "trade",
+    "num": -1220,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "diamoneyemega": {
+    "name": "Diamoneye-Mega",
+    "types": [
+      "Ghost",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 80,
+      "def": 84,
+      "spa": 144,
+      "spd": 94,
+      "spe": 132
+    },
+    "abilities": {
+      "0": "Unnerve"
+    },
+    "heightm": 2,
+    "weightkg": 301,
+    "evoType": "trade",
+    "requiredItem": "Diamoneyite",
+    "baseSpecies": "Diamoneye",
+    "forme": "Mega",
+    "num": -1221,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "diancieangel": {
+    "name": "Diancie-Angel",
+    "types": [
+      "Rock",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 100,
+      "def": 150,
+      "spa": 100,
+      "spd": 150,
+      "spe": 50
+    },
+    "abilities": {
+      "0": "Clear Body"
+    },
+    "heightm": 1.1,
+    "weightkg": 27.8,
+    "evoType": "trade",
+    "num": -1222,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "diancieangelmega": {
+    "name": "Diancie-Angel-Mega",
+    "types": [
+      "Rock",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 160,
+      "def": 110,
+      "spa": 160,
+      "spd": 110,
+      "spe": 110
+    },
+    "abilities": {
+      "0": "Magic Bounce"
+    },
+    "heightm": 1.1,
+    "weightkg": 27.8,
+    "evoType": "trade",
+    "requiredItem": "Diancite Angel",
+    "baseSpecies": "Diancie-Angel",
+    "forme": "Mega",
+    "num": -1223,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "diancieinnerdemon": {
+    "name": "Diancie-Inner-Demon",
+    "types": [
+      "Rock",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 100,
+      "def": 150,
+      "spa": 100,
+      "spd": 150,
+      "spe": 50
+    },
+    "abilities": {
+      "0": "Clear Body"
+    },
+    "heightm": 0.7,
+    "weightkg": 8.8,
+    "evoType": "trade",
+    "num": -1224,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "diancieinnerdemonmega": {
+    "name": "Diancie-Inner-Demon-Mega",
+    "types": [
+      "Rock",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 160,
+      "def": 110,
+      "spa": 160,
+      "spd": 110,
+      "spe": 110
+    },
+    "abilities": {
+      "0": "Magic Bounce"
+    },
+    "heightm": 1.1,
+    "weightkg": 27.8,
+    "evoType": "trade",
+    "requiredItem": "Diancite Inner Demon",
+    "baseSpecies": "Diancie-Inner-Demon",
+    "forme": "Mega",
+    "num": -1225,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "dianciesea": {
+    "name": "Diancie-Sea",
+    "types": [
+      "Rock",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 100,
+      "def": 150,
+      "spa": 100,
+      "spd": 150,
+      "spe": 50
+    },
+    "abilities": {
+      "0": "Clear Body"
+    },
+    "heightm": 0.7,
+    "weightkg": 8.8,
+    "evoType": "trade",
+    "num": -1226,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "dianciemegasea": {
+    "name": "Diancie-Mega-Sea",
+    "types": [
+      "Rock",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 160,
+      "def": 110,
+      "spa": 160,
+      "spd": 110,
+      "spe": 110
+    },
+    "abilities": {
+      "0": "Magic Bounce"
+    },
+    "heightm": 1.1,
+    "weightkg": 27.8,
+    "evoType": "trade",
+    "requiredItem": "Diancite Sea",
+    "baseSpecies": "Diancie-Sea",
+    "forme": "Mega",
+    "num": -1227,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "dianciecocoon": {
+    "name": "Diancie-Cocoon",
+    "types": [
+      "Rock",
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 100,
+      "def": 150,
+      "spa": 100,
+      "spd": 150,
+      "spe": 50
+    },
+    "abilities": {
+      "0": "Clear Body"
+    },
+    "heightm": 0.7,
+    "weightkg": 8.8,
+    "evoType": "trade",
+    "num": -1228,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "azumarillmega": {
+    "name": "Azumarill-Mega",
+    "types": [
+      "Water",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 120,
+      "def": 90,
+      "spa": 30,
+      "spd": 90,
+      "spe": 90
+    },
+    "abilities": {
+      "0": "Pixilate"
+    },
+    "heightm": 0.8,
+    "weightkg": 28.5,
+    "evoType": "trade",
+    "requiredItem": "Azumarillite",
+    "baseSpecies": "Azumarill",
+    "forme": "Mega",
+    "num": -1229,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "darkraimega": {
+    "name": "Darkrai-Mega",
+    "types": [
+      "Dark",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 90,
+      "def": 100,
+      "spa": 170,
+      "spd": 100,
+      "spe": 170
+    },
+    "abilities": {
+      "0": "Bad Dreams"
+    },
+    "heightm": 2.5,
+    "weightkg": 75.5,
+    "evoType": "trade",
+    "requiredItem": "Darkraite",
+    "baseSpecies": "Darkrai",
+    "forme": "Mega",
+    "num": -1230,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "lumineonmega": {
+    "name": "Lumineon-Mega",
+    "types": [
+      "Water",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 69,
+      "atk": 79,
+      "def": 106,
+      "spa": 79,
+      "spd": 116,
+      "spe": 111
+    },
+    "abilities": {
+      "0": "Misty Surge"
+    },
+    "heightm": 1.2,
+    "weightkg": 24,
+    "evoType": "trade",
+    "requiredItem": "Lumineonite",
+    "baseSpecies": "Lumineon",
+    "forme": "Mega",
+    "num": -1232,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "meloettamegaaria": {
+    "name": "Meloetta-Mega-Aria",
+    "types": [
+      "Normal",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 82,
+      "def": 82,
+      "spa": 158,
+      "spd": 158,
+      "spe": 120
+    },
+    "abilities": {
+      "0": "Serene Grace"
+    },
+    "heightm": 0.6,
+    "weightkg": 6.5,
+    "evoType": "trade",
+    "requiredItem": "Meloettite Aria",
+    "baseSpecies": "Meloetta",
+    "forme": "Mega",
+    "num": -1233,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "meloettamegapirouette": {
+    "name": "Meloetta-Mega-Pirouette",
+    "types": [
+      "Normal",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 158,
+      "def": 120,
+      "spa": 82,
+      "spd": 82,
+      "spe": 158
+    },
+    "abilities": {
+      "0": "Soundproof"
+    },
+    "heightm": 0.8,
+    "weightkg": 8,
+    "evoType": "trade",
+    "requiredItem": "Meloettite Pirouette",
+    "baseSpecies": "Meloetta",
+    "forme": "Mega",
+    "num": -1234,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "dodrioshadowframe": {
+    "name": "Dodrio-Shadow-Frame",
+    "types": [
+      "Dark",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 110,
+      "def": 70,
+      "spa": 60,
+      "spd": 60,
+      "spe": 110
+    },
+    "abilities": {
+      "0": "Cursed Body",
+      "1": "Early Bird",
+      "H": "Tangled Feet"
+    },
+    "heightm": 1.8,
+    "weightkg": 42,
+    "evoType": "trade",
+    "num": -1235,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "hippowdonshadowframe": {
+    "name": "Hippowdon-Shadow-Frame",
+    "types": [
+      "Dark",
+      "Ground"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 108,
+      "atk": 112,
+      "def": 118,
+      "spa": 68,
+      "spd": 72,
+      "spe": 47
+    },
+    "abilities": {
+      "0": "Sand Stream",
+      "1": "Cursed Body",
+      "H": "Sand Force"
+    },
+    "heightm": 2,
+    "weightkg": 150,
+    "evoType": "trade",
+    "num": -1236,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "lopunnyshadowframe": {
+    "name": "Lopunny-Shadow-Frame",
+    "types": [
+      "Dark",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 76,
+      "def": 84,
+      "spa": 54,
+      "spd": 96,
+      "spe": 105
+    },
+    "abilities": {
+      "0": "Cursed Body",
+      "1": "Klutz",
+      "H": "Limber"
+    },
+    "heightm": 1.2,
+    "weightkg": 17.8,
+    "evoType": "trade",
+    "num": -1237,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "mausholdshadowframe": {
+    "name": "Maushold-Shadow-Frame",
+    "types": [
+      "Dark",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 74,
+      "atk": 75,
+      "def": 70,
+      "spa": 65,
+      "spd": 75,
+      "spe": 111
+    },
+    "abilities": {
+      "0": "Friend Guard",
+      "1": "Cursed Body",
+      "H": "Technician"
+    },
+    "heightm": 0.3,
+    "weightkg": 1.4,
+    "evoType": "trade",
+    "num": -1238,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "dittoshadowframe": {
+    "name": "Ditto-Shadow-Frame",
+    "types": [
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 48,
+      "atk": 48,
+      "def": 48,
+      "spa": 48,
+      "spd": 48,
+      "spe": 48
+    },
+    "abilities": {
+      "0": "Cursed Body",
+      "H": "Imposter"
+    },
+    "heightm": 0.3,
+    "weightkg": 2,
+    "evoType": "trade",
+    "num": -1239,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "drapionpaperbender": {
+    "name": "Drapion-Paper-Bender",
+    "types": [
+      "Fairy",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 90,
+      "def": 110,
+      "spa": 60,
+      "spd": 75,
+      "spe": 95
+    },
+    "abilities": {
+      "0": "Battle Armor",
+      "1": "Sniper",
+      "H": "Sharpness"
+    },
+    "heightm": 1.3,
+    "weightkg": 6.1,
+    "evoType": "trade",
+    "num": -1240,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "beedrillpaperbender": {
+    "name": "Beedrill-Paper-Bender",
+    "types": [
+      "Fairy",
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 90,
+      "def": 40,
+      "spa": 45,
+      "spd": 80,
+      "spe": 75
+    },
+    "abilities": {
+      "0": "Sharpness",
+      "H": "Sniper"
+    },
+    "heightm": 1,
+    "weightkg": 3,
+    "evoType": "trade",
+    "num": -1241,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "gyaradospaperbender": {
+    "name": "Gyarados-Paper-Bender",
+    "types": [
+      "Fairy",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 95,
+      "atk": 125,
+      "def": 79,
+      "spa": 60,
+      "spd": 100,
+      "spe": 81
+    },
+    "abilities": {
+      "0": "Sharpness",
+      "H": "Moxie"
+    },
+    "heightm": 6.5,
+    "weightkg": 23.5,
+    "evoType": "trade",
+    "num": -1242,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "skarmorypaperbender": {
+    "name": "Skarmory-Paper-Bender",
+    "types": [
+      "Fairy",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 80,
+      "def": 140,
+      "spa": 40,
+      "spd": 70,
+      "spe": 70
+    },
+    "abilities": {
+      "0": "Sharpness",
+      "1": "Sturdy",
+      "H": "Weak Armor"
+    },
+    "heightm": 1.7,
+    "weightkg": 11.1,
+    "evoType": "trade",
+    "num": -1243,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "dittopaperbender": {
+    "name": "Ditto-Paper-Bender",
+    "types": [
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 48,
+      "atk": 48,
+      "def": 48,
+      "spa": 48,
+      "spd": 48,
+      "spe": 48
+    },
+    "abilities": {
+      "0": "Sharpness",
+      "H": "Imposter"
+    },
+    "heightm": 0.3,
+    "weightkg": 0.4,
+    "evoType": "trade",
+    "num": -1244,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "drifloonlight": {
+    "name": "Drifloon-Light",
+    "types": [
+      "Ghost",
+      "Electric"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 50,
+      "def": 34,
+      "spa": 60,
+      "spd": 44,
+      "spe": 70
+    },
+    "abilities": {
+      "0": "Volt Absorb",
+      "1": "Unburden",
+      "H": "Flare Boost"
+    },
+    "heightm": 0.4,
+    "weightkg": 1.2,
+    "evoType": "trade",
+    "num": -1245,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "driflight": {
+    "name": "Driflight",
+    "types": [
+      "Ghost",
+      "Electric"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 150,
+      "atk": 80,
+      "def": 44,
+      "spa": 90,
+      "spd": 54,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Volt Absorb",
+      "1": "Unburden",
+      "H": "Flare Boost"
+    },
+    "heightm": 1.2,
+    "weightkg": 33.1,
+    "prevo": "Drifloon-Light",
+    "evoType": "trade",
+    "num": -1246,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "falinksunova": {
+    "name": "Falinks-Unova",
+    "types": [
+      "Fighting",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 100,
+      "def": 100,
+      "spa": 70,
+      "spd": 60,
+      "spe": 75
+    },
+    "abilities": {
+      "0": "Battle Armor",
+      "H": "Defiant"
+    },
+    "heightm": 3,
+    "weightkg": 62,
+    "evoType": "trade",
+    "num": -1247,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "fezandipitiunchained": {
+    "name": "Fezandipiti-Unchained",
+    "types": [
+      "Fairy",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 88,
+      "atk": 91,
+      "def": 82,
+      "spa": 70,
+      "spd": 125,
+      "spe": 99
+    },
+    "abilities": {
+      "0": "Clear Body",
+      "H": "Technician"
+    },
+    "heightm": 1.4,
+    "weightkg": 30.1,
+    "evoType": "trade",
+    "num": -1248,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "munkidoriunchained": {
+    "name": "Munkidori-Unchained",
+    "types": [
+      "Psychic",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 88,
+      "atk": 75,
+      "def": 66,
+      "spa": 130,
+      "spd": 90,
+      "spe": 106
+    },
+    "abilities": {
+      "0": "Clear Body",
+      "H": "Frisk"
+    },
+    "heightm": 1,
+    "weightkg": 12.2,
+    "evoType": "trade",
+    "num": -1249,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "okidogiunchained": {
+    "name": "Okidogi-Unchained",
+    "types": [
+      "Fighting",
+      "Rock"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 88,
+      "atk": 128,
+      "def": 115,
+      "spa": 58,
+      "spd": 86,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Clear Body",
+      "H": "Guard Dog"
+    },
+    "heightm": 1.8,
+    "weightkg": 92,
+    "evoType": "trade",
+    "num": -1250,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "raltstrenchmaiden": {
+    "name": "Ralts-Trench-Maiden",
+    "types": [
+      "Water",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 28,
+      "atk": 25,
+      "def": 25,
+      "spa": 45,
+      "spd": 35,
+      "spe": 40
+    },
+    "abilities": {
+      "0": "Synchronize",
+      "1": "Trace",
+      "H": "Telepathy"
+    },
+    "heightm": 0.4,
+    "weightkg": 6.6,
+    "evoType": "trade",
+    "num": -1251,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "kirliatrenchmaiden": {
+    "name": "Kirlia-Trench-Maiden",
+    "types": [
+      "Water",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 38,
+      "atk": 35,
+      "def": 35,
+      "spa": 65,
+      "spd": 55,
+      "spe": 50
+    },
+    "abilities": {
+      "0": "Synchronize",
+      "1": "Trace",
+      "H": "Telepathy"
+    },
+    "heightm": 0.8,
+    "weightkg": 20.2,
+    "prevo": "Ralts-Trench-Maiden",
+    "evoType": "trade",
+    "num": -1252,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "gardevoirtrenchmaiden": {
+    "name": "Gardevoir-Trench-Maiden",
+    "types": [
+      "Water",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 68,
+      "atk": 65,
+      "def": 65,
+      "spa": 125,
+      "spd": 115,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Synchronize",
+      "1": "Trace",
+      "H": "Telepathy"
+    },
+    "heightm": 1.6,
+    "weightkg": 48.4,
+    "prevo": "Kirlia-Trench-Maiden",
+    "evoType": "trade",
+    "num": -1253,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "galladetrenchmaiden": {
+    "name": "Gallade-Trench-Maiden",
+    "types": [
+      "Water",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 68,
+      "atk": 125,
+      "def": 65,
+      "spa": 65,
+      "spd": 115,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Steadfast",
+      "1": "Sharpness",
+      "H": "Justified"
+    },
+    "heightm": 1.6,
+    "weightkg": 52,
+    "prevo": "Kirlia-Trench-Maiden",
+    "evoType": "trade",
+    "num": -1254,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "gimmighoulsea": {
+    "name": "Gimmighoul-Sea",
+    "types": [
+      "Ghost",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 45,
+      "atk": 30,
+      "def": 70,
+      "spa": 75,
+      "spd": 70,
+      "spe": 10
+    },
+    "abilities": {
+      "0": "Rattled"
+    },
+    "heightm": 0.3,
+    "weightkg": 5,
+    "evoType": "trade",
+    "num": -1255,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "gimmighoulroamingsea": {
+    "name": "Gimmighoul-Roaming-Sea",
+    "types": [
+      "Ghost",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 45,
+      "atk": 30,
+      "def": 25,
+      "spa": 75,
+      "spd": 45,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Run Away"
+    },
+    "heightm": 0.3,
+    "weightkg": 5,
+    "evoType": "trade",
+    "num": -1256,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "gholdengosea": {
+    "name": "Gholdengo-Sea",
+    "types": [
+      "Ghost",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 87,
+      "atk": 60,
+      "def": 95,
+      "spa": 133,
+      "spd": 91,
+      "spe": 84
+    },
+    "abilities": {
+      "0": "Good as Gold"
+    },
+    "heightm": 1.2,
+    "weightkg": 30,
+    "prevo": "Gimmighoul-Sea",
+    "evoType": "trade",
+    "num": -1257,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "gogoatstellar": {
+    "name": "Gogoat-Stellar",
+    "types": [
+      "Psychic",
+      "Grass"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 123,
+      "atk": 100,
+      "def": 63,
+      "spa": 97,
+      "spd": 81,
+      "spe": 68
+    },
+    "abilities": {
+      "0": "Sap Sipper",
+      "1": "Trace",
+      "H": "Grass Pelt"
+    },
+    "heightm": 1.7,
+    "weightkg": 45.5,
+    "evoType": "trade",
+    "num": -1258,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "hydrapplestellar": {
+    "name": "Hydrapple-Stellar",
+    "types": [
+      "Psychic",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 106,
+      "atk": 86,
+      "def": 110,
+      "spa": 120,
+      "spd": 80,
+      "spe": 44
+    },
+    "abilities": {
+      "0": "Supersweet Syrup",
+      "1": "Regenerator",
+      "H": "Sticky Hold"
+    },
+    "heightm": 1.8,
+    "weightkg": 46,
+    "evoType": "trade",
+    "num": -1259,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "machampstellar": {
+    "name": "Machamp-Stellar",
+    "types": [
+      "Psychic",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 130,
+      "def": 80,
+      "spa": 65,
+      "spd": 85,
+      "spe": 55
+    },
+    "abilities": {
+      "0": "Guts",
+      "1": "No Guard",
+      "H": "Trace"
+    },
+    "heightm": 1.6,
+    "weightkg": 65,
+    "evoType": "trade",
+    "num": -1260,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "noctowlstellar": {
+    "name": "Noctowl-Stellar",
+    "types": [
+      "Psychic",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 50,
+      "def": 50,
+      "spa": 86,
+      "spd": 96,
+      "spe": 70
+    },
+    "abilities": {
+      "0": "Insomnia",
+      "1": "Trace",
+      "H": "Tinted Lens"
+    },
+    "heightm": 1.6,
+    "weightkg": 20.4,
+    "evoType": "trade",
+    "num": -1261,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "dittostellar": {
+    "name": "Ditto-Stellar",
+    "types": [
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 48,
+      "atk": 48,
+      "def": 48,
+      "spa": 48,
+      "spd": 48,
+      "spe": 48
+    },
+    "abilities": {
+      "0": "Trace",
+      "H": "Imposter"
+    },
+    "heightm": 0.3,
+    "weightkg": 2,
+    "evoType": "trade",
+    "num": -1262,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "hatbirdyplant": {
+    "name": "Hatbirdy-Plant",
+    "types": [
+      "Flying",
+      "Grass"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 95,
+      "def": 59,
+      "spa": 59,
+      "spd": 59,
+      "spe": 82
+    },
+    "abilities": {
+      "0": "Keen Eye",
+      "H": "Overcoat"
+    },
+    "heightm": 0.5,
+    "weightkg": 13,
+    "evoType": "trade",
+    "num": -1263,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "hatbirdytrash": {
+    "name": "Hatbirdy-Trash",
+    "types": [
+      "Flying",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 95,
+      "def": 59,
+      "spa": 59,
+      "spd": 59,
+      "spe": 82
+    },
+    "abilities": {
+      "0": "Keen Eye",
+      "H": "Overcoat"
+    },
+    "heightm": 0.5,
+    "weightkg": 13,
+    "evoType": "trade",
+    "num": -1264,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "hatbirdysandy": {
+    "name": "Hatbirdy-Sandy",
+    "types": [
+      "Flying",
+      "Ground"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 95,
+      "def": 59,
+      "spa": 59,
+      "spd": 59,
+      "spe": 82
+    },
+    "abilities": {
+      "0": "Keen Eye",
+      "H": "Overcoat"
+    },
+    "heightm": 0.5,
+    "weightkg": 13,
+    "evoType": "trade",
+    "num": -1265,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "gothisieur": {
+    "name": "Gothisieur",
+    "types": [
+      "Psychic",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 95,
+      "def": 110,
+      "spa": 55,
+      "spd": 95,
+      "spe": 65
+    },
+    "abilities": {
+      "0": "Frisk",
+      "1": "Defiant",
+      "H": "Shadow Tag"
+    },
+    "heightm": 1.5,
+    "weightkg": 44,
+    "evoType": "trade",
+    "num": -1266,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "hatennaalola": {
+    "name": "Hatenna-Alola",
+    "types": [
+      "Psychic",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 42,
+      "atk": 30,
+      "def": 45,
+      "spa": 56,
+      "spd": 53,
+      "spe": 39
+    },
+    "abilities": {
+      "0": "Healer",
+      "1": "Anticipation",
+      "H": "Magic Bounce"
+    },
+    "heightm": 0.4,
+    "weightkg": 3.4,
+    "evoType": "trade",
+    "num": -1267,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "hattremalola": {
+    "name": "Hattrem-Alola",
+    "types": [
+      "Psychic",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 57,
+      "atk": 40,
+      "def": 65,
+      "spa": 86,
+      "spd": 73,
+      "spe": 49
+    },
+    "abilities": {
+      "0": "Healer",
+      "1": "Anticipation",
+      "H": "Magic Bounce"
+    },
+    "heightm": 0.6,
+    "weightkg": 4.8,
+    "prevo": "Hatenna-Alola",
+    "evoType": "trade",
+    "num": -1268,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "hatterenealola": {
+    "name": "Hatterene-Alola",
+    "types": [
+      "Psychic",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 57,
+      "atk": 90,
+      "def": 95,
+      "spa": 136,
+      "spd": 103,
+      "spe": 29
+    },
+    "abilities": {
+      "0": "Healer",
+      "1": "Anticipation",
+      "H": "Magic Bounce"
+    },
+    "heightm": 2.1,
+    "weightkg": 5.1,
+    "prevo": "Hattrem-Alola",
+    "evoType": "trade",
+    "num": -1269,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "hatterenealolagmax": {
+    "name": "Hatterene-Alola-Gmax",
+    "types": [
+      "Psychic",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 114,
+      "atk": 90,
+      "def": 95,
+      "spa": 136,
+      "spd": 103,
+      "spe": 29
+    },
+    "abilities": {
+      "0": "Healer",
+      "1": "Anticipation",
+      "H": "Magic Bounce"
+    },
+    "heightm": 10.2,
+    "weightkg": 51,
+    "prevo": "Hattrem-Alola",
+    "evoType": "trade",
+    "num": -1270,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "axbone": {
+    "name": "Ax Bone",
+    "types": [
+      "Fairy",
+      "Ground"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 93,
+      "atk": 113,
+      "def": 101,
+      "spa": 83,
+      "spd": 89,
+      "spe": 91
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 0.7,
+    "weightkg": 102.8,
+    "evoType": "trade",
+    "num": -1271,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "irondoll": {
+    "name": "Iron Doll",
+    "types": [
+      "Steel",
+      "Electric"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 92,
+      "atk": 114,
+      "def": 88,
+      "spa": 84,
+      "spd": 102,
+      "spe": 90
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 0.7,
+    "weightkg": 152.8,
+    "evoType": "trade",
+    "num": -1272,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironmatrix": {
+    "name": "Iron Matrix",
+    "types": [
+      "Ice",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 88,
+      "atk": 90,
+      "def": 174,
+      "spa": 80,
+      "spd": 58,
+      "spe": 78
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 2,
+    "weightkg": 232.5,
+    "evoType": "trade",
+    "num": -1273,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironpixel": {
+    "name": "Iron Pixel",
+    "types": [
+      "Poison",
+      "Electric"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 126,
+      "atk": 64,
+      "def": 64,
+      "spa": 126,
+      "spd": 64,
+      "spe": 126
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 1.3,
+    "weightkg": 7,
+    "evoType": "trade",
+    "num": -1274,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironspark": {
+    "name": "Iron Spark",
+    "types": [
+      "Electric",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 92,
+      "atk": 126,
+      "def": 90,
+      "spa": 76,
+      "spd": 70,
+      "spe": 116
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 2,
+    "weightkg": 270,
+    "evoType": "trade",
+    "num": -1275,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironspore": {
+    "name": "Iron Spore",
+    "types": [
+      "Grass",
+      "Electric"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 48,
+      "atk": 74,
+      "def": 108,
+      "spa": 108,
+      "spd": 108,
+      "spe": 124
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 1.3,
+    "weightkg": 40,
+    "evoType": "trade",
+    "num": -1276,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wildwind": {
+    "name": "Wild Wind",
+    "types": [
+      "Fairy",
+      "Grass"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 147,
+      "atk": 79,
+      "def": 76,
+      "spa": 79,
+      "spd": 76,
+      "spe": 113
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 1.5,
+    "weightkg": 55,
+    "evoType": "trade",
+    "num": -1277,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "spikeclaw": {
+    "name": "Spike Claw",
+    "types": [
+      "Grass",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 127,
+      "atk": 127,
+      "def": 67,
+      "spa": 75,
+      "spd": 67,
+      "spe": 107
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 2,
+    "weightkg": 45,
+    "evoType": "trade",
+    "num": -1278,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ironterrarium": {
+    "name": "Iron Terrarium",
+    "types": [
+      "Grass",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 108,
+      "atk": 90,
+      "def": 152,
+      "spa": 76,
+      "spd": 94,
+      "spe": 50
+    },
+    "abilities": {
+      "0": "Quark Drive"
+    },
+    "heightm": 2.5,
+    "weightkg": 400,
+    "evoType": "trade",
+    "num": -1279,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "mankeyhisuifury": {
+    "name": "Mankey-Hisui-Fury",
+    "types": [
+      "Ice",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 40,
+      "atk": 80,
+      "def": 35,
+      "spa": 35,
+      "spd": 45,
+      "spe": 70
+    },
+    "abilities": {
+      "0": "Flame Body",
+      "1": "Anger Point",
+      "H": "Defiant"
+    },
+    "heightm": 0.5,
+    "weightkg": 28,
+    "evoType": "trade",
+    "num": -1280,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "mankeyhisuicalm": {
+    "name": "Mankey-Hisui-Calm",
+    "types": [
+      "Ice",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 40,
+      "atk": 80,
+      "def": 35,
+      "spa": 35,
+      "spd": 45,
+      "spe": 70
+    },
+    "abilities": {
+      "0": "Overcoat",
+      "1": "Inner Focus",
+      "H": "Defiant"
+    },
+    "heightm": 0.5,
+    "weightkg": 28,
+    "evoType": "trade",
+    "num": -1281,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "primeapehisuioven": {
+    "name": "Primeape-Hisui-Oven",
+    "types": [
+      "Ice",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 105,
+      "def": 60,
+      "spa": 60,
+      "spd": 70,
+      "spe": 95
+    },
+    "abilities": {
+      "0": "Flame Body",
+      "1": "Anger Point",
+      "H": "Defiant"
+    },
+    "heightm": 1,
+    "weightkg": 32,
+    "prevo": "Mankey-Hisui-Fury",
+    "evoType": "trade",
+    "num": -1282,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "primeapehisuiskier": {
+    "name": "Primeape-Hisui-Skier",
+    "types": [
+      "Ice",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 95,
+      "def": 60,
+      "spa": 60,
+      "spd": 70,
+      "spe": 105
+    },
+    "abilities": {
+      "0": "Slush Rush",
+      "1": "Anger Point",
+      "H": "Defiant"
+    },
+    "heightm": 1,
+    "weightkg": 32,
+    "prevo": "Mankey-Hisui-Calm",
+    "evoType": "trade",
+    "num": -1283,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "kabuyetibonfire": {
+    "name": "Kabuyeti-Bonfire",
+    "types": [
+      "Ice",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 135,
+      "def": 65,
+      "spa": 60,
+      "spd": 75,
+      "spe": 105
+    },
+    "abilities": {
+      "0": "Flame Body",
+      "1": "Iron Fist",
+      "H": "Defiant"
+    },
+    "heightm": 1.8,
+    "weightkg": 54,
+    "prevo": "Primeape-Hisui-Oven",
+    "evoType": "trade",
+    "num": -1284,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "kabuyeticlimb": {
+    "name": "Kabuyeti-Climb",
+    "types": [
+      "Ice",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 125,
+      "def": 65,
+      "spa": 60,
+      "spd": 75,
+      "spe": 115
+    },
+    "abilities": {
+      "0": "Mold Breaker",
+      "1": "Iron Fist",
+      "H": "Defiant"
+    },
+    "heightm": 1.7,
+    "weightkg": 56,
+    "prevo": "Primeape-Hisui-Skier",
+    "evoType": "trade",
+    "num": -1285,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "klefkihisui": {
+    "name": "Klefki-Hisui",
+    "types": [
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 57,
+      "atk": 91,
+      "def": 80,
+      "spa": 87,
+      "spd": 80,
+      "spe": 75
+    },
+    "abilities": {
+      "0": "Prankster",
+      "H": "Poison Touch"
+    },
+    "heightm": 0.2,
+    "weightkg": 3,
+    "evoType": "trade",
+    "num": -1286,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "milotichell": {
+    "name": "Milotic-Hell",
+    "types": [
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 95,
+      "atk": 60,
+      "def": 79,
+      "spa": 100,
+      "spd": 125,
+      "spe": 81
+    },
+    "abilities": {
+      "0": "Marvel Scale",
+      "1": "Competitive",
+      "H": "Multiscale"
+    },
+    "heightm": 6.2,
+    "weightkg": 162,
+    "evoType": "trade",
+    "num": -1287,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "miloticmegahell": {
+    "name": "Milotic-Mega-Hell",
+    "types": [
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 95,
+      "atk": 70,
+      "def": 99,
+      "spa": 150,
+      "spd": 135,
+      "spe": 91
+    },
+    "abilities": {
+      "0": "Primordial Sea"
+    },
+    "heightm": 8,
+    "weightkg": 240,
+    "evoType": "trade",
+    "requiredItem": "Miloticite HELL",
+    "baseSpecies": "Milotic-Hell",
+    "forme": "Mega",
+    "num": -1288,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "klekelord": {
+    "name": "Klekelord",
+    "types": [
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 110,
+      "def": 75,
+      "spa": 65,
+      "spd": 130,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Color Change",
+      "H": "Protean"
+    },
+    "heightm": 1.6,
+    "weightkg": 41,
+    "prevo": "Kecleon",
+    "evoType": "trade",
+    "num": -1289,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "latiaschained": {
+    "name": "Latias-Chained",
+    "types": [
+      "Poison",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 80,
+      "def": 90,
+      "spa": 110,
+      "spd": 130,
+      "spe": 110
+    },
+    "abilities": {
+      "0": "Toxic Chain",
+      "1": "Levitate"
+    },
+    "heightm": 1.4,
+    "weightkg": 40,
+    "evoType": "trade",
+    "num": -1290,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "laties": {
+    "name": "Laties",
+    "types": [
+      "Psychic",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 130,
+      "def": 100,
+      "spa": 100,
+      "spd": 80,
+      "spe": 110
+    },
+    "abilities": {
+      "0": "Levitate"
+    },
+    "heightm": 1.5,
+    "weightkg": 45,
+    "evoType": "trade",
+    "num": -1291,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "latiis": {
+    "name": "Latiis",
+    "types": [
+      "Psychic",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 80,
+      "def": 110,
+      "spa": 90,
+      "spd": 120,
+      "spe": 100
+    },
+    "abilities": {
+      "0": "Levitate"
+    },
+    "heightm": 1.4,
+    "weightkg": 38,
+    "evoType": "trade",
+    "num": -1292,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "latius": {
+    "name": "Latius",
+    "types": [
+      "Psychic",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 90,
+      "def": 90,
+      "spa": 110,
+      "spd": 100,
+      "spe": 130
+    },
+    "abilities": {
+      "0": "Levitate"
+    },
+    "heightm": 1.4,
+    "weightkg": 40,
+    "evoType": "trade",
+    "num": -1293,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "moltik": {
+    "name": "Moltik",
+    "types": [
+      "Bug",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 47,
+      "def": 50,
+      "spa": 57,
+      "spd": 50,
+      "spe": 65
+    },
+    "abilities": {
+      "0": "Compound Eyes",
+      "1": "Unnerve",
+      "H": "Flame Body"
+    },
+    "heightm": 0.1,
+    "weightkg": 0.6,
+    "evoType": "trade",
+    "num": -1294,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "lavantula": {
+    "name": "Lavantula",
+    "types": [
+      "Bug",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 77,
+      "def": 60,
+      "spa": 97,
+      "spd": 60,
+      "spe": 108
+    },
+    "abilities": {
+      "0": "Compound Eyes",
+      "1": "Unnerve",
+      "H": "Flame Body"
+    },
+    "heightm": 0.8,
+    "weightkg": 14.3,
+    "prevo": "Moltik",
+    "evoType": "trade",
+    "num": -1295,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "lunarjumper": {
+    "name": "Lunar Jumper",
+    "types": [
+      "Fighting",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 121,
+      "def": 71,
+      "spa": 97,
+      "spd": 71,
+      "spe": 125
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 2,
+    "weightkg": 135,
+    "evoType": "trade",
+    "num": -1296,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "luxraysnowpoint": {
+    "name": "Luxray-Snowpoint",
+    "types": [
+      "Electric",
+      "Ice"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 120,
+      "def": 79,
+      "spa": 95,
+      "spd": 79,
+      "spe": 70
+    },
+    "abilities": {
+      "0": "Rivalry",
+      "1": "Fur Coat",
+      "H": "Guts"
+    },
+    "heightm": 1.4,
+    "weightkg": 42,
+    "evoType": "trade",
+    "num": -1297,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "azelfchained": {
+    "name": "Azelf-Chained",
+    "types": [
+      "Psychic",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 125,
+      "def": 70,
+      "spa": 125,
+      "spd": 70,
+      "spe": 115
+    },
+    "abilities": {
+      "0": "Toxic Chain",
+      "H": "Levitate"
+    },
+    "heightm": 0.3,
+    "weightkg": 0.3,
+    "evoType": "trade",
+    "num": -1298,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "mespritchained": {
+    "name": "Mesprit-Chained",
+    "types": [
+      "Psychic",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 105,
+      "def": 105,
+      "spa": 105,
+      "spd": 105,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Toxic Chain",
+      "H": "Levitate"
+    },
+    "heightm": 0.3,
+    "weightkg": 0.3,
+    "evoType": "trade",
+    "num": -1299,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "uxiechained": {
+    "name": "Uxie-Chained",
+    "types": [
+      "Psychic",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 75,
+      "def": 130,
+      "spa": 75,
+      "spd": 130,
+      "spe": 95
+    },
+    "abilities": {
+      "0": "Toxic Chain",
+      "H": "Levitate"
+    },
+    "heightm": 0.3,
+    "weightkg": 0.3,
+    "evoType": "trade",
+    "num": -1300,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "mewone": {
+    "name": "Mewone",
+    "types": [
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 150,
+      "atk": 60,
+      "def": 150,
+      "spa": 90,
+      "spd": 150,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Magic Guard",
+      "H": "Synchronize"
+    },
+    "heightm": 1.6,
+    "weightkg": 106,
+    "evoType": "trade",
+    "num": -1301,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "mienshaohoenn": {
+    "name": "Mienshao-Hoenn",
+    "types": [
+      "Fighting",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 65,
+      "atk": 125,
+      "def": 60,
+      "spa": 95,
+      "spd": 60,
+      "spe": 105
+    },
+    "abilities": {
+      "0": "Inner Focus",
+      "1": "Regenerator",
+      "H": "Reckless"
+    },
+    "heightm": 1.4,
+    "weightkg": 35.5,
+    "evoType": "trade",
+    "num": -1302,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "mothimen": {
+    "name": "Mothimen",
+    "types": [
+      "Bug",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 109,
+      "def": 75,
+      "spa": 109,
+      "spd": 75,
+      "spe": 86
+    },
+    "abilities": {
+      "0": "Swarm",
+      "H": "Tinted Lens"
+    },
+    "heightm": 1.8,
+    "weightkg": 41,
+    "prevo": "Mothim",
+    "evoType": "trade",
+    "num": -1303,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "nocturnaleye": {
+    "name": "Nocturnal Eye",
+    "types": [
+      "Electric",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 117,
+      "atk": 131,
+      "def": 75,
+      "spa": 73,
+      "spd": 75,
+      "spe": 99
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 1.7,
+    "weightkg": 170,
+    "evoType": "trade",
+    "num": -1304,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "orchestarrot": {
+    "name": "Orchestarrot",
+    "types": [
+      "Normal",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 83,
+      "atk": 70,
+      "def": 75,
+      "spa": 104,
+      "spd": 72,
+      "spe": 103
+    },
+    "abilities": {
+      "0": "Keen Eye",
+      "1": "Tangled Feet",
+      "H": "Soundproof"
+    },
+    "heightm": 1,
+    "weightkg": 6.8,
+    "prevo": "Chatot",
+    "evoType": "trade",
+    "num": -1305,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "pecharuntpure": {
+    "name": "Pecharunt-Pure",
+    "types": [
+      "Grass",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 88,
+      "atk": 88,
+      "def": 160,
+      "spa": 88,
+      "spd": 88,
+      "spe": 88
+    },
+    "abilities": {
+      "0": "Natural Cure"
+    },
+    "heightm": 0.3,
+    "weightkg": 0.3,
+    "evoType": "trade",
+    "num": -1307,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "plasmatomb": {
+    "name": "Plasmatomb",
+    "types": [
+      "Ghost",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 102,
+      "def": 118,
+      "spa": 102,
+      "spd": 118,
+      "spe": 30
+    },
+    "abilities": {
+      "0": "Pressure",
+      "H": "Infiltrator"
+    },
+    "heightm": 2,
+    "weightkg": 201,
+    "prevo": "Spiritomb",
+    "evoType": "trade",
+    "num": -1307,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "primaltriffid": {
+    "name": "Primal Triffid",
+    "types": [
+      "Dragon",
+      "Grass"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 83,
+      "atk": 121,
+      "def": 73,
+      "spa": 121,
+      "spd": 71,
+      "spe": 101
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 1.5,
+    "weightkg": 101,
+    "evoType": "trade",
+    "num": -1308,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "regifly": {
+    "name": "Regifly",
+    "types": [
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 150,
+      "def": 75,
+      "spa": 150,
+      "spd": 75,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Gale Wings"
+    },
+    "heightm": 1.3,
+    "weightkg": 130,
+    "evoType": "trade",
+    "num": -1309,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "revavroomgearmoto": {
+    "name": "Revavroom-Gear-Moto",
+    "types": [
+      "Steel",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 120,
+      "def": 55,
+      "spa": 60,
+      "spd": 55,
+      "spe": 130
+    },
+    "abilities": {
+      "0": "Overcoat",
+      "H": "Filter"
+    },
+    "heightm": 1.9,
+    "weightkg": 105,
+    "prevo": "Varoom",
+    "evoType": "trade",
+    "num": -1310,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "revavroomgearpull": {
+    "name": "Revavroom-Gear-Pull",
+    "types": [
+      "Steel",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 100,
+      "def": 100,
+      "spa": 60,
+      "spd": 90,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Overcoat",
+      "H": "Filter"
+    },
+    "heightm": 2,
+    "weightkg": 145,
+    "prevo": "Varoom",
+    "evoType": "trade",
+    "num": -1311,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "revavroomgearrail": {
+    "name": "Revavroom-Gear-Rail",
+    "types": [
+      "Steel",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 140,
+      "atk": 85,
+      "def": 90,
+      "spa": 60,
+      "spd": 65,
+      "spe": 60
+    },
+    "abilities": {
+      "0": "Overcoat",
+      "H": "Filter"
+    },
+    "heightm": 6,
+    "weightkg": 205,
+    "prevo": "Varoom",
+    "evoType": "trade",
+    "num": -1312,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "yamaskhisui": {
+    "name": "Yamask-Hisui",
+    "types": [
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 38,
+      "atk": 55,
+      "def": 85,
+      "spa": 30,
+      "spd": 65,
+      "spe": 30
+    },
+    "abilities": {
+      "0": "Wandering Spirit"
+    },
+    "heightm": 0.5,
+    "weightkg": 1.5,
+    "evoType": "trade",
+    "num": -1313,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "runerigushisuiattack": {
+    "name": "Runerigus-Hisui-Attack",
+    "types": [
+      "Ghost",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 58,
+      "atk": 165,
+      "def": 75,
+      "spa": 125,
+      "spd": 30,
+      "spe": 30
+    },
+    "abilities": {
+      "0": "Wandering Spirit"
+    },
+    "heightm": 1.8,
+    "weightkg": 280,
+    "prevo": "Yamask-Hisui",
+    "evoType": "trade",
+    "num": -1314,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "runerigushisuidefense": {
+    "name": "Runerigus-Hisui-Defense",
+    "types": [
+      "Ghost",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 58,
+      "atk": 75,
+      "def": 165,
+      "spa": 30,
+      "spd": 125,
+      "spe": 30
+    },
+    "abilities": {
+      "0": "Wandering Spirit"
+    },
+    "heightm": 1.8,
+    "weightkg": 280,
+    "prevo": "Yamask-Hisui",
+    "evoType": "trade",
+    "num": -1315,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "sepielago": {
+    "name": "Sepielago",
+    "types": [
+      "Water",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 73,
+      "atk": 68,
+      "def": 75,
+      "spa": 92,
+      "spd": 88,
+      "spe": 86
+    },
+    "abilities": {
+      "0": "Contrary",
+      "1": "Suction Cups",
+      "H": "Infiltrator"
+    },
+    "heightm": 1.7,
+    "weightkg": 50,
+    "prevo": "Inkay",
+    "evoType": "trade",
+    "num": -1316,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "swampwalker": {
+    "name": "Swamp Walker",
+    "types": [
+      "Grass",
+      "Fire"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 137,
+      "atk": 113,
+      "def": 81,
+      "spa": 83,
+      "spd": 81,
+      "spe": 75
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 2,
+    "weightkg": 137,
+    "evoType": "trade",
+    "num": -1317,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "tulimeow": {
+    "name": "Tulimeow",
+    "types": [
+      "Normal",
+      "Grass"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 87,
+      "def": 78,
+      "spa": 60,
+      "spd": 70,
+      "spe": 70
+    },
+    "abilities": {
+      "0": "Solar Power"
+    },
+    "heightm": 0.4,
+    "weightkg": 7,
+    "prevo": "Cherubi",
+    "evoType": "trade",
+    "num": -1318,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "roseradehell": {
+    "name": "Roserade-Hell",
+    "types": [
+      "Dark",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 70,
+      "def": 65,
+      "spa": 125,
+      "spd": 105,
+      "spe": 90
+    },
+    "abilities": {
+      "0": "Natural Cure",
+      "1": "Poison Heal",
+      "H": "Technician"
+    },
+    "heightm": 0.9,
+    "weightkg": 14.5,
+    "evoType": "trade",
+    "num": -1319,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "roseradehellmega": {
+    "name": "Roserade-Hell-Mega",
+    "types": [
+      "Dark",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 135,
+      "def": 75,
+      "spa": 100,
+      "spd": 120,
+      "spe": 125
+    },
+    "abilities": {
+      "0": "Moxie"
+    },
+    "heightm": 1.2,
+    "weightkg": 15,
+    "evoType": "trade",
+    "requiredItem": "Roseradite HELL",
+    "baseSpecies": "Roserade-Hell",
+    "forme": "Mega",
+    "num": -1320,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "drifblimhell": {
+    "name": "Drifblim-Hell",
+    "types": [
+      "Water",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 150,
+      "atk": 80,
+      "def": 44,
+      "spa": 90,
+      "spd": 54,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Poison Point",
+      "1": "Unburden",
+      "H": "Water Absorb"
+    },
+    "heightm": 1.2,
+    "weightkg": 15,
+    "evoType": "trade",
+    "num": -1321,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "drifblimhellmega": {
+    "name": "Drifblim-Hell-Mega",
+    "types": [
+      "Water",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 150,
+      "atk": 90,
+      "def": 84,
+      "spa": 130,
+      "spd": 84,
+      "spe": 60
+    },
+    "abilities": {
+      "0": "Levitate"
+    },
+    "heightm": 3.5,
+    "weightkg": 30,
+    "evoType": "trade",
+    "requiredItem": "Drifblimite Hell",
+    "baseSpecies": "Drifblim-Hell",
+    "forme": "Mega",
+    "num": -1322,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "floatzelhell": {
+    "name": "Floatzel-Hell",
+    "types": [
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 105,
+      "def": 55,
+      "spa": 85,
+      "spd": 50,
+      "spe": 115
+    },
+    "abilities": {
+      "0": "Dancer",
+      "H": "No Guard"
+    },
+    "heightm": 1.1,
+    "weightkg": 33.5,
+    "evoType": "trade",
+    "num": -1323,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "altariahell": {
+    "name": "Altaria-Hell",
+    "types": [
+      "Fire",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 80,
+      "def": 80,
+      "spa": 80,
+      "spd": 95,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Natural Cure",
+      "H": "Flash Fire"
+    },
+    "heightm": 1.1,
+    "weightkg": 20.6,
+    "evoType": "trade",
+    "num": -1324,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "altariahellmega": {
+    "name": "Altaria-Hell-Mega",
+    "types": [
+      "Fire",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 130,
+      "def": 90,
+      "spa": 130,
+      "spd": 85,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Magic Guard"
+    },
+    "heightm": 1.5,
+    "weightkg": 20.6,
+    "evoType": "trade",
+    "requiredItem": "Altarite HELL",
+    "baseSpecies": "Altaria-Hell",
+    "forme": "Mega",
+    "num": -1325,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "reuniclushell": {
+    "name": "Reuniclus-Hell",
+    "types": [
+      "Normal",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 110,
+      "atk": 65,
+      "def": 75,
+      "spa": 125,
+      "spd": 85,
+      "spe": 30
+    },
+    "abilities": {
+      "0": "Cute Charm",
+      "1": "Magic Guard",
+      "H": "Regenerator"
+    },
+    "heightm": 1,
+    "weightkg": 20.1,
+    "evoType": "trade",
+    "num": -1326,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "thievulhell": {
+    "name": "Thievul-Hell",
+    "types": [
+      "Fairy",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 58,
+      "def": 58,
+      "spa": 87,
+      "spd": 92,
+      "spe": 90
+    },
+    "abilities": {
+      "0": "Prankster",
+      "1": "Unburden",
+      "H": "Stakeout"
+    },
+    "heightm": 1.2,
+    "weightkg": 19.9,
+    "evoType": "trade",
+    "num": -1327,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "turtonatormega": {
+    "name": "Turtonator-Mega",
+    "types": [
+      "Fire",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 88,
+      "def": 185,
+      "spa": 111,
+      "spd": 95,
+      "spe": 36
+    },
+    "abilities": {
+      "0": "Iron Barbs"
+    },
+    "heightm": 2.3,
+    "weightkg": 310,
+    "evoType": "trade",
+    "requiredItem": "Turtonatorite",
+    "baseSpecies": "Turtonator",
+    "forme": "Mega",
+    "num": -1328,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "unownmega": {
+    "name": "Unown-Mega",
+    "types": [
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 48,
+      "atk": 12,
+      "def": 68,
+      "spa": 122,
+      "spd": 68,
+      "spe": 118
+    },
+    "abilities": {
+      "0": "Adaptive Mastery"
+    },
+    "heightm": 2,
+    "weightkg": 30,
+    "evoType": "trade",
+    "requiredItem": "Unownite",
+    "baseSpecies": "Unown",
+    "forme": "Mega",
+    "num": -1329,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "zebstrikamega": {
+    "name": "Zebstrika-Mega",
+    "types": [
+      "Electric",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 125,
+      "def": 78,
+      "spa": 105,
+      "spd": 78,
+      "spe": 136
+    },
+    "abilities": {
+      "0": "Eerie Resonance"
+    },
+    "heightm": 2,
+    "weightkg": 104,
+    "evoType": "trade",
+    "requiredItem": "Zebstrikite",
+    "baseSpecies": "Zebstrika",
+    "forme": "Mega",
+    "num": -1330,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "eldegossmega": {
+    "name": "Eldegoss-Mega",
+    "types": [
+      "Grass",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 50,
+      "def": 110,
+      "spa": 110,
+      "spd": 140,
+      "spe": 90
+    },
+    "abilities": {
+      "0": "Verdant Bloom"
+    },
+    "heightm": 1,
+    "weightkg": 7,
+    "evoType": "trade",
+    "requiredItem": "Eldegossite",
+    "baseSpecies": "Eldegoss",
+    "forme": "Mega",
+    "num": -1331,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "orbeetlemega": {
+    "name": "Orbeetle-Mega",
+    "types": [
+      "Bug",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 95,
+      "def": 115,
+      "spa": 110,
+      "spd": 125,
+      "spe": 100
+    },
+    "abilities": {
+      "0": "Mindscape Domain"
+    },
+    "heightm": 0.9,
+    "weightkg": 94,
+    "evoType": "trade",
+    "requiredItem": "Orbeetlite",
+    "baseSpecies": "Orbeetle",
+    "forme": "Mega",
+    "num": -1332,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "wailordmega": {
+    "name": "Wailord-Mega",
+    "types": [
+      "Water",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 170,
+      "atk": 110,
+      "def": 75,
+      "spa": 110,
+      "spd": 75,
+      "spe": 60
+    },
+    "abilities": {
+      "0": "Mystic Haze"
+    },
+    "heightm": 20,
+    "weightkg": 750,
+    "evoType": "trade",
+    "requiredItem": "Wailordite",
+    "baseSpecies": "Wailord",
+    "forme": "Mega",
+    "num": -1333,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "savagegrace": {
+    "name": "Savage Grace",
+    "types": [
+      "Dragon",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 85,
+      "atk": 121,
+      "def": 63,
+      "spa": 119,
+      "spd": 81,
+      "spe": 121
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 1.4,
+    "weightkg": 101,
+    "evoType": "trade",
+    "num": -1334,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "rotomkaijo": {
+    "name": "Rotom-Kaijo",
+    "types": [
+      "Ghost",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 50,
+      "def": 77,
+      "spa": 95,
+      "spd": 77,
+      "spe": 91
+    },
+    "abilities": {
+      "0": "Levitate"
+    },
+    "heightm": 0.3,
+    "weightkg": 0.3,
+    "evoType": "trade",
+    "num": -1335,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "rotomstring": {
+    "name": "Rotom-String",
+    "types": [
+      "Ghost",
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 65,
+      "def": 107,
+      "spa": 105,
+      "spd": 107,
+      "spe": 86
+    },
+    "abilities": {
+      "0": "Levitate"
+    },
+    "heightm": 0.8,
+    "weightkg": 0.5,
+    "evoType": "trade",
+    "num": -1336,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "rotombeat": {
+    "name": "Rotom-Beat",
+    "types": [
+      "Ghost",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 65,
+      "def": 107,
+      "spa": 105,
+      "spd": 107,
+      "spe": 86
+    },
+    "abilities": {
+      "0": "Levitate"
+    },
+    "heightm": 0.8,
+    "weightkg": 0.5,
+    "evoType": "trade",
+    "num": -1337,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "rotombrass": {
+    "name": "Rotom-Brass",
+    "types": [
+      "Ghost",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 65,
+      "def": 107,
+      "spa": 105,
+      "spd": 107,
+      "spe": 86
+    },
+    "abilities": {
+      "0": "Levitate"
+    },
+    "heightm": 0.8,
+    "weightkg": 0.5,
+    "evoType": "trade",
+    "num": -1338,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "rotomgrand": {
+    "name": "Rotom-Grand",
+    "types": [
+      "Ghost",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 50,
+      "atk": 65,
+      "def": 107,
+      "spa": 105,
+      "spd": 107,
+      "spe": 86
+    },
+    "abilities": {
+      "0": "Levitate"
+    },
+    "heightm": 0.8,
+    "weightkg": 0.5,
+    "evoType": "trade",
+    "num": -1339,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "dragonitemegaz": {
+    "name": "Dragonite-Mega-Z",
+    "types": [
+      "Dragon",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 91,
+      "atk": 94,
+      "def": 119,
+      "spa": 160,
+      "spd": 144,
+      "spe": 92
+    },
+    "abilities": {
+      "0": "Pixilate"
+    },
+    "heightm": 2.9,
+    "weightkg": 280,
+    "evoType": "trade",
+    "requiredItem": "Dragontieite Z",
+    "baseSpecies": "Dragonite",
+    "forme": "Mega-Z",
+    "num": -1339,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "charizardmegaz": {
+    "name": "Charizard-Mega-Z",
+    "types": [
+      "Fire",
+      "Dark"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 78,
+      "atk": 124,
+      "def": 103,
+      "spa": 119,
+      "spd": 100,
+      "spe": 110
+    },
+    "abilities": {
+      "0": "Berserk"
+    },
+    "heightm": 1.7,
+    "weightkg": 250,
+    "evoType": "trade",
+    "requiredItem": "Charizardite Z",
+    "baseSpecies": "Charizard",
+    "forme": "Mega-Z",
+    "num": -1339,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "typhlosionmegah": {
+    "name": "Typhlosion-Mega-H",
+    "types": [
+      "Fire",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 73,
+      "atk": 109,
+      "def": 83,
+      "spa": 159,
+      "spd": 95,
+      "spe": 115
+    },
+    "abilities": {
+      "0": "Terrify"
+    },
+    "heightm": 2,
+    "weightkg": 85,
+    "evoType": "trade",
+    "requiredItem": "Typhlosionite H",
+    "baseSpecies": "Typhlosion",
+    "forme": "Mega",
+    "num": -1339,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "flygonmegaz": {
+    "name": "Flygon-Mega-Z",
+    "types": [
+      "Dragon",
+      "Bug"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 80,
+      "atk": 100,
+      "def": 100,
+      "spa": 135,
+      "spd": 100,
+      "spe": 105
+    },
+    "abilities": {
+      "0": "Tinted Lens"
+    },
+    "heightm": 3,
+    "weightkg": 95,
+    "evoType": "trade",
+    "requiredItem": "Flygonite Z",
+    "baseSpecies": "Flygon",
+    "forme": "Mega-Z",
+    "num": -1339,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "mewtwomegaz": {
+    "name": "Mewtwo-Mega-Z",
+    "types": [
+      "Psychic",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 106,
+      "atk": 190,
+      "def": 110,
+      "spa": 104,
+      "spd": 110,
+      "spe": 160
+    },
+    "abilities": {
+      "0": "Draconize"
+    },
+    "heightm": 2.5,
+    "weightkg": 150,
+    "evoType": "trade",
+    "requiredItem": "Mewtwonite Z",
+    "baseSpecies": "Mewtwo",
+    "forme": "Mega-Z",
+    "num": -1339,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "slowbromegag": {
+    "name": "Slowbro-Mega-G",
+    "types": [
+      "Poison",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 95,
+      "atk": 140,
+      "def": 105,
+      "spa": 140,
+      "spd": 80,
+      "spe": 30
+    },
+    "abilities": {
+      "0": "Quick Draw"
+    },
+    "heightm": 1.4,
+    "weightkg": 90,
+    "evoType": "trade",
+    "requiredItem": "Slowbronite G",
+    "baseSpecies": "Slowbro",
+    "forme": "Mega",
+    "num": -1339,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "darkraimegaz": {
+    "name": "Darkrai-Mega-Z",
+    "types": [
+      "Dark",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 70,
+      "atk": 40,
+      "def": 150,
+      "spa": 160,
+      "spd": 150,
+      "spe": 130
+    },
+    "abilities": {
+      "0": "Shadow Tag"
+    },
+    "heightm": 2.5,
+    "weightkg": 75.5,
+    "evoType": "trade",
+    "requiredItem": "Darkrite Z",
+    "baseSpecies": "Darkrai",
+    "forme": "Mega-Z",
+    "num": -1339,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "regigigasshine": {
+    "name": "Regigigas-Shine",
+    "types": [
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 110,
+      "atk": 160,
+      "def": 110,
+      "spa": 80,
+      "spd": 110,
+      "spe": 100
+    },
+    "abilities": {
+      "0": "Punk Rock"
+    },
+    "heightm": 3.71,
+    "weightkg": 420,
+    "evoType": "trade",
+    "num": -1340,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "hatterenealolagigamax": {
+    "name": "Hatterene-Alola-Gigamax",
+    "types": [
+      "Psychic",
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 114,
+      "atk": 90,
+      "def": 95,
+      "spa": 136,
+      "spd": 103,
+      "spe": 29
+    },
+    "abilities": {
+      "0": "Healer",
+      "1": "Anticipation",
+      "H": "Magic Bounce"
+    },
+    "heightm": 10.2,
+    "weightkg": 51,
+    "prevo": "Hattrem-Alola",
+    "evoType": "trade",
+    "num": -1341,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "amoongussmega": {
+    "name": "Amoonguss-Mega",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 114,
+      "atk": 85,
+      "def": 110,
+      "spa": 125,
+      "spd": 100,
+      "spe": 30
+    },
+    "abilities": {
+      "0": "Ejected"
+    },
+    "heightm": 1,
+    "weightkg": 21,
+    "evoType": "trade",
+    "requiredItem": "Vent",
+    "baseSpecies": "Amoonguss",
+    "forme": "Mega",
+    "num": -1342,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "miltankmega": {
+    "name": "Miltank-Mega",
+    "types": [
+      "Normal",
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 95,
+      "atk": 115,
+      "def": 127,
+      "spa": 55,
+      "spd": 80,
+      "spe": 118
+    },
+    "abilities": {
+      "0": "Repetitive Force"
+    },
+    "heightm": 1.7,
+    "weightkg": 100,
+    "evoType": "trade",
+    "requiredItem": "Miltankite",
+    "baseSpecies": "Miltank",
+    "forme": "Mega",
+    "num": -1343,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "emolgamegay": {
+    "name": "Emolga-Mega-Y",
+    "types": [
+      "Electric",
+      "Normal"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 55,
+      "atk": 90,
+      "def": 120,
+      "spa": 90,
+      "spd": 120,
+      "spe": 53
+    },
+    "abilities": {
+      "0": "Terrain Eater"
+    },
+    "heightm": 0.8,
+    "weightkg": 45,
+    "evoType": "trade",
+    "requiredItem": "Emolgite Y",
+    "baseSpecies": "Emolga",
+    "forme": "Mega-Y",
+    "num": -1344,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "beheeyemmega": {
+    "name": "Beheeyem-Mega",
+    "types": [
+      "Psychic",
+      "Steel"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 75,
+      "atk": 60,
+      "def": 120,
+      "spa": 165,
+      "spd": 145,
+      "spe": 20
+    },
+    "abilities": {
+      "0": "DNA Tracing"
+    },
+    "heightm": 1.5,
+    "weightkg": 63,
+    "evoType": "trade",
+    "requiredItem": "Beheeyemite",
+    "baseSpecies": "Beheeyem",
+    "forme": "Mega",
+    "num": -1345,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "swellowmega": {
+    "name": "Swellow-Mega",
+    "types": [
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 60,
+      "atk": 125,
+      "def": 65,
+      "spa": 115,
+      "spd": 55,
+      "spe": 135
+    },
+    "abilities": {
+      "0": "Aerilate"
+    },
+    "heightm": 1,
+    "weightkg": 54,
+    "evoType": "trade",
+    "requiredItem": "Swellowite",
+    "baseSpecies": "Swellow",
+    "forme": "Mega",
+    "num": -1346,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "paleogeist": {
+    "name": "Paleogeist",
+    "types": [
+      "Ghost",
+      "Rock"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 117,
+      "atk": 135,
+      "def": 115,
+      "spa": 55,
+      "spd": 100,
+      "spe": 28
+    },
+    "abilities": {
+      "0": "Sheer Willpower",
+      "H": "Sheer Force"
+    },
+    "heightm": 2.4,
+    "weightkg": 160,
+    "prevo": "Rampardos",
+    "evoType": "trade",
+    "num": -1347,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "celebihell": {
+    "name": "Celebi-Hell",
+    "types": [
+      "Steel",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 100,
+      "def": 100,
+      "spa": 100,
+      "spd": 100,
+      "spe": 100
+    },
+    "abilities": {
+      "0": "ReZero"
+    },
+    "heightm": 0.7,
+    "weightkg": 25,
+    "evoType": "trade",
+    "num": -1348,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "gardevoirhell": {
+    "name": "Gardevoir-Hell",
+    "types": [
+      "Fairy",
+      "Ground"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 68,
+      "atk": 65,
+      "def": 65,
+      "spa": 125,
+      "spd": 115,
+      "spe": 80
+    },
+    "abilities": {
+      "0": "Petrifying Gaze",
+      "1": "Magic Guard",
+      "H": "Queenly Majesty"
+    },
+    "heightm": 1.9,
+    "weightkg": 71,
+    "evoType": "trade",
+    "num": -1349,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "gloomhorn": {
+    "name": "Gloomhorn",
+    "types": [
+      "Dark",
+      "Ghost"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 89,
+      "atk": 140,
+      "def": 90,
+      "spa": 70,
+      "spd": 80,
+      "spe": 61
+    },
+    "abilities": {
+      "0": "Stench",
+      "1": "Poison Heal",
+      "H": "Technician"
+    },
+    "heightm": 2.4,
+    "weightkg": 95,
+    "evoType": "trade",
+    "num": -1350,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "venusaurprime": {
+    "name": "Venusaur-Prime",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 102,
+      "def": 103,
+      "spa": 120,
+      "spd": 120,
+      "spe": 100
+    },
+    "abilities": {
+      "0": "Overgrow",
+      "1": "Grassy Surge",
+      "H": "Chlorophyll"
+    },
+    "heightm": 2,
+    "weightkg": 100,
+    "evoType": "trade",
+    "num": -1351,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "venusaurmegaprime": {
+    "name": "Venusaur-Mega-Prime",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 100,
+      "atk": 120,
+      "def": 143,
+      "spa": 142,
+      "spd": 140,
+      "spe": 100
+    },
+    "abilities": {
+      "0": "Thick Fat"
+    },
+    "heightm": 2.4,
+    "weightkg": 155.5,
+    "evoType": "trade",
+    "requiredItem": "Venusaurite Prime",
+    "baseSpecies": "Venusaur-Prime",
+    "forme": "Mega",
+    "num": -1352,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "charizardprime": {
+    "name": "Charizard-Prime",
+    "types": [
+      "Fire",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 98,
+      "atk": 104,
+      "def": 98,
+      "spa": 129,
+      "spd": 105,
+      "spe": 120
+    },
+    "abilities": {
+      "0": "Blaze",
+      "1": "Sheer Force",
+      "H": "Solar Power"
+    },
+    "heightm": 1.7,
+    "weightkg": 89.5,
+    "evoType": "trade",
+    "num": -1353,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "charizardmegaprimex": {
+    "name": "Charizard-Mega-Prime-X",
+    "types": [
+      "Fire",
+      "Dragon"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 98,
+      "atk": 150,
+      "def": 131,
+      "spa": 150,
+      "spd": 105,
+      "spe": 120
+    },
+    "abilities": {
+      "0": "Tough Claws"
+    },
+    "heightm": 1.7,
+    "weightkg": 110.5,
+    "evoType": "trade",
+    "requiredItem": "Charizardite Prime",
+    "baseSpecies": "Charizard-Prime",
+    "forme": "Mega-X",
+    "num": -1354,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "charizardmegaprimey": {
+    "name": "Charizard-Mega-Prime-Y",
+    "types": [
+      "Fire",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 98,
+      "atk": 124,
+      "def": 98,
+      "spa": 179,
+      "spd": 135,
+      "spe": 120
+    },
+    "abilities": {
+      "0": "Drought"
+    },
+    "heightm": 1.7,
+    "weightkg": 100.5,
+    "evoType": "trade",
+    "requiredItem": "Charizardite Prime Y",
+    "baseSpecies": "Charizard-Prime",
+    "forme": "Mega-Y",
+    "num": -1355,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "flutterlame": {
+    "name": "Flutter Lame",
+    "types": [
+      "Ghost",
+      "Fairy"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 73,
+      "atk": 73,
+      "def": 73,
+      "spa": 117,
+      "spd": 117,
+      "spe": 117
+    },
+    "abilities": {
+      "0": "Protosynthesis"
+    },
+    "heightm": 1.4,
+    "weightkg": 4,
+    "evoType": "trade",
+    "num": -1356,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "blastoiseprime": {
+    "name": "Blastoise-Prime",
+    "types": [
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 99,
+      "atk": 103,
+      "def": 120,
+      "spa": 105,
+      "spd": 125,
+      "spe": 98
+    },
+    "abilities": {
+      "0": "Torrent",
+      "1": "Dauntless Shield",
+      "H": "Rain Dish"
+    },
+    "heightm": 1.6,
+    "weightkg": 85.5,
+    "evoType": "trade",
+    "num": -1357,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "blastoisemegaprime": {
+    "name": "Blastoise-Mega-Prime",
+    "types": [
+      "Water"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 99,
+      "atk": 123,
+      "def": 140,
+      "spa": 155,
+      "spd": 135,
+      "spe": 98
+    },
+    "abilities": {
+      "0": "Mega Launcher"
+    },
+    "heightm": 1.6,
+    "weightkg": 101.1,
+    "evoType": "trade",
+    "requiredItem": "Blastoisite Prime",
+    "baseSpecies": "Blastoise-Prime",
+    "forme": "Mega",
+    "num": -1358,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "hoho": {
+    "name": "Ho-Ho",
+    "types": [
+      "Fire",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 86,
+      "atk": 110,
+      "def": 70,
+      "spa": 90,
+      "spd": 134,
+      "spe": 70
+    },
+    "abilities": {
+      "0": "Pressure",
+      "H": "Regenerator"
+    },
+    "heightm": 3.8,
+    "weightkg": 199,
+    "evoType": "trade",
+    "num": -1359,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "lugaya": {
+    "name": "Lugaya",
+    "types": [
+      "Psychic",
+      "Flying"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 86,
+      "atk": 70,
+      "def": 110,
+      "spa": 70,
+      "spd": 134,
+      "spe": 90
+    },
+    "abilities": {
+      "0": "Pressure",
+      "H": "Multiscale"
+    },
+    "heightm": 5.2,
+    "weightkg": 216,
+    "evoType": "trade",
+    "num": -1360,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "mewtwah": {
+    "name": "Mewtwah",
+    "types": [
+      "Psychic"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 96,
+      "atk": 110,
+      "def": 75,
+      "spa": 124,
+      "spd": 75,
+      "spe": 120
+    },
+    "abilities": {
+      "0": "Pressure",
+      "H": "Unnerve"
+    },
+    "heightm": 2,
+    "weightkg": 122.2,
+    "evoType": "trade",
+    "num": -1361,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "marshydow": {
+    "name": "Marshydow",
+    "types": [
+      "Ghost",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 90,
+      "atk": 108,
+      "def": 80,
+      "spa": 90,
+      "spd": 90,
+      "spe": 108
+    },
+    "abilities": {
+      "0": "Technician"
+    },
+    "heightm": 0.7,
+    "weightkg": 22.2,
+    "evoType": "trade",
+    "num": -1362,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+  "ledigod": {
+    "name": "Ledigod",
+    "types": [
+      "Bug",
+      "Fighting"
+    ],
+    "genderRatio": {
+      "M": 0.875,
+      "F": 0.125
+    },
+    "baseStats": {
+      "hp": 55,
+      "atk": 135,
+      "def": 50,
+      "spa": 55,
+      "spd": 110,
+      "spe": 85
+    },
+    "abilities": {
+      "0": "Swarm",
+      "1": "Early Bird",
+      "H": "Iron Fist"
+    },
+    "heightm": 1.4,
+    "weightkg": 35.6,
+    "evoType": "trade",
+    "num": -1363,
+    "eggGroups": [
+      "Undiscovered"
+    ]
+  },
+	// End of Custom Pokemon
 	bulbasaur: {
 		num: 1,
 		name: "Bulbasaur",

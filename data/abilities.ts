@@ -33,6 +33,27 @@ Ratings and how they work:
 */
 
 export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
+	// Custom Abilities
+	monsoonsurge: {
+		name: "Monsoon Surge",
+		onStart(pokemon) {
+			if (this.field.isWeather('raindance')) return;
+			this.field.setWeather('raindance');
+			
+		},
+		num: -1001,
+		rating: 4,
+	},
+	blizzardveil: {
+		name: 'Blizzard Veil',
+		onStart(pokemon) {
+			if (this.field.isWeather('hail')) return;
+			this.field.setWeather('hail');
+		},
+		num: -1002,
+		rating: 4,
+	},
+	// End of Custom Abilities
 	noability: {
 		isNonstandard: "Past",
 		flags: {},

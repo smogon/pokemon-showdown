@@ -1,4 +1,397 @@
-export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
+export const AbilitiesText: { [id: IDEntry]: AbilityText; } = {
+	// Custom Abilities
+	"monsoonsurge": {
+		"name": "Monsoon Surge",
+		"desc": "Summons rain for 10 turns when this Pokémon enters the battle.",
+		"shortDesc": "Summons rain for 10 turns."
+	},
+	"blizzardveil": {
+		"name": "Blizzard Veil",
+		"desc": "Summons snow for 10 turns when this Pokémon enters the battle.",
+		"shortDesc": "Summons snow for 10 turns."
+	},
+	"sandstormrage": {
+		"name": "Sandstorm Rage",
+		"desc": "Summons a sandstorm for 10 turns when this Pokémon enters the battle.",
+		"shortDesc": "Summons a sandstorm for 10 turns."
+	},
+	"solarflare": {
+		"name": "Solar Flare",
+		"desc": "Summons harsh sunlight for 10 turns when this Pokémon enters the battle.",
+		"shortDesc": "Summons harsh sunlight for 10 turns."
+	},
+	"eerieresonance": {
+		"name": "Eerie Resonance",
+		"desc": "Summons Electric Terrain for 10 turns when this Pokémon enters the battle.",
+		"shortDesc": "Summons Electric Terrain for 10 turns."
+	},
+	"mindscapedomain": {
+		"name": "Mindscape Domain",
+		"desc": "Summons Psychic Terrain for 10 turns when this Pokémon enters the battle.",
+		"shortDesc": "Summons Psychic Terrain for 10 turns."
+	},
+	"verdantbloom": {
+		"name": "Verdant Bloom",
+		"desc": "Summons Grassy Terrain for 10 turns when this Pokémon enters the battle.",
+		"shortDesc": "Summons Grassy Terrain for 10 turns."
+	},
+	"mystichaze": {
+		"name": "Mystic Haze",
+		"desc": "Summons Misty Terrain for 10 turns when this Pokémon enters the battle.",
+		"shortDesc": "Summons Misty Terrain for 10 turns."
+	},
+	"tundracore": {
+		"name": "Tundra Core",
+		"desc": "Boosts the highest stat in Snow.",
+		"shortDesc": "Boosts the highest stat in Snow."
+	},
+	"desertheart": {
+		"name": "Desert Heart",
+		"desc": "Boosts the highest stat in Sandstorm.",
+		"shortDesc": "Boosts the highest stat in Sandstorm."
+	},
+	"aquacircuit": {
+		"name": "Aqua Circuit",
+		"desc": "Boosts the highest stat in Rain.",
+		"shortDesc": "Boosts the highest stat in Rain."
+	},
+	"psychicpulse": {
+		"name": "Psychic Pulse",
+		"desc": "Boosts the highest stat in Psychic Terrain.",
+		"shortDesc": "Boosts the highest stat in Psychic Terrain."
+	},
+	"mysticaura": {
+		"name": "Mystic Aura",
+		"desc": "Boosts the highest stat in Misty Terrain.",
+		"shortDesc": "Boosts the highest stat in Misty Terrain."
+	},
+	"overgrowthengine": {
+		"name": "Overgrowth Engine",
+		"desc": "Boosts the highest stat in Grassy Terrain.",
+		"shortDesc": "Boosts the highest stat in Grassy Terrain."
+	},
+	"arcanemight": {
+		"name": "Arcane Might",
+		"desc": "Doubles the Special Attack stat.",
+		"shortDesc": "Doubles Special Attack."
+	},
+	"terrify": {
+		"name": "Terrify",
+		"desc": "Lowers the opponent's Special Attack when this Pokémon enters the battle.",
+		"shortDesc": "Lowers the opponent's Special Attack."
+	},
+	"charisma": {
+		"name": "Charisma",
+		"desc": "Boosts Special Attack after knocking out a foe.",
+		"shortDesc": "Boosts Special Attack after a KO."
+	},
+	"mentalfortitude": {
+		"name": "Mental Fortitude",
+		"desc": "Boosts Special Defense when hit by an attack.",
+		"shortDesc": "Boosts Special Defense when hit."
+	},
+	"accelerationofruin": {
+		"name": "Acceleration of Ruin",
+		"desc": "Decreases the Speed of all opposing Pokémon while this Pokémon is on the field.",
+		"shortDesc": "Lowers opponents' Speed."
+	},
+	"prismaticaura": {
+		"name": "Prismatic Aura",
+		"desc": "Deals damage to attacking Pokémon when hit by a non-contact move.",
+		"shortDesc": "Non-contact moves deal damage to attacker."
+	},
+	"adaptivemastery": {
+		"name": "Adaptive Mastery",
+		"desc": "All moves used by this Pokémon gain a same-type attack bonus (STAB).",
+		"shortDesc": "All moves gain STAB."
+	},
+	"stormbloom": {
+		"name": "Stormbloom",
+		"desc": "Summons Rain and Grassy Terrain for 8 turns when this Pokémon enters the battle.",
+		"shortDesc": "Summons Rain and Grassy Terrain for 8 turns."
+	},
+	"solarmist": {
+		"name": "Solar Mist",
+		"desc": "Summons Sun and Misty Terrain for 8 turns when this Pokémon enters the battle.",
+		"shortDesc": "Summons Sun and Misty Terrain for 8 turns."
+	},
+	"desertmind": {
+		"name": "Desert Mind",
+		"desc": "Summons Sandstorm and Psychic Terrain for 8 turns when this Pokémon enters the battle.",
+		"shortDesc": "Summons Sandstorm and Psychic Terrain for 8 turns."
+	},
+	"frostvolt": {
+		"name": "Frostvolt",
+		"desc": "Summons Snow and Electric Terrain for 8 turns when this Pokémon enters the battle.",
+		"shortDesc": "Summons Snow and Electric Terrain for 8 turns."
+	},
+	"soulharvest": {
+		"name": "Soul Harvest",
+		"desc": "Heals 25% HP after knocking out a foe with an attack.",
+		"shortDesc": "Heals 25% HP after a KO."
+	},
+	"entomize": {
+		"name": "Entomize",
+		"desc": "This Pokémon's Normal-type moves become Bug-type and deal 1.2x damage.",
+		"shortDesc": "Normal moves become Bug-type with 1.2x power."
+	},
+	"umbralforce": {
+		"name": "Umbral Force",
+		"desc": "This Pokémon's Normal-type moves become Dark-type and deal 1.2x damage.",
+		"shortDesc": "Normal moves become Dark-type with 1.2x power."
+	},
+	"draconize": {
+		"name": "Draconize",
+		"desc": "This Pokémon's Normal-type moves become Dragon-type and deal 1.2x damage.",
+		"shortDesc": "Normal moves become Dragon-type with 1.2x power."
+	},
+	"combatboost": {
+		"name": "Combat Boost",
+		"desc": "This Pokémon's Normal-type moves become Fighting-type and deal 1.2x damage.",
+		"shortDesc": "Normal moves become Fighting-type with 1.2x power."
+	},
+
+	"infernalize": {
+		"name": "Infernalize",
+		"desc": "This Pokémon's Normal-type moves become Fire-type and deal 1.2x damage.",
+		"shortDesc": "Normal moves become Fire-type with 1.2x power."
+	},
+	"hauntify": {
+		"name": "Hauntify",
+		"desc": "This Pokémon's Normal-type moves become Ghost-type and deal 1.2x damage.",
+		"shortDesc": "Normal moves become Ghost-type with 1.2x power."
+	},
+	"verdantforce": {
+		"name": "Verdant Force",
+		"desc": "This Pokémon's Normal-type moves become Grass-type and deal 1.2x damage.",
+		"shortDesc": "Normal moves become Grass-type with 1.2x power."
+	},
+	"terranize": {
+		"name": "Terranize",
+		"desc": "This Pokémon's Normal-type moves become Ground-type and deal 1.2x damage.",
+		"shortDesc": "Normal moves become Ground-type with 1.2x power."
+	},
+	"toxify": {
+		"name": "Toxify",
+		"desc": "This Pokémon's Normal-type moves become Poison-type and deal 1.2x damage.",
+		"shortDesc": "Normal moves become Poison-type with 1.2x power."
+	},
+	"petrify": {
+		"name": "Petrify",
+		"desc": "This Pokémon's Normal-type moves become Rock-type and deal 1.2x damage.",
+		"shortDesc": "Normal moves become Rock-type with 1.2x power."
+	},
+	"ferronize": {
+		"name": "Ferronize",
+		"desc": "This Pokémon's Normal-type moves become Steel-type and deal 1.2x damage.",
+		"shortDesc": "Normal moves become Steel-type with 1.2x power."
+	},
+	"aquify": {
+		"name": "Aquify",
+		"desc": "This Pokémon's Normal-type moves become Water-type and deal 1.2x damage.",
+		"shortDesc": "Normal moves become Water-type with 1.2x power."
+	},
+	"psionize": {
+		"name": "Psionize",
+		"desc": "This Pokémon's Normal-type moves become Psychic-type and deal 1.2x damage.",
+		"shortDesc": "Normal moves become Psychic-type with 1.2x power."
+	},
+	"antennaboost": {
+		"name": "Antenna Boost",
+		"desc": "This Pokémon's Bug-type moves gain +1 priority in Bug-type moves if HP is full.",
+		"shortDesc": "Bug moves get +1 priority at full HP."
+	},
+	"shadowsprint": {
+		"name": "Shadow Sprint",
+		"desc": "This Pokémon's Dark-type moves gain +1 priority when HP is full.",
+		"shortDesc": "Dark moves get +1 priority at full HP."
+	},
+	"wyvernwings": {
+		"name": "Wyvern Wings",
+		"desc": "This Pokémon's Dragon-type moves gain +1 priority when HP is full.",
+		"shortDesc": "Dragon moves get +1 priority at full HP."
+	},
+	"pixiedash": {
+		"name": "Pixie Dash",
+		"desc": "This Pokémon's Fairy-type moves gain +1 priority when HP is full.",
+		"shortDesc": "Fairy moves get +1 priority at full HP."
+	},
+	"voltdash": {
+		"name": "Volt Dash",
+		"desc": "This Pokémon's Electric-type moves gain +1 priority when HP is full.",
+		"shortDesc": "Electric moves get +1 priority at full HP."
+	},
+	"brawlersinstinct": {
+		"name": "Brawler's Instinct",
+		"desc": "This Pokémon's Fighting-type moves gain +1 priority when HP is full.",
+		"shortDesc": "Fighting moves get +1 priority at full HP."
+	},
+	"blazerush": {
+		"name": "Blaze Rush",
+		"desc": "This Pokémon's Fire-type moves gain +1 priority when HP is full.",
+		"shortDesc": "Fire moves get +1 priority at full HP."
+	},
+	"phantomdash": {
+		"name": "Phantom Dash",
+		"desc": "This Pokémon's Ghost-type moves gain +1 priority when HP is full.",
+		"shortDesc": "Ghost moves get +1 priority at full HP."
+	},
+	"verdantsurge": {
+		"name": "Verdant Surge",
+		"desc": "This Pokémon's Grass-type moves gain +1 priority when HP is full.",
+		"shortDesc": "Grass moves get +1 priority at full HP."
+	},
+	"earthengrace": {
+		"name": "Earthen Grace",
+		"desc": "This Pokémon's Ground-type moves gain +1 priority when HP is full.",
+		"shortDesc": "Ground moves get +1 priority at full HP."
+	},
+	"frostdash": {
+		"name": "Frost Dash",
+		"desc": "This Pokémon's Ice-type moves gain +1 priority when HP is full.",
+		"shortDesc": "Ice moves get +1 priority at full HP."
+	},
+	"venomrush": {
+		"name": "Venom Rush",
+		"desc": "This Pokémon's Poison-type moves gain +1 priority when HP is full.",
+		"shortDesc": "Poison moves get +1 priority at full HP."
+	},
+	"mindleap": {
+		"name": "Mind Leap",
+		"desc": "This Pokémon's Psychic-type moves gain +1 priority when HP is full.",
+		"shortDesc": "Psychic moves get +1 priority at full HP."
+	},
+	"stonemomentum": {
+		"name": "Stone Momentum",
+		"desc": "This Pokémon's Rock-type moves gain +1 priority when HP is full.",
+		"shortDesc": "Rock moves get +1 priority at full HP."
+	},
+	"metallicburst": {
+		"name": "Metallic Burst",
+		"desc": "This Pokémon's Steel-type moves gain +1 priority when HP is full.",
+		"shortDesc": "Steel moves get +1 priority at full HP."
+	},
+	"tidalsurge": {
+		"name": "Tidal Surge",
+		"desc": "This Pokémon's Water-type moves gain +1 priority when HP is full.",
+		"shortDesc": "Water moves get +1 priority at full HP."
+	},
+	"hiveinstinct": {
+		"name": "Hive Instinct",
+		"desc": "This Pokémon's Bug-type attacks gain the STAB bonus.",
+		"shortDesc": "Bug-type attacks gain STAB."
+	},
+	"shadowborn": {
+		"name": "Shadowborn",
+		"desc": "This Pokémon's Dark-type attacks gain the STAB bonus.",
+		"shortDesc": "Dark-type attacks gain STAB."
+	},
+	"draconicessence": {
+		"name": "Draconic Essence",
+		"desc": "This Pokémon's Dragon-type attacks gain the STAB bonus.",
+		"shortDesc": "Dragon-type attacks gain STAB."
+	},
+	"chargedcore": {
+		"name": "Charged Core",
+		"desc": "This Pokémon's Electric-type attacks gain the STAB bonus.",
+		"shortDesc": "Electric-type attacks gain STAB."
+	},
+	"enchantedforce": {
+		"name": "Enchanted Force",
+		"desc": "This Pokémon's Fairy-type attacks gain the STAB bonus.",
+		"shortDesc": "Fairy-type attacks gain STAB."
+	},
+	"warriorswill": {
+		"name": "Warrior's Will",
+		"desc": "This Pokémon's Fighting-type attacks gain the STAB bonus.",
+		"shortDesc": "Fighting-type attacks gain STAB."
+	},
+	"infernalsurge": {
+		"name": "Infernal Surge",
+		"desc": "This Pokémon's Fire-type attacks gain the STAB bonus.",
+		"shortDesc": "Fire-type attacks gain STAB."
+	},
+	"skyborn": {
+		"name": "Skyborn",
+		"desc": "This Pokémon's Flying-type attacks gain the STAB bonus.",
+		"shortDesc": "Flying-type attacks gain STAB."
+	},
+	"etherealpresence": {
+		"name": "Ethereal Presence",
+		"desc": "This Pokémon's Ghost-type attacks gain the STAB bonus.",
+		"shortDesc": "Ghost-type attacks gain STAB."
+	},
+	"verdantblessing": {
+		"name": "Verdant Blessing",
+		"desc": "This Pokémon's Grass-type attacks gain the STAB bonus.",
+		"shortDesc": "Grass-type attacks gain STAB."
+	},
+	"earthenpower": {
+		"name": "Earthen Power",
+		"desc": "This Pokémon's Ground-type attacks gain the STAB bonus.",
+		"shortDesc": "Ground-type attacks gain STAB."
+	},
+	"glacialheritage": {
+		"name": "Glacial Heritage",
+		"desc": "This Pokémon's Ice-type attacks gain the STAB bonus.",
+		"shortDesc": "Ice-type attacks gain STAB."
+	},
+	"fundamentalforce": {
+		"name": "Fundamental Force",
+		"desc": "This Pokémon's Normal-type attacks gain the STAB bonus.",
+		"shortDesc": "Normal-type attacks gain STAB."
+	},
+	"toxicveins": {
+		"name": "Toxic Veins",
+		"desc": "This Pokémon's Poison-type attacks gain the STAB bonus.",
+		"shortDesc": "Poison-type attacks gain STAB."
+	},
+	"mindforce": {
+		"name": "Mindforce",
+		"desc": "This Pokémon's Psychic-type attacks gain the STAB bonus.",
+		"shortDesc": "Psychic-type attacks gain STAB."
+	},
+	"stoneborn": {
+		"name": "Stoneborn",
+		"desc": "This Pokémon's Rock-type attacks gain the STAB bonus.",
+		"shortDesc": "Rock-type attacks gain STAB."
+	},
+	"metallicsoul": {
+		"name": "Metallic Soul",
+		"desc": "This Pokémon's Steel-type attacks gain the STAB bonus.",
+		"shortDesc": "Steel-type attacks gain STAB."
+	},
+	"aquaflow": {
+		"name": "Aqua Flow",
+		"desc": "This Pokémon's Water-type attacks gain the STAB bonus.",
+		"shortDesc": "Water-type attacks gain STAB."
+	},
+	"terraineater": {
+		"name": "Terrain Eater",
+		"desc": "On switch-in, this Pokémon removes any terrain currently active on the field.",
+		"shortDesc": "Removes terrain on switch-in."
+	},
+	"cleanfreak": {
+		"name": "Clean Freak",
+		"desc": "On switch-in, this Pokémon removes all entry hazards from its side of the field. It takes damage from the hazards first before removing them.",
+		"shortDesc": "Clears its side's hazards after taking hazard damage."
+	},
+	"gravitygenerator": {
+		"name": "Gravity Generator",
+		"desc": "On switch-in, this Pokémon sets Gravity for 5 turns. If Gravity is already active when it switches in, Gravity is removed instead.",
+		"shortDesc": "Sets Gravity for 5 turns or ends it if already active."
+	},
+	"windwalker": {
+		"name": "Wind Walker",
+		"desc": "On switch-in, this Pokémon sets up Tailwind for 4 turns. If Tailwind is already active, it does not activate again.",
+		"shortDesc": "Sets Tailwind for 4 turns if it's not already active."
+	},
+	"rightsidedown": {
+		"name": "Rightside Down",
+		"desc": "On switch-in, all opposing Pokémon have their stat changes inverted. Stat boosts become drops, and stat drops become boosts.",
+		"shortDesc": "Opponents' stat changes are inverted on switch-in."
+	},
+	// End of Custom Abilities
 	noability: {
 		name: "No Ability",
 		shortDesc: "Does nothing.",

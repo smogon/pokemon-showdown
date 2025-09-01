@@ -1,4 +1,1641 @@
 export const Items: import('../sim/dex-items').ItemDataTable = {
+	// Custom Items
+	"serperiorite": {
+		name: "Serperiorite",
+		megaStone: "Serperior-Mega",
+		itemUser: ["Serperior"],
+		megaEvolves: "Serperior",
+		num: -1005,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"emboarite": {
+		name: "Emboarite",
+		megaStone: "Emboar-Mega",
+		itemUser: ["Emboar"],
+		megaEvolves: "Emboar",
+		num: -1005,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"samurottite": {
+		name: "Samurottite",
+		megaStone: "Samurott-Mega",
+		itemUser: ["Samurott"],
+		megaEvolves: "Samurott",
+		num: -1005,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"comfeyite": {
+		name: "Comfeyite",
+		megaStone: "Comfey-Mega",
+		itemUser: ["Comfey"],
+		megaEvolves: "Comfey",
+		num: -1007,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"corviknightite": {
+		name: "Corviknightite",
+		megaStone: "Corviknight-Mega",
+		itemUser: ["Corviknight"],
+		megaEvolves: "Corviknight",
+		num: -1008,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"dragapultite": {
+		name: "Dragapultite",
+		megaStone: "Dragapult-Mega",
+		itemUser: ["Dragapult"],
+		megaEvolves: "Dragapult",
+		num: -1007,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"galvantulite": {
+		name: "Galvantulite",
+		megaStone: "Galvantula-Mega",
+		itemUser: ["Galvantula"],
+		megaEvolves: "Galvantula",
+		num: -1008,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"bronzongite": {
+		name: "Bronzongite",
+		megaStone: "Bronzong-Mega",
+		itemUser: ["Bronzong"],
+		megaEvolves: "Bronzong",
+		num: -1010,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"runerigusite": {
+		name: "Runerigusite",
+		megaStone: "Runerigus-Mega",
+		itemUser: ["Runerigus"],
+		megaEvolves: "Runerigus",
+		num: -1011,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"butterfrite": {
+		name: "Butterfrite",
+		megaStone: "Butterfree-Mega",
+		itemUser: ["Butterfree"],
+		megaEvolves: "Butterfree",
+		num: -1012,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"florgesitelove": {
+		name: "Florgesite Love",
+		megaStone: "Florges-Mega-Love",
+		itemUser: ["Florges"],
+		megaEvolves: "Florges",
+		num: -1014,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"noivernite": {
+		name: "Noivernite",
+		megaStone: "Noivern-Mega",
+		itemUser: ["Noivern"],
+		megaEvolves: "Noivern",
+		num: -1015,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"serperioriteivy": {
+		name: "SerperioriteIvy",
+		megaStone: "Serperior-Mega-Ivy",
+		itemUser: ["Serperior"],
+		megaEvolves: "Serperior",
+		num: -1016,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"starmite": {
+		name: "Starmite",
+		megaStone: "Starmie-Mega",
+		itemUser: ["Starmie"],
+		megaEvolves: "Starmie",
+		num: -1017,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"tropiusite": {
+		name: "Tropiusite",
+		megaStone: "Tropius-Mega",
+		itemUser: ["Tropius"],
+		megaEvolves: "Tropius",
+		num: -1018,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"sirfetchdite": {
+		name: "Sirfetchdite",
+		megaStone: "Sirfetch’d-Mega",
+		itemUser: ["Sirfetch’d"],
+		megaEvolves: "Sirfetch’d",
+		num: -1019,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"toxtricite": {
+		name: "Toxtricite",
+		megaStone: "Toxtricity-Mega",
+		itemUser: ["Toxtricity"],
+		megaEvolves: "Toxtricity",
+		num: -1019,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"dusknoirite": {
+		name: "Dusknoirite",
+		megaStone: "Dusknoir-Mega",
+		itemUser: ["Dusknoir"],
+		megaEvolves: "Dusknoir",
+		num: -1019,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"aurorusite": {
+		name: "Aurorusite",
+		megaStone: "Aurorus-Mega",
+		itemUser: ["Aurorus"],
+		megaEvolves: "Aurorus",
+		num: -1020,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"tyrantrumite": {
+		name: "Tyrantrumite",
+		megaStone: "Tyrantrum-Mega",
+		itemUser: ["Tyrantrum"],
+		megaEvolves: "Tyrantrum",
+		num: -1021,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"drapionite": {
+		name: "Drapionite",
+		megaStone: "Drapion-Mega",
+		itemUser: ["Drapion"],
+		megaEvolves: "Drapion",
+		num: -1022,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"charizarditea": {
+		name: "Charizardite A",
+		megaStone: "Charizard-Mega-A",
+		itemUser: ["Charizard"],
+		megaEvolves: "Charizard",
+		num: -1024,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"clodsirite": {
+		name: "Clodsirite",
+		megaStone: "Clodsire-Mega",
+		itemUser: ["Clodsire"],
+		megaEvolves: "Clodsire",
+		num: -1025,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"chesnaughtite": {
+		name: "Chesnaughtite",
+		megaStone: "Chesnaught-Mega",
+		itemUser: ["Chesnaught"],
+		megaEvolves: "Chesnaught",
+		num: -1026,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"delphoxite": {
+		name: "Delphoxite",
+		megaStone: "Delphox-Mega",
+		itemUser: ["Delphox"],
+		megaEvolves: "Delphox",
+		num: -1027,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"greninjite": {
+		name: "Greninjite",
+		megaStone: "Greninja-Mega",
+		itemUser: ["Greninja"],
+		megaEvolves: "Greninja",
+		num: -1028,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"dragoniteitea": {
+		name: "Dragoniteite A",
+		megaStone: "Dragonite-Mega-A",
+		itemUser: ["Dragonite"],
+		megaEvolves: "Dragonite",
+		num: -1029,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"emboaritey": {
+		name: "Emboarite Y",
+		megaStone: "Emboar-Mega-Y",
+		itemUser: ["Emboar"],
+		megaEvolves: "Emboar",
+		num: -1030,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"empoleonite": {
+		name: "Empoleonite",
+		megaStone: "Empoleon-Mega",
+		itemUser: ["Empoleon"],
+		megaEvolves: "Empoleon",
+		num: -1031,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"samurottitey": {
+		name: "Samurottite Y",
+		megaStone: "Samurott-Mega-Y",
+		itemUser: ["Samurott"],
+		megaEvolves: "Samurott",
+		num: -1032,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"infernapite": {
+		name: "Infernapite",
+		megaStone: "Infernape-Mega",
+		itemUser: ["Infernape"],
+		megaEvolves: "Infernape",
+		num: -1033,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"torterrite": {
+		name: "Torterrite",
+		megaStone: "Torterra-Mega",
+		itemUser: ["Torterra"],
+		megaEvolves: "Torterra",
+		num: -1034,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"sylveonite": {
+		name: "Sylveonite",
+		megaStone: "Sylveon-Mega",
+		itemUser: ["Sylveon"],
+		megaEvolves: "Sylveon",
+		num: -1035,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"espeonite": {
+		name: "Espeonite",
+		megaStone: "Espeon-Mega",
+		itemUser: ["Espeon"],
+		megaEvolves: "Espeon",
+		num: -1036,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"umbreonite": {
+		name: "Umbreonite",
+		megaStone: "Umbreon-Mega",
+		itemUser: ["Umbreon"],
+		megaEvolves: "Umbreon",
+		num: -1037,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"jolteonite": {
+		name: "Jolteonite",
+		megaStone: "Jolteon-Mega",
+		itemUser: ["Jolteon"],
+		megaEvolves: "Jolteon",
+		num: -1038,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"vaporeonite": {
+		name: "Vaporeonite",
+		megaStone: "Vaporeon-Mega",
+		itemUser: ["Vaporeon"],
+		megaEvolves: "Vaporeon",
+		num: -1039,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"flareonite": {
+		name: "Flareonite",
+		megaStone: "Flareon-Mega",
+		itemUser: ["Flareon"],
+		megaEvolves: "Flareon",
+		num: -1040,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"glaceonite": {
+		name: "Glaceonite",
+		megaStone: "Glaceon-Mega",
+		itemUser: ["Glaceon"],
+		megaEvolves: "Glaceon",
+		num: -1041,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"leafeonite": {
+		name: "Leafeonite",
+		megaStone: "Leafeon-Mega",
+		itemUser: ["Leafeon"],
+		megaEvolves: "Leafeon",
+		num: -1042,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"armarougite": {
+		name: "Armarougite",
+		megaStone: "Armarouge-Mega",
+		itemUser: ["Armarouge"],
+		megaEvolves: "Armarouge",
+		num: -1043,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"ceruledgite": {
+		name: "Ceruledgite",
+		megaStone: "Ceruledge-Mega",
+		itemUser: ["Ceruledge"],
+		megaEvolves: "Ceruledge",
+		num: -1044,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"gyaradositey": {
+		name: "Gyaradosite Y",
+		megaStone: "Gyarados-Mega-Y",
+		itemUser: ["Gyarados"],
+		megaEvolves: "Gyarados",
+		num: -1045,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"emolgite": {
+		name: "Emolgite",
+		megaStone: "Emolga-Mega",
+		itemUser: ["Emolga"],
+		megaEvolves: "Emolga",
+		num: -1046,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"articunite": {
+		name: "Articunite",
+		megaStone: "Articuno-Mega",
+		itemUser: ["Articuno"],
+		megaEvolves: "Articuno",
+		num: -1047,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"zapdosite": {
+		name: "Zapdosite",
+		megaStone: "Zapdos-Mega",
+		itemUser: ["Zapdos"],
+		megaEvolves: "Zapdos",
+		num: -1048,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"moltresite": {
+		name: "Moltresite",
+		megaStone: "Moltres-Mega",
+		itemUser: ["Moltres"],
+		megaEvolves: "Moltres",
+		num: -1049,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"chandelurite": {
+		name: "Chandelurite",
+		megaStone: "Chandelure-Mega",
+		itemUser: ["Chandelure"],
+		megaEvolves: "Chandelure",
+		num: -1050,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"suicunite": {
+		name: "Suicunite",
+		megaStone: "Suicune-Mega",
+		itemUser: ["Suicune"],
+		megaEvolves: "Suicune",
+		num: -1051,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"raikite": {
+		name: "Raikite",
+		megaStone: "Raikou-Mega",
+		itemUser: ["Raikou"],
+		megaEvolves: "Raikou",
+		num: -1052,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"enteite": {
+		name: "Enteite",
+		megaStone: "Entei-Mega",
+		itemUser: ["Entei"],
+		megaEvolves: "Entei",
+		num: -1053,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"feraligatrite": {
+		name: "Feraligatrite",
+		megaStone: "Feraligatr-Mega",
+		itemUser: ["Feraligatr"],
+		megaEvolves: "Feraligatr",
+		num: -1054,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"meganiumite": {
+		name: "Meganiumite",
+		megaStone: "Meganium-Mega",
+		itemUser: ["Meganium"],
+		megaEvolves: "Meganium",
+		num: -1055,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"typhlosionite": {
+		name: "Typhlosionite",
+		megaStone: "Typhlosion-Mega",
+		itemUser: ["Typhlosion"],
+		megaEvolves: "Typhlosion",
+		num: -1056,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"flygonitea": {
+		name: "Flygonite A",
+		megaStone: "Flygon-Mega-A",
+		itemUser: ["Flygon"],
+		megaEvolves: "Flygon",
+		num: -1058,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"froslassite": {
+		name: "Froslassite",
+		megaStone: "Froslass-Mega",
+		itemUser: ["Froslass"],
+		megaEvolves: "Froslass",
+		num: -1060,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"frosmothite": {
+		name: "Frosmothite",
+		megaStone: "Frosmoth-Mega",
+		itemUser: ["Frosmoth"],
+		megaEvolves: "Frosmoth",
+		num: -1061,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"helioliskite": {
+		name: "Helioliskite",
+		megaStone: "Heliolisk-Mega",
+		itemUser: ["Heliolisk"],
+		megaEvolves: "Heliolisk",
+		num: -1062,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"jirachite": {
+		name: "Jirachite",
+		megaStone: "Jirachi-Mega",
+		itemUser: ["Jirachi"],
+		megaEvolves: "Jirachi",
+		num: -1063,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"jynxite": {
+		name: "Jynxite",
+		megaStone: "Jynx-Mega",
+		itemUser: ["Jynx"],
+		megaEvolves: "Jynx",
+		num: -1064,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"laprasite": {
+		name: "Laprasite",
+		megaStone: "Lapras-Mega",
+		itemUser: ["Lapras"],
+		megaEvolves: "Lapras",
+		num: -1065,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"ludicolite": {
+		name: "Ludicolite",
+		megaStone: "Ludicolo-Mega",
+		itemUser: ["Ludicolo"],
+		megaEvolves: "Ludicolo",
+		num: -1066,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"mewtwonitea": {
+		name: "Mewtwonite A",
+		megaStone: "Mewtwo-Mega-A",
+		itemUser: ["Mewtwo"],
+		megaEvolves: "Mewtwo",
+		num: -1067,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"miloticite": {
+		name: "Miloticite",
+		megaStone: "Milotic-Mega",
+		itemUser: ["Milotic"],
+		megaEvolves: "Milotic",
+		num: -1069,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"noctowlite": {
+		name: "Noctowlite",
+		megaStone: "Noctowl-Mega",
+		itemUser: ["Noctowl"],
+		megaEvolves: "Noctowl",
+		num: -1070,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"shiftrite": {
+		name: "Shiftrite",
+		megaStone: "Shiftry-Mega",
+		itemUser: ["Shiftry"],
+		megaEvolves: "Shiftry",
+		num: -1071,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"sudowoodite": {
+		name: "Sudowoodite",
+		megaStone: "Sudowoodo-Mega",
+		itemUser: ["Sudowoodo"],
+		megaEvolves: "Sudowoodo",
+		num: -1073,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"tinkatonite": {
+		name: "Tinkatonite",
+		megaStone: "Tinkaton-Mega",
+		itemUser: ["Tinkaton"],
+		megaEvolves: "Tinkaton",
+		num: -1074,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"victreebelite": {
+		name: "Victreebelite",
+		megaStone: "Victreebel-Mega",
+		itemUser: ["Victreebel"],
+		megaEvolves: "Victreebel",
+		num: -1075,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"queendrite": {
+		name: "Queendrite",
+		megaStone: "Queendra-Mega",
+		itemUser: ["Queendra"],
+		megaEvolves: "Queendra",
+		num: -1076,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"queendritedark": {
+		name: "Queendrite Dark",
+		megaStone: "Queendra-Dark-Mega",
+		itemUser: ["Queendra-Dark"],
+		megaEvolves: "Queendra-Dark",
+		num: -1077,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"eelektrossitehell": {
+		name: "Eelektrossite HELL",
+		megaStone: "Eelektross-Mega-Hell",
+		itemUser: ["Eelektross-Hell"],
+		megaEvolves: "Eelektross-Hell",
+		num: -1078,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"snorlaxitehell": {
+		name: "Snorlaxite HELL",
+		megaStone: "Snorlax-Hell-Mega",
+		itemUser: ["Snorlax-HELL"],
+		megaEvolves: "Snorlax-HELL",
+		num: -1079,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"gardevoiritesuper": {
+		name: "Gardevoirite Super",
+		megaStone: "Gardevoir-Mega-Super",
+		itemUser: ["Gardevoir-Super"],
+		megaEvolves: "Gardevoir-Super",
+		num: -1080,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"diamoneyite": {
+		name: "Diamoneyite",
+		megaStone: "Diamoneye-Mega",
+		itemUser: ["Diamoneye"],
+		megaEvolves: "Diamoneye",
+		num: -1081,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"dianciteangel": {
+		name: "Diancite Angel",
+		megaStone: "Diancie-Angel-Mega",
+		itemUser: ["Diancie-Angel"],
+		megaEvolves: "Diancie-Angel",
+		num: -1082,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"dianciteinnerdemon": {
+		name: "Diancite Inner Demon",
+		megaStone: "Diancie-Inner-Demon-Mega",
+		itemUser: ["Diancie-Inner-Demon"],
+		megaEvolves: "Diancie-Inner-Demon",
+		num: -1083,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"diancitesea": {
+		name: "Diancite Sea",
+		megaStone: "Diancie-Mega-Sea",
+		itemUser: ["Diancie-Sea"],
+		megaEvolves: "Diancie-Sea",
+		num: -1084,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"azumarillite": {
+		name: "Azumarillite",
+		megaStone: "Azumarill-Mega",
+		itemUser: ["Azumarill"],
+		megaEvolves: "Azumarill",
+		num: -1085,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"darkraite": {
+		name: "Darkraite",
+		megaStone: "Darkrai-Mega",
+		itemUser: ["Darkrai"],
+		megaEvolves: "Darkrai",
+		num: -1086,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"lumineonite": {
+		name: "Lumineonite",
+		megaStone: "Lumineon-Mega",
+		itemUser: ["Lumineon"],
+		megaEvolves: "Lumineon",
+		num: -1088,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"meloettitearia": {
+		name: "Meloettite Aria",
+		megaStone: "Meloetta-Mega-Aria",
+		itemUser: ["Meloetta"],
+		megaEvolves: "Meloetta",
+		num: -1089,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"meloettitepirouette": {
+		name: "Meloettite Pirouette",
+		megaStone: "Meloetta-Mega-Pirouette",
+		itemUser: ["Meloetta"],
+		megaEvolves: "Meloetta",
+		num: -1090,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"miloticitehell": {
+		name: "Miloticite HELL",
+		megaStone: "Milotic-Mega-Hell",
+		itemUser: ["Milotic-Hell"],
+		megaEvolves: "Milotic-Hell",
+		num: -1091,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"roseraditehell": {
+		name: "Roseradite HELL",
+		megaStone: "Roserade-Hell-Mega",
+		itemUser: ["Roserade-Hell"],
+		megaEvolves: "Roserade-Hell",
+		num: -1092,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"drifblimitehell": {
+		name: "Drifblimite Hell",
+		megaStone: "Drifblim-Hell-Mega",
+		itemUser: ["Drifblim-Hell"],
+		megaEvolves: "Drifblim-Hell",
+		num: -1093,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"altaritehell": {
+		name: "Altarite HELL",
+		megaStone: "Altaria-Hell-Mega",
+		itemUser: ["Altaria-Hell"],
+		megaEvolves: "Altaria-Hell",
+		num: -1094,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"turtonatorite": {
+		name: "Turtonatorite",
+		megaStone: "Turtonator-Mega",
+		itemUser: ["Turtonator"],
+		megaEvolves: "Turtonator",
+		num: -1095,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"unownite": {
+		name: "Unownite",
+		megaStone: "Unown-Mega",
+		itemUser: ["Unown"],
+		megaEvolves: "Unown",
+		num: -1096,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"zebstrikite": {
+		name: "Zebstrikite",
+		megaStone: "Zebstrika-Mega",
+		itemUser: ["Zebstrika"],
+		megaEvolves: "Zebstrika",
+		num: -1097,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"eldegossite": {
+		name: "Eldegossite",
+		megaStone: "Eldegoss-Mega",
+		itemUser: ["Eldegoss"],
+		megaEvolves: "Eldegoss",
+		num: -1098,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"orbeetlite": {
+		name: "Orbeetlite",
+		megaStone: "Orbeetle-Mega",
+		itemUser: ["Orbeetle"],
+		megaEvolves: "Orbeetle",
+		num: -1099,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"wailordite": {
+		name: "Wailordite",
+		megaStone: "Wailord-Mega",
+		itemUser: ["Wailord"],
+		megaEvolves: "Wailord",
+		num: -1100,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"dragontieitez": {
+		name: "Dragontieite Z",
+		megaStone: "Dragonite-Mega-Z",
+		itemUser: ["Dragonite"],
+		megaEvolves: "Dragonite",
+		num: -1100,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"charizarditez": {
+		name: "Charizardite Z",
+		megaStone: "Charizard-Mega-Z",
+		itemUser: ["Charizard"],
+		megaEvolves: "Charizard",
+		num: -1100,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"typhlosioniteh": {
+		name: "Typhlosionite H",
+		megaStone: "Typhlosion-Mega-H",
+		itemUser: ["Typhlosion"],
+		megaEvolves: "Typhlosion",
+		num: -1100,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"flygonitez": {
+		name: "Flygonite Z",
+		megaStone: "Flygon-Mega-Z",
+		itemUser: ["Flygon"],
+		megaEvolves: "Flygon",
+		num: -1100,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"mewtwonitez": {
+		name: "Mewtwonite Z",
+		megaStone: "Mewtwo-Mega-Z",
+		itemUser: ["Mewtwo"],
+		megaEvolves: "Mewtwo",
+		num: -1100,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"slowbroniteg": {
+		name: "Slowbronite G",
+		megaStone: "Slowbro-Mega-G",
+		itemUser: ["Slowbro"],
+		megaEvolves: "Slowbro",
+		num: -1100,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"darkritez": {
+		name: "Darkrite Z",
+		megaStone: "Darkrai-Mega-Z",
+		itemUser: ["Darkrai"],
+		megaEvolves: "Darkrai",
+		num: -1100,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"vent": {
+		name: "Vent",
+		megaStone: "Amoonguss-Mega",
+		itemUser: ["Amoonguss"],
+		megaEvolves: "Amoonguss",
+		num: -1101,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"miltankite": {
+		name: "Miltankite",
+		megaStone: "Miltank-Mega",
+		itemUser: ["Miltank"],
+		megaEvolves: "Miltank",
+		num: -1102,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"emolgitey": {
+		name: "Emolgite Y",
+		megaStone: "Emolga-Mega-Y",
+		itemUser: ["Emolga"],
+		megaEvolves: "Emolga",
+		num: -1103,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"beheeyemite": {
+		name: "Beheeyemite",
+		megaStone: "Beheeyem-Mega",
+		itemUser: ["Beheeyem"],
+		megaEvolves: "Beheeyem",
+		num: -1104,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"swellowite": {
+		name: "Swellowite",
+		megaStone: "Swellow-Mega",
+		itemUser: ["Swellow"],
+		megaEvolves: "Swellow",
+		num: -1105,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"venusauriteprime": {
+		name: "Venusaurite Prime",
+		megaStone: "Venusaur-Mega-Prime",
+		itemUser: ["Venusaur-Prime"],
+		megaEvolves: "Venusaur-Prime",
+		num: -1106,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"charizarditeprime": {
+		name: "Charizardite Prime",
+		megaStone: "Charizard-Mega-Prime-X",
+		itemUser: ["Charizard-Prime"],
+		megaEvolves: "Charizard-Prime",
+		num: -1107,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"charizarditeprimey": {
+		name: "Charizardite Prime Y",
+		megaStone: "Charizard-Mega-Prime-Y",
+		itemUser: ["Charizard-Prime"],
+		megaEvolves: "Charizard-Prime",
+		num: -1108,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	"blastoisiteprime": {
+		name: "Blastoisite Prime",
+		megaStone: "Blastoise-Mega-Prime",
+		itemUser: ["Blastoise-Prime"],
+		megaEvolves: "Blastoise-Prime",
+		num: -1109,
+		isNonstandard: "Unobtainable",
+		gen: 0,
+		onTakeItem: (item, source) => {
+			if (item.megaEvolves === source.baseSpecies.baseSpecies) {
+				return false;
+			}
+			return true;
+		},
+	},
+	// End of Custom Items
 	abilityshield: {
 		name: "Ability Shield",
 		spritenum: 746,
