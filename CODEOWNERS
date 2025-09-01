@@ -1,8 +1,7 @@
 config/formats.ts @KrisXV @Marty-D
 data/mods/gen9ssb/ @HoeenCoder @HisuianZoroark @KrisXV
-data/random-battles/ @AnnikaCodes @KrisXV @MathyFurret @ACakeWearingAHat @livid-washed @adrivrie
+data/random-battles/ @KrisXV @MathyFurret @ACakeWearingAHat @livid-washed @adrivrie
 data/text/ @Marty-D
-data/cg-team*.ts @KrisXV @pyuk
 databases/ @monsanto
 lib/sql.ts @mia-pi-git
 server/artemis/* @mia-pi-git

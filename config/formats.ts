@@ -327,6 +327,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Ubers UU",
 		mod: 'gen9',
+		searchShow: false,
 		ruleset: ['[Gen 9] Ubers'],
 		banlist: [
 			// Ubers OU
@@ -3175,6 +3176,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] BSS Factory",
 		desc: `Randomized 3v3 Singles featuring Pok&eacute;mon and movesets popular in Battle Stadium Singles.`,
 		mod: 'gen9',
+		searchShow: false,
 		team: 'randomBSSFactory',
 		bestOfDefault: true,
 		ruleset: ['Flat Rules', 'VGC Timer'],
@@ -3183,6 +3185,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Draft Factory",
 		desc: `Randomized matchups sourced from various 6v6 singles draft leagues.`,
 		mod: 'gen9',
+		searchShow: false,
 		team: 'randomDraftFactory',
 		bestOfDefault: true,
 		ruleset: ['Standard Draft', '!Team Preview'],
@@ -3215,16 +3218,6 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Baby Random Battle",
 		mod: 'gen9',
 		team: 'randomBaby',
-		bestOfDefault: true,
-		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
-	},
-	{
-		name: "[Gen 9] Computer-Generated Teams",
-		desc: `Teams generated automatically based on heuristics (rules), with levels based on previous success/failure in battle. ` +
-			`Not affiliated with Random Battles formats. Some sets will by nature be worse than others, but you can report egregiously bad sets ` +
-			`with <a href="https://forms.gle/DYwQN5qGVegz3YU38">this form</a>.`,
-		mod: 'gen9',
-		team: 'computerGenerated',
 		bestOfDefault: true,
 		ruleset: ['Obtainable', 'Species Clause', 'HP Percentage Mod', 'Cancel Mod', 'Sleep Clause Mod', 'Illusion Level Mod'],
 	},
