@@ -2727,7 +2727,7 @@ export class TeamValidator {
 				if (!['nincada', 'spinda'].includes(species.id) && learnsetData?.learnset?.[move.id]) {
 					fullSources.push(...learnsetData.learnset[move.id]);
 				}
-				learnsetData = this.getExternalLearnsetData(species.id, 'gen8legendsarceus');
+				learnsetData = this.getExternalLearnsetData(species.id, 'gen8legends');
 				if (learnsetData?.learnset?.[move.id]) {
 					fullSources.push(...learnsetData.learnset[move.id]);
 				}
