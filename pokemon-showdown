@@ -165,6 +165,14 @@ if (!cli.positionals.length || /^[0-9]+$/.test(cli.positionals[0])) {
 			console.log(Teams.pack(Teams.generate(cli.positionals[1], {seed})));
 		}
 		break;
+	case 'generate-teams':
+			{
+				ensureBuilt();
+				var Teams = require('./dist/sim/teams.js').Teams;
+				for (var i = 0; i < (process.argv[4] || 1000); i++)
+					console.log(Teams.pack(Teams.generate(process.argv[3], { seed })));
+			}
+			break;
 	case 'validate-team':
 		{
 			ensureBuilt();
