@@ -5,6 +5,7 @@
   "main": "dist/sim/index.js",
   "types": "dist/sim/index.d.ts",
   "dependencies": {
+    "axios": "^1.11.0",
     "esbuild": "^0.25.0",
     "mysql2": "^3.14.2",
     "preact": "^10.5.15",
