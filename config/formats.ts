@@ -2859,7 +2859,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		onBegin() {
 			this.add(`raw|Welcome to Do Not Use Random Battle!`);
 			this.add(`raw|<a href="https://www.smogon.com/forums/threads/3734326/">Do Not Use</a> is a Solomod where ONLY Pok&eacute;mon with 280 BST or less are allowed!`);
-			this.add(`raw|<a href="(with some exceptions, like Luvdisc and Capsakid).`);
+			this.add(`raw|(with some exceptions, like Luvdisc and Capsakid.)`);
 			this.add(`raw|You are invited to come the <a href="https://play.pokemonshowdown.com/petmods">Pet Mods</a> room to discuss the metagame.`);
 		},
 		onSwitchInPriority: 100,
