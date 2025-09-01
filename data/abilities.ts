@@ -39,7 +39,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onStart(_) {
 			if (this.field.isWeather('raindance')) return;
 			this.field.setWeather('raindance');
-			
 		},
 		num: -1001,
 		rating: 4,
@@ -123,7 +122,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	desertheart: {
 		name: 'Desert Heart',
 		onStart(pokemon) {
-			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);	
+			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 		},
 		onWeatherChange(pokemon) {
 			if (!['sandstorm'].includes(pokemon.effectiveWeather())) return;
@@ -205,7 +204,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (target.volatiles['substitute']) {
 					this.add('-immune', target, 'substitute');
 				} else {
-					this.boost({ spa: -1}, target, pokemon, null, true);
+					this.boost({ spa: -1 }, target, pokemon, null, true);
 				}
 			}
 		},
@@ -216,7 +215,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		name: 'Charisma',
 		onSourceAfterFaint(length, _, source, effect) {
 			if (effect && effect.effectType === 'Move') {
-				this.boost({ spa: length}, source);
+				this.boost({ spa: length }, source);
 			}
 		},
 		num: -1017,
@@ -340,7 +339,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyType(move) {
 			const noModifyType = [
 				"judgment", "multiattack", "naturalgift", "revelationdance",
-				"technoblast", "terrainpulse", "weatherball"
+				"technoblast", "terrainpulse", "weatherball",
 			];
 			if (move.type !== "Normal") return;
 			if (noModifyType.includes(move.id)) return;
@@ -359,7 +358,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyType(move) {
 			const noModifyType = [
 				"judgment", "multiattack", "naturalgift", "revelationdance",
-				"technoblast", "terrainpulse", "weatherball"
+				"technoblast", "terrainpulse", "weatherball",
 			];
 			if (move.type !== "Normal") return;
 			if (noModifyType.includes(move.id)) return;
@@ -378,7 +377,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyType(move) {
 			const noModifyType = [
 				"judgment", "multiattack", "naturalgift", "revelationdance",
-				"technoblast", "terrainpulse", "weatherball"
+				"technoblast", "terrainpulse", "weatherball",
 			];
 			if (move.type !== "Normal") return;
 			if (noModifyType.includes(move.id)) return;
@@ -397,7 +396,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyType(move) {
 			const noModifyType = [
 				"judgment", "multiattack", "naturalgift", "revelationdance",
-				"technoblast", "terrainpulse", "weatherball"
+				"technoblast", "terrainpulse", "weatherball",
 			];
 			if (move.type !== "Normal") return;
 			if (noModifyType.includes(move.id)) return;
@@ -416,7 +415,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onModifyType(move) {
 			const noModifyType = [
 				"judgment", "multiattack", "naturalgift", "revelationdance",
-				"technoblast", "terrainpulse", "weatherball"
+				"technoblast", "terrainpulse", "weatherball",
 			];
 			if (move.type !== "Normal") return;
 			if (noModifyType.includes(move.id)) return;
@@ -727,7 +726,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		rating: 3.5,
 	},
 	earthspower: {
-		name: 'Earth\s Power',
+		name: 'Earth\'s Power',
 		onModifyAtk(_, _attacker, _defender, move) {
 			if (move.type !== 'Ground') return;
 			this.debug('Earth Power boost');
