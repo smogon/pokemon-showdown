@@ -1,6 +1,21 @@
 // List of flags and their descriptions can be found in sim/dex-moves.ts
 
 export const Moves: import('../sim/dex-moves').MoveDataTable = {
+	// Custom Moves
+	// Used to find said HELL pokemon.
+	hell: {
+		num: -1,
+		accuracy: 0,
+		basePower: 0,
+		category: "Physical",
+		name: "HELL",
+		flags: {},
+		pp: 10,
+		priority: 0,
+		target: "normal",
+		type: "Normal",
+	},
+	// End of Custom Moves
 	"10000000voltthunderbolt": {
 		num: 719,
 		accuracy: true,
