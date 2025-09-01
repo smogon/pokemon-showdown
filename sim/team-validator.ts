@@ -325,7 +325,7 @@ export class TeamValidator {
 	constructor(format: string | Format, dex = Dex) {
 		this.format = dex.formats.get(format);
 		if (this.format.effectType !== 'Format') {
-			throw new Error(`format should be a 'Format', but was a '${this.format.effectType}'`);
+			throw new Error(`format '${format}' should be a 'Format', but was a '${this.format.effectType}'`);
 		}
 		this.dex = dex.forFormat(this.format);
 		this.gen = this.dex.gen;
