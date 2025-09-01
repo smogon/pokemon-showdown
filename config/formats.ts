@@ -18,15 +18,6 @@ The column value will be ignored for repeat sections.
 */
 
 export const Formats: import('../sim/dex-formats').FormatList = [
-	{
-		section: "Exclusive",
-	},
-	{
-		name: "[Gen 9] HELL Draft League",
-		mod: "gen9",
-		teraPreviewDefault: true,
-		ruleset: ['Team Preview', 'Standard NatDex', '+Unobtainable', '+Past', 'Terastal Clause'],
-	},
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
 
