@@ -485,7 +485,7 @@ export class RandomFFATeams extends RandomTeams {
 		}
 
 		// Enforce Protect
-		if (!['Bulky Setup', 'Bulky Support'].includes(role)) {
+		if (!['Bulky Setup', 'Bulky Support', 'Wallbreaker'].includes(role)) {
 			const protectMoves = movePool.filter(moveid => PROTECT_MOVES.includes(moveid));
 			if (protectMoves.length) {
 				const moveid = this.sample(protectMoves);
