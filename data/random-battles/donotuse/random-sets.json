@@ -172,8 +172,8 @@
 				"teraTypes": ["Grass"]
 			},
 			{
-				"role": "Fast Attacker",
-				"movepool": ["Sunny Day", "Giga Drain", "Weather Ball", "Grass Whistle", "Growth"],
+				"role": "Wallbreaker",
+				"movepool": ["Energy Ball", "Hidden Power Fire", "Dazzling Gleam", "Healing Wish"],
 				"abilities": ["Chlorophyll"],
 				"teraTypes": ["Grass"]
 			}
@@ -1021,7 +1021,7 @@
 		"sets": [
 			{
 				"role": "Setup Sweeper",
-				"movepool": ["Sunny Day", "Growth", "Weather Ball", "Encore", "Solar Beam"],
+				"movepool": ["Sunny Day", "Growth", "Weather Ball", "Solar Beam"],
 				"abilities": ["Chlorophyll"],
 				"teraTypes": ["Fire"]
 			}
