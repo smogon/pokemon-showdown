@@ -2590,9 +2590,9 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Last Respects', 'Shed Tail', 'Baton Pass + Contrary', 'Baton Pass + Rapid Spin',
 		],
 		unbanlist: [
-			'Amoonguss', 'Arcanine-Base', 'Basculegion-F', 'Beartic', 'Brambleghast', 'Chandelure', 'Chesnaught', 'Cobalion', 'Copperajah', 'Cramorant-Base', 'Cursola',
-			'Dugtrio-Base', 'Eldegoss', 'Flygon', 'Froslass', 'Frosmoth', 'Gabite', 'Gardevoir-Base', 'Hatterene', 'Heliolisk', 'Incineroar', 'Jolteon', 'Liepard',
-			'Maractus', 'Maushold', 'Oricorio-Pom-Pom', 'Overqwil', 'Scizor-Base', 'Shedinja', 'Stoutland', 'Sylveon', 'Toxicroak', 'Uxie', 'Weavile', 'Yanmega',
+			'Arbok', 'Avalugg-Base', 'Cacturne', 'Chesnaught', 'Clodsire', 'Cobalion', 'Crawdaunt', 'Eldegoss', 'Empoleon', 'Falinks', 'Feraligatr', 'Ferrothorn',
+			'Florges', 'Galvantula', 'Grimmsnarl', 'Klawf', 'Lucario-Base', 'Ludicolo', 'Mantine', 'Marowak-Alola', 'Milotic', 'Musharna', 'Overqwil', 'Pincurchin',
+			'Primeape', 'Regice', 'Sceptile-Base', 'Scolipede', 'Silvally-Dragon', 'Slurpuff', 'Torterra', 'Toxicroak', 'Trapinch', 'Vikavolt-Base', 'Wormadam-Base',
 		],
 		// Stupid hardcode
 		onValidateSet(set, format, setHas, teamHas) {
