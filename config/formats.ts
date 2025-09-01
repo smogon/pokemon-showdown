@@ -44,7 +44,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 	{
 		name: "[Gen 9] Free-For-All Random Battle",
 		mod: 'gen9',
-		team: 'random',
+		team: 'randomFFA',
 		gameType: 'freeforall',
 		tournamentShow: false,
 		rated: false,
