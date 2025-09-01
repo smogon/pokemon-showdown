@@ -25,7 +25,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] HELL Draft League",
 		mod: "gen9",
 		teraPreviewDefault: true,
-		ruleset: ['Team Preview', 'Standard NatDex', 'Evasion Clause', 'Sleep Clause Mod', 'Terastal Clause'],
+		ruleset: ['Team Preview', 'Standard NatDex', 'Terastal Clause'],
 	},
 	// S/V Singles
 	///////////////////////////////////////////////////////////////////
