@@ -36,7 +36,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	// Custom Abilities
 	monsoonsurge: {
 		name: "Monsoon Surge",
-		onStart(pokemon) {
+		onStart(_) {
 			if (this.field.isWeather('raindance')) return;
 			this.field.setWeather('raindance');
 			
@@ -46,11 +46,956 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	blizzardveil: {
 		name: 'Blizzard Veil',
-		onStart(pokemon) {
+		onStart(_) {
 			if (this.field.isWeather('hail')) return;
 			this.field.setWeather('hail');
 		},
 		num: -1002,
+		rating: 4,
+	},
+	sandstormrage: {
+		name: "Sandstorm Rage",
+		onStart(_) {
+			if (this.field.isWeather('sandstorm')) return;
+			this.field.setWeather('sandstorm');
+		},
+		num: -1003,
+		rating: 4,
+	},
+	solarflare: {
+		name: 'Solar Flare',
+		onStart(pokemon) {
+			if (this.field.isWeather('sunnyday')) return;
+			this.field.setWeather('sunnyday');
+		},
+		num: -1004,
+		rating: 4,
+	},
+	eerieresonance: {
+		name: 'Eerie Resonance',
+		onStart(_) {
+			if (this.field.isTerrain('electricterrain')) return;
+			this.field.setTerrain('electricterrain');
+		},
+		num: -1005,
+		rating: 4,
+	},
+	mindscapedomain: {
+		name: 'Mindscape Domain',
+		onStart(_) {
+			if (this.field.isTerrain('psychicterrain')) return;
+			this.field.setTerrain('psychicterrain');
+		},
+		num: -1006,
+		rating: 4,
+	},
+	verdantbloom: {
+		name: 'Verdant Bloom',
+		onStart(_) {
+			if (this.field.isTerrain('grassyterrain')) return;
+			this.field.setTerrain('grassyterrain');
+		},
+		num: -1007,
+		rating: 4,
+	},
+	mystichaze: {
+		name: 'Mystic Haze',
+		onStart(_) {
+			if (this.field.isTerrain('psychicterrain')) return;
+			this.field.setTerrain('psychicterrain');
+		},
+		num: -1008,
+		rating: 4,
+	},
+	tundrecore: {
+		name: 'Tundre Core',
+		onStart(pokemon) {
+			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+		},
+		onWeatherChange(pokemon) {
+			if (!['snow', 'hail'].includes(pokemon.effectiveWeather())) return;
+			const bestStat = pokemon.getBestStat();
+			this.boost({ [bestStat]: 1.5 }, pokemon);
+		},
+		num: -1009,
+		rating: 4,
+	},
+	desertheart: {
+		name: 'Desert Heart',
+		onStart(pokemon) {
+			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);	
+		},
+		onWeatherChange(pokemon) {
+			if (!['sandstorm'].includes(pokemon.effectiveWeather())) return;
+			const bestStat = pokemon.getBestStat();
+			this.boost({ [bestStat]: 1.5 }, pokemon);
+		},
+		num: -1010,
+		rating: 4,
+	},
+	aquacircuit: {
+		name: 'Aqua Circuit',
+		onStart(pokemon) {
+			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
+		},
+		onWeatherChange(pokemon) {
+			if (!['raindance'].includes(pokemon.effectiveWeather())) return;
+			const bestStat = pokemon.getBestStat();
+			this.boost({ [bestStat]: 1.3 }, pokemon);
+		},
+		num: -1011,
+		rating: 4,
+	},
+	psychicpulse: {
+		name: 'Psychic Pulse',
+		onStart(pokemon) {
+			this.singleEvent('TerrainChange', this.effect, this.effectState, pokemon);
+		},
+		onTerrainChange(pokemon) {
+			if (!this.field.isTerrain('psychicterrain')) return;
+			const bestStat = pokemon.getBestStat();
+			this.boost({ [bestStat]: 1.3 }, pokemon);
+		},
+		num: -1012,
+		rating: 4,
+	},
+	mysticaura: {
+		name: 'Mystic Aura',
+		onStart(pokemon) {
+			this.singleEvent('TerrainChange', this.effect, this.effectState, pokemon);
+		},
+		onTerrainChange(pokemon) {
+			if (!this.field.isTerrain('mistyterrain')) return;
+			const bestStat = pokemon.getBestStat();
+			this.boost({ [bestStat]: 1.3 }, pokemon);
+		},
+		num: -1013,
+		rating: 4,
+	},
+	overgrowthengine: {
+		name: 'Overgrowth Engine',
+		onStart(pokemon) {
+			this.singleEvent('TerrainChange', this.effect, this.effectState, pokemon);
+		},
+		onTerrainChange(pokemon) {
+			if (!this.field.isTerrain('grassyterrain')) return;
+			const bestStat = pokemon.getBestStat();
+			this.boost({ [bestStat]: 1.3 }, pokemon);
+		},
+		num: -1014,
+		rating: 4,
+	},
+	arcanemight: {
+		name: 'Arcane Might',
+		onModifySpA() {
+			return this.chainModify(2);
+		},
+		num: -1015,
+		rating: 4,
+	},
+	terrify: {
+		name: 'Terrify',
+		onStart(pokemon) {
+			let activated = false;
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Terrify', 'boost');
+					activated = true;
+				}
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target, 'substitute');
+				} else {
+					this.boost({ spa: -1}, target, pokemon, null, true);
+				}
+			}
+		},
+		num: -1016,
+		rating: 4,
+	},
+	charisma: {
+		name: 'Charisma',
+		onSourceAfterFaint(length, _, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				this.boost({ spa: length}, source);
+			}
+		},
+		num: -1017,
+		rating: 3.5,
+	},
+	bootsofruin: {
+		name: 'Boots of Ruin',
+		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'Boots of Ruin');
+		},
+		onAnyModifySpe(spe, target) {
+			const abilityHolder = this.effectState.target;
+			if (target.hasAbility('Boots of Ruin')) return;
+			this.debug('Boots of Ruin spe drop');
+			return this.chainModify(0.75);
+		},
+		num: -1018,
+		rating: 4,
+	},
+	prismaticaura: {
+		name: 'Prismatic Aura',
+		onDamagingHit(_, target, source, move) {
+			if (move.category === "Status") return;
+			if (this.checkMoveMakesContact(move, source, target, true)) return;
+			this.damage(source.baseMaxhp / 8, source, target);
+		},
+		num: -1019,
+		rating: 4,
+	},
+	adaptivemastery: {
+		name: 'Adaptive Mastery',
+		onModifyAtk(_, attacker, _defender, move) {
+			// Has stab already.
+			if (attacker.hasType(move.type)) return;
+			this.debug(('Adaptive Mastery boost'));
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, attacker, _defender, move) {
+			// Has stab already.
+			if (attacker.hasType(move.type)) return;
+			this.debug(('Adaptive Mastery boost'));
+			return this.chainModify(1.5);
+		},
+		num: -1020,
+		rating: 4,
+	},
+	stormbloom: {
+		name: 'Storm Bloom',
+		onStart() {
+			if (!this.field.isWeather('raindance')) {
+				this.field.setWeather('raindance');
+			}
+
+			if (!this.field.isTerrain('grassyterrain')) {
+				this.field.setTerrain('grassyterrain');
+			}
+		},
+		num: -1021,
+		rating: 3.5,
+	},
+	solarmist: {
+		name: 'Solar Mist',
+		onStart() {
+			if (!this.field.isWeather('sunnyday')) {
+				this.field.setWeather('sunnyday');
+			}
+
+			if (!this.field.isTerrain('mistyterrain')) {
+				this.field.setTerrain('mistyterrain');
+			}
+		},
+		num: -1022,
+		rating: 3.5,
+	},
+	desertmind: {
+		name: 'Desert Mind',
+		onStart() {
+			if (!this.field.isWeather('sandstorm')) {
+				this.field.setWeather('sandstorm');
+			}
+
+			if (!this.field.isTerrain('psychicterrain')) {
+				this.field.setTerrain('psychicterrain');
+			}
+		},
+		num: -1023,
+		rating: 3.5,
+	},
+	frostvolt: {
+		name: 'Frost Volt',
+		onStart() {
+			if (!this.field.isWeather('snow')) {
+				this.field.setWeather('snow');
+			}
+
+			if (!this.field.isTerrain('electricterrain')) {
+				this.field.setTerrain('electricterrain');
+			}
+		},
+		num: -1024,
+		rating: 4,
+	},
+	soulharvest: {
+		name: 'Soul Harvest',
+		onSourceAfterFaint(_, _target, source, effect) {
+			if (!effect || effect.effectType !== 'Move') return;
+			source.heal(source.baseMaxhp / 4);
+			this.add('-ability', source, 'Soul Harvest');
+			this.add('-heal', source, source.getHealth, 'ability: Soul Harvest');
+		},
+		num: -1025,
+		rating: 3.5,
+	},
+	entomize: {
+		name: 'Entomize',
+		onBasePower(_, _pokemon, _target, move) {
+			if (move.typeChangerBoosted !== this.effect) return;
+			return this.chainModify([4915, 4096]); // 1.2x
+		},
+		onModifyType(move) {
+			const noModifyType = [
+				"judgment", "multiattack", "naturalgift", "revelationdance",
+				"technoblast", "terrainpulse", "weatherball"
+			];
+			if (move.type !== "Normal") return;
+			if (noModifyType.includes(move.id)) return;
+			move.type = "Bug";
+			move.typeChangerBoosted = this.effect;
+		},
+		num: -1026,
+		rating: 3,
+	},
+	umbralforce: {
+		name: 'Umbral Force',
+		onBasePower(_, _pokemon, _target, move) {
+			if (move.typeChangerBoosted !== this.effect) return;
+			return this.chainModify([4915, 4096]); // 1.2x
+		},
+		onModifyType(move) {
+			const noModifyType = [
+				"judgment", "multiattack", "naturalgift", "revelationdance",
+				"technoblast", "terrainpulse", "weatherball"
+			];
+			if (move.type !== "Normal") return;
+			if (noModifyType.includes(move.id)) return;
+			move.type = "Dark";
+			move.typeChangerBoosted = this.effect;
+		},
+		num: -1027,
+		rating: 3,
+	},
+	draconize: {
+		name: 'Draconize',
+		onBasePower(_, _pokemon, _target, move) {
+			if (move.typeChangerBoosted !== this.effect) return;
+			return this.chainModify([4915, 4096]); // 1.2x
+		},
+		onModifyType(move) {
+			const noModifyType = [
+				"judgment", "multiattack", "naturalgift", "revelationdance",
+				"technoblast", "terrainpulse", "weatherball"
+			];
+			if (move.type !== "Normal") return;
+			if (noModifyType.includes(move.id)) return;
+			move.type = "Dragon";
+			move.typeChangerBoosted = this.effect;
+		},
+		num: -1028,
+		rating: 3,
+	},
+	combatboost: {
+		name: 'Combat Boost',
+		onBasePower(_, _pokemon, _target, move) {
+			if (move.typeChangerBoosted !== this.effect) return;
+			return this.chainModify([4915, 4096]); // 1.2x
+		},
+		onModifyType(move) {
+			const noModifyType = [
+				"judgment", "multiattack", "naturalgift", "revelationdance",
+				"technoblast", "terrainpulse", "weatherball"
+			];
+			if (move.type !== "Normal") return;
+			if (noModifyType.includes(move.id)) return;
+			move.type = "Fighting";
+			move.typeChangerBoosted = this.effect;
+		},
+		num: -1029,
+		rating: 3,
+	},
+	infernalize: {
+		name: 'Infernalize',
+		onBasePower(_, _pokemon, _target, move) {
+			if (move.typeChangerBoosted !== this.effect) return;
+			return this.chainModify([4915, 4096]); // 1.2x
+		},
+		onModifyType(move) {
+			const noModifyType = [
+				"judgment", "multiattack", "naturalgift", "revelationdance",
+				"technoblast", "terrainpulse", "weatherball"
+			];
+			if (move.type !== "Normal") return;
+			if (noModifyType.includes(move.id)) return;
+			move.type = "Fire";
+			move.typeChangerBoosted = this.effect;
+		},
+		num: -1030,
+		rating: 3,
+	},
+	antennaboost: {
+		name: 'Antenna Boost',
+		onModifyPriority(priority, pokemon, _, move) {
+			if (move.type !== "Bug") return;
+			if (pokemon.hp !== pokemon.maxhp) return;
+			return priority + 1;
+		},
+		num: -1031,
+		rating: 3,
+	},
+	shadowsprint: {
+		name: 'Shadows Print',
+		onModifyPriority(priority, pokemon, _, move) {
+			if (move.type !== "Dark") return;
+			if (pokemon.hp !== pokemon.maxhp) return;
+			return priority + 1;
+		},
+		num: -1032,
+		rating: 3,
+	},
+	wyvernwings: {
+		name: 'Wyvern Wings',
+		onModifyPriority(priority, pokemon, _, move) {
+			if (move.type !== "Dragon") return;
+			if (pokemon.hp !== pokemon.maxhp) return;
+			return priority + 1;
+		},
+		num: -1033,
+		rating: 3,
+	},
+	pixiedash: {
+		name: 'Pixie Dash',
+		onModifyPriority(priority, pokemon, _, move) {
+			if (move.type !== "Fairy") return;
+			if (pokemon.hp !== pokemon.maxhp) return;
+			return priority + 1;
+		},
+		num: -1034,
+		rating: 3,
+	},
+	voltdash: {
+		name: 'Volt Dash',
+		onModifyPriority(priority, pokemon, _, move) {
+			if (move.type !== "Electric") return;
+			if (pokemon.hp !== pokemon.maxhp) return;
+			return priority + 1;
+		},
+		num: -1035,
+		rating: 3,
+	},
+	brawlersinstinct: {
+		name: 'Brawler\'s Instinct',
+		onModifyPriority(priority, pokemon, _, move) {
+			if (move.type !== "Fighting") return;
+			if (pokemon.hp !== pokemon.maxhp) return;
+			return priority + 1;
+		},
+		num: -1036,
+		rating: 3,
+	},
+	blazerush: {
+		name: 'Blaze Rush',
+		onModifyPriority(priority, pokemon, _, move) {
+			if (move.type !== "Fire") return;
+			if (pokemon.hp !== pokemon.maxhp) return;
+			return priority + 1;
+		},
+		num: -1037,
+		rating: 3,
+	},
+	verdantsurge: {
+		name: 'Verdant Surge',
+		onModifyPriority(priority, pokemon, _, move) {
+			if (move.type !== "Grass") return;
+			if (pokemon.hp !== pokemon.maxhp) return;
+			return priority + 1;
+		},
+		num: -1038,
+		rating: 3,
+	},
+	earthgrace: {
+		name: 'Earth Grace',
+		onModifyPriority(priority, pokemon, _, move) {
+			if (move.type !== "Ground") return;
+			if (pokemon.hp !== pokemon.maxhp) return;
+			return priority + 1;
+		},
+		num: -1039,
+		rating: 3,
+	},
+	frostdash: {
+		name: 'Frost Dash',
+		onModifyPriority(priority, pokemon, _, move) {
+			if (move.type !== "Ice") return;
+			if (pokemon.hp !== pokemon.maxhp) return;
+			return priority + 1;
+		},
+		num: -1040,
+		rating: 3,
+	},
+	venomrush: {
+		name: 'Venom Rush',
+		onModifyPriority(priority, pokemon, _, move) {
+			if (move.type !== "Poison") return;
+			if (pokemon.hp !== pokemon.maxhp) return;
+			return priority + 1;
+		},
+		num: -1041,
+		rating: 3,
+	},
+	mindleap: {
+		name: 'Mind Leap',
+		onModifyPriority(priority, pokemon, _, move) {
+			if (move.type !== "Psychic") return;
+			if (pokemon.hp !== pokemon.maxhp) return;
+			return priority + 1;
+		},
+		num: -1042,
+		rating: 3,
+	},
+	stonemomentum: {
+		name: 'Stone Momentum',
+		onModifyPriority(priority, pokemon, _, move) {
+			if (move.type !== "Rock") return;
+			if (pokemon.hp !== pokemon.maxhp) return;
+			return priority + 1;
+		},
+		num: -1043,
+		rating: 3,
+	},
+	metallicburst: {
+		name: 'Metallic Burst',
+		onModifyPriority(priority, pokemon, _, move) {
+			if (move.type !== "Steel") return;
+			if (pokemon.hp !== pokemon.maxhp) return;
+			return priority + 1;
+		},
+		num: -1044,
+		rating: 3,
+	},
+	tidalsurge: {
+		name: 'Tidal Surge',
+		onModifyPriority(priority, pokemon, _, move) {
+			if (move.type !== "Water") return;
+			if (pokemon.hp !== pokemon.maxhp) return;
+			return priority + 1;
+		},
+		num: -1045,
+		rating: 3,
+	},
+	hiveinstinct: {
+		name: 'Hive Instinct',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Bug') return;
+			this.debug('Hive Instinct boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Bug') return;
+			this.debug('Hive Instinct boost');
+			return this.chainModify(1.5);
+		},
+		num: -1046,
+		rating: 3.5,
+	},
+	shadowborn: {
+		name: 'Shadowborn',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Dark') return;
+			this.debug('Shadowborn boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Dark') return;
+			this.debug('Shadowborn boost');
+			return this.chainModify(1.5);
+		},
+		num: -1047,
+		rating: 3.5,
+	},
+	draconicessence: {
+		name: 'Draconic Essence',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Dragon') return;
+			this.debug('Draconic Essence boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Dragon') return;
+			this.debug('Draconic Essence boost');
+			return this.chainModify(1.5);
+		},
+		num: -1048,
+		rating: 3.5,
+	},
+	chargedcore: {
+		name: 'Charged Core',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Electric') return;
+			this.debug('Charged Core boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Electric') return;
+			this.debug('Charged Core boost');
+			return this.chainModify(1.5);
+		},
+		num: -1049,
+		rating: 3.5,
+	},
+	enchantedforce: {
+		name: 'Enchanted Force',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Fairy') return;
+			this.debug('Enchanted Force boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Fairy') return;
+			this.debug('Enchanted Force boost');
+			return this.chainModify(1.5);
+		},
+		num: -1050,
+		rating: 3.5,
+	},
+	warriorswill: {
+		name: 'Warrior\'s Will',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Fighting') return;
+			this.debug('Warrior\'s Will boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Fighting') return;
+			this.debug('Warrior\'s Will boost');
+			return this.chainModify(1.5);
+		},
+		num: -1051,
+		rating: 3.5,
+	},
+	infernalsurge: {
+		name: 'Infernal Surge',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Fire') return;
+			this.debug('Infernal Surge boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Fire') return;
+			this.debug('Infernal Surge boost');
+			return this.chainModify(1.5);
+		},
+		num: -1052,
+		rating: 3.5,
+	},
+	skyborn: {
+		name: 'Skyborn',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Flying') return;
+			this.debug('Skyborn boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Flying') return;
+			this.debug('Skyborn boost');
+			return this.chainModify(1.5);
+		},
+		num: -1053,
+		rating: 3.5,
+	},
+	etherealpresence: {
+		name: 'Ethereal Presence',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Ghost') return;
+			this.debug('Ethereal Presence boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Ghost') return;
+			this.debug('Ethereal Presence boost');
+			return this.chainModify(1.5);
+		},
+		num: -1054,
+		rating: 3.5,
+	},
+	verdantblessing: {
+		name: 'Verdant Blessing',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Grass') return;
+			this.debug('Verdant Blessing boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Grass') return;
+			this.debug('Verdant Blessing boost');
+			return this.chainModify(1.5);
+		},
+		num: -1055,
+		rating: 3.5,
+	},
+	earthpower: {
+		name: 'Earth Power',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Ground') return;
+			this.debug('Earth Power boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Ground') return;
+			this.debug('Earth Power boost');
+			return this.chainModify(1.5);
+		},
+		num: -1056,
+		rating: 3.5,
+	},
+	glacialheritage: {
+		name: 'Glacial Heritage',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Ice') return;
+			this.debug('Glacial Heritage boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Ice') return;
+			this.debug('Glacial Heritage boost');
+			return this.chainModify(1.5);
+		},
+		num: -1057,
+		rating: 3.5,
+	},
+	fundamentalforce: {
+		name: 'Fundamental Force',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Normal') return;
+			this.debug('Fundamental Force boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Normal') return;
+			this.debug('Fundamental Force boost');
+			return this.chainModify(1.5);
+		},
+		num: -1058,
+		rating: 3.5,
+	},
+	toxicveins: {
+		name: 'Toxic Veins',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Poison') return;
+			this.debug('Toxic Veins boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Poison') return;
+			this.debug('Toxic Veins boost');
+			return this.chainModify(1.5);
+		},
+		num: -1059,
+		rating: 3.5,
+	},
+	mindforce: {
+		name: 'Mind Force',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Psychic') return;
+			this.debug('Mind Force boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Psychic') return;
+			this.debug('Mind Force boost');
+			return this.chainModify(1.5);
+		},
+		num: -1060,
+		rating: 3.5,
+	},
+	stoneborn: {
+		name: 'Stoneborn',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Rock') return;
+			this.debug('Stoneborn boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Rock') return;
+			this.debug('Stoneborn boost');
+			return this.chainModify(1.5);
+		},
+		num: -1061,
+		rating: 3.5,
+	},
+	metallicsoul: {
+		name: 'Metallic Soul',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Steel') return;
+			this.debug('Metallic Soul boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Steel') return;
+			this.debug('Metallic Soul boost');
+			return this.chainModify(1.5);
+		},
+		num: -1062,
+		rating: 3.5,
+	},
+	aquaflow: {
+		name: 'Aqua Flow',
+		onModifyAtk(_, _attacker, _defender, move) {
+			if (move.type !== 'Water') return;
+			this.debug('Aqua Flow boost');
+			return this.chainModify(1.5);
+		},
+		onModifySpA(_, _attacker, _defender, move) {
+			if (move.type !== 'Water') return;
+			this.debug('Aqua Flow boost');
+			return this.chainModify(1.5);
+		},
+		num: -1063,
+		rating: 3.5,
+	},
+	hauntify: {
+		name: 'Hauntify',
+		onBasePower(_, _pokemon, _target, move) {
+			if (move.typeChangerBoosted !== this.effect) return;
+			return this.chainModify([4915, 4096]); // 1.2x
+		},
+		onModifyType(move) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance',
+				'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type !== 'Normal') return;
+			if (noModifyType.includes(move.id)) return;
+			move.type = "Ghost";
+			move.typeChangerBoosted = this.effect;
+		},
+		num: -1064,
+		rating: 4,
+	},
+	verdantforce: {
+		name: 'Verdant Force',
+		onBasePower(_, _pokemon, _target, move) {
+			if (move.typeChangerBoosted !== this.effect) return;
+			return this.chainModify([4915, 4096]); // 1.2x
+		},
+		onModifyType(move) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance',
+				'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type !== 'Normal') return;
+			if (noModifyType.includes(move.id)) return;
+			move.type = "Grass";
+			move.typeChangerBoosted = this.effect;
+		},
+		num: -1065,
+		rating: 4,
+	},
+	terranize: {
+		name: 'Terranize',
+		onBasePower(_, _pokemon, _target, move) {
+			if (move.typeChangerBoosted !== this.effect) return;
+			return this.chainModify([4915, 4096]); // 1.2x
+		},
+		onModifyType(move) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance',
+				'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type !== 'Normal') return;
+			if (noModifyType.includes(move.id)) return;
+			move.type = "Ground";
+			move.typeChangerBoosted = this.effect;
+		},
+		num: -1066,
+		rating: 4,
+	},
+	toxify: {
+		name: 'Toxify',
+		onBasePower(_, _pokemon, _target, move) {
+			if (move.typeChangerBoosted !== this.effect) return;
+			return this.chainModify([4915, 4096]); // 1.2x
+		},
+		onModifyType(move) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance',
+				'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type !== 'Normal') return;
+			if (noModifyType.includes(move.id)) return;
+			move.type = "Poison";
+			move.typeChangerBoosted = this.effect;
+		},
+		num: -1067,
+		rating: 4,
+	},
+	petrify: {
+		name: 'Petrify',
+		onBasePower(_, _pokemon, _target, move) {
+			if (move.typeChangerBoosted !== this.effect) return;
+			return this.chainModify([4915, 4096]); // 1.2x
+		},
+		onModifyType(move) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance',
+				'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type !== 'Normal') return;
+			if (noModifyType.includes(move.id)) return;
+			move.type = "Rock";
+			move.typeChangerBoosted = this.effect;
+		},
+		num: -1068,
+		rating: 4,
+	},
+	ferronize: {
+		name: 'Ferronize',
+		onBasePower(_, _pokemon, _target, move) {
+			if (move.typeChangerBoosted !== this.effect) return;
+			return this.chainModify([4915, 4096]); // 1.2x
+		},
+		onModifyType(move) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance',
+				'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type !== 'Normal') return;
+			if (noModifyType.includes(move.id)) return;
+			move.type = "Steel";
+			move.typeChangerBoosted = this.effect;
+		},
+		num: -1069,
+		rating: 4,
+	},
+	aquify: {
+		name: 'Aquify',
+		onBasePower(_, _pokemon, _target, move) {
+			if (move.typeChangerBoosted !== this.effect) return;
+			return this.chainModify([4915, 4096]); // 1.2x
+		},
+		onModifyType(move) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance',
+				'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type !== 'Normal') return;
+			if (noModifyType.includes(move.id)) return;
+			move.type = "Water";
+			move.typeChangerBoosted = this.effect;
+		},
+		num: -1070,
+		rating: 4,
+	},
+	psionize: {
+		name: 'Psionize',
+		onBasePower(_, _pokemon, _target, move) {
+			if (move.typeChangerBoosted !== this.effect) return;
+			return this.chainModify([4915, 4096]); // 1.2x
+		},
+		onModifyType(move) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance',
+				'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type !== 'Normal') return;
+			if (noModifyType.includes(move.id)) return;
+			move.type = "Psychic";
+			move.typeChangerBoosted = this.effect;
+		},
+		num: -1071,
 		rating: 4,
 	},
 	// End of Custom Abilities

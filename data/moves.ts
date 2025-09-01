@@ -4673,8 +4673,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
+				if (source?.hasItem('terrainextender') || source.hasAbility('frostvolt')) {
 					return 8;
+				}
+				if (source.hasAbility('eerieresonance')) {
+					return 10;
 				}
 				return 5;
 			},
@@ -7959,8 +7962,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
+				if (source?.hasItem('terrainextender') || source.hasAbility('stormbloom')) {
 					return 8;
+				}
+				if (source.hasAbility('verdantbloom')) {
+					return 10;
 				}
 				return 5;
 			},
@@ -12607,8 +12613,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
+				if (source?.hasItem('terrainextender') || source.hasAbility('solarmist')) {
 					return 8;
+				}
+				if (source.hasAbility('mystichaze')) {
+					return 10;
 				}
 				return 5;
 			},
@@ -14637,8 +14646,11 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			effectType: 'Terrain',
 			duration: 5,
 			durationCallback(source, effect) {
-				if (source?.hasItem('terrainextender')) {
+				if (source?.hasItem('terrainextender') || source.hasAbility('desertmind')) {
 					return 8;
+				}
+				if (source.hasAbility('mindscapedomain')) {
+					return 10;
 				}
 				return 5;
 			},
