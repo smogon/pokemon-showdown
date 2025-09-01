@@ -425,9 +425,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		desc: "Only allows Pok&eacute;mon native to the Paldea region (SV)",
 		banlist: [
 			'Arcanine-Hisui', 'Avalugg-Hisui', 'Basculin-White-Striped', 'Braviary-Hisui', 'Diglett-Alola', 'Dugtrio-Alola', 'Electrode-Hisui', 'Gimmighoul-Roaming',
-			'Goodra-Hisui', 'Grimer-Alola', 'Growlithe-Hisui', 'Lilligant-Hisui', 'Meowth-Galar', 'Muk-Alola', 'Persian-Alola', 'Qwilfish-Hisui', 'Raichu-Alola',
-			'Sliggoo-Hisui', 'Slowbro-Galar', 'Slowking-Galar', 'Slowpoke-Galar', 'Sneasel-Hisui', 'Voltorb-Hisui', 'Tauros-Base', 'Wooper-Base', 'Zorua-Hisui',
-			'Zoroark-Hisui',
+			'Goodra-Hisui', 'Grimer-Alola', 'Growlithe-Hisui', 'Lilligant-Hisui', 'Meowth-Alola', 'Meowth-Galar', 'Muk-Alola', 'Persian-Alola', 'Qwilfish-Hisui',
+			'Raichu-Alola', 'Sliggoo-Hisui', 'Slowbro-Galar', 'Slowking-Galar', 'Slowpoke-Galar', 'Sneasel-Hisui', 'Voltorb-Hisui', 'Tauros-Base', 'Wooper-Base',
+			'Zorua-Hisui', 'Zoroark-Hisui',
 		],
 		onValidateSet(set, format) {
 			const paldeaDex = [
