@@ -227,6 +227,23 @@ export class RandomDNUTeams extends RandomTeams {
 			['dazzlinggleam', 'thunderwave'],
 			// Combee
 			['lunge', 'bugbuzz'],
+			// Nidoran-F
+			['sludgebomb', 'poisonjab'],
+			// Wattrel
+			['thunder', 'thunderbolt'],
+			['voltswitch', 'uturn'],
+			// Nacli
+			['rockslide', 'stoneedge'],
+			// Cleffa and Impidimp
+			[['alluringvoice', 'dazzlinggleam'], 'drainingkiss'],
+			// Fletchling
+			['bravebird', 'dualwingbeat'],
+			// Gossifleur
+			['sleeppowder', 'stunspore'],
+			// Swablu
+			['defog', 'cottonguard'],
+			// Pidove
+			['nightslash', ['quickattack', 'roost']],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -348,6 +365,14 @@ export class RandomDNUTeams extends RandomTeams {
 		if (species.id === 'smeargle') {
 			if (movePool.includes('spore')) {
 				counter = this.addMove('spore', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
+		}
+
+		// Enforce Focus Energy on Spearow
+		if (species.id === 'spearow') {
+			if (movePool.includes('focusenergy')) {
+				counter = this.addMove('focusenergy', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			}
 		}
@@ -627,7 +652,10 @@ export class RandomDNUTeams extends RandomTeams {
 		if (species.id === 'regieleki') return 'Magnet';
 		if (species.id === 'smeargle') return 'Focus Sash';
 		if (species.id === 'nickit') return 'Throat Spray';
+		if (species.id === 'lechonk' && moves.has('stuffcheeks')) return 'Salac Berry';
 		if (species.id === 'spearow') return 'Razor Claw';
+		if (species.id === 'pidove' && moves.has('nightslash')) return 'Razor Claw';
+		if (species.id === 'shedinja') return 'Heavy-Duty Boots';
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
@@ -783,9 +811,23 @@ export class RandomDNUTeams extends RandomTeams {
 			ivs.atk = 0;
 		}
 
-		if (moves.has('gyroball') || moves.has('trickroom') || moves.has('archaicglare')) {
-			evs.spe = 0;
-			ivs.spe = 0;
+		// Hidden Power Grass IVs
+		if (species.id === 'luvdisc' && moves.has('hiddenpower')) {
+			ivs.atk = 0;
+			ivs.spa = 30;
+		}
+
+		// Hidden Power Psychic IVs
+		if (species.id === 'unown') {
+			ivs.atk = 0;
+			ivs.spe = 30;
+		}
+
+		// Hidden Power Fire IVs
+		if (['fomantis', 'nincada', 'petilil', 'cherubi'].includes(species.id) && moves.has('hiddenpower')) {
+			ivs.atk = 0;
+			ivs.spa = 30;
+			ivs.spe = 30;
 		}
 
 		// Enforce Tera Type after all set generation is done to prevent infinite generation
