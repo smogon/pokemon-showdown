@@ -654,8 +654,8 @@ export class RandomDNUTeams extends RandomTeams {
 		if (species.id === 'nickit') return 'Throat Spray';
 		if (species.id === 'lechonk' && moves.has('stuffcheeks')) return 'Salac Berry';
 		if (species.id === 'spearow') return 'Razor Claw';
-		if (species.id === 'pidove' && moves.has('nightslash')) return 'Razor Claw';
-		if (species.id === 'shedinja') return 'Heavy-Duty Boots';
+		if (species.id === 'pidove' && moves.has('nightslash')) return 'Scope Lens';
+		if (['shedinja', 'luvdisc', 'nymble', 'fletchling'].includes(species.id)) return 'Heavy-Duty Boots';
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
@@ -691,14 +691,7 @@ export class RandomDNUTeams extends RandomTeams {
 		) {
 			return 'Sitrus Berry';
 		}
-		if (
-			species.id !== 'yanmega' &&
-			this.dex.getEffectiveness('Rock', species) >= 2
-		) return 'Heavy-Duty Boots';
-		if (
-			moves.has('courtchange') ||
-			!isDoubles && (species.id === 'luvdisc' || (species.id === 'terapagos' && !moves.has('rest')))
-		) return 'Heavy-Duty Boots';
+		if (this.dex.getEffectiveness('Rock', species) >= 2) return 'Heavy-Duty Boots';
 		if (species.nfe) return 'Eviolite';
 	}
 
