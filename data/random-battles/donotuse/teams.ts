@@ -231,6 +231,14 @@ export class RandomDNUTeams extends RandomTeams {
 			['sludgebomb', 'poisonjab'],
 			// Wattrel
 			['thunder', 'thunderbolt'],
+			// Nacli
+			['rockslide', 'stoneedge'],
+			// Cleffa and Impidimp
+			[['alluringvoice', 'dazzlinggleam'], 'drainingkiss'],
+			// Fletchling
+			['bravebird', 'dualwingbeat'],
+			// Gossifleur
+			['sleeppowder', 'stunspore'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -631,6 +639,7 @@ export class RandomDNUTeams extends RandomTeams {
 		if (species.id === 'regieleki') return 'Magnet';
 		if (species.id === 'smeargle') return 'Focus Sash';
 		if (species.id === 'nickit') return 'Throat Spray';
+		if (species.id === 'lechonk') return 'Salac Berry';
 		if (species.id === 'spearow') return 'Razor Claw';
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
