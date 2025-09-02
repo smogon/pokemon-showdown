@@ -116,7 +116,7 @@
 		"sets": [
 			{
 				"role": "Setup Sweeper",
-				"movepool": ["Return", "Earthquake", "Swords Dance", "Quick Attack", "Bulk Up"],
+				"movepool": ["Return", "Earthquake", "Swords Dance", "Quick Attack"],
 				"abilities": ["Pickup"],
 				"teraTypes": ["Ground"]
 			},
@@ -738,9 +738,15 @@
 		"sets": [
 			{
 				"role": "Fast Support",
-				"movepool": ["Defog", "Wish", "Return", "Protect", "U-turn"],
+				"movepool": ["Defog", "Wish", "Dual Wingbeat", "Protect", "U-turn"],
 				"abilities": ["Super Luck"],
 				"teraTypes": ["Electric"]
+			},
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Return", "Night Slash", "Dual Wingbeat", "Quick Attack", "Roost", "U-turn"],
+				"abilities": ["Super Luck"],
+				"teraTypes": ["Dark"]
 			}
 		]
 	},
@@ -1143,7 +1149,7 @@
 		"sets": [
 			{
 				"role": "Fast Attacker",
-				"movepool": ["Hurricane", "Roost", "Thunder", "Thunderbolt", "Volt Switch"],
+				"movepool": ["Hurricane", "Roost", "Thunder", "Thunderbolt", "Volt Switch", "U-turn"],
 				"abilities": ["Volt Absorb"],
 				"teraTypes": ["Flying"]
 			}
