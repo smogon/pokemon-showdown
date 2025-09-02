@@ -3720,7 +3720,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Standard', 'One Boost Passer Clause', 'Accuracy Trap Clause', 'Freeze Clause Mod'],
 		banlist: [
 			'Uber', 'Smeargle + Ingrain', 'Sand Veil', 'Soundproof', 'Assist', 'Baton Pass + Block', 'Baton Pass + Mean Look', 'Baton Pass + Spider Web',
-			'Baton Pass + Agility', 'Baton Pass + Dragon Dance', 'Baton Pass + Salac Berry', 'Baton Pass + Speed Boost', 'Baton Pass + Starf Berry', 'Swagger'
+			'Baton Pass + Agility', 'Baton Pass + Dragon Dance', 'Baton Pass + Salac Berry', 'Baton Pass + Speed Boost', 'Baton Pass + Starf Berry', 'Swagger',
 		],
 	},
 	{
