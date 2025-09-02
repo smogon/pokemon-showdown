@@ -145,6 +145,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	flowergift: {
 		inherit: true,
+		onEnd() {},
 		onAllyModifyAtk(atk) {
 			if (this.field.isWeather('sunnyday')) {
 				return this.chainModify(1.5);
@@ -159,6 +160,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	forecast: {
 		inherit: true,
+		onEnd() {},
 		flags: { notrace: 1 },
 	},
 	forewarn: {
