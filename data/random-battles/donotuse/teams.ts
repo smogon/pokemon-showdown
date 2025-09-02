@@ -652,7 +652,7 @@ export class RandomDNUTeams extends RandomTeams {
 		if (species.id === 'regieleki') return 'Magnet';
 		if (species.id === 'smeargle') return 'Focus Sash';
 		if (species.id === 'nickit') return 'Throat Spray';
-		if (species.id === 'lechonk') return 'Salac Berry';
+		if (species.id === 'lechonk' && moves.has('stuffcheeks')) return 'Salac Berry';
 		if (species.id === 'spearow') return 'Razor Claw';
 		if (species.id === 'pidove' && moves.has('nightslash')) return 'Razor Claw';
 		if (species.id === 'shedinja') return 'Heavy-Duty Boots';
