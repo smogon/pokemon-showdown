@@ -54,7 +54,7 @@
 		"sets": [
 			{
 				"role": "Setup Sweeper",
-				"movepool": ["Swords Dance", "Curse", "Return", "Crunch", "Aqua Tail", "Quick Attack"],
+				"movepool": ["Swords Dance", "Curse", "Double-Edge", "Crunch", "Aqua Tail", "Quick Attack"],
 				"abilities": ["Simple"],
 				"teraTypes": ["Normal", "Dark"]
 			},
@@ -616,7 +616,7 @@
 		"sets": [
 			{
 				"role": "Setup Sweeper",
-				"movepool": ["Nasty Plot", "Snarl", "Mud Shot", "Swift"],
+				"movepool": ["Nasty Plot", "Snarl", "Mud Shot", "Round"],
 				"abilities": ["Unburden"],
 				"teraTypes": ["Dark"]
 			}
@@ -1243,7 +1243,7 @@
 		"sets": [
 			{
 				"role": "Wallbreaker",
-				"movepool": ["Return", "Crunch", "Earthquake", "U-turn"],
+				"movepool": ["Double-Edge", "Crunch", "Earthquake", "U-turn"],
 				"abilities": ["Adaptability"],
 				"teraTypes": ["Normal"]
 			}
