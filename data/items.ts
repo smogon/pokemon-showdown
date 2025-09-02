@@ -4499,7 +4499,7 @@ export const Items: import('../sim/dex-items').ItemDataTable = {
 	},
 	prettyfeather: {
 		name: "Pretty Feather",
-		spritenum: 754, // placeholder
+		spritenum: 1,
 		fling: {
 			basePower: 20,
 		},
