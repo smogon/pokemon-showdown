@@ -871,7 +871,7 @@
                 "role": "Fast Support",
                 "movepool": ["Transform"],
                 "abilities": ["Imposter"],
-                "teraTypes": ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"]
+                "teraTypes": ["Ghost", "Steel"]
             }
         ]
     },
@@ -1204,12 +1204,6 @@
     "bellossom": {
         "level": 84,
         "sets": [
-            {
-                "role": "Fast Bulky Setup",
-                "movepool": ["Giga Drain", "Quiver Dance", "Sleep Powder", "Strength Sap"],
-                "abilities": ["Chlorophyll"],
-                "teraTypes": ["Poison", "Steel", "Water"]
-            },
             {
                 "role": "Bulky Setup",
                 "movepool": ["Giga Drain", "Moonblast", "Quiver Dance", "Sludge Bomb", "Strength Sap"],
@@ -2724,13 +2718,13 @@
                 "role": "Fast Attacker",
                 "movepool": ["Earthquake", "Fire Punch", "Head Smash", "Rock Slide"],
                 "abilities": ["Sheer Force"],
-                "teraTypes": ["Ground", "Rock"]
+                "teraTypes": ["Fire", "Ground", "Rock"]
             },
             {
                 "role": "Wallbreaker",
                 "movepool": ["Earthquake", "Fire Punch", "Rock Slide", "Zen Headbutt"],
                 "abilities": ["Sheer Force"],
-                "teraTypes": ["Psychic", "Rock"]
+                "teraTypes": ["Fire", "Psychic", "Rock"]
             }
         ]
     },
@@ -3475,7 +3469,7 @@
         "level": 75,
         "sets": [
             {
-                "role": "Fast Support",
+                "role": "Bulky Attacker",
                 "movepool": ["Dragon Tail", "Rest", "Shadow Ball", "Sleep Talk", "Will-O-Wisp"],
                 "abilities": ["Pressure"],
                 "teraTypes": ["Fairy"]
@@ -4374,6 +4368,17 @@
                 "movepool": ["Dynamic Punch", "Earthquake", "Poltergeist", "Stealth Rock", "Stone Edge"],
                 "abilities": ["No Guard"],
                 "teraTypes": ["Fighting", "Ghost", "Ground"]
+            }
+        ]
+    },
+    "bisharp": {
+        "level": 79,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Iron Head", "Stealth Rock", "Sucker Punch", "Swords Dance", "Throat Chop"],
+                "abilities": ["Defiant"],
+                "teraTypes": ["Ghost"]
             }
         ]
     },
@@ -6519,7 +6524,7 @@
             {
                 "role": "Wallbreaker",
                 "movepool": ["Close Combat", "Double Shock", "Ice Punch", "Revival Blessing"],
-                "abilities": ["Iron Fist", "Volt Absorb"],
+                "abilities": ["Iron Fist"],
                 "teraTypes": ["Electric"]
             }
         ]
@@ -6772,7 +6777,7 @@
                 "role": "Wallbreaker",
                 "movepool": ["Energy Ball", "Fire Blast", "Stomping Tantrum", "Sunny Day"],
                 "abilities": ["Chlorophyll"],
-                "teraTypes": ["Fire", "Grass", "Ground"]
+                "teraTypes": ["Fire", "Ground"]
             }
         ]
     },
@@ -6815,7 +6820,7 @@
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Gigaton Hammer", "Knock Off", "Play Rough", "Swords Dance"],
+                "movepool": ["Gigaton Hammer", "Knock Off", "Play Rough", "Protect", "Swords Dance"],
                 "abilities": ["Mold Breaker"],
                 "teraTypes": ["Steel"]
             }
@@ -7165,15 +7170,15 @@
         "sets": [
             {
                 "role": "Fast Bulky Setup",
-                "movepool": ["Bulk Up", "Close Combat", "Earthquake", "Flame Charge", "Leech Life", "Wild Charge"],
+                "movepool": ["Acrobatics", "Bulk Up", "Close Combat", "Earthquake", "Flame Charge", "Leech Life", "Wild Charge"],
                 "abilities": ["Protosynthesis"],
-                "teraTypes": ["Electric", "Fighting"]
+                "teraTypes": ["Electric", "Flying"]
             },
             {
                 "role": "Fast Attacker",
-                "movepool": ["Close Combat", "Earthquake", "First Impression", "U-turn", "Wild Charge"],
+                "movepool": ["Close Combat", "Earthquake", "First Impression", "Flare Blitz", "U-turn", "Wild Charge"],
                 "abilities": ["Protosynthesis"],
-                "teraTypes": ["Bug", "Electric", "Fighting"]
+                "teraTypes": ["Bug", "Electric", "Fighting", "Fire"]
             },
             {
                 "role": "Fast Support",
