@@ -63,6 +63,7 @@ const MOVE_PAIRS = [
 	['protect', 'wish'],
 	// FFA:
 	['protect', 'leechseed'],
+	['spikyshield', 'leechseed'],
 	['icebeam', 'thunderbolt'],
 ];
 
@@ -186,11 +187,11 @@ export class RandomFFATeams extends RandomTeams {
 			[SPECIAL_SETUP, SPECIAL_SETUP],
 			['substitute', PIVOT_MOVES],
 			[SPEED_SETUP, ['aquajet', 'rest', 'trickroom']],
-			[['icywind', 'thunderwave'], 'trickroom'],
+			[['icywind', 'thunderwave', 'futuresight'], 'trickroom'],
 
 			// These attacks are redundant with each other
 			[['psychic', 'psychicnoise'], ['psyshock', 'psychicnoise']],
-			[['liquidation', 'scald'], ['wavecrash', 'hyrdopump']],
+			[['liquidation', 'scald'], ['wavecrash', 'hydropump']],
 			[['gigadrain', 'leafstorm'], ['leafstorm', 'energyball']],
 			['powerwhip', 'hornleech'],
 			['airslash', 'hurricane'],
@@ -280,6 +281,20 @@ export class RandomFFATeams extends RandomTeams {
 			return this.moveEnforcementCheckers[checkerName](
 				movePool, moves, abilities, types, counter, species, teamDetails, isLead, isDoubles, teraType, role
 			);
+		};
+
+		// Helper function for paired move enforcement
+		const addPairedMove = (moveid: string) => {
+			for (const pair of MOVE_PAIRS) {
+				if (moveid === pair[0] && movePool.includes(pair[1])) {
+					counter = this.addMove(pair[1], moves, types, abilities, teamDetails, species, isLead, isDoubles,
+						movePool, teraType, role);
+				}
+				if (moveid === pair[1] && movePool.includes(pair[0])) {
+					counter = this.addMove(pair[0], moves, types, abilities, teamDetails, species, isLead, isDoubles,
+						movePool, teraType, role);
+				}
+			}
 		};
 
 		if (role === 'Tera Blast user') {
@@ -386,6 +401,8 @@ export class RandomFFATeams extends RandomTeams {
 				const moveid = this.sampleNoReplace(stabMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
+				// Enforce Thunderbolt on Regice
+				addPairedMove(moveid);
 			}
 		}
 
@@ -406,6 +423,8 @@ export class RandomFFATeams extends RandomTeams {
 				const moveid = this.sample(stabMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
+				// Enforce Ice Beam on Tera Electric Porygon-Z
+				addPairedMove(moveid);
 			}
 		}
 
@@ -466,12 +485,14 @@ export class RandomFFATeams extends RandomTeams {
 		}
 
 		// Enforce Protect
-		if (!['Bulky Setup', 'Bulky Support'].includes(role)) {
+		if (!['Bulky Setup', 'Bulky Support', 'Wallbreaker'].includes(role)) {
 			const protectMoves = movePool.filter(moveid => PROTECT_MOVES.includes(moveid));
 			if (protectMoves.length) {
 				const moveid = this.sample(protectMoves);
 				counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
+				// Enforce Wish and Leech Seed with Protect/Spiky Shield
+				addPairedMove(moveid);
 			}
 		}
 
@@ -504,16 +525,7 @@ export class RandomFFATeams extends RandomTeams {
 			const moveid = this.sample(movePool);
 			counter = this.addMove(moveid, moves, types, abilities, teamDetails, species, isLead, isDoubles,
 				movePool, teraType, role);
-			for (const pair of MOVE_PAIRS) {
-				if (moveid === pair[0] && movePool.includes(pair[1])) {
-					counter = this.addMove(pair[1], moves, types, abilities, teamDetails, species, isLead, isDoubles,
-						movePool, teraType, role);
-				}
-				if (moveid === pair[1] && movePool.includes(pair[0])) {
-					counter = this.addMove(pair[0], moves, types, abilities, teamDetails, species, isLead, isDoubles,
-						movePool, teraType, role);
-				}
-			}
+			addPairedMove(moveid);
 		}
 		return moves;
 	}
@@ -728,7 +740,7 @@ export class RandomFFATeams extends RandomTeams {
 		)) {
 			return 'Heavy-Duty Boots';
 		}
-		if (!role.includes('Bulky') || species.id === 'golduck' && this.prng.randomChance(1, 2)) {
+		if (['Wallbreaker', 'Fast Attacker'].includes(role) || species.id === 'golduck' && this.prng.randomChance(1, 2)) {
 			const damagingTypes = [...counter.basePowerMoves].map(m => m.type);
 			if (counter.basePowerMoves.size >= 2 && (new Set(damagingTypes)).size === 1) {
 				if (damagingTypes[0] === 'Normal') return 'Silk Scarf';
