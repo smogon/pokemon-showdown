@@ -5786,7 +5786,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Apple Acid", "Draco Meteor", "Dragon Pulse", "Leech Seed", "Recover"],
+                "movepool": ["Apple Acid", "Draco Meteor", "Dragon Pulse", "Dragon Tail", "Leech Seed", "Recover"],
                 "abilities": ["Thick Fat"],
                 "teraTypes": ["Steel"]
             }
