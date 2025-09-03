@@ -2996,7 +2996,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		team: 'random',
 		bestOfDefault: true,
 		ruleset: ['[Gen 5] Random Battle'],
-				onBegin() {
+		onBegin() {
 			for (const pokemon of this.getAllPokemon()) {
 				if (pokemon.ability === this.toID(pokemon.species.abilities['S'])) {
 					continue;
