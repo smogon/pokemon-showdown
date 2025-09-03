@@ -5546,12 +5546,12 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["discharge", "earthpower", "rest", "scald", "sleeptalk", "stealthrock", "toxic"],
+                "movepool": ["discharge", "earthpower", "scald", "stealthrock", "toxic"],
                 "abilities": ["Static"]
             },
             {
-                "role": "Staller",
-                "movepool": ["discharge", "earthpower", "protect", "toxic"],
+                "role": "Bulky Support",
+                "movepool": ["discharge", "earthpower", "protect", "rest", "sleeptalk", "toxic"],
                 "abilities": ["Static"]
             }
         ]
