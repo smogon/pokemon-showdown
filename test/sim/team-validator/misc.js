@@ -12,7 +12,7 @@ describe('Team Validator', () => {
 		team = [
 			{ species: 'shedinja', ability: 'wonderguard', moves: ['silverwind', 'batonpass'], evs: { hp: 1 } },
 		];
-		assert.legalTeam(team, 'gen3ou');
+		assert.legalTeam(team, 'gen31v1');
 
 		team = [
 			{ species: 'shedinja', ability: 'wonderguard', moves: ['silverwind', 'swordsdance', 'batonpass'], evs: { hp: 1 } },
