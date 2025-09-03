@@ -223,6 +223,7 @@ export class RandomDNUTeams extends RandomTeams {
 			['calmmind', 'mysticalfire'],
 			// Jigglypuff
 			[['toxic', 'thunderwave'], 'encore'],
+			['calmmind', 'nastyplot'],
 			// Impidimp
 			['dazzlinggleam', 'thunderwave'],
 			// Combee
