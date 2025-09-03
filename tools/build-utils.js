@@ -215,10 +215,12 @@ function generateRandomBattlesModuleMap() {
 
     lines.push('];');
     lines.push('');
-    lines.push('export const RandomBattlesModuleMap: Record<string, any> = {');
+    lines.push('export const getRandomBattlesModule = (module: typeof RandomBattlesMods[number]) => {');
+    lines.push('\treturn {');
     for (const mod of subdirs) {
-        lines.push(`\t'${mod}': require('../data/random-battles/${mod}/teams'),`);
+        lines.push(`\t\t'${mod}': require('../data/random-battles/${mod}/teams'),`);
     }
+    lines.push('\t}[module];');
     lines.push('};');
     lines.push('');
 

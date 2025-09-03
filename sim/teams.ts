@@ -9,7 +9,7 @@
 
 import { Dex, toID } from './dex';
 import type { PRNG, PRNGSeed } from './prng';
-import { RandomBattlesModuleMap } from './random-battles-module-map';
+import { getRandomBattlesModule } from './random-battles-module-map';
 
 /**
  * Represents additional move data
@@ -711,7 +711,7 @@ export const Teams = new class Teams {
 			TeamGenerator = require(`../data/random-battles/gen9ffa/teams`).default;
 		} else {
 			// @pokebedrock - use generated static module map to avoid dynamic requires
-			TeamGenerator = RandomBattlesModuleMap[mod];
+			TeamGenerator = getRandomBattlesModule(mod).default;
 		}
 
 		return new TeamGenerator(format, seed);
