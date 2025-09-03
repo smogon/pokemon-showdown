@@ -1238,7 +1238,7 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		},
 		onValidateTeam(team) {
 			const boostingEffects = [
-				'agility', 'dragondance', 'salacberry', 'speedboost', 'starfberry',
+				'agility', 'dragondance', 'ancientpower', 'silverwind', 'salacberry', 'speedboost', 'starfberry',
 			];
 			for (const set of team) {
 				const moves = set.moves.map(this.toID);
