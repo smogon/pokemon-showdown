@@ -1698,7 +1698,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	torchic: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	combusken: {
 		tier: "NFE",
@@ -2340,7 +2340,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "NFE",
 	},
 	salamence: {
-		tier: "RU",
+		tier: "RUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "RUBL",
 	},
@@ -2586,7 +2586,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "LC",
 	},
 	floatzel: {
-		tier: "ZU",
+		tier: "ZUBL",
 		doublesTier: "(DUU)",
 		natDexTier: "RU",
 	},
@@ -5002,7 +5002,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "RU",
 	},
 	duraludon: {
-		tier: "PU",
+		tier: "PUBL",
 		doublesTier: "NFE",
 		natDexTier: "RU",
 	},
@@ -5302,7 +5302,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	tatsugiri: {
 		tier: "PU",
-		doublesTier: "DUber",
+		doublesTier: "DOU",
 		natDexTier: "RU",
 	},
 	cyclizar: {
@@ -5433,7 +5433,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	fluttermane: {
 		tier: "Uber",
-		doublesTier: "DUber",
+		doublesTier: "DOU",
 		natDexTier: "Uber",
 	},
 	slitherwing: {
@@ -5614,7 +5614,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	archaludon: {
 		tier: "Uber",
 		doublesTier: "DUber",
-		natDexTier: "RU",
+		natDexTier: "RUBL",
 	},
 	hydrapple: {
 		tier: "UU",

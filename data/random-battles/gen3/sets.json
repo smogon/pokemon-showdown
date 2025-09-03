@@ -394,7 +394,7 @@
         ]
     },
     "machamp": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -602,7 +602,7 @@
         ]
     },
     "kingler": {
-        "level": 91,
+        "level": 90,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -871,7 +871,7 @@
         ]
     },
     "gyarados": {
-        "level": 74,
+        "level": 73,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -993,7 +993,7 @@
         ]
     },
     "snorlax": {
-        "level": 72,
+        "level": 71,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -1289,7 +1289,7 @@
         ]
     },
     "bellossom": {
-        "level": 93,
+        "level": 94,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -1439,7 +1439,7 @@
         ]
     },
     "umbreon": {
-        "level": 87,
+        "level": 88,
         "sets": [
             {
                 "role": "Staller",
@@ -1801,7 +1801,7 @@
         ]
     },
     "skarmory": {
-        "level": 74,
+        "level": 73,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -1909,7 +1909,7 @@
         ]
     },
     "blissey": {
-        "level": 77,
+        "level": 76,
         "sets": [
             {
                 "role": "Staller",
@@ -1940,7 +1940,7 @@
         ]
     },
     "entei": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -2952,7 +2952,7 @@
         ]
     },
     "metagross": {
-        "level": 72,
+        "level": 73,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -3060,7 +3060,7 @@
         ]
     },
     "rayquaza": {
-        "level": 69,
+        "level": 70,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -3096,7 +3096,7 @@
         "level": 71,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Fast Attacker",
                 "movepool": ["extremespeed", "firepunch", "icebeam", "psychoboost", "shadowball", "superpower"],
                 "abilities": ["Pressure"],
                 "preferredTypes": ["Fighting", "Ghost"]
@@ -3107,7 +3107,7 @@
         "level": 70,
         "sets": [
             {
-                "role": "Wallbreaker",
+                "role": "Fast Attacker",
                 "movepool": ["extremespeed", "firepunch", "icebeam", "psychoboost", "shadowball", "superpower"],
                 "abilities": ["Pressure"],
                 "preferredTypes": ["Fighting", "Ghost"]

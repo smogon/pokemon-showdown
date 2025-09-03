@@ -664,6 +664,7 @@ export const commands: Chat.ChatCommands = {
 					details["Weight"] = `${pokemon.weighthg / 10} kg <em>(${weighthit} BP)</em>`;
 					const gmaxMove = pokemon.canGigantamax || dex.species.get(pokemon.changesFrom).canGigantamax;
 					if (gmaxMove && dex.gen === 8) details["G-Max Move"] = gmaxMove;
+					if (dex.gen === 1) details["Crit Rate"] = `${((pokemon.baseStats.spe * 100) / 512).toFixed(2)}%`;
 					if (pokemon.color && dex.gen >= 5) details["Dex Colour"] = pokemon.color;
 					if (pokemon.eggGroups && dex.gen >= 2) details["Egg Group(s)"] = pokemon.eggGroups.join(", ");
 					const evos: string[] = [];

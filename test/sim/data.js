@@ -230,14 +230,14 @@ describe('Dex data', () => {
 
 	it('should have valid Learnsets entries', function () {
 		this.timeout(0);
-		const learnsetsArray = [Dex.mod('gen2').data.Learnsets, Dex.mod('gen7letsgo').data.Learnsets, Dex.mod('gen8bdsp').data.Learnsets, Dex.data.Learnsets];
-		for (const Learnsets of learnsetsArray) {
-			for (const speciesid in Learnsets) {
+		const mods = [Dex.mod('gen2'), Dex.mod('gen7letsgo'), Dex.mod('gen8bdsp'), Dex.mod('gen8legends'), Dex];
+		for (const mod of mods) {
+			for (const speciesid in mod.data.Learnsets) {
 				const species = Dex.species.get(speciesid);
 				assert.equal(speciesid, species.id, `Key "${speciesid}" in Learnsets should be a Species ID`);
 				assert(species.exists, `Key "${speciesid}" in Learnsets should be a pokemon`);
-				let entry = Learnsets[speciesid];
-				if (!entry.learnset) entry = Learnsets[toID(species.changesFrom || species.baseSpecies)];
+				let entry = mod.data.Learnsets[speciesid];
+				if (!entry.learnset) entry = mod.data.Learnsets[toID(species.changesFrom || species.baseSpecies)];
 				for (const moveid in entry.learnset) {
 					const move = Dex.moves.get(moveid);
 					assert.equal(moveid, move.id, `Move key "${moveid}" of Learnsets entry ${species.name} should be a Move ID`);
@@ -292,7 +292,8 @@ describe('Dex data', () => {
 								}
 								assert.equal(eventMove, toID(eventMove), `${species.name}'s event move "${eventMove}" must be an ID`);
 								assert(entry.learnset, `${species.name} has event moves but no learnset`);
-								assert(entry.learnset[eventMove]?.includes(learned), `${species.name}'s event move ${Dex.moves.get(eventMove).name} should exist as "${learned}"`);
+								const effectiveMod = ['gen8bdsp', 'gen8legends'].includes(mod.currentMod) ? mod.currentMod : undefined;
+								if (eventEntry.source === effectiveMod) assert(entry.learnset[eventMove]?.includes(learned), `${species.name}'s event move ${Dex.moves.get(eventMove).name} should exist as "${learned}"`);
 							}
 						}
 					}

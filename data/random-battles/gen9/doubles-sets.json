@@ -1129,7 +1129,7 @@
         ]
     },
     "jumpluff": {
-        "level": 93,
+        "level": 92,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -1940,7 +1940,7 @@
         ]
     },
     "seviper": {
-        "level": 95,
+        "level": 96,
         "sets": [
             {
                 "role": "Offensive Protect",
@@ -2535,7 +2535,7 @@
         "sets": [
             {
                 "role": "Doubles Support",
-                "movepool": ["Helping Hand", "High Horsepower", "Slack Off", "Stealth Rock", "Stone Edge", "Whirlwind"],
+                "movepool": ["High Horsepower", "Slack Off", "Stealth Rock", "Stone Edge", "Whirlwind"],
                 "abilities": ["Sand Stream"],
                 "teraTypes": ["Dragon", "Rock", "Steel", "Water"]
             }
@@ -3911,7 +3911,7 @@
             },
             {
                 "role": "Offensive Protect",
-                "movepool": ["Close Combat", "High Horsepower", "Protect", "Rock Slide"],
+                "movepool": ["Close Combat", "Protect", "Rock Slide", "Stone Edge"],
                 "abilities": ["Justified"],
                 "teraTypes": ["Fighting", "Ghost", "Rock"]
             }
@@ -4676,7 +4676,7 @@
         ]
     },
     "toxapex": {
-        "level": 93,
+        "level": 92,
         "sets": [
             {
                 "role": "Bulky Protect",
@@ -4698,7 +4698,7 @@
         ]
     },
     "araquanid": {
-        "level": 85,
+        "level": 84,
         "sets": [
             {
                 "role": "Doubles Bulky Setup",
@@ -4777,7 +4777,7 @@
         ]
     },
     "oranguru": {
-        "level": 91,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -5087,7 +5087,7 @@
         ]
     },
     "coalossal": {
-        "level": 91,
+        "level": 90,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -6454,7 +6454,7 @@
         ]
     },
     "irontreads": {
-        "level": 80,
+        "level": 81,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
