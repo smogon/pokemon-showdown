@@ -2990,14 +2990,48 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		column: 3,
 	},
 	{
-		name: "[Gen 9] Random Battle (Hyperblitz, Auto Choose)",
-		desc: `[Gen 9] Random Battle (Blitz), but even faster! If a player runs out of time on a turn, the first available option is automatically selected.`,
-		mod: 'gen9',
+		name: "[Gen 5] Pokebilities Random Battle",
+		desc: `Pok&eacute;mon have all of their released abilities simultaneously.`,
+		mod: 'gen5pokebilities',
 		team: 'random',
 		bestOfDefault: true,
-		ruleset: ['[Gen 9] Random Battle (Blitz)', '!! Timer Starting = 900', '!! Timer Add Per Turn = 10', '!! Timer Max Per Turn = 10', 'Timeout Auto Choose'],
-		onBegin() {
-			this.add(`raw|<div class="broadcast-blue">Spotlight ladders are now the focus of the Ladder Achievements Project, which allows you to complete challenges to win some prizes in the <a href="/randombattles">Random Battles</a> room! Check out <a href="https://www.smogon.com/forums/threads/3767546">the Ladder Achievements thread</a> to see what the project is all about!</div>`);
+		ruleset: ['[Gen 5] Random Battle'],
+				onBegin() {
+			for (const pokemon of this.getAllPokemon()) {
+				if (pokemon.ability === this.toID(pokemon.species.abilities['S'])) {
+					continue;
+				}
+				pokemon.m.innates = Object.keys(pokemon.species.abilities)
+					.filter(key => key !== 'S' && (key !== 'H' || !pokemon.species.unreleasedHidden))
+					.map(key => this.toID(pokemon.species.abilities[key as "0" | "1" | "H" | "S"]))
+					.filter(ability => ability !== pokemon.ability);
+			}
+		},
+		onBeforeSwitchIn(pokemon) {
+			if (pokemon.m.innates) {
+				for (const innate of pokemon.m.innates) {
+					if (pokemon.hasAbility(innate)) continue;
+					const effect = 'ability:' + this.toID(innate);
+					pokemon.volatiles[effect] = this.initEffectState({ id: effect, target: pokemon });
+				}
+			}
+		},
+		onSwitchOut(pokemon) {
+			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				pokemon.removeVolatile(innate);
+			}
+		},
+		onFaint(pokemon) {
+			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				const innateEffect = this.dex.conditions.get(innate) as Effect;
+				this.singleEvent('End', innateEffect, null, pokemon);
+			}
+		},
+		onAfterMega(pokemon) {
+			for (const innate of Object.keys(pokemon.volatiles).filter(i => i.startsWith('ability:'))) {
+				pokemon.removeVolatile(innate);
+			}
+			pokemon.m.innates = undefined;
 		},
 	},
 
