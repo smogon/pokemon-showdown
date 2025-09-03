@@ -4063,7 +4063,7 @@
             {
                 "role": "Imprisoner",
                 "movepool": ["Encore", "Imprison", "Knock Off", "Protect"],
-                "abilities": ["Prankster"],
+                "abilities": ["Illusion"],
                 "teraTypes": ["Poison"]
             }
         ]
