@@ -604,12 +604,8 @@
     "rhydon": {
         "sets": [
             {
-                "role": "Fast Attacker",
+                "role": "Generalist",
                 "movepool": ["curse", "earthquake", "rest", "roar", "rockslide", "sleeptalk"]
-            },
-            {
-                "role": "Bulky Setup",
-                "movepool": ["curse", "rest", "rockslide", "sleeptalk"]
             }
         ]
     },
