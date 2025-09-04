@@ -336,6 +336,7 @@ export class MySQLDatabase extends Database<mysql.Pool, mysql.OkPacket> {
 		const prefix = config.prefix || "";
 		if (config.prefix) {
 			config = { ...config };
+			delete config.prefix;
 		}
 		super(mysql.createPool(config), prefix);
 	}
