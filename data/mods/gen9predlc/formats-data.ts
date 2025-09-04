@@ -2708,6 +2708,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Illegal",
 		natDexTier: "LC",
 	},
+	burmysandy: {
+		isNonstandard: "Past",
+	},
+	burmytrash: {
+		isNonstandard: "Past",
+	},
 	wormadam: {
 		isNonstandard: "Past",
 		tier: "Illegal",
@@ -2727,6 +2733,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "RU",
+	},
+	mothimsandy: {
+		isNonstandard: "Past",
+	},
+	mothimtrash: {
+		isNonstandard: "Past",
 	},
 	combee: {
 		tier: "LC",
@@ -4679,6 +4691,24 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Illegal",
 		natDexTier: "RU",
 	},
+	miniororange: {
+		isNonstandard: "Past",
+	},
+	minioryellow: {
+		isNonstandard: "Past",
+	},
+	miniorgreen: {
+		isNonstandard: "Past",
+	},
+	miniorblue: {
+		isNonstandard: "Past",
+	},
+	miniorindigo: {
+		isNonstandard: "Past",
+	},
+	miniorviolet: {
+		isNonstandard: "Past",
+	},
 	miniormeteor: {
 		isNonstandard: "Past",
 	},
@@ -5193,6 +5223,30 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "RU",
+	},
+	alcremierubycream: {
+		isNonstandard: "Past",
+	},
+	alcremiematchacream: {
+		isNonstandard: "Past",
+	},
+	alcremiemintcream: {
+		isNonstandard: "Past",
+	},
+	alcremielemoncream: {
+		isNonstandard: "Past",
+	},
+	alcremiesaltedcream: {
+		isNonstandard: "Past",
+	},
+	alcremierubyswirl: {
+		isNonstandard: "Past",
+	},
+	alcremiecaramelswirl: {
+		isNonstandard: "Past",
+	},
+	alcremierainbowswirl: {
+		isNonstandard: "Past",
 	},
 	alcremiegmax: {
 		isNonstandard: "Past",
