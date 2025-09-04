@@ -8065,6 +8065,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 					this.add('-activate', source, 'ability: Persistent', '[move] Gravity');
 					return 7;
 				}
+				if (source.hasAbility('gravitygenerator')) {
+					return 5;
+				}
 				return 5;
 			},
 			onFieldStart(target, source) {
@@ -19627,6 +19630,9 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 				if (source?.hasAbility('persistent')) {
 					this.add('-activate', source, 'ability: Persistent', '[move] Tailwind');
 					return 6;
+				}
+				if (source.hasAbility('windwalker')) {
+					return 5;
 				}
 				return 4;
 			},

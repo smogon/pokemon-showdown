@@ -997,6 +997,260 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: -1071,
 		rating: 4,
 	},
+	rightsidedown: {
+		name: 'Right Side Down',
+		onStart(pokemon) {
+			let activated = false;
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add("-ability", pokemon, "Right Side Down", "boost");
+					activated = true;
+				}
+				if (target.volatiles["substitute"]) {
+					this.add("-immune", target);
+				} else {
+					for (let i in target.boosts) {
+						if (target.boosts[i as keyof BoostsTable] === 0) continue;
+						target.boosts[i as keyof BoostsTable] =
+							-target.boosts[i as keyof BoostsTable];
+					}
+					this.add(
+						"-invertboost",
+						target,
+						"[from] ability: Right Side Down"
+					);
+				}
+			}
+		},
+		flags: {},
+		rating: 3.5,
+		num: -1072,
+	},
+	windwalker: {
+		name: "Wind Walker",
+		onStart(pokemon) {
+			// Tailwind duration increase occurs in moves.ts/Tailwind/DurationCallback
+			pokemon.side.addSideCondition("tailwind");
+		},
+		flags: {},
+		rating: 3.5,
+		num: -1073,
+	},
+	gravitygenerator: {
+		name: "Gravity Generator",
+		onStart(pokemon) {
+			// Gravity duration increase occurs in moves.ts/Gravity/DurationCallback
+			pokemon.side.addSideCondition('gravity');
+		},
+		flags: {},
+		rating: 3.5,
+		num: -1074,
+	},
+	cleanfreak: {
+		name: 'Clean Freak',
+		onStart(pokemon) {
+			const sideConditions = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+			sideConditions.forEach(condition => {
+				pokemon.side.removeSideCondition(condition);
+				this.add('-sideend', pokemon.side, this.dex.conditions.get(condition).name, '[from] ability: Clean Freak', `[of] ${pokemon}`);
+			});
+		},
+		flags: {},
+		rating: 3.5,
+		num: -1075,
+	},
+	terraineater: {
+		name: 'Terrain Eater',
+		onStart(pokemon) {
+			if (!(this.field.terrain && pokemon.isGrounded())) return;
+			this.add('-ability', pokemon, 'Terrain Eater');
+			this.field.clearTerrain();
+		},
+		flags: {},
+		rating: 3.5,
+		num: -1076,
+	},
+	ejected: {
+		name: 'Ejected',
+		onSwitchOut(pokemon) {
+			pokemon.heal(pokemon.baseMaxhp / 5);
+			this.add('-heal', pokemon, pokemon.getHealth, '[from] ability: Ejected');
+		},
+		onResidualOrder: 29,
+		onResidual(pokemon) {
+			if (pokemon.hp <= 0 || pokemon.hp >= pokemon.maxhp) return;
+			if (pokemon.beingCalledBack) return;
+			pokemon.switchFlag = true;
+		},
+		flags: {},
+		rating: 1,
+		num: -1077,
+	},
+	dnatracing: {
+		name: 'DNA Tracing',
+		onModifyMovePriority: -1,
+		onModifyMove(move) {
+			if (move.id !== 'synchronoise') return;
+			move.ignoreImmunity = true;
+			move.onEffectiveness = function () {
+				return 0;
+			};
+		},
+		onBeforeMovePriority: 9,
+		onBeforeMove(pokemon, target, move) {
+			if (move.category === 'Status' || move.id === 'reflecttype') return;
+			if (!target && pokemon.volatiles['dnatracing']) return;
+			this.add('-ability', pokemon, 'DNA Tracing');
+			pokemon.addVolatile('dnatracing');
+			pokemon.volatiles['dnatracing'].originalTypes = pokemon.getTypes(true);
+			this.actions.useMove('reflecttype', pokemon, { target });
+		},
+		onResidualOrder: 29,
+		onResidual(pokemon) {
+			if (!pokemon.volatiles['dnatracing']?.originalTypes) return;
+			const originalTypes = pokemon.volatiles['dnatracing'].originalTypes;
+			this.add('-ability', pokemon, 'DNA Tracing');
+			this.add('-message', `${pokemon.name}'s DNA Tracing reverted its type!`);
+			pokemon.setType(originalTypes);
+			pokemon.removeVolatile('dnatracing');
+		},
+		flags: {},
+		rating: 3.5,
+		num: -1078,
+	},
+	sheerwillpower: {
+		name: 'Sheer Willpower',
+		onModifyMovePriority: 1,
+		onModifyMove(move, source, target) {
+			const chargeMoves = [
+				'skullbash', 'skyattack', 'solarbeam', 'solarblade',
+				'phantomforce', 'shadowforce', 'fly', 'dig', 'dive', 'bounce',
+			];
+			if (!move.flags['charge'] || !chargeMoves.includes(move.id)) return;
+			delete move.flags['charge'];
+			delete move.onTryMove;
+			delete move.onTry;
+			delete move.onPrepareHit;
+
+			this.add('-ability', source, 'Sheer Willpower');
+			this.add('-message', `${source.name}'s ${move.name} hits instantly!`);
+			this.actions.runMove(move, source, source.getLocOf(target!));
+
+			if (move.self?.volatileStatus !== 'mustrecharge') return;
+			delete move.self.volatileStatus;
+		},
+		onUpdate(pokemon) {
+			if (!pokemon.volatiles['mustrecharge']) return;
+			pokemon.removeVolatile('mustrecharge');
+			this.add('-ability', pokemon, 'Sheer Willpower');
+			this.add('-message', `${pokemon.name} avoids recharging!`);
+		},
+		flags: {},
+		rating: 4.5,
+		num: -1079,
+	},
+	repetitiveforce: {
+		name: 'Repetitive Force',
+		onStart(pokemon) {
+			pokemon.addVolatile('repetitiveforce');
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('repetitiveforce');
+		},
+		onBasePowerPriority: 21,
+		onBasePower(_, attacker, defender, move) {
+			const reptitiveForce = attacker.volatiles['repetitiveforce'];
+			if (!reptitiveForce) return;
+
+			if (move.id !== reptitiveForce.lastMove)
+				reptitiveForce.counter = 0;
+			else
+				reptitiveForce.counter++;
+
+			reptitiveForce.lastMove = move.id;
+
+			const boostTable = [1, 1.2, 1.4, 1.6, 1.8, 2];
+			const boost = boostTable[Math.min(reptitiveForce.counter, 5)];
+
+			if (reptitiveForce.counter <= 0) return;
+			this.add('-ability', attacker, 'Reptitive Force');
+			this.add('-message', `${attacker.name}'s consecutive hits boost its power (x${boost.toFixed(1)})`);
+			return this.chainModify(boost);
+		},
+		flags: {},
+		rating: 3.5,
+		num: -1080,
+	},
+	petrifyinggaze: {
+		name: 'Petrifying Gaze',
+		onStart(pokemon) {
+			let activated = false;
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Petrifying Gaze', 'boost');
+					activated = true;
+				}
+				if (target.volatiles['substitute'])
+					this.add('-immune', target);
+				else
+					this.boost({ spe: -1 }, target, pokemon, null, true);
+			}
+		},
+		flags: {},
+		rating: 3.5,
+		num: -1081,
+	},
+	rezero: {
+		name: 'ReZero',
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'ReZero');
+			this.add('-message', 'The battle state has been reset to zero!');
+			for (const active of this.getAllActive()) {
+				active.clearBoosts();
+				this.add('-clearboost', active);
+			}
+
+			for (const side of this.sides) {
+				const hazards = ['spikes', 'toxicspikes', 'stealthrock', 'stickyweb', 'gmaxsteelsurge'];
+				for (const hazard of hazards) {
+					if (!side.sideConditions[hazard]) continue;
+					side.removeSideCondition(hazard);
+					this.add('-sideend', side, this.dex.conditions.get(hazard).name, '[from] ability: ReZero');
+				}
+
+				const screens = ['reflect', 'lightscreen', 'auroraveil'];
+				for (const screen of screens) {
+					if (!side.sideConditions[screen]) continue;
+					side.removeSideCondition(screen);
+					this.add('-sideend', side, this.dex.conditions.get(screen).name, '[from] ability: ReZero');
+				}
+
+				if (this.field.weather) {
+					const weatherName = this.field.weather;
+					this.field.clearWeather();
+					this.add('-weather', 'none', '[from] ability: ReZero');
+					this.add('-message', `${weatherName} weather was cleared!`);
+				}
+
+				if (this.field.terrain) {
+					const terrainName = this.field.terrain;
+					this.field.clearTerrain();
+					this.add('-terrain', 'none', '[from] ability: ReZero');
+					this.add('-message', `${terrainName} terrain was cleared!`);
+				}
+
+				const rooms = ['trickroom', 'magicroom', 'wonderroom', 'gravity'];
+				for (const room of rooms) {
+					if (!this.field.pseudoWeather[room]) continue;
+					this.field.removePseudoWeather(room);
+					this.add('-fieldend', this.dex.conditions.get(room).name, '[from] ability: ReZero');
+				}
+			}
+		},
+		flags: {},
+		rating: 3.5,
+		num: -1082,
+	},
 	// End of Custom Abilities
 	noability: {
 		isNonstandard: "Past",
@@ -2388,21 +2642,21 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveWeather()) {
-			case 'sunnyday':
-			case 'desolateland':
-				if (pokemon.species.id !== 'castformsunny') forme = 'Castform-Sunny';
-				break;
-			case 'raindance':
-			case 'primordialsea':
-				if (pokemon.species.id !== 'castformrainy') forme = 'Castform-Rainy';
-				break;
-			case 'hail':
-			case 'snowscape':
-				if (pokemon.species.id !== 'castformsnowy') forme = 'Castform-Snowy';
-				break;
-			default:
-				if (pokemon.species.id !== 'castform') forme = 'Castform';
-				break;
+				case 'sunnyday':
+				case 'desolateland':
+					if (pokemon.species.id !== 'castformsunny') forme = 'Castform-Sunny';
+					break;
+				case 'raindance':
+				case 'primordialsea':
+					if (pokemon.species.id !== 'castformrainy') forme = 'Castform-Rainy';
+					break;
+				case 'hail':
+				case 'snowscape':
+					if (pokemon.species.id !== 'castformsnowy') forme = 'Castform-Snowy';
+					break;
+				default:
+					if (pokemon.species.id !== 'castform') forme = 'Castform';
+					break;
 			}
 			if (pokemon.isActive && forme) {
 				pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
@@ -3486,20 +3740,20 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onTerrainChange(pokemon) {
 			let types;
 			switch (this.field.terrain) {
-			case 'electricterrain':
-				types = ['Electric'];
-				break;
-			case 'grassyterrain':
-				types = ['Grass'];
-				break;
-			case 'mistyterrain':
-				types = ['Fairy'];
-				break;
-			case 'psychicterrain':
-				types = ['Psychic'];
-				break;
-			default:
-				types = pokemon.baseSpecies.types;
+				case 'electricterrain':
+					types = ['Electric'];
+					break;
+				case 'grassyterrain':
+					types = ['Grass'];
+					break;
+				case 'mistyterrain':
+					types = ['Fairy'];
+					break;
+				case 'psychicterrain':
+					types = ['Psychic'];
+					break;
+				default:
+					types = pokemon.baseSpecies.types;
 			}
 			const oldTypes = pokemon.getTypes();
 			if (oldTypes.join() === types.join() || !pokemon.setType(types)) return;
