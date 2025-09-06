@@ -34,12 +34,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		inherit: true,
 		flags: { protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1 },
 	},
-	blizzard: {
-		inherit: true,
-		onModifyMove(move) {
-			if (this.field.isWeather('hail')) move.accuracy = true;
-		},
-	},
 	boltbeak: {
 		inherit: true,
 		isNonstandard: null,
