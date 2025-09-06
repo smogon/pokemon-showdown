@@ -2865,10 +2865,11 @@ export class Battle {
 		// phazing (Roar, etc)
 		for (const side of this.sides) {
 			for (const pokemon of side.active) {
-				if (pokemon.forceSwitchFlag) {
-					if (pokemon.hp) this.actions.dragIn(pokemon.side, pokemon.position);
-					pokemon.forceSwitchFlag = false;
-				}
+				// @pokebedrock - Cannot read property 'forceSwitchFlag' of null
+				if (!pokemon) continue;
+				if (!pokemon.forceSwitchFlag) continue;
+				if (pokemon.hp) this.actions.dragIn(pokemon.side, pokemon.position);
+				pokemon.forceSwitchFlag = false;
 			}
 		}
 
