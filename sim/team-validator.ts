@@ -120,6 +120,7 @@ export class PokemonSources {
 	 * the relearner.
 	 */
 	moveEvoCarryCount: number;
+	restrictedVoltTackle?: boolean;
 
 	babyOnly?: string;
 	sketchMove?: string;
@@ -2570,6 +2571,8 @@ export class TeamValidator {
 					}
 					continue;
 				}
+				// Cap Pikachu with Volt Tackle in Gen 9 can only get the move from a Gen 7 event
+				if (moveSources.restrictedVoltTackle && learned !== '7S0') continue;
 
 				if (learnedGen === 9 && learned.charAt(1) !== 'S') canUseHomeRelearner = true;
 
@@ -2658,6 +2661,10 @@ export class TeamValidator {
 					//   available as long as the source gen was or was before this gen
 					if (learned.charAt(1) === 'R') {
 						moveSources.restrictedMove = moveid;
+						if (learnedGen === 9 && species.baseSpecies === "Pikachu") {
+							moveSources.restrictedVoltTackle = true;
+							continue;
+						}
 					}
 					limit1 = false;
 					moveSources.addGen(learnedGen);
@@ -2724,17 +2731,17 @@ export class TeamValidator {
 			if (canUseHomeRelearner) {
 				const fullSources = [];
 				let learnsetData = this.getExternalLearnsetData(species.id, 'gen8bdsp');
-				if (!['nincada', 'spinda'].includes(species.id) && learnsetData?.learnset?.[move.id]) {
-					fullSources.push(...learnsetData.learnset[move.id]);
+				if (!['nincada', 'spinda'].includes(species.id) && learnsetData?.learnset?.[moveid]) {
+					fullSources.push(...learnsetData.learnset[moveid]);
 				}
 				learnsetData = this.getExternalLearnsetData(species.id, 'gen8legends');
-				if (learnsetData?.learnset?.[move.id]) {
-					fullSources.push(...learnsetData.learnset[move.id]);
+				if (moveid !== 'volttackle' && learnsetData?.learnset?.[moveid]) {
+					fullSources.push(...learnsetData.learnset[moveid]);
 				}
 				for (const source of fullSources) {
 					// Non-event sources from BDSP/LA should always be legal through HOME relearner,
 					// assuming the Pokemon's level is high enough
-					if (source.charAt(1) === 'S') continue;
+					if ('RS'.includes(source.charAt(1))) continue;
 					if (source.charAt(1) === 'L' && level < parseInt(source.substr(2))) continue;
 					return null;
 				}
