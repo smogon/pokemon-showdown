@@ -120,7 +120,6 @@ export class PokemonSources {
 	 * the relearner.
 	 */
 	moveEvoCarryCount: number;
-	restrictedVoltTackle?: boolean;
 
 	babyOnly?: string;
 	sketchMove?: string;
@@ -2571,8 +2570,6 @@ export class TeamValidator {
 					}
 					continue;
 				}
-				// Cap Pikachu with Volt Tackle in Gen 9 can only get the move from Gen 7
-				if (moveSources.restrictedVoltTackle && learnedGen !== 7) continue;
 
 				if (learnedGen === 9 && learned.charAt(1) !== 'S') canUseHomeRelearner = true;
 
@@ -2661,10 +2658,8 @@ export class TeamValidator {
 					//   available as long as the source gen was or was before this gen
 					if (learned.charAt(1) === 'R') {
 						moveSources.restrictedMove = moveid;
-						if (learnedGen === 9 && species.baseSpecies === "Pikachu") {
-							moveSources.restrictedVoltTackle = true;
-							continue;
-						}
+						// Gen 9 is not the actual source for Volt Tackle on Cap Pikachu
+						if (learnedGen === 9 && species.baseSpecies === "Pikachu") continue;
 					}
 					limit1 = false;
 					moveSources.addGen(learnedGen);
