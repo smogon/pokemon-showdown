@@ -254,13 +254,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	asoneglastrier: {
 		onSwitchInPriority: 1,
 		onStart(pokemon) {
-			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'As One');
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
 		},
 		onEnd() {
-			this.effectState.unnerved = false;
+			if (this.effectState.unnerved) this.effectState.unnerved = false;
 		},
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
@@ -278,13 +277,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	asonespectrier: {
 		onSwitchInPriority: 1,
 		onStart(pokemon) {
-			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'As One');
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
 		},
 		onEnd() {
-			this.effectState.unnerved = false;
+			if (this.effectState.unnerved) this.effectState.unnerved = false;
 		},
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
@@ -1328,8 +1326,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 		},
 		onWeatherChange(pokemon) {
-			if (!pokemon.isActive || pokemon.baseSpecies.baseSpecies !== 'Cherrim' || pokemon.transformed) return;
-			if (!pokemon.hp) return;
+			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Cherrim' ||
+				pokemon.transformed) return;
 			if (['sunnyday', 'desolateland'].includes(pokemon.effectiveWeather())) {
 				if (pokemon.species.id !== 'cherrimsunshine') {
 					pokemon.formeChange('Cherrim-Sunshine', this.effect, false, '0', '[msg]');
@@ -1338,6 +1336,13 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (pokemon.species.id === 'cherrimsunshine') {
 					pokemon.formeChange('Cherrim', this.effect, false, '0', '[msg]');
 				}
+			}
+		},
+		onEnd(pokemon) {
+			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Cherrim' ||
+				pokemon.transformed || pokemon.beingCalledBack) return;
+			if (pokemon.species.id !== 'cherrim') {
+				pokemon.formeChange('Cherrim', this.effect, false, '0', '[msg]');
 			}
 		},
 		onAllyModifyAtkPriority: 3,
@@ -1416,7 +1421,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.singleEvent('WeatherChange', this.effect, this.effectState, pokemon);
 		},
 		onWeatherChange(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Castform' || pokemon.transformed) return;
+			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Castform' ||
+				pokemon.transformed) return;
 			let forme = null;
 			switch (pokemon.effectiveWeather()) {
 			case 'sunnyday':
@@ -1435,8 +1441,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				if (pokemon.species.id !== 'castform') forme = 'Castform';
 				break;
 			}
-			if (pokemon.isActive && forme) {
+			if (forme) {
 				pokemon.formeChange(forme, this.effect, false, '0', '[msg]');
+			}
+		},
+		onEnd(pokemon) {
+			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Castform' ||
+				pokemon.transformed || pokemon.beingCalledBack) return;
+			if (pokemon.species.id !== 'castform') {
+				pokemon.formeChange('Castform', this.effect, false, '0', '[msg]');
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1 },
@@ -2842,26 +2855,19 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onSwitchIn(pokemon) {
 			this.add('-ability', pokemon, 'Neutralizing Gas');
 			pokemon.abilityState.ending = false;
-			const strongWeathers = ['desolateland', 'primordialsea', 'deltastream'];
 			for (const target of this.getAllActive()) {
 				if (target.hasItem('Ability Shield')) {
 					this.add('-block', target, 'item: Ability Shield');
 					continue;
 				}
 				// Can't suppress a Tatsugiri inside of Dondozo already
-				if (target.volatiles['commanding']) {
-					continue;
-				}
-				if (target.illusion) {
-					this.singleEvent('End', this.dex.abilities.get('Illusion'), target.abilityState, target, pokemon, 'neutralizinggas');
-				}
-				if (target.volatiles['slowstart']) {
-					delete target.volatiles['slowstart'];
-					this.add('-end', target, 'Slow Start', '[silent]');
-				}
-				if (strongWeathers.includes(target.getAbility().id)) {
-					this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
-				}
+				if (target.volatiles['commanding']) continue;
+				const ability = target.getAbility();
+				if (ability.id === 'neutralizinggas') continue;
+				if (ability.flags['cantsuppress']) continue;
+				// Flash Fire, Protosynthesis, Quark Drive, Unburden should not clear their condition
+				if (target.volatiles[ability.id]) continue;
+				this.singleEvent('End', this.dex.abilities.get(target.getAbility().id), target.abilityState, target, pokemon, 'neutralizinggas');
 			}
 		},
 		onEnd(source) {
@@ -2885,12 +2891,17 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.speedSort(sortedActive);
 			for (const pokemon of sortedActive) {
 				if (pokemon !== source) {
-					if (pokemon.getAbility().flags['cantsuppress']) continue; // does not interact with e.g Ice Face, Zen Mode
 					if (pokemon.hasItem('abilityshield')) continue; // don't restart abilities that weren't suppressed
+					if (pokemon.getAbility().flags['cantsuppress']) continue; // does not interact with e.g Ice Face, Zen Mode
 
+					if (pokemon.ability === 'unnerve' && pokemon.abilityState.unnerved === false) {
+						// restart Unnerve, but don't run the activation message
+						pokemon.abilityState.unnerved = true;
+						continue;
+					}
 					// Will be suppressed by Pokemon#ignoringAbility if needed
 					this.singleEvent('Start', pokemon.getAbility(), pokemon.abilityState, pokemon);
-					if (pokemon.ability === "gluttony") {
+					if (pokemon.ability === 'gluttony') {
 						pokemon.abilityState.gluttony = false;
 					}
 				}
@@ -3460,30 +3471,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
-				if (this.effectState.bestStat !== 'atk' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'atk' || !pokemon.hasAbility('protosynthesis')) return;
 				this.debug('Protosynthesis atk boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifyDefPriority: 6,
 			onModifyDef(def, pokemon) {
-				if (this.effectState.bestStat !== 'def' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'def' || !pokemon.hasAbility('protosynthesis')) return;
 				this.debug('Protosynthesis def boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(spa, pokemon) {
-				if (this.effectState.bestStat !== 'spa' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spa' || !pokemon.hasAbility('protosynthesis')) return;
 				this.debug('Protosynthesis spa boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpDPriority: 6,
 			onModifySpD(spd, pokemon) {
-				if (this.effectState.bestStat !== 'spd' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spd' || !pokemon.hasAbility('protosynthesis')) return;
 				this.debug('Protosynthesis spd boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpe(spe, pokemon) {
-				if (this.effectState.bestStat !== 'spe' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spe' || !pokemon.hasAbility('protosynthesis')) return;
 				this.debug('Protosynthesis spe boost');
 				return this.chainModify(1.5);
 			},
@@ -3596,30 +3607,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			},
 			onModifyAtkPriority: 5,
 			onModifyAtk(atk, pokemon) {
-				if (this.effectState.bestStat !== 'atk' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'atk' || !pokemon.hasAbility('quarkdrive')) return;
 				this.debug('Quark Drive atk boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifyDefPriority: 6,
 			onModifyDef(def, pokemon) {
-				if (this.effectState.bestStat !== 'def' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'def' || !pokemon.hasAbility('quarkdrive')) return;
 				this.debug('Quark Drive def boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpAPriority: 5,
 			onModifySpA(spa, pokemon) {
-				if (this.effectState.bestStat !== 'spa' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spa' || !pokemon.hasAbility('quarkdrive')) return;
 				this.debug('Quark Drive spa boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpDPriority: 6,
 			onModifySpD(spd, pokemon) {
-				if (this.effectState.bestStat !== 'spd' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spd' || !pokemon.hasAbility('quarkdrive')) return;
 				this.debug('Quark Drive spd boost');
 				return this.chainModify([5325, 4096]);
 			},
 			onModifySpe(spe, pokemon) {
-				if (this.effectState.bestStat !== 'spe' || pokemon.ignoringAbility()) return;
+				if (this.effectState.bestStat !== 'spe' || !pokemon.hasAbility('quarkdrive')) return;
 				this.debug('Quark Drive spe boost');
 				return this.chainModify(1.5);
 			},
@@ -5157,7 +5168,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		},
 		condition: {
 			onModifySpe(spe, pokemon) {
-				if (!pokemon.item && !pokemon.ignoringAbility()) {
+				if (!pokemon.item && pokemon.hasAbility('unburden')) {
 					return this.chainModify(2);
 				}
 			},
@@ -5170,12 +5181,11 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	unnerve: {
 		onSwitchInPriority: 1,
 		onStart(pokemon) {
-			if (this.effectState.unnerved) return;
 			this.add('-ability', pokemon, 'Unnerve');
 			this.effectState.unnerved = true;
 		},
 		onEnd() {
-			this.effectState.unnerved = false;
+			if (this.effectState.unnerved) this.effectState.unnerved = false;
 		},
 		onFoeTryEatItem() {
 			return !this.effectState.unnerved;
@@ -5510,37 +5520,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	zenmode: {
 		onResidualOrder: 29,
 		onResidual(pokemon) {
-			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) {
-				return;
-			}
-			if (pokemon.hp <= pokemon.maxhp / 2 && !['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
-				pokemon.addVolatile('zenmode');
-			} else if (pokemon.hp > pokemon.maxhp / 2 && ['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
-				pokemon.addVolatile('zenmode'); // in case of base Darmanitan-Zen
-				pokemon.removeVolatile('zenmode');
+			if (pokemon.baseSpecies.baseSpecies !== 'Darmanitan' || pokemon.transformed) return;
+			const forme = pokemon.species.forme;
+			if (pokemon.hp <= pokemon.maxhp / 2) {
+				if (!['Zen', 'Galar-Zen'].includes(forme)) {
+					pokemon.formeChange('Darmanitan-' + forme);
+				}
+			} else {
+				if (['Zen', 'Galar-Zen'].includes(forme)) {
+					pokemon.formeChange(pokemon.species.battleOnly as string);
+				}
 			}
 		},
 		onEnd(pokemon) {
-			if (!pokemon.volatiles['zenmode'] || !pokemon.hp) return;
-			pokemon.transformed = false;
-			delete pokemon.volatiles['zenmode'];
+			if (!pokemon.isActive || !pokemon.hp || pokemon.baseSpecies.baseSpecies !== 'Darmanitan' ||
+				pokemon.transformed || pokemon.beingCalledBack) return;
 			if (pokemon.species.baseSpecies === 'Darmanitan' && pokemon.species.battleOnly) {
-				pokemon.formeChange(pokemon.species.battleOnly as string, this.effect, false, '0', '[silent]');
+				pokemon.formeChange(pokemon.species.battleOnly as string);
 			}
-		},
-		condition: {
-			onStart(pokemon) {
-				if (!pokemon.species.name.includes('Galar')) {
-					if (pokemon.species.id !== 'darmanitanzen') pokemon.formeChange('Darmanitan-Zen');
-				} else {
-					if (pokemon.species.id !== 'darmanitangalarzen') pokemon.formeChange('Darmanitan-Galar-Zen');
-				}
-			},
-			onEnd(pokemon) {
-				if (['Zen', 'Galar-Zen'].includes(pokemon.species.forme)) {
-					pokemon.formeChange(pokemon.species.battleOnly as string);
-				}
-			},
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1 },
 		name: "Zen Mode",
