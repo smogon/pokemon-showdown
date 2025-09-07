@@ -1906,8 +1906,7 @@ export const pages: Chat.PageTable = {
 			} else if (ticket.claimed) {
 				buf += `<strong>Claimed:</strong> ${ticket.claimed}<br /><br />`;
 			}
-			buf += `<strong>From: <a href="https://${Config.routes.root}/users/${ticket.userid}">`;
-			buf += `${ticket.userid}</a></strong>`;
+			buf += `<strong>From: <span class="username">${ticket.creator}</span></strong>`;
 			buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
 			buf += `<button class="button" name="send" value="/modlog room=global,user='${ticket.userid}'">Global Modlog</button><br />`;
 			buf += await ticketInfo.getReviewDisplay(ticket as TicketState & { text: [string, string] }, user, connection);
@@ -2001,7 +2000,7 @@ export const pages: Chat.PageTable = {
 				const ticketInfo = textTickets[HelpTicket.getTypeId(ticket.type)];
 				this.title = `[Text Ticket] ${ticket.userid}`;
 				buf += `<h2>Issue: ${ticket.type}</h2>`;
-				buf += `<strong>From: ${ticket.userid}</strong>`;
+				buf += `<strong>From: <span class="username">${ticket.userid}</span></strong>`;
 				buf += `  <button class="button" name="send" value="/msgroom staff,/ht ban ${ticket.userid}">Ticketban</button> | `;
 				buf += `<button class="button" name="send" value="/modlog room=global,user='${ticket.userid}'">Global Modlog</button><br />`;
 				if (ticket.claimed) {

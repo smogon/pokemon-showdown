@@ -325,7 +325,7 @@ export class TeamValidator {
 	constructor(format: string | Format, dex = Dex) {
 		this.format = dex.formats.get(format);
 		if (this.format.effectType !== 'Format') {
-			throw new Error(`format should be a 'Format', but was a '${this.format.effectType}'`);
+			throw new Error(`format '${format}' should be a 'Format', but was a '${this.format.effectType}'`);
 		}
 		this.dex = dex.forFormat(this.format);
 		this.gen = this.dex.gen;
@@ -2721,6 +2721,24 @@ export class TeamValidator {
 				if (!canLearnSpecies.includes(toID(species.baseSpecies))) canLearnSpecies.push(toID(species.baseSpecies));
 				minLearnGen = Math.min(minLearnGen, learnedGen);
 			}
+			if (canUseHomeRelearner) {
+				const fullSources = [];
+				let learnsetData = this.getExternalLearnsetData(species.id, 'gen8bdsp');
+				if (!['nincada', 'spinda'].includes(species.id) && learnsetData?.learnset?.[move.id]) {
+					fullSources.push(...learnsetData.learnset[move.id]);
+				}
+				learnsetData = this.getExternalLearnsetData(species.id, 'gen8legends');
+				if (learnsetData?.learnset?.[move.id]) {
+					fullSources.push(...learnsetData.learnset[move.id]);
+				}
+				for (const source of fullSources) {
+					// Non-event sources from BDSP/LA should always be legal through HOME relearner,
+					// assuming the Pokemon's level is high enough
+					if (source.charAt(1) === 'S') continue;
+					if (source.charAt(1) === 'L' && level < parseInt(source.substr(2))) continue;
+					return null;
+				}
+			}
 			if (ruleTable.has('mimicglitch') && species.gen < 5) {
 				// include the Mimic Glitch when checking this mon's learnset
 				const glitchMoves = ['metronome', 'copycat', 'transform', 'mimic', 'assist'];
@@ -2858,6 +2876,12 @@ export class TeamValidator {
 
 		if (babyOnly) setSources.babyOnly = babyOnly;
 		return null;
+	}
+
+	getExternalLearnsetData(species: ID, mod: string) {
+		const moddedDex = this.dex.mod(mod);
+		if (moddedDex.species.get(species).isNonstandard) return null;
+		return moddedDex.species.getLearnsetData(species);
 	}
 
 	static fillStats(stats: SparseStatsTable | null, fillNum = 0): StatsTable {

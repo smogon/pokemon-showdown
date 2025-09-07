@@ -303,6 +303,43 @@ describe('Neutralizing Gas', () => {
 		assert.species(eiscue, 'Eiscue-Noice');
 	});
 
+	it(`should delay the activation of Cud Chew`, () => {
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'tauros', ability: 'cudchew', item: 'lumberry', moves: ['sleeptalk'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
+		], [
+			{ species: 'toxicroak', moves: ['toxic'] },
+			{ species: 'magikarp', moves: ['sleeptalk'] },
+			{ species: 'weezing', ability: 'neutralizinggas', moves: ['sleeptalk'] },
+		]]);
+		let tauros = battle.p1.active[0];
+		battle.makeChoices();
+		assert.equal(tauros.status, '');
+		battle.makeChoices('auto', 'move toxic 1, switch 3');
+		assert.equal(tauros.status, 'tox');
+		battle.makeChoices('auto', 'move toxic 1, switch 3');
+		assert.equal(tauros.status, '');
+
+		battle = common.createBattle({ gameType: 'doubles' }, [[
+			{ species: 'tauros', ability: 'cudchew', item: 'lumberry', moves: ['sleeptalk'] },
+			{ species: 'wynaut', moves: ['sleeptalk'] },
+		], [
+			{ species: 'toxicroak', moves: ['toxic'] },
+			{ species: 'magikarp', moves: ['sleeptalk', 'uturn'] },
+			{ species: 'weezing', ability: 'neutralizinggas', moves: ['sleeptalk'] },
+		]]);
+		tauros = battle.p1.active[0];
+		battle.makeChoices('auto', 'move toxic 1, move uturn 2');
+		battle.makeChoices();
+		assert.equal(tauros.status, ''); // 0 turns passed before Neutralizing Gas
+		battle.makeChoices();
+		assert.equal(tauros.status, 'tox');
+		battle.makeChoices('auto', 'move toxic 1, switch 3');
+		assert.equal(tauros.status, 'tox'); // 1 turn has passed
+		battle.makeChoices();
+		assert.equal(tauros.status, '');
+	});
+
 	it(`should not work if it was obtained via Transform`, () => {
 		battle = common.createBattle([[
 			{ species: 'Ditto', moves: ['transform'] },
