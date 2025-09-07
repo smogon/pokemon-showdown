@@ -2735,7 +2735,7 @@ export class TeamValidator {
 					fullSources.push(...learnsetData.learnset[moveid]);
 				}
 				learnsetData = this.getExternalLearnsetData(species.id, 'gen8legends');
-				if (moveid !== 'volttackle' && learnsetData?.learnset?.[moveid]) {
+				if (baseSpecies.id !== 'raichualola' && learnsetData?.learnset?.[moveid]) {
 					fullSources.push(...learnsetData.learnset[moveid]);
 				}
 				for (const source of fullSources) {
