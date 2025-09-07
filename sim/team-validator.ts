@@ -2571,8 +2571,8 @@ export class TeamValidator {
 					}
 					continue;
 				}
-				// Cap Pikachu with Volt Tackle in Gen 9 can only get the move from a Gen 7 event
-				if (moveSources.restrictedVoltTackle && learned !== '7S0') continue;
+				// Cap Pikachu with Volt Tackle in Gen 9 can only get the move from Gen 7
+				if (moveSources.restrictedVoltTackle && learnedGen !== 7) continue;
 
 				if (learnedGen === 9 && learned.charAt(1) !== 'S') canUseHomeRelearner = true;
 
