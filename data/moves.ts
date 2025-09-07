@@ -15361,6 +15361,7 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			if (pokemon.item || !pokemon.lastItem) return false;
 			const item = pokemon.lastItem;
 			pokemon.lastItem = '';
+			delete pokemon.itemState.knockedOff; // Gens 3-4
 			this.add('-item', pokemon, this.dex.items.get(item), '[from] move: Recycle');
 			pokemon.setItem(item, source, move);
 		},
