@@ -751,9 +751,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		onResidualOrder: 28,
 		onResidualSubOrder: 2,
 		onResidual(pokemon) {
-			if (!this.effectState.berry) return;
-			this.effectState.counter--;
-			if (!this.effectState.counter && pokemon.hp) {
+			if (!this.effectState.berry || !pokemon.hp) return;
+			if (--this.effectState.counter <= 0) {
 				const item = this.effectState.berry;
 				this.add('-activate', pokemon, 'ability: Cud Chew');
 				this.add('-enditem', pokemon, item.name, '[eat]');
