@@ -4457,7 +4457,7 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Bleakwind Storm", "Focus Blast", "Grass Knot", "Nasty Plot", "Protect"],
-                "abilities": ["Prankster"],
+                "abilities": ["Regenerator"],
                 "teraTypes": ["Fighting", "Flying", "Grass"]
             }
         ]
