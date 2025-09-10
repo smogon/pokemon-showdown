@@ -141,6 +141,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				delete this.effectState.shortfuse;
 				this.actions.useMove('explosion', pokemon);
 			}
+			this.checkFainted();
 		},
 		flags: {
 			breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1,
@@ -730,6 +731,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		},
 	},
 	terawheel: {
+		onStart(pokemon) {
+			pokemon.canTerastallize = null;
+		},
 		// copied from SSB High Performance Computing
 		onResidualOrder: 6,
 		onResidual(source) {
@@ -743,5 +747,70 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		rating: 5,
 		num: -115,
 		shortDesc: "At the end of each turn, this Pokemon switches to a random type (including Stellar).",
+	},
+	download: {
+		inherit: true,
+		onUpdate(pokemon) {
+			const teraType = pokemon.m.thirdType;
+			if (teraType) {
+				if (teraType === "Fire") {
+					pokemon.setAbility('Drought', null, null, true);
+					pokemon.baseAbility = pokemon.ability;
+					this.add('-ability', pokemon, 'Drought');
+				}
+				if (teraType === "Ice") {
+					pokemon.setAbility('Snow Warning', null, null, true);
+					pokemon.baseAbility = pokemon.ability;
+					this.add('-ability', pokemon, 'Snow Warning');
+				}
+				if (teraType === "Water") {
+					pokemon.setAbility('Drizzle', null, null, true);
+					pokemon.baseAbility = pokemon.ability;
+					this.add('-ability', pokemon, 'Drizzle');
+				}
+				if (teraType === "Electric") {
+					pokemon.setAbility('Electric Surge', null, null, true);
+					pokemon.baseAbility = pokemon.ability;
+					this.add('-ability', pokemon, 'Electric Surge');
+				}
+			}
+		},
+	},
+	battlerage: {
+		onDamagingHit(damage, target, source, effect) {
+			this.boost({ atk: 1 });
+		},
+		flags: {},
+		name: "Battle Rage",
+		rating: 5,
+		num: -116,
+	},
+	terrainshift: {
+		onStart(source) {
+			if (source.hp >= source.maxhp) {
+				source.setType("Electric");
+				this.add('-start', source, 'typechange', type, '[from] ability: Terrain Shift');
+				this.field.setTerrain('electricterrain');
+			}
+			else if (source.hp >= (2 * source.maxhp) / 3) {
+				source.setType("Fairy");
+				this.add('-start', source, 'typechange', type, '[from] ability: Terrain Shift');
+				this.field.setTerrain('mistyterrain');
+			}
+			else if (source.hp >= source.maxhp / 3) {
+				source.setType("Grass");
+				this.add('-start', source, 'typechange', type, '[from] ability: Terrain Shift');
+				this.field.setTerrain('grassyterrain');
+			}
+			else {
+				source.setType("Psychic");
+				this.add('-start', source, 'typechange', type, '[from] ability: Terrain Shift');
+				this.field.setTerrain('psychicterrain');
+			}
+		},
+		flags: {},
+		name: "Terrain Shift",
+		rating: 5,
+		num: -117,
 	},
 };
