@@ -129,7 +129,6 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData('Learnsets', 'roaringmoon').learnset.glaiverush = ['9L1'];
 
 		this.modData('Learnsets', 'milotic').learnset.bouncybubble = ['9L1'];
-		this.modData('Learnsets', 'milotic').learnset.toxic = ['9L1'];
 		this.modData('Learnsets', 'milotic').learnset.moonblast = ['9L1'];
 
 		this.modData('Learnsets', 'gogoat').learnset.headsmash = ['9L1'];
@@ -244,5 +243,34 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData('Learnsets', 'typhlosion').learnset.morningsun = ['9L1'];
 
 		this.modData('Learnsets', 'terapagos').learnset.nastyplot = ['9L1'];
+
+		this.modData('Learnsets', 'tatsugiri').learnset.switcheroo = ['9L1'];
+		this.modData('Learnsets', 'tatsugiri').learnset.sashimishuffle = ['9L1'];
+		this.modData('Learnsets', 'tatsugiri').learnset.twister = ['9L1'];
+		this.modData('Learnsets', 'tatsugiri').learnset.waterspout = ['9L1'];
+
+		this.modData('Learnsets', 'flapple').learnset.earthquake = ['9L1'];
+		this.modData('Learnsets', 'flapple').learnset.grabapple = ['9L1'];
+		this.modData('Learnsets', 'flapple').learnset.flareblitz = ['9L1'];
+
+		this.modData('Learnsets', 'genesect').learnset.earthquake = ['9L1'];
+		this.modData('Learnsets', 'genesect').learnset.sunsteelstrike = ['9L1'];
+		this.modData('Learnsets', 'genesect').learnset.behemothblade = ['9L1'];
+		this.modData('Learnsets', 'genesect').learnset.makeitrain = ['9L1'];
+		this.modData('Learnsets', 'genesect').learnset.tachyoncutter = ['9L1'];
+
+		this.modData('Learnsets', 'honchkrow').learnset.crowverload = ['9L1'];
+		this.modData('Learnsets', 'honchkrow').learnset.oblivionwing = ['9L1'];
+		this.modData('Learnsets', 'honchkrow').learnset.closecombat = ['9L1'];
+
+		this.modData('Learnsets', 'primeape').learnset.knockoff = ['9L1'];
+		this.modData('Learnsets', 'primeape').learnset.ironhead = ['9L1'];
+
+		this.modData('Learnsets', 'rillaboom').learnset.naturesfury = ['9L1'];
+		this.modData('Learnsets', 'rillaboom').learnset.landswrath = ['9L1'];
+
+		this.modData('Learnsets', 'mandibuzz').learnset.fling = ['9L1'];
+		this.modData('Learnsets', 'mandibuzz').learnset.scavenge = ['9L1'];
+		this.modData('Learnsets', 'mandibuzz').learnset.bonemerang = ['9L1'];
 	},
 };
