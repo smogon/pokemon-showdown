@@ -461,12 +461,12 @@
         ]
     },
     "tatsugiri": {
-        "level": 86,
+        "level": 84,
         "sets": [
             {
-                "role": "Fast Attacker",
-                "movepool": ["Hydro Pump", "Draco Meteor", "Rain Dance", "Nasty Plot", "Rapid Spin"],
-                "abilities": ["Dry Skin"],
+                "role": "Fast Support",
+                "movepool": ["Switcheroo", "Sashimi Shuffle", "Twister", "Water Spout"],
+                "abilities": ["Regenerator"],
                 "teraTypes": ["Water"]
             }
         ]
@@ -498,7 +498,7 @@
         "sets": [
             {
                 "role": "Bulky Support",
-                "movepool": ["Bouncy Bubble", "Ice Beam", "Recover", "Haze", "Toxic", "Dragon Tail", "Substitute", "Moonblast"],
+                "movepool": ["Bouncy Bubble", "Recover", "Haze", "Moonblast"],
                 "abilities": ["Aqua Veil"],
                 "teraTypes": ["Grass"]
             }
@@ -960,13 +960,103 @@
                 "role": "Bulky Setup",
                 "movepool": ["Rest", "Sleep Talk", "Calm Mind", "Tera Starstorm"],
                 "abilities": ["Tera Shift"],
-                "teraTypes": ["Stellar"]
+                "teraTypes": ["Normal"]
             },
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Rapid Spin", "Nasty Plot", "Earth Power", "Dark Pulse", "Tera Starstorm"],
+                "movepool": ["Rapid Spin", "Nasty Plot", "Protect", "Tera Starstorm"],
                 "abilities": ["Tera Shift"],
+                "teraTypes": ["Normal"]
+            }
+        ]
+    },
+    "flapple": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Setup Sweeper",
+                "movepool": ["Dragon Dance", "Earthquake", "Grab Apple", "Flare Blitz"],
+                "abilities": ["Ripen"],
+                "teraTypes": ["Fire"]
+            }
+        ]
+    },
+    "genesect": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Techno Blast", "Earthquake", "Sunsteel Strike", "U-turn"],
+                "abilities": ["Download"],
+                "teraTypes": ["Fire"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Techno Blast", "Earthquake", "Behemoth Blade", "U-turn"],
+                "abilities": ["Download"],
+                "teraTypes": ["Ice"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Techno Blast", "Thunder", "Make It Rain", "U-turn"],
+                "abilities": ["Download"],
+                "teraTypes": ["Water"]
+            },
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Techno Blast", "Ice Beam", "Tachyon Cutter", "U-turn"],
+                "abilities": ["Download"],
+                "teraTypes": ["Electric"]
+            }
+        ]
+    },
+    "honchkrow": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Crowverload", "Sucker Punch", "Oblivion Wing", "U-turn"],
+                "abilities": ["Supreme Overlord"],
+                "teraTypes": ["Dark"]
+            },
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Crowverload", "Sucker Punch", "Oblivion Wing", "Close Combat"],
+                "abilities": ["Supreme Overlord"],
+                "teraTypes": ["Fighting"]
+            }
+        ]
+    },
+    "primeape": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Bulky Attacker",
+                "movepool": ["Drain Punch", "Taunt", "Knock Off", "Iron Head", "Earthquake"],
+                "abilities": ["Battle Rage"],
+                "teraTypes": ["Steel"]
+            }
+        ]
+    },
+    "rillaboom": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Fast Attacker",
+                "movepool": ["Nature's Fury", "Wood Hammer", "Land's Wrath", "U-turn"],
+                "abilities": ["Terrain Shift"],
                 "teraTypes": ["Stellar"]
+            }
+        ]
+    },
+    "mandibuzz": {
+        "level": 84,
+        "sets": [
+            {
+                "role": "Wallbreaker",
+                "movepool": ["Fling", "Scavenge", "Bonemerang", "Roost"],
+                "abilities": ["Weak Armor"],
+                "teraTypes": ["Poison"]
             }
         ]
     }
