@@ -1067,6 +1067,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	purify: {
 		inherit: true,
+		pp: 10,
 		flags: { reflectable: 1, heal: 1, metronome: 1 },
 		onHit(target, source) {
 			const foe = source.side.foe.active[0];
@@ -1228,5 +1229,259 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		desc: "Type varies based on the user's primary type.",
 		shortDesc: "Type varies based on the user's primary type.",
+	},
+	grabapple: {
+		num: -1008,
+		accuracy: 100,
+		basePower: 100,
+		category: "Physical",
+		name: "Grab Apple",
+		pp: 10,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: null,
+		target: "normal",
+		type: "Grass",
+		contestType: "Tough",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Grav Apple', target);
+			this.add('-anim', source, 'Thief', target);
+		},
+		onAfterMove(source) {
+			if (source.lastItem) {
+				const item = source.lastItem;
+				source.lastItem = '';
+				source.setItem(item);
+				this.add('-item', source, this.dex.items.get(item), '[from] move: Grab Apple');
+			} else {
+				return null;
+			}
+		},
+		shortDesc: "User regains their last used item, similar to Recycle.",
+		desc: "If the user has consumed their item, it will be restored.",
+	},
+	sashimishuffle: {
+		num: -1009,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Sashimi Shuffle",
+		pp: 5,
+		priority: 0,
+		flags: { metronome: 1 },
+		onHit(target) {
+			if (!this.canSwitch(target.side) || target.volatiles['commanded']) {
+				this.attrLastMove('[still]');
+				this.add('-fail', target);
+				return this.NOT_FAIL;
+			}
+		},
+		self: {
+			onHit(source) {
+				source.skipBeforeSwitchOutEventFlag = true;
+			},
+		},
+		selfSwitch: true,
+		slotCondition: 'sashimishuffle',
+		condition: {
+			onSwitchIn(target) {
+				this.singleEvent('Swap', this.effect, this.effectState, target);
+			},
+			onSwap(target) {
+				if (!target.fainted) {
+					target.heal(target.maxhp / 3);
+					this.add('-heal', target, target.getHealth, '[from] move: Sashimi Shuffle');
+					target.side.removeSlotCondition(target, 'sashimishuffle');
+				}
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Cute",
+		shortDesc: "User switches. Next Pokemon heals 1/3 HP.",
+		desc: "User switches. Next Pokemon heals 1/3 HP.",
+	},
+	technoblast: {
+		inherit: true,
+		basePowerCallback(pokemon, target, move) {
+			if (this.field.isWeather('snowscape')) {
+				return move.basePower * 1.3;
+			}
+		},
+	},
+	crowverload: {
+		num: -1010,
+		accuracy: 100,
+		basePower: 12,
+		category: "Physical",
+		name: "Crowverload",
+		pp: 10,
+		priority: -4,
+		volatileStatus: 'substitute',
+		onTryHit(source) {
+			if (source.volatiles['substitute']) {
+				this.add('-fail', source, 'move: Crowverload');
+				return this.NOT_FAIL;
+			}
+			if (source.hp <= source.maxhp / 4) {
+				this.add('-fail', source, 'move: Substitute', '[weak]');
+				return this.NOT_FAIL;
+			}
+		},
+		onHit(source, target, move) {
+			this.directDamage(Math.ceil(source.maxhp / 4));
+		},
+		flags: { protect: 1, mirror: 1, metronome: 1, },
+		multihit: [10],
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+		zMove: { basePower: 140 },
+		maxMove: { basePower: 130 },
+		contestType: "Tough",
+		shortDesc: "Hits 10 times. User creates a Substitute.",
+		desc: "Hits 10 times. User creates a Substitute.",
+	},
+	naturesfury: {
+		num: -1011,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Nature's Fury",
+		pp: 20,
+		priority: 0,
+		flags: { failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
+		onModifyPriority(priority, source, target, move) {
+			if (this.field.isTerrain('electricterrain')) {
+				return priority + 1;
+			} else if (this.field.isTerrain('grassyterrain')) {
+				return priority + 1;
+			} else if (this.field.isTerrain('mistyterrain')) {
+				return priority + 1;
+			} else if (this.field.isTerrain('psychicterrain')) {
+				return priority
+			} else {
+				return priority + 2;
+			}
+		},
+		onTryHit(target, pokemon) {
+			let move = 'extremespeed';
+			if (this.field.isTerrain('electricterrain')) {
+				move = 'lightningleap';
+			} else if (this.field.isTerrain('grassyterrain')) {
+				move = 'grassyglide';
+			} else if (this.field.isTerrain('mistyterrain')) {
+				move = 'mistymarch';
+			} else if (this.field.isTerrain('psychicterrain')) {
+				move = 'wackywhack';
+			}
+			this.actions.useMove(move, pokemon, { target });
+			return null;
+		},
+		callsMove: true,
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		contestType: "Beautiful",
+		shortDesc: "Move used depends on Terrain.",
+		desc: "Move used depends on Terrain.",
+	},
+	mistymarch: {
+		num: -1012,
+		accuracy: 100,
+		basePower: 55,
+		category: "Physical",
+		name: "Misty March",
+		pp: 20,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onModifyPriority(priority, source, target, move) {
+			if (this.field.isTerrain('mistyterrain') && source.isGrounded()) {
+				return priority + 1;
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+		contestType: "Cool",
+		shortDesc: "User on Misty Terrain: +1 priority.",
+		desc: "User on Misty Terrain: +1 priority.",
+	},
+	lightningleap: {
+		num: -1013,
+		accuracy: 100,
+		basePower: 55,
+		category: "Physical",
+		name: "Lightning Leap",
+		pp: 20,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onModifyPriority(priority, source, target, move) {
+			if (this.field.isTerrain('electricterrain') && source.isGrounded()) {
+				return priority + 1;
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Electric",
+		contestType: "Cool",
+		shortDesc: "User on Electric Terrain: +1 priority.",
+		desc: "User on Electric Terrain: +1 priority.",
+	},
+	wackywhack: {
+		num: -1014,
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		name: "Wacky Whack",
+		pp: 20,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onHit(source, target, move) {
+			if (this.field.isTerrain('psychicterrain') && source.isGrounded()) {
+				this.boost({ spe: 1 });
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Psychic",
+		contestType: "Cool",
+		shortDesc: "User in Psychic Terrain: +1 Speed.",
+		desc: "User in Psychic Terrain: +1 Speed.",
+	},
+	bonemerang: {
+		num: 155,
+		accuracy: 90,
+		basePower: 50,
+		category: "Physical",
+		name: "Bonemerang",
+		pp: 10,
+		priority: 0,
+		onAfterMove(source) {
+			if (source.lastItem) {
+				const item = source.lastItem;
+				source.lastItem = '';
+				source.setItem(item);
+				this.add('-item', source, this.dex.items.get(item), '[from] move: Bonemerang');
+			} else {
+				source.lastItem = '';
+				source.setItem('thickclub');
+				this.add('-item', source, this.dex.items.get('thickclub'), '[from] move: Bonemerang');
+			}
+		},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		multihit: 2,
+		secondary: null,
+		target: "normal",
+		type: "Ground",
+		maxMove: { basePower: 130 },
+		contestType: "Tough",
+		shortDesc: "Returns last used item.",
+		desc: "Returns last used item. Defaults to Thick Club if none.",
 	},
 };
