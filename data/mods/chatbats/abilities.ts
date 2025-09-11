@@ -751,28 +751,27 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	download: {
 		inherit: true,
 		onUpdate(pokemon) {
-				if (pokemon.species.name === 'Genesect-Burn' && pokemon.terastallized) {
-					pokemon.setAbility('Drought', null, null, true);
-					pokemon.baseAbility = pokemon.ability;
-					this.add('-ability', pokemon, 'Drought');
-				}
-				if (pokemon.species.name === 'Genesect-Burn' && pokemon.terastallized) {
-					pokemon.setAbility('Snow Warning', null, null, true);
-					pokemon.baseAbility = pokemon.ability;
-					this.add('-ability', pokemon, 'Snow Warning');
-				}
-				if (pokemon.species.name === 'Genesect-Burn' && pokemon.terastallized) {
-					pokemon.setAbility('Drizzle', null, null, true);
-					pokemon.baseAbility = pokemon.ability;
-					this.add('-ability', pokemon, 'Drizzle');
-				}
-				if (pokemon.species.name === 'Genesect-Burn' && pokemon.terastallized) {
-					pokemon.setAbility('Electric Surge', null, null, true);
-					pokemon.baseAbility = pokemon.ability;
-					this.add('-ability', pokemon, 'Electric Surge');
-				}
+			if (pokemon.species.name === 'Genesect-Burn' && pokemon.terastallized) {
+				pokemon.setAbility('Drought', null, null, true);
+				pokemon.baseAbility = pokemon.ability;
+				this.add('-ability', pokemon, 'Drought');
 			}
-		},
+			if (pokemon.species.name === 'Genesect-Burn' && pokemon.terastallized) {
+				pokemon.setAbility('Snow Warning', null, null, true);
+				pokemon.baseAbility = pokemon.ability;
+				this.add('-ability', pokemon, 'Snow Warning');
+			}
+			if (pokemon.species.name === 'Genesect-Burn' && pokemon.terastallized) {
+				pokemon.setAbility('Drizzle', null, null, true);
+				pokemon.baseAbility = pokemon.ability;
+				this.add('-ability', pokemon, 'Drizzle');
+			}
+			if (pokemon.species.name === 'Genesect-Burn' && pokemon.terastallized) {
+				pokemon.setAbility('Electric Surge', null, null, true);
+				pokemon.baseAbility = pokemon.ability;
+				this.add('-ability', pokemon, 'Electric Surge');
+			}
+		}
 	},
 	battlerage: {
 		onDamagingHit(damage, target, source, effect) {
