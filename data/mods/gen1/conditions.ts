@@ -191,7 +191,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		duration: 2,
 		// defender still takes PSN damage, etc
 		// TODO: research exact mechanics
-		onBeforeMovePriority: 0,
+		onBeforeMovePriority: 9,
 		onBeforeMove(pokemon) {
 			this.add('cant', pokemon, 'partiallytrapped');
 			return false;
