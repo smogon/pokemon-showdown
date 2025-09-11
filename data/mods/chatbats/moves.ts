@@ -1322,8 +1322,10 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Crowverload",
 		pp: 10,
 		priority: -4,
-		volatileStatus: 'substitute',
-		onTryHit(source) {
+		self: {
+			sideCondition: 'substitute',
+		},
+		onTryHit(source, target, move) {
 			if (source.volatiles['substitute']) {
 				this.add('-fail', source, 'move: Crowverload');
 				return this.NOT_FAIL;
