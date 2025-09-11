@@ -1001,7 +1001,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 			if (pokemon.length === 1 || this.maxTeamSize === 1) species = this.dex.species.get('Terapagos');
 			if (pokemon.length === 2 || this.maxTeamSize === 1) species = this.dex.species.get('Electrode');
 			if (pokemon.length === 3 || this.maxTeamSize === 1) species = this.dex.species.get('Genesect-Shock');
-			if (pokemon.length === 4 || this.maxTeamSize === 1) species = this.dex.species.get('Primeape');
+			if (pokemon.length === 4 || this.maxTeamSize === 1) species = this.dex.species.get('Hippowdon');
 			if (pokemon.length === 5 || this.maxTeamSize === 1) species = this.dex.species.get('Rillaboom');
 
 			let set: RandomTeamsTypes.RandomSet;
