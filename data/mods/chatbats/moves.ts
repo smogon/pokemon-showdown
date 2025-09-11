@@ -1323,7 +1323,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 10,
 		priority: -4,
 		self: {
-			sideCondition: 'substitute',
+			volatileStatus: 'substitute',
 		},
 		onTryHit(source, target, move) {
 			if (source.volatiles['substitute']) {
@@ -1336,7 +1336,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onHit(source, target, move) {
-			this.directDamage(Math.ceil(source.maxhp / 4));
+			source.directDamage(Math.ceil(source.maxhp / 4));
 		},
 		flags: { protect: 1, mirror: 1, metronome: 1, },
 		multihit: [10],
