@@ -1272,6 +1272,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 5,
 		priority: 0,
 		flags: { metronome: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Order Up', target);
+			this.add('-anim', source, 'Order Up', target);
+		},
 		onHit(target) {
 			if (!this.canSwitch(target.side) || target.volatiles['commanded']) {
 				this.attrLastMove('[still]');
@@ -1322,6 +1329,13 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Crowverload",
 		pp: 10,
 		priority: -4,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Glare', target);
+			this.add('-anim', source, 'X-Scissor', target);
+		},
 		onTryHit(source, target, move) {
 			if (source.volatiles['substitute']) {
 				this.add('-fail', source, 'move: Crowverload');
@@ -1370,6 +1384,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				return priority + 2;
 			}
 		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
 		onTryHit(target, pokemon) {
 			let move = 'extremespeed';
 			if (this.field.isTerrain('electricterrain')) {
@@ -1401,6 +1418,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Play Rough', target);
+		},
 		onModifyPriority(priority, source, target, move) {
 			if (this.field.isTerrain('mistyterrain') && source.isGrounded()) {
 				return priority + 1;
@@ -1422,6 +1445,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Volt Tackle', target);
+		},
 		onModifyPriority(priority, source, target, move) {
 			if (this.field.isTerrain('electricterrain') && source.isGrounded()) {
 				return priority + 1;
@@ -1443,9 +1472,16 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		onHit(source, target, move) {
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Zed Headbutt', target);
+			this.add('-anim', source, 'Thief', target);
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
 			if (this.field.isTerrain('psychicterrain') && source.isGrounded()) {
-				this.boost({ spe: 1 });
+				this.boost({ spe: 1 }, source, source);
 			}
 		},
 		secondary: null,
