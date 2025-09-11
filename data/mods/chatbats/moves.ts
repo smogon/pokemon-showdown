@@ -1322,9 +1322,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		name: "Crowverload",
 		pp: 10,
 		priority: -4,
-		self: {
-			volatileStatus: 'substitute',
-		},
 		onTryHit(source, target, move) {
 			if (source.volatiles['substitute']) {
 				this.add('-fail', source, 'move: Crowverload');
@@ -1336,11 +1333,11 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onAfterMove(source, target, move) {
-			source.addVolatiles['substitute'];
+			source.addVolatile['substitute'];
 			this.damage(Math.ceil(source.maxhp / 4));
 		},
 		flags: { protect: 1, mirror: 1, metronome: 1, },
-		multihit: [10],
+		multihit: [10, 10],
 		secondary: null,
 		target: "normal",
 		type: "Dark",
