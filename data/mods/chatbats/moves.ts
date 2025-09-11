@@ -1319,6 +1319,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (this.field.isWeather('snowscape')) {
 				return move.basePower * 1.3;
 			}
+			else return move.basePower;
 		},
 	},
 	crowverload: {
