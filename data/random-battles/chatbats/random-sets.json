@@ -981,7 +981,7 @@
             }
         ]
     },
-    "genesect": {
+    "genesectburn": {
         "level": 84,
         "sets": [
             {
@@ -990,18 +990,28 @@
                 "abilities": ["Download"],
                 "teraTypes": ["Fire"]
             },
+    "genesectchill": {
+        "level": 84,
+        "sets": [
             {
                 "role": "Wallbreaker",
                 "movepool": ["Techno Blast", "Earthquake", "Behemoth Blade", "U-turn"],
                 "abilities": ["Download"],
                 "teraTypes": ["Ice"]
             },
+    "genesectdouse": {
+        "level": 84,
+        "sets": [
             {
                 "role": "Wallbreaker",
                 "movepool": ["Techno Blast", "Thunder", "Make It Rain", "U-turn"],
                 "abilities": ["Download"],
                 "teraTypes": ["Water"]
             },
+    "genesectshock": {
+        "level": 84,
+        "sets": [
+            {
             {
                 "role": "Wallbreaker",
                 "movepool": ["Techno Blast", "Ice Beam", "Tachyon Cutter", "U-turn"],
