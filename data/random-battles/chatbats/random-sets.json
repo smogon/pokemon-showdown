@@ -990,6 +990,8 @@
                 "abilities": ["Download"],
                 "teraTypes": ["Fire"]
             },
+        ]
+    },
     "genesectchill": {
         "level": 84,
         "sets": [
@@ -999,6 +1001,8 @@
                 "abilities": ["Download"],
                 "teraTypes": ["Ice"]
             },
+        ]
+    },
     "genesectdouse": {
         "level": 84,
         "sets": [
@@ -1008,6 +1012,8 @@
                 "abilities": ["Download"],
                 "teraTypes": ["Water"]
             },
+        ]
+    },
     "genesectshock": {
         "level": 84,
         "sets": [
