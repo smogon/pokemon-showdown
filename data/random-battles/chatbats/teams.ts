@@ -705,10 +705,10 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'swanna') return 'Heavy-Duty Boots';
 		if (species.id === 'terapagos') return 'Leftovers';
 		if (species.id === 'flapple') return 'Tart Apple';
-		if (species.id === 'genesect' && moves.has('sunsteelstrike')) return 'Burn Drive';
-		if (species.id === 'genesect' && moves.has('behemothblade')) return 'Chill Drive';
-		if (species.id === 'genesect' && moves.has('makeitrain')) return 'Douse Drive';
-		if (species.id === 'genesect' && moves.has('tachyoncutter')) return 'Shock Drive';
+		if (species.id === 'genesectburn' && moves.has('sunsteelstrike')) return 'Burn Drive';
+		if (species.id === 'genesectchill' && moves.has('behemothblade')) return 'Chill Drive';
+		if (species.id === 'genesectdouse' && moves.has('makeitrain')) return 'Douse Drive';
+		if (species.id === 'genesectshock' && moves.has('tachyoncutter')) return 'Shock Drive';
 		if (species.id === 'honchkrow') return 'Heavy-Duty Boots';
 		if (species.id === 'primeape') return 'Eviolite';
 		if (species.id === 'rillaboom') return 'Heavy-Duty Boots';
@@ -1000,7 +1000,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 			if (pokemon.length === 0 || this.maxTeamSize === 1) species = this.dex.species.get('Flapple');
 			if (pokemon.length === 1 || this.maxTeamSize === 1) species = this.dex.species.get('Tatsugiri');
 			if (pokemon.length === 2 || this.maxTeamSize === 1) species = this.dex.species.get('Honchkrow');
-			if (pokemon.length === 3 || this.maxTeamSize === 1) species = this.dex.species.get('Genesect');
+			if (pokemon.length === 3 || this.maxTeamSize === 1) species = this.dex.species.get('Genesect-Douse');
 			if (pokemon.length === 4 || this.maxTeamSize === 1) species = this.dex.species.get('Primeape');
 			if (pokemon.length === 5 || this.maxTeamSize === 1) species = this.dex.species.get('Rillaboom');
 
