@@ -604,7 +604,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		shortDesc: "Moves ignore charge/recharge turns.",
 	},
 	biogenesis: {
-		onSwitchInPriority: -1,
+		onSwitchInPriority: 2,
 		onBeforeSwitchIn(pokemon) {
 			if (pokemon.m.didRandomMoves) return;
 			const moves = this.dex.moves.all();
