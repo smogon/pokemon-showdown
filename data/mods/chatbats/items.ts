@@ -73,6 +73,7 @@ export const Items: import('../../../sim/dex-items').ModdedItemDataTable = {
 	tartapple: {
 		name: "Tart Apple",
 		spritenum: 712,
+		isBerry: true,
 		fling: {
 			basePower: 30,
 		},
