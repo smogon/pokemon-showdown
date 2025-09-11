@@ -2551,6 +2551,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Illegal",
 		natDexTier: "LC",
 	},
+	burmysandy: {
+		isNonstandard: "Past",
+	},
+	burmytrash: {
+		isNonstandard: "Past",
+	},
 	wormadam: {
 		isNonstandard: "Past",
 		tier: "Illegal",
@@ -2570,6 +2576,12 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "RU",
+	},
+	mothimsandy: {
+		isNonstandard: "Past",
+	},
+	mothimtrash: {
+		isNonstandard: "Past",
 	},
 	combee: {
 		tier: "LC",
@@ -3378,10 +3390,28 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "Illegal",
 		natDexTier: "LC",
 	},
+	deerlingsummer: {
+		isNonstandard: "Past",
+	},
+	deerlingautumn: {
+		isNonstandard: "Past",
+	},
+	deerlingwinter: {
+		isNonstandard: "Past",
+	},
 	sawsbuck: {
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "RU",
+	},
+	sawsbucksummer: {
+		isNonstandard: "Past",
+	},
+	sawsbuckautumn: {
+		isNonstandard: "Past",
+	},
+	sawsbuckwinter: {
+		isNonstandard: "Past",
 	},
 	emolga: {
 		tier: "ZU",
@@ -4488,6 +4518,24 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		isNonstandard: "Past",
 		tier: "Illegal",
 		natDexTier: "RU",
+	},
+	miniororange: {
+		isNonstandard: "Past",
+	},
+	minioryellow: {
+		isNonstandard: "Past",
+	},
+	miniorgreen: {
+		isNonstandard: "Past",
+	},
+	miniorblue: {
+		isNonstandard: "Past",
+	},
+	miniorindigo: {
+		isNonstandard: "Past",
+	},
+	miniorviolet: {
+		isNonstandard: "Past",
 	},
 	miniormeteor: {
 		isNonstandard: "Past",
