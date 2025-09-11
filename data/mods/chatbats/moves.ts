@@ -1333,8 +1333,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 		onAfterMove(source, target, move) {
-			source.addVolatile['substitute'];
-			this.damage(Math.ceil(source.maxhp / 4));
+			this.actions.useMove('substitute', source, { source });
+			// source.addVolatile['substitute'];
+			// this.damage(Math.ceil(source.maxhp / 4));
 		},
 		flags: { protect: 1, mirror: 1, metronome: 1, },
 		multihit: [10, 10],
