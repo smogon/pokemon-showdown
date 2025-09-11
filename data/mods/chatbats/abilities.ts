@@ -789,22 +789,22 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		onStart(source) {
 			if (source.hp >= source.maxhp) {
 				source.setType("Electric");
-				this.add('-start', source, 'typechange', type, '[from] ability: Terrain Shift');
+				this.add('-start', source, 'typechange', 'electric', '[from] ability: Terrain Shift');
 				this.field.setTerrain('electricterrain');
 			}
 			else if (source.hp >= (2 * source.maxhp) / 3) {
 				source.setType("Fairy");
-				this.add('-start', source, 'typechange', type, '[from] ability: Terrain Shift');
+				this.add('-start', source, 'typechange', 'fairy', '[from] ability: Terrain Shift');
 				this.field.setTerrain('mistyterrain');
 			}
 			else if (source.hp >= source.maxhp / 3) {
 				source.setType("Grass");
-				this.add('-start', source, 'typechange', type, '[from] ability: Terrain Shift');
+				this.add('-start', source, 'typechange', 'grass', '[from] ability: Terrain Shift');
 				this.field.setTerrain('grassyterrain');
 			}
 			else {
 				source.setType("Psychic");
-				this.add('-start', source, 'typechange', type, '[from] ability: Terrain Shift');
+				this.add('-start', source, 'typechange', 'psychic', '[from] ability: Terrain Shift');
 				this.field.setTerrain('psychicterrain');
 			}
 		},
