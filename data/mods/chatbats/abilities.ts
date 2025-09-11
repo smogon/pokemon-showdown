@@ -756,17 +756,17 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				pokemon.baseAbility = pokemon.ability;
 				this.add('-ability', pokemon, 'Drought');
 			}
-			if (pokemon.species.name === 'Genesect-Burn' && pokemon.terastallized) {
+			if (pokemon.species.name === 'Genesect-Chill' && pokemon.terastallized) {
 				pokemon.setAbility('Snow Warning', null, null, true);
 				pokemon.baseAbility = pokemon.ability;
 				this.add('-ability', pokemon, 'Snow Warning');
 			}
-			if (pokemon.species.name === 'Genesect-Burn' && pokemon.terastallized) {
+			if (pokemon.species.name === 'Genesect-Douse' && pokemon.terastallized) {
 				pokemon.setAbility('Drizzle', null, null, true);
 				pokemon.baseAbility = pokemon.ability;
 				this.add('-ability', pokemon, 'Drizzle');
 			}
-			if (pokemon.species.name === 'Genesect-Burn' && pokemon.terastallized) {
+			if (pokemon.species.name === 'Genesect-Shock' && pokemon.terastallized) {
 				pokemon.setAbility('Electric Surge', null, null, true);
 				pokemon.baseAbility = pokemon.ability;
 				this.add('-ability', pokemon, 'Electric Surge');
