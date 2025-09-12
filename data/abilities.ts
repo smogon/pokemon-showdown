@@ -740,33 +740,29 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 		num: 238,
 	},
 	cudchew: {
-		onEatItem(item, pokemon) {
-			if (item.isBerry && pokemon.addVolatile('cudchew')) {
-				pokemon.volatiles['cudchew'].berry = item;
+		onEatItem(item, pokemon, source, effect) {
+			if (item.isBerry && (!effect || !['bugbite', 'pluck'].includes(effect.id))) {
+				this.effectState.berry = item;
+				this.effectState.counter = 2;
+				// This is needed in case the berry was eaten during residuals, preventing the timer from decreasing this turn
+				if (!this.queue.peek()) this.effectState.counter--;
 			}
 		},
-		onEnd(pokemon) {
-			delete pokemon.volatiles['cudchew'];
-		},
-		condition: {
-			noCopy: true,
-			duration: 2,
-			onRestart() {
-				this.effectState.duration = 2;
-			},
-			onResidualOrder: 28,
-			onResidualSubOrder: 2,
-			onEnd(pokemon) {
-				if (pokemon.hp) {
-					const item = this.effectState.berry;
-					this.add('-activate', pokemon, 'ability: Cud Chew');
-					this.add('-enditem', pokemon, item.name, '[eat]');
-					if (this.singleEvent('Eat', item, null, pokemon, null, null)) {
-						this.runEvent('EatItem', pokemon, null, null, item);
-					}
-					if (item.onEat) pokemon.ateBerry = true;
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (!this.effectState.berry || !pokemon.hp) return;
+			if (--this.effectState.counter <= 0) {
+				const item = this.effectState.berry;
+				this.add('-activate', pokemon, 'ability: Cud Chew');
+				this.add('-enditem', pokemon, item.name, '[eat]');
+				if (this.singleEvent('Eat', item, null, pokemon, null, null)) {
+					this.runEvent('EatItem', pokemon, null, null, item);
 				}
-			},
+				if (item.onEat) pokemon.ateBerry = true;
+				delete this.effectState.berry;
+				delete this.effectState.counter;
+			}
 		},
 		flags: {},
 		name: "Cud Chew",
@@ -4233,34 +4229,30 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	slowstart: {
 		onStart(pokemon) {
-			pokemon.addVolatile('slowstart');
+			this.add('-start', pokemon, 'ability: Slow Start');
+			this.effectState.counter = 5;
 		},
-		onEnd(pokemon) {
-			delete pokemon.volatiles['slowstart'];
-			this.add('-end', pokemon, 'Slow Start', '[silent]');
-		},
-		condition: {
-			duration: 5,
-			onResidualOrder: 28,
-			onResidualSubOrder: 2,
-			onStart(target) {
-				this.add('-start', target, 'ability: Slow Start');
-			},
-			onResidual(pokemon) {
-				if (!pokemon.activeTurns) {
-					this.effectState.duration! += 1;
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.activeTurns && this.effectState.counter) {
+				this.effectState.counter--;
+				if (!this.effectState.counter) {
+					this.add('-end', pokemon, 'Slow Start');
+					delete this.effectState.counter;
 				}
-			},
-			onModifyAtkPriority: 5,
-			onModifyAtk(atk, pokemon) {
+			}
+		},
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			if (this.effectState.counter) {
 				return this.chainModify(0.5);
-			},
-			onModifySpe(spe, pokemon) {
+			}
+		},
+		onModifySpe(spe, pokemon) {
+			if (this.effectState.counter) {
 				return this.chainModify(0.5);
-			},
-			onEnd(target) {
-				this.add('-end', target, 'Slow Start');
-			},
+			}
 		},
 		flags: {},
 		name: "Slow Start",

@@ -1687,7 +1687,7 @@
             {
                 "role": "Choice Item user",
                 "movepool": ["Aura Sphere", "Discharge", "Scald", "Thunderbolt"],
-                "abilities": ["Inner Focus"],
+                "abilities": ["Pressure"],
                 "teraTypes": ["Electric", "Water"]
             }
         ]
@@ -1721,7 +1721,7 @@
             {
                 "role": "Bulky Setup",
                 "movepool": ["Calm Mind", "Ice Beam", "Protect", "Scald"],
-                "abilities": ["Inner Focus"],
+                "abilities": ["Pressure"],
                 "teraTypes": ["Steel"]
             }
         ]
@@ -4063,7 +4063,7 @@
             {
                 "role": "Imprisoner",
                 "movepool": ["Encore", "Imprison", "Knock Off", "Protect"],
-                "abilities": ["Prankster"],
+                "abilities": ["Illusion"],
                 "teraTypes": ["Poison"]
             }
         ]
