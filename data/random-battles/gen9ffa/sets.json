@@ -1382,7 +1382,7 @@
         "sets": [
             {
                 "role": "Bulky Attacker",
-                "movepool": ["Chilling Reception", "Flamethrower", "Future Sight", "Nasty Plot", "Protect", "Psychic", "Psyshock", "Scald", "Slack Off", "Surf", "Thunder Wave", "Trick Room"],
+                "movepool": ["Chilly Reception", "Flamethrower", "Future Sight", "Nasty Plot", "Protect", "Psychic", "Psyshock", "Scald", "Slack Off", "Surf", "Thunder Wave", "Trick Room"],
                 "abilities": ["Regenerator"],
                 "teraTypes": ["Dragon", "Fairy", "Poison", "Steel"]
             },
