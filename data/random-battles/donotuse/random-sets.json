@@ -407,7 +407,7 @@
 		"sets": [
 			{
 				"role": "Bulky Setup",
-				"movepool": ["Calm Mind", "Nasty Plot", "Draining Kiss", "Fire Blast", "Psychic Noise"],
+				"movepool": ["Calm Mind", "Nasty Plot", "Alluring Voice", "Fire Blast", "Psychic Noise"],
 				"abilities": ["Competitive"],
 				"teraTypes": ["Flying"]
 			},
