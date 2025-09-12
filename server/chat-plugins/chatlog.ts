@@ -989,6 +989,9 @@ export const pages: Chat.PageTable = {
 			if (roomid.startsWith('spl') && roomid !== 'splatoon') {
 				throw new Chat.ErrorMessage("SPL team discussions are super secret.");
 			}
+			if (roomid.startsWith('scl')) {
+				throw new Chat.ErrorMessage("SCL team discussions are super secret.");
+			}
 			if (roomid.startsWith('wcop')) {
 				throw new Chat.ErrorMessage("WCOP team discussions are super secret.");
 			}
