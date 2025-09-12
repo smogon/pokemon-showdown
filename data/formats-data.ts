@@ -366,6 +366,51 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	, "marshydow": { "isNonstandard": "Past", "tier": "HELL", "natDexTier": "HELL" }
 	, "ledigod": { "isNonstandard": "Past", "tier": "HELL", "natDexTier": "HELL" }
 	,
+	wigglytough: {
+		isNonstandard: "Past",
+		tier: "HELL",
+		natDexTier: "HELL",
+	},
+	octikrillery: {
+		isNonstandard: "Past",
+		tier: "HELL",
+		natDexTier: "HELL",
+	},
+	grapplick: {
+		isNonstandard: "Past",
+		tier: "HELL",
+		natDexTier: "HELL",
+	},
+	stonjorker: {
+		isNonstandard: "Past",
+		tier: "HELL",
+		natDexTier: "HELL",
+	},
+	mightyeesh: {
+		isNonstandard: "Past",
+		tier: "HELL",
+		natDexTier: "HELL",
+	},
+	cursolo: {
+		isNonstandard: "Past",
+		tier: "HELL",
+		natDexTier: "HELL",
+	},
+	elecprobe: {
+		isNonstandard: "Past",
+		tier: "HELL",
+		natDexTier: "HELL",
+	},
+	heatles: {
+		isNonstandard: "Past",
+		tier: "HELL",
+		natDexTier: "HELL",
+	},
+	probenose: {
+		isNonstandard: "Past",
+		tier: "HELL",
+		natDexTier: "HELL",
+	},
 	// End of Custom Pokemon Tier
 	bulbasaur: {
 		tier: "LC",
