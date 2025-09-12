@@ -631,6 +631,9 @@ export class RandomFFATeams extends RandomTeams {
 			return this.sample(species.requiredItems);
 		}
 		if (role === 'AV Pivot') return 'Assault Vest';
+		if (moves.has('acrobatics')) {
+			return (ability === 'Protosynthesis') ? 'Booster Energy' : '';
+		}
 		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'regieleki') return 'Magnet';
 		if (species.id === 'blaziken') return 'Life Orb';
@@ -685,9 +688,6 @@ export class RandomFFATeams extends RandomTeams {
 		}
 		if (moves.has('shellsmash') && ability !== 'Weak Armor') return 'White Herb';
 		if (moves.has('meteorbeam') || (moves.has('electroshot') && !teamDetails.rain)) return 'Power Herb';
-		if (moves.has('acrobatics')) {
-			return (ability === 'Protosynthesis') ? 'Booster Energy' : '';
-		}
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (ability === 'Gluttony') return `${this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'])} Berry`;
 		if (
