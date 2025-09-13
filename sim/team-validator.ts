@@ -2796,7 +2796,7 @@ export class TeamValidator {
 			// Pokemon that cannot be sent from Pokemon GO to Let's Go can only access Let's Go moves through HOME
 			// It can only obtain a chain of four level up moves and cannot have TM moves
 			const pokemonGoData = dex.species.getPokemonGoData(checkedSpecies.id);
-			if (pokemonGoData.LGPERestrictiveMoves) {
+			if (pokemonGoData?.LGPERestrictiveMoves) {
 				let levelUpMoveCount = 0;
 				const restrictiveMovesToID = [];
 				for (const moveName of setSources.restrictiveMoves) {
