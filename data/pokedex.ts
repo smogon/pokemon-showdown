@@ -10708,7 +10708,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
       "spe": 100
     },
     "abilities": {
-      "0": "ReZero"
+      "0": "Motor Drive"
     },
     "heightm": 0.7,
     "weightkg": 25,
