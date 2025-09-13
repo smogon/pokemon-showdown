@@ -6144,6 +6144,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Vibrava",
 		evoLevel: 45,
 		eggGroups: ["Bug", "Dragon"],
+		cosmeticFormes: ["Flygon-Fly"],
 	},
 	cacnea: {
 		num: 331,
