@@ -11280,6 +11280,17 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
     color: "Gray",
     eggGroups: ["Mineral"],
   },
+  savagescythe: {
+    num: -1643,
+    name: "Savage Scythe",
+    types: ["Bug", "Water"],
+    baseStats: { hp: 85, atk: 127, def: 91, spa: 77, spd: 83, spe: 107 },
+    abilities: { 0: "Protosynthesis" },
+    weightkg: 129,
+    heightm: 2.6,
+    color: "Green",
+    eggGroups: ["Undiscovered"],
+  },
   // End of Custom Pokemon
   bulbasaur: {
     num: 1,

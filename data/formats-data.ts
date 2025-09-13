@@ -386,7 +386,7 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		tier: "HELL",
 		natDexTier: "HELL",
 	},
-	mightyeesh: {
+	mightyeeesh: {
 		isNonstandard: "Past",
 		tier: "HELL",
 		natDexTier: "HELL",
@@ -407,6 +407,11 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 		natDexTier: "HELL",
 	},
 	probenose: {
+		isNonstandard: "Past",
+		tier: "HELL",
+		natDexTier: "HELL",
+	},
+	savagescythe: {
 		isNonstandard: "Past",
 		tier: "HELL",
 		natDexTier: "HELL",
