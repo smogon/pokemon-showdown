@@ -676,12 +676,6 @@ export abstract class BasicRoom {
 		}
 	}
 	expire() {
-		const game = this.getGame(BestOfGame);
-		// do not expire parent room until children expire
-		if (game?.games.length) {
-			this.pokeExpireTimer();
-			return;
-		}
 		this.send('|expire|');
 		this.destroy();
 	}
