@@ -31,7 +31,8 @@ export interface CosmeticFormeData {
 }
 
 export type ModdedSpeciesData = SpeciesData | CosmeticFormeData |
-	Partial<Omit<SpeciesData, 'name'>> & { inherit: true } | Partial<Omit<CosmeticFormeData, 'isCosmeticForme'>> & { inherit: true };
+	Partial<Omit<SpeciesData, 'name'>> & { inherit: true } |
+	Partial<Omit<CosmeticFormeData, 'isCosmeticForme'>> & { inherit: true };
 
 export interface SpeciesFormatsData {
 	doublesTier?: TierTypes.Doubles | TierTypes.Other;
@@ -447,7 +448,7 @@ export class DexSpecies {
 					species = new Species({
 						...species,
 						...cosmeticForme,
-						name: species.baseSpecies + '-' + cosmeticForme.forme,
+						name: species.baseSpecies + '-' + cosmeticForme.forme!, // Forme always exists on cosmetic forme entries
 						baseForme: "",
 						otherFormes: null,
 						cosmeticFormes: null,
