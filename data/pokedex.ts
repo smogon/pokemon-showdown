@@ -16052,9 +16052,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 	},
 	alcremiecaramelswirl: {
 		isCosmeticForme: true,
-		name: "Alcremie-Ruby-Swirl",
+		name: "Alcremie-Caramel-Swirl",
 		baseSpecies: "Alcremie",
-		forme: "Ruby-Swirl",
+		forme: "Caramel-Swirl",
 		color: "Yellow",
 	},
 	alcremierainbowswirl: {
