@@ -448,6 +448,7 @@ export class DexSpecies {
 						...species,
 						...cosmeticForme,
 						name: species.baseSpecies + '-' + cosmeticForme.forme,
+						baseForme: "",
 						otherFormes: null,
 						cosmeticFormes: null,
 					});
@@ -461,6 +462,7 @@ export class DexSpecies {
 								name: forme,
 								forme: forme.slice(species.name.length + 1),
 								baseSpecies: species.name,
+								baseForme: "",
 								isCosmeticForme: true,
 								otherFormes: null,
 								cosmeticFormes: null,

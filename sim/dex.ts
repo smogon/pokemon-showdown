@@ -548,7 +548,6 @@ export class ModdedDex {
 		for (const table of ['Items', 'Abilities', 'Moves', 'Pokedex'] as const) {
 			const data = this.data[table];
 			for (const [id, entry] of Object.entries(data) as [ID, DexTableData[typeof table][string]][]) {
-				if ((entry as any).isCosmeticForme) continue;
 				let name = compoundNames.get(id) || entry.name;
 				let forme = '' as ID;
 				let formeLetter = '' as ID;
