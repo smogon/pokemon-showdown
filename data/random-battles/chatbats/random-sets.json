@@ -1,6 +1,6 @@
 {
     "volcarona": {
-        "level": 82,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -72,7 +72,7 @@
         ]
     },
     "carbink": {
-        "level": 90,
+        "level": 84,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -189,7 +189,7 @@
         ]
     },
     "tyranitar": {
-        "level": 84,
+        "level": 86,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -322,7 +322,7 @@
         ]
     },
     "empoleon": {
-        "level": 84,
+        "level": 82,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -360,14 +360,14 @@
         "sets": [
             {
                 "role": "Fast Attacker",
-                "movepool": ["Explosion", "Extreme Speed", "Blazing Torque", "Volt Switch", "Rapid Spin", "Soak"],
+                "movepool": ["Explosion", "Extreme Speed", "Volt Switch", "Rapid Spin", "Soak"],
                 "abilities": ["Galvanize"],
                 "teraTypes": ["Electric"]
             }
         ]
     },
     "lycanrocmidnight": {
-        "level": 90,
+        "level": 88,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -389,7 +389,7 @@
         ]
     },
     "lycanrocdusk": {
-        "level": 84,
+        "level": 86,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -428,7 +428,7 @@
         ]
     },
     "hippowdon": {
-        "level": 84,
+        "level": 86,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -505,7 +505,7 @@
         ]
     },
     "gogoat": {
-        "level": 88,
+        "level": 90,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -582,7 +582,7 @@
         ]
     },
     "chienpao": {
-        "level": 80,
+        "level": 82,
         "sets": [
             {
                 "role": "Bulky Setup",
@@ -610,7 +610,7 @@
         ]
     },
     "kleavor": {
-        "level": 82,
+        "level": 80,
         "sets": [
             {
                 "role": "AV Pivot",
@@ -627,7 +627,7 @@
         ]
     },
     "araquanid": {
-        "level": 84,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -710,7 +710,7 @@
         ]
     },
     "golurk": {
-        "level": 86,
+        "level": 88,
         "sets": [
             {
                 "role": "Bulky Setup",
