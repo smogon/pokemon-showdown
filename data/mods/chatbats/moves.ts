@@ -116,7 +116,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			},
 		},
-		shortDesc: "User Water power 2x, takes 0.5x Fire damage. Recover 1/16 max HP per turn.",
+		shortDesc: "2x Water power, 0.5x Fire damage, heal 1/16 HP per turn.",
 		desc: "User recovers 1/16 max HP per turn. While this is active, this Pokemon's Water power is 2x and Fire power against it is halved.",
 	},
 
@@ -131,7 +131,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Normal",
 		effectType: "Move",
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		shortDesc: "Changes type to the most effective against the target (Water, Fighting, Fire, or Normal).",
+		shortDesc: "Type swaps to most effective (Water, Fighting, Fire, or Normal).",
 		desc: "Changes the move's and user's forme to the most effective against the target (Water, Fighting, Fire, or Normal).",
 		beforeMoveCallback(source, target, move) {
 			if (target) {
@@ -347,7 +347,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Rock",
 		contestType: "Beautiful",
-		shortDesc: "+1 Priority and 2x power if target is using a Water move.",
+		shortDesc: "+1 Priority and 2x power if target uses Water move.",
 		desc: "If the target is using a Water type move, this move will always move first and gains double power.",
 	},
 	ironstrike: {
@@ -589,7 +589,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Dragon",
 		desc: "Dondozo eats a mon on the user's team, KOing it. Dondozo then gains a stat boost depending on the eaten mon's highest stat: +3 Attack for Atk/SpA, +2 Def/+2 SpD for Def/SpD, and +3 Speed for Speed.",
-		shortDesc: "Dondozo orders up a meal. Dondozo gains stat boosts based on the highest stat of the Pokemon it eats.",
+		shortDesc: "Dondozo KOs an ally mon. Gain stat boost in ally's highest stat.",
 	},
 	toxicspikes: {
 		// prevents Dondozo from being affected by Toxic Spikes during Order Up switching
@@ -1049,7 +1049,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		target: "self",
 		desc: "Heals for 25% HP, or 50% if foe is statused.",
-		shortDesc: "Heals for 20% HP, or 50% if foe is statused.",
+		shortDesc: "Heals for 25% HP, or 50% if foe is statused.",
 	},
 	saltcurse: {
 		num: -1006,
@@ -1083,7 +1083,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Rock",
 		contestType: "Tough",
 		desc: "Double power if target is Paralyzed. Super-effective against Water and Steel.",
-		shortDesc: "Double power if target is Paralyzed. Super-effective against Water and Steel.",
+		shortDesc: "2x BP if target is Paralyzed, Water type, or Steel type.",
 	},
 	flyby: {
 		num: -1006,
@@ -1180,7 +1180,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		zMove: { basePower: 160 },
 		contestType: "Clever",
 		desc: "50% drain. 75% drain instead if target is Burned.",
-		shortDesc: "50% drain. 75% drain instead if target is Burned.",
+		shortDesc: "50% drain. 75% drain if target is Burned.",
 	},
 	terastarstorm: {
 		inherit: true,
@@ -1488,7 +1488,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Ground",
 		maxMove: { basePower: 130 },
 		contestType: "Tough",
-		shortDesc: "Returns last used item.",
+		shortDesc: "Returns last used item. Default Thick Club.",
 		desc: "Returns last used item. Defaults to Thick Club if none.",
 	},
 	electricterrain: {
