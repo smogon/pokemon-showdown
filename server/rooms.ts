@@ -1969,7 +1969,11 @@ export class GameRoom extends BasicRoom {
 			this.expireTimer = setTimeout(() => this.expire(), TIMEOUT_EMPTY_DEALLOCATE);
 		} else {
 			if (this.expireTimer) clearTimeout(this.expireTimer);
-			this.expireTimer = setTimeout(() => this.expire(), TIMEOUT_INACTIVE_DEALLOCATE);
+			if (this.bestOf) {
+				this.expireTimer = null;
+			} else {
+				this.expireTimer = setTimeout(() => this.expire(), TIMEOUT_INACTIVE_DEALLOCATE);
+			}
 		}
 	}
 	requestModchat(user: User | null) {
