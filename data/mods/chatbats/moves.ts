@@ -1552,15 +1552,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "5 turns. Grounded: +Electric power, can't sleep, can't use healing moves.",
 	},
 	mistyterrain: {
-		num: 581,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Misty Terrain",
-		pp: 10,
-		priority: 0,
-		flags: { nonsky: 1, metronome: 1 },
-		terrain: 'mistyterrain',
+		inherit: true,
 		condition: {
 			effectType: 'Terrain',
 			duration: 5,
@@ -1608,11 +1600,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-fieldend', 'Misty Terrain');
 			},
 		},
-		secondary: null,
-		target: "all",
-		type: "Fairy",
-		zMove: { boost: { spd: 1 } },
-		contestType: "Beautiful",
 		shortDesc: "5 turns. Can't status,-Dragon power vs grounded, +Fairy power.",
 		desc: "5 turns. Can't status,-Dragon power vs grounded, +Fairy power.",
 	},
