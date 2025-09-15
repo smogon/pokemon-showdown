@@ -588,6 +588,18 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 			this.add(`c:|${getName('calmvibes ♫')}|The vibes are off... :(`);
 		},
 	},
+	cassiopeia: {
+		noCopy: true,
+		onStart() {
+			this.add(`c:|${getName('Cassiopeia')}|git pull ps cassiopeia`);
+		},
+		onSwitchOut() {
+			this.add(`c:|${getName('Cassiopeia')}|git switch`);
+		},
+		onFaint() {
+			this.add(`c:|${getName('Cassiopeia')}|git checkout --detach HEAD && git commit -m "war crimes"`);
+		},
+	},
 	chaos: {
 		noCopy: true,
 	},
@@ -973,18 +985,6 @@ export const Conditions: { [id: IDEntry]: ModdedConditionData & { innateName?: s
 		},
 		onFaint() {
 			this.add(`c:|${getName('havi')}|the nightmare swirls and churns unending n_n`);
-		},
-	},
-	hecate: {
-		noCopy: true,
-		onStart() {
-			this.add(`c:|${getName('Hecate')}|git pull ps hecate`);
-		},
-		onSwitchOut() {
-			this.add(`c:|${getName('Hecate')}|git switch`);
-		},
-		onFaint() {
-			this.add(`c:|${getName('Hecate')}|git checkout --detach HEAD && git commit -m "war crimes"`);
 		},
 	},
 	hizo: {
