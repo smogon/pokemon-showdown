@@ -1288,8 +1288,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		basePowerCallback(pokemon, target, move) {
 			if (this.field.isWeather('snowscape')) {
 				return move.basePower * 1.3;
-			}
-			else return move.basePower;
+			} else return move.basePower;
 		},
 	},
 	crowverload: {
@@ -1322,7 +1321,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			// source.addVolatile['substitute'];
 			// this.damage(Math.ceil(source.maxhp / 4));
 		},
-		flags: { protect: 1, mirror: 1, metronome: 1, },
+		flags: { protect: 1, mirror: 1, metronome: 1 },
 		multihit: [10, 10],
 		secondary: null,
 		target: "normal",
@@ -1350,7 +1349,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			} else if (this.field.isTerrain('mistyterrain')) {
 				return priority + 1;
 			} else if (this.field.isTerrain('psychicterrain')) {
-				return priority
+				return priority;
 			} else {
 				return priority + 2;
 			}
