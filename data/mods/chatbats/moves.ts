@@ -116,7 +116,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			},
 		},
-		shortDesc: "User Water power 2x, takes 0.5x Fire damage. Recover 1/16 max HP per turn.",
+		shortDesc: "2x Water power, 0.5x Fire damage, heal 1/16 HP per turn.",
 		desc: "User recovers 1/16 max HP per turn. While this is active, this Pokemon's Water power is 2x and Fire power against it is halved.",
 	},
 
@@ -131,7 +131,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Normal",
 		effectType: "Move",
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		shortDesc: "Changes type to the most effective against the target (Water, Fighting, Fire, or Normal).",
+		shortDesc: "Type swaps to most effective (Water, Fighting, Fire, or Normal).",
 		desc: "Changes the move's and user's forme to the most effective against the target (Water, Fighting, Fire, or Normal).",
 		beforeMoveCallback(source, target, move) {
 			if (target) {
@@ -347,7 +347,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Rock",
 		contestType: "Beautiful",
-		shortDesc: "+1 Priority and 2x power if target is using a Water move.",
+		shortDesc: "+1 Priority and 2x power if target uses Water move.",
 		desc: "If the target is using a Water type move, this move will always move first and gains double power.",
 	},
 	ironstrike: {
@@ -589,7 +589,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		target: "normal",
 		type: "Dragon",
 		desc: "Dondozo eats a mon on the user's team, KOing it. Dondozo then gains a stat boost depending on the eaten mon's highest stat: +3 Attack for Atk/SpA, +2 Def/+2 SpD for Def/SpD, and +3 Speed for Speed.",
-		shortDesc: "Dondozo orders up a meal. Dondozo gains stat boosts based on the highest stat of the Pokemon it eats.",
+		shortDesc: "Dondozo KOs an ally mon. Gain stat boost in ally's highest stat.",
 	},
 	toxicspikes: {
 		// prevents Dondozo from being affected by Toxic Spikes during Order Up switching
@@ -898,7 +898,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		num: -1004,
 		accuracy: 100,
 		basePower: 70,
-		category: "Physical",
+		category: "Special",
 		name: "Burn Out",
 		pp: 20,
 		priority: 0,
@@ -906,7 +906,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'U-turn', target);
+			this.add('-anim', source, 'Fire Spin', target);
 		},
 		onHit(target, source, move) {
 			if (source.species.id === 'jolteon' || source.species.id === 'vaporeon') {
@@ -917,7 +917,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-sethp', source, source.getHealth, '[from] move: Flip Turn', '[silent]');
 				// target.setAbility('Eeveelution');
 				// target.baseAbility = target.ability;
-				const newMoves = ['flipturn', 'voltswitch', 'sizzlyslide', 'bbqbeatdown'];
+				const newMoves = ['flipturn', 'voltswitch', 'sizzlyslide', 'facade'];
 				// Update move slots
 				// eslint-disable-next-line @typescript-eslint/no-shadow
 				source.moveSlots = newMoves.map(move => {
@@ -987,7 +987,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-sethp', source, source.getHealth, '[from] move: Flip Turn', '[silent]');
 				// target.setAbility('Eeveelution');
 				// target.baseAbility = target.ability;
-				const newMoves = ['voltswitch', 'burnout', 'wish', 'bouncybubble'];
+				const newMoves = ['voltswitch', 'burnout', 'recover', 'scald'];
 				// Update move slots
 				// eslint-disable-next-line @typescript-eslint/no-shadow
 				source.moveSlots = newMoves.map(move => {
@@ -1007,39 +1007,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 	},
-	bbqbeatdown: {
-		num: -1005,
-		accuracy: 100,
-		basePower: 65,
-		basePowerCallback(pokemon, target, move) {
-			if (target.status === "brn") {
-				this.debug('BP doubled from status condition');
-				return move.basePower * 2;
-			}
-			return move.basePower;
-		},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Burn Up', target);
-			this.add('-anim', source, 'Close Combat', target);
-		},
-		category: "Physical",
-		name: "BBQ Beatdown",
-		pp: 10,
-		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		secondary: null,
-		target: "normal",
-		type: "Fighting",
-		zMove: { basePower: 160 },
-		contestType: "Clever",
-		desc: "Power doubles if the target is Burned.",
-		shortDesc: "Power doubles if the target is Burned.",
-	},
 	sizzlyslide: {
 		inherit: true,
+		basePower: 80,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
@@ -1067,6 +1037,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	},
 	purify: {
 		inherit: true,
+		pp: 10,
 		flags: { reflectable: 1, heal: 1, metronome: 1 },
 		onHit(target, source) {
 			const foe = source.side.foe.active[0];
@@ -1078,7 +1049,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		target: "self",
 		desc: "Heals for 25% HP, or 50% if foe is statused.",
-		shortDesc: "Heals for 20% HP, or 50% if foe is statused.",
+		shortDesc: "Heals for 25% HP, or 50% if foe is statused.",
 	},
 	saltcurse: {
 		num: -1006,
@@ -1112,7 +1083,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		type: "Rock",
 		contestType: "Tough",
 		desc: "Double power if target is Paralyzed. Super-effective against Water and Steel.",
-		shortDesc: "Double power if target is Paralyzed. Super-effective against Water and Steel.",
+		shortDesc: "2x BP if target is Paralyzed, Water type, or Steel type.",
 	},
 	flyby: {
 		num: -1006,
@@ -1209,7 +1180,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		zMove: { basePower: 160 },
 		contestType: "Clever",
 		desc: "50% drain. 75% drain instead if target is Burned.",
-		shortDesc: "50% drain. 75% drain instead if target is Burned.",
+		shortDesc: "50% drain. 75% drain if target is Burned.",
 	},
 	terastarstorm: {
 		inherit: true,
@@ -1228,5 +1199,408 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		},
 		desc: "Type varies based on the user's primary type.",
 		shortDesc: "Type varies based on the user's primary type.",
+	},
+	grabapple: {
+		num: -1008,
+		accuracy: 100,
+		basePower: 100,
+		category: "Physical",
+		name: "Grab Apple",
+		pp: 10,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		secondary: null,
+		target: "normal",
+		type: "Grass",
+		contestType: "Tough",
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Grav Apple', target);
+			this.add('-anim', source, 'Thief', target);
+		},
+		onAfterMove(source) {
+			if (source.lastItem) {
+				const item = source.lastItem;
+				source.lastItem = '';
+				source.setItem(item);
+				this.add('-item', source, this.dex.items.get(item), '[from] move: Grab Apple');
+			} else {
+				return null;
+			}
+		},
+		shortDesc: "User regains their last used item, similar to Recycle.",
+		desc: "If the user has consumed their item, it will be restored.",
+	},
+	sashimishuffle: {
+		num: -1009,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Sashimi Shuffle",
+		pp: 5,
+		priority: 0,
+		flags: { metronome: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Order Up', target);
+			this.add('-anim', source, 'Order Up', target);
+		},
+		onHit(target) {
+			if (!this.canSwitch(target.side) || target.volatiles['commanded']) {
+				this.attrLastMove('[still]');
+				this.add('-fail', target);
+				return this.NOT_FAIL;
+			}
+		},
+		self: {
+			onHit(source) {
+				source.skipBeforeSwitchOutEventFlag = true;
+			},
+		},
+		selfSwitch: true,
+		slotCondition: 'sashimishuffle',
+		condition: {
+			onSwitchIn(target) {
+				this.singleEvent('Swap', this.effect, this.effectState, target);
+			},
+			onSwap(target) {
+				if (!target.fainted) {
+					target.heal(target.maxhp / 3);
+					this.add('-heal', target, target.getHealth, '[from] move: Sashimi Shuffle');
+					target.side.removeSlotCondition(target, 'sashimishuffle');
+				}
+			},
+		},
+		secondary: null,
+		target: "self",
+		type: "Normal",
+		zMove: { effect: 'clearnegativeboost' },
+		contestType: "Cute",
+		shortDesc: "User switches. Next Pokemon heals 1/3 HP.",
+		desc: "User switches. Next Pokemon heals 1/3 HP.",
+	},
+	technoblast: {
+		inherit: true,
+		basePowerCallback(pokemon, target, move) {
+			if (this.field.isWeather('snowscape')) {
+				return move.basePower * 1.3;
+			} else return move.basePower;
+		},
+	},
+	crowverload: {
+		num: -1010,
+		accuracy: 100,
+		basePower: 12,
+		category: "Physical",
+		name: "Crowverload",
+		pp: 10,
+		priority: -4,
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Glare', target);
+			this.add('-anim', source, 'X-Scissor', target);
+		},
+		onTryHit(source, target, move) {
+			if (source.volatiles['substitute']) {
+				this.add('-fail', source, 'move: Crowverload');
+				return this.NOT_FAIL;
+			}
+			if (source.hp <= source.maxhp / 4) {
+				this.add('-fail', source, 'move: Substitute', '[weak]');
+				return this.NOT_FAIL;
+			}
+		},
+		onAfterMove(source, target, move) {
+			this.actions.useMove('substitute', source, { });
+			// source.addVolatile['substitute'];
+			// this.damage(Math.ceil(source.maxhp / 4));
+		},
+		flags: { protect: 1, mirror: 1, metronome: 1 },
+		multihit: [10, 10],
+		secondary: null,
+		target: "normal",
+		type: "Dark",
+		zMove: { basePower: 140 },
+		maxMove: { basePower: 130 },
+		contestType: "Tough",
+		shortDesc: "Hits 10 times. User creates a Substitute.",
+		desc: "Hits 10 times. User creates a Substitute.",
+	},
+	naturesfury: {
+		num: -1011,
+		accuracy: true,
+		basePower: 0,
+		category: "Status",
+		name: "Nature's Fury",
+		pp: 20,
+		priority: 0,
+		flags: { failencore: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failmimic: 1, failinstruct: 1 },
+		onModifyPriority(priority, source, target, move) {
+			if (this.field.isTerrain('electricterrain')) {
+				return priority + 1;
+			} else if (this.field.isTerrain('grassyterrain')) {
+				return priority + 1;
+			} else if (this.field.isTerrain('mistyterrain')) {
+				return priority + 1;
+			} else if (this.field.isTerrain('psychicterrain')) {
+				return priority;
+			} else {
+				return priority + 2;
+			}
+		},
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onTryHit(target, pokemon) {
+			let move = 'extremespeed';
+			if (this.field.isTerrain('electricterrain')) {
+				move = 'lightningleap';
+			} else if (this.field.isTerrain('grassyterrain')) {
+				move = 'grassyglide';
+			} else if (this.field.isTerrain('mistyterrain')) {
+				move = 'mistymarch';
+			} else if (this.field.isTerrain('psychicterrain')) {
+				move = 'wackywhack';
+			}
+			this.actions.useMove(move, pokemon, { target });
+			return null;
+		},
+		callsMove: true,
+		secondary: null,
+		target: "normal",
+		type: "Normal",
+		contestType: "Beautiful",
+		shortDesc: "Move used depends on Terrain.",
+		desc: "Move used depends on Terrain.",
+	},
+	mistymarch: {
+		num: -1012,
+		accuracy: 100,
+		basePower: 55,
+		category: "Physical",
+		name: "Misty March",
+		pp: 20,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Play Rough', target);
+		},
+		onModifyPriority(priority, source, target, move) {
+			if (this.field.isTerrain('mistyterrain') && source.isGrounded()) {
+				return priority + 1;
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Fairy",
+		contestType: "Cool",
+		shortDesc: "User on Misty Terrain: +1 priority.",
+		desc: "User on Misty Terrain: +1 priority.",
+	},
+	lightningleap: {
+		num: -1013,
+		accuracy: 100,
+		basePower: 55,
+		category: "Physical",
+		name: "Lightning Leap",
+		pp: 20,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Volt Tackle', target);
+		},
+		onModifyPriority(priority, source, target, move) {
+			if (this.field.isTerrain('electricterrain') && source.isGrounded()) {
+				return priority + 1;
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Electric",
+		contestType: "Cool",
+		shortDesc: "User on Electric Terrain: +1 priority.",
+		desc: "User on Electric Terrain: +1 priority.",
+	},
+	wackywhack: {
+		num: -1014,
+		accuracy: 100,
+		basePower: 80,
+		category: "Physical",
+		name: "Wacky Whack",
+		pp: 20,
+		priority: 0,
+		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
+		onTryMove() {
+			this.attrLastMove('[still]');
+		},
+		onPrepareHit(target, source) {
+			this.add('-anim', source, 'Zed Headbutt', target);
+			this.add('-anim', source, 'Thief', target);
+		},
+		onAfterMoveSecondarySelf(source, target, move) {
+			if (this.field.isTerrain('psychicterrain') && source.isGrounded()) {
+				this.boost({ spe: 1 }, source, source);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Psychic",
+		contestType: "Cool",
+		shortDesc: "User in Psychic Terrain: +1 Speed.",
+		desc: "User in Psychic Terrain: +1 Speed.",
+	},
+	bonemerang: {
+		inherit: true,
+		onAfterMove(source) {
+			const item = source.lastItem || 'thickclub';
+			source.lastItem = '';
+			source.setItem(item);
+			this.add('-item', source, this.dex.items.get(item), '[from] move: Bonemerang');
+		},
+		shortDesc: "Returns last used item. Default Thick Club.",
+		desc: "Returns last used item. Defaults to Thick Club if none.",
+	},
+	electricterrain: {
+		inherit: true,
+		condition: {
+			effectType: 'Terrain',
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onSetStatus(status, target, source, effect) {
+				if (status.id === 'slp' && target.isGrounded() && !target.isSemiInvulnerable()) {
+					if (effect.id === 'yawn' || (effect.effectType === 'Move' && !effect.secondaries)) {
+						this.add('-activate', target, 'move: Electric Terrain');
+					}
+					return false;
+				}
+			},
+			onTryAddVolatile(status, target) {
+				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (status.id === 'yawn') {
+					this.add('-activate', target, 'move: Electric Terrain');
+					return null;
+				}
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Electric' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+					this.debug('electric terrain boost');
+					return this.chainModify([5325, 4096]);
+				}
+			},
+			onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Electric Terrain', '[from] ability: ' + effect.name, `[of] ${source}`);
+				} else {
+					this.add('-fieldstart', 'move: Electric Terrain');
+				}
+			},
+			onDisableMove(pokemon) {
+				for (const moveSlot of pokemon.moveSlots) {
+					if (this.dex.moves.get(moveSlot.id).flags['heal']) {
+						pokemon.disableMove(moveSlot.id);
+					}
+				}
+			},
+			onBeforeMovePriority: 6,
+			onBeforeMove(pokemon, target, move) {
+				if (move.flags['heal'] && !move.isZ && !move.isMax) {
+					this.add('cant', pokemon, 'move: Electric Terrain', move);
+					return false;
+				}
+			},
+			onModifyMove(move, pokemon, target) {
+				if (move.flags['heal'] && !move.isZ && !move.isMax) {
+					this.add('cant', pokemon, 'move: Electric Terrain', move);
+					return false;
+				}
+			},
+			onTryHeal(damage, target, source, effect) {
+				if (effect && (effect.id === 'zpower' || (effect as Move).isZ)) return damage;
+				if (source && target !== source && target.hp !== target.maxhp && effect.name === "Pollen Puff") {
+					this.attrLastMove('[still]');
+					// FIXME: Wrong error message, correct one not supported yet
+					this.add('cant', source, 'move: Electric Terrain', effect);
+					return null;
+				}
+				return false;
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
+			onFieldEnd() {
+				this.add('-fieldend', 'move: Electric Terrain');
+			},
+		},
+		shortDesc: "5 turns. Grounded: +Electric power, can't sleep, can't heal.",
+		desc: "5 turns. Grounded: +Electric power, can't sleep, can't use healing moves.",
+	},
+	mistyterrain: {
+		inherit: true,
+		condition: {
+			effectType: 'Terrain',
+			duration: 5,
+			durationCallback(source, effect) {
+				if (source?.hasItem('terrainextender')) {
+					return 8;
+				}
+				return 5;
+			},
+			onSetStatus(status, target, source, effect) {
+				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (effect && ((effect as Move).status || effect.id === 'yawn')) {
+					this.add('-activate', target, 'move: Misty Terrain');
+				}
+				return false;
+			},
+			onTryAddVolatile(status, target, source, effect) {
+				if (!target.isGrounded() || target.isSemiInvulnerable()) return;
+				if (status.id === 'confusion') {
+					if (effect.effectType === 'Move' && !effect.secondaries) this.add('-activate', target, 'move: Misty Terrain');
+					return null;
+				}
+			},
+			onBasePowerPriority: 6,
+			onBasePower(basePower, attacker, defender, move) {
+				if (move.type === 'Dragon' && defender.isGrounded() && !defender.isSemiInvulnerable()) {
+					this.debug('misty terrain weaken');
+					return this.chainModify(0.5);
+				}
+				if (move.type === 'Fairy' && attacker.isGrounded() && !attacker.isSemiInvulnerable()) {
+					this.debug('misty terrain boost');
+					return this.chainModify([5325, 4096]);
+				}
+			},
+			onFieldStart(field, source, effect) {
+				if (effect?.effectType === 'Ability') {
+					this.add('-fieldstart', 'move: Misty Terrain', '[from] ability: ' + effect.name, `[of] ${source}`);
+				} else {
+					this.add('-fieldstart', 'move: Misty Terrain');
+				}
+			},
+			onFieldResidualOrder: 27,
+			onFieldResidualSubOrder: 7,
+			onFieldEnd() {
+				this.add('-fieldend', 'Misty Terrain');
+			},
+		},
+		shortDesc: "5 turns. Can't status,-Dragon power vs grounded, +Fairy power.",
+		desc: "5 turns. Can't status,-Dragon power vs grounded, +Fairy power.",
 	},
 };
