@@ -95,7 +95,7 @@
                 "role": "Bulky Support",
                 "movepool": ["Brave Bird", "Flare Blitz", "Wood Hammer", "Wave Crash", "Defog", "U-Turn"],
                 "abilities": ["Magic Guard"],
-                "teraTypes": ["Ground"]
+                "teraTypes": ["Grass"]
             }
         ]
     },
@@ -803,7 +803,7 @@
         "sets": [
             {
                 "role": "Setup Sweeper",
-                "movepool": ["Rock Wrecker", "Giga Impact", "Meteor Assault", "Sky Attack", "Solar Blade", "Victory Dance"],
+                "movepool": ["Rock Wrecker", "Giga Impact", "Meteor Assault", "Sky Attack", "Solar Blade"],
                 "abilities": ["Power Spot"],
                 "teraTypes": ["Rock", "Grass", "Fighting"]
             }
@@ -908,8 +908,8 @@
         "sets": [
             {
                 "role": "Fast Support",
-                "movepool": ["Volt Switch", "Burn Out", "Wish", "Bouncy Bubble"],
-                "abilities": ["Poison Heal"],
+                "movepool": ["Volt Switch", "Burn Out", "Recover", "Scald"],
+                "abilities": ["Marvel Scale"],
                 "teraTypes": ["Stellar"]
             }
         ]
