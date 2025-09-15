@@ -690,7 +690,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'urshifu') return this.sample(['Life Orb', 'Protective Pads']);
 		if (species.id === 'urshifurapidstrike') return this.sample(['Life Orb', 'Protective Pads']);
 		if (species.id === 'salamence') return this.sample(['Life Orb', 'Heavy-Duty Boots', 'Sky Plate']);
-		if (species.id === 'stonjourner') return 'Life Orb';
+		if (species.id === 'stonjourner') return 'Choice Scarf';
 		if (species.id === 'veluza') return 'Sitrus Berry';
 		if (species.id === 'ogerponhearthflame') return 'Hearthflame Mask';
 		if (species.id === 'dachsbun') return 'Rocky Helmet';
@@ -700,7 +700,7 @@ export class RandomChatBatsTeams extends RandomTeams {
 		if (species.id === 'hitmontop') return this.sample(['Protective Pads', 'Wide Lens']);
 		if (species.id === 'articunogalar' && moves.has('roost')) return 'Heavy-Duty Boots';
 		if (species.id === 'articunogalar' && moves.has('aurasphere')) return 'Choice Specs';
-		if (species.id === 'vaporeon') return 'Toxic Orb';
+		if (species.id === 'vaporeon') return 'Flame Orb';
 		if (species.id === 'garganacl') return 'Poisonium Z';
 		if (species.id === 'swanna') return 'Heavy-Duty Boots';
 		if (species.id === 'terapagos') return 'Leftovers';
