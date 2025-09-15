@@ -367,7 +367,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	vaporeon: {
 		inherit: true,
-		abilities: { 0: "Poison Heal" },
+		abilities: { 0: "Marvel Scale" },
 	},
 	jolteon: {
 		inherit: true,
@@ -376,6 +376,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	flareon: {
 		inherit: true,
 		abilities: { 0: "Guts" },
+		baseStats: { hp: 65, atk: 130, def: 65, spa: 60, spd: 110, spe: 95 },
 	},
 	garganacl: {
 		inherit: true,
