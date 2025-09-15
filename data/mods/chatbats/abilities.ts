@@ -654,6 +654,9 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			pokemon.m.hasTypeChanged = true;
 			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
 		},
+		onAfterSwitchInSelf(pokemon) {
+			this.add('-start', pokemon, 'typechange', (pokemon.illusion || pokemon).getTypes(true).join('/'), '[silent]');
+		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1,
 			breakable: 1, notransform: 1, cantsuppress: 1 },
 		name: "Biogenesis",
