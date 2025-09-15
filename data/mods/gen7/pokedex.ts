@@ -59,6 +59,14 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		eggGroups: ["Bug"],
 	},
+	burmysandy: {
+		inherit: true,
+		color: "Green",
+	},
+	burmytrash: {
+		inherit: true,
+		color: "Green",
+	},
 	magnezone: {
 		inherit: true,
 		evoType: "levelExtra",
@@ -82,6 +90,94 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		abilities: { 0: "Flash Fire", H: "Flame Body" },
 		unreleasedHidden: true,
+	},
+	deerlingsummer: {
+		inherit: true,
+		color: "Pink",
+	},
+	deerlingautumn: {
+		inherit: true,
+		color: "Pink",
+	},
+	deerlingwinter: {
+		inherit: true,
+		color: "Pink",
+	},
+	vivillonicysnow: {
+		inherit: true,
+		color: "White",
+	},
+	vivillonpolar: {
+		inherit: true,
+		color: "White",
+	},
+	vivillontundra: {
+		inherit: true,
+		color: "White",
+	},
+	vivilloncontinental: {
+		inherit: true,
+		color: "White",
+	},
+	vivillongarden: {
+		inherit: true,
+		color: "White",
+	},
+	vivillonelegant: {
+		inherit: true,
+		color: "White",
+	},
+	vivillonmodern: {
+		inherit: true,
+		color: "White",
+	},
+	vivillonmarine: {
+		inherit: true,
+		color: "White",
+	},
+	vivillonarchipelago: {
+		inherit: true,
+		color: "White",
+	},
+	vivillonhighplains: {
+		inherit: true,
+		color: "White",
+	},
+	vivillonsandstorm: {
+		inherit: true,
+		color: "White",
+	},
+	vivillonriver: {
+		inherit: true,
+		color: "White",
+	},
+	vivillonmonsoon: {
+		inherit: true,
+		color: "White",
+	},
+	vivillonsavanna: {
+		inherit: true,
+		color: "White",
+	},
+	vivillonsun: {
+		inherit: true,
+		color: "White",
+	},
+	vivillonocean: {
+		inherit: true,
+		color: "White",
+	},
+	vivillonjungle: {
+		inherit: true,
+		color: "White",
+	},
+	vivillonfancy: {
+		inherit: true,
+		color: "White",
+	},
+	vivillonpokeball: {
+		inherit: true,
+		color: "White",
 	},
 	aegislash: {
 		inherit: true,
