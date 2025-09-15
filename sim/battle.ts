@@ -115,7 +115,7 @@ export class Battle {
 	readonly format: Format;
 	readonly formatData: EffectState;
 	readonly gameType: GameType;
-	
+
 	hasAnyEventHandlers = false;
 	hasPokemonEventHandlers = false;
 	/**
@@ -1052,32 +1052,32 @@ export class Battle {
 	 */
 	private checkForAnyEventHandlers(): boolean {
 		if (this.events && Object.keys(this.events).length > 0) return true;
-		
+
 		if (Object.keys(this.field.pseudoWeather).length > 0) return true;
 		if (this.field.weather) return true;
 		if (this.field.terrain) return true;
-		
+
 		for (const side of this.sides) {
 			if (Object.keys(side.sideConditions).length > 0) return true;
 			for (const slotConditions of side.slotConditions) {
 				if (Object.keys(slotConditions).length > 0) return true;
 			}
 		}
-		
+
 		return this.checkForPokemonEventHandlers();
 	}
 
 	/**
 	 * Checks if any Pokemon have event handlers (status, volatiles, abilities, items, species).
-	 * This is expensive so we cache the result in hasPokemonEventHandlers.  
+	 * This is expensive so we cache the result in hasPokemonEventHandlers.
 	 */
 	private checkForPokemonEventHandlers(): boolean {
 		for (const side of this.sides) {
 			for (const pokemon of side.pokemon) {
 				if (pokemon.status) return true;
-				
+
 				if (Object.keys(pokemon.volatiles).length > 0) return true;
-				
+
 				if (pokemon.getAbility().id !== 'noability') return true;
 				if (pokemon.getItem().id !== '') return true;
 				return true;
