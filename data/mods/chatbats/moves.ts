@@ -1462,45 +1462,18 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		desc: "User in Psychic Terrain: +1 Speed.",
 	},
 	bonemerang: {
-		num: 155,
-		accuracy: 90,
-		basePower: 50,
-		category: "Physical",
-		name: "Bonemerang",
-		pp: 10,
-		priority: 0,
+		inherit: true,
 		onAfterMove(source) {
-			if (source.lastItem) {
-				const item = source.lastItem;
-				source.lastItem = '';
-				source.setItem(item);
-				this.add('-item', source, this.dex.items.get(item), '[from] move: Bonemerang');
-			} else {
-				source.lastItem = '';
-				source.setItem('thickclub');
-				this.add('-item', source, this.dex.items.get('thickclub'), '[from] move: Bonemerang');
-			}
+			const item = source.lastItem || 'thickclub';
+			source.lastItem = '';
+			source.setItem(item);
+			this.add('-item', source, this.dex.items.get(item), '[from] move: Bonemerang');
 		},
-		flags: { protect: 1, mirror: 1, metronome: 1 },
-		multihit: 2,
-		secondary: null,
-		target: "normal",
-		type: "Ground",
-		maxMove: { basePower: 130 },
-		contestType: "Tough",
 		shortDesc: "Returns last used item. Default Thick Club.",
 		desc: "Returns last used item. Defaults to Thick Club if none.",
 	},
 	electricterrain: {
-		num: 604,
-		accuracy: true,
-		basePower: 0,
-		category: "Status",
-		name: "Electric Terrain",
-		pp: 10,
-		priority: 0,
-		flags: { nonsky: 1, metronome: 1 },
-		terrain: 'electricterrain',
+		inherit: true,
 		condition: {
 			effectType: 'Terrain',
 			duration: 5,
@@ -1575,11 +1548,6 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-fieldend', 'move: Electric Terrain');
 			},
 		},
-		secondary: null,
-		target: "all",
-		type: "Electric",
-		zMove: { boost: { spe: 1 } },
-		contestType: "Clever",
 		shortDesc: "5 turns. Grounded: +Electric power, can't sleep, can't heal.",
 		desc: "5 turns. Grounded: +Electric power, can't sleep, can't use healing moves.",
 	},
