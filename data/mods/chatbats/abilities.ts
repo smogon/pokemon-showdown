@@ -771,7 +771,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				pokemon.baseAbility = pokemon.ability;
 				this.add('-ability', pokemon, 'Electric Surge');
 			}
-		}
+		},
 	},
 	battlerage: {
 		onDamagingHit(damage, target, source, effect) {
@@ -788,18 +788,15 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				source.setType("Electric");
 				this.field.setTerrain('electricterrain');
 				this.add('-start', source, 'typechange', 'Electric', '[silent]');
-			}
-			else if (source.hp >= (2 * source.maxhp) / 3) {
+			} else if (source.hp >= (2 * source.maxhp) / 3) {
 				source.setType("Fairy");
 				this.field.setTerrain('mistyterrain');
 				this.add('-start', source, 'typechange', 'Fairy', '[silent]');
-			}
-			else if (source.hp >= source.maxhp / 3) {
+			} else if (source.hp >= source.maxhp / 3) {
 				source.setType("Grass");
 				this.field.setTerrain('grassyterrain');
 				this.add('-start', source, 'typechange', 'Grass', '[silent]');
-			}
-			else {
+			} else {
 				source.setType("Psychic");
 				this.field.setTerrain('psychicterrain');
 				this.add('-start', source, 'typechange', 'Psychic', '[silent]');
