@@ -15,7 +15,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 			return false;
 		},
-		shortDesc: "Fire-/Ice-type moves against this Pokemon deal 1/2 damage. Burn immune.",
+		shortDesc: "-50% damage from Fire and Ice. Burn immune.",
 	},
 	callillumise: {
 		onDamagePriority: -30,
@@ -149,7 +149,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Short Fuse",
 		rating: 5,
 		num: -102,
-		shortDesc: "When this Pokemon would be KOed, it instead uses Explosion.",
+		shortDesc: "If KO'd, use Explosion instead.",
 	},
 	hydroelectricdam: {
 		// Copied from the code for Sand Spit
@@ -160,7 +160,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Hydroelectric Dam",
 		rating: 5,
 		num: -103,
-		shortDesc: "When this Pokemon is hit by an attack, the effect of Rain Dance begins.",
+		shortDesc: "Starts Rain Dance when hit by an attack.",
 	},
 	frozenarmor: {
 		onTryHit(target, source, move) {
@@ -188,7 +188,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Frozen Armor",
 		rating: 5,
 		num: -105,
-		shortDesc: "Incoming attacks have their BP reduced by 20. This Pokemon transforms into Calyrex-Ice below 50% HP.",
+		shortDesc: "-20 BP on attacks targeting Glastrier, at 50% HP become Calyrex-Ice.",
 	},
 	flipflop: {
 		onDamagingHitOrder: 1,
@@ -214,7 +214,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Flip Flop",
 		rating: 5,
 		num: -104,
-		shortDesc: "When hit by a contact move, the attacker’s stat changes are inverted.",
+		shortDesc: "When hit by contact move, invert attacker’s stat boosts.",
 	},
 
 	grasspelt: {
@@ -335,7 +335,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "King of the Hill",
 		rating: 5,
 		num: -108,
-		shortDesc: "Mountaineer + Sharpness. Prevents opposing Pokemon from ignoring hazard damage.",
+		shortDesc: "Mountaineer + Sharpness. Opponent cannot ignore hazard damage.",
 	},
 	// stockpile on hit
 	omnivore: {
@@ -349,7 +349,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Omnivore",
 		rating: 5,
 		num: -109,
-		shortDesc: "This Pokemon gains a Stockpile charge upon being hit by a damaging attack.",
+		shortDesc: "Gain Stockpile charge when hit by attack.",
 	},
 	// disguise clone
 	pseudowoodo: {
@@ -398,7 +398,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Pseudowoodo",
 		rating: 5,
 		num: -110,
-		shortDesc: "The first hit it takes is blocked, and it takes 1/8 HP damage instead and becomes Rock type.",
+		shortDesc: "Disguise. Becomes Rock type when it breaks.",
 	},
 	magicguard: {
 		onDamage(damage, target, source, effect) {
@@ -508,7 +508,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		rating: 4.5,
-		shortDesc: "This Pokemon's type changes to the type of the move it is using.",
+		shortDesc: "Gen 8 Protean.",
 	},
 	berserk: {
 		onUpdate(pokemon) {
@@ -721,7 +721,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Brain Freeze",
 		rating: 5,
 		num: -114,
-		shortDesc: "This Pokemon's attacks are critical hits if the target is frostbitten or Snow is active.",
+		shortDesc: "If Snowscape or target is Frostbitten, attacks auto Crit.",
 	},
 	neutralizinggas: {
 		inherit: true,
@@ -746,7 +746,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Tera Wheel",
 		rating: 5,
 		num: -115,
-		shortDesc: "At the end of each turn, this Pokemon switches to a random type (including Stellar).",
+		shortDesc: "End of turn: this Pokemon switches to a random type (including Stellar).",
 	},
 	download: {
 		inherit: true,
@@ -772,6 +772,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 				this.add('-ability', pokemon, 'Electric Surge');
 			}
 		},
+		shortDesc: "Download + Gets weather setting move when Tera.",
 	},
 	battlerage: {
 		onDamagingHit(damage, target, source, effect) {
@@ -781,6 +782,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Battle Rage",
 		rating: 5,
 		num: -116,
+		shortDesc: "+1 Atk when hit by an attack.",
 	},
 	terrainshift: {
 		onStart(source) {
@@ -806,5 +808,6 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 		name: "Terrain Shift",
 		rating: 5,
 		num: -117,
+		shortDesc: "Sets terrain depending on HP value.",
 	},
 };
