@@ -486,7 +486,7 @@ export class BestOfGame extends RoomGame<BestOfPlayer> {
 	}
 	override destroy() {
 		this.setEnded();
-		for (const { room } of this.games) Rooms.get(room)?.expire();
+		for (const { room } of this.games) Rooms.get(room)?.setParent(null);
 		this.games = [];
 		for (const p of this.players) p.destroy();
 		this.players = [];
