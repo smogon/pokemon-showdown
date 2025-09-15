@@ -898,7 +898,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 		num: -1004,
 		accuracy: 100,
 		basePower: 70,
-		category: "Physical",
+		category: "Special",
 		name: "Burn Out",
 		pp: 20,
 		priority: 0,
@@ -906,7 +906,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			this.attrLastMove('[still]');
 		},
 		onPrepareHit(target, source) {
-			this.add('-anim', source, 'U-turn', target);
+			this.add('-anim', source, 'Fire Spin', target);
 		},
 		onHit(target, source, move) {
 			if (source.species.id === 'jolteon' || source.species.id === 'vaporeon') {
@@ -917,7 +917,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-sethp', source, source.getHealth, '[from] move: Flip Turn', '[silent]');
 				// target.setAbility('Eeveelution');
 				// target.baseAbility = target.ability;
-				const newMoves = ['flipturn', 'voltswitch', 'sizzlyslide', 'bbqbeatdown'];
+				const newMoves = ['flipturn', 'voltswitch', 'sizzlyslide', 'facade'];
 				// Update move slots
 				// eslint-disable-next-line @typescript-eslint/no-shadow
 				source.moveSlots = newMoves.map(move => {
@@ -987,7 +987,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-sethp', source, source.getHealth, '[from] move: Flip Turn', '[silent]');
 				// target.setAbility('Eeveelution');
 				// target.baseAbility = target.ability;
-				const newMoves = ['voltswitch', 'burnout', 'wish', 'bouncybubble'];
+				const newMoves = ['voltswitch', 'burnout', 'recover', 'scald'];
 				// Update move slots
 				// eslint-disable-next-line @typescript-eslint/no-shadow
 				source.moveSlots = newMoves.map(move => {
@@ -1007,39 +1007,9 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			}
 		},
 	},
-	bbqbeatdown: {
-		num: -1005,
-		accuracy: 100,
-		basePower: 65,
-		basePowerCallback(pokemon, target, move) {
-			if (target.status === "brn") {
-				this.debug('BP doubled from status condition');
-				return move.basePower * 2;
-			}
-			return move.basePower;
-		},
-		onTryMove() {
-			this.attrLastMove('[still]');
-		},
-		onPrepareHit(target, source) {
-			this.add('-anim', source, 'Burn Up', target);
-			this.add('-anim', source, 'Close Combat', target);
-		},
-		category: "Physical",
-		name: "BBQ Beatdown",
-		pp: 10,
-		priority: 0,
-		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		secondary: null,
-		target: "normal",
-		type: "Fighting",
-		zMove: { basePower: 160 },
-		contestType: "Clever",
-		desc: "Power doubles if the target is Burned.",
-		shortDesc: "Power doubles if the target is Burned.",
-	},
 	sizzlyslide: {
 		inherit: true,
+		basePower: 80,
 		onTryMove() {
 			this.attrLastMove('[still]');
 		},
