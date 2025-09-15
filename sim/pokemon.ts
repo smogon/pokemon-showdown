@@ -1714,6 +1714,7 @@ export class Pokemon {
 		if (status.id && !this.battle.runEvent('AfterSetStatus', this, source, sourceEffect, status)) {
 			return false;
 		}
+		this.battle.updateEventHandlerFlags();
 		return true;
 	}
 
@@ -1858,6 +1859,7 @@ export class Pokemon {
 		if (item.id) {
 			this.battle.singleEvent('Start', item, this.itemState, this, source, effect);
 		}
+		this.battle.updateEventHandlerFlags();
 		return true;
 	}
 
@@ -1907,6 +1909,7 @@ export class Pokemon {
 			(!isTransform || oldAbility.id !== ability.id || this.battle.gen <= 4)) {
 			this.battle.singleEvent('Start', ability, this.abilityState, this, source);
 		}
+		this.battle.updateEventHandlerFlags();
 		return oldAbility.id;
 	}
 
@@ -1977,6 +1980,7 @@ export class Pokemon {
 			delete this.volatiles[status.id];
 			return result;
 		}
+		this.battle.updateEventHandlerFlags();
 		if (linkedStatus && source) {
 			if (!source.volatiles[linkedStatus.toString()]) {
 				source.addVolatile(linkedStatus, this, sourceEffect);
@@ -2007,6 +2011,7 @@ export class Pokemon {
 		if (linkedPokemon) {
 			this.removeLinkedVolatiles(linkedStatus, linkedPokemon);
 		}
+		this.battle.updateEventHandlerFlags();
 		return true;
 	}
 

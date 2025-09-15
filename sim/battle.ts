@@ -115,6 +115,9 @@ export class Battle {
 	readonly format: Format;
 	readonly formatData: EffectState;
 	readonly gameType: GameType;
+	
+	hasAnyEventHandlers = false;
+	hasPokemonEventHandlers = false;
 	/**
 	 * The number of active pokemon per half-field.
 	 * See header comment in side.ts for details.
@@ -249,6 +252,7 @@ export class Battle {
 		this.event = { id: '' };
 		this.events = null;
 		this.eventDepth = 0;
+		this.updateEventHandlerFlags();
 
 		this.activeMove = null;
 		this.activePokemon = null;
@@ -1033,7 +1037,57 @@ export class Battle {
 		return callback;
 	}
 
+	/**
+	 * Updates the event handler flags when handlers are added or removed.
+	 * Call this whenever event handlers might be registered or removed.
+	 */
+	updateEventHandlerFlags() {
+		this.hasAnyEventHandlers = this.checkForAnyEventHandlers();
+		this.hasPokemonEventHandlers = this.checkForPokemonEventHandlers();
+	}
+
+	/**
+	 * Checks if there are any active event handlers in the battle.
+	 * This is expensive so we cache the result in hasAnyEventHandlers.
+	 */
+	private checkForAnyEventHandlers(): boolean {
+		if (this.events && Object.keys(this.events).length > 0) return true;
+		
+		if (Object.keys(this.field.pseudoWeather).length > 0) return true;
+		if (this.field.weather) return true;
+		if (this.field.terrain) return true;
+		
+		for (const side of this.sides) {
+			if (Object.keys(side.sideConditions).length > 0) return true;
+			for (const slotConditions of side.slotConditions) {
+				if (Object.keys(slotConditions).length > 0) return true;
+			}
+		}
+		
+		return this.checkForPokemonEventHandlers();
+	}
+
+	/**
+	 * Checks if any Pokemon have event handlers (status, volatiles, abilities, items, species).
+	 * This is expensive so we cache the result in hasPokemonEventHandlers.  
+	 */
+	private checkForPokemonEventHandlers(): boolean {
+		for (const side of this.sides) {
+			for (const pokemon of side.pokemon) {
+				if (pokemon.status) return true;
+				
+				if (Object.keys(pokemon.volatiles).length > 0) return true;
+				
+				if (pokemon.getAbility().id !== 'noability') return true;
+				if (pokemon.getItem().id !== '') return true;
+				return true;
+			}
+		}
+		return false;
+	}
+
 	findEventHandlers(target: Pokemon | Pokemon[] | Side | Battle, eventName: string, source?: Pokemon | null) {
+		if (!this.hasAnyEventHandlers) return [];
 		let handlers: EventListener[] = [];
 		if (Array.isArray(target)) {
 			for (const [i, pokemon] of target.entries()) {
@@ -1096,6 +1150,7 @@ export class Battle {
 	}
 
 	findPokemonEventHandlers(pokemon: Pokemon, callbackName: string, getKey?: 'duration') {
+		if (!this.hasPokemonEventHandlers) return [];
 		const handlers: EventListener[] = [];
 
 		const status = pokemon.getStatus();
@@ -1282,8 +1337,10 @@ export class Battle {
 		const eventHandlers = this.events[callbackName];
 		if (eventHandlers === undefined) {
 			this.events[callbackName] = [eventHandler];
+			this.updateEventHandlerFlags();
 		} else {
 			eventHandlers.push(eventHandler);
+			this.updateEventHandlerFlags();
 		}
 	}
 
