@@ -268,6 +268,7 @@ export const commands: Chat.ChatCommands = {
 			(Rooms.get('upperstaff') || Rooms.get('staff'))?.addByUser(user,
 				`${user.name} added the IP range ${formatRange(range)} to the list of ${type} ranges.`
 			).update();
+			this.sendReply(`Added ${formatRange(range)}.`);
 			this.globalModlog('IPRANGE ADD', null, formatRange(range, true));
 		},
 		addhelp: [
@@ -290,6 +291,7 @@ export const commands: Chat.ChatCommands = {
 			(Rooms.get('upperstaff') || Rooms.get('staff'))?.addByUser(user,
 				`${user.name} removed the IP range ${formatRange(range)}.`
 			).update();
+			this.sendReply(`Removed ${formatRange(range)}.`);
 			this.globalModlog('IPRANGE REMOVE', null, formatRange(range, true));
 		},
 		removehelp: [
@@ -319,6 +321,7 @@ export const commands: Chat.ChatCommands = {
 			(Rooms.get('upperstaff') || Rooms.get('staff'))?.addByUser(user,
 				`${user.name} renamed the IP range ${formatRange(toRename)} to ${range.host}.`
 			).update();
+			this.sendReply(`Renamed ${formatRange(toRename)} to ${range.host}.`);
 			this.globalModlog('IPRANGE RENAME', null, `IP range ${formatRange(toRename, true)} to ${range.host}`);
 		},
 		renamehelp: [
