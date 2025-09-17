@@ -265,7 +265,7 @@ export const commands: Chat.ChatCommands = {
 			}
 			IPTools.addRange(range as AddressRange & { host: string });
 
-			this.privateGlobalModAction(`${user.name} added the IP range ${formatRange(range)} to the list of ${type} ranges.`);
+			(Rooms.get('upperstaff') || Rooms.get('staff'))?.addByUser(user, `${user.name} added the IP range ${formatRange(range)} to the list of ${type} ranges.`).update();
 			this.globalModlog('IPRANGE ADD', null, formatRange(range, true));
 		},
 		addhelp: [
@@ -285,7 +285,7 @@ export const commands: Chat.ChatCommands = {
 
 			void IPTools.removeRange(range.minIP, range.maxIP);
 
-			this.privateGlobalModAction(`${user.name} removed the IP range ${formatRange(range)}.`);
+			(Rooms.get('upperstaff') || Rooms.get('staff'))?.addByUser(user, `${user.name} removed the IP range ${formatRange(range)}.`).update();
 			this.globalModlog('IPRANGE REMOVE', null, formatRange(range, true));
 		},
 		removehelp: [
@@ -312,7 +312,7 @@ export const commands: Chat.ChatCommands = {
 			};
 			void IPTools.addRange(range);
 
-			this.privateGlobalModAction(`${user.name} renamed the IP range ${formatRange(toRename)} to ${range.host}.`);
+			(Rooms.get('upperstaff') || Rooms.get('staff'))?.addByUser(user, `${user.name} renamed the IP range ${formatRange(toRename)} to ${range.host}.`).update();
 			this.globalModlog('IPRANGE RENAME', null, `IP range ${formatRange(toRename, true)} to ${range.host}`);
 		},
 		renamehelp: [
