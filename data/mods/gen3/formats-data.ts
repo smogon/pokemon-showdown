@@ -1092,7 +1092,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "LC",
 	},
 	glalie: {
-		tier: "UU",
+		tier: "NUBL",
 	},
 	spheal: {
 		tier: "LC",
