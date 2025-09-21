@@ -2261,7 +2261,11 @@ export const AbilitiesText: { [id: IDEntry]: AbilityText } = {
 
 		activate: "  [POKEMON] underwent a heroic transformation!",
 	},
-
+	surge: {
+		name: "Surge",
+		desc: "When this Pokemon has 1/3 or less of its maximum HP, rounded down, its offensive stat is multiplied by 1.5 while using an Electric-type attack.",
+		shortDesc: "At 1/3 or less of its max HP, this Pokemon's offensive stat is 1.5x with Electric attacks.",
+	},
 	// CAP
 	mountaineer: {
 		name: "Mountaineer",
