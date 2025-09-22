@@ -160,4 +160,30 @@ describe("Tera Stellar", () => {
 		damage = blissey.maxhp - blissey.hp;
 		assert.bounded(damage, [63, 75], `Flip Turn should have regular damage on its first use, because Water-type was already used`);
 	});
+
+	it(`should boost the base power of weaker moves on the first use of that move type to 60 BP`, () => {
+		battle = common.gen(9).createBattle([[
+			{ species: 'Comfey', moves: ['drainingkiss', 'absorb'], teraType: 'Stellar' },
+		], [
+			{ species: 'Chansey', ability: 'shellarmor', moves: ['sleeptalk'] },
+		]]);
+
+		const chansey = battle.p2.active[0];
+
+		let hp = chansey.hp;
+		battle.makeChoices('move drainingkiss terastallize', 'auto');
+		assert.bounded(hp - chansey.hp, [70, 84], `Draining Kiss should be a 60 BP with 2x damage on its first use`);
+
+		hp = chansey.hp;
+		battle.makeChoices('move drainingkiss', 'auto');
+		assert.bounded(hp - chansey.hp, [45, 54], `Draining Kiss should be a 50 BP with 1.5x damage on its second use`);
+
+		hp = chansey.hp;
+		battle.makeChoices('move absorb', 'auto');
+		assert.bounded(hp - chansey.hp, [42, 50], `Absorb should be a 60 BP with ~1.2x damage on its first use`);
+
+		hp = chansey.hp;
+		battle.makeChoices('move absorb', 'auto');
+		assert.bounded(hp - chansey.hp, [12, 15], `Absorb should be a 20 BP with regular damage on its second use`);
+	});
 });
