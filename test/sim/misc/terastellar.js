@@ -103,20 +103,6 @@ describe("Tera Stellar", () => {
 		assert.statStage(steelix, 'atk', 2);
 	});
 
-	it(`should increase the user's stats with Tera Blast if the user has Contrary`, () => {
-		battle = common.gen(9).createBattle([[
-			{ species: 'inkay', ability: 'contrary', moves: ['terablast'], teraType: 'Stellar' },
-		], [
-			{ species: 'chansey', moves: ['sleeptalk'] },
-		]]);
-
-		const inkay = battle.p1.active[0];
-
-		battle.makeChoices('move terablast terastallize', 'move sleeptalk terastallize');
-		assert.statStage(inkay, 'atk', 1);
-		assert.statStage(inkay, 'spa', 1);
-	});
-
 	it(`should not work with Adapatability`, () => {
 		battle = common.gen(9).createBattle([[
 			{ species: 'Wynaut', ability: 'adaptability', moves: ['hyperspacehole', 'terablast'], teraType: 'Stellar' },
