@@ -1655,10 +1655,9 @@ export class BattleActions {
 		}
 
 		const dexMove = this.dex.moves.get(move.id);
-		const boostMoveBP = (
-			source.getTypes(true).includes(move.type) && source.terastallized && source.terastallized !== 'Stellar'
-		) || (source.terastallized === 'Stellar' && !source.stellarBoostedTypes.includes(move.type));
-		if (boostMoveBP && basePower < 60 && dexMove.priority <= 0 && !dexMove.multihit &&
+		if (source.terastallized && (source.terastallized === 'Stellar' ?
+			!source.stellarBoostedTypes.includes(move.type) : source.getTypes(true).includes(move.type)) &&
+			basePower < 60 && dexMove.priority <= 0 && !dexMove.multihit &&
 			// Hard move.basePower check for moves like Dragon Energy that have variable BP
 			!((move.basePower === 0 || move.basePower === 150) && move.basePowerCallback)
 		) {
