@@ -325,7 +325,7 @@ export class TeamValidator {
 	constructor(format: string | Format, dex = Dex) {
 		this.format = dex.formats.get(format);
 		if (this.format.effectType !== 'Format') {
-			throw new Error(`format should be a 'Format', but was a '${this.format.effectType}'`);
+			throw new Error(`format '${format}' should be a 'Format', but was a '${this.format.effectType}'`);
 		}
 		this.dex = dex.forFormat(this.format);
 		this.gen = this.dex.gen;
@@ -2721,16 +2721,22 @@ export class TeamValidator {
 				if (!canLearnSpecies.includes(toID(species.baseSpecies))) canLearnSpecies.push(toID(species.baseSpecies));
 				minLearnGen = Math.min(minLearnGen, learnedGen);
 			}
-			if (canUseHomeRelearner && !['nincada', 'spinda'].includes(species.id)) {
-				const learnsetData = this.getExternalLearnsetData(species.id, 'gen8bdsp');
+			if (canUseHomeRelearner) {
+				const fullSources = [];
+				let learnsetData = this.getExternalLearnsetData(species.id, 'gen8bdsp');
+				if (!['nincada', 'spinda'].includes(species.id) && learnsetData?.learnset?.[move.id]) {
+					fullSources.push(...learnsetData.learnset[move.id]);
+				}
+				learnsetData = this.getExternalLearnsetData(species.id, 'gen8legends');
 				if (learnsetData?.learnset?.[move.id]) {
-					for (const source of learnsetData.learnset[move.id]) {
-						// Non-event sources from BDSP should always be legal through HOME relearner,
-						// assuming the Pokemon's level is high enough
-						if (source.charAt(1) === 'S') continue;
-						if (source.charAt(1) === 'L' && level < parseInt(source.substr(2))) continue;
-						return null;
-					}
+					fullSources.push(...learnsetData.learnset[move.id]);
+				}
+				for (const source of fullSources) {
+					// Non-event sources from BDSP/LA should always be legal through HOME relearner,
+					// assuming the Pokemon's level is high enough
+					if (source.charAt(1) === 'S') continue;
+					if (source.charAt(1) === 'L' && level < parseInt(source.substr(2))) continue;
+					return null;
 				}
 			}
 			if (ruleTable.has('mimicglitch') && species.gen < 5) {
@@ -2790,7 +2796,7 @@ export class TeamValidator {
 			// Pokemon that cannot be sent from Pokemon GO to Let's Go can only access Let's Go moves through HOME
 			// It can only obtain a chain of four level up moves and cannot have TM moves
 			const pokemonGoData = dex.species.getPokemonGoData(checkedSpecies.id);
-			if (pokemonGoData.LGPERestrictiveMoves) {
+			if (pokemonGoData?.LGPERestrictiveMoves) {
 				let levelUpMoveCount = 0;
 				const restrictiveMovesToID = [];
 				for (const moveName of setSources.restrictiveMoves) {

@@ -177,7 +177,8 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	tatsugiri: {
 		inherit: true,
-		abilities: { 0: "Dry Skin" },
+		abilities: { 0: "Regenerator" },
+		baseStats: { hp: 78, atk: 50, def: 70, spa: 120, spd: 95, spe: 82 },
 	},
 	kyurem: {
 		inherit: true,
@@ -366,7 +367,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	vaporeon: {
 		inherit: true,
-		abilities: { 0: "Poison Heal" },
+		abilities: { 0: "Marvel Scale" },
 	},
 	jolteon: {
 		inherit: true,
@@ -375,6 +376,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	flareon: {
 		inherit: true,
 		abilities: { 0: "Guts" },
+		baseStats: { hp: 65, atk: 130, def: 65, spa: 60, spd: 110, spe: 95 },
 	},
 	garganacl: {
 		inherit: true,
@@ -413,5 +415,32 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	terapagosstellar: {
 		inherit: true,
 		types: ["Stellar"],
+	},
+	flapple: {
+		inherit: true,
+		abilities: { 0: "Ripen" },
+		types: ["Grass", "Ground"],
+	},
+	genesect: {
+		inherit: true,
+		abilities: { 0: "Download" },
+	},
+	honchkrow: {
+		inherit: true,
+		abilities: { 0: "Supreme Overlord" },
+		baseStats: { hp: 100, atk: 125, def: 52, spa: 125, spd: 52, spe: 71 },
+	},
+	primeape: {
+		inherit: true,
+		abilities: { 0: "Battle Rage" },
+	},
+	rillaboom: {
+		inherit: true,
+		abilities: { 0: "Terrain Shift" },
+	},
+	mandibuzz: {
+		inherit: true,
+		abilities: { 0: "Weak Armor" },
+		types: ["Dark", "Ground"],
 	},
 };
