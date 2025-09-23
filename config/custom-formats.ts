@@ -6,8 +6,8 @@ export const Formats: FormatList = [
 		mod: "gen9",
 		gameType: "singles",
 		ruleset: [
-			"Obtainable"
-		]
+			"Obtainable",
+		],
 	},
 	{
 		name: "[PokeBedrock] Doubles",
@@ -15,18 +15,18 @@ export const Formats: FormatList = [
 		gameType: "doubles",
 		ruleset: [
 			"Obtainable",
-		]
+		],
 	},
 	{
-		name: "[PokeBedrock] Singles [Rated]",
+		name: "[PokeBedrock] [Rated] Singles",
 		mod: "gen9",
 		gameType: "singles",
 		ruleset: [
-			"Obtainable"
-		]
+			"Obtainable",
+		],
 	},
 	{
-		name: "[PokeBedrock] Doubles [Rated]",
+		name: "[PokeBedrock] [Rated] Doubles",
 		mod: "gen9",
 		gameType: "doubles",
 		ruleset: [
@@ -36,19 +36,19 @@ export const Formats: FormatList = [
 			"Species Clause",
 			"OHKO Clause",
 			"Endless Battle Clause",
-			"Gravity Sleep Clause"
+			"Gravity Sleep Clause",
 		],
 		banlist: [
 			"Dialga", "Dialga-Origin", "Giratina", "Giratina-Origin",
-			"Palkia", "Palkia-Origin", "Rayquaza", "Reshiram", 
-			"Kyurem-Black", "Kyurem-White", "Zekrom", "Zacian", 
+			"Palkia", "Palkia-Origin", "Rayquaza", "Reshiram",
+			"Kyurem-Black", "Kyurem-White", "Zekrom", "Zacian",
 			"Zacian-Crowned", "Zamazenta", "Zamazenta-Crowned",
-			"Eternatus", "Ho-Oh", "Lugia", "Lunala", "Solgaleo", 
+			"Eternatus", "Ho-Oh", "Lugia", "Lunala", "Solgaleo",
 			"Koraidon", "Shadow Tag",
-		]
+		],
 	},
 	{
-		name: "[PokeBedrock] Anything Goes [Rated]",
+		name: "[PokeBedrock] [Rated] Anything Goes",
 		mod: "gen9",
 		gameType: "singles",
 		ruleset: [
@@ -57,7 +57,7 @@ export const Formats: FormatList = [
 		],
 	},
 	{
-		name: "[PokeBedrock] Uber [Rated]",
+		name: "[PokeBedrock] [Rated] Uber",
 		mod: 'gen9',
 		gameType: "singles",
 		ruleset: [
@@ -69,7 +69,7 @@ export const Formats: FormatList = [
 			"Moody Clause",
 			"Endless Battle Clause",
 			"Swagger Clause",
-			"Mega Rayquaza Clause"
+			"Mega Rayquaza Clause",
 		],
 	},
 ];
