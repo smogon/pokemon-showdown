@@ -607,15 +607,15 @@ export class User extends Chat.MessageContext {
 		return false;
 	}
 	/**
-	 * Permission check for using the dev console
-	 *
-	 * The `console` permission is incredibly powerful because it allows the
-	 * execution of abitrary shell commands on the local computer As such, it
-	 * can only be used from a specified whitelist of IPs and userids. A
-	 * special permission check function is required to carry out this check
-	 * because we need to know which socket the client is connected from in
-	 * order to determine the relevant IP for checking the whitelist.
-	 */
+ * Permission check for using the dev console
+ *
+ * The `console` permission is incredibly powerful because it allows the
+ * execution of arbitrary shell commands on the local computer. As such, it
+ * can only be used from a specified whitelist of IPs and userids. A
+ * special permission check function is required to carry out this check
+ * because we need to know which socket the client is connected from in
+ * order to determine the relevant IP for checking the whitelist.
+ */
 	hasConsoleAccess(connection: Connection) {
 		if (this.hasSysopAccess()) return true;
 		if (!this.can('console')) return false; // normal permission check
