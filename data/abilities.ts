@@ -100,8 +100,8 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	mystichaze: {
 		name: 'Mystic Haze',
 		onStart(_) {
-			if (this.field.isTerrain('psychicterrain')) return;
-			this.field.setTerrain('psychicterrain');
+			if (this.field.isTerrain('mistyterrain')) return;
+			this.field.setTerrain('mistyterrain');
 		},
 		num: -1008,
 		rating: 4,
@@ -1076,11 +1076,15 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			pokemon.heal(pokemon.baseMaxhp / 5);
 			this.add('-heal', pokemon, pokemon.getHealth, '[from] ability: Ejected');
 		},
-		onResidualOrder: 29,
-		onResidual(pokemon) {
-			if (pokemon.hp <= 0 || pokemon.hp >= pokemon.maxhp) return;
-			if (pokemon.beingCalledBack) return;
+		onEmergencyExit(pokemon) {
+			if (!this.canSwitch(pokemon.side) || pokemon.forceSwitchFlag || pokemon.switchFlag) return;
+			for (const side of this.sides) {
+				for (const active of side.active) {
+					active.switchFlag = false;
+				}
+			}
 			pokemon.switchFlag = true;
+			this.add('-activate', pokemon, 'ability: Ejected');
 		},
 		flags: {},
 		rating: 1,
@@ -1120,30 +1124,12 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	sheerwillpower: {
 		name: 'Sheer Willpower',
-		onModifyMovePriority: 1,
-		onModifyMove(move, source, target) {
-			const chargeMoves = [
-				'skullbash', 'skyattack', 'solarbeam', 'solarblade',
-				'phantomforce', 'shadowforce', 'fly', 'dig', 'dive', 'bounce',
-			];
-			if (!move.flags['charge'] || !chargeMoves.includes(move.id)) return;
-			delete move.flags['charge'];
-			delete move.onTryMove;
-			delete move.onTry;
-			delete move.onPrepareHit;
-
-			this.add('-ability', source, 'Sheer Willpower');
-			this.add('-message', `${source.name}'s ${move.name} hits instantly!`);
-			this.actions.runMove(move, source, source.getLocOf(target!));
-
-			if (move.self?.volatileStatus !== 'mustrecharge') return;
-			delete move.self.volatileStatus;
-		},
-		onUpdate(pokemon) {
-			if (!pokemon.volatiles['mustrecharge']) return;
-			pokemon.removeVolatile('mustrecharge');
-			this.add('-ability', pokemon, 'Sheer Willpower');
-			this.add('-message', `${pokemon.name} avoids recharging!`);
+		onTryMove(attacker, defender, move) {
+			if (attacker.removeVolatile(move.id)) return;
+			if (!move.flags['charge']) return;
+			this.add('-prepare', attacker, move.name);
+			this.attrLastMove('[still]');
+			this.addMove('-anim', attacker, move.name, defender);
 		},
 		flags: {},
 		rating: 4.5,
