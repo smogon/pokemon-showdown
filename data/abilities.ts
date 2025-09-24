@@ -1136,16 +1136,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 
 			this.add('-ability', source, 'Sheer Willpower');
 			this.add('-message', `${source.name}'s ${move.name} hits instantly!`);
-			this.actions.runMove(move, source, source.getLocOf(target!));
-
-			if (move.self?.volatileStatus !== 'mustrecharge') return;
-			delete move.self.volatileStatus;
-		},
-		onUpdate(pokemon) {
-			if (!pokemon.volatiles['mustrecharge']) return;
-			pokemon.removeVolatile('mustrecharge');
-			this.add('-ability', pokemon, 'Sheer Willpower');
-			this.add('-message', `${pokemon.name} avoids recharging!`);
 		},
 		flags: {},
 		rating: 4.5,
