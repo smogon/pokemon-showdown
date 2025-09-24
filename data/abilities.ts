@@ -1076,13 +1076,10 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			pokemon.heal(pokemon.baseMaxhp / 5);
 			this.add('-heal', pokemon, pokemon.getHealth, '[from] ability: Ejected');
 		},
-		onEmergencyExit(pokemon) {
+		onResidual(pokemon) {
+			if (!pokemon.hp) return;
+			if (pokemon.hp > pokemon.baseMaxhp / 2) return;
 			if (!this.canSwitch(pokemon.side) || pokemon.forceSwitchFlag || pokemon.switchFlag) return;
-			for (const side of this.sides) {
-				for (const active of side.active) {
-					active.switchFlag = false;
-				}
-			}
 			pokemon.switchFlag = true;
 			this.add('-activate', pokemon, 'ability: Ejected');
 		},
@@ -1124,12 +1121,31 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	sheerwillpower: {
 		name: 'Sheer Willpower',
-		onTryMove(attacker, defender, move) {
-			if (attacker.removeVolatile(move.id)) return;
+		onModifyMovePriority: 1,
+		onModifyMove(move, source, target) {
 			if (!move.flags['charge']) return;
-			this.add('-prepare', attacker, move.name);
-			this.attrLastMove('[still]');
-			this.addMove('-anim', attacker, move.name, defender);
+			move.onTryMove = (attacker, defender, move) => {
+				if (attacker.removeVolatile(move.id)) {
+					return;
+				}
+				this.add('-prepare', attacker, move.name);
+				this.attrLastMove('[still]');
+				this.addMove('-anim', attacker, move.name, defender);
+			
+			};
+
+			this.add('-ability', source, 'Sheer Willpower');
+			this.add('-message', `${source.name}'s ${move.name} hits instantly!`);
+			this.actions.runMove(move, source, source.getLocOf(target!));
+
+			if (move.self?.volatileStatus !== 'mustrecharge') return;
+			delete move.self.volatileStatus;
+		},
+		onUpdate(pokemon) {
+			if (!pokemon.volatiles['mustrecharge']) return;
+			pokemon.removeVolatile('mustrecharge');
+			this.add('-ability', pokemon, 'Sheer Willpower');
+			this.add('-message', `${pokemon.name} avoids recharging!`);
 		},
 		flags: {},
 		rating: 4.5,
