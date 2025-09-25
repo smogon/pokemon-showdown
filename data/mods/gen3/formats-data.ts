@@ -1104,7 +1104,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "UU",
 	},
 	clamperl: {
-		tier: "ZU",
+		tier: "ZUBL",
 	},
 	huntail: {
 		tier: "NU",
