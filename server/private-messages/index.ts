@@ -4,7 +4,7 @@
  * @author mia-pi-git
  */
 import { SQL, Utils } from '../../lib';
-import { Config } from '../config-loader';
+import * as ConfigLoader from '../config-loader';
 import { Auth } from '../user-groups';
 import { statements } from './database';
 /** The time until a PM sent offline expires. Presently, 60 days. */
@@ -17,7 +17,7 @@ export const MAX_PENDING = 20;
 // this would be in database.ts, but for some weird reason, if the extension and the pm are the same
 // it doesn't work. all the keys in the require() result are there, but they're also set to undefined.
 // no idea why.
-export const PM = SQL(module, {
+export const PM = SQL('private-messages', module, {
 	file: 'databases/offline-pms.db',
 	extension: 'server/private-messages/database.js',
 });
@@ -208,25 +208,32 @@ export const PrivateMessages = new class {
 	destroy() {
 		void PM.destroy();
 	}
+	start(processCount: ConfigLoader.SubProcessesConfig) {
+		start(processCount);
+	}
 };
 
-if (Config.usesqlite) {
-	if (!process.send) {
-		PM.spawn(global.Config?.subprocessescache?.pm ?? 1);
-		// clear super old pms on startup
-		void PM.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
-	} else if (process.send && process.mainModule === module) {
-		global.Monitor = {
-			crashlog(error: Error, source = 'A private message child process', details: AnyObject | null = null) {
-				const repr = JSON.stringify([error.name, error.message, source, details]);
-				process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
-			},
-		};
-		process.on('uncaughtException', err => {
-			Monitor.crashlog(err, 'A private message database process');
-		});
-		process.on('unhandledRejection', err => {
-			Monitor.crashlog(err as Error, 'A private message database process');
-		});
+if (!PM.isParentProcess) {
+	ConfigLoader.ensureLoaded();
+	global.Monitor = {
+		crashlog(error: Error, source = 'A private message child process', details: AnyObject | null = null) {
+			const repr = JSON.stringify([error.name, error.message, source, details]);
+			process.send!(`THROW\n@!!@${repr}\n${error.stack}`);
+		},
+	};
+	process.on('uncaughtException', err => {
+		Monitor.crashlog(err, 'A private message database process');
+	});
+	process.on('unhandledRejection', err => {
+		Monitor.crashlog(err as Error, 'A private message database process');
+	});
+}
+
+function start(processCount: ConfigLoader.SubProcessesConfig) {
+	if (!Config.usesqlite) {
+		return;
 	}
+	PM.spawn(processCount['pm'] ?? 1);
+	// clear super old pms on startup
+	void PM.run(statements.clearDated, [Date.now(), EXPIRY_TIME]);
 }
