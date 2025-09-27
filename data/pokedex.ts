@@ -23759,9 +23759,9 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
     evoLevel: 48,
     eggGroups: ["Water 1", "Dragon"],
   },
-  dragalgaprime: {
+  dragalgeprime: {
     num: 691,
-    name: "Draglga-Prime",
+    name: "Dragalge-Prime",
     baseSpecies: "Dragalge",
     forme: "Prime",
     types: ["Poison", "Dragon"],
