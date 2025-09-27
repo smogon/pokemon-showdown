@@ -28113,7 +28113,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
     types: ["Water", "Ghost"],
     gender: "M",
     baseStats: { hp: 140, atk: 132, def: 85, spa: 100, spd: 95, spe: 98 },
-    abilities: { 0: "Swift Swim", 1: "Adaptability", H: "Supreme Overload" },
+    abilities: { 0: "Swift Swim", 1: "Adaptability", H: "Supreme Overlord" },
     heightm: 3.5,
     weightkg: 150,
     color: "Red",
