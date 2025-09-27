@@ -98,4 +98,59 @@ describe('Magician', () => {
 		assert.equal(battle.p2.active[0].item, 'tr68');
 		assert.equal(battle.p2.active[1].item, '');
 	});
+
+	it(`should steal a restore-on-hit berry that activates on being hit`, () => {
+		battle = common.createBattle([[
+			{ species: 'klefki', ability: 'magician', moves: ['dragonrage'] },
+		], [
+			{ species: 'wynaut', item: 'sitrusberry', level: 10, moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.holdsItem(battle.p1.active[0], 'Magician should steal berries that would be consumed when hit, such as Sitrus Berry.');
+		assert.false.holdsItem(battle.p2.active[0], 'Opponent should not have Sitrus Berry after it was stolen.');
+	});
+
+	it(`should not steal from a Sticky Hold target`, () => {
+		battle = common.createBattle([[
+			{ species: 'klefki', ability: 'magician', moves: ['tackle'] },
+		], [
+			{ species: 'skarmory', ability: 'stickyhold', item: 'leftovers', moves: ['tackle'] },
+		]]);
+		battle.makeChoices();
+		assert.holdsItem(battle.p2.active[0], 'Sticky Hold should prevent theft');
+		assert.false.holdsItem(battle.p1.active[0], 'Magician should not steal from Sticky Hold');
+	});
+
+	it(`should steal on the first hit of a multi-hit move`, () => {
+		battle = common.createBattle([[
+			{ species: 'Delphox', ability: 'magician', moves: ['furyattack'] },
+		], [
+			{ species: 'Chansey', item: 'sitrusberry', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].item, 'sitrusberry',
+			'Magician should steal after the first hit of a multi-hit move');
+	});
+
+	it(`should not double-steal if using Thief`, () => {
+		battle = common.createBattle([[
+			{ species: 'Delphox', ability: 'magician', moves: ['thief'] },
+		], [
+			{ species: 'Chansey', item: 'leftovers', moves: ['sleeptalk'] },
+		]]);
+		battle.makeChoices();
+		assert.equal(battle.p1.active[0].item, 'leftovers', 'Thief should steal the item');
+		assert.equal(battle.p2.active[0].item, '', 'Target should lose its item');
+	});
+
+	it(`should steal through Substitute`, () => {
+		battle = common.createBattle([[
+			{ species: 'Delphox', ability: 'magician', moves: ['tackle'] },
+		], [
+			{ species: 'Chansey', item: 'leftovers', moves: ['substitute'] },
+		]]);
+		battle.makeChoices('move tackle', 'move substitute');
+		assert.equal(battle.p1.active[0].item, 'leftovers', 'Magician should steal through Substitute');
+		assert.equal(battle.p2.active[0].item, '', 'Target should lose its item even behind Substitute');
+	});
 });
