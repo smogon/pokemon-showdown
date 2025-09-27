@@ -15828,7 +15828,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
     color: "Red",
     prevo: "Remoraid",
     evoLevel: 25,
-    otherForms: ["Octikrillery"],
+    otherFormes: ["Octikrillery"],
     eggGroups: ["Water 1", "Water 2"],
   },
   delibird: {
