@@ -12456,7 +12456,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   vileplumeprime: {
     num: 45,
     name: "Vileplume-Prime",
-    baseSpecies: "Vileplume",
     forme: "Prime",
     types: ["Grass", "Poison"],
     baseStats: { hp: 95, atk: 100, def: 105, spa: 130, spd: 110, spe: 70 },
@@ -14302,7 +14301,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   jolteonprime: {
     num: 135,
     name: "Jolteon-Prime",
-    baseSpecies: "Jolteon",
     forme: "Prime",
     types: ["Electric"],
     genderRatio: { M: 0.875, F: 0.125 },
@@ -14684,7 +14682,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   meganiumprime: {
     num: 154,
     name: "Meganium-Prime",
-    baseSpecies: "Meganium",
     forme: "Prime",
     types: ["Grass"],
     genderRatio: { M: 0.875, F: 0.125 },
@@ -14742,7 +14739,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   typhlosionprime: {
     num: 157,
     name: "Typhlosion-Prime",
-    baseSpecies: "Typhlosion",
     forme: "Prime",
     types: ["Fire"],
     genderRatio: { M: 0.875, F: 0.125 },
@@ -14814,7 +14810,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   feraligatrprime: {
     num: 160,
     name: "Feraligatr-Prime",
-    baseSpecies: "Feraligatr",
     forme: "Prime",
     types: ["Water"],
     genderRatio: { M: 0.875, F: 0.125 },
@@ -15189,7 +15184,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   sudowoodoprime: {
     num: 185,
     name: "Sudowoodo-Prime",
-    baseSpecies: "Sudowoodo",
     forme: "Prime",
     types: ["Rock"],
     baseStats: { hp: 90, atk: 120, def: 135, spa: 50, spd: 85, spe: 50 },
@@ -15845,7 +15839,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   delibirdprime: {
     num: 225,
     name: "Delibird-Prime",
-    baseSpecies: "Delibird",
     forme: "Prime",
     types: ["Ice", "Flying"],
     baseStats: { hp: 65, atk: 75, def: 65, spa: 85, spd: 65, spe: 95 },
@@ -16277,7 +16270,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   sceptileprime: {
     num: 253,
     name: "Sceptile-Prime",
-    baseSpecies: "Sceptile",
     forme: "Prime",
     types: ["Grass"],
     genderRatio: { M: 0.875, F: 0.125 },
@@ -16350,7 +16342,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   blazikenprime: {
     num: 257,
     name: "Blaziken-Prime",
-    baseSpecies: "Blaziken",
     forme: "Prime",
     types: ["Fire", "Fighting"],
     genderRatio: { M: 0.875, F: 0.125 },
@@ -16423,7 +16414,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   swampertprime: {
     num: 260,
     name: "Swampert-Prime",
-    baseSpecies: "Swampert",
     forme: "Prime",
     types: ["Water", "Ground"],
     genderRatio: { M: 0.875, F: 0.125 },
@@ -16838,7 +16828,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   breloomprime: {
     num: 286,
     name: "Breloom-Prime",
-    baseSpecies: "Breloom",
     forme: "Prime",
     types: ["Grass", "Fighting"],
     baseStats: { hp: 80, atk: 150, def: 100, spa: 80, spd: 80, spe: 90 },
@@ -19367,7 +19356,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   garchompprime: {
     num: 445,
     name: "Garchomp-Prime",
-    baseSpecies: "Garchomp",
     forme: "Prime",
     types: ["Dragon", "Ground"],
     baseStats: { hp: 128, atk: 150, def: 115, spa: 100, spd: 105, spe: 122 },
@@ -20117,7 +20105,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   regigigasprime: {
     num: 486,
     name: "Regigigas-Prime",
-    baseSpecies: "Regigigas",
     forme: "Prime",
     types: ["Normal"],
     gender: "N",
@@ -20868,7 +20855,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   simipourprime: {
     num: 516,
     name: "Simipour-Prime",
-    baseSpecies: "Simipour",
     forme: "Prime",
     types: ["Water"],
     genderRatio: { M: 0.875, F: 0.125 },
@@ -22583,7 +22569,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   mandibuzzprime: {
     num: 630,
     name: "Mandibuzz-Prime",
-    baseSpecies: "Mandibuzz",
     forme: "Prime",
     types: ["Dark", "Flying"],
     gender: "F",
@@ -22620,7 +22605,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   durantprime: {
     num: 632,
     name: "Durant-Prime",
-    baseSpecies: "Durant",
     forme: "Prime",
     types: ["Bug", "Steel"],
     baseStats: { hp: 78, atk: 129, def: 132, spa: 68, spd: 68, spe: 129 },
@@ -23762,7 +23746,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   dragalgeprime: {
     num: 691,
     name: "Dragalge-Prime",
-    baseSpecies: "Dragalge",
     forme: "Prime",
     types: ["Poison", "Dragon"],
     baseStats: { hp: 85, atk: 95, def: 110, spa: 117, spd: 143, spe: 64 },
@@ -23854,7 +23837,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   tyrantrumprime: {
     num: 697,
     name: "Tyrantrum-Prime",
-    baseSpecies: "Tyrantrum",
     forme: "Prime",
     types: ["Rock", "Dragon"],
     genderRatio: { M: 0.875, F: 0.125 },
@@ -25145,7 +25127,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   bewearprime: {
     num: 760,
     name: "Bewear-Prime",
-    baseSpecies: "Bewear",
     forme: "Prime",
     types: ["Normal", "Fighting"],
     baseStats: { hp: 140, atk: 145, def: 100, spa: 75, spd: 80, spe: 80 },
@@ -26488,7 +26469,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   corviknightprime: {
     num: 823,
     name: "Corviknight-Prime",
-    baseSpecies: "Corviknight",
     forme: "Prime",
     types: ["Flying", "Steel"],
     baseStats: { hp: 118, atk: 107, def: 125, spa: 73, spd: 105, spe: 87 },
@@ -26941,7 +26921,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   barraskewdaprime: {
     num: 847,
     name: "Barraskewda-Prime",
-    baseSpecies: "Barraskewda",
     forme: "Prime",
     types: ["Water"],
     baseStats: { hp: 81, atk: 143, def: 80, spa: 80, spd: 70, spe: 156 },
@@ -27347,7 +27326,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   mrrimeprime: {
     num: 866,
     name: "Mr. Rime-Prime",
-    baseSpecies: "Mr. Rime",
     forme: "Prime",
     types: ["Ice", "Psychic"],
     baseStats: { hp: 100, atk: 105, def: 95, spa: 130, spd: 120, spe: 90 },
@@ -28108,7 +28086,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   basculegionprime: {
     num: 902,
     name: "Basculegion-Prime",
-    baseSpecies: "Basculegion",
     forme: "Prime",
     types: ["Water", "Ghost"],
     gender: "M",
@@ -28829,7 +28806,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   brambleghastprime: {
     num: 947,
     name: "Brambleghast-Prime",
-    baseSpecies: "Brambleghast",
     forme: "Prime",
     types: ["Grass", "Ghost"],
     baseStats: { hp: 75, atk: 135, def: 90, spa: 100, spd: 90, spe: 110 },
@@ -29101,7 +29077,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   revavroomprime: {
     num: 966,
     name: "Revavroom-Prime",
-    baseSpecies: "Revavroom",
     forme: "Prime",
     types: ["Steel", "Poison"],
     baseStats: { hp: 100, atk: 139, def: 110, spa: 74, spd: 87, spe: 110 },
@@ -29374,7 +29349,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   screamtailprime: {
     num: 985,
     name: "Scream Tail-Prime",
-    baseSpecies: "Scream Tail",
     forme: "Prime",
     types: ["Fairy", "Psychic"],
     gender: "N",
@@ -29519,7 +29493,6 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
   ironthornsprime: {
     num: 995,
     name: "Iron Thorns-Prime",
-    baseSpecies: "Iron Thorns",
     forme: "Prime",
     types: ["Rock", "Electric"],
     gender: "N",
