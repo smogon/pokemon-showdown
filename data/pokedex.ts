@@ -10863,7 +10863,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
     },
     "abilities": {
       "0": "Blaze",
-      "1": "Sheer Force",
+      "1": "Beast Boost",
       "H": "Solar Power"
     },
     "heightm": 1.7,
