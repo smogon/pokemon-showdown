@@ -422,7 +422,9 @@ export const commands: Chat.ChatCommands = {
 			`<code>/autoresponder view [page]</code> - Views the Autoresponder page [page]. (options: keys, stats)`,
 			`<code>/autoresponder toggle [on | off]</code> - Enables or disables the Autoresponder for the current room. Requires: @ # ~`,
 			`<code>/autoresponder add [input] => [faq]</code> - Adds regex made from the input string to the current room's Autoresponder, to respond with [faq] to matches.`,
+			`<code>/autoresponder ignore [input]</code> - Adds a term to the ignore list which will not be flagged by the current room's Autoresponder. (separate multiple inputs with a comma)`,
 			`<code>/autoresponder remove [faq], [regex index]</code> - removes the regex matching the [index] from the current room's responses for [faq].`,
+			`<code>/autoresponder unignore [input]</code> - removes a term from the ignore list of the current room's Autoresponder. (separate multiple inputs with a comma)`,
 			`Indexes can be found in /autoresponder keys.`,
 			`Requires: @ # ~`,
 		];
