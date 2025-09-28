@@ -61,7 +61,7 @@ const NO_LEAD_POKEMON = [
 const DOUBLES_NO_LEAD_POKEMON = [
 	'Basculegion', 'Houndstone', 'Iron Bundle', 'Roaring Moon', 'Zacian', 'Zamazenta',
 ];
-export class RandomDNUTeams extends RandomTeams {
+export class RandomBLCTeams extends RandomTeams {
 	override cullMovePool(
 		types: string[],
 		moves: Set<string>,
@@ -200,6 +200,7 @@ export class RandomDNUTeams extends RandomTeams {
 			[['dragonpulse', 'spacialrend'], 'dracometeor'],
 			['heavyslam', 'flashcannon'],
 			['alluringvoice', 'dazzlinggleam'],
+			['defog', 'rapidspin'],
 
 			// These status moves are redundant with each other
 			['taunt', 'disable'],
@@ -217,34 +218,18 @@ export class RandomDNUTeams extends RandomTeams {
 			['healbell', 'stealthrock'],
 			// Araquanid and Magnezone
 			['mirrorcoat', ['hydropump', 'bodypress']],
-			// Marill
-			['seismictoss', 'liquidation'],
-			// Hatenna
-			['calmmind', 'mysticalfire'],
-			// Jigglypuff
-			[['toxic', 'thunderwave'], 'encore'],
-			['calmmind', 'nastyplot'],
-			// Impidimp
-			['dazzlinggleam', 'thunderwave'],
-			// Combee
-			['lunge', 'bugbuzz'],
-			// Nidoran-F
-			['sludgebomb', 'poisonjab'],
-			// Wattrel
-			['thunder', 'thunderbolt'],
-			['voltswitch', 'uturn'],
-			// Nacli
-			['rockslide', 'stoneedge'],
-			// Cleffa and Impidimp
-			[['alluringvoice', 'dazzlinggleam'], 'drainingkiss'],
-			// Fletchling
-			['bravebird', 'dualwingbeat'],
-			// Gossifleur
-			['sleeppowder', 'stunspore'],
-			// Swablu
-			['defog', 'cottonguard'],
-			// Pidove
-			['nightslash', ['quickattack', 'roost']],
+			// Plasmage
+			['electroshot', 'psychoboost'],
+			// Seaode
+			['stoneedge', 'stoneaxe'],
+			// Geigeramp
+			['willowisp', 'nuzzle'],
+			// Martorse
+			['willowisp', 'encore'],
+			// Faeruin
+			['substitute', 'rapidspin'],
+			// Geoporka
+			['toxic', 'stunspore'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -366,14 +351,6 @@ export class RandomDNUTeams extends RandomTeams {
 		if (species.id === 'smeargle') {
 			if (movePool.includes('spore')) {
 				counter = this.addMove('spore', moves, types, abilities, teamDetails, species, isLead, isDoubles,
-					movePool, teraType, role);
-			}
-		}
-
-		// Enforce Focus Energy on Spearow
-		if (species.id === 'spearow') {
-			if (movePool.includes('focusenergy')) {
-				counter = this.addMove('focusenergy', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			}
 		}
@@ -652,16 +629,42 @@ export class RandomDNUTeams extends RandomTeams {
 		if (species.id === 'pikachu') return 'Light Ball';
 		if (species.id === 'regieleki') return 'Magnet';
 		if (species.id === 'smeargle') return 'Focus Sash';
-		if (species.id === 'nickit') return 'Throat Spray';
-		if (species.id === 'lechonk' && moves.has('stuffcheeks')) return 'Salac Berry';
-		if (species.id === 'spearow') return 'Razor Claw';
-		if (species.id === 'pidove' && moves.has('nightslash')) return 'Scope Lens';
-		if (['shedinja', 'luvdisc', 'nymble', 'fletchling'].includes(species.id)) return 'Heavy-Duty Boots';
+		if (
+			(species.id === 'lundicare' && role === 'Fast Bulky Setup' && moves.has('stuffcheeks')) ||
+			(species.id === 'devestial' && role === 'Bulky Setup')
+		) {
+			return 'Petaya Berry';
+		}
+		if (
+			[
+				'goblantern', 'lavalisk', 'eolikopter', 'scarachnid', 'bugswarm', 'leechmonner',
+				'hebicikuga', 'socknbuskn', 'fausteil', 'deadward', 'borealis', 'flarenheit',
+			].includes(species.id) ||
+			(species.id === 'searytch' && role === 'Bulky Attacker') ||
+			(species.id === 'monmothra' && role === 'Bulky Support')
+		) {
+			return 'Heavy-Duty Boots';
+		}
+		if (
+			['dastard', 'geigeramp', 'arsenstorm', 'jokerpent', 'geoporka'].includes(species.id) ||
+			(species.id === 'maldractice' && role === 'Bulky Support')
+		) {
+			return 'Black Sludge';
+		}
 		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
 			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
 		}
-		if (ability === 'Sheer Force' && counter.get('sheerforce')) return 'Life Orb';
+		if (ability === 'Magic Guard' || (ability === 'Sheer Force' && counter.get('sheerforce'))) return 'Life Orb';
+		if (counter.get('skilllink') && ability !== 'Skill Link') return 'Loaded Dice';
+		if (ability === 'Sand Stream') return 'Smooth Rock';
+		if (ability === 'Drought' && role !== 'Setup Sweeper') return 'Heat Rock';
+		if (moves.has('meteorbeam') || (moves.has('electroshot') && !teamDetails.rain)) return 'Power Herb';
 		if (moves.has('raindance') || moves.has('sunnyday')) return 'Life Orb';
+		if (species.id === 'plasmage' && moves.has('psychoboost') && role === 'Setup Sweeper') return 'Eject Pack';
+		if (['craggon', 'jackoswarm'].includes(species.id) && this.randomChance(1, 2)) return 'Rocky Helmet';
+		if (species.id === 'thaumaton' && moves.has('steelbeam')) return 'Sitrus Berry';
+		if (species.id === 'thaumaton' && !moves.has('steelbeam')) return 'Air Balloon';
+		if (species.id === 'kadraoke' && role === 'Setup Sweeper') return 'Throat Spray';
 		if (['healingwish', 'switcheroo', 'trick'].some(m => moves.has(m))) {
 			if (
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
@@ -682,8 +685,9 @@ export class RandomDNUTeams extends RandomTeams {
 		) {
 			return 'Choice Specs';
 		}
+		if (ability === 'Flare Boost') return 'Flame Orb';
 		if (ability === 'Poison Heal' || ability === 'Quick Feet') return 'Toxic Orb';
-		if (moves.has('acrobatics') && ability !== 'Protosynthesis') return '';
+		if (moves.has('acrobatics') && ability !== 'Quark Drive' && ability !== 'Protosynthesis') return '';
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';
 		if (ability === 'Gluttony') return `${this.sample(['Aguav', 'Figy', 'Iapapa', 'Mago', 'Wiki'])} Berry`;
 		if (
@@ -805,25 +809,6 @@ export class RandomDNUTeams extends RandomTeams {
 			ivs.atk = 0;
 		}
 
-		// Hidden Power Grass IVs
-		if (species.id === 'luvdisc' && moves.has('hiddenpower')) {
-			ivs.atk = 0;
-			ivs.spa = 30;
-		}
-
-		// Hidden Power Psychic IVs
-		if (species.id === 'unown') {
-			ivs.atk = 0;
-			ivs.spe = 30;
-		}
-
-		// Hidden Power Fire IVs
-		if (['fomantis', 'nincada', 'petilil', 'cherubi'].includes(species.id) && moves.has('hiddenpower')) {
-			ivs.atk = 0;
-			ivs.spa = 30;
-			ivs.spe = 30;
-		}
-
 		// Enforce Tera Type after all set generation is done to prevent infinite generation
 		if (this.forceTeraType) teraType = this.forceTeraType;
 
@@ -848,7 +833,7 @@ export class RandomDNUTeams extends RandomTeams {
 
 	override randomSets: { [species: string]: RandomTeamsTypes.RandomSpeciesData } = require('./random-sets.json');
 
-	randomDNUTeam() {
+	randomBLCTeam() {
 		this.enforceNoDirectCustomBanlistChanges();
 
 		const seed = this.prng.getSeed();
@@ -890,7 +875,7 @@ export class RandomDNUTeams extends RandomTeams {
 			if (['ogerpon', 'ogerponhearthflame', 'terapagos'].includes(species.id) && teamDetails.teraBlast) continue;
 
 			// Illusion shouldn't be on the last slot
-			if (species.baseSpecies === 'Zoroark' && pokemon.length >= (this.maxTeamSize - 1)) continue;
+			if (species.baseSpecies === 'Sorrowcean' && pokemon.length >= (this.maxTeamSize - 1)) continue;
 
 			const types = species.types;
 			const typeCombo = types.slice().sort().join();
@@ -1061,4 +1046,4 @@ export class RandomDNUTeams extends RandomTeams {
 	}
 }
 
-export default RandomDNUTeams;
+export default RandomBLCTeams;
