@@ -207,7 +207,7 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "NFE",
 	},
 	vulpixalola: {
-		tier: "LC",
+		tier: "NFE",
 	},
 	ninetales: {
 		tier: "RU",
