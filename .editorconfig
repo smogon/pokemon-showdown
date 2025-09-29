@@ -1,5 +1,5 @@
 # see: http://EditorConfig.org
-
+10
 # end_of_line is unspecified so Windows users can use the repo in crlf mode
 
 root = true
