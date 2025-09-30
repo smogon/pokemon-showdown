@@ -230,6 +230,8 @@ export class RandomBLCTeams extends RandomTeams {
 			['substitute', 'rapidspin'],
 			// Geoporka
 			['toxic', 'stunspore'],
+			// Blobbiam
+			['spiritbreak', 'playrough'],
 		];
 
 		for (const pair of incompatiblePairs) this.incompatibleMoves(moves, movePool, pair[0], pair[1]);
@@ -359,6 +361,14 @@ export class RandomBLCTeams extends RandomTeams {
 		if (species.id === 'fausteil') {
 			if (movePool.includes('roost')) {
 				counter = this.addMove('roost', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
+		}
+
+		// Enforce Sunny Day on Wallbreaker Cottentration
+		if (species.id === 'cottentration') {
+			if (movePool.includes('sunnyday')) {
+				counter = this.addMove('sunnyday', moves, types, abilities, teamDetails, species, isLead, isDoubles,
 					movePool, teraType, role);
 			}
 		}
@@ -691,7 +701,7 @@ export class RandomBLCTeams extends RandomTeams {
 			return this.sample(['Heavy-Duty Boots', 'Choice Band', 'Choice Scarf']);
 		}
 		if (
-			(['blobbiam', 'massassin'].includes(species.id) && role === 'Bulky Support') ||
+			(['blobbiam', 'massassin', 'martorse'].includes(species.id) && role === 'Bulky Support') ||
 			['mohawtter', 'arachnode', 'porcupyre', 'bazhigangquan', 'actaniathan'].includes(species.id)
 		) {
 			return this.sample(['Heavy-Duty Boots', 'Leftovers']);

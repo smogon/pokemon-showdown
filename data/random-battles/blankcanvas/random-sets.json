@@ -242,7 +242,7 @@
 		]
 	},
 	"craggon": {
-		"level": 91,
+		"level": 87,
 		"sets": [
 			{
 				"role": "Bulky Support",
@@ -292,7 +292,7 @@
 		]
 	},
 	"llanfairwyrm": {
-		"level": 91,
+		"level": 87,
 		"sets": [
 			{
 				"role": "Bulky Support",
@@ -448,7 +448,13 @@
 		"sets": [
 			{
 				"role": "Fast Support",
-				"movepool": ["Protect", "Wish", "Fire Lash", "Encore", "Will-O-Wisp", "U-turn"],
+				"movepool": ["Protect", "Wish", "Fire Lash", "Will-O-Wisp", "U-turn"],
+				"abilities": ["Prankster"],
+				"teraTypes": ["Ground"]
+			},
+			{
+				"role": "Bulky Support",
+				"movepool": ["Protect", "Wish", "Fire Lash", "Encore", "U-turn"],
 				"abilities": ["Prankster"],
 				"teraTypes": ["Ground"]
 			},
@@ -1063,7 +1069,7 @@
 		"sets": [
 			{
 				"role": "Wallbreaker",
-				"movepool": ["Sunny Day", "Solar Beam", "Flamethrower", "Focus Blast"],
+				"movepool": ["Sunny Day", "Solar Beam", "Flamethrower", "Focus Blast", "Scorching Sands"],
 				"abilities": ["Chlorophyll"],
 				"teraTypes": ["Grass"]
 			},
@@ -1092,7 +1098,7 @@
 			},
 			{
 				"role": "Bulky Support",
-				"movepool": ["Ceaseless Edge", "Close Combat", "Knock Off", "Slack Off", "Parting Shot"],
+				"movepool": ["Ceaseless Edge", "Close Combat", "Knock Off", "Slack Off", "Parting Shot", "Sucker Punch"],
 				"abilities": ["Quark Drive"],
 				"teraTypes": ["Fighting"]
 			}
