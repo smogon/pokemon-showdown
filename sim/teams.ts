@@ -10,6 +10,11 @@
 import { Dex, toID } from './dex';
 import type { PRNG, PRNGSeed } from './prng';
 
+interface ExportOptions {
+	hideStats?: boolean;
+	removeNicknames?: boolean | ((nickname: string) => string | null);
+}
+
 export interface PokemonSet {
 	/**
 	 * Nickname. Should be identical to its base species if not specified
@@ -358,7 +363,7 @@ export const Teams = new class Teams {
 	/**
 	 * Exports a team in human-readable PS export format
 	 */
-	export(team: PokemonSet[], options?: { hideStats?: boolean }) {
+	export(team: PokemonSet[], options?: ExportOptions) {
 		let output = '';
 		for (const set of team) {
 			output += this.exportSet(set, options) + `\n`;
@@ -366,11 +371,14 @@ export const Teams = new class Teams {
 		return output;
 	}
 
-	exportSet(set: PokemonSet, { hideStats }: { hideStats?: boolean } = {}) {
+	exportSet(set: PokemonSet, { hideStats, removeNicknames }: ExportOptions = {}) {
 		let out = ``;
 
 		// core
-		if (set.name && set.name !== set.species) {
+		if (typeof removeNicknames === 'function' && set.name && set.name !== set.species) {
+			set.name = removeNicknames(set.name) || set.species;
+		}
+		if (set.name && set.name !== set.species && removeNicknames !== true) {
 			out += `${set.name} (${set.species})`;
 		} else {
 			out += set.species;
@@ -622,18 +630,16 @@ export const Teams = new class Teams {
 		let mod = format.mod;
 		if (format.mod === 'monkeyspaw') mod = 'gen9';
 		const formatID = toID(format);
-		if (formatID.includes('gen9computergeneratedteams')) {
-			TeamGenerator = require(Dex.forFormat(format).dataDir + '/cg-teams').default;
-		} else if (mod === 'gen9ssb') {
+		if (mod === 'gen9ssb') {
 			TeamGenerator = require(`../data/mods/gen9ssb/random-teams`).default;
-		} else if (mod === 'ccapm2024') {
-			TeamGenerator = require(`../data/mods/ccapm2024/random-teams`).default;
-		} else if (mod === 'gen9fe') {
-			TeamGenerator = require(`../data/mods/gen9fe/random-teams`).default;
+		} else if (formatID.includes('gen9donotuserandombattle')) {
+			TeamGenerator = require(`../data/random-battles/donotuse/teams`).default;
 		} else if (formatID.includes('gen9babyrandombattle')) {
 			TeamGenerator = require(`../data/random-battles/gen9baby/teams`).default;
 		} else if (formatID.includes('gen9randombattle') && format.ruleTable?.has('+pokemontag:cap')) {
 			TeamGenerator = require(`../data/random-battles/gen9cap/teams`).default;
+		} else if (formatID.includes('gen9freeforallrandombattle')) {
+			TeamGenerator = require(`../data/random-battles/gen9ffa/teams`).default;
 		} else {
 			TeamGenerator = require(`../data/random-battles/${mod}/teams`).default;
 		}

@@ -57,7 +57,7 @@
         ]
     },
     "fidgit": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Fast Support",
@@ -147,7 +147,7 @@
         ]
     },
     "krilowatt": {
-        "level": 84,
+        "level": 82,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -158,7 +158,7 @@
         ]
     },
     "voodoom": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -305,7 +305,7 @@
         ]
     },
     "naviathan": {
-        "level": 79,
+        "level": 78,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -316,7 +316,7 @@
         ]
     },
     "crucibelle": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "AV Pivot",
@@ -350,7 +350,7 @@
         ]
     },
     "pajantom": {
-        "level": 80,
+        "level": 81,
         "sets": [
             {
                 "role": "Fast Attacker",
@@ -378,7 +378,7 @@
         ]
     },
     "caribolt": {
-        "level": 81,
+        "level": 79,
         "sets": [
             {
                 "role": "Setup Sweeper",
@@ -435,7 +435,7 @@
         ]
     },
     "equilibra": {
-        "level": 84,
+        "level": 83,
         "sets": [
             {
                 "role": "Bulky Support",
@@ -480,7 +480,7 @@
         ]
     },
     "chromera": {
-        "level": 82,
+        "level": 81,
         "sets": [
             {
                 "role": "Wallbreaker",
@@ -514,7 +514,7 @@
         ]
     },
     "venomiconepilogue": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -565,7 +565,7 @@
         ]
     },
     "cresceidon": {
-        "level": 81,
+        "level": 80,
         "sets": [
             {
                 "role": "Bulky Attacker",
@@ -606,6 +606,17 @@
                 "movepool": ["Discharge", "Ice Beam", "Knock Off", "Milk Drink", "Thunderbolt"],
                 "abilities": ["Electromorphosis"],
                 "teraTypes": ["Fairy", "Ghost", "Grass"]
+            }
+        ]
+    },
+    "ramnarok": {
+        "level": 72,
+        "sets": [
+            {
+                "role": "AV Pivot",
+                "movepool": ["Blizzard", "Inferno", "Polar Flare", "Thunder"],
+                "abilities": ["No Guard"],
+                "teraTypes": ["Electric", "Flying", "Water"]
             }
         ]
     }
