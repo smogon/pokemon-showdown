@@ -355,6 +355,14 @@ export class RandomBLCTeams extends RandomTeams {
 			}
 		}
 
+		// Enforce Roost on Fausteil
+		if (species.id === 'fausteil') {
+			if (movePool.includes('roost')) {
+				counter = this.addMove('roost', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
+		}
+
 		// Enforce moves in doubles
 		if (isDoubles) {
 			const doublesEnforcedMoves = ['auroraveil', 'mortalspin', 'spore'];
@@ -625,10 +633,9 @@ export class RandomBLCTeams extends RandomTeams {
 			}
 			return this.sample(species.requiredItems);
 		}
-		if (role === 'AV Pivot') return 'Assault Vest';
-		if (species.id === 'pikachu') return 'Light Ball';
-		if (species.id === 'regieleki') return 'Magnet';
-		if (species.id === 'smeargle') return 'Focus Sash';
+		// buncha BC specific hardcodes
+		if (species.id === 'badjur') return 'Toxic Orb';
+		if (species.id === 'vipult' && role === 'Bulky Support') return this.sample(['Black Sludge', 'Heavy-Duty Boots']);
 		if (
 			(species.id === 'lundicare' && role === 'Fast Bulky Setup' && moves.has('stuffcheeks')) ||
 			(species.id === 'devestial' && role === 'Bulky Setup')
@@ -641,7 +648,8 @@ export class RandomBLCTeams extends RandomTeams {
 				'hebicikuga', 'socknbuskn', 'fausteil', 'deadward', 'borealis', 'flarenheit',
 			].includes(species.id) ||
 			(species.id === 'searytch' && role === 'Bulky Attacker') ||
-			(species.id === 'monmothra' && role === 'Bulky Support')
+			(species.id === 'monmothra' && role === 'Bulky Support') ||
+			(['crystuit', 'pinaturbo'].includes(species.id) && role === 'Fast Support')
 		) {
 			return 'Heavy-Duty Boots';
 		}
@@ -651,20 +659,102 @@ export class RandomBLCTeams extends RandomTeams {
 		) {
 			return 'Black Sludge';
 		}
-		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
-			return (types.includes('Fire') || ability === 'Toxic Boost') ? 'Toxic Orb' : 'Flame Orb';
-		}
-		if (ability === 'Magic Guard' || (ability === 'Sheer Force' && counter.get('sheerforce'))) return 'Life Orb';
 		if (counter.get('skilllink') && ability !== 'Skill Link') return 'Loaded Dice';
 		if (ability === 'Sand Stream') return 'Smooth Rock';
 		if (ability === 'Drought' && role !== 'Setup Sweeper') return 'Heat Rock';
 		if (moves.has('meteorbeam') || (moves.has('electroshot') && !teamDetails.rain)) return 'Power Herb';
-		if (moves.has('raindance') || moves.has('sunnyday')) return 'Life Orb';
+		if (moves.has('sunnyday') || ['piss', 'sculptera'].includes(species.id)) return 'Life Orb';
 		if (species.id === 'plasmage' && moves.has('psychoboost') && role === 'Setup Sweeper') return 'Eject Pack';
-		if (['craggon', 'jackoswarm'].includes(species.id) && this.randomChance(1, 2)) return 'Rocky Helmet';
-		if (species.id === 'thaumaton' && moves.has('steelbeam')) return 'Sitrus Berry';
-		if (species.id === 'thaumaton' && !moves.has('steelbeam')) return 'Air Balloon';
+		if (['craggon', 'jackoswarm'].includes(species.id)) return this.sample(['Rocky Helmet', 'Leftovers']);
+		if (species.id === 'thaumaton') return (moves.has('steelbeam')) ? 'Sitrus Berry' : 'Air Balloon';
 		if (species.id === 'kadraoke' && role === 'Setup Sweeper') return 'Throat Spray';
+		if (species.id === 'sylravage') return this.sample(['Choice Band', 'Choice Scarf']);
+		if (species.id === 'capricorrie') return this.sample(['Heavy-Duty Boots', 'Life Orb']);
+		if (['snabterra', 'maldractice'].includes(species.id) && role === 'Wallbreaker') return 'Choice Band';
+		if (species.id === 'snabterra' && role === 'Bulky Attacker') return 'Heavy-Duty Boots';
+		if (species.id === 'snabterra' && role === 'Bulky Setup') return this.sample(['Leftovers', 'Sitrus Berry']);
+		if (species.id === 'searytch') return (role === 'Bulky Support') ? 'Leftovers' : 'Heavy-Duty Boots';
+		if (species.id === 'lundicare' && role === 'Fast Attacker') return this.sample(['Leftovers', 'Earth Plate']);
+		if (species.id === 'tryonite' && ability === 'Sturdy') return 'Leftovers';
+		if (species.id === 'tryonite' && role === 'Setup Sweeper') return this.sample(['Heavy-Duty Boots', 'Life Orb']);
+		if (species.id === 'ironcrest' && role === 'Setup Sweeper') return 'Booster Energy';
+		if (species.id === 'seaode') return this.sample(['Heavy-Duty Boots', 'Life Orb', 'Choice Band', 'Choice Scarf']);
+		if (['serpvoltidae', 'twinkaton', 'devestial'].includes(species.id) && role === 'Bulky Support') return 'Leftovers';
+		if (species.id === 'serpvoltidae' && role === 'Bulky Attacker' && !moves.has('shoreup')) {
+			return this.sample(['Choice Specs', 'Life Orb']);
+		}
+		if (species.id === 'serpvoltidae' && role === 'Bulky Attacker' && moves.has('shoreup')) return 'Life Orb';
+		if (species.id === 'sheepquake') return this.sample(['Leftovers', 'Life Orb']);
+		if (ability === 'Flare Boost') return 'Flame Orb';
+		if (species.id === 'sorrowcean' && ability !== 'Flare Boost') return 'Leftovers';
+		if (species.id === 'blobbiam' && role === 'Bulky Attacker') {
+			return this.sample(['Heavy-Duty Boots', 'Choice Band', 'Choice Scarf']);
+		}
+		if (
+			(['blobbiam', 'massassin'].includes(species.id) && role === 'Bulky Support') ||
+			['mohawtter', 'arachnode', 'porcupyre', 'bazhigangquan', 'actaniathan'].includes(species.id)
+		) {
+			return this.sample(['Heavy-Duty Boots', 'Leftovers']);
+		}
+		if (species.id === 'hippaint' && !moves.has('calmmind')) return this.sample(['Choice Specs', 'Life Orb']);
+		if (species.id === 'hippaint' && moves.has('calmmind')) return 'Life Orb';
+		if (species.id === 'parasike') return this.sample(['Heavy-Duty Boots', 'Choice Band', 'Silver Powder']);
+		if (species.id === 'llanfairwyrm' && role === 'Bulky Support') return this.sample(['Rocky Helmet', 'Leftovers']);
+		if (species.id === 'llanfairwyrm' && role === 'Bulky Setup') return this.sample(['Heavy-Duty Boots', 'Life Orb']);
+		if (species.id === 'karmalice') {
+			return (moves.has('fakeout') || role === 'Fast Support') ? 'Heavy-Duty Boots' : 'Choice Specs';
+		}
+		if (species.id === 'reversadusa' && !moves.has('substitute')) return this.sample(['Heavy-Duty Boots', 'Life Orb']);
+		if (species.id === 'reversadusa' && moves.has('substitute')) return 'Leftovers';
+		if (species.id === 'primordialith' && ability === 'Vital Spirit') return 'Leftovers';
+		if (['frostengu', 'monmothra', 'drakkannon'].includes(species.id) && role === 'Fast Attacker') {
+			return this.sample(['Choice Specs', 'Choice Scarf']);
+		}
+		if (species.id === 'frostengu' && role === 'Wallbreaker') return this.sample(['Choice Band', 'Choice Scarf']);
+		if (species.id === 'sleetshell' && role === 'Fast Attacker') return this.sample(['Choice Band', 'Choice Scarf']);
+		if (['martorse', 'faeruin'].includes(species.id) && role === 'Fast Support') {
+			return this.sample(['Heavy-Duty Boots', 'Leftovers']);
+		}
+		if (species.id === 'martorse' && role === 'Fast Attacker') return this.sample(['Heavy-Duty Boots', 'Life Orb']);
+		if (species.id === 'freightmare') return (role === 'Fast Support') ? 'Leftovers' : 'Life Orb';
+		if (species.id === 'faeruin' && role === 'Setup Sweeper' && !moves.has('substitute')) {
+			return this.sample(['Heavy-Duty Boots', 'Life Orb']);
+		}
+		if (species.id === 'faeruin' && role === 'Setup Sweeper' && moves.has('substitute')) return 'Leftovers';
+		if (species.id === 'haarstorm') {
+			if (role === 'Fast Attacker') return 'Choice Scarf';
+			if (role === 'Bulky Support') return 'Leftovers';
+			if (role === 'Fast Support') return 'Life Orb';
+		}
+		if (species.id === 'bulionage') return this.sample(['Leftovers', 'Clear Amulet']);
+		if (['fettogre', 'copperhead', 'psyllapse', 'obaki'].includes(species.id)) return 'Leftovers';
+		if (species.id === 'crystuit' && role === 'Fast Attacker') return this.sample(['Choice Specs', 'Choice Scarf']);
+		if (species.id === 'odonata') return this.sample(['Heavy-Duty Boots', 'Lum Berry']);
+		if (species.id === 'yamateraph') return this.sample(['Leftovers', 'Lum Berry']);
+		if (species.id === 'wizhazard') {
+			if (role === 'Wallbreaker') return 'Choice Specs';
+			if (role === 'Bulky Setup') return 'Leftovers';
+		}
+		if (species.id === 'groundead') return (role === 'Wallbreaker') ? 'Choice Band' : 'Leftovers';
+		if (species.id === 'bellolysk') {
+			if (role === 'Bulky Setup') return this.sample(['Leftovers', 'Life Orb']);
+			if (role === 'Bulky Support') return 'Leftovers';
+			if (role === 'Wallbreaker') return 'Life Orb';
+		}
+		if (species.id === 'sorrowcean' && role !== 'AV Pivot') return 'Leftovers';
+		if (species.id === 'versalyre') return 'Choice Scarf';
+		if (species.id === 'pinaturbo' && role === 'Wallbreaker') return 'Life Orb';
+		if (species.id === 'brasspecter') {
+			if (role === 'Bulky Attacker') return 'Choice Band';
+			if (role === 'Bulky Setup') return 'Leftovers';
+		}
+		if (species.id === 'cottentration' && role !== 'Wallbreaker') return 'Leftovers';
+
+		// backups to catch stuff that falls through the cracks
+		if ((ability === 'Guts' || moves.has('facade')) && !moves.has('sleeptalk')) {
+			return (types.includes('Fire') || ability === 'Toxic Boost' || ability === 'Poison Heal') ? 'Toxic Orb' : 'Flame Orb';
+		}
+		if (ability === 'Magic Guard' || (ability === 'Sheer Force' && counter.get('sheerforce'))) return 'Life Orb';
 		if (['healingwish', 'switcheroo', 'trick'].some(m => moves.has(m))) {
 			if (
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
@@ -685,7 +775,6 @@ export class RandomBLCTeams extends RandomTeams {
 		) {
 			return 'Choice Specs';
 		}
-		if (ability === 'Flare Boost') return 'Flame Orb';
 		if (ability === 'Poison Heal' || ability === 'Quick Feet') return 'Toxic Orb';
 		if (moves.has('acrobatics') && ability !== 'Quark Drive' && ability !== 'Protosynthesis') return '';
 		if (moves.has('auroraveil') || moves.has('lightscreen') && moves.has('reflect')) return 'Light Clay';

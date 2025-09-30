@@ -96,7 +96,7 @@
 		]
 	},
 	"seaode": {
-		"level": 80,
+		"level": 81,
 		"sets": [
 			{
 				"role": "Fast Attacker",
@@ -124,7 +124,7 @@
 		]
 	},
 	"sheepquake": {
-		"level": 80,
+		"level": 81,
 		"sets": [
 			{
 				"role": "Bulky Support",
@@ -192,7 +192,7 @@
 		]
 	},
 	"hippaint": {
-		"level": 90,
+		"level": 89,
 		"sets": [
 			{
 				"role": "Fast Attacker",
@@ -214,7 +214,7 @@
 		]
 	},
 	"parasike": {
-		"level": 91,
+		"level": 90,
 		"sets": [
 			{
 				"role": "Fast Attacker",
@@ -259,17 +259,11 @@
 		]
 	},
 	"arachnode": {
-		"level": 94,
+		"level": 93,
 		"sets": [
 			{
 				"role": "Bulky Support",
 				"movepool": ["Thunder Cage", "Volt Switch", "Recover", "Earth Power", "Toxic", "Stealth Rock"],
-				"abilities": ["Thick Fat"],
-				"teraTypes": ["Electric"]
-			},
-			{
-				"role": "AV Pivot",
-				"movepool": ["Volt Switch", "Parabolic Charge", "Thunder Cage", "Earth Power", "Giga Drain"],
 				"abilities": ["Thick Fat"],
 				"teraTypes": ["Electric"]
 			}
@@ -287,7 +281,7 @@
 		]
 	},
 	"geigeramp": {
-		"level": 84,
+		"level": 85,
 		"sets": [
 			{
 				"role": "Bulky Support",
@@ -332,11 +326,11 @@
 		]
 	},
 	"karmalice": {
-		"level": 89,
+		"level": 88,
 		"sets": [
 			{
 				"role": "Fast Attacker",
-				"movepool": ["Thunderbolt", "Volt Switch", "Ice Beam", "Tera Blast", "Switcheroo"],
+				"movepool": ["Thunderbolt", "Volt Switch", "Fake Out", "Tera Blast", "Switcheroo"],
 				"abilities": ["Refrigerate"],
 				"teraTypes": ["Ice"]
 			},
@@ -349,7 +343,7 @@
 		]
 	},
 	"reversadusa": {
-		"level": 88,
+		"level": 87,
 		"sets": [
 			{
 				"role": "Fast Attacker",
@@ -388,7 +382,7 @@
 		]
 	},
 	"lavalisk": {
-		"level": 92,
+		"level": 91,
 		"sets": [
 			{
 				"role": "Bulky Support",
@@ -439,7 +433,7 @@
 		]
 	},
 	"sculptera": {
-		"level": 91,
+		"level": 90,
 		"sets": [
 			{
 				"role": "Setup Sweeper",
@@ -540,7 +534,7 @@
 		]
 	},
 	"haarstorm": {
-		"level": 83,
+		"level": 84,
 		"sets": [
 			{
 				"role": "Fast Attacker",
@@ -580,7 +574,7 @@
 		]
 	},
 	"twinkaton": {
-		"level": 83,
+		"level": 84,
 		"sets": [
 			{
 				"role": "AV Pivot",
@@ -608,7 +602,7 @@
 		]
 	},
 	"fettogre": {
-		"level": 87,
+		"level": 85,
 		"sets": [
 			{
 				"role": "Bulky Support",
@@ -625,7 +619,7 @@
 		]
 	},
 	"scarachnid": {
-		"level": 85,
+		"level": 86,
 		"sets": [
 			{
 				"role": "Fast Support",
@@ -670,11 +664,11 @@
 		]
 	},
 	"porcupyre": {
-		"level": 83,
+		"level": 84,
 		"sets": [
 			{
 				"role": "Bulky Support",
-				"movepool": ["Burning Bulwark", "Knock Off", "Stealth Rock", "Recover", "Circle Throw"],
+				"movepool": ["Burning Bulwark", "Knock Off", "Stealth Rock", "Recover", "Circle Throw", "Blaze Kick"],
 				"abilities": ["Rough Skin", "Bulletproof"],
 				"teraTypes": ["Dark"]
 			}
@@ -760,7 +754,7 @@
 		]
 	},
 	"obaki": {
-		"level": 81,
+		"level": 82,
 		"sets": [
 			{
 				"role": "Bulky Setup",
@@ -788,11 +782,17 @@
 		]
 	},
 	"drakkannon": {
-		"level": 93,
+		"level": 90,
 		"sets": [
 			{
 				"role": "AV Pivot",
 				"movepool": ["Aura Sphere", "Rapid Spin", "Dragon Pulse", "Sludge Bomb", "Dark Pulse"],
+				"abilities": ["Mega Launcher"],
+				"teraTypes": ["Fighting"]
+			},
+			{
+				"role": "Fast Attacker",
+				"movepool": ["Aura Sphere", "Dragon Pulse", "Sludge Bomb", "Dark Pulse", "Vacuum Wave"],
 				"abilities": ["Mega Launcher"],
 				"teraTypes": ["Fighting"]
 			}
@@ -850,7 +850,7 @@
 		]
 	},
 	"yamateraph": {
-		"level": 90,
+		"level": 88,
 		"sets": [
 			{
 				"role": "Setup Sweeper",
@@ -861,7 +861,7 @@
 		]
 	},
 	"wizhazard": {
-		"level": 91,
+		"level": 90,
 		"sets": [
 			{
 				"role": "Bulky Setup",
@@ -912,7 +912,7 @@
 		]
 	},
 	"geoporka": {
-		"level": 82,
+		"level": 83,
 		"sets": [
 			{
 				"role": "Bulky Support",
@@ -929,7 +929,7 @@
 		]
 	},
 	"bellolysk": {
-		"level": 80,
+		"level": 81,
 		"sets": [
 			{
 				"role": "Bulky Support",
@@ -991,7 +991,7 @@
 		]
 	},
 	"versalyre": {
-		"level": 91,
+		"level": 90,
 		"sets": [
 			{
 				"role": "Fast Attacker",
@@ -1012,7 +1012,7 @@
 			},
             {
                 "role": "Fast Support",
-                "movepool": ["Flamethrower", "Earth Power", "Court Change", "Parting Shot", "Taunt", "Will-o Wisp"],
+                "movepool": ["Flamethrower", "Earth Power", "Court Change", "Parting Shot", "Taunt", "Will-O-Wisp"],
                 "abilities": ["Regenerator"],
                 "teraTypes": ["Fire"]
             },
@@ -1063,7 +1063,7 @@
 		"sets": [
 			{
 				"role": "Wallbreaker",
-				"movepool": ["Scorching Sands", "Solar Beam", "Flamethrower", "Focus Blast"],
+				"movepool": ["Sunny Day", "Solar Beam", "Flamethrower", "Focus Blast"],
 				"abilities": ["Chlorophyll"],
 				"teraTypes": ["Grass"]
 			},
@@ -1132,17 +1132,17 @@
 		]
 	},
 	"vipult": {
-		"level": 89,
+		"level": 88,
 		"sets": [
             {
                 "role": "AV Pivot",
-                "movepool": ["Knock Off", "Sludge Bomb", "Mortal Spin", "U-turn"],
+                "movepool": ["Knock Off", "Dark Pulse", "Acid Spray", "Sludge Bomb", "Mortal Spin", "U-turn"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Flying"]
             },
             {
                 "role": "Bulky Support",
-                "movepool": ["Knock Off", "Comeuppance", "Jaw Lock", "Sludge Bomb", "Mortal Spin", "U-turn"],
+                "movepool": ["Knock Off", "Sludge Bomb", "Mortal Spin", "U-turn"],
                 "abilities": ["Intimidate"],
                 "teraTypes": ["Flying"]
             }
@@ -1171,7 +1171,7 @@
 		]
 	},
 	"kadraoke": {
-		"level": 89,
+		"level": 87,
 		"sets": [
 			{
 				"role": "Setup Sweeper",
