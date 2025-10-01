@@ -163,7 +163,7 @@
         ]
     },
     "ninetales": {
-        "level": 80,
+        "level": 79,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
@@ -1279,7 +1279,7 @@
         ]
     },
     "qwilfishhisui": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -1610,7 +1610,7 @@
         ]
     },
     "mightyena": {
-        "level": 94,
+        "level": 95,
         "sets": [
             {
                 "role": "Doubles Setup Sweeper",
@@ -1812,7 +1812,7 @@
         ]
     },
     "volbeat": {
-        "level": 83,
+        "level": 82,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -3833,7 +3833,7 @@
         ]
     },
     "mandibuzz": {
-        "level": 86,
+        "level": 85,
         "sets": [
             {
                 "role": "Doubles Support",
@@ -5115,7 +5115,7 @@
         ]
     },
     "appletun": {
-        "level": 91,
+        "level": 92,
         "sets": [
             {
                 "role": "Doubles Bulky Attacker",
@@ -6426,7 +6426,7 @@
         ]
     },
     "slitherwing": {
-        "level": 82,
+        "level": 83,
         "sets": [
             {
                 "role": "Doubles Wallbreaker",
