@@ -15647,6 +15647,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
     heightm: 1.5,
     weightkg: 54,
     color: "Blue",
+    evos: ["Crossblue"],
     eggGroups: ["Bug"],
     otherFormes: ["Heracross-Mega"],
     formeOrder: ["Heracross", "Heracross-Mega"],
@@ -17045,6 +17046,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
     heightm: 0.5,
     weightkg: 11,
     color: "Purple",
+    evos: ["Diamoneye"],
     eggGroups: ["Human-Like"],
     otherFormes: ["Sableye-Mega"],
     formeOrder: ["Sableye", "Sableye-Mega"],
@@ -18806,6 +18808,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
     color: "Blue",
     prevo: "Cranidos",
     evoLevel: 30,
+    evos: ["Paleogeist"],
     eggGroups: ["Monster"],
   },
   shieldon: {
@@ -18911,6 +18914,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
     color: "Yellow",
     prevo: "Burmy",
     evoLevel: 20,
+    evos: ["Mothimen"],
     eggGroups: ["Bug"],
   },
   combee: {
@@ -19248,6 +19252,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
     color: "Green",
     prevo: "Bronzor",
     evoLevel: 33,
+    evos: ["Bronzolord"],
     eggGroups: ["Mineral"],
   },
   bonsly: {
@@ -19310,6 +19315,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
     heightm: 1,
     weightkg: 108,
     color: "Purple",
+    evos: ["Plasmatomb"],
     eggGroups: ["Amorphous"],
   },
   gible: {
