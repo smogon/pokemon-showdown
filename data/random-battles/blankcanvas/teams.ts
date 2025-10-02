@@ -643,6 +643,7 @@ export class RandomBLCTeams extends RandomTeams {
 			}
 			return this.sample(species.requiredItems);
 		}
+		if (role === 'AV Pivot') return 'Assault Vest';
 		// buncha BC specific hardcodes
 		if (species.id === 'badjur') return 'Toxic Orb';
 		if (species.id === 'vipult' && role === 'Bulky Support') return this.sample(['Black Sludge', 'Heavy-Duty Boots']);
@@ -680,7 +681,10 @@ export class RandomBLCTeams extends RandomTeams {
 		if (species.id === 'kadraoke' && role === 'Setup Sweeper') return 'Throat Spray';
 		if (species.id === 'sylravage') return this.sample(['Choice Band', 'Choice Scarf']);
 		if (species.id === 'capricorrie') return this.sample(['Heavy-Duty Boots', 'Life Orb']);
-		if (['snabterra', 'maldractice'].includes(species.id) && role === 'Wallbreaker') return 'Choice Band';
+		if (species.id === 'maldractice' && role === 'Wallbreaker') {
+			return (moves.has('dragondance')) ? 'Black Sludge' : 'Choice Band';
+		}
+		if (species.id === 'snabterra' && role === 'Wallbreaker') return 'Choice Band';
 		if (species.id === 'snabterra' && role === 'Bulky Attacker') return 'Heavy-Duty Boots';
 		if (species.id === 'snabterra' && role === 'Bulky Setup') return this.sample(['Leftovers', 'Sitrus Berry']);
 		if (species.id === 'searytch') return (role === 'Bulky Support') ? 'Leftovers' : 'Heavy-Duty Boots';
@@ -751,7 +755,7 @@ export class RandomBLCTeams extends RandomTeams {
 			if (role === 'Bulky Support') return 'Leftovers';
 			if (role === 'Wallbreaker') return 'Life Orb';
 		}
-		if (species.id === 'sorrowcean' && role !== 'AV Pivot') return 'Leftovers';
+		if (species.id === 'bufferfly' && role === 'Bulky Setup') return 'Leftovers';
 		if (species.id === 'versalyre') return 'Choice Scarf';
 		if (species.id === 'pinaturbo' && role === 'Wallbreaker') return 'Life Orb';
 		if (species.id === 'brasspecter') {
