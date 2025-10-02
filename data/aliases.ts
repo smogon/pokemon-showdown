@@ -88,8 +88,8 @@ export const Aliases: import('../sim/dex').AliasesTable = {
 	gen6ag: "[Gen 6] Anything Goes",
 	crossevo: "[Gen 9] Cross Evolution",
 	mayhem: "[Gen 9] Random Battle Mayhem",
-	omotm: "[Gen 9] Bad 'n Boosted",
-	lcotm: "[Gen 9] Revelationmons",
+	// omotm: "[Gen 9] Bad 'n Boosted",
+	lcotm: "[Gen 9] Tera Override",
 
 	// mega evos --- 1st ordered alphabetically by species, 2nd by alias
 	megasnow: "Abomasnow-Mega",
