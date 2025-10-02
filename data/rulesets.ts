@@ -574,7 +574,8 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 		},
 		onValidateTeam(team) {
 			let hasSelection = false;
-			const speciesNameList = this.ruleTable.valueRules.get('forceselect')!.split('|').map(value => this.dex.species.get(value).name);
+			const speciesNameList = this.ruleTable.valueRules.get('forceselect')!.split('|')
+				.map(value => this.dex.species.get(value).name);
 			for (const set of team) {
 				if (speciesNameList.includes(set.species)) {
 					hasSelection = true;
@@ -582,7 +583,9 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				}
 			}
 			if (!hasSelection) {
-				return [`Your team must contain ${speciesNameList.length > 1 ? `one of: ${speciesNameList.join(', ')}` : speciesNameList[0]}.`];
+				return [
+					`Your team must contain ${speciesNameList.length > 1 ? `one of: ${speciesNameList.join(', ')}` : speciesNameList[0]}.`,
+				];
 			}
 		},
 		// hardcoded in sim/side

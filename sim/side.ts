@@ -1023,7 +1023,8 @@ export class Side {
 			}
 		}
 		if (ruleTable.valueRules.has('forceselect')) {
-			const speciesList = ruleTable.valueRules.get('forceselect')!.split('|').map(entry => this.battle.dex.species.get(entry).name);
+			const speciesList = ruleTable.valueRules.get('forceselect')!.split('|')
+				.map(entry => this.battle.dex.species.get(entry).name);
 			if (!data) {
 				// autoChoose
 				positions = [...this.pokemon.keys()].filter(pos => speciesList.includes(this.pokemon[pos].species.name))
