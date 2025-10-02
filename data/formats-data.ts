@@ -4806,8 +4806,6 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	dipplin: {
 		tier: "NFE",
-		doublesTier: "(DUU)",
-		natDexTier: "RU",
 	},
 	silicobra: {
 		tier: "LC",
