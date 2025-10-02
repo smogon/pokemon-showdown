@@ -189,12 +189,14 @@ describe('Partial Trapping Moves', () => {
 				{ species: "Tangrowth", moves: [toID(move), 'sleeptalk'] },
 				{ species: "Starmie", moves: ['sleeptalk'] },
 			] });
+			const fastTrapper = battle.p1.active[0];
+			const slowTrapper = battle.p2.active[0];
 			battle.makeChoices('move ' + toID(move), 'move ' + toID(move));
-			battle.p1.active[0].hp = 1;
-			battle.p2.active[0].hp = 1;
+			slowTrapper.hp = 1;
 			battle.makeChoices('move sleeptalk', 'move sleeptalk');
-			battle.makeChoices('switch 2', '');
-			battle.makeChoices('move sleeptalk', 'switch 2');
+			assert.fainted(slowTrapper);
+			battle.makeChoices();
+			assert.false(fastTrapper.volatiles['partiallytrapped']);
 		});
 
 		it('should stop trapping the Pokemon if the target uses Rapid Spin', () => {
