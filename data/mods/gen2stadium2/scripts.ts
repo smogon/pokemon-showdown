@@ -66,8 +66,6 @@ export const Scripts: ModdedBattleScriptsData = {
 	actions: {
 		inherit: true,
 		tryMoveHit(target, pokemon, move) {
-			const positiveBoostTable = [1, 1.33, 1.66, 2, 2.33, 2.66, 3];
-			const negativeBoostTable = [1, 0.75, 0.6, 0.5, 0.43, 0.36, 0.33];
 			const doSelfDestruct = true;
 			let damage: number | false | undefined = 0;
 
@@ -138,51 +136,11 @@ export const Scripts: ModdedBattleScriptsData = {
 				return false;
 			}
 
-			let accuracy = move.accuracy;
-			if (move.alwaysHit) {
-				accuracy = true;
-			} else {
-				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
+			if (move.ohko && pokemon.level < target.level) {
+				this.battle.add('-immune', target, '[ohko]');
+				return false;
 			}
-			// Now, let's calculate the accuracy.
-			if (accuracy !== true) {
-				accuracy = Math.floor(accuracy * 255 / 100);
-				if (move.ohko) {
-					if (pokemon.level >= target.level) {
-						accuracy += (pokemon.level - target.level) * 2;
-						accuracy = Math.min(accuracy, 255);
-					} else {
-						this.battle.add('-immune', target, '[ohko]');
-						return false;
-					}
-				}
-				if (!move.ignoreAccuracy) {
-					if (pokemon.boosts.accuracy > 0) {
-						accuracy *= positiveBoostTable[pokemon.boosts.accuracy];
-					} else {
-						accuracy *= negativeBoostTable[-pokemon.boosts.accuracy];
-					}
-				}
-				if (!move.ignoreEvasion) {
-					if (target.boosts.evasion > 0 && !move.ignorePositiveEvasion) {
-						accuracy *= negativeBoostTable[target.boosts.evasion];
-					} else if (target.boosts.evasion < 0) {
-						accuracy *= positiveBoostTable[-target.boosts.evasion];
-					}
-				}
-				accuracy = Math.min(Math.floor(accuracy), 255);
-				accuracy = Math.max(accuracy, 1);
-			} else {
-				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
-			}
-			accuracy = this.battle.runEvent('ModifyAccuracy', target, pokemon, move, accuracy);
-			if (accuracy !== true) accuracy = Math.max(accuracy, 0);
-			if (move.alwaysHit) {
-				accuracy = true;
-			} else {
-				accuracy = this.battle.runEvent('Accuracy', target, pokemon, move, accuracy);
-			}
-			if (accuracy !== true && accuracy !== 255 && !this.battle.randomChance(accuracy, 256)) {
+			if (!this.accuracyCheck(pokemon, target, move)) {
 				this.battle.attrLastMove('[miss]');
 				this.battle.add('-miss', pokemon);
 				damage = false;
