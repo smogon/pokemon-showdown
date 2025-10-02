@@ -752,7 +752,7 @@ export class RandomBLCTeams extends RandomTeams {
 			if (role === 'Bulky Support') return 'Leftovers';
 			if (role === 'Wallbreaker') return 'Life Orb';
 		}
-		if (species.id === 'sorrowcean' && role !== 'AV Pivot') return 'Leftovers';
+		if (species.id === 'bufferfly' && role !== 'AV Pivot') return 'Leftovers';
 		if (species.id === 'versalyre') return 'Choice Scarf';
 		if (species.id === 'pinaturbo' && role === 'Wallbreaker') return 'Life Orb';
 		if (species.id === 'brasspecter') {
