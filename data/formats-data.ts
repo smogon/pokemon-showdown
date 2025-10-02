@@ -4887,8 +4887,6 @@ export const FormatsData: import('../sim/dex-species').SpeciesFormatsDataTable =
 	},
 	hattrem: {
 		tier: "NFE",
-		doublesTier: "NFE",
-		natDexTier: "NFE",
 	},
 	hatterene: {
 		tier: "OU",
