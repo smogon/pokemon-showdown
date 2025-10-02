@@ -17,7 +17,7 @@ export const Conditions: import('../../../sim/dex-conditions').ModdedConditionDa
 		},
 	},
 	futuremove: {
-		inherit: true, 
+		inherit: true,
 		onEnd(target) {
 			const data = this.effectState;
 			// time's up; time to hit! :D
