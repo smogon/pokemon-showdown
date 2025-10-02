@@ -26,7 +26,6 @@ interface BattleSearchResults {
 	timesBattled: { [k: string]: number };
 }
 
-const MAX_BATTLESEARCH_PROCESSES = 1;
 export async function runBattleSearch(userids: ID[], month: string, tierid: ID, turnLimit?: number) {
 	const useRipgrep = await checkRipgrepAvailability();
 	const pathString = `${month}/${tierid}/`;
@@ -499,5 +498,5 @@ if (!PM.isParentProcess) {
 	// eslint-disable-next-line no-eval
 	Repl.start('battlesearch', cmd => eval(cmd));
 } else {
-	PM.spawn(MAX_BATTLESEARCH_PROCESSES);
+	PM.spawn(global.Config?.subprocessescache?.battlesearch ?? 1);
 }
