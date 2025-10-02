@@ -66,7 +66,7 @@
 		"sets": [
 			{
 				"role": "Fast Attacker",
-				"movepool": ["Blood Moon", "Moonblast", "Moongeist Beam", "Moonlight", "Judgement"],
+				"movepool": ["Blood Moon", "Moonblast", "Moongeist Beam", "Moonlight", "Judgment"],
 				"abilities": ["Trace"],
 				"teraTypes": ["Normal"]
 			},

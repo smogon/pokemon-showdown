@@ -9,7 +9,7 @@ export const Rulesets: import('../../../sim/dex-formats').ModdedFormatDataTable 
 		onSwitchIn(pokemon) {
 			if (!this.effectState[pokemon.species.id]) {
 				this.add('-message', `${pokemon.species.name}'s Sprite:`);
-				this.add(`raw|<img src="https://github.com/scoopapa/DH2/blob/main/data/mods/blankcanvas/sprites/front/${pokemon.species.id}.png" height="96" width="96">`);
+				this.add(`raw|<img src="https://raw.githubusercontent.com/scoopapa/DH2/refs/heads/main/data/mods/blankcanvas/sprites/front/${pokemon.species.id}.png" height="96" width="96">`);
 				this.effectState[pokemon.species.id] = true;
 			}
 		},
