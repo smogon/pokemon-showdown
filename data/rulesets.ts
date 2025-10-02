@@ -566,22 +566,26 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	forceselect: {
 		effectType: 'ValidatorRule',
 		name: 'Force Select',
-		desc: `Forces a Pokemon to be on the team and selected at Team Preview. Usage: Force Select = [Pokemon], e.g. "Force Select = Magikarp"`,
+		desc: `Forces a Pokemon to be on the team and selected at Team Preview. Usage: Force Select = [Pokemon], e.g. "Force Select = Magikarp" or "Force Select = Koraidon | Miraidon"`,
 		hasValue: true,
 		onValidateRule(value) {
-			if (!this.dex.species.get(value).exists) throw new Error(`Misspelled Pokemon "${value}"`);
+			const values = value.split('|');
+			if (values.some(v => !this.dex.species.get(v).exists)) throw new Error(`Misspelled Pokemon provided in "${value}"`);
 		},
 		onValidateTeam(team) {
 			let hasSelection = false;
-			const species = this.dex.species.get(this.ruleTable.valueRules.get('forceselect'));
+			const speciesNameList = this.ruleTable.valueRules.get('forceselect')!.split('|')
+				.map(value => this.dex.species.get(value).name);
 			for (const set of team) {
-				if (species.name === set.species) {
+				if (speciesNameList.includes(set.species)) {
 					hasSelection = true;
 					break;
 				}
 			}
 			if (!hasSelection) {
-				return [`Your team must contain ${species.name}.`];
+				return [
+					`Your team must contain ${speciesNameList.length > 1 ? `one of: ${speciesNameList.join(', ')}` : speciesNameList[0]}.`,
+				];
 			}
 		},
 		// hardcoded in sim/side
