@@ -643,6 +643,7 @@ export class RandomBLCTeams extends RandomTeams {
 			}
 			return this.sample(species.requiredItems);
 		}
+		if (role === 'AV Pivot') return 'Assault Vest';
 		// buncha BC specific hardcodes
 		if (species.id === 'badjur') return 'Toxic Orb';
 		if (species.id === 'vipult' && role === 'Bulky Support') return this.sample(['Black Sludge', 'Heavy-Duty Boots']);
