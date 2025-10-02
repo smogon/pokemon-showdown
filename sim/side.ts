@@ -1023,22 +1023,22 @@ export class Side {
 			}
 		}
 		if (ruleTable.valueRules.has('forceselect')) {
-			const species = this.battle.dex.species.get(ruleTable.valueRules.get('forceselect'));
+			const speciesList = ruleTable.valueRules.get('forceselect')!.split('|').map(entry => this.battle.dex.species.get(entry).name);
 			if (!data) {
 				// autoChoose
-				positions = [...this.pokemon.keys()].filter(pos => this.pokemon[pos].species.name === species.name)
-					.concat([...this.pokemon.keys()].filter(pos => this.pokemon[pos].species.name !== species.name))
+				positions = [...this.pokemon.keys()].filter(pos => speciesList.includes(this.pokemon[pos].species.name))
+					.concat([...this.pokemon.keys()].filter(pos => !speciesList.includes(this.pokemon[pos].species.name)))
 					.slice(0, pickedTeamSize);
 			} else {
 				let hasSelection = false;
 				for (const pos of positions) {
-					if (this.pokemon[pos].species.name === species.name) {
+					if (speciesList.includes(this.pokemon[pos].species.name)) {
 						hasSelection = true;
 						break;
 					}
 				}
 				if (!hasSelection) {
-					return this.emitChoiceError(`You must bring ${species.name} to the battle.`);
+					return this.emitChoiceError(`You must bring ${speciesList.length > 1 ? `one of ${speciesList.join(', ')}` : speciesList[0]} to the battle.`);
 				}
 			}
 		}
