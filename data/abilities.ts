@@ -1361,7 +1361,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 	},
 	flowerveil: {
 		onAllyTryBoost(boost, target, source, effect) {
-			if ((source && target === source) || !target.hasType('Grass')) return;
+			if (!target.hasType('Grass')) return;
 			let showMsg = false;
 			let i: BoostID;
 			for (i in boost) {
@@ -1376,7 +1376,7 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			}
 		},
 		onAllySetStatus(status, target, source, effect) {
-			if (target.hasType('Grass') && source && target !== source && effect && effect.id !== 'yawn') {
+			if (target.hasType('Grass') && effect?.id !== 'yawn') {
 				this.debug('interrupting setStatus with Flower Veil');
 				if (effect.name === 'Synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
 					const effectHolder = this.effectState.target;

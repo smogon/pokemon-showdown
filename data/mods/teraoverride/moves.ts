@@ -39,12 +39,12 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				}
 			},
 			onMoveAborted(pokemon, target, move) {
-				if (move.type === pokemon.teraType && move.id !== 'charge') {
+				if (move.type === pokemon.teraType && move.id !== 'tailwind' && move.id !== 'charge') {
 					pokemon.removeVolatile('charge');
 				}
 			},
 			onAfterMove(pokemon, target, move) {
-				if (move.type === pokemon.teraType && move.id !== 'charge') {
+				if (move.type === pokemon.teraType && move.id !== 'tailwind' && move.id !== 'charge') {
 					pokemon.removeVolatile('charge');
 				}
 			},
@@ -700,6 +700,23 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				const typeMod = this.clampIntRange(pokemon.runEffectiveness(this.effectState.source.teraType), -6, 6);
 				this.damage(pokemon.maxhp * (2 ** typeMod) / 8);
 			},
+		},
+	},
+	stoneaxe: {
+		inherit: true,
+		onAfterHit(target, source, move) {
+			if (!move.hasSheerForce && source.hp) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('stealthrock', source);
+				}
+			}
+		},
+		onAfterSubDamage(damage, target, source, move) {
+			if (!move.hasSheerForce && source.hp) {
+				for (const side of source.side.foeSidesWithConditions()) {
+					side.addSideCondition('stealthrock', source);
+				}
+			}
 		},
 	},
 	terrainpulse: {
