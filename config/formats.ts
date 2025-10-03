@@ -276,9 +276,22 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Terastal Crescendo",
 		mod: 'gen9',
 		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Picked Team Size = 2', 'Min Team Size = 4', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Limit One Restricted'],
+		ruleset: ['Flat Rules', '!! Picked Team Size = 2', 'Min Team Size = 4', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer'],
 		unbanlist: ['Koraidon', 'Miraidon'],
-		restricted: ['Koraidon', 'Miraidon'],
+		onValidateTeam(team) {
+			let donCount = 0;
+			for (const set of team) {
+				if (set.species === 'Koraidon' || set.species === 'Miraidon') {
+					donCount++;
+				}
+			}
+			if (donCount !== 1) {
+				return [
+					`You must bring either Koraidon or Miraidon, but not both.`,
+					`(You have ${!donCount ? 'neither' : 'both'} Koraidon ${!donCount ? 'nor' : 'and'} Miraidon)`,
+				];
+			}
+		},
 		onChooseTeam(positions, pokemon, autoChoose) {
 			const species = pokemon.find(p => p.species.name === 'Koraidon' || p.species.name === 'Miraidon')!.species;
 			if (autoChoose) {
@@ -4734,7 +4747,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			}
 			const restrictedCount = positions.filter(pos => this.ruleTable.isRestrictedSpecies(pokemon[pos].species)).length;
 			if (restrictedCount > 2) {
-				return `You can only bring up to two restricted Pok\u00e9mon to the battle`;
+				return `You can only bring up to two restricted Pok\u00e9mon to the battle.`;
 			}
 		},
 	},
