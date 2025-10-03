@@ -4721,8 +4721,16 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		},
 		onChooseTeam(positions, pokemon, autoChoose) {
 			if (autoChoose) {
-				return [...pokemon.keys()].filter(pos => this.ruleTable.isRestrictedSpecies(pokemon[pos].species)).slice(0, 2)
-					.concat([...pokemon.keys()].filter(pos => !this.ruleTable.isRestrictedSpecies(pokemon[pos].species)));
+				positions = [];
+				let restrictedCount = 0;
+				for (let i = 0; i < pokemon.length; i++) {
+					if (this.ruleTable.isRestrictedSpecies(pokemon[i].species)) {
+						restrictedCount++;
+						if (restrictedCount > 2) continue;
+					}
+					positions.push(i);
+				}
+				return positions;
 			}
 			const restrictedCount = positions.filter(pos => this.ruleTable.isRestrictedSpecies(pokemon[pos].species)).length;
 			if (restrictedCount > 2) {
