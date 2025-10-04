@@ -1803,7 +1803,7 @@ export class GlobalRoomState {
 				} else {
 					this.notifyRooms(
 						notifyPlaces,
-						`|html|<div class="broadcsat-red"><b>Automatic server lockdown kill canceled.</b><br /><br />In the last final seconds, the automatic lockdown was manually disabled.</div>`
+						`|html|<div class="broadcast-red"><b>Automatic server lockdown kill canceled.</b><br /><br />In the last final seconds, the automatic lockdown was manually disabled.</div>`
 					);
 				}
 			}, 10 * 1000);
