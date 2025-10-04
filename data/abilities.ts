@@ -2438,6 +2438,24 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 				}
 			}
 		},
+		onTryEatItem(item, pokemon) {
+			const healingBerries = [
+				'aguavberry', 'enigmaberry', 'figyberry', 'iapapaberry', 'magoberry', 'sitrusberry', 'wikiberry', 'oranberry', 'berryjuice',
+			];
+			// Only will be triggered if the attacker has Magician and doesn't have an item
+			const lastAttacker = pokemon.getLastAttackedBy();
+			if (
+				lastAttacker && lastAttacker.source.hasAbility('magician') &&
+				healingBerries.includes(item.id) &&
+				!lastAttacker.source.item
+			) {
+				const stolen = pokemon.takeItem(lastAttacker.source);
+				if (stolen && lastAttacker.source.setItem(stolen)) {
+					this.add('-item', lastAttacker.source, stolen, '[from] ability: Magician', `[of] ${pokemon}`);
+					return false; // Prevent berry from being eaten
+				}
+			}
+		},
 		flags: {},
 		name: "Magician",
 		rating: 1,
