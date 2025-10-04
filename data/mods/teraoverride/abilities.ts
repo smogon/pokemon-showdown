@@ -150,7 +150,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		onAllyTryAddVolatile(status, target, source) {
-			if (target.hasType(this.effectState.target) && status.id === 'yawn') {
+			if (target.hasType(this.effectState.target.teraType) && status.id === 'yawn') {
 				this.debug('Flower Veil blocking yawn');
 				const effectHolder = this.effectState.target;
 				this.add('-block', target, 'ability: Flower Veil', `[of] ${effectHolder}`);
