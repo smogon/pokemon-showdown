@@ -124,8 +124,23 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	},
 	flowerveil: {
 		inherit: true,
+		onAllyTryBoost(boost, target, source, effect) {
+			if ((source && target === source) || !target.hasType(this.effectState.target)) return;
+			let showMsg = false;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+					showMsg = true;
+				}
+			}
+			if (showMsg && !(effect as ActiveMove).secondaries) {
+				const effectHolder = this.effectState.target;
+				this.add('-block', target, 'ability: Flower Veil', `[of] ${effectHolder}`);
+			}
+		},
 		onAllySetStatus(status, target, source, effect) {
-			if (source && target.hasType(source.teraType) && effect && effect.id !== 'yawn') {
+			if (target.hasType(this.effectState.target) && source && target !== source && effect && effect.id !== 'yawn') {
 				this.debug('interrupting setStatus with Flower Veil');
 				if (effect.name === 'Synchronize' || (effect.effectType === 'Move' && !effect.secondaries)) {
 					const effectHolder = this.effectState.target;
@@ -135,7 +150,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 			}
 		},
 		onAllyTryAddVolatile(status, target, source) {
-			if (source && target.hasType(source.teraType) && status.id === 'yawn') {
+			if (target.hasType(this.effectState.target) && status.id === 'yawn') {
 				this.debug('Flower Veil blocking yawn');
 				const effectHolder = this.effectState.target;
 				this.add('-block', target, 'ability: Flower Veil', `[of] ${effectHolder}`);
