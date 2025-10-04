@@ -125,7 +125,7 @@ export const Abilities: import('../../../sim/dex-abilities').ModdedAbilityDataTa
 	flowerveil: {
 		inherit: true,
 		onAllyTryBoost(boost, target, source, effect) {
-			if ((source && target === source) || !target.hasType(this.effectState.target)) return;
+			if ((source && target === source) || !target.hasType(this.effectState.target.teraType)) return;
 			let showMsg = false;
 			let i: BoostID;
 			for (i in boost) {
