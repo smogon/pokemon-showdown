@@ -279,12 +279,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		ruleset: ['Flat Rules', '!! Picked Team Size = 2', 'Min Team Size = 4', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer'],
 		unbanlist: ['Koraidon', 'Miraidon'],
 		onValidateTeam(team) {
-			let donCount = 0;
-			for (const set of team) {
-				if (set.species === 'Koraidon' || set.species === 'Miraidon') {
-					donCount++;
-				}
-			}
+			const donCount = team.filter(set => set.species === 'Koraidon' || set.species === 'Miraidon').length;
 			if (donCount !== 1) {
 				return [
 					`You must bring either Koraidon or Miraidon, but not both.`,
@@ -293,13 +288,16 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			}
 		},
 		onChooseTeam(positions, pokemon, autoChoose) {
-			const species = pokemon.find(p => p.species.name === 'Koraidon' || p.species.name === 'Miraidon')!.species;
+			const donIndex = pokemon.findIndex(p => p.species.name === 'Koraidon' || p.species.name === 'Miraidon');
 			if (autoChoose) {
-				return [...pokemon.keys()].filter(pos => pokemon[pos].species.name === species.name)
-					.concat([...pokemon.keys()].filter(pos => pokemon[pos].species.name !== species.name));
+				positions = [donIndex];
+				for (let i = 0; i < pokemon.length; i++) {
+					if (i !== donIndex) positions.push(i);
+				}
+				return positions;
 			}
-			if (!positions.some(pos => pokemon[pos].species.name === species.name)) {
-				return `You must bring ${species.name} to the battle.`;
+			if (!positions.includes(donIndex)) {
+				return `You must bring ${pokemon[donIndex].species.name} to the battle.`;
 			}
 		},
 	},

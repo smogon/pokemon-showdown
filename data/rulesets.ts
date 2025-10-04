@@ -572,25 +572,22 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			if (!this.dex.species.get(value).exists) throw new Error(`Misspelled Pokemon "${value}"`);
 		},
 		onValidateTeam(team) {
-			let hasSelection = false;
 			const species = this.dex.species.get(this.ruleTable.valueRules.get('forceselect'));
-			for (const set of team) {
-				if (species.name === set.species) {
-					hasSelection = true;
-					break;
-				}
-			}
-			if (!hasSelection) {
+			if (!team.some(set => set.species === species.name)) {
 				return [`Your team must contain ${species.name}.`];
 			}
 		},
 		onChooseTeam(positions, pokemon, autoChoose) {
 			const species = this.dex.species.get(this.ruleTable.valueRules.get('forceselect'));
+			const speciesIndex = pokemon.findIndex(p => p.species.name === species.name);
 			if (autoChoose) {
-				return [...pokemon.keys()].filter(pos => pokemon[pos].species.name === species.name)
-					.concat([...pokemon.keys()].filter(pos => pokemon[pos].species.name !== species.name));
+				positions = [speciesIndex];
+				for (let i = 0; i < pokemon.length; i++) {
+					if (i !== speciesIndex) positions.push(i);
+				}
+				return positions;
 			}
-			if (!positions.some(pos => pokemon[pos].species.name === species.name)) {
+			if (!positions.includes(speciesIndex)) {
 				return `You must bring ${species.name} to the battle.`;
 			}
 		},
@@ -2143,14 +2140,13 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 			}
 		},
 		onChooseTeam(positions, pokemon, autoChoose) {
+			if (autoChoose) {
+				return [...pokemon.keys()].sort((a, b) => (pokemon[a].level - pokemon[b].level));
+			}
 			let totalLevel = 0;
 			for (const pos of positions) totalLevel += pokemon[pos].level;
 			if (totalLevel > this.ruleTable.maxTotalLevel!) {
-				if (autoChoose) {
-					return [...pokemon.keys()].sort((a, b) => (pokemon[a].level - pokemon[b].level));
-				} else {
-					return `Your selected team has a total level of ${totalLevel}, but it can't be above ${this.ruleTable.maxTotalLevel}.`;
-				}
+				return `Your selected team has a total level of ${totalLevel}, but it can't be above ${this.ruleTable.maxTotalLevel}.`;
 			}
 		},
 	},
