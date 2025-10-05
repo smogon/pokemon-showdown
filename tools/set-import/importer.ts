@@ -398,9 +398,9 @@ const SMOGON = {
 	bssseries2: 'battlestadiumsinglesseries2',
 } as unknown as { [id: string]: ID };
 
-const getAnalysis = retrying(async (u: string) => {
+const getAnalysis = retrying(async (url: string, options: http.RequestOptions, body: string) => {
 	try {
-		return smogon.Analyses.process(await request(u));
+		return smogon.Analyses.process(await request(url, options, body));
 	} catch (err: any) {
 		// Don't try HTTP errors that we've already retried
 		if (err.message.startsWith('HTTP')) {
