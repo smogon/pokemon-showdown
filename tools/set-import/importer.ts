@@ -10,9 +10,9 @@ import { TeamValidator } from '../../sim/team-validator';
 Dex.includeModData();
 
 interface FetchOptions {
-	url: string,
-	options?: http.RequestOptions,
-	body?: string
+	url: string;
+	options?: http.RequestOptions;
+	body?: string;
 }
 
 type DeepPartial<T> = {
