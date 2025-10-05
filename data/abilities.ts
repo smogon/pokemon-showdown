@@ -2427,17 +2427,6 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			this.speedSort(hitTargets);
 			for (const pokemon of hitTargets) {
 				if (pokemon !== source) {
-					if (pokemon.item) {
-						const targetItem = this.dex.items.getByID(pokemon.item);
-						if (targetItem?.isBerry && typeof targetItem.onEat === 'function') {
-							continue;
-						}
-					}
-					if (pokemon.ateBerry || pokemon.usedItemThisTurn) continue;
-					if (pokemon.lastItem) {
-						const lastItem = this.dex.items.getByID(pokemon.lastItem);
-						if (lastItem?.isBerry) continue;
-					}
 					const yourItem = pokemon.takeItem(source);
 					if (!yourItem) continue;
 					if (!source.setItem(yourItem)) {
