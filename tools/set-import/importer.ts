@@ -556,10 +556,10 @@ class RetryableError extends Error {
 // this tool). Retry up to 5 times with a 20ms backoff increment.
 export const request = retrying(throttling(fetch, 1, 50), 5, 20);
 
-export function fetch(req: string | FetchOptions) {
-	const url = typeof req === 'string' ? req : req.url;
-	const options = typeof req === 'string' ? undefined : req.options;
-	const body = typeof req === 'string' ? undefined : req.body;
+export function fetch(r: string | FetchOptions) {
+	const url = typeof r === 'string' ? r : r.url;
+	const options = typeof r === 'string' ? undefined : r.options;
+	const body = typeof r === 'string' ? undefined : r.body;
 	const client = url.startsWith('http:') ? http : https;
 
 	return new Promise<string>((resolve, reject) => {
