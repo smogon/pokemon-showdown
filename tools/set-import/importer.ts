@@ -1,6 +1,5 @@
 import * as http from 'http';
 import * as https from 'https';
-import * as url from 'url';
 import * as util from 'util';
 
 import * as smogon from 'smogon';
@@ -10,19 +9,10 @@ import { Dex, toID } from '../../sim/dex';
 import { TeamValidator } from '../../sim/team-validator';
 Dex.includeModData();
 
-type DeepPartial<T> = {
-	[P in keyof T]?: T[P] extends (infer I)[] ? (DeepPartial<I>)[] : DeepPartial<T[P]>;
-};
-
 interface PokemonSets {
 	[speciesid: string]: {
-		[name: string]: DeepPartial<PokemonSet>,
+		[name: string]: PokemonSet,
 	};
-}
-
-interface IncomingMessage extends NodeJS.ReadableStream {
-	statusCode: number;
-	headers: { location?: string };
 }
 
 // eg. 'gen1.json'
@@ -219,7 +209,7 @@ function addSmogonSet(
 	format: Format,
 	pokemon: string,
 	name: string,
-	set: DeepPartial<PokemonSet>,
+	set: PokemonSet,
 	setsForPokemon: PokemonSets,
 	numByFormat: { [format: string]: number },
 	outOfBattleSpeciesName?: string
@@ -235,28 +225,29 @@ function cleanName(name: string) {
 	return name.replace(/"/g, `'`);
 }
 
-function movesetToPokemonSet(dex: ModdedDex, format: Format, pokemon: string, set: smogon.Moveset) {
-	const level = getLevel(format, set.levels[0]);
+function movesetToPokemonSet(dex: ModdedDex, format: Format, pokemon: string, set: smogon.Moveset): PokemonSet {
 	return {
-		level: level === 100 ? undefined : level,
+		name: '',
+		species: pokemon,
+		gender: getGender(dex, format, pokemon),
+		level: getLevel(format, set.levels[0]),
 		moves: set.moveslots.map(ms => ms[0]).map(s => s.type ? `${s.move} ${s.type}` : s.move),
-		ability: fixedAbility(dex, pokemon, set.abilities[0]),
-		item: set.items[0] === 'No Item' ? undefined : set.items[0],
-		nature: set.natures[0],
+		ability: fixedAbility(dex, pokemon, set.abilities[0]) || '',
+		item: set.items[0] === 'No Item' ? '' : set.items[0],
+		nature: set.natures ? set.natures[0] : 'Serious',
 		teraType: set.teratypes ? set.teratypes[0] : undefined,
 		ivs: toStatsTable(set.ivconfigs[0], 31),
-		evs: toStatsTable(set.evconfigs[0]),
+		evs: toStatsTable(set.evconfigs[0], dex.gen <= 2 ? 252 : 0),
 	};
 }
 
 function toStatsTable(stats?: StatsTable, elide = 0) {
-	if (!stats) return undefined;
+	const s: StatsTable = fillStats(undefined, elide);
+	if (!stats) return s;
 
-	const s: Partial<StatsTable> = {};
 	let stat: keyof StatsTable;
 	for (stat in stats) {
-		const val = stats[stat];
-		if (val !== elide) s[stat] = val;
+		s[stat] = stats[stat];
 	}
 	return s;
 }
@@ -274,7 +265,7 @@ function validSet(
 	format: Format,
 	pokemon: string,
 	name: string,
-	set: DeepPartial<PokemonSet>,
+	set: PokemonSet,
 	outOfBattleSpeciesName?: string
 ) {
 	if (skip(dex, format, pokemon, set)) return false;
@@ -299,7 +290,7 @@ function validSet(
 	return false;
 }
 
-function skip(dex: ModdedDex, format: Format, pokemon: string, set: DeepPartial<PokemonSet>) {
+function skip(dex: ModdedDex, format: Format, pokemon: string, set: PokemonSet) {
 	const { gen } = FORMATS.get(format.id)!;
 	const hasMove = (m: string) => set.moves?.includes(m);
 	const bh = format.id.includes('balancedhackmons');
@@ -328,18 +319,17 @@ function toPokemonSet(
 	dex: ModdedDex,
 	format: Format,
 	pokemon: string,
-	set: DeepPartial<PokemonSet>,
+	set: PokemonSet,
 	outOfBattleSpeciesName?: string
 ): PokemonSet {
 	// To simplify things, during validation we mutate the input set to correct for HP mismatches
 	const hp = set.moves?.find(m => m.startsWith('Hidden Power'));
-	let fill = dex.gen === 2 ? 30 : 31;
 	if (hp) {
 		const type = hp.slice(13);
-		if (type && dex.getHiddenPower(fillStats(set.ivs, fill)).type !== type) {
-			if (!set.ivs || (dex.gen >= 7 && (!set.level || set.level === 100))) {
+		if (type && dex.getHiddenPower(fillStats(set.ivs, 31)).type !== type) {
+			if (!set.ivs || (dex.gen >= 7 && (!set.level || set.level === 100)) ||
+				(dex.gen >= 9 && (!set.level || set.level >= 50))) {
 				set.hpType = type;
-				fill = 31;
 			} else if (dex.gen === 2) {
 				const dvs = { ...dex.types.get(type).HPdvs };
 				let stat: StatID;
@@ -354,13 +344,11 @@ function toPokemonSet(
 		}
 	}
 
-	const copy = { species: pokemon, ...set } as PokemonSet;
-	copy.ivs = fillStats(set.ivs, fill);
+	const copy = { ...set, species: pokemon } as PokemonSet;
+	copy.ivs = fillStats(set.ivs, 31);
 	// The validator expects us to have at least 1 EV set to prove it is intentional
-	if (!set.evs && dex.gen >= 3 && format.id !== 'gen7letsgoou') set.evs = { spe: 1 };
+	if (!set.evs && dex.gen >= 3 && format.mod !== 'gen7letsgo') set.evs = fillStats({ spe: 1 }, 0);
 	copy.evs = fillStats(set.evs, dex.gen <= 2 ? 252 : 0);
-	// The validator wants an ability even when Gen < 3
-	copy.ability = copy.ability || 'None';
 
 	const species = dex.species.get(pokemon);
 	if (species.battleOnly && !format.id.includes('balancedhackmons')) {
@@ -404,9 +392,9 @@ const SMOGON = {
 	bssseries2: 'battlestadiumsinglesseries2',
 } as unknown as { [id: string]: ID };
 
-const getAnalysis = retrying(async (u: string) => {
+const getAnalysis = retrying(async (url: string, options: http.RequestOptions, body: string) => {
 	try {
-		return smogon.Analyses.process(await request(u));
+		return smogon.Analyses.process(await request(url, options, body));
 	} catch (err: any) {
 		// Don't try HTTP errors that we've already retried
 		if (err.message.startsWith('HTTP')) {
@@ -418,9 +406,9 @@ const getAnalysis = retrying(async (u: string) => {
 }, 3, 50);
 
 async function getAnalysesByFormat(pokemon: string, gen: GenerationNum) {
-	const u = smogon.Analyses.url(pokemon === 'Meowstic' ? 'Meowstic-M' : pokemon, gen);
+	const r = smogon.Analyses.request(pokemon === 'Meowstic' ? 'Meowstic-M' : pokemon, gen);
 	try {
-		const analysesByTier = await getAnalysis(u);
+		const analysesByTier = await getAnalysis(r.url, r.init, r.init.body);
 		if (!analysesByTier) {
 			error(`Unable to process analysis for ${pokemon} in generation ${gen}`);
 			return undefined;
@@ -442,6 +430,14 @@ async function getAnalysesByFormat(pokemon: string, gen: GenerationNum) {
 		error(`Unable to process analysis for ${pokemon} in generation ${gen}`);
 		return undefined;
 	}
+}
+
+function getGender(dex: ModdedDex, format: Format, pokemon: string) {
+	if (format.ruleTable?.has('obtainablemisc')) {
+		const gender = dex.species.get(pokemon).gender;
+		return gender === 'N' ? '' : gender;
+	}
+	return '';
 }
 
 function getLevel(format: Format, level = 0) {
@@ -472,23 +468,35 @@ function importUsageBasedSets(gen: GenerationNum, format: Format, statistics: sm
 	for (const pokemon in statistics.data) {
 		const stats = statistics.data[pokemon];
 		if (eligible(dex, toID(pokemon)) && stats.usage >= threshold) {
-			const set: DeepPartial<PokemonSet> = {
+			const set: PokemonSet = {
+				name: '',
+				species: pokemon,
+				gender: getGender(dex, format, pokemon),
 				level: getLevel(format),
 				moves: (top(stats.Moves, 4) as string[]).map(m => dex.moves.get(m).name).filter(m => m),
+				ability: '',
+				item: '',
+				nature: '',
+				ivs: fillStats(undefined, 31),
+				evs: fillStats(undefined, dex.gen <= 2 ? 252 : 0),
 			};
-			if (gen >= 2 && format.id !== 'gen7letsgoou') {
+			if (gen >= 2 && format.mod !== 'gen7letsgo') {
 				const id = top(stats.Items) as string;
 				set.item = dex.items.get(id).name;
-				if (set.item === 'nothing') set.item = undefined;
+				if (set.item === 'nothing') set.item = '';
 			}
 			if (gen >= 3) {
 				const id = top(stats.Abilities) as string;
-				set.ability = fixedAbility(dex, pokemon, dex.abilities.get(id).name);
+				set.ability = fixedAbility(dex, pokemon, dex.abilities.get(id).name) || '';
 				const { nature, evs } = fromSpread(top(stats.Spreads) as string);
 				set.nature = nature;
-				if (format.id !== 'gen7letsgoou') {
+				if (format.mod !== 'gen7letsgo') {
 					if (!evs || !Object.keys(evs).length) continue;
-					set.evs = evs;
+					let stat: keyof StatsTable;
+					for (stat in evs) {
+						const val = evs[stat];
+						if (val !== undefined) set.evs[stat] = val;
+					}
 				}
 			}
 			const name = 'Showdown Usage';
@@ -556,31 +564,41 @@ class RetryableError extends Error {
 // this tool). Retry up to 5 times with a 20ms backoff increment.
 const request = retrying(throttling(fetch, 1, 50), 5, 20);
 
-export function fetch(u: string) {
-	const client = u.startsWith('http:') ? http : https;
+export function fetch(url: string, options?: http.RequestOptions, body?: string) {
+	const client = url.startsWith('http:') ? http : https;
+
 	return new Promise<string>((resolve, reject) => {
-		// @ts-expect-error Typescript bug - thinks the second argument should be RequestOptions, not a callback
-		const req = client.get(u, (res: IncomingMessage) => {
-			if (res.statusCode !== 200) {
-				if (res.statusCode >= 500 && res.statusCode < 600) {
-					return reject(new RetryableError(`HTTP ${res.statusCode}`));
-				} else if (res.statusCode >= 300 && res.statusCode <= 400 && res.headers.location) {
-					resolve(fetch(url.resolve(u, res.headers.location)));
+		const handleResponse = (res: http.IncomingMessage) => {
+			const statusCode = res.statusCode!;
+			if (statusCode !== 200) {
+				if (statusCode >= 500 && statusCode < 600) {
+					return reject(new RetryableError(`HTTP ${statusCode}`));
+				} else if (statusCode >= 300 && statusCode <= 400 && res.headers.location) {
+					const redirectedUrl = new URL(res.headers.location, url).toString();
+          			resolve(fetch(redirectedUrl, options, body));
 				} else {
-					return reject(new Error(`HTTP ${res.statusCode}`));
+					return reject(new Error(`HTTP ${statusCode}`));
 				}
 			}
 			Streams.readAll(res).then(resolve, reject);
-		});
+		};
+		const req = options
+			? client.request(url, options, handleResponse)
+			: client.request(url, handleResponse);
 		req.on('error', reject);
+		if (body) req.write(body);
 		req.end();
 	});
 }
 
-function retrying<I, O>(fn: (args: I) => Promise<O>, retries: number, wait: number): (args: I) => Promise<O> {
-	const retry = async (args: I, attempt = 0): Promise<O> => {
+function retrying<F extends (...args: any[]) => Promise<any>>(
+	fn: F,
+	retries: number,
+	wait: number
+): (...args: Parameters<F>) => Promise<ReturnType<F>> {
+	const retry = async (attempt = 0, ...args: Parameters<F>): Promise<ReturnType<F>> => {
 		try {
-			return await fn(args);
+			return await fn(...args);
 		} catch (err) {
 			if (err instanceof RetryableError) {
 				attempt++;
@@ -589,7 +607,7 @@ function retrying<I, O>(fn: (args: I) => Promise<O>, retries: number, wait: numb
 				warn(`Retrying ${args} in ${timeout}ms (${attempt}):`, err);
 				return new Promise(resolve => {
 					setTimeout(() => {
-						resolve(retry(args, attempt++));
+						resolve(retry(attempt++, ...args));
 					}, timeout);
 				});
 			} else {
@@ -600,16 +618,20 @@ function retrying<I, O>(fn: (args: I) => Promise<O>, retries: number, wait: numb
 	return retry;
 }
 
-function throttling<I, O>(fn: (args: I) => Promise<O>, limit: number, interval: number): (args: I) => Promise<O> {
+function throttling<F extends (...args: any[]) => Promise<any>>(
+	fn: F,
+	limit: number,
+	interval: number
+): (...args: Parameters<F>) => Promise<ReturnType<F>> {
 	const queue = new Map();
 	let currentTick = 0;
 	let activeCount = 0;
 
-	const throttled = (args: I) => {
+	const throttled = (...args: Parameters<F>) => {
 		let timeout: NodeJS.Timeout;
-		return new Promise<O>((resolve, reject) => {
+		return new Promise<ReturnType<F>>((resolve, reject) => {
 			const execute = () => {
-				resolve(fn(args));
+				resolve(fn(...args));
 				queue.delete(timeout);
 			};
 
