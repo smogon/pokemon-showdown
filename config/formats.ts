@@ -2986,6 +2986,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 					.map(key => this.toID(pokemon.species.abilities[key as "0" | "1" | "H" | "S"]))
 					.filter(ability => ability !== pokemon.ability);
 			}
+			this.add(`raw|<div class="broadcast-blue">The Ladder Achievements Project for Gen 5 Pokebilities has officially started! Check <a href="https://www.smogon.com/forums/threads/3770569">this thread</a> to see what the project is all about and the challenges for this cycle!</div>`);
 		},
 		onBeforeSwitchIn(pokemon) {
 			if (pokemon.m.innates) {
