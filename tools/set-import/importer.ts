@@ -575,16 +575,16 @@ export function fetch(url: string, options?: http.RequestOptions, body?: string)
 					return reject(new RetryableError(`HTTP ${statusCode}`));
 				} else if (statusCode >= 300 && statusCode <= 400 && res.headers.location) {
 					const redirectedUrl = new URL(res.headers.location, url).toString();
-          			resolve(fetch(redirectedUrl, options, body));
+					resolve(fetch(redirectedUrl, options, body));
 				} else {
 					return reject(new Error(`HTTP ${statusCode}`));
 				}
 			}
 			Streams.readAll(res).then(resolve, reject);
 		};
-		const req = options
-			? client.request(url, options, handleResponse)
-			: client.request(url, handleResponse);
+		const req = options ?
+			client.request(url, options, handleResponse) :
+			client.request(url, handleResponse);
 		req.on('error', reject);
 		if (body) req.write(body);
 		req.end();
