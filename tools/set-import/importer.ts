@@ -9,9 +9,13 @@ import { Dex, toID } from '../../sim/dex';
 import { TeamValidator } from '../../sim/team-validator';
 Dex.includeModData();
 
+type DeepPartial<T> = {
+	[P in keyof T]?: T[P] extends (infer I)[] ? (DeepPartial<I>)[] : DeepPartial<T[P]>;
+};
+
 interface PokemonSets {
 	[speciesid: string]: {
-		[name: string]: PokemonSet,
+		[name: string]: DeepPartial<PokemonSet>,
 	};
 }
 
@@ -209,7 +213,7 @@ function addSmogonSet(
 	format: Format,
 	pokemon: string,
 	name: string,
-	set: PokemonSet,
+	set: DeepPartial<PokemonSet>,
 	setsForPokemon: PokemonSets,
 	numByFormat: { [format: string]: number },
 	outOfBattleSpeciesName?: string
@@ -225,16 +229,14 @@ function cleanName(name: string) {
 	return name.replace(/"/g, `'`);
 }
 
-function movesetToPokemonSet(dex: ModdedDex, format: Format, pokemon: string, set: smogon.Moveset): PokemonSet {
+function movesetToPokemonSet(dex: ModdedDex, format: Format, pokemon: string, set: smogon.Moveset) {
+	const level = getLevel(format, set.levels[0]);
 	return {
-		name: '',
-		species: pokemon,
-		gender: getGender(dex, format, pokemon),
-		level: getLevel(format, set.levels[0]),
+		level: level === 100 ? undefined : level,
 		moves: set.moveslots.map(ms => ms[0]).map(s => s.type ? `${s.move} ${s.type}` : s.move),
-		ability: fixedAbility(dex, pokemon, set.abilities[0]) || '',
-		item: set.items[0] === 'No Item' ? '' : set.items[0],
-		nature: set.natures ? set.natures[0] : 'Serious',
+		ability: fixedAbility(dex, pokemon, set.abilities[0]),
+		item: set.items[0] === 'No Item' ? undefined : set.items[0],
+		nature: set.natures[0],
 		teraType: set.teratypes ? set.teratypes[0] : undefined,
 		ivs: toStatsTable(set.ivconfigs[0], 31),
 		evs: toStatsTable(set.evconfigs[0], dex.gen <= 2 ? 252 : 0),
@@ -242,12 +244,13 @@ function movesetToPokemonSet(dex: ModdedDex, format: Format, pokemon: string, se
 }
 
 function toStatsTable(stats?: StatsTable, elide = 0) {
-	const s: StatsTable = fillStats(undefined, elide);
-	if (!stats) return s;
+	if (!stats) return undefined;
 
+	const s: Partial<StatsTable> = {};
 	let stat: keyof StatsTable;
 	for (stat in stats) {
-		s[stat] = stats[stat];
+		const val = stats[stat];
+		if (val !== elide) s[stat] = val;
 	}
 	return s;
 }
@@ -265,7 +268,7 @@ function validSet(
 	format: Format,
 	pokemon: string,
 	name: string,
-	set: PokemonSet,
+	set: DeepPartial<PokemonSet>,
 	outOfBattleSpeciesName?: string
 ) {
 	if (skip(dex, format, pokemon, set)) return false;
@@ -290,7 +293,7 @@ function validSet(
 	return false;
 }
 
-function skip(dex: ModdedDex, format: Format, pokemon: string, set: PokemonSet) {
+function skip(dex: ModdedDex, format: Format, pokemon: string, set: DeepPartial<PokemonSet>) {
 	const { gen } = FORMATS.get(format.id)!;
 	const hasMove = (m: string) => set.moves?.includes(m);
 	const bh = format.id.includes('balancedhackmons');
@@ -319,17 +322,18 @@ function toPokemonSet(
 	dex: ModdedDex,
 	format: Format,
 	pokemon: string,
-	set: PokemonSet,
+	set: DeepPartial<PokemonSet>,
 	outOfBattleSpeciesName?: string
 ): PokemonSet {
 	// To simplify things, during validation we mutate the input set to correct for HP mismatches
 	const hp = set.moves?.find(m => m.startsWith('Hidden Power'));
+	let fill = dex.gen === 2 ? 30 : 31;
 	if (hp) {
 		const type = hp.slice(13);
-		if (type && dex.getHiddenPower(fillStats(set.ivs, 31)).type !== type) {
-			if (!set.ivs || (dex.gen >= 7 && (!set.level || set.level === 100)) ||
-				(dex.gen >= 9 && (!set.level || set.level >= 50))) {
+		if (type && dex.getHiddenPower(fillStats(set.ivs, fill)).type !== type) {
+			if (!set.ivs || (dex.gen >= 7 && (!set.level || set.level === 100))) {
 				set.hpType = type;
+				fill = 31;
 			} else if (dex.gen === 2) {
 				const dvs = { ...dex.types.get(type).HPdvs };
 				let stat: StatID;
@@ -344,11 +348,13 @@ function toPokemonSet(
 		}
 	}
 
-	const copy = { ...set, species: pokemon } as PokemonSet;
-	copy.ivs = fillStats(set.ivs, 31);
+	const copy = { species: pokemon, ...set } as PokemonSet;
+	copy.ivs = fillStats(set.ivs, fill);
 	// The validator expects us to have at least 1 EV set to prove it is intentional
-	if (!set.evs && dex.gen >= 3 && format.mod !== 'gen7letsgo') set.evs = fillStats({ spe: 1 }, 0);
+	if (!set.evs && dex.gen >= 3 && format.mod !== 'gen7letsgo') set.evs = { spe: 1 };
 	copy.evs = fillStats(set.evs, dex.gen <= 2 ? 252 : 0);
+	// The validator wants an ability even when Gen < 3
+	copy.ability = copy.ability || 'None';
 
 	const species = dex.species.get(pokemon);
 	if (species.battleOnly && !format.id.includes('balancedhackmons')) {
@@ -392,9 +398,9 @@ const SMOGON = {
 	bssseries2: 'battlestadiumsinglesseries2',
 } as unknown as { [id: string]: ID };
 
-const getAnalysis = retrying(async (url: string, options: http.RequestOptions, body: string) => {
+const getAnalysis = retrying(async (u: string) => {
 	try {
-		return smogon.Analyses.process(await request(url, options, body));
+		return smogon.Analyses.process(await request(u));
 	} catch (err: any) {
 		// Don't try HTTP errors that we've already retried
 		if (err.message.startsWith('HTTP')) {
@@ -432,14 +438,6 @@ async function getAnalysesByFormat(pokemon: string, gen: GenerationNum) {
 	}
 }
 
-function getGender(dex: ModdedDex, format: Format, pokemon: string) {
-	if (format.ruleTable?.has('obtainablemisc')) {
-		const gender = dex.species.get(pokemon).gender;
-		return gender === 'N' ? '' : gender;
-	}
-	return '';
-}
-
 function getLevel(format: Format, level = 0) {
 	const ruleTable = Dex.formats.getRuleTable(format);
 	if (ruleTable.adjustLevel) return ruleTable.adjustLevel;
@@ -468,35 +466,23 @@ function importUsageBasedSets(gen: GenerationNum, format: Format, statistics: sm
 	for (const pokemon in statistics.data) {
 		const stats = statistics.data[pokemon];
 		if (eligible(dex, toID(pokemon)) && stats.usage >= threshold) {
-			const set: PokemonSet = {
-				name: '',
-				species: pokemon,
-				gender: getGender(dex, format, pokemon),
+			const set: DeepPartial<PokemonSet> = {
 				level: getLevel(format),
 				moves: (top(stats.Moves, 4) as string[]).map(m => dex.moves.get(m).name).filter(m => m),
-				ability: '',
-				item: '',
-				nature: '',
-				ivs: fillStats(undefined, 31),
-				evs: fillStats(undefined, dex.gen <= 2 ? 252 : 0),
 			};
 			if (gen >= 2 && format.mod !== 'gen7letsgo') {
 				const id = top(stats.Items) as string;
 				set.item = dex.items.get(id).name;
-				if (set.item === 'nothing') set.item = '';
+				if (set.item === 'nothing') set.item = undefined;
 			}
 			if (gen >= 3) {
 				const id = top(stats.Abilities) as string;
-				set.ability = fixedAbility(dex, pokemon, dex.abilities.get(id).name) || '';
+				set.ability = fixedAbility(dex, pokemon, dex.abilities.get(id).name);
 				const { nature, evs } = fromSpread(top(stats.Spreads) as string);
 				set.nature = nature;
 				if (format.mod !== 'gen7letsgo') {
 					if (!evs || !Object.keys(evs).length) continue;
-					let stat: keyof StatsTable;
-					for (stat in evs) {
-						const val = evs[stat];
-						if (val !== undefined) set.evs[stat] = val;
-					}
+					set.evs = evs;
 				}
 			}
 			const name = 'Showdown Usage';
