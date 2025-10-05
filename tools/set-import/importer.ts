@@ -9,6 +9,12 @@ import { Dex, toID } from '../../sim/dex';
 import { TeamValidator } from '../../sim/team-validator';
 Dex.includeModData();
 
+interface FetchOptions {
+	url: string,
+	options?: http.RequestOptions,
+	body?: string
+}
+
 type DeepPartial<T> = {
 	[P in keyof T]?: T[P] extends (infer I)[] ? (DeepPartial<I>)[] : DeepPartial<T[P]>;
 };
@@ -398,9 +404,9 @@ const SMOGON = {
 	bssseries2: 'battlestadiumsinglesseries2',
 } as unknown as { [id: string]: ID };
 
-const getAnalysis = retrying(async (url: string, options: http.RequestOptions, body: string) => {
+const getAnalysis = retrying(async (o: FetchOptions) => {
 	try {
-		return smogon.Analyses.process(await request(url, options, body));
+		return smogon.Analyses.process(JSON.parse(await request(o)));
 	} catch (err: any) {
 		// Don't try HTTP errors that we've already retried
 		if (err.message.startsWith('HTTP')) {
@@ -414,7 +420,7 @@ const getAnalysis = retrying(async (url: string, options: http.RequestOptions, b
 async function getAnalysesByFormat(pokemon: string, gen: GenerationNum) {
 	const r = smogon.Analyses.request(pokemon === 'Meowstic' ? 'Meowstic-M' : pokemon, gen);
 	try {
-		const analysesByTier = await getAnalysis(r.url, r.init, r.init.body);
+		const analysesByTier = await getAnalysis({ url: r.url, options: r.init, body: r.init.body });
 		if (!analysesByTier) {
 			error(`Unable to process analysis for ${pokemon} in generation ${gen}`);
 			return undefined;
@@ -548,9 +554,12 @@ class RetryableError extends Error {
 // requests makes us signficantly less likely to encounter ECONNRESET errors
 // on macOS (though these are still pretty frequent, Linux is recommended for running
 // this tool). Retry up to 5 times with a 20ms backoff increment.
-const request = retrying(throttling(fetch, 1, 50), 5, 20);
+export const request = retrying(throttling(fetch, 1, 50), 5, 20);
 
-export function fetch(url: string, options?: http.RequestOptions, body?: string) {
+export function fetch(req: string | FetchOptions) {
+	const url = typeof req === 'string' ? req : req.url;
+	const options = typeof req === 'string' ? undefined : req.options;
+	const body = typeof req === 'string' ? undefined : req.body;
 	const client = url.startsWith('http:') ? http : https;
 
 	return new Promise<string>((resolve, reject) => {
@@ -561,7 +570,7 @@ export function fetch(url: string, options?: http.RequestOptions, body?: string)
 					return reject(new RetryableError(`HTTP ${statusCode}`));
 				} else if (statusCode >= 300 && statusCode <= 400 && res.headers.location) {
 					const redirectedUrl = new URL(res.headers.location, url).toString();
-					resolve(fetch(redirectedUrl, options, body));
+					resolve(fetch({ url: redirectedUrl, options, body }));
 				} else {
 					return reject(new Error(`HTTP ${statusCode}`));
 				}
@@ -577,14 +586,10 @@ export function fetch(url: string, options?: http.RequestOptions, body?: string)
 	});
 }
 
-function retrying<F extends (...args: any[]) => Promise<any>>(
-	fn: F,
-	retries: number,
-	wait: number
-): (...args: Parameters<F>) => Promise<ReturnType<F>> {
-	const retry = async (attempt = 0, ...args: Parameters<F>): Promise<ReturnType<F>> => {
+function retrying<I, O>(fn: (args: I) => Promise<O>, retries: number, wait: number): (args: I) => Promise<O> {
+	const retry = async (args: I, attempt = 0): Promise<O> => {
 		try {
-			return await fn(...args);
+			return await fn(args);
 		} catch (err) {
 			if (err instanceof RetryableError) {
 				attempt++;
@@ -593,7 +598,7 @@ function retrying<F extends (...args: any[]) => Promise<any>>(
 				warn(`Retrying ${args} in ${timeout}ms (${attempt}):`, err);
 				return new Promise(resolve => {
 					setTimeout(() => {
-						resolve(retry(attempt++, ...args));
+						resolve(retry(args, attempt++));
 					}, timeout);
 				});
 			} else {
@@ -604,20 +609,16 @@ function retrying<F extends (...args: any[]) => Promise<any>>(
 	return retry;
 }
 
-function throttling<F extends (...args: any[]) => Promise<any>>(
-	fn: F,
-	limit: number,
-	interval: number
-): (...args: Parameters<F>) => Promise<ReturnType<F>> {
+function throttling<I, O>(fn: (args: I) => Promise<O>, limit: number, interval: number): (args: I) => Promise<O> {
 	const queue = new Map();
 	let currentTick = 0;
 	let activeCount = 0;
 
-	const throttled = (...args: Parameters<F>) => {
+	const throttled = (args: I) => {
 		let timeout: NodeJS.Timeout;
-		return new Promise<ReturnType<F>>((resolve, reject) => {
+		return new Promise<O>((resolve, reject) => {
 			const execute = () => {
-				resolve(fn(...args));
+				resolve(fn(args));
 				queue.delete(timeout);
 			};
 
