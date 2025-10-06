@@ -373,6 +373,22 @@ export class RandomBLCTeams extends RandomTeams {
 			}
 		}
 
+		// Enforce Superpower on Reversadusa
+		if (species.id === 'reversadusa') {
+			if (movePool.includes('superpower')) {
+				counter = this.addMove('superpower', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
+		}
+
+		// Enforce Close Combat on Iron Crest
+		if (species.id === 'ironcrest') {
+			if (movePool.includes('closecombat')) {
+				counter = this.addMove('closecombat', moves, types, abilities, teamDetails, species, isLead, isDoubles,
+					movePool, teraType, role);
+			}
+		}
+
 		// Enforce moves in doubles
 		if (isDoubles) {
 			const doublesEnforcedMoves = ['auroraveil', 'mortalspin', 'spore'];
@@ -691,7 +707,7 @@ export class RandomBLCTeams extends RandomTeams {
 		if (species.id === 'lundicare' && role === 'Fast Attacker') return this.sample(['Leftovers', 'Earth Plate']);
 		if (species.id === 'tryonite' && ability === 'Sturdy') return 'Leftovers';
 		if (species.id === 'tryonite' && role === 'Setup Sweeper') return this.sample(['Heavy-Duty Boots', 'Life Orb']);
-		if (species.id === 'ironcrest' && role === 'Setup Sweeper') return 'Booster Energy';
+		if (species.id === 'ironcrest' && role === 'Setup Sweeper') return 'White Herb';
 		if (species.id === 'seaode') return this.sample(['Heavy-Duty Boots', 'Life Orb', 'Choice Band', 'Choice Scarf']);
 		if (['serpvoltidae', 'twinkaton', 'devestial'].includes(species.id) && role === 'Bulky Support') return 'Leftovers';
 		if (species.id === 'serpvoltidae' && role === 'Bulky Attacker' && !moves.has('shoreup')) {
@@ -751,8 +767,7 @@ export class RandomBLCTeams extends RandomTeams {
 		}
 		if (species.id === 'groundead') return (role === 'Wallbreaker') ? 'Choice Band' : 'Leftovers';
 		if (species.id === 'bellolysk') {
-			if (role === 'Bulky Setup') return this.sample(['Leftovers', 'Life Orb']);
-			if (role === 'Bulky Support') return 'Leftovers';
+			if (role === 'Bulky Setup' || role === 'Bulky Support') return 'Leftovers';
 			if (role === 'Wallbreaker') return 'Life Orb';
 		}
 		if (species.id === 'bufferfly' && role === 'Bulky Setup') return 'Leftovers';
