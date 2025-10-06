@@ -354,7 +354,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] ZU",
 		mod: 'gen9',
 		ruleset: ['[Gen 9] PU'],
-		banlist: ['PU', 'ZUBL', 'Unburden'],
+		banlist: ['PU', 'ZUBL', 'Unburden', 'Heat Rock'],
 	},
 	{
 		name: "[Gen 9] Free-For-All",
