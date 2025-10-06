@@ -528,7 +528,7 @@
                 "teraTypes": ["Flying"]
             },
             {
-                "role": "Bulky Attacker",
+                "role": "Imprisoner",
                 "movepool": ["Imprison", "Knock Off", "Poison Jab", "Protect"],
                 "abilities": ["Poison Touch"],
                 "teraTypes": ["Flying"]
@@ -2043,13 +2043,13 @@
             {
                 "role": "Setup Sweeper",
                 "movepool": ["Alluring Voice", "Grass Knot", "Nasty Plot", "Protect", "Thunderbolt"],
-                "abilities": ["Lightning Rod"],
+                "abilities": ["Volt Absorb"],
                 "teraTypes": ["Fairy", "Flying", "Grass"]
             },
             {
                 "role": "Fast Attacker",
                 "movepool": ["Discharge", "Encore", "Protect", "Super Fang"],
-                "abilities": ["Lightning Rod"],
+                "abilities": ["Volt Absorb"],
                 "teraTypes": ["Flying"]
             }
         ]
