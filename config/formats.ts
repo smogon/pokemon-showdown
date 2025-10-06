@@ -2927,6 +2927,7 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 			'Faeruin', 'Karmalice', 'Martorse', 'Massassin', 'Mohawtter', 'Mon Mothra', 'Parasike', 'Pinaturbo', 'Piss', 'Vipult',
 			'Fettogre', 'Florustitia', 'Searytch', 'Sleet Shell', 'Snabterra', 'Socknbuskn', 'Thaumaton', 'Versalyre',
 			'Lavalisk', 'Llanfairwyrm', 'Primordialith', 'Reversadusa', 'Sculptera', 'Wizhazard', 'Yamateraph',
+			'Whalestro', 'Urslag', 'Centaghoul', 'Noirwark', 'Metarachne',
 		],
 		onBegin() {
 			this.add('-message', `Welcome to Blank Canvas!`);
