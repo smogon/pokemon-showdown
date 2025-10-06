@@ -566,29 +566,31 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 	forceselect: {
 		effectType: 'ValidatorRule',
 		name: 'Force Select',
-		desc: `Forces a Pokemon to be on the team and selected at Team Preview. Usage: Force Select = [Pokemon], e.g. "Force Select = Magikarp" or "Force Select = Koraidon | Miraidon"`,
+		desc: `Forces a Pokemon to be on the team and selected at Team Preview. Usage: Force Select = [Pokemon], e.g. "Force Select = Magikarp"`,
 		hasValue: true,
 		onValidateRule(value) {
-			const values = value.split('|');
-			if (values.some(v => !this.dex.species.get(v).exists)) throw new Error(`Misspelled Pokemon provided in "${value}"`);
+			if (!this.dex.species.get(value).exists) throw new Error(`Misspelled Pokemon "${value}"`);
 		},
 		onValidateTeam(team) {
-			let hasSelection = false;
-			const speciesNameList = this.ruleTable.valueRules.get('forceselect')!.split('|')
-				.map(value => this.dex.species.get(value).name);
-			for (const set of team) {
-				if (speciesNameList.includes(set.species)) {
-					hasSelection = true;
-					break;
-				}
-			}
-			if (!hasSelection) {
-				return [
-					`Your team must contain ${speciesNameList.length > 1 ? `one of: ${speciesNameList.join(', ')}` : speciesNameList[0]}.`,
-				];
+			const species = this.dex.species.get(this.ruleTable.valueRules.get('forceselect'));
+			if (!team.some(set => set.species === species.name)) {
+				return [`Your team must contain ${species.name}.`];
 			}
 		},
-		// hardcoded in sim/side
+		onChooseTeam(positions, pokemon, autoChoose) {
+			const species = this.dex.species.get(this.ruleTable.valueRules.get('forceselect'));
+			const speciesIndex = pokemon.findIndex(p => p.species.name === species.name);
+			if (autoChoose) {
+				positions = [speciesIndex];
+				for (let i = 0; i < pokemon.length; i++) {
+					if (i !== speciesIndex) positions.push(i);
+				}
+				return positions;
+			}
+			if (!positions.includes(speciesIndex)) {
+				return `You must bring ${species.name} to the battle.`;
+			}
+		},
 	},
 	evlimits: {
 		effectType: 'ValidatorRule',
@@ -2137,7 +2139,16 @@ export const Rulesets: import('../sim/dex-formats').FormatDataTable = {
 				throw new Error(`A Max Total Level of ${maxTotalLevel}${ruleTable.blame('maxtotallevel')} is too low with ${maxTeamSize}${maxTeamSizeBlame} Pokémon at min level ${ruleTable.minLevel}${ruleTable.blame('minlevel')}`);
 			}
 		},
-		// hardcoded in sim/side
+		onChooseTeam(positions, pokemon, autoChoose) {
+			if (autoChoose) {
+				return [...pokemon.keys()].sort((a, b) => (pokemon[a].level - pokemon[b].level));
+			}
+			let totalLevel = 0;
+			for (const pos of positions) totalLevel += pokemon[pos].level;
+			if (totalLevel > this.ruleTable.maxTotalLevel!) {
+				return `Your selected team has a total level of ${totalLevel}, but it can't be above ${this.ruleTable.maxTotalLevel}.`;
+			}
+		},
 	},
 	minlevel: {
 		effectType: 'ValidatorRule',
