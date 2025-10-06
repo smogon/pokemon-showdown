@@ -276,9 +276,30 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		name: "[Gen 9] Terastal Crescendo",
 		mod: 'gen9',
 		gameType: 'doubles',
-		ruleset: ['Flat Rules', '!! Picked Team Size = 2', 'Min Team Size = 4', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer', 'Limit One Restricted', 'Force Select = Koraidon | Miraidon'],
+		ruleset: ['Flat Rules', '!! Picked Team Size = 2', 'Min Team Size = 4', '!! Adjust Level = 50', 'Min Source Gen = 9', 'VGC Timer'],
 		unbanlist: ['Koraidon', 'Miraidon'],
-		restricted: ['Koraidon', 'Miraidon'],
+		onValidateTeam(team) {
+			const donCount = team.filter(set => set.species === 'Koraidon' || set.species === 'Miraidon').length;
+			if (donCount !== 1) {
+				return [
+					`You must bring either Koraidon or Miraidon, but not both.`,
+					`(You have ${!donCount ? 'neither' : 'both'} Koraidon ${!donCount ? 'nor' : 'and'} Miraidon)`,
+				];
+			}
+		},
+		onChooseTeam(positions, pokemon, autoChoose) {
+			const donIndex = pokemon.findIndex(p => p.species.name === 'Koraidon' || p.species.name === 'Miraidon');
+			if (autoChoose) {
+				positions = [donIndex];
+				for (let i = 0; i < pokemon.length; i++) {
+					if (i !== donIndex) positions.push(i);
+				}
+				return positions;
+			}
+			if (!positions.includes(donIndex)) {
+				return `You must bring ${pokemon[donIndex].species.name} to the battle.`;
+			}
+		},
 	},
 	{
 		name: "[Gen 9] Doubles Custom Game",
@@ -4689,9 +4710,47 @@ export const Formats: import('../sim/dex-formats').FormatList = [
 		gameType: 'doubles',
 		searchShow: false,
 		bestOfDefault: true,
-		ruleset: ['Flat Rules', 'Limit Two Restricted'],
+		ruleset: ['Flat Rules'],
 		restricted: ['Restricted Legendary'],
 		banlist: ['Soul Dew'],
+		onValidateTeam(team) {
+			const problems = [];
+			const restrictedSpecies = [];
+			const nonRestrictedSpecies = [];
+			for (const set of team) {
+				const species = this.dex.species.get(set.species);
+				if (this.ruleTable.isRestrictedSpecies(species)) {
+					restrictedSpecies.push(species.name);
+				} else {
+					nonRestrictedSpecies.push(species.name);
+				}
+			}
+			if (restrictedSpecies.length > 4) {
+				problems.push(`You can only use up to four restricted Pok\u00e9mon; you have: ${restrictedSpecies.join(', ')}`);
+			}
+			if (nonRestrictedSpecies.length < 2) {
+				problems.push(`You must use at least two non-restricted Pok\u00e9mon; you have: ${nonRestrictedSpecies.length ? nonRestrictedSpecies[0] : 'None'}.`);
+			}
+			return problems;
+		},
+		onChooseTeam(positions, pokemon, autoChoose) {
+			if (autoChoose) {
+				positions = [];
+				let restrictedCount = 0;
+				for (let i = 0; i < pokemon.length; i++) {
+					if (this.ruleTable.isRestrictedSpecies(pokemon[i].species)) {
+						restrictedCount++;
+						if (restrictedCount > 2) continue;
+					}
+					positions.push(i);
+				}
+				return positions;
+			}
+			const restrictedCount = positions.filter(pos => this.ruleTable.isRestrictedSpecies(pokemon[pos].species)).length;
+			if (restrictedCount > 2) {
+				return `You can only bring up to two restricted Pok\u00e9mon to the battle.`;
+			}
+		},
 	},
 	{
 		name: "[Gen 4] VGC 2009",
