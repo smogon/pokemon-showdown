@@ -292,4 +292,19 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	ironmike: {
 		tier: "RU",
 	},
+	whalestro: {
+		tier: "RU",
+	},
+	urslag: {
+		tier: "RU",
+	},
+	centaghoul: {
+		tier: "RU",
+	},
+	noirwark: {
+		tier: "RU",
+	},
+	metarachne: {
+		tier: "RU",
+	},
 };
