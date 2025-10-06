@@ -5552,13 +5552,14 @@ export const Abilities: import('../sim/dex-abilities').AbilityDataTable = {
 			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
 			if (pokemon.species.forme !== 'Hero') {
 				pokemon.formeChange('Palafin-Hero', this.effect, true);
+				pokemon.heroMessageDisplayed = false;
 			}
 		},
 		onSwitchIn(pokemon) {
 			if (pokemon.baseSpecies.baseSpecies !== 'Palafin') return;
-			if (!this.effectState.heroMessageDisplayed && pokemon.species.forme === 'Hero') {
+			if (!pokemon.heroMessageDisplayed && pokemon.species.forme === 'Hero') {
 				this.add('-activate', pokemon, 'ability: Zero to Hero');
-				this.effectState.heroMessageDisplayed = true;
+				pokemon.heroMessageDisplayed = true;
 			}
 		},
 		flags: { failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, cantsuppress: 1, notransform: 1 },
