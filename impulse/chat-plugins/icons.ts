@@ -5,7 +5,7 @@
 */
 
 import { FS } from '../../lib';
-import { MongoDB } from '../../impulse/mongodb_module';
+import { ImpulseDB } from '../../impulse/impulse-db';
 
 // Change this to match your server's userlist color.
 //const backgroundColor = 'rgba(248, 187, 217, 0.3)';
@@ -26,7 +26,7 @@ interface IconDocument {
 }
 
 // Get typed MongoDB collection for icons
-const IconsDB = MongoDB<IconDocument>('usericons');
+const IconsDB = ImpulseDB<IconDocument>('usericons');
 
 async function updateIcons(): Promise<void> {
   try {
