@@ -44,6 +44,7 @@ sendChatMessage(message: string) {
 
 import Autolinker from 'autolinker';
 import { ImpulseDB } from '../../impulse/impulse-db';
+import '../utils';
 
 interface EmoticonEntry {
   _id: string; // emoticon name
