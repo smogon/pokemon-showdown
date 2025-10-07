@@ -23,8 +23,15 @@ const NewsDB = ImpulseDB<NewsEntry>('news');
 
 class NewsManager {
   static async generateNewsDisplay(): Promise<string[]> {
-    // Use findSorted for efficient sorted queries - no need to fetch all and sort in memory
-    const news = await NewsDB.findSorted({}, { timestamp: -1 }, 3);
+    // Use find with sort and limit options for efficient sorted queries
+    const news = await NewsDB.find(
+      {},
+      {
+        sort: { timestamp: -1 },
+        limit: 3,
+        projection: { title: 1, desc: 1, postedBy: 1, postTime: 1 }
+      }
+    );
     
     return news.map(entry =>
       `<center><strong>${entry.title}</strong></center><br>` +
@@ -34,7 +41,7 @@ class NewsManager {
   }
   
   static async onUserConnect(user: User): Promise<void> {
-    // More efficient: check count first before fetching
+    // More efficient: check if any news exists first before fetching
     const hasNews = await NewsDB.exists({});
     if (!hasNews) {
       return; // Don't send anything if no news exists
@@ -64,10 +71,10 @@ class NewsManager {
   }
   
   static async deleteNews(title: string): Promise<string | null> {
-    // Use atomic deleteOne - no need to fetch first
-    const deletedCount = await NewsDB.deleteOne({ title });
+    // Use atomic deleteOne and check deletedCount
+    const result = await NewsDB.deleteOne({ title });
     
-    if (deletedCount === 0) {
+    if (result.deletedCount === 0) {
       return `News with this title doesn't exist.`;
     }
     
@@ -75,13 +82,13 @@ class NewsManager {
   }
   
   static async updateNews(title: string, newDesc: string): Promise<string | null> {
-    // Atomic update operation
-    const modifiedCount = await NewsDB.updateOne(
+    // Atomic update operation with $set and check modifiedCount
+    const result = await NewsDB.updateOne(
       { title },
       { $set: { desc: newDesc } }
     );
     
-    if (modifiedCount === 0) {
+    if (result.matchedCount === 0) {
       return `News with this title doesn't exist.`;
     }
     
@@ -90,7 +97,10 @@ class NewsManager {
   
   static async getAllNews(): Promise<NewsEntry[]> {
     // Fetch all news sorted by timestamp descending
-    return await NewsDB.findSorted({}, { timestamp: -1 });
+    return await NewsDB.find(
+      {},
+      { sort: { timestamp: -1 } }
+    );
   }
   
   static async getNewsByTitle(title: string): Promise<NewsEntry | null> {
@@ -100,18 +110,25 @@ class NewsManager {
   
   static async getRecentNews(limit: number = 5): Promise<NewsEntry[]> {
     // Get most recent N news items
-    return await NewsDB.findSorted({}, { timestamp: -1 }, limit);
+    return await NewsDB.find(
+      {},
+      {
+        sort: { timestamp: -1 },
+        limit
+      }
+    );
   }
   
   static async deleteOldNews(daysOld: number = 90): Promise<number> {
-    // Delete news older than specified days
+    // Delete news older than specified days and return deletedCount
     const cutoffTimestamp = Date.now() - (daysOld * 24 * 60 * 60 * 1000);
-    return await NewsDB.deleteMany({ timestamp: { $lt: cutoffTimestamp } });
+    const result = await NewsDB.deleteMany({ timestamp: { $lt: cutoffTimestamp } });
+    return result.deletedCount || 0;
   }
   
   static async getNewsCount(): Promise<number> {
     // Efficient count operation
-    return await NewsDB.count({});
+    return await NewsDB.countDocuments({});
   }
 }
 
@@ -169,8 +186,8 @@ export const commands: Chat.ChatCommands = {
       const trimmedTitle = title.trim();
       const trimmedDesc = descParts.join(',').trim();
       
-      // Check if news with this title already exists
-      const existing = await NewsManager.getNewsByTitle(trimmedTitle);
+      // Check if news with this title already exists using exists()
+      const existing = await NewsDB.exists({ title: trimmedTitle });
       if (existing) {
         return this.errorReply(`News with title "${trimmedTitle}" already exists. Use /servernews update to modify it.`);
       }
