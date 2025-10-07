@@ -7,7 +7,7 @@
 Impulse.NewsManager.onUserConnect(user);
 */
 
-import { MongoDB } from '../../impulse/mongodb_module';
+import { ImpulseDB } from '../../impulse/impulse-db';
 
 interface NewsEntry {
   _id?: any; // MongoDB automatically generates this
@@ -19,7 +19,7 @@ interface NewsEntry {
 }
 
 // Get typed MongoDB collection
-const NewsDB = MongoDB<NewsEntry>('news');
+const NewsDB = ImpulseDB<NewsEntry>('news');
 
 class NewsManager {
   static async generateNewsDisplay(): Promise<string[]> {
