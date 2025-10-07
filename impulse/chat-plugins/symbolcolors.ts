@@ -5,7 +5,7 @@
 */
 
 import { FS } from '../../lib';
-import { MongoDB } from '../../impulse/mongodb_module';
+import { ImpulseDB } from '../../impulse/impulse-db';
 
 const STAFF_ROOM_ID = 'staff';
 
@@ -17,7 +17,7 @@ interface SymbolColorDocument {
 }
 
 // Get typed MongoDB collection for symbol colors
-const SymbolColorsDB = MongoDB<SymbolColorDocument>('symbolcolors');
+const SymbolColorsDB = ImpulseDB<SymbolColorDocument>('symbolcolors');
 
 async function updateSymbolColors(): Promise<void> {
 	try {
