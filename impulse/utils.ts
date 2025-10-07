@@ -76,4 +76,4 @@ function generateThemedTable(
   return output;
 }
 
-  Impulse.generateThemedTable = generateThemedTable;
+Impulse.generateThemedTable = generateThemedTable;
