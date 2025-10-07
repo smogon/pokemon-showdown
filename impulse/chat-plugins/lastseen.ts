@@ -12,8 +12,7 @@
 import { ImpulseDB } from '../../impulse/impulse-db';
 
 interface SeenDocument {
-	_id?: any;
-	userid: string;
+	_id: string; // userid
 	lastSeen: Date;
 }
 
@@ -24,13 +23,13 @@ const SeenDB = ImpulseDB<SeenDocument>('seen');
  * Uses atomic upsert for race-condition safety
  */
 export function trackSeen(userid: string): void {
-	
-	// Atomic upsert - no race conditions, single database operation
+	// Atomic upsert with $set operator - no race conditions, single database operation
 	void SeenDB.upsert(
-		{ userid: userid },
+		{ _id: userid },
 		{
-			userid: userid,
-			lastSeen: new Date(),
+			$set: {
+				lastSeen: new Date(),
+			}
 		}
 	).catch(err => {
 		console.error('Error tracking seen data:', err);
@@ -42,8 +41,12 @@ Impulse.Seen = trackSeen;
 /**
  * Get user's last seen timestamp
  */
-async function getLastSeen(userid: string): Promise<Date | null> {	
-	const doc = await SeenDB.findOne({ userid: userid });
+async function getLastSeen(userid: string): Promise<Date | null> {
+	// Use findOne with projection to fetch only lastSeen field
+	const doc = await SeenDB.findOne(
+		{ _id: userid },
+		{ projection: { lastSeen: 1 } }
+	);
 	
 	return doc?.lastSeen || null;
 }
@@ -52,22 +55,33 @@ async function getLastSeen(userid: string): Promise<Date | null> {
  * Check if user has any seen data
  */
 async function hasSeen(userid: string): Promise<boolean> {
-	return SeenDB.exists({ userid: userid });
+	return SeenDB.exists({ _id: userid });
 }
 
 /**
  * Get recently seen users (for leaderboards, etc.)
  */
 async function getRecentUsers(limit: number = 50): Promise<SeenDocument[]> {
-	return SeenDB.findSorted({}, { lastSeen: -1 }, limit);
+	// Use find with sort and limit for efficient query
+	return SeenDB.find(
+		{},
+		{
+			sort: { lastSeen: -1 },
+			limit,
+			projection: { _id: 1, lastSeen: 1 }
+		}
+	);
 }
 
 /**
  * Clean up old seen data (users not seen in X days)
  */
 async function cleanupOldSeen(daysOld: number = 365): Promise<number> {	
-	const cutoffDate = new Date(Date.now() - daysOld * 24 * 60 * 60 * 1000);	
-	return SeenDB.deleteMany({ lastSeen: { $lt: cutoffDate } });
+	const cutoffDate = new Date(Date.now() - daysOld * 24 * 60 * 60 * 1000);
+	
+	// Use deleteMany and return deletedCount
+	const result = await SeenDB.deleteMany({ lastSeen: { $lt: cutoffDate } });
+	return result.deletedCount || 0;
 }
 
 function clearRooms(rooms: Room[], user: User): string[] {
@@ -165,8 +179,8 @@ export const commands: Chat.ChatCommands = {
 				`<strong>Recently Seen Users (${recent.length}):</strong><br/>` +
 				recent.map((doc, i) => {
 					const duration = Chat.toDurationString(Date.now() - doc.lastSeen.getTime());
-					return `${i + 1}. ${doc.userid} - ${duration} ago`;
-				}).join('<br/>')
+					return `${i + 1}. ${doc._id} - ${duration} ago`;
+				}).join('<br/>>')
 			);
 		} catch (err: any) {
 			this.errorReply('Error retrieving recent seen data: ' + err.message);
