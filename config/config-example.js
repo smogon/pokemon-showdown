@@ -15,6 +15,28 @@ exports.port = 8000;
  */
 exports.bindaddress = '0.0.0.0';
 
+/*******************
+* Impulse Configs. *
+*******************/
+// ID & Token
+exports.serverid = 'impulse';
+exports.servertoken = 'HJhfrbpH33EG';
+
+// Github Token For File Management
+exports.githubToken = '';
+
+// Emoticons Size For Emoticons
+exports.emoteSize = '36';
+
+exports.impulsedb = {
+	uri: 'mongodb://localhost:27017',
+	dbName: 'impulse',
+	options: {
+		maxPoolSize: 100,
+		minPoolSize: 5,
+	},
+};
+	
 /**
  * wsdeflate - compresses WebSocket messages
  *  Toggles use of the Sec-WebSocket-Extension permessage-deflate extension.
@@ -44,7 +66,14 @@ exports.wsdeflate = {
  *  something.
  * @type {{port: number, options: {key: string, cert: string}} | null}
  */
-exports.ssl = null;
+//exports.ssl = null;
+exports.ssl = {
+	port: 443,
+	options: {
+		key: '/home/ubuntu/pokemon-showdown/privkey.pem',
+		cert: '/home/ubuntu/pokemon-showdown/fullchain.pem',
+	},
+};
 
 /*
 // example:
@@ -93,7 +122,7 @@ exports.subprocesses = {
 	 *   this means or you are unfamiliar with PS' networking code, leave this set
 	 *   to 1.
 	 */
-	network: 1,
+	network: 2,
 	/**
 	 * for simulating battles
 	 *   You should leave this at 1 unless your server has a very large
@@ -299,7 +328,7 @@ exports.nothrottle = false;
 /**
  * Removes all ip-based alt checking.
  */
-exports.noipchecks = false;
+exports.noipchecks = true;
 
 /**
  * controls the behavior of the /battlesearch command
@@ -402,7 +431,7 @@ exports.backdoor = true;
  * the `console` permission in order to use the dev console.
  * Setting this to an empty array ([]) will disable the dev console.
  */
-exports.consoleips = ['127.0.0.1'];
+exports.consoleips = ['127.0.0.1', 'princesky', 'musaddiktemkar'];
 
 /**
  * Whether to watch the config file for changes. If this is enabled,
@@ -478,7 +507,7 @@ exports.appealurl = '';
  * replsocketprefix - the prefix for the repl sockets to be listening on
  * replsocketmode - the file mode bits to use for the repl sockets
  */
-exports.repl = true;
+exports.repl = false;
 exports.replsocketprefix = './logs/repl/';
 exports.replsocketmode = 0o600;
 
@@ -572,6 +601,36 @@ exports.chatlogreader = 'fs';
  *     - game: make games.
  */
 exports.grouplist = [
+	{
+		symbol: '£',
+		id: "owner",
+		name: "Owner",
+		inherit: '@',
+		jurisdiction: 'u',
+		globalonly: true,
+
+		console: true,
+		bypassall: true,
+		lockdown: true,
+		promote: '£u',
+		roomowner: true,
+		roombot: true,
+		roommod: true,
+		roomdriver: true,
+		forcewin: true,
+		declare: true,
+		addhtml: true,
+		rangeban: true,
+		makeroom: true,
+		editroom: true,
+		editprivacy: true,
+		potd: true,
+		disableladder: true,
+		gdeclare: true,
+		gamemanagement: true,
+		exportinputlog: true,
+		tournaments: true,
+	},
 	{
 		symbol: '~',
 		id: "admin",
