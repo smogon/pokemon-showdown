@@ -250,6 +250,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "Green",
 		evos: ["Metapod"],
 		eggGroups: ["Bug"],
+		cosmeticFormes: ["Caterpie-King"],
 	},
 	metapod: {
 		num: 11,
@@ -2961,6 +2962,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		weightkg: 4,
 		color: "Purple",
 		eggGroups: ["Ditto"],
+		cosmeticFormes: ["Ditto-Slimeking"],
 	},
 	eevee: {
 		num: 133,
@@ -4296,6 +4298,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Bug"],
 		otherFormes: ["Scizor-Mega"],
 		formeOrder: ["Scizor", "Scizor-Mega"],
+		cosmeticFormes: ["Scizor-Ranger"],
 	},
 	scizormega: {
 		num: 212,
@@ -4870,6 +4873,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		color: "White",
 		tags: ["Restricted Legendary"],
 		eggGroups: ["Undiscovered"],
+		cosmeticFormes: ["Lugia-Shadow"],
 	},
 	hooh: {
 		num: 250,
@@ -8438,6 +8442,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		evoType: "levelMove",
 		evoMove: "Ancient Power",
 		eggGroups: ["Field"],
+		cosmeticFormes: ["Mamoswine-Appa"],
 	},
 	porygonz: {
 		num: 474,
@@ -9688,6 +9693,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Drilbur",
 		evoLevel: 31,
 		eggGroups: ["Field"],
+		cosmeticFormes: ["Excadrill-Miner"],
 	},
 	audino: {
 		num: 531,
@@ -11110,7 +11116,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		prevo: "Golett",
 		evoLevel: 43,
 		eggGroups: ["Mineral"],
-		cosmeticFormes: ["Golurk-Halloween"],
+		cosmeticFormes: ["Golurk-Halloween", "Golurk-Fullmetal"],
 	},
 	pawniard: {
 		num: 624,
@@ -11560,6 +11566,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		tags: ["Mythical"],
 		otherFormes: ["Meloetta-Pirouette"],
 		formeOrder: ["Meloetta", "Meloetta-Pirouette"],
+		cosmeticFormes: ["Meloetta-Diva"],
 	},
 	meloettapirouette: {
 		num: 648,
@@ -11576,6 +11583,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		eggGroups: ["Undiscovered"],
 		requiredMove: "Relic Song",
 		battleOnly: "Meloetta",
+		cosmeticFormes: ["Meloetta-Pirouette-Diva"],
 	},
 	genesect: {
 		num: 649,
@@ -11591,6 +11599,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		tags: ["Mythical"],
 		otherFormes: ["Genesect-Douse", "Genesect-Shock", "Genesect-Burn", "Genesect-Chill"],
 		formeOrder: ["Genesect", "Genesect-Douse", "Genesect-Shock", "Genesect-Burn", "Genesect-Chill"],
+		cosmeticFormes: ["Genesect-Teamplasma", "Genesect-Beru"],
 	},
 	genesectdouse: {
 		num: 649,
@@ -11608,6 +11617,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		requiredItem: "Douse Drive",
 		changeEvent: "setHeldItem",
 		changesFrom: "Genesect",
+		cosmeticFormes: ["Genesect-Douse-Teamplasma", "Genesect-Douse-Beru"],
 	},
 	genesectshock: {
 		num: 649,
@@ -11625,6 +11635,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		requiredItem: "Shock Drive",
 		changeEvent: "setHeldItem",
 		changesFrom: "Genesect",
+		cosmeticFormes: ["Genesect-Shock-Teamplasma", "Genesect-Shock-Beru"],
 	},
 	genesectburn: {
 		num: 649,
@@ -11642,6 +11653,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		requiredItem: "Burn Drive",
 		changeEvent: "setHeldItem",
 		changesFrom: "Genesect",
+		cosmeticFormes: ["Genesect-Burn-Teamplasma", "Genesect-Burn-Beru"],
 	},
 	genesectchill: {
 		num: 649,
@@ -11659,6 +11671,7 @@ export const Pokedex: import('../sim/dex-species').SpeciesDataTable = {
 		requiredItem: "Chill Drive",
 		changeEvent: "setHeldItem",
 		changesFrom: "Genesect",
+		cosmeticFormes: ["Genesect-Chill-Teamplasma", "Genesect-Chill-Beru"],
 	},
 	chespin: {
 		num: 650,

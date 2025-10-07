@@ -283,7 +283,7 @@ export class Battle {
 		this.FAIL = false;
 		this.SILENT_FAIL = null;
 
-		this.send = options.send || (() => {});
+		this.send = options.send || (() => { });
 
 		const inputOptions: { formatid: ID, seed: PRNGSeed, rated?: string | true } = {
 			formatid: options.formatid, seed: this.prngSeed,
@@ -1142,7 +1142,7 @@ export class Battle {
 		callback = this.getCallback(pokemon, species, callbackName);
 		if (callback !== undefined) {
 			handlers.push(this.resolvePriority({
-				effect: species, callback, state: pokemon.speciesState, end() {}, effectHolder: pokemon,
+				effect: species, callback, state: pokemon.speciesState, end() { }, effectHolder: pokemon,
 			}, callbackName));
 		}
 		const side = pokemon.side;
@@ -2502,10 +2502,10 @@ export class Battle {
 	checkFainted() {
 		for (const side of this.sides) {
 			for (const pokemon of side.active) {
-				if (pokemon.fainted) {
-					pokemon.status = 'fnt' as ID;
-					pokemon.switchFlag = true;
-				}
+				if (!pokemon) continue;
+				if (!pokemon.fainted) continue;
+				pokemon.status = 'fnt' as ID;
+				pokemon.switchFlag = true;
 			}
 		}
 	}
