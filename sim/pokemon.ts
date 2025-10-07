@@ -253,6 +253,7 @@ export class Pokemon {
 	truantTurn: boolean;
 	bondTriggered: boolean;
 	// Gen 9 only
+	heroMessageDisplayed: boolean;
 	swordBoost: boolean;
 	shieldBoost: boolean;
 	syrupTriggered: boolean;
@@ -467,6 +468,7 @@ export class Pokemon {
 		this.previouslySwitchedIn = 0;
 		this.truantTurn = false;
 		this.bondTriggered = false;
+		this.heroMessageDisplayed = false;
 		this.swordBoost = false;
 		this.shieldBoost = false;
 		this.syrupTriggered = false;
