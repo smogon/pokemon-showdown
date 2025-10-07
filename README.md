@@ -1,19 +1,8 @@
 # A PokeBedrock Fork of Pokémon Showdown
 
-This library has been gutted, and changed a bit. The main things that are changed have to do with usability
-with Minecraft Bedrocks Script API.
-
 ## Goal
 
 Try to keep this fork with the least amount of changes to the original codebase. However since we NEED to make changes to make it work in minecraft we need to keep all changes small and prefix them all with `// @pokebedrock` ensuring when merge conflicts come (when syncing with the original codebase) we can easily see what changes are needed to be made.
-
-## Releasing a new NPM Version
-
-If your `smell-of-curry` and you want to release a new version, you can do the following:
-
-1. Update the version in `package.json`
-2. Run `npm run build-npm`
-3. Run `npm publish`
 
 ## Current Changes:
 
@@ -79,3 +68,11 @@ If your `smell-of-curry` and you want to release a new version, you can do the f
 - **Type Definitions**: Improved TypeScript definitions throughout the codebase.
 - **Const Assertions**: Added `as const` to data tables for better type inference.
 - **Error Handling**: Enhanced error handling for bag items and forme changes.
+
+## Releasing a new NPM Version
+
+If your `smell-of-curry` and you want to release a new version, you can do the following:
+
+1. Update the version in `package.json`
+2. Run `npm run build-npm`
+3. Run `npm publish`
