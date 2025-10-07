@@ -60,7 +60,7 @@ export class ExpSystem {
 
   private static async loadExpConfig(): Promise<void> {
     try {
-      const config = await ExpConfigDB.findById('config');
+      const config = await ExpConfigDB.findOne({ _id: 'config' });
       if (config) {
         DOUBLE_EXP = config.doubleExp;
         DOUBLE_EXP_END_TIME = config.doubleExpEndTime;
@@ -76,6 +76,7 @@ export class ExpSystem {
       await ExpConfigDB.upsert(
         { _id: 'config' },
         {
+          _id: 'config',
           doubleExp: DOUBLE_EXP,
           doubleExpEndTime: DOUBLE_EXP_END_TIME,
           lastUpdated: new Date(),
@@ -99,6 +100,7 @@ export class ExpSystem {
     await ExpDB.upsert(
       { _id: id },
       {
+        _id: id,
         exp: amount,
         level: level,
         lastUpdated: new Date(),
@@ -108,7 +110,7 @@ export class ExpSystem {
 
   static async readExp(userid: string): Promise<number> {
     const id = toID(userid);
-    const doc = await ExpDB.findById(id);
+    const doc = await ExpDB.findOne({ _id: id });
     return doc ? doc.exp : DEFAULT_EXP;
   }
 
@@ -134,7 +136,7 @@ export class ExpSystem {
     }
 
     // Get current exp and level for level-up detection
-    const currentDoc = await ExpDB.findById(id);
+    const currentDoc = await ExpDB.findOne({ _id: id });
     const currentExp = currentDoc ? currentDoc.exp : DEFAULT_EXP;
     const currentLevel = this.getLevel(currentExp);
     
@@ -170,7 +172,7 @@ export class ExpSystem {
     const id = toID(userid);
     
     // Get current exp and level for level-up detection
-    const currentDoc = await ExpDB.findById(id);
+    const currentDoc = await ExpDB.findOne({ _id: id });
     const currentExp = currentDoc ? currentDoc.exp : DEFAULT_EXP;
     const currentLevel = this.getLevel(currentExp);
     
@@ -315,7 +317,7 @@ export class ExpSystem {
     }
     
     // User doesn't have enough exp or doesn't exist
-    const doc = await ExpDB.findById(id);
+    const doc = await ExpDB.findOne({ _id: id });
     return doc ? doc.exp : DEFAULT_EXP;
   }
 
@@ -325,8 +327,8 @@ export class ExpSystem {
   }
 
   static async getRichestUsers(limit: number = 100): Promise<[string, number][]> {
-    // Use optimized findSorted from mongodb_module
-    const docs = await ExpDB.findSorted({}, { exp: -1 }, limit);
+    // Use MongoDB sort and limit
+    const docs = await ExpDB.find({}, { sort: { exp: -1 }, limit });
     return docs.map(doc => [doc._id, doc.exp]);
   }
 
@@ -571,7 +573,7 @@ export const commands: Chat.ChatCommands = {
       return this.parse(`/join view-expladder`);
     },
 
-    async help(target, room, user) {
+	  async help(target, room, user) {
       if (!this.runBroadcast()) return;
       this.sendReplyBox(
         `<div><b><center>EXP System Commands By ${Impulse.nameColor('Prince Sky', true, false)}</center></b><br>` +
