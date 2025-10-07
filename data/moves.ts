@@ -1982,12 +1982,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, metronome: 1 },
-		onHit(target, source) {
+		onHit(target, source, move) {
 			const item = target.getItem();
 			if (source.hp && item.isBerry && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Bug Bite', `[of] ${source}`);
-				if (this.singleEvent('Eat', item, null, source, null, null)) {
-					this.runEvent('EatItem', source, null, null, item);
+				if (this.singleEvent('Eat', item, target.itemState, source, source, move)) {
+					this.runEvent('EatItem', source, source, move, item);
 					if (item.id === 'leppaberry') target.staleness = 'external';
 				}
 				if (item.onEat) source.ateBerry = true;
@@ -5950,9 +5950,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 			move.basePower = item.fling.basePower;
 			this.debug(`BP: ${move.basePower}`);
 			if (item.isBerry) {
+				if (source.hasAbility('cudchew')) {
+					this.singleEvent('EatItem', source.getAbility(), source.abilityState, source, source, move, item);
+				}
 				move.onHit = function (foe) {
-					if (this.singleEvent('Eat', item, null, foe, null, null)) {
-						this.runEvent('EatItem', foe, null, null, item);
+					if (this.singleEvent('Eat', item, source.itemState, foe, source, move)) {
+						this.runEvent('EatItem', foe, source, move, item);
 						if (item.id === 'leppaberry') foe.staleness = 'external';
 					}
 					if (item.onEat) foe.ateBerry = true;
@@ -13920,12 +13923,12 @@ export const Moves: import('../sim/dex-moves').MoveDataTable = {
 		pp: 20,
 		priority: 0,
 		flags: { contact: 1, protect: 1, mirror: 1, distance: 1, metronome: 1 },
-		onHit(target, source) {
+		onHit(target, source, move) {
 			const item = target.getItem();
 			if (source.hp && item.isBerry && target.takeItem(source)) {
 				this.add('-enditem', target, item.name, '[from] stealeat', '[move] Pluck', `[of] ${source}`);
-				if (this.singleEvent('Eat', item, null, source, null, null)) {
-					this.runEvent('EatItem', source, null, null, item);
+				if (this.singleEvent('Eat', item, target.itemState, source, source, move)) {
+					this.runEvent('EatItem', source, source, move, item);
 					if (item.id === 'leppaberry') target.staleness = 'external';
 				}
 				if (item.onEat) source.ateBerry = true;
