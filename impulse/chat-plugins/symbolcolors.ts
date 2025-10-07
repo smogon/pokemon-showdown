@@ -80,7 +80,7 @@ export const commands: Chat.ChatCommands = {
 				color,
 				createdAt: now,
 				updatedAt: now,
-			} as any);
+			});
 			
 			await updateSymbolColors();
 			
@@ -104,22 +104,20 @@ export const commands: Chat.ChatCommands = {
 			
 			const userId = toID(name);
 			
-			// Use findById() - most efficient for _id lookups
-			const existingColor = await SymbolColorsDB.findById(userId);
-			if (!existingColor) {
-				return this.errorReply('This user does not have a symbol color. Use /symbolcolor set to create one.');
-			}
-			
 			// Validate hex color format
 			if (!/^#[0-9A-Fa-f]{6}$/.test(color) && !/^#[0-9A-Fa-f]{3}$/.test(color)) {
 				return this.errorReply('Invalid color format. Please use hex format (e.g., #FF5733 or #F73)');
 			}
 			
-			// Use updateOne() with $set operator
-			await SymbolColorsDB.updateOne(
+			// Use atomic updateOne with $set - checks existence and updates in one operation
+			const result = await SymbolColorsDB.updateOne(
 				{ _id: userId },
 				{ $set: { color, updatedAt: new Date() } }
 			);
+			
+			if (result.matchedCount === 0) {
+				return this.errorReply('This user does not have a symbol color. Use /symbolcolor set to create one.');
+			}
 			
 			await updateSymbolColors();
 			
@@ -140,13 +138,13 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('globalban');
 			const userId = toID(target);
 			
-			// Use exists() for efficient check before delete
-			if (!await SymbolColorsDB.exists({ _id: userId })) {
+			// Use deleteOne() and check result - single atomic operation
+			const result = await SymbolColorsDB.deleteOne({ _id: userId });
+			
+			if (result.deletedCount === 0) {
 				return this.errorReply(`${target} does not have a symbol color.`);
 			}
 			
-			// Use deleteOne() for single document deletion
-			await SymbolColorsDB.deleteOne({ _id: userId });
 			await updateSymbolColors();
 			
 			this.sendReply(`You removed ${target}'s symbol color.`);
@@ -166,8 +164,8 @@ export const commands: Chat.ChatCommands = {
 			this.checkCan('globalban');
 			const page = parseInt(target) || 1;
 			
-			// Use findWithPagination() - optimized for paginated results
-			const result = await SymbolColorsDB.findWithPagination({}, {
+			// Use findPaginated() - optimized helper method for pagination
+			const result = await SymbolColorsDB.findPaginated({}, {
 				page,
 				limit: 20,
 				sort: { _id: 1 }
@@ -177,21 +175,21 @@ export const commands: Chat.ChatCommands = {
 				return this.sendReply('No custom symbol colors have been set.');
 			}
 			
-			let output = `<div class="ladder pad"><h2>Custom Symbol Colors (Page ${result.page}/${result.pages})</h2><table style="width: 100%"><tr><th>User</th><th>Color</th><th>Preview</th><th>Created</th></tr>`;
+			let output = `<div class="ladder pad"><h2>Custom Symbol Colors (Page ${result.page}/${result.totalPages})</h2><table style="width: 100%"><tr><th>User</th><th>Color</th><th>Preview</th><th>Created</th></tr>`;
 			
-			for (const symbolColor of result.data) {
+			for (const symbolColor of result.docs) {
 				const created = symbolColor.createdAt ? symbolColor.createdAt.toLocaleDateString() : 'Unknown';
 				output += `<tr><td>${symbolColor._id}</td><td>${symbolColor.color}</td><td><span style="color: ${symbolColor.color}; font-size: 24px;">■</span></td><td>${created}</td></tr>`;
 			}
 			
 			output += `</table></div>`;
 			
-			if (result.pages > 1) {
+			if (result.totalPages > 1) {
 				output += `<div class="pad"><center>`;
-				if (result.page > 1) {
+				if (result.hasPrev) {
 					output += `<button class="button" name="send" value="/symbolcolor list ${result.page - 1}">Previous</button> `;
 				}
-				if (result.page < result.pages) {
+				if (result.hasNext) {
 					output += `<button class="button" name="send" value="/symbolcolor list ${result.page + 1}">Next</button>`;
 				}
 				output += `</center></div>`;
@@ -204,8 +202,12 @@ export const commands: Chat.ChatCommands = {
 			const userId = toID(target);
 			if (!userId) return this.parse('/help symbolcolor');
 			
-			// Use findById() - most efficient for _id lookups
-			const symbolColor = await SymbolColorsDB.findById(userId);
+			// Use findOne() with projection to only fetch needed fields
+			const symbolColor = await SymbolColorsDB.findOne(
+				{ _id: userId },
+				{ projection: { _id: 1, color: 1, createdAt: 1, updatedAt: 1 } }
+			);
+			
 			if (!symbolColor) {
 				return this.sendReply(`${target} does not have a custom symbol color.`);
 			}
@@ -231,7 +233,7 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('No symbol colors to set. Format: /symbolcolor setmany user1:#FF5733, user2:#00FF00');
 			}
 			
-			const documents: any[] = [];
+			const documents: SymbolColorDocument[] = [];
 			const now = new Date();
 			
 			for (const entry of entries) {
@@ -258,18 +260,25 @@ export const commands: Chat.ChatCommands = {
 				return this.errorReply('No valid symbol colors to set.');
 			}
 			
-			// Use insertMany() for bulk inserts - much more efficient than multiple insertOne()
+			// Use insertMany() with ordered: false for best performance
+			// ordered: false allows MongoDB to continue inserting even if some fail
 			try {
-				await SymbolColorsDB.insertMany(documents);
+				const result = await SymbolColorsDB.insertMany(documents, { ordered: false });
 				await updateSymbolColors();
-				this.sendReply(`|raw|Successfully set ${documents.length} custom symbol color(s).`);
+				this.sendReply(`|raw|Successfully set ${result.insertedCount} custom symbol color(s).`);
 				
 				const staffRoom = Rooms.get(STAFF_ROOM_ID);
 				if (staffRoom) {
-					staffRoom.add(`|html|<div class="infobox">${Impulse.nameColor(user.name, true, true)} bulk set ${documents.length} custom symbol colors.</div>`).update();
+					staffRoom.add(`|html|<div class="infobox">${Impulse.nameColor(user.name, true, true)} bulk set ${result.insertedCount} custom symbol colors.</div>`).update();
 				}
-			} catch (err) {
-				this.errorReply(`Error setting symbol colors: ${err}`);
+			} catch (err: any) {
+				// Handle duplicate key errors gracefully
+				if (err.code === 11000 && err.result?.insertedCount) {
+					await updateSymbolColors();
+					this.sendReply(`|raw|Successfully set ${err.result.insertedCount} custom symbol color(s). Some users already had colors.`);
+				} else {
+					this.errorReply(`Error setting symbol colors: ${err.message || err}`);
+				}
 			}
 		},
 		
@@ -279,10 +288,11 @@ export const commands: Chat.ChatCommands = {
 			
 			const searchTerm = toID(target);
 			
-			// Use find() with regex filter for searching
-			const symbolColors = await SymbolColorsDB.find({
-				_id: { $regex: searchTerm, $options: 'i' } as any
-			});
+			// Use find() with regex filter - only fetch needed fields with projection
+			const symbolColors = await SymbolColorsDB.find(
+				{ _id: { $regex: searchTerm, $options: 'i' } as any },
+				{ projection: { _id: 1, color: 1 }, limit: 50 }
+			);
 			
 			if (symbolColors.length === 0) {
 				return this.sendReply(`No symbol colors found matching "${target}".`);
@@ -301,8 +311,8 @@ export const commands: Chat.ChatCommands = {
 		async count(this: CommandContext, target: string, room: Room, user: User) {
 			this.checkCan('globalban');
 			
-			// Use count() - most efficient way to get document count
-			const total = await SymbolColorsDB.count({});
+			// Use estimatedDocumentCount() - faster than countDocuments() for total count
+			const total = await SymbolColorsDB.estimatedDocumentCount();
 			this.sendReply(`There are currently ${total} custom symbol color(s) set.`);
 		},
 
